@@ -100,9 +100,9 @@ export const OPGAVER = [
 ];
 
 const HENFALD_TEKST = {
-  'beta-': 'Betahenfald: En neutron blev til en proton og skød en elektron ud (og en næsten usynlig antineutrino).',
-  'beta+': 'Beta-plus-henfald: En proton blev til en neutron og skød en positron ud. En positron er elektronens modsætning: antistof!',
-  alfa: 'Alfahenfald: Kernen skød en alfapartikel ud. Det er en heliumkerne med 2 protoner og 2 neutroner.',
+  'beta-': 'Betahenfald: En neutron blev til en proton. I samme øjeblik blev der skabt en helt ny elektron, som skød ud af kernen (sammen med en næsten usynlig antineutrino). Elektronen fandtes ikke i kernen før!',
+  'beta+': 'Beta-plus-henfald: En proton blev til en neutron, og der blev skabt en positron (elektronens antistof-tvilling), som skød ud. Den møder hurtigt en elektron, og så forsvinder de begge i et glimt af gammastråling.',
+  alfa: 'Alfahenfald: Kernen skød en alfapartikel ud: 2 protoner og 2 neutroner, der allerede sad i kernen. Den bliver bremset efter få centimeter i luft, fanger 2 elektroner og bliver til almindelig heliumgas.',
   'dobbeltbeta-': 'Dobbelt betahenfald: To neutroner blev til protoner på én gang og skød to elektroner ud.',
   'dobbeltbeta+': 'To protoner blev til neutroner på én gang og skød to positroner ud.',
   n: 'Kernen havde alt for mange neutroner og skød en neutron ud med det samme.',
@@ -110,6 +110,17 @@ const HENFALD_TEKST = {
 };
 
 // Hvilken stråling kernen sender ud, og hvad der stopper den
+// Korte udgaver til beskeden øverst (hele forklaringen står i Kerne-fanen)
+const HENFALD_KORT = {
+  'beta-': 'En neutron blev til en proton og skød en nyskabt elektron ud.',
+  'beta+': 'En proton blev til en neutron og skød en positron (antistof) ud.',
+  alfa: 'Kernen skød en alfapartikel ud (2 protoner + 2 neutroner).',
+  'dobbeltbeta-': 'To neutroner blev til protoner på én gang.',
+  'dobbeltbeta+': 'To protoner blev til neutroner på én gang.',
+  n: 'Kernen skød en neutron ud.',
+  p: 'Kernen skød en proton ud.',
+};
+
 const STRÅLING = {
   'beta-': 'Betastråling (elektroner). Bliver stoppet af nogle millimeter aluminium.',
   'dobbeltbeta-': 'Betastråling (elektroner). Bliver stoppet af nogle millimeter aluminium.',
@@ -171,10 +182,12 @@ export function lavVærksted() {
     kategori: $('infoKategori'), tal: $('infoTal'), stabilitet: $('infoStabilitet'), fakta: $('infoFakta'), model: $('infoModel'),
     opgaveTekst: $('opgaveTekst'), opgaveKrav: $('opgaveKrav'), opgaveTæller: $('opgaveTæller'),
     opdagetTæller: $('opdagetTæller'), kortTekst: $('stabkortTekst'),
+    statusLinje: $('statusLinje'), sidsteHenfald: $('sidsteHenfald'), om: $('infoOm'),
   };
   kort = new Stabilitetskort($('stabilitetskort'), document.querySelectorAll('.stabkort-valg .chip'));
 
   lavKnapper();
+  lavFaner();
   lavMinitabel();
   // På smalle skærme starter det periodiske system foldet sammen
   if (matchMedia('(max-width: 820px)').matches) {
@@ -248,6 +261,7 @@ function sæt(ny, intern = false) {
     clearTimeout(neutralTimer);
     neutralTimer = null;
     kæde = null; // man har selv ændret atomet, så kæden er brudt
+    elementer.sidsteHenfald.classList.add('skjult');
   }
   // Atomet kan ikke holde på alle elektronerne, hvis der er for få protoner
   if (ny.e > ny.p + EKSTRA_ELEKTRONER) ny.e = ny.p + EKSTRA_ELEKTRONER;
@@ -295,7 +309,12 @@ function startHenfald() {
         ? ' Atomet mangler nu elektroner (det er en ion), men det fanger snart nogle fra omgivelserne.'
         : ' Atomet har nu for mange elektroner (det er en ion), men de forsvinder snart igen.';
     }
-    visBesked({ titel: `${kerneNavn(før.p, før.n)} → ${kerneNavn(ny.p, ny.n)}`, tekst, type: 'henfald', varighed: 9000 });
+    const titel = `${kerneNavn(før.p, før.n)} → ${kerneNavn(ny.p, ny.n)}`;
+    visBesked({ titel, tekst: HENFALD_KORT[måde] + ' Læs mere under Kerne.', type: 'henfald', varighed: 9000 });
+    sætFane('kerne');
+    // Teksten bliver også stående i Kerne-fanen, så man kan nå at læse den
+    elementer.sidsteHenfald.innerHTML = `<strong>Seneste henfald: ${titel}</strong>${tekst}`;
+    elementer.sidsteHenfald.classList.remove('skjult');
 
     løsHændelse('henfald');
     if (kæde) {
@@ -316,6 +335,48 @@ function startHenfald() {
       }, 1600);
     }
   });
+}
+
+// ---------- Faner i infopanelet ----------
+function hentGemt(nøgle, standard) {
+  try {
+    return localStorage.getItem(nøgle) ?? standard;
+  } catch {
+    return standard;
+  }
+}
+function gem(nøgle, værdi) {
+  try {
+    localStorage.setItem(nøgle, værdi);
+  } catch {
+    // ingen lagring: valget huskes bare ikke
+  }
+}
+
+function lavFaner() {
+  for (const knap of document.querySelectorAll('.fane-knap')) {
+    knap.addEventListener('click', () => {
+      lyd.klik();
+      sætFane(knap.dataset.fane);
+    });
+  }
+  sætFane(hentGemt('atomlabFane', 'atom'));
+}
+
+function sætFane(navn) {
+  if (!['atom', 'kerne', 'fakta'].includes(navn)) navn = 'atom';
+  for (const knap of document.querySelectorAll('.fane-knap')) knap.classList.toggle('valgt', knap.dataset.fane === navn);
+  for (const fane of document.querySelectorAll('.fane')) fane.classList.toggle('vist', fane.dataset.fane === navn);
+  gem('atomlabFane', navn);
+  if (navn === 'kerne') kort?.tegn(); // kortet kan først tegnes, når det kan ses
+}
+
+function sætOpgaveFoldet(foldet) {
+  $('opgavePille').classList.toggle('foldet', foldet);
+  const knap = $('knapOpgaveFold');
+  knap.textContent = foldet ? '+' : '–';
+  knap.title = foldet ? 'Vis opgaven' : 'Skjul opgaven';
+  gem('atomlabOpgaveFoldet', foldet ? 'ja' : 'nej');
 }
 
 // ---------- Knapper ----------
@@ -379,6 +440,11 @@ function lavKnapper() {
   });
   $('knapHjælp').addEventListener('click', () => åbn('hjælp'));
   $('knapOpgaver').addEventListener('click', () => åbn('opgaveliste'));
+  $('knapOpgaveFold').addEventListener('click', () => {
+    lyd.klik();
+    sætOpgaveFoldet(!$('opgavePille').classList.contains('foldet'));
+  });
+  sætOpgaveFoldet(hentGemt('atomlabOpgaveFoldet', 'nej') === 'ja');
   $('knapMinitabel').addEventListener('click', () => {
     const panel = $('minitabelPanel');
     panel.classList.toggle('lukket');
@@ -409,6 +475,11 @@ function lavKnapper() {
     if (h.target.closest('.henfald-knap')) startHenfald();
     const link = h.target.closest('[data-hjælp]');
     if (link) åbnHjælp(link.dataset.hjælp);
+    const fane = h.target.closest('[data-til-fane]');
+    if (fane) {
+      lyd.klik();
+      sætFane(fane.dataset.tilFane);
+    }
   });
 
   // Luk dialoger
@@ -560,16 +631,18 @@ function opdaterOpgave() {
       const ok = tilstand[type] === o.mål[type];
       const chip = document.createElement('span');
       chip.className = 'chip ' + (ok ? 'ok' : '');
-      chip.textContent = `${navne[type]} ${visTip ? o.mål[type] : ok ? '✓' : '?'}`;
+      chip.innerHTML = `<span class="navn-lang">${navne[type]}</span><span class="navn-kort">${type.toUpperCase()}</span> ${visTip ? o.mål[type] : ok ? '✓' : '?'}`;
+      chip.title = navne[type];
       krav.append(chip);
     }
   }
   const tip = document.createElement('button');
   tip.className = 'chip tip';
-  tip.textContent = visTip ? o.tip : 'Tip';
+  tip.textContent = 'Tip';
   tip.addEventListener('click', () => {
-    visTip = !visTip;
+    visTip = true;
     lyd.klik();
+    visBesked({ titel: `Tip: ${o.titel}`, tekst: o.tip, varighed: 9000 });
     opdaterOpgave();
   });
   krav.append(tip);
@@ -621,8 +694,16 @@ function opdaterInfo() {
   const { p, n, e } = tilstand;
   const el = elementer;
   const st = stabilitet(p, n);
+  const måde = henfaldsmåde(p, n);
   opdaterKort(st);
   opdaterCitat(st);
+  visStabilitet(st, måde);
+  opdaterStatus(st, måde);
+
+  // Prik på Kerne-fanen, når kernen er ustabil
+  const kerneFane = document.querySelector('.fane-knap[data-fane="kerne"]');
+  kerneFane.classList.toggle('advarsel', ['ustabil', 'meget'].includes(st.status));
+  kerneFane.classList.toggle('fare', st.status === 'straks');
 
   if (p === 0) {
     el.kort.style.setProperty('--farve', '#5c6b8a');
@@ -630,25 +711,26 @@ function opdaterInfo() {
     el.symbol.textContent = '?';
     el.navn.textContent = 'Intet grundstof endnu';
     el.masse.textContent = '';
-    el.kategori.textContent = '';
+    el.kategori.textContent = n ? 'Kun neutroner' : 'Læg en proton i kernen for at begynde';
     el.tal.innerHTML = '';
+    el.model.textContent = 'Antallet af protoner bestemmer, hvilket grundstof atomet er. 1 proton er hydrogen, 6 er carbon, 79 er guld.';
     el.fakta.textContent = 'Læg en proton i kernen for at begynde. Antallet af protoner bestemmer, hvilket grundstof atomet er.';
-    visStabilitet(st);
-    el.model.textContent = '';
+    el.om.innerHTML = '';
     return;
   }
 
   const g = grundstof(p);
   const kat = KATEGORIER[g.kategori];
+  const pl = placering(p);
   el.kort.style.setProperty('--farve', kat.farve);
   el.nr.textContent = g.nr;
   el.symbol.textContent = g.symbol;
-  el.navn.textContent = g.navn + (g.kaldenavn ? ` (${g.kaldenavn})` : '');
+  el.navn.innerHTML = g.navn + (g.kaldenavn ? ` <small>(${g.kaldenavn})</small>` : '');
   // Hele tal i [ ] er massetallet for den mest stabile isotop (grundstoffet har ingen stabile)
   el.masse.textContent = Number.isInteger(g.masse) ? `[${g.masse}]` : tal(g.masse);
-  const pl = placering(p);
-  el.kategori.textContent = `${kat.navn} · ${TILSTANDE[g.tilstand]} ved stuetemperatur · Periode ${pl.periode}` + (pl.gruppe ? `, gruppe ${pl.gruppe}` : '');
+  el.kategori.textContent = `${kat.navn} · ${TILSTANDE[g.tilstand]}`;
 
+  // Fanen "Atom"
   const q = p - e;
   let ladning;
   if (e === 0) {
@@ -662,7 +744,7 @@ function opdaterInfo() {
 
   const skaller = skallerForIon(p, e);
   let skalTekst = skaller.length ? skaller.join(' · ') : 'ingen';
-  if (FYLDTE.includes(e)) skalTekst += ' (fyldt yderste skal)';
+  if (FYLDTE.includes(e)) skalTekst += ' <small>(fyldt yderste skal)</small>';
 
   const rækker = [
     ['Isotop', `${isotopNavn(p, n)} <span class="notation">${hævet(p + n)}${g.symbol}</span>`],
@@ -671,13 +753,45 @@ function opdaterInfo() {
     ['Elektronskaller', skalTekst],
   ];
   el.tal.innerHTML = rækker.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
-
-  visStabilitet(st);
-  el.fakta.textContent = faktaOm(p);
   el.model.textContent = atom.visning === 'sky'
     ? 'Elektronsky: I virkeligheden kredser elektroner ikke i baner som planeter. Man kan kun sige, hvor de sandsynligvis er, og det ligner en sky.'
     : 'Ringene er en forenklet tegning, der gør det let at tælle elektronerne. Prøv "Elektronsky".';
   if (p + n > 1) el.model.textContent += ' De gyldne lyspunkter i kernen viser, hvor kernekraften "limer" partiklerne sammen. Kraften selv kan man ikke se.';
+
+  // Fanen "Fakta"
+  el.fakta.textContent = faktaOm(p);
+  const om = [
+    ['Gruppe', `${kat.navn}. <small>${kat.tekst}</small>`],
+    ['Ved stuetemperatur', TILSTANDE[g.tilstand]],
+    ['Placering', `Periode ${pl.periode}` + (pl.gruppe ? `, gruppe ${pl.gruppe}` : ', i de to rækker nederst')],
+    ['Atommasse', Number.isInteger(g.masse)
+      ? `[${g.masse}] <small>Massetallet for den mest stabile isotop.</small>`
+      : `${tal(g.masse)} <small>Gennemsnittet af grundstoffets isotoper i naturen.</small>`],
+  ];
+  el.om.innerHTML = om.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
+}
+
+// Statuslinjen: det vigtigste i ét blik (isotop, ladning, stabilitet og henfaldsknap)
+function opdaterStatus(st, måde) {
+  const { p, n, e } = tilstand;
+  const linje = elementer.statusLinje;
+  if (p + n === 0) {
+    linje.innerHTML = '<span class="status-tip">Byg et atom med knapperne til venstre.</span>';
+    return;
+  }
+  const chips = [];
+  if (p > 0) {
+    const g = grundstof(p);
+    chips.push(`<span class="status-chip isotop">${isotopNavn(p, n).replace(' (', ' <small>(').replace(')', ')</small>')}</span>`);
+    const q = p - e;
+    if (e === 0) chips.push(`<span class="status-chip ion">Nøgen kerne ${g.symbol}${ladningstegn(p)}</span>`);
+    else if (q === 0) chips.push('<span class="status-chip">Neutralt</span>');
+    else chips.push(`<span class="status-chip ion">Ion ${g.symbol}${ladningstegn(q)}</span>`);
+  }
+  const ord = { stabil: '✓ Stabil', næsten: '≈ Næsten stabil', ustabil: '☢ Ustabil', meget: '☢ Meget ustabil', straks: '✸ Falder fra hinanden' }[st.status];
+  if (ord) chips.push(`<button class="status-chip knap ${st.status}" data-til-fane="kerne" title="Se mere om kernen">${ord}</button>`);
+  if (måde) chips.push(`<button class="status-chip henfald-knap"${travl ? ' disabled' : ''} title="Se kernen henfalde (tast H)">${travl ? '…' : '▶ Henfald'}</button>`);
+  linje.innerHTML = chips.join('');
 }
 
 // Et citat, der passer til det, man har bygget
@@ -696,7 +810,7 @@ function opdaterCitat(st) {
   }
 }
 
-function visStabilitet(st) {
+function visStabilitet(st, måde = henfaldsmåde(tilstand.p, tilstand.n)) {
   const boks = elementer.stabilitet;
   boks.className = 'stabilitet ' + (st.status || 'tom');
   if (!st.status || st.status === 'tom') {
@@ -704,7 +818,6 @@ function visStabilitet(st) {
     return;
   }
   const ikon = { stabil: '✓', næsten: '≈', ustabil: '☢', meget: '☢', straks: '✸' }[st.status];
-  const måde = henfaldsmåde(tilstand.p, tilstand.n);
   let knapper = '';
   if (måde) {
     const tekst = st.status === 'straks' ? '▶ Se den falde fra hinanden' : '▶ Se den henfalde';

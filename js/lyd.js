@@ -26,15 +26,52 @@ export function skiftLyd() {
   return tændt;
 }
 
+let udgang = null; // alle lyde går gennem en kompressor, så kraftige lyde ikke skratter
+let støjBuffer = null;
+
 function lydkort() {
   if (!tændt) return null;
   if (!ctx) {
     const Klasse = window.AudioContext || window.webkitAudioContext;
     if (!Klasse) return null;
     ctx = new Klasse();
+    udgang = ctx.createDynamicsCompressor();
+    udgang.threshold.value = -14;
+    udgang.ratio.value = 6;
+    udgang.connect(ctx.destination);
+    // Et sekunds hvid støj, som bruges til brag og klik
+    støjBuffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const data = støjBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
   }
   if (ctx.state === 'suspended') ctx.resume();
   return ctx;
+}
+
+// Støj gennem et filter, der glider (fx et brag, der bliver dybere)
+function støj({ varighed = 0.5, fra = 3000, til = 200, filter = 'lowpass', styrke = 0.3, forsinkelse = 0, angreb = 0.005 }) {
+  const c = lydkort();
+  if (!c) return;
+  const start = c.currentTime + forsinkelse;
+  const kilde = c.createBufferSource();
+  kilde.buffer = støjBuffer;
+  kilde.loop = true;
+  const f = c.createBiquadFilter();
+  f.type = filter;
+  f.frequency.setValueAtTime(fra, start);
+  f.frequency.exponentialRampToValueAtTime(til, start + varighed);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, start);
+  g.gain.exponentialRampToValueAtTime(styrke, start + angreb);
+  g.gain.exponentialRampToValueAtTime(0.0001, start + varighed);
+  kilde.connect(f).connect(g).connect(udgang);
+  kilde.start(start, Math.random() * 0.5);
+  kilde.stop(start + varighed + 0.05);
+}
+
+// Klik som fra en geigertæller (måler radioaktiv stråling)
+function geigerklik(forsinkelse) {
+  støj({ varighed: 0.012, fra: 5000, til: 3000, filter: 'highpass', styrke: 0.35, forsinkelse, angreb: 0.001 });
 }
 
 // En enkelt tone, der kan glide fra én frekvens til en anden
@@ -50,7 +87,7 @@ function tone({ fra, til = fra, varighed = 0.15, type = 'sine', styrke = 0.12, f
   forstærker.gain.setValueAtTime(0.0001, start);
   forstærker.gain.exponentialRampToValueAtTime(styrke, start + 0.01);
   forstærker.gain.exponentialRampToValueAtTime(0.0001, start + varighed);
-  osc.connect(forstærker).connect(c.destination);
+  osc.connect(forstærker).connect(udgang);
   osc.start(start);
   osc.stop(start + varighed + 0.02);
 }
@@ -72,16 +109,30 @@ export const lyd = {
     tone({ fra: 1568, til: 2093, varighed: 0.5, styrke: 0.05, forsinkelse: 0.4 });
   },
   klik: () => tone({ fra: 900, varighed: 0.04, type: 'square', styrke: 0.03 }),
-  // Kernen ryster og summer, lige før den henfalder
+  // Kernen ryster: en rumlen, der vokser, og geigerklik, der kommer hurtigere og hurtigere
   opbygning: () => {
-    tone({ fra: 90, til: 260, varighed: 0.8, type: 'sawtooth', styrke: 0.05 });
-    tone({ fra: 180, til: 520, varighed: 0.8, type: 'triangle', styrke: 0.04 });
+    støj({ varighed: 0.85, fra: 150, til: 900, filter: 'lowpass', styrke: 0.18, angreb: 0.7 });
+    tone({ fra: 55, til: 110, varighed: 0.85, type: 'sine', styrke: 0.12 });
+    let t = 0;
+    let pause = 0.16;
+    while (t < 0.8) {
+      geigerklik(t + Math.random() * 0.02);
+      t += pause;
+      pause = Math.max(0.025, pause * 0.8);
+    }
   },
-  // Selve henfaldet: et brag og et "pew", når partiklen skydes ud
+  // Selve henfaldet: et dybt brag, et sus og så lidt geigerklik bagefter
   henfald: (måde) => {
-    tone({ fra: 140, til: 40, varighed: 0.5, type: 'sawtooth', styrke: 0.12 });
-    tone({ fra: 2400, til: 300, varighed: 0.35, type: 'square', styrke: 0.03 });
-    if (måde === 'alfa') tone({ fra: 700, til: 160, varighed: 0.6, type: 'triangle', styrke: 0.08, forsinkelse: 0.05 });
-    else tone({ fra: 3000, til: 900, varighed: 0.25, type: 'sine', styrke: 0.06, forsinkelse: 0.05 });
+    tone({ fra: 130, til: 32, varighed: 0.9, type: 'sine', styrke: 0.6 });
+    støj({ varighed: 0.9, fra: 5000, til: 120, filter: 'lowpass', styrke: 0.45 });
+    if (måde === 'alfa') {
+      tone({ fra: 80, til: 28, varighed: 1.2, type: 'sine', styrke: 0.5, forsinkelse: 0.04 });
+      støj({ varighed: 1.1, fra: 900, til: 80, filter: 'bandpass', styrke: 0.3, forsinkelse: 0.05 });
+    } else {
+      // Den lette partikel suser af sted
+      tone({ fra: 3200, til: 180, varighed: 0.35, type: 'sawtooth', styrke: 0.07, forsinkelse: 0.03 });
+      støj({ varighed: 0.4, fra: 8000, til: 1500, filter: 'bandpass', styrke: 0.2, forsinkelse: 0.03 });
+    }
+    for (let i = 0; i < 9; i++) geigerklik(0.25 + i * 0.07 + Math.random() * 0.12);
   },
 };

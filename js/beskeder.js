@@ -23,6 +23,9 @@ export function visBesked({ titel = '', tekst = '', type = 'info', varighed = 45
     boks.classList.remove('vist');
     setTimeout(() => boks.remove(), 400);
   };
-  setTimeout(fjern, varighed);
+  // Beskeden bliver, mens musen er over den, og forsvinder lidt efter, man flytter musen
+  let timer = setTimeout(fjern, varighed);
+  boks.addEventListener('mouseenter', () => clearTimeout(timer));
+  boks.addEventListener('mouseleave', () => { timer = setTimeout(fjern, 2500); });
   boks.addEventListener('click', fjern);
 }

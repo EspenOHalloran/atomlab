@@ -46,6 +46,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Opladning: laderen pumper elektroner gennem ledningen over i grafitten, og Li⁺-ioner svømmer gennem elektrolytten efter dem. Afladning: det modsatte, og elektronerne laver arbejde i motoren på vejen.
   - Målere for spænding (ca. 3,0–4,2 V pr. celle) og opladning. Vis hvad der sker ved overopladning (lithium-nåle, der kan stikke hul i skillevæggen) og ved alt for dyb afladning.
 
+- [x] **Trin 1d: Overskueligt værksted**
+  - Opgaven står som en pille i toplinjen og kan foldes sammen (huskes).
+  - Infopanelet har ingen scrollbar: et kompakt hoved (symbol, navn, gruppe), en statuslinje (isotop, ladning, stabilitet og knappen "Henfald") og tre faneblade: **Atom** (isotop, massetal, ladning, skaller), **Kerne** (stabilitet, stråling, seneste henfald og stabilitetskortet) og **Fakta** (fakta, gruppe, tilstand, placering, citat). Der er en blinkende prik på Kerne-fanen, når kernen er ustabil.
+  - Efter et henfald skifter panelet til Kerne-fanen, og forklaringen bliver stående der. Beskeden øverst er kort.
+  - Kraftigere henfaldslyd med geigerklik, brag og sus.
+  - Hjælpen forklarer, hvad det betyder, at kernen "skyder en elektron ud", og hvor elektronen bliver af.
+
 ## Idéer til senere
 - Supernova-generator (fx Betelgeuse): en stor stjernes liv med skaller af fusion (som et løg), en jernkerne der styrter sammen, og eksplosionen der spreder grundstofferne ud i rummet.
 - Kilonova-generator: to neutronstjerner, der kredser om hinanden og smelter sammen. Hurtig neutronindfangning (r-processen) laver guld, platin og uran. Kan vises på stabilitetskortet: kernerne skubbes langt ud til højre og henfalder tilbage til båndet.

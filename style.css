@@ -189,50 +189,67 @@ button { font: inherit; color: inherit; }
 /* ---------- Atomværkstedet ---------- */
 #vaerksted {
   grid-template-columns: minmax(250px, 290px) minmax(0, 1fr) minmax(280px, 340px);
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   grid-template-areas:
     "top top top"
-    "opgave opgave opgave"
     "byg vindue info"
     "byg tabel info";
 }
 .topbjælke { grid-area: top; display: flex; align-items: center; gap: 12px; }
 .topbjælke h2 {
   margin: 0;
-  flex: 1;
+  flex: 0 0 auto;
   font-size: 22px;
   background: linear-gradient(90deg, #7ff7ff, #8c7bff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-.topknapper { display: flex; gap: 8px; }
+.topknapper { display: flex; gap: 8px; margin-left: auto; }
 #vaerksted .vindue { grid-area: vindue; }
 
-/* Opgavebjælken */
-.opgavebjælke {
-  grid-area: opgave;
+/* Opgaven: en pille i toplinjen, som kan foldes sammen */
+.opgave-pille {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
-  padding: 8px 10px 8px 14px;
-  border-radius: 14px;
-  background: linear-gradient(90deg, rgba(255, 212, 59, 0.14), rgba(12, 18, 38, 0.7) 60%);
-  border: 1px solid rgba(255, 212, 59, 0.3);
+  padding: 4px 6px 4px 4px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, rgba(255, 212, 59, 0.16), rgba(12, 18, 38, 0.75) 70%);
+  border: 1px solid rgba(255, 212, 59, 0.35);
 }
-.opgave-nu { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-weight: 600; }
 .opgave-mærke {
-  padding: 2px 8px;
+  flex: none;
+  padding: 4px 10px;
+  border: 0;
   border-radius: 99px;
   background: var(--gul);
   color: #1a1400;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  cursor: pointer;
 }
-.opgave-krav { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.opgave-indhold { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.opgave-tekst { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.opgave-fold {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: var(--svag);
+  cursor: pointer;
+  font-weight: 700;
+}
+.opgave-pille.foldet .opgave-indhold { display: none; }
+.opgave-pille.foldet { background: rgba(12, 18, 38, 0.75); }
+.opgave-krav { display: inline-flex; flex-wrap: nowrap; gap: 5px; }
+.opgave-krav .chip { white-space: nowrap; }
+.opgave-krav .navn-kort { display: none; }
 .chip {
   padding: 3px 9px;
   border-radius: 99px;
@@ -292,25 +309,77 @@ button { font: inherit; color: inherit; }
 .hjælpeknapper .knap { flex: 1 1 auto; font-size: 14px; padding: 9px 10px; }
 @media (pointer: coarse) { .tastatur-tip { display: none; } }
 
-/* Infopanelet */
-.info { grid-area: info; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+/* Infopanelet: kompakt hoved, statuslinje og faneblade (ingen scrollbar) */
+.info { grid-area: info; padding: 12px; overflow: hidden; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.info-hoved { display: flex; gap: 12px; align-items: center; }
 .grundstofkort {
   --farve: #5c6b8a;
+  flex: 0 0 92px;
+  height: 92px;
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "nr . masse" "symbol symbol symbol" "navn navn navn";
-  padding: 8px 12px;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "nr ." "symbol symbol" "masse masse";
+  padding: 6px 8px;
   border-radius: 14px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--farve) 40%, transparent), color-mix(in srgb, var(--farve) 10%, transparent));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--farve) 45%, transparent), color-mix(in srgb, var(--farve) 12%, transparent));
   border: 1px solid color-mix(in srgb, var(--farve) 70%, transparent);
-  box-shadow: 0 0 30px color-mix(in srgb, var(--farve) 25%, transparent);
+  box-shadow: 0 0 26px color-mix(in srgb, var(--farve) 25%, transparent);
   transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
 }
-.grundstofkort .nr { grid-area: nr; font-weight: 700; font-size: 16px; }
-.grundstofkort .masse { grid-area: masse; font-size: 14px; color: rgba(255, 255, 255, 0.8); }
-.grundstofkort .symbol { grid-area: symbol; font-size: 54px; font-weight: 800; line-height: 1.05; text-align: center; text-shadow: 0 0 24px color-mix(in srgb, var(--farve) 70%, transparent); }
-.grundstofkort .navn { grid-area: navn; text-align: center; font-size: 19px; font-weight: 600; }
-.info-indhold { display: flex; flex-direction: column; gap: 12px; }
+.grundstofkort .nr { grid-area: nr; font-weight: 700; font-size: 13px; }
+.grundstofkort .masse { grid-area: masse; font-size: 11px; text-align: center; color: rgba(255, 255, 255, 0.8); }
+.grundstofkort .symbol { grid-area: symbol; align-self: center; font-size: 38px; font-weight: 800; line-height: 1; text-align: center; text-shadow: 0 0 20px color-mix(in srgb, var(--farve) 70%, transparent); }
+.info-titel { min-width: 0; }
+.info-titel h3 { margin: 0; font-size: 21px; line-height: 1.2; }
+.info-titel h3 small { font-size: 14px; font-weight: 500; color: var(--svag); }
+.info-titel .kategori { margin-top: 4px; }
+
+.status-linje { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.status-chip {
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--tekst);
+}
+.status-chip.isotop { color: var(--accent); border-color: rgba(95, 227, 255, 0.4); }
+.status-chip.ion { color: #ffc6f0; border-color: rgba(255, 140, 220, 0.5); }
+.status-chip.knap { cursor: pointer; }
+.status-chip.stabil { color: var(--grøn); border-color: rgba(140, 233, 154, 0.5); }
+.status-chip.næsten { color: #c0eb75; border-color: rgba(192, 235, 117, 0.5); }
+.status-chip.ustabil, .status-chip.meget { color: var(--gul); border-color: rgba(255, 212, 59, 0.55); }
+.status-chip.straks { color: var(--rød); border-color: rgba(255, 107, 107, 0.6); }
+.status-chip.henfald-knap { background: linear-gradient(180deg, rgba(255, 212, 59, 0.35), rgba(200, 120, 20, 0.35)); border-color: rgba(255, 212, 59, 0.7); color: #fff3c4; cursor: pointer; }
+.status-chip.henfald-knap:disabled { opacity: 0.5; cursor: default; }
+.status-tip { font-size: 13px; color: var(--svag); }
+
+.faner { display: flex; gap: 4px; padding: 3px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
+.fane-knap {
+  flex: 1;
+  padding: 7px 6px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--svag);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  position: relative;
+}
+.fane-knap.valgt { background: rgba(95, 227, 255, 0.16); color: var(--tekst); }
+.fane-prik { display: none; position: absolute; top: 6px; margin-left: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--gul); box-shadow: 0 0 8px var(--gul); animation: blink 1.4s infinite; }
+.fane-knap.advarsel .fane-prik { display: inline-block; }
+.fane-knap.fare .fane-prik { display: inline-block; background: var(--rød); box-shadow: 0 0 8px var(--rød); }
+@keyframes blink { 50% { opacity: 0.3; } }
+.fane { display: none; flex: 1; min-height: 0; flex-direction: column; gap: 10px; overflow-y: auto; scrollbar-width: none; }
+.fane::-webkit-scrollbar { display: none; }
+.fane.vist { display: flex; }
+.sidste-henfald { padding: 10px 12px; border-radius: 12px; background: rgba(255, 140, 220, 0.08); border: 1px solid rgba(255, 140, 220, 0.35); font-size: 13.5px; line-height: 1.45; }
+.sidste-henfald strong { display: block; color: #ff9be0; margin-bottom: 2px; }
+.tal.lille dd { font-weight: 500; font-size: 14px; }
 .kategori { margin: 0; color: var(--svag); font-size: 13px; }
 .tal { margin: 0; display: grid; gap: 8px; }
 .tal div { display: grid; grid-template-columns: 112px 1fr; gap: 8px; align-items: baseline; }
@@ -355,12 +424,12 @@ button { font: inherit; color: inherit; }
 .stabilitet .straaling { font-size: 13px; color: #ffe8a3; }
 
 /* Stabilitetskortet */
-.stabkort { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(255, 255, 255, 0.06); }
+.stabkort { flex: 1 1 0; min-height: 190px; display: flex; flex-direction: column; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(255, 255, 255, 0.06); }
 .stabkort-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: 14px; }
 .stabkort-valg { display: flex; gap: 4px; }
 .stabkort-valg .chip { cursor: pointer; font-size: 12px; padding: 2px 8px; }
 .stabkort-valg .chip.valgt { background: rgba(95, 227, 255, 0.2); border-color: rgba(95, 227, 255, 0.6); color: var(--tekst); }
-#stabilitetskort { display: block; width: 100%; height: 150px; }
+#stabilitetskort { display: block; width: 100%; flex: 1 1 0; min-height: 80px; max-height: 190px; }
 .stabkort-forklaring { margin: 4px 0 0; font-size: 11.5px; color: var(--svag); display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; }
 .stabkort-forklaring .prik { width: 8px; height: 8px; border-radius: 2px; background: #8ce99a; display: inline-block; }
 .stabkort-forklaring .streg { width: 16px; border-top: 1.5px dashed rgba(255, 255, 255, 0.5); display: inline-block; margin-left: 6px; }
@@ -491,8 +560,10 @@ button { font: inherit; color: inherit; }
 /* ---------- Mellemstore skærme (fx tablet på langs) ---------- */
 @media (max-width: 1150px) {
   #vaerksted { grid-template-columns: 240px minmax(0, 1fr) 280px; }
-  .grundstofkort .symbol { font-size: 52px; }
   .menukort { grid-template-columns: repeat(2, minmax(0, 320px)); }
+  .opgave-krav .navn-lang { display: none; }
+  .opgave-krav .navn-kort { display: inline; }
+  .topbjælke h2 { font-size: 19px; }
 }
 
 /* ---------- Smalle skærme (tablet på højkant og telefoner) ---------- */
@@ -500,19 +571,19 @@ button { font: inherit; color: inherit; }
   .skærm { gap: 8px; padding: 8px; }
   #vaerksted {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto minmax(140px, 1fr) auto auto;
-    grid-template-areas: "top" "opgave" "info" "vindue" "byg" "tabel";
+    grid-template-rows: auto auto minmax(140px, 1fr) auto auto;
+    grid-template-areas: "top" "info" "vindue" "byg" "tabel";
   }
+  .topbjælke { flex-wrap: wrap; row-gap: 6px; }
   .topbjælke h2 { font-size: 18px; }
-  .opgavebjælke { padding: 6px 8px 6px 10px; font-size: 14px; }
-  .info { max-height: 30vh; padding: 10px; flex-direction: row; align-items: flex-start; gap: 10px; }
-  .grundstofkort { flex: 0 0 110px; padding: 8px; }
-  .grundstofkort .symbol { font-size: 40px; }
-  .grundstofkort .navn { font-size: 13px; }
-  .info-indhold { gap: 8px; font-size: 14px; }
+  .opgave-pille { order: 3; flex: 1 1 100%; margin: 0; }
+  .info { max-height: 36vh; padding: 10px; gap: 8px; }
+  .grundstofkort { flex-basis: 70px; height: 70px; }
+  .grundstofkort .symbol { font-size: 28px; }
+  .info-titel h3 { font-size: 17px; }
   .tal div { grid-template-columns: 96px 1fr; }
-  .model-note, .kategori, #infoCitat, .menu-citat { display: none; }
-  #stabilitetskort { height: 130px; }
+  .model-note, #infoCitat, .menu-citat { display: none; }
+  #stabilitetskort { min-height: 110px; }
   .byg { flex-direction: row; flex-wrap: wrap; padding: 8px; gap: 8px; }
   .partikel-række { flex: 1 1 220px; padding: 6px 8px; }
   .partikel-række .kugle { width: 24px; height: 24px; }

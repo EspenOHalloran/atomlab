@@ -69,6 +69,14 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Atomværkstedet</h2>
+      <div class="opgave-pille" id="opgavePille">
+        <button class="opgave-mærke" id="knapOpgaver" title="Se alle opgaver">★ <span id="opgaveTæller"></span></button>
+        <span class="opgave-indhold">
+          <span class="opgave-tekst" id="opgaveTekst"></span>
+          <span class="opgave-krav" id="opgaveKrav"></span>
+        </span>
+        <button class="opgave-fold" id="knapOpgaveFold" title="Skjul opgaven">–</button>
+      </div>
       <div class="topknapper">
         <button class="knap lille" id="knapVisning" title="Skift mellem ringe og elektronsky">Elektronsky</button>
         <button class="knap lille ikon" id="knapLyd" title="Lyd til/fra">🔊</button>
@@ -76,15 +84,6 @@
         <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
       </div>
     </header>
-
-    <div class="opgavebjælke" id="opgavebjælke">
-      <div class="opgave-nu">
-        <span class="opgave-mærke">Opgave</span>
-        <span id="opgaveTekst"></span>
-        <span class="opgave-krav" id="opgaveKrav"></span>
-      </div>
-      <button class="knap lille" id="knapOpgaver">Alle opgaver <span id="opgaveTæller"></span></button>
-    </div>
 
     <aside class="panel byg" id="byggepanel">
       <div class="partikel-række" data-type="p">
@@ -129,16 +128,30 @@
     <div class="vindue" id="vaerkstedVindue"></div>
 
     <aside class="panel info" id="infopanel">
-      <div class="grundstofkort" id="grundstofkort">
-        <span class="nr" id="infoNr"></span>
-        <span class="symbol" id="infoSymbol">?</span>
-        <span class="navn" id="infoNavn"></span>
-        <span class="masse" id="infoMasse"></span>
+      <div class="info-hoved">
+        <div class="grundstofkort" id="grundstofkort">
+          <span class="nr" id="infoNr"></span>
+          <span class="symbol" id="infoSymbol">?</span>
+          <span class="masse" id="infoMasse"></span>
+        </div>
+        <div class="info-titel">
+          <h3 id="infoNavn"></h3>
+          <p class="kategori" id="infoKategori"></p>
+        </div>
       </div>
-      <div class="info-indhold">
-        <p class="kategori" id="infoKategori"></p>
+      <div class="status-linje" id="statusLinje"></div>
+      <nav class="faner" role="tablist">
+        <button class="fane-knap" data-fane="atom" role="tab">Atom</button>
+        <button class="fane-knap" data-fane="kerne" role="tab">Kerne<span class="fane-prik"></span></button>
+        <button class="fane-knap" data-fane="fakta" role="tab">Fakta</button>
+      </nav>
+      <div class="fane" data-fane="atom">
         <dl class="tal" id="infoTal"></dl>
+        <p class="model-note" id="infoModel"></p>
+      </div>
+      <div class="fane" data-fane="kerne">
         <div class="stabilitet" id="infoStabilitet"></div>
+        <div class="sidste-henfald skjult" id="sidsteHenfald"></div>
         <div class="stabkort" id="stabkort">
           <div class="stabkort-top">
             <strong>Stabilitetskort</strong>
@@ -151,8 +164,10 @@
           <p class="stabkort-forklaring"><span class="prik"></span>stabile kerner <span class="streg"></span>lige mange protoner og neutroner</p>
           <p class="stabkort-tekst" id="stabkortTekst"></p>
         </div>
+      </div>
+      <div class="fane" data-fane="fakta">
         <p class="fakta" id="infoFakta"></p>
-        <p class="model-note" id="infoModel"></p>
+        <dl class="tal lille" id="infoOm"></dl>
         <blockquote class="citat lille" id="infoCitat"></blockquote>
       </div>
     </aside>
@@ -211,6 +226,12 @@
         <p><strong>Men ikke for mange!</strong> Forestil dig, at protoner og neutroner står på hver sin trappe med plads til to på hvert trin. Er der langt flere neutroner, må de ekstra stå højt oppe. Så kan det betale sig for en neutron at lave sig om til en proton og skyde en elektron ud. Det hedder <strong>betahenfald</strong>. Er der for få neutroner, sker det omvendte (beta-plus-henfald).</p>
         <blockquote class="citat" data-citat="rutherford"></blockquote>
         <p><strong>Lette kerner</strong> har cirka lige mange protoner og neutroner. <strong>Tunge kerner</strong> skal have flere neutroner end protoner, fordi frastødningen virker over hele kernen, mens limen kun virker mellem naboer. Jern-56 har 1,15 neutroner pr. proton, guld-197 har 1,5 og uran-238 har 1,6. Det kan du se på <strong>stabilitetskortet</strong>: båndet af stabile kerner bøjer væk fra den stiplede linje. Fra grundstof nr. 84 og opefter er ingen kerner stabile. De er for store og skyder små heliumkerner ud (<strong>alfahenfald</strong>).</p>
+        <h4 id="hjælpBeta">Hvad betyder det, at kernen "skyder en elektron ud"?</h4>
+        <p>Det lyder mærkeligt, for der er jo ingen elektroner inde i kernen. Og det er netop pointen: <strong>Elektronen bliver skabt i samme øjeblik</strong>, som en neutron laver sig om til en proton. Det er den <em>svage kernekraft</em>, der kan gøre det. (Protoner og neutroner er selv bygget af endnu mindre partikler, kvarker, og ved betahenfald skifter én kvark type.)</p>
+        <p>Energien kommer fra kernen selv: Den nye kerne vejer en lille smule mindre end den gamle, og den forsvundne masse er blevet til energi (E = mc²). Den energi bliver til den nye elektron og giver den fart på.</p>
+        <p><strong>Hvor bliver den af?</strong> Elektronen suser ud med en stor del af lysets hastighed. På vejen støder den ind i andre atomer og slår deres elektroner løs (det er derfor, stråling kan være farlig). For hvert sammenstød bliver den langsommere, og efter nogle millimeter i kroppen eller et par meter i luft er den bremset helt op. Så er den bare en helt almindelig elektron, som bliver fanget af et atom, måske et der manglede en.</p>
+        <p><strong>Og den usynlige partikel?</strong> Sammen med elektronen bliver der skabt en <em>antineutrino</em>. Den reagerer næsten aldrig med noget og flyver lige gennem hele Jorden. Hvert sekund suser hundredvis af billioner neutrinoer fra Solen gennem din krop, uden at du mærker noget.</p>
+        <p><strong>Alfahenfald er anderledes:</strong> Her bliver der ikke skabt noget nyt. De 2 protoner og 2 neutroner sad allerede i kernen og slipper ud. Alfapartiklen bliver bremset efter få centimeter i luft, fanger 2 elektroner og bliver til almindelig heliumgas. Det meste helium på Jorden er faktisk lavet sådan, af uran og thorium i undergrunden.</p>
         <p>Når en kerne henfalder, bliver den til et <em>andet grundstof</em>. Det var lige præcis det, alkymisterne drømte om! Prøv knappen "Se den henfalde" ved en ustabil kerne.</p>
         <blockquote class="citat" data-citat="feynman"></blockquote>
         <p><strong>Ikke målfast!</strong> Hvis kernen var så stor som her, ville et rigtigt atom være flere kilometer bredt. Atomer er næsten kun tomt rum.</p>

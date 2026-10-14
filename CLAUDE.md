@@ -35,6 +35,10 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 ## Gemte data (localStorage)
 - `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`
 - `atomlabLyd`: `'til'` eller `'fra'`
+- `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne` eller `fakta`)
+- `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
+
+Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta) og være kort, eller ind i hjælpen.
 
 Et grundstof bliver "opdaget", når man har bygget et neutralt atom af det, og kernen kan hænge sammen. Først derefter kan man hoppe direkte til det i det lille periodiske system.
 
