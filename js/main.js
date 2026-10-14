@@ -5,6 +5,7 @@ import { lavVerden, verden, sætVindue, flyInd, stopKamera } from './scene3d.js'
 import { Atom } from './atom.js';
 import { lavVærksted, startVærksted, stopVærksted, OPGAVER, åbnGrundstof } from './vaerksted.js';
 import { lavSystem, startSystem, stopSystem } from './system.js';
+import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
@@ -14,6 +15,7 @@ const skærme = {
   menu: { start: startMenu, stop: stopMenu },
   vaerksted: { start: startVærksted, stop: stopVærksted },
   system: { start: startSystem, stop: stopSystem },
+  fusion: { start: startFusion, stop: stopFusion },
 };
 
 let aktivSkærm = null;
@@ -41,6 +43,7 @@ function start() {
       location.hash = '#vaerksted';
     },
   });
+  lavFusion();
   lavFuldSkærmKnapper();
   // Lydknapper på de andre skærme (værkstedet har sin egen)
   for (const knap of document.querySelectorAll('[data-lyd-knap]')) {
@@ -53,6 +56,12 @@ function start() {
   // Faste citater i hjælpen
   for (const boks of document.querySelectorAll('[data-citat]')) boks.innerHTML = citatHTML(boks.dataset.citat);
   addEventListener('hashchange', visSkærm);
+  // Esc lukker hjælp og andre dialoger
+  addEventListener('keydown', (h) => {
+    if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
+  });
+  // Adgang for automatiske tests
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { fusion: fusionTest() };
   visSkærm();
 }
 
@@ -87,9 +96,9 @@ function startMenu() {
   // Et nyt citat hver gang man kommer til menuen
   const nøgle = MENU_CITATER[Math.floor(Math.random() * MENU_CITATER.length)];
   document.getElementById('menuCitat').innerHTML = citatHTML(nøgle);
-  const løste = fremgang.antalLøste(OPGAVER.map((o) => o.id));
+  const alle = [...OPGAVER, ...OPGAVER_FUSION].map((o) => o.id);
   document.getElementById('menuStatus').textContent =
-    `Opdagede grundstoffer: ${fremgang.antalOpdaget()} af 118 · Opgaver klaret: ${løste} af ${OPGAVER.length}`;
+    `Opdagede grundstoffer: ${fremgang.antalOpdaget()} af 118 · Opgaver klaret: ${fremgang.antalLøste(alle)} af ${alle.length}`;
 }
 
 function stopMenu() {

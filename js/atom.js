@@ -33,7 +33,7 @@ const MAX_LIM = 2400; // højst så mange lyspunkter for kernekraften
 
 // Giver kuglerne et lysende kantlys og lader dem pulsere svagt (hver kugle i sin egen takt).
 // Det gøres ved at tilføje lidt kode til Three.js' almindelige materiale.
-function tilføjKantlys(materiale, kantFarve, pulsFarve, tid) {
+export function tilføjKantlys(materiale, kantFarve, pulsFarve, tid) {
   materiale.onBeforeCompile = (shader) => {
     shader.uniforms.uKant = { value: kantFarve };
     shader.uniforms.uPuls = { value: pulsFarve };

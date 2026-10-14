@@ -33,11 +33,14 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Klik på et felt: væggen trækker sig tilbage, og grundstoffet vises som et atom i 3D. Kortet til højre viser fakta, hvor det findes, hvad det bruges til, hvornår og af hvem det blev opdaget, hvor navnet kommer fra, elektronskaller og stabile isotoper. Pilene (eller piletasterne) skifter grundstof.
   - "Byg det i værkstedet": er grundstoffet opdaget, åbnes det i værkstedet. Ellers får man en opgave om selv at bygge det (så "opdaget" stadig betyder, at man har bygget det).
   - Filtre: kategori, tilstand (fast, væske, gas) og opdagede.
-- [ ] **Trin 3: Stjerneovnen (fusion)**
-  - Solens kerne: brintkerner suser rundt. En temperaturskyder viser, at de frastøder hinanden, når det er for koldt.
-  - pp-kæden trin for trin: p + p → deuterium + positron + neutrino, d + p → helium-3 + gammastråling, ³He + ³He → helium-4 + 2 p.
-  - Energi i MeV og forklaring af massetabet (E = mc²). Ærlig note om, at det i virkeligheden tager milliarder af år for én proton.
-  - Opgaver, og som bonus tre-alfa-processen (3 helium-4 → carbon-12).
+- [x] **Trin 3: Stjerneovnen (fusion)**
+  - Solens kerne i 3D: brintkerner suser rundt i et glødende plasma med frie elektroner (små blå gnister). Temperaturskyder fra 1 til 120 mio. °C og to tempi.
+  - Plusladede kerner frastøder hinanden synligt (de bøjer af). Kun hvis de er hurtige nok, når de sammen. Er det for koldt, bliver en skudt proton skubbet væk.
+  - Klik på en kerne og derefter på en anden for at skyde den første mod den anden (lige så hurtigt som temperaturen tillader). Målet bremser lidt, så det er til at ramme.
+  - pp-kæden med rigtige energier: p + p → D + e⁺ + ν (1,44 MeV, lykkes kun nogle gange, fordi en proton skal laves om til en neutron), D + p → ³He + γ (5,49 MeV), ³He + ³He → ⁴He + 2 p (12,86 MeV). Bonus ved mindst 80 mio. °C: ⁴He + ⁴He → ⁸Be, som skal rammes af en tredje ⁴He, før den falder fra hinanden → ¹²C.
+  - Lysglimt, chokbølge, "+MeV" der svæver op, positroner, neutrinoer og gammastråling med hale. Panel med frigjort energi, Solens opskrift (med tællere), seneste reaktion og E = mc².
+  - Hjælpen siger ærligt, at det i virkeligheden kræver tunneleffekt, og at første skridt tager milliarder af år for én proton.
+  - 7 opgaver (fx "for koldt", deuterium, helium-3, helium-4, 5 helium, 100 MeV og carbon).
 - [ ] **Trin 4: Reaktoren (fission)**
   - Spalt én kerne: en langsom neutron rammer uran-235, som spalter i et af tre rigtige par (Ba-141 + Kr-92 + 3 n, Xe-140 + Sr-94 + 2 n, Te-137 + Zr-97 + 2 n).
   - Kædereaktion med kontrolstave og moderator. Opgave: hold reaktoren stabil i 30 sekunder.

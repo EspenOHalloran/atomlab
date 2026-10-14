@@ -25,6 +25,8 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `js/atom.js`: klassen `Atom`, som tegner kernen (protoner og neutroner som InstancedMesh med enkel fysik), elektronskaller som ringe eller elektronsky, et skær om kernen (farven viser stabilitet), festfyrværkeri (`fejr()`) og henfald (`henfald(måde, færdig)`). `sætMål(p, n, e)` får partiklerne til at flyve ind eller ud.
 - `js/vaerksted.js`: Atomværkstedet: knapper, infopanel, det lille periodiske system og `OPGAVER`. `åbnGrundstof(nr)` bruges fra Det periodiske system.
 - `js/system.js`: Det periodiske system (`#system`): den buede væg, filtre og detaljevisning med et `Atom`
+- `js/fusion.js`: Stjerneovnen (`#fusion`): kernetyper (`TYPER`), reaktioner (`REAKTIONER`), opgaver (`OPGAVER_FUSION`), fysik i små delskridt (frastødning, sammenstød) og klik-for-at-skyde
+- `js/effekter.js`: fælles effekter (`Effekter`: glimt, bølge, skyd, tekst), som også bruges af Reaktoren
 - `js/data/fakta.js`: `FAKTA` for alle 118 grundstoffer (findes, bruges, opdaget, af, navn)
 - `js/fremgang.js`: løste opgaver og opdagede grundstoffer
 - `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler)
@@ -43,6 +45,9 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta) og være kort, eller ind i hjælpen.
 
 Et grundstof bliver "opdaget", når man har bygget et neutralt atom af det, og kernen kan hænge sammen. Først derefter kan man hoppe direkte til det i det lille periodiske system.
+
+## Automatiske tests
+Åbnes siden med `?test` i adressen (fx `index.html?test#fusion`), findes `window.atomlabTest` med adgang til simuleringerne (fx `atomlabTest.fusion.spol(60)` spoler 60 sekunder frem uden at tegne). Det bruges kun af tests.
 
 ## Afprøv
 Moduler virker ikke ved dobbeltklik på `index.html`. Start en lille server i mappen:

@@ -109,6 +109,13 @@ export const lyd = {
     tone({ fra: 1568, til: 2093, varighed: 0.5, styrke: 0.05, forsinkelse: 0.4 });
   },
   klik: () => tone({ fra: 900, varighed: 0.04, type: 'square', styrke: 0.03 }),
+  // Fusion: et dybt "vuup" og en klokkeklang (flere toner jo længere i kæden)
+  fusion: (trin = 0) => {
+    const stor = trin >= 2;
+    tone({ fra: 190, til: 55, varighed: 0.55, type: 'sine', styrke: stor ? 0.5 : 0.3 });
+    støj({ varighed: 0.5, fra: 4200, til: 260, filter: 'lowpass', styrke: stor ? 0.3 : 0.16 });
+    [660, 990, 1320].slice(0, 1 + Math.min(2, trin)).forEach((f, i) => tone({ fra: f, varighed: 0.45, type: 'triangle', styrke: 0.07, forsinkelse: 0.05 + i * 0.08 }));
+  },
   // Kernen ryster: en rumlen, der vokser, og geigerklik, der kommer hurtigere og hurtigere
   opbygning: () => {
     støj({ varighed: 0.85, fra: 150, til: 900, filter: 'lowpass', styrke: 0.18, angreb: 0.7 });

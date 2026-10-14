@@ -42,14 +42,13 @@
           <small>Alle 118 grundstoffer i 3D</small>
         </span>
       </a>
-      <div class="kort låst">
+      <a class="kort åben" href="#fusion">
         <span class="kort-ikon ikon-stjerne"></span>
         <span class="kort-tekst">
           <strong>Stjerneovnen</strong>
           <small>Fusion: lav helium af hydrogen ligesom Solen</small>
         </span>
-        <span class="snart">Kommer snart</span>
-      </div>
+      </a>
       <div class="kort låst">
         <span class="kort-ikon ikon-reaktor"></span>
         <span class="kort-tekst">
@@ -211,6 +210,69 @@
     <nav class="panel system-filtre" id="systemFiltre" aria-label="Filtre"></nav>
     <div class="system-etiket skjult" id="systemEtiket"></div>
   </section>
+
+  <!-- ===== Stjerneovnen ===== -->
+  <section id="fusion" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Stjerneovnen</h2>
+      <span class="system-status">Inde i Solens kerne</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="fusHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <label class="skyder-boks">
+        <span class="skyder-top"><span>Temperatur</span><strong id="fusTemp"></strong></span>
+        <input type="range" id="fusTempSkyder" min="1" max="120" step="1" value="15">
+        <small id="fusZone"></small>
+      </label>
+      <div class="knap-række">
+        <button class="knap lille" id="fusTilføj">+ 10 protoner</button>
+        <button class="knap lille" id="fusTempo">Tempo: normal</button>
+        <button class="knap lille svag" id="fusRyd">Start forfra</button>
+      </div>
+      <p class="klik-tip">Klik på en kerne og derefter på en anden for at skyde den første mod den anden.</p>
+      <ul class="kerne-liste" id="fusKerner"></ul>
+      <h4 class="panel-overskrift">Opgaver</h4>
+      <ol class="opgaver kompakt" id="fusOpgaver"></ol>
+    </aside>
+    <div class="vindue" id="fusionVindue"></div>
+    <aside class="panel side-panel højre-panel">
+      <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong></div>
+      <h4 class="panel-overskrift">Solens opskrift</h4>
+      <ol class="opskrift" id="fusOpskrift">
+        <li data-trin="0"><span class="ligning">p + p → <b>D</b> + e⁺ + ν</span><span class="mev">1,44 MeV</span><span class="antal"></span></li>
+        <li data-trin="1"><span class="ligning">D + p → <b>³He</b> + γ</span><span class="mev">5,49 MeV</span><span class="antal"></span></li>
+        <li data-trin="2"><span class="ligning">³He + ³He → <b>⁴He</b> + p + p</span><span class="mev">12,86 MeV</span><span class="antal"></span></li>
+        <li data-trin="3" class="bonus"><span class="ligning">3 ⁴He → <b>C</b> (rød kæmpe)</span><span class="mev">7,27 MeV</span><span class="antal"></span></li>
+      </ol>
+      <div class="seneste-boks" id="fusSeneste"></div>
+      <div class="forklaring-boks">
+        <strong>Hvor kommer energien fra?</strong>
+        4 protoner vejer 0,7 % mere end en heliumkerne. Den forsvundne masse er blevet til energi, ligesom Einstein forudsagde: E = mc².
+      </div>
+      <blockquote class="citat lille" data-citat="einsteinEnergi"></blockquote>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpFusion" role="dialog" aria-label="Hjælp til Stjerneovnen">
+    <div class="dialog">
+      <header><h3>Sådan virker Stjerneovnen</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p>Du er inde i <strong>Solens kerne</strong>. Her er det ca. 15 millioner grader varmt, så varmt at elektronerne er revet af atomerne. Kernerne suser rundt i et <strong>plasma</strong>, og de små blå gnister er de frie elektroner.</p>
+        <p><strong>Sådan gør du:</strong> Klik på en kerne og derefter på en anden. Så bliver den første skudt mod den anden, lige så hurtigt som temperaturen tillader. Træk for at dreje, og rul eller knib for at zoome.</p>
+        <p><strong>Frastødning:</strong> Alle kernerne er plusladede og skubber hinanden væk. Kun hvis de er hurtige nok, kommer de helt tæt på hinanden, og så tager den stærke kernekraft over og limer dem sammen. Derfor kræver fusion så høj en temperatur.</p>
+        <p><strong>Solens opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. Til sidst bliver to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri.</p>
+        <p><strong>Ærligt talt:</strong> Vi har gjort det meget lettere end i virkeligheden. I Solen er protonerne faktisk ikke hurtige nok til at komme over frastødningen. De klarer det kun takket være kvantemekanikkens <em>tunneleffekt</em>. Og det første skridt er ekstremt sjældent: En proton venter i gennemsnit milliarder af år, før det sker. Solen klarer sig kun, fordi den har ufatteligt mange protoner.</p>
+        <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger mange tusinde år, før energien når overfladen som sollys.</p>
+        <p><strong>Røde kæmper:</strong> Når en stjerne har brugt sit hydrogen, bliver kernen varmere, ca. 100 millioner grader. Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
+        <blockquote class="citat" data-citat="saganStjernestof"></blockquote>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Opgaveliste ===== -->
   <div class="overlag skjult" id="opgaveliste" role="dialog" aria-label="Opgaver">
