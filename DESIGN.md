@@ -19,7 +19,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Kernen ryster og lyser grønt, når den er ustabil, og blinker rødt, når den slet ikke kan hænge sammen.
   - Skift mellem ringe (Bohrs model) og elektronsky, med en ærlig forklaring.
   - Lille periodisk system. Grundstoffer bliver "opdaget", når man har bygget dem, og så kan man hoppe direkte til dem.
-  - 11 opgaver: hydrogen, helium-4, deuterium, carbon-12, oxygen-16, neon-20, Na⁺, Cl⁻, carbon-14, jern-56 og uran-235.
+  - 16 opgaver: hydrogen, to protoner uden neutroner, helium-4, deuterium, tritium, se et henfald, carbon-12, den tungeste stabile carbon, oxygen-16, neon-20, Na⁺, Cl⁻, carbon-14, jern-56, uran-235 og uran-238-kæden ned til bly-206. Man kan starte forfra med opgaverne (opdagede grundstoffer beholdes).
+- [x] **Trin 1b: Neutronernes rolle og ioner**
+  - Stabilitetskort: protoner op ad, neutroner hen ad. De stabile kerner danner et bånd, der bøjer mod flere neutroner, og ens egen kerne er en lysende prik. Teksten under viser neutroner pr. proton og hvor mange neutroner, stabile kerner af grundstoffet har.
+  - "Se den henfalde": kernen ryster, og så sker henfaldet som animation (betahenfald, beta-plus, alfa, dobbelt beta, neutron eller proton ud) med lysglimt og partikler med hale. Atomet bliver til det nye grundstof og er en ion et øjeblik, før det bliver neutralt igen. Uran-238-kæden følger den rigtige rækkefølge (8 alfa, 6 beta).
+  - Hjælpen forklarer "Hvad er en ion?" og "Hvorfor neutroner?", og der er "Hvorfor?"-links fra infopanelet.
 - [ ] **Trin 2: Det periodiske system**
   - En 3D-væg med 118 felter, farvet efter kategori. Kameraet flyver ind, når man vælger et felt.
   - Kort med et 3D-atom, der drejer, 2-4 sætninger fakta, hvor stoffet findes, og hvad det bruges til. Knap: "Byg det i værkstedet".
@@ -34,6 +38,5 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Kædereaktion med kontrolstave og moderator. Opgave: hold reaktoren stabil i 30 sekunder.
 
 ## Idéer til senere
-- Lad ustabile kerner henfalde med en animation (alfa, beta).
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).

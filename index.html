@@ -122,7 +122,7 @@
         <button class="knap" id="knapStabil" title="Det mest almindelige antal neutroner">Stabil kerne</button>
         <button class="knap svag" id="knapRyd">Ryd</button>
       </div>
-      <p class="tastatur-tip">Taster: P, N og E tilføjer. Med Shift fjerner de.</p>
+      <p class="tastatur-tip">Taster: P, N og E tilføjer. Med Shift fjerner de. H lader en ustabil kerne henfalde.</p>
     </aside>
 
     <div class="vindue" id="vaerkstedVindue"></div>
@@ -138,6 +138,18 @@
         <p class="kategori" id="infoKategori"></p>
         <dl class="tal" id="infoTal"></dl>
         <div class="stabilitet" id="infoStabilitet"></div>
+        <div class="stabkort" id="stabkort">
+          <div class="stabkort-top">
+            <strong>Stabilitetskort</strong>
+            <span class="stabkort-valg">
+              <button class="chip" data-område="lette">Lette</button>
+              <button class="chip" data-område="alle">Alle</button>
+            </span>
+          </div>
+          <canvas id="stabilitetskort" aria-label="Kort over stabile kerner"></canvas>
+          <p class="stabkort-forklaring"><span class="prik"></span>stabile kerner <span class="streg"></span>lige mange protoner og neutroner</p>
+          <p class="stabkort-tekst" id="stabkortTekst"></p>
+        </div>
         <p class="fakta" id="infoFakta"></p>
         <p class="model-note" id="infoModel"></p>
       </div>
@@ -158,6 +170,9 @@
     <div class="dialog">
       <header><h3>Opgaver i Atomværkstedet</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <ol class="opgaver" id="opgaver"></ol>
+      <footer class="dialog-fod">
+        <button class="knap lille svag" id="knapOpgaverForfra">↺ Start opgaverne forfra</button>
+      </footer>
     </div>
   </div>
 
@@ -170,6 +185,18 @@
         <p><span class="kugle neutron lille"></span> <strong>Neutroner</strong> har ingen ladning. De er en slags lim, der holder kernen sammen, for protonerne frastøder hinanden. Atomer af samme grundstof med forskelligt antal neutroner kaldes <strong>isotoper</strong>.</p>
         <p><span class="kugle elektron lille"></span> <strong>Elektroner</strong> er minusladede og meget lettere. De befinder sig i skaller rundt om kernen. Har atomet for mange eller for få elektroner, kaldes det en <strong>ion</strong>.</p>
         <p><strong>Massetal</strong> = protoner + neutroner. Carbon-14 har 6 protoner og 8 neutroner.</p>
+        <h4 id="hjælpIoner">Hvad er en ion?</h4>
+        <p>Et atom er normalt <strong>neutralt</strong>: Det har lige mange plusladede protoner og minusladede elektroner, så ladningerne går lige op. Protonerne sidder dybt inde i kernen og kan kun ændres ved kernereaktioner. Men elektronerne sidder udenpå, og de yderste sidder løst. De kan flyttes fra ét atom til et andet, når atomerne mødes. Har atomet for få eller for mange elektroner, kaldes det en <strong>ion</strong>.</p>
+        <p><strong>Hvorfor giver et atom en elektron væk?</strong> Atomer er mest "tilfredse" med en fyldt yderste skal, ligesom ædelgasserne. Det er en forenkling, men den passer godt for de lette grundstoffer. Natrium har skallerne 2 · 8 · 1. Den ene elektron yderst sidder løst, og giver natrium den væk, har det kun fyldte skaller tilbage (2 · 8). Så har det 11 protoner, men kun 10 elektroner. Det er nu en positiv ion: <strong>Na⁺</strong>.</p>
+        <p><strong>Og hvorfor tager et andet atom én ekstra?</strong> Chlor har 2 · 8 · 7 og mangler kun én elektron i at fylde den yderste skal. Det tager gerne én, og så har det 17 protoner og 18 elektroner. Det er nu en negativ ion: <strong>Cl⁻</strong>.</p>
+        <p>Plus og minus tiltrækker hinanden, så Na⁺ og Cl⁻ holder sammen. Det er <strong>køkkensalt</strong>! Ioner er overalt: Dine nerver sender signaler med natrium- og kalium-ioner, og batteriet i en telefon virker, fordi lithium-ioner vandrer frem og tilbage.</p>
+        <p><strong>Hvorfor ikke uendeligt mange?</strong> Jo flere elektroner et atom har mistet, jo mere plusladet bliver det, og jo hårdere holder det på resten. Og en negativ ion skubber nye elektroner væk. Derfor ser man oftest ladninger som +1, +2, +3, −1 og −2. I værkstedet kan et atom højst få 2 ekstra elektroner.</p>
+        <p>Du kender det også fra statisk elektricitet: Gnider du en ballon mod håret, flytter elektroner sig fra håret over på ballonen. Så bliver ballonen minusladet og kan hænge fast på væggen.</p>
+        <h4 id="hjælpNeutroner">Hvorfor neutroner?</h4>
+        <p>Protonerne frastøder hinanden, fordi de alle er plusladede. Kernen holdes sammen af den <strong>stærke kernekraft</strong>, som trækker i alle protoner og neutroner. Den er meget stærkere end frastødningen, men den virker kun mellem nære naboer. Neutronerne giver altså ekstra "lim" uden at skubbe. Derfor kan 2 protoner alene ikke holde sammen, mens 2 protoner og 2 neutroner (helium-4) er en af de mest stabile kerner, der findes.</p>
+        <p><strong>Men ikke for mange!</strong> Forestil dig, at protoner og neutroner står på hver sin trappe med plads til to på hvert trin. Er der langt flere neutroner, må de ekstra stå højt oppe. Så kan det betale sig for en neutron at lave sig om til en proton og skyde en elektron ud. Det hedder <strong>betahenfald</strong>. Er der for få neutroner, sker det omvendte (beta-plus-henfald).</p>
+        <p><strong>Lette kerner</strong> har cirka lige mange protoner og neutroner. <strong>Tunge kerner</strong> skal have flere neutroner end protoner, fordi frastødningen virker over hele kernen, mens limen kun virker mellem naboer. Jern-56 har 1,15 neutroner pr. proton, guld-197 har 1,5 og uran-238 har 1,6. Det kan du se på <strong>stabilitetskortet</strong>: båndet af stabile kerner bøjer væk fra den stiplede linje. Fra grundstof nr. 84 og opefter er ingen kerner stabile. De er for store og skyder små heliumkerner ud (<strong>alfahenfald</strong>).</p>
+        <p>Når en kerne henfalder, bliver den til et <em>andet grundstof</em>. Det var lige præcis det, alkymisterne drømte om! Prøv knappen "Se den henfalde" ved en ustabil kerne.</p>
         <p><strong>Ikke målfast!</strong> Hvis kernen var så stor som her, ville et rigtigt atom være flere kilometer bredt. Atomer er næsten kun tomt rum.</p>
         <p><strong>Ringe eller sky?</strong> Ringene er en forenklet tegning (Bohrs atommodel), der gør det let at tælle elektronerne. I virkeligheden kan man kun sige, hvor elektronerne <em>sandsynligvis</em> er, og det ligner mere en sky. Prøv knappen "Elektronsky".</p>
         <p><strong>Styring:</strong> Træk for at dreje atomet. Rul eller knib for at zoome. Klik på et grundstof i det lille periodiske system for at hoppe til det, men først når du har bygget det selv én gang.</p>

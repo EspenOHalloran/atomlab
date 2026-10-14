@@ -22,14 +22,15 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `style.css`: mørkt rum-tema. Layoutet tilpasser sig ved 1150 px og 820 px bredde.
 - `js/main.js`: starter 3D-verdenen og skifter skærm efter `#` i adressen (`#vaerksted`)
 - `js/scene3d.js`: fælles renderer, kamera, lys, stjernehimmel og glød (bloom). `sætVindue(el)` centrerer 3D-billedet i et HTML-element (hullet mellem panelerne), og `passerTil(radius)` zoomer kameraet. Funktioner i `verden.opdateringer` kaldes hvert billede.
-- `js/atom.js`: klassen `Atom`, som tegner kernen (protoner og neutroner som InstancedMesh med enkel fysik), elektronskaller som ringe eller elektronsky, et skær om kernen (farven viser stabilitet) og festfyrværkeri (`fejr()`). `sætMål(p, n, e)` får partiklerne til at flyve ind eller ud.
+- `js/atom.js`: klassen `Atom`, som tegner kernen (protoner og neutroner som InstancedMesh med enkel fysik), elektronskaller som ringe eller elektronsky, et skær om kernen (farven viser stabilitet), festfyrværkeri (`fejr()`) og henfald (`henfald(måde, færdig)`). `sætMål(p, n, e)` får partiklerne til at flyve ind eller ud.
 - `js/vaerksted.js`: Atomværkstedet: knapper, infopanel, det lille periodiske system og `OPGAVER`
 - `js/fremgang.js`: løste opgaver og opdagede grundstoffer
 - `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler)
 - `js/beskeder.js`: beskeder øverst på skærmen
+- `js/stabilitetskort.js`: klassen `Stabilitetskort`, som tegner kortet over stabile kerner (2D-canvas) i infopanelet
 - `js/fuldskaerm.js`: knapperne til fuld skærm (klassen `knap-fuldskaerm`). De skjules, hvis browseren ikke kan vise fuld skærm (fx iPhone).
 - `js/data/grundstoffer.js`: alle 118 grundstoffer (navn, symbol, masse, kategori, tilstand), korte fakta, elektronskaller (`skaller`, `skallerForIon`) og placering i tabellen (`placering`)
-- `js/data/isotoper.js`: stabile isotoper, næsten stabile, kendte radioaktive med halveringstid og `stabilitet(z, n)`
+- `js/data/isotoper.js`: stabile isotoper, næsten stabile, kendte radioaktive med halveringstid, `stabilitet(z, n)` og `henfaldsmåde(z, n)`. Henfaldsmåden findes ud fra kendte data og reglen "bliv til en (næsten) stabil nabo med samme massetal". Ændres reglerne, så tjek at alle kombinationer ender i en stabil kerne uden løkker, og at uran-238 ender som bly-206 efter 8 alfa- og 6 betahenfald.
 
 ## Gemte data (localStorage)
 - `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`

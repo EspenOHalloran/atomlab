@@ -57,6 +57,12 @@ export function antalLøste(ider) {
   return ider.filter(erLøst).length;
 }
 
+// Starter forfra med opgaverne (de opdagede grundstoffer beholdes)
+export function nulstilOpgaver() {
+  data.opgaver = {};
+  gem();
+}
+
 export function nulstilFremgang() {
   data = { opgaver: {}, opdaget: [] };
   gem();

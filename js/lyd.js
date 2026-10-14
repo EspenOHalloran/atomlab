@@ -72,4 +72,16 @@ export const lyd = {
     tone({ fra: 1568, til: 2093, varighed: 0.5, styrke: 0.05, forsinkelse: 0.4 });
   },
   klik: () => tone({ fra: 900, varighed: 0.04, type: 'square', styrke: 0.03 }),
+  // Kernen ryster og summer, lige før den henfalder
+  opbygning: () => {
+    tone({ fra: 90, til: 260, varighed: 0.8, type: 'sawtooth', styrke: 0.05 });
+    tone({ fra: 180, til: 520, varighed: 0.8, type: 'triangle', styrke: 0.04 });
+  },
+  // Selve henfaldet: et brag og et "pew", når partiklen skydes ud
+  henfald: (måde) => {
+    tone({ fra: 140, til: 40, varighed: 0.5, type: 'sawtooth', styrke: 0.12 });
+    tone({ fra: 2400, til: 300, varighed: 0.35, type: 'square', styrke: 0.03 });
+    if (måde === 'alfa') tone({ fra: 700, til: 160, varighed: 0.6, type: 'triangle', styrke: 0.08, forsinkelse: 0.05 });
+    else tone({ fra: 3000, til: 900, varighed: 0.25, type: 'sine', styrke: 0.06, forsinkelse: 0.05 });
+  },
 };

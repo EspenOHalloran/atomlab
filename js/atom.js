@@ -47,6 +47,7 @@ export class Atom {
     const eGeo = new THREE.SphereGeometry(0.2, 14, 10);
     this.eMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1.3, 3.4, 4.2) });
     this.eMesh = new THREE.InstancedMesh(eGeo, this.eMat, MAX_E + 40);
+    this.eGeo = eGeo;
 
     for (const m of [this.pMesh, this.nMesh, this.eMesh]) {
       m.count = 0;
@@ -65,7 +66,13 @@ export class Atom {
       depthWrite: false, blending: THREE.AdditiveBlending,
     }));
 
-    this.gruppe.add(this.pMesh, this.nMesh, this.eMesh, this.ringGruppe, this.skyGruppe, this.skær);
+    // Et kort lysglimt (gammastråling), når kernen henfalder
+    this.glimt = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: lavPrikTekstur(true), color: new THREE.Color(3, 2.6, 1.6), transparent: true, opacity: 0,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+
+    this.gruppe.add(this.pMesh, this.nMesh, this.eMesh, this.ringGruppe, this.skyGruppe, this.skær, this.glimt);
 
     this.nukleoner = []; // { type: 'p'|'n', pos, fart, ud, liv, vækst }
     this.elektroner = []; // { pos, ud, liv, vækst, fart }
@@ -76,6 +83,9 @@ export class Atom {
     this.pladser = [];
     this.skyer = [];
     this.fester = [];
+    this.skud = []; // partikler, der skydes ud ved henfald (elektron, positron, neutrino)
+    this.henfaldVenter = null;
+    this.glimtTid = 0;
     this.tid = 0;
   }
 
@@ -272,6 +282,91 @@ export class Atom {
     partikel.fart = retning.multiplyScalar(fart);
   }
 
+  // ---------- Henfald ----------
+  // Kernen ryster voldsomt et øjeblik, og så sker henfaldet. færdig({ p, n }) kaldes bagefter.
+  henfald(måde, færdig) {
+    this.henfaldVenter = { måde, tid: 0.8, færdig };
+  }
+
+  udførHenfald(måde) {
+    let { p, n, e } = this.mål;
+    // De yderste partikler af en slags (dem, der er på plads i kernen)
+    const yderste = (type) => this.nukleoner
+      .filter((k) => !k.ud && k.type === type)
+      .sort((a, b) => ((a.påVej ? 1 : 0) - (b.påVej ? 1 : 0)) || (b.pos.lengthSq() - a.pos.lengthSq()));
+    const skift = (fra, til, antal, lepton) => {
+      const kandidater = yderste(fra);
+      for (let i = 0; i < antal; i++) {
+        const k = kandidater[i];
+        if (!k) break;
+        k.type = til;
+        k.puls = 1;
+        this.skyd(lepton, k.pos);
+        this.skyd(lepton === 'elektron' ? 'antineutrino' : 'neutrino', k.pos);
+      }
+    };
+    const skydUd = (k, retning, fart) => {
+      k.ud = true;
+      k.langsom = true;
+      k.liv = 2.2;
+      k.fart = retning.clone().multiplyScalar(fart);
+    };
+
+    if (måde === 'beta-') { skift('n', 'p', 1, 'elektron'); p += 1; n -= 1; }
+    if (måde === 'dobbeltbeta-') { skift('n', 'p', 2, 'elektron'); p += 2; n -= 2; }
+    if (måde === 'beta+') { skift('p', 'n', 1, 'positron'); p -= 1; n += 1; }
+    if (måde === 'dobbeltbeta+') { skift('p', 'n', 2, 'positron'); p -= 2; n += 2; }
+    if (måde === 'n' || måde === 'p') {
+      const k = yderste(måde)[0];
+      if (k) skydUd(k, k.pos.lengthSq() > 0.01 ? k.pos.clone().normalize() : new THREE.Vector3().randomDirection(), 22);
+      if (måde === 'n') n -= 1; else p -= 1;
+    }
+    if (måde === 'alfa') {
+      // 2 protoner og 2 neutroner tæt ved et sted på overfladen flyver ud sammen
+      const retning = new THREE.Vector3().randomDirection();
+      const punkt = retning.clone().multiplyScalar(kerneRadius(p + n));
+      for (const type of ['p', 'n']) {
+        const nærmeste = this.nukleoner
+          .filter((k) => !k.ud && k.type === type)
+          .sort((a, b) => a.pos.distanceToSquared(punkt) - b.pos.distanceToSquared(punkt))
+          .slice(0, 2);
+        for (const k of nærmeste) { skydUd(k, retning, 11); k.puls = 1; }
+      }
+      p -= 2; n -= 2;
+    }
+    this.mål = { p, n, e };
+    this.beregnSkaller();
+    this.glimtTid = 0.6;
+    return { p, n };
+  }
+
+  // Skyder en lille partikel ud med en lysende hale
+  skyd(slags, fra) {
+    const farver = {
+      elektron: new THREE.Color(1.3, 3.4, 4.2),
+      positron: new THREE.Color(4.2, 1.0, 3.4),
+      neutrino: new THREE.Color(0.9, 0.9, 1.0),
+      antineutrino: new THREE.Color(0.9, 0.9, 1.0),
+    };
+    const farve = farver[slags];
+    const spøgelse = slags.endsWith('neutrino');
+    const ud = fra.lengthSq() > 0.01 ? fra.clone().normalize() : new THREE.Vector3().randomDirection();
+    const retning = ud.add(new THREE.Vector3().randomDirection().multiplyScalar(0.6)).normalize();
+    const kugle = new THREE.Mesh(this.eGeo, new THREE.MeshBasicMaterial({ color: farve, transparent: true }));
+    kugle.scale.setScalar(spøgelse ? 0.45 : 1.2);
+    kugle.position.copy(fra);
+    const halePunkter = 18;
+    const haleGeo = new THREE.BufferGeometry();
+    haleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(halePunkter * 3), 3));
+    const hale = new THREE.Line(haleGeo, new THREE.LineBasicMaterial({
+      color: farve, transparent: true, opacity: spøgelse ? 0.25 : 0.8, depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    hale.frustumCulled = false;
+    const historik = Array.from({ length: halePunkter }, () => fra.clone());
+    this.gruppe.add(kugle, hale);
+    this.skud.push({ kugle, hale, historik, fart: retning.multiplyScalar(spøgelse ? 46 : 30), liv: 1.8 });
+  }
+
   // ---------- Kernen trækker sammen, og partiklerne skubber hinanden væk ----------
   kernefysik(dt) {
     const aktive = this.nukleoner.filter((k) => !k.ud);
@@ -330,21 +425,36 @@ export class Atom {
   // ---------- Hvert billede ----------
   opdater(dt) {
     this.tid += dt;
+    let ekstraRyst = 0;
+    if (this.henfaldVenter) {
+      const v = this.henfaldVenter;
+      v.tid -= dt;
+      ekstraRyst = 0.25 * (1 - Math.max(0, v.tid) / 0.8);
+      if (v.tid <= 0) {
+        this.henfaldVenter = null;
+        const ny = this.udførHenfald(v.måde);
+        v.færdig?.(ny);
+      }
+    }
     this.nærmerSigMål();
     this.kernefysik(dt);
 
     // Ustabile kerner ryster
-    const rystStyrke = { ustabil: 0.05, meget: 0.1, straks: 0.16, næsten: 0.015 }[this.status] || 0;
+    const rystStyrke = ({ ustabil: 0.05, meget: 0.1, straks: 0.16, næsten: 0.015 }[this.status] || 0) + ekstraRyst;
 
     let ip = 0, iN = 0;
     for (const k of this.nukleoner) {
       if (k.ud) {
         k.pos.addScaledVector(k.fart, dt);
-        k.liv -= dt * 1.4;
+        k.liv -= dt * (k.langsom ? 1 : 1.4);
       } else if (k.vækst < 1) {
         k.vækst = Math.min(1, k.vækst + dt * 3);
       }
-      const s = k.ud ? Math.max(0.001, k.liv) : k.vækst;
+      let s = k.ud ? Math.max(0.001, Math.min(1, k.liv)) : k.vækst;
+      if (k.puls > 0) {
+        s *= 1 + 0.7 * k.puls;
+        k.puls = Math.max(0, k.puls - dt * 1.5);
+      }
       ryst.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(rystStyrke * 2);
       hjælpV.copy(k.pos).add(ryst);
       hjælpMatrix.compose(hjælpV, hjælpQ, hjælpS.setScalar(s));
@@ -408,6 +518,32 @@ export class Atom {
     mat.opacity += (opacitet - mat.opacity) * Math.min(1, dt * 6);
     const skærStørrelse = kerneR * 4.2 + 1.5;
     this.skær.scale.setScalar(this.skær.scale.x + (skærStørrelse - this.skær.scale.x) * Math.min(1, dt * 4));
+
+    // Partikler fra henfald flyver ud og trækker en hale efter sig
+    for (const skud of this.skud) {
+      skud.liv -= dt;
+      skud.kugle.position.addScaledVector(skud.fart, dt);
+      skud.historik.pop();
+      skud.historik.unshift(skud.kugle.position.clone());
+      const arr = skud.hale.geometry.attributes.position.array;
+      skud.historik.forEach((v, i) => { arr[i * 3] = v.x; arr[i * 3 + 1] = v.y; arr[i * 3 + 2] = v.z; });
+      skud.hale.geometry.attributes.position.needsUpdate = true;
+      const synlig = Math.min(1, skud.liv / 0.6);
+      skud.kugle.material.opacity = synlig;
+      skud.hale.material.opacity = Math.min(skud.hale.material.opacity, synlig);
+      if (skud.liv <= 0) {
+        this.gruppe.remove(skud.kugle, skud.hale);
+        skud.kugle.material.dispose();
+        skud.hale.geometry.dispose();
+        skud.hale.material.dispose();
+      }
+    }
+    this.skud = this.skud.filter((s) => s.liv > 0);
+
+    // Gammaglimt
+    if (this.glimtTid > 0) this.glimtTid = Math.max(0, this.glimtTid - dt);
+    this.glimt.material.opacity = Math.min(0.85, this.glimtTid * 2);
+    this.glimt.scale.setScalar(kerneR * 3 + 1.5 + (0.6 - this.glimtTid) * (kerneR * 8 + 4));
 
     // Festfyrværkeri
     for (const fest of this.fester) {
