@@ -5,6 +5,7 @@ import { lavVerden, verden, sætVindue, passerTil } from './scene3d.js';
 import { Atom } from './atom.js';
 import { lavVærksted, startVærksted, stopVærksted, OPGAVER } from './vaerksted.js';
 import * as fremgang from './fremgang.js';
+import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -30,6 +31,7 @@ function start() {
   verden.scene.add(menuAtom.gruppe);
 
   lavVærksted();
+  lavFuldSkærmKnapper();
   addEventListener('hashchange', visSkærm);
   visSkærm();
 }

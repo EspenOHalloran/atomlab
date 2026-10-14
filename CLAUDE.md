@@ -27,6 +27,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `js/fremgang.js`: løste opgaver og opdagede grundstoffer
 - `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler)
 - `js/beskeder.js`: beskeder øverst på skærmen
+- `js/fuldskaerm.js`: knapperne til fuld skærm (klassen `knap-fuldskaerm`). De skjules, hvis browseren ikke kan vise fuld skærm (fx iPhone).
 - `js/data/grundstoffer.js`: alle 118 grundstoffer (navn, symbol, masse, kategori, tilstand), korte fakta, elektronskaller (`skaller`, `skallerForIon`) og placering i tabellen (`placering`)
 - `js/data/isotoper.js`: stabile isotoper, næsten stabile, kendte radioaktive med halveringstid og `stabilitet(z, n)`
 

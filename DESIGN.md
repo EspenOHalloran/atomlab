@@ -12,6 +12,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 - [x] **Trin 1: Grundskelet og Atomværkstedet**
   - Menu med fire dele. De tre sidste står som "kommer snart".
+  - Knap til fuld skærm i menuen og i værkstedet (skjules, hvor browseren ikke kan).
   - 3D-scene med stjernehimmel og glød. Man drejer og zoomer med mus eller fingre.
   - Byg et atom: protoner, neutroner og elektroner flyver ind. Hold knappen inde for at tilføje mange. Tasterne P, N og E virker også, og med Shift fjerner de.
   - Infopanel: grundstof, isotop, massetal, ladning (ion), elektronskaller og om kernen er stabil (med halveringstid og grunden til, at den er ustabil).

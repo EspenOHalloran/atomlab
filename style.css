@@ -88,6 +88,8 @@ button { font: inherit; color: inherit; }
 .knap.lille { padding: 7px 11px; font-size: 14px; border-radius: 10px; }
 .knap.ikon { width: 36px; padding: 7px 0; }
 .knap.svag { background: transparent; color: var(--svag); }
+.knap-fuldskaerm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.menu-hjørne { position: absolute; top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
 
 /* ---------- Menu ---------- */
 #menu {
