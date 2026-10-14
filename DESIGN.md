@@ -75,6 +75,16 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - **Kvasar:** en spiralgalakse med en blændende kerne og to jetstråler. Tænd og sluk, giv det sorte hul mad, og zoom ind i kernen.
   - **Ormehul:** universet tegnet som foldet papir med en tunnel. Kapløb mellem lyset (den lange vej) og et rumskib (genvejen). Det siges tydeligt, at ingen har set et ormehul.
 
+- [x] **Trin 7: Telefon, tablet og et samlet UI-review**
+  - Tablet på højkant: 3D-billedet øverst (næsten halvdelen af skærmen) og de to paneler side om side nedenunder.
+  - Telefon på højkant: 3D-billedet øverst og panelerne under hinanden. Hele skærmen ruller, og 3D-billedet følger med. I Kosmos er fænomenerne en vandret række, så knapperne kommer lige under animationen, og "lige nu"-teksten vises også som en besked.
+  - Telefon på langs: tre smalle kolonner og en kompakt menu, hvor alle seks kort kan ses.
+  - Menuen kan rulle på små skærme (før kunne man ikke nå de nederste kort på en telefon).
+  - Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere.
+  - "Start her" på Atomværkstedet, når man er helt ny. I Kosmos har fænomener, man ikke har set, en lille prik, og der står, hvor mange man har set.
+  - To nye citater (Sagan og Feynman), så citaterne i Kosmos ikke bliver gentaget.
+
 ## Idéer til senere
+- En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).

@@ -190,8 +190,8 @@ export function lavVærksted() {
   lavKnapper();
   lavFaner();
   lavMinitabel();
-  // På smalle skærme starter det periodiske system foldet sammen
-  if (matchMedia('(max-width: 820px)').matches) {
+  // På smalle og lave skærme (telefoner) starter det periodiske system foldet sammen
+  if (matchMedia('(max-width: 820px), (max-height: 500px)').matches) {
     $('minitabelPanel').classList.add('lukket');
     $('knapMinitabel').textContent = 'Vis';
   }

@@ -1,7 +1,7 @@
 // Start: laver 3D-verdenen og skifter mellem menuen og de forskellige dele.
 // Hvilken del der vises, står efter # i adressen (fx index.html#vaerksted).
 
-import { lavVerden, verden, sætVindue, flyInd, stopKamera } from './scene3d.js';
+import { lavVerden, verden, sætVindue, flyInd, stopKamera, centrerVindue } from './scene3d.js';
 import { Atom } from './atom.js';
 import { lavVærksted, startVærksted, stopVærksted, OPGAVER, åbnGrundstof } from './vaerksted.js';
 import { lavSystem, startSystem, stopSystem } from './system.js';
@@ -54,6 +54,7 @@ function start() {
   lavBatteri();
   lavKosmos();
   lavFuldSkærmKnapper();
+  lavRulleTip();
   // Lydknapper på de andre skærme (værkstedet har sin egen)
   for (const knap of document.querySelectorAll('[data-lyd-knap]')) {
     knap.addEventListener('click', () => {
@@ -65,6 +66,15 @@ function start() {
   // Faste citater i hjælpen
   for (const boks of document.querySelectorAll('[data-citat]')) boks.innerHTML = citatHTML(boks.dataset.citat);
   addEventListener('hashchange', visSkærm);
+  // På små skærme kan man rulle i en skærm. Så skal 3D-billedet følge med hullet.
+  for (const skærm of document.querySelectorAll('.skærm')) {
+    let venter = false;
+    skærm.addEventListener('scroll', () => {
+      if (venter) return;
+      venter = true;
+      requestAnimationFrame(() => { venter = false; centrerVindue(); });
+    }, { passive: true });
+  }
   // Esc lukker hjælp og andre dialoger
   addEventListener('keydown', (h) => {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
@@ -88,6 +98,24 @@ function visSkærm() {
   skærme[ny].start();
 }
 
+// Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult)
+function lavRulleTip() {
+  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, #menu, #fusion, #reaktor, #batteri, #kosmos')];
+  const tjek = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
+  let venter = false;
+  const tjekAlle = () => {
+    if (venter) return;
+    venter = true;
+    requestAnimationFrame(() => { venter = false; paneler.forEach(tjek); });
+  };
+  const størrelse = new ResizeObserver(tjekAlle);
+  for (const el of paneler) {
+    el.addEventListener('scroll', () => tjek(el), { passive: true });
+    størrelse.observe(el);
+  }
+  new MutationObserver(tjekAlle).observe(document.body, { childList: true, subtree: true, characterData: true });
+}
+
 function opdaterLydknapper() {
   for (const knap of document.querySelectorAll('[data-lyd-knap], #knapLyd')) knap.textContent = lydErTændt() ? '🔊' : '🔇';
 }
@@ -108,6 +136,9 @@ function startMenu() {
   const alle = [...OPGAVER, ...OPGAVER_FUSION, ...OPGAVER_REAKTOR, ...OPGAVER_BATTERI].map((o) => o.id);
   document.getElementById('menuStatus').textContent =
     `Opdagede grundstoffer: ${fremgang.antalOpdaget()} af 118 · Opgaver klaret: ${fremgang.antalLøste(alle)} af ${alle.length}`;
+  // Er man helt ny, viser et lille mærke, hvor man kan starte
+  const ny = fremgang.antalOpdaget() === 0 && fremgang.antalLøste(alle) === 0;
+  document.querySelector('.menukort a[href="#vaerksted"]').classList.toggle('start-her', ny);
 }
 
 function stopMenu() {

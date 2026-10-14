@@ -102,6 +102,20 @@ export const CITATER = {
     kilde: 'Cosmos, 1980',
     original: 'The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.',
   },
+  saganScene: {
+    tekst: 'Jorden er en meget lille scene i en enorm kosmisk arena.',
+    person: 'Carl Sagan',
+    kilde: 'Pale Blue Dot, 1994',
+    original: 'The Earth is a very small stage in a vast cosmic arena.',
+    kommentar: 'Sagan skrev det om et billede, som rumsonden Voyager 1 tog af Jorden fra 6 milliarder km væk. Jorden er en lille prik i et solstrejf.',
+  },
+  feynmanVæv: {
+    tekst: 'Naturen bruger kun de længste tråde til at væve sine mønstre, så hvert lille stykke af hendes stof viser, hvordan hele tæppet er bygget op.',
+    person: 'Richard Feynman',
+    kilde: 'The Character of Physical Law, 1965',
+    original: 'Nature uses only the longest threads to weave her patterns, so that each small piece of her fabric reveals the organization of the entire tapestry.',
+    kommentar: 'De samme naturlove gælder overalt. Tyngdekraften, der får et æble til at falde, styrer også planeter, stjerner og sorte huller.',
+  },
   curie: {
     tekst: 'Man lægger aldrig mærke til det, der er gjort. Man kan kun se det, der mangler at blive gjort.',
     person: 'Marie Curie',

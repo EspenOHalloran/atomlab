@@ -33,7 +33,7 @@ export default {
     <p><b>Billeder af sorte huller:</b> I 2019 kombinerede forskere radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). De tog det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
     <p><b>Ærligt talt:</b> Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Stephen Hawking regnede ud, at sorte huller langsomt "fordamper" (Hawking-stråling), men så langsomt, at det aldrig er blevet målt.</p>`,
 
-  lav(gruppe, { effekter, lyd, fase, verden }) {
+  lav(gruppe, { lyd, fase, verden }) {
     // Skyggen
     const hul = new THREE.Mesh(new THREE.SphereGeometry(HORISONT, 48, 32), new THREE.MeshBasicMaterial({ color: 0x000000 }));
     gruppe.add(hul);

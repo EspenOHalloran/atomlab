@@ -15,6 +15,7 @@ export default {
   navn: 'Pulsar',
   ikon: '🔦',
   undertitel: 'En neutronstjerne, der blinker som et fyrtårn',
+  citat: 'hawkingStjerner',
   kamera: { retning: [-0.25, 0.45, 1], radius: 10 },
   tal: [
     ['Bredde', 'ca. 20 km'],
@@ -29,7 +30,7 @@ export default {
   nørd: `
     <p><b>Opdaget af en studerende:</b> I 1967 opdagede Jocelyn Bell Burnell nogle radioblink, der kom præcis hvert 1,34 sekund. De var så regelmæssige, at man for sjov kaldte signalet LGM-1, "Little Green Men" (små grønne mænd). Hendes vejleder fik Nobelprisen for opdagelsen i 1974, men det gjorde hun ikke. I 2018 fik hun en stor pris på 3 millioner dollar, som hun gav væk til studerende.</p>
     <p><b>Hvorfor drejer den så hurtigt?</b> Tænk på en skøjteløber, der trækker armene ind: Så drejer hun hurtigere. Da stjernen faldt sammen til 20 km, begyndte den at dreje tusindvis af gange hurtigere.</p>
-    <p><b>Ekstrem tyngdekraft:</b> Tabte man en ting fra 1 meters højde på en neutronstjerne, ville den ramme jorden med ca. 1.400 km i sekundet. Magnetfeltet er omkring en billion gange stærkere end Jordens.</p>
+    <p><b>Ekstrem tyngdekraft:</b> Tabte man en ting fra 1 meters højde på en neutronstjerne, ville den ramme overfladen med over 1.000 km i sekundet. Magnetfeltet er omkring en billion gange stærkere end Jordens.</p>
     <p><b>Universets bedste ure:</b> De hurtigste pulsarer tikker lige så præcist som atomure. Ved at holde øje med mange af dem har forskerne fundet spor af tyngdebølger, der ruller gennem hele vores galakse.</p>
     <p><b>Ærligt talt:</b> Strålerne er mest radiobølger, som vi ikke kan se med øjnene. Her har de fået en farve. Og stjernen er tegnet langt større i forhold til strålerne.</p>`,
 

@@ -66,4 +66,9 @@ export function nulstilOpgaver() {
 export function nulstilFremgang() {
   data = { opgaver: {}, opdaget: [] };
   gem();
+  try {
+    localStorage.removeItem('atomlabKosmosSet'); // de fænomener, man har set i Kosmos
+  } catch {
+    // ingen lagring
+  }
 }

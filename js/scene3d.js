@@ -211,11 +211,18 @@ export function sætVindue(element) {
 }
 
 export function tilpasStørrelse() {
-  const { renderer, komponist, kamera } = verden;
+  const { renderer, komponist } = verden;
   if (!renderer) return;
+  renderer.setSize(innerWidth, innerHeight);
+  komponist.setSize(innerWidth, innerHeight);
+  centrerVindue();
+}
+
+// Flytter 3D-billedet, så det står midt i "hullet" (kaldes også, når en skærm bliver rullet)
+export function centrerVindue() {
+  const { kamera } = verden;
+  if (!kamera) return;
   const B = innerWidth, H = innerHeight;
-  renderer.setSize(B, H);
-  komponist.setSize(B, H);
 
   // Midten af "hullet" mellem panelerne skal være midten af billedet.
   // Vi tegner et større billede og viser kun et udsnit af det (setViewOffset).

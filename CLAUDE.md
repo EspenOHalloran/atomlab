@@ -19,9 +19,9 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 
 ## Filer
 - `index.html`: alle skærme (menu, Atomværkstedet), dialoger og importmap
-- `style.css`: mørkt rum-tema. Layoutet tilpasser sig ved 1150 px og 820 px bredde.
+- `style.css`: mørkt rum-tema. Layoutet tilpasser sig ved 1150 px bredde (tablet på langs), 820 px (tablet på højkant: 3D øverst og panelerne side om side), 560 px (telefon på højkant: alt under hinanden, og hele skærmen ruller) og ved en højde under 500 px (telefon på langs: tre smalle kolonner). Paneler, der kan rulles, får klassen `mere` og toner ud forneden (rullebjælkerne er skjult). Test altid i telefon- og tabletstørrelse, når layoutet ændres.
 - `js/main.js`: starter 3D-verdenen og skifter skærm efter `#` i adressen (`#vaerksted`, `#system`, `#fusion`, `#reaktor`, `#batteri`, `#kosmos`). Hver skærm har en start- og en stopfunktion. Ved skærmskift stoppes kamerabevægelser (`stopKamera`).
-- `js/scene3d.js`: fælles renderer, kamera, lys, stjernehimmel og glød (bloom). `sætVindue(el)` centrerer 3D-billedet i et HTML-element (hullet mellem panelerne), og `passerTil(radius)` zoomer kameraet. Funktioner i `verden.opdateringer` kaldes hvert billede.
+- `js/scene3d.js`: fælles renderer, kamera, lys, stjernehimmel og glød (bloom). `sætVindue(el)` centrerer 3D-billedet i et HTML-element (hullet mellem panelerne), `centrerVindue()` flytter det igen (fx når en skærm bliver rullet), og `passerTil(radius)` zoomer kameraet. Funktioner i `verden.opdateringer` kaldes hvert billede.
 - `js/atom.js`: klassen `Atom`, som tegner kernen (protoner og neutroner som InstancedMesh med enkel fysik), elektronskaller som ringe eller elektronsky, et skær om kernen (farven viser stabilitet), festfyrværkeri (`fejr()`) og henfald (`henfald(måde, færdig)`). `sætMål(p, n, e)` får partiklerne til at flyve ind eller ud.
 - `js/vaerksted.js`: Atomværkstedet: knapper, infopanel, det lille periodiske system og `OPGAVER`. `åbnGrundstof(nr)` bruges fra Det periodiske system.
 - `js/system.js`: Det periodiske system (`#system`): den buede væg, filtre og detaljevisning med et `Atom`
@@ -50,6 +50,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
 - `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`)
+- `atomlabKosmosSet`: liste med id på de fænomener, man har kigget på (de andre har en lille prik)
 
 Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Nørd) og være kort, eller ind i hjælpen.
 

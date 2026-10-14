@@ -15,7 +15,7 @@ export default {
   navn: 'Solstorm',
   ikon: '☀️',
   undertitel: 'Når Solen kaster en sky af partikler mod Jorden',
-  citat: 'hawkingStjerner',
+  citat: 'saganScene',
   kamera: { retning: [0.12, 0.38, 1], radius: 17, mål: [-1, 0, 0], drej: false },
   tal: [
     ['Solvindens fart', 'ca. 400 km/s'],

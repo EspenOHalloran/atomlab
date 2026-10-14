@@ -30,7 +30,7 @@ export default {
     <p>Her kredser to <b>sorte huller</b> om hinanden. De mister energi til bølgerne, kommer tættere på og drejer hurtigere og hurtigere, til de smelter sammen.</p>
     <p>Ude ved kanten står en <b>detektor</b>. Grafen nederst viser, hvad den måler. Einstein forudsagde tyngdebølgerne i 1916, men troede ikke, man nogensinde ville kunne måle dem. 100 år senere lykkedes det.</p>`,
   nørd: `
-    <p><b>Den første måling</b> (14. september 2015) kom fra to sorte huller, der smeltede sammen 1,3 milliarder lysår væk. Bølgerne havde været undervejs, siden der kun fandtes encellede dyr på Jorden. På 0,2 sekunder blev 3 gange Solens masse lavet om til tyngdebølger (E = mc²). I det øjeblik var det mere kraftfuldt end alle stjerner i det synlige univers tilsammen.</p>
+    <p><b>Den første måling</b> (14. september 2015) kom fra to sorte huller, der smeltede sammen 1,3 milliarder lysår væk. Bølgerne havde været undervejs, siden livet på Jorden mest bestod af encellede organismer. På 0,2 sekunder blev 3 gange Solens masse lavet om til tyngdebølger (E = mc²). I det øjeblik var det mere kraftfuldt end alle stjerner i det synlige univers tilsammen.</p>
     <p><b>LIGO</b> er to detektorer i USA. Hver har to 4 km lange arme, hvor laserlys løber frem og tilbage. Bølgen ændrede armenes længde med mindre end en hundrededel af en protons bredde. Tre af forskerne bag fik Nobelprisen i 2017.</p>
     <p><b>Chirpet:</b> Signalet stiger i tone og styrke og stopper brat, ligesom et fuglepip. Derfor kalder man det et "chirp". Tryk på knappen og hør det.</p>
     <p><b>Ærligt talt:</b> Bølgerne er tegnet enormt store. Og rumtiden har fire dimensioner (tre i rummet og én i tiden), så en flad dug er kun en tegning af en lille del af det.</p>`,

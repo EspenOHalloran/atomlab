@@ -7,6 +7,7 @@ import { verden, sætVindue, passerTil } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
+import { visBesked } from './beskeder.js';
 import { ryd } from './kosmos/faelles.js';
 import solstorm from './kosmos/solstorm.js';
 import supernova from './kosmos/supernova.js';
@@ -22,6 +23,8 @@ import ormehul from './kosmos/ormehul.js';
 export const FÆNOMENER = [solstorm, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
+const NØGLE_SET = 'atomlabKosmosSet'; // de fænomener, man har kigget på
+let set = new Set();
 
 let rod = null;
 let gruppe = null;
@@ -76,6 +79,7 @@ export function startKosmos() {
   let id = null;
   try {
     id = localStorage.getItem(NØGLE);
+    set = new Set(JSON.parse(localStorage.getItem(NØGLE_SET) || '[]')); // læses igen, hvis fremgangen er nulstillet
   } catch {
     // ingen lagring
   }
@@ -107,8 +111,10 @@ function vælg(id) {
   const f = FÆNOMENER.find((x) => x.id === id) ?? FÆNOMENER[0];
   luk();
   valgt = f;
+  set.add(f.id);
   try {
     localStorage.setItem(NØGLE, f.id);
+    localStorage.setItem(NØGLE_SET, JSON.stringify([...set]));
   } catch {
     // ingen lagring
   }
@@ -126,7 +132,18 @@ function vælg(id) {
     // Et sted oven på 3D-billedet, hvor fænomenet kan vise fx en graf
     overlag: () => $('kosmosOverlag'),
   });
-  for (const b of document.querySelectorAll('.kosmos-valg')) b.classList.toggle('valgt', b.dataset.id === f.id);
+  for (const b of document.querySelectorAll('.kosmos-valg')) {
+    b.classList.toggle('valgt', b.dataset.id === f.id);
+    b.classList.toggle('ny', !set.has(b.dataset.id));
+  }
+  // Er listen en vandret række (på telefoner), rulles det valgte fænomen frem
+  const liste = $('kosmosListe');
+  if (liste.scrollWidth > liste.clientWidth + 4) {
+    const b = liste.querySelector('.valgt').getBoundingClientRect();
+    const l = liste.getBoundingClientRect();
+    liste.scrollTo({ left: liste.scrollLeft + (b.left - l.left) - (l.width - b.width) / 2, behavior: 'smooth' });
+  }
+  $('kosmosSet').textContent = set.size < FÆNOMENER.length ? `${set.size} af ${FÆNOMENER.length} set` : 'Alle set ★';
   $('kosmosIkon').textContent = f.ikon;
   $('kosmosNavn').textContent = f.navn;
   $('kosmosUndertitel').textContent = f.undertitel;
@@ -154,6 +171,8 @@ function visFase(titel, tekst = '') {
   boks.innerHTML = `<strong></strong><span></span>`;
   boks.querySelector('strong').textContent = titel;
   boks.querySelector('span').textContent = tekst;
+  // På en telefon på højkant ligger panelet langt nede, så teksten vises også som en besked
+  if (matchMedia('(max-width: 560px) and (orientation: portrait)').matches) visBesked({ titel, tekst, varighed: 7000 });
 }
 
 // Kameraet: retning (hvorfra vi kigger), radius (hvor stort det, vi skal se, er) og mål (midten).
