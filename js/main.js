@@ -1,9 +1,11 @@
 // Start: laver 3D-verdenen og skifter mellem menuen og de forskellige dele.
 // Hvilken del der vises, står efter # i adressen (fx index.html#vaerksted).
 
-import { lavVerden, verden, sætVindue, flyInd } from './scene3d.js';
+import { lavVerden, verden, sætVindue, flyInd, stopKamera } from './scene3d.js';
 import { Atom } from './atom.js';
-import { lavVærksted, startVærksted, stopVærksted, OPGAVER } from './vaerksted.js';
+import { lavVærksted, startVærksted, stopVærksted, OPGAVER, åbnGrundstof } from './vaerksted.js';
+import { lavSystem, startSystem, stopSystem } from './system.js';
+import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 import { citatHTML, MENU_CITATER } from './data/citater.js';
@@ -11,6 +13,7 @@ import { citatHTML, MENU_CITATER } from './data/citater.js';
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
   vaerksted: { start: startVærksted, stop: stopVærksted },
+  system: { start: startSystem, stop: stopSystem },
 };
 
 let aktivSkærm = null;
@@ -32,7 +35,21 @@ function start() {
   verden.scene.add(menuAtom.gruppe);
 
   lavVærksted();
+  lavSystem({
+    åbnIVærksted: (nr) => {
+      åbnGrundstof(nr);
+      location.hash = '#vaerksted';
+    },
+  });
   lavFuldSkærmKnapper();
+  // Lydknapper på de andre skærme (værkstedet har sin egen)
+  for (const knap of document.querySelectorAll('[data-lyd-knap]')) {
+    knap.addEventListener('click', () => {
+      skiftLyd();
+      opdaterLydknapper();
+      lyd.klik();
+    });
+  }
   // Faste citater i hjælpen
   for (const boks of document.querySelectorAll('[data-citat]')) boks.innerHTML = citatHTML(boks.dataset.citat);
   addEventListener('hashchange', visSkærm);
@@ -48,7 +65,13 @@ function visSkærm() {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }
   aktivSkærm = ny;
+  stopKamera();
+  opdaterLydknapper();
   skærme[ny].start();
+}
+
+function opdaterLydknapper() {
+  for (const knap of document.querySelectorAll('[data-lyd-knap], #knapLyd')) knap.textContent = lydErTændt() ? '🔊' : '🔇';
 }
 
 function opdaterMenuAtom(dt) {

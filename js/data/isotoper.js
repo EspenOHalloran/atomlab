@@ -176,6 +176,11 @@ function erLanglivet(z, n) {
   return erStabil(z, n) || `${grundstof(z).symbol}-${z + n}` in NÆSTEN_STABILE;
 }
 
+// Massetal for de stabile isotoper af et grundstof
+export function stabileIsotoper(z) {
+  return [...(STABILE[z] || [])];
+}
+
 // Laveste og højeste antal neutroner i en stabil kerne af grundstoffet (null hvis ingen)
 export function stabileNeutroner(z) {
   const s = STABILE[z];

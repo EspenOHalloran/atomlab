@@ -249,6 +249,12 @@ export function kameraSving(vinkel = 0.6, varighed = 1.4) {
   sving = { vinkel, varighed, tid: 0, sidst: 0 };
 }
 
+// Stopper sving og automatisk zoom (fx når man skifter skærm)
+export function stopKamera() {
+  sving = null;
+  verden.målAfstand = null;
+}
+
 // Kameraet starter langt væk og flyver ind (fx når man åbner en del)
 export function flyInd(radius, faktor = 3) {
   const { kamera, styring } = verden;
@@ -268,6 +274,31 @@ function svingKamera(dt) {
   const { kamera, styring } = verden;
   kamera.position.sub(styring.target).applyAxisAngle(new THREE.Vector3(0, 1, 0), skridt).add(styring.target);
   if (t >= 1) sving = null;
+}
+
+// Zoomer, så en kasse med denne halve bredde og højde passer i hullet (fx det periodiske system)
+export function passerTilBoks(halvBredde, halvHøjde) {
+  const { hul } = verden;
+  const t = Math.tan(THREE.MathUtils.degToRad(SYNSVINKEL / 2));
+  const H = innerHeight;
+  const d = Math.max(halvBredde / (t * hul.width / H), halvHøjde / (t * hul.height / H)) * 1.06;
+  verden.målAfstand = THREE.MathUtils.clamp(d, 6, 240);
+}
+
+// Begrænser, hvor meget man kan dreje (null = frit)
+export function begrænsDrejning(grænser) {
+  const s = verden.styring;
+  if (grænser) {
+    s.minAzimuthAngle = -grænser.vandret;
+    s.maxAzimuthAngle = grænser.vandret;
+    s.minPolarAngle = Math.PI / 2 - grænser.lodret;
+    s.maxPolarAngle = Math.PI / 2 + grænser.lodret;
+  } else {
+    s.minAzimuthAngle = -Infinity;
+    s.maxAzimuthAngle = Infinity;
+    s.minPolarAngle = 0;
+    s.maxPolarAngle = Math.PI;
+  }
 }
 
 function zoomMod(dt) {

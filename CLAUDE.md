@@ -20,10 +20,12 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 ## Filer
 - `index.html`: alle skærme (menu, Atomværkstedet), dialoger og importmap
 - `style.css`: mørkt rum-tema. Layoutet tilpasser sig ved 1150 px og 820 px bredde.
-- `js/main.js`: starter 3D-verdenen og skifter skærm efter `#` i adressen (`#vaerksted`)
+- `js/main.js`: starter 3D-verdenen og skifter skærm efter `#` i adressen (`#vaerksted`, `#system`). Hver skærm har en start- og en stopfunktion. Ved skærmskift stoppes kamerabevægelser (`stopKamera`).
 - `js/scene3d.js`: fælles renderer, kamera, lys, stjernehimmel og glød (bloom). `sætVindue(el)` centrerer 3D-billedet i et HTML-element (hullet mellem panelerne), og `passerTil(radius)` zoomer kameraet. Funktioner i `verden.opdateringer` kaldes hvert billede.
 - `js/atom.js`: klassen `Atom`, som tegner kernen (protoner og neutroner som InstancedMesh med enkel fysik), elektronskaller som ringe eller elektronsky, et skær om kernen (farven viser stabilitet), festfyrværkeri (`fejr()`) og henfald (`henfald(måde, færdig)`). `sætMål(p, n, e)` får partiklerne til at flyve ind eller ud.
-- `js/vaerksted.js`: Atomværkstedet: knapper, infopanel, det lille periodiske system og `OPGAVER`
+- `js/vaerksted.js`: Atomværkstedet: knapper, infopanel, det lille periodiske system og `OPGAVER`. `åbnGrundstof(nr)` bruges fra Det periodiske system.
+- `js/system.js`: Det periodiske system (`#system`): den buede væg, filtre og detaljevisning med et `Atom`
+- `js/data/fakta.js`: `FAKTA` for alle 118 grundstoffer (findes, bruges, opdaget, af, navn)
 - `js/fremgang.js`: løste opgaver og opdagede grundstoffer
 - `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler)
 - `js/beskeder.js`: beskeder øverst på skærmen

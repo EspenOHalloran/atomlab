@@ -28,10 +28,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Elektroner med lysende haler, kuglerne har kantlys, og protonerne pulserer svagt. Gyldne lyspunkter viser kernekraftens "lim" (det siges ærligt, at det er en tegning). Rumstøv driver forbi. Chokbølge ved henfald.
   - Kameraet flyver ind, når man åbner en del, og svinger blødt, når man skifter grundstof.
   - Citater fra Feynman, Rutherford, Bohr, Sagan og Einstein i menuen, i hjælpen og nederst i infopanelet. Kun citater med en sikker kilde (de står i `js/data/citater.js`). Brug dem også i de kommende dele (fx Einsteins E = mc² i Stjerneovnen og Reaktoren, Sagans "stjernestof" ved supernovaer).
-- [ ] **Trin 2: Det periodiske system**
-  - En 3D-væg med 118 felter, farvet efter kategori. Kameraet flyver ind, når man vælger et felt.
-  - Kort med et 3D-atom, der drejer, 2-4 sætninger fakta, hvor stoffet findes, og hvad det bruges til. Knap: "Byg det i værkstedet".
-  - Filtre: kategori, tilstand (fast, flydende, gas) og opdaget.
+- [x] **Trin 2: Det periodiske system**
+  - En buet 3D-væg med 118 felter, farvet efter kategori. Feltet under musen løfter sig og lyser op, og en etiket viser navnet. Opdagede grundstoffer har en gul stjerne.
+  - Klik på et felt: væggen trækker sig tilbage, og grundstoffet vises som et atom i 3D. Kortet til højre viser fakta, hvor det findes, hvad det bruges til, hvornår og af hvem det blev opdaget, hvor navnet kommer fra, elektronskaller og stabile isotoper. Pilene (eller piletasterne) skifter grundstof.
+  - "Byg det i værkstedet": er grundstoffet opdaget, åbnes det i værkstedet. Ellers får man en opgave om selv at bygge det (så "opdaget" stadig betyder, at man har bygget det).
+  - Filtre: kategori, tilstand (fast, væske, gas) og opdagede.
 - [ ] **Trin 3: Stjerneovnen (fusion)**
   - Solens kerne: brintkerner suser rundt. En temperaturskyder viser, at de frastøder hinanden, når det er for koldt.
   - pp-kæden trin for trin: p + p → deuterium + positron + neutrino, d + p → helium-3 + gammastråling, ³He + ³He → helium-4 + 2 p.

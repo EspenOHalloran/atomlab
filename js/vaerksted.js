@@ -216,6 +216,25 @@ export function stopVærksted() {
   verden.opdateringer.delete(opdater3D);
 }
 
+// Åbner et grundstof fra Det periodiske system. Er det ikke opdaget endnu, får man en opgave om at bygge det.
+export function åbnGrundstof(nr) {
+  const g = grundstof(nr);
+  const n = Math.min(MAX_N, typiskeNeutroner(nr));
+  if (fremgang.erOpdaget(nr)) {
+    sæt({ p: nr, n, e: nr });
+    return;
+  }
+  sæt({ p: 0, n: 0, e: 0 });
+  aktivOpgave = {
+    id: `byg-${nr}`, midlertidig: true, titel: `Byg ${g.navn}-${nr + n}`, mål: { p: nr, n, e: nr },
+    tip: `${g.navn} har ${nr} protoner. Den mest almindelige udgave har ${n} neutroner, og et neutralt atom har lige så mange elektroner som protoner.`,
+    fakta: `Flot! Nu har du selv bygget ${g.navn.toLowerCase()}.`,
+  };
+  visTip = false;
+  sætOpgaveFoldet(false);
+  opdaterOpgave();
+}
+
 function opdater3D(dt) {
   atom.opdater(dt);
 }
@@ -675,6 +694,16 @@ function tjekFremskridt() {
   }
   for (const o of OPGAVER) {
     if (passer(o, tilstand) && fremgang.løs(o.id)) fejrOpgave(o);
+  }
+  // En opgave fra Det periodiske system (gemmes ikke i listen)
+  if (aktivOpgave?.midlertidig && passer(aktivOpgave, tilstand)) {
+    const o = aktivOpgave;
+    vælgNæsteOpgave();
+    setTimeout(() => {
+      lyd.klaret();
+      atom.fejr(0xffd43b);
+      visBesked({ titel: `${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 7000 });
+    }, 250);
   }
   opdaterOpgave();
 }

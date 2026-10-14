@@ -35,14 +35,13 @@
           <small>Byg atomer af protoner, neutroner og elektroner</small>
         </span>
       </a>
-      <div class="kort låst">
+      <a class="kort åben" href="#system">
         <span class="kort-ikon ikon-tabel"></span>
         <span class="kort-tekst">
           <strong>Det periodiske system</strong>
           <small>Alle 118 grundstoffer i 3D</small>
         </span>
-        <span class="snart">Kommer snart</span>
-      </div>
+      </a>
       <div class="kort låst">
         <span class="kort-ikon ikon-stjerne"></span>
         <span class="kort-tekst">
@@ -180,6 +179,37 @@
       </div>
       <div class="minitabel" id="minitabel"></div>
     </div>
+  </section>
+
+  <!-- ===== Det periodiske system ===== -->
+  <section id="system" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Det periodiske system</h2>
+      <span class="system-status"><span id="systemOpdaget"></span> <span id="systemAntal"></span></span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <div class="vindue" id="systemVindue"></div>
+    <aside class="panel system-kort" id="systemKort">
+      <div class="info-hoved">
+        <div class="grundstofkort"><span class="nr" id="sysNr"></span><span class="symbol" id="sysSymbol"></span><span class="masse" id="sysMasse"></span></div>
+        <div class="info-titel"><h3 id="sysNavn"></h3><p class="kategori" id="sysUndertitel"></p></div>
+      </div>
+      <p class="fakta" id="sysFakta"></p>
+      <dl class="tal lille" id="sysTal"></dl>
+      <p class="sys-opdaget" id="sysOpdaget"></p>
+      <div class="system-knapper">
+        <button class="knap lille" id="systemForrige" title="Forrige (pil venstre)">‹</button>
+        <button class="knap" id="systemByg">Byg det i værkstedet</button>
+        <button class="knap lille" id="systemNæste" title="Næste (pil højre)">›</button>
+        <button class="knap lille svag" id="systemLuk" title="Tilbage til væggen (Esc)">Luk</button>
+      </div>
+    </aside>
+    <nav class="panel system-filtre" id="systemFiltre" aria-label="Filtre"></nav>
+    <div class="system-etiket skjult" id="systemEtiket"></div>
   </section>
 
   <!-- ===== Opgaveliste ===== -->

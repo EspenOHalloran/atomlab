@@ -555,6 +555,47 @@ button { font: inherit; color: inherit; }
 .besked.henfald { border-color: rgba(255, 140, 220, 0.7); box-shadow: 0 0 30px rgba(255, 140, 220, 0.25); }
 .besked.henfald strong { color: #ff9be0; }
 
+/* ---------- Det periodiske system ---------- */
+#system {
+  grid-template-columns: minmax(0, 1fr) 0;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: "top top" "vindue kort" "filtre filtre";
+}
+#system.detalje { grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); }
+#system .vindue { grid-area: vindue; }
+.system-status { font-size: 14px; color: var(--svag); }
+.system-status #systemOpdaget { color: var(--gul); font-weight: 700; }
+.system-kort { grid-area: kort; display: none; flex-direction: column; gap: 10px; padding: 14px; overflow: hidden; }
+#system.detalje .system-kort { display: flex; }
+#system.detalje .system-filtre { display: none; }
+.system-kort .tal div { grid-template-columns: 110px 1fr; }
+.system-kort .tal dd { font-size: 13.5px; line-height: 1.4; }
+.system-kort .fakta { font-size: 15px; }
+.sys-opdaget { margin: 0; font-size: 13px; color: var(--svag); }
+.sys-opdaget.ja { color: var(--gul); font-weight: 700; }
+.system-knapper { margin-top: auto; display: flex; gap: 8px; align-items: center; }
+.system-knapper #systemByg { flex: 1; }
+.system-filtre { grid-area: filtre; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 8px 10px; }
+.chip.filter { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.chip.filter.valgt { background: rgba(95, 227, 255, 0.2); border-color: rgba(95, 227, 255, 0.7); color: var(--tekst); }
+.farveprik { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.filter-skille { width: 1px; background: rgba(255, 255, 255, 0.15); margin: 2px 4px; }
+.system-etiket {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 15;
+  pointer-events: none;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(14, 22, 48, 0.95);
+  border: 1px solid var(--panel-kant);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+.system-etiket span { font-size: 12px; color: var(--svag); }
+
 .ingen3d { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; }
 
 /* ---------- Mellemstore skærme (fx tablet på langs) ---------- */
@@ -594,5 +635,8 @@ button { font: inherit; color: inherit; }
   .hjælpeknapper { flex: 1 1 100%; }
   .minitabel-panel { width: min(100%, 480px); }
   .menukort { grid-template-columns: minmax(0, 1fr); }
+  #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }
+  .system-kort { max-height: 48vh; overflow-y: auto; }
+  .system-filtre { max-height: 22vh; overflow-y: auto; }
   .kort { padding: 12px; }
 }
