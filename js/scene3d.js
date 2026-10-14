@@ -1,0 +1,222 @@
+// Den fælles 3D-verden: renderer, kamera, lys, stjernehimmel og glød (bloom).
+// Alle dele af AtomLab tegner i den samme verden.
+
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// Tablets og telefoner (fingre i stedet for mus) får lidt færre effekter, så det kører glat
+export const LAV_KVALITET = matchMedia('(pointer: coarse)').matches;
+
+const SYNSVINKEL = 40; // kameraets synsvinkel i grader (lodret)
+
+export const verden = {
+  renderer: null,
+  scene: null,
+  kamera: null,
+  styring: null,
+  komponist: null,
+  glød: null,
+  vindue: null, // det HTML-element, som 3D-billedet skal centreres i
+  hul: { left: 0, top: 0, width: 1, height: 1 },
+  målAfstand: null,
+  opdateringer: new Set(), // funktioner, der kaldes hvert billede: f(dt, tid)
+};
+
+export function lavVerden(lærred) {
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({
+      canvas: lærred,
+      antialias: !LAV_KVALITET,
+      powerPreference: 'high-performance',
+    });
+  } catch (fejl) {
+    return false;
+  }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, LAV_KVALITET ? 1.5 : 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x03040c);
+
+  // Bløde refleksioner på kuglerne
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.55;
+
+  const kamera = new THREE.PerspectiveCamera(SYNSVINKEL, innerWidth / innerHeight, 0.1, 3000);
+  kamera.position.set(0, 6, 34);
+
+  // Lys: et hovedlys, et blåligt kantlys bagfra og lidt lys alle steder
+  const hovedlys = new THREE.DirectionalLight(0xffffff, 2.2);
+  hovedlys.position.set(6, 10, 12);
+  const kantlys = new THREE.DirectionalLight(0x6f8cff, 1.4);
+  kantlys.position.set(-10, -4, -12);
+  scene.add(hovedlys, kantlys, new THREE.AmbientLight(0x404a70, 0.6));
+
+  lavStjernehimmel(scene);
+
+  const styring = new OrbitControls(kamera, renderer.domElement);
+  styring.enableDamping = true;
+  styring.dampingFactor = 0.08;
+  styring.enablePan = false;
+  styring.minDistance = 4;
+  styring.maxDistance = 250;
+  styring.autoRotate = true;
+  styring.autoRotateSpeed = 0.5;
+  // Når man selv zoomer, stopper den automatiske zoom
+  styring.addEventListener('start', () => { verden.målAfstand = null; });
+
+  // Glød: alt, der er lysere end en grænse, får en glorie
+  const komponist = new EffectComposer(renderer);
+  komponist.addPass(new RenderPass(scene, kamera));
+  const opløsning = new THREE.Vector2(innerWidth, innerHeight).multiplyScalar(LAV_KVALITET ? 0.5 : 1);
+  const glød = new UnrealBloomPass(opløsning, 0.9, 0.55, 0.82);
+  komponist.addPass(glød);
+  komponist.addPass(new OutputPass());
+
+  Object.assign(verden, { renderer, scene, kamera, styring, komponist, glød });
+
+  addEventListener('resize', tilpasStørrelse);
+  // Mobiler ændrer størrelse lidt efter, at skærmen drejes
+  addEventListener('orientationchange', () => setTimeout(tilpasStørrelse, 300));
+  tilpasStørrelse();
+
+  let sidst = performance.now();
+  renderer.setAnimationLoop((nu) => {
+    const dt = Math.min(0.05, (nu - sidst) / 1000);
+    sidst = nu;
+    const tid = nu / 1000;
+    for (const f of verden.opdateringer) f(dt, tid);
+    zoomMod(dt);
+    styring.update(dt);
+    komponist.render(dt);
+  });
+  return true;
+}
+
+// Stjerner i tre størrelser og nogle farvede tågeskyer langt væk
+function lavStjernehimmel(scene) {
+  const himmel = new THREE.Group();
+  const antal = LAV_KVALITET ? [900, 300, 60] : [1800, 600, 120];
+  const størrelser = [1.4, 2.4, 4.0];
+  const prik = lavPrikTekstur();
+  antal.forEach((n, lag) => {
+    const pos = new Float32Array(n * 3);
+    const farver = new Float32Array(n * 3);
+    const farve = new THREE.Color();
+    for (let i = 0; i < n; i++) {
+      const v = new THREE.Vector3().randomDirection().multiplyScalar(700 + Math.random() * 600);
+      pos.set([v.x, v.y, v.z], i * 3);
+      // Stjerner er hvide, blålige eller gullige
+      farve.setHSL(Math.random() < 0.5 ? 0.6 : 0.12, 0.6, 0.75 + Math.random() * 0.25);
+      farver.set([farve.r, farve.g, farve.b], i * 3);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(farver, 3));
+    const mat = new THREE.PointsMaterial({
+      size: størrelser[lag], map: prik, vertexColors: true, transparent: true,
+      depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: false,
+    });
+    himmel.add(new THREE.Points(geo, mat));
+  });
+
+  const tåger = [
+    [0x5b2bff, new THREE.Vector3(-600, 200, -900), 1100],
+    [0x0fa3c9, new THREE.Vector3(700, -150, -800), 900],
+    [0xc12e8a, new THREE.Vector3(200, 500, 900), 1000],
+    [0x2b4bff, new THREE.Vector3(-500, -400, 700), 900],
+  ];
+  const tågeTekstur = lavPrikTekstur(true);
+  for (const [farve, sted, str] of tåger) {
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: tågeTekstur, color: farve, transparent: true, opacity: 0.22,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    sprite.position.copy(sted);
+    sprite.scale.setScalar(str);
+    himmel.add(sprite);
+  }
+  scene.add(himmel);
+  verden.opdateringer.add((dt) => { himmel.rotation.y += dt * 0.004; });
+}
+
+// En rund, blød prik (eller en stor blød sky) tegnet på et lille lærred
+export function lavPrikTekstur(blød = false) {
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  if (blød) {
+    grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.35)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+  } else {
+    grad.addColorStop(0, 'rgba(255,255,255,1)');
+    grad.addColorStop(0.25, 'rgba(255,255,255,0.9)');
+    grad.addColorStop(0.6, 'rgba(255,255,255,0.15)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+  }
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 64, 64);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// Fortæller, hvilket HTML-element 3D-billedet skal centreres i
+export function sætVindue(element) {
+  verden.vindue = element;
+  tilpasStørrelse();
+}
+
+export function tilpasStørrelse() {
+  const { renderer, komponist, kamera } = verden;
+  if (!renderer) return;
+  const B = innerWidth, H = innerHeight;
+  renderer.setSize(B, H);
+  komponist.setSize(B, H);
+
+  // Midten af "hullet" mellem panelerne skal være midten af billedet.
+  // Vi tegner et større billede og viser kun et udsnit af det (setViewOffset).
+  let r = { left: 0, top: 0, width: B, height: H };
+  if (verden.vindue) {
+    const b = verden.vindue.getBoundingClientRect();
+    if (b.width > 10 && b.height > 10) r = b;
+  }
+  verden.hul = r;
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  const FB = B + 2 * Math.abs(B / 2 - cx);
+  const FH = H + 2 * Math.abs(H / 2 - cy);
+  kamera.aspect = FB / FH;
+  kamera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(SYNSVINKEL / 2)) * FH / H));
+  kamera.setViewOffset(FB, FH, FB / 2 - cx, FH / 2 - cy, B, H);
+  kamera.updateProjectionMatrix();
+}
+
+// Zoomer kameraet, så en kugle med denne radius passer i hullet
+export function passerTil(radius) {
+  const { hul } = verden;
+  const halv = Math.tan(THREE.MathUtils.degToRad(SYNSVINKEL / 2));
+  const mindste = Math.min(hul.width, hul.height) / innerHeight;
+  verden.målAfstand = THREE.MathUtils.clamp((radius * 1.18) / (halv * mindste), 6, 240);
+}
+
+function zoomMod(dt) {
+  if (verden.målAfstand == null) return;
+  const { kamera, styring } = verden;
+  const retning = kamera.position.clone().sub(styring.target);
+  const nu = retning.length();
+  const ny = nu + (verden.målAfstand - nu) * (1 - Math.exp(-dt * 3));
+  kamera.position.copy(styring.target).add(retning.setLength(ny));
+  if (Math.abs(ny - verden.målAfstand) < 0.02) verden.målAfstand = null;
+}

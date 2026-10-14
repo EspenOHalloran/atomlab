@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#03040c">
+  <title>AtomLab</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Three.js ligger i lib/three, så siden ikke er afhængig af andre hjemmesider -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./lib/three/three.module.js",
+        "three/addons/": "./lib/three/addons/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="lærred"></canvas>
+
+  <!-- ===== Menu ===== -->
+  <section id="menu" class="skærm">
+    <header class="menu-top">
+      <h1 class="logo">Atom<span>Lab</span></h1>
+      <p class="undertitel">Byg atomer, opdag grundstofferne, og lav dine egne kernereaktioner</p>
+    </header>
+    <div class="vindue" id="menuVindue"></div>
+    <nav class="menukort">
+      <a class="kort åben" href="#vaerksted">
+        <span class="kort-ikon ikon-atom"></span>
+        <span class="kort-tekst">
+          <strong>Atomværkstedet</strong>
+          <small>Byg atomer af protoner, neutroner og elektroner</small>
+        </span>
+      </a>
+      <div class="kort låst">
+        <span class="kort-ikon ikon-tabel"></span>
+        <span class="kort-tekst">
+          <strong>Det periodiske system</strong>
+          <small>Alle 118 grundstoffer i 3D</small>
+        </span>
+        <span class="snart">Kommer snart</span>
+      </div>
+      <div class="kort låst">
+        <span class="kort-ikon ikon-stjerne"></span>
+        <span class="kort-tekst">
+          <strong>Stjerneovnen</strong>
+          <small>Fusion: lav helium af hydrogen ligesom Solen</small>
+        </span>
+        <span class="snart">Kommer snart</span>
+      </div>
+      <div class="kort låst">
+        <span class="kort-ikon ikon-reaktor"></span>
+        <span class="kort-tekst">
+          <strong>Reaktoren</strong>
+          <small>Fission: spalt uran og styr en kædereaktion</small>
+        </span>
+        <span class="snart">Kommer snart</span>
+      </div>
+    </nav>
+    <p class="menu-status" id="menuStatus"></p>
+  </section>
+
+  <!-- ===== Atomværkstedet ===== -->
+  <section id="vaerksted" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Atomværkstedet</h2>
+      <div class="topknapper">
+        <button class="knap lille" id="knapVisning" title="Skift mellem ringe og elektronsky">Elektronsky</button>
+        <button class="knap lille ikon" id="knapLyd" title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="knapHjælp" title="Hjælp">?</button>
+      </div>
+    </header>
+
+    <div class="opgavebjælke" id="opgavebjælke">
+      <div class="opgave-nu">
+        <span class="opgave-mærke">Opgave</span>
+        <span id="opgaveTekst"></span>
+        <span class="opgave-krav" id="opgaveKrav"></span>
+      </div>
+      <button class="knap lille" id="knapOpgaver">Alle opgaver <span id="opgaveTæller"></span></button>
+    </div>
+
+    <aside class="panel byg" id="byggepanel">
+      <div class="partikel-række" data-type="p">
+        <span class="kugle proton"></span>
+        <strong class="partikel-navn">Protoner</strong>
+        <span class="styring">
+          <button class="rund minus" data-type="p" data-retning="-1" aria-label="Fjern proton">−</button>
+          <span class="antal" id="antalP">0</span>
+          <button class="rund plus" data-type="p" data-retning="1" aria-label="Tilføj proton">+</button>
+        </span>
+        <small class="beskr">Plusladede. Antallet bestemmer, hvilket grundstof det er.</small>
+      </div>
+      <div class="partikel-række" data-type="n">
+        <span class="kugle neutron"></span>
+        <strong class="partikel-navn">Neutroner</strong>
+        <span class="styring">
+          <button class="rund minus" data-type="n" data-retning="-1" aria-label="Fjern neutron">−</button>
+          <span class="antal" id="antalN">0</span>
+          <button class="rund plus" data-type="n" data-retning="1" aria-label="Tilføj neutron">+</button>
+        </span>
+        <small class="beskr">Uden ladning. De holder kernen sammen.</small>
+      </div>
+      <div class="partikel-række" data-type="e">
+        <span class="kugle elektron"></span>
+        <strong class="partikel-navn">Elektroner</strong>
+        <span class="styring">
+          <button class="rund minus" data-type="e" data-retning="-1" aria-label="Fjern elektron">−</button>
+          <span class="antal" id="antalE">0</span>
+          <button class="rund plus" data-type="e" data-retning="1" aria-label="Tilføj elektron">+</button>
+        </span>
+        <small class="beskr">Minusladede. De suser rundt om kernen.</small>
+      </div>
+      <p class="hold-tip">Hold knappen inde for at tilføje mange.</p>
+      <div class="hjælpeknapper">
+        <button class="knap" id="knapNeutral" title="Lige så mange elektroner som protoner">Gør neutral</button>
+        <button class="knap" id="knapStabil" title="Det mest almindelige antal neutroner">Stabil kerne</button>
+        <button class="knap svag" id="knapRyd">Ryd</button>
+      </div>
+      <p class="tastatur-tip">Taster: P, N og E tilføjer. Med Shift fjerner de.</p>
+    </aside>
+
+    <div class="vindue" id="vaerkstedVindue"></div>
+
+    <aside class="panel info" id="infopanel">
+      <div class="grundstofkort" id="grundstofkort">
+        <span class="nr" id="infoNr"></span>
+        <span class="symbol" id="infoSymbol">?</span>
+        <span class="navn" id="infoNavn"></span>
+        <span class="masse" id="infoMasse"></span>
+      </div>
+      <div class="info-indhold">
+        <p class="kategori" id="infoKategori"></p>
+        <dl class="tal" id="infoTal"></dl>
+        <div class="stabilitet" id="infoStabilitet"></div>
+        <p class="fakta" id="infoFakta"></p>
+        <p class="model-note" id="infoModel"></p>
+      </div>
+    </aside>
+
+    <div class="panel minitabel-panel" id="minitabelPanel">
+      <div class="minitabel-top">
+        <span>Det periodiske system</span>
+        <span class="opdaget-tæller" id="opdagetTæller"></span>
+        <button class="knap lille" id="knapMinitabel">Skjul</button>
+      </div>
+      <div class="minitabel" id="minitabel"></div>
+    </div>
+  </section>
+
+  <!-- ===== Opgaveliste ===== -->
+  <div class="overlag skjult" id="opgaveliste" role="dialog" aria-label="Opgaver">
+    <div class="dialog">
+      <header><h3>Opgaver i Atomværkstedet</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <ol class="opgaver" id="opgaver"></ol>
+    </div>
+  </div>
+
+  <!-- ===== Hjælp ===== -->
+  <div class="overlag skjult" id="hjælp" role="dialog" aria-label="Hjælp">
+    <div class="dialog">
+      <header><h3>Sådan virker et atom</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p><span class="kugle proton lille"></span> <strong>Protoner</strong> er plusladede. <em>Antallet af protoner bestemmer, hvilket grundstof atomet er</em>: 1 proton er hydrogen, 6 er carbon, 79 er guld.</p>
+        <p><span class="kugle neutron lille"></span> <strong>Neutroner</strong> har ingen ladning. De er en slags lim, der holder kernen sammen, for protonerne frastøder hinanden. Atomer af samme grundstof med forskelligt antal neutroner kaldes <strong>isotoper</strong>.</p>
+        <p><span class="kugle elektron lille"></span> <strong>Elektroner</strong> er minusladede og meget lettere. De befinder sig i skaller rundt om kernen. Har atomet for mange eller for få elektroner, kaldes det en <strong>ion</strong>.</p>
+        <p><strong>Massetal</strong> = protoner + neutroner. Carbon-14 har 6 protoner og 8 neutroner.</p>
+        <p><strong>Ikke målfast!</strong> Hvis kernen var så stor som her, ville et rigtigt atom være flere kilometer bredt. Atomer er næsten kun tomt rum.</p>
+        <p><strong>Ringe eller sky?</strong> Ringene er en forenklet tegning (Bohrs atommodel), der gør det let at tælle elektronerne. I virkeligheden kan man kun sige, hvor elektronerne <em>sandsynligvis</em> er, og det ligner mere en sky. Prøv knappen "Elektronsky".</p>
+        <p><strong>Styring:</strong> Træk for at dreje atomet. Rul eller knib for at zoome. Klik på et grundstof i det lille periodiske system for at hoppe til det, men først når du har bygget det selv én gang.</p>
+        <p class="nulstil-linje"><button class="knap lille svag" id="knapNulstil">Nulstil al fremgang</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="beskeder" id="beskeder" aria-live="polite"></div>
+
+  <div class="ingen3d skjult" id="ingen3d">
+    <h2>Din browser kan ikke vise 3D</h2>
+    <p>AtomLab bruger WebGL. Prøv en nyere udgave af Chrome, Edge, Firefox eller Safari.</p>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
