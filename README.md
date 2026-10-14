@@ -7,6 +7,7 @@ Lær om atomer og grundstoffer i 3D:
 - **Stjerneovnen:** fusion som i Solens kerne (pp-kæden) og carbon i røde kæmper
 - **Reaktoren:** spalt uran og styr en kædereaktion
 - **Batteriet:** se ioner og elektroner, når et LiPo-batteri lades op og aflades
+- **Kosmos:** solstorme, supernovaer, pulsarer, kilonovaer, rumtid, tyngdebølger, sorte huller, kvasarer og ormehuller
 
 **Prøv det:** https://espenohalloran.github.io/atomlab/
 

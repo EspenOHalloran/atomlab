@@ -8,6 +8,7 @@ import { lavSystem, startSystem, stopSystem } from './system.js';
 import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
 import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
+import { lavKosmos, startKosmos, stopKosmos, testAdgang as kosmosTest } from './kosmos.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
@@ -20,6 +21,7 @@ const skærme = {
   fusion: { start: startFusion, stop: stopFusion },
   reaktor: { start: startReaktor, stop: stopReaktor },
   batteri: { start: startBatteri, stop: stopBatteri },
+  kosmos: { start: startKosmos, stop: stopKosmos },
 };
 
 let aktivSkærm = null;
@@ -50,6 +52,7 @@ function start() {
   lavFusion();
   lavReaktor();
   lavBatteri();
+  lavKosmos();
   lavFuldSkærmKnapper();
   // Lydknapper på de andre skærme (værkstedet har sin egen)
   for (const knap of document.querySelectorAll('[data-lyd-knap]')) {
@@ -67,7 +70,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest() };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest() };
   visSkærm();
 }
 

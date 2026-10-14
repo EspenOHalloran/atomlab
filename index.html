@@ -24,7 +24,7 @@
     <button class="knap lille ikon knap-fuldskaerm menu-hjørne" title="Fuld skærm"></button>
     <header class="menu-top">
       <h1 class="logo">Atom<span>Lab</span></h1>
-      <p class="undertitel">Byg atomer, opdag grundstofferne, lav kernereaktioner, og se hvordan et batteri virker</p>
+      <p class="undertitel">Byg atomer, opdag grundstofferne, lav kernereaktioner, og udforsk rummet</p>
     </header>
     <div class="vindue" id="menuVindue"></div>
     <nav class="menukort">
@@ -61,6 +61,13 @@
         <span class="kort-tekst">
           <strong>Batteriet</strong>
           <small>Se ioner og elektroner, når et LiPo-batteri lades</small>
+        </span>
+      </a>
+      <a class="kort åben" href="#kosmos">
+        <span class="kort-ikon ikon-kosmos"></span>
+        <span class="kort-tekst">
+          <strong>Kosmos</strong>
+          <small>Sorte huller, supernovaer, tyngdebølger og andre vilde ting i rummet</small>
         </span>
       </a>
     </nav>
@@ -448,6 +455,59 @@
         <p><strong>Pas på:</strong> Overlader man (over 4,2 V), eller lader man for hurtigt eller i kulde, kan lithium sætte sig som metal-nåle (dendritter). De kan stikke hul i skillevæggen og give kortslutning, varme og brand. Aflader man for dybt, kan kobberet opløses, og cellen tager skade. Derfor har LiPo-batterier beskyttelse, og gode ladere stopper ved 4,2 V og balancerer cellerne.</p>
         <p><strong>Strømmens retning:</strong> Man siger, at strømmen løber fra plus til minus uden om batteriet. Men elektronerne løber faktisk den modsatte vej. Det er en gammel aftale fra før man kendte elektronen.</p>
         <p><strong>Ærligt talt:</strong> Et rigtigt batteri har milliarder af milliarder lithium-ioner. Her viser vi 24.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Kosmos ===== -->
+  <section id="kosmos" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Kosmos</h2>
+      <span class="system-status">Vilde fænomener i rummet</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="kosmosHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <h4 class="panel-overskrift">Vælg et fænomen</h4>
+      <div class="kosmos-liste" id="kosmosListe"></div>
+      <h4 class="panel-overskrift">Prøv selv</h4>
+      <div class="kosmos-styring" id="kosmosStyring"></div>
+      <div class="kosmos-forklaring" id="kosmosForklaring"></div>
+    </aside>
+    <div class="vindue" id="kosmosVindue"><div class="kosmos-overlag" id="kosmosOverlag"></div></div>
+    <aside class="panel side-panel højre-panel">
+      <div class="kosmos-hoved">
+        <span class="kosmos-ikon" id="kosmosIkon"></span>
+        <div>
+          <h3 id="kosmosNavn"></h3>
+          <small id="kosmosUndertitel"></small>
+        </div>
+      </div>
+      <div class="seneste-boks kosmos-fase" id="kosmosFase"></div>
+      <dl class="kosmos-tal" id="kosmosTal"></dl>
+      <div class="del-vælger">
+        <button class="del-knap valgt" data-kosmos-fane="kort">Kort fortalt</button>
+        <button class="del-knap" data-kosmos-fane="nørd">For nørder</button>
+      </div>
+      <div class="kosmos-tekst" id="kosmosTekst"></div>
+      <blockquote class="citat lille" id="kosmosCitat"></blockquote>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpKosmos" role="dialog" aria-label="Hjælp til Kosmos">
+    <div class="dialog">
+      <header><h3>Kosmos</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p>Her kan du se nogle af de vildeste ting, der findes i universet. Vælg et fænomen til venstre, og prøv knapperne under <strong>Prøv selv</strong>. Til højre står, hvad du ser. Under <strong>For nørder</strong> er der mere at hente.</p>
+        <p><strong>Hvorfor er rummet med i AtomLab?</strong> Fordi atomerne er lavet derude. Hydrogen og helium kom fra Big Bang. Carbon, oxygen og jern blev lavet inde i stjerner og spredt af supernovaer. Meget af guldet og uranet blev lavet, da neutronstjerner stødte sammen. Og en neutronstjerne er næsten som én kæmpe atomkerne på størrelse med en by.</p>
+        <blockquote class="citat" data-citat="saganKosmos"></blockquote>
+        <p><strong>Ærligt talt:</strong> Intet her er i den rigtige størrelse eller det rigtige tempo. Afstandene i rummet er så enorme, at man ikke ville kunne se noget, hvis det var målfast. Og noget tager millioner af år, mens andet sker på et millisekund. Farverne er valgt, så man kan se forskel på tingene. Men det, der <em>sker</em>, er tæt på det, forskerne ved i dag.</p>
+        <p><strong>Ormehuller</strong> er det eneste her, som ingen har set. De er en mulighed i Einsteins ligninger, men måske findes de slet ikke.</p>
+        <p><strong>Styring:</strong> Træk for at dreje. Rul eller knib for at zoome.</p>
       </div>
     </div>
   </div>

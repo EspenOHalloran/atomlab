@@ -63,8 +63,18 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Kraftigere henfaldslyd med geigerklik, brag og sus.
   - Hjælpen forklarer, hvad det betyder, at kernen "skyder en elektron ud", og hvor elektronen bliver af.
 
+- [x] **Trin 6: Kosmos**
+  - En ny del med animationer af vilde fænomener i rummet. Til venstre vælger man et fænomen og har knapperne "Prøv selv". Til højre står nøgletal, "Kort fortalt", "For nørder" (med en ærlig "Ærligt talt"-note om, hvad animationen snyder med) og et citat. En boks fortæller, hvad der sker lige nu.
+  - **Solstorm:** Solen (med kogende overflade) sender solvind ud. En solstorm (CME) trykker Jordens magnetfelt sammen, partiklerne glider uden om, og nogle bliver fanget i halen og laver grønne og røde nordlysgardiner ved polerne. Zoom ind på Jorden.
+  - **Supernova:** Betelgeuse som rød kæmpe. "Vis lagene" skærer stjernen op (hydrogen, helium, carbon, oxygen, neon, silicium, jern). Jernkernen falder sammen, neutrinoer og en chokbølge, eksplosion, en tåge i lagenes farver og en neutronstjerne i midten.
+  - **Pulsar:** en neutronstjerne med to stråler, der fejer forbi Jorden. En graf viser blinkene, som et radioteleskop måler dem. Man kan høre Vela- og Krabbe-pulsaren og den hurtigste kendte pulsar i deres rigtige tempo.
+  - **Kilonova:** to neutronstjerner spiraler ind (tyngdebølger som ringe), støder sammen, gammaglimt og en sky, der går fra blå til rød, mens navnene på de nye grundstoffer (guld, platin, uran ...) dukker op.
+  - **Rumtid:** gummidugen. Læg stjerner og sorte huller, skyd planeter ind, og send lys forbi.
+  - **Tyngdebølger:** to sorte huller på dugen sender spiralbølger ud og smelter sammen. En detektor (som LIGO) ude ved kanten bliver strakt og presset, og grafen viser "chirpet", som også kan høres.
+  - **Sort hul:** skygge, en gas-skive (lysest på den side, der kommer mod os), en bue af bøjet lys, en astronaut, der bliver strakt som spaghetti og ser ud til at gå i stå, og en stjerne, der bliver revet over.
+  - **Kvasar:** en spiralgalakse med en blændende kerne og to jetstråler. Tænd og sluk, giv det sorte hul mad, og zoom ind i kernen.
+  - **Ormehul:** universet tegnet som foldet papir med en tunnel. Kapløb mellem lyset (den lange vej) og et rumskib (genvejen). Det siges tydeligt, at ingen har set et ormehul.
+
 ## Idéer til senere
-- Supernova-generator (fx Betelgeuse): en stor stjernes liv med skaller af fusion (som et løg), en jernkerne der styrter sammen, og eksplosionen der spreder grundstofferne ud i rummet.
-- Kilonova-generator: to neutronstjerner, der kredser om hinanden og smelter sammen. Hurtig neutronindfangning (r-processen) laver guld, platin og uran. Kan vises på stabilitetskortet: kernerne skubbes langt ud til højre og henfalder tilbage til båndet.
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).

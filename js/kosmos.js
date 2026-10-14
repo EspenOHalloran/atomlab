@@ -1,0 +1,294 @@
+// Kosmos: animationer af vilde fænomener i rummet (sorte huller, supernovaer, tyngdebølger ...).
+// Hvert fænomen ligger i sin egen fil i js/kosmos/ og har samme opbygning (se fx rumtid.js):
+// { id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
+
+import * as THREE from 'three';
+import { verden, sætVindue, passerTil } from './scene3d.js';
+import { Effekter } from './effekter.js';
+import { lyd } from './lyd.js';
+import { citatHTML } from './data/citater.js';
+import { ryd } from './kosmos/faelles.js';
+import solstorm from './kosmos/solstorm.js';
+import supernova from './kosmos/supernova.js';
+import pulsar from './kosmos/pulsar.js';
+import kilonova from './kosmos/kilonova.js';
+import rumtid from './kosmos/rumtid.js';
+import tyngdebolger from './kosmos/tyngdebolger.js';
+import sorthul from './kosmos/sorthul.js';
+import kvasar from './kosmos/kvasar.js';
+import ormehul from './kosmos/ormehul.js';
+
+// Rækkefølgen fortæller en historie: fra vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
+export const FÆNOMENER = [solstorm, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
+
+const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
+
+let rod = null;
+let gruppe = null;
+let effekter = null;
+let aktiv = false;
+let valgt = null;
+let kørende = null; // det, fænomenets lav() gav tilbage
+let fane = 'kort';
+let tjekTid = 0;
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+export function lavKosmos() {
+  rod = new THREE.Group();
+  rod.visible = false;
+  verden.scene.add(rod);
+  gruppe = new THREE.Group();
+  rod.add(gruppe);
+  effekter = new Effekter(rod);
+
+  const liste = $('kosmosListe');
+  for (const f of FÆNOMENER) {
+    const b = document.createElement('button');
+    b.className = 'kosmos-valg';
+    b.dataset.id = f.id;
+    b.title = f.undertitel;
+    b.innerHTML = `<span class="kosmos-valg-ikon">${f.ikon}</span><span class="kosmos-valg-navn">${f.navn}</span>`;
+    b.addEventListener('click', () => {
+      if (valgt === f) return;
+      lyd.klik();
+      vælg(f.id);
+    });
+    liste.append(b);
+  }
+  for (const b of document.querySelectorAll('[data-kosmos-fane]')) {
+    b.addEventListener('click', () => {
+      fane = b.dataset.kosmosFane;
+      lyd.klik();
+      visTekst();
+    });
+  }
+  $('kosmosHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpKosmos').classList.remove('skjult'); });
+}
+
+export function startKosmos() {
+  aktiv = true;
+  rod.visible = true;
+  verden.opdateringer.add(opdater);
+  sætVindue($('kosmosVindue'));
+  let id = null;
+  try {
+    id = localStorage.getItem(NØGLE);
+  } catch {
+    // ingen lagring
+  }
+  vælg(id);
+}
+
+export function stopKosmos() {
+  aktiv = false;
+  rod.visible = false;
+  verden.opdateringer.delete(opdater);
+  luk();
+  verden.styring.target.set(0, 0, 0);
+  verden.styring.autoRotate = true;
+  verden.styring.autoRotateSpeed = 0.5;
+}
+
+// Rydder det nuværende fænomen helt væk (så det ikke bruger grafikkortet, når man er et andet sted)
+function luk() {
+  kameraTur = null;
+  kørende?.stop?.();
+  kørende = null;
+  effekter.opdater(1e6); // alle effekter bliver færdige med det samme
+  ryd(gruppe);
+  $('kosmosOverlag').innerHTML = '';
+  valgt = null;
+}
+
+function vælg(id) {
+  const f = FÆNOMENER.find((x) => x.id === id) ?? FÆNOMENER[0];
+  luk();
+  valgt = f;
+  try {
+    localStorage.setItem(NØGLE, f.id);
+  } catch {
+    // ingen lagring
+  }
+  visFase(null);
+  $('kosmosForklaring').innerHTML = '';
+  $('kosmosOverlag').innerHTML = '';
+  kørende = f.lav(gruppe, {
+    effekter,
+    lyd,
+    verden,
+    fase: visFase,
+    kamera: stilKamera,
+    opdaterKnapper: lavStyring,
+    forklaring: (html) => { $('kosmosForklaring').innerHTML = html; },
+    // Et sted oven på 3D-billedet, hvor fænomenet kan vise fx en graf
+    overlag: () => $('kosmosOverlag'),
+  });
+  for (const b of document.querySelectorAll('.kosmos-valg')) b.classList.toggle('valgt', b.dataset.id === f.id);
+  $('kosmosIkon').textContent = f.ikon;
+  $('kosmosNavn').textContent = f.navn;
+  $('kosmosUndertitel').textContent = f.undertitel;
+  $('kosmosTal').innerHTML = (f.tal ?? []).map(([navn, værdi]) => `<div><dt>${navn}</dt><dd>${værdi}</dd></div>`).join('');
+  $('kosmosCitat').innerHTML = f.citat ? citatHTML(f.citat) : '';
+  $('kosmosCitat').hidden = !f.citat;
+  visTekst();
+  lavStyring();
+  stilKamera(f.kamera);
+}
+
+function visTekst() {
+  for (const b of document.querySelectorAll('[data-kosmos-fane]')) b.classList.toggle('valgt', b.dataset.kosmosFane === fane);
+  $('kosmosTekst').innerHTML = valgt ? valgt[fane] : '';
+  $('kosmosTekst').scrollTop = 0;
+}
+
+// En boks, der fortæller, hvad der sker lige nu (fx "Jernkernen falder sammen")
+function visFase(titel, tekst = '') {
+  const boks = $('kosmosFase');
+  if (!titel) {
+    boks.innerHTML = '';
+    return;
+  }
+  boks.innerHTML = `<strong></strong><span></span>`;
+  boks.querySelector('strong').textContent = titel;
+  boks.querySelector('span').textContent = tekst;
+}
+
+// Kameraet: retning (hvorfra vi kigger), radius (hvor stort det, vi skal se, er) og mål (midten).
+// flyv: true = kameraet flyver ind langt udefra. false = det glider blødt fra, hvor det er nu.
+let kameraTur = null;
+function stilKamera({ retning, radius = 16, mål = [0, 0, 0], drej = true, flyv = true } = {}) {
+  const s = verden.styring;
+  const k = verden.kamera;
+  s.autoRotate = drej;
+  s.autoRotateSpeed = 0.35;
+  const nu = k.position.clone().sub(s.target);
+  if (flyv) {
+    s.target.set(...mål);
+    k.position.copy(s.target).addScaledVector(new THREE.Vector3(...(retning ?? [0, 0.4, 1])).normalize(), radius * 7);
+    kameraTur = null;
+    passerTil(radius);
+    return;
+  }
+  passerTil(radius);
+  kameraTur = {
+    t: 0,
+    fraMål: s.target.clone(),
+    tilMål: new THREE.Vector3(...mål),
+    fraRetning: nu.clone().normalize(),
+    tilRetning: retning ? new THREE.Vector3(...retning).normalize() : nu.clone().normalize(),
+    fraAfstand: nu.length(),
+    tilAfstand: verden.målAfstand ?? nu.length(),
+  };
+  verden.målAfstand = null; // vi styrer selv afstanden under turen
+}
+
+function kørKameraTur(dt) {
+  if (!kameraTur) return;
+  const tur = kameraTur;
+  tur.t = Math.min(1, tur.t + dt / 1.3);
+  const e = tur.t * tur.t * (3 - 2 * tur.t); // blød start og slutning
+  const s = verden.styring;
+  s.target.lerpVectors(tur.fraMål, tur.tilMål, e);
+  const retning = tur.fraRetning.clone().lerp(tur.tilRetning, e).normalize();
+  verden.kamera.position.copy(s.target).addScaledVector(retning, tur.fraAfstand + (tur.tilAfstand - tur.fraAfstand) * e);
+  if (tur.t >= 1) kameraTur = null;
+}
+
+// Knapperne under "Prøv selv". Et punkt kan være en knap, en til/fra-knap eller en skyder.
+function lavStyring() {
+  const boks = $('kosmosStyring');
+  boks.innerHTML = '';
+  for (const s of kørende?.styring ?? []) {
+    if (s.skyder) {
+      const div = document.createElement('label');
+      div.className = 'skyder-boks';
+      div.innerHTML = `<span class="skyder-top"><span></span><strong></strong></span><input type="range">`;
+      div.querySelector('.skyder-top span').textContent = s.navn;
+      const vis = div.querySelector('strong');
+      const input = div.querySelector('input');
+      Object.assign(input, { min: s.min, max: s.max, step: s.trin ?? 1, value: s.værdi });
+      vis.textContent = s.vis ? s.vis(s.værdi) : s.værdi;
+      input.addEventListener('input', () => {
+        s.værdi = Number(input.value);
+        vis.textContent = s.vis ? s.vis(s.værdi) : s.værdi;
+        s.ændring(s.værdi);
+      });
+      boks.append(div);
+      continue;
+    }
+    const b = document.createElement('button');
+    b.textContent = s.tekst;
+    if (s.til !== undefined) {
+      b.className = 'chip filter kosmos-til';
+      b.classList.toggle('valgt', s.til);
+      b.addEventListener('click', () => {
+        s.til = !s.til;
+        b.classList.toggle('valgt', s.til);
+        lyd.klik();
+        s.skift(s.til);
+      });
+    } else {
+      b.className = 'knap lille kosmos-knap';
+      b.addEventListener('click', () => {
+        if (b.disabled) return;
+        lyd.klik();
+        s.handling();
+        tjekKnapper();
+      });
+    }
+    s.knap = b;
+    boks.append(b);
+  }
+  tjekKnapper();
+}
+
+// Nogle knapper kan ikke bruges hele tiden (fx "Eksplodér", når stjernen allerede er eksploderet)
+function tjekKnapper() {
+  for (const s of kørende?.styring ?? []) {
+    if (s.knap && s.deaktiv) s.knap.disabled = s.deaktiv();
+  }
+}
+
+function opdater(dt, tid) {
+  if (!aktiv || !kørende) return;
+  kørKameraTur(dt);
+  kørende.opdater(dt, tid);
+  effekter.opdater(dt);
+  tjekTid += dt;
+  if (tjekTid > 0.25) {
+    tjekTid = 0;
+    tjekKnapper();
+  }
+}
+
+// Adgang for automatiske tests
+export function testAdgang() {
+  return {
+    fænomener: FÆNOMENER.map((f) => f.id),
+    vælg: (id) => vælg(id),
+    valgt: () => valgt?.id,
+    knapper: () => (kørende?.styring ?? []).map((s) => s.tekst ?? s.navn),
+    tryk: (i) => {
+      const s = kørende.styring[i];
+      if (s.handling) s.handling();
+      else if (s.skift) { s.til = !s.til; s.skift(s.til); }
+      lavStyring();
+    },
+    antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },
+    // Spoler tiden frem (testbrowseren tegner kun få billeder i sekundet)
+    spol: (sekunder) => {
+      for (let t = 0; t < sekunder; t += 0.05) opdater(0.05, performance.now() / 1000 + t);
+    },
+    // Kameraet springer straks derhen, hvor det er på vej hen
+    kameraFrem: () => {
+      kørKameraTur(10);
+      const { kamera, styring, målAfstand } = verden;
+      const retning = kamera.position.clone().sub(styring.target);
+      if (målAfstand != null) kamera.position.copy(styring.target).add(retning.setLength(målAfstand));
+      verden.målAfstand = null;
+    },
+  };
+}

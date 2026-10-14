@@ -114,7 +114,7 @@ button { font: inherit; color: inherit; }
 
 .menukort {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 240px));
+  grid-template-columns: repeat(3, minmax(0, 300px));
   gap: 14px;
   justify-content: center;
   width: 100%;
@@ -603,12 +603,12 @@ button { font: inherit; color: inherit; }
 .system-etiket span { font-size: 12px; color: var(--svag); }
 
 /* ---------- Fælles for Stjerneovnen og Reaktoren ---------- */
-#fusion, #reaktor, #batteri {
+#fusion, #reaktor, #batteri, #kosmos {
   grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px);
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas: "top top top" "venstre vindue højre";
 }
-#fusion .vindue, #reaktor .vindue, #batteri .vindue { grid-area: vindue; }
+#fusion .vindue, #reaktor .vindue, #batteri .vindue, #kosmos .vindue { grid-area: vindue; }
 .batteri-tal { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
 .batteri-tal span { font-size: 12.5px; color: var(--svag); }
@@ -671,13 +671,58 @@ button { font: inherit; color: inherit; }
 .forklaring-boks { padding: 10px 12px; border-radius: 12px; background: rgba(95, 227, 255, 0.06); border: 1px solid rgba(95, 227, 255, 0.25); font-size: 13px; line-height: 1.45; }
 .forklaring-boks strong { display: block; color: var(--accent); margin-bottom: 2px; }
 
+/* ---------- Kosmos ---------- */
+.ikon-kosmos { background: radial-gradient(circle, #000 0 9px, #fff3c4 10px, #ffb347 12px, rgba(255, 120, 60, 0.45) 16px, transparent 24px); }
+.ikon-kosmos::before { content: ""; position: absolute; inset: 21px -3px; border-radius: 50%; border: 3px solid #ffb347; box-shadow: 0 0 10px #ff8a3d; transform: rotate(-14deg); }
+.kosmos-liste { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.kosmos-valg {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 9px;
+  border-radius: 12px;
+  border: 1px solid var(--panel-kant);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.kosmos-valg:hover { border-color: rgba(95, 227, 255, 0.5); }
+.kosmos-valg.valgt { background: rgba(95, 227, 255, 0.16); border-color: rgba(95, 227, 255, 0.75); box-shadow: 0 0 16px rgba(95, 227, 255, 0.18); }
+.kosmos-valg-ikon { font-size: 17px; line-height: 1; }
+.kosmos-styring { display: flex; flex-direction: column; gap: 6px; }
+.kosmos-knap { justify-content: flex-start; text-align: left; }
+.kosmos-forklaring:empty { display: none; }
+#kosmosVindue { position: relative; }
+.kosmos-overlag { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; justify-content: center; pointer-events: none; }
+.kosmos-overlag:empty { display: none; }
+.kosmos-graf { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 12px; background: rgba(8, 12, 28, 0.72); border: 1px solid var(--panel-kant); font-size: 12px; color: var(--svag); }
+.kosmos-graf canvas { width: min(420px, 100%); height: 70px; display: block; }
+.kosmos-forklaring { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.kosmos-til { justify-content: flex-start; padding: 7px 11px; font-size: 14px; }
+.kosmos-hoved { display: flex; gap: 12px; align-items: center; }
+.kosmos-ikon { flex: 0 0 52px; height: 52px; display: grid; place-items: center; font-size: 30px; border-radius: 14px; background: radial-gradient(circle, rgba(140, 123, 255, 0.35), rgba(95, 227, 255, 0.06)); border: 1px solid var(--panel-kant); }
+.kosmos-hoved h3 { margin: 0; font-size: 22px; }
+.kosmos-hoved small { color: var(--svag); font-size: 13px; }
+.kosmos-fase span { display: block; }
+.kosmos-tal { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.kosmos-tal:empty { display: none; }
+.kosmos-tal div { padding: 6px 9px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
+.kosmos-tal dt { font-size: 11.5px; color: var(--svag); }
+.kosmos-tal dd { margin: 0; font-size: 13.5px; font-weight: 700; }
+.kosmos-tekst { font-size: 14px; line-height: 1.5; }
+.kosmos-tekst p { margin: 0 0 9px; }
+.kosmos-tekst b { color: #bfe9ff; }
+.kosmos-tekst a { color: var(--accent); }
+
 .ingen3d { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px; }
 
 /* ---------- Mellemstore skærme (fx tablet på langs) ---------- */
 @media (max-width: 1150px) {
   #vaerksted { grid-template-columns: 240px minmax(0, 1fr) 280px; }
   .menukort { grid-template-columns: repeat(2, minmax(0, 320px)); }
-  .menukort .kort:last-child { grid-column: 1 / -1; justify-self: center; width: min(100%, 320px); }
   .opgave-krav .navn-lang { display: none; }
   .opgave-krav .navn-kort { display: inline; }
   .topbjælke h2 { font-size: 19px; }
@@ -711,7 +756,7 @@ button { font: inherit; color: inherit; }
   .hjælpeknapper { flex: 1 1 100%; }
   .minitabel-panel { width: min(100%, 480px); }
   .menukort { grid-template-columns: minmax(0, 1fr); }
-  #fusion, #reaktor, #batteri { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(200px, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; overflow-y: auto; }
+  #fusion, #reaktor, #batteri, #kosmos { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(200px, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; overflow-y: auto; }
   .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
   #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }

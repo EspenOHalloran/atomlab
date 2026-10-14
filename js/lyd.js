@@ -157,4 +157,44 @@ export const lyd = {
     }
     for (let i = 0; i < 9; i++) geigerklik(0.25 + i * 0.07 + Math.random() * 0.12);
   },
+  // Et kæmpe brag, der ruller ud (supernova og kilonova)
+  eksplosion: () => {
+    tone({ fra: 95, til: 18, varighed: 2.6, type: 'sine', styrke: 0.75 });
+    støj({ varighed: 2.8, fra: 4000, til: 50, filter: 'lowpass', styrke: 0.55, angreb: 0.02 });
+    støj({ varighed: 1.6, fra: 9000, til: 400, filter: 'bandpass', styrke: 0.18, forsinkelse: 0.05 });
+  },
+  // En pulsar lavet om til lyd: et klik for hvert blink. Over 100 blink i sekundet bliver det til en tone.
+  pulsar: (frekvens, varighed = 2) => {
+    if (frekvens > 100) {
+      tone({ fra: frekvens, varighed, type: 'square', styrke: 0.05 });
+      return;
+    }
+    for (let t = 0; t < varighed; t += 1 / frekvens) geigerklik(t);
+  },
+  // Et sus (fx en solstorm)
+  sus: (varighed = 1.6) => {
+    støj({ varighed, fra: 400, til: 2600, filter: 'bandpass', styrke: 0.22, angreb: varighed * 0.5 });
+  },
+  // Tyngdebølgernes "chirp": en tone, der stiger hurtigere og hurtigere og stopper brat,
+  // ligesom da LIGO lavede den første måling om til lyd
+  chirp: (varighed = 1.4) => {
+    const c = lydkort();
+    if (!c) return;
+    const start = c.currentTime;
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(40, start);
+    for (let i = 1; i <= 20; i++) {
+      const t = i / 20;
+      osc.frequency.linearRampToValueAtTime(40 + 360 * Math.pow(t, 4), start + t * varighed);
+    }
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(0.08, start + varighed * 0.5);
+    g.gain.exponentialRampToValueAtTime(0.35, start + varighed);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + varighed + 0.25);
+    osc.connect(g).connect(udgang);
+    osc.start(start);
+    osc.stop(start + varighed + 0.3);
+  },
 };
