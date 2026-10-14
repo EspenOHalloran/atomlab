@@ -28,18 +28,64 @@ const hjælpS = new THREE.Vector3();
 const hjælpV = new THREE.Vector3();
 const ryst = new THREE.Vector3();
 
+const HALE_LÆNGDE = LAV_KVALITET ? 9 : 16; // så mange punkter er der i en elektrons hale
+const MAX_LIM = 2400; // højst så mange lyspunkter for kernekraften
+
+// Giver kuglerne et lysende kantlys og lader dem pulsere svagt (hver kugle i sin egen takt).
+// Det gøres ved at tilføje lidt kode til Three.js' almindelige materiale.
+function tilføjKantlys(materiale, kantFarve, pulsFarve, tid) {
+  materiale.onBeforeCompile = (shader) => {
+    shader.uniforms.uKant = { value: kantFarve };
+    shader.uniforms.uPuls = { value: pulsFarve };
+    shader.uniforms.uTid = tid;
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nuniform float uTid;\nvarying float vPuls;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+        #ifdef USE_INSTANCING
+          vPuls = 0.5 + 0.5 * sin(uTid * 2.2 + float(gl_InstanceID) * 2.39);
+        #else
+          vPuls = 0.5;
+        #endif`);
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform vec3 uKant;\nuniform vec3 uPuls;\nvarying float vPuls;')
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+        float kant = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 2.5);
+        totalEmissiveRadiance += uKant * kant + uPuls * vPuls;`);
+  };
+}
+
+// En lysende ring (til chokbølgen ved henfald)
+function lavRingTekstur() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, 'rgba(255,255,255,0)');
+  grad.addColorStop(0.68, 'rgba(255,255,255,0)');
+  grad.addColorStop(0.86, 'rgba(255,255,255,0.9)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
 export class Atom {
   constructor() {
     this.gruppe = new THREE.Group();
 
     const [b, h] = LAV_KVALITET ? [14, 10] : [26, 18];
     const kugle = new THREE.SphereGeometry(R, b, h);
+    this.tidUniform = { value: 0 };
     this.protonMat = new THREE.MeshStandardMaterial({
-      color: 0xff3d3d, roughness: 0.3, metalness: 0.05, emissive: 0x5a0a0a,
+      color: 0xd81414, roughness: 0.38, metalness: 0.05, emissive: 0x4a0303,
     });
     this.neutronMat = new THREE.MeshStandardMaterial({
-      color: 0xb4c4e4, roughness: 0.36, metalness: 0.05, emissive: 0x111a2e,
+      color: 0x98a8c8, roughness: 0.42, metalness: 0.05, emissive: 0x0c1424,
     });
+    tilføjKantlys(this.protonMat, new THREE.Color(1.1, 0.12, 0.08), new THREE.Color(0.28, 0.02, 0.01), this.tidUniform);
+    tilføjKantlys(this.neutronMat, new THREE.Color(0.16, 0.3, 0.85), new THREE.Color(0.0, 0.0, 0.0), this.tidUniform);
     this.pMesh = new THREE.InstancedMesh(kugle, this.protonMat, MAX_P + 40);
     this.nMesh = new THREE.InstancedMesh(kugle, this.neutronMat, MAX_N + 40);
 
@@ -72,7 +118,35 @@ export class Atom {
       depthWrite: false, blending: THREE.AdditiveBlending,
     }));
 
-    this.gruppe.add(this.pMesh, this.nMesh, this.eMesh, this.ringGruppe, this.skyGruppe, this.skær, this.glimt);
+    // Elektron-haler: hver elektron trækker en stribe af lysende prikker efter sig
+    const haleGeo = new THREE.BufferGeometry();
+    haleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array((MAX_E + 40) * HALE_LÆNGDE * 3), 3));
+    haleGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array((MAX_E + 40) * HALE_LÆNGDE * 3), 3));
+    this.haler = new THREE.Points(haleGeo, new THREE.PointsMaterial({
+      size: 0.3, map: this.prik, vertexColors: true, transparent: true,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    this.haler.frustumCulled = false;
+
+    // "Lim": små gyldne lyspunkter, hvor naboer i kernen rører hinanden (en tegning af kernekraften)
+    const limGeo = new THREE.BufferGeometry();
+    limGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_LIM * 3), 3));
+    limGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(MAX_LIM * 3), 3));
+    this.lim = new THREE.Points(limGeo, new THREE.PointsMaterial({
+      size: 0.5, map: this.prik, vertexColors: true, transparent: true,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    this.lim.frustumCulled = false;
+
+    // Chokbølge ved henfald
+    this.bølge = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: lavRingTekstur(), color: new THREE.Color(2.2, 1.8, 1.2), transparent: true, opacity: 0,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    this.bølgeTid = 0;
+
+    this.gruppe.add(this.pMesh, this.nMesh, this.eMesh, this.ringGruppe, this.skyGruppe, this.skær, this.glimt,
+      this.haler, this.lim, this.bølge);
 
     this.nukleoner = []; // { type: 'p'|'n', pos, fart, ud, liv, vækst }
     this.elektroner = []; // { pos, ud, liv, vækst, fart }
@@ -124,6 +198,7 @@ export class Atom {
     this.skyGruppe.visible = sky;
     this.ringGruppe.visible = !sky;
     this.eMesh.visible = !sky;
+    this.haler.visible = !sky;
   }
 
   // 'stabil', 'næsten', 'ustabil', 'meget', 'straks' eller 'tom'
@@ -337,6 +412,7 @@ export class Atom {
     this.mål = { p, n, e };
     this.beregnSkaller();
     this.glimtTid = 0.6;
+    this.bølgeTid = 1;
     return { p, n };
   }
 
@@ -425,6 +501,7 @@ export class Atom {
   // ---------- Hvert billede ----------
   opdater(dt) {
     this.tid += dt;
+    this.tidUniform.value = this.tid;
     let ekstraRyst = 0;
     if (this.henfaldVenter) {
       const v = this.henfaldVenter;
@@ -488,6 +565,27 @@ export class Atom {
       hjælpMatrix.compose(e.pos, hjælpQ, hjælpS.setScalar(s));
       this.eMesh.setMatrixAt(ie++, hjælpMatrix);
     }
+    // Halerne: gem elektronens seneste positioner og tegn dem som prikker, der bliver svagere
+    const halePos = this.haler.geometry.attributes.position.array;
+    const haleFarve = this.haler.geometry.attributes.color.array;
+    let ih = 0;
+    for (const e of this.elektroner) {
+      if (!e.hale) e.hale = Array.from({ length: HALE_LÆNGDE }, () => e.pos.clone());
+      const sidste = e.hale.pop();
+      e.hale.unshift(sidste.copy(e.pos));
+      const styrke = e.ud ? Math.max(0, e.liv) : e.vækst;
+      for (let j = 1; j < HALE_LÆNGDE; j++) {
+        const v = e.hale[j];
+        const f = Math.pow(1 - j / HALE_LÆNGDE, 1.6) * styrke * 0.9;
+        halePos[ih * 3] = v.x; halePos[ih * 3 + 1] = v.y; halePos[ih * 3 + 2] = v.z;
+        haleFarve[ih * 3] = 0.45 * f; haleFarve[ih * 3 + 1] = 1.5 * f; haleFarve[ih * 3 + 2] = 2.0 * f;
+        ih++;
+      }
+    }
+    this.haler.geometry.setDrawRange(0, ih);
+    this.haler.geometry.attributes.position.needsUpdate = true;
+    this.haler.geometry.attributes.color.needsUpdate = true;
+
     this.elektroner = this.elektroner.filter((e) => !e.ud || e.liv > 0);
     this.eMesh.count = ie;
     this.eMesh.instanceMatrix.needsUpdate = true;
@@ -506,7 +604,7 @@ export class Atom {
     const a = this.mål.p + this.mål.n;
     const kerneR = kerneRadius(a);
     const mat = this.skær.material;
-    let opacitet = a > 0 ? 0.28 : 0;
+    let opacitet = a > 0 ? 0.1 : 0;
     if (this.status === 'stabil' || this.status === 'næsten') mat.color.setHex(0xffc890);
     else if (this.status === 'straks') {
       mat.color.setHex(0xff4040);
@@ -539,6 +637,34 @@ export class Atom {
       }
     }
     this.skud = this.skud.filter((s) => s.liv > 0);
+
+    // Kernekraftens "lim": lyspunkter midt mellem naboer, der rører hinanden. De blinker svagt.
+    const limPos = this.lim.geometry.attributes.position.array;
+    const limFarve = this.lim.geometry.attributes.color.array;
+    const faste = this.nukleoner.filter((k) => !k.ud && !k.påVej);
+    const nabo2 = (2 * R * 1.12) ** 2;
+    const uro = this.status === 'straks' ? 0.5 + 0.5 * Math.sin(this.tid * 30) : 1;
+    let il = 0;
+    for (let i = 0; i < faste.length && il < MAX_LIM; i++) {
+      const a = faste[i].pos;
+      for (let j = i + 1; j < faste.length && il < MAX_LIM; j++) {
+        const b = faste[j].pos;
+        const dx = a.x - b.x, dy = a.y - b.y, dz = a.z - b.z;
+        if (dx * dx + dy * dy + dz * dz > nabo2) continue;
+        limPos[il * 3] = (a.x + b.x) / 2; limPos[il * 3 + 1] = (a.y + b.y) / 2; limPos[il * 3 + 2] = (a.z + b.z) / 2;
+        const f = (0.3 + 0.7 * Math.max(0, Math.sin(this.tid * 4 + il * 1.7)) ** 2) * uro;
+        limFarve[il * 3] = 2.0 * f; limFarve[il * 3 + 1] = 1.45 * f; limFarve[il * 3 + 2] = 0.5 * f;
+        il++;
+      }
+    }
+    this.lim.geometry.setDrawRange(0, il);
+    this.lim.geometry.attributes.position.needsUpdate = true;
+    this.lim.geometry.attributes.color.needsUpdate = true;
+
+    // Chokbølge
+    if (this.bølgeTid > 0) this.bølgeTid = Math.max(0, this.bølgeTid - dt * 1.1);
+    this.bølge.material.opacity = this.bølgeTid * 0.9;
+    this.bølge.scale.setScalar(kerneR * 2 + (1 - this.bølgeTid) * (this.størrelse() * 2.4 + 6));
 
     // Gammaglimt
     if (this.glimtTid > 0) this.glimtTid = Math.max(0, this.glimtTid - dt);

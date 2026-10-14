@@ -1,11 +1,12 @@
 // Start: laver 3D-verdenen og skifter mellem menuen og de forskellige dele.
 // Hvilken del der vises, står efter # i adressen (fx index.html#vaerksted).
 
-import { lavVerden, verden, sætVindue, passerTil } from './scene3d.js';
+import { lavVerden, verden, sætVindue, flyInd } from './scene3d.js';
 import { Atom } from './atom.js';
 import { lavVærksted, startVærksted, stopVærksted, OPGAVER } from './vaerksted.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
+import { citatHTML, MENU_CITATER } from './data/citater.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -32,6 +33,8 @@ function start() {
 
   lavVærksted();
   lavFuldSkærmKnapper();
+  // Faste citater i hjælpen
+  for (const boks of document.querySelectorAll('[data-citat]')) boks.innerHTML = citatHTML(boks.dataset.citat);
   addEventListener('hashchange', visSkærm);
   visSkærm();
 }
@@ -57,7 +60,10 @@ function startMenu() {
   verden.opdateringer.add(opdaterMenuAtom);
   sætVindue(document.getElementById('menuVindue'));
   verden.styring.autoRotate = true;
-  passerTil(menuAtom.størrelse());
+  flyInd(menuAtom.størrelse());
+  // Et nyt citat hver gang man kommer til menuen
+  const nøgle = MENU_CITATER[Math.floor(Math.random() * MENU_CITATER.length)];
+  document.getElementById('menuCitat').innerHTML = citatHTML(nøgle);
   const løste = fremgang.antalLøste(OPGAVER.map((o) => o.id));
   document.getElementById('menuStatus').textContent =
     `Opdagede grundstoffer: ${fremgang.antalOpdaget()} af 118 · Opgaver klaret: ${løste} af ${OPGAVER.length}`;

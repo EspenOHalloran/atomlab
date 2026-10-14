@@ -49,19 +49,20 @@ export function lavVerden(lærred) {
   // Bløde refleksioner på kuglerne
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.55;
+  scene.environmentIntensity = 0.4;
 
   const kamera = new THREE.PerspectiveCamera(SYNSVINKEL, innerWidth / innerHeight, 0.1, 3000);
   kamera.position.set(0, 6, 34);
 
   // Lys: et hovedlys, et blåligt kantlys bagfra og lidt lys alle steder
-  const hovedlys = new THREE.DirectionalLight(0xffffff, 2.2);
+  const hovedlys = new THREE.DirectionalLight(0xffffff, 1.9);
   hovedlys.position.set(6, 10, 12);
   const kantlys = new THREE.DirectionalLight(0x6f8cff, 1.4);
   kantlys.position.set(-10, -4, -12);
   scene.add(hovedlys, kantlys, new THREE.AmbientLight(0x404a70, 0.6));
 
   lavStjernehimmel(scene);
+  lavRumstøv(scene);
 
   const styring = new OrbitControls(kamera, renderer.domElement);
   styring.enableDamping = true;
@@ -96,6 +97,7 @@ export function lavVerden(lærred) {
     const tid = nu / 1000;
     for (const f of verden.opdateringer) f(dt, tid);
     zoomMod(dt);
+    svingKamera(dt);
     styring.update(dt);
     komponist.render(dt);
   });
@@ -147,6 +149,36 @@ function lavStjernehimmel(scene) {
   }
   scene.add(himmel);
   verden.opdateringer.add((dt) => { himmel.rotation.y += dt * 0.004; });
+}
+
+// Rumstøv: svage prikker, der driver langsomt forbi tæt på atomet og giver dybde
+function lavRumstøv(scene) {
+  const antal = LAV_KVALITET ? 160 : 360;
+  const pos = new Float32Array(antal * 3);
+  const farter = new Float32Array(antal * 3);
+  for (let i = 0; i < antal; i++) {
+    const v = new THREE.Vector3().randomDirection().multiplyScalar(22 + Math.random() * 70);
+    pos.set([v.x, v.y, v.z], i * 3);
+    const f = new THREE.Vector3().randomDirection().multiplyScalar(0.3 + Math.random() * 0.6);
+    farter.set([f.x, f.y, f.z], i * 3);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const støv = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: 0.35, map: lavPrikTekstur(), color: 0x8fb4ff, transparent: true, opacity: 0.45,
+    depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  støv.frustumCulled = false;
+  scene.add(støv);
+  verden.opdateringer.add((dt) => {
+    for (let i = 0; i < antal * 3; i++) pos[i] += farter[i] * dt;
+    // Støv, der driver for langt væk, kommer ind fra den anden side
+    for (let i = 0; i < antal; i++) {
+      const x = pos[i * 3], y = pos[i * 3 + 1], z = pos[i * 3 + 2];
+      if (x * x + y * y + z * z > 95 * 95) { pos[i * 3] = -x * 0.9; pos[i * 3 + 1] = -y * 0.9; pos[i * 3 + 2] = -z * 0.9; }
+    }
+    geo.attributes.position.needsUpdate = true;
+  });
 }
 
 // En rund, blød prik (eller en stor blød sky) tegnet på et lille lærred
@@ -209,6 +241,33 @@ export function passerTil(radius) {
   const halv = Math.tan(THREE.MathUtils.degToRad(SYNSVINKEL / 2));
   const mindste = Math.min(hul.width, hul.height) / innerHeight;
   verden.målAfstand = THREE.MathUtils.clamp((radius * 1.18) / (halv * mindste), 6, 240);
+}
+
+// Kameraet svinger blødt et stykke rundt om atomet (fx når man skifter grundstof)
+let sving = null;
+export function kameraSving(vinkel = 0.6, varighed = 1.4) {
+  sving = { vinkel, varighed, tid: 0, sidst: 0 };
+}
+
+// Kameraet starter langt væk og flyver ind (fx når man åbner en del)
+export function flyInd(radius, faktor = 3) {
+  const { kamera, styring } = verden;
+  const retning = kamera.position.clone().sub(styring.target);
+  kamera.position.copy(styring.target).add(retning.setLength(Math.max(retning.length(), radius * 4) * faktor));
+  passerTil(radius);
+  kameraSving(0.9, 2);
+}
+
+function svingKamera(dt) {
+  if (!sving) return;
+  sving.tid = Math.min(sving.varighed, sving.tid + dt);
+  const t = sving.tid / sving.varighed;
+  const blød = t * t * (3 - 2 * t); // langsom start og slutning
+  const skridt = (blød - sving.sidst) * sving.vinkel;
+  sving.sidst = blød;
+  const { kamera, styring } = verden;
+  kamera.position.sub(styring.target).applyAxisAngle(new THREE.Vector3(0, 1, 0), skridt).add(styring.target);
+  if (t >= 1) sving = null;
 }
 
 function zoomMod(dt) {

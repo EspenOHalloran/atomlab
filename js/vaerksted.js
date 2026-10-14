@@ -1,6 +1,6 @@
 // Atomværkstedet: byg et atom af protoner, neutroner og elektroner, og se hvad det bliver.
 
-import { verden, sætVindue, passerTil } from './scene3d.js';
+import { verden, sætVindue, passerTil, kameraSving, flyInd } from './scene3d.js';
 import { Atom } from './atom.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering } from './data/grundstoffer.js';
 import { stabilitet, isotopNavn, typiskeNeutroner, henfaldsmåde, stabileNeutroner } from './data/isotoper.js';
@@ -8,6 +8,7 @@ import { Stabilitetskort } from './stabilitetskort.js';
 import * as fremgang from './fremgang.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { citatHTML } from './data/citater.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -108,6 +109,20 @@ const HENFALD_TEKST = {
   p: 'Kernen kunne ikke holde på alle protonerne og skød en proton ud med det samme.',
 };
 
+// Hvilken stråling kernen sender ud, og hvad der stopper den
+const STRÅLING = {
+  'beta-': 'Betastråling (elektroner). Bliver stoppet af nogle millimeter aluminium.',
+  'dobbeltbeta-': 'Betastråling (elektroner). Bliver stoppet af nogle millimeter aluminium.',
+  'beta+': 'Positroner. De møder hurtigt en elektron, og så forsvinder begge og bliver til gammastråling.',
+  'dobbeltbeta+': 'Positroner. De møder hurtigt en elektron, og så forsvinder begge og bliver til gammastråling.',
+  alfa: 'Alfastråling (heliumkerner). Bliver stoppet af et stykke papir, men er farlig, hvis stoffet kommer ind i kroppen.',
+  n: 'Neutroner. De går let gennem mange ting og bliver bedst stoppet af vand eller beton.',
+  p: 'Protoner.',
+};
+
+// Grundstoffer, som Carl Sagans citat om stjernestof handler om
+const STJERNESTOF = [6, 7, 20, 26];
+
 const HÆVET = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 function hævet(tal) {
   return String(tal).split('').map((c) => HÆVET[c] ?? c).join('');
@@ -177,7 +192,7 @@ export function startVærksted() {
   verden.opdateringer.add(opdater3D);
   sætVindue($('vaerkstedVindue'));
   verden.styring.autoRotate = true;
-  passerTil(atom.størrelse());
+  flyInd(atom.størrelse());
   opdaterLydknap();
   opdaterAlt();
 }
@@ -266,6 +281,7 @@ function startHenfald() {
   atom.henfald(måde, (ny) => {
     travl = false;
     lyd.henfald(måde);
+    kameraSving(0.45, 1.2);
     sæt({ p: ny.p, n: ny.n, e: før.e }, true);
     const efter = stabilitet(ny.p, ny.n);
 
@@ -489,6 +505,7 @@ function vælgFraTabel(nr) {
     return;
   }
   lyd.klik();
+  kameraSving();
   sæt({ p: nr, n: Math.min(MAX_N, typiskeNeutroner(nr)), e: nr });
 }
 
@@ -605,6 +622,7 @@ function opdaterInfo() {
   const el = elementer;
   const st = stabilitet(p, n);
   opdaterKort(st);
+  opdaterCitat(st);
 
   if (p === 0) {
     el.kort.style.setProperty('--farve', '#5c6b8a');
@@ -634,7 +652,7 @@ function opdaterInfo() {
   const q = p - e;
   let ladning;
   if (e === 0) {
-    ladning = `+${p}: en nøgen kerne uden elektroner`;
+    ladning = `+${p}: en nøgen kerne uden elektroner (${g.symbol}${ladningstegn(p)}). Det findes fx inde i Solen, hvor der er så varmt, at alle elektronerne bliver revet af.`;
     if (p === 1 && n === 0) ladning = '+1: bare en enkelt proton (H⁺)';
     if (p === 2 && n === 2) ladning = '+2: en alfapartikel (heliumkerne)';
   } else if (q === 0) ladning = '0: et neutralt atom';
@@ -659,6 +677,23 @@ function opdaterInfo() {
   el.model.textContent = atom.visning === 'sky'
     ? 'Elektronsky: I virkeligheden kredser elektroner ikke i baner som planeter. Man kan kun sige, hvor de sandsynligvis er, og det ligner en sky.'
     : 'Ringene er en forenklet tegning, der gør det let at tælle elektronerne. Prøv "Elektronsky".';
+  if (p + n > 1) el.model.textContent += ' De gyldne lyspunkter i kernen viser, hvor kernekraften "limer" partiklerne sammen. Kraften selv kan man ikke se.';
+}
+
+// Et citat, der passer til det, man har bygget
+function opdaterCitat(st) {
+  const { p } = tilstand;
+  let nøgle;
+  if (p === 0) nøgle = 'feynman';
+  else if (atom.visning === 'sky') nøgle = 'bohr';
+  else if (['ustabil', 'meget', 'næsten'].includes(st.status)) nøgle = 'einsteinTerninger';
+  else if (STJERNESTOF.includes(p)) nøgle = 'saganStjernestof';
+  else nøgle = ['rutherford', 'einsteinNysgerrighed', 'saganÆbletærte', 'feynman'][p % 4];
+  const boks = document.getElementById('infoCitat');
+  if (boks.dataset.nøgle !== nøgle) {
+    boks.dataset.nøgle = nøgle;
+    boks.innerHTML = citatHTML(nøgle);
+  }
 }
 
 function visStabilitet(st) {
@@ -676,9 +711,12 @@ function visStabilitet(st) {
     knapper += `<button class="knap lille henfald-knap"${travl ? ' disabled' : ''}>${travl ? 'Henfalder …' : tekst}</button>`;
   }
   knapper += '<button class="link-knap" data-hjælp="hjælpNeutroner">Hvorfor?</button>';
+  if (måde && st.status !== 'straks') knapper += '<button class="link-knap" data-hjælp="hjælpRadioaktivitet">Er det farligt?</button>';
+  const stråling = måde && st.status !== 'straks' && tilstand.p > 0 ? `<span class="straaling">Stråling: ${STRÅLING[måde]}</span>` : '';
   boks.innerHTML = `<strong>${ikon} ${st.overskrift}</strong>`
     + (st.halveringstid ? `<span class="halv" title="Den tid, det tager, før halvdelen af kernerne er henfaldet">Halveringstid: ${st.halveringstid}</span>` : '')
     + `<span>${st.tekst}</span>`
+    + stråling
     + `<span class="knapper">${knapper}</span>`;
 }
 

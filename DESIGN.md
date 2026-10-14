@@ -23,7 +23,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - [x] **Trin 1b: Neutronernes rolle og ioner**
   - Stabilitetskort: protoner op ad, neutroner hen ad. De stabile kerner danner et bånd, der bøjer mod flere neutroner, og ens egen kerne er en lysende prik. Teksten under viser neutroner pr. proton og hvor mange neutroner, stabile kerner af grundstoffet har.
   - "Se den henfalde": kernen ryster, og så sker henfaldet som animation (betahenfald, beta-plus, alfa, dobbelt beta, neutron eller proton ud) med lysglimt og partikler med hale. Atomet bliver til det nye grundstof og er en ion et øjeblik, før det bliver neutralt igen. Uran-238-kæden følger den rigtige rækkefølge (8 alfa, 6 beta).
-  - Hjælpen forklarer "Hvad er en ion?" og "Hvorfor neutroner?", og der er "Hvorfor?"-links fra infopanelet.
+  - Hjælpen forklarer "Hvad er en ion?", "Hvorfor neutroner?" og "Hvad er radioaktivitet, og hvorfor er det farligt?", og der er links fra infopanelet. Ved ustabile kerner står, hvilken stråling de sender ud, og hvad der stopper den.
+- [x] **Trin 1c: Flottere grafik og citater**
+  - Elektroner med lysende haler, kuglerne har kantlys, og protonerne pulserer svagt. Gyldne lyspunkter viser kernekraftens "lim" (det siges ærligt, at det er en tegning). Rumstøv driver forbi. Chokbølge ved henfald.
+  - Kameraet flyver ind, når man åbner en del, og svinger blødt, når man skifter grundstof.
+  - Citater fra Feynman, Rutherford, Bohr, Sagan og Einstein i menuen, i hjælpen og nederst i infopanelet. Kun citater med en sikker kilde (de står i `js/data/citater.js`). Brug dem også i de kommende dele (fx Einsteins E = mc² i Stjerneovnen og Reaktoren, Sagans "stjernestof" ved supernovaer).
 - [ ] **Trin 2: Det periodiske system**
   - En 3D-væg med 118 felter, farvet efter kategori. Kameraet flyver ind, når man vælger et felt.
   - Kort med et 3D-atom, der drejer, 2-4 sætninger fakta, hvor stoffet findes, og hvad det bruges til. Knap: "Byg det i værkstedet".
@@ -37,6 +41,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Spalt én kerne: en langsom neutron rammer uran-235, som spalter i et af tre rigtige par (Ba-141 + Kr-92 + 3 n, Xe-140 + Sr-94 + 2 n, Te-137 + Zr-97 + 2 n).
   - Kædereaktion med kontrolstave og moderator. Opgave: hold reaktoren stabil i 30 sekunder.
 
+- [ ] **Trin 5: Batteriet**
+  - Et LiPo-batteri i 3D: grafit på minussiden, metaloxid på plussiden, elektrolyt og skillevæg imellem.
+  - Opladning: laderen pumper elektroner gennem ledningen over i grafitten, og Li⁺-ioner svømmer gennem elektrolytten efter dem. Afladning: det modsatte, og elektronerne laver arbejde i motoren på vejen.
+  - Målere for spænding (ca. 3,0–4,2 V pr. celle) og opladning. Vis hvad der sker ved overopladning (lithium-nåle, der kan stikke hul i skillevæggen) og ved alt for dyb afladning.
+
 ## Idéer til senere
+- Supernova-generator (fx Betelgeuse): en stor stjernes liv med skaller af fusion (som et løg), en jernkerne der styrter sammen, og eksplosionen der spreder grundstofferne ud i rummet.
+- Kilonova-generator: to neutronstjerner, der kredser om hinanden og smelter sammen. Hurtig neutronindfangning (r-processen) laver guld, platin og uran. Kan vises på stabilitetskortet: kernerne skubbes langt ud til højre og henfalder tilbage til båndet.
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).
