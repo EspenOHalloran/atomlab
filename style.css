@@ -597,12 +597,28 @@ button { font: inherit; color: inherit; }
 .system-etiket span { font-size: 12px; color: var(--svag); }
 
 /* ---------- Fælles for Stjerneovnen og Reaktoren ---------- */
-#fusion {
+#fusion, #reaktor {
   grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px);
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas: "top top top" "venstre vindue højre";
 }
-#fusion .vindue { grid-area: vindue; }
+#fusion .vindue, #reaktor .vindue { grid-area: vindue; }
+.side-panel > div[data-reaktor-del] { display: flex; flex-direction: column; gap: 10px; }
+.side-panel > div[data-reaktor-del].skjult { display: none !important; }
+.del-vælger { display: flex; gap: 4px; padding: 3px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); margin: 0 auto; }
+.del-knap { padding: 6px 14px; border: 0; border-radius: 9px; background: transparent; color: var(--svag); font-weight: 700; cursor: pointer; }
+.del-knap.valgt { background: rgba(95, 227, 255, 0.18); color: var(--tekst); }
+.valg-række { display: flex; flex-wrap: wrap; gap: 6px; }
+.forklaring-reaktor .tæl { display: block; margin: 4px 0 6px; color: var(--grøn); font-size: 12.5px; }
+.effekt-boks, .stabil-boks { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.effekt-boks > span, .stabil-boks strong { font-weight: 700; }
+.effekt-boks small, .stabil-boks small { color: var(--svag); font-size: 12.5px; }
+.måler { position: relative; height: 18px; border-radius: 9px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.måler-felt { position: absolute; left: var(--felt-fra, 20%); width: var(--felt-bredde, 30%); top: 0; bottom: 0; background: rgba(140, 233, 154, 0.25); border-left: 1px solid rgba(140, 233, 154, 0.7); border-right: 1px solid rgba(140, 233, 154, 0.7); }
+.måler-niveau { position: absolute; left: 0; top: 0; bottom: 0; width: var(--niveau, 0%); background: linear-gradient(90deg, #4dabf7, #ffd43b 60%, #ff6b6b); opacity: 0.85; transition: width 0.2s; }
+.fremskridt { height: 10px; border-radius: 5px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.fremskridt div { height: 100%; width: var(--niveau, 0%); background: var(--grøn); transition: width 0.3s; }
+.knap:disabled { opacity: 0.45; cursor: default; }
 .side-panel { padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; scrollbar-width: none; min-height: 0; }
 .side-panel::-webkit-scrollbar { display: none; }
 .venstre-panel { grid-area: venstre; }
@@ -677,7 +693,8 @@ button { font: inherit; color: inherit; }
   .hjælpeknapper { flex: 1 1 100%; }
   .minitabel-panel { width: min(100%, 480px); }
   .menukort { grid-template-columns: minmax(0, 1fr); }
-  #fusion { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(200px, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; overflow-y: auto; }
+  #fusion, #reaktor { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(200px, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; overflow-y: auto; }
+  .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
   #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }
   .system-kort { max-height: 48vh; overflow-y: auto; }

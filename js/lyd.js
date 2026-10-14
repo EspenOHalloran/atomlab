@@ -109,6 +109,21 @@ export const lyd = {
     tone({ fra: 1568, til: 2093, varighed: 0.5, styrke: 0.05, forsinkelse: 0.4 });
   },
   klik: () => tone({ fra: 900, varighed: 0.04, type: 'square', styrke: 0.03 }),
+  // Et enkelt geigerklik (fx for hver spaltning i reaktoren)
+  tik: () => geigerklik(0),
+  // Alarm ved nødstop: to toner, der skifter
+  alarm: () => {
+    for (let i = 0; i < 4; i++) {
+      tone({ fra: 880, varighed: 0.22, type: 'square', styrke: 0.06, forsinkelse: i * 0.5 });
+      tone({ fra: 660, varighed: 0.22, type: 'square', styrke: 0.06, forsinkelse: i * 0.5 + 0.25 });
+    }
+  },
+  // Spaltning: et kraftigt brag
+  spaltning: () => {
+    tone({ fra: 120, til: 28, varighed: 1.1, type: 'sine', styrke: 0.7 });
+    støj({ varighed: 1.0, fra: 6000, til: 100, filter: 'lowpass', styrke: 0.5 });
+    tone({ fra: 2600, til: 200, varighed: 0.5, type: 'sawtooth', styrke: 0.06, forsinkelse: 0.05 });
+  },
   // Fusion: et dybt "vuup" og en klokkeklang (flere toner jo længere i kæden)
   fusion: (trin = 0) => {
     const stor = trin >= 2;

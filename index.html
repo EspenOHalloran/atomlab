@@ -49,14 +49,13 @@
           <small>Fusion: lav helium af hydrogen ligesom Solen</small>
         </span>
       </a>
-      <div class="kort låst">
+      <a class="kort åben" href="#reaktor">
         <span class="kort-ikon ikon-reaktor"></span>
         <span class="kort-tekst">
           <strong>Reaktoren</strong>
           <small>Fission: spalt uran og styr en kædereaktion</small>
         </span>
-        <span class="snart">Kommer snart</span>
-      </div>
+      </a>
     </nav>
     <p class="menu-status" id="menuStatus"></p>
     <blockquote class="citat menu-citat" id="menuCitat"></blockquote>
@@ -270,6 +269,99 @@
         <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger mange tusinde år, før energien når overfladen som sollys.</p>
         <p><strong>Røde kæmper:</strong> Når en stjerne har brugt sit hydrogen, bliver kernen varmere, ca. 100 millioner grader. Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
         <blockquote class="citat" data-citat="saganStjernestof"></blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Reaktoren ===== -->
+  <section id="reaktor" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Reaktoren</h2>
+      <div class="del-vælger">
+        <button class="del-knap" data-del="kerne">Spalt én kerne</button>
+        <button class="del-knap" data-del="kæde">Kædereaktion</button>
+      </div>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="reaktorHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <div data-reaktor-del="kerne">
+        <h4 class="panel-overskrift">Kernen</h4>
+        <div class="valg-række">
+          <button class="chip filter" data-kerne-valg="u235">Uran-235</button>
+          <button class="chip filter" data-kerne-valg="u238">Uran-238</button>
+        </div>
+        <h4 class="panel-overskrift">Neutronen</h4>
+        <div class="valg-række">
+          <button class="chip filter" data-fart-valg="langsom">Langsom (bremset af vand)</button>
+          <button class="chip filter" data-fart-valg="hurtig">Hurtig</button>
+        </div>
+        <div class="knap-række">
+          <button class="knap" id="reaktorSkyd">Skyd neutron</button>
+          <button class="knap svag" id="reaktorIgen">Ny kerne</button>
+        </div>
+      </div>
+      <div data-reaktor-del="kæde" class="skjult">
+        <div class="knap-række"><button class="knap" id="reaktorStart">Start reaktoren</button></div>
+        <label class="skyder-boks">
+          <span class="skyder-top"><span>Kontrolstave</span><strong id="reaktorStaveTal"></strong></span>
+          <input type="range" id="reaktorStave" min="0" max="100" step="1" value="55">
+          <small>Stavene suger neutroner op. Jo længere nede, jo færre spaltninger.</small>
+        </label>
+        <button class="knap lille" id="reaktorVand">Vand (moderator): til</button>
+        <p class="klik-tip">Gulgrønne kugler er frisk uran-235. Grå er lige spaltet. Prikkerne er neutroner: hvide er hurtige, blå er langsomme.</p>
+      </div>
+      <h4 class="panel-overskrift">Opgaver</h4>
+      <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
+    </aside>
+    <div class="vindue" id="reaktorVindue"></div>
+    <aside class="panel side-panel højre-panel">
+      <div data-reaktor-del="kerne">
+        <div class="seneste-boks forklaring-reaktor" id="reaktorForklaring"></div>
+        <div class="forklaring-boks">
+          <strong>Hvorfor spalter den?</strong>
+          En stor kerne er som en dirrende vanddråbe. Neutronen giver den lige nok ekstra energi til, at den strækker sig, får en "talje" og flækker. Lise Meitner og Otto Frisch forklarede det i 1939, og Frisch arbejdede dengang hos Niels Bohr i København.
+        </div>
+      </div>
+      <div data-reaktor-del="kæde" class="skjult">
+        <div class="effekt-boks">
+          <span>Effekt</span>
+          <div class="måler" id="reaktorMåler"><div class="måler-felt"></div><div class="måler-niveau"></div></div>
+          <small id="reaktorEffektTekst"></small>
+          <small>Neutroner lige nu: <b id="reaktorNeutroner">0</b></small>
+        </div>
+        <div class="stabil-boks">
+          <strong>Hold den stabil</strong>
+          <div class="fremskridt" id="reaktorStabil"><div></div></div>
+          <small id="reaktorStabilTekst"></small>
+        </div>
+        <div class="forklaring-boks">
+          <strong>Sådan styrer man en reaktor</strong>
+          Hver spaltning giver 2-3 nye neutroner. Giver hver spaltning i gennemsnit præcis én ny, er reaktoren stabil. Kontrolstavene suger neutroner op, og vandet bremser dem, så de lettere spalter uran-235.
+        </div>
+        <div class="forklaring-boks">
+          <strong>Det blå lys</strong>
+          I rigtige reaktorer lyser vandet blåt, når reaktoren kører. Det hedder Tjerenkov-stråling og kommer fra partikler, der farer gennem vandet hurtigere end lyset kan i vand.
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpReaktor" role="dialog" aria-label="Hjælp til Reaktoren">
+    <div class="dialog">
+      <header><h3>Sådan virker Reaktoren</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p><strong>Fission</strong> betyder spaltning. En meget stor kerne som uran-235 fanger en neutron, bliver urolig og flækker i to mellemstore kerner. Samtidig slipper 2-3 nye neutroner fri, og ca. 200 MeV energi. Det er omkring 50 millioner gange mere end ved en kemisk reaktion som afbrænding.</p>
+        <p><strong>Langsomme og hurtige neutroner:</strong> Neutronerne fra en spaltning er hurtige. Uran-235 fanger meget lettere langsomme neutroner, så man bremser dem med vand. Vandet kaldes en <em>moderator</em>.</p>
+        <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
+        <p><strong>Kædereaktion:</strong> De nye neutroner kan spalte flere kerner, som giver flere neutroner. Giver hver spaltning i gennemsnit mere end én ny spaltning, vokser det. Giver den mindre, dør det ud. Kontrolstave (fx med bor eller cadmium) suger neutroner op, så man kan holde den stabil.</p>
+        <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brintkeksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
+        <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid.</p>
+        <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
       </div>
     </div>
   </div>

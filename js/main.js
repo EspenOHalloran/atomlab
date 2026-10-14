@@ -6,6 +6,7 @@ import { Atom } from './atom.js';
 import { lavVærksted, startVærksted, stopVærksted, OPGAVER, åbnGrundstof } from './vaerksted.js';
 import { lavSystem, startSystem, stopSystem } from './system.js';
 import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
+import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
@@ -16,6 +17,7 @@ const skærme = {
   vaerksted: { start: startVærksted, stop: stopVærksted },
   system: { start: startSystem, stop: stopSystem },
   fusion: { start: startFusion, stop: stopFusion },
+  reaktor: { start: startReaktor, stop: stopReaktor },
 };
 
 let aktivSkærm = null;
@@ -44,6 +46,7 @@ function start() {
     },
   });
   lavFusion();
+  lavReaktor();
   lavFuldSkærmKnapper();
   // Lydknapper på de andre skærme (værkstedet har sin egen)
   for (const knap of document.querySelectorAll('[data-lyd-knap]')) {
@@ -61,7 +64,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { fusion: fusionTest() };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { fusion: fusionTest(), reaktor: reaktorTest() };
   visSkærm();
 }
 
@@ -96,7 +99,7 @@ function startMenu() {
   // Et nyt citat hver gang man kommer til menuen
   const nøgle = MENU_CITATER[Math.floor(Math.random() * MENU_CITATER.length)];
   document.getElementById('menuCitat').innerHTML = citatHTML(nøgle);
-  const alle = [...OPGAVER, ...OPGAVER_FUSION].map((o) => o.id);
+  const alle = [...OPGAVER, ...OPGAVER_FUSION, ...OPGAVER_REAKTOR].map((o) => o.id);
   document.getElementById('menuStatus').textContent =
     `Opdagede grundstoffer: ${fremgang.antalOpdaget()} af 118 · Opgaver klaret: ${fremgang.antalLøste(alle)} af ${alle.length}`;
 }
