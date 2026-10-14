@@ -1,6 +1,12 @@
 # AtomLab
 
-Lær om atomer og grundstoffer i 3D: byg atomer af protoner, neutroner og elektroner, udforsk det periodiske system, og (snart) lav fusion og fission.
+Lær om atomer og grundstoffer i 3D:
+
+- **Atomværkstedet:** byg atomer af protoner, neutroner og elektroner, og se kerner henfalde
+- **Det periodiske system:** alle 118 grundstoffer på en buet 3D-væg med fakta
+- **Stjerneovnen:** fusion som i Solens kerne (pp-kæden) og carbon i røde kæmper
+- **Reaktoren:** spalt uran og styr en kædereaktion
+- **Batteriet:** se ioner og elektroner, når et LiPo-batteri lades op og aflades
 
 **Prøv det:** https://espenohalloran.github.io/atomlab/
 

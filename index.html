@@ -24,7 +24,7 @@
     <button class="knap lille ikon knap-fuldskaerm menu-hjørne" title="Fuld skærm"></button>
     <header class="menu-top">
       <h1 class="logo">Atom<span>Lab</span></h1>
-      <p class="undertitel">Byg atomer, opdag grundstofferne, og lav dine egne kernereaktioner</p>
+      <p class="undertitel">Byg atomer, opdag grundstofferne, lav kernereaktioner, og se hvordan et batteri virker</p>
     </header>
     <div class="vindue" id="menuVindue"></div>
     <nav class="menukort">
@@ -54,6 +54,13 @@
         <span class="kort-tekst">
           <strong>Reaktoren</strong>
           <small>Fission: spalt uran og styr en kædereaktion</small>
+        </span>
+      </a>
+      <a class="kort åben" href="#batteri">
+        <span class="kort-ikon ikon-batteri"></span>
+        <span class="kort-tekst">
+          <strong>Batteriet</strong>
+          <small>Se ioner og elektroner, når et LiPo-batteri lades</small>
         </span>
       </a>
     </nav>
@@ -362,6 +369,78 @@
         <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brintkeksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
         <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid.</p>
         <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Batteriet ===== -->
+  <section id="batteri" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Batteriet</h2>
+      <span class="system-status">Et LiPo-batteri skåret igennem</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="batteriHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <h4 class="panel-overskrift">Hvad skal batteriet?</h4>
+      <div class="valg-række">
+        <button class="chip filter" data-batteri-tilstand="oplad">⚡ Oplad</button>
+        <button class="chip filter" data-batteri-tilstand="aflad">💡 Aflad (lampe)</button>
+        <button class="chip filter" data-batteri-tilstand="pause">⏸ Pause</button>
+      </div>
+      <h4 class="panel-overskrift">Hastighed</h4>
+      <div class="valg-række">
+        <button class="chip filter" data-batteri-fart="0.5">Langsom</button>
+        <button class="chip filter" data-batteri-fart="1">Normal</button>
+        <button class="chip filter" data-batteri-fart="2">Hurtig</button>
+      </div>
+      <button class="chip filter fare" id="batteriSnyd">Snyd laderen: fra</button>
+      <button class="knap lille svag" id="batteriNyt">Nyt batteri</button>
+      <ul class="kerne-liste">
+        <li><span class="farveprik" style="background:#b79bff"></span>Lithium-ion (Li⁺)</li>
+        <li><span class="farveprik" style="background:#6ff3ff"></span>Elektron (e⁻)</li>
+        <li><span class="farveprik" style="background:#3a3f4a"></span>Grafit (carbon)</li>
+        <li><span class="farveprik" style="background:#3a6fd8"></span>Kobolt</li>
+        <li><span class="farveprik" style="background:#d84a3a"></span>Oxygen</li>
+      </ul>
+      <h4 class="panel-overskrift">Opgaver</h4>
+      <ol class="opgaver kompakt" id="batteriOpgaver"></ol>
+    </aside>
+    <div class="vindue" id="batteriVindue"></div>
+    <aside class="panel side-panel højre-panel">
+      <div class="batteri-tal">
+        <div><span>Spænding</span><strong id="batteriSpænding">3,00 V</strong></div>
+        <div><span>Opladning</span><strong id="batteriProcent">0 %</strong></div>
+      </div>
+      <div class="fremskridt stor" id="batteriLadning"><div></div></div>
+      <small class="batteri-fase" id="batteriFase"></small>
+      <div class="effekt-boks">
+        <span>Varme <small id="batteriVarmeTekst"></small></span>
+        <div class="fremskridt varme" id="batteriVarme"><div></div></div>
+      </div>
+      <div class="seneste-boks forklaring-batteri" id="batteriForklaring"></div>
+      <div class="forklaring-boks">
+        <strong>Hele tricket</strong>
+        Elektrolytten lukker kun ioner igennem, ikke elektroner. Elektronerne er tvunget til at tage omvejen gennem ledningen, og det er den strøm, vi bruger.
+      </div>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpBatteri" role="dialog" aria-label="Hjælp til Batteriet">
+    <div class="dialog">
+      <header><h3>Sådan virker et LiPo-batteri</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p>Et <strong>LiPo-batteri</strong> (lithium-polymer) har samme kemi som batterierne i telefoner og elbiler. Forskellen er, at elektrolytten er en gele, og at cellen sidder i en blød pose i stedet for en metaldåse.</p>
+        <p><strong>To parkeringspladser til lithium:</strong> På minussiden er der <em>grafit</em> (lag af carbon) på en tynd kobberfolie. På plussiden er der et <em>metaloxid</em> (her lithium-kobolt-oxid) på en tynd aluminiumsfolie. Imellem dem er en <em>elektrolyt</em> og en tynd, porøs <em>skillevæg</em> af plast, der forhindrer de to sider i at røre hinanden.</p>
+        <p><strong>Opladning:</strong> Laderen pumper elektroner fra plussiden gennem ledningen over til minussiden. Lithium-ioner (Li⁺) følger efter gennem elektrolytten og sætter sig mellem grafitlagene. Energien er gemt, fordi lithium helst vil sidde i metaloxidet. Laderen lader først med <em>konstant strøm</em>. Når spændingen når 4,2 V, skifter den til <em>konstant spænding</em>, og strømmen falder langsomt, indtil cellen er fuld.</p>
+        <p><strong>Afladning:</strong> Lithium vil tilbage til metaloxidet. Ionerne svømmer gennem elektrolytten, og elektronerne løber udenom gennem ledningen og fx en motor eller en lampe. En celle er ca. 4,2 V, når den er fuld, 3,7 V i gennemsnit og ca. 3,0 V, når den er tom.</p>
+        <p><strong>Pas på:</strong> Overlader man (over 4,2 V), eller lader man for hurtigt eller i kulde, kan lithium sætte sig som metal-nåle (dendritter). De kan stikke hul i skillevæggen og give kortslutning, varme og brand. Aflader man for dybt, kan kobberet opløses, og cellen tager skade. Derfor har LiPo-batterier beskyttelse, og gode ladere stopper ved 4,2 V og balancerer cellerne.</p>
+        <p><strong>Strømmens retning:</strong> Man siger, at strømmen løber fra plus til minus uden om batteriet. Men elektronerne løber faktisk den modsatte vej. Det er en gammel aftale fra før man kendte elektronen.</p>
+        <p><strong>Ærligt talt:</strong> Et rigtigt batteri har milliarder af milliarder lithium-ioner. Her viser vi 24.</p>
       </div>
     </div>
   </div>

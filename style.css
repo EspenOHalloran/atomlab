@@ -114,7 +114,7 @@ button { font: inherit; color: inherit; }
 
 .menukort {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 260px));
+  grid-template-columns: repeat(5, minmax(0, 240px));
   gap: 14px;
   justify-content: center;
   width: 100%;
@@ -597,12 +597,23 @@ button { font: inherit; color: inherit; }
 .system-etiket span { font-size: 12px; color: var(--svag); }
 
 /* ---------- Fælles for Stjerneovnen og Reaktoren ---------- */
-#fusion, #reaktor {
+#fusion, #reaktor, #batteri {
   grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px);
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas: "top top top" "venstre vindue højre";
 }
-#fusion .vindue, #reaktor .vindue { grid-area: vindue; }
+#fusion .vindue, #reaktor .vindue, #batteri .vindue { grid-area: vindue; }
+.batteri-tal { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
+.batteri-tal span { font-size: 12.5px; color: var(--svag); }
+.batteri-tal strong { font-size: 26px; font-variant-numeric: tabular-nums; color: #b79bff; }
+.fremskridt.stor { height: 16px; border-radius: 8px; }
+.fremskridt.stor div { background: linear-gradient(90deg, #ff6b6b, #ffd43b 30%, #8ce99a 70%); }
+.fremskridt.varme div { background: linear-gradient(90deg, #4dabf7, #ffd43b 50%, #ff6b6b); }
+.batteri-fase { color: var(--accent); font-size: 13px; font-weight: 600; }
+.chip.filter.fare.valgt { background: rgba(255, 107, 107, 0.25); border-color: var(--rød); color: #ffd0d0; }
+.ikon-batteri { border-radius: 8px; width: 34px; flex-basis: 34px; margin: 0 9px; background: linear-gradient(0deg, #8ce99a 0 60%, rgba(255, 255, 255, 0.08) 60%); border: 3px solid #d6dcf5; }
+.ikon-batteri::before { content: ""; position: absolute; top: -8px; left: 9px; width: 10px; height: 5px; border-radius: 2px 2px 0 0; background: #d6dcf5; }
 .side-panel > div[data-reaktor-del] { display: flex; flex-direction: column; gap: 10px; }
 .side-panel > div[data-reaktor-del].skjult { display: none !important; }
 .del-vælger { display: flex; gap: 4px; padding: 3px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); margin: 0 auto; }
@@ -660,6 +671,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 1150px) {
   #vaerksted { grid-template-columns: 240px minmax(0, 1fr) 280px; }
   .menukort { grid-template-columns: repeat(2, minmax(0, 320px)); }
+  .menukort .kort:last-child { grid-column: 1 / -1; justify-self: center; width: min(100%, 320px); }
   .opgave-krav .navn-lang { display: none; }
   .opgave-krav .navn-kort { display: inline; }
   .topbjælke h2 { font-size: 19px; }
@@ -693,7 +705,7 @@ button { font: inherit; color: inherit; }
   .hjælpeknapper { flex: 1 1 100%; }
   .minitabel-panel { width: min(100%, 480px); }
   .menukort { grid-template-columns: minmax(0, 1fr); }
-  #fusion, #reaktor { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(200px, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; overflow-y: auto; }
+  #fusion, #reaktor, #batteri { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(200px, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; overflow-y: auto; }
   .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
   #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }

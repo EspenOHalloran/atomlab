@@ -47,10 +47,12 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Ærlig hjælp: hvorfor en reaktor ikke kan eksplodere som en bombe, men kan nedsmelte (Tjernobyl, Fukushima), og at brugt brændsel i spillet bliver frisk igen efter få sekunder.
   - 7 opgaver.
 
-- [ ] **Trin 5: Batteriet**
-  - Et LiPo-batteri i 3D: grafit på minussiden, metaloxid på plussiden, elektrolyt og skillevæg imellem.
-  - Opladning: laderen pumper elektroner gennem ledningen over i grafitten, og Li⁺-ioner svømmer gennem elektrolytten efter dem. Afladning: det modsatte, og elektronerne laver arbejde i motoren på vejen.
-  - Målere for spænding (ca. 3,0–4,2 V pr. celle) og opladning. Vis hvad der sker ved overopladning (lithium-nåle, der kan stikke hul i skillevæggen) og ved alt for dyb afladning.
+- [x] **Trin 5: Batteriet**
+  - Et LiPo-batteri skåret igennem i 3D: kobberfolie og grafit (minus), elektrolyt med en porøs skillevæg, metaloxid (kobolt og oxygen) og aluminiumsfolie (plus). En ledning over toppen med en lader eller en lampe.
+  - Opladning: Li⁺-ioner svømmer gennem elektrolytten (gennem hullerne i skillevæggen) og lægger sig mellem grafitlagene, mens elektroner (blå prikker) løber gennem ledningen. Konstant strøm, og ved 85 % konstant spænding, hvor strømmen falder. Fuld = 4,2 V.
+  - Afladning: det modsatte, og lampen lyser. Beskyttelsen slår fra ved 3,0 V.
+  - Hastighed (langsom, normal, hurtig) med varmemåler. "Snyd laderen": lithium-nåle vokser fra grafitten, stikker hul i skillevæggen og giver kortslutning med glimt, alarm og røg.
+  - 24 lithium-ioner vises (det står ærligt i hjælpen). 5 opgaver.
 
 - [x] **Trin 1d: Overskueligt værksted**
   - Opgaven står som en pille i toplinjen og kan foldes sammen (huskes).
