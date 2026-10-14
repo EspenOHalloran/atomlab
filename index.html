@@ -148,6 +148,7 @@
         <button class="fane-knap" data-fane="atom" role="tab">Atom</button>
         <button class="fane-knap" data-fane="kerne" role="tab">Kerne<span class="fane-prik"></span></button>
         <button class="fane-knap" data-fane="fakta" role="tab">Fakta</button>
+        <button class="fane-knap" data-fane="nørd" role="tab" title="Flere detaljer til de nysgerrige">Nørd</button>
       </nav>
       <div class="fane" data-fane="atom">
         <dl class="tal" id="infoTal"></dl>
@@ -173,6 +174,10 @@
         <p class="fakta" id="infoFakta"></p>
         <dl class="tal lille" id="infoOm"></dl>
         <blockquote class="citat lille" id="infoCitat"></blockquote>
+      </div>
+      <div class="fane" data-fane="nørd">
+        <dl class="tal lille nørd" id="infoNørd"></dl>
+        <p class="model-note" id="infoNørdNote"></p>
       </div>
     </aside>
 
@@ -260,7 +265,7 @@
         <strong>Hvor kommer energien fra?</strong>
         4 protoner vejer 0,7 % mere end en heliumkerne. Den forsvundne masse er blevet til energi, ligesom Einstein forudsagde: E = mc².
       </div>
-      <blockquote class="citat lille" data-citat="einsteinEnergi"></blockquote>
+      <blockquote class="citat lille" data-citat="eddington"></blockquote>
     </aside>
   </section>
 
@@ -333,6 +338,7 @@
           <strong>Hvorfor spalter den?</strong>
           En stor kerne er som en dirrende vanddråbe. Neutronen giver den lige nok ekstra energi til, at den strækker sig, får en "talje" og flækker. Lise Meitner og Otto Frisch forklarede det i 1939, og Frisch arbejdede dengang hos Niels Bohr i København.
         </div>
+        <blockquote class="citat lille" data-citat="einsteinEnergi"></blockquote>
       </div>
       <div data-reaktor-del="kæde" class="skjult">
         <div class="effekt-boks">
@@ -427,6 +433,7 @@
         <strong>Hele tricket</strong>
         Elektrolytten lukker kun ioner igennem, ikke elektroner. Elektronerne er tvunget til at tage omvejen gennem ledningen, og det er den strøm, vi bruger.
       </div>
+      <blockquote class="citat lille" data-citat="faraday"></blockquote>
     </aside>
   </section>
 
@@ -451,6 +458,7 @@
       <header><h3>Opgaver i Atomværkstedet</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <ol class="opgaver" id="opgaver"></ol>
       <footer class="dialog-fod">
+        <blockquote class="citat lille" data-citat="curie"></blockquote>
         <button class="knap lille svag" id="knapOpgaverForfra">↺ Start opgaverne forfra</button>
       </footer>
     </div>

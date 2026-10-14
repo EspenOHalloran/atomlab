@@ -55,10 +55,66 @@ export const CITATER = {
     original: 'It followed from the special theory of relativity that mass and energy are both but different manifestations of the same thing.',
     kommentar: 'Det er det, E = mc² betyder. Når en kerne henfalder, bliver en lille smule masse til energi.',
   },
+  feynmanKvante: {
+    tekst: 'Jeg tror, jeg roligt kan sige, at ingen forstår kvantemekanik.',
+    person: 'Richard Feynman',
+    kilde: 'The Character of Physical Law, 1965',
+    original: 'I think I can safely say that nobody understands quantum mechanics.',
+    kommentar: 'Kvantemekanik er den del af fysikken, der beskriver elektronskyen. Selv nobelprisvindere synes, den er mærkelig.',
+  },
+  eddington: {
+    tekst: 'Det, der er muligt i Cavendish-laboratoriet, er måske ikke så svært i Solen.',
+    person: 'Arthur Eddington',
+    kilde: 'Foredrag, 1920',
+    original: 'What is possible in the Cavendish Laboratory may not be too difficult in the sun.',
+    kommentar: 'Eddington gættede allerede i 1920, at Solen får sin energi ved at lave helium af hydrogen. Han fik ret.',
+  },
+  faraday: {
+    tekst: 'Intet er for vidunderligt til at være sandt, hvis det stemmer med naturens love.',
+    person: 'Michael Faraday',
+    kilde: 'Laboratoriedagbog, 1849',
+    original: 'Nothing is too wonderful to be true, if it be consistent with the laws of nature.',
+    kommentar: 'Faraday fandt på ordene ion, elektrode, anode, katode og elektrolyt, som vi stadig bruger om batterier.',
+  },
+  hawkingStjerner: {
+    tekst: 'Kig op på stjernerne og ikke ned på dine fødder. Prøv at forstå det, du ser, og undr dig over, hvad der får universet til at eksistere. Vær nysgerrig.',
+    person: 'Stephen Hawking',
+    kilde: 'Åbningen af De Paralympiske Lege i London, 2012',
+    original: 'Look up at the stars and not down at your feet. Try to make sense of what you see, and wonder about what makes the universe exist. Be curious.',
+  },
+  hawkingSorteHuller: {
+    tekst: 'Sorte huller er ikke så sorte, som de bliver malet. De er ikke de evige fængsler, man engang troede.',
+    person: 'Stephen Hawking',
+    kilde: 'Reith-forelæsningerne, BBC, 2016',
+    original: 'Black holes ain\'t as black as they are painted. They are not the eternal prisons they were once thought.',
+    kommentar: 'Hawking regnede ud, at sorte huller langsomt sender stråling ud (Hawking-stråling). Den er så svag, at ingen endnu har målt den.',
+  },
+  wheeler: {
+    tekst: 'Rumtiden fortæller stoffet, hvordan det skal bevæge sig. Stoffet fortæller rumtiden, hvordan den skal krumme.',
+    person: 'John Archibald Wheeler',
+    kilde: 'Geons, Black Holes, and Quantum Foam, 1998',
+    original: 'Spacetime tells matter how to move; matter tells spacetime how to curve.',
+    kommentar: 'Wheeler var også den, der gjorde navnet "sort hul" kendt.',
+  },
+  saganKosmos: {
+    tekst: 'Kosmos er i os. Vi er lavet af stjernestof. Vi er en måde, universet kan lære sig selv at kende på.',
+    person: 'Carl Sagan',
+    kilde: 'Cosmos, 1980',
+    original: 'The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.',
+  },
+  curie: {
+    tekst: 'Man lægger aldrig mærke til det, der er gjort. Man kan kun se det, der mangler at blive gjort.',
+    person: 'Marie Curie',
+    kilde: 'Brev til sin bror, 1894',
+    original: 'One never notices what has been done; one can only see what remains to be done.',
+  },
 };
 
 // Citater, der passer godt i menuen
-export const MENU_CITATER = ['feynman', 'saganÆbletærte', 'einsteinNysgerrighed', 'rutherford', 'saganStjernestof', 'einsteinEnergi'];
+export const MENU_CITATER = [
+  'feynman', 'saganÆbletærte', 'einsteinNysgerrighed', 'rutherford', 'saganStjernestof', 'einsteinEnergi',
+  'hawkingStjerner', 'faraday', 'saganKosmos', 'eddington',
+];
 
 // Laver HTML til et citat (teksten er vores egen, så den kan sættes direkte ind)
 export function citatHTML(nøgle) {

@@ -2,7 +2,8 @@
 
 import { verden, sætVindue, passerTil, kameraSving, flyInd } from './scene3d.js';
 import { Atom } from './atom.js';
-import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering } from './data/grundstoffer.js';
+import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering, konfigurationTekst } from './data/grundstoffer.js';
+import { bindingsenergi, kerneRadiusFm } from './data/kerne.js';
 import { stabilitet, isotopNavn, typiskeNeutroner, henfaldsmåde, stabileNeutroner } from './data/isotoper.js';
 import { Stabilitetskort } from './stabilitetskort.js';
 import * as fremgang from './fremgang.js';
@@ -383,7 +384,7 @@ function lavFaner() {
 }
 
 function sætFane(navn) {
-  if (!['atom', 'kerne', 'fakta'].includes(navn)) navn = 'atom';
+  if (!['atom', 'kerne', 'fakta', 'nørd'].includes(navn)) navn = 'atom';
   for (const knap of document.querySelectorAll('.fane-knap')) knap.classList.toggle('valgt', knap.dataset.fane === navn);
   for (const fane of document.querySelectorAll('.fane')) fane.classList.toggle('vist', fane.dataset.fane === navn);
   gem('atomlabFane', navn);
@@ -728,6 +729,7 @@ function opdaterInfo() {
   opdaterCitat(st);
   visStabilitet(st, måde);
   opdaterStatus(st, måde);
+  opdaterNørd();
 
   // Prik på Kerne-fanen, når kernen er ustabil
   const kerneFane = document.querySelector('.fane-knap[data-fane="kerne"]');
@@ -800,6 +802,37 @@ function opdaterInfo() {
   el.om.innerHTML = om.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
 }
 
+// Fanen "Nørd": flere detaljer til de nysgerrige
+function opdaterNørd() {
+  const { p, n } = tilstand;
+  const dl = document.getElementById('infoNørd');
+  const note = document.getElementById('infoNørdNote');
+  if (p === 0) {
+    dl.innerHTML = '';
+    note.textContent = 'Byg et atom for at se elektronkonfiguration, kernens størrelse og bindingsenergi.';
+    return;
+  }
+  const g = grundstof(p);
+  const a = p + n;
+  const k = konfigurationTekst(p);
+  const b = bindingsenergi(p, n);
+  const tal2 = (x) => x.toLocaleString('da-DK', { maximumFractionDigits: 2 });
+  const rækker = [
+    ['Elektron&shy;konfiguration', `<span class="formel">${k.kort}</span><br><small>for et neutralt ${g.navn.toLowerCase()}-atom</small>`],
+    ['Kernens radius', `ca. ${tal2(kerneRadiusFm(a))} fm <small>(1 femtometer = en milliontedel af en milliardtedel meter). Hele atomet er ca. 100.000 gange større.</small>`],
+  ];
+  if (b) {
+    const andel = Math.min(1, b.prNukleon / 9);
+    rækker.push(['Bindings&shy;energi', `${tal2(b.ialt)} MeV i alt, <b>${tal2(b.prNukleon)} MeV pr. nukleon</b> <small>(${b.målt ? 'målt' : 'beregnet med dråbemodellen'})</small>
+      <div class="bindingsbjælke" title="Gul streg: jern og nikkel (ca. 8,8 MeV)"><div style="width:${andel * 100}%"></div><span style="left:${(8.8 / 9) * 100}%"></span></div>`]);
+  } else {
+    rækker.push(['Bindings&shy;energi', '<small>Kan ikke vises for denne kerne (den er for lille til dråbemodellen, eller den hænger ikke sammen).</small>']);
+  }
+  rækker.push(['Tæthed', '<small>Kernestof er så tæt, at en teskefuld ville veje omkring en milliard ton.</small>']);
+  dl.innerHTML = rækker.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
+  note.textContent = 'Bindingsenergien er den energi, der skal til for at skille kernen helt ad. Jern og nikkel har den højeste pr. nukleon (ca. 8,8 MeV, den gule streg). Derfor giver fusion energi for lette kerner og fission energi for tunge kerner: Begge dele flytter kernerne tættere på jern.';
+}
+
 // Statuslinjen: det vigtigste i ét blik (isotop, ladning, stabilitet og henfaldsknap)
 function opdaterStatus(st, måde) {
   const { p, n, e } = tilstand;
@@ -828,7 +861,7 @@ function opdaterCitat(st) {
   const { p } = tilstand;
   let nøgle;
   if (p === 0) nøgle = 'feynman';
-  else if (atom.visning === 'sky') nøgle = 'bohr';
+  else if (atom.visning === 'sky') nøgle = p % 2 ? 'bohr' : 'feynmanKvante';
   else if (['ustabil', 'meget', 'næsten'].includes(st.status)) nøgle = 'einsteinTerninger';
   else if (STJERNESTOF.includes(p)) nøgle = 'saganStjernestof';
   else nøgle = ['rutherford', 'einsteinNysgerrighed', 'saganÆbletærte', 'feynman'][p % 4];

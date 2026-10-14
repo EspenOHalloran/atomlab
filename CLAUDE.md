@@ -35,16 +35,18 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `js/beskeder.js`: beskeder øverst på skærmen
 - `js/stabilitetskort.js`: klassen `Stabilitetskort`, som tegner kortet over stabile kerner (2D-canvas) i infopanelet
 - `js/fuldskaerm.js`: knapperne til fuld skærm (klassen `knap-fuldskaerm`). De skjules, hvis browseren ikke kan vise fuld skærm (fx iPhone).
-- `js/data/grundstoffer.js`: alle 118 grundstoffer (navn, symbol, masse, kategori, tilstand), korte fakta, elektronskaller (`skaller`, `skallerForIon`) og placering i tabellen (`placering`)
+- `js/data/grundstoffer.js`: alle 118 grundstoffer (navn, symbol, masse, kategori, tilstand), korte fakta, elektronskaller (`skaller`, `skallerForIon`), elektronkonfiguration (`konfiguration`, `konfigurationTekst`, med de kendte undtagelser i `KONFIG_UNDTAGELSER`) og placering i tabellen (`placering`)
+- `js/data/kerne.js`: bindingsenergi (`bindingsenergi(z, n)`: målte værdier i `MÅLT`, ellers dråbemodellen) og kernens radius (`kerneRadiusFm`) til Nørd-fanen
+- `js/data/citater.js`: `CITATER` (kun citater med en sikker kilde) og `MENU_CITATER`. Sæt et citat ind med `data-citat="navn"` på et element i index.html
 - `js/data/isotoper.js`: stabile isotoper, næsten stabile, kendte radioaktive med halveringstid, `stabilitet(z, n)` og `henfaldsmåde(z, n)`. Henfaldsmåden findes ud fra kendte data og reglen "bliv til en (næsten) stabil nabo med samme massetal". Ændres reglerne, så tjek at alle kombinationer ender i en stabil kerne uden løkker, og at uran-238 ender som bly-206 efter 8 alfa- og 6 betahenfald.
 
 ## Gemte data (localStorage)
 - `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`
 - `atomlabLyd`: `'til'` eller `'fra'`
-- `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne` eller `fakta`)
+- `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
 
-Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta) og være kort, eller ind i hjælpen.
+Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Nørd) og være kort, eller ind i hjælpen.
 
 Et grundstof bliver "opdaget", når man har bygget et neutralt atom af det, og kernen kan hænge sammen. Først derefter kan man hoppe direkte til det i det lille periodiske system.
 

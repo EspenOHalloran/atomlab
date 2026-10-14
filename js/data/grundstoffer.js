@@ -307,3 +307,48 @@ export function placering(nr) {
   } else gruppe = o - 14;
   return { periode, gruppe, række: periode, kolonne: gruppe };
 }
+
+// ---------- Elektronkonfiguration (til nørderne) ----------
+// Underskallerne fyldes i Madelungs rækkefølge. Nogle grundstoffer gør det lidt anderledes i virkeligheden.
+const L_BOGSTAV = ['s', 'p', 'd', 'f'];
+const KONFIG_UNDTAGELSER = {
+  24: { '4s': 1, '3d': 5 }, 29: { '4s': 1, '3d': 10 },
+  41: { '5s': 1, '4d': 4 }, 42: { '5s': 1, '4d': 5 }, 44: { '5s': 1, '4d': 7 }, 45: { '5s': 1, '4d': 8 },
+  46: { '5s': 0, '4d': 10 }, 47: { '5s': 1, '4d': 10 },
+  57: { '4f': 0, '5d': 1 }, 58: { '4f': 1, '5d': 1 }, 64: { '4f': 7, '5d': 1 },
+  78: { '6s': 1, '5d': 9 }, 79: { '6s': 1, '5d': 10 },
+  89: { '5f': 0, '6d': 1 }, 90: { '5f': 0, '6d': 2 }, 91: { '5f': 2, '6d': 1 }, 92: { '5f': 3, '6d': 1 },
+  93: { '5f': 4, '6d': 1 }, 96: { '5f': 7, '6d': 1 }, 103: { '6d': 0, '7p': 1 },
+};
+
+// Giver { '1s': 2, '2s': 2, '2p': 6, ... } for et neutralt atom
+export function konfiguration(nr) {
+  const ud = {};
+  let tilbage = nr;
+  for (const [n, l] of FYLDE_RÆKKEFØLGE) {
+    if (tilbage <= 0) break;
+    const antal = Math.min(2 * (2 * l + 1), tilbage);
+    ud[`${n}${L_BOGSTAV[l]}`] = antal;
+    tilbage -= antal;
+  }
+  Object.assign(ud, KONFIG_UNDTAGELSER[nr] || {});
+  for (const k of Object.keys(ud)) if (!ud[k]) delete ud[k];
+  return ud;
+}
+
+const HÆVET_TAL = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+const ÆDELGASSER = [[86, 'Rn'], [54, 'Xe'], [36, 'Kr'], [18, 'Ar'], [10, 'Ne'], [2, 'He']];
+
+// Skriver konfigurationen som fx "[Ar] 3d⁶ 4s²" (kort) og "1s² 2s² 2p⁶ …" (lang), sorteret efter skal
+export function konfigurationTekst(nr) {
+  const sorter = (k) => Object.keys(k).sort((a, b) => (parseInt(a) - parseInt(b)) || (L_BOGSTAV.indexOf(a.slice(-1)) - L_BOGSTAV.indexOf(b.slice(-1))));
+  const skriv = (k, nøgler) => nøgler.map((n) => n + String(k[n]).split('').map((c) => HÆVET_TAL[c]).join('')).join(' ');
+  const k = konfiguration(nr);
+  const lang = skriv(k, sorter(k));
+  const kerne = ÆDELGASSER.find(([z]) => z < nr);
+  if (!kerne) return { kort: lang, lang };
+  const kk = konfiguration(kerne[0]);
+  const rest = {};
+  for (const [n, antal] of Object.entries(k)) if (antal - (kk[n] || 0) > 0) rest[n] = antal - (kk[n] || 0);
+  return { kort: `[${kerne[1]}] ${skriv(rest, sorter(rest))}`, lang };
+}

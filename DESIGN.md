@@ -27,7 +27,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - [x] **Trin 1c: Flottere grafik og citater**
   - Elektroner med lysende haler, kuglerne har kantlys, og protonerne pulserer svagt. Gyldne lyspunkter viser kernekraftens "lim" (det siges ærligt, at det er en tegning). Rumstøv driver forbi. Chokbølge ved henfald.
   - Kameraet flyver ind, når man åbner en del, og svinger blødt, når man skifter grundstof.
-  - Citater fra Feynman, Rutherford, Bohr, Sagan og Einstein i menuen, i hjælpen og nederst i infopanelet. Kun citater med en sikker kilde (de står i `js/data/citater.js`). Brug dem også i de kommende dele (fx Einsteins E = mc² i Stjerneovnen og Reaktoren, Sagans "stjernestof" ved supernovaer).
+  - Citater fra Feynman, Rutherford, Bohr, Sagan, Einstein, Hawking, Eddington, Faraday, Wheeler og Marie Curie i menuen, i hjælpen, i infopanelet og i Stjerneovnen, Reaktoren, Batteriet og opgavelisten. Kun citater med en sikker kilde (de står i `js/data/citater.js`). Brug dem også i de kommende dele (fx Einsteins E = mc² i Stjerneovnen og Reaktoren, Sagans "stjernestof" ved supernovaer).
+- [x] **Trin 1d: Nørd-fanen**
+  - En fjerde fane i infopanelet til dem, der vil vide mere: elektronkonfiguration (fx [Ar] 3d⁶ 4s², med de rigtige undtagelser som chrom og kobber), kernens radius, bindingsenergi i alt og pr. nukleon (målt, eller beregnet med dråbemodellen) med en bjælke, hvor jern og nikkel er toppen, og kernestoffets tæthed.
 - [x] **Trin 2: Det periodiske system**
   - En buet 3D-væg med 118 felter, farvet efter kategori. Feltet under musen løfter sig og lyser op, og en etiket viser navnet. Opdagede grundstoffer har en gul stjerne.
   - Klik på et felt: væggen trækker sig tilbage, og grundstoffet vises som et atom i 3D. Kortet til højre viser fakta, hvor det findes, hvad det bruges til, hvornår og af hvem det blev opdaget, hvor navnet kommer fra, elektronskaller og stabile isotoper. Pilene (eller piletasterne) skifter grundstof.
