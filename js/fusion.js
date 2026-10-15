@@ -629,6 +629,8 @@ function visMig() {
   tempoFørDemo = tempo;
   tempo = 0.3;
   demo = { a, b, t: 0, skudt: false };
+  a.demo = true; // de to kerner mærker ikke de andre, så skuddet altid rammer (se fysik)
+  b.demo = true;
   valgt = a;
   etiket.innerHTML = `<b>${TYPER[a.type].navn}</b> er valgt<small>Den skydes mod ${TYPER[b.type].navn.toLowerCase()}</small>`;
   etiket.style.setProperty('--farve', TYPER[a.type].farve);
@@ -897,7 +899,8 @@ function fysik(h) {
         const afstand = p.pos.distanceTo(p.mål.pos);
         p.tættest = Math.min(p.tættest, afstand);
         // Styr mod målet, indtil de er tæt på hinanden. Målet bremser imens, så det er lettere at ramme.
-        if (afstand > 1.6) {
+        // "Vis mig" (sikker) styrer hele vejen.
+        if (afstand > 1.6 || p.sikker) {
           const ønsket = hjælpV.copy(p.mål.pos).sub(p.pos).normalize().multiplyScalar(p.fart.length());
           p.fart.lerp(ønsket, 1 - Math.exp(-h * 5));
           p.mål.fart.multiplyScalar(Math.exp(-h * 3));
@@ -945,6 +948,8 @@ function fysik(h) {
     for (let j = i + 1; j < partikler.length; j++) {
       const b = partikler[j];
       if (b.væk) continue;
+      // "Vis mig": de to kerner går lige igennem de andre, så de ikke bliver skubbet af kurs eller smelter sammen med en anden
+      if (Boolean(a.demo) !== Boolean(b.demo)) continue;
       const tb = TYPER[b.type];
       const dx = a.pos.x - b.pos.x, dy = a.pos.y - b.pos.y, dz = a.pos.z - b.pos.z;
       const d2 = dx * dx + dy * dy + dz * dz;
@@ -1025,7 +1030,7 @@ function udfør(a, b, r) {
   // Opgaver. De første skridt tæller kun, når man selv har skudt kernerne sammen.
   const førsteSkridt = { d: 'f-d', he3: 'f-he3', he4: 'f-he4' }[hoved];
   if (førsteSkridt && egen) løs(førsteSkridt);
-  else if (førsteSkridt && !visning && !fremgang.erLøst(førsteSkridt) && !selvForklaret) {
+  else if (førsteSkridt && !visning && !fremgang.erLøst(førsteSkridt) && !selvForklaret && !rejse) {
     selvForklaret = true;
     besked('De smeltede selv sammen', 'Kernerne støder også sammen af sig selv i plasmaet. Opgaven tæller, når du selv skyder dem sammen.');
   }
@@ -1067,6 +1072,7 @@ function mislykket(p) {
 }
 
 function besked(titel, tekst, type = 'info') {
+  if (rejse) return; // rejsen ind i Solen har sine egne undertekster
   // Ikke for mange beskeder på én gang
   if (performance.now() - sidstBesked < 1200 && type !== 'reaktion') return;
   sidstBesked = performance.now();

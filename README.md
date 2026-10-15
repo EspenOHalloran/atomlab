@@ -20,6 +20,9 @@ python -m http.server 8000
 
 Åbn så http://localhost:8000 i browseren.
 
+## Automatiske tests
+Der er automatiske tests i [tests/](tests/README.md). De kører med `node tests/koer-alle.mjs` og kræver Node.js, Playwright og Python.
+
 ## Lavet med
 - Ren HTML, CSS og JavaScript uden byggetrin
 - [Three.js](https://threejs.org) 0.186.1 (MIT-licens, ligger i `lib/three/`)
