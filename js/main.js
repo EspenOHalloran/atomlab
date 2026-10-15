@@ -4,7 +4,7 @@
 import { lavVerden, verden, sætVindue, flyInd, stopKamera, centrerVindue } from './scene3d.js';
 import { Atom } from './atom.js';
 import { lavVærksted, startVærksted, stopVærksted, OPGAVER, åbnGrundstof } from './vaerksted.js';
-import { lavSystem, startSystem, stopSystem } from './system.js';
+import { lavSystem, startSystem, stopSystem, testAdgang as systemTest } from './system.js';
 import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
 import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
@@ -82,7 +82,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest() };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest() };
   visSkærm();
 }
 

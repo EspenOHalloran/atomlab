@@ -203,6 +203,10 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Det periodiske system</h2>
+      <div class="søgefelt" role="search">
+        <input type="search" id="systemSøg" placeholder="Find et grundstof" aria-label="Find et grundstof: skriv navn, symbol eller nummer" enterkeyhint="search" autocomplete="off" spellcheck="false">
+        <ul class="søg-liste skjult" id="systemResultater"></ul>
+      </div>
       <span class="system-status"><span id="systemOpdaget"></span> <span id="systemAntal"></span></span>
       <div class="topknapper">
         <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
@@ -227,8 +231,12 @@
         <button class="knap" id="systemByg">Byg det i værkstedet</button>
       </div>
     </aside>
-    <nav class="panel system-filtre" id="systemFiltre" aria-label="Filtre"></nav>
+    <nav class="panel system-filtre" id="systemFiltre" aria-label="Filtre">
+      <button class="chip filter filter-knap" id="systemFilterKnap" aria-expanded="false" aria-controls="systemChips">Filtre</button>
+      <div class="filter-chips" id="systemChips"></div>
+    </nav>
     <div class="system-etiket skjult" id="systemEtiket"></div>
+    <button class="system-forhånd skjult" id="systemForhånd"></button>
   </section>
 
   <!-- ===== Stjerneovnen ===== -->

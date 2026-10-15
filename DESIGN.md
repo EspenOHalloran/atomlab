@@ -89,7 +89,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - [ ] **Trin 8: Forbedringer efter det store review**
   - [x] **Hurtige rettelser:** Luk og ‹ › står øverst i grundstofkortet, kortet kan rulles, og telefonens tilbage-knap lukker det. I Stjerneovnen tæller opgaverne kun egne skud. "Genstart reaktoren". Dæmpede lysglimt i supernova og kilonova, og hensyn til "reducer bevægelse".
   - [x] **Nyt beskedsystem:** Undertekster nederst i 3D-billedet (én ad gangen, højst to linjer på telefoner og "Mere"). Belønninger som små piller i hjørnet, som man kan trykke på. Store advarsler (nødstop, kortslutning) kommer lidt efter hændelsen og bliver stående. En log (🔔), hvor man kan læse beskederne igen. Beskederne ryddes, når man skifter del. I Stjerneovnen står den valgte kerne med en lille etiket i stedet for en besked.
-  - [ ] **Det periodiske system på telefon:** forhåndsvisning ved første tryk, zoom og træk på væggen, søgning og filtre bag én knap.
+  - [x] **Det periodiske system på telefon:** Første tryk løfter det nærmeste felt og viser navnet, andet tryk åbner det. Træk med én finger for at flytte væggen, og knib for at zoome. Et søgefelt (navn, kaldenavn, symbol eller nummer). Filtrene er samlet bag én knap på telefoner. Et tip første gang.
   - [ ] **Kom i gang-guide** i Stjerneovnen og Reaktoren: korte trin første gang, "Næste skridt" og "Vis mig".
 
 ## Idéer til senere
