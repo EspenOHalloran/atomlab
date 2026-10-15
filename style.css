@@ -587,7 +587,11 @@ button { font: inherit; color: inherit; }
 #system .vindue { grid-area: vindue; }
 .system-status { font-size: 14px; color: var(--svag); }
 .system-status #systemOpdaget { color: var(--gul); font-weight: 700; }
-.system-kort { grid-area: kort; display: none; flex-direction: column; gap: 10px; padding: 14px; overflow: hidden; }
+.system-kort { grid-area: kort; display: none; flex-direction: column; gap: 10px; padding: 14px; overflow-y: auto; scrollbar-width: none; min-height: 0; }
+.system-kort::-webkit-scrollbar { display: none; }
+/* Knapperne øverst i kortet bliver stående, når man ruller */
+.kort-styring { position: sticky; top: -14px; z-index: 1; display: flex; gap: 6px; justify-content: flex-end; margin: -14px -14px 0; padding: 10px 14px 6px; background: linear-gradient(rgba(12, 18, 38, 0.97) 75%, rgba(12, 18, 38, 0)); border-radius: var(--radius) var(--radius) 0 0; }
+.kort-styring #systemLuk { margin-left: 6px; }
 #system.detalje .system-kort { display: flex; }
 #system.detalje .system-filtre { display: none; }
 .system-kort .tal div { grid-template-columns: 110px 1fr; }
@@ -857,4 +861,9 @@ button { font: inherit; color: inherit; }
   .grundstofkort .symbol { font-size: 26px; }
   .opgave-krav { display: none; }
   .kosmos-liste { grid-template-columns: 1fr; }
+}
+
+/* ---------- Reducer bevægelse (indstilling i styresystemet) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

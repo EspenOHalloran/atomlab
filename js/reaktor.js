@@ -502,6 +502,7 @@ function startKæde() {
     neutroner.push({ x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2, vx: Math.cos(vinkel) * LANGSOM, vy: Math.sin(vinkel) * LANGSOM, sidst: -1 });
   }
   løs('r-start');
+  $('reaktorStart').textContent = 'Genstart reaktoren';
   visBesked({ titel: 'Reaktoren er startet', tekst: 'En neutronkilde sender de første neutroner ind. Hold effekten i det grønne felt med kontrolstavene.', varighed: 6000 });
 }
 
@@ -510,6 +511,7 @@ function lavNødstop(grund) {
   stavDybde = 1;
   $('reaktorStave').value = 100;
   $('reaktorStave').disabled = true;
+  $('reaktorStart').textContent = 'Start reaktoren igen';
   lyd.alarm();
   visBesked({
     titel: 'NØDSTOP!', type: 'advarsel', varighed: 10000,

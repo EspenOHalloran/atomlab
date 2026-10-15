@@ -125,7 +125,7 @@ export default {
       for (const s of stjerner) s.visible = false;
       for (const h of haler) h.linje.visible = false;
       rest.visible = true;
-      effekter.glimt(new THREE.Vector3(), 16, new THREE.Color(3, 2.8, 3), 1.2);
+      effekter.glimt(new THREE.Vector3(), 10, new THREE.Color(2.4, 2.2, 2.4), 1.2);
       effekter.bølge(new THREE.Vector3(), 22, new THREE.Color(2, 2, 2.6), 1.6);
       lyd.eksplosion();
       // Fordel stoffet
@@ -205,7 +205,7 @@ export default {
         }
         sky.geometry.attributes.color.needsUpdate = true;
         jetMat.opacity = mt < 1.6 ? 0.8 * (1 - mt / 1.6) : 0;
-        glorie.material.opacity = Math.max(0, 0.7 * (1 - mt / 4));
+        glorie.material.opacity = Math.max(0, 0.45 * (1 - mt / 4));
         for (const g of skyer) {
           const { retning, fart: v, polar } = g.userData;
           g.position.copy(retning).multiplyScalar(v * s * 0.8);

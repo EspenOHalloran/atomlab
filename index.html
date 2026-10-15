@@ -211,6 +211,11 @@
     </header>
     <div class="vindue" id="systemVindue"></div>
     <aside class="panel system-kort" id="systemKort">
+      <div class="kort-styring">
+        <button class="knap lille" id="systemForrige" title="Forrige (pil venstre)" aria-label="Forrige grundstof">‹</button>
+        <button class="knap lille" id="systemNæste" title="Næste (pil højre)" aria-label="Næste grundstof">›</button>
+        <button class="knap lille" id="systemLuk" title="Tilbage til væggen (Esc)">✕ Luk</button>
+      </div>
       <div class="info-hoved">
         <div class="grundstofkort"><span class="nr" id="sysNr"></span><span class="symbol" id="sysSymbol"></span><span class="masse" id="sysMasse"></span></div>
         <div class="info-titel"><h3 id="sysNavn"></h3><p class="kategori" id="sysUndertitel"></p></div>
@@ -219,10 +224,7 @@
       <dl class="tal lille" id="sysTal"></dl>
       <p class="sys-opdaget" id="sysOpdaget"></p>
       <div class="system-knapper">
-        <button class="knap lille" id="systemForrige" title="Forrige (pil venstre)">‹</button>
         <button class="knap" id="systemByg">Byg det i værkstedet</button>
-        <button class="knap lille" id="systemNæste" title="Næste (pil højre)">›</button>
-        <button class="knap lille svag" id="systemLuk" title="Tilbage til væggen (Esc)">Luk</button>
       </div>
     </aside>
     <nav class="panel system-filtre" id="systemFiltre" aria-label="Filtre"></nav>
@@ -379,7 +381,7 @@
         <p><strong>Langsomme og hurtige neutroner:</strong> Neutronerne fra en spaltning er hurtige. Uran-235 fanger meget lettere langsomme neutroner, så man bremser dem med vand. Vandet kaldes en <em>moderator</em>.</p>
         <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
         <p><strong>Kædereaktion:</strong> De nye neutroner kan spalte flere kerner, som giver flere neutroner. Giver hver spaltning i gennemsnit mere end én ny spaltning, vokser det. Giver den mindre, dør det ud. Kontrolstave (fx med bor eller cadmium) suger neutroner op, så man kan holde den stabil.</p>
-        <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brintkeksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
+        <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brinteksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
         <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid.</p>
         <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
       </div>

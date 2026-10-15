@@ -11,6 +11,8 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 // Tablets og telefoner (fingre i stedet for mus) får lidt færre effekter, så det kører glat
 export const LAV_KVALITET = matchMedia('(pointer: coarse)').matches;
+// Har man slået "reducer bevægelse" til i sit styresystem, drejer kameraet ikke af sig selv, og lysglimt dæmpes
+export const ROLIG = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const SYNSVINKEL = 40; // kameraets synsvinkel i grader (lodret)
 
@@ -98,6 +100,7 @@ export function lavVerden(lærred) {
     for (const f of verden.opdateringer) f(dt, tid);
     zoomMod(dt);
     svingKamera(dt);
+    if (ROLIG) styring.autoRotate = false;
     styring.update(dt);
     komponist.render(dt);
   });
@@ -253,6 +256,7 @@ export function passerTil(radius) {
 // Kameraet svinger blødt et stykke rundt om atomet (fx når man skifter grundstof)
 let sving = null;
 export function kameraSving(vinkel = 0.6, varighed = 1.4) {
+  if (ROLIG) return;
   sving = { vinkel, varighed, tid: 0, sidst: 0 };
 }
 

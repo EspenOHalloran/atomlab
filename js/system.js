@@ -258,6 +258,10 @@ function lavKnapper() {
     if (h.key === 'ArrowLeft') skift(-1);
     if (h.key === 'ArrowRight') skift(1);
   });
+  // Telefonens tilbage-knap (eller -gestus) lukker kortet i stedet for at forlade det periodiske system
+  addEventListener('popstate', () => {
+    if (aktiv && valgt) lukDetalje(true);
+  });
 }
 
 function skift(retning) {
@@ -272,6 +276,8 @@ function skift(retning) {
 function visDetalje(nr, medLyd = true) {
   const forrige = valgt;
   valgt = nr;
+  // Et trin i historikken, så tilbage-knappen lukker kortet
+  if (!forrige && !history.state?.atomlabDetalje) history.pushState({ atomlabDetalje: true }, '');
   skjulEtiket();
   if (medLyd) lyd.opdaget();
   $('system').classList.add('detalje');
@@ -287,8 +293,13 @@ function visDetalje(nr, medLyd = true) {
   if (!forrige) kameraSving(0.8, 1.6);
 }
 
-function lukDetalje() {
+// fraHistorik: kaldt, fordi man trykkede tilbage (så er historikken allerede gået et trin tilbage)
+function lukDetalje(fraHistorik = false) {
   if (!valgt) return;
+  if (!fraHistorik && history.state?.atomlabDetalje) {
+    history.back(); // popstate lukker kortet bagefter
+    return;
+  }
   lyd.klik();
   valgt = null;
   $('system').classList.remove('detalje');

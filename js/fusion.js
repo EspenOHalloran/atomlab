@@ -107,6 +107,7 @@ let energi = 0;
 let tællere = [0, 0, 0, 0];
 let heliumLavet = 0;
 let sidstBesked = 0;
+let selvForklaret = false; // har vi forklaret, at kun egne skud tæller?
 let tid = 0;
 let næsteId = 1;
 let trykStart = null;
@@ -510,14 +511,18 @@ function udfør(a, b, r) {
   lyd.fusion?.(r.trin);
   const titel = `${TYPER[a.type].navn} + ${TYPER[b.type].navn} → ${TYPER[hoved].navn}`;
   visSeneste(titel, r.tekst, r.trin);
-  if (a.kastet > 0 || b.kastet > 0 || r.trin >= 2) besked(titel, r.tekst, 'klaret');
+  const egen = a.kastet > 0 || b.kastet > 0; // har man selv skudt en af kernerne?
+  if (egen || r.trin >= 2) besked(titel, r.tekst, 'klaret');
 
-  // Opgaver
-  if (hoved === 'd') løs('f-d');
-  if (hoved === 'he3') løs('f-he3');
+  // Opgaver. De første skridt tæller kun, når man selv har skudt kernerne sammen.
+  const førsteSkridt = { d: 'f-d', he3: 'f-he3', he4: 'f-he4' }[hoved];
+  if (førsteSkridt && egen) løs(førsteSkridt);
+  else if (førsteSkridt && !fremgang.erLøst(førsteSkridt) && !selvForklaret) {
+    selvForklaret = true;
+    besked('De smeltede selv sammen', 'Kernerne støder også sammen af sig selv i plasmaet. Opgaven tæller, når du selv skyder dem sammen.');
+  }
   if (hoved === 'he4') {
     heliumLavet++;
-    løs('f-he4');
     if (tællere[2] >= 5) løs('f-fem');
   }
   if (hoved === 'c12') løs('f-carbon');

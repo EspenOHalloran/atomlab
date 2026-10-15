@@ -111,7 +111,7 @@ export default {
       gruppe.add(t);
       tåger.push(t);
     }
-    const lysglimt = glød(new THREE.Color(3, 2.6, 2.1), 40, 0);
+    const lysglimt = glød(new THREE.Color(2.2, 1.9, 1.6), 40, 0);
     gruppe.add(lysglimt);
 
     // Neutronstjernen, der bliver tilbage
@@ -203,7 +203,7 @@ export default {
       dPos.set(dStart);
       rest.visible = true;
       neutronstjerne.visible = true;
-      effekter.glimt(new THREE.Vector3(), 30, new THREE.Color(3, 2.6, 2), 1.4);
+      effekter.glimt(new THREE.Vector3(), 18, new THREE.Color(2.4, 2.1, 1.7), 1.4);
       effekter.bølge(new THREE.Vector3(), 34, new THREE.Color(2.6, 1.6, 0.9), 2.2);
       lyd.eksplosion();
       kamera({ radius: 22, flyv: false });
@@ -277,8 +277,9 @@ export default {
           const varm = Math.max(0, 1 - et / 2.5);
           for (let i = 0; i < ND * 3; i++) dFarve[i] = dFarveStart[i] * (0.85 + 0.15 * varm) + varm * 1.2;
           rest.geometry.attributes.color.needsUpdate = true;
-          lysglimt.material.opacity = Math.max(0, 0.9 * (1 - et / 3.5));
-          lysglimt.scale.setScalar(30 + et * 8);
+          // Stjernen blusser op og falmer (dæmpet, så det ikke blænder)
+          lysglimt.material.opacity = Math.max(0, 0.5 * Math.min(1, et * 2) * (1 - et / 4));
+          lysglimt.scale.setScalar(24 + et * 8);
           for (const tå of tåger) {
             tå.position.copy(tå.userData.retning).multiplyScalar(tå.userData.fart * s * 0.9);
             tå.scale.setScalar(5 + s * 2.6);

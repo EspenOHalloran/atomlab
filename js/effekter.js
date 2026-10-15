@@ -2,7 +2,7 @@
 // små partikler med hale (elektron, positron, neutrino, gamma) og tekst, der svæver op.
 
 import * as THREE from 'three';
-import { lavPrikTekstur } from './scene3d.js';
+import { lavPrikTekstur, ROLIG } from './scene3d.js';
 
 const prik = () => (prik.t ??= lavPrikTekstur(true));
 
@@ -44,6 +44,7 @@ export class Effekter {
 
   // Et lysglimt, der vokser og falmer
   glimt(pos, størrelse = 3, farve = FARVER.gamma, varighed = 0.6) {
+    if (ROLIG) størrelse *= 0.6; // dæmpet ved "reducer bevægelse"
     const s = new THREE.Sprite(new THREE.SpriteMaterial({
       map: prik(), color: farve, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     }));
