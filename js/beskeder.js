@@ -130,6 +130,11 @@ function lag(v) {
   return l;
 }
 
+// Et fast sted nederst i et 3D-vindue, lige over underteksterne (fx Stjerneovnens pausemærke)
+export function bundIVindue(v) {
+  return lag(v).querySelector('.vindue-bund');
+}
+
 function bundHolder() {
   const v = aktivtVindue();
   return v ? lag(v).querySelector('.vindue-bund') : $('beskeder');

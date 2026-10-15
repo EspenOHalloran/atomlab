@@ -257,12 +257,19 @@
         <input type="range" id="fusTempSkyder" min="1" max="120" step="1" value="15">
         <small id="fusZone"></small>
       </label>
+      <div class="graf-boks">
+        <strong>Hvorfor skal det være så varmt?</strong>
+        <canvas id="fusGraf" width="520" height="170" aria-label="Graf over protonernes fart og frastødningen"></canvas>
+        <small id="fusGrafTekst"></small>
+        <small class="ærligt">Ærligt talt: I den rigtige Sol er bakken flere hundrede gange højere end protonernes gennemsnitlige energi. De kommer kun over med tunneleffekten (se hjælpen).</small>
+      </div>
       <div class="knap-række">
         <button class="knap lille" id="fusTilføj">+ 10 protoner</button>
         <button class="knap lille" id="fusTempo">Tempo: normal</button>
+        <button class="knap lille" id="fusPause" title="Pause (mellemrum)">⏸ Pause</button>
         <button class="knap lille svag" id="fusRyd">Start forfra</button>
       </div>
-      <p class="klik-tip">Klik på en kerne og derefter på en anden for at skyde den første mod den anden.</p>
+      <p class="klik-tip">Klik på en kerne og så på en anden for at skyde den første mod den anden. Tiden går langsomt, mens du sigter. Klik i listen for at finde en kerne.</p>
       <ul class="kerne-liste" id="fusKerner"></ul>
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="fusOpgaver"></ol>
@@ -273,22 +280,36 @@
         <span class="mission-tekst" id="fusMissionTekst"></span>
         <button class="knap lille mission-vis" id="fusVisMig">▶ Vis mig</button>
       </div>
+      <div class="pause-mærke skjult" id="fusPauseMærke">⏸ Pause</div>
+      <button class="knap lille rejse-spring" id="fusRejseSpring">Spring over ›</button>
+      <div class="fus-blink" id="fusBlink"></div>
     </div>
     <div class="kerne-etiket skjult" id="fusEtiket" aria-live="polite"></div>
+    <div class="kerne-etiket sigte skjult" id="fusSigte"></div>
     <aside class="panel side-panel højre-panel">
-      <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong></div>
+      <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong>
+        <small>Når 1 gram brint bliver til helium, frigøres lige så meget energi som ved at brænde over 20 ton kul.</small></div>
       <h4 class="panel-overskrift">Solens opskrift</h4>
       <ol class="opskrift" id="fusOpskrift">
-        <li data-trin="0"><span class="ligning">p + p → <b>D</b> + e⁺ + ν</span><span class="mev">1,44 MeV</span><span class="antal"></span></li>
-        <li data-trin="1"><span class="ligning">D + p → <b>³He</b> + γ</span><span class="mev">5,49 MeV</span><span class="antal"></span></li>
-        <li data-trin="2"><span class="ligning">³He + ³He → <b>⁴He</b> + p + p</span><span class="mev">12,86 MeV</span><span class="antal"></span></li>
-        <li data-trin="3" class="bonus"><span class="ligning">3 ⁴He → <b>C</b> (rød kæmpe)</span><span class="mev">7,27 MeV</span><span class="antal"></span></li>
+        <li data-trin="0" title="Klik for at vælge en proton"><span class="ligning"><span class="kp" style="--k:#ff6b6b">p</span> + <span class="kp" style="--k:#ff6b6b">p</span> → <b class="kp" style="--k:#ffa94d">D</b> + e⁺ + ν</span><span class="mev">1,44 MeV</span><span class="antal"></span></li>
+        <li data-trin="1" title="Klik for at vælge en deuterium"><span class="ligning"><span class="kp" style="--k:#ffa94d">D</span> + <span class="kp" style="--k:#ff6b6b">p</span> → <b class="kp" style="--k:#ffd43b">³He</b> + γ</span><span class="mev">5,49 MeV</span><span class="antal"></span></li>
+        <li data-trin="2" title="Klik for at vælge en helium-3"><span class="ligning"><span class="kp" style="--k:#ffd43b">³He</span> + <span class="kp" style="--k:#ffd43b">³He</span> → <b class="kp" style="--k:#74c0fc">⁴He</b> + p + p</span><span class="mev">12,86 MeV</span><span class="antal"></span></li>
+        <li data-trin="3" class="bonus" title="Klik for at vælge en heliumkerne"><span class="ligning">3 <span class="kp" style="--k:#74c0fc">⁴He</span> → <b class="kp" style="--k:#8ce99a">C</b> (rød kæmpe)</span><span class="mev">7,27 MeV</span><span class="antal"></span></li>
       </ol>
       <div class="seneste-boks" id="fusSeneste"></div>
       <div class="forklaring-boks">
         <strong>Hvor kommer energien fra?</strong>
         4 protoner vejer 0,7 % mere end en heliumkerne. Den forsvundne masse er blevet til energi, ligesom Einstein forudsagde: E = mc².
       </div>
+      <h4 class="panel-overskrift">Solen i tal</h4>
+      <dl class="kosmos-tal sol-tal">
+        <div><dt>Bredde</dt><dd>109 × Jorden</dd></div>
+        <div><dt>Kernen</dt><dd>ca. 15 mio. °C</dd></div>
+        <div><dt>Brint → helium</dt><dd>ca. 600 mio. ton i sekundet</dd></div>
+        <div><dt>Masse → energi</dt><dd>ca. 4 mio. ton i sekundet</dd></div>
+        <div><dt>Alder</dt><dd>4,6 mia. år</dd></div>
+        <div><dt>Brint nok til</dt><dd>ca. 5 mia. år mere</dd></div>
+      </dl>
       <blockquote class="citat lille" data-citat="eddington"></blockquote>
     </aside>
   </section>
@@ -299,13 +320,15 @@
       <div class="hjælp-indhold">
         <p>Du er inde i <strong>Solens kerne</strong>. Her er det ca. 15 millioner grader varmt, så varmt at elektronerne er revet af atomerne. Kernerne suser rundt i et <strong>plasma</strong>, og de små blå gnister er de frie elektroner.</p>
         <p><strong>Sådan gør du:</strong> Klik på en kerne og derefter på en anden. Så bliver den første skudt mod den anden, lige så hurtigt som temperaturen tillader. Træk for at dreje, og rul eller knib for at zoome.</p>
+        <p><strong>Lettere at ramme:</strong> Du behøver ikke ramme kernen helt præcist. Den nærmeste kerne får en ring, når du peger på den, og en stiplet linje viser, hvor skuddet går hen. Mens du sigter, går tiden langsomt. Mellemrumstasten (eller "Pause") stopper tiden helt, og Esc fortryder. Kan du ikke finde en bestemt slags kerne, så klik på den i listen til venstre eller på en linje i opskriften.</p>
         <p><strong>Frastødning:</strong> Alle kernerne er plusladede og skubber hinanden væk. Kun hvis de er hurtige nok, kommer de helt tæt på hinanden, og så tager den stærke kernekraft over og limer dem sammen. Derfor kræver fusion så høj en temperatur.</p>
+        <p><strong>Grafen under temperaturen:</strong> Kurven viser, hvor mange protoner der har hvilken fart. Den stiplede linje er frastødningen. Den er som en bakke, protonerne skal over. Når du skruer op for varmen, flytter kurven sig mod højre, og flere protoner (de gule) bliver hurtige nok.</p>
         <p><strong>Solens opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. Til sidst bliver to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri.</p>
         <p><strong>Ærligt talt:</strong> Vi har gjort det meget lettere end i virkeligheden. I Solen er protonerne faktisk ikke hurtige nok til at komme over frastødningen. De klarer det kun takket være kvantemekanikkens <em>tunneleffekt</em>. Og det første skridt er ekstremt sjældent: En proton venter i gennemsnit milliarder af år, før det sker. Solen klarer sig kun, fordi den har ufatteligt mange protoner. Og "Vis mig" snyder lidt mere: Dens skud rammer altid og smelter altid sammen, så du kan se, hvordan det ser ud.</p>
         <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger mange tusinde år, før energien når overfladen som sollys.</p>
         <p><strong>Røde kæmper:</strong> Når en stjerne har brugt sit hydrogen, bliver kernen varmere, ca. 100 millioner grader. Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
         <blockquote class="citat" data-citat="saganStjernestof"></blockquote>
-        <p class="nulstil-linje"><button class="knap lille" id="fusGuideIgen">Vis guiden igen</button></p>
+        <p class="nulstil-linje"><button class="knap lille" id="fusRejseIgen">Vis rejsen ind i Solen</button> <button class="knap lille" id="fusGuideIgen">Vis guiden igen</button></p>
       </div>
     </div>
   </div>

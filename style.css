@@ -876,6 +876,30 @@ button { font: inherit; color: inherit; }
 .forklaring-boks { padding: 10px 12px; border-radius: 12px; background: rgba(95, 227, 255, 0.06); border: 1px solid rgba(95, 227, 255, 0.25); font-size: 13px; line-height: 1.45; }
 .forklaring-boks strong { display: block; color: var(--accent); margin-bottom: 2px; }
 
+/* Stjerneovnen: graf, sigte, pause og rejsen ind i Solen */
+.graf-boks { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.graf-boks strong { font-size: 13.5px; color: #ffb36b; }
+.graf-boks canvas { width: 100%; height: auto; aspect-ratio: 520 / 200; }
+.graf-boks small { color: var(--svag); font-size: 12px; line-height: 1.4; }
+.graf-boks small b { color: #ffe08a; }
+.graf-boks .ærligt { font-size: 11.5px; opacity: 0.85; }
+.energi-boks small { margin-top: 4px; text-align: center; color: var(--svag); font-size: 11.5px; line-height: 1.35; }
+.kp::before { content: ""; display: inline-block; width: 8px; height: 8px; margin: 0 3px 1px 0; border-radius: 50%; background: var(--k); box-shadow: 0 0 5px var(--k); vertical-align: middle; }
+.opskrift .ligning b.kp { color: #ffcf7a; }
+#fusOpskrift li, #fusKerner li { cursor: pointer; }
+#fusOpskrift li:hover { background: rgba(255, 255, 255, 0.08); }
+#fusKerner li { padding: 2px 6px; margin: 0 -6px; border-radius: 8px; }
+#fusKerner li:hover { background: rgba(255, 255, 255, 0.07); }
+.kerne-etiket.sigte { z-index: 14; padding: 3px 8px; font-size: 12px; background: rgba(14, 22, 48, 0.75); border-style: dashed; }
+.kerne-etiket.sigte small { font-size: 11px; }
+.pause-mærke { padding: 4px 12px; border-radius: 999px; background: rgba(14, 22, 48, 0.85); border: 1px solid rgba(255, 207, 122, 0.6); color: #ffcf7a; font-size: 13px; font-weight: 700; pointer-events: none; }
+.rejse-spring { position: absolute; top: 10px; left: 10px; z-index: 3; pointer-events: auto; }
+#fusion:not(.rejse) .rejse-spring { display: none; }
+#fusion.rejse .mission, #fusion.rejse .kerne-etiket, #fusion.rejse .pause-mærke { display: none; }
+.fus-blink { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; background: radial-gradient(circle, rgba(255, 245, 210, 0.95), rgba(255, 150, 50, 0.7) 55%, rgba(255, 90, 20, 0.4)); }
+.fus-blink.vist { animation: fusBlink 1s ease-out; }
+@keyframes fusBlink { from { opacity: 1; } to { opacity: 0; } }
+
 /* ---------- Kosmos ---------- */
 .ikon-kosmos { background: radial-gradient(circle, #000 0 9px, #fff3c4 10px, #ffb347 12px, rgba(255, 120, 60, 0.45) 16px, transparent 24px); }
 .ikon-kosmos::before { content: ""; position: absolute; inset: 21px -3px; border-radius: 50%; border: 3px solid #ffb347; box-shadow: 0 0 10px #ff8a3d; transform: rotate(-14deg); }

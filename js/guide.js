@@ -27,6 +27,11 @@ export function harSetGuide(id) {
   return Boolean(hentSet()[id]);
 }
 
+// Husk, at man har set noget, der kun skal vises første gang (fx rejsen ind i Solen)
+export function markérSet(id) {
+  gemSet(id);
+}
+
 function gemSet(id) {
   const set = hentSet();
   set[id] = Date.now();
