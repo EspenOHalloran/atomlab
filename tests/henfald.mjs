@@ -24,6 +24,8 @@ await page.click('.fane-knap[data-fane="kerne"]');
 await page.waitForTimeout(300);
 const kortTegnet = await page.evaluate(() => { const c = document.getElementById('stabilitetskort'); const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++; return n; });
 tjek('stabilitetskort er tegnet', kortTegnet > 500, kortTegnet);
+// Atomet er kun en ion i 1,6 sekunder efter henfaldet. Vi holder øje hele tiden i stedet for at kigge én gang.
+const blevIon = page.waitForFunction(() => { const t = document.querySelector('#infopanel').textContent; return t.includes('positiv ion') && t.includes('Hvad er en ion?'); }, null, { timeout: 60000, polling: 50 }).then(() => true, () => false);
 await page.click('.henfald-knap');
 await page.waitForTimeout(400);
 await page.screenshot({ path: UD + '/h1-tritium-ryster.png' });
@@ -31,7 +33,7 @@ await ventHenfald();
 t = await info();
 await page.screenshot({ path: UD + '/h2-tritium-henfaldet.png' });
 tjek('blev til helium-3', t.includes('Helium-3') && t.includes('Stabil kerne'), t);
-tjek('ion lige efter henfald', t.includes('positiv ion') && t.includes('Hvad er en ion?'), t);
+tjek('ion lige efter henfald', await blevIon);
 await page.waitForTimeout(6000);
 t = await info();
 tjek('neutral igen bagefter', t.includes('neutralt atom'), t);

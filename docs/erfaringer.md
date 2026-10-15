@@ -12,6 +12,8 @@ Denne fil opdateres løbende, så vi kan arbejde hurtigere og med færre fejl. S
 - **Kør testene én ad gangen.** Kører flere browsere på én gang, fejler testene tilfældigt.
 - **Læs sin egen ændring igennem kritisk før commit.** Det har fundet ubrugt kode, en tast, der virkede to gange, og en lyd, der spillede, når man forlod en skærm.
 - **Små fælles byggeklodser** frem for kopier: beskeder (`visBesked`), guiden (`startGuide`) og pausen (`lavPause`) bruges flere steder, så de opfører sig ens.
+- **Faktatjek med flere agenter på hver sit område** (oktober 2026) fandt ca. 15 klare fejl og mange upræcise formuleringer i ca. 850 påstande. Agenterne må kun læse. Deres vigtigste fund skal tjekkes efter i koden eller mod kilder, før de bliver rettet. Når en regel skal tjekkes (fx henfaldsmåder), så kør selve funktionen over kendte tilfælde i stedet for at læse koden.
+- **Ny funktion, der rører fælles ting, skal tjekkes alle steder, den virker.** Pausen fryser Kosmos' ur, men stjernernes overflade bruger `performance.now()` og koger videre. Søg efter `performance.now` og lignende, når noget skal kunne sættes på pause.
 - **"Næste skridt" og "Vis mig"** hjælper meget med at komme i gang. "Vis mig" må ikke klare opgaver for en.
 
 ## Faldgruber (det, der ikke virkede, og hvad vi gjorde)
