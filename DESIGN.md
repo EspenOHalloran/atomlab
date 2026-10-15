@@ -100,8 +100,22 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] **Pause med mellemrum** i Stjerneovnen, Reaktoren og Kosmos (samme knap og samme tast alle steder). Under pausen kan man dreje kameraet og flytte kontrolstavene.
   - [x] **Sammenligninger med hverdagen:** 1 gram uran-235 svarer til ca. 3 ton kul. En stor reaktor bruger ca. 3 kg uran-235 om dagen, mens et kulkraftværk brænder ca. 10.000 ton kul. Batteriet: cellen, en mobil og et elbil-batteri, og hvor lidt energi et batteri gemmer pr. kilo.
   - [x] **Erfaringer** samles i [docs/erfaringer.md](docs/erfaringer.md).
+- [ ] **Trin 11: Rettelser efter den store gennemgang** (se [docs/gennemgang-2026-10.md](docs/gennemgang-2026-10.md))
+  - [ ] **Faglige rettelser:** faktafejlene (A1), henfaldsreglerne (A2) og de vigtigste upræcise formuleringer (A3), med en ny test af henfaldsreglerne mod kendte kerner.
+  - [ ] **Fejlrettelser og små UI-rettelser:**
+    - én fælles nulstilling ved skærmskift og timere, der ryddes
+    - "Start forfra" i alle dele
+    - Reaktorens panel og gløden på tablets
+    - den fulde ovn
+    - "Reducer bevægelse"
+    - menuen på tablet, etiketten i Batteriet, zoom på væggen og ionen i 3 sekunder
+    - stjernerne under pause
+  - [ ] **Sammenhæng:** fremgang pr. del i menuen og links mellem delene ("Se også").
+  - [ ] **Fælles "Næste skridt"-modul**, og "Næste skridt", "Vis mig" og en guide i Batteriet og en kort guide i værkstedet.
+  - [ ] **Tilgængelighed og app:** dialoger, tastatur, en app på hjemmeskærmen og mindre download.
 
 ## Idéer til senere
+- "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
 - En engelsk udgave med en sprogvælger. Planen ligger i [docs/plan-engelsk.md](docs/plan-engelsk.md).
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
 - Tidslinje over, hvornår grundstofferne blev opdaget.

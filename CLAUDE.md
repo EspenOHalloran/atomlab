@@ -5,7 +5,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 
 **Læs [DESIGN.md](DESIGN.md) først.** Den beskriver indholdet og de trin, vi bygger i. Byg ét trin ad gangen, få et "go" før hvert trin, og sæt kryds i listen, når et trin er færdigt.
 
-**Læs også [docs/erfaringer.md](docs/erfaringer.md).** Den samler det, der virker, og det, der ikke virker (faldgruber, testmetoder). Skriv nye erfaringer ind løbende, både når noget virker godt, og når noget gik galt.
+**Læs også [docs/erfaringer.md](docs/erfaringer.md).** Den har tjeklister, som skal bruges: før et stykke arbejde er færdigt, ved nye tekster med fakta, ved nye regler eller ny spillogik, ved en ny del og ved nye animationer. Den beskriver også, hvorfor tidligere fejl opstod, og hvilke populære påstande der er forkerte. Skriv nye erfaringer ind løbende, både når noget virker godt, og når noget gik galt. Får en fejl en ny rodårsag, skal den også ind i en tjekliste.
 
 ## Hvem bruger det
 - Programmet laves af en far til hans 13-årige søn. Sønnen bruger det, han koder det ikke selv.
