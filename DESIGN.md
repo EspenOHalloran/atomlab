@@ -96,6 +96,10 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] **Find kernerne:** Et klik i kernelisten eller i opskriften vælger en kerne af den slags. Opskriften har farveprikker som kuglerne i 3D.
   - [x] **Hvorfor så varmt?** En graf over protonernes fart og frastødningens "bakke", som flytter sig med temperaturen, med en ærlig note om tunneleffekten. 1 gram brint giver lige så meget energi som over 20 ton kul.
   - [x] **Rejsen ind i Solen:** Første gang flyver kameraet fra Solen udefra og ind i kernen med tre korte undertekster. Boksen "Solen i tal".
+- [x] **Trin 10: Ting fra Stjerneovnen, der kan bruges andre steder**
+  - [x] **Pause med mellemrum** i Stjerneovnen, Reaktoren og Kosmos (samme knap og samme tast alle steder). Under pausen kan man dreje kameraet og flytte kontrolstavene.
+  - [x] **Sammenligninger med hverdagen:** 1 gram uran-235 svarer til ca. 3 ton kul. En stor reaktor bruger ca. 3 kg uran-235 om dagen, mens et kulkraftværk brænder ca. 10.000 ton kul. Batteriet: cellen, en mobil og et elbil-batteri, og hvor lidt energi et batteri gemmer pr. kilo.
+  - [x] **Erfaringer** samles i [docs/erfaringer.md](docs/erfaringer.md).
 
 ## Idéer til senere
 - En engelsk udgave med en sprogvælger. Planen ligger i [docs/plan-engelsk.md](docs/plan-engelsk.md).

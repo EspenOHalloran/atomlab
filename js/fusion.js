@@ -8,9 +8,10 @@ import { tilføjKantlys } from './atom.js';
 import { Effekter, lavRingTekstur } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
-import { visBesked, skjulUndertekst, bundIVindue } from './beskeder.js';
+import { visBesked, skjulUndertekst } from './beskeder.js';
 import { startGuide, harSetGuide, markérSet } from './guide.js';
 import { stjerne } from './kosmos/faelles.js';
+import { lavPause } from './pause.js';
 
 const R_OVN = 12; // radius på det område, kernerne er i
 const RN = 0.3; // radius på en proton eller neutron
@@ -107,7 +108,7 @@ let sigteLinje = null; // stiplet linje fra den valgte kerne til kernen under mu
 let sigteEtiket = null; // navnet på kernen under musen
 let mus = null; // musens plads på skærmen (kun mus, ikke fingre)
 let sigte = null; // kernen under musen
-let pause = false;
+let pause = null; // pausen (pause.til er true, mens tiden står stille)
 let sigteFaktor = 1; // går mod SIGTE_TEMPO, mens man sigter
 let rejse = null; // "Rejsen ind i Solen", mens den kører: { start, fase, retning, slut, blink }
 let sol = null; // Solen udefra (bruges kun på rejsen)
@@ -228,31 +229,12 @@ export function lavFusion() {
   addEventListener('keydown', vedTast);
 }
 
-// Mellemrum: pause. Esc: fortryd den valgte kerne.
+// Esc: fortryd den valgte kerne (eller spring rejsen over). Mellemrum klares af pausen (lavPanel).
 function vedTast(h) {
-  if (!aktiv || h.ctrlKey || h.metaKey || h.altKey) return;
-  if (document.querySelector('.overlag:not(.skjult)') || h.target.closest?.('input, textarea')) return;
-  if (h.key === ' ' && h.target.closest?.('button, a, select')) return; // så trykker mellemrum på knappen som normalt
-  if (h.key === ' ') {
-    h.preventDefault();
-    if (rejse) slutRejse();
-    else skiftPause();
-  } else if (h.key === 'Escape') {
-    if (rejse) slutRejse();
-    else valgt = null;
-  }
-}
-
-function skiftPause() {
-  lyd.klik();
-  sætPause(!pause);
-}
-
-function sætPause(til) {
-  pause = til;
-  $('fusPause').textContent = pause ? '▶ Fortsæt' : '⏸ Pause';
-  $('fusPause').classList.toggle('valgt', pause);
-  $('fusPauseMærke').classList.toggle('skjult', !pause);
+  if (!aktiv || h.key !== 'Escape') return;
+  if (document.querySelector('.overlag:not(.skjult)')) return;
+  if (rejse) slutRejse();
+  else valgt = null;
 }
 
 function nyPartikel(type, pos, fart) {
@@ -306,7 +288,7 @@ export function stopFusion() {
   etiket.classList.add('skjult');
   sigteEtiket.classList.add('skjult');
   mus = null;
-  sætPause(false);
+  pause.sæt(false);
   verden.renderer.domElement.style.cursor = '';
   slutRejse({ husk: false, guide: false });
   slutDemo();
@@ -338,8 +320,8 @@ function lavPanel() {
     opdaterPanel();
   });
   $('fusHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpFusion').classList.remove('skjult'); });
-  $('fusPause').addEventListener('click', skiftPause);
-  bundIVindue($('fusionVindue')).prepend($('fusPauseMærke')); // over underteksterne nederst i 3D-billedet
+  // Pause med knappen eller mellemrum. Under rejsen ind i Solen springer mellemrum rejsen over.
+  pause = lavPause({ knap: $('fusPause'), vindue: $('fusionVindue'), aktiv: () => aktiv, mellemrum: () => (rejse ? slutRejse() : pause.skift()) });
   $('fusRejseSpring').addEventListener('click', () => slutRejse());
   $('fusRejseIgen').addEventListener('click', () => {
     $('hjælpFusion').classList.add('skjult');
@@ -630,6 +612,7 @@ function vælgPar(typeA, typeB) {
 function visMig() {
   const { vis } = næsteSkridt();
   if (demo || !vis) return;
+  pause.sæt(false);
   // Hvilken reaktion kan vises med de kerner, der er lige nu?
   let par = ['p', 'p'];
   if (vis === 'he4' && antalAf('he3') >= 2) par = ['he3', 'he3'];
@@ -892,9 +875,9 @@ function opdater(dt) {
   // Mens man sigter, går tiden langsomt, så målene ikke smutter. Pause stopper den helt.
   const sigter = Boolean(valgt && !demo && partikler.includes(valgt));
   sigteFaktor += ((sigter ? SIGTE_TEMPO : 1) - sigteFaktor) * (1 - Math.exp(-dt * 6));
-  if (aktiv && !rejse) verden.styring.autoRotate = !sigter && !pause;
+  if (aktiv && !rejse) verden.styring.autoRotate = !sigter && !pause.til;
   // Fysikken regnes i små delskridt, så hurtige kerner ikke springer forbi hinanden
-  const ialt = pause ? 0 : dt * tempo * sigteFaktor;
+  const ialt = pause.til ? 0 : dt * tempo * sigteFaktor;
   const skridt = Math.min(14, Math.ceil(ialt / 0.012));
   for (let i = 0; i < skridt; i++) fysik(ialt / skridt);
   partikler = partikler.filter((p) => !p.væk);
@@ -1104,7 +1087,7 @@ export function testAdgang() {
     rejseTid: (t) => { if (rejse) rejse.fastTid = t; },
     rejseInfo: () => rejse && { slut: rejse.slut, fra: rejse.fra },
     andelOverBakken: (T) => andelOverBakken(T),
-    pause: () => pause,
+    pause: () => pause.til,
     sigte: () => sigte?.id ?? null,
     kerneVed: (x, y) => kerneVed(x, y)?.id ?? null,
     vælg: (id) => { const p = partikler.find((x) => x.id === id); if (p) vælg(p); else valgt = null; },

@@ -266,7 +266,7 @@
       <div class="knap-række">
         <button class="knap lille" id="fusTilføj">+ 10 protoner</button>
         <button class="knap lille" id="fusTempo">Tempo: normal</button>
-        <button class="knap lille" id="fusPause" title="Pause (mellemrum)">⏸ Pause</button>
+        <button class="knap lille" id="fusPause">⏸ Pause</button>
         <button class="knap lille svag" id="fusRyd">Start forfra</button>
       </div>
       <p class="klik-tip">Klik på en kerne og så på en anden for at skyde den første mod den anden. Tiden går langsomt, mens du sigter. Klik i listen for at finde en kerne.</p>
@@ -280,7 +280,6 @@
         <span class="mission-tekst" id="fusMissionTekst"></span>
         <button class="knap lille mission-vis" id="fusVisMig">▶ Vis mig</button>
       </div>
-      <div class="pause-mærke skjult" id="fusPauseMærke">⏸ Pause</div>
       <button class="knap lille rejse-spring" id="fusRejseSpring">Spring over ›</button>
       <div class="fus-blink" id="fusBlink"></div>
     </div>
@@ -375,6 +374,7 @@
         <button class="knap lille" id="reaktorVand">Vand (moderator): til</button>
         <p class="klik-tip">Gulgrønne kugler er frisk uran-235. Grå er lige spaltet. Prikkerne er neutroner: hvide er hurtige, blå er langsomme.</p>
       </div>
+      <div class="knap-række"><button class="knap lille" id="reaktorPause">⏸ Pause</button></div>
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
     </aside>
@@ -397,6 +397,11 @@
           <strong>Hvorfor spalter den?</strong>
           En stor kerne er som en dirrende vanddråbe. Neutronen giver den lige nok ekstra energi til, at den strækker sig, får en "talje" og flækker. Lise Meitner og Otto Frisch forklarede det i 1939, og Frisch arbejdede dengang hos Niels Bohr i København.
         </div>
+        <div class="forklaring-boks">
+          <strong>Hvor meget er 200 MeV?</strong>
+          <p>Én spaltning giver kun en lillebitte smule energi. Men 1 gram uran-235 består af ca. 2½ trilliarder kerner (et tal med 22 cifre).</p>
+          <p>Spaltes de alle, frigøres lige så meget energi som ved at brænde ca. <b>3 ton kul</b>.</p>
+        </div>
         <blockquote class="citat lille" data-citat="einsteinEnergi"></blockquote>
       </div>
       <div data-reaktor-del="kæde" class="skjult">
@@ -416,6 +421,11 @@
           Hver spaltning giver 2-3 nye neutroner. Giver hver spaltning i gennemsnit præcis én ny, er reaktoren stabil. Kontrolstavene suger neutroner op, og vandet bremser dem, så de lettere spalter uran-235.
         </div>
         <div class="forklaring-boks">
+          <strong>En rigtig reaktor</strong>
+          <p>En stor reaktor giver ca. 3.000 megawatt varme, og ca. en tredjedel bliver til strøm. Så spaltes ca. 100 trillioner kerner i sekundet. Her i spillet er det 6-16.</p>
+          <p>Den bruger ca. <b>3 kg uran-235 om dagen</b>. Et kulkraftværk, der giver lige så meget varme, brænder ca. <b>10.000 ton kul om dagen</b>.</p>
+        </div>
+        <div class="forklaring-boks">
           <strong>Det blå lys</strong>
           I rigtige reaktorer lyser vandet blåt, når reaktoren kører. Det hedder Tjerenkov-stråling og kommer fra partikler, der farer gennem vandet hurtigere end lyset kan i vand.
         </div>
@@ -431,6 +441,7 @@
         <p><strong>Langsomme og hurtige neutroner:</strong> Neutronerne fra en spaltning er hurtige. Uran-235 fanger meget lettere langsomme neutroner, så man bremser dem med vand. Vandet kaldes en <em>moderator</em>.</p>
         <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
         <p><strong>Kædereaktion:</strong> De nye neutroner kan spalte flere kerner, som giver flere neutroner. Giver hver spaltning i gennemsnit mere end én ny spaltning, vokser det. Giver den mindre, dør det ud. Kontrolstave (fx med bor eller cadmium) suger neutroner op, så man kan holde den stabil.</p>
+        <p><strong>Pause:</strong> Mellemrumstasten (eller "Pause") stopper tiden. Så kan du tælle neutronerne og dreje kameraet. Kontrolstavene kan stadig flyttes.</p>
         <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brinteksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
         <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
         <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
@@ -494,6 +505,12 @@
         <strong>Hele tricket</strong>
         Elektrolytten lukker kun ioner igennem, ikke elektroner. Elektronerne er tvunget til at tage omvejen gennem ledningen, og det er den strøm, vi bruger.
       </div>
+      <div class="forklaring-boks">
+        <strong>Hvor meget energi?</strong>
+        <p>Cellen her er på 1.000 mAh og gemmer ca. 3,7 Wh (watt-timer). Det kan få en LED-pære på 1 watt til at lyse i næsten 4 timer.</p>
+        <p>En mobil har 4-5 gange så meget. Et elbil-batteri (ca. 60 kWh) rummer lige så meget som 3.000-4.000 mobilopladninger.</p>
+        <p>Til sammenligning: 1 kg batteri rummer omtrent lige så meget energi som 30 gram kul. Til gengæld kan et batteri lades op hundredvis af gange, og det forurener ikke, mens det bruges.</p>
+      </div>
       <blockquote class="citat lille" data-citat="faraday"></blockquote>
     </aside>
   </section>
@@ -533,6 +550,7 @@
       <div class="kosmos-liste" id="kosmosListe"></div>
       <h4 class="panel-overskrift">Prøv selv</h4>
       <div class="kosmos-styring" id="kosmosStyring"></div>
+      <div class="knap-række"><button class="knap lille" id="kosmosPause">⏸ Pause</button></div>
       <div class="kosmos-forklaring" id="kosmosForklaring"></div>
     </aside>
     <div class="vindue" id="kosmosVindue">
@@ -565,7 +583,7 @@
         <blockquote class="citat" data-citat="saganKosmos"></blockquote>
         <p><strong>Ærligt talt:</strong> Intet her er i den rigtige størrelse eller det rigtige tempo. Afstandene i rummet er så enorme, at man ikke ville kunne se noget, hvis det var målfast. Og noget tager millioner af år, mens andet sker på et millisekund. Farverne er valgt, så man kan se forskel på tingene. Men det, der <em>sker</em>, er tæt på det, forskerne ved i dag.</p>
         <p><strong>Ormehuller</strong> er det eneste her, som ingen har set. De er en mulighed i Einsteins ligninger, men måske findes de slet ikke.</p>
-        <p><strong>Styring:</strong> Træk for at dreje. Rul eller knib for at zoome.</p>
+        <p><strong>Styring:</strong> Træk for at dreje. Rul eller knib for at zoome. Mellemrumstasten (eller "Pause") fryser tiden, så du kan dreje rundt om fx en eksplosion og se den fra alle sider.</p>
       </div>
     </div>
   </div>

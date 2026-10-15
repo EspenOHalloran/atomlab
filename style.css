@@ -875,6 +875,9 @@ button { font: inherit; color: inherit; }
 .seneste-boks strong { display: block; color: #ff9be0; margin-bottom: 2px; }
 .forklaring-boks { padding: 10px 12px; border-radius: 12px; background: rgba(95, 227, 255, 0.06); border: 1px solid rgba(95, 227, 255, 0.25); font-size: 13px; line-height: 1.45; }
 .forklaring-boks strong { display: block; color: var(--accent); margin-bottom: 2px; }
+.forklaring-boks p { margin: 0 0 5px; }
+.forklaring-boks p:last-child { margin-bottom: 0; }
+.forklaring-boks p b { color: #ffcf7a; }
 
 /* Stjerneovnen: graf, sigte, pause og rejsen ind i Solen */
 .graf-boks { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }

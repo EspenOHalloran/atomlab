@@ -9,6 +9,7 @@ import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
 import { visBesked, skjulUndertekst } from './beskeder.js';
 import { ryd } from './kosmos/faelles.js';
+import { lavPause } from './pause.js';
 import solstorm from './kosmos/solstorm.js';
 import supernova from './kosmos/supernova.js';
 import pulsar from './kosmos/pulsar.js';
@@ -34,6 +35,8 @@ let valgt = null;
 let kørende = null; // det, fænomenets lav() gav tilbage
 let fane = 'kort';
 let tjekTid = 0;
+let pause = null; // pausen (pause.til er true, mens tiden står stille)
+let kosmosTid = 0; // Kosmos' eget ur, som står stille under pause
 
 function $(id) {
   return document.getElementById(id);
@@ -69,6 +72,7 @@ export function lavKosmos() {
     });
   }
   $('kosmosHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpKosmos').classList.remove('skjult'); });
+  pause = lavPause({ knap: $('kosmosPause'), vindue: $('kosmosVindue'), aktiv: () => aktiv });
 }
 
 export function startKosmos() {
@@ -90,6 +94,7 @@ export function stopKosmos() {
   aktiv = false;
   rod.visible = false;
   verden.opdateringer.delete(opdater);
+  pause.sæt(false);
   luk();
   verden.styring.target.set(0, 0, 0);
   verden.styring.autoRotate = true;
@@ -109,6 +114,7 @@ function luk() {
 
 function vælg(id) {
   const f = FÆNOMENER.find((x) => x.id === id) ?? FÆNOMENER[0];
+  pause.sæt(false);
   luk();
   valgt = f;
   set.add(f.id);
@@ -250,6 +256,7 @@ function lavStyring() {
       b.addEventListener('click', () => {
         if (b.disabled) return;
         lyd.klik();
+        pause.sæt(false); // en handling (fx "Lad stjernen eksplodere") skal kunne ses
         s.handling();
         tjekKnapper();
       });
@@ -267,11 +274,14 @@ function tjekKnapper() {
   }
 }
 
-function opdater(dt, tid) {
+function opdater(dt) {
   if (!aktiv || !kørende) return;
-  kørKameraTur(dt);
-  kørende.opdater(dt, tid);
-  effekter.opdater(dt);
+  kørKameraTur(dt); // kameraet kan stadig flyve under pause
+  if (!pause.til) {
+    kosmosTid += dt;
+    kørende.opdater(dt, kosmosTid);
+    effekter.opdater(dt);
+  }
   tjekTid += dt;
   if (tjekTid > 0.25) {
     tjekTid = 0;
@@ -292,10 +302,12 @@ export function testAdgang() {
       else if (s.skift) { s.til = !s.til; s.skift(s.til); }
       lavStyring();
     },
+    pause: () => pause.til,
+    tid: () => kosmosTid,
     antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },
     // Spoler tiden frem (testbrowseren tegner kun få billeder i sekundet)
     spol: (sekunder) => {
-      for (let t = 0; t < sekunder; t += 0.05) opdater(0.05, performance.now() / 1000 + t);
+      for (let t = 0; t < sekunder; t += 0.05) opdater(0.05);
     },
     // Kameraet springer straks derhen, hvor det er på vej hen
     kameraFrem: () => {

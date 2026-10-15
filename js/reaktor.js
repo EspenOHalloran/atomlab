@@ -11,6 +11,7 @@ import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
 import { startGuide, stopGuide } from './guide.js';
+import { lavPause } from './pause.js';
 
 // De tre måder, uran-235 spaltes på her (rigtige par; tæl efter: protoner 92, nukleoner 236)
 const PAR = [
@@ -22,7 +23,7 @@ const PAR = [
 export const OPGAVER_REAKTOR = [
   {
     id: 'r-spalt', titel: 'Spalt en uran-235-kerne', tip: 'Vælg uran-235 og en langsom neutron, og tryk "Skyd neutron".',
-    fakta: 'Når uran-235 spalter, frigøres ca. 200 MeV. Det er ca. 10 gange mere end en enkelt fusion i Solen, men pr. kilo brændsel giver fusion mere.',
+    fakta: 'Når uran-235 spalter, frigøres ca. 200 MeV. Det er ca. 7 gange mere end hele Solens opskrift (ca. 27 MeV). Men pr. gram brændsel giver fusion ca. 8 gange mere, fordi brintkerner er så lette.',
   },
   {
     id: 'r-hurtig', titel: 'Skyd en hurtig neutron mod uran-235', tip: 'Vælg "Hurtig" neutron.',
@@ -104,6 +105,7 @@ let tikTæller = 0;
 
 // Næste skridt, "Vis mig" og guiden
 let tidsFaktor = 1; // under 1 = slowmotion
+let pause = null; // pausen (pause.til er true, mens tiden står stille)
 let visDel1 = null; // "Vis mig" i del 1: { t }
 let visKæde = null; // "Vis mig" i del 2: { t, generationer }
 let sikkerSpaltning = false; // guiden: det første skud spalter altid
@@ -250,12 +252,14 @@ export function stopReaktor() {
   begrænsDrejning(null);
   verden.styring.autoRotate = true;
   slutVisning();
+  pause.sæt(false);
 }
 
 function sætTilstand(ny, første = false) {
   if (ny !== tilstand) {
     stopGuide();
     slutVisning();
+    pause.sæt(false);
   }
   tilstand = ny;
   rodKerne.visible = ny === 'kerne';
@@ -321,6 +325,7 @@ function lavPanel() {
   });
   $('reaktorHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpReaktor').classList.remove('skjult'); });
   $('reaktorVisMig').addEventListener('click', () => { lyd.klik(); visMig(); });
+  pause = lavPause({ knap: $('reaktorPause'), vindue: $('reaktorVindue'), aktiv: () => aktiv });
   $('reaktorMissionFold').addEventListener('click', () => {
     lyd.klik();
     const foldet = $('reaktorMission').classList.toggle('foldet');
@@ -442,6 +447,7 @@ function tegnHistorie() {
 function visMig() {
   const skridt = næsteSkridt();
   if (visDel1 || visKæde) return;
+  pause.sæt(false);
   if (tilstand === 'kerne') {
     if (skridt.vis === 'kæde') {
       sætTilstand('kæde');
@@ -617,6 +623,7 @@ function nulstilKerne() {
 }
 
 function skydNeutron() {
+  pause.sæt(false);
   if (optaget()) return;
   if (forløb) nulstilKerne(); // et nyt forsøg starter med en frisk kerne
   lyd.neutron();
@@ -746,6 +753,7 @@ function opdaterKerne(dt) {
 // ---------- Del 2: kædereaktion ----------
 function startKæde() {
   lyd.klik();
+  pause.sæt(false);
   nødstop = false;
   $('reaktorStave').disabled = false;
   if (stavDybde > 0.95) {
@@ -932,6 +940,14 @@ function opdaterKædePanel() {
 // ---------- Hvert billede ----------
 function opdater(dt) {
   tid += dt;
+  if (pause.til) {
+    // Tiden står stille, men stavene kan stadig flyttes
+    if (tilstand === 'kæde') {
+      stavVist += (stavDybde - stavVist) * Math.min(1, dt * 4);
+      tegnKæde();
+    }
+    return;
+  }
   const sim = dt * tidsFaktor; // slowmotion under "Vis mig"
   if (tilstand === 'kerne') opdaterKerne(sim);
   // Kædereaktionen kører videre i baggrunden, så den ikke "fryser", når man skifter
@@ -977,5 +993,8 @@ export function testAdgang() {
     visning: () => ({ del1: Boolean(visDel1), kæde: visKæde ? [...visKæde.generationer] : null, tidsFaktor }),
     mission: () => $('reaktorMissionTekst').textContent,
     tilstand: (t) => sætTilstand(t),
+    pause: () => pause.til,
+    neutronPos: () => neutroner.slice(0, 5).map((n) => Math.round(n.x * 100) / 100),
+    stavVist: () => stavVist,
   };
 }
