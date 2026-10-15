@@ -27,6 +27,7 @@ export { lavRingTekstur };
 
 export const FARVER = {
   elektron: new THREE.Color(1.3, 3.4, 4.2),
+  elektronSvag: new THREE.Color(0.45, 1.3, 1.7), // til steder med meget lys omkring (fx Batteriet)
   positron: new THREE.Color(4.2, 1.0, 3.4),
   neutrino: new THREE.Color(0.9, 0.9, 1.0),
   gamma: new THREE.Color(3.5, 3.2, 1.6),

@@ -1,17 +1,23 @@
 // Batteriet: et LiPo-batteri skåret igennem.
 // Til venstre grafit (minus), til højre metaloxid (plus), og imellem en elektrolyt med en skillevæg.
 // Lithium-ioner (Li⁺) svømmer gennem elektrolytten, og elektronerne må tage omvejen gennem ledningen.
+// Ledningen er fuld af elektroner hele tiden. Når der løber strøm, skubbes hele rækken frem på én gang.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTilBoks, begrænsDrejning, LAV_KVALITET, lavPrikTekstur } from './scene3d.js';
-import { Effekter } from './effekter.js';
+import { verden, sætVindue, passerTilBoks, begrænsDrejning, lavPrikTekstur } from './scene3d.js';
+import { Effekter, FARVER } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
 
 const ANTAL_LI = 24; // så mange lithium-ioner viser vi (24 = 100 %)
 const REJSETID = 1.8; // sekunder for en ion gennem elektrolytten
-const ELEKTRON_TID = 1.7; // sekunder for en elektron gennem ledningen
+const KÆDE_AFSTAND = 0.5; // cirka så langt er der mellem elektronerne i ledningen
+const HOP_TID = 0.45; // sekunder for en elektron mellem metalfolien og en plads i elektroden
+const MAX_SPÆNDING = 4.2; // her skifter laderen fra konstant strøm til konstant spænding
+const MODSTAND = 0.2; // volt pr. ampere: batteriets indre modstand (forenklet)
+const IONER_PR_AMPERE = 1.2; // så mange ioner flytter sig pr. sekund ved 1 A (i animationen)
+// Vi forestiller os en lille celle på 1.000 mAh. Ladestrømmen er "hastighed" ampere: 0,5 A, 1 A eller 2 A.
 
 // Spænding (V) som funktion af opladning, cirka som en rigtig LiPo-celle
 const SPÆNDING = [[0, 3.0], [0.05, 3.3], [0.1, 3.45], [0.2, 3.6], [0.4, 3.7], [0.6, 3.8], [0.8, 3.95], [0.9, 4.05], [1, 4.2]];
@@ -39,7 +45,7 @@ export const OPGAVER_BATTERI = [
   },
   {
     id: 'b-hurtig', titel: 'Lad hurtigt, og hold øje med varmen', tip: 'Vælg "Hurtig", og tryk "Oplad".',
-    fakta: 'Jo hurtigere man lader, jo varmere bliver batteriet. Varme slider på batteriet, så det holder kortere.',
+    fakta: 'Jo hurtigere man lader, jo varmere bliver batteriet. Laderen når også 4,2 V tidligere, så den sidste del tager længere tid. Varme slider på batteriet, så det holder kortere.',
   },
   {
     id: 'b-overlad', titel: 'Se hvad der sker, hvis man overlader', tip: 'Slå "Snyd laderen" til, og lad videre efter 100 %.',
@@ -57,18 +63,25 @@ let snyd = false;
 let ioner = []; // { sted: 'anode' | 'katode' | 'rejser', plads, fra, til, t }
 let anodePladser = [];
 let katodePladser = [];
-let elektroner = []; // { t, retning }
 let timer = 0;
-let strøm = 0; // udglattet: hvor mange overførsler pr. sekund
+let strøm = 0; // udglattet: hvor mange overførsler pr. sekund (strømmen i ampere er strøm / IONER_PR_AMPERE)
 let varme = 0; // 0..1
 let nåle = []; // lithium-nåle (dendritter): { x, y, længde }
 let død = false;
 let afladet = 0; // overførsler i afladning (til lampe-opgaven)
 let liMesh = null;
-let elektronPunkter = null;
+let elektronPunkter = null; // elektron-kæden i ledningen
+let kædeAntal = 0;
+let kædeAfstand = KÆDE_AFSTAND;
+let kædeLængde = 0;
+let kædeVej = 0; // hvor langt kæden har flyttet sig i alt (minus = mod kobberet)
+let kædeRetning = -1; // -1 = mod kobberet (opladning), 1 = mod aluminiummet (afladning)
 let lampe = null;
 let lampeLys = null;
 let lader = null;
+let afbryder = null;
+let ledningMidte = null;
+let skilte = {}; // skiltet over laderen, lampen og afbryderen
 let nålMesh = null;
 let ledning = null;
 let røg = null;
@@ -142,27 +155,58 @@ export function lavBatteri() {
   const kant = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(22.6, 10.4, 5.2)), new THREE.LineBasicMaterial({ color: 0x5fe3ff, transparent: true, opacity: 0.35 }));
   rod.add(elektrolyt, skillevæg, kant);
 
-  // Ledningen: fra kobberet op over og ned til aluminiummet
+  // Ledningen: fra kobberet op over og ned til aluminiummet.
+  // Røret er delt i tre, så midterstykket kan fjernes, når afbryderen er slukket.
   const punkter = [new THREE.Vector3(-11, 5, 0), new THREE.Vector3(-11, 9, 0), new THREE.Vector3(-1.4, 9, 0), new THREE.Vector3(1.4, 9, 0), new THREE.Vector3(11, 9, 0), new THREE.Vector3(11, 5, 0)];
   ledning = new THREE.CurvePath();
   for (let i = 1; i < punkter.length; i++) ledning.add(new THREE.LineCurve3(punkter[i - 1], punkter[i]));
-  const ledningMesh = new THREE.Mesh(new THREE.TubeGeometry(ledning, 120, 0.12, 8, false), new THREE.MeshStandardMaterial({ color: 0xc8743a, metalness: 0.6, roughness: 0.4 }));
-  rod.add(ledningMesh);
+  // Ledningen er halvgennemsigtig (ligesom batteriet er skåret igennem), så man kan se elektronerne inde i den
+  const ledningMat = new THREE.MeshStandardMaterial({ color: 0xc8743a, metalness: 0.4, roughness: 0.4, transparent: true, opacity: 0.4, depthWrite: false });
+  const kobberMat = new THREE.MeshStandardMaterial({ color: 0xc8743a, metalness: 0.6, roughness: 0.4 });
+  const rør = (fra, til, stykker) => {
+    const vej = new THREE.CurvePath();
+    for (let i = fra + 1; i <= til; i++) vej.add(new THREE.LineCurve3(punkter[i - 1], punkter[i]));
+    return new THREE.Mesh(new THREE.TubeGeometry(vej, stykker, 0.2, 12, false), ledningMat);
+  };
+  ledningMidte = rør(2, 3, 8);
+  rod.add(rør(0, 2, 60), ledningMidte, rør(3, 5, 60));
 
-  // Lader (en kasse med et lyn) og lampe (en glødende kugle)
+  // Lader (en mørk kasse med en gul kant), lampe (en glødende kugle) og afbryder (en arm, der kan vippes op)
   lader = new THREE.Group();
-  const kasse = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 1.4), new THREE.MeshStandardMaterial({ color: 0x1d2333, roughness: 0.5 }));
-  const lyn = lavSkilt('⚡ LADER', '#ffd43b');
-  lyn.position.set(0, 0, 0.75);
-  lyn.scale.set(2.4, 0.6, 1);
-  lader.add(kasse, lyn);
+  const kasseGeo = new THREE.BoxGeometry(2.6, 1.6, 1.4);
+  const kasse = new THREE.Mesh(kasseGeo, new THREE.MeshStandardMaterial({ color: 0x1d2333, roughness: 0.5 }));
+  const kasseKant = new THREE.LineSegments(new THREE.EdgesGeometry(kasseGeo), new THREE.LineBasicMaterial({ color: 0xffd43b }));
+  lader.add(kasse, kasseKant);
   lader.position.set(0, 9, 0);
   lampe = new THREE.Mesh(new THREE.SphereGeometry(0.9, 24, 16), new THREE.MeshStandardMaterial({ color: 0xfff3c4, emissive: 0xffd27a, emissiveIntensity: 0 }));
   lampe.position.set(0, 9.6, 0);
   lampeLys = new THREE.Sprite(new THREE.SpriteMaterial({ map: lavPrikTekstur(true), color: new THREE.Color(3, 2.4, 1.2), transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
   lampeLys.position.copy(lampe.position);
-  lampeLys.scale.setScalar(4.5);
-  rod.add(lader, lampe, lampeLys);
+  lampeLys.scale.setScalar(3.4);
+  afbryder = new THREE.Group();
+  const kontaktGeo = new THREE.SphereGeometry(0.24, 16, 12);
+  const kontaktMat = new THREE.MeshStandardMaterial({ color: 0xd8dde8, metalness: 0.8, roughness: 0.3 });
+  for (const x of [-1.4, 1.4]) {
+    const kontakt = new THREE.Mesh(kontaktGeo, kontaktMat);
+    kontakt.position.set(x, 9, 0);
+    afbryder.add(kontakt);
+  }
+  const arm = new THREE.Group(); // drejer om den venstre kontakt
+  arm.position.set(-1.4, 9, 0);
+  arm.rotation.z = 0.6; // vippet op: afbryderen er slukket
+  arm.add(new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.16, 0.16).translate(1.4, 0, 0), kobberMat));
+  afbryder.add(arm);
+  rod.add(lader, lampe, lampeLys, afbryder);
+  skilte = {
+    lader: lavSkilt('Lader', '#ffd43b'),
+    lampe: lavSkilt('Lampe', '#ffe3a3'),
+    afbryder: lavSkilt('Afbryder: slukket', '#c9d3f5'),
+  };
+  for (const s of Object.values(skilte)) {
+    s.position.set(0, 10.9, 0);
+    rod.add(s);
+  }
+  skilte.lampe.position.y = 11.5; // over lampens skær
 
   // Skilte
   for (const [tekst, x, y, farve] of [['− Grafit', -7.4, -5.9, '#c5cad6'], ['Elektrolyt', 0, -5.9, '#8fd3ff'], ['Metaloxid +', 7.4, -5.9, '#ff9f8f'], ['Skillevæg', 0, 5.8, '#e8eeff']]) {
@@ -177,13 +221,17 @@ export function lavBatteri() {
   liMesh.frustumCulled = false;
   rod.add(liMesh);
 
-  // Elektroner i ledningen
+  // Elektron-kæden: ledningen er fuld af elektroner med samme afstand hele vejen rundt
+  kædeLængde = ledning.getLength();
+  kædeAntal = Math.round(kædeLængde / KÆDE_AFSTAND);
+  kædeAfstand = kædeLængde / kædeAntal;
   const eGeo = new THREE.BufferGeometry();
-  eGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(80 * 3), 3));
+  eGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(kædeAntal * 3), 3));
   elektronPunkter = new THREE.Points(eGeo, new THREE.PointsMaterial({
-    size: 0.7, map: lavPrikTekstur(), color: new THREE.Color(1.3, 3.4, 4.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    size: 0.7, map: lavPrikTekstur(), color: FARVER.elektron.clone(), transparent: true, depthWrite: false,
   }));
   elektronPunkter.frustumCulled = false;
+  elektronPunkter.renderOrder = 2; // tegnes efter den halvgennemsigtige ledning
   rod.add(elektronPunkter);
 
   // Lithium-nåle (dendritter) og røg ved kortslutning
@@ -221,20 +269,24 @@ function lavSkillevægTekstur() {
   return t;
 }
 
-function lavSkilt(tekst, farve) {
+// Et skilt med tekst. Lærredet bliver så bredt, som teksten kræver (mindst 256 punkter).
+function lavSkilt(tekst, farve, højde = 1.2) {
   const c = document.createElement('canvas');
-  c.width = 256;
+  const font = '700 30px system-ui, sans-serif';
+  let g = c.getContext('2d');
+  g.font = font;
+  c.width = Math.max(256, Math.ceil(g.measureText(tekst).width + 24));
   c.height = 64;
-  const g = c.getContext('2d');
-  g.font = '700 30px system-ui, sans-serif';
+  g = c.getContext('2d');
+  g.font = font;
   g.textAlign = 'center';
   g.textBaseline = 'middle';
   g.fillStyle = farve;
-  g.fillText(tekst, 128, 34);
+  g.fillText(tekst, c.width / 2, 34);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-  s.scale.set(4.8, 1.2, 1);
+  s.scale.set((c.width / 64) * højde, højde, 1);
   return s;
 }
 
@@ -243,9 +295,8 @@ function nulstil() {
   // Et nyt batteri er næsten tomt: det meste lithium sidder i metaloxidet
   for (let i = 0; i < ANTAL_LI; i++) {
     const iAnode = i < 3;
-    ioner.push({ sted: iAnode ? 'anode' : 'katode', plads: iAnode ? i : i, t: 0 });
+    ioner.push({ sted: iAnode ? 'anode' : 'katode', plads: i, t: 0 });
   }
-  elektroner = [];
   nåle = [];
   død = false;
   varme = 0;
@@ -262,12 +313,12 @@ export function startBatteri() {
   rod.visible = true;
   verden.opdateringer.add(opdater);
   sætVindue($('batteriVindue'));
-  verden.styring.target.set(0, 2, 0);
+  verden.styring.target.set(0, 2.5, 0);
   verden.styring.autoRotate = false;
   begrænsDrejning({ vandret: 0.7, lodret: 0.5 });
   const k = verden.kamera;
-  k.position.set(0, 4, Math.max(k.position.length(), 45));
-  passerTilBoks(12.5, 8.5);
+  k.position.set(0, 4.5, Math.max(k.position.length(), 45));
+  passerTilBoks(12.5, 9.2); // plads til skiltet over laderen øverst og skiltene forneden
   opdaterPanel();
 }
 
@@ -342,26 +393,56 @@ function løs(id) {
 }
 
 const FORKLARING = {
-  oplad: ['Opladning', 'Laderen er en pumpe. Den trækker elektroner ud af metaloxidet og skubber dem gennem ledningen over i grafitten. Samtidig svømmer lithium-ioner (Li⁺) gennem elektrolytten og lægger sig mellem grafitlagene, tæt ved elektronerne. Det er som at pumpe vand op i et højt bassin: Lithium vil helst sidde i metaloxidet, så energien gemmes ved at tvinge det over i grafitten.'],
-  aflad: ['Afladning', 'Nu løber lithium "ned ad bakken" igen. Li⁺ svømmer tilbage gennem elektrolytten til metaloxidet. Elektronerne kan ikke komme gennem elektrolytten, så de må tage omvejen gennem ledningen og lampen, og de laver arbejde på vejen. Når alt lithium er tilbage i metaloxidet, er batteriet tomt.'],
-  pause: ['Batteriet hviler', 'Elektrolytten lukker kun ioner igennem, ikke elektroner. Uden en ledning udenom kan elektronerne ikke komme over, og så kan ionerne heller ikke. Derfor kan et batteri holde på strømmen i lang tid.'],
+  oplad: ['Opladning', 'Laderen er en pumpe. Den skubber elektroner (de blå prikker) gennem ledningen fra metaloxidet over i grafitten. Ledningen er fuld af elektroner hele tiden, så hele rækken flytter sig på én gang. Samtidig svømmer lithium-ioner (Li⁺) gennem elektrolytten og møder elektronerne i grafitten. Lithium vil helst sidde i metaloxidet, så energien gemmes ved at tvinge det over i grafitten, ligesom vand, der pumpes op i et højt bassin.'],
+  aflad: ['Afladning', 'Nu løber lithium "ned ad bakken" igen. Li⁺ svømmer tilbage gennem elektrolytten til metaloxidet. Elektronerne kan ikke komme gennem elektrolytten, så de må tage omvejen gennem ledningen og lampen, og de laver arbejde på vejen. Se rækken af elektroner løbe den anden vej. Når alt lithium er tilbage i metaloxidet, er batteriet tomt.'],
+  pause: ['Batteriet hviler', 'Afbryderen er slukket, så elektronerne i ledningen kan ikke komme rundt. Og elektrolytten lukker kun ioner igennem, ikke elektroner. Når elektronerne ikke kan komme over, kan ionerne heller ikke. Derfor kan et batteri holde på strømmen i lang tid.'],
 };
+
+// Hvor stor strøm (i ampere) skal der løbe nu, og er laderen nået til konstant spænding (cv)?
+// Laderen lader med konstant strøm, til spændingen når 4,2 V. Så holder den spændingen,
+// og strømmen falder af sig selv, mens batteriet bliver fyldt.
+function beregnStrøm(a) {
+  if (død) return { ampere: 0, cv: false };
+  if (tilstand === 'oplad') {
+    if (snyd) return { ampere: hastighed, cv: false }; // en snydt lader stopper ikke ved 4,2 V
+    if (a >= 1) return { ampere: 0, cv: true };
+    const hvile = spændingVed(a);
+    if (hvile + MODSTAND * hastighed >= MAX_SPÆNDING) return { ampere: Math.max(0, (MAX_SPÆNDING - hvile) / MODSTAND), cv: true };
+    return { ampere: hastighed, cv: false };
+  }
+  if (tilstand === 'aflad' && a > 0) return { ampere: hastighed, cv: false };
+  return { ampere: 0, cv: false };
+}
+
+// Spændingen mellem polerne: hvilespændingen plus (opladning) eller minus (afladning) et lille fald over den indre modstand
+function klemSpænding() {
+  const hvile = spændingVed(andel());
+  const ampere = strøm / IONER_PR_AMPERE;
+  if (tilstand === 'oplad' && !død) return Math.min(snyd ? 4.6 : MAX_SPÆNDING, hvile + MODSTAND * ampere);
+  if (tilstand === 'aflad') return Math.max(3.0, hvile - MODSTAND * ampere);
+  return hvile;
+}
+
+const tal = (x, decimaler) => x.toLocaleString('da-DK', { minimumFractionDigits: decimaler, maximumFractionDigits: decimaler });
 
 function opdaterPanel() {
   const a = andel();
-  const v = spændingVed(a);
-  const lades = tilstand === 'oplad' && !død;
-  const cv = lades && a >= 0.85 && !snyd;
-  const klemme = v + (tilstand === 'oplad' ? 0.04 : tilstand === 'aflad' ? -0.04 : 0) * hastighed * (strøm > 0.05 ? 1 : 0);
-  $('batteriSpænding').textContent = `${Math.min(4.6, klemme).toLocaleString('da-DK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} V`;
+  const { cv } = beregnStrøm(a);
+  const ampere = strøm / IONER_PR_AMPERE;
+  $('batteriSpænding').textContent = `${tal(klemSpænding(), 2)} V`;
+  $('batteriStrøm').textContent = `${tal(ampere < 0.05 ? 0 : ampere, 1)} A`;
   $('batteriProcent').textContent = `${Math.round(a * 100)} %`;
   $('batteriLadning').style.setProperty('--niveau', `${a * 100}%`);
   $('batteriVarme').style.setProperty('--niveau', `${varme * 100}%`);
   $('batteriVarmeTekst').textContent = varme > 0.8 ? 'Meget varm!' : varme > 0.5 ? 'Varm' : varme > 0.2 ? 'Lun' : 'Kølig';
-  let fase = 'Hviler';
+  let fase = 'Hviler: afbryderen er slukket';
   if (død) fase = 'Ødelagt (kortslutning)';
-  else if (lades) fase = a >= 1 && !snyd ? 'Fuldt opladet' : cv ? 'Konstant spænding: strømmen falder' : 'Konstant strøm';
-  else if (tilstand === 'aflad') fase = a <= 0 ? 'Beskyttelsen har slukket (3,0 V)' : 'Aflader gennem lampen';
+  else if (tilstand === 'oplad') {
+    if (snyd) fase = a >= 1 ? 'Overladning: over 4,2 V!' : `Konstant strøm (${tal(hastighed, 1)} A) uden grænse ved 4,2 V`;
+    else if (a >= 1) fase = 'Fuldt opladet';
+    else if (cv) fase = 'Konstant spænding (4,20 V): strømmen falder';
+    else fase = `Konstant strøm (${tal(hastighed, 1)} A)`;
+  } else if (tilstand === 'aflad') fase = a <= 0 ? 'Beskyttelsen har slukket (3,0 V)' : 'Aflader gennem lampen';
   $('batteriFase').textContent = fase;
   const [titel, tekst] = FORKLARING[tilstand];
   $('batteriForklaring').innerHTML = `<strong>${titel}</strong>${tekst}`;
@@ -369,11 +450,18 @@ function opdaterPanel() {
   for (const b of document.querySelectorAll('[data-batteri-fart]')) b.classList.toggle('valgt', Number(b.dataset.batteriFart) === hastighed);
   $('batteriSnyd').classList.toggle('valgt', snyd);
   $('batteriSnyd').textContent = snyd ? 'Snyd laderen: TIL (farligt!)' : 'Snyd laderen: fra';
-  lader.visible = tilstand !== 'aflad';
+  // Midt på ledningen sidder laderen, lampen eller en slukket afbryder
+  lader.visible = tilstand === 'oplad' && !død;
+  afbryder.visible = tilstand === 'pause' || død;
+  ledningMidte.visible = !afbryder.visible;
+  skilte.lader.visible = lader.visible;
+  skilte.lampe.visible = tilstand === 'aflad' && !død;
+  skilte.afbryder.visible = afbryder.visible;
 }
 
 // ---------- Overførsler ----------
-// Flytter én lithium-ion fra den ene side til den anden, og sender en elektron gennem ledningen
+// Flytter én lithium-ion fra den ene side til den anden.
+// Opladning: elektronerne går fra plus (aluminium) til minus (kobber). Afladning: den anden vej.
 function overfør(fraSted, tilSted) {
   const ion = ioner.find((i) => i.sted === fraSted);
   if (!ion) return false;
@@ -389,9 +477,20 @@ function overfør(fraSted, tilSted) {
   ion.til = pladser[tilPlads].clone();
   ion.hul = new THREE.Vector3(0, (Math.random() - 0.5) * 7, (Math.random() - 0.5) * 3);
   ion.t = 0;
-  // Opladning: elektronen går fra plus (aluminium) til minus (kobber). Afladning: den anden vej.
-  elektroner.push({ t: 0, baglæns: tilSted === 'anode' });
+  ion.hoppet = false;
+  // Når ionen går, bliver dens elektron tilbage og hopper ud i metalfolien (og videre ind i ledningen)
+  elektronHop(fraPos, fraSted, 'ud');
   return true;
+}
+
+// En elektron hopper mellem metalfolien og en plads i elektroden.
+// 'ud': fra pladsen ud i folien. 'ind': fra folien ind til pladsen, hvor den møder en Li⁺.
+function elektronHop(plads, sted, retning) {
+  const folie = new THREE.Vector3(sted === 'anode' ? -10.75 : 10.75, plads.y, plads.z);
+  const fra = retning === 'ud' ? plads : folie;
+  const til = retning === 'ud' ? folie : plads;
+  const vej = til.clone().sub(fra);
+  effekter.skyd(fra, vej, 'elektronSvag', vej.length() / HOP_TID, HOP_TID);
 }
 
 function vokseNål() {
@@ -430,12 +529,8 @@ function kortslutning(nål) {
 function opdater(dt) {
   tid += dt;
   const a = andel();
-  // Hvor ofte flyttes en ion? Hurtigere ved højere hastighed. Ved konstant spænding falder strømmen.
-  let pr = 0;
-  if (!død && tilstand === 'oplad') {
-    if (a < 0.85 || snyd) pr = 1.2 * hastighed;
-    else if (a < 1) pr = 1.2 * hastighed * Math.max(0.15, (1 - a) / 0.15);
-  } else if (!død && tilstand === 'aflad' && a > 0) pr = 1.0 * hastighed;
+  // Hvor ofte flyttes en ion? Det følger strømmen: én ion pr. elektron, der løber gennem ledningen.
+  const pr = beregnStrøm(a).ampere * IONER_PR_AMPERE;
   timer += dt * pr;
   let flyttet = 0;
   while (timer >= 1) {
@@ -468,13 +563,23 @@ function opdater(dt) {
   for (const ion of ioner) {
     if (ion.sted !== 'rejser') continue;
     ion.t += dt / REJSETID;
+    // Lige før ionen lander, hopper en elektron ind fra metalfolien, så de mødes på pladsen
+    if (!ion.hoppet && ion.t >= 1 - HOP_TID / REJSETID) {
+      ion.hoppet = true;
+      elektronHop(ion.til, ion.mål, 'ind');
+    }
     if (ion.t >= 1) {
       ion.sted = ion.mål;
       ion.plads = ion.tilPlads;
+      effekter.glimt(ion.til, 1.5, new THREE.Color(1.5, 1.6, 3.2), 0.5);
     }
   }
-  for (const e of elektroner) e.t += dt / ELEKTRON_TID;
-  elektroner = elektroner.filter((e) => e.t < 1);
+
+  // Elektron-kæden: hele rækken flytter sig sammen. Der kommer lige så mange elektroner
+  // ud af ledningen i den ene ende, som der går ind i den anden, og én pr. ion, der flytter sig.
+  if (tilstand === 'oplad') kædeRetning = -1;
+  else if (tilstand === 'aflad') kædeRetning = 1;
+  kædeVej += kædeRetning * strøm * kædeAfstand * dt;
 
   tegn(dt);
   effekter.opdater(dt);
@@ -498,20 +603,24 @@ function tegn(dt) {
   });
   liMesh.instanceMatrix.needsUpdate = true;
 
-  // Elektroner i ledningen
+  // Elektron-kæden i ledningen (de, der står i hullet ved en slukket afbryder, skjules)
   const pos = elektronPunkter.geometry.attributes.position.array;
-  elektroner.forEach((e, i) => {
-    const p = ledning.getPointAt(e.baglæns ? 1 - e.t : e.t);
-    pos[i * 3] = p.x; pos[i * 3 + 1] = p.y; pos[i * 3 + 2] = p.z;
-  });
-  elektronPunkter.geometry.setDrawRange(0, elektroner.length);
+  const forskud = ((kædeVej % kædeAfstand) + kædeAfstand) % kædeAfstand;
+  for (let i = 0; i < kædeAntal; i++) {
+    ledning.getPointAt(Math.min(1, (i * kædeAfstand + forskud) / kædeLængde), hjælpV);
+    if (afbryder.visible && Math.abs(hjælpV.x) < 1.4 && hjælpV.y > 8.5) hjælpV.set(0, -9999, 0);
+    pos[i * 3] = hjælpV.x; pos[i * 3 + 1] = hjælpV.y; pos[i * 3 + 2] = hjælpV.z;
+  }
   elektronPunkter.geometry.attributes.position.needsUpdate = true;
+  // Svagere, når de står stille, og klarere, når der løber strøm
+  const aktivitet = Math.min(1, strøm / IONER_PR_AMPERE);
+  elektronPunkter.material.color.copy(FARVER.elektron).multiplyScalar(0.3 + 0.18 * aktivitet);
 
   // Lampen lyser, når elektronerne løber gennem den
   const lys = tilstand === 'aflad' ? Math.min(1, strøm / 1.5) : 0;
   lampe.visible = tilstand === 'aflad';
   lampe.material.emissiveIntensity = 0.2 + 2.5 * lys;
-  lampeLys.material.opacity = lys * 0.8;
+  lampeLys.material.opacity = lys * 0.6;
 
   // Lithium-nåle
   let n = 0;
@@ -541,6 +650,10 @@ function tegn(dt) {
 export function testAdgang() {
   return {
     kør: (sek) => { for (let t = 0; t < sek; t += 0.05) opdater(0.05); return { andel: andel(), varme, død }; },
+    info: () => ({
+      andel: andel(), ampere: strøm / IONER_PR_AMPERE, cv: beregnStrøm(andel()).cv, spænding: klemSpænding(), kædeVej,
+      lader: lader.visible, lampe: lampe.visible, afbryder: afbryder.visible,
+    }),
     tilstand: (t) => { tilstand = t; },
     hastighed: (h) => { hastighed = h; },
     snyd: (s) => { snyd = s; },

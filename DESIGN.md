@@ -55,6 +55,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Afladning: det modsatte, og lampen lyser. Beskyttelsen slår fra ved 3,0 V.
   - Hastighed (langsom, normal, hurtig) med varmemåler. "Snyd laderen": lithium-nåle vokser fra grafitten, stikker hul i skillevæggen og giver kortslutning med glimt, alarm og røg.
   - 24 lithium-ioner vises (det står ærligt i hjælpen). 5 opgaver.
+  - **Hvad løber i ledningen?** Ledningen er halvgennemsigtig og fuld af elektroner, der flytter sig sammen som en kæde, når der løber strøm, og står stille ellers. Når en ion går, hopper en elektron ud i metalfolien, og når den lander, hopper en elektron ind og møder den. Ved pause er en afbryder slukket. Hjælpen forklarer, at elektronerne kryber langsommere end en snegl, mens skubbet når frem næsten med lysets fart.
+  - Panelet viser strømmen i ampere (en celle på 1.000 mAh: 0,5, 1 eller 2 A). Laderen lader med konstant strøm, til klemspændingen når 4,2 V, og holder så spændingen, mens strømmen falder. Lader man hurtigt, sker skiftet tidligere.
 
 - [x] **Trin 1d: Overskueligt værksted**
   - Opgaven står som en pille i toplinjen og kan foldes sammen (huskes).

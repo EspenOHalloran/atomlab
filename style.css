@@ -625,10 +625,11 @@ button { font: inherit; color: inherit; }
   grid-template-areas: "top top top" "venstre vindue højre";
 }
 #fusion .vindue, #reaktor .vindue, #batteri .vindue, #kosmos .vindue { grid-area: vindue; }
-.batteri-tal { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
+.batteri-tal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
 .batteri-tal span { font-size: 12.5px; color: var(--svag); }
-.batteri-tal strong { font-size: 26px; font-variant-numeric: tabular-nums; color: #b79bff; }
+.batteri-tal strong { font-size: 22px; font-variant-numeric: tabular-nums; color: #b79bff; white-space: nowrap; }
+#batteriStrøm { color: var(--elektron); }
 .fremskridt.stor { height: 16px; border-radius: 8px; }
 .fremskridt.stor div { background: linear-gradient(90deg, #ff6b6b, #ffd43b 30%, #8ce99a 70%); }
 .fremskridt.varme div { background: linear-gradient(90deg, #4dabf7, #ffd43b 50%, #ff6b6b); }

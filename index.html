@@ -427,6 +427,7 @@
     <aside class="panel side-panel højre-panel">
       <div class="batteri-tal">
         <div><span>Spænding</span><strong id="batteriSpænding">3,00 V</strong></div>
+        <div><span>Strøm</span><strong id="batteriStrøm">0,0 A</strong></div>
         <div><span>Opladning</span><strong id="batteriProcent">0 %</strong></div>
       </div>
       <div class="fremskridt stor" id="batteriLadning"><div></div></div>
@@ -452,9 +453,12 @@
         <p><strong>To parkeringspladser til lithium:</strong> På minussiden er der <em>grafit</em> (lag af carbon) på en tynd kobberfolie. På plussiden er der et <em>metaloxid</em> (her lithium-kobolt-oxid) på en tynd aluminiumsfolie. Imellem dem er en <em>elektrolyt</em> og en tynd, porøs <em>skillevæg</em> af plast, der forhindrer de to sider i at røre hinanden.</p>
         <p><strong>Opladning:</strong> Laderen pumper elektroner fra plussiden gennem ledningen over til minussiden. Lithium-ioner (Li⁺) følger efter gennem elektrolytten og sætter sig mellem grafitlagene. Energien er gemt, fordi lithium helst vil sidde i metaloxidet. Laderen lader først med <em>konstant strøm</em>. Når spændingen når 4,2 V, skifter den til <em>konstant spænding</em>, og strømmen falder langsomt, indtil cellen er fuld.</p>
         <p><strong>Afladning:</strong> Lithium vil tilbage til metaloxidet. Ionerne svømmer gennem elektrolytten, og elektronerne løber udenom gennem ledningen og fx en motor eller en lampe. En celle er ca. 4,2 V, når den er fuld, 3,7 V i gennemsnit og ca. 3,0 V, når den er tom.</p>
+        <p><strong>Hvad løber i ledningen?</strong> En metalledning er fuld af frie elektroner hele tiden. Når laderen eller batteriet skubber, flytter hele rækken sig på én gang, ligesom vandet i en haveslange, der allerede er fuld. Hver elektron kryber faktisk langsommere end en snegl (typisk under en millimeter i sekundet), men skubbet når frem næsten med lysets fart. Derfor tænder lampen med det samme. Når en Li⁺ forlader den ene side, hopper en elektron ud i metalfolien, og når den lander på den anden side, hopper en elektron ind og møder den.</p>
+        <p><strong>Strøm og effekt:</strong> Strømmen måles i ampere (A). 1 A betyder, at ca. 6 milliarder milliarder elektroner passerer et punkt i ledningen hvert sekund. Her forestiller vi os en lille LiPo-celle på 1.000 mAh (som i en lille drone). For den kaldes 1 A for "1C": Den strøm ville fylde batteriet på en time, hvis den holdt sig konstant hele vejen (det gør den ikke, se nedenfor). Effekten i watt er spænding gange strøm: 3,7 V × 1 A ≈ 3,7 W.</p>
+        <p><strong>Hvorfor går spændingen op, når man lader?</strong> Batteriet har en lille indre modstand. Mens der løber strøm ind, er spændingen derfor lidt højere end batteriets egen spænding, og jo større strøm, jo højere. Lader man hurtigt, når man 4,2 V tidligere, og så skal laderen skifte til konstant spænding før.</p>
         <p><strong>Pas på:</strong> Overlader man (over 4,2 V), eller lader man for hurtigt eller i kulde, kan lithium sætte sig som metal-nåle (dendritter). De kan stikke hul i skillevæggen og give kortslutning, varme og brand. Aflader man for dybt, kan kobberet opløses, og cellen tager skade. Derfor har LiPo-batterier beskyttelse, og gode ladere stopper ved 4,2 V og balancerer cellerne.</p>
         <p><strong>Strømmens retning:</strong> Man siger, at strømmen løber fra plus til minus uden om batteriet. Men elektronerne løber faktisk den modsatte vej. Det er en gammel aftale fra før man kendte elektronen.</p>
-        <p><strong>Ærligt talt:</strong> Et rigtigt batteri har milliarder af milliarder lithium-ioner. Her viser vi 24.</p>
+        <p><strong>Ærligt talt:</strong> Et rigtigt batteri har milliarder af milliarder lithium-ioner. Her viser vi 24, og i ledningen er der langt flere elektroner, end der er prikker. I en rigtig ledning kryber elektronerne også meget langsommere, end de gør her.</p>
       </div>
     </div>
   </div>
