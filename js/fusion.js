@@ -9,6 +9,7 @@ import { Effekter, lavRingTekstur } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { startGuide } from './guide.js';
 
 const R_OVN = 12; // radius på det område, kernerne er i
 const RN = 0.3; // radius på en proton eller neutron
@@ -109,6 +110,9 @@ let tællere = [0, 0, 0, 0];
 let heliumLavet = 0;
 let sidstBesked = 0;
 let selvForklaret = false; // har vi forklaret, at kun egne skud tæller?
+let skudtSelv = false; // har man selv skudt en kerne (bruges af guiden)?
+let demo = null; // "Vis mig": { a, b, t, skudt }
+let tempoFørDemo = 1;
 let tid = 0;
 let næsteId = 1;
 let trykStart = null;
@@ -232,12 +236,16 @@ export function startFusion() {
   k.position.setLength(Math.max(k.position.length(), 60));
   passerTil(R_OVN * 0.85);
   opdaterPanel();
+  setTimeout(() => {
+    if (aktiv) startGuide('fusion', guideTrin());
+  }, 1200);
 }
 
 export function stopFusion() {
   aktiv = false;
   rod.visible = false;
   etiket.classList.add('skjult');
+  slutDemo();
   verden.opdateringer.delete(opdater);
   verden.styring.autoRotateSpeed = 0.5;
 }
@@ -266,6 +274,17 @@ function lavPanel() {
     opdaterPanel();
   });
   $('fusHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpFusion').classList.remove('skjult'); });
+  $('fusVisMig').addEventListener('click', () => { lyd.klik(); visMig(); });
+  $('fusMissionFold').addEventListener('click', () => {
+    lyd.klik();
+    const foldet = $('fusMission').classList.toggle('foldet');
+    $('fusMissionFold').textContent = foldet ? '+' : '–';
+    $('fusMissionFold').title = foldet ? 'Vis næste skridt' : 'Skjul næste skridt';
+  });
+  $('fusGuideIgen').addEventListener('click', () => {
+    $('hjælpFusion').classList.add('skjult');
+    startGuide('fusion', guideTrin(), { igen: true });
+  });
   opdaterTemperatur();
   lavOpgaveliste();
 }
@@ -307,13 +326,198 @@ function løs(id) {
     visBesked({ titel: `Opgave klaret: ${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 8000 });
   }, 300);
   lavOpgaveliste();
+  opdaterMission();
+}
+
+// ---------- Næste skridt og "Vis mig" ----------
+// Det næste, man kan prøve. vis = hvilken slags kerne "Vis mig" skal arbejde hen imod.
+function næsteSkridt() {
+  const mangler = (id) => !fremgang.erLøst(id);
+  if (mangler('f-d')) return { tekst: 'Skyd en proton mod en anden proton (p + p)', vis: 'd' };
+  if (mangler('f-he3')) return { tekst: 'Skyd en proton mod deuterium, den orange (D + p)', vis: 'he3' };
+  if (mangler('f-he4')) return { tekst: 'Skyd helium-3 mod helium-3, de gule (³He + ³He)', vis: 'he4' };
+  if (mangler('f-fem')) return { tekst: `Lav 5 heliumkerner (${Math.min(5, tællere[2])} af 5)`, vis: 'he4' };
+  if (mangler('f-energi')) return { tekst: `Frigør 100 MeV (${Math.floor(energi)} af 100)`, vis: 'he4' };
+  if (mangler('f-koldt')) return { tekst: 'Skru ned under 10 mio. °C, og skyd to protoner mod hinanden', vis: null };
+  if (mangler('f-carbon')) return { tekst: 'Bonus: Skru op til mindst 80 mio. °C, og lav carbon af helium', vis: null };
+  return { tekst: 'Alle opgaver er klaret ★ Leg videre, eller prøv Reaktoren', vis: null };
+}
+
+function opdaterMission() {
+  const { tekst, vis } = næsteSkridt();
+  $('fusMissionTekst').textContent = demo ? 'Se godt efter (slowmotion) …' : tekst;
+  $('fusVisMig').hidden = !vis;
+  $('fusVisMig').disabled = Boolean(demo);
+}
+
+const antalAf = (type) => partikler.filter((p) => p.type === type && !p.væk).length;
+
+// Det par kerner af de to slags, der er tættest på hinanden og på midten
+function vælgPar(typeA, typeB) {
+  let bedst = null;
+  let bedstPoint = Infinity;
+  for (const a of partikler) {
+    if (a.type !== typeA || a.væk || a.kastet > 0) continue;
+    for (const b of partikler) {
+      if (b === a || b.type !== typeB || b.væk) continue;
+      const point = a.pos.distanceTo(b.pos) + 0.4 * (a.pos.length() + b.pos.length());
+      if (point < bedstPoint) {
+        bedstPoint = point;
+        bedst = [a, b];
+      }
+    }
+  }
+  return bedst;
+}
+
+// "Vis mig": ovnen skyder selv det næste skridt i slowmotion. Det tæller ikke som en opgave.
+function visMig() {
+  const { vis } = næsteSkridt();
+  if (demo || !vis) return;
+  // Hvilken reaktion kan vises med de kerner, der er lige nu?
+  let par = ['p', 'p'];
+  if (vis === 'he4' && antalAf('he3') >= 2) par = ['he3', 'he3'];
+  else if (vis !== 'd' && antalAf('d') >= 1) par = ['p', 'd'];
+  if (antalAf('p') < 2) for (let i = 0; i < 10; i++) nyPartikel('p', tilfældigSted());
+  const valg = vælgPar(...par);
+  if (!valg) return;
+  if (temperatur < 15) {
+    temperatur = 15;
+    $('fusTempSkyder').value = 15;
+    opdaterTemperatur();
+  }
+  const [a, b] = valg;
+  tempoFørDemo = tempo;
+  tempo = 0.3;
+  demo = { a, b, t: 0, skudt: false };
+  valgt = a;
+  etiket.innerHTML = `<b>${TYPER[a.type].navn}</b> er valgt<small>Den skydes mod ${TYPER[b.type].navn.toLowerCase()}</small>`;
+  etiket.style.setProperty('--farve', TYPER[a.type].farve);
+  visBesked({
+    titel: 'Sådan gør du',
+    tekst: `${LAV_KVALITET ? 'Tryk' : 'Klik'} først på en ${TYPER[a.type].navn.toLowerCase()}. Den får en ring. ${LAV_KVALITET ? 'Tryk' : 'Klik'} så på den kerne, den skal skydes mod. Her går det i slowmotion.`,
+    log: false,
+  });
+  opdaterMission();
+}
+
+function opdaterDemo(dt) {
+  demo.t += dt;
+  if (!demo.skudt) {
+    if (!partikler.includes(demo.a) || !partikler.includes(demo.b)) {
+      slutDemo();
+      return;
+    }
+    // Først står ringen om den valgte kerne et øjeblik, så bliver den skudt af sted
+    if (demo.t > 1.8) {
+      demo.skudt = true;
+      skyd(demo.a, demo.b, true);
+      valgt = null;
+    }
+  } else if (!partikler.includes(demo.a)) {
+    demo.slut ??= demo.t + 1.5; // lidt mere slowmotion efter reaktionen
+  }
+  if (demo.t > (demo.slut ?? 14)) slutDemo();
+}
+
+function slutDemo() {
+  if (!demo) return;
+  for (const p of [demo.a, demo.b]) {
+    p.demo = false;
+    p.sikker = false;
+  }
+  demo = null;
+  tempo = tempoFørDemo;
+  if (valgt && !partikler.includes(valgt)) valgt = null;
+  opdaterMission();
+}
+
+// Guiden første gang. Ringen peger på det, man skal trykke på.
+function guideTrin() {
+  let første = null;
+  const tryk = LAV_KVALITET ? 'Tryk' : 'Klik';
+  return [
+    {
+      titel: 'Du er inde i Solens kerne',
+      tekst: 'De røde kugler er protoner (brintkerner), og her er 15 millioner grader varmt. Dit mål er at smelte dem sammen til helium, ligesom Solen gør.',
+      knap: 'Næste',
+    },
+    {
+      titel: 'Vælg en proton',
+      tekst: `${tryk} på en proton, fx den i den gule ring.`,
+      start: () => {
+        første = vælgPar('p', 'p')?.[0] ?? null;
+      },
+      mål: () => (første && partikler.includes(første) ? kerneMål(første) : null),
+      vent: () => valgt !== null,
+    },
+    {
+      titel: 'Skyd den mod en anden',
+      tekst: `${tryk} nu på en anden proton. Så bliver den første skudt mod den. De kerner, den kan smelte sammen med, blinker.`,
+      start: () => {
+        skudtSelv = false;
+      },
+      mål: () => {
+        const p = valgt && nærmestePartner(valgt);
+        return p ? kerneMål(p) : null;
+      },
+      vent: () => skudtSelv,
+    },
+    {
+      mål: '#fusion .skyder-boks',
+      titel: 'Varmen er vigtig',
+      tekst: 'Protonerne er plusladede og skubber hinanden væk. Jo varmere, jo hurtigere farer de, og jo lettere smelter de sammen. Det kan kræve flere forsøg.',
+      knap: 'Næste',
+    },
+    {
+      mål: '#fusMission',
+      titel: 'Dit næste skridt',
+      tekst: 'Her står, hvad du kan prøve nu. Tryk "Vis mig", så viser ovnen det i slowmotion. Solens opskrift står i panelet.',
+      knap: 'Færdig',
+    },
+  ];
+}
+
+// En ring om en kerne på skærmen (til guiden)
+function kerneMål(p) {
+  const s = skærmPos(p.pos);
+  const afstand = verden.kamera.position.distanceTo(p.pos);
+  const pxPrEnhed = innerHeight / (2 * afstand * Math.tan(THREE.MathUtils.degToRad(20)));
+  return { x: s.x, y: s.y, r: Math.max(20, TYPER[p.type].radius * 1.8 * pxPrEnhed) };
+}
+
+// Hvilke slags kerner kan den her slags smelte sammen med (ved den temperatur, der er nu)?
+function partnerTyper(type) {
+  const typer = new Set();
+  for (const r of REAKTIONER) {
+    if (temperatur < (r.minT || 0)) continue;
+    if (r.a === type) typer.add(r.b);
+    if (r.b === type) typer.add(r.a);
+  }
+  return typer;
+}
+
+function nærmestePartner(p) {
+  const typer = partnerTyper(p.type);
+  let bedst = null;
+  let bedstAfstand = Infinity;
+  for (const q of partikler) {
+    if (q === p || q.væk || !typer.has(q.type)) continue;
+    const d = q.pos.distanceTo(p.pos);
+    if (d < bedstAfstand) {
+      bedstAfstand = d;
+      bedst = q;
+    }
+  }
+  return bedst;
 }
 
 function opdaterPanel() {
+  opdaterMission();
   $('fusEnergi').textContent = `${energi.toLocaleString('da-DK', { maximumFractionDigits: 1 })} MeV`;
   for (const li of document.querySelectorAll('#fusOpskrift li')) li.querySelector('.antal').textContent = `${tællere[li.dataset.trin]}×`;
   const antal = {};
-  for (const p of partikler) antal[p.type] = (antal[p.type] || 0) + 1;
+  for (const p of partikler) if (!p.væk) antal[p.type] = (antal[p.type] || 0) + 1;
   $('fusKerner').innerHTML = Object.entries(TYPER)
     .filter(([k]) => k !== 'be8' || antal.be8)
     .map(([k, t]) => `<li><span class="farveprik" style="background:${t.farve}"></span>${t.liste || t.navn}<b>${antal[k] || 0}</b></li>`).join('');
@@ -325,7 +529,28 @@ function visSeneste(titel, tekst, trin) {
 }
 
 // ---------- Klik: vælg og skyd ----------
+// Hvor på skærmen et punkt i ovnen er
+function skærmPos(v) {
+  hjælpV.copy(v).project(verden.kamera);
+  return { x: ((hjælpV.x + 1) / 2) * innerWidth, y: ((1 - hjælpV.y) / 2) * innerHeight, z: hjælpV.z };
+}
+
 function partikelUnderMusen(h) {
+  // En finger er bredere end en lille kerne: vælg den kerne, der er nærmest fingeren
+  if (h.pointerType === 'touch') {
+    let bedst = null;
+    let bedstAfstand = 32;
+    for (const p of partikler) {
+      if (p.væk) continue;
+      const s = skærmPos(p.pos);
+      const d = Math.hypot(s.x - h.clientX, s.y - h.clientY);
+      if (s.z < 1 && d < bedstAfstand) {
+        bedstAfstand = d;
+        bedst = p;
+      }
+    }
+    return bedst;
+  }
   const mus = new THREE.Vector2((h.clientX / innerWidth) * 2 - 1, -(h.clientY / innerHeight) * 2 + 1);
   stråle.setFromCamera(mus, verden.kamera);
   let bedst = null;
@@ -344,7 +569,7 @@ function partikelUnderMusen(h) {
 }
 
 function vedKlik(h) {
-  if (!aktiv || !trykStart) return;
+  if (!aktiv || !trykStart || demo) return;
   const flyttet = Math.hypot(h.clientX - trykStart.x, h.clientY - trykStart.y);
   trykStart = null;
   if (flyttet > 8) return;
@@ -364,7 +589,12 @@ function vedKlik(h) {
   valgt = null;
 }
 
-function skyd(a, b) {
+// visning = skudt af "Vis mig": rammer altid og tæller ikke som en opgave
+function skyd(a, b, visning = false) {
+  if (!visning) skudtSelv = true;
+  a.demo = visning;
+  b.demo = visning;
+  a.sikker = visning;
   const t = TYPER[a.type];
   const fart = 2.6 * termiskFart() / Math.pow(t.A, 0.25);
   a.fart.copy(b.pos).sub(a.pos).normalize().multiplyScalar(fart);
@@ -379,6 +609,7 @@ function skyd(a, b) {
 function opdater(dt) {
   tid += dt;
   tidUniform.value = tid;
+  if (demo) opdaterDemo(dt);
   // Fysikken regnes i små delskridt, så hurtige kerner ikke springer forbi hinanden
   const ialt = dt * tempo;
   const skridt = Math.min(14, Math.ceil(ialt / 0.012));
@@ -407,7 +638,11 @@ function fysik(h) {
           p.mål.holdt = 0.3;
         }
       }
-      if (p.kastet <= 0) mislykket(p);
+      if (p.kastet <= 0) {
+        mislykket(p);
+        p.sikker = false;
+        if (p.demo) slutDemo();
+      }
     } else if (p.holdt > 0) {
       p.holdt -= h;
     } else {
@@ -452,8 +687,9 @@ function fysik(h) {
       if (d2 > rækkevidde * rækkevidde) continue;
       const d = Math.sqrt(d2) || 0.001;
       hjælpV.set(dx / d, dy / d, dz / d);
-      // Plus frastøder plus (Coulomb). Jo tættere, jo kraftigere.
-      const kraft = (FRASTØD * ta.Z * tb.Z) / Math.max(d, 0.3) ** 2;
+      // Plus frastøder plus (Coulomb). Jo tættere, jo kraftigere. ("Vis mig" snyder og slår det fra for sit skud.)
+      const snyd = (a.sikker && a.mål === b) || (b.sikker && b.mål === a);
+      const kraft = snyd ? 0 : (FRASTØD * ta.Z * tb.Z) / Math.max(d, 0.3) ** 2;
       a.fart.addScaledVector(hjælpV, (kraft / ta.A) * h);
       b.fart.addScaledVector(hjælpV, (-kraft / tb.A) * h);
       if (d < kontakt * 0.92) {
@@ -467,7 +703,8 @@ function fysik(h) {
 function sammenstød(a, b, n) {
   const r = REAKTIONER.find((x) => (x.a === a.type && x.b === b.type) || (x.a === b.type && x.b === a.type));
   const kastet = a.kastet > 0 || b.kastet > 0;
-  if (r && temperatur >= (r.minT || 0) && Math.random() < (kastet ? r.kastChance : r.chance)) {
+  const sikker = (a.sikker || b.sikker) && r && temperatur >= (r.minT || 0);
+  if (sikker || (r && temperatur >= (r.minT || 0) && Math.random() < (kastet ? r.kastChance : r.chance))) {
     udfør(a, b, r);
     return;
   }
@@ -515,13 +752,14 @@ function udfør(a, b, r) {
   lyd.fusion?.(r.trin);
   const titel = `${TYPER[a.type].navn} + ${TYPER[b.type].navn} → ${TYPER[hoved].navn}`;
   visSeneste(titel, r.tekst, r.trin);
-  const egen = a.kastet > 0 || b.kastet > 0; // har man selv skudt en af kernerne?
-  if (egen || r.trin >= 2) besked(titel, r.tekst, 'reaktion');
+  const visning = a.demo || b.demo; // skudt af "Vis mig"
+  const egen = (a.kastet > 0 || b.kastet > 0) && !visning; // har man selv skudt en af kernerne?
+  if (egen || visning || r.trin >= 2) besked(titel, r.tekst, 'reaktion');
 
   // Opgaver. De første skridt tæller kun, når man selv har skudt kernerne sammen.
   const førsteSkridt = { d: 'f-d', he3: 'f-he3', he4: 'f-he4' }[hoved];
   if (førsteSkridt && egen) løs(førsteSkridt);
-  else if (førsteSkridt && !fremgang.erLøst(førsteSkridt) && !selvForklaret) {
+  else if (førsteSkridt && !visning && !fremgang.erLøst(førsteSkridt) && !selvForklaret) {
     selvForklaret = true;
     besked('De smeltede selv sammen', 'Kernerne støder også sammen af sig selv i plasmaet. Opgaven tæller, når du selv skyder dem sammen.');
   }
@@ -577,6 +815,11 @@ export function testAdgang() {
     temperatur: (t) => { temperatur = t; $('fusTempSkyder').value = t; opdaterTemperatur(); },
     energi: () => energi,
     valgt: () => valgt?.id ?? null,
+    visMig: () => visMig(),
+    demo: () => Boolean(demo),
+    // Spol hele ovnen frem med tegning og "Vis mig" (testbrowseren tegner kun få billeder i sekundet)
+    spolAlt: (sek) => { for (let t = 0; t < sek; t += 0.05) opdater(0.05); },
+    mission: () => $('fusMissionTekst').textContent,
     // Hvor på skærmen en kerne er (så en test kan klikke på den)
     skærmPos: (id) => {
       const v = partikler.find((p) => p.id === id).pos.clone().project(verden.kamera);
@@ -617,6 +860,9 @@ function tegn() {
   const gPos = glorier.geometry.attributes.position.array;
   const gFarve = glorier.geometry.attributes.color.array;
   const farve = new THREE.Color();
+  // De kerner, den valgte kan smelte sammen med, blinker
+  const partnere = valgt && partikler.includes(valgt) ? partnerTyper(valgt.type) : null;
+  const blink = 1.7 + 0.9 * Math.sin(tid * 7);
   partikler.forEach((p, i) => {
     const t = TYPER[p.type];
     const skala = 1 - p.ny * 1.5;
@@ -627,7 +873,7 @@ function tegn() {
       else nMesh.setMatrixAt(iN++, hjælpM);
     }
     gPos[i * 3] = p.pos.x; gPos[i * 3 + 1] = p.pos.y; gPos[i * 3 + 2] = p.pos.z;
-    farve.set(t.farve).multiplyScalar(p.kastet > 0 ? 1.4 : 0.55);
+    farve.set(t.farve).multiplyScalar(p.kastet > 0 ? 1.4 : partnere?.has(p.type) && p !== valgt ? blink : 0.55);
     gFarve[i * 3] = farve.r; gFarve[i * 3 + 1] = farve.g; gFarve[i * 3 + 2] = farve.b;
   });
   pMesh.count = ip;

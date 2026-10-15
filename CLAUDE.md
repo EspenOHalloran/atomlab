@@ -31,7 +31,11 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
   - På telefoner er filtrene foldet sammen bag knappen "Filtre".
   - Kortet har ‹ › og Luk øverst og kan rulles. Når kortet åbnes, lægges et trin i historikken (`history.pushState`), så telefonens tilbage-knap lukker kortet i stedet for at forlade siden.
 - `js/fusion.js`: Stjerneovnen (`#fusion`): kernetyper (`TYPER`), reaktioner (`REAKTIONER`), opgaver (`OPGAVER_FUSION`), fysik i små delskridt (frastødning, sammenstød) og klik-for-at-skyde. Opgaverne om at lave D, ³He og ⁴He tæller kun, når man selv har skudt en af kernerne (`kastet`).
-- `js/reaktor.js`: Reaktoren (`#reaktor`): del 1 "Spalt én kerne" (to genbrugte `Atom` til stumperne) og del 2 "Kædereaktion" (2D-simulering i små skridt). Konstanterne `BRUGT_TID`, `SPALT_LANGSOM`, `FELT` og `NØDSTOP_GRÆNSE` bestemmer, hvor stavene skal stå (nu ca. 50 % for stabil). Mål igen med testadgangen, hvis de ændres.
+  - Med fingre vælges den kerne, der er nærmest fingeren på skærmen. Når en kerne er valgt, blinker de kerner, den kan smelte sammen med (`partnerTyper`).
+  - Kortet "Næste skridt" (`#fusMission`, `næsteSkridt()`) står øverst til venstre i 3D-billedet. "Vis mig" (`visMig`) vælger selv to kerner og skyder i slowmotion (`tempo` 0,3). Skuddet rammer altid (`sikker`: ingen frastødning mellem de to), og det tæller ikke som en opgave (`demo`).
+- `js/reaktor.js`: Reaktoren (`#reaktor`): del 1 "Spalt én kerne" (to genbrugte `Atom` til stumperne) og del 2 "Kædereaktion" (2D-simulering i små skridt). Konstanterne `BRUGT_TID`, `SPALT_LANGSOM`, `FELT` og `NØDSTOP_GRÆNSE` bestemmer, hvor stavene skal stå (nu ca. 50 % for stabil, og stavene starter der). Mål igen med testadgangen, hvis de ændres.
+  - Kortet "Næste skridt" (`#reaktorMission`, `næsteSkridt()`) står øverst til venstre i 3D-billedet. I kædereaktionen viser det også effekten, et levende tip (`effektTip`) og en lille graf over de sidste 20 sekunder (`#reaktorHud`).
+  - "Vis mig" kører i slowmotion (`tidsFaktor`). I del 1 skydes neutronen for en. I del 2 starter én neutron en kædereaktion med stavene trukket op, og kortet tæller neutronerne i hver generation (1 → 3 → 8 …). De to første generationer spalter altid, når de rammer frisk brændsel. Bagefter sænkes stavene til 50 %. "Vis mig" klarer ikke opgaver (`løs` gør intet imens).
 - `js/batteri.js`: Batteriet (`#batteri`): ioner, pladser i grafit og metaloxid, spændingskurven `SPÆNDING` (hvilespænding), varme, lithium-nåle og kortslutning.
   - Ledningen er halvgennemsigtig og fuld af elektroner (elektron-kæden). Hele kæden flytter sig sammen, med én elektron pr. ion, der flytter sig (`kædeVej`, `KÆDE_AFSTAND`).
   - Når en ion forlader en plads, hopper en elektron ud i metalfolien, og lige før en ion lander, hopper en elektron ind og møder den (`elektronHop`).
@@ -41,10 +45,11 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `js/kosmos/*.js`: ét fænomen pr. fil (solstorm, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul). Hver fil eksporterer `{ id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) }`. `lav` bygger fænomenet i `gruppe` og giver `{ styring, opdater(dt, tid) }` tilbage. `styring` er knapper (`{ tekst, handling, deaktiv }`), til/fra-knapper (`{ tekst, til, skift }`) og skydere (`{ skyder: true, navn, min, max, værdi, vis, ændring }`). `ctx` har `effekter`, `lyd`, `verden`, `fase(titel, tekst, [trin, ialt])` (en undertekst med prikker for trinnene, `fase(null)` fjerner den), `kamera({ retning, radius, mål, drej, flyv })`, `opdaterKnapper()`, `forklaring(html)` og `overlag()` (et sted oven på 3D-billedet, fx til en graf).
 - `js/kosmos/faelles.js`: fælles byggeklodser: `stjerne` (kogende overflade lavet med en lille shader), `glød`, `prikSky`, `gitterDug` (rumtidens gummidug), `dipolLinjer` (magnetfelt), `skilt`, `hale`, `ringPulje`, `rullendeGraf`, `toningTekstur` og `ryd`.
 - Nyt fænomen: lav en fil i `js/kosmos/`, og sæt den ind i `FÆNOMENER` i `js/kosmos.js`. Hold tallene korrekte, og skriv i nørd-teksten, hvad animationen snyder med.
+- `js/guide.js`: kom i gang-guiden: `startGuide(id, trin, { igen })` viser korte trin første gang (en lysende ring om målet og en boble med "Næste" og "Spring over"). Et trin er `{ mål, titel, tekst, knap, vent, start }`, hvor `mål` er en CSS-vælger eller en funktion, der giver `{ x, y, r }` på skærmen (fx en kerne i 3D). Uden `knap` går guiden videre, når `vent()` giver true. Guiderne `fusion`, `reaktor-kerne` og `reaktor-kæde` ligger i fusion.js og reaktor.js, og man kan se dem igen fra hjælpen. `stopGuide()` kaldes ved skærmskift.
 - `js/effekter.js`: fælles effekter (`Effekter`: glimt, bølge, skyd, tekst), som også bruges af Reaktoren
 - `js/data/fakta.js`: `FAKTA` for alle 118 grundstoffer (findes, bruges, opdaget, af, navn)
 - `js/fremgang.js`: løste opgaver og opdagede grundstoffer
-- `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler)
+- `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler). Der er stille, indtil man har trykket eller klikket på siden (browserne tillader ikke lyd før).
 - `js/beskeder.js`: beskeder med faste pladser, så de ikke dækker animationerne. `visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, log })`:
   - Typerne `info`, `reaktion`, `henfald`, `advarsel` og `fase` bliver en **undertekst** nederst i 3D-billedet (én ad gangen, højst tre linjer og to på telefoner, med "Mere"). Tiden regnes ud fra tekstens længde. `varighed: 0` betyder, at den bliver stående, til noget nyt kommer.
   - `klaret` og `opdaget` bliver en lille **pille** øverst til højre i 3D-billedet (højst to ad gangen, resten venter). Tryk for at læse mere.
@@ -65,6 +70,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
 - `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`)
 - `atomlabKosmosSet`: liste med id på de fænomener, man har kigget på (de andre har en lille prik)
+- `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`)
 - `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.
 
 Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Nørd) og være kort, eller ind i hjælpen.
@@ -72,7 +78,7 @@ Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Ato
 Et grundstof bliver "opdaget", når man har bygget et neutralt atom af det, og kernen kan hænge sammen. Først derefter kan man hoppe direkte til det i det lille periodiske system.
 
 ## Automatiske tests
-Åbnes siden med `?test` i adressen (fx `index.html?test#fusion`), findes `window.atomlabTest` med adgang til simuleringerne (fx `atomlabTest.fusion.spol(60)` spoler 60 sekunder frem uden at tegne). Det bruges kun af tests.
+Åbnes siden med `?test` i adressen (fx `index.html?test#fusion`), findes `window.atomlabTest` med adgang til simuleringerne (fx `atomlabTest.fusion.spol(60)` spoler 60 sekunder frem uden at tegne, og `atomlabTest.fusion.spolAlt(…)` og `atomlabTest.reaktor.spol(…)` spoler alt frem, også "Vis mig"). `atomlabTest.system` giver felternes plads på skærmen og søgningen. Det bruges kun af tests. Testbrowseren tegner kun 3-4 billeder i sekundet, så forløb skal spoles frem i stedet for at ventes på.
 
 ## Afprøv
 Moduler virker ikke ved dobbeltklik på `index.html`. Start en lille server i mappen:

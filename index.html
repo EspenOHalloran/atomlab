@@ -267,7 +267,13 @@
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="fusOpgaver"></ol>
     </aside>
-    <div class="vindue" id="fusionVindue" data-log></div>
+    <div class="vindue" id="fusionVindue" data-log>
+      <div class="mission" id="fusMission">
+        <div class="mission-top"><span class="mission-mærke">Næste skridt</span><button class="mission-fold" id="fusMissionFold" title="Skjul næste skridt">–</button></div>
+        <span class="mission-tekst" id="fusMissionTekst"></span>
+        <button class="knap lille mission-vis" id="fusVisMig">▶ Vis mig</button>
+      </div>
+    </div>
     <div class="kerne-etiket skjult" id="fusEtiket" aria-live="polite"></div>
     <aside class="panel side-panel højre-panel">
       <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong></div>
@@ -295,10 +301,11 @@
         <p><strong>Sådan gør du:</strong> Klik på en kerne og derefter på en anden. Så bliver den første skudt mod den anden, lige så hurtigt som temperaturen tillader. Træk for at dreje, og rul eller knib for at zoome.</p>
         <p><strong>Frastødning:</strong> Alle kernerne er plusladede og skubber hinanden væk. Kun hvis de er hurtige nok, kommer de helt tæt på hinanden, og så tager den stærke kernekraft over og limer dem sammen. Derfor kræver fusion så høj en temperatur.</p>
         <p><strong>Solens opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. Til sidst bliver to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri.</p>
-        <p><strong>Ærligt talt:</strong> Vi har gjort det meget lettere end i virkeligheden. I Solen er protonerne faktisk ikke hurtige nok til at komme over frastødningen. De klarer det kun takket være kvantemekanikkens <em>tunneleffekt</em>. Og det første skridt er ekstremt sjældent: En proton venter i gennemsnit milliarder af år, før det sker. Solen klarer sig kun, fordi den har ufatteligt mange protoner.</p>
+        <p><strong>Ærligt talt:</strong> Vi har gjort det meget lettere end i virkeligheden. I Solen er protonerne faktisk ikke hurtige nok til at komme over frastødningen. De klarer det kun takket være kvantemekanikkens <em>tunneleffekt</em>. Og det første skridt er ekstremt sjældent: En proton venter i gennemsnit milliarder af år, før det sker. Solen klarer sig kun, fordi den har ufatteligt mange protoner. Og "Vis mig" snyder lidt mere: Dens skud rammer altid og smelter altid sammen, så du kan se, hvordan det ser ud.</p>
         <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger mange tusinde år, før energien når overfladen som sollys.</p>
         <p><strong>Røde kæmper:</strong> Når en stjerne har brugt sit hydrogen, bliver kernen varmere, ca. 100 millioner grader. Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
         <blockquote class="citat" data-citat="saganStjernestof"></blockquote>
+        <p class="nulstil-linje"><button class="knap lille" id="fusGuideIgen">Vis guiden igen</button></p>
       </div>
     </div>
   </div>
@@ -339,7 +346,7 @@
         <div class="knap-række"><button class="knap" id="reaktorStart">Start reaktoren</button></div>
         <label class="skyder-boks">
           <span class="skyder-top"><span>Kontrolstave</span><strong id="reaktorStaveTal"></strong></span>
-          <input type="range" id="reaktorStave" min="0" max="100" step="1" value="55">
+          <input type="range" id="reaktorStave" min="0" max="100" step="1" value="50">
           <small>Stavene suger neutroner op. Jo længere nede, jo færre spaltninger.</small>
         </label>
         <button class="knap lille" id="reaktorVand">Vand (moderator): til</button>
@@ -348,7 +355,18 @@
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
     </aside>
-    <div class="vindue" id="reaktorVindue" data-log></div>
+    <div class="vindue" id="reaktorVindue" data-log>
+      <div class="mission" id="reaktorMission">
+        <div class="mission-top"><span class="mission-mærke">Næste skridt</span><button class="mission-fold" id="reaktorMissionFold" title="Skjul næste skridt">–</button></div>
+        <span class="mission-tekst" id="reaktorMissionTekst"></span>
+        <div class="mission-ekstra skjult" id="reaktorHud">
+          <div class="måler lille" id="reaktorHudMåler"><div class="måler-felt"></div><div class="måler-niveau"></div></div>
+          <span class="hud-tip" id="reaktorHudTip"></span>
+          <canvas class="hud-graf" id="reaktorHudGraf" width="240" height="44" aria-label="Effekten de sidste 20 sekunder"></canvas>
+        </div>
+        <button class="knap lille mission-vis" id="reaktorVisMig">▶ Vis mig</button>
+      </div>
+    </div>
     <aside class="panel side-panel højre-panel">
       <div data-reaktor-del="kerne">
         <div class="seneste-boks forklaring-reaktor" id="reaktorForklaring"></div>
@@ -391,8 +409,9 @@
         <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
         <p><strong>Kædereaktion:</strong> De nye neutroner kan spalte flere kerner, som giver flere neutroner. Giver hver spaltning i gennemsnit mere end én ny spaltning, vokser det. Giver den mindre, dør det ud. Kontrolstave (fx med bor eller cadmium) suger neutroner op, så man kan holde den stabil.</p>
         <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brinteksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
-        <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid.</p>
+        <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
         <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
+        <p class="nulstil-linje"><button class="knap lille" id="reaktorGuideIgen">Vis guiden igen</button></p>
       </div>
     </div>
   </div>

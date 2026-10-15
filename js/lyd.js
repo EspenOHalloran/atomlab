@@ -31,6 +31,8 @@ let støjBuffer = null;
 
 function lydkort() {
   if (!tændt) return null;
+  // Browseren tillader først lyd, når man har trykket eller klikket på siden. Indtil da er der stille.
+  if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return null;
   if (!ctx) {
     const Klasse = window.AudioContext || window.webkitAudioContext;
     if (!Klasse) return null;

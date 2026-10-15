@@ -13,6 +13,7 @@ import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 import { lavBeskeder, rydBeskeder } from './beskeder.js';
+import { stopGuide } from './guide.js';
 import { citatHTML, MENU_CITATER } from './data/citater.js';
 
 const skærme = {
@@ -91,7 +92,8 @@ function visSkærm() {
   const ny = skærme[navn] ? navn : 'menu';
   if (ny === aktivSkærm) return;
   if (aktivSkærm) skærme[aktivSkærm].stop();
-  rydBeskeder(); // beskeder hører til den skærm, de blev vist på
+  rydBeskeder(); // beskeder og guiden hører til den skærm, de blev vist på
+  stopGuide();
   for (const id of Object.keys(skærme)) {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }

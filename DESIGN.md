@@ -86,11 +86,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - "Start her" på Atomværkstedet, når man er helt ny. I Kosmos har fænomener, man ikke har set, en lille prik, og der står, hvor mange man har set.
   - To nye citater (Sagan og Feynman), så citaterne i Kosmos ikke bliver gentaget.
 
-- [ ] **Trin 8: Forbedringer efter det store review**
+- [x] **Trin 8: Forbedringer efter det store review**
   - [x] **Hurtige rettelser:** Luk og ‹ › står øverst i grundstofkortet, kortet kan rulles, og telefonens tilbage-knap lukker det. I Stjerneovnen tæller opgaverne kun egne skud. "Genstart reaktoren". Dæmpede lysglimt i supernova og kilonova, og hensyn til "reducer bevægelse".
   - [x] **Nyt beskedsystem:** Undertekster nederst i 3D-billedet (én ad gangen, højst to linjer på telefoner og "Mere"). Belønninger som små piller i hjørnet, som man kan trykke på. Store advarsler (nødstop, kortslutning) kommer lidt efter hændelsen og bliver stående. En log (🔔), hvor man kan læse beskederne igen. Beskederne ryddes, når man skifter del. I Stjerneovnen står den valgte kerne med en lille etiket i stedet for en besked.
   - [x] **Det periodiske system på telefon:** Første tryk løfter det nærmeste felt og viser navnet, andet tryk åbner det. Træk med én finger for at flytte væggen, og knib for at zoome. Et søgefelt (navn, kaldenavn, symbol eller nummer). Filtrene er samlet bag én knap på telefoner. Et tip første gang.
-  - [ ] **Kom i gang-guide** i Stjerneovnen og Reaktoren: korte trin første gang, "Næste skridt" og "Vis mig".
+  - [x] **Kom i gang-guide** i Stjerneovnen og Reaktoren: korte trin første gang med en lysende ring om det, man skal trykke på (kan ses igen fra hjælpen). Et kort med "Næste skridt" i 3D-billedet og knappen "Vis mig", som viser det næste skridt i slowmotion. I Stjerneovnen blinker de kerner, man kan smelte sammen med, og et tryk vælger den nærmeste kerne. I Reaktoren viser kortet effekten med et levende tip og en lille graf, og "Vis mig" viser en kædereaktion, hvor man kan tælle neutronerne i hver generation. Stavene starter ved 50 %, hvor reaktoren er tæt på stabil.
 
 ## Idéer til senere
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).

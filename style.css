@@ -541,7 +541,7 @@ button { font: inherit; color: inherit; }
 /* ---------- Beskeder ---------- */
 /* Et lag oven på 3D-billedet: belønninger (piller) øverst til højre og undertekster nederst */
 .skærm > .vindue { position: relative; }
-.vindue-lag { position: absolute; inset: 0; pointer-events: none; }
+.vindue-lag { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 .vindue-top { position: absolute; top: 8px; right: 8px; left: 8px; display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 6px; }
 .piller { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 0; }
 .vindue-bund { position: absolute; left: 8px; right: 8px; bottom: 8px; max-height: calc(100% - 52px); display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -647,6 +647,57 @@ button { font: inherit; color: inherit; }
   gap: 6px;
   pointer-events: none;
 }
+
+/* ---------- Næste skridt (Stjerneovnen og Reaktoren) ---------- */
+/* Et lille kort øverst til venstre i 3D-billedet med det, man kan prøve nu, og knappen "Vis mig" */
+.mission {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  left: 8px;
+  width: max-content;
+  max-width: min(290px, 60%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 8px 10px 9px;
+  border-radius: 14px;
+  background: rgba(12, 18, 40, 0.82);
+  border: 1px solid rgba(255, 212, 59, 0.45);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+  font-size: 13.5px;
+}
+.mission-top { align-self: stretch; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mission-mærke { color: var(--gul); font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.mission-fold { width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); background: transparent; color: var(--svag); line-height: 1; cursor: pointer; }
+.mission-tekst { font-weight: 600; line-height: 1.35; }
+.mission-tekst:empty { display: none; }
+.mission .knap.lille { padding: 5px 10px; font-size: 13px; }
+.mission-vis[hidden] { display: none; }
+.mission.foldet .mission-tekst, .mission.foldet .mission-vis, .mission.foldet .mission-ekstra { display: none; }
+.mission-ekstra { align-self: stretch; display: flex; flex-direction: column; gap: 4px; }
+.måler.lille { height: 12px; border-radius: 6px; }
+.hud-tip { font-size: 12.5px; font-weight: 700; }
+.hud-tip.lav { color: #74c0fc; }
+.hud-tip.god { color: var(--grøn); }
+.hud-tip.høj { color: #ffa94d; }
+.hud-graf { width: 100%; height: 34px; display: block; }
+
+/* ---------- Kom i gang-guide ---------- */
+.guide-ring { position: fixed; left: 0; top: 0; z-index: 17; pointer-events: none; border-radius: 14px; border: 2.5px solid var(--gul); box-shadow: 0 0 0 4px rgba(255, 212, 59, 0.18), 0 0 26px rgba(255, 212, 59, 0.7); animation: guide-puls 1.6s ease-in-out infinite; }
+.guide-ring.rund { border-radius: 50%; }
+@keyframes guide-puls { 50% { box-shadow: 0 0 0 9px rgba(255, 212, 59, 0.06), 0 0 36px rgba(255, 212, 59, 0.95); } }
+.guide-boble { position: fixed; left: 0; top: 0; z-index: 18; width: min(320px, calc(100vw - 16px)); padding: 12px 14px; border-radius: 16px; background: rgba(16, 24, 54, 0.97); border: 1px solid rgba(255, 212, 59, 0.6); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6); opacity: 0; transition: opacity 0.25s; }
+.guide-boble.vist { opacity: 1; }
+.guide-trin { display: flex; gap: 4px; margin-bottom: 6px; }
+.guide-trin i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); }
+.guide-trin i.ja { background: var(--gul); box-shadow: 0 0 6px var(--gul); }
+.guide-titel { display: block; margin-bottom: 4px; color: var(--gul); font-size: 15.5px; }
+.guide-tekst { margin: 0 0 10px; font-size: 14px; line-height: 1.45; }
+.guide-knapper { display: flex; justify-content: flex-end; gap: 8px; }
+.guide-knapper [hidden] { display: none; }
 
 /* Etiketten ved den valgte kerne i Stjerneovnen */
 .kerne-etiket { --farve: var(--accent); position: fixed; left: 0; top: 0; z-index: 15; pointer-events: none; padding: 4px 10px; border-radius: 10px; background: rgba(14, 22, 48, 0.88); border: 1px solid var(--farve); font-size: 13px; line-height: 1.3; text-align: center; white-space: nowrap; }
@@ -1014,6 +1065,10 @@ button { font: inherit; color: inherit; }
   .logknap { width: 30px; height: 30px; font-size: 13px; }
   .kosmos-graf { padding: 5px 8px; font-size: 11px; }
   .kosmos-graf canvas { height: 46px; }
+  .mission { top: 6px; left: 6px; max-width: min(240px, 62%); padding: 6px 8px 7px; font-size: 12.5px; gap: 4px; }
+  .mission .knap.lille { padding: 4px 9px; font-size: 12.5px; }
+  .hud-graf { height: 26px; }
+  .guide-tekst { font-size: 13.5px; }
 }
 
 /* ---------- Reducer bevægelse (indstilling i styresystemet) ---------- */

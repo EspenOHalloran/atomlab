@@ -28,6 +28,7 @@ let fuldTekst = false; // har man trykket "Mere", vises hele teksten også i de 
 const piller = []; // { el, timer }
 const kø = []; // piller, der venter på plads
 const forsinkede = new Set();
+let holdPillerne = false; // mens guiden kører, venter belønningerne
 
 function $(id) {
   return document.getElementById(id);
@@ -73,6 +74,12 @@ export function visBesked(besked) {
 // Skjuler underteksten (fx når en fase i Kosmos er slut). Med en type skjules den kun, hvis den er af den type.
 export function skjulUndertekst(type = null) {
   if (undertekst && (!type || undertekst.b.type === type)) fjernUndertekst();
+}
+
+// Guiden beder pillerne vente, så der ikke sker for meget på én gang. Bagefter kommer de.
+export function holdPiller(til) {
+  holdPillerne = til;
+  if (!til && kø.length && !piller.length) visPille(kø.shift()); // resten kommer én ad gangen, når pillerne forsvinder
 }
 
 // Fjerner alle beskeder med det samme (når man skifter skærm)
@@ -233,10 +240,11 @@ function visPille(b) {
   const holder = pilleHolder();
   // I et lille 3D-billede (fx værkstedet på en telefon) er der kun plads til én ad gangen
   const maks = (holder.closest('.vindue')?.clientHeight ?? 999) < 260 ? 1 : MAKS_PILLER;
-  if (piller.length >= maks) {
+  if (piller.length >= maks || holdPillerne) {
     kø.push(b);
     return;
   }
+  undgåKort(holder);
   const el = document.createElement('div');
   el.className = `pille ${b.type}`;
   el.setAttribute('role', 'status');
@@ -271,6 +279,17 @@ function visPille(b) {
   }
 }
 
+// Står der et "Næste skridt"-kort øverst til venstre, og er der ikke plads ved siden af det, kommer pillerne under kortet
+function undgåKort(holder) {
+  const v = holder.closest('.vindue');
+  const kort = v?.querySelector('.mission');
+  holder.style.marginTop = '';
+  if (!kort || !kort.offsetWidth) return;
+  const k = kort.getBoundingClientRect();
+  const r = v.getBoundingClientRect();
+  if (r.right - k.right - 50 < 230) holder.style.marginTop = `${Math.round(k.bottom - holder.parentElement.getBoundingClientRect().top + 6)}px`;
+}
+
 function fjernPille(p) {
   const i = piller.indexOf(p);
   if (i < 0) return;
@@ -278,7 +297,9 @@ function fjernPille(p) {
   clearTimeout(p.timer);
   p.el.classList.remove('vist');
   setTimeout(() => p.el.remove(), 260);
-  if (kø.length) setTimeout(() => visPille(kø.shift()), 300);
+  setTimeout(() => {
+    if (kø.length && !holdPillerne) visPille(kø.shift());
+  }, 300);
 }
 
 // ---------- Loggen (🔔) ----------
