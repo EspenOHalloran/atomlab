@@ -144,7 +144,7 @@ export default {
       pos.set(start);
       sky.visible = true;
       kamera({ radius: 15, flyv: false });
-      fase('Sammenstød!', 'På et splitsekund smelter de to stjerner sammen. Et kort glimt af gammastråling skyder ud i to smalle stråler, og en sky af neutronrigt stof bliver slynget ud.');
+      fase('Sammenstød!', 'På et splitsekund smelter de to stjerner sammen. Et kort glimt af gammastråling skyder ud i to smalle stråler, og en sky af neutronrigt stof bliver slynget ud.', [2, 4]);
     }
 
     return {
@@ -153,7 +153,7 @@ export default {
           tekst: '▶ Lad dem støde sammen', handling: () => {
             t = 0;
             fase2 = 1;
-            fase('De spiraler indad', 'Stjernerne sender tyngdebølger ud (ringene) og mister energi. Så kommer de tættere på hinanden og drejer hurtigere og hurtigere.');
+            fase('De spiraler indad', 'Stjernerne sender tyngdebølger ud (ringene) og mister energi. Så kommer de tættere på hinanden og drejer hurtigere og hurtigere.', [1, 4]);
           }, deaktiv: () => t >= 0,
         },
         { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => t < 0 },
@@ -215,7 +215,7 @@ export default {
         }
         if (fase2 === 2 && mt > 2.5) {
           fase2 = 3;
-          fase('En kilonova', 'Atomkernerne i skyen fanger neutroner og henfalder til tunge grundstoffer. Skyen lyser i nogle dage, først blåt og så rødt.');
+          fase('En kilonova', 'Atomkernerne i skyen fanger neutroner og henfalder til tunge grundstoffer. Skyen lyser i nogle dage, først blåt og så rødt.', [3, 4]);
         }
         // Navne på grundstoffer, der dukker op i skyen
         if (mt > 2.5 && navnNr < GRUNDSTOFFER.length * 2) {
@@ -232,7 +232,7 @@ export default {
         }
         if (fase2 === 3 && mt > 11) {
           fase2 = 4;
-          fase('Guld fra rummet', 'Stoffet blandes med gas i galaksen og bliver en dag en del af nye stjerner og planeter. Sådan kom guldet til Jorden.');
+          fase('Guld fra rummet', 'Stoffet blandes med gas i galaksen og bliver en dag en del af nye stjerner og planeter. Sådan kom guldet til Jorden.', [4, 4]);
         }
       },
     };

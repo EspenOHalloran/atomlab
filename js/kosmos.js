@@ -7,7 +7,7 @@ import { verden, sætVindue, passerTil } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
-import { visBesked } from './beskeder.js';
+import { visBesked, skjulUndertekst } from './beskeder.js';
 import { ryd } from './kosmos/faelles.js';
 import solstorm from './kosmos/solstorm.js';
 import supernova from './kosmos/supernova.js';
@@ -161,18 +161,14 @@ function visTekst() {
   $('kosmosTekst').scrollTop = 0;
 }
 
-// En boks, der fortæller, hvad der sker lige nu (fx "Jernkernen falder sammen")
-function visFase(titel, tekst = '') {
-  const boks = $('kosmosFase');
+// En undertekst nederst i 3D-billedet, der fortæller, hvad der sker lige nu (fx "Jernkernen falder sammen").
+// Den bliver stående, til den næste fase kommer. trin = [nr, ialt] viser prikker. titel = null fjerner den.
+function visFase(titel, tekst = '', trin = null) {
   if (!titel) {
-    boks.innerHTML = '';
+    skjulUndertekst('fase');
     return;
   }
-  boks.innerHTML = `<strong></strong><span></span>`;
-  boks.querySelector('strong').textContent = titel;
-  boks.querySelector('span').textContent = tekst;
-  // På en telefon på højkant ligger panelet langt nede, så teksten vises også som en besked
-  if (matchMedia('(max-width: 560px) and (orientation: portrait)').matches) visBesked({ titel, tekst, varighed: 7000 });
+  visBesked({ titel, tekst, type: 'fase', varighed: 0, trin, log: false });
 }
 
 // Kameraet: retning (hvorfra vi kigger), radius (hvor stort det, vi skal se, er) og mål (midten).

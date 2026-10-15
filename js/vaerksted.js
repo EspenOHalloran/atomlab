@@ -689,7 +689,7 @@ function tjekFremskridt() {
   if (p > 0 && e === p && stabilitet(p, n).status !== 'straks' && fremgang.opdag(p)) {
     const g = grundstof(p);
     lyd.opdaget();
-    visBesked({ titel: `Nyt grundstof opdaget: ${g.navn} (${g.symbol})`, tekst: `Grundstof nr. ${p}. Nu kan du hoppe direkte til det i det periodiske system.`, type: 'opdaget' });
+    visBesked({ titel: `Nyt grundstof opdaget: ${g.navn} (${g.symbol})`, kort: `Nyt grundstof: ${g.navn}`, tekst: `Grundstof nr. ${p}. Nu kan du hoppe direkte til det i det periodiske system.`, type: 'opdaget' });
     atom.fejr(0x8ce99a);
     opdaterMinitabel();
   }

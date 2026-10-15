@@ -33,14 +33,19 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
   - Midt på ledningen sidder laderen (oplad), lampen (aflad) eller en slukket afbryder (pause og efter kortslutning).
   - Strømmen følger en enkel model for konstant strøm og konstant spænding (`beregnStrøm`): ladestrømmen er `hastighed` ampere, og klemspændingen er hvilespændingen ± `MODSTAND` × strømmen. Når den når `MAX_SPÆNDING` (4,2 V), holder laderen spændingen, og strømmen falder af sig selv. Ionerne flytter sig med `IONER_PR_AMPERE` pr. ampere.
 - `js/kosmos.js`: Kosmos (`#kosmos`): listen over fænomener (`FÆNOMENER`), knapperne under "Prøv selv", panelet til højre og kameraet. Det valgte fænomen huskes i `localStorage` under `atomlabKosmos`. Når man skifter fænomen, bliver det gamle ryddet helt væk (`ryd`).
-- `js/kosmos/*.js`: ét fænomen pr. fil (solstorm, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul). Hver fil eksporterer `{ id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) }`. `lav` bygger fænomenet i `gruppe` og giver `{ styring, opdater(dt, tid) }` tilbage. `styring` er knapper (`{ tekst, handling, deaktiv }`), til/fra-knapper (`{ tekst, til, skift }`) og skydere (`{ skyder: true, navn, min, max, værdi, vis, ændring }`). `ctx` har `effekter`, `lyd`, `verden`, `fase(titel, tekst)`, `kamera({ retning, radius, mål, drej, flyv })`, `opdaterKnapper()`, `forklaring(html)` og `overlag()` (et sted oven på 3D-billedet, fx til en graf).
+- `js/kosmos/*.js`: ét fænomen pr. fil (solstorm, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul). Hver fil eksporterer `{ id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) }`. `lav` bygger fænomenet i `gruppe` og giver `{ styring, opdater(dt, tid) }` tilbage. `styring` er knapper (`{ tekst, handling, deaktiv }`), til/fra-knapper (`{ tekst, til, skift }`) og skydere (`{ skyder: true, navn, min, max, værdi, vis, ændring }`). `ctx` har `effekter`, `lyd`, `verden`, `fase(titel, tekst, [trin, ialt])` (en undertekst med prikker for trinnene, `fase(null)` fjerner den), `kamera({ retning, radius, mål, drej, flyv })`, `opdaterKnapper()`, `forklaring(html)` og `overlag()` (et sted oven på 3D-billedet, fx til en graf).
 - `js/kosmos/faelles.js`: fælles byggeklodser: `stjerne` (kogende overflade lavet med en lille shader), `glød`, `prikSky`, `gitterDug` (rumtidens gummidug), `dipolLinjer` (magnetfelt), `skilt`, `hale`, `ringPulje`, `rullendeGraf`, `toningTekstur` og `ryd`.
 - Nyt fænomen: lav en fil i `js/kosmos/`, og sæt den ind i `FÆNOMENER` i `js/kosmos.js`. Hold tallene korrekte, og skriv i nørd-teksten, hvad animationen snyder med.
 - `js/effekter.js`: fælles effekter (`Effekter`: glimt, bølge, skyd, tekst), som også bruges af Reaktoren
 - `js/data/fakta.js`: `FAKTA` for alle 118 grundstoffer (findes, bruges, opdaget, af, navn)
 - `js/fremgang.js`: løste opgaver og opdagede grundstoffer
 - `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler)
-- `js/beskeder.js`: beskeder øverst på skærmen
+- `js/beskeder.js`: beskeder med faste pladser, så de ikke dækker animationerne. `visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, log })`:
+  - Typerne `info`, `reaktion`, `henfald`, `advarsel` og `fase` bliver en **undertekst** nederst i 3D-billedet (én ad gangen, højst tre linjer og to på telefoner, med "Mere"). Tiden regnes ud fra tekstens længde. `varighed: 0` betyder, at den bliver stående, til noget nyt kommer.
+  - `klaret` og `opdaget` bliver en lille **pille** øverst til højre i 3D-billedet (højst to ad gangen, resten venter). Tryk for at læse mere.
+  - `fast: true` (fx nødstop og kortslutning) bliver stående, til man lukker den, og almindelige beskeder venter imens. `forsinkelse` venter lidt, så man når at se det, der sker.
+  - Alt undtagen faser gemmes i loggen, som åbnes med 🔔 i 3D-billedet. Klokken findes kun i vinduer med `data-log`.
+  - `rydBeskeder()` kaldes ved skærmskift. Kan 3D-billedet ikke ses (fx rullet væk på en telefon), står beskeden nederst på skærmen (`#beskeder`).
 - `js/stabilitetskort.js`: klassen `Stabilitetskort`, som tegner kortet over stabile kerner (2D-canvas) i infopanelet
 - `js/fuldskaerm.js`: knapperne til fuld skærm (klassen `knap-fuldskaerm`). De skjules, hvis browseren ikke kan vise fuld skærm (fx iPhone).
 - `js/data/grundstoffer.js`: alle 118 grundstoffer (navn, symbol, masse, kategori, tilstand), korte fakta, elektronskaller (`skaller`, `skallerForIon`), elektronkonfiguration (`konfiguration`, `konfigurationTekst`, med de kendte undtagelser i `KONFIG_UNDTAGELSER`) og placering i tabellen (`placering`)
@@ -55,6 +60,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
 - `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`)
 - `atomlabKosmosSet`: liste med id på de fænomener, man har kigget på (de andre har en lille prik)
+- `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.
 
 Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Nørd) og være kort, eller ind i hjælpen.
 

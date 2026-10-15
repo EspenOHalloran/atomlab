@@ -514,7 +514,7 @@ function lavNødstop(grund) {
   $('reaktorStart').textContent = 'Start reaktoren igen';
   lyd.alarm();
   visBesked({
-    titel: 'NØDSTOP!', type: 'advarsel', varighed: 10000,
+    titel: 'NØDSTOP!', type: 'advarsel', fast: true, forsinkelse: 900,
     tekst: `${grund} Alle kontrolstave falder ned, og kædereaktionen stopper. En rigtig reaktor kan ikke eksplodere som en atombombe, men den skal køles, ellers kan brændslet smelte.`,
   });
   løs('r-nødstop');

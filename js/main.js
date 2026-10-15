@@ -12,6 +12,7 @@ import { lavKosmos, startKosmos, stopKosmos, testAdgang as kosmosTest } from './
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
+import { lavBeskeder, rydBeskeder } from './beskeder.js';
 import { citatHTML, MENU_CITATER } from './data/citater.js';
 
 const skærme = {
@@ -42,6 +43,7 @@ function start() {
   menuAtom.gruppe.visible = false;
   verden.scene.add(menuAtom.gruppe);
 
+  lavBeskeder();
   lavVærksted();
   lavSystem({
     åbnIVærksted: (nr) => {
@@ -89,6 +91,7 @@ function visSkærm() {
   const ny = skærme[navn] ? navn : 'menu';
   if (ny === aktivSkærm) return;
   if (aktivSkærm) skærme[aktivSkærm].stop();
+  rydBeskeder(); // beskeder hører til den skærm, de blev vist på
   for (const id of Object.keys(skærme)) {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }

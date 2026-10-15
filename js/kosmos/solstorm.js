@@ -189,7 +189,7 @@ export default {
         pos[i * 3 + 1] += vel[i * 3 + 1] * t;
         pos[i * 3 + 2] += vel[i * 3 + 2] * t;
       }
-      fase('Et udbrud på Solen', 'Magnetfelter på Solen er blevet vredet sammen og springer som en elastik. En sky af en milliard ton partikler bliver kastet ud i rummet.');
+      fase('Et udbrud på Solen', 'Magnetfelter på Solen er blevet vredet sammen og springer som en elastik. En sky af en milliard ton partikler bliver kastet ud i rummet.', [1, 4]);
     }
 
     const styring = [
@@ -230,7 +230,7 @@ export default {
           if (cmeTid > 0.8) udbrudsBue.visible = false;
           if (faseNr === 1 && cmeTid > 1.6) {
             faseNr = 2;
-            fase('Skyen er på vej', 'Her tager turen et par sekunder. I virkeligheden tager den 1 til 3 døgn, så man kan nå at advare om den.');
+            fase('Skyen er på vej', 'Her tager turen et par sekunder. I virkeligheden tager den 1 til 3 døgn, så man kan nå at advare om den.', [2, 4]);
           }
           if (cmeTid > 12) {
             cmeTid = -1;
@@ -316,12 +316,12 @@ export default {
         storm = Math.max(0, Math.min(1, storm + tryk * 0.004 - dt * 0.12));
         if (faseNr === 2 && storm > 0.15) {
           faseNr = 3;
-          fase('Skyen rammer magnetfeltet', 'Jordens magnetfelt bliver trykket sammen på dagsiden og strakt ud på natsiden. Skjoldet holder de fleste partikler ude.');
+          fase('Skyen rammer magnetfeltet', 'Jordens magnetfelt bliver trykket sammen på dagsiden og strakt ud på natsiden. Skjoldet holder de fleste partikler ude.', [3, 4]);
           lyd.sus(1.4);
         }
         if (faseNr === 3 && lys > 0.6) {
           faseNr = 4;
-          fase('Nordlys!', 'Partikler fra halen af magnetfeltet styrter ned mod polerne. Når de rammer luften 100 til 300 km oppe, lyser den grønt og rødt.');
+          fase('Nordlys!', 'Partikler fra halen af magnetfeltet styrter ned mod polerne. Når de rammer luften 100 til 300 km oppe, lyser den grønt og rødt.', [4, 4]);
         }
         if (faseNr === 4 && cmeTid < 0 && lys < 0.25) {
           faseNr = 0;

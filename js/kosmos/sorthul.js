@@ -124,7 +124,7 @@ export default {
       astro.v = astro.p.clone().normalize().multiplyScalar(-1.2).add(new THREE.Vector3(-Math.sin(v), 0, Math.cos(v)).multiplyScalar(0.6));
       astronaut.visible = true;
       astronaut.material.opacity = 1;
-      fase('En astronaut falder ind', 'Tæt på hullet trækker tyngdekraften meget hårdere i fødderne end i hovedet. Astronauten bliver strakt ud som spaghetti!');
+      fase('En astronaut falder ind', 'Tæt på hullet trækker tyngdekraften meget hårdere i fødderne end i hovedet. Astronauten bliver strakt ud som spaghetti!', [1, 2]);
     }
 
     function kastStjerne() {
@@ -138,7 +138,7 @@ export default {
       stjerne = { p: ud.clone().multiplyScalar(r0), v: ud.clone().multiplyScalar(-vr).addScaledVector(tværs, vt), revet: false };
       stjerneKugle.visible = true;
       strøm.visible = false;
-      fase('En stjerne kommer for tæt på', 'Tyngdekraften trækker mere i den side af stjernen, der vender mod hullet. Stjernen bliver revet over til en lang strøm af gas.');
+      fase('En stjerne kommer for tæt på', 'Tyngdekraften trækker mere i den side af stjernen, der vender mod hullet. Stjernen bliver revet over til en lang strøm af gas.', [1, 2]);
     }
 
     return {
@@ -194,7 +194,7 @@ export default {
           if (r < HORISONT * 1.08 || astro.tid > 25) {
             astronaut.visible = false;
             astro = null;
-            fase('Væk', 'Set udefra blev astronauten langsommere og rødere og forsvandt til sidst. Ingen kan se, hvad der sker inden for horisonten.');
+            fase('Væk', 'Set udefra blev astronauten langsommere og rødere og forsvandt til sidst. Ingen kan se, hvad der sker inden for horisonten.', [2, 2]);
           }
         }
 
@@ -254,7 +254,7 @@ export default {
             if (tilbage === 0) {
               stjerne = null;
               strøm.visible = false;
-              fase('Mæt for nu', 'Halvdelen af stjernen blev slugt og fik skiven til at lyse op. Resten blev slynget ud i rummet. Sådan et glimt har astronomer set mange gange.');
+              fase('Mæt for nu', 'Halvdelen af stjernen blev slugt og fik skiven til at lyse op. Resten blev slynget ud i rummet. Sådan et glimt har astronomer set mange gange.', [2, 2]);
             }
           }
         }

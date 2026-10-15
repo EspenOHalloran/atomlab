@@ -131,7 +131,7 @@ export default {
           tekst: '▶ Lad dem smelte sammen', handling: () => {
             start = T;
             trin = 1;
-            fase('De spiraler indad', 'Hver omgang sender bølger ud i rumtiden. Det koster energi, så de sorte huller kommer tættere på hinanden og drejer hurtigere.');
+            fase('De spiraler indad', 'Hver omgang sender bølger ud i rumtiden. Det koster energi, så de sorte huller kommer tættere på hinanden og drejer hurtigere.', [1, 3]);
           }, deaktiv: () => start < Infinity,
         },
         { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => start === Infinity },
@@ -160,7 +160,7 @@ export default {
             for (const h of huller) h.visible = false;
             nytHul.visible = true;
             effekter.glimt(new THREE.Vector3(0, -3, 0), 12, new THREE.Color(2.2, 1.8, 2.8), 1);
-            fase('De smelter sammen', 'På en brøkdel af et sekund bliver de til ét større sort hul. Rumtiden "ringer" som en klokke, man har slået på, og falder så til ro.');
+            fase('De smelter sammen', 'På en brøkdel af et sekund bliver de til ét større sort hul. Rumtiden "ringer" som en klokke, man har slået på, og falder så til ro.', [2, 3]);
           }
         } else {
           brønde.length = 0;
@@ -168,7 +168,7 @@ export default {
           nytHul.position.y = højde(0, 0) + 1;
           if (trin === 2 && T - smeltet > 2.5) {
             trin = 3;
-            fase('Bølgerne rejser videre', 'De farer ud i universet med lysets fart. Når de når Jorden, er de så svage, at LIGOs 4 km lange arme kun bliver ændret mindre end en hundrededel af en protons bredde.');
+            fase('Bølgerne rejser videre', 'De farer ud i universet med lysets fart. Når de når Jorden, er de så svage, at LIGOs 4 km lange arme kun bliver ændret mindre end en hundrededel af en protons bredde.', [3, 3]);
           }
         }
         dug.opdater(højde);

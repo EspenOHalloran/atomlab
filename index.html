@@ -136,7 +136,7 @@
       <p class="tastatur-tip">Taster: P, N og E tilføjer. Med Shift fjerner de. H lader en ustabil kerne henfalde.</p>
     </aside>
 
-    <div class="vindue" id="vaerkstedVindue"></div>
+    <div class="vindue" id="vaerkstedVindue" data-log></div>
 
     <aside class="panel info" id="infopanel">
       <div class="info-hoved">
@@ -259,7 +259,8 @@
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="fusOpgaver"></ol>
     </aside>
-    <div class="vindue" id="fusionVindue"></div>
+    <div class="vindue" id="fusionVindue" data-log></div>
+    <div class="kerne-etiket skjult" id="fusEtiket" aria-live="polite"></div>
     <aside class="panel side-panel højre-panel">
       <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong></div>
       <h4 class="panel-overskrift">Solens opskrift</h4>
@@ -339,7 +340,7 @@
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
     </aside>
-    <div class="vindue" id="reaktorVindue"></div>
+    <div class="vindue" id="reaktorVindue" data-log></div>
     <aside class="panel side-panel højre-panel">
       <div data-reaktor-del="kerne">
         <div class="seneste-boks forklaring-reaktor" id="reaktorForklaring"></div>
@@ -425,7 +426,7 @@
       <h4 class="panel-overskrift">Opgaver</h4>
       <ol class="opgaver kompakt" id="batteriOpgaver"></ol>
     </aside>
-    <div class="vindue" id="batteriVindue"></div>
+    <div class="vindue" id="batteriVindue" data-log></div>
     <aside class="panel side-panel højre-panel">
       <div class="batteri-tal">
         <div><span>Spænding</span><strong id="batteriSpænding">3,00 V</strong></div>
@@ -484,7 +485,9 @@
       <div class="kosmos-styring" id="kosmosStyring"></div>
       <div class="kosmos-forklaring" id="kosmosForklaring"></div>
     </aside>
-    <div class="vindue" id="kosmosVindue"><div class="kosmos-overlag" id="kosmosOverlag"></div></div>
+    <div class="vindue" id="kosmosVindue">
+      <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="kosmos-overlag" id="kosmosOverlag"></div></div></div>
+    </div>
     <aside class="panel side-panel højre-panel">
       <div class="kosmos-hoved">
         <span class="kosmos-ikon" id="kosmosIkon"></span>
@@ -493,7 +496,6 @@
           <small id="kosmosUndertitel"></small>
         </div>
       </div>
-      <div class="seneste-boks kosmos-fase" id="kosmosFase"></div>
       <dl class="kosmos-tal" id="kosmosTal"></dl>
       <div class="del-vælger">
         <button class="del-knap valgt" data-kosmos-fane="kort">Kort fortalt</button>
@@ -580,6 +582,16 @@
     </div>
   </div>
 
+  <!-- ===== Loggen med beskeder (🔔) ===== -->
+  <div class="overlag skjult" id="beskedLog" role="dialog" aria-label="Beskeder">
+    <div class="dialog">
+      <header><h3>🔔 Beskeder</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <ol class="log-liste" id="logListe"></ol>
+      <footer class="dialog-fod"><small class="log-fod">De nyeste står øverst. De sidste 40 bliver gemt.</small><button class="knap lille svag" id="logRyd">Ryd loggen</button></footer>
+    </div>
+  </div>
+
+  <!-- Beskeder, når 3D-billedet ikke kan ses (fx rullet væk på en telefon) -->
   <div class="beskeder" id="beskeder" aria-live="polite"></div>
 
   <div class="ingen3d skjult" id="ingen3d">

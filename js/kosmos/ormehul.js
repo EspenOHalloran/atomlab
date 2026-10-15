@@ -201,7 +201,7 @@ export default {
             lysHale.nulstil(her);
             skibHale.nulstil(her);
             lyd.sus(1);
-            fase('Kapløb!', 'Lyset er det hurtigste, der findes. Men det må tage den lange vej rundt. Rumskibet er meget langsommere, men tager genvejen gennem ormehullet.');
+            fase('Kapløb!', 'Lyset er det hurtigste, der findes. Men det må tage den lange vej rundt. Rumskibet er meget langsommere, men tager genvejen gennem ormehullet.', [1, 3]);
           }, deaktiv: () => løb !== null,
         },
         {
@@ -232,12 +232,12 @@ export default {
           løb.skib = løb.t;
           effekter.glimt(der, 3, new THREE.Color(0.8, 1.4, 2.4), 0.6);
           lyd.klaret();
-          fase('Rumskibet er fremme!', `Det tog rumskibet ${løb.skib.toFixed(1).replace('.', ',')} sekunder gennem ormehullet. Lyset er stadig på vej rundt.`);
+          fase('Rumskibet er fremme!', `Det tog rumskibet ${løb.skib.toFixed(1).replace('.', ',')} sekunder gennem ormehullet. Lyset er stadig på vej rundt.`, [2, 3]);
         }
         if (lt >= 1 && løb.lys === null) {
           løb.lys = løb.t;
           effekter.glimt(der, 3, new THREE.Color(2.4, 2, 1), 0.6);
-          fase('Rumskibet vandt!', `Rumskibet: ${løb.skib.toFixed(1).replace('.', ',')} s. Lyset: ${løb.lys.toFixed(1).replace('.', ',')} s. Selv om lyset er meget hurtigere, vinder genvejen.`);
+          fase('Rumskibet vandt!', `Rumskibet: ${løb.skib.toFixed(1).replace('.', ',')} s. Lyset: ${løb.lys.toFixed(1).replace('.', ',')} s. Selv om lyset er meget hurtigere, vinder genvejen.`, [3, 3]);
         }
         if (løb.lys !== null && løb.t > løb.lys + 3) {
           løb = null;

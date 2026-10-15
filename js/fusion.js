@@ -98,6 +98,7 @@ let glorier = null;
 let gnister = null;
 let plasma = null;
 let ring = null;
+let etiket = null; // HTML-etiket ved den valgte kerne
 let effekter = null;
 let aktiv = false;
 let temperatur = 15; // millioner grader
@@ -185,6 +186,7 @@ export function lavFusion() {
   ring.visible = false;
 
   rod.add(plasma, pMesh, nMesh, glorier, gnister, ring);
+  etiket = $('fusEtiket');
   effekter = new Effekter(rod);
 
   startForfra();
@@ -235,6 +237,7 @@ export function startFusion() {
 export function stopFusion() {
   aktiv = false;
   rod.visible = false;
+  etiket.classList.add('skjult');
   verden.opdateringer.delete(opdater);
   verden.styring.autoRotateSpeed = 0.5;
 }
@@ -353,7 +356,8 @@ function vedKlik(h) {
   if (!valgt || valgt === p || !partikler.includes(valgt)) {
     valgt = p;
     lyd.klik();
-    visBesked({ titel: `Valgt: ${TYPER[p.type].navn}`, tekst: 'Klik nu på den kerne, den skal skydes imod.', varighed: 3000 });
+    etiket.innerHTML = `<b>${TYPER[p.type].navn}</b> er valgt<small>${LAV_KVALITET ? 'Tryk' : 'Klik'} på den kerne, den skal skydes mod</small>`;
+    etiket.style.setProperty('--farve', TYPER[p.type].farve);
     return;
   }
   skyd(valgt, p);
@@ -512,7 +516,7 @@ function udfør(a, b, r) {
   const titel = `${TYPER[a.type].navn} + ${TYPER[b.type].navn} → ${TYPER[hoved].navn}`;
   visSeneste(titel, r.tekst, r.trin);
   const egen = a.kastet > 0 || b.kastet > 0; // har man selv skudt en af kernerne?
-  if (egen || r.trin >= 2) besked(titel, r.tekst, 'klaret');
+  if (egen || r.trin >= 2) besked(titel, r.tekst, 'reaktion');
 
   // Opgaver. De første skridt tæller kun, når man selv har skudt kernerne sammen.
   const førsteSkridt = { d: 'f-d', he3: 'f-he3', he4: 'f-he4' }[hoved];
@@ -526,7 +530,7 @@ function udfør(a, b, r) {
     if (tællere[2] >= 5) løs('f-fem');
   }
   if (hoved === 'c12') løs('f-carbon');
-  if (hoved === 'be8') besked('Hurtigt!', 'Beryllium-8 falder snart fra hinanden. Klik på en heliumkerne og så på beryllium-8 (den lilla).', 'klaret');
+  if (hoved === 'be8') besked('Hurtigt!', 'Beryllium-8 falder snart fra hinanden. Klik på en heliumkerne og så på beryllium-8 (den lilla).', 'reaktion');
   if (energi >= 100) løs('f-energi');
   opdaterPanel();
 }
@@ -560,9 +564,9 @@ function mislykket(p) {
 
 function besked(titel, tekst, type = 'info') {
   // Ikke for mange beskeder på én gang
-  if (performance.now() - sidstBesked < 1200 && type !== 'klaret') return;
+  if (performance.now() - sidstBesked < 1200 && type !== 'reaktion') return;
   sidstBesked = performance.now();
-  visBesked({ titel, tekst, type, varighed: 6000 });
+  visBesked({ titel, tekst, type });
 }
 
 // Kun til automatiske tests (bruges når adressen indeholder ?test)
@@ -572,6 +576,12 @@ export function testAdgang() {
     skyd: (idA, idB) => skyd(partikler.find((p) => p.id === idA), partikler.find((p) => p.id === idB)),
     temperatur: (t) => { temperatur = t; $('fusTempSkyder').value = t; opdaterTemperatur(); },
     energi: () => energi,
+    valgt: () => valgt?.id ?? null,
+    // Hvor på skærmen en kerne er (så en test kan klikke på den)
+    skærmPos: (id) => {
+      const v = partikler.find((p) => p.id === id).pos.clone().project(verden.kamera);
+      return { x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight };
+    },
     tilføj: (type, antal) => { for (let i = 0; i < antal; i++) nyPartikel(type, tilfældigSted()); },
     // Spol simuleringen frem uden at tegne (sekunder i ovnen)
     spol: (sek) => {
@@ -632,5 +642,19 @@ function tegn() {
   if (ring.visible) {
     ring.position.copy(valgt.pos);
     ring.scale.setScalar(TYPER[valgt.type].radius * 3.2 + Math.sin(tid * 6) * 0.25);
+    flytEtiket();
   }
+  etiket.classList.toggle('skjult', !ring.visible);
+}
+
+// Etiketten står lige over den valgte kerne (men inden for 3D-billedet)
+function flytEtiket() {
+  const afstand = verden.kamera.position.distanceTo(valgt.pos);
+  const pxPrEnhed = innerHeight / (2 * afstand * Math.tan(THREE.MathUtils.degToRad(20)));
+  hjælpV.copy(valgt.pos).project(verden.kamera);
+  const { left, top, width, height } = verden.hul;
+  const b = etiket.offsetWidth, h = etiket.offsetHeight;
+  const x = THREE.MathUtils.clamp(((hjælpV.x + 1) / 2) * innerWidth - b / 2, left + 4, left + width - b - 4);
+  const y = THREE.MathUtils.clamp(((1 - hjælpV.y) / 2) * innerHeight - TYPER[valgt.type].radius * 1.7 * pxPrEnhed - h - 6, top + 4, top + height - h - 4);
+  etiket.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
 }

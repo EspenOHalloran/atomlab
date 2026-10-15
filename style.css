@@ -539,43 +539,119 @@ button { font: inherit; color: inherit; }
 .opgaver small { color: var(--svag); line-height: 1.4; }
 
 /* ---------- Beskeder ---------- */
-.beskeder {
-  position: fixed;
-  z-index: 30;
-  top: 58px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(440px, calc(100% - 24px));
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-}
-.besked {
+/* Et lag oven på 3D-billedet: belønninger (piller) øverst til højre og undertekster nederst */
+.skærm > .vindue { position: relative; }
+.vindue-lag { position: absolute; inset: 0; pointer-events: none; }
+.vindue-top { position: absolute; top: 8px; right: 8px; left: 8px; display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 6px; }
+.piller { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 0; }
+.vindue-bund { position: absolute; left: 8px; right: 8px; bottom: 8px; max-height: calc(100% - 52px); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+
+/* Undertekster: hvad der sker lige nu (én ad gangen) */
+.undertekst {
+  --farve: var(--accent);
   pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 9px 14px;
-  border-radius: 14px;
-  font-size: 14px;
-  background: rgba(14, 22, 48, 0.95);
+  width: min(640px, 100%);
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 4px;
+  padding: 7px 4px 7px 12px;
+  border-radius: 12px;
+  background: rgba(8, 12, 30, 0.8);
   border: 1px solid var(--panel-kant);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-left: 3px solid var(--farve);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
   line-height: 1.4;
   opacity: 0;
-  transform: translateY(-14px);
-  transition: opacity 0.3s, transform 0.3s;
-  cursor: pointer;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
 }
-.besked.vist { opacity: 1; transform: none; }
-.besked.advarsel { border-color: rgba(255, 169, 77, 0.6); }
-.besked.opdaget { border-color: rgba(140, 233, 154, 0.7); box-shadow: 0 0 30px rgba(140, 233, 154, 0.25); }
-.besked.opdaget strong { color: var(--grøn); }
-.besked.klaret { border-color: rgba(255, 212, 59, 0.75); box-shadow: 0 0 34px rgba(255, 212, 59, 0.3); }
-.besked.klaret strong { color: var(--gul); }
-.besked.henfald { border-color: rgba(255, 140, 220, 0.7); box-shadow: 0 0 30px rgba(255, 140, 220, 0.25); }
-.besked.henfald strong { color: #ff9be0; }
+.undertekst.vist { opacity: 1; transform: none; }
+.undertekst.fuld { overflow-y: auto; scrollbar-width: none; }
+.ut-tekst { margin: 0; align-self: center; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+.undertekst.fuld .ut-tekst { display: block; -webkit-line-clamp: unset; line-clamp: none; }
+.ut-tekst strong { color: var(--farve); }
+.ut-trin { display: inline-flex; gap: 3px; margin-right: 7px; vertical-align: 1px; }
+.ut-trin i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.22); }
+.ut-trin i.ja { background: var(--farve); box-shadow: 0 0 6px var(--farve); }
+.ut-knapper { display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+.ut-luk { width: 30px; height: 26px; border: 0; border-radius: 8px; background: transparent; color: var(--svag); font-size: 20px; line-height: 1; cursor: pointer; }
+.ut-luk:hover { color: var(--tekst); background: rgba(255, 255, 255, 0.08); }
+.ut-mere { border: 0; padding: 2px 4px; background: none; color: var(--farve); font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.ut-mere[hidden] { display: none; }
+.undertekst.reaktion { --farve: #ffcf7a; }
+.undertekst.henfald { --farve: #ff9be0; }
+.undertekst.fase { --farve: #c3b4ff; }
+.undertekst.advarsel { --farve: #ffa94d; }
+.undertekst.advarsel.fast { background: rgba(46, 20, 6, 0.9); border-color: rgba(255, 169, 77, 0.55); box-shadow: 0 0 30px rgba(255, 120, 40, 0.3); }
+
+/* Piller: små belønninger. Tryk for at læse mere. */
+.pille {
+  --farve: var(--gul);
+  pointer-events: auto;
+  max-width: min(330px, 100%);
+  border-radius: 16px;
+  background: rgba(14, 20, 44, 0.92);
+  border: 1px solid var(--farve);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--farve) 30%, transparent);
+  opacity: 0;
+  transform: translateX(14px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.pille.vist { opacity: 1; transform: none; }
+.pille.opdaget { --farve: var(--grøn); }
+.pille-knap { display: flex; align-items: center; gap: 7px; width: 100%; padding: 5px 11px; border: 0; background: none; color: var(--tekst); font-size: 13.5px; font-weight: 700; text-align: left; cursor: pointer; }
+.pille-ikon { color: var(--farve); }
+.pille-titel { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pille-pil { margin-left: auto; padding-left: 4px; color: var(--svag); font-weight: 400; }
+.pille-mere { display: none; margin: 0; padding: 0 12px 10px; font-size: 13.5px; line-height: 1.45; color: #dfe6ff; }
+.pille.åben { max-width: min(360px, 100%); }
+.pille.åben .pille-titel { white-space: normal; color: var(--farve); }
+.pille.åben .pille-mere { display: block; }
+
+/* Klokken: loggen med beskeder */
+.logknap { pointer-events: auto; position: relative; flex: none; width: 34px; height: 34px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid var(--panel-kant); background: rgba(12, 18, 38, 0.72); font-size: 15px; cursor: pointer; }
+.logknap[hidden] { display: none; }
+.logknap:hover { border-color: rgba(130, 200, 255, 0.6); }
+.logknap b { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: var(--gul); color: #1a1400; font-size: 11px; font-weight: 800; line-height: 18px; text-align: center; }
+.logknap b:empty { display: none; }
+.logknap.ring { animation: klokke 0.7s; }
+@keyframes klokke { 20% { transform: rotate(18deg); } 40% { transform: rotate(-14deg); } 60% { transform: rotate(9deg); } 80% { transform: rotate(-5deg); } }
+.log-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.log-liste li { --farve: var(--accent); display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 2px 8px; padding: 9px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border-left: 3px solid var(--farve); }
+.log-liste li.klaret { --farve: var(--gul); }
+.log-liste li.opdaget { --farve: var(--grøn); }
+.log-liste li.reaktion { --farve: #ffcf7a; }
+.log-liste li.henfald { --farve: #ff9be0; }
+.log-liste li.advarsel { --farve: #ffa94d; }
+.log-liste li.ny { background: rgba(255, 212, 59, 0.08); }
+.log-liste .log-ikon { grid-row: span 3; color: var(--farve); font-size: 16px; }
+.log-liste strong { color: var(--farve); font-size: 14.5px; }
+.log-liste p { margin: 0; font-size: 14px; line-height: 1.45; }
+.log-liste small { color: var(--svag); font-size: 12px; }
+.log-liste .log-tom { display: block; color: var(--svag); border: 0; }
+.log-fod { color: var(--svag); }
+
+/* Når 3D-billedet ikke kan ses (fx rullet væk på en telefon), står beskederne nederst på skærmen */
+.beskeder {
+  position: fixed;
+  z-index: 19;
+  left: 50%;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 20px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+/* Etiketten ved den valgte kerne i Stjerneovnen */
+.kerne-etiket { --farve: var(--accent); position: fixed; left: 0; top: 0; z-index: 15; pointer-events: none; padding: 4px 10px; border-radius: 10px; background: rgba(14, 22, 48, 0.88); border: 1px solid var(--farve); font-size: 13px; line-height: 1.3; text-align: center; white-space: nowrap; }
+.kerne-etiket b { color: var(--farve); }
+.kerne-etiket small { display: block; color: var(--svag); font-size: 11.5px; }
 
 /* ---------- Det periodiske system ---------- */
 #system {
@@ -723,8 +799,7 @@ button { font: inherit; color: inherit; }
 .kosmos-styring { display: flex; flex-direction: column; gap: 6px; }
 .kosmos-knap { justify-content: flex-start; text-align: left; }
 .kosmos-forklaring:empty { display: none; }
-#kosmosVindue { position: relative; }
-.kosmos-overlag { position: absolute; left: 0; right: 0; bottom: 4px; display: flex; justify-content: center; pointer-events: none; }
+.kosmos-overlag { width: 100%; display: flex; justify-content: center; pointer-events: none; }
 .kosmos-overlag:empty { display: none; }
 .kosmos-graf { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 12px; background: rgba(8, 12, 28, 0.72); border: 1px solid var(--panel-kant); font-size: 12px; color: var(--svag); }
 .kosmos-graf canvas { width: min(420px, 100%); height: 70px; display: block; }
@@ -734,7 +809,6 @@ button { font: inherit; color: inherit; }
 .kosmos-ikon { flex: 0 0 52px; height: 52px; display: grid; place-items: center; font-size: 30px; border-radius: 14px; background: radial-gradient(circle, rgba(140, 123, 255, 0.35), rgba(95, 227, 255, 0.06)); border: 1px solid var(--panel-kant); }
 .kosmos-hoved h3 { margin: 0; font-size: 22px; }
 .kosmos-hoved small { color: var(--svag); font-size: 13px; }
-.kosmos-fase span { display: block; }
 .kosmos-tal { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .kosmos-tal:empty { display: none; }
 .kosmos-tal div { padding: 6px 9px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
@@ -861,6 +935,19 @@ button { font: inherit; color: inherit; }
   .grundstofkort .symbol { font-size: 26px; }
   .opgave-krav { display: none; }
   .kosmos-liste { grid-template-columns: 1fr; }
+}
+
+/* ---------- Beskeder på telefoner: mindre, og underteksten er højst to linjer ---------- */
+@media (max-width: 560px) and (orientation: portrait), (max-height: 500px) and (orientation: landscape) {
+  .vindue-top { top: 6px; right: 6px; left: 6px; }
+  .vindue-bund { left: 6px; right: 6px; bottom: 6px; max-height: calc(100% - 44px); }
+  .undertekst { font-size: 13px; line-height: 1.35; padding: 5px 2px 5px 10px; }
+  .ut-tekst { -webkit-line-clamp: 2; line-clamp: 2; }
+  .ut-luk { width: 28px; height: 24px; }
+  .pille-knap { font-size: 12.5px; padding: 4px 9px; }
+  .logknap { width: 30px; height: 30px; font-size: 13px; }
+  .kosmos-graf { padding: 5px 8px; font-size: 11px; }
+  .kosmos-graf canvas { height: 46px; }
 }
 
 /* ---------- Reducer bevægelse (indstilling i styresystemet) ---------- */

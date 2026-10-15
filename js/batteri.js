@@ -518,7 +518,7 @@ function kortslutning(nål) {
   }
   røg.material.opacity = 0.6;
   visBesked({
-    titel: 'Kortslutning!', type: 'advarsel', varighed: 12000,
+    titel: 'Kortslutning!', type: 'advarsel', fast: true, forsinkelse: 1200,
     tekst: 'En lithium-nål stak hul i skillevæggen, så plus og minus rørte hinanden. I et rigtigt batteri giver det så meget varme, at cellen kan svulme op, gå i brand eller eksplodere. Derfor er overladede eller beskadigede LiPo-batterier farlige.',
   });
   løs('b-overlad');

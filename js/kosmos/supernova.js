@@ -178,7 +178,7 @@ export default {
       opdaterKnapper();
       opdaterVisning();
       lyd.opbygning();
-      fase('1. Jernkernen falder sammen', 'Jern kan ikke give energi ved fusion, så der er intet, der holder kernen oppe. På under et sekund falder den sammen fra Jordens størrelse til en kugle på 20 km.');
+      fase('Jernkernen falder sammen', 'Jern kan ikke give energi ved fusion, så der er intet, der holder kernen oppe. På under et sekund falder den sammen fra Jordens størrelse til en kugle på 20 km.', [1, 4]);
     }
 
     function sprængStjernen() {
@@ -207,7 +207,7 @@ export default {
       effekter.bølge(new THREE.Vector3(), 34, new THREE.Color(2.6, 1.6, 0.9), 2.2);
       lyd.eksplosion();
       kamera({ radius: 22, flyv: false });
-      fase('3. Supernova!', 'Stjernen bliver blæst ud i rummet med 10.000 km i sekundet. I nogle uger lyser den stærkere end en hel galakse med milliarder af stjerner.');
+      fase('Supernova!', 'Stjernen bliver blæst ud i rummet med 10.000 km i sekundet. I nogle uger lyser den stærkere end en hel galakse med milliarder af stjerner.', [3, 4]);
     }
 
     const styring = [
@@ -243,7 +243,7 @@ export default {
             effekter.glimt(new THREE.Vector3(), 6, new THREE.Color(2.4, 2.6, 3), 0.8);
             neutrinoer.visible = true;
             lyd.fusion(2);
-            fase('2. Neutrinoer og en chokbølge', 'Kernen er presset så hårdt sammen, at den preller af. En chokbølge farer ud gennem lagene, og en storm af neutrinoer flyver lige igennem det hele.');
+            fase('Neutrinoer og en chokbølge', 'Kernen er presset så hårdt sammen, at den preller af. En chokbølge farer ud gennem lagene, og en storm af neutrinoer flyver lige igennem det hele.', [2, 4]);
           }
         } else if (trin === 2) {
           const f = Math.min(1, (t - 0.8) / 2.2);
@@ -288,7 +288,7 @@ export default {
           snurre.rotation.y += dt * 2.5;
           if (trin === 3 && et > 6) {
             trin = 4;
-            fase('4. En supernova-rest', 'Gassen breder sig ud i tusinder af år og bliver til en lysende tåge ligesom Krabbetågen. I midten snurrer en neutronstjerne. Prøv Pulsar i listen!');
+            fase('En supernova-rest', 'Gassen breder sig ud i tusinder af år og bliver til en lysende tåge ligesom Krabbetågen. I midten snurrer en neutronstjerne. Prøv Pulsar i listen!', [4, 4]);
           }
         }
       },
