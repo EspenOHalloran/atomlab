@@ -7,7 +7,10 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 
 **Læs også [docs/erfaringer.md](docs/erfaringer.md).** Den har tjeklister, som skal bruges: før et stykke arbejde er færdigt, ved nye tekster med fakta, ved nye regler eller ny spillogik, ved en ny del og ved nye animationer. Den beskriver også, hvorfor tidligere fejl opstod, og hvilke populære påstande der er forkerte. Skriv nye erfaringer ind løbende, både når noget virker godt, og når noget gik galt. Får en fejl en ny rodårsag, skal den også ind i en tjekliste.
 
-**Valg af model:** Sig til, før en opgave går i gang, hvis en anden model vil løse den bedre (fx Claude Fable 5.1 til svær fysik, svære fejl og grundige faktatjek) eller lige så godt, men billigere (fx Claude Sonnet 5.5 eller Claude Haiku 5.5 til enkle opgaver og hjælpeagenter, der søger eller læser). Begrund det kort.
+**Valg af model:** Sig til, før en opgave går i gang, hvis en anden model vil løse den bedre eller lige så godt, men billigere. Begrund det kort. Kvaliteten må ikke blive dårligere.
+- **Opus** (standard): kode, der kommer med i programmet, fysik og fakta, faktatjek, danske tekster og eftersyn.
+- **Billigere hjælpeagenter**, når det ikke koster kvalitet: **Haiku** til at finde ting i filerne og opsummere lange testlogs, **Sonnet** til at læse kode og svare på spørgsmål om den og til rutinetjek.
+- **Fable 5.1** er der ikke credits til lige nu. Når der er: Fable laver faktagrundlaget (med kilder i en fil i `docs/`) og planen for store, svære dele (fx Tjernobyl og Liv), Opus bygger og tester, og Fable laver eftersynet til sidst. Små og mellemstore opgaver laver Opus selv, og Fable tjekker kun teksterne.
 
 ## Hvem bruger det
 - Programmet laves af en far til hans 13-årige søn. Sønnen bruger det, han koder det ikke selv.
