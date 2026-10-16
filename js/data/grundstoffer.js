@@ -43,7 +43,7 @@ const RÆKKER = [
   ['Rb', 'Rubidium', '', 85.468, 'alkali', 'f'],
   ['Sr', 'Strontium', '', 87.62, 'jordalkali', 'f'],
   ['Y', 'Yttrium', '', 88.906, 'overgang', 'f'],
-  ['Zr', 'Zirconium', '', 91.224, 'overgang', 'f'],
+  ['Zr', 'Zirconium', '', 91.222, 'overgang', 'f'],
   ['Nb', 'Niobium', '', 92.906, 'overgang', 'f'],
   ['Mo', 'Molybdæn', '', 95.95, 'overgang', 'f'],
   ['Tc', 'Technetium', '', 98, 'overgang', 'f'],
@@ -88,9 +88,9 @@ const RÆKKER = [
   ['Pb', 'Bly', '', 207.2, 'andetmetal', 'f'],
   ['Bi', 'Bismuth', '', 208.98, 'andetmetal', 'f'],
   ['Po', 'Polonium', '', 209, 'andetmetal', 'f'],
-  ['At', 'Astat', '', 210, 'halogen', 'f'],
+  ['At', 'Astat', '', 210, 'halogen', 'u'],
   ['Rn', 'Radon', '', 222, 'aedelgas', 'g'],
-  ['Fr', 'Francium', '', 223, 'alkali', 'f'],
+  ['Fr', 'Francium', '', 223, 'alkali', 'u'],
   ['Ra', 'Radium', '', 226, 'jordalkali', 'f'],
   ['Ac', 'Actinium', '', 227, 'actinid', 'f'],
   ['Th', 'Thorium', '', 232.04, 'actinid', 'f'],
@@ -153,10 +153,10 @@ export const KATEGORIER = {
   halvmetal: { navn: 'Halvmetal', farve: '#20c997', tekst: 'Et halvmetal: har træk fra både metaller og ikkemetaller. Mange bruges i elektronik.' },
   ikkemetal: { navn: 'Ikkemetal', farve: '#4dabf7', tekst: 'Et ikkemetal: leder ikke strøm godt og er ofte en gas eller et skørt stof.' },
   halogen: { navn: 'Halogen', farve: '#22b8cf', tekst: 'Et halogen: meget reaktivt og danner salte sammen med metaller.' },
-  aedelgas: { navn: 'Ædelgas', farve: '#9775fa', tekst: 'En ædelgas: den yderste elektronskal er fyldt, så den reagerer næsten ikke med noget.' },
+  aedelgas: { navn: 'Ædelgas', farve: '#9775fa', tekst: 'En ædelgas: Der er 8 elektroner i den yderste skal (helium har 2). Så er den fyldt, og ædelgassen reagerer næsten ikke med noget.' },
   lanthanid: { navn: 'Lanthanid', farve: '#f783ac', tekst: 'Et lanthanid (sjældent jordartsmetal): bruges i magneter, lasere og skærme.' },
   actinid: { navn: 'Actinid', farve: '#e599f7', tekst: 'Et actinid: alle actiniderne er radioaktive.' },
-  ukendt: { navn: 'Ukendte egenskaber', farve: '#adb5bd', tekst: 'Et supertungt grundstof, der kun er lavet i laboratorier, få atomer ad gangen. De henfalder næsten med det samme.' },
+  ukendt: { navn: 'Ukendte egenskaber', farve: '#adb5bd', tekst: 'Et supertungt grundstof, der kun er lavet i laboratorier, få atomer ad gangen. Selv den mest stabile udgave henfalder hurtigt: på under et tusindedel sekund til et par minutter, alt efter grundstoffet.' },
 };
 
 export const TILSTANDE = { g: 'Gas', v: 'Væske', f: 'Fast stof', u: 'Ukendt' };
@@ -165,7 +165,7 @@ export const TILSTANDE = { g: 'Gas', v: 'Væske', f: 'Fast stof', u: 'Ukendt' };
 // Flere og længere fakta kommer med "Det periodiske system".
 export const KORT_FAKTA = {
   H: 'Det letteste grundstof og det mest almindelige i universet. Stjerner som Solen består mest af hydrogen.',
-  He: 'Dannes af hydrogen inde i stjerner. Det er lettere end luft, derfor svæver heliumballoner.',
+  He: 'Det meste helium blev dannet lige efter Big Bang, og stjerner laver mere af hydrogen. Det er lettere end luft, derfor svæver heliumballoner.',
   Li: 'Det letteste af alle metaller. Bruges i batterier i telefoner og elbiler.',
   Be: 'Et let, men meget stift metal. Spejlene i James Webb-rumteleskopet er lavet af beryllium.',
   B: 'Bruges i ildfast glas, fx målebægre. Planter har brug for en lille smule bor.',
@@ -185,7 +185,7 @@ export const KORT_FAKTA = {
   K: 'Et blødt metal, der reagerer så voldsomt med vand, at det brænder med lilla flamme. Bananer indeholder meget kalium.',
   Ca: 'Gør knogler og tænder hårde. Findes i mælk, kridt og kalksten.',
   Sc: 'Et sjældent, let metal. Bruges i stærke aluminiumsblandinger til fx cykelstel.',
-  Ti: 'Lige så stærkt som stål, men næsten halvt så tungt. Bruges i fly, rumfartøjer og kunstige hofteled.',
+  Ti: 'Lige så stærkt som mange slags stål, men ca. 40 % lettere. Bruges i fly, rumfartøjer og kunstige hofteled.',
   V: 'Gør stål ekstra stærkt og sejt, fx i skruetrækkere og skruenøgler.',
   Cr: 'Gør rustfrit stål rustfrit og giver blanke kromdele på biler og cykler.',
   Mn: 'Bruges til at gøre stål hårdere og findes i almindelige batterier.',
@@ -203,11 +203,12 @@ export const KORT_FAKTA = {
   Sr: 'Giver den røde farve i fyrværkeri.',
   Tc: 'Det letteste grundstof, hvor alle isotoper er radioaktive. Det var det første grundstof, der blev lavet kunstigt.',
   Ag: 'Det metal, der leder strøm og varme allerbedst. Bruges i smykker, mønter og elektronik.',
-  Sn: 'Et blødt metal. Dåser hed "blikdåser", fordi stålet blev belagt med tin, så det ikke rustede.',
+  Sn: 'Et blødt metal. Dåser af stål kaldes blikdåser: Stålet er belagt med tin, så det ikke ruster.',
   I: 'Kroppen bruger iod i skjoldbruskkirtlen. Iod bruges også til at rense sår.',
   Xe: 'En tung ædelgas, der lyser blåt. Bruges i stærke billygter og i ionmotorer på rumsonder.',
   Cs: 'Reagerer eksplosivt med vand. Atomure, der måler tiden helt præcist, bruger cæsium.',
   Ba: 'Giver den grønne farve i fyrværkeri. Barium er en af de kerner, der kan dannes, når uran spaltes.',
+  Pm: 'Alle dets isotoper er radioaktive, så det findes næsten ikke i naturen. Det er brugt i selvlysende maling og små atombatterier.',
   Nd: 'Bruges i verdens stærkeste magneter, fx i høretelefoner og vindmøller.',
   W: 'Det metal, der har det højeste smeltepunkt: ca. 3400 °C. Bruges i glødetråde.',
   Pt: 'Et sjældent og dyrt metal, der bruges i bilers katalysatorer og i smykker.',
@@ -215,18 +216,22 @@ export const KORT_FAKTA = {
   Hg: 'Det eneste metal, der er flydende ved stuetemperatur. Det er giftigt og blev før brugt i termometre.',
   Pb: 'Et tungt, blødt og giftigt metal. Bruges som skjold mod røntgenstråler.',
   Rn: 'En radioaktiv ædelgas, der kan sive op fra undergrunden og samle sig i kældre.',
-  Fr: 'Så radioaktivt og sjældent, at der højst findes omkring 30 gram i hele jordskorpen på én gang.',
+  Fr: 'Så radioaktivt og sjældent, at der højst findes omkring 30 gram i hele jordskorpen ad gangen.',
   Ra: 'Radioaktivt og lyser svagt i mørke. Marie og Pierre Curie opdagede det i 1898.',
   U: 'Det tungeste grundstof, der findes i naturen i større mængder. Uran-235 kan spaltes og bruges i atomkraftværker.',
-  Pu: 'Et kunstigt grundstof, der laves i atomreaktorer. Varmen fra plutonium har givet strøm til rumsonder som Voyager.',
-  Og: 'Det tungeste grundstof, man kender. Der er kun lavet en håndfuld atomer, og de lever under et tusindedel sekund.',
+  Pu: 'Næsten alt plutonium er lavet af mennesker i atomreaktorer (i naturen findes kun spor). Varmen fra plutonium-238 har givet strøm til rumsonder som Voyager.',
+  Og: 'Det tungeste grundstof, man kender. Der er kun lavet en håndfuld atomer, og halveringstiden er under et tusindedel sekund.',
 };
 
 export function faktaOm(nr) {
   const g = grundstof(nr);
   if (!g) return '';
-  let tekst = KORT_FAKTA[g.symbol] || KATEGORIER[g.kategori].tekst;
-  if (g.radioaktivt && !KORT_FAKTA[g.symbol]) tekst += ' Alle dets isotoper er radioaktive.';
+  if (KORT_FAKTA[g.symbol]) return KORT_FAKTA[g.symbol];
+  // Ingen har set de supertunge, så kategoriens tekst (fx "hårdt, skinnende") passer ikke på dem
+  if (g.kategori === 'ukendt') return KATEGORIER.ukendt.tekst;
+  if (g.tilstand === 'u' && g.nr >= 100) return 'Et tungt grundstof, der kun er lavet i laboratorier og reaktorer i meget små mængder. Ingen har lavet nok af det til at se, hvordan det ser ud. Alle dets isotoper er radioaktive.';
+  let tekst = KATEGORIER[g.kategori].tekst;
+  if (g.radioaktivt && g.kategori !== 'actinid') tekst += ' Alle dets isotoper er radioaktive.';
   return tekst;
 }
 

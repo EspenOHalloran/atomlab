@@ -3,12 +3,12 @@
 // { id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil } from './scene3d.js';
+import { verden, sætVindue, passerTil, ROLIG } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
 import { visBesked, skjulUndertekst } from './beskeder.js';
-import { ryd } from './kosmos/faelles.js';
+import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavPause } from './pause.js';
 import solstorm from './kosmos/solstorm.js';
 import supernova from './kosmos/supernova.js';
@@ -96,6 +96,7 @@ export function stopKosmos() {
   verden.opdateringer.delete(opdater);
   pause.sæt(false);
   luk();
+  stjerneUr.tid = null;
   verden.styring.target.set(0, 0, 0);
   verden.styring.autoRotate = true;
   verden.styring.autoRotateSpeed = 0.5;
@@ -147,7 +148,7 @@ function vælg(id) {
   if (liste.scrollWidth > liste.clientWidth + 4) {
     const b = liste.querySelector('.valgt').getBoundingClientRect();
     const l = liste.getBoundingClientRect();
-    liste.scrollTo({ left: liste.scrollLeft + (b.left - l.left) - (l.width - b.width) / 2, behavior: 'smooth' });
+    liste.scrollTo({ left: liste.scrollLeft + (b.left - l.left) - (l.width - b.width) / 2, behavior: ROLIG ? 'auto' : 'smooth' });
   }
   $('kosmosSet').textContent = set.size < FÆNOMENER.length ? `${set.size} af ${FÆNOMENER.length} set` : 'Alle set ★';
   $('kosmosIkon').textContent = f.ikon;
@@ -209,7 +210,7 @@ function stilKamera({ retning, radius = 16, mål = [0, 0, 0], drej = true, flyv 
 function kørKameraTur(dt) {
   if (!kameraTur) return;
   const tur = kameraTur;
-  tur.t = Math.min(1, tur.t + dt / 1.3);
+  tur.t = ROLIG ? 1 : Math.min(1, tur.t + dt / 1.3); // "reducer bevægelse": hop straks på plads
   const e = tur.t * tur.t * (3 - 2 * tur.t); // blød start og slutning
   const s = verden.styring;
   s.target.lerpVectors(tur.fraMål, tur.tilMål, e);
@@ -279,6 +280,7 @@ function opdater(dt) {
   kørKameraTur(dt); // kameraet kan stadig flyve under pause
   if (!pause.til) {
     kosmosTid += dt;
+    stjerneUr.tid = kosmosTid; // stjernernes overflade står også stille under pause
     kørende.opdater(dt, kosmosTid);
     effekter.opdater(dt);
   }
@@ -304,6 +306,7 @@ export function testAdgang() {
     },
     pause: () => pause.til,
     tid: () => kosmosTid,
+    stjerneTid: () => stjerneUr.tid,
     antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },
     // Spoler tiden frem (testbrowseren tegner kun få billeder i sekundet)
     spol: (sekunder) => {

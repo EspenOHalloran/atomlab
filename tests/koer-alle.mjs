@@ -9,7 +9,7 @@ const ADRESSE = process.env.ADRESSE ?? 'http://localhost:8765'; // samme standar
 const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
-  'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
+  'henfaldsregler', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
   'batteri', 'kosmos', 'beskeder', 'beskeder-2', 'guide', 'pause', 'fuldskaerm',
 ];
 const valgte = process.argv.length > 2 ? process.argv.slice(2) : ALLE;

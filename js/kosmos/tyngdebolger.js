@@ -21,7 +21,7 @@ export default {
   kamera: { retning: [0.15, 0.55, 1], radius: 18 },
   tal: [
     ['Forudsagt', 'Einstein, 1916'],
-    ['Første måling', '14. september 2015'],
+    ['Første direkte måling', '14. september 2015'],
     ['De sorte huller vejede', '36 og 29 × Solen'],
     ['Armene blev ændret', 'under 1/100 proton'],
   ],

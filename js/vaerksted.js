@@ -1,6 +1,6 @@
 // Atomværkstedet: byg et atom af protoner, neutroner og elektroner, og se hvad det bliver.
 
-import { verden, sætVindue, passerTil, kameraSving, flyInd } from './scene3d.js';
+import { verden, sætVindue, passerTil, kameraSving, flyInd, ROLIG } from './scene3d.js';
 import { Atom } from './atom.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering, konfigurationTekst } from './data/grundstoffer.js';
 import { bindingsenergi, kerneRadiusFm } from './data/kerne.js';
@@ -13,7 +13,7 @@ import { citatHTML } from './data/citater.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
-const EKSTRA_ELEKTRONER = 2; // så mange ekstra elektroner kan et atom holde på (fx O²⁻)
+const EKSTRA_ELEKTRONER = 2; // så mange ekstra elektroner kan man give et atom (fx O²⁻, som kun findes i krystaller)
 
 // Opgaver. mål: det antal der skal bygges (null = lige meget).
 // hændelse: opgaven løses af noget, der sker (fx et henfald), i stedet for et bestemt atom.
@@ -26,7 +26,7 @@ export const OPGAVER = [
   {
     id: 'uden-lim', titel: 'Prøv to protoner uden neutroner', mål: { p: 2, n: 0, e: null },
     tip: 'Læg to protoner i kernen og ingen neutroner. Hvad sker der?',
-    fakta: 'To protoner alene kan ikke holde sammen, for de frastøder hinanden. Neutronerne er kernens lim.',
+    fakta: 'To protoner alene kan ikke holde sammen. Kernekraften mellem kun to protoner er en tand for svag, og de frastøder også hinanden. (To neutroner kan heller ikke!) Med både protoner og neutroner bliver limen stærk nok.',
   },
   {
     id: 'helium', titel: 'Byg helium-4', mål: { p: 2, n: 2, e: 2 },
@@ -46,7 +46,7 @@ export const OPGAVER = [
   {
     id: 'henfald', titel: 'Se en kerne henfalde', hændelse: true,
     tip: 'Byg en ustabil kerne, fx tritium eller carbon-14, og tryk på "Se den henfalde".',
-    fakta: 'Når en kerne henfalder, bliver den til et andet grundstof. Det var præcis det, alkymisterne drømte om!',
+    fakta: 'Ved alfa- og betahenfald bliver kernen til et andet grundstof. Det var præcis det, alkymisterne drømte om!',
   },
   {
     id: 'carbon', titel: 'Byg carbon-12 (kulstof)', mål: { p: 6, n: 6, e: 6 },
@@ -102,22 +102,24 @@ export const OPGAVER = [
 
 const HENFALD_TEKST = {
   'beta-': 'Betahenfald: En neutron blev til en proton. I samme øjeblik blev der skabt en helt ny elektron, som skød ud af kernen (sammen med en næsten usynlig antineutrino). Elektronen fandtes ikke i kernen før!',
-  'beta+': 'Beta-plus-henfald: En proton blev til en neutron, og der blev skabt en positron (elektronens antistof-tvilling), som skød ud. Den møder hurtigt en elektron, og så forsvinder de begge i et glimt af gammastråling.',
-  alfa: 'Alfahenfald: Kernen skød en alfapartikel ud: 2 protoner og 2 neutroner, der allerede sad i kernen. Den bliver bremset efter få centimeter i luft, fanger 2 elektroner og bliver til almindelig heliumgas.',
+  'beta+': 'Beta-plus-henfald: En proton blev til en neutron, og der blev skabt en positron (elektronens antistof-tvilling), som skød ud. Den møder hurtigt en elektron, og så forsvinder de begge i et glimt af gammastråling. Mange kerner gør det i stedet ved at fange en af atomets egne elektroner. Det hedder elektronindfangning.',
+  alfa: 'Alfahenfald: Kernen skød en alfapartikel ud. En alfapartikel er en heliumkerne: 2 protoner og 2 neutroner, der sidder tæt sammen. De sad allerede i kernen og blev ikke skabt. Kernen mister altså 2 protoner og 2 neutroner og bliver til et andet grundstof, to pladser tidligere i det periodiske system. Alfapartiklen bliver bremset efter få centimeter i luft, fanger 2 elektroner og bliver til et almindeligt heliumatom.',
   'dobbeltbeta-': 'Dobbelt betahenfald: To neutroner blev til protoner på én gang og skød to elektroner ud.',
-  'dobbeltbeta+': 'To protoner blev til neutroner på én gang og skød to positroner ud.',
+  'dobbeltbeta+': 'Dobbelt elektronindfangning: To protoner blev til neutroner på én gang. Kernen fangede to af atomets egne elektroner, og to neutrinoer fløj ud.',
   n: 'Kernen havde alt for mange neutroner og skød en neutron ud med det samme.',
   p: 'Kernen kunne ikke holde på alle protonerne og skød en proton ud med det samme.',
 };
 
-// Hvilken stråling kernen sender ud, og hvad der stopper den
+// Beryllium-8 er et særtilfælde: Den deler sig i to helt ens heliumkerner
+const BERYLLIUM_8 = 'Beryllium-8 holder kun ca. en tiendedel af en milliontedel af en milliardtedel sekund. Så falder den fra hinanden i to lige store stykker: to heliumkerner (to alfapartikler). En alfapartikel er en heliumkerne: 2 protoner og 2 neutroner, der sidder tæt sammen. Den ene kalder vi alfapartiklen og den anden "det, der er tilbage", men de er helt ens. Hver af dem fanger 2 elektroner og bliver til et heliumatom. Ud af ét berylliumatom bliver der altså to heliumatomer. Derfor er det så svært for stjerner at lave carbon: Beryllium-8 skal fange en tredje heliumkerne, før den når at falde fra hinanden.';
+
 // Korte udgaver til beskeden øverst (hele forklaringen står i Kerne-fanen)
 const HENFALD_KORT = {
   'beta-': 'En neutron blev til en proton og skød en nyskabt elektron ud.',
   'beta+': 'En proton blev til en neutron og skød en positron (antistof) ud.',
-  alfa: 'Kernen skød en alfapartikel ud (2 protoner + 2 neutroner).',
+  alfa: 'Kernen skød en alfapartikel ud: en heliumkerne (2 protoner + 2 neutroner).',
   'dobbeltbeta-': 'To neutroner blev til protoner på én gang.',
-  'dobbeltbeta+': 'To protoner blev til neutroner på én gang.',
+  'dobbeltbeta+': 'To protoner blev til neutroner ved at fange to af atomets elektroner.',
   n: 'Kernen skød en neutron ud.',
   p: 'Kernen skød en proton ud.',
 };
@@ -125,8 +127,8 @@ const HENFALD_KORT = {
 const STRÅLING = {
   'beta-': 'Betastråling (elektroner). Bliver stoppet af nogle millimeter aluminium.',
   'dobbeltbeta-': 'Betastråling (elektroner). Bliver stoppet af nogle millimeter aluminium.',
-  'beta+': 'Positroner. De møder hurtigt en elektron, og så forsvinder begge og bliver til gammastråling.',
-  'dobbeltbeta+': 'Positroner. De møder hurtigt en elektron, og så forsvinder begge og bliver til gammastråling.',
+  'beta+': 'Positroner. De møder hurtigt en elektron, og så forsvinder begge og bliver til gammastråling. Fanger kernen i stedet en elektron, kommer der kun lidt røntgenstråling.',
+  'dobbeltbeta+': 'Næsten ingen: lidt røntgenstråling, når de andre elektroner falder på plads, og neutrinoer, der flyver lige igennem alt.',
   alfa: 'Alfastråling (heliumkerner). Bliver stoppet af et stykke papir, men er farlig, hvis stoffet kommer ind i kroppen.',
   n: 'Neutroner. De går let gennem mange ting og bliver bedst stoppet af vand eller beton.',
   p: 'Protoner.',
@@ -166,6 +168,8 @@ let elementer = {};
 let aktiv = false;
 let travl = false; // mens en kerne henfalder, kan man ikke bygge
 let neutralTimer = null; // efter et henfald bliver atomet neutralt igen lidt efter
+let neutralVenter = false; // man forlod værkstedet, mens atomet var en ion efter et henfald
+const ION_TID = 3000; // så længe (ms) er atomet en ion efter et henfald, før det bliver neutralt igen
 let kæde = null; // { alfa, beta } når man følger uran-238 ned til bly
 
 function $(id) {
@@ -209,12 +213,33 @@ export function startVærksted() {
   flyInd(atom.størrelse());
   opdaterLydknap();
   opdaterAlt();
+  if (neutralVenter) {
+    neutralVenter = false;
+    if (tilstand.e !== tilstand.p) startNeutralTimer();
+  }
 }
 
 export function stopVærksted() {
   aktiv = false;
+  // Et henfald, der venter, bliver færdigt nu. Ellers er værkstedet låst, når man kommer tilbage (fx fra Det periodiske system).
+  atom.afslutHenfald();
+  if (neutralTimer) {
+    clearTimeout(neutralTimer);
+    neutralTimer = null;
+    neutralVenter = true;
+  }
   atom.gruppe.visible = false;
   verden.opdateringer.delete(opdater3D);
+}
+
+// Efter et henfald bliver atomet neutralt igen lidt efter (det fanger eller mister elektroner)
+function startNeutralTimer() {
+  clearTimeout(neutralTimer);
+  neutralTimer = setTimeout(() => {
+    neutralTimer = null;
+    lyd.elektron();
+    sæt({ ...tilstand, e: tilstand.p }, true);
+  }, ION_TID);
 }
 
 // Åbner et grundstof fra Det periodiske system. Er det ikke opdaget endnu, får man en opgave om at bygge det.
@@ -228,7 +253,7 @@ export function åbnGrundstof(nr) {
   sæt({ p: 0, n: 0, e: 0 });
   aktivOpgave = {
     id: `byg-${nr}`, midlertidig: true, titel: `Byg ${g.navn}-${nr + n}`, mål: { p: nr, n, e: nr },
-    tip: `${g.navn} har ${nr} protoner. Den mest almindelige udgave har ${n} neutroner, og et neutralt atom har lige så mange elektroner som protoner.`,
+    tip: `${g.navn} har ${nr} protoner. Den mest almindelige (eller mest stabile) udgave har ${n} neutroner, og et neutralt atom har lige så mange elektroner som protoner.`,
     fakta: `Flot! Nu har du selv bygget ${g.navn.toLowerCase()}.`,
   };
   visTip = false;
@@ -238,6 +263,19 @@ export function åbnGrundstof(nr) {
 
 function opdater3D(dt) {
   atom.opdater(dt);
+}
+
+// Kun til automatiske tests (bruges når adressen indeholder ?test)
+export function testAdgang() {
+  return {
+    // Spol atomet frem i små skridt, som på en skærm med 60 billeder i sekundet (testbrowseren tegner kun få)
+    spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) atom.opdater(1 / 60); },
+    // Hvor mange kugler der tegnes, og hvor mange der er plads til
+    kugler: () => ({
+      p: atom.pMesh.count, n: atom.nMesh.count, e: atom.eMesh.count,
+      pladsP: atom.pMesh.instanceMatrix.count, pladsN: atom.nMesh.instanceMatrix.count, pladsE: atom.eMesh.instanceMatrix.count,
+    }),
+  };
 }
 
 // ---------- Ændringer ----------
@@ -280,6 +318,7 @@ function sæt(ny, intern = false) {
   if (!intern) {
     clearTimeout(neutralTimer);
     neutralTimer = null;
+    neutralVenter = false;
     kæde = null; // man har selv ændret atomet, så kæden er brudt
     elementer.sidsteHenfald.classList.add('skjult');
   }
@@ -314,13 +353,16 @@ function startHenfald() {
 
   atom.henfald(måde, (ny) => {
     travl = false;
-    lyd.henfald(måde);
-    kameraSving(0.45, 1.2);
-    sæt({ p: ny.p, n: ny.n, e: før.e }, true);
+    if (aktiv) {
+      lyd.henfald(måde);
+      kameraSving(0.45, 1.2);
+    }
+    sæt({ p: ny.p, n: ny.n, e: ny.e ?? før.e }, true); // ved elektronindfangning har kernen fanget elektroner
     const efter = stabilitet(ny.p, ny.n);
 
-    let tekst = HENFALD_TEKST[måde];
-    if (førStabilitet.halveringstid) tekst += ` I virkeligheden tager det ${førStabilitet.halveringstid} (halveringstid), men vi har spolet frem.`;
+    const be8 = måde === 'alfa' && før.p === 4 && før.n === 4;
+    let tekst = be8 ? BERYLLIUM_8 : HENFALD_TEKST[måde];
+    if (førStabilitet.halveringstid && !be8) tekst += ` Halveringstiden er ${førStabilitet.halveringstid}: Efter så lang tid er halvdelen af den slags kerner henfaldet. Hvornår netop denne kerne henfalder, er tilfældigt, så vi har spolet frem.`;
     if (efter.status === 'stabil') tekst += ' Den nye kerne er stabil.';
     else if (efter.status !== 'tom') tekst += ' Den nye kerne er også ustabil. Tryk igen!';
     const q = tilstand.p - tilstand.e;
@@ -329,8 +371,10 @@ function startHenfald() {
         ? ' Atomet mangler nu elektroner (det er en ion), men det fanger snart nogle fra omgivelserne.'
         : ' Atomet har nu for mange elektroner (det er en ion), men de forsvinder snart igen.';
     }
-    const titel = `${kerneNavn(før.p, før.n)} → ${kerneNavn(ny.p, ny.n)}`;
-    visBesked({ titel, tekst: HENFALD_KORT[måde] + ' Læs mere under Kerne.', type: 'henfald', varighed: 9000 });
+    // Ved alfahenfald står alfapartiklen også i titlen, så man kan se, at der kommer to stykker ud
+    const titel = `${kerneNavn(før.p, før.n)} → ${kerneNavn(ny.p, ny.n)}` + (måde === 'alfa' ? (be8 ? ' + Helium-4' : ' + alfapartikel') : '');
+    const kort = be8 ? 'Beryllium-8 faldt fra hinanden i to heliumkerner.' : HENFALD_KORT[måde];
+    visBesked({ titel, tekst: kort + ' Læs mere under Kerne.', type: 'henfald', varighed: 9000 });
     sætFane('kerne');
     // Teksten bliver også stående i Kerne-fanen, så man kan nå at læse den
     elementer.sidsteHenfald.innerHTML = `<strong>Seneste henfald: ${titel}</strong>${tekst}`;
@@ -348,11 +392,8 @@ function startHenfald() {
 
     // Efter lidt tid bliver atomet neutralt igen
     if (varNeutral && tilstand.e !== tilstand.p) {
-      neutralTimer = setTimeout(() => {
-        neutralTimer = null;
-        lyd.elektron();
-        sæt({ ...tilstand, e: tilstand.p }, true);
-      }, 1600);
+      if (aktiv) startNeutralTimer();
+      else neutralVenter = true;
     }
   });
 }
@@ -472,7 +513,7 @@ function lavKnapper() {
     setTimeout(() => dispatchEvent(new Event('resize')), 50);
   });
   $('knapOpgaverForfra').addEventListener('click', () => {
-    if (!confirm('Vil du starte forfra med opgaverne? De grundstoffer, du har opdaget, beholder du.')) return;
+    if (!confirm('Vil du starte forfra med opgaverne i alle dele (også Stjerneovnen, Reaktoren og Batteriet)? De grundstoffer, du har opdaget, beholder du.')) return;
     fremgang.nulstilOpgaver();
     vælgNæsteOpgave();
     lavOpgaveliste();
@@ -536,7 +577,7 @@ function åbn(id) {
 // Åbner hjælpen ved et bestemt afsnit
 function åbnHjælp(afsnit) {
   åbn('hjælp');
-  requestAnimationFrame(() => $(afsnit)?.scrollIntoView({ block: 'start', behavior: 'smooth' }));
+  requestAnimationFrame(() => $(afsnit)?.scrollIntoView({ block: 'start', behavior: ROLIG ? 'auto' : 'smooth' }));
 }
 
 function opdaterLydknap() {
@@ -670,6 +711,7 @@ function opdaterOpgave() {
 
 function fejrOpgave(o, fakta) {
   setTimeout(() => {
+    if (!aktiv) return;
     lyd.klaret();
     atom.fejr(0xffd43b);
     visBesked({ titel: `Opgave klaret: ${o.titel} ★`, tekst: fakta || o.fakta, type: 'klaret', varighed: 8000 });
@@ -701,6 +743,7 @@ function tjekFremskridt() {
     const o = aktivOpgave;
     vælgNæsteOpgave();
     setTimeout(() => {
+      if (!aktiv) return;
       lyd.klaret();
       atom.fejr(0xffd43b);
       visBesked({ titel: `${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 7000 });
@@ -765,7 +808,7 @@ function opdaterInfo() {
   const q = p - e;
   let ladning;
   if (e === 0) {
-    ladning = `+${p}: en nøgen kerne uden elektroner (${g.symbol}${ladningstegn(p)}). Det findes fx inde i Solen, hvor der er så varmt, at alle elektronerne bliver revet af.`;
+    ladning = `+${p}: en nøgen kerne uden elektroner (${g.symbol}${ladningstegn(p)}). ${p <= 8 ? 'Det findes fx inde i Solen, hvor der er så varmt, at alle elektronerne bliver revet af.' : 'Så varmt er der ikke engang inde i Solen. Den slags laves i store forsøgsmaskiner.'}`;
     if (p === 1 && n === 0) ladning = '+1: bare en enkelt proton (H⁺)';
     if (p === 2 && n === 2) ladning = '+2: en alfapartikel (heliumkerne)';
   } else if (q === 0) ladning = '0: et neutralt atom';
@@ -819,7 +862,7 @@ function opdaterNørd() {
   const tal2 = (x) => x.toLocaleString('da-DK', { maximumFractionDigits: 2 });
   const rækker = [
     ['Elektron&shy;konfiguration', `<span class="formel">${k.kort}</span><br><small>for et neutralt ${g.navn.toLowerCase()}-atom</small>`],
-    ['Kernens radius', `ca. ${tal2(kerneRadiusFm(a))} fm <small>(1 femtometer = en milliontedel af en milliardtedel meter). Hele atomet er ca. 100.000 gange større.</small>`],
+    ['Kernens radius', `ca. ${tal2(kerneRadiusFm(a))} fm <small>(1 femtometer = en milliontedel af en milliardtedel meter). Hele atomet er titusinder af gange større (ca. 20.000 til 100.000 gange).</small>`],
   ];
   if (b) {
     const andel = Math.min(1, b.prNukleon / 9);
@@ -917,7 +960,7 @@ function opdaterKort(st) {
       ? `Den eneste stabile ${g.navn.toLowerCase()} har ${stk(min, 'neutron', 'neutroner')}.`
       : `Stabile ${g.navn.toLowerCase()}-kerner har ${min}–${maks} neutroner.`;
   } else if (p >= 84) {
-    tekst += 'Fra grundstof nr. 84 og opefter er ingen kerner stabile, uanset hvor mange neutroner de har.';
+    tekst += 'Fra grundstof nr. 83 (bismuth) og opefter er ingen kerner helt stabile, uanset hvor mange neutroner de har. Bismuth-209 henfalder dog så langsomt, at den næsten er stabil.';
   } else {
     tekst += `${g.navn} har slet ingen stabile kerner.`;
   }

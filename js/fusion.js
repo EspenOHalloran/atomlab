@@ -41,23 +41,23 @@ for (const t of Object.values(TYPER)) {
 const REAKTIONER = [
   {
     a: 'p', b: 'p', ud: ['d'], skyd: ['positron', 'neutrino'], Q: 1.44, chance: 0.35, kastChance: 0.6, trin: 0,
-    tekst: 'To protoner smeltede sammen. Den ene blev lavet om til en neutron, så nu er det deuterium. En positron (antistof) og en neutrino blev skudt ud.',
+    tekst: 'To protoner (brintkerner) smeltede sammen. For at de kan blive sammen, blev den ene lavet om til en neutron, så nu er det deuterium ("tung brint"). Samtidig blev en positron (antistof) og en neutrino (en næsten usynlig partikel) skudt ud.',
   },
   {
     a: 'd', b: 'p', ud: ['he3'], skyd: ['gamma'], Q: 5.49, chance: 0.9, kastChance: 1, trin: 1,
-    tekst: 'Deuterium fangede en proton og blev til helium-3. Energien kom ud som et glimt af gammastråling.',
+    tekst: 'Deuterium fangede en proton mere og blev til helium-3 (2 protoner og 1 neutron). Energien kom ud som et glimt af gammastråling (meget kraftigt lys).',
   },
   {
     a: 'he3', b: 'he3', ud: ['he4', 'p', 'p'], skyd: [], Q: 12.86, chance: 0.9, kastChance: 1, trin: 2,
-    tekst: 'To helium-3 blev til helium-4, og to protoner blev skudt ud igen. Fire protoner er nu blevet til én heliumkerne!',
+    tekst: 'To helium-3 stødte sammen. De beholdt 2 protoner og 2 neutroner, altså helium-4, og skød 2 protoner ud igen, som kan bruges forfra. Fire protoner er nu blevet til én heliumkerne!',
   },
   {
     a: 'he4', b: 'he4', ud: ['be8'], skyd: [], Q: -0.09, chance: 1, kastChance: 1, trin: 3, minT: 80,
-    tekst: 'To heliumkerner blev til beryllium-8. Den falder fra hinanden igen på et øjeblik, medmindre en tredje heliumkerne rammer lige nu!',
+    tekst: 'To heliumkerner blev til beryllium-8. Den falder fra hinanden igen på langt under en milliardtedel af et sekund, medmindre en tredje heliumkerne rammer den lige nu! (I spillet holder den lidt længere, så du kan nå det.)',
   },
   {
     a: 'be8', b: 'he4', ud: ['c12'], skyd: ['gamma'], Q: 7.37, chance: 1, kastChance: 1, trin: 3,
-    tekst: 'Tre heliumkerner er blevet til carbon-12! Sådan er alt carbon i universet lavet, også det i din krop.',
+    tekst: 'Tre heliumkerner er blevet til carbon-12! At lave beryllium-8 kostede 0,09 MeV, så i alt giver tre heliumkerner 7,27 MeV. Sådan er alt carbon i universet lavet, også det i din krop.',
   },
 ];
 
@@ -65,7 +65,7 @@ export const OPGAVER_FUSION = [
   {
     id: 'f-koldt', titel: 'Prøv at skyde to protoner sammen, mens det er for koldt',
     tip: 'Skru temperaturen ned under 10 mio. °C, og skyd en proton mod en anden.',
-    fakta: 'Protoner er plusladede og frastøder hinanden. Kun i den enorme varme i en stjernes kerne går de hurtigt nok til at komme helt tæt på hinanden.',
+    fakta: 'Protoner er plusladede og frastøder hinanden. Kun ved enorm varme, som i en stjernes kerne, kommer de så tæt på hinanden, at de en sjælden gang kan smelte sammen.',
   },
   {
     id: 'f-d', titel: 'Lav deuterium (p + p)', tip: 'Skyd en proton mod en anden proton ved Solens temperatur (15 mio. °C). Det kan kræve flere forsøg.',
@@ -88,7 +88,7 @@ export const OPGAVER_FUSION = [
     fakta: 'I Solen bliver ca. 4 millioner ton masse til energi hvert sekund. Det er derfor, den lyser og varmer.',
   },
   {
-    id: 'f-carbon', titel: 'Bonus: Lav carbon som en rød kæmpe', tip: 'Skru op til mindst 80 mio. °C. To heliumkerner bliver til beryllium-8, som hurtigt skal rammes af en tredje heliumkerne.',
+    id: 'f-carbon', titel: 'Bonus: Lav carbon som en rød kæmpe', tip: 'Skru op til mindst 80 mio. °C (i spillet; i rigtige stjerner ca. 100 mio. °C). To heliumkerner bliver til beryllium-8, som hurtigt skal rammes af en tredje heliumkerne.',
     fakta: 'Alt carbon i din krop er lavet sådan i gamle stjerner. Vi er lavet af stjernestof!',
   },
 ];
@@ -115,7 +115,7 @@ let sol = null; // Solen udefra (bruges kun på rejsen)
 let effekter = null;
 let aktiv = false;
 let temperatur = 15; // millioner grader
-let tempo = 1;
+let tempo = 0.6; // Langsom 0,3, Normal 0,6 og Hurtig 3 (ganges på tiden, så fysikken er den samme)
 let valgt = null;
 let energi = 0;
 let tællere = [0, 0, 0, 0];
@@ -135,6 +135,12 @@ const hjælpS = new THREE.Vector3();
 
 function $(id) {
   return document.getElementById(id);
+}
+
+function sætTempo(t) {
+  if (demo) tempoFørDemo = t; // "Vis mig" kører i slowmotion og skifter tilbage til det valgte tempo bagefter
+  else tempo = t;
+  for (const b of document.querySelectorAll('[data-fus-tempo]')) b.classList.toggle('valgt', Number(b.dataset.fusTempo) === t);
 }
 
 function termiskFart() {
@@ -237,8 +243,11 @@ function vedTast(h) {
   else valgt = null;
 }
 
+// Kerner, der stadig er i ovnen (dem, der lige er smeltet sammen, er markeret væk, men står i listen til næste billede)
+const antalIOvnen = () => partikler.reduce((sum, p) => sum + (p.væk ? 0 : 1), 0);
+
 function nyPartikel(type, pos, fart) {
-  if (partikler.length >= MAX_PARTIKLER) return null;
+  if (antalIOvnen() >= MAX_PARTIKLER) return null;
   const p = {
     id: næsteId++, type, pos: pos.clone(), fart: fart ? fart.clone() : new THREE.Vector3().randomDirection().multiplyScalar(termiskFart()),
     q: new THREE.Quaternion().random(), akse: new THREE.Vector3().randomDirection(), spin: 0.5 + Math.random() * 1.5,
@@ -264,6 +273,7 @@ function startForfra() {
 export function startFusion() {
   aktiv = true;
   rod.visible = true;
+  lavOpgaveliste(); // opgaverne kan være startet forfra i værkstedet
   verden.opdateringer.add(opdater);
   sætVindue($('fusionVindue'));
   verden.styring.target.set(0, 0, 0);
@@ -275,15 +285,22 @@ export function startFusion() {
   opdaterPanel();
   // Første gang: en kort rejse fra Solen udefra og ind i kernen. Bagefter (eller ellers) kommer guiden.
   if (!ROLIG && !harSetGuide('fusion-rejse')) startRejse();
-  else {
-    setTimeout(() => {
-      if (aktiv && !rejse) startGuide('fusion', guideTrin());
-    }, 1200);
-  }
+  else ventPåGuide(1200);
+}
+
+// Guiden starter lidt efter. Kun én ventende start ad gangen, så den ikke starter to gange, hvis man skifter hurtigt frem og tilbage.
+let guideTimer = null;
+function ventPåGuide(ms) {
+  clearTimeout(guideTimer);
+  guideTimer = setTimeout(() => {
+    guideTimer = null;
+    if (aktiv && !rejse) startGuide('fusion', guideTrin());
+  }, ms);
 }
 
 export function stopFusion() {
   aktiv = false;
+  clearTimeout(guideTimer);
   rod.visible = false;
   etiket.classList.add('skjult');
   sigteEtiket.classList.add('skjult');
@@ -304,15 +321,21 @@ function lavPanel() {
     opdaterTemperatur();
   });
   $('fusTilføj').addEventListener('click', () => {
+    if (antalIOvnen() > MAX_PARTIKLER - 10) {
+      lyd.nej();
+      besked('Ovnen er fuld', `Der kan højst være ${MAX_PARTIKLER} kerner i ovnen. Smelt nogle sammen, eller tryk "Start forfra".`);
+      return;
+    }
     lyd.proton();
     for (let i = 0; i < 10; i++) nyPartikel('p', tilfældigSted());
     opdaterPanel();
   });
-  $('fusTempo').addEventListener('click', () => {
-    tempo = tempo === 1 ? 3 : 1;
-    $('fusTempo').textContent = tempo === 1 ? 'Tempo: normal' : 'Tempo: hurtigt';
-    lyd.klik();
-  });
+  for (const b of document.querySelectorAll('[data-fus-tempo]')) {
+    b.addEventListener('click', () => {
+      lyd.klik();
+      sætTempo(Number(b.dataset.fusTempo));
+    });
+  }
   $('fusRyd').addEventListener('click', () => {
     lyd.fjern();
     startForfra();
@@ -445,7 +468,7 @@ function tegnGraf() {
   g.fillStyle = '#ff9b9b';
   g.fillText('Hurtige nok →', xPx(BAKKE) + 10, top - 2);
   g.fillStyle = '#93a0c4';
-  g.fillText('Fart →', xPx(0), H - 6);
+  g.fillText('Energi (fart) →', xPx(0), H - 6);
   const andel = andelOverBakken(temperatur);
   const procent = andel < 0.01 ? 'under 1 %' : `ca. ${Math.round(andel * 100)} %`;
   $('fusGrafTekst').innerHTML = `Ved ${temperatur} mio. °C er <b>${procent}</b> af protonerne hurtige nok (gule) til at komme over frastødningens bakke (stiplet).`;
@@ -534,11 +557,7 @@ function slutRejse({ husk = true, guide = true } = {}) {
   const k = verden.kamera;
   if (k.position.length() > 70) k.position.setLength(70);
   passerTil(R_OVN * 0.85);
-  if (guide) {
-    setTimeout(() => {
-      if (aktiv && !rejse) startGuide('fusion', guideTrin());
-    }, 700);
-  }
+  if (guide) ventPåGuide(700);
 }
 
 function lavOpgaveliste() {
@@ -560,6 +579,7 @@ function løs(id) {
   const o = OPGAVER_FUSION.find((x) => x.id === id);
   if (!o || !fremgang.løs(id)) return;
   setTimeout(() => {
+    if (!aktiv) return;
     lyd.klaret();
     visBesked({ titel: `Opgave klaret: ${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 8000 });
   }, 300);
@@ -594,10 +614,14 @@ const antalAf = (type) => partikler.filter((p) => p.type === type && !p.væk).le
 function vælgPar(typeA, typeB) {
   let bedst = null;
   let bedstPoint = Infinity;
+  // Kerner, der er skudt af sted, eller som et skud er på vej mod, er optaget.
+  // (Ellers kunne "Vis mig" sigte på et skud, der stadig fløj, og stoppe uden en reaktion.)
+  const optaget = new Set();
+  for (const p of partikler) if (p.kastet > 0) { optaget.add(p); if (p.mål) optaget.add(p.mål); }
   for (const a of partikler) {
-    if (a.type !== typeA || a.væk || a.kastet > 0) continue;
+    if (a.type !== typeA || a.væk || optaget.has(a)) continue;
     for (const b of partikler) {
-      if (b === a || b.type !== typeB || b.væk) continue;
+      if (b === a || b.type !== typeB || b.væk || optaget.has(b)) continue;
       const point = a.pos.distanceTo(b.pos) + 0.4 * (a.pos.length() + b.pos.length());
       if (point < bedstPoint) {
         bedstPoint = point;
@@ -627,7 +651,7 @@ function visMig() {
   }
   const [a, b] = valg;
   tempoFørDemo = tempo;
-  tempo = 0.3;
+  tempo = 0.25;
   demo = { a, b, t: 0, skudt: false };
   a.demo = true; // de to kerner mærker ikke de andre, så skuddet altid rammer (se fysik)
   b.demo = true;
@@ -810,7 +834,7 @@ const LAV_SÅDAN = {
   d: 'Lav en ved at skyde en proton mod en anden proton.',
   he3: 'Lav en ved at skyde en proton mod deuterium.',
   he4: 'Lav en ved at skyde helium-3 mod helium-3.',
-  be8: 'Den laves af to heliumkerner ved mindst 80 mio. °C og holder kun et øjeblik.',
+  be8: 'Den laves af to heliumkerner ved mindst 80 mio. °C (i spillet) og holder kun et øjeblik.',
   c12: 'Den laves af beryllium-8 og en heliumkerne.',
 };
 
@@ -991,7 +1015,7 @@ function sammenstød(a, b, n) {
     a.kastet = 0;
     b.kastet = 0;
     if (r && r.minT && temperatur < r.minT) {
-      besked('De preller af hinanden', 'Heliumkerner har dobbelt så stor ladning som protoner og frastøder hinanden meget kraftigt. Det kræver mindst 80 mio. °C, som i en rød kæmpe.');
+      besked('De preller af hinanden', 'Heliumkerner har dobbelt så stor ladning som protoner og frastøder hinanden meget kraftigt. I spillet kræver det mindst 80 mio. °C. I rigtige stjerner sker det ved ca. 100 mio. °C, som i en rød kæmpe.');
     } else if (r && r.a === 'p') {
       besked('De ramte hinanden, men intet skete', 'For at blive til deuterium skal en proton laves om til en neutron, mens de rører hinanden. Det sker sjældent. Prøv igen!');
     } else if (!r) {
@@ -1018,7 +1042,7 @@ function udfør(a, b, r) {
   effekter.glimt(sted, 2 + Math.max(0, r.Q) * 0.35);
   effekter.bølge(sted, 3 + Math.max(0, r.Q) * 0.6);
   if (r.Q > 0) effekter.tekst(sted.clone().add(new THREE.Vector3(0, 1.4, 0)), `+${r.Q.toLocaleString('da-DK')} MeV`);
-  energi += Math.max(0, r.Q);
+  energi += r.Q; // med fortegn: beryllium-8 koster 0,09 MeV
   tællere[r.trin] += r.ud[0] === 'be8' ? 0 : 1;
   lyd.fusion?.(r.trin);
   const titel = `${TYPER[a.type].navn} + ${TYPER[b.type].navn} → ${TYPER[hoved].navn}`;
@@ -1046,6 +1070,7 @@ function udfør(a, b, r) {
 
 function berylliumFalderFraHinanden(p) {
   p.væk = true;
+  energi += 0.09; // de 0,09 MeV, det kostede at lave den, kommer tilbage
   const retning = new THREE.Vector3().randomDirection();
   nyPartikel('he4', p.pos.clone().addScaledVector(retning, 0.6), p.fart.clone().addScaledVector(retning, 5));
   nyPartikel('he4', p.pos.clone().addScaledVector(retning, -0.6), p.fart.clone().addScaledVector(retning, -5));

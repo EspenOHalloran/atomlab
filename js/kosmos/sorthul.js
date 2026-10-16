@@ -19,19 +19,19 @@ export default {
   tal: [
     ['Mælkevejens sorte hul', '4 mio. × Solen'],
     ['Afstand til det', 'ca. 26.000 lysår'],
-    ['Første billede', 'M87*, i 2019'],
+    ['Første billede', 'M87*, vist i 2019'],
     ['Jorden som sort hul', 'ca. 2 cm bred'],
   ],
   kort: `
     <p>Et <b>sort hul</b> er et sted, hvor så meget masse er presset sammen, at intet kan slippe væk, ikke engang lys. Grænsen kaldes <b>begivenhedshorisonten</b>. Det, der kommer indenfor, kommer aldrig ud igen.</p>
     <p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt og falder ind. Lyset bliver bøjet af tyngdekraften, så man kan se gassen bag hullet som en lysende bue over og under det.</p>
-    <p>Midt i vores galakse, Mælkevejen, er der et kæmpe sort hul, der vejer 4 millioner gange så meget som Solen. Prøv at sende en astronaut ind!</p>`,
+    <p>Midt i vores galakse, Mælkevejen, er der et kæmpe sort hul, der vejer 4 millioner gange så meget som Solen. Prøv at sende en astronaut ind i et sort hul!</p>`,
   nørd: `
     <p><b>Hvor stort?</b> Begivenhedshorisontens radius er 2GM/c² (G er tyngdekonstanten, M massen og c lysets fart). Blev Solen presset sammen til et sort hul, ville den være 6 km bred. Jorden ville være ca. 2 cm.</p>
     <p><b>Spaghetti:</b> Tyngdekraften er stærkere ved fødderne end ved hovedet, hvis man falder med fødderne først. Tæt på et lille sort hul bliver man derfor strakt ud som spaghetti. Ved et kæmpe sort hul er forskellen mindre, og man kunne krydse horisonten uden at mærke noget.</p>
     <p><b>Tiden går i stå:</b> Set udefra bliver astronauten langsommere og rødere tæt på horisonten, og man ser aldrig astronauten nå helt ind. For astronauten selv går det hurtigt.</p>
-    <p><b>Billeder af sorte huller:</b> I 2019 kombinerede forskere radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). De tog det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
-    <p><b>Ærligt talt:</b> Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Stephen Hawking regnede ud, at sorte huller langsomt "fordamper" (Hawking-stråling), men så langsomt, at det aldrig er blevet målt.</p>`,
+    <p><b>Billeder af sorte huller:</b> Forskere kombinerede radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). Målingerne blev lavet i 2017, og i 2019 viste de det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
+    <p><b>Ærligt talt:</b> Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Den sorte skygge er i virkeligheden ca. 2,5 gange bredere end selve horisonten. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul. Stephen Hawking regnede ud, at sorte huller langsomt "fordamper" (Hawking-stråling), men så langsomt, at det aldrig er blevet målt.</p>`,
 
   lav(gruppe, { lyd, fase, verden }) {
     // Skyggen
@@ -124,7 +124,7 @@ export default {
       astro.v = astro.p.clone().normalize().multiplyScalar(-1.2).add(new THREE.Vector3(-Math.sin(v), 0, Math.cos(v)).multiplyScalar(0.6));
       astronaut.visible = true;
       astronaut.material.opacity = 1;
-      fase('En astronaut falder ind', 'Tæt på hullet trækker tyngdekraften meget hårdere i fødderne end i hovedet. Astronauten bliver strakt ud som spaghetti!', [1, 2]);
+      fase('En astronaut falder ind', 'Tæt på et lille sort hul trækker tyngdekraften meget hårdere i fødderne end i hovedet. Astronauten bliver strakt ud som spaghetti!', [1, 2]);
     }
 
     function kastStjerne() {

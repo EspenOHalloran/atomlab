@@ -1,7 +1,7 @@
 // Atomværkstedet: menu, byg atomer, stabile og ustabile kerner, tællere og fanerne
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('vaerksted');
-const URL = `${ADRESSE}/index.html`;
+const URL = `${ADRESSE}/index.html?test`;
 const browser = await chromium.launch({ args: ARGS });
 const fejl = [];
 let ok = 0, dårlig = 0;
@@ -100,8 +100,18 @@ await page.click('#knapVisning');
 await page.waitForTimeout(1200);
 await page.screenshot({ path: UD + '/6-uran-sky.png' });
 
-// Jern til fejring + opgaveliste
+// "Ryd" og straks uran igen: Mens de gamle partikler flyver væk, er der mange flere kugler end normalt.
+// Grafikken må ikke løbe tør for plads (det gav fejl i WebGL før).
 await page.click('#knapVisning');
+await page.click('#knapRyd');
+await page.evaluate(() => atomlabTest.vaerksted.spol(0.4)); // nu er alle kuglerne på vej ud
+await page.click('#minitabel .felt[data-nr="92"]'); // uran er opdaget nu, så man kan hoppe direkte til det
+const kugler = await page.evaluate(() => { atomlabTest.vaerksted.spol(0.15); return atomlabTest.vaerksted.kugler(); }); // her er der flest (uden loftet op til ca. 180 protoner)
+tjek('Ryd og straks uran: der er plads til alle kuglerne', kugler.p <= kugler.pladsP && kugler.n <= kugler.pladsN && kugler.e <= kugler.pladsE, JSON.stringify(kugler));
+await page.waitForTimeout(800);
+tjek('Ryd og straks uran igen giver ingen grafikfejl', !fejl.some((f) => /GL|WebGL/i.test(f)), fejl.join(' | '));
+
+// Jern til fejring + opgaveliste
 await page.click('#knapRyd');
 await tast('p', 26); await tast('n', 30); await tast('e', 26);
 await page.waitForTimeout(600);

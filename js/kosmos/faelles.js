@@ -96,6 +96,11 @@ const STJERNE_FRAGMENT = `
     gl_FragColor = vec4(c, 1.0);
   }`;
 
+// Stjernernes overflade bruger Kosmos' ur (sat af kosmos.js), så den står stille under pause.
+// Uden for Kosmos (fx rejsen ind i Solen i Stjerneovnen) er uret null, og så bruges den almindelige tid.
+export const stjerneUr = { tid: null };
+export const stjerneTid = () => stjerneUr.tid ?? performance.now() / 1000;
+
 export function stjerne(radius, lys, mørk, glødFarve, glødStørrelse = 3, { styrke = 1.6, skala = 3.2, kant = 0.35 } = {}) {
   const gruppe = new THREE.Group();
   const materiale = new THREE.ShaderMaterial({
@@ -111,7 +116,7 @@ export function stjerne(radius, lys, mørk, glødFarve, glødStørrelse = 3, { s
     fragmentShader: STJERNE_FRAGMENT,
   });
   const kugle = new THREE.Mesh(new THREE.SphereGeometry(radius, 48 * KVALITET + 16, 32 * KVALITET + 12), materiale);
-  kugle.onBeforeRender = () => { materiale.uniforms.tid.value = performance.now() / 1000; };
+  kugle.onBeforeRender = () => { materiale.uniforms.tid.value = stjerneTid(); };
   const glorie = glød(glødFarve, radius * glødStørrelse, 0.85);
   gruppe.add(kugle, glorie);
   gruppe.userData.kugle = kugle;

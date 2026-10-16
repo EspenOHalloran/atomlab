@@ -826,6 +826,23 @@ button { font: inherit; color: inherit; }
 .del-knap { padding: 6px 14px; border: 0; border-radius: 9px; background: transparent; color: var(--svag); font-weight: 700; cursor: pointer; }
 .del-knap.valgt { background: rgba(95, 227, 255, 0.18); color: var(--tekst); }
 .valg-række { display: flex; flex-wrap: wrap; gap: 6px; }
+.valg-række .valg-navn { align-self: center; margin-right: 2px; color: var(--svag); font-size: 12.5px; font-weight: 700; }
+.tempo-række { gap: 4px; }
+.tempo-række .chip { padding-left: 9px; padding-right: 9px; }
+/* I smalle paneler (tablet på langs og telefon på langs) står ordet "Tempo" på sin egen linje */
+@media (max-width: 1150px) and (min-width: 821px), (max-height: 500px) {
+  .tempo-række .valg-navn { flex-basis: 100%; }
+}
+/* Boks, der kan foldes sammen (fx "Fra brint til carbon, trin for trin" i Stjerneovnen) */
+.trin-boks summary { cursor: pointer; list-style: none; }
+.trin-boks summary::-webkit-details-marker { display: none; }
+.trin-boks summary strong { display: inline; }
+.trin-boks summary strong::after { content: ' ▾'; color: var(--svag); }
+.trin-boks:not([open]) summary strong::after { content: ' ▸'; }
+.trin-boks ol { margin: 6px 0 0; padding-left: 18px; }
+.trin-boks li { margin-bottom: 6px; }
+.trin-boks li:last-child { margin-bottom: 0; }
+.trin-boks li b { color: #ffcf7a; }
 .forklaring-reaktor .tæl { display: block; margin: 4px 0 6px; color: var(--grøn); font-size: 12.5px; }
 .effekt-boks, .stabil-boks { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
 .effekt-boks > span, .stabil-boks strong { font-weight: 700; }

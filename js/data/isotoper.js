@@ -30,11 +30,12 @@ const NÆSTEN_STABILE = {
   'Rb-87': 4.9e10, 'Zr-96': 2e19, 'Mo-100': 7e18, 'Cd-113': 8e15, 'Cd-116': 3e19, 'In-115': 4.4e14,
   'Te-128': 2e24, 'Te-130': 8e20, 'Xe-124': 1.8e22, 'Xe-136': 2.2e21, 'Ba-130': 1e21, 'La-138': 1e11,
   'Nd-144': 2.3e15, 'Nd-150': 9e18, 'Sm-147': 1.06e11, 'Sm-148': 7e15, 'Eu-151': 5e18, 'Gd-152': 1.1e14,
-  'Lu-176': 3.7e10, 'Hf-174': 2e15, 'W-180': 1.8e18, 'Re-187': 4.1e10, 'Os-186': 2e15, 'Pt-190': 6.5e11,
+  'Lu-176': 3.76e10, 'Hf-174': 2e15, 'W-180': 1.8e18, 'Re-187': 4.1e10, 'Os-186': 2e15, 'Pt-190': 5e11,
   'Bi-209': 2e19, 'Th-232': 1.4e10, 'U-235': 7.04e8, 'U-238': 4.47e9,
 };
 
-// Kendte ustabile isotoper: [halveringstid, ekstra fakta, 'beta' eller 'alfa' hvis den henfalder anderledes end reglerne giver]
+// Kendte ustabile isotoper: [halveringstid, ekstra fakta, 'beta', 'beta+' eller 'alfa' hvis den henfalder anderledes end
+// reglerne giver]. Tjekkes af tests/henfaldsregler.mjs.
 const KENDTE = {
   'H-3': ['12 år', 'Kaldes tritium. Bruges i selvlysende urskiver og nødskilte.'],
   'He-6': ['0,8 sekunder'],
@@ -78,34 +79,53 @@ const KENDTE = {
   'Ba-141': ['18 minutter', 'Dannes, når uran-235 spaltes.'],
   'Pm-145': ['18 år'],
   'Pm-147': ['2,6 år'],
+  'Gd-148': ['87 år', '', 'alfa'],
+  'Gd-150': ['1,8 mio. år', '', 'alfa'],
+  'I-123': ['13 timer', 'Bruges til skanninger på hospitaler.'],
   'Th-230': ['75.000 år'],
+  'Th-231': ['25 timer', 'Dannes, når uran-235 henfalder.', 'beta'],
   'Th-234': ['24 dage', '', 'beta'],
-  'Pa-234': ['6,7 timer', '', 'beta'],
+  'Pa-233': ['27 dage', 'Bliver til uran-233.', 'beta'],
+  'Pa-234': ['1,2 minutter', 'I uran-kæden er det en kortlivet, "ophidset" udgave af kernen.', 'beta'],
   'Pb-210': ['22 år'],
+  'Pb-212': ['11 timer'],
   'Pb-214': ['27 minutter'],
   'Bi-210': ['5 dage'],
+  'Bi-211': ['2,1 minutter', '', 'alfa'],
+  'Bi-213': ['46 minutter'],
   'Bi-214': ['20 minutter'],
   'Po-214': ['0,16 millisekunder', '', 'alfa'],
+  'Po-216': ['0,15 sekunder', '', 'alfa'],
   'Po-218': ['3 minutter', '', 'alfa'],
   'Po-209': ['125 år'],
   'Po-210': ['138 dage'],
-  'At-210': ['8 timer'],
-  'At-211': ['7 timer'],
+  'At-210': ['8 timer', '', 'beta+'],
+  'At-211': ['7 timer', 'Den henfalder på to måder: alfahenfald eller elektronindfangning.'],
+  'At-217': ['32 millisekunder', '', 'alfa'],
+  'At-218': ['1,5 sekunder', '', 'alfa'],
+  'At-219': ['56 sekunder', '', 'alfa'],
   'Rn-222': ['3,8 dage', 'Kan sive op fra undergrunden og samle sig i kældre.'],
   'Fr-223': ['22 minutter', '', 'beta'],
+  'Ra-225': ['15 dage', '', 'beta'],
   'Ra-226': ['1.600 år'],
+  'Ra-228': ['5,8 år', '', 'beta'],
   'Ac-227': ['22 år', '', 'beta'],
+  'Ac-228': ['6,2 timer', '', 'beta'],
   'Pa-231': ['33.000 år'],
   'U-233': ['159.000 år'],
   'U-234': ['246.000 år'],
   'U-236': ['23 mio. år'],
+  'U-237': ['6,8 dage', '', 'beta'],
   'U-239': ['23 minutter', 'Dannes, når uran-238 fanger en neutron.', 'beta'],
   'Np-237': ['2,1 mio. år'],
+  'Np-238': ['2,1 dage', '', 'beta'],
   'Np-239': ['2,4 dage', 'Bliver til plutonium-239.', 'beta'],
   'Pu-238': ['88 år', 'Har givet strøm til rumsonder som Voyager.'],
   'Pu-239': ['24.000 år', 'Kan spaltes ligesom uran-235.'],
+  'Pu-241': ['14 år', 'Bliver til americium-241, som bruges i røgalarmer.', 'beta'],
   'Pu-244': ['80 mio. år'],
   'Am-241': ['432 år', 'Findes i nogle røgalarmer.'],
+  'Am-242': ['16 timer', '', 'beta'],
   'Am-243': ['7.400 år'],
   'Cm-247': ['16 mio. år'],
   'Bk-247': ['1.400 år'],
@@ -119,7 +139,14 @@ const KENDTE = {
   'Og-294': ['0,7 millisekunder'],
 };
 
-// Kerner, der falder fra hinanden med det samme
+// De letteste grundstoffer: [letteste og tungeste massetal, der kan hænge sammen, og massetal ind imellem, der ikke kan].
+// Alt andet falder fra hinanden med det samme (på ca. 10⁻²¹ sekund).
+const DRYP = {
+  1: [1, 3, []], 2: [3, 8, [5, 7]], 3: [6, 11, [10]], 4: [7, 14, [8, 13]], 5: [8, 19, [9, 16, 18]],
+  6: [9, 22, [21]], 7: [12, 23, []], 8: [13, 24, []], 9: [17, 31, [28, 30]], 10: [17, 34, []],
+};
+
+// Kerner, der falder fra hinanden med det samme (med en særlig forklaring)
 const STRAKS_VÆK = {
   'H-4': '', 'H-5': '', 'H-6': '', 'H-7': '',
   'He-5': '', 'He-7': '',
@@ -127,6 +154,13 @@ const STRAKS_VÆK = {
   'Be-8': 'Den falder straks i to heliumkerner. Derfor er det svært for stjerner at lave tungere stoffer end helium.',
   'B-9': '',
 };
+
+// Kan kernen slet ikke hænge sammen?
+function erUbunden(z, n) {
+  const a = z + n;
+  const d = DRYP[z];
+  return `${grundstof(z).symbol}-${a}` in STRAKS_VÆK || Boolean(d && (a < d[0] || a > d[1] || d[2].includes(a)));
+}
 
 // Det mest almindelige (eller mest stabile) massetal for hvert grundstof
 const TYPISK = {
@@ -232,17 +266,22 @@ export function henfaldsmåde(z, n) {
   const { nMin, nMax } = grænser(z);
   if (navn === 'Be-8') return 'alfa';
   if (n === 0 && z >= 2) return 'p';
-  if (navn in STRAKS_VÆK) return n > nMax ? 'n' : 'p';
+  if (erUbunden(z, n)) return n > nMax ? 'n' : 'p';
   const kendt = KENDTE[navn];
   if (kendt && kendt[2] === 'beta') return 'beta-';
+  if (kendt && kendt[2] === 'beta+') return 'beta+';
   if (kendt && kendt[2] === 'alfa') return 'alfa';
   if (ALFA_LANGSOMME.has(navn) || iAlfaBånd(z, n)) return 'alfa';
   // Alt for skæve kerner skyder en partikel ud med det samme
   const afstand = n > nMax ? n - nMax : n < nMin ? nMin - n : 0;
   if (!kendt && afstand > 10 + z / 4) return n > nMax ? 'n' : 'p';
   // Bliver den (næsten) stabil ved at bytte én partikel? (samme massetal)
-  if (erLanglivet(z + 1, n - 1)) return 'beta-';
-  if (erLanglivet(z - 1, n + 1)) return 'beta+';
+  // Kan den begge veje, vælges beta-plus, hvis den har for få neutroner (fx cobalt-58), ellers betahenfald.
+  const tilMinus = erLanglivet(z + 1, n - 1);
+  const tilPlus = erLanglivet(z - 1, n + 1);
+  if (tilMinus && tilPlus) return n < nMin ? 'beta+' : 'beta-';
+  if (tilMinus) return 'beta-';
+  if (tilPlus) return 'beta+';
   if (navn in NÆSTEN_STABILE) {
     if (erStabil(z + 2, n - 2)) return 'dobbeltbeta-';
     if (erStabil(z - 2, n + 2)) return 'dobbeltbeta+';
@@ -254,10 +293,10 @@ export function henfaldsmåde(z, n) {
 
 const MÅDE_TEKST = {
   'beta-': 'En neutron vil lave sig om til en proton og skyde en elektron ud (betahenfald).',
-  'beta+': 'En proton vil lave sig om til en neutron og skyde en positron ud (beta-plus-henfald).',
+  'beta+': 'En proton vil lave sig om til en neutron. Det sker, ved at kernen skyder en positron ud (beta-plus-henfald) eller fanger en af atomets egne elektroner (elektronindfangning).',
   alfa: 'Kernen er for stor til at holde sammen. Den skyder en lille heliumkerne ud (alfahenfald).',
   'dobbeltbeta-': 'To neutroner vil lave sig om til protoner på én gang (dobbelt betahenfald). Det er noget af det sjældneste i naturen.',
-  'dobbeltbeta+': 'To protoner vil lave sig om til neutroner på én gang. Det er noget af det sjældneste i naturen.',
+  'dobbeltbeta+': 'To protoner vil lave sig om til neutroner på én gang, ved at kernen fanger to af atomets egne elektroner. Det er noget af det sjældneste i naturen.',
   n: 'Den skyder en neutron ud.',
   p: 'Den skyder en proton ud.',
 };
@@ -270,7 +309,7 @@ export function stabilitet(z, n) {
     if (n === 1) {
       return {
         status: 'ustabil', overskrift: 'En fri neutron', halveringstid: 'ca. 10 minutter',
-        tekst: 'Alene holder en neutron kun ca. 10 minutter. Så laver den sig om til en proton og skyder en elektron ud.',
+        tekst: 'En neutron alene er radioaktiv med en halveringstid på ca. 10 minutter. Den laver sig om til en proton og skyder en elektron (og en antineutrino) ud.',
       };
     }
     return {
@@ -282,17 +321,17 @@ export function stabilitet(z, n) {
   if (n === 0 && z >= 2) {
     return {
       status: 'straks', overskrift: 'Falder fra hinanden med det samme',
-      tekst: 'Protoner frastøder hinanden, fordi de alle er plusladede. Kernen har brug for neutroner som "lim".',
+      tekst: 'Kernekraften mellem protoner alene er for svag, og de frastøder hinanden, fordi de alle er plusladede. Kernen har brug for neutroner som ekstra "lim".',
     };
   }
-  if (navn in STRAKS_VÆK) {
+  if (erUbunden(z, n)) {
     return {
       status: 'straks', overskrift: 'Falder fra hinanden med det samme',
       tekst: STRAKS_VÆK[navn] || `Denne kombination kan ikke holde sammen. ${MÅDE_TEKST[henfaldsmåde(z, n)]}`,
     };
   }
   if (erStabil(z, n)) {
-    return { status: 'stabil', overskrift: 'Stabil kerne', tekst: 'Kernen holder for evigt. Den er ikke radioaktiv.' };
+    return { status: 'stabil', overskrift: 'Stabil kerne', tekst: 'Så vidt man ved, holder kernen for evigt. Den er ikke radioaktiv.' };
   }
   const måde = henfaldsmåde(z, n);
   if (navn in NÆSTEN_STABILE) {
@@ -307,7 +346,8 @@ export function stabilitet(z, n) {
   const { stabile, nMin, nMax } = grænser(z);
   let forklaring = '';
   if (måde !== 'alfa') {
-    if (!stabile.length && z < 84) forklaring = `${grundstof(z).navn} har slet ingen stabile isotoper. `;
+    if (z >= 84) forklaring = 'Ingen kerner med så mange protoner er stabile. ';
+    else if (!stabile.length) forklaring = `${grundstof(z).navn} har slet ingen stabile isotoper. `;
     else if (n > nMax) forklaring = 'Den har for mange neutroner. ';
     else if (n < nMin) forklaring = 'Den har for få neutroner. ';
     else forklaring = 'Netop denne blanding holder ikke, selvom naboerne gør. ';
@@ -329,7 +369,7 @@ export function stabilitet(z, n) {
     };
   }
   if (afstand > 3 && !iAlfaBånd(z, n)) {
-    return { status: 'meget', overskrift: 'Meget ustabil', tekst: 'Den henfalder på et øjeblik. ' + grund };
+    return { status: 'meget', overskrift: 'Meget ustabil', tekst: 'Den ligger langt fra de stabile kerner og henfalder som regel hurtigt. ' + grund };
   }
   return { status: 'ustabil', overskrift: 'Ustabil (radioaktiv)', tekst: grund };
 }

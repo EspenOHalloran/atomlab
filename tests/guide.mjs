@@ -34,13 +34,20 @@ for (const [navn, [w, h, mobil]] of Object.entries({ pc: [1280, 800, false], tlf
   await page.screenshot({ path: `${UD}/${navn}-f2-vaelg.png` });
   await T(() => atomlabTest.fusion.temperatur(1)); // så står kernerne næsten stille, mens testen trykker
   await page.waitForTimeout(500);
-  r = await ring();
-  if (r) await tryk(r.x, r.y);
+  // Protonen kan nå at flytte sig mellem målingen og trykket (især på en travl maskine), så prøv op til tre gange
+  for (let forsøg = 0; forsøg < 3 && (await boble()) === 'Vælg en proton'; forsøg++) {
+    r = await ring();
+    if (r) await tryk(r.x, r.y);
+    await venTil(async () => (await boble()) !== 'Vælg en proton', 2500);
+  }
   tjek(`${navn}: trin 3 skyd`, await venTil(async () => (await boble()) === 'Skyd den mod en anden', 5000), await boble());
   await page.waitForTimeout(500);
   await page.screenshot({ path: `${UD}/${navn}-f3-skyd.png` });
-  r = await ring();
-  if (r) await tryk(r.x, r.y);
+  for (let forsøg = 0; forsøg < 3 && (await boble()) === 'Skyd den mod en anden'; forsøg++) {
+    r = await ring();
+    if (r) await tryk(r.x, r.y);
+    await venTil(async () => (await boble()) !== 'Skyd den mod en anden', 2500);
+  }
   tjek(`${navn}: trin 4 varmen`, await venTil(async () => (await boble()) === 'Varmen er vigtig', 6000), await boble());
   await T(() => atomlabTest.fusion.temperatur(15));
   await page.waitForTimeout(800);

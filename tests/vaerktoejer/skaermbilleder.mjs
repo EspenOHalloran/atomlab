@@ -21,7 +21,7 @@ for (const [navn, [w, h, touch]] of Object.entries(STØRRELSER)) {
   await page.goto(`${ADRESSE}/?test#${skærm}`);
   await page.evaluate(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1 })));
   await page.reload();
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(Number(process.env.VENT ?? 7000)); // testbrowseren tegner langsomt, så kameraet skal have tid til at zoome færdigt
   const fil = `${UD}/${skærm}-${navn}.png`;
   await page.screenshot({ path: fil });
   console.log(fil);

@@ -41,7 +41,7 @@ export const OPGAVER_BATTERI = [
   },
   {
     id: 'b-tom', titel: 'Aflad batteriet, til beskyttelsen slår fra', tip: 'Aflad, til spændingen når 3,0 V.',
-    fakta: 'LiPo-batterier har et lille beskyttelseskredsløb. Går en celle meget længere ned end 3 V, kan kobberet i den begynde at opløses, og cellen tager skade.',
+    fakta: 'Mange LiPo-batterier, fx i telefoner, har et lille beskyttelseskredsløb. I fx droner passer laderen og elektronikken på i stedet. Går en celle meget længere ned end 3 V, kan kobberet i den begynde at opløses, og cellen tager skade.',
   },
   {
     id: 'b-hurtig', titel: 'Lad hurtigt, og hold øje med varmen', tip: 'Vælg "Hurtig", og tryk "Oplad".',
@@ -208,10 +208,12 @@ export function lavBatteri() {
   }
   skilte.lampe.position.y = 11.5; // over lampens skær
 
-  // Skilte
-  for (const [tekst, x, y, farve] of [['− Grafit', -7.4, -5.9, '#c5cad6'], ['Elektrolyt', 0, -5.9, '#8fd3ff'], ['Metaloxid +', 7.4, -5.9, '#ff9f8f'], ['Skillevæg', 0, 5.8, '#e8eeff']]) {
+  // Skilte. De nederste står foran og under kassens forkant, så kantlinjen ikke går gennem teksten.
+  for (const [tekst, x, y, z, farve] of [['− Grafit', -7.4, -6.3, 2.7, '#c5cad6'], ['Elektrolyt', 0, -6.3, 2.7, '#8fd3ff'], ['Metaloxid +', 7.4, -6.3, 2.7, '#ff9f8f'], ['Skillevæg', 0, 5.8, 0, '#e8eeff']]) {
     const s = lavSkilt(tekst, farve);
-    s.position.set(x, y, 0);
+    s.position.set(x, y, z);
+    s.material.depthTest = false; // skiltene tegnes altid oven på kassen
+    s.renderOrder = 3;
     rod.add(s);
   }
 
@@ -311,6 +313,9 @@ function nulstil() {
 export function startBatteri() {
   aktiv = true;
   rod.visible = true;
+  // Opgaverne kan være startet forfra i værkstedet
+  if (!fremgang.erLøst('b-lampe')) afladet = 0;
+  lavOpgaveliste();
   verden.opdateringer.add(opdater);
   sætVindue($('batteriVindue'));
   verden.styring.target.set(0, 2.5, 0);
@@ -318,7 +323,7 @@ export function startBatteri() {
   begrænsDrejning({ vandret: 0.7, lodret: 0.5 });
   const k = verden.kamera;
   k.position.set(0, 4.5, Math.max(k.position.length(), 45));
-  passerTilBoks(12.5, 9.2); // plads til skiltet over laderen øverst og skiltene forneden
+  passerTilBoks(12.5, 9.6); // plads til skiltet over laderen øverst og skiltene forneden
   opdaterPanel();
 }
 
@@ -386,6 +391,7 @@ function løs(id) {
   const o = OPGAVER_BATTERI.find((x) => x.id === id);
   if (!o || !fremgang.løs(id)) return;
   setTimeout(() => {
+    if (!aktiv) return;
     lyd.klaret();
     visBesked({ titel: `Opgave klaret: ${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 8000 });
   }, 400);
@@ -393,9 +399,9 @@ function løs(id) {
 }
 
 const FORKLARING = {
-  oplad: ['Opladning', 'Laderen er en pumpe. Den skubber elektroner (de blå prikker) gennem ledningen fra metaloxidet over i grafitten. Ledningen er fuld af elektroner hele tiden, så hele rækken flytter sig på én gang. Samtidig svømmer lithium-ioner (Li⁺) gennem elektrolytten og møder elektronerne i grafitten. Lithium vil helst sidde i metaloxidet, så energien gemmes ved at tvinge det over i grafitten, ligesom vand, der pumpes op i et højt bassin.'],
-  aflad: ['Afladning', 'Nu løber lithium "ned ad bakken" igen. Li⁺ svømmer tilbage gennem elektrolytten til metaloxidet. Elektronerne kan ikke komme gennem elektrolytten, så de må tage omvejen gennem ledningen og lampen, og de laver arbejde på vejen. Se rækken af elektroner løbe den anden vej. Når alt lithium er tilbage i metaloxidet, er batteriet tomt.'],
-  pause: ['Batteriet hviler', 'Afbryderen er slukket, så elektronerne i ledningen kan ikke komme rundt. Og elektrolytten lukker kun ioner igennem, ikke elektroner. Når elektronerne ikke kan komme over, kan ionerne heller ikke. Derfor kan et batteri holde på strømmen i lang tid.'],
+  oplad: ['Opladning', 'Laderen er en pumpe. Den trækker elektroner (de lyseblå prikker) ud af metaloxidet og skubber dem gennem ledningen over i grafitten. Så bliver grafitten minusladet og trækker i de plusladede lithium-ioner (Li⁺). De svømmer den korte vej gennem elektrolytten og møder elektronerne i grafitten: én ion for hver elektron. Lithium vil helst sidde i metaloxidet, så det kræver energi at tvinge det over i grafitten, ligesom at pumpe vand op i et højt bassin. Den energi er nu gemt.'],
+  aflad: ['Afladning', 'Nu vil lithium tilbage til metaloxidet, ligesom vand, der løber ned ad bakken. Men lithium må dele sig på turen: Ionen (Li⁺) svømmer den korte vej gennem elektrolytten. Elektronen kan ikke komme gennem elektrolytten, så den må tage den lange vej gennem ledningen og lampen. Det er den tur, der får lampen til at lyse. I metaloxidet mødes de igen. Når alt lithium er tilbage, er batteriet tomt.'],
+  pause: ['Batteriet hviler', 'Afbryderen er slukket, så elektronerne i ledningen kan ikke komme rundt. Og elektrolytten lukker kun ioner igennem, ikke elektroner. Når elektronerne ikke kan komme over, kan ionerne heller ikke. Derfor kan et batteri holde på energien i lang tid.'],
 };
 
 // Hvor stor strøm (i ampere) skal der løbe nu, og er laderen nået til konstant spænding (cv)?

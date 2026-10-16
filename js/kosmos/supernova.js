@@ -2,7 +2,7 @@
 // Når kernen er blevet til jern, falder den sammen, og stjernen eksploderer.
 
 import * as THREE from 'three';
-import { stjerne, glød, prikSky, KVALITET } from './faelles.js';
+import { stjerne, stjerneTid, glød, prikSky, KVALITET } from './faelles.js';
 
 const R = 6; // stjernens radius
 // Lagene udefra og ind: navn, ydre radius, farve
@@ -10,8 +10,8 @@ const LAG = [
   ['Hydrogen', R, '#ff9a4a'],
   ['Helium', 4.4, '#ff6f3c'],
   ['Carbon', 3.4, '#ffd43b'],
-  ['Oxygen', 2.6, '#8ce99a'],
-  ['Neon', 1.95, '#4dabf7'],
+  ['Neon', 2.6, '#4dabf7'], // stjernen brænder carbon, så neon, så oxygen og til sidst silicium
+  ['Oxygen', 1.95, '#8ce99a'],
   ['Silicium', 1.35, '#b197fc'],
   ['Jern', 0.75, '#e6ecf5'],
 ];
@@ -29,19 +29,19 @@ export default {
     ['Betelgeuse er', 'ca. 550 lysår væk'],
     ['Betelgeuse er', 'ca. 750 × Solens bredde'],
     ['Kernen falder sammen på', 'under 1 sekund'],
-    ['En supernova lyser som', 'milliarder af sole'],
+    ['En supernova lyser som', 'op mod en milliard sole'],
   ],
   kort: `
-    <p>En stjerne, der er mindst 8 gange tungere end Solen, ender sit liv med et kæmpe brag: en <b>supernova</b>. Stjernen <b>Betelgeuse</b> i Orion er sådan en. Den eksploderer en dag, måske først om 100.000 år.</p>
-    <p>Hele livet laver stjernen tungere og tungere grundstoffer i sit indre: helium, carbon, oxygen, neon, silicium og til sidst <b>jern</b>. Den bliver bygget op i lag ligesom et løg. Tryk "Vis lagene".</p>
-    <p>Jern kan ikke give energi ved fusion. Så når kernen er blevet til jern, kan den ikke holde sig selv oppe. Den falder sammen på under et sekund, og resten af stjernen bliver blæst ud i rummet.</p>
-    <p>Tilbage bliver en lille, ekstremt tung <b>neutronstjerne</b> eller et <b>sort hul</b>. Stoffet, der bliver blæst ud, bliver en dag til nye stjerner og planeter. Oxygenet, du ånder, er lavet i sådan en stjerne.</p>`,
+    <p>De fleste stjerner, der er mere end ca. 8 gange tungere end Solen, ender deres liv med et kæmpe brag: en <b>supernova</b>. Stjernen <b>Betelgeuse</b> i Orion er sådan en. Den eksploderer en dag, måske først om 100.000 år.</p>
+    <p>Hele livet laver stjernen tungere og tungere grundstoffer i sit indre: helium, carbon, neon, oxygen, silicium og til sidst <b>jern</b>. Den bliver bygget op i lag ligesom et løg. Tryk "Vis lagene".</p>
+    <p>Jern kan ikke give energi ved fusion. Jernkernen i midten af stjernen vokser, og når den vejer ca. 1,4 gange så meget som hele vores Sol, kan den ikke længere holde sig selv oppe. Den falder sammen på under et sekund, og resten af stjernen bliver blæst ud i rummet.</p>
+    <p>Tilbage bliver en lille, ekstremt tung <b>neutronstjerne</b> eller et <b>sort hul</b>. Hvad det bliver, afhænger af, hvor tung resten i midten er: Vejer den mere end ca. 2-3 sole, kan intet holde den oppe, og den falder sammen til et sort hul. Det sker oftest for stjerner, der fra starten var mere end ca. 20-25 gange tungere end Solen. Betelgeuse bliver nok til en neutronstjerne. Stoffet, der bliver blæst ud, bliver en dag til nye stjerner og planeter. Oxygenet, du ånder, er lavet i sådan en stjerne.</p>`,
   nørd: `
     <p><b>Hvorfor stopper det ved jern?</b> Jern og nikkel har den højeste bindingsenergi pr. nukleon. Fusion af lette kerner giver energi, men at lave noget tungere end jern <i>koster</i> energi. Se Nørd-fanen i Atomværkstedet, når du har bygget jern-56.</p>
-    <p><b>Sammenfaldet:</b> Jernkernen vejer ca. 1,4 gange Solen og er på størrelse med Jorden. På under et sekund falder den sammen til en kugle på ca. 20 km. Elektronerne bliver presset ind i protonerne og bliver til neutroner og <b>neutrinoer</b>. Det er betahenfald baglæns. 99 % af energien forsvinder som neutrinoer.</p>
+    <p><b>Sammenfaldet:</b> Jernkernen i midten af stjernen vejer ca. 1,4 gange så meget som hele vores Sol, men den er kun på størrelse med Jorden. På under et sekund falder den sammen til en kugle på ca. 20 km. Elektronerne bliver presset ind i protonerne og bliver til neutroner og <b>neutrinoer</b>. En neutrino er en bittelille partikel uden ladning, der næsten ikke vejer noget. Den reagerer næsten aldrig med noget og flyver lige gennem stjerner, planeter og hele Jorden. Det er betahenfald baglæns (se Atomværkstedet). 99 % af energien forsvinder som neutrinoer.</p>
     <p><b>Supernova 1987A:</b> Da en stjerne eksploderede i en nabogalakse i 1987, fangede detektorer på Jorden ca. 25 neutrinoer, et par timer før man kunne se lyset. Det var første gang, man fangede neutrinoer fra en anden stjerne end Solen.</p>
     <p><b>Krabbetågen</b> er resterne af en supernova, som kinesiske astronomer så i år 1054. Den kunne ses om dagen i 23 dage. I midten snurrer en neutronstjerne 30 gange i sekundet.</p>
-    <p><b>Ærligt talt:</b> I virkeligheden er kernen bittelille i forhold til stjernen. Betelgeuse er så stor, at den ville nå langt ud forbi Mars, hvis den stod, hvor Solen står. Lagene er tegnet tykkere, så man kan se dem.</p>`,
+    <p><b>Ærligt talt:</b> I virkeligheden er kernen bittelille i forhold til stjernen. Betelgeuse er så stor, at den ville nå langt ud forbi Mars, hvis den stod, hvor Solen står. Lagene er tegnet tykkere, så man kan se dem. Og selve jernkernen bliver til neutronstjernen. Det jern, der bliver blæst ud, bliver lavet i selve eksplosionen.</p>`,
 
   lav(gruppe, { effekter, lyd, fase, kamera, verden, opdaterKnapper, forklaring }) {
     // Hele stjernen
@@ -54,7 +54,7 @@ export default {
     snit.visible = false;
     const ydre = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 40, 0, SNIT), stjerneMat);
     stjerneMat.side = THREE.DoubleSide;
-    ydre.onBeforeRender = () => { stjerneMat.uniforms.tid.value = performance.now() / 1000; };
+    ydre.onBeforeRender = () => { stjerneMat.uniforms.tid.value = stjerneTid(); };
     snit.add(ydre);
     for (let i = 1; i < LAG.length - 1; i++) {
       const farve = new THREE.Color(LAG[i][2]);
@@ -178,7 +178,7 @@ export default {
       opdaterKnapper();
       opdaterVisning();
       lyd.opbygning();
-      fase('Jernkernen falder sammen', 'Jern kan ikke give energi ved fusion, så der er intet, der holder kernen oppe. På under et sekund falder den sammen fra Jordens størrelse til en kugle på 20 km.', [1, 4]);
+      fase('Jernkernen falder sammen', 'Jernkernen kan ikke give mere energi, men den vokser. Da den vejer ca. 1,4 gange Solen, kan trykket ikke længere holde den oppe. På under et sekund falder den sammen fra Jordens størrelse til en kugle på ca. 20 km.', [1, 4]);
     }
 
     function sprængStjernen() {
@@ -207,7 +207,7 @@ export default {
       effekter.bølge(new THREE.Vector3(), 34, new THREE.Color(2.6, 1.6, 0.9), 2.2);
       lyd.eksplosion();
       kamera({ radius: 22, flyv: false });
-      fase('Supernova!', 'Stjernen bliver blæst ud i rummet med 10.000 km i sekundet. I nogle uger lyser den stærkere end en hel galakse med milliarder af stjerner.', [3, 4]);
+      fase('Supernova!', 'Stjernen bliver blæst ud i rummet med 10.000 km i sekundet. I nogle uger lyser den som flere hundrede millioner sole.', [3, 4]);
     }
 
     const styring = [
@@ -243,7 +243,7 @@ export default {
             effekter.glimt(new THREE.Vector3(), 6, new THREE.Color(2.4, 2.6, 3), 0.8);
             neutrinoer.visible = true;
             lyd.fusion(2);
-            fase('Neutrinoer og en chokbølge', 'Kernen er presset så hårdt sammen, at den preller af. En chokbølge farer ud gennem lagene, og en storm af neutrinoer flyver lige igennem det hele.', [2, 4]);
+            fase('Neutrinoer og en chokbølge', 'Kernen er presset så hårdt sammen, at den preller af. En chokbølge farer ud gennem lagene, og en storm af neutrinoer (bittesmå partikler uden ladning, der flyver gennem næsten alt) farer lige igennem det hele.', [2, 4]);
           }
         } else if (trin === 2) {
           const f = Math.min(1, (t - 0.8) / 2.2);

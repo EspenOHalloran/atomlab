@@ -23,16 +23,21 @@ await page.reload();
 tjek('rejsen starter første gang', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 0, 5000));
 tjek('"Spring over" vises', await synlig('#fusRejseSpring'));
 tjek('næste skridt skjult under rejsen', !(await synlig('#fusMission')));
-await page.waitForTimeout(1200);
+// Rejsen styres af uret (rigtig tid). På en travl maskine kan testen komme for sent, så vi fryser rejsen på bestemte tidspunkter.
+await T(() => atomlabTest.fusion.rejseTid(1));
+await page.waitForTimeout(800);
 tjek('undertekst om Solen', /Solen/.test(await undertekst()), await undertekst());
 await page.screenshot({ path: `${UD}/r1-solen.png` });
-tjek('rejsen når fase 2', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 1, 6000));
-await page.waitForTimeout(1500);
+await T(() => atomlabTest.fusion.rejseTid(4.5));
+tjek('rejsen når fase 2', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 1, 4000));
+await page.waitForTimeout(800);
 await page.screenshot({ path: `${UD}/r2-ind.png` });
-tjek('rejsen når kernen', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 2, 6000));
+await T(() => atomlabTest.fusion.rejseTid(7.5));
+tjek('rejsen når kernen', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 2, 4000));
 await page.waitForTimeout(600);
 await page.screenshot({ path: `${UD}/r3-kernen.png` });
-tjek('rejsen slutter af sig selv', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === null, 8000));
+await T(() => atomlabTest.fusion.rejseTid(null)); // nu løber tiden igen
+tjek('rejsen slutter af sig selv', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === null, 12000));
 tjek('guiden starter efter rejsen', await venTil(async () => (await boble()) === 'Du er inde i Solens kerne', 6000), await boble());
 tjek('rejsen er husket', await T(() => 'fusion-rejse' in JSON.parse(localStorage.getItem('atomlabGuide') || '{}')));
 await page.screenshot({ path: `${UD}/r4-guide.png` });

@@ -18,7 +18,7 @@ const nukleoner = await T(() => atomlabTest.fusion.partikler().reduce((sum, p) =
 tjek('40 protoner fra start (40 kernepartikler)', nukleoner === 40, nukleoner);
 // For koldt: skyd proton mod proton ved 3 mio. grader
 await T(() => atomlabTest.fusion.temperatur(3));
-await page.click('#fusTempo');
+await page.click('[data-fus-tempo="3"]');
 await page.waitForTimeout(1500);
 for (let forsøg = 0; forsøg < 2; forsøg++) {
   await T(() => { const ps = atomlabTest.fusion.partikler().filter((p) => p.type === 'p'); atomlabTest.fusion.skyd(ps[0].id, ps[1].id); });
@@ -30,18 +30,19 @@ for (let forsøg = 0; forsøg < 2; forsøg++) {
   if (løst) break;
 }
 await page.screenshot({ path: UD + '/f1b-koldt.png' });
-await page.click('#fusTempo');
+await page.click('[data-fus-tempo="0.6"]');
 let fr = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}'));
 tjek('opgave: for koldt', fr.opgaver?.['f-koldt'], JSON.stringify(fr));
 // Varmt og hurtigt: lad reaktionerne ske af sig selv
 await T(() => atomlabTest.fusion.temperatur(110));
-await page.click('#fusTempo');
+await page.click('[data-fus-tempo="3"]');
 await page.waitForTimeout(45000);
 await page.screenshot({ path: UD + '/f2-varm.png' });
 const energi = await T(() => atomlabTest.fusion.energi());
 const typer = await T(() => { const t = {}; for (const p of atomlabTest.fusion.partikler()) t[p.type] = (t[p.type] || 0) + 1; return t; });
 console.log('     energi', energi, 'kerner', JSON.stringify(typer));
 tjek('der er sket fusion', energi > 0);
+tjek('tempo: Hurtig er valgt', await page.evaluate(() => document.querySelector('[data-fus-tempo="3"]').classList.contains('valgt')));
 tjek('panelet viser energi', (await page.textContent('#fusEnergi')) !== '0 MeV', await page.textContent('#fusEnergi'));
 fr = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}'));
 tjek('tilfældige reaktioner løser ikke opgaven', !fr.opgaver?.['f-d']);
@@ -66,6 +67,26 @@ tjek('hjælp vises', await page.isVisible('#hjælpFusion'));
 await page.keyboard.press('Escape');
 await page.waitForTimeout(300);
 tjek('hjælp lukket med Esc', !(await page.isVisible('#hjælpFusion')));
+// "Vis mig" lige efter et eget, langsomt skud: Den må ikke sigte på kernen, der stadig flyver (så stoppede den uden reaktion i ca. 2,5 % af gangene).
+// 120 forsøg fanger den gamle fejl ca. 95 % af gangene.
+const visMig = await page.evaluate(() => {
+  const f = atomlabTest.fusion;
+  let ingen = 0;
+  for (let i = 0; i < 120; i++) {
+    document.getElementById('fusRyd').click(); // start forfra med 40 protoner
+    f.spolAlt(0.2);
+    f.temperatur(1);
+    const ps = f.partikler().filter((p) => p.type === 'p' && !(p.kastet > 0));
+    f.skyd(ps[0].id, ps[1].id);
+    f.temperatur(15);
+    const før = f.energi();
+    f.visMig();
+    for (let t = 0; t < 30 && f.demo(); t += 0.5) f.spolAlt(0.5);
+    if (f.energi() === før) ingen++;
+  }
+  return ingen;
+});
+tjek('Vis mig efter et eget skud laver en reaktion 120 af 120 gange', visMig === 0, `${visMig} uden reaktion`);
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);

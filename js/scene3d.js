@@ -32,9 +32,10 @@ export const verden = {
 export function lavVerden(lærred) {
   let renderer;
   try {
+    // Ingen kantudglatning på selve lærredet: Gløden (komponisten) tegner uden om den, så den kostede kun hukommelse.
     renderer = new THREE.WebGLRenderer({
       canvas: lærred,
-      antialias: !LAV_KVALITET,
+      antialias: false,
       powerPreference: 'high-performance',
     });
   } catch (fejl) {
@@ -78,10 +79,11 @@ export function lavVerden(lærred) {
   styring.addEventListener('start', () => { verden.målAfstand = null; });
 
   // Glød: alt, der er lysere end en grænse, får en glorie
+  // Kantudglatning kunne slås til her med new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 })
+  // som andet argument til EffectComposer. Den er slået fra, fordi den kostede ca. 40 % af billederne i testbrowseren.
   const komponist = new EffectComposer(renderer);
   komponist.addPass(new RenderPass(scene, kamera));
-  const opløsning = new THREE.Vector2(innerWidth, innerHeight).multiplyScalar(LAV_KVALITET ? 0.5 : 1);
-  const glød = new UnrealBloomPass(opløsning, 0.9, 0.55, 0.82);
+  const glød = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.9, 0.55, 0.82);
   komponist.addPass(glød);
   komponist.addPass(new OutputPass());
 
@@ -218,6 +220,11 @@ export function tilpasStørrelse() {
   if (!renderer) return;
   renderer.setSize(innerWidth, innerHeight);
   komponist.setSize(innerWidth, innerHeight);
+  // Gløden regner selv i halv opløsning. På telefoner og tablets halverer vi den en gang til (den er sløret alligevel).
+  if (LAV_KVALITET) {
+    const pr = renderer.getPixelRatio();
+    verden.glød.setSize(innerWidth * pr * 0.5, innerHeight * pr * 0.5);
+  }
   centrerVindue();
 }
 
@@ -270,6 +277,11 @@ export function stopKamera() {
 export function flyInd(radius, faktor = 3) {
   const { kamera, styring } = verden;
   const retning = kamera.position.clone().sub(styring.target);
+  if (ROLIG) {
+    // "Reducer bevægelse": ingen flyvetur, kameraet står bare det rigtige sted (zoomMod hopper derhen)
+    passerTil(radius);
+    return;
+  }
   kamera.position.copy(styring.target).add(retning.setLength(Math.max(retning.length(), radius * 4) * faktor));
   passerTil(radius);
   kameraSving(0.9, 2);
@@ -296,6 +308,20 @@ export function passerTilBoks(halvBredde, halvHøjde) {
   verden.målAfstand = THREE.MathUtils.clamp(d, 6, 240);
 }
 
+// Fælles nulstilling, når man skifter skærm: Hver skærm starter fra de samme indstillinger,
+// også hvis den forrige har flyttet kameraets mål eller slået flytning (pan) til (fx væggen i Det periodiske system)
+export function nulstilStyring() {
+  const s = verden.styring;
+  s.target.set(0, 0, 0);
+  s.enablePan = false;
+  s.touches.ONE = THREE.TOUCH.ROTATE;
+  s.minDistance = 4;
+  s.maxDistance = 250;
+  s.autoRotate = true;
+  s.autoRotateSpeed = 0.5;
+  begrænsDrejning(null);
+}
+
 // Begrænser, hvor meget man kan dreje (null = frit)
 export function begrænsDrejning(grænser) {
   const s = verden.styring;
@@ -317,7 +343,8 @@ function zoomMod(dt) {
   const { kamera, styring } = verden;
   const retning = kamera.position.clone().sub(styring.target);
   const nu = retning.length();
-  const ny = nu + (verden.målAfstand - nu) * (1 - Math.exp(-dt * 3));
+  // Med "reducer bevægelse" hopper kameraet straks på plads i stedet for at glide
+  const ny = ROLIG ? verden.målAfstand : nu + (verden.målAfstand - nu) * (1 - Math.exp(-dt * 3));
   kamera.position.copy(styring.target).add(retning.setLength(ny));
   if (Math.abs(ny - verden.målAfstand) < 0.02) verden.målAfstand = null;
 }

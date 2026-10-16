@@ -23,7 +23,7 @@ const PAR = [
 export const OPGAVER_REAKTOR = [
   {
     id: 'r-spalt', titel: 'Spalt en uran-235-kerne', tip: 'Vælg uran-235 og en langsom neutron, og tryk "Skyd neutron".',
-    fakta: 'Når uran-235 spalter, frigøres ca. 200 MeV. Det er ca. 7 gange mere end hele Solens opskrift (ca. 27 MeV). Men pr. gram brændsel giver fusion ca. 8 gange mere, fordi brintkerner er så lette.',
+    fakta: 'Når uran-235 spalter, frigøres ca. 200 MeV. Det er ca. 7-8 gange mere end hele Solens opskrift (ca. 27 MeV). Men pr. gram brændsel giver fusion ca. 8 gange mere, fordi brintkerner er så lette.',
   },
   {
     id: 'r-hurtig', titel: 'Skyd en hurtig neutron mod uran-235', tip: 'Vælg "Hurtig" neutron.',
@@ -35,7 +35,7 @@ export const OPGAVER_REAKTOR = [
   },
   {
     id: 'r-tre', titel: 'Find alle tre måder at spalte på', tip: 'Spalt uran-235 flere gange. Den spalter tilfældigt.',
-    fakta: 'I virkeligheden kan uran-235 spalte på mere end hundrede forskellige måder. Stumperne har altid tilsammen 92 protoner.',
+    fakta: 'I virkeligheden kan uran-235 spalte på mere end hundrede forskellige måder. Stumperne har næsten altid tilsammen 92 protoner. En sjælden gang flyver der også en lille heliumkerne ud.',
   },
   {
     id: 'r-start', titel: 'Start en kædereaktion', tip: 'Gå til "Kædereaktion", og tryk "Start reaktoren".',
@@ -47,12 +47,13 @@ export const OPGAVER_REAKTOR = [
   },
   {
     id: 'r-nødstop', titel: 'Få reaktoren til at lave nødstop', tip: 'Træk kontrolstavene helt op, og se hvad der sker.',
-    fakta: 'Ved nødstop falder alle kontrolstavene ned på én gang, og kædereaktionen stopper på et øjeblik.',
+    fakta: 'Ved nødstop kommer alle kontrolstavene ind på få sekunder, og kædereaktionen stopper. Men brændslet bliver ved med at lave varme længe bagefter, så det skal stadig køles.',
   },
 ];
 
 // ---------- Tilstand ----------
 let tilstand = 'kerne'; // 'kerne' (spalt én) eller 'kæde' (kædereaktion)
+let guideTimer = null;
 let aktiv = false;
 let rodKerne = null;
 let rodKæde = null;
@@ -64,7 +65,8 @@ let tid = 0;
 // Del 1
 let mål = null; // atomet, der skydes på
 let stumper = []; // { atom, fart, etiket }
-let neutron = null; // { mesh, fart, hale }
+let neutron = null; // { mesh, fart, langsom }
+let neutronMesh = null; // samme kugle bruges til alle skud
 let valgtKerne = 'u235';
 let langsom = true;
 let forløb = null; // { fase, tid, par }
@@ -231,6 +233,9 @@ export function lavReaktor() {
 export function startReaktor() {
   aktiv = true;
   rodEffekt.visible = true;
+  // Opgaverne kan være startet forfra i værkstedet
+  if (!fremgang.erLøst('r-tre')) sete = new Set();
+  lavOpgaveliste();
   verden.opdateringer.add(opdater);
   verden.styring.autoRotate = false;
   sætTilstand(tilstand, true);
@@ -245,6 +250,7 @@ function startDelGuide() {
 
 export function stopReaktor() {
   aktiv = false;
+  clearTimeout(guideTimer);
   rodKerne.visible = false;
   rodKæde.visible = false;
   rodEffekt.visible = false;
@@ -256,6 +262,7 @@ export function stopReaktor() {
 }
 
 function sætTilstand(ny, første = false) {
+  if (ny !== 'kerne' && ny !== 'kæde') ny = 'kerne';
   if (ny !== tilstand) {
     stopGuide();
     slutVisning();
@@ -265,7 +272,7 @@ function sætTilstand(ny, første = false) {
   rodKerne.visible = ny === 'kerne';
   rodKæde.visible = ny === 'kæde';
   for (const el of document.querySelectorAll('[data-reaktor-del]')) el.classList.toggle('skjult', el.dataset.reaktorDel !== ny);
-  for (const b of document.querySelectorAll('.del-knap')) b.classList.toggle('valgt', b.dataset.del === ny);
+  for (const b of document.querySelectorAll('.del-knap[data-del]')) b.classList.toggle('valgt', b.dataset.del === ny);
   sætVindue($('reaktorVindue'));
   const k = verden.kamera;
   verden.styring.target.set(0, 0, 0);
@@ -281,12 +288,15 @@ function sætTilstand(ny, første = false) {
     passerTilBoks(KERNE_B / 2 + 1.5, KERNE_H / 2 + 1.5);
   }
   opdaterMission();
-  setTimeout(startDelGuide, første ? 1200 : 600);
+  // Kun én ventende guide ad gangen, så den ikke starter to gange, hvis man skifter hurtigt
+  clearTimeout(guideTimer);
+  guideTimer = setTimeout(startDelGuide, første ? 1200 : 600);
 }
 
 // ---------- Panel ----------
 function lavPanel() {
-  for (const b of document.querySelectorAll('.del-knap')) {
+  // Kun Reaktorens egne del-knapper (Kosmos har også knapper med klassen del-knap)
+  for (const b of document.querySelectorAll('.del-knap[data-del]')) {
     b.addEventListener('click', () => {
       lyd.klik();
       sætTilstand(b.dataset.del);
@@ -366,6 +376,7 @@ function løs(id) {
   const o = OPGAVER_REAKTOR.find((x) => x.id === id);
   if (!o || !fremgang.løs(id)) return;
   setTimeout(() => {
+    if (!aktiv) return;
     lyd.klaret();
     visBesked({ titel: `Opgave klaret: ${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 8000 });
   }, 400);
@@ -405,8 +416,8 @@ function opdaterMission() {
     const g = visKæde.generationer;
     tekst = 'Neutroner i hver generation: ' + g.slice(0, 6).join(' → ');
   } else if (visDel1) tekst = 'Se godt efter (slowmotion) …';
-  $('reaktorMissionTekst').textContent = tekst;
-  $('reaktorVisMig').textContent = skridt.knap ?? '▶ Vis mig';
+  sætTekst('reaktorMissionTekst', tekst);
+  sætTekst('reaktorVisMig', skridt.knap ?? '▶ Vis mig');
   $('reaktorVisMig').hidden = tilstand === 'kæde' && startet && !nødstop;
   $('reaktorVisMig').disabled = Boolean(visDel1 || visKæde);
   const hud = tilstand === 'kæde' && startet;
@@ -417,8 +428,7 @@ function opdaterMission() {
   måler.style.setProperty('--niveau', `${del * 100}%`);
   måler.style.setProperty('--felt-fra', `${(FELT[0] / MÅLER_MAX) * 100}%`);
   måler.style.setProperty('--felt-bredde', `${((FELT[1] - FELT[0]) / MÅLER_MAX) * 100}%`);
-  const tip = effektTip();
-  $('reaktorHudTip').textContent = tip;
+  sætTekst('reaktorHudTip', effektTip());
   $('reaktorHudTip').className = `hud-tip ${effekt < FELT[0] ? 'lav' : effekt > FELT[1] ? 'høj' : 'god'}`;
   tegnHistorie();
 }
@@ -514,7 +524,7 @@ function slutVisning(døde = false) {
         tekst: 'Neutronerne blev suget op eller slap ud, før de ramte en frisk urankerne. Det er tilfældigt. Prøv igen!',
       } : {
         titel: 'Sådan vokser en kædereaktion',
-        tekst: 'Hver spaltning sender 2-3 nye neutroner ud, som kan spalte nye kerner. Derfor vokser det hurtigt. Nu er kontrolstavene sænket, så de suger nogle neutroner op, og hver spaltning i gennemsnit kun giver én ny. Prøv selv med stavene!',
+        tekst: 'Hver spaltning sender 2-3 nye neutroner ud, som kan spalte nye kerner. Derfor vokser det hurtigt. Nu er kontrolstavene sænket, så de suger nogle neutroner op, og hver spaltning i gennemsnit kun fører til én ny spaltning. Prøv selv med stavene!',
       });
     }
   }
@@ -627,12 +637,14 @@ function skydNeutron() {
   if (optaget()) return;
   if (forløb) nulstilKerne(); // et nyt forsøg starter med en frisk kerne
   lyd.neutron();
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 12), new THREE.MeshStandardMaterial({ color: 0x98a8c8, emissive: 0x3060c0, emissiveIntensity: 0.6 }));
+  neutronMesh ??= new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 12), new THREE.MeshStandardMaterial({ color: 0x98a8c8, emissive: 0x3060c0, emissiveIntensity: 0.6 }));
+  const mesh = neutronMesh;
   const start = new THREE.Vector3(-18, 2, 0);
   mesh.position.copy(start);
   rodKerne.add(mesh);
   const fart = langsom ? 9 : 26;
-  neutron = { mesh, fart: start.clone().negate().normalize().multiplyScalar(fart) };
+  // Farten huskes, når neutronen skydes af (den kan ikke ændres undervejs)
+  neutron = { mesh, fart: start.clone().negate().normalize().multiplyScalar(fart), langsom };
   forløb = { fase: 'flyver', tid: 0 };
   $('reaktorSkyd').disabled = true;
 }
@@ -640,20 +652,25 @@ function skydNeutron() {
 function rammer() {
   rodKerne.remove(neutron.mesh);
   const v = neutron.fart.clone();
+  const langsomt = neutron.langsom;
   neutron = null;
   const u235 = valgtKerne === 'u235';
   const r = Math.random();
-  if (!langsom && r < (u235 ? 0.8 : 0.9)) {
-    // Hurtig neutron: preller af
+  // Hurtig neutron: preller af (mod uran-238 altid, mod uran-235 de fleste gange)
+  if (!langsomt && (!u235 || r < 0.8)) {
     effekter.skyd(new THREE.Vector3(-1, 0.5, 0).multiplyScalar(4), new THREE.Vector3(-1, 1.2, 0.4), 'neutron', 16, 1.4);
     effekter.glimt(new THREE.Vector3(-3, 0.5, 0), 2, new THREE.Color(1, 1.4, 2.2), 0.4);
     lyd.fjern();
     forsøgFærdigt();
-    visForklaring('Neutronen prellede af', 'Hurtige neutroner farer forbi, før kernen når at "gribe" dem. Langsomme neutroner har meget lettere ved at blive fanget. Derfor bremser man neutronerne med vand i en reaktor.');
-    if (u235) løs('r-hurtig');
+    if (u235) {
+      visForklaring('Neutronen prellede af', 'Hurtige neutroner farer forbi, før kernen når at "gribe" dem. Langsomme neutroner har meget lettere ved at blive fanget. Derfor bremser man neutronerne med vand i en reaktor.');
+      løs('r-hurtig');
+    } else {
+      visForklaring('Neutronen prellede af', 'Uran-238 kan kun spaltes af meget hurtige neutroner, og selv da sjældent. Prøv med en langsom neutron, og se hvad der så sker.');
+    }
     return;
   }
-  if (!u235 && langsom) {
+  if (!u235) {
     // Uran-238 fanger neutronen og bliver til uran-239
     mål.sætStraks(92, 147, 0);
     mål.sætStatus('ustabil');
@@ -661,11 +678,11 @@ function rammer() {
     effekter.skyd(new THREE.Vector3(), new THREE.Vector3(0.3, 1, 0.2), 'gamma', 40);
     lyd.opdaget();
     forsøgFærdigt();
-    visForklaring('Uran-238 + neutron → uran-239', 'Uran-238 spalter ikke. Den fanger neutronen og sender lidt gammastråling ud. Uran-239 laver to betahenfald og bliver til <b>plutonium-239</b>, som kan spaltes ligesom uran-235. Sådan laves plutonium i reaktorer.');
+    visForklaring('Uran-238 + neutron → uran-239', 'Uran-238 spalter ikke med langsomme neutroner. Den fanger neutronen og sender lidt gammastråling ud. Uran-239 laver to betahenfald og bliver til <b>plutonium-239</b>, som kan spaltes ligesom uran-235. Sådan laves plutonium i reaktorer.');
     løs('r-u238');
     return;
   }
-  if (u235 && langsom && r > 0.86 && !sikkerSpaltning) {
+  if (langsomt && r > 0.86 && !sikkerSpaltning) {
     // Nogle gange bliver neutronen bare fanget
     mål.sætStraks(92, 144, 0);
     effekter.glimt(new THREE.Vector3(), 6, new THREE.Color(3, 2.8, 1.6), 0.7);
@@ -715,7 +732,7 @@ function spalt() {
   const [zb, nb] = par.b;
   visForklaring(`Uran-235 + n → ${navnPå(za, na)} + ${navnPå(zb, nb)} + ${par.neutroner} n`, `
     <span class="tæl">Protoner: ${za} + ${zb} = <b>92</b> ✓ · Nukleoner: ${za + na} + ${zb + nb} + ${par.neutroner} = <b>236</b> ✓</span>
-    Kernen flækkede i to mellemstore kerner og ${par.neutroner} nye neutroner. Stumperne vejer tilsammen ca. 0,1 % mindre end uran-236. Den masse er blevet til ca. <b>200 MeV</b> energi (E = mc²).
+    Kernen flækkede i to mellemstore kerner og ${par.neutroner} nye neutroner. Stumperne vejer tilsammen ca. 0,1 % mindre end uran-236. Den masse er blevet til ca. 180 MeV energi med det samme (E = mc²). Når de radioaktive stumper henfalder bagefter, kommer der ca. 20 MeV mere, så i alt bliver det ca. <b>200 MeV</b>.
     Stumperne har for mange neutroner, så de er radioaktive. Det er derfor, brugt brændsel er farligt.`);
   if (!visDel1) sete.add(PAR.indexOf(par));
   løs('r-spalt');
@@ -767,7 +784,7 @@ function startKæde() {
   }
   løs('r-start');
   $('reaktorStart').textContent = 'Genstart reaktoren';
-  visBesked({ titel: 'Reaktoren er startet', tekst: 'En neutronkilde sender de første neutroner ind. Hold effekten i det grønne felt med kontrolstavene.', varighed: 6000 });
+  visBesked({ titel: 'Reaktoren er startet', tekst: 'En neutronkilde sender de første neutroner ind. Det er en lille kapsel med fx californium-252, der hele tiden sender neutroner ud af sig selv. Hold effekten i det grønne felt med kontrolstavene.', varighed: 8000 });
 }
 
 function lavNødstop(grund) {
@@ -825,8 +842,8 @@ function kædeFysik(h) {
       if (Math.abs(n.x - sx) < 0.3 && n.y > stavBund) { opsuget = true; break; }
     }
     if (opsuget) continue;
-    // Vandet sluger nu og da en neutron
-    if (vand && Math.random() < h * 0.05) continue;
+    // Vandet sluger nu og da en neutron (ikke "Vis mig"s sikre neutroner, ellers døde den første i ca. 1,5 % af gangene)
+    if (vand && !n.sikker && Math.random() < h * 0.05) continue;
     // Rammer den en urankerne?
     const k = Math.round((n.x + KERNE_B / 2) / AFSTAND);
     const r = Math.round((n.y + KERNE_H / 2) / AFSTAND);
@@ -891,7 +908,6 @@ function opdaterKæde(dt) {
   }
   if (nødstop && neutroner.length === 0) startet = false;
   tegnKæde();
-  opdaterKædePanel();
 }
 
 function tegnKæde() {
@@ -922,19 +938,30 @@ function tegnKæde() {
   tjerenkov.material.opacity = Math.min(0.7, effekt / MÅLER_MAX);
 }
 
+// Skriv kun i siden, når noget har ændret sig, så browseren ikke skal regne layoutet om hele tiden
+function sætTekst(id, tekst) {
+  const el = $(id);
+  if (el.textContent !== tekst) el.textContent = tekst;
+}
+function sætStil(id, navn, værdi) {
+  const el = $(id);
+  if (el.style.getPropertyValue(navn) !== værdi) el.style.setProperty(navn, værdi);
+}
+
+// Panelet i kædereaktionen (opdateres fire gange i sekundet fra opdater og med det samme, når stavene flyttes)
 function opdaterKædePanel() {
-  $('reaktorStaveTal').textContent = `${Math.round(stavDybde * 100)} % nede`;
+  sætTekst('reaktorStaveTal', `${Math.round(stavDybde * 100)} % nede`);
   const del = Math.min(1, effekt / MÅLER_MAX);
-  $('reaktorMåler').style.setProperty('--niveau', `${del * 100}%`);
-  $('reaktorMåler').style.setProperty('--felt-fra', `${(FELT[0] / MÅLER_MAX) * 100}%`);
-  $('reaktorMåler').style.setProperty('--felt-bredde', `${((FELT[1] - FELT[0]) / MÅLER_MAX) * 100}%`);
+  sætStil('reaktorMåler', '--niveau', `${Math.round(del * 1000) / 10}%`);
+  sætStil('reaktorMåler', '--felt-fra', `${(FELT[0] / MÅLER_MAX) * 100}%`);
+  sætStil('reaktorMåler', '--felt-bredde', `${((FELT[1] - FELT[0]) / MÅLER_MAX) * 100}%`);
   let tekst = 'Slukket';
   if (startet) tekst = effekt < FELT[0] ? 'For lav' : effekt <= FELT[1] ? 'Stabil' : 'For høj!';
   if (nødstop) tekst = 'Nødstop';
-  $('reaktorEffektTekst').textContent = `${Math.round(effekt)} spaltninger pr. sekund · ${tekst}`;
-  $('reaktorNeutroner').textContent = neutroner.length;
-  $('reaktorStabil').style.setProperty('--niveau', `${Math.min(100, (stabilTid / 30) * 100)}%`);
-  $('reaktorStabilTekst').textContent = fremgang.erLøst('r-stabil') ? 'Klaret ★' : `${Math.floor(stabilTid)} af 30 sekunder i det grønne felt`;
+  sætTekst('reaktorEffektTekst', `${Math.round(effekt)} spaltninger pr. sekund · ${tekst}`);
+  sætTekst('reaktorNeutroner', String(neutroner.length));
+  sætStil('reaktorStabil', '--niveau', `${Math.round(Math.min(100, (stabilTid / 30) * 100))}%`);
+  sætTekst('reaktorStabilTekst', fremgang.erLøst('r-stabil') ? 'Klaret ★' : `${Math.floor(stabilTid)} af 30 sekunder i det grønne felt`);
 }
 
 // ---------- Hvert billede ----------
@@ -966,6 +993,7 @@ function opdater(dt) {
       if (effektHistorie.length > 80) effektHistorie.shift();
     } else effektHistorie.length = 0;
     opdaterMission();
+    if (tilstand === 'kæde') opdaterKædePanel();
   }
 }
 

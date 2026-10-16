@@ -41,8 +41,10 @@ for (const [navn, [w, h, m]] of Object.entries({ pc: [1280, 800, false], tlf: [3
   const efter = await T(() => atomlabTest.reaktor.neutronPos());
   tjek(`${navn}: neutronerne står stille under pause`, før.length > 0 && JSON.stringify(før) === JSON.stringify(efter), JSON.stringify([før, efter]));
   await T(() => { const s = document.querySelector('#reaktorStave'); s.value = 80; s.dispatchEvent(new Event('input')); });
-  await page.waitForTimeout(1500);
+  // Stavene glider billede for billede, og testbrowseren tegner kun få billeder i sekundet: hold øje i stedet for at vente en fast tid
+  await page.waitForFunction(() => atomlabTest.reaktor.stavVist() > 0.65, null, { polling: 100, timeout: 6000 }).catch(() => {});
   tjek(`${navn}: stavene kan flyttes under pause`, (await T(() => atomlabTest.reaktor.stavVist())) > 0.65, await T(() => atomlabTest.reaktor.stavVist()));
+  tjek(`${navn}: neutronerne står stadig stille`, JSON.stringify(efter) === JSON.stringify(await T(() => atomlabTest.reaktor.neutronPos())));
   tjek(`${navn}: boksen "En rigtig reaktor"`, /10\.000 ton kul/.test(await tekst('#reaktor .højre-panel')));
   await page.screenshot({ path: `${UD}/${navn}-r2.png`, fullPage: true });
   if (!m) {
@@ -75,9 +77,12 @@ for (const [navn, [w, h, m]] of Object.entries({ pc: [1280, 800, false], tlf: [3
   tjek(`${navn}: Kosmos har en pauseknap`, (await tekst('#kosmosPause')) === '⏸ Pause');
   await page.locator('#kosmosPause').click();
   const t1 = await T(() => atomlabTest.kosmos.tid());
+  const s1 = await T(() => atomlabTest.kosmos.stjerneTid());
   await page.waitForTimeout(1200);
   const t2 = await T(() => atomlabTest.kosmos.tid());
+  const s2 = await T(() => atomlabTest.kosmos.stjerneTid());
   tjek(`${navn}: Kosmos-uret står stille under pause`, t1 === t2, `${t1} ${t2}`);
+  tjek(`${navn}: stjernens overflade står stille under pause`, s1 != null && s1 === s2, `${s1} ${s2}`);
   tjek(`${navn}: pausemærket vises i Kosmos`, await synlig('#kosmosVindue .pause-mærke'));
   await page.screenshot({ path: `${UD}/${navn}-k.png`, fullPage: true });
   const knapper = await T(() => atomlabTest.kosmos.knapper());

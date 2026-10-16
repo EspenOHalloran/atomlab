@@ -3,12 +3,16 @@
 
 import * as THREE from 'three';
 import { skallerForIon } from './data/grundstoffer.js';
-import { LAV_KVALITET, lavPrikTekstur } from './scene3d.js';
+import { LAV_KVALITET, ROLIG, lavPrikTekstur } from './scene3d.js';
 
 const R = 0.5; // radius på en proton eller neutron
 const MAX_P = 118;
 const MAX_N = 200;
 const MAX_E = 125;
+// Så mange kugler af hver slags kan tegnes (plads til nogle, der er på vej ud)
+const PLADS_P = MAX_P + 40;
+const PLADS_N = MAX_N + 40;
+const PLADS_E = MAX_E + 40;
 
 // Hvor stor kernen er med a partikler (de pakker sig som kugler i en pose)
 export function kerneRadius(a) {
@@ -86,13 +90,13 @@ export class Atom {
     });
     tilføjKantlys(this.protonMat, new THREE.Color(1.1, 0.12, 0.08), new THREE.Color(0.28, 0.02, 0.01), this.tidUniform);
     tilføjKantlys(this.neutronMat, new THREE.Color(0.16, 0.3, 0.85), new THREE.Color(0.0, 0.0, 0.0), this.tidUniform);
-    this.pMesh = new THREE.InstancedMesh(kugle, this.protonMat, MAX_P + 40);
-    this.nMesh = new THREE.InstancedMesh(kugle, this.neutronMat, MAX_N + 40);
+    this.pMesh = new THREE.InstancedMesh(kugle, this.protonMat, PLADS_P);
+    this.nMesh = new THREE.InstancedMesh(kugle, this.neutronMat, PLADS_N);
 
     // Elektronerne lyser så stærkt (farver over 1), at de får glød
     const eGeo = new THREE.SphereGeometry(0.2, 14, 10);
     this.eMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1.3, 3.4, 4.2) });
-    this.eMesh = new THREE.InstancedMesh(eGeo, this.eMat, MAX_E + 40);
+    this.eMesh = new THREE.InstancedMesh(eGeo, this.eMat, PLADS_E);
     this.eGeo = eGeo;
 
     for (const m of [this.pMesh, this.nMesh, this.eMesh]) {
@@ -120,8 +124,8 @@ export class Atom {
 
     // Elektron-haler: hver elektron trækker en stribe af lysende prikker efter sig
     const haleGeo = new THREE.BufferGeometry();
-    haleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array((MAX_E + 40) * HALE_LÆNGDE * 3), 3));
-    haleGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array((MAX_E + 40) * HALE_LÆNGDE * 3), 3));
+    haleGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(PLADS_E * HALE_LÆNGDE * 3), 3));
+    haleGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(PLADS_E * HALE_LÆNGDE * 3), 3));
     this.haler = new THREE.Points(haleGeo, new THREE.PointsMaterial({
       size: 0.3, map: this.prik, vertexColors: true, transparent: true,
       depthWrite: false, blending: THREE.AdditiveBlending,
@@ -358,9 +362,17 @@ export class Atom {
   }
 
   // ---------- Henfald ----------
-  // Kernen ryster voldsomt et øjeblik, og så sker henfaldet. færdig({ p, n }) kaldes bagefter.
+  // Kernen ryster voldsomt et øjeblik, og så sker henfaldet. færdig({ p, n, e }) kaldes bagefter.
   henfald(måde, færdig) {
     this.henfaldVenter = { måde, tid: 0.8, færdig };
+  }
+
+  // Gør et ventende henfald færdigt med det samme (fx når man forlader værkstedet midt i det)
+  afslutHenfald() {
+    const v = this.henfaldVenter;
+    if (!v) return;
+    this.henfaldVenter = null;
+    v.færdig?.(this.udførHenfald(v.måde));
   }
 
   udførHenfald(måde) {
@@ -376,7 +388,7 @@ export class Atom {
         if (!k) break;
         k.type = til;
         k.puls = 1;
-        this.skyd(lepton, k.pos);
+        if (lepton) this.skyd(lepton, k.pos); // uden lepton: elektronindfangning (kun en neutrino flyver ud)
         this.skyd(lepton === 'elektron' ? 'antineutrino' : 'neutrino', k.pos);
       }
     };
@@ -390,7 +402,8 @@ export class Atom {
     if (måde === 'beta-') { skift('n', 'p', 1, 'elektron'); p += 1; n -= 1; }
     if (måde === 'dobbeltbeta-') { skift('n', 'p', 2, 'elektron'); p += 2; n -= 2; }
     if (måde === 'beta+') { skift('p', 'n', 1, 'positron'); p -= 1; n += 1; }
-    if (måde === 'dobbeltbeta+') { skift('p', 'n', 2, 'positron'); p -= 2; n += 2; }
+    // Dobbelt elektronindfangning: kernen fanger to af atomets egne elektroner
+    if (måde === 'dobbeltbeta+') { skift('p', 'n', 2, null); p -= 2; n += 2; e = Math.max(0, e - 2); }
     if (måde === 'n' || måde === 'p') {
       const k = yderste(måde)[0];
       if (k) skydUd(k, k.pos.lengthSq() > 0.01 ? k.pos.clone().normalize() : new THREE.Vector3().randomDirection(), 22);
@@ -413,7 +426,7 @@ export class Atom {
     this.beregnSkaller();
     this.glimtTid = 0.6;
     this.bølgeTid = 1;
-    return { p, n };
+    return { p, n, e };
   }
 
   // Skyder en lille partikel ud med en lysende hale
@@ -519,6 +532,12 @@ export class Atom {
     // Ustabile kerner ryster
     const rystStyrke = ({ ustabil: 0.05, meget: 0.1, straks: 0.16, næsten: 0.015 }[this.status] || 0) + ekstraRyst;
 
+    // Er der flere kugler, end der er plads til (fx "Ryd" og så straks et tungt grundstof),
+    // forsvinder dem, der er på vej ud, med det samme
+    let antalP = 0;
+    for (const k of this.nukleoner) if (k.type === 'p') antalP++;
+    if (antalP > PLADS_P || this.nukleoner.length - antalP > PLADS_N) this.nukleoner = this.nukleoner.filter((k) => !k.ud);
+    if (this.elektroner.length > PLADS_E) this.elektroner = this.elektroner.filter((e) => !e.ud);
     let ip = 0, iN = 0;
     for (const k of this.nukleoner) {
       if (k.ud) {
@@ -535,8 +554,8 @@ export class Atom {
       ryst.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(rystStyrke * 2);
       hjælpV.copy(k.pos).add(ryst);
       hjælpMatrix.compose(hjælpV, hjælpQ, hjælpS.setScalar(s));
-      if (k.type === 'p') this.pMesh.setMatrixAt(ip++, hjælpMatrix);
-      else this.nMesh.setMatrixAt(iN++, hjælpMatrix);
+      if (k.type === 'p') { if (ip < PLADS_P) this.pMesh.setMatrixAt(ip++, hjælpMatrix); }
+      else if (iN < PLADS_N) this.nMesh.setMatrixAt(iN++, hjælpMatrix);
     }
     this.nukleoner = this.nukleoner.filter((k) => !k.ud || k.liv > 0);
     this.pMesh.count = ip;
@@ -563,13 +582,14 @@ export class Atom {
       }
       const s = e.ud ? Math.max(0.001, e.liv) : e.vækst;
       hjælpMatrix.compose(e.pos, hjælpQ, hjælpS.setScalar(s));
-      this.eMesh.setMatrixAt(ie++, hjælpMatrix);
+      if (ie < PLADS_E) this.eMesh.setMatrixAt(ie++, hjælpMatrix);
     }
     // Halerne: gem elektronens seneste positioner og tegn dem som prikker, der bliver svagere
     const halePos = this.haler.geometry.attributes.position.array;
     const haleFarve = this.haler.geometry.attributes.color.array;
     let ih = 0;
     for (const e of this.elektroner) {
+      if (ih + HALE_LÆNGDE > PLADS_E * HALE_LÆNGDE) break;
       if (!e.hale) e.hale = Array.from({ length: HALE_LÆNGDE }, () => e.pos.clone());
       const sidste = e.hale.pop();
       e.hale.unshift(sidste.copy(e.pos));
@@ -668,7 +688,7 @@ export class Atom {
 
     // Gammaglimt
     if (this.glimtTid > 0) this.glimtTid = Math.max(0, this.glimtTid - dt);
-    this.glimt.material.opacity = Math.min(0.85, this.glimtTid * 2);
+    this.glimt.material.opacity = Math.min(ROLIG ? 0.35 : 0.85, this.glimtTid * 2); // dæmpet ved "reducer bevægelse"
     this.glimt.scale.setScalar(kerneR * 3 + 1.5 + (0.6 - this.glimtTid) * (kerneR * 8 + 4));
 
     // Festfyrværkeri

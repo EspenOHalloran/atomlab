@@ -52,6 +52,37 @@ await page.screenshot({ path: UD + '/r4-nødstop.png' });
 await page.click('#reaktorHjælp');
 await page.waitForTimeout(400);
 tjek('hjælp vises', await page.isVisible('#hjælpReaktor'));
+await page.keyboard.press('Escape');
+// "Vis mig" i kædereaktionen: Den første neutron skal altid spalte (før blev den slugt af vandet i ca. 1,5 % af gangene).
+// 200 forsøg fanger den gamle fejl ca. 95 % af gangene.
+const døde = await page.evaluate(() => {
+  const t = atomlabTest.reaktor;
+  t.tilstand('kæde');
+  let antal = 0;
+  for (let i = 0; i < 200; i++) {
+    t.nulstil(); t.spol(0.5);
+    t.visMig();
+    for (let tid = 0; tid < 4; tid += 0.05) { t.spol(0.05); if (!t.visning().kæde) break; }
+    const v = t.visning();
+    if (!(v.kæde && v.kæde.length >= 2)) antal++;
+    t.spol(10);
+  }
+  return antal;
+});
+tjek('Vis mig: kædereaktionen kommer i gang 200 af 200 gange', døde === 0, `${døde} døde ud`);
+// Kosmos har også knapper med klassen del-knap ("Kort fortalt" og "For nørder"). De må ikke ændre Reaktoren.
+await page.evaluate(() => { location.hash = '#kosmos'; });
+await page.waitForTimeout(1500);
+await page.click('[data-kosmos-fane="nørd"]');
+await page.evaluate(() => { location.hash = '#reaktor'; });
+await page.waitForTimeout(1500);
+const del = await page.evaluate(() => ({
+  valgt: [...document.querySelectorAll('#reaktor .del-knap.valgt')].map((k) => k.dataset.del),
+  synlige: [...document.querySelectorAll('[data-reaktor-del]')].filter((e) => !e.classList.contains('skjult')).length,
+  nørdValgt: document.querySelector('[data-kosmos-fane="nørd"]').classList.contains('valgt'),
+}));
+tjek('Reaktoren har stadig en valgt del efter Kosmos', del.valgt.length === 1 && del.synlige >= 1, JSON.stringify(del));
+tjek('Kosmos husker sin fane', del.nørdValgt, JSON.stringify(del));
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);

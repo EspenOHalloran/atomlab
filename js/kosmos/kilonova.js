@@ -17,13 +17,13 @@ export default {
   citat: 'saganKosmos',
   kamera: { retning: [0, 0.6, 1], radius: 8 },
   tal: [
-    ['Første gang set', '17. august 2017'],
+    ['Set sammen med tyngdebølger', '17. august 2017'],
     ['Afstand', '130 mio. lysår'],
     ['Guld lavet', 'flere gange Jordens vægt'],
     ['Gammaglimtet kom', '1,7 s efter tyngdebølgen'],
   ],
   kort: `
-    <p>En <b>kilonova</b> sker, når to neutronstjerner støder sammen. De har kredset om hinanden i millioner af år og er kommet tættere og tættere på. Til sidst drejer de rundt hundredvis af gange i sekundet og smelter sammen med et kæmpe brag.</p>
+    <p>En <b>kilonova</b> sker, når to neutronstjerner støder sammen. De har kredset om hinanden i millioner eller milliarder af år og er kommet tættere og tættere på. Til sidst drejer de rundt hundredvis af gange i sekundet og smelter sammen med et kæmpe brag.</p>
     <p>Ved sammenstødet bliver en sky af stof fyldt med neutroner slynget ud. Atomkernerne i skyen fanger neutronerne og <b>henfalder</b> bagefter til tunge grundstoffer: <b>guld</b>, platin, sølv, jod og uran.</p>
     <p>Meget af guldet på Jorden er lavet sådan, længe før Jorden fandtes. Måske også guldet i en ring, du har set.</p>`,
   nørd: `
@@ -232,7 +232,7 @@ export default {
         }
         if (fase2 === 3 && mt > 11) {
           fase2 = 4;
-          fase('Guld fra rummet', 'Stoffet blandes med gas i galaksen og bliver en dag en del af nye stjerner og planeter. Sådan kom guldet til Jorden.', [4, 4]);
+          fase('Guld fra rummet', 'Stoffet blandes med gas i galaksen og bliver en dag en del af nye stjerner og planeter. Sådan kom meget af guldet til Jorden.', [4, 4]);
         }
       },
     };

@@ -8,6 +8,7 @@
 
 import { lyd } from './lyd.js';
 import { holdPiller } from './beskeder.js';
+import { ROLIG } from './scene3d.js';
 
 const NØGLE = 'atomlabGuide';
 let kører = null; // { id, trin, nr, ventet }
@@ -114,7 +115,7 @@ function næsteTrin() {
   boble.classList.remove('vist');
   requestAnimationFrame(() => boble.classList.add('vist'));
   // Er målet rullet ud af syne (fx på en telefon), rulles det frem
-  if (typeof t.mål === 'string') document.querySelector(t.mål)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  if (typeof t.mål === 'string') document.querySelector(t.mål)?.scrollIntoView({ block: 'nearest', behavior: ROLIG ? 'auto' : 'smooth' });
   t.start?.();
 }
 

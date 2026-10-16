@@ -1,6 +1,7 @@
 // Citater fra kendte forskere. Kun citater med en sikker kilde.
 // (Mange citater på nettet er forkert tilskrevet, så tilføj kun nye, hvis kilden er kendt.)
-// tekst: dansk oversættelse, original: den oprindelige ordlyd, kommentar: kort forklaring (valgfri)
+// tekst: dansk oversættelse, original: den oprindelige ordlyd (eller en engelsk oversættelse, se oversat),
+// oversat: hvilket sprog citatet oprindeligt var på, hvis original er en oversættelse, kommentar: kort forklaring (valgfri)
 
 export const CITATER = {
   feynman: {
@@ -14,17 +15,18 @@ export const CITATER = {
     person: 'Ernest Rutherford',
     kilde: 'Forelæsning, 1936',
     original: 'It was quite the most incredible event that has ever happened to me in my life. It was almost as incredible as if you fired a 15-inch shell at a piece of tissue paper and it came back and hit you.',
-    kommentar: 'Om forsøget i 1909, der viste, at atomet har en lille, tung kerne.',
+    kommentar: 'Om forsøget, som Hans Geiger og Ernest Marsden lavede i Rutherfords laboratorium i 1909. I 1911 forklarede Rutherford det: Atomet har en lille, tung kerne.',
   },
   bohr: {
     tekst: 'Vi må gøre os klart, at når det gælder atomer, kan sproget kun bruges som i poesi.',
     person: 'Niels Bohr',
     kilde: 'Som Werner Heisenberg genfortalte det i "Der Teil und das Ganze", 1969',
     original: 'We must be clear that when it comes to atoms, language can be used only as in poetry.',
+    oversat: 'tysk',
     kommentar: 'Bohr lavede selv modellen med elektroner i ringe, men vidste, at virkeligheden er mærkeligere.',
   },
   saganStjernestof: {
-    tekst: 'Nitrogenet i vores DNA, calciummet i vores tænder, jernet i vores blod og kulstoffet i vores æbletærter blev lavet inde i stjerner, der styrtede sammen. Vi er lavet af stjernestof.',
+    tekst: 'Nitrogenet i vores DNA, calciummet i vores tænder, jernet i vores blod og carbonatomerne i vores æbletærter blev lavet inde i stjerner, der styrtede sammen. Vi er lavet af stjernestof.',
     person: 'Carl Sagan',
     kilde: 'Cosmos, 1980',
     original: 'The nitrogen in our DNA, the calcium in our teeth, the iron in our blood, the carbon in our apple pies were made in the interiors of collapsing stars. We are made of star-stuff.',
@@ -36,17 +38,17 @@ export const CITATER = {
     original: 'If you wish to make an apple pie from scratch, you must first invent the universe.',
   },
   einsteinNysgerrighed: {
-    tekst: 'Det vigtige er ikke at holde op med at stille spørgsmål. Nysgerrighed har sin egen grund til at være der.',
+    tekst: 'Det vigtige er, at man aldrig holder op med at stille spørgsmål. Nysgerrighed har sin egen grund til at findes.',
     person: 'Albert Einstein',
     kilde: 'LIFE, 1955',
-    original: 'The important thing is not to stop questioning. Curiosity has its own reason for existing.',
+    original: 'The important thing is not to stop questioning. Curiosity has its own reason for existence.',
   },
   einsteinTerninger: {
     tekst: 'Jeg er i hvert fald overbevist om, at Han ikke kaster med terninger.',
     person: 'Albert Einstein',
     kilde: 'Brev til Max Born, 1926',
     original: 'Jedenfalls bin ich überzeugt, daß der nicht würfelt.',
-    kommentar: 'Einstein kunne ikke lide, at naturen skulle være tilfældig. Men i dag ved vi, at det faktisk er tilfældigt, hvornår en bestemt kerne henfalder.',
+    kommentar: 'Einstein kunne ikke lide, at naturen skulle være tilfældig. Men i dag tyder alle forsøg på, at det faktisk er tilfældigt, hvornår en bestemt kerne henfalder.',
   },
   einsteinEnergi: {
     tekst: 'Det fulgte af den specielle relativitetsteori, at masse og energi blot er forskellige udtryk for den samme ting.',
@@ -74,7 +76,7 @@ export const CITATER = {
     person: 'Michael Faraday',
     kilde: 'Laboratoriedagbog, 1849',
     original: 'Nothing is too wonderful to be true, if it be consistent with the laws of nature.',
-    kommentar: 'Faraday fandt på ordene ion, elektrode, anode, katode og elektrolyt, som vi stadig bruger om batterier.',
+    kommentar: 'Faraday indførte ordene ion, elektrode, anode, katode og elektrolyt, som vi stadig bruger om batterier. Nogle af dem fandt han på sammen med William Whewell.',
   },
   hawkingStjerner: {
     tekst: 'Kig op på stjernerne og ikke ned på dine fødder. Prøv at forstå det, du ser, og undr dig over, hvad der får universet til at eksistere. Vær nysgerrig.',
@@ -97,10 +99,10 @@ export const CITATER = {
     kommentar: 'Wheeler var også den, der gjorde navnet "sort hul" kendt.',
   },
   saganKosmos: {
-    tekst: 'Kosmos er i os. Vi er lavet af stjernestof. Vi er en måde, universet kan lære sig selv at kende på.',
+    tekst: 'Kosmos er også i os. Vi er lavet af stjernestof. Vi er en måde, kosmos kan lære sig selv at kende på.',
     person: 'Carl Sagan',
     kilde: 'Cosmos, 1980',
-    original: 'The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.',
+    original: 'The cosmos is also within us. We\'re made of star-stuff. We are a way for the cosmos to know itself.',
   },
   saganScene: {
     tekst: 'Jorden er en meget lille scene i en enorm kosmisk arena.',
@@ -121,6 +123,7 @@ export const CITATER = {
     person: 'Marie Curie',
     kilde: 'Brev til sin bror, 1894',
     original: 'One never notices what has been done; one can only see what remains to be done.',
+    oversat: 'fransk',
   },
 };
 
@@ -134,7 +137,7 @@ export const MENU_CITATER = [
 export function citatHTML(nøgle) {
   const c = CITATER[nøgle];
   if (!c) return '';
-  const original = c.original.replace(/"/g, '&quot;');
+  const original = ((c.oversat ? `Engelsk oversættelse (originalen er på ${c.oversat}): ` : '') + c.original).replace(/"/g, '&quot;');
   return `<p class="citat-tekst" title="${original}">“${c.tekst}”</p>`
     + `<footer>– ${c.person}, <span>${c.kilde}</span></footer>`
     + (c.kommentar ? `<p class="citat-kommentar">${c.kommentar}</p>` : '');

@@ -20,12 +20,12 @@ export default {
   tal: [
     ['Solvindens fart', 'ca. 400 km/s'],
     ['En solstorm vejer', 'ca. 1 mia. ton'],
-    ['Tid til Jorden', '1 til 3 døgn'],
+    ['Tid til Jorden', 'typisk 1 til 3 døgn'],
     ['Nordlys i Danmark', 'fx maj 2024'],
   ],
   kort: `
     <p>Solen sender hele tiden en strøm af elektroner og protoner ud i rummet. Det hedder <b>solvinden</b>. Nogle gange sker der et kæmpe udbrud, og Solen kaster en hel sky af partikler af sted. Det er en <b>solstorm</b>.</p>
-    <p>Jorden har et <b>magnetfelt</b>, ligesom en stor magnet. Det fungerer som et skjold og leder partiklerne udenom. Men nogle bliver fanget og suser ned mod Nordpolen og Sydpolen. Når de rammer luften højt oppe, lyser den. Det er <b>nordlys</b>.</p>
+    <p>Jorden har et <b>magnetfelt</b>, ligesom en stor magnet. Det fungerer som et skjold og leder partiklerne udenom. Men nogle bliver fanget og suser ned i en ring omkring Nordpolen og Sydpolen. Når de rammer luften højt oppe, lyser den. Det er <b>nordlys</b>.</p>
     <p>Prøv at sende en solstorm, og se nordlyset tænde.</p>`,
   nørd: `
     <p><b>Farverne i nordlyset</b> kommer fra luften: Grønt og rødt er oxygen (grønt ca. 100 til 250 km oppe, rødt højere oppe), og blåt og lilla er nitrogen. Det er samme idé som i et neonrør: Atomer, der får et skub, sender lys ud i en bestemt farve.</p>
@@ -230,7 +230,7 @@ export default {
           if (cmeTid > 0.8) udbrudsBue.visible = false;
           if (faseNr === 1 && cmeTid > 1.6) {
             faseNr = 2;
-            fase('Skyen er på vej', 'Her tager turen et par sekunder. I virkeligheden tager den 1 til 3 døgn, så man kan nå at advare om den.', [2, 4]);
+            fase('Skyen er på vej', 'Her tager turen et par sekunder. I virkeligheden tager den typisk 1 til 3 døgn (de hurtigste under et døgn), så man kan nå at advare om den.', [2, 4]);
           }
           if (cmeTid > 12) {
             cmeTid = -1;
@@ -321,7 +321,7 @@ export default {
         }
         if (faseNr === 3 && lys > 0.6) {
           faseNr = 4;
-          fase('Nordlys!', 'Partikler fra halen af magnetfeltet styrter ned mod polerne. Når de rammer luften 100 til 300 km oppe, lyser den grønt og rødt.', [4, 4]);
+          fase('Nordlys!', 'Partikler fra halen af magnetfeltet styrter ned mod polerne. Når de rammer luften ca. 100 til 400 km oppe, lyser den grønt og rødt.', [4, 4]);
         }
         if (faseNr === 4 && cmeTid < 0 && lys < 0.25) {
           faseNr = 0;

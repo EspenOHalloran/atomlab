@@ -3,6 +3,7 @@
 
 import * as THREE from 'three';
 import { glød, dipolLinjer, skilt, rullendeGraf } from './faelles.js';
+import { lydErTændt } from '../lyd.js';
 
 const RADIUS = 1.2;
 const HÆLD = (62 * Math.PI) / 180; // vinklen mellem drejeaksen og magnetfeltets akse
@@ -19,22 +20,22 @@ export default {
   kamera: { retning: [-0.25, 0.45, 1], radius: 10 },
   tal: [
     ['Bredde', 'ca. 20 km'],
-    ['Vægt', '1,4 til 2 × Solen'],
-    ['En teskefuld vejer', 'ca. 1 mia. ton'],
+    ['Vægt', 'ca. 1,2 til 2,3 × Solen'],
+    ['En teskefuld vejer', 'ca. 2-3 mia. ton'],
     ['Hurtigste kendte', '716 omgange i sekundet'],
   ],
   kort: `
     <p>Når en kæmpestjerne eksploderer som en supernova, kan der blive en <b>neutronstjerne</b> tilbage. Den er kun ca. 20 km bred, men den vejer mere end Solen. Den er næsten som én kæmpe atomkerne lavet af neutroner.</p>
-    <p>En <b>pulsar</b> er en neutronstjerne, der drejer rundt. Den sender to stråler af radiobølger ud fra sine magnetiske poler. Ligesom et fyrtårn: Hver gang en stråle fejer forbi Jorden, måler vores radioteleskoper et blink. Grafen nederst viser blinkene.</p>
+    <p>En <b>pulsar</b> er en neutronstjerne, der drejer hurtigt rundt. Den sender to stråler af radiobølger ud fra sine magnetiske poler. Ligesom et fyrtårn: Hver gang en stråle fejer forbi Jorden, måler vores radioteleskoper et blink. Grafen nederst viser blinkene. Alle pulsarer er altså neutronstjerner, men ikke alle neutronstjerner er pulsarer: Vi ser kun dem, hvis stråler fejer forbi Jorden, og gamle neutronstjerner drejer for langsomt til at blinke.</p>
     <p>Prøv at lytte til tre rigtige pulsarer. Hvert klik er en omgang!</p>`,
   nørd: `
     <p><b>Opdaget af en studerende:</b> I 1967 opdagede Jocelyn Bell Burnell nogle radioblink, der kom præcis hvert 1,34 sekund. De var så regelmæssige, at man for sjov kaldte signalet LGM-1, "Little Green Men" (små grønne mænd). Hendes vejleder fik Nobelprisen for opdagelsen i 1974, men det gjorde hun ikke. I 2018 fik hun en stor pris på 3 millioner dollar, som hun gav væk til studerende.</p>
-    <p><b>Hvorfor drejer den så hurtigt?</b> Tænk på en skøjteløber, der trækker armene ind: Så drejer hun hurtigere. Da stjernen faldt sammen til 20 km, begyndte den at dreje tusindvis af gange hurtigere.</p>
+    <p><b>Hvorfor drejer den så hurtigt?</b> Tænk på en skøjteløber, der trækker armene ind: Så drejer hun hurtigere. Da stjernen faldt sammen til 20 km, begyndte den at dreje hundredtusinder af gange hurtigere.</p>
     <p><b>Ekstrem tyngdekraft:</b> Tabte man en ting fra 1 meters højde på en neutronstjerne, ville den ramme overfladen med over 1.000 km i sekundet. Magnetfeltet er omkring en billion gange stærkere end Jordens.</p>
     <p><b>Universets bedste ure:</b> De hurtigste pulsarer tikker lige så præcist som atomure. Ved at holde øje med mange af dem har forskerne fundet spor af tyngdebølger, der ruller gennem hele vores galakse.</p>
     <p><b>Ærligt talt:</b> Strålerne er mest radiobølger, som vi ikke kan se med øjnene. Her har de fået en farve. Og stjernen er tegnet langt større i forhold til strålerne.</p>`,
 
-  lav(gruppe, { lyd, verden, overlag }) {
+  lav(gruppe, { lyd, verden, overlag, fase }) {
     // Stjernen drejer om y-aksen. Magnetfeltet og strålerne hælder i forhold til den.
     const drejer = new THREE.Group();
     const kugle = new THREE.Mesh(
@@ -86,6 +87,12 @@ export default {
 
     const graf = rullendeGraf(overlag(), 'Det, et radioteleskop på Jorden måler', '#8fd0ff');
 
+    // Spil en rigtig pulsar som lyd, og forklar den i en undertekst
+    const lyt = (blink, varighed, titel, tekst) => {
+      lyd.pulsar(blink, varighed);
+      fase(titel, tekst + (lydErTændt() ? '' : ' (Lyden er slået fra. Tryk på højttaleren øverst for at høre den.)'));
+    };
+
     let omgange = 0.5; // pr. sekund
     let vinkel = 0;
     let sidst = 0;
@@ -106,9 +113,10 @@ export default {
           vis: (v) => `${v.toFixed(1).replace('.', ',')} omgange/s`,
           ændring: (v) => { omgange = v; },
         },
-        { tekst: '🔊 Vela-pulsaren (11 blink/s)', handling: () => lyd.pulsar(11, 2.5) },
-        { tekst: '🔊 Krabbe-pulsaren (30 blink/s)', handling: () => lyd.pulsar(30, 2.5) },
-        { tekst: '🔊 Den hurtigste (716 blink/s)', handling: () => lyd.pulsar(716, 1.5) },
+        // Lydene er i det rigtige tempo. Animationen kan ikke dreje så hurtigt, så en undertekst forklarer det.
+        { tekst: '🔊 Vela-pulsaren (11 blink/s)', handling: () => lyt(11, 2.5, 'Vela-pulsaren', 'Den drejer 11 gange i sekundet. Hvert klik, du hører, er et blink fra den.') },
+        { tekst: '🔊 Krabbe-pulsaren (30 blink/s)', handling: () => lyt(30, 2.5, 'Krabbe-pulsaren', 'Den drejer 30 gange i sekundet. Den blev født i den supernova, som kinesiske astronomer så i år 1054.') },
+        { tekst: '🔊 Den hurtigste (716 blink/s)', handling: () => lyt(716, 1.5, 'Den hurtigste kendte pulsar', 'Den drejer 716 gange i sekundet. Så hurtigt smelter klikkene sammen til en høj, summende tone. Animationen kan højst dreje 2 gange i sekundet, så den kan ikke vise det: 716 gange er over 350 gange hurtigere. Overfladen farer rundt med over 40.000 km i sekundet.') },
         { tekst: '🧲 Vis magnetfeltet', til: true, skift: (til) => { felt.visible = til; } },
       ],
       opdater(dt) {

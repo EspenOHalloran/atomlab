@@ -26,12 +26,16 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Er det spillets eget tal (fx 80 mio. °C eller 6-16 spaltninger), så skriv "i spillet" og det rigtige tal ved siden af.
 - [ ] Brug "ca.", "typisk" eller "de fleste", når virkeligheden har undtagelser.
 - [ ] Tekster, der sættes sammen af data (fx "opdaget 1868 af …"), er læst i den færdige form for alle tilfælde (lav et lille script, der skriver dem alle ud).
+- [ ] Fagord forklares med få ord første gang, de bruges i en tekst (fx "en neutrino (en næsten usynlig partikel)", "en alfapartikel (en heliumkerne)"). Læs teksten, som om du ikke kan fysik.
+- [ ] Står der et tal fra spillet (fx "6-16"), så sig også, hvad det tæller ("spaltninger i sekundet i det grønne felt").
 
 ### C. Ny regel, beregning eller spillogik
 - [ ] Reglen er testet mod en tabel med kendte tilfælde, også de "kedelige" og grænsetilfældene, ikke kun et enkelt eksempel (fx alle kendte isotoper, ikke kun uran-238-kæden).
 - [ ] Alle kombinationer af valg er gennemtænkt (fx 2 kerner × 2 neutronfarter). Ingen `if`-kæde må falde igennem til en forkert standard.
 - [ ] Tilfældighed: målt med mange forsøg (fx 60). En sjælden fejl er stadig en fejl.
 - [ ] Ting, som brugeren kan ændre undervejs (fx neutronens fart), gemmes, når handlingen starter.
+- [ ] Ændres et tempo eller en hastighed: find alt med en flyvetid, en tidsgrænse eller en "Vis mig", og tjek det igen.
+- [ ] "Vis mig" og andre automatiske handlinger vælger kun ting, som brugeren ikke allerede er i gang med (fx en kerne, der flyver).
 
 ### D. Ny del (skærm), eller ændring i start og stop
 - [ ] Stop-funktionen rydder **alt**: timere, kameraets mål, kamerabegrænsninger, pause, guide, beskeder og cursor.
@@ -39,6 +43,9 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Opgavelister og tal bygges, når delen startes, så de passer efter "Start forfra" og nulstilling.
 - [ ] Paneler opdateres højst 4 gange i sekundet og kun, når noget har ændret sig, ikke hvert billede.
 - [ ] Brug de fælles byggeklodser (beskeder, guide, pause, "Næste skridt") i stedet for at kopiere.
+- [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. En klasse kan bruges på flere skærme.
+- [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
+- [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
 
 ### E. Ny animation, effekt eller fælles funktion
 - [ ] "Reducer bevægelse" (`ROLIG`) er respekteret: kamerature, lysglimt og blød rulning.
@@ -46,12 +53,18 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Grafik, der laves under brug (geometri, materiale, tekstur), bliver frigivet eller genbrugt.
 - [ ] Ingen nye `Vector3`, `Color` eller `Quaternion` i løkker, der kører hvert billede.
 - [ ] Klikbare ting er knapper (`<button>`), så de kan bruges med tastatur.
+- [ ] Grafik med en fast størrelse (fx `InstancedMesh` med plads til et bestemt antal) kan ikke løbe over, heller ikke et kort øjeblik, når nogle kugler er på vej ud og andre på vej ind.
 
 ### F. Tests
 - [ ] En kort tilstand (fx "ion i 1,6 sekunder") holdes der øje med hele tiden (`waitForFunction` med `polling`), i stedet for at kigge én gang.
 - [ ] Tjek noget, der altid gælder (fx antal kernepartikler), i stedet for et præcist antal, når der er tilfældighed.
 - [ ] Tilstanden nulstilles mellem forsøg, og mål vælges i et frit område (ikke under paneler).
 - [ ] Tekst søges uden forskel på store og små bogstaver.
+- [ ] En test af en rettet fejl skal først fejle uden rettelsen. Ellers ved vi ikke, om den tester noget.
+- [ ] Fejl, der kun sker ved mange billeder i sekundet (fx mange kugler på kort tid), testes ved at spole frem i små skridt (fx `atomlabTest.vaerksted.spol`). Testbrowseren tegner kun 3-6 billeder i sekundet.
+- [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
+- [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter.
+- [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
 
 ---
 
@@ -71,6 +84,12 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **En ny fælles funktion, der ikke er tjekket alle steder** | Pausen: Stjernernes overflade koger videre, fordi den bruger `performance.now()`. "Reducer bevægelse" virker kun delvist. | E: søg efter alle steder, der skal følge med. |
 | **Arbejde hvert billede, som ikke behøves** | Reaktorens panel skrives hvert billede, også når reaktoren er slukket. | D: højst 4 gange i sekundet, og kun ved ændring. |
 | **Tests, der kigger på det forkerte tidspunkt eller forventer et præcist tilfældigt tal** | `henfald` (ion i 1,6 sekunder), `stjerneovn` (præcis 40 protoner). | F. |
+| **En CSS-klasse, der bruges på flere skærme** | Reaktoren lyttede på alle `.del-knap`, også Kosmos' "Kort fortalt" og "For nørder". Et klik der gjorde Reaktoren tom (ingen del valgt), og "Vis en kædereaktion" viste ingenting. Fundet af brugeren. | D: afgræns vælgere, og tjek tilstandens værdi. |
+| **Skærmbilleder taget, før kameraet var færdigt** | To forkerte fund i gennemgangen: Batteriets etiketter "skåret af" på tablet og væggen i Det periodiske system "kun 40 % af bredden". Begge var billeder midt i zoomet. | F: vent på kameraet. |
+| **Fagord uden forklaring** | "Neutrino" i supernovaen, "alfapartikel" ved henfald, "6-16" i Reaktoren. Fundet af brugeren. | B: forklar første gang. |
+| **Grafik med fast plads, der løber over et øjeblik** | "Ryd" og straks uran: op til 179 protoner, men plads til 158. Sker kun ved mange billeder i sekundet, så testbrowseren så det ikke. | E og F: loft over antallet, test med små tidsskridt. |
+| **En ændring af tempo eller tid, der rammer tidsgrænser andre steder** | Stjerneovnens nye tempo fik egne skud til at flyve længere, så "Vis mig" kunne vælge et skud, der stadig fløj. | C: søg efter alt, der har en flyvetid eller tidsgrænse, når tempoet ændres. |
+| **En indstilling, der ikke virker** | Kantudglatning (`antialias`) på lærredet virker ikke, når gløden tegner billedet. Den kostede bare hukommelse. | F: mål før og efter. |
 
 ### Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
 - "En supernova lyser mere end en hel galakse." Det passer kun nogenlunde for type Ia. En kollaps-supernova lyser som ca. 0,2-1 milliard sole, og galaksen er 40-100 gange stærkere.
@@ -82,6 +101,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Beta-plus = en positron skydes ud." Ofte fanger kernen i stedet en elektron.
 - "Første gang set …" Tjek, om det var "første gang set tydeligt" eller "første direkte måling".
 - Citater, der citeres i mange udgaver (Sagan, Einstein), har ofte en ændret ordlyd.
+- "Nøgne kerner" og "ioner": et frit atom kan højst holde på én ekstra elektron (O²⁻ findes kun i krystaller).
+- Supertunge grundstoffer: Halveringstiden spænder fra under et millisekund (Og) til over et døgn (Db-268). Skriv ikke "henfalder med det samme" om dem alle.
+- "Zirkonia er kunstige diamanter." Det er en efterligning af diamant, ikke diamant.
 
 ---
 
@@ -104,10 +126,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Små fælles byggeklodser** frem for kopier: beskeder (`visBesked`), guiden (`startGuide`) og pausen (`lavPause`) bruges flere steder, så de opfører sig ens.
 - **"Næste skridt" og "Vis mig"** hjælper meget med at komme i gang. "Vis mig" må ikke klare opgaver for en.
 - **Vent på testene inden for samme tur** (vent på resultatet i stedet for at afslutte), så der ikke bliver pushet utestet kode.
+- **Genskab fejlen, før den rettes.** Reaktorens tomme skærm blev genskabt med et skript (Kosmos → "For nørder" → Reaktoren), før den blev rettet. Testen for "Ryd og straks uran" bestod først også uden rettelsen. Først da den spolede i små skridt, fejlede den uden rettelsen (168 af 158) og bestod med den.
+- **Brugerens egne indtryk finder andet end testene og agenterne:** fagord uden forklaring, et tempo, der er for hurtigt, og tal uden enhed. Læs teksterne, som om du ikke kan fysik.
+- **Billeder i sekundet målt i testbrowseren** (software-tegning) kan bruges til at sammenligne før og efter. Fx tablet 3,9 → 6,7 og pc 5,1 → 5,5, da gløden blev halveret på tablets, og den virkningsløse kantudglatning blev fjernet. Kantudglatning i gløden (`samples: 4`) kostede ca. 40 % og gjorde testene langsommere, så den blev ikke slået til.
 
 ### Faldgruber: kamera og layout
 - **Kamerastyringen har en skjult grænse.** `styring.maxDistance` (250) holder kameraet tæt på, også når styringen er slået fra. En planlagt kameratur skal hæve grænsen og sætte den tilbage bagefter.
 - **Smalle skærme giver en anden kameraafstand.** På en telefon på højkant står kameraet længere væk (`passerTil` regner ud fra hullet). Rejsen ind i Solen sluttede derfor uden for Solen. Afstande skal regnes ud fra `verden.målAfstand`, og telefon på højkant skal altid testes.
+- **Etiketter i 3D ved kanten af en kasse** kan få kassens kantlinje lige gennem teksten. Sæt dem foran kassen (større z) og under kanten, og tegn dem oven på alt (`depthTest = false`).
 - **Ting i 3D-vinduet, der overlapper.** Brug `bundIVindue()` til ting nederst (over underteksterne). Et lag oven på hele vinduet skal have z-index 1, ellers dækker det underteksterne (z-index 2). 3D-etiketter kan stikke op over overskriften (Batteriet på tablet).
 - **Skærmbilleder af "hele siden"** (`fullPage`) viser kun det synlige, fordi panelerne ruller hver for sig. Rul elementet frem (`scrollIntoViewIfNeeded`), og tag billedet bagefter.
 
@@ -117,11 +143,17 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Kø med forsinkelse:** Pillerne (beskeder) gav en fejl, når køen blev tømt imens. Tjek køen igen inde i `setTimeout`.
 - **Lyde før man har trykket på siden** gav advarsler i browseren. Lyde springes nu over, indtil siden er brugt (`navigator.userActivation`).
 - **"Vis mig" lavede ingen reaktion i 4 af 60 forsøg.** En tredje kerne skubbede skuddet af kurs. Rettet, så de to kerner går igennem de andre: 0 af 60.
+- **"Vis mig" i kædereaktionen døde ud i ca. 1,3 % af gangene.** Den første neutron skal altid spalte, men reglen "vandet sluger nu og da en neutron" gjaldt også den. Fundet, fordi testen `guide` fejlede én gang i hele samlingen og bestod alene. Målt med 300 forsøg (4 døde), rettet, og målt igen (0 af 300). Reaktor-testen kører nu 200 forsøg. Lær: Når en særregel ("altid"), så gennemgå **alle** de andre regler, der kan fjerne eller ændre den samme ting.
+- **Et langsommere tempo afslørede en gammel fejl.** Stjerneovnens "Vis mig" kunne vælge en kerne, der selv var skudt af sted og stadig fløj. Når den kernes flyvetid løb ud, stoppede "Vis mig" uden reaktion. Det nye tempo (Normal 0,6 i stedet for 1) holdt egne skud længere i luften, så det skete i testen `guide`. Genskabt med 80 forsøg (2 uden reaktion), rettet (`vælgPar` springer optagne kerner over), 0 af 80, og testen `stjerneovn` kører nu 120 forsøg. Lær: Når en hastighed eller et tempo ændres, så tænk over alt, der varer en vis tid (flyvetider, tidsgrænser, "Vis mig").
 - **Beskeder kunne skubbe rejsens undertekster væk.** Nu venter ovnens beskeder, til rejsen er slut.
+- **Et henfald midt i et skærmskift** fryser, når værkstedet stopper (animationen kører kun, mens værkstedet vises), og låste værkstedet, så Det periodiske system ikke kunne åbne et grundstof der. Nu bliver det gjort færdigt med det samme (`atom.afslutHenfald()`), og ionen bliver neutral, når man kommer tilbage.
+- **Tempo ganges på tiden, ikke på farten.** Stjerneovnens nye tempoer (0,3 / 0,6 / 3) ændrer ikke fysikken, så grafen og `BAKKE` passer stadig. `termiskFart` må ikke ændres for at gøre det langsommere.
 
 ### Faldgruber: tests og værktøjer
 - **Test, der lyver:** En statistik viste for gode tal, fordi en valgt kerne ikke blev nulstillet mellem forsøgene.
-- **En sjælden testfejl kan være en ægte fejl** ("Vis mig" ovenfor). Men den kan også være testens egen timing (`henfald`). Find årsagen, før den afvises.
+- **En sjælden testfejl kan være en ægte fejl** ("Vis mig" ovenfor, to gange). Men den kan også være testens egen timing (`henfald`, og `pause`, der ventede præcis 1,5 sekunder på stavene). Find årsagen, før den afvises: Kør det, der fejler, mange gange inde i siden og tæl.
+- **Forløb, der styres af uret (rigtig tid), og tryk på mål, der bevæger sig,** fejler, når maskinen er travl (load ca. 4): Rejsen ind i Solen var nået til fase 2, før testen kiggede, og en proton flyttede sig mellem målingen og trykket. Nu fryser testen rejsen på bestemte tidspunkter (`rejseTid`), og trykket prøves op til tre gange.
+- **En ny maskine kan være langsommere.** Efter en genstart tegnede testbrowseren færre billeder i sekundet, og en test med en fast ventetid fejlede. Hold øje med en tilstand (`waitForFunction`) i stedet for at vente en fast tid.
 - **Push før testene er færdige:** En automatisk regel kræver push, når en tur slutter. Vent derfor på testene inden for samme tur. Hvis der alligevel pushes før, så sig det.
 - **Tests i en midlertidig mappe** ville være forsvundet, da sessionen sluttede. De ligger nu i `tests/`.
 - **Konsolfejl talte ikke med** i de ældste tests. Nu giver de fejl i alle tests.
@@ -135,5 +167,6 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
 
 ## Åbne punkter
-- **Rettelserne fra gennemgangen** i oktober 2026 venter: se [gennemgang-2026-10.md](gennemgang-2026-10.md) og trin 11 i DESIGN.md.
+- **Fra gennemgangen** i oktober 2026 mangler stadig: forslagene i afsnit B (fremgang i menuen, links mellem delene, guide i Batteriet, app på hjemmeskærmen, "Test dig selv"), tilgængelighed (D8), fælles kode (D9), mindre download (D11) og ubrugt kode (D12). Se [gennemgang-2026-10.md](gennemgang-2026-10.md).
+- **Ordforklaringer** (fagord, man kan trykke på) og **nye fænomener i Kosmos** er foreslået og venter på et go.
 - Ikke testet med rigtig mus og rigtige fingre: hvordan det føles at sigte i Stjerneovnen, og hvor glat rejsen ind i Solen kører. Det skal prøves af jer.

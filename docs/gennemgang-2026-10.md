@@ -1,6 +1,8 @@
 # Gennemgang af AtomLab (oktober 2026)
 
-Status: **forslag, ikke rettet endnu** (bortset fra testen `henfald`, se nederst). Vi vælger sammen, hvad der skal rettes.
+Status (oktober 2026): **Punkt 1 og 2 i afsnit E er lavet** (trin 11 i DESIGN.md): faktafejlene i A1, henfaldsreglerne i A2, de vigtigste fra A3 og kodefejlene D1-D7 og D10. Se "Status for rettelserne" nederst. Afsnit B, D8, D9, D11 og D12 venter.
+
+Mærket ✓ ved et fund betyder, at fundet er tjekket efter i koden eller mod kilder (ikke at det er rettet).
 
 ## Sådan er der kigget efter
 - **Faktatjek:** Alle tekster og tal er gennemgået i fire dele (Kosmos, grundstofferne, kerner og værkstedet, Stjerneovn/Reaktor/Batteri/citater). Det er ca. 850 tal og påstande. De vigtigste fund er tjekket efter i koden eller mod kilder. De er mærket ✓.
@@ -213,4 +215,23 @@ Koden er generelt velstruktureret og læsbar, og oprydningen i Kosmos og effekte
 5. **Tilgængelighed og en app på hjemmeskærmen**, med mindre download. *Lille til mellem.*
 6. **"Test dig selv"**, når I har prøvet det, der er lavet.
 
-Allerede gjort i denne runde: Testen `henfald` var ustabil, fordi atomet kun er en ion i 1,6 sekunder, og testen kiggede én gang i rigtig tid. Den holder nu øje hele tiden og består stabilt. Der var ikke en fejl i spillet.
+## Status for rettelserne (trin 11)
+**Fakta (A1, A2, A3):** Alt i A1 og A2 er rettet. Fra A3 er alle punkter under Reaktoren, Stjerneovnen, Batteriet, Kosmos, kerner og værkstedet, grundstofferne og citaterne rettet. Henfaldsreglerne tjekkes nu af testen `henfaldsregler` (ca. 140 kendte kerner, de letteste kerners grænser, alle kæder og de tre naturlige kæder).
+
+**Kode (D):**
+- D1: Én fælles nulstilling af kameraets styring ved skærmskift (`nulstilStyring()` i scene3d.js).
+- D2: Opgavernes fejring, guiden og ionen efter et henfald venter ikke længere til næste skærm. Et henfald, der er i gang, bliver gjort færdigt, når man forlader værkstedet. Ionen vises nu i 3 sekunder.
+- D3: Opgavelisterne bygges igen, når en del startes. Teksten ved "Start opgaverne forfra" siger, at det gælder alle dele.
+- D4: Reaktorens panel opdateres 4 gange i sekundet og kun, når noget har ændret sig.
+- D5: Kantudglatningen på lærredet er fjernet (den virkede ikke). Gløden kører i halv opløsning på telefoner og tablets. Målt i testbrowseren: tablet 3,9 → 6,7 og pc 5,1 → 5,5 billeder i sekundet. Kantudglatning i gløden blev prøvet, men kostede ca. 40 %.
+- D6: Var allerede rettet.
+- D7: "Reducer bevægelse": Kameraet flyver ikke ind og glider ikke, kameraturen i Kosmos hopper, blød rulning er slået fra, og atomets glimt er dæmpet.
+- Fundet undervejs: "Vis mig" i kædereaktionen døde ud i ca. 1,3 % af gangene (vandet slugte den første neutron). Rettet og testet med 200 forsøg.
+- Fundet undervejs: Stjerneovnens "Vis mig" kunne sigte på en kerne, man selv lige havde skudt af sted, og stoppe uden reaktion (ca. 2,5 % lige efter et eget skud). Rettet og testet med 120 forsøg.
+- D10: Stjernernes overflade i Kosmos står stille under pause. "Ryd" og straks et tungt grundstof kan ikke længere løbe tør for plads i grafikken. Neutronens fart og Reaktorens neutron var allerede rettet.
+
+**Små UI-rettelser:** Batteriets etiketter står under kassen og kan ikke længere skæres over af kantlinjen. Menuen på tablet og væggen i Det periodiske system var fine: De to fund kom fra skærmbilleder, der var taget, mens kameraet stadig zoomede.
+
+**Fundet af jer bagefter og rettet:** Reaktoren var tom efter et klik på "For nørder" i Kosmos (en fælles CSS-klasse). Fagord uden forklaring (neutrino, alfapartikel), "6-16" uden enhed, neutronkilden, et for hurtigt tempo i Stjerneovnen og batteriets ioner og elektroner. Se erfaringer.md.
+
+Allerede gjort i den første runde: Testen `henfald` var ustabil, fordi atomet kun er en ion i 1,6 sekunder, og testen kiggede én gang i rigtig tid. Den holder nu øje hele tiden og består stabilt. Der var ikke en fejl i spillet.

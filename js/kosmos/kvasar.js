@@ -17,17 +17,17 @@ export default {
   undertitel: 'Et sort hul, der lyser stærkere end en hel galakse',
   kamera: { retning: [0.3, 0.55, 1], radius: 21 },
   tal: [
-    ['Første kvasar', '3C 273 (1963)'],
-    ['Afstand til 3C 273', '2,4 mia. lysår'],
+    ['Første kvasar, man forstod', '3C 273 (1963)'],
+    ['Afstand til 3C 273', 'ca. 2 mia. lysår'],
     ['3C 273 lyser som', 'ca. 4 billioner sole'],
-    ['Det sorte hul vejer', 'op til mia. × Solen'],
+    ['Det sorte hul vejer', 'millioner til milliarder × Solen'],
   ],
   kort: `
     <p>En <b>kvasar</b> er et kæmpe sort hul i midten af en galakse, der spiser enorme mængder gas. Gassen hvirvler rundt og bliver så varm, at den lyser stærkere end alle galaksens milliarder af stjerner tilsammen.</p>
-    <p>Noget af gassen bliver skudt ud i to <b>stråler</b> (jets) med næsten lysets fart. De kan blive længere end hele galaksen.</p>
-    <p>Vores egen galakse, Mælkevejen, har også et kæmpe sort hul i midten. Men det får næsten ingen mad, så det lyser ikke. Prøv at slukke og tænde kvasaren, og giv det sorte hul mad.</p>`,
+    <p>Hos nogle kvasarer bliver noget af gassen skudt ud i to <b>stråler</b> (jets) med næsten lysets fart. De kan blive længere end hele galaksen.</p>
+    <p>Vores egen galakse, Mælkevejen, har også et kæmpe sort hul i midten. Men det får næsten ingen mad, så det lyser kun meget svagt. Prøv at slukke og tænde kvasaren, og giv det sorte hul mad.</p>`,
   nørd: `
-    <p><b>Navnet</b> kommer af "kvasistellar", som betyder "næsten som en stjerne". I et teleskop ligner en kvasar nemlig bare en prik. I 1963 opdagede Maarten Schmidt, at lyset fra kvasaren 3C 273 var forskudt mod rødt, så den måtte være 2,4 milliarder lysår væk. Når den alligevel kan ses herfra, må den lyse helt utroligt kraftigt.</p>
+    <p><b>Navnet</b> kommer af "kvasistellar", som betyder "næsten som en stjerne". I et teleskop ligner en kvasar nemlig bare en prik. I 1963 opdagede Maarten Schmidt, at lyset fra kvasaren 3C 273 var forskudt mod rødt, så lyset måtte have været ca. 2 milliarder år undervejs. Når den alligevel kan ses herfra, må den lyse helt utroligt kraftigt.</p>
     <p><b>Mere effektivt end fusion:</b> Når Solen laver helium af hydrogen, bliver 0,7 % af massen til energi (se Stjerneovnen). Gas, der falder ind mod et sort hul, kan afgive over 10 % af sin masse som energi. Det er derfor, kvasarer kan lyse så kraftigt.</p>
     <p><b>At kigge tilbage i tiden:</b> Lys er længe om at nå frem. De fjerneste kvasarer ser vi, som de så ud for over 13 milliarder år siden, da universet var ungt og galakserne fulde af gas. Lyset sendte de ud, længe før Jorden fandtes.</p>
     <p><b>Ærligt talt:</b> Det sorte hul, skiven og strålerne er tegnet enormt store i forhold til galaksen. I virkeligheden er hele det lysende område ikke meget større end vores solsystem, mens galaksen er 100.000 lysår bred.</p>`,

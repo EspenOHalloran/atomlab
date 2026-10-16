@@ -263,9 +263,13 @@
         <small id="fusGrafTekst"></small>
         <small class="ærligt">Ærligt talt: I den rigtige Sol er bakken flere hundrede gange højere end protonernes gennemsnitlige energi. De kommer kun over med tunneleffekten (se hjælpen).</small>
       </div>
+      <div class="valg-række tempo-række"><span class="valg-navn">Tempo</span>
+        <button class="chip filter" data-fus-tempo="0.3">Langsom</button>
+        <button class="chip filter valgt" data-fus-tempo="0.6">Normal</button>
+        <button class="chip filter" data-fus-tempo="3">Hurtig</button>
+      </div>
       <div class="knap-række">
         <button class="knap lille" id="fusTilføj">+ 10 protoner</button>
-        <button class="knap lille" id="fusTempo">Tempo: normal</button>
         <button class="knap lille" id="fusPause">⏸ Pause</button>
         <button class="knap lille svag" id="fusRyd">Start forfra</button>
       </div>
@@ -296,6 +300,16 @@
         <li data-trin="3" class="bonus" title="Klik for at vælge en heliumkerne"><span class="ligning">3 <span class="kp" style="--k:#74c0fc">⁴He</span> → <b class="kp" style="--k:#8ce99a">C</b> (rød kæmpe)</span><span class="mev">7,27 MeV</span><span class="antal"></span></li>
       </ol>
       <div class="seneste-boks" id="fusSeneste"></div>
+      <details class="forklaring-boks trin-boks" open>
+        <summary><strong>Fra brint til carbon, trin for trin</strong></summary>
+        <ol>
+          <li><b>Brint → deuterium (p + p).</b> To protoner (brintkerner) støder sammen. For at de kan blive sammen, bliver den ene lavet om til en neutron. Så er det deuterium, også kaldet "tung brint". Samtidig flyver en positron (antistof) og en neutrino (en næsten usynlig partikel) ud. Det er det sværeste skridt, og det sker meget sjældent.</li>
+          <li><b>Deuterium → helium-3 (D + p).</b> Deuterium fanger en proton mere. Nu er der 2 protoner og 1 neutron: helium-3. Det sker hurtigt, i Solen efter nogle sekunder.</li>
+          <li><b>Helium-3 → helium-4 (³He + ³He).</b> To helium-3 støder sammen. De beholder 2 protoner og 2 neutroner, altså helium-4, og skyder 2 protoner ud igen, som kan bruges forfra. I alt er 4 protoner blevet til 1 heliumkerne. Det er sådan, Solen lyser.</li>
+          <li><b>Helium → beryllium-8 (⁴He + ⁴He).</b> Når brinten i midten af en stjerne er brugt op, trækker midten sig sammen og bliver meget varmere, ca. 100 mio. °C. Stjernen er blevet en <em>rød kæmpe</em>. Nu kan heliumkerner smelte sammen. To heliumkerner bliver til beryllium-8, men den falder fra hinanden igen på langt under en milliardtedel af et sekund.</li>
+          <li><b>Beryllium-8 → carbon (⁸Be + ⁴He).</b> Rammer en tredje heliumkerne beryllium-8, før den falder fra hinanden, bliver det til carbon-12. Det kaldes tre-alfa-processen, fordi tre heliumkerner (alfapartikler) bliver til én carbonkerne. Alt carbon i din krop er lavet sådan.</li>
+        </ol>
+      </details>
       <div class="forklaring-boks">
         <strong>Hvor kommer energien fra?</strong>
         4 protoner vejer 0,7 % mere end en heliumkerne. Den forsvundne masse er blevet til energi, ligesom Einstein forudsagde: E = mc².
@@ -307,7 +321,7 @@
         <div><dt>Brint → helium</dt><dd>ca. 600 mio. ton i sekundet</dd></div>
         <div><dt>Masse → energi</dt><dd>ca. 4 mio. ton i sekundet</dd></div>
         <div><dt>Alder</dt><dd>4,6 mia. år</dd></div>
-        <div><dt>Brint nok til</dt><dd>ca. 5 mia. år mere</dd></div>
+        <div><dt>Brint i kernen</dt><dd>til ca. 5 mia. år mere</dd></div>
       </dl>
       <blockquote class="citat lille" data-citat="eddington"></blockquote>
     </aside>
@@ -321,11 +335,12 @@
         <p><strong>Sådan gør du:</strong> Klik på en kerne og derefter på en anden. Så bliver den første skudt mod den anden, lige så hurtigt som temperaturen tillader. Træk for at dreje, og rul eller knib for at zoome.</p>
         <p><strong>Lettere at ramme:</strong> Du behøver ikke ramme kernen helt præcist. Den nærmeste kerne får en ring, når du peger på den, og en stiplet linje viser, hvor skuddet går hen. Mens du sigter, går tiden langsomt. Mellemrumstasten (eller "Pause") stopper tiden helt, og Esc fortryder. Kan du ikke finde en bestemt slags kerne, så klik på den i listen til venstre eller på en linje i opskriften.</p>
         <p><strong>Frastødning:</strong> Alle kernerne er plusladede og skubber hinanden væk. Kun hvis de er hurtige nok, kommer de helt tæt på hinanden, og så tager den stærke kernekraft over og limer dem sammen. Derfor kræver fusion så høj en temperatur.</p>
-        <p><strong>Grafen under temperaturen:</strong> Kurven viser, hvor mange protoner der har hvilken fart. Den stiplede linje er frastødningen. Den er som en bakke, protonerne skal over. Når du skruer op for varmen, flytter kurven sig mod højre, og flere protoner (de gule) bliver hurtige nok.</p>
-        <p><strong>Solens opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. Til sidst bliver to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri.</p>
+        <p><strong>Grafen under temperaturen:</strong> Kurven viser, hvor mange protoner der har hvilken bevægelsesenergi (fart). Den stiplede linje er frastødningen. Den er som en bakke, protonerne skal over. Når du skruer op for varmen, flytter kurven sig mod højre, og flere protoner (de gule) bliver hurtige nok.</p>
+        <p><strong>Solens vigtigste opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. De to første skridt sker to gange, så der bliver to helium-3. Til sidst bliver de to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri. (Solen har også andre, sjældnere veje til helium.)</p>
+        <p><strong>Hvorfor 1,44 MeV?</strong> Selve første skridt giver kun 0,42 MeV. Men positronen møder straks en elektron, og begge forsvinder i et glimt af energi (1,02 MeV). Derfor står der 1,44 MeV i opskriften.</p>
         <p><strong>Ærligt talt:</strong> Vi har gjort det meget lettere end i virkeligheden. I Solen er protonerne faktisk ikke hurtige nok til at komme over frastødningen. De klarer det kun takket være kvantemekanikkens <em>tunneleffekt</em>. Og det første skridt er ekstremt sjældent: En proton venter i gennemsnit milliarder af år, før det sker. Solen klarer sig kun, fordi den har ufatteligt mange protoner. Og "Vis mig" snyder lidt mere: Dens skud rammer altid og smelter altid sammen, så du kan se, hvordan det ser ud.</p>
-        <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger mange tusinde år, før energien når overfladen som sollys.</p>
-        <p><strong>Røde kæmper:</strong> Når en stjerne har brugt sit hydrogen, bliver kernen varmere, ca. 100 millioner grader. Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
+        <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger titusinder af år, måske over 100.000 år, før energien når overfladen som sollys.</p>
+        <p><strong>Røde kæmper:</strong> Når en stjerne har brugt hydrogenet i kernen, bliver kernen varmere, ca. 100 millioner grader. (I spillet kræver det mindst 80 mio. °C.) Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
         <blockquote class="citat" data-citat="saganStjernestof"></blockquote>
         <p class="nulstil-linje"><button class="knap lille" id="fusRejseIgen">Vis rejsen ind i Solen</button> <button class="knap lille" id="fusGuideIgen">Vis guiden igen</button></p>
       </div>
@@ -418,16 +433,16 @@
         </div>
         <div class="forklaring-boks">
           <strong>Sådan styrer man en reaktor</strong>
-          Hver spaltning giver 2-3 nye neutroner. Giver hver spaltning i gennemsnit præcis én ny, er reaktoren stabil. Kontrolstavene suger neutroner op, og vandet bremser dem, så de lettere spalter uran-235.
+          Hver spaltning giver 2-3 nye neutroner. Fører hver spaltning i gennemsnit til præcis én ny spaltning, er reaktoren stabil. Kontrolstavene suger neutroner op, og vandet bremser dem, så de lettere spalter uran-235.
         </div>
         <div class="forklaring-boks">
           <strong>En rigtig reaktor</strong>
-          <p>En stor reaktor giver ca. 3.000 megawatt varme, og ca. en tredjedel bliver til strøm. Så spaltes ca. 100 trillioner kerner i sekundet. Her i spillet er det 6-16.</p>
+          <p>En stor reaktor giver ca. 3.000 megawatt varme, og ca. en tredjedel bliver til strøm. Så spaltes ca. 100 trillioner kerner i sekundet (et 1-tal med 20 nuller). Her i spillet er der kun 6-16 spaltninger i sekundet, når effekten er i det grønne felt.</p>
           <p>Den bruger ca. <b>3 kg uran-235 om dagen</b>. Et kulkraftværk, der giver lige så meget varme, brænder ca. <b>10.000 ton kul om dagen</b>.</p>
         </div>
         <div class="forklaring-boks">
           <strong>Det blå lys</strong>
-          I rigtige reaktorer lyser vandet blåt, når reaktoren kører. Det hedder Tjerenkov-stråling og kommer fra partikler, der farer gennem vandet hurtigere end lyset kan i vand.
+          I reaktorer, hvor man kan se ned i vandet (fx forskningsreaktorer), lyser vandet blåt, når reaktoren kører. Det hedder Tjerenkov-stråling og kommer fra partikler, der farer gennem vandet hurtigere end lyset kan i vand.
         </div>
       </div>
     </aside>
@@ -439,10 +454,11 @@
       <div class="hjælp-indhold">
         <p><strong>Fission</strong> betyder spaltning. En meget stor kerne som uran-235 fanger en neutron, bliver urolig og flækker i to mellemstore kerner. Samtidig slipper 2-3 nye neutroner fri, og ca. 200 MeV energi. Det er omkring 50 millioner gange mere end ved en kemisk reaktion som afbrænding.</p>
         <p><strong>Langsomme og hurtige neutroner:</strong> Neutronerne fra en spaltning er hurtige. Uran-235 fanger meget lettere langsomme neutroner, så man bremser dem med vand. Vandet kaldes en <em>moderator</em>.</p>
-        <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
+        <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk med almindeligt vand være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
         <p><strong>Kædereaktion:</strong> De nye neutroner kan spalte flere kerner, som giver flere neutroner. Giver hver spaltning i gennemsnit mere end én ny spaltning, vokser det. Giver den mindre, dør det ud. Kontrolstave (fx med bor eller cadmium) suger neutroner op, så man kan holde den stabil.</p>
+        <p><strong>Hvor kommer de første neutroner fra?</strong> Fra en <em>neutronkilde</em>: en lille kapsel, der hele tiden sender neutroner ud. Det kan være californium-252, som af sig selv spalter og sender neutroner ud. Eller americium blandet med beryllium: Americium skyder alfapartikler (heliumkerner) ud, og når de rammer beryllium, slår de en neutron løs. Desuden spalter lidt af uranet af sig selv en gang imellem. Når reaktoren først kører, laver den selv alle de neutroner, den skal bruge.</p>
         <p><strong>Pause:</strong> Mellemrumstasten (eller "Pause") stopper tiden. Så kan du tælle neutronerne og dreje kameraet. Kontrolstavene kan stadig flyttes.</p>
-        <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men hvis kølingen svigter, kan det blive så varmt, at brændslet smelter, og der kan ske damp- og brinteksplosioner, der spreder radioaktive stoffer. Det skete i Tjernobyl i 1986 og Fukushima i 2011. Derfor har reaktorer mange sikkerhedssystemer.</p>
+        <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men der kan ske alvorlige ulykker. I Tjernobyl i 1986 løb reaktoren løbsk under et forsøg, effekten steg voldsomt på få sekunder, og en dampeksplosion sprængte den. I Fukushima i 2011 svigtede kølingen efter en tsunami, brændslet smeltede, og der skete brinteksplosioner. Begge steder blev radioaktive stoffer spredt. Derfor har reaktorer mange sikkerhedssystemer.</p>
         <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
         <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
         <p class="nulstil-linje"><button class="knap lille" id="reaktorGuideIgen">Vis guiden igen</button></p>
@@ -502,8 +518,10 @@
       </div>
       <div class="seneste-boks forklaring-batteri" id="batteriForklaring"></div>
       <div class="forklaring-boks">
-        <strong>Hele tricket</strong>
-        Elektrolytten lukker kun ioner igennem, ikke elektroner. Elektronerne er tvunget til at tage omvejen gennem ledningen, og det er den strøm, vi bruger.
+        <strong>Hvorfor flytter både ioner og elektroner?</strong>
+        <p>Et lithiumatom er en lithium-ion (Li⁺) plus én elektron. Batteriet gemmer energi ved at flytte lithium fra den ene side til den anden. Men elektrolytten i midten lukker kun ioner igennem, ikke elektroner. Derfor må lithium dele sig på turen: Ionen tager den korte vej gennem elektrolytten, og elektronen tager den lange vej gennem ledningen. På den anden side mødes de igen.</p>
+        <p>De to følges ad: Kunne ionerne flytte sig alene, ville den ene side hurtigt blive plusladet og skubbe de næste ioner tilbage. Derfor flytter der lige så mange elektroner som ioner.</p>
+        <p><b>Hele tricket:</b> Elektronernes omvej gennem ledningen er den strøm, vi bruger. Sætter man en lampe på vejen, må elektronerne gå igennem den.</p>
       </div>
       <div class="forklaring-boks">
         <strong>Hvor meget energi?</strong>
@@ -519,16 +537,17 @@
     <div class="dialog">
       <header><h3>Sådan virker et LiPo-batteri</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
-        <p>Et <strong>LiPo-batteri</strong> (lithium-polymer) har samme kemi som batterierne i telefoner og elbiler. Forskellen er, at elektrolytten er en gele, og at cellen sidder i en blød pose i stedet for en metaldåse.</p>
+        <p>Et <strong>LiPo-batteri</strong> (lithium-polymer) er en slags lithium-ion-batteri, ligesom batterierne i telefoner og elbiler. Det særlige er, at cellen sidder i en blød pose i stedet for en metaldåse. De fleste telefoner har faktisk LiPo-batterier. Elbiler bruger ofte andre metaloxider end kobolt.</p>
         <p><strong>To parkeringspladser til lithium:</strong> På minussiden er der <em>grafit</em> (lag af carbon) på en tynd kobberfolie. På plussiden er der et <em>metaloxid</em> (her lithium-kobolt-oxid) på en tynd aluminiumsfolie. Imellem dem er en <em>elektrolyt</em> og en tynd, porøs <em>skillevæg</em> af plast, der forhindrer de to sider i at røre hinanden.</p>
-        <p><strong>Opladning:</strong> Laderen pumper elektroner fra plussiden gennem ledningen over til minussiden. Lithium-ioner (Li⁺) følger efter gennem elektrolytten og sætter sig mellem grafitlagene. Energien er gemt, fordi lithium helst vil sidde i metaloxidet. Laderen lader først med <em>konstant strøm</em>. Når spændingen når 4,2 V, skifter den til <em>konstant spænding</em>, og strømmen falder langsomt, indtil cellen er fuld.</p>
+        <p><strong>Hvorfor vandrer både ioner og elektroner?</strong> Batteriet gemmer energi ved at flytte lithium fra den ene side til den anden. Et lithiumatom er en lithium-ion (Li⁺) plus én elektron. Men elektrolytten i midten lukker kun ioner igennem. Derfor må lithium dele sig på turen: Ionen svømmer den korte vej gennem elektrolytten, og elektronen går den lange vej gennem ledningen. På den anden side mødes de igen. Tænk på to venner, der skal over en flod: Den ene kan svømme lige over. Den anden kan ikke svømme og må gå over en bro længere nede ad floden. Lampen står på broen. De to følges ad, fordi plus og minus skal passe: Kunne ionerne flytte sig alene, ville den ene side hurtigt blive plusladet og skubbe de næste ioner tilbage.</p>
+        <p><strong>Opladning:</strong> Laderen pumper elektroner fra plussiden gennem ledningen over til minussiden. Minussiden bliver minusladet og trækker i lithium-ionerne (Li⁺), som følger efter gennem elektrolytten og sætter sig mellem grafitlagene. Energien er gemt, fordi lithium helst vil sidde i metaloxidet. Laderen lader først med <em>konstant strøm</em>. Når spændingen når 4,2 V, skifter den til <em>konstant spænding</em>, og strømmen falder langsomt, indtil cellen er fuld.</p>
         <p><strong>Afladning:</strong> Lithium vil tilbage til metaloxidet. Ionerne svømmer gennem elektrolytten, og elektronerne løber udenom gennem ledningen og fx en motor eller en lampe. En celle er ca. 4,2 V, når den er fuld, 3,7 V i gennemsnit og ca. 3,0 V, når den er tom.</p>
         <p><strong>Hvad løber i ledningen?</strong> En metalledning er fuld af frie elektroner hele tiden. Når laderen eller batteriet skubber, flytter hele rækken sig på én gang, ligesom vandet i en haveslange, der allerede er fuld. Hver elektron kryber faktisk langsommere end en snegl (typisk under en millimeter i sekundet), men skubbet når frem næsten med lysets fart. Derfor tænder lampen med det samme. Når en Li⁺ forlader den ene side, hopper en elektron ud i metalfolien, og når den lander på den anden side, hopper en elektron ind og møder den.</p>
         <p><strong>Strøm og effekt:</strong> Strømmen måles i ampere (A). 1 A betyder, at ca. 6 milliarder milliarder elektroner passerer et punkt i ledningen hvert sekund. Her forestiller vi os en lille LiPo-celle på 1.000 mAh (som i en lille drone). For den kaldes 1 A for "1C": Den strøm ville fylde batteriet på en time, hvis den holdt sig konstant hele vejen (det gør den ikke, se nedenfor). Effekten i watt er spænding gange strøm: 3,7 V × 1 A ≈ 3,7 W.</p>
-        <p><strong>Hvorfor går spændingen op, når man lader?</strong> Batteriet har en lille indre modstand. Mens der løber strøm ind, er spændingen derfor lidt højere end batteriets egen spænding, og jo større strøm, jo højere. Lader man hurtigt, når man 4,2 V tidligere, og så skal laderen skifte til konstant spænding før.</p>
-        <p><strong>Pas på:</strong> Overlader man (over 4,2 V), eller lader man for hurtigt eller i kulde, kan lithium sætte sig som metal-nåle (dendritter). De kan stikke hul i skillevæggen og give kortslutning, varme og brand. Aflader man for dybt, kan kobberet opløses, og cellen tager skade. Derfor har LiPo-batterier beskyttelse, og gode ladere stopper ved 4,2 V og balancerer cellerne.</p>
+        <p><strong>Hvorfor går spændingen op, når man lader?</strong> Mest fordi batteriet bliver mere og mere fyldt: Dets egen spænding stiger fra ca. 3,0 til 4,2 V. Desuden har batteriet en lille indre modstand. Mens der løber strøm ind, er spændingen derfor lidt højere end batteriets egen spænding, og jo større strøm, jo højere. Lader man hurtigt, når man 4,2 V tidligere, og så skal laderen skifte til konstant spænding før.</p>
+        <p><strong>Pas på:</strong> Overlader man (over 4,2 V), eller lader man for hurtigt eller i kulde, kan lithium sætte sig som metal-nåle (dendritter). De kan stikke hul i skillevæggen og give kortslutning, varme og brand. Aflader man for dybt, kan kobberet opløses, og cellen tager skade. Derfor har mange LiPo-batterier (fx i telefoner) et lille beskyttelseskredsløb. I fx droner passer laderen og elektronikken på i stedet: Gode ladere stopper ved 4,2 V og balancerer cellerne.</p>
         <p><strong>Strømmens retning:</strong> Man siger, at strømmen løber fra plus til minus uden om batteriet. Men elektronerne løber faktisk den modsatte vej. Det er en gammel aftale fra før man kendte elektronen.</p>
-        <p><strong>Ærligt talt:</strong> Et rigtigt batteri har milliarder af milliarder lithium-ioner. Her viser vi 24, og i ledningen er der langt flere elektroner, end der er prikker. I en rigtig ledning kryber elektronerne også meget langsommere, end de gør her.</p>
+        <p><strong>Ærligt talt:</strong> I et rigtigt batteri flytter over 10.000 milliarder milliarder lithium-ioner sig, hver gang det lades op. Her viser vi 24, og i ledningen er der langt flere elektroner, end der er prikker. I en rigtig ledning kryber elektronerne også meget langsommere, end de gør her. Og inde i grafitten og metaloxidet sidder lithium som en ion, mens elektronen bliver i materialet lige omkring den. Men de hører sammen, ligesom i et atom.</p>
       </div>
     </div>
   </div>
@@ -579,7 +598,7 @@
       <header><h3>Kosmos</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
         <p>Her kan du se nogle af de vildeste ting, der findes i universet. Vælg et fænomen til venstre, og prøv knapperne under <strong>Prøv selv</strong>. Til højre står, hvad du ser. Under <strong>For nørder</strong> er der mere at hente.</p>
-        <p><strong>Hvorfor er rummet med i AtomLab?</strong> Fordi atomerne er lavet derude. Hydrogen og helium kom fra Big Bang. Carbon, oxygen og jern blev lavet inde i stjerner og spredt af supernovaer. Meget af guldet og uranet blev lavet, da neutronstjerner stødte sammen. Og en neutronstjerne er næsten som én kæmpe atomkerne på størrelse med en by.</p>
+        <p><strong>Hvorfor er rummet med i AtomLab?</strong> Fordi atomerne er lavet derude. Hydrogen og helium kom fra Big Bang. Carbon, oxygen og jern blev lavet i stjerner og i deres eksplosioner og spredt ud i rummet, da stjernerne døde. Meget af guldet og uranet blev lavet, da neutronstjerner stødte sammen. Og en neutronstjerne er næsten som én kæmpe atomkerne på størrelse med en by.</p>
         <blockquote class="citat" data-citat="saganKosmos"></blockquote>
         <p><strong>Ærligt talt:</strong> Intet her er i den rigtige størrelse eller det rigtige tempo. Afstandene i rummet er så enorme, at man ikke ville kunne se noget, hvis det var målfast. Og noget tager millioner af år, mens andet sker på et millisekund. Farverne er valgt, så man kan se forskel på tingene. Men det, der <em>sker</em>, er tæt på det, forskerne ved i dag.</p>
         <p><strong>Ormehuller</strong> er det eneste her, som ingen har set. De er en mulighed i Einsteins ligninger, men måske findes de slet ikke.</p>
@@ -626,20 +645,20 @@
         <p><strong>Hvorfor giver et atom en elektron væk?</strong> Atomer er mest "tilfredse" med en fyldt yderste skal, ligesom ædelgasserne. Det er en forenkling, men den passer godt for de lette grundstoffer. Natrium har skallerne 2 · 8 · 1. Den ene elektron yderst sidder løst, og giver natrium den væk, har det kun fyldte skaller tilbage (2 · 8). Så har det 11 protoner, men kun 10 elektroner. Det er nu en positiv ion: <strong>Na⁺</strong>.</p>
         <p><strong>Og hvorfor tager et andet atom én ekstra?</strong> Chlor har 2 · 8 · 7 og mangler kun én elektron i at fylde den yderste skal. Det tager gerne én, og så har det 17 protoner og 18 elektroner. Det er nu en negativ ion: <strong>Cl⁻</strong>.</p>
         <p>Plus og minus tiltrækker hinanden, så Na⁺ og Cl⁻ holder sammen. Det er <strong>køkkensalt</strong>! Ioner er overalt: Dine nerver sender signaler med natrium- og kalium-ioner, og batteriet i en telefon virker, fordi lithium-ioner vandrer frem og tilbage.</p>
-        <p><strong>Hvorfor ikke uendeligt mange?</strong> Jo flere elektroner et atom har mistet, jo mere plusladet bliver det, og jo hårdere holder det på resten. Og en negativ ion skubber nye elektroner væk. Derfor ser man oftest ladninger som +1, +2, +3, −1 og −2. I værkstedet kan et atom højst få 2 ekstra elektroner.</p>
+        <p><strong>Hvorfor ikke uendeligt mange?</strong> Jo flere elektroner et atom har mistet, jo mere plusladet bliver det, og jo hårdere holder det på resten. Og en negativ ion skubber nye elektroner væk. Derfor ser man oftest ladninger som +1, +2, +3, −1 og −2. Et frit atom kan i virkeligheden højst holde på én ekstra elektron. O²⁻ findes kun inde i fx krystaller, og ædelgasserne kan næsten ikke holde på en ekstra. I værkstedet kan et atom alligevel få 2 ekstra elektroner, så du kan prøve det.</p>
         <p>Du kender det også fra statisk elektricitet: Gnider du en ballon mod håret, flytter elektroner sig fra håret over på ballonen. Så bliver ballonen minusladet og kan hænge fast på væggen.</p>
         <h4 id="hjælpNeutroner">Hvorfor neutroner?</h4>
-        <p>Protonerne frastøder hinanden, fordi de alle er plusladede. Kernen holdes sammen af den <strong>stærke kernekraft</strong>, som trækker i alle protoner og neutroner. Den er meget stærkere end frastødningen, men den virker kun mellem nære naboer. Neutronerne giver altså ekstra "lim" uden at skubbe. Derfor kan 2 protoner alene ikke holde sammen, mens 2 protoner og 2 neutroner (helium-4) er en af de mest stabile kerner, der findes.</p>
+        <p>Protonerne frastøder hinanden, fordi de alle er plusladede. Kernen holdes sammen af den <strong>stærke kernekraft</strong>, som trækker i alle protoner og neutroner. Den er meget stærkere end frastødningen, men den virker kun mellem nære naboer. Neutronerne giver altså ekstra "lim" uden at skubbe. 2 protoner alene kan ikke holde sammen: Kernekraften mellem kun to protoner er en tand for svag, og de frastøder også hinanden (2 neutroner kan heller ikke). Men 2 protoner og 2 neutroner (helium-4) er en af de mest stabile kerner, der findes.</p>
         <p><strong>Men ikke for mange!</strong> Forestil dig, at protoner og neutroner står på hver sin trappe med plads til to på hvert trin. Er der langt flere neutroner, må de ekstra stå højt oppe. Så kan det betale sig for en neutron at lave sig om til en proton og skyde en elektron ud. Det hedder <strong>betahenfald</strong>. Er der for få neutroner, sker det omvendte (beta-plus-henfald).</p>
         <blockquote class="citat" data-citat="rutherford"></blockquote>
-        <p><strong>Lette kerner</strong> har cirka lige mange protoner og neutroner. <strong>Tunge kerner</strong> skal have flere neutroner end protoner, fordi frastødningen virker over hele kernen, mens limen kun virker mellem naboer. Jern-56 har 1,15 neutroner pr. proton, guld-197 har 1,5 og uran-238 har 1,6. Det kan du se på <strong>stabilitetskortet</strong>: båndet af stabile kerner bøjer væk fra den stiplede linje. Fra grundstof nr. 84 og opefter er ingen kerner stabile. De er for store og skyder små heliumkerner ud (<strong>alfahenfald</strong>).</p>
+        <p><strong>Lette kerner</strong> har cirka lige mange protoner og neutroner. <strong>Tunge kerner</strong> skal have flere neutroner end protoner, fordi frastødningen virker over hele kernen, mens limen kun virker mellem naboer. Jern-56 har 1,15 neutroner pr. proton, guld-197 har 1,5 og uran-238 har 1,6. Det kan du se på <strong>stabilitetskortet</strong>: båndet af stabile kerner bøjer væk fra den stiplede linje. Fra grundstof nr. 83 (bismuth) og opefter er ingen kerner helt stabile (bismuth-209 henfalder dog så langsomt, at den næsten er stabil). De fleste af dem er for store og skyder små heliumkerner ud (<strong>alfahenfald</strong>).</p>
         <h4 id="hjælpBeta">Hvad betyder det, at kernen "skyder en elektron ud"?</h4>
         <p>Det lyder mærkeligt, for der er jo ingen elektroner inde i kernen. Og det er netop pointen: <strong>Elektronen bliver skabt i samme øjeblik</strong>, som en neutron laver sig om til en proton. Det er den <em>svage kernekraft</em>, der kan gøre det. (Protoner og neutroner er selv bygget af endnu mindre partikler, kvarker, og ved betahenfald skifter én kvark type.)</p>
-        <p>Energien kommer fra kernen selv: Den nye kerne vejer en lille smule mindre end den gamle, og den forsvundne masse er blevet til energi (E = mc²). Den energi bliver til den nye elektron og giver den fart på.</p>
+        <p>Energien kommer fra kernen selv: Den nye kerne vejer en lille smule mindre end den gamle, og den forsvundne masse er blevet til energi (E = mc²). Den energi bliver til den nye elektron og antineutrinoen og giver dem fart på.</p>
         <p><strong>Hvor bliver den af?</strong> Elektronen suser ud med en stor del af lysets hastighed. På vejen støder den ind i andre atomer og slår deres elektroner løs (det er derfor, stråling kan være farlig). For hvert sammenstød bliver den langsommere, og efter nogle millimeter i kroppen eller et par meter i luft er den bremset helt op. Så er den bare en helt almindelig elektron, som bliver fanget af et atom, måske et der manglede en.</p>
         <p><strong>Og den usynlige partikel?</strong> Sammen med elektronen bliver der skabt en <em>antineutrino</em>. Den reagerer næsten aldrig med noget og flyver lige gennem hele Jorden. Hvert sekund suser hundredvis af billioner neutrinoer fra Solen gennem din krop, uden at du mærker noget.</p>
         <p><strong>Alfahenfald er anderledes:</strong> Her bliver der ikke skabt noget nyt. De 2 protoner og 2 neutroner sad allerede i kernen og slipper ud. Alfapartiklen bliver bremset efter få centimeter i luft, fanger 2 elektroner og bliver til almindelig heliumgas. Det meste helium på Jorden er faktisk lavet sådan, af uran og thorium i undergrunden.</p>
-        <p>Når en kerne henfalder, bliver den til et <em>andet grundstof</em>. Det var lige præcis det, alkymisterne drømte om! Prøv knappen "Se den henfalde" ved en ustabil kerne.</p>
+        <p>Ved alfa- og betahenfald bliver kernen til et <em>andet grundstof</em>. Det var lige præcis det, alkymisterne drømte om! Prøv knappen "Se den henfalde" ved en ustabil kerne.</p>
         <blockquote class="citat" data-citat="feynman"></blockquote>
         <p><strong>Ikke målfast!</strong> Hvis kernen var så stor som her, ville et rigtigt atom være flere kilometer bredt. Atomer er næsten kun tomt rum.</p>
         <p><strong>Ringe eller sky?</strong> Ringene er en forenklet tegning (Bohrs atommodel), der gør det let at tælle elektronerne. I virkeligheden kan man kun sige, hvor elektronerne <em>sandsynligvis</em> er, og det ligner mere en sky. Prøv knappen "Elektronsky".</p>
