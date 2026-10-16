@@ -14,7 +14,8 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
   await page.goto(`${ADRESSE}/?test#system`);
-  await page.waitForTimeout(3500);
+  await page.waitForFunction(() => window.atomlabTest && document.querySelector('#system:not(.skjult)'), null, { timeout: 20000 });
+  await page.waitForTimeout(1200);
   const T = (f, a) => page.evaluate(f, a);
   // Kameraet springer straks derhen, hvor det er på vej hen
   const snap = () => T(async () => {

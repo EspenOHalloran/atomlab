@@ -153,7 +153,8 @@ for (const [navn, [w, h, mobil]] of Object.entries({ pc: [1280, 800, false], tlf
   tjek(`${navn}: kædereaktionen i slowmotion slutter`, await venTil(async () => !(await T(() => atomlabTest.reaktor.visning())).kæde, 5000));
   await page.waitForTimeout(800);
   await page.screenshot({ path: `${UD}/${navn}-r10-efter.png` });
-  tjek(`${navn}: forklaring bagefter`, await T(() => document.querySelector('#reaktorVindue .undertekst, #beskeder .undertekst')?.textContent.includes('vokser')));
+  const efter = await T(() => [...document.querySelectorAll('#reaktorVindue .undertekst, #beskeder .undertekst')].map((e) => e.textContent).join(' | '));
+  tjek(`${navn}: forklaring bagefter`, efter.includes('vokser'), efter);
   await ctx.close();
   console.log(navn, 'konsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
   if (fejl.length) dårlig++;

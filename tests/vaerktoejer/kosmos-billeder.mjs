@@ -2,7 +2,7 @@
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const [id, ...trin] = process.argv.slice(2);
 const UD = billedmappe('kosmos-billeder');
-const b = await chromium.launch({ args: ARGS });
+const b = await chromium.launch({ args: ARGS, fuldGrafik: true }); // billederne skal se ud som i spillet
 const fejl = [];
 const vp = process.env.VP ? process.env.VP.split('x').map(Number) : [1280, 800];
 const page = await (await b.newContext({ viewport: { width: vp[0], height: vp[1] } })).newPage();

@@ -8,25 +8,27 @@ const page = await (await b.newContext({ viewport: { width: 1280, height: 800 } 
 page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await page.goto(`${ADRESSE}/?test`);
+// Rejsen ind i Solen og guiden afprøves i stjerneovn-mus og guide. Her springes de over.
+await page.evaluate(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1 })));
+await page.reload();
 await page.waitForTimeout(600);
 await page.click('a.kort[href="#fusion"]');
-await page.waitForTimeout(7000);
-await page.screenshot({ path: UD + '/f1-ovn.png' });
 const T = (f) => page.evaluate(f);
+// Vent, til ovnen er fyldt, og kameraet har zoomet på plads (til billedet)
+await page.waitForFunction(() => window.atomlabTest?.fusion.partikler().length >= 38, null, { timeout: 20000 });
+await page.waitForTimeout(1500);
+await page.screenshot({ path: UD + '/f1-ovn.png' });
 // Ovnen starter med 40 protoner. To af dem kan nå at smelte sammen af sig selv, så vi tæller kernepartikler (nukleoner).
 const nukleoner = await T(() => atomlabTest.fusion.partikler().reduce((sum, p) => sum + { p: 1, d: 2, he3: 3, he4: 4 }[p.type], 0));
 tjek('40 protoner fra start (40 kernepartikler)', nukleoner === 40, nukleoner);
 // For koldt: skyd proton mod proton ved 3 mio. grader
 await T(() => atomlabTest.fusion.temperatur(3));
 await page.click('[data-fus-tempo="3"]');
-await page.waitForTimeout(1500);
+// Spol frem i stedet for at vente (testbrowseren tegner kun få billeder i sekundet)
+const koldtLøst = () => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver?.['f-koldt']);
 for (let forsøg = 0; forsøg < 2; forsøg++) {
   await T(() => { const ps = atomlabTest.fusion.partikler().filter((p) => p.type === 'p'); atomlabTest.fusion.skyd(ps[0].id, ps[1].id); });
-  let løst = false;
-  for (let i = 0; i < 25 && !løst; i++) {
-    await page.waitForTimeout(2000);
-    løst = await T(() => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver?.['f-koldt']));
-  }
+  const løst = await page.evaluate(`(() => { const løst = ${koldtLøst}; for (let i = 0; i < 100 && !løst(); i++) atomlabTest.fusion.spolAlt(0.25); return løst(); })()`);
   if (løst) break;
 }
 await page.screenshot({ path: UD + '/f1b-koldt.png' });
@@ -36,7 +38,9 @@ tjek('opgave: for koldt', fr.opgaver?.['f-koldt'], JSON.stringify(fr));
 // Varmt og hurtigt: lad reaktionerne ske af sig selv
 await T(() => atomlabTest.fusion.temperatur(110));
 await page.click('[data-fus-tempo="3"]');
-await page.waitForTimeout(45000);
+// Før ventede testen 45 sekunder. Ved 4 billeder i sekundet svarede det til ca. 9 sekunder i ovnen.
+await T(() => atomlabTest.fusion.spolAlt(15));
+await page.waitForTimeout(500);
 await page.screenshot({ path: UD + '/f2-varm.png' });
 const energi = await T(() => atomlabTest.fusion.energi());
 const typer = await T(() => { const t = {}; for (const p of atomlabTest.fusion.partikler()) t[p.type] = (t[p.type] || 0) + 1; return t; });
@@ -52,7 +56,8 @@ const udfald = {};
 for (let forsøg = 0; forsøg < 20; forsøg++) {
   await T(() => { const ps = atomlabTest.fusion.partikler().filter((p) => p.type === 'p' && !p.kastet); if (ps.length > 1) atomlabTest.fusion.skyd(ps[0].id, ps[1].id); });
   skud++;
-  await page.waitForTimeout(2500);
+  await T(() => atomlabTest.fusion.spolAlt(1));
+  await page.waitForTimeout(200);
   const u = await T(() => document.querySelector('.undertekst strong')?.textContent ?? '(ingen)');
   udfald[u] = (udfald[u] || 0) + 1;
   fr = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}'));

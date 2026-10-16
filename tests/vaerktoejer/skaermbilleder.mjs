@@ -11,7 +11,7 @@ const STØRRELSER = {
   'tlf-hoejkant': [390, 844, true],
   'tlf-langs': [844, 390, true],
 };
-const b = await chromium.launch({ args: ARGS });
+const b = await chromium.launch({ args: ARGS, fuldGrafik: true }); // billederne skal se ud som i spillet
 const fejl = [];
 for (const [navn, [w, h, touch]] of Object.entries(STØRRELSER)) {
   const ctx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: touch, isMobile: touch });

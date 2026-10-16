@@ -865,8 +865,9 @@ function kædeFysik(h) {
           nyNeutron(b.x, b.y, gen);
           nyNeutron(b.x, b.y, gen);
           if (Math.random() < 0.43 || n.sikker) nyNeutron(b.x, b.y, gen);
-          // "Vis mig": de første to generationer spalter altid, når de rammer frisk brændsel
-          if (visKæde && gen <= 2) for (let j = før; j < neutroner.length; j++) neutroner[j].sikker = true;
+          // "Vis mig": de første tre generationer spalter altid, når de rammer frisk brændsel. Med kun to døde
+          // demoen nu og da ud, og bagefter gik reaktoren i stå i ca. 15 % af gangene (målt med 150 forsøg, nu ca. 1 %).
+          if (visKæde && gen <= 3) for (let j = før; j < neutroner.length; j++) neutroner[j].sikker = true;
         } else if (Math.random() < 0.3) {
           const vinkel = Math.random() * Math.PI * 2;
           const f = Math.hypot(n.vx, n.vy);

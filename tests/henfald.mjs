@@ -8,11 +8,12 @@ const page = await (await b.newContext({ viewport: { width: 1280, height: 800 } 
 page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 page.on('dialog', (d) => d.accept());
-await page.goto(`${ADRESSE}/#vaerksted`);
+await page.goto(`${ADRESSE}/?test#vaerksted`);
 await page.waitForTimeout(1000);
 const info = () => page.textContent('#infopanel');
 const tast = async (k, n) => { for (let i = 0; i < n; i++) await page.keyboard.press(k); };
-const ventHenfald = async () => { await page.waitForFunction(() => !document.querySelector('.henfald-knap[disabled]'), null, { timeout: 60000 }); await page.waitForTimeout(200); };
+// Spol atomet frem i små skridt, til henfaldet er færdigt (testbrowseren tegner kun få billeder i sekundet)
+const ventHenfald = async () => { await page.waitForFunction(() => { atomlabTest.vaerksted.spol(0.1); return !document.querySelector('.henfald-knap[disabled]'); }, null, { timeout: 60000, polling: 50 }); await page.waitForTimeout(200); };
 
 // Tritium → helium-3
 await tast('p', 1); await tast('n', 2); await tast('e', 1);
@@ -34,7 +35,8 @@ t = await info();
 await page.screenshot({ path: UD + '/h2-tritium-henfaldet.png' });
 tjek('blev til helium-3', t.includes('Helium-3') && t.includes('Stabil kerne'), t);
 tjek('ion lige efter henfald', await blevIon);
-await page.waitForTimeout(6000);
+// Ionen bliver neutral efter ION_TID (3 sekunder rigtig tid)
+await page.waitForFunction(() => document.querySelector('#infopanel').textContent.includes('neutralt atom'), null, { timeout: 10000 }).catch(() => {});
 t = await info();
 tjek('neutral igen bagefter', t.includes('neutralt atom'), t);
 const fr = await page.evaluate(() => JSON.parse(localStorage.getItem('atomlabFremgang')));
@@ -84,9 +86,9 @@ await page.screenshot({ path: UD + '/h4-bly.png' });
 // Alfahenfald-skærmbillede midt i
 await page.click('#knapRyd');
 await page.click('#minitabel .felt[data-nr="92"]');
-await page.waitForTimeout(2500);
+await page.waitForTimeout(1500);
 await page.keyboard.press('h');
-await page.waitForTimeout(5200);
+await page.waitForTimeout(1500);
 await page.screenshot({ path: UD + '/h5-alfa.png' });
 await ventHenfald();
 

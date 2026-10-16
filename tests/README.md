@@ -6,10 +6,16 @@ Spillet selv bruger ikke testene. Der er stadig ingen npm og intet byggetrin i p
 
 ## Sådan kører du dem
 ```
-node tests/koer-alle.mjs              # alle (ca. 25 minutter)
+node tests/koer-alle.mjs              # alle, to ad gangen (ca. 10 minutter)
+node tests/koer-alle.mjs --samtidig=1  # alle, én ad gangen (ca. 15 minutter)
 node tests/koer-alle.mjs pause guide  # kun de nævnte
+node tests/koer-alle.mjs --ændret     # kun dem, de ændrede filer kan påvirke
+node tests/koer-alle.mjs --ændret --vis js/atom.js  # vis kun, hvilke tests en ændring ville køre
 node tests/guide.mjs pc               # én test (nogle kan nøjes med "pc" eller "tlf")
 ```
+**Mens man arbejder:** brug `--ændret`. Den sammenligner med GitHub (og tager nye filer med) og følger import-linjerne fra de ændrede filer op til skærmene. Så kører den de tests, der besøger skærmen, og tests med samme navn som et fælles modul (fx `beskeder`). Ændres `index.html`, `style.css`, `main.js`, `scene3d.js` eller testhjælperen, køres alle. **Før push** køres hele samlingen.
+
+**Hurtig tegning:** Testbrowseren tegner uden grafikkort og nåede kun 3-6 billeder i sekundet. Spillet regner højst 0,05 sekund frem pr. billede, så alle animationer kørte i slowmotion. Derfor tegner testene som standard uden glød og i lav opløsning (`TEST_HURTIG` i `js/scene3d.js`, slået til af `tests/hjaelp.mjs`). Det giver 3-8 gange flere billeder i sekundet. Testen `grafik` og billedværktøjerne tegner med fuld grafik (`chromium.launch({ args: ARGS, fuldGrafik: true })` eller `FULD_GRAFIK=1`).
 `koer-alle.mjs` starter selv en lille server (`python -m http.server 8765`), hvis der ikke kører en. Kører du en enkelt test, skal serveren køre i forvejen.
 
 Hver test skriver `OK` eller `FEJL` for hvert tjek og til sidst "x OK, y fejl". Konsolfejl i browseren tæller også som fejl. Skærmbilleder havner i `tests/billeder/`, som ikke gemmes i git.
@@ -31,7 +37,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `system-mobil` | Det periodiske system på telefon, tablet og pc: tryk, træk, knib, søgning og filtre |
 | `stjerneovn` | Stjerneovnen: fusion, for koldt, energi, tempoknapperne, opgaver kun ved egne skud, og at "Vis mig" lige efter et eget skud laver en reaktion 120 af 120 gange |
 | `stjerneovn-mus` | Stjerneovnen med mus: ramme-procent, slowmotion, pause, kernelisten, grafen og rejsen ind i Solen |
-| `reaktor` | Reaktoren: spaltning, uran-238, kædereaktion, nødstop, at "Vis mig" kommer i gang 200 af 200 gange, og at Kosmos' faneknapper ikke ændrer Reaktoren |
+| `reaktor` | Reaktoren: spaltning, uran-238, kædereaktion, nødstop, at "Vis mig" kommer i gang 200 af 200 gange, ikke dør ud, og at reaktoren som regel kører videre bagefter (100 forsøg), og at Kosmos' faneknapper ikke ændrer Reaktoren |
 | `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning |
 | `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk |
 | `kosmos-nye` | Big Bang (64/64 → 112/16 → 25 % helium), Ny stjerne (brun dværg, som Solen, kæmpestjerne), Solens fremtid og den hvide dværg (eksplosion og nikkel → cobalt → jern efter 100 dage) |
@@ -40,13 +46,14 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `guide` | Kom i gang-guiderne, "Næste skridt" og "Vis mig" i Stjerneovnen og Reaktoren |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
+| `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen |
 
 ## Værktøjer
 - `vaerktoejer/skaermbilleder.mjs fusion` tager billeder af en skærm på pc, tablet og telefon (begge veje). Den venter 7 sekunder, så kameraet er færdigt med at zoome (`VENT=3500` for kortere).
 - `vaerktoejer/kosmos-billeder.mjs supernova 0 v3 s` vælger et fænomen, trykker på knap 0, venter 3 sekunder og tager et billede.
 
 ## Gode råd
-- Kør aldrig flere tests på én gang. Så bliver de ustabile.
-- Testbrowseren tegner kun 3-6 billeder i sekundet. Spol frem med testadgangen, eller frys tiden, i stedet for at vente. Fejl, der kun sker ved mange billeder i sekundet, kræver spoling i små skridt (fx `atomlabTest.vaerksted.spol`).
+- `koer-alle.mjs` kører to tests ad gangen (målt stabilt i to hele kørsler). Kør ikke flere end to, og start ikke to `koer-alle.mjs` på samme tid. Fejler en test, mens to kører, køres den igen alene, og det bliver skrevet med "OBS". Undersøg det, før det kaldes ustabilt.
+- Testbrowseren tegner 10-35 billeder i sekundet med hurtig tegning (3-6 med fuld grafik). Spol frem med testadgangen, eller frys tiden, i stedet for at vente. Vent på en tilstand (`waitForFunction`) i stedet for en fast tid. Fejl, der kun sker ved mange billeder i sekundet, kræver spoling i små skridt (fx `atomlabTest.vaerksted.spol`).
 - En test af en rettet fejl skal først fejle uden rettelsen.
 - Skriv nye erfaringer ind i [docs/erfaringer.md](../docs/erfaringer.md).

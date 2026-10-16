@@ -70,6 +70,24 @@ const døde = await page.evaluate(() => {
   return antal;
 });
 tjek('Vis mig: kædereaktionen kommer i gang 200 af 200 gange', døde === 0, `${døde} døde ud`);
+// "Vis mig" hele vejen: Den må ikke dø ud, og bagefter (stavene på 50 %) skal reaktoren som regel køre videre.
+// Med kun to sikre generationer gik den i stå bagefter i ca. 15 % af gangene (150 forsøg), med tre i ca. 1 %.
+const t0 = Date.now();
+const efterVis = await page.evaluate(() => {
+  const t = atomlabTest.reaktor;
+  const tekst = (s) => document.querySelector(s)?.textContent ?? '';
+  let døde = 0, iStå = 0;
+  for (let i = 0; i < 100; i++) {
+    t.nulstil(); t.spol(0.5); t.visMig();
+    for (let tid = 0; tid < 14 && t.visning().kæde; tid += 0.05) t.spol(0.05);
+    if (tekst('#reaktorVindue .undertekst, #beskeder .undertekst').includes('døde')) døde++;
+    for (let tid = 0; tid < 15; tid += 0.05) t.spol(0.05);
+    if (/Slukket|Nødstop/.test(tekst('#reaktorEffektTekst'))) iStå++;
+  }
+  return { døde, iStå };
+});
+console.log('      Vis mig hele vejen:', JSON.stringify(efterVis), Math.round((Date.now() - t0) / 1000), 's');
+tjek('Vis mig: dør ikke ud, og reaktoren kører som regel videre bagefter (100 forsøg)', efterVis.døde === 0 && efterVis.iStå <= 6, JSON.stringify(efterVis));
 // Kosmos har også knapper med klassen del-knap ("Kort fortalt" og "For nørder"). De må ikke ændre Reaktoren.
 await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);

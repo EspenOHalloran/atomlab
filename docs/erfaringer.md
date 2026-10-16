@@ -67,6 +67,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Fejl, der kun sker ved mange billeder i sekundet (fx mange kugler på kort tid), testes ved at spole frem i små skridt (fx `atomlabTest.vaerksted.spol`). Testbrowseren tegner kun 3-6 billeder i sekundet.
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter.
+- [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
 - [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
 
 ---
@@ -135,7 +136,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Udregninger inde i siden:** Statistik (fx ramme-procent) laves i én `page.evaluate`, så tiden ikke går imens.
 - **Frys tiden til skærmbilleder** (fx `atomlabTest.fusion.rejseTid(t)`). Testbrowseren tegner kun 3-4 billeder i sekundet, og et skærmbillede tager ca. et sekund.
 - **Skærmbilleder i alle størrelser** samlet i ét billede pr. skærm (pc, tablet på højkant, telefon begge veje) gør det hurtigt at se forskelle og ting, der overlapper.
-- **Kør testene én ad gangen.** Kører flere browsere på én gang, fejler testene tilfældigt.
+- **Højst to tests ad gangen.** Før fejlede testene tilfældigt, når flere browsere kørte på én gang. Med hurtig tegning og færre faste ventetider bestod alle 18 tests i to hele kørsler med to ad gangen (10,3 og 10,2 minutter mod 14,8 med én ad gangen). Fejler en test sammen med en anden, kører `koer-alle.mjs` den igen alene og skriver "OBS".
 - **Små fælles byggeklodser** frem for kopier: beskeder (`visBesked`), guiden (`startGuide`) og pausen (`lavPause`) bruges flere steder, så de opfører sig ens.
 - **"Næste skridt" og "Vis mig"** hjælper meget med at komme i gang. "Vis mig" må ikke klare opgaver for en.
 - **Vent på testene inden for samme tur** (vent på resultatet i stedet for at afslutte), så der ikke bliver pushet utestet kode.
@@ -173,6 +174,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Test, der lyver:** En statistik viste for gode tal, fordi en valgt kerne ikke blev nulstillet mellem forsøgene.
 - **En sjælden testfejl kan være en ægte fejl** ("Vis mig" ovenfor, to gange). Men den kan også være testens egen timing (`henfald`, og `pause`, der ventede præcis 1,5 sekunder på stavene). Find årsagen, før den afvises: Kør det, der fejler, mange gange inde i siden og tæl.
 - **Forløb, der styres af uret (rigtig tid), og tryk på mål, der bevæger sig,** fejler, når maskinen er travl (load ca. 4): Rejsen ind i Solen var nået til fase 2, før testen kiggede, og en proton flyttede sig mellem målingen og trykket. Nu fryser testen rejsen på bestemte tidspunkter (`rejseTid`), og trykket prøves op til tre gange.
+- **Testene kørte i slowmotion.** Spillet regner højst 0,05 sekund frem pr. billede (så det ikke hopper efter en pause). Testbrowseren tegnede kun 3-6 billeder i sekundet, så animationerne gik 3-6 gange langsommere end i virkeligheden, og testene ventede tilsvarende længe. Uden glød og i halv opløsning (`TEST_HURTIG`) tegner den 3-8 gange flere billeder (Kosmos 3,3 → 14,2, Stjerneovnen 2,8 → 9,8 og værkstedet på tablet 4,3 → 34,9). Hele samlingen gik fra 23 til 17,7 minutter alene af det. Faste ventetider blev skiftet ud med spoling og `waitForFunction` i de langsomste tests (fx Stjerneovn-testen 85 → 21 sekunder, henfald 103 → 60 og kosmos 100 → 52), så samlingen tog 14,8 minutter, og 10,2 med to ad gangen. Én test (`grafik`) tegner stadig med fuld grafik, så gløden også bliver afprøvet.
+- **Hurtigere tests afslørede en svaghed i spillet.** "Vis en kædereaktion" døde nu og da ud i guide-testen, og bagefter gik reaktoren i stå i ca. 15 % af gangene (målt med 150 forsøg). Kun de to første generationer var sikret. Nu er tre sikret: 0 døde ud, og ca. 1 % går i stå bagefter. Testen `reaktor` kører 100 forsøg og fejlede med den gamle kode (18 af 100).
 - **Arbejde, der venter på næste billede** (`requestAnimationFrame`), er langsomt i testbrowseren: Ordforklaringerne blev markeret 40-240 ms efter et klik, og over 400 ms, når maskinen var travl. Testen kiggede efter præcis 400 ms og fejlede 1 gang i hele samlingen. Nu markeres ordene med det samme (i MutationObserveren, 7-11 ms), og testen holder øje med ordet (`waitForSelector`).
 - **En ny maskine kan være langsommere.** Efter en genstart tegnede testbrowseren færre billeder i sekundet, og en test med en fast ventetid fejlede. Hold øje med en tilstand (`waitForFunction`) i stedet for at vente en fast tid.
 - **Push før testene er færdige:** En automatisk regel kræver push, når en tur slutter. Vent derfor på testene inden for samme tur. Hvis der alligevel pushes før, så sig det.

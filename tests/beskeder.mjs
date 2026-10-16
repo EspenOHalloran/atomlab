@@ -16,7 +16,8 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   await page.goto(`${ADRESSE}/?test#vaerksted`);
   await page.evaluate(() => localStorage.clear());
   await page.reload();
-  await page.waitForTimeout(2500);
+  await page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: 20000 });
+  await page.waitForTimeout(700);
   const dækning = () => page.evaluate(() => {
     // Hvor stor en del af 3D-billedet dækkes af beskeder?
     const v = document.querySelector('.skærm:not(.skjult) > .vindue').getBoundingClientRect();
@@ -70,15 +71,16 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   await page.screenshot({ path: `${UD}/${navn}-4-advarsel.png` });
   // Skift skærm: beskederne ryddes
   await page.evaluate(() => { location.hash = '#kosmos'; });
-  await page.waitForTimeout(2500);
+  await page.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'), null, { timeout: 10000 });
+  await page.waitForTimeout(500);
   tjek(`${navn}: beskeder ryddet ved skærmskift`, await page.evaluate(() => !document.querySelector('#vaerkstedVindue .undertekst, #vaerkstedVindue .pille')));
   // Kosmos: supernova
   await page.evaluate(() => atomlabTest.kosmos.vælg('supernova'));
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(500);
   await page.evaluate(() => atomlabTest.kosmos.tryk(0));
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(500);
   await page.evaluate(() => atomlabTest.kosmos.spol(2));
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(500);
   const fase = await page.evaluate(() => { const u = document.querySelector('#kosmosVindue .undertekst.fase'); return u && { tekst: u.textContent, prikker: u.querySelectorAll('.ut-trin i').length, h: Math.round(u.getBoundingClientRect().height) }; });
   console.log(navn, 'fase', JSON.stringify(fase));
   tjek(`${navn}: kosmos-fase som undertekst med prikker`, fase && fase.prikker === 4);
@@ -87,7 +89,7 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   tjek(`${navn}: underteksten dækker under 22 %`, d2 < 22, d2);
   await page.screenshot({ path: `${UD}/${navn}-5-supernova.png` });
   await page.evaluate(() => atomlabTest.kosmos.spol(5));
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(600);
   await page.screenshot({ path: `${UD}/${navn}-6-supernova-senere.png` });
   // Mere-knappen (kun hvis teksten er skåret af)
   const mere = await page.evaluate(() => { const m = document.querySelector('#kosmosVindue .ut-mere'); return m && !m.hidden; });
@@ -99,14 +101,15 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   }
   // Tyngdebølger: graf og undertekst sammen
   await page.evaluate(() => atomlabTest.kosmos.vælg('tyngdebolger'));
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(500);
   await page.evaluate(() => atomlabTest.kosmos.tryk(0));
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(1500);
   await page.screenshot({ path: `${UD}/${navn}-8-tyngdebolger.png` });
   console.log(navn, 'dækning tyngdebølger', await dækning(), '%');
   // Batteriet: kortslutning er en fast advarsel, der kommer lidt efter
   await page.evaluate(() => { location.hash = '#batteri'; });
-  await page.waitForTimeout(2500);
+  await page.waitForFunction(() => document.querySelector('#batteri:not(.skjult)'), null, { timeout: 10000 });
+  await page.waitForTimeout(500);
   await page.evaluate(() => { const t = atomlabTest.batteri; t.tilstand('oplad'); t.hastighed(2); t.snyd(true); for (let i = 0; i < 20 && !t.kør(5).død; i++); });
   await page.waitForTimeout(400);
   const førAdvarsel = await page.evaluate(() => Boolean(document.querySelector('.undertekst.advarsel.fast')));

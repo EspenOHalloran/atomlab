@@ -13,6 +13,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 export const LAV_KVALITET = matchMedia('(pointer: coarse)').matches;
 // Har man slået "reducer bevægelse" til i sit styresystem, drejer kameraet ikke af sig selv, og lysglimt dæmpes
 export const ROLIG = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Kun i automatiske tests: tegn hurtigt (uden glød og i lav opløsning), så animationerne ikke kører i slowmotion i
+// testbrowseren. Sættes af tests/hjaelp.mjs, før siden starter. Spillet selv bruger det aldrig.
+export const TEST_HURTIG = Boolean(globalThis.atomlabTestHurtig);
 
 const SYNSVINKEL = 40; // kameraets synsvinkel i grader (lodret)
 
@@ -41,7 +44,7 @@ export function lavVerden(lærred) {
   } catch (fejl) {
     return false;
   }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, LAV_KVALITET ? 1.5 : 2));
+  renderer.setPixelRatio(TEST_HURTIG ? 0.5 : Math.min(devicePixelRatio, LAV_KVALITET ? 1.5 : 2));
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -104,7 +107,8 @@ export function lavVerden(lærred) {
     svingKamera(dt);
     if (ROLIG) styring.autoRotate = false;
     styring.update(dt);
-    komponist.render(dt);
+    if (TEST_HURTIG) renderer.render(scene, kamera);
+    else komponist.render(dt);
   });
   return true;
 }
