@@ -192,4 +192,6 @@ Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-all
 
 ## Åbne punkter
 - **Fra gennemgangen** i oktober 2026 mangler stadig: forslagene i afsnit B (fremgang i menuen, links mellem delene, guide i Batteriet, app på hjemmeskærmen, "Test dig selv"), tilgængelighed (D8), fælles kode (D9), mindre download (D11) og ubrugt kode (D12). Se [gennemgang-2026-10.md](gennemgang-2026-10.md).
-- Ikke testet med rigtig mus og rigtige fingre: hvordan det føles at sigte i Stjerneovnen, og hvor glat rejsen ind i Solen kører. Det skal prøves af jer.
+- Ikke testet med rigtig mus og rigtige fingre: hvordan det føles at sigte i Stjerneovnen, og hvor glat rejsen ind i Solen kører. Det skal prøves af jer. Det samme gælder ordforklaringerne og de fire nye Kosmos-fænomener.
+- **Uopklaret:** Hvorfor "Vis en kædereaktion" døde ud netop i guide-testen (2 gange i ca. 14), men aldrig i 400 forsøg uden for den. Med tre sikre generationer er det ikke set siden. Dukker det op igen, så log reaktorens tilstand lige før "Vis mig".
+- **To tests ad gangen** er kun målt stabilt i to hele kørsler. Hold øje med "OBS"-linjerne fra `koer-alle.mjs`.

@@ -8,13 +8,14 @@ Man skal kunne vælge mellem dansk og engelsk, og alt skal oversættes: knapper,
 ## Hvor stor er opgaven?
 Den er stor, men det skyldes mest mængden af tekst. Teknisk er den ligetil.
 
-- Der er ca. **15.000 ord** tekst fordelt på ca. 25 filer. Det svarer til en lille bog.
+- Der er ca. **19.000 ord** tekst fordelt på ca. 30 filer (talt i oktober 2026, efter de fire nye Kosmos-fænomener og ordforklaringerne). Det svarer til en lille bog.
 - De største dele er:
 
   | Del | Ord |
   |---|---|
   | Hjælpen og teksterne i `index.html` | 3.100 |
-  | Kosmos (9 filer i `js/kosmos/`) | 3.100 |
+  | Kosmos (13 filer i `js/kosmos/`) | 6.400 |
+  | `js/data/ordbog.js` (ordforklaringerne) | 800 |
   | `js/data/fakta.js` (fakta om alle 118 grundstoffer) | 1.800 |
   | `js/vaerksted.js` | 1.500 |
   | `js/data/grundstoffer.js` (navne, kategorier og korte fakta) | 1.200 |
@@ -25,6 +26,7 @@ Den er stor, men det skyldes mest mængden af tekst. Teknisk er den ligetil.
   | `js/data/isotoper.js` | 400 |
   | Resten (system, beskeder, guide, lyd osv.) | 400 |
 - Noget tekst bliver **tegnet i 3D** og ikke skrevet i HTML: navnene på felterne i det periodiske system, navnene på stumperne i Reaktoren, skiltene i Batteriet og i Kosmos samt "+1,44 MeV" ved fusion.
+- **Ordforklaringerne** finder fagordene ud fra danske bøjninger (`former` i `ordbog.js`). Den engelske udgave skal have sine egne former (fx "neutrinos"), og testen `ordforklaring` skal tjekke dem på engelsk.
 - **Tal skrives forskelligt:** dansk "1,44 MeV" og "10.000 km", engelsk "1.44 MeV" og "10,000 km".
 - **Citaterne** har allerede den oprindelige ordlyd i feltet `original` i `citater.js`. De fleste er på engelsk fra starten (Feynman, Sagan, Hawking, Wheeler, Rutherford, Eddington, Faraday). Einstein (tysk), Bohr (genfortalt på tysk af Heisenberg) og Curie (fransk) skal bruge en kendt, udgivet engelsk oversættelse med kilde. Kan en kilde ikke findes, udelades citatet på engelsk.
 
@@ -64,7 +66,7 @@ Når man skifter sprog, gemmes valget, og siden genindlæses. Man står bagefter
 1. **Fundament, menu og det periodiske system:** `sprog.js`, ordbogen, `tal()`, oversættelse af HTML, alle 118 navne, kategorier, korte fakta og FAKTA.
 2. **Atomværkstedet:** knapper, infopanelet og fanerne, opgaver, henfald og isotoper samt den store hjælp om atomer og radioaktivitet.
 3. **Stjerneovnen, Reaktoren og Batteriet:** paneler, opgaver, reaktioner, guider, undertekster, skilte og hjælp.
-4. **Kosmos, citater og samlet gennemgang:** de 9 fænomener (kort fortalt, for nørder, faser, knapper og skilte), citaterne med kontrol af kilderne, stavekontrol og layout på telefon og tablet.
+4. **Kosmos, citater og samlet gennemgang:** de 13 fænomener (kort fortalt, for nørder, faser, knapper og skilte), ordforklaringerne, citaterne med kontrol af kilderne, stavekontrol og layout på telefon og tablet.
 
 Vælgeren i menuen bliver først vist, når alle fire trin er færdige. Indtil da kan man se den engelske udgave med `?sprog=en` i adressen. Det, der ikke er oversat endnu, står så på dansk.
 
