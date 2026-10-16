@@ -128,3 +128,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).
+- **Årstiderne** (nyt fænomen i Kosmos, foreslået af jer): Jorden på sin bane om Solen med den skrå akse (ca. 23,4°), der peger samme vej hele året. Den skal forklare årstiderne, hvorfor det er sommer i nord, når det er vinter i syd, og hvorfor sommerdagene er lange og vinterdagene korte i Danmark.
+  - Ideer: en skyder for måneden og Danmark markeret på kloden med grænsen mellem dag og nat. Panelet viser dagens længde og Solens højde ved middag i Danmark og et sted på den sydlige halvkugle. Måske midnatssol og mørketid nord for polarcirklen.
+  - Fælde at tage med: Årstiderne skyldes ikke afstanden til Solen. Jorden er faktisk tættest på Solen i starten af januar.
+  - Tal skal tjekkes, før de bruges (fx dagens længde i København, ca. 7 timer ved vintersolhverv og ca. 17½ ved sommersolhverv).
