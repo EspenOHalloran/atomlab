@@ -138,3 +138,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Tjernobyl i Reaktoren** (foreslået af jer): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i docs/erfaringer.md. En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
 - **Rækkefølge** (aftalt): Årstiderne og formørkelserne først (samme model), så Tjernobyl og til sidst Liv.
 - **Ny del: Liv** (foreslået af jer): et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme (fx Miller-Urey-forsøget, byggesten, hinder, RNA). Vigtigt at sige ærligt, at ingen endnu har lavet liv fra bunden, og at det er uvist, hvordan det opstod. Med de nyeste fund på Mars (Perseverance, "leopardpletterne" i klippen Cheyava Falls). Besluttet: Forklar, hvad der er fundet, hvorfor det er så interessant, og hvorfor det er det bedste spor af liv på andre planeter indtil nu, men også ærligt, at det ikke er bevist. Teksten skal faktatjekkes grundigt. Molekyle-idéen ovenfor kan være første skridt.
+
+## Før vi deler AtomLab med andre (tjekliste)
+AtomLab ligger allerede på GitHub Pages. Før vi deler det bredere:
+- [ ] **Fagligt tjek:** En fysik/kemi-lærer eller en anden fagperson gennemgår indholdet.
+- [ ] **Afprøvning:** 3-5 børn og en lærer prøver det. Vi skriver ned, hvor de går i stå, og retter det.
+- [ ] **Skolernes enheder:** afprøvet på ældre iPads og Chromebooks (hastighed og glød).
+- [ ] **"Om AtomLab"-side:** hvem der har lavet det og hvorfor, at der ikke indsamles data (kun det, der gemmes i ens egen browser), hvordan man melder fejl, og at det er lavet med hjælp fra AI.
+- [ ] **Licens og kilder:** vælg en licens (fx åben kildekode), og tjek, at citater og kilder er i orden (Three.js har MIT-licens).
+- [ ] **Til lærere:** en kort lærervejledning, en kobling til fagets mål i 7.-9. klasse og nogle opgaver.
+- [ ] **Del i det små først:** først med en lærer og en klasse, derefter i faglige netværk for fysik/kemi-lærere.
