@@ -10,7 +10,7 @@ const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
   'henfaldsregler', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
-  'batteri', 'kosmos', 'beskeder', 'beskeder-2', 'guide', 'pause', 'fuldskaerm',
+  'batteri', 'kosmos', 'kosmos-nye', 'ordforklaring', 'beskeder', 'beskeder-2', 'guide', 'pause', 'fuldskaerm',
 ];
 const valgte = process.argv.length > 2 ? process.argv.slice(2) : ALLE;
 

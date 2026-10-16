@@ -10,7 +10,11 @@ import { citatHTML } from './data/citater.js';
 import { visBesked, skjulUndertekst } from './beskeder.js';
 import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavPause } from './pause.js';
+import bigbang from './kosmos/bigbang.js';
+import stjernefoedsel from './kosmos/stjernefoedsel.js';
 import solstorm from './kosmos/solstorm.js';
+import solensfremtid from './kosmos/solensfremtid.js';
+import hviddvaerg from './kosmos/hviddvaerg.js';
 import supernova from './kosmos/supernova.js';
 import pulsar from './kosmos/pulsar.js';
 import kilonova from './kosmos/kilonova.js';
@@ -20,8 +24,8 @@ import sorthul from './kosmos/sorthul.js';
 import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
 
-// Rækkefølgen fortæller en historie: fra vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
-export const FÆNOMENER = [solstorm, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
+// Rækkefølgen fortæller en historie: fra Big Bang og vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
+export const FÆNOMENER = [bigbang, stjernefoedsel, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
 const NØGLE_SET = 'atomlabKosmosSet'; // de fænomener, man har kigget på
@@ -37,6 +41,7 @@ let fane = 'kort';
 let tjekTid = 0;
 let pause = null; // pausen (pause.til er true, mens tiden står stille)
 let kosmosTid = 0; // Kosmos' eget ur, som står stille under pause
+let forklaringVist = ''; // teksten i panelet lige nu (fra fænomenets forklaring())
 
 function $(id) {
   return document.getElementById(id);
@@ -127,6 +132,7 @@ function vælg(id) {
   }
   visFase(null);
   $('kosmosForklaring').innerHTML = '';
+  forklaringVist = '';
   $('kosmosOverlag').innerHTML = '';
   kørende = f.lav(gruppe, {
     effekter,
@@ -135,7 +141,12 @@ function vælg(id) {
     fase: visFase,
     kamera: stilKamera,
     opdaterKnapper: lavStyring,
-    forklaring: (html) => { $('kosmosForklaring').innerHTML = html; },
+    // Skrives kun om, når teksten ændrer sig (ellers forsvinder ordforklaringerne hver gang)
+    forklaring: (html) => {
+      if (html === forklaringVist) return;
+      forklaringVist = html;
+      $('kosmosForklaring').innerHTML = html;
+    },
     // Et sted oven på 3D-billedet, hvor fænomenet kan vise fx en graf
     overlag: () => $('kosmosOverlag'),
   });

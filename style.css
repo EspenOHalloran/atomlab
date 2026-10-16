@@ -923,16 +923,18 @@ button { font: inherit; color: inherit; }
 /* ---------- Kosmos ---------- */
 .ikon-kosmos { background: radial-gradient(circle, #000 0 9px, #fff3c4 10px, #ffb347 12px, rgba(255, 120, 60, 0.45) 16px, transparent 24px); }
 .ikon-kosmos::before { content: ""; position: absolute; inset: 21px -3px; border-radius: 50%; border: 3px solid #ffb347; box-shadow: 0 0 10px #ff8a3d; transform: rotate(-14deg); }
-.kosmos-liste { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.kosmos-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.kosmos-valg-navn { min-width: 0; line-height: 1.15; }
 .kosmos-valg {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 9px;
+  min-width: 0;
+  padding: 7px 8px;
   border-radius: 12px;
   border: 1px solid var(--panel-kant);
   background: rgba(255, 255, 255, 0.04);
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -941,7 +943,9 @@ button { font: inherit; color: inherit; }
 .kosmos-valg:hover { border-color: rgba(95, 227, 255, 0.5); }
 .kosmos-valg.valgt { background: rgba(95, 227, 255, 0.16); border-color: rgba(95, 227, 255, 0.75); box-shadow: 0 0 16px rgba(95, 227, 255, 0.18); }
 .kosmos-valg-ikon { font-size: 17px; line-height: 1; }
-.kosmos-valg.ny::after { content: ""; flex: 0 0 7px; height: 7px; margin-left: auto; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+/* Prikken for "ikke set endnu" sidder i hjørnet, så den ikke tager plads fra navnet */
+.kosmos-valg { position: relative; }
+.kosmos-valg.ny::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 .kosmos-set { float: right; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--svag); }
 .kosmos-styring { display: flex; flex-direction: column; gap: 6px; }
 .kosmos-knap { justify-content: flex-start; text-align: left; }
@@ -950,7 +954,9 @@ button { font: inherit; color: inherit; }
 .kosmos-overlag:empty { display: none; }
 .kosmos-graf { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 12px; background: rgba(8, 12, 28, 0.72); border: 1px solid var(--panel-kant); font-size: 12px; color: var(--svag); }
 .kosmos-graf canvas { width: min(420px, 100%); height: 70px; display: block; }
-.kosmos-forklaring { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+.kosmos-forklaring { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); font-size: 13.5px; line-height: 1.45; }
+.kosmos-forklaring > p { margin: 0 0 6px; }
+.kosmos-forklaring .kerne-liste { margin-top: 4px; }
 .kosmos-til { justify-content: flex-start; padding: 7px 11px; font-size: 14px; }
 .kosmos-hoved { display: flex; gap: 12px; align-items: center; }
 .kosmos-ikon { flex: 0 0 52px; height: 52px; display: grid; place-items: center; font-size: 30px; border-radius: 14px; background: radial-gradient(circle, rgba(140, 123, 255, 0.35), rgba(95, 227, 255, 0.06)); border: 1px solid var(--panel-kant); }
@@ -978,6 +984,8 @@ button { font: inherit; color: inherit; }
   .opgave-krav .navn-lang { display: none; }
   .opgave-krav .navn-kort { display: inline; }
   .topbjælke h2 { font-size: 19px; }
+  .kosmos-valg { gap: 5px; padding: 7px 6px; font-size: 12px; }
+  .kosmos-valg-ikon { font-size: 15px; }
 }
 
 /* ---------- Smalle skærme (tablet på højkant og telefoner på højkant) ---------- */
@@ -1119,3 +1127,22 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------- Ordforklaringer (fagord, man kan trykke på) ---------- */
+.fagord {
+  display: inline; margin: 0; padding: 0; border: 0; border-radius: 0; background: none;
+  font: inherit; line-height: inherit; color: inherit; text-align: inherit; letter-spacing: inherit;
+  text-decoration: underline dotted rgba(95, 227, 255, 0.85); text-decoration-thickness: 1.5px; text-underline-offset: 3px;
+  cursor: help; pointer-events: auto;
+}
+.fagord:hover, .fagord[aria-expanded="true"] { color: var(--accent); }
+.fagord:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.ordforklaring {
+  position: fixed; left: 0; top: 0; z-index: 30; width: min(300px, calc(100vw - 16px));
+  padding: 10px 12px; border-radius: 12px; background: rgba(14, 22, 50, 0.98);
+  border: 1px solid rgba(95, 227, 255, 0.55); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+  font-size: 13.5px; line-height: 1.45; color: var(--tekst);
+}
+.ordforklaring strong { display: block; margin-bottom: 3px; color: var(--accent); }
+.ordforklaring p { margin: 0; }
+.ordforklaring.skjult { display: none; }

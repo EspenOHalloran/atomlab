@@ -14,7 +14,7 @@ const DETEKTOR = new THREE.Vector3(15, 0, 13);
 
 export default {
   id: 'tyngdebolger',
-  navn: 'Tyngdebølger',
+  navn: 'Tyngde\u00adbølger', // blød bindestreg, så navnet kan deles i listen
   ikon: '〰️',
   undertitel: 'Bølger i selve rumtiden',
   citat: 'wheeler',

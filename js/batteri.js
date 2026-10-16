@@ -69,6 +69,7 @@ let varme = 0; // 0..1
 let nåle = []; // lithium-nåle (dendritter): { x, y, længde }
 let død = false;
 let afladet = 0; // overførsler i afladning (til lampe-opgaven)
+let forklaringVist = null; // den tilstand, forklaringen i panelet er skrevet til
 let liMesh = null;
 let elektronPunkter = null; // elektron-kæden i ledningen
 let kædeAntal = 0;
@@ -450,8 +451,12 @@ function opdaterPanel() {
     else fase = `Konstant strøm (${tal(hastighed, 1)} A)`;
   } else if (tilstand === 'aflad') fase = a <= 0 ? 'Beskyttelsen har slukket (3,0 V)' : 'Aflader gennem lampen';
   $('batteriFase').textContent = fase;
-  const [titel, tekst] = FORKLARING[tilstand];
-  $('batteriForklaring').innerHTML = `<strong>${titel}</strong>${tekst}`;
+  // Kun når teksten skifter (ellers bliver ordforklaringerne i den lavet om fire gange i sekundet)
+  if (forklaringVist !== tilstand) {
+    forklaringVist = tilstand;
+    const [titel, tekst] = FORKLARING[tilstand];
+    $('batteriForklaring').innerHTML = `<strong>${titel}</strong>${tekst}`;
+  }
   for (const b of document.querySelectorAll('[data-batteri-tilstand]')) b.classList.toggle('valgt', b.dataset.batteriTilstand === tilstand);
   for (const b of document.querySelectorAll('[data-batteri-fart]')) b.classList.toggle('valgt', Number(b.dataset.batteriFart) === hastighed);
   $('batteriSnyd').classList.toggle('valgt', snyd);

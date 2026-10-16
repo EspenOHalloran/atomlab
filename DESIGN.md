@@ -114,12 +114,17 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [ ] **Sammenhæng:** fremgang pr. del i menuen og links mellem delene ("Se også").
   - [ ] **Fælles "Næste skridt"-modul**, og "Næste skridt", "Vis mig" og en guide i Batteriet og en kort guide i værkstedet.
   - [ ] **Tilgængelighed og app:** dialoger, tastatur, en app på hjemmeskærmen og mindre download.
+- [x] **Trin 12: Ordforklaringer og fire nye fænomener i Kosmos**
+  - [x] **Ordforklaringer:** 32 fagord (neutrino, positron, isotop, ion, MeV, plasma, halveringstid …) har prikker under første gang, de står i en tekst. Et tryk eller klik viser en kort forklaring, og med mus vises den også, når man holder musen over ordet. Virker i hjælpen, panelerne, Kosmos, grundstofkortet, underteksterne og loggen.
+  - [x] **Big Bang:** fra en suppe af protoner og neutroner til 75 % hydrogen og 25 % helium efter ca. 20 minutter, de første atomer og de første stjerner. Man går frem trin for trin med "Næste".
+  - [x] **Ny stjerne:** En sky af gas falder sammen. Skyderen vælger massen, og resultatet bliver en brun dværg, en rød dværg, en stjerne som Solen eller en kæmpestjerne.
+  - [x] **Solens fremtid:** Solen bliver lysere, en rød kæmpe sluger Merkur og Venus, helium tænder, en planetarisk tåge og en hvid dværg.
+  - [x] **Hvid dværg:** En hvid dværg suger gas fra en nabostjerne, når grænsen på ca. 1,4 sole og eksploderer (type Ia-supernova). En graf viser lyset, og panelet viser nikkel-56 → cobalt-56 → jern-56.
+  - [x] Listen i Kosmos fortæller en historie: Big Bang først, så stjernernes liv og til sidst de mærkeligste ting.
 
 ## Idéer til senere
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
 - En engelsk udgave med en sprogvælger. Planen ligger i [docs/plan-engelsk.md](docs/plan-engelsk.md).
-- Ordforklaringer: Fagord (neutrino, positron, isotop, ion, MeV …) kan trykkes på overalt og viser en kort forklaring. Venter på et go.
-- Flere fænomener i Kosmos (forslag, venter på et go).
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).

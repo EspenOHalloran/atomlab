@@ -15,6 +15,7 @@ import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 import { lavBeskeder, rydBeskeder } from './beskeder.js';
 import { stopGuide } from './guide.js';
 import { citatHTML, MENU_CITATER } from './data/citater.js';
+import { lavOrdforklaringer, testAdgang as ordTest } from './ordforklaring.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -68,6 +69,8 @@ function start() {
   }
   // Faste citater i hjælpen
   for (const boks of document.querySelectorAll('[data-citat]')) boks.innerHTML = citatHTML(boks.dataset.citat);
+  // Fagord, man kan trykke på for at få en kort forklaring
+  lavOrdforklaringer();
   addEventListener('hashchange', visSkærm);
   // På små skærme kan man rulle i en skærm. Så skal 3D-billedet følge med hullet.
   for (const skærm of document.querySelectorAll('.skærm')) {
@@ -83,7 +86,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest() };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest() };
   visSkærm();
 }
 

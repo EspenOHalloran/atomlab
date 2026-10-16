@@ -28,6 +28,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Tekster, der sættes sammen af data (fx "opdaget 1868 af …"), er læst i den færdige form for alle tilfælde (lav et lille script, der skriver dem alle ud).
 - [ ] Fagord forklares med få ord første gang, de bruges i en tekst (fx "en neutrino (en næsten usynlig partikel)", "en alfapartikel (en heliumkerne)"). Læs teksten, som om du ikke kan fysik.
 - [ ] Står der et tal fra spillet (fx "6-16"), så sig også, hvad det tæller ("spaltninger i sekundet i det grønne felt").
+- [ ] Nye fagord kommer i ordbogen (`js/data/ordbog.js`), så de kan trykkes på. Forklaringen er højst 260 tegn.
 
 ### C. Ny regel, beregning eller spillogik
 - [ ] Reglen er testet mod en tabel med kendte tilfælde, også de "kedelige" og grænsetilfældene, ikke kun et enkelt eksempel (fx alle kendte isotoper, ikke kun uran-238-kæden).
@@ -54,6 +55,8 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Ingen nye `Vector3`, `Color` eller `Quaternion` i løkker, der kører hvert billede.
 - [ ] Klikbare ting er knapper (`<button>`), så de kan bruges med tastatur.
 - [ ] Grafik med en fast størrelse (fx `InstancedMesh` med plads til et bestemt antal) kan ikke løbe over, heller ikke et kort øjeblik, når nogle kugler er på vej ud og andre på vej ind.
+- [ ] Kan det samme vises på to måder (fx klik og musen over et ord), så skal hver af dem stoppe den andens timer.
+- [ ] Tekst, der skrives med `innerHTML`, skrives kun om, når den ændrer sig. Ellers forsvinder ordforklaringerne (og fokus) hver gang.
 
 ### F. Tests
 - [ ] En kort tilstand (fx "ion i 1,6 sekunder") holdes der øje med hele tiden (`waitForFunction` med `polling`), i stedet for at kigge én gang.
@@ -88,6 +91,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **Skærmbilleder taget, før kameraet var færdigt** | To forkerte fund i gennemgangen: Batteriets etiketter "skåret af" på tablet og væggen i Det periodiske system "kun 40 % af bredden". Begge var billeder midt i zoomet. | F: vent på kameraet. |
 | **Fagord uden forklaring** | "Neutrino" i supernovaen, "alfapartikel" ved henfald, "6-16" i Reaktoren. Fundet af brugeren. | B: forklar første gang. |
 | **Grafik med fast plads, der løber over et øjeblik** | "Ryd" og straks uran: op til 179 protoner, men plads til 158. Sker kun ved mange billeder i sekundet, så testbrowseren så det ikke. | E og F: loft over antallet, test med små tidsskridt. |
+| **To veje til den samme ting, der ikke kender hinanden** | Ordforklaringer: To hurtige klik på et ord lukkede forklaringen, men musens timer (0,3 sekunder) viste den igen bagefter. | E: hver vej stopper den andens timer. |
 | **En ændring af tempo eller tid, der rammer tidsgrænser andre steder** | Stjerneovnens nye tempo fik egne skud til at flyve længere, så "Vis mig" kunne vælge et skud, der stadig fløj. | C: søg efter alt, der har en flyvetid eller tidsgrænse, når tempoet ændres. |
 | **En indstilling, der ikke virker** | Kantudglatning (`antialias`) på lærredet virker ikke, når gløden tegner billedet. Den kostede bare hukommelse. | F: mål før og efter. |
 
@@ -104,6 +108,15 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Nøgne kerner" og "ioner": et frit atom kan højst holde på én ekstra elektron (O²⁻ findes kun i krystaller).
 - Supertunge grundstoffer: Halveringstiden spænder fra under et millisekund (Og) til over et døgn (Db-268). Skriv ikke "henfalder med det samme" om dem alle.
 - "Zirkonia er kunstige diamanter." Det er en efterligning af diamant, ikke diamant.
+- "Antistof har den modsatte ladning." Også partikler uden ladning (neutronen, neutrinoen) har en antitvilling.
+- "Protoner og neutroner blev dannet efter en milliontedel af et sekund." Nærmere 10-20 milliontedele (en hundredtusindedel).
+- "Big Bang lavede kun hydrogen og helium" og "alle tungere grundstoffer kommer fra stjerner". Der kom også lidt lithium, og meget guld kommer fra neutronstjerner, der støder sammen.
+- "Penzias og Wilson troede, at støjen kom fra duer." Duerne (og deres klatter) var én af flere mistanker.
+- "Solen bliver en rød kæmpe om 5 milliarder år." Den begynder om ca. 5 og er størst om ca. 7,6 milliarder år. Helium tænder først, når den er størst.
+- "Røde dværge lever i billioner af år." Kun de mindste. En på en halv solmasse lever "kun" ca. 100 milliarder år.
+- "Type Ia-supernovaer lyser præcis lige stærkt." De varierer 2-3 gange og bliver først et standardlys efter en rettelse (de stærkeste falder langsomst).
+- "Grænsen på 1,4 sole gælder også jernkernen." Det er samme slags grænse, men jernkernen falder sammen ved ca. 1,2-2 sole.
+- "Brænder" om stjerner: Astronomer siger det, men det er fusion, ikke ild. Forklar det, eller skriv "smelter sammen".
 
 ---
 
@@ -129,6 +142,10 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Genskab fejlen, før den rettes.** Reaktorens tomme skærm blev genskabt med et skript (Kosmos → "For nørder" → Reaktoren), før den blev rettet. Testen for "Ryd og straks uran" bestod først også uden rettelsen. Først da den spolede i små skridt, fejlede den uden rettelsen (168 af 158) og bestod med den.
 - **Brugerens egne indtryk finder andet end testene og agenterne:** fagord uden forklaring, et tempo, der er for hurtigt, og tal uden enhed. Læs teksterne, som om du ikke kan fysik.
 - **Billeder i sekundet målt i testbrowseren** (software-tegning) kan bruges til at sammenligne før og efter. Fx tablet 3,9 → 6,7 og pc 5,1 → 5,5, da gløden blev halveret på tablets, og den virkningsløse kantudglatning blev fjernet. Kantudglatning i gløden (`samples: 4`) kostede ca. 40 % og gjorde testene langsommere, så den blev ikke slået til.
+- **Trin for trin med "Næste"** (Big Bang og Solens fremtid i Kosmos): Man bestemmer selv tempoet, og hvert trin har én kort tekst. Trykker man "Næste" før tid, gøres trinnet færdigt med det samme (`gørFærdig`), så tallene i panelet altid passer.
+- **En historie i listen:** Kosmos-fænomenerne står i en rækkefølge, der fortæller en historie (Big Bang → stjerner fødes → Solen → døde stjerner → det mærkeligste), og det sidste trin peger videre til det næste fænomen.
+- **Fysik regnet i koden i stedet for skrevet fast:** Den hvide dværgs supernova regner nikkel-56 → cobalt-56 → jern-56 ud med de rigtige halveringstider (6,1 og 77,2 dage), og testen tjekker tallene efter 100 dage. Så kan teksten ikke komme ud af trit med grafen.
+- **En agent, der løber tør ("session limit"),** kan fortsætte senere med en besked (SendMessage), så det, den allerede har fundet, ikke går tabt. Start ikke en ny.
 
 ### Faldgruber: kamera og layout
 - **Kamerastyringen har en skjult grænse.** `styring.maxDistance` (250) holder kameraet tæt på, også når styringen er slået fra. En planlagt kameratur skal hæve grænsen og sætte den tilbage bagefter.
@@ -136,6 +153,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Etiketter i 3D ved kanten af en kasse** kan få kassens kantlinje lige gennem teksten. Sæt dem foran kassen (større z) og under kanten, og tegn dem oven på alt (`depthTest = false`).
 - **Ting i 3D-vinduet, der overlapper.** Brug `bundIVindue()` til ting nederst (over underteksterne). Et lag oven på hele vinduet skal have z-index 1, ellers dækker det underteksterne (z-index 2). 3D-etiketter kan stikke op over overskriften (Batteriet på tablet).
 - **Skærmbilleder af "hele siden"** (`fullPage`) viser kun det synlige, fordi panelerne ruller hver for sig. Rul elementet frem (`scrollIntoViewIfNeeded`), og tag billedet bagefter.
+- **Lange navne i et gitter** (Kosmos-listen med "Tyngdebølger" og "Solens fremtid") gjorde kolonnerne bredere end panelet, fordi `1fr` ikke kan blive smallere end det længste ord. Brug `minmax(0, 1fr)`, lad navnene bryde, og giv lange ord en blød bindestreg (`\u00ad`).
 
 ### Faldgruber: tid, timere og tilstand
 - **Gættede tal i grafer.** Bakken i Stjerneovnens graf var først gættet og gav ca. 2 % i stedet for ca. 30 % ved 15 mio. °C. Rettet ved at måle i spillets fysik. Ændres fysikken (`FRASTØD`, `RN`, `termiskFart`), skal `BAKKE` måles igen.
@@ -148,11 +166,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Beskeder kunne skubbe rejsens undertekster væk.** Nu venter ovnens beskeder, til rejsen er slut.
 - **Et henfald midt i et skærmskift** fryser, når værkstedet stopper (animationen kører kun, mens værkstedet vises), og låste værkstedet, så Det periodiske system ikke kunne åbne et grundstof der. Nu bliver det gjort færdigt med det samme (`atom.afslutHenfald()`), og ionen bliver neutral, når man kommer tilbage.
 - **Tempo ganges på tiden, ikke på farten.** Stjerneovnens nye tempoer (0,3 / 0,6 / 3) ændrer ikke fysikken, så grafen og `BAKKE` passer stadig. `termiskFart` må ikke ændres for at gøre det langsommere.
+- **Tekst, der skrives om 4 gange i sekundet,** fjerner ordforklaringerne lige så tit (Batteriets forklaring). Nu skrives den kun om, når tilstanden skifter (`forklaringVist`). Det samme gælder panelet i Kosmos (`forklaring()` springer over, når teksten er den samme).
+- **Ting, der skal blive væk:** Merkur og Venus kom tilbage, når Solen skrumpede til en hvid dværg, fordi "slugt" blev regnet ud fra Solens størrelse lige nu. Nu huskes det (`slugt`).
 
 ### Faldgruber: tests og værktøjer
 - **Test, der lyver:** En statistik viste for gode tal, fordi en valgt kerne ikke blev nulstillet mellem forsøgene.
 - **En sjælden testfejl kan være en ægte fejl** ("Vis mig" ovenfor, to gange). Men den kan også være testens egen timing (`henfald`, og `pause`, der ventede præcis 1,5 sekunder på stavene). Find årsagen, før den afvises: Kør det, der fejler, mange gange inde i siden og tæl.
 - **Forløb, der styres af uret (rigtig tid), og tryk på mål, der bevæger sig,** fejler, når maskinen er travl (load ca. 4): Rejsen ind i Solen var nået til fase 2, før testen kiggede, og en proton flyttede sig mellem målingen og trykket. Nu fryser testen rejsen på bestemte tidspunkter (`rejseTid`), og trykket prøves op til tre gange.
+- **Arbejde, der venter på næste billede** (`requestAnimationFrame`), er langsomt i testbrowseren: Ordforklaringerne blev markeret 40-240 ms efter et klik, og over 400 ms, når maskinen var travl. Testen kiggede efter præcis 400 ms og fejlede 1 gang i hele samlingen. Nu markeres ordene med det samme (i MutationObserveren, 7-11 ms), og testen holder øje med ordet (`waitForSelector`).
 - **En ny maskine kan være langsommere.** Efter en genstart tegnede testbrowseren færre billeder i sekundet, og en test med en fast ventetid fejlede. Hold øje med en tilstand (`waitForFunction`) i stedet for at vente en fast tid.
 - **Push før testene er færdige:** En automatisk regel kræver push, når en tur slutter. Vent derfor på testene inden for samme tur. Hvis der alligevel pushes før, så sig det.
 - **Tests i en midlertidig mappe** ville være forsvundet, da sessionen sluttede. De ligger nu i `tests/`.
@@ -168,5 +189,4 @@ Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-all
 
 ## Åbne punkter
 - **Fra gennemgangen** i oktober 2026 mangler stadig: forslagene i afsnit B (fremgang i menuen, links mellem delene, guide i Batteriet, app på hjemmeskærmen, "Test dig selv"), tilgængelighed (D8), fælles kode (D9), mindre download (D11) og ubrugt kode (D12). Se [gennemgang-2026-10.md](gennemgang-2026-10.md).
-- **Ordforklaringer** (fagord, man kan trykke på) og **nye fænomener i Kosmos** er foreslået og venter på et go.
 - Ikke testet med rigtig mus og rigtige fingre: hvordan det føles at sigte i Stjerneovnen, og hvor glat rejsen ind i Solen kører. Det skal prøves af jer.

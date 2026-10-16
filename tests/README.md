@@ -34,6 +34,8 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `reaktor` | Reaktoren: spaltning, uran-238, kædereaktion, nødstop, at "Vis mig" kommer i gang 200 af 200 gange, og at Kosmos' faneknapper ikke ændrer Reaktoren |
 | `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning |
 | `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk |
+| `kosmos-nye` | Big Bang (64/64 → 112/16 → 25 % helium), Ny stjerne (brun dværg, som Solen, kæmpestjerne), Solens fremtid og den hvide dværg (eksplosion og nikkel → cobalt → jern efter 100 dage) |
+| `ordforklaring` | Ordbogen (hvert ord bruges, kort tekst, ingen dobbelte former) og ordforklaringerne med klik, Esc, mus, tastatur og fingre, ét mærke pr. tekst, aldrig i knapper og overskrifter, og nye tekster bliver markeret |
 | `beskeder`, `beskeder-2` | Beskedsystemet: undertekster, piller, loggen, etiketten i Stjerneovnen og nødstop |
 | `guide` | Kom i gang-guiderne, "Næste skridt" og "Vis mig" i Stjerneovnen og Reaktoren |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
