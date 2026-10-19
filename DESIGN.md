@@ -121,6 +121,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] **Solens fremtid:** Solen bliver lysere, en rød kæmpe sluger Merkur og Venus, helium tænder, en planetarisk tåge og en hvid dværg.
   - [x] **Hvid dværg:** En hvid dværg suger gas fra en nabostjerne, når grænsen på ca. 1,4 sole og eksploderer (type Ia-supernova). En graf viser lyset, og panelet viser nikkel-56 → cobalt-56 → jern-56.
   - [x] Listen i Kosmos fortæller en historie: Big Bang først, så stjernernes liv og til sidst de mærkeligste ting.
+- [x] **Trin 13: Årstiderne i Kosmos**
+  - [x] Jorden på sin bane om Solen med den skrå akse (ca. 23,4°), der peger samme vej hele året. Kloden har land og hav, grænsen mellem dag og nat, ækvator, polarcirklerne og de fire steder.
+  - [x] Trin for trin: forårsjævndøgn, sommer i nord, efterårsjævndøgn og vinter i nord, og bagefter vælger man selv datoen med en skyder.
+  - [x] En lille tabel i 3D-billedet med dagens længde og Solens højde ved middag i Danmark, Australien, ved ækvator og i Grønland. Tallene regnes ud for de rigtige steder og passer med almanakkerne inden for få minutter.
+  - [x] Fælden: Jorden er tættest på Solen i starten af januar. Nye ordforklaringer: jævndøgn, solhverv, polarcirkel, midnatssol og mørketid.
 
 ## Idéer til senere
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
@@ -128,15 +133,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).
-- **Årstiderne** (nyt fænomen i Kosmos, foreslået af jer): Jorden på sin bane om Solen med den skrå akse (ca. 23,4°), der peger samme vej hele året. Den skal forklare årstiderne, hvorfor det er sommer i nord, når det er vinter i syd, og hvorfor sommerdagene er lange og vinterdagene korte i Danmark.
-  - Besluttet: **Begge måder.** Man kan gå frem trin for trin med "Næste" (forår, sommer, efterår, vinter, som i Big Bang) og bagefter selv styre måneden med en skyder.
-  - Besluttet: **Fire steder** i en lille tabel i panelet, som ændrer sig med måneden: **Danmark** (lange sommerdage, korte vinterdage), **Australien**, fx Sydney (modsat årstid), **ækvator**, fx Kenya eller Singapore (dagen er ca. 12 timer hele året) og **Grønland nord for polarcirklen**, fx Ilulissat (midnatssol og mørketid). De viser de to regler: Nord og syd har modsatte årstider, og jo længere fra ækvator, jo større forskel på sommer og vinter. Australien ligger tættere på ækvator end Danmark, så dagene svinger mindre dér. Det skal siges, så de to ting ikke blandes sammen.
-  - Ideer: Danmark markeret på kloden med grænsen mellem dag og nat. Panelet viser dagens længde og Solens højde ved middag de valgte steder. Måske midnatssol og mørketid nord for polarcirklen.
-  - Fælde at tage med: Årstiderne skyldes ikke afstanden til Solen. Jorden er faktisk tættest på Solen i starten af januar.
-  - Tal skal tjekkes, før de bruges (fx dagens længde i København, ca. 7 timer ved vintersolhverv og ca. 17½ ved sommersolhverv).
-- **Sol- og måneformørkelse** (Kosmos, foreslået af jer): kan bygge på samme model af Sol, Jord og Måne som Årstiderne. Hvorfor der ikke er formørkelse hver måned (Månens bane hælder ca. 5°), hvorfor Månen præcis kan dække Solen, ringformørkelse, og hvorfor Månen bliver rød. Tal og datoer tjekkes, før de bruges.
+- **Sol- og måneformørkelse** (Kosmos, foreslået af jer): kan bygge på samme model af Sol og Jord som Årstiderne (`js/data/solbane.js` og kloden i `js/kosmos/aarstider.js`). Hvorfor der ikke er formørkelse hver måned (Månens bane hælder ca. 5°), hvorfor Månen præcis kan dække Solen, ringformørkelse, og hvorfor Månen bliver rød. Tal og datoer tjekkes, før de bruges.
 - **Tjernobyl i Reaktoren** (foreslået af jer): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i docs/erfaringer.md. En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
-- **Rækkefølge** (aftalt): Årstiderne og formørkelserne først (samme model), så Tjernobyl og til sidst Liv.
+- **Rækkefølge** (aftalt): Årstiderne (lavet i Trin 13) og formørkelserne først (samme model), så Tjernobyl og til sidst Liv.
 - **Ny del: Liv** (foreslået af jer): et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme (fx Miller-Urey-forsøget, byggesten, hinder, RNA). Vigtigt at sige ærligt, at ingen endnu har lavet liv fra bunden, og at det er uvist, hvordan det opstod. Med de nyeste fund på Mars (Perseverance, "leopardpletterne" i klippen Cheyava Falls). Besluttet: Forklar, hvad der er fundet, hvorfor det er så interessant, og hvorfor det er det bedste spor af liv på andre planeter indtil nu, men også ærligt, at det ikke er bevist. Teksten skal faktatjekkes grundigt. Molekyle-idéen ovenfor kan være første skridt.
 
 ## Før vi deler AtomLab med andre (tjekliste)

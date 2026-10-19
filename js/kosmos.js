@@ -12,6 +12,7 @@ import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavPause } from './pause.js';
 import bigbang from './kosmos/bigbang.js';
 import stjernefoedsel from './kosmos/stjernefoedsel.js';
+import aarstider from './kosmos/aarstider.js';
 import solstorm from './kosmos/solstorm.js';
 import solensfremtid from './kosmos/solensfremtid.js';
 import hviddvaerg from './kosmos/hviddvaerg.js';
@@ -25,7 +26,7 @@ import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
 
 // Rækkefølgen fortæller en historie: fra Big Bang og vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
-export const FÆNOMENER = [bigbang, stjernefoedsel, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
+export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
 const NØGLE_SET = 'atomlabKosmosSet'; // de fænomener, man har kigget på
@@ -115,6 +116,7 @@ function luk() {
   effekter.opdater(1e6); // alle effekter bliver færdige med det samme
   ryd(gruppe);
   $('kosmosOverlag').innerHTML = '';
+  $('kosmosToplag').innerHTML = '';
   valgt = null;
 }
 
@@ -134,6 +136,7 @@ function vælg(id) {
   $('kosmosForklaring').innerHTML = '';
   forklaringVist = '';
   $('kosmosOverlag').innerHTML = '';
+  $('kosmosToplag').innerHTML = '';
   kørende = f.lav(gruppe, {
     effekter,
     lyd,
@@ -149,6 +152,8 @@ function vælg(id) {
     },
     // Et sted oven på 3D-billedet, hvor fænomenet kan vise fx en graf
     overlag: () => $('kosmosOverlag'),
+    // Et sted øverst til venstre i 3D-billedet (fx en lille tabel)
+    toplag: () => $('kosmosToplag'),
   });
   for (const b of document.querySelectorAll('.kosmos-valg')) {
     b.classList.toggle('valgt', b.dataset.id === f.id);

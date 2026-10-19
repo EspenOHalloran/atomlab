@@ -170,4 +170,30 @@ export const ORDBOG = [
     former: ['mørk energi', 'mørke energi'],
     tekst: 'Navnet på det ukendte, der får universet til at udvide sig hurtigere og hurtigere. Ingen ved endnu, hvad det er.',
   },
+  {
+    id: 'jaevndoegn', ord: 'Jævndøgn',
+    former: ['jævndøgn', 'jævndøgnet', 'forårsjævndøgn', 'efterårsjævndøgn'],
+    tekst: 'De to dage om året (ca. 20. marts og 23. september), hvor Solen står lige over ækvator. Så er dag og nat næsten lige lange overalt på Jorden.',
+  },
+  {
+    id: 'solhverv', ord: 'Solhverv',
+    former: ['solhverv', 'solhvervet', 'sommersolhverv', 'vintersolhverv'],
+    tekst: 'De to dage om året, hvor Solen står længst mod nord (ca. 21. juni) eller længst mod syd (ca. 21. december). I Danmark er det årets længste og korteste dag.',
+  },
+  {
+    id: 'polarcirkel', ord: 'Polarcirkel',
+    former: ['polarcirkel', 'polarcirklen', 'polarcirklerne'],
+    // 90° minus Jordaksens hældning (23,44°) = 66,56°
+    tekst: 'En tænkt cirkel på Jorden ca. 66,6° nord (eller syd) for ækvator. Mellem den og polen er der mindst én dag om året, hvor Solen ikke går ned, og én, hvor den ikke står op.',
+  },
+  {
+    id: 'midnatssol', ord: 'Midnatssol',
+    former: ['midnatssol', 'midnatssolen'],
+    tekst: 'Når Solen ikke går ned om natten. Det sker om sommeren nord for polarcirklen, fx i Ilulissat i Grønland og i Nordnorge. I Antarktis sker det omkring december og januar, og på selve Sydpolen er Solen oppe i et halvt år.',
+  },
+  {
+    id: 'moerketid', ord: 'Mørketid',
+    former: ['mørketid', 'mørketiden'],
+    tekst: 'Når Solen slet ikke kommer over horisonten, hele døgnet. Det sker om vinteren nord for polarcirklen. Tæt på polarcirklen er der tusmørke midt på dagen, men tæt på polen er det mørkt i flere måneder.',
+  },
 ];

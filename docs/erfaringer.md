@@ -117,6 +117,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Røde dværge lever i billioner af år." Kun de mindste. En på en halv solmasse lever "kun" ca. 100 milliarder år.
 - "Type Ia-supernovaer lyser præcis lige stærkt." De varierer 2-3 gange og bliver først et standardlys efter en rettelse (de stærkeste falder langsomst).
 - "Grænsen på 1,4 sole gælder også jernkernen." Det er samme slags grænse, men jernkernen falder sammen ved ca. 1,2-2 sole.
+- "Årstiderne skyldes afstanden til Solen." Nej: Jorden er tættest på Solen omkring 3. januar. Det er aksens hældning, der giver årstiderne.
+- "I Grønland er der midnatssol og mørketid." Kun nord for polarcirklen (fx Ilulissat). Sydgrønland (Nuuk) har ingen af delene. Og lige ved polarcirklen kan man skimte Solen ved vintersolhverv, fordi luften bøjer lyset.
+- "Jorden drejer 365 gange om sig selv på et år." Der er ca. 365 døgn, men set mod stjernerne drejer Jorden ca. 366 gange.
 - "Brænder" om stjerner: Astronomer siger det, men det er fusion, ikke ild. Forklar det, eller skriv "smelter sammen".
 
 ---
@@ -143,6 +146,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Genskab fejlen, før den rettes.** Reaktorens tomme skærm blev genskabt med et skript (Kosmos → "For nørder" → Reaktoren), før den blev rettet. Testen for "Ryd og straks uran" bestod først også uden rettelsen. Først da den spolede i små skridt, fejlede den uden rettelsen (168 af 158) og bestod med den.
 - **Brugerens egne indtryk finder andet end testene og agenterne:** fagord uden forklaring, et tempo, der er for hurtigt, og tal uden enhed. Læs teksterne, som om du ikke kan fysik.
 - **Billeder i sekundet målt i testbrowseren** (software-tegning) kan bruges til at sammenligne før og efter. Fx tablet 3,9 → 6,7 og pc 5,1 → 5,5, da gløden blev halveret på tablets, og den virkningsløse kantudglatning blev fjernet. Kantudglatning i gløden (`samples: 4`) kostede ca. 40 % og gjorde testene langsommere, så den blev ikke slået til.
+- **Tal regnet i koden og tjekket mod to uafhængige kilder** (Årstiderne): Formlen for dagens længde blev sammenlignet med opslag af kendte værdier. Det afslørede, at NOAA's korte formel for et "gennemsnitsår" ramte forårsjævndøgn i 2026 ca. et døgn forkert (5 minutter i København). Nu regnes Solens plads for netop 2026, og testen `aarstider` tjekker mod kilderne. Også kilderne kan afvige: én side gav 17 t 37 min for den længste dag i København, timeanddate.com giver 17 t 32 min.
+- **Billige hjælpeagenter til opslag:** En Sonnet-agent med lav effort fandt kendte værdier med kilder og skrev ærligt "not found", hvor den ikke fandt noget. Faktatjekket af teksterne laver Opus.
 - **Trin for trin med "Næste"** (Big Bang og Solens fremtid i Kosmos): Man bestemmer selv tempoet, og hvert trin har én kort tekst. Trykker man "Næste" før tid, gøres trinnet færdigt med det samme (`gørFærdig`), så tallene i panelet altid passer.
 - **En historie i listen:** Kosmos-fænomenerne står i en rækkefølge, der fortæller en historie (Big Bang → stjerner fødes → Solen → døde stjerner → det mærkeligste), og det sidste trin peger videre til det næste fænomen.
 - **Fysik regnet i koden i stedet for skrevet fast:** Den hvide dværgs supernova regner nikkel-56 → cobalt-56 → jern-56 ud med de rigtige halveringstider (6,1 og 77,2 dage), og testen tjekker tallene efter 100 dage. Så kan teksten ikke komme ud af trit med grafen.
@@ -153,6 +158,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Smalle skærme giver en anden kameraafstand.** På en telefon på højkant står kameraet længere væk (`passerTil` regner ud fra hullet). Rejsen ind i Solen sluttede derfor uden for Solen. Afstande skal regnes ud fra `verden.målAfstand`, og telefon på højkant skal altid testes.
 - **Etiketter i 3D ved kanten af en kasse** kan få kassens kantlinje lige gennem teksten. Sæt dem foran kassen (større z) og under kanten, og tegn dem oven på alt (`depthTest = false`).
 - **Ting i 3D-vinduet, der overlapper.** Brug `bundIVindue()` til ting nederst (over underteksterne). Et lag oven på hele vinduet skal have z-index 1, ellers dækker det underteksterne (z-index 2). 3D-etiketter kan stikke op over overskriften (Batteriet på tablet).
+- **Det øverste lag i 3D-vinduet (`.vindue-top`) bliver skrevet om af beskeder.js** (pillerne og klokken). Egne elementer dér forsvinder. Kosmos har derfor sit eget lag øverst til venstre (`toplag()`, `#kosmosToplag`).
 - **Skærmbilleder af "hele siden"** (`fullPage`) viser kun det synlige, fordi panelerne ruller hver for sig. Rul elementet frem (`scrollIntoViewIfNeeded`), og tag billedet bagefter.
 - **Lange navne i et gitter** (Kosmos-listen med "Tyngdebølger" og "Solens fremtid") gjorde kolonnerne bredere end panelet, fordi `1fr` ikke kan blive smallere end det længste ord. Brug `minmax(0, 1fr)`, lad navnene bryde, og giv lange ord en blød bindestreg (`\u00ad`).
 
