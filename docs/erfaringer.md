@@ -29,6 +29,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Fagord forklares med få ord første gang, de bruges i en tekst (fx "en neutrino (en næsten usynlig partikel)", "en alfapartikel (en heliumkerne)"). Læs teksten, som om du ikke kan fysik.
 - [ ] Står der et tal fra spillet (fx "6-16"), så sig også, hvad det tæller ("spaltninger i sekundet i det grønne felt").
 - [ ] Nye fagord kommer i ordbogen (`js/data/ordbog.js`), så de kan trykkes på. Forklaringen er højst 260 tegn.
+- [ ] Undertekster (trin og faser): Pointen står i første sætning, og teksten er under ca. 160 tegn. På tablet og telefon ses kun to linjer, og man trykker sjældent på "Mere". Detaljer hører til i panelet eller "For nørder".
 
 ### C. Ny regel, beregning eller spillogik
 - [ ] Reglen er testet mod en tabel med kendte tilfælde, også de "kedelige" og grænsetilfældene, ikke kun et enkelt eksempel (fx alle kendte isotoper, ikke kun uran-238-kæden).
@@ -173,6 +174,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Skærmbilleder af "hele siden"** (`fullPage`) viser kun det synlige, fordi panelerne ruller hver for sig. Rul elementet frem (`scrollIntoViewIfNeeded`), og tag billedet bagefter.
 - **Noget, der "mangler" på et billede, kan bare være uden for synet.** Månens skygge på Jorden så ud til at mangle. Set fra Solens side var den der: Kameraet så pletten helt ude ved kanten af Jorden. Kig fra lysets retning, før shaderen fejlsøges, og vælg kameraet, så det vigtige er midt i billedet.
 - **Gennemsigtige flader skærer streger:** Jordens baneplan (en svag skive) lavede en skarp streg hen over Jorden i nærbilledet. Skyggekegler oven på kuglerne gav en takket kam. Skjul hjælpeflader tæt på, og gør kegler 1-2 % større end kuglen.
+- **Navne på en kugle** (fx stederne på Jorden) bliver skåret af ved kanten, fordi kuglen dækker dem. Tegn dem oven på (`depthTest = false`), og skjul dem, når stedet er på bagsiden.
+- **Retningen til noget uden for billedet** (Solen i Årstidernes nærbilleder, Månen på himmelkortet) skal vises, når pointen afhænger af den: stråler med pile og et skilt, eller en halv måne ude ved kanten.
 - **Lange navne i et gitter** (Kosmos-listen med "Tyngdebølger" og "Solens fremtid") gjorde kolonnerne bredere end panelet, fordi `1fr` ikke kan blive smallere end det længste ord. Brug `minmax(0, 1fr)`, lad navnene bryde, og giv lange ord en blød bindestreg (`\u00ad`).
 
 ### Faldgruber: tid, timere og tilstand

@@ -41,8 +41,8 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning |
 | `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk |
 | `kosmos-nye` | Big Bang (64/64 → 112/16 → 25 % helium), Ny stjerne (brun dværg, som Solen, kæmpestjerne), Solens fremtid og den hvide dværg (eksplosion og nikkel → cobalt → jern efter 100 dage) |
-| `aarstider` | Årstiderne: formlerne for dagens længde, Solens højde og Jordens afstand mod kendte værdier (København, Sydney, Singapore og Ilulissat), og fænomenet i browseren: trinene, tabellen, skyderen og telefon |
-| `formoerkelser` | Formørkelser: skyggens geometri med rigtige afstande (total ved 363.300 km, ring ved 405.500 km, Månen i Jordens skygge), og fænomenet i browseren: trinene, himlen set fra Jorden (koronaen og den røde Måne), skyderne og "Uden hældning" i "Prøv selv", og telefon |
+| `aarstider` | Årstiderne: formlerne for dagens længde, Solens højde og Jordens afstand mod kendte værdier (København, Sydney, Singapore og Ilulissat), og fænomenet i browseren: trinene, tabellen (også årstiden), at Jorden kører rundt i første trin, og at skyderen følger med, og telefon |
+| `formoerkelser` | Formørkelser: skyggens geometri med rigtige afstande (total ved 363.300 km, ring ved 405.500 km, Månen i Jordens skygge), og fænomenet i browseren: trinene, himlen set fra Jorden (koronaen, den røde Måne, Månen ude ved kanten og en delvis måneformørkelse), at Månen kredser den rigtige vej, at kameraet ikke hopper, skyderne, "formørkelsesperiode" og "Uden hældning" i "Prøv selv", og telefon |
 | `ordforklaring` | Ordbogen (hvert ord bruges, kort tekst, ingen dobbelte former) og ordforklaringerne med klik, Esc, mus, tastatur og fingre, ét mærke pr. tekst, aldrig i knapper og overskrifter, og nye tekster bliver markeret |
 | `beskeder`, `beskeder-2` | Beskedsystemet: undertekster, piller, loggen, etiketten i Stjerneovnen og nødstop |
 | `guide` | Kom i gang-guiderne, "Næste skridt" og "Vis mig" i Stjerneovnen og Reaktoren |

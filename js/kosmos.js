@@ -256,6 +256,12 @@ function lavStyring() {
         vis.textContent = s.vis ? s.vis(s.værdi) : s.værdi;
         s.ændring(s.værdi);
       });
+      // Fænomenet kan selv flytte skyderen (fx når Jorden kører rundt i Årstidernes første trin)
+      s.sæt = (v) => {
+        s.værdi = v;
+        input.value = v;
+        vis.textContent = s.vis ? s.vis(v) : v;
+      };
       boks.append(div);
       continue;
     }

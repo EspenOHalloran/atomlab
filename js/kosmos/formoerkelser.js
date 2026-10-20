@@ -30,27 +30,27 @@ const tal = (n) => n.toLocaleString('da-DK');
 const TRIN = [
   {
     titel: 'Sol, Jord og Måne', e: null, Ω: 60, afstand: 384400, skygger: 'begge', kamera: { retning: [0.35, 0.75, 1], radius: 8 },
-    tekst: 'Månen kredser om Jorden på ca. en måned. Den lyser ikke selv: Vi ser den side, Solen lyser på. Ved nymåne står Månen mellem Solen og Jorden, og ved fuldmåne står den på den anden side af Jorden.',
-  },
-  {
-    titel: 'Hvorfor ikke hver måned?', e: 0, Ω: 90, afstand: 384400, skygger: 'begge', kamera: { retning: [0, 0.12, 1], radius: 7 },
-    tekst: 'Månens bane hælder ca. 5° i forhold til Jordens bane om Solen (her tegnet større). Derfor går Månen som regel lidt over eller under Solen ved nymåne, og dens skygge rammer ved siden af Jorden.',
+    tekst: 'Månen kredser om Jorden på ca. en måned. Ved nymåne står den mellem Solen og Jorden, og ved fuldmåne står den på den anden side af Jorden.',
   },
   {
     titel: 'Solformørkelse', e: 0, Ω: 0, afstand: 363300, skygger: 'ingen', kamera: { retning: [-1, 0.3, 0.45], radius: 2.2 },
-    tekst: 'Nu er det nymåne, lige når Månen krydser Jordens baneplan. Månen dækker Solen, og dens skygge falder på Jorden. Kun i den lille kerneskygge er Solen helt dækket: en total solformørkelse. Rundt om, i halvskyggen, er den delvis.',
+    tekst: 'Ved nymåne kan Månen stå præcis foran Solen, så dens skygge falder på Jorden. I den lille kerneskygge er Solen helt dækket: en total solformørkelse.',
   },
   {
     titel: 'Ringformørkelse', e: 0, Ω: 0, afstand: 405500, skygger: 'ingen', kamera: { retning: [-1, 0.3, 0.45], radius: 2.2 },
-    tekst: 'Månens bane er lidt aflang. Når Månen er længst væk (ca. 405.000 km), ser den lidt mindre ud end Solen og kan ikke dække den helt. Så bliver der en ring af Solen tilbage: en ringformørkelse.',
+    tekst: 'Når Månen er længst væk, ser den lidt for lille ud til at dække Solen. Så bliver der en ring af Solen tilbage: en ringformørkelse.',
   },
   {
     titel: 'Måneformørkelse', e: 180, Ω: 0, afstand: 384400, skygger: 'jord', kamera: { retning: [0.15, 0.35, 1], radius: 4.2, mål: [3.4, 0, 0] },
-    tekst: 'Ved fuldmåne præcis på linjen går Månen ind i Jordens skygge. Den bliver ikke sort, men mørk kobberrød: Jordens luft bøjer lidt sollys ind i skyggen, og det røde lys kommer bedst igennem. Det er lyset fra alle Jordens solopgange og solnedgange.',
+    tekst: 'Ved fuldmåne kan Månen gå ind i Jordens skygge. Den bliver mørk kobberrød af lyset fra alle Jordens solopgange og solnedgange.',
+  },
+  {
+    titel: 'Hvorfor ikke hver måned?', e: 0, Ω: 90, afstand: 384400, skygger: 'begge', kamera: { retning: [0, 0.12, 1], radius: 7 },
+    tekst: 'Månens bane hælder ca. 5° (her tegnet større). Derfor går Månen som regel lidt over eller under Solen, og dens skygge rammer ved siden af Jorden.',
   },
   {
     titel: 'Prøv selv', e: null, Ω: null, afstand: null, skygger: 'begge', kamera: { retning: [0.35, 0.75, 1], radius: 8 },
-    tekst: 'Træk i skyderne. Formørkelser sker kun ved nymåne eller fuldmåne, når Månen samtidig er tæt på Jordens baneplan. Det sker omtrent hvert halve år. Prøv også uden hældning.',
+    tekst: 'Træk i skyderne. Formørkelser sker kun ved nymåne eller fuldmåne, når Månen samtidig er tæt på Jordens baneplan. Prøv også uden hældning.',
   },
 ];
 
@@ -135,6 +135,7 @@ export default {
     <p><b>Et heldigt tilfælde:</b> Solen er ca. 400 gange bredere end Månen, men den er også ca. 400 gange længere væk. Derfor ser de næsten lige store ud på himlen, ca. en halv grad.</p>
     <p><b>Total eller ring:</b> Månens afstand svinger mellem ca. 356.000 og 407.000 km. Er Månen tæt på, kan den dække hele Solen, og så kan man se koronaen, Solens tynde, lysende yderste lag. Er Månen langt væk, bliver der en ring tilbage. I gennemsnit er Månen en lille smule for lille til at dække Solen, så ringformørkelser er lidt mere almindelige end totale.</p>
     <p><b>Kerneskygge og halvskygge:</b> I Månens kerneskygge er hele Solen dækket, men kerneskyggen er højst et par hundrede kilometer bred på Jorden. I halvskyggen omkring, som er flere tusind kilometer bred, er Solen kun delvist dækket. En total solformørkelse varer højst ca. 7½ minut et sted.</p>
+    <p><b>Hvorfor rød?</b> Jordens luft bøjer lidt sollys ind i skyggen. På vejen gennem luften bliver det blå lys spredt væk (det er derfor, himlen er blå), og det røde kommer bedst igennem. Det er det samme røde lys, man ser ved solopgang og solnedgang.</p>
     <p><b>Hvor tit?</b> Hvert år er der mindst to solformørkelser et sted på Jorden. Men et bestemt sted går der i gennemsnit ca. 375 år mellem totale solformørkelser. Formørkelserne kommer i perioder ca. 173 dage fra hinanden, når Solen står i den retning, hvor Månens bane krydser Jordens baneplan.</p>
     <p><b>2026:</b> Den 12. august var der total solformørkelse fra det nordligste Rusland over Grønland og Island til Spanien og et lille hjørne af Portugal. I Danmark dækkede Månen ca. 80-88 % af Solen, mens den stod lavt om aftenen. Den 28. august var der en delvis måneformørkelse. Den næste totale måneformørkelse, man kan se fra Danmark, er den 31. december 2028. En total solformørkelse i Danmark kommer først i 2142, og kun på det østlige Bornholm.</p>
     <p><b>Månen fjerner sig</b> ca. 3,8 cm om året. Om ca. 600 millioner år er den så langt væk, at den ikke længere kan dække hele Solen. Så er der kun ringformørkelser.</p>
@@ -168,7 +169,18 @@ export default {
     const planSkilt = skilt('Jordens baneplan', '#8fb0ff', 0.45);
     planSkilt.position.set(4.2, -0.3, 5.6);
     const baneSkilt = skilt('Månens bane', '#dfe6f7', 0.45);
-    gruppe.add(plan, bane, planSkilt, baneSkilt);
+    const nySkilt = skilt('nymåne', '#dfe6f7', 0.4);
+    const fuldSkilt = skilt('fuldmåne', '#dfe6f7', 0.4);
+    gruppe.add(plan, bane, planSkilt, baneSkilt, nySkilt, fuldSkilt);
+
+    // Tæt på ved en solformørkelse: en ring om kerneskyggen (den er kun en lille plet) og et skilt
+    const skyggeFarve = '#ffe08a';
+    const skyggeRing = new THREE.Mesh(new THREE.RingGeometry(0.075, 0.1, 40), new THREE.MeshBasicMaterial({ color: skyggeFarve, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }));
+    const skyggeSkilt = skilt('Månens skygge', skyggeFarve, 0.3);
+    skyggeSkilt.material.depthTest = false;
+    skyggeSkilt.renderOrder = 2;
+    gruppe.add(skyggeRing, skyggeSkilt);
+    const udad = new THREE.Vector3();
 
     // Skyggerne: Jordens kerneskygge (et stykke af den) og Månens kerneskygge (en kegle)
     const skyggeMat = new THREE.MeshBasicMaterial({ color: 0x8796bd, transparent: true, opacity: 0.13, side: THREE.DoubleSide, depthWrite: false });
@@ -247,22 +259,33 @@ export default {
         g.arc(B / 2, H / 2, 52, 0, Math.PI * 2);
         g.fill();
         const mx = B / 2 + dx * k, my = H / 2 - dy * k;
-        if (f.himmel.foran && Math.hypot(mx - B / 2, my - H / 2) < 200) {
+        const væk = Math.hypot(mx - B / 2, my - H / 2);
+        if (f.himmel.foran && væk < 200) {
           g.fillStyle = '#16181f';
           g.beginPath();
           g.arc(mx, my, f.himmel.kugle * k, 0, Math.PI * 2);
           g.fill();
+        } else if (Math.abs(((e + 180) % 360) - 180) < 30 && væk > 0) {
+          // Månen går over eller under Solen: Den er uden for billedet, så den vises halvt ude ved kanten med sit navn
+          const ux = (mx - B / 2) / væk, uy = (my - H / 2) / væk;
+          g.fillStyle = 'rgba(22, 24, 31, 0.92)';
+          g.beginPath();
+          g.arc(B / 2 + ux * 150, H / 2 + uy * 150, f.himmel.kugle * k, 0, Math.PI * 2);
+          g.fill();
+          g.font = 'bold 30px system-ui, sans-serif';
+          g.textAlign = 'center';
+          g.textBaseline = 'middle';
+          g.fillStyle = '#e8eeff';
+          g.fillText('Månen', B / 2 + ux * 98, H / 2 + uy * 98);
         }
       } else {
         // Månen set fra Jorden om natten: fasen og evt. Jordens skygge
         g.fillStyle = '#0b1024';
         g.fillRect(0, 0, B, H);
         const r = 80;
-        // Farven: kobberrød helt inde i Jordens kerneskygge, mørkere i halvskyggen
-        const mørk = Math.min(1, f.måneSkygge);
-        const base = f.måneType === 'total' ? 'rgb(150, 58, 32)'
-          : f.måneType === 'delvis' ? 'rgb(140, 92, 72)'
-            : `rgb(${Math.round(228 - 110 * mørk)}, ${Math.round(228 - 110 * mørk)}, ${Math.round(218 - 110 * mørk)})`;
+        // Lidt mørkere i Jordens halvskygge. Kerneskyggen tegnes ovenpå bagefter.
+        const mørk = f.måneType === 'halvskygge' ? Math.min(1, f.måneSkygge) : 0;
+        const base = `rgb(${Math.round(228 - 110 * mørk)}, ${Math.round(228 - 110 * mørk)}, ${Math.round(218 - 110 * mørk)})`;
         g.fillStyle = '#20232c';
         g.beginPath();
         g.arc(B / 2, H / 2, r, 0, Math.PI * 2);
@@ -277,6 +300,27 @@ export default {
         g.arc(B / 2, H / 2, r, -Math.PI / 2, Math.PI / 2, !lysHøjre);
         g.ellipse(B / 2, H / 2, Math.abs(2 * k - 1) * r, r, 0, Math.PI / 2, gennemVenstre ? Math.PI * 1.5 : -Math.PI / 2, !gennemVenstre);
         g.fill();
+        // Jordens kerneskygge som en kobberrød cirkel oven på Månen (ved en delvis eller total måneformørkelse).
+        // Skyggens midterlinje går fra Solen gennem Jorden (mod +x), og den bliver smallere væk fra Jorden.
+        if (f.måneType === 'total' || f.måneType === 'delvis') {
+          const s = m.x;
+          const ud = new THREE.Vector3(0, m.y, m.z); // Månens afstand fra skyggens midterlinje
+          const rSkygge = JORD_R - (s * (SOL_R - JORD_R)) / SOL_POS.length();
+          const px = r / MÅNE_R;
+          // Set fra Jorden mod Månen, med nord op
+          const frem = m.clone().normalize();
+          const højreM = new THREE.Vector3().crossVectors(frem, opad).normalize();
+          const opM = new THREE.Vector3().crossVectors(højreM, frem);
+          g.save();
+          g.beginPath();
+          g.arc(B / 2, H / 2, r, 0, Math.PI * 2);
+          g.clip();
+          g.fillStyle = 'rgb(150, 58, 32)';
+          g.beginPath();
+          g.arc(B / 2 - ud.dot(højreM) * px, H / 2 + ud.dot(opM) * px, rSkygge * px, 0, Math.PI * 2);
+          g.fill();
+          g.restore();
+        }
       }
       himmelTekst.textContent = nær ? 'Solen set fra Jorden' : 'Månen set fra Jorden';
     }
@@ -296,16 +340,28 @@ export default {
         for (let i = 0; i <= 128; i++) månePlads((i / 128) * 360, Ω, uden ? 0 : HÆLDNING_VIST, enheder(afstand), banePunkter[i]).toArray(p, i * 3);
         bane.geometry.attributes.position.needsUpdate = true;
         månePlads(90, Ω, uden ? 0 : HÆLDNING_VIST, enheder(afstand) + 0.9, baneSkilt.position);
+        månePlads(0, Ω, uden ? 0 : HÆLDNING_VIST, enheder(afstand) + 0.9, nySkilt.position);
+        månePlads(180, Ω, uden ? 0 : HÆLDNING_VIST, enheder(afstand) + 0.9, fuldSkilt.position);
         // Ved vintersolhverv (dag 355) hælder Nordpolen væk fra Solen (mod +x)
         const dag = trin === TRIN.length - 1 ? dagIÅr : dagFor(Ω);
         jorden.klode.rotation.y = (-(dag - 355) / 365.25) * Math.PI * 2;
       }
       // Panelet og himlen (kun når noget har ændret sig, højst for hver hele grad, Månen flytter sig)
       const f = formørkelse(m);
-      const nøgle = `${e.toFixed(0)}|${Ω.toFixed(1)}|${afstand}|${uden}`;
+      const nøgle = `${e.toFixed(0)}|${Ω.toFixed(1)}|${afstand}|${uden}|${trin}`;
       if (nøgle === sidst) return;
       sidst = nøgle;
       tegnHimmel(f);
+      // Tæt på ved en solformørkelse: en ring om kerneskyggen og et skilt
+      const visSkygge = TRIN[trin].skygger === 'ingen' && f.solType !== null;
+      skyggeRing.visible = visSkygge;
+      skyggeSkilt.visible = visSkygge;
+      if (visSkygge) {
+        udad.copy(f.P).normalize();
+        skyggeRing.position.copy(udad).multiplyScalar(JORD_R * 1.004);
+        skyggeRing.lookAt(udad.x * 2, udad.y * 2, udad.z * 2);
+        skyggeSkilt.position.copy(udad).multiplyScalar(JORD_R * 1.12).add(opad.clone().multiplyScalar(0.26));
+      }
       let hvad;
       if (f.solType === 'total') hvad = 'Månen dækker hele Solen: <b>total solformørkelse</b>';
       else if (f.solType === 'ring') hvad = `Månen ser for lille ud til at dække hele Solen (${Math.round(f.sol * 100)} % dækket): <b>ringformørkelse</b>`;
@@ -340,7 +396,7 @@ export default {
       }
       uden = false;
       const nær = !!t.kamera.mål || t.kamera.radius < 3;
-      for (const o of [stråler, plan, planSkilt, baneSkilt]) o.visible = !nær; // skiven ville skære en streg hen over Jorden
+      for (const o of [stråler, plan, planSkilt, baneSkilt, nySkilt, fuldSkilt]) o.visible = !nær; // skiven ville skære en streg hen over Jorden
       lysSkilt.visible = t.kamera.radius >= 8; // kun i oversigten (ellers står det bag panelet)
       // Tæt på viser kuglerne selv skyggen. Keglerne ville dække den.
       jordSkygge.visible = t.skygger !== 'ingen';
@@ -350,6 +406,16 @@ export default {
       opdaterAlt();
     }
 
+    // Er der en formørkelse ved nymåne eller fuldmåne på den dag (med Månens hældning og den valgte afstand)?
+    const prøve = new THREE.Vector3();
+    function iPeriode(dag) {
+      for (const vinkel of [0, 180]) {
+        const f = formørkelse(månePlads(vinkel, Ωfor(dag), HÆLDNING_VIST, enheder(afstand), prøve));
+        if (f.solType || f.måneType === 'total' || f.måneType === 'delvis') return true;
+      }
+      return false;
+    }
+
     function opdaterStyring() {
       const prøv = trin === TRIN.length - 1;
       næsteKnap.tekst = trin < TRIN.length - 1 ? `Næste: ${TRIN[trin + 1].titel.toLowerCase()} ›` : 'Næste ›';
@@ -357,7 +423,7 @@ export default {
       if (prøv) {
         ekstra.push(
           { skyder: true, navn: 'Månens fase', min: 0, max: 29.5, trin: 0.5, værdi: Math.round(((e / 360) * SYNODISK) * 2) / 2, vis: (v) => `dag ${tal(v)} · ${faseNavn((v / SYNODISK) * 360)}`, ændring: (v) => { e = (v / SYNODISK) * 360; opdaterAlt(); } },
-          { skyder: true, navn: 'Tid på året', min: 1, max: 365, trin: 1, værdi: dagIÅr, vis: (v) => MÅNEDER[måned(v)], ændring: (v) => { dagIÅr = v; Ω = Ωfor(v); opdaterAlt(); } },
+          { skyder: true, navn: 'Tid på året', min: 1, max: 365, trin: 1, værdi: dagIÅr, vis: (v) => MÅNEDER[måned(v)] + (iPeriode(v) ? ' · formørkelsesperiode' : ''), ændring: (v) => { dagIÅr = v; Ω = Ωfor(v); opdaterAlt(); } },
           { skyder: true, navn: 'Månens afstand', min: 356000, max: 407000, trin: 100, værdi: afstand, vis: (v) => `${tal(v)} km`, ændring: (v) => { afstand = v; opdaterAlt(); } },
           { tekst: 'Uden hældning', til: uden, skift: (t) => { uden = t; opdaterAlt(); } },
         );

@@ -58,6 +58,12 @@ const næste = () => T(() => { const k = atomlabTest.kosmos; k.tryk(0); k.spol(2
 
 tjek('fænomenet står efter "Ny stjerne"', (await T(() => atomlabTest.kosmos.fænomener)).join(',').includes('stjernefoedsel,aarstider'));
 tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.querySelectorAll('#kosmosToplag tr').length)) === 5, await kort());
+// Første trin: Jorden kører rundt om Solen, og datoen på skyderen følger med tabellen
+const datoFør = (await kort()).split(' · ')[0];
+await T(() => atomlabTest.kosmos.spol(3));
+const datoEfter = (await kort()).split(' · ')[0];
+const skyderDato = await T(() => document.querySelector('#kosmosStyring .skyder-boks strong').textContent);
+tjek(`første trin: Jorden kører rundt (${datoFør} → ${datoEfter}), og skyderen følger med`, datoFør !== datoEfter && datoEfter.trim() === skyderDato.trim(), skyderDato);
 await næste();
 tjek('trin 2: forår i nord', (await undertekst()).includes('Forår i nord'), await undertekst());
 tjek('forår: 20. marts og ca. 12 timer i Danmark', (await kort()).includes('20. marts') && (await række('Danmark')).includes('12 t 11 min'), await række('Danmark'));
@@ -66,6 +72,8 @@ await næste();
 tjek('sommer: Danmark 17 t 32 min', (await række('Danmark')).includes('17 t 32 min'), await række('Danmark'));
 tjek('sommer: midnatssol i Nordgrønland', (await række('Nordgrønland')).includes('midnatssol'), await række('Nordgrønland'));
 tjek('sommer: kort dag i Australien', (await række('Australien')).includes('9 t 54 min'), await række('Australien'));
+tjek('tabellen viser årstiden: sommer i Danmark, vinter i Australien, varmt hele året ved ækvator',
+  (await række('Danmark')).includes('sommer') && (await række('Australien')).includes('vinter') && (await række('Ækvator')).includes('varmt hele året'), await kort());
 tjek('panelet siger vinter i Australien', (await page.textContent('#kosmosForklaring')).includes('Australien (Sydney) · vinter'));
 await page.waitForTimeout(400);
 await page.screenshot({ path: `${UD}/1-sommer.png` });

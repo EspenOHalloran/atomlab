@@ -77,9 +77,7 @@ const omløb = await T(async () => {
 tjek('Månen kredser den rigtige vej (mod uret set fra nord)', omløb > 0, omløb);
 tjek('himlen set fra Jorden står i 3D-billedet', await T(() => Boolean(document.querySelector('#kosmosToplag .himmel-kort canvas'))));
 await næste();
-tjek('trin 2: ingen formørkelse, Månen går over eller under', (await hvad()) === 'ingen' && (await panel()).includes('over eller under'), await panel());
-await næste();
-tjek('trin 3: total solformørkelse', (await hvad()) === 'total' && (await panel()).includes('total solformørkelse'), await panel());
+tjek('trin 2: total solformørkelse', (await hvad()) === 'total' && (await panel()).includes('total solformørkelse'), await panel());
 tjek('himlen viser Solen og skriver resultatet', (await himmelTekst()) === 'Solen set fra Jorden' && (await himmelHvad()) === 'Total solformørkelse!', await himmelHvad());
 const midt = await farve(150, 150), korona = await farve(150, 90);
 tjek('Månen dækker Solen (mørk midte) og koronaen lyser omkring', Math.max(...midt) < 50 && Math.min(...korona) > 120, `${midt} ${korona}`);
@@ -93,13 +91,17 @@ const lige = await kameraAfstand();
 tjek(`kameraet hopper ikke ved "Næste" (${før.toFixed(1)} → ${lige.toFixed(1)})`, Math.abs(lige - før) < 0.2 * før, `${før} ${lige}`);
 await T(() => atomlabTest.kosmos.spol(2));
 const ring = (await panel()).match(/(\d+) % dækket/)?.[1];
-tjek(`trin 4: ringformørkelse (${ring} % dækket)`, (await hvad()) === 'ring' && ring >= 80 && ring <= 95 && (await himmelHvad()) === 'Ringformørkelse!', await panel());
+tjek(`trin 3: ringformørkelse (${ring} % dækket)`, (await hvad()) === 'ring' && ring >= 80 && ring <= 95 && (await himmelHvad()) === 'Ringformørkelse!', await panel());
 await næste();
-tjek('trin 5: total måneformørkelse', (await hvad()) === 'total' && (await panel()).includes('total måneformørkelse'), await panel());
+tjek('trin 4: total måneformørkelse', (await hvad()) === 'total' && (await panel()).includes('total måneformørkelse'), await panel());
 tjek('himlen viser Månen og skriver resultatet', (await himmelTekst()) === 'Månen set fra Jorden' && (await himmelHvad()) === 'Total måneformørkelse!', await himmelHvad());
 const rød = await farve(150, 150);
 tjek('Månen er kobberrød', rød[0] > 110 && rød[0] > 2 * rød[1] && rød[0] > 2 * rød[2], rød);
 await page.screenshot({ path: `${UD}/2-maaneformoerkelse.png` });
+await næste();
+tjek('trin 5: hvorfor ikke hver måned? Ingen formørkelse, Månen går over eller under', (await hvad()) === 'ingen' && (await panel()).includes('over eller under'), await panel());
+const kant = await farve(150, 18);
+tjek('himlen viser Månen ude ved kanten over Solen', Math.max(...kant) < 70, kant);
 await næste();
 tjek('sidste trin: Prøv selv, og "Næste" er slået fra', (await undertekst()).includes('Prøv selv') && (await T(() => document.querySelector('#kosmosStyring button').disabled)));
 tjek('tre skydere og knappen "Uden hældning"', (await T(() => document.querySelectorAll('#kosmosStyring input[type=range]').length)) === 3 && (await page.isVisible('#kosmosStyring button:has-text("Uden hældning")')));
@@ -119,11 +121,45 @@ tjek('uden hældning og fuldmåne: total måneformørkelse', (await hvad()) === 
 await page.click('#kosmosStyring button:has-text("Uden hældning")');
 await T(() => atomlabTest.kosmos.spol(0.5));
 tjek('med hældning igen: ingen formørkelse i april', (await hvad()) === 'ingen', await panel());
-// I formørkelsesperioden (sidst i februar) sker det også med hældning
+// I formørkelsesperioden (sidst i februar) sker det også med hældning, og skyderen siger det
+const tidTekst = () => T(() => document.querySelectorAll('#kosmosStyring .skyder-boks strong')[1].textContent);
+tjek('april er ikke en formørkelsesperiode', !(await tidTekst()).includes('formørkelsesperiode'), await tidTekst());
 await skyder(1, 55);
 await skyder(0, 0);
 tjek('nymåne sidst i februar: solformørkelse', (await hvad()) === 'total', await panel());
+tjek('skyderen siger "formørkelsesperiode" sidst i februar', (await tidTekst()).includes('formørkelsesperiode'), await tidTekst());
 await page.screenshot({ path: `${UD}/3-proev-selv.png` });
+// Delvis måneformørkelse: Find en dag, hvor fuldmånen kun delvis går ind i Jordens kerneskygge.
+// Så er en del af Månen kobberrød og resten grå på himlen.
+const delvisDag = await T(() => {
+  const [fase, tid] = document.querySelectorAll('#kosmosStyring input[type=range]');
+  fase.value = 14.75;
+  fase.dispatchEvent(new Event('input'));
+  for (let d = 56; d < 120; d++) {
+    tid.value = d;
+    tid.dispatchEvent(new Event('input'));
+    if (document.querySelector('#kosmosForklaring [data-formoerkelse]').dataset.formoerkelse === 'delvis') return d;
+  }
+  return null;
+});
+const måneFarver = await T(() => {
+  const kopi = document.createElement('canvas');
+  kopi.width = kopi.height = 300;
+  const g = kopi.getContext('2d');
+  g.drawImage(document.querySelector('#kosmosToplag canvas'), 0, 0);
+  const data = g.getImageData(0, 0, 300, 300).data; // læses én gang
+  let rød = 0, grå = 0;
+  for (let y = 75; y <= 225; y += 3) {
+    for (let x = 75; x <= 225; x += 3) {
+      const i = (y * 300 + x) * 4;
+      const [r, gr, b] = [data[i], data[i + 1], data[i + 2]];
+      if (r > 100 && r > 2 * gr) rød++;
+      else if (r > 150 && Math.abs(r - gr) < 20 && Math.abs(r - b) < 25) grå++;
+    }
+  }
+  return { rød, grå };
+});
+tjek(`delvis måneformørkelse (dag ${delvisDag}): Månen er delvis kobberrød og delvis grå`, delvisDag && måneFarver.rød > 20 && måneFarver.grå > 20, JSON.stringify(måneFarver));
 await page.click('#kosmosStyring button:has-text("Forfra")');
 tjek('Forfra går tilbage til første trin', (await undertekst()).includes('Sol, Jord og Måne'), await undertekst());
 tjek('skyderne forsvinder med Forfra', (await T(() => document.querySelectorAll('#kosmosStyring input[type=range]').length)) === 0);

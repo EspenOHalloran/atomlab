@@ -13,19 +13,20 @@ const JORD_R = 1.8;
 const RAD = Math.PI / 180;
 const OMDREJNING = 9; // sekunder for én omdrejning af Jorden i animationen
 
-// De fire steder i panelet: navn, by, bredde og længde i grader (nord og øst er positive) og farve
+// De fire steder i panelet: navn, by, bredde og længde i grader (nord og øst er positive) og farve.
+// skub = [øst, nord]: navnet flyttes lidt, så Danmark, Nordgrønland og N ikke står oven i hinanden.
 const STEDER = [
-  { navn: 'Danmark', by: 'København', bredde: 55.68, længde: 12.57, farve: '#ffd166' },
-  { navn: 'Australien', by: 'Sydney', bredde: -33.87, længde: 151.21, farve: '#7ee0ff' },
-  { navn: 'Ækvator', by: 'Singapore', bredde: 1.35, længde: 103.82, farve: '#9dff9d' },
-  { navn: 'Nordgrønland', by: 'Ilulissat', bredde: 69.22, længde: -51.1, farve: '#ff9de2' },
+  { navn: 'Danmark', by: 'København', bredde: 55.68, længde: 12.57, farve: '#ffd166', skub: [0.55, -0.2] },
+  { navn: 'Australien', by: 'Sydney', bredde: -33.87, længde: 151.21, farve: '#7ee0ff', skub: [0, 0] },
+  { navn: 'Ækvator', by: 'Singapore', bredde: 1.35, længde: 103.82, farve: '#9dff9d', skub: [0, 0] },
+  { navn: 'Nordgrønland', by: 'Ilulissat', bredde: 69.22, længde: -51.1, farve: '#ff9de2', skub: [-0.6, 0.05] },
 ];
 
 // Årstiden et sted (som DMI regner dem: vinter er december-februar, forår marts-maj osv.)
 const NORD = ['vinter', 'vinter', 'forår', 'forår', 'forår', 'sommer', 'sommer', 'sommer', 'efterår', 'efterår', 'efterår', 'vinter'];
 const SYD = ['sommer', 'sommer', 'efterår', 'efterår', 'efterår', 'vinter', 'vinter', 'vinter', 'forår', 'forår', 'forår', 'sommer'];
-function årstid(sted, n) {
-  if (Math.abs(sted.bredde) < 10) return 'ingen sommer og vinter';
+function årstid(sted, n, kort = false) {
+  if (Math.abs(sted.bredde) < 10) return kort ? 'varmt hele året' : 'ingen sommer og vinter';
   return (sted.bredde > 0 ? NORD : SYD)[måned(n)];
 }
 
@@ -33,27 +34,27 @@ function årstid(sted, n) {
 const TRIN = [
   {
     titel: 'Jorden og Solen', dag: null, tæt: false,
-    tekst: 'Jorden kredser om Solen på et år og drejer om sig selv én gang i døgnet. Aksen, den drejer om, hælder ca. 23,4°, og den peger hele tiden samme vej ud i rummet, mod Nordstjernen. Det giver årstiderne.',
+    tekst: 'Jorden kredser om Solen på et år. Aksen hælder ca. 23,4° og peger hele tiden samme vej ud i rummet. Det giver årstiderne.',
   },
   {
     titel: 'Forår i nord', dag: dagIÅret(3, 20), tæt: true, retning: [1, 0.35, 0],
-    tekst: 'Forårsjævndøgn: Ingen af polerne hælder mod Solen, så Solen står lige over ækvator. Grænsen mellem dag og nat går gennem begge poler, og dag og nat er ca. 12 timer overalt på Jorden.',
+    tekst: 'Ingen af polerne hælder mod Solen, så grænsen mellem dag og nat går gennem begge poler. Dag og nat er ca. 12 timer overalt: forårsjævndøgn.',
   },
   {
     titel: 'Sommer i nord', dag: dagIÅret(6, 21), tæt: true, retning: [0, 0.3, 1],
-    tekst: 'Nordpolen hælder mod Solen. I Danmark står Solen højt, og dagen er ca. 17½ time. I Ilulissat i Nordgrønland går Solen slet ikke ned: midnatssol. Samtidig hælder den sydlige halvdel væk fra Solen, så i Australien er det vinter.',
+    tekst: 'Nordpolen hælder mod Solen: sommer i nord og vinter i Australien. Solen står højt, så lyset rammer mere lige ned og varmer mere. Og dagene er lange.',
   },
   {
     titel: 'Efterår i nord', dag: dagIÅret(9, 23), tæt: true, retning: [1, 0.35, 0],
-    tekst: 'Efterårsjævndøgn: Aksen peger stadig samme vej ud i rummet, men nu er Jorden på den anden side af Solen. Igen hælder ingen af polerne mod Solen, og dag og nat er ca. lige lange overalt.',
+    tekst: 'Aksen peger stadig samme vej, men Jorden er nu på den anden side af Solen. Igen hælder ingen af polerne mod Solen: efterårsjævndøgn.',
   },
   {
     titel: 'Vinter i nord', dag: dagIÅret(12, 21), tæt: true, retning: [0, 0.3, 1],
-    tekst: 'Nordpolen hælder væk fra Solen. I Danmark er dagen kun ca. 7 timer, og i Ilulissat i Nordgrønland står Solen slet ikke op: mørketid. I Australien er det sommer. Og Jorden er faktisk tættest på Solen i starten af januar!',
+    tekst: 'Nordpolen hælder væk fra Solen: vinter i nord og sommer i Australien. Men Jorden er tættest på Solen i januar. Så det er ikke afstanden, der giver årstiderne.',
   },
   {
     titel: 'Prøv selv', dag: null, tæt: false,
-    tekst: 'Vælg selv datoen med skyderen, og følg dagens længde i panelet. Jo længere fra ækvator, jo større er forskellen mellem sommer og vinter.',
+    tekst: 'Vælg selv datoen med skyderen. Jo længere fra ækvator, jo større er forskellen mellem sommer og vinter.',
   },
 ];
 
@@ -91,7 +92,7 @@ export default {
     <p><b>Lidt over 12 timer ved ækvator:</b> I Singapore er dagen mellem ca. 12 t 03 min og 12 t 12 min hele året. Den er lidt over 12 timer, fordi luften bøjer sollyset, så man kan se Solen et par minutter, før den egentlig er over horisonten, og et par minutter efter den er gået ned. Og dagen regnes fra Solens øverste kant.</p>
     <p><b>Ærligt talt:</b> Solen og Jorden er tegnet alt for store i forhold til banen. Solen er ca. 109 gange bredere end Jorden, og afstanden mellem dem er ca. 11.700 gange Jordens bredde. I virkeligheden går der ca. 365 døgn, mens Jorden kommer én tur rundt om Solen. Tallene i panelet er regnet ud for de rigtige steder med den rigtige hældning, fra solopgang til solnedgang.</p>`,
 
-  lav(gruppe, { fase, kamera, opdaterKnapper, forklaring, toplag }) {
+  lav(gruppe, { fase, kamera, opdaterKnapper, forklaring, toplag, verden }) {
     // ---------- Solen ----------
     const sol = stjerne(2, '#fff1b8', '#ff8a20', new THREE.Color(2.2, 1.6, 0.7), 2.6, { styrke: 1.5 });
     gruppe.add(sol);
@@ -120,17 +121,52 @@ export default {
       new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 }),
     );
     const nord = skilt('N', '#ffffff', 0.5);
-    nord.position.set(0, JORD_R * 1.5 + 0.3, 0);
+    nord.position.set(0, JORD_R * 1.5 + 0.45, 0);
     hældning.add(akse, nord, breddeCirkel(0, 0xffffff, 0.35), breddeCirkel(66.56, 0x9fd3ff, 0.45), breddeCirkel(-66.56, 0x9fd3ff, 0.45));
 
-    // De fire steder: en lysende prik og et navn, som drejer med Jorden
+    // De fire steder: en lysende prik og et navn, som drejer med Jorden. Navnene tegnes oven på kloden (så de ikke
+    // bliver skåret af ved kanten), men skjules, når stedet er på bagsiden.
+    const navne = [];
     for (const s of STEDER) {
       const prik = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(s.farve).multiplyScalar(1.6) }));
       prik.position.copy(overflade(s.bredde, s.længde, JORD_R * 1.01));
       const navn = skilt(s.navn, s.farve, 0.42);
-      navn.position.copy(overflade(s.bredde, s.længde, JORD_R * 1.28));
+      const b = s.bredde * RAD, l = s.længde * RAD;
+      const øst = new THREE.Vector3(-Math.sin(l), 0, -Math.cos(l));
+      const nordpå = new THREE.Vector3(-Math.sin(b) * Math.cos(l), Math.cos(b), Math.sin(b) * Math.sin(l));
+      navn.position.copy(overflade(s.bredde, s.længde, JORD_R * 1.24)).addScaledVector(øst, s.skub[0]).addScaledVector(nordpå, s.skub[1]);
+      navn.material.depthTest = false;
+      navn.renderOrder = 2;
       omdrejning.add(prik, navn);
+      navne.push({ prik, navn });
     }
+
+    // ---------- Sollyset tæt på Jorden: stråler fra Solen hen mod Jorden, så man kan se, hvor Solen er ----------
+    // (I gruppen peger +x fra Solen mod Jorden. Gruppen følger Jorden og drejes hvert billede.)
+    const solLys = new THREE.Group();
+    const strålePunkter = [];
+    const pile = [];
+    for (const y of [-1.1, 0, 1.1]) {
+      for (const z of [-1.1, 0, 1.1]) {
+        strålePunkter.push(new THREE.Vector3(-4.8 * JORD_R, y * JORD_R, z * JORD_R), new THREE.Vector3(-1.9 * JORD_R, y * JORD_R, z * JORD_R));
+        pile.push([-1.9 * JORD_R, y * JORD_R, z * JORD_R]);
+      }
+    }
+    const lysFarve = 0xffd27a;
+    solLys.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(strålePunkter), new THREE.LineBasicMaterial({ color: lysFarve, transparent: true, opacity: 0.45, depthWrite: false })));
+    const pilGeo = new THREE.ConeGeometry(0.09, 0.3, 10).rotateZ(-Math.PI / 2); // spidsen peger mod +x (mod Jorden)
+    const pilMat = new THREE.MeshBasicMaterial({ color: lysFarve, transparent: true, opacity: 0.7, depthWrite: false });
+    for (const [x, y, z] of pile) {
+      const pil = new THREE.Mesh(pilGeo, pilMat);
+      pil.position.set(x, y, z);
+      solLys.add(pil);
+    }
+    const lysSkilt = skilt('Lys fra Solen', '#ffd27a', 0.5);
+    lysSkilt.position.set(-2.3 * JORD_R, 1.45 * JORD_R, 0);
+    solLys.add(lysSkilt);
+    solLys.visible = false;
+    gruppe.add(solLys);
+    const xAkse = new THREE.Vector3(1, 0, 0);
 
     // ---------- Tilstand ----------
     const idagNr = dagIDag();
@@ -146,27 +182,29 @@ export default {
     toplag().append(tabel);
 
     function panel() {
+      const d = ((Math.round(dag) - 1 + 365) % 365) + 1; // dag kan være et kommatal, mens Jorden kører rundt i første trin
       // Det lille kort øverst i 3D-billedet
       const rækker = STEDER.map((s) => {
-        const timer = dagslængde(s.bredde, dag);
-        const h = middagshøjde(s.bredde, dag);
+        const timer = dagslængde(s.bredde, d);
+        const h = middagshøjde(s.bredde, d);
         const dagTekst = timer >= 24 ? 'midnatssol' : timer <= 0 ? 'mørketid' : timerTekst(timer);
-        return `<tr><td><span class="farveprik" style="background:${s.farve}"></span>${s.navn}</td><td>${dagTekst}</td><td>${h > 0 ? `${Math.round(h)}°` : 'under horisonten'}</td></tr>`;
+        return `<tr><td><span class="farveprik" style="background:${s.farve}"></span>${s.navn}</td><td>${årstid(s, d, true)}</td><td>${dagTekst}</td><td>${h > 0 ? `${Math.round(h)}°` : 'under horisonten'}</td></tr>`;
       }).join('');
-      tabel.innerHTML = `<b>${datoTekst(dag)}</b> · ${afstand(dag).toFixed(1).replace('.', ',')} mio. km fra Solen<table><tr><th></th><th>Dagens længde</th><th>Sol ved middag</th></tr>${rækker}</table>`;
+      tabel.innerHTML = `<b>${datoTekst(d)}</b> · ${afstand(d).toFixed(1).replace('.', ',')} mio. km fra Solen<table><tr><th></th><th>Årstid</th><th>Dagens længde</th><th>Sol ved middag</th></tr>${rækker}</table>`;
 
       const linjer = STEDER.map((s) => {
-        const timer = dagslængde(s.bredde, dag);
-        const h = middagshøjde(s.bredde, dag);
+        const timer = dagslængde(s.bredde, d);
+        const h = middagshøjde(s.bredde, d);
         const dagTekst = timer >= 24 ? 'Midnatssol: Solen går ikke ned' : timer <= 0 ? 'Mørketid: Solen står ikke op' : `Dagens længde: ${timerTekst(timer)} · Solen ved middag: ${Math.round(h)}° oppe`;
-        return `<li data-sted="${s.navn}"><span class="farveprik" style="background:${s.farve}"></span><span><b>${s.navn}</b> (${s.by}) · ${årstid(s, dag)}<br><span class="sted-tal">${dagTekst}</span></span></li>`;
+        return `<li data-sted="${s.navn}"><span class="farveprik" style="background:${s.farve}"></span><span><b>${s.navn}</b> (${s.by}) · ${årstid(s, d)}<br><span class="sted-tal">${dagTekst}</span></span></li>`;
       }).join('');
-      forklaring(`<p><b>${datoTekst(dag)}</b> · Afstand til Solen: ${afstand(dag).toFixed(1).replace('.', ',')} mio. km</p><ul class="sted-liste">${linjer}</ul>`);
+      forklaring(`<p><b>${datoTekst(d)}</b> · Afstand til Solen: ${afstand(d).toFixed(1).replace('.', ',')} mio. km</p><ul class="sted-liste">${linjer}</ul>`);
     }
 
     // Kameraet: tæt på Jorden (med Solen ved siden af) eller hele banen oppefra
     function stilKamera(flyv = false) {
       baneSkilte.visible = !tæt;
+      solLys.visible = tæt;
       if (tæt) {
         const t = TRIN[trin];
         let retning = t.tæt && !selv ? t.retning : null;
@@ -230,9 +268,22 @@ export default {
     nulstil();
 
     const plads = new THREE.Vector3();
+    const hjælp = new THREE.Vector3();
+    let panelUge = -1;
     return {
       styring,
       opdater(dt) {
+        // I første trin kører Jorden rundt om Solen (et år på ca. 24 sekunder), så man kan se, at aksen peger samme vej hele året.
+        // Tabellen og panelet skrives kun om én gang om ugen i animationen (ellers forsvinder ordforklaringerne hele tiden).
+        if (trin === 0 && !selv) {
+          dag = ((dag - 1 + (dt * 365) / 24) % 365) + 1;
+          const uge = Math.floor(dag / 7);
+          if (uge !== panelUge) {
+            panelUge = uge;
+            panel();
+            styring[1].sæt?.(Math.round(dag));
+          }
+        }
         // Jorden glider langs banen hen til datoen (den korteste vej rundt, og hurtigt, så skyderen føles direkte)
         let forskel = dag - visDag;
         if (forskel > 182.5) forskel -= 365;
@@ -241,6 +292,19 @@ export default {
         visDag = ((visDag - 1 + 365) % 365) + 1;
         jord.position.copy(jordPlads(visDag, plads));
         if (drejer) omdrejning.rotation.y += (dt * Math.PI * 2) / OMDREJNING;
+        // Sollyset peger fra Solen mod Jorden
+        if (solLys.visible) {
+          solLys.position.copy(jord.position);
+          solLys.quaternion.setFromUnitVectors(xAkse, hjælp.copy(jord.position).normalize());
+        }
+        // Navne på bagsiden af Jorden skjules (lige bag kanten må de gerne stå, for de stikker ud over kloden)
+        const k = verden.kamera.position;
+        for (const { prik, navn } of navne) {
+          prik.getWorldPosition(hjælp);
+          const ux = hjælp.x - jord.position.x, uy = hjælp.y - jord.position.y, uz = hjælp.z - jord.position.z;
+          const kx = k.x - hjælp.x, ky = k.y - hjælp.y, kz = k.z - hjælp.z;
+          navn.visible = (ux * kx + uy * ky + uz * kz) / (Math.hypot(ux, uy, uz) * Math.hypot(kx, ky, kz)) > -0.15;
+        }
       },
     };
   },
