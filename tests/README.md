@@ -54,6 +54,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 ## Værktøjer
 - `vaerktoejer/skaermbilleder.mjs fusion` tager billeder af en skærm på pc, tablet og telefon (begge veje). Den venter 7 sekunder, så kameraet er færdigt med at zoome (`VENT=3500` for kortere).
 - `vaerktoejer/kosmos-billeder.mjs supernova 0 v3 s` vælger et fænomen, trykker på knap 0, venter 3 sekunder og tager et billede.
+- `vaerktoejer/kloder.mjs` tager billeder af Jorden og Månen tæt på i forskelligt lys (dag, glimt i havet, tusmørke, nat, modlys, kanten, fuldmåne og halvmåne). Siden `vaerktoejer/kloder.html` viser dem alene, og man kan selv dreje og zoome.
 
 ## Gode råd
 - `koer-alle.mjs` kører to tests ad gangen (målt stabilt i to hele kørsler). Kør ikke flere end to, og start ikke to `koer-alle.mjs` på samme tid. Fejler en test, mens to kører, køres den igen alene, og det bliver skrevet med "OBS". Undersøg det, før det kaldes ustabilt.

@@ -1,20 +1,71 @@
 // Jorden og Månen som kugler i Kosmos (Årstiderne og Formørkelser).
-// Jorden: land og hav, dag og nat, hældning og omdrejning. Månen: grå med mørke "have".
+// Jorden: rigtige billeder fra NASA (se billeder/solsystem/KILDER.md), når de findes, ellers et enkelt kort over land og hav.
+// Der er dag og nat, rødligt lys ved solnedgang langs grænsen mellem dag og nat, Solens glimt i havet, et blåt skær af luft
+// i kanten og en tynd atmosfære uden om. Med billederne kommer også årstider (sne om vinteren), skyer, byernes lys og bjerge.
+// Månen: et rigtigt kort, når det findes, ellers grå med mørke "have". Den lyser næsten lige meget over hele skiven, som den rigtige.
 // Begge kan få skygge: Månens skygge på Jorden (solformørkelse) og Jordens skygge på Månen (måneformørkelse).
 // Skyggen regnes som i js/data/skygge.js: hvor stor en del af Solen der er dækket, set fra hvert punkt.
 
 import * as THREE from 'three';
 import { glød } from './faelles.js';
 import { LANDKORT } from '../data/landkort.js';
+import { dagIDag } from '../data/solbane.js';
+import { verden, LAV_KVALITET, TEST_HURTIG } from '../scene3d.js';
 
 const RAD = Math.PI / 180;
 
-// Et punkt på Jordens overflade (samme retninger som kortet på kuglen: længde 0 peger mod +x, 90° øst mod -z)
-export function overflade(bredde, længde, r) {
-  const b = bredde * RAD, l = længde * RAD;
-  return new THREE.Vector3(Math.cos(b) * Math.cos(l) * r, Math.sin(b) * r, -Math.cos(b) * Math.sin(l) * r);
+// ---------- Billederne ----------
+// Kun de filer, der findes, står her, så der ikke bliver spurgt efter filer, der mangler.
+// navn: fast filnavn. størrelse: true betyder, at filen findes som -4k.jpg (pc) og -2k.jpg (tablet og telefon).
+const MAPPE = new URL('../../billeder/solsystem/', import.meta.url).href; // virker også fra andre sider (fx tests/vaerktoejer/kloder.html)
+const STØRRELSE = LAV_KVALITET || TEST_HURTIG ? '2k' : '4k';
+const BILLEDER = {
+  hav: { navn: 'jorden-hav.png' }, // hvidt = hav (til Solens glimt)
+  // dag: { navn: ['jorden-dag-01', 'jorden-dag-04', 'jorden-dag-07', 'jorden-dag-10'], størrelse: true, farve: true },
+  // nat: { navn: 'jorden-nat', størrelse: true, farve: true },
+  // skyer: { navn: 'jorden-skyer', størrelse: true },
+  // højde: { navn: 'jorden-hoejde', størrelse: true },
+  // måne: { navn: 'maanen', størrelse: true, farve: true },
+  // måneHøjde: { navn: 'maanen-hoejde', størrelse: true },
+};
+// Dagen i året midt i de fire måneder med dagbilleder (januar, april, juli og oktober)
+const BILLEDDAGE = [15, 105, 196, 288];
+
+const henter = new THREE.TextureLoader();
+const hentede = new Map(); // filnavn → Promise med teksturen (eller null)
+function hentFil(fil, farve) {
+  if (!hentede.has(fil)) {
+    hentede.set(fil, new Promise((klar) => {
+      henter.load(MAPPE + fil, (t) => {
+        t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+        t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt
+        t.anisotropy = verden.renderer ? Math.min(8, verden.renderer.capabilities.getMaxAnisotropy()) : 1;
+        klar(t);
+      }, undefined, () => klar(null));
+    }));
+  }
+  return hentede.get(fil);
+}
+// Henter et billede (eller en liste af billeder). Giver null, hvis det ikke findes.
+function hent(nøgle) {
+  const b = BILLEDER[nøgle];
+  if (!b) return Promise.resolve(null);
+  const fil = (n) => (b.størrelse ? `${n}-${STØRRELSE}.jpg` : n);
+  if (Array.isArray(b.navn)) {
+    return Promise.all(b.navn.map((n) => hentFil(fil(n), b.farve))).then((l) => (l.every(Boolean) ? l : null));
+  }
+  return hentFil(fil(b.navn), b.farve);
+}
+// Til tests: venter, til alle billeder, der er spurgt efter, er hentet
+export function billederHentet() {
+  return Promise.all(hentede.values());
+}
+// Hvilke billeder der er i brug (til tests og hjælpen)
+export function billederIBrug() {
+  return Object.keys(BILLEDER);
 }
 
+// ---------- Kort, der tegnes, hvis billederne mangler ----------
 // Kortet over land og hav som tekstur (hav blåt, land grønt og brunt, is ved polerne). Laves kun én gang.
 let jordKort = null;
 function jordTekstur() {
@@ -48,6 +99,7 @@ function jordTekstur() {
   sg.drawImage(c, 0, 0, stor.width, stor.height);
   jordKort = new THREE.CanvasTexture(stor);
   jordKort.colorSpace = THREE.SRGBColorSpace;
+  jordKort.wrapS = THREE.RepeatWrapping;
   return jordKort;
 }
 
@@ -79,9 +131,15 @@ function måneTekstur() {
   }
   måneKort = new THREE.CanvasTexture(c);
   måneKort.colorSpace = THREE.SRGBColorSpace;
+  måneKort.wrapS = THREE.RepeatWrapping;
   return måneKort;
 }
 
+// En sort 1 x 1-tekstur til de pladser i shaderen, hvor der endnu ikke er et billede
+const tom = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1);
+tom.needsUpdate = true;
+
+// ---------- Shaderne (små programmer, der regner farven ud for hvert punkt på kuglen) ----------
 // Fælles GLSL: hvor stor en del af Solen er dækket af en kugle, set fra punktet p (samme som dækket() i skygge.js)
 const SKYGGE_GLSL = `
   uniform vec3 solPos;
@@ -105,54 +163,203 @@ const SKYGGE_GLSL = `
     return overlapAreal(a, b, c) / (3.14159265 * a * a);
   }`;
 
+// Fælles GLSL: retningerne øst og nord på kuglen og bjergenes skrå sider ud fra et højdekort.
+// Kortet ligger på kuglen, så u går mod øst (1 i u = en hel omgang) og v mod nord (1 i v = en halv omgang).
+const RELIEF_GLSL = `
+  const float OMGANG = 6.2831853; // en hel omgang i radianer
+  // n er retningen ud fra kuglens midte (i kuglens egne retninger, hvor +y er nord)
+  void retninger(vec3 n, out vec3 oest, out vec3 nord, out float cosB) {
+    oest = vec3(n.z, 0.0, -n.x);
+    cosB = length(oest);
+    oest = cosB > 1e-4 ? oest / cosB : vec3(0.0, 0.0, -1.0);
+    nord = cross(n, oest);
+  }
+  // Retningen ud fra overfladen med bjergene (styrke gør dem højere end i virkeligheden, ellers kunne man ikke se dem)
+  vec3 relief(sampler2D h, vec2 uv, vec2 texel, float styrke, vec3 n, vec3 oest, vec3 nord, float cosB) {
+    float dO = texture2D(h, uv + vec2(texel.x, 0.0)).r - texture2D(h, uv - vec2(texel.x, 0.0)).r;
+    float dN = texture2D(h, uv + vec2(0.0, texel.y)).r - texture2D(h, uv - vec2(0.0, texel.y)).r;
+    dO /= 2.0 * texel.x * OMGANG * max(cosB, 0.15);
+    dN /= texel.y * OMGANG;
+    return normalize(n - styrke * (dO * oest + dN * nord));
+  }`;
+
 const VERTEX = `
   varying vec2 vUv;
-  varying vec3 vNormal;
+  varying vec3 vObjN;
   varying vec3 vPos;
   void main() {
     vUv = uv;
-    vNormal = normalize(mat3(modelMatrix) * normal);
+    vObjN = normalize(position);
     vec4 p = modelMatrix * vec4(position, 1.0);
     vPos = p.xyz;
     gl_Position = projectionMatrix * viewMatrix * p;
   }`;
 
-// Jorden: dag og nat (grænsen er lidt blød, som tusmørke) og Månens skygge
+// Jorden
 const JORD_FRAGMENT = `
-  uniform sampler2D kort;
+  uniform sampler2D dagA;
+  uniform sampler2D dagB;
+  uniform float dagMix;
+  uniform sampler2D nat;
+  uniform float harNat;
+  uniform float natStyrke;
+  uniform sampler2D skyer;
+  uniform float harSkyer;
+  uniform sampler2D hoejde;
+  uniform float harHoejde;
+  uniform vec2 hoejdeTexel;
+  uniform float reliefStyrke;
+  uniform sampler2D hav;
+  uniform float harHav;
+  uniform mat3 rot;       // kuglens drejning (fra dens egne retninger til verdens)
+  uniform vec3 solObj;    // retningen mod Solen i kuglens egne retninger
   uniform vec3 maanePos;
   uniform float maaneR;
   varying vec2 vUv;
-  varying vec3 vNormal;
+  varying vec3 vObjN;
   varying vec3 vPos;
   ${SKYGGE_GLSL}
+  ${RELIEF_GLSL}
   void main() {
-    vec3 c = texture2D(kort, vUv).rgb;
-    float l = dot(normalize(vNormal), normalize(solPos - vPos));
+    vec3 n0 = normalize(vObjN);
+    vec3 oest, nord;
+    float cosB;
+    retninger(n0, oest, nord, cosB);
+    vec3 N = normalize(rot * n0);
+    vec3 S = normalize(solPos - vPos);
+    vec3 V = normalize(cameraPosition - vPos);
+    vec3 Nr = harHoejde > 0.5 ? normalize(rot * relief(hoejde, vUv, hoejdeTexel, reliefStyrke, n0, oest, nord, cosB)) : N;
+
+    float l = dot(N, S);
     float dag = smoothstep(-0.06, 0.1, l) * (1.0 - daekket(vPos, maanePos, maaneR));
-    vec3 lys = c * (0.35 + 0.65 * max(l, 0.0));
-    vec3 nat = c * 0.06 + vec3(0.004, 0.008, 0.02);
-    gl_FragColor = vec4(mix(nat, lys, dag), 1.0);
+    // Lyset bliver rødligt tæt på grænsen mellem dag og nat, fordi det går en lang vej gennem luften (solnedgang)
+    vec3 solFarve = mix(vec3(1.0, 0.62, 0.4), vec3(1.0), smoothstep(-0.04, 0.22, l));
+
+    vec3 c = mix(texture2D(dagA, vUv).rgb, texture2D(dagB, vUv).rgb, dagMix);
+    // Skyerne og deres skygge på jorden (skyen, der skygger, ligger lidt nærmere Solen)
+    float sky = 0.0, skySkygge = 0.0;
+    if (harSkyer > 0.5) {
+      sky = texture2D(skyer, vUv).r;
+      vec2 motSol = vec2(dot(solObj, oest) / (OMGANG * max(cosB, 0.15)), 2.0 * dot(solObj, nord) / OMGANG);
+      skySkygge = texture2D(skyer, vUv + motSol * 0.004).r;
+    }
+    vec3 jord = c * (0.14 + 0.86 * max(dot(Nr, S), 0.0)) * (1.0 - 0.4 * skySkygge);
+    vec3 skyLys = vec3(0.95) * (0.14 + 0.86 * max(l, 0.0));
+    vec3 lys = mix(jord, skyLys, sky) * solFarve;
+
+    // Solens glimt i havet: en bred, svag glans og en lille, skarp plet
+    float havet = harHav > 0.5 ? texture2D(hav, vUv).r : 0.0;
+    float nh = max(dot(N, normalize(S + V)), 0.0);
+    float glimt = (pow(nh, 120.0) * 0.22 + pow(nh, 1500.0) * 0.9) * havet * (1.0 - sky) * smoothstep(0.0, 0.2, l);
+    lys += solFarve * vec3(1.0, 0.93, 0.8) * glimt;
+
+    // Luften: et blåt skær, der bliver stærkere ude mod kanten
+    float kant = pow(1.0 - max(dot(N, V), 0.0), 2.5);
+    lys = mix(lys, vec3(0.3, 0.52, 1.0) * mix(vec3(1.0), solFarve, 0.5), kant * 0.6);
+
+    // Natten: svagt lys fra stjerner og Måne, og byernes lys, som tændes i tusmørket (og ses gennem tynde skyer)
+    vec3 natFarve = c * 0.03 + vec3(0.003, 0.006, 0.016) + sky * 0.02;
+    vec3 byer = harNat > 0.5 ? texture2D(nat, vUv).rgb * natStyrke * (1.0 - 0.7 * sky) : vec3(0.0);
+    float byLys = 1.0 - smoothstep(-0.12, 0.04, l);
+    gl_FragColor = vec4(mix(natFarve, lys, dag) + byer * byLys, 1.0);
+  }`;
+
+// Atmosfæren: en tynd skal uden om Jorden. For hvert punkt regnes, hvor tæt strålen fra kameraet kommer på Jorden.
+// Luften bliver tyndere opad (skalahøjden H), så kanten er tydelig og forsvinder blødt ud i rummet.
+const LUFT_FRAGMENT = `
+  uniform vec3 midt;
+  uniform float R;
+  uniform float H;
+  uniform float styrke;
+  uniform vec3 solPos;
+  varying vec3 vPos;
+  void main() {
+    vec3 d = normalize(vPos - cameraPosition);
+    vec3 q = cameraPosition + d * dot(midt - cameraPosition, d); // stedet, hvor strålen er tættest på Jorden
+    vec3 ud = q - midt;
+    float p = length(ud);
+    float taethed = exp(-max(p - R, 0.0) / H);
+    float vinkel = dot(ud / p, normalize(solPos - q));
+    float belyst = smoothstep(-0.3, 0.2, vinkel);
+    // Luften spreder mest lys fremad, så den lyser kraftigt, når Solen står bag Jorden (modlys)
+    float fremad = 1.0 + 3.0 * pow(max(dot(d, normalize(solPos - q)), 0.0), 6.0);
+    vec3 farve = mix(vec3(1.0, 0.42, 0.18), vec3(0.32, 0.56, 1.0), smoothstep(-0.12, 0.3, vinkel));
+    gl_FragColor = vec4(farve * taethed * belyst * fremad * styrke, 1.0);
+  }`;
+const LUFT_VERTEX = `
+  varying vec3 vPos;
+  void main() {
+    vec4 p = modelMatrix * vec4(position, 1.0);
+    vPos = p.xyz;
+    gl_Position = projectionMatrix * viewMatrix * p;
   }`;
 
 // Månen: lyset fra Solen og Jordens skygge. Helt inde i skyggen bliver den mørk kobberrød (lys bøjet gennem Jordens luft).
+// Månens støv sender lyset mest tilbage, hvor det kom fra. Derfor er fuldmånen næsten lige lys over hele skiven
+// (Lommel-Seeliger), og ikke mørkere ude mod kanten som en kugle af gips.
 const MÅNE_FRAGMENT = `
   uniform sampler2D kort;
+  uniform float forskydU;
+  uniform sampler2D hoejde;
+  uniform float harHoejde;
+  uniform vec2 hoejdeTexel;
+  uniform float reliefStyrke;
+  uniform mat3 rot;
   uniform vec3 jordPos;
   uniform float jordR;
   varying vec2 vUv;
-  varying vec3 vNormal;
+  varying vec3 vObjN;
   varying vec3 vPos;
   ${SKYGGE_GLSL}
+  ${RELIEF_GLSL}
   void main() {
-    vec3 c = texture2D(kort, vUv).rgb;
-    float l = dot(normalize(vNormal), normalize(solPos - vPos));
+    vec2 uv = vec2(vUv.x + forskydU, vUv.y);
+    vec3 c = texture2D(kort, uv).rgb;
+    vec3 n0 = normalize(vObjN);
+    vec3 oest, nord;
+    float cosB;
+    retninger(n0, oest, nord, cosB);
+    vec3 N = normalize(rot * n0);
+    vec3 Nr = harHoejde > 0.5 ? normalize(rot * relief(hoejde, uv, hoejdeTexel, reliefStyrke, n0, oest, nord, cosB)) : N;
+    vec3 S = normalize(solPos - vPos);
+    vec3 V = normalize(cameraPosition - vPos);
+    float i = max(dot(Nr, S), 0.0);
+    float e = max(dot(N, V), 0.0);
+    float ls = 2.0 * i / (i + e + 0.05);
+    float l = dot(N, S);
     float skygge = daekket(vPos, jordPos, jordR);
     float dag = smoothstep(-0.03, 0.06, l);
-    vec3 lys = c * (0.2 + 0.8 * max(l, 0.0)) * dag * (1.0 - skygge);
+    vec3 lys = c * (0.08 + mix(ls, i, 0.35)) * dag * (1.0 - skygge);
     vec3 roed = vec3(0.42, 0.11, 0.04) * dot(c, vec3(0.33)) * smoothstep(0.8, 1.0, skygge) * (0.3 + 0.7 * dag);
     gl_FragColor = vec4(lys + roed + c * 0.015, 1.0);
   }`;
+
+// Sætter kuglens drejning (rot) og retningen mod Solen i kuglens egne retninger (solObj), lige før den tegnes
+const midlertidig = new THREE.Vector3();
+const verdensRot = new THREE.Matrix3();
+function følgDrejning(kugle, materiale) {
+  kugle.onBeforeRender = () => {
+    const u = materiale.uniforms;
+    verdensRot.setFromMatrix4(kugle.matrixWorld);
+    u.rot.value.copy(verdensRot);
+    if (u.solObj) {
+      kugle.getWorldPosition(midlertidig);
+      u.solObj.value.copy(u.solPos.value).sub(midlertidig).applyMatrix3(verdensRot.transpose()).normalize();
+    }
+  };
+}
+
+// Når kuglen bliver ryddet væk, frigives billederne i grafikkortet (de hentes ikke igen, de lægges bare op igen næste gang)
+function frigivVedRyd(materiale) {
+  materiale.addEventListener('dispose', () => {
+    for (const u of Object.values(materiale.uniforms)) if (u.value?.isTexture && u.value !== tom) u.value.dispose();
+  });
+}
+
+// Højdekort: en pixel i u og v
+function texel(t) {
+  return new THREE.Vector2(1 / t.image.width, 1 / t.image.height);
+}
 
 // Jorden. hældning i grader (aksen hælder mod +x). Giver grupper tilbage, så man kan flytte, dreje og sætte ting på kloden.
 export function lavJorden(radius, { hældning = 23.44 } = {}) {
@@ -162,9 +369,25 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
   const omdrejning = new THREE.Group(); // drejer om aksen
   klode.add(hæld);
   hæld.add(omdrejning);
+  const reserve = jordTekstur();
   const materiale = new THREE.ShaderMaterial({
     uniforms: {
-      kort: { value: jordTekstur() },
+      dagA: { value: reserve },
+      dagB: { value: reserve },
+      dagMix: { value: 0 },
+      nat: { value: tom },
+      harNat: { value: 0 },
+      natStyrke: { value: 2.2 },
+      skyer: { value: tom },
+      harSkyer: { value: 0 },
+      hoejde: { value: tom },
+      harHoejde: { value: 0 },
+      hoejdeTexel: { value: new THREE.Vector2(1, 1) },
+      reliefStyrke: { value: 0.06 },
+      hav: { value: tom },
+      harHav: { value: 0 },
+      rot: { value: new THREE.Matrix3() },
+      solObj: { value: new THREE.Vector3(1, 0, 0) },
       solPos: { value: new THREE.Vector3() },
       solR: { value: 1 },
       maanePos: { value: new THREE.Vector3() },
@@ -173,8 +396,50 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
     vertexShader: VERTEX,
     fragmentShader: JORD_FRAGMENT,
   });
-  omdrejning.add(new THREE.Mesh(new THREE.SphereGeometry(radius, 64, 40), materiale));
-  klode.add(glød(new THREE.Color(0.35, 0.6, 1.2), radius * 2.7, 0.28)); // luften om Jorden
+  const u = materiale.uniforms;
+  const kugle = new THREE.Mesh(new THREE.SphereGeometry(radius, 96, 64), materiale);
+  følgDrejning(kugle, materiale);
+  frigivVedRyd(materiale);
+  omdrejning.add(kugle);
+
+  // Atmosfæren (en tynd skal) og et svagt skær, så Jorden også lyser lidt, når den er lille på skærmen
+  const H = radius * 0.012;
+  const luftMat = new THREE.ShaderMaterial({
+    uniforms: { midt: { value: new THREE.Vector3() }, R: { value: radius }, H: { value: H }, styrke: { value: 0.9 }, solPos: u.solPos },
+    vertexShader: LUFT_VERTEX,
+    fragmentShader: LUFT_FRAGMENT,
+    side: THREE.BackSide,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  const luft = new THREE.Mesh(new THREE.SphereGeometry(radius + 7 * H, 96, 64), luftMat);
+  luft.onBeforeRender = () => luft.getWorldPosition(luftMat.uniforms.midt.value);
+  klode.add(luft);
+  klode.add(glød(new THREE.Color(0.35, 0.6, 1.2), radius * 2.7, 0.14));
+
+  // Billederne skiftes ind, når de er hentet
+  let dagKort = null;
+  let dato = dagIDag();
+  hent('hav').then((t) => { if (t) { u.hav.value = t; u.harHav.value = 1; } });
+  hent('dag').then((l) => { if (l) { dagKort = l; sætDato(dato); } });
+  hent('nat').then((t) => { if (t) { u.nat.value = t; u.harNat.value = 1; } });
+  hent('skyer').then((t) => { if (t) { u.skyer.value = t; u.harSkyer.value = 1; } });
+  hent('højde').then((t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
+
+  // Årstiderne: dagbilledet glider fra måned til måned (fx sne om vinteren). dag er dagen i året (1-365).
+  function sætDato(dag) {
+    dato = dag;
+    if (!dagKort) return;
+    const d = ((dag - BILLEDDAGE[0]) % 365 + 365) % 365 + BILLEDDAGE[0];
+    let a = BILLEDDAGE.length - 1;
+    while (a > 0 && d < BILLEDDAGE[a]) a--;
+    const b = (a + 1) % BILLEDDAGE.length;
+    const fra = BILLEDDAGE[a], til = b === 0 ? BILLEDDAGE[0] + 365 : BILLEDDAGE[b];
+    u.dagA.value = dagKort[a];
+    u.dagB.value = dagKort[b];
+    u.dagMix.value = (d - fra) / (til - fra);
+  }
 
   // En cirkel på Jorden ved en bestemt breddegrad (fx ækvator og polarcirklerne)
   function breddeCirkel(bredde, farve, opacitet) {
@@ -186,12 +451,12 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
   }
   // Solen og (hvis der er en) Månen, som kaster skygge
   function sætLys(solPos, solR, maanePos = null, maaneR = 0) {
-    materiale.uniforms.solPos.value.copy(solPos);
-    materiale.uniforms.solR.value = solR;
-    if (maanePos) materiale.uniforms.maanePos.value.copy(maanePos);
-    materiale.uniforms.maaneR.value = maaneR;
+    u.solPos.value.copy(solPos);
+    u.solR.value = solR;
+    if (maanePos) u.maanePos.value.copy(maanePos);
+    u.maaneR.value = maaneR;
   }
-  return { klode, hældning: hæld, omdrejning, materiale, breddeCirkel, sætLys };
+  return { klode, hældning: hæld, omdrejning, materiale, breddeCirkel, sætLys, sætDato };
 }
 
 // Månen. Den samme side vender altid mod Jorden (kald vend(jordPos) hvert billede).
@@ -200,6 +465,12 @@ export function lavMånen(radius) {
   const materiale = new THREE.ShaderMaterial({
     uniforms: {
       kort: { value: måneTekstur() },
+      forskydU: { value: 0 },
+      hoejde: { value: tom },
+      harHoejde: { value: 0 },
+      hoejdeTexel: { value: new THREE.Vector2(1, 1) },
+      reliefStyrke: { value: 0.03 },
+      rot: { value: new THREE.Matrix3() },
       solPos: { value: new THREE.Vector3() },
       solR: { value: 1 },
       jordPos: { value: new THREE.Vector3() },
@@ -208,17 +479,30 @@ export function lavMånen(radius) {
     vertexShader: VERTEX,
     fragmentShader: MÅNE_FRAGMENT,
   });
-  const kugle = new THREE.Mesh(new THREE.SphereGeometry(radius, 40, 24), materiale);
+  const u = materiale.uniforms;
+  const kugle = new THREE.Mesh(new THREE.SphereGeometry(radius, 64, 40), materiale);
+  følgDrejning(kugle, materiale);
+  frigivVedRyd(materiale);
   gruppe.add(kugle);
+  // Et rigtigt kort har Månens forside midt i billedet (u = 0,5). Det tegnede har den ved u = 0,25 (retningen +z i kuglen).
+  hent('måne').then((t) => { if (t) { u.kort.value = t; u.forskydU.value = 0.25; } });
+  hent('måneHøjde').then((t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
+
   function sætLys(solPos, solR, jordPos, jordR) {
-    materiale.uniforms.solPos.value.copy(solPos);
-    materiale.uniforms.solR.value = solR;
-    materiale.uniforms.jordPos.value.copy(jordPos);
-    materiale.uniforms.jordR.value = jordR;
+    u.solPos.value.copy(solPos);
+    u.solR.value = solR;
+    u.jordPos.value.copy(jordPos);
+    u.jordR.value = jordR;
   }
-  // Forsiden (midt på kortet ved u = 0,25, altså retningen +z i kuglen) vender mod Jorden
+  // Forsiden (retningen +z i kuglen) vender mod Jorden
   function vend(jordPos) {
     gruppe.lookAt(jordPos);
   }
   return { måne: gruppe, materiale, sætLys, vend };
+}
+
+// Et punkt på Jordens overflade (samme retninger som kortet på kuglen: længde 0 peger mod +x, 90° øst mod -z)
+export function overflade(bredde, længde, r) {
+  const b = bredde * RAD, l = længde * RAD;
+  return new THREE.Vector3(Math.cos(b) * Math.cos(l) * r, Math.sin(b) * r, -Math.cos(b) * Math.sin(l) * r);
 }

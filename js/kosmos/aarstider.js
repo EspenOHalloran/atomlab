@@ -111,7 +111,7 @@ export default {
     gruppe.add(baneSkilte);
 
     // ---------- Jorden (js/kosmos/jorden.js): aksen hælder mod +x og peger samme vej hele året ----------
-    const { klode: jord, hældning, omdrejning, breddeCirkel, sætLys } = lavJorden(JORD_R, { hældning: HÆLDNING });
+    const { klode: jord, hældning, omdrejning, breddeCirkel, sætLys, sætDato: jordSætDato } = lavJorden(JORD_R, { hældning: HÆLDNING });
     gruppe.add(jord);
     sætLys(new THREE.Vector3(0, 0, 0), 2); // Solen i midten
 
@@ -291,6 +291,7 @@ export default {
         visDag += Math.abs(forskel) < 0.05 ? forskel : forskel * (1 - Math.exp(-dt * 5));
         visDag = ((visDag - 1 + 365) % 365) + 1;
         jord.position.copy(jordPlads(visDag, plads));
+        jordSætDato(visDag); // sne og grønt efter årstiden (når der er billeder)
         if (drejer) omdrejning.rotation.y += (dt * Math.PI * 2) / OMDREJNING;
         // Sollyset peger fra Solen mod Jorden
         if (solLys.visible) {

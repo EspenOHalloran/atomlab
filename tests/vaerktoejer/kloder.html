@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kloder (værktøj)</title>
+  <!-- Udviklingsværktøj: Jorden og Månen alene, så lyset og kameraet kan styres (bruges af kloder.mjs). Ikke en del af AtomLab. -->
+  <style>
+    html, body { margin: 0; height: 100%; background: #03040c; overflow: hidden; }
+    canvas { display: block; }
+    #info { position: fixed; left: 8px; top: 8px; color: #cfe0ff; font: 13px system-ui, sans-serif; }
+  </style>
+  <script type="importmap">
+    { "imports": { "three": "../../lib/three/three.module.js", "three/addons/": "../../lib/three/addons/" } }
+  </script>
+</head>
+<body>
+  <canvas id="laerred"></canvas>
+  <div id="info">Jorden og Månen (værktøj). Træk for at dreje, rul for at zoome.</div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { lavVerden, verden } from '../../js/scene3d.js';
+    import { lavJorden, lavMånen, billederHentet } from '../../js/kosmos/jorden.js';
+
+    lavVerden(document.getElementById('laerred'));
+    const { scene, kamera, styring } = verden;
+    styring.autoRotate = false;
+    styring.minDistance = 0.3;
+
+    // Solen er kun lys langt væk (400 enheder, radius 1,86, så den er lige så stor på himlen som den rigtige)
+    const sol = new THREE.Vector3();
+    const jorden = lavJorden(1);
+    const månen = lavMånen(0.273);
+    månen.måne.position.set(0, 0, 3);
+    månen.vend(jorden.klode.position);
+    scene.add(jorden.klode, månen.måne);
+
+    // Solens retning: vinkel rundt om Jorden (0 = mod +x) og højde over ækvator, begge i grader
+    function sætSol(vinkel, højde = 0) {
+      const v = THREE.MathUtils.degToRad(vinkel), h = THREE.MathUtils.degToRad(højde);
+      sol.set(Math.cos(v) * Math.cos(h), Math.sin(h), -Math.sin(v) * Math.cos(h)).multiplyScalar(400);
+      jorden.sætLys(sol, 1.86, månen.måne.position, 0.273);
+      månen.sætLys(sol, 1.86, jorden.klode.position, 1);
+    }
+    // Kameraet kigger på Jorden eller Månen fra en retning og en afstand
+    // forskyd flytter punktet, kameraet kigger på (fx ud til kanten)
+    function kig(hvad, retning, afstand, forskyd = [0, 0, 0]) {
+      const mål = (hvad === 'månen' ? månen.måne.position : jorden.klode.position).clone().add(new THREE.Vector3(...forskyd));
+      styring.target.copy(mål);
+      kamera.position.copy(mål).add(new THREE.Vector3(...retning).normalize().multiplyScalar(afstand));
+      styring.update();
+    }
+    sætSol(30, 10);
+    kig('jorden', [1, 0.3, 0.6], 3.2);
+    window.kloder = { jorden, månen, sætSol, kig, billederHentet, drej: (grader) => { jorden.omdrejning.rotation.y = THREE.MathUtils.degToRad(grader); } };
+  </script>
+</body>
+</html>

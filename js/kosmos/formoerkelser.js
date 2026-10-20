@@ -345,6 +345,7 @@ export default {
         // Ved vintersolhverv (dag 355) hælder Nordpolen væk fra Solen (mod +x)
         const dag = trin === TRIN.length - 1 ? dagIÅr : dagFor(Ω);
         jorden.klode.rotation.y = (-(dag - 355) / 365.25) * Math.PI * 2;
+        jorden.sætDato(dag);
       }
       // Panelet og himlen (kun når noget har ændret sig, højst for hver hele grad, Månen flytter sig)
       const f = formørkelse(m);
