@@ -57,6 +57,9 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Grafik med en fast størrelse (fx `InstancedMesh` med plads til et bestemt antal) kan ikke løbe over, heller ikke et kort øjeblik, når nogle kugler er på vej ud og andre på vej ind.
 - [ ] Kan det samme vises på to måder (fx klik og musen over et ord), så skal hver af dem stoppe den andens timer.
 - [ ] Tekst, der skrives med `innerHTML`, skrives kun om, når den ændrer sig. Ellers forsvinder ordforklaringerne (og fokus) hver gang.
+- [ ] Bevægelser i rummet går den rigtige vej: Planeter og måner kredser mod uret set fra nord, og Jorden drejer samme vej. Tjek det med et tal i testen, for det kan ikke ses på et stillbillede.
+- [ ] Synlighed og andet, der følger en tilstand, sættes, når tilstanden skifter, og ikke kun i opdateringen hvert billede. Ellers er det forkert, indtil første billede er tegnet.
+- [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
 - [ ] En kort tilstand (fx "ion i 1,6 sekunder") holdes der øje med hele tiden (`waitForFunction` med `polling`), i stedet for at kigge én gang.
@@ -121,6 +124,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "I Grønland er der midnatssol og mørketid." Kun nord for polarcirklen (fx Ilulissat). Sydgrønland (Nuuk) har ingen af delene. Og lige ved polarcirklen kan man skimte Solen ved vintersolhverv, fordi luften bøjer lyset.
 - "Jorden drejer 365 gange om sig selv på et år." Der er ca. 365 døgn, men set mod stjernerne drejer Jorden ca. 366 gange.
 - "Brænder" om stjerner: Astronomer siger det, men det er fusion, ikke ild. Forklar det, eller skriv "smelter sammen".
+- "Ved en ringformørkelse er Månen for lille." Den *ser* for lille ud, fordi den er længere væk.
+- "Månens afstand svinger mellem 363.000 og 406.000 km." Det er gennemsnittet for, hvornår den er tættest på og længst væk. Yderværdierne er ca. 356.400 og 406.700 km.
+- "Månen i Jordens kerneskygge = total måneformørkelse." Kun når *hele* Månen er inde i kerneskyggen.
 
 ---
 
@@ -151,6 +157,10 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Trin for trin med "Næste"** (Big Bang og Solens fremtid i Kosmos): Man bestemmer selv tempoet, og hvert trin har én kort tekst. Trykker man "Næste" før tid, gøres trinnet færdigt med det samme (`gørFærdig`), så tallene i panelet altid passer.
 - **En historie i listen:** Kosmos-fænomenerne står i en rækkefølge, der fortæller en historie (Big Bang → stjerner fødes → Solen → døde stjerner → det mærkeligste), og det sidste trin peger videre til det næste fænomen.
 - **Fysik regnet i koden i stedet for skrevet fast:** Den hvide dværgs supernova regner nikkel-56 → cobalt-56 → jern-56 ud med de rigtige halveringstider (6,1 og 77,2 dage), og testen tjekker tallene efter 100 dage. Så kan teksten ikke komme ud af trit med grafen.
+- **Skaleret, men konsistent** (Formørkelser): Afstandene kan ikke være målfaste. I stedet er Solens størrelse valgt, så Solen og Månen ser lige så store ud på himlen som i virkeligheden. Så kan de samme formler (`js/data/skygge.js`) bruges til panelet, himlen og shaderne, og testen kan regne med rigtige afstande og få total ved 363.300 km og ring ved 405.500 km.
+- **Faste etiketter skal fortjene pladsen.** "Tættest på Solen" og "Længst væk" i Årstiderne fyldte meget og blev stående, men var ikke spændende nok. De blev fjernet efter jeres feedback. Spørg: Skal det stå hele tiden, eller kun når det er vigtigt?
+- **Kodereviewet af Formørkelser** (Opus) fandt en fejl, som hverken testene, billederne eller faktatjekket fandt: Månen kredsede den forkerte vej (`L = π + e` i stedet for `π - e`). Det fandt også, at kameraet hoppede langt væk ved hvert "Næste" (`kamera()` uden `flyv: false`), og at resultatet i "Prøv selv" lå under kanten af skærmen. Lav et kodereview af hver ny del, før den er færdig.
+- **Faktatjekket af Formørkelser** (Opus) fandt fire upræcise ting, og ingen alvorlige fejl: Månens afstand (gennemsnit i stedet for yderværdier), at totaliteten 12. august 2026 også ramte Rusland og Portugal, ordbogens "kerneskygge" og "Månen er for lille" (se fælderne ovenfor).
 - **En agent, der løber tør ("session limit"),** kan fortsætte senere med en besked (SendMessage), så det, den allerede har fundet, ikke går tabt. Start ikke en ny.
 
 ### Faldgruber: kamera og layout
@@ -160,6 +170,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Ting i 3D-vinduet, der overlapper.** Brug `bundIVindue()` til ting nederst (over underteksterne). Et lag oven på hele vinduet skal have z-index 1, ellers dækker det underteksterne (z-index 2). 3D-etiketter kan stikke op over overskriften (Batteriet på tablet).
 - **Det øverste lag i 3D-vinduet (`.vindue-top`) bliver skrevet om af beskeder.js** (pillerne og klokken). Egne elementer dér forsvinder. Kosmos har derfor sit eget lag øverst til venstre (`toplag()`, `#kosmosToplag`).
 - **Skærmbilleder af "hele siden"** (`fullPage`) viser kun det synlige, fordi panelerne ruller hver for sig. Rul elementet frem (`scrollIntoViewIfNeeded`), og tag billedet bagefter.
+- **Noget, der "mangler" på et billede, kan bare være uden for synet.** Månens skygge på Jorden så ud til at mangle. Set fra Solens side var den der: Kameraet så pletten helt ude ved kanten af Jorden. Kig fra lysets retning, før shaderen fejlsøges, og vælg kameraet, så det vigtige er midt i billedet.
+- **Gennemsigtige flader skærer streger:** Jordens baneplan (en svag skive) lavede en skarp streg hen over Jorden i nærbilledet. Skyggekegler oven på kuglerne gav en takket kam. Skjul hjælpeflader tæt på, og gør kegler 1-2 % større end kuglen.
 - **Lange navne i et gitter** (Kosmos-listen med "Tyngdebølger" og "Solens fremtid") gjorde kolonnerne bredere end panelet, fordi `1fr` ikke kan blive smallere end det længste ord. Brug `minmax(0, 1fr)`, lad navnene bryde, og giv lange ord en blød bindestreg (`\u00ad`).
 
 ### Faldgruber: tid, timere og tilstand
@@ -174,6 +186,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Et henfald midt i et skærmskift** fryser, når værkstedet stopper (animationen kører kun, mens værkstedet vises), og låste værkstedet, så Det periodiske system ikke kunne åbne et grundstof der. Nu bliver det gjort færdigt med det samme (`atom.afslutHenfald()`), og ionen bliver neutral, når man kommer tilbage.
 - **Tempo ganges på tiden, ikke på farten.** Stjerneovnens nye tempoer (0,3 / 0,6 / 3) ændrer ikke fysikken, så grafen og `BAKKE` passer stadig. `termiskFart` må ikke ændres for at gøre det langsommere.
 - **Tekst, der skrives om 4 gange i sekundet,** fjerner ordforklaringerne lige så tit (Batteriets forklaring). Nu skrives den kun om, når tilstanden skifter (`forklaringVist`). Det samme gælder panelet i Kosmos (`forklaring()` springer over, når teksten er den samme).
+- **En liste, der bygges om:** Formørkelsernes knapper blev bygget om ved at sætte `styring.length`. Det gav huller (`undefined`) i listen og en fejl i Kosmos. Brug `splice(0, styring.length, ...nye)`.
 - **Ting, der skal blive væk:** Merkur og Venus kom tilbage, når Solen skrumpede til en hvid dværg, fordi "slugt" blev regnet ud fra Solens størrelse lige nu. Nu huskes det (`slugt`).
 
 ### Faldgruber: tests og værktøjer
@@ -184,6 +197,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Hurtigere tests afslørede en svaghed i spillet.** "Vis en kædereaktion" døde nu og da ud i guide-testen, og bagefter gik reaktoren i stå i ca. 15 % af gangene (målt med 150 forsøg). Kun de to første generationer var sikret. Nu er tre sikret: 0 døde ud, og ca. 1 % går i stå bagefter. Testen `reaktor` kører 100 forsøg og fejlede med den gamle kode (18 af 100).
 - **Arbejde, der venter på næste billede** (`requestAnimationFrame`), er langsomt i testbrowseren: Ordforklaringerne blev markeret 40-240 ms efter et klik, og over 400 ms, når maskinen var travl. Testen kiggede efter præcis 400 ms og fejlede 1 gang i hele samlingen. Nu markeres ordene med det samme (i MutationObserveren, 7-11 ms), og testen holder øje med ordet (`waitForSelector`).
 - **En ny maskine kan være langsommere.** Efter en genstart tegnede testbrowseren færre billeder i sekundet, og en test med en fast ventetid fejlede. Hold øje med en tilstand (`waitForFunction`) i stedet for at vente en fast tid.
+- **Agenter, der kører browsere samtidig med testsamlingen,** gør maskinen langsom. To tests fejlede kun under den belastning (batteri og guide). Batteri-fejlen var ægte: Lampen blev først skjult i det første billede. Kør helst ikke hele samlingen, mens agenter tager skærmbilleder.
 - **Push før testene er færdige:** En automatisk regel kræver push, når en tur slutter. Vent derfor på testene inden for samme tur. Hvis der alligevel pushes før, så sig det.
 - **Tests i en midlertidig mappe** ville være forsvundet, da sessionen sluttede. De ligger nu i `tests/`.
 - **Konsolfejl talte ikke med** i de ældste tests. Nu giver de fejl i alle tests.

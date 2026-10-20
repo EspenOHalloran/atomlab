@@ -196,4 +196,24 @@ export const ORDBOG = [
     former: ['mørketid', 'mørketiden'],
     tekst: 'Når Solen slet ikke kommer over horisonten, hele døgnet. Det sker om vinteren nord for polarcirklen. Tæt på polarcirklen er der tusmørke midt på dagen, men tæt på polen er det mørkt i flere måneder.',
   },
+  {
+    id: 'baneplan', ord: 'Baneplan',
+    former: ['baneplan', 'baneplanet'],
+    tekst: 'Den flade skive, som en bane ligger i. Jorden kredser om Solen i ét plan. Månens bane ligger i et andet plan, der hælder ca. 5° i forhold til Jordens.',
+  },
+  {
+    id: 'korona', ord: 'Korona',
+    former: ['korona', 'koronaen'],
+    tekst: 'Solens yderste lag: tynd gas på over en million grader, som stråler langt ud i rummet. Den er så svag i forhold til Solen, at man kun kan se den med det blotte øje, når Månen dækker hele Solen.',
+  },
+  {
+    id: 'kerneskygge', ord: 'Kerneskygge',
+    former: ['kerneskygge', 'kerneskyggen'],
+    tekst: 'Den mørkeste del af en skygge i rummet. Inde i Månens kerneskygge er hele Solen dækket (total solformørkelse). Er hele Månen inde i Jordens kerneskygge, er det total måneformørkelse.',
+  },
+  {
+    id: 'halvskygge', ord: 'Halvskygge',
+    former: ['halvskygge', 'halvskyggen'],
+    tekst: 'Den lysere del af en skygge i rummet, rundt om kerneskyggen. Herfra er kun en del af Solen dækket, så der er stadig lys, bare mindre.',
+  },
 ];

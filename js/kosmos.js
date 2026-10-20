@@ -13,6 +13,7 @@ import { lavPause } from './pause.js';
 import bigbang from './kosmos/bigbang.js';
 import stjernefoedsel from './kosmos/stjernefoedsel.js';
 import aarstider from './kosmos/aarstider.js';
+import formoerkelser from './kosmos/formoerkelser.js';
 import solstorm from './kosmos/solstorm.js';
 import solensfremtid from './kosmos/solensfremtid.js';
 import hviddvaerg from './kosmos/hviddvaerg.js';
@@ -26,7 +27,7 @@ import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
 
 // Rækkefølgen fortæller en historie: fra Big Bang og vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
-export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
+export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
 const NØGLE_SET = 'atomlabKosmosSet'; // de fænomener, man har kigget på
@@ -66,6 +67,7 @@ export function lavKosmos() {
     b.addEventListener('click', () => {
       if (valgt === f) return;
       lyd.klik();
+      fane = 'kort'; // et nyt fænomen starter altid på "Kort fortalt"
       vælg(f.id);
     });
     liste.append(b);

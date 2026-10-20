@@ -463,6 +463,7 @@ function opdaterPanel() {
   $('batteriSnyd').textContent = snyd ? 'Snyd laderen: TIL (farligt!)' : 'Snyd laderen: fra';
   // Midt på ledningen sidder laderen, lampen eller en slukket afbryder
   lader.visible = tilstand === 'oplad' && !død;
+  lampe.visible = tilstand === 'aflad'; // også her, så den er rigtig fra start, før første billede er tegnet
   afbryder.visible = tilstand === 'pause' || død;
   ledningMidte.visible = !afbryder.visible;
   skilte.lader.visible = lader.visible;

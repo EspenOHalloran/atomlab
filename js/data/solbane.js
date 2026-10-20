@@ -18,6 +18,11 @@ export function dagIÅret(måned, dag) {
   return n;
 }
 
+// Dagens nummer i året (29. februar tæller som 28.)
+export function dagIDag(nu = new Date()) {
+  return dagIÅret(nu.getMonth() + 1, Math.min(nu.getDate(), nu.getMonth() === 1 ? 28 : 31));
+}
+
 // Dag i året som tekst, fx 172 → "21. juni"
 export function datoTekst(n) {
   let m = 0;

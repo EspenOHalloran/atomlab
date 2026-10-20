@@ -126,16 +126,27 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] Trin for trin: forårsjævndøgn, sommer i nord, efterårsjævndøgn og vinter i nord, og bagefter vælger man selv datoen med en skyder.
   - [x] En lille tabel i 3D-billedet med dagens længde og Solens højde ved middag i Danmark, Australien, ved ækvator og i Grønland. Tallene regnes ud for de rigtige steder og passer med almanakkerne inden for få minutter.
   - [x] Fælden: Jorden er tættest på Solen i starten af januar. Nye ordforklaringer: jævndøgn, solhverv, polarcirkel, midnatssol og mørketid.
+- [x] **Trin 14: Formørkelser i Kosmos**
+  - [x] Sol, Jord og Måne med den samme Jord som Årstiderne (`js/kosmos/jorden.js`). Trin for trin: Månen kredser, hvorfor det ikke sker hver måned (banen hælder), total solformørkelse, ringformørkelse og måneformørkelse, og bagefter "Prøv selv" med skydere for Månens fase, tid på året og Månens afstand og knappen "Uden hældning".
+  - [x] Skyggerne er regnet: Månens skygge på Jorden (kerneskygge og halvskygge) og Jordens skygge på Månen, som bliver kobberrød. Solens og Månens størrelse på himlen passer i forhold til hinanden, så det bliver total, når Månen er tæt på, og en ring, når den er langt væk.
+  - [x] "Solen set fra Jorden" og "Månen set fra Jorden" i et lille rundt kort i 3D-billedet (med koronaen ved total solformørkelse). Sikkerhed: Kig aldrig direkte på Solen. Nye ordforklaringer: baneplan, korona, kerneskygge og halvskygge.
 
 ## Idéer til senere
+- [ ] **Kategorierne i Det periodiske system** (jeres ønske): en rigtig beskrivelse af alkalimetaller, jordalkalimetaller, overgangsmetaller, halvmetaller, ikkemetaller, halogener, ædelgasser, lanthanider og actinider. I dag er der kun én linje pr. kategori (`KATEGORIER` i `js/data/grundstoffer.js`). Idéer til at gøre det fedt:
+  - **Et kategorikort**, når man trykker på en kategori i filtrene: hvad de har til fælles, *hvorfor* (de yderste elektroner, med et lille atom, der viser fx den ene ensomme elektron hos alkalimetallerne eller den fulde skal hos ædelgasserne), kendte medlemmer, og hvor man møder dem i hverdagen.
+  - **Væggen reagerer:** Kategoriens felter lyser op og glider lidt frem, så man kan se, hvor i tabellen de bor, og hvorfor de står i søjler.
+  - **Et "signaturforsøg" pr. kategori** som lille animation: alkalimetal i vand (lithium bobler, natrium farer rundt, kalium brænder lilla og cæsium eksploderer; ærligt talt: den berømte video med cæsium i et badekar var snyd), ædelgasser, der lyser i hver sin farve i et neonrør, natrium + chlor → bordsalt, og jern, kobolt og nikkel, der er magnetiske.
+  - **Tendenser med pile:** fx bliver alkalimetallerne mere voldsomme nedad, og halogenerne mere voldsomme opad.
+  - **Links til resten af AtomLab:** fuld skal → Atomværkstedet, uran og plutonium → Reaktoren, hydrogen og helium → Big Bang, lithium → Batteriet.
+  - Teksterne skal faktatjekkes, og "Halvmetal" og "Andet metal" skal forklares ærligt: Grænserne er flydende, og bøgerne er ikke enige om dem.
+- [ ] **Flere forskellige citater** (jeres ønske): Der er for mange gengangere. "Saganscenen" står ved 3 fænomener i Kosmos, Hawking om stjerner og Einstein om nysgerrighed ved 2 hver, og Einsteins E = mc² 2 steder i hjælpen. Find nye citater (gerne også danske forskere og flere kvinder), så hver del og hvert fænomen så vidt muligt har sit eget. Det gælder kun citater med en sikker kilde og den rigtige ordlyd (se `js/data/citater.js` og fælden om citater i docs/erfaringer.md).
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
 - En engelsk udgave med en sprogvælger. Planen ligger i [docs/plan-engelsk.md](docs/plan-engelsk.md).
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
 - Tidslinje over, hvornår grundstofferne blev opdaget.
 - Molekyler: sæt atomer sammen (H₂O, CO₂, NaCl).
-- **Sol- og måneformørkelse** (Kosmos, foreslået af jer): kan bygge på samme model af Sol og Jord som Årstiderne (`js/data/solbane.js` og kloden i `js/kosmos/aarstider.js`). Hvorfor der ikke er formørkelse hver måned (Månens bane hælder ca. 5°), hvorfor Månen præcis kan dække Solen, ringformørkelse, og hvorfor Månen bliver rød. Tal og datoer tjekkes, før de bruges.
 - **Tjernobyl i Reaktoren** (foreslået af jer): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i docs/erfaringer.md. En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
-- **Rækkefølge** (aftalt): Årstiderne (lavet i Trin 13) og formørkelserne først (samme model), så Tjernobyl og til sidst Liv.
+- **Rækkefølge** (aftalt): Årstiderne (Trin 13) og formørkelserne (Trin 14) er lavet. Så Tjernobyl og til sidst Liv.
 - **Ny del: Liv** (foreslået af jer): et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme (fx Miller-Urey-forsøget, byggesten, hinder, RNA). Vigtigt at sige ærligt, at ingen endnu har lavet liv fra bunden, og at det er uvist, hvordan det opstod. Med de nyeste fund på Mars (Perseverance, "leopardpletterne" i klippen Cheyava Falls). Besluttet: Forklar, hvad der er fundet, hvorfor det er så interessant, og hvorfor det er det bedste spor af liv på andre planeter indtil nu, men også ærligt, at det ikke er bevist. Teksten skal faktatjekkes grundigt. Molekyle-idéen ovenfor kan være første skridt.
 
 ## Før vi deler AtomLab med andre (tjekliste)

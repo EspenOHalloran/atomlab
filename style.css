@@ -969,6 +969,17 @@ button { font: inherit; color: inherit; }
 @media (max-width: 560px) and (orientation: portrait), (max-height: 500px) and (orientation: landscape) {
   .kosmos-toplag { display: none; }
 }
+/* Formørkelser: himlen set fra Jorden (et rundt "kighul") */
+.himmel-kort { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 7px 8px 6px; border-radius: 12px; background: rgba(8, 12, 30, 0.78); border: 1px solid var(--panel-kant); font-size: 12px; color: var(--svag); }
+.himmel-kort canvas { width: 128px; height: 128px; border-radius: 50%; display: block; }
+.himmel-kort strong { max-width: 132px; text-align: center; color: var(--tekst); font-size: 12.5px; line-height: 1.25; }
+/* På telefon på højkant er der plads til en lille udgave af himlen (Årstidernes tabel er stadig skjult) */
+@media (max-width: 560px) and (orientation: portrait) {
+  .kosmos-toplag:has(.himmel-kort) { display: block; }
+  .himmel-kort { padding: 4px 5px 3px; font-size: 10.5px; gap: 2px; }
+  .himmel-kort canvas { width: 76px; height: 76px; }
+  .himmel-kort strong { max-width: 92px; font-size: 10.5px; }
+}
 .sted-liste { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; font-size: 13px; line-height: 1.35; }
 .sted-liste li { display: flex; align-items: baseline; gap: 7px; }
 .sted-liste .farveprik { flex: 0 0 9px; transform: translateY(-1px); }

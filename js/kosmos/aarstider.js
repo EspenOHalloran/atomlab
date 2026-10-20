@@ -4,9 +4,9 @@
 // for de rigtige steder (de passer med almanakkerne inden for få minutter, se tests/aarstider.mjs).
 
 import * as THREE from 'three';
-import { stjerne, glød, skilt } from './faelles.js';
-import { LANDKORT } from '../data/landkort.js';
-import { HÆLDNING, dagIÅret, datoTekst, måned, dagslængde, middagshøjde, afstand, solensLængde, timerTekst } from '../data/solbane.js';
+import { stjerne, skilt } from './faelles.js';
+import { lavJorden, overflade } from './jorden.js';
+import { HÆLDNING, dagIÅret, dagIDag, datoTekst, måned, dagslængde, middagshøjde, afstand, solensLængde, timerTekst } from '../data/solbane.js';
 
 const BANE = 12; // Jordens bane i animationen (1 astronomisk enhed)
 const JORD_R = 1.8;
@@ -64,78 +64,6 @@ function jordPlads(n, v = new THREE.Vector3()) {
   return v.set(Math.cos(θ) * r, 0, -Math.sin(θ) * r);
 }
 
-// Et punkt på Jordens overflade (samme retninger som kortet på kuglen: længde 0 peger mod +x, 90° øst mod -z)
-function overflade(bredde, længde, r) {
-  const b = bredde * RAD, l = længde * RAD;
-  return new THREE.Vector3(Math.cos(b) * Math.cos(l) * r, Math.sin(b) * r, -Math.cos(b) * Math.sin(l) * r);
-}
-
-// Kortet over land og hav som tekstur (hav blåt, land grønt og brunt, is ved polerne)
-function lavJordTekstur() {
-  const { bredde: B, højde: H, data } = LANDKORT;
-  const bytes = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
-  const c = document.createElement('canvas');
-  c.width = B;
-  c.height = H;
-  const g = c.getContext('2d');
-  const billede = g.createImageData(B, H);
-  for (let y = 0; y < H; y++) {
-    const breddegrad = 90 - (y + 0.5) * (180 / H);
-    for (let x = 0; x < B; x++) {
-      const i = y * B + x;
-      const land = (bytes[i >> 3] >> (7 - (i & 7))) & 1;
-      let farve;
-      if (land) farve = Math.abs(breddegrad) > 64 ? [228, 236, 242] : Math.abs(breddegrad) < 35 ? [118, 132, 70] : [70, 126, 62];
-      else farve = Math.abs(breddegrad) > 78 ? [210, 225, 238] : [22, 66, 140];
-      billede.data.set([...farve, 255], i * 4);
-    }
-  }
-  g.putImageData(billede, 0, 0);
-  // Tegnet fire gange større med udglatning, så kysterne ikke bliver kantede
-  const stor = document.createElement('canvas');
-  stor.width = B * 4;
-  stor.height = H * 4;
-  const sg = stor.getContext('2d');
-  sg.imageSmoothingEnabled = true;
-  sg.imageSmoothingQuality = 'high';
-  sg.drawImage(c, 0, 0, stor.width, stor.height);
-  const t = new THREE.CanvasTexture(stor);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-}
-
-// Dag og nat: Siden, der vender mod Solen, er lys. Grænsen mellem dag og nat er lidt blød (tusmørke).
-const JORD_VERTEX = `
-  varying vec2 vUv;
-  varying vec3 vNormal;
-  void main() {
-    vUv = uv;
-    vNormal = normalize(mat3(modelMatrix) * normal);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }`;
-const JORD_FRAGMENT = `
-  uniform sampler2D kort;
-  uniform vec3 solRetning;
-  varying vec2 vUv;
-  varying vec3 vNormal;
-  void main() {
-    vec3 c = texture2D(kort, vUv).rgb;
-    float l = dot(normalize(vNormal), solRetning);
-    float dag = smoothstep(-0.06, 0.1, l);
-    vec3 lys = c * (0.35 + 0.65 * max(l, 0.0));
-    vec3 nat = c * 0.06 + vec3(0.004, 0.008, 0.02);
-    gl_FragColor = vec4(mix(nat, lys, dag), 1.0);
-  }`;
-
-// En cirkel på Jorden ved en bestemt breddegrad (ækvator og polarcirklerne)
-function breddeCirkel(bredde, farve, opacitet) {
-  const punkter = [];
-  const r = JORD_R * 1.004 * Math.cos(bredde * RAD);
-  const y = JORD_R * 1.004 * Math.sin(bredde * RAD);
-  for (let i = 0; i <= 96; i++) punkter.push(new THREE.Vector3(Math.cos((i / 96) * Math.PI * 2) * r, y, Math.sin((i / 96) * Math.PI * 2) * r));
-  return new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(punkter), new THREE.LineBasicMaterial({ color: farve, transparent: true, opacity: opacitet, depthWrite: false }));
-}
-
 export default {
   id: 'aarstider',
   navn: 'Årstiderne',
@@ -179,30 +107,12 @@ export default {
       s.position.copy(jordPlads(dagIÅret(m, d))).multiplyScalar(1.3).setY(-0.8);
       baneSkilte.add(s);
     }
-    const tættest = skilt('Tættest på Solen: ca. 3. januar', '#ffd9a8', 1.1);
-    tættest.position.copy(jordPlads(3)).multiplyScalar(0.62).setY(1.2);
-    const længst = skilt('Længst væk: starten af juli', '#ffd9a8', 1.1);
-    længst.position.copy(jordPlads(dagIÅret(7, 5))).multiplyScalar(0.62).setY(1.2);
-    baneSkilte.add(tættest, længst);
     gruppe.add(baneSkilte);
 
-    // ---------- Jorden: hældning (fast) og omdrejning ----------
-    const jord = new THREE.Group(); // flytter rundt i banen
-    const hældning = new THREE.Group(); // aksen hælder mod +x og peger samme vej hele året
-    hældning.rotation.z = -HÆLDNING * RAD;
-    const omdrejning = new THREE.Group(); // drejer én gang om dagen (her hvert 9. sekund)
-    jord.add(hældning);
-    hældning.add(omdrejning);
+    // ---------- Jorden (js/kosmos/jorden.js): aksen hælder mod +x og peger samme vej hele året ----------
+    const { klode: jord, hældning, omdrejning, breddeCirkel, sætLys } = lavJorden(JORD_R, { hældning: HÆLDNING });
     gruppe.add(jord);
-
-    const kort = lavJordTekstur();
-    const jordMat = new THREE.ShaderMaterial({
-      uniforms: { kort: { value: kort }, solRetning: { value: new THREE.Vector3(1, 0, 0) } },
-      vertexShader: JORD_VERTEX,
-      fragmentShader: JORD_FRAGMENT,
-    });
-    omdrejning.add(new THREE.Mesh(new THREE.SphereGeometry(JORD_R, 64, 40), jordMat));
-    jord.add(glød(new THREE.Color(0.35, 0.6, 1.2), JORD_R * 2.7, 0.28)); // luften om Jorden
+    sætLys(new THREE.Vector3(0, 0, 0), 2); // Solen i midten
 
     // Aksen med N for nord, ækvator og polarcirklerne
     const akse = new THREE.Line(
@@ -223,8 +133,7 @@ export default {
     }
 
     // ---------- Tilstand ----------
-    const iDag = new Date();
-    const idagNr = dagIÅret(iDag.getMonth() + 1, Math.min(iDag.getDate(), iDag.getMonth() === 1 ? 28 : 31)); // 29. februar tæller som 28.
+    const idagNr = dagIDag();
     let trin = 0;
     let dag = idagNr;
     let visDag = idagNr; // den dag, Jorden er tegnet ved (glider hen mod dag langs banen)
@@ -332,7 +241,6 @@ export default {
         visDag = ((visDag - 1 + 365) % 365) + 1;
         jord.position.copy(jordPlads(visDag, plads));
         if (drejer) omdrejning.rotation.y += (dt * Math.PI * 2) / OMDREJNING;
-        jordMat.uniforms.solRetning.value.copy(jord.position).negate().normalize();
       },
     };
   },

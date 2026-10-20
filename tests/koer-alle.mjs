@@ -15,7 +15,7 @@ const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
   'henfaldsregler', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
-  'batteri', 'kosmos', 'kosmos-nye', 'aarstider', 'ordforklaring', 'beskeder', 'beskeder-2', 'guide', 'pause', 'fuldskaerm', 'grafik',
+  'batteri', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'ordforklaring', 'beskeder', 'beskeder-2', 'guide', 'pause', 'fuldskaerm', 'grafik',
 ];
 const argumenter = process.argv.slice(2);
 const filArg = argumenter.filter((a) => !a.startsWith('--') && (a.includes('/') || a.includes('.')));

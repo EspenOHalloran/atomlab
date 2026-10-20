@@ -14,8 +14,8 @@ await page.click('a[href="#kosmos"]');
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('14 fænomener', ids.length === 14, ids);
-tjek('14 knapper i listen', (await page.$$('.kosmos-valg')).length === 14);
+tjek('15 fænomener', ids.length === 15, ids);
+tjek('15 knapper i listen', (await page.$$('.kosmos-valg')).length === 15);
 const K = () => page.evaluate(() => window.atomlabTest.kosmos);
 const objekter = {};
 for (const id of ids) {
@@ -38,6 +38,10 @@ for (const id of ids) {
   await page.click('[data-kosmos-fane="kort"]');
   objekter[id] = await page.evaluate(() => window.atomlabTest.kosmos.antalObjekter());
 }
+// Et nyt fænomen starter på "Kort fortalt", også når man stod på "For nørder"
+await page.click('[data-kosmos-fane="nørd"]');
+await page.click(`.kosmos-valg[data-id="${ids[0]}"]`);
+tjek('nyt fænomen starter på "Kort fortalt"', await page.evaluate(() => document.querySelector('[data-kosmos-fane="kort"]').classList.contains('valgt') && !document.querySelector('[data-kosmos-fane="nørd"]').classList.contains('valgt')));
 // Skift frem og tilbage: antallet af objekter må ikke vokse (ingen rester)
 await page.evaluate(() => { const k = window.atomlabTest.kosmos; k.vælg('solstorm'); k.vælg('supernova'); k.vælg('solstorm'); });
 const igen = await page.evaluate(() => window.atomlabTest.kosmos.antalObjekter());
