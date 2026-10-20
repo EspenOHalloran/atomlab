@@ -82,7 +82,11 @@ Til slut kommer **"Den lyseblå prik"**: Sonden vender sig om, og Jorden er en l
 
 **Grafen:** Sondens fart, der hopper ved hver planet. Den rigtige Voyager 2-kurve vises svagt bagved.
 
-**Lyd:** Web Audio som i resten af AtomLab.
+**Sonden og kameraet:** En Voyager-sonde af simple former, som er til at kende (parabolen og de lange arme). Når sonden nærmer sig en planet, glider kameraet ind bag den som i en film. Tiden går langsomt, planeten fylder billedet, banen bøjer, og så trækker kameraet sig tilbage. Det er her, wow-øjeblikket er.
+
+**Lyd:** Web Audio som i resten af AtomLab, fx et sus ved forbiflyvningen og en tone, der stiger med farten.
+
+**I Kosmos (foreslået):** et kort fænomen om tyngdekraftens slynge, der linker til Rumrejsen.
 
 ## 4. Grafik på øverste hylde
 I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadig virke på en tablet (`LAV_KVALITET` skruer ned).
@@ -113,6 +117,20 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 
 **Forslag: Start med en lille, færdig bid (en prototype).** Saturn med ringe og skygger, Enceladus med fontæner og Titan med dis, alt i topkvalitet. Så kan I se og mærke, om niveauet er rigtigt, før resten bygges. Det er den bedste måde at bruge de ekstra ressourcer på.
 
+**Jorden og Månen først (foreslået i oktober 2026, venter på et go):** Jorden og Månen findes allerede i Årstiderne og Formørkelser. Gør dem flotte først, så I kan se forskellen før og efter. Bagefter bruges den samme teknik (kort, højdekort og atmosfære) til planeterne.
+- **Jorden med rigtige billeder fra NASA:**
+  - om dagen: Blue Marble (Jorden uden skyer)
+  - om natten: byernes lys (Black Marble)
+  - skyer i et lag for sig, der kaster en svag skygge
+  - et højdekort, så bjergene får relief
+  - **årstider:** 4 måneder af Blue Marble (januar, april, juli og oktober), der glider over i hinanden efter datoen. Så kommer sneen om vinteren, og Jorden bliver grøn om sommeren. 12 måneder er lidt flottere, men tager længere tid at hente.
+  - Solen glimter i havet, en blå atmosfære ses i kanten, og der er et rødligt bånd ved solnedgangen langs grænsen mellem dag og nat.
+  - Formørkelsernes skygger beholdes med den samme udregning som nu (`js/data/skygge.js` og GLSL i `js/kosmos/jorden.js`).
+- **Månen:** et rigtigt kort fra NASA's Lunar Reconnaissance Orbiter (CGI Moon Kit) med kratere og et højdekort.
+- **Opløsning:** 4096 × 2048 på pc og 2048 × 1024 på tablet og telefon (`LAV_KVALITET`). Ikke 8k, for så fylder ét billede ca. 130 MB i grafikkortet. Det kan tablets ikke klare, og forskellen ses næsten ikke på en klode, der kun fylder en del af skærmen.
+- **Hentetid:** skønnet 10-15 MB i alt. En lille udgave vises først, mens de store bliver hentet.
+- **Ærligt:** I Formørkelser er Jorden lille i de fleste trin, så forskellen ses mest i nærbillederne og i Årstiderne.
+
 ## 5. Teknik
 - **Ny skærm `#solsystem`:**
   - `js/solsystem.js`: overblikket, tæt på, panelet og turen "Liv i solsystemet?"
@@ -128,6 +146,9 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
   - `fontaener.js`
   - `tvaersnit.js`
 - **Billeder:** De ligger i `billeder/solsystem/` med en fil, `KILDER.md`, der siger, hvor hvert billede kommer fra, og hvilken licens det har. Hjælpen får et afsnit om kilderne.
+- **Hentning af billederne:** NASA's servere er blokeret i Claude-miljøet (proxyen svarer 403). GitHub og npm virker.
+  - Tilføj `eoimages.gsfc.nasa.gov`, `svs.gsfc.nasa.gov` og `visibleearth.nasa.gov` under miljøets menu → Edit → Network access ([vejledning](https://code.claude.com/docs/en/cloud-environments#network-access)). Det virker måske først i en ny session.
+  - Nødløsning, som ikke anbefales: npm-pakken `three-globe` har Jorden i 4k (dag, nat og skyer). Billederne ligner Blue Marble, men det kan ikke bekræftes, hvor de kommer fra, og der er ingen billeder for hver måned.
 - **Ingen byggetrin.** Three.js-addons kopieres som nu.
   - Komprimerede teksturer (KTX2) kan overvejes til tablets. Det kræver addon-filen og en transcoder, men intet byggetrin.
 - **Tests:**
@@ -141,7 +162,8 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 | Trin | Hvad | Hvem |
 |---|---|---|
 | 0 | Gennemgang af planen og et faktagrundlag med kilder (`docs/fakta-solsystemet.md`) | Fable |
-| 1 | **Prototype**: Saturn, Enceladus og Titan i topkvalitet | Opus |
+| 1a | **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (foreslået, se afsnit 4). Kan laves før trin 0, for det bygger på noget, der allerede findes. | Opus |
+| 1b | **Prototype**: Saturn, Enceladus og Titan i topkvalitet | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
 | 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
 | 4 | "Liv i solsystemet?" (tekster faktatjekkes) | Opus + faktatjek |
@@ -149,15 +171,16 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 | 6 | Mission 3-5, frit rum, fartgraf, "Den lyseblå prik" | Opus |
 | 7 | Samlet gennemgang: test, faktatjek og eftersyn | Fable + Opus |
 
-Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage. Trin 1 er det vigtigste at få rigtigt, for det sætter niveauet.
+Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage. Trin 1a og 1b er de vigtigste at få rigtigt, for de sætter niveauet.
 
 ## 7. Åbne spørgsmål (vi tager dem ét ad gangen)
 1. Hvilke måner skal med fra start? (forslag ovenfor)
-2. Hvor store billeder: 2k som standard og 4k på pc? Hvor meget må delen fylde at hente?
+2. Hvor store billeder: 2k som standard og 4k på pc? Hvor meget må delen fylde at hente? Mit forslag: 4096 × 2048 på pc og halvdelen på tablet og telefon, ikke 8k.
 3. Skal Pluto og dværgplaneterne med?
 4. Hvad skal delen hedde i menuen ("Solsystemet") og spillet ("Rumrejsen")?
 5. Skal turen "Liv i solsystemet?" senere kobles sammen med den planlagte del "Liv"?
-6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi?
+6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere.
+7. Skal Jorden og Månen gøres flotte først (trin 1a)? Det kræver, at NASA's servere bliver tilladt (afsnit 5).
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)
 - **Planeterne og månerne:** fysiske tal og baneelementer (JPL Horizons og NASA Planetary Fact Sheets).
@@ -175,4 +198,4 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
   - 1 lysdøgn den 18. november 2026
   - hvor tit planeterne står, så den store tur kan lade sig gøre
 - **Slyngfysikken:** typiske fartændringer ved Jupiter, hvorfor planeten bremses en lille smule, og hvorfor sonder til Merkur bremser ved Venus.
-- **Billedlicenser:** NASA, USGS, JPL, Solar System Scope og andre.
+- **Billedlicenser:** NASA (fx Blue Marble, Black Marble og CGI Moon Kit), USGS, JPL, Solar System Scope og andre.
