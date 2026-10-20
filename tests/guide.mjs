@@ -18,6 +18,15 @@ for (const [navn, [w, h, mobil]] of Object.entries({ pc: [1280, 800, false], tlf
   const tryk = async (x, y) => { if (mobil) await page.touchscreen.tap(x, y); else await page.mouse.click(x, y); };
   const venTil = async (f, ms = 15000) => { const slut = Date.now() + ms; while (Date.now() < slut) { if (await f()) return true; await page.waitForTimeout(300); } return false; };
   const næste = () => page.click('.guide-næste');
+  // Når et tryk ikke virker: Hvad ligger der, hvor testen trykker, og hvilken kerne ville et tryk vælge?
+  const hvadErDer = async (r, navn2) => {
+    if (!r) return 'ingen ring';
+    await page.screenshot({ path: `${UD}/${navn}-fejl-${navn2}.png` });
+    return JSON.stringify(await T(([x, y]) => {
+      const el = document.elementFromPoint(x, y);
+      return { x: Math.round(x), y: Math.round(y), øverst: el ? `${el.tagName.toLowerCase()}#${el.id}.${[...el.classList].join('.')}` : null, kerne: atomlabTest.fusion.kerneVed(x, y) };
+    }, [r.x, r.y]));
+  };
   const fr = () => T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver || {});
 
   // ---------- Stjerneovnen ----------
@@ -40,15 +49,22 @@ for (const [navn, [w, h, mobil]] of Object.entries({ pc: [1280, 800, false], tlf
     if (r) await tryk(r.x, r.y);
     await venTil(async () => (await boble()) !== 'Vælg en proton', 2500);
   }
-  tjek(`${navn}: trin 3 skyd`, await venTil(async () => (await boble()) === 'Skyd den mod en anden', 5000), await boble());
+  const skydKlar = await venTil(async () => (await boble()) === 'Skyd den mod en anden', 5000);
+  tjek(`${navn}: trin 3 skyd`, skydKlar, skydKlar ? '' : `${await boble()} ${await hvadErDer(r, 'vaelg')}`);
   await page.waitForTimeout(500);
   await page.screenshot({ path: `${UD}/${navn}-f3-skyd.png` });
-  for (let forsøg = 0; forsøg < 3 && (await boble()) === 'Skyd den mod en anden'; forsøg++) {
+  // Forsvinder valget (tryk ved siden af, eller protonen smelter sammen af sig selv), skal ringen pege på en proton igen,
+  // så guiden ikke står fast. Næste tryk vælger den, og det efter skyder.
+  await T(() => atomlabTest.fusion.vælg(-1));
+  await page.waitForTimeout(500);
+  tjek(`${navn}: ringen bliver, selv om valget forsvinder`, (await ring()) !== null && (await boble()) === 'Skyd den mod en anden', await boble());
+  for (let forsøg = 0; forsøg < 4 && (await boble()) === 'Skyd den mod en anden'; forsøg++) {
     r = await ring();
     if (r) await tryk(r.x, r.y);
     await venTil(async () => (await boble()) !== 'Skyd den mod en anden', 2500);
   }
-  tjek(`${navn}: trin 4 varmen`, await venTil(async () => (await boble()) === 'Varmen er vigtig', 6000), await boble());
+  const varmeKlar = await venTil(async () => (await boble()) === 'Varmen er vigtig', 6000);
+  tjek(`${navn}: trin 4 varmen`, varmeKlar, varmeKlar ? '' : `${await boble()} ${await hvadErDer(r, 'skyd')}`);
   await T(() => atomlabTest.fusion.temperatur(15));
   await page.waitForTimeout(800);
   r = await ring();

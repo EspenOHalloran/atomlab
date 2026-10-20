@@ -713,7 +713,11 @@ function guideTrin() {
       start: () => {
         første = vælgPar('p', 'p')?.[0] ?? null;
       },
-      mål: () => (første && partikler.includes(første) ? kerneMål(første) : null),
+      mål: () => {
+        // Er protonen i ringen smeltet sammen af sig selv, vælges en ny
+        if (!første || !partikler.includes(første) || første.væk) første = vælgPar('p', 'p')?.[0] ?? null;
+        return første ? kerneMål(første) : null;
+      },
       vent: () => valgt !== null,
     },
     {
@@ -722,8 +726,14 @@ function guideTrin() {
       start: () => {
         skudtSelv = false;
       },
+      // Er valget væk (man trykkede ved siden af, eller protonen smeltede sammen af sig selv), peger ringen på en
+      // proton, man kan vælge igen. Ellers ville guiden stå fast uden en ring.
       mål: () => {
-        const p = valgt && nærmestePartner(valgt);
+        if (!valgt) {
+          if (!første || !partikler.includes(første) || første.væk) første = vælgPar('p', 'p')?.[0] ?? null;
+          return første ? kerneMål(første) : null;
+        }
+        const p = nærmestePartner(valgt);
         return p ? kerneMål(p) : null;
       },
       vent: () => skudtSelv,

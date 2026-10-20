@@ -37,6 +37,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Ting, som brugeren kan ændre undervejs (fx neutronens fart), gemmes, når handlingen starter.
 - [ ] Ændres et tempo eller en hastighed: find alt med en flyvetid, en tidsgrænse eller en "Vis mig", og tjek det igen.
 - [ ] "Vis mig" og andre automatiske handlinger vælger kun ting, som brugeren ikke allerede er i gang med (fx en kerne, der flyver).
+- [ ] Et guidetrin, der venter på noget, kan ikke gå i stå: Tjek, hvad der sker, hvis det, ringen peger på, forsvinder (et tryk ved siden af, en kerne, der smelter sammen af sig selv).
 
 ### D. Ny del (skærm), eller ændring i start og stop
 - [ ] Stop-funktionen rydder **alt**: timere, kameraets mål, kamerabegrænsninger, pause, guide, beskeder og cursor.
@@ -187,6 +188,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Tempo ganges på tiden, ikke på farten.** Stjerneovnens nye tempoer (0,3 / 0,6 / 3) ændrer ikke fysikken, så grafen og `BAKKE` passer stadig. `termiskFart` må ikke ændres for at gøre det langsommere.
 - **Tekst, der skrives om 4 gange i sekundet,** fjerner ordforklaringerne lige så tit (Batteriets forklaring). Nu skrives den kun om, når tilstanden skifter (`forklaringVist`). Det samme gælder panelet i Kosmos (`forklaring()` springer over, når teksten er den samme).
 - **En liste, der bygges om:** Formørkelsernes knapper blev bygget om ved at sætte `styring.length`. Det gav huller (`undefined`) i listen og en fejl i Kosmos. Brug `splice(0, styring.length, ...nye)`.
+- **Guiden i Stjerneovnen kunne gå i stå.** Ved "Skyd den mod en anden" pegede ringen på en partner til den valgte proton. Forsvandt valget (et tryk ved siden af, eller protonen smeltede sammen af sig selv), forsvandt ringen også, og guiden ventede for evigt på et skud. Fundet, fordi testen `guide` fejlede nu og da i hele samlingen (også én gang alene). Fejlsøgning i testen ("hvad ligger der, hvor der trykkes?") viste "ingen ring". Genskabt under belastning (1 af 2 runder), rettet, så ringen peger på en proton, man kan vælge igen, og testen fjerner nu valget med vilje.
 - **Ting, der skal blive væk:** Merkur og Venus kom tilbage, når Solen skrumpede til en hvid dværg, fordi "slugt" blev regnet ud fra Solens størrelse lige nu. Nu huskes det (`slugt`).
 
 ### Faldgruber: tests og værktøjer

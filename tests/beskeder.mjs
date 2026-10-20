@@ -47,8 +47,9 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   tjek(`${navn}: klokken vises med tal`, await page.evaluate(() => { const k = document.querySelector('#vaerkstedVindue .logknap'); return k && !k.hidden && Number(k.querySelector('b').textContent) >= 2; }));
   // Tryk på en pille for at læse mere
   await page.click('#vaerkstedVindue .pille .pille-knap');
-  await page.waitForTimeout(400);
-  tjek(`${navn}: pillen kan åbnes`, await page.evaluate(() => Boolean(document.querySelector('.pille.åben .pille-mere')?.offsetHeight)));
+  // Hold øje med pillen i stedet for at vente en fast tid (på en travl maskine tager det længere)
+  const åbnet = await page.waitForFunction(() => Boolean(document.querySelector('.pille.åben .pille-mere')?.offsetHeight), null, { timeout: 4000 }).then(() => true, () => false);
+  tjek(`${navn}: pillen kan åbnes`, åbnet);
   await page.screenshot({ path: `${UD}/${navn}-2-pille-aaben.png` });
   // Efter lidt tid er de andre piller væk, og den i køen er kommet
   await page.waitForTimeout(5500);
