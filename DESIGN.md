@@ -2,6 +2,23 @@
 
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
+## Lige nu (status til næste session)
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 20. oktober 2026.*
+
+**Senest lavet:**
+- Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
+- Skills: `/faerdig` og `/faktatjek` i `.claude/skills/`.
+
+**Venter på et go (i den rækkefølge, jeg vil foreslå):**
+1. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
+2. **Vis eller skjul panelerne:** begge dele (foldbare paneler og "Kun grafik"). Se "Idéer til senere". Mellemstor.
+3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Ingen Fable-credits lige nu, så Opus laver det med friske øjne og høj effort, hvis der ikke kommer credits.
+4. **Solsystemet, trin 1b:** prototypen med Saturn, Enceladus og Titan i topkvalitet.
+
+**Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen.
+
+**Ikke afprøvet endnu:** NASA-billederne på en rigtig tablet og telefon (kun i testbrowseren). Skills er ikke prøvet på en rigtig opgave.
+
 ## Grundregler
 - Dansk tekst i et enkelt sprog. Fagord forklares.
 - Tæt på den rigtige fysik. Forenklinger siges ærligt.

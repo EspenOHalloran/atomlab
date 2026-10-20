@@ -7,6 +7,8 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 
 **Læs også [docs/erfaringer.md](docs/erfaringer.md).** Den har tjeklister, som skal bruges: før et stykke arbejde er færdigt, ved nye tekster med fakta, ved nye regler eller ny spillogik, ved en ny del og ved nye animationer. Den beskriver også, hvorfor tidligere fejl opstod, og hvilke populære påstande der er forkerte. Skriv nye erfaringer ind løbende, både når noget virker godt, og når noget gik galt. Får en fejl en ny rodårsag, skal den også ind i en tjekliste.
 
+**Hukommelse mellem sessioner:** Kun det, der står i repoet, huskes. En ny session kan ikke se tidligere samtaler. Skriv derfor beslutninger, idéer og brugerens svar ind i DESIGN.md eller en plan i `docs/` med det samme og ikke kun i chatten. Afsnittet "Lige nu" øverst i DESIGN.md siger, hvad der senest er lavet, hvad der venter på et go, og hvad der er åbent. Læs det først, og hold det opdateret.
+
 **Skills:** `/faerdig` (før et stykke arbejde er færdigt) og `/faktatjek` (nye tekster med fakta) ligger i `.claude/skills/`.
 
 **Valg af model:** Sig til, før en opgave går i gang, hvis en anden model vil løse den bedre eller lige så godt, men billigere. Begrund det kort. Kvaliteten må ikke blive dårligere.

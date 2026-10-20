@@ -14,5 +14,6 @@ Følg trinene i rækkefølge. Spring intet over uden at sige det til brugeren, o
 5. **Læs dit eget diff kritisk** (`git diff`): fejl, glemte rester, kode, der ikke bruges, danske navne og korte danske kommentarer som i resten af koden.
 6. **Hele samlingen:** Kør `node tests/koer-alle.mjs` i baggrunden, og vent på resultatet i samme tur. Fejler en test kun sammen med andre, så find årsagen (tit en fast ventetid) i stedet for at kalde den ustabil.
 7. **Dokumentation:** Opdater `CLAUDE.md` (filer og gemte data), sæt kryds i `DESIGN.md`, og opdater `README.md` og `tests/README.md`, hvis noget er nyt. Skriv nye erfaringer i `docs/erfaringer.md`. Får en fejl en ny rodårsag, skal den også ind i en tjekliste.
-8. **Commit og push:** Skriv beskeden på dansk, og slut med de linjer, systemet beder om (Co-Authored-By og Claude-Session). Skriv aldrig modelnavne i beskeden eller i koden. Push til `main`.
-9. **Fortæl kort:** hvad der er lavet, testresultatet med tal, hvad der ikke er afprøvet (fx en rigtig tablet), og hvad der venter på et go.
+8. **"Lige nu" øverst i DESIGN.md:** Skriv, hvad der senest er lavet, hvad der venter på et go, hvilke spørgsmål der er åbne, og hvad der ikke er afprøvet. Skriv også beslutninger og svar fra samtalen ind, hvis de kun står i chatten. En ny session kan ikke se samtalen.
+9. **Commit og push:** Skriv beskeden på dansk, og slut med de linjer, systemet beder om (Co-Authored-By og Claude-Session). Skriv aldrig modelnavne i beskeden eller i koden. Push til `main`.
+10. **Fortæl kort:** hvad der er lavet, testresultatet med tal, hvad der ikke er afprøvet (fx en rigtig tablet), og hvad der venter på et go.
