@@ -14,7 +14,7 @@ export default {
   navn: 'Kilonova',
   ikon: '✨',
   undertitel: 'To neutronstjerner støder sammen og laver guld',
-  citat: 'saganKosmos',
+  citat: 'saganStjernestof',
   kamera: { retning: [0, 0.6, 1], radius: 8 },
   tal: [
     ['Set sammen med tyngdebølger', '17. august 2017'],

@@ -58,7 +58,7 @@ export default {
   navn: 'Solens fremtid',
   ikon: '🌅',
   undertitel: 'Rød kæmpe, planetarisk tåge og hvid dværg',
-  citat: 'saganScene',
+  citat: 'eddington',
   kamera: { retning: [0.15, 0.55, 1], radius: 8 },
   tal: [
     ['Solens alder', 'ca. 4,6 mia. år'],

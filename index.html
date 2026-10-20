@@ -231,6 +231,24 @@
         <button class="knap" id="systemByg">Byg det i værkstedet</button>
       </div>
     </aside>
+    <aside class="panel system-kategori" id="systemKategori" aria-label="Om kategorien">
+      <div class="kat-hoved"><span class="farveprik"></span><h3 id="katNavn"></h3><button class="knap lille" id="katLuk" title="Luk og vis alle grundstoffer">✕</button></div>
+      <p class="kat-fælles" id="katFælles"></p>
+      <div class="kat-atom">
+        <canvas id="katAtom" width="240" height="240" aria-hidden="true"></canvas>
+        <div><h4>Hvorfor?</h4><p id="katHvorfor"></p><p class="kat-lille" id="katAtomTekst"></p></div>
+      </div>
+      <div class="kat-forsøg">
+        <h4 id="katForsøgTitel"></h4>
+        <div class="kat-valg" id="katForsøgValg"></div>
+        <canvas id="katForsøg" width="520" height="260" aria-hidden="true"></canvas>
+        <p id="katForsøgTekst"></p>
+      </div>
+      <p class="kat-tendens" id="katTendens"></p>
+      <div><h4>Kendte medlemmer</h4><div class="kat-medlemmer" id="katMedlemmer"></div></div>
+      <p class="ærligt" id="katÆrligt"></p>
+      <div class="kat-links" id="katLinks"></div>
+    </aside>
     <nav class="panel system-filtre" id="systemFiltre" aria-label="Filtre">
       <button class="chip filter filter-knap" id="systemFilterKnap" aria-expanded="false" aria-controls="systemChips">Filtre</button>
       <div class="filter-chips" id="systemChips"></div>
@@ -460,7 +478,7 @@
         <p><strong>Pause:</strong> Mellemrumstasten (eller "Pause") stopper tiden. Så kan du tælle neutronerne og dreje kameraet. Kontrolstavene kan stadig flyttes.</p>
         <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men der kan ske alvorlige ulykker. I Tjernobyl i 1986 løb reaktoren løbsk under et forsøg, effekten steg voldsomt på få sekunder, og en dampeksplosion sprængte den. I Fukushima i 2011 svigtede kølingen efter en tsunami, brændslet smeltede, og der skete brinteksplosioner. Begge steder blev radioaktive stoffer spredt. Derfor har reaktorer mange sikkerhedssystemer.</p>
         <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
-        <blockquote class="citat" data-citat="einsteinEnergi"></blockquote>
+        <blockquote class="citat" data-citat="meitnerFrisch"></blockquote>
         <p class="nulstil-linje"><button class="knap lille" id="reaktorGuideIgen">Vis guiden igen</button></p>
       </div>
     </div>

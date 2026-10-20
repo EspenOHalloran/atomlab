@@ -721,6 +721,33 @@ button { font: inherit; color: inherit; }
 .kort-styring #systemLuk { margin-left: 6px; }
 #system.detalje .system-kort { display: flex; }
 #system.detalje .system-filtre { display: none; }
+/* Kategorikortet: til højre for væggen, når en kategori er valgt (og intet grundstof er åbnet) */
+#system.kategori:not(.detalje) { grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); }
+.system-kategori { grid-area: kort; display: none; flex-direction: column; gap: 10px; padding: 14px; overflow-y: auto; scrollbar-width: none; min-height: 0; font-size: 14px; line-height: 1.45; }
+.system-kategori::-webkit-scrollbar { display: none; }
+#system.kategori:not(.detalje) .system-kategori { display: flex; }
+.system-kategori h4 { margin: 0 0 4px; font-size: 13px; color: var(--svag); text-transform: uppercase; letter-spacing: 0.04em; }
+.system-kategori p { margin: 0; }
+.kat-hoved { display: flex; align-items: center; gap: 8px; }
+.kat-hoved .farveprik { width: 14px; height: 14px; background: var(--farve); }
+.kat-hoved h3 { margin: 0; flex: 1; font-size: 20px; color: var(--farve); }
+.kat-fælles { font-size: 15px; }
+.kat-atom { display: flex; gap: 12px; align-items: center; }
+.kat-atom canvas { flex: 0 0 120px; width: 120px; height: 120px; }
+.kat-lille { margin-top: 4px !important; font-size: 12.5px; color: var(--svag); }
+.kat-forsøg { display: flex; flex-direction: column; gap: 6px; }
+.kat-forsøg canvas { width: 100%; height: auto; aspect-ratio: 2 / 1; border-radius: 12px; background: rgba(5, 8, 20, 0.7); border: 1px solid var(--panel-kant); }
+.kat-valg { display: flex; gap: 6px; flex-wrap: wrap; }
+.kat-valg[hidden] { display: none; }
+.kat-tendens { font-weight: 600; }
+.kat-tendens[hidden], .system-kategori .ærligt[hidden] { display: none; }
+.kat-medlemmer { display: flex; gap: 6px; flex-wrap: wrap; }
+.kat-medlem { display: flex; flex-direction: column; align-items: center; min-width: 64px; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.04); color: inherit; font: inherit; cursor: pointer; }
+.kat-medlem span { font-size: 20px; font-weight: 800; color: var(--farve); }
+.kat-medlem small { font-size: 11.5px; color: var(--svag); }
+.kat-medlem:hover, .kat-medlem:focus-visible { border-color: var(--farve); }
+.kat-links { display: flex; flex-direction: column; gap: 6px; }
+.kat-links .knap { justify-content: flex-start; text-align: left; }
 .system-kort .tal div { grid-template-columns: 110px 1fr; }
 .system-kort .tal dd { font-size: 13.5px; line-height: 1.4; }
 .system-kort .fakta { font-size: 15px; }
@@ -1054,6 +1081,8 @@ button { font: inherit; color: inherit; }
   .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
   #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }
+  #system.kategori:not(.detalje) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto auto; grid-template-areas: "top" "vindue" "kort" "filtre"; }
+  .system-kategori { max-height: 42vh; }
   .system-kort { max-height: 48vh; overflow-y: auto; }
   .system-filtre { max-height: 22vh; overflow-y: auto; }
   .søgefelt { flex: 1 1 150px; max-width: 220px; }

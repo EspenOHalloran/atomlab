@@ -3,7 +3,7 @@
 Lær om atomer og grundstoffer i 3D:
 
 - **Atomværkstedet:** byg atomer af protoner, neutroner og elektroner, og se kerner henfalde
-- **Det periodiske system:** alle 118 grundstoffer på en buet 3D-væg med fakta
+- **Det periodiske system:** alle 118 grundstoffer på en buet 3D-væg med fakta, og et kort for hver kategori med et lille atom, der viser hvorfor, og et animeret forsøg (fx alkalimetal i vand)
 - **Stjerneovnen:** fusion som i Solens kerne (pp-kæden) og carbon i røde kæmper
 - **Reaktoren:** spalt uran og styr en kædereaktion
 - **Batteriet:** se ioner og elektroner, når et LiPo-batteri lades op og aflades

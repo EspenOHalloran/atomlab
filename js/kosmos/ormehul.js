@@ -22,7 +22,7 @@ export default {
   navn: 'Ormehul',
   ikon: '🌀',
   undertitel: 'En genvej gennem rumtiden (hvis de findes)',
-  citat: 'einsteinNysgerrighed',
+  citat: 'haldane',
   kamera: { retning: [0.75, 0.32, 1], radius: 16, mål: [3, 0, 0], drej: false },
   tal: [
     ['Fundet i Einsteins ligninger', '1916 og 1935'],

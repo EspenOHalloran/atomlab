@@ -2,7 +2,7 @@
 // To stråler (jets) skyder ud med næsten lysets fart.
 
 import * as THREE from 'three';
-import { glød, prikSky, toningTekstur, KVALITET } from './faelles.js';
+import { glød, prikSky, toningTekstur, skilt, KVALITET } from './faelles.js';
 
 const GALAKSE_R = 22;
 const JET_LÆNGDE = 42;
@@ -15,6 +15,7 @@ export default {
   navn: 'Kvasar',
   ikon: '🌟',
   undertitel: 'Et sort hul, der lyser stærkere end en hel galakse',
+  citat: 'einsteinForstå',
   kamera: { retning: [0.3, 0.55, 1], radius: 21 },
   tal: [
     ['Første kvasar, man forstod', '3C 273 (1963)'],
@@ -24,15 +25,17 @@ export default {
   ],
   kort: `
     <p>En <b>kvasar</b> er et kæmpe sort hul i midten af en galakse, der spiser enorme mængder gas. Gassen hvirvler rundt og bliver så varm, at den lyser stærkere end alle galaksens milliarder af stjerner tilsammen.</p>
-    <p>Hos nogle kvasarer bliver noget af gassen skudt ud i to <b>stråler</b> (jets) med næsten lysets fart. De kan blive længere end hele galaksen.</p>
+    <p>Hos nogle kvasarer bliver noget af gassen skudt ud i to <b>stråler</b> (jets) med næsten lysets fart. De kan blive længere end hele galaksen. Strålerne kommer ikke ud af selve det sorte hul. De bliver slynget ud lige uden for det af magnetfelter, som skiven og det snurrende sorte hul vrider op.</p>
     <p>Vores egen galakse, Mælkevejen, har også et kæmpe sort hul i midten. Men det får næsten ingen mad, så det lyser kun meget svagt. Prøv at slukke og tænde kvasaren, og giv det sorte hul mad.</p>`,
   nørd: `
     <p><b>Navnet</b> kommer af "kvasistellar", som betyder "næsten som en stjerne". I et teleskop ligner en kvasar nemlig bare en prik. I 1963 opdagede Maarten Schmidt, at lyset fra kvasaren 3C 273 var forskudt mod rødt, så lyset måtte have været ca. 2 milliarder år undervejs. Når den alligevel kan ses herfra, må den lyse helt utroligt kraftigt.</p>
     <p><b>Mere effektivt end fusion:</b> Når Solen laver helium af hydrogen, bliver 0,7 % af massen til energi (se Stjerneovnen). Gas, der falder ind mod et sort hul, kan afgive over 10 % af sin masse som energi. Det er derfor, kvasarer kan lyse så kraftigt.</p>
+    <p><b>Hvorfor stråler?</b> Gassen i skiven er så varm, at den er plasma, og plasma trækker magnetfelter med sig. Når skiven og det snurrende sorte hul drejer rundt, bliver magnetfeltet vredet op som en proptrækker langs aksen. Noget af plasmaet bliver slynget ud langs feltet med næsten lysets fart og klemt sammen til to smalle stråler, én op og én ned. Energien kan komme fra det sorte huls egen drejning. Tryk "Vis magnetfeltet" for at se det.</p>
+    <p><b>Det ved man ikke helt:</b> Forskerne er ikke sikre på alle detaljer, og ingen ved præcis, hvorfor kun ca. hver tiende kvasar har kraftige stråler. Men i 2021 viste Event Horizon Telescope mønsteret i magnetfeltet lige uden for det sorte hul i galaksen M87, som har samme slags stråler, og det passer med forklaringen.</p>
     <p><b>At kigge tilbage i tiden:</b> Lys er længe om at nå frem. De fjerneste kvasarer ser vi, som de så ud for over 13 milliarder år siden, da universet var ungt og galakserne fulde af gas. Lyset sendte de ud, længe før Jorden fandtes.</p>
     <p><b>Ærligt talt:</b> Det sorte hul, skiven og strålerne er tegnet enormt store i forhold til galaksen. I virkeligheden er hele det lysende område ikke meget større end vores solsystem, mens galaksen er 100.000 lysår bred.</p>`,
 
-  lav(gruppe, { kamera, opdaterKnapper, verden }) {
+  lav(gruppe, { kamera, opdaterKnapper, verden, fase }) {
     // Galaksen: en central kugle af gamle, gule stjerner og to spiralarme med unge, blå stjerner
     const N = Math.round(7000 * KVALITET);
     const r0 = new Float32Array(N);
@@ -103,6 +106,30 @@ export default {
       gruppe.add(kegle);
     }
 
+    // Magnetfeltet: feltlinjer, der starter i skiven og bliver vredet op som en proptrækker langs aksen.
+    // Længere ude bliver proptrækkeren smallere og klemmer strålen sammen. Det hele drejer med skiven.
+    const felt = new THREE.Group();
+    const feltMat = new THREE.LineBasicMaterial({ color: new THREE.Color(0.45, 1.6, 1.3), transparent: true, opacity: 0.75, depthWrite: false, blending: THREE.AdditiveBlending });
+    const FELT_HØJDE = 16;
+    for (const side of [1, -1]) {
+      for (let j = 0; j < 6; j++) {
+        const r0 = 0.5 + (j % 3) * 0.45; // hvor i skiven linjen starter
+        const punkter = [];
+        for (let k = 0; k <= 160; k++) {
+          const s = k / 160;
+          const r = 0.22 + (r0 - 0.22) * Math.exp(-s * 5);
+          const v = (j / 6) * Math.PI * 2 - s * Math.PI * 2 * 6; // længere ude halter linjen efter skiven (den bliver vredet op)
+          punkter.push(new THREE.Vector3(Math.cos(v) * r, side * (0.05 + s * FELT_HØJDE), Math.sin(v) * r));
+        }
+        felt.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(punkter), feltMat));
+      }
+    }
+    const feltSkilt = skilt('Magnetfelt', '#7ff0d8', 0.3);
+    feltSkilt.position.set(1.1, 2.3, 0);
+    felt.add(feltSkilt);
+    felt.visible = false;
+    gruppe.add(felt);
+
     // Mad: en sky af gas, der spiraler ind mod hullet
     const NM = Math.round(400 * KVALITET);
     const mR = new Float32Array(NM);
@@ -118,6 +145,7 @@ export default {
     let ekstra = 0; // ekstra lys, når den får mad
     let tid = 0;
 
+    const zoom = (til) => kamera(til ? { retning: [0.3, 0.45, 1], radius: 3.4, flyv: false } : { retning: [0.3, 0.55, 1], radius: 21, flyv: false });
     const styring = [
         { tekst: '💡 Kvasaren er tændt', til: true, skift: (til) => { tændt = til; } },
         {
@@ -136,7 +164,21 @@ export default {
             }
           }, deaktiv: () => mad.visible,
         },
-        { tekst: '🔍 Zoom ind i kernen', til: false, skift: (til) => kamera(til ? { retning: [0.3, 0.45, 1], radius: 3.4, flyv: false } : { retning: [0.3, 0.55, 1], radius: 21, flyv: false }) },
+        { tekst: '🔍 Zoom ind i kernen', til: false, skift: (til) => zoom(til) },
+        {
+          // Feltet kan kun ses tæt på, så knappen zoomer også ind
+          tekst: '🧲 Vis magnetfeltet', til: false, skift: (til) => {
+            felt.visible = til;
+            if (til) {
+              fase('Magnetfeltet', 'Skiven og det snurrende sorte hul vrider magnetfeltet op som en proptrækker. Langs den bliver plasma slynget ud i to smalle stråler.');
+              if (!styring[2].til) {
+                styring[2].til = true;
+                zoom(true);
+                opdaterKnapper();
+              }
+            } else fase(null);
+          },
+        },
     ];
 
     return {
@@ -171,6 +213,8 @@ export default {
         galakse.visible = skær.visible = galakseSynlig > 0.01;
         skive.material.opacity = 0.25 + 0.75 * Math.min(1, lys);
         skive.rotation.z += dt * 1.5;
+        if (felt.visible) felt.rotation.y += dt * 1.5; // drejer med skiven, så proptrækkeren ser ud til at skrue sig udad
+        feltMat.opacity = 0.3 + 0.45 * Math.min(1, lys);
         jetMat.opacity = 0.3 * Math.min(1, lys);
 
         // Strålerne: prikkerne suser udad og drejer lidt i en spiral

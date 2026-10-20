@@ -16,7 +16,7 @@ export default {
   navn: 'Pulsar',
   ikon: '🔦',
   undertitel: 'En neutronstjerne, der blinker som et fyrtårn',
-  citat: 'hawkingStjerner',
+  citat: 'bellBurnell',
   kamera: { retning: [-0.25, 0.45, 1], radius: 10 },
   tal: [
     ['Bredde', 'ca. 20 km'],

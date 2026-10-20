@@ -133,8 +133,12 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
     await page.click('#systemChips .filter[data-værdi="aedelgas"]');
     await page.waitForTimeout(600);
     tjek(`${navn}: knappen viser antal filtre`, (await page.textContent('#systemFilterKnap')).includes('(1)'));
+    // En kategori folder filtrene sammen, så der er plads til kategorikortet
+    tjek(`${navn}: filtrene folder sig sammen, og kategorikortet vises`, !(await page.isVisible('#systemChips .filter')) && (await page.isVisible('#systemKategori')));
     await page.screenshot({ path: `${UD}/${navn}-5-filtre.png` });
-    await page.click('#systemChips .filter[data-værdi="aedelgas"]');
+    await page.click('#katLuk');
+    await page.waitForTimeout(300);
+    tjek(`${navn}: ✕ på kortet fjerner filteret`, !(await page.textContent('#systemFilterKnap')).includes('('));
   } else {
     tjek(`${navn}: filtrene står frit`, chipsSynlige);
   }

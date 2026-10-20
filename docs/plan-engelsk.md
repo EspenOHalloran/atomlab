@@ -8,7 +8,7 @@ Man skal kunne vælge mellem dansk og engelsk, og alt skal oversættes: knapper,
 ## Hvor stor er opgaven?
 Den er stor, men det skyldes mest mængden af tekst. Teknisk er den ligetil.
 
-- Der er ca. **20.000 ord** tekst fordelt på ca. 30 filer (talt i oktober 2026, efter Årstiderne, Formørkelser og ordforklaringerne). Det svarer til en lille bog.
+- Der er ca. **21.500 ord** tekst fordelt på ca. 32 filer (talt i oktober 2026, efter Årstiderne, Formørkelser, kategorikortet og ordforklaringerne). Det svarer til en lille bog.
 - De største dele er:
 
   | Del | Ord |
@@ -16,6 +16,7 @@ Den er stor, men det skyldes mest mængden af tekst. Teknisk er den ligetil.
   | Hjælpen og teksterne i `index.html` | 3.100 |
   | Kosmos (15 fænomener i `js/kosmos/`) | 8.300 |
   | `js/data/ordbog.js` (ordforklaringerne) | 800 |
+  | `js/data/kategorier.js` og `js/kategorikort.js` (kategorikortet) | 1.200 |
   | `js/data/fakta.js` (fakta om alle 118 grundstoffer) | 1.800 |
   | `js/vaerksted.js` | 1.500 |
   | `js/data/grundstoffer.js` (navne, kategorier og korte fakta) | 1.200 |

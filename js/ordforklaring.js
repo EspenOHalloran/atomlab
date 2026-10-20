@@ -7,7 +7,7 @@ import { ORDBOG } from './data/ordbog.js';
 // Steder med tekst, hvor fagord bliver markeret. Hvert sted får hvert ord markeret én gang (første gang det står der).
 const ZONER = [
   '.hjælp-indhold', '.forklaring-boks', '.seneste-boks', '.kosmos-tekst', '.kosmos-forklaring', '.fane',
-  '.system-kort', '.ærligt', '.ut-tekst', '.pille-mere', '#logListe li',
+  '.system-kort', '.system-kategori', '.ærligt', '.ut-tekst', '.pille-mere', '#logListe li',
 ].join(', ');
 // Her markeres aldrig (knapper, overskrifter, citater og fremhævet tekst)
 const ALDRIG = 'button, a, input, textarea, select, label, h1, h2, h3, h4, strong, b, summary, blockquote, .fagord, .ordforklaring, canvas, svg';

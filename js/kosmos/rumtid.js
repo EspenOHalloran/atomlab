@@ -8,7 +8,7 @@ export default {
   navn: 'Rumtid',
   ikon: '🌐',
   undertitel: 'Tyngdekraft som en gummidug',
-  citat: 'feynmanVæv',
+  citat: 'wheeler',
   kamera: { retning: [0, 0.62, 0.78], radius: 21 },
   tal: [
     ['Teorien', 'Einstein, 1915'],

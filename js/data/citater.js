@@ -125,12 +125,63 @@ export const CITATER = {
     original: 'One never notices what has been done; one can only see what remains to be done.',
     oversat: 'fransk',
   },
+  carrington: {
+    tekst: 'Inde i den store nordlige gruppe af solpletter brød to pletter af meget stærkt, hvidt lys pludselig frem.',
+    person: 'Richard Carrington',
+    kilde: 'Monthly Notices of the Royal Astronomical Society, 1859',
+    original: '… within the area of the great north group (the size of which had previously excited general remark), two patches of intensely bright and white light broke out …',
+    kommentar: 'Det var det første solglimt, nogen har beskrevet (1. september 1859). Dagen efter ramte solstormen Jorden: Der var nordlys helt ned til Caribien, og telegraflinjer slog gnister.',
+  },
+  tycho: {
+    tekst: 'Sandelig et mirakel, enten det største af alle dem, der er sket i hele naturen siden verdens begyndelse …',
+    person: 'Tycho Brahe',
+    kilde: 'De nova stella, 1573',
+    original: 'A miracle indeed, either the greatest of all that have occurred in the whole range of nature since the beginning of the world, …',
+    oversat: 'latin',
+    kommentar: 'Tycho Brahe så en ny stjerne i stjernebilledet Cassiopeia i november 1572. Han målte, at den var meget længere væk end Månen, så himlen var ikke uforanderlig, som man troede. I dag ved vi, at det var en supernova.',
+  },
+  bellBurnell: {
+    tekst: 'Jeg gik hjem den aften og var meget sur. Her prøvede jeg at tage en ph.d. med en ny teknik, og så skulle en flok fjollede små grønne mænd vælge netop min antenne og min frekvens for at tale med os.',
+    person: 'Jocelyn Bell Burnell',
+    kilde: 'Tale i 1976, trykt i Cosmic Search, 1979',
+    original: '… I went home that evening very cross—here was I trying to get a Ph.D. out of a new technique, and some silly lot of little green men had to choose my aerial and my frequency to communicate with us.',
+    kommentar: 'Hun opdagede den første pulsar i 1967, mens hun var ph.d.-studerende. Signalet var så regelmæssigt, at det for sjov blev kaldt LGM-1 (Little Green Men). Det var en neutronstjerne, der snurrede rundt.',
+  },
+  reitze: {
+    tekst: 'Mine damer og herrer, vi har målt tyngdebølger. Vi gjorde det!',
+    person: 'David Reitze, leder af LIGO',
+    kilde: 'Pressemøde, 11. februar 2016',
+    original: 'Ladies and gentlemen, we have detected gravitational waves. We did it.',
+    kommentar: 'Bølgerne kom fra to sorte huller, der smeltede sammen ca. 1,3 milliarder lysår væk. De blev målt den 14. september 2015.',
+  },
+  einsteinForstå: {
+    tekst: 'Det evigt ubegribelige ved verden er, at den kan begribes.',
+    person: 'Albert Einstein',
+    kilde: 'Physik und Realität, 1936',
+    original: 'The eternal mystery of the world is its comprehensibility.',
+    oversat: 'tysk',
+    kommentar: 'Lyset fra kvasaren 3C 273 har været ca. 2 milliarder år undervejs. Alligevel kan vi regne ud, hvad der sendte det af sted.',
+  },
+  haldane: {
+    tekst: 'Jeg har selv en mistanke om, at universet ikke bare er mærkeligere, end vi tror, men mærkeligere, end vi kan forestille os.',
+    person: 'J.B.S. Haldane',
+    kilde: 'Possible Worlds and Other Essays, 1927',
+    original: 'Now my own suspicion is that the universe is not only queerer than we suppose, but queerer than we can suppose.',
+    kommentar: 'Ormehuller er en mulighed i Einsteins ligninger, men ingen ved, om de findes.',
+  },
+  meitnerFrisch: {
+    tekst: 'Det ser derfor ud til, at urankernen kun er lidt stabil i formen og efter at have fanget en neutron kan dele sig i to kerner af nogenlunde samme størrelse.',
+    person: 'Lise Meitner og Otto Frisch',
+    kilde: 'Nature, 1939',
+    original: 'It seems therefore possible that the uranium nucleus has only small stability of form, and may, after neutron capture, divide itself into two nuclei of roughly equal size.',
+    kommentar: 'Meitner og hendes nevø Otto Frisch forklarede i 1939, hvad Otto Hahn og Fritz Strassmann havde set: Urankernen var blevet delt. Frisch kaldte det fission efter et ord fra biologien. Hahn fik Nobelprisen, men Meitner fik den aldrig.',
+  },
 };
 
 // Citater, der passer godt i menuen
 export const MENU_CITATER = [
   'feynman', 'saganÆbletærte', 'einsteinNysgerrighed', 'rutherford', 'saganStjernestof', 'einsteinEnergi',
-  'hawkingStjerner', 'faraday', 'saganKosmos', 'eddington',
+  'hawkingStjerner', 'faraday', 'saganKosmos', 'eddington', 'tycho', 'einsteinForstå', 'haldane',
 ];
 
 // Laver HTML til et citat (teksten er vores egen, så den kan sættes direkte ind)

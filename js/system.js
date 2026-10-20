@@ -11,6 +11,7 @@ import { FAKTA, opdagetTekst } from './data/fakta.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { lavKategorikort } from './kategorikort.js';
 
 const AFSTAND = 1.07; // afstand mellem felterne
 const BUE = 26; // radius på væggens bue
@@ -31,6 +32,8 @@ let fundne = new Set(); // de grundstoffer, der passer til søgningen
 let vægTilbage = 0; // 0 = væggen fremme, 1 = væggen trukket tilbage (detaljevisning)
 let tilVærksted = null; // funktion, der åbner et grundstof i værkstedet
 let tipVist = false;
+let kategorikort = null; // kortet om den valgte kategori (js/kategorikort.js)
+let kategoriTid = 0; // sekunder siden kategorien blev valgt (væggen laver en bølge)
 const stråle = new THREE.Raycaster();
 const mus = new THREE.Vector2();
 const hjælpV = new THREE.Vector3();
@@ -81,6 +84,14 @@ export function lavSystem({ åbnIVærksted }) {
   lavFiltre();
   lavSøgning();
   lavKnapper();
+  kategorikort = lavKategorikort({
+    åbnGrundstof: (nr) => visDetalje(nr),
+    åbnIVærksted: (nr) => tilVærksted(nr),
+    luk: () => {
+      filter.kategori = null;
+      opdaterFilterKnapper();
+    },
+  });
   const lærred = verden.renderer.domElement;
   lærred.addEventListener('pointermove', vedMusFlyt);
   lærred.addEventListener('pointerdown', (h) => {
@@ -423,6 +434,11 @@ function lavFiltre() {
       lyd.klik();
       if (type === 'opdaget') filter.opdaget = !filter.opdaget;
       else filter[type] = filter[type] === værdi ? null : værdi;
+      // På telefoner folder filtrene sig sammen, når man vælger en kategori, så der er plads til kortet
+      if (type === 'kategori' && filter.kategori && $('systemFilterKnap').offsetParent) {
+        $('systemFiltre').classList.remove('vis-filtre');
+        $('systemFilterKnap').setAttribute('aria-expanded', false);
+      }
       opdaterFilterKnapper();
     });
     return b;
@@ -452,6 +468,24 @@ function opdaterFilterKnapper() {
   const antal = GRUNDSTOFFER.filter((g) => passerFilter(g.nr)).length;
   $('systemAntal').textContent = antal === 118 ? '' : søgning ? `${antal} passer til søgningen` : `${antal} grundstoffer passer`;
   if (forhånd && !passerFilter(forhånd)) sætForhånd(null);
+  opdaterKategori();
+}
+
+// Kategorikortet vises, når en kategori er valgt (og man ikke søger). Væggen bliver smallere og passes ind igen.
+function opdaterKategori() {
+  if (!kategorikort) return;
+  const kat = !søgning && filter.kategori ? filter.kategori : null;
+  const før = $('system').classList.contains('kategori');
+  $('system').classList.toggle('kategori', Boolean(kat));
+  if (kat && kat !== kategorikort.vist()) {
+    kategorikort.vis(kat);
+    kategoriTid = 0;
+  }
+  if (!kat) kategorikort.skjul();
+  if (før !== Boolean(kat) && aktiv && !valgt) {
+    sætVindue($('systemVindue'));
+    passerTilBoks(VÆG_HALV_BREDDE, VÆG_HALV_HØJDE);
+  }
 }
 
 // Mens man søger, gælder kun søgningen. Ellers gælder filtrene.
@@ -581,11 +615,18 @@ function opdater(dt) {
   væg.position.z = -45 * vægTilbage;
   væg.scale.setScalar(1 - 0.3 * vægTilbage);
   væg.visible = vægTilbage < 0.85; // væggen skjules bag atomet
+  // Er en kategori valgt, glider dens felter lidt frem i en bølge fra venstre mod højre
+  kategoriTid += dt;
+  const bølge = filter.kategori && !søgning && !valgt;
   for (const f of felter) {
     const mål = {
       løft: valgt ? (f.nr === valgt ? 1 : 0) : f.nr === svæver || f.nr === forhånd ? 1 : 0,
       dæmp: passerFilter(f.nr) ? 0 : 1,
     };
+    if (bølge && mål.dæmp === 0) {
+      const forsinkelse = (f.start.x + 11) * 0.035;
+      if (kategoriTid > forsinkelse) mål.løft = Math.max(mål.løft, kategoriTid < forsinkelse + 0.35 ? 0.75 : 0.3);
+    }
     f.løft += (mål.løft - f.løft) * blød;
     f.dæmp += (mål.dæmp - f.dæmp) * blød;
     // Feltet løftes ud mod en (langs sin egen retning) og bliver lidt større
@@ -601,6 +642,7 @@ function opdater(dt) {
   if (!valgt) holdPåVæggen();
   if (forhånd && !valgt) flytForhånd();
   if (atom.gruppe.visible) atom.opdater(dt);
+  if (!valgt) kategorikort.opdater(dt);
 }
 
 // Kun til automatiske tests
@@ -611,6 +653,8 @@ export function testAdgang() {
     forhånd: () => forhånd,
     glemForhånd: () => sætForhånd(null),
     valgt: () => valgt,
+    kategori: () => kategorikort.vist(),
+    kategoriSpol: (sek) => kategorikort.spol(sek),
     styring: () => ({ pan: verden.styring.enablePan, én: verden.styring.touches.ONE, mål: verden.styring.target.toArray().map((v) => Math.round(v * 100) / 100) }),
     flyt: (x, y) => { verden.styring.target.x += x; verden.styring.target.y += y; verden.kamera.position.x += x; verden.kamera.position.y += y; },
     søg: (tekst) => { $('systemSøg').value = tekst; søg(tekst); return [...$('systemResultater').querySelectorAll('.søg-valg')].map((b) => b.textContent); },

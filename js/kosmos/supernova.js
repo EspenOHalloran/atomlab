@@ -23,7 +23,7 @@ export default {
   navn: 'Supernova',
   ikon: '💥',
   undertitel: 'En kæmpestjerne eksploderer',
-  citat: 'saganStjernestof',
+  citat: 'tycho',
   kamera: { retning: [0.35, 0.3, 1], radius: 8.5 },
   tal: [
     ['Betelgeuse er', 'ca. 550 lysår væk'],

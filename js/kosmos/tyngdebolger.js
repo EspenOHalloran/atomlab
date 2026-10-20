@@ -17,7 +17,7 @@ export default {
   navn: 'Tyngde\u00adbølger', // blød bindestreg, så navnet kan deles i listen
   ikon: '〰️',
   undertitel: 'Bølger i selve rumtiden',
-  citat: 'wheeler',
+  citat: 'reitze',
   kamera: { retning: [0.15, 0.55, 1], radius: 18 },
   tal: [
     ['Forudsagt', 'Einstein, 1916'],
