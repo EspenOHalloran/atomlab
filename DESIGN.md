@@ -158,8 +158,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Tilbage bliver underteksterne, pause (mellemrum), tabellen og himmelkortet i 3D-billedet og en lille "Næste ›" i underteksten i fænomener, der går trin for trin.
   - Valget huskes for hver skærm, men første gang er panelerne fremme. På tablet og telefon på højkant viser "Kun grafik" 3D-billedet på hele skærmen.
   - Gælder de fem skærme med panel, 3D og panel (Værkstedet, Stjerneovnen, Reaktoren, Batteriet og Kosmos). Det periodiske system har sit eget layout og kommer ikke med i første omgang.
-  - Mellemstor opgave. Risikoen er layoutet på de mange skærmstørrelser, så det skal testes på pc, tablet og telefon begge veje. Åbent: begge dele (anbefalet) eller kun "Kun grafik".
-- **Skills til udviklingen** (foreslået): korte "opskrifter" i `.claude/skills/`, som Claude følger hver gang, fx `/faerdig` (tests, skærmbilleder, dokumentation, commit og push) og `/faktatjek` (påstande, kilder og fælderne i docs/erfaringer.md). De skal pege på tjeklisterne i erfaringer.md og ikke kopiere dem. Venter på et go.
+  - Mellemstor opgave. Risikoen er layoutet på de mange skærmstørrelser, så det skal testes på pc, tablet og telefon begge veje. Besluttet: begge dele (foldbare paneler og "Kun grafik"). Venter på et go.
+- [x] **Skills til udviklingen** (lavet i oktober 2026): `/faerdig` (tests, skærmbilleder, dokumentation, commit og push) og `/faktatjek` (påstande, kilder og fælderne) i `.claude/skills/`. De peger på tjeklisterne i `docs/erfaringer.md` og kopierer dem ikke.
 - **Rækkefølge** (aftalt): Årstiderne (Trin 13) og formørkelserne (Trin 14) er lavet. Så Tjernobyl og til sidst Liv.
 - **Ny del: Liv** (foreslået af jer): et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme (fx Miller-Urey-forsøget, byggesten, hinder, RNA). Vigtigt at sige ærligt, at ingen endnu har lavet liv fra bunden, og at det er uvist, hvordan det opstod. Med de nyeste fund på Mars (Perseverance, "leopardpletterne" i klippen Cheyava Falls). Besluttet: Forklar, hvad der er fundet, hvorfor det er så interessant, og hvorfor det er det bedste spor af liv på andre planeter indtil nu, men også ærligt, at det ikke er bevist. Teksten skal faktatjekkes grundigt. Molekyle-idéen ovenfor kan være første skridt.
 
@@ -174,6 +174,6 @@ AtomLab ligger allerede på GitHub Pages. Før vi deler det bredere:
   - Vælg enten "Alle rettigheder forbeholdes" eller en åben licens, fx CC BY-NC (andre må dele med kildeangivelse, men ikke tjene penge på det). Den sidste passer godt, hvis lærere skal kunne bruge det.
   - Et afsnit "Kilder og licenser" i hjælpen: Three.js (MIT), landkortet fra global-land-mask (MIT), citaterne og de kommende billeder fra NASA m.fl.
   - Ærligt om AI: Meget af koden er skrevet med AI, og i nogle lande er det juridisk uafklaret, hvor meget ophavsret der er på den. Idéerne, valgene og teksterne er tydeligt jeres. (Ikke juridisk rådgivning.)
-  - Åbent: hvilket navn der skal stå, og om I vil dele det eller beholde alle rettigheder.
+  - Navnet er Espen O'Halloran. Mit forslag (venter på et ja): "© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" i README og hjælpen og en licensfil, plus en linje om, at man gerne må bruge AtomLab i undervisningen og dele linket. Man kan altid åbne mere op senere, men en åben licens kan ikke trækkes tilbage. Three.js, landkortet og NASA's billeder bevarer deres egne licenser.
 - [ ] **Til lærere:** en kort lærervejledning, en kobling til fagets mål i 7.-9. klasse og nogle opgaver.
 - [ ] **Del i det små først:** først med en lærer og en klasse, derefter i faglige netværk for fysik/kemi-lærere.

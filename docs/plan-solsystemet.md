@@ -179,7 +179,7 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
 3. Skal Pluto og dværgplaneterne med?
 4. Hvad skal delen hedde i menuen ("Solsystemet") og spillet ("Rumrejsen")?
 5. Skal turen "Liv i solsystemet?" senere kobles sammen med den planlagte del "Liv"?
-6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere.
+6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Svar (oktober 2026): Ingen credits lige nu, men måske senere. Kommer der ikke credits, laver Opus trin 0 med friske øjne og høj effort. Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere.
 7. ~~Skal Jorden og Månen gøres flotte først (trin 1a)?~~ Ja, det er lavet. NASA's servere er tilladt.
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)

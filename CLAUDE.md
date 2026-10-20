@@ -7,6 +7,8 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 
 **Læs også [docs/erfaringer.md](docs/erfaringer.md).** Den har tjeklister, som skal bruges: før et stykke arbejde er færdigt, ved nye tekster med fakta, ved nye regler eller ny spillogik, ved en ny del og ved nye animationer. Den beskriver også, hvorfor tidligere fejl opstod, og hvilke populære påstande der er forkerte. Skriv nye erfaringer ind løbende, både når noget virker godt, og når noget gik galt. Får en fejl en ny rodårsag, skal den også ind i en tjekliste.
 
+**Skills:** `/faerdig` (før et stykke arbejde er færdigt) og `/faktatjek` (nye tekster med fakta) ligger i `.claude/skills/`.
+
 **Valg af model:** Sig til, før en opgave går i gang, hvis en anden model vil løse den bedre eller lige så godt, men billigere. Begrund det kort. Kvaliteten må ikke blive dårligere.
 - **Opus** (standard): kode, der kommer med i programmet, fysik og fakta, faktatjek, danske tekster og eftersyn.
 - **Billigere hjælpeagenter**, når det ikke koster kvalitet: **Haiku** til at finde ting i filerne og opsummere lange testlogs, **Sonnet** til at læse kode og svare på spørgsmål om den og til rutinetjek.
