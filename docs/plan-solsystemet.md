@@ -117,7 +117,7 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 
 **Forslag: Start med en lille, færdig bid (en prototype).** Saturn med ringe og skygger, Enceladus med fontæner og Titan med dis, alt i topkvalitet. Så kan I se og mærke, om niveauet er rigtigt, før resten bygges. Det er den bedste måde at bruge de ekstra ressourcer på.
 
-**Jorden og Månen først (foreslået i oktober 2026, venter på et go):** Jorden og Månen findes allerede i Årstiderne og Formørkelser. Gør dem flotte først, så I kan se forskellen før og efter. Bagefter bruges den samme teknik (kort, højdekort og atmosfære) til planeterne.
+**Jorden og Månen først (lavet i oktober 2026):** Jorden og Månen findes allerede i Årstiderne og Formørkelser. Gør dem flotte først, så I kan se forskellen før og efter. Bagefter bruges den samme teknik (kort, højdekort og atmosfære) til planeterne.
 - **Jorden med rigtige billeder fra NASA:**
   - om dagen: Blue Marble (Jorden uden skyer)
   - om natten: byernes lys (Black Marble)
@@ -162,7 +162,7 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 | Trin | Hvad | Hvem |
 |---|---|---|
 | 0 | Gennemgang af planen og et faktagrundlag med kilder (`docs/fakta-solsystemet.md`) | Fable |
-| 1a | **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (foreslået, se afsnit 4). Kan laves før trin 0, for det bygger på noget, der allerede findes. | Opus |
+| 1a | ✅ **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (lavet i oktober 2026, Trin 17 i DESIGN.md). Teknikken (`js/kosmos/jorden.js`, `lav_billeder.py` og `tests/vaerktoejer/kloder.html`) kan genbruges til planeterne. | Opus |
 | 1b | **Prototype**: Saturn, Enceladus og Titan i topkvalitet | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
 | 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
@@ -180,7 +180,7 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
 4. Hvad skal delen hedde i menuen ("Solsystemet") og spillet ("Rumrejsen")?
 5. Skal turen "Liv i solsystemet?" senere kobles sammen med den planlagte del "Liv"?
 6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere.
-7. Skal Jorden og Månen gøres flotte først (trin 1a)? Det kræver, at NASA's servere bliver tilladt (afsnit 5).
+7. ~~Skal Jorden og Månen gøres flotte først (trin 1a)?~~ Ja, det er lavet. NASA's servere er tilladt.
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)
 - **Planeterne og månerne:** fysiske tal og baneelementer (JPL Horizons og NASA Planetary Fact Sheets).

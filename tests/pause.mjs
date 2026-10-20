@@ -96,8 +96,9 @@ for (const [navn, [w, h, m]] of Object.entries({ pc: [1280, 800, false], tlf: [3
   await T(() => atomlabTest.kosmos.vælg('pulsar'));
   tjek(`${navn}: skift af fænomen slår pausen fra`, !(await T(() => atomlabTest.kosmos.pause())));
   const t3 = await T(() => atomlabTest.kosmos.tid());
-  await page.waitForTimeout(800);
-  tjek(`${navn}: Kosmos-uret går igen`, (await T(() => atomlabTest.kosmos.tid())) > t3);
+  // Hold øje med uret i stedet for at vente en fast tid (når maskinen er travl, kan det første billede tage over 0,8 sekund)
+  const gårIgen = await page.waitForFunction((t) => atomlabTest.kosmos.tid() > t, t3, { timeout: 8000 }).then(() => true, () => false);
+  tjek(`${navn}: Kosmos-uret går igen`, gårIgen);
 
   // ---------- Stjerneovnen: "Vis mig" slår pausen fra ----------
   await page.goto(`${ADRESSE}/?test#fusion`);

@@ -28,3 +28,4 @@ Der er automatiske tests i [tests/](tests/README.md). De kører med `node tests/
 ## Lavet med
 - Ren HTML, CSS og JavaScript uden byggetrin
 - [Three.js](https://threejs.org) 0.186.1 (MIT-licens, ligger i `lib/three/`)
+- Billeder af Jorden og Månen fra NASA (Blue Marble, Black Marble og Lunar Reconnaissance Orbiter, public domain). Se [billeder/solsystem/KILDER.md](billeder/solsystem/KILDER.md)

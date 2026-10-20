@@ -96,6 +96,37 @@ await T(() => atomlabTest.kosmos.spol(1));
 await page.click('#kosmosStyring button:has-text("Forfra")');
 tjek('Forfra går tilbage til første trin', (await undertekst()).includes('Jorden og Solen'), await undertekst());
 await page.screenshot({ path: `${UD}/3-oversigt.png` });
+
+// Jorden og Månen: NASA-billederne er hentet (2k i tests), og dagbilledet følger årstiden
+const kloder = await T(async () => {
+  const m = await import('/js/kosmos/jorden.js');
+  await m.billederHentet();
+  await new Promise((r) => setTimeout(r, 0));
+  const { verden } = await import('/js/scene3d.js');
+  const fil = (t) => t?.image?.src?.split('/').pop() ?? 'tegnet';
+  let u = null;
+  verden.scene.traverse((o) => { if (!u && o.material?.uniforms?.dagA) u = o.material.uniforms; });
+  const iBrug = { dag: fil(u.dagA.value), nat: u.harNat.value, skyer: u.harSkyer.value, højde: u.harHoejde.value, hav: u.harHav.value };
+  // Dagbilledet glider mellem januar (dag 15), april (105), juli (196) og oktober (288)
+  const jorden = m.lavJorden(1);
+  await m.billederHentet();
+  await new Promise((r) => setTimeout(r, 0));
+  const blanding = [15, 60, 300, 5].map((d) => { jorden.sætDato(d); const v = jorden.materiale.uniforms; return [fil(v.dagA.value), fil(v.dagB.value), Math.round(v.dagMix.value * 1000) / 1000]; });
+  const måne = m.lavMånen(0.3);
+  await m.billederHentet();
+  await new Promise((r) => setTimeout(r, 0));
+  const mu = måne.materiale.uniforms;
+  jorden.materiale.dispose();
+  måne.materiale.dispose();
+  return { iBrug, blanding, måne: [fil(mu.kort.value), mu.forskydU.value, mu.harHoejde.value] };
+});
+tjek('Jorden bruger NASA-billederne (dag, byernes lys, skyer, bjerge og hav)', kloder.iBrug.dag.includes('jorden-dag-') && kloder.iBrug.dag.endsWith('-2k.jpg') && kloder.iBrug.nat && kloder.iBrug.skyer && kloder.iBrug.højde && kloder.iBrug.hav, JSON.stringify(kloder.iBrug));
+const [jan, feb, okt, nyår] = kloder.blanding;
+tjek('dag 15: kun januar', jan[0] === 'jorden-dag-01-2k.jpg' && jan[2] === 0, JSON.stringify(jan));
+tjek('dag 60: halvvejs mellem januar og april', feb[0] === 'jorden-dag-01-2k.jpg' && feb[1] === 'jorden-dag-04-2k.jpg' && feb[2] === 0.5, JSON.stringify(feb));
+tjek('dag 300: lidt efter oktober, på vej mod januar', okt[0] === 'jorden-dag-10-2k.jpg' && okt[1] === 'jorden-dag-01-2k.jpg' && Math.abs(okt[2] - 12 / 92) < 0.002, JSON.stringify(okt));
+tjek('dag 5: næsten januar (hen over nytår)', nyår[0] === 'jorden-dag-10-2k.jpg' && nyår[1] === 'jorden-dag-01-2k.jpg' && Math.abs(nyår[2] - 82 / 92) < 0.002, JSON.stringify(nyår));
+tjek('Månen bruger LRO-kortet med forsiden mod Jorden og bjerge', kloder.måne[0] === 'maanen-2k.jpg' && kloder.måne[1] === 0.25 && kloder.måne[2] === 1, JSON.stringify(kloder.måne));
 // Skift fænomen: tabellen forsvinder
 await T(() => atomlabTest.kosmos.vælg('solstorm'));
 tjek('tabellen forsvinder, når man skifter fænomen', !(await T(() => document.querySelector('#kosmosToplag').children.length)));

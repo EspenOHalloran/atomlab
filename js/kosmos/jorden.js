@@ -20,24 +20,26 @@ const RAD = Math.PI / 180;
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url).href; // virker også fra andre sider (fx tests/vaerktoejer/kloder.html)
 const STØRRELSE = LAV_KVALITET || TEST_HURTIG ? '2k' : '4k';
 const BILLEDER = {
-  hav: { navn: 'jorden-hav.png' }, // hvidt = hav (til Solens glimt)
-  // dag: { navn: ['jorden-dag-01', 'jorden-dag-04', 'jorden-dag-07', 'jorden-dag-10'], størrelse: true, farve: true },
-  // nat: { navn: 'jorden-nat', størrelse: true, farve: true },
-  // skyer: { navn: 'jorden-skyer', størrelse: true },
-  // højde: { navn: 'jorden-hoejde', størrelse: true },
-  // måne: { navn: 'maanen', størrelse: true, farve: true },
-  // måneHøjde: { navn: 'maanen-hoejde', størrelse: true },
+  dag: { navn: ['jorden-dag-01', 'jorden-dag-04', 'jorden-dag-07', 'jorden-dag-10'], størrelse: true, farve: true }, // Blue Marble 2004
+  nat: { navn: 'jorden-nat', størrelse: true, farve: true }, // byernes lys (Black Marble 2016)
+  skyer: { navn: 'jorden-skyer', størrelse: true, kanaler: 1 }, // kun én kanal i grafikkortet (sparer hukommelse)
+  højde: { navn: 'jorden-hoejde-2k.png', kanaler: 2 }, // 16 bit i rød og grøn (se lav_billeder.py)
+  hav: { navn: 'jorden-hav.png', kanaler: 1 }, // hvidt = hav (til Solens glimt)
+  måne: { navn: 'maanen', størrelse: true, farve: true }, // LRO (CGI Moon Kit)
+  måneHøjde: { navn: 'maanen-hoejde-1k.png', kanaler: 2 },
 };
 // Dagen i året midt i de fire måneder med dagbilleder (januar, april, juli og oktober)
 const BILLEDDAGE = [15, 105, 196, 288];
 
 const henter = new THREE.TextureLoader();
-const hentede = new Map(); // filnavn → Promise med teksturen (eller null)
-function hentFil(fil, farve) {
+const hentede = new Map(); // filnavn → Promise med teksturen (eller null). De bliver i grafikkortet, så det går hurtigt at skifte fænomen.
+function hentFil(fil, farve, kanaler) {
   if (!hentede.has(fil)) {
     hentede.set(fil, new Promise((klar) => {
       henter.load(MAPPE + fil, (t) => {
         t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+        if (kanaler === 1) t.format = THREE.RedFormat;
+        if (kanaler === 2) t.format = THREE.RGFormat;
         t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt
         t.anisotropy = verden.renderer ? Math.min(8, verden.renderer.capabilities.getMaxAnisotropy()) : 1;
         klar(t);
@@ -52,17 +54,13 @@ function hent(nøgle) {
   if (!b) return Promise.resolve(null);
   const fil = (n) => (b.størrelse ? `${n}-${STØRRELSE}.jpg` : n);
   if (Array.isArray(b.navn)) {
-    return Promise.all(b.navn.map((n) => hentFil(fil(n), b.farve))).then((l) => (l.every(Boolean) ? l : null));
+    return Promise.all(b.navn.map((n) => hentFil(fil(n), b.farve, b.kanaler))).then((l) => (l.every(Boolean) ? l : null));
   }
-  return hentFil(fil(b.navn), b.farve);
+  return hentFil(fil(b.navn), b.farve, b.kanaler);
 }
 // Til tests: venter, til alle billeder, der er spurgt efter, er hentet
 export function billederHentet() {
   return Promise.all(hentede.values());
-}
-// Hvilke billeder der er i brug (til tests og hjælpen)
-export function billederIBrug() {
-  return Object.keys(BILLEDER);
 }
 
 // ---------- Kort, der tegnes, hvis billederne mangler ----------
@@ -175,9 +173,14 @@ const RELIEF_GLSL = `
     nord = cross(n, oest);
   }
   // Retningen ud fra overfladen med bjergene (styrke gør dem højere end i virkeligheden, ellers kunne man ikke se dem)
+  // Højden er gemt med 16 bit: den store del i rød og den lille del i grøn
+  float hoejdeVed(sampler2D h, vec2 uv) {
+    vec2 v = texture2D(h, uv).rg;
+    return v.x * (65280.0 / 65535.0) + v.y * (255.0 / 65535.0);
+  }
   vec3 relief(sampler2D h, vec2 uv, vec2 texel, float styrke, vec3 n, vec3 oest, vec3 nord, float cosB) {
-    float dO = texture2D(h, uv + vec2(texel.x, 0.0)).r - texture2D(h, uv - vec2(texel.x, 0.0)).r;
-    float dN = texture2D(h, uv + vec2(0.0, texel.y)).r - texture2D(h, uv - vec2(0.0, texel.y)).r;
+    float dO = hoejdeVed(h, uv + vec2(texel.x, 0.0)) - hoejdeVed(h, uv - vec2(texel.x, 0.0));
+    float dN = hoejdeVed(h, uv + vec2(0.0, texel.y)) - hoejdeVed(h, uv - vec2(0.0, texel.y));
     dO /= 2.0 * texel.x * OMGANG * max(cosB, 0.15);
     dN /= texel.y * OMGANG;
     return normalize(n - styrke * (dO * oest + dN * nord));
@@ -239,12 +242,12 @@ const JORD_FRAGMENT = `
     // Skyerne og deres skygge på jorden (skyen, der skygger, ligger lidt nærmere Solen)
     float sky = 0.0, skySkygge = 0.0;
     if (harSkyer > 0.5) {
-      sky = texture2D(skyer, vUv).r;
+      sky = smoothstep(0.12, 0.95, texture2D(skyer, vUv).r) * 0.85;
       vec2 motSol = vec2(dot(solObj, oest) / (OMGANG * max(cosB, 0.15)), 2.0 * dot(solObj, nord) / OMGANG);
-      skySkygge = texture2D(skyer, vUv + motSol * 0.004).r;
+      skySkygge = smoothstep(0.12, 0.95, texture2D(skyer, vUv + motSol * 0.004).r) * 0.85;
     }
     vec3 jord = c * (0.14 + 0.86 * max(dot(Nr, S), 0.0)) * (1.0 - 0.4 * skySkygge);
-    vec3 skyLys = vec3(0.95) * (0.14 + 0.86 * max(l, 0.0));
+    vec3 skyLys = vec3(0.78) * (0.14 + 0.86 * max(l, 0.0));
     vec3 lys = mix(jord, skyLys, sky) * solFarve;
 
     // Solens glimt i havet: en bred, svag glans og en lille, skarp plet
@@ -349,13 +352,6 @@ function følgDrejning(kugle, materiale) {
   };
 }
 
-// Når kuglen bliver ryddet væk, frigives billederne i grafikkortet (de hentes ikke igen, de lægges bare op igen næste gang)
-function frigivVedRyd(materiale) {
-  materiale.addEventListener('dispose', () => {
-    for (const u of Object.values(materiale.uniforms)) if (u.value?.isTexture && u.value !== tom) u.value.dispose();
-  });
-}
-
 // Højdekort: en pixel i u og v
 function texel(t) {
   return new THREE.Vector2(1 / t.image.width, 1 / t.image.height);
@@ -377,7 +373,7 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
       dagMix: { value: 0 },
       nat: { value: tom },
       harNat: { value: 0 },
-      natStyrke: { value: 2.2 },
+      natStyrke: { value: 1.5 },
       skyer: { value: tom },
       harSkyer: { value: 0 },
       hoejde: { value: tom },
@@ -399,7 +395,6 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
   const u = materiale.uniforms;
   const kugle = new THREE.Mesh(new THREE.SphereGeometry(radius, 96, 64), materiale);
   følgDrejning(kugle, materiale);
-  frigivVedRyd(materiale);
   omdrejning.add(kugle);
 
   // Atmosfæren (en tynd skal) og et svagt skær, så Jorden også lyser lidt, når den er lille på skærmen
@@ -469,7 +464,7 @@ export function lavMånen(radius) {
       hoejde: { value: tom },
       harHoejde: { value: 0 },
       hoejdeTexel: { value: new THREE.Vector2(1, 1) },
-      reliefStyrke: { value: 0.03 },
+      reliefStyrke: { value: 0.035 },
       rot: { value: new THREE.Matrix3() },
       solPos: { value: new THREE.Vector3() },
       solR: { value: 1 },
@@ -482,7 +477,6 @@ export function lavMånen(radius) {
   const u = materiale.uniforms;
   const kugle = new THREE.Mesh(new THREE.SphereGeometry(radius, 64, 40), materiale);
   følgDrejning(kugle, materiale);
-  frigivVedRyd(materiale);
   gruppe.add(kugle);
   // Et rigtigt kort har Månens forside midt i billedet (u = 0,5). Det tegnede har den ved u = 0,25 (retningen +z i kuglen).
   hent('måne').then((t) => { if (t) { u.kort.value = t; u.forskydU.value = 0.25; } });

@@ -61,6 +61,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Tekst, der skrives med `innerHTML`, skrives kun om, når den ændrer sig. Ellers forsvinder ordforklaringerne (og fokus) hver gang.
 - [ ] Bevægelser i rummet går den rigtige vej: Planeter og måner kredser mod uret set fra nord, og Jorden drejer samme vej. Tjek det med et tal i testen, for det kan ikke ses på et stillbillede.
 - [ ] Synlighed og andet, der følger en tilstand, sættes, når tilstanden skifter, og ikke kun i opdateringen hvert billede. Ellers er det forkert, indtil første billede er tegnet.
+- [ ] Billeder fra andre (fx NASA) står i `billeder/solsystem/KILDER.md` med kilde og licens, kilden nævnes i spillet, og kun filer, der findes, bliver hentet (ellers giver det konsolfejl). Kloder ses i `tests/vaerktoejer/kloder.html` i dagslys, i lav sol, om natten og i modlys.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
@@ -212,6 +213,15 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Ting skrevet efter hukommelsen var forkerte** (tabellen over testene). Tjek altid i filerne.
 - **`pkill` med et mønster**, der også passer på ens egen kommando, lukker ens egen terminal. Brug process-id i stedet.
 - **Netadgang:** WebSearch virker herfra, men WebFetch kan ikke slå de fleste sider op (DNS). Kilder findes derfor via søgeresultater. Skriv det, når en kilde ikke kunne læses direkte.
+
+### Grafik med rigtige billeder (Jorden og Månen, oktober 2026)
+- **NASA's servere var blokeret** i Claude-miljøet. De blev tilladt under miljøets Network access. `visibleearth.nasa.gov` sender nu videre til `science.nasa.gov` (blokeret), men filerne kan hentes direkte fra `eoimages.gsfc.nasa.gov` og `svs.gsfc.nasa.gov`. Adresserne står i `billeder/solsystem/lav_billeder.py`.
+- **Black Marble viser landet svagt blåt** (i måneskin). Lagt oven på natsiden blev hele natten lilla. Den blå baggrund trækkes fra, så kun byernes lys er tilbage.
+- **Højdekort med 8 bit giver trapper**, når bjergene gøres højere. Højden gemmes med 16 bit i rød og grøn. Det tåler udglatning i grafikkortet, fordi højden er en ret linje af de to (r · 65280/65535 + g · 255/65535).
+- **Gløden gjorde de lyseste skyer til hvide klatter** midt på dagsiden. Skyerne må højst være ca. 0,8 lyse.
+- **Kameraet inde i Kosmos er svært at styre i tests:** Fænomenet flytter selv kameraet, og Jorden glider langs banen. Siden `kloder.html` viser Jorden og Månen alene med fast lys og kamera.
+- **En "fejl" kan være rigtig fysik:** En rød plet på Månen i et testbillede var Jordens skygge, der lige strejfede den. Regn efter, før det rettes.
+- **Billeder med én eller to kanaler** kan lægges i grafikkortet som `RedFormat` og `RGFormat` (sparer 50-75 %). Billederne frigives ikke, når et fænomen ryddes, for så skulle de lægges op igen, hver gang man skifter mellem Årstiderne og Formørkelser.
 
 ---
 
