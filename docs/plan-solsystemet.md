@@ -161,7 +161,7 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 ## 6. Trin (hvert trin får et go)
 | Trin | Hvad | Hvem |
 |---|---|---|
-| 0 | Gennemgang af planen og et faktagrundlag med kilder (`docs/fakta-solsystemet.md`) | Fable |
+| 0 | Gennemgang af planen og et faktagrundlag med kilder (`docs/fakta-solsystemet.md`) | Opus laver udkastet til faktagrundlaget, og Fable gennemgår planen og tjekker faktagrundlaget (se [plan-fable.md](plan-fable.md)) |
 | 1a | ✅ **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (lavet i oktober 2026, Trin 17 i DESIGN.md). Teknikken (`js/kosmos/jorden.js`, `lav_billeder.py` og `tests/vaerktoejer/kloder.html`) kan genbruges til planeterne. | Opus |
 | 1b | **Prototype**: Saturn, Enceladus og Titan i topkvalitet | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
@@ -179,7 +179,7 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
 3. Skal Pluto og dværgplaneterne med?
 4. Hvad skal delen hedde i menuen ("Solsystemet") og spillet ("Rumrejsen")?
 5. Skal turen "Liv i solsystemet?" senere kobles sammen med den planlagte del "Liv"?
-6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Svar (oktober 2026): Ingen credits lige nu, men måske senere. Kommer der ikke credits, laver Opus trin 0 med friske øjne og høj effort. Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere.
+6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Svar (oktober 2026): Ingen credits lige nu, men måske senere. Kommer der ikke credits, laver Opus trin 0 med friske øjne og høj effort. Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere. Opdateret 21. oktober 2026: Nu er der en samlet plan for Fable ([plan-fable.md](plan-fable.md)). Opus laver udkastet til faktagrundlaget, og Fable gennemgår planen og tjekker faktagrundlaget. Rækkefølgen afgøres efter Fables overblik (F1).
 7. ~~Skal Jorden og Månen gøres flotte først (trin 1a)?~~ Ja, det er lavet. NASA's servere er tilladt.
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)

@@ -6,18 +6,17 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 21. oktober 2026.*
 
 **Senest lavet:**
+- Planen for, hvad Fable skal hjælpe med ([docs/plan-fable.md](docs/plan-fable.md)): et eftersyn af teknik, UI, grafik og indhold og hjælp til at planlægge de store dele, med jeres svar og et skøn over prisen.
+- Idéen "Molekyler i Atomværkstedet" (med Byttebørsen og hvor Jordens vand kommer fra) under "Idéer til senere".
 - Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
 - Skills: `/faerdig` og `/faktatjek` i `.claude/skills/`.
 
 **Venter på et go (i den rækkefølge, jeg vil foreslå):**
+0. **Fable, F0 og F1:** materialet og et samlet overblik over, hvor AtomLab kan blive bedre ([docs/plan-fable.md](docs/plan-fable.md)). Venter også på credits (10-20 $) og jeres skærmbilleder fra tabletten. Overblikket kan ændre rækkefølgen nedenfor.
 1. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
 2. **Vis eller skjul panelerne:** begge dele (foldbare paneler og "Kun grafik"). Se "Idéer til senere". Mellemstor.
-3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Ingen Fable-credits lige nu, så Opus laver det med friske øjne og høj effort, hvis der ikke kommer credits.
+3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Opus laver udkastet til faktagrundlaget, og Fable tjekker det (se planen for Fable).
 4. **Solsystemet, trin 1b:** prototypen med Saturn, Enceladus og Titan i topkvalitet.
-
-**I gang:** En plan for, hvad Fable skal hjælpe med (jeres ønske, 21. oktober 2026). Fable skal lave et eftersyn af teknikken, UI, grafikken og indholdet, så AtomLab kommer op på et professionelt niveau. Fable skal også hjælpe med at planlægge de store dele, der venter. Fable må ikke bruges på noget, Opus kan lave lige så godt. Vi planlægger det sammen. Mit forslag: Opus forbereder materialet, Fable giver først et samlet overblik, og bagefter går Fable i dybden, hvor det betaler sig. Planen skrives i `docs/plan-fable.md`, når den har fået et go.
-- Jeres svar: (1) "Professionelt" betyder i første omgang lige så gennemført som et godt spil eller en god app, til jeres søn (ikke skoler endnu). (2) Første budget er 10-20 $. I har ikke brugt Fable før. (3) Fable skal også hjælpe med molekylerne og måske andre idéer, men ikke med den engelske udgave. (4) I tager skærmbilleder på tabletten.
-- Mit skøn (usikkert, kan være 2 gange forkert begge veje): Overblikket (F1) koster ca. 5-10 $. Alt i planen koster ca. 50-120 $. 10-20 $ rækker til overblikket og én ting mere. Vi måler, hvad F1 koster, og regner om bagefter.
 
 **Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen. Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
 

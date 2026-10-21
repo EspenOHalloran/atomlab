@@ -15,7 +15,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - **Opus** (standard): kode, der kommer med i programmet, fysik og fakta, faktatjek, danske tekster og eftersyn.
 - **Billigere hjælpeagenter**, når det ikke koster kvalitet: **Haiku** til at finde ting i filerne og opsummere lange testlogs, **Sonnet** til at læse kode og svare på spørgsmål om den og til rutinetjek.
 - **Effort** (hvor grundigt modellen tænker): Sig til, hvis en anden indstilling passer bedre til opgaven. Lav effort til opslag, simple rettelser og hjælpeagenter, der søger eller læser. Medium eller høj til almindelig kode og tekster. Høj til svær fysik, svære fejl og faktatjek, hvor en fejl koster meget. Effort sættes kun på hjælpeagenter, når det står her, eller brugeren beder om det. Sessionens egen effort skifter brugeren selv.
-- **Fable 5.1** er der ikke credits til lige nu. Når der er: Fable laver faktagrundlaget (med kilder i en fil i `docs/`) og planen for store, svære dele (fx Tjernobyl og Liv), Opus bygger og tester, og Fable laver eftersynet til sidst. Små og mellemstore opgaver laver Opus selv, og Fable tjekker kun teksterne.
+- **Fable 5.1:** Hvad Fable skal lave, med hvilken effort og hvad det koster, står i [docs/plan-fable.md](docs/plan-fable.md). Fable køres som hjælpeagent med den effort, der står dér. Kort sagt: Opus forbereder, Fable vurderer, og Opus bygger. Fable laver faktagrundlaget (med kilder i en fil i `docs/`) og planen for store, svære dele (Tjernobyl og Liv) og eftersynet til sidst. Ved Molekyler og Solsystemet laver Opus udkastet, og Fable tjekker det. Små og mellemstore opgaver laver Opus selv.
 
 ## Hvem bruger det
 - Programmet laves af en far til hans 13-årige søn. Sønnen bruger det, han koder det ikke selv.
