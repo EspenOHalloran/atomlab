@@ -36,10 +36,13 @@ Fable må ikke bruges på noget, Opus kan lave lige så godt.
 - skrive forslagene ind i DESIGN.md og holde styr på trinnene
 
 ## Sådan bliver Fable kørt
-- Opus starter Fable som hjælpeagent (Agent-værktøjet med Fable som model) og giver den en brief og materialet. Så går Fables credits kun til selve vurderingen.
-- **Effort:** `high` som standard, som Anthropic anbefaler til de fleste opgaver. `xhigh` kun til faktagrundlaget for Tjernobyl og Liv, hvis budgettet rækker.
-- Der kører én Fable-agent ad gangen, så den samme baggrund ikke bliver læst og betalt flere gange.
-- Fable skriver kun sin egen fil i `docs/fable/` og ændrer ikke andet. Fables fil bliver ikke rettet bagefter. Opus skriver sine kommentarer i en fil ved siden af (`…-noter.md`), fx hvilke fund der er nye, og hvilke der allerede stod i eftersynet fra oktober. Så kommer Opus ikke til at sortere gode fund fra.
+Besluttet 21. oktober 2026: I starter selv en session med Fable (ikke som hjælpeagent i en Opus-session). Så kan I tale direkte med Fable, men alt i sessionen koster Fable-pris.
+- **Opus laver F0 i en separat session** og lægger alt i `docs/fable/`, som pushes til `main`. Fables session starter på en frisk klon, så det, der ikke ligger i git, findes ikke for Fable. Mappen `tests/billeder/` kommer ikke med i git, så skærmbillederne skal kopieres til `docs/fable/`.
+- **Første besked til Fable:** "Læs `docs/fable/brief.md` og lav F1." Briefen siger resten.
+- **Effort:** `high` som standard (skiftes i sessionen). `xhigh` kun til faktagrundlaget for Tjernobyl og Liv, hvis budgettet rækker.
+- Fable skriver kun i `docs/fable/` og ændrer ikke kode. Når F1 er skrevet, stopper den og går ikke videre til F2 af sig selv. Sessionen lukkes bagefter, og Opus bygger i en ny session.
+- Opus skriver sine kommentarer til Fables svar i en fil ved siden af (`…-noter.md`), fx hvilke fund der er nye, og hvilke der allerede stod i eftersynet fra oktober. Fables egen fil rettes ikke.
+- Hold sessionen kort: kun spørgsmål om overblikket. Tjek saldoen før og efter.
 - Briefen siger, hvem AtomLab er til, hvad målet er, hvilke rammer der gælder (se nedenfor), hvad der allerede er kendt, og hvordan svaret skal se ud. For hvert fund skal Fable pege på en fil og en linje eller et skærmbillede, og den skal sige det, når den er i tvivl.
 
 **Rammer, som Fable skal kende** (fra CLAUDE.md):
@@ -51,7 +54,7 @@ Fable må ikke bruges på noget, Opus kan lave lige så godt.
 ## Trinnene
 
 ### F0: Materialet (Opus, ca. 2-5 $)
-Opus samler materialet i `docs/fable/`. F0 og F1 køres i samme session, så skærmbillederne stadig er der. Mappen `tests/billeder/` kommer nemlig ikke med i git.
+Opus samler materialet i `docs/fable/`. Billederne kopieres til `docs/fable/`, fordi `tests/billeder/` ikke kommer med i git.
 - **`brief.md`:** briefen til F1 (se ovenfor).
 - **Skærmbilleder fra testbrowseren** (`tests/vaerktoejer/skaermbilleder.mjs`), ca. 40-50 billeder:
   - menuen og alle seks skærme på pc og på tablet på højkant
