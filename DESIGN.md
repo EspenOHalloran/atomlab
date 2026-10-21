@@ -15,7 +15,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Ingen Fable-credits lige nu, så Opus laver det med friske øjne og høj effort, hvis der ikke kommer credits.
 4. **Solsystemet, trin 1b:** prototypen med Saturn, Enceladus og Titan i topkvalitet.
 
-**Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen. To spørgsmål om den nye idé "Molekyler i Atomværkstedet" (se "Idéer til senere").
+**Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen. Hvor "Molekyler i Atomværkstedet" skal ligge i rækkefølgen.
 
 **Ikke afprøvet endnu:** NASA-billederne på en rigtig tablet og telefon (kun i testbrowseren). Skills er ikke prøvet på en rigtig opgave.
 
@@ -169,10 +169,12 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Molekyler i Atomværkstedet** (jeres ønske, 21. oktober 2026): se, hvordan atomer giver og tager elektroner, og byg molekyler, fx vand.
   - **Give og tage elektroner (ionbinding):** Man ser en elektron hoppe fra et atom til et andet, fx fra natrium til chlor. Så bliver de til Na⁺ og Cl⁻, som trækker i hinanden (køkkensalt). Det bygger videre på opgaverne Na⁺ og Cl⁻ og på "Hvad er en ion?" i hjælpen.
   - **Dele elektroner (molekyler):** Man sætter atomer sammen, fx H₂, O₂, H₂O og CO₂. I vand giver atomerne ikke elektroner væk. De deler dem i par. Oxygen trækker mest i de delte elektroner, så oxygen-enden bliver lidt minus og hydrogen-enderne lidt plus. Vandmolekylet er bøjet (ca. 104,5°).
-  - **Se, hvordan vand bliver til:** fx 2 H₂ + O₂ → 2 H₂O. Molekylerne går i stykker, atomerne sætter sig sammen på en ny måde, og der bliver frigjort energi (knaldgas).
+  - Navn: Delen, hvor atomerne giver og tager elektroner, kan hedde noget i stil med **Byttebørsen** (jeres forslag).
+  - **Se, hvordan vand bliver til:** Besluttet: først den kemiske reaktion, fx 2 H₂ + O₂ → 2 H₂O. Molekylerne går i stykker, atomerne sætter sig sammen på en ny måde, og der bliver frigjort energi (knaldgas, som i en raketmotor).
+  - **Hvor og hvordan blev Jordens vand dannet?** (jeres ønske). Det ved man ikke helt, og det skal siges ærligt. Foreløbig, og ikke faktatjekket: Meget af vandet blev nok dannet ude i rummet, før Solen fandtes. Det skete i kolde skyer af gas og støv, hvor hydrogen og oxygen mødes på små iskolde støvkorn. Vandet kom til Jorden med de sten, Jorden blev bygget af, med asteroider og nok kun lidt med kometer. Det blev ikke dannet som knaldgas, for ude i rummet er der næsten ingen O₂. Skal faktatjekkes grundigt (fx forholdet mellem tungt og almindeligt hydrogen og prøverne fra asteroiderne Ryugu og Bennu).
+  - Besluttet: både frit byggeri og trin for trin med opgaver.
   - Ærligt (se fælden i docs/erfaringer.md): "Atomer vil gerne have en fuld skal" er en forenkling. Hvis natrium giver sin elektron til chlor, og de to atomer er langt fra hinanden, koster det energi. Gevinsten kommer først, når plus og minus trækker i hinanden. Teksterne om salt i hjælpen og i kategorikortet skal tjekkes samtidig.
   - Plads: Infopanelet må ikke få en rullebjælke. Derfor skal molekylerne nok være en ny del i værkstedet med knapper øverst, som "Spalt én kerne" og "Kædereaktion" i Reaktoren.
-  - Åbne spørgsmål: (1) Betyder "hvordan vand er blevet skabt" den kemiske reaktion (hydrogen og oxygen bliver til vand), hvor atomerne kommer fra (hydrogen fra Big Bang og oxygen fra stjernerne), eller begge dele? Hvor atomerne kommer fra, kan kobles til Stjerneovnen og Kosmos. (2) Skal man bygge frit, eller skal det gå trin for trin med opgaver, eller begge dele?
 - **Tjernobyl i Reaktoren** (foreslået af jer): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i docs/erfaringer.md. En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
 - **Ny del: Solsystemet med Rumrejsen** (jeres ønske): Udforsk planeterne og månerne (især Europa, Enceladus og Titan, hvor der måske er betingelser for liv), og Voyager-spillet, hvor man bruger planeternes tyngdekraft. Foreløbig plan i [docs/plan-solsystemet.md](docs/plan-solsystemet.md). Fable skal gennemgå den, før vi går i gang.
 - **Vis eller skjul panelerne** (jeres ønske, især til Årstiderne og Formørkelser), så man bedre kan nyde grafikken. Forslag (venter):
