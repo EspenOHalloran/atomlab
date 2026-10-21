@@ -15,9 +15,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Ingen Fable-credits lige nu, så Opus laver det med friske øjne og høj effort, hvis der ikke kommer credits.
 4. **Solsystemet, trin 1b:** prototypen med Saturn, Enceladus og Titan i topkvalitet.
 
-**I gang:** En plan for, hvad Fable skal hjælpe med (jeres ønske, 21. oktober 2026). Fable skal lave et eftersyn af teknikken, UI, grafikken og indholdet, så AtomLab kommer op på et professionelt niveau. Fable skal også hjælpe med at planlægge de store dele, der venter. Fable må ikke bruges på noget, Opus kan lave lige så godt. Vi planlægger det sammen. Mit forslag: Opus forbereder materialet, Fable giver først et samlet overblik, og bagefter går Fable i dybden, hvor det betaler sig. Planen skrives i `docs/plan-fable.md`, når spørgsmålene er afklaret.
+**I gang:** En plan for, hvad Fable skal hjælpe med (jeres ønske, 21. oktober 2026). Fable skal lave et eftersyn af teknikken, UI, grafikken og indholdet, så AtomLab kommer op på et professionelt niveau. Fable skal også hjælpe med at planlægge de store dele, der venter. Fable må ikke bruges på noget, Opus kan lave lige så godt. Vi planlægger det sammen. Mit forslag: Opus forbereder materialet, Fable giver først et samlet overblik, og bagefter går Fable i dybden, hvor det betaler sig. Planen skrives i `docs/plan-fable.md`, når den har fået et go.
+- Jeres svar: (1) "Professionelt" betyder i første omgang lige så gennemført som et godt spil eller en god app, til jeres søn (ikke skoler endnu). (2) Første budget er 10-20 $. I har ikke brugt Fable før. (3) Fable skal også hjælpe med molekylerne og måske andre idéer, men ikke med den engelske udgave. (4) I tager skærmbilleder på tabletten.
+- Mit skøn (usikkert, kan være 2 gange forkert begge veje): Overblikket (F1) koster ca. 5-10 $. Alt i planen koster ca. 50-120 $. 10-20 $ rækker til overblikket og én ting mere. Vi måler, hvad F1 koster, og regner om bagefter.
 
-**Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen. Spørgsmålene til planen for Fable (hvad "professionelt" betyder for jer, hvor mange credits, hvilke store dele Fable skal planlægge). Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
+**Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen. Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
 
 **Ikke afprøvet endnu:** NASA-billederne på en rigtig tablet og telefon (kun i testbrowseren). Skills er ikke prøvet på en rigtig opgave.
 
