@@ -3,16 +3,17 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 21. oktober 2026.*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 22. oktober 2026.*
 
 **Senest lavet:**
+- F0 i planen for Fable (22. oktober 2026): briefen `docs/fable/brief.md` og 53 skærmbilleder i `docs/fable/billeder/` (nyt værktøj: `tests/vaerktoejer/fable-billeder.mjs`).
 - Planen for, hvad Fable skal hjælpe med ([docs/plan-fable.md](docs/plan-fable.md)): et eftersyn af teknik, UI, grafik og indhold og hjælp til at planlægge de store dele, med jeres svar og et skøn over prisen.
 - Idéen "Molekyler i Atomværkstedet" (med Byttebørsen og hvor Jordens vand kommer fra) under "Idéer til senere".
 - Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
 - Skills: `/faerdig` og `/faktatjek` i `.claude/skills/`.
 
 **Venter på et go (i den rækkefølge, jeg vil foreslå):**
-0. **Fable, F0 og F1:** materialet og et samlet overblik over, hvor AtomLab kan blive bedre ([docs/plan-fable.md](docs/plan-fable.md)). Venter også på credits (10-20 $) og jeres skærmbilleder fra tabletten. Overblikket kan ændre rækkefølgen nedenfor.
+0. **Fable, F1:** et samlet overblik over, hvor AtomLab kan blive bedre ([docs/plan-fable.md](docs/plan-fable.md)). Materialet (F0) er klar. Venter på credits (10-20 $) og jeres skærmbilleder fra tabletten i `docs/fable/tablet/`. I starter selv en session med Fable og skriver: "Læs `docs/fable/brief.md` og lav F1." Overblikket kan ændre rækkefølgen nedenfor.
 1. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
 2. **Vis eller skjul panelerne:** begge dele (foldbare paneler og "Kun grafik"). Se "Idéer til senere". Mellemstor.
 3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Opus laver udkastet til faktagrundlaget, og Fable tjekker det (se planen for Fable).

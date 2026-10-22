@@ -138,4 +138,6 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
 
 ## Status
 - [x] Planen er skrevet (21. oktober 2026).
-- [ ] F0 og F1 venter på credits, jeres skærmbilleder fra tabletten og et go.
+- [x] F0 er lavet (22. oktober 2026): `docs/fable/brief.md` og 53 billeder i `docs/fable/billeder/` (taget med `tests/vaerktoejer/fable-billeder.mjs`).
+- [ ] Jeres skærmbilleder fra tabletten i `docs/fable/tablet/`.
+- [ ] F1 venter på credits og jeres go. I starter selv en session med Fable og skriver: "Læs `docs/fable/brief.md` og lav F1."
