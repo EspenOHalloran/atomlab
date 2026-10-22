@@ -81,4 +81,4 @@ Skriv `docs/fable/F1-overblik.md` på dansk til faren. Brug et klart og enkelt s
 - Spørg kun undervejs, hvis du er gået i stå. Ellers skal spørgsmålene stå til sidst i filen.
 
 ## Testresultat
-(udfyldes af Opus, når hele samlingen har kørt)
+Kørt 22. oktober 2026 med `node tests/koer-alle.mjs`: **alle 21 tests bestod** (14,4 minutter, to ad gangen). De største er `henfaldsregler` (21.556 tjek af henfaldsreglerne), `ordforklaring` (216 tjek) og `system-mobil` (142 tjek).
