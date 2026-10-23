@@ -1,4 +1,4 @@
-# Brief til Fable: F1, et samlet overblik over AtomLab
+# Brief: F1, et samlet overblik over AtomLab
 
 *Skrevet af Opus 22. oktober 2026 som trin F0 i [docs/plan-fable.md](../plan-fable.md). Svaret skrives i `docs/fable/F1-overblik.md`.*
 
@@ -7,7 +7,7 @@ AtomLab er et interaktivt 3D-program i browseren om atomer, grundstoffer, kerner
 
 Faren synes, at AtomLab er godt, men vil have dine øjne på, hvor det kan blive bedre. Målet er, at det bliver **lige så gennemført som et godt spil eller en god app**, set fra sønnens side. At dele det med skoler kommer senere og er ikke målet nu.
 
-Du er valgt, fordi du er stærkere end Opus til at vurdere helheden, læse kode kritisk og bedømme skærmbilleder. Brug kræfterne på vurderingen. Opus bygger bagefter det, I bliver enige om. Budgettet er lille, så læs målrettet: det, der skal til for at vurdere, og ikke alt.
+Du skal se på det med friske øjne og være kritisk. Du har ikke bygget det, så du skal ikke forsvare det. Brug kræfterne på vurderingen. Bagefter bygges det, I bliver enige om, i en anden session. Budgettet er lille, så læs målrettet: det, der skal til for at vurdere, og ikke alt.
 
 ## Opgaven (F1)
 Giv et samlet overblik på tværs af fire områder: **teknik, UI, grafik og indhold**. Svar på to spørgsmål:
