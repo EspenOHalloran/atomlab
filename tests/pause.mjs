@@ -14,7 +14,7 @@ for (const [navn, [w, h, m]] of Object.entries({ pc: [1280, 800, false], tlf: [3
   const synlig = (sel) => T((s) => { const e = document.querySelector(s); if (!e) return false; const r = e.getBoundingClientRect(); return r.width > 0 && getComputedStyle(e).display !== 'none'; }, sel);
   const tekst = (sel) => T((s) => document.querySelector(s)?.textContent ?? '', sel);
   await page.goto(`${ADRESSE}/?test#reaktor`);
-  await T(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1 })));
+  await T(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1, batteri: 1 })));
   await page.reload();
   await page.waitForTimeout(1500);
 

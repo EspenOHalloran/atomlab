@@ -39,7 +39,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `stjerneovn` | Stjerneovnen: fusion, for koldt, energi, tempoknapperne, opgaver kun ved egne skud, og at "Vis mig" lige efter et eget skud laver en reaktion 120 af 120 gange |
 | `stjerneovn-mus` | Stjerneovnen med mus: ramme-procent, slowmotion, pause, kernelisten, grafen og rejsen ind i Solen |
 | `reaktor` | Reaktoren: spaltning, uran-238, kædereaktion, nødstop, at "Vis mig" kommer i gang 200 af 200 gange, ikke dør ud, og at reaktoren som regel kører videre bagefter (100 forsøg), og at Kosmos' faneknapper ikke ændrer Reaktoren |
-| `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning |
+| `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning, guiden første gang, "Næste skridt", "Vis mig" (slowmotion, to ioner, klarer ingen opgaver), gitrene og navnet |
 | `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk. På tablet og telefon på højkant står "Kort fortalt / For nørder" over teksten |
 | `kosmos-nye` | Big Bang (64/64 → 112/16 → 25 % helium), Ny stjerne (brun dværg, som Solen, kæmpestjerne), Solens fremtid og den hvide dværg (eksplosion og nikkel → cobalt → jern efter 100 dage) |
 | `aarstider` | Årstiderne: formlerne for dagens længde, Solens højde og Jordens afstand mod kendte værdier (København, Sydney, Singapore og Ilulissat), og fænomenet i browseren: trinene, tabellen (også årstiden), at Jorden kører rundt i første trin, og at skyderen følger med, og telefon |

@@ -6,7 +6,7 @@ const b = await chromium.launch({ args: ARGS });
 const fejl = [];
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
-const SET = { fusion: 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1, 'fusion-rejse': 1 };
+const SET = { fusion: 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1, 'fusion-rejse': 1, batteri: 1 };
 
 async function side(opts, guider = SET) {
   const ctx = await b.newContext(opts);

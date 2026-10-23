@@ -1,4 +1,5 @@
-// Batteriet: opladning (konstant strøm → konstant spænding), afladning, elektron-kæden, afbryderen, opgaver og kortslutning
+// Batteriet: opladning (konstant strøm → konstant spænding), afladning, elektron-kæden, afbryderen, opgaver og kortslutning,
+// guiden første gang, "Næste skridt" og "Vis mig" (slowmotion, tæller ikke som en opgave), og at gitrene er tegnet
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('batteri');
 const b = await chromium.launch({ args: ARGS });
@@ -10,7 +11,20 @@ page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') 
 await page.goto(`${ADRESSE}/?test`);
 await page.waitForTimeout(800);
 await page.click('a.kort[href="#batteri"]');
-await page.waitForTimeout(4000);
+// Guiden kommer første gang (vent på boblen, for under belastning kan skærmen være længe om at starte)
+await page.waitForSelector('.guide-boble:not(.skjult)', { timeout: 20000 }).catch(() => {});
+await page.waitForTimeout(500);
+const boble = () => page.evaluate(() => { const b = document.querySelector('.guide-boble:not(.skjult)'); return b ? b.querySelector('.guide-titel').textContent : null; });
+tjek('guiden starter første gang', (await boble()) === 'Et batteri skåret igennem', await boble());
+tjek('"Næste skridt" er skjult under guiden', await page.evaluate(() => getComputedStyle(document.getElementById('batteriMission')).visibility === 'hidden'));
+await page.click('.guide-næste');
+await page.waitForTimeout(300);
+tjek('guiden peger på "Oplad"', (await boble()) === 'Lad det op');
+await page.click('.guide-spring');
+await page.waitForTimeout(300);
+tjek('"Næste skridt": lad batteriet op', (await page.evaluate(() => atomlabTest.batteri.mission())).includes('Oplad'), await page.evaluate(() => atomlabTest.batteri.mission()));
+tjek('opgaverne er foldet sammen', await page.evaluate(() => !document.querySelector('[data-lag="batteri-opgaver"]').open && /af 5 ★/.test(document.getElementById('batteriOpgaveTal').textContent)));
+tjek('navnet: lithium-ion-batteri', /lithium-ion-batteri/.test(await page.textContent('#batteri .system-status')));
 const fr = () => page.evaluate(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver || {});
 const kør = (s) => page.evaluate((s) => atomlabTest.batteri.kør(s), s);
 const info = () => page.evaluate(() => atomlabTest.batteri.info());
@@ -102,10 +116,36 @@ await page.waitForTimeout(3000);
 await page.screenshot({ path: UD + '/b3-kortslutning.png' });
 tjek('opgave overlad', (await fr())['b-overlad']);
 await page.click('#batteriNyt');
+
+// "Vis mig" i et nyt vindue (uden klarede opgaver): slowmotion, to ioner, og ingen opgave klares
+{
+  const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
+  s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  await s.addInitScript(() => localStorage.setItem('atomlabGuide', JSON.stringify({ batteri: 1 })));
+  await s.goto(`${ADRESSE}/?test#batteri`);
+  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#batteri:not(.skjult)'));
+  tjek('ingen guide anden gang', !(await s.evaluate(() => document.querySelector('.guide-boble:not(.skjult)'))));
+  tjek('grafitten er lag af sekskanter, og metaloxidet er en krystal', await s.evaluate(() => {
+    let kugler = 0;
+    window.atomlabTest.batteri.gitter().forEach((n) => { kugler += n; });
+    return kugler > 500;
+  }));
+  const før = await s.evaluate(() => atomlabTest.batteri.info().andel);
+  await s.click('#batteriVisMig');
+  tjek('"Vis mig" kører', await s.evaluate(() => atomlabTest.batteri.demo()));
+  const r = await s.evaluate(() => { const t = atomlabTest.batteri; for (let i = 0; i < 80 && t.demo(); i++) t.kør(0.5); return { demo: t.demo(), ...t.info() }; });
+  tjek('"Vis mig" slutter efter to ioner', !r.demo && Math.abs(r.andel - før - 2 / 24) < 0.001, JSON.stringify(r));
+  tjek('"Vis mig" klarer ingen opgaver', Object.keys(await s.evaluate(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver || {})).length === 0);
+  tjek('bagefter hviler batteriet', r.afbryder && !r.lader);
+  await s.screenshot({ path: UD + '/b4-vis-mig.png' });
+  await s.context().close();
+}
+
 await page.click('#batteriHjælp');
 await page.waitForTimeout(400);
 tjek('hjælp', await page.isVisible('#hjælpBatteri'));
 tjek('hjælp: hvad løber i ledningen', (await tekst('#hjælpBatteri')).includes('Hvad løber i ledningen?'));
+tjek('hjælp: LiPo eller Li-ion', (await tekst('#hjælpBatteri')).includes('LiPo eller Li-ion?'));
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);
