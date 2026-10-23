@@ -6,28 +6,50 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- **F1, et samlet overblik** over, hvor AtomLab kan blive bedre ([docs/fable/F1-overblik.md](docs/fable/F1-overblik.md), 23. oktober 2026). Lavet i en session med høj effort ud fra briefen, fordi Fable venter. Det vigtigste: Det er skærmen og ikke koden, der holder AtomLab tilbage. Der er for mange tekster på én gang, og tit står den samme tekst to-tre steder. De 10 forbedringer i kort form:
+  1. ro på skærmen: hver oplysning ét sted og dybde i lag
+  2. skjul panelerne og "Kun grafik"
+  3. "Hvorfor?"-kort der, hvor spørgsmålet opstår (fx "Er det farligt?" og magnetisme)
+  4. et grafisk løft af atomet (fx rigtige orbitaler i elektronskyen)
+  5. Batteriet: grafik, start og navnet "Lithium-ion-batteri"
+  6. grundstofkortet i lag ("I din hverdag", "I din krop", "I universet")
+  7. fremgang og sammenhæng i menuen
+  8. gør det sorte hul sort
+  9. "For nørder" ligger nederst i Kosmos på højkant (`style.css:1081`)
+  10. én fælles byggeklods til lagene og "Næste skridt"
+
+  Rådet er, at et bredt F2 ikke betaler sig nu. Det gør en kort UI-plan for lagene.
+- Jeres princip om **dybde i lag** (23. oktober 2026). Det står under "Grundregler" nedenfor, og jeres ord står i `docs/fable/soen-og-espens-noter.md`.
 - Noter fra en afprøvning med jeres søn (`docs/fable/soen-og-espens-noter.md`, 23. oktober 2026): paneler, der kan skjules, færre tekstbokse ad gangen, dybere forklaringer, mere fakta om grundstofferne, et grafisk løft af Batteriet og atomerne, og LiPo vs. Li-ion.
-- 14 skærmbilleder fra en rigtig tablet til F1 (`docs/fable/tablet/`, 23. oktober 2026).
-- F0 i planen for Fable (22. oktober 2026): briefen `docs/fable/brief.md` og 53 skærmbilleder i `docs/fable/billeder/` (nyt værktøj: `tests/vaerktoejer/fable-billeder.mjs`).
-- Planen for, hvad Fable skal hjælpe med ([docs/plan-fable.md](docs/plan-fable.md)): et eftersyn af teknik, UI, grafik og indhold og hjælp til at planlægge de store dele, med jeres svar og et skøn over prisen.
-- Idéen "Molekyler i Atomværkstedet" (med Byttebørsen og hvor Jordens vand kommer fra) under "Idéer til senere".
+- 14 skærmbilleder fra en rigtig tablet (`docs/fable/tablet/`) og F0, materialet til F1 (`docs/fable/`).
 - Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
-- Skills: `/faerdig` og `/faktatjek` i `.claude/skills/`.
 
-**Venter på et go (i den rækkefølge, jeg vil foreslå):**
-0. **F1 med Opus:** et samlet overblik over, hvor AtomLab kan blive bedre. Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer (I mener, at Fable 5.1 ligger tæt på Opus 5.5, så det ikke er pengene værd). Opus laver F1 i en ny session med høj effort ud fra den samme brief: "Læs `docs/fable/brief.md` og lav F1." Alt er nu klar: materialet (F0), jeres 14 tabletbilleder (`docs/fable/tablet/`) og jeres og jeres søns noter efter at have prøvet AtomLab sammen (`docs/fable/soen-og-espens-noter.md` — ønske om at kunne skjule panelerne, færre tekstbokse fremme på samme tid, dybere "hvorfor"-forklaringer, mere fakta om grundstofferne, et grafisk løft af Batteriet og atomerne, og et spørgsmål om LiPo/Li-ion-navngivningen). Overblikket kan ændre rækkefølgen nedenfor. Tjernobyl og Liv venter, til Fable 5.5 kommer.
-1. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
-2. **Vis eller skjul panelerne:** begge dele (foldbare paneler og "Kun grafik"). Se "Idéer til senere". Mellemstor.
-3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Opus laver udkastet til faktagrundlaget, og Fable tjekker det (se planen for Fable).
-4. **Solsystemet, trin 1b:** prototypen med Saturn, Enceladus og Titan i topkvalitet.
+**Venter på et go (forslag til rækkefølge efter F1, I bestemmer):**
+1. **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Små opgaver, som kan laves når som helst.
+2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10): Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
+3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
+4. **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Mellemstor.
+5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten.
+6. **Batteriet** (F1 punkt 5): grafik, start og navn. LiPo/Li-ion skal faktatjekkes, før teksten rettes. Stor, men kan deles op.
+7. **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7).
+8. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
+9. **De store dele bagefter:** Molekyler, Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan), og til sidst Tjernobyl og Liv, som venter, til Fable 5.5 kommer.
 
-**Åbne spørgsmål:** Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen. Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
+**Åbne spørgsmål:**
+- De seks spørgsmål i F1 (afsnit 6). Det vigtigste: Skal UI-planen laves først, så panelerne bygges sammen med den?
+- Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen.
+- Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
 
-**Ikke afprøvet endnu:** NASA-billederne på en rigtig tablet og telefon (kun i testbrowseren). Skills er ikke prøvet på en rigtig opgave.
+**Ikke afprøvet endnu:**
+- NASA-billederne på en telefon. De er set på jeres tablet (tabletbillede 05-07).
+- Lyden og hvordan det føles med fingre. Det er ikke vurderet i F1.
+- Årsagen til, at det sorte hul ser lyst ud. Den er kun set i koden og på billeder.
+- Skills er ikke prøvet på en rigtig opgave.
 
 ## Grundregler
 - Dansk tekst i et enkelt sprog. Fagord forklares.
 - Tæt på den rigtige fysik. Forenklinger siges ærligt.
+- **Dybde i lag** (jeres princip, 23. oktober 2026): Brugeroplevelsen skal være i top, med flot UI og gode informationer de rigtige steder. Man skal ikke bombarderes med informationer, men de skal være lette at nå for den nysgerrige, fx med et klik. AtomLab skal have stor dybde og tyngde, men føles let, og man bestemmer selv, hvor dybt man vil bore. F1 foreslår, hvordan det kan gøres: Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" og "For nørder").
 - Virker på pc (mus og tastatur) og tablet (fingre).
 - Man åbner det via et link (GitHub Pages).
 
@@ -190,6 +212,10 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - Valget huskes for hver skærm, men første gang er panelerne fremme. På tablet og telefon på højkant viser "Kun grafik" 3D-billedet på hele skærmen.
   - Gælder de fem skærme med panel, 3D og panel (Værkstedet, Stjerneovnen, Reaktoren, Batteriet og Kosmos). Det periodiske system har sit eget layout og kommer ikke med i første omgang.
   - Mellemstor opgave. Risikoen er layoutet på de mange skærmstørrelser, så det skal testes på pc, tablet og telefon begge veje. Besluttet: begge dele (foldbare paneler og "Kun grafik"). Venter på et go.
+- **Tre nye idéer fra F1** (ikke besluttet, se afsnit 4 i [F1-overblik.md](docs/fable/F1-overblik.md)):
+  - **Zoom ind fra hverdagen:** korte rejser fra noget kendt (blyant → grafit → carbonatomet).
+  - **Grundstofsamlingen:** samlekort, der vender, når man opdager et grundstof.
+  - **Grundstoffernes rejse:** en historie på tværs af delene, fra Big Bang til lithium i mobilen.
 - [x] **Skills til udviklingen** (lavet i oktober 2026): `/faerdig` (tests, skærmbilleder, dokumentation, commit og push) og `/faktatjek` (påstande, kilder og fælderne) i `.claude/skills/`. De peger på tjeklisterne i `docs/erfaringer.md` og kopierer dem ikke.
 - **Rækkefølge** (aftalt): Årstiderne (Trin 13) og formørkelserne (Trin 14) er lavet. Så Tjernobyl og til sidst Liv. **Besluttet 23. oktober 2026: Tjernobyl og Liv venter, til Fable 5.5 kommer**, for dér koster en fejl mest. Vil I i gang før, kan Opus lave dem med ekstra grundigt faktatjek.
 - **Ny del: Liv** (foreslået af jer): et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme (fx Miller-Urey-forsøget, byggesten, hinder, RNA). Vigtigt at sige ærligt, at ingen endnu har lavet liv fra bunden, og at det er uvist, hvordan det opstod. Med de nyeste fund på Mars (Perseverance, "leopardpletterne" i klippen Cheyava Falls). Besluttet: Forklar, hvad der er fundet, hvorfor det er så interessant, og hvorfor det er det bedste spor af liv på andre planeter indtil nu, men også ærligt, at det ikke er bevist. Teksten skal faktatjekkes grundigt. Molekyle-idéen ovenfor kan være første skridt.

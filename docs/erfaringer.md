@@ -46,7 +46,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Opgavelister og tal bygges, når delen startes, så de passer efter "Start forfra" og nulstilling.
 - [ ] Paneler opdateres højst 4 gange i sekundet og kun, når noget har ændret sig, ikke hvert billede.
 - [ ] Brug de fælles byggeklodser (beskeder, guide, pause, "Næste skridt") i stedet for at kopiere.
-- [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. En klasse kan bruges på flere skærme.
+- [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. En klasse kan bruges på flere skærme. Det samme gælder CSS-regler, også dem i `@media` (fx `order`).
 - [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
 - [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
 
@@ -94,7 +94,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **En ny fælles funktion, der ikke er tjekket alle steder** | Pausen: Stjernernes overflade koger videre, fordi den bruger `performance.now()`. "Reducer bevægelse" virker kun delvist. | E: søg efter alle steder, der skal følge med. |
 | **Arbejde hvert billede, som ikke behøves** | Reaktorens panel skrives hvert billede, også når reaktoren er slukket. | D: højst 4 gange i sekundet, og kun ved ændring. |
 | **Tests, der kigger på det forkerte tidspunkt eller forventer et præcist tilfældigt tal** | `henfald` (ion i 1,6 sekunder), `stjerneovn` (præcis 40 protoner). | F. |
-| **En CSS-klasse, der bruges på flere skærme** | Reaktoren lyttede på alle `.del-knap`, også Kosmos' "Kort fortalt" og "For nørder". Et klik der gjorde Reaktoren tom (ingen del valgt), og "Vis en kædereaktion" viste ingenting. Fundet af brugeren. | D: afgræns vælgere, og tjek tilstandens værdi. |
+| **En CSS-klasse, der bruges på flere skærme** | Reaktoren lyttede på alle `.del-knap`, også Kosmos' "Kort fortalt" og "For nørder". Et klik der gjorde Reaktoren tom (ingen del valgt), og "Vis en kædereaktion" viste ingenting. Fundet af brugeren. Igen i F1: `.del-vælger { order: 3 }` (højst 820 px, `style.css:1081`) er ment for Reaktorens toplinje, men flytter Kosmos' "For nørder" ned under citatet. | D: afgræns vælgere og CSS-regler, og tjek tilstandens værdi. |
 | **Skærmbilleder taget, før kameraet var færdigt** | To forkerte fund i gennemgangen: Batteriets etiketter "skåret af" på tablet og væggen i Det periodiske system "kun 40 % af bredden". Begge var billeder midt i zoomet. | F: vent på kameraet. |
 | **Fagord uden forklaring** | "Neutrino" i supernovaen, "alfapartikel" ved henfald, "6-16" i Reaktoren. Fundet af brugeren. | B: forklar første gang. |
 | **Grafik med fast plads, der løber over et øjeblik** | "Ryd" og straks uran: op til 179 protoner, men plads til 158. Sker kun ved mange billeder i sekundet, så testbrowseren så det ikke. | E og F: loft over antallet, test med små tidsskridt. |
@@ -168,6 +168,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Et kort skal læses samlet:** Faktatjekket af kategorikortet fandt, at "ikkemetaller leder ikke strøm" stod på samme kort som grafit, der leder strøm. Tjek, om teksterne på samme side modsiger hinanden.
 - **Kontaktark til animationer:** De 11 forsøg i kategorikortet blev spolet frem (`spol`) og samlet i ét billede på tre tidspunkter. Så var det hurtigt at se, hvad der ikke virkede (fx lignede en "hånd" en tallerken og blev til en galliumske i te).
 - **Faktatjekket af Formørkelser** (Opus) fandt fire upræcise ting, og ingen alvorlige fejl: Månens afstand (gennemsnit i stedet for yderværdier), at totaliteten 12. august 2026 også ramte Rusland og Portugal, ordbogens "kerneskygge" og "Månen er for lille" (se fælderne ovenfor).
+- **Et spørgsmål fra brugeren kan handle om, hvor svaret står** (F1, oktober 2026). Jeres søn spurgte, hvorfor radioaktivitet er farligt. Svaret stod i hjælpen, og Kerne-fanen havde et link "Er det farligt?". Tjek derfor først, om svaret findes, og hvor man møder det, før der skrives mere tekst. Svaret skal stå der, hvor spørgsmålet opstår (se "Dybde i lag" i DESIGN.md).
+- **Den samme tekst to steder på én gang** (F1): Stjerneovnen skriver reaktionens forklaring både i panelet og i underteksten (`fusion.js:1059` og `:1062`). Reaktorens guide og panel siger næsten det samme (`reaktor.js:541` og `:631`). Når en tekst tilføjes, så tjek, hvad der ellers står fremme samtidig.
 - **En agent, der løber tør ("session limit"),** kan fortsætte senere med en besked (SendMessage), så det, den allerede har fundet, ikke går tabt. Start ikke en ny.
 
 ### Faldgruber: kamera og layout
@@ -212,7 +214,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Tests i en midlertidig mappe** ville være forsvundet, da sessionen sluttede. De ligger nu i `tests/`.
 - **Konsolfejl talte ikke med** i de ældste tests. Nu giver de fejl i alle tests.
 - **Ting skrevet efter hukommelsen var forkerte** (tabellen over testene). Tjek altid i filerne.
-- **`pkill` med et mønster**, der også passer på ens egen kommando, lukker ens egen terminal. Brug process-id i stedet.
+- **`pkill` med et mønster**, der også passer på ens egen kommando, lukker ens egen terminal. Brug process-id i stedet. Det skete igen i F1 med `pkill -f "http.server 8765"`.
 - **Netadgang:** WebSearch virker herfra, men WebFetch kan ikke slå de fleste sider op (DNS). Kilder findes derfor via søgeresultater. Skriv det, når en kilde ikke kunne læses direkte.
 
 ### Grafik med rigtige billeder (Jorden og Månen, oktober 2026)
@@ -234,3 +236,8 @@ Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-all
 - Ikke testet med rigtig mus og rigtige fingre: hvordan det føles at sigte i Stjerneovnen, og hvor glat rejsen ind i Solen kører. Det skal prøves af jer. Det samme gælder ordforklaringerne og de fire nye Kosmos-fænomener.
 - **Uopklaret:** Hvorfor "Vis en kædereaktion" døde ud netop i guide-testen (2 gange i ca. 14), men aldrig i 400 forsøg uden for den. Med tre sikre generationer er det ikke set siden. Dukker det op igen, så log reaktorens tilstand lige før "Vis mig".
 - **To tests ad gangen** er kun målt stabilt i to hele kørsler. Hold øje med "OBS"-linjerne fra `koer-alle.mjs`.
+- **Kædereaktionen efter "Vis mig" går oftere i stå end "ca. 1 %"** (målt i F1, 23. oktober 2026, med 100 forsøg og stavene på 50 %):
+  - 6 gik i stå inden for 15 sekunder, og 11 inden for 2 minutter.
+  - Testen `reaktor` tillader højst 6 af 100, så den er på grænsen og kan begynde at fejle.
+  - Testbillede 45 i `docs/fable/billeder/` er et af tilfældene.
+- **`docs/fable/tablet/LISTE.md` passer ikke med filerne:** 08 er Pulsar, 09 Kilonova, 10 Rumtid, 11 Tyngdebølger, 12 Ormehul, og 14 er menuen i Chrome. Billedet af teksten i Formørkelser mangler.
