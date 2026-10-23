@@ -280,12 +280,12 @@
         <input type="range" id="fusTempSkyder" min="1" max="120" step="1" value="15">
         <small id="fusZone"></small>
       </label>
-      <div class="graf-boks">
-        <strong>Hvorfor skal det være så varmt?</strong>
+      <details class="graf-boks lag-boks" data-lag="fus-graf">
+        <summary><strong>Hvorfor skal det være så varmt?</strong><span class="lag-kort">Se, hvor mange protoner der er hurtige nok.</span></summary>
         <canvas id="fusGraf" width="520" height="170" aria-label="Graf over protonernes fart og frastødningen"></canvas>
         <small id="fusGrafTekst"></small>
-        <small class="ærligt">Ærligt talt: I den rigtige Sol er bakken flere hundrede gange højere end protonernes gennemsnitlige energi. De kommer kun over med tunneleffekten (se hjælpen).</small>
-      </div>
+        <small class="ærligt">Ærligt talt: I den rigtige Sol er bakken flere hundrede gange højere end protonernes gennemsnitlige energi. De kommer kun over med <button class="hvorfor" data-hvorfor="tunnel">tunneleffekten</button>.</small>
+      </details>
       <div class="valg-række tempo-række"><span class="valg-navn">Tempo</span>
         <button class="chip filter" data-fus-tempo="0.3">Langsom</button>
         <button class="chip filter valgt" data-fus-tempo="0.6">Normal</button>
@@ -296,10 +296,11 @@
         <button class="knap lille" id="fusPause">⏸ Pause</button>
         <button class="knap lille svag" id="fusRyd">Start forfra</button>
       </div>
-      <p class="klik-tip">Klik på en kerne og så på en anden for at skyde den første mod den anden. Tiden går langsomt, mens du sigter. Klik i listen for at finde en kerne.</p>
       <ul class="kerne-liste" id="fusKerner"></ul>
-      <h4 class="panel-overskrift">Opgaver</h4>
-      <ol class="opgaver kompakt" id="fusOpgaver"></ol>
+      <details class="lag-boks opgave-boks" data-lag="fus-opgaver">
+        <summary><strong>Opgaver</strong> <span class="opgave-tal" id="fusOpgaveTal"></span></summary>
+        <ol class="opgaver kompakt" id="fusOpgaver"></ol>
+      </details>
     </aside>
     <div class="vindue" id="fusionVindue" data-log>
       <div class="mission" id="fusMission">
@@ -313,8 +314,7 @@
     <div class="kerne-etiket skjult" id="fusEtiket" aria-live="polite"></div>
     <div class="kerne-etiket sigte skjult" id="fusSigte"></div>
     <aside class="panel side-panel højre-panel">
-      <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong>
-        <small>Når 1 gram brint bliver til helium, frigøres lige så meget energi som ved at brænde over 20 ton kul.</small></div>
+      <div class="energi-boks"><span>Frigjort energi</span><strong id="fusEnergi">0 MeV</strong></div>
       <h4 class="panel-overskrift">Solens opskrift</h4>
       <ol class="opskrift" id="fusOpskrift">
         <li data-trin="0" title="Klik for at vælge en proton"><span class="ligning"><span class="kp" style="--k:#ff6b6b">p</span> + <span class="kp" style="--k:#ff6b6b">p</span> → <b class="kp" style="--k:#ffa94d">D</b> + e⁺ + ν</span><span class="mev">1,44 MeV</span><span class="antal"></span></li>
@@ -322,9 +322,12 @@
         <li data-trin="2" title="Klik for at vælge en helium-3"><span class="ligning"><span class="kp" style="--k:#ffd43b">³He</span> + <span class="kp" style="--k:#ffd43b">³He</span> → <b class="kp" style="--k:#74c0fc">⁴He</b> + p + p</span><span class="mev">12,86 MeV</span><span class="antal"></span></li>
         <li data-trin="3" class="bonus" title="Klik for at vælge en heliumkerne"><span class="ligning">3 <span class="kp" style="--k:#74c0fc">⁴He</span> → <b class="kp" style="--k:#8ce99a">C</b> (rød kæmpe)</span><span class="mev">7,27 MeV</span><span class="antal"></span></li>
       </ol>
-      <div class="seneste-boks" id="fusSeneste"></div>
-      <details class="forklaring-boks trin-boks" open>
-        <summary><strong>Fra brint til carbon, trin for trin</strong></summary>
+      <details class="seneste-boks lag-boks" data-lag="fus-seneste" id="fusSenesteBoks" hidden>
+        <summary><strong id="fusSenesteTitel"></strong><span class="lag-kort" id="fusSenesteKort"></span></summary>
+        <div id="fusSeneste"></div>
+      </details>
+      <details class="forklaring-boks trin-boks lag-boks" data-lag="fus-trin">
+        <summary><strong>Fra brint til carbon, trin for trin</strong><span class="lag-kort">Solens opskrift forklaret i fem skridt.</span></summary>
         <ol>
           <li><b>Brint → deuterium (p + p).</b> To protoner (brintkerner) støder sammen. For at de kan blive sammen, bliver den ene lavet om til en neutron. Så er det deuterium, også kaldet "tung brint". Samtidig flyver en positron (antistof) og en neutrino (en næsten usynlig partikel) ud. Det er det sværeste skridt, og det sker meget sjældent.</li>
           <li><b>Deuterium → helium-3 (D + p).</b> Deuterium fanger en proton mere. Nu er der 2 protoner og 1 neutron: helium-3. Det sker hurtigt, i Solen efter nogle sekunder.</li>
@@ -333,11 +336,14 @@
           <li><b>Beryllium-8 → carbon (⁸Be + ⁴He).</b> Rammer en tredje heliumkerne beryllium-8, før den falder fra hinanden, bliver det til carbon-12. Det kaldes tre-alfa-processen, fordi tre heliumkerner (alfapartikler) bliver til én carbonkerne. Alt carbon i din krop er lavet sådan.</li>
         </ol>
       </details>
-      <div class="forklaring-boks">
-        <strong>Hvor kommer energien fra?</strong>
-        4 protoner vejer 0,7 % mere end en heliumkerne. Den forsvundne masse er blevet til energi, ligesom Einstein forudsagde: E = mc².
-      </div>
-      <h4 class="panel-overskrift">Solen i tal</h4>
+      <details class="forklaring-boks lag-boks" data-lag="fus-energi">
+        <summary><strong>Hvor kommer energien fra?</strong><span class="lag-kort">Lidt masse bliver til meget energi (E = mc²).</span></summary>
+        <p>4 protoner vejer 0,7 % mere end en heliumkerne. Den forsvundne masse er blevet til energi, ligesom Einstein forudsagde: E = mc².</p>
+        <p>Når 1 gram brint bliver til helium, frigøres lige så meget energi som ved at brænde over 20 ton kul.</p>
+        <p><button class="hvorfor" data-hvorfor="binding">Hvorfor vejer heliumkernen mindre?</button></p>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="fus-sol">
+        <summary><strong>Solen i tal</strong><span class="lag-kort">Hvor stor, hvor varm og hvor gammel.</span></summary>
       <dl class="kosmos-tal sol-tal">
         <div><dt>Bredde</dt><dd>109 × Jorden</dd></div>
         <div><dt>Kernen</dt><dd>ca. 15 mio. °C</dd></div>
@@ -346,6 +352,7 @@
         <div><dt>Alder</dt><dd>4,6 mia. år</dd></div>
         <div><dt>Brint i kernen</dt><dd>til ca. 5 mia. år mere</dd></div>
       </dl>
+      </details>
       <blockquote class="citat lille" data-citat="eddington"></blockquote>
     </aside>
   </section>
@@ -413,8 +420,10 @@
         <p class="klik-tip">Gulgrønne kugler er frisk uran-235. Grå er lige spaltet. Prikkerne er neutroner: hvide er hurtige, blå er langsomme.</p>
       </div>
       <div class="knap-række"><button class="knap lille" id="reaktorPause">⏸ Pause</button></div>
-      <h4 class="panel-overskrift">Opgaver</h4>
-      <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
+      <details class="lag-boks opgave-boks" data-lag="reaktor-opgaver">
+        <summary><strong>Opgaver</strong> <span class="opgave-tal" id="reaktorOpgaveTal"></span></summary>
+        <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
+      </details>
     </aside>
     <div class="vindue" id="reaktorVindue" data-log>
       <div class="mission" id="reaktorMission">
@@ -430,16 +439,22 @@
     </div>
     <aside class="panel side-panel højre-panel">
       <div data-reaktor-del="kerne">
-        <div class="seneste-boks forklaring-reaktor" id="reaktorForklaring"></div>
-        <div class="forklaring-boks">
-          <strong>Hvorfor spalter den?</strong>
-          En stor kerne er som en dirrende vanddråbe. Neutronen giver den lige nok ekstra energi til, at den strækker sig, får en "talje" og flækker. Lise Meitner og Otto Frisch forklarede det i 1939, og Frisch arbejdede dengang hos Niels Bohr i København.
-        </div>
-        <div class="forklaring-boks">
-          <strong>Hvor meget er 200 MeV?</strong>
+        <details class="seneste-boks forklaring-reaktor lag-boks" data-lag="reaktor-seneste" id="reaktorForklaring">
+          <summary><strong id="reaktorForklaringTitel"></strong><span class="lag-kort" id="reaktorForklaringKort"></span></summary>
+          <div id="reaktorForklaringTekst"></div>
+        </details>
+        <details class="forklaring-boks lag-boks" data-lag="reaktor-spalter">
+          <summary><strong>Hvorfor spalter den?</strong><span class="lag-kort">En stor kerne er som en dirrende vanddråbe.</span></summary>
+          <p>En stor kerne er som en dirrende vanddråbe. Neutronen giver den lige nok ekstra energi til, at den strækker sig, får en "talje" og flækker. Lise Meitner og Otto Frisch forklarede det i 1939, og Frisch arbejdede dengang hos Niels Bohr i København.</p>
+          <p><button class="hvorfor" data-hvorfor="uran">Hvorfor ikke uran-238?</button></p>
+        </details>
+        <details class="forklaring-boks lag-boks" data-lag="reaktor-200">
+          <summary><strong>Hvor meget er 200 MeV?</strong><span class="lag-kort">1 gram uran-235 svarer til ca. 3 ton kul.</span></summary>
           <p>Én spaltning giver kun en lillebitte smule energi. Men 1 gram uran-235 består af ca. 2½ trilliarder kerner (et tal med 22 cifre).</p>
           <p>Spaltes de alle, frigøres lige så meget energi som ved at brænde ca. <b>3 ton kul</b>.</p>
-        </div>
+          <p><button class="hvorfor" data-hvorfor="energi">Hvor kommer energien fra?</button></p>
+        </details>
+        <p class="hvorfor-linje"><button class="hvorfor" data-hvorfor="farligt">Er det farligt?</button></p>
         <blockquote class="citat lille" data-citat="einsteinEnergi"></blockquote>
       </div>
       <div data-reaktor-del="kæde" class="skjult">
@@ -454,19 +469,20 @@
           <div class="fremskridt" id="reaktorStabil"><div></div></div>
           <small id="reaktorStabilTekst"></small>
         </div>
-        <div class="forklaring-boks">
-          <strong>Sådan styrer man en reaktor</strong>
-          Hver spaltning giver 2-3 nye neutroner. Fører hver spaltning i gennemsnit til præcis én ny spaltning, er reaktoren stabil. Kontrolstavene suger neutroner op, og vandet bremser dem, så de lettere spalter uran-235.
-        </div>
-        <div class="forklaring-boks">
-          <strong>En rigtig reaktor</strong>
+        <details class="forklaring-boks lag-boks" data-lag="reaktor-styr">
+          <summary><strong>Sådan styrer man en reaktor</strong><span class="lag-kort">Hver spaltning skal give præcis én ny.</span></summary>
+          <p>Hver spaltning giver 2-3 nye neutroner. Fører hver spaltning i gennemsnit til præcis én ny spaltning, er reaktoren stabil. Kontrolstavene suger neutroner op, og vandet bremser dem, så de lettere spalter uran-235.</p>
+        </details>
+        <details class="forklaring-boks lag-boks" data-lag="reaktor-rigtig">
+          <summary><strong>En rigtig reaktor</strong><span class="lag-kort">Ca. 3 kg uran-235 om dagen mod 10.000 ton kul.</span></summary>
           <p>En stor reaktor giver ca. 3.000 megawatt varme, og ca. en tredjedel bliver til strøm. Så spaltes ca. 100 trillioner kerner i sekundet (et 1-tal med 20 nuller). Her i spillet er der kun 6-16 spaltninger i sekundet, når effekten er i det grønne felt.</p>
           <p>Den bruger ca. <b>3 kg uran-235 om dagen</b>. Et kulkraftværk, der giver lige så meget varme, brænder ca. <b>10.000 ton kul om dagen</b>.</p>
-        </div>
-        <div class="forklaring-boks">
-          <strong>Det blå lys</strong>
-          I reaktorer, hvor man kan se ned i vandet (fx forskningsreaktorer), lyser vandet blåt, når reaktoren kører. Det hedder Tjerenkov-stråling og kommer fra partikler, der farer gennem vandet hurtigere end lyset kan i vand.
-        </div>
+        </details>
+        <details class="forklaring-boks lag-boks" data-lag="reaktor-blaa">
+          <summary><strong>Det blå lys</strong><span class="lag-kort">Partikler, der er hurtigere end lyset i vand.</span></summary>
+          <p>I reaktorer, hvor man kan se ned i vandet (fx forskningsreaktorer), lyser vandet blåt, når reaktoren kører. Det hedder Tjerenkov-stråling og kommer fra partikler, der farer gennem vandet hurtigere end lyset kan i vand.</p>
+        </details>
+        <p class="hvorfor-linje"><button class="hvorfor" data-hvorfor="bombe">Kan en reaktor eksplodere som en bombe?</button> <button class="hvorfor" data-hvorfor="farligt">Er det farligt?</button></p>
       </div>
     </aside>
   </section>

@@ -48,6 +48,7 @@ const SLAGS = {
 
 export default {
   id: 'stjernefoedsel',
+  hvorfor: ['stjerner'],
   navn: 'Ny stjerne',
   ikon: '⭐',
   undertitel: 'En stjerne bliver født i en sky af gas',

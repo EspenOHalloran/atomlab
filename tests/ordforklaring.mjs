@@ -89,7 +89,8 @@ const tjekMærker = async (sted) => {
   return res.antal;
 };
 const antal = await tjekMærker('Kosmos');
-tjek('der er markeret mange fagord i siden', antal > 40, antal);
+// (Nogle ord er nu "Hvorfor?"-knapper i stedet, fx tunneleffekten i Stjerneovnen, så grænsen er 35)
+tjek('der er markeret mange fagord i siden', antal > 35, antal);
 
 // Hjælpen i Batteriet: Esc lukker først forklaringen og så hjælpen
 await T(() => { location.hash = '#batteri'; });

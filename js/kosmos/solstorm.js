@@ -12,6 +12,7 @@ const NÆSE = 3.2; // hvor langt foran Jorden magnetfeltet holder solvinden væk
 
 export default {
   id: 'solstorm',
+  hvorfor: ['magnetfelt'],
   navn: 'Solstorm',
   ikon: '☀️',
   undertitel: 'Når Solen kaster en sky af partikler mod Jorden',

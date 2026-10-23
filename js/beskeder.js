@@ -6,14 +6,17 @@
 // - Store advarsler (fast: true) bliver stående, til man lukker dem.
 // - Næsten alt gemmes i loggen (🔔), så man kan læse det igen.
 //
-// visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, log })
+// visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, log, hvorfor })
 //   type: 'info', 'reaktion', 'henfald', 'advarsel', 'fase' (undertekster) eller 'klaret', 'opdaget' (piller)
 //   varighed: mindste tid i ms (ellers regnes den ud fra tekstens længde). 0 = bliv stående, til noget nyt kommer.
 //   forsinkelse: vent så mange ms, før beskeden vises (så man når at se det, der sker).
 //   trin: [nr, ialt] viser små prikker, fx ved faserne i Kosmos.
 //   log: false = gem ikke beskeden i loggen.
+//   hvorfor: et id i data/hvorfor.js eller { spørgsmål, svar }. Så slutter underteksten med "Hvorfor?",
+//   som åbner forklaringen (underteksten selv er kort, se docs/plan-lag.md).
 
 import { lyd } from './lyd.js';
+import { visHvorfor, lukHvorfor, vistHvorfor } from './lag.js';
 
 const LOG_NØGLE = 'atomlabLog';
 const LOG_MAKS = 40;
@@ -66,6 +69,8 @@ export function visBesked(besked) {
     forsinkede.add(id);
     return;
   }
+  // Loggen får hele forklaringen med
+  if (b.hvorfor && typeof b.hvorfor === 'object') b.logTekst ??= `${b.tekst} ${b.hvorfor.svar}`;
   if (b.log !== false) gemILog(b);
   if (b.type === 'klaret' || b.type === 'opdaget') visPille(b);
   else visUndertekst(b);
@@ -176,6 +181,20 @@ function visUndertekst(b) {
     tekst.append(t, ' ');
   }
   tekst.append(b.tekst);
+  if (b.hvorfor) {
+    const knap = document.createElement('button');
+    knap.className = 'hvorfor';
+    knap.textContent = 'Hvorfor?';
+    if (typeof b.hvorfor === 'string') knap.dataset.hvorfor = b.hvorfor;
+    else {
+      knap.addEventListener('click', () => {
+        lyd.klik();
+        if (vistHvorfor() === b.hvorfor.spørgsmål) lukHvorfor();
+        else visHvorfor(b.hvorfor, knap);
+      });
+    }
+    tekst.append(' ', knap);
+  }
   const knapper = document.createElement('div');
   knapper.className = 'ut-knapper';
   knapper.innerHTML = '<button class="ut-luk" title="Luk" aria-label="Luk">×</button><button class="ut-mere" hidden>Mere</button>';
@@ -319,13 +338,14 @@ function gemLog() {
 function gemILog(b) {
   const vigtig = b.type === 'klaret' || b.type === 'opdaget' || Boolean(b.fast);
   const sidste = log.beskeder[0];
-  if (sidste && sidste.titel === b.titel && sidste.tekst === b.tekst) {
+  const tekst = b.logTekst ?? b.tekst;
+  if (sidste && sidste.titel === b.titel && sidste.tekst === tekst) {
     // Den samme besked igen: tæl den bare op
     sidste.t = Date.now();
     sidste.gange = (sidste.gange || 1) + 1;
   } else {
     const skærm = document.querySelector('.skærm:not(.skjult) .topbjælke h2')?.textContent ?? '';
-    log.beskeder.unshift({ t: Date.now(), titel: b.titel, tekst: b.tekst, type: b.type, skærm, vigtig });
+    log.beskeder.unshift({ t: Date.now(), titel: b.titel, tekst, type: b.type, skærm, vigtig });
     log.beskeder.length = Math.min(log.beskeder.length, LOG_MAKS);
   }
   gemLog();

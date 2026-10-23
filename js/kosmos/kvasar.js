@@ -12,6 +12,7 @@ const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
 
 export default {
   id: 'kvasar',
+  hvorfor: ['magnetfelt', 'sorthul'],
   navn: 'Kvasar',
   ikon: '🌟',
   undertitel: 'Et sort hul, der lyser stærkere end en hel galakse',

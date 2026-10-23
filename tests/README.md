@@ -48,6 +48,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `ordforklaring` | Ordbogen (hvert ord bruges, kort tekst, ingen dobbelte former) og ordforklaringerne med klik, Esc, mus, tastatur og fingre, ét mærke pr. tekst, aldrig i knapper og overskrifter, og nye tekster bliver markeret |
 | `beskeder`, `beskeder-2` | Beskedsystemet: undertekster, piller, loggen, etiketten i Stjerneovnen og nødstop |
 | `guide` | Kom i gang-guiderne, "Næste skridt" og "Vis mig" i Stjerneovnen og Reaktoren |
+| `lag` | Dybde i lag: panelerne kan skjules (fanerne, "Kun grafik", G og Esc) og huskes, "Kun grafik" på højkant, opgaverne foldet sammen, den korte undertekst med "Hvorfor?", "Hvorfor?"-kortene (lag for lag, Esc, tryk udenfor, nedefra på telefon), foldebokse, der huskes, og at "Næste skridt" er skjult under guiden |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
 | `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen. Det sorte hul er sort i midten, også med glød, og dets ekstra trin i efterbehandlingen fjernes igen |

@@ -5,6 +5,7 @@
 //   knap: teksten på knappen (fx 'Næste'). Uden knap går guiden videre, når vent() giver true (tjekkes hvert billede).
 //   start: kaldes, når trinet begynder (fx for at vælge, hvilken kerne ringen skal sidde om).
 // Mens guiden kører, venter belønningspillerne (holdPiller), så der ikke sker for meget på én gang.
+// "Næste skridt" er skjult imens (body.guide-kører i style.css), medmindre guiden peger på det (.guide-mål).
 
 import { lyd } from './lyd.js';
 import { holdPiller } from './beskeder.js';
@@ -49,6 +50,7 @@ export function startGuide(id, trin, { igen = false } = {}) {
   stopGuide();
   lavElementer();
   holdPiller(true);
+  document.body.classList.add('guide-kører');
   kører = { id, trin, nr: -1 };
   næsteTrin();
   const nr = ++løkkeNr;
@@ -64,6 +66,8 @@ export function stopGuide(gem = false) {
   ring?.classList.add('skjult');
   boble?.classList.add('skjult');
   holdPiller(false);
+  document.body.classList.remove('guide-kører');
+  for (const el of document.querySelectorAll('.guide-mål')) el.classList.remove('guide-mål');
 }
 
 export function guideKører(id) {
@@ -115,7 +119,12 @@ function næsteTrin() {
   boble.classList.remove('vist');
   requestAnimationFrame(() => boble.classList.add('vist'));
   // Er målet rullet ud af syne (fx på en telefon), rulles det frem
-  if (typeof t.mål === 'string') document.querySelector(t.mål)?.scrollIntoView({ block: 'nearest', behavior: ROLIG ? 'auto' : 'smooth' });
+  for (const el of document.querySelectorAll('.guide-mål')) el.classList.remove('guide-mål');
+  if (typeof t.mål === 'string') {
+    const mål = document.querySelector(t.mål);
+    mål?.classList.add('guide-mål');
+    mål?.scrollIntoView({ block: 'nearest', behavior: ROLIG ? 'auto' : 'smooth' });
+  }
   t.start?.();
 }
 

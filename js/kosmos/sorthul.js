@@ -16,6 +16,7 @@ const GLORIE = 1.9; // buen af bøjet lys går fra skyggens kant ud til 1,9 gang
 
 export default {
   id: 'sorthul',
+  hvorfor: ['sorthul'],
   navn: 'Sort hul',
   ikon: '⚫',
   undertitel: 'Hvor ikke engang lys kan slippe ud',
