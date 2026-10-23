@@ -5,7 +5,14 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 ## Lige nu (status til næste session)
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
-**Besluttet 24. oktober 2026:** Molekyler venter (planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md)). Nu arbejdes der kun på Saturn-prototypen: Først kommer de rigtige billeder med, og så kigger I på den på tabletten. **Lavet 24. oktober 2026** (USGS blev tilladt samme dag).
+**Besluttet 24. oktober 2026:**
+- **Atomet:** B (orbitalernes former) er standard for alle. I har ikke set den på tabletten endnu, så sig til, hvis den skal ændres.
+- **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys. **Venter**, til B og Saturn er færdige.
+- **Idéen med Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Derfor skal Saturn-prototypen vise Saturns store måner, så man kan se dem og flyve hen til dem.
+- **Saturn (jeres bemærkninger):** kunne styres med piletasterne, vise flere måner end Enceladus og være lidt mindre lysstærk.
+- **"Start forfra"** (jeres ønske): Alle steder, hvor man kan klare alle opgaver (Værkstedet, Stjerneovnen, Reaktoren og Batteriet), skal man kunne starte forfra. Lille opgave, laves efter Saturn.
+
+Molekyler venter (planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md)). Nu arbejdes der kun på Saturn-prototypen: Først kommer de rigtige billeder med, og så kigger I på den på tabletten. **Lavet 24. oktober 2026** (USGS blev tilladt samme dag).
 
 **Senest lavet:**
 - **Punkt 9: Planer og en prototype til de store dele** (23. oktober 2026). Opus stopper her, så I kan kigge:
@@ -57,7 +64,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet og godkendt 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md).** Jeres svar: kortet åbner ved knappen, opgaverne foldes sammen, citaterne bliver, og underteksten er kort med "Hvorfor?". Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
 3. ✅ **Vis eller skjul panelerne** (F1 punkt 2). Lavet 23. oktober 2026.
 4. ✅ **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Lavet 23. oktober 2026 (20 kort). Batteriet får sine kort med punkt 6.
-5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten. **Udgaverne A og B er lavet (23. oktober 2026) og venter på jeres valg** (se "Senest lavet").
+5. ✅ **Et grafisk løft af atomet** (F1 punkt 4). Besluttet 24. oktober 2026: B (orbitalernes former) er standard for alle.
 6. ✅ **Batteriet** (F1 punkt 5): grafik, start og navn. Lavet 23. oktober 2026.
 7. ✅ **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7). Lavet 23. oktober 2026. Fotos af grundstofferne kommer senere.
 8. ✅ **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lavet 23. oktober 2026.
@@ -227,7 +234,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] **UI-planen for lagene** ([docs/plan-lag.md](docs/plan-lag.md)) og byggeklodserne (`js/lag.js`: foldebokse, "Hvorfor?"-kort og "Næste skridt"). Stjerneovnen og Reaktoren har fået lagene. Værkstedet og Kosmos har fået "Hvorfor?"-kort, og Kosmos har "Mere" under "Kort fortalt". Tippene om at holde knapperne inde og om tasterne i Værkstedet flyttes til hjælpen, når Værkstedet får sin korte guide.
   - [x] **Vis eller skjul panelerne og "Kun grafik"** (`js/paneler.js`), også med G og Esc. Huskes for hver skærm.
   - [x] **"Hvorfor?"-kort:** 20 kort med "Og hvorfor det?", faktatjekket af to hjælpeagenter (`docs/fakta-hvorfor.md`).
-  - [ ] **Et grafisk løft af atomet:** udgaverne A (prikker) og B (former) med orbitaler regnet som i hydrogen, skygge i kernen og en glidende overgang er lavet og kan vælges med `?udgaver`. Venter på jeres valg, før den valgte bygges færdig (også atomet i menuen).
+  - [x] **Et grafisk løft af atomet:** B (former) er standard fra 24. oktober 2026: Elektronskyen viser de yderste orbitaler som glødende former regnet som i hydrogen, kernen har skygge, og der er en glidende overgang mellem ringe og sky. Det gælder også atomet i Det periodiske system og i menuen. `?udgaver` kan stadig vise de andre udgaver til sammenligning.
   - [x] **Batteriet: grafik, start og navn** (23. oktober 2026):
     - Grafitten er lag af carbonatomer i sekskanter, og metaloxidet er en krystal med kobolt mellem to lag oxygen. Kameraet ser lidt fra siden og oppefra.
     - Guiden kommer første gang, "Næste skridt" følger opgaverne, og "Vis mig" lader op i slowmotion, til to ioner er nået frem.
@@ -241,6 +248,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] **Copyright:** "© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" i README, i hjælpen ("Om AtomLab" med kilder og licenser) og i en licensfil (`LICENSE`), og at man gerne må bruge AtomLab i undervisningen og dele linket.
 
 ## Idéer til senere
+- **Ny del: Ordbogen** (jeres idé, 24. oktober 2026): Alle begreber, der er spredt rundt i AtomLab, samlet ét sted, så de er lette at slå op. Fx gammastråling: Den står allerede i ordbogen (`js/data/ordbog.js`, 44 fagord), men man kan kun se forklaringen ved at trykke på det prikkede ord i en tekst. **Forslag:** en side med alle fagord i alfabetisk rækkefølge og en søgning, og med "Hvorfor?"-kortene og kategorierne. Fra hvert ord kan man gå derhen, hvor det bruges. Den kan åbnes fra menuen og fra hjælpen. Lille til mellem. Venter på et go.
+- **Fotoner i Stjerneovnen?** (jeres spørgsmål, 24. oktober 2026): I dag står der kun "gammastråling (meget kraftigt lys)". **Forslag:** "foton" (en lyspartikel) som nyt fagord, og én sætning i Stjerneovnens forklaring om, at energien kommer ud som fotoner af gammastråling, og at de bruger meget lang tid på at kæmpe sig ud af Solen. Det står allerede i "Lys og neutrinoer", men uden ordet foton. Lille, men skal faktatjekkes. Venter på et go.
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
 - En engelsk udgave med en sprogvælger. Planen ligger i [docs/plan-engelsk.md](docs/plan-engelsk.md).
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).

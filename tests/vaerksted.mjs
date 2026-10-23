@@ -138,7 +138,7 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   await t.ctx.close();
 }
 
-// Udgaver af atomet (?udgaver): vælgeren, orbitalerne og at "Nu" er som før
+// Udgaver af atomet (?udgaver): vælgeren, orbitalerne, og at B (formerne) er standard uden ?udgaver
 {
   const u = await side({ viewport: { width: 1280, height: 800 } });
   await u.page.goto(URL + '#vaerksted');
@@ -165,7 +165,7 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   tjek('udgaver: "Nu" har ingen orbitaler', (await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler())).length === 0);
   await u.page.goto(URL + '#vaerksted');
   await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
-  tjek('udgaver: uden ?udgaver er atomet som før', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'nu');
+  tjek('udgaver: uden ?udgaver bruges B (formerne)', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'former');
   await u.ctx.close();
 }
 
