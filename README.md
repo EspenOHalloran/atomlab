@@ -29,3 +29,9 @@ Der er automatiske tests i [tests/](tests/README.md). De kører med `node tests/
 - Ren HTML, CSS og JavaScript uden byggetrin
 - [Three.js](https://threejs.org) 0.186.1 (MIT-licens, ligger i `lib/three/`)
 - Billeder af Jorden og Månen fra NASA (Blue Marble, Black Marble og Lunar Reconnaissance Orbiter, public domain). Se [billeder/solsystem/KILDER.md](billeder/solsystem/KILDER.md)
+- Kortet over land og hav er lavet med [global-land-mask](https://github.com/toddkarin/global-land-mask) (MIT-licens) ud fra data fra NOAA
+
+## Ophavsret
+© 2026 Espen O'Halloran. Alle rettigheder forbeholdes.
+
+Du må gerne bruge AtomLab i undervisningen og dele linket. Three.js, landkortet og NASA's billeder har deres egne licenser. Se [LICENSE](LICENSE).

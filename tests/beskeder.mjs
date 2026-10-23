@@ -45,10 +45,16 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   tjek(`${navn}: pillerne dækker under 15 %`, d1 < 15, d1);
   await page.screenshot({ path: `${UD}/${navn}-1-carbon.png` });
   tjek(`${navn}: klokken vises med tal`, await page.evaluate(() => { const k = document.querySelector('#vaerkstedVindue .logknap'); return k && !k.hidden && Number(k.querySelector('b').textContent) >= 2; }));
-  // Tryk på en pille for at læse mere
-  await page.click('#vaerkstedVindue .pille .pille-knap');
-  // Hold øje med pillen i stedet for at vente en fast tid (på en travl maskine tager det længere)
-  const åbnet = await page.waitForFunction(() => Boolean(document.querySelector('.pille.åben .pille-mere')?.offsetHeight), null, { timeout: 4000 }).then(() => true, () => false);
+  // Tryk på en pille for at læse mere. En pille forsvinder efter 4,5 sekunder, og på en travl maskine kan den nå at
+  // forsvinde, før testen trykker. Så prøves der igen på den næste pille (op til tre gange).
+  let åbnet = false;
+  for (let forsøg = 0; forsøg < 3 && !åbnet; forsøg++) {
+    const knap = await page.$('#vaerkstedVindue .pille.vist:not(.åben) .pille-knap');
+    if (!knap) { await page.waitForTimeout(500); continue; }
+    await knap.click().catch(() => {});
+    // Hold øje med pillen i stedet for at vente en fast tid (på en travl maskine tager det længere)
+    åbnet = await page.waitForFunction(() => Boolean(document.querySelector('.pille.åben .pille-mere')?.offsetHeight), null, { timeout: 4000 }).then(() => true, () => false);
+  }
   tjek(`${navn}: pillen kan åbnes`, åbnet);
   await page.screenshot({ path: `${UD}/${navn}-2-pille-aaben.png` });
   // Efter lidt tid er de andre piller væk, og den i køen er kommet

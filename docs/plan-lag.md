@@ -100,7 +100,14 @@ Hvert skridt bliver testet på pc, tablet begge veje og telefon begge veje og ko
 
 **Testen `lag`** skal tjekke, at underteksten og panelet ikke viser den samme tekst, at "Næste skridt" er skjult under guiden, at panelerne kan foldes væk og hentes igen (også med G og Esc), at 3D-billedet så fylder pladsen, at valget huskes, og at et "Hvorfor?"-kort åbner, går et lag dybere og lukker med Esc.
 
-## Det skal I tage stilling til
+## Jeres svar (23. oktober 2026)
+Planen er godkendt med disse svar:
+1. "Hvorfor?"-kortet åbner ved knappen (som ordforklaringerne) og nedefra på telefon.
+2. Opgaverne foldes sammen til én linje ("Opgaver 3/7 ★ ▸").
+3. Citaterne bliver nederst i panelerne.
+4. Underteksten er kort (højst ca. 90 tegn) med et "Hvorfor?" til sidst.
+
+## Det skulle I tage stilling til
 1. **Hvor skal "Hvorfor?"-kortet åbne?** Mit forslag: lige ved knappen (som ordforklaringerne) og nedefra på telefon. Alternativet er, at det altid folder sig ud i panelet. Så ser man det ikke, når panelerne er skjult.
 2. **Opgaverne:** Skal de foldes sammen til én linje ("Opgaver 3/7 ★ ▸"), nu hvor "Næste skridt" viser den næste? Mit forslag: ja.
 3. **Citaterne:** De bliver nederst i panelerne, hvor de står i dag. De er en del af charmen og taler ikke oven i noget andet. Er I enige?
