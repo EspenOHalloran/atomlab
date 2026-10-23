@@ -6,6 +6,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- **Punkt 1: Det sorte hul er sort, og "For nørder" står øverst igen** (23. oktober 2026, Trin 18 nedenfor). Skyggen er nu ca. 2,6 gange bredere end horisonten (som i virkeligheden), og gløden holdes ude af den. Horisonten er en stiplet ring inde i skyggen. Testene `grafik` og `kosmos` tjekker begge dele.
+- **Punkt 2: UI-planen** ([docs/plan-lag.md](docs/plan-lag.md)) venter på, at I læser den.
 - **F1, et samlet overblik** over, hvor AtomLab kan blive bedre ([docs/fable/F1-overblik.md](docs/fable/F1-overblik.md), 23. oktober 2026). Lavet i en session med høj effort ud fra briefen, fordi Fable venter. Det vigtigste: Det er skærmen og ikke koden, der holder AtomLab tilbage. Der er for mange tekster på én gang, og tit står den samme tekst to-tre steder. De 10 forbedringer i kort form:
   1. ro på skærmen: hver oplysning ét sted og dybde i lag
   2. skjul panelerne og "Kun grafik"
@@ -24,9 +26,19 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - 14 skærmbilleder fra en rigtig tablet (`docs/fable/tablet/`) og F0, materialet til F1 (`docs/fable/`).
 - Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
 
-**Venter på et go (forslag til rækkefølge efter F1, I bestemmer):**
-1. **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Små opgaver, som kan laves når som helst.
-2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10): Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
+**Go til alle ni punkter herunder** (23. oktober 2026). Jeres svar på de åbne spørgsmål samme dag:
+- **Ud på tabletten:** Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når alle tests er grønne, så det kommer på GitHub Pages med det samme.
+- **UI-planen (punkt 2):** I læser den, før lagene, panelerne og "Hvorfor?"-kortene (punkt 2-4) bygges. Imens laver Opus det, der ikke afhænger af planen.
+- **Atomet (punkt 5):** 2-3 udgaver, som man vælger mellem i appen med `?udgaver` i adressen. I prøver dem på tabletten og siger, hvilken der skal bygges færdig.
+- **Tabletten** bruges lige meget på langs og på højkant. Begge vægtes lige højt.
+- **Fotos af grundstofferne:** Ja, men som et senere trin efter teksterne i lag. Fotos fra Wikimedia Commons med navn og licens. `upload.wikimedia.org` er spærret i miljøet og skal tillades under Network access først.
+- **"Er det farligt?":** I ved ikke, om han så linket. Kortet kommer der, hvor spørgsmålet opstår, med et dybere lag om, hvad strålingen gør ved cellerne og DNA, og hvor meget der skal til.
+- **Lyd:** Ingen baggrundsmusik nu. De små lyde bliver.
+- **De store dele (punkt 9):** plan og faktagrundlag til Molekyler, trin 0 i Solsystemet og prototypen med Saturn, Enceladus og Titan. Så stopper Opus, og I kigger, før de store dele bygges. Solsystemets spørgsmål 1-5 følger planens forslag. Tjernobyl og Liv venter stadig på Fable 5.5.
+
+**Punkterne (i denne rækkefølge, men UI-planen skrives først, så I kan læse den, mens resten laves):**
+1. ✅ **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Lavet 23. oktober 2026.
+2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md). Venter på, at I har læst den, og på svar på de fire spørgsmål sidst i planen.** Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
 3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
 4. **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Mellemstor.
 5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten.
@@ -36,14 +48,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 9. **De store dele bagefter:** Molekyler, Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan), og til sidst Tjernobyl og Liv, som venter, til Fable 5.5 kommer.
 
 **Åbne spørgsmål:**
-- De seks spørgsmål i F1 (afsnit 6). Det vigtigste: Skal UI-planen laves først, så panelerne bygges sammen med den?
-- Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen.
-- Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
+- De seks spørgsmål i F1 (afsnit 6) er besvaret (se ovenfor). Spørgsmål 1 (UI-planen først): ja.
+- Spørgsmål 1-5 om Solsystemet (afsnit 7 i planen): følger planens forslag, indtil I siger andet.
 
 **Ikke afprøvet endnu:**
 - NASA-billederne på en telefon. De er set på jeres tablet (tabletbillede 05-07).
 - Lyden og hvordan det føles med fingre. Det er ikke vurderet i F1.
-- Årsagen til, at det sorte hul ser lyst ud. Den er kun set i koden og på billeder.
+- Det nye sorte hul på en rigtig tablet. Det er kun set i testbrowseren (med glød).
 - Skills er ikke prøvet på en rigtig opgave.
 
 ## Grundregler
@@ -188,6 +199,17 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] Luften: et blåt skær mod kanten, rødligt lys i tusmørket og en tynd atmosfære, der lyser kraftigt i modlys.
   - [x] Månen: kort og højder fra Lunar Reconnaissance Orbiter. Fuldmånen er næsten lige lys over hele skiven, som den rigtige.
   - [x] 4k på pc og 2k på tablet og telefon. Kilder og licenser i `billeder/solsystem/KILDER.md`, og en ærlig note under "For nørder" om, hvad der er gjort større.
+
+- [ ] **Trin 18: Forbedringer efter F1** (se [F1-overblik.md](docs/fable/F1-overblik.md) og "Lige nu" øverst)
+  - [x] **Det sorte hul er sort:** Skyggen er ca. 2,6 gange bredere end horisonten, som i virkeligheden (for et sort hul, der ikke drejer), og gløden bliver holdt ude af den. Horisonten står som en stiplet ring inde i skyggen. Astronauten starter på vores side af hullet, så man ser den blive strakt.
+  - [x] **"For nørder" står øverst igen** i Kosmos på tablet og telefon på højkant (CSS-reglen gælder nu kun Reaktoren).
+  - [ ] UI-planen for lagene ([docs/plan-lag.md](docs/plan-lag.md)) og byggeklodserne
+  - [ ] Vis eller skjul panelerne og "Kun grafik"
+  - [ ] "Hvorfor?"-kort
+  - [ ] Et grafisk løft af atomet
+  - [ ] Batteriet: grafik, start og navn
+  - [ ] Grundstofkortet i lag og fremgang i menuen
+  - [ ] Copyright
 
 ## Idéer til senere
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.

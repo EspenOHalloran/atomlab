@@ -39,7 +39,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `stjerneovn-mus` | Stjerneovnen med mus: ramme-procent, slowmotion, pause, kernelisten, grafen og rejsen ind i Solen |
 | `reaktor` | Reaktoren: spaltning, uran-238, kædereaktion, nødstop, at "Vis mig" kommer i gang 200 af 200 gange, ikke dør ud, og at reaktoren som regel kører videre bagefter (100 forsøg), og at Kosmos' faneknapper ikke ændrer Reaktoren |
 | `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning |
-| `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk |
+| `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk. På tablet og telefon på højkant står "Kort fortalt / For nørder" over teksten |
 | `kosmos-nye` | Big Bang (64/64 → 112/16 → 25 % helium), Ny stjerne (brun dværg, som Solen, kæmpestjerne), Solens fremtid og den hvide dværg (eksplosion og nikkel → cobalt → jern efter 100 dage) |
 | `aarstider` | Årstiderne: formlerne for dagens længde, Solens højde og Jordens afstand mod kendte værdier (København, Sydney, Singapore og Ilulissat), og fænomenet i browseren: trinene, tabellen (også årstiden), at Jorden kører rundt i første trin, og at skyderen følger med, og telefon |
 | `formoerkelser` | Formørkelser: skyggens geometri med rigtige afstande (total ved 363.300 km, ring ved 405.500 km, Månen i Jordens skygge), og fænomenet i browseren: trinene, himlen set fra Jorden (koronaen, den røde Måne, Månen ude ved kanten og en delvis måneformørkelse), at Månen kredser den rigtige vej, at kameraet ikke hopper, skyderne, "formørkelsesperiode" og "Uden hældning" i "Prøv selv", og telefon |
@@ -49,7 +49,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `guide` | Kom i gang-guiderne, "Næste skridt" og "Vis mig" i Stjerneovnen og Reaktoren |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
-| `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen |
+| `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen. Det sorte hul er sort i midten, også med glød, og dets ekstra trin i efterbehandlingen fjernes igen |
 
 ## Værktøjer
 - `vaerktoejer/skaermbilleder.mjs fusion` tager billeder af en skærm på pc, tablet og telefon (begge veje). Den venter 7 sekunder, så kameraet er færdigt med at zoome (`VENT=3500` for kortere).

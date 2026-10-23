@@ -1078,7 +1078,8 @@ button { font: inherit; color: inherit; }
     grid-template-areas: "top top" "vindue vindue" "venstre højre";
     overflow-y: auto;
   }
-  .del-vælger { order: 3; margin: 0; }
+  /* Reaktorens del-knapper får deres egen linje i toplinjen (ikke Kosmos' "Kort fortalt / For nørder" i panelet) */
+  #reaktor .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
   #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }
   #system.kategori:not(.detalje) { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto auto; grid-template-areas: "top" "vindue" "kort" "filtre"; }
