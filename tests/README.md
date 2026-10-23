@@ -34,7 +34,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `orbitaler` | Orbitalerne (`js/data/orbitaler.js`): antallet af knuder, middelafstanden, formerne (p langs aksen, d med fire blade), at neutrale atomer følger konfigurationen, og at ioner har de rigtige orbitaler (fx Fe²⁺ mister 4s før 3d). Kører uden browser. |
 | `vaerksted` | Atomværkstedet: menu, byg atomer, stabile og ustabile kerner, tællere, fanerne, at "Ryd" og straks uran ikke løber tør for plads i grafikken, ophavsretten i hjælpen og udgaverne af atomet (`?udgaver`) |
 | `henfald` | Tritium henfalder, ion lige efter henfaldet, stabilitetskortet og opgaverne |
-| `system` | Det periodiske system på pc: væggen, grundstofkortet, filtre og opgaven "byg jern" |
+| `system` | Det periodiske system på pc: væggen, grundstofkortet (også lagene: tre linjer, "Mere" og links), filtre og opgaven "byg jern", og fremgangen og "Næste eventyr" i menuen |
 | `system-mobil` | Det periodiske system på telefon, tablet og pc: tryk, træk, knib, søgning og filtre |
 | `stjerneovn` | Stjerneovnen: fusion, for koldt, energi, tempoknapperne, opgaver kun ved egne skud, og at "Vis mig" lige efter et eget skud laver en reaktion 120 af 120 gange |
 | `stjerneovn-mus` | Stjerneovnen med mus: ramme-procent, slowmotion, pause, kernelisten, grafen og rejsen ind i Solen |

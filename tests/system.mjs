@@ -61,6 +61,63 @@ tjek('jern opdaget', fr.opdaget.includes(26));
 await page.goto(`${ADRESSE}/#system`);
 await page.waitForTimeout(6000);
 tjek('stjerne-tæller', (await page.textContent('#systemOpdaget')).includes('1 af 118'), await page.textContent('#systemOpdaget'));
+
+// Grundstofkortet i lag: tre linjer fremme, og "Mere" med eksempler, "Vidste du?", links og tallene
+{
+  const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
+  s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  s.on('console', (m) => { if (m.type() === 'error') fejl.push('error: ' + m.text()); });
+  await s.goto(`${ADRESSE}/?test#system`);
+  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#system:not(.skjult)'));
+  await s.evaluate(() => atomlabTest.system.åbn(3));
+  await s.waitForTimeout(800);
+  const li = await s.evaluate(() => ({
+    linjer: [...document.querySelectorAll('#sysLag li')].map((l) => l.textContent),
+    lagVist: !document.getElementById('sysLag').hidden,
+    mereÅben: document.getElementById('sysMere').open,
+    talIMere: Boolean(document.querySelector('#sysMere #sysTal')),
+    vidste: document.getElementById('sysVidste').textContent,
+    links: [...document.querySelectorAll('#sysSe button')].map((k) => k.textContent),
+  }));
+  tjek('lithium: tre linjer fremme', li.lagVist && li.linjer.length === 3 && /I din hverdag/.test(li.linjer[0]) && /I din krop/.test(li.linjer[1]) && /I universet/.test(li.linjer[2]), JSON.stringify(li));
+  tjek('lithium: "Mere" er foldet sammen, og tallene står i den', !li.mereÅben && li.talIMere);
+  tjek('lithium: "Vidste du?" og link til Batteriet', /Vidste du\?/.test(li.vidste) && li.links.includes('Batteriet ›'), JSON.stringify(li.links));
+  await s.evaluate(() => atomlabTest.system.åbn(4));
+  await s.waitForTimeout(400);
+  tjek('beryllium: "kosmisk stråling" er et fagord', await s.evaluate(() => Boolean(document.querySelector('#sysLag .fagord[data-ord="kosmiskstraaling"]'))));
+  await s.evaluate(() => atomlabTest.system.åbn(60));
+  await s.waitForTimeout(400);
+  const nd = await s.evaluate(() => ({ lag: document.getElementById('sysLag').hidden, mere: document.getElementById('sysMere').hidden, talUde: !document.querySelector('#sysMere #sysTal') }));
+  tjek('neodym (uden lag): tallene står fremme som før', nd.lag && nd.mere && nd.talUde, JSON.stringify(nd));
+  await s.evaluate(() => atomlabTest.system.åbn(3));
+  await s.waitForTimeout(400);
+  await s.evaluate(() => { document.getElementById('sysMere').open = true; });
+  await s.screenshot({ path: UD + '/s4-lag.png' });
+  await s.click('#sysSe button:text("Batteriet ›")');
+  await s.waitForTimeout(600);
+  tjek('linket åbner Batteriet', await s.evaluate(() => location.hash === '#batteri'));
+  await s.context().close();
+}
+
+// Menuen: fremgang på hvert kort og "Næste eventyr", når en del er klaret
+{
+  const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
+  s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  await s.addInitScript(() => {
+    const opgaver = {};
+    for (const id of ['b-fuld', 'b-lampe', 'b-tom', 'b-hurtig', 'b-overlad']) opgaver[id] = 1;
+    localStorage.setItem('atomlabFremgang', JSON.stringify({ opgaver, opdaget: [1, 26] }));
+    localStorage.setItem('atomlabKosmosSet', JSON.stringify(['bigbang', 'sorthul']));
+  });
+  await s.goto(`${ADRESSE}/?test`);
+  await s.waitForTimeout(1500);
+  const m = await s.evaluate(() => Object.fromEntries([...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), { tal: k.querySelector('.kort-fremgang')?.textContent, færdig: k.querySelector('.kort-fremgang')?.classList.contains('færdig'), næste: k.classList.contains('næste-eventyr') }])));
+  tjek('menuen: Batteriet er klaret', m['#batteri'].færdig && m['#batteri'].tal === '✓ 5/5 ★', JSON.stringify(m['#batteri']));
+  tjek('menuen: opdagede grundstoffer og sete fænomener', m['#system'].tal === '2/118 opdaget' && /^2\/\d+ set$/.test(m['#kosmos'].tal), JSON.stringify(m));
+  tjek('menuen: næste eventyr er Værkstedet', m['#vaerksted'].næste && !m['#batteri'].næste && m['#vaerksted'].tal.endsWith('★'), JSON.stringify(m));
+  await s.screenshot({ path: UD + '/s5-menu.png' });
+  await s.context().close();
+}
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);

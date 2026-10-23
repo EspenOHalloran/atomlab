@@ -1295,3 +1295,31 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 #batteriVindue:has(.undertekst) .batteri-farver { display: none; }
 /* På telefoner står farverne på én linje i bunden */
 @media (max-width: 560px) { .batteri-farver { max-width: none; right: 10px; gap: 2px 8px; font-size: 11px; padding: 4px 8px; } }
+/* Grundstofkortet i lag: tre linjer med ikoner og "Mere" */
+.sys-lag { list-style: none; margin: 8px 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.sys-lag li { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; line-height: 1.4; }
+.sys-lag b { color: var(--accent); font-weight: 600; }
+.sys-ikon { flex: 0 0 auto; width: 20px; text-align: center; }
+.sys-mere { margin: 0 0 10px; }
+.sys-eksempler { margin: 6px 0 8px; padding-left: 18px; font-size: 13px; line-height: 1.45; }
+.sys-eksempler li { margin: 2px 0; }
+.sys-vidste { font-size: 13px; line-height: 1.45; margin: 0 0 8px; padding: 6px 9px; border-radius: 8px; background: rgba(255, 212, 59, 0.08); }
+.sys-vidste b { color: #ffd43b; }
+.sys-se { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+.sys-mere .tal { margin-top: 6px; }
+/* Menuen: fremgang på hvert kort og et forslag til næste eventyr */
+.kort-fremgang { display: inline-block; align-self: flex-start; margin: 2px 0 1px; padding: 1px 8px; border-radius: 99px; font-size: 11.5px; font-weight: 700; color: #ffd43b; background: rgba(255, 212, 59, 0.1); border: 1px solid rgba(255, 212, 59, 0.25); }
+.kort-fremgang.færdig { color: #1d1600; background: var(--gul); border-color: var(--gul); }
+.kort.næste-eventyr::after {
+  content: "Næste eventyr";
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 800;
+  background: var(--accent);
+  color: #001a22;
+  box-shadow: 0 0 14px rgba(95, 227, 255, 0.5);
+}

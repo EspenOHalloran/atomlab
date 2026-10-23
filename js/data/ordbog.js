@@ -212,6 +212,21 @@ export const ORDBOG = [
     tekst: 'Den mørkeste del af en skygge i rummet. Inde i Månens kerneskygge er hele Solen dækket (total solformørkelse). Er hele Månen inde i Jordens kerneskygge, er det total måneformørkelse.',
   },
   {
+    id: 'rproces', ord: 'r-processen',
+    former: ['r-processen'],
+    tekst: 'Den hurtige måde at lave tunge grundstoffer på (r for "rapid", hurtig). Atomkerner bliver ramt af så mange neutroner, at de fanger dem hurtigere, end de når at henfalde. Det sker nok mest, når neutronstjerner støder sammen.',
+  },
+  {
+    id: 'sproces', ord: 's-processen',
+    former: ['s-processen'],
+    tekst: 'Den langsomme måde at lave tunge grundstoffer på (s for "slow", langsom). Inde i døende røde kæmpestjerner fanger atomkerner én neutron ad gangen og når at henfalde imellem. Sådan er fx det meste bly blevet lavet.',
+  },
+  {
+    id: 'kosmiskstraaling', ord: 'Kosmisk stråling',
+    former: ['kosmisk stråling', 'kosmiske stråling'],
+    tekst: 'Atomkerner (mest protoner), der suser gennem rummet med næsten lysets fart. Rammer de en anden atomkerne, kan de slå den i stykker. Sådan er det meste beryllium og bor blevet lavet. Det er ikke det samme som den kosmiske baggrundsstråling.',
+  },
+  {
     id: 'halvskygge', ord: 'Halvskygge',
     former: ['halvskygge', 'halvskyggen'],
     tekst: 'Den lysere del af en skygge i rummet, rundt om kerneskyggen. Herfra er kun en del af Solen dækket, så der er stadig lys, bare mindre.',
