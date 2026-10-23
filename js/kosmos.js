@@ -332,6 +332,8 @@ export function testAdgang() {
     tid: () => kosmosTid,
     stjerneTid: () => stjerneUr.tid,
     antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },
+    // Antal trin i efterbehandlingen (Sort hul lægger et trin til, som skal fjernes igen)
+    efterbehandling: () => verden.komponist.passes.length,
     // Spoler tiden frem (testbrowseren tegner kun få billeder i sekundet)
     spol: (sekunder) => {
       for (let t = 0; t < sekunder; t += 0.05) opdater(0.05);

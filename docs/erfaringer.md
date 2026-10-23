@@ -94,7 +94,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **En ny fælles funktion, der ikke er tjekket alle steder** | Pausen: Stjernernes overflade koger videre, fordi den bruger `performance.now()`. "Reducer bevægelse" virker kun delvist. | E: søg efter alle steder, der skal følge med. |
 | **Arbejde hvert billede, som ikke behøves** | Reaktorens panel skrives hvert billede, også når reaktoren er slukket. | D: højst 4 gange i sekundet, og kun ved ændring. |
 | **Tests, der kigger på det forkerte tidspunkt eller forventer et præcist tilfældigt tal** | `henfald` (ion i 1,6 sekunder), `stjerneovn` (præcis 40 protoner). | F. |
-| **En CSS-klasse, der bruges på flere skærme** | Reaktoren lyttede på alle `.del-knap`, også Kosmos' "Kort fortalt" og "For nørder". Et klik der gjorde Reaktoren tom (ingen del valgt), og "Vis en kædereaktion" viste ingenting. Fundet af brugeren. Igen i F1: `.del-vælger { order: 3 }` (højst 820 px, `style.css:1081`) er ment for Reaktorens toplinje, men flytter Kosmos' "For nørder" ned under citatet. | D: afgræns vælgere og CSS-regler, og tjek tilstandens værdi. |
+| **En CSS-klasse, der bruges på flere skærme** | Reaktoren lyttede på alle `.del-knap`, også Kosmos' "Kort fortalt" og "For nørder". Et klik der gjorde Reaktoren tom (ingen del valgt), og "Vis en kædereaktion" viste ingenting. Fundet af brugeren. Igen i F1: `.del-vælger { order: 3 }` (højst 820 px, `style.css:1081`) er ment for Reaktorens toplinje, men flyttede Kosmos' "For nørder" ned under citatet. Rettet til `#reaktor .del-vælger`, og testen `kosmos` tjekker det på højkant. | D: afgræns vælgere og CSS-regler, og tjek tilstandens værdi. |
 | **Skærmbilleder taget, før kameraet var færdigt** | To forkerte fund i gennemgangen: Batteriets etiketter "skåret af" på tablet og væggen i Det periodiske system "kun 40 % af bredden". Begge var billeder midt i zoomet. | F: vent på kameraet. |
 | **Fagord uden forklaring** | "Neutrino" i supernovaen, "alfapartikel" ved henfald, "6-16" i Reaktoren. Fundet af brugeren. | B: forklar første gang. |
 | **Grafik med fast plads, der løber over et øjeblik** | "Ryd" og straks uran: op til 179 protoner, men plads til 158. Sker kun ved mange billeder i sekundet, så testbrowseren så det ikke. | E og F: loft over antallet, test med små tidsskridt. |
@@ -131,6 +131,10 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Ved en ringformørkelse er Månen for lille." Den *ser* for lille ud, fordi den er længere væk.
 - "Månens afstand svinger mellem 363.000 og 406.000 km." Det er gennemsnittet for, hvornår den er tættest på og længst væk. Yderværdierne er ca. 356.400 og 406.700 km.
 - "Månen i Jordens kerneskygge = total måneformørkelse." Kun når *hele* Månen er inde i kerneskyggen.
+- "Den yderste skal har højst 8 elektroner." Næsten altid, men palladium har skallerne 2, 8, 18, 18. Og grænsen skyldes rækkefølgen af energierne (den næste skal begynder at fylde), ikke Pauli-princippet.
+- "Jordens ydre kerne koger." Det flydende metal strømmer rundt (konvektion) som suppe i en gryde, drevet af varme og af lette stoffer fra den faste indre kerne. Det koger ikke.
+- "Den dødelige stråledosis er 4-5 Sv." Kilderne siger ca. 3,5-4,5 Gy for halvdelen uden behandling. Skriv "omkring 4 Sv", og at behandling hjælper. En CT-skanning er ca. 2-10 mSv (hovedet ca. 1-2), ikke 5-10.
+- "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.
 
 ---
 
@@ -173,6 +177,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **En agent, der løber tør ("session limit"),** kan fortsætte senere med en besked (SendMessage), så det, den allerede har fundet, ikke går tabt. Start ikke en ny.
 
 ### Faldgruber: kamera og layout
+- **Gløden lyser sorte ting op** (Sort hul, F1 punkt 8, oktober 2026). Skyggen var sort uden glød, men grå med glød, også ved halv styrke, fordi gassen omkring er meget lys. At skrue ned for gløden hjalp ikke. Løsningen: Gem billedet før gløden (`GemPass`), og brug det dér, hvor noget skal være sort (`SkyggePass`). Så kan ting foran skyggen stadig ses. Første forsøg med en maske, hvor tingene foran skulle tegnes sorte, gav en grå plade med skarpe kanter. Mål lyset i et skærmbillede med fuld grafik (testen `grafik`), for de andre tests tegner uden glød.
+- **Æ, ø og å i shaderkode** gav en shaderfejl og en helt sort skærm (`'?' : syntax error`). GLSL tåler kun ASCII i navne. Skriv `oe`, som i `jorden.js`.
+- **To flader tæt på hinanden flimrer** (z-fighting). Skæret i midten af det sorte hul og navnet inde i skyggen lå 0,1 fra skyggen, og så blev halvdelen af dem skjult på skrå. Med 1 i afstand forsvandt det. Hold mindst 1 i afstand mellem flader, der vender mod kameraet.
 - **Kamerastyringen har en skjult grænse.** `styring.maxDistance` (250) holder kameraet tæt på, også når styringen er slået fra. En planlagt kameratur skal hæve grænsen og sætte den tilbage bagefter.
 - **Smalle skærme giver en anden kameraafstand.** På en telefon på højkant står kameraet længere væk (`passerTil` regner ud fra hullet). Rejsen ind i Solen sluttede derfor uden for Solen. Afstande skal regnes ud fra `verden.målAfstand`, og telefon på højkant skal altid testes.
 - **Etiketter i 3D ved kanten af en kasse** kan få kassens kantlinje lige gennem teksten. Sæt dem foran kassen (større z) og under kanten, og tegn dem oven på alt (`depthTest = false`).

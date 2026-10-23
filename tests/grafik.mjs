@@ -17,6 +17,30 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('supernova'); k.tryk(0); k.spol(3); k.kameraFrem(); });
   await page.waitForTimeout(1500);
   await page.screenshot({ path: `${UD}/${navn}-supernova.png` });
+  // Sort hul: skyggen skal være sort, også med glød (gløden bredte før lyset fra gassen ind over den)
+  const trin = await page.evaluate(() => atomlabTest.kosmos.efterbehandling());
+  await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('sorthul'); k.tryk(2); k.kameraFrem(); }); // uden navne
+  await page.waitForTimeout(2000);
+  await page.screenshot({ path: `${UD}/${navn}-sorthul.png` });
+  const r = await page.evaluate(() => { const b = document.getElementById('kosmosVindue').getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; });
+  // Lidt over midten, så gassen foran skyggen ikke er med
+  // Lysstyrken i et lille felt lidt over midten (så gassen foran skyggen ikke er med). Billedet læses i siden.
+  const felt = await page.screenshot({ clip: { x: r.x - 8, y: r.y - 38, width: 16, height: 16 } });
+  const lys = await page.evaluate(async (b64) => {
+    const img = new Image();
+    img.src = 'data:image/png;base64,' + b64;
+    await img.decode();
+    const g = new OffscreenCanvas(img.width, img.height).getContext('2d');
+    g.drawImage(img, 0, 0);
+    const d = g.getImageData(0, 0, img.width, img.height).data;
+    let sum = 0;
+    for (let i = 0; i < d.length; i += 4) sum += (d[i] + d[i + 1] + d[i + 2]) / 3;
+    return sum / (d.length / 4);
+  }, felt.toString('base64'));
+  tjek(`${navn}: det sorte hul er sort i midten med glød`, lys < 20, `lysstyrke ${lys.toFixed(1)}`);
+  tjek(`${navn}: sort hul lægger to trin til efterbehandlingen`, (await page.evaluate(() => atomlabTest.kosmos.efterbehandling())) === trin + 2);
+  await page.evaluate(() => atomlabTest.kosmos.vælg('supernova'));
+  tjek(`${navn}: trinnene fjernes igen, når man skifter fænomen`, (await page.evaluate(() => atomlabTest.kosmos.efterbehandling())) === trin);
   // Ny størrelse: lærredet og gløden skal følge med
   const [w, h] = [opts.viewport.height, opts.viewport.width];
   await page.setViewportSize({ width: w, height: h });

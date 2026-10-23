@@ -61,6 +61,17 @@ await page.click('#kosmos a[href="#"]');
 await page.waitForTimeout(800);
 tjek('menu igen', await page.isVisible('#menu'));
 tjek('kosmos ryddet', (await page.evaluate(() => window.atomlabTest.kosmos.antalObjekter())) === 1);
+// Tablet og telefon på højkant: "Kort fortalt / For nørder" står lige over teksten (ikke nederst under citatet)
+for (const [navn, vp] of [['tablet', { width: 800, height: 1280 }], ['telefon', { width: 390, height: 844 }]]) {
+  const side = await (await b.newContext({ viewport: vp, hasTouch: true, isMobile: true })).newPage();
+  side.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  await side.goto(`${ADRESSE}/?test#kosmos`);
+  await side.waitForFunction(() => window.atomlabTest && document.querySelector('#kosmos:not(.skjult)'));
+  await side.evaluate(() => window.atomlabTest.kosmos.vælg('sorthul'));
+  const y = await side.evaluate(() => ['#kosmos .del-vælger', '#kosmosTekst', '#kosmosCitat'].map((v) => document.querySelector(v).getBoundingClientRect().top));
+  tjek(`${navn} på højkant: "For nørder" står over teksten og citatet`, y[0] < y[1] && y[1] < y[2], JSON.stringify(y));
+  await side.context().close();
+}
 console.log('objekter pr. fænomen', JSON.stringify(objekter));
 console.log(fejl.length ? 'Konsol: ' + fejl.join(' | ') : 'Konsol: ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);
