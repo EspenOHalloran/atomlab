@@ -27,7 +27,7 @@ Du skal også vurdere idélisten (se nedenfor).
 2. **`DESIGN.md`:** "Lige nu" øverst, alle trin, der er lavet, og "Idéer til senere".
 3. **`docs/fable/billeder/LISTE.md` og billederne:** 53 skærmbilleder af alle skærme, de 15 fænomener i Kosmos og fem forløb i træk (et henfald, en fusion, en kædereaktion, en supernova og Big Bang).
    - Billederne er taget i en testbrowser uden grafikkort. Gløden og farverne kan derfor se lidt anderledes ud end på en rigtig skærm.
-   - Ligger der billeder i `docs/fable/tablet/`, er de taget af faren på en rigtig tablet. Dem skal grafikken især bedømmes ud fra.
+   - **`docs/fable/tablet/`** har 14 billeder taget af faren på en rigtig tablet (Samsung Galaxy Tab A11+, Chrome), med en liste (`LISTE.md`). Grafikken skal især bedømmes ud fra disse, da testbrowseren ikke har et rigtigt grafikkort. Et fund derfra: på billedet af Sort hul dækker tablettens egen systemboble (batteri/Bluetooth) en del af 3D-billedet øverst til højre — ikke en fejl i AtomLab, men værd at nævne, hvis noget vigtigt kan blive dækket af systemets overlay dér.
 4. **Det, der allerede er kendt.** Du skal ikke bruge tid på at finde det igen:
    - `docs/gennemgang-2026-10.md`: Opus' eftersyn fra oktober. Faktafejlene (A1-A3) og de fleste kodefejl (D1-D7, D10) er rettet. Afsnit B (helheden) og D8, D9, D11 og D12 venter. Det står i "Status for rettelserne" nederst.
    - `docs/erfaringer.md`: tjeklister, rodårsager, kendte fælder i fakta og "Åbne punkter".

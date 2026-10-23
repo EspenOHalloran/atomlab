@@ -139,5 +139,5 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
 ## Status
 - [x] Planen er skrevet (21. oktober 2026).
 - [x] F0 er lavet (22. oktober 2026): `docs/fable/brief.md` og 53 billeder i `docs/fable/billeder/` (taget med `tests/vaerktoejer/fable-billeder.mjs`).
-- [ ] Jeres skærmbilleder fra tabletten i `docs/fable/tablet/`.
+- [x] Jeres 14 skærmbilleder fra tabletten (23. oktober 2026, Samsung Galaxy Tab A11+, Chrome) ligger i `docs/fable/tablet/` med en liste (`LISTE.md`). Intet hakkede. Ét fund: på billedet af Sort hul dækker tablettens egen systemboble (batteri/Bluetooth) en del af 3D-billedet øverst til højre.
 - [ ] **Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer.** I mener, at Fable 5.1 ligger for tæt på Opus 5.5 til at være pengene værd. Opus laver F1 i stedet i en ny session med høj effort ud fra den samme brief (som nu ikke nævner, hvilken model der læser den). Tjernobyl og Liv venter også, til Fable 5.5 kommer (Molekyler og Solsystemet laver Opus med høj effort og `/faktatjek`). Når Fable 5.5 kommer, vurderer vi igen, om den skal lave F2-F4 eller faktagrundlaget for Tjernobyl og Liv.
