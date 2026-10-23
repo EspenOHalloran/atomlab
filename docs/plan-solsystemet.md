@@ -1,6 +1,6 @@
 # Plan: Solsystemet (ny del) med Rumrejsen (Voyager-spillet)
 
-*Foreløbig plan, oktober 2026. Den skal gennemgås af Fable, før vi går i gang. Punkter mærket **(foreslået)** er mine anbefalinger, som vi afklarer ét spørgsmål ad gangen. Alle tal og datoer skal faktatjekkes, før de bruges (se "Faktagrundlag" nederst).*
+*Foreløbig plan, oktober 2026. Gennemgået af Opus med høj effort den 23. oktober 2026 (trin 0, se "Gennemgang af planen" nederst), fordi Fable venter på version 5.5. Tallene står med kilder i [fakta-solsystemet.md](fakta-solsystemet.md). Punkter mærket **(foreslået)** er mine anbefalinger, som vi afklarer ét spørgsmål ad gangen. Alle tal og datoer skal faktatjekkes, før de bruges (se "Faktagrundlag" nederst).*
 
 ## Hvad det går ud på
 En ny del i menuen, hvor man kan udforske Solen, planeterne og deres måner i 3D, og et spil, hvor man selv sender en sonde ud i solsystemet og bruger planeternes tyngdekraft til at få fart på, ligesom Voyager.
@@ -35,23 +35,23 @@ Jeres svar indtil nu:
   - Neptun: Triton
   - Pluto: Charon
 
-  De andre måner er små prikker med et tal ("Jupiter har ca. 95 kendte måner").
+  De andre måner er små prikker med et tal og en dato, for tallet ændrer sig hele tiden ("Saturn har over 280 kendte måner (marts 2026)").
 
 **Tværsnit**
 - Knappen "Skær igennem" viser lagene indeni:
   - **Jorden:** jernkerne, kappe og skorpe
-  - **Europa:** jernkerne, sten, et hav af saltvand og en isskal på 15-25 km
+  - **Europa:** jernkerne, sten, et hav af saltvand og en isskal på ca. 15-30 km eller mere (Juno målte ca. 29 km i ét område)
   - **Enceladus:** stenkerne, hav og is med revner ved sydpolen
-  - **Titan:** hav af vand under isen og søer af metan på overfladen
+  - **Titan:** søer af metan på overfladen og dybt inde enten et hav af vand eller sjap med lommer af vand. Det er omstridt siden en ny analyse i december 2025, så tværsnittet skal vise begge og sige det ærligt.
   - **Ganymedes:** flere lag
 
 ## 2. Liv i solsystemet?
 En lille tur trin for trin, ligesom "Næste" i Kosmos.
 - **Hvad kræver liv?** Flydende vand, energi (fra Solen eller fra varmen indefra) og de rigtige grundstoffer: carbon, hydrogen, nitrogen, oxygen, fosfor og svovl. Her kommer et link til Det periodiske system.
-- **Europa:** Et hav under isen med mere vand end alle Jordens have. Jupiters tyngdekraft ælter månen, så den holdes varm. Europa Clipper er på vej.
+- **Europa:** Et hav under isen med ca. dobbelt så meget vand som alle Jordens have (et skøn). Jupiters tyngdekraft ælter månen, så den holdes varm. Europa Clipper er på vej.
 - **Enceladus:** Fontæner af vand fra sydpolen. Cassini fløj gennem dem og fandt salt, organiske stoffer og fosfat.
   - Grafikken skal vise fontænerne i modlys fra Solen. Det er et af de flotteste syn i solsystemet.
-- **Titan:** Den eneste måne med en tyk atmosfære og det eneste andet sted med søer på overfladen, men de er af metan. Huygens landede i 2005, og Dragonfly er planlagt.
+- **Titan:** Den eneste måne med en tyk atmosfære og det eneste andet sted med søer på overfladen, men de er af metan. Huygens landede i 2005, og Dragonfly skal sendes op tidligst i juli 2028 og nå frem i 2034.
 - **Ganymedes:** et hav dybt inde, og den eneste måne med sit eget magnetfelt. JUICE er på vej.
 - **Mars:** Der var engang søer og floder. Perseverance har fundet de mærkelige "leopardpletter" i klippen Cheyava Falls. Her kommer et link til den kommende del "Liv".
 - **Ærligt talt:** Man har ikke fundet liv noget sted uden for Jorden. Men det er stederne, hvor man leder.
@@ -161,9 +161,9 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 ## 6. Trin (hvert trin får et go)
 | Trin | Hvad | Hvem |
 |---|---|---|
-| 0 | Gennemgang af planen og et faktagrundlag med kilder (`docs/fakta-solsystemet.md`) | Opus laver udkastet til faktagrundlaget, og Fable gennemgår planen og tjekker faktagrundlaget (se [plan-fable.md](plan-fable.md)) |
+| 0 | ✅ Gennemgang af planen og et faktagrundlag med kilder ([fakta-solsystemet.md](fakta-solsystemet.md)). Lavet af Opus 23. oktober 2026, fordi Fable venter (se "Gennemgang af planen" nederst). Del 2 om Voyager skal tjekkes, før Rumrejsen bygges. | Opus |
 | 1a | ✅ **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (lavet i oktober 2026, Trin 17 i DESIGN.md). Teknikken (`js/kosmos/jorden.js`, `lav_billeder.py` og `tests/vaerktoejer/kloder.html`) kan genbruges til planeterne. | Opus |
-| 1b | **Prototype**: Saturn, Enceladus og Titan i topkvalitet | Opus |
+| 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos med `?saturn` i adressen. Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Saturn, Enceladus og Titan er tegnet af programmet, indtil de rigtige kort kan hentes. | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
 | 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
 | 4 | "Liv i solsystemet?" (tekster faktatjekkes) | Opus + faktatjek |
@@ -201,3 +201,29 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
   - hvor tit planeterne står, så den store tur kan lade sig gøre
 - **Slyngfysikken:** typiske fartændringer ved Jupiter, hvorfor planeten bremses en lille smule, og hvorfor sonder til Merkur bremser ved Venus.
 - **Billedlicenser:** NASA (fx Blue Marble, Black Marble og CGI Moon Kit), USGS, JPL, Solar System Scope og andre.
+
+## Gennemgang af planen (trin 0, 23. oktober 2026)
+*Opus med høj effort, i stedet for Fable. Faktagrundlaget står i [fakta-solsystemet.md](fakta-solsystemet.md). Del 2 om Voyager og slyngen er kun skrevet ud fra hukommelsen, fordi grænsen for websøgninger var nået. Den skal tjekkes, før Rumrejsen bygges.*
+
+**Planen holder.** Rækkefølgen (prototype, overblik, planeterne, "Liv i solsystemet?" og til sidst Rumrejsen) er rigtig, og den sætter grafikken først, hvor I vil bruge flest kræfter. Det, der skal rettes eller tilføjes:
+
+**Fakta, der har ændret sig** (rettet ovenfor):
+- **Titans hav dybt inde er omstridt** siden december 2025 (Petricca m.fl., Nature). Måske er det sjap med lommer af vand. Tværsnittet og teksten skal vise begge muligheder.
+- **Europas isskal** er måske tykkere end 15-25 km. Juno målte ca. 29 km i ét område i 2025.
+- **Dragonfly** sendes op tidligst i juli 2028 og når frem i 2034. Europa Clipper når Jupiter 11. april 2030, og JUICE når frem i juli 2031.
+- **Antallet af måner** ændrer sig hele tiden. Saturn havde ca. 285 i marts 2026. Skriv altid datoen.
+- **Fælder**, som teksterne skal undgå, står i faktagrundlaget. Fx flyder Saturn ikke i et badekar, ringene er typisk ca. 10 m tykke og ikke 1 km, Enceladus kaster ca. 80 % af lyset tilbage (ikke "over 100 %"), og Cassini fandt ingredienser til liv på Enceladus, ikke liv.
+
+**Teknik, der mangler i planen:**
+1. **Store afstande i 3D:** Grafikkortet regner med 32-bit tal. Med rigtige afstande (Neptun er 4,5 milliarder km fra Solen) og små måner (Enceladus har en radius på 252 km) begynder billedet at ryste. Løsningen er en **flydende nulpunkt** (kameraet står altid ved nulpunktet, og verden flyttes) og `logarithmicDepthBuffer` eller to kameraer (fjernt og nært). Det skal med fra trin 2.
+2. **Skygger regnes i shaderen**, ligesom formørkelsernes skygger i `js/kosmos/jorden.js`, og ikke med skyggekort. For hvert punkt på Saturn findes stedet, hvor strålen mod Solen rammer ringenes plan, og ringbilledet slås op dér. For hvert punkt på ringene tjekkes det, om strålen rammer Saturn (en fladtrykt kugle). Det er skarpt, præcist og billigt på en tablet.
+3. **Ringene set bagfra:** Det fine støv i C-ringen, Cassini-delingen og F-, G- og E-ringen lyser i modlys, mens de tætte A- og B-ringe bliver mørke. Shaderen skal derfor vide, hvilken side Solen står på, og hvor tæt ringen er. Ringbilledet fra Solar System Scope har kun farve og gennemsigtighed. Senere kan gennemsigtigheden regnes ud fra Cassinis målinger (PDS Ring-Moon Systems Node), som er public domain.
+4. **Rumrejsen og banerne:** Standish' baneelementer kan være over 1 million km forkerte for Saturn. Det er meget mere end Voyagers forbiflyvninger (fx ca. 5.000 km over Neptuns skyer). Den rigtige Voyager-rute skal derfor hentes fra JPL Horizons som en datafil ("spøgelset"), og spillet skal sigte i forhold til planeten og ikke prøve at regne den rigtige rute frem.
+5. **Lagene:** Panelet skal følge [plan-lag.md](plan-lag.md) fra starten (én linje fremme, "Hvorfor?" og "For nørder"), så delen ikke får for meget tekst på én gang.
+
+**Billederne:**
+- **Saturn og ringene:** Solar System Scope (CC BY 4.0) ligger på Wikimedia Commons, og den adresse kan hentes i miljøet. De skal krediteres i `LICENSE` og "Om AtomLab".
+- **Enceladus og Titan:** De bedste kort er USGS' mosaikker fra Cassini (public domain), men `astrogeology.usgs.gov` og `planetarymaps.usgs.gov` er spærret i miljøet. **Forslag:** Tillad de to adresser under Network access, så kan de rigtige kort komme med. Indtil da tegner prototypen Enceladus og Titan selv (is med de fire "tigerstriber" ved sydpolen og Titans tykke orange dis, som alligevel skjuler overfladen i almindeligt lys) og siger det ærligt.
+
+**Skønnet:** Delen er stadig stor, og trin 2 og 5 er de sværeste. Prototypen viser, om grafikken holder på tabletten, før de bygges.
+

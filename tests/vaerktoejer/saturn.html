@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saturn (værktøj)</title>
+  <!-- Udviklingsværktøj: prototypen med Saturn, Enceladus og Titan alene (bruges af saturn.mjs). Ikke en del af AtomLab. -->
+  <style>
+    html, body { margin: 0; height: 100%; background: #03040c; overflow: hidden; }
+    canvas { display: block; }
+    #info { position: fixed; left: 8px; top: 8px; color: #cfe0ff; font: 13px system-ui, sans-serif; }
+  </style>
+  <script type="importmap">
+    { "imports": { "three": "../../lib/three/three.module.js", "three/addons/": "../../lib/three/addons/" } }
+  </script>
+</head>
+<body>
+  <canvas id="laerred"></canvas>
+  <div id="info">Saturn, Enceladus og Titan (værktøj). Træk for at dreje, rul for at zoome.</div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { lavVerden, verden } from '../../js/scene3d.js';
+    import saturn from '../../js/kosmos/saturn.js';
+
+    lavVerden(document.getElementById('laerred'));
+    const { scene, kamera, styring } = verden;
+    styring.autoRotate = false;
+    const gruppe = new THREE.Group();
+    scene.add(gruppe);
+    const ctx = {
+      verden,
+      opdaterKnapper() {},
+      forklaring() {},
+      kamera({ retning, radius }) {
+        styring.target.set(0, 0, 0);
+        kamera.position.copy(new THREE.Vector3(...retning).normalize().multiplyScalar(radius * 2.6));
+        styring.update();
+      },
+    };
+    const k = saturn.lav(gruppe, ctx);
+    let tid = 0;
+    let frosset = false;
+    verden.opdateringer.add((dt) => { if (!frosset) tid += dt; k.opdater(dt, tid); });
+    // Vælg en visning ('Saturn', 'Enceladus' eller 'Titan') eller slå "Modlys" til
+    const tryk = (tekst) => { const s = k.styring.find((x) => x.tekst === tekst); (s.handling ?? s.skift)(); };
+    // Kameraet kigger fra en retning og en afstand (i scene-enheder)
+    const kig = (retning, afstand) => {
+      kamera.position.copy(new THREE.Vector3(...retning).normalize().multiplyScalar(afstand));
+      styring.target.set(0, 0, 0);
+      styring.update();
+    };
+    window.saturnTest = { tryk, kig, frys: (t) => { tid = t; frosset = true; } };
+  </script>
+</body>
+</html>
