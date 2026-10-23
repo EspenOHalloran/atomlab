@@ -36,7 +36,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Punkterne (i denne rækkefølge, men UI-planen skrives først, så I kan læse den, mens resten laves):**
 1. **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Små opgaver, som kan laves når som helst.
-2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10): Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
+2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md). Venter på, at I har læst den, og på svar på de fire spørgsmål sidst i planen.** Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
 3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
 4. **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Mellemstor.
 5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten.
