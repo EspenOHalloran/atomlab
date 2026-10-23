@@ -8,7 +8,7 @@ import { lavSystem, startSystem, stopSystem, testAdgang as systemTest } from './
 import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
 import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
-import { lavKosmos, startKosmos, stopKosmos, testAdgang as kosmosTest } from './kosmos.js';
+import { lavKosmos, startKosmos, stopKosmos, FÆNOMENER, testAdgang as kosmosTest } from './kosmos.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
@@ -156,6 +156,39 @@ function startMenu() {
   // Er man helt ny, viser et lille mærke, hvor man kan starte
   const ny = fremgang.antalOpdaget() === 0 && fremgang.antalLøste(alle) === 0;
   document.querySelector('.menukort a[href="#vaerksted"]').classList.toggle('start-her', ny);
+  visFremgangIMenu(ny);
+}
+
+// Fremgang på hvert kort i menuen ("3/7 ★"). Når en del er klaret, foreslås næste eventyr:
+// den første del i rækkefølgen, der ikke er klaret endnu.
+function visFremgangIMenu(ny) {
+  const mærke = (id, tekst, færdig) => {
+    const kort = document.querySelector(`.menukort a[href="#${id}"]`);
+    let m = kort.querySelector('.kort-fremgang');
+    if (!m) {
+      m = document.createElement('span');
+      m.className = 'kort-fremgang';
+      kort.querySelector('.kort-tekst strong').after(m);
+    }
+    m.textContent = tekst;
+    m.classList.toggle('færdig', færdig);
+    return kort;
+  };
+  let næste = null;
+  let klaret = 0;
+  for (const [id, liste] of [['vaerksted', OPGAVER], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
+    const løst = fremgang.antalLøste(liste.map((o) => o.id));
+    const kort = mærke(id, løst === liste.length ? `✓ ${løst}/${liste.length} ★` : `${løst}/${liste.length} ★`, løst === liste.length);
+    if (løst === liste.length) klaret++;
+    else if (!næste) næste = kort;
+  }
+  const opdaget = fremgang.antalOpdaget();
+  mærke('system', `${opdaget}/118 opdaget`, opdaget === 118);
+  let set = [];
+  try { set = JSON.parse(localStorage.getItem('atomlabKosmosSet')) || []; } catch { /* ingen lagring */ }
+  const antalSet = FÆNOMENER.filter((f) => set.includes(f.id)).length;
+  mærke('kosmos', `${antalSet}/${FÆNOMENER.length} set`, antalSet === FÆNOMENER.length);
+  for (const k of document.querySelectorAll('.menukort .kort')) k.classList.toggle('næste-eventyr', !ny && klaret > 0 && k === næste);
 }
 
 function stopMenu() {

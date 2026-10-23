@@ -8,6 +8,7 @@ import { Atom } from './atom.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skaller, placering } from './data/grundstoffer.js';
 import { typiskeNeutroner, stabileIsotoper, stabilitet } from './data/isotoper.js';
 import { FAKTA, opdagetTekst } from './data/fakta.js';
+import { LAG, SE_NAVN } from './data/grundstoflag.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
@@ -601,11 +602,47 @@ function udfyldKort(nr) {
     ['Stabile isotoper', isotopTekst],
   ].filter(([, v]) => v);
   $('sysTal').innerHTML = rækker.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
+  udfyldLag(g);
   const opdaget = fremgang.erOpdaget(nr);
   $('sysOpdaget').textContent = opdaget ? '★ Du har opdaget det i Atomværkstedet' : 'Ikke opdaget endnu. Byg det selv i Atomværkstedet!';
   $('sysOpdaget').classList.toggle('ja', opdaget);
   $('systemByg').textContent = opdaget ? 'Åbn i værkstedet' : 'Byg det i værkstedet';
   $('systemKort').scrollTop = 0;
+}
+
+// Grundstofkortet i lag: tre linjer fremme ("I din hverdag", "I din krop" og "I universet"),
+// og under "Mere" eksempler, "Vidste du?", links og tallene. Kun for de grundstoffer, der står i LAG.
+function udfyldLag(g) {
+  const l = LAG[g.symbol];
+  const mere = $('sysMere');
+  $('sysLag').hidden = !l;
+  mere.hidden = !l;
+  if (!l) {
+    mere.after($('sysTal')); // tallene står fremme som før
+    return;
+  }
+  const linje = (ikon, titel, tekst) => `<li><span class="sys-ikon" aria-hidden="true">${ikon}</span><span><b>${titel}</b> ${tekst}</span></li>`;
+  $('sysLag').innerHTML = linje('🏠', 'I din hverdag:', l.hverdag) + linje('🧬', 'I din krop:', l.krop) + linje('✨', 'I universet:', l.univers);
+  $('sysMereTitel').textContent = `Mere om ${g.navn.toLowerCase()}`;
+  $('sysEksempler').innerHTML = l.mere.map((m) => `<li>${m}</li>`).join('');
+  $('sysVidste').innerHTML = `<b>Vidste du?</b> ${l.vidste}`;
+  const se = $('sysSe');
+  se.innerHTML = '';
+  for (const nøgle of l.se) {
+    const b = document.createElement('button');
+    b.className = 'knap lille';
+    b.textContent = `${SE_NAVN[nøgle]} ›`;
+    b.addEventListener('click', () => {
+      lyd.klik();
+      if (nøgle.startsWith('kosmos:')) {
+        try { localStorage.setItem('atomlabKosmos', nøgle.slice(7)); } catch { /* ingen lagring */ }
+        location.hash = '#kosmos';
+      } else location.hash = `#${nøgle}`;
+    });
+    se.append(b);
+  }
+  se.hidden = !l.se.length;
+  mere.append($('sysTal')); // tallene står under "Mere"
 }
 
 // ---------- Hvert billede ----------
@@ -653,6 +690,7 @@ export function testAdgang() {
     forhånd: () => forhånd,
     glemForhånd: () => sætForhånd(null),
     valgt: () => valgt,
+    åbn: (nr) => visDetalje(nr, false),
     kategori: () => kategorikort.vist(),
     kategoriSpol: (sek) => kategorikort.spol(sek),
     styring: () => ({ pan: verden.styring.enablePan, én: verden.styring.touches.ONE, mål: verden.styring.target.toArray().map((v) => Math.round(v * 100) / 100) }),
