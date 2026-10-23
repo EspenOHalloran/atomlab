@@ -7,7 +7,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Senest lavet:**
 - **Punkt 1: Det sorte hul er sort, og "For nørder" står øverst igen** (23. oktober 2026, Trin 18 nedenfor). Skyggen er nu ca. 2,6 gange bredere end horisonten (som i virkeligheden), og gløden holdes ude af den. Horisonten er en stiplet ring inde i skyggen. Testene `grafik` og `kosmos` tjekker begge dele.
-- **Punkt 2: UI-planen** ([docs/plan-lag.md](docs/plan-lag.md)) venter på, at I læser den.
+- **Punkt 2: UI-planen** ([docs/plan-lag.md](docs/plan-lag.md)) er godkendt med jeres svar på de fire spørgsmål.
 - **F1, et samlet overblik** over, hvor AtomLab kan blive bedre ([docs/fable/F1-overblik.md](docs/fable/F1-overblik.md), 23. oktober 2026). Lavet i en session med høj effort ud fra briefen, fordi Fable venter. Det vigtigste: Det er skærmen og ikke koden, der holder AtomLab tilbage. Der er for mange tekster på én gang, og tit står den samme tekst to-tre steder. De 10 forbedringer i kort form:
   1. ro på skærmen: hver oplysning ét sted og dybde i lag
   2. skjul panelerne og "Kun grafik"
@@ -38,13 +38,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Punkterne (i denne rækkefølge, men UI-planen skrives først, så I kan læse den, mens resten laves):**
 1. ✅ **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Lavet 23. oktober 2026.
-2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md). Venter på, at I har læst den, og på svar på de fire spørgsmål sidst i planen.** Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
+2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet og godkendt 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md).** Jeres svar: kortet åbner ved knappen, opgaverne foldes sammen, citaterne bliver, og underteksten er kort med "Hvorfor?". Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
 3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
 4. **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Mellemstor.
 5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten.
 6. **Batteriet** (F1 punkt 5): grafik, start og navn. LiPo/Li-ion skal faktatjekkes, før teksten rettes. Stor, men kan deles op.
 7. **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7).
-8. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
+8. ✅ **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lavet 23. oktober 2026.
 9. **De store dele bagefter:** Molekyler, Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan), og til sidst Tjernobyl og Liv, som venter, til Fable 5.5 kommer.
 
 **Åbne spørgsmål:**
@@ -209,7 +209,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [ ] Et grafisk løft af atomet
   - [ ] Batteriet: grafik, start og navn
   - [ ] Grundstofkortet i lag og fremgang i menuen
-  - [ ] Copyright
+  - [x] **Copyright:** "© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" i README, i hjælpen ("Om AtomLab" med kilder og licenser) og i en licensfil (`LICENSE`), og at man gerne må bruge AtomLab i undervisningen og dele linket.
 
 ## Idéer til senere
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
@@ -248,7 +248,7 @@ AtomLab ligger allerede på GitHub Pages. Før vi deler det bredere:
 - [ ] **Afprøvning:** 3-5 børn og en lærer prøver det. Vi skriver ned, hvor de går i stå, og retter det.
 - [ ] **Skolernes enheder:** afprøvet på ældre iPads og Chromebooks (hastighed og glød).
 - [ ] **"Om AtomLab"-side:** hvem der har lavet det og hvorfor, at der ikke indsamles data (kun det, der gemmes i ens egen browser), hvordan man melder fejl, og at det er lavet med hjælp fra AI.
-- [ ] **Licens og kilder:** vælg en licens, og tjek, at citater og kilder er i orden. Drøftet i oktober 2026:
+- [ ] **Licens og kilder:** vælg en licens, og tjek, at citater og kilder er i orden. **Lavet 23. oktober 2026:** "Alle rettigheder forbeholdes" i README, hjælpen og `LICENSE`, med kilder og licenser i hjælpen. Tilbage: et sidste tjek af citater og kilder, før det deles bredt. Drøftet i oktober 2026:
   - En linje med "© 2026 [navn]" i README og i hjælpen og en licensfil. Ophavsret opstår af sig selv i Danmark og EU, men linjen viser tydeligt, hvem der ejer det.
   - Vælg enten "Alle rettigheder forbeholdes" eller en åben licens, fx CC BY-NC (andre må dele med kildeangivelse, men ikke tjene penge på det). Den sidste passer godt, hvis lærere skal kunne bruge det.
   - Et afsnit "Kilder og licenser" i hjælpen: Three.js (MIT), landkortet fra global-land-mask (MIT), citaterne og de kommende billeder fra NASA m.fl.

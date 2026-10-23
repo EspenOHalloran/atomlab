@@ -1,0 +1,13 @@
+© 2026 Espen O'Halloran. Alle rettigheder forbeholdes.
+
+AtomLab (koden, teksterne og grafikken, der er lavet til AtomLab) må ikke kopieres, ændres eller deles videre uden tilladelse.
+
+Du må gerne:
+- bruge AtomLab i undervisningen, på skolen og derhjemme
+- dele linket til AtomLab: https://espenohalloran.github.io/atomlab/
+
+Det her har sine egne licenser og hører ikke under linjen ovenfor:
+- Three.js (mappen lib/three/): MIT-licens, © Three.js Authors. Se lib/three/LICENSE.
+- Billederne af Jorden og Månen (mappen billeder/solsystem/): fra NASA og offentligt ejede (public domain). Se billeder/solsystem/KILDER.md.
+- Kortet over land og hav (js/data/landkort.js og billeder/solsystem/jorden-hav.png): lavet med global-land-mask (MIT-licens, https://github.com/toddkarin/global-land-mask), som bygger på data fra NOAA.
+- Citaterne tilhører dem, der sagde eller skrev dem. Kilden står ved hvert citat (js/data/citater.js).

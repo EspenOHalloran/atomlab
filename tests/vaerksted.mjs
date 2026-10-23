@@ -123,6 +123,7 @@ await page.keyboard.press('Escape');
 await page.click('#knapHjælp');
 await page.waitForTimeout(300);
 await page.screenshot({ path: UD + '/9-hjælp.png' });
+tjek('hjælpen har ophavsret og kilder', /© 2026 Espen O'Halloran/.test(await page.textContent('#hjælpOm + p')) && /Three\.js/.test(await page.textContent('#hjælp')));
 await ctx.close();
 
 // Tablet på langs og på højkant
