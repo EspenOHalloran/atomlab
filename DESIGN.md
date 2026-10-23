@@ -6,6 +6,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- **Punkt 5: To nye udgaver af atomet til afprøvning** (23. oktober 2026). Åbn https://espenohalloran.github.io/atomlab/?udgaver#vaerksted på tabletten. Øverst står tre knapper: "Nu" (som i dag), "A: prikker" (orbitalerne som en sky af prikker, der viser, hvor elektronerne sandsynligvis er) og "B: former" (orbitalernes form som glødende overflader, som i fysikbøgerne: kugler for s, dobbeltdråber for p og firkløvere for d). A og B har også skygge mellem kuglerne i kernen og en glidende overgang, når man skifter mellem ringe og sky. **Venter på jeres valg:** A, B, en blanding, eller ingen af dem. Uden `?udgaver` ser atomet ud som før.
+- **Punkt 8: Copyright** i README, hjælpen og `LICENSE`.
 - **Punkt 1: Det sorte hul er sort, og "For nørder" står øverst igen** (23. oktober 2026, Trin 18 nedenfor). Skyggen er nu ca. 2,6 gange bredere end horisonten (som i virkeligheden), og gløden holdes ude af den. Horisonten er en stiplet ring inde i skyggen. Testene `grafik` og `kosmos` tjekker begge dele.
 - **Punkt 2: UI-planen** ([docs/plan-lag.md](docs/plan-lag.md)) er godkendt med jeres svar på de fire spørgsmål.
 - **F1, et samlet overblik** over, hvor AtomLab kan blive bedre ([docs/fable/F1-overblik.md](docs/fable/F1-overblik.md), 23. oktober 2026). Lavet i en session med høj effort ud fra briefen, fordi Fable venter. Det vigtigste: Det er skærmen og ikke koden, der holder AtomLab tilbage. Der er for mange tekster på én gang, og tit står den samme tekst to-tre steder. De 10 forbedringer i kort form:
@@ -41,7 +43,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet og godkendt 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md).** Jeres svar: kortet åbner ved knappen, opgaverne foldes sammen, citaterne bliver, og underteksten er kort med "Hvorfor?". Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
 3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
 4. **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Mellemstor.
-5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten.
+5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten. **Udgaverne A og B er lavet (23. oktober 2026) og venter på jeres valg** (se "Senest lavet").
 6. **Batteriet** (F1 punkt 5): grafik, start og navn. LiPo/Li-ion skal faktatjekkes, før teksten rettes. Stor, men kan deles op.
 7. **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7).
 8. ✅ **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lavet 23. oktober 2026.
@@ -206,7 +208,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [ ] UI-planen for lagene ([docs/plan-lag.md](docs/plan-lag.md)) og byggeklodserne
   - [ ] Vis eller skjul panelerne og "Kun grafik"
   - [ ] "Hvorfor?"-kort
-  - [ ] Et grafisk løft af atomet
+  - [ ] **Et grafisk løft af atomet:** udgaverne A (prikker) og B (former) med orbitaler regnet som i hydrogen, skygge i kernen og en glidende overgang er lavet og kan vælges med `?udgaver`. Venter på jeres valg, før den valgte bygges færdig (også atomet i menuen).
   - [ ] Batteriet: grafik, start og navn
   - [ ] Grundstofkortet i lag og fremgang i menuen
   - [x] **Copyright:** "© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" i README, i hjælpen ("Om AtomLab" med kilder og licenser) og i en licensfil (`LICENSE`), og at man gerne må bruge AtomLab i undervisningen og dele linket.

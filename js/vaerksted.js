@@ -1,7 +1,7 @@
 // Atomværkstedet: byg et atom af protoner, neutroner og elektroner, og se hvad det bliver.
 
 import { verden, sætVindue, passerTil, kameraSving, flyInd, ROLIG } from './scene3d.js';
-import { Atom } from './atom.js';
+import { Atom, sætUdgave, hentUdgave } from './atom.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering, konfigurationTekst } from './data/grundstoffer.js';
 import { bindingsenergi, kerneRadiusFm } from './data/kerne.js';
 import { stabilitet, isotopNavn, typiskeNeutroner, henfaldsmåde, stabileNeutroner } from './data/isotoper.js';
@@ -266,8 +266,44 @@ function opdater3D(dt) {
 }
 
 // Kun til automatiske tests (bruges når adressen indeholder ?test)
+// Udgaver af atomet, som man kan vælge mellem med ?udgaver i adressen (så I kan prøve dem på tabletten).
+// Uden ?udgaver ser atomet ud som før. Valget huskes (atomlabUdgave), men kun mens ?udgaver står i adressen.
+const NØGLE_UDGAVE = 'atomlabUdgave';
+function lavUdgaveVælger() {
+  if (!new URLSearchParams(location.search).has('udgaver')) return;
+  const vælger = $('udgaveVælger');
+  vælger.hidden = false;
+  const vælg = (u, klik) => {
+    sætUdgave(u);
+    for (const b of vælger.querySelectorAll('[data-udgave]')) b.classList.toggle('valgt', b.dataset.udgave === hentUdgave());
+    try {
+      localStorage.setItem(NØGLE_UDGAVE, hentUdgave());
+    } catch {
+      // ingen lagring
+    }
+    // De nye udgaver handler om elektronskyen, så den vises, når man vælger dem
+    if (klik && hentUdgave() !== 'nu' && atom.visning !== 'sky') $('knapVisning').click();
+    else opdaterInfo();
+  };
+  for (const b of vælger.querySelectorAll('[data-udgave]')) {
+    b.addEventListener('click', () => {
+      lyd.klik();
+      vælg(b.dataset.udgave, true);
+    });
+  }
+  let gemt = null;
+  try {
+    gemt = localStorage.getItem(NØGLE_UDGAVE);
+  } catch {
+    // ingen lagring
+  }
+  vælg(gemt ?? 'nu', false);
+}
+
 export function testAdgang() {
   return {
+    udgave: () => hentUdgave(),
+    orbitaler: () => atom.orbitalListe(),
     // Spol atomet frem i små skridt, som på en skærm med 60 billeder i sekundet (testbrowseren tegner kun få)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) atom.opdater(1 / 60); },
     // Hvor mange kugler der tegnes, og hvor mange der er plads til
@@ -494,6 +530,7 @@ function lavKnapper() {
     lyd.klik();
     opdaterInfo();
   });
+  lavUdgaveVælger();
   $('knapLyd').addEventListener('click', () => {
     skiftLyd();
     opdaterLydknap();
@@ -827,9 +864,11 @@ function opdaterInfo() {
     ['Elektronskaller', skalTekst],
   ];
   el.tal.innerHTML = rækker.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
-  el.model.textContent = atom.visning === 'sky'
-    ? 'Elektronsky: I virkeligheden kredser elektroner ikke i baner som planeter. Man kan kun sige, hvor de sandsynligvis er, og det ligner en sky.'
-    : 'Ringene er en forenklet tegning, der gør det let at tælle elektronerne. Prøv "Elektronsky".';
+  el.model.textContent = atom.visning !== 'sky'
+    ? 'Ringene er en forenklet tegning, der gør det let at tælle elektronerne. Prøv "Elektronsky".'
+    : hentUdgave() === 'nu'
+      ? 'Elektronsky: I virkeligheden kredser elektroner ikke i baner som planeter. Man kan kun sige, hvor de sandsynligvis er, og det ligner en sky.'
+      : 'Orbitaler: Her er elektronerne sandsynligvis. s er blå, p orange, d grøn og f lilla. Formerne er regnet som for hydrogen og passer kun omtrent for større atomer.';
   if (p + n > 1) el.model.textContent += ' De gyldne lyspunkter i kernen viser, hvor kernekraften "limer" partiklerne sammen. Kraften selv kan man ikke se.';
 
   // Fanen "Fakta"

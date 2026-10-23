@@ -14,7 +14,7 @@ const ADRESSE = process.env.ADRESSE ?? 'http://localhost:8765'; // samme standar
 const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
-  'henfaldsregler', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
+  'henfaldsregler', 'orbitaler', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
   'batteri', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'kategorier', 'ordforklaring', 'beskeder', 'beskeder-2', 'guide', 'pause', 'fuldskaerm', 'grafik',
 ];
 const argumenter = process.argv.slice(2);
@@ -58,7 +58,7 @@ function vælgÆndrede(givne) {
   const SKÆRME = { 'js/vaerksted.js': 'vaerksted', 'js/system.js': 'system', 'js/fusion.js': 'fusion', 'js/reaktor.js': 'reaktor', 'js/batteri.js': 'batteri', 'js/kosmos.js': 'kosmos' };
   const EGEN_TEST = {
     'js/beskeder.js': ['beskeder', 'beskeder-2'], 'js/guide.js': ['guide'], 'js/pause.js': ['pause'], 'js/fuldskaerm.js': ['fuldskaerm'],
-    'js/ordforklaring.js': ['ordforklaring'], 'js/data/ordbog.js': ['ordforklaring'], 'js/data/isotoper.js': ['henfaldsregler'], 'js/data/kategorier.js': ['kategorier'],
+    'js/ordforklaring.js': ['ordforklaring'], 'js/data/ordbog.js': ['ordforklaring'], 'js/data/isotoper.js': ['henfaldsregler'], 'js/data/orbitaler.js': ['orbitaler'], 'js/data/kategorier.js': ['kategorier'],
   };
   const besøger = Object.fromEntries(ALLE.map((t) => [t, readFileSync(`${MAPPE}${t}.mjs`, 'utf8')]));
   const tests = new Set();

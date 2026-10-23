@@ -31,7 +31,8 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | Test | Hvad den tjekker |
 |---|---|
 | `henfaldsregler` | Henfaldsreglerne mod ca. 140 kendte kerner, de letteste kerners grænser, at alle kæder ender stabilt, og at de tre naturlige kæder (uran-238, uran-235 og thorium-232) følger den rigtige vej. Kører uden browser. |
-| `vaerksted` | Atomværkstedet: menu, byg atomer, stabile og ustabile kerner, tællere, fanerne, og at "Ryd" og straks uran ikke løber tør for plads i grafikken |
+| `orbitaler` | Orbitalerne (`js/data/orbitaler.js`): antallet af knuder, middelafstanden, formerne (p langs aksen, d med fire blade), at neutrale atomer følger konfigurationen, og at ioner har de rigtige orbitaler (fx Fe²⁺ mister 4s før 3d). Kører uden browser. |
+| `vaerksted` | Atomværkstedet: menu, byg atomer, stabile og ustabile kerner, tællere, fanerne, at "Ryd" og straks uran ikke løber tør for plads i grafikken, ophavsretten i hjælpen og udgaverne af atomet (`?udgaver`) |
 | `henfald` | Tritium henfalder, ion lige efter henfaldet, stabilitetskortet og opgaverne |
 | `system` | Det periodiske system på pc: væggen, grundstofkortet, filtre og opgaven "byg jern" |
 | `system-mobil` | Det periodiske system på telefon, tablet og pc: tryk, træk, knib, søgning og filtre |
