@@ -12,6 +12,7 @@ import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
 import { startGuide, stopGuide } from './guide.js';
 import { lavPause } from './pause.js';
+import { visLag, lavNæsteSkridt } from './lag.js';
 
 // De tre måder, uran-235 spaltes på her (rigtige par; tæl efter: protoner 92, nukleoner 236)
 const PAR = [
@@ -334,14 +335,8 @@ function lavPanel() {
     if (!vand) visBesked({ titel: 'Uden vand', tekst: 'Nu bliver neutronerne ikke bremset. Hurtige neutroner spalter sjældent uran-235, så kædereaktionen dør ud.', varighed: 7000 });
   });
   $('reaktorHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpReaktor').classList.remove('skjult'); });
-  $('reaktorVisMig').addEventListener('click', () => { lyd.klik(); visMig(); });
+  lavNæsteSkridt($('reaktorMission'), { visMig });
   pause = lavPause({ knap: $('reaktorPause'), vindue: $('reaktorVindue'), aktiv: () => aktiv });
-  $('reaktorMissionFold').addEventListener('click', () => {
-    lyd.klik();
-    const foldet = $('reaktorMission').classList.toggle('foldet');
-    $('reaktorMissionFold').textContent = foldet ? '+' : '–';
-    $('reaktorMissionFold').title = foldet ? 'Vis næste skridt' : 'Skjul næste skridt';
-  });
   $('reaktorGuideIgen').addEventListener('click', () => {
     $('hjælpReaktor').classList.add('skjult');
     startGuide(tilstand === 'kerne' ? 'reaktor-kerne' : 'reaktor-kæde', tilstand === 'kerne' ? guideKerne() : guideKæde(), { igen: true });
@@ -359,6 +354,7 @@ function opdaterValg() {
 function lavOpgaveliste() {
   const liste = $('reaktorOpgaver');
   liste.innerHTML = '';
+  $('reaktorOpgaveTal').textContent = `${OPGAVER_REAKTOR.filter((o) => fremgang.erLøst(o.id)).length} af ${OPGAVER_REAKTOR.length} ★`;
   for (const o of OPGAVER_REAKTOR) {
     const li = document.createElement('li');
     const løst = fremgang.erLøst(o.id);
@@ -602,8 +598,13 @@ function midtPåSkærmen(radius) {
   return { x: ((v.x + 1) / 2) * innerWidth, y: ((1 - v.y) / 2) * innerHeight, r: Math.max(30, radius * pxPrEnhed) };
 }
 
-function visForklaring(titel, html) {
-  $('reaktorForklaring').innerHTML = `<strong>${titel}</strong>${html}`;
+// Hvad der lige skete: overskriften står fremme, og forklaringen folder sig ud (lag 2).
+// stille = fold ikke boksen ud (fx når kernen bare står klar, og guiden allerede siger det samme).
+function visForklaring(titel, html, { kort = '', stille = false } = {}) {
+  $('reaktorForklaringTitel').textContent = titel;
+  $('reaktorForklaringKort').textContent = kort;
+  $('reaktorForklaringTekst').innerHTML = html;
+  if (!stille) visLag('reaktor-seneste');
 }
 
 // ---------- Del 1: spalt én kerne ----------
@@ -628,8 +629,9 @@ function nulstilKerne() {
   mål.gruppe.position.set(0, 0, 0);
   $('reaktorSkyd').disabled = false;
   visForklaring(navnPå(92, n), valgtKerne === 'u235'
-    ? 'Uran-235 har 92 protoner og 143 neutroner. Den er så stor, at den næsten ikke kan holde sammen. Skyd en neutron mod den!'
-    : 'Uran-238 har 92 protoner og 146 neutroner. Det er langt det mest almindelige uran i naturen (over 99 %). Hvad sker der, når den rammes?');
+    ? 'Den er så stor, at den næsten ikke kan holde sammen. Skyd en neutron mod den!'
+    : 'Det er langt det mest almindelige uran i naturen (over 99 %). Hvad sker der, når den rammes?',
+  { kort: `92 protoner og ${n} neutroner`, stille: true });
 }
 
 function skydNeutron() {

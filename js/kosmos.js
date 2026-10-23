@@ -7,7 +7,9 @@ import { verden, sætVindue, passerTil, ROLIG } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
-import { visBesked, skjulUndertekst } from './beskeder.js';
+import { visBesked, skjulUndertekst, bundIVindue } from './beskeder.js';
+import { lavLagBokse } from './lag.js';
+import { HVORFOR } from './data/hvorfor.js';
 import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavPause } from './pause.js';
 import bigbang from './kosmos/bigbang.js';
@@ -56,6 +58,8 @@ export function lavKosmos() {
   gruppe = new THREE.Group();
   rod.add(gruppe);
   effekter = new Effekter(rod);
+  const næste = Object.assign(document.createElement('button'), { className: 'knap lille kosmos-næste', id: 'kosmosNæste', hidden: true });
+  bundIVindue($('kosmosVindue')).append(næste);
 
   const liste = $('kosmosListe');
   for (const f of FÆNOMENER) {
@@ -180,10 +184,37 @@ function vælg(id) {
   stilKamera(f.kamera);
 }
 
+// "Kort fortalt": første afsnit står fremme, og resten er foldet sammen under "Mere" (lag 2).
+// Har fænomenet "Hvorfor?"-kort (hvorfor: [id]), står de nederst.
 function visTekst() {
   for (const b of document.querySelectorAll('[data-kosmos-fane]')) b.classList.toggle('valgt', b.dataset.kosmosFane === fane);
-  $('kosmosTekst').innerHTML = valgt ? valgt[fane] : '';
-  $('kosmosTekst').scrollTop = 0;
+  const boks = $('kosmosTekst');
+  boks.innerHTML = valgt ? valgt[fane] : '';
+  if (valgt && fane === 'kort') {
+    const afsnit = [...boks.children];
+    if (afsnit.length > 1) {
+      const mere = document.createElement('details');
+      mere.className = 'lag-boks kosmos-mere';
+      mere.dataset.lag = 'kosmos-mere';
+      mere.innerHTML = '<summary><strong>Mere</strong></summary>';
+      mere.append(...afsnit.slice(1));
+      boks.append(mere);
+      lavLagBokse(boks);
+    }
+    if (valgt.hvorfor?.length) {
+      const linje = document.createElement('p');
+      linje.className = 'hvorfor-linje';
+      for (const id of valgt.hvorfor) {
+        const k = document.createElement('button');
+        k.className = 'hvorfor';
+        k.dataset.hvorfor = id;
+        k.textContent = HVORFOR[id].spørgsmål;
+        linje.append(k, ' ');
+      }
+      boks.append(linje);
+    }
+  }
+  boks.scrollTop = 0;
 }
 
 // En undertekst nederst i 3D-billedet, der fortæller, hvad der sker lige nu (fx "Jernkernen falder sammen").
@@ -297,6 +328,17 @@ function tjekKnapper() {
   for (const s of kørende?.styring ?? []) {
     if (s.knap && s.deaktiv) s.knap.disabled = s.deaktiv();
   }
+  opdaterNæste();
+}
+
+// Med "Kun grafik" er panelerne væk. Så står fænomenets "Næste" (eller "Start") nederst i 3D-billedet.
+function opdaterNæste() {
+  const knap = $('kosmosNæste');
+  const s = (kørende?.styring ?? []).find((x) => x.handling && /^(Næste|▶ Start)/.test(x.tekst) && !x.deaktiv?.());
+  knap.hidden = !s;
+  const tekst = s?.tekst.startsWith('▶') ? s.tekst : 'Næste ›';
+  if (s && knap.textContent !== tekst) knap.textContent = tekst; // kaldes fire gange i sekundet
+  knap.onclick = s ? () => s.knap?.click() : null;
 }
 
 function opdater(dt) {

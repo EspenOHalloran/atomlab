@@ -48,10 +48,10 @@ tjek('sidste henfald står i Kerne-fanen', (await page.textContent('#sidsteHenfa
 tjek('ingen scrollbar i infopanelet', await page.evaluate(() => { const i = document.getElementById('infopanel'); return i.scrollHeight <= i.clientHeight + 1; }));
 await page.screenshot({ path: UD + '/r1-kerne-fane.png' });
 await page.click('#stabilitetskort');
-await page.click('[data-hjælp="hjælpNeutroner"]');
-await page.waitForTimeout(800);
-tjek('hjælp åbner ved neutroner', await page.isVisible('#hjælpNeutroner'));
-await page.screenshot({ path: UD + '/h3-hjælp-neutroner.png' });
+await page.click('#infoStabilitet button.hvorfor[data-hvorfor]');
+await page.waitForTimeout(300);
+tjek('"Hvorfor?" åbner et kort om kernen', /kerne/i.test(await page.evaluate(() => window.atomlabTest.hvorfor.vist()) ?? ''), await page.evaluate(() => window.atomlabTest.hvorfor.vist()));
+await page.screenshot({ path: UD + '/h3-hvorfor-kernen.png' });
 await page.keyboard.press('Escape');
 
 // Carbon-14 → nitrogen-14 med tasten H

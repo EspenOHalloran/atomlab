@@ -12,6 +12,7 @@ import { visBesked, skjulUndertekst } from './beskeder.js';
 import { startGuide, harSetGuide, markérSet } from './guide.js';
 import { stjerne } from './kosmos/faelles.js';
 import { lavPause } from './pause.js';
+import { visLag, lavNæsteSkridt } from './lag.js';
 
 const R_OVN = 12; // radius på det område, kernerne er i
 const RN = 0.3; // radius på en proton eller neutron
@@ -362,13 +363,7 @@ function lavPanel() {
       vælgType(['p', 'd', 'he3', antalAf('be8') ? 'be8' : 'he4'][trin]);
     });
   }
-  $('fusVisMig').addEventListener('click', () => { lyd.klik(); visMig(); });
-  $('fusMissionFold').addEventListener('click', () => {
-    lyd.klik();
-    const foldet = $('fusMission').classList.toggle('foldet');
-    $('fusMissionFold').textContent = foldet ? '+' : '–';
-    $('fusMissionFold').title = foldet ? 'Vis næste skridt' : 'Skjul næste skridt';
-  });
+  lavNæsteSkridt($('fusMission'), { visMig });
   $('fusGuideIgen').addEventListener('click', () => {
     $('hjælpFusion').classList.add('skjult');
     startGuide('fusion', guideTrin(), { igen: true });
@@ -563,6 +558,7 @@ function slutRejse({ husk = true, guide = true } = {}) {
 function lavOpgaveliste() {
   const liste = $('fusOpgaver');
   liste.innerHTML = '';
+  $('fusOpgaveTal').textContent = `${OPGAVER_FUSION.filter((o) => fremgang.erLøst(o.id)).length} af ${OPGAVER_FUSION.length} ★`;
   for (const o of OPGAVER_FUSION) {
     const li = document.createElement('li');
     const løst = fremgang.erLøst(o.id);
@@ -798,8 +794,13 @@ function opdaterPanel() {
     .map(([k, t]) => `<li data-type="${k}" title="Klik for at vælge en ${t.navn.toLowerCase()}"><span class="farveprik" style="background:${t.farve}"></span>${t.liste || t.navn}<b>${antal[k] || 0}</b></li>`).join('');
 }
 
-function visSeneste(titel, tekst, trin) {
-  $('fusSeneste').innerHTML = `<strong>${titel}</strong>${tekst}`;
+// Seneste reaktion: overskriften og energien står fremme, og forklaringen folder sig ud (lag 2)
+function visSeneste(titel, tekst, trin, kort) {
+  $('fusSenesteBoks').hidden = false;
+  $('fusSenesteTitel').textContent = titel;
+  $('fusSenesteKort').textContent = kort;
+  $('fusSeneste').textContent = tekst;
+  visLag('fus-seneste');
   for (const li of document.querySelectorAll('#fusOpskrift li')) li.classList.toggle('blink', Number(li.dataset.trin) === trin);
 }
 
@@ -1056,10 +1057,12 @@ function udfør(a, b, r) {
   tællere[r.trin] += r.ud[0] === 'be8' ? 0 : 1;
   lyd.fusion?.(r.trin);
   const titel = `${TYPER[a.type].navn} + ${TYPER[b.type].navn} → ${TYPER[hoved].navn}`;
-  visSeneste(titel, r.tekst, r.trin);
+  // Underteksten siger kort, hvad der skete. Forklaringen står i panelet og bag "Hvorfor?".
+  const kort = r.Q > 0 ? `+${r.Q.toLocaleString('da-DK')} MeV` : `Det kostede ${(-r.Q).toLocaleString('da-DK')} MeV.`;
+  visSeneste(titel, r.tekst, r.trin, kort);
   const visning = a.demo || b.demo; // skudt af "Vis mig"
   const egen = (a.kastet > 0 || b.kastet > 0) && !visning; // har man selv skudt en af kernerne?
-  if (egen || visning || r.trin >= 2) besked(titel, r.tekst, 'reaktion');
+  if (egen || visning || r.trin >= 2) besked(titel, kort, 'reaktion', { spørgsmål: titel, svar: r.tekst });
 
   // Opgaver. De første skridt tæller kun, når man selv har skudt kernerne sammen.
   const førsteSkridt = { d: 'f-d', he3: 'f-he3', he4: 'f-he4' }[hoved];
@@ -1106,12 +1109,12 @@ function mislykket(p) {
   }
 }
 
-function besked(titel, tekst, type = 'info') {
+function besked(titel, tekst, type = 'info', hvorfor = null) {
   if (rejse) return; // rejsen ind i Solen har sine egne undertekster
   // Ikke for mange beskeder på én gang
   if (performance.now() - sidstBesked < 1200 && type !== 'reaktion') return;
   sidstBesked = performance.now();
-  visBesked({ titel, tekst, type });
+  visBesked({ titel, tekst, type, hvorfor });
 }
 
 // Kun til automatiske tests (bruges når adressen indeholder ?test)

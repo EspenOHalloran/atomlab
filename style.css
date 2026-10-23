@@ -1208,3 +1208,83 @@ button { font: inherit; color: inherit; }
 .ordforklaring strong { display: block; margin-bottom: 3px; color: var(--accent); }
 .ordforklaring p { margin: 0; }
 .ordforklaring.skjult { display: none; }
+
+/* ---------- Vis eller skjul panelerne (js/paneler.js) ---------- */
+.skærm.skjul-venstre > .venstre-panel, #vaerksted.skjul-venstre > #byggepanel,
+.skærm.skjul-højre > .højre-panel, #vaerksted.skjul-højre > #infopanel,
+.skærm.kun-grafik > .side-panel, #vaerksted.kun-grafik > .panel { display: none; }
+/* :is() med id'erne, så reglerne vinder over fx "#fusion .vindue { grid-area: vindue }" */
+:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos).skjul-venstre > .vindue { grid-column-start: 1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos).skjul-højre > .vindue { grid-column-end: -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
+.panel-fane {
+  position: absolute; top: 50%; z-index: 3; width: 22px; height: 60px; margin-top: -30px; padding: 0;
+  border: 1px solid var(--panel-kant); background: var(--panel); color: var(--svag);
+  font-size: 17px; font-weight: 800; line-height: 1; cursor: pointer; pointer-events: auto;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.panel-fane.venstre { left: 0; border-left: 0; border-radius: 0 10px 10px 0; }
+.panel-fane.højre { right: 0; border-right: 0; border-radius: 10px 0 0 10px; }
+.panel-fane:hover, .panel-fane:focus-visible { color: var(--tekst); background: rgba(40, 60, 110, 0.85); }
+.panel-fane[hidden] { display: none; }
+.knap-kungrafik svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.knap-kungrafik.valgt { background: rgba(95, 227, 255, 0.22); border-color: var(--accent); }
+/* Kosmos i "Kun grafik": "Næste ›" står nederst i 3D-billedet, så man kan gå trin for trin uden panelerne */
+.kosmos-næste { align-self: flex-end; pointer-events: auto; }
+#kosmos:not(.kun-grafik) .kosmos-næste { display: none; }
+
+/* ---------- Dybde i lag (js/lag.js) ---------- */
+/* Foldebokse: overskriften og én linje står fremme, resten folder sig ud */
+details.lag-boks > summary { cursor: pointer; list-style: none; }
+details.lag-boks > summary::-webkit-details-marker { display: none; }
+details.lag-boks > summary strong { display: inline; }
+details.lag-boks > summary strong::after { content: ' ▸'; color: var(--svag); font-weight: 600; }
+details.lag-boks[open] > summary strong::after { content: ' ▾'; }
+details.lag-boks > summary .lag-kort { display: block; margin-top: 2px; color: var(--svag); font-size: 12.5px; font-weight: 400; line-height: 1.4; }
+details.lag-boks[open] > summary .lag-kort { display: none; }
+details.lag-boks > :not(summary) { margin-top: 6px; }
+/* "For nørder" inde i en boks eller et kort */
+.lag-nørd > summary, .hk-nørd > summary { cursor: pointer; color: var(--accent); font-size: 12.5px; font-weight: 700; list-style: none; }
+.lag-nørd > summary::-webkit-details-marker, .hk-nørd > summary::-webkit-details-marker { display: none; }
+.lag-nørd > summary::after, .hk-nørd > summary::after { content: ' ▸'; }
+.lag-nørd[open] > summary::after, .hk-nørd[open] > summary::after { content: ' ▾'; }
+.lag-nørd p, .hk-nørd p { margin: 4px 0 0; color: var(--svag); font-size: 12.5px; }
+
+/* Knappen "Hvorfor?" i teksterne */
+button.hvorfor {
+  display: inline; margin: 0 0 0 2px; padding: 1px 8px; border-radius: 99px;
+  border: 1px solid rgba(255, 212, 59, 0.55); background: rgba(255, 212, 59, 0.1);
+  color: #ffe08a; font: inherit; font-size: 0.92em; font-weight: 700; cursor: pointer; pointer-events: auto;
+}
+button.hvorfor::before { content: '? '; opacity: 0.8; }
+button.hvorfor:hover, button.hvorfor[aria-expanded="true"] { background: rgba(255, 212, 59, 0.25); color: var(--tekst); }
+
+/* "Hvorfor?"-kortet: ved knappen, og nedefra på telefon på højkant */
+.hvorfor-kort {
+  position: fixed; left: 0; top: 0; z-index: 25; width: min(360px, calc(100vw - 16px)); max-height: min(70vh, 520px); overflow-y: auto;
+  padding: 12px 14px; border-radius: 14px; background: rgba(14, 22, 50, 0.98);
+  border: 1px solid rgba(255, 212, 59, 0.5); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.6);
+  font-size: 14px; line-height: 1.5; color: var(--tekst);
+}
+.hvorfor-kort.skjult { display: none; }
+.hvorfor-kort.ark { top: auto; bottom: 0; left: 0; right: 0; width: auto; max-height: 60vh; border-radius: 16px 16px 0 0; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+.hk-top { display: flex; align-items: flex-start; gap: 10px; }
+.hk-titel { flex: 1; color: #ffe08a; font-size: 15px; }
+.hk-luk { width: 28px; height: 28px; flex: 0 0 auto; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: var(--tekst); font-size: 18px; line-height: 1; cursor: pointer; }
+.hk-tekst p { margin: 6px 0 0; }
+.hk-nørd { margin-top: 8px; }
+.hk-nørd[hidden] { display: none; }
+.hk-knapper { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; }
+.hk-knapper[hidden], .hk-knapper .knap[hidden] { display: none; }
+.hk-næste { margin-left: auto; }
+
+/* "Næste skridt" er skjult, mens guiden kører (medmindre guiden peger på det) */
+body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
+.kosmos-næste[hidden] { display: none; }
+/* Knapper med "Hvorfor?" på en linje for sig (fx i Reaktoren og Kosmos) */
+.hvorfor-linje { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 0; }
+.hvorfor-linje button.hvorfor { margin: 0; }
+/* Opgaverne foldet sammen til én linje */
+.opgave-boks > summary { padding: 4px 2px; }
+.opgave-boks > summary strong { color: var(--accent); font-size: 15px; }
+.opgave-tal { color: var(--gul); font-size: 13px; font-weight: 700; }

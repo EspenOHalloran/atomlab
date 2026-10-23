@@ -856,6 +856,7 @@ function opdaterInfo() {
   const skaller = skallerForIon(p, e);
   let skalTekst = skaller.length ? skaller.join(' · ') : 'ingen';
   if (FYLDTE.includes(e)) skalTekst += ' <small>(fyldt yderste skal)</small>';
+  if (skaller.length) skalTekst += ' <button class="hvorfor" data-hvorfor="skaller">Hvorfor?</button>';
 
   const rækker = [
     ['Isotop', `${isotopNavn(p, n)} <span class="notation">${hævet(p + n)}${g.symbol}</span>`],
@@ -967,8 +968,8 @@ function visStabilitet(st, måde = henfaldsmåde(tilstand.p, tilstand.n)) {
     const tekst = st.status === 'straks' ? '▶ Se den falde fra hinanden' : '▶ Se den henfalde';
     knapper += `<button class="knap lille henfald-knap"${travl ? ' disabled' : ''}>${travl ? 'Henfalder …' : tekst}</button>`;
   }
-  knapper += '<button class="link-knap" data-hjælp="hjælpNeutroner">Hvorfor?</button>';
-  if (måde && st.status !== 'straks') knapper += '<button class="link-knap" data-hjælp="hjælpRadioaktivitet">Er det farligt?</button>';
+  knapper += `<button class="hvorfor" data-hvorfor="${måde ? 'ustabil' : 'kernen'}">Hvorfor?</button>`;
+  if (måde && st.status !== 'straks') knapper += '<button class="hvorfor" data-hvorfor="farligt">Er det farligt?</button>';
   const stråling = måde && st.status !== 'straks' && tilstand.p > 0 ? `<span class="straaling">Stråling: ${STRÅLING[måde]}</span>` : '';
   boks.innerHTML = `<strong>${ikon} ${st.overskrift}</strong>`
     + (st.halveringstid ? `<span class="halv" title="Den tid, det tager, før halvdelen af kernerne er henfaldet">Halveringstid: ${st.halveringstid}</span>` : '')

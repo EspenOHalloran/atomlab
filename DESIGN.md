@@ -6,6 +6,12 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- **Punkt 2-4: Dybde i lag, panelerne og "Hvorfor?"-kortene** (23. oktober 2026), bygget efter [planen](docs/plan-lag.md):
+  - **Panelerne kan skjules** i Værkstedet, Stjerneovnen, Reaktoren, Batteriet og Kosmos: en fane på kanten af 3D-billedet (‹ ›), knappen "Kun grafik" i toplinjen og tasten G (Esc henter dem). Valget huskes for hver skærm. På højkant viser "Kun grafik" 3D-billedet på hele skærmen, og i Kosmos står "Næste ›" så nederst i 3D-billedet.
+  - **Foldebokse:** I Stjerneovnen og Reaktoren er forklaringerne foldet sammen til en overskrift og én linje. Den seneste reaktion folder sig selv ud, og opgaverne står som én linje ("Opgaver 0 af 7 ★"). Det, man selv folder ud, huskes.
+  - **Korte undertekster:** I Stjerneovnen siger underteksten kun, hvad der skete ("Proton + Deuterium → Helium-3 +5,49 MeV"), og "Hvorfor?" åbner forklaringen.
+  - **"Hvorfor?"-kort** (20 kort, faktatjekket, `js/data/hvorfor.js`): fx "Er det farligt?" (med to lag mere om DNA og doser) i Kerne-fanen og Reaktoren, "Hvorfor holder kernen sammen?", "Hvorfor har atomet skaller?", "Hvad er et magnetfelt?" i Solstorm, Pulsar og Kvasar og "Hvorfor er et sort hul sort?".
+  - "Næste skridt" er skjult, mens guiden kører (medmindre guiden peger på det).
 - **Punkt 5: To nye udgaver af atomet til afprøvning** (23. oktober 2026). Åbn https://espenohalloran.github.io/atomlab/?udgaver#vaerksted på tabletten. Øverst står tre knapper: "Nu" (som i dag), "A: prikker" (orbitalerne som en sky af prikker, der viser, hvor elektronerne sandsynligvis er) og "B: former" (orbitalernes form som glødende overflader, som i fysikbøgerne: kugler for s, dobbeltdråber for p og firkløvere for d). A og B har også skygge mellem kuglerne i kernen og en glidende overgang, når man skifter mellem ringe og sky. **Venter på jeres valg:** A, B, en blanding, eller ingen af dem. Uden `?udgaver` ser atomet ud som før.
 - **Punkt 8: Copyright** i README, hjælpen og `LICENSE`.
 - **Punkt 1: Det sorte hul er sort, og "For nørder" står øverst igen** (23. oktober 2026, Trin 18 nedenfor). Skyggen er nu ca. 2,6 gange bredere end horisonten (som i virkeligheden), og gløden holdes ude af den. Horisonten er en stiplet ring inde i skyggen. Testene `grafik` og `kosmos` tjekker begge dele.
@@ -41,8 +47,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 **Punkterne (i denne rækkefølge, men UI-planen skrives først, så I kan læse den, mens resten laves):**
 1. ✅ **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Lavet 23. oktober 2026.
 2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet og godkendt 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md).** Jeres svar: kortet åbner ved knappen, opgaverne foldes sammen, citaterne bliver, og underteksten er kort med "Hvorfor?". Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
-3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
-4. **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Mellemstor.
+3. ✅ **Vis eller skjul panelerne** (F1 punkt 2). Lavet 23. oktober 2026.
+4. ✅ **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Lavet 23. oktober 2026 (20 kort). Batteriet får sine kort med punkt 6.
 5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten. **Udgaverne A og B er lavet (23. oktober 2026) og venter på jeres valg** (se "Senest lavet").
 6. **Batteriet** (F1 punkt 5): grafik, start og navn. LiPo/Li-ion skal faktatjekkes, før teksten rettes. Stor, men kan deles op.
 7. **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7).
@@ -205,9 +211,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - [ ] **Trin 18: Forbedringer efter F1** (se [F1-overblik.md](docs/fable/F1-overblik.md) og "Lige nu" øverst)
   - [x] **Det sorte hul er sort:** Skyggen er ca. 2,6 gange bredere end horisonten, som i virkeligheden (for et sort hul, der ikke drejer), og gløden bliver holdt ude af den. Horisonten står som en stiplet ring inde i skyggen. Astronauten starter på vores side af hullet, så man ser den blive strakt.
   - [x] **"For nørder" står øverst igen** i Kosmos på tablet og telefon på højkant (CSS-reglen gælder nu kun Reaktoren).
-  - [ ] UI-planen for lagene ([docs/plan-lag.md](docs/plan-lag.md)) og byggeklodserne
-  - [ ] Vis eller skjul panelerne og "Kun grafik"
-  - [ ] "Hvorfor?"-kort
+  - [x] **UI-planen for lagene** ([docs/plan-lag.md](docs/plan-lag.md)) og byggeklodserne (`js/lag.js`: foldebokse, "Hvorfor?"-kort og "Næste skridt"). Stjerneovnen og Reaktoren har fået lagene. Værkstedet og Kosmos har fået "Hvorfor?"-kort, og Kosmos har "Mere" under "Kort fortalt". Tippene om at holde knapperne inde og om tasterne i Værkstedet flyttes til hjælpen, når Værkstedet får sin korte guide.
+  - [x] **Vis eller skjul panelerne og "Kun grafik"** (`js/paneler.js`), også med G og Esc. Huskes for hver skærm.
+  - [x] **"Hvorfor?"-kort:** 20 kort med "Og hvorfor det?", faktatjekket af to hjælpeagenter (`docs/fakta-hvorfor.md`).
   - [ ] **Et grafisk løft af atomet:** udgaverne A (prikker) og B (former) med orbitaler regnet som i hydrogen, skygge i kernen og en glidende overgang er lavet og kan vælges med `?udgaver`. Venter på jeres valg, før den valgte bygges færdig (også atomet i menuen).
   - [ ] Batteriet: grafik, start og navn
   - [ ] Grundstofkortet i lag og fremgang i menuen

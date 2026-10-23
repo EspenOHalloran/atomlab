@@ -1,6 +1,6 @@
 # Faktagrundlag: "Hvorfor?"-kortene (punkt 3 i plan-lag.md)
 
-*Udkast 23. oktober 2026. Teksterne er skrevet af Opus og skal gennem `/faktatjek`, før de kommer i spillet. Hvert kort har et svar på 3-5 korte sætninger, et næste lag ("Og hvorfor det?") og evt. "For nørder". Under hvert kort står de påstande, der skal tjekkes, og kilderne, når de er fundet.*
+*Udkast 23. oktober 2026. Teksterne står i spillet i `js/data/hvorfor.js` og skal være de samme her og dér. Hvert kort har et svar på 3-5 korte sætninger, et næste lag ("Og hvorfor det?") og evt. "For nørder". Under hvert kort står de påstande, der skal tjekkes, og kilderne, når de er fundet.*
 
 *Status (23. oktober 2026):* Kort 1-3, 5-8 og 10-12 er faktatjekket af to hjælpeagenter (Opus, høj effort) og rettet. Kort 4 og 9 bygger på tekster, der allerede er tjekket. Kilderne kunne kun ses som søgeresultater (WebFetch virker ikke herfra), så de vigtigste tal bør ses efter i selve dokumenterne, når det er muligt.
 
@@ -52,7 +52,7 @@
 
 **Svar:** Alle kernerne er plusladede og skubber hinanden væk. For at smelte sammen skal de så tæt på hinanden, at kernekraften kan tage over, og det kræver stor fart. Varme er fart: Jo varmere, jo hurtigere suser kernerne rundt. I Solens kerne er det ca. 15 mio. °C.
 
-**Og hvorfor det? → Tunneleffekten:** Selv ved 15 mio. °C er protonerne i Solen langt fra hurtige nok til at komme over frastødningen. Men i kvantemekanikken kan en partikel en gang imellem "tunnelere" gennem bakken. Uden tunneleffekten ville Solen ikke lyse.
+**Og hvorfor det? → Er 15 mio. °C så nok?** Nej, faktisk ikke. Selv ved 15 mio. °C er protonerne i Solen langt fra hurtige nok til at komme over frastødningen. Men i kvantemekanikken kan en partikel en gang imellem slippe igennem "bakken", som gennem en tunnel. Det kaldes tunneleffekten. Uden den ville Solen ikke lyse.
 
 **Påstande, der skal tjekkes:** Allerede i spillet og faktatjekket (Stjerneovnens hjælp). Kortet må ikke sige noget nyt.
 

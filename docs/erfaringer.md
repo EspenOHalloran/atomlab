@@ -46,6 +46,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Opgavelister og tal bygges, når delen startes, så de passer efter "Start forfra" og nulstilling.
 - [ ] Paneler opdateres højst 4 gange i sekundet og kun, når noget har ændret sig, ikke hvert billede.
 - [ ] Brug de fælles byggeklodser (beskeder, guide, pause, "Næste skridt") i stedet for at kopiere.
+- [ ] En CSS-regel, der skal vinde over en regel med et id (fx `#fusion .vindue { grid-area: vindue }`), skal selv have et id, fx `:is(#fusion, #reaktor).skjul-venstre > .vindue`. Ellers sker der ingenting (panelerne i oktober 2026).
 - [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. En klasse kan bruges på flere skærme. Det samme gælder CSS-regler, også dem i `@media` (fx `order`).
 - [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
 - [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
@@ -179,6 +180,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 ### Faldgruber: kamera og layout
 - **Gløden lyser sorte ting op** (Sort hul, F1 punkt 8, oktober 2026). Skyggen var sort uden glød, men grå med glød, også ved halv styrke, fordi gassen omkring er meget lys. At skrue ned for gløden hjalp ikke. Løsningen: Gem billedet før gløden (`GemPass`), og brug det dér, hvor noget skal være sort (`SkyggePass`). Så kan ting foran skyggen stadig ses. Første forsøg med en maske, hvor tingene foran skulle tegnes sorte, gav en grå plade med skarpe kanter. Mål lyset i et skærmbillede med fuld grafik (testen `grafik`), for de andre tests tegner uden glød.
 - **Æ, ø og å i shaderkode** gav en shaderfejl og en helt sort skærm (`'?' : syntax error`). GLSL tåler kun ASCII i navne. Skriv `oe`, som i `jorden.js`.
+- **En regel med klasser taber til en regel med et id.** Panelerne blev skjult, men 3D-billedet blev ikke bredere, fordi `#fusion .vindue { grid-area: vindue }` vandt over `.skærm.skjul-venstre > .vindue`. Testen `lag` måler bredden, og det fangede det. Løsning: `:is(#vaerksted, #fusion, …)` i vælgeren.
+- **"toggle" på `<details>` kommer lidt efter klikket.** En test, der genindlæser siden lige efter et klik, når ikke at gemme valget. Vent et øjeblik i testen.
 - **To flader tæt på hinanden flimrer** (z-fighting). Skæret i midten af det sorte hul og navnet inde i skyggen lå 0,1 fra skyggen, og så blev halvdelen af dem skjult på skrå. Med 1 i afstand forsvandt det. Hold mindst 1 i afstand mellem flader, der vender mod kameraet.
 - **Kamerastyringen har en skjult grænse.** `styring.maxDistance` (250) holder kameraet tæt på, også når styringen er slået fra. En planlagt kameratur skal hæve grænsen og sætte den tilbage bagefter.
 - **Smalle skærme giver en anden kameraafstand.** På en telefon på højkant står kameraet længere væk (`passerTil` regner ud fra hullet). Rejsen ind i Solen sluttede derfor uden for Solen. Afstande skal regnes ud fra `verden.målAfstand`, og telefon på højkant skal altid testes.

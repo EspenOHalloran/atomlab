@@ -16,6 +16,8 @@ import { lavBeskeder, rydBeskeder } from './beskeder.js';
 import { stopGuide } from './guide.js';
 import { citatHTML, MENU_CITATER } from './data/citater.js';
 import { lavOrdforklaringer, testAdgang as ordTest } from './ordforklaring.js';
+import { lavLag, lukHvorfor, vistHvorfor } from './lag.js';
+import { lavPaneler, startPaneler, testAdgang as panelTest } from './paneler.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -38,6 +40,9 @@ function start() {
     return;
   }
 
+  // Foldeboksene og "Hvorfor?"-kortene (først, så Esc lukker et åbent kort før alt andet)
+  lavLag();
+
   // Et carbonatom, der svæver i menuen
   menuAtom = new Atom();
   menuAtom.sætStraks(6, 6, 6);
@@ -57,6 +62,7 @@ function start() {
   lavReaktor();
   lavBatteri();
   lavKosmos();
+  lavPaneler();
   lavFuldSkærmKnapper();
   lavRulleTip();
   // Lydknapper på de andre skærme (værkstedet har sin egen)
@@ -86,7 +92,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest() };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), paneler: panelTest(), hvorfor: { vist: vistHvorfor } };
   visSkærm();
 }
 
@@ -95,8 +101,9 @@ function visSkærm() {
   const ny = skærme[navn] ? navn : 'menu';
   if (ny === aktivSkærm) return;
   if (aktivSkærm) skærme[aktivSkærm].stop();
-  rydBeskeder(); // beskeder og guiden hører til den skærm, de blev vist på
+  rydBeskeder(); // beskeder, guiden og "Hvorfor?"-kortet hører til den skærm, de blev vist på
   stopGuide();
+  lukHvorfor();
   for (const id of Object.keys(skærme)) {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }
@@ -104,6 +111,7 @@ function visSkærm() {
   stopKamera();
   nulstilStyring();
   opdaterLydknapper();
+  startPaneler(ny);
   skærme[ny].start();
 }
 
