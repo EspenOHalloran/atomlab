@@ -174,6 +174,8 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage. Trin 1a og 1b er de vigtigste at få rigtigt, for de sætter niveauet.
 
 ## 7. Åbne spørgsmål (vi tager dem ét ad gangen)
+**Svar (23. oktober 2026):** Spørgsmål 1-5 følger forslagene i planen, indtil I siger andet: månerne i afsnit 1, 4096 × 2048 på pc og 2048 × 1024 på tablet og telefon, Pluto med som dværgplanet, navnene "Solsystemet" og "Rumrejsen", og turen "Liv i solsystemet?" linker til delen Liv, når den kommer. Opus laver trin 0 og prototypen (trin 1b) og stopper derefter, så I kan se dem.
+
 1. Hvilke måner skal med fra start? (forslag ovenfor)
 2. Hvor store billeder: 2k som standard og 4k på pc? Hvor meget må delen fylde at hente? Mit forslag: 4096 × 2048 på pc og halvdelen på tablet og telefon, ikke 8k.
 3. Skal Pluto og dværgplaneterne med?

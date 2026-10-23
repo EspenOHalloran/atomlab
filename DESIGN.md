@@ -24,7 +24,17 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - 14 skærmbilleder fra en rigtig tablet (`docs/fable/tablet/`) og F0, materialet til F1 (`docs/fable/`).
 - Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
 
-**Venter på et go (forslag til rækkefølge efter F1, I bestemmer):**
+**Go til alle ni punkter herunder** (23. oktober 2026). Jeres svar på de åbne spørgsmål samme dag:
+- **Ud på tabletten:** Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når alle tests er grønne, så det kommer på GitHub Pages med det samme.
+- **UI-planen (punkt 2):** I læser den, før lagene, panelerne og "Hvorfor?"-kortene (punkt 2-4) bygges. Imens laver Opus det, der ikke afhænger af planen.
+- **Atomet (punkt 5):** 2-3 udgaver, som man vælger mellem i appen med `?udgaver` i adressen. I prøver dem på tabletten og siger, hvilken der skal bygges færdig.
+- **Tabletten** bruges lige meget på langs og på højkant. Begge vægtes lige højt.
+- **Fotos af grundstofferne:** Ja, men som et senere trin efter teksterne i lag. Fotos fra Wikimedia Commons med navn og licens. `upload.wikimedia.org` er spærret i miljøet og skal tillades under Network access først.
+- **"Er det farligt?":** I ved ikke, om han så linket. Kortet kommer der, hvor spørgsmålet opstår, med et dybere lag om, hvad strålingen gør ved cellerne og DNA, og hvor meget der skal til.
+- **Lyd:** Ingen baggrundsmusik nu. De små lyde bliver.
+- **De store dele (punkt 9):** plan og faktagrundlag til Molekyler, trin 0 i Solsystemet og prototypen med Saturn, Enceladus og Titan. Så stopper Opus, og I kigger, før de store dele bygges. Solsystemets spørgsmål 1-5 følger planens forslag. Tjernobyl og Liv venter stadig på Fable 5.5.
+
+**Punkterne (i denne rækkefølge, men UI-planen skrives først, så I kan læse den, mens resten laves):**
 1. **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Små opgaver, som kan laves når som helst.
 2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10): Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
 3. **Vis eller skjul panelerne** (F1 punkt 2, se "Idéer til senere"). Bygges helst sammen med planen i 2, for de ændrer de samme paneler. Mellemstor.
@@ -36,9 +46,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 9. **De store dele bagefter:** Molekyler, Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan), og til sidst Tjernobyl og Liv, som venter, til Fable 5.5 kommer.
 
 **Åbne spørgsmål:**
-- De seks spørgsmål i F1 (afsnit 6). Det vigtigste: Skal UI-planen laves først, så panelerne bygges sammen med den?
-- Spørgsmål 1-5 om Solsystemet i planen (afsnit 7), taget ét ad gangen.
-- Molekylerne skal bare stå i idéerne (ingen fast plads i rækkefølgen).
+- De seks spørgsmål i F1 (afsnit 6) er besvaret (se ovenfor). Spørgsmål 1 (UI-planen først): ja.
+- Spørgsmål 1-5 om Solsystemet (afsnit 7 i planen): følger planens forslag, indtil I siger andet.
 
 **Ikke afprøvet endnu:**
 - NASA-billederne på en telefon. De er set på jeres tablet (tabletbillede 05-07).
