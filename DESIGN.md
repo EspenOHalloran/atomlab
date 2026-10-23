@@ -6,6 +6,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- Noter fra en afprøvning med jeres søn (`docs/fable/soen-og-espens-noter.md`, 23. oktober 2026): paneler, der kan skjules, færre tekstbokse ad gangen, dybere forklaringer, mere fakta om grundstofferne, et grafisk løft af Batteriet og atomerne, og LiPo vs. Li-ion.
 - 14 skærmbilleder fra en rigtig tablet til F1 (`docs/fable/tablet/`, 23. oktober 2026).
 - F0 i planen for Fable (22. oktober 2026): briefen `docs/fable/brief.md` og 53 skærmbilleder i `docs/fable/billeder/` (nyt værktøj: `tests/vaerktoejer/fable-billeder.mjs`).
 - Planen for, hvad Fable skal hjælpe med ([docs/plan-fable.md](docs/plan-fable.md)): et eftersyn af teknik, UI, grafik og indhold og hjælp til at planlægge de store dele, med jeres svar og et skøn over prisen.
@@ -14,7 +15,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - Skills: `/faerdig` og `/faktatjek` i `.claude/skills/`.
 
 **Venter på et go (i den rækkefølge, jeg vil foreslå):**
-0. **F1 med Opus:** et samlet overblik over, hvor AtomLab kan blive bedre. Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer (I mener, at Fable 5.1 ligger tæt på Opus 5.5, så det ikke er pengene værd). Opus laver F1 i en ny session med høj effort ud fra den samme brief: "Læs `docs/fable/brief.md` og lav F1." Materialet (F0) er klar, og jeres 14 tabletbilleder (`docs/fable/tablet/`) ligger der nu også. Mangler kun: Se jeres søn bruge AtomLab i ca. 20 minutter uden hjælp, og læg noterne (hvor han går i stå, hvad han springer over, hvad han bliver ved med) i `docs/fable/`. Overblikket kan ændre rækkefølgen nedenfor. Tjernobyl og Liv venter, til Fable 5.5 kommer.
+0. **F1 med Opus:** et samlet overblik over, hvor AtomLab kan blive bedre. Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer (I mener, at Fable 5.1 ligger tæt på Opus 5.5, så det ikke er pengene værd). Opus laver F1 i en ny session med høj effort ud fra den samme brief: "Læs `docs/fable/brief.md` og lav F1." Alt er nu klar: materialet (F0), jeres 14 tabletbilleder (`docs/fable/tablet/`) og jeres og jeres søns noter efter at have prøvet AtomLab sammen (`docs/fable/soen-og-espens-noter.md` — ønske om at kunne skjule panelerne, færre tekstbokse fremme på samme tid, dybere "hvorfor"-forklaringer, mere fakta om grundstofferne, et grafisk løft af Batteriet og atomerne, og et spørgsmål om LiPo/Li-ion-navngivningen). Overblikket kan ændre rækkefølgen nedenfor. Tjernobyl og Liv venter, til Fable 5.5 kommer.
 1. **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lille opgave.
 2. **Vis eller skjul panelerne:** begge dele (foldbare paneler og "Kun grafik"). Se "Idéer til senere". Mellemstor.
 3. **Solsystemet, trin 0:** gennemgang af planen og faktagrundlaget ([docs/plan-solsystemet.md](docs/plan-solsystemet.md)). Opus laver udkastet til faktagrundlaget, og Fable tjekker det (se planen for Fable).

@@ -28,13 +28,14 @@ Du skal også vurdere idélisten (se nedenfor).
 3. **`docs/fable/billeder/LISTE.md` og billederne:** 53 skærmbilleder af alle skærme, de 15 fænomener i Kosmos og fem forløb i træk (et henfald, en fusion, en kædereaktion, en supernova og Big Bang).
    - Billederne er taget i en testbrowser uden grafikkort. Gløden og farverne kan derfor se lidt anderledes ud end på en rigtig skærm.
    - **`docs/fable/tablet/`** har 14 billeder taget af faren på en rigtig tablet (Samsung Galaxy Tab A11+, Chrome), med en liste (`LISTE.md`). Grafikken skal især bedømmes ud fra disse, da testbrowseren ikke har et rigtigt grafikkort. Et fund derfra: på billedet af Sort hul dækker tablettens egen systemboble (batteri/Bluetooth) en del af 3D-billedet øverst til højre — ikke en fejl i AtomLab, men værd at nævne, hvis noget vigtigt kan blive dækket af systemets overlay dér.
-4. **Det, der allerede er kendt.** Du skal ikke bruge tid på at finde det igen:
+4. **`docs/fable/soen-og-espens-noter.md`:** Far og søn har prøvet AtomLab sammen og skrevet noter ned. **Læs dem grundigt og vægt dem højt** — det er den direkte stemme fra brugeren, det hele handler om. Kort opsummeret: ønske om at kunne skjule panelerne, for mange tekstbokse fremme på samme tid, et "hvorfor" mere i nogle forklaringer (magnetisme, hvorfor radioaktivitet er farligt), mere fakta om grundstofferne i Det periodiske system (hvor de findes, hvad de bruges til), et grafisk løft af Batteriet og af atomerne (forsiden og værkstedet), og et spørgsmål om LiPo vs. Li-ion-navngivningen (Opus har skrevet et foreløbigt svar dernede, som skal vurderes, ikke tages for givet).
+5. **Det, der allerede er kendt.** Du skal ikke bruge tid på at finde det igen:
    - `docs/gennemgang-2026-10.md`: Opus' eftersyn fra oktober. Faktafejlene (A1-A3) og de fleste kodefejl (D1-D7, D10) er rettet. Afsnit B (helheden) og D8, D9, D11 og D12 venter. Det står i "Status for rettelserne" nederst.
    - `docs/erfaringer.md`: tjeklister, rodårsager, kendte fælder i fakta og "Åbne punkter".
 
    Du må gerne tage et kendt punkt med i din top 10, hvis det hører til dér, men skriv, at det er kendt. Sig også til, hvis du er uenig i et af de kendte fund eller i, hvor vigtigt det er.
-5. **Koden:** Kig i de filer, hvor du har brug for belæg. Du behøver ikke læse alle 17.000 linjer. De største filer er `js/fusion.js`, `style.css`, `js/reaktor.js`, `js/vaerksted.js`, `js/atom.js` og `index.html`.
-6. **Programmet selv:** Hvis et billede ikke er nok, kan du åbne programmet med Playwright (se `tests/README.md` og testadgangen `?test` i CLAUDE.md). Det er dyrt, så gør det kun, når det er nødvendigt.
+6. **Koden:** Kig i de filer, hvor du har brug for belæg. Du behøver ikke læse alle 17.000 linjer. De største filer er `js/fusion.js`, `style.css`, `js/reaktor.js`, `js/vaerksted.js`, `js/atom.js` og `index.html`.
+7. **Programmet selv:** Hvis et billede ikke er nok, kan du åbne programmet med Playwright (se `tests/README.md` og testadgangen `?test` i CLAUDE.md). Det er dyrt, så gør det kun, når det er nødvendigt.
 
 ## Tal, som Opus har målt
 - **Kode:** ca. 16.900 linjer i `index.html`, `style.css` og `js/`. De største filer er `js/fusion.js` (1.257 linjer), `style.css` (1.204), `js/reaktor.js` (1.029), `js/vaerksted.js` (968), `js/atom.js` (714) og `index.html` (714).
