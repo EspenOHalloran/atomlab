@@ -110,6 +110,8 @@ Senere kan det også blive et trin i delen Liv.
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |
 
 ## 7. Spørgsmål til jer
+**Jeres svar (23. oktober 2026):** i Atomværkstedet med knapper øverst, atomerne trækkes med fingeren eller musen, elektronerne vises som prikker på ringe, og Byttebørsen bygges først. Navnene "Byttebørsen" og "Byg molekyler" bruges, indtil I siger andet. Næste skridt er M1 (Byttebørsen), når I giver et go.
+
 1. **Hvor:** i Atomværkstedet med knapper øverst (forslag), eller som en egen del i menuen (fx "Kemilab")?
 2. **Hvordan man bygger:** trække atomer med fingeren eller musen (forslag), eller trykke på knapper ("Tilføj H"), som når man bygger et atom i dag?
 3. **Elektronerne:** som prikker på ringe (forslag, det er enkelt og passer med Byttebørsen), eller som skyer (passer med udgave A eller B af atomet, men er sværere at forstå i et molekyle)?
