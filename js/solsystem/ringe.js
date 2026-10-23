@@ -50,7 +50,7 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
       uPlanet: { value: new THREE.Vector3() },
       uPlanetR: { value: planetRadius / skala },
       uFlad: { value: flad },
-      uLys: { value: 0.62 },
+      uLys: { value: 0.54 },
       tFarve: { value: null },
       uHarFarve: { value: 0 },
     },

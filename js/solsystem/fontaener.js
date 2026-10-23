@@ -69,7 +69,7 @@ const OVERFLADE_FRAGMENT = /* glsl */ `
     stribe *= sydpol;
     farve = mix(farve, vec3(0.55, 0.72, 0.8), max(revne * nord, stribe * 0.75));
     // Med Cassinis kort bruges det i stedet (det er gråt, så isen får et svagt blåt skær)
-    if (uHarKort > 0.5) farve = vec3(0.94, 0.97, 1.0) * min(texture2D(tKort, vUv).r * 2.1, 1.15);
+    if (uHarKort > 0.5) farve = vec3(0.94, 0.97, 1.0) * min(texture2D(tKort, vUv).r * 1.85, 1.05);
     vec3 N = normalize(vNormal);
     vec3 V = normalize(cameraPosition - vVerden);
     float i = max(dot(N, uSol), 0.0);

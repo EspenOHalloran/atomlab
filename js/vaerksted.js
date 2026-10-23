@@ -9,6 +9,7 @@ import { Stabilitetskort } from './stabilitetskort.js';
 import * as fremgang from './fremgang.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { toTrinsKnap } from './forfra.js';
 import { citatHTML } from './data/citater.js';
 
 const MAX_P = 118;
@@ -549,15 +550,14 @@ function lavKnapper() {
     $('knapMinitabel').textContent = panel.classList.contains('lukket') ? 'Vis' : 'Skjul';
     setTimeout(() => dispatchEvent(new Event('resize')), 50);
   });
-  $('knapOpgaverForfra').addEventListener('click', () => {
-    if (!confirm('Vil du starte forfra med opgaverne i alle dele (også Stjerneovnen, Reaktoren og Batteriet)? De grundstoffer, du har opdaget, beholder du.')) return;
-    fremgang.nulstilOpgaver();
+  // Starter kun Værkstedets opgaver forfra (de andre dele har deres egen knap). De opdagede grundstoffer bliver.
+  toTrinsKnap($('knapOpgaverForfra'), () => {
+    fremgang.nulstilDel(OPGAVER.map((o) => o.id));
     vælgNæsteOpgave();
     lavOpgaveliste();
     opdaterAlt();
-    lyd.klik();
     $('opgaveliste').classList.add('skjult');
-    visBesked({ titel: 'Opgaverne starter forfra', tekst: 'Alle stjerner er nulstillet. God fornøjelse!' });
+    visBesked({ titel: 'Værkstedet starter forfra', tekst: 'Stjernerne her er nulstillet. De grundstoffer, du har opdaget, beholder du.' });
   });
   $('knapNulstil').addEventListener('click', () => {
     if (!confirm('Vil du slette alle løste opgaver og opdagede grundstoffer?')) return;

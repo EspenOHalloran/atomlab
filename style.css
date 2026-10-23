@@ -1323,3 +1323,6 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   color: #001a22;
   box-shadow: 0 0 14px rgba(95, 227, 255, 0.5);
 }
+/* "Start forfra" nederst i listen med opgaver */
+.opgaver li.forfra { list-style: none; display: block; padding: 6px 0 0; border: 0; background: none; cursor: default; }
+.knap.spørg { color: #ffd43b; border-color: rgba(255, 212, 59, 0.5); }

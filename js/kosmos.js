@@ -3,7 +3,7 @@
 // { id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, ROLIG } from './scene3d.js';
+import { verden, sætVindue, passerTil, ROLIG, piletaster } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
@@ -94,6 +94,7 @@ export function startKosmos() {
   aktiv = true;
   rod.visible = true;
   verden.opdateringer.add(opdater);
+  piletaster(true); // piletasterne drejer kameraet
   sætVindue($('kosmosVindue'));
   let id = null;
   try {
@@ -109,6 +110,7 @@ export function stopKosmos() {
   aktiv = false;
   rod.visible = false;
   verden.opdateringer.delete(opdater);
+  piletaster(false);
   pause.sæt(false);
   luk();
   stjerneUr.tid = null;
@@ -374,6 +376,8 @@ export function testAdgang() {
       lavStyring();
     },
     pause: () => pause.til,
+    kamera: () => verden.kamera.position.toArray(),
+    fænomen: () => kørende?.test, // fænomenets egen testadgang (fx Saturns måner)
     tid: () => kosmosTid,
     stjerneTid: () => stjerneUr.tid,
     antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },

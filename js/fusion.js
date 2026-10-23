@@ -9,6 +9,7 @@ import { Effekter, lavRingTekstur } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked, skjulUndertekst } from './beskeder.js';
+import { forfraKnap } from './forfra.js';
 import { startGuide, harSetGuide, markérSet } from './guide.js';
 import { stjerne } from './kosmos/faelles.js';
 import { lavPause } from './pause.js';
@@ -569,6 +570,7 @@ function lavOpgaveliste() {
     li.addEventListener('click', () => visBesked({ titel: o.titel, tekst: løst ? o.fakta : `Tip: ${o.tip}`, varighed: 8000 }));
     liste.append(li);
   }
+  forfraKnap(liste, { ider: OPGAVER_FUSION.map((o) => o.id), del: 'Stjerneovnen', efter: () => { startForfra(); lavOpgaveliste(); opdaterMission(); } });
 }
 
 function løs(id) {
