@@ -9,5 +9,7 @@ Du må gerne:
 Det her har sine egne licenser og hører ikke under linjen ovenfor:
 - Three.js (mappen lib/three/): MIT-licens, © Three.js Authors. Se lib/three/LICENSE.
 - Billederne af Jorden og Månen (mappen billeder/solsystem/): fra NASA og offentligt ejede (public domain). Se billeder/solsystem/KILDER.md.
+- Billederne af Enceladus og Titan (billeder/solsystem/enceladus-*.jpg og titan-*.jpg): fra NASA's rumsonde Cassini (NASA/JPL/Space Science Institute) via USGS Astrogeology, offentligt ejede (public domain).
+- Billederne af Saturn og ringenes farver (billeder/solsystem/saturn-*.jpg og saturn-ringe.png): © Solar System Scope (https://www.solarsystemscope.com/textures/), licens CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Ringenes farver er lagt om på de rigtige afstande.
 - Kortet over land og hav (js/data/landkort.js og billeder/solsystem/jorden-hav.png): lavet med global-land-mask (MIT-licens, https://github.com/toddkarin/global-land-mask), som bygger på data fra NOAA.
 - Citaterne tilhører dem, der sagde eller skrev dem. Kilden står ved hvert citat (js/data/citater.js).

@@ -9,6 +9,7 @@ side.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 side.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await side.goto(`${ADRESSE}/tests/vaerktoejer/saturn.html`);
 await side.waitForFunction(() => window.saturnTest);
+await side.waitForTimeout(3000); // billederne skal nå at blive hentet
 const billede = async (navn, fn) => {
   await side.evaluate(fn);
   await side.waitForTimeout(1500);
@@ -24,5 +25,6 @@ await billede('4-enceladus', () => { saturnTest.tryk('Enceladus'); saturnTest.ki
 await billede('5-enceladus-modlys', () => { saturnTest.tryk('Modlys'); saturnTest.kig([0.25, -0.3, 1], 9); });
 await billede('6-titan-modlys', () => { saturnTest.tryk('Titan'); saturnTest.kig([0.4, 0.15, 1], 12); });
 await billede('7-titan', () => { saturnTest.tryk('Modlys'); saturnTest.kig([0.9, 0.15, 0.6], 12); });
+await billede('8-titan-under-disen', () => { saturnTest.tryk('Under disen'); });
 await b.close();
 console.log(fejl.length ? fejl.join('\n') : 'Ingen konsolfejl');

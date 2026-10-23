@@ -51,6 +51,8 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
       uPlanetR: { value: planetRadius / skala },
       uFlad: { value: flad },
       uLys: { value: 0.62 },
+      tFarve: { value: null },
+      uHarFarve: { value: 0 },
     },
     vertexShader: /* glsl */ `
       varying vec3 vLokal;
@@ -64,7 +66,8 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
     fragmentShader: /* glsl */ `
       ${RING_GLSL}
       uniform vec3 uSol, uNormal, uPlanet;
-      uniform float uPlanetR, uFlad, uLys;
+      uniform float uPlanetR, uFlad, uLys, uHarFarve;
+      uniform sampler2D tFarve;
       varying vec3 vLokal;
       varying vec3 vVerden;
       // Står punktet i Saturns skygge? Saturn er fladtrykt langs aksen (uNormal), så rummet strækkes langs aksen først.
@@ -103,7 +106,9 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
           // Der er mere fint støv, hvor ringene er tynde (C-ringen og Cassini-delingen), og støv spreder mest fremad
           lys = max(k, 0.0) * fremad * (0.4 + 2.0 * exp(-2.0 * tau));
         }
-        vec3 farve = ring.rgb * lys * planetSkygge(vVerden) * uLys;
+        // Farverne og de fine striber fra ringbilledet (Solar System Scope), lagt på de rigtige grænser
+        vec3 rgb = uHarFarve > 0.5 ? texture2D(tFarve, vec2((r - uRingInd) / (uRingUd - uRingInd), 0.5)).rgb * 1.6 : ring.rgb;
+        vec3 farve = rgb * lys * planetSkygge(vVerden) * uLys;
         gl_FragColor = vec4(farve / max(alfa, 0.001), alfa);
       }`,
   });
@@ -114,6 +119,7 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
   const hjælpS = new THREE.Vector3();
   return {
     mesh,
+    sætFarve(t) { mat.uniforms.tFarve.value = t; mat.uniforms.uHarFarve.value = t ? 1 : 0; },
     // Kaldes hvert billede: Solens retning (verden), Saturns midte og akse.
     // Skyggen regnes i verdens enheder, så Saturns radius ganges med den samlede skala.
     sæt(solRetning, midte, akse) {

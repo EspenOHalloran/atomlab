@@ -163,7 +163,7 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 |---|---|---|
 | 0 | ✅ Gennemgang af planen og et faktagrundlag med kilder ([fakta-solsystemet.md](fakta-solsystemet.md)). Lavet af Opus 23. oktober 2026, fordi Fable venter (se "Gennemgang af planen" nederst). Del 2 om Voyager skal tjekkes, før Rumrejsen bygges. | Opus |
 | 1a | ✅ **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (lavet i oktober 2026, Trin 17 i DESIGN.md). Teknikken (`js/kosmos/jorden.js`, `lav_billeder.py` og `tests/vaerktoejer/kloder.html`) kan genbruges til planeterne. | Opus |
-| 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos med `?saturn` i adressen. Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Saturn, Enceladus og Titan er tegnet af programmet, indtil de rigtige kort kan hentes. | Opus |
+| 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos med `?saturn` i adressen. Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Siden 24. oktober 2026 med rigtige billeder: Saturn og ringenes farver fra Solar System Scope (CC BY 4.0), Enceladus og Titan fra Cassini via USGS (`billeder/solsystem/lav_saturn.py`). | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
 | 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
 | 4 | "Liv i solsystemet?" (tekster faktatjekkes) | Opus + faktatjek |
@@ -223,7 +223,7 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
 
 **Billederne:**
 - **Saturn og ringene:** Solar System Scope (CC BY 4.0) ligger på Wikimedia Commons, og den adresse kan hentes i miljøet. De skal krediteres i `LICENSE` og "Om AtomLab".
-- **Enceladus og Titan:** De bedste kort er USGS' mosaikker fra Cassini (public domain), men `astrogeology.usgs.gov` og `planetarymaps.usgs.gov` er spærret i miljøet. **Forslag:** Tillad de to adresser under Network access, så kan de rigtige kort komme med. Indtil da tegner prototypen Enceladus og Titan selv (is med de fire "tigerstriber" ved sydpolen og Titans tykke orange dis, som alligevel skjuler overfladen i almindeligt lys) og siger det ærligt.
+- **Enceladus og Titan:** USGS' mosaikker fra Cassini (public domain). `planetarymaps.usgs.gov` sender videre til `asc-pds-services.s3.us-west-2.amazonaws.com`, hvor filerne ligger (listen kan hentes med `?list-type=2&prefix=mosaic/`). Tilladt og hentet 24. oktober 2026.
 
 **Skønnet:** Delen er stadig stor, og trin 2 og 5 er de sværeste. Prototypen viser, om grafikken holder på tabletten, før de bygges.
 
