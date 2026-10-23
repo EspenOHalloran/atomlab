@@ -39,7 +39,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `stjerneovn` | Stjerneovnen: fusion, for koldt, energi, tempoknapperne, opgaver kun ved egne skud, og at "Vis mig" lige efter et eget skud laver en reaktion 120 af 120 gange |
 | `stjerneovn-mus` | Stjerneovnen med mus: ramme-procent, slowmotion, pause, kernelisten, grafen og rejsen ind i Solen |
 | `reaktor` | Reaktoren: spaltning, uran-238, kædereaktion, nødstop, at "Vis mig" kommer i gang 200 af 200 gange, ikke dør ud, og at reaktoren som regel kører videre bagefter (100 forsøg), og at Kosmos' faneknapper ikke ændrer Reaktoren |
-| `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning, guiden første gang, "Næste skridt", "Vis mig" (slowmotion, to ioner, klarer ingen opgaver), gitrene og navnet |
+| `batteri` | Batteriet: opladning, afladning, elektron-kæden, afbryderen og kortslutning, guiden første gang, "Næste skridt", "Vis mig" (slowmotion, to ioner, klarer ingen opgaver), gitrene, navnet og "Start forfra" (to tryk) |
 | `kosmos` | Alle Kosmos-fænomener kan vælges, alle knapper virker, og alt bliver ryddet væk. På tablet og telefon på højkant står "Kort fortalt / For nørder" over teksten |
 | `kosmos-nye` | Big Bang (64/64 → 112/16 → 25 % helium), Ny stjerne (brun dværg, som Solen, kæmpestjerne), Solens fremtid og den hvide dværg (eksplosion og nikkel → cobalt → jern efter 100 dage) |
 | `aarstider` | Årstiderne: formlerne for dagens længde, Solens højde og Jordens afstand mod kendte værdier (København, Sydney, Singapore og Ilulissat), og fænomenet i browseren: trinene, tabellen (også årstiden), at Jorden kører rundt i første trin, og at skyderen følger med, og telefon |
@@ -51,7 +51,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `lag` | Dybde i lag: panelerne kan skjules (fanerne, "Kun grafik", G og Esc) og huskes, "Kun grafik" på højkant, opgaverne foldet sammen, den korte undertekst med "Hvorfor?", "Hvorfor?"-kortene (lag for lag, Esc, tryk udenfor, nedefra på telefon), foldebokse, der huskes, og at "Næste skridt" er skjult under guiden |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
-| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), og at Saturn, Enceladus og Titan kan vises i Kosmos med `?saturn` (og ikke uden) |
+| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), at Saturn, Månerne, Enceladus og Titan kan vises i Kosmos med `?saturn` (og ikke uden), at piletasterne drejer kameraet, og at et tryk på en måne virker |
 | `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen. Det sorte hul er sort i midten, også med glød, og dets ekstra trin i efterbehandlingen fjernes igen |
 
 ## Værktøjer

@@ -58,6 +58,12 @@ export function antalLøste(ider) {
 }
 
 // Starter forfra med opgaverne (de opdagede grundstoffer beholdes)
+// Nulstiller kun én dels opgaver ("Start forfra" i delen)
+export function nulstilDel(ider) {
+  for (const id of ider) delete data.opgaver[id];
+  gem();
+}
+
 export function nulstilOpgaver() {
   data.opgaver = {};
   gem();

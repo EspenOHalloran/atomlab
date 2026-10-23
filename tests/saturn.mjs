@@ -40,10 +40,32 @@ const side = async (adresse) => {
   await s.waitForTimeout(1500);
   const knapper = async () => s.evaluate(() => [...document.querySelectorAll('#kosmosStyring button')].map((k) => k.textContent.trim()));
   const knapperNu = await knapper();
-  tjek('med ?saturn: knapperne Saturn, Enceladus, Titan og Modlys', ['Saturn', 'Enceladus', 'Titan', 'Modlys'].every((t) => knapperNu.some((k) => k.includes(t))), JSON.stringify(await knapper()));
+  tjek('med ?saturn: knapperne Saturn, Månerne, Enceladus, Titan og Modlys', ['Saturn', 'Månerne', 'Enceladus', 'Titan', 'Modlys'].every((t) => knapperNu.some((k) => k.includes(t))), JSON.stringify(await knapper()));
   tjek('Saturn: teksten om skyggerne', /skyggen/.test(await s.textContent('#kosmosForklaring')));
   tjek('panelet fortæller om alle tre', /Saturn/.test(await s.textContent('#kosmosTekst')) && /Huygens/.test(await s.textContent('#kosmosTekst')));
   await s.screenshot({ path: UD + '/1-saturn.png' });
+  // Piletasterne drejer kameraet
+  const før = await s.evaluate(() => atomlabTest.kosmos.kamera());
+  await s.keyboard.down('ArrowLeft');
+  await s.waitForTimeout(700);
+  await s.keyboard.up('ArrowLeft');
+  const efter = await s.evaluate(() => atomlabTest.kosmos.kamera());
+  tjek('piletasterne drejer kameraet', Math.hypot(efter[0] - før[0], efter[2] - før[2]) > 0.5, JSON.stringify([før, efter]));
+  // Månerne: de seks store, og et tryk på en måne
+  await s.click('#kosmosStyring button:text-is("Månerne")');
+  await s.waitForTimeout(2500);
+  tjek('Månerne: teksten om de seks store', /seks store/.test(await s.textContent('#kosmosForklaring')));
+  await s.screenshot({ path: UD + '/2-maanerne.png' });
+  let p = await s.evaluate(() => atomlabTest.kosmos.fænomen().månePlads('Dione'));
+  await s.mouse.click(p.x, p.y);
+  await s.waitForTimeout(400);
+  tjek('et tryk på Dione viser en kort tekst', /Dione:/.test(await s.textContent('#kosmosForklaring')), await s.textContent('#kosmosForklaring'));
+  p = await s.evaluate(() => atomlabTest.kosmos.fænomen().månePlads('Enceladus'));
+  await s.mouse.click(p.x, p.y);
+  await s.waitForTimeout(400);
+  tjek('et tryk på Enceladus flyver derhen', (await s.evaluate(() => atomlabTest.kosmos.fænomen().visning())) === 'enceladus');
+  await s.click('#kosmosStyring button:text-is("Saturn")');
+  await s.waitForTimeout(800);
   for (const [navn, ord] of [['Enceladus', /tigerstriber/], ['Titan', /dis/]]) {
     await s.click(`#kosmosStyring button:text-is("${navn}")`);
     await s.waitForTimeout(1200);

@@ -68,6 +68,7 @@ export function lavVerden(lærred) {
   scene.add(hovedlys, kantlys, new THREE.AmbientLight(0x404a70, 0.6));
 
   lavStjernehimmel(scene);
+  lavPiletaster();
   lavRumstøv(scene);
 
   const styring = new OrbitControls(kamera, renderer.domElement);
@@ -324,6 +325,42 @@ export function nulstilStyring() {
   s.autoRotate = true;
   s.autoRotateSpeed = 0.5;
   begrænsDrejning(null);
+}
+
+// Piletasterne drejer kameraet rundt om målet: venstre og højre rundt, op og ned over og under.
+// Den skærm, der vil bruge dem, slår dem til (Kosmos). Ikke i Det periodiske system, hvor pilene skifter grundstof.
+const pile = { til: false, nede: new Set() };
+export function piletaster(til) {
+  pile.til = til;
+  if (!til) pile.nede.clear();
+}
+function lavPiletaster() {
+  addEventListener('keydown', (h) => {
+    if (!pile.til || !h.key.startsWith('Arrow')) return;
+    if (h.target.closest?.('input, textarea, select, [contenteditable]')) return; // fx en skyder, der har fokus
+    pile.nede.add(h.key);
+    h.preventDefault();
+  });
+  addEventListener('keyup', (h) => pile.nede.delete(h.key));
+  addEventListener('blur', () => pile.nede.clear());
+  const v = new THREE.Vector3();
+  const kugle = new THREE.Spherical();
+  verden.opdateringer.add((dt) => {
+    if (!pile.til || !pile.nede.size) return;
+    const s = verden.styring;
+    v.subVectors(verden.kamera.position, s.target);
+    kugle.setFromVector3(v);
+    const fart = 1.2 * dt;
+    if (pile.nede.has('ArrowLeft')) kugle.theta -= fart;
+    if (pile.nede.has('ArrowRight')) kugle.theta += fart;
+    if (pile.nede.has('ArrowUp')) kugle.phi -= fart * 0.8;
+    if (pile.nede.has('ArrowDown')) kugle.phi += fart * 0.8;
+    kugle.phi = THREE.MathUtils.clamp(kugle.phi, Math.max(0.05, s.minPolarAngle), Math.min(Math.PI - 0.05, s.maxPolarAngle));
+    if (Number.isFinite(s.minAzimuthAngle) && Number.isFinite(s.maxAzimuthAngle)) kugle.theta = THREE.MathUtils.clamp(kugle.theta, s.minAzimuthAngle, s.maxAzimuthAngle);
+    v.setFromSpherical(kugle);
+    verden.kamera.position.copy(s.target).add(v);
+    s.update();
+  });
 }
 
 // Begrænser, hvor meget man kan dreje (null = frit)

@@ -10,6 +10,7 @@ import { grundstof } from './data/grundstoffer.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { forfraKnap } from './forfra.js';
 import { startGuide, stopGuide } from './guide.js';
 import { lavPause } from './pause.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
@@ -365,6 +366,7 @@ function lavOpgaveliste() {
     li.addEventListener('click', () => visBesked({ titel: o.titel, tekst: løst ? o.fakta : `Tip: ${o.tip}`, varighed: 8000 }));
     liste.append(li);
   }
+  forfraKnap(liste, { ider: OPGAVER_REAKTOR.map((o) => o.id), del: 'Reaktoren', efter: () => { lavOpgaveliste(); opdaterMission(); } });
 }
 
 function løs(id) {

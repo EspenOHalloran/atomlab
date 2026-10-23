@@ -115,6 +115,14 @@ tjek('efter kortslutning: afbryderen er slukket', (await info()).afbryder);
 await page.waitForTimeout(3000);
 await page.screenshot({ path: UD + '/b3-kortslutning.png' });
 tjek('opgave overlad', (await fr())['b-overlad']);
+// "Start forfra" nederst i opgaverne: to tryk nulstiller kun Batteriets opgaver
+await page.evaluate(() => { document.querySelector('[data-lag="batteri-opgaver"]').open = true; });
+tjek('"Start forfra" står nederst i opgaverne', await page.isVisible('#batteriOpgaver li.forfra button'));
+await page.click('#batteriOpgaver li.forfra button');
+tjek('"Start forfra" spørger først', (await page.textContent('#batteriOpgaver li.forfra button')).includes('Sikker'));
+await page.click('#batteriOpgaver li.forfra button');
+await page.waitForTimeout(300);
+tjek('"Start forfra" nulstiller Batteriets opgaver', Object.keys(await fr()).filter((id) => id.startsWith('b-')).length === 0 && /^0 af 5/.test(await page.textContent('#batteriOpgaveTal')), await page.textContent('#batteriOpgaveTal'));
 await page.click('#batteriNyt');
 
 // "Vis mig" i et nyt vindue (uden klarede opgaver): slowmotion, to ioner, og ingen opgave klares

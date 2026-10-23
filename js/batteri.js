@@ -9,6 +9,7 @@ import { Effekter, FARVER } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { forfraKnap } from './forfra.js';
 import { startGuide } from './guide.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
 
@@ -524,6 +525,7 @@ function lavOpgaveliste() {
     li.addEventListener('click', () => visBesked({ titel: o.titel, tekst: løst ? o.fakta : `Tip: ${o.tip}`, varighed: 8000 }));
     liste.append(li);
   }
+  forfraKnap(liste, { ider: OPGAVER_BATTERI.map((o) => o.id), del: 'Batteriet', efter: () => { nulstil(); lavOpgaveliste(); opdaterMission(); } });
 }
 
 function løs(id) {

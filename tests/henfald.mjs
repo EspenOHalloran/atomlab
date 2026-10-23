@@ -95,6 +95,8 @@ await ventHenfald();
 // Start opgaverne forfra
 await page.click('#knapOpgaver');
 await page.click('#knapOpgaverForfra');
+tjek('"Start forfra" spørger først', (await page.textContent('#knapOpgaverForfra')).includes('Sikker'));
+await page.click('#knapOpgaverForfra');
 await page.waitForTimeout(500);
 const fr3 = await page.evaluate(() => JSON.parse(localStorage.getItem('atomlabFremgang')));
 tjek('opgaver nulstillet, grundstoffer beholdt', Object.keys(fr3.opgaver).length === 0 && fr3.opdaget.length > 5, JSON.stringify(fr3));

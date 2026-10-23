@@ -74,7 +74,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur, ringInd, r
         float rand = 0.75 + 0.25 * max(dot(N, V), 0.0);
         // I modlys lyser atmosfæren som en tynd ring i kanten (lyset spredes fremad i de øverste lag)
         float kant = pow(1.0 - max(dot(N, V), 0.0), 6.0) * pow(max(dot(-V, uSol), 0.0), 3.0);
-        gl_FragColor = vec4(farve * lys * mix(0.12, 1.0, skygge) * rand * 1.15 + vec3(1.0, 0.85, 0.6) * kant * 0.9, 1.0);
+        gl_FragColor = vec4(farve * lys * mix(0.12, 1.0, skygge) * rand * 0.98 + vec3(1.0, 0.85, 0.6) * kant * 0.9, 1.0);
       }`,
   });
   const mesh = new THREE.Mesh(new THREE.SphereGeometry(R, segmenter, segmenter / 2), mat);

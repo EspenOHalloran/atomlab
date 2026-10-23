@@ -49,7 +49,7 @@ const TITAN_FRAGMENT = /* glsl */ `
     vec3 farve = mix(vec3(0.78, 0.5, 0.22), vec3(0.62, 0.38, 0.17), smoothstep(0.2, 0.9, p.y)) * (0.94 + 0.06 * s);
     // Lyset spredes i disen, så skyggegrænsen er blød, og kanten er lidt lysere (ikke mørkere som på en klippe)
     float lys = smoothstep(-0.25, 0.6, i) * (0.75 + 0.35 * (1.0 - e));
-    vec3 c = farve * lys * 1.05;
+    vec3 c = farve * lys * 0.92;
     // "Under disen": Cassinis kort i nær-infrarødt lys, hvor man kan se overfladen (mørke klitter, lyse højland)
     if (uHarKort > 0.5) {
       vec3 ir = vec3(texture2D(tKort, vUv).r) * vec3(1.05, 0.95, 0.82) * 0.9 * smoothstep(-0.1, 0.5, i);
