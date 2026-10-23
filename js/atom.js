@@ -40,11 +40,12 @@ const MAX_LIM = 2400; // højst så mange lyspunkter for kernekraften
 // 'nu' (som før), 'prikker' (orbitalerne som en sky af prikker, der viser, hvor elektronen sandsynligvis er)
 // og 'former' (orbitalernes form som glødende overflader, som i fysikbøgerne).
 // De to nye har også skygge i kernen og en glidende overgang mellem ringe og sky.
+// Besluttet 24. oktober 2026: 'former' er standard. De andre kan stadig vælges med ?udgaver i adressen.
 export const UDGAVER = ['nu', 'prikker', 'former'];
-let udgave = 'nu';
+let udgave = 'former';
 const alleAtomer = new Set();
 export function sætUdgave(ny) {
-  udgave = UDGAVER.includes(ny) ? ny : 'nu';
+  udgave = UDGAVER.includes(ny) ? ny : 'former';
   for (const a of alleAtomer) a.skiftUdgave();
 }
 export function hentUdgave() {

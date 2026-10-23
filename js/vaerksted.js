@@ -266,8 +266,8 @@ function opdater3D(dt) {
 }
 
 // Kun til automatiske tests (bruges når adressen indeholder ?test)
-// Udgaver af atomet, som man kan vælge mellem med ?udgaver i adressen (så I kan prøve dem på tabletten).
-// Uden ?udgaver ser atomet ud som før. Valget huskes (atomlabUdgave), men kun mens ?udgaver står i adressen.
+// Udgaver af atomet, som man kan vælge mellem med ?udgaver i adressen (så I kan sammenligne dem på tabletten).
+// Uden ?udgaver bruges B (orbitalernes former). Valget huskes (atomlabUdgave), men kun mens ?udgaver står i adressen.
 const NØGLE_UDGAVE = 'atomlabUdgave';
 function lavUdgaveVælger() {
   if (!new URLSearchParams(location.search).has('udgaver')) return;
@@ -297,7 +297,7 @@ function lavUdgaveVælger() {
   } catch {
     // ingen lagring
   }
-  vælg(gemt ?? 'nu', false);
+  vælg(gemt ?? 'former', false);
 }
 
 export function testAdgang() {
@@ -869,7 +869,9 @@ function opdaterInfo() {
     ? 'Ringene er en forenklet tegning, der gør det let at tælle elektronerne. Prøv "Elektronsky".'
     : hentUdgave() === 'nu'
       ? 'Elektronsky: I virkeligheden kredser elektroner ikke i baner som planeter. Man kan kun sige, hvor de sandsynligvis er, og det ligner en sky.'
-      : 'Orbitaler: Her er elektronerne sandsynligvis. s er blå, p orange, d grøn og f lilla. Formerne er regnet som for hydrogen og passer kun omtrent for større atomer.';
+      : hentUdgave() === 'former'
+        ? 'Orbitaler: Formerne viser, hvor de yderste elektroner sandsynligvis er (s blå, p lyserød, d grøn, f orange). De har ingen skarp kant og er regnet som for hydrogen.'
+        : 'Orbitaler: Her er elektronerne sandsynligvis (s blå, p lyserød, d grøn, f orange). Formerne er regnet som for hydrogen og passer kun omtrent for større atomer.';
   if (p + n > 1) el.model.textContent += ' De gyldne lyspunkter i kernen viser, hvor kernekraften "limer" partiklerne sammen. Kraften selv kan man ikke se.';
 
   // Fanen "Fakta"
