@@ -48,6 +48,7 @@ const side = async (adresse) => {
     await s.click(`#kosmosStyring button:text-is("${navn}")`);
     await s.waitForTimeout(1200);
     tjek(`${navn}: teksten skifter`, ord.test(await s.textContent('#kosmosForklaring')));
+    if (navn === 'Titan') tjek('Titan: knappen "Under disen"', (await knapper()).some((k) => k.startsWith('Under disen')));
     await s.click('#kosmosStyring button:has-text("Modlys")');
     await s.waitForTimeout(800);
     await s.screenshot({ path: `${UD}/${navn.toLowerCase()}-modlys.png` });

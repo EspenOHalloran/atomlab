@@ -3,6 +3,7 @@
 // Tal fra docs/fakta-solsystemet.md. Grafikken ligger i js/solsystem/, så Solsystemet kan genbruge den.
 
 import * as THREE from 'three';
+import { LAV_KVALITET, TEST_HURTIG } from '../scene3d.js';
 import { skilt } from './faelles.js';
 import { ringTekstur, lavRinge, RING_IND, RING_UD } from '../solsystem/ringe.js';
 import { lavGasplanet } from '../solsystem/planet.js';
@@ -16,6 +17,18 @@ const ENCELADUS_R = 252;
 const ENCELADUS_AFSTAND = 238037; // km fra Saturns centrum
 const TITAN_R = 2575;
 const TITAN_AFSTAND = 1221870;
+
+// Billederne (se billeder/solsystem/KILDER.md): pc henter -4k.jpg, tablet, telefon og tests -2k.jpg
+const STØRRELSE = LAV_KVALITET || TEST_HURTIG ? '2k' : '4k';
+const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
+const henter = new THREE.TextureLoader();
+// farve: billedet er et farvefoto (sRGB). Kortene over Enceladus og Titan er målinger i gråtoner og bruges, som de er.
+function hent(navn, færdig, farve = true) {
+  henter.load(new URL(navn, MAPPE).href, (t) => {
+    t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+    færdig(t);
+  }, undefined, () => { /* mangler billedet, bruges det tegnede */ });
+}
 
 const VISNINGER = {
   saturn: {
@@ -31,7 +44,7 @@ const VISNINGER = {
   titan: {
     navn: 'Titan',
     kamera: { retning: [0.4, 0.15, 1], radius: 5.5 },
-    tekst: '<p><b>Titan:</b> Den orange dis skjuler overfladen. Tryk "Modlys", og se disen lyse som en ring rundt om månen.</p>',
+    tekst: '<p><b>Titan:</b> Den orange dis skjuler overfladen. Tryk "Under disen" for at se den i infrarødt lys, eller "Modlys", og se disen lyse som en ring rundt om månen.</p>',
   },
 };
 
@@ -54,7 +67,8 @@ export default {
     <p><b>Titan</b> er Saturns største måne og større end planeten Merkur. Den er den eneste måne med en tyk atmosfære: mest nitrogen og lidt metan, og trykket ved jorden er ca. 1,5 gange Jordens. Nede under disen er der ca. −179 °C og søer og have af flydende metan og ethan. Sonden Huygens landede der 14. januar 2005.</p>`,
   nørd: `
     <p><b>Ringene i tegningen</b> er regnet ud fra, hvor tætte de er i hver afstand (deres optiske dybde): D-ringen er næsten gennemsigtig, B-ringen næsten tæt, og Cassini-delingen (ca. 4.600 km bred) er ikke tom. Grænserne og Encke-mellemrummet passer, men tætheden er omtrentlig, og de mange tynde ringe er lavet af programmet. Set fra den side, Solen ikke skinner på, bliver de tætte ringe mørke, og de tynde lyser, fordi lyset kun kommer igennem dem.</p>
-    <p><b>Ærligt talt:</b> Saturns bånd, Enceladus og Titan er tegnet af programmet, for kortene fra NASA og USGS er ikke hentet endnu. Ved Enceladus og Titan er Saturn rykket tættere på, men den har den rigtige størrelse på himlen. Fontænernes partikler er tegnet meget større end de rigtige iskorn, og "Modlys" flytter Solen om bag Saturn eller månen.</p>`,
+    <p><b>Billederne:</b> Enceladus er Cassinis kort (NASA/JPL/Space Science Institute, via USGS). Titans overflade er Cassinis kort i nær-infrarødt lys, hvor man kan se gennem disen (PIA19658). Saturns kort og ringenes farver er fra Solar System Scope (CC BY 4.0), som bygger på NASA's billeder.</p>
+    <p><b>Ærligt talt:</b> Ringenes farver er lagt på de rigtige grænser, men de mange tynde ringe er omtrentlige. Ved Enceladus og Titan er Saturn rykket tættere på, men den har den rigtige størrelse på himlen. Månerne vender samme side mod Saturn, ligesom Månen mod Jorden. Fontænernes partikler er tegnet meget større end de rigtige iskorn, og "Modlys" flytter Solen om bag Saturn eller månen. "Under disen" viser Titan, som et kamera med infrarødt lys ser den. Med øjnene ser man kun den orange dis.</p>`,
 
   lav(gruppe, { kamera, opdaterKnapper, forklaring, verden }) {
     const ring = ringTekstur();
@@ -98,6 +112,7 @@ export default {
     bagE.g.scale.setScalar((D_E / (ENCELADUS_AFSTAND / kmE)) / kmE);
     bagE.g.position.set(-0.75, 0, -0.66).normalize().multiplyScalar(D_E);
     encVisning.add(bagE.g);
+    enceladus.gruppe.rotation.y = Math.atan2(-bagE.g.position.z, bagE.g.position.x);
 
     // ---------- Titan tæt på (radius 2,6 med disen) ----------
     const titVisning = new THREE.Group();
@@ -110,8 +125,24 @@ export default {
     bagT.g.scale.setScalar((D_T / (TITAN_AFSTAND / kmT)) / kmT);
     bagT.g.position.set(-0.8, 0.05, -0.6).normalize().multiplyScalar(D_T);
     titVisning.add(bagT.g);
+    titan.gruppe.rotation.y = Math.atan2(-bagT.g.position.z, bagT.g.position.x);
+
+    // De rigtige billeder (kommer lidt efter, indtil da ses det tegnede)
+    hent(`saturn-${STØRRELSE}.jpg`, (t) => { for (const s of [saturn, bagE, bagT]) s.planet.sætKort(t); });
+    hent('saturn-ringe.png', (t) => { for (const s of [saturn, bagE, bagT]) s.ringe.sætFarve(t); });
+    hent(`enceladus-${STØRRELSE}.jpg`, (t) => enceladus.sætKort(t), false);
+    hent(`titan-${STØRRELSE}.jpg`, (t) => titan.sætKort(t), false);
 
     gruppe.add(saturnVisning, encVisning, titVisning);
+
+    let ir = false;
+    const styring = [];
+    const lavKnapper = () => {
+      styring.length = 0;
+      for (const [id, vis] of Object.entries(VISNINGER)) styring.push({ tekst: vis.navn, handling: () => vælg(id), deaktiv: () => visning === id });
+      styring.push({ tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } });
+      if (visning === 'titan') styring.push({ tekst: 'Under disen (infrarødt)', til: ir, skift: (til) => { ir = til; titan.sætIR(til); } });
+    };
 
     function vælg(v, flyv = false) {
       visning = v;
@@ -120,14 +151,11 @@ export default {
       titVisning.visible = v === 'titan';
       kamera({ ...VISNINGER[v].kamera, drej: false, flyv: true });
       forklaring(VISNINGER[v].tekst);
+      lavKnapper();
       opdaterKnapper();
     }
     vælg('saturn');
 
-    const styring = [
-      ...Object.entries(VISNINGER).map(([id, v]) => ({ tekst: v.navn, handling: () => vælg(id), deaktiv: () => visning === id })),
-      { tekst: 'Modlys', til: () => modlys, skift: () => { modlys = !modlys; opdaterKnapper(); } },
-    ];
 
     const kamPos = new THREE.Vector3();
     const op = new THREE.Vector3(0, 1, 0);
@@ -160,7 +188,7 @@ export default {
           s.ringe.sæt(solNu, midt, akse);
         }
         if (encVisning.visible) enceladus.sæt(solNu, tid);
-        if (titVisning.visible) titan.sæt(solNu);
+        if (titVisning.visible) titan.sæt(solNu, dt);
       },
       stop() {
         ring.dispose();

@@ -15,3 +15,9 @@ NASA's billeder er offentligt ejede (public domain), men NASA skal nævnes som k
 | `jorden-hav.png` | Hav og land (hvidt = hav), 2048 × 1024, til Solens glimt i havet | Lavet med `havkort.py` af [global-land-mask](https://github.com/toddkarin/global-land-mask), som bygger på NOAA's GLOBE-data | MIT |
 | `maanen-4k.jpg` og `-2k.jpg` | Månens overflade i farver | NASA Scientific Visualization Studio, CGI Moon Kit (4720), fra Lunar Reconnaissance Orbiter (LROC) | Public domain (NASA) |
 | `maanen-hoejde-1k.png` | Månens højder (ca. 19,7 km fra det laveste til det højeste, 16 bit i rød og grøn) | NASA SVS, CGI Moon Kit (4720), fra LRO's højdemåler (LOLA) | Public domain (NASA) |
+| `saturn-4k.jpg` og `-2k.jpg` | Saturns skybånd (til prototypen med Saturn) | [Solar System Scope](https://www.solarsystemscope.com/textures/) (bygger på NASA's billeder), hentet fra Wikimedia Commons | CC BY 4.0, Solar System Scope skal nævnes |
+| `saturn-ringe.png` | Ringenes farver og fine striber, 2048 × 1, lagt på de rigtige grænser med `lav_saturn.py` (ringbilledets egne afstande passer ikke helt) | Lavet af Solar System Scopes ringbillede (`8k_saturn_ring_alpha.png`), hentet fra Wikimedia Commons | CC BY 4.0, Solar System Scope skal nævnes |
+| `enceladus-4k.jpg` og `-2k.jpg` | Enceladus' overflade (gråtoner, 110 m pr. pixel i originalen) | NASA/JPL/Space Science Institute, Cassini ISS, global mosaik fra USGS Astrogeology (`Enceladus_Cassini_mosaic_global_110m`) | Public domain (NASA/USGS) |
+| `titan-4k.jpg` og `-2k.jpg` | Titans overflade i nær-infrarødt lys, set gennem disen (gråtoner, 4 km pr. pixel) | NASA/JPL-Caltech/Space Science Institute, Cassini ISS, PIA19658, fra USGS Astrogeology | Public domain (NASA) |
+
+`lav_saturn.py` laver billederne til Saturn, Enceladus og Titan (adresserne står øverst i filen).

@@ -9,16 +9,23 @@ const STRIBER = 4;
 const STRIBE_LÆNGDE = 135; // km
 const STRIBE_AFSTAND = 35; // km
 const RADIUS_KM = 252;
+// Striberne ligger skråt over sydpolen, ca. langs længdegraderne 144° og 324° øst (målt på Cassinis kort).
+// På kuglen svarer det til at dreje dem 36° om aksen (længdegrad 0° vender mod +x, mod Saturn).
+const STRIBE_VINKEL = THREE.MathUtils.degToRad(36);
 
 // Et punkt på stribe k (0-3) ved s (-1 til 1 langs striben), som retning fra månens midte (sydpolen er -y)
 function stribePunkt(k, s, mål = new THREE.Vector3()) {
   const x = (s * STRIBE_LÆNGDE) / 2 / RADIUS_KM;
-  const z = ((k - (STRIBER - 1) / 2) * STRIBE_AFSTAND) / RADIUS_KM + 0.025 * Math.sin(s * 3 + k);
-  return mål.set(x, -1, z).normalize();
+  const z = ((k - (STRIBER - 1) / 2) * STRIBE_AFSTAND) / RADIUS_KM + 0.012 * Math.sin(s * 3 + k);
+  const c = Math.cos(STRIBE_VINKEL), si = Math.sin(STRIBE_VINKEL);
+  return mål.set(x * c - z * si, -1, x * si + z * c).normalize();
 }
 
 const OVERFLADE_FRAGMENT = /* glsl */ `
   uniform vec3 uSol;
+  uniform sampler2D tKort;
+  uniform float uHarKort;
+  varying vec2 vUv;
   varying vec3 vLokal;
   varying vec3 vNormal;
   varying vec3 vVerden;
@@ -49,17 +56,20 @@ const OVERFLADE_FRAGMENT = /* glsl */ `
     // Revner over hele månen (svagt blålige)
     float revne = smoothstep(0.03, 0.0, abs(stoej(p * 7.0 + 2.0) - 0.5)) * 0.25;
     // Tigerstriberne ved sydpolen: fire lange, blålige sprækker
-    vec2 sp = p.xz / max(-p.y, 0.01);
+    vec2 sp0 = p.xz / max(-p.y, 0.01);
+    vec2 sp = vec2(sp0.x * ${Math.cos(STRIBE_VINKEL).toFixed(5)} + sp0.y * ${Math.sin(STRIBE_VINKEL).toFixed(5)}, -sp0.x * ${Math.sin(STRIBE_VINKEL).toFixed(5)} + sp0.y * ${Math.cos(STRIBE_VINKEL).toFixed(5)});
     float sydpol = smoothstep(-0.8, -0.9, p.y);
     float stribe = 0.0;
     for (int i = 0; i < ${STRIBER}; i++) {
       float ss = clamp(sp.x / ${(STRIBE_LÆNGDE / 2 / RADIUS_KM).toFixed(4)}, -1.0, 1.0);
-      float z = (float(i) - ${((STRIBER - 1) / 2).toFixed(1)}) * ${(STRIBE_AFSTAND / RADIUS_KM).toFixed(4)} + 0.025 * sin(ss * 3.0 + float(i));
+      float z = (float(i) - ${((STRIBER - 1) / 2).toFixed(1)}) * ${(STRIBE_AFSTAND / RADIUS_KM).toFixed(4)} + 0.012 * sin(ss * 3.0 + float(i));
       float laengs = smoothstep(1.05, 0.9, abs(sp.x / ${(STRIBE_LÆNGDE / 2 / RADIUS_KM).toFixed(4)}));
       stribe = max(stribe, smoothstep(0.018, 0.004, abs(sp.y - z)) * laengs);
     }
     stribe *= sydpol;
     farve = mix(farve, vec3(0.55, 0.72, 0.8), max(revne * nord, stribe * 0.75));
+    // Med Cassinis kort bruges det i stedet (det er gråt, så isen får et svagt blåt skær)
+    if (uHarKort > 0.5) farve = vec3(0.94, 0.97, 1.0) * min(texture2D(tKort, vUv).r * 2.1, 1.15);
     vec3 N = normalize(vNormal);
     vec3 V = normalize(cameraPosition - vVerden);
     float i = max(dot(N, uSol), 0.0);
@@ -105,10 +115,11 @@ const FONTÆNE_FRAGMENT = /* glsl */ `
 export function lavEnceladus(radius) {
   const gruppe = new THREE.Group();
   const overflade = new THREE.ShaderMaterial({
-    uniforms: { uSol: { value: new THREE.Vector3(1, 0, 0) } },
+    uniforms: { uSol: { value: new THREE.Vector3(1, 0, 0) }, tKort: { value: null }, uHarKort: { value: 0 } },
     vertexShader: /* glsl */ `
-      varying vec3 vLokal; varying vec3 vNormal; varying vec3 vVerden;
+      varying vec3 vLokal; varying vec3 vNormal; varying vec3 vVerden; varying vec2 vUv;
       void main() {
+        vUv = uv;
         vLokal = position;
         vNormal = normalize(mat3(modelMatrix) * normal);
         vec4 v = modelMatrix * vec4(position, 1.0);
@@ -166,6 +177,7 @@ export function lavEnceladus(radius) {
     gruppe,
     måne,
     fontæner,
+    sætKort(t) { overflade.uniforms.tKort.value = t; overflade.uniforms.uHarKort.value = t ? 1 : 0; },
     sæt(solRetning, tid) {
       overflade.uniforms.uSol.value.copy(solRetning);
       fontæneMat.uniforms.uSol.value.copy(solRetning);
