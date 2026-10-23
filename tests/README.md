@@ -51,12 +51,14 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `lag` | Dybde i lag: panelerne kan skjules (fanerne, "Kun grafik", G og Esc) og huskes, "Kun grafik" på højkant, opgaverne foldet sammen, den korte undertekst med "Hvorfor?", "Hvorfor?"-kortene (lag for lag, Esc, tryk udenfor, nedefra på telefon), foldebokse, der huskes, og at "Næste skridt" er skjult under guiden |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
+| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), og at Saturn, Enceladus og Titan kan vises i Kosmos med `?saturn` (og ikke uden) |
 | `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen. Det sorte hul er sort i midten, også med glød, og dets ekstra trin i efterbehandlingen fjernes igen |
 
 ## Værktøjer
 - `vaerktoejer/skaermbilleder.mjs fusion` tager billeder af en skærm på pc, tablet og telefon (begge veje). Den venter 7 sekunder, så kameraet er færdigt med at zoome (`VENT=3500` for kortere).
 - `vaerktoejer/kosmos-billeder.mjs supernova 0 v3 s` vælger et fænomen, trykker på knap 0, venter 3 sekunder og tager et billede.
 - `vaerktoejer/fable-billeder.mjs` tager de ca. 50 billeder til Fables eftersyn (`docs/plan-fable.md`): alle skærme på pc, tablet og telefon, de 15 fænomener i Kosmos og fem forløb i træk. De gemmes som JPG i `docs/fable/billeder/` med en liste (`LISTE.md`). Tager ca. 7 minutter.
+- `vaerktoejer/saturn.mjs` tager billeder af prototypen med Saturn, Enceladus og Titan med fuld grafik (forfra, bagfra og i modlys). Siden `vaerktoejer/saturn.html` viser den alene.
 - `vaerktoejer/kloder.mjs` tager billeder af Jorden og Månen tæt på i forskelligt lys (dag, glimt i havet, tusmørke, nat, modlys, kanten, fuldmåne og halvmåne). Siden `vaerktoejer/kloder.html` viser dem alene, og man kan selv dreje og zoome.
 
 ## Gode råd

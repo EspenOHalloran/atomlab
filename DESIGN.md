@@ -6,6 +6,10 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- **Punkt 9: Planer og en prototype til de store dele** (23. oktober 2026). Opus stopper her, så I kan kigge:
+  - **Molekyler:** planen ([docs/plan-molekyler.md](docs/plan-molekyler.md)) med Byttebørsen (ionbinding med "harpunen"), Byg molekyler (formen kommer af elektronparrene) og knaldgas, og faktagrundlaget ([docs/fakta-molekyler.md](docs/fakta-molekyler.md)). **Fem spørgsmål til jer** står i afsnit 7 i planen.
+  - **Solsystemet, trin 0:** faktagrundlaget ([docs/fakta-solsystemet.md](docs/fakta-solsystemet.md)) og en gennemgang af planen (nederst i [planen](docs/plan-solsystemet.md)). Vigtige rettelser: Titans hav dybt inde er omstridt siden december 2025, Europas is er måske tykkere, og Dragonfly kommer først af sted i 2028. Delen om Voyager og slyngen er skrevet ud fra hukommelsen og skal tjekkes, før Rumrejsen bygges.
+  - **Solsystemet, trin 1b (prototypen):** Åbn https://espenohalloran.github.io/atomlab/?saturn#kosmos på tabletten, og vælg "Saturn (prototype)" nederst i listen. Saturn med ringene (de rigtige mellemrum, skygger begge veje og ringene bagfra i modlys), Enceladus med fontænerne fra tigerstriberne og Titan i orange dis, der lyser som en ring i modlys. **Ærligt:** Saturn, Enceladus og Titan er tegnet af programmet, for de rigtige kort fra NASA og USGS kunne ikke hentes. **Venter på jeres mening:** Er niveauet rigtigt, før resten af Solsystemet bygges?
 - **Punkt 7: Grundstofkortet i lag og fremgang i menuen** (23. oktober 2026): "I din hverdag", "I din krop" og "I universet" for 41 grundstoffer med "Mere" og links, og fremgangen og "Næste eventyr" på kortene i menuen (se Trin 18).
 - **Punkt 6: Batteriet** (23. oktober 2026): grafit med sekskanter og metaloxid som en krystal, en guide første gang, "Næste skridt" og "Vis mig" i slowmotion, navnet "lithium-ion-batteri" og "LiPo eller Li-ion?" i hjælpen (se Trin 18).
 - **Punkt 2-4: Dybde i lag, panelerne og "Hvorfor?"-kortene** (23. oktober 2026), bygget efter [planen](docs/plan-lag.md):
@@ -55,17 +59,22 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 6. ✅ **Batteriet** (F1 punkt 5): grafik, start og navn. Lavet 23. oktober 2026.
 7. ✅ **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7). Lavet 23. oktober 2026. Fotos af grundstofferne kommer senere.
 8. ✅ **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lavet 23. oktober 2026.
-9. **De store dele bagefter:** Molekyler, Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan), og til sidst Tjernobyl og Liv, som venter, til Fable 5.5 kommer.
+9. ✅ **De store dele bagefter:** Molekyler (plan og faktagrundlag), Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan bag `?saturn`). Lavet 23. oktober 2026, og Opus stopper her, så I kan kigge. Tjernobyl og Liv venter, til Fable 5.5 kommer.
 
 **Åbne spørgsmål:**
 - De seks spørgsmål i F1 (afsnit 6) er besvaret (se ovenfor). Spørgsmål 1 (UI-planen først): ja.
 - Spørgsmål 1-5 om Solsystemet (afsnit 7 i planen): følger planens forslag, indtil I siger andet.
+- **Atomet (punkt 5):** Hvilken udgave skal bygges færdig: A (prikker), B (former), en blanding eller ingen?
+- **Molekyler:** de fem spørgsmål i afsnit 7 i [planen](docs/plan-molekyler.md).
+- **Prototypen af Saturn:** Er niveauet rigtigt? Skal de rigtige kort over Saturn, Enceladus og Titan med, så skal `astrogeology.usgs.gov` og `planetarymaps.usgs.gov` tillades under Network access (Wikimedia kan hentes, men svarede "for mange forespørgsler" den 23. oktober).
+- **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater), og grænsen for søgninger blev nået. Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager).
 
 **Ikke afprøvet endnu:**
 - NASA-billederne på en telefon. De er set på jeres tablet (tabletbillede 05-07).
 - Lyden og hvordan det føles med fingre. Det er ikke vurderet i F1.
 - Det nye sorte hul på en rigtig tablet. Det er kun set i testbrowseren (med glød).
 - Skills er ikke prøvet på en rigtig opgave.
+- Prototypen af Saturn på en rigtig tablet. Den er kun set i testbrowseren.
 
 ## Grundregler
 - Dansk tekst i et enkelt sprog. Fagord forklares.
