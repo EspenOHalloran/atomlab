@@ -1,14 +1,16 @@
-// Batteriet: et LiPo-batteri skåret igennem.
+// Batteriet: et lithium-ion-batteri (her et LiPo-batteri) skåret igennem.
 // Til venstre grafit (minus), til højre metaloxid (plus), og imellem en elektrolyt med en skillevæg.
 // Lithium-ioner (Li⁺) svømmer gennem elektrolytten, og elektronerne må tage omvejen gennem ledningen.
 // Ledningen er fuld af elektroner hele tiden. Når der løber strøm, skubbes hele rækken frem på én gang.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTilBoks, begrænsDrejning, lavPrikTekstur } from './scene3d.js';
+import { verden, sætVindue, passerTilBoks, begrænsDrejning, lavPrikTekstur, LAV_KVALITET } from './scene3d.js';
 import { Effekter, FARVER } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
+import { startGuide } from './guide.js';
+import { visLag, lavNæsteSkridt } from './lag.js';
 
 const ANTAL_LI = 24; // så mange lithium-ioner viser vi (24 = 100 %)
 const REJSETID = 1.8; // sekunder for en ion gennem elektrolytten
@@ -87,6 +89,9 @@ let nålMesh = null;
 let ledning = null;
 let røg = null;
 let tid = 0;
+let mission = null; // "Næste skridt"-kortet
+let demo = null; // "Vis mig": { landet } (ioner, der er nået frem, mens det kørte)
+let tidsFaktor = 1; // "Vis mig" kører i slowmotion
 const hjælpM = new THREE.Matrix4();
 const hjælpV = new THREE.Vector3();
 
@@ -113,36 +118,19 @@ export function lavBatteri() {
   kobber.name = 'kobber';
   rod.add(kobber, aluminium);
 
-  // Grafit: lag af carbon (minus)
-  const lagGeo = new THREE.BoxGeometry(6, 0.22, 4.4);
-  const lagMat = new THREE.MeshStandardMaterial({ color: 0x3a3f4a, roughness: 0.6, metalness: 0.3 });
-  for (let i = 0; i < 7; i++) {
-    const lag = new THREE.Mesh(lagGeo, lagMat);
-    lag.position.set(-7.4, -4 + i * 1.33, 0);
-    rod.add(lag);
-  }
-  // Pladser til lithium mellem grafitlagene
+  // Grafit (minus): lag af carbonatomer bundet i sekskanter, ligesom i rigtig grafit.
+  // Hvert andet lag er forskudt en halv sekskant (sådan ligger lagene i grafit).
+  rod.add(lavGrafit());
+  // Pladser til lithium mellem grafitlagene (lidt forskudt frem og tilbage, så de fylder rummet)
   for (let i = 0; i < 6; i++) {
-    for (let k = 0; k < 4; k++) anodePladser.push(new THREE.Vector3(-9.6 + k * 1.45, -3.33 + i * 1.33, 0));
+    for (let k = 0; k < 4; k++) anodePladser.push(new THREE.Vector3(-9.6 + k * 1.45, -3.33 + i * 1.33, (i + k) % 2 ? 0.9 : -0.9));
   }
 
-  // Metaloxid: lag af kobolt (blå) og oxygen (røde) (plus)
-  const coGeo = new THREE.SphereGeometry(0.3, 12, 10);
-  const oGeo = new THREE.SphereGeometry(0.22, 10, 8);
-  const coMesh = new THREE.InstancedMesh(coGeo, new THREE.MeshStandardMaterial({ color: 0x3a6fd8, roughness: 0.35 }), 7 * 5);
-  const oMesh = new THREE.InstancedMesh(oGeo, new THREE.MeshStandardMaterial({ color: 0xd84a3a, roughness: 0.4 }), 7 * 10);
-  let ic = 0, io = 0;
-  for (let i = 0; i < 7; i++) {
-    const y = -4 + i * 1.33;
-    for (let k = 0; k < 5; k++) {
-      coMesh.setMatrixAt(ic++, hjælpM.makeTranslation(5.0 + k * 1.3, y, 0));
-      oMesh.setMatrixAt(io++, hjælpM.makeTranslation(5.0 + k * 1.3 - 0.35, y + 0.25, 0.3));
-      oMesh.setMatrixAt(io++, hjælpM.makeTranslation(5.0 + k * 1.3 + 0.35, y - 0.25, -0.3));
-    }
-  }
-  rod.add(coMesh, oMesh);
+  // Metaloxid (plus): lithium-kobolt-oxid er en krystal med lag. Hvert lag er kobolt (blå) mellem to lag
+  // oxygen (røde), og lithium sidder mellem lagene.
+  rod.add(...lavMetaloxid());
   for (let i = 0; i < 6; i++) {
-    for (let k = 0; k < 4; k++) katodePladser.push(new THREE.Vector3(5.6 + k * 1.3, -3.33 + i * 1.33, 0));
+    for (let k = 0; k < 4; k++) katodePladser.push(new THREE.Vector3(5.6 + k * 1.3, -3.33 + i * 1.33, (i + k) % 2 ? -0.9 : 0.9));
   }
 
   // Elektrolyt og skillevæg
@@ -252,6 +240,68 @@ export function lavBatteri() {
   lavPanel();
 }
 
+// Grafitten: 7 lag grafen (sekskanter af carbon) mellem x = -10,4 og -4,4 og z = -2,2 og 2,2
+function lavGrafit() {
+  const gruppe = new THREE.Group();
+  const a = LAV_KVALITET ? 0.5 : 0.42; // afstanden mellem to carbonatomer i tegningen
+  const atomer = [];
+  const bindinger = [];
+  for (let lag = 0; lag < 7; lag++) {
+    const y = -4 + lag * 1.33;
+    const forskud = lag % 2 ? a * 0.87 : 0;
+    const iLaget = [];
+    // Sekskanterne: rækker langs x med en zigzag-kant. Hvert atom har tre naboer.
+    for (let r = -3; r * 1.5 * a <= 4.4 + 3 * a; r++) {
+      for (let c = -2; c * a * 1.732 <= 6 + 3 * a; c++) {
+        for (const [dx, dz] of [[0, 0], [a * 0.866, a * 0.5]]) {
+          const x = -10.4 + c * a * 1.732 + (r % 2 ? a * 0.866 : 0) + dx + forskud;
+          const z = -2.2 + r * 1.5 * a + dz;
+          if (x < -10.35 || x > -4.45 || z < -2.15 || z > 2.15) continue;
+          iLaget.push(new THREE.Vector3(x, y, z));
+        }
+      }
+    }
+    for (let i = 0; i < iLaget.length; i++) {
+      for (let j = i + 1; j < iLaget.length; j++) {
+        if (Math.abs(iLaget[i].distanceTo(iLaget[j]) - a) < a * 0.05) bindinger.push(iLaget[i], iLaget[j]);
+      }
+    }
+    atomer.push(...iLaget);
+  }
+  const kugler = new THREE.InstancedMesh(new THREE.SphereGeometry(0.11, 8, 6), new THREE.MeshStandardMaterial({ color: 0x5a6070, roughness: 0.5, metalness: 0.2 }), atomer.length);
+  atomer.forEach((p, i) => kugler.setMatrixAt(i, hjælpM.makeTranslation(p.x, p.y, p.z)));
+  const streger = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(bindinger), new THREE.LineBasicMaterial({ color: 0x7c8496, transparent: true, opacity: 0.75 }));
+  gruppe.add(kugler, streger);
+  gruppe.userData.antal = atomer.length;
+  return gruppe;
+}
+
+// Metaloxidet: 7 lag mellem x = 4,6 og 10,4. Atomerne sidder i trekanter (sådan ligger de i krystallen).
+function lavMetaloxid() {
+  const co = [];
+  const o = [];
+  const d = 1.2; // afstanden mellem to koboltatomer i tegningen (større end i virkeligheden, så man kan se lagene)
+  for (let lag = 0; lag < 7; lag++) {
+    const y = -4 + lag * 1.33;
+    for (let r = 0; r * d * 0.866 <= 4.1; r++) {
+      for (let c = 0; c * d <= 5.6; c++) {
+        const x = 4.7 + c * d + (r % 2 ? d / 2 : 0);
+        const z = -2.05 + r * d * 0.866;
+        if (x > 10.3) continue;
+        co.push(new THREE.Vector3(x, y, z));
+        // Oxygen over og under koboltet, forskudt hver sin vej
+        o.push(new THREE.Vector3(x + d / 2, y + 0.3, z + d * 0.29), new THREE.Vector3(x, y - 0.3, z + d * 0.58));
+      }
+    }
+  }
+  const oInde = o.filter((p) => p.x < 10.35 && p.z < 2.1);
+  const coMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.22, 12, 10), new THREE.MeshStandardMaterial({ color: 0x3a6fd8, roughness: 0.35 }), co.length);
+  const oMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.14, 10, 8), new THREE.MeshStandardMaterial({ color: 0xd84a3a, roughness: 0.4 }), oInde.length);
+  co.forEach((p, i) => coMesh.setMatrixAt(i, hjælpM.makeTranslation(p.x, p.y, p.z)));
+  oInde.forEach((p, i) => oMesh.setMatrixAt(i, hjælpM.makeTranslation(p.x, p.y, p.z)));
+  return [coMesh, oMesh];
+}
+
 function lavSkillevægTekstur() {
   const c = document.createElement('canvas');
   c.width = c.height = 128;
@@ -294,6 +344,8 @@ function lavSkilt(tekst, farve, højde = 1.2) {
 }
 
 function nulstil() {
+  demo = null;
+  tidsFaktor = 1;
   ioner = [];
   // Et nyt batteri er næsten tomt: det meste lithium sidder i metaloxidet
   for (let i = 0; i < ANTAL_LI; i++) {
@@ -321,15 +373,22 @@ export function startBatteri() {
   sætVindue($('batteriVindue'));
   verden.styring.target.set(0, 2.5, 0);
   verden.styring.autoRotate = false;
-  begrænsDrejning({ vandret: 0.7, lodret: 0.5 });
+  begrænsDrejning({ vandret: 1.0, lodret: 0.7 });
+  // Lidt fra siden og oppefra, så man kan se, at lagene går ind i dybden
   const k = verden.kamera;
-  k.position.set(0, 4.5, Math.max(k.position.length(), 45));
-  passerTilBoks(12.5, 9.6); // plads til skiltet over laderen øverst og skiltene forneden
+  k.position.set(0, 2.5, 0).add(new THREE.Vector3(0.38, 0.32, 1).normalize().multiplyScalar(Math.max(k.position.length(), 45)));
+  passerTilBoks(13.2, 10.8); // plads til skiltet over laderen øverst og skiltene forneden (som ses lidt oppefra)
   opdaterPanel();
+  startGuide('batteri', guideTrin());
 }
 
 export function stopBatteri() {
   aktiv = false;
+  if (demo) {
+    demo = null;
+    tidsFaktor = 1;
+    tilstand = 'pause';
+  }
   rod.visible = false;
   verden.opdateringer.delete(opdater);
   begrænsDrejning(null);
@@ -370,12 +429,91 @@ function lavPanel() {
     opdaterPanel();
   });
   $('batteriHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpBatteri').classList.remove('skjult'); });
+  $('batteriGuideIgen').addEventListener('click', () => {
+    $('hjælpBatteri').classList.add('skjult');
+    startGuide('batteri', guideTrin(), { igen: true });
+  });
+  mission = lavNæsteSkridt($('batteriMission'), { visMig });
   lavOpgaveliste();
+}
+
+// ---------- Næste skridt, "Vis mig" og guiden ----------
+function næsteSkridt() {
+  const mangler = (id) => !fremgang.erLøst(id);
+  if (mangler('b-fuld')) return { tekst: 'Tryk "Oplad", og lad batteriet helt op', vis: true };
+  if (mangler('b-lampe')) return { tekst: 'Tryk "Aflad (lampe)", og få lampen til at lyse', vis: true };
+  if (mangler('b-tom')) return { tekst: 'Aflad batteriet, til beskyttelsen slår fra ved 3,0 V', vis: true };
+  if (mangler('b-hurtig')) return { tekst: 'Vælg "Hurtig", lad op, og hold øje med varmen', vis: true };
+  if (mangler('b-overlad')) return { tekst: 'Slå "Snyd laderen" til, og lad videre efter 100 %', vis: false };
+  return { tekst: 'Alle opgaver er klaret ★ Prøv Reaktoren eller Kosmos', vis: false };
+}
+
+function opdaterMission() {
+  if (!mission) return;
+  const { tekst, vis } = næsteSkridt();
+  mission.sæt({ tekst: demo ? 'Se godt efter (slowmotion) …' : tekst, kanVise: vis && !død, travl: Boolean(demo) });
+}
+
+// "Vis mig": batteriet lader i slowmotion, til to ioner er nået over i grafitten. Det tæller ikke som en opgave.
+function visMig() {
+  if (demo || død) return;
+  if (andel() >= 1) {
+    visBesked({ titel: 'Batteriet er fuldt', tekst: 'Tryk "Aflad (lampe)" for at se det modsatte, eller "Nyt batteri".' });
+    return;
+  }
+  demo = { landet: 0, hastighed };
+  tilstand = 'oplad';
+  hastighed = 1;
+  tidsFaktor = 0.3;
+  visBesked({
+    titel: 'Se godt efter', type: 'info', varighed: 9000, log: false,
+    tekst: 'Laderen skubber en elektron gennem ledningen, og en lithium-ion svømmer gennem elektrolytten. De mødes i grafitten.',
+  });
+  opdaterPanel();
+}
+
+function slutDemo() {
+  if (!demo) return;
+  hastighed = demo.hastighed;
+  demo = null;
+  tidsFaktor = 1;
+  tilstand = 'pause';
+  visBesked({ titel: 'Sådan lader batteriet op', tekst: 'Én elektron for hver ion. Prøv selv med "Oplad".', varighed: 6000 });
+  opdaterPanel();
+}
+
+// Guiden første gang
+function guideTrin() {
+  return [
+    {
+      titel: 'Et batteri skåret igennem',
+      tekst: 'Til venstre er grafit (minus), og til højre er metaloxid (plus). De lilla kugler er lithium-ioner. Lige nu hviler batteriet.',
+      knap: 'Næste',
+    },
+    {
+      mål: '[data-batteri-tilstand="oplad"]',
+      titel: 'Lad det op',
+      tekst: 'Tryk "Oplad".',
+      vent: () => tilstand === 'oplad',
+    },
+    {
+      titel: 'Se dem flytte sig',
+      tekst: 'Ionerne svømmer gennem elektrolytten over i grafitten, og elektronerne tager den lange vej gennem ledningen. Én elektron for hver ion.',
+      knap: 'Næste',
+    },
+    {
+      mål: '#batteriMission',
+      titel: 'Dit næste skridt',
+      tekst: 'Her står, hvad du kan prøve nu. "Vis mig" viser det i slowmotion.',
+      knap: 'Forstået',
+    },
+  ];
 }
 
 function lavOpgaveliste() {
   const liste = $('batteriOpgaver');
   liste.innerHTML = '';
+  $('batteriOpgaveTal').textContent = `${OPGAVER_BATTERI.filter((o) => fremgang.erLøst(o.id)).length} af ${OPGAVER_BATTERI.length} ★`;
   for (const o of OPGAVER_BATTERI) {
     const li = document.createElement('li');
     const løst = fremgang.erLøst(o.id);
@@ -389,6 +527,7 @@ function lavOpgaveliste() {
 }
 
 function løs(id) {
+  if (demo) return; // "Vis mig" klarer ikke opgaverne for en
   const o = OPGAVER_BATTERI.find((x) => x.id === id);
   if (!o || !fremgang.løs(id)) return;
   setTimeout(() => {
@@ -397,8 +536,14 @@ function løs(id) {
     visBesked({ titel: `Opgave klaret: ${o.titel} ★`, tekst: o.fakta, type: 'klaret', varighed: 8000 });
   }, 400);
   lavOpgaveliste();
+  opdaterMission();
 }
 
+const FORKLARING_KORT = {
+  oplad: 'Laderen pumper lithium over i grafitten.',
+  aflad: 'Lithium løber tilbage, og lampen lyser.',
+  pause: 'Intet kan komme rundt, så energien bliver.',
+};
 const FORKLARING = {
   oplad: ['Opladning', 'Laderen er en pumpe. Den trækker elektroner (de lyseblå prikker) ud af metaloxidet og skubber dem gennem ledningen over i grafitten. Så bliver grafitten minusladet og trækker i de plusladede lithium-ioner (Li⁺). De svømmer den korte vej gennem elektrolytten og møder elektronerne i grafitten: én ion for hver elektron. Lithium vil helst sidde i metaloxidet, så det kræver energi at tvinge det over i grafitten, ligesom at pumpe vand op i et højt bassin. Den energi er nu gemt.'],
   aflad: ['Afladning', 'Nu vil lithium tilbage til metaloxidet, ligesom vand, der løber ned ad bakken. Men lithium må dele sig på turen: Ionen (Li⁺) svømmer den korte vej gennem elektrolytten. Elektronen kan ikke komme gennem elektrolytten, så den må tage den lange vej gennem ledningen og lampen. Det er den tur, der får lampen til at lyse. I metaloxidet mødes de igen. Når alt lithium er tilbage, er batteriet tomt.'],
@@ -453,10 +598,15 @@ function opdaterPanel() {
   $('batteriFase').textContent = fase;
   // Kun når teksten skifter (ellers bliver ordforklaringerne i den lavet om fire gange i sekundet)
   if (forklaringVist !== tilstand) {
+    const først = forklaringVist === null;
     forklaringVist = tilstand;
     const [titel, tekst] = FORKLARING[tilstand];
-    $('batteriForklaring').innerHTML = `<strong>${titel}</strong>${tekst}`;
+    $('batteriForklaringTitel').textContent = titel;
+    $('batteriForklaringKort').textContent = FORKLARING_KORT[tilstand];
+    $('batteriForklaring').textContent = tekst;
+    if (!først) visLag('batteri-nu'); // når man selv har trykket, folder forklaringen sig ud
   }
+  opdaterMission();
   for (const b of document.querySelectorAll('[data-batteri-tilstand]')) b.classList.toggle('valgt', b.dataset.batteriTilstand === tilstand);
   for (const b of document.querySelectorAll('[data-batteri-fart]')) b.classList.toggle('valgt', Number(b.dataset.batteriFart) === hastighed);
   $('batteriSnyd').classList.toggle('valgt', snyd);
@@ -539,6 +689,7 @@ function kortslutning(nål) {
 
 // ---------- Hvert billede ----------
 function opdater(dt) {
+  dt *= tidsFaktor;
   tid += dt;
   const a = andel();
   // Hvor ofte flyttes en ion? Det følger strømmen: én ion pr. elektron, der løber gennem ledningen.
@@ -584,6 +735,7 @@ function opdater(dt) {
       ion.sted = ion.mål;
       ion.plads = ion.tilPlads;
       effekter.glimt(ion.til, 1.5, new THREE.Color(1.5, 1.6, 3.2), 0.5);
+      if (demo && ++demo.landet >= 2) slutDemo();
     }
   }
 
@@ -667,6 +819,9 @@ export function testAdgang() {
       lader: lader.visible, lampe: lampe.visible, afbryder: afbryder.visible,
     }),
     tilstand: (t) => { tilstand = t; },
+    mission: () => $('batteriMissionTekst').textContent,
+    gitter: () => rod.children.filter((o) => o.isInstancedMesh || o.isGroup).map((o) => (o.isGroup ? o.userData.antal ?? 0 : o.count)).filter((n) => n > 50),
+    demo: () => Boolean(demo),
     hastighed: (h) => { hastighed = h; },
     snyd: (s) => { snyd = s; },
   };

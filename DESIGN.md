@@ -6,6 +6,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 23. oktober 2026.*
 
 **Senest lavet:**
+- **Punkt 6: Batteriet** (23. oktober 2026): grafit med sekskanter og metaloxid som en krystal, en guide første gang, "Næste skridt" og "Vis mig" i slowmotion, navnet "lithium-ion-batteri" og "LiPo eller Li-ion?" i hjælpen (se Trin 18).
 - **Punkt 2-4: Dybde i lag, panelerne og "Hvorfor?"-kortene** (23. oktober 2026), bygget efter [planen](docs/plan-lag.md):
   - **Panelerne kan skjules** i Værkstedet, Stjerneovnen, Reaktoren, Batteriet og Kosmos: en fane på kanten af 3D-billedet (‹ ›), knappen "Kun grafik" i toplinjen og tasten G (Esc henter dem). Valget huskes for hver skærm. På højkant viser "Kun grafik" 3D-billedet på hele skærmen, og i Kosmos står "Næste ›" så nederst i 3D-billedet.
   - **Foldebokse:** I Stjerneovnen og Reaktoren er forklaringerne foldet sammen til en overskrift og én linje. Den seneste reaktion folder sig selv ud, og opgaverne står som én linje ("Opgaver 0 af 7 ★"). Det, man selv folder ud, huskes.
@@ -50,7 +51,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 3. ✅ **Vis eller skjul panelerne** (F1 punkt 2). Lavet 23. oktober 2026.
 4. ✅ **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Lavet 23. oktober 2026 (20 kort). Batteriet får sine kort med punkt 6.
 5. **Et grafisk løft af atomet** (F1 punkt 4). Først 2-3 udgaver, som I ser på tabletten. **Udgaverne A og B er lavet (23. oktober 2026) og venter på jeres valg** (se "Senest lavet").
-6. **Batteriet** (F1 punkt 5): grafik, start og navn. LiPo/Li-ion skal faktatjekkes, før teksten rettes. Stor, men kan deles op.
+6. ✅ **Batteriet** (F1 punkt 5): grafik, start og navn. Lavet 23. oktober 2026.
 7. **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7).
 8. ✅ **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lavet 23. oktober 2026.
 9. **De store dele bagefter:** Molekyler, Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan), og til sidst Tjernobyl og Liv, som venter, til Fable 5.5 kommer.
@@ -215,7 +216,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] **Vis eller skjul panelerne og "Kun grafik"** (`js/paneler.js`), også med G og Esc. Huskes for hver skærm.
   - [x] **"Hvorfor?"-kort:** 20 kort med "Og hvorfor det?", faktatjekket af to hjælpeagenter (`docs/fakta-hvorfor.md`).
   - [ ] **Et grafisk løft af atomet:** udgaverne A (prikker) og B (former) med orbitaler regnet som i hydrogen, skygge i kernen og en glidende overgang er lavet og kan vælges med `?udgaver`. Venter på jeres valg, før den valgte bygges færdig (også atomet i menuen).
-  - [ ] Batteriet: grafik, start og navn
+  - [x] **Batteriet: grafik, start og navn** (23. oktober 2026):
+    - Grafitten er lag af carbonatomer i sekskanter, og metaloxidet er en krystal med kobolt mellem to lag oxygen. Kameraet ser lidt fra siden og oppefra.
+    - Guiden kommer første gang, "Næste skridt" følger opgaverne, og "Vis mig" lader op i slowmotion, til to ioner er nået frem.
+    - Navnet er nu "lithium-ion-batteri", og hjælpen forklarer "LiPo eller Li-ion?" (faktatjekket: LiPo er en slags Li-ion i en blød pose, og "polymer" er i dag tit en gel).
+    - Forklaringerne er foldebokse, opgaverne står som én linje, farverne står i et lille felt i 3D-billedet, og varmemåleren har et "Hvorfor?"-kort.
   - [ ] Grundstofkortet i lag og fremgang i menuen
   - [x] **Copyright:** "© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" i README, i hjælpen ("Om AtomLab" med kilder og licenser) og i en licensfil (`LICENSE`), og at man gerne må bruge AtomLab i undervisningen og dele linket.
 

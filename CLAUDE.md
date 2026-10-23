@@ -56,7 +56,9 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `js/reaktor.js`: Reaktoren (`#reaktor`): del 1 "Spalt én kerne" (to genbrugte `Atom` til stumperne) og del 2 "Kædereaktion" (2D-simulering i små skridt). Konstanterne `BRUGT_TID`, `SPALT_LANGSOM`, `FELT` og `NØDSTOP_GRÆNSE` bestemmer, hvor stavene skal stå (nu ca. 50 % for stabil, og stavene starter der). Mål igen med testadgangen, hvis de ændres. Under pause står kædereaktionen stille, men stavene kan stadig flyttes. Del-knapperne vælges med `.del-knap[data-del]` (Kosmos har også knapper med klassen `del-knap`). Panelet skrives kun, når noget har ændret sig (`sætTekst`, `sætStil`).
   - Kortet "Næste skridt" (`#reaktorMission`, `næsteSkridt()`) står øverst til venstre i 3D-billedet. I kædereaktionen viser det også effekten, et levende tip (`effektTip`) og en lille graf over de sidste 20 sekunder (`#reaktorHud`).
   - "Vis mig" kører i slowmotion (`tidsFaktor`). I del 1 skydes neutronen for en. I del 2 starter én neutron en kædereaktion med stavene trukket op, og kortet tæller neutronerne i hver generation (1 → 3 → 9 → ca. 19 …). De tre første generationer spalter altid, når de rammer frisk brændsel, og vandet sluger dem ikke (`sikker`). Bagefter sænkes stavene til 50 %. "Vis mig" klarer ikke opgaver (`løs` gør intet imens).
-- `js/batteri.js`: Batteriet (`#batteri`): ioner, pladser i grafit og metaloxid, spændingskurven `SPÆNDING` (hvilespænding), varme, lithium-nåle og kortslutning.
+- `js/batteri.js`: Batteriet (`#batteri`): et lithium-ion-batteri (her et LiPo-batteri). Ioner, pladser i grafit og metaloxid, spændingskurven `SPÆNDING` (hvilespænding), varme, lithium-nåle og kortslutning.
+  - Grafitten er 7 lag af carbonatomer i sekskanter (`lavGrafit`, hvert andet lag forskudt), og metaloxidet er en krystal med kobolt mellem to lag oxygen (`lavMetaloxid`). Kameraet ser lidt fra siden og oppefra.
+  - "Næste skridt" (`#batteriMission`, `næsteSkridt()`) følger opgaverne. "Vis mig" lader i slowmotion (`tidsFaktor` 0,3), til to ioner er nået frem, og klarer ikke opgaver (`løs` gør intet imens). Guiden `batteri` kommer første gang. Farverne står i et lille felt nederst til venstre i 3D-billedet (`.batteri-farver`).
   - Ledningen er halvgennemsigtig og fuld af elektroner (elektron-kæden). Hele kæden flytter sig sammen, med én elektron pr. ion, der flytter sig (`kædeVej`, `KÆDE_AFSTAND`).
   - Når en ion forlader en plads, hopper en elektron ud i metalfolien, og lige før en ion lander, hopper en elektron ind og møder den (`elektronHop`).
   - Midt på ledningen sidder laderen (oplad), lampen (aflad) eller en slukket afbryder (pause og efter kortslutning).
@@ -110,7 +112,7 @@ Ren HTML, CSS og JavaScript (ES-moduler) med Three.js. Der er intet byggetrin, i
 - `atomlabUdgave`: den valgte udgave af atomet (`nu`, `prikker` eller `former`). Bruges kun, når `?udgaver` står i adressen.
 - `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`)
 - `atomlabKosmosSet`: liste med id på de fænomener, man har kigget på (de andre har en lille prik)
-- `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`) og `fusion-rejse` (rejsen ind i Solen)
+- `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`, `batteri`) og `fusion-rejse` (rejsen ind i Solen)
 - `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.
 
 Infopanelet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Nørd) og være kort, eller ind i hjælpen.

@@ -60,7 +60,7 @@
         <span class="kort-ikon ikon-batteri"></span>
         <span class="kort-tekst">
           <strong>Batteriet</strong>
-          <small>Se ioner og elektroner, når et LiPo-batteri lades</small>
+          <small>Se ioner og elektroner, når et lithium-ion-batteri lades</small>
         </span>
       </a>
       <a class="kort åben" href="#kosmos">
@@ -510,7 +510,7 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Batteriet</h2>
-      <span class="system-status">Et LiPo-batteri skåret igennem</span>
+      <span class="system-status">Et lithium-ion-batteri skåret igennem</span>
       <div class="topknapper">
         <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
         <button class="knap lille ikon" id="batteriHjælp" title="Hjælp">?</button>
@@ -532,17 +532,25 @@
       </div>
       <button class="chip filter fare" id="batteriSnyd">Snyd laderen: fra</button>
       <button class="knap lille svag" id="batteriNyt">Nyt batteri</button>
-      <ul class="kerne-liste">
-        <li><span class="farveprik" style="background:#b79bff"></span>Lithium-ion (Li⁺)</li>
-        <li><span class="farveprik" style="background:#6ff3ff"></span>Elektron (e⁻)</li>
-        <li><span class="farveprik" style="background:#3a3f4a"></span>Grafit (carbon)</li>
-        <li><span class="farveprik" style="background:#3a6fd8"></span>Kobolt</li>
-        <li><span class="farveprik" style="background:#d84a3a"></span>Oxygen</li>
-      </ul>
-      <h4 class="panel-overskrift">Opgaver</h4>
-      <ol class="opgaver kompakt" id="batteriOpgaver"></ol>
+      <details class="lag-boks opgave-boks" data-lag="batteri-opgaver">
+        <summary><strong>Opgaver</strong> <span class="opgave-tal" id="batteriOpgaveTal"></span></summary>
+        <ol class="opgaver kompakt" id="batteriOpgaver"></ol>
+      </details>
     </aside>
-    <div class="vindue" id="batteriVindue" data-log></div>
+    <div class="vindue" id="batteriVindue" data-log>
+      <div class="mission" id="batteriMission">
+        <div class="mission-top"><span class="mission-mærke">Næste skridt</span><button class="mission-fold" title="Skjul næste skridt">–</button></div>
+        <span class="mission-tekst" id="batteriMissionTekst"></span>
+        <button class="knap lille mission-vis" id="batteriVisMig">▶ Vis mig</button>
+      </div>
+      <ul class="batteri-farver" aria-label="Farverne">
+        <li><span class="farveprik" style="background:#b79bff"></span>Li⁺</li>
+        <li><span class="farveprik" style="background:#6ff3ff"></span>e⁻</li>
+        <li><span class="farveprik" style="background:#6a7080"></span>carbon</li>
+        <li><span class="farveprik" style="background:#3a6fd8"></span>kobolt</li>
+        <li><span class="farveprik" style="background:#d84a3a"></span>oxygen</li>
+      </ul>
+    </div>
     <aside class="panel side-panel højre-panel">
       <div class="batteri-tal">
         <div><span>Spænding</span><strong id="batteriSpænding">3,00 V</strong></div>
@@ -552,31 +560,35 @@
       <div class="fremskridt stor" id="batteriLadning"><div></div></div>
       <small class="batteri-fase" id="batteriFase"></small>
       <div class="effekt-boks">
-        <span>Varme <small id="batteriVarmeTekst"></small></span>
+        <span>Varme <small id="batteriVarmeTekst"></small> <button class="hvorfor" data-hvorfor="batterivarme">Hvorfor?</button></span>
         <div class="fremskridt varme" id="batteriVarme"><div></div></div>
       </div>
-      <div class="seneste-boks forklaring-batteri" id="batteriForklaring"></div>
-      <div class="forklaring-boks">
-        <strong>Hvorfor flytter både ioner og elektroner?</strong>
+      <details class="seneste-boks forklaring-batteri lag-boks" data-lag="batteri-nu" id="batteriForklaringBoks">
+        <summary><strong id="batteriForklaringTitel"></strong><span class="lag-kort" id="batteriForklaringKort"></span></summary>
+        <div id="batteriForklaring"></div>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="batteri-hvorfor">
+        <summary><strong>Hvorfor flytter både ioner og elektroner?</strong><span class="lag-kort">Elektrolytten lukker kun ioner igennem.</span></summary>
         <p>Et lithiumatom er en lithium-ion (Li⁺) plus én elektron. Batteriet gemmer energi ved at flytte lithium fra den ene side til den anden. Men elektrolytten i midten lukker kun ioner igennem, ikke elektroner. Derfor må lithium dele sig på turen: Ionen tager den korte vej gennem elektrolytten, og elektronen tager den lange vej gennem ledningen. På den anden side mødes de igen.</p>
         <p>De to følges ad: Kunne ionerne flytte sig alene, ville den ene side hurtigt blive plusladet og skubbe de næste ioner tilbage. Derfor flytter der lige så mange elektroner som ioner.</p>
         <p><b>Hele tricket:</b> Elektronernes omvej gennem ledningen er den strøm, vi bruger. Sætter man en lampe på vejen, må elektronerne gå igennem den.</p>
-      </div>
-      <div class="forklaring-boks">
-        <strong>Hvor meget energi?</strong>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="batteri-energi">
+        <summary><strong>Hvor meget energi?</strong><span class="lag-kort">Cellen her gemmer ca. 3,7 Wh.</span></summary>
         <p>Cellen her er på 1.000 mAh og gemmer ca. 3,7 Wh (watt-timer). Det kan få en LED-pære på 1 watt til at lyse i næsten 4 timer.</p>
         <p>En mobil har 4-5 gange så meget. Et elbil-batteri (ca. 60 kWh) rummer lige så meget som 3.000-4.000 mobilopladninger.</p>
         <p>Til sammenligning: 1 kg batteri rummer omtrent lige så meget energi som 30 gram kul. Til gengæld kan et batteri lades op hundredvis af gange, og det forurener ikke, mens det bruges.</p>
-      </div>
+      </details>
       <blockquote class="citat lille" data-citat="faraday"></blockquote>
     </aside>
   </section>
 
   <div class="overlag skjult" id="hjælpBatteri" role="dialog" aria-label="Hjælp til Batteriet">
     <div class="dialog">
-      <header><h3>Sådan virker et LiPo-batteri</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <header><h3>Sådan virker et lithium-ion-batteri</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
-        <p>Et <strong>LiPo-batteri</strong> (lithium-polymer) er en slags lithium-ion-batteri, ligesom batterierne i telefoner og elbiler. Det særlige er, at cellen sidder i en blød pose i stedet for en metaldåse. De fleste telefoner har faktisk LiPo-batterier. Elbiler bruger ofte andre metaloxider end kobolt.</p>
+        <p>Et <strong>lithium-ion-batteri</strong> gemmer energi ved at flytte lithium fra den ene side til den anden. Det er den slags, der sidder i telefoner, bærbare computere og elbiler.</p>
+        <p><strong>LiPo eller Li-ion?</strong> Det, du ser her, er et <strong>LiPo-batteri</strong> (lithium-polymer). Det er en slags lithium-ion-batteri, hvor cellen sidder i en blød pose i stedet for en hård metaldåse, og mange telefoner har sådan et. Kemien indeni er den samme: lithium, der vandrer mellem grafit og et metaloxid. Ordet "polymer" betød oprindelig, at elektrolytten var en slags plast, men i de fleste LiPo-batterier i dag er den flydende eller en gel. Elbiler bruger ofte andre metaloxider end kobolt.</p>
         <p><strong>To parkeringspladser til lithium:</strong> På minussiden er der <em>grafit</em> (lag af carbon) på en tynd kobberfolie. På plussiden er der et <em>metaloxid</em> (her lithium-kobolt-oxid) på en tynd aluminiumsfolie. Imellem dem er en <em>elektrolyt</em> og en tynd, porøs <em>skillevæg</em> af plast, der forhindrer de to sider i at røre hinanden.</p>
         <p><strong>Hvorfor vandrer både ioner og elektroner?</strong> Batteriet gemmer energi ved at flytte lithium fra den ene side til den anden. Et lithiumatom er en lithium-ion (Li⁺) plus én elektron. Men elektrolytten i midten lukker kun ioner igennem. Derfor må lithium dele sig på turen: Ionen svømmer den korte vej gennem elektrolytten, og elektronen går den lange vej gennem ledningen. På den anden side mødes de igen. Tænk på to venner, der skal over en flod: Den ene kan svømme lige over. Den anden kan ikke svømme og må gå over en bro længere nede ad floden. Lampen står på broen. De to følges ad, fordi plus og minus skal passe: Kunne ionerne flytte sig alene, ville den ene side hurtigt blive plusladet og skubbe de næste ioner tilbage.</p>
         <p><strong>Opladning:</strong> Laderen pumper elektroner fra plussiden gennem ledningen over til minussiden. Minussiden bliver minusladet og trækker i lithium-ionerne (Li⁺), som følger efter gennem elektrolytten og sætter sig mellem grafitlagene. Energien er gemt, fordi lithium helst vil sidde i metaloxidet. Laderen lader først med <em>konstant strøm</em>. Når spændingen når 4,2 V, skifter den til <em>konstant spænding</em>, og strømmen falder langsomt, indtil cellen er fuld.</p>
@@ -586,7 +598,9 @@
         <p><strong>Hvorfor går spændingen op, når man lader?</strong> Mest fordi batteriet bliver mere og mere fyldt: Dets egen spænding stiger fra ca. 3,0 til 4,2 V. Desuden har batteriet en lille indre modstand. Mens der løber strøm ind, er spændingen derfor lidt højere end batteriets egen spænding, og jo større strøm, jo højere. Lader man hurtigt, når man 4,2 V tidligere, og så skal laderen skifte til konstant spænding før.</p>
         <p><strong>Pas på:</strong> Overlader man (over 4,2 V), eller lader man for hurtigt eller i kulde, kan lithium sætte sig som metal-nåle (dendritter). De kan stikke hul i skillevæggen og give kortslutning, varme og brand. Aflader man for dybt, kan kobberet opløses, og cellen tager skade. Derfor har mange LiPo-batterier (fx i telefoner) et lille beskyttelseskredsløb. I fx droner passer laderen og elektronikken på i stedet: Gode ladere stopper ved 4,2 V og balancerer cellerne.</p>
         <p><strong>Strømmens retning:</strong> Man siger, at strømmen løber fra plus til minus uden om batteriet. Men elektronerne løber faktisk den modsatte vej. Det er en gammel aftale fra før man kendte elektronen.</p>
-        <p><strong>Ærligt talt:</strong> I et rigtigt batteri flytter over 10.000 milliarder milliarder lithium-ioner sig, hver gang det lades op. Her viser vi 24, og i ledningen er der langt flere elektroner, end der er prikker. I en rigtig ledning kryber elektronerne også meget langsommere, end de gør her. Og inde i grafitten og metaloxidet sidder lithium som en ion, mens elektronen bliver i materialet lige omkring den. Men de hører sammen, ligesom i et atom.</p>
+        <p><strong>Grafit og metaloxid:</strong> Grafit er lag af carbonatomer, der sidder i sekskanter. Lithium kan gemme sig mellem lagene. Metaloxidet her (lithium-kobolt-oxid) er en krystal, hvor hvert lag er kobolt mellem to lag oxygen, og lithium sidder mellem lagene.</p>
+        <p><strong>Ærligt talt:</strong> I et rigtigt batteri flytter over 10.000 milliarder milliarder lithium-ioner sig, hver gang det lades op. Her viser vi 24, og i ledningen er der langt flere elektroner, end der er prikker. Atomerne i grafitten og metaloxidet er tegnet meget større og med større afstand end i virkeligheden. I en rigtig ledning kryber elektronerne også meget langsommere, end de gør her. Og inde i grafitten og metaloxidet sidder lithium som en ion, mens elektronen bliver i materialet lige omkring den. Men de hører sammen, ligesom i et atom.</p>
+        <p class="nulstil-linje"><button class="knap lille" id="batteriGuideIgen">Vis guiden igen</button></p>
       </div>
     </div>
   </div>

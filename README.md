@@ -6,7 +6,7 @@ Lær om atomer og grundstoffer i 3D:
 - **Det periodiske system:** alle 118 grundstoffer på en buet 3D-væg med fakta, og et kort for hver kategori med et lille atom, der viser hvorfor, og et animeret forsøg (fx alkalimetal i vand)
 - **Stjerneovnen:** fusion som i Solens kerne (pp-kæden) og carbon i røde kæmper
 - **Reaktoren:** spalt uran og styr en kædereaktion
-- **Batteriet:** se ioner og elektroner, når et LiPo-batteri lades op og aflades
+- **Batteriet:** se ioner og elektroner, når et lithium-ion-batteri (her et LiPo-batteri) lades op og aflades
 - **Kosmos:** 15 fænomener, der fortæller en historie: Big Bang, en ny stjerne, Jorden og årstiderne, sol- og måneformørkelser, solstorme, Solens fremtid, en hvid dværg, der eksploderer, supernovaer, pulsarer, kilonovaer, rumtid, tyngdebølger, sorte huller, kvasarer og ormehuller
 
 Fagord (neutrino, isotop, plasma …) har prikker under og kan trykkes på for en kort forklaring.

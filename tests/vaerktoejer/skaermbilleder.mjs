@@ -19,7 +19,7 @@ for (const [navn, [w, h, touch]] of Object.entries(STØRRELSER)) {
   page.on('pageerror', (e) => fejl.push(`${navn} pageerror: ${e.message}`));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(`${navn} ${m.type()}: ${m.text()}`); });
   await page.goto(`${ADRESSE}/?test#${skærm}`);
-  await page.evaluate(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1 })));
+  await page.evaluate(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1, 'reaktor-kerne': 1, 'reaktor-kæde': 1, batteri: 1 })));
   await page.reload();
   await page.waitForTimeout(Number(process.env.VENT ?? 7000)); // testbrowseren tegner langsomt, så kameraet skal have tid til at zoome færdigt
   const fil = `${UD}/${skærm}-${navn}.png`;
