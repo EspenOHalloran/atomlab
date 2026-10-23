@@ -192,6 +192,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Retningen til noget uden for billedet** (Solen i Årstidernes nærbilleder, Månen på himmelkortet) skal vises, når pointen afhænger af den: stråler med pile og et skilt, eller en halv måne ude ved kanten.
 - **Lange navne i et gitter** (Kosmos-listen med "Tyngdebølger" og "Solens fremtid") gjorde kolonnerne bredere end panelet, fordi `1fr` ikke kan blive smallere end det længste ord. Brug `minmax(0, 1fr)`, lad navnene bryde, og giv lange ord en blød bindestreg (`\u00ad`).
 
+- **Orbitaler som prikker bliver en klat** (atomets udgaver, oktober 2026). Tre fyldte p-orbitaler giver tilsammen en kugle, og de inderste skaller lægger sig oven i. Det er rigtig fysik, men man kan ikke se formerne. Det hjalp at dæmpe de inderste orbitaler og skalere skyen efter, hvor 85 % af elektronen er (ikke middelafstanden). Formerne som overflader (B) blev helt hvide for jern og uran, fordi alle de inderste lå oven i hinanden med additiv blanding. Nu vises kun de yderste, og de toner ud tæt på kernen.
+- **Samme kode i `onBeforeCompile` til to slags materialer:** Three.js genbruger programmet, når koden (toString) er den samme, også selvom den laver noget forskelligt. Kantlyset med og uden skygge har derfor hver sin `customProgramCacheKey`.
+
 ### Faldgruber: tid, timere og tilstand
 - **Gættede tal i grafer.** Bakken i Stjerneovnens graf var først gættet og gav ca. 2 % i stedet for ca. 30 % ved 15 mio. °C. Rettet ved at måle i spillets fysik. Ændres fysikken (`FRASTØD`, `RN`, `termiskFart`), skal `BAKKE` måles igen.
 - **Fænomener, der bruger det fælles ur**, kan ikke sættes på pause. Kosmos fik derfor sit eget ur (`kosmosTid`).

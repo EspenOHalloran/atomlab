@@ -212,6 +212,7 @@ button { font: inherit; color: inherit; }
     "byg tabel info";
 }
 .topbjælke { grid-area: top; display: flex; align-items: center; gap: 12px; }
+.topbjælke > a.knap { flex: 0 0 auto; white-space: nowrap; }
 .topbjælke h2 {
   margin: 0;
   flex: 0 0 auto;
@@ -222,6 +223,10 @@ button { font: inherit; color: inherit; }
   color: transparent;
 }
 .topknapper { display: flex; gap: 8px; margin-left: auto; }
+/* Udgaver af atomet (kun med ?udgaver i adressen) */
+.udgave-vælger { display: flex; align-items: center; gap: 4px; }
+.udgave-vælger .chip { white-space: nowrap; padding: 4px 8px; font-size: 12px; }
+.udgave-vælger[hidden] { display: none; }
 #vaerksted .vindue { grid-area: vindue; }
 
 /* Opgaven: en pille i toplinjen, som kan foldes sammen */

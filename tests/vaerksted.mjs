@@ -138,6 +138,37 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   await t.ctx.close();
 }
 
+// Udgaver af atomet (?udgaver): vælgeren, orbitalerne og at "Nu" er som før
+{
+  const u = await side({ viewport: { width: 1280, height: 800 } });
+  await u.page.goto(URL + '#vaerksted');
+  await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
+  tjek('udgaver: vælgeren er skjult uden ?udgaver', await u.page.isHidden('#udgaveVælger'));
+  await u.page.goto(`${ADRESSE}/index.html?test&udgaver#vaerksted`);
+  await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
+  tjek('udgaver: vælgeren vises med ?udgaver', await u.page.isVisible('#udgaveVælger'));
+  for (const t of ['p', 'p', 'p', 'p', 'p', 'p', 'n', 'n', 'n', 'n', 'n', 'n', 'e', 'e', 'e', 'e', 'e', 'e']) await u.page.keyboard.press(t);
+  await u.page.click('[data-udgave="prikker"]');
+  tjek('udgaver: A viser elektronskyen', (await u.page.textContent('#knapVisning')) === 'Ringe' && await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'prikker');
+  let o = await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler());
+  tjek('udgaver: carbon har 4 orbitaler (1s, 2s og to 2p med én elektron)', o.length === 4 && o.filter((x) => x.navn.startsWith('2p')).every((x) => x.elektroner === 1), JSON.stringify(o));
+  tjek('udgaver: teksten siger, at formerne er regnet som for hydrogen', /hydrogen/.test(await u.page.textContent('#infoModel')));
+  await u.page.click('[data-udgave="former"]');
+  o = await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler());
+  tjek('udgaver: B viser de yderste orbitaler (2s og to 2p)', o.length === 3, JSON.stringify(o));
+  await u.page.evaluate(() => window.atomlabTest.vaerksted.spol(2));
+  await u.page.screenshot({ path: UD + '/12-udgave-former.png' });
+  await u.page.reload();
+  await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
+  tjek('udgaver: valget huskes', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'former');
+  await u.page.click('[data-udgave="nu"]');
+  tjek('udgaver: "Nu" har ingen orbitaler', (await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler())).length === 0);
+  await u.page.goto(URL + '#vaerksted');
+  await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
+  tjek('udgaver: uden ?udgaver er atomet som før', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'nu');
+  await u.ctx.close();
+}
+
 await browser.close();
 console.log('\nKonsol-fejl/advarsler:', fejl.length ? '\n' + fejl.join('\n') : 'ingen');
 console.log(`\n${ok} OK, ${dårlig} FEJL`);

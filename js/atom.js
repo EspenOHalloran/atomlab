@@ -3,6 +3,7 @@
 
 import * as THREE from 'three';
 import { skallerForIon } from './data/grundstoffer.js';
+import { orbitaler, kvantilRadius, prøver, vinkel, størsteVinkel } from './data/orbitaler.js';
 import { LAV_KVALITET, ROLIG, lavPrikTekstur } from './scene3d.js';
 
 const R = 0.5; // radius på en proton eller neutron
@@ -35,26 +36,78 @@ const ryst = new THREE.Vector3();
 const HALE_LÆNGDE = LAV_KVALITET ? 9 : 16; // så mange punkter er der i en elektrons hale
 const MAX_LIM = 2400; // højst så mange lyspunkter for kernekraften
 
+// Udgaver af atomet, som man kan prøve med ?udgaver i adressen (se vaerksted.js):
+// 'nu' (som før), 'prikker' (orbitalerne som en sky af prikker, der viser, hvor elektronen sandsynligvis er)
+// og 'former' (orbitalernes form som glødende overflader, som i fysikbøgerne).
+// De to nye har også skygge i kernen og en glidende overgang mellem ringe og sky.
+export const UDGAVER = ['nu', 'prikker', 'former'];
+let udgave = 'nu';
+const alleAtomer = new Set();
+export function sætUdgave(ny) {
+  udgave = UDGAVER.includes(ny) ? ny : 'nu';
+  for (const a of alleAtomer) a.skiftUdgave();
+}
+export function hentUdgave() {
+  return udgave;
+}
+
+// Farven på orbitalerne: s er blå, p er lyserød, d er grøn og f er orange. Hver orbital har sin egen nuance.
+const ORBITAL_FARVE = [0.57, 0.93, 0.33, 0.08];
+function orbitalFarve(o) {
+  return new THREE.Color().setHSL((ORBITAL_FARVE[o.l] + (o.mi - o.l) * 0.045 + 1) % 1, 0.95, 0.6);
+}
+
+// Steder, hvor elektronen kan være, for hver orbital (i Bohr-radier). De trækkes én gang og genbruges.
+// De 4 % længst ude kommer ikke med, så skyen ikke fylder hele billedet.
+const PULJE = 1500;
+const puljer = new Map();
+function pulje(n, l, mi) {
+  const nøgle = `${n}${l}${mi}`;
+  if (!puljer.has(nøgle)) puljer.set(nøgle, prøver(n, l, mi, PULJE, Math.random, 0.96));
+  return puljer.get(nøgle);
+}
+
 // Giver kuglerne et lysende kantlys og lader dem pulsere svagt (hver kugle i sin egen takt).
 // Det gøres ved at tilføje lidt kode til Three.js' almindelige materiale.
-export function tilføjKantlys(materiale, kantFarve, pulsFarve, tid) {
+// skygge = { styrke, radius } (uniforms) gør kuglerne mørkere dybt inde i kernen, så revnerne mellem dem får skygge.
+export function tilføjKantlys(materiale, kantFarve, pulsFarve, tid, skygge = null) {
+  // Uden sin egen nøgle ville Three.js genbruge det samme program til kugler med og uden skygge
+  materiale.customProgramCacheKey = () => (skygge ? 'kantlys-skygge' : 'kantlys');
   materiale.onBeforeCompile = (shader) => {
     shader.uniforms.uKant = { value: kantFarve };
     shader.uniforms.uPuls = { value: pulsFarve };
     shader.uniforms.uTid = tid;
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nuniform float uTid;\nvarying float vPuls;')
+      .replace('#include <common>', '#include <common>\nuniform float uTid;\nvarying float vPuls;\nvarying float vDybde;')
       .replace('#include <begin_vertex>', `#include <begin_vertex>
+        vec4 dybdePos = vec4(transformed, 1.0);
         #ifdef USE_INSTANCING
           vPuls = 0.5 + 0.5 * sin(uTid * 2.2 + float(gl_InstanceID) * 2.39);
+          dybdePos = instanceMatrix * dybdePos;
         #else
           vPuls = 0.5;
-        #endif`);
-    shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform vec3 uKant;\nuniform vec3 uPuls;\nvarying float vPuls;')
+        #endif
+        vDybde = length(dybdePos.xyz);`);
+    let fragment = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform vec3 uKant;\nuniform vec3 uPuls;\nvarying float vPuls;\nvarying float vDybde;')
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         float kant = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 2.5);
         totalEmissiveRadiance += uKant * kant + uPuls * vPuls;`);
+    if (skygge) {
+      shader.uniforms.uSkygge = skygge.styrke;
+      shader.uniforms.uKerneR = skygge.radius;
+      // Jo dybere inde i kernen (tættere på midten end kernens kant), jo mørkere
+      fragment = fragment
+        .replace('#include <common>', '#include <common>\nuniform float uSkygge;\nuniform float uKerneR;')
+        .replace('#include <color_fragment>', `#include <color_fragment>
+          float skyg = mix(1.0, 0.2 + 0.8 * smoothstep(uKerneR - 1.3, uKerneR + 0.1, vDybde), uSkygge);
+          diffuseColor.rgb *= skyg;`)
+        .replace('totalEmissiveRadiance += uKant * kant + uPuls * vPuls;', 'totalEmissiveRadiance += (uKant * kant + uPuls * vPuls) * skyg;')
+        .replace('#include <aomap_fragment>', `#include <aomap_fragment>
+          reflectedLight.indirectDiffuse *= skyg;
+          reflectedLight.indirectSpecular *= skyg;`);
+    }
+    shader.fragmentShader = fragment;
   };
 }
 
@@ -78,6 +131,7 @@ function lavRingTekstur() {
 export class Atom {
   constructor() {
     this.gruppe = new THREE.Group();
+    alleAtomer.add(this);
 
     const [b, h] = LAV_KVALITET ? [14, 10] : [26, 18];
     const kugle = new THREE.SphereGeometry(R, b, h);
@@ -88,8 +142,9 @@ export class Atom {
     this.neutronMat = new THREE.MeshStandardMaterial({
       color: 0x98a8c8, roughness: 0.42, metalness: 0.05, emissive: 0x0c1424,
     });
-    tilføjKantlys(this.protonMat, new THREE.Color(1.1, 0.12, 0.08), new THREE.Color(0.28, 0.02, 0.01), this.tidUniform);
-    tilføjKantlys(this.neutronMat, new THREE.Color(0.16, 0.3, 0.85), new THREE.Color(0.0, 0.0, 0.0), this.tidUniform);
+    this.skygge = { styrke: { value: 0 }, radius: { value: 1 } };
+    tilføjKantlys(this.protonMat, new THREE.Color(1.1, 0.12, 0.08), new THREE.Color(0.28, 0.02, 0.01), this.tidUniform, this.skygge);
+    tilføjKantlys(this.neutronMat, new THREE.Color(0.16, 0.3, 0.85), new THREE.Color(0.0, 0.0, 0.0), this.tidUniform, this.skygge);
     this.pMesh = new THREE.InstancedMesh(kugle, this.protonMat, PLADS_P);
     this.nMesh = new THREE.InstancedMesh(kugle, this.neutronMat, PLADS_N);
 
@@ -109,6 +164,8 @@ export class Atom {
     this.skyGruppe = new THREE.Group();
     this.skyGruppe.visible = false;
     this.prik = lavPrikTekstur();
+    this.blødPrik = lavPrikTekstur(true);
+    this.overgang = 0; // 0 = ringe, 1 = sky (glider i de nye udgaver)
 
     // Et svagt skær omkring kernen. Det skifter farve, når kernen er ustabil.
     this.skær = new THREE.Sprite(new THREE.SpriteMaterial({
@@ -165,6 +222,7 @@ export class Atom {
     this.henfaldVenter = null;
     this.glimtTid = 0;
     this.tid = 0;
+    if (udgave !== 'nu') this.skiftUdgave(); // et atom, der laves, efter at en udgave er valgt
   }
 
   // Sæt hvor mange protoner, neutroner og elektroner atomet skal have
@@ -198,11 +256,50 @@ export class Atom {
 
   sætVisning(visning) {
     this.visning = visning;
-    const sky = visning === 'sky';
-    this.skyGruppe.visible = sky;
-    this.ringGruppe.visible = !sky;
-    this.eMesh.visible = !sky;
-    this.haler.visible = !sky;
+    // I de nye udgaver glider ringene over i skyen (se opdaterOvergang). Ellers skifter det med det samme.
+    if (udgave !== 'nu' && !ROLIG) return;
+    this.overgang = visning === 'sky' ? 1 : 0;
+    this.visOvergang();
+  }
+
+  // Ringene og elektronerne toner ud, mens skyen toner frem (og omvendt)
+  opdaterOvergang(dt) {
+    const mål = this.visning === 'sky' ? 1 : 0;
+    if (this.overgang === mål) return;
+    const skridt = dt / 0.8;
+    this.overgang = mål > this.overgang ? Math.min(mål, this.overgang + skridt) : Math.max(mål, this.overgang - skridt);
+    this.visOvergang();
+  }
+
+  visOvergang() {
+    const o = this.overgang;
+    const glidende = udgave !== 'nu';
+    this.skyGruppe.visible = o > 0;
+    this.ringGruppe.visible = o < 1;
+    this.eMesh.visible = o < 1;
+    this.haler.visible = o < 1;
+    if (!glidende) return;
+    if (this.ringMat) this.ringMat.opacity = this.ringStyrke * (1 - o);
+    this.eMat.opacity = 1 - o;
+    this.haler.material.opacity = 1 - o;
+    for (const sky of this.skyer) {
+      if (sky.form) sky.punkter.material.uniforms.uStyrke.value = sky.styrke * o;
+      else sky.punkter.material.opacity = sky.styrke * o;
+    }
+  }
+
+  // Skifter mellem udgaverne (se sætUdgave)
+  skiftUdgave() {
+    const ny = udgave !== 'nu';
+    this.eMat.transparent = ny;
+    this.eMat.opacity = 1;
+    this.eMat.needsUpdate = true;
+    this.haler.material.opacity = 1;
+    this.protonMat.roughness = ny ? 0.28 : 0.38;
+    this.neutronMat.roughness = ny ? 0.32 : 0.42;
+    this.beregnSkaller();
+    this.overgang = this.visning === 'sky' ? 1 : 0;
+    this.visOvergang();
   }
 
   // 'stabil', 'næsten', 'ustabil', 'meget', 'straks' eller 'tom'
@@ -259,7 +356,8 @@ export class Atom {
         depthWrite: false, blending: THREE.AdditiveBlending,
       });
     }
-    this.ringMat.opacity = Math.max(0.14, 0.4 - this.ringe.length * 0.018);
+    this.ringStyrke = Math.max(0.14, 0.4 - this.ringe.length * 0.018);
+    this.ringMat.opacity = this.ringStyrke * (udgave === 'nu' ? 1 : 1 - this.overgang);
     for (const r of this.ringe) {
       const geo = new THREE.TorusGeometry(r.radius, 0.03, 6, LAV_KVALITET ? 90 : 160);
       geo.rotateX(Math.PI / 2); // ringen skal ligge fladt (i x-z-planen)
@@ -277,6 +375,10 @@ export class Atom {
       this.skyGruppe.remove(barn);
     }
     this.skyer = [];
+    if (udgave !== 'nu') {
+      this.byggOrbitaler(a);
+      return;
+    }
     skaller.forEach((antal, i) => {
       if (!antal) return;
       const nr = i + 1;
@@ -296,6 +398,88 @@ export class Atom {
       this.skyGruppe.add(sky.punkter);
       this.skyer.push(sky);
     });
+  }
+
+  // Orbitalerne: én sky for hver orbital med elektroner (formen regnet som i hydrogen, se data/orbitaler.js).
+  // Hver orbital er gjort så stor, at 85 % af elektronens sandsynlighed ligger inden for ringen for samme skal.
+  // De yderste orbitaler (dem, der bestemmer kemien) lyser mest. De inderste er dæmpet, ellers bliver det bare tåge.
+  byggOrbitaler(a) {
+    const liste = orbitaler(this.mål.p, this.mål.e);
+    if (!liste.length) return;
+    // Yderst: den højeste skal og underskaller, der ikke er fyldt (fx 3d i jern)
+    const maxN = Math.max(...liste.map((o) => o.n));
+    const fyldt = {};
+    for (const o of liste) fyldt[`${o.n}${o.l}`] = (fyldt[`${o.n}${o.l}`] ?? 0) + o.elektroner;
+    const yderst = (o) => o.n === maxN || fyldt[`${o.n}${o.l}`] < 2 * (2 * o.l + 1);
+    const antal = Math.max(70, Math.min(500, Math.round((LAV_KVALITET ? 2400 : 5200) / liste.length)));
+    const former = udgave === 'former';
+    for (const o of liste) {
+      // Formerne: kun de yderste, for de inderste sidder inden i og ville gøre det hele hvidt
+      if (former && !yderst(o)) continue;
+      // Halvfyldte orbitaler (1 elektron) er svagere end fyldte (2 elektroner), og de inderste er dæmpet
+      const styrke = (o.elektroner === 2 ? 1 : 0.65) * (yderst(o) ? 1 : 0.15);
+      const sky = former ? this.orbitalForm(o, a, styrke) : this.orbitalPrikker(o, a, styrke, antal);
+      sky.orbital = o;
+      sky.nr = o.n;
+      this.skyGruppe.add(sky.punkter);
+      this.skyer.push(sky);
+    }
+  }
+
+  // Prikker, der viser, hvor elektronen sandsynligvis er
+  orbitalPrikker(o, a, styrke, antal) {
+    const pos = new Float32Array(antal * 3);
+    const sky = { pos, antal, skala: skalRadius(a, o.n) / kvantilRadius(o.n, o.l, 0.85), kilde: pulje(o.n, o.l, o.mi), styrke: 0.85 * styrke };
+    for (let j = 0; j < antal; j++) this.nyOrbitalPrik(sky, j);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    sky.punkter = new THREE.Points(geo, new THREE.PointsMaterial({
+      size: 0.32, map: this.prik, color: orbitalFarve(o).multiplyScalar(1.8),
+      transparent: true, opacity: sky.styrke * this.overgang, depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    return sky;
+  }
+
+  // Orbitalens form som en glødende overflade: Afstanden i hver retning viser, hvor meget af elektronen der er
+  // i den retning (vinkeldelen af bølgefunktionen). Lysest ved kanten, så man kan se ind gennem den.
+  orbitalForm(o, a, styrke) {
+    const [b, h] = LAV_KVALITET ? [40, 28] : [72, 48];
+    const geo = new THREE.SphereGeometry(1, b, h);
+    const p = geo.attributes.position;
+    const max = størsteVinkel(o.l, o.mi);
+    for (let i = 0; i < p.count; i++) {
+      const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+      // Three.js har y opad, og orbitalens akse (z) skal pege opad
+      const r = Math.min(1, Math.abs(vinkel(o.l, o.mi, x, z, y)) / max) ** 1.4;
+      p.setXYZ(i, x * r, y * r, z * r);
+    }
+    geo.computeVertexNormals();
+    const sky = { styrke: (o.l === 0 ? 0.25 : 0.5) * styrke };
+    const materiale = new THREE.ShaderMaterial({
+      uniforms: { uFarve: { value: orbitalFarve(o) }, uStyrke: { value: sky.styrke * this.overgang } },
+      // Formen toner ud tæt på kernen (vR er afstanden fra midten), ellers bliver midten helt hvid, hvor alle formerne mødes
+      vertexShader: `varying vec3 vNormal; varying vec3 vVis; varying float vR;
+        void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vNormal = normalize(normalMatrix * normal); vVis = normalize(-mv.xyz); vR = length(position); gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: `uniform vec3 uFarve; uniform float uStyrke; varying vec3 vNormal; varying vec3 vVis; varying float vR;
+        void main() { float kant = pow(1.0 - abs(dot(normalize(vNormal), vVis)), 2.0); gl_FragColor = vec4(uFarve * (0.12 + 0.88 * kant) * uStyrke * smoothstep(0.1, 0.45, vR), 1.0); }`,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    });
+    sky.punkter = new THREE.Mesh(geo, materiale);
+    sky.punkter.scale.setScalar(skalRadius(a, o.n) * (o.l === 0 ? 0.9 : 1.1));
+    sky.form = true;
+    return sky;
+  }
+
+  nyOrbitalPrik(sky, j) {
+    const k = Math.floor(Math.random() * PULJE) * 3;
+    sky.pos[j * 3] = sky.kilde[k] * sky.skala;
+    sky.pos[j * 3 + 1] = sky.kilde[k + 1] * sky.skala;
+    sky.pos[j * 3 + 2] = sky.kilde[k + 2] * sky.skala;
+  }
+
+  // Orbitalerne i atomet lige nu (til tests): navn og antal elektroner
+  orbitalListe() {
+    return this.skyer.filter((s) => s.orbital).map((s) => ({ navn: s.orbital.navn, elektroner: s.orbital.elektroner }));
   }
 
   nyPrik(sky, j) {
@@ -610,19 +794,29 @@ export class Atom {
     this.eMesh.count = ie;
     this.eMesh.instanceMatrix.needsUpdate = true;
 
-    // Elektronskyen flimrer: nogle prikker flytter sig hele tiden
+    // Elektronskyen flimrer: nogle prikker flytter sig hele tiden. Orbitalerne drejer ikke, for deres form har en retning.
+    this.opdaterOvergang(dt);
     if (this.skyGruppe.visible) {
       for (const sky of this.skyer) {
-        const flyt = Math.ceil(sky.antal * 0.05);
-        for (let i = 0; i < flyt; i++) this.nyPrik(sky, Math.floor(Math.random() * sky.antal));
+        if (sky.orbital) {
+          if (sky.form) continue; // formerne står stille
+          const flyt = Math.ceil(sky.antal * 0.05);
+          for (let i = 0; i < flyt; i++) this.nyOrbitalPrik(sky, Math.floor(Math.random() * sky.antal));
+        } else {
+          const flyt = Math.ceil(sky.antal * 0.05);
+          for (let i = 0; i < flyt; i++) this.nyPrik(sky, Math.floor(Math.random() * sky.antal));
+          sky.punkter.rotation.y += dt * 0.2 / sky.nr;
+        }
         sky.punkter.geometry.attributes.position.needsUpdate = true;
-        sky.punkter.rotation.y += dt * 0.2 / sky.nr;
       }
     }
 
     // Skæret om kernen
     const a = this.mål.p + this.mål.n;
     const kerneR = kerneRadius(a);
+    // Skyggen i kernen (kun i de nye udgaver, og først når der er nogle kugler, der kan skygge for hinanden)
+    this.skygge.radius.value = kerneR;
+    this.skygge.styrke.value = udgave === 'nu' ? 0 : Math.min(1, Math.max(0, (a - 2) / 10));
     const mat = this.skær.material;
     let opacitet = a > 0 ? 0.1 : 0;
     if (this.status === 'stabil' || this.status === 'næsten') mat.color.setHex(0xffc890);
