@@ -10,6 +10,11 @@
 - Er det mere udbredt at bruge et Li-ion-batteri end et LiPo-batteri? Eller skal det bare hedde et "lithium-batteri"? Er der forskel på typerne i forhold til det, vi viser?
 - Kan atomet på forsiden (og atomerne i Atomværkstedet) blive flottere? Et grafisk løft?
 
+## Tilføjet samme dag, mens F1 blev lavet (Espen)
+"Generelt skal UX være i top, dvs. flot UI, gode informationer de rigtige steder. Man skal ikke bombarderes med informationer, men de skal være lettilgængelige for den nysgerrige bruger, dvs. man kan klikke sig (eller lignende) til yderligere informationer. Det skal være et værktøj med stor dybde og tyngde, men det skal føles let, og man kan selv bestemme, hvor dybt man vil bore i emnerne."
+
+Står nu som grundregel ("Dybde i lag") i DESIGN.md. F1 er vurderet ud fra den.
+
 ## Opus' foreløbige svar på LiPo-spørgsmålet
 *Skal faktatjekkes grundigt, før noget rettes, men gives her som baggrund til F1.*
 
