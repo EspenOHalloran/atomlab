@@ -73,13 +73,16 @@ const MÅNER = [
   },
 ];
 
-// Billederne (se billeder/solsystem/KILDER.md): pc henter -4k.jpg, tablet, telefon og tests -2k.jpg.
+// Billederne (se billeder/solsystem/KILDER.md): pc, tablet og telefon henter -4k.jpg, tests -2k.jpg.
+// Pc henter -8k.jpg af de måner, hvor originalen er skarp nok (MÅNER_8K), hvis grafikkortet kan klare det.
 // De bliver i grafikkortet, så det går hurtigt at åbne prototypen igen.
-const STØRRELSE = LAV_KVALITET || TEST_HURTIG ? '2k' : '4k';
+const STØRRELSE = TEST_HURTIG ? '2k' : '4k';
+const MÅNER_8K = new Set(['enceladus', 'tethys', 'dione', 'rhea']);
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
 const henter = new THREE.TextureLoader();
 const lager = new Map();
-// farve: billedet er et farvefoto (sRGB). Månernes kort er målinger i gråtoner og bruges, som de er.
+// farve: billedet er et farvefoto (sRGB). Månernes kort er målinger i gråtoner og bruges, som de er,
+// med kun én kanal i grafikkortet (fylder en fjerdedel).
 function hent(navn, færdig, farve = true) {
   let b = lager.get(navn);
   if (!b) {
@@ -87,6 +90,7 @@ function hent(navn, færdig, farve = true) {
     lager.set(navn, b);
     henter.load(new URL(navn, MAPPE).href, (t) => {
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      if (!farve) t.format = THREE.RedFormat;
       b.tekstur = t;
       for (const f of b.venter) f(t);
       b.venter.length = 0;
@@ -204,10 +208,12 @@ export default {
       m.krop.rotation.y = m.vinkel + Math.PI; // længdegrad 0° vender mod Saturn
     }
     for (const m of måner) sætVinkel(m, m.vinkel / GRAD);
+    const kan8k = verden.renderer.capabilities.maxTextureSize >= 8192;
+    const måneStørrelse = (id) => (!LAV_KVALITET && !TEST_HURTIG && kan8k && MÅNER_8K.has(id) ? '8k' : STØRRELSE);
     function hentKort(m) {
       if (m.hentet) return;
       m.hentet = true;
-      hent(`${m.id}-${STØRRELSE}.jpg`, (t) => m.klode.sætKort(t), false);
+      hent(`${m.id}-${måneStørrelse(m.id)}.jpg`, (t) => m.klode.sætKort(t), false);
     }
 
     // Solen: en lille, skarp prik langt væk i den retning, lyset kommer fra (fra Saturn ser den ca. 9½ gange mindre ud end fra Jorden)
@@ -451,6 +457,8 @@ export default {
         visning: () => visning,
         tur: () => ({ trin: tur?.trin ?? null, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
         hop: () => rejse.hop(), // gør den igangværende flyvning færdig
+        // de hentede billeder, og om de ligger med én kanal i grafikkortet
+        billeder: () => Object.fromEntries([...lager].filter(([, b]) => b.tekstur).map(([n, b]) => [n, b.tekstur.format === THREE.RedFormat ? 'én kanal' : 'farver'])),
       },
     };
   },

@@ -1,7 +1,10 @@
 # Laver billederne til prototypen med Saturn, Enceladus og Titan (js/kosmos/saturn.js) ud fra originalerne.
 # Hent originalerne til en mappe (navnene til venstre), og kør:  python3 lav_saturn.py <mappe med originaler> <ud-mappe>
+# Mangler en original, springes den over (så kan man lave én klode ad gangen).
+# Wikimedia svarer 429, hvis forespørgslen ikke har en User-Agent (fx curl -A "AtomLab-billedvaerktoej").
 #
-#   Solarsystemscope_texture_8k_saturn.jpg            Saturn (Solar System Scope, CC BY 4.0), via Wikimedia Commons:
+#   Solarsystemscope_texture_8k_saturn.jpg            Saturn (Solar System Scope, CC BY 4.0), via Wikimedia Commons.
+#       Trods navnet er billedet kun 4096 x 2048, så Saturn får ikke et 8k-kort:
 #       https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_8k_saturn.jpg
 #   Solarsystemscope_texture_8k_saturn_ring_alpha.png Saturns ringe (Solar System Scope, CC BY 4.0), via Wikimedia Commons:
 #       https://upload.wikimedia.org/wikipedia/commons/2/29/Solarsystemscope_texture_8k_saturn_ring_alpha.png
@@ -31,33 +34,52 @@ ind, ud = sys.argv[1], sys.argv[2]
 os.makedirs(ud, exist_ok=True)
 
 
-def gem_jpg(im, navn, kvalitet=88):
-    for størrelse, b in (('4k', 4096), ('2k', 2048)):
+def findes(fil):
+    if os.path.exists(os.path.join(ind, fil)):
+        return True
+    print('springer over (mangler):', fil)
+    return False
+
+
+def gem_jpg(im, navn, kvalitet=88, otte_k=False):
+    # 8k kun, hvor originalen har mindst 8192 pixel hele vejen rundt (se docs/plan-saturn-kvalitet.md, S1)
+    størrelser = (('8k', 8192),) * otte_k + (('4k', 4096), ('2k', 2048))
+    for størrelse, b in størrelser:
         im.resize((b, b // 2), Image.LANCZOS).save(os.path.join(ud, f'{navn}-{størrelse}.jpg'), quality=kvalitet, optimize=True, progressive=True)
 
 
 # Saturn: midten af kortet er allerede længdegrad 0
-gem_jpg(Image.open(os.path.join(ind, 'Solarsystemscope_texture_8k_saturn.jpg')).convert('RGB'), 'saturn')
+if findes('Solarsystemscope_texture_8k_saturn.jpg'):
+    gem_jpg(Image.open(os.path.join(ind, 'Solarsystemscope_texture_8k_saturn.jpg')).convert('RGB'), 'saturn')
 
-# Enceladus: midten er 0° (kortets venstre kant er 180°)
-gem_jpg(Image.open(os.path.join(ind, 'Enceladus_Cassini_mosaic_global_110m.tif')).convert('L'), 'enceladus')
+# Enceladus: midten er 0° (kortets venstre kant er 180°). Kortet er 14401 x 7201: Den sidste søjle er den første
+# igen, og den sidste række (sydpolen) er tom, så begge skæres væk.
+if findes('Enceladus_Cassini_mosaic_global_110m.tif'):
+    im = Image.open(os.path.join(ind, 'Enceladus_Cassini_mosaic_global_110m.tif')).convert('L')
+    gem_jpg(im.crop((0, 0, im.size[0] // 2 * 2, im.size[0] // 2)), 'enceladus', otte_k=True)
 
-# Mimas, Tethys, Dione og Rhea: midten er 0° (se GeoTIFF-felterne), og øst er til højre som på de andre
-for navn, fil in (('mimas', 'MI_170630_DLR_basemap.tif'), ('tethys', 'Tethys_Cassini_mosaic_global_293m.tif'),
-                  ('dione', 'Dione_Cassini_Voyager_mosaic_global_154m.tif'), ('rhea', 'Rhea_Cassini_Voyager_mosaic_global_417m.tif')):
+# Mimas, Tethys, Dione og Rhea: midten er 0° (se GeoTIFF-felterne), og øst er til højre som på de andre.
+# Mimas' kort (ca. 5.800 pixel rundt i originalen) bliver ikke skarpere af 8k.
+for navn, fil, otte_k in (('mimas', 'MI_170630_DLR_basemap.tif', False), ('tethys', 'Tethys_Cassini_mosaic_global_293m.tif', True),
+                          ('dione', 'Dione_Cassini_Voyager_mosaic_global_154m.tif', True), ('rhea', 'Rhea_Cassini_Voyager_mosaic_global_417m.tif', True)):
+    if not findes(fil):
+        continue
     im = Image.open(os.path.join(ind, fil)).convert('L')
-    fak = im.size[0] // 4096
+    fak = im.size[0] // (8192 if otte_k else 4096)
     if fak > 1:
         im = im.reduce(fak)  # de store kort gøres først mindre i hele trin (sparer hukommelse og tid)
-    gem_jpg(im, navn, kvalitet=85)
+    gem_jpg(im, navn, kvalitet=85, otte_k=otte_k)
 
 # Titan: midten er 180°, så kortet rulles en halv omgang
-t = np.asarray(Image.open(os.path.join(ind, 'Titan_ISS_P19658_Mosaic_Global_4km.tif')).convert('L'))
-gem_jpg(Image.fromarray(np.roll(t, t.shape[1] // 2, axis=1)), 'titan')
+if findes('Titan_ISS_P19658_Mosaic_Global_4km.tif'):
+    t = np.asarray(Image.open(os.path.join(ind, 'Titan_ISS_P19658_Mosaic_Global_4km.tif')).convert('L'))
+    gem_jpg(Image.fromarray(np.roll(t, t.shape[1] // 2, axis=1)), 'titan')
 
 # Ringenes farver: fra pixel i ringbilledet til km fra Saturns centrum, stykke for stykke.
 # Ankerpunkterne er fundet i billedet (hvor tætheden springer): C-ringens inderkant, B-ringens inder- og yderkant,
 # A-ringens inder- og yderkant og F-ringen.
+if not findes('Solarsystemscope_texture_8k_saturn_ring_alpha.png'):
+    sys.exit(print('ok (uden ringene)'))
 ring = np.asarray(Image.open(os.path.join(ind, 'Solarsystemscope_texture_8k_saturn_ring_alpha.png')).convert('RGBA')).astype(float) / 255
 farve = ring[:, :, :3].mean(axis=0)
 ANKER_PX = [460, 2340, 5505, 5850, 7700, 8110]

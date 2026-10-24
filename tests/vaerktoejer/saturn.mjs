@@ -2,7 +2,7 @@
 // Kør: node tests/vaerktoejer/saturn.mjs  (billederne lægges i tests/billeder/saturn-vaerktoej/)
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('saturn-vaerktoej');
-const b = await chromium.launch({ args: ARGS });
+const b = await chromium.launch({ args: ARGS, fuldGrafik: true });
 const side = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
 const fejl = [];
 side.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
