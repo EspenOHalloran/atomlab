@@ -68,15 +68,16 @@ const OVERFLADE_FRAGMENT = /* glsl */ `
     }
     stribe *= sydpol;
     farve = mix(farve, vec3(0.55, 0.72, 0.8), max(revne * nord, stribe * 0.75));
-    // Med Cassinis kort bruges det i stedet (det er gråt, så isen får et svagt blåt skær)
-    if (uHarKort > 0.5) farve = vec3(0.94, 0.97, 1.0) * min(texture2D(tKort, vUv).r * 1.85, 1.05);
+    // Med Cassinis kort bruges det i stedet (det er gråt, så isen får et svagt blåt skær).
+    // Dæmpet lidt (S1), så de lyse egne ikke bliver helt hvide med glød, og detaljerne kan ses.
+    if (uHarKort > 0.5) farve = vec3(0.94, 0.97, 1.0) * min(texture2D(tKort, vUv).r * 1.5, 1.0);
     vec3 N = normalize(vNormal);
     vec3 V = normalize(cameraPosition - vVerden);
     float i = max(dot(N, uSol), 0.0);
     float e = max(dot(N, V), 0.0);
     // Isen kaster lyset tilbage næsten som Månen (Lommel-Seeliger blandet med Lambert)
     float lys = mix(i, 2.0 * i / (i + e + 0.001), 0.5);
-    gl_FragColor = vec4(farve * lys * 1.1 + farve * 0.012, 1.0);
+    gl_FragColor = vec4(farve * lys + farve * 0.012, 1.0);
   }`;
 
 const FONTÆNE_VERTEX = /* glsl */ `

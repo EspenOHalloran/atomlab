@@ -42,6 +42,7 @@ I dag (`js/kosmos/saturn.js`, `STØRRELSE`) får pc 4k og tablet, telefon og tes
 - Enceladus' original har en ekstra søjle og en tom nederste række (sydpolen). De skæres nu væk.
 - Månernes kort ligger med én kanal (`RedFormat`). På pc fylder de fire 8k-kort ca. 45 MB hver i grafikkortet (med mipmaps), og 8k-filerne er 3,7-6,6 MB at hente.
 - `tests/vaerktoejer/saturn.mjs` tegnede ikke med fuld grafik (rettet).
+- Enceladus er dæmpet lidt, så den ikke er overstrålet i fuldt dagslys (jeres ønske). 4k kører fint på mobil og tablet (jeres svar).
 
 ### S2: Ringene fra Cassinis målinger (mellem)
 I dag bygges ringene af grænserne og en omtrentlig tæthed (τ) i `js/data/ringe.js`, og de mange tynde ringe laves af programmet (`ringTekstur` i `js/solsystem/ringe.js`). Helt tæt på ser de "børstede" ud.
