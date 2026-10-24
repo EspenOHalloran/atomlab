@@ -20,6 +20,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] CLAUDE.md, DESIGN.md og denne fil er opdateret.
 
 ### B. Ny eller ændret tekst med fakta
+- [ ] Før hjælpeagenter sættes i gang med at søge: tjek med `curl`, at kildesiderne kan åbnes. Er de blokeret, så bed brugeren om at tilføje domænerne under miljøets Network access først.
 - [ ] Hvert tal er regnet efter eller slået op. Udregningen står i en kommentar eller i commit-beskeden.
 - [ ] Kilden er primær eller pålidelig (fagbøger, NIST, IUPAC, NUBASE, NASA, forskningsartikler). Populærvidenskab og "alle siger det" er ikke nok. Se fælderne i afsnit 2.
 - [ ] Citater: præcis ordlyd fra den oprindelige kilde (bog, afsnit, år). Er ordlyden usikker, så skriv det, eller lad citatet være.
