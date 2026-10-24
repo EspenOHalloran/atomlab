@@ -101,6 +101,7 @@ export function lavTitan(radius, km) {
   const dis = new THREE.Mesh(new THREE.SphereGeometry(radius + 700 / km, 96, 64), disMat);
   gruppe.add(kugle, dis);
   const midt = new THREE.Vector3();
+  const skala = new THREE.Vector3();
   let ir = 0; // 0 = almindeligt lys, 1 = infrarødt (glider blødt imellem)
   let irMål = 0;
   return {
@@ -115,6 +116,11 @@ export function lavTitan(radius, km) {
       disMat.uniforms.uSol.value.copy(solRetning);
       gruppe.getWorldPosition(midt);
       disMat.uniforms.uMidt.value.copy(midt);
+      // Disen regnes i verdens enheder (Saturn-systemet kan være skaleret)
+      const s = gruppe.getWorldScale(skala).x;
+      disMat.uniforms.uR.value = radius * s;
+      disMat.uniforms.uH.value = (60 / km) * s;
+      disMat.uniforms.uLag.value = (500 / km) * s;
     },
   };
 }

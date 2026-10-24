@@ -37,6 +37,12 @@ Jeres svar indtil nu:
 
   De andre måner er små prikker med et tal og en dato, for tallet ændrer sig hele tiden ("Saturn har over 280 kendte måner (marts 2026)").
 
+**Himlen (besluttet 24. oktober 2026)**
+- Himlen er sort med stjerner (ingen farvede tågeskyer). Solen er en lille, skarp prik med lidt glød i den retning, lyset kommer fra. Fra Saturn ser Solen ca. 9½ gange mindre ud end fra Jorden og giver ca. 1/90 så meget lys, men den er stadig blændende.
+- **Planeterne på himlen** (fx Jupiter og Jorden set fra Saturn) kommer med, når overblikket regner planeternes pladser ud efter datoen (trin 2). Fra en anden planet er de kun prikker som stjerner, så de skal have et navn.
+- **Idé:** knappen "Find Jorden" ved Saturn, som Cassinis billede fra 19. juli 2013, hvor Jorden er en lille prik under ringene.
+- **Flyby** (jeres idé, prototypen 24. oktober 2026): en guidet tur forbi planeten, ringene og månerne med stop, en kort tekst og "Næste" ved hvert. Kameraet flyver i den rigtige skala (`js/solsystem/rejse.js`), så den kan genbruges ved alle planeter.
+
 **Tværsnit**
 - Knappen "Skær igennem" viser lagene indeni:
   - **Jorden:** jernkerne, kappe og skorpe

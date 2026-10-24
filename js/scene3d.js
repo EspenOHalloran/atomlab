@@ -114,6 +114,13 @@ export function lavVerden(lærred) {
   return true;
 }
 
+// De farvede tågeskyer er pynt. I vores eget solsystem (fx ved Saturn) er himlen sort med stjerner, så der slås de fra.
+const tågeSkyer = [];
+export function visTåger(til) {
+  for (const t of tågeSkyer) t.visible = til;
+}
+export const tågerVist = () => tågeSkyer.some((t) => t.visible);
+
 // Stjerner i tre størrelser og nogle farvede tågeskyer langt væk
 function lavStjernehimmel(scene) {
   const himmel = new THREE.Group();
@@ -156,6 +163,7 @@ function lavStjernehimmel(scene) {
     sprite.position.copy(sted);
     sprite.scale.setScalar(str);
     himmel.add(sprite);
+    tågeSkyer.push(sprite);
   }
   scene.add(himmel);
   verden.opdateringer.add((dt) => { himmel.rotation.y += dt * 0.004; });

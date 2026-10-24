@@ -84,7 +84,7 @@ const FONTÆNE_VERTEX = /* glsl */ `
   attribute vec3 aRetning;
   attribute float aFase;
   attribute float aFart;
-  uniform float uTid, uR, uStr;
+  uniform float uTid, uR, uRVerden, uStr;
   uniform vec3 uSol, uMidt;
   varying float vLys;
   void main() {
@@ -97,7 +97,7 @@ const FONTÆNE_VERTEX = /* glsl */ `
     // I månens skygge er der intet lys
     vec3 d = v.xyz - uMidt;
     float b = dot(d, uSol);
-    float skygge = (b < 0.0 && length(d - b * uSol) < uR) ? 0.0 : 1.0;
+    float skygge = (b < 0.0 && length(d - b * uSol) < uRVerden) ? 0.0 : 1.0;
     vLys = fremad * skygge * (1.0 - t) * smoothstep(0.0, 0.05, t);
     vec4 mv = viewMatrix * v;
     gl_PointSize = uStr * (1.0 + 2.0 * t) / -mv.z;
@@ -159,7 +159,7 @@ export function lavEnceladus(radius) {
   geo.setAttribute('aFart', new THREE.BufferAttribute(fart, 1));
   const fontæneMat = new THREE.ShaderMaterial({
     uniforms: {
-      uTid: { value: 0 }, uR: { value: radius }, uStr: { value: radius * 26 },
+      uTid: { value: 0 }, uR: { value: radius }, uRVerden: { value: radius }, uStr: { value: radius * 26 },
       uSol: { value: new THREE.Vector3(1, 0, 0) }, uMidt: { value: new THREE.Vector3() },
     },
     vertexShader: FONTÆNE_VERTEX,
@@ -173,6 +173,7 @@ export function lavEnceladus(radius) {
   gruppe.add(fontæner);
 
   const midt = new THREE.Vector3();
+  const skala = new THREE.Vector3();
   return {
     gruppe,
     måne,
@@ -184,6 +185,10 @@ export function lavEnceladus(radius) {
       fontæneMat.uniforms.uTid.value = tid;
       gruppe.getWorldPosition(midt);
       fontæneMat.uniforms.uMidt.value.copy(midt);
+      // Skyggen og partiklernes størrelse regnes i verdens enheder (Saturn-systemet kan være skaleret)
+      const s = gruppe.getWorldScale(skala).x;
+      fontæneMat.uniforms.uRVerden.value = radius * s;
+      fontæneMat.uniforms.uStr.value = radius * 26 * s;
     },
   };
 }
