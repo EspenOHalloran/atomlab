@@ -23,7 +23,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Tokens bruges med omhu (jeres svar 24. oktober 2026):** Sig det med det samme, når noget koster unødigt mange tokens (fx sider, miljøet ikke kan åbne, eller en hjælpeagent, der må søge mange gange). Ofte kan I let løse det, fx ved at tilføje et domæne under miljøets Network access.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (24. oktober 2026, Trin 19 nedenfor):**
+**Senest lavet (24. oktober 2026): Mars, M1.** Planen ([docs/plan-mars.md](docs/plan-mars.md)) og faktagrundlaget med kilder (`docs/fakta-solsystemet.md`, del 3): tallene for Mars og stederne, Phobos og Deimos, formmodellerne, billedkilderne hos USGS og licenserne. Kildesiderne hos NASA, ESA og Wikipedia kunne ikke åbnes, så teksterne faktatjekkes igen mod kilderne i M5, når domænerne er åbne.
+
+**Før det (24. oktober 2026, Trin 19 nedenfor):**
 - **Saturn i Kosmos** (prototypen til Solsystemet) står nu i den almindelige liste efter Solstorm. Der skal ikke længere skrives en særlig adresse. Saturn, ringene og de seks store måner har den rigtige størrelse og afstand, og kameraet flyver mellem dem uden spring. "▶ Start flyby" har ni stop med en kort tekst og "Næste": oversigten, Saturn, hen over ringene, Mimas, Enceladus, Tethys, Dione, Rhea og Titan. Et tryk på en måne besøger den. Alle månerne har Cassinis kort. Teksterne er faktatjekket (`docs/fakta-solsystemet.md` afsnit 4b).
 - **Himlen:** Der er ingen farvede tågeskyer i vores eget solsystem (Saturn, Årstiderne, Formørkelser, Solstorm og Solens fremtid). Ved Saturn er Solen en lille, skarp prik. Tågerne er stadig ved atomerne og i fx Big Bang.
 - **Ringe eller sky i Det periodiske system:** knappen "Elektronsky" øverst på grundstofkortet. Valget deles med Værkstedet og huskes.
