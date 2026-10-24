@@ -644,6 +644,13 @@ Sammenligninger (egne udregninger af storcirkelafstande):
 13. Ingen side kunne åbnes direkte. Alle tal bygger på søgeuddrag og bør tjekkes på kildesiden, hvis der senere er adgang.
 
 
+### 10. Faktatjek af teksterne til Mars-kloden (M2, 24. oktober 2026)
+Siderne kunne nu åbnes direkte (efter at domænerne blev åbnet), så tallene er slået op på selve kildesiden af Opus:
+- **NSSDC Mars Fact Sheet** (https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html, åbnet): radius 3.396,2 km ved ækvator og 3.376,2 km ved polerne (forskel 20 km), middelradius 3.389,5 km (0,532 × Jordens), tyngde 3,73 m/s² = 0,380 × Jordens, siderisk omdrejning 24,6229 t, døgn 24,6597 t (= 24 t 39,6 min, "ca. 40 minutter"), aksehældning 25,19° (Jorden 23,44°), år 686,980 døgn, højdeforskel ("topographic range") 30 km, tryk 6,36 mbar (0,63 % af 1.013 mbar), CO₂ 95,1 %, middeltemperatur ca. 214 K (−59 °C).
+- **NASA "Mars: Facts"** (https://science.nasa.gov/mars/facts/, åbnet): "about half the size of Earth", rød på grund af jern, der oxiderer (ruster), i sten, jord og støv, Olympus Mons "the largest volcano in the solar system". Siden skriver også, at Olympus Mons er "more than 25 miles (… 40 kilometers) tall from base to summit". Det passer ikke med MOLA (ca. 22 km over omgivelserne, Plescia 2004) og bruges ikke.
+- **ESA "The Solar System's grandest canyon"** (åbnet): Valles Marineris "over 4000 km long and 200 km wide, and with a dizzying depth of 10 km".
+- **Egne udregninger:** Lissabon–Moskva 3.906 km (storcirkel). Olympus Mons 21,9 / 8,849 = 2,47 gange Mount Everest ("næsten 2½ gange"). 21,3 km / 3.396 km = 0,63 % af radius ("ca. 0,6 %"). 45 kg × 0,38 = 17 kg. 687 / 365 = 1,88 ("i snit næsten dobbelt så lang"). Kortets pixel: 21.339 km / 8.192 = 2,6 km. Mars-kortenes egne højder: Olympus Mons' top 21,2 km og Hellas' bund −8,2 km (MOLA-mosaikken), i alt 29,4 km ("ca. 30 km"). Middelhøjden (vægtet efter areal) er ca. −2,2 km på den nordlige og ca. +1,1 km på den sydlige halvkugle, altså ca. 3,3 km forskel. Påstanden "sydhalvkuglen ligger ca. 5 km højere" passer derfor ikke for halvkuglerne (den gælder højlandet i forhold til lavlandet), og teksten siger "flere km højere".
+
 ## B. Phobos, Deimos, formmodeller, licenser og panoramaer
 
 Lavet 24. oktober 2026 til AtomLab (Solsystemet: Mars' måner i 3D).

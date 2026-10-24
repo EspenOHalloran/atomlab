@@ -14,8 +14,8 @@ await page.click('a[href="#kosmos"]');
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('16 fænomener', ids.length === 16, ids);
-tjek('16 knapper i listen', (await page.$$('.kosmos-valg')).length === 16);
+tjek('17 fænomener', ids.length === 17, ids);
+tjek('17 knapper i listen', (await page.$$('.kosmos-valg')).length === 17);
 const K = () => page.evaluate(() => window.atomlabTest.kosmos);
 const objekter = {};
 for (const id of ids) {
