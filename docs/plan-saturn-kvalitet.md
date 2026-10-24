@@ -35,6 +35,14 @@ I dag (`js/kosmos/saturn.js`, `STØRRELSE`) får pc 4k og tablet, telefon og tes
 - `billeder/solsystem/lav_saturn.py` laver også `-8k.jpg`. Originalerne skal hentes igen (adresserne står i filen). Ret `KILDER.md`, og tjek for tomme søjler og rækker (tjekliste E).
 - Tests: `tests/saturn.mjs` skal stadig bestå. Tag billeder med `node tests/vaerktoejer/saturn.mjs` (fuld grafik), og tjek, at Enceladus' fontæner og Titans dis ser ud som før.
 
+**Status efter S1 (lavet 24. oktober 2026):**
+- Tablet og telefon henter 4k, tests 2k. Pc henter 8k for Enceladus, Tethys, Dione og Rhea, hvis `maxTextureSize` ≥ 8192 (ellers 4k).
+- **Saturn fik ikke 8k:** Solar System Scopes fil hedder "8k", men er kun 4096 × 2048. Andre kort af Saturn med en fri licens er ikke undersøgt endnu.
+- Enceladus bruger stadig kortet på 110 m. Kortet på 100 m ("HPF") er kun 10 % skarpere, og højpasfiltret fjerner de store forskelle i lysstyrke.
+- Enceladus' original har en ekstra søjle og en tom nederste række (sydpolen). De skæres nu væk.
+- Månernes kort ligger med én kanal (`RedFormat`). På pc fylder de fire 8k-kort ca. 45 MB hver i grafikkortet (med mipmaps), og 8k-filerne er 3,7-6,6 MB at hente.
+- `tests/vaerktoejer/saturn.mjs` tegnede ikke med fuld grafik (rettet).
+
 ### S2: Ringene fra Cassinis målinger (mellem)
 I dag bygges ringene af grænserne og en omtrentlig tæthed (τ) i `js/data/ringe.js`, og de mange tynde ringe laves af programmet (`ringTekstur` i `js/solsystem/ringe.js`). Helt tæt på ser de "børstede" ud.
 - Cassini målte ringenes tæthed meget fint, når den så en stjerne skinne gennem ringene (stjerneokkultationer med UVIS og VIMS). Profilerne ligger hos NASA's PDS Ring-Moon Systems Node (`pds-rings.seti.org`). **Tjek med `curl`, om siden kan åbnes, før arbejdet går i gang. Er den blokeret, så stop og bed jer om adgang.**

@@ -65,7 +65,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Bevægelser i rummet går den rigtige vej: Planeter og måner kredser mod uret set fra nord, og Jorden drejer samme vej. Tjek det med et tal i testen, for det kan ikke ses på et stillbillede.
 - [ ] Synlighed og andet, der følger en tilstand, sættes, når tilstanden skifter, og ikke kun i opdateringen hvert billede. Ellers er det forkert, indtil første billede er tegnet.
 - [ ] Billeder fra andre (fx NASA) står i `billeder/solsystem/KILDER.md` med kilde og licens, kilden nævnes i spillet, og kun filer, der findes, bliver hentet (ellers giver det konsolfejl). Kloder ses i `tests/vaerktoejer/kloder.html` i dagslys, i lav sol, om natten og i modlys.
-- [ ] Kort fra USGS og andre mosaikker: Tjek for helt tomme søjler og rækker (Viking-mosaikken over Mars har en tom første søjle, som gav en sort streg ved 180°), og at kanten ligger præcis på ±180° (skær ud efter kortets geografiske felter). Sæt den øverste og nederste række til samme værdi i et højdekort, ellers bliver polen takket, når nettet løftes.
+- [ ] Kort fra USGS og andre mosaikker: Tjek for helt tomme søjler og rækker (Viking-mosaikken over Mars har en tom første søjle, som gav en sort streg ved 180°), og at kanten ligger præcis på ±180° (skær ud efter kortets geografiske felter). Sæt den øverste og nederste række til samme værdi i et højdekort, ellers bliver polen takket, når nettet løftes. Tjek også billedets rigtige størrelse og en søjle for meget (Enceladus' kort er 14401 × 7201: Den sidste søjle er den første igen, og den nederste række er tom). Stol ikke på filnavnet: Solar System Scopes `8k_saturn.jpg` er kun 4096 × 2048.
 - [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
@@ -76,6 +76,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Tekst søges uden forskel på store og små bogstaver.
 - [ ] En test af en rettet fejl skal først fejle uden rettelsen. Ellers ved vi ikke, om den tester noget.
 - [ ] Fejl, der kun sker ved mange billeder i sekundet (fx mange kugler på kort tid), testes ved at spole frem i små skridt (fx `atomlabTest.vaerksted.spol`). Testbrowseren tegner kun 3-6 billeder i sekundet.
+- [ ] Billedværktøjer, der skal vise fuld grafik, starter browseren med `fuldGrafik: true` (`tests/vaerktoejer/saturn.mjs` manglede det, så billederne var uden glød og med 2k-kort, uden at nogen så det). Tjek, hvilke filer siden faktisk henter (`side.on('request')`), når billeders størrelse eller kvalitet er det, der testes.
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter.
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
@@ -261,6 +262,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Et navn, der bruges to gange i samme funktion** (`const { styring } = verden` og `const styring = []`), gav "Identifier has already been declared", og hele siden stoppede. Kald kameraets styring noget andet (`orbit`) i fænomener, der også har knapper i `styring`.
 - **Billeder fra USGS:** GeoTIFF-felterne (`ModelTiepoint` og projektionens midte) siger, hvilken længdegrad der står i midten. Øst er altid til højre i billedet, også når etiketten siger "PositiveWest".
 - **Faktatjek:** "Herschel er 130 km" (NASA's oversigtsside) og "Ithaca Chasma går tre fjerdedele rundt om Tethys" passer ikke med de nyeste opmålinger (139 km og ca. 1.200 km). Se fælderne i `docs/fakta-solsystemet.md` afsnit 4b.
+- **Skarpere kort (S1, 24. oktober 2026):** Månernes gråtonekort ligger nu med én kanal (`RedFormat`, som Jordens skyer) og fylder en fjerdedel. Det virker, fordi alle shaderne kun læser `.r`. Pc får 8k for Enceladus, Tethys, Dione og Rhea, hvor originalen har mindst 8.192 pixel rundt. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Wikimedia svarer 429, hvis forespørgslen ikke har en User-Agent.
+- **Enceladus er meget lys med glød** (den kaster næsten alt lyset tilbage), så detaljerne bliver svære at se i fuldt dagslys på pc. Det var også sådan før S1. Kig efter det på den rigtige skærm.
 
 ---
 

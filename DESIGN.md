@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 24. oktober 2026 (Mars M2).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 24. oktober 2026 (Saturn S1).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -24,7 +24,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (24. oktober 2026): Mars, M2 (Mars-kloden).** Mars står i Kosmos mellem Solstorm og Saturn: en klode med de rigtige højder fra MOLA (bjergene er et net, der løftes efter højdekortet) og farverne fra Viking i 8k. Mars drejer mod øst og står stille helt tæt på, og knappen "Bjergene 10 gange højere" viser landskabet tydeligt. Teksterne er faktatjekket mod NSSDC, NASA og ESA (`docs/fakta-solsystemet.md`, del 3 afsnit 10). KTX2 kunne ikke prøves (GitHub er blokeret), så kortene er JPG. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M2".
+**Senest lavet (24. oktober 2026): Saturn, S1 (skarpere kort).** Tablet og telefon henter nu 4k-kort af Saturn og månerne (før 2k). Pc henter 8k af Enceladus, Tethys, Dione og Rhea. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Mimas og Titan bliver også på 4k, for deres kilder er ikke skarpere. Månernes kort ligger med én kanal i grafikkortet og fylder en fjerdedel. Enceladus' kort havde en tom række ved sydpolen, og den er skåret væk. Jeres svar ved go: Telefonen må også få 4k, og effort var medium. Detaljer i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S1".
+
+**Før det (24. oktober 2026): Mars, M2 (Mars-kloden).** Mars står i Kosmos mellem Solstorm og Saturn: en klode med de rigtige højder fra MOLA (bjergene er et net, der løftes efter højdekortet) og farverne fra Viking i 8k. Mars drejer mod øst og står stille helt tæt på, og knappen "Bjergene 10 gange højere" viser landskabet tydeligt. Teksterne er faktatjekket mod NSSDC, NASA og ESA (`docs/fakta-solsystemet.md`, del 3 afsnit 10). KTX2 kunne ikke prøves (GitHub er blokeret), så kortene er JPG. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M2".
 
 **Før det (24. oktober 2026): Mars, M1.** Planen ([docs/plan-mars.md](docs/plan-mars.md)) og faktagrundlaget med kilder (`docs/fakta-solsystemet.md`, del 3).
 
@@ -36,9 +38,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (jeres plan 24. oktober 2026):** I starter en ny session med **S1 (skarpere kort til Saturn og månerne)** fra [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) og bagefter **Mars M3 (atmosfæren og lyset)** fra [docs/plan-mars.md](docs/plan-mars.md): den tynde, støvede luft i kanten, tusmørket, polkapperne, skyer af is over vulkanerne og "Modlys". Hver del får et go. S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
+**Næste i gang (jeres plan 24. oktober 2026):** S1 er lavet. Nu venter **Mars M3 (atmosfæren og lyset)** fra [docs/plan-mars.md](docs/plan-mars.md) på et go: den tynde, støvede luft i kanten, tusmørket, polkapperne, skyer af is over vulkanerne og "Modlys". Hver del får et go. S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
-- **GitHub-adgang:** I har åbnet for GitHub under Network access, men i den kørende session gav GitHub stadig 403. Tjek det med `curl` i den nye session, før det bruges.
+- **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
@@ -55,6 +57,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Saturns måner med 4k på tabletten og 8k på pc (S1):** Kører flybyen stadig flydende, og ser månerne skarpere ud tæt på? Enceladus er meget lys med glød i fuldt dagslys på pc, så detaljerne er svære at se. Det var også sådan før S1. Sig til, hvis det skal dæmpes.
 - **Mars:** Hvordan føles det at zoome helt ind og dreje tæt på overfladen, og drejer Mars for hurtigt (en omgang på ca. 1¾ minut)? (Den kører fint på tabletten med 8k.)
 - Saturn på tablet på højkant: Ved Titan står Saturn bag panelerne, men man kan selv dreje. (Saturn og flybyen kører helt flydende på jeres tablet, og I synes, flybyen er super flot, 24. oktober 2026.)
 - Stoppet over ringene: De mange tynde ringe er lavet af programmet og ser lidt "børstede" ud helt tæt på.

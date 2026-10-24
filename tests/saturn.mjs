@@ -2,6 +2,7 @@
 // uden fejl, med flybyen hele vejen rundt.
 // Himlen er sort (ingen farvede tågeskyer) ved Saturn og i de andre fænomener i vores solsystem.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
+import { readdirSync } from 'node:fs';
 import { ringVed, RINGE, MELLEMRUM } from '../js/data/ringe.js';
 const UD = billedmappe('saturn');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -15,6 +16,9 @@ tjek('Encke- og Keeler-mellemrummet er tomme', tau(133584) === 0 && tau(136506) 
 tjek('mellem A- og F-ringen og uden for F-ringen er der intet', tau(138500) === 0 && tau(141500) === 0 && tau(66000) === 0);
 tjek('D-ringen er næsten gennemsigtig', tau(70000) > 0 && tau(70000) < 0.02, tau(70000));
 tjek('ringene ligger i rækkefølge uden overlap', RINGE.every((r, i) => r.ind < r.ud && (i === 0 || RINGE[i - 1].ud <= r.ind)) && MELLEMRUM.every((m) => m.ind > 122170 && m.ud < 136775));
+// 8k-kort kun til de måner, hvor originalen er skarp nok (Saturns kilde er kun 4k)
+const otteK = readdirSync(new URL('../billeder/solsystem/', import.meta.url)).filter((f) => f.endsWith('-8k.jpg') && !f.startsWith('mars')).sort();
+tjek('8k-kort til Enceladus, Tethys, Dione og Rhea (ikke Saturn, Mimas og Titan)', otteK.join() === 'dione-8k.jpg,enceladus-8k.jpg,rhea-8k.jpg,tethys-8k.jpg', otteK.join());
 tjek('Cassini-delingen er ca. 4.600 km bred', Math.abs(RINGE.find((r) => r.navn === 'Cassini-delingen').ud - RINGE.find((r) => r.navn === 'Cassini-delingen').ind - 4600) < 50);
 
 const b = await chromium.launch({ args: ARGS });
@@ -112,6 +116,11 @@ const side = async (adresse) => {
   tjek('flybyen: ni stop i rækkefølge med prikker', titler.every(([t, prikker], i) => t.includes(forventet[i]) && prikker === 9), JSON.stringify(titler.map((x) => [x[0].slice(0, 30), x[1], x[2]])));
   tjek('flybyen: knapperne under turen', titler.slice(0, 8).every(([, , trin]) => trin !== null) && titler[8][2] === null, JSON.stringify(titler.map((x) => x[2])));
   await s.screenshot({ path: UD + '/5-flyby-titan.png' });
+  // Billederne (S1 i docs/plan-saturn-kvalitet.md): tests henter 2k, og månernes gråtonekort har kun én kanal
+  const måneKort = ['mimas', 'enceladus', 'tethys', 'dione', 'rhea', 'titan'].map((m) => `${m}-2k.jpg`);
+  await s.waitForFunction((navne) => navne.every((n) => n in atomlabTest.kosmos.fænomen().billeder()), måneKort, { timeout: 30000 }).catch(() => {});
+  const hentet = await s.evaluate(() => atomlabTest.kosmos.fænomen().billeder());
+  tjek('billederne: 2k i tests, månerne med én kanal og Saturn i farver', måneKort.every((n) => hentet[n] === 'én kanal') && hentet['saturn-2k.jpg'] === 'farver', JSON.stringify(hentet));
   const slut = await knapper();
   tjek('efter flybyen: de almindelige knapper og "Under disen" ved Titan', slut.includes('▶ Start flyby') && slut.some((k) => k.startsWith('Under disen')) && /Turen er slut/.test(await s.textContent('#kosmosForklaring')), JSON.stringify(slut));
   // "Stop flyby" midt i turen fjerner underteksten
