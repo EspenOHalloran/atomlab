@@ -29,10 +29,9 @@ import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
 import saturn from './kosmos/saturn.js';
 
-// Rækkefølgen fortæller en historie: fra Big Bang og vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
-export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
-// Prototypen til Solsystemet (Saturn og månerne) er kun med, når der står ?saturn i adressen
-if (new URLSearchParams(location.search).has('saturn')) FÆNOMENER.push(saturn);
+// Rækkefølgen fortæller en historie: fra Big Bang og vores eget solsystem (Jorden, Solen og ud til Saturn),
+// over stjerner der dør, til sorte huller og ormehuller. Saturn er en prototype til den kommende del Solsystemet.
+export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, saturn, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
 const NØGLE_SET = 'atomlabKosmosSet'; // de fænomener, man har kigget på
@@ -373,6 +372,7 @@ export function testAdgang() {
     knapper: () => (kørende?.styring ?? []).map((s) => s.tekst ?? s.navn),
     tryk: (i) => {
       const s = kørende.styring[i];
+      if (!s) return; // knapperne kan have skiftet (fx når Saturns flyby starter)
       if (s.handling) s.handling();
       else if (s.skift) { s.til = !s.til; s.skift(s.til); }
       lavStyring();

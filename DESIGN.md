@@ -5,89 +5,60 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 ## Lige nu (status til næste session)
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 24. oktober 2026.*
 
-**Besluttet 24. oktober 2026:**
-- **Atomet:** B (orbitalernes former) er standard for alle. I har ikke set den på tabletten endnu, så sig til, hvis den skal ændres.
-- **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys. **Venter**, til B og Saturn er færdige.
-- **Idéen med Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Derfor skal Saturn-prototypen vise Saturns store måner, så man kan se dem og flyve hen til dem.
-- **Saturn (jeres bemærkninger):** kunne styres med piletasterne, vise flere måner end Enceladus og være lidt mindre lysstærk. **Lavet 24. oktober 2026:** Piletasterne drejer kameraet i hele Kosmos. Visningen "Månerne" viser de seks store måner, og et tryk på en måne flyver til Enceladus eller Titan (de andre får en kort tekst). Saturn, ringene, Enceladus og Titan lyser ca. 12 % svagere.
-- **Flyby ved Saturn** (jeres idé): en guidet tur tæt over ringene og videre forbi månerne, med stop og en kort tekst ved hver og "Næste". Skal senere bruges ved alle planeter. **Svar: bygges i prototypen nu.** **Lavet 24. oktober 2026:** Saturn, ringene og alle seks store måner er nu i den rigtige størrelse og afstand, og kameraet flyver mellem dem uden spring (`js/solsystem/rejse.js`). Turen har ni stop: oversigten, Saturn, hen over ringene, Mimas (krateret Herschel), Enceladus (fontænerne), Tethys (krateret Odysseus), Dione (isklipperne), Rhea og Titan med Saturn ved siden af. Hvert stop har en undertekst og "Næste". Et tryk på en måne besøger den, og Mimas, Tethys, Dione og Rhea har Cassinis kort. Teksterne er faktatjekket (`docs/fakta-solsystemet.md` afsnit 4b).
-- **Himlen i vores solsystem** (jeres spørgsmål om det blå lys bag Saturn): Lyset var fire farvede tågeskyer, som var pynt i den fælles stjernehimmel. **Svar:** Ved Saturn er himlen sort med stjerner, og Solen er en lille, skarp prik med lidt glød i den retning, lyset kommer fra. Tågerne forsvinder også i Årstiderne, Formørkelser, Solstorm og Solens fremtid, men bliver ved atomerne og fx Big Bang og Stjernefødsel. Jupiter, Jorden og de andre planeter på himlen venter til Solsystemet, hvor deres pladser regnes ud efter datoen (se [planen](docs/plan-solsystemet.md)). **Lavet 24. oktober 2026.**
-- **Ringe eller sky i Det periodiske system** (jeres spørgsmål): **Svar: ja**, med samme knap som i Værkstedet. **Lavet 24. oktober 2026:** knappen "Elektronsky" øverst på grundstofkortet. Valget deles med Værkstedet og huskes.
-- **Orbitalerne i store atomer** (fx jern) er svære at læse: De mange former ligger oven i hinanden og ligner en blomst. **Svar: behold som nu, men tag det op igen.** Forslaget var én underskal ad gangen (fx "4s" og "3d") med en kort tekst, som i fysikbøgerne.
-- **"Start forfra"** (jeres ønske): Alle steder, hvor man kan klare alle opgaver (Værkstedet, Stjerneovnen, Reaktoren og Batteriet), skal man kunne starte forfra. **Lavet 24. oktober 2026:** en knap nederst i opgavelisten, der kræver to tryk og kun nulstiller den del.
+**Sådan arbejder vi (jeres svar):**
+- Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
+- Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når hele testsamlingen er grøn, så det kommer på GitHub Pages med det samme (https://espenohalloran.github.io/atomlab/). Bagefter startes arbejdsgrenen forfra fra `main`.
+- Beslutninger og jeres svar skrives ind her med det samme, ikke kun i chatten.
+- Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).
+- Tabletten bruges lige meget på langs og på højkant. Lyd: ingen baggrundsmusik, de små lyde bliver.
 
-Molekyler venter (planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md)). Nu arbejdes der kun på Saturn-prototypen: Først kommer de rigtige billeder med, og så kigger I på den på tabletten. **Lavet 24. oktober 2026** (USGS blev tilladt samme dag).
+**Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Flybyen ved Saturn er første skridt og skal senere bruges ved alle planeter.
 
-**Senest lavet:**
-- **Punkt 9: Planer og en prototype til de store dele** (23. oktober 2026). Opus stopper her, så I kan kigge:
-  - **Molekyler:** planen ([docs/plan-molekyler.md](docs/plan-molekyler.md)) med Byttebørsen (ionbinding med "harpunen"), Byg molekyler (formen kommer af elektronparrene) og knaldgas, og faktagrundlaget ([docs/fakta-molekyler.md](docs/fakta-molekyler.md)). Jeres svar på de fem spørgsmål står i afsnit 7 i planen.
-  - **Solsystemet, trin 0:** faktagrundlaget ([docs/fakta-solsystemet.md](docs/fakta-solsystemet.md)) og en gennemgang af planen (nederst i [planen](docs/plan-solsystemet.md)). Vigtige rettelser: Titans hav dybt inde er omstridt siden december 2025, Europas is er måske tykkere, og Dragonfly kommer først af sted i 2028. Delen om Voyager og slyngen er skrevet ud fra hukommelsen og skal tjekkes, før Rumrejsen bygges.
-  - **Solsystemet, trin 1b (prototypen):** Åbn https://espenohalloran.github.io/atomlab/?saturn#kosmos på tabletten, og vælg "Saturn (prototype)" nederst i listen. Saturn med ringene (de rigtige mellemrum, skygger begge veje og ringene bagfra i modlys), Enceladus med fontænerne fra tigerstriberne og Titan i orange dis, der lyser som en ring i modlys. **24. oktober 2026: med rigtige billeder:** Saturns kort og ringenes farver (Solar System Scope, CC BY 4.0), Cassinis kort over Enceladus (fontænerne kommer fra de rigtige tigerstriber) og Titans overflade i infrarødt lys (knappen "Under disen"). **Venter på jeres mening:** Er niveauet rigtigt, og kører det glat på tabletten, før resten af Solsystemet bygges?
-- **Punkt 7: Grundstofkortet i lag og fremgang i menuen** (23. oktober 2026): "I din hverdag", "I din krop" og "I universet" for 41 grundstoffer med "Mere" og links, og fremgangen og "Næste eventyr" på kortene i menuen (se Trin 18).
-- **Punkt 6: Batteriet** (23. oktober 2026): grafit med sekskanter og metaloxid som en krystal, en guide første gang, "Næste skridt" og "Vis mig" i slowmotion, navnet "lithium-ion-batteri" og "LiPo eller Li-ion?" i hjælpen (se Trin 18).
-- **Punkt 2-4: Dybde i lag, panelerne og "Hvorfor?"-kortene** (23. oktober 2026), bygget efter [planen](docs/plan-lag.md):
-  - **Panelerne kan skjules** i Værkstedet, Stjerneovnen, Reaktoren, Batteriet og Kosmos: en fane på kanten af 3D-billedet (‹ ›), knappen "Kun grafik" i toplinjen og tasten G (Esc henter dem). Valget huskes for hver skærm. På højkant viser "Kun grafik" 3D-billedet på hele skærmen, og i Kosmos står "Næste ›" så nederst i 3D-billedet.
-  - **Foldebokse:** I Stjerneovnen og Reaktoren er forklaringerne foldet sammen til en overskrift og én linje. Den seneste reaktion folder sig selv ud, og opgaverne står som én linje ("Opgaver 0 af 7 ★"). Det, man selv folder ud, huskes.
-  - **Korte undertekster:** I Stjerneovnen siger underteksten kun, hvad der skete ("Proton + Deuterium → Helium-3 +5,49 MeV"), og "Hvorfor?" åbner forklaringen.
-  - **"Hvorfor?"-kort** (20 kort, faktatjekket, `js/data/hvorfor.js`): fx "Er det farligt?" (med to lag mere om DNA og doser) i Kerne-fanen og Reaktoren, "Hvorfor holder kernen sammen?", "Hvorfor har atomet skaller?", "Hvad er et magnetfelt?" i Solstorm, Pulsar og Kvasar og "Hvorfor er et sort hul sort?".
-  - "Næste skridt" er skjult, mens guiden kører (medmindre guiden peger på det).
-- **Punkt 5: To nye udgaver af atomet til afprøvning** (23. oktober 2026). Åbn https://espenohalloran.github.io/atomlab/?udgaver#vaerksted på tabletten. Øverst står tre knapper: "Nu" (som i dag), "A: prikker" (orbitalerne som en sky af prikker, der viser, hvor elektronerne sandsynligvis er) og "B: former" (orbitalernes form som glødende overflader, som i fysikbøgerne: kugler for s, dobbeltdråber for p og firkløvere for d). A og B har også skygge mellem kuglerne i kernen og en glidende overgang, når man skifter mellem ringe og sky. **Venter på jeres valg:** A, B, en blanding, eller ingen af dem. Uden `?udgaver` ser atomet ud som før.
-- **Punkt 8: Copyright** i README, hjælpen og `LICENSE`.
-- **Punkt 1: Det sorte hul er sort, og "For nørder" står øverst igen** (23. oktober 2026, Trin 18 nedenfor). Skyggen er nu ca. 2,6 gange bredere end horisonten (som i virkeligheden), og gløden holdes ude af den. Horisonten er en stiplet ring inde i skyggen. Testene `grafik` og `kosmos` tjekker begge dele.
-- **Punkt 2: UI-planen** ([docs/plan-lag.md](docs/plan-lag.md)) er godkendt med jeres svar på de fire spørgsmål.
-- **F1, et samlet overblik** over, hvor AtomLab kan blive bedre ([docs/fable/F1-overblik.md](docs/fable/F1-overblik.md), 23. oktober 2026). Lavet i en session med høj effort ud fra briefen, fordi Fable venter. Det vigtigste: Det er skærmen og ikke koden, der holder AtomLab tilbage. Der er for mange tekster på én gang, og tit står den samme tekst to-tre steder. De 10 forbedringer i kort form:
-  1. ro på skærmen: hver oplysning ét sted og dybde i lag
-  2. skjul panelerne og "Kun grafik"
-  3. "Hvorfor?"-kort der, hvor spørgsmålet opstår (fx "Er det farligt?" og magnetisme)
-  4. et grafisk løft af atomet (fx rigtige orbitaler i elektronskyen)
-  5. Batteriet: grafik, start og navnet "Lithium-ion-batteri"
-  6. grundstofkortet i lag ("I din hverdag", "I din krop", "I universet")
-  7. fremgang og sammenhæng i menuen
-  8. gør det sorte hul sort
-  9. "For nørder" ligger nederst i Kosmos på højkant (`style.css:1081`)
-  10. én fælles byggeklods til lagene og "Næste skridt"
+**Senest lavet (24. oktober 2026, Trin 19 nedenfor):**
+- **Saturn i Kosmos** (prototypen til Solsystemet) står nu i den almindelige liste efter Solstorm. Der skal ikke længere skrives en særlig adresse. Saturn, ringene og de seks store måner har den rigtige størrelse og afstand, og kameraet flyver mellem dem uden spring. "▶ Start flyby" har ni stop med en kort tekst og "Næste": oversigten, Saturn, hen over ringene, Mimas, Enceladus, Tethys, Dione, Rhea og Titan. Et tryk på en måne besøger den. Alle månerne har Cassinis kort. Teksterne er faktatjekket (`docs/fakta-solsystemet.md` afsnit 4b).
+- **Himlen:** Der er ingen farvede tågeskyer i vores eget solsystem (Saturn, Årstiderne, Formørkelser, Solstorm og Solens fremtid). Ved Saturn er Solen en lille, skarp prik. Tågerne er stadig ved atomerne og i fx Big Bang.
+- **Ringe eller sky i Det periodiske system:** knappen "Elektronsky" øverst på grundstofkortet. Valget deles med Værkstedet og huskes.
+- **"Start forfra"** i Værkstedet, Stjerneovnen, Reaktoren og Batteriet: en knap nederst i opgavelisten. Den kræver to tryk og nulstiller kun den del.
+- **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
+- **Atomet:** B (orbitalernes former) er standard for alle.
 
-  Rådet er, at et bredt F2 ikke betaler sig nu. Det gør en kort UI-plan for lagene.
-- Jeres princip om **dybde i lag** (23. oktober 2026). Det står under "Grundregler" nedenfor, og jeres ord står i `docs/fable/soen-og-espens-noter.md`.
-- Noter fra en afprøvning med jeres søn (`docs/fable/soen-og-espens-noter.md`, 23. oktober 2026): paneler, der kan skjules, færre tekstbokse ad gangen, dybere forklaringer, mere fakta om grundstofferne, et grafisk løft af Batteriet og atomerne, og LiPo vs. Li-ion.
-- 14 skærmbilleder fra en rigtig tablet (`docs/fable/tablet/`) og F0, materialet til F1 (`docs/fable/`).
-- Trin 17: Jorden og Månen med rigtige billeder fra NASA (Årstiderne og Formørkelser).
+**Venter på et go** (ikke startet, størrelsen står i parentes):
+1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
+2. **Kategorien som link** (lille), **Ordbogen** (lille til mellem) og **fotoner i Stjerneovnen** (lille, skal faktatjekkes). Forslagene står under "Idéer til senere" nederst.
+3. **Orbitalerne i store atomer** (fx jern) er svære at læse, fordi de mange former ligger oven i hinanden og ligner en blomst. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst, som i fysikbøgerne (mellem).
+4. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor).
+5. **Solsystemet, trin 2:** overblikket med Solen og planeterne, hvor de står i dag. Derefter kan planeterne ses på himlen fra Saturn, og der kan komme en knap "Find Jorden" (se [planen](docs/plan-solsystemet.md) under "Himlen") (stor).
+6. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
+7. **Et citat til Saturn** (de andre fænomener har et). Det skal have en sikker kilde (lille).
+8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
 
-**Go til alle ni punkter herunder** (23. oktober 2026). Jeres svar på de åbne spørgsmål samme dag:
-- **Ud på tabletten:** Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når alle tests er grønne, så det kommer på GitHub Pages med det samme.
-- **UI-planen (punkt 2):** I læser den, før lagene, panelerne og "Hvorfor?"-kortene (punkt 2-4) bygges. Imens laver Opus det, der ikke afhænger af planen.
-- **Atomet (punkt 5):** 2-3 udgaver, som man vælger mellem i appen med `?udgaver` i adressen. I prøver dem på tabletten og siger, hvilken der skal bygges færdig.
-- **Tabletten** bruges lige meget på langs og på højkant. Begge vægtes lige højt.
-- **Fotos af grundstofferne:** Ja, men som et senere trin efter teksterne i lag. Fotos fra Wikimedia Commons med navn og licens. `upload.wikimedia.org` er spærret i miljøet og skal tillades under Network access først.
-- **"Er det farligt?":** I ved ikke, om han så linket. Kortet kommer der, hvor spørgsmålet opstår, med et dybere lag om, hvad strålingen gør ved cellerne og DNA, og hvor meget der skal til.
-- **Lyd:** Ingen baggrundsmusik nu. De små lyde bliver.
-- **De store dele (punkt 9):** plan og faktagrundlag til Molekyler, trin 0 i Solsystemet og prototypen med Saturn, Enceladus og Titan. Så stopper Opus, og I kigger, før de store dele bygges. Solsystemets spørgsmål 1-5 følger planens forslag. Tjernobyl og Liv venter stadig på Fable 5.5.
-
-**Punkterne (i denne rækkefølge, men UI-planen skrives først, så I kan læse den, mens resten laves):**
-1. ✅ **Hurtige rettelser** (F1 punkt 8 og 9): Gør det sorte hul sort (en større skygge uden glød), og flyt "For nørder" op igen i Kosmos på højkant. Lavet 23. oktober 2026.
-2. **En kort UI-plan for lagene** (F1 punkt 1, 3 og 10). **Skrevet og godkendt 23. oktober 2026: [docs/plan-lag.md](docs/plan-lag.md).** Jeres svar: kortet åbner ved knappen, opgaverne foldes sammen, citaterne bliver, og underteksten er kort med "Hvorfor?". Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" med ét tryk, "For nørder" med ét tryk mere). Planen skal også beskrive en fælles byggeklods til lagene, "Næste skridt" og "Vis mig". Den skrives i `docs/`, før der bygges. Mellemstor.
-3. ✅ **Vis eller skjul panelerne** (F1 punkt 2). Lavet 23. oktober 2026.
-4. ✅ **"Hvorfor?"-kort** (F1 punkt 3) med `/faktatjek`. Lavet 23. oktober 2026 (20 kort). Batteriet får sine kort med punkt 6.
-5. ✅ **Et grafisk løft af atomet** (F1 punkt 4). Besluttet 24. oktober 2026: B (orbitalernes former) er standard for alle.
-6. ✅ **Batteriet** (F1 punkt 5): grafik, start og navn. Lavet 23. oktober 2026.
-7. ✅ **Grundstofkortet i lag** (F1 punkt 6) og **fremgang og sammenhæng** (F1 punkt 7). Lavet 23. oktober 2026. Fotos af grundstofferne kommer senere.
-8. ✅ **Copyright:** forslaget under "Før vi deler AtomLab med andre" ("© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" og at man gerne må bruge det i undervisningen). Lavet 23. oktober 2026.
-9. ✅ **De store dele bagefter:** Molekyler (plan og faktagrundlag), Solsystemet (trin 0: gennemgang af [planen](docs/plan-solsystemet.md) og faktagrundlaget, og trin 1b: prototypen med Saturn, Enceladus og Titan bag `?saturn`). Lavet 23. oktober 2026, og Opus stopper her, så I kan kigge. Tjernobyl og Liv venter, til Fable 5.5 kommer.
-
-**Åbne spørgsmål:**
-- De seks spørgsmål i F1 (afsnit 6) er besvaret (se ovenfor). Spørgsmål 1 (UI-planen først): ja.
-- Spørgsmål 1-5 om Solsystemet (afsnit 7 i planen): følger planens forslag, indtil I siger andet.
-- **Atomet (punkt 5):** Hvilken udgave skal bygges færdig: A (prikker), B (former), en blanding eller ingen?
-- **Molekyler:** Besvaret 23. oktober 2026: i Værkstedet med knapper øverst, træk med fingeren, prikker på ringe og Byttebørsen først (afsnit 7 i [planen](docs/plan-molekyler.md)). Venter på et go til M1 (Byttebørsen).
-- **Prototypen af Saturn:** Er niveauet rigtigt, og kører den glat på tabletten? De rigtige billeder er med (24. oktober 2026).
-- **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater), og grænsen for søgninger blev nået. Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager).
+**Åbne spørgsmål til jer:**
+- **Saturn:** Er niveauet rigtigt, og kører det glat på tabletten, før resten af Solsystemet bygges?
+- **Atomet B:** I har ikke set det på tabletten endnu. Sig til, hvis det skal ændres.
+- **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
-- NASA-billederne på en telefon. De er set på jeres tablet (tabletbillede 05-07).
-- Lyden og hvordan det føles med fingre. Det er ikke vurderet i F1.
-- Det nye sorte hul på en rigtig tablet. Det er kun set i testbrowseren (med glød).
-- Skills er ikke prøvet på en rigtig opgave.
-- Prototypen af Saturn på en rigtig tablet. Den er kun set i testbrowseren.
+- Saturn og flybyen på en rigtig tablet. Den er kun set i testbrowseren. På højkant står Saturn bag panelerne ved Titan, men man kan selv dreje.
+- Stoppet over ringene: De mange tynde ringe er lavet af programmet og ser lidt "børstede" ud helt tæt på.
+- NASA-billederne på en telefon. De er set på jeres tablet.
+- Lyden og hvordan det føles med fingre.
+- Det nye sorte hul (fra 23. oktober) på en rigtig tablet.
+
+**Tidligere (23. oktober 2026):** De ni punkter efter F1-overblikket ([docs/fable/F1-overblik.md](docs/fable/F1-overblik.md)) er lavet. Se Trin 18 nedenfor og listen herunder. Noterne fra afprøvningen med jeres søn ligger i `docs/fable/soen-og-espens-noter.md`, og 14 skærmbilleder fra en rigtig tablet i `docs/fable/tablet/`. Jeres svar dengang, som stadig gælder:
+- **Fotos af grundstofferne:** Ja, men efter teksterne i lag (punkt 7 er lavet). Fra Wikimedia Commons med navn og licens.
+- **"Er det farligt?":** Kortet kommer der, hvor spørgsmålet opstår, med et dybere lag om, hvad strålingen gør ved cellerne og DNA, og hvor meget der skal til (lavet som "Hvorfor?"-kort).
+- **Solsystemet:** Spørgsmål 1-5 i planen følger planens forslag, indtil I siger andet.
+
+**Punkterne fra 23. oktober 2026 (alle lavet):**
+1. ✅ **Hurtige rettelser:** Det sorte hul er sort (en større skygge uden glød), og "For nørder" står øverst igen i Kosmos på højkant.
+2. ✅ **En kort UI-plan for lagene:** [docs/plan-lag.md](docs/plan-lag.md), godkendt med jeres svar (kortet åbner ved knappen, opgaverne foldes sammen, citaterne bliver, og underteksten er kort med "Hvorfor?").
+3. ✅ **Vis eller skjul panelerne** og "Kun grafik".
+4. ✅ **"Hvorfor?"-kort** (20 kort, faktatjekket).
+5. ✅ **Et grafisk løft af atomet:** B (orbitalernes former) er standard fra 24. oktober 2026.
+6. ✅ **Batteriet:** grafik, start og navnet "lithium-ion-batteri".
+7. ✅ **Grundstofkortet i lag** og **fremgang i menuen**.
+8. ✅ **Copyright** i README, hjælpen og `LICENSE`.
+9. ✅ **De store dele:** plan og faktagrundlag til Molekyler, trin 0 i Solsystemet og prototypen med Saturn (siden 24. oktober med alle seks måner og flyby).
 
 ## Grundregler
 - Dansk tekst i et enkelt sprog. Fagord forklares.
@@ -250,6 +221,17 @@ Molekyler venter (planen og jeres svar ligger klar i [docs/plan-molekyler.md](do
     - Menuen viser fremgangen på hvert kort ("3/7 ★", "2/118 opdaget" og "2/15 set"). Når en del er klaret, står der "Næste eventyr" på den næste del i rækkefølgen.
     - Senere: fotos af grundstofferne (Wikimedia kan nu hentes, men svarede "for mange forespørgsler" den 23. oktober) og tekster til flere grundstoffer.
   - [x] **Copyright:** "© 2026 Espen O'Halloran. Alle rettigheder forbeholdes" i README, i hjælpen ("Om AtomLab" med kilder og licenser) og i en licensfil (`LICENSE`), og at man gerne må bruge AtomLab i undervisningen og dele linket.
+
+- [x] **Trin 19: Saturn med måner og flyby, en sort himmel og små ønsker** (24. oktober 2026, PR #10-#14)
+  - [x] Saturn-prototypen med rigtige billeder: Saturns kort og ringenes farver (Solar System Scope, CC BY 4.0) og Cassinis kort over alle seks store måner (via USGS, Mimas lavet af DLR).
+  - [x] Saturn, ringene og månerne i den rigtige størrelse og afstand. Kameraets rejse (`js/solsystem/rejse.js`) skalerer systemet, så man kan flyve fra hele systemet ind til en lille måne. Et tryk på en måne besøger den.
+  - [x] Flybyen med ni stop, en undertekst med prikker og "Næste". Teksterne er faktatjekket.
+  - [x] Sort himmel i vores eget solsystem og Solen som en lille prik ved Saturn.
+  - [x] Saturn står i den almindelige liste i Kosmos efter Solstorm (før kun med `?saturn` i adressen).
+  - [x] Piletasterne drejer kameraet i Kosmos.
+  - [x] "Start forfra" i Værkstedet, Stjerneovnen, Reaktoren og Batteriet.
+  - [x] Atomet: B (orbitalernes former) er standard.
+  - [x] Knappen "Elektronsky"/"Ringe" på grundstofkortet i Det periodiske system, og valget deles med Værkstedet.
 
 ## Idéer til senere
 - **Kategorien som link** (jeres ønske, 24. oktober 2026): I Atomværkstedet og Det periodiske system skal kategorien under navnet (fx "Overgangsmetal") kunne trykkes på og vise, hvad kategorien er. **Anbefaling:** et "Hvorfor?"-kort, der popper op ved ordet. Det bruger teksterne fra kategorikortet (`js/data/kategorier.js`: hvad de har til fælles, og hvorfor), så man bliver, hvor man er. Nederst står "Se hele kategorien ›", som åbner kategorikortet i Det periodiske system med forsøget og medlemmerne. Det følger planen for lagene (ét tryk for mere, uden at forlade skærmen), og teksterne findes allerede. Lille opgave. Venter på et go.

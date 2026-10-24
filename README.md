@@ -7,7 +7,7 @@ Lær om atomer og grundstoffer i 3D:
 - **Stjerneovnen:** fusion som i Solens kerne (pp-kæden) og carbon i røde kæmper
 - **Reaktoren:** spalt uran og styr en kædereaktion
 - **Batteriet:** se ioner og elektroner, når et lithium-ion-batteri (her et LiPo-batteri) lades op og aflades
-- **Kosmos:** 15 fænomener, der fortæller en historie: Big Bang, en ny stjerne, Jorden og årstiderne, sol- og måneformørkelser, solstorme, Solens fremtid, en hvid dværg, der eksploderer, supernovaer, pulsarer, kilonovaer, rumtid, tyngdebølger, sorte huller, kvasarer og ormehuller
+- **Kosmos:** 16 fænomener, der fortæller en historie: Big Bang, en ny stjerne, Jorden og årstiderne, sol- og måneformørkelser, solstorme, Saturn og dens måner (med en flyby), Solens fremtid, en hvid dværg, der eksploderer, supernovaer, pulsarer, kilonovaer, rumtid, tyngdebølger, sorte huller, kvasarer og ormehuller
 
 Fagord (neutrino, isotop, plasma …) har prikker under og kan trykkes på for en kort forklaring.
 

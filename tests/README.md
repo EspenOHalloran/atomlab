@@ -51,7 +51,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `lag` | Dybde i lag: panelerne kan skjules (fanerne, "Kun grafik", G og Esc) og huskes, "Kun grafik" på højkant, opgaverne foldet sammen, den korte undertekst med "Hvorfor?", "Hvorfor?"-kortene (lag for lag, Esc, tryk udenfor, nedefra på telefon), foldebokse, der huskes, og at "Næste skridt" er skjult under guiden |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
-| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), at Saturn, Månerne, Enceladus og Titan kan vises i Kosmos med `?saturn` (og ikke uden), at piletasterne drejer kameraet, at et tryk på en måne besøger den, at systemet skaleres tæt på en måne, flybyens ni stop med undertekst og "Næste", og at himlen er sort (uden tågeskyer) i vores solsystem |
+| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), at Saturn, Månerne, Enceladus og Titan kan vises i Kosmos (Saturn står efter Solstorm), at piletasterne drejer kameraet, at et tryk på en måne besøger den, at systemet skaleres tæt på en måne, flybyens ni stop med undertekst og "Næste", og at himlen er sort (uden tågeskyer) i vores solsystem |
 | `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen. Det sorte hul er sort i midten, også med glød, og dets ekstra trin i efterbehandlingen fjernes igen |
 
 ## Værktøjer

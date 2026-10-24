@@ -1,5 +1,5 @@
 // Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), og at Saturn og månerne kan vises i Kosmos
-// med ?saturn uden fejl, med flybyen hele vejen rundt. Uden ?saturn er prototypen ikke med.
+// uden fejl, med flybyen hele vejen rundt.
 // Himlen er sort (ingen farvede tågeskyer) ved Saturn og i de andre fænomener i vores solsystem.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { ringVed, RINGE, MELLEMRUM } from '../js/data/ringe.js';
@@ -27,10 +27,11 @@ const side = async (adresse) => {
   return s;
 };
 
-// Uden ?saturn er prototypen ikke i listen
+// Saturn står i listen efter Solstorm (uden en særlig adresse)
 {
   const s = await side(`${ADRESSE}/?test#kosmos`);
-  tjek('uden ?saturn: ikke i listen', !(await s.evaluate(() => document.querySelector('.kosmos-valg[data-id="saturn"]'))));
+  const ids = await s.evaluate(() => atomlabTest.kosmos.fænomener);
+  tjek('Saturn står i listen efter Solstorm', ids.indexOf('saturn') === ids.indexOf('solstorm') + 1 && Boolean(await s.$('.kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
   // Tågeskyerne: væk i vores solsystem (fx Årstiderne), med i fx Big Bang og igen uden for Kosmos
   await s.click('.kosmos-valg[data-id="aarstider"]');
   const iÅrstiderne = await s.evaluate(() => atomlabTest.kosmos.tåger());
@@ -40,14 +41,14 @@ const side = async (adresse) => {
   await s.context().close();
 }
 
-// Med ?saturn: alle tre visninger og modlys
+// Visningerne, månerne, modlys og flybyen
 {
-  const s = await side(`${ADRESSE}/?test&saturn#kosmos`);
+  const s = await side(`${ADRESSE}/?test#kosmos`);
   await s.click('.kosmos-valg[data-id="saturn"]');
   await s.waitForTimeout(1500);
   const knapper = async () => s.evaluate(() => [...document.querySelectorAll('#kosmosStyring button')].map((k) => k.textContent.trim()));
   const knapperNu = await knapper();
-  tjek('med ?saturn: knapperne Saturn, Månerne, Enceladus, Titan og Modlys', ['Saturn', 'Månerne', 'Enceladus', 'Titan', 'Modlys'].every((t) => knapperNu.some((k) => k.includes(t))), JSON.stringify(await knapper()));
+  tjek('knapperne Saturn, Månerne, Enceladus, Titan, Start flyby og Modlys', ['Saturn', 'Månerne', 'Enceladus', 'Titan', 'Start flyby', 'Modlys'].every((t) => knapperNu.some((k) => k.includes(t))), JSON.stringify(await knapper()));
   tjek('Saturn: teksten om skyggerne', /skyggen/.test(await s.textContent('#kosmosForklaring')));
   tjek('Saturn: sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.kosmos.tåger())));
   tjek('panelet fortæller om alle tre', /Saturn/.test(await s.textContent('#kosmosTekst')) && /Huygens/.test(await s.textContent('#kosmosTekst')));
