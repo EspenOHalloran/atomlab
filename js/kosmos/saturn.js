@@ -1,5 +1,5 @@
 // Prototype til Solsystemet (trin 1b i docs/plan-solsystemet.md): Saturn med ringene og de seks store måner i den
-// rigtige størrelse og afstand, med en guidet tur (flyby). Vises kun med ?saturn i adressen (se FÆNOMENER i js/kosmos.js).
+// rigtige størrelse og afstand, med en guidet tur (flyby). Står i Kosmos efter Solstorm (se FÆNOMENER i js/kosmos.js).
 // Tal fra docs/fakta-solsystemet.md. Grafikken ligger i js/solsystem/, så Solsystemet kan genbruge den.
 //
 // Hele systemet er én gruppe (1 enhed = 10.000 km), som rejsen (js/solsystem/rejse.js) skalerer og flytter, så det,
@@ -127,7 +127,7 @@ const VISNINGER = {
 
 export default {
   id: 'saturn',
-  navn: 'Saturn (prototype)',
+  navn: 'Saturn',
   ikon: '🪐',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Ringene og de store måner',
