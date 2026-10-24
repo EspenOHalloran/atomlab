@@ -20,6 +20,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 **Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Flybyen ved Saturn er første skridt og skal senere bruges ved alle planeter.
 
 **Mars (besluttet 24. oktober 2026):** Mars bygges som Saturn med Phobos og Deimos og en flyby, der også besøger steder på planeten (Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale og Jezero). Jeres svar: Saturn og flybyen kører helt flydende på tabletten, så vi giver den gas med grafikken. "Det hele skal med. Det skal være så flot og imponerende som muligt": detaljer helt tæt på, "Stå på Mars" og månerne i den rigtige form. Opgaven er delt i otte delopgaver (M1-M8), og I siger go mellem hver. Planen står i [docs/plan-mars.md](docs/plan-mars.md). I M4 flyttes Mars og Saturn til deres egen skærm, "Solsystemet". Overblikket med Solen og planeterne (trin 2) venter. Mars får et 8k-kort.
+- **Tokens bruges med omhu (jeres svar 24. oktober 2026):** Sig det med det samme, når noget koster unødigt mange tokens (fx sider, miljøet ikke kan åbne, eller en hjælpeagent, der må søge mange gange). Ofte kan I let løse det, fx ved at tilføje et domæne under miljøets Network access.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
 **Senest lavet (24. oktober 2026, Trin 19 nedenfor):**
