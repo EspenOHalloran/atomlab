@@ -14,6 +14,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Flybyen ved Saturn er første skridt og skal senere bruges ved alle planeter.
 
+**Mars (besluttet 24. oktober 2026):** Mars bygges som Saturn med Phobos og Deimos og en flyby, der også besøger steder på planeten (Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale og Jezero). Jeres svar: Saturn og flybyen kører helt flydende på tabletten, så vi giver den gas med grafikken. "Det hele skal med. Det skal være så flot og imponerende som muligt": detaljer helt tæt på, "Stå på Mars" og månerne i den rigtige form. Opgaven er delt i otte delopgaver (M1-M8), og I siger go mellem hver. Planen står i [docs/plan-mars.md](docs/plan-mars.md).
+
 **Senest lavet (24. oktober 2026, Trin 19 nedenfor):**
 - **Saturn i Kosmos** (prototypen til Solsystemet) står nu i den almindelige liste efter Solstorm. Der skal ikke længere skrives en særlig adresse. Saturn, ringene og de seks store måner har den rigtige størrelse og afstand, og kameraet flyver mellem dem uden spring. "▶ Start flyby" har ni stop med en kort tekst og "Næste": oversigten, Saturn, hen over ringene, Mimas, Enceladus, Tethys, Dione, Rhea og Titan. Et tryk på en måne besøger den. Alle månerne har Cassinis kort. Teksterne er faktatjekket (`docs/fakta-solsystemet.md` afsnit 4b).
 - **Himlen:** Der er ingen farvede tågeskyer i vores eget solsystem (Saturn, Årstiderne, Formørkelser, Solstorm og Solens fremtid). Ved Saturn er Solen en lille, skarp prik. Tågerne er stadig ved atomerne og i fx Big Bang.
@@ -21,6 +23,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **"Start forfra"** i Værkstedet, Stjerneovnen, Reaktoren og Batteriet: en knap nederst i opgavelisten. Den kræver to tryk og nulstiller kun den del.
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
+
+**Næste i gang: Mars, M2 (Mars-kloden)** venter på jeres go. M1 (planen og faktagrundlaget) er lavet. De næste delopgaver står i [docs/plan-mars.md](docs/plan-mars.md).
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
