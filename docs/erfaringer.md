@@ -63,6 +63,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Bevægelser i rummet går den rigtige vej: Planeter og måner kredser mod uret set fra nord, og Jorden drejer samme vej. Tjek det med et tal i testen, for det kan ikke ses på et stillbillede.
 - [ ] Synlighed og andet, der følger en tilstand, sættes, når tilstanden skifter, og ikke kun i opdateringen hvert billede. Ellers er det forkert, indtil første billede er tegnet.
 - [ ] Billeder fra andre (fx NASA) står i `billeder/solsystem/KILDER.md` med kilde og licens, kilden nævnes i spillet, og kun filer, der findes, bliver hentet (ellers giver det konsolfejl). Kloder ses i `tests/vaerktoejer/kloder.html` i dagslys, i lav sol, om natten og i modlys.
+- [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
@@ -247,6 +248,15 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Kameraet inde i Kosmos er svært at styre i tests:** Fænomenet flytter selv kameraet, og Jorden glider langs banen. Siden `kloder.html` viser Jorden og Månen alene med fast lys og kamera.
 - **En "fejl" kan være rigtig fysik:** En rød plet på Månen i et testbillede var Jordens skygge, der lige strejfede den. Regn efter, før det rettes.
 - **Billeder med én eller to kanaler** kan lægges i grafikkortet som `RedFormat` og `RGFormat` (sparer 50-75 %). Billederne frigives ikke, når et fænomen ryddes, for så skulle de lægges op igen, hver gang man skifter mellem Årstiderne og Formørkelser.
+
+### Saturn i rigtig skala og flybyen (oktober 2026)
+- **Store forskelle i skala:** Fra hele Saturn-systemet (Titans bane er 1,2 mio. km) og helt ind til Mimas (198 km) passer ikke med kameraets faste grænser (stjernehimlen begynder 700 enheder ude, og dybden på skærmen bliver for grov). Løsningen er at skalere og flytte hele systemet, så fokus står i midten, og kameraet altid er tæt på (`js/solsystem/rejse.js`). Det ser ud præcis som et kamera, der flyver. Shadere, der regner med radier eller højder (Enceladus' skygge og partikler, Titans dis, ringenes og planetens skygger), skal gange med `getWorldScale()`.
+- **Glat flyvning mellem meget store og meget små ting:** van Wijk og Nuijs "glatte zoom og panorering" (2003). Skriv formlerne om med `asinh` og `sinh(ρs)/cosh(ρs + r0)`, ellers går store tal ud med hinanden.
+- **Solens retning bestemmer, hvad man kan se:** Med Saturns nordpol mod Solen lå Enceladus' sydpol (fontænerne og tigerstriberne) i mørke. Nu hælder aksen væk fra Solen (sydlig sommer, som omkring 2004).
+- **Rammen virker ikke ens på alle skærme:** Ved Titan står Saturn ved siden af Titan på pc, men bag panelerne på tablet og telefon på højkant. Tjek kameraets stop i alle størrelser.
+- **Et navn, der bruges to gange i samme funktion** (`const { styring } = verden` og `const styring = []`), gav "Identifier has already been declared", og hele siden stoppede. Kald kameraets styring noget andet (`orbit`) i fænomener, der også har knapper i `styring`.
+- **Billeder fra USGS:** GeoTIFF-felterne (`ModelTiepoint` og projektionens midte) siger, hvilken længdegrad der står i midten. Øst er altid til højre i billedet, også når etiketten siger "PositiveWest".
+- **Faktatjek:** "Herschel er 130 km" (NASA's oversigtsside) og "Ithaca Chasma går tre fjerdedele rundt om Tethys" passer ikke med de nyeste opmålinger (139 km og ca. 1.200 km). Se fælderne i `docs/fakta-solsystemet.md` afsnit 4b.
 
 ---
 

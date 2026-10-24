@@ -4,7 +4,7 @@
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTil, passerTilBoks, begrænsDrejning, kameraSving, LAV_KVALITET } from './scene3d.js';
-import { Atom } from './atom.js';
+import { Atom, gemtVisning, gemVisning, visningKnapTekst } from './atom.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skaller, placering } from './data/grundstoffer.js';
 import { typiskeNeutroner, stabileIsotoper, stabilitet } from './data/isotoper.js';
 import { FAKTA, opdagetTekst } from './data/fakta.js';
@@ -502,6 +502,14 @@ function passerFilter(nr) {
 // ---------- Detaljevisning ----------
 function lavKnapper() {
   $('systemLuk').addEventListener('click', () => lukDetalje());
+  // Ringe eller elektronsky (samme knap og samme valg som i værkstedet)
+  $('systemVisning').addEventListener('click', () => {
+    const visning = atom.visning !== 'sky' ? 'sky' : 'ringe';
+    atom.sætVisning(visning);
+    gemVisning(visning);
+    $('systemVisning').textContent = visningKnapTekst(visning);
+    lyd.klik();
+  });
   $('systemForrige').addEventListener('click', () => skift(-1));
   $('systemNæste').addEventListener('click', () => skift(1));
   $('systemByg').addEventListener('click', () => {
@@ -546,6 +554,8 @@ function visDetalje(nr, medLyd = true) {
   vægStyring(false);
   verden.styring.autoRotate = true;
   udfyldKort(nr);
+  if (atom.visning !== gemtVisning()) atom.sætVisning(gemtVisning());
+  $('systemVisning').textContent = visningKnapTekst(atom.visning);
   atom.sætStraks(nr, typiskeNeutroner(nr), nr);
   atom.sætStatus(stabilitet(nr, typiskeNeutroner(nr)).status);
   atom.gruppe.visible = true;
@@ -691,6 +701,7 @@ export function testAdgang() {
     glemForhånd: () => sætForhånd(null),
     valgt: () => valgt,
     åbn: (nr) => visDetalje(nr, false),
+    visning: () => atom.visning, // ringe eller sky
     kategori: () => kategorikort.vist(),
     kategoriSpol: (sek) => kategorikort.spol(sek),
     styring: () => ({ pan: verden.styring.enablePan, én: verden.styring.touches.ONE, mål: verden.styring.target.toArray().map((v) => Math.round(v * 100) / 100) }),

@@ -116,6 +116,7 @@ export default {
   id: 'formoerkelser',
   navn: 'Formørkelser',
   ikon: '🌘',
+  tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Sol- og måneformørkelser, og hvorfor de er sjældne',
   citat: 'saganScene',
   kamera: { retning: [0.35, 0.75, 1], radius: 8 },

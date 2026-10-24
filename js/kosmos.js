@@ -3,7 +3,7 @@
 // { id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, ROLIG, piletaster } from './scene3d.js';
+import { verden, sætVindue, passerTil, ROLIG, piletaster, visTåger, tågerVist } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
@@ -31,7 +31,7 @@ import saturn from './kosmos/saturn.js';
 
 // Rækkefølgen fortæller en historie: fra Big Bang og vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
 export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
-// Prototypen til Solsystemet (Saturn, Enceladus og Titan) er kun med, når der står ?saturn i adressen
+// Prototypen til Solsystemet (Saturn og månerne) er kun med, når der står ?saturn i adressen
 if (new URLSearchParams(location.search).has('saturn')) FÆNOMENER.push(saturn);
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
@@ -111,6 +111,7 @@ export function stopKosmos() {
   rod.visible = false;
   verden.opdateringer.delete(opdater);
   piletaster(false);
+  visTåger(true);
   pause.sæt(false);
   luk();
   stjerneUr.tid = null;
@@ -144,6 +145,7 @@ function vælg(id) {
     // ingen lagring
   }
   visFase(null);
+  visTåger(f.tåger !== false); // tåger: false = en sort himmel med stjerner (i vores eget solsystem)
   $('kosmosForklaring').innerHTML = '';
   forklaringVist = '';
   $('kosmosOverlag').innerHTML = '';
@@ -378,6 +380,7 @@ export function testAdgang() {
     pause: () => pause.til,
     kamera: () => verden.kamera.position.toArray(),
     fænomen: () => kørende?.test, // fænomenets egen testadgang (fx Saturns måner)
+    tåger: () => tågerVist(), // de farvede tågeskyer på himlen
     tid: () => kosmosTid,
     stjerneTid: () => stjerneUr.tid,
     antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },

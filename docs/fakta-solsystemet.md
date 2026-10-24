@@ -156,6 +156,35 @@ Kilder: PDS Ring-Moon Systems Node https://pds-rings.seti.org/saturn/saturn_ring
 
 ---
 
+## 4b. Flybyen ved Saturn: de andre store måner (faktatjek 24. oktober 2026)
+
+Teksterne til flybyen i `js/kosmos/saturn.js` er tjekket af en hjælpeagent (Opus, høj effort). **Alle kilder er kun set som søgeresultater** (WebFetch kunne ikke nå siderne). Tjek de vigtigste tal på JPL SSD (https://ssd.jpl.nasa.gov/sats/phys_par/ og /sats/elem/), NSSDC og USGS Gazetteer (Herschel Feature/2478, Odysseus Feature/4406, Ithaca Chasma Feature/2751). Længdegrader for Saturns måner er i Gazetteer målt mod **vest** (øst = 360° − vest).
+
+| Påstand | Vurdering | Kilde | Brugt i teksten |
+|---|---|---|---|
+| Saturn er 120.536 km bred, ca. 9½ Jorder | rettet (ikke "ni") | NSSDC, NASA/JPL | "Ca. 9½ Jorder kan ligge på række" |
+| Ringene: D til A ca. 70.000 km, mange steder ca. 10 m tykke, over 95 % is, fra støvkorn til "as big as a house" | OK med "mange steder" og "over 95 %" | NASA PIA14943, Hsu m.fl. 2018 (Science) | ja |
+| Cassini-delingen | ringtabellen giver 117.580-122.170 km ≈ 4.600 km, NASA skriver 4.800 km | PDS-ringtabel, NASA Photojournal | "ca. 4.600 km" (som ringdataene i `js/data/ringe.js`) |
+| Mimas: 396 km, 0,942 døgn (22,6 t), 185.540 km | OK | JPL, NSSDC | ja |
+| Herschel: **139 km** (NASA's oversigtsside siger 130), 1,38° S, 111,76° V | rettet | Gazetteer, NASA Photojournal 2017 | "ca. 140 km, cirka en tredjedel" |
+| Herschel blev først set af Voyager 1 i november 1980, Star Wars kom i 1977 | OK | NSSDC, DLR | ja |
+| Slaget var "probably close to breaking the moon apart" | OK med "måske" | NASA | "var måske tæt på at slå Mimas i stykker" |
+| Mimas' hav: 20-30 km under overfladen, yngre end 25 mio. år (pressemeddelelsen: 5-15 mio.), ikke afgjort | præciseret | Lainey m.fl., Nature 626:280 (7. feb. 2024) | "kan være et hav … forskerne er ikke helt enige" |
+| Enceladus' fontæner er vanddamp og iskorn (ikke flydende vand) | rettet | Thomas m.fl. 2016 og afsnit 2 | "vanddamp og iskorn" |
+| Tethys: 1.062 km, 294.620 km, tæthed ca. 0,98 | OK | JPL | ja |
+| Odysseus: 445 km, 32,82° N, 128,89° V, ca. 2/5 af månen | OK | Gazetteer | ja |
+| Ithaca Chasma: Gazetteer 1.219 km, NASA "more than 1,000 km", ca. 100 km bred, 3-5 km dyb. "Tre fjerdedele rundt" stammer fra Voyager-tidens "mindst 270°" og passer ikke med 2.000 km | rettet | Gazetteer, NASA, NTRS 19920001547 | "over 1.000 km lang og op til ca. 100 km bred" |
+| Dione: 1.123 km, 377.400 km, isklipper på flere hundrede meter på den bagerste halvkugle | OK | JPL, NASA/JPL | ja |
+| Diones hav: en model ud fra tyngdemålinger, ca. 100 km under overfladen | OK med "måske" | Beuthe m.fl. 2016 (GRL) | "måske et hav ca. 100 km under isen, men det er ikke sikkert" |
+| Rhea: næststørst, 1.527 km, 527.100 km, måske ca. ¾ is | OK med "måske" | JPL, NASA | ja |
+| Titan: større end Merkur, men kun ca. 40 % af massen. Søerne ligger mest ved nordpolen | OK | IMCCE, ESA/NASA | ja |
+| Antal måner: 285 i marts 2026. 293 i juni 2026 ifølge søgeresultater (APOD, Wikipedia) | usikkert tal | MPC/IAU | "over 280 (2026)" |
+| Geometrisk albedo (Verbiscer m.fl. 2007): Mimas 0,96, Enceladus 1,38, Tethys 1,23, Dione 1,0, Rhea 0,95, Titan 0,22. NSSDC har ældre, lavere tal | kun til lysstyrken i tegningen | Science 315:815 | `lys` i `MÅNER` (forholdet mellem månerne) |
+
+**Hvor turen kigger hen** (østlig længde, som på kortene): Herschel ved ca. −112° (248° Ø), Odysseus ved ca. −129° og 33° N, Diones isklipper omkring 60-110° Ø.
+
+---
+
 ## 5. Billeder til prototypen
 
 | Hvad | Kilde / URL | Licens | Opløsning |

@@ -16,13 +16,14 @@
 </head>
 <body>
   <canvas id="laerred"></canvas>
-  <div id="info">Saturn, Enceladus og Titan (værktøj). Træk for at dreje, rul for at zoome.</div>
+  <div id="info">Saturn og månerne (værktøj). Træk for at dreje, rul for at zoome.</div>
   <script type="module">
     import * as THREE from 'three';
-    import { lavVerden, verden } from '../../js/scene3d.js';
+    import { lavVerden, verden, visTåger } from '../../js/scene3d.js';
     import saturn from '../../js/kosmos/saturn.js';
 
     lavVerden(document.getElementById('laerred'));
+    visTåger(false); // som i Kosmos: sort himmel med stjerner
     const { scene, kamera, styring } = verden;
     styring.autoRotate = false;
     const gruppe = new THREE.Group();
@@ -31,6 +32,7 @@
       verden,
       opdaterKnapper() {},
       forklaring() {},
+      fase(titel) { document.getElementById('info').textContent = titel ?? ''; },
       kamera({ retning, radius }) {
         styring.target.set(0, 0, 0);
         kamera.position.copy(new THREE.Vector3(...retning).normalize().multiplyScalar(radius * 2.6));
@@ -50,7 +52,9 @@
       styring.target.set(0, 0, 0);
       styring.update();
     };
-    window.saturnTest = { tryk, kig, frys: (t) => { tid = t; frosset = true; } };
+    // Flybyen: start den, gå et stop frem, og gør flyvningen færdig med det samme
+    const flyby = { start: () => tryk('▶ Start flyby'), næste: () => tryk('Næste'), hop: () => k.test.hop(), tur: () => k.test.tur() };
+    window.saturnTest = { tryk, kig, flyby, frys: (t) => { tid = t; frosset = true; } };
   </script>
 </body>
 </html>

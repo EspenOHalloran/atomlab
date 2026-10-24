@@ -57,6 +57,7 @@ export default {
   id: 'solensfremtid',
   navn: 'Solens fremtid',
   ikon: '🌅',
+  tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Rød kæmpe, planetarisk tåge og hvid dværg',
   citat: 'eddington',
   kamera: { retning: [0.15, 0.55, 1], radius: 8 },

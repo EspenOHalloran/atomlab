@@ -69,6 +69,7 @@ export default {
   id: 'aarstider',
   navn: 'Årstiderne',
   ikon: '🌍',
+  tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Hvorfor det er sommer i nord, når det er vinter i syd',
   citat: 'einsteinNysgerrighed',
   kamera: { retning: [0.15, 0.9, 1], radius: 17 },

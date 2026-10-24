@@ -15,6 +15,7 @@ export default {
   hvorfor: ['magnetfelt'],
   navn: 'Solstorm',
   ikon: '☀️',
+  tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Når Solen kaster en sky af partikler mod Jorden',
   citat: 'carrington',
   kamera: { retning: [0.12, 0.38, 1], radius: 17, mål: [-1, 0, 0], drej: false },

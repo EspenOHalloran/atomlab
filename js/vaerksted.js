@@ -1,7 +1,7 @@
 // Atomværkstedet: byg et atom af protoner, neutroner og elektroner, og se hvad det bliver.
 
 import { verden, sætVindue, passerTil, kameraSving, flyInd, ROLIG } from './scene3d.js';
-import { Atom, sætUdgave, hentUdgave } from './atom.js';
+import { Atom, sætUdgave, hentUdgave, gemtVisning, gemVisning, visningKnapTekst } from './atom.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering, konfigurationTekst } from './data/grundstoffer.js';
 import { bindingsenergi, kerneRadiusFm } from './data/kerne.js';
 import { stabilitet, isotopNavn, typiskeNeutroner, henfaldsmåde, stabileNeutroner } from './data/isotoper.js';
@@ -208,6 +208,9 @@ export function lavVærksted() {
 export function startVærksted() {
   aktiv = true;
   atom.gruppe.visible = true;
+  // Ringe eller sky, som man sidst valgte (måske i Det periodiske system)
+  if (atom.visning !== gemtVisning()) atom.sætVisning(gemtVisning());
+  $('knapVisning').textContent = visningKnapTekst(atom.visning);
   verden.opdateringer.add(opdater3D);
   sætVindue($('vaerkstedVindue'));
   verden.styring.autoRotate = true;
@@ -525,9 +528,10 @@ function lavKnapper() {
   });
 
   $('knapVisning').addEventListener('click', () => {
-    const sky = atom.visning !== 'sky';
-    atom.sætVisning(sky ? 'sky' : 'ringe');
-    $('knapVisning').textContent = sky ? 'Ringe' : 'Elektronsky';
+    const visning = atom.visning !== 'sky' ? 'sky' : 'ringe';
+    atom.sætVisning(visning);
+    gemVisning(visning);
+    $('knapVisning').textContent = visningKnapTekst(visning);
     lyd.klik();
     opdaterInfo();
   });

@@ -37,6 +37,12 @@ Jeres svar indtil nu:
 
   De andre måner er små prikker med et tal og en dato, for tallet ændrer sig hele tiden ("Saturn har over 280 kendte måner (marts 2026)").
 
+**Himlen (besluttet 24. oktober 2026)**
+- Himlen er sort med stjerner (ingen farvede tågeskyer). Solen er en lille, skarp prik med lidt glød i den retning, lyset kommer fra. Fra Saturn ser Solen ca. 9½ gange mindre ud end fra Jorden og giver ca. 1/90 så meget lys, men den er stadig blændende.
+- **Planeterne på himlen** (fx Jupiter og Jorden set fra Saturn) kommer med, når overblikket regner planeternes pladser ud efter datoen (trin 2). Fra en anden planet er de kun prikker som stjerner, så de skal have et navn.
+- **Idé:** knappen "Find Jorden" ved Saturn, som Cassinis billede fra 19. juli 2013, hvor Jorden er en lille prik under ringene.
+- **Flyby** (jeres idé, prototypen 24. oktober 2026): en guidet tur forbi planeten, ringene og månerne med stop, en kort tekst og "Næste" ved hvert. Kameraet flyver i den rigtige skala (`js/solsystem/rejse.js`), så den kan genbruges ved alle planeter.
+
 **Tværsnit**
 - Knappen "Skær igennem" viser lagene indeni:
   - **Jorden:** jernkerne, kappe og skorpe
@@ -163,7 +169,7 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
 |---|---|---|
 | 0 | ✅ Gennemgang af planen og et faktagrundlag med kilder ([fakta-solsystemet.md](fakta-solsystemet.md)). Lavet af Opus 23. oktober 2026, fordi Fable venter (se "Gennemgang af planen" nederst). Del 2 om Voyager skal tjekkes, før Rumrejsen bygges. | Opus |
 | 1a | ✅ **Jorden og Månen** i topkvalitet i Årstiderne og Formørkelser (lavet i oktober 2026, Trin 17 i DESIGN.md). Teknikken (`js/kosmos/jorden.js`, `lav_billeder.py` og `tests/vaerktoejer/kloder.html`) kan genbruges til planeterne. | Opus |
-| 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos med `?saturn` i adressen. Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Siden 24. oktober 2026 med rigtige billeder: Saturn og ringenes farver fra Solar System Scope (CC BY 4.0), Enceladus og Titan fra Cassini via USGS (`billeder/solsystem/lav_saturn.py`). | Opus |
+| 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos med `?saturn` i adressen. Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Siden 24. oktober 2026 med rigtige billeder: Saturn og ringenes farver fra Solar System Scope (CC BY 4.0), de seks store måner fra Cassini via USGS (`billeder/solsystem/lav_saturn.py`). Samme dag: alt i den rigtige skala, en flyby med ni stop og sort himmel med Solen som en lille prik. | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
 | 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
 | 4 | "Liv i solsystemet?" (tekster faktatjekkes) | Opus + faktatjek |
