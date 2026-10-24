@@ -36,7 +36,9 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang: Mars, M3 (atmosfæren og lyset)** venter på jeres go: den tynde, støvede luft i kanten, tusmørket, polkapperne, skyer af is over vulkanerne og "Modlys". Læs [docs/plan-mars.md](docs/plan-mars.md) først.
+**Næste i gang (jeres plan 24. oktober 2026):** I starter en ny session med **S1 (skarpere kort til Saturn og månerne)** fra [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) og bagefter **Mars M3 (atmosfæren og lyset)** fra [docs/plan-mars.md](docs/plan-mars.md): den tynde, støvede luft i kanten, tusmørket, polkapperne, skyer af is over vulkanerne og "Modlys". Hver del får et go. S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
+- **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
+- **GitHub-adgang:** I har åbnet for GitHub under Network access, men i den kørende session gav GitHub stadig 403. Tjek det med `curl` i den nye session, før det bruges.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
@@ -53,7 +55,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
-- **Mars på tabletten:** Kører det glat, og klarer tabletten 8k-kortet (ca. 170 MB i grafikkortet)? Hvordan føles det at zoome helt ind og dreje tæt på overfladen? Drejer Mars for hurtigt (en omgang på ca. 1¾ minut)?
+- **Mars:** Hvordan føles det at zoome helt ind og dreje tæt på overfladen, og drejer Mars for hurtigt (en omgang på ca. 1¾ minut)? (Den kører fint på tabletten med 8k.)
 - Saturn på tablet på højkant: Ved Titan står Saturn bag panelerne, men man kan selv dreje. (Saturn og flybyen kører helt flydende på jeres tablet, og I synes, flybyen er super flot, 24. oktober 2026.)
 - Stoppet over ringene: De mange tynde ringe er lavet af programmet og ser lidt "børstede" ud helt tæt på.
 - NASA-billederne på en telefon. De er set på jeres tablet.

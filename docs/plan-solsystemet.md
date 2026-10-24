@@ -165,6 +165,8 @@ I vil gerne bruge ekstra ressourcer her, så planen sigter højt. Alt skal stadi
   - tid til at hente billederne på en langsom forbindelse
 
 ## 6. Trin (hvert trin får et go)
+Mars har sin egen plan ([plan-mars.md](plan-mars.md)), og Saturn og månerne i samme kvalitet som Mars står i [plan-saturn-kvalitet.md](plan-saturn-kvalitet.md) (S1-S3).
+
 | Trin | Hvad | Hvem |
 |---|---|---|
 | 0 | ✅ Gennemgang af planen og et faktagrundlag med kilder ([fakta-solsystemet.md](fakta-solsystemet.md)). Lavet af Opus 23. oktober 2026, fordi Fable venter (se "Gennemgang af planen" nederst). Del 2 om Voyager skal tjekkes, før Rumrejsen bygges. | Opus |
