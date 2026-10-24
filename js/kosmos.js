@@ -31,7 +31,7 @@ import saturn from './kosmos/saturn.js';
 
 // Rækkefølgen fortæller en historie: fra Big Bang og vores egen Sol, over stjerner der dør, til sorte huller og ormehuller
 export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
-// Prototypen til Solsystemet (Saturn, Enceladus og Titan) er kun med, når der står ?saturn i adressen
+// Prototypen til Solsystemet (Saturn og månerne) er kun med, når der står ?saturn i adressen
 if (new URLSearchParams(location.search).has('saturn')) FÆNOMENER.push(saturn);
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen

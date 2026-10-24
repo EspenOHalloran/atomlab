@@ -38,7 +38,7 @@ const MÅNER = [
     tekst: 'Fontænerne af vanddamp og iskorn sprøjter op fra de fire "tigerstriber" ved sydpolen. Tryk "Modlys", og se dem lyse.',
     kort: 'Fra fire sprækker ved sydpolen sprøjter fontæner af vanddamp og iskorn ud i rummet. Under isen er der et hav.',
     mere: '<p><b>Enceladus</b> er kun 504 km bred og den mest hvide klode i solsystemet. Iskornene fra fontænerne bliver til Saturns tynde E-ring. Tryk "Modlys", og se fontænerne lyse.</p>',
-    tur: { bane: -15, retning: 0, højde: -22, pad: 1.9 },
+    tur: { bane: -15, retning: 0, højde: -22 },
     forskyd: -0.55, // kameraet kigger lidt under midten, så fontænerne er med
     pad: 1.9,
   },

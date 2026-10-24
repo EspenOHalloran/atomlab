@@ -9,6 +9,14 @@
 #       https://planetarymaps.usgs.gov/mosaic/Enceladus_Cassini_mosaic_global_110m.tif
 #   Titan_ISS_P19658_Mosaic_Global_4km.tif            Titans overflade i nær-infrarødt lys (NASA/JPL/SSI, PIA19658, via USGS):
 #       https://planetarymaps.usgs.gov/mosaic/Titan_ISS_P19658_Mosaic_Global_4km.tif
+#   MI_170630_DLR_basemap.tif                         Mimas (NASA/JPL/SSI, lavet af DLR), pakket ud af zip-filen fra USGS:
+#       https://planetarymaps.usgs.gov/mosaic/Mimas/Cassini_DLR_Mimas.zip  (Cassini_DLR/MI_170630_DLR_basemap.tif)
+#   Tethys_Cassini_mosaic_global_293m.tif             Tethys (NASA/JPL/SSI, via USGS):
+#       https://planetarymaps.usgs.gov/mosaic/Tethys_Cassini_mosaic_global_293m.tif
+#   Dione_Cassini_Voyager_mosaic_global_154m.tif      Dione (NASA/JPL/SSI og Voyager, via USGS):
+#       https://planetarymaps.usgs.gov/mosaic/Dione_Cassini_Voyager_mosaic_global_154m.tif
+#   Rhea_Cassini_Voyager_mosaic_global_417m.tif       Rhea (NASA/JPL/SSI og Voyager, via USGS):
+#       https://planetarymaps.usgs.gov/mosaic/Rhea_Cassini_Voyager_mosaic_global_417m.tif
 #
 # Kortene vendes, så længdegrad 0° (siden, der vender mod Saturn) står midt i billedet, ligesom på Jordens kort.
 # Ringbilledet passer ikke helt med de rigtige afstande (Cassini-delingen er for smal). Derfor bruges kun farverne,
@@ -33,6 +41,15 @@ gem_jpg(Image.open(os.path.join(ind, 'Solarsystemscope_texture_8k_saturn.jpg')).
 
 # Enceladus: midten er 0° (kortets venstre kant er 180°)
 gem_jpg(Image.open(os.path.join(ind, 'Enceladus_Cassini_mosaic_global_110m.tif')).convert('L'), 'enceladus')
+
+# Mimas, Tethys, Dione og Rhea: midten er 0° (se GeoTIFF-felterne), og øst er til højre som på de andre
+for navn, fil in (('mimas', 'MI_170630_DLR_basemap.tif'), ('tethys', 'Tethys_Cassini_mosaic_global_293m.tif'),
+                  ('dione', 'Dione_Cassini_Voyager_mosaic_global_154m.tif'), ('rhea', 'Rhea_Cassini_Voyager_mosaic_global_417m.tif')):
+    im = Image.open(os.path.join(ind, fil)).convert('L')
+    fak = im.size[0] // 4096
+    if fak > 1:
+        im = im.reduce(fak)  # de store kort gøres først mindre i hele trin (sparer hukommelse og tid)
+    gem_jpg(im, navn, kvalitet=85)
 
 # Titan: midten er 180°, så kortet rulles en halv omgang
 t = np.asarray(Image.open(os.path.join(ind, 'Titan_ISS_P19658_Mosaic_Global_4km.tif')).convert('L'))
