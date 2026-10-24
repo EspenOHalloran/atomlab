@@ -11,6 +11,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - Beslutninger og jeres svar skrives ind her med det samme, ikke kun i chatten.
 - Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).
 - Tabletten bruges lige meget på langs og på højkant. Lyd: ingen baggrundsmusik, de små lyde bliver.
+- **Tests (jeres svar 24. oktober 2026):** Test, når det giver mening i forhold til prisen. I tester selv på den rigtige tablet. Derfor:
+  - Mens der arbejdes: kun `node tests/koer-alle.mjs --ændret`. Hele samlingen køres én gang pr. delopgave, før den merges, for `main` er det, jeres søn bruger. Den koster få tokens, når den er grøn (én linje pr. test).
+  - Skærmbilleder koster flest tokens. Tag kun billeder af det, der er ændret, og se kun de størrelser, hvor layoutet kan gå galt (fx pc og tablet på højkant).
+  - Hvordan det føles med fingre, om det kører glat, og hvordan det ser ud på den rigtige skærm, tester I selv. Skriv i "Ikke afprøvet", hvad I skal kigge efter.
+  - Nye tests tjekker logik og tal (fx retninger, pladser og tekster), ikke hvert billede.
 
 **Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Flybyen ved Saturn er første skridt og skal senere bruges ved alle planeter.
 
@@ -38,12 +43,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
 
 **Åbne spørgsmål til jer:**
-- **Saturn:** Er niveauet rigtigt, og kører det glat på tabletten, før resten af Solsystemet bygges?
 - **Atomet B:** I har ikke set det på tabletten endnu. Sig til, hvis det skal ændres.
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
-- Saturn og flybyen på en rigtig tablet. Den er kun set i testbrowseren. På højkant står Saturn bag panelerne ved Titan, men man kan selv dreje.
+- Saturn på tablet på højkant: Ved Titan står Saturn bag panelerne, men man kan selv dreje. (Saturn og flybyen kører helt flydende på jeres tablet, og I synes, flybyen er super flot, 24. oktober 2026.)
 - Stoppet over ringene: De mange tynde ringe er lavet af programmet og ser lidt "børstede" ud helt tæt på.
 - NASA-billederne på en telefon. De er set på jeres tablet.
 - Lyden og hvordan det føles med fingre.
