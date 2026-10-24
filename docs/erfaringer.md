@@ -263,7 +263,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Billeder fra USGS:** GeoTIFF-felterne (`ModelTiepoint` og projektionens midte) siger, hvilken længdegrad der står i midten. Øst er altid til højre i billedet, også når etiketten siger "PositiveWest".
 - **Faktatjek:** "Herschel er 130 km" (NASA's oversigtsside) og "Ithaca Chasma går tre fjerdedele rundt om Tethys" passer ikke med de nyeste opmålinger (139 km og ca. 1.200 km). Se fælderne i `docs/fakta-solsystemet.md` afsnit 4b.
 - **Skarpere kort (S1, 24. oktober 2026):** Månernes gråtonekort ligger nu med én kanal (`RedFormat`, som Jordens skyer) og fylder en fjerdedel. Det virker, fordi alle shaderne kun læser `.r`. Pc får 8k for Enceladus, Tethys, Dione og Rhea, hvor originalen har mindst 8.192 pixel rundt. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Wikimedia svarer 429, hvis forespørgslen ikke har en User-Agent.
-- **Enceladus er meget lys med glød** (den kaster næsten alt lyset tilbage), så detaljerne bliver svære at se i fuldt dagslys på pc. Det var også sådan før S1. Kig efter det på den rigtige skærm.
+- **Enceladus var overstrålet med glød:** Kortet blev ganget med 1,85 og klippet ved 1,05, så de lyse egne blev helt hvide, og gløden lagde en glorie om månen. Nu ganges det med 1,5 uden at blive klippet, og lyset er ca. 10 % svagere (`fontaener.js`). Et lyst kort skal ikke ramme loftet, ellers forsvinder detaljerne. Se det med fuld grafik, for testene tegner uden glød.
 
 ---
 
