@@ -27,11 +27,11 @@ const side = async (adresse) => {
   return s;
 };
 
-// Saturn står i listen efter Solstorm (uden en særlig adresse)
+// Saturn står i listen efter Mars (uden en særlig adresse)
 {
   const s = await side(`${ADRESSE}/?test#kosmos`);
   const ids = await s.evaluate(() => atomlabTest.kosmos.fænomener);
-  tjek('Saturn står i listen efter Solstorm', ids.indexOf('saturn') === ids.indexOf('solstorm') + 1 && Boolean(await s.$('.kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
+  tjek('Saturn står i listen efter Mars', ids.indexOf('saturn') === ids.indexOf('mars') + 1 && Boolean(await s.$('.kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
   // Tågeskyerne: væk i vores solsystem (fx Årstiderne), med i fx Big Bang og igen uden for Kosmos
   await s.click('.kosmos-valg[data-id="aarstider"]');
   const iÅrstiderne = await s.evaluate(() => atomlabTest.kosmos.tåger());

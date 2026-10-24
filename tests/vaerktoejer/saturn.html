@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Saturn (værktøj)</title>
-  <!-- Udviklingsværktøj: prototypen med Saturn, Enceladus og Titan alene (bruges af saturn.mjs). Ikke en del af AtomLab. -->
+  <title>Planeter (værktøj)</title>
+  <!-- Udviklingsværktøj: prototypen med Saturn og månerne alene (bruges af saturn.mjs), eller Mars med ?f=mars (mars.mjs). Ikke en del af AtomLab. -->
   <style>
     html, body { margin: 0; height: 100%; background: #03040c; overflow: hidden; }
     canvas { display: block; }
@@ -16,11 +16,10 @@
 </head>
 <body>
   <canvas id="laerred"></canvas>
-  <div id="info">Saturn og månerne (værktøj). Træk for at dreje, rul for at zoome.</div>
+  <div id="info">Træk for at dreje, rul for at zoome.</div>
   <script type="module">
     import * as THREE from 'three';
     import { lavVerden, verden, visTåger } from '../../js/scene3d.js';
-    import saturn from '../../js/kosmos/saturn.js';
 
     lavVerden(document.getElementById('laerred'));
     visTåger(false); // som i Kosmos: sort himmel med stjerner
@@ -39,7 +38,9 @@
         styring.update();
       },
     };
-    const k = saturn.lav(gruppe, ctx);
+    const navn = new URLSearchParams(location.search).get('f') ?? 'saturn';
+    const fænomen = (await import(`../../js/kosmos/${navn}.js`)).default;
+    const k = fænomen.lav(gruppe, ctx);
     let tid = 0;
     let frosset = false;
     verden.opdateringer.add((dt) => { if (!frosset) tid += dt; k.opdater(dt, tid); });
@@ -54,7 +55,7 @@
     };
     // Flybyen: start den, gå et stop frem, og gør flyvningen færdig med det samme
     const flyby = { start: () => tryk('▶ Start flyby'), næste: () => tryk('Næste'), hop: () => k.test.hop(), tur: () => k.test.tur() };
-    window.saturnTest = { tryk, kig, flyby, frys: (t) => { tid = t; frosset = true; } };
+    window.saturnTest = { tryk, kig, flyby, frys: (t) => { tid = t; frosset = true; }, test: k.test };
   </script>
 </body>
 </html>

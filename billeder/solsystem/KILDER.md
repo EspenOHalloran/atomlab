@@ -25,3 +25,12 @@ NASA's billeder er offentligt ejede (public domain), men NASA skal nævnes som k
 | `titan-4k.jpg` og `-2k.jpg` | Titans overflade i nær-infrarødt lys, set gennem disen (gråtoner, 4 km pr. pixel) | NASA/JPL-Caltech/Space Science Institute, Cassini ISS, PIA19658, fra USGS Astrogeology | Public domain (NASA) |
 
 `lav_saturn.py` laver billederne til Saturn og månerne (adresserne står øverst i filen). Månernes kort har længdegrad 0° (siden, der vender mod Saturn) i midten og øst til højre.
+
+## Mars
+
+`lav_mars.py` laver billederne til Mars (`js/kosmos/mars.js`) ud fra originalerne hos USGS (adresserne står øverst i filen). Kortene har længdegrad 0° i midten og øst til højre. `-8k` er 8192 × 4096 (pc og, som en prøve, tablet), `-4k` bruges, hvis grafikkortet ikke kan klare 8k, og `-2k` bruges af testene.
+
+| Fil | Hvad | Kilde | Licens |
+|---|---|---|---|
+| `mars-8k.jpg`, `-4k.jpg` og `-2k.jpg` | Mars i farver (925 m pr. pixel i originalen). Den tomme første søjle i mosaikken er udfyldt, og de mørke egne er gjort gråbrune i stedet for blålige (mosaikkens blå kanal er næsten den samme overalt) | NASA/JPL/USGS, Viking MDIM 2.1, global farvemosaik fra USGS Astrogeology (`Mars_Viking_ClrMosaic_global_925m`) | Public domain (NASA/USGS) |
+| `mars-hoejde-4k.png` og `-2k.png` | Mars' højder fra −8,5 til 21,5 km over nulpunktet (areoiden), 16 bit i rød og grøn, i trin på ca. 3,7 m | NASA/GSFC, MOLA-holdet (Mars Global Surveyor), global mosaik fra USGS Astrogeology (`Mars_MGS_MOLA_DEM_mosaic_global_463m`) | Public domain (NASA/USGS) |

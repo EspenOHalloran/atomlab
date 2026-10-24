@@ -64,6 +64,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Bevægelser i rummet går den rigtige vej: Planeter og måner kredser mod uret set fra nord, og Jorden drejer samme vej. Tjek det med et tal i testen, for det kan ikke ses på et stillbillede.
 - [ ] Synlighed og andet, der følger en tilstand, sættes, når tilstanden skifter, og ikke kun i opdateringen hvert billede. Ellers er det forkert, indtil første billede er tegnet.
 - [ ] Billeder fra andre (fx NASA) står i `billeder/solsystem/KILDER.md` med kilde og licens, kilden nævnes i spillet, og kun filer, der findes, bliver hentet (ellers giver det konsolfejl). Kloder ses i `tests/vaerktoejer/kloder.html` i dagslys, i lav sol, om natten og i modlys.
+- [ ] Kort fra USGS og andre mosaikker: Tjek for helt tomme søjler og rækker (Viking-mosaikken over Mars har en tom første søjle, som gav en sort streg ved 180°), og at kanten ligger præcis på ±180° (skær ud efter kortets geografiske felter). Sæt den øverste og nederste række til samme værdi i et højdekort, ellers bliver polen takket, når nettet løftes.
 - [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
@@ -261,6 +262,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Faktatjek:** "Herschel er 130 km" (NASA's oversigtsside) og "Ithaca Chasma går tre fjerdedele rundt om Tethys" passer ikke med de nyeste opmålinger (139 km og ca. 1.200 km). Se fælderne i `docs/fakta-solsystemet.md` afsnit 4b.
 
 ---
+
+### Mars med rigtige højder (M2, oktober 2026)
+- **Store GeoTIFF-filer hos USGS** er ukomprimerede og uden små udgaver (oversigter), så `rasterio` kan ikke læse en lille udgave billigt over nettet. Det gik hurtigere at hente hele filerne (0,8 og 2,1 GB på 1-3 minutter) til scratchpad og lave billederne lokalt.
+- **Viking-mosaikkens blå kanal er næsten den samme overalt** (ca. 68-70), så de mørke egne som Syrtis Major blev blålige. På billeder i naturlige farver er de mørk gråbrune. `lav_mars.py` giver dem en gråbrun farve med samme lysstyrke, og det står i `KILDER.md`.
+- **Rigtige højder ses som skygger, ikke som bjerge over kanten:** Set på hele kloden er Olympus Mons kun ca. 2 pixel høj ude ved kanten. Men skyggerne fra bjergenes skrå sider gør Olympus Mons, Tharsis og Valles Marineris tydelige, så de rigtige højder blev standard (jeres svar), og "Bjergene 10 gange højere" er en knap. Kameraet kigger altid på Mars' midte, så man kan ikke se horisonten tæt på. Det kommer i M4.
+- **Et net, der løftes i vertex-shaderen,** (1024 × 512 felter på pc) gav ingen synlige problemer ved sømmen (kuglens kopierede punkter ved 180° henter samme højde). Kuglens `boundingSphere` skal gøres større, ellers kan bjerge skæres væk ude ved kanten af billedet.
+- **Værktøjer:** GitHub-udgivelser er blokeret i miljøet (403), så `basisu` (KTX2) kunne ikke hentes. npm-registret og pypi kan bruges.
+- **Billeder i sekundet i testbrowseren** (software-tegning, fuld grafik): pc Saturn 4,6 og Mars 2,6, tablet Saturn 12,6 og Mars 4,4. Med et grovere net på tablet (512 × 256 i stedet for 768 × 384) blev det kun 5,2, så det er ikke nettet, der koster, men pixlerne (Mars fylder meget af skærmen, og hver pixel henter fem gange i kortene). Et rigtigt grafikkort klarer det let, men det skal prøves på tabletten.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.

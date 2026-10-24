@@ -51,14 +51,17 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 | `lag` | Dybde i lag: panelerne kan skjules (fanerne, "Kun grafik", G og Esc) og huskes, "Kun grafik" på højkant, opgaverne foldet sammen, den korte undertekst med "Hvorfor?", "Hvorfor?"-kortene (lag for lag, Esc, tryk udenfor, nedefra på telefon), foldebokse, der huskes, og at "Næste skridt" er skjult under guiden |
 | `pause` | Pause i Stjerneovnen, Reaktoren og Kosmos (også stjernernes overflade), og sammenligningerne (kul, mobil, elbil) |
 | `fuldskaerm` | Knapperne til fuld skærm på pc og tablet |
-| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), at Saturn, Månerne, Enceladus og Titan kan vises i Kosmos (Saturn står efter Solstorm), at piletasterne drejer kameraet, at et tryk på en måne besøger den, at systemet skaleres tæt på en måne, flybyens ni stop med undertekst og "Næste", og at himlen er sort (uden tågeskyer) i vores solsystem |
+| `saturn` | Prototypen til Solsystemet: Saturns ringe (grænser, mellemrum og tæthed), at Saturn, Månerne, Enceladus og Titan kan vises i Kosmos (Saturn står efter Mars), at piletasterne drejer kameraet, at et tryk på en måne besøger den, at systemet skaleres tæt på en måne, flybyens ni stop med undertekst og "Næste", og at himlen er sort (uden tågeskyer) i vores solsystem |
+| `mars` | Mars (M2): at højdekortet vender rigtigt (Olympus Mons, Arsia Mons, Elysium Mons og bunden af Hellas på de rigtige steder), at Mars står mellem Solstorm og Saturn, at billederne bliver hentet, knapperne og teksterne, at Mars drejer mod øst og kan stoppes, at bjergene kan gøres 10 gange højere og tilbage igen, og at kameraets near, zoom og drejning bliver sat tilbage bagefter |
 | `grafik` | Fuld grafik med glød på pc og tablet, en ny skærmstørrelse og ingen fejl i konsollen. Det sorte hul er sort i midten, også med glød, og dets ekstra trin i efterbehandlingen fjernes igen |
 
 ## Værktøjer
 - `vaerktoejer/skaermbilleder.mjs fusion` tager billeder af en skærm på pc, tablet og telefon (begge veje). Den venter 7 sekunder, så kameraet er færdigt med at zoome (`VENT=3500` for kortere).
 - `vaerktoejer/kosmos-billeder.mjs supernova 0 v3 s` vælger et fænomen, trykker på knap 0, venter 3 sekunder og tager et billede.
 - `vaerktoejer/fable-billeder.mjs` tager de ca. 50 billeder til Fables eftersyn (`docs/plan-fable.md`): alle skærme på pc, tablet og telefon, de 15 fænomener i Kosmos og fem forløb i træk. De gemmes som JPG i `docs/fable/billeder/` med en liste (`LISTE.md`). Tager ca. 7 minutter.
-- `vaerktoejer/saturn.mjs` tager billeder af prototypen med Saturn og månerne med fuld grafik (forfra, bagfra, i modlys og hvert stop på flybyen). Siden `vaerktoejer/saturn.html` viser den alene.
+- `vaerktoejer/saturn.mjs` tager billeder af prototypen med Saturn og månerne med fuld grafik (forfra, bagfra, i modlys og hvert stop på flybyen). Siden `vaerktoejer/saturn.html` viser den alene (`?f=mars` viser Mars).
+- `vaerktoejer/mars.mjs` tager billeder af Mars med fuld grafik og 8k-kortet: hele kloden, Olympus Mons ved kanten, lav sol og bjergene 10 gange højere.
+- `KOSMOS=mars node tests/vaerktoejer/skaermbilleder.mjs kosmos` tager skærmbilleder af ét fænomen i Kosmos i alle størrelser.
 - `vaerktoejer/kloder.mjs` tager billeder af Jorden og Månen tæt på i forskelligt lys (dag, glimt i havet, tusmørke, nat, modlys, kanten, fuldmåne og halvmåne). Siden `vaerktoejer/kloder.html` viser dem alene, og man kan selv dreje og zoome.
 
 ## Gode råd

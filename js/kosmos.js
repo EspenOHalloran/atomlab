@@ -27,11 +27,12 @@ import tyngdebolger from './kosmos/tyngdebolger.js';
 import sorthul from './kosmos/sorthul.js';
 import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
+import mars from './kosmos/mars.js';
 import saturn from './kosmos/saturn.js';
 
-// Rækkefølgen fortæller en historie: fra Big Bang og vores eget solsystem (Jorden, Solen og ud til Saturn),
-// over stjerner der dør, til sorte huller og ormehuller. Saturn er en prototype til den kommende del Solsystemet.
-export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, saturn, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
+// Rækkefølgen fortæller en historie: fra Big Bang og vores eget solsystem (Jorden, Solen og ud til Mars og Saturn),
+// over stjerner der dør, til sorte huller og ormehuller. Mars og Saturn er prototyper til den kommende del Solsystemet.
+export const FÆNOMENER = [bigbang, stjernefoedsel, aarstider, formoerkelser, solstorm, mars, saturn, solensfremtid, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul];
 
 const NØGLE = 'atomlabKosmos'; // det sidst valgte fænomen
 const NØGLE_SET = 'atomlabKosmosSet'; // de fænomener, man har kigget på
