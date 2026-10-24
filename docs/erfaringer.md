@@ -20,6 +20,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] CLAUDE.md, DESIGN.md og denne fil er opdateret.
 
 ### B. Ny eller ændret tekst med fakta
+- [ ] Før hjælpeagenter sættes i gang med at søge: tjek med `curl`, at kildesiderne kan åbnes. Er de blokeret, så bed brugeren om at tilføje domænerne under miljøets Network access først.
 - [ ] Hvert tal er regnet efter eller slået op. Udregningen står i en kommentar eller i commit-beskeden.
 - [ ] Kilden er primær eller pålidelig (fagbøger, NIST, IUPAC, NUBASE, NASA, forskningsartikler). Populærvidenskab og "alle siger det" er ikke nok. Se fælderne i afsnit 2.
 - [ ] Citater: præcis ordlyd fra den oprindelige kilde (bog, afsnit, år). Er ordlyden usikker, så skriv det, eller lad citatet være.
@@ -97,6 +98,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **Arbejde hvert billede, som ikke behøves** | Reaktorens panel skrives hvert billede, også når reaktoren er slukket. | D: højst 4 gange i sekundet, og kun ved ændring. |
 | **Tests, der kigger på det forkerte tidspunkt eller forventer et præcist tilfældigt tal** | `henfald` (ion i 1,6 sekunder), `stjerneovn` (præcis 40 protoner). | F. |
 | **En CSS-klasse, der bruges på flere skærme** | Reaktoren lyttede på alle `.del-knap`, også Kosmos' "Kort fortalt" og "For nørder". Et klik der gjorde Reaktoren tom (ingen del valgt), og "Vis en kædereaktion" viste ingenting. Fundet af brugeren. Igen i F1: `.del-vælger { order: 3 }` (højst 820 px, `style.css:1081`) er ment for Reaktorens toplinje, men flyttede Kosmos' "For nørder" ned under citatet. Rettet til `#reaktor .del-vælger`, og testen `kosmos` tjekker det på højkant. | D: afgræns vælgere og CSS-regler, og tjek tilstandens værdi. |
+| **Tokens brugt på at gå uden om en blokering** | Faktatjekket af Mars (24. oktober 2026) kostede ca. 190.000 tokens, fordi kildesiderne (nasa.gov, wikipedia, esa.int) var blokeret i miljøet, så agenten måtte søge mange gange og kun fik uddrag. Brugeren kunne have åbnet domænerne på et minut. | Sig det til brugeren med det samme, når noget er blokeret eller koster unødigt mange tokens, før en hjælpeagent sættes i gang. |
 | **Skærmbilleder taget, før kameraet var færdigt** | To forkerte fund i gennemgangen: Batteriets etiketter "skåret af" på tablet og væggen i Det periodiske system "kun 40 % af bredden". Begge var billeder midt i zoomet. | F: vent på kameraet. |
 | **Fagord uden forklaring** | "Neutrino" i supernovaen, "alfapartikel" ved henfald, "6-16" i Reaktoren. Fundet af brugeren. | B: forklar første gang. |
 | **Grafik med fast plads, der løber over et øjeblik** | "Ryd" og straks uran: op til 179 protoner, men plads til 158. Sker kun ved mange billeder i sekundet, så testbrowseren så det ikke. | E og F: loft over antallet, test med små tidsskridt. |

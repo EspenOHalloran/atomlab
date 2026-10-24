@@ -11,16 +11,29 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - Beslutninger og jeres svar skrives ind her med det samme, ikke kun i chatten.
 - Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).
 - Tabletten bruges lige meget på langs og på højkant. Lyd: ingen baggrundsmusik, de små lyde bliver.
+- **Tests (jeres svar 24. oktober 2026):** Test, når det giver mening i forhold til prisen. I tester selv på den rigtige tablet. Derfor:
+  - Mens der arbejdes: kun `node tests/koer-alle.mjs --ændret`. Hele samlingen køres én gang pr. delopgave, før den merges, for `main` er det, jeres søn bruger. Den koster få tokens, når den er grøn (én linje pr. test).
+  - Skærmbilleder koster flest tokens. Tag kun billeder af det, der er ændret, og se kun de størrelser, hvor layoutet kan gå galt (fx pc og tablet på højkant).
+  - Hvordan det føles med fingre, om det kører glat, og hvordan det ser ud på den rigtige skærm, tester I selv. Skriv i "Ikke afprøvet", hvad I skal kigge efter.
+  - Nye tests tjekker logik og tal (fx retninger, pladser og tekster), ikke hvert billede.
 
 **Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Flybyen ved Saturn er første skridt og skal senere bruges ved alle planeter.
 
-**Senest lavet (24. oktober 2026, Trin 19 nedenfor):**
+**Mars (besluttet 24. oktober 2026):** Mars bygges som Saturn med Phobos og Deimos og en flyby, der også besøger steder på planeten (Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale og Jezero). Jeres svar: Saturn og flybyen kører helt flydende på tabletten, så vi giver den gas med grafikken. "Det hele skal med. Det skal være så flot og imponerende som muligt": detaljer helt tæt på, "Stå på Mars" og månerne i den rigtige form. Opgaven er delt i otte delopgaver (M1-M8), og I siger go mellem hver. Planen står i [docs/plan-mars.md](docs/plan-mars.md). I M4 flyttes Mars og Saturn til deres egen skærm, "Solsystemet". Overblikket med Solen og planeterne (trin 2) venter. Mars får et 8k-kort.
+- **Tokens bruges med omhu (jeres svar 24. oktober 2026):** Sig det med det samme, når noget koster unødigt mange tokens (fx sider, miljøet ikke kan åbne, eller en hjælpeagent, der må søge mange gange). Ofte kan I let løse det, fx ved at tilføje et domæne under miljøets Network access.
+- **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
+
+**Senest lavet (24. oktober 2026): Mars, M1.** Planen ([docs/plan-mars.md](docs/plan-mars.md)) og faktagrundlaget med kilder (`docs/fakta-solsystemet.md`, del 3): tallene for Mars og stederne, Phobos og Deimos, formmodellerne, billedkilderne hos USGS og licenserne. Kildesiderne hos NASA, ESA og Wikipedia kunne ikke åbnes, så teksterne faktatjekkes igen mod kilderne i M5, når domænerne er åbne.
+
+**Før det (24. oktober 2026, Trin 19 nedenfor):**
 - **Saturn i Kosmos** (prototypen til Solsystemet) står nu i den almindelige liste efter Solstorm. Der skal ikke længere skrives en særlig adresse. Saturn, ringene og de seks store måner har den rigtige størrelse og afstand, og kameraet flyver mellem dem uden spring. "▶ Start flyby" har ni stop med en kort tekst og "Næste": oversigten, Saturn, hen over ringene, Mimas, Enceladus, Tethys, Dione, Rhea og Titan. Et tryk på en måne besøger den. Alle månerne har Cassinis kort. Teksterne er faktatjekket (`docs/fakta-solsystemet.md` afsnit 4b).
 - **Himlen:** Der er ingen farvede tågeskyer i vores eget solsystem (Saturn, Årstiderne, Formørkelser, Solstorm og Solens fremtid). Ved Saturn er Solen en lille, skarp prik. Tågerne er stadig ved atomerne og i fx Big Bang.
 - **Ringe eller sky i Det periodiske system:** knappen "Elektronsky" øverst på grundstofkortet. Valget deles med Værkstedet og huskes.
 - **"Start forfra"** i Værkstedet, Stjerneovnen, Reaktoren og Batteriet: en knap nederst i opgavelisten. Den kræver to tryk og nulstiller kun den del.
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
+
+**Næste i gang: Mars, M2 (Mars-kloden)** venter på jeres go. M1 (planen og faktagrundlaget) er lavet. De næste delopgaver står i [docs/plan-mars.md](docs/plan-mars.md).
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
@@ -33,12 +46,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
 
 **Åbne spørgsmål til jer:**
-- **Saturn:** Er niveauet rigtigt, og kører det glat på tabletten, før resten af Solsystemet bygges?
 - **Atomet B:** I har ikke set det på tabletten endnu. Sig til, hvis det skal ændres.
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
-- Saturn og flybyen på en rigtig tablet. Den er kun set i testbrowseren. På højkant står Saturn bag panelerne ved Titan, men man kan selv dreje.
+- Saturn på tablet på højkant: Ved Titan står Saturn bag panelerne, men man kan selv dreje. (Saturn og flybyen kører helt flydende på jeres tablet, og I synes, flybyen er super flot, 24. oktober 2026.)
 - Stoppet over ringene: De mange tynde ringe er lavet af programmet og ser lidt "børstede" ud helt tæt på.
 - NASA-billederne på en telefon. De er set på jeres tablet.
 - Lyden og hvordan det føles med fingre.
