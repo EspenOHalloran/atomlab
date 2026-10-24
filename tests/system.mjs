@@ -31,9 +31,14 @@ await page.waitForTimeout(6000);
 tjek('detaljevisning', await page.evaluate(() => document.getElementById('system').classList.contains('detalje')));
 tjek('jern-kort', (await page.textContent('#sysNavn')).includes('Jern') && (await page.textContent('#sysTal')).includes('Findes'), await page.textContent('#systemKort'));
 await page.screenshot({ path: UD + '/s3-jern.png' });
+// Ringe eller elektronsky: samme knap som i værkstedet, og valget huskes
+tjek('kortet: knappen "Elektronsky" (atomet har ringe)', (await page.textContent('#systemVisning')) === 'Elektronsky');
+await page.click('#systemVisning');
+tjek('kortet: "Elektronsky" skifter og huskes', (await page.evaluate(() => localStorage.getItem('atomlabVisning'))) === 'sky' && (await page.textContent('#systemVisning')) === 'Ringe');
 await page.click('#systemNæste');
 await page.waitForTimeout(3000);
 tjek('næste er cobalt', (await page.textContent('#sysNavn')).includes('Cobalt'));
+tjek('cobalt: stadig elektronsky', (await page.textContent('#systemVisning')) === 'Ringe');
 await page.click('#systemLuk');
 await page.waitForTimeout(3000);
 await page.click('#systemFiltre .filter[data-værdi="aedelgas"]');
@@ -53,6 +58,7 @@ await page.click('#systemByg');
 await page.waitForTimeout(2500);
 tjek('værksted med opgave', location => true);
 tjek('opgave: byg jern', (await page.textContent('#opgaveTekst')).includes('Byg Jern-56'), await page.textContent('#opgaveTekst'));
+tjek('værkstedet: også elektronsky (knappen siger "Ringe")', (await page.textContent('#knapVisning')) === 'Ringe');
 for (let i = 0; i < 26; i++) await page.keyboard.press('p');
 await page.click('#knapStabil'); await page.click('#knapNeutral');
 await page.waitForTimeout(1500);
@@ -71,6 +77,7 @@ tjek('stjerne-tæller', (await page.textContent('#systemOpdaget')).includes('1 a
   await s.waitForFunction(() => window.atomlabTest && document.querySelector('#system:not(.skjult)'));
   await s.evaluate(() => atomlabTest.system.åbn(3));
   await s.waitForTimeout(800);
+  tjek('ny bruger: atomet på kortet har ringe', (await s.evaluate(() => atomlabTest.system.visning())) === 'ringe');
   const li = await s.evaluate(() => ({
     linjer: [...document.querySelectorAll('#sysLag li')].map((l) => l.textContent),
     lagVist: !document.getElementById('sysLag').hidden,

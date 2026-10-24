@@ -724,6 +724,7 @@ button { font: inherit; color: inherit; }
 /* Knapperne øverst i kortet bliver stående, når man ruller */
 .kort-styring { position: sticky; top: -14px; z-index: 1; display: flex; gap: 6px; justify-content: flex-end; margin: -14px -14px 0; padding: 10px 14px 6px; background: linear-gradient(rgba(12, 18, 38, 0.97) 75%, rgba(12, 18, 38, 0)); border-radius: var(--radius) var(--radius) 0 0; }
 .kort-styring #systemLuk { margin-left: 6px; }
+.kort-styring #systemVisning { margin-right: auto; }
 #system.detalje .system-kort { display: flex; }
 #system.detalje .system-filtre { display: none; }
 /* Kategorikortet: til højre for væggen, når en kategori er valgt (og intet grundstof er åbnet) */

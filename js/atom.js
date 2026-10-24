@@ -52,6 +52,25 @@ export function hentUdgave() {
   return udgave;
 }
 
+// Ringe eller elektronsky: Værkstedet og Det periodiske system deler valget, og det huskes (atomlabVisning)
+const NØGLE_VISNING = 'atomlabVisning';
+export function gemtVisning() {
+  try {
+    return localStorage.getItem(NØGLE_VISNING) === 'sky' ? 'sky' : 'ringe';
+  } catch {
+    return 'ringe';
+  }
+}
+export function gemVisning(visning) {
+  try {
+    localStorage.setItem(NØGLE_VISNING, visning);
+  } catch {
+    // ingen lagring: valget huskes bare ikke
+  }
+}
+// Teksten på knappen, der skifter: den viser det, man kan skifte til
+export const visningKnapTekst = (visning) => (visning === 'sky' ? 'Ringe' : 'Elektronsky');
+
 // Farven på orbitalerne: s er blå, p er lyserød, d er grøn og f er orange. Hver orbital har sin egen nuance.
 const ORBITAL_FARVE = [0.57, 0.93, 0.33, 0.08];
 function orbitalFarve(o) {
