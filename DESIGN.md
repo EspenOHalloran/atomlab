@@ -33,7 +33,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang: Mars, M2 (Mars-kloden)** venter på jeres go. M1 (planen og faktagrundlaget) er lavet. De næste delopgaver står i [docs/plan-mars.md](docs/plan-mars.md).
+**Næste i gang: Mars, M2 (Mars-kloden)** venter på jeres go. I starter den selv i en ny session. Læs [docs/plan-mars.md](docs/plan-mars.md) (M2, "Teknik" og "Skarpheden") først. M1 (planen og faktagrundlaget) er lavet. De næste delopgaver står i [docs/plan-mars.md](docs/plan-mars.md).
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
