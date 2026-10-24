@@ -49,7 +49,9 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 
 **Store filer:** De fleste filer er for store til at hente hele. Forslag: Python-pakken `rasterio` læser kun det stykke af en stor GeoTIFF, der skal bruges, direkte over nettet. Den bruges kun af billedværktøjet (`lav_mars.py`), ikke af programmet, så det er ikke et byggetrin. Det kræver jeres ok (se spørgsmål 1).
 
-**Hvad det koster for tabletten:** Kortene er 4k på pc og 2k på tablet og telefon som ved Saturn. Nettet med højder og de lokale kort i M7 er nyt, så billeder i sekundet måles før og efter (tjekliste F).
+**Skarpheden (jeres svar 24. oktober 2026):** Mars får et kort på 8k (8192 × 4096, ca. 2,6 km pr. pixel) på pc, og 8k prøves også på tabletten i M2 (ellers 4k). De skarpe kort ved stederne kommer i M7. Hele Mars i høj opløsning overalt (kort i firkanter, der hentes efter behov) fylder mange GB og passer ikke på GitHub Pages.
+
+**Hvad det koster for tabletten:** Månernes kort er 4k på pc og 2k på tablet og telefon som ved Saturn. Nettet med højder og de lokale kort i M7 er nyt, så billeder i sekundet måles før og efter (tjekliste F).
 
 ## Åbne spørgsmål
 1. Må billedværktøjet bruge Python-pakken `rasterio`? Den bruges kun, når billederne laves, ikke i programmet. Uden den skal hele filerne hentes (op til 11 GB), eller jeg skal selv skrive en læser til GeoTIFF.
