@@ -53,6 +53,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
 
 **Åbne spørgsmål til jer:**
+- **Domæner (25. oktober 2026):** Listen over de domæner, der skal tilføjes under Network access, står i [docs/plan-mars.md](docs/plan-mars.md) under "Domæner, der skal på listen". Tjek dem med `curl`, når I har tilføjet dem.
 - **Atomet B:** I har ikke set det på tabletten endnu. Sig til, hvis det skal ændres.
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
