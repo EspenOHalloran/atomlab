@@ -25,7 +25,9 @@ const OVERDRIV = 10; // "Bjergene 10 gange højere"
 const DREJ = 0.06; // radianer i sekundet (en omgang på ca. 1¾ minut i stedet for 24 t 37 min)
 const SKALAHØJDE = 11; // km (NSSDC: 11,0 km). Luften bliver ca. 2,7 gange tyndere for hver 11 km opad.
 const TUSMØRKE = 10; // grader ind i natten, hvor støvet højt oppe stadig spreder lys (støv i ca. 50 km højde: R·(1/cos 10° − 1))
-// Skyerne over vulkanerne (NASA PIA02049: "Clouds are common over the larger Tharsis volcanoes in mid-afternoon").
+// Skyerne over vulkanerne (NASA PIA02049: "Clouds are common over the larger Tharsis volcanoes in mid-afternoon",
+// og MSSS' vejrrapport fra MARCI 8. maj 2019, nordligt forår: "Orographic water ice clouds remained steadfast afternoon
+// features over Elysium and the major volcanoes of Tharsis").
 // Bredde og længde (grader øst) fra USGS' navneliste via Wikipedia. Radius: hvor langt ud skyen når (km, omtrentligt).
 const SKY_STEDER = [
   { navn: 'Olympus Mons', bredde: 18.65, længde: -133.8, radius: 330 },
@@ -33,6 +35,7 @@ const SKY_STEDER = [
   { navn: 'Pavonis Mons', bredde: 1.48, længde: -112.96, radius: 240, styrke: 0.8 },
   { navn: 'Arsia Mons', bredde: -8.35, længde: -120.09, radius: 240, styrke: 0.7 },
   { navn: 'Alba Mons', bredde: 40.47, længde: -109.6, radius: 380, styrke: 0.7 },
+  { navn: 'Elysium Mons', bredde: 25.02, længde: 147.21, radius: 260, styrke: 0.8 }, // MARCI: "over Elysium and the major volcanoes of Tharsis"
 ];
 const SKY_HØJDE = 22; // km over kuglen, over vulkanernes toppe (ellers skærer toppene hårde huller i skyerne)
 

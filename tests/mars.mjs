@@ -100,7 +100,7 @@ const ur = await s.evaluate(async () => {
 tjek('skyernes ur: middag under Solen, aften mod øst og morgen mod vest', Math.abs(ur.middag - 12) < 0.01 && Math.abs(ur.aften - 18) < 0.01 && Math.abs(ur.morgen - 6) < 0.01, JSON.stringify(ur));
 tjek('skyerne kommer om eftermiddagen (kl. 15), ikke kl. 8 eller kl. 2 om natten', ur.kl15 > 0.9 && ur.kl8 === 0 && ur.kl2 === 0, JSON.stringify(ur));
 const sky = await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer());
-tjek('skyer ved Olympus Mons, Tharsis-vulkanerne og Alba Mons', sky.length === 5 && sky[0].navn === 'Olympus Mons', JSON.stringify(sky.map((x) => x.navn)));
+tjek('skyer ved Olympus Mons, Tharsis-vulkanerne, Alba Mons og Elysium Mons', sky.length === 6 && sky[0].navn === 'Olympus Mons', JSON.stringify(sky.map((x) => x.navn)));
 // Drej Mars hele vejen rundt: Olympus Mons har sky om eftermiddagen og ingen om morgenen
 const rundt = [];
 for (let l = 0; l < 360; l += 30) {

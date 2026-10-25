@@ -38,7 +38,7 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 - **Til M4:** Kameraet kigger altid på Mars' midte, så man kan ikke se horisonten tæt på. Rejsen ned til et sted, hvor man ser skråt mod horisonten, kommer i M4.
 
 ## Status efter M3 (25. oktober 2026)
-- **Lavet:** `lavLuft` i `js/solsystem/atmosfaere.js` (luften i kanten med skalahøjden 11 km, tusmørket og blåt lys tæt ved Solen), `js/solsystem/skyer.js` (skyer af is over Olympus Mons, Ascraeus, Pavonis, Arsia og Alba Mons om eftermiddagen, med skygge på jorden), og i `klippeplanet.js` tusmørket på jorden, et slør af støv mod kanten og hvidere polkapper. Knappen "Modlys".
+- **Lavet:** `lavLuft` i `js/solsystem/atmosfaere.js` (luften i kanten med skalahøjden 11 km, tusmørket og blåt lys tæt ved Solen), `js/solsystem/skyer.js` (skyer af is over Olympus Mons, Ascraeus, Pavonis, Arsia, Alba Mons og Elysium Mons om eftermiddagen, med skygge på jorden), og i `klippeplanet.js` tusmørket på jorden, et slør af støv mod kanten og hvidere polkapper. Knappen "Modlys". Elysium Mons kom med, da msss.com blev åbnet og bekræftede skyerne dér (MARCI, nordligt forår 2019).
 - **Modlys:** Solen står lige bag Mars' øverste kant set fra kameraet. Først stod den midt bag Mars som ved Saturn, men tæt på lå luften i kanten så i Mars' skygge, og ringen forsvandt (det er rigtig fysik). Langt væk lyser ringen hele vejen rundt.
 - **Skyerne** ligger 22 km over kuglen. Lavere skar vulkanernes toppe hårde, mørke huller i dem.
 - **Til M4:** Luften er bygget, så den også virker, når kameraet er helt nede ved overfladen og ser mod horisonten (strålen regnes fra kameraet og ikke bagved).
@@ -48,7 +48,7 @@ I sagde ja til forslagene:
 - **Polkapperne** kommer fra Viking-kortet, som allerede har begge de faste kapper (nordkappen med spiralkløfterne og sydkappen lidt ved siden af polen). Shaderen gør isen hvidere og lysere. Der tegnes ikke en vinterkappe af tøris. Nørd-teksten siger ærligt, at kapperne er vist, som de ser ud om sommeren.
 - **Skyerne** tegnes af programmet, men på de rigtige steder (Olympus Mons, Tharsis-vulkanerne og Alba Mons), og kun om eftermiddagen på Mars, som NASA beskriver dem (PIA02049).
 - **Årstiden** er nordlig forårsjævndøgn, så skyerne over vulkanerne passer (de kommer i nordens forår og sommer).
-- **Netsider:** I åbnede msss.com, agupubs, nature.com og pubs.usgs.gov. pubs.usgs.gov virker, men msss.com og nature.com afvises stadig af miljøets proxy, og agupubs (Wiley) svarer selv 403. Det plejer at kræve en ny session. Teksterne bygger derfor på NASA, ESA, NSSDC og Wikipedia.
+- **Netsider:** I åbnede msss.com, agupubs, nature.com og pubs.usgs.gov. pubs.usgs.gov virkede med det samme og msss.com sidst i sessionen. nature.com afvises stadig af miljøets proxy, og agupubs (Wiley) svarer selv 403. Teksterne bygger på NASA, ESA, NSSDC, MSSS og Wikipedia.
 - **Faktatjekket ændrede én ting:** Den lange sky over Arsia Mons (1.800 km) kommer i det sydlige forår og sommer og om morgenen (ESA 2021), ikke i det nordlige forår. Den tegnes derfor ikke, men nævnes i nørd-teksten.
 
 ## Teknik

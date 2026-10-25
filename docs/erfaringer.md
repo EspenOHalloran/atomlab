@@ -21,7 +21,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 
 ### B. Ny eller ændret tekst med fakta
 - [ ] Før hjælpeagenter sættes i gang med at søge: tjek med `curl`, at kildesiderne kan åbnes. Er de blokeret, så bed brugeren om at tilføje domænerne under miljøets Network access først.
-- [ ] Er en netside eller et værktøj blokeret (fx GitHub-udgivelser til `basisu` i Mars M2), så stop og bed brugeren om adgang, før arbejdet fortsætter med en nødløsning (brugerens svar 24. oktober 2026). Adgangen, der blev åbnet midt i sessionen, virkede ikke i den kørende session (GitHub gav stadig 403), så prøv igen i en ny session.
+- [ ] Er en netside eller et værktøj blokeret (fx GitHub-udgivelser til `basisu` i Mars M2), så stop og bed brugeren om adgang, før arbejdet fortsætter med en nødløsning (brugerens svar 24. oktober 2026). Adgang, der åbnes midt i sessionen, virker ikke altid med det samme (GitHub gav stadig 403 i S1). I Mars M3 virkede msss.com først ca. en halv time senere, så prøv igen, før du giver op, og ellers i en ny session.
 - [ ] Hvert tal er regnet efter eller slået op. Udregningen står i en kommentar eller i commit-beskeden.
 - [ ] Kilden er primær eller pålidelig (fagbøger, NIST, IUPAC, NUBASE, NASA, forskningsartikler). Populærvidenskab og "alle siger det" er ikke nok. Se fælderne i afsnit 2.
 - [ ] Citater: præcis ordlyd fra den oprindelige kilde (bog, afsnit, år). Er ordlyden usikker, så skriv det, eller lad citatet være.

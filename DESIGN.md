@@ -27,12 +27,12 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 **Senest lavet (25. oktober 2026): Mars, M3 (atmosfæren og lyset).**
 - Mars har nu en tynd, støvet luft i kanten med den rigtige skalahøjde (11 km) og et tusmørke, der lyser svagt rødbrunt ind på natsiden.
 - Polkapperne fra Viking-kortet er gjort hvidere.
-- Skyer af is kommer over Olympus Mons, Tharsis-vulkanerne og Alba Mons om eftermiddagen på Mars, mens den drejer. De kaster en svag skygge.
+- Skyer af is kommer over Olympus Mons, Tharsis-vulkanerne, Alba Mons og Elysium Mons om eftermiddagen på Mars, mens den drejer. De kaster en svag skygge.
 - Knappen "Modlys" sætter Solen lige bag kanten af Mars, så luften lyser som en bue (langt væk som en ring hele vejen rundt) og er lidt blå tæt ved Solen.
 - Teksterne er faktatjekket mod NSSDC, NASA (PIA02049, PIA07997, PIA19400), ESA og Wikipedia (`docs/fakta-solsystemet.md`, del 3, afsnit 11). Der er to nye fagord i ordbogen: tøris og skalahøjde.
 - **Jeres svar ved go:** Polkapperne kommer fra kortet (ingen vinterkappe af tøris). Skyerne tegnes af programmet på de rigtige steder og kun om eftermiddagen. Årstiden er nordlig forårsjævndøgn.
 - **Faktatjekket ændrede én ting:** Den lange sky ved Arsia Mons kommer i det sydlige forår, så den nævnes kun i nørd-teksten.
-- **Netsider:** I åbnede msss.com, agupubs, nature.com og pubs.usgs.gov. Kun pubs.usgs.gov virkede i sessionen. msss.com og nature.com blev stadig afvist af miljøets proxy, og agupubs (Wiley) svarer selv 403. Prøv igen i en ny session, hvis de skal bruges.
+- **Netsider:** I åbnede msss.com, agupubs, nature.com og pubs.usgs.gov. pubs.usgs.gov virkede med det samme og msss.com sidst i sessionen (MARCI's vejrrapporter bekræftede skyerne over vulkanerne om eftermiddagen i det nordlige forår, også over Elysium Mons, som derfor kom med). nature.com blev stadig afvist af miljøets proxy, og agupubs (Wiley) svarer selv 403.
 - Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M3".
 
 **Før det (24. oktober 2026): Saturn, S1 (skarpere kort).** Tablet og telefon henter nu 4k-kort af Saturn og månerne (før 2k). Pc henter 8k af Enceladus, Tethys, Dione og Rhea. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Mimas og Titan bliver også på 4k, for deres kilder er ikke skarpere. Månernes kort ligger med én kanal i grafikkortet og fylder en fjerdedel. Enceladus' kort havde en tom række ved sydpolen, og den er skåret væk. Jeres svar ved go: Telefonen må også få 4k, og effort var medium. **Jeres svar bagefter (24. oktober 2026):** Det kører fint på mobil og tablet. Enceladus var overstrålet i fuldt dagslys, så den er dæmpet lidt (kortet ganges med 1,5 i stedet for 1,85 og klippes ikke længere, og lyset er ca. 10 % svagere). Nu ses kraterne og sprækkerne, og den er stadig den lyseste måne. Detaljer i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S1".
