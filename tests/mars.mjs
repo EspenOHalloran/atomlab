@@ -1,6 +1,7 @@
-// Mars (M2 i docs/plan-mars.md): Mars står i Kosmos mellem Solstorm og Saturn, billederne bliver hentet, højdekortet
+// Mars (M2 og M3 i docs/plan-mars.md): Mars står i Kosmos mellem Solstorm og Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
-// 10 gange højere, og kameraets indstillinger bliver sat tilbage, når man går videre.
+// 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, og kameraets
+// indstillinger bliver sat tilbage, når man går videre.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('mars');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -56,7 +57,7 @@ await s.waitForFunction(() => atomlabTest.kosmos.fænomen()?.billeder().hentet.h
 const billeder = await s.evaluate(() => atomlabTest.kosmos.fænomen().billeder());
 tjek('billederne er hentet (2k i tests)', billeder.kort === '2k' && billeder.højde === '2k', JSON.stringify(billeder));
 const knapper = await s.evaluate(() => [...document.querySelectorAll('#kosmosStyring button')].map((k) => k.textContent.trim()));
-tjek('knapperne "Drej Mars" og "Bjergene 10 gange højere"', knapper.some((k) => k.includes('Drej Mars')) && knapper.some((k) => k.includes('Bjergene 10 gange højere')), JSON.stringify(knapper));
+tjek('knapperne "Drej Mars", "Bjergene 10 gange højere" og "Modlys"', knapper.some((k) => k.includes('Drej Mars')) && knapper.some((k) => k.includes('Bjergene 10 gange højere')) && knapper.some((k) => k.includes('Modlys')), JSON.stringify(knapper));
 tjek('sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.kosmos.tåger())));
 const tekst = await s.textContent('#kosmosTekst');
 tjek('"Kort fortalt" fortæller om Olympus Mons og Valles Marineris', /Olympus Mons/.test(tekst) && /Valles Marineris/.test(tekst));
@@ -85,6 +86,51 @@ await s.screenshot({ path: UD + '/2-mars-x10.png' });
 await s.click('#kosmosStyring button:has-text("Bjergene")');
 await s.waitForFunction(() => atomlabTest.kosmos.fænomen().overdriv() === 1, null, { timeout: 20000 }).catch(() => {});
 tjek('og tilbage til de rigtige højder', (await s.evaluate(() => atomlabTest.kosmos.fænomen().overdriv())) === 1);
+
+// M3: luften, skyerne og modlys
+// Skyernes lokale tid: middag under Solen, aften 90° mod øst, morgen 90° mod vest. Skyerne kommer kun om eftermiddagen.
+const ur = await s.evaluate(async () => {
+  const { lokalTid, eftermiddag, retning } = await import('/js/solsystem/skyer.js');
+  const sol = retning(0, 0);
+  return {
+    middag: lokalTid(retning(0, 0), sol), aften: lokalTid(retning(0, 90), sol), morgen: lokalTid(retning(0, -90), sol),
+    kl8: eftermiddag(8), kl15: eftermiddag(15), kl2: eftermiddag(2),
+  };
+});
+tjek('skyernes ur: middag under Solen, aften mod øst og morgen mod vest', Math.abs(ur.middag - 12) < 0.01 && Math.abs(ur.aften - 18) < 0.01 && Math.abs(ur.morgen - 6) < 0.01, JSON.stringify(ur));
+tjek('skyerne kommer om eftermiddagen (kl. 15), ikke kl. 8 eller kl. 2 om natten', ur.kl15 > 0.9 && ur.kl8 === 0 && ur.kl2 === 0, JSON.stringify(ur));
+const sky = await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer());
+tjek('skyer ved Olympus Mons, Tharsis-vulkanerne og Alba Mons', sky.length === 5 && sky[0].navn === 'Olympus Mons', JSON.stringify(sky.map((x) => x.navn)));
+// Drej Mars hele vejen rundt: Olympus Mons har sky om eftermiddagen og ingen om morgenen
+const rundt = [];
+for (let l = 0; l < 360; l += 30) {
+  await s.evaluate((l) => atomlabTest.kosmos.fænomen().vend(l), l);
+  await s.waitForTimeout(250);
+  rundt.push((await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer()))[0]);
+}
+tjek('Olympus Mons: sky om eftermiddagen og ingen om morgenen',
+  rundt.every((x) => (x.tid > 10.5 && x.tid < 21.5) || x.mængde === 0) && rundt.some((x) => x.mængde > 0.5) && rundt.some((x) => x.tid < 10 && x.mængde === 0),
+  JSON.stringify(rundt.map((x) => [x.tid.toFixed(1), x.mængde.toFixed(2)])));
+// Mars drejer mod øst, så klokken går fremad ved Olympus Mons
+await s.click('#kosmosStyring button:has-text("Drej Mars")');
+const t0 = (await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer()))[0].tid;
+await s.waitForFunction((t0) => { const t = atomlabTest.kosmos.fænomen().skyer()[0].tid; return Math.abs(t - t0) > 0.05; }, t0, { timeout: 15000 }).catch(() => {});
+const t1 = (await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer()))[0].tid;
+tjek('klokken går fremad ved Olympus Mons, når Mars drejer', ((t1 - t0 + 24) % 24) > 0 && ((t1 - t0 + 24) % 24) < 6, JSON.stringify([t0, t1]));
+await s.click('#kosmosStyring button:has-text("Drej Mars")');
+
+// Modlys: Solen står bag Mars, set fra kameraet, og tilbage igen
+tjek('dagslys: Solen står ikke bag Mars', (await s.evaluate(() => atomlabTest.kosmos.fænomen().sol())) > -0.5);
+await s.click('#kosmosStyring button:has-text("Modlys")');
+await s.waitForTimeout(300);
+tjek('"Modlys": Solen står bag Mars', (await s.evaluate(() => atomlabTest.kosmos.fænomen().sol())) < -0.9);
+tjek('forklaringen fortæller om modlys', /Modlys/.test(await s.textContent('#kosmosForklaring')));
+await s.screenshot({ path: UD + '/3-modlys.png' });
+await s.click('#kosmosStyring button:has-text("Modlys")');
+await s.waitForTimeout(300);
+tjek('"Modlys" slået fra: Solen er tilbage', (await s.evaluate(() => atomlabTest.kosmos.fænomen().sol())) > -0.5);
+const tekster = (await s.textContent('#kosmosTekst'));
+tjek('"Kort fortalt" fortæller om polkapperne og skyerne', /Polkapperne/.test(tekster) && /skyer af is/.test(tekster));
 
 // Videre til et andet fænomen: kameraets indstillinger er sat tilbage
 await s.click('.kosmos-valg[data-id="aarstider"]');

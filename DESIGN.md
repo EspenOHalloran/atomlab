@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 24. oktober 2026 (Saturn S1).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 25. oktober 2026 (Mars M3).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -24,7 +24,18 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (24. oktober 2026): Saturn, S1 (skarpere kort).** Tablet og telefon henter nu 4k-kort af Saturn og månerne (før 2k). Pc henter 8k af Enceladus, Tethys, Dione og Rhea. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Mimas og Titan bliver også på 4k, for deres kilder er ikke skarpere. Månernes kort ligger med én kanal i grafikkortet og fylder en fjerdedel. Enceladus' kort havde en tom række ved sydpolen, og den er skåret væk. Jeres svar ved go: Telefonen må også få 4k, og effort var medium. **Jeres svar bagefter (24. oktober 2026):** Det kører fint på mobil og tablet. Enceladus var overstrålet i fuldt dagslys, så den er dæmpet lidt (kortet ganges med 1,5 i stedet for 1,85 og klippes ikke længere, og lyset er ca. 10 % svagere). Nu ses kraterne og sprækkerne, og den er stadig den lyseste måne. Detaljer i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S1".
+**Senest lavet (25. oktober 2026): Mars, M3 (atmosfæren og lyset).**
+- Mars har nu en tynd, støvet luft i kanten med den rigtige skalahøjde (11 km) og et tusmørke, der lyser svagt rødbrunt ind på natsiden.
+- Polkapperne fra Viking-kortet er gjort hvidere.
+- Skyer af is kommer over Olympus Mons, Tharsis-vulkanerne og Alba Mons om eftermiddagen på Mars, mens den drejer. De kaster en svag skygge.
+- Knappen "Modlys" sætter Solen lige bag kanten af Mars, så luften lyser som en bue (langt væk som en ring hele vejen rundt) og er lidt blå tæt ved Solen.
+- Teksterne er faktatjekket mod NSSDC, NASA (PIA02049, PIA07997, PIA19400), ESA og Wikipedia (`docs/fakta-solsystemet.md`, del 3, afsnit 11). Der er to nye fagord i ordbogen: tøris og skalahøjde.
+- **Jeres svar ved go:** Polkapperne kommer fra kortet (ingen vinterkappe af tøris). Skyerne tegnes af programmet på de rigtige steder og kun om eftermiddagen. Årstiden er nordlig forårsjævndøgn.
+- **Faktatjekket ændrede én ting:** Den lange sky ved Arsia Mons kommer i det sydlige forår, så den nævnes kun i nørd-teksten.
+- **Netsider:** I åbnede msss.com, agupubs, nature.com og pubs.usgs.gov. Kun pubs.usgs.gov virkede i sessionen. msss.com og nature.com blev stadig afvist af miljøets proxy, og agupubs (Wiley) svarer selv 403. Prøv igen i en ny session, hvis de skal bruges.
+- Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M3".
+
+**Før det (24. oktober 2026): Saturn, S1 (skarpere kort).** Tablet og telefon henter nu 4k-kort af Saturn og månerne (før 2k). Pc henter 8k af Enceladus, Tethys, Dione og Rhea. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Mimas og Titan bliver også på 4k, for deres kilder er ikke skarpere. Månernes kort ligger med én kanal i grafikkortet og fylder en fjerdedel. Enceladus' kort havde en tom række ved sydpolen, og den er skåret væk. Jeres svar ved go: Telefonen må også få 4k, og effort var medium. **Jeres svar bagefter (24. oktober 2026):** Det kører fint på mobil og tablet. Enceladus var overstrålet i fuldt dagslys, så den er dæmpet lidt (kortet ganges med 1,5 i stedet for 1,85 og klippes ikke længere, og lyset er ca. 10 % svagere). Nu ses kraterne og sprækkerne, og den er stadig den lyseste måne. Detaljer i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S1".
 
 **Før det (24. oktober 2026): Mars, M2 (Mars-kloden).** Mars står i Kosmos mellem Solstorm og Saturn: en klode med de rigtige højder fra MOLA (bjergene er et net, der løftes efter højdekortet) og farverne fra Viking i 8k. Mars drejer mod øst og står stille helt tæt på, og knappen "Bjergene 10 gange højere" viser landskabet tydeligt. Teksterne er faktatjekket mod NSSDC, NASA og ESA (`docs/fakta-solsystemet.md`, del 3 afsnit 10). KTX2 kunne ikke prøves (GitHub er blokeret), så kortene er JPG. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M2".
 
@@ -38,7 +49,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (jeres plan 24. oktober 2026):** S1 er lavet. Nu venter **Mars M3 (atmosfæren og lyset)** fra [docs/plan-mars.md](docs/plan-mars.md) på et go: den tynde, støvede luft i kanten, tusmørket, polkapperne, skyer af is over vulkanerne og "Modlys". Hver del får et go. S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
+**Næste i gang (jeres plan 24. oktober 2026):** M3 er lavet. Nu venter **Mars M4 (fælles flyby, egen skærm "Solsystemet" og rejsen ned til overfladen)** fra [docs/plan-mars.md](docs/plan-mars.md) på et go. Hver del får et go. S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
 
@@ -57,6 +68,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Mars M3 på tabletten:** Kører det stadig flydende med luften og skyerne? Er skyerne for tydelige eller for svage, og ser "Modlys" godt ud tæt på og langt væk? Er tusmørket for kraftigt?
 - **Saturns måner (S1):** Den dæmpede Enceladus og 8k på pc er ikke set på en rigtig skærm endnu. 4k kører fint på mobil og tablet (jeres svar).
 - **Mars:** Hvordan føles det at zoome helt ind og dreje tæt på overfladen, og drejer Mars for hurtigt (en omgang på ca. 1¾ minut)? (Den kører fint på tabletten med 8k.)
 - Saturn på tablet på højkant: Ved Titan står Saturn bag panelerne, men man kan selv dreje. (Saturn og flybyen kører helt flydende på jeres tablet, og I synes, flybyen er super flot, 24. oktober 2026.)

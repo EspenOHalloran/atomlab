@@ -651,6 +651,28 @@ Siderne kunne nu åbnes direkte (efter at domænerne blev åbnet), så tallene e
 - **ESA "The Solar System's grandest canyon"** (åbnet): Valles Marineris "over 4000 km long and 200 km wide, and with a dizzying depth of 10 km".
 - **Egne udregninger:** Lissabon–Moskva 3.906 km (storcirkel). Olympus Mons 21,9 / 8,849 = 2,47 gange Mount Everest ("næsten 2½ gange"). 21,3 km / 3.396 km = 0,63 % af radius ("ca. 0,6 %"). 45 kg × 0,38 = 17 kg. 687 / 365 = 1,88 ("i snit næsten dobbelt så lang"). Kortets pixel: 21.339 km / 8.192 = 2,6 km. Mars-kortenes egne højder: Olympus Mons' top 21,2 km og Hellas' bund −8,2 km (MOLA-mosaikken), i alt 29,4 km ("ca. 30 km"). Middelhøjden (vægtet efter areal) er ca. −2,2 km på den nordlige og ca. +1,1 km på den sydlige halvkugle, altså ca. 3,3 km forskel. Påstanden "sydhalvkuglen ligger ca. 5 km højere" passer derfor ikke for halvkuglerne (den gælder højlandet i forhold til lavlandet), og teksten siger "flere km højere".
 
+### 11. Faktatjek af teksterne til luften, skyerne og polkapperne (M3, 25. oktober 2026)
+Kildesiderne er åbnet direkte af Opus (ikke hjælpeagenter, fordi siderne kunne åbnes). msss.com, nature.com, agupubs (Wiley), sciencedirect, adsabs og NIST kunne ikke åbnes i denne session.
+
+| Påstand i teksten | Resultat | Kilde |
+|---|---|---|
+| Skalahøjden er 11 km på Mars og ca. 8,5 km på Jorden | OK | NSSDC Mars Fact Sheet ("Scale height: 11.0 km") og Earth Fact Sheet ("Scale height: 8.5 km"), åbnet |
+| Luften bliver ca. 2,7 gange tyndere for hver skalahøjde | OK | definitionen: tætheden falder med faktoren e ≈ 2,718 |
+| Tusmørket varer op til ca. 2 timer, fordi støv højt oppe spreder sollys ind på natsiden | OK | NASA/JPL PIA07997 (Spirit, 19. maj 2005): "the twilight glow remains visible, but increasingly fainter, for up to two hours before sunrise or after sunset … caused by sunlight scattered around to the night side of the planet by abundant high altitude dust", åbnet |
+| Det fine støv lader blåt lys slippe lettere igennem, så himlen er blå omkring Solen ved solnedgang. Curiosity så det i 2015 | OK | NASA/JPL PIA19400 (sol 956, 15. april 2015), åbnet |
+| Skyerne over vulkanerne er af is og kommer om eftermiddagen. Luft stiger op ad vulkanens sider, bliver kold, og vanddampen fryser til iskrystaller | OK | NASA/JPL PIA02049 (MGS, 2000): "Clouds are common over the larger Tharsis volcanoes in mid-afternoon … warm air containing water vapor rises up the slopes of each volcano, cools … freeze and form a cloud of ice crystals", åbnet |
+| "W"-skyen set i kikkerter fra Jorden var skyerne over fire vulkaner | OK | PIA02049 (Ascraeus, Pavonis, Arsia og Olympus), åbnet |
+| Skyerne kommer især om foråret og sommeren på den nordlige halvkugle (også ved Alba Mons) | RS | Wikipedia "Climate of Mars", som citerer Benson m.fl. 2006, Icarus 184, 365-371 (artiklen kunne ikke åbnes) |
+| Den lange sky ved Arsia Mons: ca. 1.800 km, i det sydlige forår og sommer, om morgenen | OK | ESA "Mars Express unlocks the secrets of curious cloud" (9. marts 2021): "When spring arrives in southern Mars … 1 800 km in length and 150 km across … repeats every morning", åbnet. **Rettet:** I forslaget skulle den tegnes, men den passer ikke med det nordlige forår, så den nævnes kun i nørd-teksten |
+| Nordpolens kappe er ca. 1.000 km bred og mest vandis | OK (afrundet) | Wikipedia "Martian polar ice caps" (1.100 km, vandis), åbnet; ASU (ca. 1.000 km, afsnit 6) |
+| Sydpolens kappe er ca. 400 km og har et tyndt lag tøris ovenpå. Den ligger lidt ved siden af polen | OK | Wikipedia "Martian polar ice caps" (400 km, forskudt), åbnet; ESA "Water at Martian south pole" (2004): overfladen er 85 % CO₂-is og 15 % vandis, åbnet; HiRISE (et lag på 1-10 m, afsnit 6) |
+| Om vinteren dækker et tyndt lag tøris et meget større område | OK | Wikipedia "Martian polar ice caps" (hver vinter kommer 1,5-2 m tøris til), afsnit 6 |
+| Tøris er ca. −78 °C ved Jordens lufttryk og bliver til gas uden at smelte | OK | Wikipedia "Dry ice": sublimerer ved 194,7 K (= −78,5 °C), åbnet |
+| Støvet spreder lyset mest fremad (modlys) | OK | almindelig fysik for støv med korn, der er større end lysets bølgelængde. PIA19400 viser det samme tæt ved Solen |
+| Skyerne ligger ved Olympus Mons (18,65° N, 226,2° Ø), Ascraeus Mons (11,92° N, 255,92° Ø), Pavonis Mons (1,48° N, 247,04° Ø), Arsia Mons (8,35° S, 239,91° Ø) og Alba Mons (40,47° N, 250,4° Ø) | OK | USGS' navneliste (Gazetteer of Planetary Nomenclature) via Wikipedia |
+
+**Spillets egne tal (står ikke som fakta i teksten):** Skyerne er tegnet 22 km over kuglen, så vulkanernes toppe ikke skærer huller i dem. Tusmørket når 10° ind på natsiden. Det svarer til, at støvet i ca. 52 km højde stadig er i sollys (R · (1/cos 10° − 1)), men tallet er valgt efter billederne og ikke målt. Hvor kraftigt luften lyser, er gættet (det står i "Ærligt talt").
+
 ## B. Phobos, Deimos, formmodeller, licenser og panoramaer
 
 Lavet 24. oktober 2026 til AtomLab (Solsystemet: Mars' måner i 3D).

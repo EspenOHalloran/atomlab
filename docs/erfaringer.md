@@ -66,6 +66,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Synlighed og andet, der følger en tilstand, sættes, når tilstanden skifter, og ikke kun i opdateringen hvert billede. Ellers er det forkert, indtil første billede er tegnet.
 - [ ] Billeder fra andre (fx NASA) står i `billeder/solsystem/KILDER.md` med kilde og licens, kilden nævnes i spillet, og kun filer, der findes, bliver hentet (ellers giver det konsolfejl). Kloder ses i `tests/vaerktoejer/kloder.html` i dagslys, i lav sol, om natten og i modlys.
 - [ ] Kort fra USGS og andre mosaikker: Tjek for helt tomme søjler og rækker (Viking-mosaikken over Mars har en tom første søjle, som gav en sort streg ved 180°), og at kanten ligger præcis på ±180° (skær ud efter kortets geografiske felter). Sæt den øverste og nederste række til samme værdi i et højdekort, ellers bliver polen takket, når nettet løftes. Tjek også billedets rigtige størrelse og en søjle for meget (Enceladus' kort er 14401 × 7201: Den sidste søjle er den første igen, og den nederste række er tom). Stol ikke på filnavnet: Solar System Scopes `8k_saturn.jpg` er kun 4096 × 2048.
+- [ ] "Modlys" er set både tæt på og langt væk. Tæt på ligger en tynd luft i kanten i skygge, hvis Solen står midt bag planeten (Mars M3).
 - [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
@@ -274,6 +275,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Et net, der løftes i vertex-shaderen,** (1024 × 512 felter på pc) gav ingen synlige problemer ved sømmen (kuglens kopierede punkter ved 180° henter samme højde). Kuglens `boundingSphere` skal gøres større, ellers kan bjerge skæres væk ude ved kanten af billedet.
 - **Værktøjer:** GitHub-udgivelser er blokeret i miljøet (403), så `basisu` (KTX2) kunne ikke hentes. npm-registret og pypi kan bruges.
 - **Billeder i sekundet i testbrowseren** (software-tegning, fuld grafik): pc Saturn 4,6 og Mars 2,6, tablet Saturn 12,6 og Mars 4,4. Med et grovere net på tablet (512 × 256 i stedet for 768 × 384) blev det kun 5,2, så det er ikke nettet, der koster, men pixlerne (Mars fylder meget af skærmen, og hver pixel henter fem gange i kortene). Et rigtigt grafikkort klarer det let, men det skal prøves på tabletten.
+
+### Mars' luft, skyer og modlys (M3, oktober 2026)
+- **Modlys med Solen midt bag planeten virker kun langt væk.** Set tæt på ligger kantens tangentpunkt på natsiden (en brøkdel R/afstand mod kameraet), så luften i kanten er i planetens skygge, og ringen forsvandt helt ved 2,9 radier. Det er rigtig fysik. Løsningen: Sæt Solen lige bag kanten (ca. 3° inden for), så lyser kanten på den side som en solopgang set fra rummet. Langt væk lyser ringen hele vejen rundt.
+- **En skal, der skærer gennem bjergene, laver hårde huller:** Skyerne lå først 16 km oppe, og vulkanernes toppe stak op som mørke, skarpe pletter. Læg skallen over de højeste toppe, eller tegn skyerne i overfladens shader.
+- **Skyer med en rund vægt rundt om et sted blev til runde, hvide pletter.** Lad støjen bestemme formen (tærsklen falder tæt ved stedet), og træk støjen ud mod øst og vest (vinden), så kanten bliver laset.
+- **Polkapperne fandtes allerede i Viking-kortet**, bare lyserøde. En maske (forholdet blå/rød over ca. 0,6, lys, og tæt ved polen) skiller isen fra det orange støv (blå/rød ca. 0,4-0,5) uden nye billeder.
+- **Fælde i fakta:** Den 1.800 km lange sky ved Arsia Mons (ESA) kommer i det sydlige forår og sommer og om morgenen. De almindelige skyer over Tharsis kommer om eftermiddagen i det nordlige forår og sommer (NASA PIA02049). Bland dem ikke sammen.
+- **Tal, der regnes om:** Et tusmørke, der når 12° ind på natsiden, svarer til støv i ca. 76 km højde (R · (1/cos θ − 1)), ikke 50 km. Regn det efter, før det skrives.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.

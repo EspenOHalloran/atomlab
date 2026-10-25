@@ -231,4 +231,16 @@ export const ORDBOG = [
     former: ['halvskygge', 'halvskyggen'],
     tekst: 'Den lysere del af en skygge i rummet, rundt om kerneskyggen. Herfra er kun en del af Solen dækket, så der er stadig lys, bare mindre.',
   },
+  {
+    id: 'toeris', ord: 'Tøris',
+    former: ['tøris'],
+    // CO₂ bliver til gas ved −78,5 °C ved 1 atm uden at smelte
+    tekst: 'Frossen kuldioxid (CO₂). Her på Jorden er den ca. −78 °C kold, og den bliver til gas uden at smelte først. På Mars fryser en del af luften til tøris ved polerne om vinteren.',
+  },
+  {
+    id: 'skalahoejde', ord: 'Skalahøjde',
+    former: ['skalahøjde', 'skalahøjden'],
+    // Tætheden falder med faktoren e ≈ 2,718 pr. skalahøjde. NSSDC: Mars 11,0 km, Jorden 8,5 km
+    tekst: 'Så højt skal man op, før luften bliver ca. 2,7 gange tyndere. Kommer man en skalahøjde højere op, bliver den 2,7 gange tyndere igen. På Mars er den ca. 11 km og på Jorden ca. 8,5 km.',
+  },
 ];
