@@ -124,3 +124,76 @@ export function lavTitan(radius, km) {
     },
   };
 }
+
+// En tynd, støvet luft om en klippeplanet (først Mars), bygget som Jordens luft i js/kosmos/jorden.js: For hvert punkt
+// regnes, hvor tæt strålen fra kameraet kommer på planeten, og luften bliver tyndere opad med skalahøjden H.
+// Alt regnes i skallens egne retninger, hvor den fladtrykte planet er en kugle, så luften følger polerne.
+// Højt oppe er støvet stadig i sollys lidt ind over natsiden (tusmørket), og tæt ved Solen spreder det fine støv
+// mest blåt lys (som i Curiositys blå solnedgang).
+const LUFT_FRAGMENT = /* glsl */ `
+  uniform vec3 kam;      // kameraet i skallens retninger
+  uniform vec3 sol;      // retningen mod Solen i skallens retninger
+  uniform float R;       // planetens radius (nulpunktet for højderne)
+  uniform float H;       // skalahøjden
+  uniform float hMin;    // den laveste højde på planeten (under nulpunktet)
+  uniform float tusSin;  // hvor langt ind i natten støvet er belyst
+  uniform float styrke;
+  uniform vec3 farve;    // støvets farve i dagslys
+  uniform vec3 blaa;     // farven tæt ved Solen
+  varying vec3 vPos;
+  void main() {
+    vec3 d = normalize(vPos - kam);
+    vec3 q = kam + d * max(dot(-kam, d), 0.0); // stedet, hvor strålen er tættest på planeten (ikke bag kameraet)
+    float p = length(q);
+    float taethed = exp(-max(p - R, hMin) / H);
+    float vinkel = dot(q / p, sol);
+    float belyst = smoothstep(-tusSin, 0.12, vinkel);
+    // Støvet spreder mest lys fremad, så luften lyser som en ring, når Solen står bag planeten
+    float mod = max(dot(d, sol), 0.0);
+    float fremad = 0.55 + 10.0 * pow(mod, 8.0);
+    vec3 c = mix(farve, blaa, smoothstep(0.97, 0.997, mod)); // blå kun ca. 5-10° fra Solen
+    gl_FragColor = vec4(c * taethed * belyst * fremad * styrke, 1.0);
+  }`;
+
+// radius og polRadius i km, skala i km pr. enhed. H (skalahøjden), top og hMin i km.
+export function lavLuft({ skala, radius, polRadius = radius, H, top = 12 * H, hMin = 0, tusmørke = 0, styrke = 1, farve = [0.85, 0.6, 0.42], blaa = [0.45, 0.62, 1.0] }) {
+  const ydre = (radius + top) / radius; // skallens radius (planetens radius = 1)
+  const mat = new THREE.ShaderMaterial({
+    uniforms: {
+      kam: { value: new THREE.Vector3() },
+      sol: { value: new THREE.Vector3(1, 0, 0) },
+      R: { value: 1 / ydre },
+      H: { value: H / radius / ydre },
+      hMin: { value: hMin / radius / ydre },
+      tusSin: { value: Math.sin(THREE.MathUtils.degToRad(tusmørke)) },
+      styrke: { value: styrke },
+      farve: { value: new THREE.Vector3(...farve) },
+      blaa: { value: new THREE.Vector3(...blaa) },
+    },
+    vertexShader: /* glsl */ `
+      varying vec3 vPos;
+      void main() { vPos = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: LUFT_FRAGMENT,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    side: THREE.BackSide,
+  });
+  const u = mat.uniforms;
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 64), mat);
+  const R = radius / skala;
+  mesh.scale.set(R * ydre, polRadius / skala * ydre, R * ydre);
+  mesh.renderOrder = 2;
+  const omvendt = new THREE.Matrix4();
+  const solVerden = new THREE.Vector3(1, 0, 0);
+  mesh.onBeforeRender = (renderer, scene, camera) => {
+    omvendt.copy(mesh.matrixWorld).invert();
+    u.kam.value.copy(camera.position).applyMatrix4(omvendt);
+    u.sol.value.copy(solVerden).transformDirection(omvendt);
+  };
+  return {
+    mesh,
+    sæt(solRetning) { solVerden.copy(solRetning); },
+    stop() { mesh.geometry.dispose(); mat.dispose(); },
+  };
+}

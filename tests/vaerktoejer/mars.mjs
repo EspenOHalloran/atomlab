@@ -27,5 +27,14 @@ await side.evaluate(() => saturnTest.tryk('Bjergene'));
 // Valles Marineris tæt på grænsen mellem dag og nat (lav sol), og Hellas
 await billede('5-valles-lav-sol', () => { saturnTest.kig([-0.35, -0.2, 1], 3.39619 * 1.6); saturnTest.test.vend(-160); }, 3000);
 await billede('6-hellas', () => { saturnTest.kig([0.1, -0.6, 1], 3.39619 * 1.7); saturnTest.test.vend(70); });
+// M3: skyerne over Tharsis om eftermiddagen (kameraet ca. 45° øst for middagsstedet), polerne, tusmørket og modlys
+await billede('7-skyer-eftermiddag', () => { saturnTest.kig([0.97, 0.25, -0.22], 3.39619 * 2.2); saturnTest.test.vend(-118); });
+await billede('8-skyer-taet', () => { saturnTest.kig([0.97, 0.35, -0.22], 3.39619 * 1.35); saturnTest.test.vend(-118); });
+await billede('9-nordpol', () => { saturnTest.kig([0.4, 1, 0.3], 3.39619 * 2.2); saturnTest.test.vend(0); });
+await billede('10-sydpol', () => { saturnTest.kig([0.4, -1, 0.3], 3.39619 * 2.2); saturnTest.test.vend(0); });
+await billede('11-tusmoerke', () => { saturnTest.kig([-0.6, 0.2, 1], 3.39619 * 2.4); saturnTest.test.vend(-60); });
+await billede('12-kant-dag', () => { saturnTest.kig([0.5, 0.3, 1], 3.39619 * 1.9); saturnTest.test.vend(-60); });
+await billede('13-modlys', () => { saturnTest.tryk('Modlys'); saturnTest.kig([0.12, 0.2, 1], 3.39619 * 2.9); }, 2000);
+await billede('14-modlys-langt', () => { saturnTest.kig([0.12, 0.1, 1], 3.39619 * 12); }, 2000);
 await b.close();
 console.log(fejl.length ? fejl.join('\n') : 'Ingen konsolfejl');
