@@ -32,6 +32,7 @@ export const SKY_GLSL = /* glsl */ `
   uniform vec4 skySted[${MAKS_STEDER}];   // retning (xyz) og radius (w, i radianer)
   uniform float skyMaengde[${MAKS_STEDER}];
   uniform float skyTid;
+  uniform float skyAktiv;                 // 1, når der er sky et sted (ellers springes skyggen over)
   float skyHash(vec3 p) { return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453); }
   float skyStoej(vec3 p) {
     vec3 i = floor(p); vec3 f = fract(p); f = f * f * (3.0 - 2.0 * f);
@@ -44,8 +45,10 @@ export const SKY_GLSL = /* glsl */ `
     for (int i = 0; i < ${MAKS_STEDER}; i++) {
       vec4 s = skySted[i];
       if (skyMaengde[i] < 0.01) continue;
-      float v = acos(clamp(dot(n, s.xyz), -1.0, 1.0)) / s.w;
-      vaegt += skyMaengde[i] * exp(-v * v);
+      vec3 a = n - s.xyz; // korden er næsten lige så lang som buen tæt på stedet (og billigere end acos)
+      float v2 = dot(a, a) / (s.w * s.w);
+      if (v2 > 9.0) continue;
+      vaegt += skyMaengde[i] * exp(-v2);
     }
     if (vaegt < 0.01) return 0.0;
     // Tynde, laset skyer: støj i flere størrelser, trukket ud mod øst og vest (vinden), som langsomt flytter sig
@@ -67,7 +70,7 @@ export function lavSkyer({ radius, polRadius = radius, højde, steder, net = [25
     mængde.push(0);
   }
   // Uniforms, som deles med klippeplanetens shader (skyggen)
-  const uniforms = { skySted: { value: sted }, skyMaengde: { value: mængde }, skyTid: { value: 0 } };
+  const uniforms = { skySted: { value: sted }, skyMaengde: { value: mængde }, skyTid: { value: 0 }, skyAktiv: { value: 0 } };
   const mat = new THREE.ShaderMaterial({
     uniforms: {
       ...uniforms,
@@ -122,6 +125,8 @@ export function lavSkyer({ radius, polRadius = radius, højde, steder, net = [25
         tider[i] = lokalTid(sted[i], solObj);
         mængde[i] = eftermiddag(tider[i]) * (s.styrke ?? 1);
       });
+      uniforms.skyAktiv.value = mængde.some((m) => m >= 0.01) ? 1 : 0;
+      mesh.visible = uniforms.skyAktiv.value > 0; // ingen skyer: skallen tegnes slet ikke
     },
     set overdriv(v) { overdriv = v; sætStørrelse(); },
     // Kun til tests: lokal tid og mængden af sky ved hvert sted

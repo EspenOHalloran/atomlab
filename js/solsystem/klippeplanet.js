@@ -96,7 +96,7 @@ const FRAGMENT = /* glsl */ `
     lys *= smoothstep(-0.02, 0.04, dot(mix(N, Nr, 0.6), uSol));
     #ifdef SKYER
     // Skyernes skygge: kig fra stedet mod Solen op til skyernes højde
-    if (cosZ > 0.0) {
+    if (cosZ > 0.0 && skyAktiv > 0.5) {
       vec3 solObj = normalize(transpose(rot) * uSol);
       vec3 vandret = solObj - n0 * dot(solObj, n0);
       lys *= 1.0 - 0.45 * skyer(normalize(n0 + vandret * skyH / max(cosZ, 0.25)));

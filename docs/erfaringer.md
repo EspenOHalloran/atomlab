@@ -282,6 +282,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Skyer med en rund vægt rundt om et sted blev til runde, hvide pletter.** Lad støjen bestemme formen (tærsklen falder tæt ved stedet), og træk støjen ud mod øst og vest (vinden), så kanten bliver laset.
 - **Polkapperne fandtes allerede i Viking-kortet**, bare lyserøde. En maske (forholdet blå/rød over ca. 0,6, lys, og tæt ved polen) skiller isen fra det orange støv (blå/rød ca. 0,4-0,5) uden nye billeder.
 - **Fælde i fakta:** Den 1.800 km lange sky ved Arsia Mons (ESA) kommer i det sydlige forår og sommer og om morgenen. De almindelige skyer over Tharsis kommer om eftermiddagen i det nordlige forår og sommer (NASA PIA02049). Bland dem ikke sammen.
+- **Billeder i sekundet** (testbrowseren uden grafikkort, fuld grafik, Mars 2,2 radier væk): pc 1,8-2,1 før M3 og 1,4-1,8 efter, tablet 3,0 før og 3,4 efter (inden for målestøjen). Det meste kostede skyernes skygge for hver pixel. `acos` blev skiftet ud med kordens længde, og skyggen og skallen springes over, når der ingen skyer er (`skyAktiv`).
+- **Mål "før" mod den rigtige udgave:** Den lokale `origin/main` var forældet (fra før M2), så den første "før"-måling var slet ikke af Mars og gav et alt for højt tal. Mål mod grenens udgangspunkt (`git merge-base`), eller hent `main` først (`git fetch origin main`).
 - **Tal, der regnes om:** Et tusmørke, der når 12° ind på natsiden, svarer til støv i ca. 76 km højde (R · (1/cos θ − 1)), ikke 50 km. Regn det efter, før det skrives.
 
 ## Testsamlingen
