@@ -140,6 +140,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Månens afstand svinger mellem 363.000 og 406.000 km." Det er gennemsnittet for, hvornår den er tættest på og længst væk. Yderværdierne er ca. 356.400 og 406.700 km.
 - "Månen i Jordens kerneskygge = total måneformørkelse." Kun når *hele* Månen er inde i kerneskyggen.
 - "Den yderste skal har højst 8 elektroner." Næsten altid, men palladium har skallerne 2, 8, 18, 18. Og grænsen skyldes rækkefølgen af energierne (den næste skal begynder at fylde), ikke Pauli-princippet.
+- "Solens overflade koger." Det er også konvektion: Varm gas stiger op og kold synker ned (Solen i M4b). Skriv "bobler" eller "simrer".
+- "Lyset er 8 minutter og 20 sekunder om at nå Jorden." Det er 499 sekunder, altså 8 min 19 s. Regn afrundinger efter, før de står med sekunder.
 - "Jordens ydre kerne koger." Det flydende metal strømmer rundt (konvektion) som suppe i en gryde, drevet af varme og af lette stoffer fra den faste indre kerne. Det koger ikke.
 - "Den dødelige stråledosis er 4-5 Sv." Kilderne siger ca. 3,5-4,5 Gy for halvdelen uden behandling. Skriv "omkring 4 Sv", og at behandling hjælper. En CT-skanning er ca. 2-10 mSv (hovedet ca. 1-2), ikke 5-10.
 - "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.

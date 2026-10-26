@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 26. oktober 2026 (Mars M4a).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 26. oktober 2026 (Mars M4b).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -24,7 +24,16 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (26. oktober 2026): Mars, M4a (skærmen Solsystemet).**
+**Senest lavet (26. oktober 2026): Mars, M4b (Solen og Jorden får egne visninger).**
+- Et tryk på **Solen** og **Jorden** i listen åbner nu deres egen visning. Solsystemet har 8 fænomener, og menuen viser "x/8 set". Første gang åbner Solsystemet på Solen.
+- **Jorden** er en klode med Månen i den rigtige størrelse og afstand (1 enhed = 1.000 km). Den bruger `lavJorden` og `lavMånen`, som de var. Lyset passer med datoen og klokken lige nu: Solens retning, Jordens drejning og Månens plads (og dermed månefasen) regnes ud fra tidspunktet (`js/data/himmel.js`). Danmark er en gul prik. Et ur nederst i 3D-billedet viser tiden i Danmark, om Solen er oppe, og månefasen og afstanden til Månen. "Drej Jorden" lader tiden gå ca. 800 gange hurtigere (mod øst), og "Månen" flyver ud til Månen og tilbage. En tynd linje viser Månens bane.
+- **Solen** har den kogende overflade fra Kosmos, tal, et link til Stjerneovnen og knappen "Jorden ved siden af" (Jorden i den rigtige størrelse, 109 gange mindre).
+- **Jeres svar ved go:** "Enig i dine anbefalinger": Månen står, hvor den er i dag, Jorden starter drejet efter klokken, og Solen får knappen "Jorden ved siden af".
+- **Faktatjekket** (NSSDC og NASA, siderne åbnet med curl, `docs/fakta-solsystemet.md` del 4) rettede fem ting: lyset er 8 min 19 s (ikke 20 s), overfladen "bobler" (det er konvektion, ikke kogning), helium er ca. en fjerdedel af vægten, granulerne er ca. 4 mio. og ca. 1.500 km brede, og skyerne på Jorden er fra nogle få dage. Månens afstand står med yderværdierne (356.000-407.000 km), som erfaringer.md siger.
+- **Formlerne** er testet mod Meeus' eksempel (0,1°), formørkelserne i 2026 (nymåne og fuldmåne), solopgang i København og tidsjævningen (ny test `jorden`).
+- **Netsider:** earthobservatory.nasa.gov blev afvist af miljøets proxy (hjælpeagenten prøvede). Det er kun brugt til at tjekke, om skyerne er fra én dag, så teksten er skrevet forsigtigt i stedet.
+
+**Før det (26. oktober 2026): Mars, M4a (skærmen Solsystemet).**
 - Et nyt kort i menuen, **Solsystemet**, lige før Kosmos. Menuen har nu 4 + 3 kort på pc og tablet på langs (den sidste række i midten), 2 kolonner på tablet på højkant, 1 på telefon på højkant og 4 på telefon på langs.
 - Skærmen `#solsystem` har en liste efter afstanden til Solen: Solen (Solstorm, Solens fremtid), Jorden (Årstiderne, Formørkelser), Mars og Saturn. På telefon på højkant står de fire kloder på én række, og underpunkterne kommer i en række under dem. Indtil M4b åbner et tryk på Solen eller Jorden det første underpunkt.
 - Kosmos har nu 11 fænomener i samme rækkefølge som før og et link til Solsystemet under listen. "Solens fremtid" i Hvid dværg er et link, og grundstofkortet (carbon og nitrogen) linker til "Solsystemet: Solens fremtid".
@@ -57,7 +66,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, medium effort) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). I sagde ja til alle anbefalingerne (Solen får sin egen visning). **M4b venter på et go.** Se [docs/plan-mars.md](docs/plan-mars.md) under "Svar ved go til M4".
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). **M4c venter på et go.** Se [docs/plan-mars.md](docs/plan-mars.md) under "Svar ved go til M4".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
@@ -78,6 +87,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Jorden og Solen (M4b) på tabletten:** Passer dag og nat med det, I ser udenfor? Kan man finde Danmark-prikken og Månen? Er uret nederst i vejen på tablet på højkant? Kan man se den lille Jord ved "Jorden ved siden af" (zoom ind)? I testbrowseren er den kun et par pixel.
 - **Solsystemet (M4a) på tabletten:** Er listen let at bruge med fingre på langs og på højkant? Ser menuen med 7 kort godt ud? På telefon på langs fylder underpunkterne en linje hver.
 - **Mars M3 på tabletten:** Kører det stadig flydende med luften og skyerne? Er skyerne for tydelige eller for svage, og ser "Modlys" godt ud tæt på og langt væk? Er tusmørket for kraftigt?
 - **Saturns måner (S1):** Den dæmpede Enceladus og 8k på pc er ikke set på en rigtig skærm endnu. 4k kører fint på mobil og tablet (jeres svar).

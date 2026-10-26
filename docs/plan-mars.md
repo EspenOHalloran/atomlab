@@ -67,7 +67,7 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 | Del | Hvad | Effort |
 |---|---|---|
 | M4a | ✅ (lavet 26. oktober 2026) Den fælles skal (`js/faenomenskaerm.js`), skærmen `#solsystem`, menukortet og listen. Solstorm, Solens fremtid, Årstiderne, Formørkelser, Mars og Saturn flyttes fra Kosmos. Gemte data, links, hjælpen og testene rettes til. Intet nyt indhold. | medium |
-| M4b | Solen og Jorden får hver deres visning: Jorden-kloden med Månen i rigtig størrelse og afstand (de billeder og modeller, vi har nu), lyset efter dagens dato, og Solen med den kogende overflade, tal og et link til Stjerneovnen. Tekster og faktatjek. | medium |
+| M4b | ✅ (lavet 26. oktober 2026) Solen og Jorden får hver deres visning: Jorden-kloden med Månen i rigtig størrelse og afstand (de billeder og modeller, vi har nu), lyset efter dagens dato, og Solen med den kogende overflade, tal og et link til Stjerneovnen. Tekster og faktatjek. | medium |
 | M4c | Den fælles flyby (ud af `saturn.js`), rejsen ned til et sted på kuglen med udsyn mod horisonten, og Mars over på `rejse.js` (Mars styrer i dag kameraet selv) med ét stop at prøve, fx Olympus Mons. Kameraets "op" skal følge den lodrette retning på stedet, og kameraet må ikke komme ind under bjergene. Saturns flyby skal give de samme billeder før og efter. | høj |
 
 **Jeres svar (26. oktober 2026): "Generelt går vi med dine anbefalinger", og Solen får sin egen visning (A).** Det betyder:
@@ -76,6 +76,12 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 - **Gemt fremgang flytter med:** De sete fænomener og det sidst valgte flyttes fra `atomlabKosmos`/`atomlabKosmosSet` til `atomlabSolsystem`/`atomlabSolsystemSet`. Var det sidst valgte et af de flyttede, starter Kosmos på Big Bang. Nulstilles fremgangen, nulstilles begge.
 - **Kosmos** beholder de 11 andre i samme rækkefølge (Big Bang, Stjernefødsel, Hvid dværg, Supernova, Pulsar, Kilonova, Rumtid, Tyngdebølger, Sort hul, Kvasar og Ormehul). "Solens fremtid" i Hvid dværg bliver et link til Solsystemet, og nederst i listen står et link: "Solen, Jorden, Mars og Saturn finder du i Solsystemet".
 - **Månen** står i den rigtige afstand fra Jorden (ca. 30 gange Jordens bredde).
+
+**Jeres svar ved go til M4b (26. oktober 2026): "enig i dine anbefalinger".** Det betyder:
+- **Jorden** (`js/kosmos/jordkloden.js`, 1 enhed = 1.000 km): `lavJorden` og `lavMånen` bruges, som de er. Lyset følger dagens dato og klokken: Solens retning og Jordens drejning regnes ud fra tidspunktet, så dag og nat passer med lige nu (fx mørkt i Danmark om aftenen). Månen står, hvor den er i dag (en enkel formel, præcis inden for under 1°), så månefasen passer. Knapperne er "Drej Jorden" (mod øst, meget hurtigere end i virkeligheden) og "Månen" (kameraet flyver ud til Månen og tilbage). En tynd linje viser Månens bane.
+- **Solen** (`js/kosmos/solen.js`): den kogende overflade, tal og et link til Stjerneovnen. Knappen "Jorden ved siden af" viser en lille Jord i den rigtige størrelse til sammenligning.
+- Et tryk på "Solen" og "Jorden" i listen åbner deres egen visning. Menuen viser "x/8 set".
+- Tal og tekster faktatjekkes mod NSSDC (alle tre faktaark kunne åbnes med curl).
 - Fænomenfilerne bliver i `js/kosmos/`, for de har det samme format.
 
 ## Teknik

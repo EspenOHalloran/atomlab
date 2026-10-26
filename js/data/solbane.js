@@ -67,13 +67,22 @@ function dageSiden2000(n) {
 
 // Jordens afstand til Solen i millioner km
 export function afstand(n) {
-  const g = (357.529 + 0.98560028 * dageSiden2000(n)) * RAD;
+  return afstandVed(dageSiden2000(n));
+}
+
+// Det samme for et vilkårligt tidspunkt: d er dage siden 1. januar 2000 kl. 12 (verdenstid), også med brøkdele
+export function afstandVed(d) {
+  const g = (357.529 + 0.98560028 * d) * RAD;
   return 149.598 * (1.00014 - 0.01671 * Math.cos(g) - 0.00014 * Math.cos(2 * g));
 }
 
 // Solens længde på himlen (grader, 0 ved forårsjævndøgn, 90 ved sommersolhverv). Bruges til Jordens plads i banen.
 export function solensLængde(n) {
-  const d = dageSiden2000(n);
+  return solensLængdeVed(dageSiden2000(n));
+}
+
+// Det samme for et vilkårligt tidspunkt (d som i afstandVed)
+export function solensLængdeVed(d) {
   const g = (357.529 + 0.98560028 * d) * RAD;
   const L = 280.459 + 0.98564736 * d;
   return (((L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) % 360) + 360) % 360;

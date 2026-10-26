@@ -1,4 +1,4 @@
-// Solsystemet (Mars M4a): menukortet, listen med Solen, Jorden, Mars og Saturn, flytningen af gemte data fra Kosmos,
+// Solsystemet (Mars M4a og M4b): menukortet, listen med Solen, Jorden, Mars og Saturn (Solen og Jorden med egne visninger), flytningen af gemte data fra Kosmos,
 // links til de flyttede fænomener og layoutet af menuen og listen på pc, tablet og telefon.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('solsystem');
@@ -6,6 +6,7 @@ const b = await chromium.launch({ args: ARGS });
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const FLYTTET = ['solstorm', 'solensfremtid', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
+const ALLE = ['solen', 'solstorm', 'solensfremtid', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
 
 async function side(vp, gemt, opt = {}) {
   const s = await (await b.newContext({ viewport: vp, ...opt })).newPage();
@@ -24,12 +25,12 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   const kort = await s.evaluate(() => [...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), k.querySelector('.kort-fremgang')?.textContent]));
   const i = kort.findIndex(([h]) => h === '#solsystem');
   tjek('menuen: Solsystemet står lige før Kosmos', i >= 0 && kort[i + 1][0] === '#kosmos', JSON.stringify(kort));
-  tjek('menuen: 2/6 set i Solsystemet og 1/11 i Kosmos', kort[i][1] === '2/6 set' && kort[i + 1][1] === '1/11 set', JSON.stringify(kort));
+  tjek('menuen: 2/8 set i Solsystemet og 1/11 i Kosmos', kort[i][1] === '2/8 set' && kort[i + 1][1] === '1/11 set', JSON.stringify(kort));
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
   tjek('det sidst valgte (Saturn) åbner i Solsystemet', sol.valgt === 'saturn', JSON.stringify(sol));
-  tjek('Solsystemet: 2 af 6 set', sol.set === '2 af 6 set', sol.set);
-  tjek('Solsystemet har de seks flyttede fænomener', sol.ider.length === 6 && FLYTTET.every((id) => sol.ider.includes(id)), JSON.stringify(sol.ider));
+  tjek('Solsystemet: 2 af 8 set', sol.set === '2 af 8 set', sol.set);
+  tjek('Solsystemet har Solen, Jorden og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
   tjek('de sete (Mars og Saturn) har ingen prik', !prikker.includes('mars') && !prikker.includes('saturn') && prikker.includes('solstorm'), JSON.stringify(prikker));
   await vis(s, 'kosmos');
@@ -60,9 +61,9 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('listen: Solen, Jorden, Mars og Saturn (efter afstanden til Solen)', liste.map((g) => g.hoved).join() === 'Solen,Jorden,Mars,Saturn', JSON.stringify(liste));
   tjek('under Solen: Solstorm og Solens fremtid', liste[0].under.join() === 'solstorm,solensfremtid');
   tjek('under Jorden: Årstiderne og Formørkelser', liste[1].under.join() === 'aarstider,formoerkelser');
-  tjek('første gang åbner Solstorm', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solstorm');
+  tjek('første gang åbner Solen', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solen');
   await s.click('#solsystem .sol-gruppe[data-gruppe="1"] .sol-hoved');
-  tjek('et tryk på Jorden åbner Årstiderne (indtil Jorden får sin egen visning)', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'aarstider');
+  tjek('et tryk på Jorden åbner Jordens egen visning', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'jorden');
   tjek('Jordens gruppe er åben og markeret', await s.evaluate(() => { const g = document.querySelector('#solsystem .sol-gruppe[data-gruppe="1"]'); return g.classList.contains('åben') && g.querySelector('.sol-hoved').classList.contains('valgt'); }));
   tjek('underpunkterne står fremme på pc', await s.isVisible('#solsystem .sol-punkt[data-id="solstorm"]'));
   await s.click('#solsystem .kosmos-valg[data-id="mars"]');

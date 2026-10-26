@@ -866,3 +866,39 @@ AtomLab er gratis, til undervisning, på GitHub Pages og ikke-kommercielt. Det e
 8. **MSL Gale-mosaikken** har intet licensfelt og indeholder HRSC-data.
 9. **Henry Madan som navnegiver** og banernes hældning/excentricitet er ikke tjekket (kun hukommelse).
 10. Alt, der kun er læst som **søgeuddrag** (NASA, JPL, ESA, JAXA, Wikipedia, artikler), bør tjekkes en gang til i den fulde kilde, før teksten låses.
+
+## Del 4. Solen og Jorden i Solsystemet (Mars M4b, 26. oktober 2026)
+Teksterne i `js/kosmos/solen.js` og `js/kosmos/jordkloden.js`. Tallene er slået op af Opus på kildesiderne, og en hjælpeagent (Opus, høj effort) har tjekket alle påstande igen. Siderne er åbnet direkte med curl.
+
+**Kilder:** (A) NSSDC Sun Fact Sheet, (B) Earth Fact Sheet og (C) Moon Fact Sheet (https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html, earthfact.html, moonfact.html), (D) NASA "Sun: Facts" (https://science.nasa.gov/sun/facts/), (E) NASA "Earth: Facts" (https://science.nasa.gov/earth/facts/), (F) Wikipedia "Granule (solar physics)". earthobservatory.nasa.gov blev afvist af miljøets proxy.
+
+| Påstand | Resultat | Kilde og udregning |
+|---|---|---|
+| Solens bredde ca. 1,39 mio. km, 109 Jorder på række | OK | A: radius 695.700 km, 695.700 / 6.371 = 109,2 |
+| ca. 1,3 mio. Jorder inden i Solen | OK | A: rumfangsforhold 1.304.000 |
+| Massen ca. 333.000 Jorder, ca. 2 · 10³⁰ kg | OK | A: 1.988.400 / 5,9722 · 10²⁴ kg = 332.900 |
+| Overfladen ca. 5.500 °C (5.772 K) | OK | A og D |
+| Midten ca. 15 mio. °C (15,7 mio. K) | OK | A: 1,571 · 10⁷ K. D: "15 million degrees Celsius". Samme tal som i Stjerneovnen |
+| Ca. 9 ud af 10 atomer i overfladen er brint, resten mest helium. Efter vægt er ca. en fjerdedel helium | OK | A: H 90,965 %, He 8,889 % (af atomerne). 8,9 · 4 / (91 + 8,9 · 4) ≈ 28 % |
+| Ca. 4 mio. ton masse bliver til energi hvert sekund | OK | A: 3,828 · 10²⁶ W / c² = 4,26 · 10⁹ kg/s. Samme tal som i Stjerneovnen |
+| Højst ca. 0,03 % af massen på 4,6 mia. år | OK | 4,26 · 10⁹ kg/s · 1,45 · 10¹⁷ s = 6,2 · 10²⁶ kg = 0,031 %. Den unge Sol lyste svagere |
+| 4,6 mia. år og nogenlunde halvvejs gennem livet | OK | D: "a little less than halfway" |
+| Ækvator drejer på ca. 25 døgn, polerne på ca. 36 | OK | D (ordret) |
+| Lyset er 499 s (8 min 19 s) om at nå Jorden | **Rettet** (stod 8 min 20 s) | 149.597.871 km / 299.792 km/s = 499,0 s |
+| Overfladen "bobler" (konvektion), som suppe der simrer | **Rettet** (stod "koger") | D: "convection zone". Samme fælde som "Jordens ydre kerne koger" |
+| Ca. 4 mio. granuler på én gang, ca. 1.500 km brede | **Præciseret** (stod "millioner") | F |
+| Jorden ca. 107 Solbredder fra Solen | OK | 149,6 / 1,391 = 107,5 |
+| Jordens bredde ca. 12.740 km, 12.756 km ved ækvator og 12.714 km fra pol til pol | OK | B: 2 · 6.371, 2 · 6.378,137 og 2 · 6.356,752 |
+| Døgnet 24 t, i forhold til stjernerne 23 t 56 min | OK | B: 24,0000 og 23,9345 t |
+| Den eneste planet, vi kender, med liv | OK | E: "the only place we know of inhabited by living things" |
+| Månens bredde ca. 3.470 km, lidt over ¼ af Jordens | OK | C: 2 · 1.737,4 = 3.475. 3.475 / 12.742 = 0,27 |
+| Månen i snit 384.400 km væk, ca. 30 Jorder på række | OK | C: 384.400 / 12.742 = 30,2 |
+| Afstanden svinger mellem ca. 356.000 og 407.000 km | **Rettet** (stod 363.000-406.000, som er gennemsnittet for tættest og længst væk, se erfaringer.md) | C og formlen i himmel.js (357.400-406.000 km i 2026) |
+| Kredser på ca. 27 døgn og drejer lige så hurtigt | OK | C: 27,3217 døgn og 655,72 t |
+| Fra fuldmåne til fuldmåne ca. 29½ døgn | OK | C: 29,53. Formlen giver 29,56 i snit i 2026 |
+| Banen hælder ca. 5,1° | OK | C: 5,145° |
+| Skyerne på Jorden er fra nogle få dage | **Forsigtigere** (stod "én dag") | Earth Observatory kunne ikke åbnes. Efter agentens hukommelse er de sat sammen af flere dages billeder |
+| Månens plads inden for ca. 0,3° | OK (målt) | Meeus' eksempel 47.a: 0,09° i længde, 0,08° i bredde og 333 km. Formørkelserne i 2026 falder på nymåne og fuldmåne (`tests/jorden.mjs`). Almanakkens egen grænse er ikke læst i en kilde |
+| Dag og nat passer inden for få minutter | OK (målt) | Solopgang i København 21. december: 7:38 verdenstid som sunrisesunsettime.org |
+
+**Spillets egne tal:** "Drej Jorden" lader tiden gå 823 gange hurtigere (et døgn på ca. 105 sekunder). I teksten står "ca. 800 gange" og "under 2 minutter". Ved "Jorden ved siden af" har Jorden den rigtige størrelse, men står alt for tæt på Solen (det står i "Ærligt talt").
