@@ -36,7 +36,7 @@ export default {
     ['Tycho Brahe så en', 'i 1572'],
   ],
   kort: `
-    <p>En hvid dværg er resten af en stjerne som Solen (se Solens fremtid). Alene bliver den bare langsomt koldere. Men mange stjerner er i par. Er der en anden stjerne tæt på, kan den hvide dværg suge gas fra den. Gassen samler sig i en hvirvlende skive og falder ned på den hvide dværg, som bliver tungere og tungere.</p>
+    <p>En hvid dværg er resten af en stjerne som Solen (se <button class="link-knap" data-gaa="solsystem:solensfremtid">Solens fremtid</button> i Solsystemet). Alene bliver den bare langsomt koldere. Men mange stjerner er i par. Er der en anden stjerne tæt på, kan den hvide dværg suge gas fra den. Gassen samler sig i en hvirvlende skive og falder ned på den hvide dværg, som bliver tungere og tungere.</p>
     <p>En hvid dværg kan højst veje ca. 1,4 gange så meget som Solen. Når den kommer tæt på grænsen, tænder carbon i midten. Fusionen løber løbsk, og på et øjeblik bliver hele den hvide dværg sprængt i stykker. Der bliver intet tilbage i midten.</p>
     <p>Eksplosionen laver især nikkel-56, som henfalder til cobalt-56 og så til jern. Det er de henfald, der får supernovaen til at lyse i månedvis. En stor del af jernet i universet er lavet sådan, også noget af jernet i dit blod.</p>
     <p>Den danske astronom Tycho Brahe så en supernova af denne slags i 1572.</p>`,

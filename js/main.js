@@ -9,6 +9,8 @@ import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusio
 import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
 import { lavKosmos, startKosmos, stopKosmos, FÆNOMENER, testAdgang as kosmosTest } from './kosmos.js';
+import { lavSolsystem, startSolsystem, stopSolsystem, FÆNOMENER as SOL_FÆNOMENER, testAdgang as solsystemTest } from './solsystem.js';
+import { NØGLER } from './faenomenskaerm.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
@@ -26,6 +28,7 @@ const skærme = {
   fusion: { start: startFusion, stop: stopFusion },
   reaktor: { start: startReaktor, stop: stopReaktor },
   batteri: { start: startBatteri, stop: stopBatteri },
+  solsystem: { start: startSolsystem, stop: stopSolsystem },
   kosmos: { start: startKosmos, stop: stopKosmos },
 };
 
@@ -61,6 +64,7 @@ function start() {
   lavFusion();
   lavReaktor();
   lavBatteri();
+  lavSolsystem(); // før Kosmos, så det gemte flytter med først
   lavKosmos();
   lavPaneler();
   lavFuldSkærmKnapper();
@@ -92,7 +96,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), paneler: panelTest(), hvorfor: { vist: vistHvorfor } };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), hvorfor: { vist: vistHvorfor } };
   visSkærm();
 }
 
@@ -117,7 +121,7 @@ function visSkærm() {
 
 // Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult)
 function lavRulleTip() {
-  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, #menu, #fusion, #reaktor, #batteri, #kosmos')];
+  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, #menu, #fusion, #reaktor, #batteri, #solsystem, #kosmos')];
   const tjek = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
   let venter = false;
   const tjekAlle = () => {
@@ -184,10 +188,12 @@ function visFremgangIMenu(ny) {
   }
   const opdaget = fremgang.antalOpdaget();
   mærke('system', `${opdaget}/118 opdaget`, opdaget === 118);
-  let set = [];
-  try { set = JSON.parse(localStorage.getItem('atomlabKosmosSet')) || []; } catch { /* ingen lagring */ }
-  const antalSet = FÆNOMENER.filter((f) => set.includes(f.id)).length;
-  mærke('kosmos', `${antalSet}/${FÆNOMENER.length} set`, antalSet === FÆNOMENER.length);
+  for (const [id, liste] of [['solsystem', SOL_FÆNOMENER], ['kosmos', FÆNOMENER]]) {
+    let set = [];
+    try { set = JSON.parse(localStorage.getItem(NØGLER[id].set)) || []; } catch { /* ingen lagring */ }
+    const antalSet = liste.filter((f) => set.includes(f.id)).length;
+    mærke(id, `${antalSet}/${liste.length} set`, antalSet === liste.length);
+  }
   for (const k of document.querySelectorAll('.menukort .kort')) k.classList.toggle('næste-eventyr', !ny && klaret > 0 && k === næste);
 }
 

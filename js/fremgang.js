@@ -74,6 +74,7 @@ export function nulstilFremgang() {
   gem();
   try {
     localStorage.removeItem('atomlabKosmosSet'); // de fænomener, man har set i Kosmos
+    localStorage.removeItem('atomlabSolsystemSet'); // og i Solsystemet
   } catch {
     // ingen lagring
   }

@@ -1,4 +1,4 @@
-// De fire nyeste Kosmos-fænomener: Big Bang, Ny stjerne, Solens fremtid og Hvid dværg (type Ia-supernova)
+// Fire fænomener med trin: Big Bang, Ny stjerne og Hvid dværg (type Ia-supernova) i Kosmos og Solens fremtid i Solsystemet
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('kosmos-nye');
 const b = await chromium.launch({ args: ARGS });
@@ -8,11 +8,12 @@ const page = await (await b.newContext({ viewport: { width: 1280, height: 800 } 
 page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 const T = (f, a) => page.evaluate(f, a);
-const panel = () => page.textContent('#kosmosForklaring');
-const undertekst = () => T(() => document.querySelector('#kosmosVindue .undertekst')?.textContent ?? '');
-const knapper = () => T(() => [...document.querySelectorAll('#kosmosStyring button')].map((k) => ({ tekst: k.textContent, slået: k.disabled })));
+let skærm = 'kosmos'; // Solens fremtid ligger i Solsystemet
+const panel = () => page.textContent(`#${skærm}Forklaring`);
+const undertekst = () => T((s) => document.querySelector(`#${s}Vindue .undertekst`)?.textContent ?? '', skærm);
+const knapper = () => T((s) => [...document.querySelectorAll(`#${s}Styring button`)].map((k) => ({ tekst: k.textContent, slået: k.disabled })), skærm);
 // Tryk på en knap (via testadgangen) og spol frem
-const tryk = (i, spol = 3) => T(([i, s]) => { const k = atomlabTest.kosmos; k.tryk(i); k.spol(s); k.kameraFrem(); }, [i, spol]);
+const tryk = (i, spol = 3) => T(([i, s, sk]) => { const k = atomlabTest[sk]; k.tryk(i); k.spol(s); k.kameraFrem(); }, [i, spol, skærm]);
 const sætSkyder = (v) => T((v) => { const i = document.querySelector('#kosmosStyring input[type=range]'); i.value = v; i.dispatchEvent(new Event('input')); }, v);
 
 await page.goto(`${ADRESSE}/?test#kosmos`);
@@ -51,7 +52,10 @@ for (const [nr, forventet] of [[1, 'brun dværg'], [5, 'stjerne som Solen'], [9,
 }
 
 // ---------- Solens fremtid ----------
-await T(() => atomlabTest.kosmos.vælg('solensfremtid'));
+skærm = 'solsystem';
+await T(() => { location.hash = '#solsystem'; });
+await page.waitForFunction(() => document.querySelector('#solsystem:not(.skjult)'));
+await T(() => atomlabTest.solsystem.vælg('solensfremtid'));
 await page.waitForTimeout(300);
 tjek('Solens fremtid: starter med Solen i dag', (await undertekst()).includes('Solen i dag'), await undertekst());
 await tryk(0, 3);
@@ -65,6 +69,9 @@ tjek('Solens fremtid: ender som hvid dværg', (await undertekst()).includes('hvi
 await page.screenshot({ path: `${UD}/sol-dvaerg.png` });
 
 // ---------- Hvid dværg (type Ia) ----------
+skærm = 'kosmos';
+await T(() => { location.hash = '#kosmos'; });
+await page.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'));
 await T(() => atomlabTest.kosmos.vælg('hviddvaerg'));
 await page.waitForTimeout(300);
 tjek('Hvid dværg: starter ved 1,00 sol', (await panel()).includes('1,00 sole'), await panel());

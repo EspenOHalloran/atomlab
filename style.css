@@ -113,13 +113,19 @@ button { font: inherit; color: inherit; }
 .undertitel { margin: 4px 0 0; color: var(--svag); font-size: clamp(14px, 1.8vw, 18px); }
 #menu .vindue { width: 100%; }
 
+/* Kortene står i --kol kolonner, og en sidste række med færre kort står i midten */
 .menukort {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 300px));
-  gap: 14px;
+  --kol: 4;
+  --mellem: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mellem);
   justify-content: center;
   width: 100%;
+  max-width: 1100px;
+  justify-self: center;
 }
+.menukort > .kort { flex: 0 0 calc((100% - (var(--kol) - 1) * var(--mellem)) / var(--kol)); min-width: 0; }
 .kort {
   position: relative;
   display: flex;
@@ -835,12 +841,12 @@ button { font: inherit; color: inherit; }
 .sf-åbn { margin-left: 4px; padding: 5px 10px; border-radius: 99px; background: color-mix(in srgb, var(--farve) 25%, transparent); color: var(--tekst); font-size: 13px; font-weight: 700; }
 
 /* ---------- Fælles for Stjerneovnen og Reaktoren ---------- */
-#fusion, #reaktor, #batteri, #kosmos {
+#fusion, #reaktor, #batteri, #kosmos, #solsystem {
   grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px);
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas: "top top top" "venstre vindue højre";
 }
-#fusion .vindue, #reaktor .vindue, #batteri .vindue, #kosmos .vindue { grid-area: vindue; }
+#fusion .vindue, #reaktor .vindue, #batteri .vindue, #kosmos .vindue, #solsystem .vindue { grid-area: vindue; }
 .batteri-tal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
 .batteri-tal span { font-size: 12.5px; color: var(--svag); }
@@ -979,6 +985,18 @@ button { font: inherit; color: inherit; }
 /* Prikken for "ikke set endnu" sidder i hjørnet, så den ikke tager plads fra navnet */
 .kosmos-valg { position: relative; }
 .kosmos-valg.ny::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+/* Solsystemet: kloderne efter afstanden til Solen, og under dem de fænomener, der hører til */
+.ikon-solsystem { background: radial-gradient(circle at 30% 50%, #fff6d0 0 7px, #ffc04a 9px, rgba(255, 140, 40, 0.5) 13px, transparent 19px); }
+.ikon-solsystem::before { content: ""; position: absolute; left: 31px; top: 14px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #9fd8ff, #2f6fd0 70%); box-shadow: 0 0 6px rgba(95, 170, 255, 0.6); }
+.ikon-solsystem::after { content: ""; position: absolute; left: 36px; top: 32px; width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffb08a, #b9472a 75%); }
+.sol-liste { display: flex; flex-direction: column; gap: 6px; }
+.sol-hoved { width: 100%; }
+.sol-under { display: flex; flex-wrap: wrap; gap: 5px; margin: 5px 0 2px 22px; }
+.sol-punkt { padding: 5px 8px; font-size: 12.5px; font-weight: 500; }
+.sol-punkt .kosmos-valg-ikon { font-size: 14px; }
+.kosmos-videre { margin-top: 4px; padding: 6px 8px; border: 1px dashed var(--panel-kant); border-radius: 12px; background: none; color: var(--svag); font-size: 12.5px; text-align: left; cursor: pointer; }
+.kosmos-videre strong { color: var(--accent); }
+.kosmos-videre:hover { border-color: rgba(95, 227, 255, 0.5); }
 .kosmos-set { float: right; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--svag); }
 .kosmos-styring { display: flex; flex-direction: column; gap: 6px; }
 .kosmos-knap { justify-content: flex-start; text-align: left; }
@@ -1037,10 +1055,10 @@ button { font: inherit; color: inherit; }
 /* ---------- Mellemstore skærme (fx tablet på langs) ---------- */
 @media (max-width: 1150px) {
   #vaerksted { grid-template-columns: 240px minmax(0, 1fr) 280px; }
-  .menukort { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 980px; }
+  .menukort { max-width: 1000px; }
   .kort { padding: 12px; gap: 10px; }
   .kort-tekst small { font-size: 12.5px; }
-  #fusion, #reaktor, #batteri, #kosmos { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 290px); }
+  #fusion, #reaktor, #batteri, #kosmos, #solsystem { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 290px); }
   .opgave-krav .navn-lang { display: none; }
   .opgave-krav .navn-kort { display: inline; }
   .topbjælke h2 { font-size: 19px; }
@@ -1076,9 +1094,9 @@ button { font: inherit; color: inherit; }
   .hjælpeknapper { flex: 1 1 100%; }
   .minitabel-panel { width: min(100%, 480px); }
   #menu { overflow-y: auto; }
-  .menukort { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .menukort { --kol: 2; }
   /* 3D-billedet øverst og de to paneler side om side nedenunder. Hele skærmen kan rulle. */
-  #fusion, #reaktor, #batteri, #kosmos {
+  #fusion, #reaktor, #batteri, #kosmos, #solsystem {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto minmax(46vh, 1fr) auto;
     grid-template-areas: "top top" "vindue vindue" "venstre højre";
@@ -1099,9 +1117,9 @@ button { font: inherit; color: inherit; }
 /* ---------- Telefoner på højkant ---------- */
 @media (max-width: 560px) and (orientation: portrait) {
   #menu { grid-template-rows: auto minmax(130px, 24vh) auto auto auto; }
-  .menukort { grid-template-columns: minmax(0, 1fr); }
+  .menukort { --kol: 1; }
   .kort { padding: 10px 12px; }
-  #fusion, #reaktor, #batteri, #kosmos {
+  #fusion, #reaktor, #batteri, #kosmos, #solsystem {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(44vh, 1fr) auto auto;
     grid-template-areas: "top" "vindue" "venstre" "højre";
@@ -1110,6 +1128,12 @@ button { font: inherit; color: inherit; }
   .kosmos-liste { display: flex; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
   .kosmos-liste::-webkit-scrollbar { display: none; }
   .kosmos-valg { flex: 0 0 auto; }
+  .kosmos-videre { display: none; }
+  .sol-liste { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+  .sol-gruppe { display: contents; }
+  .sol-hoved { flex-direction: column; gap: 2px; padding: 5px 2px; text-align: center; }
+  .sol-under { display: none; grid-column: 1 / -1; grid-row: 2; margin: 0; }
+  .sol-gruppe.åben .sol-under { display: flex; }
   .søgefelt { order: 3; flex: 1 1 100%; max-width: none; }
   /* Det periodiske system: filtrene bag én knap */
   .system-filtre .chip.filter-knap { display: inline-flex; }
@@ -1117,7 +1141,7 @@ button { font: inherit; color: inherit; }
   .system-filtre.vis-filtre { max-height: 40vh; }
   .system-filtre.vis-filtre .filter-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; flex-basis: 100%; }
   /* Panelerne får deres fulde højde, og hele skærmen ruller i stedet */
-  #fusion .side-panel, #reaktor .side-panel, #batteri .side-panel, #kosmos .side-panel { overflow: visible; min-height: auto; }
+  #fusion .side-panel, #reaktor .side-panel, #batteri .side-panel, #kosmos .side-panel, #solsystem .side-panel { overflow: visible; min-height: auto; }
   .system-status { display: none; }
 }
 
@@ -1134,11 +1158,11 @@ button { font: inherit; color: inherit; }
   .menu-top { padding-top: 0; }
   .logo { font-size: 38px; }
   .undertitel { font-size: 13px; }
-  .menukort { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .menukort { --kol: 4; --mellem: 8px; }
   .kort { padding: 8px 10px; }
   .kort-tekst small, .menu-citat { display: none; }
   /* Stjerneovnen, Reaktoren, Batteriet og Kosmos: tre smalle kolonner */
-  #fusion, #reaktor, #batteri, #kosmos {
+  #fusion, #reaktor, #batteri, #kosmos, #solsystem {
     grid-template-columns: minmax(180px, 28%) minmax(0, 1fr) minmax(200px, 31%);
     grid-template-rows: auto minmax(0, 1fr);
     grid-template-areas: "top top top" "venstre vindue højre";
@@ -1215,9 +1239,9 @@ button { font: inherit; color: inherit; }
 .skærm.skjul-højre > .højre-panel, #vaerksted.skjul-højre > #infopanel,
 .skærm.kun-grafik > .side-panel, #vaerksted.kun-grafik > .panel { display: none; }
 /* :is() med id'erne, så reglerne vinder over fx "#fusion .vindue { grid-area: vindue }" */
-:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos).skjul-venstre > .vindue { grid-column-start: 1; }
-:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos).skjul-højre > .vindue { grid-column-end: -1; }
-:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos, #solsystem).skjul-venstre > .vindue { grid-column-start: 1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos, #solsystem).skjul-højre > .vindue { grid-column-end: -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #kosmos, #solsystem).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
 .panel-fane {
   position: absolute; top: 50%; z-index: 3; width: 22px; height: 60px; margin-top: -30px; padding: 0;
   border: 1px solid var(--panel-kant); background: var(--panel); color: var(--svag);
@@ -1232,7 +1256,7 @@ button { font: inherit; color: inherit; }
 .knap-kungrafik.valgt { background: rgba(95, 227, 255, 0.22); border-color: var(--accent); }
 /* Kosmos i "Kun grafik": "Næste ›" står nederst i 3D-billedet, så man kan gå trin for trin uden panelerne */
 .kosmos-næste { align-self: flex-end; pointer-events: auto; }
-#kosmos:not(.kun-grafik) .kosmos-næste { display: none; }
+#kosmos:not(.kun-grafik) .kosmos-næste, #solsystem:not(.kun-grafik) .kosmos-næste { display: none; }
 
 /* ---------- Dybde i lag (js/lag.js) ---------- */
 /* Foldebokse: overskriften og én linje står fremme, resten folder sig ud */

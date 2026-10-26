@@ -9,13 +9,14 @@ page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await page.goto(`${ADRESSE}/?test`);
 await page.waitForTimeout(1200);
-tjek('6 kort i menuen', (await page.$$('.menukort .kort')).length === 6);
+tjek('7 kort i menuen', (await page.$$('.menukort .kort')).length === 7);
 await page.click('a[href="#kosmos"]');
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('17 fænomener', ids.length === 17, ids);
-tjek('17 knapper i listen', (await page.$$('.kosmos-valg')).length === 17);
+tjek('11 fænomener', ids.length === 11, ids);
+tjek('vores eget solsystem er flyttet', !ids.some((id) => ['aarstider', 'formoerkelser', 'solstorm', 'solensfremtid', 'mars', 'saturn'].includes(id)), ids);
+tjek('11 knapper i listen', (await page.$$('#kosmos .kosmos-valg')).length === 11);
 const K = () => page.evaluate(() => window.atomlabTest.kosmos);
 const objekter = {};
 for (const id of ids) {
@@ -43,7 +44,7 @@ await page.click('[data-kosmos-fane="nørd"]');
 await page.click(`.kosmos-valg[data-id="${ids[0]}"]`);
 tjek('nyt fænomen starter på "Kort fortalt"', await page.evaluate(() => document.querySelector('[data-kosmos-fane="kort"]').classList.contains('valgt') && !document.querySelector('[data-kosmos-fane="nørd"]').classList.contains('valgt')));
 // Skift frem og tilbage: antallet af objekter må ikke vokse (ingen rester)
-await page.evaluate(() => { const k = window.atomlabTest.kosmos; k.vælg('solstorm'); k.vælg('supernova'); k.vælg('solstorm'); });
+await page.evaluate(() => { const k = window.atomlabTest.kosmos; k.vælg('pulsar'); k.vælg('supernova'); k.vælg('pulsar'); });
 const igen = await page.evaluate(() => window.atomlabTest.kosmos.antalObjekter());
 tjek('ingen rester efter skift', igen <= 30, igen);
 // Det valgte fænomen huskes

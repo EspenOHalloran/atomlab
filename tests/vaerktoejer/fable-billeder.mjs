@@ -59,27 +59,29 @@ const SKÆRME = [
   ['fusion', '#fusion', 'Stjerneovnen, som den ser ud, når man kommer ind (guiden og rejsen ind i Solen er sprunget over)'],
   ['reaktor', '#reaktor', 'Reaktoren, del 1 "Spalt én kerne"'],
   ['batteri', '#batteri', 'Batteriet under opladning (ca. halvt opladet)'],
-  ['kosmos', '#kosmos', 'Kosmos med Årstiderne valgt'],
+  ['solsystem', '#solsystem', 'Solsystemet med Årstiderne valgt'],
+  ['kosmos', '#kosmos', 'Kosmos med Big Bang valgt'],
 ];
 async function forbered(page, navn) {
   if (navn === 'vaerksted') await byg(page, 6, 6, 6);
   if (navn === 'batteri') await page.evaluate(() => { atomlabTest.batteri.tilstand('oplad'); atomlabTest.batteri.kør(7); });
-  if (navn === 'kosmos') await page.evaluate(() => atomlabTest.kosmos.vælg('aarstider'));
+  if (navn === 'solsystem') await page.evaluate(() => atomlabTest.solsystem.vælg('aarstider'));
+  if (navn === 'kosmos') await page.evaluate(() => atomlabTest.kosmos.vælg('bigbang'));
 }
 for (const størrelse of ['pc', 'tablet', 'tlf']) {
   const page = await nySide(størrelse);
   for (const [navn, hash, tekst] of SKÆRME) {
-    if (størrelse === 'tlf' && !['menu', 'vaerksted', 'fusion', 'kosmos'].includes(navn)) continue;
+    if (størrelse === 'tlf' && !['menu', 'vaerksted', 'fusion', 'solsystem', 'kosmos'].includes(navn)) continue;
     await gåTil(page, hash);
     await forbered(page, navn);
     await page.waitForTimeout(VENT);
-    if (navn === 'kosmos') { await page.evaluate(() => atomlabTest.kosmos.kameraFrem()); await page.waitForTimeout(1000); }
+    if (navn === 'kosmos' || navn === 'solsystem') { await page.evaluate((n) => atomlabTest[n].kameraFrem(), navn); await page.waitForTimeout(1000); }
     await skud(page, navn, tekst);
   }
   await page.context().close();
 }
 
-// ---------- 2. De 15 fænomener i Kosmos på pc ----------
+// ---------- 2. Fænomenerne i Kosmos og Solsystemet på pc ----------
 // For hvert fænomen: knapper, der trykkes på (nummer i "Prøv selv"), og hvor mange sekunder der spoles frem
 const FÆNOMENER = [
   ['bigbang', [0, 1, 1, 1, 1], 4, 'Big Bang efter fem trin med "Næste"'],
@@ -100,12 +102,14 @@ const FÆNOMENER = [
 ];
 {
   const page = await nySide('pc');
-  await gåTil(page, '#kosmos');
   for (const [id, knapper, sek, tekst] of FÆNOMENER) {
-    await page.evaluate((id) => atomlabTest.kosmos.vælg(id), id);
+    // Vores eget solsystem ligger i Solsystemet, resten i Kosmos
+    const sk = await page.evaluate((id) => (atomlabTest.solsystem.fænomener.includes(id) ? 'solsystem' : 'kosmos'), id);
+    await gåTil(page, `#${sk}`);
+    await page.evaluate(([id, sk]) => atomlabTest[sk].vælg(id), [id, sk]);
     await page.waitForTimeout(1000);
-    for (const i of knapper) await page.evaluate((i) => atomlabTest.kosmos.tryk(i), i);
-    await page.evaluate((s) => { atomlabTest.kosmos.spol(s); atomlabTest.kosmos.kameraFrem(); }, sek);
+    for (const i of knapper) await page.evaluate(([i, sk]) => atomlabTest[sk].tryk(i), [i, sk]);
+    await page.evaluate(([s, sk]) => { atomlabTest[sk].spol(s); atomlabTest[sk].kameraFrem(); }, [sek, sk]);
     await page.waitForTimeout(2500);
     await skud(page, `kosmos-${id}`, tekst);
   }

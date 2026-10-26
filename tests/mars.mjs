@@ -1,4 +1,4 @@
-// Mars (M2 og M3 i docs/plan-mars.md): Mars står i Kosmos mellem Solstorm og Saturn, billederne bliver hentet, højdekortet
+// Mars (M2 og M3 i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
 // 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, og kameraets
 // indstillinger bliver sat tilbage, når man går videre.
@@ -11,8 +11,8 @@ const b = await chromium.launch({ args: ARGS });
 const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
 s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 s.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
-await s.goto(`${ADRESSE}/?test#kosmos`);
-await s.waitForFunction(() => window.atomlabTest && document.querySelector('#kosmos:not(.skjult)'));
+await s.goto(`${ADRESSE}/?test#solsystem`);
+await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
 
 // Højdekortet: længdegrad 0° i midten og øst til højre (som i js/solsystem/klippeplanet.js), højder i meter
 const højder = await s.evaluate(async () => {
@@ -49,43 +49,43 @@ tjek('højdekortet: Olympus Mons (18,65° N, 133,8° V) er over 20 km', højder.
 tjek('højdekortet: Arsia Mons er over 15 km, og Elysium Mons over 10 km', højder.arsia > 15000 && højder.elysium > 10000);
 tjek('højdekortet: bunden af Hellas er under −7 km', højder.hellas < -7000, højder.hellas);
 
-// Mars står mellem Solstorm og Saturn
-const ids = await s.evaluate(() => atomlabTest.kosmos.fænomener);
-tjek('Mars står i listen mellem Solstorm og Saturn', ids.indexOf('mars') === ids.indexOf('solstorm') + 1 && ids.indexOf('saturn') === ids.indexOf('mars') + 1, JSON.stringify(ids));
-await s.click('.kosmos-valg[data-id="mars"]');
-await s.waitForFunction(() => atomlabTest.kosmos.fænomen()?.billeder().hentet.højde && atomlabTest.kosmos.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
-const billeder = await s.evaluate(() => atomlabTest.kosmos.fænomen().billeder());
+// Mars står efter Jorden og før Saturn i Solsystemet
+const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
+tjek('Mars står efter Formørkelser (Jorden) og før Saturn', ids.indexOf('mars') === ids.indexOf('formoerkelser') + 1 && ids.indexOf('saturn') === ids.indexOf('mars') + 1, JSON.stringify(ids));
+await s.click('#solsystem .kosmos-valg[data-id="mars"]');
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
+const billeder = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
 tjek('billederne er hentet (2k i tests)', billeder.kort === '2k' && billeder.højde === '2k', JSON.stringify(billeder));
-const knapper = await s.evaluate(() => [...document.querySelectorAll('#kosmosStyring button')].map((k) => k.textContent.trim()));
+const knapper = await s.evaluate(() => [...document.querySelectorAll('#solsystemStyring button')].map((k) => k.textContent.trim()));
 tjek('knapperne "Drej Mars", "Bjergene 10 gange højere" og "Modlys"', knapper.some((k) => k.includes('Drej Mars')) && knapper.some((k) => k.includes('Bjergene 10 gange højere')) && knapper.some((k) => k.includes('Modlys')), JSON.stringify(knapper));
-tjek('sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.kosmos.tåger())));
-const tekst = await s.textContent('#kosmosTekst');
+tjek('sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
+const tekst = await s.textContent('#solsystemTekst');
 tjek('"Kort fortalt" fortæller om Olympus Mons og Valles Marineris', /Olympus Mons/.test(tekst) && /Valles Marineris/.test(tekst));
-tjek('forklaringen: rigtige højder', /rigtige højde/.test(await s.textContent('#kosmosForklaring')));
+tjek('forklaringen: rigtige højder', /rigtige højde/.test(await s.textContent('#solsystemForklaring')));
 const kamera = await s.evaluate(async () => { const { verden } = await import('/js/scene3d.js'); return { near: verden.kamera.near }; });
 tjek('kameraet kan komme helt tæt på overfladen', kamera.near <= 0.01, JSON.stringify(kamera));
 await s.waitForTimeout(1500);
 await s.screenshot({ path: UD + '/1-mars.png' });
 
 // Mars drejer mod øst (rotation.y vokser: mod uret set fra nord, ligesom Jorden)
-const d0 = await s.evaluate(() => atomlabTest.kosmos.fænomen().drejning());
-await s.waitForFunction((d) => atomlabTest.kosmos.fænomen().drejning() > d + 0.01, d0, { timeout: 15000 }).catch(() => {});
-const d1 = await s.evaluate(() => atomlabTest.kosmos.fænomen().drejning());
+const d0 = await s.evaluate(() => atomlabTest.solsystem.fænomen().drejning());
+await s.waitForFunction((d) => atomlabTest.solsystem.fænomen().drejning() > d + 0.01, d0, { timeout: 15000 }).catch(() => {});
+const d1 = await s.evaluate(() => atomlabTest.solsystem.fænomen().drejning());
 tjek('Mars drejer mod øst (mod uret set fra nord)', d1 > d0, JSON.stringify([d0, d1]));
-await s.click('#kosmosStyring button:has-text("Drej Mars")');
-const d2 = await s.evaluate(() => atomlabTest.kosmos.fænomen().drejning());
+await s.click('#solsystemStyring button:has-text("Drej Mars")');
+const d2 = await s.evaluate(() => atomlabTest.solsystem.fænomen().drejning());
 await s.waitForTimeout(800);
-tjek('"Drej Mars" slået fra: Mars står stille', (await s.evaluate(() => atomlabTest.kosmos.fænomen().drejning())) === d2);
+tjek('"Drej Mars" slået fra: Mars står stille', (await s.evaluate(() => atomlabTest.solsystem.fænomen().drejning())) === d2);
 
 // Bjergene 10 gange højere og tilbage igen
-await s.click('#kosmosStyring button:has-text("Bjergene")');
-await s.waitForFunction(() => atomlabTest.kosmos.fænomen().overdriv() === 10, null, { timeout: 20000 }).catch(() => {});
-tjek('bjergene bliver 10 gange højere', (await s.evaluate(() => atomlabTest.kosmos.fænomen().overdriv())) === 10);
-tjek('forklaringen skifter til de høje bjerge', /10 gange højere/.test(await s.textContent('#kosmosForklaring')));
+await s.click('#solsystemStyring button:has-text("Bjergene")');
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().overdriv() === 10, null, { timeout: 20000 }).catch(() => {});
+tjek('bjergene bliver 10 gange højere', (await s.evaluate(() => atomlabTest.solsystem.fænomen().overdriv())) === 10);
+tjek('forklaringen skifter til de høje bjerge', /10 gange højere/.test(await s.textContent('#solsystemForklaring')));
 await s.screenshot({ path: UD + '/2-mars-x10.png' });
-await s.click('#kosmosStyring button:has-text("Bjergene")');
-await s.waitForFunction(() => atomlabTest.kosmos.fænomen().overdriv() === 1, null, { timeout: 20000 }).catch(() => {});
-tjek('og tilbage til de rigtige højder', (await s.evaluate(() => atomlabTest.kosmos.fænomen().overdriv())) === 1);
+await s.click('#solsystemStyring button:has-text("Bjergene")');
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().overdriv() === 1, null, { timeout: 20000 }).catch(() => {});
+tjek('og tilbage til de rigtige højder', (await s.evaluate(() => atomlabTest.solsystem.fænomen().overdriv())) === 1);
 
 // M3: luften, skyerne og modlys
 // Skyernes lokale tid: middag under Solen, aften 90° mod øst, morgen 90° mod vest. Skyerne kommer kun om eftermiddagen.
@@ -99,41 +99,41 @@ const ur = await s.evaluate(async () => {
 });
 tjek('skyernes ur: middag under Solen, aften mod øst og morgen mod vest', Math.abs(ur.middag - 12) < 0.01 && Math.abs(ur.aften - 18) < 0.01 && Math.abs(ur.morgen - 6) < 0.01, JSON.stringify(ur));
 tjek('skyerne kommer om eftermiddagen (kl. 15), ikke kl. 8 eller kl. 2 om natten', ur.kl15 > 0.9 && ur.kl8 === 0 && ur.kl2 === 0, JSON.stringify(ur));
-const sky = await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer());
+const sky = await s.evaluate(() => atomlabTest.solsystem.fænomen().skyer());
 tjek('skyer ved Olympus Mons, Tharsis-vulkanerne, Alba Mons og Elysium Mons', sky.length === 6 && sky[0].navn === 'Olympus Mons', JSON.stringify(sky.map((x) => x.navn)));
 // Drej Mars hele vejen rundt: Olympus Mons har sky om eftermiddagen og ingen om morgenen
 const rundt = [];
 for (let l = 0; l < 360; l += 30) {
-  await s.evaluate((l) => atomlabTest.kosmos.fænomen().vend(l), l);
+  await s.evaluate((l) => atomlabTest.solsystem.fænomen().vend(l), l);
   await s.waitForTimeout(250);
-  rundt.push((await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer()))[0]);
+  rundt.push((await s.evaluate(() => atomlabTest.solsystem.fænomen().skyer()))[0]);
 }
 tjek('Olympus Mons: sky om eftermiddagen og ingen om morgenen',
   rundt.every((x) => (x.tid > 10.5 && x.tid < 21.5) || x.mængde === 0) && rundt.some((x) => x.mængde > 0.5) && rundt.some((x) => x.tid < 10 && x.mængde === 0),
   JSON.stringify(rundt.map((x) => [x.tid.toFixed(1), x.mængde.toFixed(2)])));
 // Mars drejer mod øst, så klokken går fremad ved Olympus Mons
-await s.click('#kosmosStyring button:has-text("Drej Mars")');
-const t0 = (await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer()))[0].tid;
-await s.waitForFunction((t0) => { const t = atomlabTest.kosmos.fænomen().skyer()[0].tid; return Math.abs(t - t0) > 0.05; }, t0, { timeout: 15000 }).catch(() => {});
-const t1 = (await s.evaluate(() => atomlabTest.kosmos.fænomen().skyer()))[0].tid;
+await s.click('#solsystemStyring button:has-text("Drej Mars")');
+const t0 = (await s.evaluate(() => atomlabTest.solsystem.fænomen().skyer()))[0].tid;
+await s.waitForFunction((t0) => { const t = atomlabTest.solsystem.fænomen().skyer()[0].tid; return Math.abs(t - t0) > 0.05; }, t0, { timeout: 15000 }).catch(() => {});
+const t1 = (await s.evaluate(() => atomlabTest.solsystem.fænomen().skyer()))[0].tid;
 tjek('klokken går fremad ved Olympus Mons, når Mars drejer', ((t1 - t0 + 24) % 24) > 0 && ((t1 - t0 + 24) % 24) < 6, JSON.stringify([t0, t1]));
-await s.click('#kosmosStyring button:has-text("Drej Mars")');
+await s.click('#solsystemStyring button:has-text("Drej Mars")');
 
 // Modlys: Solen står bag Mars, set fra kameraet, og tilbage igen
-tjek('dagslys: Solen står ikke bag Mars', (await s.evaluate(() => atomlabTest.kosmos.fænomen().sol())) > -0.5);
-await s.click('#kosmosStyring button:has-text("Modlys")');
+tjek('dagslys: Solen står ikke bag Mars', (await s.evaluate(() => atomlabTest.solsystem.fænomen().sol())) > -0.5);
+await s.click('#solsystemStyring button:has-text("Modlys")');
 await s.waitForTimeout(300);
-tjek('"Modlys": Solen står bag Mars', (await s.evaluate(() => atomlabTest.kosmos.fænomen().sol())) < -0.9);
-tjek('forklaringen fortæller om modlys', /Modlys/.test(await s.textContent('#kosmosForklaring')));
+tjek('"Modlys": Solen står bag Mars', (await s.evaluate(() => atomlabTest.solsystem.fænomen().sol())) < -0.9);
+tjek('forklaringen fortæller om modlys', /Modlys/.test(await s.textContent('#solsystemForklaring')));
 await s.screenshot({ path: UD + '/3-modlys.png' });
-await s.click('#kosmosStyring button:has-text("Modlys")');
+await s.click('#solsystemStyring button:has-text("Modlys")');
 await s.waitForTimeout(300);
-tjek('"Modlys" slået fra: Solen er tilbage', (await s.evaluate(() => atomlabTest.kosmos.fænomen().sol())) > -0.5);
-const tekster = (await s.textContent('#kosmosTekst'));
+tjek('"Modlys" slået fra: Solen er tilbage', (await s.evaluate(() => atomlabTest.solsystem.fænomen().sol())) > -0.5);
+const tekster = (await s.textContent('#solsystemTekst'));
 tjek('"Kort fortalt" fortæller om polkapperne og skyerne', /Polkapperne/.test(tekster) && /skyer af is/.test(tekster));
 
 // Videre til et andet fænomen: kameraets indstillinger er sat tilbage
-await s.click('.kosmos-valg[data-id="aarstider"]');
+await s.click('#solsystem .kosmos-valg[data-id="aarstider"]');
 await s.waitForTimeout(500);
 const efter = await s.evaluate(async () => { const { verden } = await import('/js/scene3d.js'); return { near: verden.kamera.near, zoom: verden.styring.zoomSpeed, drej: verden.styring.rotateSpeed }; });
 tjek('efter Mars: kameraets near, zoom og drejning er sat tilbage', efter.near === 0.1 && efter.zoom === 1 && efter.drej === 1, JSON.stringify(efter));

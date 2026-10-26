@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 25. oktober 2026 (Mars M3).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 26. oktober 2026 (Mars M4a).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -24,7 +24,15 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (25. oktober 2026): Mars, M3 (atmosfæren og lyset).**
+**Senest lavet (26. oktober 2026): Mars, M4a (skærmen Solsystemet).**
+- Et nyt kort i menuen, **Solsystemet**, lige før Kosmos. Menuen har nu 4 + 3 kort på pc og tablet på langs (den sidste række i midten), 2 kolonner på tablet på højkant, 1 på telefon på højkant og 4 på telefon på langs.
+- Skærmen `#solsystem` har en liste efter afstanden til Solen: Solen (Solstorm, Solens fremtid), Jorden (Årstiderne, Formørkelser), Mars og Saturn. På telefon på højkant står de fire kloder på én række, og underpunkterne kommer i en række under dem. Indtil M4b åbner et tryk på Solen eller Jorden det første underpunkt.
+- Kosmos har nu 11 fænomener i samme rækkefølge som før og et link til Solsystemet under listen. "Solens fremtid" i Hvid dværg er et link, og grundstofkortet (carbon og nitrogen) linker til "Solsystemet: Solens fremtid".
+- Det, man har set, og det sidst valgte flytter med fra Kosmos, så prikkerne ikke kommer igen.
+- Skallen om fænomenerne (listen, panelet, knapperne, underteksterne, pausen og "Kun grafik") er fælles for Kosmos og Solsystemet (`js/faenomenskaerm.js`). Saturn, Mars og de andre virker som før. Kun Saturns første linje er ændret ("Et besøg hos Saturn og dens måner" i stedet for "En prøve på …").
+- Ny test `solsystem`. Testene for Saturn, Mars, Årstiderne og Formørkelser åbner nu `#solsystem`.
+
+**Før det (25. oktober 2026): Mars, M3 (atmosfæren og lyset).**
 - Mars har nu en tynd, støvet luft i kanten med den rigtige skalahøjde (11 km) og et tusmørke, der lyser svagt rødbrunt ind på natsiden.
 - Polkapperne fra Viking-kortet er gjort hvidere.
 - Skyer af is kommer over Olympus Mons, Tharsis-vulkanerne, Alba Mons og Elysium Mons om eftermiddagen på Mars, mens den drejer. De kaster en svag skygge.
@@ -49,7 +57,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (jeres plan 24. oktober 2026):** M3 er lavet. Nu venter **Mars M4 (fælles flyby, egen skærm "Solsystemet" og rejsen ned til overfladen)** fra [docs/plan-mars.md](docs/plan-mars.md) på et go. Hver del får et go.
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, medium effort) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). I sagde ja til alle anbefalingerne (Solen får sin egen visning). **M4b venter på et go.** Se [docs/plan-mars.md](docs/plan-mars.md) under "Svar ved go til M4".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
@@ -70,6 +78,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Solsystemet (M4a) på tabletten:** Er listen let at bruge med fingre på langs og på højkant? Ser menuen med 7 kort godt ud? På telefon på langs fylder underpunkterne en linje hver.
 - **Mars M3 på tabletten:** Kører det stadig flydende med luften og skyerne? Er skyerne for tydelige eller for svage, og ser "Modlys" godt ud tæt på og langt væk? Er tusmørket for kraftigt?
 - **Saturns måner (S1):** Den dæmpede Enceladus og 8k på pc er ikke set på en rigtig skærm endnu. 4k kører fint på mobil og tablet (jeres svar).
 - **Mars:** Hvordan føles det at zoome helt ind og dreje tæt på overfladen, og drejer Mars for hurtigt (en omgang på ca. 1¾ minut)? (Den kører fint på tabletten med 8k.)

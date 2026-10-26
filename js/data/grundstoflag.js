@@ -51,7 +51,7 @@ export const LAG = {
     univers: 'Døende stjerner som Solen (røde kæmper) og kæmpestjerner, der eksploderer.',
     mere: ['Kul, olie og naturgas er mest carbon fra planter og dyr, der levede for længe siden.', 'Du ånder carbon ud som CO₂ hele tiden.', 'Kulfiber gør racercykler og racerbiler lette og stærke.', 'Carbon-14 viser, hvor gamle knogler og træ er (op til ca. 50.000 år).'],
     vidste: 'En diamant og grafitten i en blyant er det samme grundstof. Forskellen er kun, hvordan atomerne sidder sammen.',
-    se: ['fusion', 'batteri', 'kosmos:solensfremtid'],
+    se: ['fusion', 'batteri', 'solsystem:solensfremtid'],
   },
   N: {
     hverdag: 'Luften (ca. 78 %), gødning og proteinerne i din mad.',
@@ -59,7 +59,7 @@ export const LAG = {
     univers: 'Mest døende stjerner som Solen (røde kæmper). Resten kæmpestjerner, der eksploderer.',
     mere: ['Flydende nitrogen koger ved −196 °C og bruges til at fryse ting lynhurtigt.', 'Chipsposer fyldes ofte med nitrogen, så chipsene holder sig sprøde.', 'Planter skal bruge nitrogen. Derfor er der nitrogen i gødning.'],
     vidste: 'Du indånder mest nitrogen, men kroppen kan ikke bruge det fra luften. Du får det fra maden, fordi bakterier, lyn og gødning har bundet det for planterne.',
-    se: ['kosmos:solensfremtid'],
+    se: ['solsystem:solensfremtid'],
   },
   O: {
     hverdag: 'Luften, du indånder (ca. 21 %), vand og næsten alle sten.',
@@ -342,7 +342,7 @@ export const SE_NAVN = {
   batteri: 'Batteriet',
   'kosmos:bigbang': 'Kosmos: Big Bang',
   'kosmos:stjernefoedsel': 'Kosmos: Ny stjerne',
-  'kosmos:solensfremtid': 'Kosmos: Solens fremtid',
+  'solsystem:solensfremtid': 'Solsystemet: Solens fremtid',
   'kosmos:hviddvaerg': 'Kosmos: Hvid dværg',
   'kosmos:supernova': 'Kosmos: Supernova',
   'kosmos:kilonova': 'Kosmos: Kilonova',

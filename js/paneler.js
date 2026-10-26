@@ -15,6 +15,7 @@ const SKÆRME = {
   fusion: { venstre: '.venstre-panel', højre: '.højre-panel' },
   reaktor: { venstre: '.venstre-panel', højre: '.højre-panel' },
   batteri: { venstre: '.venstre-panel', højre: '.højre-panel' },
+  solsystem: { venstre: '.venstre-panel', højre: '.højre-panel' },
   kosmos: { venstre: '.venstre-panel', højre: '.højre-panel' },
 };
 // Samme grænse som i style.css: her står panelerne under 3D-billedet

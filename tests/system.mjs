@@ -114,13 +114,13 @@ tjek('stjerne-tæller', (await page.textContent('#systemOpdaget')).includes('1 a
     const opgaver = {};
     for (const id of ['b-fuld', 'b-lampe', 'b-tom', 'b-hurtig', 'b-overlad']) opgaver[id] = 1;
     localStorage.setItem('atomlabFremgang', JSON.stringify({ opgaver, opdaget: [1, 26] }));
-    localStorage.setItem('atomlabKosmosSet', JSON.stringify(['bigbang', 'sorthul']));
+    localStorage.setItem('atomlabKosmosSet', JSON.stringify(['bigbang', 'sorthul', 'mars']));
   });
   await s.goto(`${ADRESSE}/?test`);
   await s.waitForTimeout(1500);
   const m = await s.evaluate(() => Object.fromEntries([...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), { tal: k.querySelector('.kort-fremgang')?.textContent, færdig: k.querySelector('.kort-fremgang')?.classList.contains('færdig'), næste: k.classList.contains('næste-eventyr') }])));
   tjek('menuen: Batteriet er klaret', m['#batteri'].færdig && m['#batteri'].tal === '✓ 5/5 ★', JSON.stringify(m['#batteri']));
-  tjek('menuen: opdagede grundstoffer og sete fænomener', m['#system'].tal === '2/118 opdaget' && /^2\/\d+ set$/.test(m['#kosmos'].tal), JSON.stringify(m));
+  tjek('menuen: opdagede grundstoffer og sete fænomener', m['#system'].tal === '2/118 opdaget' && m['#kosmos'].tal === '2/11 set' && /^1\/\d+ set$/.test(m['#solsystem'].tal), JSON.stringify(m));
   tjek('menuen: næste eventyr er Værkstedet', m['#vaerksted'].næste && !m['#batteri'].næste && m['#vaerksted'].tal.endsWith('★'), JSON.stringify(m));
   await s.screenshot({ path: UD + '/s5-menu.png' });
   await s.context().close();

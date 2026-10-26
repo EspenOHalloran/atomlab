@@ -63,6 +63,13 @@
           <small>Se ioner og elektroner, når et lithium-ion-batteri lades</small>
         </span>
       </a>
+      <a class="kort åben" href="#solsystem">
+        <span class="kort-ikon ikon-solsystem"></span>
+        <span class="kort-tekst">
+          <strong>Solsystemet</strong>
+          <small>Besøg Solen, Jorden, Mars og Saturn i den rigtige størrelse</small>
+        </span>
+      </a>
       <a class="kort åben" href="#kosmos">
         <span class="kort-ikon ikon-kosmos"></span>
         <span class="kort-tekst">
@@ -628,6 +635,7 @@
     <aside class="panel side-panel venstre-panel">
       <h4 class="panel-overskrift">Vælg et fænomen <small class="kosmos-set" id="kosmosSet"></small></h4>
       <div class="kosmos-liste" id="kosmosListe"></div>
+      <button class="kosmos-videre" data-gaa="solsystem">☀️ Solen, Jorden, Mars og Saturn finder du i <strong>Solsystemet ›</strong></button>
       <h4 class="panel-overskrift">Prøv selv</h4>
       <div class="kosmos-styring" id="kosmosStyring"></div>
       <div class="knap-række"><button class="knap lille" id="kosmosPause">⏸ Pause</button></div>
@@ -663,11 +671,66 @@
         <p><strong>Hvorfor er rummet med i AtomLab?</strong> Fordi atomerne er lavet derude. Hydrogen og helium kom fra Big Bang. Carbon, oxygen og jern blev lavet i stjerner og i deres eksplosioner og spredt ud i rummet, da stjernerne døde. Meget af guldet og uranet blev lavet, da neutronstjerner stødte sammen. Og en neutronstjerne er næsten som én kæmpe atomkerne på størrelse med en by.</p>
         <blockquote class="citat" data-citat="saganKosmos"></blockquote>
         <p><strong>Ærligt talt:</strong> Intet her er i den rigtige størrelse eller det rigtige tempo. Afstandene i rummet er så enorme, at man ikke ville kunne se noget, hvis det var målfast. Og noget tager millioner af år, mens andet sker på et millisekund. Farverne er valgt, så man kan se forskel på tingene. Men det, der <em>sker</em>, er tæt på det, forskerne ved i dag.</p>
-        <p><strong>Listen fortæller en historie:</strong> Den starter med Big Bang, hvor hydrogen og helium blev lavet. Så følger en ny stjerne, der bliver født, Jorden og årstiderne, sol- og måneformørkelser, vores egen Sol i dag og i fremtiden, og stjerner, der dør: hvide dværge, der eksploderer, supernovaer, neutronstjerner og neutronstjerner, der støder sammen. Til sidst kommer Einsteins rumtid, sorte huller og ormehuller.</p>
+        <p><strong>Listen fortæller en historie:</strong> Den starter med Big Bang, hvor hydrogen og helium blev lavet. Så følger en ny stjerne, der bliver født, og stjerner, der dør: hvide dværge, der eksploderer, supernovaer, neutronstjerner og neutronstjerner, der støder sammen. Til sidst kommer Einsteins rumtid, sorte huller og ormehuller.</p>
+        <p><strong>Vores eget solsystem</strong> (Solen, Jorden, årstiderne, formørkelser, Mars og Saturn) har sin egen del i menuen: <button class="link-knap" data-gaa="solsystem">Solsystemet</button>.</p>
         <p><strong>Ordforklaringer:</strong> Ord med prikker under (fx <em>neutrino</em>) kan du trykke på for at få en kort forklaring. Det virker også i resten af AtomLab.</p>
-        <p><strong>Billeder:</strong> Jorden og Månen er lavet af rigtige billeder fra NASA: Blue Marble (Jorden om dagen), Black Marble (byernes lys om natten) og rumsonden Lunar Reconnaissance Orbiter (Månen).</p>
         <p><strong>Ormehuller</strong> er det eneste her, som ingen har set. De er en mulighed i Einsteins ligninger, men måske findes de slet ikke.</p>
         <p><strong>Styring:</strong> Træk for at dreje. Rul eller knib for at zoome. Mellemrumstasten (eller "Pause") fryser tiden, så du kan dreje rundt om fx en eksplosion og se den fra alle sider.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Solsystemet ===== -->
+  <section id="solsystem" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Solsystemet</h2>
+      <span class="system-status">Solen, Jorden, Mars og Saturn</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="solsystemHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <h4 class="panel-overskrift">Vælg et sted <small class="kosmos-set" id="solsystemSet"></small></h4>
+      <div class="sol-liste" id="solsystemListe"></div>
+      <h4 class="panel-overskrift">Prøv selv</h4>
+      <div class="kosmos-styring" id="solsystemStyring"></div>
+      <div class="knap-række"><button class="knap lille" id="solsystemPause">⏸ Pause</button></div>
+      <div class="kosmos-forklaring" id="solsystemForklaring"></div>
+    </aside>
+    <div class="vindue" id="solsystemVindue">
+      <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="kosmos-overlag" id="solsystemOverlag"></div></div></div>
+      <div class="kosmos-toplag" id="solsystemToplag"></div>
+    </div>
+    <aside class="panel side-panel højre-panel">
+      <div class="kosmos-hoved">
+        <span class="kosmos-ikon" id="solsystemIkon"></span>
+        <div>
+          <h3 id="solsystemNavn"></h3>
+          <small id="solsystemUndertitel"></small>
+        </div>
+      </div>
+      <dl class="kosmos-tal" id="solsystemTal"></dl>
+      <div class="del-vælger">
+        <button class="del-knap valgt" data-kosmos-fane="kort">Kort fortalt</button>
+        <button class="del-knap" data-kosmos-fane="nørd">For nørder</button>
+      </div>
+      <div class="kosmos-tekst" id="solsystemTekst"></div>
+      <blockquote class="citat lille" id="solsystemCitat"></blockquote>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpSolsystem" role="dialog" aria-label="Hjælp til Solsystemet">
+    <div class="dialog">
+      <header><h3>Solsystemet</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p>Her kan du besøge vores eget solsystem. Vælg et sted til venstre, og prøv knapperne under <strong>Prøv selv</strong>. Til højre står, hvad du ser. Under <strong>For nørder</strong> er der mere at hente.</p>
+        <p><strong>Listen</strong> starter ved Solen og går udad: Solen (med solstorme og Solens fremtid), Jorden (med årstiderne og sol- og måneformørkelser), Mars og Saturn. Flere planeter kommer senere.</p>
+        <p><strong>Ærligt talt:</strong> Mars og Saturn med de seks store måner har den rigtige størrelse og afstand, og kameraet flyver mellem dem. Andre steder er afstandene gjort mindre, så man kan se det hele på én gang. Under <strong>For nørder</strong> står, hvad hvert sted snyder med.</p>
+        <p><strong>Billeder:</strong> Jorden og Månen er lavet af rigtige billeder fra NASA: Blue Marble (Jorden om dagen), Black Marble (byernes lys om natten) og rumsonden Lunar Reconnaissance Orbiter (Månen). Mars er fra NASA's Viking-sonder og højdemåleren MOLA (via USGS). Saturns måner er fra rumsonden Cassini (via USGS), og Saturns kort og ringenes farver er fra Solar System Scope (CC BY 4.0).</p>
+        <p><strong>Styring:</strong> Træk for at dreje. Rul eller knib for at zoome. Mellemrumstasten (eller "Pause") fryser tiden.</p>
       </div>
     </div>
   </div>

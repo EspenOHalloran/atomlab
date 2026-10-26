@@ -13,6 +13,7 @@ import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
 import { lavKategorikort } from './kategorikort.js';
+import { åbnFænomen } from './faenomenskaerm.js';
 
 const AFSTAND = 1.07; // afstand mellem felterne
 const BUE = 26; // radius på væggens bue
@@ -644,10 +645,9 @@ function udfyldLag(g) {
     b.textContent = `${SE_NAVN[nøgle]} ›`;
     b.addEventListener('click', () => {
       lyd.klik();
-      if (nøgle.startsWith('kosmos:')) {
-        try { localStorage.setItem('atomlabKosmos', nøgle.slice(7)); } catch { /* ingen lagring */ }
-        location.hash = '#kosmos';
-      } else location.hash = `#${nøgle}`;
+      const [skærm, id] = nøgle.split(':');
+      if (id) åbnFænomen(skærm, id); // fx 'solsystem:solensfremtid'
+      else location.hash = `#${nøgle}`;
     });
     se.append(b);
   }
