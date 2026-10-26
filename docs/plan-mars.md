@@ -37,6 +37,19 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 - **8k på tabletten:** Tabletten henter også 8k, hvis grafikkortet kan klare billeder på 8192 pixel. **Jeres svar (24. oktober 2026): Det kører fint og ser super ud.** KTX2 er derfor ikke nødvendigt lige nu.
 - **Til M4:** Kameraet kigger altid på Mars' midte, så man kan ikke se horisonten tæt på. Rejsen ned til et sted, hvor man ser skråt mod horisonten, kommer i M4.
 
+## Jorden i Solsystemet (jeres ønske 26. oktober 2026)
+**Jeres ord:** "Jorden skal have sin plads i menupunktet Solsystemet, hvor vi indtil videre har planlagt Mars og Saturn. Formørkelser og Årstider skal ligge under Jorden her."
+
+**Forslag fra Opus (venter på jeres svar):**
+- Det tages med i M4, fordi M4 alligevel bygger skærmen "Solsystemet" og gør skallen om fænomenerne fælles (trin, undertekster, `toplag` og `overlag`), som Årstiderne og Formørkelser bruger.
+- Jorden får en enkel visning som Mars (kloden fra `js/kosmos/jorden.js` med Månen), og Årstiderne og Formørkelser ligger under Jorden. En flyby med Månen kommer senere.
+- Pas på: gemte data (`atomlabKosmos`, `atomlabKosmosSet`), links til `aarstider` og `formoerkelser` (fx i `js/data/kategorier.js`), rækkefølgen i Kosmos og testene `aarstider` og `formoerkelser`, som åbner `#kosmos`.
+
+**Spørgsmål til jer:**
+1. Skal Solstorm og Solens fremtid også flytte til Solsystemet under et punkt "Solen"? (Forslag: ja.)
+2. Skal Jorden have sin egen visning nu (en klode med Månen), eller kun samle Årstiderne og Formørkelser? (Forslag: en enkel klode nu.)
+3. Med i M4 eller et skridt for sig efter M4? (Forslag: med i M4, så den bliver "stor".)
+
 ## Status efter M3 (25. oktober 2026)
 - **Lavet:** `lavLuft` i `js/solsystem/atmosfaere.js` (luften i kanten med skalahøjden 11 km, tusmørket og blåt lys tæt ved Solen), `js/solsystem/skyer.js` (skyer af is over Olympus Mons, Ascraeus, Pavonis, Arsia, Alba Mons og Elysium Mons om eftermiddagen, med skygge på jorden), og i `klippeplanet.js` tusmørket på jorden, et slør af støv mod kanten og hvidere polkapper. Knappen "Modlys". Elysium Mons kom med, da msss.com blev åbnet og bekræftede skyerne dér (MARCI, nordligt forår 2019).
 - **Modlys:** Solen står lige bag Mars' øverste kant set fra kameraet. Først stod den midt bag Mars som ved Saturn, men tæt på lå luften i kanten så i Mars' skygge, og ringen forsvandt (det er rigtig fysik). Langt væk lyser ringen hele vejen rundt.
