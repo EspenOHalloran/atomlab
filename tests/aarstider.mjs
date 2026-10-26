@@ -56,7 +56,7 @@ const række = (sted) => T((sted) => [...document.querySelectorAll('#solsystemTo
 const undertekst = () => T(() => document.querySelector('#solsystemVindue .undertekst')?.textContent ?? '');
 const næste = () => T(() => { const k = atomlabTest.solsystem; k.tryk(0); k.spol(2); });
 
-tjek('fænomenet står efter "Ny stjerne"', (await T(() => atomlabTest.solsystem.fænomener)).join(',').includes('stjernefoedsel,aarstider'));
+tjek('Årstiderne står under Jorden i Solsystemet', (await T(() => atomlabTest.solsystem.fænomener)).join(',').includes('aarstider,formoerkelser'));
 tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.querySelectorAll('#solsystemToplag tr').length)) === 5, await kort());
 // Første trin: Jorden kører rundt om Solen, og datoen på skyderen følger med tabellen
 const datoFør = (await kort()).split(' · ')[0];

@@ -1,4 +1,4 @@
-// Mars (M2 og M3 i docs/plan-mars.md): Mars står i Kosmos mellem Solstorm og Saturn, billederne bliver hentet, højdekortet
+// Mars (M2 og M3 i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
 // 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, og kameraets
 // indstillinger bliver sat tilbage, når man går videre.
@@ -49,9 +49,9 @@ tjek('højdekortet: Olympus Mons (18,65° N, 133,8° V) er over 20 km', højder.
 tjek('højdekortet: Arsia Mons er over 15 km, og Elysium Mons over 10 km', højder.arsia > 15000 && højder.elysium > 10000);
 tjek('højdekortet: bunden af Hellas er under −7 km', højder.hellas < -7000, højder.hellas);
 
-// Mars står mellem Solstorm og Saturn
+// Mars står efter Jorden og før Saturn i Solsystemet
 const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
-tjek('Mars står i listen mellem Solstorm og Saturn', ids.indexOf('mars') === ids.indexOf('solstorm') + 1 && ids.indexOf('saturn') === ids.indexOf('mars') + 1, JSON.stringify(ids));
+tjek('Mars står efter Formørkelser (Jorden) og før Saturn', ids.indexOf('mars') === ids.indexOf('formoerkelser') + 1 && ids.indexOf('saturn') === ids.indexOf('mars') + 1, JSON.stringify(ids));
 await s.click('#solsystem .kosmos-valg[data-id="mars"]');
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
 const billeder = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
