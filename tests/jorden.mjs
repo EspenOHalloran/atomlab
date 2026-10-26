@@ -130,7 +130,7 @@ tjek(`21. juni: Solen står ${dekl.toFixed(2)}° nord for ækvator (23,43°)`, M
 // "Drej Jorden": tiden går ca. 820 gange hurtigere, og Jorden drejer mod øst (Solen flytter sig mod vest hen over Jorden)
 const før = await f(s, '[f.tid(), f.solUnder().længde]');
 await s.click('#solsystemStyring button:has-text("Drej Jorden")');
-await s.waitForFunction((t) => atomlabTest.solsystem.fænomen().tid() > t + 3600000, før[0], { timeout: 15000 }).catch(() => {});
+await s.evaluate(() => atomlabTest.solsystem.spol(8)); // spoles frem (testbrowseren tegner kun få billeder i sekundet)
 const efter = await f(s, '[f.tid(), f.solUnder().længde]');
 const timer = (efter[0] - før[0]) / 3600000;
 const vest = ((før[1] - efter[1]) % 360 + 360) % 360;
