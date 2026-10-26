@@ -6,6 +6,7 @@ import { KATEGORIER, grundstof, skaller } from './data/grundstoffer.js';
 import { KATEGORI_INFO } from './data/kategorier.js';
 import { ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
+import { åbnFænomen } from './faenomenskaerm.js';
 
 const TAU = Math.PI * 2;
 
@@ -569,10 +570,9 @@ export function lavKategorikort({ åbnGrundstof, åbnIVærksted, luk }) {
       b.addEventListener('click', () => {
         lyd.klik();
         if (l.værksted) åbnIVærksted(l.værksted);
-        else if (l.kosmos) {
-          try { localStorage.setItem('atomlabKosmos', l.kosmos); } catch { /* ingen lagring */ }
-          location.hash = '#kosmos';
-        } else location.hash = `#${l.skærm}`;
+        else if (l.kosmos) åbnFænomen('kosmos', l.kosmos);
+        else if (l.solsystem) åbnFænomen('solsystem', l.solsystem);
+        else location.hash = `#${l.skærm}`;
       });
       links.append(b);
     }

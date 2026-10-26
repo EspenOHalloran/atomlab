@@ -1,4 +1,4 @@
-// Jorden og Månen som kugler i Kosmos (Årstiderne og Formørkelser).
+// Jorden og Månen som kugler i Solsystemet (Årstiderne og Formørkelser).
 // Jorden: rigtige billeder fra NASA (se billeder/solsystem/KILDER.md), når de findes, ellers et enkelt kort over land og hav.
 // Der er dag og nat, rødligt lys ved solnedgang langs grænsen mellem dag og nat, Solens glimt i havet, et blåt skær af luft
 // i kanten og en tynd atmosfære uden om. Med billederne kommer også årstider (sne om vinteren), skyer, byernes lys og bjerge.

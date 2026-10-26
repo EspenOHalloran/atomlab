@@ -49,7 +49,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Paneler opdateres højst 4 gange i sekundet og kun, når noget har ændret sig, ikke hvert billede.
 - [ ] Brug de fælles byggeklodser (beskeder, guide, pause, "Næste skridt") i stedet for at kopiere.
 - [ ] En CSS-regel, der skal vinde over en regel med et id (fx `#fusion .vindue { grid-area: vindue }`), skal selv have et id, fx `:is(#fusion, #reaktor).skjul-venstre > .vindue`. Ellers sker der ingenting (panelerne i oktober 2026).
-- [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. En klasse kan bruges på flere skærme. Det samme gælder CSS-regler, også dem i `@media` (fx `order`).
+- [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. Får to skærme den samme skal (Kosmos og Solsystemet), står den nye skærm efter den gamle i index.html, så tests uden afgrænsning stadig finder den gamle. En klasse kan bruges på flere skærme. Det samme gælder CSS-regler, også dem i `@media` (fx `order`).
 - [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
 - [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
 
@@ -285,6 +285,13 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Billeder i sekundet** (testbrowseren uden grafikkort, fuld grafik, Mars 2,2 radier væk): pc 1,8-2,1 før M3 og 1,4-1,8 efter, tablet 3,0 før og 3,4 efter (inden for målestøjen). Det meste kostede skyernes skygge for hver pixel. `acos` blev skiftet ud med kordens længde, og skyggen og skallen springes over, når der ingen skyer er (`skyAktiv`).
 - **Mål "før" mod den rigtige udgave:** Den lokale `origin/main` var forældet (fra før M2), så den første "før"-måling var slet ikke af Mars og gav et alt for højt tal. Mål mod grenens udgangspunkt (`git merge-base`), eller hent `main` først (`git fetch origin main`).
 - **Tal, der regnes om:** Et tusmørke, der når 12° ind på natsiden, svarer til støv i ca. 76 km højde (R · (1/cos θ − 1)), ikke 50 km. Regn det efter, før det skrives.
+
+### En ny skærm med samme skal som en anden (Solsystemet, M4a, oktober 2026)
+- **Del skallen i stedet for at kopiere den.** Kosmos' skal blev til `lavFænomenSkærm` (js/faenomenskaerm.js). Elementerne får skærmens navn foran (`kosmosListe`, `solsystemListe`) og beholder de samme klasser, så CSS'en kun skulle have `:is(#kosmos, #solsystem)` de steder, hvor der stod `#kosmos`. Alle `querySelectorAll` i skallen er afgrænset til skærmens sektion.
+- **Den nye skærm skal stå efter den gamle i index.html.** Testene bruger fx `page.click('[data-kosmos-fane="nørd"]')` uden at afgrænse, og Playwright tager den første, der passer. Står den skjulte skærm først, venter klikket forgæves.
+- **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
+- **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
+- **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.

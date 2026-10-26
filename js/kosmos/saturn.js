@@ -1,5 +1,5 @@
 // Prototype til Solsystemet (trin 1b i docs/plan-solsystemet.md): Saturn med ringene og de seks store måner i den
-// rigtige størrelse og afstand, med en guidet tur (flyby). Står i Kosmos efter Solstorm (se FÆNOMENER i js/kosmos.js).
+// rigtige størrelse og afstand, med en guidet tur (flyby). Står i Solsystemet efter Mars (se js/solsystem.js).
 // Tal fra docs/fakta-solsystemet.md. Grafikken ligger i js/solsystem/, så Solsystemet kan genbruge den.
 //
 // Hele systemet er én gruppe (1 enhed = 10.000 km), som rejsen (js/solsystem/rejse.js) skalerer og flytter, så det,
@@ -143,7 +143,7 @@ export default {
     ['Kendte måner', 'over 280 (2026)'],
   ],
   kort: `
-    <p>En prøve på, hvordan Solsystemet kan komme til at se ud: et besøg hos Saturn og dens måner. Tryk "▶ Start flyby" for en tur hen over ringene og forbi de seks store måner, eller tryk selv på en måne. Drej med fingeren, musen eller piletasterne.</p>
+    <p>Et besøg hos Saturn og dens måner. Tryk "▶ Start flyby" for en tur hen over ringene og forbi de seks store måner, eller tryk selv på en måne. Drej med fingeren, musen eller piletasterne.</p>
     <p><b>Saturn</b> er en kæmpe kugle af gas, mest brint og helium. Den drejer så hurtigt (ca. 10½ time om sig selv), at den er ca. 10 % fladere ved polerne end ved ækvator. Ringene er milliarder af klumper af næsten ren vandis, fra støv til flere meter store, og hver kredser for sig. Fra kant til kant er de ca. 270.000 km, men mange steder kun ca. 10 m tykke.</p>
     <p><b>Enceladus</b> er en lille måne, kun 504 km bred og dækket af is. Den er det mest hvide sted i solsystemet og kaster ca. 80 % af sollyset tilbage. Under isen er der et hav, og fra sprækker ved sydpolen sprøjter fontæner af vanddamp og iskorn ud i rummet. Rumsonden Cassini fløj gennem dem og fandt salt, organiske stoffer og fosfat.</p>
     <p><b>Titan</b> er Saturns største måne og større end planeten Merkur. Den er den eneste måne med en tyk atmosfære: mest nitrogen og lidt metan, og trykket ved jorden er ca. 1,5 gange Jordens. Nede under disen er der ca. −179 °C og søer og have af flydende metan og ethan. Sonden Huygens landede der 14. januar 2005.</p>`,

@@ -1,5 +1,5 @@
-// Mars (M2 i docs/plan-mars.md): kloden med rigtige højder fra MOLA og farverne fra Viking. Står i Kosmos efter
-// Solstorm og før Saturn (Mars er tættere på Solen). Tal fra docs/fakta-solsystemet.md (del 3) og NSSDC's faktaark.
+// Mars (M2 i docs/plan-mars.md): kloden med rigtige højder fra MOLA og farverne fra Viking. Står i Solsystemet efter
+// Jorden og før Saturn (Mars er tættere på Solen). Tal fra docs/fakta-solsystemet.md (del 3) og NSSDC's faktaark.
 // Grafikken ligger i js/solsystem/klippeplanet.js, så Solsystemet kan genbruge den.
 //
 // 1 enhed = 1.000 km. Mars drejer om sin akse, som hælder 25,19°. Solen står, som ved forårsjævndøgn på den nordlige

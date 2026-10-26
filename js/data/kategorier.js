@@ -2,7 +2,7 @@
 // et "signaturforsøg" (en lille animation i js/kategorikort.js), en tendens i tabellen, kendte medlemmer og links.
 // eksempel: grundstoffet, der tegnes som et lille atom. vis: 'yderst' (de yderste elektroner lyser),
 // 'mangler' (tomme pladser i den yderste skal), 'fuld' (fuld yderste skal) eller 'inde' (en skal længere inde fyldes op, nr. = skal).
-// link: { tekst, værksted: nr } åbner grundstoffet i værkstedet, { tekst, skærm } skifter skærm, { tekst, kosmos } åbner et fænomen.
+// link: { tekst, værksted: nr } åbner grundstoffet i værkstedet, { tekst, skærm } skifter skærm, { tekst, kosmos } åbner et fænomen i Kosmos og { tekst, solsystem } et i Solsystemet.
 
 export const KATEGORI_INFO = {
   alkali: {

@@ -43,26 +43,26 @@ const side = async (opsætning) => {
   const page = await (await b.newContext(opsætning)).newPage();
   page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
-  await page.goto(`${ADRESSE}/?test#kosmos`);
-  await page.waitForFunction(() => window.atomlabTest && document.querySelector('#kosmos:not(.skjult)'), null, { timeout: 20000 });
-  await page.evaluate(() => atomlabTest.kosmos.vælg('aarstider'));
+  await page.goto(`${ADRESSE}/?test#solsystem`);
+  await page.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'), null, { timeout: 20000 });
+  await page.evaluate(() => atomlabTest.solsystem.vælg('aarstider'));
   await page.waitForTimeout(300);
   return page;
 };
 const page = await side({ viewport: { width: 1280, height: 800 } });
 const T = (f, a) => page.evaluate(f, a);
-const kort = () => T(() => document.querySelector('#kosmosToplag .aarstid-kort')?.textContent ?? '');
-const række = (sted) => T((sted) => [...document.querySelectorAll('#kosmosToplag tr')].find((r) => r.textContent.includes(sted))?.textContent ?? '', sted);
-const undertekst = () => T(() => document.querySelector('#kosmosVindue .undertekst')?.textContent ?? '');
-const næste = () => T(() => { const k = atomlabTest.kosmos; k.tryk(0); k.spol(2); });
+const kort = () => T(() => document.querySelector('#solsystemToplag .aarstid-kort')?.textContent ?? '');
+const række = (sted) => T((sted) => [...document.querySelectorAll('#solsystemToplag tr')].find((r) => r.textContent.includes(sted))?.textContent ?? '', sted);
+const undertekst = () => T(() => document.querySelector('#solsystemVindue .undertekst')?.textContent ?? '');
+const næste = () => T(() => { const k = atomlabTest.solsystem; k.tryk(0); k.spol(2); });
 
-tjek('fænomenet står efter "Ny stjerne"', (await T(() => atomlabTest.kosmos.fænomener)).join(',').includes('stjernefoedsel,aarstider'));
-tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.querySelectorAll('#kosmosToplag tr').length)) === 5, await kort());
+tjek('fænomenet står efter "Ny stjerne"', (await T(() => atomlabTest.solsystem.fænomener)).join(',').includes('stjernefoedsel,aarstider'));
+tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.querySelectorAll('#solsystemToplag tr').length)) === 5, await kort());
 // Første trin: Jorden kører rundt om Solen, og datoen på skyderen følger med tabellen
 const datoFør = (await kort()).split(' · ')[0];
-await T(() => atomlabTest.kosmos.spol(3));
+await T(() => atomlabTest.solsystem.spol(3));
 const datoEfter = (await kort()).split(' · ')[0];
-const skyderDato = await T(() => document.querySelector('#kosmosStyring .skyder-boks strong').textContent);
+const skyderDato = await T(() => document.querySelector('#solsystemStyring .skyder-boks strong').textContent);
 tjek(`første trin: Jorden kører rundt (${datoFør} → ${datoEfter}), og skyderen følger med`, datoFør !== datoEfter && datoEfter.trim() === skyderDato.trim(), skyderDato);
 await næste();
 tjek('trin 2: forår i nord', (await undertekst()).includes('Forår i nord'), await undertekst());
@@ -74,7 +74,7 @@ tjek('sommer: midnatssol i Nordgrønland', (await række('Nordgrønland')).inclu
 tjek('sommer: kort dag i Australien', (await række('Australien')).includes('9 t 54 min'), await række('Australien'));
 tjek('tabellen viser årstiden: sommer i Danmark, vinter i Australien, varmt hele året ved ækvator',
   (await række('Danmark')).includes('sommer') && (await række('Australien')).includes('vinter') && (await række('Ækvator')).includes('varmt hele året'), await kort());
-tjek('panelet siger vinter i Australien', (await page.textContent('#kosmosForklaring')).includes('Australien (Sydney) · vinter'));
+tjek('panelet siger vinter i Australien', (await page.textContent('#solsystemForklaring')).includes('Australien (Sydney) · vinter'));
 await page.waitForTimeout(400);
 await page.screenshot({ path: `${UD}/1-sommer.png` });
 await næste();
@@ -84,16 +84,16 @@ tjek('vinter: mørketid i Nordgrønland', (await række('Nordgrønland')).includ
 tjek('vinter: ca. 12 timer ved ækvator', /12 t 0\d min/.test(await række('Ækvator')), await række('Ækvator'));
 await page.screenshot({ path: `${UD}/2-vinter.png` });
 await næste();
-tjek('sidste trin: prøv selv, og "Næste" er slået fra', (await undertekst()).includes('Prøv selv') && (await T(() => document.querySelector('#kosmosStyring button').disabled)));
+tjek('sidste trin: prøv selv, og "Næste" er slået fra', (await undertekst()).includes('Prøv selv') && (await T(() => document.querySelector('#solsystemStyring button').disabled)));
 // Skyderen: vælg selv datoen
-await T(() => { const i = document.querySelector('#kosmosStyring input[type=range]'); i.value = 172; i.dispatchEvent(new Event('input')); atomlabTest.kosmos.spol(2); });
+await T(() => { const i = document.querySelector('#solsystemStyring input[type=range]'); i.value = 172; i.dispatchEvent(new Event('input')); atomlabTest.solsystem.spol(2); });
 tjek('skyderen: 21. juni giver 17 t 32 min', (await kort()).includes('21. juni') && (await række('Danmark')).includes('17 t 32 min'), await kort());
 tjek('skyderen: underteksten siger, at man selv vælger', (await undertekst()).includes('Du vælger selv'), await undertekst());
 // Til/fra-knapperne og Forfra
-await page.click('#kosmosStyring button:has-text("Tæt på Jorden")');
-await page.click('#kosmosStyring button:has-text("Jorden drejer")');
-await T(() => atomlabTest.kosmos.spol(1));
-await page.click('#kosmosStyring button:has-text("Forfra")');
+await page.click('#solsystemStyring button:has-text("Tæt på Jorden")');
+await page.click('#solsystemStyring button:has-text("Jorden drejer")');
+await T(() => atomlabTest.solsystem.spol(1));
+await page.click('#solsystemStyring button:has-text("Forfra")');
 tjek('Forfra går tilbage til første trin', (await undertekst()).includes('Jorden og Solen'), await undertekst());
 await page.screenshot({ path: `${UD}/3-oversigt.png` });
 
@@ -128,13 +128,13 @@ tjek('dag 300: lidt efter oktober, på vej mod januar', okt[0] === 'jorden-dag-1
 tjek('dag 5: næsten januar (hen over nytår)', nyår[0] === 'jorden-dag-10-2k.jpg' && nyår[1] === 'jorden-dag-01-2k.jpg' && Math.abs(nyår[2] - 82 / 92) < 0.002, JSON.stringify(nyår));
 tjek('Månen bruger LRO-kortet med forsiden mod Jorden og bjerge', kloder.måne[0] === 'maanen-2k.jpg' && kloder.måne[1] === 0.25 && kloder.måne[2] === 1, JSON.stringify(kloder.måne));
 // Skift fænomen: tabellen forsvinder
-await T(() => atomlabTest.kosmos.vælg('solstorm'));
-tjek('tabellen forsvinder, når man skifter fænomen', !(await T(() => document.querySelector('#kosmosToplag').children.length)));
+await T(() => atomlabTest.solsystem.vælg('solstorm'));
+tjek('tabellen forsvinder, når man skifter fænomen', !(await T(() => document.querySelector('#solsystemToplag').children.length)));
 
 // Telefon: tabellen i 3D-billedet er skjult, panelet viser de fire steder
 const tlf = await side({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
-tjek('telefon: tabellen i 3D-billedet er skjult', !(await tlf.isVisible('#kosmosToplag .aarstid-kort')));
-tjek('telefon: panelet viser de fire steder', (await tlf.$$('#kosmosForklaring .sted-liste li')).length === 4);
+tjek('telefon: tabellen i 3D-billedet er skjult', !(await tlf.isVisible('#solsystemToplag .aarstid-kort')));
+tjek('telefon: panelet viser de fire steder', (await tlf.$$('#solsystemForklaring .sted-liste li')).length === 4);
 await tlf.screenshot({ path: `${UD}/4-telefon.png`, fullPage: true });
 
 await b.close();
