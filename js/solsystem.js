@@ -2,6 +2,8 @@
 // Skallen (listen, panelet, knapperne, pausen og underteksterne) er fælles med Kosmos (faenomenskaerm.js).
 
 import { lavFænomenSkærm, NØGLER } from './faenomenskaerm.js';
+import solen from './kosmos/solen.js';
+import jordkloden from './kosmos/jordkloden.js';
 import aarstider from './kosmos/aarstider.js';
 import formoerkelser from './kosmos/formoerkelser.js';
 import solstorm from './kosmos/solstorm.js';
@@ -9,13 +11,12 @@ import solensfremtid from './kosmos/solensfremtid.js';
 import mars from './kosmos/mars.js';
 import saturn from './kosmos/saturn.js';
 
-// Efter afstanden til Solen. Under Solen og Jorden står de fænomener, der hører til.
-// Solen og Jorden får deres egne visninger i M4b. Indtil da åbner de det første underpunkt.
+// Efter afstanden til Solen. Solen og Jorden har deres egne visninger (M4b), og under dem står de fænomener, der hører til.
 const skærm = lavFænomenSkærm({
   skærm: 'solsystem',
   liste: [
-    { navn: 'Solen', ikon: '☀️', under: [solstorm, solensfremtid] },
-    { navn: 'Jorden', ikon: '🌍', under: [aarstider, formoerkelser] },
+    { navn: 'Solen', ikon: '☀️', f: solen, under: [solstorm, solensfremtid] },
+    { navn: 'Jorden', ikon: '🌍', f: jordkloden, under: [aarstider, formoerkelser] },
     mars,
     saturn,
   ],
