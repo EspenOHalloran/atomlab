@@ -22,7 +22,7 @@ Hver delopgave slutter med `/faerdig` (tests, billeder, dokumentation og en PR, 
 | M1 | ✅ **Planen og faktagrundlaget** (denne fil, tal med kilder, billedkilder og licenser). Lavet 24. oktober 2026. | lille til mellem |
 | M2 | ✅ **Mars-kloden** (lavet 24. oktober 2026, se "Status efter M2" nedenfor): billederne (farvekort og højdekort), kuglen med rigtige højder (bjergene rager op i kanten), døgn, hældning og Solen. Mars står i Kosmos med panelet og "Kort fortalt". | mellem til stor |
 | M3 | ✅ **Atmosfæren og lyset** (lavet 25. oktober 2026, se "Status efter M3" nedenfor): den tynde, støvede luft i kanten (rigtig skalahøjde), tusmørket, polkapperne og skyer af is over vulkanerne. Knappen "Modlys". | mellem |
-| M4 | **Fælles flyby, egen skærm og rejsen ned til overfladen:** Flybyen flyttes ud af `saturn.js` til et fælles modul, og kameraets rejse (`rejse.js`) lærer at flyve til et sted på kuglen og se skråt ned mod horisonten. Mars og Saturn flyttes fra Kosmos til en egen skærm, "Solsystemet" (`#solsystem`, et nyt kort i menuen med en liste over planeterne). Skallen om fænomenerne i `kosmos.js` gøres fælles, så den ikke kopieres. Saturn skal virke præcis som før. Overblikket med Solen og planeternes baner (trin 2 i plan-solsystemet.md) venter, til Mars er færdig (jeres svar 24. oktober 2026). | mellem til stor |
+| M4 | **Fælles flyby, egen skærm og rejsen ned til overfladen** (plus Solen og Jorden, se "Jorden i Solsystemet" nedenfor): Flybyen flyttes ud af `saturn.js` til et fælles modul, og kameraets rejse (`rejse.js`) lærer at flyve til et sted på kuglen og se skråt ned mod horisonten. Mars og Saturn flyttes fra Kosmos til en egen skærm, "Solsystemet" (`#solsystem`, et nyt kort i menuen med en liste over planeterne). Skallen om fænomenerne i `kosmos.js` gøres fælles, så den ikke kopieres. Saturn skal virke præcis som før. Jorden (en klode som Mars med Årstiderne og Formørkelser under sig) og Solen (Solstorm og Solens fremtid) flytter også til Solsystemet (jeres svar 26. oktober 2026). Overblikket med Solen og planeternes baner (trin 2 i plan-solsystemet.md) venter, til Mars er færdig (jeres svar 24. oktober 2026). | stor |
 | M5 | **Flybyen over Mars:** stoppene med tekster (faktatjekket): oversigten, Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale (Curiosity) og Jezero (Perseverance). "For nørder", "Ærligt talt" og nye fagord i ordbogen. | mellem |
 | M6 | **Phobos og Deimos i den rigtige form:** formmodeller og kort, banerne med den rigtige fart (Phobos står op i vest), stop i flybyen og "Mars set fra Phobos". | mellem til stor |
 | M7 | **Skarpe detaljer ved stederne:** billeder og højder i høj opløsning lige der, hvor flybyen stopper, så man kan flyve helt ned til Olympus Mons' krater på toppen, ned i Valles Marineris og hen over Gale og Jezero. | stor |
@@ -40,15 +40,12 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 ## Jorden i Solsystemet (jeres ønske 26. oktober 2026)
 **Jeres ord:** "Jorden skal have sin plads i menupunktet Solsystemet, hvor vi indtil videre har planlagt Mars og Saturn. Formørkelser og Årstider skal ligge under Jorden her."
 
-**Forslag fra Opus (venter på jeres svar):**
-- Det tages med i M4, fordi M4 alligevel bygger skærmen "Solsystemet" og gør skallen om fænomenerne fælles (trin, undertekster, `toplag` og `overlag`), som Årstiderne og Formørkelser bruger.
-- Jorden får en enkel visning som Mars (kloden fra `js/kosmos/jorden.js` med Månen), og Årstiderne og Formørkelser ligger under Jorden. En flyby med Månen kommer senere.
-- Pas på: gemte data (`atomlabKosmos`, `atomlabKosmosSet`), links til `aarstider` og `formoerkelser` (fx i `js/data/kategorier.js`), rækkefølgen i Kosmos og testene `aarstider` og `formoerkelser`, som åbner `#kosmos`.
+**Jeres svar (26. oktober 2026):**
+1. **Solen:** Solstorm og Solens fremtid flytter også til Solsystemet under et punkt "Solen".
+2. **Jorden er som Mars:** en klode, man kan dreje, med Månen. Årstiderne og Formørkelser ligger under Jorden. I første omgang bruges de billeder og modeller, vi har nu (`js/kosmos/jorden.js`). Jorden og Månen kan gøres flottere senere, når Mars er færdig, hvis I vælger at prioritere det.
+3. **Med i M4**, så skærmen bygges én gang. M4 bliver derfor "stor".
 
-**Spørgsmål til jer:**
-1. Skal Solstorm og Solens fremtid også flytte til Solsystemet under et punkt "Solen"? (Forslag: ja.)
-2. Skal Jorden have sin egen visning nu (en klode med Månen), eller kun samle Årstiderne og Formørkelser? (Forslag: en enkel klode nu.)
-3. Med i M4 eller et skridt for sig efter M4? (Forslag: med i M4, så den bliver "stor".)
+**Pas på i M4:** gemte data (`atomlabKosmos`, `atomlabKosmosSet`), links til `aarstider`, `formoerkelser`, `solstorm` og `solensfremtid` (fx i `js/data/kategorier.js` og `js/data/hvorfor.js`), rækkefølgen og historien i Kosmos (Big Bang, stjerner, døde stjerner og det mærkeligste), "x af 17 set" og testene `aarstider`, `formoerkelser` og `kosmos`, som åbner `#kosmos`.
 
 ## Status efter M3 (25. oktober 2026)
 - **Lavet:** `lavLuft` i `js/solsystem/atmosfaere.js` (luften i kanten med skalahøjden 11 km, tusmørket og blåt lys tæt ved Solen), `js/solsystem/skyer.js` (skyer af is over Olympus Mons, Ascraeus, Pavonis, Arsia, Alba Mons og Elysium Mons om eftermiddagen, med skygge på jorden), og i `klippeplanet.js` tusmørket på jorden, et slør af støv mod kanten og hvidere polkapper. Knappen "Modlys". Elysium Mons kom med, da msss.com blev åbnet og bekræftede skyerne dér (MARCI, nordligt forår 2019).

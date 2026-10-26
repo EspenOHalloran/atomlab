@@ -49,7 +49,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (jeres plan 24. oktober 2026):** M3 er lavet. Nu venter **Mars M4 (fælles flyby, egen skærm "Solsystemet" og rejsen ned til overfladen)** fra [docs/plan-mars.md](docs/plan-mars.md) på et go. Hver del får et go. S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
+**Næste i gang (jeres plan 24. oktober 2026):** M3 er lavet. Nu venter **Mars M4 (fælles flyby, egen skærm "Solsystemet" og rejsen ned til overfladen)** fra [docs/plan-mars.md](docs/plan-mars.md) på et go. Hver del får et go.
+- **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
 
@@ -64,7 +65,6 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
 
 **Åbne spørgsmål til jer:**
-- **Jorden i Solsystemet (jeres ønske 26. oktober 2026):** Jorden skal ligge i Solsystemet ved siden af Mars og Saturn, med Årstiderne og Formørkelser under Jorden. Forslaget og tre spørgsmål (Solen, Jordens egen visning og om det skal med i M4) står i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet".
 - **Domæner (25. oktober 2026):** Listen over de domæner, der skal tilføjes under Network access, står i [docs/plan-mars.md](docs/plan-mars.md) under "Domæner, der skal på listen". Tjek dem med `curl`, når I har tilføjet dem.
 - **Atomet B:** I har ikke set det på tabletten endnu. Sig til, hvis det skal ændres.
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
