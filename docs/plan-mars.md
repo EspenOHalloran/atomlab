@@ -84,6 +84,16 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 - Tal og tekster faktatjekkes mod NSSDC (alle tre faktaark kunne åbnes med curl).
 - Fænomenfilerne bliver i `js/kosmos/`, for de har det samme format.
 
+## Forslag til M4c (29. oktober 2026, venter på jeres go)
+I bad om planen, før M4c går i gang. Forslaget:
+1. **Den fælles flyby** (`js/solsystem/flyby.js`): tælleren, underteksten med prikker, teksten i panelet, "Næste: … ›" og "■ Stop flyby". Planeten giver kun stoppene og flyver selv kameraet til hvert stop. Saturn bruger modulet uden at ændre noget, man kan se.
+2. **Rejsen ned til et sted** (`js/solsystem/rejse.js`): I dag skaleres og flyttes systemet, så fokus står i midten. Nu kan det også drejes, så den lodrette retning på stedet peger lige op på skærmen. Kameraets styring (OrbitControls) kan kun have én fast "op"-retning, så det er nemmere at dreje planeten end kameraet. Så følger "op" stedet af sig selv, og man drejer rundt om stedet om den lodrette akse. Kameraets plads angives på stedet: kompasretning, vinkel over horisonten og afstand. Stjernehimlen og Solens retning drejer med, så de står fast i forhold til Mars. Uden et sted (Saturn, Jorden og hele Mars) er drejningen nul, så alt er som før.
+   - **Ikke under bjergene:** Højdekortet læses én gang ind i en tabel (den højeste værdi i hvert felt). Hvert billede tjekker rejsen, om kameraet er under jorden plus en margen, og skubber det op. Det gælder under flyvningen, når man selv drejer og zoomer, og når "Bjergene 10 gange højere" slås til.
+3. **Mars over på rejse.js** med ét stop: **Olympus Mons**. Kameraet flyver ned og ser skråt hen over vulkanen mod horisonten, hvor den tynde luft lyser i kanten. Mars holder op med at dreje, når man besøger stedet. "Modlys" og zoom-farten tæt på følger med.
+4. **Tekst** til stoppet: kort undertekst og en tekst i panelet ud fra tallene i `docs/fakta-solsystemet.md` (del 3, afsnit 2), faktatjekket med `/faktatjek` og kilder åbnet med `curl`.
+
+**Tjek:** Saturns flyby fotograferes ved hvert stop før og efter (to gange før, så man kan se, hvor meget billederne skifter af sig selv, fx Enceladus' fontæner), og kameraets plads og systemets skala sammenlignes som tal. Nye tjek i testen `mars`: kameraet når Olympus Mons, "op" er den lodrette retning på stedet, kameraet ser skråt ned, og horisonten er i billedet, kameraet er over jorden under hele flyvningen og når man prøver at dreje eller zoome det ned (også med bjergene 10 gange højere), drejningen er nul igen ved hele Mars, og alt sættes tilbage. Billeder med fuld grafik på pc og tablet på højkant. Hele samlingen.
+
 ## Teknik
 **Det, der genbruges:** kameraets rejse (`js/solsystem/rejse.js`), flybyens stop med undertekst og "Næste" (fra `saturn.js`), højdekort med 16 bit og relief fra Jorden (`js/kosmos/jorden.js`), atmosfæren med skalahøjde (`js/solsystem/atmosfaere.js`) og billedværktøjet (som `billeder/solsystem/lav_saturn.py`).
 

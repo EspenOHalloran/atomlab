@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 26. oktober 2026 (Mars M4b).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (testene `batteri` og `beskeder`).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -24,7 +24,12 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (26. oktober 2026): Mars, M4b (Solen og Jorden får egne visninger).**
+**Senest lavet (29. oktober 2026): Testene `batteri` og `beskeder` holder under belastning.**
+- **Jeres opgave (29. oktober 2026):** Ret de to tests (del 1, egen PR), og lav derefter Mars M4c (del 2, egen PR, planen skal godkendes først).
+- Begge fejlede, når de kørte sammen på en travl maskine. Genskabt med fire travle CPU-løkker ved siden af. `batteri` åbnede "Vis mig"-siden, mens den første side stadig tegnede batteriet, og indlæsningen nåede ikke at blive færdig på 30 sekunder. Nu lukkes den første side først, og testen venter på, at skærmen er klar. I `beskeder` forsvandt pillerne (4,5 sekunder i rigtig tid), før testen nåede at trykke. Nu fryser testen pillernes tid og lader den selv løbe ud (ny testadgang `atomlabTest.beskeder`), og den tjekker også, at den næste pille i køen kommer frem.
+- Med rettelsen bestod begge tre runder i træk med samme belastning. Selve spillet er ikke ændret (kun en testadgang i `js/beskeder.js`).
+
+**Før det (26. oktober 2026): Mars, M4b (Solen og Jorden får egne visninger).**
 - Et tryk på **Solen** og **Jorden** i listen åbner nu deres egen visning. Solsystemet har 8 fænomener, og menuen viser "x/8 set". Første gang åbner Solsystemet på Solen.
 - **Jorden** er en klode med Månen i den rigtige størrelse og afstand (1 enhed = 1.000 km). Den bruger `lavJorden` og `lavMånen`, som de var. Lyset passer med datoen og klokken lige nu: Solens retning, Jordens drejning og Månens plads (og dermed månefasen) regnes ud fra tidspunktet (`js/data/himmel.js`). Danmark er en gul prik. Et ur nederst i 3D-billedet viser tiden i Danmark, om Solen er oppe, og månefasen og afstanden til Månen. "Drej Jorden" lader tiden gå ca. 800 gange hurtigere (mod øst), og "Månen" flyver ud til Månen og tilbage. En tynd linje viser Månens bane.
 - **Solen** har den kogende overflade fra Kosmos, tal, et link til Stjerneovnen og knappen "Jorden ved siden af" (Jorden i den rigtige størrelse, 109 gange mindre).
@@ -66,7 +71,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). **M4c venter på et go.** Se [docs/plan-mars.md](docs/plan-mars.md) under "Svar ved go til M4".
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). **M4c:** I har sagt go 29. oktober 2026, men vil se planen først. Forslaget står i [docs/plan-mars.md](docs/plan-mars.md) under "Forslag til M4c" og venter på jeres svar.
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
@@ -82,7 +87,6 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
 
 **Åbne spørgsmål til jer:**
-- **Tests (26. oktober 2026):** `batteri` og `beskeder` fejler, når de kører sammen i en travl session, og består alene. Det sker også på `main` før M4b. Det er rigtig tid i testene (en tidsgrænse og en pille, der forsvinder). Forslag: Lad dem spole frem i stedet for at vente (lille opgave). Siger I go, så laver jeg det.
 - **Domæner (25. oktober 2026):** Listen over de domæner, der skal tilføjes under Network access, står i [docs/plan-mars.md](docs/plan-mars.md) under "Domæner, der skal på listen". Tjek dem med `curl`, når I har tilføjet dem.
 - **Atomet B:** I har ikke set det på tabletten endnu. Sig til, hvis det skal ændres.
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).

@@ -125,13 +125,23 @@ await page.waitForTimeout(300);
 tjek('"Start forfra" nulstiller Batteriets opgaver', Object.keys(await fr()).filter((id) => id.startsWith('b-')).length === 0 && /^0 af 5/.test(await page.textContent('#batteriOpgaveTal')), await page.textContent('#batteriOpgaveTal'));
 await page.click('#batteriNyt');
 
+await page.click('#batteriHjælp');
+await page.waitForTimeout(400);
+tjek('hjælp', await page.isVisible('#hjælpBatteri'));
+tjek('hjælp: hvad løber i ledningen', (await tekst('#hjælpBatteri')).includes('Hvad løber i ledningen?'));
+tjek('hjælp: LiPo eller Li-ion', (await tekst('#hjælpBatteri')).includes('LiPo eller Li-ion?'));
+// Den første side lukkes, før den næste åbnes. Ellers tegner to batterier samtidig, og på en travl maskine tog det
+// over 30 sekunder at indlæse den nye side (TimeoutError i page.goto).
+await page.context().close();
+
 // "Vis mig" i et nyt vindue (uden klarede opgaver): slowmotion, to ioner, og ingen opgave klares
 {
   const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
   s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   await s.addInitScript(() => localStorage.setItem('atomlabGuide', JSON.stringify({ batteri: 1 })));
-  await s.goto(`${ADRESSE}/?test#batteri`);
-  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#batteri:not(.skjult)'));
+  // Vent på, at skærmen er klar, og ikke på sidens load-hændelse (som har en fast grænse på 30 sekunder)
+  await s.goto(`${ADRESSE}/?test#batteri`, { waitUntil: 'commit' });
+  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#batteri:not(.skjult)'), null, { timeout: 120000, polling: 250 });
   tjek('ingen guide anden gang', !(await s.evaluate(() => document.querySelector('.guide-boble:not(.skjult)'))));
   tjek('grafitten er lag af sekskanter, og metaloxidet er en krystal', await s.evaluate(() => {
     let kugler = 0;
@@ -149,11 +159,6 @@ await page.click('#batteriNyt');
   await s.context().close();
 }
 
-await page.click('#batteriHjælp');
-await page.waitForTimeout(400);
-tjek('hjælp', await page.isVisible('#hjælpBatteri'));
-tjek('hjælp: hvad løber i ledningen', (await tekst('#hjælpBatteri')).includes('Hvad løber i ledningen?'));
-tjek('hjælp: LiPo eller Li-ion', (await tekst('#hjælpBatteri')).includes('LiPo eller Li-ion?'));
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);
