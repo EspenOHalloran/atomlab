@@ -20,6 +20,8 @@ import { citatHTML, MENU_CITATER } from './data/citater.js';
 import { lavOrdforklaringer, testAdgang as ordTest } from './ordforklaring.js';
 import { lavLag, lukHvorfor, vistHvorfor } from './lag.js';
 import { lavPaneler, startPaneler, testAdgang as panelTest } from './paneler.js';
+import { lavOrdbog, startOrdbog, stopOrdbog } from './ordbog.js';
+import { ORDNE, søgOrd } from './data/ordbogliste.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -30,6 +32,7 @@ const skærme = {
   batteri: { start: startBatteri, stop: stopBatteri },
   solsystem: { start: startSolsystem, stop: stopSolsystem },
   kosmos: { start: startKosmos, stop: stopKosmos },
+  ordbog: { start: startOrdbog, stop: stopOrdbog },
 };
 
 let aktivSkærm = null;
@@ -66,6 +69,7 @@ function start() {
   lavBatteri();
   lavSolsystem(); // før Kosmos, så det gemte flytter med først
   lavKosmos();
+  lavOrdbog();
   lavPaneler();
   lavFuldSkærmKnapper();
   lavRulleTip();
@@ -96,7 +100,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor } };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) } };
   visSkærm();
 }
 
@@ -108,6 +112,8 @@ function visSkærm() {
   rydBeskeder(); // beskeder, guiden og "Hvorfor?"-kortet hører til den skærm, de blev vist på
   stopGuide();
   lukHvorfor();
+  // Dialoger (fx hjælpen med linket til Ordbogen) hører til den skærm, de blev åbnet på
+  document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   for (const id of Object.keys(skærme)) {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }
@@ -121,7 +127,7 @@ function visSkærm() {
 
 // Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult)
 function lavRulleTip() {
-  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, #menu, #fusion, #reaktor, #batteri, #solsystem, #kosmos')];
+  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #solsystem, #kosmos')];
   const tjek = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
   let venter = false;
   const tjekAlle = () => {
@@ -194,6 +200,7 @@ function visFremgangIMenu(ny) {
     const antalSet = liste.filter((f) => set.includes(f.id)).length;
     mærke(id, `${antalSet}/${liste.length} set`, antalSet === liste.length);
   }
+  mærke('ordbog', `${ORDNE.length} fagord`, false);
   for (const k of document.querySelectorAll('.menukort .kort')) k.classList.toggle('næste-eventyr', !ny && klaret > 0 && k === næste);
 }
 

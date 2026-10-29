@@ -77,6 +77,13 @@
           <small>Sorte huller, supernovaer, tyngdebølger og andre vilde ting i rummet</small>
         </span>
       </a>
+      <a class="kort åben" href="#ordbog">
+        <span class="kort-ikon ikon-ordbog" aria-hidden="true">Aa</span>
+        <span class="kort-tekst">
+          <strong>Ordbogen</strong>
+          <small>Slå alle fagordene op, fra alfapartikel til tøris</small>
+        </span>
+      </a>
     </nav>
     <p class="menu-status" id="menuStatus"></p>
     <blockquote class="citat menu-citat" id="menuCitat"></blockquote>
@@ -750,6 +757,24 @@
   </div>
 
   <!-- ===== Hjælp ===== -->
+  <section id="ordbog" class="skærm skjult" aria-label="Ordbogen">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Ordbogen</h2>
+      <span class="system-status" id="ordbogAntal"></span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <div class="panel ordbog-panel">
+      <input type="search" id="ordbogSøg" placeholder="Søg et ord" aria-label="Søg i ordbogen" enterkeyhint="search" autocomplete="off" spellcheck="false">
+      <nav class="ordbog-bogstaver" id="ordbogBogstaver" aria-label="Hop til et bogstav"></nav>
+      <ul class="ordbog-liste" id="ordbogListe"></ul>
+      <p class="ordbog-ingen" id="ordbogIngen" hidden>Ingen fagord passer. Prøv et andet ord.</p>
+    </div>
+  </section>
+
   <div class="overlag skjult" id="hjælp" role="dialog" aria-label="Hjælp">
     <div class="dialog">
       <header><h3>Sådan virker et atom</h3><button class="knap lille luk" data-luk>Luk</button></header>
@@ -758,7 +783,7 @@
         <p><span class="kugle neutron lille"></span> <strong>Neutroner</strong> har ingen ladning. De er en slags lim, der holder kernen sammen, for protonerne frastøder hinanden. Atomer af samme grundstof med forskelligt antal neutroner kaldes <strong>isotoper</strong>.</p>
         <p><span class="kugle elektron lille"></span> <strong>Elektroner</strong> er minusladede og meget lettere. De befinder sig i skaller rundt om kernen. Har atomet for mange eller for få elektroner, kaldes det en <strong>ion</strong>.</p>
         <p><strong>Massetal</strong> = protoner + neutroner. Carbon-14 har 6 protoner og 8 neutroner.</p>
-        <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Det virker i hele AtomLab.</p>
+        <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Det virker i hele AtomLab. Alle fagordene står også i <a href="#ordbog">Ordbogen</a>.</p>
         <h4 id="hjælpRadioaktivitet">Hvad er radioaktivitet, og hvorfor er det farligt?</h4>
         <p>Et stof er <strong>radioaktivt</strong>, når dets atomkerner er ustabile: De har for mange eller for få neutroner, eller de er simpelthen for store. Før eller siden henfalder kernen og skyder noget ud. Det er <strong>strålingen</strong>:</p>
         <ul>
