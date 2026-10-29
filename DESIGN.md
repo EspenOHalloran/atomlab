@@ -66,20 +66,20 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). **M4c venter på et go.** Se [docs/plan-mars.md](docs/plan-mars.md) under "Svar ved go til M4".
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). **M4c venter på et go** (Opus med xhigh anbefalet). Se [docs/plan-mars.md](docs/plan-mars.md) under "Svar ved go til M4".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
-1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
+1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor, **Opus med xhigh**: sværeste fysik og matematik på listen).
 2. **Kategorien som link** (lille), **Ordbogen** (lille til mellem) og **fotoner i Stjerneovnen** (lille, skal faktatjekkes). Forslagene står under "Idéer til senere" nederst.
 3. **Orbitalerne i store atomer** (fx jern) er svære at læse, fordi de mange former ligger oven i hinanden og ligner en blomst. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst, som i fysikbøgerne (mellem).
-4. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor).
+4. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
 5. **Solsystemet, trin 2:** overblikket med Solen og planeterne, hvor de står i dag. Derefter kan planeterne ses på himlen fra Saturn, og der kan komme en knap "Find Jorden" (se [planen](docs/plan-solsystemet.md) under "Himlen") (stor).
 6. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
 7. **Et citat til Saturn** (de andre fænomener har et). Det skal have en sikker kilde (lille).
-8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)).
+8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)). Kører Opus dem før Fable 5.5, så med xhigh til faktagrundlaget.
 
 **Åbne spørgsmål til jer:**
 - **Tests (26. oktober 2026):** `batteri` og `beskeder` fejler, når de kører sammen i en travl session, og består alene. Det sker også på `main` før M4b. Det er rigtig tid i testene (en tidsgrænse og en pille, der forsvinder). Forslag: Lad dem spole frem i stedet for at vente (lille opgave). Siger I go, så laver jeg det.
