@@ -12,7 +12,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).
 - Tabletten bruges lige meget på langs og på højkant. Lyd: ingen baggrundsmusik, de små lyde bliver.
 - **Tests (jeres svar 24. oktober 2026):** Test, når det giver mening i forhold til prisen. I tester selv på den rigtige tablet. Derfor:
-  - Mens der arbejdes: kun `node tests/koer-alle.mjs --ændret`. Hele samlingen køres én gang pr. delopgave, før den merges, for `main` er det, jeres søn bruger. Den koster få tokens, når den er grøn (én linje pr. test).
+  - Mens der arbejdes: kun `node tests/koer-alle.mjs --ændret`. Før merge køres `node tests/koer-alle.mjs --ændret`. Vælger den selv alle tests (fordi fx `index.html`, `style.css`, `main.js` eller `scene3d.js` er ændret), køres alle. Hele samlingen køres kun eksplicit, når en ændring rører fælles moduler eller data, og `--ændret` ser ud til at vælge for lidt, som afslutning på en serie af opgaver og før et større mål (fx at dele AtomLab med andre). Jeres ønske 29. oktober 2026: ikke vente på tests af ting, der næsten sikkert ikke er rørt. `main` er det, jeres søn bruger. Den koster få tokens, når den er grøn (én linje pr. test).
   - Skærmbilleder koster flest tokens. Tag kun billeder af det, der er ændret, og se kun de størrelser, hvor layoutet kan gå galt (fx pc og tablet på højkant).
   - Hvordan det føles med fingre, om det kører glat, og hvordan det ser ud på den rigtige skærm, tester I selv. Skriv i "Ikke afprøvet", hvad I skal kigge efter.
   - Nye tests tjekker logik og tal (fx retninger, pladser og tekster), ikke hvert billede.
