@@ -90,7 +90,37 @@ await page.click('#katLinks button:has-text("Kosmos")');
 await page.waitForFunction(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'kilonova', null, { timeout: 8000 }).then(() => true, () => false)
   .then((v) => tjek('link til Kosmos åbner kilonovaen', v));
 
-// Telefon på højkant: filtrene folder sig sammen, og der er stadig plads til væggen
+// Kategorien under navnet: et "Hvorfor?"-kort og "Se hele kategorien ›" (i Det periodiske system og i værkstedet)
+const hvorforVist = () => T(() => atomlabTest.hvorfor.vist());
+await T(() => { location.hash = '#system'; });
+await page.waitForFunction(() => document.querySelector('#system:not(.skjult)'), null, { timeout: 5000 });
+await T(() => atomlabTest.system.åbn(26));
+await page.click('#sysUndertitel .kategori-link');
+tjek('jern: kategorien viser kortet "Overgangsmetaller" med det, de har til fælles, og hvorfor',
+  (await hvorforVist()) === 'Overgangsmetaller' && (await page.textContent('#hvorforKort .hk-tekst')).includes(KATEGORI_INFO.overgang.hvorfor) && (await page.isVisible('#hvorforKort .hk-link')));
+await page.keyboard.press('Escape');
+tjek('Esc lukker kortet, men grundstoffet er stadig åbent', (await hvorforVist()) === null && (await T(() => atomlabTest.system.valgt())) === 26);
+await page.click('#sysUndertitel .kategori-link');
+await page.click('#hvorforKort .hk-link');
+await page.waitForFunction(() => !atomlabTest.system.valgt() && atomlabTest.system.kategori() === 'overgang', null, { timeout: 5000 }).then(() => true, () => false)
+  .then((v) => tjek('"Se hele kategorien ›" lukker grundstoffet og viser kategorikortet', v));
+tjek('kortet er lukket bagefter', (await hvorforVist()) === null);
+// Fra værkstedet (et andet grundstof er åbent i Det periodiske system, når man kommer tilbage)
+await T(() => atomlabTest.system.åbn(10));
+await page.click('#systemByg');
+await page.waitForFunction(() => location.hash === '#vaerksted' && document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: 8000 });
+// Neon er ikke opdaget, så værkstedet er tomt: læg 10 protoner i kernen
+for (let i = 0; i < 10; i++) await page.keyboard.press('p');
+await page.waitForSelector('#infoKategori .kategori-link', { timeout: 5000 });
+await page.click('#infoKategori .kategori-link');
+const panel = await T(() => { const p = document.getElementById('infopanel'); return p ? p.scrollHeight - p.clientHeight : 0; });
+tjek('værkstedet (neon): kategorien viser "Ædelgasser"', (await hvorforVist()) === 'Ædelgasser');
+await page.click('#hvorforKort .hk-link');
+await page.waitForFunction(() => location.hash === '#system' && !atomlabTest.system.valgt() && atomlabTest.system.kategori() === 'aedelgas', null, { timeout: 8000 }).then(() => true, () => false)
+  .then((v) => tjek('værkstedet: "Se hele kategorien ›" åbner kategorien på væggen (ikke det gamle grundstof)', v));
+tjek('værkstedet: knappen giver ikke infopanelet en rullebjælke', panel <= 1, panel);
+await vælg('aedelgas');
+
 const tlf = await side({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
 await tlf.click('#systemFilterKnap');
 await tlf.click('#systemChips .filter[data-værdi="aedelgas"]');
@@ -98,6 +128,10 @@ await tlf.waitForTimeout(400);
 const plads = await tlf.evaluate(() => ({ vindue: document.getElementById('systemVindue').getBoundingClientRect().height, foldet: !document.getElementById('systemFiltre').classList.contains('vis-filtre') }));
 tjek(`telefon: filtrene folder sig sammen, og væggen har plads (${Math.round(plads.vindue)} px)`, plads.foldet && plads.vindue > 250 && (await tlf.isVisible('#systemKategori')), JSON.stringify(plads));
 await tlf.screenshot({ path: `${UD}/2-telefon.png` });
+await tlf.evaluate(() => atomlabTest.system.åbn(79));
+await tlf.tap('#sysUndertitel .kategori-link');
+const ark = await tlf.evaluate(() => ({ vist: atomlabTest.hvorfor.vist(), ark: document.getElementById('hvorforKort').classList.contains('ark') }));
+tjek('telefon: kategorien viser kortet nedefra', ark.vist === 'Overgangsmetaller' && ark.ark, JSON.stringify(ark));
 
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');

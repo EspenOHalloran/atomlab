@@ -13,6 +13,8 @@ import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
 import { lavKategorikort } from './kategorikort.js';
+import { KATEGORI_INFO } from './data/kategorier.js';
+import { visHvorfor, lukHvorfor } from './lag.js';
 import { åbnFænomen } from './faenomenskaerm.js';
 
 const AFSTAND = 1.07; // afstand mellem felterne
@@ -36,6 +38,7 @@ let tilVærksted = null; // funktion, der åbner et grundstof i værkstedet
 let tipVist = false;
 let kategorikort = null; // kortet om den valgte kategori (js/kategorikort.js)
 let kategoriTid = 0; // sekunder siden kategorien blev valgt (væggen laver en bølge)
+let ventKategori = null; // kategorien, der skal vises, når skærmen starter (fra værkstedet)
 const stråle = new THREE.Raycaster();
 const mus = new THREE.Vector2();
 const hjælpV = new THREE.Vector3();
@@ -93,6 +96,14 @@ export function lavSystem({ åbnIVærksted }) {
       filter.kategori = null;
       opdaterFilterKnapper();
     },
+  });
+  // Kategorien under et grundstofs navn (her og i værkstedet) viser et "Hvorfor?"-kort om kategorien
+  document.addEventListener('click', (h) => {
+    const knap = h.target.closest('button.kategori-link[data-kategori]');
+    if (!knap) return;
+    lyd.klik();
+    if (knap.getAttribute('aria-expanded') === 'true') lukHvorfor();
+    else visKategoriKort(knap.dataset.kategori, knap);
   });
   const lærred = verden.renderer.domElement;
   lærred.addEventListener('pointermove', vedMusFlyt);
@@ -175,8 +186,43 @@ function opdaterFelter() {
   $('systemOpdaget').textContent = `★ Opdaget: ${fremgang.antalOpdaget()} af 118`;
 }
 
+// Kategoriens navn som en knap, der kan trykkes på
+export function kategoriKnap(kat) {
+  return `<button class="kategori-link" data-kategori="${kat}" aria-haspopup="dialog" title="Hvad er det?">${KATEGORIER[kat].navn}</button>`;
+}
+
+// Et "Hvorfor?"-kort med det, kategorien har til fælles, og hvorfor. Linket nederst åbner hele kategorien.
+function visKategoriKort(kat, knap) {
+  const info = KATEGORI_INFO[kat];
+  if (!info) return;
+  visHvorfor({
+    spørgsmål: info.flertal,
+    svar: `${info.fælles}\n\n${info.hvorfor}`,
+    link: { tekst: 'Se hele kategorien ›', handling: () => visKategori(kat) },
+  }, knap);
+}
+
+// Viser kategorikortet på væggen (lukker et åbent grundstof og søgningen). Fra en anden skærm skiftes der først hertil.
+function visKategori(kat) {
+  if (!aktiv) {
+    ventKategori = kat;
+    location.hash = '#system';
+    return;
+  }
+  if (valgt) lukDetalje();
+  $('systemSøg').value = '';
+  søg('');
+  filter.kategori = kat;
+  opdaterFilterKnapper();
+}
+
 export function startSystem() {
   aktiv = true;
+  // Fra værkstedet til en kategori: væggen skal vises, ikke det grundstof, der sidst var åbent
+  if (ventKategori && valgt) {
+    valgt = null;
+    $('system').classList.remove('detalje');
+  }
   væg.visible = true;
   verden.opdateringer.add(opdater);
   verden.styring.autoRotate = false;
@@ -200,6 +246,10 @@ export function startSystem() {
         log: false,
       });
     }
+  }
+  if (ventKategori) {
+    visKategori(ventKategori);
+    ventKategori = null;
   }
 }
 
@@ -598,7 +648,7 @@ function udfyldKort(nr) {
   $('sysSymbol').textContent = g.symbol;
   $('sysMasse').textContent = Number.isInteger(g.masse) ? `[${g.masse}]` : g.masse.toLocaleString('da-DK');
   $('sysNavn').innerHTML = g.navn + (g.kaldenavn ? ` <small>(${g.kaldenavn})</small>` : '');
-  $('sysUndertitel').textContent = `${kat.navn} · ${TILSTANDE[g.tilstand]}` + (pl.gruppe ? ` · Gruppe ${pl.gruppe}, periode ${pl.periode}` : ` · Periode ${pl.periode}`);
+  $('sysUndertitel').innerHTML = `${kategoriKnap(g.kategori)} · ${TILSTANDE[g.tilstand]}` + (pl.gruppe ? ` · Gruppe ${pl.gruppe}, periode ${pl.periode}` : ` · Periode ${pl.periode}`);
   $('sysFakta').textContent = faktaOm(nr);
   const stabile = stabileIsotoper(nr);
   const isotopTekst = stabile.length
@@ -703,6 +753,7 @@ export function testAdgang() {
     åbn: (nr) => visDetalje(nr, false),
     visning: () => atom.visning, // ringe eller sky
     kategori: () => kategorikort.vist(),
+    filterKategori: () => filter.kategori,
     kategoriSpol: (sek) => kategorikort.spol(sek),
     styring: () => ({ pan: verden.styring.enablePan, én: verden.styring.touches.ONE, mål: verden.styring.target.toArray().map((v) => Math.round(v * 100) / 100) }),
     flyt: (x, y) => { verden.styring.target.x += x; verden.styring.target.y += y; verden.kamera.position.x += x; verden.kamera.position.y += y; },
