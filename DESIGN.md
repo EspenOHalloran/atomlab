@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (kategorien som link).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (fotoner i Stjerneovnen).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -27,7 +27,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **I gang (29. oktober 2026): fire små opgaver med go** (jeres besked): 1) kategorien som link, 2) fotoner i Stjerneovnen (med faktatjek), 3) et citat til Saturn (kun med en sikker kilde, ellers intet) og 4) Ordbogen som egen del (spørg om kort i menuen eller kun fra hjælpen, med en skitse, før der bygges). I den rækkefølge og én PR pr. opgave, som Opus selv merger, når `--ændret` er grøn. Hele samlingen køres én gang til sidst. Testene `batteri` og `beskeder` bestod to runder i træk på den nye `main`.
 
-**Senest lavet (29. oktober 2026): Kategorien som link (opgave 1).**
+**Senest lavet (29. oktober 2026): Fotoner i Stjerneovnen (opgave 2).**
+- Nyt fagord **foton** (en lyspartikel) i ordbogen. Trin 2 i "Fra brint til carbon, trin for trin" siger nu, at energien kommer ud som en foton af gammastråling, og at gassen i Solen sluger den og sender nye ud med lidt mindre energi igen og igen, så energien er titusinder af år om at nå overfladen. Hjælpens "Lys og neutrinoer" siger "Fotonerne af gammastråling".
+- Faktatjekket (kilderne i `docs/fakta-hvorfor.md` til sidst) rettede to ting: Fotoner flyver kun "altid" med lysets fart i tomt rum, og de bliver til svagere lys undervejs. Der står ikke et præcist tal for tiden, kun "titusinder af år" som de andre steder.
+
+**Før det (29. oktober 2026): Kategorien som link (opgave 1).**
 - Kategorien under grundstoffets navn (fx "Overgangsmetal") er nu en knap i Atomværkstedet og på grundstofkortet i Det periodiske system. Et tryk viser et "Hvorfor?"-kort ved ordet med det, kategorien har til fælles, og hvorfor (de eksisterende tekster fra `js/data/kategorier.js`). Esc og et tryk udenfor lukker det, og på telefon på højkant kommer det nedefra.
 - Nederst står "Se hele kategorien ›". Det lukker grundstoffet og viser kategorikortet på væggen med forsøget og medlemmerne. Fra værkstedet skifter det først til Det periodiske system.
 - Nye tjek i testen `kategorier` (kortet, Esc, linket fra begge steder, ingen rullebjælke i infopanelet, telefon).
@@ -94,7 +98,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor, **Opus med xhigh**: sværeste fysik og matematik på listen).
-2. **Ordbogen** (lille til mellem) og **fotoner i Stjerneovnen** (lille, skal faktatjekkes) er i gang (go 29. oktober 2026). Kategorien som link er lavet. Forslagene står under "Idéer til senere" nederst.
+2. **Ordbogen** (lille til mellem) er i gang (go 29. oktober 2026). Kategorien som link og fotoner i Stjerneovnen er lavet. Forslagene står under "Idéer til senere" nederst.
 3. **Orbitalerne i store atomer** (fx jern) er svære at læse, fordi de mange former ligger oven i hinanden og ligner en blomst. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst, som i fysikbøgerne (mellem).
 4. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
 5. **Solsystemet, trin 2:** overblikket med Solen og planeterne, hvor de står i dag. Derefter kan planeterne ses på himlen fra Saturn, og der kan komme en knap "Find Jorden" (se [planen](docs/plan-solsystemet.md) under "Himlen") (stor).
@@ -314,7 +318,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Uddrag fra gamle bøger** (jeres idé, 29. oktober 2026): Billeder af siderne fra de oprindelige bøger og breve af fx Newton, Huygens, Tycho Brahe, Galilei og Einstein, med den oprindelige tekst og en dansk oversættelse ved siden af. Eksempel: Huygens' *Systema Saturnium* (1659), hvor anagrammet om Saturns ring bliver afsløret (siden findes på archive.org, McGill og Smithsonian). Forbehold: Bøgerne er så gamle, at teksten er fri, men bibliotekernes skanninger kan have egne vilkår, så licensen skal tjekkes side for side og skrives i `KILDER.md`. Ikke vurderet eller planlagt endnu.
 - **Kategorien som link** (jeres ønske, 24. oktober 2026): I Atomværkstedet og Det periodiske system skal kategorien under navnet (fx "Overgangsmetal") kunne trykkes på og vise, hvad kategorien er. **Anbefaling:** et "Hvorfor?"-kort, der popper op ved ordet. Det bruger teksterne fra kategorikortet (`js/data/kategorier.js`: hvad de har til fælles, og hvorfor), så man bliver, hvor man er. Nederst står "Se hele kategorien ›", som åbner kategorikortet i Det periodiske system med forsøget og medlemmerne. Det følger planen for lagene (ét tryk for mere, uden at forlade skærmen), og teksterne findes allerede. Lille opgave. ✅ Lavet 29. oktober 2026.
 - **Ny del: Ordbogen** (jeres idé, 24. oktober 2026): Alle begreber, der er spredt rundt i AtomLab, samlet ét sted, så de er lette at slå op. Fx gammastråling: Den står allerede i ordbogen (`js/data/ordbog.js`, 44 fagord), men man kan kun se forklaringen ved at trykke på det prikkede ord i en tekst. **Forslag:** en side med alle fagord i alfabetisk rækkefølge og en søgning, og med "Hvorfor?"-kortene og kategorierne. Fra hvert ord kan man gå derhen, hvor det bruges. Den kan åbnes fra menuen og fra hjælpen. Lille til mellem. Venter på et go.
-- **Fotoner i Stjerneovnen?** (jeres spørgsmål, 24. oktober 2026): I dag står der kun "gammastråling (meget kraftigt lys)". **Forslag:** "foton" (en lyspartikel) som nyt fagord, og én sætning i Stjerneovnens forklaring om, at energien kommer ud som fotoner af gammastråling, og at de bruger meget lang tid på at kæmpe sig ud af Solen. Det står allerede i "Lys og neutrinoer", men uden ordet foton. Lille, men skal faktatjekkes. Venter på et go.
+- **Fotoner i Stjerneovnen?** (jeres spørgsmål, 24. oktober 2026): I dag står der kun "gammastråling (meget kraftigt lys)". **Forslag:** "foton" (en lyspartikel) som nyt fagord, og én sætning i Stjerneovnens forklaring om, at energien kommer ud som fotoner af gammastråling, og at de bruger meget lang tid på at kæmpe sig ud af Solen. Det står allerede i "Lys og neutrinoer", men uden ordet foton. Lille, men skal faktatjekkes. ✅ Lavet 29. oktober 2026.
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.
 - En engelsk udgave med en sprogvælger. Planen ligger i [docs/plan-engelsk.md](docs/plan-engelsk.md).
 - En chat, hvor man kan stille spørgsmål (skal diskuteres: hvor den kører, hvem der betaler, og hvordan den holdes til emnet).
