@@ -211,7 +211,7 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 **Jeres svar (29. oktober 2026):**
 1. Planet X: sandsynligvis en gruppe "Yderst ude", men det afgøres endeligt, når vi når dertil.
 2. Månerne ligger **under Saturn** (dybere lag, ikke egne skærme). Delen Liv linker til dem. "I hvert fald en mulighed."
-3. Ikke afklaret: Skal det forsigtige lag om "kan der være liv?" skrives nu i Saturn og Liv så linke til det senere (mit forslag), eller vente på Liv? Spørges igen ved go.
+3. **Besluttet:** Det forsigtige lag om "kan der være liv?" skrives nu under Saturn (Enceladus og Titan først), og delen Liv linker til det, når den kommer. Selve arbejdet venter på et go.
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)
 - **Planeterne og månerne:** fysiske tal og baneelementer (JPL Horizons og NASA Planetary Fact Sheets).
