@@ -55,7 +55,7 @@ export function lavOrdbog() {
 
 export function startOrdbog() {
   sætVindue($('ordbog'));
-  verden.styring.autoRotate = true;
+  verden.styring.autoRotate = !ROLIG; // stjernehimlen drejer langsomt bag listen
   // Med mus og tastatur kan man skrive med det samme (på en tablet ville tastaturet dække skærmen)
   if (!LAV_KVALITET) $('ordbogSøg').focus({ preventScroll: true });
 }
