@@ -313,6 +313,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Samme billeder før og efter:** Gør `Math.random` ens fra gang til gang (stjernerne og fontænerne), tag billeder to gange før ændringen for at kende støjen, sammenlign kameraets tal (de skal være helt ens) og billederne uden stjernerne (som drejer i rigtig tid).
 - **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
 - **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
+- **Tæt på bestemmer nettet skarpheden, ikke billederne:** Skyggerne regnes i hver pixel fra højdekortet, men omridset følger nettet (ca. 21 km mellem punkterne på hele Mars). Olympus Mons blev derfor blød og flad tæt på, og en stejl skrænt bliver til en blød skråning. Regn afstanden mellem nettets punkter ud mod det, kameraet skal vise, før et stop planlægges. Overdriv ikke højderne for at skjule det, for så bliver det udtværede bare højere.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
