@@ -165,9 +165,19 @@ function lavStjernehimmel(scene) {
     himmel.add(sprite);
     tågeSkyer.push(sprite);
   }
-  scene.add(himmel);
+  himmelDrejet.add(himmel);
+  scene.add(himmelDrejet);
   verden.opdateringer.add((dt) => { himmel.rotation.y += dt * 0.004; });
 }
+
+// Stjernehimlen kan drejes med et planetsystem (js/solsystem/rejse.js drejer systemet, når kameraet er ved et sted
+// på en planet), så stjernerne står fast i forhold til planeten. null = ingen drejning.
+const himmelDrejet = new THREE.Group();
+export function drejHimmel(q) {
+  if (q) himmelDrejet.quaternion.copy(q);
+  else himmelDrejet.quaternion.identity();
+}
+export const himmelDrejning = () => himmelDrejet.quaternion.toArray(); // kun til tests
 
 // Rumstøv: svage prikker, der driver langsomt forbi tæt på atomet og giver dybde
 function lavRumstøv(scene) {
@@ -333,6 +343,7 @@ export function nulstilStyring() {
   s.autoRotate = true;
   s.autoRotateSpeed = 0.5;
   begrænsDrejning(null);
+  drejHimmel(null);
 }
 
 // Piletasterne drejer kameraet rundt om målet: venstre og højre rundt, op og ned over og under.

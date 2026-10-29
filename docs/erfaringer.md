@@ -68,6 +68,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Kort fra USGS og andre mosaikker: Tjek for helt tomme søjler og rækker (Viking-mosaikken over Mars har en tom første søjle, som gav en sort streg ved 180°), og at kanten ligger præcis på ±180° (skær ud efter kortets geografiske felter). Sæt den øverste og nederste række til samme værdi i et højdekort, ellers bliver polen takket, når nettet løftes. Tjek også billedets rigtige størrelse og en søjle for meget (Enceladus' kort er 14401 × 7201: Den sidste søjle er den første igen, og den nederste række er tom). Stol ikke på filnavnet: Solar System Scopes `8k_saturn.jpg` er kun 4096 × 2048.
 - [ ] "Modlys" er set både tæt på og langt væk. Tæt på ligger en tynd luft i kanten i skygge, hvis Solen står midt bag planeten (Mars M3).
 - [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
+- [ ] Kameraet ved et sted på en planet kan ikke komme under jorden: Test det under flyvningen (også fra den modsatte side af planeten), når man selv drejer og zoomer det ned, og med højere bjerge. Drejes systemet, skal Solens retning og stjernehimlen drejes med.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
@@ -145,6 +146,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Den yderste skal har højst 8 elektroner." Næsten altid, men palladium har skallerne 2, 8, 18, 18. Og grænsen skyldes rækkefølgen af energierne (den næste skal begynder at fylde), ikke Pauli-princippet.
 - "Solens overflade koger." Det er også konvektion: Varm gas stiger op og kold synker ned (Solen i M4b). Skriv "bobler" eller "simrer".
 - "Lyset er 8 minutter og 20 sekunder om at nå Jorden." Det er 499 sekunder, altså 8 min 19 s. Regn afrundinger efter, før de står med sekunder.
+- "Olympus Mons' sider skråner ca. 5°." Wikipedia skriver 5 % (ca. 3°). Procent og grader er ikke det samme. Skriv "nogle få grader".
+- Koordinater fra Wikipedia kan være ældre end USGS' navneliste (Olympus Mons: 18,65° N, 226,2° Ø mod 18,40° N, 226,00° Ø). Brug navnelisten (planetarynames.wr.usgs.gov).
 - "Jordens ydre kerne koger." Det flydende metal strømmer rundt (konvektion) som suppe i en gryde, drevet af varme og af lette stoffer fra den faste indre kerne. Det koger ikke.
 - "Den dødelige stråledosis er 4-5 Sv." Kilderne siger ca. 3,5-4,5 Gy for halvdelen uden behandling. Skriv "omkring 4 Sv", og at behandling hjælper. En CT-skanning er ca. 2-10 mSv (hovedet ca. 1-2), ikke 5-10.
 - "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.
@@ -302,6 +305,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
 - **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
 - **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
+
+### Kameraet ned til et sted på en planet (Mars M4c, oktober 2026)
+- **Kameraets styring (OrbitControls) kan kun have én fast op-retning** (den regnes ud, når styringen laves). I stedet for at ændre `camera.up` drejes hele planetsystemet, så stedets lodrette retning peger op i verden. Så virker drejning, zoom og piletaster af sig selv. Solens retning og stjernehimlen skal drejes med (`drejHimmel`), ellers står stjernerne stille, mens planeten drejer.
+- **van Wijk og Nuijs vej går gennem planeten,** når fokus flytter fra midten ud til et sted på den anden side: Kameraet drejer rundt om fokus, som ligger inde i planeten. Kollisionen skubbede kameraet op, så det strøg hen over jorden i 2 km højde. Ned til et sted flyver kameraet derfor i en bue rundt om planetens midte, og testen måler skubbet under flyvningen (`skubbet`), også fra bagsiden.
+- **Kollision med terrænet:** Nettet kan ligge højere end kortet mellem to punkter, så tabellen gemmer den højeste værdi i hvert felt, og kameraet holdes over den højeste i 3 × 3 felter plus en margen. Tabellen laves i strimler (ca. 10 ms ad gangen), for hele 4k-billedet tog ca. 340 ms i testbrowseren.
+- **Samme billeder før og efter:** Gør `Math.random` ens fra gang til gang (stjernerne og fontænerne), tag billeder to gange før ændringen for at kende støjen, sammenlign kameraets tal (de skal være helt ens) og billederne uden stjernerne (som drejer i rigtig tid).
+- **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
+- **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.

@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (testene `batteri` og `beskeder`).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (Mars M4c).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -24,7 +24,15 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (29. oktober 2026): Testene `batteri` og `beskeder` holder under belastning.**
+**Senest lavet (29. oktober 2026): Mars, M4c (den fælles flyby og rejsen ned til Olympus Mons).**
+- **Mars har "▶ Start flyby"** med to stop: hele Mars og Olympus Mons. Kameraet flyver i en bue ned over Mars og ser skråt hen over vulkanen mod horisonten, hvor den tynde luft lyser. Kameraets "op" følger den lodrette retning på stedet, så man drejer rundt om vulkanen med fingeren. Mars står stille, og klokken er 8 om morgenen ved vulkanen (lange skygger og ingen skyer). "Hele Mars" flyver tilbage. "Bjergene 10 gange højere" og "Modlys" virker også ved stedet (i modlys står Solen lige under horisonten foran kameraet).
+- **Kameraet kommer aldrig ind under bjergene.** Det holdes mindst 2 km over jorden: under flyvningen (også fra bagsiden af Mars), når man selv drejer og zoomer, og med de høje bjerge.
+- **Flybyen er et fælles modul** (`js/solsystem/flyby.js`), som Saturn og Mars bruger. Saturns flyby er den samme som før: Kameraets tal er helt ens ved alle ni stop, og billederne afviger ikke mere end mellem to kørsler før ændringen.
+- **Teksten om Olympus Mons** er faktatjekket (Wikipedia, USGS og en artikel fra UCL, alle åbnet med curl). Faktatjekket rettede skråningen (ca. 3°, ikke 5°) og koordinaterne (USGS' navneliste). To nye fagord: skjoldvulkan og caldera.
+- **Jeres svar ved go:** Flybyen med to stop (anbefalingen), og jeg valgte formiddag, fordi skyerne om eftermiddagen dækkede vulkanen. I åbnede `discovery.ucl.ac.uk` og `planetarynames.wr.usgs.gov`, og begge virker.
+- Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M4c".
+
+**Før det (29. oktober 2026): Testene `batteri` og `beskeder` holder under belastning.**
 - **Jeres opgave (29. oktober 2026):** Ret de to tests (del 1, egen PR), og lav derefter Mars M4c (del 2, egen PR, planen skal godkendes først).
 - Begge fejlede, når de kørte sammen på en travl maskine. Genskabt med fire travle CPU-løkker ved siden af. `batteri` åbnede "Vis mig"-siden, mens den første side stadig tegnede batteriet, og indlæsningen nåede ikke at blive færdig på 30 sekunder. Nu lukkes den første side først, og testen venter på, at skærmen er klar. I `beskeder` forsvandt pillerne (4,5 sekunder i rigtig tid), før testen nåede at trykke. Nu fryser testen pillernes tid og lader den selv løbe ud (ny testadgang `atomlabTest.beskeder`), og den tjekker også, at den næste pille i køen kommer frem.
 - Med rettelsen bestod begge tre runder i træk med samme belastning. Selve spillet er ikke ændret (kun en testadgang i `js/beskeder.js`).
@@ -71,7 +79,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). **M4c:** I har sagt go 29. oktober 2026, men vil se planen først. Forslaget står i [docs/plan-mars.md](docs/plan-mars.md) under "Forslag til M4c" og venter på jeres svar.
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026). **M5 (flybyen over Mars med alle stoppene) venter på et go.**
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
@@ -92,6 +100,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Olympus Mons (M4c) på tabletten:** Hvordan føles det at dreje rundt om vulkanen med fingeren og zoome ind (drejningen er lidt langsommere ved stedet)? Kører flyvningen ned glat? Et lille hak, første gang Mars åbnes, mens højdetabellen bliver lavet? Ser vulkanen for flad ud med de rigtige højder, og er udsigten mod horisonten flot?
 - **Jorden og Solen (M4b) på tabletten:** Passer dag og nat med det, I ser udenfor? Kan man finde Danmark-prikken og Månen? Er uret nederst i vejen på tablet på højkant? Kan man se den lille Jord ved "Jorden ved siden af" (zoom ind)? I testbrowseren er den kun et par pixel.
 - **Solsystemet (M4a) på tabletten:** Er listen let at bruge med fingre på langs og på højkant? Ser menuen med 7 kort godt ud? På telefon på langs fylder underpunkterne en linje hver.
 - **Mars M3 på tabletten:** Kører det stadig flydende med luften og skyerne? Er skyerne for tydelige eller for svage, og ser "Modlys" godt ud tæt på og langt væk? Er tusmørket for kraftigt?

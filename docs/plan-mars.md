@@ -68,7 +68,7 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 |---|---|---|
 | M4a | ✅ (lavet 26. oktober 2026) Den fælles skal (`js/faenomenskaerm.js`), skærmen `#solsystem`, menukortet og listen. Solstorm, Solens fremtid, Årstiderne, Formørkelser, Mars og Saturn flyttes fra Kosmos. Gemte data, links, hjælpen og testene rettes til. Intet nyt indhold. | medium |
 | M4b | ✅ (lavet 26. oktober 2026) Solen og Jorden får hver deres visning: Jorden-kloden med Månen i rigtig størrelse og afstand (de billeder og modeller, vi har nu), lyset efter dagens dato, og Solen med den kogende overflade, tal og et link til Stjerneovnen. Tekster og faktatjek. | medium |
-| M4c | Den fælles flyby (ud af `saturn.js`), rejsen ned til et sted på kuglen med udsyn mod horisonten, og Mars over på `rejse.js` (Mars styrer i dag kameraet selv) med ét stop at prøve, fx Olympus Mons. Kameraets "op" skal følge den lodrette retning på stedet, og kameraet må ikke komme ind under bjergene. Saturns flyby skal give de samme billeder før og efter. | høj |
+| M4c | ✅ (lavet 29. oktober 2026, se "Status efter M4c") Den fælles flyby (ud af `saturn.js`), rejsen ned til et sted på kuglen med udsyn mod horisonten, og Mars over på `rejse.js` (Mars styrer i dag kameraet selv) med ét stop at prøve, fx Olympus Mons. Kameraets "op" skal følge den lodrette retning på stedet, og kameraet må ikke komme ind under bjergene. Saturns flyby skal give de samme billeder før og efter. | høj |
 
 **Jeres svar (26. oktober 2026): "Generelt går vi med dine anbefalinger", og Solen får sin egen visning (A).** Det betyder:
 - **Menuen:** Kortet "Solsystemet" står lige før Kosmos med "x/8 set". 4 + 3 kort på pc og tablet på langs (den sidste række i midten), 2 kolonner på tablet på højkant, 1 på telefon på højkant og 4 på telefon på langs.
@@ -84,7 +84,17 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 - Tal og tekster faktatjekkes mod NSSDC (alle tre faktaark kunne åbnes med curl).
 - Fænomenfilerne bliver i `js/kosmos/`, for de har det samme format.
 
-## Forslag til M4c (29. oktober 2026, venter på jeres go)
+## Status efter M4c (29. oktober 2026)
+- **Lavet:** `js/solsystem/flyby.js` (den fælles flyby, Saturn bruger den), `rejse.js` drejer systemet, så stedets lodrette retning peger op (stjernehimlen drejer med, `drejHimmel`), flyver ned til et sted i en bue hen over planeten og holder kameraet over bjergene (`bund`). Mars er et system på rejsen med "▶ Start flyby": hele Mars og Olympus Mons. `klippeplanet.js` har fået en højdetabel i JS (`overflade`, `sted`, `punkt`).
+- **Olympus Mons:** Kameraet står 18° over horisonten, kigger fra syd, og klokken er 8 på stedet (formiddag: lange skygger og ingen skyer). Om eftermiddagen dækkede skyerne fra M3 det meste af vulkanen. Afstanden følger 3D-vinduets størrelse (`passer`).
+- **Saturn uændret:** Kameraets plads, drejning og systemets skala er helt ens ved alle ni stop før og efter. Billederne uden stjerner afviger højst 0,04 % (to kørsler før ændringen afveg op til 0,07 % indbyrdes). Stoppet over ringene glider i rigtig tid og afviger mere i begge tilfælde. Stjernerne drejer langsomt i rigtig tid, så de flytter sig lidt fra kørsel til kørsel.
+- **Ikke under bjergene:** Kameraet er mindst 2 km over jorden. Uden kollisionen kom det 120 km ned under jorden i testen. Den første udgave af flyvningen ned (van Wijk og Nuijs vej) gik gennem Mars, når man startede på bagsiden (skubbet op til ca. 100 km). Nu går den i en bue over planeten, og kameraet skubbes aldrig op under flyvningen.
+- **Faktatjekket** (kilderne åbnet med curl) rettede skråningen (5 %, ca. 3°, ikke 5°) og koordinaterne (USGS' navneliste: 18,40° N, 226,00° Ø). To nye fagord: skjoldvulkan og caldera.
+- **Til M5:** Flyvninger mellem to steder bruger samme bue. Stoppenes tekster faktatjekkes, og nettet med højderne er groft tæt på (ca. 21 km mellem punkterne på pc).
+
+## Forslag til M4c (29. oktober 2026, godkendt)
+**Jeres svar (29. oktober 2026): go.** (1) Mars får "▶ Start flyby" med to stop (hele Mars og Olympus Mons) gennem det fælles modul. De andre stop kommer i M5. (2) Tidspunktet på dagen ved Olympus Mons: Jeg prøver formiddag (klart vejr) og eftermiddag (med skyerne) og vælger det, der viser vulkanen tydeligst. I åbnede `discovery.ucl.ac.uk` og `planetarynames.wr.usgs.gov`, og begge virker nu (tjekket med curl).
+
 I bad om planen, før M4c går i gang. Forslaget:
 1. **Den fælles flyby** (`js/solsystem/flyby.js`): tælleren, underteksten med prikker, teksten i panelet, "Næste: … ›" og "■ Stop flyby". Planeten giver kun stoppene og flyver selv kameraet til hvert stop. Saturn bruger modulet uden at ændre noget, man kan se.
 2. **Rejsen ned til et sted** (`js/solsystem/rejse.js`): I dag skaleres og flyttes systemet, så fokus står i midten. Nu kan det også drejes, så den lodrette retning på stedet peger lige op på skærmen. Kameraets styring (OrbitControls) kan kun have én fast "op"-retning, så det er nemmere at dreje planeten end kameraet. Så følger "op" stedet af sig selv, og man drejer rundt om stedet om den lodrette akse. Kameraets plads angives på stedet: kompasretning, vinkel over horisonten og afstand. Stjernehimlen og Solens retning drejer med, så de står fast i forhold til Mars. Uden et sted (Saturn, Jorden og hele Mars) er drejningen nul, så alt er som før.

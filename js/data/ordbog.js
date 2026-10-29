@@ -243,4 +243,14 @@ export const ORDBOG = [
     // Tætheden falder med faktoren e ≈ 2,718 pr. skalahøjde. NSSDC: Mars 11,0 km, Jorden 8,5 km
     tekst: 'Så højt skal man op, før luften bliver ca. 2,7 gange tyndere. Kommer man en skalahøjde højere op, bliver den 2,7 gange tyndere igen. På Mars er den ca. 11 km og på Jorden ca. 8,5 km.',
   },
+  {
+    id: 'skjoldvulkan', ord: 'Skjoldvulkan',
+    former: ['skjoldvulkan', 'skjoldvulkanen', 'skjoldvulkaner'],
+    tekst: 'En bred vulkan med meget flade sider. Den er bygget af tynd lava, der er flydt langt ud, lag på lag, så den ligner et skjold, der ligger på jorden. Vulkanerne på Hawaii og Olympus Mons på Mars er skjoldvulkaner.',
+  },
+  {
+    id: 'caldera', ord: 'Caldera',
+    former: ['caldera', 'calderaen', 'calderaer'],
+    tekst: 'Et stort krater på toppen af en vulkan. Det er ikke lavet af et nedslag: Når et udbrud tømmer kammeret med smeltet sten under toppen, synker jorden ned og efterlader et stort hul.',
+  },
 ];
