@@ -39,7 +39,7 @@ Fable må ikke bruges på noget, Opus kan lave lige så godt.
 Besluttet 21. oktober 2026: I starter selv en session med Fable (ikke som hjælpeagent i en Opus-session). Så kan I tale direkte med Fable, men alt i sessionen koster Fable-pris.
 - **Opus laver F0 i en separat session** og lægger alt i `docs/fable/`, som pushes til `main`. Fables session starter på en frisk klon, så det, der ikke ligger i git, findes ikke for Fable. Mappen `tests/billeder/` kommer ikke med i git, så skærmbillederne skal kopieres til `docs/fable/`.
 - **Første besked til Fable:** "Læs `docs/fable/brief.md` og lav F1." Briefen siger resten.
-- **Effort:** `high` som standard (skiftes i sessionen). `xhigh` kun til faktagrundlaget for Tjernobyl og Liv, hvis budgettet rækker.
+- **Effort:** `high` som standard (skiftes i sessionen). `xhigh` kun til faktagrundlaget for Tjernobyl og Liv, hvis budgettet rækker. Laver Opus Tjernobyl og Liv før Fable 5.5, gælder xhigh også dér (faktagrundlaget). Opus bruger desuden xhigh til det sorte hul, Mars M4c og faktagrundlaget for Molekyler M2 (se CLAUDE.md, "Effort").
 - Fable skriver kun i `docs/fable/` og ændrer ikke kode. Når F1 er skrevet, stopper den og går ikke videre til F2 af sig selv. Sessionen lukkes bagefter, og Opus bygger i en ny session.
 - Opus skriver sine kommentarer til Fables svar i en fil ved siden af (`…-noter.md`), fx hvilke fund der er nye, og hvilke der allerede stod i eftersynet fra oktober. Fables egen fil rettes ikke.
 - Hold sessionen kort: kun spørgsmål om overblikket. Tjek saldoen før og efter.
