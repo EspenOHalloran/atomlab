@@ -121,3 +121,16 @@
 **Svar:** Inde i midten af stjernen smelter brintkerner sammen til helium, og det frigør energi (fusion). Energien varmer hele stjernen op, og den varme overflade lyser, ligesom glødende jern. I Solen tager det titusinder af år, måske over 100.000 år, før energien fra midten når ud til overfladen. Energien i det sollys, du ser, blev altså frigjort i midten for længe siden, selvom lyset kun bruger ca. 8 minutter fra Solens overflade til Jorden.
 
 **Faktatjek (23. oktober 2026):** Kilderne spænder fra ca. 10.000 år (UNLV) over 30.000 år (Ohio State) til ca. 170.000 år (Mitalas og Sills 1992). "Titusinder af år, måske over 100.000" er forsigtigt nok og står også i Stjerneovnens hjælp. Lyset bruger ca. 8 min 20 s (490-507 s).
+
+## Fotoner (ordbogen og Stjerneovnen), 29. oktober 2026
+Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brint til carbon, trin for trin" (trin 2) og "Fotonerne af gammastråling" i hjælpens "Lys og neutrinoer". Kilderne er åbnet direkte med curl (Wikipedias kildetekst).
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| En foton er en lyspartikel uden masse, der flyver med lysets fart | OK. "Altid" er fjernet, for i stof går lyset langsommere. | Wikipedia: Photon ("Photons are massless particles that can only move at one speed, the speed of light measured in vacuum") |
+| D + p → helium-3, og energien kommer ud som gammastråling | OK (5,493 MeV) | Wikipedia: Proton–proton chain |
+| Over en million gange mere energi end en foton af synligt lys | OK, regnet: 5,49 MeV / 1,6-3,1 eV ≈ 1,8-3,4 mio. (synligt lys 400-750 nm, E = 1240 eV·nm / λ) | Egen udregning |
+| Gassen sluger fotonerne og sender nye ud med mindre energi, igen og igen | OK. Rettet fra "sender en ny ud", så det er med, at lyset bliver svagere (længere bølgelængde) undervejs. | Wikipedia: Radiative zone ("absorbed or scattered … gradually shifting to longer wavelength") |
+| Energien er titusinder af år om at nå overfladen | OK, samme formulering og kilder som afsnittet om stjernerne ovenfor (ca. 10.000 til ca. 170.000 år, Mitalas og Sills 1992). Der står intet præcist tal. | Wikipedia: Radiative zone (170.000 år, Mitalas og Sills 1992) |
+
+Forenkling: I Solens yderste ca. 30 % bæres energien op af strømmende gas (konvektion), ikke af lyset. Det er ikke nævnt i den korte tekst.
