@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (Mars M4c).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (kategorien som link).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -21,10 +21,18 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Mars (besluttet 24. oktober 2026):** Mars bygges som Saturn med Phobos og Deimos og en flyby, der også besøger steder på planeten (Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale og Jezero). Jeres svar: Saturn og flybyen kører helt flydende på tabletten, så vi giver den gas med grafikken. "Det hele skal med. Det skal være så flot og imponerende som muligt": detaljer helt tæt på, "Stå på Mars" og månerne i den rigtige form. Opgaven er delt i otte delopgaver (M1-M8), og I siger go mellem hver. Planen står i [docs/plan-mars.md](docs/plan-mars.md). I M4 flyttes Mars og Saturn til deres egen skærm, "Solsystemet". Overblikket med Solen og planeterne (trin 2) venter. Mars får et 8k-kort.
 - **Tokens bruges med omhu (jeres svar 24. oktober 2026):** Sig det med det samme, når noget koster unødigt mange tokens (fx sider, miljøet ikke kan åbne, eller en hjælpeagent, der må søge mange gange). Ofte kan I let løse det, fx ved at tilføje et domæne under miljøets Network access.
+- **Spørg om adgang først (jeres svar 29. oktober 2026):** Skal en opgave bruge et domæne, der ikke står på listen over åbne domæner, så spørg om adgang, *før* arbejdet går i gang, ikke først når siden viser sig at være blokeret. I åbnede library.si.edu og archive.org til citatet til Saturn.
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Senest lavet (29. oktober 2026): Mars, M4c (den fælles flyby og rejsen ned til Olympus Mons).**
+**I gang (29. oktober 2026): fire små opgaver med go** (jeres besked): 1) kategorien som link, 2) fotoner i Stjerneovnen (med faktatjek), 3) et citat til Saturn (kun med en sikker kilde, ellers intet) og 4) Ordbogen som egen del (spørg om kort i menuen eller kun fra hjælpen, med en skitse, før der bygges). I den rækkefølge og én PR pr. opgave, som Opus selv merger, når `--ændret` er grøn. Hele samlingen køres én gang til sidst. Testene `batteri` og `beskeder` bestod to runder i træk på den nye `main`.
+
+**Senest lavet (29. oktober 2026): Kategorien som link (opgave 1).**
+- Kategorien under grundstoffets navn (fx "Overgangsmetal") er nu en knap i Atomværkstedet og på grundstofkortet i Det periodiske system. Et tryk viser et "Hvorfor?"-kort ved ordet med det, kategorien har til fælles, og hvorfor (de eksisterende tekster fra `js/data/kategorier.js`). Esc og et tryk udenfor lukker det, og på telefon på højkant kommer det nedefra.
+- Nederst står "Se hele kategorien ›". Det lukker grundstoffet og viser kategorikortet på væggen med forsøget og medlemmerne. Fra værkstedet skifter det først til Det periodiske system.
+- Nye tjek i testen `kategorier` (kortet, Esc, linket fra begge steder, ingen rullebjælke i infopanelet, telefon).
+
+**Før det (29. oktober 2026): Mars, M4c (den fælles flyby og rejsen ned til Olympus Mons).**
 - **Mars har "▶ Start flyby"** med to stop: hele Mars og Olympus Mons. Kameraet flyver i en bue ned over Mars og ser skråt hen over vulkanen mod horisonten, hvor den tynde luft lyser. Kameraets "op" følger den lodrette retning på stedet, så man drejer rundt om vulkanen med fingeren. Mars står stille, og klokken er 8 om morgenen ved vulkanen (lange skygger og ingen skyer). "Hele Mars" flyver tilbage. "Bjergene 10 gange højere" og "Modlys" virker også ved stedet (i modlys står Solen lige under horisonten foran kameraet).
 - **Kameraet kommer aldrig ind under bjergene.** Det holdes mindst 2 km over jorden: under flyvningen (også fra bagsiden af Mars), når man selv drejer og zoomer, og med de høje bjerge.
 - **Flybyen er et fælles modul** (`js/solsystem/flyby.js`), som Saturn og Mars bruger. Saturns flyby er den samme som før: Kameraets tal er helt ens ved alle ni stop, og billederne afviger ikke mere end mellem to kørsler før ændringen.
@@ -86,7 +94,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor).
-2. **Kategorien som link** (lille), **Ordbogen** (lille til mellem) og **fotoner i Stjerneovnen** (lille, skal faktatjekkes). Forslagene står under "Idéer til senere" nederst.
+2. **Ordbogen** (lille til mellem) og **fotoner i Stjerneovnen** (lille, skal faktatjekkes) er i gang (go 29. oktober 2026). Kategorien som link er lavet. Forslagene står under "Idéer til senere" nederst.
 3. **Orbitalerne i store atomer** (fx jern) er svære at læse, fordi de mange former ligger oven i hinanden og ligner en blomst. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst, som i fysikbøgerne (mellem).
 4. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor).
 5. **Solsystemet, trin 2:** overblikket med Solen og planeterne, hvor de står i dag. Derefter kan planeterne ses på himlen fra Saturn, og der kan komme en knap "Find Jorden" (se [planen](docs/plan-solsystemet.md) under "Himlen") (stor).
@@ -100,6 +108,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Kategorien som link på tabletten:** Er ordet let at ramme med fingeren, og ser man, at det kan trykkes på (en tynd streg under)? Står kortet godt ved ordet på tablet på langs og på højkant?
 - **Olympus Mons (M4c) på tabletten:** Hvordan føles det at dreje rundt om vulkanen med fingeren og zoome ind (drejningen er lidt langsommere ved stedet)? Kører flyvningen ned glat? Et lille hak, første gang Mars åbnes, mens højdetabellen bliver lavet? Ser vulkanen for flad ud med de rigtige højder, og er udsigten mod horisonten flot?
 - **Jorden og Solen (M4b) på tabletten:** Passer dag og nat med det, I ser udenfor? Kan man finde Danmark-prikken og Månen? Er uret nederst i vejen på tablet på højkant? Kan man se den lille Jord ved "Jorden ved siden af" (zoom ind)? I testbrowseren er den kun et par pixel.
 - **Solsystemet (M4a) på tabletten:** Er listen let at bruge med fingre på langs og på højkant? Ser menuen med 7 kort godt ud? På telefon på langs fylder underpunkterne en linje hver.
@@ -302,7 +311,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] Knappen "Elektronsky"/"Ringe" på grundstofkortet i Det periodiske system, og valget deles med Værkstedet.
 
 ## Idéer til senere
-- **Kategorien som link** (jeres ønske, 24. oktober 2026): I Atomværkstedet og Det periodiske system skal kategorien under navnet (fx "Overgangsmetal") kunne trykkes på og vise, hvad kategorien er. **Anbefaling:** et "Hvorfor?"-kort, der popper op ved ordet. Det bruger teksterne fra kategorikortet (`js/data/kategorier.js`: hvad de har til fælles, og hvorfor), så man bliver, hvor man er. Nederst står "Se hele kategorien ›", som åbner kategorikortet i Det periodiske system med forsøget og medlemmerne. Det følger planen for lagene (ét tryk for mere, uden at forlade skærmen), og teksterne findes allerede. Lille opgave. Venter på et go.
+- **Kategorien som link** (jeres ønske, 24. oktober 2026): I Atomværkstedet og Det periodiske system skal kategorien under navnet (fx "Overgangsmetal") kunne trykkes på og vise, hvad kategorien er. **Anbefaling:** et "Hvorfor?"-kort, der popper op ved ordet. Det bruger teksterne fra kategorikortet (`js/data/kategorier.js`: hvad de har til fælles, og hvorfor), så man bliver, hvor man er. Nederst står "Se hele kategorien ›", som åbner kategorikortet i Det periodiske system med forsøget og medlemmerne. Det følger planen for lagene (ét tryk for mere, uden at forlade skærmen), og teksterne findes allerede. Lille opgave. ✅ Lavet 29. oktober 2026.
 - **Ny del: Ordbogen** (jeres idé, 24. oktober 2026): Alle begreber, der er spredt rundt i AtomLab, samlet ét sted, så de er lette at slå op. Fx gammastråling: Den står allerede i ordbogen (`js/data/ordbog.js`, 44 fagord), men man kan kun se forklaringen ved at trykke på det prikkede ord i en tekst. **Forslag:** en side med alle fagord i alfabetisk rækkefølge og en søgning, og med "Hvorfor?"-kortene og kategorierne. Fra hvert ord kan man gå derhen, hvor det bruges. Den kan åbnes fra menuen og fra hjælpen. Lille til mellem. Venter på et go.
 - **Fotoner i Stjerneovnen?** (jeres spørgsmål, 24. oktober 2026): I dag står der kun "gammastråling (meget kraftigt lys)". **Forslag:** "foton" (en lyspartikel) som nyt fagord, og én sætning i Stjerneovnens forklaring om, at energien kommer ud som fotoner af gammastråling, og at de bruger meget lang tid på at kæmpe sig ud af Solen. Det står allerede i "Lys og neutrinoer", men uden ordet foton. Lille, men skal faktatjekkes. Venter på et go.
 - "Test dig selv": 3-5 små spørgsmål til sidst i hver del, så man husker det, man har set.

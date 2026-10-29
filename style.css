@@ -413,6 +413,10 @@ button { font: inherit; color: inherit; }
 .bindingsbjælke div { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: linear-gradient(90deg, #4dabf7, #8ce99a); }
 .bindingsbjælke span { position: absolute; top: -3px; width: 2px; height: 14px; background: var(--gul); }
 .kategori { margin: 0; color: var(--svag); font-size: 13px; }
+/* Kategorien under navnet kan trykkes på og viser et "Hvorfor?"-kort om kategorien */
+.kategori-link { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 3px; }
+.kategori-link:hover, .kategori-link[aria-expanded="true"] { color: var(--tekst); text-decoration-color: var(--farve, var(--gul)); }
+.kategori-link:focus-visible { outline: 2px solid var(--gul); outline-offset: 2px; border-radius: 3px; }
 .tal { margin: 0; display: grid; gap: 8px; }
 .tal div { display: grid; grid-template-columns: 112px 1fr; gap: 8px; align-items: baseline; }
 .tal dt { color: var(--svag); font-size: 13px; }
@@ -1301,7 +1305,7 @@ button.hvorfor:hover, button.hvorfor[aria-expanded="true"] { background: rgba(25
 .hk-nørd[hidden] { display: none; }
 .hk-knapper { display: flex; justify-content: space-between; gap: 8px; margin-top: 10px; }
 .hk-knapper[hidden], .hk-knapper .knap[hidden] { display: none; }
-.hk-næste { margin-left: auto; }
+.hk-næste, .hk-link { margin-left: auto; }
 
 /* "Næste skridt" er skjult, mens guiden kører (medmindre guiden peger på det) */
 body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }

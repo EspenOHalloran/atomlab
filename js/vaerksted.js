@@ -11,6 +11,7 @@ import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import { visBesked } from './beskeder.js';
 import { toTrinsKnap } from './forfra.js';
 import { citatHTML } from './data/citater.js';
+import { kategoriKnap } from './system.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -843,7 +844,7 @@ function opdaterInfo() {
   el.navn.innerHTML = g.navn + (g.kaldenavn ? ` <small>(${g.kaldenavn})</small>` : '');
   // Hele tal i [ ] er massetallet for den mest stabile isotop (grundstoffet har ingen stabile)
   el.masse.textContent = Number.isInteger(g.masse) ? `[${g.masse}]` : tal(g.masse);
-  el.kategori.textContent = `${kat.navn} · ${TILSTANDE[g.tilstand]}`;
+  el.kategori.innerHTML = `${kategoriKnap(g.kategori)} · ${TILSTANDE[g.tilstand]}`;
 
   // Fanen "Atom"
   const q = p - e;
