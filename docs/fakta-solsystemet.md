@@ -456,12 +456,20 @@ Punkter:
 | Ældre tal (Viking-tiden) | 25–27 km. USGS Prof. Paper 1534 (1994) har en top på 26 km. NASA-sider skriver stadig 25–27 km | NASA Goddard "How big is Olympus Mons?" https://core2.gsfc.nasa.gov/research/volc/olympus.html (søgeuddrag); science.nasa.gov Olympus Mons (søgeuddrag) | brug ikke |
 | Bredde | ca. 600 km (med lavastrømmene over skrænten 840 × 640 km) | Wikipedia (søgeuddrag); Plescia 2004 citeret i en artikel fra 2016 (søgeuddrag) | RS |
 | Areal | omtrent som delstaten Arizona (USA). NASA: "bredere end Arizona", ca. 585 km | NASA-billedtekst (søgeuddrag) | RS |
-| Skråninger | i middel ca. 5° (meget fladt, så står man på den, kan man ikke se, at det er et bjerg) | Plescia 2004 citeret (søgeuddrag) | RS |
+| Skråninger | i middel 5 % (ca. 3°) ifølge Wikipedia (meget fladt, så står man på toppen, kan man ikke se, at det er et bjerg). Var først noteret som "ca. 5°" (søgeuddrag af Plescia 2004) | Wikipedia (åbnet 29. oktober 2026) | RS ("nogle få grader") |
 | Calderaen (krateret på toppen) | 6 indfaldskratere, der overlapper, i alt ca. 65 × 80 km | USGS SIM 3470, Mouginis-Mark 2021 https://pubs.usgs.gov/publication/sim3470 (søgeuddrag) | RS |
 | Calderaens dybde | ca. 3 km (Plescia 2004: 3,2 km; ældre: 2,5 km; NASA: "næsten 3 km") | Plescia via søgeuddrag; NASA Goddard (søgeuddrag) | RS ("ca. 3 km") |
 | Skrænten ved foden | 6 km (Milkovich 2003), op til 8 km (McGovern 2007), op til 9 km nogle steder (Borgia 2015) | oversigt over Olympus Mons og litosfæren, UCL https://discovery.ucl.ac.uk/id/eprint/10158477/1/OlympusMons_Lithosphere.pdf (søgeuddrag) | RS ("op til 6–8 km") |
-| Koordinater (midten) | 18,65° N, 226,2° Ø (= 133,8° V) | Wikipedia (søgeuddrag) | RS |
+| Koordinater (midten) | 18,40° N, 226,00° Ø (= 134,0° V), "Diameter" 648 km. Wikipedia skriver 18,65° N, 226,2° Ø (ældre værdi) | USGS' navneliste https://planetarynames.wr.usgs.gov/Feature/4453 (åbnet 29. oktober 2026) | S |
 | Opdaget som vulkan | Schiaparelli kaldte det lyse sted "Nix Olympica" ("Olympens sne") i 1879, fordi det var lyst i kikkerten. Mariner 9 viste i 1971–72, at det er en kæmpe skjoldvulkan, og navnet blev Olympus Mons | USGS-geologisk kort I-2327 https://pubs.usgs.gov/publication/i2327 (søgeuddrag); Linda Hall Library (søgeuddrag) | S |
+
+**Faktatjek af stoppet ved Olympus Mons (Mars M4c, 29. oktober 2026).** Kilderne er åbnet med curl (ikke kun søgeuddrag):
+- Wikipedia "Olympus Mons" (https://en.wikipedia.org/wiki/Olympus_Mons): skjoldvulkan af "many thousands of highly fluid, basaltic lava flows" som på Hawaii, "about 600 km wide", seks calderaer "60 × 80 km across" og "up to 3.2 km deep", dannet ved "roof collapse following depletion and withdrawal of the subsurface magma chamber", skrænten "up to 8 km tall", "The average slope on the volcano's flanks is only 5%" (5 % ≈ 3°), og "an observer near the summit would be unaware of standing on a very high mountain, as the slope of the volcano would extend far beyond the horizon, a mere 3 kilometers away".
+- Taylor m.fl. 2020, "What can Olympus Mons tell us about the Martian lithosphere?", J. Volcanol. Geotherm. Res. 402, 106981 (https://discovery.ucl.ac.uk/id/eprint/10158477/1/OlympusMons_Lithosphere.pdf): "the largest known volcano in the solar system", "a basal radius of around 300 km", "22 km above the surrounding plains (Plescia, 2004)" og skrænten "up to 10 km high that surrounds the majority of the edifice".
+- USGS SIM 3470 (Mouginis-Mark 2021, https://pubs.usgs.gov/publication/sim3470): "six overlapping collapse pits that collectively measure ~65 x ~80 kilometers".
+- Plescia 2004 (resuméet på https://pubs.usgs.gov/publication/70026910): "relief varies from 1.0 km to almost 22 km" og "Average flank slopes are in the range of <1° to ∼10°" (for alle vulkanerne).
+- Egen udregning: Horisonten for et øje 1,7 m over jorden: √(2 · 3.396 km · 0,0017 km) ≈ 3,4 km ("ca. 3 km").
+- **Rettet:** Skråningen var noteret som "ca. 5°" (søgeuddrag). Wikipedia skriver 5 % (ca. 3°). Teksten siger derfor "nogle få grader". Skrænten er "op til ca. 8 km" (Wikipedia), og Taylor 2020 skriver op til 10 km, så teksten siger "nogle steder op til ca. 8 km høj". Koordinaterne er nu USGS' (se tabellen).
 
 **Det højeste bjerg i solsystemet?**
 
@@ -669,7 +677,7 @@ Kildesiderne er åbnet direkte af Opus (ikke hjælpeagenter, fordi siderne kunne
 | Om vinteren dækker et tyndt lag tøris et meget større område | OK | MSSS "Seasons on Mars" (Caplinger 1994): de kapper, der vokser og skrumper med årstiderne, er "carbon dioxide (CO2) frost", åbnet; Wikipedia "Martian polar ice caps" (hver vinter kommer 1,5-2 m tøris til) |
 | Tøris er ca. −78 °C ved Jordens lufttryk og bliver til gas uden at smelte | OK | Wikipedia "Dry ice": sublimerer ved 194,7 K (= −78,5 °C), åbnet |
 | Støvet spreder lyset mest fremad (modlys) | OK | almindelig fysik for støv med korn, der er større end lysets bølgelængde. PIA19400 viser det samme tæt ved Solen |
-| Skyerne ligger ved Olympus Mons (18,65° N, 226,2° Ø), Ascraeus Mons (11,92° N, 255,92° Ø), Pavonis Mons (1,48° N, 247,04° Ø), Arsia Mons (8,35° S, 239,91° Ø), Alba Mons (40,47° N, 250,4° Ø) og Elysium Mons (25,02° N, 147,21° Ø) | OK | USGS' navneliste (Gazetteer of Planetary Nomenclature) via Wikipedia |
+| Skyerne ligger ved Olympus Mons (18,40° N, 226,00° Ø, rettet 29. oktober 2026 efter USGS' navneliste), Ascraeus Mons (11,92° N, 255,92° Ø), Pavonis Mons (1,48° N, 247,04° Ø), Arsia Mons (8,35° S, 239,91° Ø), Alba Mons (40,47° N, 250,4° Ø) og Elysium Mons (25,02° N, 147,21° Ø) | OK | USGS' navneliste (Gazetteer of Planetary Nomenclature) via Wikipedia |
 
 **Spillets egne tal (står ikke som fakta i teksten):** Skyerne er tegnet 22 km over kuglen, så vulkanernes toppe ikke skærer huller i dem. Tusmørket når 10° ind på natsiden. Det svarer til, at støvet i ca. 52 km højde stadig er i sollys (R · (1/cos 10° − 1)), men tallet er valgt efter billederne og ikke målt. Hvor kraftigt luften lyser, er gættet (det står i "Ærligt talt").
 

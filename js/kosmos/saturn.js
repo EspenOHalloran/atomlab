@@ -15,6 +15,7 @@ import { lavEnceladus } from '../solsystem/fontaener.js';
 import { lavTitan } from '../solsystem/atmosfaere.js';
 import { lavIsmåne } from '../solsystem/maane.js';
 import { lavRejse } from '../solsystem/rejse.js';
+import { lavFlyby } from '../solsystem/flyby.js';
 
 const SATURN_R = 60268; // km ved ækvator
 const SATURN_POL = 54364; // km ved polerne
@@ -252,7 +253,6 @@ export default {
     const fokusRinge = () => iRingplan(ringKm, solVinkel + RING_VINKEL, ringPunkt);
 
     let visning = 'saturn';
-    let tur = null; // { trin } under flybyen
     let baner = true; // månerne kredser (kun i oversigten)
 
     function flyvTilSaturn(v, færdig) {
@@ -297,7 +297,7 @@ export default {
       lavKnapper();
     }
 
-    // ---------- Flybyen ----------
+    // ---------- Flybyen (js/solsystem/flyby.js) ----------
     function startTur() {
       for (const m of måner) hentKort(m);
       // Månerne stilles op, så de kan besøges efter hinanden med Solen fra siden
@@ -306,17 +306,10 @@ export default {
         sætVinkel(m, t.bane != null ? solVinkel + t.bane : solVinkel + t.side - 180 - t.længde);
       }
       baner = false;
-      tur = { trin: -1 };
-      næsteStop();
+      flyby.start();
     }
-    function næsteStop() {
-      if (!tur || tur.trin >= TUR.length - 1) return;
-      tur.trin++;
-      const stop = TUR[tur.trin];
-      const sidste = tur.trin === TUR.length - 1;
-      fase(stop.titel, stop.tekst, [tur.trin + 1, TUR.length]);
-      forklaring(stop.mere + (sidste ? '<p><b>Turen er slut.</b> Drej selv rundt, tryk på en måne for at besøge den, eller tryk "Saturn".</p>' : ''));
-      visning = stop.fokus === 'saturn' ? (tur.trin === 0 ? 'maaner' : 'saturn') : stop.fokus;
+    function flyvTilStop(stop, trin) {
+      visning = stop.fokus === 'saturn' ? (trin === 0 ? 'maaner' : 'saturn') : stop.fokus;
       if (stop.fokus === 'saturn') flyvTilSaturn(stop);
       else if (stop.fokus === 'ringe') {
         ringKm = RING_FRA;
@@ -333,14 +326,12 @@ export default {
         const vinkel = t.retning != null ? solVinkel + t.retning : solVinkel + t.side;
         flyvTilMåne(m, { retning: retningFra(vinkel, t.højde) });
       }
-      if (sidste) tur = null; // ved Titan er turen slut, og knapperne bliver de almindelige igen
-      lavKnapper();
     }
-    function afslutTur() {
-      if (!tur) return;
-      tur = null;
-      fase(null);
-    }
+    const flyby = lavFlyby({
+      stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(),
+      slut: '<p><b>Turen er slut.</b> Drej selv rundt, tryk på en måne for at besøge den, eller tryk "Saturn".</p>',
+    });
+    const afslutTur = () => flyby.afslut();
 
     // ---------- Tryk på en måne (eller dens navn) for at besøge den ----------
     const lærred = verden.renderer.domElement;
@@ -350,7 +341,7 @@ export default {
     let ned = null;
     const vedNed = (h) => { ned = { x: h.clientX, y: h.clientY }; };
     const vedOp = (h) => {
-      if (!ned || rejse.flyver || tur || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
+      if (!ned || rejse.flyver || flyby.kører || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
       const r = lærred.getBoundingClientRect();
       peg.set(((h.clientX - r.left) / r.width) * 2 - 1, -((h.clientY - r.top) / r.height) * 2 + 1);
       stråle.setFromCamera(peg, kamera);
@@ -371,11 +362,8 @@ export default {
     const styring = [];
     function lavKnapper() {
       styring.length = 0;
-      if (tur) {
-        const næste = TUR[tur.trin + 1];
-        styring.push({ tekst: `Næste: ${næste.knap ?? næste.titel} ›`, handling: næsteStop });
-        styring.push({ tekst: '■ Stop flyby', handling: () => { afslutTur(); lavKnapper(); } });
-      } else {
+      if (flyby.kører) styring.push(...flyby.knapper());
+      else {
         for (const [id, v] of Object.entries(VISNINGER)) styring.push({ tekst: v.navn, handling: () => vælg(id), deaktiv: () => visning === id });
         for (const id of ['enceladus', 'titan']) styring.push({ tekst: måneMed(id).navn, handling: () => besøg(måneMed(id)), deaktiv: () => visning === id });
         styring.push({ tekst: '▶ Start flyby', handling: startTur });
@@ -429,7 +417,7 @@ export default {
         tid = t;
         planet.mesh.rotation.y = t * 0.08;
         // Ringpunktet glider udad, mens man læser om ringene (ikke med "reducer bevægelse")
-        if (tur && TUR[tur.trin].fokus === 'ringe' && !rejse.flyver && !ROLIG) ringKm = Math.min(RING_TIL, ringKm + ((RING_TIL - RING_FRA) / RING_TID) * dt);
+        if (flyby.kører && TUR[flyby.trin].fokus === 'ringe' && !rejse.flyver && !ROLIG) ringKm = Math.min(RING_TIL, ringKm + ((RING_TIL - RING_FRA) / RING_TID) * dt);
         // Månerne kredser kun i oversigten (meget hurtigere end i virkeligheden, men i det rigtige forhold)
         if (baner && !rejse.flyver) for (const m of måner) sætVinkel(m, (m.vinkel + (dt * 0.069) / m.døgn) / GRAD);
       },
@@ -455,7 +443,7 @@ export default {
           return { x: r.left + ((hjælp.x + 1) / 2) * r.width, y: r.top + ((1 - hjælp.y) / 2) * r.height };
         },
         visning: () => visning,
-        tur: () => ({ trin: tur?.trin ?? null, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
         hop: () => rejse.hop(), // gør den igangværende flyvning færdig
         // de hentede billeder, og om de ligger med én kanal i grafikkortet
         billeder: () => Object.fromEntries([...lager].filter(([, b]) => b.tekstur).map(([n, b]) => [n, b.tekstur.format === THREE.RedFormat ? 'én kanal' : 'farver'])),

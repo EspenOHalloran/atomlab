@@ -19,8 +19,8 @@ const billede = async (navn, fn, vent = 1500) => {
 };
 // Kameraet kigger fra +z. vend(l) drejer længdegraden l (grader øst) mod kameraet.
 await billede('1-mars', () => { saturnTest.kig([0.12, 0.2, 1], 3.39619 * 2.9); saturnTest.test.vend(-100); });
-// Olympus Mons (18,65° N, 226,2° Ø) ude ved højre kant (kanten ligger acos(R/afstand) fra midten af skiven)
-await billede('2-olympus-kant', () => { saturnTest.kig([0, 0.25, 1], 3.39619 * 1.9); saturnTest.test.vend(-133.8 - 58); });
+// Olympus Mons (18,40° N, 226,0° Ø) ude ved højre kant (kanten ligger acos(R/afstand) fra midten af skiven)
+await billede('2-olympus-kant', () => { saturnTest.kig([0, 0.25, 1], 3.39619 * 1.9); saturnTest.test.vend(-134 - 58); });
 await billede('3-olympus-kant-x10', () => { saturnTest.tryk('Bjergene'); }, 3000);
 await billede('4-mars-x10', () => { saturnTest.kig([0.12, 0.2, 1], 3.39619 * 2.9); saturnTest.test.vend(-100); });
 await side.evaluate(() => saturnTest.tryk('Bjergene'));
@@ -36,5 +36,12 @@ await billede('11-tusmoerke', () => { saturnTest.kig([-0.6, 0.2, 1], 3.39619 * 2
 await billede('12-kant-dag', () => { saturnTest.kig([0.5, 0.3, 1], 3.39619 * 1.9); saturnTest.test.vend(-60); });
 await billede('13-modlys', () => { saturnTest.tryk('Modlys'); saturnTest.kig([0.12, 0.2, 1], 3.39619 * 2.9); }, 2000);
 await billede('14-modlys-langt', () => { saturnTest.kig([0.12, 0.1, 1], 3.39619 * 12); }, 2000);
+await side.evaluate(() => saturnTest.tryk('Modlys'));
+// M4c: flybyen ned til Olympus Mons (kameraet ser skråt mod horisonten), med bjergene 10 gange højere og i modlys
+await billede('15-flyby-mars', () => { saturnTest.flyby.start(); saturnTest.flyby.hop(); }, 3000);
+await billede('16-olympus-mons', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 4000);
+await billede('17-olympus-x10', () => { saturnTest.tryk('Bjergene'); }, 4000);
+await side.evaluate(() => saturnTest.tryk('Bjergene'));
+await billede('18-olympus-modlys', () => { saturnTest.tryk('Modlys'); }, 3000);
 await b.close();
 console.log(fejl.length ? fejl.join('\n') : 'Ingen konsolfejl');
