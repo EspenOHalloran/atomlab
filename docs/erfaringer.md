@@ -315,6 +315,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
 - **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
 
+### Fire små opgaver i træk (29. oktober 2026)
+- **Et link skal pege på et sted, hvor ordet står.** Ordbogens links blev tjekket i kildeteksterne med et lille script, før de kom med. Fire "Hvorfor?"-kort, der virkede passende ("radioaktiv" → "Hvorfor er nogle kerner ustabile?"), nævnte slet ikke ordet og blev fjernet. Tjekket er nu en del af testen `ordbog`.
+- **Dansk sortering med `Intl.Collator('da')`** sætter æ, ø og å efter z, også inde i ordet ("Stjerne" før "stærke"). Min egen forventning i testen var forkert, ikke sorteringen.
+- **Moduler med Three.js kan ikke testes i Node** (igen): Ordbogens liste, søgning og links ligger derfor i `js/data/ordbogliste.js`.
+- **Et citat kan bekræftes med en uafhængig kontrol:** Huygens' anagram har 7 a'er, og det passer kun med "cohaerente". Wikipedia skriver "coherente". OCR'en af den gamle bog læste ordet forkert ("cobarente"), så tælling af bogstaver var det, der afgjorde det.
+- **Dataservere skifter navn:** archive.org sender filerne videre til `ia….us.archive.org` eller `dn….eu.archive.org`. Bed om `*.archive.org` på én gang.
+- **Giv en lang testkørsel tid nok:** `koer-alle.mjs` med alle tests tog 26-27 minutter i denne session. En baggrundskørsel med 10 minutters grænse blev stoppet midt i og skulle køres forfra.
+
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
 
