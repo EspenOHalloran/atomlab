@@ -30,6 +30,8 @@ Hver delopgave slutter med `/faerdig` (tests, billeder, dokumentation og en PR, 
 
 Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man dreje Mars, efter M5 er flybyen færdig i grove træk, og M6-M8 gør den rigere.
 
+**Ny rækkefølge (jeres svar 29. oktober 2026):** M7 deles i **M7a** (teknikken til lokale detaljer, prøvet på Olympus Mons) og **M7b** (de meget skarpe kort ved Gale og Jezero). Rækkefølgen bliver **M7a → M5 → M6 → M7b → M8**. Se "Detaljer før flere stop" nedenfor.
+
 ## Status efter M2 (24. oktober 2026)
 - **Lavet:** `js/kosmos/mars.js` (fænomenet i Kosmos mellem Solstorm og Saturn), `js/solsystem/klippeplanet.js` (kuglen med rigtige højder, kan genbruges til andre klippeplaneter og måner) og `billeder/solsystem/lav_mars.py`. Farvekortet er Viking MDIM 2.1 (8k, 3,7 MB), og højderne er MOLA (4k, 7,7 MB, 16 bit). Skalaen er 1 enhed = 1.000 km.
 - **Højderne:** rigtige som standard (jeres svar). Olympus Mons kan ses fra kredsløb på skyggerne, men rager kun ca. 2 pixel op over kanten, når hele kloden ses. Knappen "Bjergene 10 gange højere" gør landskabet tydeligt (det står ærligt i teksten).
@@ -91,6 +93,26 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 - **Ikke under bjergene:** Kameraet er mindst 2 km over jorden. Uden kollisionen kom det 120 km ned under jorden i testen. Den første udgave af flyvningen ned (van Wijk og Nuijs vej) gik gennem Mars, når man startede på bagsiden (skubbet op til ca. 100 km). Nu går den i en bue over planeten, og kameraet skubbes aldrig op under flyvningen.
 - **Faktatjekket** (kilderne åbnet med curl) rettede skråningen (5 %, ca. 3°, ikke 5°) og koordinaterne (USGS' navneliste: 18,40° N, 226,00° Ø). To nye fagord: skjoldvulkan og caldera.
 - **Til M5:** Flyvninger mellem to steder bruger samme bue. Stoppenes tekster faktatjekkes, og nettet med højderne er groft tæt på (ca. 21 km mellem punkterne på pc).
+
+## Detaljer før flere stop (jeres svar 29. oktober 2026)
+**Jeres ord:** Flybyen til Olympus Mons er "ikke for imponerende". I spurgte, hvordan billedet kan blive bedre, og om kameraet kan komme tættere på overfladen, så man ser, hvor høj vulkanen er.
+
+**Hvorfor den ser flad ud:**
+- **Nettet er flaskehalsen.** Hele Mars er ét net på 1024 × 512 felter (pc), altså ca. 21 km mellem punkterne ved ækvator. Olympus Mons (ca. 600 km bred) er kun ca. 29 punkter på tværs, og calderaen 3-4. Skyggerne regnes i hver pixel ud fra højdekortet (4k, ca. 5 km pr. pixel), men omridset og alt, der rager op, følger det grove net.
+- **Skrænten ved foden** (op til 6-8 km, `fakta-solsystemet.md` del 3 afsnit 2) bliver med 21 km mellem punkterne til en skråning på ca. 20° i stedet for en mur.
+- **Vulkanen er flad i virkeligheden:** Skråningen er kun ca. 3°, og fra sletten ved foden kan man ikke se toppen, fordi Mars krummer væk. Den imponerer, når man ser skrænten, calderaen og størrelsen skråt oppefra, og det kræver skarp geometri.
+
+**Jeres svar:**
+1. **M7 deles, og den første del kommer før M5** (ja). Rækkefølgen bliver M7a → M5 → M6 → M7b → M8.
+2. **Højderne forbliver rigtige som standard** (enig). Det er skarpheden, kameraet og lyset, der skal gøre indtrykket. "Bjergene 10 gange højere" bliver som knap.
+
+**M7a: lokale detaljer, prøvet på Olympus Mons (forslag, planen godkendes før go):**
+- Et lokalt net kun over Olympus Mons (fx ca. 800 × 800 km med 1-3 km mellem punkterne) med sit eget højdekort fra MOLA i fuld opløsning (463 m pr. pixel, CC0, ingen HRSC nødvendig her) og et farvekort skåret ud af Viking-mosaikken (232 eller 925 m pr. pixel). Laves med `lav_mars.py` (rasterio).
+- Det svære: overgangen til kloden (det globale net må ikke stikke igennem), `bund()` og højdetabellen bruger de lokale højder, og "Bjergene 10 gange højere" virker på begge.
+- Kameraet stilles om efter den skarpe geometri: lavere vinkel og tættere på, evt. et stop ved skrænten. Solen lavere (længere skygger). Billeder i sekundet måles før og efter (tjekliste F), og filernes størrelse på GitHub Pages holdes nede (måske 1-3 MB pr. sted).
+- Høj effort. Opus laver det selv (Mars er ikke en Fable-opgave i `plan-fable.md`).
+
+**Bagefter:** I M5 får hvert nyt stop sit eget lokale kort med den samme teknik (fx Valles Marineris, hvor de smalle dele forsvinder i det grove net), så kameraet kun skal stilles én gang. M7b (CTX og HiRISE ved Gale og Jezero) og M8 ("Stå på Mars") bygger videre på samme teknik med finere kort.
 
 ## Forslag til M4c (29. oktober 2026, godkendt)
 **Jeres svar (29. oktober 2026): go.** (1) Mars får "▶ Start flyby" med to stop (hele Mars og Olympus Mons) gennem det fælles modul. De andre stop kommer i M5. (2) Tidspunktet på dagen ved Olympus Mons: Jeg prøver formiddag (klart vejr) og eftermiddag (med skyerne) og vælger det, der viser vulkanen tydeligst. I åbnede `discovery.ucl.ac.uk` og `planetarynames.wr.usgs.gov`, og begge virker nu (tjekket med curl).

@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (Mars M4c).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (Mars: ny rækkefølge, M7a før M5).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -79,7 +79,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026). **M5 (flybyen over Mars med alle stoppene) venter på et go.**
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026).
+- **Ny rækkefølge (jeres svar 29. oktober 2026):** Olympus Mons var "ikke for imponerende". Det skyldes mest, at Mars' net er groft (ca. 21 km mellem punkterne). Derfor kommer **M7a** (lokale detaljer, prøvet på Olympus Mons) før M5: M7a → M5 → M6 → M7b → M8. Højderne forbliver rigtige som standard. **Næste: planen for M7a skal godkendes, og derefter et go.** Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Detaljer før flere stop".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
@@ -100,7 +101,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
-- **Olympus Mons (M4c) på tabletten:** Hvordan føles det at dreje rundt om vulkanen med fingeren og zoome ind (drejningen er lidt langsommere ved stedet)? Kører flyvningen ned glat? Et lille hak, første gang Mars åbnes, mens højdetabellen bliver lavet? Ser vulkanen for flad ud med de rigtige højder, og er udsigten mod horisonten flot?
+- **Olympus Mons (M4c) på tabletten:** Hvordan føles det at dreje rundt om vulkanen med fingeren og zoome ind (drejningen er lidt langsommere ved stedet)? Kører flyvningen ned glat? Et lille hak, første gang Mars åbnes, mens højdetabellen bliver lavet? Ser vulkanen for flad ud med de rigtige højder, og er udsigten mod horisonten flot? **Jeres svar (29. oktober 2026):** "ikke for imponerende". Det løses i M7a.
 - **Jorden og Solen (M4b) på tabletten:** Passer dag og nat med det, I ser udenfor? Kan man finde Danmark-prikken og Månen? Er uret nederst i vejen på tablet på højkant? Kan man se den lille Jord ved "Jorden ved siden af" (zoom ind)? I testbrowseren er den kun et par pixel.
 - **Solsystemet (M4a) på tabletten:** Er listen let at bruge med fingre på langs og på højkant? Ser menuen med 7 kort godt ud? På telefon på langs fylder underpunkterne en linje hver.
 - **Mars M3 på tabletten:** Kører det stadig flydende med luften og skyerne? Er skyerne for tydelige eller for svage, og ser "Modlys" godt ud tæt på og langt væk? Er tusmørket for kraftigt?
