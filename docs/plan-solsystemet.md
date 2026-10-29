@@ -208,7 +208,10 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 - Skal passe ind i skalaen: afstandene er langt større end alt, vi har tegnet indtil nu. Kræver en ny visning (fx en tegning af de fjerne baner) og en måde at vise afstande, der ikke gør Solsystemet uoverskueligt.
 - Model: Opus laver udkastet, Fable tjekker. Faktagrundlaget laves med xhigh, fordi videnskaben er omstridt, og det er nemt at skrive noget for sikkert. Størrelse: stor.
 
-**Åbne spørgsmål til go:** (1) Skal Planet X ligge i listen efter Saturn, eller i en gruppe for "Yderst ude" sammen med Pluto og dværgplaneterne? (2) Skal Enceladus og Titan have deres egne visninger (som Mars) eller dybere lag i Saturn-fænomenet? (3) Skal vi vente på delen Liv med spørgsmålet om liv, eller skrive et første, forsigtigt lag nu?
+**Jeres svar (29. oktober 2026):**
+1. Planet X: sandsynligvis en gruppe "Yderst ude", men det afgøres endeligt, når vi når dertil.
+2. Månerne ligger **under Saturn** (dybere lag, ikke egne skærme). Delen Liv linker til dem. "I hvert fald en mulighed."
+3. Ikke afklaret: Skal det forsigtige lag om "kan der være liv?" skrives nu i Saturn og Liv så linke til det senere (mit forslag), eller vente på Liv? Spørges igen ved go.
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)
 - **Planeterne og månerne:** fysiske tal og baneelementer (JPL Horizons og NASA Planetary Fact Sheets).
