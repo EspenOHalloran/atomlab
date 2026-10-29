@@ -193,6 +193,26 @@ Det er en stor del, større end Stjerneovnen, og den vil fylde flere arbejdsdage
 6. Skal Fable lave trin 0 nu (kræver credits), eller venter vi? Svar (oktober 2026): Ingen credits lige nu, men måske senere. Kommer der ikke credits, laver Opus trin 0 med friske øjne og høj effort. Mit forslag: Vent ikke på en nyere model. Der vides intet om, om eller hvornår der kommer en Fable 5.5. Fable koster ca. 2,5 gange så meget som Opus, så credits skal bruges, hvor forskellen er størst: trin 0 (planen og faktagrundlaget) og trin 7 (eftersynet). Uden credits laver Opus trin 0 med friske øjne og høj effort. Det er en god plan B, men Fable ville nok fange lidt mere. Opdateret 21. oktober 2026: Nu er der en samlet plan for Fable ([plan-fable.md](plan-fable.md)). Opus laver udkastet til faktagrundlaget, og Fable gennemgår planen og tjekker faktagrundlaget. Rækkefølgen afgøres efter Fables overblik (F1).
 7. ~~Skal Jorden og Månen gøres flotte først (trin 1a)?~~ Ja, det er lavet. NASA's servere er tilladt.
 
+## 8. Idéer fra 29. oktober 2026 (ikke planlagt i trin endnu)
+Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. Teksten herunder er kun en pejling af, hvad der skal undersøges.
+
+**A. Meget mere om Saturns måner.** Under Saturn skal der være langt mere information om månerne end de korte flyby-tekster. Jeres eksempler: Enceladus (kan der være betingelser for liv?) og Titan (søer af metan, "det skal vi vide en masse mere om").
+- Skal undersøges og skrives med kilder i `docs/fakta-solsystemet.md`: hvad Cassini og Huygens faktisk målte ved Enceladus' fontæner og hav og ved Titans dis, søer og regn, og hvad der er sluttet ud fra målingerne, og hvad der er gæt.
+- Forslag til form: et dybere lag pr. måne (flere "Hvorfor?"-kort og "For nørder"), så flybyen stadig er kort. Titan og Enceladus først, de andre måner bagefter.
+- Skal siges ærligt: der er ikke fundet liv, kun forhold, der kan passe. Link til delen Liv, når den kommer.
+- Model: Opus laver udkastet (høj effort), Fable tjekker. Størrelse: mellem til stor.
+
+**B. Planet X.** En visning i Solsystemet om den mulige ekstra planet: hvorfor man tror, den findes, og hvad den kunne være.
+- Skal følge konsensus først og derefter vise de alternative forklaringer ved siden af, hver med en ærlig vurdering. Skal sige tydeligt, at planeten ikke er fundet.
+- Skal undersøges: hvad "Planet X" har betydet i historien (søgningen omkring Neptun og Pluto) og hvad den nuværende hypotese bygger på (de fjerne objekters baner), hvilke alternativer der findes (fx at mønstret skyldes, hvor man har kigget, eller at andet end en planet påvirker banerne), og hvad kommende teleskoper kan afgøre.
+- Skal passe ind i skalaen: afstandene er langt større end alt, vi har tegnet indtil nu. Kræver en ny visning (fx en tegning af de fjerne baner) og en måde at vise afstande, der ikke gør Solsystemet uoverskueligt.
+- Model: Opus laver udkastet, Fable tjekker. Faktagrundlaget laves med xhigh, fordi videnskaben er omstridt, og det er nemt at skrive noget for sikkert. Størrelse: stor.
+
+**Jeres svar (29. oktober 2026):**
+1. Planet X: sandsynligvis en gruppe "Yderst ude", men det afgøres endeligt, når vi når dertil.
+2. Månerne ligger **under Saturn** (dybere lag, ikke egne skærme). Delen Liv linker til dem. "I hvert fald en mulighed."
+3. **Besluttet:** Det forsigtige lag om "kan der være liv?" skrives nu under Saturn (Enceladus og Titan først), og delen Liv linker til det, når den kommer. Selve arbejdet venter på et go.
+
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)
 - **Planeterne og månerne:** fysiske tal og baneelementer (JPL Horizons og NASA Planetary Fact Sheets).
 - **Europa:** isskalens tykkelse, havets dybde og mængden af vand i forhold til Jordens have. Europa Clipper: opsendelse og ankomst.

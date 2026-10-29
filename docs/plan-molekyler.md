@@ -105,7 +105,7 @@ Senere kan det også blive et trin i delen Liv.
 |---|---|---|
 | M0 | ✅ Plan og faktagrundlag med kilder (denne fil og [fakta-molekyler.md](fakta-molekyler.md)) | lavet |
 | M1 | Knapperne i Værkstedet og **Byttebørsen** med Na + Cl, energimåleren og krystallen. Opgaverne Li + F, Mg + O og Ca + 2 Cl. | stor |
-| M2 | **Byg molekyler:** paletten, bindingerne, formen, ladningerne, de kendte molekyler og opgaverne | stor |
+| M2 | **Byg molekyler:** paletten, bindingerne, formen, ladningerne, de kendte molekyler og opgaverne | stor (faktagrundlaget med **xhigh**, byggeriet med høj) |
 | M3 | **Knaldgas:** boksen, gnisten, kæden og energimåleren | mellem |
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |
 
