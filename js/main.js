@@ -14,7 +14,7 @@ import { NØGLER } from './faenomenskaerm.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
-import { lavBeskeder, rydBeskeder } from './beskeder.js';
+import { lavBeskeder, rydBeskeder, testAdgang as beskederTest } from './beskeder.js';
 import { stopGuide } from './guide.js';
 import { citatHTML, MENU_CITATER } from './data/citater.js';
 import { lavOrdforklaringer, testAdgang as ordTest } from './ordforklaring.js';
@@ -96,7 +96,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), hvorfor: { vist: vistHvorfor } };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor } };
   visSkærm();
 }
 

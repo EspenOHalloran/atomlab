@@ -30,10 +30,15 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
     }
     return Math.round((100 * areal) / (v.width * v.height));
   });
+  // Pillerne står kun 4,5 sekunder i rigtig tid, og på en travl maskine kunne de forsvinde, før testen nåede at trykke.
+  // Derfor fryses deres tid, og testen lader den selv løbe ud (spolPiller).
+  await page.evaluate(() => atomlabTest.beskeder.frysPiller(true));
   // Byg carbon-12: nyt grundstof og to opgaver på én gang
   await page.click('#vaerkstedVindue', { position: { x: 5, y: 5 }, force: true }).catch(() => {});
   for (const t of ['p', 'p', 'p', 'p', 'p', 'p', 'n', 'n', 'n', 'n', 'n', 'n', 'e', 'e', 'e', 'e', 'e', 'e']) { await page.keyboard.press(t); await page.waitForTimeout(60); }
-  await page.waitForTimeout(1500);
+  // Vent på de tre belønninger (to opgaver og carbon), i stedet for en fast tid
+  const alle = await page.waitForFunction(() => atomlabTest.beskeder.piller() + atomlabTest.beskeder.kø() >= 3 && document.querySelector('#vaerkstedVindue .pille.vist'), null, { timeout: 30000, polling: 100 }).then(() => true, () => false);
+  tjek(`${navn}: tre belønninger (piller og kø)`, alle, await page.evaluate(() => [atomlabTest.beskeder.piller(), atomlabTest.beskeder.kø()]));
   const antal = await page.evaluate(() => ({ p: document.getElementById('antalP').textContent, n: document.getElementById('antalN').textContent, e: document.getElementById('antalE').textContent }));
   console.log(navn, 'atom', JSON.stringify(antal));
   const piller = await page.$$eval('.pille', (l) => l.map((p) => p.textContent.trim()));
@@ -45,20 +50,17 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   tjek(`${navn}: pillerne dækker under 15 %`, d1 < 15, d1);
   await page.screenshot({ path: `${UD}/${navn}-1-carbon.png` });
   tjek(`${navn}: klokken vises med tal`, await page.evaluate(() => { const k = document.querySelector('#vaerkstedVindue .logknap'); return k && !k.hidden && Number(k.querySelector('b').textContent) >= 2; }));
-  // Tryk på en pille for at læse mere. En pille forsvinder efter 4,5 sekunder, og på en travl maskine kan den nå at
-  // forsvinde, før testen trykker. Så prøves der igen på den næste pille (op til tre gange).
-  let åbnet = false;
-  for (let forsøg = 0; forsøg < 3 && !åbnet; forsøg++) {
-    const knap = await page.$('#vaerkstedVindue .pille.vist:not(.åben) .pille-knap');
-    if (!knap) { await page.waitForTimeout(500); continue; }
-    await knap.click().catch(() => {});
-    // Hold øje med pillen i stedet for at vente en fast tid (på en travl maskine tager det længere)
-    åbnet = await page.waitForFunction(() => Boolean(document.querySelector('.pille.åben .pille-mere')?.offsetHeight), null, { timeout: 4000 }).then(() => true, () => false);
-  }
+  // Tryk på en pille for at læse mere (den står stille, så den ikke forsvinder, før testen trykker)
+  await page.click('#vaerkstedVindue .pille.vist .pille-knap');
+  const åbnet = await page.waitForFunction(() => Boolean(document.querySelector('.pille.åben .pille-mere')?.offsetHeight), null, { timeout: 10000, polling: 100 }).then(() => true, () => false);
   tjek(`${navn}: pillen kan åbnes`, åbnet);
   await page.screenshot({ path: `${UD}/${navn}-2-pille-aaben.png` });
-  // Efter lidt tid er de andre piller væk, og den i køen er kommet
-  await page.waitForTimeout(5500);
+  // Når tiden løber ud, forsvinder pillerne, og den næste i køen kommer frem
+  const kø = await page.evaluate(() => atomlabTest.beskeder.kø());
+  await page.evaluate(() => atomlabTest.beskeder.spolPiller());
+  const næste = await page.waitForFunction((k) => atomlabTest.beskeder.kø() === k - 1 && atomlabTest.beskeder.piller() === 1, kø, { timeout: 10000, polling: 100 }).then(() => true, () => false);
+  tjek(`${navn}: den næste pille i køen kommer frem`, næste, await page.evaluate(() => [atomlabTest.beskeder.piller(), atomlabTest.beskeder.kø()]));
+  await page.evaluate(() => atomlabTest.beskeder.frysPiller(false));
   // Loggen
   await page.click('#vaerkstedVindue .logknap');
   await page.waitForTimeout(400);
@@ -73,8 +75,8 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   await page.evaluate(() => document.getElementById('knapRyd').click());
   await page.waitForTimeout(600);
   await page.keyboard.press('e');
-  await page.waitForTimeout(500);
-  tjek(`${navn}: advarsel som undertekst`, await page.evaluate(() => document.querySelector('#vaerkstedVindue .undertekst.advarsel')?.textContent.includes('intet at kredse om')));
+  // Hold øje med underteksten (den står kun et par sekunder i rigtig tid)
+  tjek(`${navn}: advarsel som undertekst`, await page.waitForFunction(() => document.querySelector('#vaerkstedVindue .undertekst.advarsel')?.textContent.includes('intet at kredse om'), null, { timeout: 10000, polling: 50 }).then(() => true, () => false));
   await page.screenshot({ path: `${UD}/${navn}-4-advarsel.png` });
   // Skift skærm: beskederne ryddes
   await page.evaluate(() => { location.hash = '#kosmos'; });
