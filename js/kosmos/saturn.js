@@ -136,6 +136,7 @@ export default {
   ikon: '🪐',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Ringene og de store måner',
+  citat: 'huygensSaturn',
   kamera: { retning: [0.2, -0.32, 1], radius: 15 },
   tal: [
     ['Saturns bredde', 'ca. 120.500 km'],

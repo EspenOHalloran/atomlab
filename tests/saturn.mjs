@@ -36,6 +36,10 @@ const side = async (adresse) => {
   const s = await side(`${ADRESSE}/?test#solsystem`);
   const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
   tjek('Saturn står i listen efter Mars', ids.indexOf('saturn') === ids.indexOf('mars') + 1 && Boolean(await s.$('#solsystem .kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
+  // Citatet af Huygens (med den latinske ordlyd, når musen holdes over)
+  await s.click('#solsystem .kosmos-valg[data-id="saturn"]');
+  const citat = await s.evaluate(() => { const c = document.getElementById('solsystemCitat'); return { vist: c && !c.hidden, tekst: c?.textContent ?? '', latin: c?.querySelector('.citat-tekst')?.title ?? '' }; });
+  tjek('Saturn viser citatet af Huygens med den latinske ordlyd', citat.vist && citat.tekst.includes('Christiaan Huygens') && citat.latin.startsWith('Annulo cingitur'), JSON.stringify(citat));
   // Tågeskyerne: væk i vores solsystem (fx Årstiderne), med i fx Big Bang og igen uden for Kosmos
   await s.click('#solsystem .kosmos-valg[data-id="aarstider"]');
   const iÅrstiderne = await s.evaluate(() => atomlabTest.solsystem.tåger());

@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (fotoner i Stjerneovnen).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (citatet til Saturn).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -27,7 +27,11 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Citatet til Saturn (opgave 3):** Huygens' sætning om ringen er bekræftet i hans egen bog (*Systema Saturnium*, 1659, McGill-eksemplaret på archive.org). I åbnede library.si.edu og *.archive.org. **I gang (29. oktober 2026): fire små opgaver med go** (jeres besked): 1) kategorien som link, 2) fotoner i Stjerneovnen (med faktatjek), 3) et citat til Saturn (kun med en sikker kilde, ellers intet) og 4) Ordbogen som egen del (spørg om kort i menuen eller kun fra hjælpen, med en skitse, før der bygges). I den rækkefølge og én PR pr. opgave, som Opus selv merger, når `--ændret` er grøn. Hele samlingen køres én gang til sidst. Testene `batteri` og `beskeder` bestod to runder i træk på den nye `main`.
 
-**Senest lavet (29. oktober 2026): Fotoner i Stjerneovnen (opgave 2).**
+**Senest lavet (29. oktober 2026): Et citat til Saturn (opgave 3).**
+- Saturn har nu et citat af Christiaan Huygens fra *Systema Saturnium* (1659): "Den er omgivet af en tynd, flad ring, der ingen steder hænger fast i den og hælder i forhold til Jordens baneplan." Den latinske ordlyd står, når man holder musen over, og kommentaren fortæller om anagrammet fra 1656 og Galilei.
+- Ordlyden er læst i bogen selv (archive.org, som I åbnede). Wikipedia staver ét ord forkert, og bogstaverne i anagrammet viser den rigtige stavning. Kilderne står i `docs/fakta-solsystemet.md` til sidst.
+
+**Før det (29. oktober 2026): Fotoner i Stjerneovnen (opgave 2).**
 - Nyt fagord **foton** (en lyspartikel) i ordbogen. Trin 2 i "Fra brint til carbon, trin for trin" siger nu, at energien kommer ud som en foton af gammastråling, og at gassen i Solen sluger den og sender nye ud med lidt mindre energi igen og igen, så energien er titusinder af år om at nå overfladen. Hjælpens "Lys og neutrinoer" siger "Fotonerne af gammastråling".
 - Faktatjekket (kilderne i `docs/fakta-hvorfor.md` til sidst) rettede to ting: Fotoner flyver kun "altid" med lysets fart i tomt rum, og de bliver til svagere lys undervejs. Der står ikke et præcist tal for tiden, kun "titusinder af år" som de andre steder.
 
@@ -103,7 +107,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 4. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
 5. **Solsystemet, trin 2:** overblikket med Solen og planeterne, hvor de står i dag. Derefter kan planeterne ses på himlen fra Saturn, og der kan komme en knap "Find Jorden" (se [planen](docs/plan-solsystemet.md) under "Himlen") (stor).
 6. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
-7. **Et citat til Saturn** (de andre fænomener har et). Det skal have en sikker kilde (lille).
+7. ~~**Et citat til Saturn**~~ ✅ Lavet 29. oktober 2026 (Huygens).
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)). Kører Opus dem før Fable 5.5, så med xhigh til faktagrundlaget.
 
 **Åbne spørgsmål til jer:**
