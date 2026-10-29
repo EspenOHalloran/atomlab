@@ -22,6 +22,7 @@ const LOG_NØGLE = 'atomlabLog';
 const LOG_MAKS = 40;
 const MAKS_PILLER = 2;
 const PILLE_TID = 4500;
+const ÅBEN_TID = 30000; // en pille, man har åbnet, står længere
 const IKONER = { info: '💬', reaktion: '✨', henfald: '☢', advarsel: '⚠', fase: '🌌', klaret: '★', opdaget: '🔬' };
 
 let log = { sidstSet: 0, beskeder: [] };
@@ -32,6 +33,7 @@ const piller = []; // { el, timer }
 const kø = []; // piller, der venter på plads
 const forsinkede = new Set();
 let holdPillerne = false; // mens guiden kører, venter belønningerne
+let pillerFrosset = false; // kun i tests: pillerne står, til testen selv lader tiden løbe ud
 
 function $(id) {
   return document.getElementById(id);
@@ -290,12 +292,11 @@ function visPille(b) {
     const åben = el.classList.toggle('åben');
     knap.querySelector('.pille-pil').textContent = åben ? '×' : '›';
     knap.querySelector('.pille-titel').textContent = åben ? b.titel.replace(/\s*★$/, '') : kortTitel(b);
-    clearTimeout(p.timer);
-    if (åben) p.timer = setTimeout(() => fjernPille(p), 30000);
+    if (åben) startPilleTid(p, ÅBEN_TID);
     else fjernPille(p);
   });
   requestAnimationFrame(() => el.classList.add('vist'));
-  p.timer = setTimeout(() => fjernPille(p), PILLE_TID);
+  startPilleTid(p, PILLE_TID);
   for (const k of document.querySelectorAll('.logknap')) {
     k.classList.remove('ring');
     void k.offsetWidth; // start animationen forfra
@@ -312,6 +313,11 @@ function undgåKort(holder) {
   const k = kort.getBoundingClientRect();
   const r = v.getBoundingClientRect();
   if (r.right - k.right - 50 < 230) holder.style.marginTop = `${Math.round(k.bottom - holder.parentElement.getBoundingClientRect().top + 6)}px`;
+}
+
+function startPilleTid(p, ms) {
+  clearTimeout(p.timer);
+  p.timer = pillerFrosset ? null : setTimeout(() => fjernPille(p), ms);
 }
 
 function fjernPille(p) {
@@ -397,4 +403,18 @@ function visLog() {
     li.querySelector('small').textContent = [b.skærm, tidTekst(b.t), b.gange > 1 ? `${b.gange} gange` : ''].filter(Boolean).join(' · ');
     liste.append(li);
   }
+}
+
+// Kun til automatiske tests. Pillerne står 4,5 sekunder i rigtig tid, og på en travl maskine kan de nå at forsvinde,
+// før testen trykker. Derfor kan testen fryse deres tid og selv lade den løbe ud.
+export function testAdgang() {
+  return {
+    frysPiller(til) {
+      pillerFrosset = til;
+      for (const p of piller) startPilleTid(p, p.el.classList.contains('åben') ? ÅBEN_TID : PILLE_TID);
+    },
+    spolPiller: () => [...piller].forEach(fjernPille), // tiden løber ud for de piller, der står nu
+    piller: () => piller.length,
+    kø: () => kø.length,
+  };
 }

@@ -68,6 +68,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Kort fra USGS og andre mosaikker: Tjek for helt tomme søjler og rækker (Viking-mosaikken over Mars har en tom første søjle, som gav en sort streg ved 180°), og at kanten ligger præcis på ±180° (skær ud efter kortets geografiske felter). Sæt den øverste og nederste række til samme værdi i et højdekort, ellers bliver polen takket, når nettet løftes. Tjek også billedets rigtige størrelse og en søjle for meget (Enceladus' kort er 14401 × 7201: Den sidste søjle er den første igen, og den nederste række er tom). Stol ikke på filnavnet: Solar System Scopes `8k_saturn.jpg` er kun 4096 × 2048.
 - [ ] "Modlys" er set både tæt på og langt væk. Tæt på ligger en tynd luft i kanten i skygge, hvis Solen står midt bag planeten (Mars M3).
 - [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
+- [ ] Kameraet ved et sted på en planet kan ikke komme under jorden: Test det under flyvningen (også fra den modsatte side af planeten), når man selv drejer og zoomer det ned, og med højere bjerge. Drejes systemet, skal Solens retning og stjernehimlen drejes med.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
@@ -82,6 +83,9 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter.
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
 - [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
+- [ ] Ting, der kun står et stykke tid i rigtig tid (fx pillerne), fryses i testen, og testen lader selv tiden løbe ud (`atomlabTest.beskeder.frysPiller` og `spolPiller`). Et nyt forsøg hjælper ikke, når hvert skridt er langsommere end tingens levetid.
+- [ ] En test åbner ikke en ny side, mens en anden side i samme test stadig tegner 3D. Luk den første først, og vent på, at skærmen er klar (`waitForFunction`), ikke på sidens load-hændelse (`page.goto` giver op efter 30 sekunder).
+- [ ] En rettelse af en test, der fejler under belastning, vises først at fejle uden rettelsen (fx med fire travle CPU-løkker ved siden af), og bestå med den flere gange i træk.
 
 ---
 
@@ -142,6 +146,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Den yderste skal har højst 8 elektroner." Næsten altid, men palladium har skallerne 2, 8, 18, 18. Og grænsen skyldes rækkefølgen af energierne (den næste skal begynder at fylde), ikke Pauli-princippet.
 - "Solens overflade koger." Det er også konvektion: Varm gas stiger op og kold synker ned (Solen i M4b). Skriv "bobler" eller "simrer".
 - "Lyset er 8 minutter og 20 sekunder om at nå Jorden." Det er 499 sekunder, altså 8 min 19 s. Regn afrundinger efter, før de står med sekunder.
+- "Olympus Mons' sider skråner ca. 5°." Wikipedia skriver 5 % (ca. 3°). Procent og grader er ikke det samme. Skriv "nogle få grader".
+- Koordinater fra Wikipedia kan være ældre end USGS' navneliste (Olympus Mons: 18,65° N, 226,2° Ø mod 18,40° N, 226,00° Ø). Brug navnelisten (planetarynames.wr.usgs.gov).
 - "Jordens ydre kerne koger." Det flydende metal strømmer rundt (konvektion) som suppe i en gryde, drevet af varme og af lette stoffer fra den faste indre kerne. Det koger ikke.
 - "Den dødelige stråledosis er 4-5 Sv." Kilderne siger ca. 3,5-4,5 Gy for halvdelen uden behandling. Skriv "omkring 4 Sv", og at behandling hjælper. En CT-skanning er ca. 2-10 mSv (hovedet ca. 1-2), ikke 5-10.
 - "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.
@@ -240,7 +246,11 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Arbejde, der venter på næste billede** (`requestAnimationFrame`), er langsomt i testbrowseren: Ordforklaringerne blev markeret 40-240 ms efter et klik, og over 400 ms, når maskinen var travl. Testen kiggede efter præcis 400 ms og fejlede 1 gang i hele samlingen. Nu markeres ordene med det samme (i MutationObserveren, 7-11 ms), og testen holder øje med ordet (`waitForSelector`).
 - **En ny maskine kan være langsommere.** Efter en genstart tegnede testbrowseren færre billeder i sekundet, og en test med en fast ventetid fejlede. Hold øje med en tilstand (`waitForFunction`) i stedet for at vente en fast tid.
 - **`batteri` og `beskeder` fejler sammen i en travl session** (Mars M4b, 26. oktober 2026). Hele samlingen tog 28 minutter i stedet for ca. 10 (load ca. 6 på 4 kerner). `batteri` fik en TimeoutError, og i `beskeder` nåede testen ikke at åbne pillen. Begge bestod alene, og det samme skete på `main` uden ændringerne. Det er altså ikke nyt, men rigtig tid på en travl maskine. Min egen nye test (`jorden`) ventede 15 sekunder på, at uret gik en time frem, og fejlede af samme grund. Nu spoler den frem (`atomlabTest.solsystem.spol`).
-- **En pille, der forsvinder, før testen trykker** (`beskeder`, oktober 2026). Pillerne står i 4,5 sekunder. Mens en ekstra browser kørte ved siden af testsamlingen, nåede testen ikke at trykke i tide. Nu prøver testen igen på den næste pille (op til tre gange). Det er samme slags fejl som rejsen ind i Solen: rigtig tid på en travl maskine.
+  - **Rettet 29. oktober 2026.** Genskabt ved at køre de to sammen med fire travle CPU-løkker ved siden af: begge fejlede i første runde.
+  - `batteri`: TimeoutError i `page.goto` til "Vis mig"-siden. Den første side tegnede stadig batteriet, og med to sider, der tegner 3D, tog det 13 sekunder at indlæse den nye side uden belastning og over 30 med (1,5 sekunder alene). Nu tjekkes hjælpen først, den første side lukkes, og den nye side venter på, at skærmen er klar (`waitForFunction`), ikke på load-hændelsen.
+  - `beskeder`: Pillerne står 4,5 sekunder i rigtig tid, og under belastning tog hvert skridt i testen længere tid end det, så heller ikke tre forsøg hjalp. Nu fryser testen pillernes tid og lader den selv løbe ud (`atomlabTest.beskeder`), og den tjekker også, at den næste pille i køen kommer frem. Den venter på belønningerne og advarslen i stedet for faste tider.
+  - Bagefter bestod begge tre runder i træk med samme belastning.
+- **En pille, der forsvinder, før testen trykker** (`beskeder`, oktober 2026). Pillerne står i 4,5 sekunder. Mens en ekstra browser kørte ved siden af testsamlingen, nåede testen ikke at trykke i tide. Testen prøvede derefter igen på den næste pille (op til tre gange), men det var ikke nok på en travl maskine. Siden 29. oktober 2026 fryser testen pillernes tid (se ovenfor). Det er samme slags fejl som rejsen ind i Solen: rigtig tid på en travl maskine.
 - **Agenter, der kører browsere samtidig med testsamlingen,** gør maskinen langsom. To tests fejlede kun under den belastning (batteri og guide). Batteri-fejlen var ægte: Lampen blev først skjult i det første billede. Kør helst ikke hele samlingen, mens agenter tager skærmbilleder.
 - **Push før testene er færdige:** En automatisk regel kræver push, når en tur slutter. Vent derfor på testene inden for samme tur. Hvis der alligevel pushes før, så sig det.
 - **Tests i en midlertidig mappe** ville være forsvundet, da sessionen sluttede. De ligger nu i `tests/`.
@@ -295,6 +305,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
 - **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
 - **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
+
+### Kameraet ned til et sted på en planet (Mars M4c, oktober 2026)
+- **Kameraets styring (OrbitControls) kan kun have én fast op-retning** (den regnes ud, når styringen laves). I stedet for at ændre `camera.up` drejes hele planetsystemet, så stedets lodrette retning peger op i verden. Så virker drejning, zoom og piletaster af sig selv. Solens retning og stjernehimlen skal drejes med (`drejHimmel`), ellers står stjernerne stille, mens planeten drejer.
+- **van Wijk og Nuijs vej går gennem planeten,** når fokus flytter fra midten ud til et sted på den anden side: Kameraet drejer rundt om fokus, som ligger inde i planeten. Kollisionen skubbede kameraet op, så det strøg hen over jorden i 2 km højde. Ned til et sted flyver kameraet derfor i en bue rundt om planetens midte, og testen måler skubbet under flyvningen (`skubbet`), også fra bagsiden.
+- **Kollision med terrænet:** Nettet kan ligge højere end kortet mellem to punkter, så tabellen gemmer den højeste værdi i hvert felt, og kameraet holdes over den højeste i 3 × 3 felter plus en margen. Tabellen laves i strimler (ca. 10 ms ad gangen), for hele 4k-billedet tog ca. 340 ms i testbrowseren.
+- **Samme billeder før og efter:** Gør `Math.random` ens fra gang til gang (stjernerne og fontænerne), tag billeder to gange før ændringen for at kende støjen, sammenlign kameraets tal (de skal være helt ens) og billederne uden stjernerne (som drejer i rigtig tid).
+- **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
+- **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
