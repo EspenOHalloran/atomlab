@@ -47,7 +47,8 @@ const glat = (t) => t * t * t * (t * (t * 6 - 15) + 10);
 // system: gruppen med hele planetsystemet (planeten i midten). verden: fra scene3d.js.
 // nær: kameraets afstand til fokus (i scene-enheder), når vi er tæt på. maks: hvor langt væk planeten højst må komme.
 // bund(p): den mindste afstand fra systemets midte, kameraet må have i retningen mod p (p i systemets retninger).
-export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }) {
+// udenom(p): flytter p (kameraets plads i systemets retninger) ud af en lille måne og giver true, hvis den blev flyttet.
+export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null, udenom = null }) {
   const kamera = verden.kamera;
   const styring = verden.styring;
   styring.target.set(0, 0, 0);
@@ -68,6 +69,7 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
   const punkt2 = new THREE.Vector3();
   const qFokus = new THREE.Quaternion();
   let skubbet = 0; // hvor meget kameraet blev skubbet op i sidste billede (til tests)
+  let skubbetUd = false; // om kameraet blev skubbet ud af en måne i sidste billede (til tests)
 
   // Den drejning, der får stedets op (fra mål.op) til at pege lige op i verden, med så lille et sving som muligt fra
   // drejningen fra. Uden et sted er den nul. ud må ikke være fra.
@@ -88,19 +90,28 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
     // Hvor langt flyvningen er nået (0 til 1, blødt). 1, når kameraet står stille.
     get fremdrift() { return tur ? glat(tur.t / tur.T) : 1; },
     get skubbet() { return skubbet; },
+    get skubbetUd() { return skubbetUd; },
+    // Kameraets plads i systemets retninger (fokus + retningen mod kameraet gange afstanden)
+    kameraPunkt(ud = new THREE.Vector3()) {
+      return ud.copy(retning).applyQuaternion(omvendt.copy(drejning).invert()).multiplyScalar(D).add(fokus);
+    },
     drejning,
     fokus,
     // Flyv hen til et nyt mål: fokus() giver punktet (kan følge en måne), afstand og retning (fra fokus mod kameraet,
     // i systemets retninger). op() giver den lodrette retning på et sted (i systemets retninger). Så drejes systemet,
     // så op peger lige op. Uden op drejes det tilbage. min og max: hvor tæt på og langt væk man selv må zoome bagefter.
     // tid: sekunder (ellers efter vejens længde).
-    flyv({ fokus: hvor, afstand, retning: ny, op = null, min = 0.01, max = Infinity, tid, færdig }) {
+    // bane(e, kam, mål): en vej, som planeten selv bestemmer (fx rundt om en lille måne). For e fra 0 til 1 giver den
+    // kameraets plads (kam) og det punkt, kameraet kigger på (mål), i systemets retninger. Ved e = 1 skal mål være
+    // fokus(), og afstanden mellem dem afstand.
+    flyv({ fokus: hvor, afstand, retning: ny, op = null, min = 0.01, max = Infinity, tid, færdig, bane = null }) {
       const til = hvor();
       const vej = glatVej(fokus.distanceTo(til), D, afstand);
       const fraRetning = retning.clone().applyQuaternion(omvendt.copy(drejning).invert()); // i systemets retninger
       // Ned til et sted: kameraets plads fra systemets midte (start) og retningen fra stedet mod kameraet (slut)
       let kugle = null, S = vej.S, T = null;
-      if (op) {
+      if (bane) T = 6;
+      else if (op) {
         const fra = fraRetning.clone().multiplyScalar(D).add(fokus);
         const slut = hjælp.copy(ny).normalize().multiplyScalar(afstand).add(til);
         kugle = { fra, ny: ny.clone().normalize(), afstand, vinkel: fra.angleTo(slut), top: 0 };
@@ -119,6 +130,7 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
         t: 0,
         T: tid ?? T ?? THREE.MathUtils.clamp(S * 0.9, kugle ? 3 : 2, 8),
         kugle,
+        bane,
         vej,
         fra: fokus.clone(),
         d: fokus.distanceTo(til),
@@ -153,7 +165,13 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
         const til = mål.fokus();
         // Systemet drejer hen mod stedets op
         drejning.slerpQuaternions(tur.fraDrejning, drejningMod(tur.fraDrejning, qHjælp), e);
-        if (tur.kugle) {
+        if (tur.bane) {
+          tur.bane(e, punkt, punkt2);
+          fokus.copy(punkt2);
+          punkt.sub(punkt2);
+          D = punkt.length();
+          retning.copy(punkt).divideScalar(D).applyQuaternion(drejning);
+        } else if (tur.kugle) {
           // I en bue rundt om midten: retningen glider langs en storcirkel, og afstanden til midten falder jævnt
           const { fra, ny: slutRetning, afstand, vinkel, top, overflade } = tur.kugle;
           const slut = punkt.copy(slutRetning).multiplyScalar(afstand).add(til); // kameraets plads ved stedet
@@ -188,14 +206,22 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
         fokus.copy(mål.fokus());
         if (mål.op) drejning.copy(drejningMod(drejning, qHjælp)); // følger stedet, hvis planeten drejer
       }
-      // Kameraet må ikke komme ind under bjergene: skub det op, hvis det er under bunden
-      if (bund) {
+      // Kameraet må ikke komme ind under bjergene: skub det op, hvis det er under bunden. Og ikke ind i en måne.
+      if (bund || udenom) {
         omvendt.copy(drejning).invert();
         punkt.copy(retning).applyQuaternion(omvendt).multiplyScalar(D).add(fokus);
-        const r = bund(punkt);
-        skubbet = Math.max(0, r - punkt.length());
-        if (skubbet > 0) {
-          punkt.setLength(r).sub(fokus);
+        let flyttet = false;
+        if (bund) {
+          const r = bund(punkt);
+          skubbet = Math.max(0, r - punkt.length());
+          if (skubbet > 0) {
+            punkt.setLength(r);
+            flyttet = true;
+          }
+        }
+        skubbetUd = !!udenom?.(punkt);
+        if (flyttet || skubbetUd) {
+          punkt.sub(fokus);
           D = punkt.length();
           retning.copy(punkt).divideScalar(D).applyQuaternion(drejning);
         }

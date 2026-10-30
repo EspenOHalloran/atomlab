@@ -152,7 +152,7 @@ await s.click('#solsystemStyring button:has-text("Drej Mars")');
 // Modlys: Solen står bag Mars, set fra kameraet, og tilbage igen
 tjek('dagslys: Solen står ikke bag Mars', (await s.evaluate(() => atomlabTest.solsystem.fænomen().sol())) > -0.5);
 await s.click('#solsystemStyring button:has-text("Modlys")');
-await s.waitForTimeout(300);
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().sol() < -0.9, null, { timeout: 10000, polling: 100 }).catch(() => {}); // (under belastning tegnes der ikke et billede på 300 ms)
 tjek('"Modlys": Solen står bag Mars', (await s.evaluate(() => atomlabTest.solsystem.fænomen().sol())) < -0.9);
 tjek('forklaringen fortæller om modlys', /Modlys/.test(await s.textContent('#solsystemForklaring')));
 await s.screenshot({ path: UD + '/3-modlys.png' });
@@ -185,6 +185,9 @@ await fm(async () => {
     window.marsMåling.max = Math.max(window.marsMåling.max ?? 0, over);
     window.marsMåling.skub = Math.max(window.marsMåling.skub, t.tur().skubbet);
     window.marsMåling.net = Math.max(window.marsMåling.net, Object.values(t.billeder().lokalt).filter((l) => l.klar).length);
+    // M6b: den laveste højde over Phobos og Deimos (km), og om kameraet blev skubbet ud af en måne
+    window.marsMåling.måne = Math.min(window.marsMåling.måne ?? Infinity, t.måneHøjde('phobos'), t.måneHøjde('deimos'));
+    window.marsMåling.ud = window.marsMåling.ud || t.skubbetUd();
   });
 });
 const nulstilMåling = () => fm(() => { window.marsMåling = { min: Infinity, skub: 0, net: 0 }; });
@@ -195,7 +198,7 @@ const førFlyby = await lokalt();
 tjek('"Start flyby" bliver aktiv, når kortene til Olympus Mons er hentet på forhånd (nettet tegnes ikke endnu, og detaljekortet venter)', førFlyby.hentet.højde && førFlyby.hentet.kort && !førFlyby.klar && !førFlyby.detalje.hentet, JSON.stringify(førFlyby));
 await s.click('#solsystemStyring button:has-text("Start flyby")');
 const fase0 = await fase();
-tjek('flybyen: første stop "Mars" med ti prikker', fase0[0].includes('Mars') && fase0[1] === 10, JSON.stringify(fase0));
+tjek('flybyen: første stop "Mars" med tretten prikker', fase0[0].includes('Mars') && fase0[1] === 13, JSON.stringify(fase0));
 await ventFremme();
 let v = await ved();
 tjek('første stop: klokken er 7 ved Olympus Mons, og Mars står stille', Math.abs(v.tid - 7) < 0.05 && !(await fm(() => document.querySelector('#solsystemStyring button.til')?.textContent.includes('Drej Mars'))), JSON.stringify(v));
@@ -235,7 +238,7 @@ tjek('overgangen til resten af Mars: under 100 m forskel lige over kanten', høj
 await nulstilMåling();
 await s.click('#solsystemStyring button:has-text("Næste: Olympus Mons")');
 const fase1 = await fase();
-tjek('flybyen: andet stop "Olympus Mons" med ti prikker', fase1[0].includes('Olympus Mons') && fase1[1] === 10, JSON.stringify(fase1));
+tjek('flybyen: andet stop "Olympus Mons" med tretten prikker', fase1[0].includes('Olympus Mons') && fase1[1] === 13, JSON.stringify(fase1));
 tjek('underteksten er kort (under 160 tegn)', fase1[0].length < 175, fase1[0].length);
 tjek('kameraet flyver', await flyver());
 await ventFremme();
@@ -272,7 +275,7 @@ await s.screenshot({ path: UD + '/4-olympus-mons.png' });
 await nulstilMåling();
 await s.click('#solsystemStyring button:has-text("Næste: Calderaen")');
 const fase2 = await fase();
-tjek('flybyen: tredje stop "Calderaen" (under 160 tegn)', fase2[0].includes('Calderaen') && fase2[1] === 10 && fase2[0].length < 175, JSON.stringify(fase2));
+tjek('flybyen: tredje stop "Calderaen" (under 160 tegn)', fase2[0].includes('Calderaen') && fase2[1] === 13 && fase2[0].length < 175, JSON.stringify(fase2));
 await ventFremme();
 m = await måling();
 v = await ved('caldera');
@@ -340,7 +343,7 @@ const stopTil = async (knap, id, navn) => {
   await nulstilMåling();
   await s.click(`#solsystemStyring button:has-text("Næste: ${knap}")`);
   const f = await fase();
-  tjek(`flybyen: stop "${navn}" med ti prikker og en kort undertekst (under 160 tegn)`, f[0].includes(navn) && f[1] === 10 && f[0].length < 175, JSON.stringify(f));
+  tjek(`flybyen: stop "${navn}" med tretten prikker og en kort undertekst (under 160 tegn)`, f[0].includes(navn) && f[1] === 13 && f[0].length < 175, JSON.stringify(f));
   const t0 = Date.now();
   await ventFremme();
   const mm = await måling();
@@ -403,8 +406,44 @@ for (let i = 0; i < 6; i++) {
 const polD1 = await fm(() => atomlabTest.solsystem.fænomen().drejning());
 tjek('ved Nordpolen med "Drej Mars": Mars drejer, og Solen bliver over 22°', polD1 !== polD0 && solHøjder.every((h) => h > 22 && h < 28), JSON.stringify([polD0, polD1, solHøjder]));
 await s.click('#solsystemStyring button:has-text("Drej Mars")');
-tjek('efter turen: "Hele Mars", "▶ Start flyby", og teksten om nordpolen og midnatssolen', (await fm(() => atomlabTest.solsystem.knapper())).includes('Hele Mars') && /Turen er slut/.test(await s.textContent('#solsystemForklaring')) && /Midnatssol/.test(await s.textContent('#solsystemForklaring')));
+tjek('ved Nordpolen: teksten om midnatssolen', /Midnatssol/.test(await s.textContent('#solsystemForklaring')));
 await s.screenshot({ path: UD + '/12-nordpolen.png' });
+// M6b: videre ud til Phobos, "Mars set fra Phobos" og Deimos. Kameraet kommer aldrig ind i en måne.
+const t6 = () => fm(() => { const t = atomlabTest.solsystem.fænomen(); return { ved: t.ved(), phobos: t.måneHøjde('phobos'), deimos: t.måneHøjde('deimos'), mars: t.marsVinkel(), skærm: t.marsPåSkærm(), horisont: t.marsOverHorisont(), skygge: [t.iSkygge('phobos'), t.iSkygge('deimos')], stickney: t.solVinkel('phobos', -1, -49), måner: t.måner().map((m) => m.vinkel) }; });
+const måneStop = async (knap, navn) => {
+  await nulstilMåling();
+  await s.click(`#solsystemStyring button:has-text("Næste: ${knap}")`);
+  const f = await fase();
+  tjek(`flybyen: stop "${navn}" med tretten prikker og en kort undertekst (under 160 tegn)`, f[0].includes(navn) && f[1] === 13 && f[0].length < 175, JSON.stringify(f));
+  await ventFremme();
+  await efterTo();
+  const mm = await måling();
+  tjek(`til ${navn}: kameraet kommer aldrig under 100 m over en måne og bliver aldrig skubbet ud af den, og højt over Mars`, mm.måne > 0.1 && !mm.ud && mm.min > 100, JSON.stringify(mm));
+  return await t6();
+};
+const vP = await måneStop('Phobos', 'Phobos');
+const forklaring = () => s.textContent('#solsystemForklaring');
+// Mars' kant står højst 12° fra midten af billedet (Mars er ca. 42° bred herfra), så Mars ses bag Phobos
+tjek('ved Phobos: ingen af månerne står i Mars\' skygge, Stickney ligger i sollys, og Mars ses i baggrunden', vP.ved === 'phobos' && !vP.skygge[0] && !vP.skygge[1] && vP.stickney < 90 && vP.skærm.vinkel - vP.mars / 2 < 12, JSON.stringify(vP));
+tjek('ved Phobos: teksten om Stickney, rillerne og at Phobos står op i vest', /Stickney/.test(await forklaring()) && /Rillerne/.test(await forklaring()) && /op i vest/.test(await forklaring()));
+await s.screenshot({ path: UD + '/13-phobos.png' });
+const vO = await måneStop('Mars set fra Phobos', 'Mars set fra Phobos');
+tjek('Mars set fra Phobos: ca. 300 m over Phobos, Mars er ca. 42° bred, står ca. 30° over horisonten og midt i billedet', vO.ved === 'phobos-mars' && Math.abs(vO.phobos - 0.3) < 0.02 && Math.abs(vO.mars - 42.5) < 1 && vO.horisont > 20 && vO.horisont < 40 && vO.skærm.vinkel < 1, JSON.stringify(vO));
+tjek('Mars set fra Phobos: månerne står stille ved stoppene, og teksten om bundet rotation og tidevand', vO.måner.join() === vP.måner.join() && /bundet rotation/.test(await forklaring()) && /tidevand/.test(await forklaring()), JSON.stringify([vP.måner, vO.måner]));
+// Man kan ikke komme ind i Phobos: zoomet helt ud og drejet lige ned mod Phobos' midte
+await fm(async () => {
+  const { verden } = await import('/js/scene3d.js');
+  const k = verden.kamera.position, m = verden.styring.target;
+  k.set(m.x, m.y - 0.01, m.z); // lige ned (Phobos' lodrette retning peger op) og langt ud: rejsen holder afstanden inden for grænsen
+});
+await efterTo();
+await efterTo();
+tjek('Mars set fra Phobos: zoomet helt ud er kameraet stadig over Phobos', (await t6()).phobos > 0.1, (await t6()).phobos);
+await s.screenshot({ path: UD + '/14-mars-set-fra-phobos.png' });
+const vD = await måneStop('Deimos', 'Deimos');
+tjek('ved Deimos: Mars er ca. 17° bred og ses ved siden af Deimos, og Deimos står ikke i skygge', vD.ved === 'deimos' && Math.abs(vD.mars - 16.6) < 0.5 && vD.skærm.vinkel < 20 && !vD.skygge[1], JSON.stringify(vD));
+tjek('efter turen: "Hele Mars", "▶ Start flyby", og teksten om MMX og at turen er slut', (await fm(() => atomlabTest.solsystem.knapper())).includes('Hele Mars') && (await fm(() => atomlabTest.solsystem.knapper())).includes('▶ Start flyby') && /Turen er slut/.test(await forklaring()) && /MMX/.test(await forklaring()));
+await s.screenshot({ path: UD + '/15-deimos.png' });
 // Tilbage til hele Mars: systemet drejes tilbage, og teksten om hele Mars kommer igen
 await nulstilMåling();
 await s.click('#solsystemStyring button:has-text("Hele Mars")');
@@ -480,6 +519,28 @@ tjek('et tryk på Phobos (uden navne) besøger den: teksten om Stickney, og Phob
 await s.click('#solsystemStyring button:has-text("Hele Mars")');
 await ventFremme();
 tjek('"Hele Mars" fra Phobos', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'mars');
+
+// M6b: Fra "Mars set fra Phobos" tilbage til hele Mars går kameraet rundt om Phobos og ikke gennem den
+await s.click('#solsystemStyring button:has-text("Start flyby")');
+for (let i = 0; i < 11; i++) {
+  await fm(() => atomlabTest.solsystem.fænomen().hop());
+  await ventFremme(); // (hop gør flyvningen færdig i næste billede)
+  await s.click('#solsystemStyring button:has-text("Næste")');
+}
+await ventFremme();
+tjek('flybyen igen: ved "Mars set fra Phobos"', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'phobos-mars');
+await s.click('#solsystemStyring button:has-text("Stop flyby")');
+await nulstilMåling();
+await s.click('#solsystemStyring button:has-text("Hele Mars")');
+await ventFremme();
+m = await måling();
+tjek('fra Phobos\' overflade til hele Mars: kameraet kommer aldrig ind i Phobos og bliver aldrig skubbet ud', m.måne > 0.25 && !m.ud && (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'mars', JSON.stringify(m));
+// Står en måne i Mars' skygge ved et besøg, flytter den sig ud af skyggen, mens kameraet flyver derhen, og teksten
+// siger det (før var både Phobos og Mars bag den helt mørke). kameraFra stiller Phobos lige bag Mars set fra Solen.
+await fm(() => atomlabTest.solsystem.fænomen().kameraFra('phobos', 0, 180, 0));
+await ventFremme();
+await efterTo();
+tjek('et besøg ved Phobos i Mars\' skygge: månen er flyttet ud af skyggen, og teksten siger det', !(await fm(() => atomlabTest.solsystem.fænomen().iSkygge('phobos'))) && /Ud af skyggen/.test(await s.textContent('#solsystemForklaring')) && (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'phobos');
 
 // Videre til et andet fænomen: kameraets indstillinger er sat tilbage
 await s.click('#solsystem .kosmos-valg[data-id="aarstider"]');
