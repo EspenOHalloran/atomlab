@@ -1,7 +1,7 @@
-// Mars (M2, M3, M4c, M7a og M5a i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
+// Mars (M2, M3, M4c, M7a, M5a og M6a i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
 // 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, flybyen ned til
-// Olympus Mons, calderaen og skrænten med det lokale kort og detaljekortet (M4c og M7a), Tharsis, Valles Marineris og Hellas (M5a, højst 2 net ad gangen og høje flyvninger mellem stederne), og kameraets indstillinger bliver sat tilbage, når man går videre.
+// Olympus Mons, calderaen og skrænten med det lokale kort og detaljekortet (M4c og M7a), Tharsis, Valles Marineris og Hellas (M5a, højst 2 net ad gangen og høje flyvninger mellem stederne), Phobos og Deimos (M6a: formen vender rigtigt, banerne, farten, navnene og et tryk på en måne), og kameraets indstillinger bliver sat tilbage, når man går videre.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('mars');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -70,6 +70,30 @@ tjek('"Kort fortalt" fortæller om Olympus Mons og Valles Marineris', /Olympus M
 tjek('forklaringen: rigtige højder', /rigtige højde/.test(await s.textContent('#solsystemForklaring')));
 const kamera = await s.evaluate(async () => { const { verden } = await import('/js/scene3d.js'); return { near: verden.kamera.near }; });
 tjek('kameraet kan komme helt tæt på overfladen', kamera.near <= 0.01, JSON.stringify(kamera));
+// M6a: Phobos og Deimos. Formen og kortene hentes, når Mars' egne kort er hentet.
+const måner = () => s.evaluate(() => atomlabTest.solsystem.fænomen().måner());
+const klareMåner = await s.waitForFunction(() => atomlabTest.solsystem.fænomen().måner().every((m) => m.form && m.kort), null, { timeout: 30000 }).then(() => true, () => false);
+tjek('månerne: formen og kortene er hentet', klareMåner, JSON.stringify(await måner()));
+const m0 = await måner();
+tjek('månerne: den rigtige afstand fra Mars\' midte (9.376 og 23.460 km) og største radius (ca. 14 og 8,7 km)', Math.abs(m0[0].afstand - 9376) < 1 && Math.abs(m0[1].afstand - 23460) < 1 && Math.abs(m0[0].radius - 14) < 0.3 && Math.abs(m0[1].radius - 8.7) < 0.2, JSON.stringify(m0.map((m) => [m.afstand, m.radius])));
+tjek('månerne vender samme side mod Mars (længde 0°), og 90° V er forsiden i bevægelsens retning', m0.every((m) => m.modMars < 1 && m.forside < 1), JSON.stringify(m0.map((m) => [m.modMars, m.forside])));
+// Formen vender rigtigt: Stickney (1° N, 311° Ø = 49° V) er en fordybning, og Deimos' formmodel er vendt fra vestlig
+// til østlig længde (Thomas' fil: 6,62 km ved 0° N, 90° V og 5,78 km ved 270° V)
+const form = await s.evaluate(() => {
+  const f = atomlabTest.solsystem.fænomen();
+  const skål = (l) => f.måneRadius('phobos', 1, l) - [0, 1, 2, 3, 4, 5, 6, 7].reduce((sum, i) => sum + f.måneRadius('phobos', 1 + 28 * Math.sin(i * Math.PI / 4), l + 28 * Math.cos(i * Math.PI / 4)), 0) / 8; // uden for kanten (Stickney er ca. 9 km bred, ca. 46° på Phobos)
+  return { stickney: skål(-49), spejl: skål(49), deimosV: f.måneRadius('deimos', 0, -90), deimosØ: f.måneRadius('deimos', 0, 90) };
+});
+tjek('Phobos: Stickney er en fordybning (ikke spejlvendt), og Deimos er vendt til østlig længde', form.stickney < -0.2 && form.spejl > -0.1 && Math.abs(form.deimosV - 6.62) < 0.05 && Math.abs(form.deimosØ - 5.78) < 0.05, JSON.stringify(form));
+// Farten: Månerne følger Mars' ur i det rigtige forhold (Mars' stjernedøgn / omløbstiden), og mod uret set fra nord.
+// Phobos er hurtigere end Mars' overflade (står op i vest), Deimos langsommere.
+const månerFør = await måner();
+await s.waitForFunction((d0) => atomlabTest.solsystem.fænomen().måner()[0].drejning - d0 > 0.15, månerFør[0].drejning, { timeout: 30000, polling: 100 });
+const månerEfter = await måner();
+const dMars = månerEfter[0].drejning - månerFør[0].drejning;
+const forhold = [0, 1].map((i) => (månerEfter[i].vinkel - månerFør[i].vinkel) / dMars);
+tjek('farten: Phobos ca. 3,217 og Deimos ca. 0,813 gange Mars\' drejning, samme vej', Math.abs(forhold[0] - 1.025957 / 0.31891) < 0.01 && Math.abs(forhold[1] - 1.025957 / 1.26244) < 0.01 && dMars > 0, JSON.stringify({ forhold, dMars }));
+tjek('Phobos står op i vest (hurtigere end Mars drejer), Deimos i øst', forhold[0] > 1 && forhold[1] < 1);
 await s.waitForTimeout(1500);
 await s.screenshot({ path: UD + '/1-mars.png' });
 
@@ -435,6 +459,27 @@ const væk = await s.waitForFunction(() => !document.querySelector('#solsystemVi
 tjek('"Stop flyby" fjerner underteksten', væk && (await fm(() => atomlabTest.solsystem.knapper())).includes('▶ Start flyby') && (await fm(() => atomlabTest.solsystem.knapper())).includes('Hele Mars'));
 await s.click('#solsystemStyring button:has-text("Hele Mars")');
 await ventFremme();
+
+// M6a: "Månerne" viser begge baner med navnene, og et tryk på Phobos besøger den
+if (!(await s.$eval(navneKnap, (k) => k.classList.contains('valgt')))) await s.click(navneKnap); // navnene til (de blev slået fra ovenfor)
+await s.click('#solsystemStyring button:text-is("Månerne")');
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await efterTo();
+const iMånerne = await måner();
+tjek('"Månerne": begge navne ses, og teksten fortæller, at de er tegnet større', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'måner' && iMånerne.every((m) => m.navn && m.større > 1) && /tegnet større/.test(await s.textContent('#solsystemForklaring')), JSON.stringify(iMånerne.map((m) => [m.navn, m.større])));
+await s.click(navneKnap);
+await efterTo();
+tjek('"Navne" slået fra: månernes navne er væk', (await måner()).every((m) => !m.navn));
+const phobosPlads = await fm(() => atomlabTest.solsystem.fænomen().månePlads('phobos'));
+await s.mouse.click(phobosPlads.x, phobosPlads.y);
+await s.waitForTimeout(200);
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await efterTo();
+const vedPhobos = await måner();
+tjek('et tryk på Phobos (uden navne) besøger den: teksten om Stickney, og Phobos er i rigtig størrelse', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'phobos' && /Stickney/.test(await s.textContent('#solsystemForklaring')) && vedPhobos[0].større === 1, JSON.stringify(vedPhobos[0]));
+await s.click('#solsystemStyring button:has-text("Hele Mars")');
+await ventFremme();
+tjek('"Hele Mars" fra Phobos', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'mars');
 
 // Videre til et andet fænomen: kameraets indstillinger er sat tilbage
 await s.click('#solsystem .kosmos-valg[data-id="aarstider"]');

@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (knappen "Navne" ved Mars og Saturn. Planen for M6 skrives nu).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M6a: Phobos og Deimos i den rigtige form. M6b venter på go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -27,9 +27,18 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Mars M5 er færdig (30. oktober 2026).** Næste kan være M6 (Phobos og Deimos), M7b (meget skarpe kort ved Gale og Jezero) eller M8 (Stå på Mars). Det venter på jeres valg og go. Planen står i [docs/plan-mars.md](docs/plan-mars.md).
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
-- **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
+- **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (30. oktober 2026): Knappen "Navne" ved Mars og Saturn (del 1 af opgaven med navneknappen og M6).**
+**Senest lavet (30. oktober 2026): Mars M6a, Phobos og Deimos i den rigtige form.** **M6b (flybyen og teksterne) venter på jeres go.**
+- **Månerne kredser om Mars** i den rigtige afstand og i det rigtige forhold til Mars' døgn: Phobos runder Mars ca. 3,2 gange, mens Mars drejer én gang (ca. 32 sekunder i programmet), så den står op i vest. Deimos er ca. 2 minutter om en omgang. Begge vender samme side mod Mars, og de bliver mørke i Mars' skygge.
+- **Knappen "Månerne"** viser begge baner med navnene. Et tryk på en måne flyver derhen (også når navnene er slået fra). Langt væk er månerne tegnet større, og det står i "Ærligt talt".
+- **Formen:** Phobos af USGS' højdekort fra Mars Express, Deimos af Thomas' formmodel (vendt fra vestlig til østlig længde). Set fra samme side som HiRISE-fotoene passer silhuetterne (overlap 0,92 og 0,93), og ved Phobos sidder kraterparret forneden samme sted (`docs/m6/programmet-mod-fotos.jpg`).
+- **Rettet i kilderne:** Phobos' højdekort har kopierede søjler ved 180°, og mosaikken har et hul dér. Det så ud som en streg fra pol til pol og er rettet i billedværktøjet (`lav_maaner.py`).
+- **Kilder og licenser** står i `KILDER.md`, `LICENSE` og "Om AtomLab" (Phobos CC BY-SA 3.0 IGO).
+- **Billeder i sekundet:** ingen målbar forskel ved hele Mars med og uden månerne (testbrowseren).
+- **Ikke afprøvet (på tabletten):** 1) Kan man ramme månerne med fingeren i "Månerne"? 2) Er Phobos og Deimos for lyse eller for mørke ved siden af Mars? 3) Kan I se en kant ved 180° på Phobos (bagsiden, væk fra Mars)? 4) Ved Deimos' nordpol er en lys kam med en mørk skråning under. Ser det mærkeligt ud? 5) Hakker det, når Phobos' kort (ca. 1 MB) hentes, kort efter Mars er åbnet?
+
+**Før det (30. oktober 2026): Knappen "Navne" ved Mars og Saturn (del 1 af opgaven med navneknappen og M6).**
 - Under "Prøv selv" ved Mars og Saturn står en til/fra-knap **"Navne"**, slået til fra start. Slået fra forsvinder navnene og prikkerne på Mars (og et tryk på kloden flyver ingen steder hen) og månernes navne ved Saturn (man kan stadig trykke på selve månerne).
 - Valget er fælles for alle planeterne og huskes (`atomlabNavne`). Det er en lille fælles hjælper (`js/solsystem/navne.js`), som Phobos og Deimos og de kommende planeter også skal bruge.
 - Testene `mars` og `saturn` tjekker, at navnene forsvinder, at et tryk på kloden ikke flyver nogen steder hen, og at valget huskes efter genindlæsning.

@@ -19,6 +19,7 @@ import { lavSkyer, lokalTid } from '../solsystem/skyer.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
+import { lavFormmåne } from '../solsystem/maane-form.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -46,6 +47,18 @@ const SKY_STEDER = [
 ];
 const SKY_HØJDE = 22; // km over kuglen, over vulkanernes toppe (ellers skærer toppene hårde huller i skyerne)
 const MARGEN = 2; // km: så tæt på jorden må kameraet komme
+// Mars' måner (M6a i docs/plan-mars.md). Afstand fra Mars' midte og middelradius i km og omløbstid i døgn
+// (docs/fakta-solsystemet.md, del 3B, JPL). De kredser i Mars' ækvatorplan (de hælder kun ca. 1-2°) mod uret set fra
+// nord og vender samme side mod Mars. vinkel: hvor i banen de starter (grader fra x-aksen, mod uret set fra nord).
+// farve: mørk, støvet grå (de kaster kun ca. 7 % af lyset tilbage). Formen og kortene: billeder/solsystem/lav_maaner.py.
+const MARS_DØGN = 1.025957; // Mars' stjernedøgn i jorddøgn (24 t 37 min)
+const MÅNER = [
+  { id: 'phobos', navn: 'Phobos', afstand: 9376, omløb: 0.31891, middel: 11.08, net: [512, 256], kort: true, farve: [0.16, 0.135, 0.11], vinkel: -35,
+    tekst: '<p><b>Phobos</b> er den største af Mars\' to måner, men kun ca. 26 km lang og formet som en kartoffel. Det store krater Stickney er ca. 9 km bredt. Phobos kredser kun ca. 6.000 km over Mars og vender altid samme side mod Mars.</p>' },
+  { id: 'deimos', navn: 'Deimos', afstand: 23460, omløb: 1.26244, middel: 6.2, net: [256, 128], kort: true, farve: [0.17, 0.145, 0.12], vinkel: 70,
+    tekst: '<p><b>Deimos</b> er den mindste af Mars\' to måner, ca. 16 km lang. Den er glattere end Phobos, fordi løst støv har fyldt kraterne op. Deimos kredser ca. 23.500 km fra Mars\' midte og vender altid samme side mod Mars.</p>' },
+];
+const MÅNERNE_TEKST = '<p><b>Månerne:</b> Mars har to små måner. Phobos (inderst) runder Mars på 7 timer og 39 minutter, hurtigere end Mars drejer. Derfor står den op i vest og går ned i øst. Deimos (yderst) er ca. 30 timer om en omgang. Her går tiden lige så hurtigt for månerne som for Mars. Månerne er tegnet større, end de er, ellers kunne de ikke ses herfra. Tryk på en måne for at besøge den.</p>';
 // Lokale kort (M7a): Over et sted ligger et fint net med sit eget højdekort (HRSC og MOLA, ca. 0,5 km pr. pixel) og
 // farvekort (js/solsystem/klippeplanet.js, lokalt). Grænserne (grader, øst positiv) skal være de samme som STEDER i
 // billeder/solsystem/lav_steder.py. Olympus Mons: ca. 1.000 × 1.000 km om vulkanen, skrænten og lavaen udenfor.
@@ -165,6 +178,7 @@ function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt 
     henter.load(new URL(navn, MAPPE).href, (t) => {
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
       if (kanaler === 2) t.format = THREE.RGFormat; // højden ligger i rød og grøn (sparer hukommelse)
+      if (kanaler === 1) t.format = THREE.RedFormat; // gråtoner (månerne)
       if (rundt) t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt (de lokale kort gør ikke)
       t.anisotropy = anisotropi;
       (t.image.decode ? t.image.decode() : Promise.resolve()).catch(() => {}).then(() => {
@@ -215,7 +229,7 @@ export default {
     <p><b>Farverne</b> er en mosaik af billeder fra de to Viking-sonder (1976-1980), lavet af USGS. Kortet har ca. 2,6 km pr. pixel på en pc og ca. 1 km pr. pixel ved Olympus Mons. Der findes en skarpere udgave, men billederne blev taget, mens Solen stod forskellige steder, så lys og skygge på skrænterne er med på dem. De ville passe dårligt med programmets eget lys, som regnes ud fra højderne.</p>
     <p><b>Luften</b> bliver ca. 2,7 gange tyndere for hver 11 km, man kommer op (skalahøjden er 11 km, på Jorden ca. 8,5 km). Set fra rummet er den derfor kun et tyndt, støvet lag i kanten. Støvet når så højt op, at det stadig er i sollys, når Solen er gået ned. Derfor varer tusmørket på Mars op til ca. 2 timer, og natsiden lyser svagt rødbrunt lige efter grænsen mellem dag og nat. Det fine støv sender blåt lys lettere lige igennem end rødt, så på Mars er himlen blå omkring Solen, når den går ned (Curiosity så det i 2015).</p>
     <p><b>Skyerne over vulkanerne:</b> Om eftermiddagen stiger varm luft op ad vulkanernes sider og bliver kold, så vanddampen fryser til iskrystaller. Skyerne kommer især om foråret og sommeren på den nordlige halvkugle. Før rumsonderne kunne man i kikkerter fra Jorden se en hvid sky formet som et "W" over Tharsis. Det var skyerne over fire af vulkanerne. Hvert år i det sydlige forår vokser der også en ca. 1.800 km lang sky ud fra Arsia Mons om morgenen. Den er ikke med her, for på tegningen er det forår i nord.</p>
-    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne.</p>`,
+    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne. Månerne Phobos og Deimos er tegnet større, når de er langt væk, ellers kunne de ikke ses. De kredser i det rigtige forhold til Mars' døgn, men står stille, mens du besøger dem, og banerne ligger præcis i Mars' ækvatorplan (i virkeligheden hælder de 1-2°). Deimos' form er målt på billeder fra Viking-sonderne i 1970'erne og er grov. På Phobos' bagside er en smal stribe af overfladen fyldt ud, hvor kortet manglede.</p>`,
 
   lav(gruppe, { opdaterKnapper, forklaring, fase, verden }) {
     const { kamera } = verden;
@@ -325,6 +339,7 @@ export default {
       if (!aktiv || forhåndUr) return;
       forhåndUr = setTimeout(flybyErKlar, FORHÅND_TID);
       hentLokalt(stedMed(TUR[1].id), { forhånd: true, klar: flybyErKlar });
+      hentMåner();
     }
     // Ved et stop på flybyen hentes kortene til det næste stop, så de er klar, når man trykker "Næste"
     function hentNæste(st) {
@@ -394,7 +409,7 @@ export default {
         .applyQuaternion(q);
     }
 
-    let visning = 'mars'; // 'mars' (hele planeten) eller et sted
+    let visning = 'mars'; // 'mars' (hele planeten), 'måner' (begge baner), et sted eller en måne ('phobos', 'deimos')
     let drejTur = null; // Mars drejer hen til det rigtige tidspunkt på dagen, mens kameraet flyver
     let hældTur = null; // og aksen drejer hen til årstiden ved stedet (sommer ved nordpolen)
     function hældHen(q) {
@@ -429,6 +444,123 @@ export default {
       vis();
       lavKnapper();
     }
+
+    // ---------- Månerne Phobos og Deimos (M6a) ----------
+    // De ligger i hæld (Mars' ækvatorplan), men ikke i omdrejningen, og kredser mod uret set fra nord i det rigtige
+    // forhold til Mars' døgn: Phobos runder Mars ca. 3,2 gange, mens Mars drejer én gang (derfor står den op i vest), og
+    // Deimos ca. 0,8 gange. Krop drejes, så længde 0° vender mod Mars. Langt væk tegnes de større, så de kan ses (som
+    // Saturns måner), og navnene står over dem (knappen "Navne").
+    const baneGruppe = new THREE.Group();
+    hæld.add(baneGruppe);
+    const måner = MÅNER.map((m) => {
+      const form = lavFormmåne({ skala: S, net: TEST_HURTIG ? [m.net[0] / 2, m.net[1] / 2] : m.net, farve: m.farve, middel: m.middel });
+      const krop = new THREE.Group();
+      krop.add(form.gruppe);
+      const plads = new THREE.Group();
+      plads.add(krop);
+      const a = m.afstand / S;
+      const bane = new THREE.LineLoop(
+        new THREE.BufferGeometry().setFromPoints(Array.from({ length: 256 }, (_, j) => new THREE.Vector3(Math.cos((j / 256) * Math.PI * 2) * a, 0, Math.sin((j / 256) * Math.PI * 2) * a))),
+        new THREE.LineBasicMaterial({ color: 0xd8b8a0, transparent: true, opacity: 0, depthWrite: false }),
+      );
+      const etiket = skilt(m.navn, '#ffe3c2', 1);
+      baneGruppe.add(bane, plads, etiket);
+      const måne = { ...m, form, krop, plads, bane, etiket, a, forhold: etiket.scale.x / etiket.scale.y, vinkel: THREE.MathUtils.degToRad(m.vinkel), hentet: { form: false, kort: false } };
+      sætPlads(måne);
+      return måne;
+    });
+    const måneMed = (id) => måner.find((m) => m.id === id);
+    const erMåne = (id) => måner.some((m) => m.id === id);
+    // Pladsen i banen (vinklen mod uret set fra nord, som omdrejningen), og længde 0° mod Mars
+    function sætPlads(m) {
+      m.plads.position.set(Math.cos(m.vinkel), 0, -Math.sin(m.vinkel)).multiplyScalar(m.a);
+      m.krop.rotation.y = m.vinkel + Math.PI;
+    }
+    // Formen og kortene hentes, når Mars' egne kort er hentet (de er små). Kortene lægges i grafikkortet med det samme.
+    const måneStr = TEST_HURTIG ? '2k' : '4k';
+    function hentMåner() {
+      for (const m of måner) {
+        hent(`${m.id}-form.png`, (t) => { if (aktiv) { m.form.sætForm(t.image); m.hentet.form = true; } }, { farve: false, rundt: false });
+        hent(`${m.id}-${m.id === 'phobos' ? måneStr : '2k'}.jpg`, (t) => {
+          if (!aktiv) return;
+          m.form.sætKort(t);
+          verden.renderer.initTexture(t);
+          m.hentet.kort = true;
+        }, { farve: false, kanaler: 1, anisotropi });
+      }
+    }
+    // Månens midte i systemets retninger
+    const månePunkt = new THREE.Vector3();
+    const måneFokus = (m) => () => månePunkt.copy(m.plads.position).applyQuaternion(hæld.quaternion);
+    // Besøg en måne: Kameraet står på den side, der vender væk fra Mars (Mars ses bag månen), med Solen fra siden.
+    // Månen står stille, mens man er der, men Mars drejer videre.
+    function besøgMåne(m) {
+      flyby.afslut();
+      fase(null);
+      aktivér([]);
+      visning = m.id;
+      const ud = måneFokus(m)().clone().normalize();
+      const retning = ud.multiplyScalar(0.9).addScaledVector(sol, 0.8).addScaledVector(Y, 0.3).normalize();
+      rejse.flyv({ fokus: måneFokus(m), afstand: passer(m.form.radius * 1.15), retning, min: m.form.radius * 1.3, max: R * 15 });
+      forklaring(m.tekst);
+      lavKnapper();
+    }
+    // Begge baner set skråt oppefra
+    function visMåner() {
+      flyby.afslut();
+      fase(null);
+      aktivér([nuværendeNet()]);
+      hældHen(HÆLD.jævndøgn);
+      visning = 'måner';
+      rejse.flyv({ fokus: () => nul, afstand: passer((MÅNER[1].afstand / S) * 1.08), retning: new THREE.Vector3(0.2, 0.75, 1).normalize(), min: minOverblik(), max: R * 30, færdig: () => aktivér([]) });
+      forklaring(MÅNERNE_TEKST);
+      lavKnapper();
+    }
+    // Den måne, et tryk rammer (inden for et lille stykke, så de er lette at ramme med en finger). Ikke bag Mars.
+    const stråle = new THREE.Raycaster();
+    const peg = new THREE.Vector2();
+    const måneHjælp = new THREE.Vector3();
+    const måneSkala = new THREE.Vector3();
+    const marsKugle = new THREE.Sphere();
+    function måneVed(x, y) {
+      const r = lærred.getBoundingClientRect();
+      peg.set(((x - r.left) / r.width) * 2 - 1, -((y - r.top) / r.height) * 2 + 1);
+      stråle.setFromCamera(peg, kamera);
+      marsKugle.set(system.position, R * rejse.skala);
+      const tilMars = stråle.ray.intersectSphere(marsKugle, måneSkala) ? måneSkala.distanceTo(kamera.position) : Infinity;
+      let bedst = null;
+      for (const m of måner) {
+        if (m.id === visning) continue;
+        m.krop.getWorldPosition(måneHjælp);
+        const langs = stråle.ray.direction.dot(måneHjælp.clone().sub(kamera.position));
+        if (langs <= 0 || langs > tilMars) continue;
+        const afstand = stråle.ray.distanceToPoint(måneHjælp);
+        const grænse = Math.max(m.form.radius * m.krop.getWorldScale(måneSkala).x * 2.2, langs * 0.03);
+        if (afstand < grænse && (!bedst || afstand < bedst.afstand)) bedst = { m, afstand };
+      }
+      return bedst?.m ?? null;
+    }
+    // Hvert billede: Solen og Mars' skygge, større langt væk, banerne og navnene
+    const månePos = new THREE.Vector3();
+    function opdaterMåner(k) {
+      const påSted = !(visning === 'mars' || visning === 'måner' || erMåne(visning));
+      const baneLys = påSted ? 0 : 0.3 * THREE.MathUtils.smoothstep(rejse.afstand / R, 2.2, 4.5);
+      for (const m of måner) {
+        m.bane.material.opacity = baneLys;
+        m.bane.visible = baneLys > 0.005;
+        m.plads.getWorldPosition(månePos);
+        const afstand = månePos.distanceTo(kamera.position);
+        const rVerden = m.form.radius * k;
+        const større = Math.max(1, (afstand * 0.0045) / rVerden);
+        m.krop.scale.setScalar(større);
+        const str = (afstand * 0.02) / k;
+        m.etiket.visible = navneTil() && !påSted && !rejse.flyver && m.id !== visning && (rVerden * større) / afstand < 0.03;
+        m.etiket.scale.set(m.forhold * str, str, 1);
+        m.etiket.position.copy(m.plads.position).add(månePos.set(0, m.form.radius * større + str * 0.8, 0));
+        m.form.sæt(solNu, system.position, R * k);
+      }
+    }
+
     // Ned til et sted: Systemet drejes, så stedets lodrette retning peger op, og kameraet ser skråt mod horisonten
     function besøg(st) {
       hentLokalt(st);
@@ -458,6 +590,7 @@ export default {
       if (flyby.kører) knapper.push(...flyby.knapper());
       else {
         if (visning !== 'mars') knapper.push({ tekst: 'Hele Mars', handling: tilbage });
+        if (visning !== 'måner') knapper.push({ tekst: 'Månerne', handling: visMåner });
         knapper.push(flybyKlar
           ? { tekst: '▶ Start flyby', handling: () => flyby.start() }
           : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
@@ -466,7 +599,7 @@ export default {
         { tekst: 'Drej Mars', til: drejer, skift: (til) => { drejer = til; } },
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; vis(); } },
         { tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; vis(); } },
-        navneKnap(() => { opdaterNavne(); vis(); }),
+        navneKnap(() => { opdaterNavne(); opdaterMåner(rejse.skala); vis(); }),
       );
       styring.splice(0, styring.length, ...knapper);
       opdaterKnapper();
@@ -510,6 +643,7 @@ export default {
     function vælgSted(st) {
       const t = TUR.find((x) => x.id === st.id);
       besøg(st);
+      opdaterNavne(); // navnene skjules med det samme (ikke først i næste billede)
       fase(t.titel, t.tekst);
       forklaring(t.mere);
       lavKnapper();
@@ -543,11 +677,19 @@ export default {
     const lærred = verden.renderer.domElement;
     let ned = null;
     const vedNed = (h) => { ned = { x: h.clientX, y: h.clientY }; };
+    // Et tryk på et navn på kloden flyver derhen, og et tryk på en måne besøger den (også uden navne). Ved et sted på
+    // Mars, på flybyen og under flyvninger sker der intet.
     const vedOp = (h) => {
-      if (!ned || !navneVist || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
+      if (!ned || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
       ned = null;
-      const n = navnVed(h.clientX, h.clientY);
-      if (n) vælgSted(n.st);
+      if (flyby.kører || rejse.flyver) return;
+      const n = navneVist ? navnVed(h.clientX, h.clientY) : null;
+      if (n) {
+        vælgSted(n.st);
+        return;
+      }
+      const m = visning === 'mars' || visning === 'måner' || erMåne(visning) ? måneVed(h.clientX, h.clientY) : null;
+      if (m) besøgMåne(m);
     };
     lærred.addEventListener('pointerdown', vedNed);
     lærred.addEventListener('pointerup', vedOp);
@@ -625,6 +767,7 @@ export default {
       for (const s of [solKerne, solGlød]) s.position.copy(kamera.position).addScaledVector(solNu, 600);
       mars.sæt(solNu);
       luft.sæt(solNu);
+      opdaterMåner(k);
       // Solens retning i Mars' egne retninger (til skyernes lokale tid)
       solObj.copy(solNu).applyQuaternion(omdrejning.getWorldQuaternion(hjælpQ).invert());
       skyer.sæt(solObj, solNu, tid);
@@ -685,7 +828,15 @@ export default {
         if (!drejer || drejTur) return;
         // Helt tæt på hele Mars står Mars stille (ellers suser landskabet forbi). Ved et sted følger kameraet med,
         // så dagen går, og skyggerne flytter sig.
-        omdrejning.rotation.y += dt * DREJ * (visning === 'mars' ? THREE.MathUtils.smoothstep(rejse.afstand / R, 1.05, 1.8) : 1);
+        const drej = dt * DREJ * (visning === 'mars' ? THREE.MathUtils.smoothstep(rejse.afstand / R, 1.05, 1.8) : 1);
+        omdrejning.rotation.y += drej;
+        // Månerne følger Mars' ur i det rigtige forhold, men står stille, mens man besøger en af dem
+        if (!erMåne(visning)) {
+          for (const m of måner) {
+            m.vinkel += (drej * MARS_DØGN) / m.omløb;
+            sætPlads(m);
+          }
+        }
       },
       stop() {
         aktiv = false;
@@ -698,6 +849,14 @@ export default {
           n.tekst.material.dispose();
           n.prik.material.dispose();
         }
+        for (const m of måner) {
+          m.form.stop();
+          m.bane.geometry.dispose();
+          m.bane.material.dispose();
+          m.etiket.material.map.dispose();
+          m.etiket.material.dispose();
+        }
+        hæld.remove(baneGruppe);
         verden.opdateringer.delete(hvertBillede);
         rejse.stop();
         mars.stop();
@@ -747,6 +906,44 @@ export default {
           const p = påSkærm(n);
           return { x: p.x, y: p.y - 0.8 * p.h };
         },
+        // Månerne (M6a): vinklen i banen (radianer, mod uret set fra nord), omdrejningen, afstanden fra Mars' midte
+        // (km), hvor mange grader længde 0° peger fra Mars, og hvor mange grader 90° V (forsiden) peger fra
+        // bevægelsens retning, hvor meget større de er tegnet, om navnet ses, og om formen og kortet er hentet
+        måner: () => måner.map((m) => {
+          const midt = m.krop.getWorldPosition(new THREE.Vector3());
+          const q = m.krop.getWorldQuaternion(new THREE.Quaternion());
+          const lon0 = m.form.retning(0, 0).applyQuaternion(q);
+          const forside = m.form.retning(0, -90).applyQuaternion(q);
+          const tilMars = system.position.clone().sub(midt).normalize();
+          const fart = new THREE.Vector3(-Math.sin(m.vinkel), 0, -Math.cos(m.vinkel)).applyQuaternion(hæld.getWorldQuaternion(new THREE.Quaternion()));
+          return {
+            id: m.id, vinkel: m.vinkel, drejning: omdrejning.rotation.y, afstand: (m.plads.position.length()) * S,
+            modMars: THREE.MathUtils.radToDeg(lon0.angleTo(tilMars)), forside: THREE.MathUtils.radToDeg(forside.angleTo(fart)),
+            større: m.krop.scale.x, navn: m.etiket.visible, ...m.hentet, radius: m.form.radius * S,
+          };
+        }),
+        // Hvor en måne står på skærmen (pixels), så testen kan trykke på den
+        månePlads(id) {
+          const p = måneMed(id).krop.getWorldPosition(new THREE.Vector3()).project(kamera);
+          const r = lærred.getBoundingClientRect();
+          return { x: r.left + ((p.x + 1) / 2) * r.width, y: r.top + ((1 - p.y) / 2) * r.height };
+        },
+        // Se en måne fra (bredde, længde) i månens egne retninger (til billederne mod fotos). Månen står stille.
+        // fra: hvor mange grader månen flyttes i banen fra stedet lige bag Mars set fra Solen (så siden mod Mars er lyst
+        // op, som da fotoene blev taget, men uden for Mars' skygge).
+        kameraFra(id, bredde, længde, fra = null) {
+          const m = måneMed(id);
+          if (fra !== null) {
+            const solH = sol.clone().applyQuaternion(hæld.quaternion.clone().invert());
+            m.vinkel = Math.atan2(-solH.z, solH.x) + Math.PI + THREE.MathUtils.degToRad(fra);
+            sætPlads(m);
+          }
+          if (visning !== id) besøgMåne(m);
+          const q = new THREE.Quaternion().copy(hæld.quaternion).multiply(m.krop.quaternion);
+          rejse.flyv({ fokus: måneFokus(m), afstand: passer(m.form.radius * 1.15), retning: m.form.retning(bredde, længde).applyQuaternion(q), min: m.form.radius * 1.3, max: R * 15 });
+        },
+        // Radius (km) i formen et sted på en måne (bredde, længde i grader øst), fx i Stickney og ringen omkring
+        måneRadius: (id, bredde, længde) => måneMed(id).form.radiusVed(bredde, længde),
         // Årstiden: vinklen mellem nordpolen og Solen (grader). 90 ved jævndøgn, ca. 65 om sommeren i nord.
         polSol() {
           const nordpol = new THREE.Vector3(0, 1, 0).applyQuaternion(hæld.quaternion);

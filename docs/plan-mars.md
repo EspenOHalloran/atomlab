@@ -196,7 +196,7 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
-## Plan for M6: Phobos og Deimos (30. oktober 2026, venter på go)
+## Plan for M6: Phobos og Deimos (30. oktober 2026, go givet)
 *Lavet af Opus. Kilderne er tjekket med curl samme dag: USGS' arkiv, raw.githubusercontent.com, planetarynames (også navnelisternes shapefiler), science.nasa.gov, www.esa.int, photojournal, hirise.lpl.arizona.edu og JAXA (www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp, som I åbnede i dag). Blokeret: uahirise.org og static.uahirise.org (HiRISE' egne billeder), assets.science.nasa.gov (NASA's billedfiler) og naif.jpl.nasa.gov. De to fotos nedenfor er derfor hentet som små udgaver fra Wikimedia Commons. Billederne til planen ligger i `docs/m6/`.*
 
 ### 1. Formen og kortene
@@ -270,6 +270,8 @@ Grunden: Teksterne ved stoppene afhænger af, hvordan stoppene ser ud, og hver d
 Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger). Xhigh er ikke nødvendig: Det sværeste (om Deimos er spejlvendt) er afgjort ovenfor. Faktatjekket i M6b: højst 2 hjælpeagenter med Opus og høj effort. Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs.
 
 ### Beslutninger, der bekræftes ved go (anbefalingerne står først)
+**Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv gælder (den første mulighed i hvert punkt). M6a først, og et go før M6b.
+
 1. **Farten:** Månerne følger Mars' ur i det rigtige forhold (Phobos ca. 32 sekunder om en omgang), og de står stille under besøg. *Eller:* langsommere end Mars, så de er lettere at følge (men så står Phobos ikke op i vest).
 2. **Phobos' overflade:** SRC-mosaikken i 4k med dæmpede skygger. *Eller:* kun højdekortet og en fast farve (blødere, ingen riller).
 3. **Deimos' overflade:** `deimoscyl4.jpg`, hvis kraterne passer med fotoet, ellers kun formen. *Eller:* kun formen.
@@ -340,6 +342,16 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
   - Valget deles af alle planeterne (en fælles hjælper, fx i `js/solsystem/`), så det ikke skal slås fra igen ved hver planet.
   - **Jeres svar (30. oktober 2026): Husk valget** (`localStorage`, `atomlabNavne`: `'til'` eller `'fra'`).
   - Tjek: testene `mars` og `saturn` (navnene forsvinder, og et tryk på kloden gør intet, når knappen er slået fra).
+
+## Status efter M6a (30. oktober 2026): Phobos og Deimos i den rigtige form
+- **Formen:** `billeder/solsystem/lav_maaner.py` laver formkortene (radius i meter, 16 bit i rød og grøn) og kortene over overfladen. `js/solsystem/maane-form.js` (`lavFormmåne`) skubber en kugle ud til formen én gang i JS (Phobos 512 × 256 felter, Deimos 256 × 128, halvt i tests).
+- **Fejl i kilderne, der er rettet:** Phobos' højdekort har kopierede søjler i begge kanter (0 = 1 og 696 = 697), og de passer ikke med naboerne: et trin på ca. 200 m ved 180°, som så ud som en rende fra pol til pol. Kun søjle 2 til 695 bruges, og trinnet er fordelt over ca. 10°. SRC-mosaikken har huller i de sidste ca. 40 søjler og er mørkere omkring 180°: Et bånd på ca. 6° er fyldt med spejlede stykker fra begge sider (en lige linje gav vandrette striber). Ved polerne glider kortene over i rækkens gennemsnit (ellers en stjerne af striber).
+- **Retningen er tjekket i programmet:** Set fra samme side som HiRISE-fotoene overlapper silhuetterne 0,92 (Phobos) og 0,93 (Deimos), og ved Phobos sidder kraterparret forneden samme sted som i fotoet (`docs/m6/programmet-mod-fotos.jpg`, `node tests/vaerktoejer/maaner-fotos.mjs`). Testen `mars` tjekker, at Stickney er en fordybning (744 m under ringen omkring, spejlvendt 83 m over), og at Deimos' form er vendt til østlig længde.
+- **Banerne og farten:** i Mars' ækvatorplan, mod uret set fra nord, i det rigtige forhold til Mars' døgn (Phobos 3,217 og Deimos 0,813 gange Mars' drejning, testet). De følger Mars' ur og står stille, mens man besøger dem. Længde 0° vender mod Mars, og 90° V er forsiden (testet).
+- **Mars' skygge** gør månerne mørke bag Mars (Deimos stod først lige bag Mars og var helt sort. Startpladserne er flyttet).
+- **Knappen "Månerne"** viser begge baner med navnene, og et tryk på en måne besøger den (også uden navne). Langt væk er månerne tegnet større, og det står i "Ærligt talt".
+- **Billeder i sekundet** (testbrowseren, fuld grafik, pc, målt alene i 10 sekunder ad gangen): hele Mars ca. 1,8-1,9 både med og uden månerne (ingen målbar forskel), ved Phobos ca. 1,8. Den første måling i en kørsel er altid højere og tæller ikke.
+- **Ikke med endnu (M6b):** flybyens stop, "Mars set fra Phobos", de lange tekster med faktatjek og fagordene. Ved et besøg kan en måne stå i Mars' skygge og være mørk (en sætning om det kommer i M6b).
 
 ## Status efter navneknappen (30. oktober 2026)
 - Knappen "Navne" under "Prøv selv" ved Mars og Saturn, slået til fra start. Fra: Navnene og prikkerne på Mars skjules, og et tryk på kloden flyver ingen steder hen. Ved Saturn skjules månernes navne, men man kan stadig trykke på månerne. Teksten om hele Mars nævner kun "Tryk på et navn", når navnene er slået til.
