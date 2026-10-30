@@ -16,6 +16,7 @@ import { lavTitan } from '../solsystem/atmosfaere.js';
 import { lavIsmåne } from '../solsystem/maane.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
+import { navneTil, navneKnap } from '../solsystem/navne.js';
 
 const SATURN_R = 60268; // km ved ækvator
 const SATURN_POL = 54364; // km ved polerne
@@ -413,6 +414,8 @@ export default {
           : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
       }
       styring.push({ tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } });
+      // Uden navne kan man stadig trykke på selve månerne
+      styring.push(navneKnap((til) => { if (!til) for (const m of måner) m.etiket.visible = false; }));
       if (visning === 'titan') styring.push({ tekst: 'Under disen (infrarødt)', til: ir, skift: (til) => { ir = til; måneMed('titan').klode.sætIR(til); } });
       opdaterKnapper();
     }
@@ -445,7 +448,7 @@ export default {
         m.krop.scale.setScalar(større);
         const str = (afstand * 0.018) / k;
         const vinkel = rVerden / afstand; // hvor stor månen ser ud
-        m.etiket.visible = vinkel < 0.03;
+        m.etiket.visible = navneTil() && vinkel < 0.03;
         m.etiket.scale.set((m.etiket.scale.x / m.etiket.scale.y) * str, str, 1);
         m.etiket.position.copy(m.plads.position).add(hjælp.set(0, m.r * større + str * 0.8, 0));
         m.klode.sæt(solNu, m.id === 'titan' ? dt : tid);
@@ -489,6 +492,7 @@ export default {
           return { x: r.left + ((hjælp.x + 1) / 2) * r.width, y: r.top + ((1 - hjælp.y) / 2) * r.height };
         },
         visning: () => visning,
+        navne: () => måner.filter((m) => m.etiket.visible).map((m) => m.id),
         tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
         hop: () => rejse.hop(), // gør den igangværende flyvning færdig
         // de hentede billeder, og om de ligger med én kanal i grafikkortet

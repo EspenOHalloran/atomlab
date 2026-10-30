@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M5b: Gale, Jezero, Nordpolen og navnene på kloden. M5 er færdig).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (knappen "Navne" ved Mars og Saturn. Planen for M6 skrives nu).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -26,7 +26,14 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
 **Mars M5 er færdig (30. oktober 2026).** Næste kan være M6 (Phobos og Deimos), M7b (meget skarpe kort ved Gale og Jezero) eller M8 (Stå på Mars). Det venter på jeres valg og go. Planen står i [docs/plan-mars.md](docs/plan-mars.md).
-- **Med i næste opgave (jeres ønske 30. oktober 2026):** En til/fra-knap til navnene, så man kan slå dem fra og se Mars dreje uden navne. Det gælder også de andre planeter og måner (Saturns måner nu, og alle kommende planeter og måner). Knappen "Navne" under "Prøv selv", slået til fra start, og valget gælder alle planeterne. **Jeres svar: Husk valget.** Prompten til næste session (navneknappen og planen for M6, Phobos og Deimos, i én prompt) står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompt til navneknappen og M6".
+- ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
+- **M6 (Phobos og Deimos):** Planen skrives i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6" og venter på jeres go. **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
+
+**Senest lavet (30. oktober 2026): Knappen "Navne" ved Mars og Saturn (del 1 af opgaven med navneknappen og M6).**
+- Under "Prøv selv" ved Mars og Saturn står en til/fra-knap **"Navne"**, slået til fra start. Slået fra forsvinder navnene og prikkerne på Mars (og et tryk på kloden flyver ingen steder hen) og månernes navne ved Saturn (man kan stadig trykke på selve månerne).
+- Valget er fælles for alle planeterne og huskes (`atomlabNavne`). Det er en lille fælles hjælper (`js/solsystem/navne.js`), som Phobos og Deimos og de kommende planeter også skal bruge.
+- Testene `mars` og `saturn` tjekker, at navnene forsvinder, at et tryk på kloden ikke flyver nogen steder hen, og at valget huskes efter genindlæsning.
+- **Ikke afprøvet (på tabletten):** Er knappen let at finde blandt de andre? Ser Mars pænere ud at se dreje uden navne?
 
 **Senest lavet (30. oktober 2026): Mars M5b (Gale, Jezero, Nordpolen og navnene på kloden).**
 - **Flybyen har nu 10 stop.** **Gale og Curiosity:** krateret og Mount Sharp set fra nord. **Jezero og Perseverance:** krateret, der engang var en sø, i lav morgensol (ellers kunne det næsten ikke ses). **Nordpolen:** iskappen med spiralkløfterne set fra højt oppe.

@@ -85,6 +85,13 @@ const side = async (adresse) => {
   await hop();
   tjek('Månerne: teksten om de seks store', /seks store/.test(await s.textContent('#solsystemForklaring')));
   await s.screenshot({ path: UD + '/2-maanerne.png' });
+  // Knappen "Navne" (js/solsystem/navne.js): slået fra skjules navnene, men man kan stadig trykke på månerne
+  const navne = () => s.evaluate(() => atomlabTest.solsystem.fænomen().navne());
+  const navneKnap = '#solsystemStyring button:text-is("Navne")';
+  tjek('Månerne: "Navne" er slået til, og navnene står over månerne', (await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))) && (await navne()).length >= 5, JSON.stringify(await navne()));
+  await s.click(navneKnap);
+  await s.waitForTimeout(200);
+  tjek('"Navne" slået fra: navnene er væk, og valget er gemt', (await navne()).length === 0 && (await s.evaluate(() => localStorage.getItem('atomlabNavne'))) === 'fra', JSON.stringify(await navne()));
   let p = await s.evaluate(() => atomlabTest.solsystem.fænomen().månePlads('Dione'));
   await s.mouse.click(p.x, p.y);
   await s.waitForTimeout(400);
@@ -143,6 +150,16 @@ const side = async (adresse) => {
   await s.click('#solsystemStyring button:has-text("Stop flyby")');
   await s.waitForTimeout(300);
   tjek('"Stop flyby" fjerner underteksten', !(await s.evaluate(() => document.querySelector('.undertekst.fase'))) && (await knapper()).includes('▶ Start flyby'));
+  tjek('"Navne" er stadig slået fra efter flybyen', (await navne()).length === 0);
+  // Valget huskes efter genindlæsning, og navnene kommer igen, når knappen slås til
+  await s.reload();
+  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)') && atomlabTest.solsystem.valgt() === 'saturn');
+  await s.click('#solsystemStyring button:text-is("Månerne")');
+  await hop();
+  tjek('efter genindlæsning: "Navne" er stadig slået fra', !(await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))) && (await navne()).length === 0);
+  await s.click(navneKnap);
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().navne().length >= 5, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  tjek('"Navne" slået til igen: navnene kommer tilbage', (await navne()).length >= 5 && (await s.evaluate(() => localStorage.getItem('atomlabNavne'))) === 'til', JSON.stringify(await navne()));
   await s.context().close();
 }
 
