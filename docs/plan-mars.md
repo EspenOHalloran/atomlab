@@ -229,6 +229,12 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** (testbrowseren, fuld grafik, målt én ad gangen): pc: hele Mars 2,6, Valles Marineris 1,5, Hellas 2,3, Gale 2,2, Jezero 1,8, Nordpolen 1,8. Tablet på højkant (touch, `LAV_KVALITET`): 4,5, 3,4, 3,4, 2,8, 2,6, 2,6. Gale og Jezero er ca. 20 % under Valles Marineris på tablet, men på niveau med Olympus Mons i M7a.
 - **Ikke afprøvet:** se "Lige nu" i DESIGN.md.
 - **Næste:** M6 (Phobos og Deimos), M7b (de meget skarpe kort ved Gale og Jezero) og M8 (Stå på Mars). Rækkefølgen er jeres valg.
+- **Jeres ønske efter M5b (30. oktober 2026), med i næste opgave:** En knap, så man kan slå navnene til og fra, når man ser Mars dreje. Det gælder også andre planeter og måner. Forslag til, hvordan det laves:
+  - En til/fra-knap "Navne" under "Prøv selv" ved Mars og Saturn (Saturns månenavne, `etiket` i `saturn.js`) og ved alle kommende planeter og måner (fx Phobos og Deimos i M6). Slået til fra start.
+  - Fra: Navnene og prikkerne skjules, og tryk på kloden flyver ingen steder hen (man kan stadig trykke på selve månerne ved Saturn). Til: som nu.
+  - Valget deles af alle planeterne (en fælles hjælper, fx i `js/solsystem/`), så det ikke skal slås fra igen ved hver planet.
+  - Spørgsmål ved go: Skal valget huskes, næste gang man åbner AtomLab (`localStorage`, fx `atomlabNavne`)?
+  - Tjek: testene `mars` og `saturn` (navnene forsvinder, og et tryk på kloden gør intet, når knappen er slået fra).
 
 ## Status efter del 1: første stop hentes på forhånd (30. oktober 2026)
 - **Saturn, årsagen til hakket:** `startTur` hentede alle seks månekort (pc: Mimas og Titan 4k, de andre 8k, ca. 23 MB), og de blev lagt i grafikkortet i de første sekunder af flybyen (målt: 6 overførsler på 90-1.600 ms, ét billede på 4 s i testbrowseren). **Rettet:** Kortene hentes efter Saturns egne kort, én ad gangen, og lægges i grafikkortet med `initTexture`. Efter "Start flyby" er der ingen overførsler.
