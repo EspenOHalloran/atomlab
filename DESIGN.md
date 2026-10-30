@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M6b er færdig. Prompten til M8 er skrevet).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Planen for Mars M8 "Stå på Mars" er klar og venter på jeres go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (30. oktober 2026): Mars M6b, flybyen ud til Phobos og Deimos. M6 er færdig.** **Jeres valg (30. oktober 2026): M8 (Stå på Mars) kommer før M7b.** Prompten til planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompt til M8". Planen laves først, og bygningen venter på jeres go.
+**Senest lavet (30. oktober 2026): Planen for Mars M8, "Stå på Mars". Den venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M8", syv beslutninger til sidst, udsigterne i `docs/m8/`).
+- **Stederne (anbefaling):** Gale: Naukluft (den flotteste udsigt mod Mount Sharp, og NASA's 360°-foto er taget dér) og "Hos Curiosity nu" (roveren står i en sænkning, så Mount Sharps top er skjult). Jezero: randens inderside (udsigt ned over deltaet og krateret) og landingsstedet. Perseverance står nu uden for krateret mellem bakker.
+- **Data:** Gale-kortene fra USGS (1 m højder, 25 cm fotos) og Mars 2020's landingskort over Jezero på `planetarymaps.usgs.gov` (1 m, kan læses direkte) kan læses i vinduer over nettet. Fotoene er grå med skygger malet ind.
+- **Teknik:** et eget landskab i ringe om stedet (ikke et net på kloden, det ville ryste helt tæt på), tre lag, himmel med støv og blå solnedgang, tid på dagen, Phobos og Deimos, og en overgang fra kredsløb. Delt i M8a (Gale og teknikken), M8b (Jezero) og M8c (rovernes fotos og 3D-modellen).
+- **Blokeret:** `assets.science.nasa.gov` (panoramaerne i fuld størrelse og roverens 3D-model). Kun M8c har brug for det.
+
+**Før det (30. oktober 2026): Mars M6b, flybyen ud til Phobos og Deimos. M6 er færdig.** **Jeres valg (30. oktober 2026): M8 (Stå på Mars) kommer før M7b.** Prompten til planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompt til M8". Planen laves først, og bygningen venter på jeres go.
 - **Flybyen har nu 13 stop:** Efter Nordpolen går turen ud til **Phobos** (Stickney ude ved kanten i lav sol, Mars i baggrunden), **"Mars set fra Phobos"** (kameraet står 300 m over Phobos og kigger op: Mars er 42,5° bred og drejer, og man kan dreje hovedet og kigge ned på Phobos) og **Deimos** (Mars er en kugle på 16,6° ved siden af).
 - **Ærligt om billedet ved Phobos:** Stickney i fuld sol og Mars i baggrunden kan ikke ses på samme tid. Stickney ligger på den side, der vender halvt mod Mars, og når Solen lyser Stickney op, er den side af Mars, man ser bag Phobos, i mørke. Valget blev: Solen fra siden og lidt bagfra, så Mars bag Phobos er lyst op, og Stickney ligger ude ved kanten i lav sol. Kameraet kigger lidt ved siden af Phobos mod Mars, så begge kan ses.
 - **Jeres fejl (30. oktober 2026):** "Månerne" og et tryk på Phobos viste ingenting. Årsagen var, at Phobos stod i Mars' skygge: Så var både Phobos og den side af Mars, man ser bag den, helt sorte. Nu glider månen frem i banen og ud af skyggen, mens kameraet flyver derhen, og teksten siger det ærligt ("Ud af skyggen"). Testen `mars` tjekker det.

@@ -395,6 +395,12 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Knappen venter højst 8 sekunder** (`FORHÅND_TID`), også hvis kortene ikke kan hentes (`fejl` i `hent`). Testen `mars` tjekker det med `side.route(…, abort)`.
 - **Callbacks, der kan komme med det samme:** Ligger et billede allerede i `lager`, kaldes `færdig` straks, midt i `lav()`, før variablerne længere nede findes (TDZ-fejl). Derfor `queueMicrotask`.
 
+### Planen for "Stå på Mars" (Mars M8, 30. oktober 2026)
+- **Der, hvor roveren står, er ikke altid en udsigt.** Curiosity står nu i en sænkning, så Mount Sharps top er skjult, og Perseverance står uden for Jezero mellem bakker. Toppen af Jezeros rand (sol 1358) skjulte også krateret. Tegn udsigten ud fra højdekortet, før et sted vælges, og regn udsynet ud for alle roverens stop (det bedste ved Jezero var randens inderside, sol 1293-1302).
+- **Rovernes stop med koordinater og dato** står i NASA's kortdata (`mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json` og `M20`). Sol regnes om til dato med 1,0275 døgn pr. sol fra landingen.
+- **Zip-filer over nettet:** GDAL kan læse inde i en zip-fil over nettet (`/vsizip/{/vsicurl/…}`), men er filerne pakket (deflate), skal alt fra filens start pakkes ud. Find hellere den samme fil ukomprimeret (Mars 2020's landingskort lå på `planetarymaps.usgs.gov`, fundet via links på USGS' søgesider).
+- **Et lille værktøj i numpy, der tegner 360°-udsigten** (højeste vinkel langs hver retning, Mars' krumning, dis), er billigt og viser, om et sted er godt, før noget bygges. Pas på med at kopiere hele højdekortet i hvert skridt (`np.nan_to_num` på 30 mio. punkter gjorde det 40 gange langsommere).
+
 ### Certifikater: "unable to get local issuer certificate" (30. oktober 2026)
 - `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` var ikke blokeret af proxyen (tunnelen svarede 200). Containeren manglede rodcertifikatet "emSign Root CA - G1" (utexas og asu), og dlr.de sender ikke sit mellemcertifikat (GEANT TLS RSA 1).
 - **Løsning uden at slå tjekket fra:** Mozillas rodliste fra `certifi` (`pip download certifi`, pypi er åben) og mellemcertifikatet fra `http://crt.harica.gr/HARICA-GEANT-TLS-R1.cer` (kun http: hent det gennem proxyens tunnel med `curl -p --proxy "$HTTPS_PROXY"`, og tjek det med `openssl verify` mod containerens rødder). Læg dem sammen med `/etc/ssl/certs/ca-certificates.crt` i én fil, og brug `curl --cacert`. Brugeren åbnede `crt.harica.gr`.

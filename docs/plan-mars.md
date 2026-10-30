@@ -26,7 +26,7 @@ Hver delopgave slutter med `/faerdig` (tests, billeder, dokumentation og en PR, 
 | M5 | ✅ (M5a og M5b lavet 30. oktober 2026, se "Status efter M5a" og "Status efter M5b") **Flybyen over Mars:** stoppene med tekster (faktatjekket): oversigten, Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale (Curiosity) og Jezero (Perseverance). "For nørder", "Ærligt talt" og nye fagord i ordbogen. | mellem |
 | M6 | **Phobos og Deimos i den rigtige form:** formmodeller og kort, banerne med den rigtige fart (Phobos står op i vest), stop i flybyen og "Mars set fra Phobos". | mellem til stor |
 | M7 | (M7a ✅ lavet 30. oktober 2026, se "Status efter M7a") **Skarpe detaljer ved stederne:** billeder og højder i høj opløsning lige der, hvor flybyen stopper, så man kan flyve helt ned til Olympus Mons' krater på toppen, ned i Valles Marineris og hen over Gale og Jezero. | stor |
-| M8 | **Stå på Mars:** et landskab i 3D ved Gale (med Mount Sharp) og ved Jezero (med deltaet), bygget af rovernes højdekort og fotos fra kredsløb. Kameraet står, hvor roveren står. Måske også de rigtige panoramafotos fra roverne. | stor |
+| M8 | (planen er klar 30. oktober 2026, se "Plan for M8") **Stå på Mars:** et landskab i 3D ved Gale (med Mount Sharp) og ved Jezero (med deltaet), bygget af rovernes højdekort og fotos fra kredsløb. Kameraet står, hvor roveren står. Måske også de rigtige panoramafotos fra roverne. | stor |
 
 Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man dreje Mars, efter M5 er flybyen færdig i grove træk, og M6-M8 gør den rigere.
 
@@ -370,6 +370,141 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 > 11. **Opdeling:** Skal M8 deles (fx M8a: Gale, M8b: Jezero og panoramaerne)? Giv en anbefaling.
 >
 > Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig med anbefalingen først, og sig, hvis en anden model eller effort passer bedre til en del. Skriv mine svar ind i planen med det samme. Når jeg har sagt go: Byg det, én PR pr. del, som du selv merger, når testene er grønne. Giv mig "Ikke afprøvet" til sidst (det, jeg skal prøve på tabletten).
+
+## Plan for M8: Stå på Mars (30. oktober 2026, venter på jeres go)
+*Lavet af Opus. Billederne til planen ligger i `docs/m8/`. Udsigterne er tegnet af et lille værktøj ud fra de rigtige højdekort (Mars' krumning, dis med afstanden og en lav morgensol fra øst). De viser kun formen på landskabet, ikke fotos, farver eller himlen, som programmet vil tegne dem. Rovernes pladser er fra NASA's egne kortdata (`mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json` og `…/M20/…/M20_waypoints.json`, hentet i dag).*
+
+**Kilderne er tjekket med curl i dag:**
+- **Kan åbnes:** USGS' arkiv (`asc-pds-services…`, både `mosaic/Mars/MSL/` og `MSR_TRN_HiRISE…`), `planetarymaps.usgs.gov` (nyt fund: Mars 2020-landingens kort), søgesiderne på `astrogeology.usgs.gov/search/map/…`, `science.nasa.gov` (også Photojournal-siderne), `mars.nasa.gov` (rovernes kortdata), `hirise.lpl.arizona.edu`, `www.uahirise.org`, `static.uahirise.org` og `raw.githubusercontent.com`.
+- **Blokeret af miljøet (403 fra proxyen):** `assets.science.nasa.gov` (NASA's billedfiler: panoramaerne i fuld størrelse og roverens 3D-model), `www.usgs.gov` (`astrogeology.usgs.gov/` sender videre dertil, men søgesiderne virker), `hirise-pds.lpl.arizona.edu` (HiRISE' egne højdekort, ikke nødvendige, for USGS har dem), `stac.astrogeology.usgs.gov` og `nasa3d.arc.nasa.gov`.
+- **Siden afviser selv:** `upload.wikimedia.org` svarer 429 (for mange forespørgsler) på panoramaerne i dag. `github.com` giver 403 (sessionens egen adgang).
+- **Kun `assets.science.nasa.gov` betyder noget for M8** (panoramaerne og roveren, spørgsmål 6 og 7). Resten af planen kan bygges uden.
+
+### 1. Hvor står man?
+Udsigterne er i `docs/m8/gale-udsigt.jpg` og `docs/m8/jezero-udsigt.jpg` (hvert billede er 140° bredt og går fra 6° under til 12° over vandret).
+
+| | Sted | Bredde, længde (højde over nulpunktet) | Hvad man ser |
+|---|---|---|---|
+| G1 | **Bradbury Landing**, Curiositys landingssted (august 2012) | 4,5895° S, 137,4417° Ø (−4.501 m) | Hele Mount Sharp mod syd og sydøst, lag på lag, og kraterranden i disen mod nord. Det klassiske billede, men forgrunden er flad. |
+| G2 | **Naukluft** (sol 1301, 3.-4. april 2016), hvor panoramaet PIA20332 er taget | 4,6784° S, 137,3594° Ø (−4.429 m) | Mount Sharp tættere på, med de mørke klitter (Bagnold-klitterne) og lyse buttes foran. **Den flotteste udsigt** i billederne, og NASA's rigtige 360°-foto er taget præcis her. |
+| G3 | **Curiosity nu** (sol 5045, ca. 15. oktober 2026, 38,16 km kørt) | 4,8247° S, 137,3876° Ø (−3.488 m, ca. 1 km over landingsstedet) | Roveren står i en sænkning mellem bakker på Mount Sharps skråning. **Toppen af Mount Sharp er skjult** af bakkerne tæt på. Mod nord er der et hul i bakkerne med udsigt ud over kraterbunden til randen. Ægte, men indelukket. |
+| J1 | **Octavia E. Butler Landing**, Perseverances landingssted (februar 2021) | 18,4446° N, 77,4509° Ø (−2.570 m) | Flad kraterbund. Mod vest deltaets front (ca. 2 km væk) og randen bag den. Her er panoramaerne PIA24422 og PIA24264 taget. |
+| J2 | **Randens inderside** (sol 1301, ca. 17. oktober 2024) | 18,4695° N, 77,2931° Ø (−2.056 m, ca. 500 m over kraterbunden) | **Udsigt ned over deltaet og hele krateret** til den anden side af randen i disen, 40-45 km væk. Fundet ved at regne udsynet ud fra alle roverens stop på randen (det bedste var sol 1293-1302). |
+| J3 | Toppen af randen (sol 1358, ca. 15. december 2024) | 18,4589° N, 77,2673° Ø (−1.794 m) | Krateret er skjult af randens egne bakker. Fravalgt. |
+| J4 | **Perseverance nu** (sol 2022, ca. 28. oktober 2026, 45,25 km kørt) | 18,4356° N, 77,2332° Ø (−1.936 m) | Uden for krateret mellem bakker. Krateret kan ikke ses. Ægte, men ikke en udsigt. |
+
+**Anbefaling:** To steder ved hvert krater: ét med **udsigten** og ét, hvor **roveren er eller var**.
+- **Gale:** G2 Naukluft (udsigten og NASA's foto fra samme sted) og G3 "Hos Curiosity nu" (roveren som 3D-model, hvis den kan hentes, spørgsmål 7). G1 er flottere end G3, men den er kun et sted, roveren har været.
+- **Jezero:** J2 Randens inderside (udsigten) og J1 Landingsstedet (NASA's fotos fra samme sted og deltaets front). Perseverance nu (J4) nævnes i teksten med et lille kort, men man står der ikke: Udsigten er bakker.
+- Mellem de to steder ved samme krater skifter man med en knap ("Gå til Curiosity nu", ca. 16 km væk, og "Gå til landingsstedet", ca. 17 km væk). Det er et hop med en kort overgang, ikke en gåtur.
+- **Billigere udgave:** ét sted pr. krater (G2 og J2). Det sparer ca. 6 MB pr. sted og en del arbejde.
+
+### 2. Data
+**Kortene (alle læst eller åbnet i dag):**
+
+| Kort | Fil og sted | Område | Skarphed | Bemærkninger |
+|---|---|---|---|---|
+| Gale, højder | `mosaic/Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif` (3,9 GB, USGS) | ca. 33 × 57 km (137,13-137,68° Ø, 4,13-5,10° S): landingsstedet, ruten og Mount Sharps nederste skråninger | 1 m (reelt nærmere 2-3 m: små klitter i fotoet ses ikke i højderne, og nogle steder er der kasseformede fejl, `docs/m8/gale-data.jpg`) | Toppen af Mount Sharp er **ikke** med. Den tages fra HRSC+MOLA (0,17 km), som vi allerede har. |
+| Gale, foto | `MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif` (24 GB) | ca. 45 × 70 km | 25 cm, **gråt, med skygger malet ind** (taget ca. kl. 15) | Klitter og sten ses tydeligt. |
+| Gale, foto i farver | `MSL_Gale_HiRISE-LRGB_78quads_sharp_cog.tif` (1 GB) | kun ca. 9 × 19 km (Bradbury, Naukluft og Curiosity nu er med) | 25 cm, farver fra HiRISE, gjort skarpere i GIMP | Farverne er HiRISE' (ikke helt ægte, blågrå klitter). Bruges højst som en blød farvetone. |
+| Jezero, højder (nyt fund) | `planetarymaps.usgs.gov/mosaic/mars2020_trn/HiRISE/JEZ_hirise_soc_006_DTM_…_1m_….tif` (1,8 GB), Mars 2020's landingskort | ca. 21 × 21 km (77,22-77,58° Ø, 18,31-18,67° N): landingsstedet, deltaet og randens inderside (J1 og J2) | 1 m | Ukomprimeret GeoTIFF, så et vindue læses direkte. |
+| Jezero, foto | `…/JEZ_hirise_soc_006_orthoMosaic_25cm_…_first.tif` | samme | 25 cm, gråt, skygger malet ind | |
+| Jezero, randen og roveren nu | `MSR_TRN_HiRISE_soc_003…_mosaics.zip` (5,5 GB) | ca. 19 × 27 km vest for krateret (77,06-77,38° Ø) | 1 m og 25 cm | Kun nødvendig for J4 (og randens yderside). |
+| Mellemlag | CTX-mosaikkerne `mosaic/Mars/CTX_EZs/Gale_CTX_BlockAdj_dd.tif` og `Jezero_…` (5 m, gråt) og Mars 2020's CTX-højdekort (20 m, `…/CTX/JEZ_ctx_B_soc_008_DTM_…_20m…tif`) | hele Gale (135,2-139,2° Ø) og 75,2-78,9° Ø ved Jezero | 5 m (foto), 20 m (højder ved Jezero) | Ved Gale findes intet CTX-højdekort hos USGS: Mellemlaget bruger 1 m-kortet (nedskaleret), og uden for det HRSC+MOLA. |
+
+- **Kan rasterio læse et lille vindue direkte over nettet? Ja.** Et vindue på 3 × 3 km fra Gales 1 m-kort (3,9 GB) tog ca. 20 sekunder, og fotoene (i firkanter) går endnu hurtigere. **I zip-filerne til Jezero: også ja** (`/vsizip/{/vsicurl/…}`), men filerne i zip'en er pakket (deflate), så GDAL må pakke ud fra starten af filen: Et 8 m-overblik og to vinduer fra 1 m-kortet (676 MB i zip'en) tog ca. 2 minutter. Fotoet i zip'en er 4,6 GB og vil tage længere. Det gør ikke noget, for Mars 2020's landingskort på `planetarymaps.usgs.gov` dækker J1 og J2 og kan læses direkte.
+- **Lagene (forslag):**
+
+| Lag | Område | Højder | Foto | Fil (anslået) |
+|---|---|---|---|---|
+| Tæt på | 2 × 2 km om stedet | 1 m, 2048 × 2048 (16 bit i rød og grøn, trin på 5 cm) | 0,5 m, 4096 × 4096, gråt | ca. 2,4 MB + 3,5-4 MB (målt på Gale-dataene) |
+| Mellem | ca. 32 × 32 km (begge steder ved samme krater) | 16 m, 2048 × 2048 | 8 m, 4096 × 4096 (CTX) | ca. 2-3 MB + 3,5 MB |
+| Langt væk | 356 × 356 km | HRSC+MOLA, som vi har (`mars-gale-hoejde-2k.png`) | Viking, som vi har | 0 (hentet allerede ved stoppet) |
+
+- **Filerne på GitHub Pages:** ca. 6 MB pr. sted og ca. 6 MB pr. krater til mellemlaget: ca. 18 MB pr. krater med to steder, ca. 36 MB i alt (testudgaver i halv størrelse ca. +9 MB). Billederne fylder 85 MB i dag. Ingen fil er over 5 MB.
+- **Grafikkortet:** Højder tæt på ca. 11 MB, foto tæt på ca. 22 MB, mellemlaget ca. 33 MB (med mipmaps): ca. 65 MB pr. krater. Tabletten klarer Mars' 8k-kort (ca. 170 MB), så det bør gå. Kun lagene ved det sted, man står, ligger i grafikkortet. Går man tilbage i kredsløb, frigives de.
+- **Skygger i fotoene:** Alle fotos fra kredsløb (HiRISE og CTX) har skygger malet ind (taget om eftermiddagen). Programmet regner selv lyset ud fra højderne. **Forslag:** Fotoet deles med programmets eget skyggebillede for fotoets sol (regnet fra højdekortet), så de store skygger forsvinder, og kun detaljerne under højdekortets skarphed (sten, ribber i sandet) bliver tilbage. Det tjekkes på billeder, før det bruges. Virker det ikke, bruges fotoet kun som små detaljer oven på programmets lys.
+- **Farver:** Fotoene er grå. Farven tages fra Viking-kortet (ca. 1 km), som vi har, og en farvetone fra HiRISE' farvefoto ved Gale tæt på. "Ærligt talt" siger det.
+- **Licenser (tjekket på USGS' sider i dag):**
+  - Mars 2020's landingskort (HiRISE og CTX): "Access Constraints: None", "Use Constraints: Please cite authors", udgivet af USGS (amerikansk offentligt værk). Kreditering: "USGS Astrogeology (Mars 2020 Terrain Relative Navigation), HiRISE: NASA/JPL-Caltech/University of Arizona, CTX: NASA/JPL-Caltech/MSSS".
+  - MSR-kortene (zip): som ovenfor, doi:10.5066/P13CPYYU (Bland m.fl. 2024).
+  - Gale-kortene (Calef og Parker, JPL): intet licensfelt, bygget af HRSC, CTX og HiRISE (`fakta-solsystemet.md` del 3B afsnit 8). For en sikkerheds skyld mærkes de som CC BY-SA 3.0 IGO (som de andre filer med HRSC). Farvefotoet: Parker og Calef.
+  - CTX-mosaikkerne: offentlige, "NASA/JPL/MSSS".
+  - Alt kommer i `KILDER.md`, `LICENSE` og "Om AtomLab".
+
+### 3. M8 før M7b: ned fra kredsløb
+- **Landskabet bliver sin egen verden** (afsnit 4), med sine egne lag. Det har ikke brug for M7b's kort.
+- **Overgangen (anbefales):** "🧍 Stå på Mars" ved Gale (eller Jezero). Rejsen flyver ned mod stedet til ca. 15 km over jorden med kloden og det lokale net, vi har (0,17 km). Så glider billedet over (ca. 0,8 sekunder) til landskabet set fra ca. 1,5 km over stedet, hvor alle tre lag er med, og kameraet "lander" i ca. 4 sekunder ned til 1,7 m, mens det drejer op mod horisonten. Tilbage: det samme baglæns. Med "reducer bevægelse" klippes der direkte.
+- **Hvorfor ikke flyve hele vejen uden overgang:** Så skulle kloden have kort ned til 1 m, og det er netop M7b. Overgangen sker højt oppe, hvor det skarpe lag og kloden ser næsten ens ud (begge har HRSC+MOLA langt væk).
+- **Med fra M7b undervejs:** billedværktøjet, der læser Gale- og Jezero-kortene i vinduer (`lav_landskab.py`), og mellemlaget (16 m over ca. 32 km). M7b kan senere bruge mellemlaget som detaljekort (`detalje` i `LOKALE`) ved Gale- og Jezero-stoppene. Det er ikke med i M8.
+- **Venter til M7b:** skarpere kort i kredsløb ved stoppene, en flyvning helt ned uden overgang og Nordpolen tæt på.
+
+### 4. Teknik
+- **Et eget landskab, ikke endnu et lokalt net på kloden (anbefales).** Kloden regner i enheder på 1.000 km. Ved 1,7 m over jorden er tal med 32 bit i grafikkortet for unøjagtige (ca. 0,2 m ved Mars' radius), så jorden ville ryste, når man drejer. Landskabet får sin egen nulpunkt lige under kameraet og regner i meter. Mars-kloden skjules (men bliver i grafikkortet).
+- **Et net i ringe om stedet (anbefales):** Kameraet står stille og drejer kun hovedet. Derfor er et net i ringe omkring stedet det billigste: tæt ved fødderne og grovere længere væk, så hvert stykke fylder lige meget på skærmen (fx 1024 retninger × 512 ringe fra 1 m til 180 km, ca. 0,5 mio. punkter, ligesom kloden i dag). Højderne læses i vertex-shaderen fra det skarpeste lag, der dækker punktet, og lagene glider over i hinanden ved kanten. Mars' krumning trækkes fra (1,7 m ved 3,4 km og ca. 130 m ved 40 km). Lyset regnes for hver pixel ud fra højdekortene.
+- **Kameraet:** 1,7 m over jorden (en voksen. Rovernes kameraer sidder ca. 2 m oppe, så det siges i "Ærligt talt"). Horisonten på fladt land er ca. 3,4 km væk, men fra en skråning ses meget længere. Mount Sharps top er ca. 45-50 km fra G2 (den nærmeste fod 5-10 km).
+- **Near, far og dybden:** Near ca. 0,3 m og far ca. 400 km. Med almindelig dybde er der ca. 30 m mellem dybderne 10 km væk og ca. 270 m 30 km væk. **Det måles som i M6b** (billedet med near 0,3 sammenlignes med near 3, hvor det tætte er skåret fra). Flimrer bjergkammene, tegnes landskabet i to omgange: alt over ca. 2 km væk først med sin egen near, så det tætte (nettet i ringe deles let). `logarithmicDepthBuffer` er sidste udvej (den koster på tabletten).
+- **Dreje hovedet:** Kameraets styring drejer om et punkt få cm foran kameraet (ikke 50 m som ved Phobos, så ville man flytte sig 50 m). En finger eller musen drejer, piletasterne også. At kniber eller rulle zoomer med synsvinklen (som en kikkert, fx 20-75°), ikke ved at flytte kameraet. Man kan kigge lige ned på jorden og næsten lige op.
+
+### 5. Himlen og lyset
+- **Himlen (anbefales):** en shader på en kuppel med en enkel model af støvet: gulbrun (butterscotch) om dagen, mørkere opad, og blålig omkring Solen, når den står lavt (støvet sender blåt lys fremad). Efter solnedgang en blå glød over stedet, hvor Solen gik ned, og et langt tusmørke. Farverne tjekkes mod NASA's fotos (fx Curiositys blå solnedgang i Gale, PIA19400).
+- **Dis (anbefales):** Det fjerne landskab blandes med himlens farve efter afstanden og højden (skalahøjden 11 km, som vi har). Det gør Mount Sharp og randen 40 km væk blege, som på rovernes fotos.
+- **Solen:** i den rigtige størrelse (ca. 0,35°, ca. to tredjedele af det, vi ser fra Jorden) med en glød.
+- **Tid på dagen (anbefales):** en skyder "Klokken på Mars" (lokal soltid) og knappen "▶ Lad dagen gå" (hurtigt, fx en dag på 2 minutter). Plus "Solnedgang" som genvej. Starttidspunktet er morgen (lange skygger, som ved de andre stop).
+- **Skygger i landskabet:** Bjerge og bakker kaster skygger, når Solen står lavt. De regnes på grafikkortet i et kort over hvert lag, når Solen har flyttet sig lidt (ikke i hvert billede).
+- **Phobos og Deimos (anbefales: ja):** Phobos ses fra både Gale og Jezero. Den er ca. 0,21° bred lige over hovedet (ca. 40 % af Månen set fra Jorden) og mindre ved horisonten, står op i vest og går ned i øst og krydser himlen på ca. 4 timer. Deimos er som en klar stjerne. De står, hvor de skal stå til klokken, med samme baner som i M6. Om natten stjernerne. Jorden som en klar "aftenstjerne" kan komme senere (kræver Jordens plads set fra Mars).
+- **Årstiden:** som resten af Mars (nordlig forårsjævndøgn).
+
+### 6. Panoramaerne
+- **Kan bruges:** ja, licensen er fri (NASA/JPL-Caltech/MSSS og NASA/JPL-Caltech/ASU/MSSS). **Men filerne ligger på `assets.science.nasa.gov`, som er blokeret**, og Wikimedia svarer 429 i dag. Uden `assets.science.nasa.gov` kan panoramaerne ikke hentes i god kvalitet.
+- **Anbefaling: en egen visning, "📷 Rovernes foto",** ved de steder, hvor fotoet er taget: G2 Naukluft (PIA20332, Mastcam i farver, april 2016) og J1 Landingsstedet (PIA24264, Mastcam-Z i farver, 142 billeder, eller PIA24422, Navcam). Fotoet lægges på en cylinder om kameraet, så man drejer på samme måde og ser i samme retning som i 3D (fotoet drejes, så Mount Sharp og randen står samme sted som i landskabet, målt ved at sammenligne horisonten). Over og under fotoet fyldes med himmel og jord, der toner ud. Det er den bedste "Ærligt talt": Man kan skifte mellem det tegnede og det fotograferede fra præcis samme sted.
+- **Ærligt:** Fotoene er hvidbalancerede (som om de var taget på Jorden), så de er mindre røde end Mars i virkeligheden. Det står i teksten.
+- **Størrelse:** ca. 8192 pixel bredt på pc (ca. 3-4 MB) og 4096 på tablet.
+
+### 7. Roveren
+- **Anbefaling: roveren som 3D-model ved G3 "Hos Curiosity nu"** med den rigtige retning og hældning fra NASA's kortdata (sol 5045: retning 161,5°, hældning 13,5° op ad bakken). Ved G2 og J1 står i stedet et lille skilt: "Her stod Curiosity i april 2016" og "Her landede Perseverance".
+- **Modellen:** NASA's `Curiosity_static.glb` (fra science.nasa.gov/resource/curiosity-rover-3d-model) ligger på `assets.science.nasa.gov` (blokeret), så størrelsen er ukendt. NASA's 3D-modeller er frie (ingen ophavsret), men man må ikke antyde, at NASA anbefaler noget. Kræver `GLTFLoader` fra `three@0.186.1` (en addon-fil). Er filen over ca. 10 MB, spørger jeg, om den må gøres mindre med et værktøj (fx `gltf-transform`, ikke et byggetrin).
+- **Spor:** Hjulsporene ses ikke i fotoene fra kredsløb ved roverens plads nu. Programmet kan tegne svage spor efter den rigtige rute (fra kortdataene) de sidste ca. 100 m. Det står i "Ærligt talt", at de er tegnet.
+
+### 8. Hvordan kommer man derhen?
+- Ved Gale- og Jezero-stoppet (både på flybyen og efter et tryk på navnet) kommer knappen **"🧍 Stå på Mars"** under "Prøv selv". Flybyen får ikke et ekstra stop (den har 13). Teksten ved stoppet nævner knappen.
+- I landskabet: knapperne "↑ Tilbage i kredsløb", "Gå til …" (det andet sted ved samme krater), "📷 Rovernes foto" (der, hvor det findes), skyderen "Klokken på Mars", "▶ Lad dagen gå", "Solnedgang" og "Navne" (små navne på det, man ser: Mount Sharp, randen, deltaet, roveren. Følger den fælles knap, `navne.js`).
+- Panelet til højre viser stedets tekst, mens man står der. Pause stopper dagen og månerne.
+
+### 9. Tekster (udkast, alt faktatjekkes med `/faktatjek` i byggefasen)
+- **Hvad man ser:** Ved Gale: Mount Sharp, lagene, klitterne, kraterranden mod nord, hvor langt der er til tingene (målt i programmet). Ved Jezero: deltaet under én, kraterbunden, hvor Perseverance landede, og randen på den anden side.
+- **Roverens fund:** Gale: søer med vand, mikrober kunne have levet i, organiske stoffer (ikke afgjort), roverens rute op ad bjerget. Jezero: deltaet, prøverne i rør, Cheyava Falls (muligt biospor), Ingenuity.
+- **Det, der ændrer sig** (rovernes plads, km, prøver og Mars Sample Return), slås op samme dag, som teksten låses, og skrives med måned og år ("i oktober 2026").
+- **"Ærligt talt":** Højderne er målt fra kredsløb (HiRISE i stereo, ca. 1 m mellem højderne, reelt lidt grovere), så sten under ca. 1-2 m er der ikke. Fotoene fra kredsløb er grå, og farverne er sat på af programmet. Himlens farve og disen er en enkel model. Solens og månernes pladser er regnet, men årstiden er valgt. Øjenhøjden er en voksens. Rovernes plads er fra NASA's kort på en bestemt dato. Ved Phobos og Deimos (fra jorden) er de i den rigtige størrelse.
+- **Fagord (forslag):** klit, butte (et lille bjerg med flad top), sol (et døgn på Mars) og måske ortofoto. Findes allerede: rover, delta, biospor, nedslagskrater.
+
+### 10. Hvad det koster
+- **Filer:** ca. 36 MB i alt (afsnit 2), hentet først, når man trykker "Stå på Mars" (det tætte lag måske allerede ved stoppet, som `hentNæste`).
+- **Grafikkort:** ca. 65 MB pr. krater oven i Mars.
+- **Billeder i sekundet:** Landskabet erstatter kloden (som skjules), så antallet af punkter er som i dag. Himlen og skyggekortet er nye. Måles i testbrowseren på pc og tablet før og efter (én ad gangen).
+- **Hvis det bliver for tungt på tabletten:** først færre ringe og retninger (768 × 384), så skyggekortet sjældnere og i lavere opløsning, så 2048-fotos i stedet for 4096 og til sidst det tætte lag på 1 × 1 km.
+
+### 11. Opdeling
+**Anbefaling: tre dele med et go imellem:**
+
+| Del | Hvad | Hvorfor |
+|---|---|---|
+| **M8a** | **Gale** med al teknikken: billedværktøjet, landskabet i ringe, lagene, himlen, disen, Solen, skyggerne, tid på dagen, Phobos og Deimos, kameraet, overgangen fra kredsløb, G2 Naukluft og G3 Curiosity nu (uden 3D-model), tekster og faktatjek. | Det svære løses ét sted. Gale har den flotteste udsigt. |
+| **M8b** | **Jezero:** J2 Randens inderside og J1 Landingsstedet, data fra Mars 2020's kort, tekster og faktatjek. | Genbruger M8a. Rovernes tal slås op tæt på, at teksten kommer ud. |
+| **M8c** | **Rovernes fotos og roveren:** "📷 Rovernes foto" ved G2 og J1, Curiosity som 3D-model ved G3 og sporene. | Kræver, at `assets.science.nasa.gov` åbnes. Kan springes over, hvis I ikke vil. |
+
+### 12. Model og effort
+- **Opus med høj effort** til alle tre dele. Det svære er dybden, overgangen og skyggerne, og det kan tjekkes med billeder og tal. Xhigh er ikke nødvendig: ingen svær fysik, og fejl kan ses med det samme. Fable bruges ikke (`plan-fable.md`).
+- **Hjælpeagenter:** Opus med høj effort til `/faktatjek` (højst 2), Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs.
+
+### Beslutninger, der bekræftes ved go (anbefalingerne står først)
+1. **Stederne:** To ved hvert krater: G2 Naukluft og G3 Curiosity nu ved Gale, J2 Randens inderside og J1 Landingsstedet ved Jezero. (Eller kun G2 og J2. Eller G1 Bradbury Landing i stedet for G2 eller G3.)
+2. **Landskabet:** et eget landskab i ringe om stedet med tre lag og en overgang fra kredsløb (A). Eller endnu et lokalt net på kloden (B, ryster helt tæt på).
+3. **Tid på dagen:** skyder, "▶ Lad dagen gå" og "Solnedgang" (A). Eller kun tre knapper: Morgen, Middag og Solnedgang (B).
+4. **Phobos og Deimos på himlen:** ja, i den rigtige størrelse og på den rigtige plads (A). Eller nej (B).
+5. **Panoramaerne og roveren:** med i M8c, hvis I åbner `assets.science.nasa.gov` (A). Eller kun panoramaerne (B), kun roveren (C) eller ingen af dem (D).
+6. **Opdelingen:** M8a (Gale og teknikken), M8b (Jezero), M8c (fotos og roveren). Eller to dele (M8a Gale, M8b Jezero, fotos og roveren).
+7. **Domænet:** Åbn `assets.science.nasa.gov` under Network access, hvis I vælger A, B eller C i spørgsmål 5. Det skal være åbent, før M8c går i gang (gerne før M8a, så modellens størrelse kan tjekkes tidligt).
 
 ## Status efter M6b (30. oktober 2026): flybyen ud til Phobos og Deimos. M6 er færdig.
 - **13 stop:** … Nordpolen → **Phobos** → **Mars set fra Phobos** → **Deimos**. Ved Phobos stiller programmet månerne i banen (`stilMånerOp`), så Solen står ved `stop.sol` set fra månen. Ingen af dem står i Mars' skygge ved stoppene (testet). Månerne står stille ved stoppene, og Mars drejer.
