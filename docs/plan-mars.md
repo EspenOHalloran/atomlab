@@ -259,6 +259,11 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
   - **Jeres svar (30. oktober 2026): Husk valget** (`localStorage`, `atomlabNavne`: `'til'` eller `'fra'`).
   - Tjek: testene `mars` og `saturn` (navnene forsvinder, og et tryk på kloden gør intet, når knappen er slået fra).
 
+## Status efter navneknappen (30. oktober 2026)
+- Knappen "Navne" under "Prøv selv" ved Mars og Saturn, slået til fra start. Fra: Navnene og prikkerne på Mars skjules, og et tryk på kloden flyver ingen steder hen. Ved Saturn skjules månernes navne, men man kan stadig trykke på månerne. Teksten om hele Mars nævner kun "Tryk på et navn", når navnene er slået til.
+- Fælles hjælper `js/solsystem/navne.js` (`navneKnap`, `navneTil`), valget huskes i `atomlabNavne`. Phobos og Deimos (M6) skal bruge den.
+- Testene `mars` og `saturn` tjekker det. Den nye test ved Saturn fejlede én gang under belastning (ventede kun 200 ms på næste billede). Nu venter den på, at navnene kommer frem.
+
 ## Status efter del 1: første stop hentes på forhånd (30. oktober 2026)
 - **Saturn, årsagen til hakket:** `startTur` hentede alle seks månekort (pc: Mimas og Titan 4k, de andre 8k, ca. 23 MB), og de blev lagt i grafikkortet i de første sekunder af flybyen (målt: 6 overførsler på 90-1.600 ms, ét billede på 4 s i testbrowseren). **Rettet:** Kortene hentes efter Saturns egne kort, én ad gangen, og lægges i grafikkortet med `initTexture`. Efter "Start flyby" er der ingen overførsler.
 - **Mars:** Olympus' kort hentes efter Mars' egne kort og lægges i grafikkortet. Ved hele Mars tegnes ingen lokale net.

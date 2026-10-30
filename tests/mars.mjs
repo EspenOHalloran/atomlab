@@ -406,6 +406,18 @@ await s.click('#solsystemStyring button:has-text("Hele Mars")');
 await ventFremme();
 tjek('"Hele Mars" fjerner underteksten', !(await fm(() => document.querySelector('#solsystemVindue .undertekst.fase'))));
 tjek('"Hele Mars": højt over jorden hele vejen, og teksten om hele Mars', m.skub === 0 && /rigtige højde/.test(await s.textContent('#solsystemForklaring')), JSON.stringify(m));
+// Knappen "Navne" (js/solsystem/navne.js): slået fra skjules navnene, og et tryk på kloden flyver ingen steder hen
+await fm(() => atomlabTest.solsystem.fænomen().vend(137.8));
+await efterTo();
+const navnePlads = await fm(() => [atomlabTest.solsystem.fænomen().navne(), atomlabTest.solsystem.fænomen().navnPlads('gale')]);
+const navneKnap = '#solsystemStyring button:text-is("Navne")';
+tjek('knappen "Navne" er slået til fra start, og Gale står på kloden', (await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))) && navnePlads[0].includes('gale'), JSON.stringify(navnePlads[0]));
+await s.click(navneKnap);
+await efterTo();
+tjek('"Navne" slået fra: navnene og prikkerne er væk, og valget er gemt', (await fm(() => atomlabTest.solsystem.fænomen().navne())).length === 0 && (await fm(() => localStorage.getItem('atomlabNavne'))) === 'fra' && !(await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))));
+await s.mouse.click(navnePlads[1].x, navnePlads[1].y);
+await s.waitForTimeout(300);
+tjek('"Navne" slået fra: et tryk, hvor Gale stod, flyver ingen steder hen, og teksten nævner ikke navnene', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'mars' && !(await fm(() => atomlabTest.solsystem.fænomen().tur().flyver)) && !/Tryk på et navn/.test(await s.textContent('#solsystemForklaring')));
 // Fra bagsiden af Mars: Kameraet flyver i en bue hen over planeten og ikke gennem den
 await s.click('#solsystemStyring button:has-text("Start flyby")');
 await fm(() => atomlabTest.solsystem.fænomen().hop());
@@ -429,6 +441,15 @@ await s.click('#solsystem .kosmos-valg[data-id="aarstider"]');
 await s.waitForTimeout(500);
 const efter = await s.evaluate(async () => { const { verden, himmelDrejning } = await import('/js/scene3d.js'); return { near: verden.kamera.near, zoom: verden.styring.zoomSpeed, drej: verden.styring.rotateSpeed, styring: verden.styring.enabled, himmel: himmelDrejning() }; });
 tjek('efter Mars: kameraets near, zoom, drejning og styring er sat tilbage, og himlen er ikke drejet', efter.near === 0.1 && efter.zoom === 1 && efter.drej === 1 && efter.styring && efter.himmel.join() === '0,0,0,1', JSON.stringify(efter));
+// "Navne" huskes efter genindlæsning (stadig slået fra)
+await s.reload();
+await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
+await s.click('#solsystem .kosmos-valg[data-id="mars"]');
+await efterTo();
+tjek('efter genindlæsning: "Navne" er stadig slået fra, og der står ingen navne på kloden', !(await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))) && (await fm(() => atomlabTest.solsystem.fænomen().navne())).length === 0);
+await s.click(navneKnap);
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().navne().length > 0, null, { timeout: 10000, polling: 100 }).catch(() => {});
+tjek('"Navne" slået til igen: navnene kommer tilbage', (await fm(() => atomlabTest.solsystem.fænomen().navne())).length > 0 && (await fm(() => localStorage.getItem('atomlabNavne'))) === 'til');
 
 await s.context().close();
 

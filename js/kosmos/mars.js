@@ -18,6 +18,7 @@ import { lavLuft } from '../solsystem/atmosfaere.js';
 import { lavSkyer, lokalTid } from '../solsystem/skyer.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
+import { navneTil, navneKnap } from '../solsystem/navne.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -465,6 +466,7 @@ export default {
         { tekst: 'Drej Mars', til: drejer, skift: (til) => { drejer = til; } },
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; vis(); } },
         { tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; vis(); } },
+        navneKnap(() => { opdaterNavne(); vis(); }),
       );
       styring.splice(0, styring.length, ...knapper);
       opdaterKnapper();
@@ -478,14 +480,15 @@ export default {
       }
       forklaring(høj
         ? '<p><b>10 gange højere:</b> Nu kan du tydeligt se Olympus Mons og de tre vulkaner ved siden af, kløften Valles Marineris og det store krater Hellas. Det meste af den sydlige halvkugle er højland med mange kratere, flere km højere end det glatte lavland i nord.</p>'
-        : '<p><b>Mars:</b> Bjergene har den rigtige højde. Selv Olympus Mons er kun ca. 0,6 % af Mars\' radius, så set fra rummet er Mars næsten glat. Se skyggerne ved grænsen mellem dag og nat, og se skyerne af is komme over vulkanerne om eftermiddagen, mens Mars drejer. Tryk på et navn på kloden for at flyve derhen.</p>');
+        : `<p><b>Mars:</b> Bjergene har den rigtige højde. Selv Olympus Mons er kun ca. 0,6 % af Mars' radius, så set fra rummet er Mars næsten glat. Se skyggerne ved grænsen mellem dag og nat, og se skyerne af is komme over vulkanerne om eftermiddagen, mens Mars drejer.${navneTil() ? ' Tryk på et navn på kloden for at flyve derhen.' : ''}</p>`);
     }
     vis();
     lavKnapper();
 
     // ---------- Navnene på kloden (M5b) ----------
     // Når man ser hele Mars, står stederne med navn på kloden, og et tryk på et navn flyver derhen (som månerne ved
-    // Saturn). Navnene skjules på bagsiden, tæt på, under flyvninger og på flybyen.
+    // Saturn). Navnene skjules på bagsiden, tæt på, under flyvninger, på flybyen og med knappen "Navne" slået fra
+    // (js/solsystem/navne.js). Så flyver et tryk på kloden ingen steder hen.
     const NAVNE = ['olympus', 'tharsis', 'valles', 'hellas', 'gale', 'jezero', 'nordpol'];
     const navne = NAVNE.map((id) => {
       const st = stedMed(id);
@@ -552,7 +555,7 @@ export default {
     const navnNormal = new THREE.Vector3();
     const tilKamera = new THREE.Vector3();
     function opdaterNavne() {
-      navneVist = visning === 'mars' && !flyby.kører && !rejse.flyver;
+      navneVist = navneTil() && visning === 'mars' && !flyby.kører && !rejse.flyver;
       // Tæt på hele Mars fylder navnene for meget (og stederne kan have deres egne net)
       const langtVæk = THREE.MathUtils.smoothstep(rejse.afstand / R, 1.25, 1.6);
       for (const n of navne) {
