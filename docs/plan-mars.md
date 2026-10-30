@@ -219,6 +219,12 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 >
 > Giv mig "Ikke afprøvet" til sidst: det, jeg skal prøve på tabletten.
 
+## Status efter del 1: første stop hentes på forhånd (30. oktober 2026)
+- **Saturn, årsagen til hakket:** `startTur` hentede alle seks månekort (pc: Mimas og Titan 4k, de andre 8k, ca. 23 MB), og de blev lagt i grafikkortet i de første sekunder af flybyen (målt: 6 overførsler på 90-1.600 ms, ét billede på 4 s i testbrowseren). **Rettet:** Kortene hentes efter Saturns egne kort, én ad gangen, og lægges i grafikkortet med `initTexture`. Efter "Start flyby" er der ingen overførsler.
+- **Mars:** Olympus' kort hentes efter Mars' egne kort og lægges i grafikkortet. Ved hele Mars tegnes ingen lokale net.
+- "▶ Start flyby (henter kort …)" er grå, indtil kortene er klar, højst 8 sekunder (`FORHÅND_TID`). Billederne afkodes før brug (`image.decode()`).
+- Testene `mars` og `saturn` tjekker den grå knap, at kortene er hentet før flybyen, at nettet ikke tegnes før, og at knappen bliver aktiv efter ca. 8 sekunder uden kortene.
+
 ## Status efter M5a (30. oktober 2026): Tharsis, Valles Marineris og Hellas
 - **Flybyen har 7 stop:** hele Mars, Olympus Mons, Calderaen, Skrænten, **Tharsis** (kl. 7, set langs rækken fra sydvest: Arsia Mons forrest), **Valles Marineris** (kl. 9, fra syd over Melas og Candor Chasma) og **Hellas** (kl. 9, fra højt oppe over nordranden).
 - **Lokale net:** Tharsis med MOLA (ca. 0,9 km pr. pixel, HRSC+MOLA var ikke skarpere), Valles Marineris med HRSC+MOLA (2048 × 1024, ca. 0,7-0,9 km) og et detaljekort over Melas, Candor og Ophir (ca. 0,28 km). Hellas har intet net. Kortene til Tharsis fylder ca. 2,6 MB og til Valles Marineris ca. 5,3 MB. De hentes ved stoppet før.

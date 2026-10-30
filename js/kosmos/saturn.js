@@ -84,22 +84,35 @@ const henter = new THREE.TextureLoader();
 const lager = new Map();
 // farve: billedet er et farvefoto (sRGB). Månernes kort er målinger i gråtoner og bruges, som de er,
 // med kun én kanal i grafikkortet (fylder en fjerdedel).
-function hent(navn, færdig, farve = true) {
+// Billedet afkodes, før det bruges (image.decode() sker uden for hovedtråden), så det ikke hakker, når det lægges i
+// grafikkortet. fejl kaldes, hvis billedet ikke kan hentes.
+function hent(navn, færdig, farve = true, fejl) {
   let b = lager.get(navn);
   if (!b) {
-    b = { tekstur: null, venter: [] };
+    b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
     lager.set(navn, b);
     henter.load(new URL(navn, MAPPE).href, (t) => {
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
       if (!farve) t.format = THREE.RedFormat;
-      b.tekstur = t;
-      for (const f of b.venter) f(t);
-      b.venter.length = 0;
-    }, undefined, () => { /* mangler billedet, bruges det tegnede */ });
+      (t.image.decode ? t.image.decode() : Promise.resolve()).catch(() => {}).then(() => {
+        b.tekstur = t;
+        for (const f of b.venter) f(t);
+        b.venter.length = 0;
+      });
+    }, undefined, () => { // mangler billedet, bruges det tegnede
+      b.fejlet = true;
+      for (const f of b.fejlVenter) f();
+      b.fejlVenter.length = 0;
+    });
   }
   if (b.tekstur) færdig(b.tekstur);
-  else b.venter.push(færdig);
+  else if (!b.fejlet) b.venter.push(færdig);
+  if (fejl) {
+    if (b.fejlet) fejl();
+    else if (!b.tekstur) b.fejlVenter.push(fejl);
+  }
 }
+const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på månernes kort
 
 // Flybyen: et stop ved hvert sted. fokus 'saturn', 'ringe' eller en måne.
 const TUR = [
@@ -212,10 +225,17 @@ export default {
     for (const m of måner) sætVinkel(m, m.vinkel / GRAD);
     const kan8k = verden.renderer.capabilities.maxTextureSize >= 8192;
     const måneStørrelse = (id) => (!LAV_KVALITET && !TEST_HURTIG && kan8k && MÅNER_8K.has(id) ? '8k' : STØRRELSE);
-    function hentKort(m) {
-      if (m.hentet) return;
+    // klar kaldes, når kortet er sat på månen (eller ikke kunne hentes). forhånd: kortet lægges i grafikkortet med det
+    // samme, så det ikke sker midt i en flyvning.
+    function hentKort(m, { forhånd = false, klar } = {}) {
+      const navn = `${m.id}-${måneStørrelse(m.id)}.jpg`;
+      if (m.hentet && !klar) return;
       m.hentet = true;
-      hent(`${m.id}-${måneStørrelse(m.id)}.jpg`, (t) => m.klode.sætKort(t), false);
+      hent(navn, (t) => {
+        m.klode.sætKort(t);
+        if (forhånd && aktiv) verden.renderer.initTexture(t);
+        klar?.();
+      }, false, klar);
     }
 
     // Solen: en lille, skarp prik langt væk i den retning, lyset kommer fra (fra Saturn ser den ca. 9½ gange mindre ud end fra Jorden)
@@ -228,8 +248,29 @@ export default {
     }
 
     // De rigtige billeder (kommer lidt efter, indtil da ses det tegnede)
-    hent(`saturn-${STØRRELSE}.jpg`, (t) => planet.sætKort(t));
-    hent('saturn-ringe.png', (t) => ringe.sætFarve(t));
+    // Når de er hentet, hentes månernes kort på forhånd, én ad gangen, til flybyen. Første stop viser alle seks måner.
+    // Før gav det et hak, når flybyen startede: Alle kortene (ca. 23 MB på pc) blev hentet og lagt i grafikkortet
+    // midt i den første flyvning. Indtil kortene er klar, er "Start flyby" grå (højst FORHÅND_TID).
+    let aktiv = true;
+    let flybyKlar = false;
+    let forhåndUr = null;
+    function flybyErKlar() {
+      if (flybyKlar || !aktiv) return;
+      flybyKlar = true;
+      clearTimeout(forhåndUr);
+      lavKnapper();
+    }
+    function hentMåner(i = 0) {
+      if (!aktiv) return;
+      if (i === 0) forhåndUr = setTimeout(flybyErKlar, FORHÅND_TID);
+      if (i >= måner.length) flybyErKlar();
+      else hentKort(måner[i], { forhånd: true, klar: () => hentMåner(i + 1) });
+    }
+    let egneMangler = 2;
+    // (queueMicrotask: Er kortene allerede i lager, kommer svaret med det samme, før resten af lav() er kørt)
+    const egetKort = () => { if (--egneMangler === 0) queueMicrotask(hentMåner); };
+    hent(`saturn-${STØRRELSE}.jpg`, (t) => { planet.sætKort(t); egetKort(); }, true, egetKort);
+    hent('saturn-ringe.png', (t) => { ringe.sætFarve(t); egetKort(); }, true, egetKort);
 
     // ---------- Kameraets rejse ----------
     const rejse = lavRejse({ system, verden });
@@ -367,7 +408,9 @@ export default {
       else {
         for (const [id, v] of Object.entries(VISNINGER)) styring.push({ tekst: v.navn, handling: () => vælg(id), deaktiv: () => visning === id });
         for (const id of ['enceladus', 'titan']) styring.push({ tekst: måneMed(id).navn, handling: () => besøg(måneMed(id)), deaktiv: () => visning === id });
-        styring.push({ tekst: '▶ Start flyby', handling: startTur });
+        styring.push(flybyKlar
+          ? { tekst: '▶ Start flyby', handling: startTur }
+          : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
       }
       styring.push({ tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } });
       if (visning === 'titan') styring.push({ tekst: 'Under disen (infrarødt)', til: ir, skift: (til) => { ir = til; måneMed('titan').klode.sætIR(til); } });
@@ -423,6 +466,8 @@ export default {
         if (baner && !rejse.flyver) for (const m of måner) sætVinkel(m, (m.vinkel + (dt * 0.069) / m.døgn) / GRAD);
       },
       stop() {
+        aktiv = false;
+        clearTimeout(forhåndUr);
         ring.dispose();
         verden.opdateringer.delete(hvertBillede);
         rejse.stop();

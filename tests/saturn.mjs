@@ -54,8 +54,17 @@ const side = async (adresse) => {
 // Visningerne, månerne, modlys og flybyen
 {
   const s = await side(`${ADRESSE}/?test#solsystem`);
-  await s.click('#solsystem .kosmos-valg[data-id="saturn"]');
-  await s.waitForTimeout(1500);
+  // "Start flyby" er grå, indtil månernes kort er hentet på forhånd (før gav det et hak, når flybyen startede)
+  const vedÅbning = await s.evaluate(() => {
+    document.querySelector('#solsystem .kosmos-valg[data-id="saturn"]').click();
+    const k = [...document.querySelectorAll('#solsystemStyring button')].find((b) => b.textContent.includes('Start flyby'));
+    return k && { tekst: k.textContent.trim(), grå: k.disabled };
+  });
+  tjek('lige efter åbning: "Start flyby" er grå med "henter kort"', vedÅbning?.grå && /henter kort/.test(vedÅbning.tekst), JSON.stringify(vedÅbning));
+  const måneKort = ['mimas', 'enceladus', 'tethys', 'dione', 'rhea', 'titan'].map((m) => `${m}-2k.jpg`);
+  const klar = await s.waitForFunction(() => [...document.querySelectorAll('#solsystemStyring button')].some((b) => b.textContent.trim() === '▶ Start flyby' && !b.disabled), null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
+  const hentetFør = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
+  tjek('"Start flyby" bliver aktiv, når alle seks månekort er hentet på forhånd', klar && måneKort.every((n) => n in hentetFør), JSON.stringify(hentetFør));
   const knapper = async () => s.evaluate(() => [...document.querySelectorAll('#solsystemStyring button')].map((k) => k.textContent.trim()));
   const knapperNu = await knapper();
   tjek('knapperne Saturn, Månerne, Enceladus, Titan, Start flyby og Modlys', ['Saturn', 'Månerne', 'Enceladus', 'Titan', 'Start flyby', 'Modlys'].every((t) => knapperNu.some((k) => k.includes(t))), JSON.stringify(await knapper()));
@@ -123,7 +132,6 @@ const side = async (adresse) => {
   tjek('flybyen: knapperne under turen', titler.slice(0, 8).every(([, , trin]) => trin !== null) && titler[8][2] === null, JSON.stringify(titler.map((x) => x[2])));
   await s.screenshot({ path: UD + '/5-flyby-titan.png' });
   // Billederne (S1 i docs/plan-saturn-kvalitet.md): tests henter 2k, og månernes gråtonekort har kun én kanal
-  const måneKort = ['mimas', 'enceladus', 'tethys', 'dione', 'rhea', 'titan'].map((m) => `${m}-2k.jpg`);
   await s.waitForFunction((navne) => navne.every((n) => n in atomlabTest.solsystem.fænomen().billeder()), måneKort, { timeout: 30000 }).catch(() => {});
   const hentet = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
   tjek('billederne: 2k i tests, månerne med én kanal og Saturn i farver', måneKort.every((n) => hentet[n] === 'én kanal') && hentet['saturn-2k.jpg'] === 'farver', JSON.stringify(hentet));

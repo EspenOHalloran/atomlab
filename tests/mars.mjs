@@ -52,7 +52,13 @@ tjek('højdekortet: bunden af Hellas er under −7 km', højder.hellas < -7000, 
 // Mars står efter Jorden og før Saturn i Solsystemet
 const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
 tjek('Mars står efter Formørkelser (Jorden) og før Saturn', ids.indexOf('mars') === ids.indexOf('formoerkelser') + 1 && ids.indexOf('saturn') === ids.indexOf('mars') + 1, JSON.stringify(ids));
-await s.click('#solsystem .kosmos-valg[data-id="mars"]');
+// Del 1 (30. oktober 2026): "Start flyby" er grå, indtil kortene til første stop (Olympus Mons) er hentet på forhånd
+const vedÅbning = await s.evaluate(() => {
+  document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click();
+  const k = [...document.querySelectorAll('#solsystemStyring button')].find((b) => b.textContent.includes('Start flyby'));
+  return k && { tekst: k.textContent.trim(), grå: k.disabled };
+});
+tjek('lige efter åbning: "Start flyby" er grå med "henter kort"', vedÅbning?.grå && /henter kort/.test(vedÅbning.tekst), JSON.stringify(vedÅbning));
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
 const billeder = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
 tjek('billederne er hentet (2k i tests)', billeder.kort === '2k' && billeder.højde === '2k', JSON.stringify(billeder));
@@ -160,8 +166,9 @@ await fm(async () => {
 const nulstilMåling = () => fm(() => { window.marsMåling = { min: Infinity, skub: 0, net: 0 }; });
 const måling = () => fm(() => window.marsMåling);
 const lokalt = () => fm(() => atomlabTest.solsystem.fænomen().billeder().lokalt.olympus);
-tjek('det lokale kort over Olympus Mons er ikke hentet før flybyen', !(await lokalt()).hentet.højde && !(await lokalt()).klar, JSON.stringify(await lokalt()));
-tjek('knappen "▶ Start flyby"', (await fm(() => atomlabTest.solsystem.knapper())).includes('▶ Start flyby'));
+await s.waitForFunction(() => atomlabTest.solsystem.knapper().includes('▶ Start flyby'), null, { timeout: 30000, polling: 200 });
+const førFlyby = await lokalt();
+tjek('"Start flyby" bliver aktiv, når kortene til Olympus Mons er hentet på forhånd (nettet tegnes ikke endnu, og detaljekortet venter)', førFlyby.hentet.højde && førFlyby.hentet.kort && !førFlyby.klar && !førFlyby.detalje.hentet, JSON.stringify(førFlyby));
 await s.click('#solsystemStyring button:has-text("Start flyby")');
 const fase0 = await fase();
 tjek('flybyen: første stop "Mars" med syv prikker', fase0[0].includes('Mars') && fase0[1] === 7, JSON.stringify(fase0));
@@ -370,6 +377,24 @@ await s.click('#solsystem .kosmos-valg[data-id="aarstider"]');
 await s.waitForTimeout(500);
 const efter = await s.evaluate(async () => { const { verden, himmelDrejning } = await import('/js/scene3d.js'); return { near: verden.kamera.near, zoom: verden.styring.zoomSpeed, drej: verden.styring.rotateSpeed, styring: verden.styring.enabled, himmel: himmelDrejning() }; });
 tjek('efter Mars: kameraets near, zoom, drejning og styring er sat tilbage, og himlen er ikke drejet', efter.near === 0.1 && efter.zoom === 1 && efter.drej === 1 && efter.styring && efter.himmel.join() === '0,0,0,1', JSON.stringify(efter));
+
+await s.context().close();
+
+// Kan kortene til Olympus Mons ikke hentes, bliver "Start flyby" aktiv efter ca. 8 sekunder alligevel
+{
+  const s2 = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
+  s2.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  await s2.route('**/mars-olympus-*', (r) => r.abort());
+  await s2.goto(`${ADRESSE}/?test#solsystem`);
+  await s2.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
+  await s2.click('#solsystem .kosmos-valg[data-id="mars"]');
+  await s2.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
+  const t0 = Date.now();
+  const aktiv = await s2.waitForFunction(() => atomlabTest.solsystem.knapper().includes('▶ Start flyby'), null, { timeout: 20000, polling: 200 }).then(() => true, () => false);
+  const ventede = (Date.now() - t0) / 1000;
+  tjek('uden kortene til Olympus Mons bliver "Start flyby" aktiv efter ca. 8 sekunder', aktiv && ventede < 12, ventede);
+  await s2.context().close();
+}
 
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');

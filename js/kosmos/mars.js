@@ -118,24 +118,37 @@ const TUR = [
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
 const henter = new THREE.TextureLoader();
 const lager = new Map(); // filnavn → tekstur. De bliver i grafikkortet, så det går hurtigt at åbne Mars igen.
-function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true } = {}) {
+// Billedet afkodes, før det bruges (image.decode() sker uden for hovedtråden), så det ikke hakker, når det lægges i
+// grafikkortet. fejl kaldes, hvis billedet ikke kan hentes.
+function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl } = {}) {
   let b = lager.get(navn);
   if (!b) {
-    b = { tekstur: null, venter: [] };
+    b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
     lager.set(navn, b);
     henter.load(new URL(navn, MAPPE).href, (t) => {
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
       if (kanaler === 2) t.format = THREE.RGFormat; // højden ligger i rød og grøn (sparer hukommelse)
       if (rundt) t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt (de lokale kort gør ikke)
       t.anisotropy = anisotropi;
-      b.tekstur = t;
-      for (const f of b.venter) f(t);
-      b.venter.length = 0;
-    }, undefined, () => { /* mangler billedet, bruges den jævne farve */ });
+      (t.image.decode ? t.image.decode() : Promise.resolve()).catch(() => {}).then(() => {
+        b.tekstur = t;
+        for (const f of b.venter) f(t);
+        b.venter.length = 0;
+      });
+    }, undefined, () => { // mangler billedet, bruges den jævne farve
+      b.fejlet = true;
+      for (const f of b.fejlVenter) f();
+      b.fejlVenter.length = 0;
+    });
   }
   if (b.tekstur) færdig(b.tekstur);
-  else b.venter.push(færdig);
+  else if (!b.fejlet) b.venter.push(færdig);
+  if (fejl) {
+    if (b.fejlet) fejl();
+    else if (!b.tekstur) b.fejlVenter.push(fejl);
+  }
 }
+const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på kortene til første stop
 
 export default {
   id: 'mars',
@@ -202,22 +215,40 @@ export default {
     const kortStr = TEST_HURTIG ? '2k' : maks >= 8192 ? '8k' : '4k';
     const højdeStr = TEST_HURTIG ? '2k' : '4k';
     const hentet = { kort: false, højde: false };
-    hent(`mars-${kortStr}.jpg`, (t) => { mars.sætKort(t); hentet.kort = true; }, { anisotropi });
-    hent(`mars-hoejde-${højdeStr}.png`, (t) => { mars.sætHøjde(t); hentet.højde = true; }, { farve: false, kanaler: 2 });
+    // Når Mars' egne kort er hentet (eller ikke kunne hentes), hentes kortene til første stop på flybyen (forhånd)
+    let egneMangler = 2;
+    // (queueMicrotask: Er kortene allerede i lager, kommer svaret med det samme, før resten af lav() er kørt)
+    const egetKort = () => { if (--egneMangler === 0) queueMicrotask(hentFørsteStop); };
+    hent(`mars-${kortStr}.jpg`, (t) => { mars.sætKort(t); hentet.kort = true; egetKort(); }, { anisotropi, fejl: egetKort });
+    hent(`mars-hoejde-${højdeStr}.png`, (t) => { mars.sætHøjde(t); hentet.højde = true; egetKort(); }, { farve: false, kanaler: 2, fejl: egetKort });
 
     // De lokale net. Kortene hentes først, når flybyen eller et besøg skal derhen (lokaltStr: højdekortet).
     const lokalNet = TEST_HURTIG ? [128, 128] : LAV_KVALITET ? [384, 384] : [512, 512];
     const lokaltStr = TEST_HURTIG ? '1k' : '2k';
-    const lokale = new Map(LOKALE.map((l) => [l.id, { net: mars.lokalt({ ...l, net: [lokalNet[0], Math.round(lokalNet[1] * (l.form ?? 1))] }), henter: false, hentet: { kort: false, højde: false }, detalje: l.detalje ? { henter: false, hentet: false } : null }]));
+    const lokale = new Map(LOKALE.map((l) => [l.id, { net: mars.lokalt({ ...l, net: [lokalNet[0], Math.round(lokalNet[1] * (l.form ?? 1))] }), henter: false, hentet: { kort: false, højde: false }, klar: false, vedKlar: [], detalje: l.detalje ? { henter: false, hentet: false } : null }]));
     // Kortene til stedet st (og detaljekortet, hvis st skal helt tæt på)
-    function hentLokalt(st) {
+    // forhånd: kortene lægges i grafikkortet med det samme (ellers sker det, første gang nettet tegnes, og det hakker),
+    // og klar() kaldes, når begge kort er klar eller ikke kunne hentes.
+    function hentLokalt(st, { forhånd = false, klar } = {}) {
       const l = lokale.get(st?.lokalt);
       if (!l) return;
       const id = st.lokalt;
+      if (klar) {
+        if (l.klar) klar();
+        else l.vedKlar.push(klar);
+      }
       if (!l.henter) {
         l.henter = true;
-        hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; }, { anisotropi, rundt: false });
-        hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; }, { farve: false, kanaler: 2, rundt: false });
+        let mangler = 2;
+        const ét = (t) => {
+          if (t && forhånd && aktiv) verden.renderer.initTexture(t);
+          if (--mangler > 0) return;
+          l.klar = true;
+          for (const f of l.vedKlar) f();
+          l.vedKlar.length = 0;
+        };
+        hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; ét(t); }, { anisotropi, rundt: false, fejl: ét });
+        hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; ét(t); }, { farve: false, kanaler: 2, rundt: false, fejl: ét });
       }
       if (st.detalje && l.detalje && !l.detalje.henter) {
         l.detalje.henter = true;
@@ -228,7 +259,25 @@ export default {
     function aktivér(ids) {
       for (const [id, l] of lokale) l.net.aktiv = ids.includes(id);
     }
+    aktivér([]); // ved hele Mars tegnes ingen lokale net (kortene til første stop hentes på forhånd, se nedenfor)
     const nuværendeNet = () => steder.find((s) => s.id === visning)?.lokalt;
+    // Kortene til første stop på flybyen (Olympus Mons, ca. 2,9 MB) hentes på forhånd, når Mars' egne kort er hentet.
+    // Indtil de er klar, er "Start flyby" grå. Fejler hentningen eller tager den for lang tid, bliver knappen aktiv
+    // efter FORHÅND_TID alligevel.
+    let aktiv = true;
+    let flybyKlar = false;
+    let forhåndUr = null;
+    function flybyErKlar() {
+      if (flybyKlar || !aktiv) return;
+      flybyKlar = true;
+      clearTimeout(forhåndUr);
+      lavKnapper();
+    }
+    function hentFørsteStop() {
+      if (!aktiv || forhåndUr) return;
+      forhåndUr = setTimeout(flybyErKlar, FORHÅND_TID);
+      hentLokalt(stedMed(TUR[1].id), { forhånd: true, klar: flybyErKlar });
+    }
     // Ved et stop på flybyen hentes kortene til det næste stop, så de er klar, når man trykker "Næste"
     function hentNæste(st) {
       const i = TUR.findIndex((s) => s.id === st.id);
@@ -354,7 +403,9 @@ export default {
       if (flyby.kører) knapper.push(...flyby.knapper());
       else {
         if (visning !== 'mars') knapper.push({ tekst: 'Hele Mars', handling: tilbage });
-        knapper.push({ tekst: '▶ Start flyby', handling: () => flyby.start() });
+        knapper.push(flybyKlar
+          ? { tekst: '▶ Start flyby', handling: () => flyby.start() }
+          : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
       }
       knapper.push(
         { tekst: 'Drej Mars', til: drejer, skift: (til) => { drejer = til; } },
@@ -485,6 +536,8 @@ export default {
         omdrejning.rotation.y += dt * DREJ * (visning === 'mars' ? THREE.MathUtils.smoothstep(rejse.afstand / R, 1.05, 1.8) : 1);
       },
       stop() {
+        aktiv = false;
+        clearTimeout(forhåndUr);
         verden.opdateringer.delete(hvertBillede);
         rejse.stop();
         mars.stop();

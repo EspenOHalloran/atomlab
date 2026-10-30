@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M5a: Tharsis, Valles Marineris og Hellas. Næste: M5b).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (forhåndshentning af første stop på flybyen. Næste: M5b, i gang i samme session).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -27,7 +27,15 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **I gang (30. oktober 2026): Mars M5 (flybyen over Mars), go givet.** Jeres svar: "go til alle - vi følger dine anbefalinger" (de syv beslutninger i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M5"). Samme metode som M7a+ (detaljekort) bruges, hvor kameraet kommer tæt på. Planen blev lavet i en session, der ikke kunne pushe, og er lagt ind fra jeres patch (PR #38). **M5a er lavet. Næste: M5b** (Gale, Jezero, nordpolen og navnene på kloden) **og forhåndshentning af første stop på flybyen** (jeres ønske: "Start flyby" er grå, indtil kortene er klar, også ved Saturn, hvor I oplevede et hak). Begge har go og laves i en ny session. Prompten med modelvalget (Opus, høj effort) står i `docs/plan-mars.md` under "Prompt til M5b". Tjek først, at www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu virker (de var blokeret i denne session, selv om de står på jeres liste).
 
-**Senest lavet (30. oktober 2026): Mars M5a (Tharsis, Valles Marineris og Hellas).**
+**Senest lavet (30. oktober 2026): Første stop på flybyen hentes på forhånd (del 1 af jeres opgave med M5b).**
+- **Saturn:** Hakket, I så, når flybyen startede, havde en klar årsag: "Start flyby" hentede alle seks månekort på én gang (ca. 23 MB på pc), og de blev lagt i grafikkortet midt i den første flyvning. I testbrowseren tog ét billede 4 sekunder. Nu hentes månernes kort, når Saturn åbnes (efter Saturns egne kort), ét ad gangen, og de lægges i grafikkortet med det samme. Bagefter var der ingen overførsler under flybyen.
+- **Mars:** Kortene til Olympus Mons (ca. 2,9 MB) hentes, når Mars åbnes, efter Mars' egne kort.
+- **Knappen:** Indtil kortene er klar, står der "▶ Start flyby (henter kort …)", og knappen er grå. Kan kortene ikke hentes, eller tager det for lang tid, bliver den aktiv efter 8 sekunder alligevel. "Næste: …"-knapperne er ikke ændret.
+- Billederne afkodes nu, før de bruges (`image.decode()`), så overførslen til grafikkortet går ca. 3 gange hurtigere.
+- **Domænerne:** www.jsg.utexas.edu, marsed.asu.edu og www.dlr.de virker nu. De var ikke blokeret: Containeren manglede et rodcertifikat, og dlr.de sender ikke sit mellemcertifikat. Løst uden at slå tjekket fra (Mozillas rodliste og mellemcertifikatet fra crt.harica.gr, som I åbnede). Fremgangsmåden står i `docs/erfaringer.md`.
+- **Ikke afprøvet:** Hvor længe "Start flyby" er grå på tabletten (Saturn ca. 10 MB, Mars ca. 2,9 MB efter planetens egne kort). Hakker det én gang pr. måne, mens kortene lægges i grafikkortet, kort efter Saturn er åbnet? Er hakket væk, når flybyen starter?
+
+**Før det (30. oktober 2026): Mars M5a (Tharsis, Valles Marineris og Hellas).**
 - Flybyen har nu 7 stop. **Tharsis:** de tre vulkaner set langs rækken fra sydvest i morgenlys, med Arsia Mons forrest. **Valles Marineris:** midten af kløfterne fra syd, med et skarpt detaljekort, så man kan zoome ned i kløfterne. **Hellas:** det kæmpe krater fra højt oppe.
 - **Flyvningen mellem to steder** går nu langs overfladen og højt op, så man kan se begge steder fra toppen. Før strøg den lavt hen over Mars på 3 sekunder. Lange hop tager op til 10 sekunder.
 - Kun nettene ved stedet og det sted, man flyver hen til, tegnes, så billeder i sekundet er de samme som ved Olympus Mons. Kortene hentes ved stoppet før.
