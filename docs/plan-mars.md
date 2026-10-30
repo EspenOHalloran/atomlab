@@ -116,7 +116,10 @@ Den fulde plan står i "Plan for M7a" nedenfor.
 
 **Bagefter:** I M5 får hvert nyt stop sit eget lokale kort med den samme teknik (fx Valles Marineris, hvor de smalle dele forsvinder i det grove net), så kameraet kun skal stilles én gang. M7b (CTX og HiRISE ved Gale og Jezero) og M8 ("Stå på Mars") bygger videre på samme teknik med finere kort.
 
-## Plan for M7a: lokale detaljer ved Olympus Mons (29. oktober 2026, venter på go)
+## Plan for M7a: lokale detaljer ved Olympus Mons (29. oktober 2026, godkendt)
+**Jeres go (29. oktober 2026):** De tre anbefalinger nedenfor (HRSC+MOLA, hvis den er tydeligt skarpere, de to nye stop med `/faktatjek` og én PR). Højderne er rigtige som standard.
+**Højdekilden (valgt 29. oktober 2026): HRSC+MOLA.** I spillets opløsning (ca. 0,5 km pr. pixel) er den tydeligt skarpere: MOLA har et ternet mønster mellem målesporene, et takket kraterrand og udtværede striber ved skrænten. HRSC+MOLA har et par kasseformede fejl på sletterne (op til 1,2 km fra MOLA i snit over ca. 7 km, hvor landet er fladt). Dér bruges MOLA (ca. 0,5 % af området, se `lav_steder.py`). Billedet blev vist i chatten.
+
 **Målet:** Ved Olympus Mons skal man kunne se, at vulkanen er enorm: den stejle skrænt ved foden, calderaen på toppen og lavastrømmene. Højderne er rigtige (jeres svar). Skarpheden, kameraet og lyset gør indtrykket. Teknikken skal kunne genbruges ved de andre stop i M5.
 
 **Hvad der begrænser i dag (målt i koden):**
