@@ -258,5 +258,14 @@ export const ORDBOG = [
     id: 'caldera', ord: 'Caldera',
     former: ['caldera', 'calderaen', 'calderaer'],
     tekst: 'Et stort krater på toppen af en vulkan. Det er ikke lavet af et nedslag: Når et udbrud tømmer kammeret med smeltet sten under toppen, synker jorden ned og efterlader et stort hul.',
+  },  {
+    id: 'nedslagskrater', ord: 'Nedslagskrater',
+    former: ['nedslagskrater', 'nedslagskrateret', 'nedslagskratere', 'nedslagskraterne', 'nedslagsbassin', 'nedslagsbassinet', 'nedslagsbassiner'],
+    tekst: 'Et krater, der blev sprængt ud, da en sten fra rummet ramte med meget høj fart. De allerstørste, der er flere hundrede km brede, kaldes nedslagsbassiner. På Mars og Månen ses mange, for der er ingen regn, der slider dem væk.',
+  },
+  {
+    id: 'spraekkedal', ord: 'Sprækkedal',
+    former: ['sprækkedal', 'sprækkedalen', 'sprækkedale'],
+    tekst: 'En lang dal, der opstår, når jordskorpen bliver strakt og revner. Landet mellem revnerne synker ned. Valles Marineris på Mars er en kæmpe sprækkedal. På Jorden er riftdalen i Østafrika et eksempel.',
   },
 ];

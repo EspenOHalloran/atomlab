@@ -1,6 +1,6 @@
 # Laver de lokale kort til stederne på Mars (js/kosmos/mars.js, LOKALE): et højdekort og et farvekort over et område
 # på ca. 1.000 × 1.000 km, som det lokale net i js/solsystem/klippeplanet.js bruger (Mars M7a).
-# Kør:  python3 lav_steder.py <ud-mappe> [mappe med originaler]
+# Kør:  python3 lav_steder.py <ud-mappe> [mappe med originaler] [kun=olympus,tharsis]
 # (kræver numpy, Pillow og rasterio). Uden en mappe med originaler læses kun vinduet om stedet direkte hos USGS
 # (filerne er ukomprimerede, så rasterio kan læse et vindue over nettet: ca. 3 minutter for HRSC+MOLA).
 #
@@ -37,18 +37,29 @@ from rasterio.windows import from_bounds
 # Stedets grænser: nord, syd, vest, øst (grader, øst positiv). Skal være de samme som LOKALE i js/kosmos/mars.js.
 # Olympus Mons: midten 18,40° N, 226,00° Ø (USGS' navneliste) og ca. 1.000 km på hver led (1° = 59,27 km, og mod øst
 # ganges med cos 18,5°).
+# Tharsis-vulkanerne (M5a): Arsia, Pavonis og Ascraeus Mons, ca. 1.840 × 1.600 km. Vestkanten holder 0,5° fra Olympus.
 STEDER = {
     'olympus': (27.5, 9.5, -143.5, -124.5),
+    'tharsis': (16.0, -15.0, -124.0, -97.0),
+    # Valles Marineris (M5a): midten med Melas, Candor og Ophir Chasma og starten af Coprates, ca. 1.470 × 950 km
+    'valles': (0.0, -16.0, -80.0, -55.0),
 }
+# Steder, hvor HRSC+MOLA ikke var tydeligt skarpere end MOLA i spillets opløsning (billederne i M5a). Her bruges kun
+# MOLA (CC0). Tharsis: ca. 0,9 km pr. pixel, og MOLA har 463 m.
+KUN_MOLA = {'tharsis'}
 # Detaljekortene (samme form, og de skal ligge inden for stedet). Skal være de samme som detalje i LOKALE.
 # Olympus Mons: calderaen (18,4° N, 226,7° Ø) og skrænten mod nordvest (22,15° N, 222,6° Ø), ca. 445 × 445 km.
 DETALJER = {
     'olympus': (24.0, 16.5, -139.5, -131.5),
+    # Valles Marineris: Melas, Candor og Ophir Chasma, hvor kløfterne mødes (ca. 590 × 560 km, ca. 0,28 km pr. pixel)
+    'valles': (-3.0, -12.5, -77.0, -67.0),
 }
 DETALJE = (2048, 1024)  # pc og tablet, tests
 HØJDE_MIN, HØJDE_MAX = -8500.0, 21500.0  # m, de samme som i lav_mars.py og js/kosmos/mars.js
-HØJDE = (2048, 1024)  # pc og tablet, tests
+HØJDE = (2048, 1024)  # bredden: pc og tablet, tests
 FARVE = 1024  # ca. 1 km pr. pixel (originalen har 925 m)
+# Højden af kortene i forhold til bredden (1 = kvadratisk). Skal passe med nettet i LOKALE (net) i js/kosmos/mars.js.
+FORM = {'valles': 0.5}
 R = 3396190.0
 USGS = '/vsicurl/https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/'
 FILER = {
@@ -57,7 +68,8 @@ FILER = {
     'farve': 'Mars_Viking_ClrMosaic_global_925m.tif',
 }
 ud = sys.argv[1]
-ind = sys.argv[2] if len(sys.argv) > 2 else None
+ind = sys.argv[2] if len(sys.argv) > 2 and not sys.argv[2].startswith('kun=') else None
+kun = next((a[4:].split(',') for a in sys.argv[2:] if a.startswith('kun=')), None)
 os.makedirs(ud, exist_ok=True)
 Image.MAX_IMAGE_PIXELS = None
 if os.path.exists('/root/.ccr/ca-bundle.crt'):
@@ -99,14 +111,20 @@ def glat(a, b, x):
     return t * t * (3 - 2 * t)
 
 
-def højder(grænser, B):
-    # Højderne i B × B pixel: HRSC+MOLA, men MOLA dér, hvor HRSC+MOLA har kasseformede fejl
+def højder(grænser, B, H=None, kun_mola=False):
+    # Højderne i B × H pixel: HRSC+MOLA, men MOLA dér, hvor HRSC+MOLA har kasseformede fejl
+    H = H or B
     mola, tm = læs('mola', grænser)
+    if kun_mola:
+        h = np.asarray(udsnit(Image.fromarray(mola[0].astype(np.float32), 'F'), tm, grænser, B, H, Image.BOX), np.float64)
+        print('højder (MOLA)', h.min(), h.max())
+        assert HØJDE_MIN <= h.min() and h.max() <= HØJDE_MAX
+        return h
     hrsc, th = læs('hrsc', grænser)
-    a = np.asarray(udsnit(Image.fromarray(mola[0].astype(np.float32), 'F'), tm, grænser, B, B, Image.BOX), np.float64)
-    b = np.asarray(udsnit(Image.fromarray(hrsc[0].astype(np.float32), 'F'), th, grænser, B, B, Image.BOX), np.float64)
+    a = np.asarray(udsnit(Image.fromarray(mola[0].astype(np.float32), 'F'), tm, grænser, B, H, Image.BOX), np.float64)
+    b = np.asarray(udsnit(Image.fromarray(hrsc[0].astype(np.float32), 'F'), th, grænser, B, H, Image.BOX), np.float64)
     # Vinduerne er lige store i km (ca. 7 km og 13 km), uanset hvor skarpt kortet er (0,52 km pr. pixel ved Olympus)
-    km = (grænser[0] - grænser[1]) * math.pi * R / 180 / 1000 / B
+    km = (grænser[0] - grænser[1]) * math.pi * R / 180 / 1000 / H
     r = lambda n: max(1, round(n * 0.521 / km))
     # Hvor langt HRSC+MOLA i snit er fra MOLA, og hvor ujævnt landet er
     d = b - a
@@ -121,12 +139,13 @@ def højder(grænser, B):
 
 
 def gem_højder(h, størrelser, navn):
-    # 16 bit i rød og grøn. navn(b) giver filnavnet for b × b pixel.
+    # 16 bit i rød og grøn. navn(b) giver filnavnet for kortet med bredden b (højden i samme forhold som h).
     for b_ in størrelser:
-        x = h if b_ == h.shape[0] else np.asarray(Image.fromarray(h.astype(np.float32), 'F').resize((b_, b_), Image.BOX), np.float64)
+        h_ = round(b_ * h.shape[0] / h.shape[1])
+        x = h if b_ == h.shape[1] else np.asarray(Image.fromarray(h.astype(np.float32), 'F').resize((b_, h_), Image.BOX), np.float64)
         n = np.clip(np.round((x - HØJDE_MIN) / (HØJDE_MAX - HØJDE_MIN) * 65535), 0, 65535)
         n = np.minimum(np.round(n / 8) * 8, 65535).astype(np.uint32)
-        rg = np.zeros((b_, b_, 3), np.uint8)
+        rg = np.zeros((h_, b_, 3), np.uint8)
         rg[:, :, 0] = n >> 8
         rg[:, :, 1] = n & 255
         Image.fromarray(rg, 'RGB').save(os.path.join(ud, navn(b_)), optimize=True)
@@ -134,14 +153,19 @@ def gem_højder(h, størrelser, navn):
 
 
 for id_, grænser in DETALJER.items():
+    if kun and id_ not in kun:
+        continue
     n, s, v, ø = grænser
     N, S, V, Ø = STEDER[id_]
     assert S < s < n < N and V < v < ø < Ø, 'detaljekortet skal ligge inden for stedet'
     gem_højder(højder(grænser, DETALJE[0]), DETALJE, lambda b_: f'mars-{id_}-detalje-hoejde-{"2k" if b_ == 2048 else "1k"}.png')
 
 for id_, grænser in STEDER.items():
+    if kun and id_ not in kun:
+        continue
+    form = FORM.get(id_, 1)
     # ---------- Højderne ----------
-    gem_højder(højder(grænser, HØJDE[0]), HØJDE, lambda b_: f'mars-{id_}-hoejde-{"2k" if b_ == 2048 else "1k"}.png')
+    gem_højder(højder(grænser, HØJDE[0], round(HØJDE[0] * form), id_ in KUN_MOLA), HØJDE, lambda b_: f'mars-{id_}-hoejde-{"2k" if b_ == 2048 else "1k"}.png')
 
     # ---------- Farverne (samme rettelse som i lav_mars.py) ----------
     rgb, tf = læs('farve', grænser)
@@ -154,6 +178,6 @@ for id_, grænser in STEDER.items():
     mørk = lys[..., None] * np.array([1.28, 0.98, 0.74], np.float32)
     rgb = np.clip(np.round(mørk + (x - mørk) * behold), 0, 255).astype(np.uint8)
     navn = f'mars-{id_}-farve.jpg'
-    udsnit(Image.fromarray(rgb, 'RGB'), tf, grænser, FARVE, FARVE, Image.LANCZOS).save(os.path.join(ud, navn), quality=90, optimize=True, progressive=True)
+    udsnit(Image.fromarray(rgb, 'RGB'), tf, grænser, FARVE, round(FARVE * form), Image.LANCZOS).save(os.path.join(ud, navn), quality=90, optimize=True, progressive=True)
     print(navn)
 print('ok')

@@ -196,6 +196,16 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
+## Status efter M5a (30. oktober 2026): Tharsis, Valles Marineris og Hellas
+- **Flybyen har 7 stop:** hele Mars, Olympus Mons, Calderaen, Skrænten, **Tharsis** (kl. 7, set langs rækken fra sydvest: Arsia Mons forrest), **Valles Marineris** (kl. 9, fra syd over Melas og Candor Chasma) og **Hellas** (kl. 9, fra højt oppe over nordranden).
+- **Lokale net:** Tharsis med MOLA (ca. 0,9 km pr. pixel, HRSC+MOLA var ikke skarpere), Valles Marineris med HRSC+MOLA (2048 × 1024, ca. 0,7-0,9 km) og et detaljekort over Melas, Candor og Ophir (ca. 0,28 km). Hellas har intet net. Kortene til Tharsis fylder ca. 2,6 MB og til Valles Marineris ca. 5,3 MB. De hentes ved stoppet før.
+- **Højst to net ad gangen** (stedets og det, man flyver hen til). Billeder i sekundet i testbrowseren på pc: 1,4-1,8 ved alle stop, som ved Olympus Mons før.
+- **Flyvningen mellem to steder** går langs overfladen og højt op (se `rejse.js`), og den tager 4-10 sekunder. Mars drejer under flyvningen, så klokken passer, når man lander. Det står i "Ærligt talt".
+- **Faktatjek:** `docs/fakta-solsystemet.md` under "Faktatjek M5a". Rettet bl.a. Tharsis' størrelse, toppenes højde, dybden og de yngste lavastrømme. Nye fagord: nedslagskrater og sprækkedal.
+- **Fundet undervejs:** Programmets koordinater for Olympus Mons er fra USGS' ældre kortsæt (MDIM 2.0, ca. 15 km fra MDIM 2.1). Ikke rettet, for stoppet er valgt ud fra højdekortet.
+- **Ikke afprøvet:** de lange flyvninger på tabletten (føles de for lange eller for høje?), et hak, når kortene hentes ved stoppet før, og om kanten af nettene ved Tharsis og Valles Marineris kan ses.
+- **Næste: M5b** (Gale, Jezero, nordpolen og navnene på kloden).
+
 ## Status efter M7a+ (30. oktober 2026): detaljekort ved calderaen og skrænten
 - **Jeres spørgsmål:** Calderaen og skrænten var "lidt grumsede". Er det noget, vi må leve med? **Jeres svar:** Lav anbefalingen (et detaljekort med kildens fulde opløsning) først, og brug samme metode i M5, hvor kameraet kommer tæt på. Jeres idé: brug de almindelige kort under flyvningen, og hent det skarpeste kort til stoppet. Det er sådan, det er lavet.
 - **Hvorfor det var grumset:** Det lokale højdekort har 0,52 km pr. pixel, og kilden (HRSC+MOLA) har 200 m. Ved calderaen fyldte én højdepixel ca. 5 skærmpixel, tæt på over 10.

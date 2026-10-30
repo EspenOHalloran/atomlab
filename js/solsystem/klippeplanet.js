@@ -485,7 +485,9 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         kant: [kant / (rad(øst - vest) * radius * Math.cos(midt)), kant / (rad(nord - syd) * radius)],
         boks: new THREE.Vector4((vest + 180) / 360, (syd + 90) / 180, (øst + 180) / 360, (nord + 90) / 180),
         tabel: null,
-        klar: false,
+        klar: false, // nettet tegnes (og kuglen har et hul): højdekortet er hentet, og nettet er aktivt
+        harHøjde: false,
+        aktiv: true,
         detalje: detalje && {
           nord: rad(detalje.nord), syd: rad(detalje.syd), vest: rad(detalje.vest), øst: rad(detalje.øst),
           kant: [(detalje.kant ?? 15) / (rad(detalje.øst - detalje.vest) * radius * Math.cos(rad((detalje.nord + detalje.syd) / 2))), (detalje.kant ?? 15) / (rad(detalje.nord - detalje.syd) * radius)],
@@ -619,12 +621,22 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         sætHøjde(t) {
           lu.lokalHoejde.value = t;
           if (t) lu.lokalTexel.value.set(1 / t.image.width, 1 / t.image.height);
-          l.klar = lmesh.visible = !!t;
+          l.harHøjde = !!t;
+          l.klar = lmesh.visible = l.harHøjde && l.aktiv;
           l.tabel = null;
           if (t) tabelFor(t, u.hMin.value, u.hSpan.value, [512, 512], (ny) => { if (lu.lokalHoejde.value === t) l.tabel = ny; });
           opdaterHuller();
         },
         get harDetaljeTabel() { return !!l.detalje?.tabel; },
+        // Et net, der ikke er aktivt, tegnes ikke, og kuglen tegnes dér i stedet (hvert net koster billeder i sekundet,
+        // også når det er på bagsiden). Højdetabellen bruges stadig, så kameraet holdes over bjergene.
+        get aktiv() { return l.aktiv; },
+        set aktiv(v) {
+          if (l.aktiv === v) return;
+          l.aktiv = v;
+          l.klar = lmesh.visible = l.harHøjde && v;
+          opdaterHuller();
+        },
         // Detaljekortet (kun med detalje). Nettets punkter bruger det niveau i kortets mipmaps, der passer til
         // afstanden mellem punkterne.
         sætDetalje(t) {
