@@ -196,6 +196,15 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
+## Status efter M7a+ (30. oktober 2026): detaljekort ved calderaen og skrænten
+- **Jeres spørgsmål:** Calderaen og skrænten var "lidt grumsede". Er det noget, vi må leve med? **Jeres svar:** Lav anbefalingen (et detaljekort med kildens fulde opløsning) først, og brug samme metode i M5, hvor kameraet kommer tæt på. Jeres idé: brug de almindelige kort under flyvningen, og hent det skarpeste kort til stoppet. Det er sådan, det er lavet.
+- **Hvorfor det var grumset:** Det lokale højdekort har 0,52 km pr. pixel, og kilden (HRSC+MOLA) har 200 m. Ved calderaen fyldte én højdepixel ca. 5 skærmpixel, tæt på over 10.
+- **Lavet:** Et detaljekort i ca. 0,22 km pr. pixel over 24° N-16,5° N og 139,5° V-131,5° V (ca. 445 × 445 km, `mars-olympus-detalje-hoejde-2k.png`, 2,2 MB, tests 1k). Det lokale net læser det, hvor det findes (`detalje` i `lokalt`), og det glider over i det lokale kort på 15 km. Det hentes, når flybyen når Olympus Mons, så det er klar ved calderaen (`hentNæste`: ved et stop hentes det næste stops kort). Højdetabellen bruger det også, så kameraet holdes over de skarpe bjerge.
+- **Resultat:** Calderaens bund viser rynker og kanter, og skrænten flere kløfter (skarphed målt i billederne +35-85 %). Helt nede ved jorden er det stadig blødt: Kilden er ikke skarpere. HRSC's egne højdekort (ca. 50 m) kan komme i M7b.
+- **Billeder i sekundet** (testbrowseren, fuld grafik): ved calderaen og skrænten 1,35-1,57 på pc og 2,0-2,5 på tablet, før 1,5-1,9 og 2,25-3,0. Målestøjen er lige så stor som forskellen, så prisen er højst ca. 10 %.
+- **Farverne** er de samme (ca. 1 km). Skarpere farver kræver fotos med skygger malet ind (se M7a). En mulighed til M7b: CTX' fotos (taget ca. kl. 15) med programmets sol sat som da billedet blev taget.
+- **Til M5:** Stop, hvor kameraet kommer tæt på (Valles Marineris, Gale og Jezero), får et detaljekort, hvis billedet ellers bliver grumset (regn skærmpixel pr. højdepixel, tjekliste E).
+
 ## Prompt til M5 (skrevet 30. oktober 2026, brugt: planen står i "Plan for M5" nedenfor)
 **Model og effort:** Opus med høj effort, både til planen og til at bygge. `CLAUDE.md` siger Opus til kode, fakta og danske tekster, og Mars er ikke en opgave for Fable (`docs/plan-fable.md`). Xhigh er ikke nødvendig: Teknikken fra M7a genbruges, og det nye (fx et net over polen) er mindre svært end M7a. Hjælpeagenter: Opus med høj effort til faktatjekket (`/faktatjek`), Haiku med lav effort til at opsummere lange testlogs og Sonnet med lav effort til at finde ting i koden. Start en ny session fra `main`.
 
@@ -211,7 +220,9 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 >
 > Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig, og sig, hvis en anden model eller effort passer bedre til en del.
 
-## Plan for M5: flybyen over Mars (30. oktober 2026, venter på go)
+## Plan for M5: flybyen over Mars (30. oktober 2026, go givet)
+**Jeres svar (30. oktober 2026): "go til alle - vi følger dine anbefalinger"** (alle syv beslutninger nedenfor). Først laves M7a+ (detaljekortet ved calderaen og skrænten), og samme metode bruges i M5, hvor kameraet kommer tæt på. Domænerne `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` står på jeres liste, men var stadig blokeret i sessionen, der startede før (proxyen afviste dem). De bruges kun til faktatjekket: Det, der kun står dér, skrives forsigtigt eller udelades.
+
 *Lavet af Opus (høj effort) ud fra "Lige nu", "Status efter M4c", "Detaljer før flere stop", "Status efter M7a", tjeklisterne og koden (`mars.js`, `klippeplanet.js`, `rejse.js`, `flyby.js`, `lav_steder.py`). Anbefalingerne står først. Beslutningerne står som spørgsmål til sidst.*
 
 **To ting kunne ikke tjekkes i den session, der lavede planen** (den kørte i Claude-appen og ikke i jeres sædvanlige miljø):

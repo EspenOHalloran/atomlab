@@ -9,7 +9,8 @@
 // Højderne ligger også i en tabel i JS (den højeste værdi i hvert felt), så kameraet kan holdes over bjergene
 // (overflade) og et sted kan findes på kuglen (sted).
 //
-// Over et sted kan der ligge et lokalt net med sit eget, skarpere højdekort og farvekort (lokalt, Mars M7a).
+// Over et sted kan der ligge et lokalt net med sit eget, skarpere højdekort og farvekort (lokalt, Mars M7a), og inden
+// for det et detaljekort med endnu skarpere højder (detalje), der hentes, når man skal helt tæt på.
 
 import * as THREE from 'three';
 import { SKY_GLSL } from './skyer.js';
@@ -25,6 +26,24 @@ const HOEJDE_GLSL = /* glsl */ `
     vec2 v = texture2D(t, uv).rg;
     return v.x * (65280.0 / 65535.0) + v.y * (255.0 / 65535.0);
   }
+  #ifdef DETALJE
+  // Detaljekortet (et skarpere højdekort i en del af det lokale net). lod: niveauet i kortets mipmaps, så nettets
+  // punkter får middelhøjden omkring sig og ikke tilfældige toppe og bunde fra det skarpe kort.
+  uniform sampler2D detaljeHoejde;
+  uniform float harDetalje;
+  uniform vec4 detaljeBoks;  // detaljekortets grænser i stedets uv
+  uniform vec2 detaljeKant;  // overgangen i detaljekortets uv
+  float hoejdeLod(sampler2D t, vec2 uv, float lod) {
+    vec2 v = textureLod(t, uv, lod).rg;
+    return v.x * (65280.0 / 65535.0) + v.y * (255.0 / 65535.0);
+  }
+  // Hvor meget detaljekortet bruges (0 udenfor, 1 inde bag overgangen), og stedet i detaljekortet (d)
+  float detaljeVaegt(vec2 lok, out vec2 d) {
+    d = (lok - detaljeBoks.xy) / (detaljeBoks.zw - detaljeBoks.xy);
+    vec2 e = min(d, 1.0 - d) / detaljeKant;
+    return harDetalje > 0.5 ? smoothstep(0.0, 1.0, clamp(min(e.x, e.y), 0.0, 1.0)) : 0.0;
+  }
+  #endif
   // Bjergenes skrå sider: hvor meget højden ændrer sig pr. strækning mod øst og nord (begge i radier). tx er en pixel i
   // kortet, og spaend er, hvor mange radianer hele kortet dækker mod øst og nord.
   vec2 haeldning(sampler2D t, vec2 uv, vec2 tx, vec2 spaend, float cosB) {
@@ -67,6 +86,9 @@ const VERTEX_LOKAL = /* glsl */ `
   uniform vec2 kant;         // overgangens bredde i stedets uv
   uniform vec2 netKugle;     // kuglens net: felter omkring og fra pol til pol
   uniform float skoertDybde; // hvor langt skørtet hænger ned (i radier)
+  #ifdef DETALJE
+  uniform float detaljeLod;
+  #endif
   attribute float skoert;
   attribute vec3 kugle;      // punktet på kuglens trekant her uden bjerge (regnet i JS: sin og cos i shaderen er for unøjagtige)
   ${HOEJDE_GLSL}
@@ -89,7 +111,15 @@ const VERTEX_LOKAL = /* glsl */ `
     vVaegt = w;
     vec3 n = normalize(position);
     vObjN = n;
+    #ifdef DETALJE
+    // Inde i detaljekortet læses kun det (det sparer tid), og i overgangen begge
+    vec2 d;
+    float wd = detaljeVaegt(vLok, d);
+    float h = wd < 1.0 ? hMin + hSpan * hoejdeAf(lokalHoejde, vLok) : 0.0;
+    if (wd > 0.0) h = mix(h, hMin + hSpan * hoejdeLod(detaljeHoejde, d, detaljeLod), wd);
+    #else
     float h = hMin + hSpan * hoejdeAf(lokalHoejde, vLok);
+    #endif
     vec3 p = n * vec3(1.0, flad, 1.0) + n * h * overdriv;
     float hL = h; // til støvet i luften
     if (w < 1.0) {
@@ -224,6 +254,10 @@ const FRAGMENT_LOKAL = /* glsl */ `
   uniform sampler2D lokalHoejde;
   uniform vec2 lokalTexel;   // en pixel i det lokale højdekort
   uniform vec2 lokalSpaend;  // hvor mange radianer stedet dækker mod øst og nord
+  #ifdef DETALJE
+  uniform vec2 detaljeTexel;
+  uniform vec2 detaljeSpaend;
+  #endif
   ${HOEJDE_GLSL}
   ${LYS_GLSL}
   varying vec2 vUv;
@@ -235,7 +269,14 @@ const FRAGMENT_LOKAL = /* glsl */ `
     vec3 oest, nord;
     float cosB = oestNord(n0, oest, nord);
     // Ved kanten glider hældningen og farven over i kuglens
+    #ifdef DETALJE
+    vec2 d;
+    float wd = detaljeVaegt(vLok, d);
+    vec2 g = wd < 1.0 ? haeldning(lokalHoejde, vLok, lokalTexel, lokalSpaend, cosB) : vec2(0.0);
+    if (wd > 0.0) g = mix(g, haeldning(detaljeHoejde, d, detaljeTexel, detaljeSpaend, cosB), wd);
+    #else
     vec2 g = haeldning(lokalHoejde, vLok, lokalTexel, lokalSpaend, cosB);
+    #endif
     vec3 c = harLokalKort > 0.5 ? texture2D(lokalKort, vLok).rgb : harKort > 0.5 ? texture2D(kort, vUv).rgb : farve;
     if (vVaegt < 0.999) {
       vec2 gK = harHoejde > 0.5 ? haeldning(hoejde, vUv, texel, vec2(OMGANG, OMGANG * 0.5), cosB) : vec2(0.0);
@@ -406,6 +447,12 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       if (lx <= 0 || lx >= 1 || ly <= 0 || ly >= 1) continue;
       const w = glidende(Math.min(lx / l.kant[0], (1 - lx) / l.kant[0], ly / l.kant[1], (1 - ly) / l.kant[1]));
       h += (slåOp(l.tabel, lx * l.tabel.B, ly * l.tabel.H, maks, false) - h) * w;
+      const d = l.detalje;
+      if (!d?.tabel) continue;
+      const dx = (længde - d.vest) / (d.øst - d.vest), dy = (d.nord - bredde) / (d.nord - d.syd);
+      if (dx <= 0 || dx >= 1 || dy <= 0 || dy >= 1) continue;
+      const wd = glidende(Math.min(dx / d.kant[0], (1 - dx) / d.kant[0], dy / d.kant[1], (1 - dy) / d.kant[1]));
+      h += (slåOp(d.tabel, dx * d.tabel.B, dy * d.tabel.H, maks, false) - h) * wd;
     }
     return h * u.overdriv.value;
   }
@@ -427,7 +474,9 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
     // Et lokalt net over et sted med sit eget højdekort og farvekort (sættes med sætHøjde og sætKort).
     // grænser: { nord, syd, vest, øst } i grader (øst positiv). net: punkter på hver led. kant: overgangen til kuglen
     // i km. Kuglen tegnes ikke inden for grænserne, når det lokale højdekort er hentet.
-    lokalt({ nord, syd, vest, øst, net: lokalNet = [512, 512], kant = 40 }) {
+    // detalje: { nord, syd, vest, øst, kant } et mindre område inden for stedet med et skarpere højdekort (sætDetalje),
+    // som glider over i stedets kort på kant km.
+    lokalt({ nord, syd, vest, øst, net: lokalNet = [512, 512], kant = 40, detalje = null }) {
       const rad = THREE.MathUtils.degToRad;
       const midt = rad((nord + syd) / 2);
       const l = {
@@ -437,6 +486,11 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         boks: new THREE.Vector4((vest + 180) / 360, (syd + 90) / 180, (øst + 180) / 360, (nord + 90) / 180),
         tabel: null,
         klar: false,
+        detalje: detalje && {
+          nord: rad(detalje.nord), syd: rad(detalje.syd), vest: rad(detalje.vest), øst: rad(detalje.øst),
+          kant: [(detalje.kant ?? 15) / (rad(detalje.øst - detalje.vest) * radius * Math.cos(rad((detalje.nord + detalje.syd) / 2))), (detalje.kant ?? 15) / (rad(detalje.nord - detalje.syd) * radius)],
+          tabel: null,
+        },
       };
       // Hullet i kuglen er 1,5 km mindre end nettet. I den smalle stribe tegnes begge (de ser ens ud, for nettet ligger
       // på kuglens trekanter helt ude ved kanten). Ellers kan der komme en revne på en pixel, når man kigger hen over kanten.
@@ -509,8 +563,18 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
           kant: { value: new THREE.Vector2(...l.kant) },
           netKugle: { value: new THREE.Vector2(...net) },
           skoertDybde: { value: 1.5 / radius }, // 1,5 km
+          ...(detalje && {
+            detaljeHoejde: { value: null },
+            harDetalje: { value: 0 },
+            // detaljekortets grænser i stedets uv (vest og syd er 0)
+            detaljeBoks: { value: new THREE.Vector4((detalje.vest - vest) / (øst - vest), (detalje.syd - syd) / (nord - syd), (detalje.øst - vest) / (øst - vest), (detalje.nord - syd) / (nord - syd)) },
+            detaljeKant: { value: new THREE.Vector2(...l.detalje.kant) },
+            detaljeTexel: { value: new THREE.Vector2(1, 1) },
+            detaljeSpaend: { value: new THREE.Vector2(rad(detalje.øst - detalje.vest), rad(detalje.nord - detalje.syd)) },
+            detaljeLod: { value: 0 },
+          }),
         },
-        defines,
+        defines: { ...defines, ...(detalje && { DETALJE: '' }) },
         vertexShader: VERTEX_LOKAL,
         fragmentShader: medSkyer(FRAGMENT_LOKAL),
       });
@@ -559,6 +623,20 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
           l.tabel = null;
           if (t) tabelFor(t, u.hMin.value, u.hSpan.value, [512, 512], (ny) => { if (lu.lokalHoejde.value === t) l.tabel = ny; });
           opdaterHuller();
+        },
+        get harDetaljeTabel() { return !!l.detalje?.tabel; },
+        // Detaljekortet (kun med detalje). Nettets punkter bruger det niveau i kortets mipmaps, der passer til
+        // afstanden mellem punkterne.
+        sætDetalje(t) {
+          if (!l.detalje) return;
+          lu.detaljeHoejde.value = t;
+          lu.harDetalje.value = t ? 1 : 0;
+          l.detalje.tabel = null;
+          if (!t) return;
+          lu.detaljeTexel.value.set(1 / t.image.width, 1 / t.image.height);
+          const punkter = (M - 1) * (detalje.øst - detalje.vest) / (øst - vest); // nettets felter hen over detaljekortet
+          lu.detaljeLod.value = Math.max(0, Math.log2(t.image.width / punkter));
+          tabelFor(t, u.hMin.value, u.hSpan.value, [512, 512], (ny) => { if (lu.detaljeHoejde.value === t) l.detalje.tabel = ny; });
         },
       };
     },

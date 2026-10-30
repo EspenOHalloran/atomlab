@@ -1,7 +1,7 @@
 // Mars (M2, M3, M4c og M7a i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
 // 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, flybyen ned til
-// Olympus Mons, calderaen og skrænten med det lokale kort (M4c og M7a), og kameraets indstillinger bliver sat tilbage, når man går videre.
+// Olympus Mons, calderaen og skrænten med det lokale kort og detaljekortet (M4c og M7a), og kameraets indstillinger bliver sat tilbage, når man går videre.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('mars');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -169,6 +169,7 @@ tjek('første stop: systemet er ikke drejet', vinkelMellem(await fm(() => atomla
 await s.waitForFunction(() => { const l = atomlabTest.solsystem.fænomen().billeder().lokalt.olympus; return l.hentet.højde && l.hentet.kort && l.tabel && l.klar; }, null, { timeout: 30000, polling: 200 });
 const lok = await lokalt();
 tjek('flybyen henter det lokale kort over Olympus Mons (1k i tests) og laver højdetabellen', lok.højde === '1k' && lok.tabel && lok.net[0] === 128, JSON.stringify(lok));
+tjek('detaljekortet over calderaen og skrænten er ikke hentet ved første stop', lok.detalje && !lok.detalje.hentet, JSON.stringify(lok));
 // Højderne med det lokale kort (HRSC og MOLA): toppen, calderaen og skrænten
 const højder2 = await fm(() => {
   const t = atomlabTest.solsystem.fænomen();
@@ -213,6 +214,23 @@ tjek('ved Olympus Mons: kameraet kigger på stedet, og klokken er 7', v.fokus < 
 const himmel = await fm(async () => { const { himmelDrejning } = await import('/js/scene3d.js'); return [himmelDrejning(), atomlabTest.solsystem.fænomen().drejningSystem()]; });
 tjek('stjernehimlen er drejet med Mars', vinkelMellem(himmel[0], himmel[1]) < 0.01 && vinkelMellem(himmel[1], [0, 0, 0, 1]) > 10, JSON.stringify(himmel));
 tjek('ved Olympus Mons: teksten om skjoldvulkanen', /skjoldvulkan/.test(await s.textContent('#solsystemForklaring')));
+// Detaljekortet (ca. 0,22 km pr. pixel) hentes ved Olympus Mons, så det er klar ved calderaen og skrænten
+await s.waitForFunction(() => { const d = atomlabTest.solsystem.fænomen().billeder().lokalt.olympus.detalje; return d.hentet && d.tabel; }, null, { timeout: 30000, polling: 200 });
+const højder3 = await fm(() => {
+  const t = atomlabTest.solsystem.fænomen();
+  const felt = (b0, l0, r, trin) => { const v = []; for (let b = b0 - r; b <= b0 + r; b += trin) for (let l = l0 - r; l <= l0 + r; l += trin) v.push(t.højde(b, l)); return v; };
+  // Overgangen fra detaljekortet (24° N til 16,5° N og 139,5° V til 131,5° V) til det lokale kort
+  const kant = [];
+  for (let x = 0; x <= 1; x += 0.05) {
+    const b = 16.5 + 7.5 * x, l = -139.5 + 8 * x;
+    // (0,001° er ca. 60 m: et spring ved kanten ville ses, men ikke skrænten, som kanten krydser mod vest)
+    kant.push(Math.abs(t.højde(24 - 0.001, l) - t.højde(24 + 0.001, l)), Math.abs(t.højde(16.5 + 0.001, l) - t.højde(16.5 - 0.001, l)),
+      Math.abs(t.højde(b, -139.5 + 0.001) - t.højde(b, -139.5 - 0.001)), Math.abs(t.højde(b, -131.5 - 0.001) - t.højde(b, -131.5 + 0.001)));
+  }
+  return { kant: Math.max(...felt(18.4, -133.3, 0.9, 0.02)), bund: Math.min(...felt(18.45, -133.25, 0.35, 0.02)), overgang: Math.max(...kant) };
+});
+tjek('med detaljekortet: calderaens bund ligger stadig ca. 3 km under kanten', højder3.kant - højder3.bund > 2.5 && højder3.kant - højder3.bund < 3.8, JSON.stringify(højder3));
+tjek('overgangen fra detaljekortet: under 50 m forskel lige over kanten', højder3.overgang < 0.05, højder3.overgang);
 await s.waitForTimeout(800);
 await s.screenshot({ path: UD + '/4-olympus-mons.png' });
 // Calderaen
