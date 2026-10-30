@@ -196,32 +196,28 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
-## Prompt til navneknappen (skrevet 30. oktober 2026)
-**Model og effort:** Opus med medium effort. Det er en lille ændring i programmets kode (`CLAUDE.md` siger Opus til kode i programmet), men uden fysik eller fakta, så høj effort er ikke nødvendig. Ingen hjælpeagenter. Start en ny session fra `main`. Den kan også køres først i samme session som M6 nedenfor (så læses filerne kun én gang).
+## Prompt til navneknappen og M6: Phobos og Deimos (skrevet 30. oktober 2026)
+**Model og effort:** Opus med høj effort. Navneknappen er lille kode i programmet. M6 er kode, fysik (banerne og farten), formmodeller og fakta (`CLAUDE.md`). Xhigh er ikke nødvendig: Teknikken (rejsen, flybyen og månerne ved Saturn) findes. Det sværeste er at få Deimos' formmodel til at vende rigtigt (længdegraderne kan være østlige eller vestlige), og det tjekkes med billeder. Fable bruges ikke: I har besluttet at vente på Fable 5.5 (`docs/plan-fable.md`). Hjælpeagenter: Opus med høj effort til `/faktatjek` (højst 2), Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs. Start en ny session fra `main`.
 
 **Prompten (kopiér den):**
 
-> Lav navneknappen i AtomLab. Den har go. Læs først "Lige nu" i DESIGN.md, `docs/plan-mars.md` under "Status efter M5b" (jeres ønske efter M5b) og tjeklisterne i `docs/erfaringer.md` (især D og E).
+> Lav to ting i AtomLab. Læs først "Lige nu" i DESIGN.md, `docs/plan-mars.md` (Delopgaverne, "Status efter M5b", "Formen på månerne (M6)" under Teknik og licenserne), `docs/fakta-solsystemet.md`, del 3B (Phobos, Deimos, MMX, formmodeller og licenser), og tjeklisterne i `docs/erfaringer.md`.
+>
+> **Del 1: Navneknappen (har go, egen PR, som du selv merger, når testene er grønne).**
 > - En til/fra-knap "Navne" under "Prøv selv" ved Mars (navnene og prikkerne på kloden, `NAVNE` i `js/kosmos/mars.js`) og ved Saturn (månernes navne, `etiket` i `js/kosmos/saturn.js`). Slået til fra start.
 > - Fra: navnene og prikkerne skjules, og et tryk på Mars flyver ingen steder hen. Ved Saturn kan man stadig trykke på selve månerne.
-> - Valget deles af alle planeterne og huskes (`localStorage`, `atomlabNavne`: `'til'` eller `'fra'`). Lav det som en lille fælles hjælper i `js/solsystem/`, så kommende planeter og måner (fx Phobos og Deimos i M6) kan bruge den.
-> - Tjek: testene `mars` og `saturn` (navnene forsvinder, et tryk på kloden gør intet, valget huskes efter genindlæsning), og `--ændret`. Opdater CLAUDE.md (også "Gemte data").
-> - Én PR, som du selv merger, når testene er grønne. Giv mig "Ikke afprøvet" til sidst.
-
-## Prompt til M6: Phobos og Deimos (skrevet 30. oktober 2026)
-**Model og effort:** Opus med høj effort, både til planen og til at bygge: kode i programmet, fysik (banerne og farten), formmodeller og fakta (`CLAUDE.md`). Xhigh er ikke nødvendig: Teknikken (rejsen, flybyen og månerne ved Saturn) findes. Det sværeste er at få Deimos' formmodel til at vende rigtigt (længdegraderne kan være østlige eller vestlige), og det tjekkes med billeder. Fable bruges ikke: I har besluttet at vente på Fable 5.5 (`docs/plan-fable.md`). Hjælpeagenter: Opus med høj effort til `/faktatjek` (højst 2), Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs. Start en ny session fra `main`.
-
-**Prompten (kopiér den):**
-
-> Lav planen for Mars M6 (Phobos og Deimos), og vent på mit go, før du bygger. Læs først "Lige nu" i DESIGN.md, `docs/plan-mars.md` (Delopgaverne, "Status efter M5b", "Formen på månerne (M6)" under Teknik og licenserne) og `docs/fakta-solsystemet.md`, del 3B (Phobos, Deimos, MMX, formmodeller og licenser), og tjeklisterne i `docs/erfaringer.md`. Tjek med curl, at kilderne kan åbnes (USGS' arkiv `asc-pds-services.s3.us-west-2.amazonaws.com`, `raw.githubusercontent.com`, `planetarynames.wr.usgs.gov`, `science.nasa.gov`, `www.esa.int` og JAXA's sider om MMX). Giver curl "unable to get local issuer certificate", er siden ikke blokeret (se "Certifikater" i erfaringer.md). Spørg mig, hvis noget er blokeret, før arbejdet går i gang. Planen skal stå i `docs/plan-mars.md` under "Plan for M6" og svare på:
+> - Valget deles af alle planeterne og huskes (`localStorage`, `atomlabNavne`: `'til'` eller `'fra'`). Lav det som en lille fælles hjælper i `js/solsystem/`, så Phobos og Deimos (og senere planeter og måner) kan bruge den.
+> - Tjek i testene `mars` og `saturn`: Navnene forsvinder, et tryk på kloden gør intet, og valget huskes efter genindlæsning. Kør `--ændret`, og opdater CLAUDE.md (også "Gemte data").
+>
+> **Del 2: Planen for M6 (Phobos og Deimos). Vent på mit go, før du bygger.** Tjek først med curl, at kilderne kan åbnes: USGS' arkiv `asc-pds-services.s3.us-west-2.amazonaws.com`, `raw.githubusercontent.com`, `planetarynames.wr.usgs.gov`, `science.nasa.gov`, `www.esa.int` og JAXA's sider om MMX. Giver curl "unable to get local issuer certificate", er siden ikke blokeret (se "Certifikater" i erfaringer.md). Spørg mig, hvis noget er blokeret, før arbejdet går i gang. Planen skal stå i `docs/plan-mars.md` under "Plan for M6" og svare på:
 > 1. **Formen:** Phobos af USGS' højdekort fra Mars Express og Deimos af Thomas' formmodel (1993). Hvilke kort (farver eller gråtoner) og hvilken opløsning? Vis billeder af begge måner fra flere sider ved siden af rigtige fotos (fx fra HiRISE eller Mars Express), så vi kan se, at de vender rigtigt og ikke er spejlvendte.
 > 2. **Banerne og farten:** den rigtige afstand og omløbstid i forhold til Mars' døgn (Mars drejer meget hurtigere i programmet: Skal månerne følge med i samme forhold?). Phobos står op i vest og går ned i øst. Begge vender samme side mod Mars. Hvordan ses de, når man ser hele Mars (de er meget små: tegnes de større langt væk som Saturns måner, og står det ærligt)?
-> 3. **Flybyen:** Fortsætter turen fra Nordpolen ud til Phobos og Deimos (12 stop), eller skal de have deres egen tur? "Mars set fra Phobos" (Mars fylder ca. 42° af himlen). Navnene og navneknappen (lavet før, `atomlabNavne`) skal også gælde månerne.
+> 3. **Flybyen:** Fortsætter turen fra Nordpolen ud til Phobos og Deimos (12 stop), eller skal de have deres egen tur? "Mars set fra Phobos" (Mars fylder ca. 42° af himlen). Navnene og navneknappen fra del 1 skal også gælde månerne.
 > 4. **Tekster:** undertekster (højst ca. 160 tegn) og tekster i panelet ved hvert stop, "For nørder", "Ærligt talt" og nye fagord. Alt med `/faktatjek`. Det, der ændrer sig (MMX' opsendelse og status), slås op samme dag og skrives med måned og år.
 > 5. **Hvad det koster:** filernes størrelse, grafikkortets hukommelse og billeder i sekundet.
 > 6. **Opdeling:** Skal M6 deles (fx M6a: formen og banerne, M6b: flybyen og teksterne)? Giv en anbefaling.
 >
-> Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig, og sig, hvis en anden model eller effort passer bedre til en del. Når du har fået go: Byg det, én PR pr. del, som du selv merger, når testene er grønne, og giv mig "Ikke afprøvet" til sidst (det, jeg skal prøve på tabletten).
+> Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig, og sig, hvis en anden model eller effort passer bedre til en del. Når du har fået go: Byg det, én PR pr. del, som du selv merger, når testene er grønne. Giv mig "Ikke afprøvet" til sidst (det, jeg skal prøve på tabletten).
 
 ## Prompt til M5b (skrevet 30. oktober 2026)
 **Model og effort:** Opus med høj effort (kode i programmet, fakta og danske tekster, som `CLAUDE.md` siger). Xhigh er ikke nødvendig: teknikken fra M7a og M5a genbruges. Hjælpeagenter: Opus med høj effort til `/faktatjek`, Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs. Start en ny session fra `main`.
