@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M7a+: detaljekort ved calderaen og skrænten. M5 har go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M5a: Tharsis, Valles Marineris og Hellas. Næste: M5b).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -25,9 +25,18 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**I gang (30. oktober 2026): Mars M5 (flybyen over Mars), go givet.** Jeres svar: "go til alle - vi følger dine anbefalinger" (de syv beslutninger i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M5"). M5a (Tharsis, Valles Marineris, Hellas og den nye flyvning) er næste. Samme metode som M7a+ (detaljekort) bruges, hvor kameraet kommer tæt på. Planen blev lavet i en session, der ikke kunne pushe, og er lagt ind fra jeres patch (PR #38).
+**I gang (30. oktober 2026): Mars M5 (flybyen over Mars), go givet.** Jeres svar: "go til alle - vi følger dine anbefalinger" (de syv beslutninger i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M5"). Samme metode som M7a+ (detaljekort) bruges, hvor kameraet kommer tæt på. Planen blev lavet i en session, der ikke kunne pushe, og er lagt ind fra jeres patch (PR #38). **M5a er lavet. Næste: M5b** (Gale, Jezero, nordpolen og navnene på kloden). Det kan starte uden nyt go, men tjek først, at www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu virker (de var blokeret i denne session, selv om de står på jeres liste).
 
-**Senest lavet (30. oktober 2026): Mars M7a+ (detaljekort ved calderaen og skrænten).**
+**Senest lavet (30. oktober 2026): Mars M5a (Tharsis, Valles Marineris og Hellas).**
+- Flybyen har nu 7 stop. **Tharsis:** de tre vulkaner set langs rækken fra sydvest i morgenlys, med Arsia Mons forrest. **Valles Marineris:** midten af kløfterne fra syd, med et skarpt detaljekort, så man kan zoome ned i kløfterne. **Hellas:** det kæmpe krater fra højt oppe.
+- **Flyvningen mellem to steder** går nu langs overfladen og højt op, så man kan se begge steder fra toppen. Før strøg den lavt hen over Mars på 3 sekunder. Lange hop tager op til 10 sekunder.
+- Kun nettene ved stedet og det sted, man flyver hen til, tegnes, så billeder i sekundet er de samme som ved Olympus Mons. Kortene hentes ved stoppet før.
+- **Faktatjekket** (hjælpeagent, kilderne åbnet med curl: ESA, NASA, USGS, NTRS og Wikipedia) rettede Tharsis' størrelse (ca. 5.000 km), toppenes højde (Pavonis ca. 14 km, de andre ca. 18 km, ikke 20), dybden (op til ca. 10 km) og de yngste lavastrømme (måske kun få millioner år gamle). To nye fagord: nedslagskrater og sprækkedal. Kilderne står i `docs/fakta-solsystemet.md` under "Faktatjek M5a".
+- **Fundet:** Koordinaterne til Olympus Mons er fra USGS' ældre kortsæt (ca. 15 km forskel). Ikke rettet (stoppet er valgt ud fra højdekortet).
+- **Ikke afprøvet:** Hvordan føles de lange flyvninger på tabletten (for lange eller for høje)? Er der et hak, når kortene hentes? Kan man se kanten af nettene ved Tharsis og Valles Marineris?
+- Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M5a".
+
+**Før det (30. oktober 2026): Mars M7a+ (detaljekort ved calderaen og skrænten).**
 - **Jeres spørgsmål:** Calderaen og skrænten var "lidt grumsede". Svaret: Det lokale højdekort brugte kun ca. 0,5 km pr. pixel, kilden har 200 m. **Jeres go:** Lav det skarpere først. Jeres idé (almindelige kort under flyvningen, det skarpeste kort ved stoppet) er sådan, det er lavet.
 - Et detaljekort i ca. 0,22 km pr. pixel over calderaen og skrænten (ca. 445 × 445 km, 2,2 MB). Det hentes, når flybyen når Olympus Mons, så det er klar ved calderaen. Calderaens bund viser nu rynker og kanter, og skrænten flere kløfter. Helt nede ved jorden er det stadig blødt, for kilden er ikke skarpere (HRSC's egne højdekort på ca. 50 m kan komme i M7b). Farverne er de samme.
 - Billeder i sekundet: højst ca. 10 % lavere ved de to stop i testbrowseren (målestøjen er lige så stor). Testen `mars` tjekker detaljekortet.
@@ -124,7 +133,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
 **Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026).
-- **Ny rækkefølge (jeres svar 29. oktober 2026):** Olympus Mons var "ikke for imponerende". Det skyldes mest, at Mars' net er groft (ca. 21 km mellem punkterne). Derfor kommer **M7a** (lokale detaljer, prøvet på Olympus Mons) før M5: M7a → M5 → M6 → M7b → M8. Højderne forbliver rigtige som standard. **M7a er lavet (30. oktober 2026), og M7a+ (detaljekortet ved calderaen og skrænten) også. M5 har go (alle syv anbefalinger), og M5a er i gang. Planen står i `docs/plan-mars.md` under "Plan for M5".** Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Detaljer før flere stop".
+- **Ny rækkefølge (jeres svar 29. oktober 2026):** Olympus Mons var "ikke for imponerende". Det skyldes mest, at Mars' net er groft (ca. 21 km mellem punkterne). Derfor kommer **M7a** (lokale detaljer, prøvet på Olympus Mons) før M5: M7a → M5 → M6 → M7b → M8. Højderne forbliver rigtige som standard. **M7a er lavet (30. oktober 2026), og M7a+ (detaljekortet ved calderaen og skrænten) også. M5 har go (alle syv anbefalinger), M5a er lavet, og M5b er næste. Planen står i `docs/plan-mars.md` under "Plan for M5".** Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Detaljer før flere stop".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.

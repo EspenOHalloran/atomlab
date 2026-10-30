@@ -670,6 +670,36 @@ Sammenligninger (egne udregninger af storcirkelafstande):
 13. Ingen side kunne åbnes direkte. Alle tal bygger på søgeuddrag og bør tjekkes på kildesiden, hvis der senere er adgang.
 
 
+### Faktatjek M5a: Tharsis, Valles Marineris og Hellas (30. oktober 2026)
+En hjælpeagent (Opus, høj effort) åbnede kilderne med curl. Blokeret: www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu (stod på listen, men virkede ikke i sessionen), www.jpl.nasa.gov, nature.com og agupubs (Plescia 2004, Tabel 1). Koordinaterne er fra USGS' navneliste i MDIM 2.1 (standarden, passer med MOLA).
+
+| Nr. | Påstand | Resultat | Kilde |
+|---|---|---|---|
+| T1 | Tre vulkaner på en linje, ca. 700-800 km mellem dem | OK: 713 og 808 km mellem midterne (Arsia 8,26° S, 239,91° Ø; Pavonis 1,48° N, 247,04° Ø; Ascraeus 11,92° N, 255,92° Ø) | USGS planetarynames.wr.usgs.gov |
+| T2 | Skjoldvulkaner | OK | photojournal.jpl.nasa.gov/catalog/PIA24223; science.nasa.gov/3d-resources/mars-tharsis/ |
+| T3 | Tharsis ca. 5.000 km bred, flere km høj | **Rettet** (var 4.000-5.000 km) | USGS SIM 3292 (pamfletten: "5,000 km east-west by 6,000 km north-south"); Wikipedia "Tharsis" |
+| T4 | Op til en fjerdedel af Mars, omtrent som Nordamerika | OK med "omtrent" (10-30 mio. km², Nordamerika ca. 24 mio. km²). DLR var blokeret | Wikipedia "Tharsis" (Tanaka 1992) |
+| T5 | Pavonis ca. 14 km, Ascraeus og Arsia ca. 18 km over nulpunktet | **Rettet** (Arsia ikke "næsten 20 km": kilderne bruger forskellige nulpunkter). Programmets MOLA-kort giver det samme (testen `mars`) | PIA24223 (Pavonis 14 km); PIA25349 (Ascraeus 18 km); Wikipedia (Arsia 17.757 m fra MGS) |
+| T6 | Skorpen omkring Tharsis blev strakt og revnede | **Rettet** ("så tung, at den bøjer skorpen" er fjernet) | ESA "The Solar System's grandest canyon"; science.nasa.gov/resource/tharsis-volcano/ |
+| T7 | I udbrud nu og da i milliarder af år, de yngste lavastrømme måske få millioner år, måske i dvale | **Rettet** (var "titals til hundreder millioner år") | sci.esa.int/web/mars-express/-/51825-5-recent-and-episodic-volcanism |
+| V1 | Ca. 4.000 km lang | OK ("over 4000 km" ESA, 3.870 km NASA, 3.761 km USGS) | ESA; science.nasa.gov/mars/facts/ |
+| V2 | Knap en femtedel af vejen rundt om Mars, som Lissabon-Moskva | **Rettet** ("knap"): 3.800-4.000 / 21.339 km = 18-19 %. Lissabon-Moskva ca. 3.900 km (egen udregning) | egen udregning |
+| V3 | Op til ca. 10 km dyb | **Rettet** (var 7-10 km) | ESA ("depth of 10 km"); NASA facts (9,3 km) |
+| V4 | Op til ca. 600 km bred i midten | OK | NASA facts ("600 km across at its widest") |
+| V5 | 10 gange længere og 5 gange dybere end Grand Canyon | OK, ordret | ESA |
+| V6 | Ikke en flod: forkastninger, landet sank ned, siden udvidet af jordskred og vand | OK | ESA; science.nasa.gov/resource/the-grand-canyon-of-mars-valles-marineris-13-mar-2006/ |
+| V7 | Begyndte for ca. 3,5 mia. år siden | OK | NASA 2006-siden |
+| V8 | Opkaldt efter Mariner 9 og holdet, fundet 1971-72 | OK | USGS (Feature 6288); Wikipedia |
+| V9 | Melas 10,52° S, 287,46° Ø; Candor 6,53° S, 289,22° Ø; Ophir 4,00° S, 287,65° Ø; Coprates 13,37° S, 299,26° Ø | Brugt til stoppet og detaljekortet | USGS |
+| H1 | Ca. 2.300 km bred | OK | ESA "Hellas Basin On Mars" (2016); USGS 2.299 km |
+| H2 | For ca. 4 mia. år siden | OK (3,8-4,1 mia. år) | ESA 2016; ESA "Craters within the Hellas Basin" (2014) |
+| H3 | Bunden mere end 7 km under nulpunktet, laveste punkt ca. 8,2 km | OK | svs.gsfc.nasa.gov/770; SIM 3292; ESA 2014 |
+| H4 | Op til ca. dobbelt så højt lufttryk | OK (12,4 mbar mod 6,1 mbar) | Wikipedia "Hellas Planitia" (Haberle 2001) |
+| H5 | Is kunne i teorien smelte et øjeblik, men fordamper så hurtigt, at det nok sjældent eller aldrig sker | OK, forsigtigt | ntrs.nasa.gov/citations/20010084314 |
+| H7 | Et af de største nedslagskratere i solsystemet | OK med "et af de" | ESA 2016 |
+
+**Nye fælder:** (1) USGS' navneliste har to sæt koordinater. MDIM 2.1 er standarden og passer med MOLA. Olympus Mons er 18,65° N, 226,20° Ø i MDIM 2.1. Programmet bruger 18,40° N, 226,00° Ø fra MDIM 2.0 (ca. 15 km forskel, ikke rettet: stoppet er valgt ud fra højdekortet). (2) "Hellas er den største synlige nedslagsstruktur" er for skarpt. (3) "Valles Marineris går en fjerdedel af vejen rundt" er forkert (knap en femtedel). (4) Valles Marineris' længde skifter mellem kilderne (3.000-4.000 km). (5) "Pavonis ligger ca. 400 km fra Arsia og Ascraeus" er forkert (ca. 710-810 km mellem midterne). (6) Arsia "næsten 20 km" og ca. 17,8 km fra MOLA bruger forskellige nulpunkter. (7) NASA's faktaside siger 40 km for Olympus Mons fra fod til top. Brug den ikke.
+
 ### 10. Faktatjek af teksterne til Mars-kloden (M2, 24. oktober 2026)
 Siderne kunne nu åbnes direkte (efter at domænerne blev åbnet), så tallene er slået op på selve kildesiden af Opus:
 - **NSSDC Mars Fact Sheet** (https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html, åbnet): radius 3.396,2 km ved ækvator og 3.376,2 km ved polerne (forskel 20 km), middelradius 3.389,5 km (0,532 × Jordens), tyngde 3,73 m/s² = 0,380 × Jordens, siderisk omdrejning 24,6229 t, døgn 24,6597 t (= 24 t 39,6 min, "ca. 40 minutter"), aksehældning 25,19° (Jorden 23,44°), år 686,980 døgn, højdeforskel ("topographic range") 30 km, tryk 6,36 mbar (0,63 % af 1.013 mbar), CO₂ 95,1 %, middeltemperatur ca. 214 K (−59 °C).
