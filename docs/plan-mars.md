@@ -196,6 +196,21 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
+## Prompt til M5 (skrevet 30. oktober 2026, venter på go)
+**Model og effort:** Opus med høj effort, både til planen og til at bygge. `CLAUDE.md` siger Opus til kode, fakta og danske tekster, og Mars er ikke en opgave for Fable (`docs/plan-fable.md`). Xhigh er ikke nødvendig: Teknikken fra M7a genbruges, og det nye (fx et net over polen) er mindre svært end M7a. Hjælpeagenter: Opus med høj effort til faktatjekket (`/faktatjek`), Haiku med lav effort til at opsummere lange testlogs og Sonnet med lav effort til at finde ting i koden. Start en ny session fra `main`.
+
+**Prompten (kopiér den):**
+
+> Lav planen for Mars M5 (flybyen over Mars) og vent på mit go, før du bygger. Læs først "Lige nu" i DESIGN.md, `docs/plan-mars.md` (især "Status efter M4c", "Detaljer før flere stop" og "Status efter M7a") og tjeklisterne i `docs/erfaringer.md`. Planen skal stå i `docs/plan-mars.md` under "Plan for M5" og svare på:
+> 1. **Stoppene og rækkefølgen:** Olympus Mons, calderaen og skrænten er lavet. Hvilke af Tharsis-vulkanerne, Valles Marineris, Hellas, nordpolen, Gale (Curiosity) og Jezero (Perseverance) kommer med, og i hvilken rækkefølge? Hvor mange stop kan flybyen have, før den bliver for lang? Skal man kunne vælge et sted direkte (fx en liste eller et tryk på kloden)?
+> 2. **Lokale kort ved hvert stop** (teknikken fra M7a, `lokalt()` og `lav_steder.py`): Hvilke steder har brug for et? Tharsis og Hellas er større end et net på 1.000 km, Valles Marineris er ca. 4.000 km lang (hvilket stykke?), og nær polen virker et net i bredde og længde ikke (alle længdegrader mødes). Gale og Jezero får de meget skarpe kort i M7b, så her er spørgsmålet, om HRSC+MOLA er nok i M5. Tjek med billeder, at HRSC+MOLA dækker stedet og er skarpere end MOLA, som i M7a, og at farverne ikke har skygger malet ind.
+> 3. **Hvad det koster:** Hvert lokalt kort er ca. 3 MB på GitHub Pages (billederne fylder ca. 65 MB nu), og det fine net koster billeder i sekundet. Hvor mange lokale net kan der være på én gang (et hul pr. net i kuglens shader)? Hentes kortene kun ved det stop, de hører til?
+> 4. **Flyvningen mellem to steder** på overfladen (buen fra M4c bruges også mellem to steder), og tidspunktet på dagen ved hvert sted (lys og skyer).
+> 5. **Tekster:** korte undertekster (højst ca. 160 tegn) og en tekst i panelet ved hvert stop, "For nørder", "Ærligt talt" og nye fagord i ordbogen. Faktagrundlaget står i `docs/fakta-solsystemet.md`, del 3, afsnit 3-8, men det bygger mest på søgeuddrag, så alt skal slås op i kilden med `/faktatjek`, før det kommer med. Tjek med curl, at kildesiderne kan åbnes, og spørg om adgang først, hvis de er blokeret.
+> 6. **Opdeling:** Skal M5 deles (fx M5a: stoppene og teksterne, M5b: de lokale kort), så der er noget at se undervejs? Giv en anbefaling.
+>
+> Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig, og sig, hvis en anden model eller effort passer bedre til en del.
+
 ## Forslag til M4c (29. oktober 2026, godkendt)
 **Jeres svar (29. oktober 2026): go.** (1) Mars får "▶ Start flyby" med to stop (hele Mars og Olympus Mons) gennem det fælles modul. De andre stop kommer i M5. (2) Tidspunktet på dagen ved Olympus Mons: Jeg prøver formiddag (klart vejr) og eftermiddag (med skyerne) og vælger det, der viser vulkanen tydeligst. I åbnede `discovery.ucl.ac.uk` og `planetarynames.wr.usgs.gov`, og begge virker nu (tjekket med curl).
 
