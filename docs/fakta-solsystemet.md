@@ -777,6 +777,28 @@ Kildesiderne er åbnet direkte af Opus (ikke hjælpeagenter, fordi siderne kunne
 
 **Spillets egne tal (står ikke som fakta i teksten):** Skyerne er tegnet 22 km over kuglen, så vulkanernes toppe ikke skærer huller i dem. Tusmørket når 10° ind på natsiden. Det svarer til, at støvet i ca. 52 km højde stadig er i sollys (R · (1/cos 10° − 1)), men tallet er valgt efter billederne og ikke målt. Hvor kraftigt luften lyser, er gættet (det står i "Ærligt talt").
 
+### Faktatjek M8a: Stå på Mars ved Gale (30. oktober 2026)
+En hjælpeagent (Opus, høj effort) læste kilderne direkte.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Naukluft er et plateau på Mount Sharps nederste skråninger. Klipperne er sandsten af vindblæst sand (gamle klitter). Curiosity var der fra ca. sol 1284 (16. marts 2016) til sol 1315 (18. april 2016) | Rettet fra "et lille plateau" | PIA20332, PIA20333 og PIA20334 (læst) |
+| Panoramaet PIA20332 er taget 4. april 2016 (sol 1302) fra stoppet ved sol 1301 (4,6784° S, 137,3594° Ø, −4.429 m) | OK | science.nasa.gov/photojournal/full-circle-vista-from-naukluft-plateau-on-mars/ og MSL_waypoints.json (læst) |
+| Mount Sharp ca. 5 km over kraterbunden. Toppen ca. 50 km fra Naukluft mod sydøst (50,6 km i retningen 144°) | OK | NASA "Curiosity reaches 1-kilometer elevation gain" (læst), egen udregning |
+| Mod nord: kraterbunden og randen i disen | OK | PIA20332 (læst) |
+| Curiosity midt i oktober 2026 (sol 5045): ca. 1 km over landingsstedet (1.013 m), ca. 38 km kørt. Ved stedet "Nazca" gjorde den klar til at bore (blog sol 5043-5049) | OK. "Nederste skråninger" rettet til "skråninger" | MSL_waypoints.json, 1-km-artiklen og Curiosity-bloggen (læst) |
+| Højdekortet (MSL Gale Merged DEM 1m) er lavet af Timothy Parker og Fred Calef (JPL), udgivet af USGS (2016), af HiRISE (12 stereopar), CTX og HRSC, bundet til MOLA. Ortofotoet 25 cm af de samme | Rettet i teksten | astrogeology.usgs.gov/search/map/mars_msl_gale_merged_dem_1m og …_orthophoto_mosaic_25cm (læst) |
+| HiRISE 25-32 cm pr. pixel, CTX ca. 6 m pr. pixel | CTX rettet fra 5 m | samme (læst) |
+| Horisonten ca. 3,4 km væk for øjne i 1,7 m | OK (√(2Rh) = 3,40 km) | egen udregning |
+| Solen ca. 0,35° bred (0,32-0,39° efter afstanden) | OK | NSSDC (læst) |
+| Phobos ca. 0,2° lige over hovedet (0,14° ved horisonten), står op i vest og krydser himlen på højst ca. 4¼ time, ca. hver 11 t 6 min. Deimos som en klar stjerne, står op i øst og er oppe ca. 2½ døgn | OK | Wikipedia Phobos og Deimos (læst), NSSDC (læst) |
+| Rovernes kameraer (Mastcam, Mastcam-Z) sidder ca. 2 m oppe | OK | NASA's instrumentsider (læst) |
+| Støvets optiske dybde ved Gale: ca. 0,4 i den klare tid (Ls ca. 135°), 0,7-0,8 det meste af året, over 1,25 i støvsæsonen | Programmet bruger 0,4 (passer til Naukluft i april 2016) | Chen-Chen m.fl., Icarus 319 (2019) (læst) |
+| Himlen gulbrun om dagen, blålig omkring Solen ved solnedgang | OK. "Butterscotch" bruges om overfladen, ikke himlen: skriv "gulbrun" | PIA19400 (læst) |
+| "1 m mellem højderne" er ikke 1 m skarphed: Sten under nogle få meter er ikke med | Rettet i "Ærligt talt" | USGS-siden (læst), egen vurdering |
+
+**Fælder (nye):** "Phobos står op i øst" (vest). "Mars' himmel er blå om dagen og rød ved solnedgang" (omvendt). "Butterscotch" om himlen. "Billederne fra kredsløb er grå" (HiRISE har også en farvemosaik fra 2025: skriv "de billeder, programmet bruger"). "1 m mellem højderne = 1 m skarphed". "Solen er halvt så stor fra Mars" (ca. 2/3 så bred).
+
 ## B. Phobos, Deimos, formmodeller, licenser og panoramaer
 
 Lavet 24. oktober 2026 til AtomLab (Solsystemet: Mars' måner i 3D).

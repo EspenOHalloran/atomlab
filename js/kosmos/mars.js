@@ -11,7 +11,7 @@
 // M7a: Over Olympus Mons ligger et fint net med skarpere højder (LOKALE), og flybyen besøger også calderaen og skrænten.
 
 import * as THREE from 'three';
-import { LAV_KVALITET, TEST_HURTIG, ROLIG, passerTil } from '../scene3d.js';
+import { LAV_KVALITET, TEST_HURTIG, ROLIG, passerTil, drejHimmel, visRumstøv } from '../scene3d.js';
 import { glød, skilt } from './faelles.js';
 import { lavKlippeplanet } from '../solsystem/klippeplanet.js';
 import { lavLuft } from '../solsystem/atmosfaere.js';
@@ -20,6 +20,7 @@ import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
+import { lavLandskab, ØJE } from '../solsystem/landskab.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -162,7 +163,8 @@ const TUR = [
     mere: '<p><b>Gale</b> blev dannet af et nedslag for mere end 3 mia. år siden. Man tror, at krateret blev fyldt op med lag af mudder og sand, som vand og vind lagde. Siden har især vinden slidt meget af det væk igen, og i midten står et bjerg tilbage: Mount Sharp (Aeolis Mons), ca. 5 km højt over kraterbunden. Lagene i bjerget fortæller, hvordan Mars\' klima har ændret sig.</p>'
       + '<p><b>Curiosity</b> er en rover på størrelse med en bil, ca. 3 m lang. Den landede 6. august 2012 nordvest for bjerget. Den har boret i stenene og vist, at her engang lå søer med vand, som mikrober kunne have levet i, måske i en million år eller mere. Den har også fundet organiske stoffer (stoffer bygget af carbon og brint, som liv også er lavet af). Man ved ikke, om de kommer fra liv, eller om de er dannet uden liv. Liv har man ikke fundet.</p>'
       + '<p><b>Nu (oktober 2026):</b> Curiosity kører stadig efter mere end 14 år. Den er på vej op ad Mount Sharp og er nu ca. 1 km højere oppe end der, hvor den landede. Den har kørt ca. 38 km.</p>'
-      + '<p><b>Lyset:</b> Det er morgen, og Solen står lavt i øst (til venstre).</p>' },
+      + '<p><b>Lyset:</b> Det er morgen, og Solen står lavt i øst (til venstre).</p>'
+      + '<p><b>Stå på Mars:</b> Tryk "🧍 Stå på Mars", så lander du i Gale-krateret og kan kigge dig omkring i øjenhøjde.</p>' },
   { id: 'jezero', titel: 'Jezero og Perseverance', knap: 'Jezero', tekst: 'Et ca. 45 km bredt krater, der engang var en sø. En flod lagde et delta ved vestkanten. Her landede roveren Perseverance i 2021.',
     mere: '<p><b>En gammel sø:</b> For mere end 3½ mia. år siden var Jezero en sø. En flod løb ind gennem et hul i vestkanten og lagde sand og mudder i en vifte, et delta. Mudder i en sø kan gemme spor af liv i milliarder af år. Derfor landede Perseverance her 18. februar 2021.</p>'
       + '<p><b>Ingenuity:</b> Perseverance havde en lille helikopter med, Ingenuity, den første, der har fløjet på en anden planet. Den fløj 72 gange, selv om den kun skulle flyve 5. Ved landingen efter den sidste flyvning i januar 2024 gik et rotorblad i stykker.</p>'
@@ -199,6 +201,24 @@ const TUR = [
       + '<p><b>MMX:</b> Den japanske rumsonde MMX (Martian Moons eXploration) blev sendt op i oktober 2026. Sidst i oktober 2026 var den sund og på vej mod Mars, som den skal nå i 2027. Først skal en lille robotbil, IDEFIX, fra Frankrig og Tyskland lande på Phobos. Så lander MMX selv og henter mindst 10 g af overfladen. Til sidst skal den prøve at flyve forbi Deimos og tage billeder. I 2031 skal prøven lande på Jorden. Så kan forskerne måske afgøre, hvor månerne kommer fra.</p>'
       + '<p><b>Lyset:</b> Solen står næsten bag dig, så Mars er næsten helt belyst.</p>' },
 ];
+
+// Stå på Mars (M8a i docs/plan-mars.md, js/solsystem/landskab.js): de steder ved et krater, hvor man kan stå. Bredden
+// og længden er roverens stop i NASA's kortdata (mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json) og skal
+// være de samme som KRATERE i billeder/solsystem/lav_landskab.py. blik: den kompasretning, man kigger, når man lander
+// (grader fra nord mod øst). tid: klokken på stedet, når man lander.
+const LANDSKAB = {
+  gale: [
+    { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 8.5,
+      titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.',
+      mere: '<p><b>Naukluft</b> er et plateau på Mount Sharps nederste skråninger inde i Gale-krateret. Klipperne er sandsten af sand, som vinden engang blæste sammen til klitter. Curiosity kørte over det i foråret 2016 og tog et billede hele vejen rundt herfra.</p>'
+        + '<p><b>Mod sydøst</b> ligger Mount Sharp, et bjerg af lag på lag af gammelt mudder og sand, ca. 5 km højt over kraterbunden. Toppen er ca. 50 km væk. <b>Mod nord</b> ser du ud over kraterbunden mod kraterets rand i disen.</p>'
+        + '<p><b>Prøv selv:</b> Skub klokken frem, eller tryk "Lad dagen gå", og se skyggerne vokse og Solen gå ned. Knib eller rul for at zoome som med en kikkert.</p>' },
+    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 9,
+      titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.',
+      mere: '<p><b>Hos Curiosity:</b> Her stod roveren i midten af oktober 2026 på Mount Sharps skråninger, ca. 1 km højere oppe end der, hvor den landede i 2012. Den har kørt ca. 38 km.</p>'
+        + '<p><b>Bakkerne omkring</b> skjuler toppen af Mount Sharp. Mod nord er der et hul i bakkerne med udsigt ud over kraterbunden til randen langt væk.</p>' },
+  ],
+};
 
 // Billederne (se billeder/solsystem/KILDER.md). Farvekortet er 8k på pc og (indtil videre, som en prøve) på tablet,
 // hvis grafikkortet kan klare så store billeder. Tests henter 2k. Højdekortet er 4k (2k i tests).
@@ -267,7 +287,8 @@ export default {
     <p><b>Luften</b> bliver ca. 2,7 gange tyndere for hver 11 km, man kommer op (skalahøjden er 11 km, på Jorden ca. 8,5 km). Set fra rummet er den derfor kun et tyndt, støvet lag i kanten. Støvet når så højt op, at det stadig er i sollys, når Solen er gået ned. Derfor varer tusmørket på Mars op til ca. 2 timer, og natsiden lyser svagt rødbrunt lige efter grænsen mellem dag og nat. Det fine støv sender blåt lys lettere lige igennem end rødt, så på Mars er himlen blå omkring Solen, når den går ned (Curiosity så det i 2015).</p>
     <p><b>Skyerne over vulkanerne:</b> Om eftermiddagen stiger varm luft op ad vulkanernes sider og bliver kold, så vanddampen fryser til iskrystaller. Skyerne kommer især om foråret og sommeren på den nordlige halvkugle. Før rumsonderne kunne man i kikkerter fra Jorden se en hvid sky formet som et "W" over Tharsis. Det var skyerne over fire af vulkanerne. Hvert år i det sydlige forår vokser der også en ca. 1.800 km lang sky ud fra Arsia Mons om morgenen. Den er ikke med her, for på tegningen er det forår i nord.</p>
     <p><b>Månerne:</b> Phobos' form er et højdekort lavet ud fra billeder fra den europæiske rumsonde Mars Express (og Viking, hvor der manglede billeder), med ca. 100 m mellem højderne. Overfladen er en mosaik af billeder fra Mars Express og Viking. Deimos' form er målt af Peter Thomas på billeder fra Viking-sonderne fra 1970'erne (ca. ½ km mellem punkterne). Almindelig sten vejer ca. 3 g pr. cm³, men Phobos kun ca. 1,9 og Deimos ca. 1,5. Derfor er de nok fulde af hulrum (porøse), måske som en bunke løse sten. De er mørke som asfalt: Kun ca. 7 % af lyset kastes tilbage. Phobos kredser inden for den afstand (ca. 20.400 km fra Mars' midte), hvor en måne ville runde Mars på samme tid, som Mars drejer én gang om sig selv (24 t 37 min). Derfor bremses den og kommer nærmere. Deimos er uden for og fjerner sig meget langsomt.</p>
-    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne. Månerne Phobos og Deimos er tegnet større, når de er langt væk, ellers kunne de ikke ses. De kredser i det rigtige forhold til Mars' døgn, men står stille, mens du besøger dem, og banerne ligger præcis i Mars' ækvatorplan (i virkeligheden hælder de 1-2°). Deimos' form er målt på billeder fra Viking-sonderne i 1970'erne og er grov. På Phobos' bagside er en smal stribe af overfladen fyldt ud, hvor kortet manglede. På flybyen flytter programmet månerne hen, hvor Solen skinner på dem fra siden, så de ikke står i Mars' skygge. I virkeligheden står de dér, hvor deres baner fører dem hen. Står en måne i Mars' skygge, når du trykker på den, flytter programmet den også lidt frem i banen. Når du besøger en måne, står den stille, mens Mars drejer. I virkeligheden runder Phobos Mars hurtigere, end Mars drejer, så fra Phobos ville Mars se ud til at dreje den anden vej, én gang på ca. 11 timer. Ved Phobos og Deimos kigger kameraet lidt ved siden af månen, så Mars kan ses i baggrunden.</p>`,
+    <p><b>Stå på Mars:</b> Ved Gale kan du stå på jorden, hvor Curiosity har kørt. Landskabet er bygget af målinger fra kredsløb. Højdekortet er sat sammen af forskere ved NASA's JPL og udgivet af USGS. Tæt på Curiositys vej er højderne regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Længere væk er de regnet ud fra kameraerne CTX og HRSC. Der er 1 m mellem højderne. Tæt på dig ligger HiRISE' billeder (25 cm pr. pixel), længere væk billeder fra CTX (ca. 6 m pr. pixel) og helt ude kortet fra Mars Express. Landskabet ligger i fire lag, der glider over i hinanden, og Mars' krumning er regnet med: På fladt land er horisonten kun ca. 3,4 km væk. Støvet i luften gør det fjerne landskab blegt, og jo mere luft, der er imellem, jo blegere.</p>
+    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne. Månerne Phobos og Deimos er tegnet større, når de er langt væk, ellers kunne de ikke ses. De kredser i det rigtige forhold til Mars' døgn, men står stille, mens du besøger dem, og banerne ligger præcis i Mars' ækvatorplan (i virkeligheden hælder de 1-2°). Deimos' form er målt på billeder fra Viking-sonderne i 1970'erne og er grov. På Phobos' bagside er en smal stribe af overfladen fyldt ud, hvor kortet manglede. På flybyen flytter programmet månerne hen, hvor Solen skinner på dem fra siden, så de ikke står i Mars' skygge. I virkeligheden står de dér, hvor deres baner fører dem hen. Står en måne i Mars' skygge, når du trykker på den, flytter programmet den også lidt frem i banen. Når du besøger en måne, står den stille, mens Mars drejer. I virkeligheden runder Phobos Mars hurtigere, end Mars drejer, så fra Phobos ville Mars se ud til at dreje den anden vej, én gang på ca. 11 timer. Ved Phobos og Deimos kigger kameraet lidt ved siden af månen, så Mars kan ses i baggrunden. Når du står på Mars, er de billeder fra kredsløb, programmet bruger, grå, og farverne er sat på af programmet ud fra lysstyrken og Viking-kortet. Sten og sand, der er mindre end nogle få meter, er ikke med i højderne, og de små ujævnheder helt tæt på dine fødder er tegnet af programmet. I billederne fra kredsløb skinnede Solen fra en anden retning. Programmet har fjernet det meste af den skygge, men lidt er tilbage i de små ting. Himlens farve, disen og tusmørket er en enkel model. Dine øjne er 1,7 m over jorden (rovernes kameraer sidder ca. 2 m oppe). Phobos og Deimos bevæger sig rigtigt hen over himlen og har den rigtige størrelse, men deres plads er ikke slået op for i dag.</p>`,
 
   lav(gruppe, { opdaterKnapper, forklaring, fase, verden }) {
     const { kamera } = verden;
@@ -758,7 +779,7 @@ export default {
       hældHen(hældFor(st));
       aktivér([nuværendeNet(), st.lokalt]);
       visning = st.id;
-      flyv({ fokus: fokusVed(st), op: opVed(st), afstand: passer(st.størrelse), retning: fraSted(st, drej, st.kompas, st.vinkel), min: 0.003, max: 3, færdig: () => aktivér([st.lokalt]) });
+      flyv({ fokus: fokusVed(st), op: opVed(st), afstand: passer(st.størrelse), retning: fraSted(st, drej, st.kompas, st.vinkel), min: 0.003, max: 3, færdig: () => { aktivér([st.lokalt]); if (LANDSKAB[st.id]) lavKnapper(); } });
     }
 
     // ---------- Flybyen (js/solsystem/flyby.js) ----------
@@ -775,6 +796,241 @@ export default {
       slut: '<p><b>Turen er slut.</b> Drej selv rundt med fingeren eller musen, eller tryk "Hele Mars".</p>',
     });
 
+    // ---------- Stå på Mars (M8a, js/solsystem/landskab.js) ----------
+    // "Stå på Mars" ved Gale: Kameraet flyver ned mod stedet, billedet toner over i landskabet, og kameraet lander i
+    // øjenhøjde. Landskabet er sin egen verden (Mars-kloden skjules imens), og kameraet drejer kun hovedet.
+    const landskaber = new Map(); // krater → { data, land } (hentes første gang)
+    let stående = null; // { krater, sd } mens man står på jorden
+    let ståVent = null; // { krater, sd, fløjet, klar } mens kameraet flyver ned, og lagene hentes
+    let landing = null; // kameraet lander (eller letter: op = true)
+    let dagenGår = false;
+    let kikkert = 1; // kameraets zoom (som en kikkert)
+    const gemt = { pos: new THREE.Vector3(), nær: 0 };
+    const LANDING_HØJDE = 1.2; // km over stedet, hvor landingen starter
+    const LANDING_TID = 4.5; // sekunder
+    const DAG_TID = 150; // sekunder for et døgn, når dagen går
+    const tæppe = document.createElement('div'); // tonen mellem kloden og landskabet
+    tæppe.style.cssText = 'position:fixed;pointer-events:none;background:#8a6a52;opacity:0;transition:opacity 0.35s;z-index:1';
+    document.body.appendChild(tæppe);
+    function ton(midt) {
+      const h = verden.hul;
+      Object.assign(tæppe.style, { left: `${h.left}px`, top: `${h.top}px`, width: `${h.width}px`, height: `${h.height}px` });
+      if (ROLIG) { midt(); return; }
+      tæppe.style.opacity = '1';
+      setTimeout(() => {
+        if (!aktiv) return;
+        midt();
+        requestAnimationFrame(() => { tæppe.style.opacity = '0'; });
+      }, 360);
+    }
+    // Lagene til krateret (JSON fra billeder/solsystem/lav_landskab.py). klar(l) kaldes, når de er hentet.
+    function hentLandskab(krater, klar) {
+      const l = landskaber.get(krater);
+      if (l?.land) { klar(l); return; }
+      if (l) { l.venter.push(klar); return; }
+      const ny = { data: null, land: null, venter: [klar] };
+      landskaber.set(krater, ny);
+      fetch(new URL(`landskab/${krater}.json`, MAPPE)).then((s) => s.json()).then((data) => {
+        if (!aktiv) return;
+        // Solens deklination i programmet (ved "jævndøgn" står Solen lidt over Mars' ækvator, se HÆLD)
+        const akse = new THREE.Vector3(0, 1, 0).applyQuaternion(HÆLD.jævndøgn);
+        const dekl = 90 - THREE.MathUtils.radToDeg(akse.angleTo(sol));
+        ny.data = data;
+        ny.land = lavLandskab({ renderer: verden.renderer, data, hent, krater, deklination: dekl });
+        ny.land.gruppe.visible = false;
+        gruppe.add(ny.land.gruppe);
+        for (const f of ny.venter) f(ny);
+        ny.venter.length = 0;
+      }).catch(() => {});
+    }
+    // Flyv ned til stedet sd ved krateret, og stå der, når lagene er hentet
+    function ståPå(krater, sd) {
+      const st = { ...sd, ramme: mars.sted(sd.bredde, sd.længde), lokalt: krater };
+      const vent = { krater, sd, fløjet: false, klar: false };
+      ståVent = vent;
+      hentLokalt(st);
+      const drej = drejningTil(st);
+      drejHen(drej);
+      hældHen(HÆLD.jævndøgn);
+      aktivér([nuværendeNet(), krater]);
+      visning = `stå-${sd.id}`;
+      fase(sd.titel, 'Vi flyver ned og lander …');
+      lavKnapper();
+      // Kameraet står bag stedet og kigger i landingens retning, skråt ned
+      flyv({ fokus: fokusVed(st), op: opVed(st), afstand: LANDING_HØJDE * 2.2 / S, retning: fraSted(st, drej, sd.blik + 180, 27), min: 0.003, max: 3,
+        færdig: () => { vent.fløjet = true; land(vent); } });
+      hentLandskab(krater, (l) => l.land.gåTil(sd.id, () => { vent.klar = true; land(vent); }));
+    }
+    function land(vent) {
+      if (vent !== ståVent || !vent.fløjet || !vent.klar) return;
+      ståVent = null;
+      ton(() => visLandskab(vent.krater, vent.sd));
+    }
+    const kamRet = new THREE.Vector3();
+    // Kameraet i landskabet: højde (km) og blik (kompas og vinkel over vandret, grader)
+    function sætBlik(højde, kompas, vinkel) {
+      const a = THREE.MathUtils.degToRad(kompas), v = THREE.MathUtils.degToRad(vinkel);
+      kamRet.set(Math.sin(a) * Math.cos(v), Math.sin(v), -Math.cos(a) * Math.cos(v));
+      kamera.position.set(0, højde, 0);
+      orbit.target.copy(kamera.position).addScaledVector(kamRet, 1e-4);
+      kamera.lookAt(orbit.target);
+    }
+    function visLandskab(krater, sd) {
+      const l = landskaber.get(krater);
+      if (!stående) {
+        gemt.pos.copy(kamera.position);
+        gemt.nær = kamera.near;
+      }
+      stående = { krater, sd, land: l.land };
+      for (const [, x] of landskaber) if (x.land) x.land.gruppe.visible = x === l;
+      system.visible = false;
+      solKerne.visible = solGlød.visible = false;
+      visRumstøv(false);
+      opdaterNavne();
+      kamera.near = 0.0003; // 0,3 m (1 enhed = 1 km i landskabet)
+      kikkert = 1;
+      kamera.zoom = 1;
+      kamera.updateProjectionMatrix();
+      orbit.minDistance = orbit.maxDistance = 1e-4; // man drejer om et punkt 10 cm foran kameraet (som at dreje hovedet)
+      orbit.enableZoom = false;
+      orbit.rotateSpeed = -0.35; // man "tager fat i" landskabet
+      l.land.tid = sd.tid;
+      landing = { t: 0, T: ROLIG ? 0 : LANDING_TID, sd };
+      orbit.enabled = false;
+      sætBlik(LANDING_HØJDE, sd.blik, -32);
+      fase(sd.titel, sd.tekst);
+      forklaring(sd.mere);
+      lavKnapper();
+    }
+    // Op i kredsløb igen: tilbage til kraterets stop
+    function tilbageOp() {
+      if (!stående) return;
+      const krater = stående.krater;
+      landing = { t: 0, T: ROLIG ? 0 : 2.2, op: true, fra: kamera.position.y, færdig: () => ton(() => {
+        forladLandskab();
+        vælgSted(stedMed(krater));
+      }) };
+      orbit.enabled = false;
+      lavKnapper();
+    }
+    function forladLandskab() {
+      if (!stående) return;
+      stående.land.gruppe.visible = false;
+      stående = null;
+      landing = null;
+      dagenGår = false;
+      system.visible = true;
+      solKerne.visible = solGlød.visible = true;
+      visRumstøv(true);
+      kamera.near = gemt.nær;
+      kamera.zoom = 1;
+      kamera.updateProjectionMatrix();
+      orbit.target.set(0, 0, 0);
+      kamera.position.copy(gemt.pos);
+      orbit.minDistance = 0.001;
+      orbit.maxDistance = 1e5;
+      orbit.enableZoom = true;
+      orbit.rotateSpeed = 1;
+      orbit.enabled = true;
+    }
+    // Gå til et andet sted ved samme krater (et hop med en tone)
+    function gåTil(sd) {
+      const krater = stående.krater;
+      stående.land.gåTil(sd.id, () => ton(() => visLandskab(krater, sd)));
+    }
+    // Klokken som tekst (lokal soltid)
+    const klokken = (t) => `${String(Math.floor(t)).padStart(2, '0')}:${String(Math.floor((t % 1) * 60)).padStart(2, '0')}`;
+    let tidsSkyder = null;
+    // Solnedgang: kort før Solen når horisonten (søges i landskabets egen sol)
+    function solnedgang() {
+      const land = stående.land;
+      let t = 12;
+      while (t < 24 && (land.tid = t, land.sol.y) > 0.02) t += 0.02;
+      land.tid = t - 0.35;
+      tidsSkyder?.sæt?.(land.tid);
+    }
+    // Hvert billede, mens man står: landingen, dagen, himlen og stjernerne
+    const qPol = new THREE.Quaternion();
+    const qDrej = new THREE.Quaternion();
+    const polRet = new THREE.Vector3();
+    function opdaterStående(dt) {
+      const land = stående.land;
+      if (landing) {
+        landing.t = Math.min(landing.T, landing.t + dt);
+        const e = landing.T ? landing.t / landing.T : 1;
+        const g = 1 - Math.pow(1 - e, 3);
+        if (landing.op) {
+          kamRet.copy(orbit.target).sub(kamera.position).normalize();
+          const kompas = THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z));
+          sætBlik(landing.fra + (LANDING_HØJDE - landing.fra) * e * e, kompas, THREE.MathUtils.radToDeg(Math.asin(kamRet.y)) * (1 - e) - 32 * e);
+        } else sætBlik(ØJE / 1000 + (LANDING_HØJDE - ØJE / 1000) * Math.pow(1 - g, 2), landing.sd.blik, -32 + 29 * g);
+        if (landing.t >= landing.T) {
+          const f = landing.færdig;
+          landing = null;
+          if (f) f();
+          else {
+            orbit.enabled = true;
+            opdaterKnapper(); // knapperne er aktive igen
+          }
+        }
+      }
+      if (!stående) return;
+      if (dagenGår && !landing) {
+        land.tid += (dt * 24) / DAG_TID;
+        tidsSkyder?.sæt?.(land.tid);
+      }
+      land.opdater(kamera);
+      // Stjernerne: himlens nordpol står over den nordlige horisont i en vinkel lig med bredden, og himlen drejer om den
+      const b = THREE.MathUtils.degToRad(stående.sd.bredde);
+      polRet.set(0, Math.sin(b), -Math.cos(b));
+      qPol.setFromUnitVectors(Y, polRet);
+      qDrej.setFromAxisAngle(Y, -(land.tid / 24) * Math.PI * 2);
+      drejHimmel(qPol.multiply(qDrej));
+    }
+    // Kikkerten: rul med musen eller knib med to fingre
+    const fingre = new Map();
+    let knibStart = null;
+    function zoom(f) {
+      kikkert = THREE.MathUtils.clamp(kikkert * f, 1, 6);
+      kamera.zoom = kikkert;
+      kamera.updateProjectionMatrix();
+      orbit.rotateSpeed = -0.35 / kikkert;
+    }
+    const vedHjul = (h) => {
+      if (!stående || landing) return;
+      h.preventDefault();
+      zoom(Math.exp(-h.deltaY * 0.0015));
+    };
+    const vedFingerNed = (h) => { fingre.set(h.pointerId, { x: h.clientX, y: h.clientY }); if (fingre.size === 2) knibStart = { d: knibAfstand(), z: kikkert }; };
+    const vedFingerFlyt = (h) => {
+      if (!fingre.has(h.pointerId)) return;
+      fingre.set(h.pointerId, { x: h.clientX, y: h.clientY });
+      if (stående && !landing && fingre.size === 2 && knibStart) zoom((knibStart.z * knibAfstand()) / knibStart.d / kikkert);
+    };
+    const vedFingerOp = (h) => { fingre.delete(h.pointerId); if (fingre.size < 2) knibStart = null; };
+    function knibAfstand() {
+      const [a, b] = [...fingre.values()];
+      return Math.max(10, Math.hypot(a.x - b.x, a.y - b.y));
+    }
+    verden.renderer.domElement.addEventListener('wheel', vedHjul, { passive: false });
+    verden.renderer.domElement.addEventListener('pointerdown', vedFingerNed);
+    addEventListener('pointermove', vedFingerFlyt);
+    addEventListener('pointerup', vedFingerOp);
+    addEventListener('pointercancel', vedFingerOp);
+    // Knapperne, mens man står på jorden
+    function ståKnapper() {
+      const { krater, sd, land } = stående;
+      const andre = LANDSKAB[krater].filter((x) => x.id !== sd.id);
+      tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; } };
+      return [
+        { tekst: '↑ Tilbage i kredsløb', handling: tilbageOp, deaktiv: () => !!landing },
+        ...andre.map((x) => ({ tekst: x.knap, handling: () => gåTil(x), deaktiv: () => !!landing })),
+        tidsSkyder,
+        { tekst: '▶ Lad dagen gå', til: dagenGår, skift: (til) => { dagenGår = til; } },
+        { tekst: 'Solnedgang', handling: solnedgang },
+      ];
+    }
+
     // ---------- Knapperne ----------
     let drejer = true;
     let høj = false;
@@ -782,6 +1038,14 @@ export default {
     const styring = [];
     function lavKnapper() {
       const knapper = [];
+      if (stående) {
+        styring.splice(0, styring.length, ...ståKnapper());
+        opdaterKnapper();
+        return;
+      }
+      // Stå på Mars ved et krater med et landskab (ikke under flyvningen derhen)
+      const krater = LANDSKAB[visning] && !rejse.flyver ? visning : null;
+      if (krater) knapper.push({ tekst: '🧍 Stå på Mars', handling: () => ståPå(krater, LANDSKAB[krater][0]) });
       if (flyby.kører) knapper.push(...flyby.knapper());
       else {
         if (visning !== 'mars') knapper.push({ tekst: 'Hele Mars', handling: tilbage });
@@ -923,6 +1187,10 @@ export default {
     let tid = 0;
     let minNu = minOverblik();
     function hvertBillede(dt) {
+      if (stående) {
+        opdaterStående(dt);
+        return;
+      }
       // Mars drejer hen til det rigtige tidspunkt (og årstiden) i takt med flyvningen (før rejsen finder stedet)
       if (drejTur) {
         omdrejning.rotation.y = THREE.MathUtils.lerp(drejTur.fra, drejTur.til, rejse.fremdrift);
@@ -1025,7 +1293,7 @@ export default {
       styring,
       opdater(dt, t) {
         tid = t;
-        if (!drejer || drejTur) return;
+        if (stående || !drejer || drejTur) return;
         // Helt tæt på hele Mars står Mars stille (ellers suser landskabet forbi). Ved et sted følger kameraet med,
         // så dagen går, og skyggerne flytter sig.
         const drej = dt * DREJ * (visning === 'mars' ? THREE.MathUtils.smoothstep(rejse.afstand / R, 1.05, 1.8) : 1);
@@ -1041,6 +1309,15 @@ export default {
       stop() {
         aktiv = false;
         clearTimeout(forhåndUr);
+        forladLandskab();
+        ståVent = null;
+        for (const [, l] of landskaber) if (l.land) { gruppe.remove(l.land.gruppe); l.land.stop(); }
+        tæppe.remove();
+        verden.renderer.domElement.removeEventListener('wheel', vedHjul);
+        verden.renderer.domElement.removeEventListener('pointerdown', vedFingerNed);
+        removeEventListener('pointermove', vedFingerFlyt);
+        removeEventListener('pointerup', vedFingerOp);
+        removeEventListener('pointercancel', vedFingerOp);
         lærred.removeEventListener('pointerdown', vedNed);
         lærred.removeEventListener('pointerup', vedOp);
         for (const n of navne) {
@@ -1073,6 +1350,22 @@ export default {
       // Kun til tests: omdrejningen, højderne, billedernes størrelse, rejsen og stederne
       test: {
         drejning: () => omdrejning.rotation.y,
+        // Stå på Mars (M8a): står man, hvor, hvilken retning man kigger (kompas og vinkel), og landskabets tal
+        stå: () => {
+          kamRet.copy(orbit.target).sub(kamera.position).normalize();
+          return {
+            står: !!stående, sted: stående?.sd.id ?? null, lander: !!landing, venter: !!ståVent, zoom: kamera.zoom,
+            kompas: (THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z)) + 360) % 360, vinkel: THREE.MathUtils.radToDeg(Math.asin(kamRet.y)),
+            øjne: kamera.position.y * 1000, kloden: system.visible, nær: kamera.near, ...(stående ? stående.land.test() : {}),
+          };
+        },
+        ståPå: (id) => ståPå('gale', LANDSKAB.gale.find((x) => x.id === id)),
+        besøgSted: (id) => vælgSted(stedMed(id)),
+        tilbageOp: () => tilbageOp(),
+        // Sæt klokken og blikket (til billeder)
+        sætTid: (t) => { stående.land.tid = t; tidsSkyder?.sæt?.(stående.land.tid); },
+        kig: (kompas, vinkel) => sætBlik(ØJE / 1000, kompas, vinkel),
+        nær: (km) => { kamera.near = km; kamera.updateProjectionMatrix(); }, // til at måle flimmer
         overdriv: () => overdriv,
         billeder: () => ({
           kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: mars.harTabel,
@@ -1091,7 +1384,7 @@ export default {
         },
         ved: () => visning,
         tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand, skubbet: rejse.skubbet }),
-        hop: () => rejse.hop(), // gør den igangværende flyvning færdig
+        hop: () => { if (landing) landing.t = landing.T; rejse.hop(); }, // gør den igangværende flyvning (eller landing) færdig
         vedSted,
         // Højden over nulpunktet (km, glat) et sted (bredde, længde i grader øst), også med det lokale kort
         højde(bredde, længde) {
