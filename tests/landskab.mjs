@@ -21,6 +21,8 @@ const tryk = async (tekst) => {
   await s.waitForFunction((t) => [...document.querySelectorAll('#solsystemStyring button')].some((k) => k.textContent.trim().startsWith(t) && !k.disabled), tekst, { timeout: 15000, polling: 100 });
   await f((t) => [...document.querySelectorAll('#solsystemStyring button')].find((k) => k.textContent.trim().startsWith(t)).click(), tekst);
 };
+const træ = () => fm(() => atomlabTest.solsystem.træ()); // træet i listen (U1, docs/plan-ux.md)
+const trykTræ = (id) => f((x) => document.querySelector(`#solsystemTræ button[data-sted="${x}"]`).click(), id);
 const hop = async () => { await fm(() => atomlabTest.solsystem.fænomen().hop()); await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { polling: 100 }); };
 
 // Ved Gale: knappen
@@ -29,6 +31,7 @@ tjek('under flyvningen til Gale: ingen "Stå på Mars" endnu', !(await knapper()
 await hop();
 await s.waitForFunction(() => atomlabTest.solsystem.knapper().includes('🧍 Stå på Mars'), null, { timeout: 10000, polling: 100 }).catch(() => {});
 tjek('ved Gale: knappen "🧍 Stå på Mars"', (await knapper()).includes('🧍 Stå på Mars'), JSON.stringify(await knapper()));
+tjek('ved Gale: de to steder, man kan stå, står under Gale i træet', (await træ()).filter((p) => p.niveau === 2).map((p) => p.id).join() === 'stå-naukluft,stå-curiosity', JSON.stringify(await træ()));
 
 // Ned på jorden
 await tryk('🧍 Stå på Mars');
@@ -47,7 +50,8 @@ tjek('near er 0,3 m', Math.abs(t.nær - 0.0003) < 1e-9);
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('skyggekortene er regnet', (await stå()).skygger === 1);
 const kn = await knapper();
-tjek('knapperne: tilbage, Curiosity, klokken, lad dagen gå, solnedgang', ['↑ Tilbage i kredsløb', 'Gå til Curiosity nu', 'Klokken på Mars', '▶ Lad dagen gå', 'Solnedgang'].every((k) => kn.includes(k)), JSON.stringify(kn));
+tjek('knapperne: klokken, lad dagen gå, solnedgang (op i kredsløb og Curiosity står i træet)', ['Klokken på Mars', '▶ Lad dagen gå', 'Solnedgang'].every((k) => kn.includes(k)) && !kn.some((k) => /Tilbage i kredsløb|Gå til/.test(k)), JSON.stringify(kn));
+tjek('i træet: "🧍 Naukluft" er markeret, og panelet og vejen viser stedet', (await træ()).find((p) => p.id === 'stå-naukluft')?.valgt && (await s.textContent('#solsystemNavn')) === 'Naukluft i Gale-krateret' && (await s.textContent('#solsystemVej')) === '› Mars › Naukluft i Gale-krateret');
 tjek('teksten om Naukluft og Mount Sharp', /Naukluft/.test(await s.textContent('#solsystemForklaring')) && /Mount Sharp/.test(await s.textContent('#solsystemForklaring')));
 
 // Solen efter klokken (Gale ligger ca. 4,7° S, og Solen står ca. 3° nord for ækvator)
@@ -93,22 +97,35 @@ const sn = await stå();
 tjek('"Solnedgang": Solen står lige over horisonten om aftenen', sn.solHøjde > 0 && sn.solHøjde < 8 && sn.tid > 15, JSON.stringify({ sol: sn.solHøjde, tid: sn.tid }));
 
 // Til Curiosity
-await tryk('Gå til Curiosity nu');
-await s.waitForFunction(() => { const t = atomlabTest.solsystem.fænomen().stå(); return t.sted === 'curiosity' && t.står && atomlabTest.solsystem.knapper().includes('Gå til Naukluft'); }, null, { timeout: 60000, polling: 200 }).catch(() => {});
+await trykTræ('stå-curiosity');
+await s.waitForFunction(() => atomlabTest.solsystem.sted() === 'stå-curiosity', null, { timeout: 60000, polling: 200 }).catch(() => {});
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
 t = await stå();
-tjek('hos Curiosity: højden passer med NASA (−3.488 m ved sol 5045), og knappen tilbage til Naukluft', t.sted === 'curiosity' && Math.abs(t.højde + 3488) < 10 && (await knapper()).includes('Gå til Naukluft'), JSON.stringify(t));
+tjek('hos Curiosity (valgt i træet): højden passer med NASA (−3.488 m ved sol 5045), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3488) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
 tjek('teksten om Curiosity i oktober 2026', /oktober 2026/.test(await s.textContent('#solsystemForklaring')));
 
-// Tilbage i kredsløb
-await tryk('↑ Tilbage i kredsløb');
+// Tilbage i kredsløb: et tryk på Gale i træet
+await trykTræ('gale');
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
 t = await stå();
 tjek('tilbage i kredsløb: Mars-kloden ses, near er 5 km igen, zoom 1', !t.står && t.kloden && Math.abs(t.nær - 0.005) < 1e-9 && t.zoom === 1, JSON.stringify(t));
 await hop();
 tjek('og kameraet er ved Gale igen', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'gale');
+// Fra træet direkte ned på jorden ved Curiosity, og fra landskabet videre til et andet sted (Phobos)
+await trykTræ('stå-curiosity');
+await hop();
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 60000, polling: 200 });
+tjek('"🧍 Hos Curiosity" i træet fra Gale: står hos Curiosity', (await stå()).sted === 'curiosity');
+await trykTræ('phobos');
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
+await s.waitForTimeout(800); // tonen mellem landskabet og kloden
+await hop();
+tjek('fra landskabet: Phobos i træet letter og flyver til Phobos', !(await stå()).står && (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'phobos');
+await trykTræ('gale');
+await hop();
 
 // Skift skærm, mens man står: alt sættes tilbage
 await s.waitForFunction(() => atomlabTest.solsystem.knapper().includes('🧍 Stå på Mars'), null, { timeout: 10000, polling: 100 }).catch(() => {});

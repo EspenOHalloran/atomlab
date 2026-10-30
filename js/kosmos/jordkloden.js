@@ -40,6 +40,7 @@ export default {
   ikon: '🌍',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Vores klode og Månen, lige nu',
+  træ: { rod: 'jorden', grupper: [{ navn: 'Måner', punkter: [{ id: 'månen', navn: 'Månen', undertitel: 'Jordens måne, lige nu' }] }] },
   get kamera() { return { retning: startRetning, radius: JORD_R / S, drej: false }; },
   tal: [
     ['Jordens bredde', 'ca. 12.740 km'],
@@ -50,7 +51,7 @@ export default {
   kort: `
     <p><b>Jorden</b> er den tredje planet fra Solen og den eneste, vi kender, hvor der er liv. Lyset passer med lige nu: Den lyse side har dag, og den mørke side har nat. Den gule prik er Danmark. Drej kloden med fingeren, musen eller piletasterne, og zoom ind.</p>
     <p><b>Dag og nat:</b> Jorden drejer om sig selv mod øst én gang i døgnet. Derfor står Solen op i øst og går ned i vest. Tryk "Drej Jorden", så går tiden ca. 800 gange hurtigere, og et døgn varer under 2 minutter. Hvorfor vi har årstider, kan du se i <button class="link-knap" data-gaa="solsystem:aarstider">Årstiderne</button>.</p>
-    <p><b>Månen</b> er ca. 3.470 km bred, lidt over en fjerdedel af Jordens bredde. Den er i snit ca. 384.400 km væk, så der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Her står den i den rigtige størrelse og afstand og der, hvor den er i dag. Tryk "Månen" for at flyve derud.</p>
+    <p><b>Månen</b> er ca. 3.470 km bred, lidt over en fjerdedel af Jordens bredde. Den er i snit ca. 384.400 km væk, så der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Her står den i den rigtige størrelse og afstand og der, hvor den er i dag. Vælg Månen i listen for at flyve derud.</p>
     <p><b>Månens faser:</b> Månen kredser om Jorden på ca. 27 døgn og drejer om sig selv lige så hurtigt. Derfor vender den altid den samme side mod os. Solen lyser altid på den ene halvdel af Månen. Hvor meget af den lyse halvdel vi ser fra Jorden, kommer an på, hvor Månen står i sin bane. Fra fuldmåne til fuldmåne går der ca. 29½ døgn. Ved nymåne og fuldmåne kan der komme <button class="link-knap" data-gaa="solsystem:formoerkelser">formørkelser</button>.</p>`,
   nørd: `
     <p><b>Tidspunktet:</b> Solens retning, Jordens drejning og Månens plads er regnet ud fra datoen og klokken med de korte formler fra "The Astronomical Almanac". Månens plads passer inden for ca. 0,3°, og grænsen mellem dag og nat passer inden for få minutter.</p>
@@ -165,11 +166,10 @@ export default {
     let drejer = false;
     const styring = [
       { tekst: 'Drej Jorden', til: drejer, skift: (til) => { drejer = til; vis(); } },
-      { tekst: 'Månen', til: false, skift: (til) => flyv(til ? 'månen' : 'jorden') },
     ];
     function vis() {
       if (ved === 'månen') {
-        forklaring('<p><b>Månen:</b> Drej kameraet rundt, så kan du se Jorden langt væk. Der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Den samme side af Månen vender altid mod Jorden. Tryk "Månen" igen for at flyve tilbage.</p>');
+        forklaring('<p><b>Månen:</b> Drej kameraet rundt, så kan du se Jorden langt væk. Der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Den samme side af Månen vender altid mod Jorden. Tryk på Jorden i listen for at flyve tilbage.</p>');
         return;
       }
       forklaring(drejer
@@ -229,6 +229,8 @@ export default {
 
     return {
       styring,
+      gåTil: (id) => flyv(id), // træet i listen (js/faenomenskaerm.js): 'jorden' eller 'månen'
+      sted: () => ved,
       opdater(dt) {
         nu += dt * 1000 * (drejer ? HURTIG : 1);
         stil();

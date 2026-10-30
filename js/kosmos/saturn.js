@@ -133,6 +133,16 @@ const RING_TIL = 136000;
 const RING_TID = 24; // sekunder
 const RING_VINKEL = 40; // hvor på ringene (grader fra Solens retning)
 
+// Træet i listen til venstre (js/faenomenskaerm.js): ringene og de seks store måner. "Måner" er selv et sted
+// (oversigten med banerne).
+const TRÆ = {
+  rod: 'saturn',
+  grupper: [
+    { navn: 'Steder', punkter: [{ id: 'ringe', navn: 'Ringene', undertitel: 'Milliarder af isklumper', ikon: '💫' }] },
+    { navn: 'Måner', id: 'maaner', titel: 'Månerne', undertitel: 'De seks store måner i deres baner', punkter: MÅNER.map((m) => ({ id: m.id, navn: m.navn })) },
+  ],
+};
+
 const VISNINGER = {
   saturn: {
     navn: 'Saturn', afstandFra: 15, retning: 35, højde: -20,
@@ -150,6 +160,7 @@ export default {
   ikon: '🪐',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Ringene og de store måner',
+  træ: TRÆ,
   citat: 'huygensSaturn',
   kamera: { retning: [0.2, -0.32, 1], radius: 15 },
   tal: [
@@ -340,6 +351,22 @@ export default {
       lavKnapper();
     }
 
+    // Gå til et sted fra træet i listen: Saturn, oversigten med månerne, ringene (som på flybyen) eller en måne
+    function gåTil(id) {
+      if (id === visning) return;
+      if (VISNINGER[id]) return vælg(id);
+      const m = måneMed(id);
+      if (m) return besøg(m);
+      if (id !== 'ringe') return;
+      afslutTur();
+      baner = false;
+      const stop = TUR.find((t) => t.fokus === 'ringe');
+      flyvTilStop(stop, TUR.indexOf(stop));
+      fase(stop.titel, stop.tekst);
+      forklaring(stop.mere);
+      lavKnapper();
+    }
+
     // ---------- Flybyen (js/solsystem/flyby.js) ----------
     function startTur() {
       for (const m of måner) hentKort(m);
@@ -372,7 +399,7 @@ export default {
     }
     const flyby = lavFlyby({
       stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(),
-      slut: '<p><b>Turen er slut.</b> Drej selv rundt, tryk på en måne for at besøge den, eller tryk "Saturn".</p>',
+      slut: '<p><b>Turen er slut.</b> Drej selv rundt, tryk på en måne for at besøge den, eller vælg Saturn i listen.</p>',
     });
     const afslutTur = () => flyby.afslut();
 
@@ -407,8 +434,6 @@ export default {
       styring.length = 0;
       if (flyby.kører) styring.push(...flyby.knapper());
       else {
-        for (const [id, v] of Object.entries(VISNINGER)) styring.push({ tekst: v.navn, handling: () => vælg(id), deaktiv: () => visning === id });
-        for (const id of ['enceladus', 'titan']) styring.push({ tekst: måneMed(id).navn, handling: () => besøg(måneMed(id)), deaktiv: () => visning === id });
         styring.push(flybyKlar
           ? { tekst: '▶ Start flyby', handling: startTur }
           : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
@@ -460,11 +485,13 @@ export default {
 
     return {
       styring,
+      gåTil, // træet i listen (js/faenomenskaerm.js)
+      sted: () => visning,
       opdater(dt, t) {
         tid = t;
         planet.mesh.rotation.y = t * 0.08;
         // Ringpunktet glider udad, mens man læser om ringene (ikke med "reducer bevægelse")
-        if (flyby.kører && TUR[flyby.trin].fokus === 'ringe' && !rejse.flyver && !ROLIG) ringKm = Math.min(RING_TIL, ringKm + ((RING_TIL - RING_FRA) / RING_TID) * dt);
+        if (visning === 'ringe' && !rejse.flyver && !ROLIG) ringKm = Math.min(RING_TIL, ringKm + ((RING_TIL - RING_FRA) / RING_TID) * dt);
         // Månerne kredser kun i oversigten (meget hurtigere end i virkeligheden, men i det rigtige forhold)
         if (baner && !rejse.flyver) for (const m of måner) sætVinkel(m, (m.vinkel + (dt * 0.069) / m.døgn) / GRAD);
       },

@@ -1010,11 +1010,30 @@ button { font: inherit; color: inherit; }
 .ikon-solsystem { background: radial-gradient(circle at 30% 50%, #fff6d0 0 7px, #ffc04a 9px, rgba(255, 140, 40, 0.5) 13px, transparent 19px); }
 .ikon-solsystem::before { content: ""; position: absolute; left: 31px; top: 14px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #9fd8ff, #2f6fd0 70%); box-shadow: 0 0 6px rgba(95, 170, 255, 0.6); }
 .ikon-solsystem::after { content: ""; position: absolute; left: 36px; top: 32px; width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffb08a, #b9472a 75%); }
-.sol-liste { display: flex; flex-direction: column; gap: 6px; }
-.sol-hoved { width: 100%; }
-.sol-under { display: flex; flex-wrap: wrap; gap: 5px; margin: 5px 0 2px 22px; }
-.sol-punkt { padding: 5px 8px; font-size: 12.5px; font-weight: 500; }
-.sol-punkt .kosmos-valg-ikon { font-size: 14px; }
+.sol-liste { display: flex; flex-direction: column; gap: 8px; }
+.sol-kloder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.sol-klode { flex-direction: column; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
+/* Træet: en liste (ikke knapper) med "du er her" som en lys streg i siden */
+.sol-træ { display: flex; flex-direction: column; gap: 1px; }
+.sol-sted { display: flex; align-items: center; gap: 7px; width: 100%; padding: 4px 8px 4px 10px; border: 0; border-left: 3px solid transparent; border-radius: 0 8px 8px 0; background: none; color: var(--tekst); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; position: relative; }
+.sol-sted:hover { background: rgba(95, 227, 255, 0.07); }
+.sol-sted.valgt { border-left-color: var(--accent); background: rgba(95, 227, 255, 0.13); font-weight: 700; }
+.sol-sted.niveau-0 { font-size: 15px; font-weight: 700; }
+.sol-sted.niveau-1 { padding-left: 18px; }
+.sol-sted.niveau-2 { padding-left: 34px; font-size: 13px; color: var(--svag); }
+.sol-sted.niveau-2.valgt { color: var(--tekst); }
+.sol-sted.niveau-2::before { content: "└"; margin-right: -2px; color: var(--svag); }
+.sol-sted .kosmos-valg-ikon { font-size: 15px; }
+.sol-gruppe-navn { margin: 5px 0 1px; padding: 2px 8px 2px 10px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--svag); }
+button.sol-gruppe-navn { font-size: 11.5px; }
+button.sol-gruppe-navn::after { content: " ›"; }
+.sol-sted.ny::after { content: ""; position: absolute; top: 50%; right: 8px; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+/* Vejen i toplinjen (Solsystemet › Mars › Olympus Mons) */
+.sol-vej .link-knap { font-size: inherit; }
+/* Ved et sted: kloden står under "Om Mars", og klodens tal skjules (stedet har ikke sine egne endnu) */
+.kosmos-om { display: none; margin: 4px 0 -4px; font-size: 13px; color: var(--svag); }
+#solsystem.ved-sted .kosmos-om { display: block; }
+#solsystem.ved-sted .kosmos-tal { display: none; }
 .kosmos-videre { margin-top: 4px; padding: 6px 8px; border: 1px dashed var(--panel-kant); border-radius: 12px; background: none; color: var(--svag); font-size: 12.5px; text-align: left; cursor: pointer; }
 .kosmos-videre strong { color: var(--accent); }
 .kosmos-videre:hover { border-color: rgba(95, 227, 255, 0.5); }
@@ -1150,11 +1169,15 @@ button { font: inherit; color: inherit; }
   .kosmos-liste::-webkit-scrollbar { display: none; }
   .kosmos-valg { flex: 0 0 auto; }
   .kosmos-videre { display: none; }
-  .sol-liste { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
-  .sol-gruppe { display: contents; }
-  .sol-hoved { flex-direction: column; gap: 2px; padding: 5px 2px; text-align: center; }
-  .sol-under { display: none; grid-column: 1 / -1; grid-row: 2; margin: 0; }
-  .sol-gruppe.åben .sol-under { display: flex; }
+  /* Træet som rækker af små punkter, der brydes (ellers skubber det "Prøv selv" langt ned) */
+  .sol-træ { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .sol-sted, .sol-sted.niveau-1, .sol-sted.niveau-2 { width: auto; padding: 5px 9px; border: 1px solid var(--panel-kant); border-radius: 10px; font-size: 12.5px; }
+  .sol-sted.niveau-0 { font-size: 13px; }
+  .sol-sted.niveau-2::before { content: "↳"; }
+  .sol-sted.valgt { border-color: var(--accent); }
+  .sol-sted.ny { padding-right: 18px; }
+  .sol-gruppe-navn, button.sol-gruppe-navn { flex-basis: 100%; margin: 3px 0 0; padding: 0 2px; border: 0; background: none; }
+  button.sol-gruppe-navn.valgt { color: var(--accent); }
   .søgefelt { order: 3; flex: 1 1 100%; max-width: none; }
   /* Det periodiske system: filtrene bag én knap */
   .system-filtre .chip.filter-knap { display: inline-flex; }
@@ -1205,6 +1228,7 @@ button { font: inherit; color: inherit; }
   .grundstofkort .symbol { font-size: 26px; }
   .opgave-krav { display: none; }
   .kosmos-liste { grid-template-columns: 1fr; }
+  .sol-kloder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* Det periodiske system: filtrene bag én knap */
   .system-filtre .chip.filter-knap { display: inline-flex; }
   .filter-chips { display: none; }

@@ -92,10 +92,10 @@ await s.evaluate(() => { location.hash = '#solsystem'; });
 await s.waitForFunction(() => document.querySelector('#solsystem:not(.skjult)'));
 
 // ---------- Jorden ----------
-await s.click('#solsystem .sol-gruppe[data-gruppe="1"] .sol-hoved');
+await s.click('#solsystem .sol-klode[data-id="jorden"]');
 tjek('et tryk på Jorden åbner Jorden', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'jorden');
 const knapper = await s.evaluate(() => [...document.querySelectorAll('#solsystemStyring button')].map((k) => k.textContent.trim()));
-tjek('knapperne "Drej Jorden" og "Månen"', knapper.length === 2 && knapper[0].includes('Drej Jorden') && knapper[1].includes('Månen'), JSON.stringify(knapper));
+tjek('knappen "Drej Jorden" (Månen står i træet)', knapper.length === 1 && knapper[0].includes('Drej Jorden'), JSON.stringify(knapper));
 tjek('Jorden: sort himmel', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
 const nu = await f(s, 'f.tid()');
 tjek('tidspunktet er nu', Math.abs(nu - Date.now()) < 60000);
@@ -148,7 +148,7 @@ await s.click('#solsystemPause');
 await f(s, 'f.sætTid(a)', Date.now());
 await s.waitForTimeout(1500);
 await s.screenshot({ path: `${UD}/pc-jorden.png` });
-await s.click('#solsystemStyring button:has-text("Månen")');
+await s.click('#solsystemTræ button[data-sted="månen"]');
 await f(s, 'f.hop()');
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().flyver());
 tjek('"Månen": kameraet er ved Månen', (await f(s, 'f.ved()')) === 'månen' && /Månen:/.test(await s.textContent('#solsystemForklaring')));
@@ -156,9 +156,9 @@ const kam = await s.evaluate(async () => { const { verden } = await import('/js/
 tjek(`kameraet er tæt på Månen (${kam.toFixed(1)} enheder fra midten, Månens radius 1,74)`, kam > 1.74 && kam < 20);
 await s.waitForTimeout(1500);
 await s.screenshot({ path: `${UD}/pc-maanen.png` });
-await s.click('#solsystemStyring button:has-text("Månen")');
+await s.click('#solsystemTræ button[data-sted="jorden"]');
 await f(s, 'f.hop()');
-tjek('"Månen" igen: tilbage ved Jorden', (await f(s, 'f.ved()')) === 'jorden');
+tjek('"Jorden" i træet: tilbage ved Jorden', (await f(s, 'f.ved()')) === 'jorden');
 // Skift væk: Jordens ur forsvinder
 await s.click('#solsystem .kosmos-valg[data-id="mars"]');
 tjek('Jordens ur er væk, når Mars vælges', (await s.$$('#solsystemOverlag .jord-ur')).length === 0);

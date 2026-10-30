@@ -219,6 +219,24 @@ const LANDSKAB = {
         + '<p><b>Bakkerne omkring</b> skjuler toppen af Mount Sharp. Mod nord er der et hul i bakkerne med udsigt ud over kraterbunden til randen langt væk.</p>' },
   ],
 };
+// Træet i listen til venstre (js/faenomenskaerm.js): stederne og månerne med flybyens navne, og under et sted det, der
+// hører til (Calderaen og Skrænten under Olympus Mons, stederne, man kan stå, under Gale, og udsigten fra Phobos
+// under Phobos)
+const punkt = (id, under) => ({ id, navn: TUR.find((t) => t.id === id).titel, ...(under && { under: under.map((u) => punkt(u)) }) });
+const TRÆ = {
+  rod: 'mars',
+  grupper: [
+    { navn: 'Steder', punkter: [punkt('olympus', ['caldera', 'skraent']), ...['tharsis', 'valles', 'hellas', 'gale', 'jezero', 'nordpol'].map((id) => punkt(id))] },
+    {
+      navn: 'Måner', id: 'måner', titel: 'Månerne', undertitel: 'Phobos og Deimos i deres baner',
+      punkter: [punkt('phobos', ['phobos-mars']), punkt('deimos')],
+    },
+  ],
+};
+TRÆ.grupper[1].punkter[0].under[0].undertitel = 'Udsigten fra Phobos';
+for (const [krater, steder] of Object.entries(LANDSKAB)) {
+  TRÆ.grupper[0].punkter.find((p) => p.id === krater).under = steder.map((sd) => ({ id: `stå-${sd.id}`, navn: `🧍 ${sd.navn}`, titel: sd.titel, undertitel: 'Stå på Mars', ikon: '🧍' }));
+}
 
 // Billederne (se billeder/solsystem/KILDER.md). Farvekortet er 8k på pc og (indtil videre, som en prøve) på tablet,
 // hvis grafikkortet kan klare så store billeder. Tests henter 2k. Højdekortet er 4k (2k i tests).
@@ -264,6 +282,7 @@ export default {
   ikon: '🔴',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Den røde planet',
+  træ: TRÆ,
   kamera: { retning: [0.12, 0.2, 1], radius: MARS_R / S, drej: false },
   tal: [
     ['Mars\' bredde', 'ca. 6.790 km'],
@@ -558,6 +577,7 @@ export default {
       fase(null);
       aktivér([]);
       visning = m.id;
+      ordnetVed = null;
       if (måneFlyt) { // en måne, der var på vej ud af skyggen, kommer helt frem
         måneFlyt.m.vinkel = måneFlyt.til;
         sætPlads(måneFlyt.m);
@@ -648,11 +668,11 @@ export default {
     }
     // Stil månerne op til turen: Solen står ved m.stop.sol set fra månen (ved jævndøgn). Solens længdegrad set fra månen
     // er Solens vinkel i banen minus månens vinkel minus 180° (længde 0° vender mod Mars).
-    function stilMånerOp() {
+    function stilMånerOp(kun = null) {
       måneFlyt = null;
       const solH = sol.clone().applyQuaternion(HÆLD.jævndøgn.clone().invert());
       const ψ = Math.atan2(-solH.z, solH.x);
-      for (const m of måner) {
+      for (const m of kun ? [kun] : måner) {
         m.vinkel = ψ - Math.PI - THREE.MathUtils.degToRad(m.stop.sol);
         sætPlads(m);
       }
@@ -694,10 +714,11 @@ export default {
     }
     // Et stop ved en måne: set fra m.stop.kamera, og kameraet kigger ved siden af månen mod Mars (m.stop.blik gange
     // halvdelen af 3D-billedets mindste side, som i passerTil i scene3d.js)
-    function flyvTilMåneStop(m) {
+    function flyvTilMåneStop(m, efter) {
       aktivér([nuværendeNet()]);
       hældHen(HÆLD.jævndøgn);
       visning = m.id;
+      ordnetVed = m.id; // månen er stillet op (stilMånerOp), så Solen står ved m.stop.sol
       drejer = true; // Mars drejer videre, mens månen står stille
       const { kamera: [b, l], størrelse, blik } = m.stop;
       const c = retningISystem(m, m.form.retning(b, l), new THREE.Vector3(), HÆLD.jævndøgn);
@@ -706,7 +727,23 @@ export default {
       const { hul } = verden;
       const halv = Math.tan(THREE.MathUtils.degToRad(20)) * Math.min(hul.width, hul.height) / innerHeight; // tan(halv vinkel)
       const forskyd = u.addScaledVector(c, -u.dot(c)).normalize().multiplyScalar(afstand * halv * blik);
-      flyv({ fokus: () => måneFokus(m)().add(forskyd), afstand, retning: c, min: forskyd.length() + m.form.radius * 1.3, max: R * 15, færdig: () => aktivér([]) });
+      flyv({ fokus: () => måneFokus(m)().add(forskyd), afstand, retning: c, min: forskyd.length() + m.form.radius * 1.3, max: R * 15, færdig: () => { aktivér([]); efter?.(); } });
+    }
+    // Til flybyens stop ved en måne fra træet i listen: Månen glider hen, hvor flybyen stiller den (den korteste vej i
+    // banen), mens kameraet flyver derhen (kameraet følger månen). efter kaldes, når kameraet er fremme.
+    let ordnetVed = null; // den måne, der står, som flybyen stiller den
+    function tilMåneStop(m, efter) {
+      if (måneFlyt) { // en måne, der var på vej, kommer helt frem
+        måneFlyt.m.vinkel = måneFlyt.til;
+        sætPlads(måneFlyt.m);
+      }
+      const fra = m.vinkel;
+      stilMånerOp(m);
+      const til = fra + THREE.MathUtils.euclideanModulo(m.vinkel - fra + Math.PI, Math.PI * 2) - Math.PI;
+      flyvTilMåneStop(m, efter); // regnes med månen, der hvor den ender
+      m.vinkel = fra;
+      sætPlads(m);
+      måneFlyt = { m, fra, til };
     }
     // "Mars set fra Phobos": OVERFLADE.højde over Phobos på siden mod Mars. Man drejer rundt om et punkt lige foran
     // kameraet (som at dreje hovedet), og Phobos' lodrette retning peger op.
@@ -793,7 +830,7 @@ export default {
           flyvTilMåneStop(måneMed(stop.id));
         } else besøg(stedMed(stop.id));
       },
-      slut: '<p><b>Turen er slut.</b> Drej selv rundt med fingeren eller musen, eller tryk "Hele Mars".</p>',
+      slut: '<p><b>Turen er slut.</b> Drej selv rundt med fingeren eller musen, eller vælg et nyt sted i listen.</p>',
     });
 
     // ---------- Stå på Mars (M8a, js/solsystem/landskab.js) ----------
@@ -903,12 +940,11 @@ export default {
       lavKnapper();
     }
     // Op i kredsløb igen: tilbage til kraterets stop
-    function tilbageOp() {
+    function tilbageOp(til = stående?.krater) {
       if (!stående) return;
-      const krater = stående.krater;
       landing = { t: 0, T: ROLIG ? 0 : 2.2, op: true, fra: kamera.position.y, færdig: () => ton(() => {
         forladLandskab();
-        vælgSted(stedMed(krater));
+        gåTil(til);
       }) };
       orbit.enabled = false;
       lavKnapper();
@@ -934,9 +970,10 @@ export default {
       orbit.enabled = true;
     }
     // Gå til et andet sted ved samme krater (et hop med en tone)
-    function gåTil(sd) {
+    function gåTilLandskab(sd) {
       const krater = stående.krater;
-      stående.land.gåTil(sd.id, () => ton(() => visLandskab(krater, sd)));
+      const nr = gåNr; // vælges noget andet, mens lagene hentes eller billedet toner, lander man ikke her alligevel
+      stående.land.gåTil(sd.id, () => { if (gåNr === nr) ton(() => { if (gåNr === nr) visLandskab(krater, sd); }); });
     }
     // Klokken som tekst (lokal soltid)
     const klokken = (t) => `${String(Math.floor(t)).padStart(2, '0')}:${String(Math.floor((t % 1) * 60)).padStart(2, '0')}`;
@@ -1019,12 +1056,9 @@ export default {
     addEventListener('pointercancel', vedFingerOp);
     // Knapperne, mens man står på jorden
     function ståKnapper() {
-      const { krater, sd, land } = stående;
-      const andre = LANDSKAB[krater].filter((x) => x.id !== sd.id);
+      const { land } = stående; // op i kredsløb og de andre steder ved krateret står i træet
       tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; } };
       return [
-        { tekst: '↑ Tilbage i kredsløb', handling: tilbageOp, deaktiv: () => !!landing },
-        ...andre.map((x) => ({ tekst: x.knap, handling: () => gåTil(x), deaktiv: () => !!landing })),
         tidsSkyder,
         { tekst: '▶ Lad dagen gå', til: dagenGår, skift: (til) => { dagenGår = til; } },
         { tekst: 'Solnedgang', handling: solnedgang },
@@ -1048,8 +1082,6 @@ export default {
       if (krater) knapper.push({ tekst: '🧍 Stå på Mars', handling: () => ståPå(krater, LANDSKAB[krater][0]) });
       if (flyby.kører) knapper.push(...flyby.knapper());
       else {
-        if (visning !== 'mars') knapper.push({ tekst: 'Hele Mars', handling: tilbage });
-        if (visning !== 'måner') knapper.push({ tekst: 'Månerne', handling: visMåner });
         knapper.push(flybyKlar
           ? { tekst: '▶ Start flyby', handling: () => flyby.start() }
           : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
@@ -1098,10 +1130,37 @@ export default {
       return { st, tekst, prik, forhold: tekst.scale.x / tekst.scale.y, str: 0 };
     });
     let navneVist = false;
-    // Et sted valgt med et tryk: flyv derhen, og vis stedets tekst (som på flybyen, men uden prikker)
-    function vælgSted(st) {
-      const t = TUR.find((x) => x.id === st.id);
-      besøg(st);
+    // Gå til et sted, en måne eller udsigten fra Phobos (fra træet i listen eller et navn på kloden): flyv derhen som
+    // på flybyen, og vis stedets tekst (uden prikker). id: et stop på flybyen, 'mars' (hele Mars) eller 'måner'.
+    // Det sted, man er ved (i landskabet: stå-naukluft, stå-curiosity)
+    const stedNu = () => (stående ? `stå-${stående.sd.id}` : visning);
+    let gåNr = 0; // så en flyvning i to dele kun fortsætter, hvis der ikke er valgt noget andet imens
+    const landskabMed = (id) => Object.entries(LANDSKAB).map(([krater, l]) => ({ krater, sd: l.find((x) => `stå-${x.id}` === id) })).find((x) => x.sd);
+    function gåTil(id) {
+      if (id === stedNu()) return;
+      const nr = ++gåNr;
+      const stå = landskabMed(id);
+      // Fra landskabet: et andet sted ved krateret er et hop, og alt andet letter først (som "op i kredsløb")
+      if (stående) return stå?.krater === stående.krater ? gåTilLandskab(stå.sd) : tilbageOp(id);
+      ståVent = null;
+      if (stå) {
+        flyby.afslut();
+        return ståPå(stå.krater, stå.sd);
+      }
+      if (id === 'mars') return tilbage();
+      if (id === 'måner') return visMåner();
+      const t = TUR.find((x) => x.id === id);
+      if (!t) return;
+      flyby.afslut();
+      if (erMåne(id)) tilMåneStop(måneMed(id));
+      else if (id === OVERFLADE.id) {
+        // Udsigten fra Phobos kræver, at Phobos står som på flybyen. Ellers flyver kameraet først derhen.
+        if (ordnetVed === 'phobos' && visning === 'phobos') flyvTilOverflade();
+        else {
+          tilMåneStop(måneMed('phobos'), () => { if (gåNr === nr) flyvTilOverflade(); });
+          visning = OVERFLADE.id; // på vej derhen (månerne står stille)
+        }
+      } else besøg(stedMed(id));
       opdaterNavne(); // navnene skjules med det samme (ikke først i næste billede)
       fase(t.titel, t.tekst);
       forklaring(t.mere);
@@ -1144,7 +1203,7 @@ export default {
       if (flyby.kører || rejse.flyver) return;
       const n = navneVist ? navnVed(h.clientX, h.clientY) : null;
       if (n) {
-        vælgSted(n.st);
+        gåTil(n.st.id);
         return;
       }
       const m = visning === 'mars' || visning === 'måner' || erMåne(visning) ? måneVed(h.clientX, h.clientY) : null;
@@ -1291,6 +1350,8 @@ export default {
 
     return {
       styring,
+      gåTil, // træet i listen (js/faenomenskaerm.js)
+      sted: () => stedNu(),
       opdater(dt, t) {
         tid = t;
         if (stående || !drejer || drejTur) return;
@@ -1360,7 +1421,7 @@ export default {
           };
         },
         ståPå: (id) => ståPå('gale', LANDSKAB.gale.find((x) => x.id === id)),
-        besøgSted: (id) => vælgSted(stedMed(id)),
+        besøgSted: (id) => gåTil(id),
         tilbageOp: () => tilbageOp(),
         // Sæt klokken og blikket (til billeder)
         sætTid: (t) => { stående.land.tid = t; tidsSkyder?.sæt?.(stående.land.tid); },
@@ -1386,6 +1447,7 @@ export default {
         tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand, skubbet: rejse.skubbet }),
         hop: () => { if (landing) landing.t = landing.T; rejse.hop(); }, // gør den igangværende flyvning (eller landing) færdig
         vedSted,
+        ordnet: () => ordnetVed,
         // Højden over nulpunktet (km, glat) et sted (bredde, længde i grader øst), også med det lokale kort
         højde(bredde, længde) {
           const r = mars.sted(bredde, længde).retning;
