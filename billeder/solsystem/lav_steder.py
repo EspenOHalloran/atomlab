@@ -20,6 +20,10 @@
 # ca. 7 km). Hvor HRSC+MOLA i snit afviger mere fra MOLA, end landet omkring er ujævnt, bruges MOLA (MOLA er målt med
 # laser og er rigtig i store træk). Ved Olympus Mons gælder det ca. 0,5 % af området.
 #
+# Detaljekort: Inden for et sted kan et mindre område få et skarpere højdekort (DETALJER), som det lokale net bruger,
+# hvor det findes (ved calderaen og skrænten på Olympus Mons ca. 0,22 km pr. pixel, næsten som kilden). Det hentes
+# først, når flybyen nærmer sig stoppene dér.
+#
 # Kortene dækker præcis stedets grænser i bredde og længde (grader øst), med længden mod højre og nord øverst.
 # Højderne gemmes som kloden (lav_mars.py): 16 bit i rød og grøn, fra HØJDE_MIN til HØJDE_MAX i trin på ca. 3,7 m.
 import sys
@@ -36,6 +40,12 @@ from rasterio.windows import from_bounds
 STEDER = {
     'olympus': (27.5, 9.5, -143.5, -124.5),
 }
+# Detaljekortene (samme form, og de skal ligge inden for stedet). Skal være de samme som detalje i LOKALE.
+# Olympus Mons: calderaen (18,4° N, 226,7° Ø) og skrænten mod nordvest (22,15° N, 222,6° Ø), ca. 445 × 445 km.
+DETALJER = {
+    'olympus': (24.0, 16.5, -139.5, -131.5),
+}
+DETALJE = (2048, 1024)  # pc og tablet, tests
 HØJDE_MIN, HØJDE_MAX = -8500.0, 21500.0  # m, de samme som i lav_mars.py og js/kosmos/mars.js
 HØJDE = (2048, 1024)  # pc og tablet, tests
 FARVE = 1024  # ca. 1 km pr. pixel (originalen har 925 m)
@@ -89,32 +99,49 @@ def glat(a, b, x):
     return t * t * (3 - 2 * t)
 
 
-for id_, grænser in STEDER.items():
-    # ---------- Højderne ----------
-    B = HØJDE[0]
+def højder(grænser, B):
+    # Højderne i B × B pixel: HRSC+MOLA, men MOLA dér, hvor HRSC+MOLA har kasseformede fejl
     mola, tm = læs('mola', grænser)
     hrsc, th = læs('hrsc', grænser)
     a = np.asarray(udsnit(Image.fromarray(mola[0].astype(np.float32), 'F'), tm, grænser, B, B, Image.BOX), np.float64)
     b = np.asarray(udsnit(Image.fromarray(hrsc[0].astype(np.float32), 'F'), th, grænser, B, B, Image.BOX), np.float64)
-    # Hvor langt HRSC+MOLA i snit er fra MOLA (ca. 7 km), og hvor ujævnt landet er (ca. 13 km)
+    # Vinduerne er lige store i km (ca. 7 km og 13 km), uanset hvor skarpt kortet er (0,52 km pr. pixel ved Olympus)
+    km = (grænser[0] - grænser[1]) * math.pi * R / 180 / 1000 / B
+    r = lambda n: max(1, round(n * 0.521 / km))
+    # Hvor langt HRSC+MOLA i snit er fra MOLA, og hvor ujævnt landet er
     d = b - a
-    afvigelse = np.abs(boks(d, 6))
-    ujævn = np.sqrt(np.maximum(boks(a * a, 12) - boks(a, 12) ** 2, 0))
+    afvigelse = np.abs(boks(d, r(6)))
+    ujævn = np.sqrt(np.maximum(boks(a * a, r(12)) - boks(a, r(12)) ** 2, 0))
     tilladt = 30 + 0.5 * ujævn
-    vægt = boks(1 - glat(tilladt, 2 * tilladt, afvigelse), 3)
+    vægt = boks(1 - glat(tilladt, 2 * tilladt, afvigelse), r(3))
     h = a + vægt * d
-    print('højder', h.min(), h.max(), 'MOLA brugt i', round(float((vægt < 0.5).mean()) * 100, 2), '%')
+    print('højder', round(km, 3), 'km pr. pixel', h.min(), h.max(), 'MOLA brugt i', round(float((vægt < 0.5).mean()) * 100, 2), '%')
     assert HØJDE_MIN <= h.min() and h.max() <= HØJDE_MAX
-    for b_ in HØJDE:
-        x = h if b_ == B else np.asarray(Image.fromarray(h.astype(np.float32), 'F').resize((b_, b_), Image.BOX), np.float64)
+    return h
+
+
+def gem_højder(h, størrelser, navn):
+    # 16 bit i rød og grøn. navn(b) giver filnavnet for b × b pixel.
+    for b_ in størrelser:
+        x = h if b_ == h.shape[0] else np.asarray(Image.fromarray(h.astype(np.float32), 'F').resize((b_, b_), Image.BOX), np.float64)
         n = np.clip(np.round((x - HØJDE_MIN) / (HØJDE_MAX - HØJDE_MIN) * 65535), 0, 65535)
         n = np.minimum(np.round(n / 8) * 8, 65535).astype(np.uint32)
         rg = np.zeros((b_, b_, 3), np.uint8)
         rg[:, :, 0] = n >> 8
         rg[:, :, 1] = n & 255
-        navn = f'mars-{id_}-hoejde-{"2k" if b_ == 2048 else "1k"}.png'
-        Image.fromarray(rg, 'RGB').save(os.path.join(ud, navn), optimize=True)
-        print(navn)
+        Image.fromarray(rg, 'RGB').save(os.path.join(ud, navn(b_)), optimize=True)
+        print(navn(b_))
+
+
+for id_, grænser in DETALJER.items():
+    n, s, v, ø = grænser
+    N, S, V, Ø = STEDER[id_]
+    assert S < s < n < N and V < v < ø < Ø, 'detaljekortet skal ligge inden for stedet'
+    gem_højder(højder(grænser, DETALJE[0]), DETALJE, lambda b_: f'mars-{id_}-detalje-hoejde-{"2k" if b_ == 2048 else "1k"}.png')
+
+for id_, grænser in STEDER.items():
+    # ---------- Højderne ----------
+    gem_højder(højder(grænser, HØJDE[0]), HØJDE, lambda b_: f'mars-{id_}-hoejde-{"2k" if b_ == 2048 else "1k"}.png')
 
     # ---------- Farverne (samme rettelse som i lav_mars.py) ----------
     rgb, tf = læs('farve', grænser)

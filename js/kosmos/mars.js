@@ -48,8 +48,10 @@ const MARGEN = 2; // km: så tæt på jorden må kameraet komme
 // Lokale kort (M7a): Over et sted ligger et fint net med sit eget højdekort (HRSC og MOLA, ca. 0,5 km pr. pixel) og
 // farvekort (js/solsystem/klippeplanet.js, lokalt). Grænserne (grader, øst positiv) skal være de samme som STEDER i
 // billeder/solsystem/lav_steder.py. Olympus Mons: ca. 1.000 × 1.000 km om vulkanen, skrænten og lavaen udenfor.
+// detalje: et mindre område med et skarpere højdekort (ca. 0,22 km pr. pixel), som hentes, når flybyen nærmer sig et
+// sted med detalje (DETALJER i lav_steder.py): ca. 445 × 445 km om calderaen og skrænten.
 const LOKALE = [
-  { id: 'olympus', nord: 27.5, syd: 9.5, vest: -143.5, øst: -124.5 },
+  { id: 'olympus', nord: 27.5, syd: 9.5, vest: -143.5, øst: -124.5, detalje: { nord: 24, syd: 16.5, vest: -139.5, øst: -131.5 } },
 ];
 
 // Steder, flybyen besøger. tid: klokken på stedet (lokal soltid), når man er der. kompas: hvorfra kameraet kigger
@@ -59,10 +61,10 @@ const LOKALE = [
 const STEDER = [
   { id: 'olympus', navn: 'Olympus Mons', bredde: 18.4, længde: -134, tid: 7, kompas: 180, vinkel: 10, størrelse: 0.2, lokalt: 'olympus' },
   // Calderaen: midten af kraterne i højdekortet. Kameraet kigger skråt ned fra syd-sydvest.
-  { id: 'caldera', navn: 'Calderaen', bredde: 18.4, længde: -133.3, tid: 8, kompas: 200, vinkel: 30, størrelse: 0.04, lokalt: 'olympus' },
+  { id: 'caldera', navn: 'Calderaen', bredde: 18.4, længde: -133.3, tid: 8, kompas: 200, vinkel: 30, størrelse: 0.04, lokalt: 'olympus', detalje: true },
   // Skrænten mod nordvest, hvor den er højest i højdekortet (ca. 7,8 km fra kanten til foden på ca. 20 km).
   // Kameraet står vest for den, kigger mod øst (mod morgensolen), og skrænten ligger i skygge.
-  { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 10, størrelse: 0.018, lokalt: 'olympus' },
+  { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 10, størrelse: 0.018, lokalt: 'olympus', detalje: true },
 ];
 // Flybyen (M5 giver flere steder)
 const TUR = [
@@ -132,12 +134,12 @@ export default {
     <p><b>Flyby:</b> Tryk "▶ Start flyby", og flyv ned til Olympus Mons, kraterne på toppen og den stejle kant ved foden. Ved hvert stop kan du selv dreje rundt og zoome helt ned.</p>`,
   nørd: `
     <p><b>Højderne</b> er målt med laser fra rumsonden Mars Global Surveyor (instrumentet MOLA, 1997-2001). Kuglen er et net, hvor hvert punkt er løftet eller sænket efter højdekortet, så bjergene rager op over kanten, når de står ude ved horisonten. Fra kredsløb ser Mars alligevel næsten glat ud, for selv Olympus Mons er kun ca. 0,6 % af Mars' radius. Tryk "Bjergene 10 gange højere" for at se landskabet tydeligere.</p>
-    <p><b>Ved Olympus Mons</b> ligger et ekstra, fint net over et område på ca. 1.000 × 1.000 km. Her er højderne fra den europæiske rumsonde Mars Express (kameraet HRSC) lagt sammen med MOLA. HRSC tager billeder af det samme sted fra lidt forskellige vinkler, ligesom dine to øjne, og ud fra dem kan man regne højderne ud. I programmet er der ca. 0,5 km mellem højderne og ca. 2 km mellem nettets punkter (ca. 2,6 km på tablets). På resten af Mars er det ca. 5 km og ca. 21 km.</p>
+    <p><b>Ved Olympus Mons</b> ligger et ekstra, fint net over et område på ca. 1.000 × 1.000 km. Her er højderne fra den europæiske rumsonde Mars Express (kameraet HRSC) lagt sammen med MOLA. HRSC tager billeder af det samme sted fra lidt forskellige vinkler, ligesom dine to øjne, og ud fra dem kan man regne højderne ud. I programmet er der ca. 0,5 km mellem højderne og ca. 2 km mellem nettets punkter (ca. 2,6 km på tablets). Omkring calderaen og skrænten er der ca. 0,2 km mellem højderne, næsten lige så tæt som i målingerne. Det kort hentes først, når flybyen nærmer sig. På resten af Mars er det ca. 5 km og ca. 21 km.</p>
     <p><b>Nulpunktet:</b> Mars har intet hav, så højderne er regnet fra en flade, hvor tyngden er lige stærk overalt (areoiden). Den er lidt fladere ved polerne, ligesom Mars selv: ca. 20 km fra pol til pol i forhold til ækvator.</p>
     <p><b>Farverne</b> er en mosaik af billeder fra de to Viking-sonder (1976-1980), lavet af USGS. Kortet har ca. 2,6 km pr. pixel på en pc og ca. 1 km pr. pixel ved Olympus Mons. Der findes en skarpere udgave, men billederne blev taget, mens Solen stod forskellige steder, så lys og skygge på skrænterne er med på dem. De ville passe dårligt med programmets eget lys, som regnes ud fra højderne.</p>
     <p><b>Luften</b> bliver ca. 2,7 gange tyndere for hver 11 km, man kommer op (skalahøjden er 11 km, på Jorden ca. 8,5 km). Set fra rummet er den derfor kun et tyndt, støvet lag i kanten. Støvet når så højt op, at det stadig er i sollys, når Solen er gået ned. Derfor varer tusmørket på Mars op til ca. 2 timer, og natsiden lyser svagt rødbrunt lige efter grænsen mellem dag og nat. Det fine støv sender blåt lys lettere lige igennem end rødt, så på Mars er himlen blå omkring Solen, når den går ned (Curiosity så det i 2015).</p>
     <p><b>Skyerne over vulkanerne:</b> Om eftermiddagen stiger varm luft op ad vulkanernes sider og bliver kold, så vanddampen fryser til iskrystaller. Skyerne kommer især om foråret og sommeren på den nordlige halvkugle. Før rumsonderne kunne man i kikkerter fra Jorden se en hvid sky formet som et "W" over Tharsis. Det var skyerne over fire af vulkanerne. Hvert år i det sydlige forår vokser der også en ca. 1.800 km lang sky ud fra Arsia Mons om morgenen. Den er ikke med her, for på tegningen er det forår i nord.</p>
-    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,5 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden.</p>`,
+    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden.</p>`,
 
   lav(gruppe, { opdaterKnapper, forklaring, fase, verden }) {
     const { kamera } = verden;
@@ -180,13 +182,26 @@ export default {
     // De lokale net. Kortene hentes først, når flybyen eller et besøg skal derhen (lokaltStr: højdekortet).
     const lokalNet = TEST_HURTIG ? [128, 128] : LAV_KVALITET ? [384, 384] : [512, 512];
     const lokaltStr = TEST_HURTIG ? '1k' : '2k';
-    const lokale = new Map(LOKALE.map((l) => [l.id, { net: mars.lokalt({ ...l, net: lokalNet }), henter: false, hentet: { kort: false, højde: false } }]));
-    function hentLokalt(id) {
-      const l = lokale.get(id);
-      if (!l || l.henter) return;
-      l.henter = true;
-      hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; }, { anisotropi, rundt: false });
-      hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; }, { farve: false, kanaler: 2, rundt: false });
+    const lokale = new Map(LOKALE.map((l) => [l.id, { net: mars.lokalt({ ...l, net: lokalNet }), henter: false, hentet: { kort: false, højde: false }, detalje: l.detalje ? { henter: false, hentet: false } : null }]));
+    // Kortene til stedet st (og detaljekortet, hvis st skal helt tæt på)
+    function hentLokalt(st) {
+      const l = lokale.get(st?.lokalt);
+      if (!l) return;
+      const id = st.lokalt;
+      if (!l.henter) {
+        l.henter = true;
+        hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; }, { anisotropi, rundt: false });
+        hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; }, { farve: false, kanaler: 2, rundt: false });
+      }
+      if (st.detalje && l.detalje && !l.detalje.henter) {
+        l.detalje.henter = true;
+        hent(`mars-${id}-detalje-hoejde-${lokaltStr}.png`, (t) => { l.net.sætDetalje(t); l.detalje.hentet = true; }, { farve: false, kanaler: 2, anisotropi, rundt: false });
+      }
+    }
+    // Ved et stop på flybyen hentes kortene til det næste stop, så de er klar, når man trykker "Næste"
+    function hentNæste(st) {
+      const i = TUR.findIndex((s) => s.id === st.id);
+      if (i >= 0 && i + 1 < TUR.length) hentLokalt(stedMed(TUR[i + 1].id));
     }
 
     // Solen: en lille, skarp prik langt væk i lysets retning (fra Mars ser den ca. ⅔ så stor ud som fra Jorden)
@@ -266,7 +281,7 @@ export default {
     }
     // Hele Mars med stedet st lidt nord for midten, på det rigtige tidspunkt af dagen (første stop på turen)
     function flyvTilMarsMod(st) {
-      hentLokalt(st.lokalt);
+      hentLokalt(st);
       const drej = drejningTil(st);
       drejHen(drej);
       flyvTilMars(fraSted(st, drej, st.kompas, 65));
@@ -281,7 +296,8 @@ export default {
     }
     // Ned til et sted: Systemet drejes, så stedets lodrette retning peger op, og kameraet ser skråt mod horisonten
     function besøg(st) {
-      hentLokalt(st.lokalt);
+      hentLokalt(st);
+      hentNæste(st);
       const drej = drejningTil(st);
       drejHen(drej);
       visning = st.id;
@@ -455,7 +471,7 @@ export default {
         overdriv: () => overdriv,
         billeder: () => ({
           kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: mars.harTabel,
-          lokalt: Object.fromEntries([...lokale].map(([id, l]) => [id, { højde: lokaltStr, net: lokalNet, hentet: { ...l.hentet }, tabel: l.net.harTabel, klar: l.net.klar }])),
+          lokalt: Object.fromEntries([...lokale].map(([id, l]) => [id, { højde: lokaltStr, net: lokalNet, hentet: { ...l.hentet }, tabel: l.net.harTabel, klar: l.net.klar, detalje: l.detalje && { hentet: l.detalje.hentet, tabel: l.net.harDetaljeTabel } }])),
         }),
         skyer: () => skyer.måling(),
         // Hvor står Solen i forhold til kameraet (−1 = lige bag Mars)

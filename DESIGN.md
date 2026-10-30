@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M7a: lokale detaljer ved Olympus Mons).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M7a+: detaljekort ved calderaen og skrænten. M5 har go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -25,9 +25,16 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
-**Venter på go (30. oktober 2026): Mars M5 (flybyen over Mars).** Planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M5" med syv spørgsmål til jer. Billederne af kilderne og curl-tjekket af kildesiderne kunne ikke laves i den session (USGS' arkiv og siderne gav 403), så de er første skridt efter go.
+**I gang (30. oktober 2026): Mars M5 (flybyen over Mars), go givet.** Jeres svar: "go til alle - vi følger dine anbefalinger" (de syv beslutninger i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M5"). M5a (Tharsis, Valles Marineris, Hellas og den nye flyvning) er næste. Samme metode som M7a+ (detaljekort) bruges, hvor kameraet kommer tæt på. Planen blev lavet i en session, der ikke kunne pushe, og er lagt ind fra jeres patch (PR #38).
 
-**Senest lavet (30. oktober 2026): Mars, M7a (lokale detaljer ved Olympus Mons).**
+**Senest lavet (30. oktober 2026): Mars M7a+ (detaljekort ved calderaen og skrænten).**
+- **Jeres spørgsmål:** Calderaen og skrænten var "lidt grumsede". Svaret: Det lokale højdekort brugte kun ca. 0,5 km pr. pixel, kilden har 200 m. **Jeres go:** Lav det skarpere først. Jeres idé (almindelige kort under flyvningen, det skarpeste kort ved stoppet) er sådan, det er lavet.
+- Et detaljekort i ca. 0,22 km pr. pixel over calderaen og skrænten (ca. 445 × 445 km, 2,2 MB). Det hentes, når flybyen når Olympus Mons, så det er klar ved calderaen. Calderaens bund viser nu rynker og kanter, og skrænten flere kløfter. Helt nede ved jorden er det stadig blødt, for kilden er ikke skarpere (HRSC's egne højdekort på ca. 50 m kan komme i M7b). Farverne er de samme.
+- Billeder i sekundet: højst ca. 10 % lavere ved de to stop i testbrowseren (målestøjen er lige så stor). Testen `mars` tjekker detaljekortet.
+- Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M7a+".
+- **Ikke afprøvet:** Ser I en kant eller et skift i lyset, hvor detaljekortet slutter (ca. 200 km fra calderaen)? Er der et hak, når det hentes ved Olympus Mons? Ses fine skrå striber på vulkanens sider (fejl i HRSC-målingerne)?
+
+**Før det (30. oktober 2026): Mars, M7a (lokale detaljer ved Olympus Mons).**
 - **Jeres go (29. oktober 2026):** de tre anbefalinger i planen: HRSC+MOLA, hvis den er tydeligt skarpere, de to nye stop med `/faktatjek` og én PR for hele M7a. Højderne er rigtige som standard (jeres beslutning).
 - **Et fint net over Olympus Mons** (ca. 1.000 × 1.000 km, ca. 2 km mellem punkterne på pc og 2,6 km på tablet, før ca. 21 km) med sit eget højdekort (ca. 0,5 km pr. pixel, før ca. 5 km). Kortene hentes først, når flybyen starter (ca. 2,9 MB). Ved kanten glider nettet over i resten af Mars uden synlige sprækker.
 - **Højderne er fra HRSC+MOLA** (Mars Express og MOLA, lagt sammen af USGS). I spillets opløsning var den tydeligt skarpere end MOLA alene (billedet i chatten). Den har licensen CC BY-SA 3.0 IGO, som står i `KILDER.md`, `LICENSE` og "Om AtomLab". Et par kasseformede fejl i HRSC+MOLA er erstattet af MOLA.
@@ -117,7 +124,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
 **Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026).
-- **Ny rækkefølge (jeres svar 29. oktober 2026):** Olympus Mons var "ikke for imponerende". Det skyldes mest, at Mars' net er groft (ca. 21 km mellem punkterne). Derfor kommer **M7a** (lokale detaljer, prøvet på Olympus Mons) før M5: M7a → M5 → M6 → M7b → M8. Højderne forbliver rigtige som standard. **M7a er lavet (30. oktober 2026). Næste: M5 (flybyen over Mars) venter på go. Prompten med modelvalget (Opus, høj effort) står i `docs/plan-mars.md` under "Prompt til M5". Først laves planen, så kommer go.** Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Detaljer før flere stop".
+- **Ny rækkefølge (jeres svar 29. oktober 2026):** Olympus Mons var "ikke for imponerende". Det skyldes mest, at Mars' net er groft (ca. 21 km mellem punkterne). Derfor kommer **M7a** (lokale detaljer, prøvet på Olympus Mons) før M5: M7a → M5 → M6 → M7b → M8. Højderne forbliver rigtige som standard. **M7a er lavet (30. oktober 2026), og M7a+ (detaljekortet ved calderaen og skrænten) også. M5 har go (alle syv anbefalinger), og M5a er i gang. Planen står i `docs/plan-mars.md` under "Plan for M5".** Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Detaljer før flere stop".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
