@@ -53,6 +53,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. Får to skærme den samme skal (Kosmos og Solsystemet), står den nye skærm efter den gamle i index.html, så tests uden afgrænsning stadig finder den gamle. En klasse kan bruges på flere skærme. Det samme gælder CSS-regler, også dem i `@media` (fx `order`).
 - [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
 - [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
+- [ ] Nye knapper eller steder i Kosmos og Solsystemet: Sortér dem efter de fire slags i [plan-ux.md](plan-ux.md) (sted, forsøg, tur og styring), og sæt dem på den plads, planen siger. Et sted, man flyver hen til, er aldrig en knap blandt kontakterne, og en kontakt skal ligne en kontakt.
 
 ### E. Ny animation, effekt eller fælles funktion
 - [ ] "Reducer bevægelse" (`ROLIG`) er respekteret: kamerature, lysglimt og blød rulning.
@@ -123,6 +124,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **To veje til den samme ting, der ikke kender hinanden** | Ordforklaringer: To hurtige klik på et ord lukkede forklaringen, men musens timer (0,3 sekunder) viste den igen bagefter. | E: hver vej stopper den andens timer. |
 | **En ændring af tempo eller tid, der rammer tidsgrænser andre steder** | Stjerneovnens nye tempo fik egne skud til at flyve længere, så "Vis mig" kunne vælge et skud, der stadig fløj. | C: søg efter alt, der har en flyvetid eller tidsgrænse, når tempoet ændres. |
 | **Regnet med for lav præcision** | Mars M7a: Kanten af det lokale net blev regnet med `sin` og `cos` i shaderen og lå flere hundrede meter for lavt, så der var en revne på en pixel, når man kiggede hen over kanten. | E: punkter regnes i JS. |
+| **Små skridt, der hver for sig er rimelige, men tilsammen giver rod** | "Prøv selv" i Solsystemet: Mars og Saturn fik én knap ad gangen (M4-M6), så steder, kontakter, flybyen og tid endte i samme bunke og lignede hinanden. Fundet af brugeren 30. oktober 2026. | D: sortér nye knapper efter de fire slags i plan-ux.md. |
 | **En indstilling, der ikke virker** | Kantudglatning (`antialias`) på lærredet virker ikke, når gløden tegner billedet. Den kostede bare hukommelse. | F: mål før og efter. |
 
 ### Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
@@ -321,6 +323,11 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
 - **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
 - **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
+
+### Eftersyn af UX i Solsystemet (30. oktober 2026)
+- **Genbrugt skal, genbrugt model:** Solsystemet fik Kosmos' skal (M4a), og med den Kosmos' flade liste, hvor én fil er ét punkt. Kosmos er en række fænomener, men Solsystemet er steder inde i steder. Derfor havnede stederne og månerne som knapper under "Prøv selv". Når en skal genbruges, så spørg, om indholdet har samme form.
+- **Tekst, der flytter med en skal, kan gå i stykker:** Solens fremtid sagde stadig "Prøv Hvid dværg i listen", efter fænomenet var flyttet fra Kosmos til Solsystemet. Henvisninger skal være knapper med `data-gaa`, ikke tekst om, hvor noget står.
+- **Se på, hvad der står samme sted på skærmen:** Det, der afslørede rodet, var skærmbilleder af flybyen på tablet på højkant ("Næste" langt nede under listen og stoppets tekst uden for skærmen) og ved Saturn, hvor en knap, der ikke kan bruges, og en kontakt, der er slået fra, så ens ud.
 
 ### Kameraet ned til et sted på en planet (Mars M4c, oktober 2026)
 - **Kameraets styring (OrbitControls) kan kun have én fast op-retning** (den regnes ud, når styringen laves). I stedet for at ændre `camera.up` drejes hele planetsystemet, så stedets lodrette retning peger op i verden. Så virker drejning, zoom og piletaster af sig selv. Solens retning og stjernehimlen skal drejes med (`drejHimmel`), ellers står stjernerne stille, mens planeten drejer.
