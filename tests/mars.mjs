@@ -1,4 +1,4 @@
-// Mars (M2, M3, M4c, M7a, M5a og M6a i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
+// Mars (M2, M3, M4c, M7a, M5a, M6a og M6b i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
 // 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, flybyen ned til
 // Olympus Mons, calderaen og skrænten med det lokale kort og detaljekortet (M4c og M7a), Tharsis, Valles Marineris og Hellas (M5a, højst 2 net ad gangen og høje flyvninger mellem stederne), Phobos og Deimos (M6a: formen vender rigtigt, banerne, farten, navnene og et tryk på en måne), og kameraets indstillinger bliver sat tilbage, når man går videre.

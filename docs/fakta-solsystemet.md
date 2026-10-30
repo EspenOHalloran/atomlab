@@ -832,7 +832,7 @@ Lavet 24. oktober 2026 til AtomLab (Solsystemet: Mars' måner i 3D).
 | Albedo | ca. 0,07 (0,068 ± 0,007) | Thomas m.fl. 1996 via tabel (uddrag) | RS |
 | Banens radius | ca. 23 460 km (kilderne siger 23 458–23 463 km) | JPL via tabeller (uddrag) | S |
 | Omløbstid | 1,263 døgn = 30 t 18 min | JPL/Universe Today (uddrag) | S |
-| Bevægelse på himlen | Står op i øst og går ned i vest, men meget langsomt: Den er over horisonten i ca. 2,5–2,7 sol ad gangen og kommer igen hver ~5,3 sol | Egen udregning: 1/(1/24,623 t − 1/30,30 t) ≈ 131 t | RS |
+| Bevægelse på himlen | Står op i øst og går ned i vest, men meget langsomt: Den er over horisonten i ca. 2,4 sol (2,48 jorddøgn) ad gangen (rettet i "Faktatjek M6b") og kommer igen hver ~5,3 sol | Egen udregning: 1/(1/24,623 t − 1/30,30 t) ≈ 131 t | RS |
 | Fjerner sig langsomt | Ligger lige uden for den synkrone bane (ca. 20 400 km), så tidevandet skubber den meget langsomt udad. Ingen sikker hastighed fundet | arXiv, JAXA MMX-news (uddrag) | RS for retningen, U for tempoet |
 | Glat overflade | Glattere end Phobos, fordi kratrene er delvist fyldt op med løst støv og grus (regolit) | Wikipedia (uddrag) | S |
 | Kratere med navne | Kun to: Swift og Voltaire, opkaldt efter Jonathan Swift (Gullivers rejser, 1726) og Voltaire (Micromégas, 1752), der "gættede" på to Mars-måner. Størrelser: Swift ca. 1–3 km, Voltaire ca. 1,9 km (kilderne er uenige) | Wikipedia (uddrag) | S for navnene, U for størrelserne (udelad) |
@@ -976,6 +976,37 @@ AtomLab er gratis, til undervisning, på GitHub Pages og ikke-kommercielt. Det e
 - **Mars' stjernedøgn:** 1,025957 døgn (24 t 37 min 22,7 s, NSSDC). Forholdet i programmet: Phobos 1,025957 / 0,31891 = 3,217 og Deimos 0,8127.
 - **De korte tekster** (panelet ved Phobos, Deimos og "Månerne") bruger kun tal fra del 3B, som er sikre (S): ca. 26 km lang, Stickney ca. 9 km, ca. 6.000 km over Mars, 7 t 39 min, Deimos ca. 16 km lang, glattere af løst støv, ca. 23.500 km og ca. 30 timer. Den fulde tekst til flybyen faktatjekkes i M6b.
 - **Retningen** (spejlvending): se `docs/plan-mars.md`, "Plan for M6" og "Status efter M6a".
+
+### Faktatjek M6b: teksterne til flybyen ved Phobos og Deimos (30. oktober 2026)
+To hjælpeagenter (Opus, høj effort). Læst direkte med curl: science.nasa.gov (Phobos, Deimos), nasa.gov (Perseverance' formørkelse), global.jaxa.jp (pressemeddelelserne 20. og 21. oktober 2026), www.mmx.jaxa.jp (forsiden, mission og science), www.esa.int (MMX lifts off) og Wikipedia (Phobos, Deimos, Moons of Mars, Stickney, Asaph Hall, Tidal acceleration, Solar eclipses on Mars, Micromégas). Kun søgeuddrag: Universe Today og Spaceflight Now.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Mars set fra Phobos er ca. 42° bred, ca. 80 gange Månen | 2 · arcsin(3.396 / 9.363) = 42,5°, Månen 0,518° → ca. 82. Programmet måler 42,5° | Egen udregning, testet |
+| Mars set fra Deimos | 16,6° | Egen udregning, testet |
+| Stickney "næsten halvdelen af Phobos" | **Rettet:** ca. 9 km på en måne, der er ca. 26 km lang (35-40 % af bredden, få procent af overfladen). NASA's "takes up about half the moon's surface" er forkert | Wikipedia Stickney, NASA |
+| Nedslaget slog næsten Phobos i stykker | OK (modelberegning, Syal m.fl. 2016: hulrummene tog stødet) | NASA, Wikipedia Stickney |
+| Angeline Stickney Hall opmuntrede Hall | OK (Hall 1878: "I might have abandoned the search had it not been for the encouragement of my wife"). Hun var matematiker | Wikipedia Asaph Hall, NASA |
+| Rillerne: ikke enige | OK (rullende sten fra Stickney, revner fra tidevand, kraterkæder fra udkast fra Mars og revner fra selve nedslaget) | Wikipedia Phobos og Stickney |
+| Står op i vest ca. hver 11. time, ses ikke over ca. 70° bredde | OK (11 t 6 min, 70,4°) | Wikipedia Phobos |
+| Bundet rotation, Mars næsten stille på Phobos' himmel | OK (vugger 1-2°) | Wikipedia, egen udregning |
+| Tidevandsbulen halter bagefter og bremser Phobos, nogle få cm om året, ring eller nedstyrtning om nogle titals millioner år | OK. Bulen halter, fordi Mars' indre er sejt. At Phobos er hurtigere, betyder at bulen ligger bagved og bremser | Wikipedia Tidal acceleration og Phobos |
+| Phobos set fra Mars ca. ⅓ af fuldmånen | OK ("højst" fjernet: 0,35-0,42) | Wikipedia Phobos |
+| Perseverance filmede Phobos foran Solen 2. april 2022, lidt over 40 s | OK | NASA (direkte) |
+| Synkron bane ca. 20.400 km | OK (20.428 km for stjernedøgnet 24 t 37 min, ikke soldøgnet) | Egen udregning |
+| Æ1: Fra Phobos drejer Mars den anden vej, én gang på ca. 11 t | OK (1/(1/7,654 − 1/24,623) = 11,1 t) | Egen udregning |
+| I skygge | **Rettet:** Phobos på næsten hver omgang undtagen omkring solhverv (Solen mere end ca. 21° fra ækvator), højst ca. 52 min. Deimos kun omkring jævndøgn (ca. 8°), højst ca. 82 min | Egen udregning (kerneskygge 3.368 km ved Phobos, 2,14 km/s) |
+| Tæthed og "lidt over halvdelen af sten" | **Rettet:** Sten ca. 2,7-3 g/cm³, Phobos ca. 1,9 (⅔), Deimos ca. 1,5 (½). Hulrum 25-35 % (Andert 2010) | Wikipedia Phobos, JPL |
+| Deimos glat | **Rettet:** kraterne er *delvist* fyldt op ("partial filling of some of its craters") | NASA Deimos (direkte) |
+| Swift og Voltaire | OK (de eneste navngivne, 1973, Swift 1726, Voltaire 1752) | Wikipedia |
+| Deimos oppe ca. 2½ døgn | OK (2,48 jorddøgn = 2,41 sol. Del 3B sagde 2,5-2,7 sol: rettet) | Wikipedia, egen udregning |
+| Hall, august 1877, Phobos 6 dage senere, verdens største kikkert | **Rettet:** verdens største *linsekikkert* (66 cm). Spejlkikkerter var større | Wikipedia Asaph Hall |
+| Ares' sønner, frygt og rædsel | OK | Wikipedia, NASA |
+| Indfangede asteroider: banerne ville være aflange og hælde | OK (banerne er næsten runde og ligger over ækvator) | Wikipedia Moons of Mars, JAXA |
+| **MMX' status (slået op 30. oktober 2026)** | Opsendt 20. oktober 2026 kl. 04:41:03 japansk tid. Sund 21. oktober (solpaneler foldet ud). En nyhed 26. oktober om første signal. Ankomst sommeren 2027, to bløde landinger 2027-2030, mindst 10 g, forsøg på at flyve forbi Deimos, hjem 2031 (Australien). IDEFIX (CNES og DLR) lander først | global.jaxa.jp/press/2026/10/20261020-1_e.html og 20261021-1_e.html, www.mmx.jaxa.jp/en/ (direkte) |
+| Fagordene bundet rotation, regolit, tidevandskraft | Rettet: "præcis" fjernet, regolit på Mars også af vind og vejr, tidevandskraft kommer fra et *andet* legeme, og Solen giver ca. ⅓ af tidevandet | Wikipedia, NASA |
+
+**Nye fælder:** se "Kendte fælder i fakta" i `docs/erfaringer.md`.
 
 ## Del 4. Solen og Jorden i Solsystemet (Mars M4b, 26. oktober 2026)
 Teksterne i `js/kosmos/solen.js` og `js/kosmos/jordkloden.js`. Tallene er slået op af Opus på kildesiderne, og en hjælpeagent (Opus, høj effort) har tjekket alle påstande igen. Siderne er åbnet direkte med curl.
