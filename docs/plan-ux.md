@@ -303,7 +303,7 @@ Lavet, som planen siger. Afgjort undervejs:
 - **En måne fra træet** glider hen, hvor flybyen stiller den (den korteste vej i banen), mens kameraet flyver derhen. Det giver det samme billede som på flybyen. "Mars set fra Phobos" flyver først til Phobos, hvis man ikke er der.
 - **Et tryk i træet under flybyen** stopper turen og flyver derhen.
 
-**Mars M8 bygges samtidig i en anden session** (30. oktober 2026). Den lægger knapper til under "Prøv selv" ("🧍 Stå på Mars", "↑ Tilbage i kredsløb", "Gå til …"). Når de to mødes, skal stederne i landskabet ind i Mars' `TRÆ` (fx under Gale og Jezero på tredje niveau), og "Tilbage i kredsløb" er så bare stedet over dem i træet. Skyderen og "Lad dagen gå" bliver under "Prøv selv" til U2.
+**Flettet med Mars M8a** (30. oktober 2026, bygget i en anden session samtidig): Stederne, man kan stå ved Gale, står i træet på tredje niveau ("🧍 Naukluft" og "🧍 Hos Curiosity"). "↑ Tilbage i kredsløb" og "Gå til …" er fjernet fra "Prøv selv", for Gale og det andet sted står i træet, og et tryk på et hvilket som helst andet sted letter først. "🧍 Stå på Mars" bliver ved Gale som en handling (flyttes til bjælken i U2). Skyderen, "Lad dagen gå" og "Solnedgang" bliver under "Prøv selv" til U2. M8b og M8c (Jezero og et sted mere) skal bruge det samme: et punkt pr. sted under krateret i `TRÆ` (det sker af sig selv ud fra `LANDSKAB`).
 
 ## Afgøres undervejs (med skærmbilleder)
 - **Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?

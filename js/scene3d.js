@@ -179,7 +179,12 @@ export function drejHimmel(q) {
 }
 export const himmelDrejning = () => himmelDrejet.quaternion.toArray(); // kun til tests
 
-// Rumstøv: svage prikker, der driver langsomt forbi tæt på atomet og giver dybde
+// Rumstøv: svage prikker, der driver langsomt forbi tæt på atomet og giver dybde. Skjules, når man står på en planet
+// (Stå på Mars), hvor de ville ligne prikker på himlen.
+let støv = null;
+export function visRumstøv(til) {
+  if (støv) støv.visible = til;
+}
 function lavRumstøv(scene) {
   const antal = LAV_KVALITET ? 160 : 360;
   const pos = new Float32Array(antal * 3);
@@ -192,7 +197,7 @@ function lavRumstøv(scene) {
   }
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  const støv = new THREE.Points(geo, new THREE.PointsMaterial({
+  støv = new THREE.Points(geo, new THREE.PointsMaterial({
     size: 0.35, map: lavPrikTekstur(), color: 0x8fb4ff, transparent: true, opacity: 0.45,
     depthWrite: false, blending: THREE.AdditiveBlending,
   }));
@@ -344,6 +349,7 @@ export function nulstilStyring() {
   s.autoRotateSpeed = 0.5;
   begrænsDrejning(null);
   drejHimmel(null);
+  visRumstøv(true);
 }
 
 // Piletasterne drejer kameraet rundt om målet: venstre og højre rundt, op og ned over og under.
