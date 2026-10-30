@@ -371,7 +371,11 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 >
 > Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig med anbefalingen først, og sig, hvis en anden model eller effort passer bedre til en del. Skriv mine svar ind i planen med det samme. Når jeg har sagt go: Byg det, én PR pr. del, som du selv merger, når testene er grønne. Giv mig "Ikke afprøvet" til sidst (det, jeg skal prøve på tabletten).
 
-## Plan for M8: Stå på Mars (30. oktober 2026, venter på jeres go)
+## Plan for M8: Stå på Mars (30. oktober 2026, go givet)
+**Jeres svar (30. oktober 2026): "Generelt går vi med dine anbefalinger. Go."** Alle syv anbefalinger gælder: de fire steder (Naukluft og Curiosity nu ved Gale, randens inderside og landingsstedet ved Jezero), et eget landskab i ringe, skyder og "Lad dagen gå", Phobos og Deimos på himlen, rovernes fotos og 3D-modellen, tre dele (M8a, M8b, M8c) og domænet. I har åbnet `assets.science.nasa.gov` (virker: `Curiosity_static.glb` er 11,9 MB).
+- **Størrelse og kvalitet (jeres ord):** "Størrelse i sig selv er ikke et problem. Så længe det kan køre godt, må det gerne fylde, medmindre du advarer imod det. Det vigtigste er kvaliteten. Jeg er æstetiker." Lagene må derfor gerne være større og skarpere end i forslaget, så længe tabletten kører godt (målt).
+- Én PR pr. del, som Opus selv merger, når testene er grønne. M8b og M8c bygges efter hinanden uden nyt go, medmindre noget er uklart (go til hele M8).
+
 *Lavet af Opus. Billederne til planen ligger i `docs/m8/`. Udsigterne er tegnet af et lille værktøj ud fra de rigtige højdekort (Mars' krumning, dis med afstanden og en lav morgensol fra øst). De viser kun formen på landskabet, ikke fotos, farver eller himlen, som programmet vil tegne dem. Rovernes pladser er fra NASA's egne kortdata (`mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json` og `…/M20/…/M20_waypoints.json`, hentet i dag).*
 
 **Kilderne er tjekket med curl i dag:**
