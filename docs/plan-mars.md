@@ -26,7 +26,7 @@ Hver delopgave slutter med `/faerdig` (tests, billeder, dokumentation og en PR, 
 | M5 | ✅ (M5a og M5b lavet 30. oktober 2026, se "Status efter M5a" og "Status efter M5b") **Flybyen over Mars:** stoppene med tekster (faktatjekket): oversigten, Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale (Curiosity) og Jezero (Perseverance). "For nørder", "Ærligt talt" og nye fagord i ordbogen. | mellem |
 | M6 | **Phobos og Deimos i den rigtige form:** formmodeller og kort, banerne med den rigtige fart (Phobos står op i vest), stop i flybyen og "Mars set fra Phobos". | mellem til stor |
 | M7 | (M7a ✅ lavet 30. oktober 2026, se "Status efter M7a") **Skarpe detaljer ved stederne:** billeder og højder i høj opløsning lige der, hvor flybyen stopper, så man kan flyve helt ned til Olympus Mons' krater på toppen, ned i Valles Marineris og hen over Gale og Jezero. | stor |
-| M8 | (planen er klar 30. oktober 2026, se "Plan for M8") **Stå på Mars:** et landskab i 3D ved Gale (med Mount Sharp) og ved Jezero (med deltaet), bygget af rovernes højdekort og fotos fra kredsløb. Kameraet står, hvor roveren står. Måske også de rigtige panoramafotos fra roverne. | stor |
+| M8 | (planen er klar 30. oktober 2026, se "Plan for M8". M8a ✅ Gale lavet 30. oktober 2026, se "Status efter M8a") **Stå på Mars:** et landskab i 3D ved Gale (med Mount Sharp) og ved Jezero (med deltaet), bygget af rovernes højdekort og fotos fra kredsløb. Kameraet står, hvor roveren står. Måske også de rigtige panoramafotos fra roverne. | stor |
 
 Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man dreje Mars, efter M5 er flybyen færdig i grove træk, og M6-M8 gør den rigere.
 
@@ -370,6 +370,18 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 > 11. **Opdeling:** Skal M8 deles (fx M8a: Gale, M8b: Jezero og panoramaerne)? Giv en anbefaling.
 >
 > Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig med anbefalingen først, og sig, hvis en anden model eller effort passer bedre til en del. Skriv mine svar ind i planen med det samme. Når jeg har sagt go: Byg det, én PR pr. del, som du selv merger, når testene er grønne. Giv mig "Ikke afprøvet" til sidst (det, jeg skal prøve på tabletten).
+
+## Status efter M8a (30. oktober 2026): Stå på Mars ved Gale
+- **Lavet:** `js/solsystem/landskab.js` (landskabet), `billeder/solsystem/lav_landskab.py` og lagene i `billeder/solsystem/landskab/`, knappen "🧍 Stå på Mars" ved Gale i `js/kosmos/mars.js`, testen `landskab` og værktøjerne `tests/vaerktoejer/landskab.mjs` og `landskab-lille.mjs`.
+- **To steder:** Naukluft (sol 1301, hvor panoramaet PIA20332 er taget, 4,678° S, 137,359° Ø, −4.429 m) og "Hos Curiosity nu" (sol 5045, 4,825° S, 137,388° Ø, −3.488 m). Højden under kameraet passer med NASA's kortdata inden for 1 m.
+- **Lagene:** lag 0 (2 × 2 km, højder 1 m, foto 25 cm på pc i 8k og 50 cm på tablet), lag 1 (8 × 8 km, 4 m og 2 m), lag 2 (64 × 64 km, 16 m) og lag 3 (stedets kort fra M5b, ca. 0,17 km, med CTX-fotoet ca. 87 m). Uden for Gale-kortet (det dækker ca. 33 × 57 km) er huller fyldt med HRSC+MOLA. Fotoenes skygger fra skråningerne er fjernet (regression mod hældningen i firkanter). Et forsøg på at fjerne striberne mellem satellitbillederne hjalp ikke og blev droppet: Striberne ses lidt i det fjerne lag.
+- **Hentes, når man trykker:** ca. 45 MB på pc og ca. 36 MB på tablet første gang (i baggrunden, mens kameraet flyver ned, 5-8 sekunder). Billederne fylder 82 MB i repoet (testudgaver 3,6 MB).
+- **Teknik:** et net i ringe om stedet (1024 × 900 på pc, 640 × 640 på touch). Normalen regnes i nettets punkter: Med normalen pr. pixel (4 opslag i højderne) var det 6 gange langsommere. Skyggekortene stopper, når strålen er over det højeste sted (`hMaks`, 1.963 m ved Gale).
+- **Flimmer målt:** near 0,3 m og near 3 m gav samme billede over horisonten (0 pixel forskel). Kun det tætte ved fødderne skiftede.
+- **Billeder i sekundet** (testbrowseren, fuld grafik, én ad gangen): pc hele Mars 2,85-3,18 og stående 1,29-1,35 (ca. 45 %), tablet på højkant 3,98 og 2,22 (56 %). Det svarer til de tungeste stop, vi har (Jezero 58 % i M5b).
+- **Himlen:** gulbrun om dagen, blålig omkring Solen, en blå glød i vest efter solnedgang og stjerner om natten. Solen er 0,35°, Phobos ca. 0,2° og står op i vest, Deimos står op i øst (testet). Månernes plads i dag er ikke slået op.
+- **Faktatjek** (hjælpeagent, kilderne læst): `docs/fakta-solsystemet.md` under "Faktatjek M8a". Rettet: Naukluft er et plateau på Mount Sharps nederste skråninger (sandsten af gamle klitter), CTX ca. 6 m pr. pixel, hvem der lavede højdekortet (Parker og Calef, JPL, udgivet af USGS), "mindre end nogle få meter".
+- **Ikke med endnu:** Jezero (M8b), rovernes fotos og Curiosity som 3D-model (M8c), navne på det, man ser.
 
 ## Plan for M8: Stå på Mars (30. oktober 2026, go givet)
 **Jeres svar (30. oktober 2026): "Generelt går vi med dine anbefalinger. Go."** Alle syv anbefalinger gælder: de fire steder (Naukluft og Curiosity nu ved Gale, randens inderside og landingsstedet ved Jezero), et eget landskab i ringe, skyder og "Lad dagen gå", Phobos og Deimos på himlen, rovernes fotos og 3D-modellen, tre dele (M8a, M8b, M8c) og domænet. I har åbnet `assets.science.nasa.gov` (virker: `Curiosity_static.glb` er 11,9 MB).

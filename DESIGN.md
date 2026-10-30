@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Go til Mars M8 "Stå på Mars". M8a bygges).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M8a "Stå på Mars" ved Gale er lavet. M8b og M8c er næste).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,11 +29,23 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (30. oktober 2026): Planen for Mars M8, "Stå på Mars". Jeres svar: "Generelt går vi med dine anbefalinger. Go." Størrelse er ikke et problem, så længe det kører godt: Kvaliteten er det vigtigste. I har åbnet `assets.science.nasa.gov`. M8a (Gale og teknikken) bygges nu** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M8", syv beslutninger til sidst, udsigterne i `docs/m8/`).
-- **Stederne (anbefaling):** Gale: Naukluft (den flotteste udsigt mod Mount Sharp, og NASA's 360°-foto er taget dér) og "Hos Curiosity nu" (roveren står i en sænkning, så Mount Sharps top er skjult). Jezero: randens inderside (udsigt ned over deltaet og krateret) og landingsstedet. Perseverance står nu uden for krateret mellem bakker.
-- **Data:** Gale-kortene fra USGS (1 m højder, 25 cm fotos) og Mars 2020's landingskort over Jezero på `planetarymaps.usgs.gov` (1 m, kan læses direkte) kan læses i vinduer over nettet. Fotoene er grå med skygger malet ind.
-- **Teknik:** et eget landskab i ringe om stedet (ikke et net på kloden, det ville ryste helt tæt på), tre lag, himmel med støv og blå solnedgang, tid på dagen, Phobos og Deimos, og en overgang fra kredsløb. Delt i M8a (Gale og teknikken), M8b (Jezero) og M8c (rovernes fotos og 3D-modellen).
-- **Blokeret:** `assets.science.nasa.gov` (panoramaerne i fuld størrelse og roverens 3D-model). Kun M8c har brug for det.
+**Senest lavet (30. oktober 2026): Mars M8a, "Stå på Mars" ved Gale.** Planen og jeres svar står i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M8" og "Status efter M8a". Jeres svar ved go: "Generelt går vi med dine anbefalinger." Størrelse er ikke et problem, så længe det kører godt, for kvaliteten er det vigtigste. I åbnede `assets.science.nasa.gov`. **Næste: M8b (Jezero) og M8c (rovernes fotos og Curiosity som 3D-model)** bygges efter hinanden uden nyt go, medmindre noget er uklart.
+- **Sådan:** Ved Gale-stoppet trykker man "🧍 Stå på Mars". Kameraet flyver ned, billedet toner over, og man lander i øjenhøjde ved **Naukluft**, hvor Curiosity tog sit 360°-billede i april 2016. Mount Sharp rejser sig mod sydøst, og mod nord ses kraterranden i disen. "Gå til Curiosity nu" hopper til roverens plads i midten af oktober 2026. Den står i en dal, så toppen af Mount Sharp er skjult.
+- **Drej hovedet** med fingeren eller musen (man tager fat i landskabet), knib eller rul for at zoome som med en kikkert, skub "Klokken på Mars", tryk "Lad dagen gå" eller "Solnedgang". Efter solnedgang kommer en blå glød i vest og så stjernerne. Phobos står op i vest og Deimos i øst.
+- **Landskabet** er bygget af USGS' kort til Curiosity (højder med 1 m mellem dem og billeder fra HiRISE med 25 cm pr. pixel) i fire lag ud til ca. 150 km. Fotoene er grå, så farverne er sat på af programmet. Småsten helt tæt på er tegnet af programmet. Det står i "Ærligt talt".
+- **Fylder:** ca. 45 MB på pc og ca. 36 MB på tablet, første gang man trykker (hentes, mens kameraet flyver ned).
+- **Målt i testbrowseren:** stående ca. 56 % af billederne i sekundet ved hele Mars på tablet, som ved Jezero-stoppet. Ingen flimmer.
+- **Faktatjekket** af en hjælpeagent med kilderne læst (`docs/fakta-solsystemet.md`, "Faktatjek M8a").
+- **Ikke afprøvet (på tabletten):**
+  1. Kører det glat, når I står og drejer hovedet, både på langs og på højkant?
+  2. Føles det naturligt at dreje (man tager fat i landskabet og trækker det)? Er farten god?
+  3. Virker det at knibe for at zoome?
+  4. Hvor længe tager det første gang fra "Stå på Mars" til landingen (ca. 36 MB skal hentes)? Hakker det, når billedet toner over?
+  5. Kan I se kanter i landskabet, hvor lagene mødes (ca. 1 km og 4 km væk og ude ved 32 km), eller striber i det fjerne?
+  6. Ser stenene og gruset tæt ved fødderne pæne ud, eller kunstige?
+  7. Farverne, disen og himlen: For blege, for røde, for disede? Solnedgangen og natten?
+
+**Før det (30. oktober 2026): Planen for Mars M8.** Udsigterne fra syv steder er tegnet ud fra højdekortene (`docs/m8/`).
 
 **Før det (30. oktober 2026): Mars M6b, flybyen ud til Phobos og Deimos. M6 er færdig.** **Jeres valg (30. oktober 2026): M8 (Stå på Mars) kommer før M7b.** Prompten til planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompt til M8". Planen laves først, og bygningen venter på jeres go.
 - **Flybyen har nu 13 stop:** Efter Nordpolen går turen ud til **Phobos** (Stickney ude ved kanten i lav sol, Mars i baggrunden), **"Mars set fra Phobos"** (kameraet står 300 m over Phobos og kigger op: Mars er 42,5° bred og drejer, og man kan dreje hovedet og kigge ned på Phobos) og **Deimos** (Mars er en kugle på 16,6° ved siden af).
