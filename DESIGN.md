@@ -25,6 +25,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
+**Venter på go (30. oktober 2026): Mars M5 (flybyen over Mars).** Planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M5" med syv spørgsmål til jer. Billederne af kilderne og curl-tjekket af kildesiderne kunne ikke laves i den session (USGS' arkiv og siderne gav 403), så de er første skridt efter go.
+
 **Senest lavet (30. oktober 2026): Mars, M7a (lokale detaljer ved Olympus Mons).**
 - **Jeres go (29. oktober 2026):** de tre anbefalinger i planen: HRSC+MOLA, hvis den er tydeligt skarpere, de to nye stop med `/faktatjek` og én PR for hele M7a. Højderne er rigtige som standard (jeres beslutning).
 - **Et fint net over Olympus Mons** (ca. 1.000 × 1.000 km, ca. 2 km mellem punkterne på pc og 2,6 km på tablet, før ca. 21 km) med sit eget højdekort (ca. 0,5 km pr. pixel, før ca. 5 km). Kortene hentes først, når flybyen starter (ca. 2,9 MB). Ved kanten glider nettet over i resten af Mars uden synlige sprækker.
