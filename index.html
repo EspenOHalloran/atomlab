@@ -77,6 +77,13 @@
           <small>Sorte huller, supernovaer, tyngdebølger og andre vilde ting i rummet</small>
         </span>
       </a>
+      <a class="kort åben" href="#ordbog">
+        <span class="kort-ikon ikon-ordbog" aria-hidden="true">Aa</span>
+        <span class="kort-tekst">
+          <strong>Ordbogen</strong>
+          <small>Slå alle fagordene op, fra alfapartikel til tøris</small>
+        </span>
+      </a>
     </nav>
     <p class="menu-status" id="menuStatus"></p>
     <blockquote class="citat menu-citat" id="menuCitat"></blockquote>
@@ -345,7 +352,7 @@
         <summary><strong>Fra brint til carbon, trin for trin</strong><span class="lag-kort">Solens opskrift forklaret i fem skridt.</span></summary>
         <ol>
           <li><b>Brint → deuterium (p + p).</b> To protoner (brintkerner) støder sammen. For at de kan blive sammen, bliver den ene lavet om til en neutron. Så er det deuterium, også kaldet "tung brint". Samtidig flyver en positron (antistof) og en neutrino (en næsten usynlig partikel) ud. Det er det sværeste skridt, og det sker meget sjældent.</li>
-          <li><b>Deuterium → helium-3 (D + p).</b> Deuterium fanger en proton mere. Nu er der 2 protoner og 1 neutron: helium-3. Det sker hurtigt, i Solen efter nogle sekunder.</li>
+          <li><b>Deuterium → helium-3 (D + p).</b> Deuterium fanger en proton mere. Nu er der 2 protoner og 1 neutron: helium-3. Det sker hurtigt, i Solen efter nogle sekunder. Energien kommer ud som en foton (en lyspartikel) af gammastråling. Gassen i Solen sluger fotonen og sender nye ud med lidt mindre energi, igen og igen, så energien er titusinder af år om at nå ud til overfladen. Dér kommer den ud som sollys.</li>
           <li><b>Helium-3 → helium-4 (³He + ³He).</b> To helium-3 støder sammen. De beholder 2 protoner og 2 neutroner, altså helium-4, og skyder 2 protoner ud igen, som kan bruges forfra. I alt er 4 protoner blevet til 1 heliumkerne. Det er sådan, Solen lyser.</li>
           <li><b>Helium → beryllium-8 (⁴He + ⁴He).</b> Når brinten i midten af en stjerne er brugt op, trækker midten sig sammen og bliver meget varmere, ca. 100 mio. °C. Stjernen er blevet en <em>rød kæmpe</em>. Nu kan heliumkerner smelte sammen. To heliumkerner bliver til beryllium-8, men den falder fra hinanden igen på langt under en milliardtedel af et sekund.</li>
           <li><b>Beryllium-8 → carbon (⁸Be + ⁴He).</b> Rammer en tredje heliumkerne beryllium-8, før den falder fra hinanden, bliver det til carbon-12. Det kaldes tre-alfa-processen, fordi tre heliumkerner (alfapartikler) bliver til én carbonkerne. Alt carbon i din krop er lavet sådan.</li>
@@ -384,7 +391,7 @@
         <p><strong>Solens vigtigste opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. De to første skridt sker to gange, så der bliver to helium-3. Til sidst bliver de to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri. (Solen har også andre, sjældnere veje til helium.)</p>
         <p><strong>Hvorfor 1,44 MeV?</strong> Selve første skridt giver kun 0,42 MeV. Men positronen møder straks en elektron, og begge forsvinder i et glimt af energi (1,02 MeV). Derfor står der 1,44 MeV i opskriften.</p>
         <p><strong>Ærligt talt:</strong> Vi har gjort det meget lettere end i virkeligheden. I Solen er protonerne faktisk ikke hurtige nok til at komme over frastødningen. De klarer det kun takket være kvantemekanikkens <em>tunneleffekt</em>. Og det første skridt er ekstremt sjældent: En proton venter i gennemsnit milliarder af år, før det sker. Solen klarer sig kun, fordi den har ufatteligt mange protoner. Og "Vis mig" snyder lidt mere: Dens skud rammer altid og smelter altid sammen, så du kan se, hvordan det ser ud.</p>
-        <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Gammastrålingen skal derimod kæmpe sig ud gennem Solen og bruger titusinder af år, måske over 100.000 år, før energien når overfladen som sollys.</p>
+        <p><strong>Lys og neutrinoer:</strong> Neutrinoerne fra første skridt flyver lige ud af Solen og når Jorden efter ca. 8 minutter. Fotonerne af gammastråling skal derimod kæmpe sig ud gennem Solen og bruger titusinder af år, måske over 100.000 år, før energien når overfladen som sollys.</p>
         <p><strong>Røde kæmper:</strong> Når en stjerne har brugt hydrogenet i kernen, bliver kernen varmere, ca. 100 millioner grader. (I spillet kræver det mindst 80 mio. °C.) Så kan tre heliumkerner blive til carbon. Beryllium-8 i midten holder kun et øjeblik, så den tredje heliumkerne skal komme med det samme.</p>
         <blockquote class="citat" data-citat="saganStjernestof"></blockquote>
         <p class="nulstil-linje"><button class="knap lille" id="fusRejseIgen">Vis rejsen ind i Solen</button> <button class="knap lille" id="fusGuideIgen">Vis guiden igen</button></p>
@@ -750,6 +757,24 @@
   </div>
 
   <!-- ===== Hjælp ===== -->
+  <section id="ordbog" class="skærm skjult" aria-label="Ordbogen">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Ordbogen</h2>
+      <span class="system-status" id="ordbogAntal"></span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <div class="panel ordbog-panel">
+      <input type="search" id="ordbogSøg" placeholder="Søg et ord" aria-label="Søg i ordbogen" enterkeyhint="search" autocomplete="off" spellcheck="false">
+      <nav class="ordbog-bogstaver" id="ordbogBogstaver" aria-label="Hop til et bogstav"></nav>
+      <ul class="ordbog-liste" id="ordbogListe"></ul>
+      <p class="ordbog-ingen" id="ordbogIngen" hidden>Ingen fagord passer. Prøv et andet ord.</p>
+    </div>
+  </section>
+
   <div class="overlag skjult" id="hjælp" role="dialog" aria-label="Hjælp">
     <div class="dialog">
       <header><h3>Sådan virker et atom</h3><button class="knap lille luk" data-luk>Luk</button></header>
@@ -758,7 +783,7 @@
         <p><span class="kugle neutron lille"></span> <strong>Neutroner</strong> har ingen ladning. De er en slags lim, der holder kernen sammen, for protonerne frastøder hinanden. Atomer af samme grundstof med forskelligt antal neutroner kaldes <strong>isotoper</strong>.</p>
         <p><span class="kugle elektron lille"></span> <strong>Elektroner</strong> er minusladede og meget lettere. De befinder sig i skaller rundt om kernen. Har atomet for mange eller for få elektroner, kaldes det en <strong>ion</strong>.</p>
         <p><strong>Massetal</strong> = protoner + neutroner. Carbon-14 har 6 protoner og 8 neutroner.</p>
-        <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Det virker i hele AtomLab.</p>
+        <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Det virker i hele AtomLab. Alle fagordene står også i <a href="#ordbog">Ordbogen</a>.</p>
         <h4 id="hjælpRadioaktivitet">Hvad er radioaktivitet, og hvorfor er det farligt?</h4>
         <p>Et stof er <strong>radioaktivt</strong>, når dets atomkerner er ustabile: De har for mange eller for få neutroner, eller de er simpelthen for store. Før eller siden henfalder kernen og skyder noget ud. Det er <strong>strålingen</strong>:</p>
         <ul>

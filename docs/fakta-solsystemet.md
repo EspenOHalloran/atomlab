@@ -928,3 +928,16 @@ Teksterne i `js/kosmos/solen.js` og `js/kosmos/jordkloden.js`. Tallene er slået
 | Dag og nat passer inden for få minutter | OK (målt) | Solopgang i København 21. december: 7:38 verdenstid som sunrisesunsettime.org |
 
 **Spillets egne tal:** "Drej Jorden" lader tiden gå 823 gange hurtigere (et døgn på ca. 105 sekunder). I teksten står "ca. 800 gange" og "under 2 minutter". Ved "Jorden ved siden af" har Jorden den rigtige størrelse, men står alt for tæt på Solen (det står i "Ærligt talt").
+
+## Citatet til Saturn (Huygens), 29. oktober 2026
+Citatet `huygensSaturn` i `js/data/citater.js`, vist ved Saturn i Solsystemet.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Ordlyden "Annulo cingitur, tenui, plano, nusquam cohaerente, ad eclipticam inclinato." | OK, læst i bogen | Huygens, *Systema Saturnium* (1659), McGill-eksemplaret på archive.org (OCR af skanningen; "cohærente" læses som "cobarente"). Wikipedia (Rings of Saturn) skriver "coherente", men anagrammet har 7 a'er, og det passer kun med "cohaerente". |
+| Først offentliggjort som anagram i 1656 | OK | Samme side i bogen ("1656 die 25 Martij permixtis literis … edidimus") |
+| Afsløret i 1659 | OK | *Systema Saturnium* (1659); Wikipedia: Rings of Saturn ("Three years later, he revealed …") |
+| Anagrammer var en måde at gøre krav på en opdagelse før udgivelsen | OK | Wikipedia: Anagram ("In this way they laid claim to new discoveries before their results were ready for publication") |
+| Galilei så ringen i 1610 og troede, at Saturn bestod af tre | OK | Wikipedia: Rings of Saturn (brevet til hertugen af Toscana: "composed of three") |
+
+Oversættelse: "ad eclipticam inclinato" er oversat til "hælder i forhold til Jordens baneplan" (ekliptika er planet for Jordens bane), så en 13-årig kan forstå det. "nusquam cohaerente" er "ingen steder hænger fast i den".

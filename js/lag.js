@@ -88,7 +88,7 @@ function lavKort() {
   kort.innerHTML = `<div class="hk-top"><strong class="hk-titel"></strong><button class="hk-luk" title="Luk (Esc)" aria-label="Luk">×</button></div>
     <div class="hk-tekst"></div>
     <details class="hk-nørd"><summary>For nørder</summary><p></p></details>
-    <div class="hk-knapper"><button class="knap lille svag hk-tilbage">‹ Tilbage</button><button class="knap lille hk-næste"></button></div>`;
+    <div class="hk-knapper"><button class="knap lille svag hk-tilbage">‹ Tilbage</button><button class="knap lille hk-næste"></button><button class="knap lille hk-link"></button></div>`;
   document.body.append(kort);
   kort.querySelector('.hk-luk').addEventListener('click', () => {
     lyd.klik();
@@ -106,6 +106,13 @@ function lavKort() {
     if (!næste) return;
     historik.push(næste);
     vis(næste);
+  });
+  // Et link nederst (fx "Se hele kategorien ›") lukker kortet og går videre
+  kort.querySelector('.hk-link').addEventListener('click', () => {
+    lyd.klik();
+    const nu = historik[historik.length - 1];
+    lukHvorfor();
+    nu?.link?.handling();
   });
   // Esc og et tryk et andet sted lukker kortet (men ikke et tryk i en ordforklaring)
   addEventListener('keydown', (h) => {
@@ -131,7 +138,7 @@ function lavKort() {
   });
 }
 
-// Viser et kort. indhold er et id i HVORFOR eller { spørgsmål, svar, næste, nørd }. knap er det, kortet hører til.
+// Viser et kort. indhold er et id i HVORFOR eller { spørgsmål, svar, næste, nørd, link: { tekst, handling } }. knap er det, kortet hører til.
 export function visHvorfor(indhold, knap = null) {
   if (!kort) lavKort();
   const k = typeof indhold === 'string' ? HVORFOR[indhold] : indhold;
@@ -155,8 +162,11 @@ function vis(k) {
   næste.hidden = !HVORFOR[k.næste];
   næste.textContent = HVORFOR[k.næste] ? `Og hvorfor det? ›` : '';
   næste.title = HVORFOR[k.næste]?.spørgsmål ?? '';
+  const link = kort.querySelector('.hk-link');
+  link.hidden = !k.link;
+  link.textContent = k.link?.tekst ?? '';
   kort.querySelector('.hk-tilbage').hidden = historik.length < 2;
-  kort.querySelector('.hk-knapper').hidden = næste.hidden && historik.length < 2;
+  kort.querySelector('.hk-knapper').hidden = næste.hidden && link.hidden && historik.length < 2;
   kort.classList.remove('skjult');
   kort.scrollTop = 0;
   placer();

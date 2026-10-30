@@ -9,7 +9,7 @@ page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await page.goto(`${ADRESSE}/?test`);
 await page.waitForTimeout(1200);
-tjek('7 kort i menuen', (await page.$$('.menukort .kort')).length === 7);
+tjek('8 kort i menuen', (await page.$$('.menukort .kort')).length === 8);
 await page.click('a[href="#kosmos"]');
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));

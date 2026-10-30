@@ -75,6 +75,12 @@ export const ORDBOG = [
     tekst: 'Lys med ekstremt meget energi, som regel endnu mere end røntgenstråler. Man kan ikke se det med øjnene. Det kommer fx fra atomkerner.',
   },
   {
+    id: 'foton', ord: 'Foton',
+    former: ['foton', 'fotonen', 'fotoner', 'fotonerne'],
+    // D + p → ³He giver 5,49 MeV. Synligt lys er ca. 1,6-3,1 eV pr. foton, så 1,8-3,4 mio. gange mere.
+    tekst: 'En lyspartikel. Lys kommer i bittesmå portioner af energi, som kaldes fotoner. De vejer ingenting og flyver med lysets fart. En foton af gammastråling fra Solens kerne har over en million gange mere energi end en foton af synligt lys.',
+  },
+  {
     id: 'deuterium', ord: 'Deuterium',
     former: ['deuterium'],
     // D/H i havvand: ca. 156 ppm, altså ca. 1 ud af 6.400

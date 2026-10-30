@@ -21,6 +21,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 
 ### B. Ny eller ændret tekst med fakta
 - [ ] Før hjælpeagenter sættes i gang med at søge: tjek med `curl`, at kildesiderne kan åbnes. Er de blokeret, så bed brugeren om at tilføje domænerne under miljøets Network access først.
+- [ ] Planlæg kilderne, før opgaven går i gang: Står et domæne ikke på listen over åbne domæner, så spørg brugeren om adgang først (brugerens svar 29. oktober 2026, da library.si.edu og archive.org var lukket under citatet til Saturn).
 - [ ] Er en netside eller et værktøj blokeret (fx GitHub-udgivelser til `basisu` i Mars M2), så stop og bed brugeren om adgang, før arbejdet fortsætter med en nødløsning (brugerens svar 24. oktober 2026). Adgang, der åbnes midt i sessionen, virker ikke altid med det samme (GitHub gav stadig 403 i S1). I Mars M3 virkede msss.com først ca. en halv time senere, så prøv igen, før du giver op, og ellers i en ny session.
 - [ ] Hvert tal er regnet efter eller slået op. Udregningen står i en kommentar eller i commit-beskeden.
 - [ ] Kilden er primær eller pålidelig (fagbøger, NIST, IUPAC, NUBASE, NASA, forskningsartikler). Populærvidenskab og "alle siger det" er ikke nok. Se fælderne i afsnit 2.
@@ -329,6 +330,15 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Fejlsøgning med farver:** Gløden og tonekurven ændrer farverne (ren grøn blev (152, 229, 93)), så test for "grøn" med en bred grænse. En ren farve pr. net og `renderOrder` viste, hvilket net der lå forrest.
 - **Billeder i sekundet** (testbrowseren uden grafikkort, fuld grafik): pc ved Olympus Mons 2,3 → ca. 1,6, tablet 3,7 → ca. 2,5. Hele Mars er uændret (målestøjen er stor, 4,5-7,5). Prisen er det fine net (flere trekanter og lys i de samme pixel). Først kostede `discard` i hele kuglen også meget. Mål "før" med `git worktree` på `main` og en server på en anden port, skiftevis før og efter, for tallene svinger med maskinens belastning.
 
+### Fire små opgaver i træk (29. oktober 2026)
+- **Et link skal pege på et sted, hvor ordet står.** Ordbogens links blev tjekket i kildeteksterne med et lille script, før de kom med. Fire "Hvorfor?"-kort, der virkede passende ("radioaktiv" → "Hvorfor er nogle kerner ustabile?"), nævnte slet ikke ordet og blev fjernet. Tjekket er nu en del af testen `ordbog`.
+- **Dansk sortering med `Intl.Collator('da')`** sætter æ, ø og å efter z, også inde i ordet ("Stjerne" før "stærke"). Min egen forventning i testen var forkert, ikke sorteringen.
+- **Moduler med Three.js kan ikke testes i Node** (igen): Ordbogens liste, søgning og links ligger derfor i `js/data/ordbogliste.js`.
+- **Et citat kan bekræftes med en uafhængig kontrol:** Huygens' anagram har 7 a'er, og det passer kun med "cohaerente". Wikipedia skriver "coherente". OCR'en af den gamle bog læste ordet forkert ("cobarente"), så tælling af bogstaver var det, der afgjorde det.
+- **Dataservere skifter navn:** archive.org sender filerne videre til `ia….us.archive.org` eller `dn….eu.archive.org`. Bed om `*.archive.org` på én gang.
+- **Søg efter faste tal i testene, når noget fælles ændres:** Testen `kosmos` tjekkede "7 kort i menuen", så det ottende kort fik den til at fejle. Søg efter tallet (`grep`) i `tests/`, før hele samlingen køres.
+- **Giv en lang testkørsel tid nok:** `koer-alle.mjs` med alle tests tog 26-27 minutter i denne session. En baggrundskørsel med 10 minutters grænse blev stoppet midt i og skulle køres forfra.
+
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
 
@@ -341,4 +351,5 @@ Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-all
   - 6 gik i stå inden for 15 sekunder, og 11 inden for 2 minutter.
   - Testen `reaktor` tillader højst 6 af 100, så den er på grænsen og kan begynde at fejle.
   - Testbillede 45 i `docs/fable/billeder/` er et af tilfældene.
+- **`stjerneovn-mus` (rejsen starter) og `guide` ("pc: måleren i 3D-billedet") fejlede sammen med andre** (29. oktober 2026, kategorien som link, samlingen tog 27 minutter i stedet for ca. 10). Begge bestod alene, og ændringen rørte ingen af dem. I næste kørsel samme dag (fotonerne, kun tekst) fejlede `stjerneovn-mus` igen og `mars` ("Modlys": Solen står bag Mars) én gang, og begge bestod alene. I kørslen af Ordbogen fejlede `mars` igen under belastning ("Modlys" slået fra: Solen er tilbage) og bestod alene. `stjerneovn-mus` fejler altså tit under belastning. Ikke undersøgt endnu. Genskab det med fire travle CPU-løkker (som `batteri` og `beskeder`) og find den faste ventetid.
 - **`docs/fable/tablet/LISTE.md` passer ikke med filerne:** 08 er Pulsar, 09 Kilonova, 10 Rumtid, 11 Tyngdebølger, 12 Ormehul, og 14 er menuen i Chrome. Billedet af teksten i Formørkelser mangler.

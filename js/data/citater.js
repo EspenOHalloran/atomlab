@@ -140,6 +140,15 @@ export const CITATER = {
     oversat: 'latin',
     kommentar: 'Tycho Brahe så en ny stjerne i stjernebilledet Cassiopeia i november 1572. Han målte, at den var meget længere væk end Månen, så himlen var ikke uforanderlig, som man troede. I dag ved vi, at det var en supernova.',
   },
+  // Kilden er læst i bogen selv (Systema Saturnium, 1659, McGill-eksemplaret på archive.org). Anagrammet har 7 a'er,
+  // så der står "cohaerente" (Wikipedias "coherente" er en slåfejl). "Ekliptika" er oversat til "Jordens baneplan".
+  huygensSaturn: {
+    tekst: 'Den er omgivet af en tynd, flad ring, der ingen steder hænger fast i den og hælder i forhold til Jordens baneplan.',
+    person: 'Christiaan Huygens',
+    kilde: 'Systema Saturnium, 1659',
+    original: 'Annulo cingitur, tenui, plano, nusquam cohaerente, ad eclipticam inclinato.',
+    kommentar: 'Huygens offentliggjorde først sætningen i 1656 som et anagram, hvor alle bogstaverne var blandet (aaaaaaa ccccc d eeeee …). Sådan kunne forskere dengang gøre krav på en opdagelse, før de var klar til at udgive den. I 1659 afslørede han, hvad der stod. Galilei havde set ringen i 1610, men hans kikkert var for svag: Han troede, at Saturn bestod af tre kloder.',
+  },
   bellBurnell: {
     tekst: 'Jeg gik hjem den aften og var meget sur. Her prøvede jeg at tage en ph.d. med en ny teknik, og så skulle en flok fjollede små grønne mænd vælge netop min antenne og min frekvens for at tale med os.',
     person: 'Jocelyn Bell Burnell',
