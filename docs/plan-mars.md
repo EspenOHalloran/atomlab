@@ -25,10 +25,12 @@ Hver delopgave slutter med `/faerdig` (tests, billeder, dokumentation og en PR, 
 | M4 | **Fælles flyby, egen skærm og rejsen ned til overfladen** (plus Solen og Jorden, se "Jorden i Solsystemet" nedenfor): Flybyen flyttes ud af `saturn.js` til et fælles modul, og kameraets rejse (`rejse.js`) lærer at flyve til et sted på kuglen og se skråt ned mod horisonten. Mars og Saturn flyttes fra Kosmos til en egen skærm, "Solsystemet" (`#solsystem`, et nyt kort i menuen med en liste over planeterne). Skallen om fænomenerne i `kosmos.js` gøres fælles, så den ikke kopieres. Saturn skal virke præcis som før. Jorden (en klode som Mars med Årstiderne og Formørkelser under sig) og Solen (Solstorm og Solens fremtid) flytter også til Solsystemet (jeres svar 26. oktober 2026). Overblikket med Solen og planeternes baner (trin 2 i plan-solsystemet.md) venter, til Mars er færdig (jeres svar 24. oktober 2026). | stor |
 | M5 | **Flybyen over Mars:** stoppene med tekster (faktatjekket): oversigten, Olympus Mons, Tharsis, Valles Marineris, Hellas, nordpolen, Gale (Curiosity) og Jezero (Perseverance). "For nørder", "Ærligt talt" og nye fagord i ordbogen. | mellem |
 | M6 | **Phobos og Deimos i den rigtige form:** formmodeller og kort, banerne med den rigtige fart (Phobos står op i vest), stop i flybyen og "Mars set fra Phobos". | mellem til stor |
-| M7 | **Skarpe detaljer ved stederne:** billeder og højder i høj opløsning lige der, hvor flybyen stopper, så man kan flyve helt ned til Olympus Mons' krater på toppen, ned i Valles Marineris og hen over Gale og Jezero. | stor |
+| M7 | (M7a ✅ lavet 30. oktober 2026, se "Status efter M7a") **Skarpe detaljer ved stederne:** billeder og højder i høj opløsning lige der, hvor flybyen stopper, så man kan flyve helt ned til Olympus Mons' krater på toppen, ned i Valles Marineris og hen over Gale og Jezero. | stor |
 | M8 | **Stå på Mars:** et landskab i 3D ved Gale (med Mount Sharp) og ved Jezero (med deltaet), bygget af rovernes højdekort og fotos fra kredsløb. Kameraet står, hvor roveren står. Måske også de rigtige panoramafotos fra roverne. | stor |
 
 Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man dreje Mars, efter M5 er flybyen færdig i grove træk, og M6-M8 gør den rigere.
+
+**Ny rækkefølge (jeres svar 29. oktober 2026):** M7 deles i **M7a** (teknikken til lokale detaljer, prøvet på Olympus Mons) og **M7b** (de meget skarpe kort ved Gale og Jezero). Rækkefølgen bliver **M7a → M5 → M6 → M7b → M8**. Se "Detaljer før flere stop" nedenfor.
 
 ## Status efter M2 (24. oktober 2026)
 - **Lavet:** `js/kosmos/mars.js` (fænomenet i Kosmos mellem Solstorm og Saturn), `js/solsystem/klippeplanet.js` (kuglen med rigtige højder, kan genbruges til andre klippeplaneter og måner) og `billeder/solsystem/lav_mars.py`. Farvekortet er Viking MDIM 2.1 (8k, 3,7 MB), og højderne er MOLA (4k, 7,7 MB, 16 bit). Skalaen er 1 enhed = 1.000 km.
@@ -91,6 +93,108 @@ M4 er delt i tre dele med et go imellem. Hver del får sin egen PR, der merges, 
 - **Ikke under bjergene:** Kameraet er mindst 2 km over jorden. Uden kollisionen kom det 120 km ned under jorden i testen. Den første udgave af flyvningen ned (van Wijk og Nuijs vej) gik gennem Mars, når man startede på bagsiden (skubbet op til ca. 100 km). Nu går den i en bue over planeten, og kameraet skubbes aldrig op under flyvningen.
 - **Faktatjekket** (kilderne åbnet med curl) rettede skråningen (5 %, ca. 3°, ikke 5°) og koordinaterne (USGS' navneliste: 18,40° N, 226,00° Ø). To nye fagord: skjoldvulkan og caldera.
 - **Til M5:** Flyvninger mellem to steder bruger samme bue. Stoppenes tekster faktatjekkes, og nettet med højderne er groft tæt på (ca. 21 km mellem punkterne på pc).
+
+## Detaljer før flere stop (jeres svar 29. oktober 2026)
+**Jeres ord:** Flybyen til Olympus Mons er "ikke for imponerende". I spurgte, hvordan billedet kan blive bedre, og om kameraet kan komme tættere på overfladen, så man ser, hvor høj vulkanen er.
+
+**Hvorfor den ser flad ud:**
+- **Nettet er flaskehalsen.** Hele Mars er ét net på 1024 × 512 felter (pc), altså ca. 21 km mellem punkterne ved ækvator. Olympus Mons (ca. 600 km bred) er kun ca. 29 punkter på tværs, og calderaen 3-4. Skyggerne regnes i hver pixel ud fra højdekortet (4k, ca. 5 km pr. pixel), men omridset og alt, der rager op, følger det grove net.
+- **Skrænten ved foden** (op til 6-8 km, `fakta-solsystemet.md` del 3 afsnit 2) bliver med 21 km mellem punkterne til en skråning på ca. 20° i stedet for en mur.
+- **Vulkanen er flad i virkeligheden:** Skråningen er kun ca. 3°, og fra sletten ved foden kan man ikke se toppen, fordi Mars krummer væk. Den imponerer, når man ser skrænten, calderaen og størrelsen skråt oppefra, og det kræver skarp geometri.
+
+**Jeres svar:**
+1. **M7 deles, og den første del kommer før M5** (ja). Rækkefølgen bliver M7a → M5 → M6 → M7b → M8.
+2. **Højderne forbliver rigtige som standard** (enig). Det er skarpheden, kameraet og lyset, der skal gøre indtrykket. "Bjergene 10 gange højere" bliver som knap.
+
+**M7a: lokale detaljer, prøvet på Olympus Mons (forslag, planen godkendes før go):**
+- Et lokalt net kun over Olympus Mons (fx ca. 800 × 800 km med 1-3 km mellem punkterne) med sit eget højdekort fra MOLA i fuld opløsning (463 m pr. pixel, CC0, ingen HRSC nødvendig her) og et farvekort skåret ud af Viking-mosaikken (232 eller 925 m pr. pixel). Laves med `lav_mars.py` (rasterio).
+- Det svære: overgangen til kloden (det globale net må ikke stikke igennem), `bund()` og højdetabellen bruger de lokale højder, og "Bjergene 10 gange højere" virker på begge.
+- Kameraet stilles om efter den skarpe geometri: lavere vinkel og tættere på, evt. et stop ved skrænten. Solen lavere (længere skygger). Billeder i sekundet måles før og efter (tjekliste F), og filernes størrelse på GitHub Pages holdes nede (måske 1-3 MB pr. sted).
+- Høj effort. Opus laver det selv (Mars er ikke en Fable-opgave i `plan-fable.md`).
+
+Den fulde plan står i "Plan for M7a" nedenfor.
+
+**Bagefter:** I M5 får hvert nyt stop sit eget lokale kort med den samme teknik (fx Valles Marineris, hvor de smalle dele forsvinder i det grove net), så kameraet kun skal stilles én gang. M7b (CTX og HiRISE ved Gale og Jezero) og M8 ("Stå på Mars") bygger videre på samme teknik med finere kort.
+
+## Plan for M7a: lokale detaljer ved Olympus Mons (29. oktober 2026, godkendt)
+**Jeres go (29. oktober 2026):** De tre anbefalinger nedenfor (HRSC+MOLA, hvis den er tydeligt skarpere, de to nye stop med `/faktatjek` og én PR). Højderne er rigtige som standard.
+**Højdekilden (valgt 29. oktober 2026): HRSC+MOLA.** I spillets opløsning (ca. 0,5 km pr. pixel) er den tydeligt skarpere: MOLA har et ternet mønster mellem målesporene, et takket kraterrand og udtværede striber ved skrænten. HRSC+MOLA har et par kasseformede fejl på sletterne (op til 1,2 km fra MOLA i snit over ca. 7 km, hvor landet er fladt). Dér bruges MOLA (ca. 0,5 % af området, se `lav_steder.py`). Billedet blev vist i chatten.
+
+**Målet:** Ved Olympus Mons skal man kunne se, at vulkanen er enorm: den stejle skrænt ved foden, calderaen på toppen og lavastrømmene. Højderne er rigtige (jeres svar). Skarpheden, kameraet og lyset gør indtrykket. Teknikken skal kunne genbruges ved de andre stop i M5.
+
+**Hvad der begrænser i dag (målt i koden):**
+- Nettet: 1024 × 512 felter på pc (`mars.js:129`), ca. 21 km mellem punkterne ved ækvator (ca. 28 km på tablet).
+- Højdekortet: 4k, ca. 5,2 km pr. pixel. Skyggerne regnes i hver pixel ud fra det (`klippeplanet.js:73-81`), så de er heller ikke skarpere end 5 km.
+- Farvekortet: 8k, ca. 2,6 km pr. pixel.
+- Kameraet ved stoppet: `min: 0.02` (20 km) i `besøg()`, så det kan ikke komme tæt på.
+
+### 1. Data (billedværktøjet)
+- **Område:** ca. 1.000 × 1.000 km om Olympus Mons (ca. 9,5-27,5° N og ca. 143,5-124,5° V). Det dækker vulkanen, skrænten og en kant, hvor det lokale kort glider over i kloden. Lavastrømmene uden for skrænten (840 × 640 km i alt) kommer med det meste.
+- **Højder:** Der prøves to kilder, og den skarpeste vælges ud fra billeder:
+  - MOLA (463 m pr. pixel, CC0), samme fil som nu. Mellem MOLA's målespor er der fyldt ud, så de fine detaljer kan være udtværede. Det skal ses.
+  - HRSC og MOLA lagt sammen (`mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif`, 200 m pr. pixel, 11,4 GB, CC BY-SA 3.0 IGO). Kun vinduet om Olympus læses (`rasterio` med et vindue). Bruges den, mærkes billedet CC BY-SA i `KILDER.md` (tilladt for M7 i "Licenserne").
+  - Begge filer kan hentes i miljøet (tjekket med en liste fra USGS' S3-arkiv 29. oktober 2026).
+- **Farver:** Viking MDIM 2.1 i 232 m pr. pixel (`mosaic/Mars_Viking_MDIM21_ClrMosaic_global_232m.tif`, 12,7 GB, kun vinduet læses). Den samme farverettelse som i `lav_mars.py` (de mørke egne bliver gråbrune), så det lokale kort har samme farver og lysstyrke som kloden. Det tjekkes ved kanten.
+- **Størrelser (forslag):** Højden 2048 × 2048 (ca. 490 m pr. pixel, anslået 3-5 MB som PNG med 16 bit i rød og grøn). Farverne 4096 × 4096 på pc og tablet, hvis `maxTextureSize` ≥ 4096 (ca. 245 m pr. pixel, anslået 3-5 MB som JPG), ellers 2048, og 1024 i tests. Filerne hentes først, når man besøger Olympus Mons, og bliver i grafikkortet (`lager`).
+- **Værktøjet:** `lav_mars.py` får en del til lokale kort (eller en ny fil `lav_steder.py`), så M5 kan lave de andre steder på samme måde. Stedets grænser står ét sted i JS og læses ikke af Python. Tallene skrives ind begge steder med en kommentar, ligesom `HØJDE_MIN` og `HØJDE_MAX`.
+
+### 2. Det lokale net (`js/solsystem/klippeplanet.js`)
+- **Et nyt net over stedet**, fx `lokalt({ bredde: [a, b], længde: [c, d], kort, højde, net })`. Det er et gitter i bredde og længde med fx 512 × 512 punkter på pc (ca. 2 km mellem punkterne), 384 × 384 på tablet og 128 × 128 i tests. Nettet hænger på samme gruppe som kuglen, så det drejer, skaleres og får overdriv på samme måde.
+- **Samme lys og luft:** Det lokale net bruger samme fragment-shader som kuglen (lyset, tusmørket, sløret, isen og skyernes skygge). Shaderen skal derfor kende kortets strækning pr. pixel mod øst og nord som uniforms i stedet for at regne den ud fra et kort over hele kloden. Skyggerne bliver skarpe ned til ca. 0,5 km, fordi de regnes fra det lokale højdekort.
+- **Overgangen til kloden (det sværeste):**
+  - Inderst skjules kuglen (`discard` i kuglens fragment-shader inden for et rektangel i bredde og længde, sat med uniforms).
+  - I en kant på fx 40 km glider højderne og farverne fra det lokale kort over i klodens (`mix` med en blød vægt), så de mødes nøjagtigt ved kanten.
+  - Uden for det skjulte område tegnes begge. Det lokale net sænkes lidt i den yderste kant (en "skørt"-kant), så kuglen ligger øverst, og der ikke kommer sprækker eller flimmer (z-fighting).
+  - Det tjekkes ved at flyve langs kanten i lavt lys.
+- **Dybden:** Kameraet kan komme ned til få km over jorden, mens Mars er 3.400 km i radius. Det tjekkes, om dybdebufferen er præcis nok (flimmer mellem de to net og i bjergene langt væk), og om `kamera.near` skal følge højden over jorden. Er det ikke nok, prøves `logarithmicDepthBuffer` kun for Mars, men det koster lidt og skal måles.
+
+### 3. Kollision, steder og overdriv
+- **Højdetabellen** får en lokal del (højst 512 × 512, den højeste værdi i hvert felt, lavet i strimler som nu). `overflade()`, `punkt()` og `sted()` bruger den lokale tabel inden for området (med samme bløde overgang som shaderen) og ellers den globale. Så holdes kameraet 2 km over den rigtige jord (`bund`), og fokus ligger på den rigtige top.
+- **"Bjergene 10 gange højere"** virker på begge net og begge tabeller.
+- **Kameraet må komme tættere på:** `min` i `besøg()` sænkes (fx til 3-5 km), og zoom og drejning bliver langsommere helt nede (som ved hele Mars).
+
+### 4. Kameraet, lyset og stoppene
+- **Olympus Mons** stilles om efter den skarpe geometri. Udgangspunkt: lavere vinkel (ca. 8-12° i stedet for 18°) og tættere på, med horisonten i billedet. Solen lavere (fx kl. 7 i stedet for 8), så skyggerne bliver længere. Det endelige valg sker ud fra billeder.
+- **To nye stop ved Olympus Mons (anbefales):**
+  - **"Calderaen":** kameraet ca. 30-50 km over toppen, skråt ned i de seks kratere (ca. 65 × 80 km, op til ca. 3 km dybe).
+  - **"Skrænten":** lavt ved foden af den stejleste del af skrænten (op til 6-8 km), så den står som en mur.
+
+  Tallene er faktatjekket i forvejen (`fakta-solsystemet.md`, del 3 afsnit 2). Hvilken side af skrænten der er højest, skal findes i højdekortet og tjekkes mod en kilde. Teksterne er korte og faktatjekkes med `/faktatjek`. Flybyen har så fire stop: hele Mars, Olympus Mons, Calderaen og Skrænten.
+- **Nørd-teksten ("Ærligt talt")** rettes: Nettet er fint ved Olympus Mons (ca. 2 km mellem punkterne), og kilden til højderne og farverne nævnes.
+
+### 5. Tjek
+- **Testen `mars`:**
+  - Det lokale kort hentes ved stoppet.
+  - Højden er den samme på begge sider af overgangen (forskel under fx 100 m langs hele kanten).
+  - Calderaens bund ligger ca. 2-3 km under kanten.
+  - Toppen er ca. 21 km over nulpunktet (MOLA).
+  - Skrænten falder flere km på en kort strækning.
+  - Kameraet er mindst 2 km over jorden ved alle stop, når man drejer og zoomer ned og med bjergene 10 gange højere.
+  - Alt sættes tilbage i `stop`.
+- **Saturn og Jorden er uændrede:** testene `saturn` og `jorden` og hele samlingen.
+- **Billeder med fuld grafik** (`node tests/vaerktoejer/mars.mjs`) ved alle fire stop på pc og tablet på højkant, før og efter. Kun de nye billeder ses.
+- **Billeder i sekundet** måles før og efter i testbrowseren (tjekliste F). Tabletten tester I selv. Skriv i "Ikke afprøvet", hvad I skal kigge efter: kanten mellem nettene, flimmer, hak, når kortene hentes, og hvordan det føles at komme helt ned.
+- **Dokumentation:** `CLAUDE.md` (klippeplanet og mars), `KILDER.md`, "Status efter M7a" her, "Lige nu" i DESIGN.md og erfaringer.
+
+### Hvis det bliver for tungt på tabletten
+Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten klarede 8k-kortet på hele Mars fint, så det forventes ikke.
+
+### Beslutninger, der bekræftes ved go (anbefalingerne står først)
+1. **Højdekilden:** HRSC+MOLA, hvis den er tydeligt skarpere end MOLA på billederne (med CC BY-SA i `KILDER.md`), ellers MOLA.
+2. **De to nye stop** (Calderaen og Skrænten) kommer med i M7a.
+3. **Én PR for hele M7a.** Efter data-delen (afsnit 1) vises et billede, der sammenligner de to højdekilder, i chatten, men arbejdet fortsætter uden at vente på et nyt go, medmindre noget er uklart.
+
+**Model og effort:** Opus med høj effort. Koden er det sværeste i Mars-planen indtil nu (to net, der skal mødes uden sprækker, shaderen og kollisionen), og `CLAUDE.md` siger Opus til kode og faktatjek. Xhigh er ikke nødvendig. M4c gik godt med høj. Hjælpeagenter: Haiku med lav effort til at opsummere lange testlogs.
+
+## Status efter M7a (30. oktober 2026)
+- **Lavet:** `billeder/solsystem/lav_steder.py` (læser kun vinduet om stedet hos USGS), de lokale kort `mars-olympus-hoejde-2k/1k.png` (2,8 MB og 0,9 MB) og `mars-olympus-farve.jpg` (86 kB), `lokalt()` i `klippeplanet.js` (det lokale net, overgangen til kuglen, den lokale højdetabel) og flybyen med fire stop: hele Mars, Olympus Mons (10° over horisonten, kl. 7), Calderaen (30°, kl. 8) og Skrænten (mod nordvest, 10°, kl. 8). Kameraet må komme ned til 3 km fra fokus og holdes 2 km over jorden.
+- **Højderne:** HRSC+MOLA (valgt ud fra billedet i chatten). Kasseformede fejl i HRSC+MOLA på sletterne (op til 1,2 km) er erstattet af MOLA (ca. 0,5 % af området). Toppen er 21,2 km, calderaens bund ca. 3,3 km under kanten, og skrænten mod nordvest falder 7,8 km på ca. 20 km.
+- **Farverne:** 925 m-mosaikken (som kloden), ikke 232 m-mosaikken, for den har skygger fra Solen malet ind (fx mørke skygger i calderaen). Afvigelse fra planen, se `KILDER.md`.
+- **Lyset og luften:** Sløret af støv følger nu luften mellem stedet og kameraet (skalahøjden), så landskabet ikke bliver mælket ud tæt på jorden, og himlen lyser lidt ind i skyggerne. Det ændrer kloden lidt ved kanten og på de høje vulkaner (de er mindre slørede).
+- **Overgangen:** Nettet ligger præcis på kuglens trekanter helt ude ved kanten og glider over i de lokale højder på 40 km. Kuglens trekanter under nettet tegnes ikke, og kun trekanterne på kanten har et hul (`discard`). En revne på en pixel, når man kiggede hen over kanten i lav vinkel, skyldtes `sin` og `cos` i shaderen (fejl på flere hundrede meter). Nu regnes kuglens punkter i JS.
+- **Faktatjekket** (30. oktober 2026, `docs/fakta-solsystemet.md`, del 3, afsnit 2) rettede kraternes alder (ca. 100-400 mio. år), kantens højde (ca. 20-21 km), lufttrykket (ca. 10-15 %) og "overlapper hinanden".
+- **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
+- **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
 ## Forslag til M4c (29. oktober 2026, godkendt)
 **Jeres svar (29. oktober 2026): go.** (1) Mars får "▶ Start flyby" med to stop (hele Mars og Olympus Mons) gennem det fælles modul. De andre stop kommer i M5. (2) Tidspunktet på dagen ved Olympus Mons: Jeg prøver formiddag (klart vejr) og eftermiddag (med skyerne) og vælger det, der viser vulkanen tydeligst. I åbnede `discovery.ucl.ac.uk` og `planetarynames.wr.usgs.gov`, og begge virker nu (tjekket med curl).

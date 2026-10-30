@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 29. oktober 2026 (Ordbogen).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M7a: lokale detaljer ved Olympus Mons).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -25,9 +25,21 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Blokeret adgang (jeres svar 24. oktober 2026):** Er en netside eller et værktøj blokeret i miljøet, så sæt udviklingen på pause, og bed jer om adgang (navngiv domænet). Gå ikke videre med en nødløsning uden at spørge først.
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 
+**Senest lavet (30. oktober 2026): Mars, M7a (lokale detaljer ved Olympus Mons).**
+- **Jeres go (29. oktober 2026):** de tre anbefalinger i planen: HRSC+MOLA, hvis den er tydeligt skarpere, de to nye stop med `/faktatjek` og én PR for hele M7a. Højderne er rigtige som standard (jeres beslutning).
+- **Et fint net over Olympus Mons** (ca. 1.000 × 1.000 km, ca. 2 km mellem punkterne på pc og 2,6 km på tablet, før ca. 21 km) med sit eget højdekort (ca. 0,5 km pr. pixel, før ca. 5 km). Kortene hentes først, når flybyen starter (ca. 2,9 MB). Ved kanten glider nettet over i resten af Mars uden synlige sprækker.
+- **Højderne er fra HRSC+MOLA** (Mars Express og MOLA, lagt sammen af USGS). I spillets opløsning var den tydeligt skarpere end MOLA alene (billedet i chatten). Den har licensen CC BY-SA 3.0 IGO, som står i `KILDER.md`, `LICENSE` og "Om AtomLab". Et par kasseformede fejl i HRSC+MOLA er erstattet af MOLA.
+- **Farverne er ikke skarpere end ca. 1 km:** Den skarpere Viking-mosaik (232 m) har skygger fra Solen malet ind, som ville modsige programmets eget lys. Detaljerne kommer derfor fra højderne. Det er en afvigelse fra planen.
+- **Flybyen har fire stop:** hele Mars, Olympus Mons (lavere og tættere på, kl. 7), **Calderaen** (skråt ned i de seks kratere) og **Skrænten** (ved foden mod nordvest, hvor den falder ca. 8 km, i morgenlys med Solen bag skrænten). Man kan zoome ned til 3 km fra stedet (kameraet holdes stadig 2 km over jorden), og helt nede drejer og zoomer det langsommere.
+- **Luften tæt på jorden:** Støvet slører nu kun efter den luft, der er mellem stedet og kameraet, så landskabet ikke bliver mælket ud tæt på. Himlen lyser lidt ind i skyggerne. Kloden ser næsten ud som før, men de høje vulkaner er lidt mindre slørede.
+- **Faktatjekket** (hjælpeagent med kilderne åbnet: USGS SIM 3470, ESA, NSSDC, Wikipedia og Taylor m.fl. 2020) rettede kraternes alder (ca. 100-400 mio. år), kantens højde (ca. 20-21 km), lufttrykket (ca. 10-15 %) og at kraterne "overlapper hinanden". nature.com og lpi.usra.edu gav 403, så Neukum 2004 og Robbins 2011 er kun læst gennem USGS.
+- **Billeder i sekundet i testbrowseren** ved Olympus Mons: pc ca. 2,3 → 1,6 og tablet ca. 3,7 → 2,5 (hele Mars uændret). Det koster at tegne det fine net. Et rigtigt grafikkort klarer det meget lettere, men det skal I prøve.
+- **Tests:** Hele samlingen bestod (27 af 27, 15 minutter). Testen `mars` har fået tjek af det lokale kort, de nye stop og højderne.
+- Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M7a".
+
 **Citatet til Saturn (opgave 3):** Huygens' sætning om ringen er bekræftet i hans egen bog (*Systema Saturnium*, 1659, McGill-eksemplaret på archive.org). I åbnede library.si.edu og *.archive.org. **Lavet 29. oktober 2026: fire små opgaver med go** (jeres besked): 1) kategorien som link, 2) fotoner i Stjerneovnen (med faktatjek), 3) et citat til Saturn (kun med en sikker kilde, ellers intet) og 4) Ordbogen som egen del (spørg om kort i menuen eller kun fra hjælpen, med en skitse, før der bygges). I den rækkefølge og én PR pr. opgave, som Opus selv merger, når `--ændret` er grøn. Hele samlingen køres én gang til sidst. Testene `batteri` og `beskeder` bestod to runder i træk på den nye `main`.
 
-**Senest lavet (29. oktober 2026): Ordbogen (opgave 4).**
+**Før det (29. oktober 2026): Ordbogen (opgave 4).**
 - Menuen har et ottende kort, **Ordbogen** (4 + 4 på pc, jeres valg). Det viser antallet af fagord (49). Værkstedets hjælp har et link under "Ordforklaringer". Adressen er `#ordbog`.
 - Alle fagordene står i alfabetisk rækkefølge (dansk sortering, æ, ø og å til sidst) med bogstaver at hoppe til og en søgning. Ord, hvor navnet passer, kommer først, derefter ord, hvor teksten nævner det. Esc tømmer søgningen. Teksterne er de samme som i ordforklaringerne, så intet er skrevet om.
 - 29 ord har et link til et sted, hvor de bruges: tre "Hvorfor?"-kort (tunneleffekt, den stærke kernekraft, bindingsenergi), Stjerneovnen, Reaktoren eller Batteriet, eller et fænomen i Kosmos eller Solsystemet. Et link må kun pege på et sted, hvor ordet står i teksten. Fire, der ikke gjorde det, blev fjernet (fx radioaktiv → "Hvorfor er nogle kerner ustabile?"). De andre 20 ord har intet link.
@@ -102,7 +114,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Piletasterne** drejer kameraet i hele Kosmos, og Saturn lyser ca. 12 % svagere end før (jeres bemærkninger).
 - **Atomet:** B (orbitalernes former) er standard for alle.
 
-**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026). **M5 (flybyen over Mars med alle stoppene) venter på et go.**
+**Næste i gang (26. oktober 2026):** **Mars M4** er delt i M4a (skærmen Solsystemet, den fælles skal og flytningen, ✅ lavet), M4b (Solen og Jorden får egne visninger, ✅ lavet) og M4c (den fælles flyby og rejsen ned til overfladen, høj effort). M4c (den fælles flyby og rejsen ned til overfladen, ✅ lavet 29. oktober 2026).
+- **Ny rækkefølge (jeres svar 29. oktober 2026):** Olympus Mons var "ikke for imponerende". Det skyldes mest, at Mars' net er groft (ca. 21 km mellem punkterne). Derfor kommer **M7a** (lokale detaljer, prøvet på Olympus Mons) før M5: M7a → M5 → M6 → M7b → M8. Højderne forbliver rigtige som standard. **M7a er lavet (30. oktober 2026). Næste: M5 (flere steder med samme teknik) venter på go.** Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Detaljer før flere stop".
 - **Jorden og Solen i Solsystemet (jeres svar 26. oktober 2026):** Med i M4. Jorden bliver en klode som Mars (man kan dreje den, og Månen er med), og Årstiderne og Formørkelser ligger under Jorden. Solstorm og Solens fremtid flytter med under "Solen". Jorden bruger de billeder og modeller, vi har nu, og kan gøres flottere senere, når Mars er færdig. Detaljer i [docs/plan-mars.md](docs/plan-mars.md) under "Jorden i Solsystemet". S2 (ringene fra Cassinis målinger) og S3 (højder på månerne) venter, til Mars er færdig.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet og ser super ud. KTX2 er derfor ikke nødvendigt lige nu.
 - **GitHub-adgang:** I har åbnet for GitHub under Network access, men github.com gav stadig 403, også i en ny session (tjekket 24. oktober 2026 i S1). Det er ikke brugt i S1. Skal KTX2 (`basisu`) prøves, så tjek miljøets indstilling for Network access igen.
@@ -123,6 +136,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne kildesiderne (kun søgeresultater). Det, der skal tjekkes mod kilderne, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
 
 **Ikke afprøvet endnu:**
+- **Olympus Mons (M7a) på tabletten:** Kører det glat ved Olympus Mons, calderaen og skrænten (det fine net koster mest dér)? Er der et hak, når kortene hentes ved flybyens start? Kan I se en kant eller flimmer, hvor det fine net går over i resten af Mars (ca. 500 km fra toppen)? Hvordan føles det at zoome helt ned til et par km over jorden? Er den støvede himmel ved skrænten for brun eller for lys? Hakker det, er første skridt et grovere net på tabletten (256 × 256).
 - **Ordbogen på tabletten:** Er bogstaverne og linkene lette at ramme? Ruller listen glat med fingeren? Ser menuen med 8 kort godt ud på langs og på højkant? Kommer tastaturet op, når man trykker i søgefeltet, og dækker det listen?
 - **Kategorien som link på tabletten:** Er ordet let at ramme med fingeren, og ser man, at det kan trykkes på (en tynd streg under)? Står kortet godt ved ordet på tablet på langs og på højkant?
 - **Olympus Mons (M4c) på tabletten:** Hvordan føles det at dreje rundt om vulkanen med fingeren og zoome ind (drejningen er lidt langsommere ved stedet)? Kører flyvningen ned glat? Et lille hak, første gang Mars åbnes, mens højdetabellen bliver lavet? Ser vulkanen for flad ud med de rigtige højder, og er udsigten mod horisonten flot?

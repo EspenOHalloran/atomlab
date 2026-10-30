@@ -1,7 +1,7 @@
-// Mars (M2, M3 og M4c i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
+// Mars (M2, M3, M4c og M7a i docs/plan-mars.md): Mars står i Solsystemet før Saturn, billederne bliver hentet, højdekortet
 // vender rigtigt (Olympus Mons, Hellas og Arsia Mons på de rigtige steder), Mars drejer mod øst, bjergene kan gøres
 // 10 gange højere, skyerne over vulkanerne kommer om eftermiddagen, "Modlys" sætter Solen bag Mars, flybyen ned til
-// Olympus Mons (M4c), og kameraets indstillinger bliver sat tilbage, når man går videre.
+// Olympus Mons, calderaen og skrænten med det lokale kort (M4c og M7a), og kameraets indstillinger bliver sat tilbage, når man går videre.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('mars');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -132,14 +132,17 @@ tjek('"Modlys" slået fra: Solen er tilbage', (await s.evaluate(() => atomlabTes
 const tekster = (await s.textContent('#solsystemTekst'));
 tjek('"Kort fortalt" fortæller om polkapperne og skyerne', /Polkapperne/.test(tekster) && /skyer af is/.test(tekster));
 
-// M4c: flybyen ned til Olympus Mons. Kameraets rejse drejer Mars, så stedets lodrette retning peger lige op, kameraet
-// ser skråt mod horisonten, og det kommer aldrig ind under bjergene (under flyvningen, når man selv drejer det ned,
-// og med bjergene 10 gange højere). "Hele Mars" drejer systemet tilbage.
+// M4c og M7a: flybyen ned til Olympus Mons, calderaen og skrænten. Kameraets rejse drejer Mars, så stedets lodrette
+// retning peger lige op, kameraet ser skråt mod horisonten, og det kommer aldrig ind under bjergene (under flyvningen,
+// når man selv drejer det ned, og med bjergene 10 gange højere). "Hele Mars" drejer systemet tilbage.
+// M7a: Det lokale kort over Olympus Mons hentes først, når flybyen starter, og højderne er rigtige (toppen, calderaen,
+// skrænten og overgangen til resten af Mars).
 const fm = (u, a) => s.evaluate(u, a);
-const ved = () => fm(() => atomlabTest.solsystem.fænomen().vedSted('olympus'));
+const ved = (id = 'olympus') => fm((id) => atomlabTest.solsystem.fænomen().vedSted(id), id);
 const flyver = () => fm(() => atomlabTest.solsystem.fænomen().tur().flyver);
 const ventFremme = () => s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 30000, polling: 100 });
 const vinkelMellem = (a, b) => 2 * Math.acos(Math.min(1, Math.abs(a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]))) * 180 / Math.PI;
+const fase = () => fm(() => [document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin i').length]);
 // Den laveste højde over jorden og det største skub op, målt i hvert billede
 await fm(async () => {
   const { verden } = await import('/js/scene3d.js');
@@ -153,18 +156,50 @@ await fm(async () => {
 });
 const nulstilMåling = () => fm(() => { window.marsMåling = { min: Infinity, skub: 0 }; });
 const måling = () => fm(() => window.marsMåling);
+const lokalt = () => fm(() => atomlabTest.solsystem.fænomen().billeder().lokalt.olympus);
+tjek('det lokale kort over Olympus Mons er ikke hentet før flybyen', !(await lokalt()).hentet.højde && !(await lokalt()).klar, JSON.stringify(await lokalt()));
 tjek('knappen "▶ Start flyby"', (await fm(() => atomlabTest.solsystem.knapper())).includes('▶ Start flyby'));
 await s.click('#solsystemStyring button:has-text("Start flyby")');
-const fase0 = await fm(() => [document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin i').length]);
-tjek('flybyen: første stop "Mars" med to prikker', fase0[0].includes('Mars') && fase0[1] === 2, JSON.stringify(fase0));
+const fase0 = await fase();
+tjek('flybyen: første stop "Mars" med fire prikker', fase0[0].includes('Mars') && fase0[1] === 4, JSON.stringify(fase0));
 await ventFremme();
 let v = await ved();
-tjek('første stop: klokken er 8 ved Olympus Mons, og Mars står stille', Math.abs(v.tid - 8) < 0.05 && !(await fm(() => document.querySelector('#solsystemStyring button.til')?.textContent.includes('Drej Mars'))), JSON.stringify(v));
+tjek('første stop: klokken er 7 ved Olympus Mons, og Mars står stille', Math.abs(v.tid - 7) < 0.05 && !(await fm(() => document.querySelector('#solsystemStyring button.til')?.textContent.includes('Drej Mars'))), JSON.stringify(v));
 tjek('første stop: systemet er ikke drejet', vinkelMellem(await fm(() => atomlabTest.solsystem.fænomen().drejningSystem()), [0, 0, 0, 1]) < 0.01);
+await s.waitForFunction(() => { const l = atomlabTest.solsystem.fænomen().billeder().lokalt.olympus; return l.hentet.højde && l.hentet.kort && l.tabel && l.klar; }, null, { timeout: 30000, polling: 200 });
+const lok = await lokalt();
+tjek('flybyen henter det lokale kort over Olympus Mons (1k i tests) og laver højdetabellen', lok.højde === '1k' && lok.tabel && lok.net[0] === 128, JSON.stringify(lok));
+// Højderne med det lokale kort (HRSC og MOLA): toppen, calderaen og skrænten
+const højder2 = await fm(() => {
+  const t = atomlabTest.solsystem.fænomen();
+  const felt = (b0, l0, r, trin) => { const v = []; for (let b = b0 - r; b <= b0 + r; b += trin) for (let l = l0 - r; l <= l0 + r; l += trin) v.push(t.højde(b, l)); return v; };
+  const omkring = felt(18.4, -133.3, 0.9, 0.02); // calderaen og kanten
+  const indeni = felt(18.45, -133.25, 0.35, 0.02);
+  // Ud fra midten mod nordvest (320°) hen over skrænten: det største fald på 25 km
+  const profil = [];
+  for (let r = 200; r <= 400; r += 0.5) {
+    const a = 320 * Math.PI / 180, b = 18.4 + (r * Math.cos(a)) / 59.27;
+    profil.push([r, t.højde(b, -134 + (r * Math.sin(a)) / (59.27 * Math.cos(b * Math.PI / 180)))]);
+  }
+  let fald = 0;
+  for (const [r, h] of profil) for (const [r2, h2] of profil) if (r2 > r && r2 - r <= 25) fald = Math.max(fald, h - h2);
+  // Overgangen til resten af Mars: lige inden for og uden for grænserne (27,5° N til 9,5° N og 143,5° V til 124,5° V)
+  const kant = [];
+  for (let x = 0; x <= 1; x += 0.05) {
+    const b = 9.5 + 18 * x, l = -143.5 + 19 * x;
+    kant.push(Math.abs(t.højde(27.5 - 0.01, l) - t.højde(27.5 + 0.01, l)), Math.abs(t.højde(9.5 + 0.01, l) - t.højde(9.5 - 0.01, l)),
+      Math.abs(t.højde(b, -143.5 + 0.01) - t.højde(b, -143.5 - 0.01)), Math.abs(t.højde(b, -124.5 - 0.01) - t.højde(b, -124.5 + 0.01)));
+  }
+  return { top: Math.max(...felt(18, -133.5, 1.2, 0.03)), kant: Math.max(...omkring), bund: Math.min(...indeni), fald, overgang: Math.max(...kant) };
+});
+tjek('toppen af Olympus Mons er ca. 21 km over nulpunktet (MOLA: 21,2 km)', højder2.top > 20.7 && højder2.top < 21.6, JSON.stringify(højder2));
+tjek('calderaens bund ligger ca. 3 km under kanten (Plescia: 3,2 km)', højder2.kant - højder2.bund > 2.5 && højder2.kant - højder2.bund < 3.8, JSON.stringify(højder2));
+tjek('skrænten mod nordvest falder over 6 km på højst 25 km', højder2.fald > 6, højder2.fald);
+tjek('overgangen til resten af Mars: under 100 m forskel lige over kanten', højder2.overgang < 0.1, højder2.overgang);
 await nulstilMåling();
 await s.click('#solsystemStyring button:has-text("Næste: Olympus Mons")');
-const fase1 = await fm(() => [document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin i').length]);
-tjek('flybyen: andet stop "Olympus Mons" med to prikker', fase1[0].includes('Olympus Mons') && fase1[1] === 2, JSON.stringify(fase1));
+const fase1 = await fase();
+tjek('flybyen: andet stop "Olympus Mons" med fire prikker', fase1[0].includes('Olympus Mons') && fase1[1] === 4, JSON.stringify(fase1));
 tjek('underteksten er kort (under 160 tegn)', fase1[0].length < 175, fase1[0].length);
 tjek('kameraet flyver', await flyver());
 await ventFremme();
@@ -172,14 +207,36 @@ let m = await måling();
 tjek('under flyvningen: kameraet er højt over jorden og bliver aldrig skubbet op', m.min > 100 && m.skub === 0, JSON.stringify(m));
 v = await ved();
 tjek('ved Olympus Mons: stedets lodrette retning peger lige op (inden for 1°)', v.op > Math.cos(Math.PI / 180), v.op);
-tjek('ved Olympus Mons: kameraet ser ned på stedet 18° over horisonten', Math.abs(v.vinkel - 18) < 0.5, v.vinkel);
-tjek('ved Olympus Mons: horisonten er i billedet (over midten)', v.horisont > 1 && v.horisont < 18, v.horisont);
-tjek('ved Olympus Mons: kameraet kigger på stedet, og klokken er 8', v.fokus < 1 && Math.abs(v.tid - 8) < 0.05, JSON.stringify(v));
+tjek('ved Olympus Mons: kameraet ser ned på stedet 10° over horisonten', Math.abs(v.vinkel - 10) < 0.5, v.vinkel);
+tjek('ved Olympus Mons: horisonten er i billedet (over midten)', v.horisont > 0.5 && v.horisont < 10, v.horisont);
+tjek('ved Olympus Mons: kameraet kigger på stedet, og klokken er 7', v.fokus < 1 && Math.abs(v.tid - 7) < 0.05, JSON.stringify(v));
 const himmel = await fm(async () => { const { himmelDrejning } = await import('/js/scene3d.js'); return [himmelDrejning(), atomlabTest.solsystem.fænomen().drejningSystem()]; });
 tjek('stjernehimlen er drejet med Mars', vinkelMellem(himmel[0], himmel[1]) < 0.01 && vinkelMellem(himmel[1], [0, 0, 0, 1]) > 10, JSON.stringify(himmel));
-tjek('efter turen: "Hele Mars", "▶ Start flyby", og teksten om skjoldvulkanen', (await fm(() => atomlabTest.solsystem.knapper())).includes('Hele Mars') && /Turen er slut/.test(await s.textContent('#solsystemForklaring')) && /skjoldvulkan/.test(await s.textContent('#solsystemForklaring')));
+tjek('ved Olympus Mons: teksten om skjoldvulkanen', /skjoldvulkan/.test(await s.textContent('#solsystemForklaring')));
 await s.waitForTimeout(800);
 await s.screenshot({ path: UD + '/4-olympus-mons.png' });
+// Calderaen
+await nulstilMåling();
+await s.click('#solsystemStyring button:has-text("Næste: Calderaen")');
+const fase2 = await fase();
+tjek('flybyen: tredje stop "Calderaen" (under 160 tegn)', fase2[0].includes('Calderaen') && fase2[1] === 4 && fase2[0].length < 175, JSON.stringify(fase2));
+await ventFremme();
+m = await måling();
+v = await ved('caldera');
+tjek('ved calderaen: 30° over horisonten, klokken er 8, og kameraet kigger på kraterne', Math.abs(v.vinkel - 30) < 0.5 && Math.abs(v.tid - 8) < 0.05 && v.fokus < 1 && v.op > Math.cos(Math.PI / 180), JSON.stringify(v));
+tjek('ved calderaen: aldrig skubbet op under flyvningen', m.skub === 0 && m.min > 2, JSON.stringify(m));
+tjek('ved calderaen: teksten om de seks kratere', /mindst seks gange/.test(await s.textContent('#solsystemForklaring')));
+await s.screenshot({ path: UD + '/5-calderaen.png' });
+// Skrænten (sidste stop)
+await nulstilMåling();
+await s.click('#solsystemStyring button:has-text("Næste: Skrænten")');
+await ventFremme();
+m = await måling();
+v = await ved('skraent');
+tjek('ved skrænten: lavt (10° over horisonten) og over jorden', Math.abs(v.vinkel - 10) < 0.5 && v.overJorden > 2 && v.overJorden < 25 && v.fokus < 1, JSON.stringify(v));
+tjek('ved skrænten: aldrig skubbet op under flyvningen', m.skub === 0 && m.min > 2, JSON.stringify(m));
+tjek('efter turen: "Hele Mars", "▶ Start flyby", og teksten om skrænten', (await fm(() => atomlabTest.solsystem.knapper())).includes('Hele Mars') && /Turen er slut/.test(await s.textContent('#solsystemForklaring')) && /Skrænten/.test(await s.textContent('#solsystemForklaring')));
+await s.screenshot({ path: UD + '/6-skraenten.png' });
 // Prøv at få kameraet ind under bjergene: under horisonten, lige ned og vandret ind i bjerget
 const sætKamera = (grader, afstand) => fm(async ([grader, afstand]) => {
   const { verden } = await import('/js/scene3d.js');
@@ -192,28 +249,31 @@ const sætKamera = (grader, afstand) => fm(async ([grader, afstand]) => {
 }, [grader, afstand]);
 const efterTo = () => s.waitForFunction(() => { window.billeder = (window.billeder ?? 0) + 1; return window.billeder % 3 === 0; }, null, { polling: 'raf' });
 await nulstilMåling();
-for (const [grader, afstand] of [[-10, 1.9], [-30, 0.5], [-89, 0.02], [0, 0.3]]) {
+for (const [grader, afstand] of [[-10, 1.9], [-30, 0.5], [-89, 0.02], [0, 0.3], [0, 0.01]]) {
   await sætKamera(grader, afstand);
   await efterTo();
 }
 m = await måling();
-tjek('kameraet kan ikke drejes eller zoomes ind under bjergene (mindst 2 km over jorden)', m.min > 1.99 && m.skub > 0 && (await ved()).overJorden > 1.99, JSON.stringify(m));
+tjek('ved skrænten: kameraet kan ikke drejes eller zoomes ind under bjergene (mindst 2 km over jorden)', m.min > 1.99 && m.skub > 0 && (await ved()).overJorden > 1.99, JSON.stringify(m));
+const nede = await fm(async () => { const { verden } = await import('/js/scene3d.js'); return [verden.styring.zoomSpeed, verden.styring.rotateSpeed]; });
+tjek('helt nede ved jorden zoomer og drejer kameraet langsommere', nede[0] < 0.5 && nede[1] < 0.3, JSON.stringify(nede));
 await s.click('#solsystemStyring button:has-text("Bjergene")');
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().overdriv() === 10, null, { timeout: 20000 }).catch(() => {});
 await nulstilMåling();
-for (const [grader, afstand] of [[-10, 1.9], [0, 0.3]]) {
+for (const [grader, afstand] of [[-10, 1.9], [0, 0.3], [-60, 0.05]]) {
   await sætKamera(grader, afstand);
   await efterTo();
 }
 m = await måling();
-v = await ved();
-tjek('med bjergene 10 gange højere: stadig over jorden, og kameraet kigger på toppen', m.min > 1.99 && v.fokus < 1, JSON.stringify([m, v.fokus]));
+v = await ved('skraent');
+tjek('med bjergene 10 gange højere: stadig over jorden, og kameraet kigger på skrænten', m.min > 1.99 && v.fokus < 1, JSON.stringify([m, v.fokus]));
 await s.click('#solsystemStyring button:has-text("Bjergene")');
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().overdriv() === 1, null, { timeout: 20000 }).catch(() => {});
-// Modlys ved stedet: Solen står lige under horisonten foran kameraet
+// Modlys ved stedet: Solen står lige under horisonten foran kameraet (kameraet kigger skråt ned som ved stoppet)
+await sætKamera(10, 0.04);
 await s.click('#solsystemStyring button:has-text("Modlys")');
 await efterTo();
-tjek('modlys ved Olympus Mons: Solen står bag stedet, set fra kameraet', (await fm(() => atomlabTest.solsystem.fænomen().sol())) < -0.5, await fm(() => atomlabTest.solsystem.fænomen().sol()));
+tjek('modlys ved skrænten: Solen står bag stedet, set fra kameraet', (await fm(() => atomlabTest.solsystem.fænomen().sol())) < -0.5, await fm(() => atomlabTest.solsystem.fænomen().sol()));
 await s.click('#solsystemStyring button:has-text("Modlys")');
 // Tilbage til hele Mars: systemet drejes tilbage, og teksten om hele Mars kommer igen
 await nulstilMåling();
@@ -234,13 +294,11 @@ await s.click('#solsystemStyring button:has-text("Næste: Olympus Mons")');
 await ventFremme();
 m = await måling();
 tjek('fra bagsiden af Mars: højt over jorden hele vejen og aldrig skubbet op', m.min > 100 && m.skub === 0, JSON.stringify(m));
-await s.click('#solsystemStyring button:has-text("Hele Mars")');
-await ventFremme();
 // "Stop flyby" midt i turen fjerner underteksten
-await s.click('#solsystemStyring button:has-text("Start flyby")');
 await s.click('#solsystemStyring button:has-text("Stop flyby")');
 const væk = await s.waitForFunction(() => !document.querySelector('#solsystemVindue .undertekst.fase'), null, { timeout: 5000, polling: 100 }).then(() => true, () => false);
-tjek('"Stop flyby" fjerner underteksten', væk && (await fm(() => atomlabTest.solsystem.knapper())).includes('▶ Start flyby'));
+tjek('"Stop flyby" fjerner underteksten', væk && (await fm(() => atomlabTest.solsystem.knapper())).includes('▶ Start flyby') && (await fm(() => atomlabTest.solsystem.knapper())).includes('Hele Mars'));
+await s.click('#solsystemStyring button:has-text("Hele Mars")');
 await ventFremme();
 
 // Videre til et andet fænomen: kameraets indstillinger er sat tilbage

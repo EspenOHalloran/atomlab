@@ -471,6 +471,24 @@ Punkter:
 - Egen udregning: Horisonten for et øje 1,7 m over jorden: √(2 · 3.396 km · 0,0017 km) ≈ 3,4 km ("ca. 3 km").
 - **Rettet:** Skråningen var noteret som "ca. 5°" (søgeuddrag). Wikipedia skriver 5 % (ca. 3°). Teksten siger derfor "nogle få grader". Skrænten er "op til ca. 8 km" (Wikipedia), og Taylor 2020 skriver op til 10 km, så teksten siger "nogle steder op til ca. 8 km høj". Koordinaterne er nu USGS' (se tabellen).
 
+**Faktatjek af stoppene ved calderaen og skrænten (Mars M7a, 30. oktober 2026).** En hjælpeagent (Opus, høj effort) tjekkede teksterne. Åbnet direkte: USGS SIM 3470 (siden og pamfletten https://pubs.usgs.gov/sim/3470/sim3470_pamphlet.pdf), ESA "Olympus Mons – the caldera in close-up", USGS' side om Viking-mosaikken i 232 m og NSSDC. Wikipedia og Taylor m.fl. 2020 er læst fra kopier hentet med curl. Blokeret: nature.com (Neukum 2004) og lpi.usra.edu (Robbins 2011) gav 403, og AGU/Wiley (Plescia 2004) svarer selv 403, så deres tal er kun læst, som SIM 3470 gengiver dem.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Seks kratere, ca. 65 × 80 km, op til ca. 3 km dybe | OK. **Rettet sproget:** kraterne "overlapper hinanden" (ikke "inden i hinanden", de ligger mest side om side) | SIM 3470: "six nested paterae … collectively measure ~65 x ~80 km"; ESA: "depth of about 3 km" |
+| Taget sank ned over det tømte kammer, mindst seks gange, de yngste skærer sig ind i de ældre | OK. "Hvert krater (en caldera)" i stedet for "Calderaen" | ESA; Wikipedia |
+| Kraternes alder | **Rettet:** "nogle hundrede millioner år, skønnene går fra ca. 100 til 400 millioner år" (var 150-350). Neukum 2004: ca. 100-200 mio. år; Robbins 2011: ca. 140-420 mio. år. Kratertællingerne passer ikke helt med rækkefølgen | SIM 3470 |
+| Kanten over nulpunktet | **Rettet:** "ca. 20-21 km" (kanten ligger 19,38-21,08 km; det højeste punkt, 21,29 km, ligger ca. 11 km syd for calderaen) | SIM 3470 |
+| Lufttrykket ved kanten | **Rettet:** "ca. 10-15 %" (var 12 %). Wikipedias 72 Pa hviler på en svag kilde. Egen udregning: exp(−20,5 / 11) ≈ 13 %, og skalahøjden 9,5-11 km giver 11-15 %. NSSDC: skalahøjde 11,0 km | NSSDC; egen udregning |
+| Skrænten rundt om det meste, op til ca. 8 km | OK (Taylor 2020 skriver op til 10 km; teksten bruger 8 km som de andre tekster) | Wikipedia; Taylor 2020 |
+| Mod nordvest: ca. 8 km fald på ca. 20 km | OK som egen måling ("i kortet"): 7,8 km fald på ca. 20 km ved ca. 22° N, 137,3° V i HRSC+MOLA. Ingen kilde siger direkte, at skrænten er højest mod nordvest, men Plescia måler relieffet fra "the foot of the cliffs which form its northwest margin" | Wikipedia; højdekortet |
+| Ingen andre skjoldvulkaner på Mars har sådan en kant | OK: "a feature unique among the shield volcanoes of Mars" | Wikipedia (Lopes m.fl. 1982) |
+| Dannelsen er usikker: glidning under egen vægt eller kæmpe skred | OK | Wikipedia; Taylor 2020 ("gravity-driven spreading") |
+| Det rillede landskab mod nordvest (aureolen, Lycus Sulci) op til ca. 750 km ud, måske rester af skred | OK | Wikipedia |
+| Ca. 300.000 km², ca. 7 gange Danmark | OK: 300.000 / 43.000 ≈ 7; 600 km i diameter giver ca. 283.000 km² | Wikipedia; SIM 3470 |
+| HRSC regner højder ud fra billeder fra forskellige vinkler | OK: "derived from the stereo channels" | ESA |
+| Skarpere Viking-billeder har skygger fra Solen | OK: "Images were obtained with a wide range of solar incidence angles" | USGS' side om 232 m-mosaikken |
+
 **Det højeste bjerg i solsystemet?**
 
 | Bjerg | Højde | Kilde | Sikkerhed |
