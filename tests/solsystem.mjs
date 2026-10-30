@@ -32,7 +32,9 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('Solsystemet: 2 af 8 set', sol.set === '2 af 8 set', sol.set);
   tjek('Solsystemet har Solen, Jorden og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
-  tjek('de sete (Mars og Saturn) har ingen prik', !prikker.includes('mars') && !prikker.includes('saturn') && prikker.includes('solstorm'), JSON.stringify(prikker));
+  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden', JSON.stringify(prikker));
+  await s.click('#solsystem .sol-klode[data-id="solen"]');
+  tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
   await vis(s, 'kosmos');
   const kos = await s.evaluate(() => ({ valgt: atomlabTest.kosmos.valgt(), set: document.getElementById('kosmosSet').textContent, gemt: JSON.parse(localStorage.getItem('atomlabKosmosSet')) }));
   tjek('Kosmos starter på Big Bang og har 1 af 11 set', kos.valgt === 'bigbang' && kos.set === '1 af 11 set', JSON.stringify(kos));
@@ -54,18 +56,33 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
 {
   const s = await side({ width: 1280, height: 800 });
   await vis(s, 'solsystem');
-  const liste = await s.evaluate(() => [...document.querySelectorAll('#solsystemListe .sol-gruppe')].map((g) => ({
-    hoved: g.querySelector('.sol-hoved .kosmos-valg-navn').textContent,
-    under: [...g.querySelectorAll('.sol-punkt')].map((k) => k.dataset.id),
-  })));
-  tjek('listen: Solen, Jorden, Mars og Saturn (efter afstanden til Solen)', liste.map((g) => g.hoved).join() === 'Solen,Jorden,Mars,Saturn', JSON.stringify(liste));
-  tjek('under Solen: Solstorm og Solens fremtid', liste[0].under.join() === 'solstorm,solensfremtid');
-  tjek('under Jorden: Årstiderne og Formørkelser', liste[1].under.join() === 'aarstider,formoerkelser');
+  // U1 (docs/plan-ux.md): kloderne på én række og et træ med den valgte klodes steder, måner og forsøg
+  const kloder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => k.textContent));
+  tjek('kloderne: Solen, Jorden, Mars og Saturn (efter afstanden til Solen)', kloder.join() === '☀️Solen,🌍Jorden,🔴Mars,🪐Saturn', JSON.stringify(kloder));
   tjek('første gang åbner Solen', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solen');
-  await s.click('#solsystem .sol-gruppe[data-gruppe="1"] .sol-hoved');
+  const træ = () => s.evaluate(() => atomlabTest.solsystem.træ());
+  let t = await træ();
+  tjek('træet ved Solen: Solen og forsøgene Solstorm og Solens fremtid', t.map((p) => p.id).join() === 'solen,solstorm,solensfremtid' && t[0].valgt, JSON.stringify(t));
+  tjek('gruppen hedder "Forsøg"', (await s.textContent('#solsystemTræ .sol-gruppe-navn')) === 'Forsøg');
+  await s.click('#solsystem .sol-klode[data-id="jorden"]');
   tjek('et tryk på Jorden åbner Jordens egen visning', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'jorden');
-  tjek('Jordens gruppe er åben og markeret', await s.evaluate(() => { const g = document.querySelector('#solsystem .sol-gruppe[data-gruppe="1"]'); return g.classList.contains('åben') && g.querySelector('.sol-hoved').classList.contains('valgt'); }));
-  tjek('underpunkterne står fremme på pc', await s.isVisible('#solsystem .sol-punkt[data-id="solstorm"]'));
+  tjek('Jordens klode er markeret', await s.evaluate(() => document.querySelector('#solsystem .sol-klode[data-id="jorden"]').classList.contains('valgt')));
+  t = await træ();
+  tjek('træet ved Jorden: Jorden, Månen (under Måner), Årstiderne og Formørkelser', t.map((p) => p.id).join() === 'jorden,månen,aarstider,formoerkelser' && t[0].valgt, JSON.stringify(t));
+  tjek('vejen i toplinjen: › Jorden', (await s.textContent('#solsystemVej')) === '› Jorden');
+  await s.click('#solsystemTræ button[data-sted="månen"]');
+  tjek('Månen i træet: kameraet flyver til Månen', (await s.evaluate(() => atomlabTest.solsystem.sted())) === 'månen');
+  const hoved = await s.evaluate(() => ({ navn: solsystemNavn.textContent, under: solsystemUndertitel.textContent, vej: solsystemVej.textContent, om: getComputedStyle(solsystemOm).display !== 'none' && solsystemOm.textContent, tal: getComputedStyle(solsystemTal).display }));
+  tjek('ved Månen: panelet hedder Månen, vejen er › Jorden › Månen, og Jorden står under "Om Jorden" uden tallene', hoved.navn === 'Månen' && hoved.vej === '› Jorden › Månen' && hoved.om === 'Om Jorden' && hoved.tal === 'none', JSON.stringify(hoved));
+  tjek('ved Månen: Månen er markeret i træet', (await træ()).find((p) => p.id === 'månen').valgt);
+  tjek('"Lige nu" (teksten om det, man ser) står i højre panel', await s.evaluate(() => Boolean(solsystemForklaring.closest('.højre-panel')) && /Månen/.test(solsystemForklaring.textContent)));
+  await s.click('#solsystemVej button');
+  tjek('vejen: et tryk på "Jorden" flyver tilbage', (await s.evaluate(() => atomlabTest.solsystem.sted())) === 'jorden' && (await s.textContent('#solsystemNavn')) === 'Jorden');
+  await s.click('#solsystemTræ button[data-id="aarstider"]');
+  tjek('forsøget Årstiderne åbner og er markeret, og vejen er › Jorden › Årstiderne', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'aarstider' && (await træ()).find((p) => p.id === 'aarstider').valgt && (await s.textContent('#solsystemVej')) === '› Jorden › Årstiderne');
+  await s.click('#solsystemTræ button[data-sted="månen"]');
+  tjek('fra Årstiderne: Månen i træet åbner Jorden og flyver til Månen', (await s.evaluate(() => [atomlabTest.solsystem.valgt(), atomlabTest.solsystem.sted()].join())) === 'jorden,månen');
+  tjek('"Månen" er ikke længere en kontakt under "Prøv selv"', !(await s.evaluate(() => atomlabTest.solsystem.knapper())).includes('Månen'));
   await s.click('#solsystem .kosmos-valg[data-id="mars"]');
   tjek('Mars kan vælges', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'mars' && (await s.textContent('#solsystemNavn')) === 'Mars');
   await s.screenshot({ path: `${UD}/pc-mars.png` });
@@ -113,13 +130,10 @@ for (const [navn, vp, kol] of STØRRELSER) {
   await vis(s, 'solsystem');
   await s.evaluate(() => atomlabTest.solsystem.vælg('formoerkelser'));
   await s.waitForTimeout(400);
-  const hoveder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-hoved')].map((k) => { const r = k.getBoundingClientRect(); return { y: Math.round(r.top), x: Math.round(r.left), synlig: r.width > 0 }; }));
-  if (navn === 'telefon') {
-    tjek('telefon: de fire kloder står på én række', new Set(hoveder.map((h) => h.y)).size === 1 && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
-    tjek('telefon: kun Jordens underpunkter vises', (await s.isVisible('#solsystem .sol-punkt[data-id="aarstider"]')) && !(await s.isVisible('#solsystem .sol-punkt[data-id="solstorm"]')));
-  } else {
-    tjek(`${navn}: kloderne står under hinanden, og alle underpunkter vises`, hoveder.every((h, i) => i === 0 || h.y > hoveder[i - 1].y) && (await s.isVisible('#solsystem .sol-punkt[data-id="solstorm"]')), JSON.stringify(hoveder));
-  }
+  const hoveder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => { const r = k.getBoundingClientRect(); return { y: Math.round(r.top), x: Math.round(r.left), synlig: r.width > 0 }; }));
+  const klodeRækker = navn === 'telefon-langs' ? 2 : 1; // på telefon på langs er venstre kolonne smal: to og to
+  tjek(`${navn}: kloderne står på ${klodeRækker} række(r)`, new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
+  tjek(`${navn}: kun Jordens forsøg står i træet`, (await s.isVisible('#solsystemTræ button[data-id="aarstider"]')) && !(await s.$('#solsystemTræ button[data-id="solstorm"]')));
   const vindue = await s.evaluate(() => document.getElementById('solsystemVindue').getBoundingClientRect().height);
   tjek(`${navn}: 3D-billedet har plads`, vindue > 150, vindue);
   await s.screenshot({ path: `${UD}/${navn}-solsystem.png` });

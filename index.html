@@ -646,7 +646,6 @@
       <h4 class="panel-overskrift">Prøv selv</h4>
       <div class="kosmos-styring" id="kosmosStyring"></div>
       <div class="knap-række"><button class="knap lille" id="kosmosPause">⏸ Pause</button></div>
-      <div class="kosmos-forklaring" id="kosmosForklaring"></div>
     </aside>
     <div class="vindue" id="kosmosVindue">
       <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="kosmos-overlag" id="kosmosOverlag"></div></div></div>
@@ -661,6 +660,7 @@
         </div>
       </div>
       <dl class="kosmos-tal" id="kosmosTal"></dl>
+      <div class="kosmos-forklaring" id="kosmosForklaring"></div>
       <div class="del-vælger">
         <button class="del-knap valgt" data-kosmos-fane="kort">Kort fortalt</button>
         <button class="del-knap" data-kosmos-fane="nørd">For nørder</button>
@@ -692,7 +692,7 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Solsystemet</h2>
-      <span class="system-status">Solen, Jorden, Mars og Saturn</span>
+      <span class="system-status sol-vej" id="solsystemVej"></span>
       <div class="topknapper">
         <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
         <button class="knap lille ikon" id="solsystemHjælp" title="Hjælp">?</button>
@@ -705,7 +705,6 @@
       <h4 class="panel-overskrift">Prøv selv</h4>
       <div class="kosmos-styring" id="solsystemStyring"></div>
       <div class="knap-række"><button class="knap lille" id="solsystemPause">⏸ Pause</button></div>
-      <div class="kosmos-forklaring" id="solsystemForklaring"></div>
     </aside>
     <div class="vindue" id="solsystemVindue">
       <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="kosmos-overlag" id="solsystemOverlag"></div></div></div>
@@ -720,6 +719,8 @@
         </div>
       </div>
       <dl class="kosmos-tal" id="solsystemTal"></dl>
+      <div class="kosmos-forklaring" id="solsystemForklaring"></div>
+      <h4 class="kosmos-om" id="solsystemOm"></h4>
       <div class="del-vælger">
         <button class="del-knap valgt" data-kosmos-fane="kort">Kort fortalt</button>
         <button class="del-knap" data-kosmos-fane="nørd">For nørder</button>
@@ -733,8 +734,8 @@
     <div class="dialog">
       <header><h3>Solsystemet</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
-        <p>Her kan du besøge vores eget solsystem. Vælg et sted til venstre, og prøv knapperne under <strong>Prøv selv</strong>. Til højre står, hvad du ser. Under <strong>For nørder</strong> er der mere at hente.</p>
-        <p><strong>Listen</strong> starter ved Solen og går udad: Solen (med solstorme og Solens fremtid), Jorden (med årstiderne og sol- og måneformørkelser), Mars og Saturn. Flere planeter kommer senere.</p>
+        <p>Her kan du besøge vores eget solsystem. Vælg en klode til venstre, og under den et sted, en måne eller et forsøg. Prøv knapperne under <strong>Prøv selv</strong>. Til højre står, hvad du ser. Under <strong>For nørder</strong> er der mere at hente.</p>
+        <p><strong>Listen</strong> starter ved Solen og går udad: Solen, Jorden, Mars og Saturn. Flere planeter kommer senere. Under kloden står dens <strong>steder</strong> og <strong>måner</strong>, som kameraet flyver hen til, og dens <strong>forsøg</strong> (fx årstiderne og formørkelser), hvor du ser en model, der ikke er i den rigtige størrelse. Øverst står vejen derhen (fx Mars › Olympus Mons). Tryk på kloden for at komme tilbage.</p>
         <p><strong>Flyby:</strong> Ved Mars og Saturn kan du trykke "▶ Start flyby". Kameraet flyver fra stop til stop, og du trykker "Næste", når du er klar. Ved Mars flyver du ned til vulkanen Olympus Mons og videre til Tharsis-vulkanerne, kløfterne i Valles Marineris, krateret Hellas, kraterne Gale og Jezero, hvor roverne landede, og nordpolen. Ved hvert stop kigger du skråt mod horisonten og kan selv dreje rundt. Når du ser hele Mars, kan du også trykke på et navn på kloden.</p>
         <p><strong>Jorden lige nu:</strong> Ved Jorden passer lyset med datoen og klokken. Den lyse side har dag, og Månen står, hvor den er i dag, med den rigtige månefase. Uret nederst i billedet viser tiden i Danmark.</p>
         <p><strong>Ærligt talt:</strong> Jorden og Månen, Mars og Saturn med de seks store måner har den rigtige størrelse og afstand, og kameraet flyver mellem dem. Andre steder er afstandene gjort mindre, så man kan se det hele på én gang. Under <strong>For nørder</strong> står, hvad hvert sted snyder med.</p>

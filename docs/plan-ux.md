@@ -125,7 +125,7 @@ MÅNER
 | Klode | Steder | Måner | Forsøg |
 |---|---|---|---|
 | Solen | | | Solstorm, Solens fremtid |
-| Jorden | Månen | | Årstiderne, Formørkelser |
+| Jorden | | Månen | Årstiderne, Formørkelser |
 | Mars | Olympus Mons (Calderaen, Skrænten), Tharsis, Valles Marineris, Hellas, Gale, Jezero, Nordpolen | Phobos ("Mars set fra Phobos"), Deimos | |
 | Saturn | Ringene | Mimas, Enceladus, Tethys, Dione, Rhea, Titan | |
 
@@ -213,7 +213,7 @@ Den samme opbygning for alle steder (planet, måne og sted) og alle fænomener i
 | Solstorm | 🧲 Vis magnetfeltet, 🌬️ Vis solvinden, 🔍 Zoom ind på Jorden | Styr: kontakter |
 | Solens fremtid | Næste ›, ↺ Forfra | Bjælken: trin |
 | Jorden | Drej Jorden | Tidsknappen: ⏩ |
-| Jorden | Månen (kontakt) | Træet: Steder → Månen |
+| Jorden | Månen (kontakt) | Træet: Måner → Månen |
 | Årstiderne | Næste ›, ↺ Forfra | Bjælken: trin |
 | Årstiderne | Tæt på Jorden, Jorden drejer | Styr: kontakter |
 | Årstiderne | Dato | Styr: skyder |
@@ -293,10 +293,20 @@ Hvert trin får sin egen PR, og I siger go før hvert. Kosmos og Solsystemet del
 
 U3 og U4 kan komme før eller efter M8.
 
+## Status for U1 (30. oktober 2026)
+Lavet, som planen siger. Afgjort undervejs:
+- **Månen står under Måner ved Jorden**, ikke under Steder.
+- **Forsøgenes mærke er gruppens overskrift** ("Forsøg"), ikke et mærke på hvert punkt.
+- **"▶ Start flyby" bliver under "Prøv selv"** til U2, hvor den flytter til bjælken. Flybyen står ikke i træet endnu, for så ville knappen stå to steder. Turen markerer stedet i træet.
+- **Ved et sted** viser højre panel stedets navn, "Lige nu" med stedets tekst og kloden under "Om Mars". Klodens tal skjules, til stederne får deres egne tal i U3.
+- **Telefon på højkant:** Træet er rækker af små punkter, og gruppernes navne står på deres egen linje.
+- **En måne fra træet** glider hen, hvor flybyen stiller den (den korteste vej i banen), mens kameraet flyver derhen. Det giver det samme billede som på flybyen. "Mars set fra Phobos" flyver først til Phobos, hvis man ikke er der.
+- **Et tryk i træet under flybyen** stopper turen og flyver derhen.
+
+**Mars M8 bygges samtidig i en anden session** (30. oktober 2026). Den lægger knapper til under "Prøv selv" ("🧍 Stå på Mars", "↑ Tilbage i kredsløb", "Gå til …"). Når de to mødes, skal stederne i landskabet ind i Mars' `TRÆ` (fx under Gale og Jezero på tredje niveau), og "Tilbage i kredsløb" er så bare stedet over dem i træet. Skyderen og "Lad dagen gå" bliver under "Prøv selv" til U2.
+
 ## Afgøres undervejs (med skærmbilleder)
-- **Telefon på højkant:** Står punkterne som en vandret række, eller som en kort liste?
 - **Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?
-- **Forsøgenes mærke:** Er det et ord ("Forsøg") eller et lille ikon?
 - **Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?
 
 ## Ikke afprøvet (skal prøves på tabletten efter hvert trin)

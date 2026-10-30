@@ -327,6 +327,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 ### Eftersyn af UX i Solsystemet (30. oktober 2026)
 - **Genbrugt skal, genbrugt model:** Solsystemet fik Kosmos' skal (M4a), og med den Kosmos' flade liste, hvor én fil er ét punkt. Kosmos er en række fænomener, men Solsystemet er steder inde i steder. Derfor havnede stederne og månerne som knapper under "Prøv selv". Når en skal genbruges, så spørg, om indholdet har samme form.
 - **Tekst, der flytter med en skal, kan gå i stykker:** Solens fremtid sagde stadig "Prøv Hvid dværg i listen", efter fænomenet var flyttet fra Kosmos til Solsystemet. Henvisninger skal være knapper med `data-gaa`, ikke tekst om, hvor noget står.
+- **U1, træet:** Mars og Saturn havde allerede funktioner til hvert sted (`vælgSted`, `besøgMåne`, `vælg`, `besøg`). Træet skulle kun bruge dem (`gåTil`) og vide, hvor man er (`sted()`, tjekket fire gange i sekundet i skallen). Det gjorde det let, også fordi et sted kan vælges tre steder fra (træet, kloden og flybyen).
+- **Et sted, der kræver en bestemt opstilling** ("Mars set fra Phobos" kræver, at Phobos står som på flybyen): Lad månen glide derhen under flyvningen i stedet for at hoppe. Kameraets mål er en funktion, så kameraet følger med. Kræver det to flyvninger, så tjek med et tæller (`gåNr`), at der ikke er valgt noget andet imens.
+- **`node tests/koer-alle.mjs --help` kører hele samlingen** (den kender ikke `--help`). Læs kommentaren øverst i filen i stedet.
 - **Se på, hvad der står samme sted på skærmen:** Det, der afslørede rodet, var skærmbilleder af flybyen på tablet på højkant ("Næste" langt nede under listen og stoppets tekst uden for skærmen) og ved Saturn, hvor en knap, der ikke kan bruges, og en kontakt, der er slået fra, så ens ud.
 
 ### Kameraet ned til et sted på en planet (Mars M4c, oktober 2026)

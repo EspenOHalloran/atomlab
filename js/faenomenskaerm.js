@@ -64,9 +64,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
   let forklaringVist = ''; // teksten i panelet lige nu (fra fænomenets forklaring())
   let kameraTur = null;
 
-  function valgKnap(f, klasse) {
+  function valgKnap(f) {
     const b = document.createElement('button');
-    b.className = `kosmos-valg ${klasse}`;
+    b.className = 'kosmos-valg';
     b.dataset.id = f.id;
     b.title = f.undertitel;
     b.innerHTML = `<span class="kosmos-valg-ikon">${f.ikon}</span><span class="kosmos-valg-navn">${f.navn}</span>`;
@@ -90,36 +90,40 @@ export function lavFænomenSkærm({ skærm, liste }) {
     bundIVindue($('Vindue')).append(næste);
 
     const boks = $('Liste');
-    for (const [i, g] of grupper.entries()) {
-      if (!grupperet) {
-        boks.append(valgKnap(g.f, ''));
-        continue;
+    if (!grupperet) for (const g of grupper) boks.append(valgKnap(g.f));
+    else {
+      // Kloderne på én række (fx Jorden), og under dem et træ med den valgte klodes steder, måner og forsøg
+      const kloder = document.createElement('div');
+      kloder.className = 'sol-kloder';
+      for (const [i, g] of grupper.entries()) {
+        const b = document.createElement('button');
+        b.className = 'kosmos-valg sol-klode';
+        b.dataset.gruppe = i;
+        if (g.f) {
+          b.dataset.id = g.f.id;
+          b.title = g.f.undertitel;
+        }
+        b.innerHTML = `<span class="kosmos-valg-ikon">${g.f?.ikon ?? g.ikon}</span><span class="kosmos-valg-navn">${g.f?.navn ?? g.navn}</span>`;
+        b.addEventListener('click', () => gåTilKlode(g));
+        kloder.append(b);
       }
-      // En gruppe: kloden (fx Jorden) og under den de fænomener, der hører til (fx Årstiderne)
-      const div = document.createElement('div');
-      div.className = 'sol-gruppe';
-      div.dataset.gruppe = i;
-      let hoved;
-      if (g.f) hoved = valgKnap(g.f, 'sol-hoved');
-      else {
-        hoved = document.createElement('button');
-        hoved.className = 'kosmos-valg sol-hoved';
-        hoved.innerHTML = `<span class="kosmos-valg-ikon">${g.ikon}</span><span class="kosmos-valg-navn">${g.navn}</span>`;
-        hoved.addEventListener('click', () => {
-          if (g.under.includes(valgt)) return;
+      const træ = document.createElement('div');
+      træ.className = 'sol-træ';
+      træ.id = `${skærm}Træ`;
+      træ.addEventListener('click', (h) => {
+        const b = h.target.closest('button');
+        if (!b) return;
+        const g = åbenGruppe();
+        if (b.dataset.sted) gå(g, b.dataset.sted);
+        else if (b.dataset.id && valgt?.id !== b.dataset.id) {
           lyd.klik();
           fane = 'kort';
-          vælg(g.under[0].id);
-        });
-      }
-      div.append(hoved);
-      if (g.under.length) {
-        const under = document.createElement('div');
-        under.className = 'sol-under';
-        for (const f of g.under) under.append(valgKnap(f, 'sol-punkt'));
-        div.append(under);
-      }
-      boks.append(div);
+          vælg(b.dataset.id);
+        } else if (b.dataset.klode) gåTilKlode(g);
+      });
+      boks.append(kloder, træ);
+      // Vejen i toplinjen (Solsystemet › Mars › Olympus Mons): et tryk på kloden går tilbage til den
+      $('Vej')?.addEventListener('click', (h) => { if (h.target.closest('button')) gåTilKlode(åbenGruppe()); });
     }
     for (const b of sektion.querySelectorAll('[data-kosmos-fane]')) {
       b.addEventListener('click', () => {
@@ -212,15 +216,14 @@ export function lavFænomenSkærm({ skærm, liste }) {
       b.classList.toggle('valgt', b.dataset.id === f.id);
       b.classList.toggle('ny', !set.has(b.dataset.id));
     }
-    for (const div of sektion.querySelectorAll('.sol-gruppe')) {
-      const g = grupper[div.dataset.gruppe];
-      const åben = g.f === f || g.under.includes(f);
-      div.classList.toggle('åben', åben);
-      if (!g.f) div.querySelector('.sol-hoved').classList.toggle('valgt', åben);
+    if (grupperet) {
+      const åben = åbenGruppe();
+      for (const b of sektion.querySelectorAll('.sol-klode')) b.classList.toggle('valgt', grupper[b.dataset.gruppe] === åben);
     }
+    stedVist = undefined; // træet, panelets hoved og vejen tegnes nedenfor (visSted)
     // Er listen en vandret række (på telefoner), rulles det valgte fænomen frem
     const boks = $('Liste');
-    if (boks.scrollWidth > boks.clientWidth + 4) {
+    if (!grupperet && boks.scrollWidth > boks.clientWidth + 4) {
       const b = boks.querySelector('.valgt').getBoundingClientRect();
       const l = boks.getBoundingClientRect();
       boks.scrollTo({ left: boks.scrollLeft + (b.left - l.left) - (l.width - b.width) / 2, behavior: ROLIG ? 'auto' : 'smooth' });
@@ -236,6 +239,151 @@ export function lavFænomenSkærm({ skærm, liste }) {
     visTekst();
     lavStyring();
     stilKamera(f.kamera);
+    visSted();
+  }
+
+  // ---------- Træet (Solsystemet): kloderne, deres steder og måner og forsøgene ----------
+  // Et fænomen kan have træ: { rod, grupper: [{ navn, id?, titel?, undertitel?, punkter: [{ id, navn, undertitel?,
+  // ikon?, under: [...] }] }] }. rod er id'et på kloden selv (fx 'mars'), og en gruppe med id er selv et sted (fx
+  // månernes baner). lav() giver så gåTil(id) og sted() (det sted, man er ved) tilbage.
+  // Forsøgene (fx Årstiderne) er gruppens andre fænomener (under i listen).
+  let stedVist; // det sted, træet sidst blev tegnet for (undefined = tegn igen)
+  const åbenGruppe = () => grupper.find((g) => g.f === valgt || g.under.includes(valgt));
+  const stedNu = () => (kørende?.sted ? kørende.sted() : null);
+  const SLAGS = { Steder: { ikon: '📍', tekst: 'Et sted på' }, Måner: { ikon: '🌑', tekst: 'En måne ved' } };
+
+  // Punktet med id i træet: { p, gruppe }. En gruppe, der selv er et sted, giver { p: gruppen, gruppe }.
+  function findPunkt(træ, id) {
+    for (const gruppe of træ?.grupper ?? []) {
+      if (gruppe.id === id) return { p: gruppe, gruppe };
+      for (const p of gruppe.punkter) {
+        if (p.id === id) return { p, gruppe };
+        const u = p.under?.find((x) => x.id === id);
+        if (u) return { p: u, gruppe };
+      }
+    }
+    return null;
+  }
+
+  // Et tryk på en klode: Er man ved den, flyver man tilbage til hele kloden. Ellers vælges den.
+  function gåTilKlode(g) {
+    if (!g) return;
+    if (g.f && valgt === g.f) {
+      if (g.f.træ && stedNu() !== g.f.træ.rod) gå(g, g.f.træ.rod);
+      return;
+    }
+    lyd.klik();
+    fane = 'kort';
+    vælg((g.f ?? g.under[0]).id);
+  }
+
+  // Gå til et sted i træet. Er et forsøg valgt, vælges kloden først.
+  function gå(g, id) {
+    if (!g?.f) return;
+    lyd.klik();
+    if (valgt !== g.f) {
+      fane = 'kort';
+      vælg(g.f.id);
+      if (id === g.f.træ?.rod) return; // kloden starter selv der
+    } else if (id === stedNu()) return;
+    pause.sæt(false); // man skal kunne se flyvningen
+    kørende?.gåTil?.(id);
+    visSted();
+  }
+
+  function stedKnap(id, navn, niveau, ikon = '') {
+    const b = document.createElement('button');
+    b.className = `sol-sted niveau-${niveau}`;
+    b.dataset.sted = id;
+    b.innerHTML = `${ikon ? `<span class="kosmos-valg-ikon">${ikon}</span>` : ''}<span>${navn}</span>`;
+    return b;
+  }
+
+  // Tegner træet for den åbne klode. Det tredje niveau (fx Calderaen) står kun under det sted, man er ved.
+  function tegnTræ(sted) {
+    const boks = $('Træ');
+    const g = åbenGruppe();
+    boks.replaceChildren();
+    if (!g) return;
+    const træ = g.f?.træ;
+    if (g.f) {
+      const rod = træ ? stedKnap(træ.rod, g.f.navn, 0, g.f.ikon) : Object.assign(document.createElement('button'), { className: 'sol-sted niveau-0' });
+      if (!træ) {
+        rod.dataset.klode = g.f.id;
+        rod.innerHTML = `<span class="kosmos-valg-ikon">${g.f.ikon}</span><span>${g.f.navn}</span>`;
+      }
+      rod.classList.toggle('valgt', valgt === g.f && (!træ || sted === træ.rod));
+      boks.append(rod);
+    }
+    const overskrift = (tekst, id) => {
+      const o = id ? stedKnap(id, tekst, 'gruppe') : Object.assign(document.createElement('div'), { textContent: tekst });
+      o.classList.add('sol-gruppe-navn');
+      if (id) o.classList.toggle('valgt', valgt === g.f && sted === id);
+      boks.append(o);
+    };
+    for (const gruppe of træ?.grupper ?? []) {
+      overskrift(gruppe.navn, gruppe.id);
+      for (const p of gruppe.punkter) {
+        const k = stedKnap(p.id, p.navn, 1);
+        k.classList.toggle('valgt', valgt === g.f && sted === p.id);
+        boks.append(k);
+        if (valgt === g.f && p.under && (sted === p.id || p.under.some((u) => u.id === sted))) {
+          for (const u of p.under) {
+            const ku = stedKnap(u.id, u.navn, 2);
+            ku.classList.toggle('valgt', sted === u.id);
+            boks.append(ku);
+          }
+        }
+      }
+    }
+    if (g.under.length) {
+      overskrift('Forsøg');
+      for (const f of g.under) {
+        const k = stedKnap('', f.navn, 1, f.ikon);
+        delete k.dataset.sted;
+        k.dataset.id = f.id;
+        k.title = f.undertitel;
+        k.classList.toggle('valgt', valgt === f);
+        k.classList.toggle('ny', !set.has(f.id));
+        boks.append(k);
+      }
+    }
+  }
+
+  // Træet, panelets hoved (navnet på stedet) og vejen i toplinjen. Kaldes, når fænomenet skifter, og når stedet gør
+  // (tjekkes fire gange i sekundet, for et sted kan også vælges på kloden eller på flybyen).
+  function visSted() {
+    if (!grupperet || !valgt) return;
+    const sted = stedNu();
+    if (sted === stedVist) return;
+    stedVist = sted;
+    tegnTræ(sted);
+    const træ = valgt.træ;
+    const fundet = træ && sted !== træ.rod ? findPunkt(træ, sted) : null;
+    sektion.classList.toggle('ved-sted', Boolean(fundet));
+    if (fundet) {
+      const { p, gruppe } = fundet;
+      const slags = SLAGS[gruppe.navn] ?? {};
+      $('Ikon').textContent = p.ikon ?? slags.ikon ?? valgt.ikon;
+      $('Navn').textContent = p.titel ?? p.navn;
+      $('Undertitel').textContent = p.undertitel ?? (slags.tekst ? `${slags.tekst} ${valgt.navn}` : valgt.navn);
+    } else {
+      $('Ikon').textContent = valgt.ikon;
+      $('Navn').textContent = valgt.navn;
+      $('Undertitel').textContent = valgt.undertitel;
+    }
+    if ($('Om')) $('Om').textContent = `Om ${valgt.navn}`;
+    // Vejen: › Mars › Olympus Mons (kloden er en knap, når man er et andet sted end ved hele kloden)
+    const vej = $('Vej');
+    if (vej) {
+      const g = åbenGruppe();
+      const klode = g.f ?? valgt;
+      const herunder = fundet ? (fundet.p.titel ?? fundet.p.navn) : valgt !== klode ? valgt.navn : null;
+      vej.replaceChildren('› ');
+      if (herunder) {
+        vej.append(Object.assign(document.createElement('button'), { className: 'link-knap', textContent: klode.navn }), ` › ${herunder}`);
+      } else vej.append(klode.navn);
+    }
   }
 
   // "Kort fortalt": første afsnit står fremme, og resten er foldet sammen under "Mere" (lag 2).
@@ -382,6 +530,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       if (s.knap && s.deaktiv) s.knap.disabled = s.deaktiv();
     }
     opdaterNæste();
+    visSted(); // stedet kan være valgt på kloden eller på flybyen
   }
 
   // Med "Kun grafik" er panelerne væk. Så står fænomenets "Næste" (eller "Start") nederst i 3D-billedet.
@@ -427,6 +576,13 @@ export function lavFænomenSkærm({ skærm, liste }) {
       pause: () => pause.til,
       kamera: () => verden.kamera.position.toArray(),
       fænomen: () => kørende?.test, // fænomenets egen testadgang (fx Saturns måner)
+      // Træet (Solsystemet): punkterne, der vises ({ id, navn, valgt, niveau }), det sted, man er ved, og gå til et sted
+      træ: () => [...sektion.querySelectorAll('.sol-træ button')].map((b) => ({
+        id: b.dataset.sted ?? b.dataset.id ?? b.dataset.klode, navn: b.textContent, valgt: b.classList.contains('valgt'),
+        niveau: b.classList.contains('niveau-2') ? 2 : b.classList.contains('niveau-0') ? 0 : 1,
+      })),
+      sted: () => stedNu(),
+      gåTil: (id) => { kørende?.gåTil?.(id); visSted(); },
       tåger: () => tågerVist(), // de farvede tågeskyer på himlen
       tid: () => tid,
       stjerneTid: () => stjerneUr.tid,
