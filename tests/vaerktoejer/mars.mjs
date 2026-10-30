@@ -1,6 +1,6 @@
 // Billeder af Mars med fuld grafik (glød og 8k-kort): hele kloden, Olympus Mons ude ved kanten, landskabet ved
 // grænsen mellem dag og nat, bjergene 10 gange højere og flybyens stop (Olympus Mons, calderaen, skrænten, Tharsis,
-// Valles Marineris og Hellas).
+// Valles Marineris, Hellas, Gale, Jezero og nordpolen).
 // Kør: node tests/vaerktoejer/mars.mjs  (billederne lægges i tests/billeder/mars-vaerktoej/)
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('mars-vaerktoej');
@@ -53,5 +53,9 @@ await billede('20-skraenten', () => { saturnTest.flyby.næste(); saturnTest.flyb
 await billede('21-tharsis', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
 await billede('22-valles', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
 await billede('23-hellas', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 5000);
+// M5b: Gale, Jezero og nordpolen (sommer og midnatssol)
+await billede('24-gale', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
+await billede('25-jezero', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
+await billede('26-nordpolen', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 5000);
 await b.close();
 console.log(fejl.length ? fejl.join('\n') : 'Ingen konsolfejl');

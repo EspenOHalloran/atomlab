@@ -43,6 +43,11 @@ STEDER = {
     'tharsis': (16.0, -15.0, -124.0, -97.0),
     # Valles Marineris (M5a): midten med Melas, Candor og Ophir Chasma og starten af Coprates, ca. 1.470 × 950 km
     'valles': (0.0, -16.0, -80.0, -55.0),
+    # M5b: Gale (5,37° S, 137,81° Ø) og Jezero (18,41° N, 77,69° Ø), midterne fra USGS' navneliste (MDIM 2.1). Ca. 356 ×
+    # 356 km om hvert krater, så kortet på 2048 × 2048 har ca. 0,17 km pr. pixel: lige så skarpt som kilden (200 m),
+    # og intet detaljekort er nødvendigt. Jezero: 6° mod øst er kun ca. 5,7° på kloden (cos 18,4°), så kortet er 6,4° bredt.
+    'gale': (-2.4, -8.4, 134.8, 140.8),
+    'jezero': (21.4, 15.4, 74.5, 80.9),
 }
 # Steder, hvor HRSC+MOLA ikke var tydeligt skarpere end MOLA i spillets opløsning (billederne i M5a). Her bruges kun
 # MOLA (CC0). Tharsis: ca. 0,9 km pr. pixel, og MOLA har 463 m.
