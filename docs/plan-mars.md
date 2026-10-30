@@ -196,6 +196,29 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
+## Prompt til M5b (skrevet 30. oktober 2026)
+**Model og effort:** Opus med høj effort (kode i programmet, fakta og danske tekster, som `CLAUDE.md` siger). Xhigh er ikke nødvendig: teknikken fra M7a og M5a genbruges. Hjælpeagenter: Opus med høj effort til `/faktatjek`, Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs. Start en ny session fra `main`.
+
+**Prompten (kopiér den):**
+
+> Lav to ting i AtomLab. Begge har go. Læs først "Lige nu" i DESIGN.md, `docs/plan-mars.md` ("Plan for M5", "Status efter M5a" og "Status efter M7a+") og tjeklisterne i `docs/erfaringer.md`. Tjek først med curl, at `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` kan åbnes (de var blokeret i sidste session, selv om de står på listen). Spørg mig, hvis de stadig er blokeret, før faktatjekket går i gang. Én PR for hver del. Du merger den selv, når testene er grønne.
+>
+> **Del 1 (lille): Hent første stop på forhånd.**
+> - Mars: Kortene til Olympus Mons (det lokale net, ca. 2,9 MB) begynder at hentes, når Mars åbnes, efter Mars' egne kort. "▶ Start flyby" står der hele tiden, men er grå med "Henter kort …", indtil de er hentet. Fejler hentningen eller tager den for lang tid, bliver knappen aktiv efter ca. 8 sekunder alligevel.
+> - Saturn: Jeg har oplevet et hak, når flybyen startede ved Saturn. Find årsagen først (fx at månernes billeder hentes eller lægges i grafikkortet, når flybyen starter), og hent det, første stop skal bruge, på forhånd på samme måde. Måske er det allerede løst. Gør det ikke til et større projekt.
+> - "Næste: …"-knapperne ændres ikke: Kortene til næste stop har været klar, når man har været ved et stop et par sekunder.
+> - Tjek det i testene `mars` og `saturn`.
+>
+> **Del 2: Mars M5b** som i planen: Gale (Curiosity), Jezero (Perseverance), nordpolen og navnene på kloden.
+> - Navnene på kloden: Når man ser hele Mars, kan man trykke på Olympus Mons, Tharsis, Valles Marineris, Hellas, Gale, Jezero og Nordpolen og flyve direkte derhen, ligesom månerne ved Saturn. Navnene skjules på bagsiden.
+> - Lokale net ved Gale og Jezero: Sammenlign først HRSC+MOLA og MOLA i billeder i spillets opløsning, som i M5a. Brug et detaljekort, hvor kameraet kommer tæt på og ellers bliver grumset (regn skærmpixel pr. højdepixel, tjekliste E). Intet net ved polen.
+> - Nordpolen: nordlig sommer med midnatssol ved polstoppet. Sig det ærligt i teksten.
+> - Koordinaterne fra USGS' navneliste i MDIM 2.1.
+> - Tekster med `/faktatjek`. Rovernes status (hvor de er, prøverør, Mars Sample Return) slås op samme dag og skrives med måned og år. Nye fagord: rover, delta og biospor.
+> - Til sidst: billeder i sekundet ved de nye stop, billeder på pc og tablet på højkant og hele testsamlingen (M5 er færdig).
+>
+> Giv mig "Ikke afprøvet" til sidst: det, jeg skal prøve på tabletten.
+
 ## Status efter M5a (30. oktober 2026): Tharsis, Valles Marineris og Hellas
 - **Flybyen har 7 stop:** hele Mars, Olympus Mons, Calderaen, Skrænten, **Tharsis** (kl. 7, set langs rækken fra sydvest: Arsia Mons forrest), **Valles Marineris** (kl. 9, fra syd over Melas og Candor Chasma) og **Hellas** (kl. 9, fra højt oppe over nordranden).
 - **Lokale net:** Tharsis med MOLA (ca. 0,9 km pr. pixel, HRSC+MOLA var ikke skarpere), Valles Marineris med HRSC+MOLA (2048 × 1024, ca. 0,7-0,9 km) og et detaljekort over Melas, Candor og Ophir (ca. 0,28 km). Hellas har intet net. Kortene til Tharsis fylder ca. 2,6 MB og til Valles Marineris ca. 5,3 MB. De hentes ved stoppet før.
@@ -204,7 +227,9 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Faktatjek:** `docs/fakta-solsystemet.md` under "Faktatjek M5a". Rettet bl.a. Tharsis' størrelse, toppenes højde, dybden og de yngste lavastrømme. Nye fagord: nedslagskrater og sprækkedal.
 - **Fundet undervejs:** Programmets koordinater for Olympus Mons er fra USGS' ældre kortsæt (MDIM 2.0, ca. 15 km fra MDIM 2.1). Ikke rettet, for stoppet er valgt ud fra højdekortet.
 - **Ikke afprøvet:** de lange flyvninger på tabletten (føles de for lange eller for høje?), et hak, når kortene hentes ved stoppet før, og om kanten af nettene ved Tharsis og Valles Marineris kan ses.
-- **Næste: M5b** (Gale, Jezero, nordpolen og navnene på kloden).
+- **Næste: M5b** (Gale, Jezero, nordpolen og navnene på kloden). Prompten står ovenfor under "Prompt til M5b".
+- **Jeres svar efter M5a (30. oktober 2026):** Første stop på flybyen skal hentes på forhånd ("Start flyby" er grå, indtil kortene er klar). I har oplevet et hak, da flybyen startede ved Saturn. "Næste"-knapperne skal ikke ændres, for de andre stop har været klar efter et par sekunder. Det laves sammen med M5b i en ny session, og det skal ikke gøres til et større problem.
+- **Til M7b (jeres idé, 30. oktober 2026):** Under flyvningen bruges de kort, vi har, og ved selve stoppet hentes det skarpest mulige kort. Det skal kun dække det, man kan se fra stoppet, når man drejer og zoomer (fx ca. 100 × 100 km). Så kan det være meget skarpt uden at fylde meget: HRSC's egne højdekort (ca. 50 m) giver ca. 2000 × 2000 pixel og ca. 3-4 MB, og ved Gale og Jezero kan CTX (ca. 20 m) eller HiRISE (1 m) bruges i små pletter. Tjek, at dataene dækker hvert stop.
 
 ## Status efter M7a+ (30. oktober 2026): detaljekort ved calderaen og skrænten
 - **Jeres spørgsmål:** Calderaen og skrænten var "lidt grumsede". Er det noget, vi må leve med? **Jeres svar:** Lav anbefalingen (et detaljekort med kildens fulde opløsning) først, og brug samme metode i M5, hvor kameraet kommer tæt på. Jeres idé: brug de almindelige kort under flyvningen, og hent det skarpeste kort til stoppet. Det er sådan, det er lavet.
