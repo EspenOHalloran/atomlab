@@ -196,6 +196,88 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
+## Plan for M6: Phobos og Deimos (30. oktober 2026, venter på go)
+*Lavet af Opus. Kilderne er tjekket med curl samme dag: USGS' arkiv, raw.githubusercontent.com, planetarynames (også navnelisternes shapefiler), science.nasa.gov, www.esa.int, photojournal, hirise.lpl.arizona.edu og JAXA (www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp, som I åbnede i dag). Blokeret: uahirise.org og static.uahirise.org (HiRISE' egne billeder), assets.science.nasa.gov (NASA's billedfiler) og naif.jpl.nasa.gov. De to fotos nedenfor er derfor hentet som små udgaver fra Wikimedia Commons. Billederne til planen ligger i `docs/m6/`.*
+
+### 1. Formen og kortene
+**Phobos:** USGS' højdekort fra Mars Express (`Phobos_ME_HRSC_DEM_Global_2ppd.tif`, 699 × 349, 100 m pr. pixel, højde over en kugle på 11,1 km, østlig længde).
+- **Den vender rigtigt (tjekket):** Kraterne i USGS' navneliste passer med højdekortet, når længden er østlig: Stickney ligger 443 m dybere end ringen omkring (spejlvendt 4 m), Drunlo 295 m (9 m) og Todd 232 m (7 m). **Fælde:** Shapefilens metadata siger "Positive West", men tallene er østlige (Stickney 311° Ø = 49° V). Det skrives i erfaringer.md.
+- **Fælde i kortet:** 699 pixel × 100 m er lidt mere end en omgang (kortet starter ved −180,14°). Kanten skal skæres efter kortets geografiske felter (tjekliste E).
+- **Overfladen:** SRC-mosaikken fra Mars Express (`Phobos_ME_SRC_Mosaic_Global_16ppd.tif`, 5760 × 2880 gråtoner, ca. 12 m pr. pixel, 16,6 MB). Den passer på højdekortet (Stickney ligger samme sted, `docs/m6/phobos-kort-src.jpg`). Den er meget skarpere end højdekortet, så rillerne og de små kratere kommer fra kortet. **Problem:** Den er lavet af fotos, så skyggerne er malet ind, og der er sorte pletter ved polerne (skygge eller ingen data). **Forslag:** Dæmp de store forskelle i lyset (divider med en kraftigt sløret udgave af kortet), fyld de sorte pletter ud, og lad programmet regne lyset ud fra højdekortet. Farven er Phobos' egen mørke, rødbrune grå (ca. 7 % af lyset kastes tilbage) som en fast farve. HRSC' farvemosaik findes kun i 100 m pr. pixel.
+- **Opløsning:** 4k (4096 × 2048, ca. 17 m pr. pixel) på pc og tablet, 2k i tests. Højderne som 16 bit (rød og grøn) i 1024 × 512.
+
+**Deimos:** Thomas' formmodel (1993, `m2deimos.tab`, et gitter på 5°, kontrolsummen passer med originalen).
+- **Længden er vestlig (tjekket):** Thomas' formmodel af Phobos fra samme datasæt (`Phobos.tab` fra samme spejl, samme format) passer kun med USGS' højdekort, når længden læses som vestlig: korrelation 0,96 (rms 0,33 km) mod 0,85 (0,64 km) for østlig. Deimos-filen er derfor også vestlig. Den skal vendes til østlig, ellers bliver Deimos spejlvendt. Tilpasningen til HiRISE-fotoet peger samme vej, men svagt (0,915 mod 0,905), for Deimos er rund og blød.
+- **Overfladen:** `deimoscyl4.jpg` (3600 × 1800 gråtoner, 0,1° pr. pixel, østlig længde ifølge USGS). Den er sløret som en airbrush-tegning, og det er usikkert, hvem der har lavet den (Stooke alene eller Hamiltons blanding, faktagrundlaget del 3B). **Forslag:** Brug den dæmpet som i Phobos, men kun hvis kraterne passer med HiRISE-fotoet, når den sidder på formen (tjekkes som det første i M6a). Ellers kun formen med en fin, kornet overflade lavet af programmet. Det står ærligt i "Ærligt talt". 2k er nok (kortet er ikke skarpere).
+- **Formen er grov** (ca. 500 m mellem punkterne). Det passer faktisk med Deimos, som er glat af støv. Formen forfines med en blød kurve (ikke kanter).
+
+**Billederne** (lavet med et lille Python-script, lyset er fladere end i programmet):
+- `docs/m6/formen-mod-fotos.jpg`: HiRISE-fotoet (2008 og 2009) ved siden af formen og den spejlvendte form, tilpasset samme kamera, sol og drejning. Ved Phobos står Stickney til højre som i fotoet, og kraterparret forneden passer. Spejlvendt passer det dårligere (0,882 mod 0,860).
+- `docs/m6/former-fra-seks-sider.jpg`: begge måner fra seks sider (mod Mars, forfra, bag, bagfra, nordpolen og sydpolen), og Deimos både østlig (forkert) og vestlig (rigtig).
+- I M6a laves billederne igen i programmet med kortene på, og de sammenlignes med fotoet (som `tests/vaerktoejer/mars.mjs`).
+
+**Teknik:** Begge månerne bliver en kugle med 512 × 256 punkter (Deimos 256 × 128), der skubbes ud til radius i JS én gang (ingen vertex-shader: de er små og står stille). Lyset bruger normaler fra formen og kortet som detalje. En ny fil `js/solsystem/maane-form.js` (`lavFormmåne`), så andre små måner kan bruge den senere. Kropsretninger: længde 0 mod Mars, nord op, og banen mod uret set fra nord. Testen tjekker, at punktet, der vender mod Mars, er længde 0, og at Stickney ligger på den side, hvor den skal (længde 311° Ø).
+
+### 2. Banerne og farten
+| | Phobos | Deimos |
+|---|---|---|
+| Afstand fra Mars' midte | ca. 9.376 km (ca. 6.000 km over overfladen) | ca. 23.460 km |
+| Omløbstid | 7 t 39 min | 30 t 18 min |
+| I programmet (Mars drejer ca. 847 gange hurtigere: en omgang på 1¾ minut) | ca. 32,5 sekunder | ca. 2 min 9 s |
+| Går over himlen (set fra Mars' ækvator) | hver ca. 11 t, i programmet hvert ca. 47. sekund, fra vest mod øst | hver ca. 5,4 døgn, i programmet ca. 9 minutter |
+
+**Anbefaling: samme forhold som Mars' døgn.** Kun sådan ses det, der er særligt: Phobos runder Mars hurtigere, end Mars drejer, så den står op i vest og går ned i øst, og Deimos står næsten stille over et sted. Månerne følger Mars' ur: Står Mars stille ("Drej Mars" slået fra eller helt tæt på), står de også stille. Under besøg ved en måne og på flybyen står månen stille (som Saturns måner), men Mars drejer videre. Banerne ligger i Mars' ækvatorplan (de hælder kun ca. 1-2°) og hælder med Mars' akse (også ved Nordpolens sommer).
+
+**Begge vender samme side mod Mars** (bundet rotation, længde 0 mod Mars). **Mars' skygge:** Ved jævndøgn går Phobos gennem Mars' skygge på hver omgang (ca. en time i virkeligheden, ca. 4 sekunder i programmet). Forslag: en enkel skygge (en cylinder bag Mars) i månernes shader, så de bliver mørke. Lille opgave, og den er rigtig.
+
+**Når man ser hele Mars:** Phobos (ca. 22 km bred) ville være under én pixel, når man ser hele Mars. **Anbefaling: som Saturns måner:** Langt væk tegnes de større (højst få pixel), banerne ses som tynde linjer, når kameraet er langt nok væk, og navnene "Phobos" og "Deimos" står over dem. En ny knap **"Månerne"** flyver ud, så begge baner kan ses (Deimos' bane er ca. 7 gange Mars' radius, inden for kameraets grænse på 15 radier). Det står ærligt i "For nørder", at de er tegnet større.
+
+**Navnene:** Månernes navne følger knappen "Navne" (`navneTil()`). Et tryk på en måne besøger den, også når navnene er slået fra (som ved Saturn).
+
+### 3. Flybyen
+**Anbefaling: Turen fortsætter fra Nordpolen ud til månerne (13 stop):** … Nordpolen → **Phobos** → **Mars set fra Phobos** → **Deimos**. Det er én historie fra planeten og ud, som ved Saturn, og overgangen er god: Fra Nordpolen kan man aldrig se Phobos (den er under horisonten nord for ca. 70° bredde). Alternativet er en egen tur ("▶ Flyby: månerne"), men så skal man finde to knapper. Man kan stoppe turen, når man vil, og besøge månerne med et tryk.
+- **Phobos:** set på skrå fra siden med Stickney i solen og Mars i baggrunden.
+- **Mars set fra Phobos:** Kameraet står ca. 300 m over Phobos' side, der vender mod Mars, og ser op. Mars fylder ca. 42° af himlen (ca. 80 gange så bredt som Månen på vores himmel), dvs. det meste af skærmen (synsvinklen er 40° lodret). Mars drejer under en. **Risiko:** Kameraets near skal ned på ca. 0,0001 enheder (100 m), mens Mars er ca. 6 enheder væk. Det kan give flimmer i Mars' lag (luften og nettene). Måles som det første i M6b. Hjælper det ikke at flytte near, står kameraet 2-3 km over Phobos i stedet.
+- **Deimos:** tæt på, og man ser Mars som en lille kugle (ca. 17° bred).
+- Rækkefølgen og stoppene bruger det fælles `flyby.js`. Kortene til månerne hentes, når Mars åbnes, efter kortene til Olympus Mons (de er små, ca. 2-3 MB).
+
+### 4. Tekster (udkast, faktatjekkes med `/faktatjek` i M6b)
+Undertekster (højst ca. 160 tegn):
+- **Phobos:** "Phobos er kun ca. 26 km lang og kredser kun ca. 6.000 km over Mars. Den runder Mars på 7 timer og 39 minutter, hurtigere end Mars drejer."
+- **Mars set fra Phobos:** "Herfra fylder Mars ca. 42° af himlen, ca. 80 gange så bredt som Månen på vores himmel. Phobos vender altid samme side mod Mars."
+- **Deimos:** "Deimos er kun ca. 16 km lang og kredser ca. 23.500 km fra Mars' midte. Den er glattere end Phobos, fordi støv har fyldt kraterne op."
+
+Panelet ved hvert stop: Stickney (ca. 9 km, næsten halvdelen af Phobos, opkaldt efter Angeline Stickney Hall), rillerne (man er ikke enige om, hvorfor), at Phobos står op i vest to gange om dagen og ikke kan ses fra polerne, at Phobos kommer nærmere med nogle få cm om året og om nogle titals millioner år bliver revet i stykker til en ring eller styrter ned, opdagelsen (Asaph Hall, august 1877) og navnene (Frygt og Rædsel), hvor månerne kommer fra (ikke afgjort: indfangede asteroider eller stumper fra et kæmpe nedslag) og **MMX** (JAXA. Opsendt 20. oktober 2026 kl. 04:41 japansk tid og har sendt de første signaler hjem. Den skal hente mindst 10 g fra Phobos og komme hjem i 2031. Slås op igen samme dag, som teksten skrives, og skrives med måned og år).
+
+"For nørder": tallene (akser, tæthed ca. 1,9 og 1,5 g/cm³, albedo ca. 0,07), bundet rotation og den synkrone bane (Phobos er inden for, Deimos uden for), formmodellerne og kortene (hvem der har lavet dem).
+
+"Ærligt talt": tiden går ca. 850 gange hurtigere, månerne står stille under besøg, de er tegnet større langt væk, banerne ligger præcis i ækvatorplanet, Deimos' form er målt på Viking-billeder fra 1970'erne (grov), og kortene har skygger malet ind, som er dæmpet.
+
+**Nye fagord:** bundet rotation, regolit og evt. tidevandskraft (ingen af dem står i ordbogen).
+
+### 5. Hvad det koster
+- **Filer:** Phobos' kort 4k ca. 2 MB (2k ca. 0,6 MB) og højder ca. 0,7 MB. Deimos' kort 2k ca. 0,3 MB og formen ca. 20 kB. I alt ca. 3 MB ekstra på pc (Mars' egne kort og Olympus er ca. 14 MB).
+- **Grafikkortet:** Phobos' kort som én kanal (`RedFormat`) 8 MB + mipmaps ≈ 11 MB, Deimos ≈ 3 MB, nettene ca. 5 MB. I alt ca. 20 MB (Mars' 8k-kort fylder ca. 170 MB).
+- **Billeder i sekundet:** Ved hele Mars er månerne nogle få pixel og koster næsten intet. Ved "Mars set fra Phobos" tegnes hele Mars med nettene, så det koster som hele Mars (testbrowseren: pc ca. 2,6, tablet ca. 4,5). Måles før og efter (tjekliste F).
+
+### 6. Opdeling
+**Anbefaling: to dele, hver med sin PR.**
+- **M6a: formen, kortene og banerne:** billedværktøjet (`billeder/solsystem/lav_maaner.py`), `lavFormmåne`, banerne med den rigtige fart, Mars' skygge, navnene, et tryk på en måne, knappen "Månerne" og billederne mod fotoene. Grafik og fysik, som kan tjekkes på billeder og tal, før der skrives tekster.
+- **M6b: flybyen og teksterne:** de tre nye stop, "Mars set fra Phobos" (near og flimmer), teksterne med `/faktatjek`, "For nørder", "Ærligt talt", fagord og billeder i sekundet.
+Grunden: Teksterne ved stoppene afhænger af, hvordan stoppene ser ud, og hver del er mellem stor. Det svære i M6a (spejlvending og banernes retning) er løst eller kan tjekkes med tal.
+
+### 7. Model og effort
+Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger). Xhigh er ikke nødvendig: Det sværeste (om Deimos er spejlvendt) er afgjort ovenfor. Faktatjekket i M6b: højst 2 hjælpeagenter med Opus og høj effort. Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs.
+
+### Beslutninger, der bekræftes ved go (anbefalingerne står først)
+1. **Farten:** Månerne følger Mars' ur i det rigtige forhold (Phobos ca. 32 sekunder om en omgang), og de står stille under besøg. *Eller:* langsommere end Mars, så de er lettere at følge (men så står Phobos ikke op i vest).
+2. **Phobos' overflade:** SRC-mosaikken i 4k med dæmpede skygger. *Eller:* kun højdekortet og en fast farve (blødere, ingen riller).
+3. **Deimos' overflade:** `deimoscyl4.jpg`, hvis kraterne passer med fotoet, ellers kun formen. *Eller:* kun formen.
+4. **Flybyen:** fortsætter fra Nordpolen (13 stop). *Eller:* en egen tur for månerne.
+5. **"Mars set fra Phobos"** som et eget stop med kameraet tæt på Phobos' overflade. *Eller:* kun et stop ved Phobos, hvor Mars ses bagved.
+6. **Mars' skygge på månerne** kommer med i M6a.
+7. **Opdeling:** M6a og M6b med hver sin PR og et go imellem. *Eller:* én PR for hele M6.
+
 ## Prompt til navneknappen og M6: Phobos og Deimos (skrevet 30. oktober 2026)
 **Model og effort:** Opus med høj effort. Navneknappen er lille kode i programmet. M6 er kode, fysik (banerne og farten), formmodeller og fakta (`CLAUDE.md`). Xhigh er ikke nødvendig: Teknikken (rejsen, flybyen og månerne ved Saturn) findes. Det sværeste er at få Deimos' formmodel til at vende rigtigt (længdegraderne kan være østlige eller vestlige), og det tjekkes med billeder. Fable bruges ikke: I har besluttet at vente på Fable 5.5 (`docs/plan-fable.md`). Hjælpeagenter: Opus med høj effort til `/faktatjek` (højst 2), Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs. Start en ny session fra `main`.
 
