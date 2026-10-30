@@ -27,7 +27,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Mars M5 er færdig (30. oktober 2026).** Næste kan være M6 (Phobos og Deimos), M7b (meget skarpe kort ved Gale og Jezero) eller M8 (Stå på Mars). Det venter på jeres valg og go. Planen står i [docs/plan-mars.md](docs/plan-mars.md).
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
-- **M6 (Phobos og Deimos):** Planen skrives i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6" og venter på jeres go. **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
+- **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
 **Senest lavet (30. oktober 2026): Knappen "Navne" ved Mars og Saturn (del 1 af opgaven med navneknappen og M6).**
 - Under "Prøv selv" ved Mars og Saturn står en til/fra-knap **"Navne"**, slået til fra start. Slået fra forsvinder navnene og prikkerne på Mars (og et tryk på kloden flyver ingen steder hen) og månernes navne ved Saturn (man kan stadig trykke på selve månerne).
