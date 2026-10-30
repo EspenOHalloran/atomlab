@@ -8,6 +8,7 @@
 // M3: luften (skalahøjde 11 km, NSSDC), tusmørket, polkapperne, skyer af is over vulkanerne om eftermiddagen og "Modlys".
 // M4c: Mars er et system, som kameraets rejse (js/solsystem/rejse.js) skalerer, flytter og drejer, og flybyen
 // (js/solsystem/flyby.js) flyver ned til Olympus Mons, hvor kameraet ser skråt mod horisonten.
+// M7a: Over Olympus Mons ligger et fint net med skarpere højder (LOKALE), og flybyen besøger også calderaen og skrænten.
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, ROLIG, passerTil } from '../scene3d.js';
@@ -57,10 +58,10 @@ const LOKALE = [
 // Midten af Olympus Mons fra USGS' navneliste (Gazetteer of Planetary Nomenclature, 18,40° N og 226,00° Ø).
 const STEDER = [
   { id: 'olympus', navn: 'Olympus Mons', bredde: 18.4, længde: -134, tid: 7, kompas: 180, vinkel: 10, størrelse: 0.2, lokalt: 'olympus' },
-  // Calderaen: midten af kraterne i højdekortet. Kameraet kigger skråt ned fra sydvest.
+  // Calderaen: midten af kraterne i højdekortet. Kameraet kigger skråt ned fra syd-sydvest.
   { id: 'caldera', navn: 'Calderaen', bredde: 18.4, længde: -133.3, tid: 8, kompas: 200, vinkel: 30, størrelse: 0.04, lokalt: 'olympus' },
   // Skrænten mod nordvest, hvor den er højest i højdekortet (ca. 7,8 km fra kanten til foden på ca. 20 km).
-  // Kameraet står ude på sletten og kigger op mod skrænten.
+  // Kameraet står vest for den, kigger mod øst (mod morgensolen), og skrænten ligger i skygge.
   { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 10, størrelse: 0.018, lokalt: 'olympus' },
 ];
 // Flybyen (M5 giver flere steder)
@@ -72,11 +73,11 @@ const TUR = [
   { id: 'olympus', titel: 'Olympus Mons', tekst: 'Den største vulkan, vi kender i solsystemet. Den er ca. 600 km bred og rejser sig ca. 22 km over landet omkring den.',
     mere: '<p><b>Olympus Mons</b> er en skjoldvulkan: Tusindvis af strømme af tynd lava er flydt ud lag på lag og har bygget et bredt, fladt bjerg, ligesom vulkanerne på Hawaii, bare meget større. Siderne skråner kun nogle få grader. Står man på toppen, kan man ikke se, at man står på et bjerg, for horisonten er kun ca. 3 km væk, og skråningen fortsætter langt bag den.</p>'
       + '<p><b>Herfra ser du hele vulkanen.</b> Den dækker ca. 300.000 km², ca. 7 gange så meget som Danmark. Næste stop er kraterne på toppen og den stejle kant ved foden.</p>' },
-  // M7a, faktatjekket 29. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 2). Kanten ca. 21 km over nulpunktet
-  // og bunden ca. 3,3 km lavere: målt i højdekortet (HRSC og MOLA).
-  { id: 'caldera', titel: 'Calderaen', tekst: 'På toppen ligger seks kratere inden i hinanden. Tilsammen er de ca. 65 × 80 km og op til ca. 3 km dybe.',
-    mere: '<p><b>Calderaen</b> blev dannet, når et udbrud havde tømt kammeret med smeltet sten under toppen. Så sank taget over kammeret ned. Det er sket mindst seks gange, og de yngste kratere skærer sig ind i de ældre. Ud fra hvor mange små kratere fra nedslag der er på bunden, er kraterne ca. 150-350 millioner år gamle.</p>'
-      + '<p><b>Højt oppe:</b> Kanten ligger ca. 21 km over Mars\' nulpunkt. Her er lufttrykket kun ca. 12 % af trykket i snit ved Mars\' overflade.</p>'
+  // M7a, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 2). Kanten 19,4-21,1 km over
+  // nulpunktet (USGS SIM 3470). Trykket: exp(−20,5 / 11) ≈ 13 % (skalahøjden 9,5-11 km giver 11-15 %).
+  { id: 'caldera', titel: 'Calderaen', tekst: 'På toppen ligger seks kratere, der overlapper hinanden. Tilsammen er de ca. 65 × 80 km og op til ca. 3 km dybe.',
+    mere: '<p><b>Hvert krater</b> (en caldera) blev dannet, når et udbrud havde tømt meget af kammeret med smeltet sten under toppen. Så sank taget over kammeret ned. Det er sket mindst seks gange, og de yngste kratere skærer sig ind i de ældre. Ud fra hvor mange små kratere fra nedslag der er på bunden, er kraterne nogle hundrede millioner år gamle. Skønnene går fra ca. 100 til 400 millioner år.</p>'
+      + '<p><b>Højt oppe:</b> Kanten ligger ca. 20-21 km over Mars\' nulpunkt. Her er lufttrykket kun ca. 10-15 % af trykket i snit ved Mars\' overflade.</p>'
       + '<p><b>Lyset:</b> Det er morgen, og Solen står lavt i øst. Derfor ligger de vægge, der vender mod vest, i skygge.</p>' },
   // Skrænten mod nordvest: ca. 7,8 km fald på ca. 20 km, målt i højdekortet. Mount Everest 8.849 m.
   { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet her ca. 8 km ned til sletten på ca. 20 km. Det er næsten lige så højt som Mount Everest.',
@@ -133,7 +134,7 @@ export default {
     <p><b>Højderne</b> er målt med laser fra rumsonden Mars Global Surveyor (instrumentet MOLA, 1997-2001). Kuglen er et net, hvor hvert punkt er løftet eller sænket efter højdekortet, så bjergene rager op over kanten, når de står ude ved horisonten. Fra kredsløb ser Mars alligevel næsten glat ud, for selv Olympus Mons er kun ca. 0,6 % af Mars' radius. Tryk "Bjergene 10 gange højere" for at se landskabet tydeligere.</p>
     <p><b>Ved Olympus Mons</b> ligger et ekstra, fint net over et område på ca. 1.000 × 1.000 km. Her er højderne fra den europæiske rumsonde Mars Express (kameraet HRSC) lagt sammen med MOLA. HRSC tager billeder af det samme sted fra lidt forskellige vinkler, ligesom dine to øjne, og ud fra dem kan man regne højderne ud. I programmet er der ca. 0,5 km mellem højderne og ca. 2 km mellem nettets punkter (ca. 2,6 km på tablets). På resten af Mars er det ca. 5 km og ca. 21 km.</p>
     <p><b>Nulpunktet:</b> Mars har intet hav, så højderne er regnet fra en flade, hvor tyngden er lige stærk overalt (areoiden). Den er lidt fladere ved polerne, ligesom Mars selv: ca. 20 km fra pol til pol i forhold til ækvator.</p>
-    <p><b>Farverne</b> er en mosaik af billeder fra de to Viking-sonder (1976-1980), lavet af USGS. Kortet har ca. 2,6 km pr. pixel på en pc og ca. 1 km pr. pixel ved Olympus Mons. Der findes skarpere billeder, men Solen stod forskellige steder, da de blev taget, så skyggerne er med på billederne. De ville passe dårligt med programmets eget lys, som regnes ud fra højderne.</p>
+    <p><b>Farverne</b> er en mosaik af billeder fra de to Viking-sonder (1976-1980), lavet af USGS. Kortet har ca. 2,6 km pr. pixel på en pc og ca. 1 km pr. pixel ved Olympus Mons. Der findes en skarpere udgave, men billederne blev taget, mens Solen stod forskellige steder, så lys og skygge på skrænterne er med på dem. De ville passe dårligt med programmets eget lys, som regnes ud fra højderne.</p>
     <p><b>Luften</b> bliver ca. 2,7 gange tyndere for hver 11 km, man kommer op (skalahøjden er 11 km, på Jorden ca. 8,5 km). Set fra rummet er den derfor kun et tyndt, støvet lag i kanten. Støvet når så højt op, at det stadig er i sollys, når Solen er gået ned. Derfor varer tusmørket på Mars op til ca. 2 timer, og natsiden lyser svagt rødbrunt lige efter grænsen mellem dag og nat. Det fine støv sender blåt lys lettere lige igennem end rødt, så på Mars er himlen blå omkring Solen, når den går ned (Curiosity så det i 2015).</p>
     <p><b>Skyerne over vulkanerne:</b> Om eftermiddagen stiger varm luft op ad vulkanernes sider og bliver kold, så vanddampen fryser til iskrystaller. Skyerne kommer især om foråret og sommeren på den nordlige halvkugle. Før rumsonderne kunne man i kikkerter fra Jorden se en hvid sky formet som et "W" over Tharsis. Det var skyerne over fire af vulkanerne. Hvert år i det sydlige forår vokser der også en ca. 1.800 km lang sky ud fra Arsia Mons om morgenen. Den er ikke med her, for på tegningen er det forår i nord.</p>
     <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,5 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden.</p>`,
@@ -477,8 +478,6 @@ export default {
           return (mars.punkt(r, stedTest).length() - Math.hypot(r.x, (r.y * MARS_POL) / MARS_R, r.z)) * MARS_R;
         },
         drejningSystem: () => rejse.drejning.toArray(),
-        _sted: (id, ændr) => { const st = stedMed(id); Object.assign(st, ændr); st.ramme = mars.sted(st.bredde, st.længde); besøg(st); }, // MIDLERTIDIG
-        _høj: () => { høj = !høj; },
       },
     };
   },

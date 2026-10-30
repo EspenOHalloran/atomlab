@@ -69,6 +69,9 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] "Modlys" er set både tæt på og langt væk. Tæt på ligger en tynd luft i kanten i skygge, hvis Solen står midt bag planeten (Mars M3).
 - [ ] Shadere, der regner med en radius, en højde eller en punktstørrelse, virker også, når gruppen er skaleret (gang med `getWorldScale()`). Kameraets faste stop (fx på en flyby) er set på pc, tablet og telefon, både på langs og på højkant.
 - [ ] Kameraet ved et sted på en planet kan ikke komme under jorden: Test det under flyvningen (også fra den modsatte side af planeten), når man selv drejer og zoomer det ned, og med højere bjerge. Drejes systemet, skal Solens retning og stjernehimlen drejes med.
+- [ ] Punkter på en planet regnes ikke med `sin` og `cos` i en shader. De er for unøjagtige: Mars M7a fik fejl på flere hundrede meter (radius 3.396 km), så der kom en revne mellem to net. Regn punkterne i JS, og send dem som attributter.
+- [ ] `discard` i en shader, der dækker meget af skærmen, gør den langsommere (grafikkortet kan ikke springe skjulte punkter over). Giv kun de trekanter, der har brug for det, et materiale med `discard`.
+- [ ] Billeder fra mosaikker af rigtige fotos (fx Viking MDIM 2.1 i 232 m) kan have skygger fra Solen "malet ind". Brug dem ikke som farver, når programmet selv regner lyset ud fra højderne.
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
@@ -112,6 +115,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **Grafik med fast plads, der løber over et øjeblik** | "Ryd" og straks uran: op til 179 protoner, men plads til 158. Sker kun ved mange billeder i sekundet, så testbrowseren så det ikke. | E og F: loft over antallet, test med små tidsskridt. |
 | **To veje til den samme ting, der ikke kender hinanden** | Ordforklaringer: To hurtige klik på et ord lukkede forklaringen, men musens timer (0,3 sekunder) viste den igen bagefter. | E: hver vej stopper den andens timer. |
 | **En ændring af tempo eller tid, der rammer tidsgrænser andre steder** | Stjerneovnens nye tempo fik egne skud til at flyve længere, så "Vis mig" kunne vælge et skud, der stadig fløj. | C: søg efter alt, der har en flyvetid eller tidsgrænse, når tempoet ændres. |
+| **Regnet med for lav præcision** | Mars M7a: Kanten af det lokale net blev regnet med `sin` og `cos` i shaderen og lå flere hundrede meter for lavt, så der var en revne på en pixel, når man kiggede hen over kanten. | E: punkter regnes i JS. |
 | **En indstilling, der ikke virker** | Kantudglatning (`antialias`) på lærredet virker ikke, når gløden tegner billedet. Den kostede bare hukommelse. | F: mål før og efter. |
 
 ### Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
@@ -314,6 +318,16 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
 - **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
 - **Tæt på bestemmer nettet skarpheden, ikke billederne:** Skyggerne regnes i hver pixel fra højdekortet, men omridset følger nettet (ca. 21 km mellem punkterne på hele Mars). Olympus Mons blev derfor blød og flad tæt på, og en stejl skrænt bliver til en blød skråning. Regn afstanden mellem nettets punkter ud mod det, kameraet skal vise, før et stop planlægges. Overdriv ikke højderne for at skjule det, for så bliver det udtværede bare højere.
+
+### Lokale detaljer ved et sted (Mars M7a, oktober 2026)
+- **Sammenlign kilderne i spillets opløsning:** HRSC+MOLA (200 m) og MOLA (463 m) så næsten ens ud i 1 km pr. pixel, men i 0,5 km pr. pixel (det spillet bruger) var HRSC+MOLA tydeligt skarpere (MOLA har et ternet mønster mellem målesporene). HRSC+MOLA havde kasseformede fejl på op til 1,2 km på sletterne. De blev fundet ved at sammenligne med MOLA i snit over ca. 7 km: Hvor landet er fladt, må forskellen kun være lille.
+- **Store ukomprimerede GeoTIFF-filer kan læses i vinduer over nettet** (`/vsicurl/` i rasterio): Vinduet om Olympus Mons (18° × 19°) tog ca. 3 minutter fra den 11 GB store HRSC+MOLA-fil. Det er ikke nødvendigt at hente hele filen.
+- **Farver med skygger:** Viking MDIM 2.1 i 232 m har mørke skygger i calderaen og lyse skrænter fra Solen, da billederne blev taget. 925 m-mosaikken (den samme som kloden) blev brugt i stedet, og detaljerne kommer fra højdekortet.
+- **Støvet i luften tæt på jorden:** Sløret mod kanten var regnet, som om man kigger fra rummet gennem hele luften, så alt blev mælket ud, når kameraet var få km oppe. Nu følger det luften mellem stedet og kameraet (skalahøjden), og høje steder er mindre slørede. Den støvede himmel lyser også lidt ind i skyggerne, ellers var de helt sorte.
+- **Morgenlys viser skrænten bedst:** Om eftermiddagen lyste Solen lige på skrænten mod nordvest, så den så flad ud. Kl. 8 ligger den i skygge, og luften lyser omkring Solen bag den.
+- **To net, der skal mødes:** Det lokale net ligger præcis på kuglens trekanter helt ude ved kanten (samme punkter og højder som `THREE.SphereGeometry`, tjekket mod geometrien i JS), glider over i de skarpe højder på 40 km og har et skørt. Kuglens hul er 1,5 km mindre end nettet, så de overlapper lidt. Revnen blev fundet ved at kigge hen over kanten i 4° fra ca. 9 km højde.
+- **Fejlsøgning med farver:** Gløden og tonekurven ændrer farverne (ren grøn blev (152, 229, 93)), så test for "grøn" med en bred grænse. En ren farve pr. net og `renderOrder` viste, hvilket net der lå forrest.
+- **Billeder i sekundet** (testbrowseren uden grafikkort, fuld grafik): pc ved Olympus Mons 2,3 → ca. 1,6, tablet 3,7 → ca. 2,5. Hele Mars er uændret (målestøjen er stor, 4,5-7,5). Prisen er det fine net (flere trekanter og lys i de samme pixel). Først kostede `discard` i hele kuglen også meget. Mål "før" med `git worktree` på `main` og en server på en anden port, skiftevis før og efter, for tallene svinger med maskinens belastning.
 
 ## Testsamlingen
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.

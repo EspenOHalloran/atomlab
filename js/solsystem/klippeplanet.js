@@ -8,6 +8,8 @@
 //
 // Højderne ligger også i en tabel i JS (den højeste værdi i hvert felt), så kameraet kan holdes over bjergene
 // (overflade) og et sted kan findes på kuglen (sted).
+//
+// Over et sted kan der ligge et lokalt net med sit eget, skarpere højdekort og farvekort (lokalt, Mars M7a).
 
 import * as THREE from 'three';
 import { SKY_GLSL } from './skyer.js';
