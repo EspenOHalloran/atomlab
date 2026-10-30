@@ -971,6 +971,12 @@ AtomLab er gratis, til undervisning, på GitHub Pages og ikke-kommercielt. Det e
 9. **Henry Madan som navnegiver** og banernes hældning/excentricitet er ikke tjekket (kun hukommelse).
 10. Alt, der kun er læst som **søgeuddrag** (NASA, JPL, ESA, JAXA, Wikipedia, artikler), bør tjekkes en gang til i den fulde kilde, før teksten låses.
 
+### Faktatjek M6a: tal i koden og de korte tekster (30. oktober 2026)
+- **JPL's middelelementer** (https://ssd.jpl.nasa.gov/sats/elem/sep.html, åbnet med curl samme dag, MAR099, i forhold til de lokale Laplace-planer): Phobos a = 9.375 km, e = 0,015, i = 1,1°, P = 0,3187 døgn. Deimos a = 23.457 km, e = 0,000, i = 1,8°, P = 1,2625 døgn, Laplace-planet hælder 0,9°. Programmet bruger 9.376 km og 0,31891 døgn (Phobos) og 23.460 km og 1,26244 døgn (Deimos) fra del 3B. Forskellen er under 0,1 %. "Banerne hælder 1-2°" passer.
+- **Mars' stjernedøgn:** 1,025957 døgn (24 t 37 min 22,7 s, NSSDC). Forholdet i programmet: Phobos 1,025957 / 0,31891 = 3,217 og Deimos 0,8127.
+- **De korte tekster** (panelet ved Phobos, Deimos og "Månerne") bruger kun tal fra del 3B, som er sikre (S): ca. 26 km lang, Stickney ca. 9 km, ca. 6.000 km over Mars, 7 t 39 min, Deimos ca. 16 km lang, glattere af løst støv, ca. 23.500 km og ca. 30 timer. Den fulde tekst til flybyen faktatjekkes i M6b.
+- **Retningen** (spejlvending): se `docs/plan-mars.md`, "Plan for M6" og "Status efter M6a".
+
 ## Del 4. Solen og Jorden i Solsystemet (Mars M4b, 26. oktober 2026)
 Teksterne i `js/kosmos/solen.js` og `js/kosmos/jordkloden.js`. Tallene er slået op af Opus på kildesiderne, og en hjælpeagent (Opus, høj effort) har tjekket alle påstande igen. Siderne er åbnet direkte med curl.
 
