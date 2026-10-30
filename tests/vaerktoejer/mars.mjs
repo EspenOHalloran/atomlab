@@ -1,5 +1,6 @@
 // Billeder af Mars med fuld grafik (glød og 8k-kort): hele kloden, Olympus Mons ude ved kanten, landskabet ved
-// grænsen mellem dag og nat og bjergene 10 gange højere.
+// grænsen mellem dag og nat, bjergene 10 gange højere og flybyens stop (Olympus Mons, calderaen, skrænten, Tharsis,
+// Valles Marineris, Hellas, Gale, Jezero og nordpolen).
 // Kør: node tests/vaerktoejer/mars.mjs  (billederne lægges i tests/billeder/mars-vaerktoej/)
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('mars-vaerktoej');
@@ -39,9 +40,22 @@ await billede('14-modlys-langt', () => { saturnTest.kig([0.12, 0.1, 1], 3.39619 
 await side.evaluate(() => saturnTest.tryk('Modlys'));
 // M4c: flybyen ned til Olympus Mons (kameraet ser skråt mod horisonten), med bjergene 10 gange højere og i modlys
 await billede('15-flyby-mars', () => { saturnTest.flyby.start(); saturnTest.flyby.hop(); }, 3000);
+await side.waitForFunction(() => { const l = saturnTest.test.billeder().lokalt.olympus; return l.hentet.højde && l.hentet.kort; }, null, { timeout: 60000 });
 await billede('16-olympus-mons', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 4000);
 await billede('17-olympus-x10', () => { saturnTest.tryk('Bjergene'); }, 4000);
 await side.evaluate(() => saturnTest.tryk('Bjergene'));
 await billede('18-olympus-modlys', () => { saturnTest.tryk('Modlys'); }, 3000);
+await side.evaluate(() => saturnTest.tryk('Modlys'));
+// M7a: calderaen og skrænten med det lokale kort (HRSC og MOLA)
+await billede('19-calderaen', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 4000);
+await billede('20-skraenten', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 4000);
+// M5a: Tharsis, Valles Marineris og Hellas (kortene hentes ved stoppet før)
+await billede('21-tharsis', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
+await billede('22-valles', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
+await billede('23-hellas', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 5000);
+// M5b: Gale, Jezero og nordpolen (sommer og midnatssol)
+await billede('24-gale', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
+await billede('25-jezero', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 9000);
+await billede('26-nordpolen', () => { saturnTest.flyby.næste(); saturnTest.flyby.hop(); }, 5000);
 await b.close();
 console.log(fejl.length ? fejl.join('\n') : 'Ingen konsolfejl');

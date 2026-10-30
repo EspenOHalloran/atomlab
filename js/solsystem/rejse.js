@@ -12,6 +12,8 @@
 // er drejningen nul. bund(p) siger, hvor tæt på planetens midte kameraet må komme (så det ikke kommer under bjergene).
 // Ned til et sted flyver kameraet i en bue hen over planeten (rundt om systemets midte), så det aldrig går gennem den:
 // Afstanden til midten falder jævnt, og jo længere vejen er rundt om planeten, jo højere går buen.
+// Fra et sted til et andet (Mars M5): Fokus glider langs overfladen, og kameraet stiger så højt, at man på toppen af
+// buen kan se begge steder (horisonten når halvvejs). Flyvningen tager længere tid, jo længere der er.
 
 import * as THREE from 'three';
 import { ROLIG, drejHimmel } from '../scene3d.js';
@@ -63,6 +65,8 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
   const qHjælp = new THREE.Quaternion();
   const omvendt = new THREE.Quaternion();
   const punkt = new THREE.Vector3();
+  const punkt2 = new THREE.Vector3();
+  const qFokus = new THREE.Quaternion();
   let skubbet = 0; // hvor meget kameraet blev skubbet op i sidste billede (til tests)
 
   // Den drejning, der får stedets op (fra mål.op) til at pege lige op i verden, med så lille et sving som muligt fra
@@ -95,16 +99,25 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
       const vej = glatVej(fokus.distanceTo(til), D, afstand);
       const fraRetning = retning.clone().applyQuaternion(omvendt.copy(drejning).invert()); // i systemets retninger
       // Ned til et sted: kameraets plads fra systemets midte (start) og retningen fra stedet mod kameraet (slut)
-      let kugle = null, S = vej.S;
+      let kugle = null, S = vej.S, T = null;
       if (op) {
         const fra = fraRetning.clone().multiplyScalar(D).add(fokus);
         const slut = hjælp.copy(ny).normalize().multiplyScalar(afstand).add(til);
-        kugle = { fra, ny: ny.clone().normalize(), afstand, vinkel: fra.angleTo(slut) };
+        kugle = { fra, ny: ny.clone().normalize(), afstand, vinkel: fra.angleTo(slut), top: 0 };
         S = (Math.abs(Math.log(afstand / D)) / RHO + kugle.vinkel) * 1.2;
+        // Fra et sted til et andet langt væk (begge på overfladen, mere end ca. 10° imellem): langs overfladen og højt
+        // nok til at se begge steder (radius / cos(halvdelen af vinklen), højst 2,2 gange radius)
+        const r0 = fokus.length(), r1 = til.length();
+        const v = r0 > 0.5 * r1 ? fokus.angleTo(til) : 0;
+        if (v > 0.17) {
+          kugle.overflade = { v, fra: fokus.clone(), r0, r1 };
+          kugle.top = Math.max(r0, r1) / Math.cos(Math.min(v / 2, 1.1));
+          T = THREE.MathUtils.clamp(3 + 3 * v, 4, 10);
+        }
       }
       tur = {
         t: 0,
-        T: tid ?? THREE.MathUtils.clamp(S * 0.9, kugle ? 3 : 2, 8),
+        T: tid ?? T ?? THREE.MathUtils.clamp(S * 0.9, kugle ? 3 : 2, 8),
         kugle,
         vej,
         fra: fokus.clone(),
@@ -142,12 +155,18 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null }
         drejning.slerpQuaternions(tur.fraDrejning, drejningMod(tur.fraDrejning, qHjælp), e);
         if (tur.kugle) {
           // I en bue rundt om midten: retningen glider langs en storcirkel, og afstanden til midten falder jævnt
-          const { fra, ny: slutRetning, afstand, vinkel } = tur.kugle;
+          const { fra, ny: slutRetning, afstand, vinkel, top, overflade } = tur.kugle;
           const slut = punkt.copy(slutRetning).multiplyScalar(afstand).add(til); // kameraets plads ved stedet
-          const r = Math.exp(THREE.MathUtils.lerp(Math.log(fra.length()), Math.log(slut.length()), e)) * (1 + 0.3 * (vinkel / Math.PI) * Math.sin(Math.PI * e));
+          let r = Math.exp(THREE.MathUtils.lerp(Math.log(fra.length()), Math.log(slut.length()), e)) * (1 + 0.3 * (vinkel / Math.PI) * Math.sin(Math.PI * e));
+          // Højt op mellem to steder: buen når top midtvejs (og aldrig lavere end den almindelige bue)
+          if (top) r = Math.max(r, r + (top - Math.exp(0.5 * (Math.log(fra.length()) + Math.log(slut.length())))) * Math.sin(Math.PI * e));
           q.setFromUnitVectors(hjælp.copy(fra).normalize(), slut.normalize());
           const plads = slut.copy(fra).normalize().applyQuaternion(q.slerp(ingen, 1 - e)).multiplyScalar(r);
-          fokus.lerpVectors(tur.fra, til, e);
+          if (overflade) {
+            // Fokus glider langs overfladen (en storcirkel), ikke gennem planeten
+            q.setFromUnitVectors(hjælp.copy(overflade.fra).normalize(), punkt2.copy(til).normalize());
+            fokus.copy(hjælp).applyQuaternion(qFokus.copy(ingen).slerp(q, e)).multiplyScalar(THREE.MathUtils.lerp(overflade.r0, overflade.r1, e));
+          } else fokus.lerpVectors(tur.fra, til, e);
           plads.sub(fokus);
           D = plads.length();
           retning.copy(plads).divideScalar(D).applyQuaternion(drejning);

@@ -471,6 +471,24 @@ Punkter:
 - Egen udregning: Horisonten for et øje 1,7 m over jorden: √(2 · 3.396 km · 0,0017 km) ≈ 3,4 km ("ca. 3 km").
 - **Rettet:** Skråningen var noteret som "ca. 5°" (søgeuddrag). Wikipedia skriver 5 % (ca. 3°). Teksten siger derfor "nogle få grader". Skrænten er "op til ca. 8 km" (Wikipedia), og Taylor 2020 skriver op til 10 km, så teksten siger "nogle steder op til ca. 8 km høj". Koordinaterne er nu USGS' (se tabellen).
 
+**Faktatjek af stoppene ved calderaen og skrænten (Mars M7a, 30. oktober 2026).** En hjælpeagent (Opus, høj effort) tjekkede teksterne. Åbnet direkte: USGS SIM 3470 (siden og pamfletten https://pubs.usgs.gov/sim/3470/sim3470_pamphlet.pdf), ESA "Olympus Mons – the caldera in close-up", USGS' side om Viking-mosaikken i 232 m og NSSDC. Wikipedia og Taylor m.fl. 2020 er læst fra kopier hentet med curl. Blokeret: nature.com (Neukum 2004) og lpi.usra.edu (Robbins 2011) gav 403, og AGU/Wiley (Plescia 2004) svarer selv 403, så deres tal er kun læst, som SIM 3470 gengiver dem.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Seks kratere, ca. 65 × 80 km, op til ca. 3 km dybe | OK. **Rettet sproget:** kraterne "overlapper hinanden" (ikke "inden i hinanden", de ligger mest side om side) | SIM 3470: "six nested paterae … collectively measure ~65 x ~80 km"; ESA: "depth of about 3 km" |
+| Taget sank ned over det tømte kammer, mindst seks gange, de yngste skærer sig ind i de ældre | OK. "Hvert krater (en caldera)" i stedet for "Calderaen" | ESA; Wikipedia |
+| Kraternes alder | **Rettet:** "nogle hundrede millioner år, skønnene går fra ca. 100 til 400 millioner år" (var 150-350). Neukum 2004: ca. 100-200 mio. år; Robbins 2011: ca. 140-420 mio. år. Kratertællingerne passer ikke helt med rækkefølgen | SIM 3470 |
+| Kanten over nulpunktet | **Rettet:** "ca. 20-21 km" (kanten ligger 19,38-21,08 km; det højeste punkt, 21,29 km, ligger ca. 11 km syd for calderaen) | SIM 3470 |
+| Lufttrykket ved kanten | **Rettet:** "ca. 10-15 %" (var 12 %). Wikipedias 72 Pa hviler på en svag kilde. Egen udregning: exp(−20,5 / 11) ≈ 13 %, og skalahøjden 9,5-11 km giver 11-15 %. NSSDC: skalahøjde 11,0 km | NSSDC; egen udregning |
+| Skrænten rundt om det meste, op til ca. 8 km | OK (Taylor 2020 skriver op til 10 km; teksten bruger 8 km som de andre tekster) | Wikipedia; Taylor 2020 |
+| Mod nordvest: ca. 8 km fald på ca. 20 km | OK som egen måling ("i kortet"): 7,8 km fald på ca. 20 km ved ca. 22° N, 137,3° V i HRSC+MOLA. Ingen kilde siger direkte, at skrænten er højest mod nordvest, men Plescia måler relieffet fra "the foot of the cliffs which form its northwest margin" | Wikipedia; højdekortet |
+| Ingen andre skjoldvulkaner på Mars har sådan en kant | OK: "a feature unique among the shield volcanoes of Mars" | Wikipedia (Lopes m.fl. 1982) |
+| Dannelsen er usikker: glidning under egen vægt eller kæmpe skred | OK | Wikipedia; Taylor 2020 ("gravity-driven spreading") |
+| Det rillede landskab mod nordvest (aureolen, Lycus Sulci) op til ca. 750 km ud, måske rester af skred | OK | Wikipedia |
+| Ca. 300.000 km², ca. 7 gange Danmark | OK: 300.000 / 43.000 ≈ 7; 600 km i diameter giver ca. 283.000 km² | Wikipedia; SIM 3470 |
+| HRSC regner højder ud fra billeder fra forskellige vinkler | OK: "derived from the stereo channels" | ESA |
+| Skarpere Viking-billeder har skygger fra Solen | OK: "Images were obtained with a wide range of solar incidence angles" | USGS' side om 232 m-mosaikken |
+
 **Det højeste bjerg i solsystemet?**
 
 | Bjerg | Højde | Kilde | Sikkerhed |
@@ -651,6 +669,84 @@ Sammenligninger (egne udregninger af storcirkelafstande):
 12. **Atmosfærens decimaler**: NSSDC (95,1 / 2,59 / 1,94 %) og Curiosity (Mahaffy 2013) er ikke helt ens. Skriv "ca. 95 % CO₂, lidt nitrogen og argon".
 13. Ingen side kunne åbnes direkte. Alle tal bygger på søgeuddrag og bør tjekkes på kildesiden, hvis der senere er adgang.
 
+
+### Faktatjek M5a: Tharsis, Valles Marineris og Hellas (30. oktober 2026)
+En hjælpeagent (Opus, høj effort) åbnede kilderne med curl. Blokeret: www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu (stod på listen, men virkede ikke i sessionen), www.jpl.nasa.gov, nature.com og agupubs (Plescia 2004, Tabel 1). Koordinaterne er fra USGS' navneliste i MDIM 2.1 (standarden, passer med MOLA).
+
+| Nr. | Påstand | Resultat | Kilde |
+|---|---|---|---|
+| T1 | Tre vulkaner på en linje, ca. 700-800 km mellem dem | OK: 713 og 808 km mellem midterne (Arsia 8,26° S, 239,91° Ø; Pavonis 1,48° N, 247,04° Ø; Ascraeus 11,92° N, 255,92° Ø) | USGS planetarynames.wr.usgs.gov |
+| T2 | Skjoldvulkaner | OK | photojournal.jpl.nasa.gov/catalog/PIA24223; science.nasa.gov/3d-resources/mars-tharsis/ |
+| T3 | Tharsis ca. 5.000 km bred, flere km høj | **Rettet** (var 4.000-5.000 km) | USGS SIM 3292 (pamfletten: "5,000 km east-west by 6,000 km north-south"); Wikipedia "Tharsis" |
+| T4 | Op til en fjerdedel af Mars, omtrent som Nordamerika | OK med "omtrent" (10-30 mio. km², Nordamerika ca. 24 mio. km²). DLR var blokeret | Wikipedia "Tharsis" (Tanaka 1992) |
+| T5 | Pavonis ca. 14 km, Ascraeus og Arsia ca. 18 km over nulpunktet | **Rettet** (Arsia ikke "næsten 20 km": kilderne bruger forskellige nulpunkter). Programmets MOLA-kort giver det samme (testen `mars`) | PIA24223 (Pavonis 14 km); PIA25349 (Ascraeus 18 km); Wikipedia (Arsia 17.757 m fra MGS) |
+| T6 | Skorpen omkring Tharsis blev strakt og revnede | **Rettet** ("så tung, at den bøjer skorpen" er fjernet) | ESA "The Solar System's grandest canyon"; science.nasa.gov/resource/tharsis-volcano/ |
+| T7 | I udbrud nu og da i milliarder af år, de yngste lavastrømme måske få millioner år, måske i dvale | **Rettet** (var "titals til hundreder millioner år") | sci.esa.int/web/mars-express/-/51825-5-recent-and-episodic-volcanism |
+| V1 | Ca. 4.000 km lang | OK ("over 4000 km" ESA, 3.870 km NASA, 3.761 km USGS) | ESA; science.nasa.gov/mars/facts/ |
+| V2 | Knap en femtedel af vejen rundt om Mars, som Lissabon-Moskva | **Rettet** ("knap"): 3.800-4.000 / 21.339 km = 18-19 %. Lissabon-Moskva ca. 3.900 km (egen udregning) | egen udregning |
+| V3 | Op til ca. 10 km dyb | **Rettet** (var 7-10 km) | ESA ("depth of 10 km"); NASA facts (9,3 km) |
+| V4 | Op til ca. 600 km bred i midten | OK | NASA facts ("600 km across at its widest") |
+| V5 | 10 gange længere og 5 gange dybere end Grand Canyon | OK, ordret | ESA |
+| V6 | Ikke en flod: forkastninger, landet sank ned, siden udvidet af jordskred og vand | OK | ESA; science.nasa.gov/resource/the-grand-canyon-of-mars-valles-marineris-13-mar-2006/ |
+| V7 | Begyndte for ca. 3,5 mia. år siden | OK | NASA 2006-siden |
+| V8 | Opkaldt efter Mariner 9 og holdet, fundet 1971-72 | OK | USGS (Feature 6288); Wikipedia |
+| V9 | Melas 10,52° S, 287,46° Ø; Candor 6,53° S, 289,22° Ø; Ophir 4,00° S, 287,65° Ø; Coprates 13,37° S, 299,26° Ø | Brugt til stoppet og detaljekortet | USGS |
+| H1 | Ca. 2.300 km bred | OK | ESA "Hellas Basin On Mars" (2016); USGS 2.299 km |
+| H2 | For ca. 4 mia. år siden | OK (3,8-4,1 mia. år) | ESA 2016; ESA "Craters within the Hellas Basin" (2014) |
+| H3 | Bunden mere end 7 km under nulpunktet, laveste punkt ca. 8,2 km | OK | svs.gsfc.nasa.gov/770; SIM 3292; ESA 2014 |
+| H4 | Op til ca. dobbelt så højt lufttryk | OK (12,4 mbar mod 6,1 mbar) | Wikipedia "Hellas Planitia" (Haberle 2001) |
+| H5 | Is kunne i teorien smelte et øjeblik, men fordamper så hurtigt, at det nok sjældent eller aldrig sker | OK, forsigtigt | ntrs.nasa.gov/citations/20010084314 |
+| H7 | Et af de største nedslagskratere i solsystemet | OK med "et af de" | ESA 2016 |
+
+**Nye fælder:** (1) USGS' navneliste har to sæt koordinater. MDIM 2.1 er standarden og passer med MOLA. Olympus Mons er 18,65° N, 226,20° Ø i MDIM 2.1. Programmet bruger 18,40° N, 226,00° Ø fra MDIM 2.0 (ca. 15 km forskel, ikke rettet: stoppet er valgt ud fra højdekortet). (2) "Hellas er den største synlige nedslagsstruktur" er for skarpt. (3) "Valles Marineris går en fjerdedel af vejen rundt" er forkert (knap en femtedel). (4) Valles Marineris' længde skifter mellem kilderne (3.000-4.000 km). (5) "Pavonis ligger ca. 400 km fra Arsia og Ascraeus" er forkert (ca. 710-810 km mellem midterne). (6) Arsia "næsten 20 km" og ca. 17,8 km fra MOLA bruger forskellige nulpunkter. (7) NASA's faktaside siger 40 km for Olympus Mons fra fod til top. Brug den ikke.
+
+### Faktatjek M5b: Gale, Jezero og Nordpolen (30. oktober 2026)
+To hjælpeagenter (Opus, høj effort) tjekkede udkastet. "Læst" = siden er hentet og læst. www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu virkede efter en rettelse af certifikaterne (se `docs/erfaringer.md`, "Certifikater"). www.jpl.nasa.gov, CNN, ASU-news og Crossref gav 403.
+
+**Koordinater (USGS' navneliste, MDIM 2.1, shapefilen `MARS_nomenclature_center_pts`, læst):** Gale 5,367° S, 137,811° Ø (154,08 km). Aeolis Mons (Mount Sharp) 5,083° S, 137,845° Ø. Jezero 18,408° N, 77,687° Ø (47,52 km; et ældre net siger 49,00 km). Planum Boreum 87,32° N, 54,96° Ø. Siderne på planetarynames.wr.usgs.gov viser et ældre sæt uden net for Gale og Planum Boreum. Olympus Mons er 18,65° N, 226,20° Ø i MDIM 2.1 (programmet bruger 18,40° N, 226,00° Ø, se M5a).
+
+**Rovernes status (slået op 30. oktober 2026):**
+| Påstand | Kilde |
+|---|---|
+| Curiosity har kørt ca. 38 km (38,16 km ved sol 5045, ca. 15. oktober 2026) | NASA's kortdata bag "Where is the rover?": https://mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json (læst) |
+| Curiosity er ca. 1 km højere oppe end landingsstedet (26. august 2026), i de lave skråninger af Mount Sharp | https://science.nasa.gov/mars/curiosity-reaches-1-kilometer-elevation-gain/ (læst); Curiosity-blog sol 5043-5049 (28. oktober 2026, læst) |
+| Curiosity nåede sol 5000 **30. august 2026** (afsnit 7 sagde september: rettet her) | https://science.nasa.gov/photojournal/curiosity-postcard-celebrates-rovers-5000th-day-on-mars/ (læst) |
+| Perseverance har kørt 45,22 km (11. oktober 2026), længere end nogen anden rover (Opportunity 45,16 km) | https://science.nasa.gov/mission/mars-2020-perseverance/ og PIA26814 (13. oktober 2026, læst) |
+| Perseverance er uden for krateret, vest for vestranden ("Lac de Charmes", "Idubi") | NASA-blogs 21. september, 29. september og 19. oktober 2026 (læst) |
+| 43 rør i alt. 30 prøver (27 stenkerner, 2 løs jord, 1 luft) + 3 kontrolrør = 33 brugte. 10 i depotet "Three Forks". Et forsøg i september 2026 mislykkedes (stenen var for hård), og ingen ny prøve er nævnt til 19. oktober 2026 | https://science.nasa.gov/mission/mars-2020-perseverance/mars-rock-samples/ (opdateret 20. juni 2026, læst); PIA26643 (24. juli 2025, læst); blog "Mars Has Its Charmes" (læst) |
+| Mars Sample Return: NASA's side står i datid ("was a plan", opdateret 17. september 2026). Finansloven for 2026 gav 0 dollar til MSR og 110 mio. dollar til "Mars Future Missions" | https://science.nasa.gov/mission/mars-sample-return/ (læst); https://www.planetary.org/articles/advocacy-success-fy2026-nasa-budget (15. januar 2026, læst) |
+
+**Gale og Jezero:**
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Gale er dannet "for mere end 3 mia. år siden" | Rettet fra 3,5-3,8 (3,5 er ikke fundet). Thomson m.fl. 2011 siger 3,6-3,8 mia. år (kun søgeuddrag) | NASA "Gale Crater's History Book" (læst) |
+| "Man tror", at krateret blev fyldt med lag, som vinden siden har slidt væk | Rettet: Det er en hypotese ("might have formed"), Kite m.fl. mener, vinden byggede meget af bjerget | PIA19079 (læst) |
+| Mount Sharp ca. 5 km over kraterbunden (5,5 km over den nordlige bund, 4,5 km over den sydlige) | OK | NASA 2026 ("5-kilometer-tall", læst); "Gale Crater's History Book" (læst) |
+| Curiosity er på størrelse med en bil, ca. 3 m lang | OK | https://science.nasa.gov/mission/msl-curiosity/ (læst) |
+| Søer med vand, som mikrober kunne have levet i, måske en million år eller mere | OK (en række søer) | NASA Curiosity science highlights (læst) |
+| Organiske stoffer: man ved ikke, om de kommer fra liv | Rettet: En NASA-undersøgelse (Astrobiology, februar 2026) fandt, at kendte kilder uden liv ikke helt forklarer mængden i "Cumberland" | https://science.nasa.gov/blogs/science-news/2026/02/06/nasa-study-non-biologic-processes-dont-fully-explain-mars-organics/ (læst) |
+| Jezero "ca. 45 km" | NASA bruger 45 km, USGS 47,5 km (randen sættes forskelligt) | NASA Perseverance-siden (læst); USGS (læst) |
+| Jezero var en sø "for mere end 3½ mia. år siden" | Rettet fra "ca." | NASA Perseverance-siden og MSR-siden (læst) |
+| Ingenuity fløj 72 gange (skulle flyve 5), og et rotorblad gik i stykker ved landingen efter den sidste flyvning (18. januar 2024) | Rettet rækkefølgen | NASA 25. januar 2024 (læst); Ingenuity-siden (128,8 minutter, 17,0 km, læst) |
+| Cheyava Falls (juli 2024), prøven Sapphire Canyon, "muligt biospor" (Nature, 10. september 2025) | OK | NASA 10. september 2025 (læst) |
+| Deltaets kant er ca. 40 m høj | Rettet fra "nogle få snese meter". Det er højden af den vej, roveren kørte op (Hawksbill Gap), ikke målt langs hele kanten. Mangold m.fl. 2021 kunne ikke læses | NASA-blog "Campaign 2: The Delta Front" (27. april 2022, læst) |
+| Ordbogen: rover, delta og biospor (også "biosignatur", som er almindeligt på dansk) | OK | NASA's definition af et muligt biospor (læst); Britannica om Nilens delta (kun søgeuddrag) |
+
+**Nordpolen:**
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Kappen er ca. 1.000 km bred og mest vandis (højst ca. 2 % støv) | OK (NASA: 1.000-1.100 km) | PIA13163, PIA02800 (læst); ASU "Planum Boreum" (MARSIS, læst) |
+| Op til ca. 3 km tyk | OK, begge steder ens. 3 km er hele stakken; den nederste ca. 1 km er mest sand kittet sammen af is | UT Austin 26. maj 2010 (læst); ASU (læst) |
+| Lagene som årringe, men "et lag er ikke ét år" | Tilføjet: Tiden pr. lag er et åbent spørgsmål, og lagene følger nok hældningens langsomme svingninger | ASU (læst); UT Austin (læst) |
+| Spiralkløfterne er formet af katabatiske vinde, som Mars' drejning bøjer | OK. Smith & Holt og Holt m.fl., **Nature 27. maj 2010** (bekræftet af UT Austin; Smith & Holt: Nature 465, 450-453) | https://www.jsg.utexas.edu/news/?p=196 (læst) |
+| Chasma Boreale ca. 500 km lang og op til 2 km dyb | OK som rundt tal (USGS 460 km, Wikipedia 560 km, ASU 570 km) | PIA13163 (læst); USGS (læst); ASU (læst) |
+| Midnatssol: Solen 22,5-27,9° oppe hele døgnet ved 87,3° N ved sommersolhverv | OK (25,19° ± 2,68°, egen udregning). Programmet stiller aksen præcis på solhverv. Midnatssol ved 87,3° N fra Ls ca. 6° til ca. 174° | NSSDC (25,19°, læst); MSSS "Seasons on Mars" (læst) |
+| "Hvert år fryser ca. en fjerdedel af luften til tøris ved polerne, mest ved sydpolen" | Rettet: De 25 % er hele årets udsving, og det største fald sker sidst i den sydlige vinter | MSSS (læst) |
+| Kappen "som om sommeren" (tørisrimen væk, vandiskappen tilbage) | OK | PIA02800 (læst); ASU (læst) |
+
+**Fælder (nye):** "Nordkappen er tøris" (nej, vandis). "Hvert lag i polkappen er ét år" (ukendt). "Chasma Boreale blev gravet af en oversvømmelse" (vinden, Holt m.fl. 2010). "En fjerdedel af luften fryser ved nordpolen" (mest i syd). "Curiosity har vist, at de organiske stoffer ikke kommer fra liv" (ikke afgjort, 2026 trækker lidt den anden vej).
+
+**Mindst sikre:** antallet af prøver efter september 2026 (ingen ny er nævnt), deltaets højde (40 m langs roverens vej), Gales alder (3,6-3,8 kun fra et søgeuddrag) og Holt m.fl.s sidetal.
 
 ### 10. Faktatjek af teksterne til Mars-kloden (M2, 24. oktober 2026)
 Siderne kunne nu åbnes direkte (efter at domænerne blev åbnet), så tallene er slået op på selve kildesiden af Opus:

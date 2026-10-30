@@ -258,5 +258,30 @@ export const ORDBOG = [
     id: 'caldera', ord: 'Caldera',
     former: ['caldera', 'calderaen', 'calderaer'],
     tekst: 'Et stort krater på toppen af en vulkan. Det er ikke lavet af et nedslag: Når et udbrud tømmer kammeret med smeltet sten under toppen, synker jorden ned og efterlader et stort hul.',
+  },  {
+    id: 'nedslagskrater', ord: 'Nedslagskrater',
+    former: ['nedslagskrater', 'nedslagskrateret', 'nedslagskratere', 'nedslagskraterne', 'nedslagsbassin', 'nedslagsbassinet', 'nedslagsbassiner'],
+    tekst: 'Et krater, der blev sprængt ud, da en sten fra rummet ramte med meget høj fart. De allerstørste, der er flere hundrede km brede, kaldes nedslagsbassiner. På Mars og Månen ses mange, for der er ingen regn, der slider dem væk.',
+  },
+  {
+    id: 'spraekkedal', ord: 'Sprækkedal',
+    former: ['sprækkedal', 'sprækkedalen', 'sprækkedale'],
+    tekst: 'En lang dal, der opstår, når jordskorpen bliver strakt og revner. Landet mellem revnerne synker ned. Valles Marineris på Mars er en kæmpe sprækkedal. På Jorden er riftdalen i Østafrika et eksempel.',
+  },
+  // M5b (Mars: Gale og Jezero), faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, "Faktatjek M5b")
+  {
+    id: 'rover', ord: 'Rover',
+    former: ['rover', 'roveren', 'rovere', 'roverne', 'roverens'],
+    tekst: 'En robotbil, der kører rundt på en anden planet eller måne og undersøger den. Den styres fra Jorden, men signalerne er minutter om at nå frem, så den skal klare meget selv. Curiosity og Perseverance er rovere på Mars.',
+  },
+  {
+    id: 'delta', ord: 'Delta',
+    former: ['delta', 'deltaet', 'deltaets', 'deltaer'],
+    tekst: 'En vifte af sand og mudder, som en flod lægger, hvor den løber ud i en sø eller et hav og mister farten. Navnet kommer fra det græske bogstav Δ (delta), for Nilens delta er trekantet. Mange andre deltaer har en anden form.',
+  },
+  {
+    id: 'biospor', ord: 'Biospor',
+    former: ['biospor', 'biosporet', 'biosignatur', 'biosignaturer'],
+    tekst: 'Et spor, som kun liv eller næsten kun liv kan lave, fx bestemte stoffer, mønstre eller fossiler. Det kaldes også en biosignatur. Et muligt biospor kan også være lavet uden liv, så forskerne skal udelukke det, før de kan sige, at de har fundet liv.',
   },
 ];
