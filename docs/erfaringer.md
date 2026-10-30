@@ -77,6 +77,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Billeder fra mosaikker af rigtige fotos (fx Viking MDIM 2.1 i 232 m) kan have skygger fra Solen "malet ind". Brug dem ikke som farver, når programmet selv regner lyset ud fra højderne.
 - [ ] Koordinater fra USGS' navneliste: Brug MDIM 2.1 (standarden, passer med MOLA), og skriv, hvilket sæt der er brugt. MDIM 2.0 kan ligge 15 km ved siden af.
 - [ ] Kommer kameraet tæt på et landskab (fx et stop på en flyby): Regn ud, hvor mange skærmpixel én pixel i højdekortet fylder ved stoppet (billedets bredde i km delt med kortets km pr. pixel og skærmens bredde i pixel). Er det mere end ca. 3, ser det grumset ud. Brug kildens fulde opløsning i et detaljekort lige der (`detalje` i `lokalt`), og sammenlign kilderne i den opløsning først (Mars M7a+).
+- [ ] Et stop, der skal vise flere ting på én gang (fx en måne, et krater i sol og planeten bagved), er regnet igennem med vinkler først: kameraets, Solens og planetens retning, og hvor bredt 3D-billedet er (ca. 32-35° på pc med panelerne, mindre på højkant). Står en måne eller den side af planeten, man ser, i skygge, ser den ud, som om den mangler (Mars M6b).
 - [ ] 3D-billedet er set fra flere vinkler og helt tæt på. Gennemsigtige hjælpeflader (fx et baneplan) og kegler kan skære streger eller takker hen over kugler, og en kegle kan vende forkert. Ting, der ikke ændrer sig, bygges én gang og ikke i hvert billede.
 
 ### F. Tests
@@ -90,6 +91,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter. Mål én browser ad gangen (to samtidig halverer tallene).
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
+- [ ] Efter `hop()` (eller anden spoling af en flyvning) ventes der på, at flyvningen er slut (`!tur().flyver`), før næste flyvning startes. Ellers starter den midt i den gamle (Mars M6b).
 - [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
 - [ ] Ting, der kun står et stykke tid i rigtig tid (fx pillerne), fryses i testen, og testen lader selv tiden løbe ud (`atomlabTest.beskeder.frysPiller` og `spolPiller`). Et nyt forsøg hjælper ikke, når hvert skridt er langsommere end tingens levetid.
 - [ ] En test åbner ikke en ny side, mens en anden side i samme test stadig tegner 3D. Luk den første først, og vent på, at skærmen er klar (`waitForFunction`), ikke på sidens load-hændelse (`page.goto` giver op efter 30 sekunder).
@@ -124,6 +126,11 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **En indstilling, der ikke virker** | Kantudglatning (`antialias`) på lærredet virker ikke, når gløden tegner billedet. Den kostede bare hukommelse. | F: mål før og efter. |
 
 ### Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
+- "Stickney fylder halvdelen af Phobos" (NASA's egen side). Krateret er ca. 9 km på en måne, der er ca. 26 km lang, og dækker kun få procent af overfladen.
+- "Phobos er kun i Mars' skygge omkring jævndøgn." Det er Deimos. Phobos er i skygge på næsten hver omgang, undtagen omkring solhverv.
+- "Hall brugte verdens største kikkert." Det var verdens største *linsekikkert*. Spejlkikkerter var større.
+- "MMX kommer hjem i 2029" (Wikipedia i oktober 2026). Det er den gamle plan. JAXA siger 2031. Og opsendelsen var 20. oktober i Japan, men 19. oktober i Danmark: Skriv måned og år.
+- "Den synkrone bane er en omgang på et døgn." Den gælder stjernedøgnet (Mars' 24 t 37 min), ikke soldøgnet.
 - "En supernova lyser mere end en hel galakse." Det passer kun nogenlunde for type Ia. En kollaps-supernova lyser som ca. 0,2-1 milliard sole, og galaksen er 40-100 gange stærkere.
 - "Tjernobyl skyldtes, at kølingen svigtede." Reaktoren løb løbsk under et forsøg. Fukushima var kølesvigt.
 - "Stjernens lag: C, O, Ne, Si." Brændingen sker i rækkefølgen C, Ne, O, Si, så udefra og ind er det H, He, C, Ne, O, Si, Fe.
@@ -364,6 +371,15 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **USGS' navneliste for Phobos og Deimos:** Shapefilens metadata siger "Positive West", men tallene i `center_lon` er østlige (Stickney 311 = 49° V). Tjek det mod kortet, før tallene bruges.
 - **Fotos fra NASA og HiRISE:** assets.science.nasa.gov, uahirise.org og naif.jpl.nasa.gov er blokeret. Små udgaver fra Wikimedia Commons virker med en thumb-adresse i en standardbredde (fx 960px, regnet med md5 af filnavnet), men API'et svarer tit 429.
 - **Send aldrig brugerens e-mail med** i en User-Agent eller anden forespørgsel til fremmede tjenester (sket én gang ved et forsøg mod Wikimedia, 30. oktober 2026). Brug fx "AtomLab-billedvaerktoej/1.0".
+
+### Flybyen ud til Phobos og Deimos (Mars M6b, 30. oktober 2026)
+- **Regn ønskerne til et billede igennem, før du bygger det.** "Stickney i solen og Mars i baggrunden" kunne ikke lade sig gøre samtidig: Stickney ligger halvt mod Mars, og når Solen lyser Stickney op, er den side af Mars, man ser bag Phobos, i mørke. Første billede viste ingen Mars. Tjek med vinkler (kameraets retning, Solens retning, Mars' retning og 3D-billedets bredde på ca. 32-35° på pc med panelerne), og skriv kompromiset til brugeren. Tjekliste E er udvidet.
+- **En måne i planetens skygge er usynlig, og det er planeten bag den også** (natsiden). Brugeren troede, at Phobos manglede. Et besøg flytter nu månen ud af skyggen og siger det i teksten.
+- **Kollision skal bruge den rigtige størrelse.** Månerne tegnes større langt væk. Kollisionen brugte den forstørrede størrelse og skubbede kameraet 9 km ud efter et hop fra langt væk.
+- **`hop()` gør flyvningen færdig i *næste* billede.** Trykker et script "Næste" lige efter `hop()`, starter den nye flyvning midt i den gamle. Det gav forkerte målinger og et falsk fund. Vent på `!tur().flyver` efter `hop()` (tjekliste F).
+- **Mål flimmer ved at sammenligne med en større near**, ikke ved at gætte ud fra formlen for dybdeopløsning. Ved "Mars set fra Phobos" så formlen farlig ud (ca. 25 km mellem dybderne ved Mars), men billedet med near 0,05 var ens med near 0,005. Hvad der flimrer, afhænger af, hvad der faktisk overlapper.
+- **Kør ikke en test med fuld grafik samtidig med en anden test.** Billederne tog over 30 sekunder, og skærmbilledet gav op. En fast ventetid på 300 ms i testen `mars` ("Modlys") fejlede af samme grund og venter nu på tilstanden.
+- **Pas på med `pkill -f`:** Et mønster, der også står i den kommando, man selv kører, dræber ens egen skal (og her den lokale server).
 
 ### Phobos og Deimos i den rigtige form (Mars M6a, 30. oktober 2026)
 - **Kanterne i et globalt kort kan være kopier:** Phobos' højdekort fra USGS har dobbelte søjler i begge kanter (0 = 1 og 696 = 697), og de passer ikke med naboerne. Det så ud som en rende ved 180°. Find dem ved at måle springet mellem nabosøjler (typisk 10 m, ved kanten 50-180 m). Tjekliste E er udvidet.

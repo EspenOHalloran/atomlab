@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M6a: Phobos og Deimos i den rigtige form. M6b venter på go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (Mars M6b: flybyen ud til Phobos og Deimos. M6 er færdig).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,29 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (30. oktober 2026): Mars M6a, Phobos og Deimos i den rigtige form.** **M6b (flybyen og teksterne) venter på jeres go.**
+**Senest lavet (30. oktober 2026): Mars M6b, flybyen ud til Phobos og Deimos. M6 er færdig.** Næste kan være M7b (meget skarpe kort ved Gale og Jezero) eller M8 (Stå på Mars). Det venter på jeres valg og go.
+- **Flybyen har nu 13 stop:** Efter Nordpolen går turen ud til **Phobos** (Stickney ude ved kanten i lav sol, Mars i baggrunden), **"Mars set fra Phobos"** (kameraet står 300 m over Phobos og kigger op: Mars er 42,5° bred og drejer, og man kan dreje hovedet og kigge ned på Phobos) og **Deimos** (Mars er en kugle på 16,6° ved siden af).
+- **Ærligt om billedet ved Phobos:** Stickney i fuld sol og Mars i baggrunden kan ikke ses på samme tid. Stickney ligger på den side, der vender halvt mod Mars, og når Solen lyser Stickney op, er den side af Mars, man ser bag Phobos, i mørke. Valget blev: Solen fra siden og lidt bagfra, så Mars bag Phobos er lyst op, og Stickney ligger ude ved kanten i lav sol. Kameraet kigger lidt ved siden af Phobos mod Mars, så begge kan ses.
+- **Jeres fejl (30. oktober 2026):** "Månerne" og et tryk på Phobos viste ingenting. Årsagen var, at Phobos stod i Mars' skygge: Så var både Phobos og den side af Mars, man ser bag den, helt sorte. Nu glider månen frem i banen og ud af skyggen, mens kameraet flyver derhen, og teksten siger det ærligt ("Ud af skyggen"). Testen `mars` tjekker det.
+- **Flimmer:** Kameraets near er 0,005 som ved resten af Mars. Systemet er skaleret ca. 59 gange, så det svarer til ca. 85 m. Et billede med 10 gange bedre dybdeopløsning var ens med billedet i programmet (målt). Derfor står kameraet 300 m over Phobos, ikke 2-3 km.
+- **Faktatjekket** (to hjælpeagenter, NASA, JAXA, ESA, JPL og Wikipedia læst direkte). Rettet bl.a.:
+  - Stickney er ca. 9 km på en måne, der er ca. 26 km lang, ikke "halvdelen af Phobos".
+  - Phobos er i Mars' skygge på næsten hver omgang (ikke omkring solhverv), Deimos kun omkring jævndøgn.
+  - Hall brugte verdens største *linsekikkert*.
+  - Deimos' kratere er kun *delvist* fyldt op.
+  - MMX' status er slået op hos JAXA i dag: sonden var sund og på vej mod Mars sidst i oktober 2026.
+  - Nye fagord: bundet rotation, regolit og tidevandskraft.
+  - Kilderne står i `docs/fakta-solsystemet.md` under "Faktatjek M6b".
+- **Billeder i sekundet** (testbrowseren, fuld grafik, én ad gangen): pc: hele Mars 1,1, Phobos 1,1, Mars set fra Phobos 1,0 og Deimos 1,1. Tablet på højkant: 2,3, 1,5, 2,3 og 1,4. Maskinen var langsommere end i tidligere sessioner, så tallene kan kun sammenlignes indbyrdes.
+- **Ikke afprøvet (på tabletten):**
+  1. Ser I Mars i baggrunden ved Phobos, både på langs og på højkant? (På højkant står Phobos tæt på underteksten.)
+  2. Flimrer luften eller skyerne på Mars ved "Mars set fra Phobos", når Mars drejer, eller når I drejer hovedet?
+  3. Føles det naturligt at dreje rundt ved "Mars set fra Phobos" (man drejer om et punkt lige foran kameraet), og kan I kigge ned og se Phobos' overflade?
+  4. Føles flyvningen rundt om Phobos (til og fra overfladen) for hurtig eller for lav?
+  5. "Månerne" → tryk på Phobos, når den står bag Mars: Ser I den glide ud af skyggen?
+  6. Er teksterne ved de tre stop for lange?
+
+**Før det (30. oktober 2026): Mars M6a, Phobos og Deimos i den rigtige form.**
 - **Månerne kredser om Mars** i den rigtige afstand og i det rigtige forhold til Mars' døgn: Phobos runder Mars ca. 3,2 gange, mens Mars drejer én gang (ca. 32 sekunder i programmet), så den står op i vest. Deimos er ca. 2 minutter om en omgang. Begge vender samme side mod Mars, og de bliver mørke i Mars' skygge.
 - **Knappen "Månerne"** viser begge baner med navnene. Et tryk på en måne flyver derhen (også når navnene er slået fra). Langt væk er månerne tegnet større, og det står i "Ærligt talt".
 - **Formen:** Phobos af USGS' højdekort fra Mars Express, Deimos af Thomas' formmodel (vendt fra vestlig til østlig længde). Set fra samme side som HiRISE-fotoene passer silhuetterne (overlap 0,92 og 0,93), og ved Phobos sidder kraterparret forneden samme sted (`docs/m6/programmet-mod-fotos.jpg`).

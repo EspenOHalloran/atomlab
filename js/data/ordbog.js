@@ -284,4 +284,21 @@ export const ORDBOG = [
     former: ['biospor', 'biosporet', 'biosignatur', 'biosignaturer'],
     tekst: 'Et spor, som kun liv eller næsten kun liv kan lave, fx bestemte stoffer, mønstre eller fossiler. Det kaldes også en biosignatur. Et muligt biospor kan også være lavet uden liv, så forskerne skal udelukke det, før de kan sige, at de har fundet liv.',
   },
+  // M6b (Phobos og Deimos), faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, "Faktatjek M6b")
+  {
+    id: 'bundet-rotation', ord: 'Bundet rotation',
+    former: ['bundet rotation', 'bundne rotation'],
+    tekst: 'Når en måne drejer én gang om sig selv, mens den runder sin planet én gang. Så vender den altid samme side mod planeten. Vores Måne, Phobos og Deimos har bundet rotation. Tidevandskraften har bremset deres drejning.',
+  },
+  {
+    id: 'regolit', ord: 'Regolit',
+    former: ['regolit', 'regolitten'],
+    tekst: 'Løst støv, grus og sten, som dækker overfladen på Månen, Mars, asteroider og små måner. Det meste er knust af nedslag fra meteoritter gennem meget lang tid. På Mars har vind og vejr også været med.',
+  },
+  {
+    id: 'tidevandskraft', ord: 'Tidevandskraft',
+    former: ['tidevandskraft', 'tidevandskraften', 'tidevandskræfter', 'tidevandskræfterne'],
+    // Solen giver ca. en tredjedel af tidevandet på Jorden
+    tekst: 'Forskellen i tyngdekraften fra et andet legeme på den nære og den fjerne side. Den strækker legemet lidt. Sådan giver Månen og Solen ebbe og flod på Jorden. Tidevandskraften kan også bremse en måne eller rive den i stykker, hvis den kommer for tæt på.',
+  },
 ];

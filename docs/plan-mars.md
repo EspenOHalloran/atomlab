@@ -343,6 +343,24 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
   - **Jeres svar (30. oktober 2026): Husk valget** (`localStorage`, `atomlabNavne`: `'til'` eller `'fra'`).
   - Tjek: testene `mars` og `saturn` (navnene forsvinder, og et tryk på kloden gør intet, når knappen er slået fra).
 
+## Status efter M6b (30. oktober 2026): flybyen ud til Phobos og Deimos. M6 er færdig.
+- **13 stop:** … Nordpolen → **Phobos** → **Mars set fra Phobos** → **Deimos**. Ved Phobos stiller programmet månerne i banen (`stilMånerOp`), så Solen står ved `stop.sol` set fra månen. Ingen af dem står i Mars' skygge ved stoppene (testet). Månerne står stille ved stoppene, og Mars drejer.
+- **Phobos-stoppet er et kompromis:**
+  - Stickney (49° V) ligger på den side, der vender halvt mod Mars. Hvis Mars skal ses i baggrunden, må kameraet stå på den modsatte side, og så er Stickney mindst ca. 105° væk fra kameraet, altså ude ved kanten.
+  - Står Solen, så Stickney ligger i fuld sol (mod −90°), er den side af Mars, man ser bag Phobos, i mørke (første forsøg: Mars kunne slet ikke ses).
+  - Valg: Solen fra −125°. Mars er mere end halvt lyst op bag Phobos, og Stickney ude ved kanten ligger i lav sol (ca. 14°).
+  - 3D-billedet er kun ca. 32-35° bredt på pc med panelerne. Derfor kigger kameraet lidt ved siden af månen mod Mars (`blik` gange halvdelen af billedets mindste side, så det også virker på højkant).
+- **Mars set fra Phobos:**
+  - 0,3 km over Phobos (30° S, 55° V). Mars er 42,5° bred og står ca. 30° over horisonten, og Solen står ca. 17° oppe.
+  - Man drejer rundt om et punkt 50 m foran kameraet, og Phobos' lodrette retning peger op.
+  - **Flimmer målt:** near 0,005 (som ved Mars, ca. 85 m, fordi systemet er skaleret ca. 59 gange) og near 0,05 gav samme billede (ca. 100 pixel forskel, lige så meget som mellem to billeder med samme near, dvs. stjernerne). Ingen grund til 2-3 km.
+- **Flyvningen rundt om Phobos** (`baneOmMåne`, `bane` i `rejse.flyv`): rundt om månens midte, og højden over overfladen ændrer sig jævnt i log. Den bruges til og fra overfladen. Testen måler i hvert billede, at kameraet aldrig er under 100 m over en måne og aldrig skubbes ud (`udenom`, 50 m).
+- **Fejl fundet under arbejdet:** Kollisionen brugte månens forstørrede størrelse (langt væk tegnes den større). Efter et hop fra langt væk skubbede den kameraet 9 km ud. Nu bruges den rigtige størrelse.
+- **Jeres fejl:** En måne i Mars' skygge var usynlig ved et besøg. Nu glider den ud af skyggen (`udAfSkygge`).
+- **Billeder i sekundet** (fuld grafik, én ad gangen, maskinen var langsommere i dag): pc 1,12 / 1,11 / 0,96 / 1,07 (hele Mars / Phobos / Mars set fra Phobos / Deimos), tablet på højkant 2,28 / 1,50 / 2,25 / 1,38. Ved Phobos og Deimos er tablet ca. 35 % lavere end ved hele Mars. Det er ikke undersøgt nærmere (målestøjen er stor, og månerne er små).
+- **Faktatjek:** `docs/fakta-solsystemet.md`, "Faktatjek M6b".
+- **Ikke afprøvet:** se "Lige nu" i DESIGN.md.
+
 ## Status efter M6a (30. oktober 2026): Phobos og Deimos i den rigtige form
 - **Formen:** `billeder/solsystem/lav_maaner.py` laver formkortene (radius i meter, 16 bit i rød og grøn) og kortene over overfladen. `js/solsystem/maane-form.js` (`lavFormmåne`) skubber en kugle ud til formen én gang i JS (Phobos 512 × 256 felter, Deimos 256 × 128, halvt i tests).
 - **Fejl i kilderne, der er rettet:** Phobos' højdekort har kopierede søjler i begge kanter (0 = 1 og 696 = 697), og de passer ikke med naboerne: et trin på ca. 200 m ved 180°, som så ud som en rende fra pol til pol. Kun søjle 2 til 695 bruges, og trinnet er fordelt over ca. 10°. SRC-mosaikken har huller i de sidste ca. 40 søjler og er mørkere omkring 180°: Et bånd på ca. 6° er fyldt med spejlede stykker fra begge sider (en lige linje gav vandrette striber). Ved polerne glider kortene over i rækkens gennemsnit (ellers en stjerne af striber).
