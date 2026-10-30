@@ -196,7 +196,7 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 - **Billeder i sekundet** i testbrowseren: se `docs/erfaringer.md` ("Lokale detaljer ved et sted"). Hvis tabletten hakker: først et grovere lokalt net (256 × 256 i stedet for 384 × 384), derefter mindre kort.
 - **Til M5:** Hvert nyt sted får sin linje i `STEDER` i `lav_steder.py` og `LOKALE` i `mars.js`. Nettet kan have op til flere lokale net (et hul pr. net i kuglens shader).
 
-## Prompt til M5 (skrevet 30. oktober 2026, venter på go)
+## Prompt til M5 (skrevet 30. oktober 2026, brugt: planen står i "Plan for M5" nedenfor)
 **Model og effort:** Opus med høj effort, både til planen og til at bygge. `CLAUDE.md` siger Opus til kode, fakta og danske tekster, og Mars er ikke en opgave for Fable (`docs/plan-fable.md`). Xhigh er ikke nødvendig: Teknikken fra M7a genbruges, og det nye (fx et net over polen) er mindre svært end M7a. Hjælpeagenter: Opus med høj effort til faktatjekket (`/faktatjek`), Haiku med lav effort til at opsummere lange testlogs og Sonnet med lav effort til at finde ting i koden. Start en ny session fra `main`.
 
 **Prompten (kopiér den):**
@@ -210,6 +210,129 @@ Først et grovere lokalt net (256 × 256), derefter 2048-farvekort. Tabletten kl
 > 6. **Opdeling:** Skal M5 deles (fx M5a: stoppene og teksterne, M5b: de lokale kort), så der er noget at se undervejs? Giv en anbefaling.
 >
 > Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig, og sig, hvis en anden model eller effort passer bedre til en del.
+
+## Plan for M5: flybyen over Mars (30. oktober 2026, venter på go)
+*Lavet af Opus (høj effort) ud fra "Lige nu", "Status efter M4c", "Detaljer før flere stop", "Status efter M7a", tjeklisterne og koden (`mars.js`, `klippeplanet.js`, `rejse.js`, `flyby.js`, `lav_steder.py`). Anbefalingerne står først. Beslutningerne står som spørgsmål til sidst.*
+
+**To ting kunne ikke tjekkes i den session, der lavede planen** (den kørte i Claude-appen og ikke i jeres sædvanlige miljø):
+- **Billederne af HRSC+MOLA, MOLA og farverne:** USGS' arkiv (`asc-pds-services.s3.us-west-2.amazonaws.com`) svarede 403 fra skallen. Tallene for områderne nedenfor er derfor regnet, ikke set. Billederne laves som første skridt efter go (se afsnit 2).
+- **Kildesiderne med curl:** Alle gav 403 fra skallen (også Wikipedia og NSSDC). WebFetch kunne åbne Wikipedia. I jeres sædvanlige miljø var siderne åbne 24.-30. oktober (se "Netsider i miljøet"), undtagen `www.jpl.nasa.gov`, `sbnarchive.psi.edu` og `agupubs`. Mange kilder i del 3, afsnit 3-8, ligger netop på `www.jpl.nasa.gov`, så faktatjekket bruger `science.nasa.gov` og `photojournal.jpl.nasa.gov` i stedet. Nye domæner, der skal åbnes før M5: `www.dlr.de`, `www.jsg.utexas.edu`, `marsed.asu.edu` (eller `marsed.mars.asu.edu`), `svs.gsfc.nasa.gov`, `hirise.lpl.arizona.edu` (står allerede under "Senere") og `www.planetary.org` (står under "Faktatjek"). Tjekkes med curl ved start, og jeg spørger, før arbejdet går videre, hvis noget er lukket.
+
+### 1. Stoppene og rækkefølgen
+**Anbefaling: Alle seks steder kommer med, så flybyen får 10 stop.** Rækkefølgen fortæller en historie (vulkaner → kløften, de skabte → et kæmpe nedslag → søer, hvor der måske var liv → is i dag) og holder flyvningerne nogenlunde korte:
+
+| # | Stop | Midte (skal tjekkes mod USGS' navneliste) | Hop fra forrige | Lokalt net |
+|---|---|---|---|---|
+| 1 | Mars | | | |
+| 2-4 | Olympus Mons, Calderaen, Skrænten (lavet) | 18,4° N, 226,0° Ø | | ✅ findes |
+| 5 | **Tharsis-vulkanerne** (Ascraeus, Pavonis og Arsia Mons på en række) | ca. 1° N, 247° Ø | ca. 30° | ja |
+| 6 | **Valles Marineris** (midten, hvor kløfterne er bredest) | ca. 8° S, 293° Ø (midten af området) | ca. 45° | ja |
+| 7 | **Hellas** | ca. 42° S, 70° Ø | ca. 115° | nej |
+| 8 | **Gale og Curiosity** (med Mount Sharp) | ca. 5° S, 138° Ø | ca. 70° | ja |
+| 9 | **Jezero og Perseverance** | ca. 18° N, 78° Ø | ca. 65° | ja |
+| 10 | **Nordpolen** | 90° N | ca. 70° | nej |
+
+- **Gale før Jezero:** Det er både kortere at flyve (ca. 206° i alt mod 219° for Jezero før Gale) og i den rigtige tidsfølge (Curiosity 2012, Perseverance 2021).
+- **Nordpolen til sidst:** En god afslutning (vand som is i dag), og i M6 kan turen fortsætte derfra ud til Phobos og Deimos.
+- **Hvor lang må den være?** Saturn har 9 stop. Med ca. 30-45 sekunder pr. stop og 5-9 sekunders flyvning tager 10 stop ca. 6-9 minutter. Det er i den lange ende, men man trykker selv "Næste" og kan stoppe når som helst. Med Phobos og Deimos (M6) bliver det 12. Bliver det for langt, er det nemmeste at slå Calderaen og Skrænten sammen med Olympus Mons i turen (de kan stadig besøges direkte).
+- **Vælg et sted direkte (anbefales):** Navne på kloden, når man ser hele Mars: Olympus Mons, Tharsis, Valles Marineris, Hellas, Gale, Jezero og Nordpolen. Et tryk på et navn flyver derhen og viser stedets tekst, ligesom et tryk på en måne ved Saturn. Navnene skjules på bagsiden og tæt på (erfaringer: "Navne på en kugle"). Det lærer også, hvor stederne ligger. Billigere alternativ: en knap pr. sted i "Prøv selv", men 7 ekstra knapper fylder meget på telefon.
+
+### 2. Lokale kort ved stoppene
+Nettet over hele Mars har ca. 21 km mellem punkterne. Et sted får brug for et lokalt net, når det, kameraet skal vise, er under ca. 50 punkter bredt i det grove net (Olympus Mons var 29 og så flad ud).
+
+| Sted | Område (forslag) | Højdekort | Net (pc) | Hvorfor |
+|---|---|---|---|---|
+| Tharsis | 15° S-16° N, 124°-97° V (ca. 1.840 × 1.600 km) | 2048 × 2048, ca. 0,8-0,9 km pr. pixel | 512 × 512, ca. 3,5 km | Hver vulkan er ca. 400 km bred = ca. 19 punkter i det grove net. Vestkanten holder 0,5° (ca. 30 km) fra Olympus' net, så de to ikke overlapper. Arsias vestflanke ligger i overgangen og skal ses på billeder. |
+| Valles Marineris | 16° S-0°, 80°-55° V (ca. 1.470 × 950 km) | 2048 × 1024, ca. 0,7-0,9 km | 512 × 256, ca. 3 km | **Stykket i midten:** Melas, Candor og Ophir Chasma, hvor kløfterne er bredest og dybest, og starten af Coprates Chasma mod øst. Kløfterne er 50-200 km brede og forsvinder næsten i det grove net. Noctis Labyrinthus mod vest og udløbet mod øst er med i det grove net. |
+| Hellas | intet | | | Bassinet er ca. 2.200 km bredt og skråner jævnt. Kameraet skal se det hele fra højt oppe, og så er det grove net ca. 100 punkter bredt. Det er nok. |
+| Nordpolen | intet | | | Et net i bredde og længde virker ikke ved polen. Kappen er ca. 1.000 km bred og ses fra højt oppe. Spiralkløfterne står i farvekortet (2,6 km pr. pixel). Et rigtigt polarnet (et andet gitter, hvor hullet i kuglen er en "kalot" øverst i kortet) er muligt, men nyt arbejde. Det kan komme i M7b, hvis I vil helt ned i kløfterne. |
+| Gale | 8,4°-2,4° S, 134,8°-140,8° Ø (ca. 355 × 355 km) | 1536 × 1536, ca. 0,23 km | 512 × 512, ca. 0,7 km | Krateret er 154 km = ca. 7 punkter i det grove net. Uden et lokalt net kan man ikke se Mount Sharp. |
+| Jezero | 16,3°-20,5° N, 75,4°-79,8° Ø (ca. 250 × 250 km) | 1024 × 1024, ca. 0,24 km | 512 × 512, ca. 0,5 km | Krateret er 45 km = ca. 2 punkter i det grove net. |
+
+**Er HRSC+MOLA nok ved Gale og Jezero i M5? Anbefaling: ja.** Med 200 m pr. pixel ses Gale-krateret og Mount Sharp (ca. 5 km høj) tydeligt, og Jezero bliver et skarpt krater med sin rand. Deltaet i Jezero er kun nogle få snese meter højt og vil næppe kunne ses. Det siges ærligt i teksten ("det skarpe kort kommer senere"), og i M7b udskiftes kortene med CTX og HiRISE (måske i et mindre område). Farverne er Viking i 925 m (Jezero bliver kun ca. 50 pixel bred i farver). CTX er i gråtoner, så farverne kommer også i M7b fra Viking.
+
+**Tjekket med billeder (første skridt efter go), som i M7a:**
+- For hvert sted et billede med HRSC+MOLA og MOLA side om side i spillets opløsning og et kort over, hvor de afviger (de kasseformede fejl fra Olympus). HRSC+MOLA har ingen huller, men den er kun skarpere end MOLA, hvor Mars Express har lavet højdemodeller. Det skal ses for hvert sted, ikke antages. Er den ikke tydeligt skarpere et sted, bruges MOLA (CC0).
+- Farverne fra 925 m-mosaikken med højdernes skygger ved siden af, så man kan se, om der er skygger malet ind (mørke vægge i Valles Marineris og Mount Sharp er de mest oplagte steder).
+- Billederne vises i chatten, og arbejdet fortsætter uden et nyt go, medmindre et sted ser forkert ud.
+- `lav_steder.py` skal kunne lave kort, der ikke er kvadratiske (Valles Marineris), og vælge højdekortets størrelse pr. sted.
+
+### 3. Hvad det koster
+| | Nu | Efter M5 (anslået) |
+|---|---|---|
+| Billeder i repoet | ca. 65 MB | ca. 76 MB (4 nye steder: ca. 8 MB, der hentes, og ca. 3 MB testkort) |
+| Hentet ved hvert stop | Olympus ca. 2,9 MB | Tharsis ca. 3 MB, Valles Marineris ca. 2 MB, Gale ca. 2 MB, Jezero ca. 1 MB |
+| Grafikkortets hukommelse | 8k-kortet ca. 170 MB, Olympus ca. 17 MB | ca. +70 MB, hvis alle steder er besøgt (de bliver i `lager`) |
+
+- **Hentes kun ved stoppet:** Ja, som nu (`hentLokalt`). Nyt: Når man er ved et stop, hentes det **næste** stops kort i baggrunden, så det ikke hakker, når man trykker "Næste". Vælger man et sted direkte, hentes det med det samme (som nu).
+- **Hvor mange net på én gang:** Hullerne i kuglens shader koster næsten intet (løkken køres kun for trekanterne på kanterne, og der er højst 5 huller). Det, der koster, er nettene selv: Hvert net er ca. 260.000 punkter og tegnes, også når det er på bagsiden af Mars. **Anbefaling:** Kun nettet ved stoppet og det, man flyver hen til, tegnes. De andre skjules, og kuglen tegnes igen dér (samme mekanik som "klar" i `opdaterHuller`). Så er der højst 2 net på skærmen ad gangen. Alle 5 net laves, når Mars åbnes (så shaderen kun bygges én gang), men uden kort.
+- **Billeder i sekundet** måles før og efter ved hvert nyt stop og på hele Mars, med alle steder besøgt (tjekliste F). I M7a kostede Olympus' net pc 2,3 → 1,6 i testbrowseren. Med "kun 2 net" bør ingen stop koste mere end Olympus. Hakker tabletten: først 384 × 384 og 256 × 256 net, derefter frigives kortene ved steder langt væk.
+
+### 4. Flyvningen mellem to steder og tidspunktet på dagen
+**Problemet i dag (læst i `rejse.js`):** Buen fra M4c bruges også mellem to steder, men ved lange hop går den for lavt og for hurtigt. Fra Valles Marineris til Hellas (ca. 115°) går kameraet kun ca. 20 % af Mars' radius op (ca. 650 km), flyvningen tager kun ca. 3 sekunder (tiden regnes ud fra vinklen i radianer og holdes mellem 3 og 8 sekunder), og fokus glider i en lige linje gennem Mars' indre. Det bliver et hurtigt, forvirrende strøg hen over overfladen.
+
+**Forslag:**
+- **Korte hop** (under ca. 10°, fx Calderaen → Skrænten): som nu.
+- **Lange hop:** Kameraet stiger, så man på toppen af buen kan se både stedet, man kommer fra, og stedet, man skal hen til (ca. R/cos(vinklen/2), fx ca. 1,5 R ved 95°). Fokus glider langs overfladen (en storcirkel) i stedet for gennem Mars. Flyvetiden vokser med vinklen, fx 4-10 sekunder.
+- **Mars drejer under flyvningen,** så klokken passer, når man lander (`drejHen`). Det betyder, at dag og nat står næsten stille i forhold til kameraet, og Mars drejer under det. Det står i "Ærligt talt".
+- **Tjek:** Kameraet skubbes aldrig op under flyvningen (`skubbet` = 0) mellem alle par af stop i turen og ved direkte valg fra og til hvert sted, også fra bagsiden. "Reducer bevægelse" hopper som nu.
+
+**Tidspunktet på dagen (forslag, det endelige valg sker ud fra billeder):**
+
+| Stop | Klokken | Kameraet | Hvorfor |
+|---|---|---|---|
+| Tharsis-vulkanerne | ca. 8 | fra sydøst, højt nok til at se alle tre | Morgen: klart vejr og lange skygger. Om eftermiddagen dækker skyerne toppene (se spørgsmål 4). |
+| Valles Marineris | ca. 8-9 | fra syd eller langs kløften mod øst | Lavt sollys fra siden viser væggene. Prøves begge veje. |
+| Hellas | ca. 8-9 | højt over nordranden, mod syd | Lav sol viser randen og bunden. |
+| Gale | ca. 9 | fra nord (Bradbury Landing), mod syd mod Mount Sharp | Solen fra øst giver lys fra siden på bjerget. |
+| Jezero | ca. 9 | fra sydøst mod vestranden, hvor deltaet ligger | Lys fra siden, ikke bagfra. |
+| Nordpolen | se nedenfor | højt over kappen | |
+
+**Nordpolen og årstiden:** På tegningen er det forårsjævndøgn i nord (for skyerne over vulkanerne). Så står Solen lige i horisonten ved nordpolen, og kappen ligger i halvmørke. Kappen er desuden tegnet, som den ser ud om sommeren. **Anbefaling:** Under flyvningen til nordpolen drejes Mars' akse, så det bliver nordlig sommer (Solen ca. 25° over horisonten hele døgnet: midnatssol). Teksten siger det ("Vi har spolet frem til sommer i nord"), og det passer med kappen, som den er tegnet. Når man forlader polen, drejes den tilbage. Det rører Solens retning i systemet, så luften, skyerne og "Modlys" skal tjekkes ved polen.
+
+### 5. Tekster
+Ved hvert nyt stop: en undertekst (højst ca. 160 tegn, pointen i første sætning) og en tekst i panelet (2-3 korte afsnit, som ved Olympus Mons). Indholdet bygger på `fakta-solsystemet.md`, del 3, afsnit 3-8, men **alt slås op i kilden med `/faktatjek`, før det kommer med**, for faktagrundlaget er mest søgeuddrag.
+
+| Stop | Pointen (udkast, ikke tjekket) | Det, der skal tjekkes særligt |
+|---|---|---|
+| Tharsis | Tre kæmpevulkaner på en række på et højland på størrelse med Nordamerika. Skyerne om eftermiddagen ("W"-skyen, man så fra Jorden). | Arsia Mons' højde (kilderne er uenige: skriv intet præcist tal), afstanden mellem vulkanerne, plateauets størrelse og højde. |
+| Valles Marineris | Ca. 4.000 km, lige så langt som fra Lissabon til Moskva, og op til 7-10 km dyb. Skorpen revnede og sank ned. Den er ikke gravet af en flod. | Dybden (7, 8, 10 eller 11 km efter kilden), alderen (ca. 3,5 mia. år), navnene og koordinaterne på kløfterne i området. |
+| Hellas | Et kæmpe nedslag for ca. 4 mia. år siden. Bunden er Mars' laveste sted, og trykket er ca. dobbelt så højt. Vand kunne i teorien være flydende et kort øjeblik. | Alderen (ikke tjekket), "laveste sted" (bunden ca. 7 km, det laveste punkt ca. 8,2 km: hold dem adskilt). |
+| Gale | Mount Sharp, ca. 5 km høj, lag på lag af gammelt mudder. Curiosity landede i 2012 og har vist, at her var en sø, mikrober kunne have levet i. | Hvad Curiosity laver **nu** (ændrer sig hver måned: slå op ved bygningen, og skriv "i efteråret 2026"). Organiske stoffer: "kan være dannet uden liv". |
+| Jezero | En sø med et delta for ca. 3,5 mia. år siden. Perseverance landede i 2021, Ingenuity fløj 72 gange, og roveren har fyldt rør med prøver. | Antal rør og hvor roveren er nu, Sapphire Canyon (kun et **muligt** biospor), Mars Sample Return (status i 2026, ændrer sig). |
+| Nordpolen | En kappe af vandis, ca. 1.000 km bred og 2-3 km tyk, med spiralkløfter formet af vinden. Om vinteren fryser ca. en fjerdedel af luften til tøris. | Spiralkløfternes kilde (Nature 465 er ikke bekræftet), Chasma Boreale (kun Wikipedia), midnatssolen (regnes efter med aksens hældning). |
+
+- **"Kort fortalt"** nævner flybyens nye stop og navnene på kloden.
+- **"For nørder":** de nye lokale net (hvor, hvor skarpe, fra hvilke sonder), hvorfor Hellas og polen ikke har et, og at Gale og Jezero får skarpere kort senere.
+- **"Ærligt talt":** klokken er valgt ved hvert stop, Mars drejer hurtigt under flyvningen, årstiden skiftes ved polen, deltaet i Jezero kan ikke ses i denne opløsning, og farverne er ca. 1 km pr. pixel.
+- **Nye fagord i ordbogen (forslag):** nedslagskrater, sprækkedal (eller gravsænkning), delta, rover og biospor. "Tøris", "skjoldvulkan", "caldera", "skalahøjde" og "midnatssol" findes allerede.
+- **Kilder til faktatjekket:** NSSDC, `science.nasa.gov`, `photojournal.jpl.nasa.gov`, ESA, USGS (navnelisten for alle koordinater), DLR, UT Austin, ASU og Wikipedia, hvor intet bedre findes. Det, der ændrer sig (roverne, Mars Sample Return), slås op samme dag og skrives med måned og år.
+
+### 6. Opdeling
+**Anbefaling: M5 deles efter steder, så hver del giver færdige stop:**
+
+| Del | Hvad | Hvorfor |
+|---|---|---|
+| **M5a** | Tharsis-vulkanerne, Valles Marineris og Hellas: billederne af kilderne, de to lokale net, den nye flyvning mellem stederne, kun 2 net på skærmen ad gangen, kortene til næste stop i baggrunden, tekster og faktatjek, 2 fagord (sprækkedal eller gravsænkning, og nedslagskrater). | Det tekniske nye (flere net, flyvningen) løses her med to net. Kameraet stilles én gang ved hvert stop på det skarpe net. |
+| **M5b** | Gale, Jezero og Nordpolen: de to små lokale net, sommer ved polen, navnene på kloden (vælg et sted direkte), rovernes tekster (slås op samme dag) og 3 fagord (rover, delta og biospor). | Genbruger M5a. Teksterne om roverne ændrer sig mest, så de tjekkes tæt på, at de kommer ud. |
+
+Jeres eget forslag (M5a: stoppene og teksterne, M5b: de lokale kort) giver noget at se hurtigere, men kameraet skal så stilles to gange ved 4 stop (først på det grove net, så på det fine), og Gale og Jezero ser grødede ud i mellemtiden. Det er ikke dyrt, men opdelingen efter steder spilder mindre.
+
+Hver del slutter med `/faerdig`: tests (`--ændret`, og hele samlingen efter M5b), billeder med fuld grafik ved de nye stop på pc og tablet på højkant, billeder i sekundet før og efter og "Ikke afprøvet" (kanterne mellem nettene, hak ved hentning, flyvningerne på tabletten). Testen `mars` får tjek af: de nye lokale kort og højder (fx Mount Sharp ca. 5 km over bunden, Hellas' bund under −7 km), at højst 2 net tegnes, at kameraet er 2 km over jorden ved alle stop og ingen skub under flyvningerne, klokken ved hvert stop, årstiden ved polen, og at alt sættes tilbage.
+
+### 7. Model og effort
+- **Opus med høj effort** til begge dele, som M7a: kode i programmet, data, danske tekster og faktatjek (`CLAUDE.md`). Xhigh er ikke nødvendig: teknikken fra M7a genbruges. Mars er ikke en Fable-opgave (`docs/plan-fable.md`).
+- **Hjælpeagenter:** Opus med høj effort til `/faktatjek` (højst 2 ad gangen, og først når curl har vist, at kilderne kan åbnes), Haiku med lav effort til lange testlogs, Sonnet med lav effort til at finde ting i koden.
+- **Miljøet:** Start M5a i jeres sædvanlige miljø fra `main`, hvor USGS' arkiv og kildesiderne er åbne, og hvor der kan pushes.
+
+### Beslutninger, der bekræftes ved go (anbefalingerne står først)
+1. **Stoppene:** Alle seks, 10 stop i alt, i rækkefølgen Tharsis → Valles Marineris → Hellas → Gale → Jezero → Nordpolen. (Eller færre: hvilke skal ud?)
+2. **Vælg et sted direkte:** Navne på kloden, man kan trykke på (A). Eller en knap pr. sted i "Prøv selv" (B), eller ingen i M5 (C).
+3. **Lokale net:** Tharsis, Valles Marineris (stykket i midten), Gale og Jezero. Ingen ved Hellas og polen. HRSC+MOLA ved Gale og Jezero nu, og de meget skarpe kort i M7b.
+4. **Tharsis og skyerne:** Morgen uden skyer (anbefales, vulkanerne skal ses). Eller en ekstra knap "Se skyerne komme", der drejer Mars frem til eftermiddag ved stoppet.
+5. **Nordpolen:** Sommer i nord ved polstoppet (midnatssol), sagt ærligt i teksten. Eller beholde forårsjævndøgn, hvor kappen ligger i halvmørke.
+6. **Opdelingen:** M5a (Tharsis, Valles Marineris, Hellas og den nye flyvning) og M5b (Gale, Jezero, Nordpolen og navnene på kloden). Eller jeres forslag (stop og tekster først, lokale kort bagefter), eller én PR.
+7. **Domænerne:** Åbn `www.dlr.de`, `www.jsg.utexas.edu`, `marsed.asu.edu`, `svs.gsfc.nasa.gov` og `hirise.lpl.arizona.edu` i miljøet før start (og tjek, at `www.planetary.org` er åben).
 
 ## Forslag til M4c (29. oktober 2026, godkendt)
 **Jeres svar (29. oktober 2026): go.** (1) Mars får "▶ Start flyby" med to stop (hele Mars og Olympus Mons) gennem det fælles modul. De andre stop kommer i M5. (2) Tidspunktet på dagen ved Olympus Mons: Jeg prøver formiddag (klart vejr) og eftermiddag (med skyerne) og vælger det, der viser vulkanen tydeligst. I åbnede `discovery.ucl.ac.uk` og `planetarynames.wr.usgs.gov`, og begge virker nu (tjekket med curl).
