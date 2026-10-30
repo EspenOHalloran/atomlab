@@ -343,6 +343,34 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
   - **Jeres svar (30. oktober 2026): Husk valget** (`localStorage`, `atomlabNavne`: `'til'` eller `'fra'`).
   - Tjek: testene `mars` og `saturn` (navnene forsvinder, og et tryk på kloden gør intet, når knappen er slået fra).
 
+## Prompt til M8: Stå på Mars (skrevet 30. oktober 2026)
+**Jeres valg (30. oktober 2026):** M8 kommer før M7b. Det ændrer rækkefølgen fra M7b → M8. M8 må derfor selv skaffe de skarpe kort ved de steder, man står (se spørgsmål 3 i prompten).
+
+**Model og effort:** Opus med høj effort. M8 er stor og ny: et landskab helt nede ved jorden, data i meget høj opløsning, himmel, lys og kamera i øjenhøjde. Først en plan, så et go. Xhigh er ikke nødvendig til planen. Det svære er valg af data og teknik, og det kan tjekkes med billeder og tal. Overvej xhigh, når det svære stykke bygges (overgangen fra kredsløb til jorden og dybdeopløsningen), hvis planen viser, at det bliver nyt og svært. Fable bruges ikke (I venter på Fable 5.5, `docs/plan-fable.md`). Hjælpeagenter: Opus med høj effort til `/faktatjek` (højst 2), Sonnet med lav effort til at finde ting i koden og Haiku med lav effort til lange testlogs. Start en ny session fra `main`.
+
+**Prompten (kopiér den):**
+
+> Lav en plan for Mars M8, "Stå på Mars", i AtomLab. **Byg ikke endnu: Vent på mit go.** Læs først "Lige nu" i DESIGN.md, `docs/plan-mars.md` (Delopgaverne, "Teknik" med billederne, licenserne og panoramaerne, "Plan for M7a", "Status efter M5b" og "Status efter M6b") og `docs/fakta-solsystemet.md` (del 3: Gale og Curiosity, Jezero og Perseverance, del 3B afsnit 8-9: licenser og 360°-panoramaer) og tjeklisterne i `docs/erfaringer.md`.
+>
+> Tjek først med curl, at kilderne kan åbnes: `asc-pds-services.s3.us-west-2.amazonaws.com` (USGS: `mosaic/Mars/MSL/` og `mosaic/Mars/MSR_TRN_HiRISE_soc_003_USGS_release_aug2024/`), `astrogeology.usgs.gov`, `science.nasa.gov`, `photojournal.jpl.nasa.gov`, `upload.wikimedia.org`, `hirise.lpl.arizona.edu` og `www.uahirise.org`. Giver curl "unable to get local issuer certificate", er siden ikke blokeret (se "Certifikater" i erfaringer.md). Spørg mig, hvis noget er blokeret, før planen går i gang.
+>
+> **Målet (mine ord fra starten):** Man skal få oplevelsen af at besøge planeterne. "Det hele skal med. Det skal være så flot og imponerende som muligt." M8: Man står på Mars ved Gale (med Mount Sharp) og ved Jezero (med deltaet), der hvor roverne kører, og kigger rundt.
+>
+> Planen skal stå i `docs/plan-mars.md` under "Plan for M8" og svare på:
+> 1. **Hvor står man?** Ved landingsstedet, der hvor roveren er nu (oktober 2026), eller et sted med en særlig god udsigt (fx Mount Sharp set fra kraterbunden, og deltaets kant i Jezero)? Giv koordinaterne og kilden, og vis billeder af udsigten fra hvert forslag.
+> 2. **Data:** Hvilke højdekort og fotos (rovernes kort fra USGS: Gale-højdekortet med 1 m og ortofotoet med 25 cm, Jezeros HiRISE-kort med 1 m, CTX), og hvor stort et område? Kan rasterio læse et lille vindue direkte over nettet (også i zip-filerne til Jezero)? Hvor store bliver filerne (de skal ligge på GitHub Pages), og hvor meget fylder de i grafikkortet på tabletten? Har fotoene skygger malet ind, og er de i farver eller gråtoner? Tjek licenserne og hvordan de skal krediteres.
+> 3. **M8 før M7b:** Hvordan kommer man fra kredsløb ned på jorden, når de meget skarpe kort fra M7b ikke findes endnu? Skal M8 selv have flere lag (fx et mellemlag med CTX og et skarpt lag lige omkring stedet), eller skal man "lande" med en overgang? Hvad af M7b bliver lavet undervejs, og hvad venter?
+> 4. **Teknik:** et eget landskab (et fladt eller let krummet net omkring stedet) eller endnu et `lokalt` net på kloden? Kameraet i øjenhøjde (ca. 1,7 m), horisonten ca. 3,4 km væk, Mount Sharp ca. 20-30 km væk, kameraets near og far og dybdeopløsningen (mål flimmer ved at sammenligne med en større near, se erfaringer.md under M6b). Hvordan drejer man rundt med fingeren og musen (som at dreje hovedet, som ved "Mars set fra Phobos")?
+> 5. **Himlen og lyset:** Mars' himmel er gulbrun om dagen og blålig omkring Solen ved solnedgang. Skal der være tid på dagen (en skyder eller knapper), støv i luften, der gør det fjerne landskab disset, og Solens størrelse set fra Mars? Kan Phobos ses på himlen, og må den være med?
+> 6. **Panoramaerne:** Kan rovernes rigtige 360°-panoramaer bruges (fx Curiositys PIA20332 og Perseverances PIA24422, de er kun striber)? Som en egen visning ("Se rovernes billede") ved siden af landskabet i 3D, eller slet ikke? Giv en anbefaling.
+> 7. **Roveren:** Skal roveren stå i billedet (en 3D-model fra NASA, hvis licensen og størrelsen tillader det), eller kun sporene?
+> 8. **Hvordan kommer man derhen?** En knap "Stå på Mars" ved Gale og Jezero (flybyen og et tryk på navnet), en flyvning ned og en knap tilbage.
+> 9. **Tekster:** hvad man ser fra stedet, roverens fund og "Ærligt talt" (hvad er målt, og hvad er tegnet). Alt med `/faktatjek` i byggefasen. Det, der ændrer sig (rovernes plads og status), slås op samme dag og skrives med måned og år.
+> 10. **Hvad det koster:** filernes størrelse, grafikkortets hukommelse og billeder i sekundet (pc og tablet). Hvad gør vi, hvis det bliver for tungt på tabletten?
+> 11. **Opdeling:** Skal M8 deles (fx M8a: Gale, M8b: Jezero og panoramaerne)? Giv en anbefaling.
+>
+> Giv anbefalinger med begrundelse, sæt beslutningerne op som spørgsmål til mig med anbefalingen først, og sig, hvis en anden model eller effort passer bedre til en del. Skriv mine svar ind i planen med det samme. Når jeg har sagt go: Byg det, én PR pr. del, som du selv merger, når testene er grønne. Giv mig "Ikke afprøvet" til sidst (det, jeg skal prøve på tabletten).
+
 ## Status efter M6b (30. oktober 2026): flybyen ud til Phobos og Deimos. M6 er færdig.
 - **13 stop:** … Nordpolen → **Phobos** → **Mars set fra Phobos** → **Deimos**. Ved Phobos stiller programmet månerne i banen (`stilMånerOp`), så Solen står ved `stop.sol` set fra månen. Ingen af dem står i Mars' skygge ved stoppene (testet). Månerne står stille ved stoppene, og Mars drejer.
 - **Phobos-stoppet er et kompromis:**
