@@ -450,6 +450,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Kortets projektion kan have `lat_ts`:** JPL's CTX-højdekort over Jezero er en ækvidistant cylinderprojektion med `lat_ts = 18,4663°`, så længden skal ganges med cos(lat_ts). `læs` tjekker nu projektionen i stedet for at gå ud fra lat_ts = 0.
 - **Mellemlaget som detaljekort:** Lagene regnes i meter fra kraterets nulpunkt, men meterne er en lige skalering af bredde og længde. Derfor kunne lag 2 gemmes igen som detaljekort til kloden (kun højderne genkodet), uden at noget skulle projiceres om.
 - **Se på et skyggebillede af et nyt højdekort, før det bruges** (hældningen gange 8, lys fra én side). Sømme mellem striber i en mosaik ses dér med det samme og kan næsten ikke fjernes bagefter (Jezero, M8b, fire forsøg). Vælg hellere kilden efter det, eller lav mosaikken selv af striber, der overlapper.
+- **`--ændret` efter push finder intet:** Testkøreren sammenligner med grenens upstream. Er grenen pushet, så giv den filerne: `node tests/koer-alle.mjs --ændret $(git diff --name-only origin/main...HEAD)`.
+- **`until ! pgrep -f …` igen:** Ventesløjfen fandt sin egen kommandolinje (står allerede under M8a). Vent på en fil eller en linje i loggen i stedet.
 - **Solen i ryggen eller fra siden:** Ved randen kigger man mod øst. Kl. 7:30 kigger man lige mod Solen (gløder, intet relief). Kl. 16:30 står Solen i ryggen. Se på flere tidspunkter, før starttiden vælges.
 
 ### Styringen på billedet (U2, 31. oktober 2026)
