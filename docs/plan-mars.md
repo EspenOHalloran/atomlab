@@ -402,14 +402,14 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
 | Nr. | Del | Hvorfor her |
 |---|---|---|
 | 1 | **L1: lyset i Stå på Mars, den billige del** | Mest synligt for prisen, og M8b bruger den samme shader, så det justeres kun én gang. Rører `landskab.js` og måske `scene3d.js`, ikke U3's filer, så den kan laves nu. |
-| 2 | **M8b: Jezero** (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
-| 3 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
-| 4 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
-| 5 | **U4** (tidsknappen og kontakterne i resten af AtomLab) | Når U3 er merget. Rører ikke Mars-filerne og kan ligge mellem to Mars-trin. |
-| 6 | **L2: lyset, den dyre del** | Kun det, der holder, når det er målt på tabletten. |
-| 7 | **Saturn S2** (ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Mellemstor og meget synlig. Tjek med curl, om `pds-rings.seti.org` kan åbnes. |
+| 2 | **Saturn S2** (ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Udfylder ventetiden på U3: Data og shader rører ikke U3's filer (kun nørd-teksten i `saturn.js` kan give en lille konflikt). Shaderen læser allerede τ fra et billede på én linje (`ringTekstur`), så kun kilden og antallet af punkter skiftes. `pds-rings.seti.org` svarer (curl 31. oktober 2026, også `CORSS_8001` og `COUVIS_8001`). |
+| 3 | **M8b: Jezero** (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
+| 4 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
+| 5 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
+| 6 | **U4** (tidsknappen og kontakterne i resten af AtomLab) | Når U3 er merget. Rører ikke Mars-filerne. |
+| 7 | **L2: lyset, den dyre del** | Kun det, der holder, når det er målt. Kræver en lokal session på jeres pc (Windows, så Remote Control fra skyen virker ikke). |
 | 8 | **Solsystemets overblik** (trin 2 i `plan-solsystemet.md`) | Stort og svært (et flydende nulpunkt), så det får sin egen plan først. |
-| 9 | **Saturn S3** | Kun Enceladus har et højdekort over hele månen. Venter. |
+| 9 | **Saturn S3** og Saturn i 8k | Venter. Kun Enceladus har et højdekort over hele månen, og det er groft. Til Saturn findes intet frit kort over 4k, og en gasplanet vinder næsten intet ved 8k. |
 
 ### 3. Lyset og kvaliteten
 **L1, det, der ikke koster hastighed** (konstanter og et par uniforms):
@@ -419,7 +419,7 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
 - Starttiden sænkes fra 8,5 (37°) til en lav sol (15-25°, fx 07:30), så skyggerne bliver lange.
 - Eksponering og glød kun, mens man står: Tonemappingen beholdes (ACES), og kun `toneMappingExposure` ændres. Et skift af tonemapping får Three.js til at oversætte shaderne igen, og det giver et hak. Måske kan gløden slås helt fra, mens man står. Det sparer også tid. **Tjekkes først:** Kommer Solens skær på himlen fra gløden? Så skal det laves i himlens shader i stedet.
 - **Facit:** NASA's panorama PIA20332 fra Naukluft (taget dér, hvor man står) hentes og bruges som sammenligning. Kun som billede, det kommer ikke med i programmet før M8c. Husk, at fotoet er hvidbalanceret (mindre rødt end i virkeligheden).
-- **Hvor:** på jeres pc med Remote Control (et billede tager sekunder i stedet for minutter, og I ser det på en rigtig skærm). Kan også laves i skyen, men langsommere og dyrere i tokens.
+- **Hvor:** i skyen (jeres pc er Windows, og en cloud-session kan kun bruge en Mac eller Linux med Remote Control). Farverne er de samme som på en rigtig skærm, men et billede tager minutter, så tag få og små billeder. I bedømmer det selv på pc og tablet til sidst.
 
 **L2, det, der skal måles først:**
 
@@ -435,32 +435,36 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 
 | Del | Model og effort | Omfang | Afhængigheder | Faktatjek |
 |---|---|---|---|---|
-| L1 | Opus, medium | lille | Remote Control til jeres pc | kun hvis "Ærligt talt" om disen ændres |
+| L1 | Opus, medium | lille | ingen (i skyen) | kun hvis "Ærligt talt" om disen ændres |
 | M8b | Opus, høj | mellem | `planetarymaps.usgs.gov` (tjekkes med curl), U3 merget | Perseverances plads og tal (med dato), deltaet, Cheyava Falls |
 | M8c del 1 | Opus, høj | mellem | `assets.science.nasa.gov` (åben 31. oktober 2026) | fotoenes dato, kamera og hvidbalance |
 | M8c del 2 | Opus, høj | mellem | jeres ja til at gøre modellen mindre (`gltf-transform`, et værktøj, der køres én gang, ikke et byggetrin), `GLTFLoader` fra `three@0.186.1`, måling på tabletten | rovernes retning og plads i oktober 2026 |
-| L2 | Opus, høj | mellem | jeres pc og tablet | – |
+| L2 | Opus, høj | mellem | en lokal session på jeres pc (Claude Code installeret, Node.js og Playwright) | – |
 | U4 | Opus, medium | lille-mellem | U3 merget | – |
 | S2 | Opus, høj | mellem | `pds-rings.seti.org` | ringenes tal og kilde i nørd-teksten |
 
-### 5. Go'er og hvad I skal prøve
-- **Nu (koster ingen tokens):** en runde på tabletten:
-  1. Kører Stå på Mars glat, når man drejer hovedet, på langs og på højkant?
-  2. Hvor længe går der første gang fra "Stå på Mars", til man er landet?
-  3. Ses der kanter, hvor lagene mødes (ca. 1, 4 og 32 km væk)?
-  4. Lyset kl. 8:30, kl. 12 og ved solnedgang: Hvad er værst?
-  5. Er Styr-boksen og træet lette at bruge på højkant?
-- **Go 1: L1.** I ser en mørkere himmel, mere relief og en lavere sol fra start. På tabletten: lige så glat som før?
-- **Go 2: M8b + resten af M7b** (efter U3). I står på kanten af Jezero og ser ned over deltaet. På tabletten: samme spørgsmål som ved Gale.
-- **Go 3: rovernes panoramaer.** I skifter mellem det tegnede og det fotograferede. Står Mount Sharp samme sted i begge?
-- **Go 4: Curiosity som 3D-model.** På tabletten: kører det stadig glat, når roveren er i billedet?
-- **Go 5: L2**, med ambient occlusion først.
-- Derefter U4, S2 og en plan for trin 2.
+### 5. Arbejdsgangen (jeres svar 31. oktober 2026)
+- **"Du skal bare lave alt det, du kan fra listen, i din rækkefølge. Go mellem hvert skridt."** Rækkefølgen i afsnit 2 gælder, og M7b er droppet (på nær resten i M8b).
+- **I laver jeres vurdering til sidst**, ikke efter hvert skridt. Hvert skridt skriver derfor sin egen liste "Ikke afprøvet" (hvad I skal kigge efter på pc og tablet), og listerne samles til jeres runde til sidst. Det betyder, at lyset i L1 justeres efter Opus' billeder og NASA's foto, ikke efter jeres øjne. Det kan kræve en rettelse efter jeres runde.
+- **Nye sessioner, hvor det giver mening**, for at spare tokens, men ikke på bekostning af kvaliteten. Hvert skridt slutter med at skrive prompten til det næste skridt ind under "Prompter til de næste skridt" nedenfor. I starter den nye session med prompten og siger go.
+- **Sessionerne:** L1, S2, M8b, M8c (begge dele i én session, med go imellem), U4, L2 (lokal på jeres pc) og planen for trin 2 får hver sin session.
+- **DESIGN.md og `docs/plan-ux.md` røres ikke, før U3 er merget.** Indtil da skrives status her i filen. Den første session efter U3 skriver status ind i "Lige nu" i DESIGN.md.
 
 ### Åbne spørgsmål
-1. Er I enige i at droppe M7b (på nær resten i M8b)?
-2. Må Curiositys model gøres mindre med `gltf-transform` (go 4)?
-3. Remote Control til jeres pc ved go 1 (se "Lige nu" i DESIGN.md, når det er sat op).
+1. Må Curiositys model gøres mindre med `gltf-transform` (en npm-pakke, der kun køres én gang som værktøj)? Spørges ved M8c del 2.
+2. L2: Vil I installere Claude Code på pc'en (`irm https://claude.ai/install.ps1 | iex` i PowerShell) eller bruge Claude Code i Claude-appen? Spørges, når vi når dertil.
+
+### Prompter til de næste skridt
+**L1 (skrevet 31. oktober 2026):**
+> Lav L1: lyset i Stå på Mars, den billige del. Læs CLAUDE.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (især 3 og 5) og "Stå på Mars: lyset og kvaliteten". Tjek først, om U3 (`ccr-1dbfe8b3-phtbvs`) er merget. Er den ikke, så rør ikke DESIGN.md og `docs/plan-ux.md`.
+>
+> **Mål:** mere kontrast og relief, når man står på Mars. I dag er himmel og jord næsten lige lyse, og disen er kraftig. Ingen ændring må koste hastighed: kun konstanter og uniforms i `js/solsystem/landskab.js` (`sollys`, `himmellys`, himlen, disen) og starttiden i `LANDSKAB` i `js/kosmos/mars.js`. Eksponering og glød ændres kun, mens man står, og sættes tilbage, når man letter. Behold ACES, for et skift af tonemapping oversætter shaderne igen. Tjek, om Solens skær på himlen kommer fra gløden, før gløden dæmpes eller slås fra.
+>
+> **Facit:** Hent NASA's panorama PIA20332 fra Naukluft (`science.nasa.gov`/`assets.science.nasa.gov`, begge åbne), og sammenlign med det. Fotoet er hvidbalanceret (mindre rødt end i virkeligheden). Hold Mars rødlig, og tag ikke fotoets farver blindt. Fysikken skal stadig holde (`TAU` 0,4 passer med årstiden). Ændres disen eller lyset, så "Ærligt talt" ikke længere passer, så ret teksten og faktatjek den.
+>
+> **Billeder:** Skyen har intet grafikkort (ca. 1,3 billede i sekundet). Brug `tests/vaerktoejer/landskab-lille.mjs` med få billeder (fx kl. 7:30, 12 og 17 mod Mount Sharp, før og efter). Start den i baggrunden, og vent med en overvågning (se erfaringer.md under "Lyset i Stå på Mars"). Mål billeder i sekundet i testbrowseren før og efter, så intet er blevet langsommere.
+>
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv status under "Status efter L1" her i filen med listen "Ikke afprøvet" til jeres runde til sidst. Skriv så prompten til S2 under "Prompter til de næste skridt" (Saturns ringe fra Cassinis målinger, se `docs/plan-saturn-kvalitet.md` under S2 og afsnit 2 her). Model: Opus. Effort: medium (I sætter den selv).
 
 ## Stå på Mars: lyset og kvaliteten (31. oktober 2026, fund og muligheder, intet er ændret endnu)
 **Anledning:** Jeres iagttagelse: "Det ser ret lyst ud, når man står der." Der er kun læst kode og taget prøvebilleder. Intet er justeret, og der er ikke målt på rigtigt grafikkort.
