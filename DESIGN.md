@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (S2 er færdig: Saturns ringe fra Cassinis måling. Næste er M8b, Jezero, og den venter på jeres go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (M8b er færdig: Stå på Mars ved Jezero. Næste er M8c del 1, rovernes panoramaer, og den venter på jeres go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,26 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (31. oktober 2026): S2, Saturns ringe fra Cassinis måling.** Detaljerne står i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S2". Jeres svar ved valget af kilde: "Go" (til alle tre forslag).
+**Senest lavet (31. oktober 2026): M8b, Stå på Mars ved Jezero.** Detaljerne står i [docs/plan-mars.md](docs/plan-mars.md) under "Status efter M8b". Jeres besked ved go: U4 bygges samtidig i en anden session, så Stjerneovnen, Reaktoren, pause.js, style.css og index.html er ikke rørt. I vurderer det hele til sidst.
+- **To nye steder ved Jezero** (i træet under Jezero og med "🧍 Stå på Mars" ved stoppet):
+  - **"Ved randen":** hvor Perseverance holdt i oktober 2024 på vej op ad randen, ca. 500 m over landingsstedet. Man kigger ud over deltaet og hele krateret. Man lander kl. 16:30 med Solen i ryggen, for om morgenen kigger man lige mod Solen.
+  - **"Landingsstedet":** Octavia E. Butler Landing. Man kigger mod vest mod deltaets front, ca. 2-3 km væk, kl. 7:30.
+- **Kortene:** Mars 2020's landingskort fra USGS (højder med 1 m og foto med 25 cm) og et højdekort over hele krateret (CTX, 20 m). Teknikken og lyset er de samme som ved Gale (L1 uændret).
+- **Skarpere kort i kredsløb (resten af M7b):** Mellemlaget fra Stå på Mars (64 × 64 km) ligger nu som detaljekort på kloden ved Gale- og Jezero-stoppet, med ca. 32 m mellem højderne i stedet for ca. 170 m. Ved Jezero dækker det hele krateret og deltaet.
+- **Tekster:** sider til begge steder (randen, Cheyava Falls og landingen med himmelkranen og Ingenuity). Faktatjekket med kilderne læst (`docs/fakta-solsystemet.md`, "Faktatjek M8b"). Rettet bl.a.: "et nedslag" i stedet for "en asteroide", og at roveren fandt et sikkert sted ud fra et kort, der var tegnet på forhånd.
+- **Kendt fejl i kilden:** Højdekortet over hele krateret er sat sammen af striber. To steder ses det som tynde, lige streger hen over kraterbunden ved Jezero-stoppet. Fire forsøg på at fjerne dem fjernede enten for lidt eller ændrede det rigtige landskab, så kortet er uændret, og teksten siger det. En idé til senere står i plan-mars.md.
+- **Ikke lavet:** Hjælpen og "Om AtomLab" i index.html nævner kun Gale (index.html røres ikke under U4). To sætninger, der skal rettes, når U4 er merget.
+- **Størrelse:** Lagene fylder 84 MB i repoet, og første gang, man står ved et af stederne, hentes ca. 48-55 MB på pc og 42-47 MB på tablet (mellemlaget deles af begge steder). Mellemlagets højdekort er 18,8 MB, for en grovere højde kunne give striber i lyset på den flade kraterbund.
+- **Ikke afprøvet (på pc og tablet):**
+  1. Ved randen: Er udsigten flot nok kl. 16:30, eller vil I hellere have sidelys (fx kl. 10 eller 14)? Det er ét tal (`tid` i `LANDSKAB`).
+  2. Ved randen: Kan I se deltaet og randen på den anden side i disen? Østranden er lav og ligger lavere end jer, så den er svag.
+  3. Ved landingsstedet: Kan I se deltaets front (50-100 m høj, 2-3 km væk)? Zoom ind med kikkerten.
+  4. Hentetid og hastighed på tabletten første gang ved Jezero (ca. 42-47 MB på tablet). I testbrowseren er det lige så hurtigt som ved Gale (0,39 billeder i sekundet mod 0,37-0,49).
+  5. Gale- og Jezero-stoppet på flybyen: Ser kraterne skarpere ud, og er der en synlig kant, hvor detaljekortet slutter (overgangen er 6 km bred)? Hvor meget forstyrrer stregerne fra sømmene på Jezeros kraterbund?
+  6. Flyvningen ned til Stå på Mars: Passer kloden og landskabet bedre sammen i overgangen nu?
+- **Næste:** M8c del 1 (rovernes panoramaer). Prompten står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompter til de næste skridt". Venter på jeres go.
+
+**Før det (31. oktober 2026): S2, Saturns ringe fra Cassinis måling.** Detaljerne står i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S2". Jeres svar ved valget af kilde: "Go" (til alle tre forslag).
 - **Tætheden i ringene er målt:** Cassini så stjernen β Centauri skinne gennem ringene 28. juli 2008 (UVIS). Ringene har nu 8.192 målte punkter (ca. 9 km pr. punkt) i stedet for de ringe, programmet lavede. Kanterne, Huygens-ringen i Cassini-delingen, B-ringens tætte kerne og de mange tynde ringe i C-ringen er de rigtige.
 - **Det, målingen ikke viser:** D-ringen er for tynd og er stadig tegnet. F-ringen er flyttet til sin middelafstand (den er skæv). Farvebilledets falske striber er fjernet, og kun farvetonen er tilbage.
 - **Tekster:** Nørd-teksten, "Billederne" og "Ærligt talt" ved Ringene siger, hvor tallene kommer fra. "Optisk dybde" er kommet i Ordbogen. Faktatjekket mod dataene og deres etiket (`docs/fakta-solsystemet.md`, "Faktatjek S2").
@@ -40,7 +59,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   2. Modlys og "Hen over ringene" på flybyen: Ser de mange tynde ringe flotte ud, og flimrer de, når kameraet glider?
   3. Langt væk (hele systemet): Flimrer ringene, når I drejer? Teksturen har mipmaps, men det er ikke set på en rigtig skærm.
   4. Saturns skygge fra ringene på planeten bruger de samme målte tal. Ser skyggen rigtig ud?
-- **Næste:** M8b (Jezero). Prompten står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompter til de næste skridt". Venter på jeres go.
+- **Næste:** M8b (Jezero), lavet 31. oktober 2026 (se ovenfor).
 
 **Før det (31. oktober 2026): L1, lyset i Stå på Mars (den billige del).** Rækkefølgen og arbejdsgangen for resten af Mars står i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for resten af Mars" (jeres svar: "Du skal bare lave alt det, du kan fra listen, i din rækkefølge. Go mellem hvert skridt", og I vurderer det hele til sidst). Status, målinger og "Ikke afprøvet" står dér under "Status efter L1".
 - **Mere kontrast:** Mindre himmellys i skyggerne (`HIMMELLYS` 0,55 → 0,18), lidt mindre sollys, en himmel, der bliver lysere, jo højere Solen står, og mørkere og mere mættet opad. Disen (`TAU` 0,4) er uændret. Justeret efter tal fra NASA's panorama fra Naukluft (PIA20332), ikke efter jeres øjne.

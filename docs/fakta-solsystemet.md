@@ -799,6 +799,29 @@ En hjælpeagent (Opus, høj effort) læste kilderne direkte.
 
 **Fælder (nye):** "Phobos står op i øst" (vest). "Mars' himmel er blå om dagen og rød ved solnedgang" (omvendt). "Butterscotch" om himlen. "Billederne fra kredsløb er grå" (HiRISE har også en farvemosaik fra 2025: skriv "de billeder, programmet bruger"). "1 m mellem højderne = 1 m skarphed". "Solen er halvt så stor fra Mars" (ca. 2/3 så bred).
 
+### Faktatjek M8b: Stå på Mars ved Jezero (31. oktober 2026)
+En hjælpeagent (Opus, høj effort) læste kilderne direkte, hvor intet andet er nævnt. `www.jpl.nasa.gov` svarede 403, så JPL's nyheder er læst i deres udgave på nasa.gov (samme tekst).
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Stoppet på sol 1301 (18,4695° N, 77,2930° Ø, −2.056 m) ligger midt på vestrandens inderside. Sol 1301 = 17. oktober 2024 | OK (bunden ved Neretva −2.353 m, toppen Lookout Hill −1.786 m) | M20_waypoints.json (læst), NASA "Perseverance to begin long climb up crater rim" (læst), egen udregning (1 sol = 1,02749 døgn fra 18. februar 2021) |
+| Opstigningen startede i slutningen af august 2024, tog ca. 3½ måned, gik ca. 500 m op og nåede toppen (Lookout Hill) 10. december 2024 | OK | NASA-blog 27. august 2024 og "Perseverance reaches top of Jezero Crater rim" (12. december 2024, læst) |
+| Randen: sten slået op dybt nedefra ved nedslaget "og måske ældre nedslag". Nogle af de ældste sten (Silver Mountain, sandsynligvis mindst 3,9 mia. år) fundet på den anden side af toppen | Rettet fra "en asteroide" og "sten slynget op, da krateret blev slået" | NASA 12. december 2024 og 10. april 2025 (læst) |
+| Neretva Vallis er den gamle floddal, hvor vandet løb ind i krateret. Cheyava Falls i "Bright Angel" ved dens nordkant, prøven 21. juli 2024. Ca. 1,8 km mod nord-nordøst for stoppet | OK ("knap 2 km mod nord") | NASA 25. juli 2024 (læst), M20_waypoints.json (sol 1206-1220), egen udregning |
+| Octavia E. Butler Landing: et kaldenavn fra holdet (5. marts 2021) efter den afdøde science fiction-forfatter | OK, "holdet bag roveren kaldte" tilføjet (ikke et officielt IAU-navn) | NASA 5. marts 2021 (læst) |
+| Varmeskjold, faldskærm og en kran med raketmotorer, der sænker roveren ca. 7,6 m ned i tre nylonreb | OK ("dalede" i stedet for "svævede") | NASA "How we land on Mars" (læst), JPL's pressemappe (kun søgeuddrag) |
+| Roveren sammenlignede sine billeder med et kort fra kredsløb (pladsen) og valgte et sikkert sted med et kort over farer, lavet på forhånd | Rettet: Farerne blev ikke set i billederne | USGS Astropedia "Mars 2020 Jezero Crater Landing Site Products" (læst), pressemappen (søgeuddrag) |
+| HiRISE-højderne (1 m) og fotoet (25 cm) er USGS' (Fergason, Galuszka, Hare og Mayer, 2020), lavet til landingen som grundlag for kortet over farer. Kortet om bord var en CTX-mosaik (6 m), som programmet ikke bruger | OK | USGS Astropedia og .xml-filerne på asc-pds-services (læst) |
+| CTX-højdekortet (20 m) er ikke et landingskort: "Mars 2020 Science Investigation CTX DEM Mosaic" (F. Calef, PDS, 14. oktober 2021), lavet bagefter til holdets undersøgelser | Rettet fra "forskere ved JPL" til "holdet bag Perseverance" (Calefs arbejdsplads står ikke på siden) | USGS Astropedia (læst) |
+| Ingenuity 19. april 2021: ca. 3 m op, svævede i 30 sekunder, 39,1 sekunder i alt, "first powered, controlled flight on another planet", tæt ved landingsstedet (Wright Brothers Field) | OK | NASA 19. april 2021 (læst), M20_waypoints.json (roveren ca. 20 m fra landingsstedet på sol 43) |
+| Stoppet ved randen er ca. 500 m højere end landingsstedet (514 m) og ca. 9 km fra det | OK | M20_waypoints.json, egen udregning |
+| Deltaets front ca. 2-3 km mod vest for landingsstedet | Rettet fra "ca. 2 km" | NASA (2,3 km, søgeuddrag), NTRS (1,9 km, søgeuddrag), roverens vej (2,4-2,8 km), programmets højdekort (stiger 50-100 m 2-2,5 km mod vest) |
+| Randen på den anden side ca. 45 km væk, lav og slidt og lavere end stoppet | OK | Agentens profil i CTX-højdekortet (top 45-51 km væk, −2.150 til −2.250 m) og programmets HRSC-kort |
+
+**Fælder (nye):** "Hele randen blev slynget op af Jezero-nedslaget" (måske også ældre nedslag, og nogle lag er dannet på stedet). "En asteroide lavede krateret" (det vides ikke: skriv "nedslag"). "De ældste sten ligger på randens inderside" (Silver Mountain lå uden for krateret). "Roveren så farerne i sine billeder" (de stod på et kort, tegnet på forhånd). "Roveren sammenlignede med HiRISE-kortet" (om bord var en CTX-mosaik). Opstigningens tal ændrede sig undervejs (august 2024: ca. 300 m til Aurora Park, december: 500 m til Lookout Hill). "Octavia E. Butler Landing er et officielt navn" (et kaldenavn).
+
+**Mindst sikre:** afstanden til deltaets front (kilderne siger 1,9-2,8 km), hvor østrandens top præcis er, og Silver Mountains alder ("most likely").
+
 ## B. Phobos, Deimos, formmodeller, licenser og panoramaer
 
 Lavet 24. oktober 2026 til AtomLab (Solsystemet: Mars' måner i 3D).

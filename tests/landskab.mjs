@@ -1,4 +1,4 @@
-// Stå på Mars (M8a i docs/plan-mars.md): knappen ved Gale, landingen, stedet og højden, Solen efter klokken, Phobos
+// Stå på Mars (M8a og M8b i docs/plan-mars.md): knappen ved Gale og Jezero, detaljekortene på kloden, landingen, stedet og højden, Solen efter klokken, Phobos
 // står op i vest og Deimos i øst, at man drejer hovedet (træk mod højre: landskabet følger med), kikkerten, at dagen
 // går med tidsknappen (▶, U2 i docs/plan-ux.md), "Solnedgang", at gå til Curiosity og tilbage i kredsløb (kameraet og
 // kloden sættes tilbage).
@@ -32,6 +32,9 @@ tjek('under flyvningen til Gale: ingen "Stå på Mars" endnu', !(await knapper()
 await hop();
 await s.waitForFunction(() => atomlabTest.solsystem.knapper().includes('🧍 Stå på Mars'), null, { timeout: 10000, polling: 100 }).catch(() => {});
 tjek('ved Gale: knappen "🧍 Stå på Mars"', (await knapper()).includes('🧍 Stå på Mars'), JSON.stringify(await knapper()));
+// M8b: mellemlaget som detaljekort på kloden ved Gale-stoppet
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().billeder().lokalt.gale.detalje?.hentet, null, { timeout: 30000, polling: 200 }).catch(() => {});
+tjek('ved Gale: detaljekortet (mellemlaget, M8b) er hentet', (await fm(() => atomlabTest.solsystem.fænomen().billeder().lokalt.gale.detalje?.hentet)) === true);
 tjek('ved Gale: de to steder, man kan stå, står under Gale i træet', (await træ()).filter((p) => p.niveau === 2).map((p) => p.id).join() === 'stå-naukluft,stå-curiosity', JSON.stringify(await træ()));
 
 // Ned på jorden
@@ -132,6 +135,36 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, nu
 await s.waitForTimeout(800); // tonen mellem landskabet og kloden
 await hop();
 tjek('fra landskabet: Phobos i træet letter og flyver til Phobos', !(await stå()).står && (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'phobos');
+
+// Jezero (M8b): knappen, stederne i træet, detaljekortet, randen og landingsstedet
+await trykTræ('jezero');
+await hop();
+await s.waitForFunction(() => atomlabTest.solsystem.knapper().includes('🧍 Stå på Mars'), null, { timeout: 10000, polling: 100 }).catch(() => {});
+tjek('ved Jezero: knappen "🧍 Stå på Mars"', (await knapper()).includes('🧍 Stå på Mars'), JSON.stringify(await knapper()));
+tjek('ved Jezero: de to steder står under Jezero i træet', (await træ()).filter((p) => p.niveau === 2).map((p) => p.id).join() === 'stå-randen,stå-landing', JSON.stringify(await træ()));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().billeder().lokalt.jezero.detalje?.hentet, null, { timeout: 30000, polling: 200 }).catch(() => {});
+tjek('ved Jezero: detaljekortet er hentet', (await fm(() => atomlabTest.solsystem.fænomen().billeder().lokalt.jezero.detalje?.hentet)) === true);
+await tryk('🧍 Stå på Mars');
+await hop();
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 60000, polling: 200 });
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
+t = await stå();
+tjek('ved randen af Jezero: højden passer med NASA (−2.056 m ved sol 1301), kigger mod øst', t.sted === 'randen' && Math.abs(t.højde + 2056) < 10 && Math.abs(t.kompas - 95) < 1 && !t.kloden, JSON.stringify(t));
+tjek('ved randen: panelet og teksten om deltaet', (await s.textContent('#solsystemNavn')) === 'Ved randen af Jezero' && /deltaet/.test(await s.textContent('#solsystemTekst')));
+await trykTræ('stå-landing');
+await s.waitForFunction(() => atomlabTest.solsystem.sted() === 'stå-landing', null, { timeout: 60000, polling: 200 }).catch(() => {});
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
+t = await stå();
+tjek('ved landingsstedet: højden passer med NASA (−2.570 m), kigger mod vest', t.sted === 'landing' && Math.abs(t.højde + 2570) < 10 && Math.abs(t.kompas - 270) < 1, JSON.stringify(t));
+tjek('ved landingsstedet: teksten om Octavia E. Butler Landing', /Octavia E\. Butler/.test(await s.textContent('#solsystemTekst')));
+// Fra Jezero til Gale: letter først
+await trykTræ('gale');
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
+await s.waitForTimeout(800); // tonen mellem landskabet og kloden
+tjek('fra landingsstedet: Gale i træet letter', !(await stå()).står && (await stå()).kloden);
 await trykTræ('gale');
 await hop();
 

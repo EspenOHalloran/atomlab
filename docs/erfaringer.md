@@ -148,6 +148,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Beta-plus = en positron skydes ud." Ofte fanger kernen i stedet en elektron.
 - "Første gang set …" Tjek, om det var "første gang set tydeligt" eller "første direkte måling".
 - Citater, der citeres i mange udgaver (Sagan, Einstein), har ofte en ændret ordlyd.
+- "En asteroide lavede krateret" (Jezero, M8b). Det vides ikke, hvad der ramte: skriv "nedslag". Og randen er ikke kun sten fra ét nedslag.
+- "Roveren så farerne i sine billeder" (Perseverances landing). Billederne gav kun pladsen. Farerne stod på et kort, der var tegnet på forhånd.
 - "Nøgne kerner" og "ioner": et frit atom kan højst holde på én ekstra elektron (O²⁻ findes kun i krystaller).
 - "Natrium giver sin elektron til chlor, fordi begge vil have en fuld skal." For to frie atomer koster det energi: Det kræver ca. 5,1 eV at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage. Gevinsten kommer, når Na⁺ og Cl⁻ trækker i hinanden (i saltkrystallen eller som et par).
 - Supertunge grundstoffer: Halveringstiden spænder fra under et millisekund (Og) til over et døgn (Db-268). Skriv ikke "henfalder med det samme" om dem alle.
@@ -441,6 +443,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **L1: Mål et foto og billederne med tal** (lysstyrken af himlen, jorden og de mørkeste og lyseste 5 %), ikke kun med øjnene. Det viste to rodårsager: Himlen blev ikke lysere over 30° sol, men jorden gjorde (kl. 12 var jorden lysest), og himmellyset var halvdelen af lyset på jorden ved lav sol, så skyggerne var svage. Pas på målefeltet: "Himlen" øverst i billedet var nogle gange Mount Sharp.
 - **Et værktøj, der tager billeder lige efter en landing, skal vente på landingen.** Ellers overskriver landingen blikket i det første billede (`landskab-lille.mjs`, rettet i L1).
 - **Eksponering, der følger lyset, er gratis** (én værdi i JS pr. billede) og fjerner, at middag er meget lysere end morgen. Gløden kan slås fra med `verden.glød.enabled`, men så skal Solens skær laves i himlens shader.
+
+### Stå på Mars ved Jezero (Mars M8b, 31. oktober 2026)
+- **Se på, hvordan en GeoTIFF er lagt, før den læses over nettet:** Mars 2020's landingskort ligger i striber på én række (`block_shapes` = (1, bredde)) og uden overblik. Over `/vsicurl` er hver række en forespørgsel: 512 × 512 m af fotoet tog 31 sekunder, og hele lag 0 og 1 ville have taget lang tid. Hele filen hentet i 8 stykker med `curl -r` tog ca. 6 minutter (7,4 GB, ca. 19 MB/s), og så tog alle lagene 8 minutter. `lav_landskab.py` tager nu `orig=mappe`.
+- **Afbryd ikke en del af en hentning inde i et script, der bagefter sætter delene sammen og sletter dem:** Da én langsom `curl` blev slået ihjel, gik scriptet videre til `cat` og `rm`. Delene blev reddet i sidste øjeblik. Hent den manglende del for sig, og sæt sammen i hånden (tjek størrelsen og et par rækker mod kilden).
+- **Kortets projektion kan have `lat_ts`:** JPL's CTX-højdekort over Jezero er en ækvidistant cylinderprojektion med `lat_ts = 18,4663°`, så længden skal ganges med cos(lat_ts). `læs` tjekker nu projektionen i stedet for at gå ud fra lat_ts = 0.
+- **Mellemlaget som detaljekort:** Lagene regnes i meter fra kraterets nulpunkt, men meterne er en lige skalering af bredde og længde. Derfor kunne lag 2 gemmes igen som detaljekort til kloden (kun højderne genkodet), uden at noget skulle projiceres om.
+- **Se på et skyggebillede af et nyt højdekort, før det bruges** (hældningen gange 8, lys fra én side). Sømme mellem striber i en mosaik ses dér med det samme og kan næsten ikke fjernes bagefter (Jezero, M8b, fire forsøg). Vælg hellere kilden efter det, eller lav mosaikken selv af striber, der overlapper.
+- **Solen i ryggen eller fra siden:** Ved randen kigger man mod øst. Kl. 7:30 kigger man lige mod Solen (gløder, intet relief). Kl. 16:30 står Solen i ryggen. Se på flere tidspunkter, før starttiden vælges.
 
 ### Styringen på billedet (U2, 31. oktober 2026)
 - **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
