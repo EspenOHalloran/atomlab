@@ -4,7 +4,8 @@
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTil, passerTilBoks, begrænsDrejning, kameraSving, LAV_KVALITET } from './scene3d.js';
-import { Atom, gemtVisning, gemVisning, visningKnapTekst } from './atom.js';
+import { Atom, gemtVisning, gemVisning } from './atom.js';
+import { lavKontakt } from './kontakt.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skaller, placering } from './data/grundstoffer.js';
 import { typiskeNeutroner, stabileIsotoper, stabilitet } from './data/isotoper.js';
 import { FAKTA, opdagetTekst } from './data/fakta.js';
@@ -551,14 +552,16 @@ function passerFilter(nr) {
 }
 
 // ---------- Detaljevisning ----------
+let skyKontakt = null; // kontakten "Elektronsky" (samme valg som i værkstedet)
 function lavKnapper() {
+  skyKontakt = lavKontakt($('systemVisning'), 'Elektronsky');
   $('systemLuk').addEventListener('click', () => lukDetalje());
   // Ringe eller elektronsky (samme knap og samme valg som i værkstedet)
   $('systemVisning').addEventListener('click', () => {
     const visning = atom.visning !== 'sky' ? 'sky' : 'ringe';
     atom.sætVisning(visning);
     gemVisning(visning);
-    $('systemVisning').textContent = visningKnapTekst(visning);
+    skyKontakt.sæt(visning === 'sky');
     lyd.klik();
   });
   $('systemForrige').addEventListener('click', () => skift(-1));
@@ -606,7 +609,7 @@ function visDetalje(nr, medLyd = true) {
   verden.styring.autoRotate = true;
   udfyldKort(nr);
   if (atom.visning !== gemtVisning()) atom.sætVisning(gemtVisning());
-  $('systemVisning').textContent = visningKnapTekst(atom.visning);
+  skyKontakt.sæt(atom.visning === 'sky');
   atom.sætStraks(nr, typiskeNeutroner(nr), nr);
   atom.sætStatus(stabilitet(nr, typiskeNeutroner(nr)).status);
   atom.gruppe.visible = true;

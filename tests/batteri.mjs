@@ -107,7 +107,10 @@ await page.waitForTimeout(500);
 tjek('opgave hurtig (varme)', (await fr())['b-hurtig']);
 
 // Snydt lader: over 4,2 V, nåle og kortslutning
+const snydK = () => page.evaluate(() => { const k = document.querySelector('#batteriSnyd'); return { rolle: k.getAttribute('role'), til: k.getAttribute('aria-checked'), tekst: k.textContent.trim() }; });
+tjek('"Snyd laderen" er en kontakt, der er slukket', JSON.stringify(await snydK()) === JSON.stringify({ rolle: 'switch', til: 'false', tekst: 'Snyd laderen (farligt!)' }), JSON.stringify(await snydK()));
 await page.click('#batteriSnyd');
+tjek('"Snyd laderen" tændes (samme navn)', (await snydK()).til === 'true' && (await snydK()).tekst === 'Snyd laderen (farligt!)');
 r = await kør(40);
 console.log('     snydt lader:', JSON.stringify(r));
 tjek('kortslutning', r.død);

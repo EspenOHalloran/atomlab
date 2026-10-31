@@ -23,7 +23,7 @@ const nukleoner = await T(() => atomlabTest.fusion.partikler().reduce((sum, p) =
 tjek('40 protoner fra start (40 kernepartikler)', nukleoner === 40, nukleoner);
 // For koldt: skyd proton mod proton ved 3 mio. grader
 await T(() => atomlabTest.fusion.temperatur(3));
-await page.click('[data-fus-tempo="3"]');
+await page.click('#fusTid [data-tid="hurtig"]');
 // Spol frem i stedet for at vente (testbrowseren tegner kun få billeder i sekundet)
 const koldtLøst = () => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver?.['f-koldt']);
 for (let forsøg = 0; forsøg < 2; forsøg++) {
@@ -32,12 +32,12 @@ for (let forsøg = 0; forsøg < 2; forsøg++) {
   if (løst) break;
 }
 await page.screenshot({ path: UD + '/f1b-koldt.png' });
-await page.click('[data-fus-tempo="0.6"]');
+await page.click('#fusTid [data-tid="spil"]');
 let fr = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}'));
 tjek('opgave: for koldt', fr.opgaver?.['f-koldt'], JSON.stringify(fr));
 // Varmt og hurtigt: lad reaktionerne ske af sig selv
 await T(() => atomlabTest.fusion.temperatur(110));
-await page.click('[data-fus-tempo="3"]');
+await page.click('#fusTid [data-tid="hurtig"]');
 // Før ventede testen 45 sekunder. Ved 4 billeder i sekundet svarede det til ca. 9 sekunder i ovnen.
 await T(() => atomlabTest.fusion.spolAlt(15));
 await page.waitForTimeout(500);
@@ -46,7 +46,7 @@ const energi = await T(() => atomlabTest.fusion.energi());
 const typer = await T(() => { const t = {}; for (const p of atomlabTest.fusion.partikler()) t[p.type] = (t[p.type] || 0) + 1; return t; });
 console.log('     energi', energi, 'kerner', JSON.stringify(typer));
 tjek('der er sket fusion', energi > 0);
-tjek('tempo: Hurtig er valgt', await page.evaluate(() => document.querySelector('[data-fus-tempo="3"]').classList.contains('valgt')));
+tjek('tempo: ⏩ er valgt (3)', await page.evaluate(() => document.querySelector('#fusTid [data-tid="hurtig"]').classList.contains('valgt') && atomlabTest.fusion.tempo() === 3));
 tjek('panelet viser energi', (await page.textContent('#fusEnergi')) !== '0 MeV', await page.textContent('#fusEnergi'));
 fr = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}'));
 tjek('tilfældige reaktioner løser ikke opgaven', !fr.opgaver?.['f-d']);

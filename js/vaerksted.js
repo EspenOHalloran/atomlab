@@ -1,7 +1,8 @@
 // Atomværkstedet: byg et atom af protoner, neutroner og elektroner, og se hvad det bliver.
 
 import { verden, sætVindue, passerTil, kameraSving, flyInd, ROLIG } from './scene3d.js';
-import { Atom, sætUdgave, hentUdgave, gemtVisning, gemVisning, visningKnapTekst } from './atom.js';
+import { Atom, sætUdgave, hentUdgave, gemtVisning, gemVisning } from './atom.js';
+import { lavKontakt } from './kontakt.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering, konfigurationTekst } from './data/grundstoffer.js';
 import { bindingsenergi, kerneRadiusFm } from './data/kerne.js';
 import { stabilitet, isotopNavn, typiskeNeutroner, henfaldsmåde, stabileNeutroner } from './data/isotoper.js';
@@ -173,6 +174,7 @@ let neutralTimer = null; // efter et henfald bliver atomet neutralt igen lidt ef
 let neutralVenter = false; // man forlod værkstedet, mens atomet var en ion efter et henfald
 const ION_TID = 3000; // så længe (ms) er atomet en ion efter et henfald, før det bliver neutralt igen
 let kæde = null; // { alfa, beta } når man følger uran-238 ned til bly
+let skyKontakt = null; // kontakten "Elektronsky" (tændt = elektronsky, slukket = ringe)
 
 function $(id) {
   return document.getElementById(id);
@@ -211,7 +213,7 @@ export function startVærksted() {
   atom.gruppe.visible = true;
   // Ringe eller sky, som man sidst valgte (måske i Det periodiske system)
   if (atom.visning !== gemtVisning()) atom.sætVisning(gemtVisning());
-  $('knapVisning').textContent = visningKnapTekst(atom.visning);
+  skyKontakt.sæt(atom.visning === 'sky');
   verden.opdateringer.add(opdater3D);
   sætVindue($('vaerkstedVindue'));
   verden.styring.autoRotate = true;
@@ -528,11 +530,12 @@ function lavKnapper() {
     sæt({ p: 0, n: 0, e: 0 });
   });
 
+  skyKontakt = lavKontakt($('knapVisning'), 'Elektronsky');
   $('knapVisning').addEventListener('click', () => {
     const visning = atom.visning !== 'sky' ? 'sky' : 'ringe';
     atom.sætVisning(visning);
     gemVisning(visning);
-    $('knapVisning').textContent = visningKnapTekst(visning);
+    skyKontakt.sæt(visning === 'sky');
     lyd.klik();
     opdaterInfo();
   });

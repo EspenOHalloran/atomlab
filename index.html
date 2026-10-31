@@ -108,7 +108,7 @@
           <button class="chip filter" data-udgave="prikker">A: prikker</button>
           <button class="chip filter" data-udgave="former">B: former</button>
         </div>
-        <button class="knap lille" id="knapVisning" title="Skift mellem ringe og elektronsky">Elektronsky</button>
+        <button class="kontakt løs" id="knapVisning" title="Vis elektronerne som en sky (slukket: som ringe)">Elektronsky</button>
         <button class="knap lille ikon" id="knapLyd" title="Lyd til/fra">🔊</button>
         <button class="knap lille ikon" id="knapHjælp" title="Hjælp">?</button>
         <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
@@ -235,7 +235,7 @@
     <div class="vindue" id="systemVindue"></div>
     <aside class="panel system-kort" id="systemKort">
       <div class="kort-styring">
-        <button class="knap lille" id="systemVisning" title="Skift mellem ringe og elektronsky">Elektronsky</button>
+        <button class="kontakt løs" id="systemVisning" title="Vis elektronerne som en sky (slukket: som ringe)">Elektronsky</button>
         <button class="knap lille" id="systemForrige" title="Forrige (pil venstre)" aria-label="Forrige grundstof">‹</button>
         <button class="knap lille" id="systemNæste" title="Næste (pil højre)" aria-label="Næste grundstof">›</button>
         <button class="knap lille" id="systemLuk" title="Tilbage til væggen (Esc)">✕ Luk</button>
@@ -308,14 +308,8 @@
         <small id="fusGrafTekst"></small>
         <small class="ærligt">Ærligt talt: I den rigtige Sol er bakken flere hundrede gange højere end protonernes gennemsnitlige energi. De kommer kun over med <button class="hvorfor" data-hvorfor="tunnel">tunneleffekten</button>.</small>
       </details>
-      <div class="valg-række tempo-række"><span class="valg-navn">Tempo</span>
-        <button class="chip filter" data-fus-tempo="0.3">Langsom</button>
-        <button class="chip filter valgt" data-fus-tempo="0.6">Normal</button>
-        <button class="chip filter" data-fus-tempo="3">Hurtig</button>
-      </div>
       <div class="knap-række">
         <button class="knap lille" id="fusTilføj">+ 10 protoner</button>
-        <button class="knap lille" id="fusPause">⏸ Pause</button>
         <button class="knap lille svag" id="fusRyd">Start forfra</button>
       </div>
       <ul class="kerne-liste" id="fusKerner"></ul>
@@ -385,7 +379,8 @@
       <div class="hjælp-indhold">
         <p>Du er inde i <strong>Solens kerne</strong>. Her er det ca. 15 millioner grader varmt, så varmt at elektronerne er revet af atomerne. Kernerne suser rundt i et <strong>plasma</strong>, og de små blå gnister er de frie elektroner.</p>
         <p><strong>Sådan gør du:</strong> Klik på en kerne og derefter på en anden. Så bliver den første skudt mod den anden, lige så hurtigt som temperaturen tillader. Træk for at dreje, og rul eller knib for at zoome.</p>
-        <p><strong>Lettere at ramme:</strong> Du behøver ikke ramme kernen helt præcist. Den nærmeste kerne får en ring, når du peger på den, og en stiplet linje viser, hvor skuddet går hen. Mens du sigter, går tiden langsomt. Mellemrumstasten (eller "Pause") stopper tiden helt, og Esc fortryder. Kan du ikke finde en bestemt slags kerne, så klik på den i listen til venstre eller på en linje i opskriften.</p>
+        <p><strong>Lettere at ramme:</strong> Du behøver ikke ramme kernen helt præcist. Den nærmeste kerne får en ring, når du peger på den, og en stiplet linje viser, hvor skuddet går hen. Mens du sigter, går tiden langsomt. Mellemrumstasten (eller ⏸ nederst til højre i billedet) stopper tiden helt, og Esc fortryder. Kan du ikke finde en bestemt slags kerne, så klik på den i listen til venstre eller på en linje i opskriften.</p>
+        <p><strong>Tiden:</strong> Knappen nederst til højre i billedet styrer tiden: ⏸ stopper den, ▷ er slowmotion, ▶ er normal, og ⏩ går 5 gange hurtigere. Et skud lader tiden gå igen efter en pause. Tempoet ændrer ikke fysikken, kun hvor hurtigt du ser den.</p>
         <p><strong>Frastødning:</strong> Alle kernerne er plusladede og skubber hinanden væk. Kun hvis de er hurtige nok, kommer de helt tæt på hinanden, og så tager den stærke kernekraft over og limer dem sammen. Derfor kræver fusion så høj en temperatur.</p>
         <p><strong>Grafen under temperaturen:</strong> Kurven viser, hvor mange protoner der har hvilken bevægelsesenergi (fart). Den stiplede linje er frastødningen. Den er som en bakke, protonerne skal over. Når du skruer op for varmen, flytter kurven sig mod højre, og flere protoner (de gule) bliver hurtige nok.</p>
         <p><strong>Solens vigtigste opskrift (pp-kæden):</strong> Først bliver to protoner til deuterium. Så fanger deuterium en proton og bliver til helium-3. De to første skridt sker to gange, så der bliver to helium-3. Til sidst bliver de to helium-3 til helium-4, og to protoner sendes videre. I alt er 4 protoner blevet til 1 heliumkerne, og ca. 27 MeV energi er sluppet fri. (Solen har også andre, sjældnere veje til helium.)</p>
@@ -438,10 +433,9 @@
           <input type="range" id="reaktorStave" min="0" max="100" step="1" value="50">
           <small>Stavene suger neutroner op. Jo længere nede, jo færre spaltninger.</small>
         </label>
-        <button class="knap lille" id="reaktorVand">Vand (moderator): til</button>
+        <button class="kontakt løs" id="reaktorVand">Vand (moderator)</button>
         <p class="klik-tip">Gulgrønne kugler er frisk uran-235. Grå er lige spaltet. Prikkerne er neutroner: hvide er hurtige, blå er langsomme.</p>
       </div>
-      <div class="knap-række"><button class="knap lille" id="reaktorPause">⏸ Pause</button></div>
       <details class="lag-boks opgave-boks" data-lag="reaktor-opgaver">
         <summary><strong>Opgaver</strong> <span class="opgave-tal" id="reaktorOpgaveTal"></span></summary>
         <ol class="opgaver kompakt" id="reaktorOpgaver"></ol>
@@ -518,7 +512,7 @@
         <p><strong>Uran-238</strong> er over 99 % af alt uran. Den spalter næsten aldrig. Den fanger oftest neutronen og bliver langsomt til plutonium-239. Derfor skal brændslet i et atomkraftværk med almindeligt vand være <em>beriget</em>: Man øger andelen af uran-235 fra 0,7 % til 3-5 %.</p>
         <p><strong>Kædereaktion:</strong> De nye neutroner kan spalte flere kerner, som giver flere neutroner. Giver hver spaltning i gennemsnit mere end én ny spaltning, vokser det. Giver den mindre, dør det ud. Kontrolstave (fx med bor eller cadmium) suger neutroner op, så man kan holde den stabil.</p>
         <p><strong>Hvor kommer de første neutroner fra?</strong> Fra en <em>neutronkilde</em>: en lille kapsel, der hele tiden sender neutroner ud. Det kan være californium-252, som af sig selv spalter og sender neutroner ud. Eller americium blandet med beryllium: Americium skyder alfapartikler (heliumkerner) ud, og når de rammer beryllium, slår de en neutron løs. Desuden spalter lidt af uranet af sig selv en gang imellem. Når reaktoren først kører, laver den selv alle de neutroner, den skal bruge.</p>
-        <p><strong>Pause:</strong> Mellemrumstasten (eller "Pause") stopper tiden. Så kan du tælle neutronerne og dreje kameraet. Kontrolstavene kan stadig flyttes.</p>
+        <p><strong>Pause:</strong> Mellemrumstasten (eller ⏸ nederst til højre i billedet) stopper tiden, og ▶ lader den gå igen. Så kan du tælle neutronerne og dreje kameraet. Kontrolstavene kan stadig flyttes.</p>
         <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men der kan ske alvorlige ulykker. I Tjernobyl i 1986 løb reaktoren løbsk under et forsøg, effekten steg voldsomt på få sekunder, og en dampeksplosion sprængte den. I Fukushima i 2011 svigtede kølingen efter en tsunami, brændslet smeltede, og der skete brinteksplosioner. Begge steder blev radioaktive stoffer spredt. Derfor har reaktorer mange sikkerhedssystemer.</p>
         <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
         <blockquote class="citat" data-citat="meitnerFrisch"></blockquote>
@@ -552,7 +546,7 @@
         <button class="chip filter" data-batteri-fart="1">Normal</button>
         <button class="chip filter" data-batteri-fart="2">Hurtig</button>
       </div>
-      <button class="chip filter fare" id="batteriSnyd">Snyd laderen: fra</button>
+      <button class="kontakt løs fare" id="batteriSnyd">Snyd laderen (farligt!)</button>
       <button class="knap lille svag" id="batteriNyt">Nyt batteri</button>
       <details class="lag-boks opgave-boks" data-lag="batteri-opgaver">
         <summary><strong>Opgaver</strong> <span class="opgave-tal" id="batteriOpgaveTal"></span></summary>

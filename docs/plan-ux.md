@@ -378,6 +378,27 @@ Afgjort undervejs:
 - **Iapetus:** Saturns tredjestørste måne (ca. 1.470 km) er ikke med, selv om teksterne talte om "de seks store måner". Det står nu i "Ærligt talt" ved Månerne, og oversigten siger "seks af Saturns største måner". Den kan komme med senere.
 - **Tests:** `kosmos` (siden, knapperne, kontakten folder emnet ud, underteksten står ikke på siden), `solsystem` (alle steder i træet har en side med 2-4 tal og "Ærligt talt" sidst, knapperne virker, links til Hvid dværg og til et sted), `ordforklaring` (fagord i boksene), `mars`, `saturn`, `jorden`, `landskab`, `reaktor` og `ordbog`.
 
+## Status for U4 (31. oktober 2026)
+Lavet, som planen siger. Jeres svar ved go: "Go", og I vurderer selv til sidst.
+- **Tidsknappen i Stjerneovnen og Reaktoren:** Den samme tidsknap som i Kosmos (`lavTidsknap`) står nederst til højre i 3D-billedet. "⏸ Pause" og tempoknapperne i venstre panel er væk, og det samme er pausemærket midt forneden (tidsknappen viser det). `lavPause` findes ikke længere.
+- **Stjerneovnens tre tempoer (valget):** Tidsknappen har fået en fjerde tilstand, ▷ langsom, mellem ⏸ og ▶: **⏸ · ▷ 0,3 · ▶ 0,6 · ⏩ 3**. Grunden:
+  - Intet går tabt. Alle tre tempoer er der stadig, og de står ét sted i den rækkefølge, de går (stille, langsomt, normalt, hurtigt).
+  - Tempoet er tid, og tiden hører til på tidsknappen. Som kontakt i panelet ("Langsom" til/fra) ville to ting styre tiden, og man skulle tænke over, hvad "Langsom" og ⏩ på samme tid betyder.
+  - Mellemrum virker som før: Det skifter mellem ⏸ og det tempo, tiden gik med før (fx ⏩). Det er den samme regel som ved Jorden i Solsystemet.
+  - Andre steder er ▷ skjult (`langsom(null)`), så Kosmos og Solsystemet ser ud som før.
+  - Ulempen: ▷ (en tom trekant) er ikke et kendt tegn. Titlen siger "Langsommere: slowmotion", og hjælpen forklarer de fire knapper. Synes I, den er svær at forstå, kan den blive til en lille snegl eller et "½".
+- **Knapper, der starter noget, lader tiden gå:** I Stjerneovnen et skud (også et klik, når tiden står stille) og "Vis mig". I Reaktoren "Skyd neutron", "Start reaktoren" og "Vis mig". De går tilbage til det tempo, man havde valgt (`fortsæt`), ikke altid til ▶. "Vis mig" kører stadig i slowmotion (Stjerneovnen 0,25, Reaktoren `tidsFaktor`), og vælger man et andet tempo imens, gælder det, når "Vis mig" er færdig.
+- **Reaktoren:** ⏸ ▶ (ingen ⏩). Under pause står kædereaktionen stille, men stavene kan stadig flyttes, som før.
+- **Under rejsen ind i Solen** er tidsknappen skjult, og mellemrum springer rejsen over, som før.
+- **Kontakter ligner kontakter overalt** (`js/kontakt.js`, samme udseende som i Styr-boksen, med en kant om, fordi de står for sig selv). Fundet med grep efter knapper, der skifter tekst eller får `valgt` ved til/fra:
+  - "Elektronsky" i Værkstedets toplinje og på grundstofkortet (før skiftede knappen mellem "Elektronsky" og "Ringe" og viste det, man kunne skifte til. Nu står der altid "Elektronsky", og ✓ betyder, at skyen vises).
+  - "Vand (moderator)" i Reaktoren (før "Vand (moderator): til/fra").
+  - "Snyd laderen (farligt!)" i Batteriet (før "Snyd laderen: fra/TIL (farligt!)"). Den er rød, når den er tændt.
+  - **Ikke ændret:** Ikonknapperne i toplinjen (🔊, panelerne og fuld skærm) er små ikoner, hvor et ✓ ikke ville passe. Valg mellem flere ting (Batteriets Oplad/Aflad/Pause og Hastighed, Reaktorens kerne og neutronfart, filtrene, udgaverne og kategorikortets forsøg) er ikke til/fra og bliver valgknapper. Batteriets "Pause" bliver, for den betyder "ingen strøm".
+- **"Næste skridt"** i Stjerneovnen, Reaktoren og Batteriet er, som det var.
+- **Teksterne:** Hjælpen i Stjerneovnen forklarer de fire knapper, og hjælpen i Reaktoren og opgaven "Lav 5 heliumkerner" peger på tidsknappen i stedet for "Pause" og "tempoet".
+- **Tests:** `pause` (tidsknappen i Reaktoren og Stjerneovnen: pause, ▶, mellemrum tilbage til ⏩, de fire tempoer, at et skud, "Skyd neutron" og "Vis mig" lader tiden gå, at "Vis mig" stadig er slowmotion, og at "Vand" er en kontakt), `stjerneovn` og `stjerneovn-mus` (tidsknappen, også skjult under rejsen), `system` og `vaerksted` ("Elektronsky" er en kontakt med ✓) og `batteri` ("Snyd laderen" er en kontakt).
+
 ## Afgøres undervejs (med skærmbilleder)
 - ~~**Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?~~ Åben (U2).
 - ~~**Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?~~ Se "U3: Stedernes tal".
@@ -388,3 +409,5 @@ Afgjort undervejs:
 - Er Styr-boksen let at finde, og dækker den for meget på højkant?
 - Er "Næste" i bjælken let at ramme? Kan man ramme prikkerne i underteksten med en finger (de er små)?
 - Forstår man tidsknappen (⏸ ▶ ⏩), og at tiden står stille ved et sted på Mars?
+- U4: Forstår man ▷ (langsom) i Stjerneovnen? Er de fire små knapper lette at ramme med en finger?
+- U4: Ser "Elektronsky", "Vand (moderator)" og "Snyd laderen" ud som kontakter, og er det tydeligt, at ✓ betyder "til"?
