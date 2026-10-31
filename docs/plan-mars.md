@@ -394,6 +394,8 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 | 12:00 | 82,7° | Næsten ingen skygger (Solen næsten i zenit), fladt og lyst. Det værste billede. |
 | 16:30 | 22° | Lidt mere relief end kl. 12, men stadig lys himmel og kraftig dis. |
 
+**Kørslen:** Ingen fejl. Træk med musen mod højre drejer kompasset fra 0° til 333° (rigtig retning). Billeder i sekundet: 0,39 uden grafikkort (værdiløst, se nedenfor om pc).
+
 **Fund (det, billederne og koden peger på, i den rækkefølge jeg tror på dem):**
 1. **Himmel og jord er lige lyse.** Himlen (`himmel()`) er en gulbrun flade, og jorden er gulbrun i næsten samme lysstyrke. Dermed mangler den kontrast, der får landskabet til at stå frem. Det er det, der får det til at se "lyst" ud, mere end selve jorden.
 2. **Disen er kraftig.** Det fjerne landskab (Mount Sharp) blandes ind i horisontens farve (`ud * T + himmel * (1 - T)`), og himlens horisont er det lyseste sted. `TAU` er 0,4 (klar tid, rigtigt for april 2016), så det er kun delvis en fejl: Rigtige fotos har også dis, men fotoene fra roverne virker mørkere, fordi de er hvidbalanceret og eksponeret efter jorden.
