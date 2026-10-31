@@ -383,6 +383,38 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 - **Faktatjek** (hjælpeagent, kilderne læst): `docs/fakta-solsystemet.md` under "Faktatjek M8a". Rettet: Naukluft er et plateau på Mount Sharps nederste skråninger (sandsten af gamle klitter), CTX ca. 6 m pr. pixel, hvem der lavede højdekortet (Parker og Calef, JPL, udgivet af USGS), "mindre end nogle få meter".
 - **Ikke med endnu:** Jezero (M8b), rovernes fotos og Curiosity som 3D-model (M8c), navne på det, man ser.
 
+## Stå på Mars: lyset og kvaliteten (31. oktober 2026, fund og muligheder, intet er ændret endnu)
+**Anledning:** Jeres iagttagelse: "Det ser ret lyst ud, når man står der." Der er kun læst kode og taget prøvebilleder. Intet er justeret, og der er ikke målt på rigtigt grafikkort.
+
+**Prøvebilleder** (`node tests/vaerktoejer/landskab-lille.mjs naukluft 135,8,8.5 135,8,12 135,8,16.5 0,8,12`, fuld grafik uden grafikkort, 900 × 560, kamera mod Mount Sharp, billederne ligger i `tests/billeder/landskab/` og er ikke med i repoet):
+
+| Klokken | Solens højde | Hvad billedet viser |
+|---|---|---|
+| 08:30 (**startværdien**, `tid: 8.5`) | 37° | Pæne skygger af klitterne, men himlen og jorden har næsten samme lysstyrke og farve. |
+| 12:00 | 82,7° | Næsten ingen skygger (Solen næsten i zenit), fladt og lyst. Det værste billede. |
+| 16:30 | 22° | Lidt mere relief end kl. 12, men stadig lys himmel og kraftig dis. |
+
+**Kørslen:** Ingen fejl. Træk med musen mod højre drejer kompasset fra 0° til 333° (rigtig retning). Billeder i sekundet: 0,39 uden grafikkort (værdiløst, se nedenfor om pc).
+
+**Fund (det, billederne og koden peger på, i den rækkefølge jeg tror på dem):**
+1. **Himmel og jord er lige lyse.** Himlen (`himmel()`) er en gulbrun flade, og jorden er gulbrun i næsten samme lysstyrke. Dermed mangler den kontrast, der får landskabet til at stå frem. Det er det, der får det til at se "lyst" ud, mere end selve jorden.
+2. **Disen er kraftig.** Det fjerne landskab (Mount Sharp) blandes ind i horisontens farve (`ud * T + himmel * (1 - T)`), og himlens horisont er det lyseste sted. `TAU` er 0,4 (klar tid, rigtigt for april 2016), så det er kun delvis en fejl: Rigtige fotos har også dis, men fotoene fra roverne virker mørkere, fordi de er hvidbalanceret og eksponeret efter jorden.
+3. **Solens lys er skaleret frit.** `sollys()` giver 2,4 og `himmellys()` ca. 0,55 × farve + himlens bidrag ovenfra (0,55 + 0,45 · n.y). Skyggerne bliver derfor aldrig rigtig mørke, og det sparer relieffet.
+4. **Efterbehandlingen er fælles for hele programmet** (`scene3d.js`): ACES-tonemapping, eksponering 1,05 og glød (UnrealBloom, styrke 0,9, tærskel 0,82). Den er sat til rum og stjerner. Her løfter ACES mellemtonerne, og gløden lægger et skær over lyse flader. Ikke målt hver for sig endnu (se "Næste måling").
+5. **Standardtiden** er 08:30 (37°). Det er ikke middag, så det er ikke dér, det går galt, men 37° er højt nok til, at skyggerne er korte. Lav sol (15-25°) giver mere relief.
+6. **Fysik:** Rigtige Mars-fotos er faktisk ret lyse og flade ved høj sol, fordi himlen er tæt og støvet. "Realistisk" og "flot" er ikke det samme, og I har sagt, at kvaliteten og æstetikken er det vigtigste.
+
+**Muligheder for at gøre det bedre** (ikke besluttet, ingen er gjort):
+- **Billig, meget synlig:** Sænk `sollys` og `himmellys` (fx 1,6-1,8), gør himlen lidt mørkere og mere mættet over for horisonten, dæmp disen en smule, dæmp gløden og tonemappingen kun mens man står (ikke i resten af programmet), og start på en lavere sol (morgen 07:00-08:00 eller sen eftermiddag).
+- **Mellem:** Blødere skygger fra skyggekortene, ambient occlusion i sprækker og lavninger, rigtigt farvefoto fra HiRISE/CTX i stedet for gråtone med rust-forløb (HiRISE-farve dækker kun smalle striber), flere slags sten, riller og sand tæt på, dis og støv i lag.
+- **Dyrt eller stort:** Rovernes panoramafotos som reference ved siden af (M8c), Curiosity som 3D-model (M8c, `assets.science.nasa.gov` er blokeret i miljøet), skarpere højder end 1 m findes ikke.
+- **Pas på prisen:** Stå på Mars kører allerede på ca. 45 % af hastigheden ved hele Mars på pc og 56 % på tablet (testbrowseren, se M8a). Alt, der koster pr. pixel (AO, bløde skygger, volumetrisk dis), skal måles på tabletten.
+- **Et lysbord til tabletten** (`?lys` med skydere for sollys, himmellys, bloom og eksponering) blev foreslået, men **er ikke bestilt**. Jeres svar (31. oktober 2026): "Nej, du skal bare dokumentere dine findings."
+
+**Næste måling (når I siger go):** Tag de samme billeder med gløden og tonemappingen slået fra og med lavere `sollys`/`himmellys`, så vi kan se, hvad hver del betyder. Kun billeder, ingen ændring i programmet.
+
+**At teste på jeres egen pc (jeres svar 31. oktober 2026, noteret):** Skyen har ikke noget grafikkort, så hastighed, flimmer og "føles det rigtigt" kan ikke måles her (ca. 1,3 billede i sekundet, ét prøvebillede tager minutter). Farver og lys er de samme som på jeres skærm, for det er den samme shader. **Aftale:** Når en opgave kræver rigtig grafik (billeder i sekundet, finjustering af lys og farver, skærmbilleder i fuld opløsning, AO og bløde skygger), så bed jer om adgang til pc'en *før* arbejdet går i gang (`list_computer_folders` og `request_computer_folder`, kræver at I har sat Remote Control op: Claude-appen, Indstillinger, Claude Code, Remote Control, eller `claude remote-control` i mappen). I godkender selv forbindelsen. Tablet og telefon kan ikke styres derfra. Dem prøver I selv: kør `python -m http.server 8000` på pc'en og åbn `http://<pc'ens IP>:8000` på tabletten på samme wifi, så ses ændringerne uden at vente på en merge.
+
 ## Plan for M8: Stå på Mars (30. oktober 2026, go givet)
 **Jeres svar (30. oktober 2026): "Generelt går vi med dine anbefalinger. Go."** Alle syv anbefalinger gælder: de fire steder (Naukluft og Curiosity nu ved Gale, randens inderside og landingsstedet ved Jezero), et eget landskab i ringe, skyder og "Lad dagen gå", Phobos og Deimos på himlen, rovernes fotos og 3D-modellen, tre dele (M8a, M8b, M8c) og domænet. I har åbnet `assets.science.nasa.gov` (virker: `Curiosity_static.glb` er 11,9 MB).
 - **Størrelse og kvalitet (jeres ord):** "Størrelse i sig selv er ikke et problem. Så længe det kan køre godt, må det gerne fylde, medmindre du advarer imod det. Det vigtigste er kvaliteten. Jeg er æstetiker." Lagene må derfor gerne være større og skarpere end i forslaget, så længe tabletten kører godt (målt).

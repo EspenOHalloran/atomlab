@@ -424,6 +424,11 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Ventesløjfer med `pgrep -f`:** `until ! pgrep -f "landskab.mjs"` finder sin egen kommandolinje og venter for evigt. Brug et mønster, der ikke står i kommandoen, eller vent på en fil.
 - **Små sten tegnet af programmet:** Med normalen vendt forkert lignede de huller (som kratere). Tjek retningen på en bule: Normalen skal pege væk fra midten.
 
+### Lyset i Stå på Mars (31. oktober 2026)
+- **Mål først, så justér.** Jeres indtryk ("lyst") blev først undersøgt med prøvebilleder ved tre tidspunkter (08:30, 12:00 og 16:30). Himlen og jorden er næsten lige lyse, og disen er kraftig. Det er kontrasten, der mangler, mere end lysstyrken. Se `docs/plan-mars.md` under "Stå på Mars: lyset og kvaliteten".
+- **Kør ikke grafikken uden grafikkort for hurtigt.** Fuld grafik i skyen er ca. 1,3 billede i sekundet, og `landskab-lille.mjs` tager minutter. Start den i baggrunden (`nohup … &`) og vent med en overvågning, ikke med `sleep`. Testserveren skal køre på port 8765 (`ADRESSE` i `tests/hjaelp.mjs`).
+- **Billeder af lys kan tages i skyen** (samme shader, samme farver). Hastighed og følelse kan ikke. Skal det måles, så bed om adgang til pc'en først (se samme afsnit).
+
 ### Styringen på billedet (U2, 31. oktober 2026)
 - **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
 - **Trin, der bygger oven på hinanden** (Big Bang, Solens fremtid): Et spring kan ikke bare sætte `trin = nr`. Noget sker kun i `opdater` undervejs (fx tågen i Solens fremtid i trin 5). Spring tilbage = forfra og frem igen, og spol de sprungne trin igennem.

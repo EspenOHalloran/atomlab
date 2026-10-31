@@ -44,6 +44,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   4. Føles det rigtigt, at "🌅 Solnedgang" lader dagen gå videre, så Solen går ned?
   5. Ser kontakterne ud som kontakter (fyldt med ✓, når de er tændt)?
 
+**Stå på Mars: lys og kvalitet (31. oktober 2026, kun noteret, intet ændret).** Fund, muligheder og en aftale om at bede om adgang til jeres pc, når grafikken skal måles, står i [docs/plan-mars.md](docs/plan-mars.md) under "Stå på Mars: lyset og kvaliteten". Kort: Himlen og jorden er næsten lige lyse, disen er kraftig, og sol og himmellys er skaleret frit, så kontrasten mangler. Venter på jeres prioritering. U3 kører i en anden session.
+
 **Før det (30. oktober 2026): U1, træet i Solsystemet.** Planen står i [docs/plan-ux.md](docs/plan-ux.md) (status for U1 nederst).
 - **Venstre panel er nu navigation:** Kloderne står på én række, og under dem et træ med den valgte klode, dens steder og måner og dens forsøg. Mars har alle 12 steder og måner (Calderaen og Skrænten under Olympus Mons, "Mars set fra Phobos" under Phobos), Saturn har Ringene og alle seks måner, og Jorden har Månen. Før kunne Calderaen, Ringene og udsigten fra Phobos kun nås med flybyen.
 - **Fjernet fra "Prøv selv":** "Hele Mars", "Månerne", "Saturn", "Enceladus", "Titan" og Jordens "Månen". Resten (kontakterne, flybyen og Pause) flytter i U2.
