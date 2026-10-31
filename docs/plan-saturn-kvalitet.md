@@ -58,4 +58,6 @@ I dag bygges ringene af grænserne og en omtrentlig tæthed (τ) i `js/data/ring
 - Enceladus' fontæner og tigerstriber (`js/solsystem/fontaener.js`) skal blive ved med at sidde det rigtige sted.
 
 ## Rækkefølgen (forslag)
+**31. oktober 2026:** S2 kommer lige efter L1 (lyset i Stå på Mars), mens U3 kører. S3 og Saturn i 8k venter. Se "Plan for resten af Mars" i [plan-mars.md](plan-mars.md), afsnit 2.
+
 S1 nu, fordi den er lille og synlig, især på tabletten. Derefter Mars M3-M8, og så S2 og S3.
