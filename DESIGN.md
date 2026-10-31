@@ -33,7 +33,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Tætheden i ringene er målt:** Cassini så stjernen β Centauri skinne gennem ringene 28. juli 2008 (UVIS). Ringene har nu 8.192 målte punkter (ca. 9 km pr. punkt) i stedet for de ringe, programmet lavede. Kanterne, Huygens-ringen i Cassini-delingen, B-ringens tætte kerne og de mange tynde ringe i C-ringen er de rigtige.
 - **Det, målingen ikke viser:** D-ringen er for tynd og er stadig tegnet. F-ringen er flyttet til sin middelafstand (den er skæv). Farvebilledets falske striber er fjernet, og kun farvetonen er tilbage.
 - **Tekster:** Nørd-teksten, "Billederne" og "Ærligt talt" ved Ringene siger, hvor tallene kommer fra. "Optisk dybde" er kommet i Ordbogen. Faktatjekket mod dataene og deres etiket (`docs/fakta-solsystemet.md`, "Faktatjek S2").
-- **Testkøreren:** `tests/koer-alle.mjs` gik ned i Node 22.23 (fetch), før den kørte en eneste test. Rettet.
+- **Testkøreren:** `tests/koer-alle.mjs` gik ned i Node 22.23 (fetch), før den kørte en eneste test. Rettet. Testen `ordbog` stod ikke i dens liste (`ALLE`) og blev aldrig kørt med hele samlingen. Nu er den med.
+- **Tests:** Hele samlingen (fordi testkøreren var ændret): alle 28 bestod (23 minutter), og `ordbog` bestod bagefter (35 OK). `guide` fejlede én gang sammen med en anden test ("tlf: måleren i 3D-billedet") og bestod alene. Den rører ikke ringene. Nye tjek i `saturn` (kanterne, B-ringens kerne, Huygens-ringen og F-ringen).
 - **Ikke afprøvet (på pc og tablet):**
   1. Ringene forfra: B- og A-ringen er nu næsten ensartet lyse (rigtigt for tætte ringe, men før gav de falske striber mere mønster). Synes I, det er kedeligere? Så kan B-ringens lysstyrke tages fra et Cassini-foto.
   2. Modlys og "Hen over ringene" på flybyen: Ser de mange tynde ringe flotte ud, og flimrer de, når kameraet glider?
