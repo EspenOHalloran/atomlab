@@ -1098,3 +1098,24 @@ Siden i lag (U3 i [plan-ux.md](plan-ux.md)) giver hvert sted 2-4 tal. Næsten al
 | Iapetus, Saturns tredjestørste måne, ca. 1.470 km bred og ca. 3,6 mio. km fra Saturn (nævnt i "Ærligt talt" ved Saturns måner) | OK | NSSDC: 746 × 746 × 712 km og 3.560,85 · 10³ km. Titan (5.150 km) og Rhea (1.527 km) er større |
 
 Tallene i programmet: `SIDER` i `js/data/sider/mars.js`, `saturn.js` og `jorden.js`.
+
+## Faktatjek S2: Saturns ringe fra Cassinis måling (31. oktober 2026)
+Teksterne: nørd-teksten, "Billederne" og "Ærligt talt" ved Ringene (`js/data/sider/saturn.js`) og "Optisk dybde" i Ordbogen. Tallene er tjekket direkte i dataene og etiketten (`.LBL`) fra PDS Ring-Moon Systems Node (`COUVIS_8001`, læst), ikke i populære kilder.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Målt 28. juli 2008 | OK (dag 210 i 2008, `RING_EVENT_START_TIME` 2008-210T05:21) | etiketten |
+| Stjernen β Centauri, instrumentet UVIS, i ultraviolet lys | OK (110-190 nm) | etiketten |
+| Lagt sammen i stykker på 10 km, 8.192 punkter, ca. 9 km pr. punkt | OK (74.100 km / 8.192 = 9,05 km) | etiketten, `lav_ringe.py` |
+| τ = 1: ca. 37 % slipper lige igennem, τ = 5: under 1 % | OK (e⁻¹ = 36,8 %, e⁻⁵ = 0,67 %) | regnet |
+| C-ringen og Cassini-delingen τ ca. 0,1 | OK (median 0,08 og 0,09, halvdelen af punkterne 0,05-0,10 og 0,04-0,15) | dataene |
+| A-ringen τ ca. 0,5-1 | OK (80 % af punkterne mellem 0,54 og 1,09) | dataene |
+| Midt i B-ringen er τ mange steder over 5 | OK (99.000-108.000 km: 58 % af punkterne over 5) | dataene |
+| Set fra ca. 67° over ringene | OK (`OBSERVED_RING_ELEVATION` 66,7°) | etiketten |
+| D-ringen er for tynd til målingen | OK (`LOWEST_DETECTABLE_OPACITY` 0,01, og i D-ringen er der kun støj) | etiketten, dataene |
+| Nogle kanter bølger frem og tilbage, F-ringen er skæv og klumpet | OK (B-ringens yderkant er excentrisk, A-ringens yderkant styres af 7:6-resonansen med Janus og Epimetheus, F-ringen har "knobs, kinks and lumps") | Wikipedia "Rings of Saturn" (læst) |
+| Kreditering NASA/JPL/University of Colorado | OK (UVIS er bygget af LASP, University of Colorado, og datasættet er lavet af Colwell m.fl.) | `dataset.cat` og `uvisinst.cat` i `COUVIS_8001` |
+
+**Rettet undervejs:** Værktøjets henvisning til metoden stod som "Icarus 206" (skrevet efter hukommelsen). Den rigtige er Colwell m.fl. 2010, Astronomical Journal 140, 1569-1578 (`ref.cat` i `COUVIS_8001`). Og γ Crucis blev set fra 62,3°, ikke fra en lav vinkel: Den stopper ved τ ≈ 2,5, fordi den er en rød kæmpe, der er svag i ultraviolet.
+**Ingen hjælpeagent:** Alle tal står i den primære kilde (dataene og etiketten), som kunne læses direkte. ADS, IOP og LASP var ikke åbne fra miljøet, men behøvedes ikke.
+

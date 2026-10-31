@@ -36,6 +36,7 @@ export const LINKS = {
   skalahoejde: { gaa: ['solsystem:mars', 'Solsystemet: Mars'] },
   skjoldvulkan: { gaa: ['solsystem:mars:olympus', 'Solsystemet: Olympus Mons'] },
   caldera: { gaa: ['solsystem:mars:caldera', 'Solsystemet: Calderaen på Olympus Mons'] },
+  optiskdybde: { gaa: ['solsystem:saturn:ringe', 'Solsystemet: Saturns ringe'] },
 };
 
 const sorter = new Intl.Collator('da', { sensitivity: 'base' });
