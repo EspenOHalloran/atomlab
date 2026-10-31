@@ -21,7 +21,7 @@ import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
 import { SIDE, SIDER } from '../data/sider/mars.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
-import { lavLandskab, ØJE } from '../solsystem/landskab.js';
+import { lavLandskab, ØJE, eksponering } from '../solsystem/landskab.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -159,9 +159,9 @@ const TUR = [
 // (grader fra nord mod øst). tid: klokken på stedet, når man lander.
 const LANDSKAB = {
   gale: [
-    { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 8.5,
+    { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 7.5,
       titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.' },
-    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 9,
+    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 7.5,
       titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.' },
   ],
 };
@@ -774,7 +774,7 @@ export default {
     let ståVent = null; // { krater, sd, fløjet, klar } mens kameraet flyver ned, og lagene hentes
     let landing = null; // kameraet lander (eller letter: op = true)
     let kikkert = 1; // kameraets zoom (som en kikkert)
-    const gemt = { pos: new THREE.Vector3(), nær: 0 };
+    const gemt = { pos: new THREE.Vector3(), nær: 0, eksponering: 1, glød: true };
     const LANDING_HØJDE = 1.2; // km over stedet, hvor landingen starter
     const LANDING_TID = 4.5; // sekunder
     const DAG_TID = 150; // sekunder for et døgn, når dagen går
@@ -849,6 +849,12 @@ export default {
       if (!stående) {
         gemt.pos.copy(kamera.position);
         gemt.nær = kamera.near;
+        // Lyset, mens man står (L1): mindre eksponering og ingen glød (Solens skær står i himlens shader). Kun
+        // eksponeringen ændres, ikke tonemappingen, for et skift af den oversætter alle shaderne igen (et hak).
+        gemt.eksponering = verden.renderer.toneMappingExposure;
+        gemt.glød = verden.glød?.enabled ?? true;
+        verden.renderer.toneMappingExposure = eksponering(l.land.sol.y);
+        if (verden.glød) verden.glød.enabled = false;
       }
       stående = { krater, sd, land: l.land };
       for (const [, x] of landskaber) if (x.land) x.land.gruppe.visible = x === l;
@@ -890,6 +896,8 @@ export default {
       system.visible = true;
       solKerne.visible = solGlød.visible = true;
       visRumstøv(true);
+      verden.renderer.toneMappingExposure = gemt.eksponering;
+      if (verden.glød) verden.glød.enabled = gemt.glød;
       kamera.near = gemt.nær;
       kamera.zoom = 1;
       kamera.updateProjectionMatrix();
@@ -945,6 +953,7 @@ export default {
       }
       if (!stående) return;
       land.opdater(kamera);
+      verden.renderer.toneMappingExposure = eksponering(land.sol.y); // tilpasser sig lyset (L1)
       // Stjernerne: himlens nordpol står over den nordlige horisont i en vinkel lig med bredden, og himlen drejer om den
       const b = THREE.MathUtils.degToRad(stående.sd.bredde);
       polRet.set(0, Math.sin(b), -Math.cos(b));
@@ -1341,7 +1350,7 @@ export default {
           return {
             står: !!stående, sted: stående?.sd.id ?? null, lander: !!landing, venter: !!ståVent, zoom: kamera.zoom,
             kompas: (THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z)) + 360) % 360, vinkel: THREE.MathUtils.radToDeg(Math.asin(kamRet.y)),
-            øjne: kamera.position.y * 1000, kloden: system.visible, nær: kamera.near, ...(stående ? stående.land.test() : {}),
+            øjne: kamera.position.y * 1000, kloden: system.visible, nær: kamera.near, eksponering: verden.renderer.toneMappingExposure, glød: verden.glød?.enabled ?? null, ...(stående ? stående.land.test() : {}),
           };
         },
         ståPå: (id) => ståPå('gale', LANDSKAB.gale.find((x) => x.id === id)),
