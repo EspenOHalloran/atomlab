@@ -96,6 +96,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter. Mål én browser ad gangen (to samtidig halverer tallene).
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
+- [ ] `--ændret` sammenligner med grenens egen udgave på GitHub (`@{upstream}`). Kør den før push, ellers finder den ingen ændringer (U4). Efter push: nævn testene, eller kør hele samlingen.
 - [ ] Knapper findes ud fra deres tekst (`trykPå(tekst)` i Kosmos og Solsystemet), ikke deres nummer. Numrene skifter, når knapper flytter eller kommer til (U2).
 - [ ] Vent ikke på en proces med `pgrep -f navn` i en løkke: Løkkens egen kommandolinje indeholder navnet, så den venter for evigt (U2). Start i stedet testen selv i baggrunden (`run_in_background`), og få besked, når den er færdig.
 - [ ] `pkill -f navn` køres i sin egen kommando, ikke i samme kommandolinje som noget, der skal blive ved (den rammer sig selv, S2). Svar fra `fetch` læses færdigt (`await svar.arrayBuffer()`), ellers kan Node 22.23 gå ned.
