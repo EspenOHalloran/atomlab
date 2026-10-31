@@ -58,6 +58,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Nye knapper eller steder i Kosmos og Solsystemet: Sortér dem efter de fire slags i [plan-ux.md](plan-ux.md) (sted, forsøg, tur og styring), og sæt dem på den plads, planen siger. Et sted, man flyver hen til, er aldrig en knap blandt kontakterne, og en kontakt skal ligne en kontakt. Siden U2: et sted står i træet (`træ`, `gåTil`), en handling i bjælken (`styring` med `handling`, og `skjul`, hvis den kun giver mening i nogle tilstande), en kontakt eller skyder i Styr-boksen, trin i `trin()` og en tur i `tur`. Tiden styres kun med tidsknappen (`ctx.tiden`, `hurtig`, `tempo`), aldrig med en kontakt.
 - [ ] En ny til/fra-knap er en kontakt med et fast navn (`lavKontakt` i `js/kontakt.js`, i Kosmos og Solsystemet en kontakt i Styr-boksen), ikke en knap, der skifter tekst. Tiden styres med tidsknappen (`lavTidsknap`), ikke med egne pause- eller tempoknapper (U4).
 - [ ] En handling i bjælken er tjekket i alle tilstande, fænomenet kan være i (fx "▶ Start flyby", mens man står på Mars, U2).
+- [ ] En handling, der fører ind i en ny tilstand midt på en tur (fx "🧍 Stå på Mars" på flybyen), sætter turen på pause, så dens "Næste" ikke virker i den forkerte tilstand, og giver én tydelig knap tilbage til turen (fundet af brugeren efter M8b).
 
 ### E. Ny animation, effekt eller fælles funktion
 - [ ] "Reducer bevægelse" (`ROLIG`) er respekteret: kamerature, lysglimt og blød rulning.
@@ -133,6 +134,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 | **En ændring af tempo eller tid, der rammer tidsgrænser andre steder** | Stjerneovnens nye tempo fik egne skud til at flyve længere, så "Vis mig" kunne vælge et skud, der stadig fløj. | C: søg efter alt, der har en flyvetid eller tidsgrænse, når tempoet ændres. |
 | **Regnet med for lav præcision** | Mars M7a: Kanten af det lokale net blev regnet med `sin` og `cos` i shaderen og lå flere hundrede meter for lavt, så der var en revne på en pixel, når man kiggede hen over kanten. | E: punkter regnes i JS. |
 | **Små skridt, der hver for sig er rimelige, men tilsammen giver rod** | "Prøv selv" i Solsystemet: Mars og Saturn fik én knap ad gangen (M4-M6), så steder, kontakter, flybyen og tid endte i samme bunke og lignede hinanden. Fundet af brugeren 30. oktober 2026. | D: sortér nye knapper efter de fire slags i plan-ux.md. |
+| **En ny tilstand, der ikke kender den tur, den startede fra** | "🧍 Stå på Mars" stoppede ikke flybyen. Mens man stod, viste bjælken stadig "Næste: Jezero ›", og et tryk flyttede kameraet usynligt, mens man stod ved Gale. Der var heller ingen knap tilbage. Fundet af brugeren efter M8b. | D: sæt turen på pause, og giv en knap tilbage. |
 | **En indstilling, der ikke virker** | Kantudglatning (`antialias`) på lærredet virker ikke, når gløden tegner billedet. Den kostede bare hukommelse. | F: mål før og efter. |
 
 ### Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
