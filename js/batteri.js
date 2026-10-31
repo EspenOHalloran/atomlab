@@ -12,6 +12,7 @@ import { visBesked } from './beskeder.js';
 import { forfraKnap } from './forfra.js';
 import { startGuide } from './guide.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
+import { lavKontakt } from './kontakt.js';
 
 const ANTAL_LI = 24; // så mange lithium-ioner viser vi (24 = 100 %)
 const REJSETID = 1.8; // sekunder for en ion gennem elektrolytten
@@ -63,6 +64,7 @@ let aktiv = false;
 let tilstand = 'pause'; // 'oplad', 'aflad' eller 'pause'
 let hastighed = 1; // 0.5 = langsom, 1 = normal, 2 = hurtig
 let snyd = false;
+let snydKontakt = null; // kontakten "Snyd laderen (farligt!)"
 let ioner = []; // { sted: 'anode' | 'katode' | 'rejser', plads, fra, til, t }
 let anodePladser = [];
 let katodePladser = [];
@@ -418,6 +420,7 @@ function lavPanel() {
       opdaterPanel();
     });
   }
+  snydKontakt = lavKontakt($('batteriSnyd'), 'Snyd laderen (farligt!)');
   $('batteriSnyd').addEventListener('click', () => {
     snyd = !snyd;
     lyd.klik();
@@ -611,8 +614,7 @@ function opdaterPanel() {
   opdaterMission();
   for (const b of document.querySelectorAll('[data-batteri-tilstand]')) b.classList.toggle('valgt', b.dataset.batteriTilstand === tilstand);
   for (const b of document.querySelectorAll('[data-batteri-fart]')) b.classList.toggle('valgt', Number(b.dataset.batteriFart) === hastighed);
-  $('batteriSnyd').classList.toggle('valgt', snyd);
-  $('batteriSnyd').textContent = snyd ? 'Snyd laderen: TIL (farligt!)' : 'Snyd laderen: fra';
+  snydKontakt.sæt(snyd);
   // Midt på ledningen sidder laderen, lampen eller en slukket afbryder
   lader.visible = tilstand === 'oplad' && !død;
   lampe.visible = tilstand === 'aflad'; // også her, så den er rigtig fra start, før første billede er tegnet

@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (M8b er færdig: Stå på Mars ved Jezero. Næste er M8c del 1, rovernes panoramaer, og den venter på jeres go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (M8b er færdig: Stå på Mars ved Jezero, og samme dag blev U4 færdig i en anden session: den samme tidsknap og de samme kontakter i resten af AtomLab. Næste er M8c del 1, rovernes panoramaer, og den venter på jeres go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -38,7 +38,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Tekster:** sider til begge steder (randen, Cheyava Falls og landingen med himmelkranen og Ingenuity). Faktatjekket med kilderne læst (`docs/fakta-solsystemet.md`, "Faktatjek M8b"). Rettet bl.a.: "et nedslag" i stedet for "en asteroide", og at roveren fandt et sikkert sted ud fra et kort, der var tegnet på forhånd.
 - **Tests:** `--ændret` valgte 9 tests (system, kosmos-nye, aarstider, formoerkelser, saturn, mars, landskab, solsystem og jorden), og alle bestod (31. oktober 2026, 12,3 minutter). Nye tjek i `landskab`: Jezero (knappen, træet, begge steder med NASA's højder og retningen) og detaljekortene ved Gale og Jezero. **Risiko:** `mars` tog 591 s af de 600 s, en test må tage (alene 469 s). Første gang fejlede den, mens tunge beregninger kørte ved siden af. Grænsen i `tests/koer-alle.mjs` bør hæves, næste gang en fælles fil alligevel ændres.
 - **Kendt fejl i kilden:** Højdekortet over hele krateret er sat sammen af striber. To steder ses det som tynde, lige streger hen over kraterbunden ved Jezero-stoppet. Fire forsøg på at fjerne dem fjernede enten for lidt eller ændrede det rigtige landskab, så kortet er uændret, og teksten siger det. En idé til senere står i plan-mars.md.
-- **Ikke lavet:** Hjælpen og "Om AtomLab" i index.html nævner kun Gale (index.html røres ikke under U4). To sætninger, der skal rettes, når U4 er merget.
+- **Ikke lavet:** Hjælpen og "Om AtomLab" i index.html nævner kun Gale (index.html blev ikke rørt, mens U4 blev bygget). U4 er nu merget, så de to sætninger kan rettes i næste session.
 - **Størrelse:** Lagene fylder 84 MB i repoet, og første gang, man står ved et af stederne, hentes ca. 48-55 MB på pc og 42-47 MB på tablet (mellemlaget deles af begge steder). Mellemlagets højdekort er 18,8 MB, for en grovere højde kunne give striber i lyset på den flade kraterbund.
 - **Ikke afprøvet (på pc og tablet):**
   1. Ved randen: Er udsigten flot nok kl. 16:30, eller vil I hellere have sidelys (fx kl. 10 eller 14)? Det er ét tal (`tid` i `LANDSKAB`).
@@ -48,6 +48,19 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   5. Gale- og Jezero-stoppet på flybyen: Ser kraterne skarpere ud, og er der en synlig kant, hvor detaljekortet slutter (overgangen er 6 km bred)? Hvor meget forstyrrer stregerne fra sømmene på Jezeros kraterbund?
   6. Flyvningen ned til Stå på Mars: Passer kloden og landskabet bedre sammen i overgangen nu?
 - **Næste:** M8c del 1 (rovernes panoramaer). Prompten står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompter til de næste skridt". Venter på jeres go.
+
+**Samtidig (31. oktober 2026, i en anden session): U4, tidsknappen og kontakterne i resten af AtomLab.** Detaljerne og grunden til valget står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U4". Jeres svar: "Go", og I vurderer selv til sidst.
+- **Tidsknappen** fra Kosmos står nu også nederst til højre i 3D-billedet i Stjerneovnen og Reaktoren. "⏸ Pause" og Stjerneovnens tempoknapper (Langsom, Normal og Hurtig) er væk fra venstre panel.
+- **Stjerneovnen har fire knapper: ⏸ · ▷ langsom · ▶ normal · ⏩ hurtig** (0,3, 0,6 og 3 som før). Valget: Langsom blev en tilstand mere på tidsknappen, så alle tre tempoer står ét sted, og mellemrum går tilbage til det tempo, man havde. Batteriet beholder sin "Pause" (ingen strøm).
+- **Knapper, der starter noget, lader tiden gå:** et skud og "Vis mig" i Stjerneovnen og "Skyd neutron", "Start reaktoren" og "Vis mig" i Reaktoren. "Vis mig" er stadig i slowmotion.
+- **Kontakter ligner kontakter** (fyldt med ✓, når de er tændt): "Elektronsky" i Værkstedet og på grundstofkortet (før skiftede knappen mellem "Elektronsky" og "Ringe"), "Vand (moderator)" i Reaktoren og "Snyd laderen (farligt!)" i Batteriet (rød, når den er tændt).
+- **Tests:** Nye tjek står i "Status for U4". Hele samlingen (31. oktober 2026): alle 29 bestod. `mars` fejlede én gang sammen med en anden test ("Modlys slået fra", en fast ventetid på 300 ms) og bestod alene. Tjekket venter nu på Solen i stedet for en fast tid, og `mars` bestod igen (153 OK). Det er ikke vist, at det gamle tjek fejler under kunstig belastning.
+- **Ikke afprøvet (på tabletten):**
+  1. Forstår I ▷ (langsom) i Stjerneovnen? Den er en tom trekant mellem ⏸ og ▶. Ellers kan den blive til en snegl eller "½".
+  2. Er tidsknappens fire små knapper lette at ramme med en finger (de er lige så store som i Kosmos)?
+  3. Er det tydeligt, at "Elektronsky" med ✓ betyder, at skyen vises (og uden ✓ ringene)?
+  4. Skifter Stjerneovnen og Reaktoren rigtigt, når I trykker mellemrum på pc (pause og tilbage til det tempo, I havde)?
+  5. Savner I tempoknapperne i panelet, eller er det fint, at alt om tiden står i billedet?
 
 **Før det (31. oktober 2026): S2, Saturns ringe fra Cassinis måling.** Detaljerne står i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S2". Jeres svar ved valget af kilde: "Go" (til alle tre forslag).
 - **Tætheden i ringene er målt:** Cassini så stjernen β Centauri skinne gennem ringene 28. juli 2008 (UVIS). Ringene har nu 8.192 målte punkter (ca. 9 km pr. punkt) i stedet for de ringe, programmet lavede. Kanterne, Huygens-ringen i Cassini-delingen, B-ringens tætte kerne og de mange tynde ringe i C-ringen er de rigtige.
@@ -532,13 +545,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] Piletasterne drejer kameraet i Kosmos.
   - [x] "Start forfra" i Værkstedet, Stjerneovnen, Reaktoren og Batteriet.
   - [x] Atomet: B (orbitalernes former) er standard.
-  - [x] Knappen "Elektronsky"/"Ringe" på grundstofkortet i Det periodiske system, og valget deles med Værkstedet.
+  - [x] Knappen "Elektronsky"/"Ringe" på grundstofkortet i Det periodiske system, og valget deles med Værkstedet (siden U4 en kontakt).
 
 - [ ] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (se [docs/plan-ux.md](docs/plan-ux.md))
   - [x] U1: Træet til venstre (kloder, Steder, Måner og Forsøg) og stedets side til højre. Vejen i toplinjen (30. oktober 2026).
   - [x] U2: Bjælken med tur og "Næste", Styr-boksen med kontakter og skydere og tidsknappen på billedet. "Prøv selv" forsvinder (31. oktober 2026).
   - [x] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek) (31. oktober 2026).
-  - [ ] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab.
+  - [x] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab (31. oktober 2026).
 
 ## Idéer til senere
 - **Uddrag fra gamle bøger** (jeres idé, 29. oktober 2026): Billeder af siderne fra de oprindelige bøger og breve af fx Newton, Huygens, Tycho Brahe, Galilei og Einstein, med den oprindelige tekst og en dansk oversættelse ved siden af. Eksempel: Huygens' *Systema Saturnium* (1659), hvor anagrammet om Saturns ring bliver afsløret (siden findes på archive.org, McGill og Smithsonian). Forbehold: Bøgerne er så gamle, at teksten er fri, men bibliotekernes skanninger kan have egne vilkår, så licensen skal tjekkes side for side og skrives i `KILDER.md`. Ikke vurderet eller planlagt endnu.

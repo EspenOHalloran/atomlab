@@ -3,7 +3,7 @@
 // - "Kun grafik" (knappen i toplinjen eller tasten G) folder begge paneler væk. Esc eller knappen igen henter dem.
 // - Valget huskes for hver skærm (atomlabPaneler), men første gang er panelerne fremme.
 // - På højkant står panelerne under 3D-billedet. Der bruges fanerne ikke, og "Kun grafik" viser 3D-billedet på hele skærmen.
-// Tilbage i 3D-billedet er underteksten, pausen, "Næste skridt" og det, delen selv har lagt i billedet.
+// Tilbage i 3D-billedet er underteksten, tidsknappen, "Næste skridt" og det, delen selv har lagt i billedet.
 
 import { centrerVindue } from './scene3d.js';
 import { lyd } from './lyd.js';

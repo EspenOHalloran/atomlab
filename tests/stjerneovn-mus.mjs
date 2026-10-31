@@ -23,6 +23,7 @@ await page.reload();
 tjek('rejsen starter første gang', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 0, 5000));
 tjek('"Spring over" vises', await synlig('#fusRejseSpring'));
 tjek('næste skridt skjult under rejsen', !(await synlig('#fusMission')));
+tjek('tidsknappen skjult under rejsen', !(await synlig('#fusTid')));
 // Rejsen styres af uret (rigtig tid). På en travl maskine kan testen komme for sent, så vi fryser rejsen på bestemte tidspunkter.
 await T(() => atomlabTest.fusion.rejseTid(1));
 await page.waitForTimeout(800);
@@ -103,9 +104,9 @@ await T(() => { const f = atomlabTest.fusion; if (f.valgt()) f.vælg(null); });
 
 // ---------- Mus over en kerne: ring, navn og hånd ----------
 await page.keyboard.press('Escape');
-await page.click('#fusPause');
-tjek('pause med knappen', await T(() => atomlabTest.fusion.pause()));
-tjek('pausemærket vises', await synlig('#fusionVindue .pause-mærke'));
+await page.click('#fusTid [data-tid="pause"]');
+tjek('pause med tidsknappen', await T(() => atomlabTest.fusion.pause()));
+tjek('⏸ er valgt i tidsknappen', await T(() => document.querySelector('#fusTid [data-tid="pause"]').classList.contains('valgt')));
 const p0 = await T(() => { const f = atomlabTest.fusion; const alle = f.partikler().map((p) => ({ ...p, ...f.skærmPos(p.id) })); // en proton uden naboer tæt på
   return alle.filter((p) => p.type === 'p' && p.x > 400 && p.x < 900 && p.y > 150 && p.y < 650).find((p) => alle.every((q) => q.id === p.id || Math.hypot(q.x - p.x, q.y - p.y) > 45)); });
 const pos0 = await T((id) => atomlabTest.fusion.skærmPos(id), p0.id);
@@ -134,7 +135,7 @@ tjek('Esc fortryder valget', (await T(() => atomlabTest.fusion.valgt())) === nul
 await page.keyboard.press('Space');
 await page.waitForTimeout(300);
 tjek('mellemrum slår pausen fra', !(await T(() => atomlabTest.fusion.pause())));
-tjek('pausemærket skjult', !(await synlig('#fusionVindue .pause-mærke')));
+tjek('▶ er valgt igen', await T(() => atomlabTest.fusion.tidsknap() === 'spil'));
 
 // ---------- Find kernerne ----------
 await page.mouse.move(5, 5);

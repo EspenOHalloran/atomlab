@@ -96,7 +96,9 @@ await page.waitForTimeout(8000);
 tekst = await info();
 tjek('Uran-238', tekst.includes('Uran-238') && tekst.includes('Næsten stabil'), tekst);
 await page.screenshot({ path: UD + '/5-uran.png' });
+tjek('"Elektronsky" er en kontakt, der er slukket', (await page.getAttribute('#knapVisning', 'role')) === 'switch' && (await page.getAttribute('#knapVisning', 'aria-checked')) === 'false');
 await page.click('#knapVisning');
+tjek('"Elektronsky" tændes (samme navn, med ✓)', (await page.getAttribute('#knapVisning', 'aria-checked')) === 'true' && (await page.textContent('#knapVisning')).trim() === 'Elektronsky' && (await page.evaluate(() => getComputedStyle(document.querySelector('#knapVisning .kontakt-boks'), '::after').content)).includes('✓'));
 await page.waitForTimeout(1200);
 await page.screenshot({ path: UD + '/6-uran-sky.png' });
 
@@ -149,7 +151,7 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   tjek('udgaver: vælgeren vises med ?udgaver', await u.page.isVisible('#udgaveVælger'));
   for (const t of ['p', 'p', 'p', 'p', 'p', 'p', 'n', 'n', 'n', 'n', 'n', 'n', 'e', 'e', 'e', 'e', 'e', 'e']) await u.page.keyboard.press(t);
   await u.page.click('[data-udgave="prikker"]');
-  tjek('udgaver: A viser elektronskyen', (await u.page.textContent('#knapVisning')) === 'Ringe' && await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'prikker');
+  tjek('udgaver: A viser elektronskyen', (await u.page.getAttribute('#knapVisning', 'aria-checked')) === 'true' && await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'prikker');
   let o = await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler());
   tjek('udgaver: carbon har 4 orbitaler (1s, 2s og to 2p med én elektron)', o.length === 4 && o.filter((x) => x.navn.startsWith('2p')).every((x) => x.elektroner === 1), JSON.stringify(o));
   tjek('udgaver: teksten siger, at formerne er regnet som for hydrogen', /hydrogen/.test(await u.page.textContent('#infoModel')));

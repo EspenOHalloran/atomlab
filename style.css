@@ -877,12 +877,6 @@ button { font: inherit; color: inherit; }
 .del-knap.valgt { background: rgba(95, 227, 255, 0.18); color: var(--tekst); }
 .valg-række { display: flex; flex-wrap: wrap; gap: 6px; }
 .valg-række .valg-navn { align-self: center; margin-right: 2px; color: var(--svag); font-size: 12.5px; font-weight: 700; }
-.tempo-række { gap: 4px; }
-.tempo-række .chip { padding-left: 9px; padding-right: 9px; }
-/* I smalle paneler (tablet på langs og telefon på langs) står ordet "Tempo" på sin egen linje */
-@media (max-width: 1150px) and (min-width: 821px), (max-height: 500px) {
-  .tempo-række .valg-navn { flex-basis: 100%; }
-}
 /* Boks, der kan foldes sammen (fx "Fra brint til carbon, trin for trin" i Stjerneovnen) */
 .trin-boks summary { cursor: pointer; list-style: none; }
 .trin-boks summary::-webkit-details-marker { display: none; }
@@ -962,10 +956,9 @@ button { font: inherit; color: inherit; }
 #fusKerner li:hover { background: rgba(255, 255, 255, 0.07); }
 .kerne-etiket.sigte { z-index: 14; padding: 3px 8px; font-size: 12px; background: rgba(14, 22, 48, 0.75); border-style: dashed; }
 .kerne-etiket.sigte small { font-size: 11px; }
-.pause-mærke { padding: 4px 12px; border-radius: 999px; background: rgba(14, 22, 48, 0.85); border: 1px solid rgba(255, 207, 122, 0.6); color: #ffcf7a; font-size: 13px; font-weight: 700; pointer-events: none; }
 .rejse-spring { position: absolute; top: 10px; left: 10px; z-index: 3; pointer-events: auto; }
 #fusion:not(.rejse) .rejse-spring { display: none; }
-#fusion.rejse .mission, #fusion.rejse .kerne-etiket, #fusion.rejse .pause-mærke { display: none; }
+#fusion.rejse .mission, #fusion.rejse .kerne-etiket, #fusion.rejse .tidsknap { display: none; }
 .fus-blink { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; background: radial-gradient(circle, rgba(255, 245, 210, 0.95), rgba(255, 150, 50, 0.7) 55%, rgba(255, 90, 20, 0.4)); }
 .fus-blink.vist { animation: fusBlink 1s ease-out; }
 @keyframes fusBlink { from { opacity: 1; } to { opacity: 0; } }
@@ -1356,6 +1349,14 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .kontakt.til { background: rgba(95, 227, 255, 0.12); border-color: rgba(95, 227, 255, 0.35); }
 .kontakt.til .kontakt-boks { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(95, 227, 255, 0.5); }
 .kontakt.til .kontakt-boks::after { content: '✓'; }
+/* En kontakt for sig selv i et panel eller en toplinje (js/kontakt.js, U4): samme mærke, men med en kant om */
+.kontakt.løs { display: inline-flex; width: auto; flex: 0 0 auto; padding: 6px 11px 6px 8px; border-color: var(--panel-kant); border-radius: 10px; background: rgba(255, 255, 255, 0.04); font-size: 14px; white-space: nowrap; }
+.kontakt.løs:hover { background: rgba(255, 255, 255, 0.09); }
+.kontakt.løs.til { background: rgba(95, 227, 255, 0.12); border-color: rgba(95, 227, 255, 0.45); }
+.kontakt.løs:disabled { opacity: 0.5; cursor: default; }
+/* Farlige kontakter (Snyd laderen) er røde, når de er tændt */
+.kontakt.fare.til { background: rgba(255, 107, 107, 0.2); border-color: var(--rød); color: #ffd0d0; }
+.kontakt.fare.til .kontakt-boks { background: var(--rød); border-color: var(--rød); box-shadow: 0 0 8px rgba(255, 107, 107, 0.5); }
 /* Turen øverst i træet (▶ Flyby · 13 stop) */
 .sol-tur { margin-bottom: 3px; color: var(--accent); }
 .sol-tur:disabled { opacity: 0.6; cursor: default; }

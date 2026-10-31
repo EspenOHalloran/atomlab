@@ -56,6 +56,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
 - [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
 - [ ] Nye knapper eller steder i Kosmos og Solsystemet: Sortér dem efter de fire slags i [plan-ux.md](plan-ux.md) (sted, forsøg, tur og styring), og sæt dem på den plads, planen siger. Et sted, man flyver hen til, er aldrig en knap blandt kontakterne, og en kontakt skal ligne en kontakt. Siden U2: et sted står i træet (`træ`, `gåTil`), en handling i bjælken (`styring` med `handling`, og `skjul`, hvis den kun giver mening i nogle tilstande), en kontakt eller skyder i Styr-boksen, trin i `trin()` og en tur i `tur`. Tiden styres kun med tidsknappen (`ctx.tiden`, `hurtig`, `tempo`), aldrig med en kontakt.
+- [ ] En ny til/fra-knap er en kontakt med et fast navn (`lavKontakt` i `js/kontakt.js`, i Kosmos og Solsystemet en kontakt i Styr-boksen), ikke en knap, der skifter tekst. Tiden styres med tidsknappen (`lavTidsknap`), ikke med egne pause- eller tempoknapper (U4).
 - [ ] En handling i bjælken er tjekket i alle tilstande, fænomenet kan være i (fx "▶ Start flyby", mens man står på Mars, U2).
 
 ### E. Ny animation, effekt eller fælles funktion
@@ -95,6 +96,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter. Mål én browser ad gangen (to samtidig halverer tallene).
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
+- [ ] `--ændret` sammenligner med grenens egen udgave på GitHub (`@{upstream}`). Kør den før push, ellers finder den ingen ændringer (U4). Efter push: nævn testene, eller kør hele samlingen.
 - [ ] Knapper findes ud fra deres tekst (`trykPå(tekst)` i Kosmos og Solsystemet), ikke deres nummer. Numrene skifter, når knapper flytter eller kommer til (U2).
 - [ ] Vent ikke på en proces med `pgrep -f navn` i en løkke: Løkkens egen kommandolinje indeholder navnet, så den venter for evigt (U2). Start i stedet testen selv i baggrunden (`run_in_background`), og få besked, når den er færdig.
 - [ ] `pkill -f navn` køres i sin egen kommando, ikke i samme kommandolinje som noget, der skal blive ved (den rammer sig selv, S2). Svar fra `fetch` læses færdigt (`await svar.arrayBuffer()`), ellers kan Node 22.23 gå ned.
@@ -458,6 +460,8 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
 - **Trin, der bygger oven på hinanden** (Big Bang, Solens fremtid): Et spring kan ikke bare sætte `trin = nr`. Noget sker kun i `opdater` undervejs (fx tågen i Solens fremtid i trin 5). Spring tilbage = forfra og frem igen, og spol de sprungne trin igennem.
 - **Fælles regel i stedet for at flytte knapper én for én:** Skallen sorterer selv `styring` (handling → bjælken, kontakt og skyder → Styr-boksen). Derfor skulle de 11 fænomener i Kosmos næsten ikke ændres. Kun "↺ Forfra" fik `skjul`, så bjælken ikke fyldes med grå knapper.
+- **En fælles byggeklods, der kan vokse, i stedet for to (U4):** Stjerneovnens tre tempoer passede ikke i tidsknappen (⏸ ▶ ⏩). I stedet for en særlig knap til Stjerneovnen fik `lavTidsknap` en valgfri tilstand mere (▷ langsom, `langsom(titel)`, ligesom `hurtig(titel)`), og `lavPause` kunne slettes. Mellemrum, "Vis mig" og et skud går tilbage til det tempo, man havde valgt (`fortsæt`), så intet tempo går tabt efter en pause.
+- **En til/fra-knap, der viser det, man kan skifte til** ("Elektronsky", når atomet har ringe), er svær at læse: Man kan ikke se, hvad der er valgt nu. En kontakt med et fast navn og ✓ viser det (U4, `js/kontakt.js`). Find dem med grep efter knapper, der skifter tekst (`textContent = … ?`) eller "til"/"fra" i teksten.
 - **Et nyt sted for en knap viser fejl i tilstande, ingen havde set:** "▶ Start flyby" stod pludselig i bjælken, mens man stod på Mars (før lå den i "Prøv selv", hvor den blev skiftet ud). Testen `landskab` fangede det.
 - **Tegn ikoner i små knapper** (SVG) i stedet for tegn som ⏸: Nogle skrifttyper viser ⏸ meget lille, mens ▶ bliver en emoji.
 
