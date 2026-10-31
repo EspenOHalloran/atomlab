@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (S2 er færdig: Saturns ringe fra Cassinis måling. Næste er M8b, Jezero, og den venter på jeres go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (U4 er færdig: den samme tidsknap og de samme kontakter i resten af AtomLab. M8b, Jezero, bygges i en anden session).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,20 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (31. oktober 2026): S2, Saturns ringe fra Cassinis måling.** Detaljerne står i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S2". Jeres svar ved valget af kilde: "Go" (til alle tre forslag).
+**Senest lavet (31. oktober 2026): U4, tidsknappen og kontakterne i resten af AtomLab.** Detaljerne og grunden til valget står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U4". Jeres svar: "Go", og I vurderer selv til sidst.
+- **Tidsknappen** fra Kosmos står nu også nederst til højre i 3D-billedet i Stjerneovnen og Reaktoren. "⏸ Pause" og Stjerneovnens tempoknapper (Langsom, Normal og Hurtig) er væk fra venstre panel.
+- **Stjerneovnen har fire knapper: ⏸ · ▷ langsom · ▶ normal · ⏩ hurtig** (0,3, 0,6 og 3 som før). Valget: Langsom blev en tilstand mere på tidsknappen, så alle tre tempoer står ét sted, og mellemrum går tilbage til det tempo, man havde. Batteriet beholder sin "Pause" (ingen strøm).
+- **Knapper, der starter noget, lader tiden gå:** et skud og "Vis mig" i Stjerneovnen og "Skyd neutron", "Start reaktoren" og "Vis mig" i Reaktoren. "Vis mig" er stadig i slowmotion.
+- **Kontakter ligner kontakter** (fyldt med ✓, når de er tændt): "Elektronsky" i Værkstedet og på grundstofkortet (før skiftede knappen mellem "Elektronsky" og "Ringe"), "Vand (moderator)" i Reaktoren og "Snyd laderen (farligt!)" i Batteriet (rød, når den er tændt).
+- **Tests:** se "Status for U4". `index.html` og `style.css` er ændret, så `--ændret` kører alle tests.
+- **Ikke afprøvet (på tabletten):**
+  1. Forstår I ▷ (langsom) i Stjerneovnen? Den er en tom trekant mellem ⏸ og ▶. Ellers kan den blive til en snegl eller "½".
+  2. Er tidsknappens fire små knapper lette at ramme med en finger (de er lige så store som i Kosmos)?
+  3. Er det tydeligt, at "Elektronsky" med ✓ betyder, at skyen vises (og uden ✓ ringene)?
+  4. Skifter Stjerneovnen og Reaktoren rigtigt, når I trykker mellemrum på pc (pause og tilbage til det tempo, I havde)?
+  5. Savner I tempoknapperne i panelet, eller er det fint, at alt om tiden står i billedet?
+
+**Før det (31. oktober 2026): S2, Saturns ringe fra Cassinis måling.** Detaljerne står i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S2". Jeres svar ved valget af kilde: "Go" (til alle tre forslag).
 - **Tætheden i ringene er målt:** Cassini så stjernen β Centauri skinne gennem ringene 28. juli 2008 (UVIS). Ringene har nu 8.192 målte punkter (ca. 9 km pr. punkt) i stedet for de ringe, programmet lavede. Kanterne, Huygens-ringen i Cassini-delingen, B-ringens tætte kerne og de mange tynde ringe i C-ringen er de rigtige.
 - **Det, målingen ikke viser:** D-ringen er for tynd og er stadig tegnet. F-ringen er flyttet til sin middelafstand (den er skæv). Farvebilledets falske striber er fjernet, og kun farvetonen er tilbage.
 - **Tekster:** Nørd-teksten, "Billederne" og "Ærligt talt" ved Ringene siger, hvor tallene kommer fra. "Optisk dybde" er kommet i Ordbogen. Faktatjekket mod dataene og deres etiket (`docs/fakta-solsystemet.md`, "Faktatjek S2").
@@ -512,13 +525,13 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] Piletasterne drejer kameraet i Kosmos.
   - [x] "Start forfra" i Værkstedet, Stjerneovnen, Reaktoren og Batteriet.
   - [x] Atomet: B (orbitalernes former) er standard.
-  - [x] Knappen "Elektronsky"/"Ringe" på grundstofkortet i Det periodiske system, og valget deles med Værkstedet.
+  - [x] Knappen "Elektronsky"/"Ringe" på grundstofkortet i Det periodiske system, og valget deles med Værkstedet (siden U4 en kontakt).
 
 - [ ] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (se [docs/plan-ux.md](docs/plan-ux.md))
   - [x] U1: Træet til venstre (kloder, Steder, Måner og Forsøg) og stedets side til højre. Vejen i toplinjen (30. oktober 2026).
   - [x] U2: Bjælken med tur og "Næste", Styr-boksen med kontakter og skydere og tidsknappen på billedet. "Prøv selv" forsvinder (31. oktober 2026).
   - [x] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek) (31. oktober 2026).
-  - [ ] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab.
+  - [x] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab (31. oktober 2026).
 
 ## Idéer til senere
 - **Uddrag fra gamle bøger** (jeres idé, 29. oktober 2026): Billeder af siderne fra de oprindelige bøger og breve af fx Newton, Huygens, Tycho Brahe, Galilei og Einstein, med den oprindelige tekst og en dansk oversættelse ved siden af. Eksempel: Huygens' *Systema Saturnium* (1659), hvor anagrammet om Saturns ring bliver afsløret (siden findes på archive.org, McGill og Smithsonian). Forbehold: Bøgerne er så gamle, at teksten er fri, men bibliotekernes skanninger kan have egne vilkår, så licensen skal tjekkes side for side og skrives i `KILDER.md`. Ikke vurderet eller planlagt endnu.

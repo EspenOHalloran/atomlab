@@ -9,10 +9,11 @@ import { Effekter } from './effekter.js';
 import { grundstof } from './data/grundstoffer.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
-import { visBesked } from './beskeder.js';
+import { visBesked, bundIVindue } from './beskeder.js';
 import { forfraKnap } from './forfra.js';
 import { startGuide, stopGuide } from './guide.js';
-import { lavPause } from './pause.js';
+import { lavTidsknap } from './pause.js';
+import { lavKontakt } from './kontakt.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
 
 // De tre måder, uran-235 spaltes på her (rigtige par; tæl efter: protoner 92, nukleoner 236)
@@ -109,7 +110,8 @@ let tikTæller = 0;
 
 // Næste skridt, "Vis mig" og guiden
 let tidsFaktor = 1; // under 1 = slowmotion
-let pause = null; // pausen (pause.til er true, mens tiden står stille)
+let pause = null; // tidsknappen ⏸ ▶ (pause.til er true, mens tiden står stille)
+let vandKontakt = null; // kontakten "Vand (moderator)"
 let visDel1 = null; // "Vis mig" i del 1: { t }
 let visKæde = null; // "Vis mig" i del 2: { t, generationer }
 let sikkerSpaltning = false; // guiden: det første skud spalter altid
@@ -260,7 +262,7 @@ export function stopReaktor() {
   begrænsDrejning(null);
   verden.styring.autoRotate = true;
   slutVisning();
-  pause.sæt(false);
+  pause.sæt('spil');
 }
 
 function sætTilstand(ny, første = false) {
@@ -268,7 +270,7 @@ function sætTilstand(ny, første = false) {
   if (ny !== tilstand) {
     stopGuide();
     slutVisning();
-    pause.sæt(false);
+    pause.sæt('spil');
   }
   tilstand = ny;
   rodKerne.visible = ny === 'kerne';
@@ -328,16 +330,23 @@ function lavPanel() {
     stavDybde = Number(h.target.value) / 100;
     opdaterKædePanel();
   });
+  vandKontakt = lavKontakt($('reaktorVand'), 'Vand (moderator)');
+  vandKontakt.sæt(vand);
   $('reaktorVand').addEventListener('click', () => {
     vand = !vand;
     lyd.klik();
     rodKæde.getObjectByName('vand').visible = vand;
-    $('reaktorVand').textContent = vand ? 'Vand (moderator): til' : 'Vand (moderator): fra';
+    vandKontakt.sæt(vand);
     if (!vand) visBesked({ titel: 'Uden vand', tekst: 'Nu bliver neutronerne ikke bremset. Hurtige neutroner spalter sjældent uran-235, så kædereaktionen dør ud.', varighed: 7000 });
   });
   $('reaktorHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpReaktor').classList.remove('skjult'); });
   lavNæsteSkridt($('reaktorMission'), { visMig });
-  pause = lavPause({ knap: $('reaktorPause'), vindue: $('reaktorVindue'), aktiv: () => aktiv });
+  // Tidsknappen nederst til højre i 3D-billedet (som i Kosmos). Mellemrum skifter pausen.
+  const række = document.createElement('div');
+  række.className = 'bjælke-række';
+  bundIVindue($('reaktorVindue')).append(række);
+  pause = lavTidsknap({ holder: række, aktiv: () => aktiv });
+  række.querySelector('.tidsknap').id = 'reaktorTid';
   $('reaktorGuideIgen').addEventListener('click', () => {
     $('hjælpReaktor').classList.add('skjult');
     startGuide(tilstand === 'kerne' ? 'reaktor-kerne' : 'reaktor-kæde', tilstand === 'kerne' ? guideKerne() : guideKæde(), { igen: true });
@@ -455,7 +464,7 @@ function tegnHistorie() {
 function visMig() {
   const skridt = næsteSkridt();
   if (visDel1 || visKæde) return;
-  pause.sæt(false);
+  pause.fortsæt();
   if (tilstand === 'kerne') {
     if (skridt.vis === 'kæde') {
       sætTilstand('kæde');
@@ -637,7 +646,7 @@ function nulstilKerne() {
 }
 
 function skydNeutron() {
-  pause.sæt(false);
+  pause.fortsæt();
   if (optaget()) return;
   if (forløb) nulstilKerne(); // et nyt forsøg starter med en frisk kerne
   lyd.neutron();
@@ -774,7 +783,7 @@ function opdaterKerne(dt) {
 // ---------- Del 2: kædereaktion ----------
 function startKæde() {
   lyd.klik();
-  pause.sæt(false);
+  pause.fortsæt();
   nødstop = false;
   $('reaktorStave').disabled = false;
   if (stavDybde > 0.95) {
@@ -1027,6 +1036,7 @@ export function testAdgang() {
     mission: () => $('reaktorMissionTekst').textContent,
     tilstand: (t) => sætTilstand(t),
     pause: () => pause.til,
+    tidsknap: () => pause.tilstand,
     neutronPos: () => neutroner.slice(0, 5).map((n) => Math.round(n.x * 100) / 100),
     stavVist: () => stavVist,
   };

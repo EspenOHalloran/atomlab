@@ -8,11 +8,11 @@ import { tilføjKantlys } from './atom.js';
 import { Effekter, lavRingTekstur } from './effekter.js';
 import * as fremgang from './fremgang.js';
 import { lyd } from './lyd.js';
-import { visBesked, skjulUndertekst } from './beskeder.js';
+import { visBesked, skjulUndertekst, bundIVindue } from './beskeder.js';
 import { forfraKnap } from './forfra.js';
 import { startGuide, harSetGuide, markérSet } from './guide.js';
 import { stjerne } from './kosmos/faelles.js';
-import { lavPause } from './pause.js';
+import { lavTidsknap } from './pause.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
 
 const R_OVN = 12; // radius på det område, kernerne er i
@@ -82,7 +82,7 @@ export const OPGAVER_FUSION = [
     fakta: 'Fire protoner er blevet til én heliumkerne, og 0,7 % af massen er blevet til energi. Sådan lyser Solen.',
   },
   {
-    id: 'f-fem', titel: 'Lav 5 heliumkerner', tip: 'Skru op for varmen og tempoet, eller skyd selv kernerne sammen.',
+    id: 'f-fem', titel: 'Lav 5 heliumkerner', tip: 'Skru op for varmen, sæt tiden på ⏩, eller skyd selv kernerne sammen.',
     fakta: 'Hvert sekund laver Solen ca. 600 millioner ton hydrogen om til helium.',
   },
   {
@@ -110,14 +110,16 @@ let sigteLinje = null; // stiplet linje fra den valgte kerne til kernen under mu
 let sigteEtiket = null; // navnet på kernen under musen
 let mus = null; // musens plads på skærmen (kun mus, ikke fingre)
 let sigte = null; // kernen under musen
-let pause = null; // pausen (pause.til er true, mens tiden står stille)
+let pause = null; // tidsknappen ⏸ ▷ ▶ ⏩ (pause.til er true, mens tiden står stille)
 let sigteFaktor = 1; // går mod SIGTE_TEMPO, mens man sigter
 let rejse = null; // "Rejsen ind i Solen", mens den kører: { start, fase, retning, slut, blink }
 let sol = null; // Solen udefra (bruges kun på rejsen)
 let effekter = null;
 let aktiv = false;
 let temperatur = 15; // millioner grader
-let tempo = 0.6; // Langsom 0,3, Normal 0,6 og Hurtig 3 (ganges på tiden, så fysikken er den samme)
+// Tempoet på tidsknappen: ▷ langsom 0,3, ▶ normal 0,6 og ⏩ hurtig 3 (ganges på tiden, så fysikken er den samme)
+const TEMPO = { langsom: 0.3, spil: 0.6, hurtig: 3 };
+let tempo = TEMPO.spil;
 let valgt = null;
 let energi = 0;
 let tællere = [0, 0, 0, 0];
@@ -139,10 +141,12 @@ function $(id) {
   return document.getElementById(id);
 }
 
-function sætTempo(t) {
+// Tidsknappen er skiftet (pausen klares i opdater, så tempoet bliver det samme efter en pause)
+function sætTempo(tilstand) {
+  const t = TEMPO[tilstand];
+  if (!t) return;
   if (demo) tempoFørDemo = t; // "Vis mig" kører i slowmotion og skifter tilbage til det valgte tempo bagefter
   else tempo = t;
-  for (const b of document.querySelectorAll('[data-fus-tempo]')) b.classList.toggle('valgt', Number(b.dataset.fusTempo) === t);
 }
 
 function termiskFart() {
@@ -307,7 +311,7 @@ export function stopFusion() {
   etiket.classList.add('skjult');
   sigteEtiket.classList.add('skjult');
   mus = null;
-  pause.sæt(false);
+  pause.fortsæt(); // tempoet bliver, som man valgte det
   verden.renderer.domElement.style.cursor = '';
   slutRejse({ husk: false, guide: false });
   slutDemo();
@@ -332,12 +336,6 @@ function lavPanel() {
     for (let i = 0; i < 10; i++) nyPartikel('p', tilfældigSted());
     opdaterPanel();
   });
-  for (const b of document.querySelectorAll('[data-fus-tempo]')) {
-    b.addEventListener('click', () => {
-      lyd.klik();
-      sætTempo(Number(b.dataset.fusTempo));
-    });
-  }
   $('fusRyd').addEventListener('click', () => {
     lyd.fjern();
     startForfra();
@@ -345,8 +343,15 @@ function lavPanel() {
     opdaterPanel();
   });
   $('fusHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpFusion').classList.remove('skjult'); });
-  // Pause med knappen eller mellemrum. Under rejsen ind i Solen springer mellemrum rejsen over.
-  pause = lavPause({ knap: $('fusPause'), vindue: $('fusionVindue'), aktiv: () => aktiv, mellemrum: () => (rejse ? slutRejse() : pause.skift()) });
+  // Tidsknappen nederst til højre i 3D-billedet (som i Kosmos): ⏸ ▷ ▶ ⏩. Mellemrum skifter pausen, men springer
+  // rejsen ind i Solen over, mens den kører.
+  const række = document.createElement('div');
+  række.className = 'bjælke-række';
+  bundIVindue($('fusionVindue')).append(række);
+  pause = lavTidsknap({ holder: række, aktiv: () => aktiv, ændret: sætTempo, mellemrum: () => (rejse ? slutRejse() : pause.skift()) });
+  pause.langsom('slowmotion');
+  pause.hurtig('5 gange hurtigere');
+  række.querySelector('.tidsknap').id = 'fusTid';
   $('fusRejseSpring').addEventListener('click', () => slutRejse());
   $('fusRejseIgen').addEventListener('click', () => {
     $('hjælpFusion').classList.add('skjult');
@@ -634,7 +639,7 @@ function vælgPar(typeA, typeB) {
 function visMig() {
   const { vis } = næsteSkridt();
   if (demo || !vis) return;
-  pause.sæt(false);
+  pause.fortsæt();
   // Hvilken reaktion kan vises med de kerner, der er lige nu?
   let par = ['p', 'p'];
   if (vis === 'he4' && antalAf('he3') >= 2) par = ['he3', 'he3'];
@@ -892,6 +897,7 @@ function vedKlik(h) {
 // visning = skudt af "Vis mig": rammer altid og tæller ikke som en opgave
 function skyd(a, b, visning = false) {
   if (!visning) skudtSelv = true;
+  pause.fortsæt(); // et skud skal kunne ses, så tiden går igen efter en pause
   a.demo = visning;
   b.demo = visning;
   a.sikker = visning;
@@ -1122,7 +1128,7 @@ function besked(titel, tekst, type = 'info', hvorfor = null) {
 // Kun til automatiske tests (bruges når adressen indeholder ?test)
 export function testAdgang() {
   return {
-    partikler: () => partikler.map((p) => ({ id: p.id, type: p.type, kastet: p.kastet, tættest: p.tættest, mål: p.mål?.id, fart: p.fart.length() })),
+    partikler: () => partikler.map((p) => ({ id: p.id, type: p.type, kastet: p.kastet, tættest: p.tættest, mål: p.mål?.id, fart: p.fart.length(), pos: p.pos.toArray() })),
     skyd: (idA, idB) => skyd(partikler.find((p) => p.id === idA), partikler.find((p) => p.id === idB)),
     temperatur: (t) => { temperatur = t; $('fusTempSkyder').value = t; opdaterTemperatur(); },
     energi: () => energi,
@@ -1134,6 +1140,9 @@ export function testAdgang() {
     rejseInfo: () => rejse && { slut: rejse.slut, fra: rejse.fra },
     andelOverBakken: (T) => andelOverBakken(T),
     pause: () => pause.til,
+    // Tidsknappen ('pause', 'langsom', 'spil' eller 'hurtig') og tempoet, der ganges på tiden
+    tidsknap: () => pause.tilstand,
+    tempo: () => tempo,
     sigte: () => sigte?.id ?? null,
     kerneVed: (x, y) => kerneVed(x, y)?.id ?? null,
     vælg: (id) => { const p = partikler.find((x) => x.id === id); if (p) vælg(p); else valgt = null; },
