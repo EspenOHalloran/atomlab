@@ -4,6 +4,7 @@
 // for de rigtige steder (de passer med almanakkerne inden for få minutter, se tests/aarstider.mjs).
 
 import * as THREE from 'three';
+import { sted, gå } from '../sideknap.js';
 import { stjerne, skilt } from './faelles.js';
 import { lavJorden, overflade } from './jorden.js';
 import { HÆLDNING, dagIÅret, dagIDag, datoTekst, måned, dagslængde, middagshøjde, afstand, solensLængde, timerTekst } from '../data/solbane.js';
@@ -79,20 +80,36 @@ export default {
     ['Længste dag i København', 'ca. 17½ time'],
     ['Korteste dag i København', 'ca. 7 timer'],
   ],
-  kort: `
-    <p>Jorden kredser om Solen på et år, og den drejer om sig selv én gang i døgnet. Aksen, som den drejer om, hælder ca. 23,4°, og den peger hele tiden samme vej ud i rummet, mod Nordstjernen.</p>
-    <p>Derfor hælder den nordlige halvdel af Jorden mod Solen i den ene halvdel af året og væk fra den i den anden. Når den hælder mod Solen, er det sommer i nord: Solen står højt på himlen, og dagene er lange. Samtidig hælder den sydlige halvdel væk fra Solen, så det er vinter i fx Australien. Derfor holder de jul om sommeren dér.</p>
-    <p>Jo længere man er fra ækvator, jo større er forskellen mellem sommer og vinter. Ved ækvator er dagen ca. 12 timer hele året. Nord for polarcirklen, fx i Nordgrønland, går Solen slet ikke ned midt på sommeren, og midt på vinteren står den slet ikke op.</p>
-    <p>Tryk "Næste", og følg Jorden rundt om Solen. Bagefter kan du selv vælge datoen.</p>`,
-  nørd: `
-    <p><b>Hvorfor er det varmere om sommeren?</b> Af to grunde. Solen står højere, så lyset rammer mere lige ned. I København står Solen ca. 58° over horisonten ved middag på årets længste dag og kun ca. 11° på den korteste. Om vinteren bliver det samme sollys derfor fordelt på et ca. 4½ gange større område, så hver kvadratmeter får mindre. Og om sommeren skinner Solen mange flere timer.</p>
-    <p><b>Det er ikke afstanden.</b> Jordens bane er næsten en cirkel. Jorden er tættest på Solen omkring 3. januar (ca. 147 mio. km) og længst væk i starten af juli (ca. 152 mio. km). I januar rammer der ca. 7 % mere sollys Jorden end i juli, og alligevel er det vinter i Danmark. Hvis afstanden gav årstiderne, ville hele Jorden have sommer på samme tid.</p>
-    <p><b>Jævndøgn og solhverv:</b> Ved jævndøgn (ca. 20. marts og 23. september) står Solen lige over ækvator, og dag og nat er næsten lige lange overalt. Ved solhverv (ca. 21. juni og 21. december) står Solen længst mod nord eller syd, og dagen er længst eller kortest.</p>
-    <p><b>Polarcirklen</b> ligger ca. 66,6° nord for ækvator (90° minus 23,4°). Mellem den og Nordpolen er der mindst én dag om året, hvor Solen ikke går ned, og mindst én, hvor den ikke står op. (Lige ved cirklen snyder luften lidt: Den bøjer lyset, så man kan skimte Solen midt på dagen.) I Ilulissat i Grønland er der midnatssol i ca. to måneder (ca. 20. maj til 23. juli) og mørketid i ca. seks uger (ca. 30. november til 11. januar). Mørketid er ikke kulsort i Ilulissat: Midt på dagen er der tusmørke.</p>
-    <p><b>Hvorfor er juli varmere end 21. juni?</b> Land og hav er længe om at blive varme og om at køle af igen. Derfor er det som regel varmest i juli og august og koldest i januar og februar, lidt efter solhverv.</p>
-    <p><b>Lidt over 12 timer ved ækvator:</b> I Singapore er dagen mellem ca. 12 t 03 min og 12 t 12 min hele året. Den er lidt over 12 timer, fordi luften bøjer sollyset, så man kan se Solen et par minutter, før den egentlig er over horisonten, og et par minutter efter den er gået ned. Og dagen regnes fra Solens øverste kant.</p>
-    <p><b>Ærligt talt:</b> Solen og Jorden er tegnet alt for store i forhold til banen. Solen er ca. 109 gange bredere end Jorden, og afstanden mellem dem er ca. 11.700 gange Jordens bredde. I virkeligheden går der ca. 365 døgn, mens Jorden kommer én tur rundt om Solen. Tallene i panelet er regnet ud for de rigtige steder med den rigtige hældning, fra solopgang til solnedgang.</p>
-    <p><b>Billederne af Jorden</b> er fra NASA. Jorden om dagen er sat sammen af satellitbilleder fra 2004, én måned for hver årstid, så man kan se sneen komme og gå, når du flytter datoen. Byernes lys om natten er fra 2016. Skyerne er de samme hele året. Bjergene er gjort højere, og luften om Jorden er tegnet ca. 10 gange tykkere end i virkeligheden. Ellers kunne man ikke se dem.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Jordens akse hælder ca. 23,4° og peger hele tiden samme vej ud i rummet, mod Nordstjernen. Det giver årstiderne. Gå frem trin for trin, og vælg bagefter selv datoen under Styr.',
+    emner: [
+      {
+        titel: 'Hvorfor holder de jul om sommeren i Australien?',
+        tekst: '<p>Den nordlige halvdel af Jorden hælder mod Solen i den ene halvdel af året og væk fra den i den anden. Når den hælder mod Solen, er det sommer i nord: Solen står højt på himlen, og dagene er lange. Samtidig hælder den sydlige halvdel væk fra Solen, så det er vinter i fx Australien.</p>',
+      },
+      {
+        titel: 'Hvorfor er det varmere om sommeren?',
+        tekst: '<p>Af to grunde. Solen står højere, så lyset rammer mere lige ned. I København står Solen ca. 58° over horisonten ved middag på årets længste dag og kun ca. 11° på den korteste. Om vinteren bliver det samme sollys derfor fordelt på et ca. 4½ gange større område, så hver kvadratmeter får mindre. Og om sommeren skinner Solen mange flere timer.</p>',
+      },
+      {
+        titel: 'Er det ikke afstanden til Solen?',
+        tekst: '<p>Nej. Jordens bane er næsten en cirkel. Jorden er tættest på Solen omkring 3. januar (ca. 147 mio. km) og længst væk i starten af juli (ca. 152 mio. km). I januar rammer der ca. 7 % mere sollys Jorden end i juli, og alligevel er det vinter i Danmark. Hvis afstanden gav årstiderne, ville hele Jorden have sommer på samme tid.</p>',
+      },
+      {
+        titel: 'Hvor er forskellen størst?',
+        tekst: '<p>Jo længere man er fra ækvator, jo større er forskellen mellem sommer og vinter. Ved ækvator er dagen ca. 12 timer hele året. Nord for polarcirklen, fx i Nordgrønland, går Solen slet ikke ned midt på sommeren, og midt på vinteren står den slet ikke op.</p>',
+      },
+    ],
+    videre: [sted('jorden', 'Jorden lige nu'), gå('solsystem:formoerkelser', 'Formørkelser')],
+    nørd: `
+      <p><b>Jævndøgn og solhverv:</b> Ved jævndøgn (ca. 20. marts og 23. september) står Solen lige over ækvator, og dag og nat er næsten lige lange overalt. Ved solhverv (ca. 21. juni og 21. december) står Solen længst mod nord eller syd, og dagen er længst eller kortest.</p>
+      <p><b>Polarcirklen</b> ligger ca. 66,6° nord for ækvator (90° minus 23,4°). Mellem den og Nordpolen er der mindst én dag om året, hvor Solen ikke går ned, og mindst én, hvor den ikke står op. (Lige ved cirklen snyder luften lidt: Den bøjer lyset, så man kan skimte Solen midt på dagen.) I Ilulissat i Grønland er der midnatssol i ca. to måneder (ca. 20. maj til 23. juli) og mørketid i ca. seks uger (ca. 30. november til 11. januar). Mørketid er ikke kulsort i Ilulissat: Midt på dagen er der tusmørke.</p>
+      <p><b>Hvorfor er juli varmere end 21. juni?</b> Land og hav er længe om at blive varme og om at køle af igen. Derfor er det som regel varmest i juli og august og koldest i januar og februar, lidt efter solhverv.</p>
+      <p><b>Lidt over 12 timer ved ækvator:</b> I Singapore er dagen mellem ca. 12 t 03 min og 12 t 12 min hele året. Den er lidt over 12 timer, fordi luften bøjer sollyset, så man kan se Solen et par minutter, før den egentlig er over horisonten, og et par minutter efter den er gået ned. Og dagen regnes fra Solens øverste kant.</p>`,
+    billeder: '<p>Billederne af Jorden er fra NASA. Jorden om dagen er sat sammen af satellitbilleder fra 2004, én måned for hver årstid, så man kan se sneen komme og gå, når du flytter datoen. Byernes lys om natten er fra 2016.</p>',
+    ærligt: '<p>Solen og Jorden er tegnet alt for store i forhold til banen. Solen er ca. 109 gange bredere end Jorden, og afstanden mellem dem er ca. 11.700 gange Jordens bredde. I virkeligheden går der ca. 365 døgn, mens Jorden kommer én tur rundt om Solen. Tallene i panelet er regnet ud for de rigtige steder med den rigtige hældning, fra solopgang til solnedgang. Skyerne er de samme hele året. Bjergene er gjort højere, og luften om Jorden er tegnet ca. 10 gange tykkere end i virkeligheden. Ellers kunne man ikke se dem.</p>',
+  },
 
   lav(gruppe, { fase, kamera, opdaterKnapper, forklaring, toplag, verden }) {
     // ---------- Solen ----------

@@ -2,6 +2,7 @@
 // Man kan sende en astronaut ind (spaghetti!) eller kaste en stjerne forbi, så den bliver revet over.
 
 import * as THREE from 'three';
+import { handling, gå } from '../sideknap.js';
 import { Pass, FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { glød, prikSky, skilt, KVALITET } from './faelles.js';
 
@@ -16,7 +17,6 @@ const GLORIE = 1.9; // buen af bøjet lys går fra skyggens kant ud til 1,9 gang
 
 export default {
   id: 'sorthul',
-  hvorfor: ['sorthul'],
   navn: 'Sort hul',
   ikon: '⚫',
   undertitel: 'Hvor ikke engang lys kan slippe ud',
@@ -28,17 +28,35 @@ export default {
     ['Første billede', 'M87*, vist i 2019'],
     ['Jorden som sort hul', 'ca. 2 cm bred'],
   ],
-  kort: `
-    <p>Et <b>sort hul</b> er et sted, hvor så meget masse er presset sammen, at intet kan slippe væk, ikke engang lys. Grænsen kaldes <b>begivenhedshorisonten</b>. Det, der kommer indenfor, kommer aldrig ud igen.</p>
-    <p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt og falder ind. Lyset bliver bøjet af tyngdekraften, så man kan se gassen bag hullet som en lysende bue over og under det.</p>
-    <p>Den sorte skygge er ca. 2,6 gange bredere end selve horisonten. Lys, der kommer tættere forbi end skyggens kant, bliver bøjet så meget, at det falder ind.</p>
-    <p>Midt i vores galakse, Mælkevejen, er der et kæmpe sort hul, der vejer 4 millioner gange så meget som Solen. Prøv at sende en astronaut ind i et sort hul!</p>`,
-  nørd: `
-    <p><b>Hvor stort?</b> Begivenhedshorisontens radius er 2GM/c² (G er tyngdekonstanten, M massen og c lysets fart). Blev Solen presset sammen til et sort hul, ville den være 6 km bred. Jorden ville være ca. 2 cm.</p>
-    <p><b>Spaghetti:</b> Tyngdekraften er stærkere ved fødderne end ved hovedet, hvis man falder med fødderne først. Tæt på et lille sort hul bliver man derfor strakt ud som spaghetti. Ved et kæmpe sort hul er forskellen mindre, og man kunne krydse horisonten uden at mærke noget.</p>
-    <p><b>Tiden går i stå:</b> Set udefra bliver astronauten langsommere og rødere tæt på horisonten, og man ser aldrig astronauten nå helt ind. For astronauten selv går det hurtigt.</p>
-    <p><b>Billeder af sorte huller:</b> Forskere kombinerede radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). Målingerne blev lavet i 2017, og i 2019 viste de det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
-    <p><b>Ærligt talt:</b> Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Skyggens størrelse passer: ca. 2,6 gange horisonten for et sort hul, der ikke drejer (et hul, der drejer, har en lidt skæv skygge). Gløden om gassen er holdt ude af skyggen, så den er helt sort. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul. Stephen Hawking regnede ud, at sorte huller langsomt "fordamper" (Hawking-stråling), men så langsomt, at det aldrig er blevet målt.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Et sort hul er et sted, hvor så meget masse er presset sammen, at intet kan slippe væk, ikke engang lys. Midt i vores galakse, Mælkevejen, er der et, der vejer 4 millioner gange så meget som Solen.',
+    emner: [
+      {
+        titel: 'Hvor går grænsen?', hvorfor: ['sorthul'],
+        tekst: '<p>Grænsen kaldes begivenhedshorisonten. Det, der kommer indenfor, kommer aldrig ud igen.</p>',
+      },
+      {
+        titel: 'Hvad er den lysende ring?',
+        tekst: '<p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt og falder ind. Lyset bliver bøjet af tyngdekraften, så man kan se gassen bag hullet som en lysende bue over og under det.</p>',
+      },
+      {
+        titel: 'Hvorfor er skyggen så stor?',
+        tekst: '<p>Den sorte skygge er ca. 2,6 gange bredere end selve horisonten. Lys, der kommer tættere forbi end skyggens kant, bliver bøjet så meget, at det falder ind.</p>',
+      },
+      {
+        titel: 'Hvad sker der med en astronaut?',
+        tekst: `<p>${handling('astronaut', '🧑‍🚀 Send en astronaut ind')} Tyngdekraften er stærkere ved fødderne end ved hovedet, hvis man falder med fødderne først. Tæt på et lille sort hul bliver man derfor strakt ud som spaghetti. Ved et kæmpe sort hul er forskellen mindre, og man kunne krydse horisonten uden at mærke noget.</p>
+          <p>Set udefra bliver astronauten langsommere og rødere tæt på horisonten, og man ser aldrig astronauten nå helt ind. For astronauten selv går det hurtigt.</p>`,
+      },
+    ],
+    videre: [gå('kosmos:kvasar', 'Kvasar'), gå('kosmos:rumtid', 'Rumtid'), gå('kosmos:ormehul', 'Ormehul')],
+    nørd: `
+      <p><b>Hvor stort?</b> Begivenhedshorisontens radius er 2GM/c² (G er tyngdekonstanten, M massen og c lysets fart). Blev Solen presset sammen til et sort hul, ville den være 6 km bred. Jorden ville være ca. 2 cm.</p>
+      <p><b>Billeder af sorte huller:</b> Forskere kombinerede radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). Målingerne blev lavet i 2017, og i 2019 viste de det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
+      <p><b>Hawking-stråling:</b> Stephen Hawking regnede ud, at sorte huller langsomt "fordamper", men så langsomt, at det aldrig er blevet målt.</p>`,
+    ærligt: '<p>Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Skyggens størrelse passer: ca. 2,6 gange horisonten for et sort hul, der ikke drejer (et hul, der drejer, har en lidt skæv skygge). Gløden om gassen er holdt ude af skyggen, så den er helt sort. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul.</p>',
+  },
 
   lav(gruppe, { lyd, fase, verden }) {
     // Skyggen: en sort skive, der altid vender mod os. Gassen foran den tegnes oven på, og gassen bag den er skjult.

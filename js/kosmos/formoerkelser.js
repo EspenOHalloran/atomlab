@@ -5,6 +5,7 @@
 // Skyggerne regnes ud i js/data/skygge.js og i shaderne i js/kosmos/jorden.js.
 
 import * as THREE from 'three';
+import { sted, kontakt, gå } from '../sideknap.js';
 import { stjerne, skilt } from './faelles.js';
 import { lavJorden, lavMånen } from './jorden.js';
 import { dækket, påHimlen } from '../data/skygge.js';
@@ -126,22 +127,40 @@ export default {
     ['Total solformørkelse varer', 'højst ca. 7½ minut'],
     ['Næste totale måneformørkelse i Danmark', '31. december 2028'],
   ],
-  kort: `
-    <p>Månen kredser om Jorden på ca. en måned. Den lyser ikke selv: Vi ser den side, Solen lyser på. Ved nymåne står Månen mellem Solen og Jorden, og ved fuldmåne står Jorden mellem Solen og Månen.</p>
-    <p>Ved en <b>solformørkelse</b> står Månen præcis foran Solen, og Månens skygge falder på Jorden. Ved en <b>måneformørkelse</b> går Månen ind i Jordens skygge og bliver mørk og kobberrød.</p>
-    <p>Det sker ikke hver måned, fordi Månens bane hælder ca. 5° i forhold til Jordens bane om Solen. Som regel går Månen lidt over eller under Solen og Jordens skygge.</p>
-    <p><b>Kig aldrig direkte på Solen</b>, heller ikke når den er delvist dækket. Det kan skade øjnene for altid. Brug godkendte solformørkelsesbriller. En måneformørkelse kan man trygt kigge på.</p>
-    <p>Tryk "Næste", og se formørkelserne trin for trin. Bagefter kan du selv prøve.</p>`,
-  nørd: `
-    <p><b>Et heldigt tilfælde:</b> Solen er ca. 400 gange bredere end Månen, men den er også ca. 400 gange længere væk. Derfor ser de næsten lige store ud på himlen, ca. en halv grad.</p>
-    <p><b>Total eller ring:</b> Månens afstand svinger mellem ca. 356.000 og 407.000 km. Er Månen tæt på, kan den dække hele Solen, og så kan man se koronaen, Solens tynde, lysende yderste lag. Er Månen langt væk, bliver der en ring tilbage. I gennemsnit er Månen en lille smule for lille til at dække Solen, så ringformørkelser er lidt mere almindelige end totale.</p>
-    <p><b>Kerneskygge og halvskygge:</b> I Månens kerneskygge er hele Solen dækket, men kerneskyggen er højst et par hundrede kilometer bred på Jorden. I halvskyggen omkring, som er flere tusind kilometer bred, er Solen kun delvist dækket. En total solformørkelse varer højst ca. 7½ minut et sted.</p>
-    <p><b>Hvorfor rød?</b> Jordens luft bøjer lidt sollys ind i skyggen. På vejen gennem luften bliver det blå lys spredt væk (det er derfor, himlen er blå), og det røde kommer bedst igennem. Det er det samme røde lys, man ser ved solopgang og solnedgang.</p>
-    <p><b>Hvor tit?</b> Hvert år er der mindst to solformørkelser et sted på Jorden. Men et bestemt sted går der i gennemsnit ca. 375 år mellem totale solformørkelser. Formørkelserne kommer i perioder ca. 173 dage fra hinanden, når Solen står i den retning, hvor Månens bane krydser Jordens baneplan.</p>
-    <p><b>2026:</b> Den 12. august var der total solformørkelse fra det nordligste Rusland over Grønland og Island til Spanien og et lille hjørne af Portugal. I Danmark dækkede Månen ca. 80-88 % af Solen, mens den stod lavt om aftenen. Den 28. august var der en delvis måneformørkelse. Den næste totale måneformørkelse, man kan se fra Danmark, er den 31. december 2028. En total solformørkelse i Danmark kommer først i 2142, og kun på det østlige Bornholm.</p>
-    <p><b>Månen fjerner sig</b> ca. 3,8 cm om året. Om ca. 600 millioner år er den så langt væk, at den ikke længere kan dække hele Solen. Så er der kun ringformørkelser.</p>
-    <p><b>Ærligt talt:</b> Afstandene er ikke målfaste. Her er Månen ca. 6 jordradier væk, men i virkeligheden er den ca. 60 jordradier væk, og Solen er langt længere væk end her. Derfor er Månens bane tegnet med en hældning på 25° i stedet for 5°, så man kan se, at den går over og under. Selv med den store hældning varer formørkelsesperioderne ca. dobbelt så længe her som i virkeligheden, fordi Månen er så tæt på Jorden. Men Solens og Månens størrelse på himlen og Månens skygge passer i forhold til hinanden, og afstandene i panelet er de rigtige. Jordens skygge er derimod ca. 20 % for bred, hvor Månen er, så måneformørkelser sker lidt lettere her.</p>
-    <p><b>Billederne af Jorden og Månen</b> er fra NASA. Jorden om dagen er sat sammen af satellitbilleder fra 2004, én måned for hver årstid, så man kan se sneen komme og gå. Byernes lys om natten er fra 2016, og Månen er fotograferet af rumsonden Lunar Reconnaissance Orbiter, som kom i kredsløb om Månen i 2009. Skyerne er de samme hele året. Bjergene og Månens kratere er gjort højere, og luften om Jorden er tegnet ca. 10 gange tykkere end i virkeligheden. Ellers kunne man ikke se dem.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Ved en solformørkelse står Månen præcis foran Solen, og ved en måneformørkelse går Månen ind i Jordens skygge. Gå frem trin for trin, og prøv bagefter selv under Styr.',
+    emner: [
+      {
+        titel: 'Hvorfor sker det ikke hver måned?', kontakt: 'Uden hældning',
+        tekst: `<p>Månen kredser om Jorden på ca. en måned. Ved nymåne står den mellem Solen og Jorden, og ved fuldmåne står Jorden mellem Solen og Månen. Men Månens bane hælder ca. 5° i forhold til Jordens bane om Solen. Som regel går Månen derfor lidt over eller under Solen og Jordens skygge. Slå ${kontakt('Uden hældning')} til, så kommer der formørkelse hver gang.</p>`,
+      },
+      {
+        titel: 'Hvorfor bliver Månen rød?',
+        tekst: '<p>Jordens luft bøjer lidt sollys ind i skyggen. På vejen gennem luften bliver det blå lys spredt væk (det er derfor, himlen er blå), og det røde kommer bedst igennem. Det er det samme røde lys, man ser ved solopgang og solnedgang.</p>',
+      },
+      {
+        titel: 'Hvorfor passer Månen så godt foran Solen?',
+        tekst: '<p>Solen er ca. 400 gange bredere end Månen, men den er også ca. 400 gange længere væk. Derfor ser de næsten lige store ud på himlen, ca. en halv grad. Er Månen tæt på, kan den dække hele Solen, og så kan man se koronaen, Solens tynde, lysende yderste lag. Er Månen langt væk, bliver der en ring tilbage.</p>',
+      },
+      {
+        titel: 'Må man kigge på en formørkelse?',
+        tekst: '<p>Kig aldrig direkte på Solen, heller ikke når den er delvist dækket. Det kan skade øjnene for altid. Brug godkendte solformørkelsesbriller. En måneformørkelse kan man trygt kigge på.</p>',
+      },
+      {
+        titel: 'Hvornår er der formørkelse i Danmark?',
+        tekst: '<p>Den 12. august 2026 var der total solformørkelse fra det nordligste Rusland over Grønland og Island til Spanien og et lille hjørne af Portugal. I Danmark dækkede Månen ca. 80-88 % af Solen, mens den stod lavt om aftenen. Den 28. august 2026 var der en delvis måneformørkelse. Den næste totale måneformørkelse, man kan se fra Danmark, er den 31. december 2028. En total solformørkelse i Danmark kommer først i 2142, og kun på det østlige Bornholm.</p>',
+      },
+    ],
+    videre: [sted('månen', 'Månen lige nu'), gå('solsystem:aarstider', 'Årstiderne')],
+    nørd: `
+      <p><b>Total eller ring:</b> Månens afstand svinger mellem ca. 356.000 og 407.000 km. I gennemsnit er Månen en lille smule for lille til at dække Solen, så ringformørkelser er lidt mere almindelige end totale.</p>
+      <p><b>Kerneskygge og halvskygge:</b> I Månens kerneskygge er hele Solen dækket, men kerneskyggen er højst et par hundrede kilometer bred på Jorden. I halvskyggen omkring, som er flere tusind kilometer bred, er Solen kun delvist dækket. En total solformørkelse varer højst ca. 7½ minut et sted.</p>
+      <p><b>Hvor tit?</b> Hvert år er der mindst to solformørkelser et sted på Jorden. Men et bestemt sted går der i gennemsnit ca. 375 år mellem totale solformørkelser. Formørkelserne kommer i perioder ca. 173 dage fra hinanden, når Solen står i den retning, hvor Månens bane krydser Jordens baneplan.</p>
+      <p><b>Månen fjerner sig</b> ca. 3,8 cm om året. Om ca. 600 millioner år er den så langt væk, at den ikke længere kan dække hele Solen. Så er der kun ringformørkelser.</p>`,
+    billeder: '<p>Billederne af Jorden og Månen er fra NASA. Jorden om dagen er sat sammen af satellitbilleder fra 2004, én måned for hver årstid, så man kan se sneen komme og gå. Byernes lys om natten er fra 2016, og Månen er fotograferet af rumsonden Lunar Reconnaissance Orbiter, som kom i kredsløb om Månen i 2009.</p>',
+    ærligt: '<p>Afstandene er ikke målfaste. Her er Månen ca. 6 jordradier væk, men i virkeligheden er den ca. 60 jordradier væk, og Solen er langt længere væk end her. Derfor er Månens bane tegnet med en hældning på 25° i stedet for 5°, så man kan se, at den går over og under. Selv med den store hældning varer formørkelsesperioderne ca. dobbelt så længe her som i virkeligheden, fordi Månen er så tæt på Jorden. Men Solens og Månens størrelse på himlen og Månens skygge passer i forhold til hinanden, og afstandene i panelet er de rigtige. Jordens skygge er derimod ca. 20 % for bred, hvor Månen er, så måneformørkelser sker lidt lettere her. Skyerne er de samme hele året. Bjergene og Månens kratere er gjort højere, og luften om Jorden er tegnet ca. 10 gange tykkere end i virkeligheden. Ellers kunne man ikke se dem.</p>',
+  },
 
   lav(gruppe, { fase, kamera, opdaterKnapper, forklaring, toplag }) {
     // ---------- Solen (langt væk mod -x) og lyset fra den ----------

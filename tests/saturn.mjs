@@ -71,9 +71,10 @@ const side = async (adresse) => {
   tjek('bjælken: "▶ Start flyby", og Styr-boksen: kontakterne Modlys og Navne (stederne står i træet)', JSON.stringify(knapperNu) === JSON.stringify(['▶ Start flyby', 'Modlys', 'Navne']) && JSON.stringify(await s.evaluate(() => atomlabTest.solsystem.styr().map((x) => x.slags))) === '["kontakt","kontakt"]', JSON.stringify(knapperNu));
   const træ = await s.evaluate(() => atomlabTest.solsystem.træ());
   tjek('træet: "▶ Flyby · 9 stop" øverst, så Saturn, Ringene, Måner og alle seks måner', træ.map((p) => p.id).join() === 'tur,saturn,ringe,maaner,mimas,enceladus,tethys,dione,rhea,titan' && træ[0].navn.includes('Flyby · 9 stop') && træ[1].valgt, JSON.stringify(træ.map((p) => p.id)));
-  tjek('Saturn: teksten om skyggerne', /skyggen/.test(await s.textContent('#solsystemForklaring')));
+  tjek('Saturn: teksten om skyggerne', /skygge/.test(await s.textContent('#solsystemTekst')));
   tjek('Saturn: sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
-  tjek('panelet fortæller om alle tre', /Saturn/.test(await s.textContent('#solsystemTekst')) && /Huygens/.test(await s.textContent('#solsystemTekst')));
+  const satSide = await s.evaluate(() => atomlabTest.solsystem.side());
+  tjek('Saturns side handler om Saturn og peger videre til ringene og månerne (de har deres egne sider)', /fladtrykt/.test(satSide.tekst) && !/Huygens|tigerstriber/.test(satSide.tekst) && ['ringe', 'enceladus', 'titan'].every((id) => satSide.knapper.some((k) => k.mål === id)) && satSide.sidst === 'Ærligt talt', JSON.stringify(satSide.bokse));
   await s.screenshot({ path: UD + '/1-saturn.png' });
   // Piletasterne drejer kameraet
   const før = await s.evaluate(() => atomlabTest.solsystem.kamera());
@@ -86,7 +87,7 @@ const side = async (adresse) => {
   const hop = async () => { await s.evaluate(() => atomlabTest.solsystem.fænomen().hop()); await s.waitForTimeout(300); };
   await s.click('#solsystemTræ button[data-sted="maaner"]');
   await hop();
-  tjek('Månerne: teksten om de seks store', /seks store/.test(await s.textContent('#solsystemForklaring')));
+  tjek('Månerne: teksten om de seks store og tallet "Kendte måner"', /seks af Saturns største/.test(await s.textContent('#solsystemTekst')) && (await s.evaluate(() => atomlabTest.solsystem.side().tal[0])) === 'Kendte måner');
   await s.screenshot({ path: UD + '/2-maanerne.png' });
   // Knappen "Navne" (js/solsystem/navne.js): slået fra skjules navnene, men man kan stadig trykke på månerne
   const navne = () => s.evaluate(() => atomlabTest.solsystem.fænomen().navne());
@@ -98,7 +99,7 @@ const side = async (adresse) => {
   let p = await s.evaluate(() => atomlabTest.solsystem.fænomen().månePlads('Dione'));
   await s.mouse.click(p.x, p.y);
   await s.waitForTimeout(400);
-  tjek('et tryk på Dione flyver derhen og viser en kort tekst', /Dione:/.test(await s.textContent('#solsystemForklaring')) && (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'dione', await s.textContent('#solsystemForklaring'));
+  tjek('et tryk på Dione flyver derhen og viser Diones side og underteksten', /Dione/.test(await s.textContent('#solsystemTekst')) && (await s.evaluate(() => atomlabTest.solsystem.fase()?.titel)) === 'Dione' && (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'dione', await s.textContent('#solsystemTekst'));
   await hop();
   await s.click('#solsystemTræ button[data-sted="maaner"]');
   await hop();
@@ -118,12 +119,20 @@ const side = async (adresse) => {
   // Ringene fra træet: som stoppet på flybyen (kameraet glider udad over ringene)
   await s.click('#solsystemTræ button[data-sted="ringe"]');
   await hop();
-  tjek('Ringene i træet: kameraet flyver hen over ringene, og panelet og underteksten viser dem', (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'ringe' && (await s.textContent('#solsystemNavn')) === 'Ringene' && /Cassini-delingen/.test(await s.textContent('#solsystemForklaring')));
+  tjek('Ringene i træet: kameraet flyver hen over ringene, og panelet og underteksten viser dem', (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'ringe' && (await s.textContent('#solsystemNavn')) === 'Ringene' && /Cassini-delingen/.test(await s.textContent('#solsystemTekst')));
   for (const [navn, ord] of [['Enceladus', /tigerstriber/], ['Titan', /dis/]]) {
     await s.click(`#solsystemTræ button[data-sted="${navn.toLowerCase()}"]`);
     await hop();
-    tjek(`${navn}: teksten skifter`, ord.test(await s.textContent('#solsystemForklaring')));
+    tjek(`${navn}: teksten skifter`, ord.test(await s.textContent('#solsystemTekst')));
     if (navn === 'Titan') tjek('Titan: knappen "Under disen"', (await knapper()).some((k) => k.startsWith('Under disen')));
+    if (navn === 'Titan') {
+      // Knappen i teksten slår kontakten til, og emnet om overfladen folder sig ud
+      await s.evaluate(() => { for (const d of document.querySelectorAll('#solsystemTekst details')) d.open = false; });
+      await s.evaluate(() => { const e = [...document.querySelectorAll('#solsystemTekst details.side-emne')].find((d) => d.dataset.kontakt === 'Under disen'); e.open = true; });
+      await s.click('#solsystemTekst .side-kontakt[data-kontakt="Under disen"]');
+      tjek('Titan: knappen "Under disen" i teksten slår kontakten til', (await s.evaluate(() => atomlabTest.solsystem.styr().find((x) => x.navn.startsWith('Under disen')).til)));
+      await s.click('#solsystemTekst .side-kontakt[data-kontakt="Under disen"]');
+    }
     await s.click('#solsystemStyr .kontakt:has-text("Modlys")');
     await s.waitForTimeout(800);
     await s.screenshot({ path: `${UD}/${navn.toLowerCase()}-modlys.png` });

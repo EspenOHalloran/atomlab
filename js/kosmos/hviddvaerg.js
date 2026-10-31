@@ -3,6 +3,7 @@
 // nikkel-56 → cobalt-56 → jern-56 (halveringstider ca. 6,1 og 77 dage).
 
 import * as THREE from 'three';
+import { gå } from '../sideknap.js';
 import { stjerne, glød, prikSky, rullendeGraf, KVALITET } from './faelles.js';
 
 const HVID = new THREE.Vector3(-3, 0, 0); // den hvide dværg
@@ -35,19 +36,32 @@ export default {
     ['Tilbage i midten', 'intet'],
     ['Tycho Brahe så en', 'i 1572'],
   ],
-  kort: `
-    <p>En hvid dværg er resten af en stjerne som Solen (se <button class="link-knap" data-gaa="solsystem:solensfremtid">Solens fremtid</button> i Solsystemet). Alene bliver den bare langsomt koldere. Men mange stjerner er i par. Er der en anden stjerne tæt på, kan den hvide dværg suge gas fra den. Gassen samler sig i en hvirvlende skive og falder ned på den hvide dværg, som bliver tungere og tungere.</p>
-    <p>En hvid dværg kan højst veje ca. 1,4 gange så meget som Solen. Når den kommer tæt på grænsen, tænder carbon i midten. Fusionen løber løbsk, og på et øjeblik bliver hele den hvide dværg sprængt i stykker. Der bliver intet tilbage i midten.</p>
-    <p>Eksplosionen laver især nikkel-56, som henfalder til cobalt-56 og så til jern. Det er de henfald, der får supernovaen til at lyse i månedvis. En stor del af jernet i universet er lavet sådan, også noget af jernet i dit blod.</p>
-    <p>Den danske astronom Tycho Brahe så en supernova af denne slags i 1572.</p>`,
-  nørd: `
-    <p><b>Grænsen på 1,4 sole:</b> En hvid dværg bliver holdt oppe af elektronernes tryk: Elektronerne kan ikke presses ind i samme tilstand. I 1930 regnede den indisk-amerikanske fysiker Subrahmanyan Chandrasekhar ud, at det tryk højst kan bære ca. 1,4 sole. Det er samme slags grænse, der får jernkernen i en kæmpestjerne til at falde sammen (se Supernova). Han fik Nobelprisen i 1983.</p>
-    <p><b>Lyset kommer fra henfald:</b> Eksplosionen laver omkring en halv sols masse nikkel-56. Det henfalder til cobalt-56 med en halveringstid på ca. 6 dage, og cobalt-56 henfalder til jern-56 med en halveringstid på ca. 77 dage. Begge gange fanger kernen som regel en af atomets elektroner (elektronindfangning), og energien kommer ud som gammastråling, der varmer gassen op. Se grafen: Lyset falder i takt med henfaldene.</p>
-    <p><b>Et standardlys:</b> Supernovaer af denne slags lyser næsten lige stærkt, når de er stærkest, og de små forskelle kan man rette for: De stærkeste falder langsomst bagefter. Derfor kan man regne ud, hvor langt væk de er, ud fra hvor svage de ser ud. I 1998 opdagede to hold forskere på den måde, at universet udvider sig hurtigere og hurtigere. Ingen ved hvorfor, og forskerne kalder det mørk energi. Opdagelsen gav Nobelprisen i 2011.</p>
-    <p><b>Tycho Brahes stjerne:</b> I november 1572 så Tycho Brahe en ny, klar stjerne i stjernebilledet Cassiopeia. Den kunne ses med det blotte øje i over et år. Han viste, at den lå langt bag Månen, og at stjernehimlen altså kan forandre sig. I dag ved vi, at det var en hvid dværg, der eksploderede.</p>
-    <p><b>Navnet:</b> Astronomerne kalder den en supernova af type Ia (romertallet I og et lille a). Supernovaer fra kæmpestjerner hedder type II (eller Ib og Ic).</p>
-    <p><b>To veje:</b> Forskerne er ikke helt enige om, hvordan det oftest sker: at en hvid dværg suger gas fra en nabostjerne (som her), eller at to hvide dværge kredser om hinanden og til sidst støder sammen.</p>
-    <p><b>Ærligt talt:</b> Den hvide dværg er tegnet alt for stor: I virkeligheden er den ca. 100 gange mindre end nabostjernen. Det tager millioner af år at samle gassen, men her tager det et øjeblik. Grafen er forenklet: Den viser energien fra henfaldene, som langsomt siver ud af gassen. Efter nogle uger slipper mere og mere af gammastrålingen ud uden at varme gassen, og så falder lyset hurtigt.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'En hvid dværg er resten af en stjerne som Solen. Er der en anden stjerne tæt på, kan den hvide dværg suge gas fra den, til den eksploderer.',
+    emner: [
+      {
+        titel: 'Hvordan kan en hvid dværg eksplodere?',
+        tekst: '<p>Alene bliver en hvid dværg bare langsomt koldere. Men mange stjerner er i par. Den hvide dværg kan suge gas fra sin nabo. Gassen samler sig i en hvirvlende skive og falder ned på den hvide dværg, som bliver tungere og tungere. Den kan højst veje ca. 1,4 gange så meget som Solen. Når den kommer tæt på grænsen, tænder carbon i midten. Fusionen løber løbsk, og på et øjeblik bliver hele den hvide dværg sprængt i stykker. Der bliver intet tilbage i midten.</p>',
+      },
+      {
+        titel: 'Hvorfor lyser den i månedvis?',
+        tekst: '<p>Eksplosionen laver især nikkel-56, som henfalder til cobalt-56 og så til jern. Det er de henfald, der får supernovaen til at lyse i månedvis. En stor del af jernet i universet er lavet sådan, også noget af jernet i dit blod.</p>',
+      },
+      {
+        titel: 'Hvem har set en?',
+        tekst: '<p>I november 1572 så den danske astronom Tycho Brahe en ny, klar stjerne i stjernebilledet Cassiopeia. Den kunne ses med det blotte øje i over et år. Han viste, at den lå langt bag Månen, og at stjernehimlen altså kan forandre sig. I dag ved vi, at det var en hvid dværg, der eksploderede.</p>',
+      },
+    ],
+    videre: [gå('solsystem:solensfremtid', 'Solens fremtid'), gå('kosmos:supernova', 'Supernova')],
+    nørd: `
+      <p><b>Grænsen på 1,4 sole:</b> En hvid dværg bliver holdt oppe af elektronernes tryk: Elektronerne kan ikke presses ind i samme tilstand. I 1930 regnede den indisk-amerikanske fysiker Subrahmanyan Chandrasekhar ud, at det tryk højst kan bære ca. 1,4 sole. Det er samme slags grænse, der får jernkernen i en kæmpestjerne til at falde sammen (se Supernova). Han fik Nobelprisen i 1983.</p>
+      <p><b>Lyset kommer fra henfald:</b> Eksplosionen laver omkring en halv sols masse nikkel-56. Det henfalder til cobalt-56 med en halveringstid på ca. 6 dage, og cobalt-56 henfalder til jern-56 med en halveringstid på ca. 77 dage. Begge gange fanger kernen som regel en af atomets elektroner (elektronindfangning), og energien kommer ud som gammastråling, der varmer gassen op. Se grafen: Lyset falder i takt med henfaldene.</p>
+      <p><b>Et standardlys:</b> Supernovaer af denne slags lyser næsten lige stærkt, når de er stærkest, og de små forskelle kan man rette for: De stærkeste falder langsomst bagefter. Derfor kan man regne ud, hvor langt væk de er, ud fra hvor svage de ser ud. I 1998 opdagede to hold forskere på den måde, at universet udvider sig hurtigere og hurtigere. Ingen ved hvorfor, og forskerne kalder det mørk energi. Opdagelsen gav Nobelprisen i 2011.</p>
+      <p><b>Navnet:</b> Astronomerne kalder den en supernova af type Ia (romertallet I og et lille a). Supernovaer fra kæmpestjerner hedder type II (eller Ib og Ic).</p>
+      <p><b>To veje:</b> Forskerne er ikke helt enige om, hvordan det oftest sker: at en hvid dværg suger gas fra en nabostjerne (som her), eller at to hvide dværge kredser om hinanden og til sidst støder sammen.</p>`,
+    ærligt: '<p>Den hvide dværg er tegnet alt for stor: I virkeligheden er den ca. 100 gange mindre end nabostjernen. Det tager millioner af år at samle gassen, men her tager det et øjeblik. Grafen er forenklet: Den viser energien fra henfaldene, som langsomt siver ud af gassen. Efter nogle uger slipper mere og mere af gammastrålingen ud uden at varme gassen, og så falder lyset hurtigt.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera, opdaterKnapper, forklaring, overlag }) {
     // Hele dobbeltstjernen drejer langsomt rundt

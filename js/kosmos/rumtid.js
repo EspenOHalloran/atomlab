@@ -1,6 +1,7 @@
 // Rumtid som en gummidug: tunge ting laver en fordybning, og andre ting følger krumningen.
 
 import * as THREE from 'three';
+import { handling, gå } from '../sideknap.js';
 import { gitterDug, stjerne, glød, KVALITET } from './faelles.js';
 
 export default {
@@ -16,14 +17,29 @@ export default {
     ['Lys bøjer ved Solen', 'ca. 0,0005°'],
     ['GPS uden rettelse', 'fejl på 10 km pr. døgn'],
   ],
-  kort: `
-    <p>Einstein fandt i 1915 ud af, at tyngdekraft ikke er et usynligt reb, der trækker. <b>Tunge ting krummer rummet og tiden omkring sig</b>, og andre ting følger krumningen, ligesom kugler, der triller ned i en fordybning i en gummidug.</p>
-    <p>Prøv at lægge stjerner og sorte huller på dugen, og skyd planeter ind. Har de omtrent den rigtige fart, går de i bane, ofte en aflang bane. Alt for langsomt, og de falder ind. Alt for hurtigt, og de flyver væk.</p>`,
-  nørd: `
-    <p><b>Gummidugen er kun en model.</b> Den snyder lidt, for den bruger jo selv tyngdekraft til at trække kuglerne ned i fordybningen! I virkeligheden er det <i>rumtiden</i>, der krummer, og for ting, der bevæger sig langsomt, er det mest tidens krumning, der får dem til at falde.</p>
-    <p><b>Tid går langsommere tæt på tunge ting.</b> Højt oppe, længere væk fra Jorden, går urene i GPS-satellitterne ca. 45 milliontedele sekund hurtigere pr. døgn. Men fordi satellitterne farer af sted, går de også ca. 7 milliontedele sekund langsommere (det forudsagde Einstein allerede i 1905). Samlet går de ca. 38 milliontedele sekund for hurtigt pr. døgn. Rettede man ikke for det, ville GPS tage fejl med omkring 10 km om dagen.</p>
-    <p><b>Lys bøjer også.</b> Ved en solformørkelse i 1919 målte man, at stjernelys bøjer om Solen, omtrent som Einstein havde regnet ud og dobbelt så meget, som Newtons tyngdelov gav. Senere målinger har bekræftet det meget præcist. Det gjorde ham verdensberømt. Prøv knappen "Send en lysstråle forbi".</p>
-    <p><b>Merkur</b> drejer sin bane en lille smule mere, end Newtons tyngdelov kan forklare. Einsteins teori passer præcist.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Einstein fandt i 1915 ud af, at tunge ting krummer rummet og tiden omkring sig, og andre ting følger krumningen. Læg stjerner og sorte huller på dugen, og skyd planeter ind.',
+    emner: [
+      {
+        titel: 'Hvad er tyngdekraft så?',
+        tekst: '<p>Ikke et usynligt reb, der trækker. Ting følger krumningen, ligesom kugler, der triller ned i en fordybning i en gummidug.</p>',
+      },
+      {
+        titel: 'Hvornår går en planet i bane?',
+        tekst: `<p>${handling('Skyd en planet', '🪐 Skyd en planet ind')} Har den omtrent den rigtige fart, går den i bane, ofte en aflang bane. Alt for langsomt, og den falder ind. Alt for hurtigt, og den flyver væk.</p>`,
+      },
+      {
+        titel: 'Bøjer lys også?',
+        tekst: `<p>Ja. Ved en solformørkelse i 1919 målte man, at stjernelys bøjer om Solen, omtrent som Einstein havde regnet ud og dobbelt så meget, som Newtons tyngdelov gav. Senere målinger har bekræftet det meget præcist. Det gjorde ham verdensberømt. ${handling('lysstråle', '💡 Send en lysstråle forbi')}</p>`,
+      },
+    ],
+    videre: [gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:tyngdebolger', 'Tyngdebølger')],
+    nørd: `
+      <p><b>Tid går langsommere tæt på tunge ting.</b> Højt oppe, længere væk fra Jorden, går urene i GPS-satellitterne ca. 45 milliontedele sekund hurtigere pr. døgn. Men fordi satellitterne farer af sted, går de også ca. 7 milliontedele sekund langsommere (det forudsagde Einstein allerede i 1905). Samlet går de ca. 38 milliontedele sekund for hurtigt pr. døgn. Rettede man ikke for det, ville GPS tage fejl med omkring 10 km om dagen.</p>
+      <p><b>Merkur</b> drejer sin bane en lille smule mere, end Newtons tyngdelov kan forklare. Einsteins teori passer præcist.</p>`,
+    ærligt: '<p>Gummidugen er kun en model. Den snyder lidt, for den bruger jo selv tyngdekraft til at trække kuglerne ned i fordybningen! I virkeligheden er det <i>rumtiden</i>, der krummer, og for ting, der bevæger sig langsomt, er det mest tidens krumning, der får dem til at falde. Dugen viser også kun to af rummets tre retninger.</p>',
+  },
 
   lav(gruppe, { effekter }) {
     const dug = gitterDug(60, Math.round(31 + 10 * KVALITET), Math.round(80 + 40 * KVALITET));

@@ -98,6 +98,16 @@ const synlig = (page, sel) => page.evaluate((s) => { const e = document.querySel
   await page.reload();
   await vent(page);
   tjek('pc: en foldeboks, man selv åbner, huskes', await page.evaluate(() => document.querySelector('[data-lag="reaktor-200"]').open));
+  // Siden i lag i Kosmos (U3): "For nørder" huskes for alle sider, men emnerne starter altid foldet sammen
+  await page.evaluate(() => { location.hash = '#kosmos'; });
+  await page.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'));
+  await page.evaluate(() => atomlabTest.kosmos.vælg('bigbang'));
+  await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary');
+  await page.click('#kosmosTekst details.side-emne > summary');
+  await page.waitForTimeout(300);
+  await page.evaluate(() => atomlabTest.kosmos.vælg('pulsar'));
+  const kos = await page.evaluate(() => ({ nørd: document.querySelector('#kosmosTekst details[data-lag="side-nørd"]').open, emner: atomlabTest.kosmos.side().emner.some((e) => e.åben) }));
+  tjek('pc: Kosmos husker "For nørder" på det næste fænomen, og emnerne er foldet sammen', kos.nørd && !kos.emner, JSON.stringify(kos));
   await page.context().close();
 }
 

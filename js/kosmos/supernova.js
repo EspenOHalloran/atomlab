@@ -2,6 +2,7 @@
 // Når kernen er blevet til jern, falder den sammen, og stjernen eksploderer.
 
 import * as THREE from 'three';
+import { kontakt, gå } from '../sideknap.js';
 import { stjerne, stjerneTid, glød, prikSky, KVALITET } from './faelles.js';
 
 const R = 6; // stjernens radius
@@ -31,17 +32,35 @@ export default {
     ['Kernen falder sammen på', 'under 1 sekund'],
     ['En supernova lyser som', 'op mod en milliard sole'],
   ],
-  kort: `
-    <p>De fleste stjerner, der er mere end ca. 8 gange tungere end Solen, ender deres liv med et kæmpe brag: en <b>supernova</b>. Stjernen <b>Betelgeuse</b> i Orion er sådan en. Den eksploderer en dag, måske først om 100.000 år.</p>
-    <p>Hele livet laver stjernen tungere og tungere grundstoffer i sit indre: helium, carbon, neon, oxygen, silicium og til sidst <b>jern</b>. Den bliver bygget op i lag ligesom et løg. Tryk "Vis lagene".</p>
-    <p>Jern kan ikke give energi ved fusion. Jernkernen i midten af stjernen vokser, og når den vejer ca. 1,4 gange så meget som hele vores Sol, kan den ikke længere holde sig selv oppe. Den falder sammen på under et sekund, og resten af stjernen bliver blæst ud i rummet.</p>
-    <p>Tilbage bliver en lille, ekstremt tung <b>neutronstjerne</b> eller et <b>sort hul</b>. Hvad det bliver, afhænger af, hvor tung resten i midten er: Vejer den mere end ca. 2-3 sole, kan intet holde den oppe, og den falder sammen til et sort hul. Det sker oftest for stjerner, der fra starten var mere end ca. 20-25 gange tungere end Solen. Betelgeuse bliver nok til en neutronstjerne. Stoffet, der bliver blæst ud, bliver en dag til nye stjerner og planeter. Oxygenet, du ånder, er lavet i sådan en stjerne.</p>`,
-  nørd: `
-    <p><b>Hvorfor stopper det ved jern?</b> Jern og nikkel har den højeste bindingsenergi pr. nukleon. Fusion af lette kerner giver energi, men at lave noget tungere end jern <i>koster</i> energi. Se Nørd-fanen i Atomværkstedet, når du har bygget jern-56.</p>
-    <p><b>Sammenfaldet:</b> Jernkernen i midten af stjernen vejer ca. 1,4 gange så meget som hele vores Sol, men den er kun på størrelse med Jorden. På under et sekund falder den sammen til en kugle på ca. 20 km. Elektronerne bliver presset ind i protonerne og bliver til neutroner og <b>neutrinoer</b>. En neutrino er en bittelille partikel uden ladning, der næsten ikke vejer noget. Den reagerer næsten aldrig med noget og flyver lige gennem stjerner, planeter og hele Jorden. Det er betahenfald baglæns (se Atomværkstedet). 99 % af energien forsvinder som neutrinoer.</p>
-    <p><b>Supernova 1987A:</b> Da en stjerne eksploderede i en nabogalakse i 1987, fangede detektorer på Jorden ca. 25 neutrinoer, et par timer før man kunne se lyset. Det var første gang, man fangede neutrinoer fra en anden stjerne end Solen.</p>
-    <p><b>Krabbetågen</b> er resterne af en supernova, som kinesiske astronomer så i år 1054. Den kunne ses om dagen i 23 dage. I midten snurrer en neutronstjerne 30 gange i sekundet.</p>
-    <p><b>Ærligt talt:</b> I virkeligheden er kernen bittelille i forhold til stjernen. Betelgeuse er så stor, at den ville nå langt ud forbi Mars, hvis den stod, hvor Solen står. Lagene er tegnet tykkere, så man kan se dem. Og selve jernkernen bliver til neutronstjernen. Det jern, der bliver blæst ud, bliver lavet i selve eksplosionen.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'De fleste stjerner, der er mere end ca. 8 gange tungere end Solen, ender deres liv med et kæmpe brag: en supernova. Stjernen Betelgeuse i Orion er sådan en. Den eksploderer en dag, måske først om 100.000 år.',
+    emner: [
+      {
+        titel: 'Hvorfor er stjernen bygget som et løg?', kontakt: '🧅 Vis lagene',
+        tekst: `<p>Hele livet laver stjernen tungere og tungere grundstoffer i sit indre: helium, carbon, neon, oxygen, silicium og til sidst jern. Den bliver bygget op i lag ligesom et løg. ${kontakt('🧅 Vis lagene')}</p>`,
+      },
+      {
+        titel: 'Hvorfor eksploderer den?',
+        tekst: '<p>Jern kan ikke give energi ved fusion. Jernkernen i midten af stjernen vokser, og når den vejer ca. 1,4 gange så meget som hele vores Sol, kan den ikke længere holde sig selv oppe. Den falder sammen på under et sekund, og resten af stjernen bliver blæst ud i rummet.</p>',
+      },
+      {
+        titel: 'Hvad bliver der tilbage?',
+        tekst: '<p>En lille, ekstremt tung neutronstjerne eller et sort hul. Hvad det bliver, afhænger af, hvor tung resten i midten er: Vejer den mere end ca. 2-3 sole, kan intet holde den oppe, og den falder sammen til et sort hul. Det sker oftest for stjerner, der fra starten var mere end ca. 20-25 gange tungere end Solen. Betelgeuse bliver nok til en neutronstjerne.</p>',
+      },
+      {
+        titel: 'Hvad har det med dig at gøre?',
+        tekst: '<p>Stoffet, der bliver blæst ud, bliver en dag til nye stjerner og planeter. Oxygenet, du ånder, er lavet i sådan en stjerne.</p>',
+      },
+    ],
+    videre: [gå('kosmos:pulsar', 'Pulsar'), gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:hviddvaerg', 'Hvid dværg')],
+    nørd: `
+      <p><b>Hvorfor stopper det ved jern?</b> Jern og nikkel har den højeste bindingsenergi pr. nukleon. Fusion af lette kerner giver energi, men at lave noget tungere end jern <i>koster</i> energi. Se Nørd-fanen i Atomværkstedet, når du har bygget jern-56.</p>
+      <p><b>Sammenfaldet:</b> Jernkernen i midten af stjernen vejer ca. 1,4 gange så meget som hele vores Sol, men den er kun på størrelse med Jorden. På under et sekund falder den sammen til en kugle på ca. 20 km. Elektronerne bliver presset ind i protonerne og bliver til neutroner og <b>neutrinoer</b>. En neutrino er en bittelille partikel uden ladning, der næsten ikke vejer noget. Den reagerer næsten aldrig med noget og flyver lige gennem stjerner, planeter og hele Jorden. Det er betahenfald baglæns (se Atomværkstedet). 99 % af energien forsvinder som neutrinoer.</p>
+      <p><b>Supernova 1987A:</b> Da en stjerne eksploderede i en nabogalakse i 1987, fangede detektorer på Jorden ca. 25 neutrinoer, et par timer før man kunne se lyset. Det var første gang, man fangede neutrinoer fra en anden stjerne end Solen.</p>
+      <p><b>Krabbetågen</b> er resterne af en supernova, som kinesiske astronomer så i år 1054. Den kunne ses om dagen i 23 dage. I midten snurrer en neutronstjerne 30 gange i sekundet.</p>`,
+    ærligt: '<p>I virkeligheden er kernen bittelille i forhold til stjernen. Betelgeuse er så stor, at den ville nå langt ud forbi Mars, hvis den stod, hvor Solen står. Lagene er tegnet tykkere, så man kan se dem. Og selve jernkernen bliver til neutronstjernen. Det jern, der bliver blæst ud, bliver lavet i selve eksplosionen.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera, verden, opdaterKnapper, forklaring }) {
     // Hele stjernen

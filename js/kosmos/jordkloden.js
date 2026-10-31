@@ -12,6 +12,7 @@ import { LAV_KVALITET, passerTil } from '../scene3d.js';
 import { glød, skilt } from './faelles.js';
 import { lavJorden, lavMånen, overflade } from './jorden.js';
 import { lavRejse } from '../solsystem/rejse.js';
+import { SIDE, SIDER } from '../data/sider/jorden.js';
 import { dageSidenJ2000, hældningVed, solen, månen, stjernetid, månefase, faseNavn, solHøjde } from '../data/himmel.js';
 
 const S = 1000; // km pr. enhed
@@ -45,20 +46,11 @@ export default {
   tal: [
     ['Jordens bredde', 'ca. 12.740 km'],
     ['Et døgn', '24 timer'],
-    ['Til Månen', 'ca. 384.400 km'],
-    ['Månens bredde', 'ca. 3.470 km'],
+    ['Et år', 'ca. 365¼ døgn'],
+    ['Aksen hælder', 'ca. 23,4°'],
   ],
-  kort: `
-    <p><b>Jorden</b> er den tredje planet fra Solen og den eneste, vi kender, hvor der er liv. Lyset passer med lige nu: Den lyse side har dag, og den mørke side har nat. Den gule prik er Danmark. Drej kloden med fingeren, musen eller piletasterne, og zoom ind.</p>
-    <p><b>Dag og nat:</b> Jorden drejer om sig selv mod øst én gang i døgnet. Derfor står Solen op i øst og går ned i vest. Tryk ⏩ nederst til højre i billedet, så går tiden ca. 800 gange hurtigere, og et døgn varer under 2 minutter. Hvorfor vi har årstider, kan du se i <button class="link-knap" data-gaa="solsystem:aarstider">Årstiderne</button>.</p>
-    <p><b>Månen</b> er ca. 3.470 km bred, lidt over en fjerdedel af Jordens bredde. Den er i snit ca. 384.400 km væk, så der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Her står den i den rigtige størrelse og afstand og der, hvor den er i dag. Vælg Månen i listen for at flyve derud.</p>
-    <p><b>Månens faser:</b> Månen kredser om Jorden på ca. 27 døgn og drejer om sig selv lige så hurtigt. Derfor vender den altid den samme side mod os. Solen lyser altid på den ene halvdel af Månen. Hvor meget af den lyse halvdel vi ser fra Jorden, kommer an på, hvor Månen står i sin bane. Fra fuldmåne til fuldmåne går der ca. 29½ døgn. Ved nymåne og fuldmåne kan der komme <button class="link-knap" data-gaa="solsystem:formoerkelser">formørkelser</button>.</p>`,
-  nørd: `
-    <p><b>Tidspunktet:</b> Solens retning, Jordens drejning og Månens plads er regnet ud fra datoen og klokken med de korte formler fra "The Astronomical Almanac". Månens plads passer inden for ca. 0,3°, og grænsen mellem dag og nat passer inden for få minutter.</p>
-    <p><b>Månens bane</b> er ikke helt rund, men en ellipse (en lidt aflang cirkel). Afstanden svinger mellem ca. 356.000 og 407.000 km. Banen hælder ca. 5,1° i forhold til Jordens bane om Solen, og derfor er der ikke formørkelse ved hver nymåne og fuldmåne. Linjen viser Månens vej i en måned omkring det tidspunkt, du ser.</p>
-    <p><b>Jordens form:</b> Jorden er ca. 12.756 km bred ved ækvator og 12.714 km fra pol til pol. Den er lidt fladtrykt, fordi den drejer. Kuglen her er helt rund.</p>
-    <p><b>Et døgn</b> er 24 timer fra middag til middag. I forhold til stjernerne drejer Jorden én gang på 23 timer og 56 minutter. Forskellen kommer af, at Jorden også flytter sig et stykke i sin bane om Solen hver dag, så den skal dreje lidt ekstra, før Solen står samme sted på himlen igen.</p>
-    <p><b>Ærligt talt:</b> Billederne er fra NASA (Blue Marble og Black Marble), og skyerne er et øjebliksbillede fra nogle få dage, så de passer ikke med vejret i dag. Bjergene er gjort højere end i virkeligheden, så de kan ses. Solen er tegnet som en lille prik langt væk. Når du trykker ⏩, går tiden ca. 800 gange hurtigere, og Månen flytter sig i sin bane imens.</p>`,
+  side: SIDE, // teksten i højre panel (js/data/sider/jorden.js)
+  sider: SIDER,
 
   lav(gruppe, { opdaterKnapper, forklaring, overlag, verden }) {
     const { kamera } = verden;
@@ -165,14 +157,15 @@ export default {
     // ---------- Knapperne og teksten ----------
     let drejer = false; // ⏩ på tidsknappen: tiden går ca. 820 gange hurtigere
     const styring = [];
+    // "Lige nu" i panelet: hvor hurtigt tiden går (ved Månen står Månens egen side)
     function vis() {
       if (ved === 'månen') {
-        forklaring('<p><b>Månen:</b> Drej kameraet rundt, så kan du se Jorden langt væk. Der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Den samme side af Månen vender altid mod Jorden. Tryk på Jorden i listen for at flyve tilbage.</p>');
+        forklaring('');
         return;
       }
       forklaring(drejer
-        ? '<p><b>Jorden drejer:</b> Tiden går nu ca. 800 gange hurtigere. Se Danmark (den gule prik) komme ind i dagen om morgenen og ud i natten om aftenen. Månen flytter sig også lidt i sin bane.</p>'
-        : '<p><b>Lige nu:</b> Den lyse side har dag, og den mørke side har nat. Om natten kan du se lyset fra byerne. Den gule prik er Danmark. Uret nederst viser tiden i Danmark, og om Solen er oppe.</p>');
+        ? '<p><b>Lige nu:</b> Tiden går ca. 800 gange hurtigere. Danmark (den gule prik) kommer ind i dagen om morgenen og ud i natten om aftenen.</p>'
+        : '<p><b>Lige nu:</b> Den lyse side har dag, og den mørke side har nat. Om natten kan du se lyset fra byerne. Uret nederst viser tiden i Danmark.</p>');
     }
     vis();
     opdaterKnapper();

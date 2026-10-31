@@ -4,7 +4,10 @@
 // - Styr-boksen øverst til højre: kontakter (tændt er fyldt med ✓) og skydere
 // - tidsknappen nederst til højre: ⏸ ▶ og ⏩, hvor scenen kan gå hurtigere (mellemrum skifter pausen)
 // Hvert fænomen ligger i sin egen fil i js/kosmos/ og har samme opbygning (se fx rumtid.js):
-// { id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
+// { id, navn, ikon, undertitel, citat, kamera, tal, side, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
+// side er teksten i højre panel i lag fra let til dybt (U3 i docs/plan-ux.md, se visSide):
+// { kort, emner: [{ titel, tekst, hvorfor?: [id], kontakt?: navn }], videre: [knapper], nørd, billeder, ærligt }.
+// Knapperne i teksterne laves med js/sideknap.js. Et fænomen med træ har også sider: { stedets id: { tal, ...side } }.
 // lav() kan også give: trin() (trinene i bjælken, se tegnBjælke), tur (en tur som flybyen, øverst i træet:
 // { navn, stop, klar(), kører(), start(), skjul()? }),
 // hurtig (teksten til ⏩, fx 'ca. 820 gange hurtigere'), tempo(tilstand) (kaldes, når tidsknappen skifter) og
@@ -32,22 +35,27 @@ export const NØGLER = {
   solsystem: { valgt: 'atomlabSolsystem', set: 'atomlabSolsystemSet' },
 };
 
-// Åbner et fænomen på en anden skærm (fx fra grundstofkortet eller en tekst i Kosmos)
-export function åbnFænomen(skærm, id) {
+// Et sted i træet, som skærmen skal gå til, når den starter (fx Olympus Mons fra Ordbogen): { skærm, sted }
+let ventSted = null;
+
+// Åbner et fænomen på en anden skærm (fx fra grundstofkortet eller en tekst i Kosmos). sted er et sted i fænomenets
+// træ (fx 'olympus'), som kameraet flyver hen til.
+export function åbnFænomen(skærm, id, sted) {
   if (id) {
     try { localStorage.setItem(NØGLER[skærm].valgt, id); } catch { /* ingen lagring */ }
   }
+  ventSted = sted ? { skærm, sted } : null;
   location.hash = `#${skærm}`;
 }
 
-// Knapper med data-gaa="skærm:id" (eller bare "skærm") i teksterne åbner et fænomen et andet sted
+// Knapper med data-gaa="skærm:id" (eller bare "skærm", eller "skærm:id:sted") i teksterne åbner et fænomen et andet sted
 document.addEventListener('click', (h) => {
   const b = h.target.closest?.('[data-gaa]');
   if (!b) return;
-  const [skærm, id] = b.dataset.gaa.split(':');
+  const [skærm, id, sted] = b.dataset.gaa.split(':');
   if (!NØGLER[skærm]) return;
   lyd.klik();
-  åbnFænomen(skærm, id);
+  åbnFænomen(skærm, id, sted);
 });
 
 // skærm: navnet (fx 'kosmos'). liste: fænomenerne i rækkefølge, eller grupper { navn, ikon, f, under: [fænomener] },
@@ -67,7 +75,6 @@ export function lavFænomenSkærm({ skærm, liste }) {
   let aktiv = false;
   let valgt = null;
   let kørende = null; // det, fænomenets lav() gav tilbage
-  let fane = 'kort';
   let tjekTid = 0;
   let tidsknap = null; // ⏸ ▶ ⏩ (tidsknap.til er true, mens tiden står stille)
   let tid = 0; // skærmens eget ur, som står stille under pause
@@ -83,7 +90,6 @@ export function lavFænomenSkærm({ skærm, liste }) {
     b.addEventListener('click', () => {
       if (valgt === f) return;
       lyd.klik();
-      fane = 'kort'; // et nyt fænomen starter altid på "Kort fortalt"
       vælg(f.id);
     });
     return b;
@@ -144,7 +150,6 @@ export function lavFænomenSkærm({ skærm, liste }) {
         } else if (b.dataset.sted) gå(g, b.dataset.sted);
         else if (b.dataset.id && valgt?.id !== b.dataset.id) {
           lyd.klik();
-          fane = 'kort';
           vælg(b.dataset.id);
         } else if (b.dataset.klode) gåTilKlode(g);
       });
@@ -152,13 +157,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // Vejen i toplinjen (Solsystemet › Mars › Olympus Mons): et tryk på kloden går tilbage til den
       $('Vej')?.addEventListener('click', (h) => { if (h.target.closest('button')) gåTilKlode(åbenGruppe()); });
     }
-    for (const b of sektion.querySelectorAll('[data-kosmos-fane]')) {
-      b.addEventListener('click', () => {
-        fane = b.dataset.kosmosFane;
-        lyd.klik();
-        visTekst();
-      });
-    }
+    // Knapperne i teksterne (js/sideknap.js)
+    sektion.querySelector('.højre-panel').addEventListener('click', brugSideKnap);
     $('Hjælp').addEventListener('click', () => { lyd.klik(); document.getElementById(`hjælp${skærm[0].toUpperCase()}${skærm.slice(1)}`).classList.remove('skjult'); });
     tidsknap = lavTidsknap({ holder: række, aktiv: () => aktiv, ændret: (t) => kørende?.tempo?.(t) });
     tidsknap.knap = række.querySelector('.tidsknap');
@@ -179,6 +179,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // ingen lagring
     }
     vælg(id);
+    if (ventSted?.skærm === skærm) gå(åbenGruppe(), ventSted.sted);
+    ventSted = null;
   }
 
   function stop() {
@@ -267,10 +269,10 @@ export function lavFænomenSkærm({ skærm, liste }) {
     $('Ikon').textContent = f.ikon;
     $('Navn').textContent = f.navn;
     $('Undertitel').textContent = f.undertitel;
-    $('Tal').innerHTML = (f.tal ?? []).map(([navn, værdi]) => `<div><dt>${navn}</dt><dd>${værdi}</dd></div>`).join('');
     $('Citat').innerHTML = f.citat ? citatHTML(f.citat) : '';
     $('Citat').hidden = !f.citat;
-    visTekst();
+    sideVist = null;
+    visSide();
     lavStyring();
     stilKamera(f.kamera);
     visSted();
@@ -307,7 +309,6 @@ export function lavFænomenSkærm({ skærm, liste }) {
       return;
     }
     lyd.klik();
-    fane = 'kort';
     vælg((g.f ?? g.under[0]).id);
   }
 
@@ -316,7 +317,6 @@ export function lavFænomenSkærm({ skærm, liste }) {
     if (!g?.f) return;
     lyd.klik();
     if (valgt !== g.f) {
-      fane = 'kort';
       vælg(g.f.id);
       if (id === g.f.træ?.rod) return; // kloden starter selv der
     } else if (id === stedNu()) return;
@@ -418,7 +418,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       $('Navn').textContent = valgt.navn;
       $('Undertitel').textContent = valgt.undertitel;
     }
-    if ($('Om')) $('Om').textContent = `Om ${valgt.navn}`;
+    visSide();
     // Vejen: › Mars › Olympus Mons (kloden er en knap, når man er et andet sted end ved hele kloden)
     const vej = $('Vej');
     if (vej) {
@@ -432,37 +432,126 @@ export function lavFænomenSkærm({ skærm, liste }) {
     }
   }
 
-  // "Kort fortalt": første afsnit står fremme, og resten er foldet sammen under "Mere" (lag 2).
-  // Har fænomenet "Hvorfor?"-kort (hvorfor: [id]), står de nederst.
-  function visTekst() {
-    for (const b of sektion.querySelectorAll('[data-kosmos-fane]')) b.classList.toggle('valgt', b.dataset.kosmosFane === fane);
+  // ---------- Siden i højre panel (U3 i docs/plan-ux.md) ----------
+  // Fra let øverst til dybt nederst: tallene, "Lige nu" (fænomenets forklaring()), Kort (står fremme), emnerne
+  // (foldebokse, "Hvorfor?"-kortene står ved deres emne), "Gå videre", For nørder, Billederne og Ærligt talt (altid
+  // sidst) og citatet. Ved et sted i træet viser panelet stedets egen side (sider[id]), ellers fænomenets (side).
+  // Emnerne starter foldet sammen. For nørder, Billederne og Ærligt talt husker, om man har foldet dem ud (atomlabLag),
+  // så de står åbne på alle sider.
+  let sideVist = null; // nøglen på den side, der står i panelet
+  function sideNu() {
+    const sted = stedNu();
+    const egen = valgt?.træ && sted && sted !== valgt.træ.rod ? valgt.sider?.[sted] : null;
+    return egen ? { nøgle: `${valgt.id}:${sted}`, side: egen, tal: egen.tal } : { nøgle: valgt?.id, side: valgt?.side ?? {}, tal: valgt?.tal };
+  }
+
+  function visSide() {
+    if (!valgt) return;
+    const { nøgle, side, tal } = sideNu();
+    if (nøgle === sideVist) return;
+    sideVist = nøgle;
+    $('Tal').innerHTML = (tal ?? []).map(([navn, værdi]) => `<div><dt>${navn}</dt><dd>${værdi}</dd></div>`).join('');
     const boks = $('Tekst');
-    boks.innerHTML = valgt ? valgt[fane] : '';
-    if (valgt && fane === 'kort') {
-      const afsnit = [...boks.children];
-      if (afsnit.length > 1) {
-        const mere = document.createElement('details');
-        mere.className = 'lag-boks kosmos-mere';
-        mere.dataset.lag = 'kosmos-mere';
-        mere.innerHTML = '<summary><strong>Mere</strong></summary>';
-        mere.append(...afsnit.slice(1));
-        boks.append(mere);
-        lavLagBokse(boks);
-      }
-      if (valgt.hvorfor?.length) {
-        const linje = document.createElement('p');
-        linje.className = 'hvorfor-linje';
-        for (const id of valgt.hvorfor) {
-          const k = document.createElement('button');
-          k.className = 'hvorfor';
-          k.dataset.hvorfor = id;
-          k.textContent = HVORFOR[id].spørgsmål;
-          linje.append(k, ' ');
-        }
-        boks.append(linje);
-      }
+    boks.innerHTML = sideHTML(side);
+    lavLagBokse(boks);
+    // En ny side starter øverst, når panelet selv ruller (på telefoner ruller hele siden, og den lader vi være)
+    const panel = boks.closest('.højre-panel');
+    if (panelRuller(panel)) panel.scrollTop = 0;
+    tjekSideKnapper();
+  }
+
+  function sideHTML(side) {
+    const hvorfor = (ider) => (ider?.length
+      ? `<p class="hvorfor-linje">${ider.map((id) => `<button class="hvorfor" data-hvorfor="${id}">${HVORFOR[id].spørgsmål}</button>`).join(' ')}</p>`
+      : '');
+    const boks = (titel, indhold, lag, klasse = '') => `<details class="lag-boks side-boks side-del ${klasse}"${lag ? ` data-lag="${lag}"` : ''}><summary><strong>${titel}</strong></summary>${indhold}</details>`;
+    let html = side.kort ? `<div class="side-del side-kort"><p>${side.kort}</p></div>` : '';
+    for (const e of side.emner ?? []) {
+      html += boks(e.titel, e.tekst + hvorfor(e.hvorfor), null, 'side-emne').replace('<details ', `<details ${e.kontakt ? `data-kontakt="${e.kontakt}" ` : ''}`);
     }
-    boks.scrollTop = 0;
+    if (side.videre?.length) html += `<p class="side-videre"><span>Gå videre</span>${side.videre.join('')}</p>`;
+    if (side.nørd) html += boks('For nørder', side.nørd, 'side-nørd');
+    if (side.billeder) html += boks('Billederne', side.billeder, 'side-billeder');
+    if (side.ærligt) html += boks('Ærligt talt', side.ærligt, 'side-ærligt', 'side-ærligt');
+    return html;
+  }
+
+  const panelRuller = (panel) => panel && panel.scrollHeight > panel.clientHeight + 4 && /auto|scroll/.test(getComputedStyle(panel).overflowY);
+
+  // En kontakt i Styr-boksen med det navn (fx 'Modlys' eller 'Under disen (infrarødt)')
+  const findKontakt = (navn) => (kørende?.styring ?? []).find((s) => s.til !== undefined && !s.skyder && s.tekst.startsWith(navn));
+  const findHandling = (navn) => (kørende?.styring ?? []).find((s) => s.handling && s.tekst.includes(navn));
+
+  // Når en kontakt bliver slået til, folder dens emne sig ud (regel 3 i docs/plan-lag.md). De andre emner, som
+  // siden selv har foldet ud, folder sig sammen igen.
+  function foldUd(navn) {
+    const boks = [...$('Tekst').querySelectorAll('details.side-emne[data-kontakt]')].find((d) => navn.startsWith(d.dataset.kontakt));
+    if (!boks) return;
+    for (const d of $('Tekst').querySelectorAll('details.side-emne[data-auto]')) {
+      if (d === boks) continue;
+      delete d.dataset.auto;
+      d.open = false;
+    }
+    if (boks.open) return;
+    boks.open = true;
+    boks.dataset.auto = '1';
+    // Kan panelet selv rulle (pc og tablet på langs), rulles emnet frem. På telefoner ruller hele siden, og den lader vi være.
+    const panel = boks.closest('.højre-panel');
+    if (panelRuller(panel)) {
+      const b = boks.getBoundingClientRect();
+      const p = panel.getBoundingClientRect();
+      if (b.bottom > p.bottom || b.top < p.top) panel.scrollTo({ top: panel.scrollTop + b.top - p.top - 12, behavior: ROLIG ? 'auto' : 'smooth' });
+    }
+  }
+
+  // Et tryk på en knap i teksten (js/sideknap.js) gør det samme som det rigtige sted (træet, Styr-boksen, bjælken)
+  function brugSideKnap(h) {
+    const b = h.target.closest('.side-knap, [data-gaa]');
+    if (!b || b.disabled) return;
+    const d = b.dataset;
+    if (d.gaa) {
+      const [skærmNavn, id, sted] = d.gaa.split(':');
+      if (skærmNavn !== skærm) return; // en anden skærm (klaret af lytteren øverst i filen)
+      h.stopPropagation();
+      lyd.klik();
+      if (id && valgt?.id !== id) vælg(id);
+      if (sted) gå(åbenGruppe(), sted);
+      return;
+    }
+    if (d.sted) gå(åbenGruppe(), d.sted);
+    else if (d.kontakt) findKontakt(d.kontakt)?.knap?.click();
+    else if (d.handling) {
+      const s = findHandling(d.handling);
+      if (!s || s.deaktiv?.()) return;
+      lyd.klik();
+      fortsæt();
+      s.handling();
+      tjekKnapper();
+    } else if (d.tur) startTur();
+    else if (d.tid) {
+      lyd.klik();
+      tidsknap.sæt(d.tid);
+    }
+  }
+
+  // Knapperne i teksten følger med: En kontakt viser, om den er tændt, og en handling, der ikke kan bruges lige nu, er grå
+  function sideKnapFindes(b) {
+    const d = b.dataset;
+    if (d.kontakt) return Boolean(findKontakt(d.kontakt));
+    if (d.handling) { const s = findHandling(d.handling); return Boolean(s && !s.skjul?.() && !s.deaktiv?.()); }
+    if (d.tur) { const t = kørende?.tur; return Boolean(t && !t.kører() && t.klar() && !t.skjul?.()); }
+    if (d.sted) { // et sted ved den klode, man er ved (fra et forsøg går man til kloden, fx "Solen" fra Solstorm)
+      const klode = åbenGruppe()?.f;
+      return Boolean(klode && (d.sted === klode.id || d.sted === klode.træ?.rod || findPunkt(klode.træ, d.sted)));
+    }
+    return true;
+  }
+  function tjekSideKnapper() {
+    for (const b of sektion.querySelectorAll('.højre-panel button.side-knap')) {
+      const findes = sideKnapFindes(b);
+      if (b.disabled === findes) b.disabled = !findes;
+      if (b.dataset.kontakt) b.classList.toggle('til', Boolean(findKontakt(b.dataset.kontakt)?.til));
+    }
   }
 
   // En undertekst nederst i 3D-billedet, der fortæller, hvad der sker lige nu (fx "Jernkernen falder sammen").
@@ -566,6 +655,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
           vis();
           lyd.klik();
           s.skift(s.til);
+          if (s.til) foldUd(s.tekst); // emnet om kontakten folder sig ud
+          tjekSideKnapper();
         });
         s.knap = b;
         boks.append(b);
@@ -653,6 +744,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
   function tjekKnapper() {
     tegnBjælke();
     visSted(); // stedet kan være valgt på kloden eller på flybyen
+    tjekSideKnapper();
     pladsTilStyr();
   }
 
@@ -723,6 +815,34 @@ export function lavFænomenSkærm({ skærm, liste }) {
       sætTid: (tilstand) => tidsknap.sæt(tilstand),
       kamera: () => verden.kamera.position.toArray(),
       fænomen: () => kørende?.test, // fænomenets egen testadgang (fx Saturns måner)
+      // Siden i højre panel: nøglen (fænomenet eller fænomen:sted), teksten, emnerne og knapperne i teksten
+      side: () => {
+        tjekKnapper();
+        const boks = $('Tekst');
+        const titel = (d) => d.querySelector('summary').textContent.trim();
+        return {
+          nøgle: sideVist,
+          tal: [...$('Tal').querySelectorAll('dt')].map((x) => x.textContent),
+          kort: boks.querySelector('.side-kort')?.textContent.trim() ?? '',
+          tekst: boks.textContent.replace(/\s+/g, ' '),
+          emner: [...boks.querySelectorAll('details.side-emne')].map((d) => ({ titel: titel(d), åben: d.open, kontakt: d.dataset.kontakt ?? null })),
+          bokse: [...boks.querySelectorAll('details.side-boks')].map(titel),
+          sidst: boks.lastElementChild ? titel(boks.lastElementChild) : null,
+          knapper: [...sektion.querySelectorAll('.højre-panel .side-knap')].map((b) => ({
+            tekst: b.textContent.trim(), slags: Object.keys(b.dataset)[0] ?? 'link', mål: Object.values(b.dataset)[0] ?? b.getAttribute('href'), findes: b.tagName === 'A' || sideKnapFindes(b), slået: Boolean(b.disabled), til: b.classList.contains('til'),
+          })),
+        };
+      },
+      // Tryk på en knap i teksten ud fra teksten (false, hvis den ikke findes eller er grå)
+      trykISide: (tekst) => {
+        tjekKnapper();
+        const t = tekst.toLowerCase();
+        const b = [...sektion.querySelectorAll('.højre-panel .side-knap')].find((x) => x.textContent.trim().toLowerCase().includes(t));
+        if (!b || b.disabled) return false;
+        b.click();
+        return true;
+      },
+      fase: () => (faseNu ? { titel: faseNu.titel, tekst: faseNu.tekst } : null), // underteksten (bjælkens linje)
       // Træet (Solsystemet): punkterne, der vises ({ id, navn, valgt, niveau }), det sted, man er ved, og gå til et sted
       træ: () => [...sektion.querySelectorAll('.sol-træ button')].map((b) => ({
         id: b.dataset.tur ? 'tur' : b.dataset.sted ?? b.dataset.id ?? b.dataset.klode, navn: b.textContent, valgt: b.classList.contains('valgt'),

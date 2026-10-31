@@ -2,6 +2,7 @@
 // Ormehullet er en tunnel mellem dem. Lyset tager den lange vej rundt, rumskibet tager genvejen.
 
 import * as THREE from 'three';
+import { handling, gå } from '../sideknap.js';
 import { glød, skilt, hale } from './faelles.js';
 
 const H = 4; // halvdelen af afstanden mellem de to lag
@@ -30,16 +31,30 @@ export default {
     ['Ormehuller set', 'ingen'],
     ['Kræver', 'negativ energi i store mængder'],
   ],
-  kort: `
-    <p>Et <b>ormehul</b> er en tænkt genvej gennem rumtiden. Forestil dig, at universet er et stykke papir, der er bøjet, så to steder, der ligger langt fra hinanden, kommer til at ligge lige over hinanden. Et ormehul ville være en tunnel mellem dem.</p>
-    <p>Ingen har nogensinde set et ormehul. De er en mulighed i Einsteins ligninger, men måske findes de slet ikke. Hvis de findes, ville de klappe sammen med det samme, medmindre noget holdt dem åbne.</p>
-    <p>Start kapløbet: Lyset tager den lange vej rundt, og rumskibet tager genvejen.</p>`,
-  nørd: `
-    <p><b>Einstein-Rosen-broen:</b> Allerede i 1916 så Ludwig Flamm en slags "bro" i Einsteins ligninger. I 1935 fandt Albert Einstein og Nathan Rosen ud af, at hans ligninger tillader en "bro" mellem to steder i rumtiden. John Wheeler kaldte det senere et ormehul, ligesom en orm, der æder sig gennem et æble i stedet for at kravle rundt om det.</p>
-    <p><b>Eksotisk stof:</b> I 1988 regnede Kip Thorne og Michael Morris ud, at man kunne rejse gennem et ormehul, hvis det blev holdt åbent af stof med <i>negativ energi</i>. Små mængder negativ energi findes faktisk i kvantefysikken (Casimir-effekten), men ingen ved, om der kan blive nok.</p>
-    <p><b>En kugle, ikke en tragt:</b> Tragten her er en tegning i to dimensioner. Et rigtigt ormehul i vores tredimensionelle rum ville have en åbning, der ligner en kugle. Kigger man ind i den, ser man stjernerne på den anden side. Sådan blev det vist i filmen <i>Interstellar</i>, hvor Kip Thorne var rådgiver.</p>
-    <p><b>Tidsrejser?</b> Hvis den ene ende af et ormehul blev fløjet rundt med næsten lysets fart, ville tiden gå langsommere der. Så kunne ormehullet i teorien blive en tidsmaskine. Stephen Hawking mente, at naturen må forhindre det.</p>
-    <p><b>Ærligt talt:</b> Rumtiden behøver ikke noget "udenfor" for at kunne krumme. Foldningen er bare en måde at tegne det på.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Et ormehul er en tænkt genvej gennem rumtiden. Ingen har nogensinde set et, og måske findes de slet ikke.',
+    emner: [
+      {
+        titel: 'Hvordan kan det være en genvej?',
+        tekst: `<p>Forestil dig, at universet er et stykke papir, der er bøjet, så to steder, der ligger langt fra hinanden, kommer til at ligge lige over hinanden. Et ormehul ville være en tunnel mellem dem. ${handling('kapløbet', '🏁 Start kapløbet')}: Lyset tager den lange vej rundt, og rumskibet tager genvejen.</p>`,
+      },
+      {
+        titel: 'Findes de?',
+        tekst: '<p>Ormehuller er en mulighed i Einsteins ligninger, men måske findes de slet ikke. Hvis de findes, ville de klappe sammen med det samme, medmindre noget holdt dem åbne.</p>',
+      },
+      {
+        titel: 'Hvorfor hedder det et ormehul?',
+        tekst: '<p>Allerede i 1916 så Ludwig Flamm en slags "bro" i Einsteins ligninger. I 1935 fandt Albert Einstein og Nathan Rosen ud af, at hans ligninger tillader en "bro" mellem to steder i rumtiden. John Wheeler kaldte det senere et ormehul, ligesom en orm, der æder sig gennem et æble i stedet for at kravle rundt om det.</p>',
+      },
+    ],
+    videre: [gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:rumtid', 'Rumtid')],
+    nørd: `
+      <p><b>Eksotisk stof:</b> I 1988 regnede Kip Thorne og Michael Morris ud, at man kunne rejse gennem et ormehul, hvis det blev holdt åbent af stof med <i>negativ energi</i>. Små mængder negativ energi findes faktisk i kvantefysikken (Casimir-effekten), men ingen ved, om der kan blive nok.</p>
+      <p><b>En kugle, ikke en tragt:</b> Tragten her er en tegning i to dimensioner. Et rigtigt ormehul i vores tredimensionelle rum ville have en åbning, der ligner en kugle. Kigger man ind i den, ser man stjernerne på den anden side. Sådan blev det vist i filmen <i>Interstellar</i>, hvor Kip Thorne var rådgiver.</p>
+      <p><b>Tidsrejser?</b> Hvis den ene ende af et ormehul blev fløjet rundt med næsten lysets fart, ville tiden gå langsommere der. Så kunne ormehullet i teorien blive en tidsmaskine. Stephen Hawking mente, at naturen må forhindre det.</p>`,
+    ærligt: '<p>Rumtiden behøver ikke noget "udenfor" for at kunne krumme. Foldningen er bare en måde at tegne det på. Tragten er en tegning i to dimensioner (se For nørder).</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera }) {
     // Nettet: to lag forbundet af tragten (ormehullet) og af folden ude til højre

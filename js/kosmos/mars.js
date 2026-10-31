@@ -19,6 +19,7 @@ import { lavSkyer, lokalTid } from '../solsystem/skyer.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
+import { SIDE, SIDER } from '../data/sider/mars.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
 import { lavLandskab, ØJE } from '../solsystem/landskab.js';
 
@@ -63,11 +64,9 @@ const MARS_DØGN = 1.025957; // Mars' stjernedøgn i jorddøgn (24 t 37 min)
 // så Mars er næsten helt belyst.
 const MÅNER = [
   { id: 'phobos', navn: 'Phobos', afstand: 9376, omløb: 0.31891, middel: 11.08, net: [512, 256], kort: true, farve: [0.16, 0.135, 0.11], vinkel: -35,
-    stop: { sol: -125, kamera: [10, -155], størrelse: 2.2, blik: 0.65 },
-    tekst: '<p><b>Phobos</b> er den største af Mars\' to måner, men kun ca. 26 km lang og formet som en kartoffel. Det store krater Stickney er ca. 9 km bredt. Phobos kredser kun ca. 6.000 km over Mars og vender altid samme side mod Mars.</p>' },
+    stop: { sol: -125, kamera: [10, -155], størrelse: 2.2, blik: 0.65 } },
   { id: 'deimos', navn: 'Deimos', afstand: 23460, omløb: 1.26244, middel: 6.2, net: [256, 128], kort: true, farve: [0.17, 0.145, 0.12], vinkel: 70,
-    stop: { sol: -165, kamera: [8, 168], størrelse: 2, blik: 0.55 },
-    tekst: '<p><b>Deimos</b> er den mindste af Mars\' to måner, ca. 16 km lang. Den er glattere end Phobos, fordi løst støv har fyldt kraterne op. Deimos kredser ca. 23.500 km fra Mars\' midte og vender altid samme side mod Mars.</p>' },
+    stop: { sol: -165, kamera: [8, 168], størrelse: 2, blik: 0.55 } },
 ];
 // "Mars set fra Phobos" (M6b): kameraet står OVERFLADE.højde km over Phobos på den side, der vender mod Mars (bredde
 // og længde), og kigger mod Mars' midte. Herfra står Mars ca. 30° over horisonten og Solen (fra −125°) ca. 17° (lav sol).
@@ -75,7 +74,6 @@ const MÅNER = [
 // kan zoome fra det punkt.
 const OVERFLADE = { id: 'phobos-mars', bredde: -30, længde: -55, højde: 0.3, blik: 0.05, min: 0.02, max: 0.15 };
 const MÅNE_MARGEN = 0.05; // km: så tæt på en måne kan kameraet komme
-const MÅNERNE_TEKST = '<p><b>Månerne:</b> Mars har to små måner. Phobos (inderst) runder Mars på 7 timer og 39 minutter, hurtigere end Mars drejer. Derfor står den op i vest og går ned i øst. Deimos (yderst) er ca. 30 timer om en omgang. Her går tiden lige så hurtigt for månerne som for Mars. Månerne er tegnet større, end de er, ellers kunne de ikke ses herfra. Tryk på en måne for at besøge den.</p>';
 // Lokale kort (M7a): Over et sted ligger et fint net med sit eget højdekort (HRSC og MOLA, ca. 0,5 km pr. pixel) og
 // farvekort (js/solsystem/klippeplanet.js, lokalt). Grænserne (grader, øst positiv) skal være de samme som STEDER i
 // billeder/solsystem/lav_steder.py. Olympus Mons: ca. 1.000 × 1.000 km om vulkanen, skrænten og lavaen udenfor.
@@ -121,85 +119,38 @@ const STEDER = [
 ];
 // Flybyen (M5 giver flere steder)
 const TUR = [
-  { id: 'mars', titel: 'Mars', tekst: 'Vi flyver ned til Olympus Mons, den største vulkan, vi kender i solsystemet.',
-    mere: '<p><b>Flyby:</b> Tryk "Næste" for at flyve videre. Når kameraet står stille, kan du selv dreje rundt.</p>' },
+  { id: 'mars', titel: 'Mars', tekst: 'Vi flyver ned til Olympus Mons, den største vulkan, vi kender i solsystemet.' },
   // Faktatjekket 29. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 2). Horisonten: √(2 · 3.396 km · 1,7 m) ≈ 3,4 km.
   // Arealet: ca. 300.000 km² (Wikipedia) / Danmark ca. 43.000 km² ≈ 7.
-  { id: 'olympus', titel: 'Olympus Mons', tekst: 'Den største vulkan, vi kender i solsystemet. Den er ca. 600 km bred og rejser sig ca. 22 km over landet omkring den.',
-    mere: '<p><b>Olympus Mons</b> er en skjoldvulkan: Tusindvis af strømme af tynd lava er flydt ud lag på lag og har bygget et bredt, fladt bjerg, ligesom vulkanerne på Hawaii, bare meget større. Siderne skråner kun nogle få grader. Står man på toppen, kan man ikke se, at man står på et bjerg, for horisonten er kun ca. 3 km væk, og skråningen fortsætter langt bag den.</p>'
-      + '<p><b>Herfra ser du hele vulkanen.</b> Den dækker ca. 300.000 km², ca. 7 gange så meget som Danmark. Kraterne på toppen og den stejle kant ved foden har deres egne stop på flybyen.</p>' },
+  { id: 'olympus', titel: 'Olympus Mons', tekst: 'Den største vulkan, vi kender i solsystemet. Den er ca. 600 km bred og rejser sig ca. 22 km over landet omkring den.' },
   // M7a, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 2). Kanten 19,4-21,1 km over
   // nulpunktet (USGS SIM 3470). Trykket: exp(−20,5 / 11) ≈ 13 % (skalahøjden 9,5-11 km giver 11-15 %).
-  { id: 'caldera', titel: 'Calderaen', tekst: 'På toppen ligger seks kratere, der overlapper hinanden. Tilsammen er de ca. 65 × 80 km og op til ca. 3 km dybe.',
-    mere: '<p><b>Hvert krater</b> (en caldera) blev dannet, når et udbrud havde tømt meget af kammeret med smeltet sten under toppen. Så sank taget over kammeret ned. Det er sket mindst seks gange, og de yngste kratere skærer sig ind i de ældre. Ud fra hvor mange små kratere fra nedslag der er på bunden, er kraterne nogle hundrede millioner år gamle. Skønnene går fra ca. 100 til 400 millioner år.</p>'
-      + '<p><b>Højt oppe:</b> Kanten ligger ca. 20-21 km over Mars\' nulpunkt. Her er lufttrykket kun ca. 10-15 % af trykket i snit ved Mars\' overflade.</p>'
-      + '<p><b>Lyset:</b> Det er morgen, og Solen står lavt i øst. Derfor ligger de vægge, der vender mod vest, i skygge.</p>' },
+  { id: 'caldera', titel: 'Calderaen', tekst: 'På toppen ligger seks kratere, der overlapper hinanden. Tilsammen er de ca. 65 × 80 km og op til ca. 3 km dybe.' },
   // Skrænten mod nordvest: ca. 7,8 km fald på ca. 20 km, målt i højdekortet. Mount Everest 8.849 m.
-  { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet her ca. 8 km ned til sletten på ca. 20 km. Det er næsten lige så højt som Mount Everest.',
-    mere: '<p><b>Skrænten</b> går rundt om det meste af vulkanen og er nogle steder op til ca. 8 km høj. Her mod nordvest er den højest i kortet: Landet falder ca. 8 km på ca. 20 km. Mount Everest er 8,8 km over havet. Ingen af de andre skjoldvulkaner på Mars har sådan en kant.</p>'
-      + '<p><b>Hvordan blev den dannet?</b> Det ved man ikke sikkert. Måske er vulkanen langsomt gledet ud til siderne under sin egen vægt, eller store stykker af kanten er styrtet ned i kæmpe jordskred. Det rillede landskab ude på sletten mod nordvest kan være rester af sådanne skred. Det når op til ca. 750 km ud.</p>'
-      + '<p><b>Lyset:</b> Det er morgen, og Solen står lavt i øst bag skrænten. Derfor ligger skrænten i skygge, og den støvede luft lyser omkring Solen.</p>' },
+  { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet her ca. 8 km ned til sletten på ca. 20 km. Det er næsten lige så højt som Mount Everest.' },
   // M5a, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 3-5 og "Faktatjek M5a"). Afstande
   // mellem vulkanernes midter fra USGS' koordinater: 713 og 808 km. Olympus Mons-Pavonis Mons: ca. 1.600 km.
-  { id: 'tharsis', titel: 'Tharsis', tekst: 'Tre kæmpevulkaner på en lige linje: Arsia, Pavonis og Ascraeus Mons. Der er ca. 700-800 km mellem dem.',
-    mere: '<p><b>Tharsis</b> er en kæmpe bule i Mars\' skorpe, ca. 5.000 km bred og flere km høj. Den dækker op til en fjerdedel af Mars, omtrent lige så meget som Nordamerika. Olympus Mons ligger ca. 1.600 km mod nordvest.</p>'
-      + '<p><b>Tre skjoldvulkaner:</b> Pavonis Mons i midten er lavest, ca. 14 km over Mars\' nulpunkt. Ascraeus Mons mod nordøst og Arsia Mons mod sydvest når ca. 18 km. Hver af dem er flere hundrede km bred. Herfra ser de flade ud, for siderne skråner kun nogle få grader. Prøv "Bjergene 10 gange højere".</p>'
-      + '<p><b>Sover de bare?</b> Vulkanerne har været i udbrud nu og da i milliarder af år. De yngste lavastrømme er måske kun få millioner år gamle, så vulkanerne er måske bare i dvale. Alderen er regnet ud fra, hvor mange små kratere der er på lavaen.</p>'
-      + '<p><b>Lyset:</b> Det er tidlig morgen. Om eftermiddagen samler der sig ofte skyer af is over toppene.</p>' },
+  { id: 'tharsis', titel: 'Tharsis', tekst: 'Tre kæmpevulkaner på en lige linje: Arsia, Pavonis og Ascraeus Mons. Der er ca. 700-800 km mellem dem.' },
   // Lissabon-Moskva ca. 3.900 km (storcirkel). Ækvatorens omkreds 21.339 km.
-  { id: 'valles', titel: 'Valles Marineris', tekst: 'Et system af kløfter, ca. 4.000 km langt og op til ca. 10 km dybt. Her ser du midten, hvor kløfterne er bredest.',
-    mere: '<p><b>Ca. 4.000 km lang:</b> knap en femtedel af vejen rundt om Mars, lige så langt som fra Lissabon til Moskva. Kløften er op til ca. 10 km dyb, mere end Mount Everest er høj, og ca. 10 gange længere og 5 gange dybere end Grand Canyon. Her i midten, hvor Melas, Candor og Ophir Chasma mødes, er den op til ca. 600 km bred. Chasma betyder kløft.</p>'
-      + '<p><b>Ikke gravet af en flod:</b> Da Tharsis voksede op, blev skorpen omkring den strakt, så den revnede. For ca. 3,5 mia. år siden begyndte landet at synke ned mellem revnerne. Sådan en kløft kaldes en sprækkedal. Bagefter har jordskred og vand i jorden gjort den bredere.</p>'
-      + '<p><b>Navnet:</b> Den er opkaldt efter rumsonden Mariner 9 og holdet bag den. Mariner 9 fandt kløften i 1971-72.</p>' },
-  { id: 'hellas', titel: 'Hellas', tekst: 'Et kæmpe krater fra et nedslag for ca. 4 mia. år siden. Det er ca. 2.300 km bredt, og bunden er mere end 7 km dyb.',
-    mere: '<p><b>Et af de største nedslagskratere i solsystemet:</b> For ca. 4 mia. år siden ramte en stor asteroide Mars og sprængte et krater, der er ca. 2.300 km bredt. Det laveste sted på Mars ligger herinde, ca. 8,2 km under Mars\' nulpunkt.</p>'
-      + '<p><b>Mere luft:</b> Fordi bunden ligger så dybt, er lufttrykket op til ca. dobbelt så højt som ved nulpunktet. Det er nok til, at is i teorien kunne smelte et øjeblik på en varm dag. Men vandet fordamper så hurtigt, at det nok sjældent eller aldrig sker.</p>' },
+  { id: 'valles', titel: 'Valles Marineris', tekst: 'Et system af kløfter, ca. 4.000 km langt og op til ca. 10 km dybt. Her ser du midten, hvor kløfterne er bredest.' },
+  { id: 'hellas', titel: 'Hellas', tekst: 'Et kæmpe krater fra et nedslag for ca. 4 mia. år siden. Det er ca. 2.300 km bredt, og bunden er mere end 7 km dyb.' },
   // M5b, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, "Faktatjek M5b"). Rovernes status er slået op samme
   // dag: Curiosity ca. 38 km (NASA's kortdata, sol 5045) og 1 km højere end landingsstedet (NASA 26. august 2026).
   // Perseverance 45,22 km (NASA 11. oktober 2026), 30 prøver (NASA's prøveside, juni 2026, og blogs til 19. oktober
   // 2026), Mars Sample Return står i datid på NASA's side (september 2026) og fik 0 dollar i 2026.
   // Deltaets kant: ca. 40 m (NASA-blog "Campaign 2: The Delta Front", 2022).
-  { id: 'gale', titel: 'Gale og Curiosity', knap: 'Gale', tekst: 'Et 154 km bredt krater med et ca. 5 km højt bjerg i midten, Mount Sharp. Her har roveren Curiosity kørt rundt siden 2012.',
-    mere: '<p><b>Gale</b> blev dannet af et nedslag for mere end 3 mia. år siden. Man tror, at krateret blev fyldt op med lag af mudder og sand, som vand og vind lagde. Siden har især vinden slidt meget af det væk igen, og i midten står et bjerg tilbage: Mount Sharp (Aeolis Mons), ca. 5 km højt over kraterbunden. Lagene i bjerget fortæller, hvordan Mars\' klima har ændret sig.</p>'
-      + '<p><b>Curiosity</b> er en rover på størrelse med en bil, ca. 3 m lang. Den landede 6. august 2012 nordvest for bjerget. Den har boret i stenene og vist, at her engang lå søer med vand, som mikrober kunne have levet i, måske i en million år eller mere. Den har også fundet organiske stoffer (stoffer bygget af carbon og brint, som liv også er lavet af). Man ved ikke, om de kommer fra liv, eller om de er dannet uden liv. Liv har man ikke fundet.</p>'
-      + '<p><b>Nu (oktober 2026):</b> Curiosity kører stadig efter mere end 14 år. Den er på vej op ad Mount Sharp og er nu ca. 1 km højere oppe end der, hvor den landede. Den har kørt ca. 38 km.</p>'
-      + '<p><b>Lyset:</b> Det er morgen, og Solen står lavt i øst (til venstre).</p>'
-      + '<p><b>Stå på Mars:</b> Tryk "🧍 Stå på Mars", så lander du i Gale-krateret og kan kigge dig omkring i øjenhøjde.</p>' },
-  { id: 'jezero', titel: 'Jezero og Perseverance', knap: 'Jezero', tekst: 'Et ca. 45 km bredt krater, der engang var en sø. En flod lagde et delta ved vestkanten. Her landede roveren Perseverance i 2021.',
-    mere: '<p><b>En gammel sø:</b> For mere end 3½ mia. år siden var Jezero en sø. En flod løb ind gennem et hul i vestkanten og lagde sand og mudder i en vifte, et delta. Mudder i en sø kan gemme spor af liv i milliarder af år. Derfor landede Perseverance her 18. februar 2021.</p>'
-      + '<p><b>Ingenuity:</b> Perseverance havde en lille helikopter med, Ingenuity, den første, der har fløjet på en anden planet. Den fløj 72 gange, selv om den kun skulle flyve 5. Ved landingen efter den sidste flyvning i januar 2024 gik et rotorblad i stykker.</p>'
-      + '<p><b>Prøverne:</b> Indtil nu har Perseverance fyldt 30 rør med prøver: 27 stykker af sten, 2 med løs jord og 1 med luft fra Mars. I juli 2024 fandt den en sten (Cheyava Falls) med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv. Det har forskerne endnu ikke kunnet afgøre.</p>'
-      + '<p><b>Nu (oktober 2026):</b> Perseverance er kørt op over kraterets vestrand og undersøger nogle af de ældste sten, den har set. Den har kørt over 45 km, længere end nogen anden rover. Prøverne skulle hentes til Jorden af en anden mission, Mars Sample Return. Men den plan er stoppet, og ingen ved, om eller hvornår prøverne kommer hjem.</p>'
-      + '<p><b>Se godt efter:</b> Deltaets kant er kun ca. 40 m høj, så den kan næsten ikke ses i programmets kort. Det er tidlig morgen, og Solen står lavt i øst (til højre).</p>' },
+  { id: 'gale', titel: 'Gale og Curiosity', knap: 'Gale', tekst: 'Et 154 km bredt krater med et ca. 5 km højt bjerg i midten, Mount Sharp. Her har roveren Curiosity kørt rundt siden 2012.' },
+  { id: 'jezero', titel: 'Jezero og Perseverance', knap: 'Jezero', tekst: 'Et ca. 45 km bredt krater, der engang var en sø. En flod lagde et delta ved vestkanten. Her landede roveren Perseverance i 2021.' },
   // Faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, "Faktatjek M5b"): NASA PIA13163 og PIA02800, UT Austin
   // (Smith & Holt og Holt m.fl., Nature 27. maj 2010), ASU "Planum Boreum", MSSS "Seasons on Mars" og NSSDC.
   // Solens højde ved sommersolhverv: 25,19° ± (90° − 87,3°) = 22,5°-27,9° (programmet stiller aksen på solhverv).
-  { id: 'nordpol', titel: 'Nordpolen', tekst: 'En kappe af is, ca. 1.000 km bred og op til ca. 3 km tyk. Vi har spolet frem til sommer, så Solen går ikke ned her: midnatssol.',
-    mere: '<p><b>Isen</b> er mest frossent vand (ikke tøris) med lidt støv. Kappen er ca. 1.000 km bred og op til ca. 3 km tyk, lag på lag af is og støv. Lagene fortæller om Mars\' klima, lidt ligesom årringe i et træ. Men et lag er ikke ét år. Lagene skifter nok, når Mars\' hældning langsomt ændrer sig over mange tusinde år.</p>'
-      + '<p><b>Spiralen:</b> Kløfterne snor sig ud fra midten som en spiral. Radarmålinger har vist, at de er formet af kolde, tunge vinde, der falder ned ad isen og bliver bøjet til siden, fordi Mars drejer. Den store kløft Chasma Boreale er ca. 500 km lang og op til 2 km dyb.</p>'
-      + '<p><b>Midnatssol:</b> Vi har spolet frem til midt på sommeren på den nordlige halvkugle. Nu hælder nordpolen ca. 25° mod Solen, så her står Solen ca. 22-28° over horisonten hele døgnet og går aldrig ned. Tryk ▶ nederst til højre i billedet: Lyset og skyggerne går rundt, men det bliver aldrig nat.</p>'
-      + '<p><b>Om vinteren</b> ligger der også et lag tøris på et par meter, langt ud over kappen. Hvert år fryser ca. en fjerdedel af Mars\' luft til tøris ved polerne, mest ved sydpolen. Om foråret bliver den til luft igen.</p>' },
+  { id: 'nordpol', titel: 'Nordpolen', tekst: 'En kappe af is, ca. 1.000 km bred og op til ca. 3 km tyk. Vi har spolet frem til sommer, så Solen går ikke ned her: midnatssol.' },
   // M6b, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, "Faktatjek M6b"): NASA, JAXA, ESA og Wikipedia læst
   // direkte. Mars set fra Phobos: 2 · arcsin(3.396 / 9.363) = 42,5°, Månen 0,52° (ca. 82 gange). Fra Deimos 16,6°.
   // MMX' status slået op samme dag hos JAXA (sund 21. oktober 2026, første signal nævnt 26. oktober).
-  { id: 'phobos', titel: 'Phobos', tekst: 'Phobos er kun ca. 26 km lang og kredser ca. 6.000 km over Mars. Den runder Mars på 7 timer og 39 minutter, hurtigere end Mars drejer.',
-    mere: '<p><b>Stickney</b>, det store krater, er ca. 9 km bredt, og Phobos er kun ca. 26 km lang. Forskerne regner med, at nedslaget næsten slog Phobos i stykker. Krateret er opkaldt efter matematikeren Angeline Stickney Hall. Hun var gift med Asaph Hall, som fandt månerne, og hun opmuntrede ham til at blive ved med at lede.</p>'
-      + '<p><b>Rillerne:</b> Lange, lige riller løber hen over Phobos. Forskerne er ikke enige om, hvorfor de er der. Måske er de spor efter sten, der rullede og hoppede væk fra Stickney. Måske er de revner, fordi Mars\' tidevandskraft strækker Phobos. Eller måske er de kæder af små kratere fra stumper, der blev slynget op ved nedslag på Mars.</p>'
-      + '<p><b>Står op i vest:</b> Phobos runder Mars hurtigere, end Mars drejer. Set fra Mars står den derfor op i vest og går ned i øst, som regel to gange om dagen (ca. hver 11. time). Tæt ved polerne (over ca. 70° nord eller syd) kan den slet ikke ses. Den kredser så tæt på Mars og over ækvator, at Mars\' runding skjuler den.</p>'
-      + '<p><b>Lyset:</b> Solen skinner fra siden og lidt bagfra. Så er Mars i baggrunden mere end halvt belyst, og Stickney ude ved kanten ligger i lav sol.</p>' },
-  { id: 'phobos-mars', titel: 'Mars set fra Phobos', tekst: 'Herfra er Mars ca. 42° bred på himlen, ca. 80 gange så bred som Månen på vores himmel. Phobos vender altid samme side mod Mars.',
-    mere: '<p><b>Mars fylder himlen:</b> Vi står ca. 300 m over Phobos på den side, der vender mod Mars, og kigger op. Herfra er Mars ca. 42° bred, ca. 80 gange så bred som Månen på vores himmel. Drej selv rundt, og kig ned på Phobos.</p>'
-      + '<p><b>Altid samme side mod Mars:</b> Phobos drejer én gang om sig selv, mens den runder Mars én gang. Det kaldes bundet rotation. Derfor vender Phobos altid samme side mod Mars, og Mars står næsten stille på Phobos\' himmel.</p>'
-      + '<p><b>Phobos kommer nærmere:</b> Phobos løfter Mars\' overflade en lille smule, ligesom Månen giver tidevand på Jorden. Bulen kommer lidt for sent, og fordi Phobos runder Mars hurtigere, end Mars drejer, halter den bagefter Phobos og bremser den. Så kommer Phobos nogle få centimeter nærmere Mars hvert år. Om nogle titals millioner år bliver den nok revet i stykker af tidevandskraften til en ring om Mars, eller den styrter ned.</p>'
-      + '<p><b>Set fra Mars</b> er Phobos ca. en tredjedel så bred som fuldmånen hos os. Når den går hen foran Solen, dækker den kun en del af Solen. Perseverance filmede det 2. april 2022, og det varede lidt over 40 sekunder.</p>'
-      + '<p><b>Lyset:</b> Solen står lavt på Phobos\' himmel, og Mars er mere end halvt belyst. Kig ned, så ser du Phobos\' grå overflade og de lange skygger.</p>' },
-  { id: 'deimos', titel: 'Deimos', tekst: 'Deimos er kun ca. 16 km lang og kredser ca. 23.500 km fra Mars\' midte. Den ser glattere ud end Phobos, fordi støv har fyldt kraterne delvist op.',
-    mere: '<p><b>Deimos</b> er ca. 16 km lang og ser glattere ud end Phobos. Et tykt lag løst støv og grus (regolit) har delvist fyldt kraterne op. Kun to kratere har navne: Swift og Voltaire. De er opkaldt efter to forfattere, der i 1700-tallet skrev om to måner om Mars, længe før de blev fundet. Det var et heldigt gæt.</p>'
-      + '<p><b>Langsom på himlen:</b> Deimos runder Mars på ca. 30 timer, lidt langsommere end Mars drejer. Set fra Mars\' ækvator står den op i øst og bevæger sig meget langsomt mod vest: Den er oppe i ca. 2½ døgn ad gangen. Den ligner en klar stjerne, ikke en måne. Herfra er Mars ca. 17° bred.</p>'
-      + '<p><b>Opdaget i 1877:</b> Den amerikanske astronom Asaph Hall fandt Deimos i august 1877 og Phobos seks dage senere. Han brugte dengang verdens største linsekikkert (66 cm). Navnene er fra græsk mytologi: Phobos og Deimos er sønner af krigsguden Ares (romernes Mars). Phobos betyder frygt, og Deimos betyder rædsel.</p>'
-      + '<p><b>Hvor kommer de fra?</b> Det ved man ikke endnu. Måske er de asteroider, som Mars har fanget. Men så ville banerne nok være aflange og hælde. I stedet er banerne næsten runde og ligger lige over Mars\' ækvator. Måske er månerne samlet af stumper, der blev slynget ud, da noget stort ramte Mars.</p>'
-      + '<p><b>MMX:</b> Den japanske rumsonde MMX (Martian Moons eXploration) blev sendt op i oktober 2026. Sidst i oktober 2026 var den sund og på vej mod Mars, som den skal nå i 2027. Først skal en lille robotbil, IDEFIX, fra Frankrig og Tyskland lande på Phobos. Så lander MMX selv og henter mindst 10 g af overfladen. Til sidst skal den prøve at flyve forbi Deimos og tage billeder. I 2031 skal prøven lande på Jorden. Så kan forskerne måske afgøre, hvor månerne kommer fra.</p>'
-      + '<p><b>Lyset:</b> Solen står næsten bag dig, så Mars er næsten helt belyst.</p>' },
+  { id: 'phobos', titel: 'Phobos', tekst: 'Phobos er kun ca. 26 km lang og kredser ca. 6.000 km over Mars. Den runder Mars på 7 timer og 39 minutter, hurtigere end Mars drejer.' },
+  { id: 'phobos-mars', titel: 'Mars set fra Phobos', tekst: 'Herfra er Mars ca. 42° bred på himlen, ca. 80 gange så bred som Månen på vores himmel. Phobos vender altid samme side mod Mars.' },
+  { id: 'deimos', titel: 'Deimos', tekst: 'Deimos er kun ca. 16 km lang og kredser ca. 23.500 km fra Mars\' midte. Den ser glattere ud end Phobos, fordi støv har fyldt kraterne delvist op.' },
 ];
 
 // Stå på Mars (M8a i docs/plan-mars.md, js/solsystem/landskab.js): de steder ved et krater, hvor man kan stå. Bredden
@@ -209,14 +160,9 @@ const TUR = [
 const LANDSKAB = {
   gale: [
     { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 8.5,
-      titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.',
-      mere: '<p><b>Naukluft</b> er et plateau på Mount Sharps nederste skråninger inde i Gale-krateret. Klipperne er sandsten af sand, som vinden engang blæste sammen til klitter. Curiosity kørte over det i foråret 2016 og tog et billede hele vejen rundt herfra.</p>'
-        + '<p><b>Mod sydøst</b> ligger Mount Sharp, et bjerg af lag på lag af gammelt mudder og sand, ca. 5 km højt over kraterbunden. Toppen er ca. 50 km væk. <b>Mod nord</b> ser du ud over kraterbunden mod kraterets rand i disen.</p>'
-        + '<p><b>Prøv selv:</b> Skub klokken frem under "Styr", eller tryk ▶ nederst til højre, så går dagen, og du kan se skyggerne vokse og Solen gå ned. Knib eller rul for at zoome som med en kikkert.</p>' },
+      titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.' },
     { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 9,
-      titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.',
-      mere: '<p><b>Hos Curiosity:</b> Her stod roveren i midten af oktober 2026 på Mount Sharps skråninger, ca. 1 km højere oppe end der, hvor den landede i 2012. Den har kørt ca. 38 km.</p>'
-        + '<p><b>Bakkerne omkring</b> skjuler toppen af Mount Sharp. Mod nord er der et hul i bakkerne med udsigt ud over kraterbunden til randen langt væk.</p>' },
+      titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.' },
   ],
 };
 // Træet i listen til venstre (js/faenomenskaerm.js): stederne og månerne med flybyens navne, og under et sted det, der
@@ -290,24 +236,8 @@ export default {
     ['Et år', '687 jorddøgn'],
     ['Tyngden', '38 % af Jordens'],
   ],
-  kort: `
-    <p><b>Mars</b> er den fjerde planet fra Solen og ca. halvt så bred som Jorden. Den er rød, fordi støvet indeholder jernoxid, et stof der ligner rust. Drej kloden med fingeren, musen eller piletasterne, og zoom helt ind.</p>
-    <p><b>Bjergene har den rigtige højde.</b> Olympus Mons er den største vulkan, vi kender i solsystemet. Den rejser sig ca. 22 km over landet omkring den, næsten 2½ gange så højt som Mount Everest. Ved siden af ligger tre andre store vulkaner på en række, og mod øst skærer kløften Valles Marineris sig ca. 4.000 km gennem landet, lige så langt som fra Lissabon til Moskva. Den er op til ca. 10 km dyb. Fra toppen af Olympus Mons til bunden af Hellas, det store krater i syd, er der ca. 30 km.</p>
-    <p><b>Et døgn</b> på Mars varer 24 timer og ca. 40 minutter, næsten som hos os. Aksen hælder 25,2° (Jordens 23,4°), så Mars har årstider ligesom Jorden. Men et år varer 687 jorddøgn, så hver årstid er i snit næsten dobbelt så lang.</p>
-    <p><b>Luften</b> er meget tynd, under 1 % af trykket på Jorden, og mest kuldioxid (CO₂). Den er fuld af fint, rødligt støv, og om eftermiddagen kommer der skyer af is over de store vulkaner. Det er koldt: i snit ca. −60 °C. Tyngden er 38 % af Jordens, så vejer du 45 kg, ville du føle dig som ca. 17 kg.</p>
-    <p><b>Polkapperne</b> er hvide af is. Nordpolens kappe er ca. 1.000 km bred og mest frossent vand. Sydpolens er mindre, ca. 400 km, og har et tyndt lag tøris (frossen kuldioxid) ovenpå. Tryk "Modlys", og se den tynde luft lyse i kanten.</p>
-    <p><b>Flyby:</b> Tryk "▶ Start flyby", og flyv ned til Olympus Mons, kraterne på toppen og den stejle kant ved foden, videre til de tre vulkaner på Tharsis, kløfterne i Valles Marineris, det kæmpe krater Hellas, kraterne Gale og Jezero, hvor roverne Curiosity og Perseverance landede, og nordpolen. Til sidst går turen ud til månerne Phobos og Deimos, og du ser Mars fra Phobos, hvor den fylder det meste af himlen. Ved hvert stop kan du selv dreje rundt og zoome helt ned. Når du ser hele Mars, kan du også trykke på et navn på kloden og flyve direkte derhen.</p>`,
-  nørd: `
-    <p><b>Højderne</b> er målt med laser fra rumsonden Mars Global Surveyor (instrumentet MOLA, 1997-2001). Kuglen er et net, hvor hvert punkt er løftet eller sænket efter højdekortet, så bjergene rager op over kanten, når de står ude ved horisonten. Fra kredsløb ser Mars alligevel næsten glat ud, for selv Olympus Mons er kun ca. 0,6 % af Mars' radius. Tryk "Bjergene 10 gange højere" for at se landskabet tydeligere.</p>
-    <p><b>Ved Olympus Mons</b> ligger et ekstra, fint net over et område på ca. 1.000 × 1.000 km. Her er højderne fra den europæiske rumsonde Mars Express (kameraet HRSC) lagt sammen med MOLA. HRSC tager billeder af det samme sted fra lidt forskellige vinkler, ligesom dine to øjne, og ud fra dem kan man regne højderne ud. I programmet er der ca. 0,5 km mellem højderne og ca. 2 km mellem nettets punkter (ca. 2,6 km på tablets). Omkring calderaen og skrænten er der ca. 0,2 km mellem højderne, næsten lige så tæt som i målingerne. Det kort hentes først, når flybyen nærmer sig. På resten af Mars er det ca. 5 km og ca. 21 km.</p>
-    <p><b>Ved Tharsis og Valles Marineris</b> ligger også et fint net. Ved Tharsis er højderne fra MOLA (ca. 0,9 km mellem højderne), for her var HRSC ikke skarpere i programmets opløsning. Ved Valles Marineris er de fra HRSC og MOLA, og midt i kløfterne er der ca. 0,3 km mellem højderne. Ved Gale og Jezero er de fra HRSC og MOLA, med ca. 0,17 km mellem højderne over et område på ca. 356 × 356 km. Det er lige så tæt som i målingerne. Hellas og nordpolen ses fra højt oppe og klarer sig med Mars' almindelige net (et net i bredde og længde virker heller ikke ved polen, hvor alle længdegrader mødes). Kun nettene ved det sted, du er ved, og det sted, du flyver hen til, tegnes, for hvert net koster billeder i sekundet.</p>
-    <p><b>Nulpunktet:</b> Mars har intet hav, så højderne er regnet fra en flade, hvor tyngden er lige stærk overalt (areoiden). Den er lidt fladere ved polerne, ligesom Mars selv: ca. 20 km fra pol til pol i forhold til ækvator.</p>
-    <p><b>Farverne</b> er en mosaik af billeder fra de to Viking-sonder (1976-1980), lavet af USGS. Kortet har ca. 2,6 km pr. pixel på en pc og ca. 1 km pr. pixel ved Olympus Mons. Der findes en skarpere udgave, men billederne blev taget, mens Solen stod forskellige steder, så lys og skygge på skrænterne er med på dem. De ville passe dårligt med programmets eget lys, som regnes ud fra højderne.</p>
-    <p><b>Luften</b> bliver ca. 2,7 gange tyndere for hver 11 km, man kommer op (skalahøjden er 11 km, på Jorden ca. 8,5 km). Set fra rummet er den derfor kun et tyndt, støvet lag i kanten. Støvet når så højt op, at det stadig er i sollys, når Solen er gået ned. Derfor varer tusmørket på Mars op til ca. 2 timer, og natsiden lyser svagt rødbrunt lige efter grænsen mellem dag og nat. Det fine støv sender blåt lys lettere lige igennem end rødt, så på Mars er himlen blå omkring Solen, når den går ned (Curiosity så det i 2015).</p>
-    <p><b>Skyerne over vulkanerne:</b> Om eftermiddagen stiger varm luft op ad vulkanernes sider og bliver kold, så vanddampen fryser til iskrystaller. Skyerne kommer især om foråret og sommeren på den nordlige halvkugle. Før rumsonderne kunne man i kikkerter fra Jorden se en hvid sky formet som et "W" over Tharsis. Det var skyerne over fire af vulkanerne. Hvert år i det sydlige forår vokser der også en ca. 1.800 km lang sky ud fra Arsia Mons om morgenen. Den er ikke med her, for på tegningen er det forår i nord.</p>
-    <p><b>Månerne:</b> Phobos' form er et højdekort lavet ud fra billeder fra den europæiske rumsonde Mars Express (og Viking, hvor der manglede billeder), med ca. 100 m mellem højderne. Overfladen er en mosaik af billeder fra Mars Express og Viking. Deimos' form er målt af Peter Thomas på billeder fra Viking-sonderne fra 1970'erne (ca. ½ km mellem punkterne). Almindelig sten vejer ca. 3 g pr. cm³, men Phobos kun ca. 1,9 og Deimos ca. 1,5. Derfor er de nok fulde af hulrum (porøse), måske som en bunke løse sten. De er mørke som asfalt: Kun ca. 7 % af lyset kastes tilbage. Phobos kredser inden for den afstand (ca. 20.400 km fra Mars' midte), hvor en måne ville runde Mars på samme tid, som Mars drejer én gang om sig selv (24 t 37 min). Derfor bremses den og kommer nærmere. Deimos er uden for og fjerner sig meget langsomt.</p>
-    <p><b>Stå på Mars:</b> Ved Gale kan du stå på jorden, hvor Curiosity har kørt. Landskabet er bygget af målinger fra kredsløb. Højdekortet er sat sammen af forskere ved NASA's JPL og udgivet af USGS. Tæt på Curiositys vej er højderne regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Længere væk er de regnet ud fra kameraerne CTX og HRSC. Der er 1 m mellem højderne. Tæt på dig ligger HiRISE' billeder (25 cm pr. pixel), længere væk billeder fra CTX (ca. 6 m pr. pixel) og helt ude kortet fra Mars Express. Landskabet ligger i fire lag, der glider over i hinanden, og Mars' krumning er regnet med: På fladt land er horisonten kun ca. 3,4 km væk. Støvet i luften gør det fjerne landskab blegt, og jo mere luft, der er imellem, jo blegere.</p>
-    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker ▶ nederst til højre i billedet. På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne. Månerne Phobos og Deimos er tegnet større, når de er langt væk, ellers kunne de ikke ses. De kredser i det rigtige forhold til Mars' døgn, men står stille, mens du besøger dem, og banerne ligger præcis i Mars' ækvatorplan (i virkeligheden hælder de 1-2°). Deimos' form er målt på billeder fra Viking-sonderne i 1970'erne og er grov. På Phobos' bagside er en smal stribe af overfladen fyldt ud, hvor kortet manglede. På flybyen flytter programmet månerne hen, hvor Solen skinner på dem fra siden, så de ikke står i Mars' skygge. I virkeligheden står de dér, hvor deres baner fører dem hen. Står en måne i Mars' skygge, når du trykker på den, flytter programmet den også lidt frem i banen. Når du besøger en måne, står den stille, mens Mars drejer. I virkeligheden runder Phobos Mars hurtigere, end Mars drejer, så fra Phobos ville Mars se ud til at dreje den anden vej, én gang på ca. 11 timer. Ved Phobos og Deimos kigger kameraet lidt ved siden af månen, så Mars kan ses i baggrunden. Når du står på Mars, er de billeder fra kredsløb, programmet bruger, grå, og farverne er sat på af programmet ud fra lysstyrken og Viking-kortet. Sten og sand, der er mindre end nogle få meter, er ikke med i højderne, og de små ujævnheder helt tæt på dine fødder er tegnet af programmet. I billederne fra kredsløb skinnede Solen fra en anden retning. Programmet har fjernet det meste af den skygge, men lidt er tilbage i de små ting. Himlens farve, disen og tusmørket er en enkel model. Dine øjne er 1,7 m over jorden (rovernes kameraer sidder ca. 2 m oppe). Phobos og Deimos bevæger sig rigtigt hen over himlen og har den rigtige størrelse, men deres plads er ikke slået op for i dag.</p>`,
+  side: SIDE, // teksten i højre panel (js/data/sider/mars.js)
+  sider: SIDER,
 
   lav(gruppe, { opdaterKnapper, forklaring, fase, verden, tiden }) {
     const { kamera } = verden;
@@ -517,7 +447,7 @@ export default {
       fase(null);
       tiden('spil'); // hele Mars drejer igen
       flyvTilMars(kamPos.copy(kamera.position).sub(system.position).applyQuaternion(qHjælp.copy(rejse.drejning).invert()));
-      vis();
+      forklaring('');
       lavKnapper();
     }
 
@@ -593,7 +523,9 @@ export default {
         sætPlads(m);
       }
       flyv({ fokus: måneFokus(m), afstand: passer(m.form.radius * 1.15), retning, min: m.form.radius * 1.3, max: R * 15 });
-      forklaring(m.tekst + (flyttet ? skyggeTekst(m) : ''));
+      const t = TUR.find((x) => x.id === m.id);
+      fase(t.titel, t.tekst);
+      forklaring(flyttet ? skyggeTekst(m) : ''); // "Lige nu": hvis programmet har flyttet månen ud af skyggen
       lavKnapper();
     }
     // Begge baner set skråt oppefra
@@ -604,7 +536,7 @@ export default {
       hældHen(HÆLD.jævndøgn);
       visning = 'måner';
       flyv({ fokus: () => nul, afstand: passer((MÅNER[1].afstand / S) * 1.08), retning: new THREE.Vector3(0.2, 0.75, 1).normalize(), min: minOverblik(), max: R * 30, færdig: () => aktivér([]) });
-      forklaring(MÅNERNE_TEKST);
+      forklaring('');
       lavKnapper();
     }
     // ---------- Månerne på flybyen og "Mars set fra Phobos" (M6b) ----------
@@ -937,7 +869,7 @@ export default {
       sætBlik(LANDING_HØJDE, sd.blik, -32);
       tiden('pause'); // klokken står stille, når man lander (▶ lader dagen gå)
       fase(sd.titel, sd.tekst);
-      forklaring(sd.mere);
+      forklaring('');
       lavKnapper();
     }
     // Op i kredsløb igen: tilbage til kraterets stop
@@ -1077,25 +1009,13 @@ export default {
       if (krater) knapper.push({ tekst: '🧍 Stå på Mars', handling: () => ståPå(krater, LANDSKAB[krater][0]) });
       // Flybyen står i træet og bjælken (tur og trin nedenfor), og tiden styres med tidsknappen
       knapper.push(
-        { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; vis(); } },
-        { tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; vis(); } },
-        navneKnap(() => { opdaterNavne(); opdaterMåner(rejse.skala); vis(); }),
+        { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; } },
+        { tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } },
+        navneKnap(() => { opdaterNavne(); opdaterMåner(rejse.skala); }),
       );
       styring.splice(0, styring.length, ...knapper);
       opdaterKnapper();
     }
-    // Teksten i panelet, når man ser hele Mars (ved et sted står stedets tekst)
-    function vis() {
-      if (visning !== 'mars' || flyby.kører) return;
-      if (modlys) {
-        forklaring('<p><b>Modlys:</b> Nu står Solen lige bag kanten af Mars. Den tynde luft lyser som en smal bue, fordi støvet spreder lyset mest fremad. Tæt ved Solen er den lidt blå, som Curiosity har set det ved solnedgang på Mars. Zoom ud, så lyser buen hele vejen rundt.</p>');
-        return;
-      }
-      forklaring(høj
-        ? '<p><b>10 gange højere:</b> Nu kan du tydeligt se Olympus Mons og de tre vulkaner ved siden af, kløften Valles Marineris og det store krater Hellas. Det meste af den sydlige halvkugle er højland med mange kratere, flere km højere end det glatte lavland i nord.</p>'
-        : `<p><b>Mars:</b> Bjergene har den rigtige højde. Selv Olympus Mons er kun ca. 0,6 % af Mars' radius, så set fra rummet er Mars næsten glat. Se skyggerne ved grænsen mellem dag og nat, og se skyerne af is komme over vulkanerne om eftermiddagen, mens Mars drejer.${navneTil() ? ' Tryk på et navn på kloden for at flyve derhen.' : ''}</p>`);
-    }
-    vis();
     lavKnapper();
 
     // ---------- Navnene på kloden (M5b) ----------
@@ -1156,7 +1076,7 @@ export default {
       flyvDirekte(id, nr);
       opdaterNavne(); // navnene skjules med det samme (ikke først i næste billede)
       fase(t.titel, t.tekst);
-      forklaring(t.mere);
+      forklaring('');
       lavKnapper();
     }
     const navnHjælp = new THREE.Vector3();

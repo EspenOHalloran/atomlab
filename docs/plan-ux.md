@@ -321,8 +321,8 @@ Lavet, som planen siger, i begge skærme på én gang (den fælles skal `js/faen
 - **Tidsknappen** har små tegnede ikoner, fordi ⏸ blev vist meget lille i nogle skrifttyper.
 - **Tests:** Knapperne findes ud fra teksten (`trykPå`), også i billedværktøjerne. Nye tjek: Styr-boksen har kun kontakter og skydere, en tændt kontakt har ✓, bjælken står der med "Kun grafik", ‹ og prikkerne (Big Bang, Solens fremtid, Årstiderne, Saturns og Mars' flyby), tidsknappen stopper uret, men ikke flyvningerne, mellemrum går tilbage til ⏩, og Styr-boksen er foldet sammen på højkant.
 
-## U3: Forslag til stedernes tal (31. oktober 2026, venter på jeres svar)
-2-4 tal pr. sted. Næsten alle står allerede i faktatjekkede tekster (`docs/fakta-solsystemet.md` og stedernes tekster). Tal med * står ikke i en tekst endnu og faktatjekkes med `/faktatjek` (JPL, NSSDC, NASA og Wikipedia kan åbnes).
+## U3: Stedernes tal (31. oktober 2026, jeres svar: "Go til dine anbefalinger")
+2-4 tal pr. sted, som foreslået. Næsten alle stod allerede i faktatjekkede tekster. Tal med * stod ikke i en tekst og blev faktatjekket (`docs/fakta-solsystemet.md`, "Faktatjek U3"). Tigerstriberne blev rettet til ca. 130 km.
 
 **Mars**
 | Sted | Tal |
@@ -349,7 +349,7 @@ Lavet, som planen siger, i begge skærme på én gang (den fælles skal `js/faen
 | Ringene | Bredde: ca. 70.000 km · Tykkelse: mange steder ca. 10 m · Is: over 95 % · Cassini-delingen: ca. 4.600 km |
 | Månerne | Kendte måner: over 280 (2026) · Nærmest af de store (Mimas): ca. 185.500 km · Længst ude (Titan): ca. 1,22 mio. km* |
 | Mimas | Bredde: 396 km · Herschel: ca. 140 km · En omgang: ca. 22½ timer* · Fra Saturn: ca. 185.500 km |
-| Enceladus | Bredde: 504 km · Kaster lyset tilbage: ca. 80 % · Tigerstriberne: 4, hver ca. 135 km lang* · Fra Saturn: ca. 238.000 km* |
+| Enceladus | Bredde: 504 km · Kaster lyset tilbage: ca. 80 % · Tigerstriberne: 4, hver ca. 130 km lang* · Fra Saturn: ca. 238.000 km* |
 | Tethys | Bredde: 1.062 km · Odysseus: 445 km · Ithaca Chasma: over 1.000 km lang · Tæthed: næsten som vand |
 | Dione | Bredde: 1.123 km · Isklipperne: flere hundrede m høje · En omgang: ca. 2¾ døgn* · Fra Saturn: ca. 377.400 km* |
 | Rhea | Bredde: ca. 1.530 km · Is: måske ca. ¾ · En omgang: ca. 4½ døgn · Fra Saturn: ca. 527.000 km |
@@ -363,9 +363,24 @@ Lavet, som planen siger, i begge skærme på én gang (den fælles skal `js/faen
 
 Planeternes tal (Solen, Mars, Saturn) og de 15 forsøg og fænomener i Kosmos beholder deres tal.
 
+## Status for U3 (31. oktober 2026)
+Lavet, som planen siger, i begge skærme på én gang. Jeres svar ved go: "Go til dine anbefalinger":
+- **Ved et sted viser højre panel kun stedets egen side.** "Om Mars" under stedet er væk. Man kommer tilbage til Mars med træet eller vejen øverst.
+- **For nørder, Billederne og Ærligt talt huskes** for alle sider (har man foldet en ud, står den åben på de næste sider). Emnerne starter altid foldet sammen.
+
+Afgjort undervejs:
+- **Teksterne til Mars, Saturn og Jorden** står i `js/data/sider/` (planetens side og en side for hvert sted i træet). Fænomenerne i Kosmos og forsøgene har deres side i deres egen fil.
+- **Stedernes undertekst** (bjælkens linje, fx "Den største vulkan, vi kender i solsystemet …") er den samme som før. Siden har et nyt Kort, der ikke gentager den. Ved et besøg på en måne fra 3D-billedet (et tryk på månen) står månens undertekst nu også, som når man vælger den i træet.
+- **"Lige nu"** viser kun det, der ændrer sig: tiden ved Jorden, Månen, der er flyttet ud af Mars' skygge, Årstidernes dato, Big Bangs tid, Solens fremtid, supernovaens lag og "Turen er slut". Kontakternes forklaringer (fx Modlys og "Bjergene 10 gange højere") er blevet til emner, der folder sig ud, når kontakten slås til.
+- **Knapper i teksten** (`js/sideknap.js`): et sted, en kontakt (viser, om den er tændt), en handling (grå, når den ikke kan bruges), tidsknappen, et fænomen og en anden del. "Tryk X" og "i listen" står ikke længere i teksterne.
+- **Et link kan pege på et sted:** `data-gaa="solsystem:mars:olympus"`. Ordbogens "skjoldvulkan" og "caldera" peger nu på Olympus Mons og Calderaen, hvor ordene står.
+- **Fagord** markeres i hver foldeboks for sig (`.side-del`), så ordet er markeret i den boks, man åbner.
+- **Iapetus:** Saturns tredjestørste måne (ca. 1.470 km) er ikke med, selv om teksterne talte om "de seks store måner". Det står nu i "Ærligt talt" ved Månerne, og oversigten siger "seks af Saturns største måner". Den kan komme med senere.
+- **Tests:** `kosmos` (siden, knapperne, kontakten folder emnet ud, underteksten står ikke på siden), `solsystem` (alle steder i træet har en side med 2-4 tal og "Ærligt talt" sidst, knapperne virker, links til Hvid dværg og til et sted), `ordforklaring` (fagord i boksene), `mars`, `saturn`, `jorden`, `landskab`, `reaktor` og `ordbog`.
+
 ## Afgøres undervejs (med skærmbilleder)
 - ~~**Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?~~ Åben (U2).
-- **Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?
+- ~~**Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?~~ Se "U3: Stedernes tal".
 
 ## Ikke afprøvet (skal prøves på tabletten efter hvert trin)
 - Kan man ramme punkterne i træet med fingeren, og er det tydeligt, hvor man er?

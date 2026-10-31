@@ -77,7 +77,7 @@ Kilder: PDS Ring-Moon Systems Node https://pds-rings.seti.org/saturn/saturn_ring
 
 - **Lysende:** Det er rigtigt at kalde Enceladus "den mest lysende/hvide krop i solsystemet". En geometrisk albedo over 1 er mulig på grund af modstillingseffekten, så skriv **ikke** "reflekterer over 100 %". Skriv i stedet "kaster ca. 80 % af sollyset tilbage", hvilket er Bond-albedoen.
 - **Opdagelsen af fontænerne (2005):** I februar og marts 2005 så Cassinis magnetometer (Dougherty-holdet), at Saturns magnetfelt bøjede uden om Enceladus. Ved forbiflyvningen 14. juli 2005 (i 168-175 km afstand) fandt UVIS og INMS en sky af vand over sydpolen. ISS-billederne fra nov. 2005 viste fontænerne direkte. Artiklerne kom i Science 2006 (Porco m.fl. og Dougherty m.fl.). Kilder: https://space.com/38559-how-cassini-discovered-enceladus-plumes.html og https://www.boulder.swri.edu/~spencer/enceladus_jpl_public.pdf. Sikkerhed S.
-- **Tigerstriberne:** **4** sprækker, hver ca. **135 km** lang: Alexandria, Cairo, Baghdad og Damascus. Kanterne er 75-200 m høje, og furerne 150-300 m dybe. Porco m.fl. 2014 talte **101 gejsere**. Kilde: NASA PIA10352 (via pds-rings-spejl). Sikkerhed S.
+- **Tigerstriberne:** **4** sprækker, hver ca. **130 km** lang (rettet i "Faktatjek U3", før 135 km): Alexandria, Cairo, Baghdad og Damascus. Kanterne er 75-200 m høje, og furerne 150-300 m dybe. Porco m.fl. 2014 talte **101 gejsere**. Kilde: NASA PIA10352 (via pds-rings-spejl). Sikkerhed S.
 - **Det, Cassini fandt:**
   - vand og salt (natriumsalte i iskornene, Postberg 2009/2011, egen viden)
   - **kiselsyre-nanopartikler** (Hsu m.fl. 2015, Nature), som tyder på vand på mindst ca. 90 °C ved havbunden, altså varme kilder (hydrotermisk aktivitet)
@@ -1078,3 +1078,23 @@ Citatet `huygensSaturn` i `js/data/citater.js`, vist ved Saturn i Solsystemet.
 | Galilei så ringen i 1610 og troede, at Saturn bestod af tre | OK | Wikipedia: Rings of Saturn (brevet til hertugen af Toscana: "composed of three") |
 
 Oversættelse: "ad eclipticam inclinato" er oversat til "hælder i forhold til Jordens baneplan" (ekliptika er planet for Jordens bane), så en 13-årig kan forstå det. "nusquam cohaerente" er "ingen steder hænger fast i den".
+
+## Faktatjek U3: stedernes tal (31. oktober 2026)
+Siden i lag (U3 i [plan-ux.md](plan-ux.md)) giver hvert sted 2-4 tal. Næsten alle stod allerede i faktatjekkede tekster. De nye blev tjekket af en hjælpeagent (Opus, høj effort), der læste kilderne direkte med curl: JPL (https://ssd.jpl.nasa.gov/sats/elem/ og /sats/phys_par/), NSSDC (saturniansatfact.html, earthfact.html, moonfact.html og marsfact.html) og Wikipedia. 25 af 26 tal var OK.
+
+| Tal | Resultat | Kilde |
+|---|---|---|
+| Titan ca. 5.150 km bred, en omgang ca. 16 døgn, ca. 1,22 mio. km fra Saturn | OK | JPL: R = 2.574,76 km. NSSDC: 15,945 d og 1.221,87 · 10³ km |
+| Mimas: en omgang ca. 22½ timer, ca. 185.500 km fra Saturn | OK | NSSDC: 0,9424 d (22 t 37 min) og 185,52 · 10³ km (JPL afrunder til 186.000) |
+| Enceladus ca. 238.000 km fra Saturn, 4 tigerstriber | OK | NSSDC: 238,02 · 10³ km. Wikipedia "Tiger stripes (Enceladus)" |
+| Tigerstriberne "hver ca. 135 km" | **Rettet til ca. 130 km** | Wikipedia: "On average, each tiger stripe depression is 130 kilometers long". 135 km (afsnit 2 ovenfor, PIA10352 som søgeuddrag) kunne ikke bekræftes |
+| Dione: en omgang ca. 2¾ døgn, ca. 377.400 km, 1.123 km | OK | NSSDC: 2,7369 d og 377,40 · 10³ km. JPL: R = 561,4 km |
+| Rhea ca. 1.530 km, ca. 4½ døgn, ca. 527.000 km | OK | JPL: R = 763,5 km. NSSDC: 4,5175 d og 527,04 · 10³ km |
+| Tethys 1.062 km, Odysseus 445 km | OK | JPL: R = 531,1 km. Wikipedia "Odysseus (crater)" (fra USGS' navneliste) |
+| Jorden: et år ca. 365¼ døgn, aksen hælder ca. 23,4° | OK | NSSDC: 365,256 d (siderisk), 23,44° |
+| Månen: ca. 3.470 km, ca. 384.400 km, en omgang ca. 27 døgn, ca. 29½ døgn fra fuldmåne til fuldmåne | OK | NSSDC: R = 1.737,4 km, 0,3844 · 10⁶ km, 27,32 d og 29,53 d |
+| Phobos 7 t 39 min og ca. 6.000 km over Mars, Deimos ca. 30 timer og ca. 23.500 km fra Mars' midte, begge fundet af Asaph Hall i august 1877 | OK | NSSDC: 0,31891 d, a = 9.378 km − R 3.389,5 km = 5.988 km, 1,26244 d og 23.459 km. Wikipedia (Deimos 12. august, Phobos 18. august 1877) |
+| Curiosity landede 6. august 2012, Gale 154 km bred | OK | Wikipedia "Curiosity (rover)" (05:17:57 UTC, 5. august i USA) og "Gale (crater)" |
+| Iapetus, Saturns tredjestørste måne, ca. 1.470 km bred og ca. 3,6 mio. km fra Saturn (nævnt i "Ærligt talt" ved Saturns måner) | OK | NSSDC: 746 × 746 × 712 km og 3.560,85 · 10³ km. Titan (5.150 km) og Rhea (1.527 km) er større |
+
+Tallene i programmet: `SIDER` i `js/data/sider/mars.js`, `saturn.js` og `jorden.js`.
