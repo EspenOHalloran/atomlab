@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (U2 er færdig: styringen på billedet i Solsystemet og Kosmos. U3, U4 og M8b/M8c venter på jeres valg og go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (S2 er færdig: Saturns ringe fra Cassinis måling. Næste er M8b, Jezero, og den venter på jeres go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,41 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (31. oktober 2026): U2, styringen på billedet i Solsystemet og Kosmos.** Planen og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U2". **Næste:** U3 (siden i lag med faktatjek af stedernes tal), U4 (tidsknappen og kontakterne i resten af AtomLab) eller M8b/M8c. Det venter på jeres valg og go.
+**Senest lavet (31. oktober 2026): S2, Saturns ringe fra Cassinis måling.** Detaljerne står i [docs/plan-saturn-kvalitet.md](docs/plan-saturn-kvalitet.md) under "Status efter S2". Jeres svar ved valget af kilde: "Go" (til alle tre forslag).
+- **Tætheden i ringene er målt:** Cassini så stjernen β Centauri skinne gennem ringene 28. juli 2008 (UVIS). Ringene har nu 8.192 målte punkter (ca. 9 km pr. punkt) i stedet for de ringe, programmet lavede. Kanterne, Huygens-ringen i Cassini-delingen, B-ringens tætte kerne og de mange tynde ringe i C-ringen er de rigtige.
+- **Det, målingen ikke viser:** D-ringen er for tynd og er stadig tegnet. F-ringen er flyttet til sin middelafstand (den er skæv). Farvebilledets falske striber er fjernet, og kun farvetonen er tilbage.
+- **Tekster:** Nørd-teksten, "Billederne" og "Ærligt talt" ved Ringene siger, hvor tallene kommer fra. "Optisk dybde" er kommet i Ordbogen. Faktatjekket mod dataene og deres etiket (`docs/fakta-solsystemet.md`, "Faktatjek S2").
+- **Testkøreren:** `tests/koer-alle.mjs` gik ned i Node 22.23 (fetch), før den kørte en eneste test. Rettet. Testen `ordbog` stod ikke i dens liste (`ALLE`) og blev aldrig kørt med hele samlingen. Nu er den med.
+- **Tests:** Hele samlingen (fordi testkøreren var ændret): alle 28 bestod (23 minutter), og `ordbog` bestod bagefter (35 OK). `guide` fejlede én gang sammen med en anden test ("tlf: måleren i 3D-billedet") og bestod alene. Den rører ikke ringene. Nye tjek i `saturn` (kanterne, B-ringens kerne, Huygens-ringen og F-ringen).
+- **Ikke afprøvet (på pc og tablet):**
+  1. Ringene forfra: B- og A-ringen er nu næsten ensartet lyse (rigtigt for tætte ringe, men før gav de falske striber mere mønster). Synes I, det er kedeligere? Så kan B-ringens lysstyrke tages fra et Cassini-foto.
+  2. Modlys og "Hen over ringene" på flybyen: Ser de mange tynde ringe flotte ud, og flimrer de, når kameraet glider?
+  3. Langt væk (hele systemet): Flimrer ringene, når I drejer? Teksturen har mipmaps, men det er ikke set på en rigtig skærm.
+  4. Saturns skygge fra ringene på planeten bruger de samme målte tal. Ser skyggen rigtig ud?
+- **Næste:** M8b (Jezero). Prompten står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompter til de næste skridt". Venter på jeres go.
+
+**Før det (31. oktober 2026): L1, lyset i Stå på Mars (den billige del).** Rækkefølgen og arbejdsgangen for resten af Mars står i [docs/plan-mars.md](docs/plan-mars.md) under "Plan for resten af Mars" (jeres svar: "Du skal bare lave alt det, du kan fra listen, i din rækkefølge. Go mellem hvert skridt", og I vurderer det hele til sidst). Status, målinger og "Ikke afprøvet" står dér under "Status efter L1".
+- **Mere kontrast:** Mindre himmellys i skyggerne (`HIMMELLYS` 0,55 → 0,18), lidt mindre sollys, en himmel, der bliver lysere, jo højere Solen står, og mørkere og mere mættet opad. Disen (`TAU` 0,4) er uændret. Justeret efter tal fra NASA's panorama fra Naukluft (PIA20332), ikke efter jeres øjne.
+- **Mens man står:** ingen glød (Solens skær står i himlens shader), og eksponeringen tilpasser sig lyset, så middag ikke er meget lysere end morgen. Sættes tilbage, når man letter. Man lander kl. 07:30 (Solen 22°, lange skygger).
+- **Tests:** `--ændret` valgte 9 tests (mars, landskab, solsystem, saturn, jorden, system, kosmos-nye, aarstider og formoerkelser), og alle bestod (31. oktober 2026). Nye tjek i `landskab`: gløden og eksponeringen, mens man står, og efter at man er lettet.
+- **Ikke afprøvet:** fem punkter i plan-mars.md under "Status efter L1" (er det for mørkt nu, pumper eksponeringen, er Solen for lille uden glød, forgrunden er stadig flad tæt på, kører det glat).
+
+**Før det (31. oktober 2026): U3, siden i lag i Solsystemet og Kosmos.** Planen, stedernes tal og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "U3: Stedernes tal" og "Status for U3". Jeres svar ved go: "Go til dine anbefalinger". **Næste:** U4 (tidsknappen og kontakterne i resten af AtomLab) eller M8b/M8c. Det venter på jeres valg og go. Valgfrit: Fable kan lave et eftersyn efter U3 (F4 i [docs/plan-fable.md](docs/plan-fable.md)).
+- **Fanerne "Kort fortalt" og "For nørder" er væk.** Højre panel er én side fra let til dybt: tallene, "Lige nu", Kort (fremme), emnerne som foldebokse med et spørgsmål som overskrift, "Gå videre", For nørder, Billederne og Ærligt talt (altid sidst i sin egen boks) og citatet.
+- **Hvert sted har sin egen side** med 2-4 tal (fx Olympus Mons: ca. 22 km høj, ca. 600 km bred, ca. 7 × Danmark). Mars' side handler om Mars som helhed og peger videre til stederne. Det, der handlede om et sted (Olympus Mons, Tharsis, månerne, Stå på Mars …), står nu på stedets side, også stedets egne "Billederne" og "Ærligt talt". Det gælder også Saturn, Jorden og Månen.
+- **"Tryk X" er blevet til knapper i teksten:** et sted ("Calderaen ›"), en kontakt (viser, om den er tændt), en handling (grå, når den ikke kan bruges lige nu), tidsknappen og andre dele. Solens fremtid peger nu på "Hvid dværg i Kosmos ›".
+- **En kontakt folder sit emne ud:** Slår man fx "Modlys" til, folder emnet om modlys sig ud, og emner, siden selv har foldet ud, folder sig sammen.
+- **Faktatjek:** 26 nye tal tjekket mod JPL, NSSDC og Wikipedia. Tigerstriberne på Enceladus er rettet fra 135 til ca. 130 km. Iapetus, Saturns tredjestørste måne, er ikke med i programmet. Det står nu i "Ærligt talt" ved Saturns måner.
+- **Ordbogen** peger nu på Olympus Mons og Calderaen ("skjoldvulkan" og "caldera"), hvor ordene står.
+- **Tests:** Nye tjek i `kosmos`, `solsystem` (alle steder i træet), `lag`, `ordforklaring`, `mars`, `saturn` og `jorden`. Hele samlingen: alle 28 tests bestod (31. oktober 2026).
+- **Ikke afprøvet (på tabletten):**
+  1. Er siden let at læse, og er det tydeligt, at overskrifterne med ▸ kan foldes ud?
+  2. Er siden for lang på pc, når flere emner er foldet ud?
+  3. Folder emnet sig ud, når I slår en kontakt til (fx "Modlys" ved Mars), og kan I se det på tablet på højkant, hvor panelet står under billedet?
+  4. Er knapperne i teksten lette at ramme med en finger, og ligner en kontakt i teksten en kontakt?
+  5. Mangler I noget fra de gamle tekster? Mars' og Saturns tekster er delt ud på stederne og skrevet om.
+
+**Før det (31. oktober 2026): U2, styringen på billedet i Solsystemet og Kosmos.** Planen og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U2".
 - **"Prøv selv" er væk.** Alt, der styrer billedet, står nu i billedet:
   - **Bjælken forneden:** trinene med "‹", "Næste: … ›", til sidst "↺ Forfra" og på flybyen ✕, og scenens handlinger (fx "▶ Start flyby", "🧍 Stå på Mars", "💥 Send en solstorm"). Man kan trykke på prikkerne i underteksten og springe til et trin. Bjælken står der også med "Kun grafik".
   - **Styr-boksen øverst til højre:** kontakterne (tændt er fyldt med ✓) og skyderne. Åben på pc og tablet på langs, foldet sammen til "Styr" på tablet på højkant og telefon.
@@ -44,7 +78,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   4. Føles det rigtigt, at "🌅 Solnedgang" lader dagen gå videre, så Solen går ned?
   5. Ser kontakterne ud som kontakter (fyldt med ✓, når de er tændt)?
 
-**Stå på Mars: lys og kvalitet (31. oktober 2026, kun noteret, intet ændret).** Fund, muligheder og en aftale om at bede om adgang til jeres pc, når grafikken skal måles, står i [docs/plan-mars.md](docs/plan-mars.md) under "Stå på Mars: lyset og kvaliteten". Kort: Himlen og jorden er næsten lige lyse, disen er kraftig, og sol og himmellys er skaleret frit, så kontrasten mangler. Venter på jeres prioritering. U3 kører i en anden session.
+**Stå på Mars: lys og kvalitet (31. oktober 2026, noteret, den billige del er nu lavet i L1).** Fund, muligheder og en aftale om at bede om adgang til jeres pc, når grafikken skal måles, står i [docs/plan-mars.md](docs/plan-mars.md) under "Stå på Mars: lyset og kvaliteten". Kort: Himlen og jorden er næsten lige lyse, disen er kraftig, og sol og himmellys er skaleret frit, så kontrasten mangler. Venter på jeres prioritering. U3 kører i en anden session.
 
 **Før det (30. oktober 2026): U1, træet i Solsystemet.** Planen står i [docs/plan-ux.md](docs/plan-ux.md) (status for U1 nederst).
 - **Venstre panel er nu navigation:** Kloderne står på én række, og under dem et træ med den valgte klode, dens steder og måner og dens forsøg. Mars har alle 12 steder og måner (Calderaen og Skrænten under Olympus Mons, "Mars set fra Phobos" under Phobos), Saturn har Ringene og alle seks måner, og Jorden har Månen. Før kunne Calderaen, Ringene og udsigten fra Phobos kun nås med flybyen.
@@ -93,7 +127,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Trinene:** U1 (træet og stedets side), U2 (styringen på billedet), U3 (siden i lag med faktatjek af stedernes tal) og U4 (tidsknappen og kontakterne i resten af AtomLab). Hvert trin får et go og sin egen PR.
 - **Anbefaling:** U1 og U2 før Mars M8. Ellers kommer M8's nye steder og knapper ind i det gamle "Prøv selv" og skal flyttes bagefter.
 - **Model:** Opus bygger det hele med høj effort til U1 og U2. En billigere model ville ikke spare meget og kunne give fejl i den fælles skal (begrundelsen står i planen). Haiku bruges kun til lange testlogs.
-- **Lille fejl fundet:** Solens fremtid slutter med "Prøv Hvid dværg i listen", men siden flytningen står Hvid dværg i Kosmos. Rettes i U3.
+- ~~**Lille fejl fundet:** Solens fremtid slutter med "Prøv Hvid dværg i listen", men siden flytningen står Hvid dværg i Kosmos. Rettes i U3.~~ Rettet i U3.
 
 **Før det (30. oktober 2026): Mars M6b, flybyen ud til Phobos og Deimos. M6 er færdig.** **Jeres valg (30. oktober 2026): M8 (Stå på Mars) kommer før M7b.** Prompten til planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompt til M8". Planen laves først, og bygningen venter på jeres go.
 - **Flybyen har nu 13 stop:** Efter Nordpolen går turen ud til **Phobos** (Stickney ude ved kanten i lav sol, Mars i baggrunden), **"Mars set fra Phobos"** (kameraet står 300 m over Phobos og kigger op: Mars er 42,5° bred og drejer, og man kan dreje hovedet og kigge ned på Phobos) og **Deimos** (Mars er en kugle på 16,6° ved siden af).
@@ -483,7 +517,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - [ ] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (se [docs/plan-ux.md](docs/plan-ux.md))
   - [x] U1: Træet til venstre (kloder, Steder, Måner og Forsøg) og stedets side til højre. Vejen i toplinjen (30. oktober 2026).
   - [x] U2: Bjælken med tur og "Næste", Styr-boksen med kontakter og skydere og tidsknappen på billedet. "Prøv selv" forsvinder (31. oktober 2026).
-  - [ ] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek).
+  - [x] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek) (31. oktober 2026).
   - [ ] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab.
 
 ## Idéer til senere

@@ -2,6 +2,7 @@
 // Ude ved kanten står en detektor (som LIGO), hvis arme bliver strakt og presset, når bølgerne kommer forbi.
 
 import * as THREE from 'three';
+import { kontakt, handling, gå } from '../sideknap.js';
 import { gitterDug, glød, skilt, rullendeGraf, KVALITET } from './faelles.js';
 
 const A0 = 7; // afstanden mellem de sorte huller i starten
@@ -25,15 +26,28 @@ export default {
     ['De sorte huller vejede', '36 og 29 × Solen'],
     ['Armene blev ændret', 'under 1/100 proton'],
   ],
-  kort: `
-    <p>Når meget tunge ting bevæger sig hurtigt, sender de <b>bølger</b> ud i selve rumtiden, lidt ligesom når man rører rundt i vand. Det kaldes <b>tyngdebølger</b>. Når en bølge kommer forbi, bliver rummet skiftevis strakt og presset en lille smule sammen.</p>
-    <p>Her kredser to <b>sorte huller</b> om hinanden. De mister energi til bølgerne, kommer tættere på og drejer hurtigere og hurtigere, til de smelter sammen.</p>
-    <p>Ude ved kanten står en <b>detektor</b>. Grafen nederst viser, hvad den måler. Einstein forudsagde tyngdebølgerne i 1916, men troede ikke, man nogensinde ville kunne måle dem. 100 år senere lykkedes det.</p>`,
-  nørd: `
-    <p><b>Den første måling</b> (14. september 2015) kom fra to sorte huller, der smeltede sammen 1,3 milliarder lysår væk. Bølgerne havde været undervejs, siden livet på Jorden mest bestod af encellede organismer. På 0,2 sekunder blev 3 gange Solens masse lavet om til tyngdebølger (E = mc²). I det øjeblik var det mere kraftfuldt end alle stjerner i det synlige univers tilsammen.</p>
-    <p><b>LIGO</b> er to detektorer i USA. Hver har to 4 km lange arme, hvor laserlys løber frem og tilbage. Bølgen ændrede armenes længde med mindre end en hundrededel af en protons bredde. Tre af forskerne bag fik Nobelprisen i 2017.</p>
-    <p><b>Chirpet:</b> Signalet stiger i tone og styrke og stopper brat, ligesom et fuglepip. Derfor kalder man det et "chirp". Tryk på knappen og hør det.</p>
-    <p><b>Ærligt talt:</b> Bølgerne er tegnet enormt store. Og rumtiden har fire dimensioner (tre i rummet og én i tiden), så en flad dug er kun en tegning af en lille del af det.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Her kredser to sorte huller om hinanden. De mister energi til bølger i selve rumtiden, kommer tættere på og drejer hurtigere og hurtigere, til de smelter sammen.',
+    emner: [
+      {
+        titel: 'Hvad er en tyngdebølge?',
+        tekst: '<p>Når meget tunge ting bevæger sig hurtigt, sender de bølger ud i selve rumtiden, lidt ligesom når man rører rundt i vand. Når en bølge kommer forbi, bliver rummet skiftevis strakt og presset en lille smule sammen.</p>',
+      },
+      {
+        titel: 'Hvordan måler man dem?', kontakt: '📡 Vis detektoren',
+        tekst: `<p>Ude ved kanten står en detektor, og grafen nederst viser, hvad den måler. ${kontakt('📡 Vis detektoren')} Einstein forudsagde tyngdebølgerne i 1916, men troede ikke, man nogensinde ville kunne måle dem. 100 år senere lykkedes det.</p>
+          <p>LIGO er to detektorer i USA. Hver har to 4 km lange arme, hvor laserlys løber frem og tilbage. Bølgen ændrede armenes længde med mindre end en hundrededel af en protons bredde. Tre af forskerne bag fik Nobelprisen i 2017.</p>`,
+      },
+      {
+        titel: 'Hvordan lyder det?',
+        tekst: `<p>Signalet stiger i tone og styrke og stopper brat, ligesom et fuglepip. Derfor kalder man det et "chirp". ${handling('chirp', '🔊 Hør chirpet')}</p>`,
+      },
+    ],
+    videre: [gå('kosmos:kilonova', 'Kilonova'), gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:rumtid', 'Rumtid')],
+    nørd: '<p><b>Den første måling</b> (14. september 2015) kom fra to sorte huller, der smeltede sammen 1,3 milliarder lysår væk. Bølgerne havde været undervejs, siden livet på Jorden mest bestod af encellede organismer. På 0,2 sekunder blev 3 gange Solens masse lavet om til tyngdebølger (E = mc²). I det øjeblik var det mere kraftfuldt end alle stjerner i det synlige univers tilsammen.</p>',
+    ærligt: '<p>Bølgerne er tegnet enormt store. Og rumtiden har fire dimensioner (tre i rummet og én i tiden), så en flad dug er kun en tegning af en lille del af det.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, overlag }) {
     const dug = gitterDug(52, Math.round(35 + 16 * KVALITET), Math.round(90 + 50 * KVALITET));

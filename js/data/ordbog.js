@@ -213,6 +213,12 @@ export const ORDBOG = [
     tekst: 'Solens yderste lag: tynd gas på over en million grader, som stråler langt ud i rummet. Den er så svag i forhold til Solen, at man kun kan se den med det blotte øje, når Månen dækker hele Solen.',
   },
   {
+    id: 'optiskdybde', ord: 'Optisk dybde',
+    former: ['optisk dybde', 'optiske dybde'],
+    // e^-1 ≈ 37 %, e^-5 ≈ 0,7 % (lyset, der går lige igennem)
+    tekst: 'Et tal (τ) for, hvor meget noget skygger for lyset. Ved τ = 1 slipper ca. 37 % af lyset lige igennem, og ved τ = 5 under 1 %. Saturns C-ring har τ ca. 0,1, og midt i B-ringen er τ mange steder over 5.',
+  },
+  {
     id: 'kerneskygge', ord: 'Kerneskygge',
     former: ['kerneskygge', 'kerneskyggen'],
     tekst: 'Den mørkeste del af en skygge i rummet. Inde i Månens kerneskygge er hele Solen dækket (total solformørkelse). Er hele Månen inde i Jordens kerneskygge, er det total måneformørkelse.',

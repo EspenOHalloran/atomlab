@@ -2,6 +2,7 @@
 // To stråler (jets) skyder ud med næsten lysets fart.
 
 import * as THREE from 'three';
+import { kontakt, handling, gå, skærm } from '../sideknap.js';
 import { glød, prikSky, toningTekstur, skilt, KVALITET } from './faelles.js';
 
 const GALAKSE_R = 22;
@@ -12,7 +13,6 @@ const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
 
 export default {
   id: 'kvasar',
-  hvorfor: ['magnetfelt', 'sorthul'],
   navn: 'Kvasar',
   ikon: '🌟',
   undertitel: 'Et sort hul, der lyser stærkere end en hel galakse',
@@ -24,17 +24,31 @@ export default {
     ['3C 273 lyser som', 'ca. 4 billioner sole'],
     ['Det sorte hul vejer', 'millioner til milliarder × Solen'],
   ],
-  kort: `
-    <p>En <b>kvasar</b> er et kæmpe sort hul i midten af en galakse, der spiser enorme mængder gas. Gassen hvirvler rundt og bliver så varm, at den lyser stærkere end alle galaksens milliarder af stjerner tilsammen.</p>
-    <p>Hos nogle kvasarer bliver noget af gassen skudt ud i to <b>stråler</b> (jets) med næsten lysets fart. De kan blive længere end hele galaksen. Strålerne kommer ikke ud af selve det sorte hul. De bliver slynget ud lige uden for det af magnetfelter, som skiven og det snurrende sorte hul vrider op.</p>
-    <p>Vores egen galakse, Mælkevejen, har også et kæmpe sort hul i midten. Men det får næsten ingen mad, så det lyser kun meget svagt. Prøv at slukke og tænde kvasaren, og giv det sorte hul mad.</p>`,
-  nørd: `
-    <p><b>Navnet</b> kommer af "kvasistellar", som betyder "næsten som en stjerne". I et teleskop ligner en kvasar nemlig bare en prik. I 1963 opdagede Maarten Schmidt, at lyset fra kvasaren 3C 273 var forskudt mod rødt, så lyset måtte have været ca. 2 milliarder år undervejs. Når den alligevel kan ses herfra, må den lyse helt utroligt kraftigt.</p>
-    <p><b>Mere effektivt end fusion:</b> Når Solen laver helium af hydrogen, bliver 0,7 % af massen til energi (se Stjerneovnen). Gas, der falder ind mod et sort hul, kan afgive over 10 % af sin masse som energi. Det er derfor, kvasarer kan lyse så kraftigt.</p>
-    <p><b>Hvorfor stråler?</b> Gassen i skiven er så varm, at den er plasma, og plasma trækker magnetfelter med sig. Når skiven og det snurrende sorte hul drejer rundt, bliver magnetfeltet vredet op som en proptrækker langs aksen. Noget af plasmaet bliver slynget ud langs feltet med næsten lysets fart og klemt sammen til to smalle stråler, én op og én ned. Energien kan komme fra det sorte huls egen drejning. Tryk "Vis magnetfeltet" for at se det.</p>
-    <p><b>Det ved man ikke helt:</b> Forskerne er ikke sikre på alle detaljer, og ingen ved præcis, hvorfor kun ca. hver tiende kvasar har kraftige stråler. Men i 2021 viste Event Horizon Telescope mønsteret i magnetfeltet lige uden for det sorte hul i galaksen M87, som har samme slags stråler, og det passer med forklaringen.</p>
-    <p><b>At kigge tilbage i tiden:</b> Lys er længe om at nå frem. De fjerneste kvasarer ser vi, som de så ud for over 13 milliarder år siden, da universet var ungt og galakserne fulde af gas. Lyset sendte de ud, længe før Jorden fandtes.</p>
-    <p><b>Ærligt talt:</b> Det sorte hul, skiven og strålerne er tegnet enormt store i forhold til galaksen. I virkeligheden er hele det lysende område ikke meget større end vores solsystem, mens galaksen er 100.000 lysår bred.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'En kvasar er et kæmpe sort hul i midten af en galakse, der spiser enorme mængder gas. Gassen bliver så varm, at den lyser stærkere end alle galaksens milliarder af stjerner tilsammen.',
+    emner: [
+      {
+        titel: 'Hvorfor lyser Mælkevejens sorte hul ikke?', kontakt: '💡 Kvasaren er tændt', hvorfor: ['sorthul'],
+        tekst: `<p>Vores egen galakse, Mælkevejen, har også et kæmpe sort hul i midten. Men det får næsten ingen mad, så det lyser kun meget svagt. Prøv selv: ${kontakt('💡 Kvasaren er tændt')} ${handling('mad', '🍽️ Giv det sorte hul mad')}</p>`,
+      },
+      {
+        titel: 'Hvor kommer strålerne fra?', kontakt: '🧲 Vis magnetfeltet', hvorfor: ['magnetfelt'],
+        tekst: `<p>Hos nogle kvasarer bliver noget af gassen skudt ud i to stråler (jets) med næsten lysets fart. De kan blive længere end hele galaksen. Strålerne kommer ikke ud af selve det sorte hul. De bliver slynget ud lige uden for det af magnetfelter, som skiven og det snurrende sorte hul vrider op. ${kontakt('🧲 Vis magnetfeltet')}</p>`,
+      },
+      {
+        titel: 'Hvorfor lyser den så kraftigt?',
+        tekst: '<p>Når Solen laver helium af hydrogen, bliver 0,7 % af massen til energi (se Stjerneovnen). Gas, der falder ind mod et sort hul, kan afgive over 10 % af sin masse som energi. Det er derfor, kvasarer kan lyse så kraftigt.</p>',
+      },
+    ],
+    videre: [gå('kosmos:sorthul', 'Sort hul'), skærm('#fusion', 'Stjerneovnen')],
+    nørd: `
+      <p><b>Navnet</b> kommer af "kvasistellar", som betyder "næsten som en stjerne". I et teleskop ligner en kvasar nemlig bare en prik. I 1963 opdagede Maarten Schmidt, at lyset fra kvasaren 3C 273 var forskudt mod rødt, så lyset måtte have været ca. 2 milliarder år undervejs. Når den alligevel kan ses herfra, må den lyse helt utroligt kraftigt.</p>
+      <p><b>Hvorfor stråler?</b> Gassen i skiven er så varm, at den er plasma, og plasma trækker magnetfelter med sig. Når skiven og det snurrende sorte hul drejer rundt, bliver magnetfeltet vredet op som en proptrækker langs aksen. Noget af plasmaet bliver slynget ud langs feltet med næsten lysets fart og klemt sammen til to smalle stråler, én op og én ned. Energien kan komme fra det sorte huls egen drejning.</p>
+      <p><b>Det ved man ikke helt:</b> Forskerne er ikke sikre på alle detaljer, og ingen ved præcis, hvorfor kun ca. hver tiende kvasar har kraftige stråler. Men i 2021 viste Event Horizon Telescope mønsteret i magnetfeltet lige uden for det sorte hul i galaksen M87, som har samme slags stråler, og det passer med forklaringen.</p>
+      <p><b>At kigge tilbage i tiden:</b> Lys er længe om at nå frem. De fjerneste kvasarer ser vi, som de så ud for over 13 milliarder år siden, da universet var ungt og galakserne fulde af gas. Lyset sendte de ud, længe før Jorden fandtes.</p>`,
+    ærligt: '<p>Det sorte hul, skiven og strålerne er tegnet enormt store i forhold til galaksen. I virkeligheden er hele det lysende område ikke meget større end vores solsystem, mens galaksen er 100.000 lysår bred.</p>',
+  },
 
   lav(gruppe, { kamera, opdaterKnapper, verden, fase }) {
     // Galaksen: en central kugle af gamle, gule stjerner og to spiralarme med unge, blå stjerner

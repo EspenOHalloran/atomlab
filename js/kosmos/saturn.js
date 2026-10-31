@@ -17,6 +17,7 @@ import { lavIsmåne } from '../solsystem/maane.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
+import { SIDE, SIDER } from '../data/sider/saturn.js';
 
 const SATURN_R = 60268; // km ved ækvator
 const SATURN_POL = 54364; // km ved polerne
@@ -26,50 +27,38 @@ const GRAD = Math.PI / 180;
 
 // Saturns seks store måner: afstand fra Saturns centrum og radius i km og omløbstid i døgn (NASA/JPL).
 // lys: hvor lyst kortet tegnes, så månerne har den rigtige lysstyrke i forhold til hinanden (Enceladus er den lyseste).
-// tur: hvor månen står på turen og hvorfra kameraet kigger (se stopVed). kort: underteksten på turen.
+// tur: hvor månen står på turen og hvorfra kameraet kigger (se stopVed). kort: underteksten (på turen og ved et besøg).
 const MÅNER = [
   {
     id: 'mimas', navn: 'Mimas', afstand: 185539, r: 198, døgn: 0.942, farve: [0.97, 0.97, 0.97], lys: 1.11,
-    tekst: 'Kun 396 km bred. Krateret Herschel er ca. 140 km bredt, cirka en tredjedel af hele månen. Mimas ligner Dødsstjernen fra Star Wars, men det er et tilfælde.',
     kort: 'Kun 396 km bred. Krateret Herschel er ca. 140 km bredt, cirka en tredjedel af hele månen.',
-    mere: '<p><b>Mimas</b> ligner Dødsstjernen fra Star Wars, men det er et tilfælde: Filmen kom i 1977, og krateret blev først set af Voyager 1 i november 1980. Slaget, der lavede krateret, var måske tæt på at slå Mimas i stykker.</p><p>Målinger af Mimas\' bane tyder på, at der kan være et hav 20-30 km under isen. Hvis det passer, er det yngre end 25 millioner år. Forskerne er ikke helt enige endnu.</p>',
     tur: { længde: -112, side: 45, højde: -8 }, // Herschel ligger ved 112° vest
   },
   {
     id: 'enceladus', navn: 'Enceladus', afstand: 238037, r: 252, døgn: 1.37, farve: [1, 1, 1],
-    tekst: 'Fontænerne af vanddamp og iskorn sprøjter op fra de fire "tigerstriber" ved sydpolen. Tryk "Modlys", og se dem lyse.',
     kort: 'Fra fire sprækker ved sydpolen sprøjter fontæner af vanddamp og iskorn ud i rummet. Under isen er der et hav.',
-    mere: '<p><b>Enceladus</b> er kun 504 km bred og den mest hvide klode i solsystemet. Iskornene fra fontænerne bliver til Saturns tynde E-ring. Tryk "Modlys", og se fontænerne lyse.</p>',
     tur: { bane: -15, retning: 0, højde: -22 },
     forskyd: -0.55, // kameraet kigger lidt under midten, så fontænerne er med
     pad: 1.9,
   },
   {
     id: 'tethys', navn: 'Tethys', afstand: 294619, r: 531, døgn: 1.888, farve: [0.96, 0.98, 1], lys: 1.36,
-    tekst: 'Næsten ren vandis. Krateret Odysseus er 445 km bredt, ca. to femtedele af hele månen.',
     kort: 'Næsten ren vandis. Krateret Odysseus er 445 km bredt, ca. to femtedele af hele månen.',
-    mere: '<p><b>Tethys</b> er 1.062 km bred og næsten lige så tæt som vand, så den må være næsten ren is med lidt sten. Kløften Ithaca Chasma er over 1.000 km lang og op til ca. 100 km bred.</p>',
     tur: { længde: -129, side: 45, højde: 18 }, // Odysseus ligger ved 33° nord og 129° vest
   },
   {
     id: 'dione', navn: 'Dione', afstand: 377396, r: 561, døgn: 2.737, farve: [1, 1, 1], lys: 1.1,
-    tekst: 'De lyse striber er klipper af is, hvor skorpen er revnet. Nogle er flere hundrede meter høje.',
     kort: 'De lyse striber er klipper af is, hvor skorpen er revnet. Nogle er flere hundrede meter høje.',
-    mere: '<p><b>Dione</b> er 1.123 km bred. Klipperne ligger på den side, der vender bagud i banen. Dione har måske et hav ca. 100 km under isen, men det er ikke sikkert.</p>',
     tur: { længde: 75, side: -45, højde: -8 }, // klipperne ligger omkring 75° øst
   },
   {
     id: 'rhea', navn: 'Rhea', afstand: 527108, r: 764, døgn: 4.518, farve: [1, 0.98, 0.95], lys: 1.23,
-    tekst: 'Saturns næststørste måne, ca. 1.530 km bred. Den er mest is og fuld af gamle kratere.',
     kort: 'Saturns næststørste måne, ca. 1.530 km bred. Den er mest is og fuld af gamle kratere.',
-    mere: '<p><b>Rhea</b> er mest is (måske ca. tre fjerdedele) og resten sten. Den ligger 527.000 km fra Saturn og bruger 4½ døgn på en tur rundt.</p>',
     tur: { længde: 64, side: -45, højde: -8 },
   },
   {
     id: 'titan', navn: 'Titan', afstand: 1221870, r: 2575, døgn: 15.945, farve: [0.9, 0.62, 0.3],
-    tekst: 'Den orange dis skjuler overfladen. Tryk "Under disen" for at se den i infrarødt lys, eller "Modlys", og se disen lyse som en ring rundt om månen.',
     kort: 'Saturns største måne, større end planeten Merkur. Den orange dis skjuler søer af flydende metan og ethan.',
-    mere: '<p><b>Titan</b> er den eneste måne med en tyk atmosfære. Søerne ligger mest ved nordpolen. Sonden Huygens landede der 14. januar 2005. Tryk "Under disen" for at se overfladen i infrarødt lys.</p>',
     tur: { bane: 81, retning: 98, højde: -8 }, // lidt fra siden, så Saturn ses ved siden af Titan
     pad: 2,
   },
@@ -118,15 +107,12 @@ const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på må
 // Flybyen: et stop ved hvert sted. fokus 'saturn', 'ringe' eller en måne.
 const TUR = [
   { fokus: 'saturn', titel: 'Saturn og de store måner', afstand: 380, retning: 20, højde: -38,
-    tekst: 'Vi flyver ind til Saturn, hen over ringene og videre ud forbi de seks store måner.',
-    mere: '<p><b>Flyby:</b> Tryk "Næste" for at flyve videre. Når kameraet står stille, kan du selv dreje rundt.</p>' },
+    tekst: 'Vi flyver ind til Saturn, hen over ringene og videre ud forbi de seks store måner.' },
   { fokus: 'saturn', titel: 'Saturn', passer: 15, retning: 35, højde: -20,
-    tekst: 'En kæmpe kugle af gas, mest brint og helium. Ca. 9½ Jorder kan ligge på række hen over den.',
-    mere: '<p><b>Saturn</b> drejer om sig selv på ca. 10½ time. Derfor buler den ud ved ækvator og er ca. 10 % fladere fra pol til pol.</p>' },
+    tekst: 'En kæmpe kugle af gas, mest brint og helium. Ca. 9½ Jorder kan ligge på række hen over den.' },
   { fokus: 'ringe', titel: 'Hen over ringene', knap: 'ringene', afstand: 6, højde: -30, side: -35,
-    tekst: 'Milliarder af isklumper, fra sandkorn til klumper på størrelse med et hus. Mange steder er ringene kun ca. 10 m tykke.',
-    mere: '<p><b>Ringene</b> er ca. 70.000 km brede og over 95 % vandis. Hver klump kredser for sig. Den mørke stribe er Cassini-delingen. Den er ca. 4.600 km bred og ikke helt tom, der er bare langt færre klumper.</p>' },
-  ...MÅNER.map((m) => ({ fokus: m.id, titel: m.navn, tekst: m.kort, mere: m.mere })),
+    tekst: 'Milliarder af isklumper, fra sandkorn til klumper på størrelse med et hus. Mange steder er ringene kun ca. 10 m tykke.' },
+  ...MÅNER.map((m) => ({ fokus: m.id, titel: m.navn, tekst: m.kort })),
 ];
 const RING_FRA = 100000; // km: kameraet glider ud over ringene fra B-ringen til uden for A-ringen
 const RING_TIL = 136000;
@@ -146,11 +132,9 @@ const TRÆ = {
 const VISNINGER = {
   saturn: {
     navn: 'Saturn', afstandFra: 15, retning: 35, højde: -20,
-    tekst: '<p><b>Saturn:</b> Se skyggen, ringene kaster på Saturn, og skyggen, Saturn kaster på ringene. Tryk "Modlys", og se ringene bagfra med Solen bag Saturn.</p>',
   },
   maaner: {
     navn: 'Månerne', afstand: 380, retning: 20, højde: -38,
-    tekst: '<p><b>Saturn og månerne:</b> Saturn har over 280 kendte måner. Her er de seks store i den rigtige afstand. Tryk på en måne for at besøge den.</p>',
   },
 };
 
@@ -169,16 +153,8 @@ export default {
     ['Ringenes tykkelse', 'mange steder ca. 10 m'],
     ['Kendte måner', 'over 280 (2026)'],
   ],
-  kort: `
-    <p>Et besøg hos Saturn og dens måner. Tryk "▶ Start flyby" for en tur hen over ringene og forbi de seks store måner, eller tryk selv på en måne. Drej med fingeren, musen eller piletasterne.</p>
-    <p><b>Saturn</b> er en kæmpe kugle af gas, mest brint og helium. Den drejer så hurtigt (ca. 10½ time om sig selv), at den er ca. 10 % fladere ved polerne end ved ækvator. Ringene er milliarder af klumper af næsten ren vandis, fra støv til flere meter store, og hver kredser for sig. Fra kant til kant er de ca. 270.000 km, men mange steder kun ca. 10 m tykke.</p>
-    <p><b>Enceladus</b> er en lille måne, kun 504 km bred og dækket af is. Den er det mest hvide sted i solsystemet og kaster ca. 80 % af sollyset tilbage. Under isen er der et hav, og fra sprækker ved sydpolen sprøjter fontæner af vanddamp og iskorn ud i rummet. Rumsonden Cassini fløj gennem dem og fandt salt, organiske stoffer og fosfat.</p>
-    <p><b>Titan</b> er Saturns største måne og større end planeten Merkur. Den er den eneste måne med en tyk atmosfære: mest nitrogen og lidt metan, og trykket ved jorden er ca. 1,5 gange Jordens. Nede under disen er der ca. −179 °C og søer og have af flydende metan og ethan. Sonden Huygens landede der 14. januar 2005.</p>`,
-  nørd: `
-    <p><b>Ringene i tegningen</b> er regnet ud fra, hvor tætte de er i hver afstand (deres optiske dybde): D-ringen er næsten gennemsigtig, B-ringen næsten tæt, og Cassini-delingen (ca. 4.600 km bred) er ikke tom. Grænserne og Encke-mellemrummet passer, men tætheden er omtrentlig, og de mange tynde ringe er lavet af programmet. Set fra den side, Solen ikke skinner på, bliver de tætte ringe mørke, og de tynde lyser, fordi lyset kun kommer igennem dem.</p>
-    <p><b>Flybyen</b> foregår i den rigtige skala. For at kunne flyve fra hele systemet og helt ind til en lille måne gør programmet hele Saturn-systemet større og mindre i stedet for at flytte kameraet langt væk. Det ser ud præcis, som hvis kameraet fløj.</p>
-    <p><b>Billederne:</b> Månerne er kort lavet af Cassinis billeder (NASA/JPL/Space Science Institute), via USGS. Mimas-kortet er lavet af DLR, og i Dione og Rhea er der også lidt fra Voyager. Titans overflade er Cassinis kort i nær-infrarødt lys, hvor man kan se gennem disen (PIA19658). Saturns kort og ringenes farver er fra Solar System Scope (CC BY 4.0), som bygger på NASA's billeder.</p>
-    <p><b>Ærligt talt:</b> Saturn, ringene og månerne har den rigtige størrelse og afstand. Ringenes farver er lagt på de rigtige grænser, men de mange tynde ringe er omtrentlige. Månerne vender samme side mod Saturn, ligesom Månen mod Jorden. Langt væk er de tegnet større, så man kan se dem, og de kredser meget hurtigere end i virkeligheden, men i det rigtige forhold (Mimas kommer rundt på under et døgn, Titan på ca. 16 døgn). Under flybyen og besøgene står de stille, og på turen er de stillet op, så de er nemme at besøge efter hinanden. Solen står omtrent som da Cassini kom frem i 2004: Det var sommer på Saturns sydlige halvkugle, så ringene og månernes sydpoler var belyst. Fontænernes partikler er tegnet meget større end de rigtige iskorn, og "Modlys" flytter Solen om bag Saturn eller månen. "Under disen" viser Titan, som et kamera med infrarødt lys ser den. Med øjnene ser man kun den orange dis.</p>`,
+  side: SIDE, // teksten i højre panel (js/data/sider/saturn.js)
+  sider: SIDER,
 
   lav(gruppe, { opdaterKnapper, forklaring, fase, verden }) {
     const ring = ringTekstur();
@@ -338,16 +314,16 @@ export default {
       visning = v;
       baner = false;
       flyvTilSaturn(VISNINGER[v], () => { baner = true; });
-      forklaring(VISNINGER[v].tekst);
+      forklaring('');
       lavKnapper();
     }
     function besøg(m) {
       afslutTur();
-      fase(null);
+      fase(m.navn, m.kort);
       visning = m.id;
       baner = false;
       flyvTilMåne(m);
-      forklaring(`<p><b>${m.navn}:</b> ${m.tekst}</p>`);
+      forklaring('');
       lavKnapper();
     }
 
@@ -363,7 +339,7 @@ export default {
       const stop = TUR.find((t) => t.fokus === 'ringe');
       flyvTilStop(stop, TUR.indexOf(stop));
       fase(stop.titel, stop.tekst);
-      forklaring(stop.mere);
+      forklaring('');
       lavKnapper();
     }
 
@@ -438,7 +414,6 @@ export default {
       if (visning === 'titan') styring.push({ tekst: 'Under disen (infrarødt)', til: ir, skift: (til) => { ir = til; måneMed('titan').klode.sætIR(til); } });
       opdaterKnapper();
     }
-    forklaring(VISNINGER.saturn.tekst);
     lavKnapper();
 
     // ---------- Hvert billede: kameraet, systemets skala, lys og skygger ----------

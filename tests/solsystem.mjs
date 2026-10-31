@@ -72,10 +72,10 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('vejen i toplinjen: › Jorden', (await s.textContent('#solsystemVej')) === '› Jorden');
   await s.click('#solsystemTræ button[data-sted="månen"]');
   tjek('Månen i træet: kameraet flyver til Månen', (await s.evaluate(() => atomlabTest.solsystem.sted())) === 'månen');
-  const hoved = await s.evaluate(() => ({ navn: solsystemNavn.textContent, under: solsystemUndertitel.textContent, vej: solsystemVej.textContent, om: getComputedStyle(solsystemOm).display !== 'none' && solsystemOm.textContent, tal: getComputedStyle(solsystemTal).display }));
-  tjek('ved Månen: panelet hedder Månen, vejen er › Jorden › Månen, og Jorden står under "Om Jorden" uden tallene', hoved.navn === 'Månen' && hoved.vej === '› Jorden › Månen' && hoved.om === 'Om Jorden' && hoved.tal === 'none', JSON.stringify(hoved));
+  const hoved = await s.evaluate(() => ({ navn: solsystemNavn.textContent, under: solsystemUndertitel.textContent, vej: solsystemVej.textContent, side: atomlabTest.solsystem.side() }));
+  tjek('ved Månen: panelet hedder Månen, vejen er › Jorden › Månen, og siden er Månens egen med Månens tal (U3)', hoved.navn === 'Månen' && hoved.vej === '› Jorden › Månen' && hoved.side.nøgle === 'jorden:månen' && hoved.side.tal.join() === 'Bredde,Afstand,En omgang,Fra fuldmåne til fuldmåne' && hoved.side.sidst === 'Ærligt talt' && !/Danmark/.test(hoved.side.tekst), JSON.stringify(hoved));
   tjek('ved Månen: Månen er markeret i træet', (await træ()).find((p) => p.id === 'månen').valgt);
-  tjek('"Lige nu" (teksten om det, man ser) står i højre panel', await s.evaluate(() => Boolean(solsystemForklaring.closest('.højre-panel')) && /Månen/.test(solsystemForklaring.textContent)));
+  tjek('"Lige nu" står i højre panel og er tom ved Månen (Månens side fortæller om den)', await s.evaluate(() => Boolean(solsystemForklaring.closest('.højre-panel')) && solsystemForklaring.textContent === '' && /bundet rotation/.test(solsystemTekst.textContent)));
   await s.click('#solsystemVej button');
   tjek('vejen: et tryk på "Jorden" flyver tilbage', (await s.evaluate(() => atomlabTest.solsystem.sted())) === 'jorden' && (await s.textContent('#solsystemNavn')) === 'Jorden');
   await s.click('#solsystemTræ button[data-id="aarstider"]');
@@ -138,6 +138,67 @@ for (const [navn, vp, kol] of STØRRELSER) {
   const vindue = await s.evaluate(() => document.getElementById('solsystemVindue').getBoundingClientRect().height);
   tjek(`${navn}: 3D-billedet har plads`, vindue > 150, vindue);
   await s.screenshot({ path: `${UD}/${navn}-solsystem.png` });
+  await s.context().close();
+}
+
+// ---------- Siden i lag (U3): hvert sted i træet har sin egen side ----------
+{
+  const s = await side({ width: 1280, height: 800 });
+  await vis(s, 'solsystem');
+  const S = (f, a) => s.evaluate(f, a);
+  for (const klode of ['jorden', 'mars', 'saturn']) {
+    await S((k) => atomlabTest.solsystem.vælg(k), klode);
+    await s.waitForTimeout(300);
+    // Alle steder i træet har en side (også dem, der kun står, når man er ved stedet over dem)
+    const mangler = await S(async (k) => {
+      const f = (await import(`/js/kosmos/${k === 'jorden' ? 'jordkloden' : k}.js`)).default;
+      const ider = f.træ.grupper.flatMap((g) => [g.id, ...g.punkter.flatMap((p) => [p.id, ...(p.under ?? []).map((u) => u.id)])]).filter(Boolean);
+      return ider.filter((id) => !f.sider?.[id]?.ærligt || !(f.sider[id].tal?.length >= 2 && f.sider[id].tal.length <= 4));
+    }, klode);
+    tjek(`${klode}: alle steder i træet har en side med 2-4 tal og "Ærligt talt"`, mangler.length === 0, JSON.stringify(mangler));
+    const forsøg = await S(() => atomlabTest.solsystem.fænomener);
+    const ider = (await S(() => atomlabTest.solsystem.træ())).filter((p) => p.niveau > 0 && p.id && !p.id.startsWith('stå-') && p.id !== 'tur' && !forsøg.includes(p.id)).map((p) => p.id);
+    const ider2 = klode === 'mars' ? [...ider, 'caldera', 'skraent', 'phobos-mars'] : ider; // det tredje niveau
+    for (const id of ider2) {
+      await S((i) => atomlabTest.solsystem.gåTil(i), id);
+      await s.waitForFunction(() => { const f = atomlabTest.solsystem.fænomen(); f.hop?.(); return !(f.tur?.().flyver ?? f.flyver?.()); }, null, { timeout: 30000, polling: 300 }).catch(() => {});
+      await s.waitForTimeout(500);
+      const sd = await S(() => atomlabTest.solsystem.side());
+      const fase = await S(() => atomlabTest.solsystem.fase());
+      const døde = sd.knapper.filter((k) => !k.findes && !['handling', 'tur'].includes(k.slags));
+      tjek(`${klode} › ${id}: egen side, "Ærligt talt" sidst, ingen "Tryk", knapperne virker, og underteksten står ikke på siden`,
+        sd.nøgle === `${klode}:${id}` && sd.sidst === 'Ærligt talt' && !/Tryk "|i listen/.test(sd.tekst) && !døde.length && (!fase || !sd.tekst.includes(fase.tekst)),
+        JSON.stringify({ nøgle: sd.nøgle, sidst: sd.sidst, døde, fase: fase?.tekst }));
+    }
+  }
+  // Forsøgene og Solen: siden, "Ærligt talt" og knapperne
+  for (const id of ['solen', 'solstorm', 'solensfremtid', 'aarstider', 'formoerkelser']) {
+    await S((i) => atomlabTest.solsystem.vælg(i), id);
+    await s.waitForTimeout(300);
+    // Formørkelsernes kontakt "Uden hældning" kommer først efter trinene (indtil da er knappen i teksten grå)
+    if (id === 'formoerkelser') {
+      tjek('formoerkelser: knappen "Uden hældning" i teksten er grå, før kontakten findes', (await S(() => atomlabTest.solsystem.side().knapper.find((k) => k.mål === 'Uden hældning').slået)));
+      for (let i = 0; i < 12; i++) {
+        const t = await S(() => atomlabTest.solsystem.trin());
+        if (!t || t.nr >= t.ialt - 1) break;
+        await S(() => atomlabTest.solsystem.trykPå('Næste'));
+      }
+    }
+    const sd = await S(() => atomlabTest.solsystem.side());
+    tjek(`${id}: Kort, emner, "Ærligt talt" sidst og knapper, der virker`, sd.kort && sd.emner.length >= 2 && sd.sidst === 'Ærligt talt' && sd.knapper.every((k) => k.findes), JSON.stringify(sd.knapper.filter((k) => !k.findes)));
+  }
+  // Solens fremtid peger på Hvid dværg i Kosmos
+  await S(() => atomlabTest.solsystem.vælg('solensfremtid'));
+  await S(() => document.querySelector('#solsystemTekst [data-gaa="kosmos:hviddvaerg"]').click());
+  await s.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'));
+  tjek('Solens fremtid: "Hvid dværg i Kosmos" åbner Hvid dværg', (await S(() => atomlabTest.kosmos.valgt())) === 'hviddvaerg');
+  // Ordbogen kan pege på et sted (data-gaa="solsystem:mars:olympus")
+  await S(() => { location.hash = '#ordbog'; });
+  await s.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'));
+  await S(() => { const b = document.createElement('button'); b.dataset.gaa = 'solsystem:mars:olympus'; b.id = 'prøveLink'; document.body.append(b); });
+  await S(() => document.getElementById('prøveLink').click());
+  await s.waitForFunction(() => atomlabTest.solsystem.sted?.() === 'olympus', null, { timeout: 15000 }).catch(() => {});
+  tjek('et link til "solsystem:mars:olympus" åbner Mars og flyver til Olympus Mons', (await S(() => atomlabTest.solsystem.valgt())) === 'mars' && (await S(() => atomlabTest.solsystem.sted())) === 'olympus');
   await s.context().close();
 }
 

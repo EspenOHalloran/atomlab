@@ -25,6 +25,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Er en netside eller et værktøj blokeret (fx GitHub-udgivelser til `basisu` i Mars M2), så stop og bed brugeren om adgang, før arbejdet fortsætter med en nødløsning (brugerens svar 24. oktober 2026). Adgang, der åbnes midt i sessionen, virker ikke altid med det samme (GitHub gav stadig 403 i S1). I Mars M3 virkede msss.com først ca. en halv time senere, så prøv igen, før du giver op, og ellers i en ny session.
 - [ ] Hvert tal er regnet efter eller slået op. Udregningen står i en kommentar eller i commit-beskeden.
 - [ ] Kilden er primær eller pålidelig (fagbøger, NIST, IUPAC, NUBASE, NASA, forskningsartikler). Populærvidenskab og "alle siger det" er ikke nok. Se fælderne i afsnit 2.
+- [ ] Litteraturhenvisninger (tidsskrift, bind, sider) er slået op i kilden, ikke skrevet efter hukommelsen (S2).
 - [ ] Citater: præcis ordlyd fra den oprindelige kilde (bog, afsnit, år). Er ordlyden usikker, så skriv det, eller lad citatet være.
 - [ ] Er det spillets eget tal (fx 80 mio. °C eller 6-16 spaltninger), så skriv "i spillet" og det rigtige tal ved siden af.
 - [ ] Brug "ca.", "typisk" eller "de fleste", når virkeligheden har undtagelser.
@@ -32,6 +33,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Fagord forklares med få ord første gang, de bruges i en tekst (fx "en neutrino (en næsten usynlig partikel)", "en alfapartikel (en heliumkerne)"). Læs teksten, som om du ikke kan fysik.
 - [ ] Står der et tal fra spillet (fx "6-16"), så sig også, hvad det tæller ("spaltninger i sekundet i det grønne felt").
 - [ ] Nye fagord kommer i ordbogen (`js/data/ordbog.js`), så de kan trykkes på. Forklaringen er højst 260 tegn.
+- [ ] Flytter en tekst til en anden side eller fil (fx et sted i Solsystemet), så søg efter links til den (Ordbogens `LINKS`, `data-gaa`, `HVORFOR`), og lad dem pege på det sted, teksten står nu (U3).
 - [ ] Undertekster (trin og faser): Pointen står i første sætning, og teksten er under ca. 160 tegn. På tablet og telefon ses kun to linjer, og man trykker sjældent på "Mere". Detaljer hører til i panelet eller "For nørder".
 
 ### C. Ny regel, beregning eller spillogik
@@ -95,6 +97,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
 - [ ] Knapper findes ud fra deres tekst (`trykPå(tekst)` i Kosmos og Solsystemet), ikke deres nummer. Numrene skifter, når knapper flytter eller kommer til (U2).
 - [ ] Vent ikke på en proces med `pgrep -f navn` i en løkke: Løkkens egen kommandolinje indeholder navnet, så den venter for evigt (U2). Start i stedet testen selv i baggrunden (`run_in_background`), og få besked, når den er færdig.
+- [ ] `pkill -f navn` køres i sin egen kommando, ikke i samme kommandolinje som noget, der skal blive ved (den rammer sig selv, S2). Svar fra `fetch` læses færdigt (`await svar.arrayBuffer()`), ellers kan Node 22.23 gå ned.
 - [ ] Efter `hop()` (eller anden spoling af en flyvning) ventes der på, at flyvningen er slut (`!tur().flyver`), før næste flyvning startes. Ellers starter den midt i den gamle (Mars M6b).
 - [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
 - [ ] Ting, der kun står et stykke tid i rigtig tid (fx pillerne), fryses i testen, og testen lader selv tiden løbe ud (`atomlabTest.beskeder.frysPiller` og `spolPiller`). Et nyt forsøg hjælper ikke, når hvert skridt er langsommere end tingens levetid.
@@ -253,6 +256,13 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Moduler, der importerer Three.js, kan ikke testes i Node.** Saturns ringe blev derfor delt i tal (`js/data/ringe.js`) og grafik (`js/solsystem/ringe.js`), ligesom de andre `js/data/`-filer.
 - **Ringe set fra kanten.** Saturn i baggrunden ved Enceladus er rykket tættere på. Så kom kameraet ud af ringenes plan, og ringene blev en tyk, mørk streg foran fontænerne. Rettet ved at dreje ringenes plan, så den går gennem kameraet.
 - **Kort fra USGS (ISIS-etiketter).** `LongitudeDirection = PositiveWest` ændrer kun tallene, ikke billedet (øst er stadig til højre). Men midten kan være forskellig: Enceladus-mosaikken har 0° i midten, Titans kort 180°, og højdekortet over Enceladus har 180° i midten. Læs `CenterLongitude` og `UpperLeftCornerX` i `.lbl`-filen, og rul kortet, så 0° står i midten (ligesom Jordens kort). Så vender siden mod Saturn rigtigt, når +x peger mod Saturn.
+- **Målte data frem for lavede mønstre (S2, Saturns ringe):** Ringene fik τ fra Cassinis okkultation af β Centauri. Vælg okkultationen efter, hvor højt stjernen stod over ringene, og hvor klar den er i ultraviolet (etikettens `HIGHEST_DETECTABLE_OPACITY`, og tæl punkter ved grænsen), ikke efter navnet. Bagfra (modlys) blev ringene meget flottere. Forfra ændrer de tætte ringe sig næsten ikke, når τ er over ca. 1, så fine striber fra et farvebillede gav et mønster, som målingen ikke har. Tjek, om et gammelt "pynte"-lag stadig passer, når de rigtige data kommer.
+- **En litteraturhenvisning skrevet efter hukommelsen var forkert** (S2: "Icarus 206" i stedet for Astronomical Journal 140). Slå henvisninger op i kilden (PDS' `ref.cat`), og skriv kun det, der står dér.
+- **En tekstur med mange fine detaljer langt væk:** Lav mipmaps selv for en `DataTexture` med halve float (`t.mipmaps`, `generateMipmaps = false`). `generateMipmap` kræver, at grafikkortet kan tegne i formatet, og det kan RGBA16F ikke altid.
+- **`pkill -f navn` rammer sin egen kommando**, når navnet står i den samme kommandolinje (S2: `pkill -f "http.server 8765"; … node tests/koer-alle.mjs` stoppede hele testkørslen med kode 144). Stop en proces ud fra dens pid, eller kør `pkill` i sin egen kommando.
+- **Node 22.23's fetch går ned (`assert(!this.paused)` i undici),** når et svar fra Pythons `http.server` ikke læses færdigt. `tests/koer-alle.mjs` spurgte serveren flere gange uden at læse svaret og stoppede, før den kørte en test. Læs altid svaret (`await svar.arrayBuffer()`).
+- **`guide` fejlede én gang i hele samlingen** (S2, 31. oktober 2026, 23 minutter på en travl maskine): "tlf: måleren i 3D-billedet". Den bestod alene, og S2 rørte ikke Stjerneovnen eller Reaktoren. Sker det igen, så log, hvad måleren viser, og om testen venter en fast tid.
+- **En test, der ikke står i testkørerens liste, køres aldrig** (`ordbog` manglede i `ALLE` i `tests/koer-alle.mjs` fra 31. oktober 2026 eller før). Tjek `ls tests/*.mjs` mod `ALLE`, når en ny test laves.
 - **Et ringbillede passer ikke nødvendigvis med de rigtige afstande.** I Solar System Scopes ringbillede er Cassini-delingen for smal. Derfor bruges kun farverne, og de lægges stykke for stykke på de målte grænser (`lav_saturn.py`). Tjek altid et billedes skala mod kendte afstande, før det bruges som data.
 - **Gråtonekort er målinger, ikke farvefotos.** Indlæst som sRGB blev Enceladus mørkegrå (sRGB-afkodningen gjorde det mørkere). Med `NoColorSpace` og en fast faktor blev den hvid, som den er.
 - **`stjerneovn-mus` fejlede én gang uden forklaring** (24. oktober 2026): "rejsen starter første gang" i hele samlingen og 5 fejl, da den blev kørt igen alene. Bagefter bestod den 4 gange (3 alene og 1 sammen med `kosmos`), og ændringen rørte ikke Stjerneovnen. Rejsen skal starte inden for 5 sekunder efter en genindlæsning. Sker det igen, så log hvilke tjek der fejler, og giv rejsen længere tid.
@@ -428,6 +438,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Mål først, så justér.** Jeres indtryk ("lyst") blev først undersøgt med prøvebilleder ved tre tidspunkter (08:30, 12:00 og 16:30). Himlen og jorden er næsten lige lyse, og disen er kraftig. Det er kontrasten, der mangler, mere end lysstyrken. Se `docs/plan-mars.md` under "Stå på Mars: lyset og kvaliteten".
 - **Kør ikke grafikken uden grafikkort for hurtigt.** Fuld grafik i skyen er ca. 1,3 billede i sekundet, og `landskab-lille.mjs` tager minutter. Start den i baggrunden (`nohup … &`) og vent med en overvågning, ikke med `sleep`. Testserveren skal køre på port 8765 (`ADRESSE` i `tests/hjaelp.mjs`).
 - **Billeder af lys kan tages i skyen** (samme shader, samme farver). Hastighed og følelse kan ikke. Skal det måles, så bed om adgang til pc'en først (se samme afsnit).
+- **L1: Mål et foto og billederne med tal** (lysstyrken af himlen, jorden og de mørkeste og lyseste 5 %), ikke kun med øjnene. Det viste to rodårsager: Himlen blev ikke lysere over 30° sol, men jorden gjorde (kl. 12 var jorden lysest), og himmellyset var halvdelen af lyset på jorden ved lav sol, så skyggerne var svage. Pas på målefeltet: "Himlen" øverst i billedet var nogle gange Mount Sharp.
+- **Et værktøj, der tager billeder lige efter en landing, skal vente på landingen.** Ellers overskriver landingen blikket i det første billede (`landskab-lille.mjs`, rettet i L1).
+- **Eksponering, der følger lyset, er gratis** (én værdi i JS pr. billede) og fjerner, at middag er meget lysere end morgen. Gløden kan slås fra med `verden.glød.enabled`, men så skal Solens skær laves i himlens shader.
 
 ### Styringen på billedet (U2, 31. oktober 2026)
 - **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
@@ -435,6 +448,13 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Fælles regel i stedet for at flytte knapper én for én:** Skallen sorterer selv `styring` (handling → bjælken, kontakt og skyder → Styr-boksen). Derfor skulle de 11 fænomener i Kosmos næsten ikke ændres. Kun "↺ Forfra" fik `skjul`, så bjælken ikke fyldes med grå knapper.
 - **Et nyt sted for en knap viser fejl i tilstande, ingen havde set:** "▶ Start flyby" stod pludselig i bjælken, mens man stod på Mars (før lå den i "Prøv selv", hvor den blev skiftet ud). Testen `landskab` fangede det.
 - **Tegn ikoner i små knapper** (SVG) i stedet for tegn som ⏸: Nogle skrifttyper viser ⏸ meget lille, mens ▶ bliver en emoji.
+
+### Siden i lag (U3, 31. oktober 2026)
+- **Tekster, der deles op, skal skrives, ikke flyttes:** Hvert sted fik et nyt Kort, fordi stedets gamle tekst var den samme som underteksten. En test tjekker nu på hvert sted og i hvert fænomen, at underteksten ikke står på siden (`fase()` mod `side().tekst`).
+- **Et link i en ordbog eller tekst skal pege på det sted, ordet står:** Da teksterne om Olympus Mons flyttede fra Mars' side til stedets, pegede Ordbogens "skjoldvulkan" og "caldera" stadig på Mars. Testen `ordbog` læste hele mars.js og så det ikke. Derfor kan `data-gaa` nu pege på et sted (`solsystem:mars:olympus`).
+- **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
+- **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
+- **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
 
 ### Certifikater: "unable to get local issuer certificate" (30. oktober 2026)
 - `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` var ikke blokeret af proxyen (tunnelen svarede 200). Containeren manglede rodcertifikatet "emSign Root CA - G1" (utexas og asu), og dlr.de sender ikke sit mellemcertifikat (GEANT TLS RSA 1).

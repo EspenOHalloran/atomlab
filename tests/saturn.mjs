@@ -3,7 +3,7 @@
 // Himlen er sort (ingen farvede tågeskyer) ved Saturn og i de andre fænomener i vores solsystem.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { readdirSync } from 'node:fs';
-import { ringVed, RINGE, MELLEMRUM } from '../js/data/ringe.js';
+import { ringVed, ringProfil, RINGE, MELLEMRUM } from '../js/data/ringe.js';
 const UD = billedmappe('saturn');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -20,6 +20,16 @@ tjek('ringene ligger i rækkefølge uden overlap', RINGE.every((r, i) => r.ind <
 const otteK = readdirSync(new URL('../billeder/solsystem/', import.meta.url)).filter((f) => f.endsWith('-8k.jpg') && !f.startsWith('mars')).sort();
 tjek('8k-kort til Enceladus, Tethys, Dione og Rhea (ikke Saturn, Mimas og Titan)', otteK.join() === 'dione-8k.jpg,enceladus-8k.jpg,rhea-8k.jpg,tethys-8k.jpg', otteK.join());
 tjek('Cassini-delingen er ca. 4.600 km bred', Math.abs(RINGE.find((r) => r.navn === 'Cassini-delingen').ud - RINGE.find((r) => r.navn === 'Cassini-delingen').ind - 4600) < 50);
+// Tætheden fra Cassinis måling (β Centauri, UVIS 2008, js/data/ringe-tau.js): kanterne og de skarpe træk ligger, hvor de skal
+tjek('8.192 målte punkter fra D-ringen til F-ringen', ringProfil().length === 8192);
+let bMaks = 0, bSum = 0, bN = 0;
+for (let r = 99000; r < 108000; r += 10) { const t = tau(r); bMaks = Math.max(bMaks, t); bSum += t; bN++; }
+tjek('midt i B-ringen er τ over 5 mange steder (i snit over 3)', bMaks > 5 && bSum / bN > 3, [bMaks, bSum / bN]);
+tjek('B-ringens yderkant er skarp ved ca. 117.570 km', tau(117500) > 0.8 && tau(117680) < 0.02, [tau(117500), tau(117680)]);
+tjek('Huygens-mellemrummet er tomt, og Huygens-ringen ved ca. 117.810 km er tæt', tau(117700) < 0.02 && tau(117810) > 0.5, [tau(117700), tau(117810)]);
+tjek('A-ringens inderkant ved ca. 122.170 km', tau(122000) < 0.3 && tau(122350) > 0.5, [tau(122000), tau(122350)]);
+tjek('C-ringen begynder ved ca. 74.490 km', tau(74300) < 0.01 && tau(75000) > 0.03, [tau(74300), tau(75000)]);
+tjek('F-ringen står ved sin middelafstand (ca. 140.200 km), og uden for den er der intet', tau(140200) > 0.1 && tau(140350) === 0 && tau(140050) === 0, [tau(140200), tau(140350)]);
 
 const b = await chromium.launch({ args: ARGS });
 const side = async (adresse) => {
@@ -71,9 +81,10 @@ const side = async (adresse) => {
   tjek('bjælken: "▶ Start flyby", og Styr-boksen: kontakterne Modlys og Navne (stederne står i træet)', JSON.stringify(knapperNu) === JSON.stringify(['▶ Start flyby', 'Modlys', 'Navne']) && JSON.stringify(await s.evaluate(() => atomlabTest.solsystem.styr().map((x) => x.slags))) === '["kontakt","kontakt"]', JSON.stringify(knapperNu));
   const træ = await s.evaluate(() => atomlabTest.solsystem.træ());
   tjek('træet: "▶ Flyby · 9 stop" øverst, så Saturn, Ringene, Måner og alle seks måner', træ.map((p) => p.id).join() === 'tur,saturn,ringe,maaner,mimas,enceladus,tethys,dione,rhea,titan' && træ[0].navn.includes('Flyby · 9 stop') && træ[1].valgt, JSON.stringify(træ.map((p) => p.id)));
-  tjek('Saturn: teksten om skyggerne', /skyggen/.test(await s.textContent('#solsystemForklaring')));
+  tjek('Saturn: teksten om skyggerne', /skygge/.test(await s.textContent('#solsystemTekst')));
   tjek('Saturn: sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
-  tjek('panelet fortæller om alle tre', /Saturn/.test(await s.textContent('#solsystemTekst')) && /Huygens/.test(await s.textContent('#solsystemTekst')));
+  const satSide = await s.evaluate(() => atomlabTest.solsystem.side());
+  tjek('Saturns side handler om Saturn og peger videre til ringene og månerne (de har deres egne sider)', /fladtrykt/.test(satSide.tekst) && !/Huygens|tigerstriber/.test(satSide.tekst) && ['ringe', 'enceladus', 'titan'].every((id) => satSide.knapper.some((k) => k.mål === id)) && satSide.sidst === 'Ærligt talt', JSON.stringify(satSide.bokse));
   await s.screenshot({ path: UD + '/1-saturn.png' });
   // Piletasterne drejer kameraet
   const før = await s.evaluate(() => atomlabTest.solsystem.kamera());
@@ -86,7 +97,7 @@ const side = async (adresse) => {
   const hop = async () => { await s.evaluate(() => atomlabTest.solsystem.fænomen().hop()); await s.waitForTimeout(300); };
   await s.click('#solsystemTræ button[data-sted="maaner"]');
   await hop();
-  tjek('Månerne: teksten om de seks store', /seks store/.test(await s.textContent('#solsystemForklaring')));
+  tjek('Månerne: teksten om de seks store og tallet "Kendte måner"', /seks af Saturns største/.test(await s.textContent('#solsystemTekst')) && (await s.evaluate(() => atomlabTest.solsystem.side().tal[0])) === 'Kendte måner');
   await s.screenshot({ path: UD + '/2-maanerne.png' });
   // Knappen "Navne" (js/solsystem/navne.js): slået fra skjules navnene, men man kan stadig trykke på månerne
   const navne = () => s.evaluate(() => atomlabTest.solsystem.fænomen().navne());
@@ -98,7 +109,7 @@ const side = async (adresse) => {
   let p = await s.evaluate(() => atomlabTest.solsystem.fænomen().månePlads('Dione'));
   await s.mouse.click(p.x, p.y);
   await s.waitForTimeout(400);
-  tjek('et tryk på Dione flyver derhen og viser en kort tekst', /Dione:/.test(await s.textContent('#solsystemForklaring')) && (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'dione', await s.textContent('#solsystemForklaring'));
+  tjek('et tryk på Dione flyver derhen og viser Diones side og underteksten', /Dione/.test(await s.textContent('#solsystemTekst')) && (await s.evaluate(() => atomlabTest.solsystem.fase()?.titel)) === 'Dione' && (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'dione', await s.textContent('#solsystemTekst'));
   await hop();
   await s.click('#solsystemTræ button[data-sted="maaner"]');
   await hop();
@@ -118,12 +129,20 @@ const side = async (adresse) => {
   // Ringene fra træet: som stoppet på flybyen (kameraet glider udad over ringene)
   await s.click('#solsystemTræ button[data-sted="ringe"]');
   await hop();
-  tjek('Ringene i træet: kameraet flyver hen over ringene, og panelet og underteksten viser dem', (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'ringe' && (await s.textContent('#solsystemNavn')) === 'Ringene' && /Cassini-delingen/.test(await s.textContent('#solsystemForklaring')));
+  tjek('Ringene i træet: kameraet flyver hen over ringene, og panelet og underteksten viser dem', (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'ringe' && (await s.textContent('#solsystemNavn')) === 'Ringene' && /Cassini-delingen/.test(await s.textContent('#solsystemTekst')));
   for (const [navn, ord] of [['Enceladus', /tigerstriber/], ['Titan', /dis/]]) {
     await s.click(`#solsystemTræ button[data-sted="${navn.toLowerCase()}"]`);
     await hop();
-    tjek(`${navn}: teksten skifter`, ord.test(await s.textContent('#solsystemForklaring')));
+    tjek(`${navn}: teksten skifter`, ord.test(await s.textContent('#solsystemTekst')));
     if (navn === 'Titan') tjek('Titan: knappen "Under disen"', (await knapper()).some((k) => k.startsWith('Under disen')));
+    if (navn === 'Titan') {
+      // Knappen i teksten slår kontakten til, og emnet om overfladen folder sig ud
+      await s.evaluate(() => { for (const d of document.querySelectorAll('#solsystemTekst details')) d.open = false; });
+      await s.evaluate(() => { const e = [...document.querySelectorAll('#solsystemTekst details.side-emne')].find((d) => d.dataset.kontakt === 'Under disen'); e.open = true; });
+      await s.click('#solsystemTekst .side-kontakt[data-kontakt="Under disen"]');
+      tjek('Titan: knappen "Under disen" i teksten slår kontakten til', (await s.evaluate(() => atomlabTest.solsystem.styr().find((x) => x.navn.startsWith('Under disen')).til)));
+      await s.click('#solsystemTekst .side-kontakt[data-kontakt="Under disen"]');
+    }
     await s.click('#solsystemStyr .kontakt:has-text("Modlys")');
     await s.waitForTimeout(800);
     await s.screenshot({ path: `${UD}/${navn.toLowerCase()}-modlys.png` });

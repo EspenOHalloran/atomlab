@@ -406,7 +406,7 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
 | Nr. | Del | Hvorfor her |
 |---|---|---|
 | 1 | **L1: lyset i Stå på Mars, den billige del** | Mest synligt for prisen, og M8b bruger den samme shader, så det justeres kun én gang. Rører `landskab.js` og måske `scene3d.js`, ikke U3's filer, så den kan laves nu. |
-| 2 | **Saturn S2** (ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Udfylder ventetiden på U3: Data og shader rører ikke U3's filer (kun nørd-teksten i `saturn.js` kan give en lille konflikt). Shaderen læser allerede τ fra et billede på én linje (`ringTekstur`), så kun kilden og antallet af punkter skiftes. `pds-rings.seti.org` svarer (curl 31. oktober 2026, også `CORSS_8001` og `COUVIS_8001`). |
+| 2 | ✅ **Saturn S2** (lavet 31. oktober 2026, ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Udfylder ventetiden på U3: Data og shader rører ikke U3's filer (kun nørd-teksten i `saturn.js` kan give en lille konflikt). Shaderen læser allerede τ fra et billede på én linje (`ringTekstur`), så kun kilden og antallet af punkter skiftes. `pds-rings.seti.org` svarer (curl 31. oktober 2026, også `CORSS_8001` og `COUVIS_8001`). |
 | 3 | **M8b: Jezero** (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
 | 4 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
 | 5 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
@@ -454,14 +454,14 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 - **I laver jeres vurdering til sidst**, ikke efter hvert skridt. Hvert skridt skriver derfor sin egen liste "Ikke afprøvet" (hvad I skal kigge efter på pc og tablet), og listerne samles til jeres runde til sidst. Det betyder, at lyset i L1 justeres efter Opus' billeder og NASA's foto, ikke efter jeres øjne. Det kan kræve en rettelse efter jeres runde.
 - **Nye sessioner, hvor det giver mening**, for at spare tokens, men ikke på bekostning af kvaliteten. Hvert skridt slutter med at skrive prompten til det næste skridt ind under "Prompter til de næste skridt" nedenfor. I starter den nye session med prompten og siger go.
 - **Sessionerne:** L1, S2, M8b, M8c (begge dele i én session, med go imellem), M7b-pol, U4, L2 (lokal på jeres pc) og planen for trin 2 får hver sin session.
-- **DESIGN.md og `docs/plan-ux.md` røres ikke, før U3 er merget.** Indtil da skrives status her i filen. Den første session efter U3 skriver status ind i "Lige nu" i DESIGN.md.
+- **DESIGN.md og `docs/plan-ux.md` røres ikke, før U3 er merget.** (U3 blev merget 31. oktober 2026.) Indtil da skrives status her i filen. Den første session efter U3 skriver status ind i "Lige nu" i DESIGN.md.
 
 ### Åbne spørgsmål
 1. Må Curiositys model gøres mindre med `gltf-transform` (en npm-pakke, der kun køres én gang som værktøj)? Spørges ved M8c del 2.
 2. L2: Vil I installere Claude Code på pc'en (`irm https://claude.ai/install.ps1 | iex` i PowerShell) eller bruge Claude Code i Claude-appen? Spørges, når vi når dertil.
 
 ### Prompter til de næste skridt
-**L1 (skrevet 31. oktober 2026):**
+**L1 (skrevet 31. oktober 2026, brugt: se "Status efter L1" nedenfor):**
 > Lav L1: lyset i Stå på Mars, den billige del. Læs CLAUDE.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (især 3 og 5) og "Stå på Mars: lyset og kvaliteten". Tjek først, om U3 (`ccr-1dbfe8b3-phtbvs`) er merget. Er den ikke, så rør ikke DESIGN.md og `docs/plan-ux.md`.
 >
 > **Mål:** mere kontrast og relief, når man står på Mars. I dag er himmel og jord næsten lige lyse, og disen er kraftig. Ingen ændring må koste hastighed: kun konstanter og uniforms i `js/solsystem/landskab.js` (`sollys`, `himmellys`, himlen, disen) og starttiden i `LANDSKAB` i `js/kosmos/mars.js`. Eksponering og glød ændres kun, mens man står, og sættes tilbage, når man letter. Behold ACES, for et skift af tonemapping oversætter shaderne igen. Tjek, om Solens skær på himlen kommer fra gløden, før gløden dæmpes eller slås fra.
@@ -471,6 +471,54 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 > **Billeder:** Skyen har intet grafikkort (ca. 1,3 billede i sekundet). Brug `tests/vaerktoejer/landskab-lille.mjs` med få billeder (fx kl. 7:30, 12 og 17 mod Mount Sharp, før og efter). Start den i baggrunden, og vent med en overvågning (se erfaringer.md under "Lyset i Stå på Mars"). Mål billeder i sekundet i testbrowseren før og efter, så intet er blevet langsommere.
 >
 > **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv status under "Status efter L1" her i filen med listen "Ikke afprøvet" til jeres runde til sidst. Skriv så prompten til S2 under "Prompter til de næste skridt" (Saturns ringe fra Cassinis målinger, se `docs/plan-saturn-kvalitet.md` under S2 og afsnit 2 her). Model: Opus. Effort: medium (I sætter den selv).
+
+**S2 (skrevet 31. oktober 2026 efter L1, brugt: se "Status efter S2" i `docs/plan-saturn-kvalitet.md`):**
+> Lav S2: Saturns ringe fra Cassinis målinger. Læs CLAUDE.md, `docs/erfaringer.md`, `docs/plan-saturn-kvalitet.md` under "S2" og i `docs/plan-mars.md` "Plan for resten af Mars" (afsnit 2 og 5). U3 er merget, så status skrives i "Lige nu" i DESIGN.md.
+>
+> **Først:** Tjek med `curl`, at `pds-rings.seti.org` kan åbnes (også `CORSS_8001` og `COUVIS_8001`). Er den blokeret, så stop og bed om adgang. Find en stjerneokkultation (UVIS eller VIMS) eller radiookkultationen (RSS), der dækker hele ringsystemet fra ca. 66.900 til 141.000 km, og sig kort, hvilken du vælger og hvorfor, før du bygger.
+>
+> **Mål:** τ langs radius som en tekstur (fx 8.192 punkter, ca. 9 km pr. punkt) i stedet for de ringe, `ringTekstur` i `js/solsystem/ringe.js` laver i dag. Shaderen læser allerede τ fra et billede på én linje, så kun kilden og antallet af punkter skiftes. Grænserne i `js/data/ringe.js` og tjekkene i `tests/saturn.mjs` skal stadig passe (Cassini-delingen ca. 4.600 km bred, Encke-mellemrummet tomt). Lav dataen med et lille værktøj i `billeder/solsystem/` (Python er fint), og skriv kilden og licensen i `billeder/solsystem/KILDER.md`.
+>
+> **Tekster:** Ret nørd-teksten om ringene, så den siger, hvor tallene kommer fra, og faktatjek med `/faktatjek`.
+>
+> **Billeder:** Skyen har intet grafikkort. Tag få billeder med `node tests/vaerktoejer/saturn.mjs` i baggrunden, og vent med en overvågning. Tjek ringene tæt på ("Hen over ringene" på flybyen), i modlys og langt væk.
+>
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til M8b under "Prompter til de næste skridt" her i filen (Jezero, se afsnit 2 og 4 her og "Plan for M8"). Model: Opus. Effort: høj (I sætter den selv).
+
+**M8b (skrevet 31. oktober 2026 efter S2):**
+> Lav M8b: Stå på Mars ved Jezero. Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 1-5), "Plan for M8" (stederne J1 og J2, dataene, overgangen) og "Status efter M8a" og "Status efter L1". U3 og S2 er merget.
+>
+> **Først:** Tjek med `curl`, at `planetarymaps.usgs.gov` og `asc-pds-services.s3.us-west-2.amazonaws.com` kan åbnes, og at rasterio kan læse et lille vindue fra Mars 2020's landingskort (`mosaic/mars2020_trn/HiRISE/JEZ_hirise_soc_006_DTM_…_1m_….tif` og ortofotoet med 25 cm) og CTX-kortene ved Jezero (5 m foto, 20 m højder). Er noget blokeret, så stop og bed om adgang. Tjek også, om mellemlaget (16 m over ca. 32 km, i meter fra kraterets nulpunkt) kan bruges som `detalje` i `LOKALE` ved Gale- og Jezero-stoppene (bredde og længde), før det loves (resten af M7b, afsnit 1).
+>
+> **Mål:** de to steder ved Jezero fra "Plan for M8": J2 Randens inderside (18,4695° N, 77,2931° Ø, udsigten over deltaet) og J1 Landingsstedet (18,4446° N, 77,4509° Ø, deltaets front mod vest), med samme teknik som Gale (`lav_landskab.py`, `js/solsystem/landskab.js`, `LANDSKAB` i `js/kosmos/mars.js`, "🧍 Stå på Mars" ved Jezero-stoppet og stederne i træet under Jezero). Brug L1's lys uændret. Lav tal og tekster til stedernes sider (U3: `js/data/sider/mars.js`, 2-4 tal) og faktatjek med `/faktatjek` (Perseverances plads og tal med dato, deltaet, Cheyava Falls). Mål billeder i sekundet som i M8a (pc og tablet på højkant, én ad gangen).
+>
+> **Billeder:** Skyen har intet grafikkort. Tag få, små billeder i baggrunden (`tests/vaerktoejer/landskab-lille.mjs`), og sammenlign med NASA's panoramaer fra landingsstedet (PIA24422, PIA24264) som facit.
+>
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til M8c del 1 (rovernes panoramaer) under "Prompter til de næste skridt" her i filen. Model: Opus. Effort: høj (I sætter den selv).
+
+## Status efter L1 (31. oktober 2026): lyset i Stå på Mars, den billige del
+**Facit:** NASA's panorama PIA20332 (hentet fra `assets.science.nasa.gov`, 29.163 × 6.702 pixel, kun brugt som sammenligning, ikke i programmet). Målt i fotoet (sRGB 0-255): himlen ved horisonten ca. 230, jorden ca. 100, de mørkeste 5 % af jorden 15-30. Fotoet er hvidbalanceret (himlen er blågrå), så farverne er ikke taget derfra, kun forholdet mellem lys og mørkt.
+
+**Rodårsagerne (målt i billederne før):**
+1. **Himlen blev ikke lysere, når Solen steg over 30°, men det gjorde jorden.** Kl. 12 var jorden lysere end himlen øverst i billedet (153 mod 147), og på fotoet er horisonten det lyseste.
+2. **For meget himmellys i skyggerne.** Ved lav sol kom omtrent halvdelen af lyset på jorden fra himlen, så skyggerne kun var ca. 3 gange mørkere end det belyste. Derfor var relieffet væk.
+3. **Gløden** gav Solens store skær. Det stod ikke i himlens shader (kun en strålekrans på ca. 1°).
+
+**Ændret (kun konstanter, ét led i himlens shader og eksponeringen, intet koster mere pr. pixel):**
+- `SOLLYS` 2,4 → 2,2 og `HIMMELLYS` 0,55 → 0,18 (`js/solsystem/landskab.js`).
+- Himlen: Lysstyrken følger Solen helt op til zenit (`HIMMEL_STYRKE` 1,5), og den er mørkere og mere mættet opad. `TAU` er uændret (0,4), så disen er fysisk den samme, og "Ærligt talt" ("en enkel model") passer stadig. Ingen ny tekst, så intet faktatjek.
+- **Mens man står:** Gløden er slået fra (det sparer et trin i efterbehandlingen), og Solens skær står i himlens shader. Eksponeringen tilpasser sig delvis lyset på jorden (`eksponering(solY)`, 0,85 ved Solen 22°, mellem 0,55 og 1,5), som et kamera eller øjet. Tonemappingen er stadig ACES. Begge dele sættes tilbage, når man letter eller skifter skærm (`forladLandskab`, tjekket i testen `landskab`).
+- Starttiden: kl. 07:30 (Solen 22°) begge steder, før 08:30 og 09:00.
+- `tests/vaerktoejer/landskab-lille.mjs` venter nu, til landingen er færdig. Før blev blikket i det første billede overskrevet af landingen.
+
+**Målt efter (samme billeder, mod Mount Sharp):** Himlen ved horisonten er lysere end jorden på alle tidspunkter, også kl. 12 (set i billederne, for målefeltet ramte også Mount Sharp), og jorden kl. 17 går fra 42 til 134 (de mørkeste og lyseste 5 %, før 56 til 128). Solnedgangen kl. 17:30: en lille skarp skive med et blåligt skær omkring, og efter solnedgang den blå glød. Billeder i sekundet i testbrowseren uden grafikkort: 0,37 før og 0,38-0,49 efter (ikke langsommere).
+
+**Ikke afprøvet (til jeres runde til sidst, på pc og tablet):**
+1. Er det for mørkt nu? Lyset er justeret efter tal og NASA's foto, ikke efter jeres øjne. Er det for mørkt eller for kontrastrigt, rettes `EKSPONERING`, `SOLLYS` eller `HIMMELLYS` (ét tal hver).
+2. Kør dagen med ▶: Føles det naturligt, at billedet bliver lidt mørkere ved middag og lysere ved morgen og aften (eksponeringen tilpasser sig)? Pumper det mærkbart?
+3. Solen uden glød: Er den for lille eller for svag på tabletten? Skæret omkring den står nu i himlens shader.
+4. Forgrunden er stadig ret flad tæt på. Det skyldes mest højdekortet (reelt 2-3 m), ikke lyset. Det er L2 (ambient occlusion).
+5. Kører det mindst lige så glat som før på tabletten (gløden er slået fra, mens man står)?
 
 ## Stå på Mars: lyset og kvaliteten (31. oktober 2026, fund og muligheder, intet er ændret endnu)
 **Anledning:** Jeres iagttagelse: "Det ser ret lyst ud, når man står der." Der er kun læst kode og taget prøvebilleder. Intet er justeret, og der er ikke målt på rigtigt grafikkort.

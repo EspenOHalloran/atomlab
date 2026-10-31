@@ -2,6 +2,7 @@
 // En sky af neutronrigt stof bliver slynget ud, og i den bliver der lavet guld, platin og uran.
 
 import * as THREE from 'three';
+import { gå } from '../sideknap.js';
 import { glød, prikSky, hale, ringPulje, KVALITET } from './faelles.js';
 
 const A0 = 6; // afstanden mellem stjernerne i starten
@@ -22,16 +23,30 @@ export default {
     ['Guld lavet', 'flere gange Jordens vægt'],
     ['Gammaglimtet kom', '1,7 s efter tyngdebølgen'],
   ],
-  kort: `
-    <p>En <b>kilonova</b> sker, når to neutronstjerner støder sammen. De har kredset om hinanden i millioner eller milliarder af år og er kommet tættere og tættere på. Til sidst drejer de rundt hundredvis af gange i sekundet og smelter sammen med et kæmpe brag.</p>
-    <p>Ved sammenstødet bliver en sky af stof fyldt med neutroner slynget ud. Atomkernerne i skyen fanger neutronerne og <b>henfalder</b> bagefter til tunge grundstoffer: <b>guld</b>, platin, sølv, jod og uran.</p>
-    <p>Meget af guldet på Jorden er lavet sådan, længe før Jorden fandtes. Måske også guldet i en ring, du har set.</p>`,
-  nørd: `
-    <p><b>17. august 2017</b> målte LIGO og Virgo tyngdebølger fra to neutronstjerner, der stødte sammen 130 millioner lysår væk. 1,7 sekund senere så en satellit et kort glimt af gammastråling fra samme sted. Bagefter kiggede omkring 70 teleskoper verden over på kilonovaen. Det var første gang, man både "hørte" tyngdebølger og så lys fra den samme begivenhed.</p>
-    <p><b>r-processen</b> ("r" for <i>rapid</i>, hurtig): Kernerne fanger neutroner hurtigere, end de når at henfalde. Når neutronerne slipper op, henfalder de neutronrige kerner med betahenfald igen og igen (en neutron bliver til en proton), indtil de er stabile. Det er det samme betahenfald, som du kan se i Atomværkstedet.</p>
-    <p><b>Farven:</b> Først lyser skyen blåt. Efter nogle dage bliver den rød, fordi tunge grundstoffer som europium og neodym holder på det blå lys. Netop den farve afslørede, at der var lavet tunge grundstoffer.</p>
-    <p><b>Navnet</b> kommer af, at den lyser ca. 1000 gange stærkere end en almindelig nova.</p>
-    <p><b>Ærligt talt:</b> Neutronstjernerne er kun 20 km brede, og de sidste omgange tager under et sekund. Her er det sat ned i fart. Man er ikke sikker på, om resten blev en tung neutronstjerne eller et sort hul.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'En kilonova sker, når to neutronstjerner støder sammen. Meget af guldet på Jorden er lavet sådan, længe før Jorden fandtes.',
+    emner: [
+      {
+        titel: 'Hvordan ender de med at støde sammen?',
+        tekst: '<p>De to neutronstjerner har kredset om hinanden i millioner eller milliarder af år og er kommet tættere og tættere på. Til sidst drejer de rundt hundredvis af gange i sekundet og smelter sammen med et kæmpe brag.</p>',
+      },
+      {
+        titel: 'Hvordan bliver der lavet guld?',
+        tekst: '<p>Ved sammenstødet bliver en sky af stof fyldt med neutroner slynget ud. Atomkernerne i skyen fanger neutronerne og henfalder bagefter til tunge grundstoffer: guld, platin, sølv, jod og uran. Måske også guldet i en ring, du har set.</p>',
+      },
+      {
+        titel: 'Har nogen set det?',
+        tekst: '<p>Ja. 17. august 2017 målte LIGO og Virgo tyngdebølger fra to neutronstjerner, der stødte sammen 130 millioner lysår væk. 1,7 sekund senere så en satellit et kort glimt af gammastråling fra samme sted. Bagefter kiggede omkring 70 teleskoper verden over på kilonovaen. Det var første gang, man både "hørte" tyngdebølger og så lys fra den samme begivenhed.</p>',
+      },
+    ],
+    videre: [gå('kosmos:tyngdebolger', 'Tyngdebølger'), gå('kosmos:pulsar', 'Pulsar')],
+    nørd: `
+      <p><b>r-processen</b> ("r" for <i>rapid</i>, hurtig): Kernerne fanger neutroner hurtigere, end de når at henfalde. Når neutronerne slipper op, henfalder de neutronrige kerner med betahenfald igen og igen (en neutron bliver til en proton), indtil de er stabile. Det er det samme betahenfald, som du kan se i Atomværkstedet.</p>
+      <p><b>Farven:</b> Først lyser skyen blåt. Efter nogle dage bliver den rød, fordi tunge grundstoffer som europium og neodym holder på det blå lys. Netop den farve afslørede, at der var lavet tunge grundstoffer.</p>
+      <p><b>Navnet</b> kommer af, at den lyser ca. 1000 gange stærkere end en almindelig nova.</p>`,
+    ærligt: '<p>Neutronstjernerne er kun 20 km brede, og de sidste omgange tager under et sekund. Her er det sat ned i fart. Man er ikke sikker på, om resten blev en tung neutronstjerne eller et sort hul.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera }) {
     const stjerner = [0, 1].map(() => {

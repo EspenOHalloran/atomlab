@@ -32,9 +32,12 @@ for (const [id, l] of Object.entries(LINKS)) {
   if (l.hvorfor && !(HVORFOR[l.hvorfor] && har(HVORFOR[l.hvorfor].spørgsmål + HVORFOR[l.hvorfor].svar + (HVORFOR[l.hvorfor].nørd ?? '')))) forkerte.push(`${id} → ${l.hvorfor}`);
   if (l.skærm && !har(sektion(l.skærm[0]) + html.slice(html.indexOf(`aria-label="Hjælp til`)))) forkerte.push(`${id} → #${l.skærm[0]}`);
   if (l.gaa) {
-    const fil = new URL(`../js/kosmos/${l.gaa[0].split(':')[1]}.js`, import.meta.url);
+    // Teksten står i fænomenets fil eller (Mars, Saturn og Jorden) i js/data/sider/
+    const navn = l.gaa[0].split(':')[1];
     let tekst = '';
-    try { tekst = readFileSync(fil, 'utf8'); } catch { /* mangler */ }
+    for (const sti of [`../js/kosmos/${navn}.js`, `../js/data/sider/${navn === 'jordkloden' ? 'jorden' : navn}.js`]) {
+      try { tekst += readFileSync(new URL(sti, import.meta.url), 'utf8'); } catch { /* mangler */ }
+    }
     if (!har(tekst)) forkerte.push(`${id} → ${l.gaa[0]}`);
   }
 }

@@ -88,13 +88,21 @@ RING_IND, RING_UD, N = 66900, 141000, 2048
 km = RING_IND + (np.arange(N) + 0.5) / N * (RING_UD - RING_IND)
 px = np.interp(km, ANKER_KM, ANKER_PX)
 rgb = np.stack([np.interp(px, np.arange(len(farve)), farve[:, i]) for i in range(3)], axis=1)
-# Kun farvetonen og de fine striber bruges. Lysstyrken kommer fra tætheden i shaderen.
+# Kun farvetonen bruges. Lysstyrken og de tynde ringe kommer fra Cassinis måling af tætheden (js/data/ringe.js,
+# lav_ringe.py). Billedets egne striber passer ikke med de målte, så tonen glattes inden for hver ring (S2, oktober 2026).
 lys = rgb.mean(axis=1, keepdims=True)
-glat = np.convolve(lys[:, 0], np.ones(41) / 41, mode='same')[:, None]
 tone = 0.5 + 0.5 * rgb / np.maximum(lys, 1e-3)  # kun halvdelen af farvetonen, så ringene ikke bliver for farvede
-striber = np.clip(lys / np.maximum(glat, 1e-3), 0.6, 1.4)
 tone[km < ANKER_KM[1]] = 0.8 + 0.2 * tone[km < ANKER_KM[1]]  # C-ringen er blålig i billedet, men gråbrun i virkeligheden
-ud_rgb = np.clip(tone * striber * 0.62, 0, 1)
+GLAT = 61  # punkter (ca. 2.200 km)
+for a, b in zip([0] + ANKER_KM, ANKER_KM + [RING_UD]):
+    m = (km >= a) & (km < b)
+    w = min(GLAT, m.sum() - 1 + m.sum() % 2)  # ulige og ikke bredere end ringen (F-ringen er smal)
+    if w < 3:
+        continue
+    vægt = np.convolve(np.ones(m.sum()), np.ones(w), mode='same')
+    for i in range(3):
+        tone[m, i] = np.convolve(tone[m, i], np.ones(w), mode='same') / vægt
+ud_rgb = np.clip(tone * 0.62, 0, 1)
 ud_rgb[km < ANKER_KM[0]] = ud_rgb[km >= ANKER_KM[0]][0]  # D-ringen findes ikke i billedet
 ud_rgb[km > ANKER_KM[4]] = 0.55  # ringbilledets yderkant er blålig, så F-ringen er grå
 Image.fromarray(np.round(ud_rgb[None, :, :] * 255).astype(np.uint8), 'RGB').save(os.path.join(ud, 'saturn-ringe.png'), optimize=True)

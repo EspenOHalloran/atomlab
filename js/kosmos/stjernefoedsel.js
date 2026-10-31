@@ -2,6 +2,7 @@
 // Midten bliver varmere og varmere, og ved nok varme tænder fusionen. Er skyen for lille, bliver det kun en brun dværg.
 
 import * as THREE from 'three';
+import { gå } from '../sideknap.js';
 import { stjerne, glød, prikSky, ryd, KVALITET } from './faelles.js';
 
 const SKY_R = 9; // skyens radius ved start
@@ -42,13 +43,12 @@ const SLAGS = {
   },
   kæmpe: {
     navn: 'En blå kæmpestjerne', r: 1.45, lys: '#e8f0ff', mørk: '#6f8cff', glød: new THREE.Color(1.3, 1.7, 3.0), styrke: 2,
-    tekst: 'Fusionen tænder i en kæmpestjerne. Den lyser tusinder til hundredtusinder af gange stærkere end Solen, men lever kun nogle få til nogle titals millioner år og ender som regel som en supernova. Prøv Supernova i listen.',
+    tekst: 'Fusionen tænder i en kæmpestjerne. Den lyser tusinder til hundredtusinder af gange stærkere end Solen, men lever kun nogle få til nogle titals millioner år og ender som regel som en supernova..',
   },
 };
 
 export default {
   id: 'stjernefoedsel',
-  hvorfor: ['stjerner'],
   navn: 'Ny stjerne',
   ikon: '⭐',
   undertitel: 'En stjerne bliver født i en sky af gas',
@@ -60,18 +60,36 @@ export default {
     ['Fusionen tænder ved', 'ca. 10 mio. °C (i en stjerne som Solen)'],
     ['Den mindste stjerne vejer', 'ca. 8 % af Solen'],
   ],
-  kort: `
-    <p>Stjerner bliver født i kæmpe skyer af gas og støv. Et kendt eksempel er Orion-tågen, som man kan se som en lille tåget plet i Orions sværd, og tydeligere med en kikkert. Skyerne består mest af hydrogen og helium fra Big Bang.</p>
-    <p>Et sted i skyen er gassen lidt tættere. Tyngdekraften trækker den sammen, og jo mere den falder sammen, jo hurtigere drejer den, ligesom en skøjteløber, der trækker armene ind. Gassen bliver til en flad, roterende skive med en tæt klump i midten.</p>
-    <p>Når gassen falder ind, bliver den varmere. For en stjerne som Solen begynder hydrogen at smelte sammen til helium, når midten når omkring 10 millioner grader. Fusionen tænder, og en stjerne er født. Rundt om den kan resten af skiven blive til planeter. Sådan blev Solen og Jorden til for ca. 4,6 milliarder år siden.</p>
-    <p>Prøv at skrue på, hvor meget gas der samles i midten (stjernens masse). Er det for lidt, bliver det kun en brun dværg.</p>`,
-  nørd: `
-    <p><b>Piruetteffekten:</b> Skyen drejer en lille smule fra start. Når den trækker sig sammen, drejer den hurtigere, fordi drejningen (fysikere siger impulsmomentet) bliver bevaret. Derfor bliver den flad: Langs aksen kan gassen falde frit ind, men ude til siden holder drejningen den ude.</p>
-    <p><b>Jetstråler:</b> Unge stjerner skyder ofte to smalle stråler af gas ud fra polerne med hundredvis af kilometer i sekundet. Strålerne fjerner noget af drejningen, så mere gas kan falde ind på stjernen.</p>
-    <p><b>Hvor kommer varmen fra?</b> Når gassen falder ind, bliver farten til varme. Den unge stjerne lyser derfor allerede, før fusionen tænder. Det tager nogle titals millioner år, før en stjerne som Solen er helt færdig og brænder hydrogen stabilt (astronomer siger "brænder", men det er fusion, ikke ild).</p>
-    <p><b>Små og store stjerner:</b> Små stjerner er tættere i midten og klarer sig med lavere temperatur, ned til ca. 3-4 mio. °C. Under ca. 8 % af Solens masse rækker det ikke, og så bliver det en brun dværg. De største stjerner vejer over 100 gange så meget som Solen. De lyser op til millioner af gange stærkere og lever kun nogle få millioner år. Små røde dværge kan lyse i billioner af år.</p>
-    <p><b>Vi er lavet af stjernestof:</b> Skyerne indeholder også lidt støv og tungere grundstoffer fra tidligere stjerner, der døde: Nogle eksploderede, andre blæste deres ydre lag ud. Det var dem, der blev til Jorden, og til dig.</p>
-    <p><b>Ærligt talt:</b> Sammenfaldet tager ca. 100.000 år og hele fødslen nogle titals millioner år, men her tager det et kvart minut. En rigtig sky er mange lysår bred, og stjernen i midten er en bitte prik. Temperaturerne i panelet er omtrentlige tal fra modeller af stjerner.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Stjerner bliver født i kæmpe skyer af gas og støv, mest hydrogen og helium fra Big Bang. Skub på stjernens masse under Styr, og se, hvad der bliver født.',
+    emner: [
+      {
+        titel: 'Hvor kan man se det?',
+        tekst: '<p>Et kendt eksempel er Orion-tågen, som man kan se som en lille tåget plet i Orions sværd, og tydeligere med en kikkert.</p>',
+      },
+      {
+        titel: 'Hvorfor bliver skyen til en flad skive?',
+        tekst: '<p>Et sted i skyen er gassen lidt tættere. Tyngdekraften trækker den sammen, og jo mere den falder sammen, jo hurtigere drejer den, ligesom en skøjteløber, der trækker armene ind. Gassen bliver til en flad, roterende skive med en tæt klump i midten.</p>',
+      },
+      {
+        titel: 'Hvornår er stjernen født?', hvorfor: ['stjerner'],
+        tekst: '<p>Når gassen falder ind, bliver den varmere. For en stjerne som Solen begynder hydrogen at smelte sammen til helium, når midten når omkring 10 millioner grader. Fusionen tænder, og en stjerne er født. Rundt om den kan resten af skiven blive til planeter. Sådan blev Solen og Jorden til for ca. 4,6 milliarder år siden.</p>',
+      },
+      {
+        titel: 'Hvad sker der, hvis der er for lidt gas?',
+        tekst: '<p>Under ca. 8 % af Solens masse bliver midten aldrig varm nok til fusion. Så bliver det kun en brun dværg.</p>',
+      },
+    ],
+    videre: [gå('kosmos:bigbang', 'Big Bang'), gå('kosmos:supernova', 'Supernova'), gå('solsystem:solensfremtid', 'Solens fremtid')],
+    nørd: `
+      <p><b>Piruetteffekten:</b> Skyen drejer en lille smule fra start. Når den trækker sig sammen, drejer den hurtigere, fordi drejningen (fysikere siger impulsmomentet) bliver bevaret. Derfor bliver den flad: Langs aksen kan gassen falde frit ind, men ude til siden holder drejningen den ude.</p>
+      <p><b>Jetstråler:</b> Unge stjerner skyder ofte to smalle stråler af gas ud fra polerne med hundredvis af kilometer i sekundet. Strålerne fjerner noget af drejningen, så mere gas kan falde ind på stjernen.</p>
+      <p><b>Hvor kommer varmen fra?</b> Når gassen falder ind, bliver farten til varme. Den unge stjerne lyser derfor allerede, før fusionen tænder. Det tager nogle titals millioner år, før en stjerne som Solen er helt færdig og brænder hydrogen stabilt (astronomer siger "brænder", men det er fusion, ikke ild).</p>
+      <p><b>Små og store stjerner:</b> Små stjerner er tættere i midten og klarer sig med lavere temperatur, ned til ca. 3-4 mio. °C. De største stjerner vejer over 100 gange så meget som Solen. De lyser op til millioner af gange stærkere og lever kun nogle få millioner år. Små røde dværge kan lyse i billioner af år.</p>
+      <p><b>Vi er lavet af stjernestof:</b> Skyerne indeholder også lidt støv og tungere grundstoffer fra tidligere stjerner, der døde: Nogle eksploderede, andre blæste deres ydre lag ud. Det var dem, der blev til Jorden, og til dig.</p>`,
+    ærligt: '<p>Sammenfaldet tager ca. 100.000 år og hele fødslen nogle titals millioner år, men her tager det et kvart minut. En rigtig sky er mange lysår bred, og stjernen i midten er en bitte prik. Temperaturerne i panelet er omtrentlige tal fra modeller af stjerner.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera, opdaterKnapper, forklaring }) {
     let masseNr = 5; // 1 sol

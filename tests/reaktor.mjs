@@ -88,19 +88,17 @@ const efterVis = await page.evaluate(() => {
 });
 console.log('      Vis mig hele vejen:', JSON.stringify(efterVis), Math.round((Date.now() - t0) / 1000), 's');
 tjek('Vis mig: dør ikke ud, og reaktoren kører som regel videre bagefter (100 forsøg)', efterVis.døde === 0 && efterVis.iStå <= 6, JSON.stringify(efterVis));
-// Kosmos har også knapper med klassen del-knap ("Kort fortalt" og "For nørder"). De må ikke ændre Reaktoren.
+// En CSS-klasse på flere skærme (fx .del-knap) må ikke ændre Reaktoren: Et tryk i Kosmos' panel lader Reaktoren være
 await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
-await page.click('[data-kosmos-fane="nørd"]');
+await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary');
 await page.evaluate(() => { location.hash = '#reaktor'; });
 await page.waitForTimeout(1500);
 const del = await page.evaluate(() => ({
   valgt: [...document.querySelectorAll('#reaktor .del-knap.valgt')].map((k) => k.dataset.del),
   synlige: [...document.querySelectorAll('[data-reaktor-del]')].filter((e) => !e.classList.contains('skjult')).length,
-  nørdValgt: document.querySelector('[data-kosmos-fane="nørd"]').classList.contains('valgt'),
 }));
 tjek('Reaktoren har stadig en valgt del efter Kosmos', del.valgt.length === 1 && del.synlige >= 1, JSON.stringify(del));
-tjek('Kosmos husker sin fane', del.nørdValgt, JSON.stringify(del));
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);
