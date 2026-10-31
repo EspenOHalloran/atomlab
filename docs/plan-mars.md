@@ -32,6 +32,8 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 
 **Ny rækkefølge (jeres svar 29. oktober 2026):** M7 deles i **M7a** (teknikken til lokale detaljer, prøvet på Olympus Mons) og **M7b** (de meget skarpe kort ved Gale og Jezero). Rækkefølgen bliver **M7a → M5 → M6 → M7b → M8**. Se "Detaljer før flere stop" nedenfor.
 
+**Resten af Mars (plan 31. oktober 2026):** M7b droppes (på nær én lille rest i M8b), og rækkefølgen bliver L1 (lyset) → M8b → M8c → L2. Se "Plan for resten af Mars" nedenfor.
+
 ## Status efter M2 (24. oktober 2026)
 - **Lavet:** `js/kosmos/mars.js` (fænomenet i Kosmos mellem Solstorm og Saturn), `js/solsystem/klippeplanet.js` (kuglen med rigtige højder, kan genbruges til andre klippeplaneter og måner) og `billeder/solsystem/lav_mars.py`. Farvekortet er Viking MDIM 2.1 (8k, 3,7 MB), og højderne er MOLA (4k, 7,7 MB, 16 bit). Skalaen er 1 enhed = 1.000 km.
 - **Højderne:** rigtige som standard (jeres svar). Olympus Mons kan ses fra kredsløb på skyggerne, men rager kun ca. 2 pixel op over kanten, når hele kloden ses. Knappen "Bjergene 10 gange højere" gør landskabet tydeligt (det står ærligt i teksten).
@@ -383,6 +385,83 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 - **Faktatjek** (hjælpeagent, kilderne læst): `docs/fakta-solsystemet.md` under "Faktatjek M8a". Rettet: Naukluft er et plateau på Mount Sharps nederste skråninger (sandsten af gamle klitter), CTX ca. 6 m pr. pixel, hvem der lavede højdekortet (Parker og Calef, JPL, udgivet af USGS), "mindre end nogle få meter".
 - **Ikke med endnu:** Jezero (M8b), rovernes fotos og Curiosity som 3D-model (M8c), navne på det, man ser.
 
+## Plan for resten af Mars (31. oktober 2026, skrevet ind efter jeres go)
+*Lavet af Opus ud fra CLAUDE.md, "Lige nu" i DESIGN.md, denne fil, `docs/erfaringer.md`, `docs/plan-fable.md`, `docs/plan-ux.md` og `docs/plan-saturn-kvalitet.md`. Hvert trin får stadig sit eget go. De åbne spørgsmål står til sidst.*
+
+**Udgangspunktet:** M1-M6, M7a og M8a er færdige, og det samme er U1 og U2. U3 kører i en anden session (`ccr-1dbfe8b3-phtbvs`, indtil videre kun `docs/plan-ux.md`). M5b, M7a, M8a, U1 og U2 er ikke set på den rigtige tablet. Stå på Mars kører med ca. 45 % (pc) og 56 % (tablet) af hastigheden ved hele Mars i testbrowseren. På et rigtigt grafikkort er det ikke målt.
+
+### 1. M7b: droppes, på nær én lille rest
+Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle give, har M8a nu givet bedre:
+- **Skarpere farver fra CTX med Solen sat som på fotoet:** CTX er i gråtoner, så farven kommer stadig fra Viking. Hvis Solen skal stå som på fotoet, er hvert stop låst til ét klokkeslæt. Meget arbejde for lidt.
+- **HRSC' egne højder (ca. 50 m):** Fra den højde, flybyen ser stederne fra, ligner de næsten de 0,17 km, vi har.
+- **Nordpolen tæt på:** Det kræver et nyt polarnet til ét stop. Stort, så det venter, til I selv beder om det.
+- **En flyvning helt ned uden overgang:** Det kræver kort ned til 1 m på kloden. Overgangen i 1,2 km højde virker.
+- **Resten, der kommer med i M8b:** Mellemlaget fra Stå på Mars (16 m over ca. 32 km) bruges som detaljekort (`detalje` i `LOKALE`) ved Gale- og Jezero-stoppene, når Jezeros mellemlag findes. **Ikke tjekket:** Mellemlaget regnes i meter fra kraterets nulpunkt og `detalje` i bredde og længde. Om det kan bruges direkte, eller om billedværktøjet skal lave et kort mere, tjekkes, før det loves.
+
+### 2. Rækkefølgen
+| Nr. | Del | Hvorfor her |
+|---|---|---|
+| 1 | **L1: lyset i Stå på Mars, den billige del** | Mest synligt for prisen, og M8b bruger den samme shader, så det justeres kun én gang. Rører `landskab.js` og måske `scene3d.js`, ikke U3's filer, så den kan laves nu. |
+| 2 | **M8b: Jezero** (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
+| 3 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
+| 4 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
+| 5 | **U4** (tidsknappen og kontakterne i resten af AtomLab) | Når U3 er merget. Rører ikke Mars-filerne og kan ligge mellem to Mars-trin. |
+| 6 | **L2: lyset, den dyre del** | Kun det, der holder, når det er målt på tabletten. |
+| 7 | **Saturn S2** (ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Mellemstor og meget synlig. Tjek med curl, om `pds-rings.seti.org` kan åbnes. |
+| 8 | **Solsystemets overblik** (trin 2 i `plan-solsystemet.md`) | Stort og svært (et flydende nulpunkt), så det får sin egen plan først. |
+| 9 | **Saturn S3** | Kun Enceladus har et højdekort over hele månen. Venter. |
+
+### 3. Lyset og kvaliteten
+**L1, det, der ikke koster hastighed** (konstanter og et par uniforms):
+- `sollys()` (2,4) og `himmellys()` (0,55) sænkes, så skyggerne bliver mørkere og relieffet står frem. Prøv fx 1,6-1,8.
+- Himlen mørkere og mere mættet opad, så himmel og jord ikke er lige lyse.
+- Lidt mindre dis. `TAU` 0,4 er rigtig for årstiden. Ændres den, skal "Ærligt talt" sige det.
+- Starttiden sænkes fra 8,5 (37°) til en lav sol (15-25°, fx 07:30), så skyggerne bliver lange.
+- Eksponering og glød kun, mens man står: Tonemappingen beholdes (ACES), og kun `toneMappingExposure` ændres. Et skift af tonemapping får Three.js til at oversætte shaderne igen, og det giver et hak. Måske kan gløden slås helt fra, mens man står. Det sparer også tid. **Tjekkes først:** Kommer Solens skær på himlen fra gløden? Så skal det laves i himlens shader i stedet.
+- **Facit:** NASA's panorama PIA20332 fra Naukluft (taget dér, hvor man står) hentes og bruges som sammenligning. Kun som billede, det kommer ikke med i programmet før M8c. Husk, at fotoet er hvidbalanceret (mindre rødt end i virkeligheden).
+- **Hvor:** på jeres pc med Remote Control (et billede tager sekunder i stedet for minutter, og I ser det på en rigtig skærm). Kan også laves i skyen, men langsommere og dyrere i tokens.
+
+**L2, det, der skal måles først:**
+
+| Forbedring | Pris | Vurdering |
+|---|---|---|
+| Ambient occlusion (mørkere i sprækker og lavninger), regnet én gang pr. lag som skyggekortene | ét opslag i et kort mere pr. pixel | Den bedste af de dyre. Prøves først. |
+| Blødere skygger | Kanten er allerede blød (`landskab.js`, ved `regnSkygge`) | Se L1's billeder først. Måske er det ikke nødvendigt. |
+| Farvefoto fra HiRISE | dækker kun smalle striber, klitterne bliver blågrå | Frarådes: Farverne er ikke ægte. |
+| Flere sten og riller helt tæt på | pr. pixel helt tæt på | Først hvis I synes, at stenene ser kunstige ud (punkt 6 under "Ikke afprøvet" for M8a). |
+
+### 4. Model, effort, afhængigheder og faktatjek
+Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hjælpeagenter: Haiku med lav effort til testlogs og Sonnet med lav effort til at finde ting i koden.
+
+| Del | Model og effort | Omfang | Afhængigheder | Faktatjek |
+|---|---|---|---|---|
+| L1 | Opus, medium | lille | Remote Control til jeres pc | kun hvis "Ærligt talt" om disen ændres |
+| M8b | Opus, høj | mellem | `planetarymaps.usgs.gov` (tjekkes med curl), U3 merget | Perseverances plads og tal (med dato), deltaet, Cheyava Falls |
+| M8c del 1 | Opus, høj | mellem | `assets.science.nasa.gov` (åben 31. oktober 2026) | fotoenes dato, kamera og hvidbalance |
+| M8c del 2 | Opus, høj | mellem | jeres ja til at gøre modellen mindre (`gltf-transform`, et værktøj, der køres én gang, ikke et byggetrin), `GLTFLoader` fra `three@0.186.1`, måling på tabletten | rovernes retning og plads i oktober 2026 |
+| L2 | Opus, høj | mellem | jeres pc og tablet | – |
+| U4 | Opus, medium | lille-mellem | U3 merget | – |
+| S2 | Opus, høj | mellem | `pds-rings.seti.org` | ringenes tal og kilde i nørd-teksten |
+
+### 5. Go'er og hvad I skal prøve
+- **Nu (koster ingen tokens):** en runde på tabletten:
+  1. Kører Stå på Mars glat, når man drejer hovedet, på langs og på højkant?
+  2. Hvor længe går der første gang fra "Stå på Mars", til man er landet?
+  3. Ses der kanter, hvor lagene mødes (ca. 1, 4 og 32 km væk)?
+  4. Lyset kl. 8:30, kl. 12 og ved solnedgang: Hvad er værst?
+  5. Er Styr-boksen og træet lette at bruge på højkant?
+- **Go 1: L1.** I ser en mørkere himmel, mere relief og en lavere sol fra start. På tabletten: lige så glat som før?
+- **Go 2: M8b + resten af M7b** (efter U3). I står på kanten af Jezero og ser ned over deltaet. På tabletten: samme spørgsmål som ved Gale.
+- **Go 3: rovernes panoramaer.** I skifter mellem det tegnede og det fotograferede. Står Mount Sharp samme sted i begge?
+- **Go 4: Curiosity som 3D-model.** På tabletten: kører det stadig glat, når roveren er i billedet?
+- **Go 5: L2**, med ambient occlusion først.
+- Derefter U4, S2 og en plan for trin 2.
+
+### Åbne spørgsmål
+1. Er I enige i at droppe M7b (på nær resten i M8b)?
+2. Må Curiositys model gøres mindre med `gltf-transform` (go 4)?
+3. Remote Control til jeres pc ved go 1 (se "Lige nu" i DESIGN.md, når det er sat op).
+
 ## Stå på Mars: lyset og kvaliteten (31. oktober 2026, fund og muligheder, intet er ændret endnu)
 **Anledning:** Jeres iagttagelse: "Det ser ret lyst ud, når man står der." Der er kun læst kode og taget prøvebilleder. Intet er justeret, og der er ikke målt på rigtigt grafikkort.
 
@@ -407,7 +486,7 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 **Muligheder for at gøre det bedre** (ikke besluttet, ingen er gjort):
 - **Billig, meget synlig:** Sænk `sollys` og `himmellys` (fx 1,6-1,8), gør himlen lidt mørkere og mere mættet over for horisonten, dæmp disen en smule, dæmp gløden og tonemappingen kun mens man står (ikke i resten af programmet), og start på en lavere sol (morgen 07:00-08:00 eller sen eftermiddag).
 - **Mellem:** Blødere skygger fra skyggekortene, ambient occlusion i sprækker og lavninger, rigtigt farvefoto fra HiRISE/CTX i stedet for gråtone med rust-forløb (HiRISE-farve dækker kun smalle striber), flere slags sten, riller og sand tæt på, dis og støv i lag.
-- **Dyrt eller stort:** Rovernes panoramafotos som reference ved siden af (M8c), Curiosity som 3D-model (M8c, `assets.science.nasa.gov` er blokeret i miljøet), skarpere højder end 1 m findes ikke.
+- **Dyrt eller stort:** Rovernes panoramafotos som reference ved siden af (M8c), Curiosity som 3D-model (M8c, `assets.science.nasa.gov` er åben siden 31. oktober 2026), skarpere højder end 1 m findes ikke.
 - **Pas på prisen:** Stå på Mars kører allerede på ca. 45 % af hastigheden ved hele Mars på pc og 56 % på tablet (testbrowseren, se M8a). Alt, der koster pr. pixel (AO, bløde skygger, volumetrisk dis), skal måles på tabletten.
 - **Et lysbord til tabletten** (`?lys` med skydere for sollys, himmellys, bloom og eksponering) blev foreslået, men **er ikke bestilt**. Jeres svar (31. oktober 2026): "Nej, du skal bare dokumentere dine findings."
 
