@@ -34,7 +34,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Stjerneovnen har fire knapper: ⏸ · ▷ langsom · ▶ normal · ⏩ hurtig** (0,3, 0,6 og 3 som før). Valget: Langsom blev en tilstand mere på tidsknappen, så alle tre tempoer står ét sted, og mellemrum går tilbage til det tempo, man havde. Batteriet beholder sin "Pause" (ingen strøm).
 - **Knapper, der starter noget, lader tiden gå:** et skud og "Vis mig" i Stjerneovnen og "Skyd neutron", "Start reaktoren" og "Vis mig" i Reaktoren. "Vis mig" er stadig i slowmotion.
 - **Kontakter ligner kontakter** (fyldt med ✓, når de er tændt): "Elektronsky" i Værkstedet og på grundstofkortet (før skiftede knappen mellem "Elektronsky" og "Ringe"), "Vand (moderator)" i Reaktoren og "Snyd laderen (farligt!)" i Batteriet (rød, når den er tændt).
-- **Tests:** se "Status for U4". `index.html` og `style.css` er ændret, så `--ændret` kører alle tests.
+- **Tests:** Nye tjek står i "Status for U4". Hele samlingen (31. oktober 2026): alle 29 bestod. `mars` fejlede én gang sammen med en anden test ("Modlys slået fra", en fast ventetid på 300 ms) og bestod alene. Tjekket venter nu på Solen i stedet for en fast tid, og `mars` bestod igen (153 OK). Det er ikke vist, at det gamle tjek fejler under kunstig belastning.
 - **Ikke afprøvet (på tabletten):**
   1. Forstår I ▷ (langsom) i Stjerneovnen? Den er en tom trekant mellem ⏸ og ▶. Ellers kan den blive til en snegl eller "½".
   2. Er tidsknappens fire små knapper lette at ramme med en finger (de er lige så store som i Kosmos)?

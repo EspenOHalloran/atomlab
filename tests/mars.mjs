@@ -162,7 +162,7 @@ tjek('"Modlys": Solen står bag Mars', (await s.evaluate(() => atomlabTest.solsy
 tjek('kontakten folder emnet om modlys ud (og emnet om bjergene sammen)', await s.evaluate(() => { const e = atomlabTest.solsystem.side().emner; return e.find((x) => x.kontakt === 'Modlys').åben && !e.find((x) => x.kontakt?.startsWith('Bjergene')).åben; }));
 await s.screenshot({ path: UD + '/3-modlys.png' });
 await s.click('#solsystemStyr .kontakt:has-text("Modlys")');
-await s.waitForTimeout(300);
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().sol() > -0.5, null, { timeout: 10000, polling: 100 }).catch(() => {}); // fast ventetid fejlede under belastning (U4)
 tjek('"Modlys" slået fra: Solen er tilbage', (await s.evaluate(() => atomlabTest.solsystem.fænomen().sol())) > -0.5);
 const tekster = (await s.textContent('#solsystemTekst'));
 tjek('Mars\' side fortæller om polkapperne og skyerne', /Polkapperne/.test(tekster) && /Skyerne kommer/.test(tekster));
