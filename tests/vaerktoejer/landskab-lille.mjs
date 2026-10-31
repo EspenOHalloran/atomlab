@@ -19,6 +19,8 @@ await s.waitForTimeout(500);
 await f(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 300000 });
 await f(() => atomlabTest.solsystem.fænomen().hop());
+// Vent, til landingen er færdig (ellers overskriver den blikket i det første billede)
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { timeout: 300000 });
 for (const x of blik) {
   const [k, v, t] = x.split(',').map(Number);
   await f(([k, v, t]) => { const y = atomlabTest.solsystem.fænomen(); y.sætTid(t); y.kig(k, v); }, [k, v, t]);

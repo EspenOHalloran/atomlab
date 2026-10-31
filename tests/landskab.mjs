@@ -45,6 +45,7 @@ tjek('lander (kameraet er højt oppe først)', t.lander && t.øjne > 100, JSON.s
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
 t = await stå();
+tjek('mens man står: gløden er slået fra, og eksponeringen er lavere (L1)', t.glød === false && t.eksponering < 1, JSON.stringify({ glød: t.glød, eksponering: t.eksponering }));
 tjek('efter landingen: øjnene 1,7 m over jorden, kigger mod sydøst (135°) lidt under vandret', Math.abs(t.øjne - 1.7) < 0.01 && Math.abs(t.kompas - 135) < 1 && t.vinkel < 0 && t.vinkel > -6, JSON.stringify(t));
 tjek('højden under stedet passer med NASA (−4.429 m ved sol 1301)', Math.abs(t.højde + 4429) < 10, String(t.højde));
 tjek('near er 0,3 m', Math.abs(t.nær - 0.0003) < 1e-9);
@@ -117,6 +118,7 @@ await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
 t = await stå();
 tjek('tilbage i kredsløb: Mars-kloden ses, near er 5 km igen, zoom 1', !t.står && t.kloden && Math.abs(t.nær - 0.005) < 1e-9 && t.zoom === 1, JSON.stringify(t));
+tjek('tilbage i kredsløb: gløden og eksponeringen er som før (1,05)', t.glød === true && Math.abs(t.eksponering - 1.05) < 1e-9, JSON.stringify({ glød: t.glød, eksponering: t.eksponering }));
 await hop();
 tjek('og kameraet er ved Gale igen', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'gale');
 // Fra træet direkte ned på jorden ved Curiosity, og fra landskabet videre til et andet sted (Phobos)

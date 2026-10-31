@@ -26,6 +26,23 @@ const TAU = 0.4; // støvets optiske dybde lodret ved kraterbunden. Ved Gale ca.
 // Naukluft i april 2016), ca. 0,7-0,8 det meste af året og over 1,25 i støvsæsonen (Chen-Chen m.fl. 2019, Navcam)
 const TAU_HØJDE = -4500; // m: den højde, TAU gælder for
 const SKALAHØJDE = 11000; // m (NSSDC)
+// Lyset (L1 i docs/plan-mars.md, justeret efter NASA's panorama PIA20332 fra Naukluft): Sollyset og himlens lys på
+// jorden. Mens man står, er gløden slået fra, og js/kosmos/mars.js sætter eksponeringen med eksponering(solY).
+const SOLLYS = 2.2;
+const HIMMELLYS = 0.18;
+const HIMMEL_STYRKE = 1.5; // himlens egen lysstyrke
+// Eksponeringen tilpasser sig delvis lyset på jorden, som et kamera eller øjet (ellers er middag meget lysere end
+// morgen). EKSPONERING gælder ved Solen 22° over horisonten.
+const EKSPONERING = 0.85;
+const lysPåJorden = (solY) => {
+  const h = Math.max(solY, 0);
+  const op = THREE.MathUtils.smoothstep(solY, -0.01, 0.03);
+  return SOLLYS * Math.exp(-TAU / (h + 0.035)) * h * op + 0.62 * HIMMELLYS * THREE.MathUtils.smoothstep(solY, -0.12, 0.4) + 0.02;
+};
+const LYS_REF = lysPåJorden(Math.sin(THREE.MathUtils.degToRad(22)));
+export function eksponering(solY) {
+  return THREE.MathUtils.clamp(EKSPONERING * (LYS_REF / lysPåJorden(solY)) ** 0.4, 0.55, 1.5);
+}
 const SOL_RADIUS = THREE.MathUtils.degToRad(0.35 / 2); // Solen er ca. 0,35° bred set fra Mars
 // Månerne (km fra Mars' midte og middelradius i km, som MÅNER i js/kosmos/mars.js). periode: timer mellem to gange,
 // månen står højest set fra jorden (Phobos ca. 11,1 t mod øst, Deimos ca. 131 t mod vest). fase: timevinkel kl. 0.
@@ -83,9 +100,12 @@ const HIMMEL_GLSL = /* glsl */ `
     float m = 1.0 / (vy + 0.08);                       // hvor meget luft man kigger igennem
     float dag = smoothstep(-0.12, 0.25, hs);          // dagslys
     float tus = smoothstep(-0.3, 0.0, hs) * (1.0 - smoothstep(-0.02, 0.18, hs)); // tusmørke
-    // Støvets gulbrune lys: mest mod horisonten, mindre ved Solen lavt
-    vec3 brun = vec3(0.62, 0.40, 0.24) * (1.0 - exp(-uTau * m * 0.55)) * (0.35 + 0.65 * smoothstep(-0.05, 0.5, hs));
-    brun = mix(brun, vec3(0.42, 0.24, 0.13) * (1.0 - exp(-uTau * m * 0.55)), 1.0 - smoothstep(0.0, 0.3, hs));
+    // Støvets gulbrune lys: mest mod horisonten, mindre ved Solen lavt. Opad er himlen mørkere og mere mættet
+    // (L1: før var himlen og jorden næsten lige lyse, på rovernes fotos er horisonten det lyseste)
+    vec3 farve = mix(vec3(0.70, 0.46, 0.29), vec3(0.62, 0.34, 0.18), smoothstep(0.1, 0.7, vy));
+    // Himlen bliver lysere, jo højere Solen står (før L1 holdt den op ved 30°, så jorden ved middag blev lysere end himlen)
+    vec3 brun = farve * ${HIMMEL_STYRKE.toFixed(2)} * (1.0 - exp(-uTau * m * 0.6)) * (0.25 + 0.75 * smoothstep(-0.05, 0.9, hs));
+    brun = mix(brun, vec3(0.42, 0.24, 0.13) * (1.0 - exp(-uTau * m * 0.6)), 1.0 - smoothstep(0.0, 0.3, hs));
     // Fremad: blåligt lys omkring Solen (Henyey-Greenstein, g = 0,8), svækket af luften
     float g = 0.8;
     float hg = (1.0 - g * g) / pow(1.0 + g * g - 2.0 * g * mu, 1.5);
@@ -96,14 +116,16 @@ const HIMMEL_GLSL = /* glsl */ `
     c += tus * (vec3(0.10, 0.17, 0.32) * pow(mod, 6.0) * exp(-vy * 6.0) + vec3(0.07, 0.04, 0.03) * exp(-vy * 3.0));
     return c;
   }
-  // Sollyset, der når frem (farve og styrke), og himlens lys på jorden ovenfra
+  // Sollyset, der når frem (farve og styrke), og himlens lys på jorden ovenfra. Forholdet mellem dem bestemmer, hvor
+  // mørke skyggerne er (L1: himmellyset var 0,55, og så var skyggerne kun ca. 3 gange mørkere end det belyste ved lav
+  // sol. På rovernes fotos er de meget mørkere)
   vec3 sollys() {
     float hs = max(uSol.y, 0.0);
     vec3 t = exp(-uTau * vec3(0.9, 1.0, 1.15) / (hs + 0.035)); // rødligere, når Solen står lavt
-    return 2.4 * t * smoothstep(-0.01, 0.03, uSol.y);
+    return ${SOLLYS.toFixed(2)} * t * smoothstep(-0.01, 0.03, uSol.y);
   }
   vec3 himmellys() {
-    return vec3(0.62, 0.42, 0.28) * 0.55 * smoothstep(-0.12, 0.4, uSol.y) + vec3(0.03, 0.025, 0.03);
+    return vec3(0.62, 0.42, 0.28) * ${HIMMELLYS.toFixed(2)} * smoothstep(-0.12, 0.4, uSol.y) + vec3(0.02, 0.017, 0.02);
   }`;
 
 const VERTEX = /* glsl */ `
@@ -260,7 +282,9 @@ const HIMMEL_FRAGMENT = /* glsl */ `
     float bred = max(fwidth(vinkel), 1e-5);
     float skive = 1.0 - smoothstep(${SOL_RADIUS.toFixed(6)} - bred, ${SOL_RADIUS.toFixed(6)} + bred, vinkel);
     vec3 solFarve = sollys();
-    c += solFarve * skive * 14.0 + solFarve * 0.4 * exp(-vinkel * 60.0) * smoothstep(-0.02, 0.02, uSol.y);
+    // Skiven, en lille strålekrans og et bredere skær af støvet omkring Solen. Skæret står her, fordi gløden (bloom) er
+    // slået fra, mens man står (L1)
+    c += solFarve * skive * 14.0 + solFarve * (0.5 * exp(-vinkel * 50.0) + 0.06 * exp(-vinkel * 9.0)) * smoothstep(-0.02, 0.02, uSol.y);
     alfa = max(alfa, skive);
     // Månerne: kugler belyst af Solen (mørke som asfalt), svækket af luften foran
     for (int k = 0; k < 2; k++) {
