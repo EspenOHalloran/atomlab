@@ -1,12 +1,12 @@
 // Enceladus: en kugle af is med kratere mod nord og de fire "tigerstriber" ved sydpolen,
 // og fontænerne af vand og is, der sprøjter op fra striberne. De lyser mest i modlys (lyset spredes fremad).
-// Tal fra docs/fakta-solsystemet.md: radius 252 km, 4 striber på ca. 135 km, ca. 35 km imellem, 101 gejsere (Porco 2014).
+// Tal fra docs/fakta-solsystemet.md: radius 252 km, 4 striber på ca. 130 km (Wikipedia, "Faktatjek U3"), ca. 35 km imellem, 101 gejsere (Porco 2014).
 
 import * as THREE from 'three';
 import { LAV_KVALITET } from '../scene3d.js';
 
 const STRIBER = 4;
-const STRIBE_LÆNGDE = 135; // km
+const STRIBE_LÆNGDE = 130; // km
 const STRIBE_AFSTAND = 35; // km
 const RADIUS_KM = 252;
 // Striberne ligger skråt over sydpolen, ca. langs længdegraderne 144° og 324° øst (målt på Cassinis kort).

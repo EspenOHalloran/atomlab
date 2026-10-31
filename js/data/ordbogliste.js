@@ -4,7 +4,8 @@
 import { ORDBOG } from './ordbog.js';
 
 // Kun links, der er enkle og sikre: et "Hvorfor?"-kort, en skærm eller et fænomen, hvor ordet står i teksten.
-// hvorfor: id i HVORFOR, skærm: [adresse, navn], gaa: [skærm:id, navn] (åbnes af knapper med data-gaa).
+// hvorfor: id i HVORFOR, skærm: [adresse, navn], gaa: [skærm:id eller skærm:id:sted, navn] (åbnes af knapper
+// med data-gaa).
 export const LINKS = {
   tunneleffekt: { hvorfor: 'tunnel' },
   kernekraft: { hvorfor: 'kernen' },
@@ -33,8 +34,8 @@ export const LINKS = {
   halvskygge: { gaa: ['solsystem:formoerkelser', 'Solsystemet: Formørkelser'] },
   toeris: { gaa: ['solsystem:mars', 'Solsystemet: Mars'] },
   skalahoejde: { gaa: ['solsystem:mars', 'Solsystemet: Mars'] },
-  skjoldvulkan: { gaa: ['solsystem:mars', 'Solsystemet: Mars'] },
-  caldera: { gaa: ['solsystem:mars', 'Solsystemet: Mars'] },
+  skjoldvulkan: { gaa: ['solsystem:mars:olympus', 'Solsystemet: Olympus Mons'] },
+  caldera: { gaa: ['solsystem:mars:caldera', 'Solsystemet: Calderaen på Olympus Mons'] },
 };
 
 const sorter = new Intl.Collator('da', { sensitivity: 'base' });

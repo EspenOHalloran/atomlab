@@ -321,9 +321,66 @@ Lavet, som planen siger, i begge skærme på én gang (den fælles skal `js/faen
 - **Tidsknappen** har små tegnede ikoner, fordi ⏸ blev vist meget lille i nogle skrifttyper.
 - **Tests:** Knapperne findes ud fra teksten (`trykPå`), også i billedværktøjerne. Nye tjek: Styr-boksen har kun kontakter og skydere, en tændt kontakt har ✓, bjælken står der med "Kun grafik", ‹ og prikkerne (Big Bang, Solens fremtid, Årstiderne, Saturns og Mars' flyby), tidsknappen stopper uret, men ikke flyvningerne, mellemrum går tilbage til ⏩, og Styr-boksen er foldet sammen på højkant.
 
+## U3: Stedernes tal (31. oktober 2026, jeres svar: "Go til dine anbefalinger")
+2-4 tal pr. sted, som foreslået. Næsten alle stod allerede i faktatjekkede tekster. Tal med * stod ikke i en tekst og blev faktatjekket (`docs/fakta-solsystemet.md`, "Faktatjek U3"). Tigerstriberne blev rettet til ca. 130 km.
+
+**Mars**
+| Sted | Tal |
+|---|---|
+| Olympus Mons | Højde: ca. 22 km over landet omkring · Bredde: ca. 600 km · Areal: ca. 7 × Danmark |
+| Calderaen | Størrelse: ca. 65 × 80 km · Dybde: op til ca. 3 km · Kratere: mindst 6 · Alder: ca. 100-400 mio. år |
+| Skrænten | Højde: op til ca. 8 km · Her: ca. 8 km ned på ca. 20 km · Skredene: op til ca. 750 km ud |
+| Tharsis | Bulen: ca. 5.000 km bred · Vulkanerne: ca. 14-18 km over nulpunktet · Mellem dem: ca. 700-800 km · Til Olympus Mons: ca. 1.600 km |
+| Valles Marineris | Længde: ca. 4.000 km · Dybde: op til ca. 10 km · Bredde i midten: op til ca. 600 km · Alder: ca. 3,5 mia. år |
+| Hellas | Bredde: ca. 2.300 km · Laveste sted: ca. 8,2 km under nulpunktet · Lufttryk: op til ca. 2 × nulpunktets · Alder: ca. 4 mia. år |
+| Gale | Bredde: 154 km · Mount Sharp: ca. 5 km over bunden · Curiosity landede: 6. august 2012 · Curiosity har kørt: ca. 38 km |
+| Jezero | Bredde: ca. 45 km · En sø: for over 3½ mia. år siden · Perseverance har kørt: over 45 km · Prøver: 30 rør |
+| Nordpolen | Iskappen: ca. 1.000 km bred · Tykkelse: op til ca. 3 km · Mest: frossent vand · Solen om sommeren: ca. 22-28° oppe |
+| Månerne | Phobos rundt: 7 t 39 min · Deimos rundt: ca. 30 timer · Opdaget: 1877 |
+| Phobos | Længde: ca. 26 km · Over Mars: ca. 6.000 km · En omgang: 7 t 39 min · Stickney: ca. 9 km |
+| Mars set fra Phobos | Mars på himlen: ca. 42° bred · Mod Månen hos os: ca. 80 gange bredere · Vi står: ca. 300 m over Phobos (i programmet) |
+| Deimos | Længde: ca. 16 km · Fra Mars' midte: ca. 23.500 km · En omgang: ca. 30 timer · Mars på himlen: ca. 17° |
+| 🧍 Naukluft | Til toppen af Mount Sharp: ca. 50 km · Horisonten: ca. 3,4 km væk (fladt land) · Curiosity var her: april 2016 |
+| 🧍 Hos Curiosity | Curiosity har kørt: ca. 38 km · Højere end landingen: ca. 1 km · På Mars siden: august 2012 |
+
+**Saturn**
+| Sted | Tal |
+|---|---|
+| Ringene | Bredde: ca. 70.000 km · Tykkelse: mange steder ca. 10 m · Is: over 95 % · Cassini-delingen: ca. 4.600 km |
+| Månerne | Kendte måner: over 280 (2026) · Nærmest af de store (Mimas): ca. 185.500 km · Længst ude (Titan): ca. 1,22 mio. km* |
+| Mimas | Bredde: 396 km · Herschel: ca. 140 km · En omgang: ca. 22½ timer* · Fra Saturn: ca. 185.500 km |
+| Enceladus | Bredde: 504 km · Kaster lyset tilbage: ca. 80 % · Tigerstriberne: 4, hver ca. 130 km lang* · Fra Saturn: ca. 238.000 km* |
+| Tethys | Bredde: 1.062 km · Odysseus: 445 km · Ithaca Chasma: over 1.000 km lang · Tæthed: næsten som vand |
+| Dione | Bredde: 1.123 km · Isklipperne: flere hundrede m høje · En omgang: ca. 2¾ døgn* · Fra Saturn: ca. 377.400 km* |
+| Rhea | Bredde: ca. 1.530 km · Is: måske ca. ¾ · En omgang: ca. 4½ døgn · Fra Saturn: ca. 527.000 km |
+| Titan | Bredde: ca. 5.150 km* · Lufttryk: ca. 1,5 × Jordens · Ved jorden: ca. −179 °C · En omgang: ca. 16 døgn* |
+
+**Jorden**
+| Sted | Tal |
+|---|---|
+| Månen | Bredde: ca. 3.470 km · Afstand: ca. 384.400 km (i snit) · En omgang: ca. 27 døgn · Fra fuldmåne til fuldmåne: ca. 29½ døgn |
+| Jorden (kloden) | Månens to tal flytter til Månen. I stedet: Et år: ca. 365¼ døgn* · Aksen hælder: ca. 23,4° |
+
+Planeternes tal (Solen, Mars, Saturn) og de 15 forsøg og fænomener i Kosmos beholder deres tal.
+
+## Status for U3 (31. oktober 2026)
+Lavet, som planen siger, i begge skærme på én gang. Jeres svar ved go: "Go til dine anbefalinger":
+- **Ved et sted viser højre panel kun stedets egen side.** "Om Mars" under stedet er væk. Man kommer tilbage til Mars med træet eller vejen øverst.
+- **For nørder, Billederne og Ærligt talt huskes** for alle sider (har man foldet en ud, står den åben på de næste sider). Emnerne starter altid foldet sammen.
+
+Afgjort undervejs:
+- **Teksterne til Mars, Saturn og Jorden** står i `js/data/sider/` (planetens side og en side for hvert sted i træet). Fænomenerne i Kosmos og forsøgene har deres side i deres egen fil.
+- **Stedernes undertekst** (bjælkens linje, fx "Den største vulkan, vi kender i solsystemet …") er den samme som før. Siden har et nyt Kort, der ikke gentager den. Ved et besøg på en måne fra 3D-billedet (et tryk på månen) står månens undertekst nu også, som når man vælger den i træet.
+- **"Lige nu"** viser kun det, der ændrer sig: tiden ved Jorden, Månen, der er flyttet ud af Mars' skygge, Årstidernes dato, Big Bangs tid, Solens fremtid, supernovaens lag og "Turen er slut". Kontakternes forklaringer (fx Modlys og "Bjergene 10 gange højere") er blevet til emner, der folder sig ud, når kontakten slås til.
+- **Knapper i teksten** (`js/sideknap.js`): et sted, en kontakt (viser, om den er tændt), en handling (grå, når den ikke kan bruges), tidsknappen, et fænomen og en anden del. "Tryk X" og "i listen" står ikke længere i teksterne.
+- **Et link kan pege på et sted:** `data-gaa="solsystem:mars:olympus"`. Ordbogens "skjoldvulkan" og "caldera" peger nu på Olympus Mons og Calderaen, hvor ordene står.
+- **Fagord** markeres i hver foldeboks for sig (`.side-del`), så ordet er markeret i den boks, man åbner.
+- **Iapetus:** Saturns tredjestørste måne (ca. 1.470 km) er ikke med, selv om teksterne talte om "de seks store måner". Det står nu i "Ærligt talt" ved Månerne, og oversigten siger "seks af Saturns største måner". Den kan komme med senere.
+- **Tests:** `kosmos` (siden, knapperne, kontakten folder emnet ud, underteksten står ikke på siden), `solsystem` (alle steder i træet har en side med 2-4 tal og "Ærligt talt" sidst, knapperne virker, links til Hvid dværg og til et sted), `ordforklaring` (fagord i boksene), `mars`, `saturn`, `jorden`, `landskab`, `reaktor` og `ordbog`.
+
 ## Afgøres undervejs (med skærmbilleder)
 - ~~**Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?~~ Åben (U2).
-- **Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?
+- ~~**Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?~~ Se "U3: Stedernes tal".
 
 ## Ikke afprøvet (skal prøves på tabletten efter hvert trin)
 - Kan man ramme punkterne i træet med fingeren, og er det tydeligt, hvor man er?

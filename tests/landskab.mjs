@@ -54,7 +54,7 @@ const kn = await knapper();
 tjek('knapperne: solnedgang i bjælken og klokken i Styr-boksen (op i kredsløb og Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['🌅 Solnedgang', 'Klokken på Mars']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
 tjek('efter landingen står tiden stille (⏸, som ved et sted)', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
 tjek('i træet: "🧍 Naukluft" er markeret, og panelet og vejen viser stedet', (await træ()).find((p) => p.id === 'stå-naukluft')?.valgt && (await s.textContent('#solsystemNavn')) === 'Naukluft i Gale-krateret' && (await s.textContent('#solsystemVej')) === '› Mars › Naukluft i Gale-krateret');
-tjek('teksten om Naukluft og Mount Sharp', /Naukluft/.test(await s.textContent('#solsystemForklaring')) && /Mount Sharp/.test(await s.textContent('#solsystemForklaring')));
+tjek('teksten om Naukluft og Mount Sharp', /Naukluft/.test(await s.textContent('#solsystemTekst')) && /Mount Sharp/.test(await s.textContent('#solsystemTekst')));
 
 // Solen efter klokken (Gale ligger ca. 4,7° S, og Solen står ca. 3° nord for ækvator)
 const solVed = (tid) => f((x) => { const y = atomlabTest.solsystem.fænomen(); y.sætTid(x); return y.stå().solHøjde; }, tid);
@@ -109,7 +109,7 @@ await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
 t = await stå();
 tjek('hos Curiosity (valgt i træet): højden passer med NASA (−3.488 m ved sol 5045), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3488) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
-tjek('teksten om Curiosity i oktober 2026', /oktober 2026/.test(await s.textContent('#solsystemForklaring')));
+tjek('teksten om Curiosity (har kørt ca. 38 km)', /38 km/.test(await s.textContent('#solsystemTekst')));
 
 // Tilbage i kredsløb: et tryk på Gale i træet
 await trykTræ('gale');

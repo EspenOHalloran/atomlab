@@ -2,6 +2,7 @@
 // men nogle bliver fanget og styrter ned mod polerne, hvor de laver nordlys.
 
 import * as THREE from 'three';
+import { sted, kontakt, handling, gå } from '../sideknap.js';
 import { stjerne, glød, prikSky, dipolLinjer, skilt, KVALITET } from './faelles.js';
 
 const SOL_X = -15;
@@ -12,7 +13,6 @@ const NÆSE = 3.2; // hvor langt foran Jorden magnetfeltet holder solvinden væk
 
 export default {
   id: 'solstorm',
-  hvorfor: ['magnetfelt'],
   navn: 'Solstorm',
   ikon: '☀️',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
@@ -25,15 +25,32 @@ export default {
     ['Tid til Jorden', 'typisk 1 til 3 døgn'],
     ['Nordlys i Danmark', 'fx maj 2024'],
   ],
-  kort: `
-    <p>Solen sender hele tiden en strøm af elektroner og protoner ud i rummet. Det hedder <b>solvinden</b>. Nogle gange sker der et kæmpe udbrud, og Solen kaster en hel sky af partikler af sted. Det er en <b>solstorm</b>.</p>
-    <p>Jorden har et <b>magnetfelt</b>, ligesom en stor magnet. Det fungerer som et skjold og leder partiklerne udenom. Men nogle bliver fanget og suser ned i en ring omkring Nordpolen og Sydpolen. Når de rammer luften højt oppe, lyser den. Det er <b>nordlys</b>.</p>
-    <p>Prøv at sende en solstorm, og se nordlyset tænde.</p>`,
-  nørd: `
-    <p><b>Farverne i nordlyset</b> kommer fra luften: Grønt og rødt er oxygen (grønt ca. 100 til 250 km oppe, rødt højere oppe), og blåt og lilla er nitrogen. Det er samme idé som i et neonrør: Atomer, der får et skub, sender lys ud i en bestemt farve.</p>
-    <p><b>Udbruddet</b> hedder en <i>koronamasseudkastning</i> (CME). Magnetfelter i Solens yderste lag bliver vredet sammen, til de springer som en elastik. Partiklerne kommer især ind på Jordens natside: Magnetfeltet bliver strakt ud i en lang hale, og når feltlinjerne i halen "klikker" sammen igen, bliver partiklerne skudt ned mod polerne.</p>
-    <p><b>Carrington-stormen</b> i 1859 var så kraftig, at telegrafledninger slog gnister, og der var nordlys helt ned til Caribien. Sker det samme i dag, kan satellitter, GPS og elnet blive ramt. I 1989 slukkede en solstorm strømmen i Québec i Canada i ni timer.</p>
-    <p><b>Ærligt talt:</b> Solen er i virkeligheden 109 gange bredere end Jorden og 150 millioner km væk. Her er alt rykket tæt sammen.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Nogle gange sker der et kæmpe udbrud på Solen, og den kaster en hel sky af partikler af sted. Det er en solstorm. Når den rammer Jorden, tænder nordlyset.',
+    emner: [
+      {
+        titel: 'Hvad er solvinden?', kontakt: '🌬️ Vis solvinden',
+        tekst: `<p>Solen sender hele tiden en strøm af elektroner og protoner ud i rummet. Det hedder solvinden. ${kontakt('🌬️ Vis solvinden')}</p>`,
+      },
+      {
+        titel: 'Hvordan beskytter Jorden sig?', kontakt: '🧲 Vis magnetfeltet', hvorfor: ['magnetfelt'],
+        tekst: `<p>Jorden har et magnetfelt, ligesom en stor magnet. Det fungerer som et skjold og leder partiklerne udenom. ${kontakt('🧲 Vis magnetfeltet')}</p>`,
+      },
+      {
+        titel: 'Hvordan opstår nordlys?', kontakt: '🔍 Zoom ind på Jorden',
+        tekst: `<p>Nogle af partiklerne bliver fanget af magnetfeltet og suser ned i en ring omkring Nordpolen og Sydpolen. Når de rammer luften højt oppe, lyser den. Det er nordlys. ${handling('solstorm', '💥 Send en solstorm')} ${kontakt('🔍 Zoom ind på Jorden')}</p>
+          <p>Farverne kommer fra luften: Grønt og rødt er oxygen (grønt ca. 100 til 250 km oppe, rødt højere oppe), og blåt og lilla er nitrogen. Det er samme idé som i et neonrør: Atomer, der får et skub, sender lys ud i en bestemt farve.</p>`,
+      },
+      {
+        titel: 'Kan en solstorm gøre skade?',
+        tekst: '<p>Carrington-stormen i 1859 var så kraftig, at telegrafledninger slog gnister, og der var nordlys helt ned til Caribien. Sker det samme i dag, kan satellitter, GPS og elnet blive ramt. I 1989 slukkede en solstorm strømmen i Québec i Canada i ni timer.</p>',
+      },
+    ],
+    videre: [sted('solen', 'Solen'), gå('solsystem:solensfremtid', 'Solens fremtid')],
+    nørd: '<p><b>Udbruddet</b> hedder en <i>koronamasseudkastning</i> (CME). Magnetfelter i Solens yderste lag bliver vredet sammen, til de springer som en elastik. Partiklerne kommer især ind på Jordens natside: Magnetfeltet bliver strakt ud i en lang hale, og når feltlinjerne i halen "klikker" sammen igen, bliver partiklerne skudt ned mod polerne.</p>',
+    ærligt: '<p>Solen er i virkeligheden 109 gange bredere end Jorden og 150 millioner km væk. Her er alt rykket tæt sammen.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera }) {
     // Solen og dens lys

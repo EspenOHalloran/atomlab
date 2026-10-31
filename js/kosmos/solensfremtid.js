@@ -3,6 +3,7 @@
 // Tal: Schröder og Smith (2008) og lærebøger. Rød kæmpe størst om ca. 7,6 mia. år (ca. 250 gange så bred som i dag).
 
 import * as THREE from 'three';
+import { sted, gå, skærm } from '../sideknap.js';
 import { stjerne, glød, prikSky, skilt, KVALITET } from './faelles.js';
 
 const AU = 7; // 1 astronomisk enhed (Jordens afstand til Solen) i animationen
@@ -48,7 +49,7 @@ const TRIN = [
   },
   {
     titel: 'En hvid dværg', r: 0.18, farve: ORANGE, glød: 0.9, bane: 1.85, radius: 14,
-    tekst: 'Tilbage er den glødende kerne af carbon og oxygen: en hvid dværg på størrelse med Jorden, men med over halvdelen af Solens masse. Den fusionerer ikke mere og bliver langsomt koldere i mange milliarder år. Prøv Hvid dværg i listen.',
+    tekst: 'Tilbage er den glødende kerne af carbon og oxygen: en hvid dværg på størrelse med Jorden, men med over halvdelen af Solens masse. Den fusionerer ikke mere og bliver langsomt koldere i mange milliarder år.',
     panel: ['fra ca. 12,3 mia. år', 'som Jorden', 'svag, og den bliver svagere'],
   },
 ];
@@ -67,18 +68,31 @@ export default {
     ['Som rød kæmpe', 'over 200 gange så bred'],
     ['Som hvid dværg', 'på størrelse med Jorden'],
   ],
-  kort: `
-    <p>Solen er ca. 4,6 milliarder år gammel og cirka halvvejs gennem sit liv. I midten smelter hydrogen sammen til helium, ligesom i Stjerneovnen.</p>
-    <p>Om ca. 5 milliarder år er hydrogenet i midten brugt op. Så begynder Solen at svulme op til en <b>rød kæmpe</b>, over 200 gange så bred som i dag. Merkur og Venus bliver slugt, og måske også Jorden. Når Solen er størst, tænder helium i midten. Så trækker Solen sig sammen igen, og helium smelter sammen til carbon og oxygen.</p>
-    <p>Til sidst blæser Solen sine ydre lag ud i rummet som en lysende boble af gas: en <b>planetarisk tåge</b>. Tilbage bliver den glødende kerne: en <b>hvid dværg</b> på størrelse med Jorden, som langsomt køler af i milliarder af år. Solen er for lille til at eksplodere som en supernova.</p>
-    <p>Tryk "Næste", og følg Solens liv i dit eget tempo.</p>`,
-  nørd: `
-    <p><b>Hvorfor svulmer den op?</b> Når hydrogenet i midten er brugt op, trækker midten sig sammen og bliver varmere. Så smelter hydrogen sammen i en skal uden om midten, og det ekstra tryk puster de ydre lag op. Overfladen bliver køligere (ca. 2.500-4.000 grader) og derfor rød. Alligevel lyser Solen et par tusind gange stærkere end i dag, fordi den er så stor.</p>
-    <p><b>Heliumglimtet:</b> Når midten når ca. 100 millioner grader, tænder helium. I en stjerne som Solen sker det pludseligt og voldsomt: heliumglimtet. Energien bliver brugt inde i midten, så det kan ikke ses udefra. Bagefter smelter helium roligt sammen til carbon og oxygen i ca. 100 millioner år.</p>
-    <p><b>Planetarisk tåge:</b> Navnet er misvisende. Tågerne har intet med planeter at gøre, men i 1700-tallets teleskoper lignede de små, runde planeter. Tågen lyser, fordi den varme kerne (ofte over 100.000 grader) lyser den op. Farverne kommer fra forskellige grundstoffer, fx oxygen (grønblå) og hydrogen (rød).</p>
-    <p><b>Den hvide dværg</b> vejer lidt over halvdelen af det, Solen vejer i dag, men er kun på størrelse med Jorden. En teskefuld vejer flere ton. Den lyser kun af sin rest-varme og bliver langsomt koldere. Det tager længere tid, end universet har eksisteret, før en hvid dværg bliver helt kold.</p>
-    <p><b>Jordens bane:</b> Når Solen mister masse, trækker den mindre i planeterne, og banerne bliver større. Om det er nok til, at Jorden slipper for at blive slugt, afhænger af detaljer, som forskerne endnu ikke er enige om.</p>
-    <p><b>Ærligt talt:</b> Solen og planeterne er tegnet alt for store i forhold til banerne. Hvis Jordens bane var så stor som her, ville Solen i dag kun være en lille prik. Tiden går også ujævnt: 5 milliarder år og de 10.000 år, tågen lyser, tager lige lang tid her.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'Solen er ca. 4,6 milliarder år gammel og cirka halvvejs gennem sit liv. Gå frem trin for trin, og følg resten af dens liv.',
+    emner: [
+      {
+        titel: 'Hvad sker der, når brinten slipper op?',
+        tekst: '<p>Om ca. 5 milliarder år er hydrogenet i midten brugt op. Så begynder Solen at svulme op til en rød kæmpe, over 200 gange så bred som i dag. Merkur og Venus bliver slugt, og måske også Jorden. Når Solen er størst, tænder helium i midten. Så trækker Solen sig sammen igen, og helium smelter sammen til carbon og oxygen.</p>',
+      },
+      {
+        titel: 'Hvordan ender Solen?',
+        tekst: '<p>Til sidst blæser Solen sine ydre lag ud i rummet som en lysende boble af gas: en planetarisk tåge. Tilbage bliver den glødende kerne: en hvid dværg på størrelse med Jorden, som langsomt køler af i milliarder af år. Solen er for lille til at eksplodere som en supernova.</p>',
+      },
+      {
+        titel: 'Bliver Jorden slugt?',
+        tekst: '<p>Det ved man ikke. Når Solen mister masse, trækker den mindre i planeterne, og banerne bliver større. Om det er nok til, at Jorden slipper for at blive slugt, afhænger af detaljer, som forskerne endnu ikke er enige om.</p>',
+      },
+    ],
+    videre: [gå('kosmos:hviddvaerg', 'Hvid dværg i Kosmos'), sted('solen', 'Solen i dag'), skærm('#fusion', 'Stjerneovnen')],
+    nørd: `
+      <p><b>Hvorfor svulmer den op?</b> Når hydrogenet i midten er brugt op, trækker midten sig sammen og bliver varmere. Så smelter hydrogen sammen i en skal uden om midten, og det ekstra tryk puster de ydre lag op. Overfladen bliver køligere (ca. 2.500-4.000 grader) og derfor rød. Alligevel lyser Solen et par tusind gange stærkere end i dag, fordi den er så stor.</p>
+      <p><b>Heliumglimtet:</b> Når midten når ca. 100 millioner grader, tænder helium. I en stjerne som Solen sker det pludseligt og voldsomt: heliumglimtet. Energien bliver brugt inde i midten, så det kan ikke ses udefra. Bagefter smelter helium roligt sammen til carbon og oxygen i ca. 100 millioner år.</p>
+      <p><b>Planetarisk tåge:</b> Navnet er misvisende. Tågerne har intet med planeter at gøre, men i 1700-tallets teleskoper lignede de små, runde planeter. Tågen lyser, fordi den varme kerne (ofte over 100.000 grader) lyser den op. Farverne kommer fra forskellige grundstoffer, fx oxygen (grønblå) og hydrogen (rød).</p>
+      <p><b>Den hvide dværg</b> vejer lidt over halvdelen af det, Solen vejer i dag, men er kun på størrelse med Jorden. En teskefuld vejer flere ton. Den lyser kun af sin rest-varme og bliver langsomt koldere. Det tager længere tid, end universet har eksisteret, før en hvid dværg bliver helt kold.</p>`,
+    ærligt: '<p>Solen og planeterne er tegnet alt for store i forhold til banerne. Hvis Jordens bane var så stor som her, ville Solen i dag kun være en lille prik. Tiden går også ujævnt: 5 milliarder år og de 10.000 år, tågen lyser, tager lige lang tid her.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera, opdaterKnapper, forklaring }) {
     // ---------- Solen ----------

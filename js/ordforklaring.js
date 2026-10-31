@@ -5,8 +5,9 @@
 import { ORDBOG } from './data/ordbog.js';
 
 // Steder med tekst, hvor fagord bliver markeret. Hvert sted får hvert ord markeret én gang (første gang det står der).
+// I Kosmos og Solsystemet er hver foldeboks på siden sit eget sted (.side-del), så ordet også er markeret i den boks, man åbner.
 const ZONER = [
-  '.hjælp-indhold', '.forklaring-boks', '.seneste-boks', '.kosmos-tekst', '.kosmos-forklaring', '.fane',
+  '.hjælp-indhold', '.forklaring-boks', '.seneste-boks', '.side-del', '.kosmos-forklaring', '.fane',
   '.system-kort', '.system-kategori', '.ærligt', '.ut-tekst', '.pille-mere', '#logListe li', '.hk-tekst', '.hk-nørd',
 ].join(', ');
 // Her markeres aldrig (knapper, overskrifter, citater og fremhævet tekst)

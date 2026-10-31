@@ -9,7 +9,8 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
 // ---------- Uden browser: ordlisten ----------
 const rod = new URL('..', import.meta.url).pathname;
 const filer = ['index.html', ...readdirSync(rod + 'js').filter((f) => f.endsWith('.js')).map((f) => 'js/' + f),
-  ...readdirSync(rod + 'js/kosmos').map((f) => 'js/kosmos/' + f), ...readdirSync(rod + 'js/data').filter((f) => f !== 'ordbog.js').map((f) => 'js/data/' + f)];
+  ...readdirSync(rod + 'js/kosmos').map((f) => 'js/kosmos/' + f), ...readdirSync(rod + 'js/data').filter((f) => f !== 'ordbog.js' && f.endsWith('.js')).map((f) => 'js/data/' + f),
+  ...readdirSync(rod + 'js/data/sider').map((f) => 'js/data/sider/' + f)];
 const tekst = filer.map((f) => readFileSync(rod + f, 'utf8')).join('\n').toLowerCase();
 const former = new Set();
 for (const o of ORDBOG) {
@@ -39,7 +40,7 @@ const vist = () => T(() => atomlabTest.ord.vist());
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForTimeout(1500);
 await T(() => atomlabTest.kosmos.vælg('supernova'));
-await page.click('[data-kosmos-fane="nørd"]');
+await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary'); // folder "For nørder" ud
 // Hold øje med ordet i stedet for at vente en fast tid (testbrowseren tegner langsomt)
 const markeret = await page.waitForSelector('#kosmosTekst .fagord[data-ord="neutrino"]', { timeout: 3000 }).then(() => true, () => false);
 tjek('supernova: "neutrino" er markeret', markeret);
@@ -72,10 +73,13 @@ await page.waitForTimeout(200);
 tjek('Enter på ordet viser forklaringen', (await vist()) === 'Neutrino');
 await page.keyboard.press('Escape');
 
+// Hver foldeboks på siden er sin egen tekst: "neutronstjerne" er markeret både i et emne og i "For nørder"
+tjek('supernova: fagord er markeret i hver boks for sig', await T(() => [...document.querySelectorAll('#kosmosTekst .side-del')].filter((d) => d.querySelector('.fagord[data-ord="neutronstjerne"]')).length >= 2));
+
 // Ord bliver kun markeret én gang pr. tekst og aldrig i knapper, overskrifter og citater
 const tjekMærker = async (sted) => {
   const res = await T(() => {
-    const ZONER = '.hjælp-indhold, .forklaring-boks, .seneste-boks, .kosmos-tekst, .kosmos-forklaring, .fane, .system-kort, .ærligt, .ut-tekst, .pille-mere, #logListe li';
+    const ZONER = '.hjælp-indhold, .forklaring-boks, .seneste-boks, .side-del, .kosmos-forklaring, .fane, .system-kort, .ærligt, .ut-tekst, .pille-mere, #logListe li';
     let dobbelt = 0;
     for (const z of document.querySelectorAll(ZONER)) {
       const ord = [...z.querySelectorAll('.fagord')].filter((k) => k.parentElement.closest(ZONER) === z).map((k) => k.dataset.ord);

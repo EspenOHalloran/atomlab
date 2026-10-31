@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (U2 er færdig: styringen på billedet i Solsystemet og Kosmos. U3, U4 og M8b/M8c venter på jeres valg og go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (U3 er færdig: siden i lag i Solsystemet og Kosmos. U4 og M8b/M8c venter på jeres valg og go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,22 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (31. oktober 2026): U2, styringen på billedet i Solsystemet og Kosmos.** Planen og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U2". **Næste:** U3 (siden i lag med faktatjek af stedernes tal), U4 (tidsknappen og kontakterne i resten af AtomLab) eller M8b/M8c. Det venter på jeres valg og go.
+**Senest lavet (31. oktober 2026): U3, siden i lag i Solsystemet og Kosmos.** Planen, stedernes tal og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "U3: Stedernes tal" og "Status for U3". Jeres svar ved go: "Go til dine anbefalinger". **Næste:** U4 (tidsknappen og kontakterne i resten af AtomLab) eller M8b/M8c. Det venter på jeres valg og go. Valgfrit: Fable kan lave et eftersyn efter U3 (F4 i [docs/plan-fable.md](docs/plan-fable.md)).
+- **Fanerne "Kort fortalt" og "For nørder" er væk.** Højre panel er én side fra let til dybt: tallene, "Lige nu", Kort (fremme), emnerne som foldebokse med et spørgsmål som overskrift, "Gå videre", For nørder, Billederne og Ærligt talt (altid sidst i sin egen boks) og citatet.
+- **Hvert sted har sin egen side** med 2-4 tal (fx Olympus Mons: ca. 22 km høj, ca. 600 km bred, ca. 7 × Danmark). Mars' side handler om Mars som helhed og peger videre til stederne. Det, der handlede om et sted (Olympus Mons, Tharsis, månerne, Stå på Mars …), står nu på stedets side, også stedets egne "Billederne" og "Ærligt talt". Det gælder også Saturn, Jorden og Månen.
+- **"Tryk X" er blevet til knapper i teksten:** et sted ("Calderaen ›"), en kontakt (viser, om den er tændt), en handling (grå, når den ikke kan bruges lige nu), tidsknappen og andre dele. Solens fremtid peger nu på "Hvid dværg i Kosmos ›".
+- **En kontakt folder sit emne ud:** Slår man fx "Modlys" til, folder emnet om modlys sig ud, og emner, siden selv har foldet ud, folder sig sammen.
+- **Faktatjek:** 26 nye tal tjekket mod JPL, NSSDC og Wikipedia. Tigerstriberne på Enceladus er rettet fra 135 til ca. 130 km. Iapetus, Saturns tredjestørste måne, er ikke med i programmet. Det står nu i "Ærligt talt" ved Saturns måner.
+- **Ordbogen** peger nu på Olympus Mons og Calderaen ("skjoldvulkan" og "caldera"), hvor ordene står.
+- **Tests:** Nye tjek i `kosmos`, `solsystem` (alle steder i træet), `lag`, `ordforklaring`, `mars`, `saturn` og `jorden`. Hele samlingen: alle 28 tests bestod (31. oktober 2026).
+- **Ikke afprøvet (på tabletten):**
+  1. Er siden let at læse, og er det tydeligt, at overskrifterne med ▸ kan foldes ud?
+  2. Er siden for lang på pc, når flere emner er foldet ud?
+  3. Folder emnet sig ud, når I slår en kontakt til (fx "Modlys" ved Mars), og kan I se det på tablet på højkant, hvor panelet står under billedet?
+  4. Er knapperne i teksten lette at ramme med en finger, og ligner en kontakt i teksten en kontakt?
+  5. Mangler I noget fra de gamle tekster? Mars' og Saturns tekster er delt ud på stederne og skrevet om.
+
+**Før det (31. oktober 2026): U2, styringen på billedet i Solsystemet og Kosmos.** Planen og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U2".
 - **"Prøv selv" er væk.** Alt, der styrer billedet, står nu i billedet:
   - **Bjælken forneden:** trinene med "‹", "Næste: … ›", til sidst "↺ Forfra" og på flybyen ✕, og scenens handlinger (fx "▶ Start flyby", "🧍 Stå på Mars", "💥 Send en solstorm"). Man kan trykke på prikkerne i underteksten og springe til et trin. Bjælken står der også med "Kun grafik".
   - **Styr-boksen øverst til højre:** kontakterne (tændt er fyldt med ✓) og skyderne. Åben på pc og tablet på langs, foldet sammen til "Styr" på tablet på højkant og telefon.
@@ -93,7 +108,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Trinene:** U1 (træet og stedets side), U2 (styringen på billedet), U3 (siden i lag med faktatjek af stedernes tal) og U4 (tidsknappen og kontakterne i resten af AtomLab). Hvert trin får et go og sin egen PR.
 - **Anbefaling:** U1 og U2 før Mars M8. Ellers kommer M8's nye steder og knapper ind i det gamle "Prøv selv" og skal flyttes bagefter.
 - **Model:** Opus bygger det hele med høj effort til U1 og U2. En billigere model ville ikke spare meget og kunne give fejl i den fælles skal (begrundelsen står i planen). Haiku bruges kun til lange testlogs.
-- **Lille fejl fundet:** Solens fremtid slutter med "Prøv Hvid dværg i listen", men siden flytningen står Hvid dværg i Kosmos. Rettes i U3.
+- ~~**Lille fejl fundet:** Solens fremtid slutter med "Prøv Hvid dværg i listen", men siden flytningen står Hvid dværg i Kosmos. Rettes i U3.~~ Rettet i U3.
 
 **Før det (30. oktober 2026): Mars M6b, flybyen ud til Phobos og Deimos. M6 er færdig.** **Jeres valg (30. oktober 2026): M8 (Stå på Mars) kommer før M7b.** Prompten til planen står i [docs/plan-mars.md](docs/plan-mars.md) under "Prompt til M8". Planen laves først, og bygningen venter på jeres go.
 - **Flybyen har nu 13 stop:** Efter Nordpolen går turen ud til **Phobos** (Stickney ude ved kanten i lav sol, Mars i baggrunden), **"Mars set fra Phobos"** (kameraet står 300 m over Phobos og kigger op: Mars er 42,5° bred og drejer, og man kan dreje hovedet og kigge ned på Phobos) og **Deimos** (Mars er en kugle på 16,6° ved siden af).
@@ -483,7 +498,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - [ ] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (se [docs/plan-ux.md](docs/plan-ux.md))
   - [x] U1: Træet til venstre (kloder, Steder, Måner og Forsøg) og stedets side til højre. Vejen i toplinjen (30. oktober 2026).
   - [x] U2: Bjælken med tur og "Næste", Styr-boksen med kontakter og skydere og tidsknappen på billedet. "Prøv selv" forsvinder (31. oktober 2026).
-  - [ ] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek).
+  - [x] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek) (31. oktober 2026).
   - [ ] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab.
 
 ## Idéer til senere

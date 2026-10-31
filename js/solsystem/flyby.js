@@ -1,12 +1,12 @@
 // Flybyen: en guidet tur med stop i et planetsystem (Saturn og Mars). Hvert stop har en undertekst med prikker
-// (fase), en tekst i panelet og bjælkens "Næste: … ›" i 3D-billedet. Selve flyvningen til stoppet laver planeten
+// (fase) og bjælkens "Næste: … ›" i 3D-billedet. Selve flyvningen til stoppet laver planeten
 // (flyvTil).
 //
-// stop: [{ titel, tekst, mere, knap }]: tekst er underteksten, mere teksten i panelet og knap et kortere navn på
-//   "Næste"-knappen (ellers titlen).
+// stop: [{ titel, tekst, knap }]: tekst er underteksten og knap et kortere navn på "Næste"-knappen (ellers titlen).
+//   Stedets tekst i panelet er stedets side (sider i fænomenet, js/faenomenskaerm.js).
 // fase og forklaring kommer fra fænomenskærmen. flyvTil(stop, nr, hop) flyver kameraet derhen. hop er true, når man
-// springer (‹ eller en prik) i stedet for at tage det næste stop. skift() bygger knapperne om. slut kommer til sidst i
-// panelet ved det sidste stop.
+// springer (‹ eller en prik) i stedet for at tage det næste stop. skift() bygger knapperne om. slut står i "Lige nu"
+// i panelet ved det sidste stop.
 
 export function lavFlyby({ stop, fase, forklaring, flyvTil, skift, slut = '' }) {
   let trin = null; // det stop, turen er ved (null = ingen tur)
@@ -19,7 +19,7 @@ export function lavFlyby({ stop, fase, forklaring, flyvTil, skift, slut = '' }) 
     const s = stop[nr];
     const sidste = nr === stop.length - 1;
     fase(s.titel, s.tekst, [nr + 1, stop.length]);
-    forklaring(s.mere + (sidste ? slut : ''));
+    forklaring(sidste ? slut : '');
     flyvTil(s, nr, hop);
     if (sidste) trin = null;
     skift();

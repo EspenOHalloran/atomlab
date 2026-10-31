@@ -4,6 +4,7 @@
 // → de første stjerner. Man går selv videre fra trin til trin, så der er tid til at læse.
 
 import * as THREE from 'three';
+import { handling, gå, skærm } from '../sideknap.js';
 import { glød, prikSky, KVALITET } from './faelles.js';
 
 // 128 kernepartikler. Fra start er halvdelen neutroner. Da fusionen går i gang, er der 1 neutron for hver 7 protoner (16 og 112).
@@ -53,7 +54,7 @@ const TRIN = [
   },
   {
     titel: 'De første stjerner',
-    tekst: 'Tyngdekraften samler gassen i klumper, og de første stjerner tænder. Inde i dem, og når de eksploderer, bliver hydrogen og helium til carbon, oxygen og jern, som Big Bang aldrig nåede at lave. Prøv "Ny stjerne" i listen.',
+    tekst: 'Tyngdekraften samler gassen i klumper, og de første stjerner tænder. Inde i dem, og når de eksploderer, bliver hydrogen og helium til carbon, oxygen og jern, som Big Bang aldrig nåede at lave..',
     tid: 'Ca. 100-200 millioner år', skala: 7.2, radius: 10.5,
   },
 ];
@@ -71,18 +72,35 @@ export default {
     ['Bagefter var der', 'ca. 75 % hydrogen og 25 % helium'],
     ['De første atomer', 'efter ca. 380.000 år'],
   ],
-  kort: `
-    <p>For ca. 13,8 milliarder år siden var alt det, vi kan se i universet, samlet i en ufatteligt varm og tæt tilstand. Så begyndte rummet at udvide sig, og det gør det stadig. Det kalder vi <b>Big Bang</b>. Det var ikke en eksplosion et bestemt sted: Det var rummet selv, der begyndte at strække sig, alle steder på én gang.</p>
-    <p>I de første minutter var hele universet en kæmpe stjerneovn. Protoner og neutroner smeltede sammen til helium. Efter ca. 20 minutter var det slut, og resultatet var ca. 75 % hydrogen og 25 % helium. Sådan ser det stadig ud næsten overalt i universet. Næsten alle tungere grundstoffer blev lavet senere: i stjerner, når stjerner eksploderer, og når neutronstjerner støder sammen.</p>
-    <p>Tryk "Start universet", og gå videre med "Næste" i dit eget tempo.</p>`,
-  nørd: `
-    <p><b>Hvorfor lige 25 % helium?</b> Da fusionen gik i gang efter ca. 3 minutter, var der ca. 1 neutron for hver 7 protoner. Tag 16 nukleoner: 2 neutroner og 14 protoner. De 2 neutroner og 2 af protonerne bliver til én heliumkerne. Det er 4 ud af 16, altså 25 % af vægten. De 12 andre protoner bliver hydrogen. Målinger af gasskyer, der næsten ikke indeholder tungere grundstoffer, og af baggrundsstrålingen passer med det.</p>
-    <p><b>Hvorfor blev neutronerne færre?</b> En fri neutron henfalder til en proton, en elektron og en antineutrino (halveringstiden er ca. 10 minutter). I det første sekund blev neutroner og protoner også hele tiden lavet om til hinanden. Da universet var kølet af, gik det lettest den vej, der giver en proton, fordi neutronen er en smule tungere.</p>
-    <p><b>Lettere end i Solen:</b> I Stjerneovnen er det første skridt (proton + proton → deuterium) det sværeste, fordi en proton skal laves om til en neutron. En proton i Solen venter i gennemsnit milliarder af år på det. I Big Bang var der frie neutroner, så proton + neutron → deuterium gik let.</p>
-    <p><b>Hvorfor stoppede det ved helium?</b> Der findes ingen stabile kerner med 5 eller 8 nukleoner. Helium-4 plus en proton falder straks fra hinanden, og det gør to heliumkerner (beryllium-8) også. Se det selv i Stjerneovnen. Stjernerne klarer det senere, fordi de har millioner af år og stor tæthed, så tre heliumkerner kan nå at mødes. Big Bang havde kun minutter.</p>
-    <p><b>Det første lys:</b> Vi kan stadig se lyset fra dengang, da de første atomer blev dannet. Universet er udvidet så meget siden, at lyset er strakt ud til mikrobølger. Det blev opdaget ved et tilfælde i 1964 af Arno Penzias og Robert Wilson. De mistænkte blandt andet duerne, der boede i antennen, og deres klatter for at give støjen. De fjernede duerne og gjorde rent, men støjen blev ved.</p>
-    <p><b>Navnet</b> "Big Bang" fandt astronomen Fred Hoyle på i et radioprogram i 1949. Han troede selv ikke på teorien.</p>
-    <p><b>Ærligt talt:</b> Animationen viser en klump, der vokser. Men Big Bang skete ikke ét sted i et tomt rum. Det var rummet selv, der udvidede sig overalt. Der er også ufatteligt mange flere partikler, og tiden er spolet vildt: En hundredtusindedel af et sekund, 3 minutter og 380.000 år tager her lige lang tid.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'For ca. 13,8 milliarder år siden var alt det, vi kan se i universet, samlet i en ufatteligt varm og tæt tilstand. Det kalder vi Big Bang. Gå frem trin for trin i dit eget tempo.',
+    emner: [
+      {
+        titel: 'Var Big Bang en eksplosion?',
+        tekst: '<p>Nej, ikke en eksplosion et bestemt sted. Det var rummet selv, der begyndte at strække sig, alle steder på én gang. Og det gør det stadig.</p>',
+      },
+      {
+        titel: 'Hvor kommer grundstofferne fra?',
+        tekst: '<p>I de første minutter var hele universet en kæmpe stjerneovn. Protoner og neutroner smeltede sammen til helium. Efter ca. 20 minutter var det slut, og resultatet var ca. 75 % hydrogen og 25 % helium. Sådan ser det stadig ud næsten overalt i universet. Næsten alle tungere grundstoffer blev lavet senere: i stjerner, når stjerner eksploderer, og når neutronstjerner støder sammen.</p>',
+      },
+      {
+        titel: 'Kan man se lyset fra dengang?',
+        tekst: '<p>Ja. Vi kan stadig se lyset fra dengang, da de første atomer blev dannet. Universet er udvidet så meget siden, at lyset er strakt ud til mikrobølger. Det blev opdaget ved et tilfælde i 1964 af Arno Penzias og Robert Wilson. De mistænkte blandt andet duerne, der boede i antennen, og deres klatter for at give støjen. De fjernede duerne og gjorde rent, men støjen blev ved.</p>',
+      },
+      {
+        titel: 'Hvem fandt på navnet?',
+        tekst: '<p>"Big Bang" fandt astronomen Fred Hoyle på i et radioprogram i 1949. Han troede selv ikke på teorien.</p>',
+      },
+    ],
+    videre: [handling('Start universet', '▶ Start universet'), gå('kosmos:stjernefoedsel', 'Ny stjerne'), skærm('#fusion', 'Stjerneovnen')],
+    nørd: `
+      <p><b>Hvorfor lige 25 % helium?</b> Da fusionen gik i gang efter ca. 3 minutter, var der ca. 1 neutron for hver 7 protoner. Tag 16 nukleoner: 2 neutroner og 14 protoner. De 2 neutroner og 2 af protonerne bliver til én heliumkerne. Det er 4 ud af 16, altså 25 % af vægten. De 12 andre protoner bliver hydrogen. Målinger af gasskyer, der næsten ikke indeholder tungere grundstoffer, og af baggrundsstrålingen passer med det.</p>
+      <p><b>Hvorfor blev neutronerne færre?</b> En fri neutron henfalder til en proton, en elektron og en antineutrino (halveringstiden er ca. 10 minutter). I det første sekund blev neutroner og protoner også hele tiden lavet om til hinanden. Da universet var kølet af, gik det lettest den vej, der giver en proton, fordi neutronen er en smule tungere.</p>
+      <p><b>Lettere end i Solen:</b> I Stjerneovnen er det første skridt (proton + proton → deuterium) det sværeste, fordi en proton skal laves om til en neutron. En proton i Solen venter i gennemsnit milliarder af år på det. I Big Bang var der frie neutroner, så proton + neutron → deuterium gik let.</p>
+      <p><b>Hvorfor stoppede det ved helium?</b> Der findes ingen stabile kerner med 5 eller 8 nukleoner. Helium-4 plus en proton falder straks fra hinanden, og det gør to heliumkerner (beryllium-8) også. Se det selv i Stjerneovnen. Stjernerne klarer det senere, fordi de har millioner af år og stor tæthed, så tre heliumkerner kan nå at mødes. Big Bang havde kun minutter.</p>`,
+    ærligt: '<p>Animationen viser en klump, der vokser. Men Big Bang skete ikke ét sted i et tomt rum. Det var rummet selv, der udvidede sig overalt. Der er også ufatteligt mange flere partikler, og tiden er spolet vildt: En hundredtusindedel af et sekund, 3 minutter og 380.000 år tager her lige lang tid.</p>',
+  },
 
   lav(gruppe, { effekter, lyd, fase, kamera, opdaterKnapper, forklaring }) {
     // ---------- Det, man ser ----------

@@ -167,7 +167,7 @@ await s.screenshot({ path: `${UD}/pc-jorden.png` });
 await s.click('#solsystemTræ button[data-sted="månen"]');
 await f(s, 'f.hop()');
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().flyver());
-tjek('"Månen": kameraet er ved Månen', (await f(s, 'f.ved()')) === 'månen' && /Månen:/.test(await s.textContent('#solsystemForklaring')));
+tjek('"Månen": kameraet er ved Månen', (await f(s, 'f.ved()')) === 'månen' && (await s.evaluate(() => atomlabTest.solsystem.side().nøgle)) === 'jorden:månen');
 const kam = await s.evaluate(async () => { const { verden } = await import('/js/scene3d.js'); return verden.kamera.position.length(); });
 tjek(`kameraet er tæt på Månen (${kam.toFixed(1)} enheder fra midten, Månens radius 1,74)`, kam > 1.74 && kam < 20);
 await s.waitForTimeout(1500);

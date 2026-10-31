@@ -32,6 +32,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Fagord forklares med få ord første gang, de bruges i en tekst (fx "en neutrino (en næsten usynlig partikel)", "en alfapartikel (en heliumkerne)"). Læs teksten, som om du ikke kan fysik.
 - [ ] Står der et tal fra spillet (fx "6-16"), så sig også, hvad det tæller ("spaltninger i sekundet i det grønne felt").
 - [ ] Nye fagord kommer i ordbogen (`js/data/ordbog.js`), så de kan trykkes på. Forklaringen er højst 260 tegn.
+- [ ] Flytter en tekst til en anden side eller fil (fx et sted i Solsystemet), så søg efter links til den (Ordbogens `LINKS`, `data-gaa`, `HVORFOR`), og lad dem pege på det sted, teksten står nu (U3).
 - [ ] Undertekster (trin og faser): Pointen står i første sætning, og teksten er under ca. 160 tegn. På tablet og telefon ses kun to linjer, og man trykker sjældent på "Mere". Detaljer hører til i panelet eller "For nørder".
 
 ### C. Ny regel, beregning eller spillogik
@@ -435,6 +436,13 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Fælles regel i stedet for at flytte knapper én for én:** Skallen sorterer selv `styring` (handling → bjælken, kontakt og skyder → Styr-boksen). Derfor skulle de 11 fænomener i Kosmos næsten ikke ændres. Kun "↺ Forfra" fik `skjul`, så bjælken ikke fyldes med grå knapper.
 - **Et nyt sted for en knap viser fejl i tilstande, ingen havde set:** "▶ Start flyby" stod pludselig i bjælken, mens man stod på Mars (før lå den i "Prøv selv", hvor den blev skiftet ud). Testen `landskab` fangede det.
 - **Tegn ikoner i små knapper** (SVG) i stedet for tegn som ⏸: Nogle skrifttyper viser ⏸ meget lille, mens ▶ bliver en emoji.
+
+### Siden i lag (U3, 31. oktober 2026)
+- **Tekster, der deles op, skal skrives, ikke flyttes:** Hvert sted fik et nyt Kort, fordi stedets gamle tekst var den samme som underteksten. En test tjekker nu på hvert sted og i hvert fænomen, at underteksten ikke står på siden (`fase()` mod `side().tekst`).
+- **Et link i en ordbog eller tekst skal pege på det sted, ordet står:** Da teksterne om Olympus Mons flyttede fra Mars' side til stedets, pegede Ordbogens "skjoldvulkan" og "caldera" stadig på Mars. Testen `ordbog` læste hele mars.js og så det ikke. Derfor kan `data-gaa` nu pege på et sted (`solsystem:mars:olympus`).
+- **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
+- **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
+- **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
 
 ### Certifikater: "unable to get local issuer certificate" (30. oktober 2026)
 - `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` var ikke blokeret af proxyen (tunnelen svarede 200). Containeren manglede rodcertifikatet "emSign Root CA - G1" (utexas og asu), og dlr.de sender ikke sit mellemcertifikat (GEANT TLS RSA 1).

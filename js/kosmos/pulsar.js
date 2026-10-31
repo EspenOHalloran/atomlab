@@ -2,6 +2,7 @@
 // Ligesom et fyrtårn: Hver gang en stråle fejer forbi Jorden, måler vi et blink.
 
 import * as THREE from 'three';
+import { kontakt, handling, gå } from '../sideknap.js';
 import { glød, dipolLinjer, skilt, rullendeGraf } from './faelles.js';
 import { lydErTændt } from '../lyd.js';
 
@@ -13,7 +14,6 @@ const OP = new THREE.Vector3(0, 1, 0);
 
 export default {
   id: 'pulsar',
-  hvorfor: ['magnetfelt'],
   navn: 'Pulsar',
   ikon: '🔦',
   undertitel: 'En neutronstjerne, der blinker som et fyrtårn',
@@ -25,16 +25,35 @@ export default {
     ['En teskefuld vejer', 'ca. 2-3 mia. ton'],
     ['Hurtigste kendte', '716 omgange i sekundet'],
   ],
-  kort: `
-    <p>Når en kæmpestjerne eksploderer som en supernova, kan der blive en <b>neutronstjerne</b> tilbage. Den er kun ca. 20 km bred, men den vejer mere end Solen. Den er næsten som én kæmpe atomkerne lavet af neutroner.</p>
-    <p>En <b>pulsar</b> er en neutronstjerne, der drejer hurtigt rundt. Den sender to stråler af radiobølger ud fra sine magnetiske poler. Ligesom et fyrtårn: Hver gang en stråle fejer forbi Jorden, måler vores radioteleskoper et blink. Grafen nederst viser blinkene. Alle pulsarer er altså neutronstjerner, men ikke alle neutronstjerner er pulsarer: Vi ser kun dem, hvis stråler fejer forbi Jorden, og gamle neutronstjerner drejer for langsomt til at blinke.</p>
-    <p>Prøv at lytte til tre rigtige pulsarer. Hvert klik er en omgang!</p>`,
-  nørd: `
-    <p><b>Opdaget af en studerende:</b> I 1967 opdagede Jocelyn Bell Burnell nogle radioblink, der kom præcis hvert 1,34 sekund. De var så regelmæssige, at man for sjov kaldte signalet LGM-1, "Little Green Men" (små grønne mænd). Hendes vejleder fik Nobelprisen for opdagelsen i 1974, men det gjorde hun ikke. I 2018 fik hun en stor pris på 3 millioner dollar, som hun gav væk til studerende.</p>
-    <p><b>Hvorfor drejer den så hurtigt?</b> Tænk på en skøjteløber, der trækker armene ind: Så drejer hun hurtigere. Da stjernen faldt sammen til 20 km, begyndte den at dreje hundredtusinder af gange hurtigere.</p>
-    <p><b>Ekstrem tyngdekraft:</b> Tabte man en ting fra 1 meters højde på en neutronstjerne, ville den ramme overfladen med over 1.000 km i sekundet. Magnetfeltet er omkring en billion gange stærkere end Jordens.</p>
-    <p><b>Universets bedste ure:</b> De hurtigste pulsarer tikker lige så præcist som atomure. Ved at holde øje med mange af dem har forskerne fundet spor af tyngdebølger, der ruller gennem hele vores galakse.</p>
-    <p><b>Ærligt talt:</b> Strålerne er mest radiobølger, som vi ikke kan se med øjnene. Her har de fået en farve. Og stjernen er tegnet langt større i forhold til strålerne.</p>`,
+  // Teksten i højre panel (siden i lag, U3 i docs/plan-ux.md)
+  side: {
+    kort: 'En pulsar er en neutronstjerne, der drejer hurtigt rundt og blinker som et fyrtårn. Grafen nederst viser blinkene.',
+    emner: [
+      {
+        titel: 'Hvad er en neutronstjerne?',
+        tekst: '<p>Når en kæmpestjerne eksploderer som en supernova, kan der blive en neutronstjerne tilbage. Den er kun ca. 20 km bred, men den vejer mere end Solen. Den er næsten som én kæmpe atomkerne lavet af neutroner.</p>',
+      },
+      {
+        titel: 'Hvorfor blinker den?', kontakt: '🧲 Vis magnetfeltet', hvorfor: ['magnetfelt'],
+        tekst: `<p>Pulsaren sender to stråler af radiobølger ud fra sine magnetiske poler. Ligesom et fyrtårn: Hver gang en stråle fejer forbi Jorden, måler vores radioteleskoper et blink. ${kontakt('🧲 Vis magnetfeltet')}</p>
+          <p>Alle pulsarer er altså neutronstjerner, men ikke alle neutronstjerner er pulsarer: Vi ser kun dem, hvis stråler fejer forbi Jorden, og gamle neutronstjerner drejer for langsomt til at blinke.</p>`,
+      },
+      {
+        titel: 'Hvordan lyder en pulsar?',
+        tekst: `<p>Lyt til tre rigtige pulsarer. Hvert klik er en omgang: ${handling('Vela', '🔊 Vela-pulsaren')} ${handling('Krabbe', '🔊 Krabbe-pulsaren')} ${handling('hurtigste', '🔊 Den hurtigste')}</p>`,
+      },
+      {
+        titel: 'Hvorfor drejer den så hurtigt?',
+        tekst: '<p>Tænk på en skøjteløber, der trækker armene ind: Så drejer hun hurtigere. Da stjernen faldt sammen til 20 km, begyndte den at dreje hundredtusinder af gange hurtigere.</p>',
+      },
+    ],
+    videre: [gå('kosmos:supernova', 'Supernova'), gå('kosmos:kilonova', 'Kilonova')],
+    nørd: `
+      <p><b>Opdaget af en studerende:</b> I 1967 opdagede Jocelyn Bell Burnell nogle radioblink, der kom præcis hvert 1,34 sekund. De var så regelmæssige, at man for sjov kaldte signalet LGM-1, "Little Green Men" (små grønne mænd). Hendes vejleder fik Nobelprisen for opdagelsen i 1974, men det gjorde hun ikke. I 2018 fik hun en stor pris på 3 millioner dollar, som hun gav væk til studerende.</p>
+      <p><b>Ekstrem tyngdekraft:</b> Tabte man en ting fra 1 meters højde på en neutronstjerne, ville den ramme overfladen med over 1.000 km i sekundet. Magnetfeltet er omkring en billion gange stærkere end Jordens.</p>
+      <p><b>Universets bedste ure:</b> De hurtigste pulsarer tikker lige så præcist som atomure. Ved at holde øje med mange af dem har forskerne fundet spor af tyngdebølger, der ruller gennem hele vores galakse.</p>`,
+    ærligt: '<p>Strålerne er mest radiobølger, som vi ikke kan se med øjnene. Her har de fået en farve. Og stjernen er tegnet langt større i forhold til strålerne.</p>',
+  },
 
   lav(gruppe, { lyd, verden, overlag, fase }) {
     // Stjernen drejer om y-aksen. Magnetfeltet og strålerne hælder i forhold til den.
