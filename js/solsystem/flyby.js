@@ -42,6 +42,16 @@ export function lavFlyby({ stop, fase, forklaring, flyvTil, skift, slut = '' }) 
     næste: () => gå(trin + 1),
     gå,
     afslut,
+    // Tag turen op igen ved stop nr, uden at flyve (kameraet er der allerede), fx når man kommer tilbage fra Stå på
+    // Mars midt på flybyen
+    fortsæt(nr) {
+      if (nr < 0 || nr >= stop.length - 1) return;
+      trin = nr;
+      const s = stop[nr];
+      fase(s.titel, s.tekst, [nr + 1, stop.length]);
+      forklaring('');
+      skift();
+    },
     // Trinene til bjælken i fænomenskærmen (null, når turen ikke kører)
     bjælke() {
       if (trin === null || trin < 0) return null;

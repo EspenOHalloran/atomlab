@@ -784,6 +784,9 @@ export default {
     const landskaber = new Map(); // krater → { data, land } (hentes første gang)
     let stående = null; // { krater, sd } mens man står på jorden
     let ståVent = null; // { krater, sd, fløjet, klar } mens kameraet flyver ned, og lagene hentes
+    // Flybyens stop, hvis man gik ned fra flybyen. Mens man står, er flybyen sat på pause (dens trin er væk fra
+    // bjælken), og "↑ Tilbage til flybyen" letter og tager den op igen ved stoppet.
+    let fraFlyby = null;
     let landing = null; // kameraet lander (eller letter: op = true)
     let kikkert = 1; // kameraets zoom (som en kikkert)
     const gemt = { pos: new THREE.Vector3(), nær: 0, eksponering: 1, glød: true };
@@ -891,11 +894,12 @@ export default {
       lavKnapper();
     }
     // Op i kredsløb igen: tilbage til kraterets stop
-    function tilbageOp(til = stående?.krater) {
+    function tilbageOp(til = stående?.krater, efter) {
       if (!stående) return;
       landing = { t: 0, T: ROLIG ? 0 : 2.2, op: true, fra: kamera.position.y, færdig: () => ton(() => {
         forladLandskab();
         gåTil(til);
+        efter?.();
       }) };
       orbit.enabled = false;
       lavKnapper();
@@ -1009,9 +1013,25 @@ export default {
       const { land } = stående;
       tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, trin: 0.05, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; } };
       return [
+        tilbageKnap(),
         tidsSkyder,
         { tekst: '🌅 Solnedgang', handling: solnedgang, deaktiv: () => !!landing },
       ];
+    }
+    // Vejen tilbage fra Stå på Mars (også mens kameraet flyver ned): op til kraterets stop, og kom man fra flybyen,
+    // fortsætter den dér med "Næste: … ›"
+    const tilbageKnap = () => ({ tekst: fraFlyby !== null ? '↑ Tilbage til flybyen' : '↑ Op i kredsløb', handling: tilbageFraLandskab, deaktiv: () => !!landing });
+    function tilbageFraLandskab() {
+      const krater = stående?.krater ?? ståVent?.krater;
+      if (!krater) return;
+      const nr = fraFlyby;
+      fraFlyby = null;
+      const efter = () => { if (nr !== null) flyby.fortsæt(nr); };
+      if (stående) tilbageOp(krater, efter);
+      else {
+        gåTil(krater);
+        efter();
+      }
     }
 
     // ---------- Knapperne ----------
@@ -1025,9 +1045,15 @@ export default {
         opdaterKnapper();
         return;
       }
-      // Stå på Mars ved et krater med et landskab (ikke under flyvningen derhen)
+      if (ståVent) knapper.push(tilbageKnap()); // på vej ned
+      // Stå på Mars ved et krater med et landskab (ikke under flyvningen derhen). Midt på flybyen sættes flybyen på
+      // pause, så dens "Næste" ikke står i bjælken, mens man står på jorden.
       const krater = LANDSKAB[visning] && !rejse.flyver ? visning : null;
-      if (krater) knapper.push({ tekst: '🧍 Stå på Mars', handling: () => ståPå(krater, LANDSKAB[krater][0]) });
+      if (krater) knapper.push({ tekst: '🧍 Stå på Mars', handling: () => {
+        fraFlyby = flyby.kører ? flyby.trin : null;
+        flyby.afslut();
+        ståPå(krater, LANDSKAB[krater][0]);
+      } });
       // Flybyen står i træet og bjælken (tur og trin nedenfor), og tiden styres med tidsknappen
       knapper.push(
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; } },
@@ -1082,6 +1108,8 @@ export default {
       if (id === stedNu()) return;
       const nr = ++gåNr;
       const stå = landskabMed(id);
+      // Et andet sted end krateret, man står ved, forlader flybyen helt (tilbageFraLandskab har selv gemt stoppet)
+      if (stå?.krater !== (stående ?? ståVent)?.krater) fraFlyby = null;
       // Fra landskabet: et andet sted ved krateret er et hop, og alt andet letter først (som "op i kredsløb")
       if (stående) return stå?.krater === stående.krater ? gåTilLandskab(stå.sd) : tilbageOp(id);
       ståVent = null;

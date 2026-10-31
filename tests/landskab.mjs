@@ -55,7 +55,7 @@ tjek('near er 0,3 m', Math.abs(t.nær - 0.0003) < 1e-9);
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('skyggekortene er regnet', (await stå()).skygger === 1);
 const kn = await knapper();
-tjek('knapperne: solnedgang i bjælken og klokken i Styr-boksen (op i kredsløb og Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['🌅 Solnedgang', 'Klokken på Mars']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
+tjek('knapperne: op i kredsløb og solnedgang i bjælken og klokken i Styr-boksen (Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['↑ Op i kredsløb', '🌅 Solnedgang', 'Klokken på Mars']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
 tjek('efter landingen står tiden stille (⏸, som ved et sted)', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
 tjek('i træet: "🧍 Naukluft" er markeret, og panelet og vejen viser stedet', (await træ()).find((p) => p.id === 'stå-naukluft')?.valgt && (await s.textContent('#solsystemNavn')) === 'Naukluft i Gale-krateret' && (await s.textContent('#solsystemVej')) === '› Mars › Naukluft i Gale-krateret');
 tjek('teksten om Naukluft og Mount Sharp', /Naukluft/.test(await s.textContent('#solsystemTekst')) && /Mount Sharp/.test(await s.textContent('#solsystemTekst')));
@@ -167,6 +167,36 @@ await s.waitForTimeout(800); // tonen mellem landskabet og kloden
 tjek('fra landingsstedet: Gale i træet letter', !(await stå()).står && (await stå()).kloden);
 await trykTræ('gale');
 await hop();
+
+// Fra flybyen ned på jorden og tilbage til flybyen (jeres fund efter M8b): Mens man står, er flybyens trin væk fra
+// bjælken, og "↑ Tilbage til flybyen" letter og fortsætter flybyen ved Gale
+const bjælke = () => fm(() => atomlabTest.solsystem.bjælke().map((k) => k.tekst));
+await trykTræ('mars');
+await hop();
+await tryk('▶ Start flyby');
+await hop();
+for (let i = 0; i < 12 && (await fm(() => atomlabTest.solsystem.fænomen().ved())) !== 'gale'; i++) {
+  await tryk('Næste');
+  await hop();
+}
+tjek('flybyen: ved Gale med "Næste: Jezero ›"', (await bjælke()).includes('Næste: Jezero ›'), JSON.stringify(await bjælke()));
+await tryk('🧍 Stå på Mars');
+tjek('på vej ned fra flybyen: "↑ Tilbage til flybyen" og ingen "Næste"', (await bjælke()).includes('↑ Tilbage til flybyen') && !(await bjælke()).some((k) => k.startsWith('Næste')), JSON.stringify(await bjælke()));
+await hop();
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 60000, polling: 200 });
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
+tjek('står (fra flybyen): flybyens trin er væk fra bjælken', (await fm(() => atomlabTest.solsystem.trin())) === null && !(await bjælke()).some((k) => k.startsWith('Næste') || k === '‹' || k === '✕'), JSON.stringify(await bjælke()));
+tjek('står (fra flybyen): knappen "↑ Tilbage til flybyen"', (await bjælke()).includes('↑ Tilbage til flybyen'), JSON.stringify(await bjælke()));
+await tryk('↑ Tilbage til flybyen');
+await fm(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
+await s.waitForTimeout(800); // tonen mellem landskabet og kloden
+await hop();
+t = await stå();
+const trinEfter = await fm(() => atomlabTest.solsystem.trin());
+tjek('"↑ Tilbage til flybyen": kloden ses, ved Gale, flybyen fortsætter (stop 8 af 13, "Næste: Jezero ›")', !t.står && t.kloden && (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'gale' && trinEfter?.nr === 7 && (await bjælke()).includes('Næste: Jezero ›'), JSON.stringify({ trinEfter, bjælke: await bjælke() }));
+tjek('og underteksten er flybyens igen', (await fm(() => atomlabTest.solsystem.fase()?.titel)) === 'Gale og Curiosity');
 
 // Skift skærm, mens man står: alt sættes tilbage
 await s.waitForFunction(() => atomlabTest.solsystem.knapper().includes('🧍 Stå på Mars'), null, { timeout: 10000, polling: 100 }).catch(() => {});
