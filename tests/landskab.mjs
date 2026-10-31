@@ -1,6 +1,7 @@
 // Stå på Mars (M8a i docs/plan-mars.md): knappen ved Gale, landingen, stedet og højden, Solen efter klokken, Phobos
-// står op i vest og Deimos i øst, at man drejer hovedet (træk mod højre: landskabet følger med), kikkerten, "Lad dagen
-// gå", "Solnedgang", at gå til Curiosity og tilbage i kredsløb (kameraet og kloden sættes tilbage).
+// står op i vest og Deimos i øst, at man drejer hovedet (træk mod højre: landskabet følger med), kikkerten, at dagen
+// går med tidsknappen (▶, U2 i docs/plan-ux.md), "Solnedgang", at gå til Curiosity og tilbage i kredsløb (kameraet og
+// kloden sættes tilbage).
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -18,8 +19,8 @@ const fm = (fn) => s.evaluate(fn);
 const stå = () => fm(() => atomlabTest.solsystem.fænomen().stå());
 const knapper = () => fm(() => atomlabTest.solsystem.knapper());
 const tryk = async (tekst) => {
-  await s.waitForFunction((t) => [...document.querySelectorAll('#solsystemStyring button')].some((k) => k.textContent.trim().startsWith(t) && !k.disabled), tekst, { timeout: 15000, polling: 100 });
-  await f((t) => [...document.querySelectorAll('#solsystemStyring button')].find((k) => k.textContent.trim().startsWith(t)).click(), tekst);
+  await s.waitForFunction((t) => [...document.querySelectorAll('#solsystemBjælke button')].some((k) => k.textContent.trim().startsWith(t) && !k.disabled), tekst, { timeout: 15000, polling: 100 });
+  await f((t) => [...document.querySelectorAll('#solsystemBjælke button')].find((k) => k.textContent.trim().startsWith(t)).click(), tekst);
 };
 const træ = () => fm(() => atomlabTest.solsystem.træ()); // træet i listen (U1, docs/plan-ux.md)
 const trykTræ = (id) => f((x) => document.querySelector(`#solsystemTræ button[data-sted="${x}"]`).click(), id);
@@ -50,7 +51,8 @@ tjek('near er 0,3 m', Math.abs(t.nær - 0.0003) < 1e-9);
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('skyggekortene er regnet', (await stå()).skygger === 1);
 const kn = await knapper();
-tjek('knapperne: klokken, lad dagen gå, solnedgang (op i kredsløb og Curiosity står i træet)', ['Klokken på Mars', '▶ Lad dagen gå', 'Solnedgang'].every((k) => kn.includes(k)) && !kn.some((k) => /Tilbage i kredsløb|Gå til/.test(k)), JSON.stringify(kn));
+tjek('knapperne: solnedgang i bjælken og klokken i Styr-boksen (op i kredsløb og Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['🌅 Solnedgang', 'Klokken på Mars']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
+tjek('efter landingen står tiden stille (⏸, som ved et sted)', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
 tjek('i træet: "🧍 Naukluft" er markeret, og panelet og vejen viser stedet', (await træ()).find((p) => p.id === 'stå-naukluft')?.valgt && (await s.textContent('#solsystemNavn')) === 'Naukluft i Gale-krateret' && (await s.textContent('#solsystemVej')) === '› Mars › Naukluft i Gale-krateret');
 tjek('teksten om Naukluft og Mount Sharp', /Naukluft/.test(await s.textContent('#solsystemForklaring')) && /Mount Sharp/.test(await s.textContent('#solsystemForklaring')));
 
@@ -86,13 +88,17 @@ for (let i = 0; i < 12; i++) await s.mouse.wheel(0, 600);
 await s.waitForTimeout(300);
 tjek('og tilbage til 1', (await stå()).zoom === 1);
 
-// Lad dagen gå og Solnedgang
+// ▶ lader dagen gå (før "Lad dagen gå"), og skyderen følger med, og Solnedgang
 const t0 = (await stå()).tid;
-await tryk('▶ Lad dagen gå');
+await s.click('#solsystemTid button[data-tid="spil"]');
 await s.waitForFunction((x) => atomlabTest.solsystem.fænomen().stå().tid > x + 0.05, t0, { timeout: 20000, polling: 200 }).catch(() => {});
-tjek('"Lad dagen gå": klokken går', (await stå()).tid > t0 + 0.05);
-await tryk('▶ Lad dagen gå');
-await tryk('Solnedgang');
+const skyder = await f(() => Number(document.querySelector('#solsystemStyr input[type=range]').value));
+tjek('▶: klokken går, og skyderen følger med', (await stå()).tid > t0 + 0.05 && skyder > t0 + 0.04, `${t0} → ${(await stå()).tid} (skyderen ${skyder})`);
+await s.click('#solsystemTid button[data-tid="pause"]');
+const t1 = (await stå()).tid;
+await s.waitForTimeout(600);
+tjek('⏸: klokken står stille', (await stå()).tid === t1);
+await tryk('🌅 Solnedgang');
 const sn = await stå();
 tjek('"Solnedgang": Solen står lige over horisonten om aftenen', sn.solHøjde > 0 && sn.solHøjde < 8 && sn.tid > 15, JSON.stringify({ sol: sn.solHøjde, tid: sn.tid }));
 

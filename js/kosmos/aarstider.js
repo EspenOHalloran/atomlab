@@ -54,7 +54,7 @@ const TRIN = [
   },
   {
     titel: 'Prøv selv', dag: null, tæt: false,
-    tekst: 'Vælg selv datoen med skyderen. Jo længere fra ækvator, jo større er forskellen mellem sommer og vinter.',
+    tekst: 'Vælg selv datoen med skyderen under Styr. Jo længere fra ækvator, jo større er forskellen mellem sommer og vinter.',
   },
 ];
 
@@ -176,7 +176,6 @@ export default {
     let dag = idagNr;
     let visDag = idagNr; // den dag, Jorden er tegnet ved (glider hen mod dag langs banen)
     let tæt = false;
-    let drejer = true;
     let selv = false; // man har selv flyttet skyderen
 
     const tabel = document.createElement('div');
@@ -226,17 +225,17 @@ export default {
       fase(t.titel, t.tekst, [trin + 1, TRIN.length]);
       if (t.dag) dag = t.dag;
       tæt = t.tæt;
-      styring[1].værdi = dag;
-      styring[2].til = tæt;
-      styring[0].tekst = trin < TRIN.length - 1 ? `Næste: ${TRIN[trin + 1].titel.toLowerCase()} ›` : 'Næste ›';
+      datoSkyder.værdi = dag;
+      tætKontakt.til = tæt;
       opdaterKnapper();
       stilKamera();
       panel();
     }
 
-    function næste() {
-      if (trin >= TRIN.length - 1) return;
-      trin++;
+    // Gå til et trin (Næste, ‹ og prikkerne i bjælken)
+    function gåTrin(nr) {
+      if (nr < 0 || nr >= TRIN.length) return;
+      trin = nr;
       selv = false;
       visTrin();
     }
@@ -248,9 +247,8 @@ export default {
       visTrin();
     }
 
-    const styring = [
-      { tekst: 'Næste ›', handling: næste, deaktiv: () => trin >= TRIN.length - 1 },
-      {
+    // Trinene står i bjælken (trin() nedenfor), og Jorden drejer, når tiden går (tidsknappen)
+    const datoSkyder = {
         skyder: true, navn: 'Dato', min: 1, max: 365, værdi: dag, vis: datoTekst,
         ændring: (v) => {
           dag = v;
@@ -261,11 +259,9 @@ export default {
           if (tæt) stilKamera();
           panel();
         },
-      },
-      { tekst: 'Tæt på Jorden', til: tæt, skift: (t) => { tæt = t; stilKamera(); } },
-      { tekst: 'Jorden drejer', til: drejer, skift: (t) => { drejer = t; } },
-      { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => trin === 0 && !selv },
-    ];
+    };
+    const tætKontakt = { tekst: 'Tæt på Jorden', til: tæt, skift: (t) => { tæt = t; stilKamera(); } };
+    const styring = [datoSkyder, tætKontakt];
 
     nulstil();
 
@@ -274,6 +270,9 @@ export default {
     let panelUge = -1;
     return {
       styring,
+      test: { jordPlads: () => jord.position.toArray() }, // kun til tests
+      trin: () => ({ nr: trin, ialt: TRIN.length, næste: trin < TRIN.length - 1 ? TRIN[trin + 1].titel.toLowerCase() : '', gå: gåTrin, forfra: nulstil }),
+      // Når tiden går: Jorden drejer, og i første trin kører den rundt om Solen
       opdater(dt) {
         // I første trin kører Jorden rundt om Solen (et år på ca. 24 sekunder), så man kan se, at aksen peger samme vej hele året.
         // Tabellen og panelet skrives kun om én gang om ugen i animationen (ellers forsvinder ordforklaringerne hele tiden).
@@ -283,9 +282,13 @@ export default {
           if (uge !== panelUge) {
             panelUge = uge;
             panel();
-            styring[1].sæt?.(Math.round(dag));
+            datoSkyder.sæt?.(Math.round(dag));
           }
         }
+        omdrejning.rotation.y += (dt * Math.PI * 2) / OMDREJNING;
+      },
+      // Hvert billede, også under pause (så Jorden følger skyderen)
+      altid(dt) {
         // Jorden glider langs banen hen til datoen (den korteste vej rundt, og hurtigt, så skyderen føles direkte)
         let forskel = dag - visDag;
         if (forskel > 182.5) forskel -= 365;
@@ -294,7 +297,6 @@ export default {
         visDag = ((visDag - 1 + 365) % 365) + 1;
         jord.position.copy(jordPlads(visDag, plads));
         jordSætDato(visDag); // sne og grønt efter årstiden (når der er billeder)
-        if (drejer) omdrejning.rotation.y += (dt * Math.PI * 2) / OMDREJNING;
         // Sollyset peger fra Solen mod Jorden
         if (solLys.visible) {
           solLys.position.copy(jord.position);

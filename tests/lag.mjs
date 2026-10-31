@@ -125,10 +125,10 @@ for (const [navn, vp] of [['tablet', { width: 800, height: 1280 }], ['telefon', 
   await page.waitForTimeout(300);
   const h = await page.evaluate(() => document.getElementById('kosmosVindue').getBoundingClientRect().height);
   tjek(`${navn}: "Kun grafik" viser 3D-billedet på næsten hele skærmen`, h > vp.height * 0.8, `${h} af ${vp.height}`);
-  tjek(`${navn}: "Start"/"Næste" står i 3D-billedet med "Kun grafik"`, await synlig(page, '#kosmosNæste'));
-  await page.click('#kosmosNæste');
+  tjek(`${navn}: bjælken ("▶ Start universet") og tidsknappen står i 3D-billedet med "Kun grafik"`, await synlig(page, '#kosmosBjælke button') && await synlig(page, '#kosmosTid'));
+  await page.click('#kosmosBjælke button:has-text("Start universet")');
   await page.waitForTimeout(300);
-  tjek(`${navn}: og knappen virker`, (await page.textContent('#kosmosNæste')).includes('Næste'));
+  tjek(`${navn}: og knappen virker (nu står "Næste" i bjælken)`, (await page.textContent('#kosmosBjælke')).includes('Næste'));
   await page.screenshot({ path: `${UD}/${navn}-kosmos-kun-grafik.png` });
   await page.click('#kosmos .knap-kungrafik');
   await page.goto(`${ADRESSE}/?test#reaktor`);

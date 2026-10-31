@@ -177,7 +177,7 @@ const TUR = [
   { id: 'nordpol', titel: 'Nordpolen', tekst: 'En kappe af is, ca. 1.000 km bred og op til ca. 3 km tyk. Vi har spolet frem til sommer, så Solen går ikke ned her: midnatssol.',
     mere: '<p><b>Isen</b> er mest frossent vand (ikke tøris) med lidt støv. Kappen er ca. 1.000 km bred og op til ca. 3 km tyk, lag på lag af is og støv. Lagene fortæller om Mars\' klima, lidt ligesom årringe i et træ. Men et lag er ikke ét år. Lagene skifter nok, når Mars\' hældning langsomt ændrer sig over mange tusinde år.</p>'
       + '<p><b>Spiralen:</b> Kløfterne snor sig ud fra midten som en spiral. Radarmålinger har vist, at de er formet af kolde, tunge vinde, der falder ned ad isen og bliver bøjet til siden, fordi Mars drejer. Den store kløft Chasma Boreale er ca. 500 km lang og op til 2 km dyb.</p>'
-      + '<p><b>Midnatssol:</b> Vi har spolet frem til midt på sommeren på den nordlige halvkugle. Nu hælder nordpolen ca. 25° mod Solen, så her står Solen ca. 22-28° over horisonten hele døgnet og går aldrig ned. Tryk "Drej Mars": Lyset og skyggerne går rundt, men det bliver aldrig nat.</p>'
+      + '<p><b>Midnatssol:</b> Vi har spolet frem til midt på sommeren på den nordlige halvkugle. Nu hælder nordpolen ca. 25° mod Solen, så her står Solen ca. 22-28° over horisonten hele døgnet og går aldrig ned. Tryk ▶ nederst til højre i billedet: Lyset og skyggerne går rundt, men det bliver aldrig nat.</p>'
       + '<p><b>Om vinteren</b> ligger der også et lag tøris på et par meter, langt ud over kappen. Hvert år fryser ca. en fjerdedel af Mars\' luft til tøris ved polerne, mest ved sydpolen. Om foråret bliver den til luft igen.</p>' },
   // M6b, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, "Faktatjek M6b"): NASA, JAXA, ESA og Wikipedia læst
   // direkte. Mars set fra Phobos: 2 · arcsin(3.396 / 9.363) = 42,5°, Månen 0,52° (ca. 82 gange). Fra Deimos 16,6°.
@@ -212,7 +212,7 @@ const LANDSKAB = {
       titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.',
       mere: '<p><b>Naukluft</b> er et plateau på Mount Sharps nederste skråninger inde i Gale-krateret. Klipperne er sandsten af sand, som vinden engang blæste sammen til klitter. Curiosity kørte over det i foråret 2016 og tog et billede hele vejen rundt herfra.</p>'
         + '<p><b>Mod sydøst</b> ligger Mount Sharp, et bjerg af lag på lag af gammelt mudder og sand, ca. 5 km højt over kraterbunden. Toppen er ca. 50 km væk. <b>Mod nord</b> ser du ud over kraterbunden mod kraterets rand i disen.</p>'
-        + '<p><b>Prøv selv:</b> Skub klokken frem, eller tryk "Lad dagen gå", og se skyggerne vokse og Solen gå ned. Knib eller rul for at zoome som med en kikkert.</p>' },
+        + '<p><b>Prøv selv:</b> Skub klokken frem under "Styr", eller tryk ▶ nederst til højre, så går dagen, og du kan se skyggerne vokse og Solen gå ned. Knib eller rul for at zoome som med en kikkert.</p>' },
     { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 9,
       titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.',
       mere: '<p><b>Hos Curiosity:</b> Her stod roveren i midten af oktober 2026 på Mount Sharps skråninger, ca. 1 km højere oppe end der, hvor den landede i 2012. Den har kørt ca. 38 km.</p>'
@@ -307,9 +307,9 @@ export default {
     <p><b>Skyerne over vulkanerne:</b> Om eftermiddagen stiger varm luft op ad vulkanernes sider og bliver kold, så vanddampen fryser til iskrystaller. Skyerne kommer især om foråret og sommeren på den nordlige halvkugle. Før rumsonderne kunne man i kikkerter fra Jorden se en hvid sky formet som et "W" over Tharsis. Det var skyerne over fire af vulkanerne. Hvert år i det sydlige forår vokser der også en ca. 1.800 km lang sky ud fra Arsia Mons om morgenen. Den er ikke med her, for på tegningen er det forår i nord.</p>
     <p><b>Månerne:</b> Phobos' form er et højdekort lavet ud fra billeder fra den europæiske rumsonde Mars Express (og Viking, hvor der manglede billeder), med ca. 100 m mellem højderne. Overfladen er en mosaik af billeder fra Mars Express og Viking. Deimos' form er målt af Peter Thomas på billeder fra Viking-sonderne fra 1970'erne (ca. ½ km mellem punkterne). Almindelig sten vejer ca. 3 g pr. cm³, men Phobos kun ca. 1,9 og Deimos ca. 1,5. Derfor er de nok fulde af hulrum (porøse), måske som en bunke løse sten. De er mørke som asfalt: Kun ca. 7 % af lyset kastes tilbage. Phobos kredser inden for den afstand (ca. 20.400 km fra Mars' midte), hvor en måne ville runde Mars på samme tid, som Mars drejer én gang om sig selv (24 t 37 min). Derfor bremses den og kommer nærmere. Deimos er uden for og fjerner sig meget langsomt.</p>
     <p><b>Stå på Mars:</b> Ved Gale kan du stå på jorden, hvor Curiosity har kørt. Landskabet er bygget af målinger fra kredsløb. Højdekortet er sat sammen af forskere ved NASA's JPL og udgivet af USGS. Tæt på Curiositys vej er højderne regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Længere væk er de regnet ud fra kameraerne CTX og HRSC. Der er 1 m mellem højderne. Tæt på dig ligger HiRISE' billeder (25 cm pr. pixel), længere væk billeder fra CTX (ca. 6 m pr. pixel) og helt ude kortet fra Mars Express. Landskabet ligger i fire lag, der glider over i hinanden, og Mars' krumning er regnet med: På fladt land er horisonten kun ca. 3,4 km væk. Støvet i luften gør det fjerne landskab blegt, og jo mere luft, der er imellem, jo blegere.</p>
-    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker "Drej Mars". På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne. Månerne Phobos og Deimos er tegnet større, når de er langt væk, ellers kunne de ikke ses. De kredser i det rigtige forhold til Mars' døgn, men står stille, mens du besøger dem, og banerne ligger præcis i Mars' ækvatorplan (i virkeligheden hælder de 1-2°). Deimos' form er målt på billeder fra Viking-sonderne i 1970'erne og er grov. På Phobos' bagside er en smal stribe af overfladen fyldt ud, hvor kortet manglede. På flybyen flytter programmet månerne hen, hvor Solen skinner på dem fra siden, så de ikke står i Mars' skygge. I virkeligheden står de dér, hvor deres baner fører dem hen. Står en måne i Mars' skygge, når du trykker på den, flytter programmet den også lidt frem i banen. Når du besøger en måne, står den stille, mens Mars drejer. I virkeligheden runder Phobos Mars hurtigere, end Mars drejer, så fra Phobos ville Mars se ud til at dreje den anden vej, én gang på ca. 11 timer. Ved Phobos og Deimos kigger kameraet lidt ved siden af månen, så Mars kan ses i baggrunden. Når du står på Mars, er de billeder fra kredsløb, programmet bruger, grå, og farverne er sat på af programmet ud fra lysstyrken og Viking-kortet. Sten og sand, der er mindre end nogle få meter, er ikke med i højderne, og de små ujævnheder helt tæt på dine fødder er tegnet af programmet. I billederne fra kredsløb skinnede Solen fra en anden retning. Programmet har fjernet det meste af den skygge, men lidt er tilbage i de små ting. Himlens farve, disen og tusmørket er en enkel model. Dine øjne er 1,7 m over jorden (rovernes kameraer sidder ca. 2 m oppe). Phobos og Deimos bevæger sig rigtigt hen over himlen og har den rigtige størrelse, men deres plads er ikke slået op for i dag.</p>`,
+    <p><b>Ærligt talt:</b> Mars drejer meget hurtigere end i virkeligheden (en omgang på under 2 minutter i stedet for 24 t 37 min), og den står stille, når du er helt tæt på. Solen er tegnet større, og den står som ved forårsjævndøgn på den nordlige halvkugle. Skyerne er tegnet af programmet, men de ligger, hvor skyerne plejer at være, og kommer om eftermiddagen. Polkapperne er vist, som de ser ud om sommeren. Om vinteren dækker et tyndt lag tøris et meget større område omkring polen. Hvor kraftigt luften og tusmørket lyser, er gættet ud fra billeder og ikke regnet. "Modlys" flytter Solen om bag kanten af Mars. På flybyen drejer programmet Mars, så det er tidlig morgen (ca. kl. 7) ved Olympus Mons: Så viser de lange skygger formen, og skyerne er ikke kommet endnu. Mars står stille, mens du er der, medmindre du trykker ▶ nederst til højre i billedet. På flybyen er klokken også ca. 8 ved calderaen og skrænten, ca. 7 ved Tharsis og ca. 9 ved Valles Marineris, Hellas og Gale og ca. 7½ ved Jezero (lav sol, så det lave krater kan ses). Mellem to steder drejer programmet Mars hurtigt, så klokken passer, når du lander. Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Den støvede himmel er tegnet ud fra skalahøjden, men farven er gættet. Programmet holder kameraet mindst 2 km over jorden. Ved nordpolen spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Roverne kan ikke ses, og deltaet i Jezero næsten heller ikke: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne. Månerne Phobos og Deimos er tegnet større, når de er langt væk, ellers kunne de ikke ses. De kredser i det rigtige forhold til Mars' døgn, men står stille, mens du besøger dem, og banerne ligger præcis i Mars' ækvatorplan (i virkeligheden hælder de 1-2°). Deimos' form er målt på billeder fra Viking-sonderne i 1970'erne og er grov. På Phobos' bagside er en smal stribe af overfladen fyldt ud, hvor kortet manglede. På flybyen flytter programmet månerne hen, hvor Solen skinner på dem fra siden, så de ikke står i Mars' skygge. I virkeligheden står de dér, hvor deres baner fører dem hen. Står en måne i Mars' skygge, når du trykker på den, flytter programmet den også lidt frem i banen. Når du besøger en måne, står den stille, mens Mars drejer. I virkeligheden runder Phobos Mars hurtigere, end Mars drejer, så fra Phobos ville Mars se ud til at dreje den anden vej, én gang på ca. 11 timer. Ved Phobos og Deimos kigger kameraet lidt ved siden af månen, så Mars kan ses i baggrunden. Når du står på Mars, er de billeder fra kredsløb, programmet bruger, grå, og farverne er sat på af programmet ud fra lysstyrken og Viking-kortet. Sten og sand, der er mindre end nogle få meter, er ikke med i højderne, og de små ujævnheder helt tæt på dine fødder er tegnet af programmet. I billederne fra kredsløb skinnede Solen fra en anden retning. Programmet har fjernet det meste af den skygge, men lidt er tilbage i de små ting. Himlens farve, disen og tusmørket er en enkel model. Dine øjne er 1,7 m over jorden (rovernes kameraer sidder ca. 2 m oppe). Phobos og Deimos bevæger sig rigtigt hen over himlen og har den rigtige størrelse, men deres plads er ikke slået op for i dag.</p>`,
 
-  lav(gruppe, { opdaterKnapper, forklaring, fase, verden }) {
+  lav(gruppe, { opdaterKnapper, forklaring, fase, verden, tiden }) {
     const { kamera } = verden;
     const orbit = verden.styring; // kameraets styring med mus og fingre
     const gammelt = { min: orbit.minDistance, max: orbit.maxDistance, nær: kamera.near, zoom: orbit.zoomSpeed, drej: orbit.rotateSpeed };
@@ -495,10 +495,7 @@ export default {
     }
     function drejHen(til) {
       drejTur = { fra: omdrejning.rotation.y, til };
-      if (drejer) {
-        drejer = false; // Mars står stille ved stedet
-        lavKnapper();
-      }
+      tiden('pause'); // ved et sted står tiden stille fra start (▶ lader lyset og skyggerne gå rundt)
     }
     // Hele Mars: kameraet kigger på midten fra retning (i systemets retninger)
     function flyvTilMars(retning, net = []) {
@@ -518,6 +515,7 @@ export default {
     function tilbage() {
       flyby.afslut();
       fase(null);
+      tiden('spil'); // hele Mars drejer igen
       flyvTilMars(kamPos.copy(kamera.position).sub(system.position).applyQuaternion(qHjælp.copy(rejse.drejning).invert()));
       vis();
       lavKnapper();
@@ -719,7 +717,7 @@ export default {
       hældHen(HÆLD.jævndøgn);
       visning = m.id;
       ordnetVed = m.id; // månen er stillet op (stilMånerOp), så Solen står ved m.stop.sol
-      drejer = true; // Mars drejer videre, mens månen står stille
+      tiden('spil'); // Mars drejer videre, mens månen står stille
       const { kamera: [b, l], størrelse, blik } = m.stop;
       const c = retningISystem(m, m.form.retning(b, l), new THREE.Vector3(), HÆLD.jævndøgn);
       const u = retningISystem(m, new THREE.Vector3(1, 0, 0), new THREE.Vector3(), HÆLD.jævndøgn); // mod Mars
@@ -752,7 +750,7 @@ export default {
       aktivér([]);
       hældHen(HÆLD.jævndøgn);
       visning = OVERFLADE.id;
-      drejer = true;
+      tiden('spil');
       const r = m.form.retning(OVERFLADE.bredde, OVERFLADE.længde);
       const n = retningISystem(m, r, new THREE.Vector3());
       const K1 = iSystem(m, r.clone().multiplyScalar(m.form.radiusVed(OVERFLADE.bredde, OVERFLADE.længde) / S), new THREE.Vector3()).addScaledVector(n, OVERFLADE.højde / S);
@@ -822,8 +820,11 @@ export default {
     // ---------- Flybyen (js/solsystem/flyby.js) ----------
     const flyby = lavFlyby({
       stop: TUR, fase, forklaring, skift: () => lavKnapper(),
-      flyvTil: (stop) => {
+      // hop: man springer med ‹ eller en prik. Så flyver kameraet derhen som fra træet (månerne glider på plads).
+      flyvTil: (stop, nr, hop) => {
+        gåNr++;
         if (stop.id === 'mars') flyvTilMarsMod(stedMed(TUR[1].id));
+        else if (hop) flyvDirekte(stop.id);
         else if (stop.id === OVERFLADE.id) flyvTilOverflade();
         else if (erMåne(stop.id)) {
           if (stop.id === 'phobos') stilMånerOp(); // fra Nordpolen kan man ikke se Phobos, så den må gerne flytte sig
@@ -840,7 +841,6 @@ export default {
     let stående = null; // { krater, sd } mens man står på jorden
     let ståVent = null; // { krater, sd, fløjet, klar } mens kameraet flyver ned, og lagene hentes
     let landing = null; // kameraet lander (eller letter: op = true)
-    let dagenGår = false;
     let kikkert = 1; // kameraets zoom (som en kikkert)
     const gemt = { pos: new THREE.Vector3(), nær: 0 };
     const LANDING_HØJDE = 1.2; // km over stedet, hvor landingen starter
@@ -935,6 +935,7 @@ export default {
       landing = { t: 0, T: ROLIG ? 0 : LANDING_TID, sd };
       orbit.enabled = false;
       sætBlik(LANDING_HØJDE, sd.blik, -32);
+      tiden('pause'); // klokken står stille, når man lander (▶ lader dagen gå)
       fase(sd.titel, sd.tekst);
       forklaring(sd.mere);
       lavKnapper();
@@ -954,7 +955,6 @@ export default {
       stående.land.gruppe.visible = false;
       stående = null;
       landing = null;
-      dagenGår = false;
       system.visible = true;
       solKerne.visible = solGlød.visible = true;
       visRumstøv(true);
@@ -1012,10 +1012,6 @@ export default {
         }
       }
       if (!stående) return;
-      if (dagenGår && !landing) {
-        land.tid += (dt * 24) / DAG_TID;
-        tidsSkyder?.sæt?.(land.tid);
-      }
       land.opdater(kamera);
       // Stjernerne: himlens nordpol står over den nordlige horisont i en vinkel lig med bredden, og himlen drejer om den
       const b = THREE.MathUtils.degToRad(stående.sd.bredde);
@@ -1054,19 +1050,18 @@ export default {
     addEventListener('pointermove', vedFingerFlyt);
     addEventListener('pointerup', vedFingerOp);
     addEventListener('pointercancel', vedFingerOp);
-    // Knapperne, mens man står på jorden
+    // Knapperne, mens man står på jorden: klokken i Styr-boksen og "Solnedgang" i bjælken. Dagen går med tidsknappen
+    // (▶, et døgn på DAG_TID). Op i kredsløb og de andre steder ved krateret står i træet.
     function ståKnapper() {
-      const { land } = stående; // op i kredsløb og de andre steder ved krateret står i træet
-      tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; } };
+      const { land } = stående;
+      tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, trin: 0.05, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; } };
       return [
         tidsSkyder,
-        { tekst: '▶ Lad dagen gå', til: dagenGår, skift: (til) => { dagenGår = til; } },
-        { tekst: 'Solnedgang', handling: solnedgang },
+        { tekst: '🌅 Solnedgang', handling: solnedgang, deaktiv: () => !!landing },
       ];
     }
 
     // ---------- Knapperne ----------
-    let drejer = true;
     let høj = false;
     let modlys = false;
     const styring = [];
@@ -1080,14 +1075,8 @@ export default {
       // Stå på Mars ved et krater med et landskab (ikke under flyvningen derhen)
       const krater = LANDSKAB[visning] && !rejse.flyver ? visning : null;
       if (krater) knapper.push({ tekst: '🧍 Stå på Mars', handling: () => ståPå(krater, LANDSKAB[krater][0]) });
-      if (flyby.kører) knapper.push(...flyby.knapper());
-      else {
-        knapper.push(flybyKlar
-          ? { tekst: '▶ Start flyby', handling: () => flyby.start() }
-          : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
-      }
+      // Flybyen står i træet og bjælken (tur og trin nedenfor), og tiden styres med tidsknappen
       knapper.push(
-        { tekst: 'Drej Mars', til: drejer, skift: (til) => { drejer = til; } },
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; vis(); } },
         { tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; vis(); } },
         navneKnap(() => { opdaterNavne(); opdaterMåner(rejse.skala); vis(); }),
@@ -1136,6 +1125,18 @@ export default {
     const stedNu = () => (stående ? `stå-${stående.sd.id}` : visning);
     let gåNr = 0; // så en flyvning i to dele kun fortsætter, hvis der ikke er valgt noget andet imens
     const landskabMed = (id) => Object.entries(LANDSKAB).map(([krater, l]) => ({ krater, sd: l.find((x) => `stå-${x.id}` === id) })).find((x) => x.sd);
+    // Flyv direkte til et stop (en måne, udsigten fra Phobos eller et sted), fra hvor man end er (træet og flybyens spring)
+    function flyvDirekte(id, nr = gåNr) {
+      if (erMåne(id)) tilMåneStop(måneMed(id));
+      else if (id === OVERFLADE.id) {
+        // Udsigten fra Phobos kræver, at Phobos står som på flybyen. Ellers flyver kameraet først derhen.
+        if (ordnetVed === 'phobos' && visning === 'phobos') flyvTilOverflade();
+        else {
+          tilMåneStop(måneMed('phobos'), () => { if (gåNr === nr) flyvTilOverflade(); });
+          visning = OVERFLADE.id; // på vej derhen (månerne står stille)
+        }
+      } else besøg(stedMed(id));
+    }
     function gåTil(id) {
       if (id === stedNu()) return;
       const nr = ++gåNr;
@@ -1152,15 +1153,7 @@ export default {
       const t = TUR.find((x) => x.id === id);
       if (!t) return;
       flyby.afslut();
-      if (erMåne(id)) tilMåneStop(måneMed(id));
-      else if (id === OVERFLADE.id) {
-        // Udsigten fra Phobos kræver, at Phobos står som på flybyen. Ellers flyver kameraet først derhen.
-        if (ordnetVed === 'phobos' && visning === 'phobos') flyvTilOverflade();
-        else {
-          tilMåneStop(måneMed('phobos'), () => { if (gåNr === nr) flyvTilOverflade(); });
-          visning = OVERFLADE.id; // på vej derhen (månerne står stille)
-        }
-      } else besøg(stedMed(id));
+      flyvDirekte(id, nr);
       opdaterNavne(); // navnene skjules med det samme (ikke først i næste billede)
       fase(t.titel, t.tekst);
       forklaring(t.mere);
@@ -1352,9 +1345,20 @@ export default {
       styring,
       gåTil, // træet i listen (js/faenomenskaerm.js)
       sted: () => stedNu(),
+      // Flybyen: øverst i træet og i bjælken i 3D-billedet
+      tur: { navn: 'Flyby', stop: TUR.length, klar: () => flybyKlar, kører: () => flyby.kører, start: () => flyby.start(), skjul: () => Boolean(stående || ståVent) }, // ikke mens man står på Mars
+      trin: () => flyby.bjælke(),
+      // Kaldes kun, når tiden går (tidsknappen). Mens man står på Mars, går dagen (et døgn på DAG_TID sekunder).
       opdater(dt, t) {
         tid = t;
-        if (stående || !drejer || drejTur) return;
+        if (stående) {
+          if (!landing) {
+            stående.land.tid = (stående.land.tid + (dt * 24) / DAG_TID) % 24;
+            tidsSkyder?.sæt?.(stående.land.tid);
+          }
+          return;
+        }
+        if (drejTur) return;
         // Helt tæt på hele Mars står Mars stille (ellers suser landskabet forbi). Ved et sted følger kameraet med,
         // så dagen går, og skyggerne flytter sig.
         const drej = dt * DREJ * (visning === 'mars' ? THREE.MathUtils.smoothstep(rejse.afstand / R, 1.05, 1.8) : 1);
@@ -1437,8 +1441,7 @@ export default {
         sol: () => solNu.dot(kamPos.copy(kamera.position).sub(orbit.target).normalize()),
         // Drej Mars, så længdegraden (i grader øst) vender mod kameraet (når man ser hele Mars)
         vend(længde) {
-          drejer = false;
-          lavKnapper();
+          tiden('pause');
           kamPos.copy(kamera.position).sub(system.position).applyQuaternion(qHjælp.copy(rejse.drejning).multiply(hæld.quaternion).invert());
           const vinkel = Math.atan2(-kamPos.z, kamPos.x); // kameraets retning som længdegrad i hældningens retninger
           omdrejning.rotation.y = vinkel - THREE.MathUtils.degToRad(længde);

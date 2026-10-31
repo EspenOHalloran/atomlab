@@ -218,7 +218,7 @@ export default {
           opdaterVisning();
         },
       },
-      { tekst: '↺ Ny stjerne', handling: nulstil, deaktiv: () => t < 0 },
+      { tekst: '↺ Ny stjerne', handling: nulstil, skjul: () => t < 0 },
     ];
 
     return {

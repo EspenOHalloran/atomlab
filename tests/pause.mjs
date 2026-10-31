@@ -1,4 +1,5 @@
-// Pause med mellemrum i Stjerneovnen, Reaktoren og Kosmos, og de nye sammenligninger
+// Pause med mellemrum i Stjerneovnen og Reaktoren, tidsknappen i Kosmos (⏸ ▶, U2 i docs/plan-ux.md) og de nye
+// sammenligninger
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('pause');
 const b = await chromium.launch({ args: ARGS });
@@ -74,8 +75,9 @@ for (const [navn, [w, h, m]] of Object.entries({ pc: [1280, 800, false], tlf: [3
   await page.waitForTimeout(1500);
   await T(() => atomlabTest.kosmos.vælg('supernova'));
   await page.waitForTimeout(800);
-  tjek(`${navn}: Kosmos har en pauseknap`, (await tekst('#kosmosPause')) === '⏸ Pause');
-  await page.locator('#kosmosPause').click();
+  tjek(`${navn}: Kosmos har tidsknappen (⏸ og ▶, ingen ⏩ ved supernovaen)`, await synlig('#kosmosTid button[data-tid="pause"]') && await synlig('#kosmosTid button[data-tid="spil"]') && !(await synlig('#kosmosTid button[data-tid="hurtig"]')));
+  tjek(`${navn}: ▶ er valgt fra start`, await T(() => document.querySelector('#kosmosTid button[data-tid="spil"]').classList.contains('valgt')));
+  await page.locator('#kosmosTid button[data-tid="pause"]').click();
   const t1 = await T(() => atomlabTest.kosmos.tid());
   const s1 = await T(() => atomlabTest.kosmos.stjerneTid());
   await page.waitForTimeout(1200);
@@ -83,16 +85,23 @@ for (const [navn, [w, h, m]] of Object.entries({ pc: [1280, 800, false], tlf: [3
   const s2 = await T(() => atomlabTest.kosmos.stjerneTid());
   tjek(`${navn}: Kosmos-uret står stille under pause`, t1 === t2, `${t1} ${t2}`);
   tjek(`${navn}: stjernens overflade står stille under pause`, s1 != null && s1 === s2, `${s1} ${s2}`);
-  tjek(`${navn}: pausemærket vises i Kosmos`, await synlig('#kosmosVindue .pause-mærke'));
+  tjek(`${navn}: ⏸ er valgt i tidsknappen`, await T(() => document.querySelector('#kosmosTid button[data-tid="pause"]').classList.contains('valgt') && atomlabTest.kosmos.tidsknap() === 'pause'));
   await page.screenshot({ path: `${UD}/${navn}-k.png`, fullPage: true });
   const knapper = await T(() => atomlabTest.kosmos.knapper());
-  const i = knapper.findIndex((k) => /Eksplod/i.test(k ?? ''));
-  if (i >= 0) {
-    await page.locator('#kosmosStyring .kosmos-knap').filter({ hasText: /eksplod/i }).click();
+  if (knapper.some((k) => /eksplod/i.test(k))) {
+    await page.locator('#kosmosBjælke button').filter({ hasText: /eksplod/i }).click();
     await page.waitForTimeout(300);
     tjek(`${navn}: "Lad stjernen eksplodere" slår pausen fra`, !(await T(() => atomlabTest.kosmos.pause())));
-  } else tjek(`${navn}: fandt knappen "Eksplodér"`, false, JSON.stringify(knapper));
-  await page.locator('#kosmosPause').click();
+  } else tjek(`${navn}: fandt knappen "Eksplodér" i bjælken`, false, JSON.stringify(knapper));
+  if (!m) {
+    // Mellemrum skifter mellem ⏸ og ▶ (ikke når fokus står på en knap)
+    await page.mouse.click(640, 400);
+    await page.keyboard.press('Space');
+    tjek(`${navn}: mellemrum sætter Kosmos på pause`, await T(() => atomlabTest.kosmos.tidsknap() === 'pause'));
+    await page.keyboard.press('Space');
+    tjek(`${navn}: mellemrum lader tiden gå igen`, await T(() => atomlabTest.kosmos.tidsknap() === 'spil'));
+  }
+  await page.locator('#kosmosTid button[data-tid="pause"]').click();
   await T(() => atomlabTest.kosmos.vælg('pulsar'));
   tjek(`${navn}: skift af fænomen slår pausen fra`, !(await T(() => atomlabTest.kosmos.pause())));
   const t3 = await T(() => atomlabTest.kosmos.tid());

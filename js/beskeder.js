@@ -6,11 +6,11 @@
 // - Store advarsler (fast: true) bliver stående, til man lukker dem.
 // - Næsten alt gemmes i loggen (🔔), så man kan læse det igen.
 //
-// visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, log, hvorfor })
+// visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, vedTrin, log, hvorfor })
 //   type: 'info', 'reaktion', 'henfald', 'advarsel', 'fase' (undertekster) eller 'klaret', 'opdaget' (piller)
 //   varighed: mindste tid i ms (ellers regnes den ud fra tekstens længde). 0 = bliv stående, til noget nyt kommer.
 //   forsinkelse: vent så mange ms, før beskeden vises (så man når at se det, der sker).
-//   trin: [nr, ialt] viser små prikker, fx ved faserne i Kosmos.
+//   trin: [nr, ialt] viser små prikker, fx ved faserne i Kosmos. vedTrin(nr): et tryk på en prik går til trin nr.
 //   log: false = gem ikke beskeden i loggen.
 //   hvorfor: et id i data/hvorfor.js eller { spørgsmål, svar }. Så slutter underteksten med "Hvorfor?",
 //   som åbner forklaringen (underteksten selv er kort, se docs/plan-lag.md).
@@ -174,7 +174,18 @@ function visUndertekst(b) {
     const prikker = document.createElement('span');
     prikker.className = 'ut-trin';
     prikker.title = `Trin ${b.trin[0]} af ${b.trin[1]}`;
-    for (let i = 1; i <= b.trin[1]; i++) prikker.append(Object.assign(document.createElement('i'), { className: i <= b.trin[0] ? 'ja' : '' }));
+    for (let i = 1; i <= b.trin[1]; i++) {
+      // Med vedTrin(nr) kan man trykke på en prik og gå til det trin (fx flybyen i Solsystemet)
+      const p = document.createElement(b.vedTrin ? 'button' : 'i');
+      p.className = i <= b.trin[0] ? 'ja' : '';
+      if (b.vedTrin) {
+        p.title = `Trin ${i}`;
+        p.setAttribute('aria-label', `Gå til trin ${i} af ${b.trin[1]}`);
+        if (i === b.trin[0]) p.setAttribute('aria-current', 'step');
+        p.addEventListener('click', () => { if (i !== b.trin[0]) { lyd.klik(); b.vedTrin(i); } });
+      }
+      prikker.append(p);
+    }
     tekst.append(prikker);
   }
   if (b.titel) {

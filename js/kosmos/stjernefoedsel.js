@@ -226,7 +226,7 @@ export default {
         ændring: (v) => { masseNr = v; nulstil(); },
       },
       { tekst: '▶ Lad skyen falde sammen', handling: start, deaktiv: () => t >= 0 && !tændt },
-      { tekst: '↺ Ny sky', handling: nulstil, deaktiv: () => t < 0 },
+      { tekst: '↺ Ny sky', handling: nulstil, skjul: () => t < 0 },
     ];
 
     nulstil();

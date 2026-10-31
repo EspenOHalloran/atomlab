@@ -53,7 +53,8 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] `document.querySelectorAll` er afgrænset til delen (`#reaktor .del-knap`) eller bruger en data-attribut, som kun findes der. Får to skærme den samme skal (Kosmos og Solsystemet), står den nye skærm efter den gamle i index.html, så tests uden afgrænsning stadig finder den gamle. En klasse kan bruges på flere skærme. Det samme gælder CSS-regler, også dem i `@media` (fx `order`).
 - [ ] Værdier, der styrer tilstanden (fx `tilstand = 'kerne' | 'kæde'`), tjekkes, så en ukendt værdi ikke giver en tom skærm.
 - [ ] Kameraets fælles indstillinger nulstilles af `nulstilStyring()` i main.js. En del, der ændrer andre indstillinger, skal også nulstille dem der.
-- [ ] Nye knapper eller steder i Kosmos og Solsystemet: Sortér dem efter de fire slags i [plan-ux.md](plan-ux.md) (sted, forsøg, tur og styring), og sæt dem på den plads, planen siger. Et sted, man flyver hen til, er aldrig en knap blandt kontakterne, og en kontakt skal ligne en kontakt.
+- [ ] Nye knapper eller steder i Kosmos og Solsystemet: Sortér dem efter de fire slags i [plan-ux.md](plan-ux.md) (sted, forsøg, tur og styring), og sæt dem på den plads, planen siger. Et sted, man flyver hen til, er aldrig en knap blandt kontakterne, og en kontakt skal ligne en kontakt. Siden U2: et sted står i træet (`træ`, `gåTil`), en handling i bjælken (`styring` med `handling`, og `skjul`, hvis den kun giver mening i nogle tilstande), en kontakt eller skyder i Styr-boksen, trin i `trin()` og en tur i `tur`. Tiden styres kun med tidsknappen (`ctx.tiden`, `hurtig`, `tempo`), aldrig med en kontakt.
+- [ ] En handling i bjælken er tjekket i alle tilstande, fænomenet kan være i (fx "▶ Start flyby", mens man står på Mars, U2).
 
 ### E. Ny animation, effekt eller fælles funktion
 - [ ] "Reducer bevægelse" (`ROLIG`) er respekteret: kamerature, lysglimt og blød rulning.
@@ -92,6 +93,8 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter. Mål én browser ad gangen (to samtidig halverer tallene).
 - [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
+- [ ] Knapper findes ud fra deres tekst (`trykPå(tekst)` i Kosmos og Solsystemet), ikke deres nummer. Numrene skifter, når knapper flytter eller kommer til (U2).
+- [ ] Vent ikke på en proces med `pgrep -f navn` i en løkke: Løkkens egen kommandolinje indeholder navnet, så den venter for evigt (U2). Start i stedet testen selv i baggrunden (`run_in_background`), og få besked, når den er færdig.
 - [ ] Efter `hop()` (eller anden spoling af en flyvning) ventes der på, at flyvningen er slut (`!tur().flyver`), før næste flyvning startes. Ellers starter den midt i den gamle (Mars M6b).
 - [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
 - [ ] Ting, der kun står et stykke tid i rigtig tid (fx pillerne), fryses i testen, og testen lader selv tiden løbe ud (`atomlabTest.beskeder.frysPiller` og `spolPiller`). Et nyt forsøg hjælper ikke, når hvert skridt er langsommere end tingens levetid.
@@ -420,6 +423,13 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Fotos med skygger fra Solen:** I firkanter regnes log(foto) mod hældningen øst og nord fra højdekortet, og den del, der følger hældningen, trækkes fra (`uden_skygger` i `lav_landskab.py`). Det fjernede de store skygger. Et forsøg på at fjerne striberne mellem satellitbilleder (højpas på tværs) hjalp ikke.
 - **Ventesløjfer med `pgrep -f`:** `until ! pgrep -f "landskab.mjs"` finder sin egen kommandolinje og venter for evigt. Brug et mønster, der ikke står i kommandoen, eller vent på en fil.
 - **Små sten tegnet af programmet:** Med normalen vendt forkert lignede de huller (som kratere). Tjek retningen på en bule: Normalen skal pege væk fra midten.
+
+### Styringen på billedet (U2, 31. oktober 2026)
+- **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
+- **Trin, der bygger oven på hinanden** (Big Bang, Solens fremtid): Et spring kan ikke bare sætte `trin = nr`. Noget sker kun i `opdater` undervejs (fx tågen i Solens fremtid i trin 5). Spring tilbage = forfra og frem igen, og spol de sprungne trin igennem.
+- **Fælles regel i stedet for at flytte knapper én for én:** Skallen sorterer selv `styring` (handling → bjælken, kontakt og skyder → Styr-boksen). Derfor skulle de 11 fænomener i Kosmos næsten ikke ændres. Kun "↺ Forfra" fik `skjul`, så bjælken ikke fyldes med grå knapper.
+- **Et nyt sted for en knap viser fejl i tilstande, ingen havde set:** "▶ Start flyby" stod pludselig i bjælken, mens man stod på Mars (før lå den i "Prøv selv", hvor den blev skiftet ud). Testen `landskab` fangede det.
+- **Tegn ikoner i små knapper** (SVG) i stedet for tegn som ⏸: Nogle skrifttyper viser ⏸ meget lille, mens ▶ bliver en emoji.
 
 ### Certifikater: "unable to get local issuer certificate" (30. oktober 2026)
 - `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` var ikke blokeret af proxyen (tunnelen svarede 200). Containeren manglede rodcertifikatet "emSign Root CA - G1" (utexas og asu), og dlr.de sender ikke sit mellemcertifikat (GEANT TLS RSA 1).

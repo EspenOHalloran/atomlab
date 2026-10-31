@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 30. oktober 2026 (U1 er færdig: træet i Solsystemet, flettet med Mars M8a. U2 og M8b/M8c venter på jeres valg og go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 31. oktober 2026 (U2 er færdig: styringen på billedet i Solsystemet og Kosmos. U3, U4 og M8b/M8c venter på jeres valg og go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -29,7 +29,22 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - ~~**Knappen "Navne"**~~ ✅ Lavet 30. oktober 2026 (se nedenfor).
 - **M6 (Phobos og Deimos): Planen er klar og venter på jeres go** ([docs/plan-mars.md](docs/plan-mars.md) under "Plan for M6", syv beslutninger til jer til sidst, billederne i `docs/m6/`). Formen er afgjort: Phobos' højdekort vender rigtigt, og Deimos' formmodel har vestlig længde (ellers ville Deimos blive spejlvendt). Anbefalingen er to dele: M6a (formen, kortene og banerne) og M6b (flybyen og teksterne). **Jeres svar (30. oktober 2026): "Go herfra. Vi følger dine anbefalinger."** Alle syv anbefalinger gælder. M6a bygges nu, og M6b venter på et go efter M6a (anbefaling 7). **Jeres svar (30. oktober 2026):** JAXA var blokeret. Lav planen nu, og I åbner `*.jaxa.jp`. Samme dag virkede www.mmx.jaxa.jp, global.jaxa.jp og www.jaxa.jp (isas.jaxa.jp svarede 502 fra siden selv).
 
-**Senest lavet (30. oktober 2026): U1, træet i Solsystemet. U2 (styringen på billedet) venter på go.** Planen står i [docs/plan-ux.md](docs/plan-ux.md) (status for U1 nederst).
+**Senest lavet (31. oktober 2026): U2, styringen på billedet i Solsystemet og Kosmos.** Planen og det, der blev afgjort undervejs, står i [docs/plan-ux.md](docs/plan-ux.md) under "Status for U2". **Næste:** U3 (siden i lag med faktatjek af stedernes tal), U4 (tidsknappen og kontakterne i resten af AtomLab) eller M8b/M8c. Det venter på jeres valg og go.
+- **"Prøv selv" er væk.** Alt, der styrer billedet, står nu i billedet:
+  - **Bjælken forneden:** trinene med "‹", "Næste: … ›", til sidst "↺ Forfra" og på flybyen ✕, og scenens handlinger (fx "▶ Start flyby", "🧍 Stå på Mars", "💥 Send en solstorm"). Man kan trykke på prikkerne i underteksten og springe til et trin. Bjælken står der også med "Kun grafik".
+  - **Styr-boksen øverst til højre:** kontakterne (tændt er fyldt med ✓) og skyderne. Åben på pc og tablet på langs, foldet sammen til "Styr" på tablet på højkant og telefon.
+  - **Tidsknappen nederst til højre:** ⏸ ▶ og ved Jorden ⏩. Den afløser Pause, "Drej Mars", "Drej Jorden" og "Jorden drejer". Mellemrum virker som før. Ved et sted på Mars står tiden stille fra start, og når man står på Mars, lader ▶ dagen gå.
+- **Flybyen** står øverst i træet ("▶ Flyby · 13 stop"), og man kan gå et stop tilbage.
+- **Kameraet flyver også, når tiden står stille** (det gjorde det allerede, men nu slår et tryk i træet ikke pausen fra).
+- **Tests:** Knapperne findes nu ud fra teksten. Nye tjek for bjælken, Styr-boksen og tidsknappen. Hele samlingen: alle 28 tests bestod (31. oktober 2026).
+- **Ikke afprøvet (på tabletten):**
+  1. Er Styr-boksen let at finde på højkant, og dækker den for meget, når den er foldet ud?
+  2. Er "Næste" og "‹" i bjælken lette at ramme? Kan I ramme prikkerne i underteksten med fingeren (de er små)?
+  3. Forstår I tidsknappen, og at tiden står stille ved et sted på Mars (tryk ▶ for at lade lyset gå rundt)?
+  4. Føles det rigtigt, at "🌅 Solnedgang" lader dagen gå videre, så Solen går ned?
+  5. Ser kontakterne ud som kontakter (fyldt med ✓, når de er tændt)?
+
+**Før det (30. oktober 2026): U1, træet i Solsystemet.** Planen står i [docs/plan-ux.md](docs/plan-ux.md) (status for U1 nederst).
 - **Venstre panel er nu navigation:** Kloderne står på én række, og under dem et træ med den valgte klode, dens steder og måner og dens forsøg. Mars har alle 12 steder og måner (Calderaen og Skrænten under Olympus Mons, "Mars set fra Phobos" under Phobos), Saturn har Ringene og alle seks måner, og Jorden har Månen. Før kunne Calderaen, Ringene og udsigten fra Phobos kun nås med flybyen.
 - **Fjernet fra "Prøv selv":** "Hele Mars", "Månerne", "Saturn", "Enceladus", "Titan" og Jordens "Månen". Resten (kontakterne, flybyen og Pause) flytter i U2.
 - **Højre panel viser stedet:** navnet, teksten om det, man ser ("Lige nu", før den lille boks nederst til venstre, også i Kosmos), og kloden under "Om Mars". Toplinjen viser vejen (› Mars › Olympus Mons).
@@ -465,7 +480,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 - [ ] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (se [docs/plan-ux.md](docs/plan-ux.md))
   - [x] U1: Træet til venstre (kloder, Steder, Måner og Forsøg) og stedets side til højre. Vejen i toplinjen (30. oktober 2026).
-  - [ ] U2: Bjælken med tur og "Næste", Styr-boksen med kontakter og skydere og tidsknappen på billedet. "Prøv selv" forsvinder.
+  - [x] U2: Bjælken med tur og "Næste", Styr-boksen med kontakter og skydere og tidsknappen på billedet. "Prøv selv" forsvinder (31. oktober 2026).
   - [ ] U3: Siden i lag (Kort, emner, For nørder, Ærligt talt), planeternes tekster delt ud på stederne og tal for hvert sted (faktatjek).
   - [ ] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab.
 

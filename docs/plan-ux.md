@@ -305,12 +305,29 @@ Lavet, som planen siger. Afgjort undervejs:
 
 **Flettet med Mars M8a** (30. oktober 2026, bygget i en anden session samtidig): Stederne, man kan stå ved Gale, står i træet på tredje niveau ("🧍 Naukluft" og "🧍 Hos Curiosity"). "↑ Tilbage i kredsløb" og "Gå til …" er fjernet fra "Prøv selv", for Gale og det andet sted står i træet, og et tryk på et hvilket som helst andet sted letter først. "🧍 Stå på Mars" bliver ved Gale som en handling (flyttes til bjælken i U2). Skyderen, "Lad dagen gå" og "Solnedgang" bliver under "Prøv selv" til U2. M8b og M8c (Jezero og et sted mere) skal bruge det samme: et punkt pr. sted under krateret i `TRÆ` (det sker af sig selv ud fra `LANDSKAB`).
 
+## Status for U2 (31. oktober 2026)
+Lavet, som planen siger, i begge skærme på én gang (den fælles skal `js/faenomenskaerm.js`). "Prøv selv" og pauseknappen i panelet er væk. Afgjort undervejs:
+- **Flyvningerne under pause:** "Pas på" ovenfor var allerede løst: Kameraets rejse kører i Mars, Saturn og Jorden i deres egen opdatering hvert billede (`verden.opdateringer`), ikke i fænomenets `opdater`. Derfor flyver kameraet, også når tiden står stille. Nu slår et tryk i træet ikke længere pausen fra, og to nye tjek (Jorden og Saturn) viser, at kameraet flyver under pause uden at spole.
+- **Prikkerne** står stadig i underteksten (ikke i bjælken), men man kan trykke på dem, når fænomenet har trin. Så fylder bjælken én linje mindre. Bjælken har "‹", "Næste: … ›", til sidst "↺ Forfra" og på flybyen ✕.
+- **Big Bang og Solens fremtid** bygges op trin for trin. Et spring tilbage starter forfra og går frem igen, og Solens fremtid spoler de sprungne trin igennem (ellers bliver tågen aldrig blæst af).
+- **Flybyen** står øverst i træet ("▶ Flyby · 13 stop", lyser, mens den kører) og som "▶ Start flyby" i bjælken, når den ikke kører, så den også kan startes med "Kun grafik". Ved det sidste stop er turen slut som før (der er ingen "‹" dér). Et spring med "‹" eller en prik flyver derhen som fra træet (månerne glider på plads).
+- **Tiden ved Mars:** Ved et sted står tiden stille fra start, ved en måne og hele Mars går den. Før blev Mars stående, når man fløj fra et sted tilbage til hele Mars. Nu drejer den igen.
+- **Stå på Mars:** Når man lander, står tiden stille, og ▶ lader dagen gå (før "▶ Lad dagen gå", et døgn på 150 sekunder). Der er ingen ⏩, for 1 gang den rigtige fart ville ikke kunne ses. "Klokken på Mars" står i Styr-boksen og "🌅 Solnedgang" i bjælken. Solnedgang lader tiden gå, så man ser Solen gå ned. Flybyen kan ikke startes, mens man står.
+- **Jorden:** ▶ er den rigtige tid og ⏩ ca. 800 gange hurtigere (før "Drej Jorden"). Kun Jorden har ⏩.
+- **Årstiderne:** "Jorden drejer" er blevet til tidsknappen. Under pause står Jorden stille, men glider stadig hen til datoen på skyderen (`altid`).
+- **Kosmos:** Reglen fra skallen sorterer selv: handlinger i bjælken, kontakter og skydere i Styr-boksen. "↺ Forfra" og "↺ Ny …" dukker først op, når der er sket noget (`skjul`). Pulsarens tre lyde står i bjælken.
+- **Styr-boksen** er åben på pc og tablet på langs og foldet sammen på tablet på højkant og telefoner (også telefon på langs).
+- **Pausemærket** midt forneden er væk i Kosmos og Solsystemet, for tidsknappen viser det.
+- **Tidsknappen** har små tegnede ikoner, fordi ⏸ blev vist meget lille i nogle skrifttyper.
+- **Tests:** Knapperne findes ud fra teksten (`trykPå`), også i billedværktøjerne. Nye tjek: Styr-boksen har kun kontakter og skydere, en tændt kontakt har ✓, bjælken står der med "Kun grafik", ‹ og prikkerne (Big Bang, Solens fremtid, Årstiderne, Saturns og Mars' flyby), tidsknappen stopper uret, men ikke flyvningerne, mellemrum går tilbage til ⏩, og Styr-boksen er foldet sammen på højkant.
+
 ## Afgøres undervejs (med skærmbilleder)
-- **Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?
+- ~~**Styr-boksen:** Er den åben eller foldet fra start på tablet på langs?~~ Åben (U2).
 - **Tallene for hvert sted:** Hvilke 2-4 tal skal stå (U3)?
 
 ## Ikke afprøvet (skal prøves på tabletten efter hvert trin)
 - Kan man ramme punkterne i træet med fingeren, og er det tydeligt, hvor man er?
 - Forstår man, at flybyen går gennem træet?
 - Er Styr-boksen let at finde, og dækker den for meget på højkant?
-- Er "Næste" i bjælken let at ramme?
+- Er "Næste" i bjælken let at ramme? Kan man ramme prikkerne i underteksten med en finger (de er små)?
+- Forstår man tidsknappen (⏸ ▶ ⏩), og at tiden står stille ved et sted på Mars?

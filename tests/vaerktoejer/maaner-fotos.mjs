@@ -11,7 +11,7 @@ await s.goto(`${ADRESSE}/?test#solsystem`);
 await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
 await s.click('#solsystem .kosmos-valg[data-id="mars"]');
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.måner().every((m) => m.form && m.kort), null, { timeout: 120000 });
-await s.click('#solsystemStyring button:text-is("Drej Mars")');
+await s.click('#solsystemTid button[data-tid="pause"]');
 // fra: månen står så mange grader fra stedet bag Mars (Solen bag kameraet, lidt til siden)
 for (const [id, bredde, længde, fra] of [['phobos', 30, 0, 30], ['deimos', -10, -30, 25]]) {
   await s.evaluate(([id, b_, l, f]) => atomlabTest.solsystem.fænomen().kameraFra(id, b_, l, f), [id, bredde, længde, fra]);

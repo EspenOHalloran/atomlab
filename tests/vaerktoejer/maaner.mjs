@@ -14,13 +14,13 @@ await s.click('#solsystem .kosmos-valg[data-id="mars"]');
 const fm = (f, a) => s.evaluate(f, a);
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.måner().every((m) => m.form && m.kort), null, { timeout: 120000 });
 const vent = async () => { await fm(() => atomlabTest.solsystem.fænomen().hop()); await s.waitForTimeout(1500); };
-await s.click('#solsystemStyring button:text-is("Drej Mars")'); // står stille, så billederne kan sammenlignes
-await s.click('#solsystemStyring button:text-is("Månerne")');
+await s.click('#solsystemTid button[data-tid="pause"]'); // står stille, så billederne kan sammenlignes
+await s.click('#solsystemTræ button[data-sted="måner"]');
 await vent();
 await s.screenshot({ path: `${UD}/1-maanerne.png` });
 for (const id of ['phobos', 'deimos']) {
   if (id !== 'phobos') {
-    await s.click('#solsystemStyring button:text-is("Månerne")');
+    await s.click('#solsystemTræ button[data-sted="måner"]');
     await vent();
   }
   const p = await fm((id) => atomlabTest.solsystem.fænomen().månePlads(id), id);

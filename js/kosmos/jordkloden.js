@@ -19,7 +19,7 @@ const JORD_R = 6371; // km (NSSDC: middelradius 6.371,0 km)
 const MÅNE_R = 1737.4; // km (NSSDC: middelradius 1.737,4 km)
 const SOL_R = 695700; // km (NSSDC)
 const OMDREJNING = (2 * Math.PI) / 86164.1; // Jordens drejning i forhold til stjernerne (radianer i sekundet, 23 t 56 min 4 s)
-const DREJ = 0.06; // "Drej Jorden": radianer i sekundet (et døgn på ca. 1¾ minut, som Mars)
+const DREJ = 0.06; // ⏩ på tidsknappen: radianer i sekundet (et døgn på ca. 1¾ minut, som Mars)
 const HURTIG = DREJ / OMDREJNING; // så meget hurtigere går tiden (ca. 820 gange)
 const KBH = { bredde: 55.68, længde: 12.57 }; // København
 const RAD = Math.PI / 180;
@@ -50,7 +50,7 @@ export default {
   ],
   kort: `
     <p><b>Jorden</b> er den tredje planet fra Solen og den eneste, vi kender, hvor der er liv. Lyset passer med lige nu: Den lyse side har dag, og den mørke side har nat. Den gule prik er Danmark. Drej kloden med fingeren, musen eller piletasterne, og zoom ind.</p>
-    <p><b>Dag og nat:</b> Jorden drejer om sig selv mod øst én gang i døgnet. Derfor står Solen op i øst og går ned i vest. Tryk "Drej Jorden", så går tiden ca. 800 gange hurtigere, og et døgn varer under 2 minutter. Hvorfor vi har årstider, kan du se i <button class="link-knap" data-gaa="solsystem:aarstider">Årstiderne</button>.</p>
+    <p><b>Dag og nat:</b> Jorden drejer om sig selv mod øst én gang i døgnet. Derfor står Solen op i øst og går ned i vest. Tryk ⏩ nederst til højre i billedet, så går tiden ca. 800 gange hurtigere, og et døgn varer under 2 minutter. Hvorfor vi har årstider, kan du se i <button class="link-knap" data-gaa="solsystem:aarstider">Årstiderne</button>.</p>
     <p><b>Månen</b> er ca. 3.470 km bred, lidt over en fjerdedel af Jordens bredde. Den er i snit ca. 384.400 km væk, så der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Her står den i den rigtige størrelse og afstand og der, hvor den er i dag. Vælg Månen i listen for at flyve derud.</p>
     <p><b>Månens faser:</b> Månen kredser om Jorden på ca. 27 døgn og drejer om sig selv lige så hurtigt. Derfor vender den altid den samme side mod os. Solen lyser altid på den ene halvdel af Månen. Hvor meget af den lyse halvdel vi ser fra Jorden, kommer an på, hvor Månen står i sin bane. Fra fuldmåne til fuldmåne går der ca. 29½ døgn. Ved nymåne og fuldmåne kan der komme <button class="link-knap" data-gaa="solsystem:formoerkelser">formørkelser</button>.</p>`,
   nørd: `
@@ -58,7 +58,7 @@ export default {
     <p><b>Månens bane</b> er ikke helt rund, men en ellipse (en lidt aflang cirkel). Afstanden svinger mellem ca. 356.000 og 407.000 km. Banen hælder ca. 5,1° i forhold til Jordens bane om Solen, og derfor er der ikke formørkelse ved hver nymåne og fuldmåne. Linjen viser Månens vej i en måned omkring det tidspunkt, du ser.</p>
     <p><b>Jordens form:</b> Jorden er ca. 12.756 km bred ved ækvator og 12.714 km fra pol til pol. Den er lidt fladtrykt, fordi den drejer. Kuglen her er helt rund.</p>
     <p><b>Et døgn</b> er 24 timer fra middag til middag. I forhold til stjernerne drejer Jorden én gang på 23 timer og 56 minutter. Forskellen kommer af, at Jorden også flytter sig et stykke i sin bane om Solen hver dag, så den skal dreje lidt ekstra, før Solen står samme sted på himlen igen.</p>
-    <p><b>Ærligt talt:</b> Billederne er fra NASA (Blue Marble og Black Marble), og skyerne er et øjebliksbillede fra nogle få dage, så de passer ikke med vejret i dag. Bjergene er gjort højere end i virkeligheden, så de kan ses. Solen er tegnet som en lille prik langt væk. Når du trykker "Drej Jorden", går tiden ca. 800 gange hurtigere, og Månen flytter sig i sin bane imens.</p>`,
+    <p><b>Ærligt talt:</b> Billederne er fra NASA (Blue Marble og Black Marble), og skyerne er et øjebliksbillede fra nogle få dage, så de passer ikke med vejret i dag. Bjergene er gjort højere end i virkeligheden, så de kan ses. Solen er tegnet som en lille prik langt væk. Når du trykker ⏩, går tiden ca. 800 gange hurtigere, og Månen flytter sig i sin bane imens.</p>`,
 
   lav(gruppe, { opdaterKnapper, forklaring, overlag, verden }) {
     const { kamera } = verden;
@@ -163,10 +163,8 @@ export default {
     }
 
     // ---------- Knapperne og teksten ----------
-    let drejer = false;
-    const styring = [
-      { tekst: 'Drej Jorden', til: drejer, skift: (til) => { drejer = til; vis(); } },
-    ];
+    let drejer = false; // ⏩ på tidsknappen: tiden går ca. 820 gange hurtigere
+    const styring = [];
     function vis() {
       if (ved === 'månen') {
         forklaring('<p><b>Månen:</b> Drej kameraet rundt, så kan du se Jorden langt væk. Der er plads til ca. 30 Jorder på række mellem Jorden og Månen. Den samme side af Månen vender altid mod Jorden. Tryk på Jorden i listen for at flyve tilbage.</p>');
@@ -231,6 +229,8 @@ export default {
       styring,
       gåTil: (id) => flyv(id), // træet i listen (js/faenomenskaerm.js): 'jorden' eller 'månen'
       sted: () => ved,
+      hurtig: 'tiden går ca. 800 gange hurtigere',
+      tempo: (t) => { drejer = t === 'hurtig'; vis(); },
       opdater(dt) {
         nu += dt * 1000 * (drejer ? HURTIG : 1);
         stil();

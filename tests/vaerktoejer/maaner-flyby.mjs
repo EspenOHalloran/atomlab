@@ -17,7 +17,7 @@ for (const navn of valgt) {
   await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
   await s.evaluate(() => document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click());
   await s.waitForFunction(() => { const t = atomlabTest.solsystem.fænomen(); return t?.måner().every((m) => m.form && m.kort) && atomlabTest.solsystem.knapper().includes('▶ Start flyby'); }, null, { timeout: 60000 });
-  const tryk = (tekst) => s.evaluate((t) => [...document.querySelectorAll('#solsystemStyring button')].find((k) => k.textContent.startsWith(t)).click(), tekst);
+  const tryk = (tekst) => s.evaluate((t) => [...document.querySelectorAll('#solsystemBjælke button')].find((k) => k.textContent.startsWith(t)).click(), tekst);
   const f = (fn, a) => s.evaluate(fn, a);
   await tryk('▶ Start flyby');
   for (let i = 0; i < 10; i++) { await f(() => atomlabTest.solsystem.fænomen().hop()); await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver); await tryk('Næste'); }

@@ -1,7 +1,14 @@
-// Den fælles skal om fænomenerne i Kosmos og Solsystemet: listen, panelet, knapperne under "Prøv selv",
-// underteksterne med trin, toplag og overlag i 3D-billedet, pausen, skærmens eget ur og "Næste ›" med "Kun grafik".
+// Den fælles skal om fænomenerne i Kosmos og Solsystemet: listen (i Solsystemet et træ), panelet, underteksterne med
+// trin, toplag og overlag i 3D-billedet og skærmens eget ur. Styringen står i selve 3D-billedet (U2 i docs/plan-ux.md):
+// - bjælken forneden: turen og trinene (‹, "Næste: … ›", ↺ Forfra og ✕) og scenens handlinger (fx "▶ Start flyby")
+// - Styr-boksen øverst til højre: kontakter (tændt er fyldt med ✓) og skydere
+// - tidsknappen nederst til højre: ⏸ ▶ og ⏩, hvor scenen kan gå hurtigere (mellemrum skifter pausen)
 // Hvert fænomen ligger i sin egen fil i js/kosmos/ og har samme opbygning (se fx rumtid.js):
 // { id, navn, ikon, undertitel, citat, kamera, tal, kort, nørd, lav(gruppe, ctx) → { styring, opdater(dt, tid), stop() } }
+// lav() kan også give: trin() (trinene i bjælken, se tegnBjælke), tur (en tur som flybyen, øverst i træet:
+// { navn, stop, klar(), kører(), start(), skjul()? }),
+// hurtig (teksten til ⏩, fx 'ca. 820 gange hurtigere'), tempo(tilstand) (kaldes, når tidsknappen skifter) og
+// altid(dt) (kaldes hvert billede, også under pause, fx når Jorden glider hen til en dato fra en skyder).
 //
 // Elementerne i index.html har skærmens navn foran (fx kosmosListe og solsystemListe), så CSS og tests kan finde dem.
 
@@ -14,7 +21,10 @@ import { visBesked, skjulUndertekst, bundIVindue } from './beskeder.js';
 import { lavLagBokse } from './lag.js';
 import { HVORFOR } from './data/hvorfor.js';
 import { ryd, stjerneUr } from './kosmos/faelles.js';
-import { lavPause } from './pause.js';
+import { lavTidsknap } from './pause.js';
+
+// Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
+const SMAL = matchMedia('(max-width: 820px), (max-height: 500px)');
 
 // Hvor hver skærm husker det sidst valgte fænomen og de fænomener, man har kigget på
 export const NØGLER = {
@@ -59,7 +69,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
   let kørende = null; // det, fænomenets lav() gav tilbage
   let fane = 'kort';
   let tjekTid = 0;
-  let pause = null; // pausen (pause.til er true, mens tiden står stille)
+  let tidsknap = null; // ⏸ ▶ ⏩ (tidsknap.til er true, mens tiden står stille)
   let tid = 0; // skærmens eget ur, som står stille under pause
   let forklaringVist = ''; // teksten i panelet lige nu (fra fænomenets forklaring())
   let kameraTur = null;
@@ -86,8 +96,23 @@ export function lavFænomenSkærm({ skærm, liste }) {
     gruppe = new THREE.Group();
     rod.add(gruppe);
     effekter = new Effekter(rod);
-    const næste = Object.assign(document.createElement('button'), { className: 'knap lille kosmos-næste', id: `${skærm}Næste`, hidden: true });
-    bundIVindue($('Vindue')).append(næste);
+    // Styr-boksen øverst til højre i 3D-billedet. Foldet sammen til "Styr" på tablet på højkant og telefon.
+    const styr = document.createElement('details');
+    styr.className = 'styr';
+    styr.id = `${skærm}Styr`;
+    styr.open = !SMAL.matches;
+    styr.innerHTML = '<summary>Styr</summary><div class="styr-indhold"></div>';
+    styr.addEventListener('toggle', () => lyd.klik());
+    bundIVindue($('Vindue')); // laver laget med toppen og bunden, hvis det mangler
+    $('Vindue').querySelector('.vindue-top').prepend(styr);
+    // Bjælken forneden (turen, trinene og handlingerne) og tidsknappen ved siden af
+    const række = document.createElement('div');
+    række.className = 'bjælke-række';
+    const bjælke = document.createElement('div');
+    bjælke.className = 'bjælke';
+    bjælke.id = `${skærm}Bjælke`;
+    række.append(bjælke);
+    bundIVindue($('Vindue')).append(række);
 
     const boks = $('Liste');
     if (!grupperet) for (const g of grupper) boks.append(valgKnap(g.f));
@@ -114,7 +139,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
         const b = h.target.closest('button');
         if (!b) return;
         const g = åbenGruppe();
-        if (b.dataset.sted) gå(g, b.dataset.sted);
+        if (b.dataset.tur) {
+          if (!kørende?.tur?.kører()) startTur();
+        } else if (b.dataset.sted) gå(g, b.dataset.sted);
         else if (b.dataset.id && valgt?.id !== b.dataset.id) {
           lyd.klik();
           fane = 'kort';
@@ -133,7 +160,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
       });
     }
     $('Hjælp').addEventListener('click', () => { lyd.klik(); document.getElementById(`hjælp${skærm[0].toUpperCase()}${skærm.slice(1)}`).classList.remove('skjult'); });
-    pause = lavPause({ knap: $('Pause'), vindue: $('Vindue'), aktiv: () => aktiv });
+    tidsknap = lavTidsknap({ holder: række, aktiv: () => aktiv, ændret: (t) => kørende?.tempo?.(t) });
+    tidsknap.knap = række.querySelector('.tidsknap');
+    tidsknap.knap.id = `${skærm}Tid`;
   }
 
   function start() {
@@ -158,8 +187,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
     verden.opdateringer.delete(opdater);
     piletaster(false);
     visTåger(true);
-    pause.sæt(false);
     luk();
+    tidsknap.sæt('spil');
     stjerneUr.tid = null;
     verden.styring.target.set(0, 0, 0);
     verden.styring.autoRotate = true;
@@ -171,6 +200,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
     kameraTur = null;
     kørende?.stop?.();
     kørende = null;
+    bjælkeNøgle = null;
     effekter.opdater(1e6); // alle effekter bliver færdige med det samme
     ryd(gruppe);
     $('Overlag').innerHTML = '';
@@ -180,8 +210,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
 
   function vælg(id) {
     const f = FÆNOMENER.find((x) => x.id === id) ?? FÆNOMENER[0];
-    pause.sæt(false);
     luk();
+    tidsknap.hurtig(null);
+    tidsknap.sæt('spil'); // et nyt fænomen starter altid med tiden i gang
     valgt = f;
     set.add(f.id);
     try {
@@ -201,6 +232,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       fase: visFase,
       kamera: stilKamera,
       opdaterKnapper: lavStyring,
+      // Fænomenet kan selv stille tidsknappen (fx står tiden stille, når man lander ved et sted på Mars)
+      tiden: (tilstand) => tidsknap.sæt(tilstand),
       // Skrives kun om, når teksten ændrer sig (ellers forsvinder ordforklaringerne hver gang)
       forklaring: (html) => {
         if (html === forklaringVist) return;
@@ -212,6 +245,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // Et sted øverst til venstre i 3D-billedet (fx en lille tabel)
       toplag: () => $('Toplag'),
     });
+    tidsknap.hurtig(kørende.hurtig ?? null);
     for (const b of sektion.querySelectorAll('.kosmos-valg[data-id]')) {
       b.classList.toggle('valgt', b.dataset.id === f.id);
       b.classList.toggle('ny', !set.has(b.dataset.id));
@@ -286,8 +320,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       vælg(g.f.id);
       if (id === g.f.træ?.rod) return; // kloden starter selv der
     } else if (id === stedNu()) return;
-    pause.sæt(false); // man skal kunne se flyvningen
-    kørende?.gåTil?.(id);
+    kørende?.gåTil?.(id); // flyvningen kører også, når tiden står stille
     visSted();
   }
 
@@ -306,6 +339,17 @@ export function lavFænomenSkærm({ skærm, liste }) {
     boks.replaceChildren();
     if (!g) return;
     const træ = g.f?.træ;
+    // Turen (fx flybyen) står øverst: ▶ Flyby · 13 stop. Den lyser, mens den kører.
+    const tur = valgt === g.f ? kørende?.tur : null;
+    if (tur) {
+      const t = stedKnap('', `${tur.navn} · ${tur.stop} stop${tur.klar() ? '' : ' (henter kort …)'}`, 0, '▶');
+      delete t.dataset.sted;
+      t.dataset.tur = '1';
+      t.classList.add('sol-tur');
+      t.classList.toggle('valgt', tur.kører());
+      t.disabled = !tur.klar() || Boolean(tur.skjul?.());
+      boks.append(t);
+    }
     if (g.f) {
       const rod = træ ? stedKnap(træ.rod, g.f.navn, 0, g.f.ikon) : Object.assign(document.createElement('button'), { className: 'sol-sted niveau-0' });
       if (!træ) {
@@ -355,8 +399,10 @@ export function lavFænomenSkærm({ skærm, liste }) {
   function visSted() {
     if (!grupperet || !valgt) return;
     const sted = stedNu();
-    if (sted === stedVist) return;
-    stedVist = sted;
+    const tur = kørende?.tur;
+    const nøgle = `${sted}|${tur?.kører()}|${tur?.klar()}|${tur?.skjul?.()}`; // træet tegnes også igen, når turen starter eller er klar
+    if (nøgle === stedVist) return;
+    stedVist = nøgle;
     tegnTræ(sted);
     const træ = valgt.træ;
     const fundet = træ && sted !== træ.rod ? findPunkt(træ, sted) : null;
@@ -421,12 +467,19 @@ export function lavFænomenSkærm({ skærm, liste }) {
 
   // En undertekst nederst i 3D-billedet, der fortæller, hvad der sker lige nu (fx "Jernkernen falder sammen").
   // Den bliver stående, til den næste fase kommer. trin = [nr, ialt] viser prikker. titel = null fjerner den.
+  // Har fænomenet trin i bjælken (trin()), kan man trykke på prikkerne og gå til et trin.
+  let faseNu = null; // { titel, tekst, trin, klikbar } den fase, der står nu
   function visFase(titel, tekst = '', trin = null) {
     if (!titel) {
+      faseNu = null;
       skjulUndertekst('fase');
       return;
     }
-    visBesked({ titel, tekst, type: 'fase', varighed: 0, trin, log: false });
+    const t = kørende?.trin?.();
+    const klikbar = Boolean(t && trin && trin[1] === t.ialt);
+    faseNu = { titel, tekst, trin, klikbar };
+    const vedTrin = klikbar ? (nr) => brugTrin((x) => x.gå(nr - 1)) : null;
+    visBesked({ titel, tekst, type: 'fase', varighed: 0, trin, vedTrin, log: false });
   }
 
   // Kameraet: retning (hvorfra vi kigger), radius (hvor stort det, vi skal se, er) og mål (midten).
@@ -469,10 +522,11 @@ export function lavFænomenSkærm({ skærm, liste }) {
     if (tur.t >= 1) kameraTur = null;
   }
 
-  // Knapperne under "Prøv selv". Et punkt kan være en knap, en til/fra-knap eller en skyder.
+  // Styringen fra fænomenet: Kontakter (til/fra) og skydere står i Styr-boksen, og handlingerne (knapper, der
+  // starter noget, fx "💥 Send en solstorm") står i bjælken. Et punkt med skjul() vises ikke, når den giver true.
   function lavStyring() {
-    const boks = $('Styring');
-    boks.innerHTML = '';
+    const boks = $('Styr').querySelector('.styr-indhold');
+    boks.replaceChildren();
     for (const s of kørende?.styring ?? []) {
       if (s.skyder) {
         const div = document.createElement('label');
@@ -495,58 +549,128 @@ export function lavFænomenSkærm({ skærm, liste }) {
           vis.textContent = s.vis ? s.vis(v) : v;
         };
         boks.append(div);
-        continue;
-      }
-      const b = document.createElement('button');
-      b.textContent = s.tekst;
-      if (s.til !== undefined) {
-        b.className = 'chip filter kosmos-til';
-        b.classList.toggle('valgt', s.til);
+      } else if (s.til !== undefined) {
+        // En kontakt: tændt er fyldt med ✓, slukket er en tynd kant
+        const b = document.createElement('button');
+        b.className = 'kontakt';
+        b.setAttribute('role', 'switch');
+        b.innerHTML = '<span class="kontakt-boks" aria-hidden="true"></span><span></span>';
+        b.lastChild.textContent = s.tekst;
+        const vis = () => {
+          b.classList.toggle('til', s.til);
+          b.setAttribute('aria-checked', String(s.til));
+        };
+        vis();
         b.addEventListener('click', () => {
           s.til = !s.til;
-          b.classList.toggle('valgt', s.til);
+          vis();
           lyd.klik();
           s.skift(s.til);
         });
-      } else {
-        b.className = 'knap lille kosmos-knap';
-        b.addEventListener('click', () => {
-          if (b.disabled) return;
+        s.knap = b;
+        boks.append(b);
+      }
+    }
+    $('Styr').hidden = !boks.children.length;
+    bjælkeNøgle = null; // handlingerne kan have skiftet
+    tjekKnapper();
+  }
+
+  // En handling eller et trin skal kunne ses: Står tiden stille, går den igen (et sted på Mars stopper den selv)
+  function fortsæt() {
+    if (tidsknap.til) tidsknap.sæt('spil');
+  }
+  function brugTrin(gør) {
+    const t = kørende?.trin?.();
+    if (!t) return;
+    lyd.klik();
+    fortsæt();
+    gør(t);
+    tjekKnapper();
+  }
+  function startTur() {
+    const tur = kørende?.tur;
+    if (!tur || tur.kører() || !tur.klar()) return;
+    lyd.klik();
+    fortsæt();
+    tur.start();
+    tjekKnapper();
+  }
+
+  // Bjælken i 3D-billedet. Fænomenets trin() giver { nr, ialt, næste, gå(nr), forfra?, stop? } (nr starter ved 0, og
+  // næste er navnet på det næste trin eller ''), eller null, når der ikke er trin lige nu. Uden trin står
+  // handlingerne og turens start ("▶ Start flyby"). Bjælken bygges kun om, når den har ændret sig.
+  let bjælkeNøgle = null;
+  function tegnBjælke() {
+    const bjælke = $('Bjælke');
+    const t = kørende?.trin?.() ?? null;
+    const tur = kørende?.tur;
+    const handlinger = (kørende?.styring ?? []).filter((s) => s.handling && !s.skjul?.());
+    const turStart = tur && !tur.kører() && !tur.skjul?.() ? (tur.klar() ? `▶ Start ${tur.navn.toLowerCase()}` : `▶ Start ${tur.navn.toLowerCase()} (henter kort …)`) : null;
+    const nøgle = JSON.stringify([t && [t.nr, t.ialt, t.næste, !!t.forfra, !!t.stop], handlinger.map((s) => s.tekst), turStart]);
+    if (nøgle !== bjælkeNøgle) {
+      bjælkeNøgle = nøgle;
+      bjælke.replaceChildren();
+      const knap = (tekst, klasse, gør) => {
+        const b = Object.assign(document.createElement('button'), { className: `knap lille ${klasse}`, textContent: tekst });
+        b.addEventListener('click', () => { if (!b.disabled) gør(); });
+        bjælke.append(b);
+        return b;
+      };
+      if (t) {
+        const tilbage = knap('‹', 'bjælke-tilbage', () => brugTrin((x) => x.gå(x.nr - 1)));
+        tilbage.title = 'Et trin tilbage';
+        tilbage.setAttribute('aria-label', tilbage.title);
+        tilbage.disabled = t.nr <= 0;
+        if (t.nr < t.ialt - 1) knap(t.næste ? `Næste: ${t.næste} ›` : 'Næste ›', 'bjælke-næste', () => brugTrin((x) => x.gå(x.nr + 1)));
+        else if (t.forfra) knap('↺ Forfra', 'bjælke-forfra', () => brugTrin((x) => x.forfra()));
+        if (t.stop) {
+          const stop = knap('✕', 'bjælke-stop', () => brugTrin((x) => x.stop()));
+          stop.title = `Stop ${tur?.navn.toLowerCase() ?? 'turen'}`;
+          stop.setAttribute('aria-label', stop.title);
+        }
+      }
+      for (const s of handlinger) {
+        s.knap = knap(s.tekst, 'bjælke-handling', () => {
           lyd.klik();
-          pause.sæt(false); // en handling (fx "Lad stjernen eksplodere") skal kunne ses
+          fortsæt(); // en handling (fx "Lad stjernen eksplodere") skal kunne ses
           s.handling();
           tjekKnapper();
         });
       }
-      s.knap = b;
-      boks.append(b);
+      if (turStart) {
+        const b = knap(turStart, 'bjælke-handling bjælke-tur', startTur);
+        b.disabled = !tur.klar();
+      }
+      bjælke.hidden = !bjælke.children.length;
+      // Prikkerne i underteksten kan bruges, når der er trin (fasen kom måske, før trinene var klar)
+      if (faseNu?.trin && !faseNu.klikbar && t) visFase(faseNu.titel, faseNu.tekst, faseNu.trin);
     }
-    tjekKnapper();
+    for (const s of handlinger) if (s.knap) s.knap.disabled = Boolean(s.deaktiv?.());
   }
 
   // Nogle knapper kan ikke bruges hele tiden (fx "Eksplodér", når stjernen allerede er eksploderet)
   function tjekKnapper() {
-    for (const s of kørende?.styring ?? []) {
-      if (s.knap && s.deaktiv) s.knap.disabled = s.deaktiv();
-    }
-    opdaterNæste();
+    tegnBjælke();
     visSted(); // stedet kan være valgt på kloden eller på flybyen
+    pladsTilStyr();
   }
 
-  // Med "Kun grafik" er panelerne væk. Så står fænomenets "Næste" (eller "Start") nederst i 3D-billedet.
-  function opdaterNæste() {
-    const knap = $('Næste');
-    const s = (kørende?.styring ?? []).find((x) => x.handling && /^(Næste|▶ Start)/.test(x.tekst) && !x.deaktiv?.());
-    knap.hidden = !s;
-    const tekst = s?.tekst.startsWith('▶') ? s.tekst : 'Næste ›';
-    if (s && knap.textContent !== tekst) knap.textContent = tekst; // kaldes fire gange i sekundet
-    knap.onclick = s ? () => s.knap?.click() : null;
+  // Styr-boksen dækker ikke toplaget (fx Årstidernes tabel): Er der ikke plads ved siden af, rykker den ned under det
+  function pladsTilStyr() {
+    const top = $('Toplag');
+    const styr = $('Styr');
+    const v = $('Vindue');
+    const ved = top.offsetWidth > 0 && top.offsetLeft + top.offsetWidth + 8 > v.clientWidth - styr.offsetWidth - 8;
+    const ned = ved ? `${top.offsetTop + top.offsetHeight}px` : '';
+    if (styr.style.marginTop !== ned) styr.style.marginTop = ned;
   }
 
   function opdater(dt) {
     if (!aktiv || !kørende) return;
     kørKameraTur(dt); // kameraet kan stadig flyve under pause
-    if (!pause.til) {
+    kørende.altid?.(dt);
+    if (!tidsknap.til) {
       tid += dt;
       stjerneUr.tid = tid; // stjernernes overflade står også stille under pause
       kørende.opdater(dt, tid);
@@ -565,20 +689,43 @@ export function lavFænomenSkærm({ skærm, liste }) {
       fænomener: FÆNOMENER.map((f) => f.id),
       vælg: (id) => vælg(id),
       valgt: () => valgt?.id,
-      knapper: () => (kørende?.styring ?? []).map((s) => s.tekst ?? s.navn),
-      tryk: (i) => {
-        const s = kørende.styring[i];
-        if (!s) return; // knapperne kan have skiftet (fx når Saturns flyby starter)
-        if (s.handling) s.handling();
-        else if (s.skift) { s.til = !s.til; s.skift(s.til); }
-        lavStyring();
+      // Teksterne på knapperne i bjælken og navnene i Styr-boksen
+      knapper: () => {
+        tjekKnapper();
+        return [...$('Bjælke').querySelectorAll('button'), ...$('Styr').querySelectorAll('.kontakt, .skyder-top > span')].map((b) => b.textContent.trim());
       },
-      pause: () => pause.til,
+      // Knapperne i bjælken: { tekst, slået } (slået = kan ikke bruges lige nu)
+      bjælke: () => {
+        tjekKnapper();
+        return [...$('Bjælke').querySelectorAll('button')].map((b) => ({ tekst: b.textContent.trim(), slået: b.disabled }));
+      },
+      // Punkterne i Styr-boksen: { slags: 'kontakt' | 'skyder' | 'andet', navn, til }
+      styr: () => [...$('Styr').querySelector('.styr-indhold').children].map((e) => ({
+        slags: e.classList.contains('kontakt') ? 'kontakt' : e.classList.contains('skyder-boks') ? 'skyder' : 'andet',
+        navn: (e.classList.contains('kontakt') ? e : e.querySelector('.skyder-top > span'))?.textContent.trim(),
+        til: e.classList.contains('kontakt') ? e.classList.contains('til') : undefined,
+      })),
+      styrÅben: () => $('Styr').open && !$('Styr').hidden,
+      // Tryk på en knap i bjælken eller en kontakt i Styr-boksen ud fra teksten (uden forskel på store og små
+      // bogstaver). Giver false, hvis den ikke findes eller ikke kan bruges.
+      trykPå: (tekst) => {
+        tjekKnapper();
+        const t = tekst.toLowerCase();
+        const b = [...$('Bjælke').querySelectorAll('button'), ...$('Styr').querySelectorAll('.kontakt')]
+          .find((x) => x.textContent.trim().toLowerCase().includes(t));
+        if (!b || b.disabled) return false;
+        b.click();
+        return true;
+      },
+      trin: () => { const t = kørende?.trin?.(); return t ? { nr: t.nr, ialt: t.ialt, næste: t.næste } : null; },
+      pause: () => tidsknap.til,
+      tidsknap: () => tidsknap.tilstand, // 'pause', 'spil' eller 'hurtig'
+      sætTid: (tilstand) => tidsknap.sæt(tilstand),
       kamera: () => verden.kamera.position.toArray(),
       fænomen: () => kørende?.test, // fænomenets egen testadgang (fx Saturns måner)
       // Træet (Solsystemet): punkterne, der vises ({ id, navn, valgt, niveau }), det sted, man er ved, og gå til et sted
       træ: () => [...sektion.querySelectorAll('.sol-træ button')].map((b) => ({
-        id: b.dataset.sted ?? b.dataset.id ?? b.dataset.klode, navn: b.textContent, valgt: b.classList.contains('valgt'),
+        id: b.dataset.tur ? 'tur' : b.dataset.sted ?? b.dataset.id ?? b.dataset.klode, navn: b.textContent, valgt: b.classList.contains('valgt'),
         niveau: b.classList.contains('niveau-2') ? 2 : b.classList.contains('niveau-0') ? 0 : 1,
       })),
       sted: () => stedNu(),

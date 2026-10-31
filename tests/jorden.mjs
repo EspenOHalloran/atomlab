@@ -81,7 +81,7 @@ tjek('Solen: tekst om fusion og 109 Jorder', /fusion/.test(solTekst) && /109 Jor
 tjek('Solen: link til Stjerneovnen', (await s.getAttribute('#solsystemTekst a:has-text("Stjerneovnen")', 'href')) === '#fusion');
 const radier = await f(s, 'f.radier()');
 tjek(`Solen: Jorden er ${(radier.sol / radier.jorden).toFixed(1)} gange mindre (109,2)`, Math.abs(radier.sol / radier.jorden - 109.2) < 0.1);
-await s.click('#solsystemStyring button:has-text("Jorden ved siden af")');
+await s.click('#solsystemStyr .kontakt:has-text("Jorden ved siden af")');
 tjek('"Jorden ved siden af" viser Jorden', await f(s, 'f.jordenVist()'));
 await s.waitForTimeout(2500);
 await s.screenshot({ path: `${UD}/pc-solen-jorden.png` });
@@ -94,8 +94,9 @@ await s.waitForFunction(() => document.querySelector('#solsystem:not(.skjult)'))
 // ---------- Jorden ----------
 await s.click('#solsystem .sol-klode[data-id="jorden"]');
 tjek('et tryk på Jorden åbner Jorden', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'jorden');
-const knapper = await s.evaluate(() => [...document.querySelectorAll('#solsystemStyring button')].map((k) => k.textContent.trim()));
-tjek('knappen "Drej Jorden" (Månen står i træet)', knapper.length === 1 && knapper[0].includes('Drej Jorden'), JSON.stringify(knapper));
+const knapper = await s.evaluate(() => atomlabTest.solsystem.knapper());
+tjek('ingen knapper i bjælken og Styr-boksen ("Drej Jorden" er ⏩, og Månen står i træet)', knapper.length === 0, JSON.stringify(knapper));
+tjek('tidsknappen har ⏩ ved Jorden', await s.isVisible('#solsystemTid button[data-tid="hurtig"]'));
 tjek('Jorden: sort himmel', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
 const nu = await f(s, 'f.tid()');
 tjek('tidspunktet er nu', Math.abs(nu - Date.now()) < 60000);
@@ -127,22 +128,37 @@ const solR = (await f(s, 'f.måne()')).solRetning;
 const dekl = Math.asin(pol.reduce((t, v, i) => t + v * solR[i], 0)) * 180 / Math.PI;
 tjek(`21. juni: Solen står ${dekl.toFixed(2)}° nord for ækvator (23,43°)`, Math.abs(dekl - 23.43) < 0.1);
 
-// "Drej Jorden": tiden går ca. 820 gange hurtigere, og Jorden drejer mod øst (Solen flytter sig mod vest hen over Jorden)
+// ⏩ (før "Drej Jorden"): tiden går ca. 820 gange hurtigere, og Jorden drejer mod øst (Solen flytter sig mod vest hen
+// over Jorden)
 const før = await f(s, '[f.tid(), f.solUnder().længde]');
-await s.click('#solsystemStyring button:has-text("Drej Jorden")');
+await s.click('#solsystemTid button[data-tid="hurtig"]');
+tjek('⏩: teksten siger, at tiden går hurtigere', /800 gange hurtigere/.test(await s.textContent('#solsystemForklaring')));
 await s.evaluate(() => atomlabTest.solsystem.spol(8)); // spoles frem (testbrowseren tegner kun få billeder i sekundet)
 const efter = await f(s, '[f.tid(), f.solUnder().længde]');
 const timer = (efter[0] - før[0]) / 3600000;
 const vest = ((før[1] - efter[1]) % 360 + 360) % 360;
-tjek(`"Drej Jorden": tiden gik ${timer.toFixed(1)} timer frem`, timer > 1, JSON.stringify([før, efter]));
+tjek(`⏩: tiden gik ${timer.toFixed(1)} timer frem`, timer > 1, JSON.stringify([før, efter]));
 tjek(`Jorden drejer mod øst: Solen flyttede sig ${vest.toFixed(0)}° mod vest (ca. 15° i timen: ${(timer * 15.04 % 360).toFixed(0)}°)`, Math.abs(vest - (timer * 15.04) % 360) < 3);
-await s.click('#solsystemStyring button:has-text("Drej Jorden")');
-// Pause: tiden står stille
-await s.click('#solsystemPause');
+// Pause: tiden står stille, og mellemrum går tilbage til ⏩ (det, tiden gik med før)
+await s.click('#solsystemTid button[data-tid="pause"]');
 const p0 = await f(s, 'f.tid()');
 await s.waitForTimeout(600);
 tjek('pause: tiden står stille', (await f(s, 'f.tid()')) === p0);
-await s.click('#solsystemPause');
+await s.mouse.click(640, 400);
+await s.keyboard.press('Space');
+tjek('mellemrum efter ⏩ og ⏸: tiden går hurtigt igen', (await s.evaluate(() => atomlabTest.solsystem.tidsknap())) === 'hurtig');
+await s.click('#solsystemTid button[data-tid="spil"]');
+tjek('▶: tiden går normalt, og teksten siger "Lige nu"', /Lige nu/.test(await s.textContent('#solsystemForklaring')));
+// Under pause flyver kameraet stadig (flyvningen kører uden for fænomenets ur)
+await s.click('#solsystemTid button[data-tid="pause"]');
+const flyvFør = await s.evaluate(async () => { const { verden } = await import('/js/scene3d.js'); return verden.kamera.position.toArray(); });
+await s.click('#solsystemTræ button[data-sted="månen"]');
+const fløj = await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().flyver(), null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
+const flyvEfter = await s.evaluate(async () => { const { verden } = await import('/js/scene3d.js'); return verden.kamera.position.toArray(); });
+tjek('under pause flyver kameraet stadig ud til Månen (uden at spole)', fløj && (await f(s, 'f.ved()')) === 'månen' && Math.hypot(...flyvFør.map((v, i) => v - flyvEfter[i])) > 1 && (await s.evaluate(() => atomlabTest.solsystem.pause())), JSON.stringify([flyvFør, flyvEfter]));
+await s.click('#solsystemTræ button[data-sted="jorden"]');
+await f(s, 'f.hop()');
+await s.click('#solsystemTid button[data-tid="spil"]');
 
 // "Månen": kameraet flyver ud til Månen og tilbage
 await f(s, 'f.sætTid(a)', Date.now());

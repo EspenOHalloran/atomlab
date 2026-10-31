@@ -190,7 +190,7 @@ export default {
       fase(null);
       forklaring('');
       kamera({ radius: 5, flyv: false });
-      opdaterNæsteKnap();
+      opdaterKnapper();
     }
 
     // Gør det nuværende trin færdigt med det samme (hvis man trykker "Næste", før animationen er færdig)
@@ -222,13 +222,18 @@ export default {
       fase(t.titel, t.tekst, [trin + 1, TRIN.length]);
       kamera({ radius: t.radius, flyv: false });
       opdaterPanel();
-      opdaterNæsteKnap();
+      opdaterKnapper();
     }
 
-    function opdaterNæsteKnap() {
-      const s = styring[1];
-      s.tekst = trin >= 0 && trin < TRIN.length - 1 ? `Næste: ${TRIN[trin + 1].titel.toLowerCase()} ›` : 'Næste ›';
-      opdaterKnapper();
+    // Gå til et trin (Næste, ‹ og prikkerne i bjælken). Universet bygges op trin for trin, så et trin tilbage starter
+    // forfra og går frem igen (hvert trin gøres færdigt med det samme, gørFærdig).
+    function gåTrin(nr) {
+      if (trin < 0 || nr < 0 || nr >= TRIN.length || nr === trin) return;
+      if (nr < trin) {
+        nulstil();
+        start();
+      }
+      while (trin < nr) næste();
     }
 
     // Panelet: hvor langt vi er, og hvad universet består af
@@ -360,14 +365,14 @@ export default {
       if (v.lengthSq() > 1) { v.setLength(1); f.reflect(hjælp.copy(v).normalize()); }
     }
 
+    // Før start står "▶ Start universet" i bjælken, og bagefter trinene (trin() nedenfor)
     const styring = [
-      { tekst: '▶ Start universet', handling: start, deaktiv: () => trin >= 0 },
-      { tekst: 'Næste ›', handling: næste, deaktiv: () => trin < 0 || trin >= TRIN.length - 1 },
-      { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => trin < 0 },
+      { tekst: '▶ Start universet', handling: start, skjul: () => trin >= 0 },
     ];
 
     return {
       styring,
+      trin: () => (trin < 0 ? null : { nr: trin, ialt: TRIN.length, næste: trin < TRIN.length - 1 ? TRIN[trin + 1].titel.toLowerCase() : '', gå: gåTrin, forfra: nulstil }),
       opdater(dt, tid) {
         if (trin < 0) {
           // Før start: et lille, varmt lyspunkt, der venter

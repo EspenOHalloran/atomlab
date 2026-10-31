@@ -82,23 +82,24 @@ for (const størrelse of ['pc', 'tablet', 'tlf']) {
 }
 
 // ---------- 2. Fænomenerne i Kosmos og Solsystemet på pc ----------
-// For hvert fænomen: knapper, der trykkes på (nummer i "Prøv selv"), og hvor mange sekunder der spoles frem
+// For hvert fænomen: knapper (i bjælken) eller kontakter (i Styr-boksen), der trykkes på (efter teksten), og hvor
+// mange sekunder der spoles frem
 const FÆNOMENER = [
-  ['bigbang', [0, 1, 1, 1, 1], 4, 'Big Bang efter fem trin med "Næste"'],
-  ['stjernefoedsel', [1], 10, 'Stjernefødsel: skyen falder sammen'],
+  ['bigbang', ['Start universet', 'Næste', 'Næste', 'Næste', 'Næste'], 4, 'Big Bang efter fem trin med "Næste"'],
+  ['stjernefoedsel', ['Lad skyen falde sammen'], 10, 'Stjernefødsel: skyen falder sammen'],
   ['aarstider', [], 2, 'Årstiderne, første trin'],
-  ['formoerkelser', [0], 3, 'Formørkelser: solformørkelse'],
-  ['solstorm', [0], 3, 'Solstorm på vej mod Jorden'],
+  ['formoerkelser', ['Næste'], 3, 'Formørkelser: solformørkelse'],
+  ['solstorm', ['Send en solstorm'], 3, 'Solstorm på vej mod Jorden'],
   ['solensfremtid', [], 2, 'Solens fremtid, første trin'],
-  ['hviddvaerg', [0], 6, 'Hvid dværg, der suger gas fra en nabo'],
-  ['supernova', [1], 2, 'Supernova: Betelgeuse med lagene vist'],
-  ['pulsar', [4], 2, 'Pulsar med magnetfeltet vist'],
-  ['kilonova', [0], 4, 'Kilonova: to neutronstjerner støder sammen'],
-  ['rumtid', [1, 2], 4, 'Rumtid: et sort hul i gummidugen og en planet'],
-  ['tyngdebolger', [0], 4, 'Tyngdebølger: to sorte huller smelter sammen'],
-  ['sorthul', [2], 2, 'Sort hul med navne vist'],
+  ['hviddvaerg', ['Lad den suge gas'], 6, 'Hvid dværg, der suger gas fra en nabo'],
+  ['supernova', ['Vis lagene'], 2, 'Supernova: Betelgeuse med lagene vist'],
+  ['pulsar', [], 2, 'Pulsar med magnetfeltet vist'],
+  ['kilonova', ['Lad dem støde sammen'], 4, 'Kilonova: to neutronstjerner støder sammen'],
+  ['rumtid', ['Læg et sort hul', 'Skyd en planet ind'], 4, 'Rumtid: et sort hul i gummidugen og en planet'],
+  ['tyngdebolger', ['Lad dem smelte sammen'], 4, 'Tyngdebølger: to sorte huller smelter sammen'],
+  ['sorthul', [], 2, 'Sort hul med navne vist'],
   ['kvasar', [], 2, 'Kvasar'],
-  ['ormehul', [0], 3, 'Ormehul: kapløbet er i gang'],
+  ['ormehul', ['Start kapløbet'], 3, 'Ormehul: kapløbet er i gang'],
 ];
 {
   const page = await nySide('pc');
@@ -108,7 +109,7 @@ const FÆNOMENER = [
     await gåTil(page, `#${sk}`);
     await page.evaluate(([id, sk]) => atomlabTest[sk].vælg(id), [id, sk]);
     await page.waitForTimeout(1000);
-    for (const i of knapper) await page.evaluate(([i, sk]) => atomlabTest[sk].tryk(i), [i, sk]);
+    for (const t of knapper) await page.evaluate(([t, sk]) => atomlabTest[sk].trykPå(t), [t, sk]);
     await page.evaluate(([s, sk]) => { atomlabTest[sk].spol(s); atomlabTest[sk].kameraFrem(); }, [sek, sk]);
     await page.waitForTimeout(2500);
     await skud(page, `kosmos-${id}`, tekst);
@@ -159,10 +160,10 @@ const FÆNOMENER = [
     ['supernova', [[1, 'Kernen falder sammen'], [2, 'Chokbølgen'], [4, 'Eksplosionen'], [12, 'Tågen og neutronstjernen']], 'Supernova'],
     ['bigbang', [[3, 'Starten'], [4, 'Næste trin'], [4, 'Næste trin'], [4, 'Næste trin']], 'Big Bang'],
   ]) {
-    await page.evaluate((id) => { atomlabTest.kosmos.vælg(id); atomlabTest.kosmos.tryk(0); }, id);
+    await page.evaluate((id) => { atomlabTest.kosmos.vælg(id); atomlabTest.kosmos.trykPå(id === 'bigbang' ? 'Start universet' : 'eksplodere'); }, id);
     let i = 0;
     for (const [sek, tekst] of sekvens) {
-      if (id === 'bigbang' && i > 0) await page.evaluate(() => atomlabTest.kosmos.tryk(1)); // Big Bang går frem med "Næste"
+      if (id === 'bigbang' && i > 0) await page.evaluate(() => atomlabTest.kosmos.trykPå('Næste')); // Big Bang går frem med "Næste"
       await page.evaluate((s) => { atomlabTest.kosmos.spol(s); atomlabTest.kosmos.kameraFrem(); }, sek);
       await page.waitForTimeout(2000);
       await skud(page, `${id}-${'abcd'[i]}`, `${navn} ${++i}/4: ${tekst}`);

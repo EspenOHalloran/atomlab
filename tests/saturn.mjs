@@ -58,19 +58,19 @@ const side = async (adresse) => {
   // "Start flyby" er grå, indtil månernes kort er hentet på forhånd (før gav det et hak, når flybyen startede)
   const vedÅbning = await s.evaluate(() => {
     document.querySelector('#solsystem .kosmos-valg[data-id="saturn"]').click();
-    const k = [...document.querySelectorAll('#solsystemStyring button')].find((b) => b.textContent.includes('Start flyby'));
+    const k = [...document.querySelectorAll('#solsystemBjælke button')].find((b) => b.textContent.includes('Start flyby'));
     return k && { tekst: k.textContent.trim(), grå: k.disabled };
   });
   tjek('lige efter åbning: "Start flyby" er grå med "henter kort"', vedÅbning?.grå && /henter kort/.test(vedÅbning.tekst), JSON.stringify(vedÅbning));
   const måneKort = ['mimas', 'enceladus', 'tethys', 'dione', 'rhea', 'titan'].map((m) => `${m}-2k.jpg`);
-  const klar = await s.waitForFunction(() => [...document.querySelectorAll('#solsystemStyring button')].some((b) => b.textContent.trim() === '▶ Start flyby' && !b.disabled), null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
+  const klar = await s.waitForFunction(() => [...document.querySelectorAll('#solsystemBjælke button')].some((b) => b.textContent.trim() === '▶ Start flyby' && !b.disabled), null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
   const hentetFør = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
   tjek('"Start flyby" bliver aktiv, når alle seks månekort er hentet på forhånd', klar && måneKort.every((n) => n in hentetFør), JSON.stringify(hentetFør));
-  const knapper = async () => s.evaluate(() => [...document.querySelectorAll('#solsystemStyring button')].map((k) => k.textContent.trim()));
+  const knapper = async () => s.evaluate(() => atomlabTest.solsystem.knapper());
   const knapperNu = await knapper();
-  tjek('knapperne Start flyby, Modlys og Navne (stederne står i træet)', ['Start flyby', 'Modlys', 'Navne'].every((t) => knapperNu.some((k) => k.includes(t))) && !knapperNu.some((k) => ['Saturn', 'Månerne', 'Enceladus', 'Titan'].includes(k)), JSON.stringify(knapperNu));
+  tjek('bjælken: "▶ Start flyby", og Styr-boksen: kontakterne Modlys og Navne (stederne står i træet)', JSON.stringify(knapperNu) === JSON.stringify(['▶ Start flyby', 'Modlys', 'Navne']) && JSON.stringify(await s.evaluate(() => atomlabTest.solsystem.styr().map((x) => x.slags))) === '["kontakt","kontakt"]', JSON.stringify(knapperNu));
   const træ = await s.evaluate(() => atomlabTest.solsystem.træ());
-  tjek('træet (U1): Saturn, Ringene, Måner og alle seks måner', træ.map((p) => p.id).join() === 'saturn,ringe,maaner,mimas,enceladus,tethys,dione,rhea,titan' && træ[0].valgt, JSON.stringify(træ.map((p) => p.id)));
+  tjek('træet: "▶ Flyby · 9 stop" øverst, så Saturn, Ringene, Måner og alle seks måner', træ.map((p) => p.id).join() === 'tur,saturn,ringe,maaner,mimas,enceladus,tethys,dione,rhea,titan' && træ[0].navn.includes('Flyby · 9 stop') && træ[1].valgt, JSON.stringify(træ.map((p) => p.id)));
   tjek('Saturn: teksten om skyggerne', /skyggen/.test(await s.textContent('#solsystemForklaring')));
   tjek('Saturn: sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
   tjek('panelet fortæller om alle tre', /Saturn/.test(await s.textContent('#solsystemTekst')) && /Huygens/.test(await s.textContent('#solsystemTekst')));
@@ -90,8 +90,8 @@ const side = async (adresse) => {
   await s.screenshot({ path: UD + '/2-maanerne.png' });
   // Knappen "Navne" (js/solsystem/navne.js): slået fra skjules navnene, men man kan stadig trykke på månerne
   const navne = () => s.evaluate(() => atomlabTest.solsystem.fænomen().navne());
-  const navneKnap = '#solsystemStyring button:text-is("Navne")';
-  tjek('Månerne: "Navne" er slået til, og navnene står over månerne', (await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))) && (await navne()).length >= 5, JSON.stringify(await navne()));
+  const navneKnap = '#solsystemStyr .kontakt:has-text("Navne")';
+  tjek('Månerne: "Navne" er slået til, og navnene står over månerne', (await s.$eval(navneKnap, (k) => k.classList.contains('til'))) && (await navne()).length >= 5, JSON.stringify(await navne()));
   await s.click(navneKnap);
   await s.waitForTimeout(200);
   tjek('"Navne" slået fra: navnene er væk, og valget er gemt', (await navne()).length === 0 && (await s.evaluate(() => localStorage.getItem('atomlabNavne'))) === 'fra', JSON.stringify(await navne()));
@@ -124,22 +124,39 @@ const side = async (adresse) => {
     await hop();
     tjek(`${navn}: teksten skifter`, ord.test(await s.textContent('#solsystemForklaring')));
     if (navn === 'Titan') tjek('Titan: knappen "Under disen"', (await knapper()).some((k) => k.startsWith('Under disen')));
-    await s.click('#solsystemStyring button:has-text("Modlys")');
+    await s.click('#solsystemStyr .kontakt:has-text("Modlys")');
     await s.waitForTimeout(800);
     await s.screenshot({ path: `${UD}/${navn.toLowerCase()}-modlys.png` });
-    await s.click('#solsystemStyring button:has-text("Modlys")');
+    await s.click('#solsystemStyr .kontakt:has-text("Modlys")');
   }
 
-  // Flybyen: ni stop med en undertekst og prikker, og "Næste" hele vejen til Titan
+  // Under pause flyver kameraet stadig (rejsen kører uden for fænomenets ur, U2): et tryk på Mimas i træet
+  await s.click('#solsystemTid button[data-tid="pause"]');
+  await s.click('#solsystemTræ button[data-sted="mimas"]');
+  const fløj = await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
+  tjek('under pause flyver kameraet stadig hen til Mimas (uden at spole)', fløj && (await s.evaluate(() => atomlabTest.solsystem.fænomen().visning())) === 'mimas' && (await s.evaluate(() => atomlabTest.solsystem.pause())));
+  await s.click('#solsystemTid button[data-tid="spil"]');
+
+  // Flybyen: ni stop med en undertekst og prikker, og "Næste" hele vejen til Titan. Den startes fra træet.
   await s.click('#solsystemTræ button[data-sted="saturn"]');
   await hop();
-  await s.click('#solsystemStyring button:has-text("Start flyby")');
+  await s.click('#solsystemTræ button[data-tur]');
+  tjek('flybyen startes fra træet, og punktet lyser', (await s.evaluate(() => atomlabTest.solsystem.træ()))[0].valgt && (await s.evaluate(() => atomlabTest.solsystem.fænomen().tur().trin)) === 0);
   const titler = [];
   for (let i = 0; i < 9; i++) {
     await hop();
-    titler.push(await s.evaluate(() => [document.querySelector('.undertekst.fase')?.textContent ?? '', document.querySelectorAll('.undertekst.fase .ut-trin i').length, atomlabTest.solsystem.fænomen().tur().trin]));
+    titler.push(await s.evaluate(() => [document.querySelector('.undertekst.fase')?.textContent ?? '', document.querySelectorAll('.undertekst.fase .ut-trin button').length, atomlabTest.solsystem.fænomen().tur().trin]));
     if (i === 2) await s.screenshot({ path: UD + '/4-flyby-ringene.png' });
-    if (i < 8) await s.click('#solsystemStyring button:has-text("Næste")');
+    if (i === 3) {
+      // "‹" går et stop tilbage (til ringene), og en prik springer frem igen
+      await s.click('#solsystemBjælke button:has-text("‹")');
+      await hop();
+      tjek('flybyen: "‹" går tilbage til ringene', (await s.evaluate(() => [atomlabTest.solsystem.fænomen().visning(), atomlabTest.solsystem.fænomen().tur().trin].join())) === 'ringe,2');
+      await s.click('#solsystemVindue .ut-trin button:nth-child(4)');
+      await hop();
+      tjek('flybyen: en prik springer til Mimas', (await s.evaluate(() => [atomlabTest.solsystem.fænomen().visning(), atomlabTest.solsystem.fænomen().tur().trin].join())) === 'mimas,3');
+    }
+    if (i < 8) await s.click('#solsystemBjælke button:has-text("Næste")');
   }
   const forventet = ['Saturn og de store måner', 'Saturn', 'Hen over ringene', 'Mimas', 'Enceladus', 'Tethys', 'Dione', 'Rhea', 'Titan'];
   tjek('flybyen: ni stop i rækkefølge med prikker', titler.every(([t, prikker], i) => t.includes(forventet[i]) && prikker === 9), JSON.stringify(titler.map((x) => [x[0].slice(0, 30), x[1], x[2]])));
@@ -151,19 +168,19 @@ const side = async (adresse) => {
   tjek('billederne: 2k i tests, månerne med én kanal og Saturn i farver', måneKort.every((n) => hentet[n] === 'én kanal') && hentet['saturn-2k.jpg'] === 'farver', JSON.stringify(hentet));
   const slut = await knapper();
   tjek('efter flybyen: de almindelige knapper og "Under disen" ved Titan', slut.includes('▶ Start flyby') && slut.some((k) => k.startsWith('Under disen')) && /Turen er slut/.test(await s.textContent('#solsystemForklaring')), JSON.stringify(slut));
-  // "Stop flyby" midt i turen fjerner underteksten
-  await s.click('#solsystemStyring button:has-text("Start flyby")');
+  // ✕ (stop flyby) midt i turen fjerner underteksten
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
   await hop();
-  await s.click('#solsystemStyring button:has-text("Stop flyby")');
+  await s.click('#solsystemBjælke button[aria-label="Stop flyby"]');
   await s.waitForTimeout(300);
-  tjek('"Stop flyby" fjerner underteksten', !(await s.evaluate(() => document.querySelector('.undertekst.fase'))) && (await knapper()).includes('▶ Start flyby'));
+  tjek('✕ stopper flybyen og fjerner underteksten', !(await s.evaluate(() => document.querySelector('.undertekst.fase'))) && (await knapper()).includes('▶ Start flyby'));
   tjek('"Navne" er stadig slået fra efter flybyen', (await navne()).length === 0);
   // Valget huskes efter genindlæsning, og navnene kommer igen, når knappen slås til
   await s.reload();
   await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)') && atomlabTest.solsystem.valgt() === 'saturn');
   await s.click('#solsystemTræ button[data-sted="maaner"]');
   await hop();
-  tjek('efter genindlæsning: "Navne" er stadig slået fra', !(await s.$eval(navneKnap, (k) => k.classList.contains('valgt'))) && (await navne()).length === 0);
+  tjek('efter genindlæsning: "Navne" er stadig slået fra', !(await s.$eval(navneKnap, (k) => k.classList.contains('til'))) && (await navne()).length === 0);
   await s.click(navneKnap);
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().navne().length >= 5, null, { timeout: 10000, polling: 100 }).catch(() => {});
   tjek('"Navne" slået til igen: navnene kommer tilbage', (await navne()).length >= 5 && (await s.evaluate(() => localStorage.getItem('atomlabNavne'))) === 'til', JSON.stringify(await navne()));
