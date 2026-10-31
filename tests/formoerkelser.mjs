@@ -48,7 +48,7 @@ const himmelTekst = () => T(() => document.querySelector('#solsystemToplag .himm
 const himmelHvad = () => T(() => document.querySelector('#solsystemToplag .himmel-kort strong')?.textContent ?? '');
 // Kameraets afstand til det, det kigger på
 const kameraAfstand = () => T(async () => { const { verden } = await import('/js/scene3d.js'); return verden.kamera.position.distanceTo(verden.styring.target); });
-const næste = () => T(() => { const k = atomlabTest.solsystem; k.tryk(0); k.spol(2); });
+const næste = () => T(() => { const k = atomlabTest.solsystem; k.trykPå('Næste'); k.spol(2); });
 // Farven midt på himlen og et stykke ude (koronaen)
 // (læses fra en kopi, så browseren ikke advarer om mange aflæsninger fra det samme lærred)
 const farve = (x, y) => T(([x, y]) => {
@@ -60,7 +60,7 @@ const farve = (x, y) => T(([x, y]) => {
 }, [x, y]);
 // Skyderne i "Prøv selv": 0 = Månens fase (dage), 1 = tid på året (dag), 2 = Månens afstand (km)
 const skyder = (i, v) => T(([i, v]) => {
-  const s = document.querySelectorAll('#solsystemStyring input[type=range]')[i];
+  const s = document.querySelectorAll('#solsystemStyr input[type=range]')[i];
   s.value = v;
   s.dispatchEvent(new Event('input'));
   atomlabTest.solsystem.spol(0.5);
@@ -86,7 +86,7 @@ await page.screenshot({ path: `${UD}/1-total.png` });
 // "Næste" til et trin med samme kamera: Kameraet glider og hopper ikke langt væk først
 await T(() => atomlabTest.solsystem.kameraFrem());
 const før = await kameraAfstand();
-await T(() => atomlabTest.solsystem.tryk(0));
+await T(() => atomlabTest.solsystem.trykPå('Næste'));
 const lige = await kameraAfstand();
 tjek(`kameraet hopper ikke ved "Næste" (${før.toFixed(1)} → ${lige.toFixed(1)})`, Math.abs(lige - før) < 0.2 * før, `${før} ${lige}`);
 await T(() => atomlabTest.solsystem.spol(2));
@@ -103,26 +103,26 @@ tjek('trin 5: hvorfor ikke hver måned? Ingen formørkelse, Månen går over ell
 const kant = await farve(150, 18);
 tjek('himlen viser Månen ude ved kanten over Solen', Math.max(...kant) < 70, kant);
 await næste();
-tjek('sidste trin: Prøv selv, og "Næste" er slået fra', (await undertekst()).includes('Prøv selv') && (await T(() => document.querySelector('#solsystemStyring button').disabled)));
-tjek('tre skydere og knappen "Uden hældning"', (await T(() => document.querySelectorAll('#solsystemStyring input[type=range]').length)) === 3 && (await page.isVisible('#solsystemStyring button:has-text("Uden hældning")')));
+tjek('sidste trin: Prøv selv, og bjælken har "↺ Forfra" i stedet for "Næste"', (await undertekst()).includes('Prøv selv') && JSON.stringify(await T(() => atomlabTest.solsystem.bjælke().map((k) => k.tekst))) === JSON.stringify(['‹', '↺ Forfra']));
+tjek('tre skydere og kontakten "Uden hældning" i Styr-boksen', (await T(() => document.querySelectorAll('#solsystemStyr input[type=range]').length)) === 3 && (await page.isVisible('#solsystemStyr .kontakt:has-text("Uden hældning")')));
 
 // Prøv selv: nymåne i april (uden for formørkelsesperioden) giver ingen formørkelse, men uden hældning sker det hver måned
 await skyder(0, 0);
 await skyder(1, 115);
 await skyder(2, 384000);
 tjek('nymåne i april: ingen formørkelse (også på himlen)', (await hvad()) === 'ingen' && (await himmelHvad()) === 'Ingen formørkelse', await panel());
-await page.click('#solsystemStyring button:has-text("Uden hældning")');
+await page.click('#solsystemStyr .kontakt:has-text("Uden hældning")');
 await T(() => atomlabTest.solsystem.spol(0.5));
 tjek('uden hældning: ringformørkelse ved middelafstand', (await hvad()) === 'ring', await panel());
 await skyder(2, 360000);
 tjek('uden hældning og Månen tæt på: total', (await hvad()) === 'total', await panel());
 await skyder(0, 14.5);
 tjek('uden hældning og fuldmåne: total måneformørkelse', (await hvad()) === 'total' && (await panel()).includes('måneformørkelse'), await panel());
-await page.click('#solsystemStyring button:has-text("Uden hældning")');
+await page.click('#solsystemStyr .kontakt:has-text("Uden hældning")');
 await T(() => atomlabTest.solsystem.spol(0.5));
 tjek('med hældning igen: ingen formørkelse i april', (await hvad()) === 'ingen', await panel());
 // I formørkelsesperioden (sidst i februar) sker det også med hældning, og skyderen siger det
-const tidTekst = () => T(() => document.querySelectorAll('#solsystemStyring .skyder-boks strong')[1].textContent);
+const tidTekst = () => T(() => document.querySelectorAll('#solsystemStyr .skyder-boks strong')[1].textContent);
 tjek('april er ikke en formørkelsesperiode', !(await tidTekst()).includes('formørkelsesperiode'), await tidTekst());
 await skyder(1, 55);
 await skyder(0, 0);
@@ -132,7 +132,7 @@ await page.screenshot({ path: `${UD}/3-proev-selv.png` });
 // Delvis måneformørkelse: Find en dag, hvor fuldmånen kun delvis går ind i Jordens kerneskygge.
 // Så er en del af Månen kobberrød og resten grå på himlen.
 const delvisDag = await T(() => {
-  const [fase, tid] = document.querySelectorAll('#solsystemStyring input[type=range]');
+  const [fase, tid] = document.querySelectorAll('#solsystemStyr input[type=range]');
   fase.value = 14.75;
   fase.dispatchEvent(new Event('input'));
   for (let d = 56; d < 120; d++) {
@@ -160,9 +160,9 @@ const måneFarver = await T(() => {
   return { rød, grå };
 });
 tjek(`delvis måneformørkelse (dag ${delvisDag}): Månen er delvis kobberrød og delvis grå`, delvisDag && måneFarver.rød > 20 && måneFarver.grå > 20, JSON.stringify(måneFarver));
-await page.click('#solsystemStyring button:has-text("Forfra")');
+await page.click('#solsystemBjælke button:has-text("Forfra")');
 tjek('Forfra går tilbage til første trin', (await undertekst()).includes('Sol, Jord og Måne'), await undertekst());
-tjek('skyderne forsvinder med Forfra', (await T(() => document.querySelectorAll('#solsystemStyring input[type=range]').length)) === 0);
+tjek('skyderne forsvinder med Forfra', (await T(() => document.querySelectorAll('#solsystemStyr input[type=range]').length)) === 0);
 await T(() => atomlabTest.solsystem.vælg('solstorm'));
 tjek('himlen forsvinder, når man skifter fænomen', !(await T(() => document.querySelector('#solsystemToplag').children.length)));
 

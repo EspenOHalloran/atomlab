@@ -14,12 +14,12 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await page.waitForFunction(() => window.atomlabTest && document.querySelector('#kosmos:not(.skjult)'), null, { timeout: 20000 });
   tjek(`${navn}: hurtig tegning er slået fra`, await page.evaluate(() => !globalThis.atomlabTestHurtig));
   // Supernovaen lyser meget, så gløden har noget at arbejde med
-  await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('supernova'); k.tryk(0); k.spol(3); k.kameraFrem(); });
+  await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('supernova'); k.trykPå('eksplodere'); k.spol(3); k.kameraFrem(); });
   await page.waitForTimeout(1500);
   await page.screenshot({ path: `${UD}/${navn}-supernova.png` });
   // Sort hul: skyggen skal være sort, også med glød (gløden bredte før lyset fra gassen ind over den)
   const trin = await page.evaluate(() => atomlabTest.kosmos.efterbehandling());
-  await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('sorthul'); k.tryk(2); k.kameraFrem(); }); // uden navne
+  await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('sorthul'); k.trykPå('Vis navne'); k.kameraFrem(); }); // uden navne
   await page.waitForTimeout(2000);
   await page.screenshot({ path: `${UD}/${navn}-sorthul.png` });
   const r = await page.evaluate(() => { const b = document.getElementById('kosmosVindue').getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; });

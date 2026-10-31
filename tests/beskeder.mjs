@@ -86,7 +86,7 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   // Kosmos: supernova
   await page.evaluate(() => atomlabTest.kosmos.vælg('supernova'));
   await page.waitForTimeout(500);
-  await page.evaluate(() => atomlabTest.kosmos.tryk(0));
+  await page.evaluate(() => atomlabTest.kosmos.trykPå('eksplodere'));
   await page.waitForTimeout(500);
   await page.evaluate(() => atomlabTest.kosmos.spol(2));
   await page.waitForTimeout(500);
@@ -111,7 +111,7 @@ for (const [navn, [w, h, mobil]] of Object.entries(enheder)) {
   // Tyngdebølger: graf og undertekst sammen
   await page.evaluate(() => atomlabTest.kosmos.vælg('tyngdebolger'));
   await page.waitForTimeout(500);
-  await page.evaluate(() => atomlabTest.kosmos.tryk(0));
+  await page.evaluate(() => atomlabTest.kosmos.trykPå('smelte sammen'));
   await page.waitForTimeout(1500);
   await page.screenshot({ path: `${UD}/${navn}-8-tyngdebolger.png` });
   console.log(navn, 'dækning tyngdebølger', await dækning(), '%');

@@ -421,7 +421,6 @@ export default {
 
     function opdaterStyring() {
       const prøv = trin === TRIN.length - 1;
-      næsteKnap.tekst = trin < TRIN.length - 1 ? `Næste: ${TRIN[trin + 1].titel.toLowerCase()} ›` : 'Næste ›';
       const ekstra = [];
       if (prøv) {
         ekstra.push(
@@ -431,14 +430,15 @@ export default {
           { tekst: 'Uden hældning', til: uden, skift: (t) => { uden = t; opdaterAlt(); } },
         );
       }
-      // Skyderne findes kun i "Prøv selv"
-      styring.splice(0, styring.length, næsteKnap, ...ekstra, forfraKnap);
+      // Skyderne findes kun i "Prøv selv" (trinene står i bjælken, trin() nedenfor)
+      styring.splice(0, styring.length, ...ekstra);
       opdaterKnapper();
     }
 
-    function næste() {
-      if (trin >= TRIN.length - 1) return;
-      trin++;
+    // Gå til et trin (Næste, ‹ og prikkerne i bjælken)
+    function gåTrin(nr) {
+      if (nr < 0 || nr >= TRIN.length) return;
+      trin = nr;
       visTrin();
     }
 
@@ -447,14 +447,13 @@ export default {
       visTrin();
     }
 
-    const næsteKnap = { tekst: 'Næste ›', handling: næste, deaktiv: () => trin >= TRIN.length - 1 };
-    const forfraKnap = { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => trin === 0 };
-    const styring = [næsteKnap, forfraKnap];
+    const styring = [];
 
     nulstil();
 
     return {
       styring,
+      trin: () => ({ nr: trin, ialt: TRIN.length, næste: trin < TRIN.length - 1 ? TRIN[trin + 1].titel.toLowerCase() : '', gå: gåTrin, forfra: nulstil }),
       opdater(dt) {
         // I første trin kredser Månen hele tiden (en måned på ca. 20 sekunder)
         if (trin === 0) {

@@ -431,13 +431,7 @@ export default {
 
     const styring = [];
     function lavKnapper() {
-      styring.length = 0;
-      if (flyby.kører) styring.push(...flyby.knapper());
-      else {
-        styring.push(flybyKlar
-          ? { tekst: '▶ Start flyby', handling: startTur }
-          : { tekst: '▶ Start flyby (henter kort …)', handling: () => {}, deaktiv: () => !flybyKlar });
-      }
+      styring.length = 0; // flybyen står i træet og bjælken (tur og trin nedenfor)
       styring.push({ tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } });
       // Uden navne kan man stadig trykke på selve månerne
       styring.push(navneKnap((til) => { if (!til) for (const m of måner) m.etiket.visible = false; }));
@@ -487,6 +481,9 @@ export default {
       styring,
       gåTil, // træet i listen (js/faenomenskaerm.js)
       sted: () => visning,
+      // Flybyen: øverst i træet og i bjælken i 3D-billedet
+      tur: { navn: 'Flyby', stop: TUR.length, klar: () => flybyKlar, kører: () => flyby.kører, start: startTur },
+      trin: () => flyby.bjælke(),
       opdater(dt, t) {
         tid = t;
         planet.mesh.rotation.y = t * 0.08;

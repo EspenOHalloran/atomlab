@@ -181,7 +181,7 @@ export default {
 
     const styring = [
       { tekst: '▶ Lad den suge gas', handling: start, deaktiv: () => t >= 0 && eksplosion < 0 },
-      { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => t < 0 },
+      { tekst: '↺ Forfra', handling: nulstil, skjul: () => t < 0 },
     ];
 
     nulstil();

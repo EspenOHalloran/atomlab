@@ -27,9 +27,11 @@
     styring.autoRotate = false;
     const gruppe = new THREE.Group();
     scene.add(gruppe);
+    let pause = false; // tidsknappen (Mars stopper tiden ved et sted)
     const ctx = {
       verden,
       opdaterKnapper() {},
+      tiden(t) { pause = t === 'pause'; },
       forklaring() {},
       fase(titel) { document.getElementById('info').textContent = titel ?? ''; },
       kamera({ retning, radius }) {
@@ -43,7 +45,7 @@
     const k = fænomen.lav(gruppe, ctx);
     let tid = 0;
     let frosset = false;
-    verden.opdateringer.add((dt) => { if (!frosset) tid += dt; k.opdater(dt, tid); });
+    verden.opdateringer.add((dt) => { if (pause) return; if (!frosset) tid += dt; k.opdater(dt, tid); });
     // Vælg en visning ('Saturn', 'Enceladus' eller 'Titan') eller slå "Modlys" til
     // Som i Kosmos: en knap kalder handling, og en til/fra-knap skifter til og kalder skift
     const tryk = (tekst) => { const s = k.styring.find((x) => x.tekst.startsWith(tekst)); if (s.handling) s.handling(); else { s.til = !s.til; s.skift(s.til); } };
@@ -54,7 +56,7 @@
       styring.update();
     };
     // Flybyen: start den, gå et stop frem, og gør flyvningen færdig med det samme
-    const flyby = { start: () => tryk('▶ Start flyby'), næste: () => tryk('Næste'), hop: () => k.test.hop(), tur: () => k.test.tur() };
+    const flyby = { start: () => k.tur.start(), næste: () => { const t = k.trin(); t?.gå(t.nr + 1); }, hop: () => k.test.hop(), tur: () => k.test.tur() };
     window.saturnTest = { tryk, kig, flyby, frys: (t) => { tid = t; frosset = true; }, test: k.test };
   </script>
 </body>

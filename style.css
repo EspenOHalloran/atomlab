@@ -590,6 +590,13 @@ button { font: inherit; color: inherit; }
 .ut-trin { display: inline-flex; gap: 3px; margin-right: 7px; vertical-align: 1px; }
 .ut-trin i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.22); }
 .ut-trin i.ja { background: var(--farve); box-shadow: 0 0 6px var(--farve); }
+/* Prikker, man kan trykke på (trinene i bjælken): en lidt større flade at ramme */
+.ut-trin { gap: 0; }
+.ut-trin button { width: 13px; height: 15px; padding: 0; border: 0; background: none; cursor: pointer; display: inline-grid; place-items: center; }
+.ut-trin button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.22); }
+.ut-trin button.ja::before { background: var(--farve); box-shadow: 0 0 6px var(--farve); }
+.ut-trin button[aria-current]::before { width: 9px; height: 9px; }
+.ut-trin button:hover::before { background: var(--tekst); }
 .ut-knapper { display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
 .ut-luk { width: 30px; height: 26px; border: 0; border-radius: 8px; background: transparent; color: var(--svag); font-size: 20px; line-height: 1; cursor: pointer; }
 .ut-luk:hover { color: var(--tekst); background: rgba(255, 255, 255, 0.08); }
@@ -1038,8 +1045,6 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .kosmos-videre strong { color: var(--accent); }
 .kosmos-videre:hover { border-color: rgba(95, 227, 255, 0.5); }
 .kosmos-set { float: right; margin-top: 2px; font-size: 12px; font-weight: 500; color: var(--svag); }
-.kosmos-styring { display: flex; flex-direction: column; gap: 6px; }
-.kosmos-knap { justify-content: flex-start; text-align: left; }
 .kosmos-forklaring:empty { display: none; }
 .kosmos-overlag { width: 100%; display: flex; justify-content: center; pointer-events: none; }
 .kosmos-overlag:empty { display: none; }
@@ -1075,7 +1080,6 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .sted-liste li { display: flex; align-items: baseline; gap: 7px; }
 .sted-liste .farveprik { flex: 0 0 9px; transform: translateY(-1px); }
 .sted-tal { color: var(--svag); font-variant-numeric: tabular-nums; }
-.kosmos-til { justify-content: flex-start; padding: 7px 11px; font-size: 14px; }
 .kosmos-hoved { display: flex; gap: 12px; align-items: center; }
 .kosmos-ikon { flex: 0 0 52px; height: 52px; display: grid; place-items: center; font-size: 30px; border-radius: 14px; background: radial-gradient(circle, rgba(140, 123, 255, 0.35), rgba(95, 227, 255, 0.06)); border: 1px solid var(--panel-kant); }
 .kosmos-hoved h3 { margin: 0; font-size: 22px; }
@@ -1299,9 +1303,48 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .panel-fane[hidden] { display: none; }
 .knap-kungrafik svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .knap-kungrafik.valgt { background: rgba(95, 227, 255, 0.22); border-color: var(--accent); }
-/* Kosmos i "Kun grafik": "Næste ›" står nederst i 3D-billedet, så man kan gå trin for trin uden panelerne */
-.kosmos-næste { align-self: flex-end; pointer-events: auto; }
-#kosmos:not(.kun-grafik) .kosmos-næste, #solsystem:not(.kun-grafik) .kosmos-næste { display: none; }
+/* ---------- Styringen i 3D-billedet (Kosmos og Solsystemet, U2 i docs/plan-ux.md) ---------- */
+/* Grafen og uret (overlag) står over underteksten, og bjælken med tidsknappen står nederst */
+:is(#kosmos, #solsystem) .kosmos-overlag { order: -1; }
+.bjælke-række { order: 2; width: 100%; display: flex; align-items: flex-end; gap: 6px; pointer-events: none; }
+/* Plads til venstre, der svarer til tidsknappen, så knapperne står midt i billedet (men kun, når der er plads) */
+.bjælke { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; pointer-events: none; padding-left: clamp(0px, calc(100% - 430px), 92px); }
+.bjælke .knap { white-space: nowrap; }
+.bjælke[hidden] { display: none; }
+.bjælke .knap { pointer-events: auto; background: rgba(14, 24, 56, 0.88); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); }
+.bjælke .knap:hover { background: rgba(40, 64, 130, 0.92); }
+.bjælke .knap:disabled { opacity: 0.6; }
+.bjælke-næste, .bjælke-tur { border-color: rgba(95, 227, 255, 0.6); }
+.bjælke-tilbage, .bjælke-stop { min-width: 34px; }
+.bjælke-tilbage { font-size: 17px; line-height: 1; }
+/* Tidsknappen: ⏸ ▶ (⏩). Den valgte er fyldt. */
+.tidsknap { flex: 0 0 auto; margin-left: auto; display: flex; padding: 3px; gap: 2px; border-radius: 12px; background: rgba(14, 24, 56, 0.88); border: 1px solid var(--panel-kant); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); pointer-events: auto; }
+.tidsknap button { width: 30px; height: 28px; padding: 0; border: 0; border-radius: 9px; background: none; color: var(--svag); font-size: 14px; line-height: 1; cursor: pointer; }
+.tidsknap svg { width: 14px; height: 14px; fill: currentColor; display: block; margin: auto; }
+.tidsknap button:hover { color: var(--tekst); background: rgba(255, 255, 255, 0.08); }
+.tidsknap button.valgt { background: rgba(95, 227, 255, 0.28); color: var(--tekst); box-shadow: inset 0 0 0 1px var(--accent); }
+.tidsknap button[hidden] { display: none; }
+/* Styr-boksen øverst til højre: kontakter og skydere */
+.styr { pointer-events: auto; width: 228px; max-width: calc(100% - 4px); max-height: calc(100% - 4px); overflow-y: auto; scrollbar-width: none; border-radius: 12px; background: rgba(10, 16, 38, 0.86); border: 1px solid var(--panel-kant); box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4); font-size: 13.5px; }
+.styr[hidden] { display: none; }
+.styr > summary { cursor: pointer; list-style: none; padding: 6px 10px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--svag); }
+.styr > summary::-webkit-details-marker { display: none; }
+.styr > summary::after { content: ' ▾'; }
+.styr:not([open]) > summary::after { content: ' ▸'; }
+.styr:not([open]) { width: auto; }
+.styr:not([open]) > summary { padding: 7px 12px; color: var(--tekst); font-size: 13px; }
+.styr-indhold { display: flex; flex-direction: column; gap: 5px; padding: 0 8px 8px; }
+.styr .skyder-boks { padding: 4px 2px 0; gap: 2px; background: none; font-size: 12.5px; }
+/* Kontakterne: tændt er fyldt med ✓, slukket er en tynd kant (de ligner aldrig en knap) */
+.kontakt { display: flex; align-items: center; gap: 8px; width: 100%; padding: 5px 8px; border: 1px solid transparent; border-radius: 9px; background: none; color: var(--tekst); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; }
+.kontakt:hover { background: rgba(255, 255, 255, 0.06); }
+.kontakt-boks { flex: 0 0 18px; height: 18px; display: grid; place-items: center; border-radius: 5px; border: 1.5px solid rgba(180, 200, 255, 0.45); font-size: 13px; font-weight: 800; line-height: 1; color: #06202a; }
+.kontakt.til { background: rgba(95, 227, 255, 0.12); border-color: rgba(95, 227, 255, 0.35); }
+.kontakt.til .kontakt-boks { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px rgba(95, 227, 255, 0.5); }
+.kontakt.til .kontakt-boks::after { content: '✓'; }
+/* Turen øverst i træet (▶ Flyby · 13 stop) */
+.sol-tur { margin-bottom: 3px; color: var(--accent); }
+.sol-tur:disabled { opacity: 0.6; cursor: default; }
 
 /* ---------- Dybde i lag (js/lag.js) ---------- */
 /* Foldebokse: overskriften og én linje står fremme, resten folder sig ud */
@@ -1350,7 +1393,6 @@ button.hvorfor:hover, button.hvorfor[aria-expanded="true"] { background: rgba(25
 
 /* "Næste skridt" er skjult, mens guiden kører (medmindre guiden peger på det) */
 body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
-.kosmos-næste[hidden] { display: none; }
 /* Knapper med "Hvorfor?" på en linje for sig (fx i Reaktoren og Kosmos) */
 .hvorfor-linje { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 0; }
 .hvorfor-linje button.hvorfor { margin: 0; }

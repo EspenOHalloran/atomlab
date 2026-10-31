@@ -156,7 +156,7 @@ export default {
             fase('De spiraler indad', 'Stjernerne sender tyngdebølger ud (ringene) og mister energi. Så kommer de tættere på hinanden og drejer hurtigere og hurtigere.', [1, 4]);
           }, deaktiv: () => t >= 0,
         },
-        { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => t < 0 },
+        { tekst: '↺ Forfra', handling: nulstil, skjul: () => t < 0 },
       ],
       opdater(dt) {
         if (t >= 0) t += dt;

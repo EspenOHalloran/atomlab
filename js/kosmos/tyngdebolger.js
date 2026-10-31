@@ -134,7 +134,7 @@ export default {
             fase('De spiraler indad', 'Hver omgang sender bølger ud i rumtiden. Det koster energi, så de sorte huller kommer tættere på hinanden og drejer hurtigere.', [1, 3]);
           }, deaktiv: () => start < Infinity,
         },
-        { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => start === Infinity },
+        { tekst: '↺ Forfra', handling: nulstil, skjul: () => start === Infinity },
         { tekst: '🔊 Hør chirpet', handling: () => lyd.chirp(1.4) },
         { tekst: '📡 Vis detektoren', til: true, skift: (til) => { detektor.visible = til; } },
       ],

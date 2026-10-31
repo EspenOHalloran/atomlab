@@ -54,7 +54,8 @@ const T = (f, a) => page.evaluate(f, a);
 const kort = () => T(() => document.querySelector('#solsystemToplag .aarstid-kort')?.textContent ?? '');
 const række = (sted) => T((sted) => [...document.querySelectorAll('#solsystemToplag tr')].find((r) => r.textContent.includes(sted))?.textContent ?? '', sted);
 const undertekst = () => T(() => document.querySelector('#solsystemVindue .undertekst')?.textContent ?? '');
-const næste = () => T(() => { const k = atomlabTest.solsystem; k.tryk(0); k.spol(2); });
+const næste = () => T(() => { const k = atomlabTest.solsystem; k.trykPå('Næste'); k.spol(2); });
+const bjælke = () => T(() => atomlabTest.solsystem.bjælke().map((k) => k.tekst));
 
 tjek('Årstiderne står under Jorden i Solsystemet', (await T(() => atomlabTest.solsystem.fænomener)).join(',').includes('aarstider,formoerkelser'));
 tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.querySelectorAll('#solsystemToplag tr').length)) === 5, await kort());
@@ -62,8 +63,17 @@ tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.que
 const datoFør = (await kort()).split(' · ')[0];
 await T(() => atomlabTest.solsystem.spol(3));
 const datoEfter = (await kort()).split(' · ')[0];
-const skyderDato = await T(() => document.querySelector('#solsystemStyring .skyder-boks strong').textContent);
+const skyderDato = await T(() => document.querySelector('#solsystemStyr .skyder-boks strong').textContent);
 tjek(`første trin: Jorden kører rundt (${datoFør} → ${datoEfter}), og skyderen følger med`, datoFør !== datoEfter && datoEfter.trim() === skyderDato.trim(), skyderDato);
+tjek('bjælken: "‹" og "Næste: forår i nord ›"', JSON.stringify(await bjælke()) === JSON.stringify(['‹', 'Næste: forår i nord ›']), JSON.stringify(await bjælke()));
+tjek('Styr-boksen: skyderen "Dato" og kontakten "Tæt på Jorden" ("Jorden drejer" er blevet til tidsknappen)', JSON.stringify(await T(() => atomlabTest.solsystem.styr().map((x) => x.navn))) === JSON.stringify(['Dato', 'Tæt på Jorden']), JSON.stringify(await T(() => atomlabTest.solsystem.styr())));
+// Tidsknappen: under pause står Jorden stille, men den følger stadig skyderen (altid() kører også under pause)
+await T(() => atomlabTest.solsystem.sætTid('pause'));
+const pauseFør = await T(() => [atomlabTest.solsystem.tid(), atomlabTest.solsystem.fænomen().jordPlads()]);
+await T(() => { const i = document.querySelector('#solsystemStyr input[type=range]'); i.value = 172; i.dispatchEvent(new Event('input')); atomlabTest.solsystem.spol(3); });
+const pauseEfter = await T(() => [atomlabTest.solsystem.tid(), atomlabTest.solsystem.fænomen().jordPlads()]);
+tjek('under pause: uret står stille, men Jorden glider hen til datoen på skyderen', pauseFør[0] === pauseEfter[0] && Math.hypot(...pauseFør[1].map((v, i) => v - pauseEfter[1][i])) > 1, JSON.stringify([pauseFør, pauseEfter]));
+await T(() => atomlabTest.solsystem.sætTid('spil'));
 await næste();
 tjek('trin 2: forår i nord', (await undertekst()).includes('Forår i nord'), await undertekst());
 tjek('forår: 20. marts og ca. 12 timer i Danmark', (await kort()).includes('20. marts') && (await række('Danmark')).includes('12 t 11 min'), await række('Danmark'));
@@ -84,16 +94,22 @@ tjek('vinter: mørketid i Nordgrønland', (await række('Nordgrønland')).includ
 tjek('vinter: ca. 12 timer ved ækvator', /12 t 0\d min/.test(await række('Ækvator')), await række('Ækvator'));
 await page.screenshot({ path: `${UD}/2-vinter.png` });
 await næste();
-tjek('sidste trin: prøv selv, og "Næste" er slået fra', (await undertekst()).includes('Prøv selv') && (await T(() => document.querySelector('#solsystemStyring button').disabled)));
+tjek('sidste trin: prøv selv, og bjælken har "↺ Forfra" i stedet for "Næste"', (await undertekst()).includes('Prøv selv') && JSON.stringify(await bjælke()) === JSON.stringify(['‹', '↺ Forfra']), JSON.stringify(await bjælke()));
+// "‹" og prikkerne: et trin tilbage og et spring til sommer
+await page.click('#solsystemBjælke button:has-text("‹")');
+tjek('"‹" går tilbage til vinter', (await undertekst()).includes('Vinter i nord'), await undertekst());
+await page.click('#solsystemVindue .ut-trin button:nth-child(3)');
+tjek('et tryk på den tredje prik går til sommer', (await undertekst()).includes('Sommer i nord') && (await række('Danmark')).includes('17 t 32 min'), await undertekst());
+await page.click('#solsystemVindue .ut-trin button:last-child');
 // Skyderen: vælg selv datoen
-await T(() => { const i = document.querySelector('#solsystemStyring input[type=range]'); i.value = 172; i.dispatchEvent(new Event('input')); atomlabTest.solsystem.spol(2); });
+await T(() => { const i = document.querySelector('#solsystemStyr input[type=range]'); i.value = 172; i.dispatchEvent(new Event('input')); atomlabTest.solsystem.spol(2); });
 tjek('skyderen: 21. juni giver 17 t 32 min', (await kort()).includes('21. juni') && (await række('Danmark')).includes('17 t 32 min'), await kort());
 tjek('skyderen: underteksten siger, at man selv vælger', (await undertekst()).includes('Du vælger selv'), await undertekst());
 // Til/fra-knapperne og Forfra
-await page.click('#solsystemStyring button:has-text("Tæt på Jorden")');
-await page.click('#solsystemStyring button:has-text("Jorden drejer")');
+await page.click('#solsystemStyr .kontakt:has-text("Tæt på Jorden")');
+tjek('kontakten "Tæt på Jorden" er tændt', (await T(() => atomlabTest.solsystem.styr())).find((x) => x.navn === 'Tæt på Jorden')?.til === true);
 await T(() => atomlabTest.solsystem.spol(1));
-await page.click('#solsystemStyring button:has-text("Forfra")');
+await page.click('#solsystemBjælke button:has-text("Forfra")');
 tjek('Forfra går tilbage til første trin', (await undertekst()).includes('Jorden og Solen'), await undertekst());
 await page.screenshot({ path: `${UD}/3-oversigt.png` });
 

@@ -137,8 +137,6 @@ export default {
       kamera({ radius: t.radius, flyv: false });
       const [alder, bredde, lysstyrke] = t.panel;
       forklaring(`<p><b>Solens alder:</b> ${alder}</p><p><b>Bredde:</b> ${bredde}</p><p><b>Lysstyrke:</b> ${lysstyrke}</p>`);
-      const s = styring[0];
-      s.tekst = trin < TRIN.length - 1 ? `Næste: ${TRIN[trin + 1].titel.toLowerCase()} ›` : 'Næste ›';
       opdaterKnapper();
     }
 
@@ -169,15 +167,24 @@ export default {
       visTrin();
     }
 
-    const styring = [
-      { tekst: 'Næste ›', handling: næste, deaktiv: () => trin >= TRIN.length - 1 },
-      { tekst: '↺ Forfra', handling: nulstil, deaktiv: () => trin === 0 },
-    ];
+    // Trinene står i bjælken. Solen ændrer sig trin for trin, så et trin tilbage starter forfra, og de trin, man
+    // springer over, spoles igennem (så planeterne bliver slugt, og tågen bliver blæst af).
+    let ud = null;
+    function gåTrin(nr) {
+      if (nr < 0 || nr >= TRIN.length || nr === trin) return;
+      if (nr < trin) nulstil();
+      while (trin < nr) {
+        næste();
+        if (trin < nr) for (let t = 0; t < 8; t += 0.05) ud.opdater(0.05, t);
+      }
+    }
+    const styring = [];
 
     nulstil();
 
-    return {
+    return (ud = {
       styring,
+      trin: () => ({ nr: trin, ialt: TRIN.length, næste: trin < TRIN.length - 1 ? TRIN[trin + 1].titel.toLowerCase() : '', gå: gåTrin, forfra: nulstil }),
       opdater(dt, tid) {
         trinTid += dt;
         const t = TRIN[trin];
@@ -244,6 +251,6 @@ export default {
         // Havene fordamper: Jorden bliver brun
         if (trin >= 1) jorden.kugle.material.color.lerp(jordBrun, 1 - Math.exp(-dt * 0.8));
       },
-    };
+    });
   },
 };

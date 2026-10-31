@@ -82,17 +82,18 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('forsøget Årstiderne åbner og er markeret, og vejen er › Jorden › Årstiderne', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'aarstider' && (await træ()).find((p) => p.id === 'aarstider').valgt && (await s.textContent('#solsystemVej')) === '› Jorden › Årstiderne');
   await s.click('#solsystemTræ button[data-sted="månen"]');
   tjek('fra Årstiderne: Månen i træet åbner Jorden og flyver til Månen', (await s.evaluate(() => [atomlabTest.solsystem.valgt(), atomlabTest.solsystem.sted()].join())) === 'jorden,månen');
-  tjek('"Månen" er ikke længere en kontakt under "Prøv selv"', !(await s.evaluate(() => atomlabTest.solsystem.knapper())).includes('Månen'));
+  tjek('"Månen" er ikke en kontakt i Styr-boksen', !(await s.evaluate(() => atomlabTest.solsystem.knapper())).includes('Månen'));
+  tjek('"Prøv selv" og pauseknappen i panelet er væk', !(await s.$('#solsystemStyring')) && !(await s.$('#solsystemPause')));
   await s.click('#solsystem .kosmos-valg[data-id="mars"]');
   tjek('Mars kan vælges', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'mars' && (await s.textContent('#solsystemNavn')) === 'Mars');
   await s.screenshot({ path: `${UD}/pc-mars.png` });
   await s.click('#solsystemHjælp');
   tjek('hjælpen vises', await s.isVisible('#hjælpSolsystem'));
   await s.keyboard.press('Escape');
-  // Pausen hører til skærmen
-  await s.click('#solsystemPause');
+  // Tidsknappen hører til skærmen
+  await s.click('#solsystemTid button[data-tid="pause"]');
   tjek('pause i Solsystemet', await s.evaluate(() => atomlabTest.solsystem.pause()));
-  await s.click('#solsystemPause');
+  await s.click('#solsystemTid button[data-tid="spil"]');
   // Grundstofkortet for carbon linker til Solens fremtid
   await vis(s, 'system');
   await s.evaluate(() => atomlabTest.system.åbn(6));

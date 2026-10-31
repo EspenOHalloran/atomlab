@@ -1,4 +1,5 @@
-// Kosmos: alle fænomener kan vælges, alle knapper kan trykkes, og der kommer ingen fejl
+// Kosmos: alle fænomener kan vælges, alle knapper kan trykkes, og der kommer ingen fejl. Styringen står i 3D-billedet
+// (U2 i docs/plan-ux.md): Styr-boksen har kun kontakter og skydere, og bjælken står der også med "Kun grafik".
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('kosmos');
 const b = await chromium.launch({ args: ARGS });
@@ -26,9 +27,13 @@ for (const id of ids) {
   const tekst = await page.textContent('#kosmosTekst');
   tjek(`${id}: navn og tekst`, navn.length > 2 && tekst.length > 100, navn);
   const knapper = await page.evaluate(() => window.atomlabTest.kosmos.knapper());
-  // tryk på alle knapper, og spol lidt frem efter hver
-  for (let i = 0; i < knapper.length; i++) {
-    await page.evaluate((i) => { const k = window.atomlabTest.kosmos; k.tryk(i); k.spol(3); }, i);
+  const styr = await page.evaluate(() => window.atomlabTest.kosmos.styr());
+  tjek(`${id}: Styr-boksen har kun kontakter og skydere`, styr.every((x) => x.slags === 'kontakt' || x.slags === 'skyder'), JSON.stringify(styr));
+  const bjælke = await page.evaluate(() => window.atomlabTest.kosmos.bjælke());
+  tjek(`${id}: bjælken har en handling (fx "Start")`, bjælke.length > 0 && !bjælke[0].slået, JSON.stringify(bjælke));
+  // tryk på alle knapper (efter teksten), og spol lidt frem efter hver
+  for (const tekst of knapper) {
+    await page.evaluate((t) => { const k = window.atomlabTest.kosmos; k.trykPå(t); k.spol(3); }, tekst);
   }
   await page.evaluate(() => window.atomlabTest.kosmos.spol(12));
   await page.evaluate(() => window.atomlabTest.kosmos.kameraFrem());
@@ -39,6 +44,20 @@ for (const id of ids) {
   await page.click('[data-kosmos-fane="kort"]');
   objekter[id] = await page.evaluate(() => window.atomlabTest.kosmos.antalObjekter());
 }
+tjek('"Prøv selv" og pauseknappen i panelet er væk', !(await page.$('#kosmosStyring')) && !(await page.$('#kosmosPause')));
+// "Kun grafik": bjælken og tidsknappen står stadig i billedet (før stod "Næste ›" kun der i "Kun grafik")
+await page.evaluate(() => window.atomlabTest.kosmos.vælg('supernova'));
+await page.click('#kosmos .knap-kungrafik');
+tjek('"Kun grafik": bjælken og tidsknappen ses', await page.isVisible('#kosmosBjælke button:has-text("eksplodere")') && await page.isVisible('#kosmosTid'));
+await page.click('#kosmosBjælke button:has-text("eksplodere")');
+tjek('"Kun grafik": et tryk i bjælken virker', (await page.evaluate(() => window.atomlabTest.kosmos.bjælke())).some((x) => x.tekst.includes('Ny stjerne')));
+await page.click('#kosmos .knap-kungrafik');
+// Styr-boksen: åben på pc, og en kontakt er fyldt med ✓, når den er tændt
+await page.evaluate(() => window.atomlabTest.kosmos.vælg('kvasar'));
+tjek('Styr-boksen er åben på pc', await page.evaluate(() => window.atomlabTest.kosmos.styrÅben()));
+await page.click('#kosmosStyr .kontakt:has-text("Zoom ind")');
+const kontakt = await page.evaluate(() => { const k = [...document.querySelectorAll('#kosmosStyr .kontakt')].find((x) => x.textContent.includes('Zoom ind')); return { til: k.getAttribute('aria-checked'), flueben: getComputedStyle(k.querySelector('.kontakt-boks'), '::after').content }; });
+tjek('en tændt kontakt har ✓ og aria-checked', kontakt.til === 'true' && kontakt.flueben.includes('✓'), JSON.stringify(kontakt));
 // Et nyt fænomen starter på "Kort fortalt", også når man stod på "For nørder"
 await page.click('[data-kosmos-fane="nørd"]');
 await page.click(`.kosmos-valg[data-id="${ids[0]}"]`);
@@ -71,6 +90,10 @@ for (const [navn, vp] of [['tablet', { width: 800, height: 1280 }], ['telefon', 
   await side.evaluate(() => window.atomlabTest.kosmos.vælg('sorthul'));
   const y = await side.evaluate(() => ['#kosmos .del-vælger', '#kosmosTekst', '#kosmosCitat'].map((v) => document.querySelector(v).getBoundingClientRect().top));
   tjek(`${navn} på højkant: "For nørder" står over teksten og citatet`, y[0] < y[1] && y[1] < y[2], JSON.stringify(y));
+  // Styr-boksen er foldet sammen til "Styr", og et tryk folder den ud
+  const foldet = !(await side.evaluate(() => window.atomlabTest.kosmos.styrÅben()));
+  await side.click('#kosmosStyr > summary');
+  tjek(`${navn} på højkant: Styr-boksen er foldet sammen og kan foldes ud`, foldet && await side.evaluate(() => window.atomlabTest.kosmos.styrÅben()));
   await side.context().close();
 }
 console.log('objekter pr. fænomen', JSON.stringify(objekter));
