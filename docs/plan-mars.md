@@ -32,7 +32,7 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 
 **Ny rækkefølge (jeres svar 29. oktober 2026):** M7 deles i **M7a** (teknikken til lokale detaljer, prøvet på Olympus Mons) og **M7b** (de meget skarpe kort ved Gale og Jezero). Rækkefølgen bliver **M7a → M5 → M6 → M7b → M8**. Se "Detaljer før flere stop" nedenfor.
 
-**Resten af Mars (plan 31. oktober 2026):** M7b droppes (på nær én lille rest i M8b), og rækkefølgen bliver L1 (lyset) → M8b → M8c → L2. Se "Plan for resten af Mars" nedenfor.
+**Resten af Mars (plan 31. oktober 2026):** Af M7b bliver kun Nordpolen tæt på (M7b-pol) og en lille rest i M8b. Rækkefølgen bliver L1 (lyset) → S2 → M8b → M8c → M7b-pol → U4 → L2. Se "Plan for resten af Mars" nedenfor.
 
 ## Status efter M2 (24. oktober 2026)
 - **Lavet:** `js/kosmos/mars.js` (fænomenet i Kosmos mellem Solstorm og Saturn), `js/solsystem/klippeplanet.js` (kuglen med rigtige højder, kan genbruges til andre klippeplaneter og måner) og `billeder/solsystem/lav_mars.py`. Farvekortet er Viking MDIM 2.1 (8k, 3,7 MB), og højderne er MOLA (4k, 7,7 MB, 16 bit). Skalaen er 1 enhed = 1.000 km.
@@ -390,12 +390,16 @@ Opus med høj effort til begge dele (kode, fysik og fakta, som `CLAUDE.md` siger
 
 **Udgangspunktet:** M1-M6, M7a og M8a er færdige, og det samme er U1 og U2. U3 kører i en anden session (`ccr-1dbfe8b3-phtbvs`, indtil videre kun `docs/plan-ux.md`). M5b, M7a, M8a, U1 og U2 er ikke set på den rigtige tablet. Stå på Mars kører med ca. 45 % (pc) og 56 % (tablet) af hastigheden ved hele Mars i testbrowseren. På et rigtigt grafikkort er det ikke målt.
 
-### 1. M7b: droppes, på nær én lille rest
+### 1. M7b: kun Nordpolen tæt på og én lille rest (jeres valg 31. oktober 2026: B)
 Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle give, har M8a nu givet bedre:
 - **Skarpere farver fra CTX med Solen sat som på fotoet:** CTX er i gråtoner, så farven kommer stadig fra Viking. Hvis Solen skal stå som på fotoet, er hvert stop låst til ét klokkeslæt. Meget arbejde for lidt.
 - **HRSC' egne højder (ca. 50 m):** Fra den højde, flybyen ser stederne fra, ligner de næsten de 0,17 km, vi har.
-- **Nordpolen tæt på:** Det kræver et nyt polarnet til ét stop. Stort, så det venter, til I selv beder om det.
+- **Nordpolen tæt på: kommer med som sit eget skridt, M7b-pol** (jeres valg B). Det er den eneste del, der giver noget helt nyt at se. Se nedenfor.
 - **En flyvning helt ned uden overgang:** Det kræver kort ned til 1 m på kloden. Overgangen i 1,2 km højde virker.
+- **M7b-pol, Nordpolen tæt på (mellem til stor):** Et net i bredde og længde virker ikke ved polen (alle længdegrader mødes), så der skal et nyt net til: et lokalt net i polarstereografisk projektion over kappen (ca. 1.000 km bred), der glider over i kuglen ved kanten som de andre lokale net (`lokalt()` i `klippeplanet.js`), og et hul i kuglen omkring polen. Så kan man flyve ned over spiralkløfterne og Chasma Boreale i midnatssolen.
+  - **Data, ikke tjekket endnu:** MOLA har polarstereografiske højdekort, der er skarpere end det globale kort. Hvor skarpe og hvor langt ned mod ækvator de går, tjekkes med curl, før noget loves. Farverne: Viking (ca. 1 km) eller noget skarpere med en fri licens, hvis det findes.
+  - **Højdetabellen** (`overflade`, `bund`) skal også kunne bruge det nye net, så kameraet holdes over isen.
+  - **Faktatjek:** kappens tal (tykkelse, bredde), spiralkløfterne og Chasma Boreale.
 - **Resten, der kommer med i M8b:** Mellemlaget fra Stå på Mars (16 m over ca. 32 km) bruges som detaljekort (`detalje` i `LOKALE`) ved Gale- og Jezero-stoppene, når Jezeros mellemlag findes. **Ikke tjekket:** Mellemlaget regnes i meter fra kraterets nulpunkt og `detalje` i bredde og længde. Om det kan bruges direkte, eller om billedværktøjet skal lave et kort mere, tjekkes, før det loves.
 
 ### 2. Rækkefølgen
@@ -406,10 +410,11 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
 | 3 | **M8b: Jezero** (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
 | 4 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
 | 5 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
-| 6 | **U4** (tidsknappen og kontakterne i resten af AtomLab) | Når U3 er merget. Rører ikke Mars-filerne. |
-| 7 | **L2: lyset, den dyre del** | Kun det, der holder, når det er målt. Kræver en lokal session på jeres pc (Windows, så Remote Control fra skyen virker ikke). |
-| 8 | **Solsystemets overblik** (trin 2 i `plan-solsystemet.md`) | Stort og svært (et flydende nulpunkt), så det får sin egen plan først. |
-| 9 | **Saturn S3** og Saturn i 8k | Venter. Kun Enceladus har et højdekort over hele månen, og det er groft. Til Saturn findes intet frit kort over 4k, og en gasplanet vinder næsten intet ved 8k. |
+| 6 | **M7b-pol: Nordpolen tæt på** | Et nyt polarnet over kappen (se afsnit 1). Nyt arbejde i `klippeplanet.js` og `lav_steder.py`, så det kommer efter M8, hvor resten af Mars er på plads. |
+| 7 | **U4** (tidsknappen og kontakterne i resten af AtomLab) | Når U3 er merget. Rører ikke Mars-filerne. |
+| 8 | **L2: lyset, den dyre del** | Kun det, der holder, når det er målt. Kræver en lokal session på jeres pc (Windows, så Remote Control fra skyen virker ikke). |
+| 9 | **Solsystemets overblik** (trin 2 i `plan-solsystemet.md`) | Stort og svært (et flydende nulpunkt), så det får sin egen plan først. |
+| 10 | **Saturn S3** og Saturn i 8k | Venter. Kun Enceladus har et højdekort over hele månen, og det er groft. Til Saturn findes intet frit kort over 4k, og en gasplanet vinder næsten intet ved 8k. |
 
 ### 3. Lyset og kvaliteten
 **L1, det, der ikke koster hastighed** (konstanter og et par uniforms):
@@ -439,15 +444,16 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 | M8b | Opus, høj | mellem | `planetarymaps.usgs.gov` (tjekkes med curl), U3 merget | Perseverances plads og tal (med dato), deltaet, Cheyava Falls |
 | M8c del 1 | Opus, høj | mellem | `assets.science.nasa.gov` (åben 31. oktober 2026) | fotoenes dato, kamera og hvidbalance |
 | M8c del 2 | Opus, høj | mellem | jeres ja til at gøre modellen mindre (`gltf-transform`, et værktøj, der køres én gang, ikke et byggetrin), `GLTFLoader` fra `three@0.186.1`, måling på tabletten | rovernes retning og plads i oktober 2026 |
+| M7b-pol | Opus, høj | mellem til stor | MOLA's polarkort (domænet tjekkes med curl), M8 færdig | kappens tal, spiralkløfterne, Chasma Boreale |
 | L2 | Opus, høj | mellem | en lokal session på jeres pc (Claude Code installeret, Node.js og Playwright) | – |
 | U4 | Opus, medium | lille-mellem | U3 merget | – |
 | S2 | Opus, høj | mellem | `pds-rings.seti.org` | ringenes tal og kilde i nørd-teksten |
 
 ### 5. Arbejdsgangen (jeres svar 31. oktober 2026)
-- **"Du skal bare lave alt det, du kan fra listen, i din rækkefølge. Go mellem hvert skridt."** Rækkefølgen i afsnit 2 gælder, og M7b er droppet (på nær resten i M8b).
+- **"Du skal bare lave alt det, du kan fra listen, i din rækkefølge. Go mellem hvert skridt."** Rækkefølgen i afsnit 2 gælder. Af M7b kommer kun Nordpolen tæt på (M7b-pol) og resten i M8b med (jeres valg B, 31. oktober 2026).
 - **I laver jeres vurdering til sidst**, ikke efter hvert skridt. Hvert skridt skriver derfor sin egen liste "Ikke afprøvet" (hvad I skal kigge efter på pc og tablet), og listerne samles til jeres runde til sidst. Det betyder, at lyset i L1 justeres efter Opus' billeder og NASA's foto, ikke efter jeres øjne. Det kan kræve en rettelse efter jeres runde.
 - **Nye sessioner, hvor det giver mening**, for at spare tokens, men ikke på bekostning af kvaliteten. Hvert skridt slutter med at skrive prompten til det næste skridt ind under "Prompter til de næste skridt" nedenfor. I starter den nye session med prompten og siger go.
-- **Sessionerne:** L1, S2, M8b, M8c (begge dele i én session, med go imellem), U4, L2 (lokal på jeres pc) og planen for trin 2 får hver sin session.
+- **Sessionerne:** L1, S2, M8b, M8c (begge dele i én session, med go imellem), M7b-pol, U4, L2 (lokal på jeres pc) og planen for trin 2 får hver sin session.
 - **DESIGN.md og `docs/plan-ux.md` røres ikke, før U3 er merget.** Indtil da skrives status her i filen. Den første session efter U3 skriver status ind i "Lige nu" i DESIGN.md.
 
 ### Åbne spørgsmål
