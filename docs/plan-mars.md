@@ -402,7 +402,7 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
 | Nr. | Del | Hvorfor her |
 |---|---|---|
 | 1 | **L1: lyset i Stå på Mars, den billige del** | Mest synligt for prisen, og M8b bruger den samme shader, så det justeres kun én gang. Rører `landskab.js` og måske `scene3d.js`, ikke U3's filer, så den kan laves nu. |
-| 2 | **Saturn S2** (ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Udfylder ventetiden på U3: Data og shader rører ikke U3's filer (kun nørd-teksten i `saturn.js` kan give en lille konflikt). Shaderen læser allerede τ fra et billede på én linje (`ringTekstur`), så kun kilden og antallet af punkter skiftes. `pds-rings.seti.org` svarer (curl 31. oktober 2026, også `CORSS_8001` og `COUVIS_8001`). |
+| 2 | ✅ **Saturn S2** (lavet 31. oktober 2026, ringene fra Cassinis målinger, `plan-saturn-kvalitet.md`) | Udfylder ventetiden på U3: Data og shader rører ikke U3's filer (kun nørd-teksten i `saturn.js` kan give en lille konflikt). Shaderen læser allerede τ fra et billede på én linje (`ringTekstur`), så kun kilden og antallet af punkter skiftes. `pds-rings.seti.org` svarer (curl 31. oktober 2026, også `CORSS_8001` og `COUVIS_8001`). |
 | 3 | **M8b: Jezero** (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
 | 4 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
 | 5 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
@@ -466,7 +466,7 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 >
 > **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv status under "Status efter L1" her i filen med listen "Ikke afprøvet" til jeres runde til sidst. Skriv så prompten til S2 under "Prompter til de næste skridt" (Saturns ringe fra Cassinis målinger, se `docs/plan-saturn-kvalitet.md` under S2 og afsnit 2 her). Model: Opus. Effort: medium (I sætter den selv).
 
-**S2 (skrevet 31. oktober 2026 efter L1):**
+**S2 (skrevet 31. oktober 2026 efter L1, brugt: se "Status efter S2" i `docs/plan-saturn-kvalitet.md`):**
 > Lav S2: Saturns ringe fra Cassinis målinger. Læs CLAUDE.md, `docs/erfaringer.md`, `docs/plan-saturn-kvalitet.md` under "S2" og i `docs/plan-mars.md` "Plan for resten af Mars" (afsnit 2 og 5). U3 er merget, så status skrives i "Lige nu" i DESIGN.md.
 >
 > **Først:** Tjek med `curl`, at `pds-rings.seti.org` kan åbnes (også `CORSS_8001` og `COUVIS_8001`). Er den blokeret, så stop og bed om adgang. Find en stjerneokkultation (UVIS eller VIMS) eller radiookkultationen (RSS), der dækker hele ringsystemet fra ca. 66.900 til 141.000 km, og sig kort, hvilken du vælger og hvorfor, før du bygger.
@@ -478,6 +478,17 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 > **Billeder:** Skyen har intet grafikkort. Tag få billeder med `node tests/vaerktoejer/saturn.mjs` i baggrunden, og vent med en overvågning. Tjek ringene tæt på ("Hen over ringene" på flybyen), i modlys og langt væk.
 >
 > **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til M8b under "Prompter til de næste skridt" her i filen (Jezero, se afsnit 2 og 4 her og "Plan for M8"). Model: Opus. Effort: høj (I sætter den selv).
+
+**M8b (skrevet 31. oktober 2026 efter S2):**
+> Lav M8b: Stå på Mars ved Jezero. Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 1-5), "Plan for M8" (stederne J1 og J2, dataene, overgangen) og "Status efter M8a" og "Status efter L1". U3 og S2 er merget.
+>
+> **Først:** Tjek med `curl`, at `planetarymaps.usgs.gov` og `asc-pds-services.s3.us-west-2.amazonaws.com` kan åbnes, og at rasterio kan læse et lille vindue fra Mars 2020's landingskort (`mosaic/mars2020_trn/HiRISE/JEZ_hirise_soc_006_DTM_…_1m_….tif` og ortofotoet med 25 cm) og CTX-kortene ved Jezero (5 m foto, 20 m højder). Er noget blokeret, så stop og bed om adgang. Tjek også, om mellemlaget (16 m over ca. 32 km, i meter fra kraterets nulpunkt) kan bruges som `detalje` i `LOKALE` ved Gale- og Jezero-stoppene (bredde og længde), før det loves (resten af M7b, afsnit 1).
+>
+> **Mål:** de to steder ved Jezero fra "Plan for M8": J2 Randens inderside (18,4695° N, 77,2931° Ø, udsigten over deltaet) og J1 Landingsstedet (18,4446° N, 77,4509° Ø, deltaets front mod vest), med samme teknik som Gale (`lav_landskab.py`, `js/solsystem/landskab.js`, `LANDSKAB` i `js/kosmos/mars.js`, "🧍 Stå på Mars" ved Jezero-stoppet og stederne i træet under Jezero). Brug L1's lys uændret. Lav tal og tekster til stedernes sider (U3: `js/data/sider/mars.js`, 2-4 tal) og faktatjek med `/faktatjek` (Perseverances plads og tal med dato, deltaet, Cheyava Falls). Mål billeder i sekundet som i M8a (pc og tablet på højkant, én ad gangen).
+>
+> **Billeder:** Skyen har intet grafikkort. Tag få, små billeder i baggrunden (`tests/vaerktoejer/landskab-lille.mjs`), og sammenlign med NASA's panoramaer fra landingsstedet (PIA24422, PIA24264) som facit.
+>
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til M8c del 1 (rovernes panoramaer) under "Prompter til de næste skridt" her i filen. Model: Opus. Effort: høj (I sætter den selv).
 
 ## Status efter L1 (31. oktober 2026): lyset i Stå på Mars, den billige del
 **Facit:** NASA's panorama PIA20332 (hentet fra `assets.science.nasa.gov`, 29.163 × 6.702 pixel, kun brugt som sammenligning, ikke i programmet). Målt i fotoet (sRGB 0-255): himlen ved horisonten ca. 230, jorden ca. 100, de mørkeste 5 % af jorden 15-30. Fotoet er hvidbalanceret (himlen er blågrå), så farverne er ikke taget derfra, kun forholdet mellem lys og mørkt.

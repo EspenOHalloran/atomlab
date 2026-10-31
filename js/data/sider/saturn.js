@@ -55,9 +55,10 @@ export const SIDER = {
       },
     ],
     videre: [sted('maaner', 'Månerne'), sted('saturn', 'Saturn')],
-    nørd: '<p><b>Ringene i tegningen</b> er regnet ud fra, hvor tætte de er i hver afstand (deres optiske dybde): D-ringen er næsten gennemsigtig, B-ringen næsten tæt, og Cassini-delingen er ikke tom. Grænserne og Encke-mellemrummet passer, men tætheden er omtrentlig.</p>',
-    billeder: '<p>Ringenes farver er fra Solar System Scope (CC BY 4.0), som bygger på NASA\'s billeder.</p>',
-    ærligt: '<p>Ringenes farver er lagt på de rigtige grænser, men de mange tynde ringe er lavet af programmet. Kameraet glider langsomt udad hen over ringene, fra B-ringen til uden for A-ringen.</p>',
+    nørd: '<p><b>Tætheden i ringene er målt af Cassini.</b> Den 28. juli 2008 så rumsonden stjernen β Centauri skinne gennem ringene. Dens instrument UVIS målte i ultraviolet lys (kortere bølger, end øjet kan se), hvor meget af stjernens lys der kom igennem. Målingerne er lagt sammen i stykker på 10 km. Det giver ringenes optiske dybde τ: Ved τ = 1 slipper ca. 37 % af lyset lige igennem, og ved τ = 5 under 1 %. Programmet bruger 8.192 punkter fra D-ringen til F-ringen, ca. 9 km pr. punkt.</p>'
+      + '<p>C-ringen og Cassini-delingen er tynde (τ ca. 0,1), og A-ringen har τ ca. 0,5-1. Midt i B-ringen er τ mange steder over 5, så næsten intet lys slipper igennem. Cassini så stjernen fra ca. 67° over ringene, så lyset gik den korte vej. Derfor kunne den måle gennem B-ringen.</p>',
+    billeder: '<p>Tætheden er målt af Cassini (NASA/JPL/University of Colorado) og hentet fra NASA\'s PDS Ring-Moon Systems Node. Ringenes farver er fra Solar System Scope (CC BY 4.0), som bygger på NASA\'s billeder.</p>',
+    ærligt: '<p>Tætheden er målt langs én linje hen over ringene, og programmet tegner den ens hele vejen rundt. I virkeligheden bølger nogle kanter frem og tilbage. F-ringen er skæv og klumpet, så den står i sin gennemsnitlige afstand. D-ringen er for tynd til målingen, så den er tegnet. Ringenes farver er lagt på de rigtige grænser. Kameraet glider langsomt udad hen over ringene, fra B-ringen til uden for A-ringen.</p>',
   },
   maaner: {
     tal: [['Kendte måner', 'over 280 (2026)'], ['Nærmest af de store (Mimas)', 'ca. 185.500 km'], ['Længst ude (Titan)', 'ca. 1,22 mio. km']],

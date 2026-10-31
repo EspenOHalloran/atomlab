@@ -81,7 +81,10 @@ function vælgÆndrede(givne) {
 
 async function serverSvarer() {
   try {
-    return (await fetch(ADRESSE)).ok;
+    // Svaret læses færdigt: Ellers går Node 22.23's fetch ned (assert(!this.paused) i undici), når Pythons server lukker forbindelsen
+    const svar = await fetch(ADRESSE);
+    await svar.arrayBuffer();
+    return svar.ok;
   } catch {
     return false;
   }

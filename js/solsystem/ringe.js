@@ -2,22 +2,33 @@
 // Tallene (grænserne og tætheden) står i js/data/ringe.js.
 
 import * as THREE from 'three';
-import { RING_IND, RING_UD, ringVed } from '../data/ringe.js';
+import { RING_IND, RING_UD, TAU_N, ringProfil } from '../data/ringe.js';
 
 export { RING_IND, RING_UD };
 
-// Ringene som et billede på én linje: farve i rgb og τ i alfa (halve float, så den kan filtreres på alle grafikkort)
-export function ringTekstur(n = 2048) {
-  const data = new Uint16Array(n * 4);
+// Ringene som et billede på én linje: farve i rgb og τ i alfa (halve float, så den kan filtreres på alle grafikkort).
+// 8.192 punkter med τ fra Cassinis måling (js/data/ringe.js).
+export function ringTekstur(n = TAU_N) {
   const h = THREE.DataUtils.toHalfFloat;
-  for (let i = 0; i < n; i++) {
-    const r = RING_IND + ((i + 0.5) / n) * (RING_UD - RING_IND);
-    const { tau, farve } = ringVed(r);
-    data.set([h(farve[0]), h(farve[1]), h(farve[2]), h(tau)], i * 4);
+  // Niveau 0 er punkterne fra målingen (ca. 9 km pr. punkt). De mindre niveauer er gennemsnit af to og to, så de
+  // tynde ringe ikke flimrer, når en pixel dækker mange punkter (langt væk).
+  let lag = new Float32Array(n * 4);
+  ringProfil(n).forEach(({ tau, farve }, i) => lag.set([farve[0], farve[1], farve[2], tau], i * 4));
+  const niveauer = [];
+  for (let b = n; ; b >>= 1) {
+    const data = new Uint16Array(b * 4);
+    for (let i = 0; i < b * 4; i++) data[i] = h(lag[i]);
+    niveauer.push({ data, width: b, height: 1 });
+    if (b === 1) break;
+    const mindre = new Float32Array((b >> 1) * 4);
+    for (let i = 0; i < mindre.length; i++) mindre[i] = (lag[(i >> 2) * 8 + (i & 3)] + lag[(i >> 2) * 8 + 4 + (i & 3)]) / 2;
+    lag = mindre;
   }
-  const t = new THREE.DataTexture(data, n, 1, THREE.RGBAFormat, THREE.HalfFloatType);
+  const t = new THREE.DataTexture(niveauer[0].data, n, 1, THREE.RGBAFormat, THREE.HalfFloatType);
+  t.mipmaps = niveauer;
+  t.generateMipmaps = false;
   t.magFilter = THREE.LinearFilter;
-  t.minFilter = THREE.LinearFilter;
+  t.minFilter = THREE.LinearMipmapLinearFilter;
   t.needsUpdate = true;
   return t;
 }
