@@ -6,7 +6,7 @@ const UD = billedmappe('landskab');
 const STØRRELSER = { pc: [1280, 800, false], tablet: [820, 1180, true] };
 const valgt = process.argv[2] ? [process.argv[2]] : ['pc'];
 const sted = process.argv[3] ?? 'naukluft';
-const BLIK = { naukluft: [[135, 1, 7.2], [0, 1, 8.5], [290, 6, 18.2], [100, -30, 8.5]], curiosity: [[10, 1, 9], [150, 3, 9]] };
+const BLIK = { naukluft: [[135, 1, 7.2], [0, 1, 8.5], [290, 6, 18.2], [100, -30, 8.5]], curiosity: [[10, 1, 9], [150, 3, 9]], randen: [[95, 1, 16.5], [95, -7, 16.5], [0, 1, 16.5]], landing: [[270, 1, 7.5], [285, 2, 16.5]] };
 if (process.argv[4]) BLIK[sted] = BLIK[sted].slice(0, Number(process.argv[4]));
 const b = await chromium.launch({ args: ARGS, fuldGrafik: true });
 for (const navn of valgt) {

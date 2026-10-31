@@ -1,14 +1,33 @@
 # Laver lagene til "Stå på Mars" (Mars M8 i docs/plan-mars.md, js/solsystem/landskab.js): højdekort og fotos i
 # fire lag om de steder, man kan stå, fra 1 m tæt på til ca. 0,17 km langt væk.
-# Kør:  python3 lav_landskab.py <ud-mappe> [krater]   (kræver numpy, scipy, Pillow og rasterio)
-# Kun vinduerne om stederne læses direkte over nettet (filerne er GeoTIFF i firkanter eller striber).
+# Kør:  python3 lav_landskab.py <ud-mappe> [krater] [orig=mappe]   (kræver numpy, scipy, Pillow og rasterio)
+# Kun vinduerne om stederne læses direkte over nettet (filerne er GeoTIFF i firkanter eller striber). Ligger en fil
+# med samme navn i orig-mappen, læses den dér i stedet: Jezero-kortene ligger i striber på én række, så hver række er
+# en forespørgsel (ca. 30 sekunder for 512 × 512 m af fotoet). Det går meget hurtigere at hente hele filen først
+# (højderne 1,8 GB og fotoet 7,4 GB, ca. 19 MB/s i skyen i oktober 2026).
 #
-#   USGS (https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/):
+#   USGS (https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/, Gale under Mars/):
 #   MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif          Højder ved Gale, 1 m pr. pixel (Calef og Parker, JPL/USGS, af HRSC,
 #                                              CTX og HiRISE). Mærkes CC BY-SA 3.0 IGO for en sikkerheds skyld (HRSC).
 #   MSL/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif Foto ved Gale, 25 cm pr. pixel, gråt (HiRISE: NASA/JPL-Caltech/UArizona)
 #   CTX_EZs/Gale_CTX_BlockAdj_dd.tif           Foto over hele Gale, ca. 5 m pr. pixel, gråt (CTX: NASA/JPL/MSSS)
 #   Langt væk bruges højdekortet fra lav_steder.py (HRSC+MOLA, ../mars-gale-hoejde-2k.png).
+#
+#   Jezero (M8b), Mars 2020's landingskort (USGS Astrogeology, Mars 2020 Terrain Relative Navigation):
+#   mars2020_trn/HiRISE/JEZ_hirise_soc_006_DTM_…_1m_….tif     Højder, 1 m pr. pixel, ca. 21 × 21 km (HiRISE: NASA/JPL-Caltech/UArizona)
+#   mars2020_trn/HiRISE/JEZ_hirise_soc_006_orthoMosaic_25cm_….tif   Foto, 25 cm pr. pixel, gråt
+#   (HiRISE-kortene: Fergason, Galuszka, Hare og Mayer, USGS 2020, lavet til kortet over farlige steder ved landingen)
+#   mars2020_trn/CTX/ScienceInvestigationMaps_JPL/M20_JezeroCrater_CTXDEM_20m.tif   Højder, 20 m pr. pixel, ca. 89 × 101 km
+#                                              (Mars 2020 Science Investigation CTX DEM Mosaic, F. Calef, PDS 2021, CTX:
+#                                              NASA/JPL-Caltech/MSSS), fylder mellemlaget ud, hvor HiRISE ikke når
+#   Mars/CTX_EZs/Jezero_CTX_BlockAdj_dd.tif    Foto over hele Jezero, ca. 5 m pr. pixel, gråt (CTX: NASA/JPL/MSSS)
+#   Langt væk ../mars-jezero-hoejde-2k.png (HRSC+MOLA) som ved Gale.
+#
+# Detaljekortet til stoppet på flybyen (M8b, resten af M7b): Lag 2 regnes i meter fra nulpunktet, og meterne er en
+# lige skalering af bredde og længde (se Retningerne nedenfor). Derfor er lag 2 også et kort i bredde og længde, og
+# det gemmes igen som detaljekort til det lokale net på kloden (../mars-<krater>-detalje-hoejde-2k/1k.png, samme
+# højder som lav_steder.py: HØJDE_MIN til HØJDE_MAX i trin på ca. 3,7 m). Grænserne skrives ud og skal stå som
+# detalje i LOKALE i js/kosmos/mars.js.
 #
 # Lagene (forslag i planen, M8a): Hvert sted har et lag 0 (2 × 2 km) og et lag 1 (8 × 8 km). Lag 2 (64 × 64 km) og
 # lag 3 (stedets kort fra lav_steder.py, ca. 356 × 356 km) deles af stederne ved samme krater.
@@ -38,7 +57,7 @@ from rasterio.windows import from_bounds
 from rasterio.enums import Resampling
 
 R = 3396190.0
-USGS = '/vsicurl/https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Mars/'
+USGS = '/vsicurl/https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/'
 HØJDE_MIN, HØJDE_MAX = -8500.0, 21500.0  # lag 3: kortene fra lav_steder.py (som lav_mars.py)
 # Kraterne. REF: nulpunktet (bredde, længde i grader øst), midten af lag 2. steder: hvor man står (rovernes stop
 # fra NASA's kortdata, mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json). fjern: lag 3 (nord, syd, vest,
@@ -52,9 +71,25 @@ KRATERE = {
         },
         'fjern': (-2.4, -8.4, 134.8, 140.8),
         'fjern_fil': 'mars-gale-hoejde-{}.png',
-        'dem': 'MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif',
-        'foto': 'MSL/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif',
-        'ctx': 'CTX_EZs/Gale_CTX_BlockAdj_dd.tif',
+        'dem': 'Mars/MSL/MSL_Gale_DEM_Mosaic_1m_v3.tif',
+        'foto': 'Mars/MSL/MSL_Gale_Orthophoto_Mosaic_25cm_v3.tif',
+        'ctx': 'Mars/CTX_EZs/Gale_CTX_BlockAdj_dd.tif',
+    },
+    # M8b. Nulpunktet ligger mellem stederne og lidt mod øst, så lag 2 (64 × 64 km) dækker hele krateret (midten
+    # 18,408° N, 77,687° Ø, ca. 45 km bredt), deltaet og randen bag stederne. Stederne er Perseverances stop fra
+    # mars.nasa.gov/mmgis-maps/M20/Layers/json/M20_waypoints.json.
+    'jezero': {
+        'ref': (18.44, 77.55),
+        'steder': {
+            'randen': (18.46946748, 77.29304719),  # sol 1301 (ca. 17. oktober 2024), randens inderside, −2.056 m
+            'landing': (18.44462715, 77.45088572),  # Octavia E. Butler Landing (18. februar 2021), −2.570 m
+        },
+        'fjern': (21.4, 15.4, 74.5, 80.9),
+        'fjern_fil': 'mars-jezero-hoejde-{}.png',
+        'dem': 'mars2020_trn/HiRISE/JEZ_hirise_soc_006_DTM_MOLAtopography_DeltaGeoid_1m_Eqc_latTs0_lon0_blend40.tif',
+        'dem2': 'mars2020_trn/CTX/ScienceInvestigationMaps_JPL/M20_JezeroCrater_CTXDEM_20m.tif',
+        'foto': 'mars2020_trn/HiRISE/JEZ_hirise_soc_006_orthoMosaic_25cm_Eqc_latTs0_lon0_first.tif',
+        'ctx': 'Mars/CTX_EZs/Jezero_CTX_BlockAdj_dd.tif',
     },
 }
 # Lagene: halv bredde (m), pixel i højdekortet og i fotoet. Lag 0 og 1 for hvert sted, lag 2 for krateret.
@@ -67,7 +102,8 @@ FOTO3 = 4096  # lag 3: CTX over hele stedets kort (ca. 87 m pr. pixel)
 LILLE = {'højde': 512, 'foto': 1024}  # testudgaver (TEST_HURTIG)
 
 ud = sys.argv[1]
-kun = sys.argv[2] if len(sys.argv) > 2 else None
+kun = next((a for a in sys.argv[2:3] if not a.startswith('orig=')), None)
+orig = next((a[5:] for a in sys.argv[2:] if a.startswith('orig=')), None)
 os.makedirs(ud, exist_ok=True)
 Image.MAX_IMAGE_PIXELS = None
 if os.path.exists('/root/.ccr/ca-bundle.crt'):
@@ -87,14 +123,28 @@ def meter(ref, bredde, længde):
     return R * math.cos(math.radians(b0)) * math.radians(længde - l0), R * math.radians(bredde - b0)
 
 
+def kilde(fil):
+    # Filen i orig-mappen, hvis den ligger dér, ellers direkte hos USGS
+    lokal = orig and os.path.join(orig, os.path.basename(fil))
+    return lokal if lokal and os.path.exists(lokal) else USGS + fil
+
+
 def læs(fil, ref, midt, halv, n, metode, ingen=None):
     # Et kvadrat på 2·halv meter om midt (øst, nord), n × n pixel, nord øverst. Pixel uden data bliver NaN.
     lv, bs = grader(ref, midt[0] - halv, midt[1] - halv)
     lø, bn = grader(ref, midt[0] + halv, midt[1] + halv)
     with rasterio.Env(**ENV):
-        with rasterio.open(USGS + fil) as d:
-            f = 1 if d.crs.is_geographic else math.pi * R / 180  # kortets enheder pr. grad
-            w = from_bounds(lv * f, bs * f, lø * f, bn * f, d.transform)
+        with rasterio.open(kilde(fil)) as d:
+            # kortets enheder pr. grad: grader, eller en ækvidistant cylinderprojektion (eqc) med meter, hvor
+            # længden ganges med cos(lat_ts) (Jezero-kortet fra JPL har lat_ts = 18,4663°)
+            if d.crs.is_geographic:
+                fx = fy = 1
+            else:
+                p = d.crs.to_dict()
+                assert p.get('proj') == 'eqc' and not p.get('lon_0') and not p.get('lat_0') and not p.get('x_0') and not p.get('y_0'), p
+                fy = math.pi * p.get('R', R) / 180
+                fx = fy * math.cos(math.radians(p.get('lat_ts', 0)))
+            w = from_bounds(lv * fx, bs * fy, lø * fx, bn * fy, d.transform)
             a = d.read(1, window=w, out_shape=(n, n), resampling=metode, boundless=True,
                        fill_value=d.nodata if d.nodata is not None else 0).astype(np.float64)
             nd = d.nodata if ingen is None else ingen
@@ -212,6 +262,37 @@ def kort_fra_png(fil):
     return (a[..., 0] * 256 + a[..., 1]) / 65535 * (HØJDE_MAX - HØJDE_MIN) + HØJDE_MIN
 
 
+def gem_detalje(kid, ref, h2):
+    # Detaljekortet til det lokale net på kloden (se øverst): lag 2 med klodens højder (som lav_steder.py)
+    d_vest, d_syd = grader(ref, -LAG[2]['halv'], -LAG[2]['halv'])
+    d_øst, d_nord = grader(ref, LAG[2]['halv'], LAG[2]['halv'])
+    for n in (2048, 1024):
+        x = skaler_ned(h2, n)
+        assert HØJDE_MIN <= x.min() and x.max() <= HØJDE_MAX
+        v = np.clip(np.round((x - HØJDE_MIN) / (HØJDE_MAX - HØJDE_MIN) * 65535), 0, 65535)
+        v = np.minimum(np.round(v / 8) * 8, 65535).astype(np.uint32)
+        rg = np.zeros((n, n, 3), np.uint8)
+        rg[..., 0] = v >> 8
+        rg[..., 1] = v & 255
+        fil = os.path.join(ud, '..', f'mars-{kid}-detalje-hoejde-{"2k" if n == 2048 else "1k"}.png')
+        Image.fromarray(rg, 'RGB').save(fil, optimize=True)
+        print('  ', os.path.basename(fil), f'{os.path.getsize(fil) / 1e6:.2f} MB', flush=True)
+    print(f'   detalje i LOKALE: {{ nord: {d_nord:.6f}, syd: {d_syd:.6f}, vest: {d_vest:.6f}, øst: {d_øst:.6f} }}', flush=True)
+
+
+# Kun detaljekortet ud fra et færdigt lag 2 (<krater>-h2.png og <krater>.json i ud-mappen), fx ved Gale, så de andre
+# lag ikke laves om:  python3 lav_landskab.py <ud-mappe> gale detalje
+if 'detalje' in sys.argv[3:]:
+    with open(os.path.join(ud, f'{kun}.json')) as fil:
+        data = json.load(fil)
+    L2 = data['lag']['2']
+    a = np.asarray(Image.open(os.path.join(ud, L2['højde'])).convert('RGB')).astype(np.float64)
+    h2 = L2['h'][0] + (a[..., 0] * 256 + a[..., 1]) / 65535 * (L2['h'][1] - L2['h'][0])
+    assert L2['øst'] == [-LAG[2]['halv'], LAG[2]['halv']] and L2['nord'] == L2['øst'] and h2.shape[0] == LAG[2]['højde']
+    gem_detalje(kun, tuple(data['ref']), h2)
+    sys.exit(0)
+
+
 for kid, K in KRATERE.items():
     if kun and kun != kid:
         continue
@@ -252,6 +333,8 @@ for kid, K in KRATERE.items():
     L = LAG[2]
     midt2 = (0.0, 0.0)
     g3 = h3_ved(midt2, L['halv'], L['højde'])
+    if 'dem2' in K:  # Jezero: CTX (20 m) mellem HiRISE og lag 3
+        g3 = fyld(læs(K['dem2'], ref, midt2, L['halv'], L['højde'], Resampling.bilinear), g3)
     h2 = fyld(læs(K['dem'], ref, midt2, L['halv'], L['højde'], Resampling.average), g3)
     data['lag']['2'] = {'højde': f'{kid}-h2.png', 'foto': f'{kid}-f2.jpg', 'øst': [-L['halv'], L['halv']], 'nord': [-L['halv'], L['halv']],
                         'h': gem_højde(h2, f'{kid}-h2')}
@@ -288,6 +371,7 @@ for kid, K in KRATERE.items():
             gem_foto(f, f'{kid}-{sid}-f{k}', størrelser)
             grov_h, grov_midt, grov_halv = h, midt, L['halv']
             grov_f, grov_fhalv = f, L['halv']
+    gem_detalje(kid, ref, h2)
     data['hMaks'] = float(np.ceil(h3.max()))  # den højeste højde (m), så skyggerne kan stoppe tidligt
     with open(os.path.join(ud, f'{kid}.json'), 'w') as fil:
         json.dump(data, fil, ensure_ascii=False, indent=1)

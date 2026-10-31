@@ -1,6 +1,6 @@
 // Teksterne i højre panel ved Mars (siden i lag, U3 i docs/plan-ux.md): Mars' egen side (SIDE) og en side for hvert sted
 // og hver måne i træet (SIDER). Underteksten på stedet (bjælkens linje) står i TUR i js/kosmos/mars.js og må ikke stå
-// igen her. Faktatjekket i docs/fakta-solsystemet.md (del 3, "Faktatjek M5a", "M5b", "M6b", "M8a" og "Faktatjek U3").
+// igen her. Faktatjekket i docs/fakta-solsystemet.md (del 3, "Faktatjek M5a", "M5b", "M6b", "M8a", "M8b" og "Faktatjek U3").
 // Uden Three.js, så teksterne kan testes i Node.
 
 import { sted, kontakt, handling, tur, tid } from '../../sideknap.js';
@@ -199,7 +199,7 @@ export const SIDER = {
       },
     ],
     videre: [handling('Stå på Mars', '🧍 Stå på Mars'), sted('stå-naukluft', '🧍 Naukluft'), sted('jezero', 'Jezero')],
-    billeder: `<p>Ved Gale ligger et fint net med højder fra HRSC og MOLA. ${HRSC} Der er ca. 0,17 km mellem højderne over et område på ca. 356 × 356 km. Det er lige så tæt som i målingerne.</p>`,
+    billeder: `<p>Ved Gale ligger et fint net med højder fra HRSC og MOLA. ${HRSC} Der er ca. 0,17 km mellem højderne over et område på ca. 356 × 356 km. Det er lige så tæt som i målingerne. Over landingsstedet, Curiositys vej og foden af Mount Sharp ligger et skarpere kort med ca. 32 m mellem højderne (det samme, som bruges, når du står på Mars).</p>`,
     ærligt: klokken('9 om morgenen', 'Solen står lavt i øst (til venstre).') + '<p>Roveren kan ikke ses: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne.</p>',
   },
   jezero: {
@@ -223,9 +223,9 @@ export const SIDER = {
         tekst: '<p>I oktober 2026 er Perseverance kørt op over kraterets vestrand og undersøger nogle af de ældste sten, den har set. Den har kørt over 45 km, længere end nogen anden rover. Prøverne skulle hentes til Jorden af en anden mission, Mars Sample Return. Men den plan er stoppet, og ingen ved, om eller hvornår prøverne kommer hjem.</p>',
       },
     ],
-    videre: [sted('gale', 'Gale og Curiosity'), sted('nordpol', 'Nordpolen')],
-    billeder: `<p>Ved Jezero ligger et fint net med højder fra HRSC og MOLA, med ca. 0,17 km mellem højderne. ${HRSC}</p>`,
-    ærligt: '<p>Deltaets kant er kun ca. 40 m høj, så den kan næsten ikke ses i programmets kort, og roveren kan slet ikke ses: Der er ca. 0,17 km mellem højderne og ca. 1 km mellem farverne.</p>'
+    videre: [handling('Stå på Mars', '🧍 Stå på Mars'), sted('stå-landing', '🧍 Landingsstedet'), sted('gale', 'Gale og Curiosity'), sted('nordpol', 'Nordpolen')],
+    billeder: `<p>Ved Jezero ligger et fint net med højder fra HRSC og MOLA, med ca. 0,17 km mellem højderne. ${HRSC} Over krateret og deltaet ligger et skarpere kort med ca. 32 m mellem højderne. Det er lavet af kortene til Perseverances landing (HiRISE og CTX). Kortet over hele krateret er sat sammen af striber, og hvor to striber mødes, kan du se svage, lige streger hen over kraterbunden.</p>`,
+    ærligt: '<p>Deltaets kant er kun ca. 40 m høj. Herfra kan du lige ane den, og roveren kan slet ikke ses: Der er ca. 32 m mellem højderne og ca. 1 km mellem farverne. Stå på Mars ved landingsstedet, så ser du kanten tæt på.</p>'
       + klokken('7½ om morgenen', 'Krateret er så lavt, at det først ses med lange skygger. Solen står lavt i øst (til højre).'),
   },
   nordpol: {
@@ -359,7 +359,7 @@ export const SIDER = {
 };
 
 // Stå på Mars (M8a): det samme om billederne og lyset ved begge steder
-const LANDSKAB_BILLEDER = '<p>Landskabet er bygget af målinger fra kredsløb. Højdekortet er sat sammen af forskere ved NASA\'s JPL og udgivet af USGS. Tæt på Curiositys vej er højderne regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Længere væk er de regnet ud fra kameraerne CTX og HRSC. Der er 1 m mellem højderne. Tæt på dig ligger HiRISE\' billeder (25 cm pr. pixel), længere væk billeder fra CTX (ca. 6 m pr. pixel) og helt ude kortet fra Mars Express. Landskabet ligger i fire lag, der glider over i hinanden, og Mars\' krumning er regnet med.</p>';
+const LANDSKAB_BILLEDER = '<p>Landskabet er bygget af målinger fra kredsløb. Højdekortet er sat sammen af forskere ved NASA\'s JPL og udgivet af USGS. Tæt på Curiositys vej er højderne regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Længere væk er de regnet ud fra kameraerne CTX og HRSC. Der er 1 m mellem højderne. Tæt på dig ligger HiRISE\' billeder (25 cm pr. pixel), længere væk billeder fra CTX (ca. 6 m pr. pixel) og helt ude kortet fra Mars Express. Kortet over hele krateret er sat sammen af striber, og hvor to striber mødes, kan der i det fjerne ses svage, lige streger. Landskabet ligger i fire lag, der glider over i hinanden, og Mars\' krumning er regnet med.</p>';
 const LANDSKAB_ÆRLIGT = '<p>Billederne fra kredsløb er grå, og farverne er sat på af programmet ud fra lysstyrken og Viking-kortet. Sten og sand, der er mindre end nogle få meter, er ikke med i højderne, og de små ujævnheder helt tæt på dine fødder er tegnet af programmet. I billederne fra kredsløb skinnede Solen fra en anden retning. Programmet har fjernet det meste af den skygge, men lidt er tilbage i de små ting. Himlens farve, disen og tusmørket er en enkel model. Dine øjne er 1,7 m over jorden (rovernes kameraer sidder ca. 2 m oppe). Phobos og Deimos bevæger sig rigtigt hen over himlen og har den rigtige størrelse, men deres plads er ikke slået op for i dag. Roveren er ikke med.</p>';
 const SOLNEDGANG = {
   titel: 'Hvordan går Solen ned på Mars?',
@@ -395,5 +395,53 @@ SIDER['stå-curiosity'] = {
   ],
   videre: [sted('stå-naukluft', '🧍 Naukluft'), sted('gale', 'Op i kredsløb over Gale')],
   billeder: LANDSKAB_BILLEDER,
+  ærligt: LANDSKAB_ÆRLIGT,
+};
+
+// Stå på Mars ved Jezero (M8b). Tallene er målt i kortene og Perseverances kortdata
+// (mars.nasa.gov/mmgis-maps/M20/Layers/json/M20_waypoints.json) og faktatjekket (docs/fakta-solsystemet.md, "Faktatjek M8b").
+const JEZERO_BILLEDER = '<p>De skarpeste højder og fotos er lavet af USGS til Perseverances landing. Ud fra dem blev kortet over farlige steder tegnet. Højderne er regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Der er 1 m mellem højderne, og HiRISE\' billeder har 25 cm pr. pixel. Længere væk bruges et højdekort over hele krateret fra kameraet CTX (20 m mellem højderne), som holdet bag Perseverance lavede bagefter, og helt ude kortet fra Mars Express. Kortet over hele krateret er sat sammen af striber, og hvor to striber mødes, kan der i det fjerne ses svage, lige streger. Landskabet ligger i fire lag, der glider over i hinanden, og Mars\' krumning er regnet med.</p>';
+SIDER['stå-randen'] = {
+  tal: [['Højere end landingsstedet', 'ca. 500 m'], ['Til randen på den anden side', 'ca. 45 km'], ['Perseverance var her', 'oktober 2024']],
+  kort: 'Du står på indersiden af Jezeros vestrand. Herfra ser du ud over deltaet og den gamle søbund til randen på den anden side af krateret.',
+  emner: [
+    {
+      titel: 'Hvad kan jeg se?',
+      tekst: '<p>Mod øst ligger deltaet: lag af sand og mudder, som en flod lagde, da den løb ud i søen for mere end 3½ mia. år siden. Bag det ligger den flade bund af krateret. Perseverance landede dernede, ca. 9 km herfra. Randen på den anden side er lav og slidt og ligger lavere end dig. Helt ude i disen ser du landet bag den.</p>',
+    },
+    {
+      titel: 'Hvorfor kørte Perseverance herop?',
+      tekst: '<p>Randen blev rejst, da et stort nedslag lavede krateret. Meget af stenen her blev slået op dybt nedefra, ved dette nedslag og måske også ved ældre nedslag. Perseverance var her i oktober 2024 på vej op. Turen op tog ca. 3½ måned og gik ca. 500 m opad, og i december 2024 nåede den toppen. På den anden side fandt den nogle af de ældste sten, den har set: sandsynligvis mindst 3,9 mia. år gamle.</p>',
+    },
+    {
+      titel: 'Hvor fandt Perseverance Cheyava Falls?',
+      tekst: '<p>Knap 2 km mod nord ligger en gammel floddal, Neretva Vallis, hvor vandet løb ind i krateret. Dér fandt Perseverance i juli 2024 stenen Cheyava Falls med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv.</p>',
+    },
+    SOLNEDGANG,
+  ],
+  videre: [sted('stå-landing', '🧍 Landingsstedet'), sted('jezero', 'Op i kredsløb over Jezero')],
+  billeder: JEZERO_BILLEDER,
+  ærligt: LANDSKAB_ÆRLIGT,
+};
+SIDER['stå-landing'] = {
+  tal: [['Perseverance landede', '18. februar 2021'], ['Til deltaets front', 'ca. 2-3 km'], ['Ingenuity fløj første gang', '19. april 2021']],
+  kort: 'Her på den flade bund af krateret landede Perseverance. Holdet bag roveren kaldte stedet Octavia E. Butler Landing efter en amerikansk forfatter, der skrev science fiction.',
+  emner: [
+    {
+      titel: 'Hvad kan jeg se?',
+      tekst: '<p>Mod vest ligger deltaets front: en lav kant, hvor floden engang løb ud i søen. Bag den rejser kraterets rand sig. Omkring dig er den flade søbund med sten og sand. Zoom ind på kanten som med en kikkert.</p>',
+    },
+    {
+      titel: 'Hvordan landede Perseverance?',
+      tekst: '<p>Et varmeskjold og en faldskærm bremsede den. Til sidst dalede en slags kran med raketmotorer langsomt ned og sænkede roveren ca. 7 m ned i tre nylonreb. Undervejs tog roveren billeder af jorden under sig og sammenlignede dem med et kort fra kredsløb, så den vidste præcis, hvor den var. Med et kort over farlige steder, lavet på forhånd, valgte den selv et sikkert sted at lande. Kortene, der blev lavet til landingen, er også brugt til landskabet her.</p>',
+    },
+    {
+      titel: 'Hvor fløj Ingenuity første gang?',
+      tekst: '<p>Tæt ved landingsstedet fløj helikopteren Ingenuity første gang 19. april 2021. Den steg ca. 3 m op, svævede i 30 sekunder og landede igen. Det var første gang, noget fløj med motor og styring på en anden planet.</p>',
+    },
+    SOLNEDGANG,
+  ],
+  videre: [sted('stå-randen', '🧍 Ved randen'), sted('jezero', 'Op i kredsløb over Jezero')],
+  billeder: JEZERO_BILLEDER,
   ærligt: LANDSKAB_ÆRLIGT,
 };

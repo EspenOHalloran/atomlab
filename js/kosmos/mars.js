@@ -85,10 +85,13 @@ const LOKALE = [
   // (HRSC+MOLA, ca. 1.470 × 950 km, form: højden i forhold til bredden) med et detaljekort over Melas, Candor og Ophir.
   { id: 'tharsis', nord: 16, syd: -15, vest: -124, øst: -97 },
   { id: 'valles', nord: 0, syd: -16, vest: -80, øst: -55, form: 0.5, detalje: { nord: -3, syd: -12.5, vest: -77, øst: -67 } },
-  // M5b: Gale og Jezero (HRSC+MOLA, ca. 356 × 356 km og ca. 0,17 km pr. pixel, lige så skarpt som kilden, så
-  // intet detaljekort). Nordpolen har intet net (et net i bredde og længde virker ikke ved polen).
-  { id: 'gale', nord: -2.4, syd: -8.4, vest: 134.8, øst: 140.8 },
-  { id: 'jezero', nord: 21.4, syd: 15.4, vest: 74.5, øst: 80.9 },
+  // M5b: Gale og Jezero (HRSC+MOLA, ca. 356 × 356 km og ca. 0,17 km pr. pixel, lige så skarpt som kilden). Nordpolen
+  // har intet net (et net i bredde og længde virker ikke ved polen).
+  // M8b: Detaljekortet er mellemlaget fra Stå på Mars (lag 2, 64 × 64 km, her ca. 32 m pr. pixel, 16 i landskabet),
+  // gemt igen af billeder/solsystem/lav_landskab.py med klodens højder. Grænserne skriver værktøjet ud. Ved Jezero
+  // dækker det hele krateret og deltaet (HiRISE og CTX), ved Gale landingsstedet, Curiositys vej og Mount Sharps fod.
+  { id: 'gale', nord: -2.4, syd: -8.4, vest: 134.8, øst: 140.8, detalje: { nord: -4.198684, syd: -5.304316, vest: 136.818778, øst: 137.928222, kant: 6 } },
+  { id: 'jezero', nord: 21.4, syd: 15.4, vest: 74.5, øst: 80.9, detalje: { nord: 18.992816, syd: 17.887184, vest: 76.967264, øst: 78.132736, kant: 6 } },
 ];
 
 // Steder, flybyen besøger. tid: klokken på stedet (lokal soltid), når man er der. kompas: hvorfra kameraet kigger
@@ -113,8 +116,8 @@ const STEDER = [
   // Sharp med morgensolen fra venstre. Jezero ses fra syd med den lave morgensol fra højre (kl. 7½: Krateret er så lavt,
   // at det først ses med lange skygger), så randen og deltaet mod vest får lys fra siden. sommer: Mars' akse drejes,
   // så det er nordligt sommersolhverv (midnatssol), mens man er ved stedet.
-  { id: 'gale', navn: 'Gale', bredde: -5.367, længde: 137.811, tid: 9, kompas: 0, vinkel: 16, størrelse: 0.085, lokalt: 'gale' },
-  { id: 'jezero', navn: 'Jezero', bredde: 18.408, længde: 77.687, tid: 7.5, kompas: 180, vinkel: 32, størrelse: 0.03, lokalt: 'jezero' },
+  { id: 'gale', navn: 'Gale', bredde: -5.367, længde: 137.811, tid: 9, kompas: 0, vinkel: 16, størrelse: 0.085, lokalt: 'gale', detalje: true },
+  { id: 'jezero', navn: 'Jezero', bredde: 18.408, længde: 77.687, tid: 7.5, kompas: 180, vinkel: 32, størrelse: 0.03, lokalt: 'jezero', detalje: true },
   { id: 'nordpol', navn: 'Nordpolen', bredde: 87.32, længde: 54.96, tid: 12, kompas: 90, vinkel: 55, størrelse: 0.6, sommer: true },
 ];
 // Flybyen (M5 giver flere steder)
@@ -164,9 +167,18 @@ const LANDSKAB = {
     { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 7.5,
       titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.' },
   ],
+  // M8b: Perseverances stop fra mars.nasa.gov/mmgis-maps/M20/Layers/json/M20_waypoints.json (randen: sol 1301,
+  // landingsstedet: Octavia E. Butler Landing). Ved randen kigger man mod øst, så man lander om eftermiddagen med Solen i
+  // ryggen (om morgenen kigger man lige mod Solen, og relieffet forsvinder).
+  jezero: [
+    { id: 'randen', navn: 'Ved randen', knap: 'Gå til randen', bredde: 18.46946748, længde: 77.29304719, blik: 95, tid: 16.5,
+      titel: 'Ved randen af Jezero', tekst: 'Du står på randens inderside, ca. 500 m højere end landingsstedet. Mod øst ligger deltaet og bag det hele krateret.' },
+    { id: 'landing', navn: 'Landingsstedet', knap: 'Gå til landingsstedet', bredde: 18.44462715, længde: 77.45088572, blik: 270, tid: 7.5,
+      titel: 'Hvor Perseverance landede', tekst: 'Her landede Perseverance 18. februar 2021. Mod vest ligger deltaets front, ca. 2-3 km væk. Drej hovedet med fingeren eller musen.' },
+  ],
 };
 // Træet i listen til venstre (js/faenomenskaerm.js): stederne og månerne med flybyens navne, og under et sted det, der
-// hører til (Calderaen og Skrænten under Olympus Mons, stederne, man kan stå, under Gale, og udsigten fra Phobos
+// hører til (Calderaen og Skrænten under Olympus Mons, stederne, man kan stå, under Gale og Jezero, og udsigten fra Phobos
 // under Phobos)
 const punkt = (id, under) => ({ id, navn: TUR.find((t) => t.id === id).titel, ...(under && { under: under.map((u) => punkt(u)) }) });
 const TRÆ = {
@@ -814,7 +826,7 @@ export default {
     }
     // Flyv ned til stedet sd ved krateret, og stå der, når lagene er hentet
     function ståPå(krater, sd) {
-      const st = { ...sd, ramme: mars.sted(sd.bredde, sd.længde), lokalt: krater };
+      const st = { ...sd, ramme: mars.sted(sd.bredde, sd.længde), lokalt: krater, detalje: true }; // med detaljekortet (M8b)
       const vent = { krater, sd, fløjet: false, klar: false };
       ståVent = vent;
       hentLokalt(st);
@@ -1353,7 +1365,7 @@ export default {
             øjne: kamera.position.y * 1000, kloden: system.visible, nær: kamera.near, eksponering: verden.renderer.toneMappingExposure, glød: verden.glød?.enabled ?? null, ...(stående ? stående.land.test() : {}),
           };
         },
-        ståPå: (id) => ståPå('gale', LANDSKAB.gale.find((x) => x.id === id)),
+        ståPå: (id) => { const x = landskabMed(`stå-${id}`); ståPå(x.krater, x.sd); },
         besøgSted: (id) => gåTil(id),
         tilbageOp: () => tilbageOp(),
         // Sæt klokken og blikket (til billeder)
