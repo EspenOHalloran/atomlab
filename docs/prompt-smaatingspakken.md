@@ -1,0 +1,23 @@
+# Prompt: Småtingspakken
+
+*Skrevet 5. november 2026. Kopiér teksten nedenfor ind i en ny session. Model: Opus, medium effort (høj, hvis punkt 4 viser sig at kræve ændringer i shadere). Start først, når M8c del 1 er merget til `main`, så index.html ikke giver en konflikt.*
+
+---
+
+Lav småtingspakken fra DESIGN.md ("Kursen", 5. november 2026). Jeres go er givet. Det hele kommer i én PR, og den merges, når testene er grønne. Læs først CLAUDE.md, "Lige nu" i DESIGN.md og tjeklisterne i docs/erfaringer.md. Brug `/faktatjek` til punkt 2 og `/faerdig` til sidst.
+
+1. **Jezero i hjælpen og i "Om AtomLab"** (`index.html`):
+   - Afsnittet om flybyen i hjælpen nævner kun Gale under "🧍 Stå på Mars". Skriv, at man også kan stå ved Jezero (ved randen og ved landingsstedet, hvor Perseverance landede). Brug det, M8c del 1 har tilføjet (rovernes panoramaer), hvis det står i koden. Hold det kort.
+   - "Kilder og licenser" nævner kun Gale-landskabet. Tilføj kilderne til Jezero: Mars 2020's landingskort fra USGS (HiRISE-højder med 1 m og ortofoto med 25 cm) og CTX-højdekortet over krateret. Tag navnene, krediteringen og licensen fra `billeder/solsystem/KILDER.md` (tjek dem dér, og skriv dem ikke efter hukommelsen). Ret også `LICENSE`, hvis den nævner stederne.
+2. **"Vidste du?" under nitrogen** (`js/data/grundstoflag.js`, `vidste` ved nitrogen). Teksten nu: "Du indånder mest nitrogen, men kroppen kan ikke bruge det fra luften. Du får det fra maden, fordi bakterier, lyn og gødning har bundet det for planterne." Problemer: "bundet" bliver ikke forklaret, og lynet kommer ud af det blå. Indhold, der skal tjekkes: N₂ holdes sammen af en meget stærk tredobbelt binding, som planter og dyr ikke kan bryde. Bakterier (bl.a. i rodknolde på ærter og kløver), gødningsfabrikker (Haber-Bosch) og lyn kan. Lynet splitter N₂ og O₂, og de bliver til nitrogenoxider, som regnen skyller ned som nitrat. Lyn står kun for en lille del, og bakterierne for det meste af det naturlige. Tallet er ikke tjekket. Skriv det kort, i et sprog en 13-årig forstår, og forklar, hvad det betyder at "binde nitrogen". Hold længden som de andre "Vidste du?". Faktatjek med kilder i `docs/fakta-grundstofkort.md`. Er du i tvivl om et tal, så lad det være.
+3. **Testgrænsen** i `tests/koer-alle.mjs`: fra 600 til 900 sekunder pr. test (testen `mars` tog 591 s). Ret tallet i DESIGN.md og tests/README.md, hvis det står dér.
+4. **Prikkerne på himlen ved Olympus Mons** (jeres skærmbillede 5. november: "kan du ikke ændre de ting der er i baggrunden. det ligner ikke nogle ægte fænomener"). Ved Olympus-stoppet (pc, 1490 × 895) står der to prikker på den sorte himmel over horisonten, som er tydeligere end stjernerne. Den ene er blålig, den anden hvid med et lille skær. Første gæt, ikke tjekket:
+   - Den blålige er nok **rumstøvet** fra `js/scene3d.js` (`lavRumstøv`: blålige prikker, `0x8fb4ff`, der driver rundt 22-92 enheder fra midten). Det er lavet til atomet og giver ingen mening i Solsystemet. Det skjules allerede, når man står på Mars (`visRumstøv`).
+   - Den hvide kan være **Phobos eller Deimos**, der tegnes større langt væk (`større` i `opdaterMåner` i `js/kosmos/mars.js`), eller Solens prik.
+   - Find ud af det med testadgangen (`månePlads(id)`, skjul rumstøvet med `visRumstøv(false)`, og sammenlign skærmbilleder). Ret det, der ikke ligner noget ægte. Forslag: skjul rumstøvet på hele Solsystemet-skærmen (og evt. i de fænomener i Kosmos, der har `tåger: false`) og sæt det tilbage i `nulstilStyring`. Er det en måne, så skal den stadig kunne ses, men ikke ligne en glødende prik på det forkerte sted. Spørg, hvis det er uklart, hvad der er rigtigt.
+   - En første kørsel (5. november) med et lille Playwright-script (`gåTil('olympus')`, `hop()`) gik i timeout, før Mars' kort var hentet. Vent på `billeder().hentet.kort` med en længere ventetid, eller start med `tests/mars.mjs` som skabelon.
+5. **Allerede på `main`:** ændringen i DESIGN.md fra planlægningen ("Kursen"), `docs/tjekliste-tablet.md` og denne prompt (merget 5. november 2026).
+
+**Tests:** `node tests/koer-alle.mjs --ændret`. Den vælger selv alle tests, fordi index.html (og evt. scene3d.js) er ændret. Skærmbilleder kun af Olympus-stoppet før og efter (pc og tablet på højkant).
+
+**Til sidst:** Opdater "Lige nu" i DESIGN.md (flyt det forrige "Senest lavet" til historikken), og fjern punkterne fra "Åbne punkter". Opdater artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe, læs det først, og behold linket): Småtingspakken flyttes til "Lavet for nylig".
