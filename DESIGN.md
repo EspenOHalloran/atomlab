@@ -19,8 +19,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Kursen (jeres svar 5. november 2026, planlægningen efter oprydningen):**
 - **M8c del 1** kører i en anden session og er snart færdig.
-- **Småtingspakken** (én PR, Opus medium, venter på et go): Jezero i hjælpen og i "Om AtomLab" (med kilderne til Jezero-kortene), nitrogen-teksten under "Vidste du?" (omskrevet og faktatjekket) og testgrænsen i `tests/koer-alle.mjs` fra 600 til 900 sekunder. Samlet, fordi en ændring i index.html alligevel kører alle tests.
-- **Tabletten før Jupiter bygges.** Opus laver en kort tjekliste (10-15 punkter) ud fra "Ikke afprøvet" nedenfor, og I går den igennem. Fejl rettes, før planeterne genbruger den fælles kode. Planen for Jupiter kan laves imens.
+- **Småtingspakken** (én PR, Opus medium, prompten står i [docs/prompt-smaatingspakken.md](docs/prompt-smaatingspakken.md), start efter M8c del 1): Jezero i hjælpen og i "Om AtomLab" (med kilderne til Jezero-kortene), nitrogen-teksten under "Vidste du?" (omskrevet og faktatjekket) og testgrænsen i `tests/koer-alle.mjs` fra 600 til 900 sekunder. Samlet, fordi en ændring i index.html alligevel kører alle tests. Punkt 4 (jeres fund 5. november): de to prikker på himlen ved Olympus Mons, der ikke ligner noget ægte (nok rumstøvet fra scene3d.js og en forstørret måne).
+- **Tabletten før Jupiter bygges.** Tjeklisten (15 punkter) står i [docs/tjekliste-tablet.md](docs/tjekliste-tablet.md). Fejl rettes, før planeterne genbruger den fælles kode. Planen for Jupiter kan laves imens.
 - **Indskydes mellem planeterne** (jeres valg, alle tre): Formørkelser med et grafisk løft (mellem, Opus høj), Molekyler M1 (stor, kan køre samtidig med planeterne, for den ligger i Værkstedet) og Det sorte hul (stor, Opus xhigh). Hver får sit eget go. Opus' forslag til rækkefølgen: Formørkelser mellem Jupiter og Venus, Molekyler M1 sideløbende, og Det sorte hul, når en planet er færdig, og der er plads til en dyr opgave.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
