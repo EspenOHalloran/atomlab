@@ -3,7 +3,7 @@
 Denne fil skal gøre os mere præcise og hurtigere. Den har tre dele:
 1. **Tjeklister**, som bruges, mens man arbejder.
 2. **Rodårsager:** hvorfor fejlene opstod.
-3. **Konkrete erfaringer:** det, der virker, og faldgruberne.
+3. **Konkrete erfaringer:** det, der virker, og faldgruberne, sorteret efter emne.
 
 Når noget går galt eller virker særlig godt, skrives det ind med det samme: kort, konkret og med det, vi gjorde ved det. Får en fejl en ny rodårsag, skal den også ind i en tjekliste.
 
@@ -186,6 +186,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 ---
 
 ## 3. Konkrete erfaringer
+*Sorteret efter emne 5. november 2026. Læs det emne, du arbejder med. Nye erfaringer skrives ind under det emne, de hører til (lav et nyt emne, hvis intet passer), ikke som et nyt afsnit pr. opgave.*
 
 ### Arbejdsmåde, der virker
 - **Mål i stedet for at gætte.** Når et tal på skærmen beskriver spillets egen simulering, så mål det i simuleringen. Eksempler: kontrolstavene i Reaktoren (stabil ved ca. 50 %), frastødningens "bakke" i Stjerneovnens graf og hvor tit man rammer en kerne med musen (målt med 40 forsøg).
@@ -297,7 +298,9 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **`pkill` med et mønster**, der også passer på ens egen kommando, lukker ens egen terminal. Brug process-id i stedet. Det skete igen i F1 med `pkill -f "http.server 8765"`.
 - **Netadgang:** WebSearch virker herfra, men WebFetch kan ikke slå de fleste sider op (DNS). Kilder findes derfor via søgeresultater. Skriv det, når en kilde ikke kunne læses direkte.
 
-### Grafik med rigtige billeder (Jorden og Månen, oktober 2026)
+### Planeter og måner: billeder, højder, kort og luft
+
+#### Grafik med rigtige billeder (Jorden og Månen, oktober 2026)
 - **NASA's servere var blokeret** i Claude-miljøet. De blev tilladt under miljøets Network access. `visibleearth.nasa.gov` sender nu videre til `science.nasa.gov` (blokeret), men filerne kan hentes direkte fra `eoimages.gsfc.nasa.gov` og `svs.gsfc.nasa.gov`. Adresserne står i `billeder/solsystem/lav_billeder.py`.
 - **Black Marble viser landet svagt blåt** (i måneskin). Lagt oven på natsiden blev hele natten lilla. Den blå baggrund trækkes fra, så kun byernes lys er tilbage.
 - **Højdekort med 8 bit giver trapper**, når bjergene gøres højere. Højden gemmes med 16 bit i rød og grøn. Det tåler udglatning i grafikkortet, fordi højden er en ret linje af de to (r · 65280/65535 + g · 255/65535).
@@ -306,20 +309,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **En "fejl" kan være rigtig fysik:** En rød plet på Månen i et testbillede var Jordens skygge, der lige strejfede den. Regn efter, før det rettes.
 - **Billeder med én eller to kanaler** kan lægges i grafikkortet som `RedFormat` og `RGFormat` (sparer 50-75 %). Billederne frigives ikke, når et fænomen ryddes, for så skulle de lægges op igen, hver gang man skifter mellem Årstiderne og Formørkelser.
 
-### Saturn i rigtig skala og flybyen (oktober 2026)
-- **Store forskelle i skala:** Fra hele Saturn-systemet (Titans bane er 1,2 mio. km) og helt ind til Mimas (198 km) passer ikke med kameraets faste grænser (stjernehimlen begynder 700 enheder ude, og dybden på skærmen bliver for grov). Løsningen er at skalere og flytte hele systemet, så fokus står i midten, og kameraet altid er tæt på (`js/solsystem/rejse.js`). Det ser ud præcis som et kamera, der flyver. Shadere, der regner med radier eller højder (Enceladus' skygge og partikler, Titans dis, ringenes og planetens skygger), skal gange med `getWorldScale()`.
-- **Glat flyvning mellem meget store og meget små ting:** van Wijk og Nuijs "glatte zoom og panorering" (2003). Skriv formlerne om med `asinh` og `sinh(ρs)/cosh(ρs + r0)`, ellers går store tal ud med hinanden.
-- **Solens retning bestemmer, hvad man kan se:** Med Saturns nordpol mod Solen lå Enceladus' sydpol (fontænerne og tigerstriberne) i mørke. Nu hælder aksen væk fra Solen (sydlig sommer, som omkring 2004).
-- **Rammen virker ikke ens på alle skærme:** Ved Titan står Saturn ved siden af Titan på pc, men bag panelerne på tablet og telefon på højkant. Tjek kameraets stop i alle størrelser.
-- **Et navn, der bruges to gange i samme funktion** (`const { styring } = verden` og `const styring = []`), gav "Identifier has already been declared", og hele siden stoppede. Kald kameraets styring noget andet (`orbit`) i fænomener, der også har knapper i `styring`.
-- **Billeder fra USGS:** GeoTIFF-felterne (`ModelTiepoint` og projektionens midte) siger, hvilken længdegrad der står i midten. Øst er altid til højre i billedet, også når etiketten siger "PositiveWest".
-- **Faktatjek:** "Herschel er 130 km" (NASA's oversigtsside) og "Ithaca Chasma går tre fjerdedele rundt om Tethys" passer ikke med de nyeste opmålinger (139 km og ca. 1.200 km). Se fælderne i `docs/fakta-solsystemet.md` afsnit 4b.
-- **Skarpere kort (S1, 24. oktober 2026):** Månernes gråtonekort ligger nu med én kanal (`RedFormat`, som Jordens skyer) og fylder en fjerdedel. Det virker, fordi alle shaderne kun læser `.r`. Pc får 8k for Enceladus, Tethys, Dione og Rhea, hvor originalen har mindst 8.192 pixel rundt. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Wikimedia svarer 429, hvis forespørgslen ikke har en User-Agent.
-- **Enceladus var overstrålet med glød:** Kortet blev ganget med 1,85 og klippet ved 1,05, så de lyse egne blev helt hvide, og gløden lagde en glorie om månen. Nu ganges det med 1,5 uden at blive klippet, og lyset er ca. 10 % svagere (`fontaener.js`). Et lyst kort skal ikke ramme loftet, ellers forsvinder detaljerne. Se det med fuld grafik, for testene tegner uden glød.
-
----
-
-### Mars med rigtige højder (M2, oktober 2026)
+#### Mars med rigtige højder (M2, oktober 2026)
 - **Store GeoTIFF-filer hos USGS** er ukomprimerede og uden små udgaver (oversigter), så `rasterio` kan ikke læse en lille udgave billigt over nettet. Det gik hurtigere at hente hele filerne (0,8 og 2,1 GB på 1-3 minutter) til scratchpad og lave billederne lokalt.
 - **Viking-mosaikkens blå kanal er næsten den samme overalt** (ca. 68-70), så de mørke egne som Syrtis Major blev blålige. På billeder i naturlige farver er de mørk gråbrune. `lav_mars.py` giver dem en gråbrun farve med samme lysstyrke, og det står i `KILDER.md`.
 - **Rigtige højder ses som skygger, ikke som bjerge over kanten:** Set på hele kloden er Olympus Mons kun ca. 2 pixel høj ude ved kanten. Men skyggerne fra bjergenes skrå sider gør Olympus Mons, Tharsis og Valles Marineris tydelige, så de rigtige højder blev standard (jeres svar), og "Bjergene 10 gange højere" er en knap. Kameraet kigger altid på Mars' midte, så man kan ikke se horisonten tæt på. Det kommer i M4.
@@ -327,7 +317,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Værktøjer:** GitHub-udgivelser er blokeret i miljøet (403), så `basisu` (KTX2) kunne ikke hentes. npm-registret og pypi kan bruges.
 - **Billeder i sekundet i testbrowseren** (software-tegning, fuld grafik): pc Saturn 4,6 og Mars 2,6, tablet Saturn 12,6 og Mars 4,4. Med et grovere net på tablet (512 × 256 i stedet for 768 × 384) blev det kun 5,2, så det er ikke nettet, der koster, men pixlerne (Mars fylder meget af skærmen, og hver pixel henter fem gange i kortene). Et rigtigt grafikkort klarer det let, men det skal prøves på tabletten.
 
-### Mars' luft, skyer og modlys (M3, oktober 2026)
+#### Mars' luft, skyer og modlys (M3, oktober 2026)
 - **Modlys med Solen midt bag planeten virker kun langt væk.** Set tæt på ligger kantens tangentpunkt på natsiden (en brøkdel R/afstand mod kameraet), så luften i kanten er i planetens skygge, og ringen forsvandt helt ved 2,9 radier. Det er rigtig fysik. Løsningen: Sæt Solen lige bag kanten (ca. 3° inden for), så lyser kanten på den side som en solopgang set fra rummet. Langt væk lyser ringen hele vejen rundt.
 - **En skal, der skærer gennem bjergene, laver hårde huller:** Skyerne lå først 16 km oppe, og vulkanernes toppe stak op som mørke, skarpe pletter. Læg skallen over de højeste toppe, eller tegn skyerne i overfladens shader.
 - **Skyer med en rund vægt rundt om et sted blev til runde, hvide pletter.** Lad støjen bestemme formen (tærsklen falder tæt ved stedet), og træk støjen ud mod øst og vest (vinden), så kanten bliver laset.
@@ -337,31 +327,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Mål "før" mod den rigtige udgave:** Den lokale `origin/main` var forældet (fra før M2), så den første "før"-måling var slet ikke af Mars og gav et alt for højt tal. Mål mod grenens udgangspunkt (`git merge-base`), eller hent `main` først (`git fetch origin main`).
 - **Tal, der regnes om:** Et tusmørke, der når 12° ind på natsiden, svarer til støv i ca. 76 km højde (R · (1/cos θ − 1)), ikke 50 km. Regn det efter, før det skrives.
 
-### En ny skærm med samme skal som en anden (Solsystemet, M4a, oktober 2026)
-- **Del skallen i stedet for at kopiere den.** Kosmos' skal blev til `lavFænomenSkærm` (js/faenomenskaerm.js). Elementerne får skærmens navn foran (`kosmosListe`, `solsystemListe`) og beholder de samme klasser, så CSS'en kun skulle have `:is(#kosmos, #solsystem)` de steder, hvor der stod `#kosmos`. Alle `querySelectorAll` i skallen er afgrænset til skærmens sektion.
-- **Den nye skærm skal stå efter den gamle i index.html.** Testene bruger fx `page.click('[data-kosmos-fane="nørd"]')` uden at afgrænse, og Playwright tager den første, der passer. Står den skjulte skærm først, venter klikket forgæves.
-- **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
-- **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
-- **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
-
-### Eftersyn af UX i Solsystemet (30. oktober 2026)
-- **Genbrugt skal, genbrugt model:** Solsystemet fik Kosmos' skal (M4a), og med den Kosmos' flade liste, hvor én fil er ét punkt. Kosmos er en række fænomener, men Solsystemet er steder inde i steder. Derfor havnede stederne og månerne som knapper under "Prøv selv". Når en skal genbruges, så spørg, om indholdet har samme form.
-- **Tekst, der flytter med en skal, kan gå i stykker:** Solens fremtid sagde stadig "Prøv Hvid dværg i listen", efter fænomenet var flyttet fra Kosmos til Solsystemet. Henvisninger skal være knapper med `data-gaa`, ikke tekst om, hvor noget står.
-- **U1, træet:** Mars og Saturn havde allerede funktioner til hvert sted (`vælgSted`, `besøgMåne`, `vælg`, `besøg`). Træet skulle kun bruge dem (`gåTil`) og vide, hvor man er (`sted()`, tjekket fire gange i sekundet i skallen). Det gjorde det let, også fordi et sted kan vælges tre steder fra (træet, kloden og flybyen).
-- **Et sted, der kræver en bestemt opstilling** ("Mars set fra Phobos" kræver, at Phobos står som på flybyen): Lad månen glide derhen under flyvningen i stedet for at hoppe. Kameraets mål er en funktion, så kameraet følger med. Kræver det to flyvninger, så tjek med et tæller (`gåNr`), at der ikke er valgt noget andet imens.
-- **`node tests/koer-alle.mjs --help` kører hele samlingen** (den kender ikke `--help`). Læs kommentaren øverst i filen i stedet.
-- **Se på, hvad der står samme sted på skærmen:** Det, der afslørede rodet, var skærmbilleder af flybyen på tablet på højkant ("Næste" langt nede under listen og stoppets tekst uden for skærmen) og ved Saturn, hvor en knap, der ikke kan bruges, og en kontakt, der er slået fra, så ens ud.
-
-### Kameraet ned til et sted på en planet (Mars M4c, oktober 2026)
-- **Kameraets styring (OrbitControls) kan kun have én fast op-retning** (den regnes ud, når styringen laves). I stedet for at ændre `camera.up` drejes hele planetsystemet, så stedets lodrette retning peger op i verden. Så virker drejning, zoom og piletaster af sig selv. Solens retning og stjernehimlen skal drejes med (`drejHimmel`), ellers står stjernerne stille, mens planeten drejer.
-- **van Wijk og Nuijs vej går gennem planeten,** når fokus flytter fra midten ud til et sted på den anden side: Kameraet drejer rundt om fokus, som ligger inde i planeten. Kollisionen skubbede kameraet op, så det strøg hen over jorden i 2 km højde. Ned til et sted flyver kameraet derfor i en bue rundt om planetens midte, og testen måler skubbet under flyvningen (`skubbet`), også fra bagsiden.
-- **Kollision med terrænet:** Nettet kan ligge højere end kortet mellem to punkter, så tabellen gemmer den højeste værdi i hvert felt, og kameraet holdes over den højeste i 3 × 3 felter plus en margen. Tabellen laves i strimler (ca. 10 ms ad gangen), for hele 4k-billedet tog ca. 340 ms i testbrowseren.
-- **Samme billeder før og efter:** Gør `Math.random` ens fra gang til gang (stjernerne og fontænerne), tag billeder to gange før ændringen for at kende støjen, sammenlign kameraets tal (de skal være helt ens) og billederne uden stjernerne (som drejer i rigtig tid).
-- **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
-- **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
-- **Tæt på bestemmer nettet skarpheden, ikke billederne:** Skyggerne regnes i hver pixel fra højdekortet, men omridset følger nettet (ca. 21 km mellem punkterne på hele Mars). Olympus Mons blev derfor blød og flad tæt på, og en stejl skrænt bliver til en blød skråning. Regn afstanden mellem nettets punkter ud mod det, kameraet skal vise, før et stop planlægges. Overdriv ikke højderne for at skjule det, for så bliver det udtværede bare højere.
-
-### Lokale detaljer ved et sted (Mars M7a, oktober 2026)
+#### Lokale detaljer ved et sted (Mars M7a, oktober 2026)
 - **Sammenlign kilderne i spillets opløsning:** HRSC+MOLA (200 m) og MOLA (463 m) så næsten ens ud i 1 km pr. pixel, men i 0,5 km pr. pixel (det spillet bruger) var HRSC+MOLA tydeligt skarpere (MOLA har et ternet mønster mellem målesporene). HRSC+MOLA havde kasseformede fejl på op til 1,2 km på sletterne. De blev fundet ved at sammenligne med MOLA i snit over ca. 7 km: Hvor landet er fladt, må forskellen kun være lille.
 - **Store ukomprimerede GeoTIFF-filer kan læses i vinduer over nettet** (`/vsicurl/` i rasterio): Vinduet om Olympus Mons (18° × 19°) tog ca. 3 minutter fra den 11 GB store HRSC+MOLA-fil. Det er ikke nødvendigt at hente hele filen.
 - **Farver med skygger:** Viking MDIM 2.1 i 232 m har mørke skygger i calderaen og lyse skrænter fra Solen, da billederne blev taget. 925 m-mosaikken (den samme som kloden) blev brugt i stedet, og detaljerne kommer fra højdekortet.
@@ -372,15 +338,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **To sessioner på samme tid:** Mens M7a blev lavet, mergede en anden session fire PR'er til `main` (Ordbogen m.m.). Hent `main` (`git fetch origin main`) og merge den ind i grenen før PR'en, løs konflikterne i DESIGN.md (begge "Senest lavet" bevares, den nyeste øverst), og kør testene igen på resultatet. En force-push af arbejdsgrenen bagefter blev afvist af miljøet. En fast-forward til `main` (`git merge --ff-only origin/main`) virker, når grenen allerede er merget.
 - **Billeder i sekundet** (testbrowseren uden grafikkort, fuld grafik): pc ved Olympus Mons 2,3 → ca. 1,6, tablet 3,7 → ca. 2,5. Hele Mars er uændret (målestøjen er stor, 4,5-7,5). Prisen er det fine net (flere trekanter og lys i de samme pixel). Først kostede `discard` i hele kuglen også meget. Mål "før" med `git worktree` på `main` og en server på en anden port, skiftevis før og efter, for tallene svinger med maskinens belastning.
 
-### Flybyen over Mars, M5a (30. oktober 2026)
-- **Sammenlign kilderne for hvert sted:** Ved Tharsis (0,9 km pr. pixel) var HRSC+MOLA ikke skarpere end MOLA, så der bruges kun MOLA (CC0). Ved Valles Marineris (0,7-0,9 km) havde MOLA et ternet mønster i kløfterne, og HRSC+MOLA var tydeligt skarpere. Det skal ses på billeder for hvert sted.
-- **Kameraets vinkel afgør, om et sted ser imponerende ud:** Tharsis-vulkanerne set fra siden af rækken (sydøst) lå som flade pletter ved horisonten, og Noctis Labyrinthus fyldte forgrunden. Set langs rækken fra sydvest står Arsia Mons forrest med calderaen og de andre bag den, i morgenlys fra siden. Det virker også på tablet på højkant, hvor en bred række ikke kan være i billedet.
-- **Skjoldvulkaner er flade i virkeligheden:** 14-18 km høje og flere hundrede km brede. Teksten siger det og peger på "Bjergene 10 gange højere" i stedet for at snyde med højderne.
-- **Flyvningen mellem to steder gik gennem Mars:** Fokus gled i en lige linje mellem stederne, og kameraet gik kun ca. 650 km op på 3 sekunder ved et hop på 115°. Nu glider fokus langs overfladen, og kameraet stiger, så begge steder kan ses fra toppen (radius / cos(halvdelen af vinklen), højst 2,2 radier). Testen måler, at det går over 2.000 km op mellem Valles Marineris og Hellas.
-- **Højst to net ad gangen:** Hvert lokalt net tegnes, også på bagsiden af Mars. Nu tegnes kun nettet ved stedet og det, man flyver hen til (`aktiv`). Billeder i sekundet var ens ved alle stop (1,4-1,8 i testbrowseren).
-- **Blokerede domæner, der står på listen:** www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu blev afvist af proxyen, selv om de stod under Network access. Ændringen gælder sandsynligvis først i en ny session. Faktatjekket brugte ESA, NASA, USGS og Wikipedia i stedet.
-
-### Detaljekort ved calderaen og skrænten (Mars M7a+, 30. oktober 2026)
+#### Detaljekort ved calderaen og skrænten (Mars M7a+, 30. oktober 2026)
 - **Hvorfor det var grumset:** Det lokale højdekort over Olympus Mons har 0,52 km pr. pixel (2048 pixel over ca. 1.070 km), og kilden har 200 m. Ved calderaen er billedet ca. 135 km bredt, så én højdepixel fyldte ca. 5 skærmpixel, og tæt på mere end 10. Farverne (ca. 1 km) fylder endnu mere, men landet er næsten ensfarvet, så det er lyset fra højderne, der viser formerne.
 - **Detaljekort i stedet for et nyt net:** Et højdekort i 0,22 km over ca. 445 × 445 km (calderaen og skrænten), som det lokale net læser, hvor det findes, og som glider over i det lokale kort på 15 km. Der kom ingen ny geometri og intet nyt hul. Lyset regnes for hver pixel ud fra kortet, så kanterne bliver skarpere, selv om nettet stadig har ca. 2 km mellem punkterne. Nettets punkter læser kortet på et grovere niveau i mipmaps (`detaljeLod`), ellers får de tilfældige toppe fra det skarpe kort.
 - **Billederne viste forskellen:** Calderaens bund fik rynker og kanter, og skrænten flere kløfter. Det målte skarphed (forskel mellem nabopixel) steg 35-85 %. Helt nede ved jorden (ca. 15 km væk) er det stadig blødt, for kilden er ikke skarpere. Det næste skridt er HRSC's egne højdekort (ca. 50 m) i M7b.
@@ -388,7 +346,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Testens kant krydsede skrænten:** Et tjek af overgangen med et skridt på 0,6 km fejlede, fordi vestkanten krydser skrænten, så forskellen var skråningen selv. Med 60 m bestod det. Tjek et spring med et skridt, der er meget mindre end landskabets egne skråninger.
 - **Billeder i sekundet svinger meget i testbrowseren:** To kørsler af den samme udgave gav 1,5 og 1,7-1,9 ved calderaen og skrænten på pc. Med detaljekortet lå tallene i den nederste del (1,35-1,57). Prisen er højst ca. 10 %. Mål flere gange, før en forskel kaldes rigtig.
 
-### Gale, Jezero, Nordpolen og navnene på kloden (Mars M5b, 30. oktober 2026)
+#### Gale, Jezero, Nordpolen og navnene på kloden (Mars M5b, 30. oktober 2026)
 - **USGS' koordinater i MDIM 2.1** står i shapefilen `MARS_nomenclature_center_pts.zip` (fra planetarynames.wr.usgs.gov/GIS_Downloads, læst med en lille DBF-læser i Python). Sidevisningen af et sted kan vise et ældre sæt uden net (Gale og Planum Boreum). Tjek mod et sted, hvor siden skriver "MDIM 2.1" (Aeolis Mons).
 - **En årstid er en vinkel til Solen, ikke en drejning:** Programmets "jævndøgn" har Solen 2,9° over Mars' ækvator. At dreje aksen 25,19° mod Solen gav derfor 30,8° sol ved polen i stedet for 22,5-27,9°. Stil nordpolen præcis 90° − hældningen fra Solen. Testen `mars` fangede det, fordi den regner Solens højde over stedet ud (`solHøjde`), ikke bare drejningen.
 - **Lave landskaber kræver lav sol:** Jezeros rand er kun 0,5-1,4 km over en 45 km bred bund. Kl. 9 (Solen ca. 40° oppe) kunne krateret næsten ikke ses. Kl. 7½ (ca. 22°) ses randen tydeligt. Vælg klokken ud fra, hvor høje tingene er, og se billedet med fuld grafik (testgrafikken er for mørk til at bedømme).
@@ -396,13 +354,50 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Navne på en kugle:** `Sprite.center` (fx `(0.5, -0.3)`) sætter teksten lige over stedet. `depthTest = false`, så bjergene ikke skærer i navnet, og et tjek af stedets retning mod kameraet skjuler det på bagsiden. Samme størrelse på skærmen: skaler med afstanden og del med systemets skala. Et tryk rammer tekstens kasse på skærmen plus 12 px.
 - **Billeder i sekundet måles én browser ad gangen:** Pc og tablet samtidig gav 0,9 i stedet for 1,8 ved Jezero.
 
-### Planen for Phobos og Deimos (Mars M6, 30. oktober 2026)
+#### Planen for Phobos og Deimos (Mars M6, 30. oktober 2026)
 - **Spejlvending afgøres med tal, ikke med øjnene:** Et højdekort eller en formmodel, hvor længden kan være østlig eller vestlig, tjekkes mod noget med kendt retning. Phobos: kraterne i USGS' navneliste skal ligge i fordybninger i højdekortet (Stickney 443 m dybere end ringen omkring, spejlvendt 4 m). Deimos: Thomas' formmodel af Phobos fra samme datasæt passede kun med USGS' højdekort som vestlig (korrelation 0,96 mod 0,85), så Deimos-filen er også vestlig. Tilpasning af silhuetten til et foto var for svag (0,915 mod 0,905), for små måner er runde og bløde.
 - **USGS' navneliste for Phobos og Deimos:** Shapefilens metadata siger "Positive West", men tallene i `center_lon` er østlige (Stickney 311 = 49° V). Tjek det mod kortet, før tallene bruges.
 - **Fotos fra NASA og HiRISE:** assets.science.nasa.gov, uahirise.org og naif.jpl.nasa.gov er blokeret. Små udgaver fra Wikimedia Commons virker med en thumb-adresse i en standardbredde (fx 960px, regnet med md5 af filnavnet), men API'et svarer tit 429.
 - **Send aldrig brugerens e-mail med** i en User-Agent eller anden forespørgsel til fremmede tjenester (sket én gang ved et forsøg mod Wikimedia, 30. oktober 2026). Brug fx "AtomLab-billedvaerktoej/1.0".
 
-### Flybyen ud til Phobos og Deimos (Mars M6b, 30. oktober 2026)
+#### Phobos og Deimos i den rigtige form (Mars M6a, 30. oktober 2026)
+- **Kanterne i et globalt kort kan være kopier:** Phobos' højdekort fra USGS har dobbelte søjler i begge kanter (0 = 1 og 696 = 697), og de passer ikke med naboerne. Det så ud som en rende ved 180°. Find dem ved at måle springet mellem nabosøjler (typisk 10 m, ved kanten 50-180 m). Tjekliste E er udvidet.
+- **En streg på en klode: slå kortet fra, før du leder.** Med kortet slået fra (`uHarKort = 0` i browseren) forsvandt stregen. Den lå altså i mosaikken, ikke i formen, og en ny streg i formen var allerede rettet. Et billede med og uden kort sparer mange forsøg.
+- **Huller i en mosaik:** Fyld dem ikke med en lige linje mellem kanterne (det giver striber). Spejlede stykker fra begge sider, der glider over i hinanden, ligner overfladen.
+- **Planetens skygge:** En måne, der står lige bag planeten set fra Solen, er helt sort og ser ud, som om den mangler. Vælg startpladser uden for skyggen, og tjek billedet.
+- **Synlighed med det samme:** Testen "et tryk på Gale … navnene forsvinder" fejlede under belastning, fordi navnene først blev skjult i næste billede. Nu kaldes `opdaterNavne()` med det samme (tjekliste E).
+
+### Kameraet, rejsen og flybyen
+
+#### Saturn i rigtig skala og flybyen (oktober 2026)
+- **Store forskelle i skala:** Fra hele Saturn-systemet (Titans bane er 1,2 mio. km) og helt ind til Mimas (198 km) passer ikke med kameraets faste grænser (stjernehimlen begynder 700 enheder ude, og dybden på skærmen bliver for grov). Løsningen er at skalere og flytte hele systemet, så fokus står i midten, og kameraet altid er tæt på (`js/solsystem/rejse.js`). Det ser ud præcis som et kamera, der flyver. Shadere, der regner med radier eller højder (Enceladus' skygge og partikler, Titans dis, ringenes og planetens skygger), skal gange med `getWorldScale()`.
+- **Glat flyvning mellem meget store og meget små ting:** van Wijk og Nuijs "glatte zoom og panorering" (2003). Skriv formlerne om med `asinh` og `sinh(ρs)/cosh(ρs + r0)`, ellers går store tal ud med hinanden.
+- **Solens retning bestemmer, hvad man kan se:** Med Saturns nordpol mod Solen lå Enceladus' sydpol (fontænerne og tigerstriberne) i mørke. Nu hælder aksen væk fra Solen (sydlig sommer, som omkring 2004).
+- **Rammen virker ikke ens på alle skærme:** Ved Titan står Saturn ved siden af Titan på pc, men bag panelerne på tablet og telefon på højkant. Tjek kameraets stop i alle størrelser.
+- **Et navn, der bruges to gange i samme funktion** (`const { styring } = verden` og `const styring = []`), gav "Identifier has already been declared", og hele siden stoppede. Kald kameraets styring noget andet (`orbit`) i fænomener, der også har knapper i `styring`.
+- **Billeder fra USGS:** GeoTIFF-felterne (`ModelTiepoint` og projektionens midte) siger, hvilken længdegrad der står i midten. Øst er altid til højre i billedet, også når etiketten siger "PositiveWest".
+- **Faktatjek:** "Herschel er 130 km" (NASA's oversigtsside) og "Ithaca Chasma går tre fjerdedele rundt om Tethys" passer ikke med de nyeste opmålinger (139 km og ca. 1.200 km). Se fælderne i `docs/fakta-solsystemet.md` afsnit 4b.
+- **Skarpere kort (S1, 24. oktober 2026):** Månernes gråtonekort ligger nu med én kanal (`RedFormat`, som Jordens skyer) og fylder en fjerdedel. Det virker, fordi alle shaderne kun læser `.r`. Pc får 8k for Enceladus, Tethys, Dione og Rhea, hvor originalen har mindst 8.192 pixel rundt. Saturn bliver på 4k, for kildens "8k"-fil er kun 4096 × 2048. Wikimedia svarer 429, hvis forespørgslen ikke har en User-Agent.
+- **Enceladus var overstrålet med glød:** Kortet blev ganget med 1,85 og klippet ved 1,05, så de lyse egne blev helt hvide, og gløden lagde en glorie om månen. Nu ganges det med 1,5 uden at blive klippet, og lyset er ca. 10 % svagere (`fontaener.js`). Et lyst kort skal ikke ramme loftet, ellers forsvinder detaljerne. Se det med fuld grafik, for testene tegner uden glød.
+
+#### Kameraet ned til et sted på en planet (Mars M4c, oktober 2026)
+- **Kameraets styring (OrbitControls) kan kun have én fast op-retning** (den regnes ud, når styringen laves). I stedet for at ændre `camera.up` drejes hele planetsystemet, så stedets lodrette retning peger op i verden. Så virker drejning, zoom og piletaster af sig selv. Solens retning og stjernehimlen skal drejes med (`drejHimmel`), ellers står stjernerne stille, mens planeten drejer.
+- **van Wijk og Nuijs vej går gennem planeten,** når fokus flytter fra midten ud til et sted på den anden side: Kameraet drejer rundt om fokus, som ligger inde i planeten. Kollisionen skubbede kameraet op, så det strøg hen over jorden i 2 km højde. Ned til et sted flyver kameraet derfor i en bue rundt om planetens midte, og testen måler skubbet under flyvningen (`skubbet`), også fra bagsiden.
+- **Kollision med terrænet:** Nettet kan ligge højere end kortet mellem to punkter, så tabellen gemmer den højeste værdi i hvert felt, og kameraet holdes over den højeste i 3 × 3 felter plus en margen. Tabellen laves i strimler (ca. 10 ms ad gangen), for hele 4k-billedet tog ca. 340 ms i testbrowseren.
+- **Samme billeder før og efter:** Gør `Math.random` ens fra gang til gang (stjernerne og fontænerne), tag billeder to gange før ændringen for at kende støjen, sammenlign kameraets tal (de skal være helt ens) og billederne uden stjernerne (som drejer i rigtig tid).
+- **To kvaternioner i samme variabel:** `ud.setFromUnitVectors(...).multiply(fra)` med `ud === fra` overskriver `fra`, før der ganges. Brug en hjælpevariabel.
+- **Formiddag eller eftermiddag:** Skyerne fra M3 kommer om eftermiddagen og dækkede næsten hele Olympus Mons. Kl. 8 er der klart vejr, og Solen står lavt, så de lange skygger viser formen.
+- **Tæt på bestemmer nettet skarpheden, ikke billederne:** Skyggerne regnes i hver pixel fra højdekortet, men omridset følger nettet (ca. 21 km mellem punkterne på hele Mars). Olympus Mons blev derfor blød og flad tæt på, og en stejl skrænt bliver til en blød skråning. Regn afstanden mellem nettets punkter ud mod det, kameraet skal vise, før et stop planlægges. Overdriv ikke højderne for at skjule det, for så bliver det udtværede bare højere.
+
+#### Flybyen over Mars, M5a (30. oktober 2026)
+- **Sammenlign kilderne for hvert sted:** Ved Tharsis (0,9 km pr. pixel) var HRSC+MOLA ikke skarpere end MOLA, så der bruges kun MOLA (CC0). Ved Valles Marineris (0,7-0,9 km) havde MOLA et ternet mønster i kløfterne, og HRSC+MOLA var tydeligt skarpere. Det skal ses på billeder for hvert sted.
+- **Kameraets vinkel afgør, om et sted ser imponerende ud:** Tharsis-vulkanerne set fra siden af rækken (sydøst) lå som flade pletter ved horisonten, og Noctis Labyrinthus fyldte forgrunden. Set langs rækken fra sydvest står Arsia Mons forrest med calderaen og de andre bag den, i morgenlys fra siden. Det virker også på tablet på højkant, hvor en bred række ikke kan være i billedet.
+- **Skjoldvulkaner er flade i virkeligheden:** 14-18 km høje og flere hundrede km brede. Teksten siger det og peger på "Bjergene 10 gange højere" i stedet for at snyde med højderne.
+- **Flyvningen mellem to steder gik gennem Mars:** Fokus gled i en lige linje mellem stederne, og kameraet gik kun ca. 650 km op på 3 sekunder ved et hop på 115°. Nu glider fokus langs overfladen, og kameraet stiger, så begge steder kan ses fra toppen (radius / cos(halvdelen af vinklen), højst 2,2 radier). Testen måler, at det går over 2.000 km op mellem Valles Marineris og Hellas.
+- **Højst to net ad gangen:** Hvert lokalt net tegnes, også på bagsiden af Mars. Nu tegnes kun nettet ved stedet og det, man flyver hen til (`aktiv`). Billeder i sekundet var ens ved alle stop (1,4-1,8 i testbrowseren).
+- **Blokerede domæner, der står på listen:** www.dlr.de, www.jsg.utexas.edu og marsed.asu.edu blev afvist af proxyen, selv om de stod under Network access. Ændringen gælder sandsynligvis først i en ny session. Faktatjekket brugte ESA, NASA, USGS og Wikipedia i stedet.
+
+#### Flybyen ud til Phobos og Deimos (Mars M6b, 30. oktober 2026)
 - **Regn ønskerne til et billede igennem, før du bygger det.** "Stickney i solen og Mars i baggrunden" kunne ikke lade sig gøre samtidig: Stickney ligger halvt mod Mars, og når Solen lyser Stickney op, er den side af Mars, man ser bag Phobos, i mørke. Første billede viste ingen Mars. Tjek med vinkler (kameraets retning, Solens retning, Mars' retning og 3D-billedets bredde på ca. 32-35° på pc med panelerne), og skriv kompromiset til brugeren. Tjekliste E er udvidet.
 - **En måne i planetens skygge er usynlig, og det er planeten bag den også** (natsiden). Brugeren troede, at Phobos manglede. Et besøg flytter nu månen ud af skyggen og siger det i teksten.
 - **Kollision skal bruge den rigtige størrelse.** Månerne tegnes større langt væk. Kollisionen brugte den forstørrede størrelse og skubbede kameraet 9 km ud efter et hop fra langt væk.
@@ -411,27 +406,22 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Kør ikke en test med fuld grafik samtidig med en anden test.** Billederne tog over 30 sekunder, og skærmbilledet gav op. En fast ventetid på 300 ms i testen `mars` ("Modlys") fejlede af samme grund og venter nu på tilstanden.
 - **Pas på med `pkill -f`:** Et mønster, der også står i den kommando, man selv kører, dræber ens egen skal (og her den lokale server).
 
-### Phobos og Deimos i den rigtige form (Mars M6a, 30. oktober 2026)
-- **Kanterne i et globalt kort kan være kopier:** Phobos' højdekort fra USGS har dobbelte søjler i begge kanter (0 = 1 og 696 = 697), og de passer ikke med naboerne. Det så ud som en rende ved 180°. Find dem ved at måle springet mellem nabosøjler (typisk 10 m, ved kanten 50-180 m). Tjekliste E er udvidet.
-- **En streg på en klode: slå kortet fra, før du leder.** Med kortet slået fra (`uHarKort = 0` i browseren) forsvandt stregen. Den lå altså i mosaikken, ikke i formen, og en ny streg i formen var allerede rettet. Et billede med og uden kort sparer mange forsøg.
-- **Huller i en mosaik:** Fyld dem ikke med en lige linje mellem kanterne (det giver striber). Spejlede stykker fra begge sider, der glider over i hinanden, ligner overfladen.
-- **Planetens skygge:** En måne, der står lige bag planeten set fra Solen, er helt sort og ser ud, som om den mangler. Vælg startpladser uden for skyggen, og tjek billedet.
-- **Synlighed med det samme:** Testen "et tryk på Gale … navnene forsvinder" fejlede under belastning, fordi navnene først blev skjult i næste billede. Nu kaldes `opdaterNavne()` med det samme (tjekliste E).
-
-### Hent første stop på forhånd (Mars og Saturn, 30. oktober 2026)
+#### Hent første stop på forhånd (Mars og Saturn, 30. oktober 2026)
 - **Hakket ved Saturn:** "Start flyby" hentede alle seks månekort på én gang (ca. 23 MB på pc, fire i 8k). Når de kom, blev de lagt i grafikkortet midt i den første flyvning: Målt i testbrowseren med fuld grafik tog hver overførsel 90-1.600 ms, og ét billede tog 4 sekunder. Målt ved at pakke `texSubImage2D`, `linkProgram` osv. ind med tidtagning (`side.addInitScript`) og trykke på knappen. Det er sådan, man finder årsagen til et hak, i stedet for at gætte.
 - **Det hjalp:** `image.decode()`, før teksturen bruges (billedet afkodes uden for hovedtråden, ca. 3 gange hurtigere overførsel), og `renderer.initTexture(t)` på forhånd, så overførslen sker, mens man kigger på planeten, og ikke under flyvningen. Én ad gangen, så hakkene ikke kommer samtidig. Bagefter var der ingen overførsler efter "Start flyby".
 - **Faldgrube:** De lokale net var aktive fra start og blev kun ikke tegnet, fordi kortene manglede. Da kortene kom på forhånd, blev Olympus' net tegnet over hele Mars (også på bagsiden). Testen fangede det (`klar` før flybyen). Når noget hentes tidligere end før, så tjek, hvad der skjulte det indtil da.
 - **Knappen venter højst 8 sekunder** (`FORHÅND_TID`), også hvis kortene ikke kan hentes (`fejl` i `hent`). Testen `mars` tjekker det med `side.route(…, abort)`.
 - **Callbacks, der kan komme med det samme:** Ligger et billede allerede i `lager`, kaldes `færdig` straks, midt i `lav()`, før variablerne længere nede findes (TDZ-fejl). Derfor `queueMicrotask`.
 
-### Planen for "Stå på Mars" (Mars M8, 30. oktober 2026)
+### Stå på Mars (landskab, lys og data)
+
+#### Planen for "Stå på Mars" (Mars M8, 30. oktober 2026)
 - **Der, hvor roveren står, er ikke altid en udsigt.** Curiosity står nu i en sænkning, så Mount Sharps top er skjult, og Perseverance står uden for Jezero mellem bakker. Toppen af Jezeros rand (sol 1358) skjulte også krateret. Tegn udsigten ud fra højdekortet, før et sted vælges, og regn udsynet ud for alle roverens stop (det bedste ved Jezero var randens inderside, sol 1293-1302).
 - **Rovernes stop med koordinater og dato** står i NASA's kortdata (`mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json` og `M20`). Sol regnes om til dato med 1,0275 døgn pr. sol fra landingen.
 - **Zip-filer over nettet:** GDAL kan læse inde i en zip-fil over nettet (`/vsizip/{/vsicurl/…}`), men er filerne pakket (deflate), skal alt fra filens start pakkes ud. Find hellere den samme fil ukomprimeret (Mars 2020's landingskort lå på `planetarymaps.usgs.gov`, fundet via links på USGS' søgesider).
 - **Et lille værktøj i numpy, der tegner 360°-udsigten** (højeste vinkel langs hver retning, Mars' krumning, dis), er billigt og viser, om et sted er godt, før noget bygges. Pas på med at kopiere hele højdekortet i hvert skridt (`np.nan_to_num` på 30 mio. punkter gjorde det 40 gange langsommere).
 
-### Stå på Mars ved Gale (Mars M8a, 30. oktober 2026)
+#### Stå på Mars ved Gale (Mars M8a, 30. oktober 2026)
 - **Normalen pr. pixel var den store pris:** Fire opslag i højderne (op til to lag hver) for hver pixel gjorde landskabet 6 gange langsommere (0,22 mod 1,29 billeder i sekundet i testbrowseren). Nettet i ringe har punkter tættere end højdekortet tæt på og ca. 7 skærmpixel imellem langt væk, så normalen regnes nu i punkterne. Mål, før du optimerer: billeder i sekundet med og uden.
 - **Et tidligt stop kræver det rigtige loft:** Skyggekortene stopper, når strålen er over det højeste sted. Loftet var Mars' højeste højde (21,5 km), så de stoppede aldrig, og et billede tog minutter. Nu er det det højeste sted i stedets kort (`hMaks`).
 - **Tid, der kører i ring, skal tælle døgnene:** Månerne blev regnet ud fra klokken (0-24), så de hoppede ved midnat, og Deimos (ca. 131 timer om en tur set fra jorden) kom aldrig rundt. Testen fangede det. Brug døgn + klokken.
@@ -441,7 +431,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Ventesløjfer med `pgrep -f`:** `until ! pgrep -f "landskab.mjs"` finder sin egen kommandolinje og venter for evigt. Brug et mønster, der ikke står i kommandoen, eller vent på en fil.
 - **Små sten tegnet af programmet:** Med normalen vendt forkert lignede de huller (som kratere). Tjek retningen på en bule: Normalen skal pege væk fra midten.
 
-### Lyset i Stå på Mars (31. oktober 2026)
+#### Lyset i Stå på Mars (31. oktober 2026)
 - **Mål først, så justér.** Jeres indtryk ("lyst") blev først undersøgt med prøvebilleder ved tre tidspunkter (08:30, 12:00 og 16:30). Himlen og jorden er næsten lige lyse, og disen er kraftig. Det er kontrasten, der mangler, mere end lysstyrken. Se `docs/plan-mars.md` under "Stå på Mars: lyset og kvaliteten".
 - **Kør ikke grafikken uden grafikkort for hurtigt.** Fuld grafik i skyen er ca. 1,3 billede i sekundet, og `landskab-lille.mjs` tager minutter. Start den i baggrunden (`nohup … &`) og vent med en overvågning, ikke med `sleep`. Testserveren skal køre på port 8765 (`ADRESSE` i `tests/hjaelp.mjs`).
 - **Billeder af lys kan tages i skyen** (samme shader, samme farver). Hastighed og følelse kan ikke. Skal det måles, så bed om adgang til pc'en først (se samme afsnit).
@@ -449,7 +439,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Et værktøj, der tager billeder lige efter en landing, skal vente på landingen.** Ellers overskriver landingen blikket i det første billede (`landskab-lille.mjs`, rettet i L1).
 - **Eksponering, der følger lyset, er gratis** (én værdi i JS pr. billede) og fjerner, at middag er meget lysere end morgen. Gløden kan slås fra med `verden.glød.enabled`, men så skal Solens skær laves i himlens shader.
 
-### Stå på Mars ved Jezero (Mars M8b, 31. oktober 2026)
+#### Stå på Mars ved Jezero (Mars M8b, 31. oktober 2026)
 - **Se på, hvordan en GeoTIFF er lagt, før den læses over nettet:** Mars 2020's landingskort ligger i striber på én række (`block_shapes` = (1, bredde)) og uden overblik. Over `/vsicurl` er hver række en forespørgsel: 512 × 512 m af fotoet tog 31 sekunder, og hele lag 0 og 1 ville have taget lang tid. Hele filen hentet i 8 stykker med `curl -r` tog ca. 6 minutter (7,4 GB, ca. 19 MB/s), og så tog alle lagene 8 minutter. `lav_landskab.py` tager nu `orig=mappe`.
 - **Afbryd ikke en del af en hentning inde i et script, der bagefter sætter delene sammen og sletter dem:** Da én langsom `curl` blev slået ihjel, gik scriptet videre til `cat` og `rm`. Delene blev reddet i sidste øjeblik. Hent den manglende del for sig, og sæt sammen i hånden (tjek størrelsen og et par rækker mod kilden).
 - **Kortets projektion kan have `lat_ts`:** JPL's CTX-højdekort over Jezero er en ækvidistant cylinderprojektion med `lat_ts = 18,4663°`, så længden skal ganges med cos(lat_ts). `læs` tjekker nu projektionen i stedet for at gå ud fra lat_ts = 0.
@@ -459,16 +449,33 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **`until ! pgrep -f …` igen:** Ventesløjfen fandt sin egen kommandolinje (står allerede under M8a). Vent på en fil eller en linje i loggen i stedet.
 - **Solen i ryggen eller fra siden:** Ved randen kigger man mod øst. Kl. 7:30 kigger man lige mod Solen (gløder, intet relief). Kl. 16:30 står Solen i ryggen. Se på flere tidspunkter, før starttiden vælges.
 
-### Rovernes fotos i Stå på Mars (M8c del 1, 5. november 2026)
+#### Rovernes fotos i Stå på Mars (M8c del 1, 5. november 2026)
 - **Mål et panoramas vinkler mod noget, man kender, før det bruges.** Billedteksten sagde kun "syd i begge ender". Tre uafhængige mål gav tallene: kanten mellem himmel og land mod 3D-horisonten fra vores egne lag (retning og række for vandret, ca. 0,1° ved Naukluft), roverens egen skygge (kameraets skygge står i −Solens højde, så den viser, om fotoet har lige mange pixel pr. grad lodret), og ved Perseverance kameraernes egne retninger (CAHVOR-modellen i NASA's API over rå billeder), fundet i panoramaet med krydskorrelation af kanterne.
-- **Et panorama kan følge roverens ramme og ikke være vandret.** Perseverances foto hælder ca. 1,2° med roveren. Det ses som en bølge i horisontens række rundt om fotoet. Brug roverens hældning (kvaternionen i API'et) i stedet for at rette det i billedet.
-- **NASA's API over rå billeder ligger på `mars.nasa.gov`.** `mars.jpl.nasa.gov` var blokeret, men samme filer ligger under `mars.nasa.gov/msl-raw-images/…`. Billedernes tid (UTC) og Mars24-formlerne giver den lokale soltid og Solens plads.
-- **Tonemapping ændrer et foto.** Efterbehandlingen (ACES og eksponeringen) gælder alt, også et foto. Send fotoet gennem den omvendte kurve i shaderen, så vises det med sine egne farver uden at skifte tonemapping (det ville oversætte alle shaderne igen).
+- **Et panorama kan følge roverens ramme og ikke være vandret.** Perseverances foto hælder ca. 1,2° med roveren. Brug roverens hældning (kvaternionen i API'et) i stedet for at rette det i billedet. Retningen bekræftes af, at himlen er lysest mod Solen.
+- **NASA's API over rå billeder ligger på `mars.nasa.gov`.** `mars.jpl.nasa.gov` var blokeret, men de samme filer ligger under `mars.nasa.gov/msl-raw-images/…`. Billedernes tid (UTC) og Mars24-formlerne giver den lokale soltid og Solens plads.
+- **Tonemapping ændrer et foto.** Efterbehandlingen (ACES og eksponeringen) gælder alt, også et foto. Send fotoet gennem den omvendte kurve i shaderen (matricerne regnet på forhånd), så vises det med sine egne farver uden at skifte tonemapping (det ville oversætte alle shaderne igen).
 - **En maske af et foto: "sort" er ikke det samme som "uden data".** Dybe skygger (mellem klipperne og under roveren) er også næsten sorte, så det tegnede landskab skinnede igennem som orange pletter (set i prøvebillederne, ikke i testen). Kun sorte områder, der rører fotoets øverste eller nederste kant, er uden data. Og et foto, der går hele vejen rundt, skal regnes rundt om sømmen (`np.pad(…, mode='wrap')`), ellers æder masken sig ind fra venstre og højre kant og giver en lodret stribe. Se på selve masken som billede, før den bruges.
-- **Tjek, at en kilde handler om det rigtige billede.** En side om "natural color" handlede om et andet panorama fra samme sted (PIA23727, sol 4) end det, vi bruger (PIA24264, sol 3). Begge er fra Mastcam-Z og ligner hinanden.
-- **Sol tælles fra 0.** "Sol 3" er tre døgn efter landingen, ikke det tredje døgn (NASA skriver selv begge dele).
+- **Tjek, at en kilde handler om det rigtige billede.** En side om "natural color" handlede om et andet panorama fra samme sted (PIA23727, sol 4) end det, vi bruger (PIA24264, sol 3).
+- **Sol tælles fra 0.** "Sol 3" er tre døgn efter landingen, ikke det tredje døgn.
 
-### Styringen på billedet (U2, 31. oktober 2026)
+### Skærme og UI
+
+#### En ny skærm med samme skal som en anden (Solsystemet, M4a, oktober 2026)
+- **Del skallen i stedet for at kopiere den.** Kosmos' skal blev til `lavFænomenSkærm` (js/faenomenskaerm.js). Elementerne får skærmens navn foran (`kosmosListe`, `solsystemListe`) og beholder de samme klasser, så CSS'en kun skulle have `:is(#kosmos, #solsystem)` de steder, hvor der stod `#kosmos`. Alle `querySelectorAll` i skallen er afgrænset til skærmens sektion.
+- **Den nye skærm skal stå efter den gamle i index.html.** Testene bruger fx `page.click('[data-kosmos-fane="nørd"]')` uden at afgrænse, og Playwright tager den første, der passer. Står den skjulte skærm først, venter klikket forgæves.
+- **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
+- **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
+- **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
+
+#### Eftersyn af UX i Solsystemet (30. oktober 2026)
+- **Genbrugt skal, genbrugt model:** Solsystemet fik Kosmos' skal (M4a), og med den Kosmos' flade liste, hvor én fil er ét punkt. Kosmos er en række fænomener, men Solsystemet er steder inde i steder. Derfor havnede stederne og månerne som knapper under "Prøv selv". Når en skal genbruges, så spørg, om indholdet har samme form.
+- **Tekst, der flytter med en skal, kan gå i stykker:** Solens fremtid sagde stadig "Prøv Hvid dværg i listen", efter fænomenet var flyttet fra Kosmos til Solsystemet. Henvisninger skal være knapper med `data-gaa`, ikke tekst om, hvor noget står.
+- **U1, træet:** Mars og Saturn havde allerede funktioner til hvert sted (`vælgSted`, `besøgMåne`, `vælg`, `besøg`). Træet skulle kun bruge dem (`gåTil`) og vide, hvor man er (`sted()`, tjekket fire gange i sekundet i skallen). Det gjorde det let, også fordi et sted kan vælges tre steder fra (træet, kloden og flybyen).
+- **Et sted, der kræver en bestemt opstilling** ("Mars set fra Phobos" kræver, at Phobos står som på flybyen): Lad månen glide derhen under flyvningen i stedet for at hoppe. Kameraets mål er en funktion, så kameraet følger med. Kræver det to flyvninger, så tjek med et tæller (`gåNr`), at der ikke er valgt noget andet imens.
+- **`node tests/koer-alle.mjs --help` kører hele samlingen** (den kender ikke `--help`). Læs kommentaren øverst i filen i stedet.
+- **Se på, hvad der står samme sted på skærmen:** Det, der afslørede rodet, var skærmbilleder af flybyen på tablet på højkant ("Næste" langt nede under listen og stoppets tekst uden for skærmen) og ved Saturn, hvor en knap, der ikke kan bruges, og en kontakt, der er slået fra, så ens ud.
+
+#### Styringen på billedet (U2, 31. oktober 2026)
 - **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
 - **Trin, der bygger oven på hinanden** (Big Bang, Solens fremtid): Et spring kan ikke bare sætte `trin = nr`. Noget sker kun i `opdater` undervejs (fx tågen i Solens fremtid i trin 5). Spring tilbage = forfra og frem igen, og spol de sprungne trin igennem.
 - **Fælles regel i stedet for at flytte knapper én for én:** Skallen sorterer selv `styring` (handling → bjælken, kontakt og skyder → Styr-boksen). Derfor skulle de 11 fænomener i Kosmos næsten ikke ændres. Kun "↺ Forfra" fik `skjul`, så bjælken ikke fyldes med grå knapper.
@@ -477,18 +484,20 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Et nyt sted for en knap viser fejl i tilstande, ingen havde set:** "▶ Start flyby" stod pludselig i bjælken, mens man stod på Mars (før lå den i "Prøv selv", hvor den blev skiftet ud). Testen `landskab` fangede det.
 - **Tegn ikoner i små knapper** (SVG) i stedet for tegn som ⏸: Nogle skrifttyper viser ⏸ meget lille, mens ▶ bliver en emoji.
 
-### Siden i lag (U3, 31. oktober 2026)
+#### Siden i lag (U3, 31. oktober 2026)
 - **Tekster, der deles op, skal skrives, ikke flyttes:** Hvert sted fik et nyt Kort, fordi stedets gamle tekst var den samme som underteksten. En test tjekker nu på hvert sted og i hvert fænomen, at underteksten ikke står på siden (`fase()` mod `side().tekst`).
 - **Et link i en ordbog eller tekst skal pege på det sted, ordet står:** Da teksterne om Olympus Mons flyttede fra Mars' side til stedets, pegede Ordbogens "skjoldvulkan" og "caldera" stadig på Mars. Testen `ordbog` læste hele mars.js og så det ikke. Derfor kan `data-gaa` nu pege på et sted (`solsystem:mars:olympus`).
 - **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
 - **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
 - **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
 
-### Certifikater: "unable to get local issuer certificate" (30. oktober 2026)
+### Netsider, certifikater og arbejdsgang
+
+#### Certifikater: "unable to get local issuer certificate" (30. oktober 2026)
 - `www.dlr.de`, `www.jsg.utexas.edu` og `marsed.asu.edu` var ikke blokeret af proxyen (tunnelen svarede 200). Containeren manglede rodcertifikatet "emSign Root CA - G1" (utexas og asu), og dlr.de sender ikke sit mellemcertifikat (GEANT TLS RSA 1).
 - **Løsning uden at slå tjekket fra:** Mozillas rodliste fra `certifi` (`pip download certifi`, pypi er åben) og mellemcertifikatet fra `http://crt.harica.gr/HARICA-GEANT-TLS-R1.cer` (kun http: hent det gennem proxyens tunnel med `curl -p --proxy "$HTTPS_PROXY"`, og tjek det med `openssl verify` mod containerens rødder). Læg dem sammen med `/etc/ssl/certs/ca-certificates.crt` i én fil, og brug `curl --cacert`. Brugeren åbnede `crt.harica.gr`.
 
-### Fire små opgaver i træk (29. oktober 2026)
+#### Fire små opgaver i træk (29. oktober 2026)
 - **Et link skal pege på et sted, hvor ordet står.** Ordbogens links blev tjekket i kildeteksterne med et lille script, før de kom med. Fire "Hvorfor?"-kort, der virkede passende ("radioaktiv" → "Hvorfor er nogle kerner ustabile?"), nævnte slet ikke ordet og blev fjernet. Tjekket er nu en del af testen `ordbog`.
 - **Dansk sortering med `Intl.Collator('da')`** sætter æ, ø og å efter z, også inde i ordet ("Stjerne" før "stærke"). Min egen forventning i testen var forkert, ikke sorteringen.
 - **Moduler med Three.js kan ikke testes i Node** (igen): Ordbogens liste, søgning og links ligger derfor i `js/data/ordbogliste.js`.
@@ -501,7 +510,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 Testene ligger i [tests/](../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
 
 ## Åbne punkter
-- **Fra gennemgangen** i oktober 2026 mangler stadig: forslagene i afsnit B (fremgang i menuen, links mellem delene, guide i Batteriet, app på hjemmeskærmen, "Test dig selv"), tilgængelighed (D8), fælles kode (D9), mindre download (D11) og ubrugt kode (D12). Se [gennemgang-2026-10.md](gennemgang-2026-10.md).
+- **Fra gennemgangen** i oktober 2026 mangler stadig: forslagene i afsnit B (links mellem delene, app på hjemmeskærmen og "Test dig selv". Fremgangen i menuen og guiden i Batteriet er lavet), tilgængelighed (D8), fælles kode (D9), mindre download (D11) og ubrugt kode (D12). Se [gennemgang-2026-10.md](gennemgang-2026-10.md).
 - Ikke testet med rigtig mus og rigtige fingre: hvordan det føles at sigte i Stjerneovnen, og hvor glat rejsen ind i Solen kører. Det skal prøves af jer. Det samme gælder ordforklaringerne og de fire nye Kosmos-fænomener.
 - **Uopklaret:** Hvorfor "Vis en kædereaktion" døde ud netop i guide-testen (2 gange i ca. 14), men aldrig i 400 forsøg uden for den. Med tre sikre generationer er det ikke set siden. Dukker det op igen, så log reaktorens tilstand lige før "Vis mig".
 - **To tests ad gangen** er kun målt stabilt i to hele kørsler. Hold øje med "OBS"-linjerne fra `koer-alle.mjs`.
