@@ -750,7 +750,7 @@ export default {
         // Ude i rummet ses månen mindst 0,26° (0,0045 rad) i radius, så den kan ses og trykkes på. Ved et sted på Mars
         // tegnes den i sin rigtige størrelse (Phobos ca. 0,2° bred, Deimos som en klar stjerne), dog mindst PRIK pixel
         // i radius, så Deimos ikke forsvinder. Overgangen følger kameraets afstand, så månen ikke hopper i størrelse.
-        const nær = påSted ? 1 - THREE.MathUtils.smoothstep(rejse.afstand / R, 2.2, 4.5) : 0;
+        const nær = påSted ? 1 - THREE.MathUtils.smoothstep(kamera.position.distanceTo(system.position) / (R * k), 2.2, 4.5) : 0;
         const pixel = (2 * Math.tan(THREE.MathUtils.degToRad(kamera.fov) / 2)) / Math.max(1, verden.renderer.domElement.clientHeight) / kamera.zoom;
         const større = Math.max(1, (afstand * THREE.MathUtils.lerp(0.0045, PRIK * pixel, nær)) / rVerden);
         m.krop.scale.setScalar(større);
