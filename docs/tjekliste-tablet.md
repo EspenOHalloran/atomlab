@@ -23,6 +23,6 @@
 ## C. Hurtigt rundt i resten
 13. **Jorden:** Passer dag og nat med det, I ser udenfor? Er uret nederst i vejen på højkant?
 14. **Værkstedet og Det periodiske system:** Er det tydeligt, at "Elektronsky" med ✓ viser skyen (og uden ✓ ringene)? Ser atomet (orbitalernes former) godt ud på skærmen?
-15. **Generelt:** Ser I noget i billedet, der ligner en fejl? Fx prikkerne på himlen ved Olympus Mons (jeres skærmbillede 5. november, er med i småtingspakken).
+15. **Generelt:** Ser I noget i billedet, der ligner en fejl? Fx ting på himlen, der ikke ligner noget ægte (prikkerne ved Olympus Mons er rettet i småtingspakken: rumstøvet er væk i Solsystemet, og månerne har deres rigtige størrelse set fra et sted).
 
 *Resten af de ca. 30 punkter (fx Ordbogen, kategorien som link og den lille Jord ved Solen) står stadig i DESIGN.md. Tag dem, hvis I har tid, men de er ikke nødvendige, før Jupiter bygges.*

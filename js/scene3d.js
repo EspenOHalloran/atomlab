@@ -179,12 +179,13 @@ export function drejHimmel(q) {
 }
 export const himmelDrejning = () => himmelDrejet.quaternion.toArray(); // kun til tests
 
-// Rumstøv: svage prikker, der driver langsomt forbi tæt på atomet og giver dybde. Skjules, når man står på en planet
-// (Stå på Mars), hvor de ville ligne prikker på himlen.
+// Rumstøv: svage prikker, der driver langsomt forbi tæt på atomet og giver dybde. Skjules i fænomenerne fra vores
+// eget solsystem (tåger: false, hele Solsystemet-skærmen), hvor de lignede prikker på himlen.
 let støv = null;
 export function visRumstøv(til) {
   if (støv) støv.visible = til;
 }
+export const rumstøvVist = () => støv?.visible ?? false; // kun til tests
 function lavRumstøv(scene) {
   const antal = LAV_KVALITET ? 160 : 360;
   const pos = new Float32Array(antal * 3);

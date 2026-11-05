@@ -54,11 +54,14 @@ const side = async (adresse) => {
   await s.click('#solsystem .sol-klode[data-id="jorden"]');
   await s.click('#solsystemTræ button[data-id="aarstider"]');
   const iÅrstiderne = await s.evaluate(() => atomlabTest.solsystem.tåger());
+  const støvÅrstider = await s.evaluate(() => atomlabTest.solsystem.rumstøv());
   await s.evaluate(() => { location.hash = '#kosmos'; });
   await s.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'));
   await s.click('#kosmos .kosmos-valg[data-id="bigbang"]');
   const iBigBang = await s.evaluate(() => atomlabTest.kosmos.tåger());
   tjek('tågeskyerne: væk i Årstiderne, med i Big Bang', !iÅrstiderne && iBigBang, JSON.stringify([iÅrstiderne, iBigBang]));
+  const støvBigBang = await s.evaluate(() => atomlabTest.kosmos.rumstøv());
+  tjek('rumstøvet: væk i Årstiderne, med i Big Bang', !støvÅrstider && støvBigBang, JSON.stringify([støvÅrstider, støvBigBang]));
   await s.context().close();
 }
 

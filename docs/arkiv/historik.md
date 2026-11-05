@@ -2,6 +2,16 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 5. november 2026 (M8c del 1, før småtingspakken)
+**Senest lavet (5. november 2026): M8c del 1, roverens foto.** Mars er hermed færdig (resten er "Mars ekstra"). Detaljerne står i [docs/plan-mars.md](docs/plan-mars.md) under "M8c del 1: rovernes panoramaer, målingerne" og "Status efter M8c del 1". Jeres svar ved go: "Ja, tag 1 og 2 med".
+- **Kontakten "📷 Roverens foto"** står i Styr-boksen ved Naukluft og ved landingsstedet ved Jezero. Roverens eget 360°-foto fra samme sted toner ind over landskabet, og man drejer og zoomer som før. Fotoet er drejet, så Mount Sharp og kraterets rand står samme sted som i det tegnede, og klokken stilles til den tid, fotoet blev taget.
+- **Afvigelse fra planen:** Planen sagde en knap i bjælken, der skifter frem og tilbage. Efter U4 er en til/fra-knap en kontakt i Styr-boksen, så det blev en kontakt, og teksten på stedets side har en knap til den. Navnet er "Roverens foto" (ental), for der er én rover ved hvert sted.
+- **Vinklerne er målt** mod 3D-horisonten fra vores egne højdekort, mod Curiositys egen skygge og ved Perseverance mod kameraernes egne retninger fra NASA's data. Perseverances foto hælder ca. 1° med roveren, og det er der taget højde for.
+- **Fotos:** Curiositys Mastcam-foto fra 4. april 2016 (PIA20332, farverne justeret til dagslys på Jorden, siger NASA) og Perseverances Mastcam-Z-foto fra 21. februar 2021 (PIA24264, NASA skriver ikke, hvordan farverne er justeret). 8k på pc (ca. 3,5 MB hver) og 4k på tablet (ca. 1 MB), hentet først, når kontakten slås til. Tekster faktatjekket ("Faktatjek M8c del 1" i `docs/fakta-solsystemet.md`).
+- **Også lavet:** Hjælpen og "Om AtomLab" nævner nu Jezero og rovernes fotos, og testkøreren giver hver test 15 minutter (før 10).
+- **Tests:** alle 29 bestod (21,8 minutter). `stjerneovn-mus` fejlede én gang sammen med en anden test og bestod alene (se "Åbne punkter").
+- **Bagefter (egen lille PR):** Nitrogens "Vidste du?" er skrevet om uden ordet "bundet" (se "Idéer til senere"). Ikke afprøvet: Er den let at forstå for jeres søn?
+
 ## "Senest lavet" 5. november 2026 (før M8c del 1)
 **Senest lavet (5. november 2026): oprydning i dokumenterne og planen efter Mars.**
 - **Dokumenterne er gjort kortere,** fordi hver session læser dem (jeres go til alle fire punkter). CLAUDE.md har kun reglerne og en kort oversigt, og detaljerne om hver fil står i [docs/kode.md](../kode.md). Den gamle "Lige nu" står ordret i [docs/arkiv/historik.md](../arkiv/historik.md), og listerne "Ikke afprøvet" er samlet herunder. Det færdige i plan-mars.md og de færdige trin står i `docs/arkiv/`. erfaringer.md er sorteret efter emne. Intet er slettet.

@@ -210,6 +210,11 @@ let v = await ved();
 tjek('første stop: klokken er 7 ved Olympus Mons, og tiden står stille (⏸)', Math.abs(v.tid - 7) < 0.05 && (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause', JSON.stringify(v));
 tjek('første stop: systemet er ikke drejet', vinkelMellem(await fm(() => atomlabTest.solsystem.fænomen().drejningSystem()), [0, 0, 0, 1]) < 0.01);
 tjek('på flybyen står der ingen navne på kloden', (await fm(() => atomlabTest.solsystem.fænomen().navne())).length === 0);
+// Småtingspakken (5. november 2026): ingen blålige prikker fra rumstøvet i Solsystemet, og ved et sted tegnes månerne i
+// deres rigtige størrelse (Phobos ca. 0,1° i radius, Deimos som en stjerne), ikke 0,26° som ude i rummet
+tjek('Solsystemet: rumstøvet er skjult', (await fm(() => atomlabTest.solsystem.rumstøv())) === false);
+const synsradius = await fm(() => atomlabTest.solsystem.fænomen().måner().map((m) => [m.id, m.synsradius]));
+tjek('ved Olympus Mons: Phobos og Deimos er mindre end 0,15° i radius på himlen', synsradius.every(([, r]) => r < 0.15), JSON.stringify(synsradius));
 await s.waitForFunction(() => { const l = atomlabTest.solsystem.fænomen().billeder().lokalt.olympus; return l.hentet.højde && l.hentet.kort && l.tabel && l.klar; }, null, { timeout: 30000, polling: 200 });
 const lok = await lokalt();
 tjek('flybyen henter det lokale kort over Olympus Mons (1k i tests) og laver højdetabellen', lok.højde === '1k' && lok.tabel && lok.net[0] === 128, JSON.stringify(lok));
