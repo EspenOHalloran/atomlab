@@ -55,8 +55,29 @@ tjek('near er 0,3 m', Math.abs(t.nær - 0.0003) < 1e-9);
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('skyggekortene er regnet', (await stå()).skygger === 1);
 const kn = await knapper();
-tjek('knapperne: op i kredsløb og solnedgang i bjælken og klokken i Styr-boksen (Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['↑ Op i kredsløb', '🌅 Solnedgang', 'Klokken på Mars']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
+tjek('knapperne: op i kredsløb og solnedgang i bjælken, klokken og roverens foto i Styr-boksen (Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['↑ Op i kredsløb', '🌅 Solnedgang', 'Klokken på Mars', '📷 Roverens foto']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
 tjek('efter landingen står tiden stille (⏸, som ved et sted)', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
+// M8c del 1: roverens foto (PIA20332) ved Naukluft
+const foto = async () => (await stå()).foto;
+const hentede = [];
+s.on('request', (r) => { if (/pano-/.test(r.url())) hentede.push(r.url().split('/').pop()); });
+tjek('roverens foto er ikke hentet, før man slår det til', hentede.length === 0 && (await foto()).vist === null);
+await fm(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig > 0, null, { timeout: 30000, polling: 100 }).catch(() => {});
+let fo = await foto();
+tjek('roverens foto: hentet i den lille udgave (tests), vist og toner ind', fo.vist === 'naukluft' && fo.til && fo.synlig > 0 && fo.foto === 'pano-naukluft-lille.jpg' && hentede.includes('pano-naukluft-maske.png'), JSON.stringify({ fo, hentede }));
+tjek('roverens foto: kontakten er tændt, og klokken er stillet til eftermiddagen, da fotoet blev taget (15:42)', (await fm(() => atomlabTest.solsystem.styr().find((x) => x.navn === '📷 Roverens foto')?.til)) === true && Math.abs((await stå()).tid - 15.7) < 0.01);
+tjek('roverens foto: emnet om fotoet er foldet ud, og teksten nævner Mastcam og hvidbalancen', (await fm(() => atomlabTest.solsystem.side().emner.find((e) => e.kontakt)?.åben)) === true && /Mastcam/.test(await s.textContent('#solsystemTekst')) && /dagslys på Jorden/.test(await s.textContent('#solsystemTekst')));
+// Retningen: Curiositys skygge står i fotoet 81,4 % fra venstre kant (målt). Den skal pege væk fra Solen (293,3°, Mars24)
+const skygge = await fm(() => atomlabTest.solsystem.fænomen().fotoRetning('naukluft', 0.8143, 0.5));
+tjek('roverens foto: skyggen peger væk fra Solen (113,3° ± 1°, skyggen er aflæst med ca. ±1°)', Math.abs(skygge.kompas - 113.3) < 1, JSON.stringify(skygge));
+const nul = await fm(() => atomlabTest.solsystem.fænomen().fotoRetning('naukluft', 0, 1157 / 6702));
+tjek('roverens foto: venstre kant mod 180,75° og række 1.157 vandret', Math.abs(nul.kompas - 180.75) < 0.01 && Math.abs(nul.vinkel) < 0.01, JSON.stringify(nul));
+await fm(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.vist === null, null, { timeout: 10000, polling: 100 }).catch(() => {});
+tjek('roverens foto: slået fra, toner ud og er væk', (await foto()).vist === null && !(await foto()).til);
+await fm(() => atomlabTest.solsystem.trykPå('📷 Roverens foto')); // til igen: skal skjules, når man går til et andet sted
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.vist === 'naukluft', null, { timeout: 10000, polling: 100 }).catch(() => {});
 tjek('i træet: "🧍 Naukluft" er markeret, og panelet og vejen viser stedet', (await træ()).find((p) => p.id === 'stå-naukluft')?.valgt && (await s.textContent('#solsystemNavn')) === 'Naukluft i Gale-krateret' && (await s.textContent('#solsystemVej')) === '› Mars › Naukluft i Gale-krateret');
 tjek('teksten om Naukluft og Mount Sharp', /Naukluft/.test(await s.textContent('#solsystemTekst')) && /Mount Sharp/.test(await s.textContent('#solsystemTekst')));
 
@@ -114,6 +135,7 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, n
 t = await stå();
 tjek('hos Curiosity (valgt i træet): højden passer med NASA (−3.488 m ved sol 5045), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3488) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
 tjek('teksten om Curiosity (har kørt ca. 38 km)', /38 km/.test(await s.textContent('#solsystemTekst')));
+tjek('hos Curiosity: intet foto (Naukluft-fotoet er skjult, og kontakten findes ikke)', (await stå()).foto.vist === null && !(await knapper()).includes('📷 Roverens foto'), JSON.stringify(await stå()));
 
 // Tilbage i kredsløb: et tryk på Gale i træet
 await trykTræ('gale');
@@ -159,6 +181,12 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, n
 t = await stå();
 tjek('ved landingsstedet: højden passer med NASA (−2.570 m), kigger mod vest', t.sted === 'landing' && Math.abs(t.højde + 2570) < 10 && Math.abs(t.kompas - 270) < 1, JSON.stringify(t));
 tjek('ved landingsstedet: teksten om Octavia E. Butler Landing', /Octavia E\. Butler/.test(await s.textContent('#solsystemTekst')));
+// M8c del 1: Perseverances foto (PIA24264). Fotoet følger roverens ramme: Venstre kant vender mod ca. 131,4° (målt)
+await fm(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.vist === 'landing', null, { timeout: 30000, polling: 100 }).catch(() => {});
+tjek('ved landingsstedet: Perseverances foto vises', (await stå()).foto.vist === 'landing' && Math.abs((await stå()).tid - 14.75) < 0.01, JSON.stringify(await stå()));
+const kantJ = await fm(() => atomlabTest.solsystem.fænomen().fotoRetning('landing', 0, 239.9 / 2451));
+tjek('ved landingsstedet: fotoets venstre kant mod ca. 131,4° og vandret inden for roverens hældning (ca. 1,2°)', Math.abs(kantJ.kompas - 131.4) < 0.6 && Math.abs(kantJ.vinkel) < 1.3, JSON.stringify(kantJ));
 // Fra Jezero til Gale: letter først
 await trykTræ('gale');
 await fm(() => atomlabTest.solsystem.fænomen().hop());

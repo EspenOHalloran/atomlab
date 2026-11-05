@@ -26,6 +26,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 - [ ] Hvert tal er regnet efter eller slået op. Udregningen står i en kommentar eller i commit-beskeden.
 - [ ] Kilden er primær eller pålidelig (fagbøger, NIST, IUPAC, NUBASE, NASA, forskningsartikler). Populærvidenskab og "alle siger det" er ikke nok. Se fælderne i afsnit 2.
 - [ ] Litteraturhenvisninger (tidsskrift, bind, sider) er slået op i kilden, ikke skrevet efter hukommelsen (S2).
+- [ ] Kilden handler om præcis det samme (samme billede, samme dag, samme instrument). Et søgeresultat om et andet panorama fra samme sted gav en forkert påstand om farverne (M8c del 1).
 - [ ] Citater: præcis ordlyd fra den oprindelige kilde (bog, afsnit, år). Er ordlyden usikker, så skriv det, eller lad citatet være.
 - [ ] Er det spillets eget tal (fx 80 mio. °C eller 6-16 spaltninger), så skriv "i spillet" og det rigtige tal ved siden af.
 - [ ] Brug "ca.", "typisk" eller "de fleste", når virkeligheden har undtagelser.
@@ -457,6 +458,15 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **`--ændret` efter push finder intet:** Testkøreren sammenligner med grenens upstream. Er grenen pushet, så giv den filerne: `node tests/koer-alle.mjs --ændret $(git diff --name-only origin/main...HEAD)`.
 - **`until ! pgrep -f …` igen:** Ventesløjfen fandt sin egen kommandolinje (står allerede under M8a). Vent på en fil eller en linje i loggen i stedet.
 - **Solen i ryggen eller fra siden:** Ved randen kigger man mod øst. Kl. 7:30 kigger man lige mod Solen (gløder, intet relief). Kl. 16:30 står Solen i ryggen. Se på flere tidspunkter, før starttiden vælges.
+
+### Rovernes fotos i Stå på Mars (M8c del 1, 5. november 2026)
+- **Mål et panoramas vinkler mod noget, man kender, før det bruges.** Billedteksten sagde kun "syd i begge ender". Tre uafhængige mål gav tallene: kanten mellem himmel og land mod 3D-horisonten fra vores egne lag (retning og række for vandret, ca. 0,1° ved Naukluft), roverens egen skygge (kameraets skygge står i −Solens højde, så den viser, om fotoet har lige mange pixel pr. grad lodret), og ved Perseverance kameraernes egne retninger (CAHVOR-modellen i NASA's API over rå billeder), fundet i panoramaet med krydskorrelation af kanterne.
+- **Et panorama kan følge roverens ramme og ikke være vandret.** Perseverances foto hælder ca. 1,2° med roveren. Det ses som en bølge i horisontens række rundt om fotoet. Brug roverens hældning (kvaternionen i API'et) i stedet for at rette det i billedet.
+- **NASA's API over rå billeder ligger på `mars.nasa.gov`.** `mars.jpl.nasa.gov` var blokeret, men samme filer ligger under `mars.nasa.gov/msl-raw-images/…`. Billedernes tid (UTC) og Mars24-formlerne giver den lokale soltid og Solens plads.
+- **Tonemapping ændrer et foto.** Efterbehandlingen (ACES og eksponeringen) gælder alt, også et foto. Send fotoet gennem den omvendte kurve i shaderen, så vises det med sine egne farver uden at skifte tonemapping (det ville oversætte alle shaderne igen).
+- **En maske pr. søjle er ikke nok:** Panoramaer har sorte huller inde i billedet (mellem billederne ved roverens dæk). En lille, blød maske i 2D klarer både kanterne og hullerne, og det sorte fyldes med den nærmeste pixel med data, så der ikke kommer en mørk rand, når fotoet toner ud.
+- **Tjek, at en kilde handler om det rigtige billede.** En side om "natural color" handlede om et andet panorama fra samme sted (PIA23727, sol 4) end det, vi bruger (PIA24264, sol 3). Begge er fra Mastcam-Z og ligner hinanden.
+- **Sol tælles fra 0.** "Sol 3" er tre døgn efter landingen, ikke det tredje døgn (NASA skriver selv begge dele).
 
 ### Styringen på billedet (U2, 31. oktober 2026)
 - **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.

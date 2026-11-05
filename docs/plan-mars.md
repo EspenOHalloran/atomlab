@@ -509,6 +509,20 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 >
 > **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til M8c del 2 (Curiosity som 3D-model, spørg først om `gltf-transform`, åbent spørgsmål 1) under "Prompter til de næste skridt" her i filen. Model: Opus. Effort: høj (I sætter den selv).
 
+## M8c del 1: rovernes panoramaer, målingerne (5. november 2026)
+Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "Vidste du?").
+
+**Fotoene (hentet fra `assets.science.nasa.gov`):**
+- **PIA20332 (Naukluft):** 29.163 × 6.702 pixel (JPEG 105 MB). Curiosity, Mastcam (venstre kamera), sol 1302, "mid-afternoon", hvidbalanceret ("approximates white balancing"). Billederne er taget 5. april 2016 kl. 00:25-01:03 UTC (4. april i USA), lokal soltid (LMST) ca. 15:07-15:44 (NASA's API over rå billeder, `mars.nasa.gov/api/v1/raw_image_items`, og Mars24-formlerne). Kredit: NASA/JPL-Caltech/MSSS.
+- **PIA24264 (landingsstedet):** 9.238 × 2.451 pixel (TIFF 47 MB, det store er 36.952 × 11.570). Perseverance, Mastcam-Z, sol 3 (21. februar 2021), 142 billeder, LMST ca. 15:17-16:40. Kredit på siden: NASA/JPL-Caltech/MSSS/ASU. Siden siger intet om hvidbalance (se faktatjekket).
+- **PIA24422 (Navcam):** ikke brugt, for PIA24264 dækker 360°.
+
+**Vinklerne (målt):**
+- **Begge har lige mange pixel pr. grad vandret og lodret** (en ligevinklet cylinder, 81,01 og 25,66 pixel pr. grad). Ved Naukluft passer Curiositys egen skygge (kameraets skygge står i −Solens højde, 26,7° ifølge Mars24) med lige vinkler og ikke med en perspektivisk cylinder (30 mod 140 pixel forskel). Ved Jezero passer Mastcam-Z-billedernes egne retninger (CAHVOR-modellen i NASA's API) ned til ca. −47° inden for ca. 1°.
+- **Naukluft:** Venstre kant vender mod 180,75° (syd), retningen vokser med uret, og vandret ligger i række 1.157 (+14,3° til −68,4°). Kanten mellem himmel og land passer med 3D-horisonten fra højdekortet inden for ca. 0,1° (Mount Sharp og kraterets rand mod øst og nord). Mod vest er randen skjult i dis i fotoet. Skyggen står ved 113,9° (med venstre kant ved 180,75°), og Solen stod ved 293,3°, så skyggen burde pege mod 113,3° (forskel 0,6°, skyggens plads er aflæst med ca. ±1°). Fotoet er vandret (ingen målbar hældning).
+- **Landingsstedet:** Fotoet følger roverens ramme. Venstre kant er 0,52° i roverens retninger, vandret i roverens ramme ligger i række 239,9 (ca. +9,3° til −86°), og roveren hælder ca. 1,2° (kvaternionen (0,415617; −0,00408664; −0,00947025; 0,909481) fra roverens ramme til nord-øst-ned). Venstre kant vender derfor mod ca. 131,4° (sydøst). Himlen er lysest ved 255-260°, og Solen stod ved 254°. Randen passer med 3D-horisonten.
+- Værktøjerne til målingen (Mars24, horisonten fra lagene, krydskorrelation) lå i sessionens kladdemappe og er ikke med i repoet. Tallene står i `PANORAMA` i `js/kosmos/mars.js`.
+
 ## Status efter M8b (31. oktober 2026): Stå på Mars ved Jezero
 - **Lavet:** To steder ved Jezero (`LANDSKAB.jezero` i `js/kosmos/mars.js`): "Ved randen" (Perseverances stop på sol 1301, 17. oktober 2024, 18,4695° N, 77,2930° Ø, −2.056 m, kigger mod øst-sydøst (95°) ud over deltaet og krateret, lander kl. 16:30 med Solen i ryggen) og "Landingsstedet" (Octavia E. Butler Landing, 18,4446° N, 77,4509° Ø, −2.570 m, kigger mod vest mod deltaets front, lander kl. 7:30). Knappen "🧍 Stå på Mars" ved Jezero-stoppet går til randen. Stederne står i træet under Jezero. Siderne `stå-randen` og `stå-landing` i `js/data/sider/mars.js` med 3 tal hver.
 - **Data:** Mars 2020's landingskort (HiRISE 1 m og 25 cm, USGS) tæt på og i mellemlaget, hvor det dækker (ca. 7 %), ellers CTX-højdekortet over hele krateret (20 m) og helt ude HRSC+MOLA. Kortene ligger i striber på én række, så de blev hentet hele først (9,2 GB, `orig=` i `lav_landskab.py`). Lagene fylder 84 MB (testudgaver 3,7 MB). Mellemlagets højdekort er 18,8 MB (Gale 10,7 MB). Det kunne gøres ca. 40 % mindre med en grovere højde, men på den flade kraterbund kunne det give striber i lyset, så det er ikke gjort.

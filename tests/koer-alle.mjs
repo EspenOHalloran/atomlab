@@ -117,7 +117,9 @@ function kørTest(navn) {
     let ud = '';
     p.stdout.on('data', (d) => { ud += d; });
     p.stderr.on('data', (d) => { ud += d; });
-    const stop = setTimeout(() => p.kill(), 10 * 60 * 1000);
+    // Højst 15 minutter pr. test. mars tog 591 af 600 s, da grænsen var 10 minutter (M8b, oktober 2026), og fejlede, når
+    // tunge beregninger kørte ved siden af
+    const stop = setTimeout(() => p.kill(), 15 * 60 * 1000);
     p.on('close', (kode) => {
       clearTimeout(stop);
       færdig({ navn, ok: kode === 0, linjer: ud.split('\n'), sek: Math.round((Date.now() - t0) / 1000) });

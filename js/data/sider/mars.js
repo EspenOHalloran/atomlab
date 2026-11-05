@@ -361,6 +361,10 @@ export const SIDER = {
 // Stå på Mars (M8a): det samme om billederne og lyset ved begge steder
 const LANDSKAB_BILLEDER = '<p>Landskabet er bygget af målinger fra kredsløb. Højdekortet er sat sammen af forskere ved NASA\'s JPL og udgivet af USGS. Tæt på Curiositys vej er højderne regnet ud fra billeder af det samme sted fra to vinkler, taget af kameraet HiRISE på rumsonden Mars Reconnaissance Orbiter. Længere væk er de regnet ud fra kameraerne CTX og HRSC. Der er 1 m mellem højderne. Tæt på dig ligger HiRISE\' billeder (25 cm pr. pixel), længere væk billeder fra CTX (ca. 6 m pr. pixel) og helt ude kortet fra Mars Express. Kortet over hele krateret er sat sammen af striber, og hvor to striber mødes, kan der i det fjerne ses svage, lige streger. Landskabet ligger i fire lag, der glider over i hinanden, og Mars\' krumning er regnet med.</p>';
 const LANDSKAB_ÆRLIGT = '<p>Billederne fra kredsløb er grå, og farverne er sat på af programmet ud fra lysstyrken og Viking-kortet. Sten og sand, der er mindre end nogle få meter, er ikke med i højderne, og de små ujævnheder helt tæt på dine fødder er tegnet af programmet. I billederne fra kredsløb skinnede Solen fra en anden retning. Programmet har fjernet det meste af den skygge, men lidt er tilbage i de små ting. Himlens farve, disen og tusmørket er en enkel model. Dine øjne er 1,7 m over jorden (rovernes kameraer sidder ca. 2 m oppe). Phobos og Deimos bevæger sig rigtigt hen over himlen og har den rigtige størrelse, men deres plads er ikke slået op for i dag. Roveren er ikke med.</p>';
+// Roverens foto (M8c del 1, js/solsystem/panorama.js). Tidspunkterne og vinklerne er målt (docs/plan-mars.md, "M8c del 1:
+// rovernes panoramaer, målingerne") og faktatjekket (docs/fakta-solsystemet.md, "Faktatjek M8c del 1")
+const FOTO = '📷 Roverens foto';
+const FOTO_ÆRLIGT = '<p>Roverens foto er taget fra roverens mast ca. 2 m oppe, på én bestemt eftermiddag. Når du slår det til, stilles klokken til den tid, det blev taget, men når tiden går, flytter skyggerne i fotoet sig ikke. Fotoet er drejet, så horisonten passer med det tegnede landskab (inden for under 1°). Ting tæt på passer ikke helt: Kameraet sad lidt højere end dine øjne, og kortene fra kredsløb viser ikke de små sten.</p>';
 const SOLNEDGANG = {
   titel: 'Hvordan går Solen ned på Mars?',
   tekst: `<p>Skub "Klokken på Mars" under Styr, tryk ${TIDEN}, eller tryk ${handling('Solnedgang', '🌅 Solnedgang')}. Så ser du skyggerne vokse og Solen gå ned. Støvet i luften gør det fjerne landskab blegt, og jo mere luft der er imellem, jo blegere. Efter solnedgangen kommer en blå glød, og så stjernerne. Phobos står op i vest og Deimos i øst. Knib eller rul for at zoome som med en kikkert.</p>`,
@@ -377,11 +381,16 @@ SIDER['stå-naukluft'] = {
       titel: 'Hvorfor er horisonten så tæt på?',
       tekst: '<p>Mars er mindre end Jorden, så den krummer mere. På fladt land er horisonten kun ca. 3,4 km væk, når dine øjne er 1,7 m over jorden. Programmet regner krumningen med.</p>',
     },
+    {
+      titel: 'Hvordan så Curiosity det her?',
+      kontakt: FOTO,
+      tekst: `<p>Slå ${kontakt(FOTO)} til, så ser du Curiositys eget foto herfra. Roveren tog det med sit kamera Mastcam 4. april 2016, midt på eftermiddagen på sol 1302 (en sol er et døgn på Mars, og roverne tæller dem fra landingen). Det er sat sammen af mange billeder hele vejen rundt. Fotoet er drejet, så Mount Sharp står samme sted som i det tegnede landskab. Nederst ser du roverens eget dæk, og mod øst-sydøst ligger roverens skygge.</p><p>NASA har justeret farverne, så klipperne ser ud, som de ville gøre i dagslys på Jorden. Derfor er himlen blågrå i fotoet. På Mars er den gulbrun om dagen.</p>`,
+    },
     SOLNEDGANG,
   ],
   videre: [sted('stå-curiosity', '🧍 Hos Curiosity'), sted('gale', 'Op i kredsløb over Gale')],
-  billeder: LANDSKAB_BILLEDER,
-  ærligt: LANDSKAB_ÆRLIGT,
+  billeder: LANDSKAB_BILLEDER + '<p>Roverens foto: NASA/JPL-Caltech/MSSS (PIA20332).</p>',
+  ærligt: LANDSKAB_ÆRLIGT + FOTO_ÆRLIGT,
 };
 SIDER['stå-curiosity'] = {
   tal: [['Curiosity har kørt', 'ca. 38 km'], ['Højere end landingen', 'ca. 1 km'], ['På Mars siden', 'august 2012']],
@@ -439,9 +448,14 @@ SIDER['stå-landing'] = {
       titel: 'Hvor fløj Ingenuity første gang?',
       tekst: '<p>Tæt ved landingsstedet fløj helikopteren Ingenuity første gang 19. april 2021. Den steg ca. 3 m op, svævede i 30 sekunder og landede igen. Det var første gang, noget fløj med motor og styring på en anden planet.</p>',
     },
+    {
+      titel: 'Hvordan så Perseverance det her?',
+      kontakt: FOTO,
+      tekst: `<p>Slå ${kontakt(FOTO)} til, så ser du Perseverances eget foto herfra. Roveren tog det med sit kamera Mastcam-Z 21. februar 2021, om eftermiddagen på sol 3, tre døgn efter landingen. Det er sat sammen af 142 billeder hele vejen rundt. Fotoet er drejet, så deltaets front og kraterets rand står samme sted som i det tegnede landskab, og det hælder lidt ligesom roveren. I midten ser du roverens dæk.</p><p>På NASA's side om fotoet står der ikke, hvordan farverne er justeret. De er mere rødlige end i Curiositys foto fra Naukluft, som er justeret til dagslys på Jorden.</p>`,
+    },
     SOLNEDGANG,
   ],
   videre: [sted('stå-randen', '🧍 Ved randen'), sted('jezero', 'Op i kredsløb over Jezero')],
-  billeder: JEZERO_BILLEDER,
-  ærligt: LANDSKAB_ÆRLIGT,
+  billeder: JEZERO_BILLEDER + '<p>Roverens foto: NASA/JPL-Caltech/MSSS/ASU (PIA24264).</p>',
+  ærligt: LANDSKAB_ÆRLIGT + FOTO_ÆRLIGT,
 };
