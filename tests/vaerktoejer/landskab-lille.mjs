@@ -49,7 +49,12 @@ await s.mouse.move(450, 300); await s.mouse.down(); await s.mouse.move(550, 300,
 await s.waitForTimeout(3000);
 console.log('træk mod højre: kompas', før.toFixed(1), '→', (await f(() => atomlabTest.solsystem.fænomen().stå().kompas)).toFixed(1));
 // Billeder i sekundet i 10 sekunder
-const bps = await f(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const l = () => { n++; if (performance.now() - t0 < 10000) requestAnimationFrame(l); else r(n / ((performance.now() - t0) / 1000)); }; requestAnimationFrame(l); }));
-console.log('billeder i sekundet', bps.toFixed(2));
+const måling = () => f(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const l = () => { n++; if (performance.now() - t0 < 10000) requestAnimationFrame(l); else r(n / ((performance.now() - t0) / 1000)); }; requestAnimationFrame(l); }));
+console.log('billeder i sekundet', (await måling()).toFixed(2));
+if (blik.some((x) => x.endsWith(',foto'))) {
+  await f(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig === 1, null, { timeout: 300000 });
+  console.log('billeder i sekundet med fotoet', (await måling()).toFixed(2));
+}
 console.log(fejl.length ? fejl.join('\n') : 'ingen fejl');
 await b.close();

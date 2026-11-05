@@ -31,15 +31,16 @@ const FRAGMENT = /* glsl */ `
   varying vec3 vRet;
   // Den omvendte af three.js' ACESFilmicToneMapping (samme matricer og kurve), så fotoet kommer ud med sine egne farver
   vec3 omvendtACES(vec3 p) {
-    const mat3 ind = mat3(vec3(0.59719, 0.07600, 0.02840), vec3(0.35458, 0.90834, 0.13383), vec3(0.04823, 0.01566, 0.83777));
-    const mat3 ud = mat3(vec3(1.60475, -0.10208, -0.00327), vec3(-0.53108, 1.10813, -0.07276), vec3(-0.07367, -0.00605, 1.07602));
-    vec3 y = clamp(inverse(ud) * min(p, vec3(0.985)), 0.0, 0.99);
+    // De omvendte af ACESInputMat og ACESOutputMat i three.js (regnet på forhånd med numpy)
+    const mat3 indOmv = mat3(vec3(1.764741, -0.147028, -0.036337), vec3(-0.675778, 1.160252, -0.162436), vec3(-0.088963, -0.013224, 1.198773));
+    const mat3 udOmv = mat3(vec3(0.643038, 0.059269, 0.005962), vec3(0.311187, 0.931436, 0.063929), vec3(0.045775, 0.009295, 0.930118));
+    vec3 y = clamp(udOmv * min(p, vec3(0.985)), 0.0, 0.99);
     // y = (v² + 0,0245786 v − 0,000090537) / (0,983729 v² + 0,4329510 v + 0,238081), løst for v
     vec3 a = 0.983729 * y - 1.0;
     vec3 b = 0.4329510 * y - 0.0245786;
     vec3 c = 0.238081 * y + 0.000090537;
     vec3 v = (-b - sqrt(max(b * b - 4.0 * a * c, 0.0))) / (2.0 * a);
-    return max(inverse(ind) * v, 0.0) * 0.6 / uEksp;
+    return max(indOmv * v, 0.0) * 0.6 / uEksp;
   }
   void main() {
     vec3 d = normalize(vRet);
