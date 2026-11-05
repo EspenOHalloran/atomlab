@@ -109,10 +109,10 @@ Svaret står i `docs/fable/F2-<område>.md` i samme form som F1.
 | Molekyler | Opus: plan og faktagrundlag med kilder | tjekker fakta og fælder og kommenterer planen | 2-5 $ |
 | Solsystemet (trin 0) | Opus: faktagrundlag med kilder (planen findes) | gennemgår planen og tjekker faktagrundlaget kritisk | 5-10 $ |
 | Tjernobyl | Fable fra bunden | laver faktagrundlag med kilder og en plan | 10-20 $ |
-| Liv | Fable fra bunden | laver faktagrundlag med kilder og en plan | 10-20 $ |
+| Liv | Opus: faktagrundlag (xhigh) og plan (ændret 5. november 2026) | tjekker det kritisk, hvis Fable 5.5 kommer | 5-10 $ |
 | Andre idéer | Opus | kun hvis F1 siger, at de er svære | |
 
-Når Opus laver udkastet, og Fable tjekker det, bliver prisen omtrent halveret. Ulempen er, at Fable bliver præget af udkastet og fanger lidt mindre. Ved Tjernobyl og Liv koster en fejl mest, så dér starter Fable forfra. Faktagrundlaget skrives i `docs/fakta-<del>.md`. Rækkefølgen bestemmes efter F1.
+Når Opus laver udkastet, og Fable tjekker det, bliver prisen omtrent halveret. Ulempen er, at Fable bliver præget af udkastet og fanger lidt mindre. Ved Tjernobyl koster en fejl mest, så dér starter Fable forfra. Liv laver Opus nu selv, fordi den er rykket op lige efter Molekyler (jeres go 5. november 2026). Faktagrundlaget skrives i `docs/fakta-<del>.md`. Rækkefølgen bestemmes efter F1.
 
 ### F4: Eftersyn, når en stor del er bygget (Fable, ca. 5-10 $ pr. del)
 Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
@@ -145,4 +145,4 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
   - Afsnit 5 siger, hvilke fund der er nye, så `F1-noter.md` er ikke nødvendig.
   - Rådet er, at et bredt F2 ikke betaler sig nu. Det gør en kort UI-plan for lagene (punkt 1, 3 og 10), og den kan laves uden Fable.
   - Næste skridt står i "Lige nu" i DESIGN.md.
-- [ ] **Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer.** I mener, at Fable 5.1 ligger for tæt på Opus 5.5 til at være pengene værd. Opus laver F1 i stedet i en ny session med høj effort ud fra den samme brief (som nu ikke nævner, hvilken model der læser den). Tjernobyl og Liv venter også, til Fable 5.5 kommer (Molekyler og Solsystemet laver Opus med høj effort og `/faktatjek`). Når Fable 5.5 kommer, vurderer vi igen, om den skal lave F2-F4 eller faktagrundlaget for Tjernobyl og Liv.
+- [ ] **Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer.** I mener, at Fable 5.1 ligger for tæt på Opus 5.5 til at være pengene værd. Opus laver F1 i stedet i en ny session med høj effort ud fra den samme brief (som nu ikke nævner, hvilken model der læser den). Tjernobyl og Liv venter også, til Fable 5.5 kommer (Molekyler og Solsystemet laver Opus med høj effort og `/faktatjek`). Når Fable 5.5 kommer, vurderer vi igen, om den skal lave F2-F4 eller faktagrundlaget for Tjernobyl og Liv. **Ændret 5. november 2026:** Liv venter ikke længere. Opus laver den med xhigh lige efter Molekyler, og Fable tjekker den senere. Tjernobyl venter stadig og er rykket ned.
