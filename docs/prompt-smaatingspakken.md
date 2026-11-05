@@ -16,7 +16,7 @@ Lav småtingspakken fra DESIGN.md ("Kursen", 5. november 2026). Jeres go er give
    - Den hvide kan være **Phobos eller Deimos**, der tegnes større langt væk (`større` i `opdaterMåner` i `js/kosmos/mars.js`), eller Solens prik.
    - Find ud af det med testadgangen (`månePlads(id)`, skjul rumstøvet med `visRumstøv(false)`, og sammenlign skærmbilleder). Ret det, der ikke ligner noget ægte. Forslag: skjul rumstøvet på hele Solsystemet-skærmen (og evt. i de fænomener i Kosmos, der har `tåger: false`) og sæt det tilbage i `nulstilStyring`. Er det en måne, så skal den stadig kunne ses, men ikke ligne en glødende prik på det forkerte sted. Spørg, hvis det er uklart, hvad der er rigtigt.
    - En første kørsel (5. november) med et lille Playwright-script (`gåTil('olympus')`, `hop()`) gik i timeout, før Mars' kort var hentet. Vent på `billeder().hentet.kort` med en længere ventetid, eller start med `tests/mars.mjs` som skabelon.
-5. **Med i PR'en:** ændringen i DESIGN.md fra planlægningen ("Kursen") og de to nye filer `docs/tjekliste-tablet.md` og denne prompt (ligger på grenen `claude/sharp-brown-b2jyi5`, hvis de ikke allerede er på `main`).
+5. **Allerede på `main`:** ændringen i DESIGN.md fra planlægningen ("Kursen"), `docs/tjekliste-tablet.md` og denne prompt (merget 5. november 2026).
 
 **Tests:** `node tests/koer-alle.mjs --ændret`. Den vælger selv alle tests, fordi index.html (og evt. scene3d.js) er ændret. Skærmbilleder kun af Olympus-stoppet før og efter (pc og tablet på højkant).
 
