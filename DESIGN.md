@@ -3,7 +3,7 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 5. november 2026 (ni nye idéer er noteret under "Idéer til senere", og en drøftelse af planeterne efter Mars står i [docs/plan-solsystemet.md](docs/plan-solsystemet.md) under afsnit 9. Begge venter på jeres svar. Før det, 31. oktober 2026: M8b er færdig: Stå på Mars ved Jezero, og samme dag blev U4 færdig i en anden session: den samme tidsknap og de samme kontakter i resten af AtomLab. Næste er M8c del 1, rovernes panoramaer, og den venter på jeres go).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 5. november 2026 (ni nye idéer er noteret under "Idéer til senere", og planeterne efter Mars er besluttet ([docs/plan-solsystemet.md](docs/plan-solsystemet.md), afsnit 9): Mars slutter med M8c del 1, så Jupiter først. Idéerne undtagen Hjernen og AI står i planen under "Venter på et go" (punkt 9 og 10). Næste: M8c del 1 og planen for Jupiter, begge venter på et go. Før det, 31. oktober 2026: M8b er færdig: Stå på Mars ved Jezero, og samme dag blev U4 færdig i en anden session: den samme tidsknap og de samme kontakter i resten af AtomLab. Næste er M8c del 1, rovernes panoramaer, og den venter på jeres go).*
 
 **Sådan arbejder vi (jeres svar):**
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
@@ -337,6 +337,15 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 6. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
 7. ~~**Et citat til Saturn**~~ ✅ Lavet 29. oktober 2026 (Huygens).
 8. **Tjernobyl og Liv** venter på Fable (se [docs/plan-fable.md](docs/plan-fable.md)). Kører Opus dem før Fable 5.5, så med xhigh til faktagrundlaget.
+9. **Planeterne efter Mars (besluttet 5. november 2026):** Mars slutter med M8c del 1. Så Jupiter → Venus → Merkur → Uranus og Neptun → Pluto → overblikket med en filmisk overgang. De store måner står som små kugler med rigtige kort fra start. Detaljer og jeres svar i [docs/plan-solsystemet.md](docs/plan-solsystemet.md), afsnit 9. Næste: planen for Jupiter (Opus, høj effort), venter på et go.
+10. **Planen efter planeterne (jeres svar 5. november 2026, rækkefølgen er Opus' forslag og kan ændres):** Hver får sin egen plan og sit eget go. Vurderingerne står under "Idéer til senere".
+    1. **Ild** sammen med Molekyler ([docs/plan-molekyler.md](docs/plan-molekyler.md)): forbrænding, kædereaktionen med radikaler og flammefarverne.
+    2. **Kvantefysik** med kvantecomputeren som sidste kapitel.
+    3. **Antistof** og **Mørkt stof** som fænomener i Kosmos.
+    4. **Gåderne:** 5-10 uløste gåder med links ud i programmet (også Planet X). Fable tjekker listen.
+    5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11), se plan-solsystemet.md afsnit 9.
+    6. **DNA** i delen Liv.
+    - Hjernen og AI venter (jeres svar). Nye dele kræver en beslutning om menuen (i dag 8 kort).
 
 **Åbne spørgsmål til jer:**
 - **Domæner (25. oktober 2026):** Listen over de domæner, der skal tilføjes under Network access, står i [docs/plan-mars.md](docs/plan-mars.md) under "Domæner, der skal på listen". Tjek dem med `curl`, når I har tilføjet dem.
@@ -555,7 +564,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
   - [x] U4: Tidsknappen og kontakterne i Stjerneovnen, Reaktoren og resten af AtomLab (31. oktober 2026).
 
 ## Idéer til senere
-- **Ni nye idéer (jeres idéer, 5. november 2026, ikke besluttet, intet er faktatjekket).** Opus' første vurdering står ved hver, og der er en samlet anbefaling til sidst. Rød tråd: AtomLab kan vokse i to retninger, ind mod det mindste (kvante → atom → molekyle → ild → liv → hjerne) og ud mod det største (planeter → stjerner → kosmos → gåder).
+- **Ni nye idéer (jeres idéer, 5. november 2026, intet er faktatjekket).** **Jeres svar (5. november 2026):** Alle undtagen Hjernen og AI skrives ind i planen (se "Planen efter planeterne" under "Venter på et go" øverst). Hjernen og AI venter. Opus' første vurdering står ved hver, og der er en samlet anbefaling til sidst. Rød tråd: AtomLab kan vokse i to retninger, ind mod det mindste (kvante → atom → molekyle → ild → liv → hjerne) og ud mod det største (planeter → stjerner → kosmos → gåder).
   - **Kvantefysik, hvad er det?** Meget relevant. Bygger direkte videre på orbitalerne (elektronskyen er allerede |ψ|²), tunneleffekten i Stjerneovnen og flammefarverne (se Ild). Forslag: en ny del eller en del af Værkstedet med dobbeltspalten (elektroner lander én ad gangen og bygger et mønster op), hvorfor elektronen ikke falder ind i kernen, spektrallinjer og tunneleffekt. Fælder: "observatøren er en bevidsthed", "partiklen er to steder på én gang" og "sammenfiltring sender beskeder hurtigere end lyset". Stor. Faktagrundlaget med høj effort.
   - **Kvantecomputer.** Relevant, men kun som det sidste kapitel i Kvantefysik, ikke en del for sig. Qubitten som en pil på en kugle, superposition og interferens. Fælde: "den prøver alle svar på én gang" (forkert). Feltet ændrer sig hurtigt, så tal skal have en dato. Mellem.
   - **Frontlinjen, 5-10 uløste gåder.** God og passer til AtomLabs "Ærligt talt". Forslag: et samlingssted ("Gåderne"), hvor hver gåde har et kort: hvad ved vi, hvad ved vi ikke, og hvilket forsøg eller teleskop kan afgøre det og hvornår. Kortene linker til steder i programmet. Kandidater: mørkt stof, mørk energi, hvorfor der er mere stof end antistof, hvad der er inde i et sort hul, liv andre steder (Enceladus, Europa, Mars), Planet X (allerede noteret), neutrinoernes masse, Hubble-spændingen, kvantetyngdekraft og livets oprindelse. Billig, når indholdet findes, så den bør komme efter antistof og mørkt stof. Fable bør tjekke listen (det er nemt at skrive for sikkert).

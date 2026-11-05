@@ -174,7 +174,7 @@ Mars har sin egen plan ([plan-mars.md](plan-mars.md)), og Saturn og månerne i s
 | 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos som "Saturn" efter Solstorm (fra 24. oktober 2026 i den almindelige udgave, før kun med `?saturn` i adressen). Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Siden 24. oktober 2026 med rigtige billeder: Saturn og ringenes farver fra Solar System Scope (CC BY 4.0), de seks store måner fra Cassini via USGS (`billeder/solsystem/lav_saturn.py`). Samme dag: alt i den rigtige skala, en flyby med ni stop og sort himmel med Solen som en lille prik. | Opus |
 | 1c | **Mars** med Phobos og Deimos og en flyby, der også besøger steder på overfladen. Otte delopgaver med et go mellem hver, se [plan-mars.md](plan-mars.md). M1 (planen og faktagrundlaget) er lavet 24. oktober 2026. | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
-| 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
+| 3 | Alle planeter og månerne med billeder, tværsnit og grafik. **Besluttet 5. november 2026: planeterne kommer før overblikket** (Jupiter → Venus → Merkur → Uranus og Neptun → Pluto), og månerne bagefter. Se afsnit 9. | Opus |
 | 4 | "Liv i solsystemet?" (tekster faktatjekkes) | Opus + faktatjek |
 | 5 | Rumrejsen: fysik, banelinje, mission 1-2, "Set fra Jupiter/Solen" | Opus |
 | 6 | Mission 3-5, frit rum, fartgraf, "Den lyseblå prik" | Opus |
@@ -238,7 +238,18 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 
 **Model og effort:** Opus med høj effort laver en plan for hver planet (data, stop, signatur og faktagrundlag), I siger go, og Opus bygger. Fable tjekker evt. planen for alle planeterne samlet (F-trin i plan-fable.md) i stedet for hver for sig.
 
-**Spørgsmål til jer (5. november 2026):**
+**Jeres svar (5. november 2026), besluttet:**
+1. **Mars slutter med M8c del 1.** Curiosity-modellen, M7b-pol og L2 er "Mars ekstra" til senere.
+2. **Filmisk overgang** fra overblikket til planeterne. Planeterne bygges derfor som hver sin visning, som Mars og Saturn, og ingen fælles verden med flydende nulpunkt.
+3. **Jupiter først.** Rækkefølgen er Jupiter → Venus → Merkur → Uranus og Neptun → Pluto → overblikket.
+4. **Pluto kommer med nu** (i denne runde, med Charon som lille kugle).
+5. **De store måner står som små kugler med rigtige kort fra start** (fx Jupiters fire), så planeterne ikke ser tomme ud. Besøgene på månerne og "Land på måner" kommer senere (se nedenfor).
+
+**Næste skridt:** Opus laver planen for Jupiter med høj effort (data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag med kilder i `fakta-solsystemet.md`). Domæner, der ikke er åbne, nævnes før arbejdet. Venter på et go, og jeres runde på tabletten bør komme før byggeriet.
+
+**Senere: månerne og "Land på måner" (jeres idé 5. november 2026, skrevet ind i planen):** Når planeterne og overblikket er på plads, kommer de store måner med besøg og evt. "Stå på" med teknikken fra Stå på Mars. Kun Titan af Europa, Titan og Enceladus har haft en landingssonde (Huygens 2005), så "Land med Huygens" kan bygges på rigtige data. Europa og Enceladus vil være tegnet ud fra fotos fra kredsløb og skal siges at være det. Opus' forslag: Månen ved Apollo 11 (LRO har skarpe højdekort ved landingsstederne). Hænger sammen med afsnit 2 ("Liv i solsystemet?") og idé A (Saturns måner).
+
+**Spørgsmålene (stillet 5. november 2026, besvaret ovenfor):**
 1. Skal Mars slutte med M8c del 1, og resten blive "Mars ekstra"?
 2. Filmisk overgang fra overblikket (anbefalet) eller sømløs flyvning (dyrere, kræver beslutning nu)?
 3. Rækkefølgen: Jupiter først, eller Merkur først som en hurtig prøve?
