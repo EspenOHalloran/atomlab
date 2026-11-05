@@ -46,6 +46,13 @@ orig = next((a[5:] for a in sys.argv[2:] if a.startswith('orig=')), '.')
 os.makedirs(ud, exist_ok=True)
 
 
+def træk_ind(a, n, P=64):
+    # Trækker kanten af data n pixel ind. Rundt om sømmen i siderne (fotoet går hele vejen rundt), men over og under
+    # fotoet er der intet, så dér trækkes den ind
+    b = np.pad(np.pad(a, ((0, 0), (P, P)), mode='wrap'), ((P, P), (0, 0)), constant_values=False)
+    return ndimage.binary_erosion(b, iterations=n, border_value=1)[P:-P, P:-P]
+
+
 for id_, f in FOTOS.items():
     sti = os.path.join(orig, f['fil'])
     if not os.path.exists(sti):
@@ -59,8 +66,21 @@ for id_, f in FOTOS.items():
     # ind, så den mørke rand ved det sorte ikke kommer med
     s = max(1, W // 4096)
     lille = np.asarray(im.resize((W // s, H // s), Image.BILINEAR))
-    data = ndimage.binary_opening(lille.max(2) > MØRK, iterations=2)
-    data = ndimage.binary_erosion(data, iterations=3)
+    # Fotoet går hele vejen rundt: Masken regnes med et stykke af den anden ende på hver side (ellers æder den sig ind
+    # fra venstre og højre kant og giver en stribe i sømmen)
+    P = 64
+    mørk = np.pad(lille.max(2) <= MØRK, ((0, 0), (P, P)), mode='wrap')
+    data = ndimage.binary_opening(~mørk, iterations=2)
+    # Mørke skygger (mellem klipperne og under roveren) er også næsten sorte. Kun sorte områder, der rører fotoets
+    # øverste eller nederste kant, er uden data (det gælder alle huller i begge fotos). De andre fyldes ud (før skinnede
+    # det tegnede landskab igennem)
+    huller, n = ndimage.label(~data)
+    kant = np.unique(np.concatenate([huller[0], huller[-1]]))
+    ude = np.zeros(n + 1, bool)
+    ude[kant] = True
+    ude[0] = False
+    data = ~ude[huller]
+    data = træk_ind(data[:, P:-P], 3)
     # Fyld uden for data med den nærmeste pixel med data, så fotoet ikke får en sort rand, når det toner ud
     a = np.asarray(im)
     nær = ndimage.distance_transform_edt(~data, return_distances=False, return_indices=True)
@@ -71,7 +91,7 @@ for id_, f in FOTOS.items():
     mb = MASKE_BREDDE
     mh = round(H * mb / W)
     maske = np.asarray(Image.fromarray((data * 255).astype(np.uint8)).resize((mb, mh), Image.BILINEAR)).astype(np.float32) / 255
-    maske = ndimage.binary_erosion(maske > 0.5, iterations=max(1, round(TONING * mb / 360 / 2))).astype(np.float32)
+    maske = træk_ind(maske > 0.5, max(1, round(TONING * mb / 360 / 2))).astype(np.float32)
     maske = ndimage.gaussian_filter(maske, TONING * mb / 360 / 2.5, mode=('nearest', 'wrap'))
     Image.fromarray(np.clip(maske * 255 + 0.5, 0, 255).astype(np.uint8), 'L').save(os.path.join(ud, f'pano-{id_}-maske.png'), optimize=True)
     for navn, bredde in BREDDER.items():
