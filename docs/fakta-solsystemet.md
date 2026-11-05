@@ -812,7 +812,7 @@ Tjekket af Opus i hovedsessionen mod kilderne, som blev læst direkte (ingen hj�
 | "Roverens døgn nummer 1.302" | **Rettet** til "en sol er et døgn på Mars, og roverne tæller dem fra landingen" (samme grund) | Som ovenfor |
 | "NASA skriver ikke, hvordan farverne er justeret" (Perseverance) | **Rettet** til "På NASA's side om fotoet står der ikke …": Photojournal-siden og NASA's nyhed siger intet om farverne. En anden side ("natural color", "not white balanced") handler om et andet panorama (PIA23727, 110 mm, sol 4), så den er ikke brugt | Photojournal PIA24264 og PIA23727 (begge læst), nasa.gov (læst) |
 | Kameraerne sidder ca. 2 m oppe | OK (Mastcam-Z: kameraets centrum 1,97 m over roverens nulpunkt i CAHVOR-modellen, Curiositys Mastcam ca. 2 m, står allerede i "Ærligt talt") | NASA's API (CAHVOR, læst), tidligere faktatjek M8a |
-| Horisonten passer inden for under 1° | OK: ved Naukluft ca. 0,1°, ved landingsstedet ses det på billedet med 3D-horisonten (ca. 0,5°) | Egen måling (plan-mars.md, M8c del 1) |
+| Horisonten passer inden for ca. 1° | **Rettet** fra "under 1°": ved Naukluft ca. 0,1°, ved landingsstedet ca. 0,5° mod højdekortet, men i prøvebillederne står fotoets rand 1-2° over den tegnede (den tegnede rand er svag i disen, så det er usikkert) | Egen måling (plan-mars.md, M8c del 1) |
 | "Ting tæt på passer ikke helt, for fotoet er sat sammen af mange billeder" | **Rettet**: Den vigtigste grund er, at kameraet sidder højere end øjnene (2 m mod 1,7 m), og at kortene fra kredsløb ikke viser de små sten | Egen vurdering |
 
 ### Faktatjek M8b: Stå på Mars ved Jezero (31. oktober 2026)

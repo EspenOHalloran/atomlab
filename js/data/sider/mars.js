@@ -364,7 +364,7 @@ const LANDSKAB_ÆRLIGT = '<p>Billederne fra kredsløb er grå, og farverne er sa
 // Roverens foto (M8c del 1, js/solsystem/panorama.js). Tidspunkterne og vinklerne er målt (docs/plan-mars.md, "M8c del 1:
 // rovernes panoramaer, målingerne") og faktatjekket (docs/fakta-solsystemet.md, "Faktatjek M8c del 1")
 const FOTO = '📷 Roverens foto';
-const FOTO_ÆRLIGT = '<p>Roverens foto er taget fra roverens mast ca. 2 m oppe, på én bestemt eftermiddag. Når du slår det til, stilles klokken til den tid, det blev taget, men når tiden går, flytter skyggerne i fotoet sig ikke. Fotoet er drejet, så horisonten passer med det tegnede landskab (inden for under 1°). Ting tæt på passer ikke helt: Kameraet sad lidt højere end dine øjne, og kortene fra kredsløb viser ikke de små sten.</p>';
+const FOTO_ÆRLIGT = '<p>Roverens foto er taget fra roverens mast ca. 2 m oppe, på én bestemt eftermiddag. Når du slår det til, stilles klokken til den tid, det blev taget, men når tiden går, flytter skyggerne i fotoet sig ikke. Fotoet er drejet, så horisonten passer med det tegnede landskab (inden for ca. 1°). Ting tæt på passer ikke helt: Kameraet sad lidt højere end dine øjne, og kortene fra kredsløb viser ikke de små sten.</p>';
 const SOLNEDGANG = {
   titel: 'Hvordan går Solen ned på Mars?',
   tekst: `<p>Skub "Klokken på Mars" under Styr, tryk ${TIDEN}, eller tryk ${handling('Solnedgang', '🌅 Solnedgang')}. Så ser du skyggerne vokse og Solen gå ned. Støvet i luften gør det fjerne landskab blegt, og jo mere luft der er imellem, jo blegere. Efter solnedgangen kommer en blå glød, og så stjernerne. Phobos står op i vest og Deimos i øst. Knib eller rul for at zoome som med en kikkert.</p>`,
