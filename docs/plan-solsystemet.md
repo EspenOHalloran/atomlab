@@ -174,7 +174,7 @@ Mars har sin egen plan ([plan-mars.md](plan-mars.md)), og Saturn og månerne i s
 | 1b | ✅ **Prototype**: Saturn, Enceladus og Titan (lavet 23. oktober 2026). Ses i Kosmos som "Saturn" efter Solstorm (fra 24. oktober 2026 i den almindelige udgave, før kun med `?saturn` i adressen). Grafikken ligger i `js/solsystem/` (ringe, planet, fontæner og dis), så Solsystemet kan genbruge den. Siden 24. oktober 2026 med rigtige billeder: Saturn og ringenes farver fra Solar System Scope (CC BY 4.0), de seks store måner fra Cassini via USGS (`billeder/solsystem/lav_saturn.py`). Samme dag: alt i den rigtige skala, en flyby med ni stop og sort himmel med Solen som en lille prik. | Opus |
 | 1c | **Mars** med Phobos og Deimos og en flyby, der også besøger steder på overfladen. Otte delopgaver med et go mellem hver, se [plan-mars.md](plan-mars.md). M1 (planen og faktagrundlaget) er lavet 24. oktober 2026. | Opus |
 | 2 | Skærmen og overblikket: Solen, planeterne, rigtige baner, tidsskyder og panelet | Opus |
-| 3 | Alle planeter og månerne med billeder, tværsnit og grafik | Opus |
+| 3 | Alle planeter og månerne med billeder, tværsnit og grafik. **Besluttet 5. november 2026: planeterne kommer før overblikket** (Jupiter → Venus → Merkur → Uranus og Neptun → Pluto), og månerne bagefter. Se afsnit 9. | Opus |
 | 4 | "Liv i solsystemet?" (tekster faktatjekkes) | Opus + faktatjek |
 | 5 | Rumrejsen: fysik, banelinje, mission 1-2, "Set fra Jupiter/Solen" | Opus |
 | 6 | Mission 3-5, frit rum, fartgraf, "Den lyseblå prik" | Opus |
@@ -212,6 +212,49 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 1. Planet X: sandsynligvis en gruppe "Yderst ude", men det afgøres endeligt, når vi når dertil.
 2. Månerne ligger **under Saturn** (dybere lag, ikke egne skærme). Delen Liv linker til dem. "I hvert fald en mulighed."
 3. **Besluttet:** Det forsigtige lag om "kan der være liv?" skrives nu under Saturn (Enceladus og Titan først), og delen Liv linker til det, når den kommer. Selve arbejdet venter på et go.
+
+## 9. Efter Mars: alle planeterne (drøftelse 5. november 2026, intet er besluttet)
+**Jeres ønske (5. november 2026):** Når Mars er færdig, skal alle planeterne på plads. Månerne kan komme senere. Kvaliteten og oplevelsen skal være så flot og imponerende som muligt.
+
+**Hvor vi står:** Solen, Jorden (med Månen), Mars (med Phobos og Deimos) og Saturn (med seks måner) findes. Merkur, Venus, Jupiter, Uranus og Neptun mangler, og Pluto er besluttet med som dværgplanet (spørgsmål 3). Tilbage af Mars: M8c del 1 (rovernes panoramaer), M8c del 2 (Curiosity som 3D-model), M7b-pol (Nordpolen tæt på) og L2 (kræver en session på jeres pc). S3 (højder på Saturns måner) venter, til Mars er færdig.
+
+**Opus' forslag (venter på jeres svar):**
+1. **Mars afsluttes med M8c del 1.** Curiosity-modellen, M7b-pol og L2 bliver "Mars ekstra", som kan tages senere. De giver mindre nyt end en ny planet.
+2. **Først en runde på tabletten (jer, koster ingen tokens):** Mange ting fra M5b-M8b og U1-U4 er ikke set på den rigtige tablet ("Ikke afprøvet" i DESIGN.md). Planeterne genbruger flybyen, træet, siden og rejsen, så en fejl dér bliver ganget med fem.
+3. **En fast pakke pr. planet** i stedet for Mars' 15 delopgaver: kloden i topkvalitet, en flyby med 4-6 stop, steder i træet med deres egne sider, og 1-2 signatur-effekter, som er planetens wow. "Stå på" kun dér, hvor der findes rigtige data.
+4. **Overblikket (trin 2) kommer efter planeterne** som sin egen visning, hvor et tryk på en planet flyver ind med en filmisk overgang. En helt sømløs flyvning fra Solen til en måne kræver en fælles verden med flydende nulpunkt og ville betyde, at planeterne skal bygges om bagefter. Det skal afgøres, før første planet bygges.
+
+**Signatur pr. planet (udkast, ikke faktatjekket, datakilderne tjekkes med curl, før noget loves):**
+| Planet | Wow | Data | Genbruger | Størrelse |
+|---|---|---|---|---|
+| Jupiter | Skybåndene glider mod hver sin side, Den Store Røde Plet drejer, Junos cykloner ved polerne, nordlys | Cassini- og Juno-kort (NASA, fri), Solar System Scope (CC BY 4.0) | `planet.js` (gasplanet) og Saturns flyby | stor |
+| Venus | Skyerne (svagt gule, med struktur i ultraviolet lys), og kontakten "Under skyerne" med Magellans radarkort af overfladen (Maat Mons). Måske "Stå på Venus" med Venera 13's farvefotos (1982) | Magellan (NASA, fri), Venera-fotos (licensen tjekkes) | `klippeplanet.js` + en ny, tyk atmosfære | stor |
+| Merkur | Solen ca. 3 gange så stor på himlen som fra Jorden, Caloris-bassinet, is i kratere, der altid er i skygge, den mærkelige solopgang | MESSENGER-mosaik og højdekort (USGS, fri) | `klippeplanet.js` næsten uændret | mellem (den billigste) |
+| Uranus | Liggende på siden: en skyder for årstiderne, hvor polerne får sol i mange år ad gangen, de mørke, smalle ringe | Kun Voyager 2 (1986), Hubble og JWST. Intet detaljeret kort, så overfladen er tegnet, og det siges ærligt | `planet.js`, `ringe.js` | mellem |
+| Neptun | Den hurtigste vind i solsystemet, Den Store Mørke Plet (er væk nu), ringbuerne. "Ærligt talt": Voyagers dybblå farve var forstærket (Uranus og Neptun har næsten samme farve, Irwin m.fl. 2024) | Voyager 2 (1989), Hubble | samme skygge-shader som Uranus | mellem |
+| Pluto | Hjertet (Sputnik Planitia), bjerge af vandis og disens lag i modlys | New Horizons (NASA, fri) | `klippeplanet.js`, `lavLuft` | mellem |
+
+**Rækkefølge (forslag):** Jupiter (størst wow, genbruger mest fra Saturn og skal bruges i Rumrejsen) → Venus → Merkur → Uranus og Neptun sammen (fælles shader og få data) → Pluto → overblikket. Merkur kan rykkes først, hvis I vil have en hurtig planet at se niveauet på. BepiColombo skulle efter planen nå Merkur sidst i 2026, så Merkur kan være aktuel (tjekkes).
+
+**Model og effort:** Opus med høj effort laver en plan for hver planet (data, stop, signatur og faktagrundlag), I siger go, og Opus bygger. Fable tjekker evt. planen for alle planeterne samlet (F-trin i plan-fable.md) i stedet for hver for sig.
+
+**Jeres svar (5. november 2026), besluttet:**
+1. **Mars slutter med M8c del 1.** Curiosity-modellen, M7b-pol og L2 er "Mars ekstra" til senere.
+2. **Filmisk overgang** fra overblikket til planeterne. Planeterne bygges derfor som hver sin visning, som Mars og Saturn, og ingen fælles verden med flydende nulpunkt.
+3. **Jupiter først.** Rækkefølgen er Jupiter → Venus → Merkur → Uranus og Neptun → Pluto → overblikket.
+4. **Pluto kommer med nu** (i denne runde, med Charon som lille kugle).
+5. **De store måner står som små kugler med rigtige kort fra start** (fx Jupiters fire), så planeterne ikke ser tomme ud. Besøgene på månerne og "Land på måner" kommer senere (se nedenfor).
+
+**Næste skridt:** Opus laver planen for Jupiter med høj effort (data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag med kilder i `fakta-solsystemet.md`). Domæner, der ikke er åbne, nævnes før arbejdet. Venter på et go, og jeres runde på tabletten bør komme før byggeriet.
+
+**Senere: månerne og "Land på måner" (jeres idé 5. november 2026, skrevet ind i planen):** Når planeterne og overblikket er på plads, kommer de store måner med besøg og evt. "Stå på" med teknikken fra Stå på Mars. Kun Titan af Europa, Titan og Enceladus har haft en landingssonde (Huygens 2005), så "Land med Huygens" kan bygges på rigtige data. Europa og Enceladus vil være tegnet ud fra fotos fra kredsløb og skal siges at være det. Opus' forslag: Månen ved Apollo 11 (LRO har skarpe højdekort ved landingsstederne). Hænger sammen med afsnit 2 ("Liv i solsystemet?") og idé A (Saturns måner).
+
+**Spørgsmålene (stillet 5. november 2026, besvaret ovenfor):**
+1. Skal Mars slutte med M8c del 1, og resten blive "Mars ekstra"?
+2. Filmisk overgang fra overblikket (anbefalet) eller sømløs flyvning (dyrere, kræver beslutning nu)?
+3. Rækkefølgen: Jupiter først, eller Merkur først som en hurtig prøve?
+4. Skal Pluto med i denne runde eller med månerne?
+5. Skal de store måner (fx Jupiters fire) stå som små kugler med rigtige kort fra start, så planeterne ikke ser tomme ud, med de dybe besøg senere?
 
 ## Faktagrundlag (skal tjekkes og skrives med kilder i `docs/fakta-solsystemet.md`)
 - **Planeterne og månerne:** fysiske tal og baneelementer (JPL Horizons og NASA Planetary Fact Sheets).
