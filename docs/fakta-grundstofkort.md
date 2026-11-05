@@ -91,6 +91,15 @@ Et udkast ligger også i `/tmp/claude-0/-home-user-atomlab/a5ff1646-2a7a-5247-a5
 6. **F i kroppen:** "Ca. 3 g" er rundet op fra 2,6 g.
 7. **Mere-punkterne om berylliumkobber, Epsom-salt og magnesiumfælge** er ikke slået op i en primær kilde.
 
+### Nitrogens "Vidste du?" (rettet 5. november 2026, jeres spørgsmål 3. november)
+Før: "… fordi bakterier, lyn og gødning har bundet det for planterne." "Bundet" var et fagord uden forklaring, og lyn kom ud af det blå. Nu: Atomerne sidder to og to (N₂) og holder for fast sammen. Bakterier, lyn og gødningsfabrikker skiller dem ad, så planter kan bruge dem. Ny linje under "Mere": bakterier i knolde på ærter og kløver.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Luftens nitrogen er N₂ med en meget stærk (tredobbelt) binding, som planter og dyr ikke kan bryde | OK (lærebogsstof). "Holder for fast sammen" er den enkle udgave | Lærebøger i kemi og biologi |
+| Bakterier, lyn og gødningsfabrikker (Haber-Bosch) kan skille N₂ ad og gøre nitrogenet brugbart for planter | OK. Lyn står kun for en lille del: ca. 3-10 Tg N om året mod ca. 100-290 Tg fra bakterier på land i naturen (Galloway m.fl. 2004 og Cleveland m.fl. 1999). Teksten nævner ingen andele | Cleveland m.fl. 1999, Global Biogeochemical Cycles (søgeresultat og pdf-link), BioNumbers 110431 og 110433 (søgeresultater, ikke åbnet) |
+| Bakterier i knolde på rødderne af ærter og kløver henter nitrogen fra luften til planten | OK (rhizobier i rodknolde hos ærteblomstfamilien, lærebogsstof) | Lærebøger i biologi |
+
 ## Nr. 15-30 (P-Zn)
 
 ### Grundstofkort for P-Zn (nr. 15-30)

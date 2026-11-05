@@ -57,8 +57,8 @@ export const LAG = {
     hverdag: 'Luften (ca. 78 %), gødning og proteinerne i din mad.',
     krop: 'Ca. 1,8 kg. Er i alle proteiner (muskler, hår, enzymer) og i DNA.',
     univers: 'Mest døende stjerner som Solen (røde kæmper). Resten kæmpestjerner, der eksploderer.',
-    mere: ['Flydende nitrogen koger ved −196 °C og bruges til at fryse ting lynhurtigt.', 'Chipsposer fyldes ofte med nitrogen, så chipsene holder sig sprøde.', 'Planter skal bruge nitrogen. Derfor er der nitrogen i gødning.'],
-    vidste: 'Du indånder mest nitrogen, men kroppen kan ikke bruge det fra luften. Du får det fra maden, fordi bakterier, lyn og gødning har bundet det for planterne.',
+    mere: ['Flydende nitrogen koger ved −196 °C og bruges til at fryse ting lynhurtigt.', 'Chipsposer fyldes ofte med nitrogen, så chipsene holder sig sprøde.', 'Planter skal bruge nitrogen. Derfor er der nitrogen i gødning.', 'Bakterier i små knolde på rødderne af ærter og kløver henter nitrogen fra luften til planten.'],
+    vidste: 'Du indånder mest nitrogen, men kan ikke bruge det: I luften sidder atomerne to og to (N₂) og holder for fast sammen. Bakterier, lyn og gødningsfabrikker skiller dem ad, så planter kan bruge dem. Du får dem fra maden.',
     se: ['solsystem:solensfremtid'],
   },
   O: {
