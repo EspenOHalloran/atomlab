@@ -1,5 +1,7 @@
 // Hurtige prøvebilleder af "Stå på Mars" med fuld grafik i et lille vindue og uden paneler (til at justere lys og
-// farver). Kør: node tests/vaerktoejer/landskab-lille.mjs <sted> <kompas,vinkel,tid> [...]
+// farver). Kør: node tests/vaerktoejer/landskab-lille.mjs <sted> <kompas,vinkel,tid[,foto]> [...]
+// Med ",foto" tages også et billede med roverens foto slået til fra samme retning (M8c del 1, kun ved Naukluft og
+// landingsstedet). Brug fotoets tid (15.7 ved Naukluft og 14.75 ved landingsstedet), så lyset er det samme.
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('landskab');
 const [sted, ...blik] = process.argv.slice(2);
@@ -23,12 +25,23 @@ await f(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { timeout: 300000 });
 for (const x of blik) {
   const [k, v, t] = x.split(',').map(Number);
+  const medFoto = x.endsWith(',foto');
   await f(([k, v, t]) => { const y = atomlabTest.solsystem.fænomen(); y.sætTid(t); y.kig(k, v); }, [k, v, t]);
   await s.waitForTimeout(1500);
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 300000 });
   await s.waitForTimeout(2000);
   await s.screenshot({ path: `${UD}/lille-${sted}-${k}-${v}-${t}.png`, timeout: 300000 });
   console.log(x, JSON.stringify(await f(() => { const t = atomlabTest.solsystem.fænomen().stå(); return { sol: t.solHøjde?.toFixed(1), måner: t.måner }; })));
+  if (medFoto) {
+    await f(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+    await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig === 1, null, { timeout: 300000 });
+    await f(([k, v]) => atomlabTest.solsystem.fænomen().kig(k, v), [k, v]);
+    await s.waitForTimeout(2000);
+    await s.screenshot({ path: `${UD}/lille-${sted}-${k}-${v}-${t}-foto.png`, timeout: 300000 });
+    console.log('  med foto:', JSON.stringify(await f(() => atomlabTest.solsystem.fænomen().stå().foto)));
+    await f(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+    await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.vist === null, null, { timeout: 300000 });
+  }
 }
 // Træk med musen 200 px mod højre: Kompasset skal falde (man tager fat i landskabet og trækker det med)
 const før = await f(() => atomlabTest.solsystem.fænomen().stå().kompas);
@@ -36,7 +49,12 @@ await s.mouse.move(450, 300); await s.mouse.down(); await s.mouse.move(550, 300,
 await s.waitForTimeout(3000);
 console.log('træk mod højre: kompas', før.toFixed(1), '→', (await f(() => atomlabTest.solsystem.fænomen().stå().kompas)).toFixed(1));
 // Billeder i sekundet i 10 sekunder
-const bps = await f(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const l = () => { n++; if (performance.now() - t0 < 10000) requestAnimationFrame(l); else r(n / ((performance.now() - t0) / 1000)); }; requestAnimationFrame(l); }));
-console.log('billeder i sekundet', bps.toFixed(2));
+const måling = () => f(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const l = () => { n++; if (performance.now() - t0 < 10000) requestAnimationFrame(l); else r(n / ((performance.now() - t0) / 1000)); }; requestAnimationFrame(l); }));
+console.log('billeder i sekundet', (await måling()).toFixed(2));
+if (blik.some((x) => x.endsWith(',foto'))) {
+  await f(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig === 1, null, { timeout: 300000 });
+  console.log('billeder i sekundet med fotoet', (await måling()).toFixed(2));
+}
 console.log(fejl.length ? fejl.join('\n') : 'ingen fejl');
 await b.close();

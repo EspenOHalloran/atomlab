@@ -116,7 +116,7 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 ### Prompter til de næste skridt
 *De brugte prompter (L1, S2 og M8b) står i [arkiv/plan-mars-faerdigt.md](arkiv/plan-mars-faerdigt.md).*
 
-**M8c del 1 (skrevet 31. oktober 2026 efter M8b):**
+**M8c del 1 (skrevet 31. oktober 2026 efter M8b, brugt: se "Status efter M8c del 1" nedenfor):**
 > Lav M8c del 1: rovernes panoramaer. Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 2, 4 og 5), "Plan for M8" (afsnit 6 "Panoramaerne" og 9) og "Status efter M8b". M8b er merget.
 >
 > **Først:** Tjek med `curl`, at `assets.science.nasa.gov` og `science.nasa.gov` kan åbnes, og hent PIA20332 (Naukluft, Mastcam) og PIA24264 (landingsstedet ved Jezero, Mastcam-Z) i fuld størrelse (og PIA24422, Navcam, hvis PIA24264 ikke dækker 360°). Er noget blokeret, så stop og bed om adgang. Tjek panoramaernes vinkler (hvor meget over og under vandret, og hvilken retning midten vender), før noget bygges.
@@ -128,6 +128,41 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 > **Billeder:** Skyen har intet grafikkort. Tag få, små billeder i baggrunden (`tests/vaerktoejer/landskab-lille.mjs`), og sammenlign det tegnede og fotoet fra samme retning.
 >
 > **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og markér, at Mars er færdig (besluttet 5. november 2026: M8c del 2, M7b-pol og L2 er "Mars ekstra" til senere, og næste er planen for Jupiter i `docs/plan-solsystemet.md`, afsnit 9). Model: Opus. Effort: høj (I sætter den selv).
+
+## M8c del 1: rovernes panoramaer, målingerne (5. november 2026)
+Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "Vidste du?").
+
+**Fotoene (hentet fra `assets.science.nasa.gov`):**
+- **PIA20332 (Naukluft):** 29.163 × 6.702 pixel (JPEG 105 MB). Curiosity, Mastcam (venstre kamera), sol 1302, "mid-afternoon", hvidbalanceret ("approximates white balancing"). Billederne er taget 5. april 2016 kl. 00:25-01:03 UTC (4. april i USA), lokal soltid (LMST) ca. 15:07-15:44 (NASA's API over rå billeder, `mars.nasa.gov/api/v1/raw_image_items`, og Mars24-formlerne). Kredit: NASA/JPL-Caltech/MSSS.
+- **PIA24264 (landingsstedet):** 9.238 × 2.451 pixel (TIFF 47 MB, det store er 36.952 × 11.570). Perseverance, Mastcam-Z, sol 3 (21. februar 2021), 142 billeder, LMST ca. 15:17-16:40. Kredit på siden: NASA/JPL-Caltech/MSSS/ASU. Siden siger intet om hvidbalance (se faktatjekket).
+- **PIA24422 (Navcam):** ikke brugt, for PIA24264 dækker 360°.
+
+**Vinklerne (målt):**
+- **Begge har lige mange pixel pr. grad vandret og lodret** (en ligevinklet cylinder, 81,01 og 25,66 pixel pr. grad). Ved Naukluft passer Curiositys egen skygge (kameraets skygge står i −Solens højde, 26,7° ifølge Mars24) med lige vinkler og ikke med en perspektivisk cylinder (30 mod 140 pixel forskel). Ved Jezero passer Mastcam-Z-billedernes egne retninger (CAHVOR-modellen i NASA's API) ned til ca. −47° inden for ca. 1°.
+- **Naukluft:** Venstre kant vender mod 180,75° (syd), retningen vokser med uret, og vandret ligger i række 1.157 (+14,3° til −68,4°). Kanten mellem himmel og land passer med 3D-horisonten fra højdekortet inden for ca. 0,1° (Mount Sharp og kraterets rand mod øst og nord). Mod vest er randen skjult i dis i fotoet. Skyggen står ved 113,9° (med venstre kant ved 180,75°), og Solen stod ved 293,3°, så skyggen burde pege mod 113,3° (forskel 0,6°, skyggens plads er aflæst med ca. ±1°). Fotoet er vandret (ingen målbar hældning).
+- **Landingsstedet:** Fotoet følger roverens ramme. Venstre kant er 0,52° i roverens retninger, vandret i roverens ramme ligger i række 239,9 (ca. +9,3° til −86°), og roveren hælder ca. 1,2° (kvaternionen (0,415617; −0,00408664; −0,00947025; 0,909481) fra roverens ramme til nord-øst-ned). Venstre kant vender derfor mod ca. 131,4° (sydøst). Himlen er lysest ved 255-260°, og Solen stod ved 254°. Randen passer med 3D-horisonten.
+- Værktøjerne til målingen (Mars24, horisonten fra lagene, krydskorrelation) lå i sessionens kladdemappe og er ikke med i repoet. Tallene står i `FOTOS` i `billeder/solsystem/lav_panorama.py` og i `pano-<id>.json`.
+
+**M8c del 2 (skrevet 5. november 2026 efter M8c del 1, "Mars ekstra" til senere: næste er planen for Jupiter, besluttet 5. november 2026):**
+> Lav M8c del 2: Curiosity som 3D-model ved "Hos Curiosity nu". Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 2, 4 og 5), "Plan for M8" (afsnit 7 "Roveren" og 10), "Status efter M8a" og "Status efter M8c del 1". M8c del 1 er merget.
+>
+> **Først:** Spørg om åbent spørgsmål 1: Må `Curiosity_static.glb` (11,9 MB, `assets.science.nasa.gov/…/gltf_files/24584_Curiosity_static.glb`) gøres mindre med `gltf-transform` (en npm-pakke, der kun køres én gang som værktøj, ikke et byggetrin)? Byg intet, før I har svaret. Tjek med `curl`, at filen kan hentes, og se, hvor meget af størrelsen der er teksturer og hvor meget geometri.
+>
+> **Mål:** Curiosity står ved "Hos Curiosity nu" med den rigtige retning og hældning fra NASA's kortdata (sol 5045: retning 161,5°, hældning 13,5° op ad bakken) på jorden i landskabet (`js/solsystem/landskab.js`). Kopiér `GLTFLoader` (og de filer, den importerer) fra `three@0.186.1` til `lib/three/addons/`. Lyset på modellen skal passe med landskabets Sol og himmel (`sollys`, `himmellys`), og modellen kaster en skygge, der passer med Solen. Ved Naukluft og landingsstedet: et lille skilt i stedet ("Her stod Curiosity i april 2016" og "Her landede Perseverance"), hvis det ikke fylder for meget. Mål billeder i sekundet før og efter (pc og tablet på højkant, én ad gangen), og spørg om adgang til en rigtig pc, hvis følelsen skal måles.
+>
+> **Tekster:** en kort tekst om roveren (størrelse, vægt, hvor længe den har kørt), faktatjekket med `/faktatjek`, og "Ærligt talt" om modellen (NASA's model, forenklet).
+>
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til det næste skridt under "Prompter til de næste skridt" her i filen (M7b-pol eller L2, se "Plan for resten af Mars"). Model: Opus. Effort: høj (I sætter den selv).
+
+## Status efter M8c del 1 (5. november 2026): roverens foto
+- **Lavet:** Kontakten "📷 Roverens foto" i Styr-boksen ved Naukluft og landingsstedet (`foto` i `LANDSKAB`, `visFoto`). Roverens 360°-panorama (PIA20332 og PIA24264) ligger på en kugle om kameraet (`js/solsystem/panorama.js`), drejet efter de målte vinkler (se "M8c del 1: rovernes panoramaer, målingerne" ovenfor), og toner ind over landskabet på 0,6 s. Over og under fotoet og i hullerne uden data ses det tegnede landskab (en blød maske). Klokken stilles til den tid, fotoet blev taget (15:42 ved Naukluft og 14:45 ved landingsstedet, lokal soltid). Teksten på stedets side har et emne om fotoet, der folder sig ud, når kontakten slås til.
+- **Afvigelse fra prompten:** Prompten sagde en knap i bjælken, der skifter frem og tilbage. Erfaringerne (U4) siger, at en til/fra-knap er en kontakt med et fast navn i Styr-boksen, så det blev en kontakt, og teksten på siden har en knap til den. Navnet er "Roverens foto" (ental), for der er kun én rover ved hvert sted.
+- **Farverne:** Efterbehandlingen (ACES og eksponeringen, der følger lyset) ville ændre fotoets farver. Shaderen sender derfor fotoet gennem den omvendte ACES-kurve, så det vises med NASA's farver.
+- **Filer:** 8k på pc (3,5-3,6 MB pr. foto), 4k på touch og hvis grafikkortet ikke kan klare 8k (ca. 1 MB), testudgaver 60 KB og masker 70-160 KB. I alt ca. 10 MB i repoet. Hentes først, når kontakten slås til.
+- **Rettet undervejs:** Den første maske talte dybe skygger mellem klipperne og under roveren som "uden data", så det tegnede landskab skinnede igennem som orange pletter, og den gav en stribe i sømmen ved landingsstedet. Nu er kun sorte områder, der rører fotoets øverste eller nederste kant, uden data, og masken regnes rundt om sømmen.
+- **Hjælpen og "Om AtomLab"** nævner nu også Jezero og rovernes fotos (det manglede efter M8b).
+- **Testkøreren:** 15 minutter pr. test i stedet for 10 (`mars` tog 591 af 600 s efter M8b).
+- **Prøvebilleder (fuld grafik i testbrowseren, `landskab-lille.mjs … ,foto`):** Ved Naukluft står Mount Sharp samme sted og har samme form i det tegnede og i fotoet (ingen synlig forskel). Ved landingsstedet passer randens form og bakken foran deltaet, men fotoets rand står 1-2° over den tegnede. Mod højdekortet passede fotoet inden for ca. 0,5°, og den tegnede rand er svag i disen, så det er ikke afgjort, om forskellen er rigtig. Fotoets lyse himmel ved Solen giver et lyst bånd, hvor det toner over i den tegnede himmel. Billeder i sekundet (fotoet slået fra): 0,39-0,41 som før (L1: 0,37-0,49).
 
 ## Status efter M8b (31. oktober 2026): Stå på Mars ved Jezero
 - **Lavet:** To steder ved Jezero (`LANDSKAB.jezero` i `js/kosmos/mars.js`): "Ved randen" (Perseverances stop på sol 1301, 17. oktober 2024, 18,4695° N, 77,2930° Ø, −2.056 m, kigger mod øst-sydøst (95°) ud over deltaet og krateret, lander kl. 16:30 med Solen i ryggen) og "Landingsstedet" (Octavia E. Butler Landing, 18,4446° N, 77,4509° Ø, −2.570 m, kigger mod vest mod deltaets front, lander kl. 7:30). Knappen "🧍 Stå på Mars" ved Jezero-stoppet går til randen. Stederne står i træet under Jezero. Siderne `stå-randen` og `stå-landing` i `js/data/sider/mars.js` med 3 tal hver.
