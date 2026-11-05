@@ -61,6 +61,7 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
 | 3 | ✅ **M8b: Jezero** (lavet 31. oktober 2026, se "Status efter M8b") (J2 Randens inderside og J1 Landingsstedet) + resten af M7b | Teknikken findes, så det er mest data og tekster. **Venter, til U3 er merget:** U3 flytter stedernes tekster i `mars.js`, og M8b skriver nye tekster dér. |
 | 4 | **M8c del 1: rovernes panoramaer** ("📷 Rovernes foto" ved Naukluft og landingsstedet) | Den bedste "Ærligt talt": man skifter mellem det tegnede og det fotograferede fra samme sted. |
 | 5 | **M8c del 2: Curiosity som 3D-model** ved "Hos Curiosity nu" | Modellen er 11,9 MB (over grænsen på ca. 10 MB i afsnit 7 under "Plan for M8"). Hvad den koster på tabletten, ved vi ikke endnu. |
+| 5b | **M8c del 3: stenene og terrænet (tilføjet 3. november 2026 efter jeres fund)** | Jeres fund: "Stenene ser meget ensartede ud", mest helt tæt på, men også længere væk. Se "M8c del 3" sidst i filen. Kommer efter del 1, for panoramaerne er facit for, hvordan stenene skal se ud. |
 | 6 | **M7b-pol: Nordpolen tæt på** | Et nyt polarnet over kappen (se afsnit 1). Nyt arbejde i `klippeplanet.js` og `lav_steder.py`, så det kommer efter M8, hvor resten af Mars er på plads. |
 | 7 | ✅ **U4** (lavet 31. oktober 2026, tidsknappen og kontakterne i resten af AtomLab) | Når U3 er merget. Rører ikke Mars-filerne. |
 | 8 | **L2: lyset, den dyre del** | Kun det, der holder, når det er målt. Kræver en lokal session på jeres pc (Windows, så Remote Control fra skyen virker ikke). |
@@ -297,3 +298,28 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 **Hvad det koster for tabletten:** Månernes kort er 4k på pc og 2k på tablet og telefon som ved Saturn. Nettet med højder og de lokale kort i M7 er nyt, så billeder i sekundet måles før og efter (tjekliste F).
 
 **Komprimerede teksturer (forslag til M2):** KTX2 (Basis Universal) bliver i grafikkortet komprimeret og fylder 4-8 gange mindre end et almindeligt billede. Et 8k-kort fylder ellers ca. 170 MB i grafikkortet (med mipmaps). Det kræver addon-filen `KTX2Loader` og transcoderen (en lille wasm-fil) fra `three@0.186.1` i `lib/three/` og værktøjet `basisu` til at lave filerne. Intet byggetrin. Det prøves og måles i M2, og der bruges JPG, hvis det ikke ser lige så godt ud.
+
+## M8c del 3: stenene og terrænet (jeres fund 3. november 2026)
+*Hentet 5. november 2026 fra grenen `claude/relaxed-cori-h0yxvd`, som ikke blev merget.*
+**Jeres fund:** "Når man står på Mars, ser stenene meget ensartede ud." Jeres svar på hvor: "Mest dem helt tæt på, men også længere væk." Jeres besked: "Skriv det ind i M8c." Der er ikke sagt go til at bygge det endnu.
+
+**Årsagen (læst i `js/solsystem/landskab.js`, linje ca. 196-226):** Stenene er ikke modeller, men tegnes i shaderen i to lag af tilfældige celler (0,32 m og 0,11 m). Alle har næsten samme form og højst ca. en halv meters størrelse. De tegnes kun inden for ca. 1,2-9 m fra kameraet (`fod`, `naer`). Længere væk er der kun fotoet med 25 cm pr. pixel, så der er ingen enkeltsten, og der er et hul mellem de små sten og de store former.
+
+**Mulighederne, billigste først (min anbefaling er trin 1-3, derefter 5):**
+1. **Mere variation i den eksisterende shader:** flere størrelser (småsten til blokke på 1-2 m), flere former (flade plader, runde), forskellig farve pr. sten, klynger styret af støj og sand, der samler sig på den ene side af stenene. Næsten gratis.
+2. **Ambient occlusion (L2 i "Resten af Mars", afsnit 3):** mørkere i sprækker, lavninger og ved stenenes fod, regnet én gang pr. lag som skyggekortene. Ét opslag mere pr. pixel.
+3. **Et mellemlag af sten på ca. 0,5-3 m**, der fades ind mellem de små sten og fotoet. Det løser "også længere væk". Måles på tabletten.
+4. **Rigtige 3D-sten som instanser** (`InstancedMesh`, 3-5 former, nogle tusinde stk., skrues ned med `LAV_KVALITET`), hvis det stadig er fladt efter 1-3. Skyggekortene skal tage dem med. Dyrest på tabletten.
+5. **Rigtige data:** Fordelingen af sten (størrelse og tæthed) ved Naukluft og landingsstedet tages fra panoramaerne i del 1 (PIA20332 og PIA24264) og fra NASA's data om stenene (kilder skal findes og faktatjekkes), i stedet for at gætte. Sig i "Ærligt talt", hvad der er målt, og hvad der er tegnet.
+6. **Bedre materiale** (normalkort for rifler og revner, lag i de store sten) og **støv og stemning** (støv i luften, sandkorn): kun hvis det stadig mangler.
+
+**Prompt (til når I siger go, skrevet 3. november 2026):**
+> Lav M8c del 3: stenene og terrænet i Stå på Mars. Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md`, "M8c del 3" og L2 i `docs/plan-mars.md` og stenkoden i `js/solsystem/landskab.js` (ca. linje 196-226). M8c del 1 er merget, så panoramaerne kan bruges som facit.
+>
+> **Først:** Tag få, små billeder af Naukluft og landingsstedet fra samme retning som panoramaerne (`tests/vaerktoejer/landskab-lille.mjs`), og sammenlign stenenes størrelse, form, farve og tæthed med fotoerne. Skriv, hvad der er forkert, før noget ændres. Mål billeder i sekundet på pc og tablet før og efter (tjekliste F i `docs/erfaringer.md`).
+>
+> **Mål:** Stenene skal ikke se ens ud, hverken helt tæt på eller 10-100 m væk. Byg trin 1, 3 og 2 (i den rækkefølge). Hold shaderen under det antal opslag, tabletten kan klare. Kom først med 3D-instanser (trin 4), hvis jeg siger det efter billederne.
+>
+> **Tekster:** Opdater "Ærligt talt" ved stederne, så den siger, at stenene er tegnet af programmet efter fotoerne og ikke er hver enkelt sten fra Mars. Faktatjek tal om stenene med `/faktatjek`.
+>
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md (er stenene nu forskellige nok, flimrer noget langt væk, kører det glat på tabletten). Model: Opus. Effort: høj (I sætter den selv).
