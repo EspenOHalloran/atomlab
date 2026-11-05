@@ -11,7 +11,7 @@
 // M7a: Over Olympus Mons ligger et fint net med skarpere højder (LOKALE), og flybyen besøger også calderaen og skrænten.
 
 import * as THREE from 'three';
-import { LAV_KVALITET, TEST_HURTIG, ROLIG, passerTil, drejHimmel, visRumstøv } from '../scene3d.js';
+import { LAV_KVALITET, TEST_HURTIG, ROLIG, passerTil, drejHimmel } from '../scene3d.js';
 import { glød, skilt } from './faelles.js';
 import { lavKlippeplanet } from '../solsystem/klippeplanet.js';
 import { lavLuft } from '../solsystem/atmosfaere.js';
@@ -75,6 +75,7 @@ const MÅNER = [
 // kan zoome fra det punkt.
 const OVERFLADE = { id: 'phobos-mars', bredde: -30, længde: -55, højde: 0.3, blik: 0.05, min: 0.02, max: 0.15 };
 const MÅNE_MARGEN = 0.05; // km: så tæt på en måne kan kameraet komme
+const PRIK = 0.8; // pixel: mindste radius for en måne set fra et sted på Mars (se opdaterMåner)
 // Lokale kort (M7a): Over et sted ligger et fint net med sit eget højdekort (HRSC og MOLA, ca. 0,5 km pr. pixel) og
 // farvekort (js/solsystem/klippeplanet.js, lokalt). Grænserne (grader, øst positiv) skal være de samme som STEDER i
 // billeder/solsystem/lav_steder.py. Olympus Mons: ca. 1.000 × 1.000 km om vulkanen, skrænten og lavaen udenfor.
@@ -746,7 +747,12 @@ export default {
         m.plads.getWorldPosition(månePos);
         const afstand = månePos.distanceTo(kamera.position);
         const rVerden = m.form.radius * k;
-        const større = Math.max(1, (afstand * 0.0045) / rVerden);
+        // Ude i rummet ses månen mindst 0,26° (0,0045 rad) i radius, så den kan ses og trykkes på. Ved et sted på Mars
+        // tegnes den i sin rigtige størrelse (Phobos ca. 0,2° bred, Deimos som en klar stjerne), dog mindst PRIK pixel
+        // i radius, så Deimos ikke forsvinder. Overgangen følger kameraets afstand, så månen ikke hopper i størrelse.
+        const nær = påSted ? 1 - THREE.MathUtils.smoothstep(kamera.position.distanceTo(system.position) / (R * k), 2.2, 4.5) : 0;
+        const pixel = (2 * Math.tan(THREE.MathUtils.degToRad(kamera.fov) / 2)) / Math.max(1, verden.renderer.domElement.clientHeight) / kamera.zoom;
+        const større = Math.max(1, (afstand * THREE.MathUtils.lerp(0.0045, PRIK * pixel, nær)) / rVerden);
         m.krop.scale.setScalar(større);
         const str = (afstand * 0.02) / k;
         m.etiket.visible = navneTil() && !påSted && !rejse.flyver && m.id !== visning && (rVerden * større) / afstand < 0.03;
@@ -886,7 +892,6 @@ export default {
       for (const [, x] of landskaber) if (x.land) x.land.gruppe.visible = x === l;
       system.visible = false;
       solKerne.visible = solGlød.visible = false;
-      visRumstøv(false);
       opdaterNavne();
       kamera.near = 0.0003; // 0,3 m (1 enhed = 1 km i landskabet)
       kikkert = 1;
@@ -924,7 +929,6 @@ export default {
       panorama.skjul(true);
       system.visible = true;
       solKerne.visible = solGlød.visible = true;
-      visRumstøv(true);
       verden.renderer.toneMappingExposure = gemt.eksponering;
       if (verden.glød) verden.glød.enabled = gemt.glød;
       kamera.near = gemt.nær;
@@ -1483,6 +1487,7 @@ export default {
             id: m.id, vinkel: m.vinkel, drejning: omdrejning.rotation.y, afstand: (m.plads.position.length()) * S,
             modMars: THREE.MathUtils.radToDeg(lon0.angleTo(tilMars)), forside: THREE.MathUtils.radToDeg(forside.angleTo(fart)),
             større: m.krop.scale.x, navn: m.etiket.visible, ...m.hentet, radius: m.form.radius * S,
+            synsradius: THREE.MathUtils.radToDeg((m.form.radius * m.krop.getWorldScale(new THREE.Vector3()).x) / midt.distanceTo(kamera.position)), // grader på himlen
           };
         }),
         // Hvor en måne står på skærmen (pixels), så testen kan trykke på den

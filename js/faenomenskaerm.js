@@ -16,7 +16,7 @@
 // Elementerne i index.html har skærmens navn foran (fx kosmosListe og solsystemListe), så CSS og tests kan finde dem.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, ROLIG, piletaster, visTåger, tågerVist } from './scene3d.js';
+import { verden, sætVindue, passerTil, ROLIG, piletaster, visTåger, tågerVist, visRumstøv, rumstøvVist } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
@@ -189,6 +189,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
     verden.opdateringer.delete(opdater);
     piletaster(false);
     visTåger(true);
+    visRumstøv(true);
     luk();
     tidsknap.sæt('spil');
     stjerneUr.tid = null;
@@ -225,6 +226,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
     }
     visFase(null);
     visTåger(f.tåger !== false); // tåger: false = en sort himmel med stjerner (i vores eget solsystem)
+    visRumstøv(f.tåger !== false); // og intet blåligt rumstøv (det hører til atomet og lignede prikker på himlen)
     $('Forklaring').innerHTML = '';
     forklaringVist = '';
     kørende = f.lav(gruppe, {
@@ -851,6 +853,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       sted: () => stedNu(),
       gåTil: (id) => { kørende?.gåTil?.(id); visSted(); },
       tåger: () => tågerVist(), // de farvede tågeskyer på himlen
+      rumstøv: () => rumstøvVist(), // det blålige rumstøv fra scene3d.js
       tid: () => tid,
       stjerneTid: () => stjerneUr.tid,
       antalObjekter: () => { let n = 0; gruppe.traverse(() => n++); return n; },
