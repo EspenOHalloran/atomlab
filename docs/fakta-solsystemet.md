@@ -799,6 +799,22 @@ En hjælpeagent (Opus, høj effort) læste kilderne direkte.
 
 **Fælder (nye):** "Phobos står op i øst" (vest). "Mars' himmel er blå om dagen og rød ved solnedgang" (omvendt). "Butterscotch" om himlen. "Billederne fra kredsløb er grå" (HiRISE har også en farvemosaik fra 2025: skriv "de billeder, programmet bruger"). "1 m mellem højderne = 1 m skarphed". "Solen er halvt så stor fra Mars" (ca. 2/3 så bred).
 
+### Faktatjek M8c del 1: roverens foto (5. november 2026)
+Tjekket af Opus i hovedsessionen mod kilderne, som blev læst direkte (ingen hjælpeagent, for alle påstande står i NASA's egne sider og data). `mastcamz.asu.edu` var blokeret og blev ikke brugt.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Curiositys foto fra Naukluft er taget med Mastcam (venstre kamera) 4. april 2016, sol 1302, midt på eftermiddagen, og sat sammen af mange billeder | OK ("dozens of images", "mid-afternoon", "April 4, 2016", "1,302nd sol"). Billederne er taget 5. april 2016 kl. 00:25-01:03 UTC, dvs. 4. april i USA. LMST ca. 15:07-15:44 | science.nasa.gov/photojournal/full-circle-vista-from-naukluft-plateau-on-mars/ (læst), NASA's API over rå billeder (`mars.nasa.gov/api/v1/raw_image_items`, sol 1302, læst) og Mars24-formlerne (Allison og McEwen 2000) |
+| Farverne er justeret, så klipperne ser ud, som de ville i dagslys på Jorden | OK ("a color adjustment that approximates white balancing, to resemble how the rocks and sand would appear under daytime lighting conditions on Earth") | Samme side (læst) |
+| Nederst roverens dæk, mod øst-sydøst roverens skygge | OK: Skyggen står ved 113°, og Solen stod ved 293° (Mars24) | Fotoet og egen måling (plan-mars.md, M8c del 1) |
+| Perseverances foto er taget med Mastcam-Z 21. februar 2021, sol 3, af 142 billeder, om eftermiddagen | OK. LMST ca. 15:17-16:40 (billedernes egne tider) | science.nasa.gov/photojournal/mastcam-zs-first-360-degree-panorama/ (læst), NASA's nyhed "NASA's Perseverance Rover Gives High-Definition Panoramic View of Landing Site" (læst), NASA's API over rå billeder for Mars 2020 (sol 3, læst) |
+| "Roverens tredje døgn på Mars" | **Rettet** til "tre døgn efter landingen": Roverne tæller fra sol 0 (landingsdagen). NASA skriver selv "the third Martian day of the mission" | Mars 2020 og MSL tæller sol fra 0 |
+| "Roverens døgn nummer 1.302" | **Rettet** til "en sol er et døgn på Mars, og roverne tæller dem fra landingen" (samme grund) | Som ovenfor |
+| "NASA skriver ikke, hvordan farverne er justeret" (Perseverance) | **Rettet** til "På NASA's side om fotoet står der ikke …": Photojournal-siden og NASA's nyhed siger intet om farverne. En anden side ("natural color", "not white balanced") handler om et andet panorama (PIA23727, 110 mm, sol 4), så den er ikke brugt | Photojournal PIA24264 og PIA23727 (begge læst), nasa.gov (læst) |
+| Kameraerne sidder ca. 2 m oppe | OK (Mastcam-Z: kameraets centrum 1,97 m over roverens nulpunkt i CAHVOR-modellen, Curiositys Mastcam ca. 2 m, står allerede i "Ærligt talt") | NASA's API (CAHVOR, læst), tidligere faktatjek M8a |
+| Horisonten passer inden for ca. 1° | **Rettet** fra "under 1°": ved Naukluft ca. 0,1°, ved landingsstedet ca. 0,5° mod højdekortet, men i prøvebillederne står fotoets rand 1-2° over den tegnede (den tegnede rand er svag i disen, så det er usikkert) | Egen måling (plan-mars.md, M8c del 1) |
+| "Ting tæt på passer ikke helt, for fotoet er sat sammen af mange billeder" | **Rettet**: Den vigtigste grund er, at kameraet sidder højere end øjnene (2 m mod 1,7 m), og at kortene fra kredsløb ikke viser de små sten | Egen vurdering |
+
 ### Faktatjek M8b: Stå på Mars ved Jezero (31. oktober 2026)
 En hjælpeagent (Opus, høj effort) læste kilderne direkte, hvor intet andet er nævnt. `www.jpl.nasa.gov` svarede 403, så JPL's nyheder er læst i deres udgave på nasa.gov (samme tekst).
 

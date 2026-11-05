@@ -2,6 +2,13 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 5. november 2026 (før M8c del 1)
+**Senest lavet (5. november 2026): oprydning i dokumenterne og planen efter Mars.**
+- **Dokumenterne er gjort kortere,** fordi hver session læser dem (jeres go til alle fire punkter). CLAUDE.md har kun reglerne og en kort oversigt, og detaljerne om hver fil står i [docs/kode.md](../kode.md). Den gamle "Lige nu" står ordret i [docs/arkiv/historik.md](../arkiv/historik.md), og listerne "Ikke afprøvet" er samlet herunder. Det færdige i plan-mars.md og de færdige trin står i `docs/arkiv/`. erfaringer.md er sorteret efter emne. Intet er slettet.
+- **Planeterne efter Mars er besluttet** ([docs/plan-solsystemet.md](../plan-solsystemet.md), afsnit 9): Mars slutter med M8c del 1. Så Jupiter → Venus → Merkur → Uranus og Neptun → Pluto (med Charon) → overblikket med en filmisk overgang. De store måner står som små kugler med rigtige kort fra start.
+- **Ni nye idéer** er vurderet under "Idéer til senere". Alle undtagen Hjernen og AI står i planen (punkt 10 nedenfor).
+
+
 ## "Lige nu", som det stod 5. november 2026
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Sidst opdateret: 5. november 2026 (ni nye idéer er noteret under "Idéer til senere", og planeterne efter Mars er besluttet ([docs/plan-solsystemet.md](../plan-solsystemet.md), afsnit 9): Mars slutter med M8c del 1, så Jupiter først. Idéerne undtagen Hjernen og AI står i planen under "Venter på et go" (punkt 9 og 10). Næste: M8c del 1 og planen for Jupiter, begge venter på et go. Før det, 31. oktober 2026: M8b er færdig: Stå på Mars ved Jezero, og samme dag blev U4 færdig i en anden session: den samme tidsknap og de samme kontakter i resten af AtomLab. Næste er M8c del 1, rovernes panoramaer, og den venter på jeres go).*
 
