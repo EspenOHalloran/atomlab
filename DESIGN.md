@@ -80,6 +80,8 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Kvaliteten og oplevelsen skal være så flot og imponerende som muligt ("Det hele skal med", om Mars 24. oktober 2026).
 
+**Himlen i Solsystemet (jeres ord 5. november 2026):** "Helt generelt skal baggrundene (det ydre rum) se realistiske ud, dog uden at det behøver decideret modelleres op." Der var prikker, der bevægede sig hurtigt, alle steder i Solsystemet. De var efter alt at dømme rumstøvet, som nu er skjult i hele Solsystemet.
+
 **Svar fra 23. oktober 2026, som stadig gælder:** Fotos af grundstofferne kommer efter teksterne i lag, fra Wikimedia Commons med navn og licens. Solsystemets spørgsmål 1-5 følger planens forslag, indtil I siger andet. Noterne fra afprøvningen med jeres søn ligger i `docs/fable/soen-og-espens-noter.md`.
 
 ## Grundregler
