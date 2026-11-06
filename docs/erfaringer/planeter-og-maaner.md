@@ -1,5 +1,9 @@
 # Planeter og måner: billeder, højder, kort og luft
 
+## Hentebjælken (6. november 2026)
+- Testen forsinker billederne med `route` (2,5 s), før serveren svarer. Så kendes størrelsen ikke, og en bjælke, der kun lagde de kendte størrelser sammen, viste "4,0 af 4,0 MB", mens den ventede (højdekortet var hentet, farvekortet ikke). Nu vises MB først, når alle størrelser kendes. Solsystemet åbner med Solen, som viser Jorden, så en test af Jordens første hentning skal starte et andet sted (`localStorage` `atomlabSolsystem`).
+- Billeder fra `hentBillede` har en blob-adresse som `src`. Tests, der læste filnavnet i `image.src` (`aarstider`, roverens foto i `landskab`), fejlede. Filnavnet står nu i `image.dataset.fil`.
+
 ## Grafik med rigtige billeder (Jorden og Månen, oktober 2026)
 - **NASA's servere var blokeret** i Claude-miljøet. De blev tilladt under miljøets Network access. `visibleearth.nasa.gov` sender nu videre til `science.nasa.gov` (blokeret), men filerne kan hentes direkte fra `eoimages.gsfc.nasa.gov` og `svs.gsfc.nasa.gov`. Adresserne står i `billeder/solsystem/lav_billeder.py`.
 - **Black Marble viser landet svagt blåt** (i måneskin). Lagt oven på natsiden blev hele natten lilla. Den blå baggrund trækkes fra, så kun byernes lys er tilbage.

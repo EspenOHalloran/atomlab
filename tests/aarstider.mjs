@@ -119,7 +119,7 @@ const kloder = await T(async () => {
   await m.billederHentet();
   await new Promise((r) => setTimeout(r, 0));
   const { verden } = await import('/js/scene3d.js');
-  const fil = (t) => t?.image?.src?.split('/').pop() ?? 'tegnet';
+  const fil = (t) => t?.image?.dataset?.fil ?? t?.image?.src?.split('/').pop() ?? 'tegnet'; // (hentBillede: src er en blob-adresse)
   let u = null;
   verden.scene.traverse((o) => { if (!u && o.material?.uniforms?.dagA) u = o.material.uniforms; });
   const iBrug = { dag: fil(u.dagA.value), nat: u.harNat.value, skyer: u.harSkyer.value, højde: u.harHoejde.value, hav: u.harHav.value };

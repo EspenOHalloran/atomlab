@@ -1,12 +1,12 @@
 // Henter billederne til planeterne og månerne i Solsystemet (Mars, Saturn og Jupiter) fra billeder/solsystem/.
 // Hvert billede hentes kun én gang og bliver i grafikkortet, så det går hurtigt at åbne en planet igen.
-// Billedet afkodes, før det bruges (image.decode() sker uden for hovedtråden), så det ikke hakker, når det lægges i
-// grafikkortet.
+// Billedet hentes med hentBillede (js/hentning.js), så bjælken "Henter …" kan tælle de hentede MB, og det er afkodet,
+// før det bruges (uden for hovedtråden), så det ikke hakker, når det lægges i grafikkortet.
 
 import * as THREE from 'three';
+import { hentBillede } from '../hentning.js';
 
 export const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
-const henter = new THREE.TextureLoader();
 export const lager = new Map(); // filnavn → { tekstur, fejlet, venter, fejlVenter }
 
 // hent(navn, færdig, valg): færdig(tekstur) kaldes, når billedet er klar (med det samme, hvis det allerede er hentet).
@@ -18,18 +18,18 @@ export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1,
   if (!b) {
     b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
     lager.set(navn, b);
-    henter.load(new URL(navn, MAPPE).href, (t) => {
+    hentBillede(new URL(navn, MAPPE).href).then((billede) => {
+      const t = new THREE.Texture(billede);
+      t.needsUpdate = true;
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
       if (kanaler === 2) t.format = THREE.RGFormat;
       if (kanaler === 1) t.format = THREE.RedFormat;
       if (rundt) t.wrapS = THREE.RepeatWrapping;
       t.anisotropy = anisotropi;
-      (t.image.decode ? t.image.decode() : Promise.resolve()).catch(() => {}).then(() => {
-        b.tekstur = t;
-        for (const f of b.venter) f(t);
-        b.venter.length = 0;
-      });
-    }, undefined, () => {
+      b.tekstur = t;
+      for (const f of b.venter) f(t);
+      b.venter.length = 0;
+    }, () => {
       b.fejlet = true;
       for (const f of b.fejlVenter) f();
       b.fejlVenter.length = 0;
@@ -41,6 +41,14 @@ export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1,
     if (b.fejlet) fejl();
     else if (!b.tekstur) b.fejlVenter.push(fejl);
   }
+}
+
+// Er billedet hentet (og ligger i grafikkortet)?
+export const iLager = (navn) => Boolean(lager.get(navn)?.tekstur);
+// Den lille udgave af et billede bruges ikke mere (den store er sat ind): fjern den fra grafikkortet og lageret
+export function glem(navn) {
+  lager.get(navn)?.tekstur?.dispose();
+  lager.delete(navn);
 }
 
 // De hentede billeder, og om de ligger med én kanal i grafikkortet (til tests). navne: kun billeder, hvis navn starter
