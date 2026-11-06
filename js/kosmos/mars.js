@@ -105,8 +105,9 @@ const STEDER = [
   // Calderaen: midten af kraterne i højdekortet. Kameraet kigger skråt ned fra syd-sydvest.
   { id: 'caldera', navn: 'Calderaen', bredde: 18.4, længde: -133.3, tid: 8, kompas: 200, vinkel: 30, størrelse: 0.04, lokalt: 'olympus', detalje: true },
   // Skrænten mod nordvest, hvor den er højest i højdekortet (ca. 7,8 km fra kanten til foden på ca. 20 km).
-  // Kameraet står vest for den, kigger mod øst (mod morgensolen), og skrænten ligger i skygge.
-  { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 10, størrelse: 0.018, lokalt: 'olympus', detalje: true },
+  // Kameraet står vest for den, kigger mod øst (mod morgensolen), og skrænten ligger i skygge. Set fra 22° og ca. 60 km
+  // bredt (6. november 2026): helt tæt på (10°, 18 km) blev detaljekortets 0,22 km pr. pixel til grumsede klatter.
+  { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 22, størrelse: 0.06, lokalt: 'olympus', detalje: true },
   // M5a. Koordinaterne er fra USGS' navneliste (MDIM 2.1, passer med MOLA). Tharsis: Pavonis Mons i midten, set fra
   // sydvest langs rækken (Arsia forrest, Ascraeus bagerst), med morgensolen fra siden. Valles Marineris: mellem Melas (10,52° S, 72,54° V) og Candor Chasma
   // (6,53° S, 70,78° V). Hellas: midten (42,43° S, 70,50° Ø) fra højt oppe over nordranden.
@@ -132,7 +133,7 @@ const TUR = [
   // nulpunktet (USGS SIM 3470). Trykket: exp(−20,5 / 11) ≈ 13 % (skalahøjden 9,5-11 km giver 11-15 %).
   { id: 'caldera', titel: 'Calderaen', tekst: 'På toppen ligger seks kratere, der overlapper hinanden. Tilsammen er de ca. 65 × 80 km og op til ca. 3 km dybe.' },
   // Skrænten mod nordvest: ca. 7,8 km fald på ca. 20 km, målt i højdekortet. Mount Everest 8.849 m.
-  { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet her ca. 8 km ned til sletten på ca. 20 km. Det er næsten lige så højt som Mount Everest.' },
+  { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet ca. 8 km ned til sletten. Det sker over en strækning på kun ca. 20 km. 8 km er næsten lige så højt som Mount Everest.' },
   // M5a, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 3-5 og "Faktatjek M5a"). Afstande
   // mellem vulkanernes midter fra USGS' koordinater: 713 og 808 km. Olympus Mons-Pavonis Mons: ca. 1.600 km.
   { id: 'tharsis', titel: 'Tharsis', tekst: 'Tre kæmpevulkaner på en lige linje: Arsia, Pavonis og Ascraeus Mons. Der er ca. 700-800 km mellem dem.' },

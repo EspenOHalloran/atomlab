@@ -306,7 +306,7 @@ await s.click('#solsystemBjælke button:has-text("Næste: Skrænten")');
 await ventFremme();
 m = await måling();
 v = await ved('skraent');
-tjek('ved skrænten: lavt (10° over horisonten) og over jorden', Math.abs(v.vinkel - 10) < 0.5 && v.overJorden > 2 && v.overJorden < 25 && v.fokus < 1, JSON.stringify(v));
+tjek('ved skrænten: 22° over horisonten og over jorden', Math.abs(v.vinkel - 22) < 0.5 && v.overJorden > 2 && v.overJorden < 150 && v.fokus < 1, JSON.stringify(v));
 tjek('ved skrænten: aldrig skubbet op under flyvningen', m.skub === 0 && m.min > 2, JSON.stringify(m));
 tjek('ved skrænten: teksten om skrænten, og turen fortsætter til Tharsis', /Skrænten/.test(await s.textContent('#solsystemTekst')) && (await fm(() => atomlabTest.solsystem.knapper())).some((k) => k.startsWith('Næste: Tharsis')));
 tjek('ved skrænten: kun nettet over Olympus Mons tegnes, og Tharsis-kortet hentes i baggrunden', m.net <= 2 && (await fm(() => { const l = atomlabTest.solsystem.fænomen().billeder().lokalt; return l.olympus.klar && !l.tharsis.klar && !l.valles.klar && l.tharsis.hentet.højde !== undefined; })), JSON.stringify(m));
