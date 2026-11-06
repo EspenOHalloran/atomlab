@@ -488,6 +488,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Sol tælles fra 0.** "Sol 3" er tre døgn efter landingen, ikke det tredje døgn.
 
 ### Skærme og UI
+- **Bjælken "Henter AtomLab"** (6. november 2026): Forsiden henter ca. 95 JavaScript-filer (ca. 3,5 MB), før noget virker, og uden bjælke lignede siden en frossen side. Moduler kan ikke melde, hvor langt de er, så bjælken tæller hentede filer med `PerformanceObserver` mod et skøn (`FORVENTET` i index.html). Testen `henter` fanger, når skønnet ikke passer længere. Med `waitUntil: 'commit'` og forsinkede filer (`page.route`) kan bjælken ses i en test.
 
 #### En ny skærm med samme skal som en anden (Solsystemet, M4a, oktober 2026)
 - **Del skallen i stedet for at kopiere den.** Kosmos' skal blev til `lavFænomenSkærm` (js/faenomenskaerm.js). Elementerne får skærmens navn foran (`kosmosListe`, `solsystemListe`) og beholder de samme klasser, så CSS'en kun skulle have `:is(#kosmos, #solsystem)` de steder, hvor der stod `#kosmos`. Alle `querySelectorAll` i skallen er afgrænset til skærmens sektion.
