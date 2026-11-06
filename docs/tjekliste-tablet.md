@@ -40,7 +40,7 @@
 - **C14 Elektronsky og orbitalerne:** intet at bemærke.
 - **C15 Generelt og Formørkelser:** intet at bemærke. Det sorte hul afprøves først, når det er bygget om (jeres ønske: byg det om som planlagt, før det testes på tabletten).
 
-**Fund (til rettelse, venter på et go):**
+**Fund (til rettelse, venter på et go).** Fund 1, 5, 6 og 7 er rettelsespakken ([prompt-rettelsespakken.md](prompt-rettelsespakken.md)).
 1. **Hop i flybyen ved Tharsis og Hellas:** Når bevægelsen stopper, hopper kameraet et hak tættere på. Formentlig har slutningen af flyvningen og det stillestående billede ikke samme afstand eller zoom.
 2. **Hak i Mars-flybyen** og ved nedstigningen til Jezero og tilbage (A7, B9-B11).
 3. **Tæppemønstret** i jorden tæt på i Stå på Mars (hænger sammen med M8c del 3, stenene og terrænet).
