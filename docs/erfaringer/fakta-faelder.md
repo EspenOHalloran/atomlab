@@ -1,0 +1,54 @@
+# Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
+
+- "Stickney fylder halvdelen af Phobos" (NASA's egen side). Krateret er ca. 9 km på en måne, der er ca. 26 km lang, og dækker kun få procent af overfladen.
+- "Phobos er kun i Mars' skygge omkring jævndøgn." Det er Deimos. Phobos er i skygge på næsten hver omgang, undtagen omkring solhverv.
+- "Hall brugte verdens største kikkert." Det var verdens største *linsekikkert*. Spejlkikkerter var større.
+- "MMX kommer hjem i 2029" (Wikipedia i oktober 2026). Det er den gamle plan. JAXA siger 2031. Og opsendelsen var 20. oktober i Japan, men 19. oktober i Danmark: Skriv måned og år.
+- "Den synkrone bane er en omgang på et døgn." Den gælder stjernedøgnet (Mars' 24 t 37 min), ikke soldøgnet.
+- "En supernova lyser mere end en hel galakse." Det passer kun nogenlunde for type Ia. En kollaps-supernova lyser som ca. 0,2-1 milliard sole, og galaksen er 40-100 gange stærkere.
+- "Tjernobyl skyldtes, at kølingen svigtede." Reaktoren løb løbsk under et forsøg. Fukushima var kølesvigt.
+- "Stjernens lag: C, O, Ne, Si." Brændingen sker i rækkefølgen C, Ne, O, Si, så udefra og ind er det H, He, C, Ne, O, Si, Fe.
+- "Man bliver til spaghetti ved et sort hul." Kun ved små sorte huller. Ved de kæmpe sorte huller mærker man næsten intet ved horisonten.
+- "Meteoren, der udryddede dinosaurerne." Det var en asteroide. En meteor er lysstriben.
+- "Halveringstiden er den tid, det tager for en kerne at henfalde." Det er den tid, hvor halvdelen af mange kerner er henfaldet.
+- "Beta-plus = en positron skydes ud." Ofte fanger kernen i stedet en elektron.
+- "Første gang set …" Tjek, om det var "første gang set tydeligt" eller "første direkte måling".
+- Citater, der citeres i mange udgaver (Sagan, Einstein), har ofte en ændret ordlyd.
+- "En asteroide lavede krateret" (Jezero, M8b). Det vides ikke, hvad der ramte: skriv "nedslag". Og randen er ikke kun sten fra ét nedslag.
+- "Roveren så farerne i sine billeder" (Perseverances landing). Billederne gav kun pladsen. Farerne stod på et kort, der var tegnet på forhånd.
+- "Nøgne kerner" og "ioner": et frit atom kan højst holde på én ekstra elektron (O²⁻ findes kun i krystaller).
+- "Natrium giver sin elektron til chlor, fordi begge vil have en fuld skal." For to frie atomer koster det energi: Det kræver ca. 5,1 eV at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage. Gevinsten kommer, når Na⁺ og Cl⁻ trækker i hinanden (i saltkrystallen eller som et par).
+- Supertunge grundstoffer: Halveringstiden spænder fra under et millisekund (Og) til over et døgn (Db-268). Skriv ikke "henfalder med det samme" om dem alle.
+- "Zirkonia er kunstige diamanter." Det er en efterligning af diamant, ikke diamant.
+- "Antistof har den modsatte ladning." Også partikler uden ladning (neutronen, neutrinoen) har en antitvilling.
+- "Protoner og neutroner blev dannet efter en milliontedel af et sekund." Nærmere 10-20 milliontedele (en hundredtusindedel).
+- "Big Bang lavede kun hydrogen og helium" og "alle tungere grundstoffer kommer fra stjerner". Der kom også lidt lithium, og meget guld kommer fra neutronstjerner, der støder sammen.
+- "Penzias og Wilson troede, at støjen kom fra duer." Duerne (og deres klatter) var én af flere mistanker.
+- "Solen bliver en rød kæmpe om 5 milliarder år." Den begynder om ca. 5 og er størst om ca. 7,6 milliarder år. Helium tænder først, når den er størst.
+- "Røde dværge lever i billioner af år." Kun de mindste. En på en halv solmasse lever "kun" ca. 100 milliarder år.
+- "Type Ia-supernovaer lyser præcis lige stærkt." De varierer 2-3 gange og bliver først et standardlys efter en rettelse (de stærkeste falder langsomst).
+- "Grænsen på 1,4 sole gælder også jernkernen." Det er samme slags grænse, men jernkernen falder sammen ved ca. 1,2-2 sole.
+- "Årstiderne skyldes afstanden til Solen." Nej: Jorden er tættest på Solen omkring 3. januar. Det er aksens hældning, der giver årstiderne.
+- "I Grønland er der midnatssol og mørketid." Kun nord for polarcirklen (fx Ilulissat). Sydgrønland (Nuuk) har ingen af delene. Og lige ved polarcirklen kan man skimte Solen ved vintersolhverv, fordi luften bøjer lyset.
+- "Jorden drejer 365 gange om sig selv på et år." Der er ca. 365 døgn, men set mod stjernerne drejer Jorden ca. 366 gange.
+- "Brænder" om stjerner: Astronomer siger det, men det er fusion, ikke ild. Forklar det, eller skriv "smelter sammen".
+- "Ved en ringformørkelse er Månen for lille." Den *ser* for lille ud, fordi den er længere væk.
+- "Månens afstand svinger mellem 363.000 og 406.000 km." Det er gennemsnittet for, hvornår den er tættest på og længst væk. Yderværdierne er ca. 356.400 og 406.700 km.
+- "Månen i Jordens kerneskygge = total måneformørkelse." Kun når *hele* Månen er inde i kerneskyggen.
+- "Den yderste skal har højst 8 elektroner." Næsten altid, men palladium har skallerne 2, 8, 18, 18. Og grænsen skyldes rækkefølgen af energierne (den næste skal begynder at fylde), ikke Pauli-princippet.
+- "Solens overflade koger." Det er også konvektion: Varm gas stiger op og kold synker ned (Solen i M4b). Skriv "bobler" eller "simrer".
+- "Lyset er 8 minutter og 20 sekunder om at nå Jorden." Det er 499 sekunder, altså 8 min 19 s. Regn afrundinger efter, før de står med sekunder.
+- "Olympus Mons' sider skråner ca. 5°." Wikipedia skriver 5 % (ca. 3°). Procent og grader er ikke det samme. Skriv "nogle få grader".
+- Koordinater fra Wikipedia kan være ældre end USGS' navneliste (Olympus Mons: 18,65° N, 226,2° Ø mod 18,40° N, 226,00° Ø). Brug navnelisten (planetarynames.wr.usgs.gov).
+- "Jordens ydre kerne koger." Det flydende metal strømmer rundt (konvektion) som suppe i en gryde, drevet af varme og af lette stoffer fra den faste indre kerne. Det koger ikke.
+- "Den dødelige stråledosis er 4-5 Sv." Kilderne siger ca. 3,5-4,5 Gy for halvdelen uden behandling. Skriv "omkring 4 Sv", og at behandling hjælper. En CT-skanning er ca. 2-10 mSv (hovedet ca. 1-2), ikke 5-10.
+- "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.
+
+- "Den Store Røde Plet har raset i 350 år." Cassinis plet fra 1665-1713 forsvandt nok. Den nuværende er set sikkert siden 1831 (Sánchez-Lavega m.fl. 2024). Den er ikke længere "2-3 Jordkloder bred", men ca. én (ca. 16.000 km i 2021). NASA's side "Jupiter Facts" er forældet på begge punkter.
+- "Jupiter er en mislykket stjerne." Brint smelter først sammen ved ca. 75-80 gange Jupiters masse, og en brun dværg kræver ca. 13 gange.
+- "Jupiter beskytter Jorden mod kometer." Horner og Jones (2008-2012): Jupiter fjerner nogle kometer, men sender også asteroider og kometer ind mod os. Den er ikke et enkelt skjold.
+- "Io har over 400 aktive vulkaner." Ca. 150 er set i udbrud, og der er ca. 400 i alt (NASA's skøn). Bland ikke kendte og aktive sammen.
+- "Zonerne er opadgående luft." Det gælder kun øverst. Ca. 65 km under vandskyerne er mønstret omvendt (Juno).
+- Antal måner skifter hurtigt: NSSDC siger 95 og MPC sagde 101 i marts 2026, men JPL og NASA siger 115 (april 2026). Skriv måned og år.
+- JPL SSD's tabel over månernes baner (`sats/elem`) har en kolonne "P", som ikke er den sideriske omløbstid (Io 1,7627 mod 1,7691 døgn). Brug NSSDC's omløbstider, ellers passer resonansen 1 : 2 : 4 ikke.
+- USGS' farvemosaik af Io er forstærket (violet, grøn og nær-infrarød). "De ægte farver er meget mere dæmpede" (USGS).

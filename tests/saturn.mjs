@@ -41,11 +41,11 @@ const side = async (adresse) => {
   return s;
 };
 
-// Saturn står i Solsystemets liste efter Mars
+// Saturn står i Solsystemets liste efter Jupiter
 {
   const s = await side(`${ADRESSE}/?test#solsystem`);
   const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
-  tjek('Saturn står i listen efter Mars', ids.indexOf('saturn') === ids.indexOf('mars') + 1 && Boolean(await s.$('#solsystem .kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
+  tjek('Saturn står i listen efter Jupiter', ids.indexOf('saturn') === ids.indexOf('jupiter') + 1 && Boolean(await s.$('#solsystem .kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
   // Citatet af Huygens (med den latinske ordlyd, når musen holdes over)
   await s.click('#solsystem .kosmos-valg[data-id="saturn"]');
   const citat = await s.evaluate(() => { const c = document.getElementById('solsystemCitat'); return { vist: c && !c.hidden, tekst: c?.textContent ?? '', latin: c?.querySelector('.citat-tekst')?.title ?? '' }; });

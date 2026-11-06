@@ -51,7 +51,7 @@ tjek('højdekortet: bunden af Hellas er under −7 km', højder.hellas < -7000, 
 
 // Mars står efter Jorden og før Saturn i Solsystemet
 const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
-tjek('Mars står efter Formørkelser (Jorden) og før Saturn', ids.indexOf('mars') === ids.indexOf('formoerkelser') + 1 && ids.indexOf('saturn') === ids.indexOf('mars') + 1, JSON.stringify(ids));
+tjek('Mars står efter Formørkelser (Jorden) og før Jupiter', ids.indexOf('mars') === ids.indexOf('formoerkelser') + 1 && ids.indexOf('jupiter') === ids.indexOf('mars') + 1, JSON.stringify(ids));
 // Del 1 (30. oktober 2026): "Start flyby" er grå, indtil kortene til første stop (Olympus Mons) er hentet på forhånd
 const vedÅbning = await s.evaluate(() => {
   document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click();

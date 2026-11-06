@@ -18,6 +18,7 @@ import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
 import { SIDE, SIDER } from '../data/sider/saturn.js';
+import { hent, hentedeBilleder } from '../solsystem/hent.js';
 
 const SATURN_R = 60268; // km ved ækvator
 const SATURN_POL = 54364; // km ved polerne
@@ -66,42 +67,10 @@ const MÅNER = [
 
 // Billederne (se billeder/solsystem/KILDER.md): pc, tablet og telefon henter -4k.jpg, tests -2k.jpg.
 // Pc henter -8k.jpg af de måner, hvor originalen er skarp nok (MÅNER_8K), hvis grafikkortet kan klare det.
-// De bliver i grafikkortet, så det går hurtigt at åbne prototypen igen.
+// De hentes med js/solsystem/hent.js og bliver i grafikkortet, så det går hurtigt at åbne prototypen igen.
+// Månernes kort er målinger i gråtoner og ligger med kun én kanal i grafikkortet (fylder en fjerdedel).
 const STØRRELSE = TEST_HURTIG ? '2k' : '4k';
 const MÅNER_8K = new Set(['enceladus', 'tethys', 'dione', 'rhea']);
-const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
-const henter = new THREE.TextureLoader();
-const lager = new Map();
-// farve: billedet er et farvefoto (sRGB). Månernes kort er målinger i gråtoner og bruges, som de er,
-// med kun én kanal i grafikkortet (fylder en fjerdedel).
-// Billedet afkodes, før det bruges (image.decode() sker uden for hovedtråden), så det ikke hakker, når det lægges i
-// grafikkortet. fejl kaldes, hvis billedet ikke kan hentes.
-function hent(navn, færdig, farve = true, fejl) {
-  let b = lager.get(navn);
-  if (!b) {
-    b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
-    lager.set(navn, b);
-    henter.load(new URL(navn, MAPPE).href, (t) => {
-      t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
-      if (!farve) t.format = THREE.RedFormat;
-      (t.image.decode ? t.image.decode() : Promise.resolve()).catch(() => {}).then(() => {
-        b.tekstur = t;
-        for (const f of b.venter) f(t);
-        b.venter.length = 0;
-      });
-    }, undefined, () => { // mangler billedet, bruges det tegnede
-      b.fejlet = true;
-      for (const f of b.fejlVenter) f();
-      b.fejlVenter.length = 0;
-    });
-  }
-  if (b.tekstur) færdig(b.tekstur);
-  else if (!b.fejlet) b.venter.push(færdig);
-  if (fejl) {
-    if (b.fejlet) fejl();
-    else if (!b.tekstur) b.fejlVenter.push(fejl);
-  }
-}
 const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på månernes kort
 
 // Flybyen: et stop ved hvert sted. fokus 'saturn', 'ringe' eller en måne.
@@ -223,7 +192,7 @@ export default {
         m.klode.sætKort(t);
         if (forhånd && aktiv) verden.renderer.initTexture(t);
         klar?.();
-      }, false, klar);
+      }, { farve: false, kanaler: 1, rundt: false, fejl: klar });
     }
 
     // Solen: en lille, skarp prik langt væk i den retning, lyset kommer fra (fra Saturn ser den ca. 9½ gange mindre ud end fra Jorden)
@@ -257,8 +226,8 @@ export default {
     let egneMangler = 2;
     // (queueMicrotask: Er kortene allerede i lager, kommer svaret med det samme, før resten af lav() er kørt)
     const egetKort = () => { if (--egneMangler === 0) queueMicrotask(hentMåner); };
-    hent(`saturn-${STØRRELSE}.jpg`, (t) => { planet.sætKort(t); egetKort(); }, true, egetKort);
-    hent('saturn-ringe.png', (t) => { ringe.sætFarve(t); egetKort(); }, true, egetKort);
+    hent(`saturn-${STØRRELSE}.jpg`, (t) => { planet.sætKort(t); egetKort(); }, { rundt: false, fejl: egetKort });
+    hent('saturn-ringe.png', (t) => { ringe.sætFarve(t); egetKort(); }, { rundt: false, fejl: egetKort });
 
     // ---------- Kameraets rejse ----------
     const rejse = lavRejse({ system, verden });
@@ -495,7 +464,7 @@ export default {
         tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
         hop: () => rejse.hop(), // gør den igangværende flyvning færdig
         // de hentede billeder, og om de ligger med én kanal i grafikkortet
-        billeder: () => Object.fromEntries([...lager].filter(([, b]) => b.tekstur).map(([n, b]) => [n, b.tekstur.format === THREE.RedFormat ? 'én kanal' : 'farver'])),
+        billeder: () => hentedeBilleder(['saturn', ...MÅNER.map((m) => m.id)]),
       },
     };
   },

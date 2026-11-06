@@ -27,6 +27,14 @@ NASA's billeder er offentligt ejede (public domain), men NASA skal nævnes som k
 
 `lav_saturn.py` laver billederne til Saturn og månerne (adresserne står øverst i filen). 8k laves kun, hvor originalen har mindst 8.192 pixel hele vejen rundt (Mimas og Titan har det ikke). Månernes kort har længdegrad 0° (siden, der vender mod Saturn) i midten og øst til højre.
 
+## Jupiter
+
+`lav_jupiter.py` laver kortet over Jupiter (`js/kosmos/jupiter.js`) ud fra originalerne (adresserne står øverst i filen). `python3 lav_jupiter.py <originaler> <ud> sammenlign` laver et billede med OPAL og Cassini side om side (kloden og pletten tæt på).
+
+| Fil | Hvad | Kilde | Licens |
+|---|---|---|---|
+| `jupiter-4k.jpg`, `-2k.jpg` og `-1k.jpg` | Jupiters skyer. Hubbles kort fra 11.-12. december 2025 (farvebilledet fra filtrene F395N, F502N og F631N, 10 pixel pr. grad). Farverne er stemt af efter Cassinis kort (én fælles omregning for hele kloden, målt mellem 60° S og 60° N), og fra 70-78° og op til polerne glider kortet over i Cassinis kort, for Hubble ser ikke polerne (OPAL dækker ca. 81° S til 85° N). Rækkerne følger den parametriske bredde, så kortet passer på den fladtrykte klode (OPAL er planetografisk, Cassini planetocentrisk). u = østlig længde / 360 (0° System III i venstre kant). Syd for ca. 84° S har Cassinis kort ingen detaljer (en jævn, grå plet) | Hubble OPAL, cyklus 32, `hlsp_opal_hst_wfc3-uvis_jupiter-2025a_f395n-f502n-f631n_v1_globalmap.tif`, archive.stsci.edu/hlsp/opal, doi:10.17909/T9G593 (Simon m.fl. 2015, Wong m.fl. 2020). Farverne og polerne: Cassini ISS, PIA07782 (11.-12. dec. 2000), NASA/JPL/Space Science Institute. Cassinis polkort PIA07783/84 er lavet af de samme billeder og er ikke skarpere, så de bruges ikke | OPAL: CC BY 4.0, krediteres "NASA, ESA, A. Simon (GSFC), OPAL". Cassini: public domain (NASA), krediteres "NASA/JPL/Space Science Institute" |
+
 ## Mars
 
 `lav_mars.py` laver billederne til Mars (`js/kosmos/mars.js`) ud fra originalerne hos USGS (adresserne står øverst i filen). `lav_steder.py` laver de lokale kort over stederne (først Olympus Mons, Mars M7a) og læser kun vinduet om stedet direkte hos USGS. Kortene har længdegrad 0° i midten og øst til højre. `-8k` er 8192 × 4096 (pc og, som en prøve, tablet), `-4k` bruges, hvis grafikkortet ikke kan klare 8k, og `-2k` bruges af testene.

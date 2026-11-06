@@ -78,4 +78,4 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 - `koer-alle.mjs` kører to tests ad gangen (målt stabilt i to hele kørsler). Kør ikke flere end to, og start ikke to `koer-alle.mjs` på samme tid. Fejler en test, mens to kører, køres den igen alene, og det bliver skrevet med "OBS". Undersøg det, før det kaldes ustabilt.
 - Testbrowseren tegner 10-35 billeder i sekundet med hurtig tegning (3-6 med fuld grafik). Spol frem med testadgangen, eller frys tiden, i stedet for at vente. Vent på en tilstand (`waitForFunction`) i stedet for en fast tid. Fejl, der kun sker ved mange billeder i sekundet, kræver spoling i små skridt (fx `atomlabTest.vaerksted.spol`).
 - En test af en rettet fejl skal først fejle uden rettelsen.
-- Skriv nye erfaringer ind i [docs/erfaringer.md](../docs/erfaringer.md).
+- Skriv nye erfaringer ind i den rigtige fil i `docs/erfaringer/` (oversigt i [docs/erfaringer.md](../docs/erfaringer.md)), fx `tests-og-vaerktoejer.md`.

@@ -23,8 +23,9 @@ import { SIDE, SIDER } from '../data/sider/mars.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
 import { lavLandskab, ØJE, eksponering } from '../solsystem/landskab.js';
 import { lavPanorama } from '../solsystem/panorama.js';
+import { hent, MAPPE, glem, iLager } from '../solsystem/hent.js';
 import { kontakt } from '../sideknap.js';
-import { hentBillede, lavHentebjælke, tonInd } from '../hentning.js';
+import { lavHentebjælke, tonInd } from '../hentning.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -206,48 +207,8 @@ for (const [krater, steder] of Object.entries(LANDSKAB)) {
   TRÆ.grupper[0].punkter.find((p) => p.id === krater).under = steder.map((sd) => ({ id: `stå-${sd.id}`, navn: `🧍 ${sd.navn}`, titel: sd.titel, undertitel: 'Stå på Mars', ikon: '🧍' }));
 }
 
-// Billederne (se billeder/solsystem/KILDER.md). Farvekortet er 8k på pc og (indtil videre, som en prøve) på tablet,
+// Billederne (se billeder/solsystem/KILDER.md, hentes med js/solsystem/hent.js). Farvekortet er 8k på pc og (indtil videre, som en prøve) på tablet,
 // hvis grafikkortet kan klare så store billeder. Tests henter 2k. Højdekortet er 4k (2k i tests).
-const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
-const lager = new Map(); // filnavn → tekstur. De bliver i grafikkortet, så det går hurtigt at åbne Mars igen.
-// Billedet hentes med hentBillede (js/hentning.js), så bjælken "Henter …" kan tælle de hentede MB, og det er afkodet,
-// før det bruges (uden for hovedtråden), så det ikke hakker, når det lægges i grafikkortet. fejl kaldes, hvis billedet
-// ikke kan hentes.
-function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl } = {}) {
-  let b = lager.get(navn);
-  if (!b) {
-    b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
-    lager.set(navn, b);
-    hentBillede(new URL(navn, MAPPE).href).then((billede) => {
-      const t = new THREE.Texture(billede);
-      t.needsUpdate = true;
-      t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
-      if (kanaler === 2) t.format = THREE.RGFormat; // højden ligger i rød og grøn (sparer hukommelse)
-      if (kanaler === 1) t.format = THREE.RedFormat; // gråtoner (månerne)
-      if (rundt) t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt (de lokale kort gør ikke)
-      t.anisotropy = anisotropi;
-      b.tekstur = t;
-      for (const f of b.venter) f(t);
-      b.venter.length = 0;
-    }, () => { // mangler billedet, bruges den jævne farve
-      b.fejlet = true;
-      for (const f of b.fejlVenter) f();
-      b.fejlVenter.length = 0;
-    });
-  }
-  if (b.tekstur) færdig(b.tekstur);
-  else if (!b.fejlet) b.venter.push(færdig);
-  if (fejl) {
-    if (b.fejlet) fejl();
-    else if (!b.tekstur) b.fejlVenter.push(fejl);
-  }
-}
-// Den lille udgave af et billede bruges ikke mere (den store er sat ind): fjern den fra grafikkortet og lageret
-function glem(navn) {
-  lager.get(navn)?.tekstur?.dispose();
-  lager.delete(navn);
-}
-const iLager = (navn) => Boolean(lager.get(navn)?.tekstur);
 const MØRK = [0.03, 0.022, 0.018]; // Mars' farve, før kortet er hentet: en mørk kugle med luften i kanten
 const RUST = [0.55, 0.3, 0.17]; // farven, hvis kortet ikke kan hentes (fx uden net)
 const FORHÅND_TID = 8000;
