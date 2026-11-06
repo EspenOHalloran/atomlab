@@ -4,7 +4,7 @@
 
 ---
 
-Byg det sorte hul i Kosmos om (`js/kosmos/sorthul.js`). Jeres go til at gå i gang er givet, men læs "Sådan gør du" nedenfor: Først en kort plan og et prøvebillede, og byg først det hele efter jeres næste go. Læs CLAUDE.md, "Lige nu" i DESIGN.md (punkt 1 under "Venter på et go"), tjeklisterne i docs/erfaringer.md (især "Gløden lyser sorte ting op" i afsnit 3) og afsnittene om Kosmos og Sort hul i docs/kode.md. Brug `/faktatjek` til teksterne og `/faerdig` til sidst.
+Byg det sorte hul i Kosmos om (`js/kosmos/sorthul.js`). Jeres go til at gå i gang er givet, men læs "Sådan gør du" nedenfor: Først en kort plan og et prøvebillede, og byg først det hele efter jeres næste go. Læs CLAUDE.md, "Lige nu" (`docs/lige-nu.md`) (punkt 1 under "Venter på et go"), tjekliste E i `docs/tjeklister/`, erfaringerne i `docs/erfaringer/` (især "Gløden lyser sorte ting op", find den med `grep`) og `docs/kode/kosmos.md` (Kosmos og Sort hul). Brug `/faktatjek` til teksterne og `/faerdig` til sidst.
 
 **Jeres kritik** (DESIGN.md): Det sorte hul er ikke imponerende nok. Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden.
 
@@ -25,7 +25,7 @@ Byg det sorte hul i Kosmos om (`js/kosmos/sorthul.js`). Jeres go til at gå i ga
 **Teknik:**
 - Én fuldskærmsshader (eller en stor kugle om hullet), der sender en stråle pr. pixel fra kameraet og følger den i et fast antal skridt. Hold skridtene korte tæt på hullet og lange langt væk.
 - **Tabletten** (`LAV_KVALITET` fra `scene3d.js`): færre skridt og tegnet i lavere opløsning (fx halv) og skaleret op. Det skal køre glat på jeres tablet. Mål billeder pr. sekund med testadgangen eller et lille script, og skriv tallene i docs/kode.md.
-- **Gløden:** Den nuværende løsning med `GemPass` og `SkyggePass` (`holdSkyggenSort`) holder skyggen sort. Tjek, om den stadig er nødvendig, når skiven tegnes i shaderen. Er den ikke, så fjern den (og ret docs/kode.md og erfaringen).
+- **Gløden:** Den nuværende løsning med `GemPass` og `SkyggePass` (`holdSkyggenSort`) holder skyggen sort. Tjek, om den stadig er nødvendig, når skiven tegnes i shaderen. Er den ikke, så fjern den (og ret `docs/kode/kosmos.md` og erfaringen).
 - **"Reducer bevægelse"** (`ROLIG`): skiven hvirvler langsommere eller står stille.
 - **Navne i shaderkode kun med ASCII-tegn.**
 - **Astronauten og stjernen**, der bliver revet over: De er 3D-ting med deres egen fysik og skal blive. Forslag: Tegn dem som nu oven på shaderen, så de ikke bøjes, og lad dem forsvinde i skyggen, ligesom nu. Skriv det i "Ærligt talt". Har du en billig måde at bøje dem på, så nævn den i planen, men byg den ikke uden et go.
@@ -39,4 +39,4 @@ Byg det sorte hul i Kosmos om (`js/kosmos/sorthul.js`). Jeres go til at gå i ga
 
 **Tests:** Testene `kosmos` og `grafik` bruger sorthul. Tilføj tjek for skyggens størrelse på skærmen (fx at midten er sort, og at kanten sidder ved √27 M ± lidt), og at den side, der kommer mod os, er lysere end den anden. Kør `node tests/koer-alle.mjs --ændret`. Skærmbilleder: `node tests/vaerktoejer/skaermbilleder.mjs kosmos` (eller det, der passer), både med navne og uden, og med fuld grafik.
 
-**Til sidst:** Opdater "Lige nu" i DESIGN.md (flyt det forrige "Senest lavet" til docs/arkiv/historik.md), fjern punkt 1 (Det sorte hul) fra "Venter på et go", og skriv "Det sorte hul (bygget om)" i "Ikke afprøvet" til næste runde på tabletten. Skriv erfaringerne med lysbøjningen i docs/erfaringer.md. Opdater artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe, læs det først, og behold linket).
+**Til sidst:** Opdater "Lige nu" (`docs/lige-nu.md`) (flyt det forrige "Senest lavet" til docs/arkiv/historik.md), fjern punkt 1 (Det sorte hul) fra "Venter på et go", og skriv "Det sorte hul (bygget om)" i `docs/ikke-afproevet.md` til næste runde på tabletten. Skriv erfaringerne med lysbøjningen i den rigtige fil i `docs/erfaringer/`. Opdater artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe, læs det først, og behold linket).

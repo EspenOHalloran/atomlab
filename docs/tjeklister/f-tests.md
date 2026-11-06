@@ -1,0 +1,21 @@
+# Tjekliste F. Tests
+
+- [ ] En kort tilstand (fx "ion i 1,6 sekunder") holdes der øje med hele tiden (`waitForFunction` med `polling`), i stedet for at kigge én gang.
+- [ ] Tjek noget, der altid gælder (fx antal kernepartikler), i stedet for et præcist antal, når der er tilfældighed.
+- [ ] Tilstanden nulstilles mellem forsøg, og mål vælges i et frit område (ikke under paneler).
+- [ ] Tekst søges uden forskel på store og små bogstaver.
+- [ ] En test af en rettet fejl skal først fejle uden rettelsen. Ellers ved vi ikke, om den tester noget.
+- [ ] Fejl, der kun sker ved mange billeder i sekundet (fx mange kugler på kort tid), testes ved at spole frem i små skridt (fx `atomlabTest.vaerksted.spol`). Testbrowseren tegner kun 3-6 billeder i sekundet.
+- [ ] Billedværktøjer, der skal vise fuld grafik, starter browseren med `fuldGrafik: true` (`tests/vaerktoejer/saturn.mjs` manglede det, så billederne var uden glød og med 2k-kort, uden at nogen så det). Tjek, hvilke filer siden faktisk henter (`side.on('request')`), når billeders størrelse eller kvalitet er det, der testes.
+- [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
+- [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter. Mål én browser ad gangen (to samtidig halverer tallene).
+- [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
+- [ ] `--ændret` sammenligner med grenens egen udgave på GitHub (`@{upstream}`). Kør den før push, ellers finder den ingen ændringer (U4). Efter push: nævn testene, eller kør hele samlingen.
+- [ ] Knapper findes ud fra deres tekst (`trykPå(tekst)` i Kosmos og Solsystemet), ikke deres nummer. Numrene skifter, når knapper flytter eller kommer til (U2).
+- [ ] Vent ikke på en proces med `pgrep -f navn` i en løkke: Løkkens egen kommandolinje indeholder navnet, så den venter for evigt (U2). Start i stedet testen selv i baggrunden (`run_in_background`), og få besked, når den er færdig.
+- [ ] `pkill -f navn` køres i sin egen kommando, ikke i samme kommandolinje som noget, der skal blive ved (den rammer sig selv, S2). Svar fra `fetch` læses færdigt (`await svar.arrayBuffer()`), ellers kan Node 22.23 gå ned.
+- [ ] Efter `hop()` (eller anden spoling af en flyvning) ventes der på, at flyvningen er slut (`!tur().flyver`), før næste flyvning startes. Ellers starter den midt i den gamle (Mars M6b).
+- [ ] Forløb, der styres af uret (fx rejsen ind i Solen), fryses i testen på faste tidspunkter. Tryk på noget, der bevæger sig, prøves igen, hvis det ikke ramte.
+- [ ] Ting, der kun står et stykke tid i rigtig tid (fx pillerne), fryses i testen, og testen lader selv tiden løbe ud (`atomlabTest.beskeder.frysPiller` og `spolPiller`). Et nyt forsøg hjælper ikke, når hvert skridt er langsommere end tingens levetid.
+- [ ] En test åbner ikke en ny side, mens en anden side i samme test stadig tegner 3D. Luk den første først, og vent på, at skærmen er klar (`waitForFunction`), ikke på sidens load-hændelse (`page.goto` giver op efter 30 sekunder).
+- [ ] En rettelse af en test, der fejler under belastning, vises først at fejle uden rettelsen (fx med fire travle CPU-løkker ved siden af), og bestå med den flere gange i træk.

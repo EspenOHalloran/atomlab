@@ -1,0 +1,34 @@
+# Skærme og UI
+
+- **Bjælken "Henter AtomLab"** (6. november 2026): Forsiden henter ca. 95 JavaScript-filer (ca. 3,5 MB), før noget virker, og uden bjælke lignede siden en frossen side. Moduler kan ikke melde, hvor langt de er, så bjælken tæller hentede filer med `PerformanceObserver` mod et skøn (`FORVENTET` i index.html). Testen `henter` fanger, når skønnet ikke passer længere. Med `waitUntil: 'commit'` og forsinkede filer (`page.route`) kan bjælken ses i en test.
+
+## En ny skærm med samme skal som en anden (Solsystemet, M4a, oktober 2026)
+- **Del skallen i stedet for at kopiere den.** Kosmos' skal blev til `lavFænomenSkærm` (js/faenomenskaerm.js). Elementerne får skærmens navn foran (`kosmosListe`, `solsystemListe`) og beholder de samme klasser, så CSS'en kun skulle have `:is(#kosmos, #solsystem)` de steder, hvor der stod `#kosmos`. Alle `querySelectorAll` i skallen er afgrænset til skærmens sektion.
+- **Den nye skærm skal stå efter den gamle i index.html.** Testene bruger fx `page.click('[data-kosmos-fane="nørd"]')` uden at afgrænse, og Playwright tager den første, der passer. Står den skjulte skærm først, venter klikket forgæves.
+- **Gemte data, når noget flytter:** De sete og det sidst valgte flyttes én gang (`flytGemt`), før skærmene bygges. Tælleren "x af N set" tæller kun de id'er, der hører til skærmen. Før talte den alt i den gemte liste, så den ville have vist "8 af 11".
+- **Tælling med `replace` i Python:** `'#kosmos {'` passede også på `#kosmos { grid-template-columns …`. Tjek antallet (`assert s.count(a) == n`), før en tekst skiftes ud mange steder.
+- **En sidste række med færre kort i midten:** Et CSS-gitter kan ikke centrere en halv række. Menuen bruger derfor `flex-wrap` med `justify-content: center` og en bredde ud fra `--kol`.
+
+## Eftersyn af UX i Solsystemet (30. oktober 2026)
+- **Genbrugt skal, genbrugt model:** Solsystemet fik Kosmos' skal (M4a), og med den Kosmos' flade liste, hvor én fil er ét punkt. Kosmos er en række fænomener, men Solsystemet er steder inde i steder. Derfor havnede stederne og månerne som knapper under "Prøv selv". Når en skal genbruges, så spørg, om indholdet har samme form.
+- **Tekst, der flytter med en skal, kan gå i stykker:** Solens fremtid sagde stadig "Prøv Hvid dværg i listen", efter fænomenet var flyttet fra Kosmos til Solsystemet. Henvisninger skal være knapper med `data-gaa`, ikke tekst om, hvor noget står.
+- **U1, træet:** Mars og Saturn havde allerede funktioner til hvert sted (`vælgSted`, `besøgMåne`, `vælg`, `besøg`). Træet skulle kun bruge dem (`gåTil`) og vide, hvor man er (`sted()`, tjekket fire gange i sekundet i skallen). Det gjorde det let, også fordi et sted kan vælges tre steder fra (træet, kloden og flybyen).
+- **Et sted, der kræver en bestemt opstilling** ("Mars set fra Phobos" kræver, at Phobos står som på flybyen): Lad månen glide derhen under flyvningen i stedet for at hoppe. Kameraets mål er en funktion, så kameraet følger med. Kræver det to flyvninger, så tjek med et tæller (`gåNr`), at der ikke er valgt noget andet imens.
+- **`node tests/koer-alle.mjs --help` kører hele samlingen** (den kender ikke `--help`). Læs kommentaren øverst i filen i stedet.
+- **Se på, hvad der står samme sted på skærmen:** Det, der afslørede rodet, var skærmbilleder af flybyen på tablet på højkant ("Næste" langt nede under listen og stoppets tekst uden for skærmen) og ved Saturn, hvor en knap, der ikke kan bruges, og en kontakt, der er slået fra, så ens ud.
+
+## Styringen på billedet (U2, 31. oktober 2026)
+- **Tjek koden, før en advarsel i en plan bygges om:** Planen sagde, at kameraets flyvninger stod stille under pause. Det passede ikke: Rejsen kørte allerede i sin egen opdatering hvert billede (`verden.opdateringer`), kun skallen slog pausen fra ved et tryk i træet. Et nyt tjek (flyv under pause uden at spole) viser det nu.
+- **Trin, der bygger oven på hinanden** (Big Bang, Solens fremtid): Et spring kan ikke bare sætte `trin = nr`. Noget sker kun i `opdater` undervejs (fx tågen i Solens fremtid i trin 5). Spring tilbage = forfra og frem igen, og spol de sprungne trin igennem.
+- **Fælles regel i stedet for at flytte knapper én for én:** Skallen sorterer selv `styring` (handling → bjælken, kontakt og skyder → Styr-boksen). Derfor skulle de 11 fænomener i Kosmos næsten ikke ændres. Kun "↺ Forfra" fik `skjul`, så bjælken ikke fyldes med grå knapper.
+- **En fælles byggeklods, der kan vokse, i stedet for to (U4):** Stjerneovnens tre tempoer passede ikke i tidsknappen (⏸ ▶ ⏩). I stedet for en særlig knap til Stjerneovnen fik `lavTidsknap` en valgfri tilstand mere (▷ langsom, `langsom(titel)`, ligesom `hurtig(titel)`), og `lavPause` kunne slettes. Mellemrum, "Vis mig" og et skud går tilbage til det tempo, man havde valgt (`fortsæt`), så intet tempo går tabt efter en pause.
+- **En til/fra-knap, der viser det, man kan skifte til** ("Elektronsky", når atomet har ringe), er svær at læse: Man kan ikke se, hvad der er valgt nu. En kontakt med et fast navn og ✓ viser det (U4, `js/kontakt.js`). Find dem med grep efter knapper, der skifter tekst (`textContent = … ?`) eller "til"/"fra" i teksten.
+- **Et nyt sted for en knap viser fejl i tilstande, ingen havde set:** "▶ Start flyby" stod pludselig i bjælken, mens man stod på Mars (før lå den i "Prøv selv", hvor den blev skiftet ud). Testen `landskab` fangede det.
+- **Tegn ikoner i små knapper** (SVG) i stedet for tegn som ⏸: Nogle skrifttyper viser ⏸ meget lille, mens ▶ bliver en emoji.
+
+## Siden i lag (U3, 31. oktober 2026)
+- **Tekster, der deles op, skal skrives, ikke flyttes:** Hvert sted fik et nyt Kort, fordi stedets gamle tekst var den samme som underteksten. En test tjekker nu på hvert sted og i hvert fænomen, at underteksten ikke står på siden (`fase()` mod `side().tekst`).
+- **Et link i en ordbog eller tekst skal pege på det sted, ordet står:** Da teksterne om Olympus Mons flyttede fra Mars' side til stedets, pegede Ordbogens "skjoldvulkan" og "caldera" stadig på Mars. Testen `ordbog` læste hele mars.js og så det ikke. Derfor kan `data-gaa` nu pege på et sted (`solsystem:mars:olympus`).
+- **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
+- **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
+- **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
