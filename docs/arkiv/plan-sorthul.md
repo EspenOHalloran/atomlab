@@ -1,6 +1,6 @@
 # Plan: Det sorte hul bygges om
 
-*Skrevet 6. november 2026 (Opus, xhigh) efter [prompt-sorthul.md](prompt-sorthul.md). Trin 1 (plan og prøvebillede) er lavet. **Jeres svar 6. november 2026: "vi går med dine anbefalinger. go."** Altså g⁴, 6.000 K, mindste afstand 15, astronauten og stjernen bøjes ikke, og dynamisk opløsning på både pc og tablet. Trin 2 er i gang.*
+*Skrevet 6. november 2026 (Opus, xhigh) efter [prompt-sorthul.md](prompt-sorthul.md). Trin 1 (plan og prøvebillede) er lavet. **Jeres svar 6. november 2026: "vi går med dine anbefalinger. go."** Altså g⁴, 6.000 K, mindste afstand 15, astronauten og stjernen bøjes ikke, og dynamisk opløsning på både pc og tablet. **Trin 2 er færdigt** (se "Lige nu" i DESIGN.md og historikken). Planen og prompten ligger nu i arkivet.*
 
 ## Trin 1: lavet (prøven)
 - **`js/data/sorthul.js`** (uden Three.js, kan testes i Node): tallene og fysikken. M = 0,75 enhed, så horisonten (2M) er 1,5 og skyggen (√27 M) 3,90 enheder som før. Fotonkuglen 3M, inderkanten ved ISCO 6M (4,5 enheder), skiven ud til 20M (15 enheder). Lysets bane (RK4), rødforskydningen g, skivens temperatur og sortlegeme-farverne.
@@ -25,7 +25,8 @@
 - **Kameraets mindste afstand** er 15 enheder (ca. 20 M) i stedet for 4 (sat tilbage i `stop`). Ved 7 enheder fyldte skyggen hele billedet, så man kun så sort. Ved 15-16 fylder skyggen det meste af højden, og ringen og skiven foran ses stadig.
 - Rumstøvet er skjult ved hullet (det bliver ikke bøjet).
 
-## Trin 2 (efter jeres go)
+## Trin 2 (lavet efter jeres go)
+*Udfaldet: Masken blev (skyggen blev grå uden den, når skiven lyser op). Navnene står i en gruppe, der vender mod kameraet. Mindste afstand 15. Faktatjekket rettede Interstellar-sætningen (alle frekvensskift blev taget ud) og afstanden til ca. 27.000 lysår.*
 1. **Billedet færdigt:** finpudse lysstyrke, farver, striber og skivens størrelse efter jeres svar. Navnene flyttes, så de passer (fx "Bøjet lys" på buen), og **"Fotonring"** kommer til. Kameraets startafstand.
 2. **Tabletten:** **dynamisk opløsning**: Programmet måler billeder i sekundet og skruer selv ned for opløsningen (ned til ca. en tredjedel), hvis det hakker, og op igen, når der er luft. Testbrowseren har intet grafikkort, så de rigtige tal kan kun måles hos jer. Tallene fra testbrowseren og et overslag skrives i docs/kode.md.
 3. **Gløden:** I prøvebillederne var skyggen helt sort (0 af 255) også **uden** masken (`GemPass` og `SkyggePass`), både forfra og tæt på: Det lyseste af skiven ligger nu længere fra skyggen end den gamle ring. Masken bruger nu den rigtige skygge (√27 M set fra kameraets afstand). Anbefaling: Fjern masken, hvis skyggen også er sort, når skiven lyser op (stjernen bliver slugt). Erfaringen og docs/kode.md rettes.

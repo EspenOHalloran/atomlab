@@ -5,7 +5,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 ## Lige nu (status til næste session)
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Højst ca. 10 KB: Det forrige "Senest lavet" flyttes til [docs/arkiv/historik.md](docs/arkiv/historik.md), når noget nyt er lavet. Sidst opdateret: 6. november 2026 (Det sorte hul).*
 
-**Senest lavet (6. november 2026): Det sorte hul er bygget om med rigtig lysbøjning.** Jeres go: "vi går med dine anbefalinger. go." (efter planen og prøvebilledet, [docs/plan-sorthul.md](docs/plan-sorthul.md), [oversigt](docs/sorthul-proeve.jpg)).
+**Senest lavet (6. november 2026): Det sorte hul er bygget om med rigtig lysbøjning.** Jeres go: "vi går med dine anbefalinger. go." (efter planen og prøvebilledet, [docs/arkiv/plan-sorthul.md](docs/arkiv/plan-sorthul.md), [oversigt](docs/arkiv/sorthul-proeve.jpg)).
 - **En shader** (`js/kosmos/linse.js`) følger lyset baglæns for hver pixel om et hul, der ikke drejer: Skivens bagside ses som en bue over og under skyggen, der er en tynd fotonring, den side, der kommer mod os, er lysere og hvidere (g⁴), og stjernerne bag hullet bøjes. Fysikken står i `js/data/sorthul.js` og testes i Node (ny test `sorthul`: skyggen ved √27 M, fotonkuglen 3M, ISCO 6M).
 - **Jeres svar:** g⁴, 6.000 K, mindste afstand 15 (ca. 20 M), astronauten og stjernen bøjes ikke, og dynamisk opløsning på pc og tablet.
 - **Gløden:** Masken (`GemPass`/`SkyggePass`) blev, for skyggen blev grå uden den, når skiven lyser op.
