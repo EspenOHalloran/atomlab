@@ -389,6 +389,13 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Mål data selv, når tabellen er lukket:** Ingen fri tabel med Jupiters vinde. Men OPAL har to omgange med ca. 9½ times mellemrum, og krydskorrelation af hver række gav ca. 147 m/s ved 24° N (Simon m.fl. 2015: 153 m/s), allerede i den lille udgave.
 - **Hjælpeagenter til fakta:** To agenter (planeten og månerne med himlen) kostede ca. 210.000 tokens hver med åbne domæner. Giv dem tallene, der allerede er slået op, og listen over lukkede domæner, så de ikke prøver dem.
 
+#### Jupiter J1: kloden og kortet (6. november 2026)
+- **certifi kan miste en rod:** Den nyeste `certifi` (2026.10.18) har ikke længere "emSign Root CA - G1", så `archive.stsci.edu` fejlede igen. `pip download certifi==2025.1.31` har den. Læg dens `cacert.pem` sammen med `/root/.ccr/ca-bundle.crt`, og brug `curl --cacert`.
+- **Mål, hvilken bredde et kort bruger,** i stedet for at stole på teksten: Korreler kanterne af båndene (gradienten af lysstyrken pr. række) i to kort under hver antagelse. Cassini som planetocentrisk gav 0,57, som planetografisk 0,34. En plet, der står 2-3° forkert, kan også bare være flyttet siden.
+- **En "søm" i et JPG-kort kan være JPEG's blokke:** Springet ved 0° var 2-3 gange springet mellem to nabosøjler, men kun 1,1-1,3 gange springet ved en almindelig blokgrænse (hver 16. søjle). Kortet i hukommelsen havde ingen søm. Mål mod blokgrænserne. PIL's `resize` ved heller ikke, at kortet går rundt: Læg en stribe fra den modsatte kant på før nedskaleringen.
+- **`passerTil` i `lav()` giver en forkert afstand,** for panelerne har ikke fået deres plads endnu (Jupiter blev alt for lille). Flyv derhen i det første billede (`hvertBillede`) og `hop()`.
+- **Farver fra et andet foto: én omregning for hele kloden.** At stemme af bånd for bånd ville flytte båndenes lysstyrke fra 2000 over på 2025, for båndene ændrer sig. Middelværdi og kovarians (Monge-Kantorovich) i lineært lys gav Cassinis farvetone uden at flytte noget.
+
 ### Kameraet, rejsen og flybyen
 
 #### Saturn i rigtig skala og flybyen (oktober 2026)

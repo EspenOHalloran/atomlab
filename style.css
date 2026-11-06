@@ -1011,7 +1011,7 @@ button { font: inherit; color: inherit; }
 .ikon-solsystem::before { content: ""; position: absolute; left: 31px; top: 14px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #9fd8ff, #2f6fd0 70%); box-shadow: 0 0 6px rgba(95, 170, 255, 0.6); }
 .ikon-solsystem::after { content: ""; position: absolute; left: 36px; top: 32px; width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffb08a, #b9472a 75%); }
 .sol-liste { display: flex; flex-direction: column; gap: 8px; }
-.sol-kloder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+.sol-kloder { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
 .sol-klode { flex-direction: column; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
 /* Træet: en liste (ikke knapper) med "du er her" som en lys streg i siden */
 .sol-træ { display: flex; flex-direction: column; gap: 1px; }
@@ -1239,7 +1239,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .grundstofkort .symbol { font-size: 26px; }
   .opgave-krav { display: none; }
   .kosmos-liste { grid-template-columns: 1fr; }
-  .sol-kloder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sol-kloder { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   /* Det periodiske system: filtrene bag én knap */
   .system-filtre .chip.filter-knap { display: inline-flex; }
   .filter-chips { display: none; }

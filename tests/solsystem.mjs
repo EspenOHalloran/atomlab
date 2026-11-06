@@ -1,4 +1,4 @@
-// Solsystemet (Mars M4a og M4b): menukortet, listen med Solen, Jorden, Mars og Saturn (Solen og Jorden med egne visninger), flytningen af gemte data fra Kosmos,
+// Solsystemet (Mars M4a og M4b): menukortet, listen med Solen, Jorden, Mars, Jupiter og Saturn (Solen og Jorden med egne visninger), flytningen af gemte data fra Kosmos,
 // links til de flyttede fænomener og layoutet af menuen og listen på pc, tablet og telefon.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('solsystem');
@@ -6,7 +6,7 @@ const b = await chromium.launch({ args: ARGS });
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const FLYTTET = ['solstorm', 'solensfremtid', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
-const ALLE = ['solen', 'solstorm', 'solensfremtid', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
+const ALLE = ['solen', 'solstorm', 'solensfremtid', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn'];
 
 async function side(vp, gemt, opt = {}) {
   const s = await (await b.newContext({ viewport: vp, ...opt })).newPage();
@@ -25,14 +25,14 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   const kort = await s.evaluate(() => [...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), k.querySelector('.kort-fremgang')?.textContent]));
   const i = kort.findIndex(([h]) => h === '#solsystem');
   tjek('menuen: Solsystemet står lige før Kosmos', i >= 0 && kort[i + 1][0] === '#kosmos', JSON.stringify(kort));
-  tjek('menuen: 2/8 set i Solsystemet og 1/11 i Kosmos', kort[i][1] === '2/8 set' && kort[i + 1][1] === '1/11 set', JSON.stringify(kort));
+  tjek('menuen: 2/9 set i Solsystemet og 1/11 i Kosmos', kort[i][1] === '2/9 set' && kort[i + 1][1] === '1/11 set', JSON.stringify(kort));
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
   tjek('det sidst valgte (Saturn) åbner i Solsystemet', sol.valgt === 'saturn', JSON.stringify(sol));
-  tjek('Solsystemet: 2 af 8 set', sol.set === '2 af 8 set', sol.set);
-  tjek('Solsystemet har Solen, Jorden og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
+  tjek('Solsystemet: 2 af 9 set', sol.set === '2 af 9 set', sol.set);
+  tjek('Solsystemet har Solen, Jorden, Jupiter og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
-  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden', JSON.stringify(prikker));
+  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden,jupiter', JSON.stringify(prikker));
   await s.click('#solsystem .sol-klode[data-id="solen"]');
   tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
   await vis(s, 'kosmos');
@@ -58,7 +58,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   await vis(s, 'solsystem');
   // U1 (docs/plan-ux.md): kloderne på én række og et træ med den valgte klodes steder, måner og forsøg
   const kloder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => k.textContent));
-  tjek('kloderne: Solen, Jorden, Mars og Saturn (efter afstanden til Solen)', kloder.join() === '☀️Solen,🌍Jorden,🔴Mars,🪐Saturn', JSON.stringify(kloder));
+  tjek('kloderne: Solen, Jorden, Mars, Jupiter og Saturn (efter afstanden til Solen)', kloder.join() === '☀️Solen,🌍Jorden,🔴Mars,🟠Jupiter,🪐Saturn', JSON.stringify(kloder));
   tjek('første gang åbner Solen', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solen');
   const træ = () => s.evaluate(() => atomlabTest.solsystem.træ());
   let t = await træ();
@@ -146,7 +146,7 @@ for (const [navn, vp, kol] of STØRRELSER) {
   const s = await side({ width: 1280, height: 800 });
   await vis(s, 'solsystem');
   const S = (f, a) => s.evaluate(f, a);
-  for (const klode of ['jorden', 'mars', 'saturn']) {
+  for (const klode of ['jorden', 'mars', 'jupiter', 'saturn']) {
     await S((k) => atomlabTest.solsystem.vælg(k), klode);
     await s.waitForTimeout(300);
     // Alle steder i træet har en side (også dem, der kun står, når man er ved stedet over dem)
