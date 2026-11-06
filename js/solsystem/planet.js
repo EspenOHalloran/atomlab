@@ -8,7 +8,7 @@
 //   altid halvvejs, når den anden starter). Så glider skyerne med den rigtige fart uden at blive trukket ud i striber,
 //   men de toner langsomt ud og kommer igen, hvor de stod på kortet.
 // - hvirvel: { u, v, au, av, ind, ud }: en ellipse (midten og halvakserne i kortets koordinater), der drejer som en
-//   hel skive (mod uret set ovenfra, vinklen sættes med sæt). Den toner over i vindene fra ind til ud (målt i
+//   hel skive (mod uret set ovenfra, vinklen sættes med sætHvirvel). Den toner over i vindene fra ind til ud (målt i
 //   halvakser), og vindene dæmpes tæt på den, så de ikke trækker pletten med sig.
 // - detaljer: fine skyer, der tegnes oven på kortet, når én pixel i kortet fylder mere end ca. 2 pixel på skærmen.
 // - pile: højst så mange rækker af pile, der viser vindene (sættes med sætPile).

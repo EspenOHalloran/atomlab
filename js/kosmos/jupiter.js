@@ -193,10 +193,11 @@ export default {
       øst: new THREE.Vector3(Math.sin(2 * Math.PI * pletU), 0, Math.cos(2 * Math.PI * pletU)),
     };
     const pletNu = { punkt: new THREE.Vector3(), op: new THREE.Vector3(), nord: new THREE.Vector3(), øst: new THREE.Vector3() };
+    const RAMME = ['punkt', 'op', 'nord', 'øst'];
     // Pletten, når Jupiter er drejet vinklen d (i systemets retninger)
     function pletVed(d = døgn, ud = pletNu) {
       qDøgn.setFromAxisAngle(Y, d).premultiply(jupiterG.quaternion);
-      for (const k of ['punkt', 'op', 'nord', 'øst']) ud[k].copy(lokalt[k]).applyQuaternion(qDøgn);
+      for (const k of RAMME) ud[k].copy(lokalt[k]).applyQuaternion(qDøgn);
       return ud;
     }
     // Den vinkel, hvor Solen står SOL_HØJDE over horisonten ved pletten om formiddagen (Solen i øst), så tæt på den
