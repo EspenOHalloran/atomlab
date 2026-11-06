@@ -185,6 +185,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - "Den dødelige stråledosis er 4-5 Sv." Kilderne siger ca. 3,5-4,5 Gy for halvdelen uden behandling. Skriv "omkring 4 Sv", og at behandling hjælper. En CT-skanning er ca. 2-10 mSv (hovedet ca. 1-2), ikke 5-10.
 - "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.
 
+- "Den Store Røde Plet har raset i 350 år." Cassinis plet fra 1665-1713 forsvandt nok. Den nuværende er set sikkert siden 1831 (Sánchez-Lavega m.fl. 2024). Den er ikke længere "2-3 Jordkloder bred", men ca. én (ca. 16.000 km i 2021). NASA's side "Jupiter Facts" er forældet på begge punkter.
+- "Jupiter er en mislykket stjerne." Brint smelter først sammen ved ca. 75-80 gange Jupiters masse, og en brun dværg kræver ca. 13 gange.
+- "Jupiter beskytter Jorden mod kometer." Horner og Jones (2008-2012): Jupiter fjerner nogle kometer, men sender også asteroider og kometer ind mod os. Den er ikke et enkelt skjold.
+- "Io har over 400 aktive vulkaner." Ca. 150 er set i udbrud, og der er ca. 400 i alt (NASA's skøn). Bland ikke kendte og aktive sammen.
+- "Zonerne er opadgående luft." Det gælder kun øverst. Ca. 65 km under vandskyerne er mønstret omvendt (Juno).
+- Antal måner skifter hurtigt: NSSDC siger 95 og MPC sagde 101 i marts 2026, men JPL og NASA siger 115 (april 2026). Skriv måned og år.
+- JPL SSD's tabel over månernes baner (`sats/elem`) har en kolonne "P", som ikke er den sideriske omløbstid (Io 1,7627 mod 1,7691 døgn). Brug NSSDC's omløbstider, ellers passer resonansen 1 : 2 : 4 ikke.
+- USGS' farvemosaik af Io er forstærket (violet, grøn og nær-infrarød). "De ægte farver er meget mere dæmpede" (USGS).
 ---
 
 ## 3. Konkrete erfaringer
@@ -369,6 +377,14 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Huller i en mosaik:** Fyld dem ikke med en lige linje mellem kanterne (det giver striber). Spejlede stykker fra begge sider, der glider over i hinanden, ligner overfladen.
 - **Planetens skygge:** En måne, der står lige bag planeten set fra Solen, er helt sort og ser ud, som om den mangler. Vælg startpladser uden for skyggen, og tjek billedet.
 - **Synlighed med det samme:** Testen "et tryk på Gale … navnene forsvinder" fejlede under belastning, fordi navnene først blev skjult i næste billede. Nu kaldes `opdaterNavne()` med det samme (tjekliste E).
+
+#### Planen for Jupiter (6. november 2026)
+- **Kildernes domæner:** `archive.stsci.edu` (Hubbles OPAL) gav "unable to get local issuer certificate", også efter I åbnede det. Det var emSign-roden igen (se "Certifikater"), og det virkede med Mozillas rodliste fra `certifi`. `upload.wikimedia.org` svarede 429 på næsten alt, også direkte filer, så hent hellers fra kilden (fx `www.solarsystemscope.com` eller `assets.science.nasa.gov`).
+- **NASA's Photojournal er flyttet** til science.nasa.gov. Siderne findes med WordPress-søgningen `https://science.nasa.gov/wp-json/wp/v2/search?search=PIA07782`, og filerne ligger på `assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia07/pia07782/PIA07782.tif`.
+- **Se kortene i små udgaver** (OPAL har `-medium` og `-small`, NASA har `dynamicimage/...?w=900`). Det viste forskellen mellem 2000 og 2025 (pletten) og hullerne ved polerne uden at hente 19 MB.
+- **Kortets bredde skal passe til kuglen:** OPAL er planetografisk, Cassini planetocentrisk, og en kugle med `scale.y` følger den parametriske bredde. Ved 45° er forskellen op til 3,8°. Tjek, hvilket system et kort bruger, før det lægges på en fladtrykt planet.
+- **Mål data selv, når tabellen er lukket:** Ingen fri tabel med Jupiters vinde. Men OPAL har to omgange med ca. 9½ times mellemrum, og krydskorrelation af hver række gav ca. 147 m/s ved 24° N (Simon m.fl. 2015: 153 m/s), allerede i den lille udgave.
+- **Hjælpeagenter til fakta:** To agenter (planeten og månerne med himlen) kostede ca. 210.000 tokens hver med åbne domæner. Giv dem tallene, der allerede er slået op, og listen over lukkede domæner, så de ikke prøver dem.
 
 ### Kameraet, rejsen og flybyen
 

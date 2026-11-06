@@ -2,6 +2,13 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 5. november 2026 (småtingspakken, før planen for Jupiter)
+**Senest lavet (5. november 2026): småtingspakken, punkt 4 (prikkerne på himlen ved Olympus Mons).** Jeres go: "go, tag punkt 4 og ryd grenene op". Hermed er småtingspakken færdig (punkt 1-3 kom med i #69 og #71).
+- **Den blålige prik var rumstøvet** fra `scene3d.js`, der hører til atomet (bevist med billeder med og uden). Det er nu skjult i alle fænomener med en sort himmel (`tåger: false`), dvs. hele Solsystemet og fx Årstiderne i Kosmos, og kommer igen i resten.
+- **Den hvide prik med skær var efter alt at dømme Phobos eller Deimos.** De blev tegnet 3-14 gange for store (0,26° i radius, så de kan ses ude fra rummet). Ved et sted på Mars tegnes de nu i deres rigtige størrelse: Phobos ca. 0,2° bred og Deimos som en klar stjerne. Ikke set på et billede, for i vores kørsler stod månerne ikke på himlen ved Olympus Mons.
+- **Tests:** nye tjek i `mars` og `saturn` (rumstøvet og månernes størrelse ude fra rummet og ved Olympus Mons). Alle 29 bestod (`--ændret` valgte alle, 34 minutter), `mars` efter en rettelse, som det nye tjek fangede. `guide` fejlede én gang under belastning (timeout på telefon i trin 4) og bestod alene, ligesom `stjerneovn-mus` sidst (se "Åbne punkter"). Billeder af Olympus-stoppet på pc og tablet på højkant: kun hvide stjerner på himlen.
+- **Oprydning:** PR #45 er lukket uden merge. De fem gamle grene er ikke slettet, for sletningen blev afvist af miljøets sikkerhedstjek (se "Åbne punkter").
+
 ## "Senest lavet" 5. november 2026 (M8c del 1, før småtingspakken)
 **Senest lavet (5. november 2026): M8c del 1, roverens foto.** Mars er hermed færdig (resten er "Mars ekstra"). Detaljerne står i [docs/plan-mars.md](docs/plan-mars.md) under "M8c del 1: rovernes panoramaer, målingerne" og "Status efter M8c del 1". Jeres svar ved go: "Ja, tag 1 og 2 med".
 - **Kontakten "📷 Roverens foto"** står i Styr-boksen ved Naukluft og ved landingsstedet ved Jezero. Roverens eget 360°-foto fra samme sted toner ind over landskabet, og man drejer og zoomer som før. Fotoet er drejet, så Mount Sharp og kraterets rand står samme sted som i det tegnede, og klokken stilles til den tid, fotoet blev taget.

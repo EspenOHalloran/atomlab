@@ -3,19 +3,17 @@
 AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundstofferne og om kernereaktioner (fusion og fission). Det er et **laboratorium med opgaver**: man kan eksperimentere frit, men der er også opgaver, som giver stjerner og låser ting op. Alt er i 3D med glød og partikler.
 
 ## Lige nu (status til næste session)
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Højst ca. 10 KB: Det forrige "Senest lavet" flyttes til [docs/arkiv/historik.md](docs/arkiv/historik.md), når noget nyt er lavet. Sidst opdateret: 5. november 2026.*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session. Højst ca. 10 KB: Det forrige "Senest lavet" flyttes til [docs/arkiv/historik.md](docs/arkiv/historik.md), når noget nyt er lavet. Sidst opdateret: 6. november 2026.*
 
-**Senest lavet (5. november 2026): småtingspakken, punkt 4 (prikkerne på himlen ved Olympus Mons).** Jeres go: "go, tag punkt 4 og ryd grenene op". Hermed er småtingspakken færdig (punkt 1-3 kom med i #69 og #71).
-- **Den blålige prik var rumstøvet** fra `scene3d.js`, der hører til atomet (bevist med billeder med og uden). Det er nu skjult i alle fænomener med en sort himmel (`tåger: false`), dvs. hele Solsystemet og fx Årstiderne i Kosmos, og kommer igen i resten.
-- **Den hvide prik med skær var efter alt at dømme Phobos eller Deimos.** De blev tegnet 3-14 gange for store (0,26° i radius, så de kan ses ude fra rummet). Ved et sted på Mars tegnes de nu i deres rigtige størrelse: Phobos ca. 0,2° bred og Deimos som en klar stjerne. Ikke set på et billede, for i vores kørsler stod månerne ikke på himlen ved Olympus Mons.
-- **Tests:** nye tjek i `mars` og `saturn` (rumstøvet og månernes størrelse ude fra rummet og ved Olympus Mons). Alle 29 bestod (`--ændret` valgte alle, 34 minutter), `mars` efter en rettelse, som det nye tjek fangede. `guide` fejlede én gang under belastning (timeout på telefon i trin 4) og bestod alene, ligesom `stjerneovn-mus` sidst (se "Åbne punkter"). Billeder af Olympus-stoppet på pc og tablet på højkant: kun hvide stjerner på himlen.
-- **Oprydning:** PR #45 er lukket uden merge. De fem gamle grene er ikke slettet, for sletningen blev afvist af miljøets sikkerhedstjek (se "Åbne punkter").
+**Senest lavet (6. november 2026): planen for Jupiter.** Jeres go: "Læs prompt-jupiter-plan.md og lav planen". Planen står i [docs/plan-jupiter.md](docs/plan-jupiter.md), og faktagrundlaget i [docs/fakta-solsystemet.md](docs/fakta-solsystemet.md), "Del 5: Jupiter". Koden er ikke rørt.
+- **Kilder** (tjekket med curl, I åbnede de blokerede domæner): Hubbles OPAL-kort fra december 2025 med farver og poler fra Cassini, og USGS' kort over månerne. Vindene måler vi selv i OPAL's to omgange (prøven: ca. 147 m/s ved 24° N, Hubble målte 153).
+- **Pakken:** kloden, båndene og pletten, Junos cykloner, nordlyset, ringene i modlys, de fire måner i resonansen 1 : 2 : 4 og en flyby med 6 stop, delt i J1-J6. Nye fælder (fx "pletten har raset i 350 år") står i docs/erfaringer.md.
 
-**Før det:** M8c del 1 (roverens foto i Stå på Mars, #69) og nitrogens "Vidste du?" (#71). Oprydningen i dokumenterne og planen efter Mars (5. november 2026, CLAUDE.md er kort, og detaljerne om koden står i [docs/kode.md](docs/kode.md)). 31. oktober 2026: M8b (Stå på Mars ved Jezero, [plan-mars.md](docs/plan-mars.md) under "Status efter M8b"), U4 (den samme tidsknap og de samme kontakter i hele AtomLab, [plan-ux.md](docs/plan-ux.md)), S2 (Saturns ringe fra Cassinis måling), L1 (lyset i Stå på Mars), U3 (siden i lag) og U2 (styringen på billedet). Detaljerne står i historikken.
+**Før det:** Småtingspakken (5. november 2026, #69, #71 og prikkerne på himlen ved Olympus Mons). M8c del 1 (roverens foto i Stå på Mars, #69) og nitrogens "Vidste du?" (#71). Oprydningen i dokumenterne og planen efter Mars (5. november 2026, CLAUDE.md er kort, og detaljerne om koden står i [docs/kode.md](docs/kode.md)). 31. oktober 2026: M8b (Stå på Mars ved Jezero, [plan-mars.md](docs/plan-mars.md) under "Status efter M8b"), U4 (den samme tidsknap og de samme kontakter i hele AtomLab, [plan-ux.md](docs/plan-ux.md)), S2 (Saturns ringe fra Cassinis måling), L1 (lyset i Stå på Mars), U3 (siden i lag) og U2 (styringen på billedet). Detaljerne står i historikken.
 
 **Næste (venter på jeres go):**
-1. **Planen for Jupiter** (Opus, høj effort): data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag. Domæner, der ikke er åbne, nævnes før arbejdet. Rører ikke koden. Prompten står i [docs/prompt-jupiter-plan.md](docs/prompt-jupiter-plan.md) (skrevet 6. november 2026).
-2. **Jeres runde på tabletten** med listen "Ikke afprøvet" nedenfor, helst før Jupiter bygges.
+1. **Jeres runde på tabletten** med listen "Ikke afprøvet" nedenfor, før Jupiter bygges.
+2. **Jupiter bygges (J1-J6)**, når I har svaret på de fem spørgsmål nedenfor under "Venter på et go" og sagt go til J1. Planen står i [docs/plan-jupiter.md](docs/plan-jupiter.md).
 
 **Kursen (jeres svar 5. november 2026, planlægningen efter oprydningen):**
 - **M8c del 1** er færdig og merget (#69).
@@ -24,6 +22,12 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Indskydes mellem planeterne** (jeres valg, alle tre): Formørkelser med et grafisk løft (mellem, Opus høj), Molekyler M1 (stor, kan køre samtidig med planeterne, for den ligger i Værkstedet) og Det sorte hul (stor, Opus xhigh). Hver får sit eget go. Opus' forslag til rækkefølgen: Formørkelser mellem Jupiter og Venus, Molekyler M1 sideløbende, og Det sorte hul, når en planet er færdig, og der er plads til en dyr opgave.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
+0. **Jupiter bygges** (stor, J1-J6, Opus høj, [docs/plan-jupiter.md](docs/plan-jupiter.md)). **Fem spørgsmål til jer** (Opus' anbefaling først):
+    1. **Kortet:** Hubble 2025 (OPAL) med farver og poler fra Cassini, så pletten har sin størrelse fra i dag (anbefalet), eller Cassini 2000 med pletten fra dengang?
+    2. **Signatur-effekterne:** båndene og pletten, cyklonerne ved polerne, nordlyset og ringene i modlys (anbefalet). Skal Io's vulkaner (J6) med nu, eller vente til månerne får besøg?
+    3. **Månerne:** kan trykkes på og besøges kort som Saturns (anbefalet), eller kun stå som kugler indtil månerne-runden?
+    4. **Flybyens 6 stop:** oversigten, båndene, pletten, sydpolen, Io og "I Jupiters skygge" (anbefalet), eller Europa i stedet for skyggen?
+    5. **Vindene:** den rigtige fart i forhold til Jupiters døgn (anbefalet, tydelig med ⏩), eller en kontakt, der gør dem 10 gange hurtigere?
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor, **Opus med xhigh**).
 2. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
 3. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
@@ -48,7 +52,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Testen `stjerneovn-mus`** fejlede én gang sammen med en anden test ("klik i listen vælger en deuterium", 5. november 2026) og bestod alene. Ikke undersøgt.
 - **Kendt fejl i kilden:** Højdekortet over Jezero-krateret har to tynde, lige streger fra sømmene mellem striberne (se plan-mars.md).
 - **Domæner:** Listen over domæner til Network access står i [docs/plan-mars.md](docs/plan-mars.md) under "Domæner, der skal på listen".
-- **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne alle kildesider. Det, der skal tjekkes, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen).
+- **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne alle kildesider. Det, der skal tjekkes, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen). Jupiter: se "Mindst sikre påstande" i del 5.
 
 **Ikke afprøvet (samlet 5. november 2026, til jeres runde på tabletten, på langs og på højkant):** De fulde spørgsmål med baggrund står i historikken under hver delopgave.
 - **Hele programmet:** Lyden og hvordan det føles med fingre. NASA-billederne på en telefon. Menuen med 8 kort. Atomet B (orbitalernes former).
