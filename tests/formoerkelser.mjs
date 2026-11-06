@@ -1,5 +1,5 @@
 // Formørkelser (Kosmos): skyggens geometri (js/data/skygge.js) med rigtige tal, og fænomenet i browseren
-// (trinene, himlen set fra Jorden, skyderne i "Prøv selv" og telefon)
+// (trinene, keglerne med kerneskygge og halvskygge, himlen set fra Jorden, skyderne i "Prøv selv" og telefon)
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { overlap, dækket, påHimlen } from '../js/data/skygge.js';
 const UD = billedmappe('formoerkelser');
@@ -75,12 +75,18 @@ const omløb = await T(async () => {
   return a.z * b.x - a.x * b.z;
 });
 tjek('Månen kredser den rigtige vej (mod uret set fra nord)', omløb > 0, omløb);
+const skygger = () => T(() => atomlabTest.solsystem.fænomen().skygger());
+let sk = await skygger();
+tjek('trin 1: begge kloders kegler (kerneskygge og halvskygge) og lysglimtene vises', sk.jord && sk.måne && sk.glimt > 0, JSON.stringify(sk));
 tjek('himlen set fra Jorden står i 3D-billedet', await T(() => Boolean(document.querySelector('#solsystemToplag .himmel-kort canvas'))));
 await næste();
 tjek('trin 2: total solformørkelse', (await hvad()) === 'total' && (await panel()).includes('total solformørkelse'), await panel());
 tjek('himlen viser Solen og skriver resultatet', (await himmelTekst()) === 'Solen set fra Jorden' && (await himmelHvad()) === 'Total solformørkelse!', await himmelHvad());
 const midt = await farve(150, 150), korona = await farve(150, 90);
 tjek('Månen dækker Solen (mørk midte) og koronaen lyser omkring', Math.max(...midt) < 50 && Math.min(...korona) > 120, `${midt} ${korona}`);
+sk = await skygger();
+tjek(`trin 2: spidsen af Månens kerneskygge når ind i Jorden (${sk.spidsAfstand.toFixed(2)} fra midten)`, sk.spidsAfstand < 1, JSON.stringify(sk));
+tjek('trin 2: kun Månens kegler vises (Jordens skygge peger væk)', sk.måne && !sk.jord, JSON.stringify(sk));
 tjek('ordet "kerneskygge" kan trykkes på', await T(() => Boolean(document.querySelector('.fagord[data-ord="kerneskygge"]'))));
 await page.screenshot({ path: `${UD}/1-total.png` });
 // "Næste" til et trin med samme kamera: Kameraet glider og hopper ikke langt væk først
@@ -92,8 +98,12 @@ tjek(`kameraet hopper ikke ved "Næste" (${før.toFixed(1)} → ${lige.toFixed(1
 await T(() => atomlabTest.solsystem.spol(2));
 const ring = (await panel()).match(/(\d+) % dækket/)?.[1];
 tjek(`trin 3: ringformørkelse (${ring} % dækket)`, (await hvad()) === 'ring' && ring >= 80 && ring <= 95 && (await himmelHvad()) === 'Ringformørkelse!', await panel());
+sk = await skygger();
+tjek(`trin 3: spidsen af Månens kerneskygge slutter før Jorden (${sk.spidsAfstand.toFixed(2)} fra midten)`, sk.spidsAfstand > 1.2, JSON.stringify(sk));
 await næste();
 tjek('trin 4: total måneformørkelse', (await hvad()) === 'total' && (await panel()).includes('total måneformørkelse'), await panel());
+sk = await skygger();
+tjek('trin 4: kun Jordens kegler vises', sk.jord && !sk.måne, JSON.stringify(sk));
 tjek('himlen viser Månen og skriver resultatet', (await himmelTekst()) === 'Månen set fra Jorden' && (await himmelHvad()) === 'Total måneformørkelse!', await himmelHvad());
 const rød = await farve(150, 150);
 tjek('Månen er kobberrød', rød[0] > 110 && rød[0] > 2 * rød[1] && rød[0] > 2 * rød[2], rød);

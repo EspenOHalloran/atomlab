@@ -139,7 +139,7 @@ tom.needsUpdate = true;
 
 // ---------- Shaderne (små programmer, der regner farven ud for hvert punkt på kuglen) ----------
 // Fælles GLSL: hvor stor en del af Solen er dækket af en kugle, set fra punktet p (samme som dækket() i skygge.js)
-const SKYGGE_GLSL = `
+export const SKYGGE_GLSL = `
   uniform vec3 solPos;
   uniform float solR;
   float overlapAreal(float a, float b, float c) {
