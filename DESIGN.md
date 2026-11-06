@@ -14,7 +14,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 **Før det:** M8c del 1 (roverens foto i Stå på Mars, #69) og nitrogens "Vidste du?" (#71). Oprydningen i dokumenterne og planen efter Mars (5. november 2026, CLAUDE.md er kort, og detaljerne om koden står i [docs/kode.md](docs/kode.md)). 31. oktober 2026: M8b (Stå på Mars ved Jezero, [plan-mars.md](docs/plan-mars.md) under "Status efter M8b"), U4 (den samme tidsknap og de samme kontakter i hele AtomLab, [plan-ux.md](docs/plan-ux.md)), S2 (Saturns ringe fra Cassinis måling), L1 (lyset i Stå på Mars), U3 (siden i lag) og U2 (styringen på billedet). Detaljerne står i historikken.
 
 **Næste (venter på jeres go):**
-1. **Planen for Jupiter** (Opus, høj effort): data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag. Domæner, der ikke er åbne, nævnes før arbejdet. Rører ikke koden.
+1. **Planen for Jupiter** (Opus, høj effort): data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag. Domæner, der ikke er åbne, nævnes før arbejdet. Rører ikke koden. Prompten står i [docs/prompt-jupiter-plan.md](docs/prompt-jupiter-plan.md) (skrevet 6. november 2026).
 2. **Jeres runde på tabletten** med listen "Ikke afprøvet" nedenfor, helst før Jupiter bygges.
 
 **Kursen (jeres svar 5. november 2026, planlægningen efter oprydningen):**
