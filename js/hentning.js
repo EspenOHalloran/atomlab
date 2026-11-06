@@ -33,6 +33,7 @@ export async function hentBillede(url) {
     }
     h.modtaget = h.total = blob.size;
     const img = new Image();
+    img.dataset.fil = url.split('/').pop(); // filnavnet (src er en blob-adresse), til tests
     const adresse = URL.createObjectURL(blob);
     img.src = adresse;
     try {
