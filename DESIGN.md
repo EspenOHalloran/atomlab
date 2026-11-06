@@ -16,7 +16,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 
 **Næste (venter på jeres go):**
 1. **Tabletrunden er lavet (6. november 2026).** Svarene og 7 fund står i [docs/tjekliste-tablet.md](docs/tjekliste-tablet.md) under "Svar fra runden". Den fælles styring holdt. Jeres ønske: Det sorte hul bygges om, før det testes på tabletten. Prompterne til de næste to opgaver er klar: [rettelsespakken](docs/prompt-rettelsespakken.md) (Opus høj) og [Det sorte hul](docs/prompt-sorthul.md) (Opus xhigh). De rører ikke de samme filer og kan køre samtidig.
-2. **Jupiter bygges (J1-J6)**, når I har svaret på de fem spørgsmål nedenfor under "Venter på et go" og sagt go til J1. Planen står i [docs/plan-jupiter.md](docs/plan-jupiter.md).
+2. **Jupiter bygges (J1-J5).** Jeres svar er givet, og prompten er klar: [docs/prompt-jupiter.md](docs/prompt-jupiter.md) (Opus høj). Hver delopgave får sit eget go.
 
 **Kursen (jeres svar 5. november 2026, planlægningen efter oprydningen):**
 - **M8c del 1** er færdig og merget (#69).
@@ -25,12 +25,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 - **Indskydes mellem planeterne** (jeres valg, alle tre): Formørkelser med et grafisk løft (✅ lavet 6. november 2026, før tabletrunden), Molekyler M1 (stor, kan køre samtidig med planeterne, for den ligger i Værkstedet) og Det sorte hul (stor, Opus xhigh). Hver får sit eget go. Opus' forslag til rækkefølgen: Formørkelser mellem Jupiter og Venus, Molekyler M1 sideløbende, og Det sorte hul, når en planet er færdig, og der er plads til en dyr opgave.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
-0. **Jupiter bygges** (stor, J1-J6, Opus høj, [docs/plan-jupiter.md](docs/plan-jupiter.md)). **Fem spørgsmål til jer** (Opus' anbefaling først):
-    1. **Kortet:** Hubble 2025 (OPAL) med farver og poler fra Cassini, så pletten har sin størrelse fra i dag (anbefalet), eller Cassini 2000 med pletten fra dengang?
-    2. **Signatur-effekterne:** båndene og pletten, cyklonerne ved polerne, nordlyset og ringene i modlys (anbefalet). Skal Io's vulkaner (J6) med nu, eller vente til månerne får besøg?
-    3. **Månerne:** kan trykkes på og besøges kort som Saturns (anbefalet), eller kun stå som kugler indtil månerne-runden?
-    4. **Flybyens 6 stop:** oversigten, båndene, pletten, sydpolen, Io og "I Jupiters skygge" (anbefalet), eller Europa i stedet for skyggen?
-    5. **Vindene:** den rigtige fart i forhold til Jupiters døgn (anbefalet, tydelig med ⏩), eller en kontakt, der gør dem 10 gange hurtigere?
+0. **Jupiter bygges** (stor, J1-J5, Opus høj, [docs/plan-jupiter.md](docs/plan-jupiter.md)). Jeres svar på de fem spørgsmål er givet (6. november 2026, står i planen under "Jeres svar"): OPAL-kortet, vulkanerne venter, månerne som kugler (tryk og besøg kun, hvis det er lille og i Saturns kvalitet), 5 stop uden Io, den rigtige fart. Prompten: [docs/prompt-jupiter.md](docs/prompt-jupiter.md). Kan køre samtidig med rettelsespakken og Det sorte hul.
 1. **Det sorte hul** er ikke imponerende nok (jeres billede): Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden. **Forslag:** Byg det om med rigtig lysbøjning (en shader, der regner lysets baner som i Interstellar), så skivens bagside bøjes op over og ned under skyggen, med en tynd fotonring og Doppler-lys (stor, **Opus med xhigh**).
 2. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
 3. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](docs/plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
