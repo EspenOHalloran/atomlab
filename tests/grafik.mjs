@@ -78,7 +78,8 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   // Ny størrelse: lærredet og gløden skal følge med
   const [w, h] = [opts.viewport.height, opts.viewport.width];
   await page.setViewportSize({ width: w, height: h });
-  await page.waitForTimeout(1500);
+  // Vent på den nye størrelse i stedet for en fast tid (under belastning kan et billede tage over 1,5 s)
+  await page.waitForFunction(([w, h]) => { const c = document.getElementById('lærred'); return c.clientWidth === w && c.clientHeight === h; }, [w, h], { timeout: 30000 }).catch(() => {});
   const lærred = await page.evaluate(() => { const c = document.getElementById('lærred'); return { w: c.clientWidth, h: c.clientHeight }; });
   tjek(`${navn}: lærredet følger med en ny størrelse`, lærred.w === w && lærred.h === h, JSON.stringify(lærred));
   await page.evaluate(() => { location.hash = '#vaerksted'; });
