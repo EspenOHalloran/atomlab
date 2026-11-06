@@ -113,6 +113,15 @@ button { font: inherit; color: inherit; }
 .undertitel { margin: 4px 0 0; color: var(--svag); font-size: clamp(14px, 1.8vw, 18px); }
 #menu .vindue { width: 100%; }
 
+/* Bjælken "Henter AtomLab" dækker siden, mens JavaScript hentes (index.html og skjulHenter i main.js) */
+.henter { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--baggrund); transition: opacity 0.5s; }
+.henter.færdig { opacity: 0; pointer-events: none; }
+.henter-boks { width: min(320px, 80vw); text-align: center; }
+.henter-logo { font-size: clamp(40px, 9vw, 64px); }
+.henter-bjaelke { height: 6px; margin-top: 18px; border-radius: 3px; background: var(--panel-kant); overflow: hidden; }
+.henter-fyld { width: 5%; height: 100%; background: linear-gradient(90deg, #7ff7ff, #8c7bff 55%, #ff7bc0); transition: width 0.3s; }
+.henter-tekst { margin: 12px 0 0; color: var(--svag); font-size: 15px; }
+
 /* Kortene står i --kol kolonner, og en sidste række med færre kort står i midten */
 .menukort {
   --kol: 4;
@@ -1313,6 +1322,11 @@ button.sol-gruppe-navn::after { content: " ›"; }
 /* ---------- Styringen i 3D-billedet (Kosmos og Solsystemet, U2 i docs/plan-ux.md) ---------- */
 /* Grafen og uret (overlag) står over underteksten, og bjælken med tidsknappen står nederst */
 :is(#kosmos, #solsystem) .kosmos-overlag { order: -1; }
+/* Uret ved Jorden på højkant: nederst til venstre i linje med tidsknappen, tæt på panelerne og under kloden
+   (tabletrunden, fund 6). Bjælken er tom ved Jorden, så kun tidsknappen står i rækken. */
+@media (orientation: portrait) {
+  :is(#kosmos, #solsystem) .jord-ur { position: absolute; left: 0; bottom: 0; width: max-content; max-width: calc(100% - 116px); }
+}
 .bjælke-række { order: 2; width: 100%; display: flex; align-items: flex-end; gap: 6px; pointer-events: none; }
 /* Plads til venstre, der svarer til tidsknappen, så knapperne står midt i billedet (men kun, når der er plads) */
 .bjælke { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; pointer-events: none; padding-left: clamp(0px, calc(100% - 430px), 92px); }

@@ -62,10 +62,16 @@ const foto = async () => (await stå()).foto;
 const hentede = [];
 s.on('request', (r) => { if (/pano-/.test(r.url())) hentede.push(r.url().split('/').pop()); });
 tjek('roverens foto er ikke hentet, før man slår det til', hentede.length === 0 && (await foto()).vist === null);
-await fm(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+// Tabletrunden (fund 5): Kontakten står også i "Lige nu" øverst i højre panel, så den kan findes, når Styr er foldet
+// sammen på højkant. Her slås fotoet til med knappen i teksten.
+const ligeNu = await s.$$eval('#solsystemForklaring button.side-kontakt', (k) => k.map((x) => x.textContent.trim()));
+tjek('"Lige nu" ved Naukluft: Curiosity tog et foto herfra, og kontakten "📷 Roverens foto" står i teksten', ligeNu.length === 1 && /Roverens foto/.test(ligeNu[0]) && /Curiosity tog et foto/.test(await s.textContent('#solsystemForklaring')), JSON.stringify(ligeNu));
+await fm(() => atomlabTest.solsystem.trykISide('Roverens foto'));
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig > 0, null, { timeout: 30000, polling: 100 }).catch(() => {});
 let fo = await foto();
 tjek('roverens foto: hentet i den lille udgave (tests), vist og toner ind', fo.vist === 'naukluft' && fo.til && fo.synlig > 0 && fo.foto === 'pano-naukluft-lille.jpg' && hentede.includes('pano-naukluft-maske.png'), JSON.stringify({ fo, hentede }));
+await s.waitForFunction(() => document.querySelector('#solsystemForklaring button.side-kontakt')?.classList.contains('til'), null, { timeout: 5000, polling: 100 }).catch(() => {});
+tjek('"Lige nu": knappen i teksten viser, at fotoet er slået til', await s.$eval('#solsystemForklaring button.side-kontakt', (k) => k.classList.contains('til')));
 tjek('roverens foto: kontakten er tændt, og klokken er stillet til eftermiddagen, da fotoet blev taget (15:42)', (await fm(() => atomlabTest.solsystem.styr().find((x) => x.navn === '📷 Roverens foto')?.til)) === true && Math.abs((await stå()).tid - 15.7) < 0.01);
 tjek('roverens foto: emnet om fotoet er foldet ud, og teksten nævner Mastcam og hvidbalancen', (await fm(() => atomlabTest.solsystem.side().emner.find((e) => e.kontakt)?.åben)) === true && /Mastcam/.test(await s.textContent('#solsystemTekst')) && /dagslys på Jorden/.test(await s.textContent('#solsystemTekst')));
 // Retningen: Curiositys skygge står i fotoet 81,4 % fra venstre kant (målt). Den skal pege væk fra Solen (293,3°, Mars24)
@@ -135,7 +141,7 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, n
 t = await stå();
 tjek('hos Curiosity (valgt i træet): højden passer med NASA (−3.488 m ved sol 5045), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3488) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
 tjek('teksten om Curiosity (har kørt ca. 38 km)', /38 km/.test(await s.textContent('#solsystemTekst')));
-tjek('hos Curiosity: intet foto (Naukluft-fotoet er skjult, og kontakten findes ikke)', (await stå()).foto.vist === null && !(await knapper()).includes('📷 Roverens foto'), JSON.stringify(await stå()));
+tjek('hos Curiosity: intet foto (Naukluft-fotoet er skjult, og kontakten findes ikke)', (await stå()).foto.vist === null && !(await knapper()).includes('📷 Roverens foto') && !(await s.$('#solsystemForklaring button.side-kontakt')), JSON.stringify(await stå()));
 
 // Tilbage i kredsløb: et tryk på Gale i træet
 await trykTræ('gale');
@@ -217,9 +223,16 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, n
 tjek('står (fra flybyen): flybyens trin er væk fra bjælken', (await fm(() => atomlabTest.solsystem.trin())) === null && !(await bjælke()).some((k) => k.startsWith('Næste') || k === '‹' || k === '✕'), JSON.stringify(await bjælke()));
 tjek('står (fra flybyen): knappen "↑ Tilbage til flybyen"', (await bjælke()).includes('↑ Tilbage til flybyen'), JSON.stringify(await bjælke()));
 await tryk('↑ Tilbage til flybyen');
+// Tabletrunden (fund 7): Tæppet toner ind i slutningen af opstigningen, mens kameraet stadig stiger (før stod
+// kameraet stille under hele toningen), og toner ud igen, når kloden ses
+const tæppe = () => fm(() => { const t = document.querySelector('.mars-taeppe'); const st = atomlabTest.solsystem.fænomen().stå(); return { opacitet: t?.style.opacity, står: st.står, lander: st.lander, øjne: st.øjne }; });
+await s.waitForFunction(() => document.querySelector('.mars-taeppe')?.style.opacity === '1', null, { timeout: 120000, polling: 30 }).catch(() => {});
+const tonInd = await tæppe();
+tjek('"↑ Tilbage til flybyen": tæppet toner ind, mens kameraet stadig stiger (under 1,2 km)', tonInd.opacitet === '1' && tonInd.står && tonInd.lander && tonInd.øjne < 1200 && tonInd.øjne > 100, JSON.stringify(tonInd));
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
-await s.waitForTimeout(800); // tonen mellem landskabet og kloden
+await s.waitForFunction(() => document.querySelector('.mars-taeppe')?.style.opacity === '0', null, { timeout: 10000, polling: 100 }).catch(() => {});
+tjek('"↑ Tilbage til flybyen": tæppet toner ud igen, når kloden ses', (await tæppe()).opacitet === '0', JSON.stringify(await tæppe()));
 await hop();
 t = await stå();
 const trinEfter = await fm(() => atomlabTest.solsystem.trin());

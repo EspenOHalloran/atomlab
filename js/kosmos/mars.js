@@ -23,6 +23,7 @@ import { SIDE, SIDER } from '../data/sider/mars.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
 import { lavLandskab, ØJE, eksponering } from '../solsystem/landskab.js';
 import { lavPanorama } from '../solsystem/panorama.js';
+import { kontakt } from '../sideknap.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -105,8 +106,9 @@ const STEDER = [
   // Calderaen: midten af kraterne i højdekortet. Kameraet kigger skråt ned fra syd-sydvest.
   { id: 'caldera', navn: 'Calderaen', bredde: 18.4, længde: -133.3, tid: 8, kompas: 200, vinkel: 30, størrelse: 0.04, lokalt: 'olympus', detalje: true },
   // Skrænten mod nordvest, hvor den er højest i højdekortet (ca. 7,8 km fra kanten til foden på ca. 20 km).
-  // Kameraet står vest for den, kigger mod øst (mod morgensolen), og skrænten ligger i skygge.
-  { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 10, størrelse: 0.018, lokalt: 'olympus', detalje: true },
+  // Kameraet står vest for den, kigger mod øst (mod morgensolen), og skrænten ligger i skygge. Set fra 22° og ca. 60 km
+  // bredt (6. november 2026): helt tæt på (10°, 18 km) blev detaljekortets 0,22 km pr. pixel til grumsede klatter.
+  { id: 'skraent', navn: 'Skrænten', bredde: 22.15, længde: -137.4, tid: 8, kompas: 270, vinkel: 22, størrelse: 0.06, lokalt: 'olympus', detalje: true },
   // M5a. Koordinaterne er fra USGS' navneliste (MDIM 2.1, passer med MOLA). Tharsis: Pavonis Mons i midten, set fra
   // sydvest langs rækken (Arsia forrest, Ascraeus bagerst), med morgensolen fra siden. Valles Marineris: mellem Melas (10,52° S, 72,54° V) og Candor Chasma
   // (6,53° S, 70,78° V). Hellas: midten (42,43° S, 70,50° Ø) fra højt oppe over nordranden.
@@ -132,7 +134,7 @@ const TUR = [
   // nulpunktet (USGS SIM 3470). Trykket: exp(−20,5 / 11) ≈ 13 % (skalahøjden 9,5-11 km giver 11-15 %).
   { id: 'caldera', titel: 'Calderaen', tekst: 'På toppen ligger seks kratere, der overlapper hinanden. Tilsammen er de ca. 65 × 80 km og op til ca. 3 km dybe.' },
   // Skrænten mod nordvest: ca. 7,8 km fald på ca. 20 km, målt i højdekortet. Mount Everest 8.849 m.
-  { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet her ca. 8 km ned til sletten på ca. 20 km. Det er næsten lige så højt som Mount Everest.' },
+  { id: 'skraent', titel: 'Skrænten', tekst: 'Ved vulkanens kant falder landet ca. 8 km ned til sletten. Det sker over en strækning på kun ca. 20 km. 8 km er næsten lige så højt som Mount Everest.' },
   // M5a, faktatjekket 30. oktober 2026 (docs/fakta-solsystemet.md, del 3, afsnit 3-5 og "Faktatjek M5a"). Afstande
   // mellem vulkanernes midter fra USGS' koordinater: 713 og 808 km. Olympus Mons-Pavonis Mons: ca. 1.600 km.
   { id: 'tharsis', titel: 'Tharsis', tekst: 'Tre kæmpevulkaner på en lige linje: Arsia, Pavonis og Ascraeus Mons. Der er ca. 700-800 km mellem dem.' },
@@ -169,7 +171,7 @@ const LANDSKAB = {
   gale: [
     { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 7.5,
       titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.',
-      foto: { tid: 15.7, tekst: 'Curiositys foto herfra, 4. april 2016. Klokken er stillet til midt på eftermiddagen, da det blev taget.' } },
+      foto: { rover: 'Curiosity', tid: 15.7, tekst: 'Curiositys foto herfra, 4. april 2016. Klokken er stillet til midt på eftermiddagen, da det blev taget.' } },
     { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 7.5,
       titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.' },
   ],
@@ -181,7 +183,7 @@ const LANDSKAB = {
       titel: 'Ved randen af Jezero', tekst: 'Du står på randens inderside, ca. 500 m højere end landingsstedet. Mod øst ligger deltaet og bag det hele krateret.' },
     { id: 'landing', navn: 'Landingsstedet', knap: 'Gå til landingsstedet', bredde: 18.44462715, længde: 77.45088572, blik: 270, tid: 7.5,
       titel: 'Hvor Perseverance landede', tekst: 'Her landede Perseverance 18. februar 2021. Mod vest ligger deltaets front, ca. 2-3 km væk. Drej hovedet med fingeren eller musen.',
-      foto: { tid: 14.75, tekst: 'Perseverances foto herfra, 21. februar 2021. Klokken er stillet til eftermiddagen, da det blev taget.' } },
+      foto: { rover: 'Perseverance', tid: 14.75, tekst: 'Perseverances foto herfra, 21. februar 2021. Klokken er stillet til eftermiddagen, da det blev taget.' } },
   ],
 };
 // Træet i listen til venstre (js/faenomenskaerm.js): stederne og månerne med flybyens navne, og under et sted det, der
@@ -771,7 +773,10 @@ export default {
       hældHen(hældFor(st));
       aktivér([nuværendeNet(), st.lokalt]);
       visning = st.id;
-      flyv({ fokus: fokusVed(st), op: opVed(st), afstand: passer(st.størrelse), retning: fraSted(st, drej, st.kompas, st.vinkel), min: 0.003, max: 3, færdig: () => { aktivér([st.lokalt]); if (LANDSKAB[st.id]) lavKnapper(); } });
+      // max: Man kan selv zoome ud til 3.000 km, og mindst en fjerdedel længere ud end stoppet (Hellas og Tharsis på
+      // tablet står længere væk end 3.000 km, se rejse.js)
+      const afstand = passer(st.størrelse);
+      flyv({ fokus: fokusVed(st), op: opVed(st), afstand, retning: fraSted(st, drej, st.kompas, st.vinkel), min: 0.003, max: Math.max(3, afstand * 1.25), færdig: () => { aktivér([st.lokalt]); if (LANDSKAB[st.id]) lavKnapper(); } });
     }
 
     // ---------- Flybyen (js/solsystem/flyby.js) ----------
@@ -809,20 +814,37 @@ export default {
     const LANDING_HØJDE = 1.2; // km over stedet, hvor landingen starter
     const LANDING_TID = 4.5; // sekunder
     const DAG_TID = 150; // sekunder for et døgn, når dagen går
-    const tæppe = document.createElement('div'); // tonen mellem kloden og landskabet
+    // Tonen mellem kloden og landskabet: et tæppe i Mars' farve over 3D-billedet. Det skjuler skiftet mellem de to
+    // verdener (landskabet i meter uden kloden og kloden med det lokale net, med en anden eksponering og glød), som
+    // ellers ville hoppe synligt.
+    const tæppe = document.createElement('div');
+    tæppe.className = 'mars-taeppe'; // til tests
     tæppe.style.cssText = 'position:fixed;pointer-events:none;background:#8a6a52;opacity:0;transition:opacity 0.35s;z-index:1';
     document.body.appendChild(tæppe);
-    function ton(midt) {
+    function tæppeInd(sek, kurve = 'ease') {
       const h = verden.hul;
-      Object.assign(tæppe.style, { left: `${h.left}px`, top: `${h.top}px`, width: `${h.width}px`, height: `${h.height}px` });
-      if (ROLIG) { midt(); return; }
+      Object.assign(tæppe.style, { left: `${h.left}px`, top: `${h.top}px`, width: `${h.width}px`, height: `${h.height}px`, transition: `opacity ${sek}s ${kurve}` });
       tæppe.style.opacity = '1';
+    }
+    function tæppeUd(sek, kurve = 'ease') {
+      requestAnimationFrame(() => { tæppe.style.transition = `opacity ${sek}s ${kurve}`; tæppe.style.opacity = '0'; });
+    }
+    // Ned til landskabet og hop mellem stederne: tæppet toner ind, skiftet sker (midt), og det toner ud igen
+    function ton(midt) {
+      if (ROLIG) { midt(); return; }
+      tæppeInd(0.35);
       setTimeout(() => {
         if (!aktiv) return;
         midt();
-        requestAnimationFrame(() => { tæppe.style.opacity = '0'; });
+        tæppeUd(0.35);
       }, 360);
     }
+    // Op fra landskabet (tabletrunden, fund 7: "fader lidt for meget til sidst, ikke helt flydende"). Før stod
+    // kameraet stille, mens tæppet toner helt ind (0,35 s), og først derefter skiftede det. Nu toner tæppet ind i
+    // de sidste TON_OP_IND sekunder af opstigningen, mens kameraet stadig bevæger sig, skiftet sker, så snart
+    // opstigningen er slut, og tæppet toner blødt ud, mens kameraet flyver til kraterets stop.
+    const TON_OP_IND = 0.3;
+    const TON_OP_UD = 0.45;
     // Lagene til krateret (JSON fra billeder/solsystem/lav_landskab.py). klar(l) kaldes, når de er hentet.
     function hentLandskab(krater, klar) {
       const l = landskaber.get(krater);
@@ -906,18 +928,21 @@ export default {
       sætBlik(LANDING_HØJDE, sd.blik, -32);
       tiden('pause'); // klokken står stille, når man lander (▶ lader dagen gå)
       fase(sd.titel, sd.tekst);
-      forklaring('');
+      // Et sted med roverens foto: kontakten står også i "Lige nu" øverst i højre panel, for i Styr-boksen ses den
+      // ikke, når Styr er foldet sammen på højkant (tabletrunden, fund 5). Knappen i teksten trykker på kontakten.
+      forklaring(sd.foto ? `<p>${sd.foto.rover} tog et foto hele vejen rundt herfra. ${kontakt(FOTO_KONTAKT)}</p>` : '');
       lavKnapper();
     }
     // Op i kredsløb igen: tilbage til kraterets stop
     function tilbageOp(til = stående?.krater, efter) {
       if (!stående) return;
       panorama.skjul();
-      landing = { t: 0, T: ROLIG ? 0 : 2.2, op: true, fra: kamera.position.y, færdig: () => ton(() => {
+      landing = { t: 0, T: ROLIG ? 0 : 2.2, op: true, fra: kamera.position.y, tonet: ROLIG, færdig: () => {
         forladLandskab();
         gåTil(til);
         efter?.();
-      }) };
+        if (!ROLIG) tæppeUd(TON_OP_UD, 'ease-out');
+      } };
       orbit.enabled = false;
       lavKnapper();
     }
@@ -970,6 +995,7 @@ export default {
         const e = landing.T ? landing.t / landing.T : 1;
         const g = 1 - Math.pow(1 - e, 3);
         if (landing.op) {
+          if (!landing.tonet && landing.T - landing.t <= TON_OP_IND) { landing.tonet = true; tæppeInd(TON_OP_IND, 'ease-in'); }
           kamRet.copy(orbit.target).sub(kamera.position).normalize();
           const kompas = THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z));
           sætBlik(landing.fra + (LANDING_HØJDE - landing.fra) * e * e, kompas, THREE.MathUtils.radToDeg(Math.asin(kamRet.y)) * (1 - e) - 32 * e);

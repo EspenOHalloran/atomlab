@@ -101,7 +101,7 @@ export const SIDER = {
     ærligt: klokken('8 om morgenen', '') + '<p>Helt tæt på er landskabet stadig lidt blødt og uskarpt, for der er ca. 0,2 km mellem højderne og ca. 1 km mellem farverne. Programmet holder kameraet mindst 2 km over jorden.</p>',
   },
   skraent: {
-    tal: [['Højde', 'op til ca. 8 km'], ['Her', 'ca. 8 km ned på ca. 20 km'], ['Skredene', 'op til ca. 750 km ud']],
+    tal: [['Højde', 'op til ca. 8 km'], ['Her', 'ca. 8 km ned over ca. 20 km'], ['Skredene', 'op til ca. 750 km ud']],
     kort: 'Skrænten går rundt om det meste af Olympus Mons. Ingen af de andre skjoldvulkaner på Mars har sådan en kant.',
     emner: [
       {
@@ -114,12 +114,12 @@ export const SIDER = {
       },
       {
         titel: 'Hvorfor ligger skrænten i skygge?',
-        tekst: '<p>Det er morgen, og Solen står lavt i øst bag skrænten. Derfor ligger skrænten i skygge, og den støvede luft lyser omkring Solen.</p>',
+        tekst: '<p>Det er morgen, og Solen står lavt i øst bag skrænten. Derfor ligger skrænten i skygge, mens vulkanens top over den er i sollys.</p>',
       },
     ],
     videre: [sted('olympus', 'Hele Olympus Mons'), sted('caldera', 'Calderaen')],
     billeder: '<p>Omkring calderaen og skrænten ligger et detaljekort med ca. 0,2 km mellem højderne (fra HRSC), næsten lige så tæt som i målingerne.</p>',
-    ærligt: '<p>"Ca. 8 km ned på ca. 20 km" er målt i programmets højdekort, ikke slået op i en artikel.</p>'
+    ærligt: '<p>"Ca. 8 km ned over ca. 20 km" er målt i programmets højdekort, ikke slået op i en artikel.</p>'
       + klokken('8 om morgenen', '') + UTYDELIG,
   },
   tharsis: {
