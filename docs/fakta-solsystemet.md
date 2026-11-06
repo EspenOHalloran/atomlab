@@ -1671,3 +1671,23 @@ Ny fælde: Positive West betyder, at længdegraden **falder** mod højre i bille
 - Wikipedia-API'et afviste først kald, fordi der blev sendt for mange for hurtigt. Det lykkedes med pauser.
 - De gamle USGS-adresser (`/search/map/Io_GalileoSSI-Voyager_Global_Mosaic_1km` osv.) giver 404. De rigtige sider har små bogstaver (se tabellen i punkt 9).
 - Ingen store TIF-filer blev hentet (kun `curl -sI` for størrelsen).
+
+## Faktatjek J2: vindene og Den Store Røde Plet (6. november 2026)
+
+*Opus (høj effort) med `/faktatjek`. Teksterne i `js/data/sider/jupiter.js` (emnet "Hvor hurtigt blæser det?", "Vindene er målt af os" under For nørder, Ærligt talt og siden `plet`) og underteksten ved pletten (`PLET_STOP` i `js/kosmos/jupiter.js`). Næsten alt stod allerede i del 5 ovenfor med kilder. Kun én påstand var ny, og den blev tjekket uden hjælpeagent.*
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Ca. 150 m/s (ca. 540 km/t) mod øst ved 24° N | OK. Vores måling: ca. 149 m/s (OPAL, december 2025, `js/data/vinde-jupiter.js`). 150 × 3,6 = 540 | Egen måling, Simon m.fl. 2015 (del 5, punkt 5) |
+| Skyerne flytter sig højst ca. 5° på ét Jupiter-døgn | OK (regnet): 149 m/s × 35.730 s = 5.300 km. Breddekredsen ved 24° N er ca. 415.000 km, altså ca. 4,6° | Regnet |
+| 9 t 25 min mellem Hubbles to omgange | OK: 9 t 24 min 54 s ved begge ender af omgangene | OPAL's README for cyklus 32 (åbnet) |
+| 153 m/s (Hubble 2015), 138 (Cassini 2000), 184 (Voyager 1979) | OK | Simon, Wong & Orton 2015 (del 5, punkt 5, åbnet) |
+| "Vindene ændrer sig lidt fra år til år" | OK: toppene ændrer sig 10-20 m/s | Samme |
+| Pletten: ca. 13.000-14.000 km bred, ca. 23° S | OK (egen måling i Hubbles kort): 10,8° langs breddekredsen, hvor den er tydeligt rød, og ca. 12° til den røde kant. 1° = ca. 1.160 km ved pletten. Midten ved 23,1° S planetografisk | Egen måling (`lav_jupiter.py`, `mål_plet`), del 5 punkt 1 |
+| Vind mod vest på nordsiden og mod øst på sydsiden | OK: −56 m/s ved 20° S, +30-40 m/s ved 26-29° S (vores måling) | Egen måling |
+| "Derfor drejer den rundt, som en bold mellem to hænder" | **Rettet:** Årsagen er ikke så enkel (pletten opstod nok ved en forstyrrelse mellem de to jetstrømme, del 5 punkt 2). Nu: "Den drejer samme vej, som en bold mellem to hænder, der gnider mod hinanden" | – |
+| Kanten drejer hurtigst, og midten er roligere | OK: "The GRS's high-speed collar and quiescent interior" (Shetty, Asay-Davis & Marcus 2007, arXiv 0707.4193). Galileo: "high-velocity collar", op til ca. 170 m/s, og tegn på en kerne, der drejer den anden vej (Choi m.fl. 2007, Icarus 188, 35, arXiv 1301.6119) | Begge abstracts åbnet på export.arxiv.org |
+| Hubbles kort: ca. 125 km pr. pixel | OK (regnet): 0,1° ved ækvator = 2π · 71.492 km / 3.600 = 125 km | Regnet |
+| Undertekst, alder, 1600-tallet, 41.000 km, rundere, højtryk, 640 km/t, 350-500 km | OK | Del 5, punkt 1 og 2 |
+
+**Ny fælde:** Pletten drejer ikke som en stiv skive. Kanten er hurtigst, og midten er næsten stille (måske drejer den endda lidt den anden vej). Programmet drejer den som en skive, og det står i "Ærligt talt".
