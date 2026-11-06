@@ -6,7 +6,7 @@
 - **Kloden:** Hubbles kort fra december 2025 (OPAL), så Den Store Røde Plet har den størrelse, den har nu. Farverne stemmes af efter Cassinis kort, og polerne kommer fra Cassini. Jupiter er fladtrykt (6,5 %) og drejer på 9 t 56 min.
 - **Wow:** Skybåndene glider mod øst og vest med den fart, vi selv måler i Hubbles to omgange, og pletten drejer. Dertil Junos cykloner ved polerne, nordlyset (med en kontakt til ultraviolet lys), ringene i modlys og evt. Io's vulkaner.
 - **Månerne:** Io, Europa, Ganymedes og Callisto med USGS' kort i resonansen 1 : 2 : 4. De er større langt væk, men har den rigtige størrelse tæt på, ligesom ved Mars. De kaster skygger på Jupiter.
-- **Flybyen:** 6 stop. Ingen "Stå på", for Jupiter har ingen overflade.
+- **Flybyen:** 5 stop (Io kommer med månerne senere, jeres svar). Ingen "Stå på", for Jupiter har ingen overflade.
 - **Delopgaver:** J1-J6, hver med sit eget go. Opus med høj effort. Ca. 5-7 sessioner i alt.
 - **Fem spørgsmål til jer** står sidst.
 
@@ -81,7 +81,7 @@ Set i små udgaver ved siden af hinanden:
 **Træet** (efter [plan-ux.md](plan-ux.md), "Fire slags indhold, fire faste pladser"):
 ```
 [Sol] [Jord] [Mars] [JUPITER] [Saturn]
-▶ Flyby · 6 stop
+▶ Flyby · 5 stop
 Jupiter
 STEDER
   Den Store Røde Plet
@@ -104,7 +104,7 @@ MÅNER
 2. **Båndene og vindene** (hele kloden, kontakten "Vindene" foreslås). *"De lyse og mørke bånd er skyer, som vindene trækker hver sin vej, mod øst og mod vest. Den hurtigste blæser ca. 550 km/t."* Ærligt talt: Båndene glider med den målte fart, men skyerne i dem ændrer sig ikke, som de gør i virkeligheden.
 3. **Den Store Røde Plet** (tæt på, kameraet følger pletten, mens Jupiter drejer). *"En storm, der er omtrent lige så bred som Jorden. Den drejer rundt på ca. 4½ døgn og er set sikkert siden 1831."* Ærligt talt: De fine skyer tæt på er tegnet af programmet. Fælden "350 år" undgås, og "Den var tre gange så bred i 1800-tallet" kan stå på siden.
 4. **Sydpolen** (oppefra med lav sol, kontakten "Ultraviolet" foreslås). *"Fem cykloner står i en ring om en sjette lige over polen. Juno så dem, da den kom frem i 2016."* Ærligt talt: Cyklonerne er tegnet efter Junos infrarøde målinger.
-5. **Io** (Io foran og Jupiter stor bagved, 19,5° bred). *"Det mest vulkanske sted i solsystemet. Jupiter og de andre måner hiver og trækker i Io, så den bliver varm indeni."* Ærligt talt: Farverne er dæmpet, for USGS' farvekort er forstærket.
+5. *(Udskudt til månerne-runden, jeres svar 6. november 2026)* **Io** (Io foran og Jupiter stor bagved, 19,5° bred). *"Det mest vulkanske sted i solsystemet. Jupiter og de andre måner hiver og trækker i Io, så den bliver varm indeni."* Ærligt talt: Farverne er dæmpet, for USGS' farvekort er forstærket.
 6. **I Jupiters skygge** (Solen bag Jupiter: en tynd lysende kant om planeten, og ringene lyser op i modlys, nordlyset på natsiden, Europa i baggrunden). *"Her bag Jupiter er Solen skjult. Nu ses ringene af støv, som forfra er næsten usynlige."*
 
 Europa, Ganymedes og Callisto er i træet og kan trykkes på. Europa er også med i baggrunden ved stop 6. Se spørgsmål 4.
@@ -153,7 +153,7 @@ Hver får sit eget go. Model: Opus. Effort: høj, undtagen J3 (medium er nok, de
 | **J1: Kloden og skelettet** | `billeder/solsystem/lav_jupiter.py` (OPAL + Cassini, farver, poler, bredde, kanter, 4k/2k/1k) og `KILDER.md`. `js/kosmos/jupiter.js` efter mønstret fra `saturn.js` (systemet, rejsen, træet med Jupiter alene, Solen 0,1°). Jupiter i `js/solsystem.js` mellem Mars og Saturn. `planet.js` med valgfri ringskygge. `hent` (findes to gange i saturn.js og mars.js) flyttes til en fælles fil | `planet.js`, `rejse.js`, `navne.js`, skallen | Ny `tests/jupiter.mjs`: starter, henter kortet, fladtrykt, drejer mod uret, står stille i pause, ingen konsolfejl. `saturn` og `mars` (fælles `hent`). Kort set i `kloder.html` | Mellem-stor |
 | **J2: Vindene og pletten** | Vindprofilen måles i `lav_jupiter.py` ved at sammenligne hver række i OPAL's to omgange (krydskorrelation, i den fulde opløsning og for flere filtre, med tiderne fra README'en). Den tjekkes mod de tal, der er åbnet (Simon m.fl. 2015: 153 m/s ved 24° N) og gemmes i `js/data/vinde-jupiter.js` (testes i Node). Derefter strømningen i `planet.js` (to faser), pletten som en hvirvel, fine skyer tæt på, kontakten "Vindene" og stoppet ved pletten (kameraet følger pletten) | `planet.js`, `rejse.js` (`op`, et sted, der drejer) | Node: retningen ved ækvator og den stærkeste jet. Browser: et punkt ved en given bredde flytter den rigtige vej og står stille i pause. Billeder i sekundet før og efter | Mellem |
 | **J3: Månerne** | Kortene i `lav_jupiter.py`, `lavIsmåne` med planetens skygge og tone, banerne (NSSDC), størrelsesreglen som fælles funktion (Mars bruger den også), skygger på Jupiter, tryk og besøg, "Måner" i træet | `maane.js`, `maane-form.js` (skyggen), Saturns tryk og besøg, `mars.js` (`PRIK`) | Forholdet mellem omløbene (1 : 2 : 4 og Laplace), mod uret, rigtig størrelse tæt på (målt i grader), tryk på en måne, skyggen på Jupiter findes. `mars` (fælles størrelsesregel) | Mellem |
-| **J4: Flybyen, træet og siderne** | `TUR` med 6 stop, træet, `js/data/sider/jupiter.js`, nye ord i Ordbogen, faktatjek af alle tekster (`/faktatjek`). Evt. et citat fra Galilei (kun med den præcise ordlyd fra Sidereus Nuncius) | `flyby.js`, skallen, `sideknap.js` | Flybyen igennem alle stop (`hop`, vent på `!tur().flyver`), knapperne findes ud fra teksten, underteksterne er under 160 tegn, skærmbilleder af alle stop i alle størrelser, et billedværktøj `tests/vaerktoejer/jupiter.mjs` med fuld grafik | Mellem-stor |
+| **J4: Flybyen, træet og siderne** | `TUR` med 5 stop (jeres svar), træet, `js/data/sider/jupiter.js`, nye ord i Ordbogen, faktatjek af alle tekster (`/faktatjek`). Evt. et citat fra Galilei (kun med den præcise ordlyd fra Sidereus Nuncius) | `flyby.js`, skallen, `sideknap.js` | Flybyen igennem alle stop (`hop`, vent på `!tur().flyver`), knapperne findes ud fra teksten, underteksterne er under 160 tegn, skærmbilleder af alle stop i alle størrelser, et billedværktøj `tests/vaerktoejer/jupiter.mjs` med fuld grafik | Mellem-stor |
 | **J5: Polerne, nordlyset og ringene** | Cyklonerne (ved nord og syd), nordlyset med kontakten "Ultraviolet" og ringene med `js/data/ringe-jupiter.js` og spredning fremad | `ringe.js`, `planet.js` | Cyklonerne står de rigtige steder (antal og bredde), nordlyset kun med kontakten (målt i billedet), ringene næsten usynlige forfra og synlige i modlys. Himlen ved hvert stop (tjekliste E). Billeder i sekundet | Mellem |
 | **J6: Io's vulkaner** (hvis I vil) | Skyerne over Pele og Tvashtar som partikler og Io's dæmpede farver | `fontaener.js` | Partiklerne står stille i pause, og antallet er under loftet | Lille-mellem |
 
@@ -166,5 +166,15 @@ Hver får sit eget go. Model: Opus. Effort: høj, undtagen J3 (medium er nok, de
 4. **Flybyens 6 stop:** **Oversigten, båndene, pletten, sydpolen, Io og skyggen** (anbefalet), eller skal Europa have sit eget stop i stedet for skyggen (så kommer ringene og nordlyset i modlys kun med kontakterne)?
 5. **Vindene:** **Den rigtige fart i forhold til Jupiters døgn** (anbefalet: Båndene glider ca. 1-4° pr. omgang, og med ⏩ ses det tydeligt), eller en kontakt, der gør vindene 10 gange hurtigere (som "Bjergene 10 gange højere" ved Mars)?
 
+### Jeres svar (6. november 2026)
+1. **Kortet:** "Brug det bedste billede, der giver den flotteste repræsentation af planeten. Som udgangspunkt din anbefaling." → OPAL 2025 med Cassinis farver og poler. J1 laver et billede med OPAL og Cassini side om side, og er Cassini tydeligt flottest, spørges I.
+2. **Effekterne:** A-D er med. **Io's vulkaner (J6) venter** til månerne-runden (det sparer ingen tokens at lave dem nu).
+3. **Månerne:** Kugler indtil videre, med mindre tryk og et kort besøg er en lille opgave. Laves det, skal det have samme kvalitet som Saturns måner. Vurderes ved starten af J3.
+4. **Flybyen:** Månerne kommer med i flybyen senere, når de er bygget færdige. **Nu 5 stop:** oversigten, båndene, pletten, sydpolen og "I Jupiters skygge". Stop 5 (Io) er udskudt.
+5. **Vindene:** den rigtige fart i forhold til Jupiters døgn.
+6. **Én prompt** ([prompt-jupiter.md](prompt-jupiter.md)), der bygger J1, stopper og venter på go til J2 osv.
+7. **Jupiter ligger i Solsystemet fra J1**, selvom den er halvfærdig.
+8. **Samtidig med rettelsespakken og Det sorte hul:** Jupiter-sessionen ændrer ikke `rejse.js` og `flyby.js` i J1, og den henter `main` og fletter før hver merge.
+
 ## Status
-Planen er skrevet (6. november 2026). Faktagrundlaget står i `fakta-solsystemet.md`, "Del 5: Jupiter". Intet er bygget. Venter på jeres svar og go, efter jeres runde på tabletten.
+Planen er skrevet, og jeres svar er givet (6. november 2026). Faktagrundlaget står i `fakta-solsystemet.md`, "Del 5: Jupiter". Intet er bygget. Prompten ligger klar i [prompt-jupiter.md](prompt-jupiter.md).
