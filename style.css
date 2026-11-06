@@ -121,6 +121,14 @@ button { font: inherit; color: inherit; }
 .henter-bjaelke { height: 6px; margin-top: 18px; border-radius: 3px; background: var(--panel-kant); overflow: hidden; }
 .henter-fyld { width: 5%; height: 100%; background: linear-gradient(90deg, #7ff7ff, #8c7bff 55%, #ff7bc0); transition: width 0.3s; }
 .henter-tekst { margin: 12px 0 0; color: var(--svag); font-size: 15px; }
+/* Den lille bjælke i 3D-billedet, når store billeder hentes (js/hentning.js). Står midt i "hullet" mellem panelerne,
+   oven på den mørke klode (nederst ligger underteksten og bjælken med knapper). */
+.hentebjaelke { position: fixed; z-index: 2; width: min(280px, 70vw); padding: 10px 14px 12px; border-radius: 12px; transform: translate(-50%, -50%);
+  background: rgba(8, 12, 28, 0.78); border: 1px solid var(--panel-kant); pointer-events: none; opacity: 0; transition: opacity 0.3s; text-align: center; }
+.hentebjaelke.vist { opacity: 1; }
+.hentebjaelke-tekst { margin: 0 0 8px; color: var(--tekst, #e8ecff); font-size: 14px; font-variant-numeric: tabular-nums; }
+.hentebjaelke-spor { height: 5px; border-radius: 3px; background: var(--panel-kant); overflow: hidden; }
+.hentebjaelke-fyld { width: 4%; height: 100%; background: linear-gradient(90deg, #7ff7ff, #8c7bff 55%, #ff7bc0); transition: width 0.25s; }
 
 /* Kortene står i --kol kolonner, og en sidste række med færre kort står i midten */
 .menukort {

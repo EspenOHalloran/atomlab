@@ -220,7 +220,7 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 
 **Opus' forslag (venter på jeres svar):**
 1. **Mars afsluttes med M8c del 1.** Curiosity-modellen, M7b-pol og L2 bliver "Mars ekstra", som kan tages senere. De giver mindre nyt end en ny planet.
-2. **Først en runde på tabletten (jer, koster ingen tokens):** Mange ting fra M5b-M8b og U1-U4 er ikke set på den rigtige tablet ("Ikke afprøvet" i DESIGN.md). Planeterne genbruger flybyen, træet, siden og rejsen, så en fejl dér bliver ganget med fem.
+2. **Først en runde på tabletten (jer, koster ingen tokens):** Mange ting fra M5b-M8b og U1-U4 er ikke set på den rigtige tablet (`docs/ikke-afproevet.md`). Planeterne genbruger flybyen, træet, siden og rejsen, så en fejl dér bliver ganget med fem.
 3. **En fast pakke pr. planet** i stedet for Mars' 15 delopgaver: kloden i topkvalitet, en flyby med 4-6 stop, steder i træet med deres egne sider, og 1-2 signatur-effekter, som er planetens wow. "Stå på" kun dér, hvor der findes rigtige data.
 4. **Overblikket (trin 2) kommer efter planeterne** som sin egen visning, hvor et tryk på en planet flyver ind med en filmisk overgang. En helt sømløs flyvning fra Solen til en måne kræver en fælles verden med flydende nulpunkt og ville betyde, at planeterne skal bygges om bagefter. Det skal afgøres, før første planet bygges.
 

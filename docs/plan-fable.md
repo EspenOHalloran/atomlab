@@ -74,7 +74,7 @@ Opus samler materialet i `docs/fable/`. Billederne kopieres til `docs/fable/`, f
   8. **det sted, I synes ser mindst flot eller mest kedeligt ud.** Det er måske det vigtigste billede.
 
   Den sikre vej er at lægge dem på GitHub (Add file → Upload files) i mappen `docs/fable/tablet/`. Opus gør dem mindre, før Fable ser dem.
-- **Det, der allerede er kendt:** eftersynet fra oktober (`docs/gennemgang-2026-10.md`), "Åbne punkter" i `docs/erfaringer.md` og idélisten i DESIGN.md.
+- **Det, der allerede er kendt:** eftersynet fra oktober (`docs/gennemgang-2026-10.md`), `docs/erfaringer/aabne-punkter.md` og idélisten i `docs/ideer.md`.
 - **Lidt tal:** hvor meget hver skærm skal hente, antal linjer pr. fil, og om alle tests er grønne.
 
 ### F1: Samlet overblik (Fable, `high`, ca. 5-10 $)
@@ -144,5 +144,5 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
 - [x] **F1 er lavet** (23. oktober 2026) uden Fable, i en session med høj effort ud fra den samme brief: [docs/fable/F1-overblik.md](fable/F1-overblik.md).
   - Afsnit 5 siger, hvilke fund der er nye, så `F1-noter.md` er ikke nødvendig.
   - Rådet er, at et bredt F2 ikke betaler sig nu. Det gør en kort UI-plan for lagene (punkt 1, 3 og 10), og den kan laves uden Fable.
-  - Næste skridt står i "Lige nu" i DESIGN.md.
+  - Næste skridt står i "Lige nu" (`docs/lige-nu.md`).
 - [ ] **Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer.** I mener, at Fable 5.1 ligger for tæt på Opus 5.5 til at være pengene værd. Opus laver F1 i stedet i en ny session med høj effort ud fra den samme brief (som nu ikke nævner, hvilken model der læser den). Tjernobyl og Liv venter også, til Fable 5.5 kommer (Molekyler og Solsystemet laver Opus med høj effort og `/faktatjek`). Når Fable 5.5 kommer, vurderer vi igen, om den skal lave F2-F4 eller faktagrundlaget for Tjernobyl og Liv. **Ændret 5. november 2026:** Liv venter ikke længere. Opus laver den med xhigh lige efter Molekyler, og Fable tjekker den senere. Tjernobyl venter stadig og er rykket ned.

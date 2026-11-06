@@ -262,7 +262,7 @@ Hvert trin får sin egen PR, og I siger go før hvert. Kosmos og Solsystemet del
 - **Planeternes tekster deles op.** Det, der handler om et sted, flytter ud til stedet. "Ærligt talt" og "Billederne" bliver deres egne bokse.
 - **Tal for hvert sted:** Nye tal skal faktatjekkes (`/faktatjek`). De fleste står allerede i faktatjekkede tekster i `docs/fakta-solsystemet.md`.
 - **"Tryk X" bliver til knapper i teksten** (22 steder), og linket til Hvid dværg rettes (`data-gaa="kosmos:hviddvaerg"`).
-- **Tekst, der flytter og bliver kortere, læses igennem**, så sammenhængen holder (tjekliste B i [erfaringer.md](erfaringer.md)).
+- **Tekst, der flytter og bliver kortere, læses igennem**, så sammenhængen holder (tjekliste B i [tjeklister/b-fakta.md](tjeklister/b-fakta.md)).
 - **Tests:**
   - Hver side har "Ærligt talt".
   - Bjælkens linje står ikke på siden.
