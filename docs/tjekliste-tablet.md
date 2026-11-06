@@ -26,3 +26,25 @@
 15. **Generelt:** Ser I noget i billedet, der ligner en fejl? Fx ting på himlen, der ikke ligner noget ægte (prikkerne ved Olympus Mons er rettet i småtingspakken: rumstøvet er væk i Solsystemet, og månerne har deres rigtige størrelse set fra et sted).
 
 *Resten af de ca. 30 punkter (fx Ordbogen, kategorien som link og den lille Jord ved Solen) står stadig i DESIGN.md. Tag dem, hvis I har tid, men de er ikke nødvendige, før Jupiter bygges.*
+
+## Svar fra runden (6. november 2026)
+*Jeres svar, skrevet ind ordret i kort form. Det, der skal rettes, står under "Fund" nederst.*
+- **A1-A6 (træet, bjælken, Styr, kontakterne, tidsknappen, siden):** intet at bemærke.
+- **A7 Flybyen ved Mars:** kører nogenlunde, men hakker en smule under flyvningerne. Hentetiden for "Start flyby" er ukendt, men ok.
+- **A8 Flybyen ved Saturn:** kører godt, bedre end Mars. "Start flyby" er grå 3-5 sekunder. Ingen flimmer i ringene.
+- **B9 Stå på Mars:** ikke helt glat, hakker lidt. Hentetiden er ok. Lyset virker lidt for lyst. Roverens foto er ikke imponerende skarpt (måske kilden). Kontakten "Roverens foto" opdages ikke, når Styr er foldet sammen.
+- **B10 Jezero:** hakker lidt på vej ned. Ok flot, når man står der, men underlaget tæt på ser ensartet ud, som et mønster, der gentages ("som et tæppe").
+- **B11 Tilbage til flybyen:** knappen er let at finde. Toningen er måske lidt for kraftig til sidst, og overgangen er ikke helt flydende.
+- **B12 Phobos og Deimos:** intet at bemærke.
+- **C13 Jorden:** uret kunne stå længere nede, tættere på panelerne, på højkant.
+- **C14 Elektronsky og orbitalerne:** intet at bemærke.
+- **C15 Generelt og Formørkelser:** intet at bemærke. Det sorte hul afprøves først, når det er bygget om (jeres ønske: byg det om som planlagt, før det testes på tabletten).
+
+**Fund (til rettelse, venter på et go):**
+1. **Hop i flybyen ved Tharsis og Hellas:** Når bevægelsen stopper, hopper kameraet et hak tættere på. Formentlig har slutningen af flyvningen og det stillestående billede ikke samme afstand eller zoom.
+2. **Hak i Mars-flybyen** og ved nedstigningen til Jezero og tilbage (A7, B9-B11).
+3. **Tæppemønstret** i jorden tæt på i Stå på Mars (hænger sammen med M8c del 3, stenene og terrænet).
+4. **Lyset i Stå på Mars** lidt for lyst (L1, se plan-mars.md).
+5. **"Roverens foto"** er svær at finde med Styr foldet sammen på højkant.
+6. **Uret ved Jorden** længere ned på højkant.
+7. **Toningen** ved "↑ Tilbage til flybyen" er lidt for kraftig til sidst.
