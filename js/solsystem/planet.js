@@ -1,14 +1,17 @@
-// En gasplanet (til prototypen: Saturn): en fladtrykt kugle med skybånd, lys og skygge fra ringene.
+// En gasplanet (Saturn og Jupiter): en fladtrykt kugle med skybånd, lys og (valgfrit) skygge fra ringene.
 // Har vi et kort (billede), bruges det. Ellers tegnes båndene af shaderen.
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
-// skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur, ringInd, ringUd, kort = null, segmenter = 128 }) {
+// skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
+// ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128 }) {
   const R = radius / skala;
   const flad = polRadius / radius;
+  const medRing = Boolean(ringTekstur);
   const mat = new THREE.ShaderMaterial({
+    defines: medRing ? { RING_SKYGGE: '' } : {},
     uniforms: {
       tKort: { value: kort },
       uHarKort: { value: kort ? 1 : 0 },
@@ -32,7 +35,9 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur, ringInd, r
         gl_Position = projectionMatrix * viewMatrix * v;
       }`,
     fragmentShader: /* glsl */ `
+      #ifdef RING_SKYGGE
       ${RING_GLSL}
+      #endif
       uniform sampler2D tKort;
       uniform float uHarKort, uTid;
       uniform vec3 uSol, uAkse, uMidt;
@@ -59,16 +64,18 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur, ringInd, r
         float lys = max(dot(N, uSol), 0.0);
         // Blød overgang ved grænsen mellem dag og nat (lyset spredes i de øverste skyer)
         lys = smoothstep(-0.05, 0.35, dot(N, uSol)) * (0.35 + 0.65 * lys);
+        float skygge = 1.0;
+        #ifdef RING_SKYGGE
         // Ringenes skygge: hvor rammer strålen mod Solen ringenes plan?
         vec3 d = vVerden - uMidt;
         float sn = dot(uSol, uAkse);
         float t = -dot(d, uAkse) / sn;
-        float skygge = 1.0;
         if (t > 0.0 && abs(sn) > 0.001) {
           vec3 q = d + t * uSol;
           vec4 ring = ringData(length(q));
           skygge = exp(-ring.a / abs(sn));
         }
+        #endif
         // Lidt mørkere mod kanten (randformørkelse)
         vec3 V = normalize(cameraPosition - vVerden);
         float rand = 0.75 + 0.25 * max(dot(N, V), 0.0);

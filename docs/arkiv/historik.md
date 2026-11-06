@@ -2,7 +2,22 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
-## "Senest lavet" 6. november 2026 (Skrænten set længere fra, før Det sorte hul)
+## "Senest lavet" 6. november 2026 (dokumenterne delt op, før Det sorte hul)
+**Senest lavet (6. november 2026): Dokumenterne delt op, så en ny session starter med mindre kontekst.** Jeres spørgsmål: "Kan nye sessioner undgå at have næsten 100k kontekst, før jeg får det første svar?" Jeres go til alle fire forslag, på betingelse af, at kvaliteten ikke falder.
+- **Årsagen:** CLAUDE.md bad hver session om at læse DESIGN.md (42 KB), `docs/erfaringer.md` (111 KB) og `docs/kode.md` (70 KB). Dansk fylder ca. 2,1 tegn pr. token, så det var ca. 100.000 tokens, før arbejdet gik i gang. "Læs kun afsnit X" virkede ikke, fordi Read-værktøjet henter hele filen.
+- **Nu læses ved start:** CLAUDE.md, denne fil og DESIGN.md (ca. 28 KB, ca. 13.000 tokens). Resten læses, når opgaven har brug for det, efter læsekortet i CLAUDE.md: tjeklisterne i `docs/tjeklister/` (A-F, én fil hver), erfaringerne i `docs/erfaringer/` (én fil pr. emne, også rodårsagerne og fælderne i fakta), koden i `docs/kode/` (én fil pr. område). "Ikke afprøvet", "Idéer til senere" og "Før vi deler" har hver sin fil. `docs/erfaringer.md` og `docs/kode.md` er nu oversigter.
+- **Kvaliteten:** Teksten er flyttet med et script uden ændringer og tjekket linje for linje (kun overskrifter og links er rettet). Tjeklisterne skal stadig læses, *før* arbejdet går i gang (C, D, E og F efter opgaven), og igen i `/faerdig`. `/faktatjek` læser B og fælderne. De aktive prompter (Jupiter, Det sorte hul, Mars) peger på de nye filer.
+- **Andre sessioner:** Sessioner, der startede før opdelingen, får en merge-konflikt i DESIGN.md, `docs/erfaringer.md` eller `docs/kode.md`. Oversigterne og CLAUDE.md siger, hvor teksten skal flyttes hen.
+
+## "Senest lavet" 6. november 2026 (Jupiter J1, før opdelingen af dokumenterne)
+**Senest lavet (6. november 2026): Jupiter J1, kloden og skelettet.** Jeres go: "Go til J1" ([prompt-jupiter.md](prompt-jupiter.md)). Jupiter står i Solsystemet mellem Mars og Saturn (halvfærdig, som I bad om).
+- **Kortet** er Hubbles OPAL-kort fra december 2025 med farverne stemt af efter Cassinis kort fra 2000 og Cassinis poler (`billeder/solsystem/lav_jupiter.py`). Sammenligningsbilledet (OPAL, OPAL med Cassinis farver og Cassini, kloden og pletten tæt på) viste ikke Cassini som tydeligt flottest, så anbefalingen blev brugt. Bredden er regnet om til den fladtrykte klode (målt: båndene passer kun, når Cassini læses som planetocentrisk).
+- **Kloden:** fladtrykt 6,5 %, aksen hælder 3,13°, drejer mod øst én gang på 80 sekunder i programmets ur, står stille i pause. Solen er en lille prik (0,10°). Kontakten "Modlys". En kort side (resten kommer i J4).
+- **Fælles kode:** `hent` ligger nu i `js/solsystem/hent.js` (før to gange i `mars.js` og `saturn.js`), og ringenes skygge i `planet.js` er valgfri. Kloderne øverst i listen står 5 på en række (`style.css`).
+- **Tests:** ny `tests/jupiter.mjs` (15 tjek: rækkefølgen, kortet hentet, fladtrykt, drejer mod uret, står stille i pause, pletten ved den rigtige bredde, ingen søm og ingen sorte poler). Hele samlingen tre gange. Efter mergen af `main` (#79-#81) bestod alle 31 på første forsøg (23 min). I de to første kørsler fejlede `mars` (en timeout) og `stjerneovn-mus` (det kendte åbne punkt) hver én gang sammen med andre tests, og begge bestod alene.
+- **Billeder i sekundet** (testbrowseren, fuld grafik, hele Jupiter): pc ca. 5, tablet ca. 15 (Saturn: 4,6 og 12,6).
+
+## "Senest lavet" 6. november 2026 (Skrænten set længere fra, før Jupiter J1)
 **Senest lavet (6. november 2026): Skrænten ved Olympus Mons set længere fra.** Jeres fund: Skrænten lignede "et lavopløst grumset billede", og teksten "ned til sletten på ca. 20 km" var uklar. Jeres valg: udgave B af tre.
 - **Kameraet** står nu 22° over horisonten med ca. 60 km i billedet (før 10° og 18 km, `STEDER` i `js/kosmos/mars.js`). Helt tæt på blev detaljekortets 0,22 km pr. pixel til bløde klatter. Nu ses skrænten som én kant mellem vulkanen og sletten. Zoomer man selv helt ned, er klatterne der stadig (kortet bliver ikke skarpere).
 - **Teksten:** "falder landet ca. 8 km ned til sletten. Det sker over en strækning på kun ca. 20 km." Pillen og "Ærligt talt" siger "ned over ca. 20 km". "Hvorfor ligger skrænten i skygge?" passer til det nye billede. Tallene er de samme.

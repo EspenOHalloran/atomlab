@@ -369,7 +369,7 @@ function lavNet(retninger, ringe) {
   return geo;
 }
 
-// data: kraterets JSON fra lav_landskab.py. hent(navn, færdig, valg) som i js/kosmos/mars.js (billederne bliver i
+// data: kraterets JSON fra lav_landskab.py. hent(navn, færdig, valg) fra js/solsystem/hent.js (billederne bliver i
 // grafikkortet). bredde: stedets bredde (grader) til Solens bane. deklination: Solens deklination (grader).
 export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   const gruppe = new THREE.Group();

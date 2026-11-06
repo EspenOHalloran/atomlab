@@ -37,7 +37,7 @@ Rækkefølgen er valgt, så der er noget at se efter hver del: Efter M2 kan man 
 **Resten af Mars (plan 31. oktober 2026):** Af M7b bliver kun Nordpolen tæt på (M7b-pol) og en lille rest i M8b. Rækkefølgen bliver L1 (lyset) → S2 → M8b → M8c → M7b-pol → U4 → L2. Se "Plan for resten af Mars" nedenfor.
 
 ## Plan for resten af Mars (31. oktober 2026, skrevet ind efter jeres go)
-*Lavet af Opus ud fra CLAUDE.md, "Lige nu" i DESIGN.md, denne fil, `docs/erfaringer.md`, `docs/plan-fable.md`, `docs/plan-ux.md` og `docs/plan-saturn-kvalitet.md`. Hvert trin får stadig sit eget go. De åbne spørgsmål står til sidst.*
+*Lavet af Opus ud fra CLAUDE.md, "Lige nu" (`docs/lige-nu.md`), denne fil, `docs/erfaringer.md`, `docs/plan-fable.md`, `docs/plan-ux.md` og `docs/plan-saturn-kvalitet.md`. Hvert trin får stadig sit eget go. De åbne spørgsmål står til sidst.*
 
 **Udgangspunktet:** M1-M6, M7a og M8a er færdige, og det samme er U1 og U2. U3 kører i en anden session (`ccr-1dbfe8b3-phtbvs`, indtil videre kun `docs/plan-ux.md`). M5b, M7a, M8a, U1 og U2 er ikke set på den rigtige tablet. Stå på Mars kører med ca. 45 % (pc) og 56 % (tablet) af hastigheden ved hele Mars i testbrowseren. På et rigtigt grafikkort er det ikke målt.
 
@@ -108,7 +108,7 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 - **I laver jeres vurdering til sidst**, ikke efter hvert skridt. Hvert skridt skriver derfor sin egen liste "Ikke afprøvet" (hvad I skal kigge efter på pc og tablet), og listerne samles til jeres runde til sidst. Det betyder, at lyset i L1 justeres efter Opus' billeder og NASA's foto, ikke efter jeres øjne. Det kan kræve en rettelse efter jeres runde.
 - **Nye sessioner, hvor det giver mening**, for at spare tokens, men ikke på bekostning af kvaliteten. Hvert skridt slutter med at skrive prompten til det næste skridt ind under "Prompter til de næste skridt" nedenfor. I starter den nye session med prompten og siger go.
 - **Sessionerne:** L1, S2, M8b, M8c (begge dele i én session, med go imellem), M7b-pol, U4, L2 (lokal på jeres pc) og planen for trin 2 får hver sin session.
-- **DESIGN.md og `docs/plan-ux.md` røres ikke, før U3 er merget.** (U3 blev merget 31. oktober 2026.) Indtil da skrives status her i filen. Den første session efter U3 skriver status ind i "Lige nu" i DESIGN.md.
+- **DESIGN.md og `docs/plan-ux.md` røres ikke, før U3 er merget.** (U3 blev merget 31. oktober 2026.) Indtil da skrives status her i filen. Den første session efter U3 skriver status ind i "Lige nu" (`docs/lige-nu.md`).
 
 ### Åbne spørgsmål
 1. Må Curiositys model gøres mindre med `gltf-transform` (en npm-pakke, der kun køres én gang som værktøj)? Spørges ved M8c del 2.
@@ -118,7 +118,7 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 *De brugte prompter (L1, S2 og M8b) står i [arkiv/plan-mars-faerdigt.md](arkiv/plan-mars-faerdigt.md).*
 
 **M8c del 1 (skrevet 31. oktober 2026 efter M8b, brugt: se "Status efter M8c del 1" nedenfor):**
-> Lav M8c del 1: rovernes panoramaer. Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 2, 4 og 5), "Plan for M8" (afsnit 6 "Panoramaerne" og 9) og "Status efter M8b". M8b er merget.
+> Lav M8c del 1: rovernes panoramaer. Læs CLAUDE.md, "Lige nu" (`docs/lige-nu.md`), `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 2, 4 og 5), "Plan for M8" (afsnit 6 "Panoramaerne" og 9) og "Status efter M8b". M8b er merget.
 >
 > **Først:** Tjek med `curl`, at `assets.science.nasa.gov` og `science.nasa.gov` kan åbnes, og hent PIA20332 (Naukluft, Mastcam) og PIA24264 (landingsstedet ved Jezero, Mastcam-Z) i fuld størrelse (og PIA24422, Navcam, hvis PIA24264 ikke dækker 360°). Er noget blokeret, så stop og bed om adgang. Tjek panoramaernes vinkler (hvor meget over og under vandret, og hvilken retning midten vender), før noget bygges.
 >
@@ -128,7 +128,7 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 >
 > **Billeder:** Skyen har intet grafikkort. Tag få, små billeder i baggrunden (`tests/vaerktoejer/landskab-lille.mjs`), og sammenlign det tegnede og fotoet fra samme retning.
 >
-> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og markér, at Mars er færdig (besluttet 5. november 2026: M8c del 2, M7b-pol og L2 er "Mars ekstra" til senere, og næste er planen for Jupiter i `docs/plan-solsystemet.md`, afsnit 9). Model: Opus. Effort: høj (I sætter den selv).
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv det, der ikke er afprøvet, i `docs/ikke-afproevet.md`, og markér, at Mars er færdig (besluttet 5. november 2026: M8c del 2, M7b-pol og L2 er "Mars ekstra" til senere, og næste er planen for Jupiter i `docs/plan-solsystemet.md`, afsnit 9). Model: Opus. Effort: høj (I sætter den selv).
 
 ## M8c del 1: rovernes panoramaer, målingerne (5. november 2026)
 Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "Vidste du?").
@@ -145,7 +145,7 @@ Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "V
 - Værktøjerne til målingen (Mars24, horisonten fra lagene, krydskorrelation) lå i sessionens kladdemappe og er ikke med i repoet. Tallene står i `FOTOS` i `billeder/solsystem/lav_panorama.py` og i `pano-<id>.json`.
 
 **M8c del 2 (skrevet 5. november 2026 efter M8c del 1, "Mars ekstra" til senere: næste er planen for Jupiter, besluttet 5. november 2026):**
-> Lav M8c del 2: Curiosity som 3D-model ved "Hos Curiosity nu". Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 2, 4 og 5), "Plan for M8" (afsnit 7 "Roveren" og 10), "Status efter M8a" og "Status efter M8c del 1". M8c del 1 er merget.
+> Lav M8c del 2: Curiosity som 3D-model ved "Hos Curiosity nu". Læs CLAUDE.md, "Lige nu" (`docs/lige-nu.md`), `docs/erfaringer.md` og i `docs/plan-mars.md` afsnittene "Plan for resten af Mars" (afsnit 2, 4 og 5), "Plan for M8" (afsnit 7 "Roveren" og 10), "Status efter M8a" og "Status efter M8c del 1". M8c del 1 er merget.
 >
 > **Først:** Spørg om åbent spørgsmål 1: Må `Curiosity_static.glb` (11,9 MB, `assets.science.nasa.gov/…/gltf_files/24584_Curiosity_static.glb`) gøres mindre med `gltf-transform` (en npm-pakke, der kun køres én gang som værktøj, ikke et byggetrin)? Byg intet, før I har svaret. Tjek med `curl`, at filen kan hentes, og se, hvor meget af størrelsen der er teksturer og hvor meget geometri.
 >
@@ -153,7 +153,7 @@ Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "V
 >
 > **Tekster:** en kort tekst om roveren (størrelse, vægt, hvor længe den har kørt), faktatjekket med `/faktatjek`, og "Ærligt talt" om modellen (NASA's model, forenklet).
 >
-> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md, og skriv prompten til det næste skridt under "Prompter til de næste skridt" her i filen (M7b-pol eller L2, se "Plan for resten af Mars"). Model: Opus. Effort: høj (I sætter den selv).
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv det, der ikke er afprøvet, i `docs/ikke-afproevet.md`, og skriv prompten til det næste skridt under "Prompter til de næste skridt" her i filen (M7b-pol eller L2, se "Plan for resten af Mars"). Model: Opus. Effort: høj (I sætter den selv).
 
 ## Status efter M8c del 1 (5. november 2026): roverens foto
 - **Lavet:** Kontakten "📷 Roverens foto" i Styr-boksen ved Naukluft og landingsstedet (`foto` i `LANDSKAB`, `visFoto`). Roverens 360°-panorama (PIA20332 og PIA24264) ligger på en kugle om kameraet (`js/solsystem/panorama.js`), drejet efter de målte vinkler (se "M8c del 1: rovernes panoramaer, målingerne" ovenfor), og toner ind over landskabet på 0,6 s. Over og under fotoet og i hullerne uden data ses det tegnede landskab (en blød maske). Klokken stilles til den tid, fotoet blev taget (15:42 ved Naukluft og 14:45 ved landingsstedet, lokal soltid). Teksten på stedets side har et emne om fotoet, der folder sig ud, når kontakten slås til.
@@ -350,7 +350,7 @@ Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "V
 6. **Bedre materiale** (normalkort for rifler og revner, lag i de store sten) og **støv og stemning** (støv i luften, sandkorn): kun hvis det stadig mangler.
 
 **Prompt (til når I siger go, skrevet 3. november 2026):**
-> Lav M8c del 3: stenene og terrænet i Stå på Mars. Læs CLAUDE.md, "Lige nu" i DESIGN.md, `docs/erfaringer.md`, "M8c del 3" og L2 i `docs/plan-mars.md` og stenkoden i `js/solsystem/landskab.js` (ca. linje 196-226). M8c del 1 er merget, så panoramaerne kan bruges som facit.
+> Lav M8c del 3: stenene og terrænet i Stå på Mars. Læs CLAUDE.md, "Lige nu" (`docs/lige-nu.md`), `docs/erfaringer.md`, "M8c del 3" og L2 i `docs/plan-mars.md` og stenkoden i `js/solsystem/landskab.js` (ca. linje 196-226). M8c del 1 er merget, så panoramaerne kan bruges som facit.
 >
 > **Først:** Tag få, små billeder af Naukluft og landingsstedet fra samme retning som panoramaerne (`tests/vaerktoejer/landskab-lille.mjs`), og sammenlign stenenes størrelse, form, farve og tæthed med fotoerne. Skriv, hvad der er forkert, før noget ændres. Mål billeder i sekundet på pc og tablet før og efter (tjekliste F i `docs/erfaringer.md`).
 >
@@ -358,4 +358,4 @@ Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "V
 >
 > **Tekster:** Opdater "Ærligt talt" ved stederne, så den siger, at stenene er tegnet af programmet efter fotoerne og ikke er hver enkelt sten fra Mars. Faktatjek tal om stenene med `/faktatjek`.
 >
-> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv "Ikke afprøvet" i "Lige nu" i DESIGN.md (er stenene nu forskellige nok, flimrer noget langt væk, kører det glat på tabletten). Model: Opus. Effort: høj (I sætter den selv).
+> **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv det, der ikke er afprøvet, i `docs/ikke-afproevet.md` (er stenene nu forskellige nok, flimrer noget langt væk, kører det glat på tabletten). Model: Opus. Effort: høj (I sætter den selv).

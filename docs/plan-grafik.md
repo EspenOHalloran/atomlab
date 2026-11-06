@@ -57,7 +57,7 @@
 | G4 | **Ambient occlusion** (skærm og landskab) | Dyr. Først når G1 viser, hvor meget der er plads til. | Opus, høj |
 | G5 | **Komprimerede teksturer** | Kun hvis hukommelsen på tabletten er flaskehalsen. Spørg om værktøjet først. | Opus, medium |
 
-**Regel for hele planen:** Hvert trin måles før og efter på pc og tablet (tjekliste F i `docs/erfaringer.md`), og vi tager kun billeder af det, der er ændret. Er et trin for dyrt på tabletten, får tabletten en billigere udgave, ikke en dårligere oplevelse uden at sige det.
+**Regel for hele planen:** Hvert trin måles før og efter på pc og tablet (tjekliste F i `docs/tjeklister/f-tests.md`), og vi tager kun billeder af det, der er ændret. Er et trin for dyrt på tabletten, får tabletten en billigere udgave, ikke en dårligere oplevelse uden at sige det.
 
 ## 5. Beslutninger til jer
 1. Hvilken skærm føles mest flad lige nu? (Afgør G3.)

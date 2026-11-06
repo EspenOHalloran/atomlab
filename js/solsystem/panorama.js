@@ -64,7 +64,7 @@ const FRAGMENT = /* glsl */ `
 
 const TONE_TID = 0.6; // sekunder, som fotoet toner ind og ud over
 
-// hent(navn, færdig, valg) som i js/kosmos/mars.js (billederne bliver i grafikkortet). mappe: billeder/solsystem/.
+// hent(navn, færdig, valg) fra js/solsystem/hent.js (billederne bliver i grafikkortet). mappe: billeder/solsystem/.
 export function lavPanorama({ renderer, hent, mappe }) {
   const maks = renderer.capabilities.maxTextureSize;
   const størrelse = TEST_HURTIG ? 'lille' : LAV_KVALITET || maks < 8192 ? '4k' : '8k';
