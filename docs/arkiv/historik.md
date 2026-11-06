@@ -2,6 +2,13 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 6. november 2026 (hentebjælken og de mørke kloder, før Jupiter J2)
+**Senest lavet (6. november 2026): Hentebjælken og de mørke kloder.** Jeres fund: Jorden og Mars var grimme, mens kortene blev hentet (det tegnede kort og en jævn rødbrun kugle), og I ville have en loadskærm, hvor det tager over 2-3 sekunder. Jeres go: "go med dine anbefalinger".
+- **Kloderne:** Jorden, Månen og Mars er mørke kugler (med luften i kanten), indtil kortet er hentet, og toner så ind på 0,6 s. På pc kommer kortet i to trin: først 2k (ca. 0,3 MB pr. billede), så 4k/8k, som skiftes ind uden tone, og 2k fjernes fra grafikkortet. Er kortet hentet før, ses det med det samme. Det tegnede kort og den rødbrune kugle ses kun, hvis billederne ikke kan hentes. Mars' højdekort er stadig 4k i ét trin, så bjergene kommer lidt efter farverne.
+- **Bjælken** (`js/hentning.js`): En lille boks midt i 3D-billedet ("Henter landskabet … 18 af 42 MB"), som kun ses, hvis man venter over ca. 1 sekund: Stå på Mars (lagene og et hop mellem stederne), roverens foto, Mars første gang og Jorden første gang. MB vises, når størrelsen på alle billederne kendes. `js/solsystem/hent.js` (Mars, Saturn og Jupiter) henter nu med `hentBillede`, så de kan bruge bjælken.
+- **Ny test `hentning`** (langsomt net med forsinkede billeder): mørk klode, bjælken, toningen, Stå på Mars med MB, et kort, der mangler, og skærmskift. Hele samlingen (31 tests) bestod på nær `aarstider` og `landskab`, som læste filnavnet i `image.src` (nu en blob-adresse). Rettet til `image.dataset.fil`, og så bestod de.
+- **Solstormens Jord** bruger stadig det tegnede kort (den har aldrig haft NASA's billeder). Det kan tages med senere.
+
 ## "Senest lavet" 6. november 2026 (dokumenterne delt op, før hentebjælken og de mørke kloder)
 **Senest lavet (6. november 2026): Dokumenterne delt op, så en ny session starter med mindre kontekst.** Jeres spørgsmål: "Kan nye sessioner undgå at have næsten 100k kontekst, før jeg får det første svar?" Jeres go til alle fire forslag, på betingelse af, at kvaliteten ikke falder.
 - **Årsagen:** CLAUDE.md bad hver session om at læse DESIGN.md (42 KB), `docs/erfaringer.md` (111 KB) og `docs/kode.md` (70 KB). Dansk fylder ca. 2,1 tegn pr. token, så det var ca. 100.000 tokens, før arbejdet gik i gang. "Læs kun afsnit X" virkede ikke, fordi Read-værktøjet henter hele filen.

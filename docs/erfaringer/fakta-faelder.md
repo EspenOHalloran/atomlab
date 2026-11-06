@@ -45,6 +45,7 @@
 - "En bombe bruger rent uran-235." Typisk ca. 90 %. Brændslet i et kraftværk har typisk 3-5 %.
 
 - "Den Store Røde Plet har raset i 350 år." Cassinis plet fra 1665-1713 forsvandt nok. Den nuværende er set sikkert siden 1831 (Sánchez-Lavega m.fl. 2024). Den er ikke længere "2-3 Jordkloder bred", men ca. én (ca. 16.000 km i 2021). NASA's side "Jupiter Facts" er forældet på begge punkter.
+- "Pletten drejer rundt på 4½ døgn" gælder kanten. Midten er næsten stille (Shetty m.fl. 2007, Choi m.fl. 2007). Programmet drejer den som en skive og siger det.
 - "Jupiter er en mislykket stjerne." Brint smelter først sammen ved ca. 75-80 gange Jupiters masse, og en brun dværg kræver ca. 13 gange.
 - "Jupiter beskytter Jorden mod kometer." Horner og Jones (2008-2012): Jupiter fjerner nogle kometer, men sender også asteroider og kometer ind mod os. Den er ikke et enkelt skjold.
 - "Io har over 400 aktive vulkaner." Ca. 150 er set i udbrud, og der er ca. 400 i alt (NASA's skøn). Bland ikke kendte og aktive sammen.

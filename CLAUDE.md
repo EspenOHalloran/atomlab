@@ -50,7 +50,7 @@ Dokumenterne er delt op i små filer (6. november 2026), så en ny session ikke 
 - **Skærmene:** `js/vaerksted.js` (Atomværkstedet), `js/system.js` og `js/kategorikort.js` (Det periodiske system), `js/fusion.js` (Stjerneovnen), `js/reaktor.js` (Reaktoren), `js/batteri.js` (Batteriet), `js/ordbog.js` (Ordbogen), `js/kosmos.js` og `js/solsystem.js` (begge bygget på `js/faenomenskaerm.js`, med knapper i teksten fra `js/sideknap.js`).
 - **Fænomenerne:** `js/kosmos/*.js`, én fil pr. fænomen i Kosmos og Solsystemet (Mars, Saturn, Jupiter, Jorden og Solen er de store). Fælles byggeklodser i `js/kosmos/faelles.js` og `js/kosmos/jorden.js`.
 - **Grafikken til Solsystemet:** `js/solsystem/` (`hent.js` henter billederne for alle planeterne, klippeplanet, gasplanet, ringe, atmosfære, skyer, måner, landskabet til Stå på Mars og rovernes fotos (`panorama.js`), kameraets rejse, flybyen og navnene).
-- **Data uden Three.js** (kan testes i Node): `js/data/` (grundstoffer, isotoper, kerne, orbitaler, fakta, ordbog, hvorfor, kategorier, citater, grundstoflag, himmel, solbane, skygge, ringe, landkort og siderne i `js/data/sider/`).
+- **Data uden Three.js** (kan testes i Node): `js/data/` (grundstoffer, isotoper, kerne, orbitaler, fakta, ordbog, hvorfor, kategorier, citater, grundstoflag, himmel, solbane, skygge, ringe, landkort, vinde-jupiter og siderne i `js/data/sider/`).
 - **Billeder:** `billeder/solsystem/` med `KILDER.md` (kilde og licens for hvert billede) og Python-værktøjerne, der laver dem (`lav_*.py`).
 - **Nyt fænomen:** lav en fil i `js/kosmos/`, og sæt den ind i listen i `js/kosmos.js` eller `js/solsystem.js`. Hold tallene korrekte, og skriv i nørd-teksten, hvad animationen snyder med.
 

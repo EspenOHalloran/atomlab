@@ -1,10 +1,34 @@
-// Jupiter (J1 i docs/plan-jupiter.md): kloden står i Solsystemet mellem Mars og Saturn, kortet hentes og ligger rigtigt
-// (pletten syd for ækvator, ingen søm, ingen sorte poler), Jupiter er fladtrykt, drejer mod uret set fra nord og står
-// stille i pause. Ingen fejl i konsollen.
+// Jupiter (J1 og J2 i docs/plan-jupiter.md): kloden står i Solsystemet mellem Mars og Saturn, kortet hentes og ligger
+// rigtigt (pletten syd for ækvator, ingen søm, ingen sorte poler), Jupiter er fladtrykt, drejer mod uret set fra nord og
+// står stille i pause. J2: vindene (målt i Hubbles to omgange, testes først uden browser), at skyerne glider den rigtige
+// vej og står stille i pause, ⏩, kontakten "Vindene" og pletten (kameraet følger pletten, døgnet står stille, pletten
+// drejer mod uret). Ingen fejl i konsollen.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
+import { VIND, TRIN, PLET, vindVed } from '../js/data/vinde-jupiter.js';
 const UD = billedmappe('jupiter');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
+
+// ---------- Vindene uden browser (js/data/vinde-jupiter.js) ----------
+{
+  tjek('vindene: fra 90° S til 90° N i trin på 0,25°', VIND.length === 721 && TRIN === 0.25, VIND.length);
+  let maks = { v: -1e9 }, min = { v: 1e9 };
+  for (let b = -70; b <= 70; b += 0.05) {
+    const v = vindVed(b);
+    if (v > maks.v) maks = { v, b };
+    if (v < min.v) min = { v, b };
+  }
+  // Simon m.fl. 2015 (Hubble): 153 m/s ved 24° N. Cassini (2000): 138, Voyager (1979): 184 (fakta-solsystemet.md, del 5)
+  tjek('vindene: den stærkeste jetstrøm blæser mod øst ved 23-25° N med 140-160 m/s', maks.b > 23 && maks.b < 25 && maks.v > 140 && maks.v < 160, JSON.stringify(maks));
+  tjek('vindene: ved ækvator mod øst (50-100 m/s), og ved 7° N og 7° S over 100 m/s', vindVed(0) > 50 && vindVed(0) < 100 && vindVed(7) > 100 && vindVed(-7) > 100, [vindVed(0), vindVed(7), vindVed(-7)].join());
+  tjek('vindene: den stærkeste vind mod vest er ved 18-21° S (nord for pletten), 40-80 m/s', min.b > -21 && min.b < -18 && min.v < -40 && min.v > -80, JSON.stringify(min));
+  tjek('vindene: skiftevis mod øst og vest (mindst 10 skift mellem 60° S og 60° N)', (() => { let n = 0; for (let b = -60; b < 60; b += 0.25) if (Math.sign(vindVed(b)) !== Math.sign(vindVed(b + 0.25))) n++; return n >= 10; })());
+  // Ved grænsen til det, der ikke er målt, toner vinden ned (ellers en søm, hvor skyerne glider). Jetstrømmens flanker
+  // ved 24° N er stejle i virkeligheden (ca. 15 m/s pr. 0,25°), så kun grænsen tjekkes.
+  const nærPol = VIND.map((v, i) => (i && Math.abs(-90 + i * TRIN) >= 55 ? Math.abs(v - VIND[i - 1]) : 0));
+  tjek('vindene: 0 nær polerne (ikke målt), uden spring ved grænsen', vindVed(75) === 0 && vindVed(-75) === 0 && Math.max(...nærPol) < 4, Math.max(...nærPol));
+  tjek('pletten i Hubbles kort: ved 21-25° S, bredere end høj, 10.000-16.000 km lang', PLET.bredde < -21 && PLET.bredde > -25 && PLET.halvLængde > PLET.halvBredde && PLET.halvLængde * 2 * 1162 > 10000 && PLET.halvLængde * 2 * 1162 < 16000, JSON.stringify(PLET));
+}
 
 const b = await chromium.launch({ args: ARGS });
 const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
@@ -24,8 +48,8 @@ await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'jupiter' && ato
 tjek('Jupiter åbner, og kortet er hentet (1k i tests, i farver)', (await fm(() => atomlabTest.solsystem.fænomen().hentet())) && (await fm(() => atomlabTest.solsystem.fænomen().billeder()))['jupiter-1k.jpg'] === 'farver', JSON.stringify(await fm(() => atomlabTest.solsystem.fænomen().billeder())));
 tjek('sort himmel (ingen tågeskyer)', !(await fm(() => atomlabTest.solsystem.tåger())));
 const træ = await fm(() => atomlabTest.solsystem.træ());
-tjek('træet: kun Jupiter (stederne og månerne kommer i J3 og J4)', træ.map((p) => p.id).join() === 'jupiter' && træ[0].valgt, JSON.stringify(træ));
-tjek('Styr-boksen: kontakten Modlys', JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['Modlys']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+tjek('træet: Jupiter og Den Store Røde Plet (månerne kommer i J3, flybyen i J4)', træ.filter((p) => p.id).map((p) => p.id).join() === 'jupiter,plet' && træ[0].valgt, JSON.stringify(træ));
+tjek('Styr-boksen: kontakterne Vindene og Modlys', JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['Vindene', 'Modlys']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
 const side = await fm(() => atomlabTest.solsystem.side());
 tjek('siden: fladtrykt, Billederne og "Ærligt talt" sidst', /fladtrykt/.test(side.tekst) && side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
 
@@ -46,6 +70,70 @@ await s.waitForTimeout(1200);
 const p1 = await fm(() => atomlabTest.solsystem.fænomen().drejning());
 tjek('Jupiter står stille i pause', p0 === p1, JSON.stringify([p0, p1]));
 await s.click('#solsystemTid button[data-tid="spil"]');
+
+// ---------- Vindene i shaderen (J2) ----------
+const J = (f, a) => fm(f, a);
+const strøm = (b) => J((b) => atomlabTest.solsystem.fænomen().strøm(b), b);
+const s24 = await strøm(24), s20 = await strøm(-20);
+tjek('vindene i teksturen: ca. 149 m/s ved 24° N og mod vest ved 20° S (som dataene)', Math.abs(s24.ms - vindVed(24)) < 2 && Math.abs(s20.ms - vindVed(-20)) < 2 && s20.ms < -40, JSON.stringify([s24.ms, s20.ms]));
+// Kortet forskydes mod øst ved 24° N og mod vest ved 20° S, mens tiden går (den fase, der ikke er startet forfra)
+const flyt = async (b) => {
+  const f0 = await strøm(b);
+  const u0 = (await J(() => atomlabTest.solsystem.fænomen().ur())).vind;
+  await s.waitForFunction((u0) => atomlabTest.solsystem.fænomen().ur().vind > u0 + 1.5, u0, { timeout: 15000, polling: 100 }).catch(() => {});
+  const f1 = await strøm(b);
+  const da = f1.a - f0.a, db = f1.b - f0.b;
+  return Math.abs(da) < Math.abs(db) ? da : db;
+};
+const øst24 = await flyt(24), vest20 = await flyt(-20);
+tjek('skyerne glider mod øst ved 24° N og mod vest ved 20° S', øst24 > 0.01 && vest20 < -0.005, JSON.stringify([øst24, vest20]));
+await s.click('#solsystemTid button[data-tid="pause"]');
+const pa = await strøm(24), pu = await J(() => atomlabTest.solsystem.fænomen().ur());
+await s.waitForTimeout(1000);
+const pb = await strøm(24), pv = await J(() => atomlabTest.solsystem.fænomen().ur());
+tjek('vindene og pletten står stille i pause', pa.a === pb.a && pu.vind === pv.vind, JSON.stringify([pa, pb]));
+// ⏩: tiden går HURTIG gange hurtigere (vindene og døgnet)
+tjek('tidsknappen har ⏩ ved Jupiter', await J(() => !!document.querySelector('#solsystemTid button[data-tid="hurtig"]')?.offsetWidth));
+await s.click('#solsystemTid button[data-tid="hurtig"]');
+const h0 = await J(() => ({ ...atomlabTest.solsystem.fænomen().ur(), t: performance.now() }));
+await s.waitForTimeout(1500);
+const h1 = await J(() => ({ ...atomlabTest.solsystem.fænomen().ur(), t: performance.now() }));
+const fart = (h1.vind - h0.vind) / ((h1.t - h0.t) / 1000);
+tjek('⏩: vindenes ur går mindst 5 gange hurtigere end uret på væggen, og døgnet følger med', h1.hurtig && fart > 5 && Math.abs((h1.døgn - h0.døgn) / (h1.vind - h0.vind) - (2 * Math.PI) / 80) < 1e-6, JSON.stringify({ fart, h0, h1 }));
+await s.click('#solsystemTid button[data-tid="spil"]');
+// Kontakten "Vindene": pile over båndene, én række ved hver jetstrøm
+await J(() => atomlabTest.solsystem.trykPå('Vindene'));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().pile().styrke === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+const pile = await J(() => atomlabTest.solsystem.fænomen().pile());
+tjek('"Vindene": pilene toner frem, mindst 12 rækker, den længste ved 23-25° N mod øst', pile.styrke === 1 && pile.rækker.length >= 12 && pile.rækker[0].bredde > 23 && pile.rækker[0].bredde < 25 && pile.rækker[0].vind > 140 && pile.rækker.some((r) => r.vind < -40), JSON.stringify(pile));
+await s.screenshot({ path: UD + '/2-vindene.png' });
+await J(() => atomlabTest.solsystem.trykPå('Vindene'));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().pile().styrke === 0, null, { timeout: 10000, polling: 100 }).catch(() => {});
+tjek('"Vindene" slået fra: pilene er væk', (await J(() => atomlabTest.solsystem.fænomen().pile().styrke)) === 0);
+
+// ---------- Den Store Røde Plet (J2) ----------
+await J(() => atomlabTest.solsystem.gåTil('plet'));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 10000, polling: 100 }).catch(() => {});
+await s.waitForTimeout(300);
+const q1 = await J(() => ({ ...atomlabTest.solsystem.fænomen().plet(), d: atomlabTest.solsystem.fænomen().drejning(), ur: atomlabTest.solsystem.fænomen().ur().vind }));
+const fasePlet = await J(() => atomlabTest.solsystem.fase());
+tjek('pletten: stedet er valgt, underteksten står (under 160 tegn), og stedet står lodret', q1.ved && (await J(() => atomlabTest.solsystem.sted())) === 'plet' && fasePlet?.titel === 'Den Store Røde Plet' && fasePlet.tekst.length < 160 && q1.lodret > 0.999, JSON.stringify({ q1, fasePlet }));
+tjek('pletten: formiddag med Solen ca. 45° oppe i øst', Math.abs(q1.solHøjde - 45) < 2 && q1.øst, JSON.stringify(q1));
+await s.waitForFunction((u0) => atomlabTest.solsystem.fænomen().ur().vind > u0 + 2, q1.ur, { timeout: 15000, polling: 100 }).catch(() => {});
+const q2 = await J(() => ({ ...atomlabTest.solsystem.fænomen().plet(), d: atomlabTest.solsystem.fænomen().drejning(), ur: atomlabTest.solsystem.fænomen().ur().vind }));
+// Pletten drejer mod uret (vinklen vokser) én gang på ca. 4,5 døgn: (2π / 870 s) pr. sekund i programmets ur
+const dvPlet = (q2.vinkel - q1.vinkel) / (q2.ur - q1.ur);
+tjek('pletten: Jupiters døgn står stille, men pletten drejer mod uret (én omgang på ca. 4½ døgn)', q2.d === q1.d && Math.abs(dvPlet / ((2 * Math.PI) / ((4.5 * 86400) / ((9.925 * 3600) / 80))) - 1) < 0.01 && Math.abs(q2.solHøjde - q1.solHøjde) < 0.01, JSON.stringify({ q1, q2, dvPlet }));
+const sidePlet = await J(() => atomlabTest.solsystem.side());
+tjek('pletten: egen side med tal og "Ærligt talt" sidst', sidePlet.nøgle === 'jupiter:plet' && sidePlet.sidst === 'Ærligt talt', JSON.stringify(sidePlet.nøgle));
+await s.screenshot({ path: UD + '/3-pletten.png' });
+await J(() => atomlabTest.solsystem.gåTil('jupiter'));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 10000, polling: 100 }).catch(() => {});
+const d0 = await J(() => atomlabTest.solsystem.fænomen().drejning());
+await s.waitForFunction((d0) => atomlabTest.solsystem.fænomen().drejning() > d0 + 0.02, d0, { timeout: 15000, polling: 100 }).catch(() => {});
+tjek('tilbage til Jupiter: Jupiter drejer igen, og underteksten er væk', (await J(() => atomlabTest.solsystem.fænomen().drejning())) > d0 + 0.02 && !(await J(() => atomlabTest.solsystem.fase())) && !(await J(() => atomlabTest.solsystem.fænomen().plet().ved)));
 
 // ---------- Kortet (lavet af billeder/solsystem/lav_jupiter.py) ----------
 const kort = await fm(async () => {
