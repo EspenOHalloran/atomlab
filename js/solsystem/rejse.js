@@ -139,7 +139,10 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null, 
         fraDrejning: drejning.clone(),
         færdig,
       };
-      mål = { fokus: hvor, op, min, max };
+      // Stoppet skal ligge inden for grænserne for zoom. Ellers klipper første billede efter flyvningen afstanden, og
+      // kameraet hopper. Afstanden kommer ofte fra passerTil, som vokser på smalle skærme, mens grænserne er faste
+      // (tabletrunden 6. november 2026: Tharsis, Hellas og Nordpolen hoppede tættere på, når bevægelsen stoppede).
+      mål = { fokus: hvor, op, min: Math.min(min, afstand), max: Math.max(max, afstand) };
       styring.enabled = false;
       verden.målAfstand = null;
     },
