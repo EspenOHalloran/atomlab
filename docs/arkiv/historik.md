@@ -2,6 +2,11 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 6. november 2026 (planen for Jupiter, før Formørkelsernes løft)
+**Senest lavet (6. november 2026): planen for Jupiter.** Jeres go: "Læs prompt-jupiter-plan.md og lav planen". Planen står i [docs/plan-jupiter.md](docs/plan-jupiter.md), og faktagrundlaget i [docs/fakta-solsystemet.md](docs/fakta-solsystemet.md), "Del 5: Jupiter". Koden er ikke rørt.
+- **Kilder** (tjekket med curl, I åbnede de blokerede domæner): Hubbles OPAL-kort fra december 2025 med farver og poler fra Cassini, og USGS' kort over månerne. Vindene måler vi selv i OPAL's to omgange (prøven: ca. 147 m/s ved 24° N, Hubble målte 153).
+- **Pakken:** kloden, båndene og pletten, Junos cykloner, nordlyset, ringene i modlys, de fire måner i resonansen 1 : 2 : 4 og en flyby med 6 stop, delt i J1-J6. Nye fælder (fx "pletten har raset i 350 år") står i docs/erfaringer.md.
+
 ## "Senest lavet" 5. november 2026 (småtingspakken, før planen for Jupiter)
 **Senest lavet (5. november 2026): småtingspakken, punkt 4 (prikkerne på himlen ved Olympus Mons).** Jeres go: "go, tag punkt 4 og ryd grenene op". Hermed er småtingspakken færdig (punkt 1-3 kom med i #69 og #71).
 - **Den blålige prik var rumstøvet** fra `scene3d.js`, der hører til atomet (bevist med billeder med og uden). Det er nu skjult i alle fænomener med en sort himmel (`tåger: false`), dvs. hele Solsystemet og fx Årstiderne i Kosmos, og kommer igen i resten.
