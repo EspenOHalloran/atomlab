@@ -24,6 +24,7 @@ import { lavFormmåne } from '../solsystem/maane-form.js';
 import { lavLandskab, ØJE, eksponering } from '../solsystem/landskab.js';
 import { lavPanorama } from '../solsystem/panorama.js';
 import { kontakt } from '../sideknap.js';
+import { hentBillede, lavHentebjælke, tonInd } from '../hentning.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -208,27 +209,27 @@ for (const [krater, steder] of Object.entries(LANDSKAB)) {
 // Billederne (se billeder/solsystem/KILDER.md). Farvekortet er 8k på pc og (indtil videre, som en prøve) på tablet,
 // hvis grafikkortet kan klare så store billeder. Tests henter 2k. Højdekortet er 4k (2k i tests).
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
-const henter = new THREE.TextureLoader();
 const lager = new Map(); // filnavn → tekstur. De bliver i grafikkortet, så det går hurtigt at åbne Mars igen.
-// Billedet afkodes, før det bruges (image.decode() sker uden for hovedtråden), så det ikke hakker, når det lægges i
-// grafikkortet. fejl kaldes, hvis billedet ikke kan hentes.
+// Billedet hentes med hentBillede (js/hentning.js), så bjælken "Henter …" kan tælle de hentede MB, og det er afkodet,
+// før det bruges (uden for hovedtråden), så det ikke hakker, når det lægges i grafikkortet. fejl kaldes, hvis billedet
+// ikke kan hentes.
 function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl } = {}) {
   let b = lager.get(navn);
   if (!b) {
     b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
     lager.set(navn, b);
-    henter.load(new URL(navn, MAPPE).href, (t) => {
+    hentBillede(new URL(navn, MAPPE).href).then((billede) => {
+      const t = new THREE.Texture(billede);
+      t.needsUpdate = true;
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
       if (kanaler === 2) t.format = THREE.RGFormat; // højden ligger i rød og grøn (sparer hukommelse)
       if (kanaler === 1) t.format = THREE.RedFormat; // gråtoner (månerne)
       if (rundt) t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt (de lokale kort gør ikke)
       t.anisotropy = anisotropi;
-      (t.image.decode ? t.image.decode() : Promise.resolve()).catch(() => {}).then(() => {
-        b.tekstur = t;
-        for (const f of b.venter) f(t);
-        b.venter.length = 0;
-      });
-    }, undefined, () => { // mangler billedet, bruges den jævne farve
+      b.tekstur = t;
+      for (const f of b.venter) f(t);
+      b.venter.length = 0;
+    }, () => { // mangler billedet, bruges den jævne farve
       b.fejlet = true;
       for (const f of b.fejlVenter) f();
       b.fejlVenter.length = 0;
@@ -241,6 +242,14 @@ function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt 
     else if (!b.tekstur) b.fejlVenter.push(fejl);
   }
 }
+// Den lille udgave af et billede bruges ikke mere (den store er sat ind): fjern den fra grafikkortet og lageret
+function glem(navn) {
+  lager.get(navn)?.tekstur?.dispose();
+  lager.delete(navn);
+}
+const iLager = (navn) => Boolean(lager.get(navn)?.tekstur);
+const MØRK = [0.03, 0.022, 0.018]; // Mars' farve, før kortet er hentet: en mørk kugle med luften i kanten
+const RUST = [0.55, 0.3, 0.17]; // farven, hvis kortet ikke kan hentes (fx uden net)
 const FORHÅND_TID = 8000;
 const FOTO_KONTAKT = '📷 Roverens foto'; // kontakten i Styr-boksen, mens man står ved Naukluft og landingsstedet (M8c del 1) // ms: så længe venter "Start flyby" højst på kortene til første stop
 
@@ -276,7 +285,7 @@ export default {
     const net = TEST_HURTIG ? [256, 128] : LAV_KVALITET ? [768, 384] : [1024, 512]; // felter omkring og fra pol til pol
     const skyer = lavSkyer({ radius: MARS_R, polRadius: MARS_POL, højde: SKY_HØJDE, steder: SKY_STEDER, net: LAV_KVALITET ? [192, 96] : [256, 128] });
     const mars = lavKlippeplanet({
-      skala: S, radius: MARS_R, polRadius: MARS_POL, højdeMin: HØJDE_MIN, højdeMax: HØJDE_MAX, net, farve: [0.55, 0.3, 0.17],
+      skala: S, radius: MARS_R, polRadius: MARS_POL, højdeMin: HØJDE_MIN, højdeMax: HØJDE_MAX, net, farve: MØRK,
       luft: { tusmørke: TUSMØRKE, farve: [0.85, 0.55, 0.36], slør: 0.035, skalahøjde: SKALAHØJDE }, is: true, skyer,
     });
     mars.mesh.add(skyer.mesh); // skyerne drejer med Mars
@@ -311,7 +320,28 @@ export default {
     let egneMangler = 2;
     // (queueMicrotask: Er kortene allerede i lager, kommer svaret med det samme, før resten af lav() er kørt)
     const egetKort = () => { if (--egneMangler === 0) queueMicrotask(hentFørsteStop); };
-    hent(`mars-${kortStr}.jpg`, (t) => { mars.sætKort(t); hentet.kort = true; egetKort(); }, { anisotropi, fejl: egetKort });
+    // Farvekortet i to trin: først 2k (ca. 0,3 MB, er der hurtigt), som toner ind fra den mørke kugle, og så det store
+    // kort (8k er ca. 3,6 MB), som skiftes ind uden tone. Indtil da ses ikke en jævn rødbrun kugle (kun uden net).
+    const bjælke = lavHentebjælke(); // "Henter Mars …" og "Henter landskabet …" (ses kun, hvis det tager over 1 sekund)
+    const nyHentning = !iLager(`mars-${kortStr}.jpg`); // (er kortet hentet før, ses det med det samme)
+    let kortVist = false, tone = 1;
+    const visKort = (t) => {
+      mars.sætKort(t);
+      mars.toneKort(tone); // (kommer det store kort midt i toningen, fortsætter den)
+      if (kortVist) return;
+      kortVist = true;
+      bjælke.færdig();
+      if (nyHentning) tonInd((v) => { tone = v; mars.toneKort(v); });
+    };
+    const toTrin = kortStr !== '2k' && nyHentning;
+    if (nyHentning) bjælke.vent('Henter Mars …');
+    if (toTrin) hent('mars-2k.jpg', (t) => { if (!hentet.kort) visKort(t); }, { anisotropi });
+    hent(`mars-${kortStr}.jpg`, (t) => {
+      visKort(t);
+      hentet.kort = true;
+      if (toTrin) glem('mars-2k.jpg');
+      egetKort();
+    }, { anisotropi, fejl: () => { if (!kortVist) { mars.sætFarve(RUST); bjælke.færdig(); } egetKort(); } });
     hent(`mars-hoejde-${højdeStr}.png`, (t) => { mars.sætHøjde(t); hentet.højde = true; egetKort(); }, { farve: false, kanaler: 2, fejl: egetKort });
 
     // De lokale net. Kortene hentes først, når flybyen eller et besøg skal derhen (lokaltStr: højdekortet).
@@ -870,6 +900,7 @@ export default {
       const st = { ...sd, ramme: mars.sted(sd.bredde, sd.længde), lokalt: krater, detalje: true }; // med detaljekortet (M8b)
       const vent = { krater, sd, fløjet: false, klar: false };
       ståVent = vent;
+      bjælke.vent('Henter landskabet …'); // ca. 36-55 MB første gang
       hentLokalt(st);
       const drej = drejningTil(st);
       drejHen(drej);
@@ -881,7 +912,11 @@ export default {
       // Kameraet står bag stedet og kigger i landingens retning, skråt ned
       flyv({ fokus: fokusVed(st), op: opVed(st), afstand: LANDING_HØJDE * 2.2 / S, retning: fraSted(st, drej, sd.blik + 180, 27), min: 0.003, max: 3,
         færdig: () => { vent.fløjet = true; land(vent); } });
-      hentLandskab(krater, (l) => l.land.gåTil(sd.id, () => { vent.klar = true; land(vent); }));
+      hentLandskab(krater, (l) => l.land.gåTil(sd.id, () => {
+        vent.klar = true;
+        if (vent === ståVent) bjælke.færdig();
+        land(vent);
+      }));
     }
     function land(vent) {
       if (vent !== ståVent || !vent.fløjet || !vent.klar) return;
@@ -948,6 +983,7 @@ export default {
     }
     function forladLandskab() {
       if (!stående) return;
+      bjælke.færdig(); // (fx roverens foto, der ikke var hentet endnu)
       stående.land.gruppe.visible = false;
       stående = null;
       landing = null;
@@ -971,7 +1007,12 @@ export default {
     function gåTilLandskab(sd) {
       const krater = stående.krater;
       const nr = gåNr; // vælges noget andet, mens lagene hentes eller billedet toner, lander man ikke her alligevel
-      stående.land.gåTil(sd.id, () => { if (gåNr === nr) ton(() => { if (gåNr === nr) visLandskab(krater, sd); }); });
+      bjælke.vent('Henter stedet …');
+      stående.land.gåTil(sd.id, () => {
+        if (gåNr !== nr) return;
+        bjælke.færdig();
+        ton(() => { if (gåNr === nr) visLandskab(krater, sd); });
+      });
     }
     // Klokken som tekst (lokal soltid)
     const klokken = (t) => `${String(Math.floor(t)).padStart(2, '0')}:${String(Math.floor((t % 1) * 60)).padStart(2, '0')}`;
@@ -1067,13 +1108,16 @@ export default {
     function visFoto(til) {
       if (!stående?.sd.foto) return;
       if (!til) {
+        bjælke.færdig();
         panorama.skjul();
         fase(stående.sd.titel, stående.sd.tekst);
         return;
       }
       const { sd, land } = stående;
+      bjælke.vent('Henter roverens foto …');
       panorama.vis(sd.id, () => {
         if (stående?.sd !== sd) return;
+        bjælke.færdig();
         land.tid = sd.foto.tid;
         tidsSkyder?.sæt?.(land.tid);
         fase(sd.titel, sd.foto.tekst);
@@ -1173,6 +1217,7 @@ export default {
       if (stå?.krater !== (stående ?? ståVent)?.krater) fraFlyby = null;
       // Fra landskabet: et andet sted ved krateret er et hop, og alt andet letter først (som "op i kredsløb")
       if (stående) return stå?.krater === stående.krater ? gåTilLandskab(stå.sd) : tilbageOp(id);
+      if (ståVent) bjælke.færdig();
       ståVent = null;
       if (stå) {
         flyby.afslut();
@@ -1410,6 +1455,7 @@ export default {
         gruppe.remove(panorama.kugle);
         panorama.stop();
         tæppe.remove();
+        bjælke.fjern();
         verden.renderer.domElement.removeEventListener('wheel', vedHjul);
         verden.renderer.domElement.removeEventListener('pointerdown', vedFingerNed);
         removeEventListener('pointermove', vedFingerFlyt);
@@ -1468,7 +1514,7 @@ export default {
         nær: (km) => { kamera.near = km; kamera.updateProjectionMatrix(); }, // til at måle flimmer
         overdriv: () => overdriv,
         billeder: () => ({
-          kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: mars.harTabel,
+          kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: mars.harTabel, tone, bjælke: { venter: bjælke.venter, vist: bjælke.vist },
           lokalt: Object.fromEntries([...lokale].map(([id, l]) => [id, { højde: lokaltStr, net: lokalNet, hentet: { ...l.hentet }, tabel: l.net.harTabel, klar: l.net.klar, aktiv: l.net.aktiv, detalje: l.detalje && { hentet: l.detalje.hentet, tabel: l.net.harDetaljeTabel } }])),
         }),
         skyer: () => skyer.måling(),
