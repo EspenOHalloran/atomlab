@@ -8,6 +8,8 @@ Byg det sorte hul i Kosmos om (`js/kosmos/sorthul.js`). Jeres go til at gå i ga
 
 **Jeres kritik** (DESIGN.md): Det sorte hul er ikke imponerende nok. Den hvide ring ligner ikke bøjet lys, skiven foran hullet ligner et beige låg, og den ene side er ikke lysere end den anden.
 
+**Jeres skærmbillede (6. november 2026), tæt på hullet:** Skyggen er skåret over med en skarp, vandret kant midt i billedet. Over kanten er skyggen sort, og under den ligger skivens forreste halvdel som et beige låg med en sort ellipse (hullet i skiven). Årsagen (Opus, læst i koden, ikke målt): Skyggen er en flad sort skive midt i hullet (radius 3,9), og gas-skiven starter inden for den (inderst 2,5). Den flade skygge skærer derfor gas-skiven over: Den forreste halvdel tegnes oven på, og den bagerste skjules. Kameraet kan komme helt ned til 4 enheder fra midten (`minDistance` i `scene3d.js`), så det ses tydeligst tæt på. Den nye shader skal se rigtig ud på alle afstande, også tæt på. Overvej en mindste afstand for netop dette fænomen.
+
 **Målet:** Rigtig lysbøjning i en shader, der regner lysets baner om hullet, som i filmen Interstellar. Det, der skal ses:
 1. **Skiven bøjes:** Skivens bagside ses som en bue op over skyggen og ned under den. Det er det samme lys, ikke en ring, der er tegnet for sig.
 2. **En tynd fotonring** lige uden for skyggen (lys, der er gået en eller flere gange rundt om hullet), og evt. de svage billeder af skiven inde ved ringen.
