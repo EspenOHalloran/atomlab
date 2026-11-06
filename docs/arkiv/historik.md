@@ -2,7 +2,13 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
-## "Senest lavet" 6. november 2026 (Formørkelsernes løft, før Jupiter J1)
+## "Senest lavet" 6. november 2026 (bjælken "Henter AtomLab", før Jupiter J1)
+**Senest lavet (6. november 2026): bjælken "Henter AtomLab" på forsiden.** Jeres go: "ja, lav den" (forsiden lignede, at den var frosset, mens den hentede). Forsiden henter ca. 95 JavaScript-filer (ca. 3,5 MB), før noget virker.
+- **Bjælken** står i `index.html` og ses med det samme. Den fyldes efter antallet af hentede filer (et skøn, `FORVENTET`), står højst på 95 %, indtil `main.js` er færdig, og tones væk, når det første 3D-billede er tegnet. Teksten skifter efter 15 sekunder ("Det tager lidt længere end normalt") og ved en fejl.
+- **Ny test `henter`** (pc, tablet på højkant og telefon, med langsomt net): bjælken ses, forsvinder, skønnet passer, og menuen kan trykkes på bagefter. Hele samlingen bestod (29 tests).
+- **Ikke afprøvet:** Hvor længe bjælken ses på jeres tablet på GitHub Pages. **Næste lille opgave (forslag):** en rigtig bjælke med procent, når Stå på Mars henter sine 36-55 MB.
+
+## "Senest lavet" 6. november 2026 (Formørkelsernes løft, før bjælken "Henter AtomLab")
 **Senest lavet (6. november 2026): Formørkelser med et grafisk løft.** Jeres go: "go med dine anbefalinger" (før tabletrunden). Kun `js/kosmos/formoerkelser.js` er ændret (`jorden.js` eksporterer kun sin skygge-GLSL, så Årstiderne er uændret). Fysikken og `skygge.js` er ikke rørt.
 - **Lyset:** De 9 gule streger er væk. Sollyset er en svag, varm dis, og glimt glider fra Solen og forsvinder i skyggen (færre på tabletten, står stille med "Reducer bevægelse").
 - **Skyggerne** er mørke, bløde kegler i disen i stedet for lyse klodser, nu med halvskygge bag både Jorden og Månen. De dækker ikke kloderne, så Månen stadig er kobberrød.
