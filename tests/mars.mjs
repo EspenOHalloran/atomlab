@@ -653,6 +653,50 @@ await s.context().close();
   await s2.context().close();
 }
 
+// Tabletrunden (fund 1, 6. november 2026): Kameraet hoppede tættere på, når flyvningen stoppede ved Tharsis, Hellas og
+// Nordpolen. Stoppets afstand (passer) er større på en smal skærm, men grænsen for zoom var fast (max 3), så første
+// billede efter flyvningen klippede afstanden. Målt på tablet på højkant, hvor afstandene er størst: Afstanden og
+// zoom (fov) i billedet, hvor flyvningen slutter, og de næste fire billeder må højst ændre sig 0,5 %.
+{
+  const s3 = await (await b.newContext({ viewport: { width: 820, height: 1180 } })).newPage();
+  s3.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  await s3.goto(`${ADRESSE}/?test#solsystem`);
+  await s3.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
+  await s3.click('#solsystem .kosmos-valg[data-id="mars"]');
+  await s3.waitForFunction(() => atomlabTest.solsystem.knapper().includes('▶ Start flyby'), null, { timeout: 60000, polling: 200 });
+  await s3.evaluate(async () => {
+    const { verden } = await import('/js/scene3d.js');
+    window.hopLog = [];
+    verden.opdateringer.add(() => {
+      const t = atomlabTest.solsystem.fænomen()?.tur?.();
+      if (t) window.hopLog.push({ flyver: t.flyver, D: t.afstand, fov: verden.kamera.fov });
+    });
+  });
+  // Spring flyvningen over (hop), og mål de første 5 billeder, efter den er slut
+  const målStop = async () => {
+    await s3.evaluate(() => atomlabTest.solsystem.fænomen().hop());
+    await s3.waitForFunction(() => { const l = window.hopLog; const i = l.findIndex((x) => !x.flyver); return i >= 0 && l.length - i >= 5; }, null, { timeout: 60000, polling: 50 });
+    return s3.evaluate(() => {
+      const l = window.hopLog, i = l.findIndex((x) => !x.flyver), efter = l.slice(i, i + 5);
+      const spring = Math.max(...efter.map((x) => Math.abs(x.D - efter[0].D) / Math.max(efter[0].D, 1e-9)));
+      return { stop: atomlabTest.solsystem.fase().titel, D: efter.map((x) => +x.D.toFixed(4)), fov: Math.max(...efter.map((x) => x.fov)) - Math.min(...efter.map((x) => x.fov)), spring };
+    });
+  };
+  const hop = [];
+  await s3.evaluate(() => { window.hopLog.length = 0; atomlabTest.solsystem.trykPå('Start flyby'); });
+  hop.push(await målStop());
+  for (let nr = 1; nr < 13; nr++) {
+    await s3.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 60000, polling: 50 });
+    await s3.evaluate(() => { window.hopLog.length = 0; atomlabTest.solsystem.trykPå('Næste'); });
+    hop.push(await målStop());
+  }
+  const dårlige = hop.filter((x) => !(x.spring < 0.005 && x.fov < 1e-6));
+  tjek('tablet på højkant: ingen hop i afstanden eller zoom, når flyvningen stopper, ved alle 13 stop på flybyen', hop.length === 13 && dårlige.length === 0, JSON.stringify(dårlige.length ? dårlige : hop.map((x) => x.stop)));
+  const hellas = hop.find((x) => /Hellas/.test(x.stop));
+  tjek('tablet på højkant: Hellas står længere væk end den gamle grænse (3.000 km), og afstanden holder', hellas && hellas.D[0] > 3 && hellas.D[4] > 3, JSON.stringify(hellas));
+  await s3.context().close();
+}
+
 await b.close();
 console.log('\nKonsol:', fejl.length ? fejl.join('\n') : 'ingen fejl');
 console.log(`${ok} OK, ${dårlig} FEJL`);
