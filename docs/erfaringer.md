@@ -394,6 +394,7 @@ Fra den store gennemgang i oktober 2026 (se [gennemgang-2026-10.md](gennemgang-2
 - **Mål, hvilken bredde et kort bruger,** i stedet for at stole på teksten: Korreler kanterne af båndene (gradienten af lysstyrken pr. række) i to kort under hver antagelse. Cassini som planetocentrisk gav 0,57, som planetografisk 0,34. En plet, der står 2-3° forkert, kan også bare være flyttet siden.
 - **En "søm" i et JPG-kort kan være JPEG's blokke:** Springet ved 0° var 2-3 gange springet mellem to nabosøjler, men kun 1,1-1,3 gange springet ved en almindelig blokgrænse (hver 16. søjle). Kortet i hukommelsen havde ingen søm. Mål mod blokgrænserne. PIL's `resize` ved heller ikke, at kortet går rundt: Læg en stribe fra den modsatte kant på før nedskaleringen.
 - **`passerTil` i `lav()` giver en forkert afstand,** for panelerne har ikke fået deres plads endnu (Jupiter blev alt for lille). Flyv derhen i det første billede (`hvertBillede`) og `hop()`.
+- **`--ændret` efter en push finder intet:** Den sammenligner med den pushede gren. Giv den filerne: `node tests/koer-alle.mjs --ændret $(git diff --name-only origin/main...HEAD)`.
 - **Farver fra et andet foto: én omregning for hele kloden.** At stemme af bånd for bånd ville flytte båndenes lysstyrke fra 2000 over på 2025, for båndene ændrer sig. Middelværdi og kovarians (Monge-Kantorovich) i lineært lys gav Cassinis farvetone uden at flytte noget.
 
 ### Kameraet, rejsen og flybyen
