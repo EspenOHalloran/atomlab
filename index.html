@@ -17,6 +17,36 @@
   </script>
 </head>
 <body>
+  <!-- Bjælken "Henter AtomLab": ses, mens JavaScript hentes, så siden ikke ligner, at den er frosset. main.js fjerner den. -->
+  <div class="henter" id="henter" role="status" aria-live="polite">
+    <div class="henter-boks">
+      <div class="logo henter-logo">Atom<span>Lab</span></div>
+      <div class="henter-bjaelke"><div class="henter-fyld" id="henterFyld"></div></div>
+      <p class="henter-tekst" id="henterTekst">Henter AtomLab …</p>
+    </div>
+  </div>
+  <script>
+    // Bjælken fyldes efter, hvor mange JavaScript-filer der er hentet. Det er et skøn: Forsiden henter ca. FORVENTET filer
+    // (tests/henter.mjs tjekker, at tallet stadig passer). Den står højst på 95 %, indtil main.js er færdig.
+    (() => {
+      const FORVENTET = 95;
+      const fyld = document.getElementById('henterFyld');
+      const tekst = document.getElementById('henterTekst');
+      let hentet = 0;
+      const vis = () => { fyld.style.width = Math.min(95, 5 + 90 * hentet / FORVENTET) + '%'; };
+      vis();
+      try {
+        new PerformanceObserver((liste) => {
+          for (const p of liste.getEntries()) if (/\.js(\?|$)/.test(p.name)) hentet++;
+          vis();
+        }).observe({ type: 'resource', buffered: true });
+      } catch { /* gammel browser: bjælken står stille, men teksten ses */ }
+      const findes = () => document.getElementById('henter');
+      setTimeout(() => { if (findes()) tekst.textContent = 'Det tager lidt længere end normalt …'; }, 15000);
+      addEventListener('error', () => { if (findes()) tekst.textContent = 'Noget gik galt. Prøv at hente siden igen.'; });
+      window.atomlabHentet = () => hentet;
+    })();
+  </script>
   <canvas id="lærred"></canvas>
 
   <!-- ===== Menu ===== -->

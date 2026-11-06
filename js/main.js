@@ -43,6 +43,7 @@ function start() {
   if (!lavVerden(lærred)) {
     document.getElementById('ingen3d').classList.remove('skjult');
     document.getElementById('menu').classList.add('skjult');
+    skjulHenter();
     return;
   }
 
@@ -102,6 +103,7 @@ function start() {
   // Adgang for automatiske tests
   if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) } };
   visSkærm();
+  skjulHenter();
 }
 
 function visSkærm() {
@@ -202,6 +204,17 @@ function visFremgangIMenu(ny) {
   }
   mærke('ordbog', `${ORDNE.length} fagord`, false);
   for (const k of document.querySelectorAll('.menukort .kort')) k.classList.toggle('næste-eventyr', !ny && klaret > 0 && k === næste);
+}
+
+// Bjælken "Henter AtomLab" (index.html): fyldes helt og tones væk, når det første 3D-billede er tegnet
+function skjulHenter() {
+  const henter = document.getElementById('henter');
+  if (!henter) return;
+  document.getElementById('henterFyld').style.width = '100%';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    henter.classList.add('færdig');
+    setTimeout(() => henter.remove(), 600);
+  }));
 }
 
 function stopMenu() {
