@@ -1,6 +1,6 @@
 # Prompt: Jupiter bygges (J1-J5)
 
-*Skrevet 6. november 2026. Kopiér teksten nedenfor ind i en ny session. Model: Opus, høj effort (J3 kan klares med medium, hvis I vil skifte). Kan køre samtidig med [Det sorte hul](prompt-sorthul.md). Rettelsespakken ([arkiv/prompt-rettelsespakken.md](arkiv/prompt-rettelsespakken.md)) er færdig og har ændret `rejse.flyv`: Grænserne for zoom udvides nu selv, så stoppets afstand ligger inden for (ellers hopper kameraet). Én session til hele Jupiter: Den bygger én delopgave ad gangen og venter på jeres go mellem hver.*
+*Skrevet 6. november 2026. Kopiér teksten nedenfor ind i en ny session. Model: Opus, høj effort (J3 kan klares med medium, hvis I vil skifte). Det sorte hul ([arkiv/prompt-sorthul.md](arkiv/prompt-sorthul.md)) er færdigt. Rettelsespakken ([arkiv/prompt-rettelsespakken.md](arkiv/prompt-rettelsespakken.md)) er færdig og har ændret `rejse.flyv`: Grænserne for zoom udvides nu selv, så stoppets afstand ligger inden for (ellers hopper kameraet). Én session til hele Jupiter: Den bygger én delopgave ad gangen og venter på jeres go mellem hver.*
 
 ---
 

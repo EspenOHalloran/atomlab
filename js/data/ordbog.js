@@ -161,6 +161,16 @@ export const ORDBOG = [
     tekst: 'Det, der kan blive tilbage i midten, når en stor stjerne eksploderer: en kugle, der kun er ca. 20 km bred, men vejer mere end Solen og næsten kun består af neutroner.',
   },
   {
+    id: 'fotonring', ord: 'Fotonring',
+    former: ['fotonring', 'fotonringen'],
+    tekst: 'En tynd, lys ring lige uden for skyggen af et sort hul. Den er lavet af lys, der er gået mindst en halv tur rundt om hullet, før det slap væk.',
+  },
+  {
+    id: 'doppler', ord: 'Dopplereffekt',
+    former: ['dopplereffekt', 'dopplereffekten'],
+    tekst: 'Lys og lyd fra noget, der kommer mod os, får kortere bølger (lyset bliver mere blåt, tonen lysere). Fra noget, der fjerner sig, bliver bølgerne længere (mere rødt, dybere tone). Man hører det, når en ambulance kører forbi: Sirenens tone falder.',
+  },
+  {
     id: 'horisont', ord: 'Begivenhedshorisont',
     former: ['begivenhedshorisont', 'begivenhedshorisonten'],
     tekst: 'Grænsen omkring et sort hul. Indenfor kan intet slippe ud igen, ikke engang lys.',

@@ -35,6 +35,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 | [Planeter og måner](erfaringer/planeter-og-maaner.md) | Billeder, højdekort, net, luft, skyer, Phobos og Deimos, Jupiter. |
 | [Kameraet, rejsen og flybyen](erfaringer/kamera-rejse-flyby.md) | Saturn i skala, kameraet ned til et sted, flybyerne, hop ved stop, hent på forhånd. |
 | [Stå på Mars](erfaringer/staa-paa-mars.md) | Landskabet, lyset, Gale, Jezero og rovernes fotos. |
+| [Shadere og lysbøjningen](erfaringer/shadere.md) | Det sorte hul: fysikken i Node først, lysets bane i shaderen, tynde ting under en pixel, `dFdx`, dybden, langsom testbrowser. |
 | [Skærme og UI](erfaringer/skaerme-og-ui.md) | Fælles skal, UX-eftersyn, styringen på billedet, siden i lag. |
 | [Netsider, certifikater og arbejdsgang](erfaringer/netsider-og-arbejdsgang.md) | Certifikatfejl, flere små opgaver i træk. |
 | [Åbne punkter](erfaringer/aabne-punkter.md) | Ting, der ikke er opklaret eller testet. |

@@ -1,19 +1,17 @@
-// Sort hul: en sort skygge, en skive af varm gas, der hvirvler rundt, og lys, der bliver bøjet rundt om hullet.
+// Sort hul: rigtig lysbøjning om et sort hul, der ikke drejer. En shader (js/kosmos/linse.js) følger lysets bane for
+// hver pixel, så skivens bagside ses som en bue over og under skyggen, med en tynd fotonring og dopplerlys.
 // Man kan sende en astronaut ind (spaghetti!) eller kaste en stjerne forbi, så den bliver revet over.
 
 import * as THREE from 'three';
 import { handling, gå } from '../sideknap.js';
 import { Pass, FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
+import { visRumstøv } from '../scene3d.js';
 import { glød, prikSky, skilt, KVALITET } from './faelles.js';
+import { lavLinse } from './linse.js';
+import { HORISONT, SKYGGE, ISCO, skyggeVinkel } from '../data/sorthul.js';
 
-const HORISONT = 1.5; // begivenhedshorisontens radius
-// Skyggen: Lys, der kommer tættere forbi end skyggens kant, bliver bøjet ind i hullet.
-// For et sort hul, der ikke drejer, er kanten √27/2 ≈ 2,6 gange horisontens radius.
-const SKYGGE = HORISONT * 2.6;
-const GM = 45; // tyngdekraftens styrke i animationen
-const INDERST = 2.7; // gassens inderste bane
-const YDERST = 9;
-const GLORIE = 1.9; // buen af bøjet lys går fra skyggens kant ud til 1,9 gange skyggens radius
+const GM = 45; // tyngdekraftens styrke for astronauten og stjernen (deres egen, enkle fysik)
+const MINDSTE_AFSTAND = 15; // kameraet kan ikke komme tættere på (ca. 20 M): så fylder skyggen det meste af billedets højde
 
 export default {
   id: 'sorthul',
@@ -24,7 +22,7 @@ export default {
   kamera: { retning: [0, 0.2, 1], radius: 8.5 },
   tal: [
     ['Mælkevejens sorte hul', '4 mio. × Solen'],
-    ['Afstand til det', 'ca. 26.000 lysår'],
+    ['Afstand til det', 'ca. 27.000 lysår'],
     ['Første billede', 'M87*, vist i 2019'],
     ['Jorden som sort hul', 'ca. 2 cm bred'],
   ],
@@ -38,11 +36,15 @@ export default {
       },
       {
         titel: 'Hvad er den lysende ring?',
-        tekst: '<p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt og falder ind. Lyset bliver bøjet af tyngdekraften, så man kan se gassen bag hullet som en lysende bue over og under det.</p>',
+        tekst: '<p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt. Tyngdekraften bøjer lyset. Derfor kan man også se gassen <i>bag</i> hullet: Lyset fra den bliver bøjet op over hullet og ned under det. Buen over og under skyggen er altså den samme flade skive af gas, bare set gennem bøjet lys.</p><p>Helt inde ved skyggen er der en tynd, lys ring, fotonringen. Den er lavet af lys, der er gået mindst en halv tur rundt om hullet, før det slap væk.</p>',
+      },
+      {
+        titel: 'Hvorfor er den ene side lysere?',
+        tekst: '<p>Gassen inderst kører rundt med omkring halvdelen af lysets fart. Den side, der kommer mod os, ser lysere og mere blålig ud. Den side, der kører væk, ser mørkere og rødere ud. Det kaldes dopplereffekten: Lys fra noget, der kommer mod os, bliver presset sammen til kortere bølger (mere blåt), og lys fra noget, der kører væk, bliver strakt ud (mere rødt). Ved så høj fart bliver lyset også kastet fremad, ligesom lyset fra en lygte.</p><p>Inderst er lyset også rødere og svagere, fordi det skal op ad hullets tyngdekraft. I filmen <i>Interstellar</i> tog man med vilje både dopplereffekten og tyngdekraftens rødforskydning ud. Ellers blev den ene side så lys, at billedet blev skævt og svært at forstå. Her er de med, for de er rigtige. På det første billede af et sort hul (M87*, 2019) er ringen også lysest i den ene side, nederst, hvor gassen efter alt at dømme kommer mod os.</p>',
       },
       {
         titel: 'Hvorfor er skyggen så stor?',
-        tekst: '<p>Den sorte skygge er ca. 2,6 gange bredere end selve horisonten. Lys, der kommer tættere forbi end skyggens kant, bliver bøjet så meget, at det falder ind.</p>',
+        tekst: '<p>Den sorte skygge er ca. 2,6 gange bredere end selve horisonten. Lys, der kommer tættere forbi end skyggens kant, bliver bøjet så meget, at det falder ind. Lys, der rammer præcis kanten, kan gå i ring om hullet i en afstand fra midten, der er 1,5 gange horisontens. Det giver fotonringen.</p>',
       },
       {
         titel: 'Hvad sker der med en astronaut?',
@@ -54,70 +56,47 @@ export default {
     nørd: `
       <p><b>Hvor stort?</b> Begivenhedshorisontens radius er 2GM/c² (G er tyngdekonstanten, M massen og c lysets fart). Blev Solen presset sammen til et sort hul, ville den være 6 km bred. Jorden ville være ca. 2 cm.</p>
       <p><b>Billeder af sorte huller:</b> Forskere kombinerede radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). Målingerne blev lavet i 2017, og i 2019 viste de det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
+      <p><b>Sådan er billedet regnet:</b> For hver pixel følger computeren lyset baglæns fra kameraet med Einsteins ligninger for et sort hul, der ikke drejer (Schwarzschild). Lyset går i ét plan, og banen regnes i små skridt, til den falder ind eller slipper væk. Skiven begynder ved den inderste stabile bane, 3 gange horisontens radius. Indenfor falder gassen ind. Lysstyrken ganges med g⁴, hvor g er, hvor meget lyset er presset sammen (g større end 1) eller strakt ud.</p>
       <p><b>Hawking-stråling:</b> Stephen Hawking regnede ud, at sorte huller langsomt "fordamper", men så langsomt, at det aldrig er blevet målt.</p>`,
-    ærligt: '<p>Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Skyggens størrelse passer: ca. 2,6 gange horisonten for et sort hul, der ikke drejer (et hul, der drejer, har en lidt skæv skygge). Gløden om gassen er holdt ude af skyggen, så den er helt sort. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul.</p>',
+    ærligt: '<p>Lysets bøjning, skyggens størrelse, fotonringen og dopplerlyset er regnet med Einsteins ligninger, men for et sort hul, der ikke drejer. Rigtige sorte huller drejer som regel, og så kan skyggen blive lidt skæv. Skiven er tegnet tynd og meget mindre end i virkeligheden, og kameraet står stille ved hullet. Farverne er valgt, så de kan ses: Gassen i en tynd skive som denne er så varm, at den mest lyser med ultraviolet lys (ved kæmpe huller) eller røntgenstråler (ved små huller). Billederne af M87* og Mælkevejens hul er taget med radiobølger. Astronauten og stjernen bliver ikke bøjet (de er tegnet oven på billedet). Gløden om gassen er holdt ude af skyggen, så den er helt sort. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul.</p>',
   },
 
   lav(gruppe, { lyd, fase, verden }) {
-    // Skyggen: en sort skive, der altid vender mod os. Gassen foran den tegnes oven på, og gassen bag den er skjult.
-    const skygge = new THREE.Mesh(new THREE.CircleGeometry(SKYGGE, 96), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-    gruppe.add(skygge);
+    // Lysbøjningen: skyggen, skiven, fotonringen og den bøjede stjernehimmel tegnes af én shader (js/kosmos/linse.js)
+    const linse = lavLinse();
+    gruppe.add(linse.flade);
+    visRumstøv(false); // rumstøvet bliver ikke bøjet og ville flyde hen over billedet
+    const orbit = verden.styring;
+    const gammelMin = orbit.minDistance;
+    orbit.minDistance = MINDSTE_AFSTAND;
 
-    // Gas-skiven: en flad ring med striber + prikker, der hvirvler rundt
-    const skive = new THREE.Mesh(
-      new THREE.RingGeometry(INDERST - 0.2, YDERST + 0.5, 128, 1),
-      new THREE.MeshBasicMaterial({ map: skiveTekstur(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }),
-    );
-    skive.rotation.x = -Math.PI / 2;
-    gruppe.add(skive);
-
-    const N = Math.round(2600 * KVALITET);
-    const pr = new Float32Array(N); // radius
-    const pv = new Float32Array(N); // vinkel
-    const py = new Float32Array(N); // højde over skiven
-    const grundfarve = new Float32Array(N * 3);
-    const nyPartikel = (i, r) => {
-      pr[i] = r;
-      pv[i] = Math.random() * Math.PI * 2;
-      py[i] = (Math.random() - 0.5) * 0.12 * Math.sqrt(r);
-      const t = (r - INDERST) / (YDERST - INDERST); // 0 inderst (hvidglødende), 1 yderst (rødlig)
-      const c = new THREE.Color(2.4, 2.1, 1.7).lerp(new THREE.Color(1.5, 0.45, 0.12), Math.pow(t, 0.6));
-      grundfarve.set([c.r, c.g, c.b], i * 3);
-    };
-    for (let i = 0; i < N; i++) nyPartikel(i, INDERST + Math.pow(Math.random(), 1.6) * (YDERST - INDERST));
-    const gas = prikSky(N, 0.18, () => {});
-    gruppe.add(gas);
-    const gasPos = gas.geometry.attributes.position.array;
-    const gasFarve = gas.geometry.attributes.color.array;
-
-    // Lyset fra skiven bag hullet bliver bøjet op over og ned under hullet (en ring, der altid vender mod os)
-    const glorie = new THREE.Mesh(
-      new THREE.RingGeometry(SKYGGE, SKYGGE * GLORIE, 128, 1),
-      new THREE.MeshBasicMaterial({ map: glorieTekstur(), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }),
-    );
-    gruppe.add(glorie);
-    // Et varmt skær om det hele. Det sidder et stykke bag skyggen, så det ikke tegnes oven på den.
-    const skær = glød(new THREE.Color(1.2, 0.7, 0.35), 20, 0.1);
-    gruppe.add(skær);
-
-    // Navne. Horisonten sidder inde i skyggen og vises som en stiplet ring.
+    // Navne. De står i en flade, der altid vender mod os (ligesom skyggen), så de passer til billedet fra alle sider.
+    // Horisonten sidder inde i skyggen og vises som en stiplet ring. Navnene tegnes altid øverst.
     const navne = new THREE.Group();
-    const n1 = skilt('Skygge', '#c9d3f5', 1.1);
-    n1.position.set(0, -SKYGGE - 1.1, 0);
-    const n2 = skilt('Varm gas', '#ffb36b', 1.1);
-    n2.position.set(YDERST * 0.75, 1.3, 0);
-    const n3 = skilt('Bøjet lys', '#ffe3b0', 1.1);
-    n3.position.set(0, SKYGGE * GLORIE + 0.5, 0);
+    const R = SKYGGE;
+    const navn = (tekst, farve, str, x, y) => {
+      const n = skilt(tekst, farve, str);
+      n.position.set(x, y, 0);
+      navne.add(n);
+    };
+    navn('Fotonring', '#ffe9c4', 0.7, 0, R * 0.84);
+    navn('Skygge', '#c9d3f5', 1.0, 0, R * 0.56);
+    navn('Bøjet lys', '#ffe3b0', 1.0, 0, R * 2.05);
+    navn('Varm gas', '#ffb36b', 0.9, R * 1.75, R * 0.35);
+    navn('Mod os: lysere', '#a9c8ff', 0.75, -R * 1.75, -R * 0.42);
+    navn('Væk: mørkere', '#ff9a5c', 0.75, R * 1.75, -R * 0.42);
+    const pil = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, R * 0.92, 0), new THREE.Vector3(0, R * 0.985, 0)]),
+      new THREE.LineBasicMaterial({ color: 0xffe9c4, transparent: true, opacity: 0.8 }),
+    );
     const horisont = new THREE.LineLoop(
       new THREE.BufferGeometry().setFromPoints(new THREE.EllipseCurve(0, 0, HORISONT, HORISONT).getPoints(96)),
       new THREE.LineDashedMaterial({ color: 0x8d9bcc, dashSize: 0.22, gapSize: 0.16, transparent: true, opacity: 0.8, depthWrite: false }),
     );
     horisont.computeLineDistances();
-    const n4 = skilt('Begivenhedshorisont', '#aab6e0', 0.55);
-    n4.position.y = 0.5;
-    const iSkyggen = new THREE.Group(); // vender altid mod os, ligesom skyggen
-    iSkyggen.add(horisont, n4);
-    navne.add(n1, n2, n3, iSkyggen);
+    navn('Begivenhedshorisont', '#aab6e0', 0.55, 0, 0.5);
+    navne.add(horisont, pil);
+    navne.traverse((o) => { if (o.material) { o.material.depthTest = false; o.material.depthWrite = false; o.renderOrder = 10; } });
     gruppe.add(navne);
 
     // Astronauten og stjernen
@@ -151,7 +130,6 @@ export default {
     };
     const a = new THREE.Vector3();
     const op = new THREE.Vector3(0, 1, 0);
-    const tilKamera = new THREE.Vector3();
     const hjælp = new THREE.Vector3();
 
     function sendAstronaut() {
@@ -180,44 +158,35 @@ export default {
     }
 
     // Gløden må gerne lyse om hullet, men den må ikke brede lyset ind over skyggen
-    const sort = holdSkyggenSort(verden, skygge);
+    const sort = holdSkyggenSort(verden, gruppe);
 
     return {
-      stop: () => sort.fjern(),
+      stop: () => {
+        sort.fjern();
+        linse.fjern();
+        orbit.minDistance = gammelMin;
+      },
+      // Til tests: skyggens midte og radius på skærmen (CSS-pixel), regnet med √27 M
+      test: {
+        skygge: () => sort.skærm(), linseSkala: () => linse.skala(), dynamisk: (til) => linse.dynamisk(til), maske: (til) => sort.slå(til),
+        lysere: (v) => { lysere = v; }, // skiven lyser op, som når den får mad
+        // Kameraet i afstanden a, h grader over skivens plan og drejet v grader (står stille bagefter)
+        kamera: (a, h, v = 0) => {
+          orbit.autoRotate = false;
+          verden.målAfstand = null;
+          verden.kamera.position.setFromSphericalCoords(a, THREE.MathUtils.degToRad(90 - h), THREE.MathUtils.degToRad(v));
+          orbit.update();
+        },
+      },
       styring: [
         { tekst: '🧑‍🚀 Send en astronaut ind', handling: sendAstronaut, deaktiv: () => astro !== null },
         { tekst: '⭐ Kast en stjerne forbi', handling: kastStjerne, deaktiv: () => stjerne !== null },
         { tekst: '🏷️ Vis navne', til: true, skift: (til) => { navne.visible = til; } },
       ],
-      opdater(dt) {
-        // Gassen hvirvler rundt (hurtigst inderst) og falder langsomt ind
-        tilKamera.copy(verden.kamera.position).normalize();
-        skive.rotation.z += dt * 0.25;
+      opdater(dt, tid) {
         lysere = Math.max(0, lysere - dt * 0.3);
-        for (let i = 0; i < N; i++) {
-          const r = pr[i];
-          pv[i] += Math.sqrt(GM / (r * r * r)) * dt;
-          pr[i] -= dt * 0.04 * (YDERST / r);
-          if (pr[i] < INDERST) nyPartikel(i, YDERST - Math.random() * 0.5);
-          const x = Math.cos(pv[i]) * pr[i], z = Math.sin(pv[i]) * pr[i];
-          gasPos[i * 3] = x;
-          gasPos[i * 3 + 1] = py[i];
-          gasPos[i * 3 + 2] = z;
-          // Gas, der bevæger sig mod os, ser lysere ud (dopplereffekt)
-          const mod = (-Math.sin(pv[i]) * tilKamera.x + Math.cos(pv[i]) * tilKamera.z);
-          const d = (1 + 0.55 * mod) ** 2 * (1 + lysere);
-          gasFarve[i * 3] = grundfarve[i * 3] * d;
-          gasFarve[i * 3 + 1] = grundfarve[i * 3 + 1] * d;
-          gasFarve[i * 3 + 2] = grundfarve[i * 3 + 2] * d;
-        }
-        gas.geometry.attributes.position.needsUpdate = true;
-        gas.geometry.attributes.color.needsUpdate = true;
-        glorie.quaternion.copy(verden.kamera.quaternion);
-        skygge.quaternion.copy(verden.kamera.quaternion);
-        skær.position.copy(tilKamera).multiplyScalar(-1);
-        iSkyggen.quaternion.copy(verden.kamera.quaternion);
-        iSkyggen.position.copy(tilKamera);
-        skive.material.opacity = 0.85 + 0.15 * lysere;
+        linse.opdater(tid, lysere);
+        navne.quaternion.copy(verden.kamera.quaternion);
 
         // Astronauten: tiden går langsommere tæt på horisonten (set udefra)
         if (astro) {
@@ -286,7 +255,7 @@ export default {
                 p.addScaledVector(v, dt / 3);
               }
               const r = p.length();
-              if (r < INDERST * 0.9) {
+              if (r < ISCO * 0.9) {
                 sVæk[i] = 1;
                 lysere = Math.min(1.2, lysere + 0.01);
                 p.set(0, 9999, 0);
@@ -315,15 +284,17 @@ export default {
 // Uden glød (TEST_HURTIG) tegnes efterbehandlingen ikke, og skyggen er sort i forvejen.
 const KOPI_VS = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
 
-function holdSkyggenSort(verden, skygge) {
+function holdSkyggenSort(verden, hul) {
   const før = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType });
   const gem = new GemPass(før);
-  const bland = new SkyggePass(før, verden.kamera, skygge);
+  const bland = new SkyggePass(før, verden.kamera, hul);
   const komponist = verden.komponist;
   const i = komponist.passes.indexOf(verden.glød);
   komponist.insertPass(gem, i);
   komponist.insertPass(bland, i + 2);
   return {
+    skærm: () => bland.skærm(),
+    slå: (til) => { gem.enabled = bland.enabled = til; }, // til tests og prøvebilleder
     fjern() {
       komponist.removePass(gem);
       komponist.removePass(bland);
@@ -361,12 +332,13 @@ class GemPass extends Pass {
 
 // Inde i skyggen: billedet fra før gløden. Udenfor: billedet med glød. Kanten er lidt blød.
 class SkyggePass extends Pass {
-  constructor(før, kamera, skygge) {
+  constructor(før, kamera, hul) {
     super();
     this.kamera = kamera;
-    this.skygge = skygge;
+    this.hul = hul;
     this.midt = new THREE.Vector3();
     this.kant = new THREE.Vector3();
+    this.op = new THREE.Vector3();
     this.materiale = new THREE.ShaderMaterial({
       uniforms: {
         tDiffuse: { value: null }, tFoer: { value: før.texture },
@@ -387,83 +359,32 @@ class SkyggePass extends Pass {
     this.materiale.uniforms.uStoerrelse.value.set(bredde, højde);
   }
 
-  render(renderer, writeBuffer, readBuffer) {
-    // Hvor skyggen står på skærmen (i punkter), og hvor stor den er
-    const u = this.materiale.uniforms;
-    const størrelse = u.uStoerrelse.value;
-    this.midt.setFromMatrixPosition(this.skygge.matrixWorld);
-    this.kant.set(0, SKYGGE, 0).applyQuaternion(this.kamera.quaternion).add(this.midt);
+  // Skyggens midte og radius på skærmen (i punkter i lærredet). Radius fra √27 M set fra kameraets afstand.
+  måling(størrelse) {
+    this.midt.setFromMatrixPosition(this.hul.matrixWorld);
+    const afstand = this.kamera.position.distanceTo(this.midt);
+    this.op.set(0, 1, 0).applyQuaternion(this.kamera.quaternion);
+    this.kant.copy(this.midt).addScaledVector(this.op, afstand * Math.tan(skyggeVinkel(afstand)));
     this.midt.project(this.kamera);
     this.kant.project(this.kamera);
-    u.uMidt.value.set((this.midt.x + 1) / 2 * størrelse.x, (this.midt.y + 1) / 2 * størrelse.y);
-    u.uRadius.value = Math.max(1, Math.hypot((this.kant.x - this.midt.x) / 2 * størrelse.x, (this.kant.y - this.midt.y) / 2 * størrelse.y));
+    const x = (this.midt.x + 1) / 2 * størrelse.x, y = (this.midt.y + 1) / 2 * størrelse.y;
+    return { x, y, r: Math.max(1, Math.hypot((this.kant.x - this.midt.x) / 2 * størrelse.x, (this.kant.y - this.midt.y) / 2 * størrelse.y)) };
+  }
+
+  // Til tests: skyggen i CSS-pixel med y nedad
+  skærm() {
+    const m = this.måling({ x: innerWidth, y: innerHeight });
+    return { x: m.x, y: innerHeight - m.y, r: m.r };
+  }
+
+  render(renderer, writeBuffer, readBuffer) {
+    const u = this.materiale.uniforms;
+    const m = this.måling(u.uStoerrelse.value);
+    u.uMidt.value.set(m.x, m.y);
+    u.uRadius.value = m.r;
     u.tDiffuse.value = readBuffer.texture;
     renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
     this.quad.render(renderer);
   }
 }
 
-// Skiven: lys inderst, rødlig yderst, med striber i omløbsretningen
-function skiveTekstur() {
-  const c = document.createElement('canvas');
-  c.width = c.height = 512;
-  const g = c.getContext('2d');
-  const m = 256;
-  const ydre = 256;
-  const indre = ydre * ((INDERST - 0.2) / (YDERST + 0.5));
-  const grad = g.createRadialGradient(m, m, indre, m, m, ydre);
-  grad.addColorStop(0, 'rgba(255,250,235,1)');
-  grad.addColorStop(0.12, 'rgba(255,215,150,0.9)');
-  grad.addColorStop(0.45, 'rgba(255,140,60,0.55)');
-  grad.addColorStop(1, 'rgba(160,40,20,0)');
-  g.fillStyle = grad;
-  g.beginPath();
-  g.arc(m, m, ydre, 0, Math.PI * 2);
-  g.arc(m, m, indre, 0, Math.PI * 2, true);
-  g.fill();
-  // Striber
-  g.globalCompositeOperation = 'destination-out';
-  for (let i = 0; i < 140; i++) {
-    const r = indre + Math.random() * (ydre - indre);
-    const start = Math.random() * Math.PI * 2;
-    g.strokeStyle = `rgba(0,0,0,${0.15 + Math.random() * 0.35})`;
-    g.lineWidth = 1 + Math.random() * 4;
-    g.beginPath();
-    g.arc(m, m, r, start, start + 0.5 + Math.random() * 2);
-    g.stroke();
-  }
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-}
-
-// Buen af bøjet lys: en tynd, skarp ring inderst og et bredere skær, kraftigst over og under hullet
-function glorieTekstur() {
-  const c = document.createElement('canvas');
-  c.width = c.height = 512;
-  const g = c.getContext('2d');
-  const m = 256;
-  const ydre = 256;
-  const indre = ydre / GLORIE;
-  const img = g.createImageData(512, 512);
-  for (let y = 0; y < 512; y++) {
-    for (let x = 0; x < 512; x++) {
-      const dx = x - m, dy = y - m;
-      const r = Math.hypot(dx, dy);
-      if (r < indre || r > ydre) continue;
-      const t = (r - indre) / (ydre - indre);
-      const ring = Math.exp(-(((t - 0.04) / 0.035) ** 2)); // den skarpe fotonring
-      const skær = Math.exp(-t * 3.2) * (0.35 + 0.65 * Math.abs(dy / r)) * (1 - t) ** 2; // mest over og under, og uden kant yderst
-      const s = Math.min(1, ring * 1.2 + skær * 0.9);
-      const i = (y * 512 + x) * 4;
-      img.data[i] = 255;
-      img.data[i + 1] = 200 + 55 * ring;
-      img.data[i + 2] = 140 + 100 * ring;
-      img.data[i + 3] = s * 255;
-    }
-  }
-  g.putImageData(img, 0, 0);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-}

@@ -53,3 +53,4 @@
 - Antal måner skifter hurtigt: NSSDC siger 95 og MPC sagde 101 i marts 2026, men JPL og NASA siger 115 (april 2026). Skriv måned og år.
 - JPL SSD's tabel over månernes baner (`sats/elem`) har en kolonne "P", som ikke er den sideriske omløbstid (Io 1,7627 mod 1,7691 døgn). Brug NSSDC's omløbstider, ellers passer resonansen 1 : 2 : 4 ikke.
 - USGS' farvemosaik af Io er forstærket (violet, grøn og nær-infrarød). "De ægte farver er meget mere dæmpede" (USGS).
+- "Interstellar fjernede dopplereffekten for at gøre billedet pænere." Filmen fjernede alle frekvensskift (også tyngdekraftens rødforskydning), fordi skiven ellers blev så skæv, at det var svært at forstå for publikum (James m.fl. 2015, arXiv:1502.03808). Og afstanden til Mælkevejens sorte hul er ca. 27.000 lysår (GRAVITY 2021), ikke 26.000.
