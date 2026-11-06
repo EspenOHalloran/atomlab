@@ -22,7 +22,7 @@ export default {
   kamera: { retning: [0, 0.2, 1], radius: 8.5 },
   tal: [
     ['Mælkevejens sorte hul', '4 mio. × Solen'],
-    ['Afstand til det', 'ca. 26.000 lysår'],
+    ['Afstand til det', 'ca. 27.000 lysår'],
     ['Første billede', 'M87*, vist i 2019'],
     ['Jorden som sort hul', 'ca. 2 cm bred'],
   ],
@@ -36,11 +36,15 @@ export default {
       },
       {
         titel: 'Hvad er den lysende ring?',
-        tekst: '<p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt og falder ind. Lyset bliver bøjet af tyngdekraften, så man kan se gassen bag hullet som en lysende bue over og under det.</p>',
+        tekst: '<p>Selve hullet er sort, men gassen omkring det bliver glohed og lyser, mens den hvirvler rundt. Tyngdekraften bøjer lyset. Derfor kan man også se gassen <i>bag</i> hullet: Lyset fra den bliver bøjet op over hullet og ned under det. Buen over og under skyggen er altså den samme flade skive af gas, bare set gennem bøjet lys.</p><p>Helt inde ved skyggen er der en tynd, lys ring, fotonringen. Den er lavet af lys, der er gået mindst en halv tur rundt om hullet, før det slap væk.</p>',
+      },
+      {
+        titel: 'Hvorfor er den ene side lysere?',
+        tekst: '<p>Gassen inderst kører rundt med omkring halvdelen af lysets fart. Den side, der kommer mod os, ser lysere og mere blålig ud. Den side, der kører væk, ser mørkere og rødere ud. Det kaldes dopplereffekten: Lys fra noget, der kommer mod os, bliver presset sammen til kortere bølger (mere blåt), og lys fra noget, der kører væk, bliver strakt ud (mere rødt). Ved så høj fart bliver lyset også kastet fremad, ligesom lyset fra en lygte.</p><p>Inderst er lyset også rødere og svagere, fordi det skal op ad hullets tyngdekraft. I filmen <i>Interstellar</i> tog man med vilje både dopplereffekten og tyngdekraftens rødforskydning ud. Ellers blev den ene side så lys, at billedet blev skævt og svært at forstå. Her er de med, for de er rigtige. På det første billede af et sort hul (M87*, 2019) er ringen også lysest i den ene side, nederst, hvor gassen efter alt at dømme kommer mod os.</p>',
       },
       {
         titel: 'Hvorfor er skyggen så stor?',
-        tekst: '<p>Den sorte skygge er ca. 2,6 gange bredere end selve horisonten. Lys, der kommer tættere forbi end skyggens kant, bliver bøjet så meget, at det falder ind.</p>',
+        tekst: '<p>Den sorte skygge er ca. 2,6 gange bredere end selve horisonten. Lys, der kommer tættere forbi end skyggens kant, bliver bøjet så meget, at det falder ind. Lys, der rammer præcis kanten, kan gå i ring om hullet i en afstand fra midten, der er 1,5 gange horisontens. Det giver fotonringen.</p>',
       },
       {
         titel: 'Hvad sker der med en astronaut?',
@@ -52,8 +56,9 @@ export default {
     nørd: `
       <p><b>Hvor stort?</b> Begivenhedshorisontens radius er 2GM/c² (G er tyngdekonstanten, M massen og c lysets fart). Blev Solen presset sammen til et sort hul, ville den være 6 km bred. Jorden ville være ca. 2 cm.</p>
       <p><b>Billeder af sorte huller:</b> Forskere kombinerede radioteleskoper over hele Jorden til ét kæmpe teleskop (Event Horizon Telescope). Målingerne blev lavet i 2017, og i 2019 viste de det første billede af skyggen af et sort hul, M87*, der vejer 6,5 milliarder sole. I 2022 fulgte et billede af Mælkevejens eget sorte hul.</p>
+      <p><b>Sådan er billedet regnet:</b> For hver pixel følger computeren lyset baglæns fra kameraet med Einsteins ligninger for et sort hul, der ikke drejer (Schwarzschild). Lyset går i ét plan, og banen regnes i små skridt, til den falder ind eller slipper væk. Skiven begynder ved den inderste stabile bane, 3 gange horisontens radius. Indenfor falder gassen ind. Lysstyrken ganges med g⁴, hvor g er, hvor meget lyset er presset sammen (g større end 1) eller strakt ud.</p>
       <p><b>Hawking-stråling:</b> Stephen Hawking regnede ud, at sorte huller langsomt "fordamper", men så langsomt, at det aldrig er blevet målt.</p>`,
-    ærligt: '<p>Gas-skiven er tegnet tættere på og mindre end i virkeligheden, og lysets bøjning er kun efterlignet med buen om hullet. Skyggens størrelse passer: ca. 2,6 gange horisonten for et sort hul, der ikke drejer (et hul, der drejer, har en lidt skæv skygge). Gløden om gassen er holdt ude af skyggen, så den er helt sort. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul.</p>',
+    ærligt: '<p>Lysets bøjning, skyggens størrelse, fotonringen og dopplerlyset er regnet med Einsteins ligninger, men for et sort hul, der ikke drejer. Rigtige sorte huller drejer som regel, og så kan skyggen blive lidt skæv. Skiven er tegnet tynd og meget mindre end i virkeligheden, og kameraet står stille ved hullet. Farverne er valgt, så de kan ses: Gassen i en tynd skive som denne er så varm, at den mest lyser med ultraviolet lys (ved kæmpe huller) eller røntgenstråler (ved små huller). Billederne af M87* og Mælkevejens hul er taget med radiobølger. Astronauten og stjernen bliver ikke bøjet (de er tegnet oven på billedet). Gløden om gassen er holdt ude af skyggen, så den er helt sort. Og astronauten bliver kun til spaghetti ved et lille sort hul, mens stjerner bliver revet over ved de kæmpe sorte huller midt i galakser. Her er begge dele vist ved det samme hul.</p>',
   },
 
   lav(gruppe, { lyd, fase, verden }) {
@@ -65,25 +70,33 @@ export default {
     const gammelMin = orbit.minDistance;
     orbit.minDistance = MINDSTE_AFSTAND;
 
-    // Navne. Horisonten sidder inde i skyggen og vises som en stiplet ring. Navnene tegnes altid øverst.
+    // Navne. De står i en flade, der altid vender mod os (ligesom skyggen), så de passer til billedet fra alle sider.
+    // Horisonten sidder inde i skyggen og vises som en stiplet ring. Navnene tegnes altid øverst.
     const navne = new THREE.Group();
-    const n1 = skilt('Skygge', '#c9d3f5', 1.1);
-    n1.position.set(0, -SKYGGE - 1.1, 0);
-    const n2 = skilt('Varm gas', '#ffb36b', 1.1);
-    n2.position.set(ISCO * 2.2, 0.9, 0);
-    const n3 = skilt('Bøjet lys', '#ffe3b0', 1.1);
-    n3.position.set(0, SKYGGE * 1.9 + 0.5, 0);
+    const R = SKYGGE;
+    const navn = (tekst, farve, str, x, y) => {
+      const n = skilt(tekst, farve, str);
+      n.position.set(x, y, 0);
+      navne.add(n);
+    };
+    navn('Fotonring', '#ffe9c4', 0.7, 0, R * 0.84);
+    navn('Skygge', '#c9d3f5', 1.0, 0, R * 0.56);
+    navn('Bøjet lys', '#ffe3b0', 1.0, 0, R * 2.05);
+    navn('Varm gas', '#ffb36b', 0.9, R * 1.75, R * 0.35);
+    navn('Mod os: lysere', '#a9c8ff', 0.75, -R * 1.75, -R * 0.42);
+    navn('Væk: mørkere', '#ff9a5c', 0.75, R * 1.75, -R * 0.42);
+    const pil = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, R * 0.92, 0), new THREE.Vector3(0, R * 0.985, 0)]),
+      new THREE.LineBasicMaterial({ color: 0xffe9c4, transparent: true, opacity: 0.8 }),
+    );
     const horisont = new THREE.LineLoop(
       new THREE.BufferGeometry().setFromPoints(new THREE.EllipseCurve(0, 0, HORISONT, HORISONT).getPoints(96)),
       new THREE.LineDashedMaterial({ color: 0x8d9bcc, dashSize: 0.22, gapSize: 0.16, transparent: true, opacity: 0.8, depthWrite: false }),
     );
     horisont.computeLineDistances();
-    const n4 = skilt('Begivenhedshorisont', '#aab6e0', 0.55);
-    n4.position.y = 0.5;
-    const iSkyggen = new THREE.Group(); // vender altid mod os, ligesom skyggen
-    iSkyggen.add(horisont, n4);
-    navne.add(n1, n2, n3, iSkyggen);
-    navne.traverse((o) => { if (o.material) { o.material.depthTest = false; o.renderOrder = 10; } });
+    navn('Begivenhedshorisont', '#aab6e0', 0.55, 0, 0.5);
+    navne.add(horisont, pil);
+    navne.traverse((o) => { if (o.material) { o.material.depthTest = false; o.material.depthWrite = false; o.renderOrder = 10; } });
     gruppe.add(navne);
 
     // Astronauten og stjernen
@@ -117,7 +130,6 @@ export default {
     };
     const a = new THREE.Vector3();
     const op = new THREE.Vector3(0, 1, 0);
-    const tilKamera = new THREE.Vector3();
     const hjælp = new THREE.Vector3();
 
     function sendAstronaut() {
@@ -156,7 +168,8 @@ export default {
       },
       // Til tests: skyggens midte og radius på skærmen (CSS-pixel), regnet med √27 M
       test: {
-        skygge: () => sort.skærm(), linseSkala: () => linse.skala(), maske: (til) => sort.slå(til),
+        skygge: () => sort.skærm(), linseSkala: () => linse.skala(), dynamisk: (til) => linse.dynamisk(til), maske: (til) => sort.slå(til),
+        lysere: (v) => { lysere = v; }, // skiven lyser op, som når den får mad
         // Kameraet i afstanden a, h grader over skivens plan og drejet v grader (står stille bagefter)
         kamera: (a, h, v = 0) => {
           orbit.autoRotate = false;
@@ -171,11 +184,9 @@ export default {
         { tekst: '🏷️ Vis navne', til: true, skift: (til) => { navne.visible = til; } },
       ],
       opdater(dt, tid) {
-        tilKamera.copy(verden.kamera.position).normalize();
         lysere = Math.max(0, lysere - dt * 0.3);
         linse.opdater(tid, lysere);
-        iSkyggen.quaternion.copy(verden.kamera.quaternion);
-        iSkyggen.position.copy(tilKamera);
+        navne.quaternion.copy(verden.kamera.quaternion);
 
         // Astronauten: tiden går langsommere tæt på horisonten (set udefra)
         if (astro) {

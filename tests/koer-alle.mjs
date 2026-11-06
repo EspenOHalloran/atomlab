@@ -14,7 +14,7 @@ const ADRESSE = process.env.ADRESSE ?? 'http://localhost:8765'; // samme standar
 const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
-  'henfaldsregler', 'orbitaler', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
+  'henfaldsregler', 'orbitaler', 'sorthul', 'vaerksted', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
   'batteri', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'kategorier', 'ordforklaring', 'ordbog', 'beskeder', 'beskeder-2', 'guide', 'lag', 'pause', 'fuldskaerm', 'grafik', 'saturn', 'mars', 'landskab', 'solsystem', 'jorden',
 ];
 const argumenter = process.argv.slice(2);
@@ -58,7 +58,7 @@ function vælgÆndrede(givne) {
   const SKÆRME = { 'js/vaerksted.js': 'vaerksted', 'js/system.js': 'system', 'js/fusion.js': 'fusion', 'js/reaktor.js': 'reaktor', 'js/batteri.js': 'batteri', 'js/kosmos.js': 'kosmos', 'js/solsystem.js': 'solsystem' };
   const EGEN_TEST = {
     'js/beskeder.js': ['beskeder', 'beskeder-2'], 'js/guide.js': ['guide'], 'js/pause.js': ['pause'], 'js/fuldskaerm.js': ['fuldskaerm'],
-    'js/ordforklaring.js': ['ordforklaring'], 'js/data/ordbog.js': ['ordforklaring', 'ordbog'], 'js/data/ordbogliste.js': ['ordbog'], 'js/ordbog.js': ['ordbog'], 'js/data/isotoper.js': ['henfaldsregler'], 'js/data/orbitaler.js': ['orbitaler'], 'js/lag.js': ['lag'], 'js/paneler.js': ['lag'], 'js/data/hvorfor.js': ['lag'], 'js/data/kategorier.js': ['kategorier'], 'js/kosmos/saturn.js': ['saturn'], 'js/kosmos/mars.js': ['mars', 'landskab'], 'js/solsystem/landskab.js': ['landskab'], 'js/kosmos/jordkloden.js': ['jorden'], 'js/kosmos/solen.js': ['jorden'], 'js/data/himmel.js': ['jorden'],
+    'js/ordforklaring.js': ['ordforklaring'], 'js/data/ordbog.js': ['ordforklaring', 'ordbog'], 'js/data/ordbogliste.js': ['ordbog'], 'js/ordbog.js': ['ordbog'], 'js/data/isotoper.js': ['henfaldsregler'], 'js/data/orbitaler.js': ['orbitaler'], 'js/data/sorthul.js': ['sorthul'], 'js/lag.js': ['lag'], 'js/paneler.js': ['lag'], 'js/data/hvorfor.js': ['lag'], 'js/data/kategorier.js': ['kategorier'], 'js/kosmos/saturn.js': ['saturn'], 'js/kosmos/mars.js': ['mars', 'landskab'], 'js/solsystem/landskab.js': ['landskab'], 'js/kosmos/jordkloden.js': ['jorden'], 'js/kosmos/solen.js': ['jorden'], 'js/data/himmel.js': ['jorden'],
   };
   const besøger = Object.fromEntries(ALLE.map((t) => [t, readFileSync(`${MAPPE}${t}.mjs`, 'utf8')]));
   const tests = new Set();

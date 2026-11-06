@@ -14,9 +14,16 @@ import { LAV_KVALITET, ROLIG } from '../scene3d.js';
 import { M, ISCO, SKIVE_YDERST, FARVER, LOG_T, farvetabel } from '../data/sorthul.js';
 
 // Kvaliteten: pc og tablet. skala = opløsningen af billedet i forhold til skærmen.
+// mindst = den laveste opløsning, den dynamiske opløsning må gå ned til.
 export const LINSE_KVALITET = LAV_KVALITET
-  ? { skala: 0.5, maks: 110, kort: 0.085, langt: 0.3, oktaver: 2, stjernelag: 2 }
-  : { skala: 1, maks: 170, kort: 0.06, langt: 0.24, oktaver: 4, stjernelag: 3 };
+  ? { skala: 0.5, mindst: 0.3, maks: 110, kort: 0.085, langt: 0.3, oktaver: 2, stjernelag: 2 }
+  : { skala: 1, mindst: 0.4, maks: 170, kort: 0.06, langt: 0.24, oktaver: 4, stjernelag: 3 };
+// Dynamisk opløsning: Programmet måler billeder i sekundet hvert sekund og skruer ned for opløsningen under 45 og op
+// igen over 56 (to sekunder i træk). Ikke i testene (?test), hvor testbrowseren altid er langsom, medmindre en test slår
+// den til.
+const DYNAMISK = !new URLSearchParams(location.search).has('test');
+const FPS_NED = 45;
+const FPS_OP = 56;
 
 const TIDSSKALA = ROLIG ? 3.5 : 14; // tidsenheder (M = 1 → lyset går 0,75 enhed) pr. sekund: inderkanten går rundt på ca. 5 s
 const T_INDERST = 6000; // farvetemperaturen (kelvin), hvor skiven er varmest, før rødforskydningen (se "Ærligt talt")
@@ -312,7 +319,7 @@ void main() {
   #include <colorspace_fragment>
 }`;
 
-// Laver lysbøjningen. Giver { flade (læg den i scenen), opdater(tid, lysere), skalaNu(), fjern() }.
+// Laver lysbøjningen. Giver { flade (læg den i scenen), opdater(tid, lysere), skala(), dynamisk(til), fjern() }.
 export function lavLinse({ lysstyrke = 0.2 } = {}) {
   const q = LINSE_KVALITET;
   const lag = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false });
@@ -354,8 +361,33 @@ export function lavLinse({ lysstyrke = 0.2 } = {}) {
   const størrelse = new THREE.Vector2();
   const midt = new THREE.Vector3();
   let skala = q.skala;
+  let dynamisk = DYNAMISK;
+  const måling = { start: 0, sidst: 0, billeder: 0, gode: 0 };
+  // Måler den rigtige tid mellem billederne (ikke fænomenets ur, for det handler om, hvor hurtigt grafikkortet er)
+  function målFart() {
+    const nu = performance.now();
+    if (nu - måling.sidst > 3000) { // første billede eller en pause (fx en skjult fane): start forfra
+      Object.assign(måling, { start: nu, sidst: nu, billeder: 0 });
+      return;
+    }
+    måling.sidst = nu;
+    måling.billeder++;
+    if (nu - måling.start < 1000) return;
+    const fps = (måling.billeder * 1000) / (nu - måling.start);
+    if (fps < FPS_NED && skala > q.mindst) {
+      skala = Math.max(q.mindst, skala * 0.85);
+      måling.gode = 0;
+    } else if (fps > FPS_OP && skala < q.skala) {
+      if (++måling.gode >= 2) {
+        skala = Math.min(q.skala, skala * 1.1);
+        måling.gode = 0;
+      }
+    } else måling.gode = 0;
+    Object.assign(måling, { start: nu, billeder: 0 });
+  }
 
   flade.onBeforeRender = (renderer, scene, kamera) => {
+    if (dynamisk) målFart();
     // Billedet tegnes i et lag for sig, i den opløsning, der passer til skærmen og kvaliteten
     const mål = renderer.getRenderTarget();
     if (mål) størrelse.set(mål.width, mål.height);
@@ -388,8 +420,8 @@ export function lavLinse({ lysstyrke = 0.2 } = {}) {
       linseMat.uniforms.uTid.value = tid * TIDSSKALA;
       linseMat.uniforms.uLys.value = lysere;
     },
-    sætSkala(s) { skala = s; },
     skala: () => skala,
+    dynamisk: (til) => { dynamisk = til; }, // til tests
     fjern() {
       lag.dispose();
       linseMat.dispose();

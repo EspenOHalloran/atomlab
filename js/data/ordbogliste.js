@@ -18,6 +18,8 @@ export const LINKS = {
   elektrolyt: { skærm: ['batteri', 'Batteriet'] },
   dendrit: { skærm: ['batteri', 'Batteriet'] },
   horisont: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
+  fotonring: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
+  doppler: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
   hviddvaerg: { gaa: ['kosmos:hviddvaerg', 'Kosmos: Hvid dværg'] },
   neutronstjerne: { gaa: ['kosmos:pulsar', 'Kosmos: Pulsar'] },
   brundvaerg: { gaa: ['kosmos:stjernefoedsel', 'Kosmos: Ny stjerne'] },

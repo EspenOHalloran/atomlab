@@ -1,6 +1,6 @@
 # Plan: Det sorte hul bygges om
 
-*Skrevet 6. november 2026 (Opus, xhigh) efter [prompt-sorthul.md](prompt-sorthul.md). Trin 1 (plan og prøvebillede) er lavet. **Trin 2 venter på jeres go.***
+*Skrevet 6. november 2026 (Opus, xhigh) efter [prompt-sorthul.md](prompt-sorthul.md). Trin 1 (plan og prøvebillede) er lavet. **Jeres svar 6. november 2026: "vi går med dine anbefalinger. go."** Altså g⁴, 6.000 K, mindste afstand 15, astronauten og stjernen bøjes ikke, og dynamisk opløsning på både pc og tablet. Trin 2 er i gang.*
 
 ## Trin 1: lavet (prøven)
 - **`js/data/sorthul.js`** (uden Three.js, kan testes i Node): tallene og fysikken. M = 0,75 enhed, så horisonten (2M) er 1,5 og skyggen (√27 M) 3,90 enheder som før. Fotonkuglen 3M, inderkanten ved ISCO 6M (4,5 enheder), skiven ud til 20M (15 enheder). Lysets bane (RK4), rødforskydningen g, skivens temperatur og sortlegeme-farverne.

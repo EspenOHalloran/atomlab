@@ -2,6 +2,14 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 6. november 2026 (Formørkelsernes løft, før Det sorte hul)
+**Senest lavet (6. november 2026): Formørkelser med et grafisk løft.** Jeres go: "go med dine anbefalinger" (før tabletrunden). Kun `js/kosmos/formoerkelser.js` er ændret (`jorden.js` eksporterer kun sin skygge-GLSL, så Årstiderne er uændret). Fysikken og `skygge.js` er ikke rørt.
+- **Lyset:** De 9 gule streger er væk. Sollyset er en svag, varm dis, og glimt glider fra Solen og forsvinder i skyggen (færre på tabletten, står stille med "Reducer bevægelse").
+- **Skyggerne** er mørke, bløde kegler i disen i stedet for lyse klodser, nu med halvskygge bag både Jorden og Månen. De dækker ikke kloderne, så Månen stadig er kobberrød.
+- **Trin 2 og 3** ses fra siden med Månens kegler: Ved total når spidsen ind i Jorden, og ved ring slutter den før. Kameraet er flyttet lidt.
+- **Himlen øverst til venstre:** Solen er mørkere mod kanten og har et skær, og koronaen har stråler. "Ærligt talt" siger, at lys og skygger ikke kan ses fra siden i tomt rum.
+- **Tests:** 5 nye tjek i `formoerkelser` (spidsen 0,68 fra Jordens midte ved total og 1,47 ved ring, og hvilke kegler der vises). `--ændret` valgte 9 tests, og alle bestod.
+
 ## "Senest lavet" 6. november 2026 (planen for Jupiter, før Formørkelsernes løft)
 **Senest lavet (6. november 2026): planen for Jupiter.** Jeres go: "Læs prompt-jupiter-plan.md og lav planen". Planen står i [docs/plan-jupiter.md](docs/plan-jupiter.md), og faktagrundlaget i [docs/fakta-solsystemet.md](docs/fakta-solsystemet.md), "Del 5: Jupiter". Koden er ikke rørt.
 - **Kilder** (tjekket med curl, I åbnede de blokerede domæner): Hubbles OPAL-kort fra december 2025 med farver og poler fra Cassini, og USGS' kort over månerne. Vindene måler vi selv i OPAL's to omgange (prøven: ca. 147 m/s ved 24° N, Hubble målte 153).
