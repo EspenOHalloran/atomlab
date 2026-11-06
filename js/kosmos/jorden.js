@@ -11,6 +11,7 @@ import { glød } from './faelles.js';
 import { LANDKORT } from '../data/landkort.js';
 import { dagIDag } from '../data/solbane.js';
 import { verden, LAV_KVALITET, TEST_HURTIG } from '../scene3d.js';
+import { hentBillede, lavHentebjælke, tonInd } from '../hentning.js';
 
 const RAD = Math.PI / 180;
 
@@ -31,32 +32,77 @@ const BILLEDER = {
 // Dagen i året midt i de fire måneder med dagbilleder (januar, april, juli og oktober)
 const BILLEDDAGE = [15, 105, 196, 288];
 
-const henter = new THREE.TextureLoader();
 const hentede = new Map(); // filnavn → Promise med teksturen (eller null). De bliver i grafikkortet, så det går hurtigt at skifte fænomen.
+const færdige = new Set(); // filnavne, der er hentet
 function hentFil(fil, farve, kanaler) {
   if (!hentede.has(fil)) {
     hentede.set(fil, new Promise((klar) => {
-      henter.load(MAPPE + fil, (t) => {
+      // (hentBillede tæller de hentede MB til bjælken)
+      hentBillede(MAPPE + fil).then((billede) => {
+        const t = new THREE.Texture(billede);
+        t.needsUpdate = true;
+        færdige.add(fil);
         t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
         if (kanaler === 1) t.format = THREE.RedFormat;
         if (kanaler === 2) t.format = THREE.RGFormat;
         t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt
         t.anisotropy = verden.renderer ? Math.min(8, verden.renderer.capabilities.getMaxAnisotropy()) : 1;
         klar(t);
-      }, undefined, () => klar(null));
+      }, () => klar(null));
     }));
   }
   return hentede.get(fil);
 }
-// Henter et billede (eller en liste af billeder). Giver null, hvis det ikke findes.
-function hent(nøgle) {
+const filerFor = (b, str) => (Array.isArray(b.navn) ? b.navn : [b.navn]).map((n) => (b.størrelse ? `${n}-${str}.jpg` : n));
+// Er billedet (eller listen) hentet før i den størrelse, der skal bruges? Så ses det med det samme (ingen toning).
+const iForvejen = (nøgle) => filerFor(BILLEDER[nøgle], STØRRELSE).every((f) => færdige.has(f));
+// Henter et billede (eller en liste af billeder) og kalder sæt(t) med det, eller med null, hvis det ikke findes.
+// På pc (4k) kommer det i to trin: først 2k (er der hurtigt), og så 4k, som skiftes ind. 2k fjernes bagefter fra
+// grafikkortet. Er 4k hentet før, kommer det med det samme.
+function hent(nøgle, sæt) {
   const b = BILLEDER[nøgle];
-  if (!b) return Promise.resolve(null);
-  const fil = (n) => (b.størrelse ? `${n}-${STØRRELSE}.jpg` : n);
-  if (Array.isArray(b.navn)) {
-    return Promise.all(b.navn.map((n) => hentFil(fil(n), b.farve, b.kanaler))).then((l) => (l.every(Boolean) ? l : null));
+  const samlet = (str) => Promise.all(filerFor(b, str).map((f) => hentFil(f, b.farve, b.kanaler)))
+    .then((l) => (l.every(Boolean) ? (Array.isArray(b.navn) ? l : l[0]) : null));
+  if (!b.størrelse || STØRRELSE === '2k' || iForvejen(nøgle)) return samlet(STØRRELSE).then(sæt);
+  let stor = false;
+  const lille = samlet('2k').then((t) => { if (!stor && t) sæt(t); return t; });
+  return samlet(STØRRELSE).then(async (t) => {
+    stor = true;
+    if (!t) { if (!(await lille)) sæt(null); return; }
+    sæt(t);
+    for (const f of filerFor(b, '2k')) {
+      hentede.get(f)?.then((x) => x?.dispose());
+      hentede.delete(f);
+      færdige.delete(f);
+    }
+  });
+}
+// Til tests: synlig (0-1) for de sidste kloder, der er lavet
+const sidste = { jorden: [], måne: [] };
+export const synlighed = () => ({ jorden: sidste.jorden.map((u) => u.synlig.value), måne: sidste.måne.map((u) => u.synlig.value) });
+const husk = (liste, u) => { liste.push(u); if (liste.length > 3) liste.shift(); };
+// Bjælken "Henter Jorden …" (én for alle kloderne). Den ses kun, mens en klode, der venter, bliver tegnet.
+let bjælke = null;
+// Kuglen er mørk, indtil kortet er hentet, og toner så ind (u.synlig fra 0 til 1). Mangler kortet, ses det tegnede
+// kort med det samme. Giver funktionen, der kaldes, når kortet er hentet (ok) eller ikke findes. tekst: bjælkens tekst
+// (kun Jorden, for Månens kort er små, og der er kun én bjælke).
+function tonVedKort(kugle, u, nøgle, tekst = null) {
+  if (iForvejen(nøgle)) { u.synlig.value = 1; return () => {}; }
+  let færdig = false;
+  if (tekst) {
+    let tegnet = 0;
+    const før = kugle.onBeforeRender;
+    kugle.onBeforeRender = (...a) => { tegnet = performance.now(); før(...a); };
+    bjælke ??= lavHentebjælke();
+    bjælke.vent(tekst, () => performance.now() - tegnet < 500);
   }
-  return hentFil(fil(b.navn), b.farve, b.kanaler);
+  return (ok) => {
+    if (færdig) return;
+    færdig = true;
+    if (tekst) bjælke.færdig();
+    if (ok) tonInd((v) => { u.synlig.value = v; });
+    else u.synlig.value = 1;
+  };
 }
 // Til tests: venter, til alle billeder, der er spurgt efter, er hentet
 export function billederHentet() {
@@ -214,6 +260,7 @@ const JORD_FRAGMENT = `
   uniform float reliefStyrke;
   uniform sampler2D hav;
   uniform float harHav;
+  uniform float synlig;   // 0 = mørk kugle (kortet er ikke hentet endnu), 1 = kortet ses
   uniform mat3 rot;       // kuglens drejning (fra dens egne retninger til verdens)
   uniform vec3 solObj;    // retningen mod Solen i kuglens egne retninger
   uniform vec3 maanePos;
@@ -264,7 +311,7 @@ const JORD_FRAGMENT = `
     vec3 natFarve = c * 0.03 + vec3(0.003, 0.006, 0.016) + sky * 0.02;
     vec3 byer = harNat > 0.5 ? texture2D(nat, vUv).rgb * natStyrke * (1.0 - 0.7 * sky) : vec3(0.0);
     float byLys = 1.0 - smoothstep(-0.12, 0.04, l);
-    gl_FragColor = vec4(mix(natFarve, lys, dag) + byer * byLys, 1.0);
+    gl_FragColor = vec4((mix(natFarve, lys, dag) + byer * byLys) * synlig, 1.0);
   }`;
 
 // Atmosfæren: en tynd skal uden om Jorden. For hvert punkt regnes, hvor tæt strålen fra kameraet kommer på Jorden.
@@ -302,6 +349,7 @@ const LUFT_VERTEX = `
 // (Lommel-Seeliger), og ikke mørkere ude mod kanten som en kugle af gips.
 const MÅNE_FRAGMENT = `
   uniform sampler2D kort;
+  uniform float synlig;   // 0 = mørk kugle (kortet er ikke hentet endnu), 1 = kortet ses
   uniform float forskydU;
   uniform sampler2D hoejde;
   uniform float harHoejde;
@@ -334,7 +382,7 @@ const MÅNE_FRAGMENT = `
     float dag = smoothstep(-0.03, 0.06, l);
     vec3 lys = c * (0.08 + mix(ls, i, 0.35)) * dag * (1.0 - skygge);
     vec3 roed = vec3(0.42, 0.11, 0.04) * dot(c, vec3(0.33)) * smoothstep(0.8, 1.0, skygge) * (0.3 + 0.7 * dag);
-    gl_FragColor = vec4(lys + roed + c * 0.015, 1.0);
+    gl_FragColor = vec4((lys + roed + c * 0.015) * synlig, 1.0);
   }`;
 
 // Sætter kuglens drejning (rot) og retningen mod Solen i kuglens egne retninger (solObj), lige før den tegnes
@@ -382,6 +430,7 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
       reliefStyrke: { value: 0.06 },
       hav: { value: tom },
       harHav: { value: 0 },
+      synlig: { value: 0 },
       rot: { value: new THREE.Matrix3() },
       solObj: { value: new THREE.Vector3(1, 0, 0) },
       solPos: { value: new THREE.Vector3() },
@@ -416,11 +465,14 @@ export function lavJorden(radius, { hældning = 23.44 } = {}) {
   // Billederne skiftes ind, når de er hentet
   let dagKort = null;
   let dato = dagIDag();
-  hent('hav').then((t) => { if (t) { u.hav.value = t; u.harHav.value = 1; } });
-  hent('dag').then((l) => { if (l) { dagKort = l; sætDato(dato); } });
-  hent('nat').then((t) => { if (t) { u.nat.value = t; u.harNat.value = 1; } });
-  hent('skyer').then((t) => { if (t) { u.skyer.value = t; u.harSkyer.value = 1; } });
-  hent('højde').then((t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
+  // (Jorden er mørk, indtil dagbillederne er hentet, og toner så ind. Det tegnede kort ses kun, hvis de mangler.)
+  husk(sidste.jorden, u);
+  const dagKlar = tonVedKort(kugle, u, 'dag', 'Henter Jorden …');
+  hent('hav', (t) => { if (t) { u.hav.value = t; u.harHav.value = 1; } });
+  hent('dag', (l) => { if (l) { dagKort = l; sætDato(dato); } dagKlar(Boolean(l)); });
+  hent('nat', (t) => { if (t) { u.nat.value = t; u.harNat.value = 1; } });
+  hent('skyer', (t) => { if (t) { u.skyer.value = t; u.harSkyer.value = 1; } });
+  hent('højde', (t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
 
   // Årstiderne: dagbilledet glider fra måned til måned (fx sne om vinteren). dag er dagen i året (1-365).
   function sætDato(dag) {
@@ -461,6 +513,7 @@ export function lavMånen(radius) {
     uniforms: {
       kort: { value: måneTekstur() },
       forskydU: { value: 0 },
+      synlig: { value: 0 },
       hoejde: { value: tom },
       harHoejde: { value: 0 },
       hoejdeTexel: { value: new THREE.Vector2(1, 1) },
@@ -479,8 +532,10 @@ export function lavMånen(radius) {
   følgDrejning(kugle, materiale);
   gruppe.add(kugle);
   // Et rigtigt kort har Månens forside midt i billedet (u = 0,5). Det tegnede har den ved u = 0,25 (retningen +z i kuglen).
-  hent('måne').then((t) => { if (t) { u.kort.value = t; u.forskydU.value = 0.25; } });
-  hent('måneHøjde').then((t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
+  husk(sidste.måne, u);
+  const kortKlar = tonVedKort(kugle, u, 'måne');
+  hent('måne', (t) => { if (t) { u.kort.value = t; u.forskydU.value = 0.25; } kortKlar(Boolean(t)); });
+  hent('måneHøjde', (t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
 
   function sætLys(solPos, solR, jordPos, jordR) {
     u.solPos.value.copy(solPos);

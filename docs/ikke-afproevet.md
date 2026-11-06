@@ -3,6 +3,7 @@
 *Hører til [lige-nu.md](lige-nu.md) (stod før i "Lige nu" i DESIGN.md). Nyt, der ikke er afprøvet, skrives ind under det rigtige emne, og det, I har afprøvet, fjernes.*
 
 **Ikke afprøvet (samlet 5. november 2026, til jeres runde på tabletten, på langs og på højkant):** De fulde spørgsmål med baggrund står i historikken under hver delopgave.
+- **Hentebjælken og de mørke kloder (6. november 2026):** Hvor længe står bjælken på tabletten på GitHub Pages (Mars, Jorden, Stå på Mars)? Kan I se toningen ind og skiftet fra 2k til 8k (Mars) og 4k (Jorden)? Er midten af billedet det rigtige sted til bjælken?
 - **Hele programmet:** Lyden og hvordan det føles med fingre. NASA-billederne på en telefon. Menuen med 8 kort. Atomet B (orbitalernes former).
 - **Værkstedet, Det periodiske system og Ordbogen:** Er det tydeligt, at "Elektronsky" med ✓ viser skyen? Er kategorien under navnet let at ramme, og står kortet godt? Ordbogen: Er bogstaverne og linkene lette at ramme, ruller listen glat, og dækker tastaturet listen?
 - **Stjerneovnen og Reaktoren (U4):** Forstår I ▷ (langsom)? Er tidsknappens fire små knapper lette at ramme? Virker mellemrum på pc (pause og tilbage til tempoet)? Savner I tempoknapperne i panelet?

@@ -161,7 +161,7 @@ export function lavPanorama({ renderer, hent, mappe }) {
       f.applyQuaternion(new THREE.Quaternion(x, y, z, w));
       return { kompas: (THREE.MathUtils.radToDeg(Math.atan2(f.y, f.x)) + 360) % 360, vinkel: THREE.MathUtils.radToDeg(Math.asin(-f.z)) };
     },
-    test: () => ({ vist, til: mål === 1, synlig: u.uSynlig.value, størrelse, foto: u.tFoto.value?.image?.src?.split('/').pop() ?? null }),
+    test: () => ({ vist, til: mål === 1, synlig: u.uSynlig.value, størrelse, foto: u.tFoto.value?.image?.dataset?.fil ?? null }),
     stop() {
       kugle.geometry.dispose();
       mat.dispose();

@@ -215,7 +215,7 @@ const LYS_GLSL = /* glsl */ `
 
 const FRAGMENT = /* glsl */ `
   uniform sampler2D kort;
-  uniform float harKort;
+  uniform float harKort;   // 0-1: glider fra farven til kortet, når kortet er hentet (toningen i mars.js)
   uniform vec3 farve;      // farven, indtil kortet er hentet
   uniform sampler2D hoejde;
   uniform float harHoejde;
@@ -238,7 +238,7 @@ const FRAGMENT = /* glsl */ `
     vec3 oest, nord;
     float cosB = oestNord(n0, oest, nord);
     vec2 g = harHoejde > 0.5 ? haeldning(hoejde, vUv, texel, vec2(OMGANG, OMGANG * 0.5), cosB) : vec2(0.0);
-    vec3 c = harKort > 0.5 ? texture2D(kort, vUv).rgb : farve;
+    vec3 c = mix(farve, texture2D(kort, vUv).rgb, harKort);
     gl_FragColor = vec4(belys(n0, normalize(n0 - g.x * oest - g.y * nord), c), 1.0);
   }`;
 
@@ -277,11 +277,11 @@ const FRAGMENT_LOKAL = /* glsl */ `
     #else
     vec2 g = haeldning(lokalHoejde, vLok, lokalTexel, lokalSpaend, cosB);
     #endif
-    vec3 c = harLokalKort > 0.5 ? texture2D(lokalKort, vLok).rgb : harKort > 0.5 ? texture2D(kort, vUv).rgb : farve;
+    vec3 c = harLokalKort > 0.5 ? texture2D(lokalKort, vLok).rgb : mix(farve, texture2D(kort, vUv).rgb, harKort);
     if (vVaegt < 0.999) {
       vec2 gK = harHoejde > 0.5 ? haeldning(hoejde, vUv, texel, vec2(OMGANG, OMGANG * 0.5), cosB) : vec2(0.0);
       g = mix(gK, g, vVaegt);
-      vec3 cK = harKort > 0.5 ? texture2D(kort, vUv).rgb : farve;
+      vec3 cK = mix(farve, texture2D(kort, vUv).rgb, harKort);
       c = mix(cK, c, vVaegt);
     }
     gl_FragColor = vec4(belys(n0, normalize(n0 - g.x * oest - g.y * nord), c), 1.0);
@@ -463,6 +463,9 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
     set overdriv(v) { u.overdriv.value = v; u.skyH.value = (skyer?.højde ?? 0) * v; },
     get harTabel() { return !!tabel; },
     sætKort(t) { u.kort.value = t; u.harKort.value = t ? 1 : 0; },
+    // Toner kortet ind fra farven (v fra 0 til 1), og farven, der ses, indtil kortet er hentet
+    toneKort(v) { u.harKort.value = v; },
+    sætFarve(f) { u.farve.value.set(...f); },
     sætHøjde(t) {
       u.hoejde.value = t;
       u.harHoejde.value = t ? 1 : 0;
