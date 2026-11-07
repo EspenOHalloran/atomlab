@@ -7,6 +7,7 @@
 |---|---|---|
 | Solsystemet og Kosmos | [lige-nu/solsystemet.md](lige-nu/solsystemet.md) | Planeterne, månerne, Mars ekstra og Kosmos |
 | Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 (senere Ild og Liv) |
+| Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)) |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | Menuen som en ring (K1-K3) |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | Ordbogen, grundstofkortene og kategorierne |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
@@ -29,4 +30,4 @@
     5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
     6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
     - Hjernen og AI venter (jeres svar). Nye dele kræver en beslutning om menuen (i dag 8 kort).
-6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" med lysuret og tvillingerejsen og flere idéer. Alt fra samtalen står i [plan-tid.md](plan-tid.md). Tre åbne spørgsmål (hvor det skal ligge, hvor i køen, og hvem der bliver hjemme) skal besvares før start (mellem til stor).
+6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" med lysuret og tvillingerejsen og flere idéer. Alt fra samtalen står i [plan-tid.md](plan-tid.md). Jeres svar: Tid kommer nu, før Uranus og Neptun og Liv, og en tvilling bliver hjemme. Kun placeringen (A, B eller C) er åben. Go til Trin 0 med [prompt-tid.md](prompt-tid.md) (mellem til stor).
