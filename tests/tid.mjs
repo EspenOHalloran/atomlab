@@ -87,8 +87,14 @@ tjek('undervejs ved 99,99 %: Jordens ur går 70,7 gange hurtigere end dit', nær
 tjek('undervejs: urene tæller op (fx "år 20xx" og dage)', /dage/.test(u.skib) && u.jordÅr > 0.5, JSON.stringify(u));
 tjek('underteksten: "Afgang"', (await E(() => atomlabTest.kosmos.fase()))?.titel === 'Afgang');
 tjek('"Flyv" er grå undervejs', (await E(() => atomlabTest.kosmos.bjælke())).some((k) => k.tekst.includes('Flyv') && k.slået));
-const før = await ure();
-await sætFart(1);
+// Skyderen flyttes og urene læses i samme skridt: Siden tegner videre i rigtig tid imellem, og ellers kommer der
+// billeder med den gamle fart med i målingen (forholdet blev 2,31 i stedet for 2,29)
+const før = await E(() => {
+  const i = document.querySelector('#kosmosStyr input[type=range]');
+  i.value = 1;
+  i.dispatchEvent(new Event('input'));
+  return atomlabTest.kosmos.fænomen().ure();
+});
 await E(() => atomlabTest.kosmos.spol(2));
 u = await ure();
 const forhold = (u.jordÅr - før.jordÅr) / (u.skibÅr - før.skibÅr);
@@ -98,8 +104,8 @@ await page.screenshot({ path: `${UD}/undervejs.png` });
 
 // En hel rejse ved 99,99 %, spolet frem
 await sætFart(4);
-await E(() => { atomlabTest.kosmos.trykPå('Forfra'); atomlabTest.kosmos.trykPå('Flyv til Alpha Centauri'); atomlabTest.kosmos.spol(13); });
-tjek('ved målet: "Ude ved Alpha Centauri" med ca. 22 dage og 4,3 år', /Ude ved Alpha Centauri/.test((await E(() => atomlabTest.kosmos.fase()))?.titel) && /22 dage.*4,3 år/.test((await E(() => atomlabTest.kosmos.fase()))?.tekst), JSON.stringify(await E(() => atomlabTest.kosmos.fase())));
+const vedMålet = await E(() => { atomlabTest.kosmos.trykPå('Forfra'); atomlabTest.kosmos.trykPå('Flyv til Alpha Centauri'); atomlabTest.kosmos.spol(13); return atomlabTest.kosmos.fase(); });
+tjek('ved målet: "Ude ved Alpha Centauri" med ca. 22 dage og 4,3 år', /Ude ved Alpha Centauri/.test(vedMålet?.titel) && /22 dage.*4,3 år/.test(vedMålet?.tekst), JSON.stringify(vedMålet));
 await E(() => atomlabTest.kosmos.spol(20));
 tjek('rejsen er slut', (await E(() => atomlabTest.kosmos.fænomen().tilstand())) === 'færdig');
 const fase = await E(() => atomlabTest.kosmos.fase());
@@ -116,9 +122,8 @@ await E(() => atomlabTest.kosmos.spol(3));
 tjek('under pause står urene stille', (await ure()).jordÅr === pause1.jordÅr);
 // ⏩: Jordens ur går 6 gange hurtigere pr. sekund
 await E(() => atomlabTest.kosmos.sætTid('hurtig'));
-const h1 = await ure();
-await E(() => atomlabTest.kosmos.spol(0.5));
-const h2 = await ure();
+// Læses i samme skridt som spolingen (ellers kommer billeder i rigtig tid med imellem)
+const [h1, h2] = await E(() => { const f = atomlabTest.kosmos.fænomen(); const a = f.ure(); atomlabTest.kosmos.spol(0.5); return [a, f.ure()]; });
 tjek('⏩: 6 gange hurtigere (0,5 s giver ca. 1,08 år på Jorden)', nær(h2.jordÅr - h1.jordÅr, 0.5 * 0.36 * 6, 0.12), h2.jordÅr - h1.jordÅr);
 await E(() => atomlabTest.kosmos.sætTid('spil'));
 
