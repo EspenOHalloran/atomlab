@@ -1,6 +1,6 @@
 # Ikke afprøvet
 
-*Hører til [lige-nu.md](lige-nu.md) (stod før i "Lige nu" i DESIGN.md). Nyt, der ikke er afprøvet, skrives ind under det rigtige emne, og det, I har afprøvet, fjernes.*
+*Hører til [lige-nu.md](lige-nu.md) (stod før i "Lige nu" i DESIGN.md). Nyt, der ikke er afprøvet, skrives ind som en ny linje under det rigtige emne, og det, I har afprøvet, fjernes. Filen merges med `merge=union` (se `.gitattributes`), så ret ikke i en linje, en anden session måske også retter i.*
 
 **Ikke afprøvet (samlet 5. november 2026, til jeres runde på tabletten, på langs og på højkant):** De fulde spørgsmål med baggrund står i historikken under hver delopgave.
 - **Hentebjælken og de mørke kloder (6. november 2026):** Hvor længe står bjælken på tabletten på GitHub Pages (Mars, Jorden, Stå på Mars)? Kan I se toningen ind og skiftet fra 2k til 8k (Mars) og 4k (Jorden)? Er midten af billedet det rigtige sted til bjælken?
