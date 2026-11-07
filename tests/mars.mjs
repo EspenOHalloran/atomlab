@@ -53,8 +53,9 @@ tjek('højdekortet: bunden af Hellas er under −7 km', højder.hellas < -7000, 
 const ids = await s.evaluate(() => atomlabTest.solsystem.fænomener);
 tjek('Mars står efter Formørkelser (Jorden) og før Jupiter', ids.indexOf('mars') === ids.indexOf('formoerkelser') + 1 && ids.indexOf('jupiter') === ids.indexOf('mars') + 1, JSON.stringify(ids));
 // Del 1 (30. oktober 2026): "Start flyby" er grå, indtil kortene til første stop (Olympus Mons) er hentet på forhånd
-const vedÅbning = await s.evaluate(() => {
+const vedÅbning = await s.evaluate(async () => {
   document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click();
+  while (atomlabTest.solsystem.valgt() !== 'mars') await new Promise(requestAnimationFrame); // efter rejseskiltet
   const k = [...document.querySelectorAll('#solsystemBjælke button')].find((b) => b.textContent.includes('Start flyby'));
   return k && { tekst: k.textContent.trim(), grå: k.disabled };
 });

@@ -232,7 +232,7 @@ export default {
   side: SIDE, // teksten i højre panel (js/data/sider/mars.js)
   sider: SIDER,
 
-  lav(gruppe, { opdaterKnapper, forklaring, fase, verden, tiden }) {
+  lav(gruppe, { opdaterKnapper, sætKontakt, forklaring, fase, verden, tiden }) {
     const { kamera } = verden;
     const orbit = verden.styring; // kameraets styring med mus og fingre
     const gammelt = { min: orbit.minDistance, max: orbit.maxDistance, nær: kamera.near, zoom: orbit.zoomSpeed, drej: orbit.rotateSpeed };
@@ -863,6 +863,7 @@ export default {
       ståVent = vent;
       bjælke.vent('Henter landskabet …'); // ca. 36-55 MB første gang
       hentLokalt(st);
+      if (sd.foto && fotoØnske) panorama.forhånd(sd.id); // roverens foto vises, når man er landet
       const drej = drejningTil(st);
       drejHen(drej);
       hældHen(HÆLD.jævndøgn);
@@ -918,7 +919,7 @@ export default {
       orbit.minDistance = orbit.maxDistance = 1e-4; // man drejer om et punkt 10 cm foran kameraet (som at dreje hovedet)
       orbit.enableZoom = false;
       orbit.rotateSpeed = -0.35; // man "tager fat i" landskabet
-      l.land.tid = sd.tid;
+      l.land.tid = sd.foto && fotoØnske ? sd.foto.tid : sd.tid; // med fotoet: klokken, da det blev taget
       landing = { t: 0, T: ROLIG ? 0 : LANDING_TID, sd };
       orbit.enabled = false;
       sætBlik(LANDING_HØJDE, sd.blik, -32);
@@ -926,7 +927,7 @@ export default {
       fase(sd.titel, sd.tekst);
       // Et sted med roverens foto: kontakten står også i "Lige nu" øverst i højre panel, for i Styr-boksen ses den
       // ikke, når Styr er foldet sammen på højkant (tabletrunden, fund 5). Knappen i teksten trykker på kontakten.
-      forklaring(sd.foto ? `<p>${sd.foto.rover} tog et foto hele vejen rundt herfra. ${kontakt(FOTO_KONTAKT)}</p>` : '');
+      forklaring(sd.foto ? `<p>${sd.foto.rover} tog et foto hele vejen rundt herfra, og det er det, du ser. Det er taget på ét tidspunkt, så når du ændrer klokken, skifter det til det tegnede landskab. ${kontakt(FOTO_KONTAKT)}</p>` : '');
       lavKnapper();
     }
     // Op i kredsløb igen: tilbage til kraterets stop
@@ -969,6 +970,7 @@ export default {
       const krater = stående.krater;
       const nr = gåNr; // vælges noget andet, mens lagene hentes eller billedet toner, lander man ikke her alligevel
       bjælke.vent('Henter stedet …');
+      if (sd.foto && fotoØnske) panorama.forhånd(sd.id);
       stående.land.gåTil(sd.id, () => {
         if (gåNr !== nr) return;
         bjælke.færdig();
@@ -978,8 +980,17 @@ export default {
     // Klokken som tekst (lokal soltid)
     const klokken = (t) => `${String(Math.floor(t)).padStart(2, '0')}:${String(Math.floor((t % 1) * 60)).padStart(2, '0')}`;
     let tidsSkyder = null;
+    // Roverens foto vises, når man lander ved et sted med et foto. Slår man det fra, huskes det, indtil man forlader Mars.
+    let fotoØnske = true;
+    // Fotoet er taget på ét tidspunkt: Går klokken, skjules det, så det tegnede landskab viser den nye tid
+    function fotoVækForTiden() {
+      if (!panorama.til) return;
+      visFoto(false);
+      sætKontakt(FOTO_KONTAKT, false); // ikke opdaterKnapper: den bygger skyderen om midt i et træk
+    }
     // Solnedgang: kort før Solen når horisonten (søges i landskabets egen sol)
     function solnedgang() {
+      fotoVækForTiden();
       const land = stående.land;
       let t = 12;
       while (t < 24 && (land.tid = t, land.sol.y) > 0.02) t += 0.02;
@@ -1008,7 +1019,9 @@ export default {
           if (f) f();
           else {
             orbit.enabled = true;
-            opdaterKnapper(); // knapperne er aktive igen
+            // Roverens foto vises fra start (jeres ønske 7. november 2026), med mindre man har slået det fra
+            if (stående?.sd.foto && fotoØnske && !panorama.til) visFoto(true);
+            lavKnapper(); // knapperne er aktive igen (og kontakten til fotoet er tændt)
           }
         }
       }
@@ -1057,12 +1070,12 @@ export default {
     // (▶, et døgn på DAG_TID). Op i kredsløb og de andre steder ved krateret står i træet.
     function ståKnapper() {
       const { land } = stående;
-      tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, trin: 0.05, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; } };
+      tidsSkyder = { skyder: true, navn: 'Klokken på Mars', min: 0, max: 24, trin: 0.05, værdi: land.tid, vis: klokken, ændring: (t) => { land.tid = t; fotoVækForTiden(); } };
       return [
         tilbageKnap(),
         tidsSkyder,
         { tekst: '🌅 Solnedgang', handling: solnedgang, deaktiv: () => !!landing },
-        ...(stående.sd.foto ? [{ tekst: FOTO_KONTAKT, til: panorama.til, skift: (til) => visFoto(til) }] : []),
+        ...(stående.sd.foto ? [{ tekst: FOTO_KONTAKT, til: panorama.til, skift: (til) => { fotoØnske = til; visFoto(til); } }] : []),
       ];
     }
     // Roverens foto til eller fra. Klokken stilles til den tid, fotoet blev taget, så Solen og himlen over det passer
@@ -1389,6 +1402,7 @@ export default {
         tid = t;
         if (stående) {
           if (!landing) {
+            fotoVækForTiden();
             stående.land.tid = (stående.land.tid + (dt * 24) / DAG_TID) % 24;
             tidsSkyder?.sæt?.(stående.land.tid);
           }

@@ -25,6 +25,7 @@ import { lavLagBokse } from './lag.js';
 import { HVORFOR } from './data/hvorfor.js';
 import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavTidsknap } from './pause.js';
+import { lavRejseskilt } from './rejseskilt.js';
 
 // Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
 const SMAL = matchMedia('(max-width: 820px), (max-height: 500px)');
@@ -126,6 +127,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // Kloderne på én række (fx Jorden), og under dem et træ med den valgte klodes steder, måner og forsøg
       const kloder = document.createElement('div');
       kloder.className = 'sol-kloder';
+      rejseskilt = lavRejseskilt($('Vindue'));
       for (const [i, g] of grupper.entries()) {
         const b = document.createElement('button');
         b.className = 'kosmos-valg sol-klode';
@@ -236,6 +238,15 @@ export function lavFænomenSkærm({ skærm, liste }) {
       fase: visFase,
       kamera: stilKamera,
       opdaterKnapper: lavStyring,
+      // Fænomenet slår selv en kontakt til eller fra uden at bygge Styr-boksen om (fx midt i et træk i en skyder)
+      sætKontakt: (tekst, til) => {
+        const k = findKontakt(tekst);
+        if (!k) return;
+        k.til = til;
+        k.knap?.classList.toggle('til', til);
+        k.knap?.setAttribute('aria-checked', String(til));
+        tjekSideKnapper();
+      },
       // Fænomenet kan selv stille tidsknappen (fx står tiden stille, når man lander ved et sted på Mars)
       tiden: (tilstand) => tidsknap.sæt(tilstand),
       // Skrives kun om, når teksten ændrer sig (ellers forsvinder ordforklaringerne hver gang)
@@ -311,7 +322,13 @@ export function lavFænomenSkærm({ skærm, liste }) {
       return;
     }
     lyd.klik();
-    vælg((g.f ?? g.under[0]).id);
+    rejsTil(g, () => vælg((g.f ?? g.under[0]).id));
+  }
+  // Til en anden klode: rejseskiltet ("Kurs mod Mars") vises, mens den bygges (kun i Solsystemet)
+  let rejseskilt = null;
+  function rejsTil(g, gør) {
+    if (!rejseskilt || !aktiv) gør();
+    else rejseskilt.rejs(g.f?.navn ?? g.navn, g.f?.ikon ?? g.ikon, () => { if (aktiv) gør(); });
   }
 
   // Gå til et sted i træet. Er et forsøg valgt, vælges kloden først.
@@ -319,8 +336,13 @@ export function lavFænomenSkærm({ skærm, liste }) {
     if (!g?.f) return;
     lyd.klik();
     if (valgt !== g.f) {
-      vælg(g.f.id);
-      if (id === g.f.træ?.rod) return; // kloden starter selv der
+      rejsTil(g, () => {
+        vælg(g.f.id);
+        if (id === g.f.træ?.rod) return; // kloden starter selv der
+        kørende?.gåTil?.(id);
+        visSted();
+      });
+      return;
     } else if (id === stedNu()) return;
     kørende?.gåTil?.(id); // flyvningen kører også, når tiden står stille
     visSted();

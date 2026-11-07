@@ -17,7 +17,7 @@ tjek('mellem A- og F-ringen og uden for F-ringen er der intet', tau(138500) === 
 tjek('D-ringen er næsten gennemsigtig', tau(70000) > 0 && tau(70000) < 0.02, tau(70000));
 tjek('ringene ligger i rækkefølge uden overlap', RINGE.every((r, i) => r.ind < r.ud && (i === 0 || RINGE[i - 1].ud <= r.ind)) && MELLEMRUM.every((m) => m.ind > 122170 && m.ud < 136775));
 // 8k-kort kun til de måner, hvor originalen er skarp nok (Saturns kilde er kun 4k)
-const otteK = readdirSync(new URL('../billeder/solsystem/', import.meta.url)).filter((f) => f.endsWith('-8k.jpg') && !/^(mars|io|europa|ganymedes|callisto)-/.test(f)).sort(); // (Mars og Jupiters måner har deres egne)
+const otteK = readdirSync(new URL('../billeder/solsystem/', import.meta.url)).filter((f) => f.endsWith('-8k.jpg') && !/^(mars|io|europa|ganymedes|callisto|maanen)-/.test(f)).sort(); // (Mars, Jupiters måner og Månen har deres egne)
 tjek('8k-kort til Enceladus, Tethys, Dione og Rhea (ikke Saturn, Mimas og Titan)', otteK.join() === 'dione-8k.jpg,enceladus-8k.jpg,rhea-8k.jpg,tethys-8k.jpg', otteK.join());
 tjek('Cassini-delingen er ca. 4.600 km bred', Math.abs(RINGE.find((r) => r.navn === 'Cassini-delingen').ud - RINGE.find((r) => r.navn === 'Cassini-delingen').ind - 4600) < 50);
 // Tætheden fra Cassinis måling (β Centauri, UVIS 2008, js/data/ringe-tau.js): kanterne og de skarpe træk ligger, hvor de skal
@@ -69,8 +69,9 @@ const side = async (adresse) => {
 {
   const s = await side(`${ADRESSE}/?test#solsystem`);
   // "Start flyby" er grå, indtil månernes kort er hentet på forhånd (før gav det et hak, når flybyen startede)
-  const vedÅbning = await s.evaluate(() => {
+  const vedÅbning = await s.evaluate(async () => {
     document.querySelector('#solsystem .kosmos-valg[data-id="saturn"]').click();
+    while (atomlabTest.solsystem.valgt() !== 'saturn') await new Promise(requestAnimationFrame); // efter rejseskiltet
     const k = [...document.querySelectorAll('#solsystemBjælke button')].find((b) => b.textContent.includes('Start flyby'));
     return k && { tekst: k.textContent.trim(), grå: k.disabled };
   });

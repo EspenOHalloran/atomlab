@@ -13,6 +13,10 @@ s.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fej
 await s.goto(`${ADRESSE}/?test#solsystem`);
 await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
 await s.evaluate(() => document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click());
+// Rejseskiltet (7. november 2026): vises med det samme ved et tryk på en anden klode og forsvinder, når Mars er bygget
+const skilt = await s.evaluate(() => { const k = document.querySelector('#solsystemVindue .rejseskilt'); return { vist: k?.classList.contains('vist'), titel: k?.querySelector('.rejse-titel').textContent }; });
+await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt').classList.contains('vist') && atomlabTest.solsystem.valgt() === 'mars', null, { timeout: 20000, polling: 50 }).catch(() => {});
+tjek('rejseskiltet "Kurs mod Mars" vises ved trykket og forsvinder, når Mars er bygget', skilt.vist && skilt.titel === 'Kurs mod Mars' && !(await s.evaluate(() => document.querySelector('#solsystemVindue .rejseskilt').classList.contains('vist'))), JSON.stringify(skilt));
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.kort, null, { timeout: 60000 });
 const f = (fn, a) => s.evaluate(fn, a);
 const fm = (fn) => s.evaluate(fn);
@@ -37,7 +41,9 @@ await s.waitForFunction(() => atomlabTest.solsystem.fænomen().billeder().lokalt
 tjek('ved Gale: detaljekortet (mellemlaget, M8b) er hentet', (await fm(() => atomlabTest.solsystem.fænomen().billeder().lokalt.gale.detalje?.hentet)) === true);
 tjek('ved Gale: de to steder, man kan stå, står under Gale i træet', (await træ()).filter((p) => p.niveau === 2).map((p) => p.id).join() === 'stå-naukluft,stå-curiosity', JSON.stringify(await træ()));
 
-// Ned på jorden
+// Ned på jorden. Roverens foto (M8c del 1) hentes, mens kameraet flyver ned, og vises, når man er landet
+const hentede = [];
+s.on('request', (r) => { if (/pano-/.test(r.url())) hentede.push(r.url().split('/').pop()); });
 await tryk('🧍 Stå på Mars');
 tjek('trykket: kameraet flyver ned, og lagene hentes', (await stå()).venter && !(await stå()).står);
 await hop();
@@ -59,21 +65,18 @@ tjek('knapperne: op i kredsløb og solnedgang i bjælken, klokken og roverens fo
 tjek('efter landingen står tiden stille (⏸, som ved et sted)', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
 // M8c del 1: roverens foto (PIA20332) ved Naukluft
 const foto = async () => (await stå()).foto;
-const hentede = [];
-s.on('request', (r) => { if (/pano-/.test(r.url())) hentede.push(r.url().split('/').pop()); });
-tjek('roverens foto er ikke hentet, før man slår det til', hentede.length === 0 && (await foto()).vist === null);
 // Tabletrunden (fund 5): Kontakten står også i "Lige nu" øverst i højre panel, så den kan findes, når Styr er foldet
-// sammen på højkant. Her slås fotoet til med knappen i teksten.
+// sammen på højkant.
 const ligeNu = await s.$$eval('#solsystemForklaring button.side-kontakt', (k) => k.map((x) => x.textContent.trim()));
 tjek('"Lige nu" ved Naukluft: Curiosity tog et foto herfra, og kontakten "📷 Roverens foto" står i teksten', ligeNu.length === 1 && /Roverens foto/.test(ligeNu[0]) && /Curiosity tog et foto/.test(await s.textContent('#solsystemForklaring')), JSON.stringify(ligeNu));
-await fm(() => atomlabTest.solsystem.trykISide('Roverens foto'));
+// Fotoet vises fra start, når man er landet (jeres ønske 7. november 2026)
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig > 0, null, { timeout: 30000, polling: 100 }).catch(() => {});
 let fo = await foto();
-tjek('roverens foto: hentet i den lille udgave (tests), vist og toner ind', fo.vist === 'naukluft' && fo.til && fo.synlig > 0 && fo.foto === 'pano-naukluft-lille.jpg' && hentede.includes('pano-naukluft-maske.png'), JSON.stringify({ fo, hentede }));
+tjek('roverens foto vises fra start: hentet under flyvningen ned i den lille udgave (tests), vist og toner ind', fo.vist === 'naukluft' && fo.til && fo.synlig > 0 && fo.foto === 'pano-naukluft-lille.jpg' && hentede.includes('pano-naukluft-maske.png'), JSON.stringify({ fo, hentede }));
 await s.waitForFunction(() => document.querySelector('#solsystemForklaring button.side-kontakt')?.classList.contains('til'), null, { timeout: 5000, polling: 100 }).catch(() => {});
 tjek('"Lige nu": knappen i teksten viser, at fotoet er slået til', await s.$eval('#solsystemForklaring button.side-kontakt', (k) => k.classList.contains('til')));
 tjek('roverens foto: kontakten er tændt, og klokken er stillet til eftermiddagen, da fotoet blev taget (15:42)', (await fm(() => atomlabTest.solsystem.styr().find((x) => x.navn === '📷 Roverens foto')?.til)) === true && Math.abs((await stå()).tid - 15.7) < 0.01);
-tjek('roverens foto: emnet om fotoet er foldet ud, og teksten nævner Mastcam og hvidbalancen', (await fm(() => atomlabTest.solsystem.side().emner.find((e) => e.kontakt)?.åben)) === true && /Mastcam/.test(await s.textContent('#solsystemTekst')) && /dagslys på Jorden/.test(await s.textContent('#solsystemTekst')));
+tjek('roverens foto: siden har et emne om fotoet, og teksten nævner Mastcam og hvidbalancen', (await fm(() => atomlabTest.solsystem.side().emner.some((e) => e.kontakt))) && /Mastcam/.test(await s.textContent('#solsystemTekst')) && /dagslys på Jorden/.test(await s.textContent('#solsystemTekst')));
 // Retningen: Curiositys skygge står i fotoet 81,4 % fra venstre kant (målt). Den skal pege væk fra Solen (293,3°, Mars24)
 const skygge = await fm(() => atomlabTest.solsystem.fænomen().fotoRetning('naukluft', 0.8143, 0.5));
 tjek('roverens foto: skyggen peger væk fra Solen (113,3° ± 1°, skyggen er aflæst med ca. ±1°)', Math.abs(skygge.kompas - 113.3) < 1, JSON.stringify(skygge));
@@ -120,9 +123,12 @@ await s.waitForTimeout(300);
 tjek('og tilbage til 1', (await stå()).zoom === 1);
 
 // ▶ lader dagen gå (før "Lad dagen gå"), og skyderen følger med, og Solnedgang
+await fm(() => atomlabTest.solsystem.fænomen().sætTid(15.7)); // (sætTid går uden om skyderen, så fotoet står stadig)
+tjek('før ▶: roverens foto er slået til', (await foto()).til);
 const t0 = (await stå()).tid;
 await s.click('#solsystemTid button[data-tid="spil"]');
 await s.waitForFunction((x) => atomlabTest.solsystem.fænomen().stå().tid > x + 0.05, t0, { timeout: 20000, polling: 200 }).catch(() => {});
+tjek('▶: roverens foto skjules, når klokken går (det er taget på ét tidspunkt), og kontakten og knappen i teksten slukkes', !(await foto()).til && (await fm(() => atomlabTest.solsystem.styr().find((x) => x.navn === '📷 Roverens foto')?.til)) === false && !(await s.$eval('#solsystemForklaring button.side-kontakt', (k) => k.classList.contains('til'))));
 const skyder = await f(() => Number(document.querySelector('#solsystemStyr input[type=range]').value));
 tjek('▶: klokken går, og skyderen følger med', (await stå()).tid > t0 + 0.05 && skyder > t0 + 0.04, `${t0} → ${(await stå()).tid} (skyderen ${skyder})`);
 await s.click('#solsystemTid button[data-tid="pause"]');
@@ -188,9 +194,8 @@ t = await stå();
 tjek('ved landingsstedet: højden passer med NASA (−2.570 m), kigger mod vest', t.sted === 'landing' && Math.abs(t.højde + 2570) < 10 && Math.abs(t.kompas - 270) < 1, JSON.stringify(t));
 tjek('ved landingsstedet: teksten om Octavia E. Butler Landing', /Octavia E\. Butler/.test(await s.textContent('#solsystemTekst')));
 // M8c del 1: Perseverances foto (PIA24264). Fotoet følger roverens ramme: Venstre kant vender mod ca. 131,4° (målt)
-await fm(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.vist === 'landing', null, { timeout: 30000, polling: 100 }).catch(() => {});
-tjek('ved landingsstedet: Perseverances foto vises', (await stå()).foto.vist === 'landing' && Math.abs((await stå()).tid - 14.75) < 0.01, JSON.stringify(await stå()));
+tjek('ved landingsstedet: Perseverances foto vises fra start, og klokken er stillet til 14:45', (await stå()).foto.vist === 'landing' && Math.abs((await stå()).tid - 14.75) < 0.01, JSON.stringify(await stå()));
 const kantJ = await fm(() => atomlabTest.solsystem.fænomen().fotoRetning('landing', 0, 239.9 / 2451));
 tjek('ved landingsstedet: fotoets venstre kant mod ca. 131,4° og vandret inden for roverens hældning (ca. 1,2°)', Math.abs(kantJ.kompas - 131.4) < 0.6 && Math.abs(kantJ.vinkel) < 1.3, JSON.stringify(kantJ));
 // Fra Jezero til Gale: letter først

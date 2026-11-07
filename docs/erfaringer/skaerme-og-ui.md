@@ -48,3 +48,8 @@
 - **Ingen rullebjælke med foldebokse:** To foldebokse, der begge er åbne, gav en rullebjælke på pc (921 mod 724 px). `name` på `<details>` gør dem til en harmonika, så kun én er åben ad gangen, og testen åbner hver af dem på pc og tablet på langs.
 - **Tal, der skrives om, når de ændrer sig:** Tallene i panelet blev kun skrevet, når summen ændrede sig. Den sidste linje (+5,78) passede så ikke med summen, efter at ionerne var landet (+5,79). Skriv hele teksten og sammenlign den, ikke kun ét tal.
 
+
+## Ventetid ved skift af klode (7. november 2026)
+- **Mål først, hvad ventetiden er:** Brugeren så 4-5 sekunder uden noget, når man skiftede fra Jupiter til Mars. Bjælken "Henter …" kom ikke, for tiden gik ikke med at hente billeder, men med JS, der låste browseren (målt med en CPU-profil). Efter rettelsen tager klikket ca. 0,6 s i testbrowseren.
+- **En ventebesked kan kun bevæge sig, mens browseren er låst, hvis den er en CSS-animation af transform eller opacity,** og den skal være tegnet, før arbejdet starter. Rejseskiltet venter derfor på et billede (`requestAnimationFrame` og så `setTimeout`), før kloden bygges, og toner først ind efter 0,2 s, så hurtige skift ikke blinker.
+- **En kontakt, som fænomenet selv slår fra:** `opdaterKnapper()` bygger hele Styr-boksen om, også en skyder, man trækker i. Brug `sætKontakt(navn, til)`, når det sker midt i et træk (roverens foto, der slukkes, når klokken flyttes).
