@@ -18,6 +18,7 @@ import { lavLuft } from '../solsystem/atmosfaere.js';
 import { lavSkyer, lokalTid } from '../solsystem/skyer.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavFlyby } from '../solsystem/flyby.js';
+import { måneForstørrelse } from '../solsystem/maanestr.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
 import { SIDE, SIDER } from '../data/sider/mars.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
@@ -744,8 +745,7 @@ export default {
         // tegnes den i sin rigtige størrelse (Phobos ca. 0,2° bred, Deimos som en klar stjerne), dog mindst PRIK pixel
         // i radius, så Deimos ikke forsvinder. Overgangen følger kameraets afstand, så månen ikke hopper i størrelse.
         const nær = påSted ? 1 - THREE.MathUtils.smoothstep(kamera.position.distanceTo(system.position) / (R * k), 2.2, 4.5) : 0;
-        const pixel = (2 * Math.tan(THREE.MathUtils.degToRad(kamera.fov) / 2)) / Math.max(1, verden.renderer.domElement.clientHeight) / kamera.zoom;
-        const større = Math.max(1, (afstand * THREE.MathUtils.lerp(0.0045, PRIK * pixel, nær)) / rVerden);
+        const større = måneForstørrelse({ afstand, rVerden, nær, kamera, højde: verden.renderer.domElement.clientHeight, prik: PRIK });
         m.krop.scale.setScalar(større);
         const str = (afstand * 0.02) / k;
         m.etiket.visible = navneTil() && !påSted && !rejse.flyver && m.id !== visning && (rVerden * større) / afstand < 0.03;

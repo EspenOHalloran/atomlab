@@ -12,13 +12,15 @@
 //   halvakser), og vindene dæmpes tæt på den, så de ikke trækker pletten med sig.
 // - detaljer: fine skyer, der tegnes oven på kortet, når én pixel i kortet fylder mere end ca. 2 pixel på skærmen.
 // - pile: højst så mange rækker af pile, der viser vindene (sættes med sætPile).
+// - måner (Jupiter, J3): højst så mange måner, der kaster en skygge på planeten (sættes med sætMåner). Skyggen har en
+//   kerneskygge og en halvskygge efter Solens vinkel og afstanden fra månen.
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0 }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0 }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -28,6 +30,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   if (vind && hvirvel) defines.HVIRVEL = '';
   if (vind && detaljer) defines.DETALJER = '';
   if (pile) defines.PILE = pile;
+  if (måner) defines.MAANER = måner;
   const mat = new THREE.ShaderMaterial({
     defines,
     uniforms: {
@@ -40,6 +43,8 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uKortHoejde: { value: 1024 },
       uPile: { value: 0 },
       uPileR: { value: Array.from({ length: Math.max(1, pile) }, () => new THREE.Vector4()) },
+      uMaane: { value: Array.from({ length: Math.max(1, måner) }, () => new THREE.Vector4()) },
+      uSolVinkel: { value: 0.00089 },
       tKort: { value: kort },
       uHarKort: { value: kort ? 1 : 0 },
       tRing: { value: ringTekstur },
@@ -132,6 +137,29 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         return z;
       }
       #endif
+      #ifdef MAANER
+      uniform vec4 uMaane[MAANER]; // midten (verden) og radius for hver måne (radius 0: ingen)
+      uniform float uSolVinkel; // Solens vinkelradius (radianer)
+      // Månernes skygger: Hvor tæt går linjen mod Solen forbi hver måne? Kerneskyggen er radius minus Solens vinkel gange
+      // afstanden, halvskyggen radius plus.
+      float maaneSkygge(vec3 p, vec3 sol) {
+        float s = 1.0;
+        for (int i = 0; i < MAANER; i++) {
+          vec4 m = uMaane[i];
+          if (m.w <= 0.0) continue;
+          vec3 d = m.xyz - p;
+          float t = dot(d, sol);
+          if (t <= 0.0) continue;
+          float q = length(d - t * sol);
+          float b = t * uSolVinkel;
+          float kerne = m.w - b, halv = m.w + b;
+          if (q >= halv) continue;
+          // Andelen af Solen, der er dækket: fuldt inde i kerneskyggen, ellers glider den ud mod halvskyggens kant
+          s *= mix(0.04, 1.0, smoothstep(kerne, halv, q));
+        }
+        return s;
+      }
+      #endif
       #ifdef PILE
       uniform float uPile;
       uniform vec4 uPileR[PILE]; // for hver række: bredden (v), farten (uv pr. sekund), længden (grader) og antal pile
@@ -201,6 +229,9 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
           skygge = exp(-ring.a / abs(sn));
         }
         #endif
+        #ifdef MAANER
+        lys *= maaneSkygge(vVerden, uSol);
+        #endif
         // Lidt mørkere mod kanten (randformørkelse)
         vec3 V = normalize(cameraPosition - vVerden);
         float rand = 0.75 + 0.25 * max(dot(N, V), 0.0);
@@ -237,6 +268,10 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
     sætPile(rækker, styrke) {
       if (rækker) mat.uniforms.uPileR.value.forEach((p, i) => { const r = rækker[i]; p.set(r?.v ?? 0, r?.fart ?? 0, r?.længde ?? 0, r?.antal ?? 0); });
       mat.uniforms.uPile.value = styrke;
+    },
+    // Månernes skygger: [{ midt (verden), r (verden) }], højst måner
+    sætMåner(liste) {
+      mat.uniforms.uMaane.value.forEach((v, i) => { const m = liste[i]; if (m) v.set(m.midt.x, m.midt.y, m.midt.z, m.r); else v.set(0, 0, 0, 0); });
     },
     // Kaldes hvert billede med Solens retning (verden)
     sæt(solRetning, tid) {
