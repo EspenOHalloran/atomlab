@@ -48,6 +48,45 @@ Det, man har bygget i "Byg et atom", tager man med: Har man bygget et neutralt n
 
 **Grafik:** Atomerne genbruger skallerne fra `Atom` (ringe), men kernen er lille og rolig, for den ændrer sig ikke. Elektronen, der skifter, får et lysspor. Na⁺ krymper, når den mister sin yderste skal, og Cl⁻ vokser lidt (ionernes rigtige størrelsesforhold, se faktagrundlaget). Krystallen er en InstancedMesh.
 
+## M1 i dag (Trin 0, 7. november 2026)
+*Planen er fra 23. oktober, før U1-U4, `lag.js`, den fælles tidsknap og kontakterne. Her står, hvordan Byttebørsen passer ind i det, der findes nu. Punkter med **(spørgsmål)** venter på jeres svar. Tallene står i [fakta-molekyler.md](fakta-molekyler.md), afsnit 1b.*
+
+**1. Del-knapperne (spørgsmål).** Toplinjen i Værkstedet er fuld i dag: Menu, overskriften, opgavepillen (ca. 600 px på pc), "Elektronsky" og fire ikonknapper. På tablet på langs (1024 px) er opgaveteksten allerede skåret af ("Byg et hydrogen…"). Tre del-knapper (ca. 300 px) kan ikke stå ved siden af pillen uden at noget flyttes. Mulighederne:
+- **A (anbefalet): som i Reaktoren.** Del-knapperne står midt i toplinjen, og opgavepillen flytter ned øverst i 3D-billedet (som kortet "Næste skridt" i Reaktoren). På tablet på højkant og telefon står del-knapperne på deres egen linje under toplinjen, hvor pillen står i dag, og pillen står øverst i 3D-billedet. Det giver ikke en linje mere, og Værkstedet og Reaktoren ligner hinanden. Ulempen: "Byg et atom" ændrer sig lidt, og pillen dækker en smule af 3D-billedet (den kan foldes sammen som i dag).
+- **B:** Del-knapperne erstatter overskriften "Atomværkstedet". Ingen ting flytter, men pillen bliver smallere på tablet (endnu mere tekst skåret af), og overskriften forsvinder.
+- **C:** En ekstra linje med del-knapperne under toplinjen på alle skærme. Enkelt, men 3D-billedet mister ca. 45 px i højden, også på telefonen.
+
+**2. Panelerne.** Hver del får sine egne paneler (`data-vaerksted-del`, ligesom `data-reaktor-del`), så infopanelet aldrig får en rullebjælke:
+- **Venstre panel (Byttebørsen):** valget af par (Na + Cl i M1a, de andre i M1b), knapperne "Næste trin", "Sådan sker det i virkeligheden" (harpunen) og "Forfra", og opgaverne med "Start forfra" (`toTrinsKnap`).
+- **Højre panel:** en kort tekst til det trin, man er på (2-3 linjer), tallene for de to atomer (elektroner i den yderste skal, ladning), "Hvorfor?"-kort (`lag.js`) til "Hvorfor koster det?", "Hvor kommer gevinsten fra?" og "Hvad er harpunen?", og "Ærligt talt" i en foldeboks (`lag-boks`). Udregningerne i eV og kJ/mol står bag "Og hvorfor det?" (nørd-laget) i stedet for en fane.
+- **Kortet "Næste skridt"** (`lavNæsteSkridtKort`) i 3D-billedet viser trinnet, man er på ("Træk elektronen fra natrium over til chlor"), med "Vis mig", som i Reaktoren og Batteriet. Underteksterne (`visBesked`) siger kort, hvad der skete.
+- **Elektronsky:** Kontakten skjules i Byttebørsen (elektronerne er altid prikker på ringe, jeres svar).
+
+**3. Energimåleren (spørgsmål).** **Forslag:** en lodret bjælke i 3D-billedet (højre kant, som Reaktorens måler), så den ses på alle skærme, også når panelet er rullet væk på telefonen. Nul er "to neutrale atomer langt fra hinanden". Over nul er energi, der bliver frigivet (grøn), og under nul er energi, det koster (rød). Den viser tallet i **eV** (elektronvolt forklares første gang og kommer i Ordbogen), fx −1,5 eV efter hoppet, ca. +4,2 eV, når parret er samlet, og ca. +6,6 eV pr. par i krystallen. Mens ionerne flyver sammen, stiger den jævnt (tiltrækningen regnes ud fra afstanden, 14,4/r eV med r i Å, og en frastødning tæt på, som giver 2,36 Å og 4,2 eV). Den anden mulighed er tre faste søjler ("Det koster", "Det får man tilbage" og "I alt"), som er lettere at læse, men ikke viser, at tiltrækningen vokser, når ionerne kommer tættere på.
+
+**4. Harpunen (spørgsmål).** **Forslag: i M1a,** for den hører til regnestykket for Na + Cl, og planen siger, at den skal være der, så det omvendte forløb ikke står alene. Den er lille: Atomerne flyver mod hinanden, elektronen springer ved ca. 9 Å (tegnet større), og ionerne suser sammen.
+
+**5. Opgaverne og fremgangen.** `fremgang.js` skal ikke ændres. Byttebørsen får sin egen liste `OPGAVER_BYTTE` i `js/molekyler.js` (fx `bytte-nacl`, `bytte-harpun`, `bytte-krystal`, `bytte-lif`, `bytte-mgo`, `bytte-cacl2`, `bytte-nana`), og de gemmes som de andre i `atomlabFremgang`. Opgavepillen viser Byttebørsens opgaver, når man står i Byttebørsen.
+- **Menuen (spørgsmål):** Menuen har 8 kort, og en 9. passer ikke i rækkerne (4 + 4). **Forslag:** Værkstedets kort tæller Byttebørsens opgaver med og viser dem på en linje mere ("Byttebørsen 2/7 ★"), og tallet "Opgaver klaret" på forsiden tæller dem med. Planens "ny linje Molekyler i menuen" bliver altså en linje *på* Værkstedets kort, ikke et nyt kort.
+
+**6. Tiden.** Værkstedet har ingen tidsknap i dag. Byttebørsen får tidsknappen (`lavTidsknap`: ⏸, ▷ langsom og ▶) nederst til højre i 3D-billedet, og alt bevæger sig med `dt` og `tid`. Mellemrum virker kun i Byttebørsen (i "Byg et atom" betyder tasterne P, N, E og H noget andet). "Næste trin", "Vis mig" og harpunen lader tiden gå igen (`fortsæt`).
+
+**7. Det, man har bygget.** Har man bygget et neutralt natriumatom eller chloratom i "Byg et atom" (med en kerne, der kan holde sammen), står det klar i Byttebørsen ("Dit natriumatom"). Ellers står der et almindeligt. Kernen ændrer sig ikke i Byttebørsen, så kun antallet af protoner tæller (en anden isotop ser ens ud).
+
+**8. Fælder fundet i Trin 0 (se faktagrundlaget, afsnit 1b):**
+- **"Na + Na: der sker ikke noget"** passer ikke helt. Ingen af dem bliver til ioner, men de deler elektronerne i stedet (natrium er et metal). Teksten skal sige det.
+- **O²⁻:** Den 2. elektron til oxygen koster ca. 8 eV, og O²⁻ findes kun inde i krystaller. Mg + O koster i alt ca. 29 eV at lave om til ioner, men krystallen giver ca. 39 eV tilbage.
+- **Stjernekastere:** Gnisterne er mest jern og aluminium, ikke magnesium. Skriv "nødblus og fyrværkeri".
+- **Radier:** Forholdet mellem atom og ion afhænger af, hvordan man måler radien. Skriv "omtrent".
+- **Mg + O og Ca + 2 Cl** bruger frie atomer i spillet. I virkeligheden er det O₂ og Cl₂ (står i "For nørder").
+
+**9. Fælde 1 i de tekster, der findes (forslag, spørgsmål):**
+- **Hjælpens "Hvad er en ion?"** (`index.html`): "Atomer er mest 'tilfredse' med en fyldt yderste skal … giver natrium den væk" giver indtrykket, at natrium giver elektronen væk, fordi den vil have en fuld skal. Forslag til de to afsnit:
+  - *Hvorfor giver et atom en elektron væk?* "Natrium har skallerne 2 · 8 · 1. Den ene elektron yderst sidder løst, men det koster stadig energi at tage den. Uden den har natrium kun fyldte skaller (2 · 8), 11 protoner og 10 elektroner. Det er nu en positiv ion: **Na⁺**."
+  - *Og hvorfor tager et andet atom én ekstra?* "Chlor har 2 · 8 · 7 og mangler kun én elektron i at fylde den yderste skal. Får det én, frigives der lidt energi, og det bliver en negativ ion: **Cl⁻**. Men det er mindre, end det kostede at tage elektronen fra natrium. Gevinsten kommer først, når Na⁺ og Cl⁻ trækker i hinanden. Den fulde skal forklarer, hvilke ladninger ionerne får (+1 og −1), men ikke, hvorfor det sker. Prøv det selv i Byttebørsen."
+  - Den næste linje ("Plus og minus tiltrækker hinanden …") passer stadig.
+- **Halogen-kortets `forsøg`** (`js/data/kategorier.js`): "… så begge får en fuld yderste skal" lyder som formålet. Forslag: "Natrium giver sin ene yderste elektron til chlor. Det koster faktisk energi, men bagefter trækker plus og minus så hårdt i hinanden, at det betaler sig. Så har begge en fuld yderste skal."
+
 ## 3. Byg molekyler (kovalente bindinger)
 **Frit byggeri:**
 - En lille palet med H, C, N, O og Cl (måske senere F, S og P). Man trækker et atom ind i 3D-billedet.

@@ -2,7 +2,9 @@
 
 *Lavet 23. oktober 2026 af en hjælpeagent (Opus, høj effort) til [planen](plan-molekyler.md). Ikke tjekket af Fable.*
 
-**Status:** Tallene er tjekket mod søgeresultater og deres uddrag, men ingen kildesider kunne åbnes i miljøet. Før en tekst kommer med i programmet, skal tallet bag den slås op i kilden (NIST WebBook, CRC eller artiklen) med `/faktatjek`. Det gælder især dem, der er mærket "ret sikker", "usikker" eller "fra min viden".
+**Status (7. november 2026):** Afsnit 1 og tallene til de andre par er nu slået op i kilderne (afsnit 1b). Afsnit 2-5 er stadig kun tjekket mod uddrag og skal slås op, før de bruges (M2-M4).
+
+**Status (23. oktober 2026):** Tallene er tjekket mod søgeresultater og deres uddrag, men ingen kildesider kunne åbnes i miljøet. Før en tekst kommer med i programmet, skal tallet bag den slås op i kilden (NIST WebBook, CRC eller artiklen) med `/faktatjek`. Det gælder især dem, der er mærket "ret sikker", "usikker" eller "fra min viden".
 
 **Vigtigt om kilderne:** Jeg kunne ikke åbne en eneste side. WebFetch gav DNS-fejl for alle domæner (nist.gov, wikipedia, libretexts), og curl blev afvist af proxyen (403). Alle kilder nedenfor har jeg kun set som søgeresultater med uddrag. Hvor uddragene bekræfter et tal, skriver jeg det. Hvor tallet er standardlærebogsviden, som uddragene ikke dækkede, står det som "fra min viden". Inden teksterne kommer med, bør de vigtigste tal slås op i NIST WebBook eller CRC i en browser.
 
@@ -24,6 +26,73 @@ Omregning: 1 eV pr. molekyle = 96,485 kJ/mol.
 - **Afstanden mellem Na⁺ og Cl⁻ i krystallen er 2,82 Å (282 pm).** Gitterkonstanten er a = 5,640 Å, og afstanden er a/2. https://unit.aist.go.jp/ifm-ri/ja/groups/db-nomura/common/struc-coord/NaCl-c.html og https://www.ilpi.com/inorganic/structures/nacl/index.html. **Sikker.** Afstanden er større end i gasparret (2,36 Å).
 - **Terninger:** Ionerne sidder skiftevis i et kubisk gitter (stensaltstrukturen), og hver ion har 6 naboer. Krystallen flækker langs terningens sider. https://chem.libretexts.org/Bookshelves/Inorganic_Chemistry/Map%3A_Inorganic_Chemistry_(Housecroft)/06%3A_Structures_and_Energetics_of_Metallic_and_Ionic_solids/6.11%3A_Ionic_Lattices/6.11A%3A_Structure_-_Rock_Salt_(NaCl) (Housecroft). **Sikker.** Ærligt: Med tilsætninger og hurtig vækst kan der også komme andre former, fx trappeformede "hopper"-krystaller (fra min viden, **ret sikker**).
 - **Strøm:** I tørt salt sidder ionerne fast, så salt isolerer. Opløst i vand (eller smeltet ved 801 °C) kan ionerne bevæge sig, og så er det **ionerne, der bærer strømmen, ikke elektroner, der løber gennem vandet**. Rent vand leder meget dårligt. Lærebogsviden. **Sikker.**
+
+## 1b. Tjekket i kilderne og de andre par (7. november 2026, til M1)
+
+*Lavet af Opus (høj) i Trin 0 for M1. Denne gang kunne kildesiderne åbnes: NIST ASD (ioniseringsenergier), NIST WebBook (dannelsesvarmer og NaCl-molekylets konstanter), Wikipedia (elektronaffiniteter, Shannons ionradier og Corderos kovalente radier, med deres originale kilder), OpenStax Chemistry 2e §7.5 og LibreTexts (Brown, §8.2). WebElements (gitterenergien for CaCl₂) var lukket (proxyen afviste `winter.group.shef.ac.uk`), så den er regnet med Born-Haber ud fra NIST i stedet. Omregning: 1 eV = 96,485 kJ/mol.*
+
+**Afsnit 1 tjekket i kilderne:**
+- Na: ioniseringsenergien er **5,13907696 eV** (NIST ASD). ✓
+- Cl: elektronaffiniteten er **3,612725 eV** = 348,575 kJ/mol (Berzinsh m.fl., Phys. Rev. A 51, 231, 1995, i Wikipedias tabel). ✓
+- NaCl-molekylet i gas: afstanden er **r_e = 2,36079 Å**, og dipolmomentet er **8,971 D** (NIST WebBook, Huber & Herzberg og Hebert m.fl. 1968). ✓ To punktladninger i den afstand giver 11,34 D, så forholdet er 0,79 ("ca. 80 % ionisk", et groft mål). ✓
+- At dele NaCl-molekylet i to neutrale atomer: Ud fra WebBooks dannelsesvarmer ved 25 °C (Na(g) 107,5, Cl(g) 121,30, NaCl(g) −181,42 kJ/mol) giver det 410 kJ/mol = **4,25 eV**. Det passer med 4,22-4,26 eV i afsnit 1. ✓ Fra ionerne bliver det 4,25 + 1,53 ≈ **5,8 eV**. ✓
+- Gitterenergien for NaCl: Born-Haber med WebBook (NaCl(s) −411,12 kJ/mol) giver **787 kJ/mol = 8,16 eV** pr. ionpar. Shriver & Atkins (5. udg., i Wikipedia) skriver 786, Brown (LibreTexts) 788, og OpenStax 769. ✓ (OpenStax' 769 er lavere. De andre tre er enige.)
+- Fra neutrale gasatomer til krystal: 8,16 − 1,53 = **6,6 eV** pr. NaCl. ✓
+- Harpunen: 14,40 eV·Å / 1,526 eV = **9,4 Å**. ✓ (enkel udregning, ingen måling)
+- Gitterkonstanten 5,640 Å er ikke slået op igen (de to kilder i afsnit 1 er enige). Ret sikker.
+
+**Ioniseringsenergier** (NIST ASD, Kramida m.fl., set 7. november 2026, https://physics.nist.gov/PhysRefData/ASD/ionEnergy.html). **Sikker.**
+
+| | 1. elektron | 2. elektron |
+|---|---|---|
+| Li | 5,3917 eV (520,2 kJ/mol) | |
+| Na | 5,1391 eV (495,8 kJ/mol) | |
+| Mg | 7,6462 eV (737,7 kJ/mol) | 15,0353 eV (1450,7 kJ/mol) |
+| Ca | 6,1132 eV (589,8 kJ/mol) | 11,8717 eV (1145,4 kJ/mol) |
+
+**Elektronaffiniteter** (energien, der frigives, når et frit atom får en elektron, Wikipedias datatabel med originalkilderne). **Sikker.**
+- F: **3,4011898 eV** (328,16 kJ/mol, Blondel m.fl. 1989).
+- O: **1,461113 eV** (140,976 kJ/mol, Kristiansson m.fl., Nature Comm. 13, 5906, 2022).
+- Na: 0,547926 eV (52,87 kJ/mol, Hotop & Lineberger 1985). Bruges til Na + Na.
+- **Fælden ved O²⁻:** Den 2. elektron *koster* energi: O⁻ + e⁻ → O²⁻ kræver ca. **7,7 eV (744 kJ/mol)** (Huheey, i Rayner-Canhams tillæg 5, i Wikipedia). Andre lærebøger skriver ca. 8,75 eV (844 kJ/mol). Tallet kan ikke måles, for O²⁻ falder fra hinanden med det samme som fri ion. Det er regnet baglæns fra krystaller (Born-Haber), så skriv "ca. 8 eV" og "findes kun inde i krystaller". **Sikker** på, at det koster. **Usikker** på tallet.
+
+**Gitterenergier** (fra frie ioner til krystal, pr. formelenhed):
+
+| Salt | Kilder | Born-Haber med NIST (min udregning) | I spillet |
+|---|---|---|---|
+| NaCl | 786 (Shriver), 788 (Brown), 769 (OpenStax) | 787 kJ/mol = 8,16 eV | ca. 8,2 eV |
+| LiF | 1030 (Shriver), 1024 (Brown), 1023 (OpenStax) | 1048 kJ/mol = 10,9 eV | ca. 10,7 eV |
+| MgO | 3795 (Shriver), 3938 (Brown), 3900 (OpenStax) | 3789 med 744 for O²⁻, 3889 med 844 | ca. 39 eV ("ca. 3.800 kJ/mol") |
+| CaCl₂ | ingen åben tabel (WebElements var lukket; søgeuddraget viser 2258 kJ/mol) | **2254 kJ/mol = 23,4 eV** | ca. 23 eV |
+
+- Udregningen: gitterenergi = −ΔfH(salt) + ΔfH(metal, gas) + ΔfH(ikke-metal, gas) + ioniseringsenergierne − elektronaffiniteterne. Dannelsesvarmerne er NIST WebBook ved 25 °C: NaCl(s) −411,12, LiF(s) −616,93, MgO(s) −601,6, CaCl₂(s) −795,8, Na(g) 107,5, Li(g) 159,3, Mg(g) 147,1, Ca(g) 177,8, Cl(g) 121,30, F(g) 79,38 og O(g) 249,18 kJ/mol. Små rettelser for temperaturen (RT ≈ 2,5 kJ/mol pr. trin) er ikke med. Derfor ligger LiF lidt over tabellerne.
+- **Ret sikker** på alle fire (tabellerne er uenige med nogle procent, MgO mest, fordi den hænger på O²⁻). I spillet skal tallene afrundes ("ca.").
+
+**Regnestykket for hvert par i spillet** (fra frie, neutrale atomer langt fra hinanden, min udregning ud fra tallene ovenfor):
+
+| Par | Det koster at flytte elektronerne | Krystallen giver tilbage | Netto |
+|---|---|---|---|
+| Na + Cl → Na⁺ Cl⁻ | 5,14 − 3,61 = **1,53 eV** | 8,2 eV | **+6,6 eV** |
+| Li + F → Li⁺ F⁻ | 5,39 − 3,40 = **1,99 eV** | ca. 10,9 eV | ca. **+8,9 eV** |
+| Ca + 2 Cl → Ca²⁺ 2 Cl⁻ | 6,11 + 11,87 − 2 × 3,61 = **10,8 eV** | ca. 23,4 eV | ca. **+12,6 eV** |
+| Mg + O → Mg²⁺ O²⁻ | 7,65 + 15,04 − 1,46 + ca. 7,7 = **ca. 29 eV** | ca. 39 eV | ca. **+10 eV** |
+| Na + Na → Na⁺ Na⁻ | 5,14 − 0,55 = **4,59 eV** | (ingen krystal af ioner) | sker ikke |
+
+- **Pointen:** Det koster *altid* energi at flytte elektronerne mellem frie atomer, også når "skallerne bliver fulde". Mg + O koster mest (ca. 29 eV), men giver også mest tilbage, fordi 2+ og 2− trækker fire gange så hårdt som 1+ og 1−. **Sikker** som pointe. Tallene for MgO er **ret sikre** (O²⁻).
+- **Mg + O i virkeligheden:** Magnesium brænder med O₂ fra luften (2 Mg + O₂ → 2 MgO), ikke med frie O-atomer. Spillet bruger frie atomer, så regnestykket bliver enkelt. Det skal stå ærligt i "For nørder".
+- **Ca + 2 Cl:** Chlor findes som Cl₂ i virkeligheden. Samme ærlige note.
+
+**Na + Na: hvorfor der ikke kommer ioner** (til opgaven):
+- Begge trækker lige hårdt i elektronerne (samme elektronegativitet, 0,93). At flytte en elektron fra det ene til det andet koster 4,59 eV, og Na⁻ holder kun svagt på den ekstra (0,55 eV). **Sikker.**
+- **Fælde:** "Der sker ingenting" passer ikke helt. To natriumatomer kan godt binde sig ved at *dele* elektronerne: I damp findes der et svagt Na₂-molekyle, og fast natrium er et **metal**, hvor de yderste elektroner deles af alle atomerne ("et hav af elektroner"). Ingen af dem bliver til ioner af modsat ladning. Skriv derfor: "Ingen af dem giver sin elektron til den anden. De trækker lige hårdt, så de deler i stedet (natrium er et metal)." Bindingsenergien i Na₂ (ca. 0,7 eV) er fra min viden og ikke slået op, så den skal ikke stå i spillet.
+
+**Radier** (til, at Na⁺ krymper og Cl⁻ vokser):
+- **Ionerne:** Shannons "effektive" ionradier med 6 naboer (Acta Cryst. A32, 751, 1976, i Wikipedias tabel): **Li⁺ 76, Na⁺ 102, Mg²⁺ 72, Ca²⁺ 100, F⁻ 133, Cl⁻ 181, O²⁻ 140 pm.** **Sikker.**
+- **Atomerne:** Corderos kovalente radier (Dalton Trans. 2008, 2832, i Wikipedias tabel): **Li 128, Na 166, Mg 141, Ca 176, F 57, Cl 102, O 66 pm.** **Sikker.**
+- **Forholdet i spillet** (ion/atom): Na 0,61, Li 0,59, Mg 0,51, Ca 0,57, Cl 1,77, O 2,12 og F 2,33. Metallerne krymper til ca. halvdelen, og ikke-metallerne vokser til ca. dobbelt.
+- **Ærligt (fælde):** Et atom har ikke en skarp kant, og "radius" måles på forskellige måder. Kovalente radier, metalradier (Na 186 pm) og van der Waals-radier (Cl ca. 175 pm) giver forskellige forhold. Med van der Waals-radier vokser Cl⁻ næsten ikke. Retningen er sikker: Positive ioner er mindre end atomet, og negative ioner er større. Skriv "omtrent" og "i en model", og nævn ikke et præcist forhold i teksten.
+
+**Magnesium i blitz og stjernekastere (fælde i planen, afsnit 2):** Planen siger, at det, der brænder hvidt i stjernekastere og blitz, er magnesium. Gamle blitzlamper brugte magnesium (senere også aluminium og zirconium), men gnisterne i almindelige stjernekastere er mest jern og aluminium. Skriv "nødblus og fyrværkeri" (som kategorikortet), og lad stjernekastere være. **Ret sikker** (fra min viden, ikke slået op).
 
 ## 2. Elektronegativitet (Pauling)
 
