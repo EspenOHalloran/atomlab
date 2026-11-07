@@ -1737,3 +1737,33 @@ Opus (høj effort) med `/faktatjek`. Teksterne: underteksterne i `TUR` i `js/kos
 | De mediceiske stjerner efter Medici i Firenze. Navnene kom senere | OK: titelbladet ("Medicea sidera"), Galilei var fra Firenze ("patritio Florentino"), Cosimo II de' Medici. Navnene valgte Simon Marius (fælden: skriv bare "senere") | Titelbladet (archive.org), Wikipedia "Galilean moons" |
 
 **Ny fælde:** NASA skriver "up to 539 km/h at the equator", men ifølge Hubbles målinger (og vores) blæser det hurtigste ved 24° N, ikke ved ækvator.
+
+## Faktatjek J5: polerne, nordlyset og ringene (7. november 2026)
+
+Opus (høj effort) med `/faktatjek`. Teksterne: `POL_STOP`, `RINGE_STOP`, `POL_NU` og `RINGE_NU` i `js/kosmos/jupiter.js`, siderne `sydpol`, `nordpol` og `ringe` og de nye emner på Jupiters side i `js/data/sider/jupiter.js` og ordet "Ultraviolet lys" i `js/data/ordbog.js`. De fleste påstande stod i del 5 med åbnede kilder. Nyt: Gavriel og Kaspi 2021 (Nature Geoscience 14, 559-563, arXiv 2110.09422) og 2023 (GRL 50, doi:10.1029/2023GL103635, arXiv 2311.11917), begge åbnet som PDF på arXiv. Ingen hjælpeagenter.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| 8 cykloner om 1 ved nordpolen, 5 om 1 ved sydpolen | OK | NASA Jupiter Facts (del 5, A6), Gavriel og Kaspi 2021 (abstract) |
+| Ringene af cykloner ligger ved ca. 84° N og S | OK: "both circumpolar rings positioned along latitude ∼ 84° N/S" | Gavriel og Kaspi 2021 (åbnet) |
+| Cyklonerne er ca. 4.000-7.000 km brede, størst ved sydpolen | OK: "observable diameters ... between 4,000 and 6,000 km" (Gavriel 2021). Adriani m.fl. 2018: syd 5.600-7.000, nord 4.000-4.600 (søgeresultat, del 5). "Flere tusind km" i underteksten | Gavriel 2021 (åbnet), del 5 |
+| Vinden i dem op til ca. 100 m/s | OK: "velocities inside the cyclones reach up to 100 m/s" | Gavriel 2021 (åbnet), efter Grassi m.fl. 2018 |
+| Én omgang på ca. 20 timer | Regnet: 2π · 900 km / 80 m/s = 19,6 t (nord), 2π · 1.100 km / 85 m/s = 22,6 t (syd), med de tal, Gavriel 2021 bruger for cyklonen i midten. Står kun i "Ærligt talt" med "regnet ud fra den målte vind" | Gavriel 2021 (åbnet) |
+| Ringens cykloner vil mod polen, cyklonen i midten skubber dem tilbage | OK | NASA Jupiter Facts (del 5, A6) |
+| Antallet afhænger af, hvor store cyklonerne i midten er, og hvor hurtigt de drejer | OK: "according to the size and spin of the respective polar cyclone" | Gavriel 2021 (åbnet) |
+| De flytter sig nogle grader om året mod vest, og mønsteret holder i flere år | OK: "drift in the westward direction a few degrees per year", "stable over the next five years" | Gavriel og Kaspi 2023 (åbnet) |
+| En sjette cyklon ved sydpolen i 2019, igen fem i 2021 | RS (som del 5: 2019 fra en søgning, 2021 åbnet) | Del 5, A6 |
+| Fra Jorden ser vi Jupiter fra siden, for aksen hælder kun ca. 3°. Juno har en bane hen over polerne | OK | NSSDC (3,13°), NASA Juno |
+| JIRAM ser i infrarødt (ca. 5 µm) 50-70 km ned | OK | Del 5, A6 og A9 |
+| Nordlyset er hundredvis af gange kraftigere end Jordens, lyser mest i ultraviolet og infrarødt | OK | Del 5, A7 |
+| En del af partiklerne kommer fra vulkanerne på Io | OK ("particles thrown into space by ... Io") | Hubble 2016 (del 5, A7) |
+| Io's fodspor: der rammer magnetfeltets linjer fra Io Jupiter, og det flytter sig med Io | OK (fysikken). At alle fire store måner har et fodspor: Juno (del 5, A7) | Del 5, A7 |
+| Lilla som på billederne fra Hubble | Forsigtigt: Farven er valgt (fælden i del 5, A7), og teksten siger "falsk farve" | Del 5, A7 |
+| Ringene: glorie, hovedring og to svage ringe, hovedringen 123.000-128.940 km, under ca. 100 km tyk, glorien ca. 10.000 km tyk, τ ca. 5 · 10⁻⁶, 3 · 10⁻⁶ og 10⁻⁷ | OK | NSSDC (del 5, A8) |
+| Opdaget af Voyager 1 i 1979, fint mørkt støv, ses næsten kun i modlys | OK | NASA Jupiter Facts (del 5, A8) |
+| Støvet slås løs fra de små måner, når meteoroider rammer dem. De yderste ringe er nok lavet af Amalthea og Thebe | OK med "nok" | NASA Jupiter Facts, Juno 2026 om Thebe (del 5, A8) |
+| Kun ca. 5 af hver million lysstråler rammer et støvkorn i hovedringen | Regnet: 1 − e^(−5 · 10⁻⁶) ≈ 5 · 10⁻⁶ (lodret gennem ringen) | NSSDC |
+| Ultraviolet lys har kortere bølgelængde end violet, ses ikke af øjet, giver solskoldning | OK (almen fysik) | – |
+| Magnetfeltets akse hælder 9,4° | OK (NSSDC). Retningen (ca. 200° V), ringens 16° og fodsporets 22° er tegnet og står kun i koden og "Ærligt talt" (forenklet ring) | NSSDC (del 5) |
+
+**Ny fælde:** Skriv ikke en "ægte" farve på nordlyset, og skriv ikke, at Jupiters ringe kan ses med det blotte øje. Selv i modlys er de ca. 1.000 gange svagere end skyerne.

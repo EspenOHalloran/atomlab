@@ -1,5 +1,7 @@
-// Saturns ringe: en shader, der tegner dem forfra og bagfra med Saturns skygge.
-// Tallene (grænserne og tætheden) står i js/data/ringe.js.
+// Ringene om en gasplanet: en shader, der tegner dem forfra og bagfra med planetens skygge.
+// Saturn: tallene (grænserne og tætheden) står i js/data/ringe.js. Isklumperne kaster lyset tilbage forfra.
+// Jupiter (J5): js/data/ringe-jupiter.js. Fint støv (støv: true), som næsten kun ses i modlys, fordi det spreder lyset
+// fremad (Henyey-Greensteins formel).
 
 import * as THREE from 'three';
 import { RING_IND, RING_UD, TAU_N, ringProfil } from '../data/ringe.js';
@@ -7,13 +9,13 @@ import { RING_IND, RING_UD, TAU_N, ringProfil } from '../data/ringe.js';
 export { RING_IND, RING_UD };
 
 // Ringene som et billede på én linje: farve i rgb og τ i alfa (halve float, så den kan filtreres på alle grafikkort).
-// 8.192 punkter med τ fra Cassinis måling (js/data/ringe.js).
-export function ringTekstur(n = TAU_N) {
+// 8.192 punkter med τ fra Cassinis måling (js/data/ringe.js). profil: en anden planets ringe (punkter { tau, farve }).
+export function ringTekstur(n = TAU_N, profil = ringProfil) {
   const h = THREE.DataUtils.toHalfFloat;
   // Niveau 0 er punkterne fra målingen (ca. 9 km pr. punkt). De mindre niveauer er gennemsnit af to og to, så de
   // tynde ringe ikke flimrer, når en pixel dækker mange punkter (langt væk).
   let lag = new Float32Array(n * 4);
-  ringProfil(n).forEach(({ tau, farve }, i) => lag.set([farve[0], farve[1], farve[2], tau], i * 4));
+  profil(n).forEach(({ tau, farve }, i) => lag.set([farve[0], farve[1], farve[2], tau], i * 4));
   const niveauer = [];
   for (let b = n; ; b >>= 1) {
     const data = new Uint16Array(b * 4);
@@ -44,11 +46,16 @@ export const RING_GLSL = /* glsl */ `
   }
 `;
 
-// Ringene. skala: km pr. scene-enhed. planet: { midt (Vector3), radius, flad } til Saturns skygge på ringene.
-export function lavRinge({ skala, tekstur, planetRadius, flad }) {
-  const ind = RING_IND / skala;
-  const ud = RING_UD / skala;
+// Ringene. skala: km pr. scene-enhed. planetRadius og flad til planetens skygge på ringene. ind og ud: ringenes grænser
+// (km, Saturns som standard). støv: fint støv (Jupiter), hvor τ i teksturen er ganget med 1/tauEnhed, og lys gør dem
+// lysere end i virkeligheden, så de kan ses. tegnUd: hvor langt ud fladen tegnes (km), hvis de yderste ringe er for svage
+// til at ses (så koster de ikke tid).
+export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING_IND, ud: udKm = RING_UD, støv = false, tauEnhed = 1, lys = 0.54, tegnUd = udKm }) {
+  const ind = indKm / skala;
+  const ud = udKm / skala;
   const mat = new THREE.ShaderMaterial({
+    defines: støv ? { STOEV: '' } : {},
+    ...(støv ? { blending: THREE.AdditiveBlending } : {}),
     transparent: true,
     depthWrite: false,
     side: THREE.DoubleSide,
@@ -61,7 +68,8 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
       uPlanet: { value: new THREE.Vector3() },
       uPlanetR: { value: planetRadius / skala },
       uFlad: { value: flad },
-      uLys: { value: 0.54 },
+      uLys: { value: lys },
+      uTauEnhed: { value: tauEnhed },
       tFarve: { value: null },
       uHarFarve: { value: 0 },
     },
@@ -77,7 +85,7 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
     fragmentShader: /* glsl */ `
       ${RING_GLSL}
       uniform vec3 uSol, uNormal, uPlanet;
-      uniform float uPlanetR, uFlad, uLys, uHarFarve;
+      uniform float uPlanetR, uFlad, uLys, uHarFarve, uTauEnhed;
       uniform sampler2D tFarve;
       varying vec3 vLokal;
       varying vec3 vVerden;
@@ -96,15 +104,31 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
       void main() {
         float r = length(vLokal.xy);
         // Gennemsnit over den bredde, én pixel dækker, så de tynde ringe ikke flimrer
+        #ifdef STOEV
+        vec4 ring = ringData(r); // støvringene er jævne, så ét opslag er nok
+        #else
         float dr = fwidth(r) * 0.5;
         vec4 ring = (ringData(r - dr) + ringData(r - dr * 0.5) + ringData(r) + ringData(r + dr * 0.5) + ringData(r + dr)) * 0.2;
-        float tau = ring.a;
+        #endif
+        float tau = ring.a * uTauEnhed;
         if (tau <= 0.0) discard;
         vec3 V = normalize(cameraPosition - vVerden);
         float vn = dot(uNormal, V);
         float sn = dot(uNormal, uSol);
         float muV = max(abs(vn), 0.02);
         float muS = max(abs(sn), 0.02);
+        #ifdef STOEV
+        // Fint støv, så tyndt at hvert korn kun rammes af lyset én gang: lyset er τ · albedo · P(vinkel) / (4 μ), og
+        // P er størst, når lyset kun skal bøje lidt (Solen bag ringene, set fra kameraet). To led: fint støv, der
+        // spreder kraftigt fremad, og lidt jævn spredning.
+        float c = dot(-uSol, V); // cos til spredningsvinklen: 1, når kameraet ser lige mod Solen gennem ringene
+        float g = 0.8;
+        float hg = (1.0 - g * g) / pow(1.0 + g * g - 2.0 * g * c, 1.5);
+        float P = 0.9 * hg + 0.1;
+        float sollys = planetSkygge(vVerden);
+        vec3 farve = ring.rgb * (0.5 * tau * P / (4.0 * muV)) * sollys * uLys;
+        gl_FragColor = vec4(farve, 1.0); // lyset lægges til (AdditiveBlending, støvet dækker næsten intet)
+        #else
         float alfa = 1.0 - exp(-tau / muV);
         float lys;
         if (vn * sn > 0.0) {
@@ -121,9 +145,10 @@ export function lavRinge({ skala, tekstur, planetRadius, flad }) {
         vec3 rgb = uHarFarve > 0.5 ? texture2D(tFarve, vec2((r - uRingInd) / (uRingUd - uRingInd), 0.5)).rgb * 1.6 : ring.rgb;
         vec3 farve = rgb * lys * planetSkygge(vVerden) * uLys;
         gl_FragColor = vec4(farve / max(alfa, 0.001), alfa);
+        #endif
       }`,
   });
-  const mesh = new THREE.Mesh(new THREE.RingGeometry(ind, ud, 256, 1), mat);
+  const mesh = new THREE.Mesh(new THREE.RingGeometry(ind, tegnUd / skala, 256, 1), mat);
   mesh.rotation.x = -Math.PI / 2; // ringen ligger i Saturns ækvatorplan
   mesh.renderOrder = 2;
   const hjælpN = new THREE.Vector3();

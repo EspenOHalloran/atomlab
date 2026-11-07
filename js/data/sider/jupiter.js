@@ -1,7 +1,7 @@
 // Teksterne i højre panel ved Jupiter (siden i lag, U3 i docs/plan-ux.md). J1 og J2 i docs/plan-jupiter.md: Jupiters
 // egen side og pletten. J3: månerne (faktatjekket i fakta-solsystemet.md, "Faktatjek J3"). J4: emnerne på Jupiters side
-// (faktatjekket i "Faktatjek J4"). Polerne og ringene får deres sider i J5. Underteksterne ved en måne og på flybyen står
-// i MÅNER og TUR i js/kosmos/jupiter.js.
+// (faktatjekket i "Faktatjek J4"). J5: polerne, nordlyset og ringene ("Faktatjek J5"). Underteksterne ved en måne, et sted
+// og på flybyen står i MÅNER, POL_STOP, RINGE_STOP og TUR i js/kosmos/jupiter.js.
 // Tallene er fra docs/fakta-solsystemet.md, "Del 5: Jupiter" (NSSDC). Uden Three.js, så teksterne kan testes i Node.
 
 import { kontakt, sted, tid } from '../../sideknap.js';
@@ -40,8 +40,16 @@ export const SIDE = {
       tekst: '<p>Mange har sagt, at Jupiter er et skjold, der holder kometer væk fra Jorden. Computerberegninger viser, at det er mere blandet: Jupiter skubber nogle kometer væk, men sender også asteroider og kometer ind mod os. Alt i alt er den ikke det store skjold, man troede.</p>',
     },
     {
+      titel: 'Hvad er der ved polerne?',
+      tekst: `<p>Ved begge poler står kæmpestore storme, cykloner, i en ring om en cyklon lige over polen: otte om én ved nordpolen og fem om én ved sydpolen. Rumsonden Juno opdagede dem, for fra Jorden ser vi næsten ikke polerne. ${sted('sydpol', 'Flyv til sydpolen')}</p>`,
+    },
+    {
+      titel: 'Har Jupiter nordlys?', kontakt: 'Ultraviolet',
+      tekst: `<p>Ja, og det er hundredvis af gange kraftigere end Jordens. Det lyser mest i ultraviolet og infrarødt lys, som vores øjne ikke kan se. Slå ${kontakt('Ultraviolet')} til, så ser du det i en falsk farve, lilla som på billederne fra Hubble.</p>`,
+    },
+    {
       titel: 'Hvordan ser Jupiter ud bagfra?', kontakt: 'Modlys',
-      tekst: `<p>Slå ${kontakt('Modlys')} til, så står Solen bag Jupiter. Så lyser de øverste lag af luften som en tynd ring i kanten.</p>`,
+      tekst: `<p>Slå ${kontakt('Modlys')} til, så står Solen bag Jupiter. Så lyser de øverste lag af luften som en tynd ring i kanten, og Jupiters ringe af støv kommer frem. Forfra kan de næsten ikke ses. ${sted('ringe', 'Flyv om bag Jupiter')}</p>`,
     },
   ],
   nørd: '<p><b>Døgnet</b> er svært at måle på en planet uden fast overflade, for skyerne blæser hver sin vej. Derfor måles det efter radiobølgerne fra Jupiters magnetfelt, som drejer med planetens indre: 9 t 55,5 min. Det kaldes System III.</p>'
@@ -49,12 +57,78 @@ export const SIDE = {
     + '<p><b>Varmen indefra:</b> Det gamle tal er, at Jupiter sender ca. 1,7 gange så meget varme ud, som den optager fra Solen. Nyere målinger fra Cassini (Li m.fl. 2018) tyder på, at Jupiter optager mindre sollys og har mere varme indefra end antaget, så tallet bliver nærmere 2.</p>'
     + '<p><b>Grænserne:</b> Brint smelter sammen ved ca. 75-80 gange Jupiters masse (en stjerne), deuterium ved ca. 13 gange (en brun dværg). Beregningerne om kometerne er fra Horner og Jones (2008-2012).</p>'
     + '<p><b>Kortet ligger på en fladtrykt kugle.</b> Hubbles kort bruger "planetografisk" bredde (vinklen mellem lodret og ækvator), Cassinis "planetocentrisk" (vinklen fra Jupiters midte). Ved 45° er forskellen næsten 4°, så begge kort er regnet om, før de lægges på kloden.</p>',
-  billeder: '<p>Kortet er Hubbles foto fra 11.-12. december 2025 (OPAL: NASA, ESA, A. Simon, CC BY 4.0). Farverne er justeret efter Cassinis kort fra december 2000 (NASA/JPL/Space Science Institute), som har farver tæt på dem, øjet ville se. Nær polerne, hvor Hubble ikke kan se, er kortet fra Cassini.</p>',
-  videre: [sted('plet', 'Den Store Røde Plet'), sted('maaner', 'Månerne'), sted('io', 'Io'), sted('europa', 'Europa')],
-  ærligt: '<p>Jupiter bliver bygget lige nu. Polerne, nordlyset og ringene kommer senere. Båndene glider med den fart, vi har målt, men skyerne i dem ændrer sig ikke, som de gør i virkeligheden: De toner langsomt ud og kommer igen, hvor de stod på Hubbles foto. Nær polerne er vindene ikke målt, så der står skyerne stille. Hubbles farver er justeret efter Cassinis, og skyerne ved polerne er fra år 2000.</p>',
+  billeder: '<p>Kortet er Hubbles foto fra 11.-12. december 2025 (OPAL: NASA, ESA, A. Simon, CC BY 4.0). Farverne er justeret efter Cassinis kort fra december 2000 (NASA/JPL/Space Science Institute), som har farver tæt på dem, øjet ville se. Nær polerne, hvor Hubble ikke kan se, er kortet fra Cassini. Cyklonerne ved polerne, nordlyset og ringene er tegnet af programmet efter målinger fra Juno, Hubble og NASA.</p>',
+  videre: [sted('plet', 'Den Store Røde Plet'), sted('sydpol', 'Sydpolen'), sted('ringe', 'Ringene'), sted('maaner', 'Månerne'), sted('io', 'Io')],
+  ærligt: '<p>Båndene glider med den fart, vi har målt, men skyerne i dem ændrer sig ikke, som de gør i virkeligheden: De toner langsomt ud og kommer igen, hvor de stod på Hubbles foto. Nær polerne er vindene ikke målt, så der står skyerne stille. Hubbles farver er justeret efter Cassinis, og skyerne ved polerne er fra år 2000. Cyklonerne ved polerne er tegnet, nordlyset vises i en falsk farve, og ringene er gjort meget lysere, end de er.</p>',
+};
+
+// Sydpolen og nordpolen deler det meste (J5)
+const POL_BILLEDER = '<p>Kortet ved polerne er fra Cassini (år 2000), og det er uskarpt. Cyklonerne er tegnet af programmet efter Junos målinger. De fleste af Junos billeder af polerne er taget i infrarødt lys eller har forstærkede farver, så der findes ikke et foto i ægte farver, som kan lægges på.</p>';
+const POL_ÆRLIGT = '<p>Antallet af cykloner, hvor langt fra polen de står, og hvor store de er, passer med Junos målinger. Hvor langt rundt de står, og skyerne i dem er tegnet. Hver cyklon drejer som en skive, én omgang på ca. 20 timer (regnet ud fra den målte vind). Solen står kun få grader over horisonten, så billedet er gjort lysere. Her står Jupiters døgn stille.</p>';
+const NORDLYS = {
+  titel: 'Hvad er det lilla lys?', kontakt: 'Ultraviolet',
+  tekst: `<p>Det er nordlyset. Slå ${kontakt('Ultraviolet')} til. Partikler, som Jupiters magnetfelt fanger, bliver ført ned mod polerne og får luften til at lyse. En del af dem kommer fra vulkanerne på månen Io. Den lille plet uden for ringen er Io's "fodspor": Der rammer magnetfeltets linjer fra Io Jupiter, og den flytter sig med Io.</p>`,
 };
 
 export const SIDER = {
+  sydpol: {
+    tal: [['Cykloner', '5 om 1'], ['Bredde', 'flere tusind km hver'], ['Ligger ved', 'ca. 84° syd'], ['Vinden', 'op til ca. 100 m/s']],
+    kort: 'Ved Jupiters sydpol står fem kæmpestore cykloner i en ring om en sjette lige over polen. De er større end cyklonerne ved nordpolen.',
+    emner: [
+      {
+        titel: 'Hvorfor bliver de liggende?',
+        tekst: '<p>Cyklonerne i ringen vil gerne glide ind mod polen. Men cyklonen i midten skubber dem tilbage, så de bliver liggende i en ring. De flytter sig kun langsomt, nogle grader om året.</p>',
+      },
+      {
+        titel: 'Hvorfor kan vi ikke se dem fra Jorden?',
+        tekst: '<p>Jupiters akse hælder kun ca. 3 grader, så fra Jorden ser vi altid Jupiter fra siden, næsten ud for ækvator. Polerne ligger helt ude ved kanten. Rumsonden Juno kredser om Jupiter i en bane, der går hen over polerne.</p>',
+      },
+      NORDLYS,
+    ],
+    videre: [sted('nordpol', 'Nordpolen'), sted('ringe', 'Ringene')],
+    nørd: '<p>Ringene af cykloner ligger ved ca. 84° nord og syd. Cyklonerne er ca. 4.000-7.000 km brede, og vinden i dem når op til ca. 100 m/s. Gavriel og Kaspi (2021) har forklaret, hvorfor der er otte i nord og fem i syd: Det afhænger af, hvor store cyklonerne i midten er, og hvor hurtigt de drejer.</p>'
+      + '<p>Junos kamera JIRAM ser i infrarødt lys (ca. 5 µm) 50-70 km ned under de øverste skyer. I november 2019 kom en sjette, mindre cyklon til ved sydpolen, men i 2021 var der igen fem i ringen.</p>',
+    billeder: POL_BILLEDER,
+    ærligt: POL_ÆRLIGT,
+  },
+  nordpol: {
+    tal: [['Cykloner', '8 om 1'], ['Bredde', 'ca. 4.000-4.600 km'], ['Ligger ved', 'ca. 84° nord'], ['Vinden', 'op til ca. 100 m/s']],
+    kort: 'Ved Jupiters nordpol står otte cykloner i en ring om en niende lige over polen. De er lidt mindre end cyklonerne ved sydpolen.',
+    emner: [
+      {
+        titel: 'Hvordan holder de formen?',
+        tekst: '<p>Cyklonerne skubber til hinanden. Cyklonen i midten holder dem væk fra polen, og naboerne i ringen holder afstand til hinanden. Derfor står de i et mønster som en ottekant, og Juno har set det holde i flere år.</p>',
+      },
+      NORDLYS,
+    ],
+    videre: [sted('sydpol', 'Sydpolen'), sted('ringe', 'Ringene')],
+    nørd: '<p>Hver cyklon drejer mod uret set ovenfra, som lavtryk på Jordens nordlige halvkugle. Ved sydpolen drejer de med uret. Mønsteret drejer langsomt mod vest som en helhed, nogle grader om året (Gavriel og Kaspi 2023).</p>',
+    billeder: POL_BILLEDER,
+    ærligt: POL_ÆRLIGT,
+  },
+  ringe: {
+    tal: [['Hovedringen', 'ca. 123.000-129.000 km fra midten'], ['Tykkelse', 'under ca. 100 km'], ['Opdaget', '1979 (Voyager 1)'], ['Lavet af', 'fint, mørkt støv']],
+    kort: 'Jupiter har ringe af fint, mørkt støv: en tyk glorie inderst, hovedringen og to meget svage ringe uden for den. Her står Solen bag Jupiter, og så lyser ringene op.',
+    emner: [
+      {
+        titel: 'Hvorfor ses de kun bagfra?',
+        tekst: '<p>Fint støv sender det meste af lyset videre fremad og kun lidt tilbage. Det er ligesom støvet i et rum: Du ser det bedst i en solstråle, der kommer imod dig. Derfor kan Jupiters ringe næsten kun ses, når Solen skinner bagfra.</p>',
+      },
+      {
+        titel: 'Hvor kommer støvet fra?',
+        tekst: '<p>Fra Jupiters små måner tæt på ringene. Når små sten fra rummet rammer dem, bliver støv slået løs. De to yderste ringe er opkaldt efter de små måner Amalthea og Thebe, som de nok er lavet af.</p>',
+      },
+      {
+        titel: 'Hvorfor er de ikke som Saturns?',
+        tekst: '<p>Saturns ringe er klumper af is, der kaster meget lys tilbage, og nogle steder er de så tætte, at næsten intet lys slipper igennem. Jupiters hovedring er så tynd, at kun ca. 5 af hver million lysstråler rammer et støvkorn.</p>',
+      },
+    ],
+    videre: [sted('sydpol', 'Sydpolen'), sted('maaner', 'Månerne')],
+    nørd: '<p>Den optiske dybde er ca. 5 · 10⁻⁶ i hovedringen, ca. 3 · 10⁻⁶ i glorien og ca. 10⁻⁷ i de to yderste ringe (NSSDC). Glorien er ca. 10.000 km tyk, hovedringen under ca. 100 km. Ringene blev opdaget af Voyager 1 i 1979.</p>'
+      + '<p>Programmet regner lyset fra hvert støvkorn med en formel for lys, der spredes fremad (Henyey-Greenstein), og lægger det til billedet.</p>',
+    billeder: '<p>Ringene er tegnet af programmet efter tallene fra NASA (NSSDC).</p>',
+    ærligt: '<p>Ringene er gjort ca. 1.000 gange lysere, end de er, ellers kunne de ikke ses. Forskellen på forfra og bagfra passer nogenlunde: Forfra ses de næsten ikke. Glorien er tegnet flad, selvom den er ca. 10.000 km tyk, og hvor kraftigt støvet spreder fremad, er et skøn.</p>',
+  },
   plet: {
     tal: [['Bredde', 'ca. 13.000-14.000 km'], ['Én omgang', 'ca. 4½ døgn'], ['Set sikkert siden', '1831'], ['Ligger ved', 'ca. 23° syd']],
     kort: 'Pletten ligger mellem to vinde, der blæser hver sin vej: mod vest på nordsiden og mod øst på sydsiden. Den drejer samme vej, som en bold mellem to hænder, der gnider mod hinanden.',

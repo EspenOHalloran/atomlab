@@ -2,6 +2,13 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 7. november 2026 (menuen som en ring, før Jupiter J5)
+**Senest lavet (7. november 2026): Menuen som en ring af kort (K1, kun med `?karrusel` sidst i adressen).** Jeres go: "go" (prototypen), "fint med elektronbane … nærmest noget apple kunne have lavet" og "retningen er god. go" (efter billedet). Planen og jeres svar: [plan-menu.md](plan-menu.md).
+- **Ringen:** Kortene kredser om menuens atom på en skrå, lysende elektronbane med tre lysprikker. Kortet forrest er stort og skarpt, kortene til siden mindre og mørkere, og kortene svæver let. Ringen følger fingeren, tager farten med og falder blødt på plads (fjeder). Musehjul, piletaster og tryk på et kort til siden drejer den. Kun kortet forrest åbner delen.
+- **Rækkefølgen efter størrelse:** Stjerneovnen, Reaktoren, Værkstedet, Det periodiske system, Batteriet, Solsystemet, Kosmos og Ordbogen. Docken af glas nederst har alle ikonerne under "‹ mindre … større ›".
+- **Fremgangen mindre fremme:** Kun et ✓ på en klaret del. Tallene står bag "★ Din fremgang". Ringen starter på den del, man sidst var i (`atomlabSidsteDel`). Citatet er skjult i ringen.
+- **Den almindelige menu er uændret.** Testen `karrusel` har 96 tjek. Hele samlingen efter fletningen med `main` (J4, M1a og PR A): alle 35 tests bestod (30 min), også `ordforklaring`.
+
 ## "Senest lavet" 7. november 2026 (PR A i Det periodiske system, før menuen som en ring)
 **Senest lavet (7. november 2026): Rettelser i Det periodiske system, gruppernes navne og plasma (PR A).** Jeres go: "go" (efter jeres opsamling på brugen).
 - **"‹ Tilbage"** i stedet for "✕ Luk" på grundstofkortet, så man ikke trykker på "Menu" for at komme tilbage til tabellen.

@@ -1,7 +1,8 @@
 // Jupiter (docs/plan-jupiter.md). J1: kloden og skelettet. J2: vindene og Den Store Røde Plet. J3: de fire store måner.
 // Kortet er Hubbles OPAL-kort fra december 2025 med farverne stemt af efter Cassini (billeder/solsystem/lav_jupiter.py).
-// J4: flybyen med 3 stop (oversigten, båndene og pletten). Effekterne ved polerne, ringene og stoppene ved sydpolen og i
-// Jupiters skygge kommer i J5. Tal fra docs/fakta-solsystemet.md, "Del 5: Jupiter".
+// J4: flybyen (oversigten, båndene og pletten). J5: Junos cykloner ved polerne, nordlyset (kontakten "Ultraviolet"),
+// ringene af støv, der næsten kun ses i modlys, og stoppene ved sydpolen og i Jupiters skygge. Tal fra
+// docs/fakta-solsystemet.md, "Del 5: Jupiter".
 //
 // Systemet er én gruppe (1 enhed = 10.000 km, som Saturn), som rejsen (js/solsystem/rejse.js) skalerer og flytter.
 // Kortet: u = østlig længde / 360 (0° System III i venstre kant, øst til højre), rækkerne følger den parametriske
@@ -25,6 +26,8 @@ import { glød, skilt } from './faelles.js';
 import { lavGasplanet } from '../solsystem/planet.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { lavIsmåne } from '../solsystem/maane.js';
+import { lavRinge, ringTekstur } from '../solsystem/ringe.js';
+import { lavNordlys } from '../solsystem/nordlys.js';
 import { måneForstørrelse } from '../solsystem/maanestr.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
 import { lavFlyby } from '../solsystem/flyby.js';
@@ -32,6 +35,8 @@ import { kontakt, tid } from '../sideknap.js';
 import { hent, hentedeBilleder } from '../solsystem/hent.js';
 import { SIDE, SIDER } from '../data/sider/jupiter.js';
 import { PLET, vindVed } from '../data/vinde-jupiter.js';
+import { POLER, cykloner as cyklonListe, omløb } from '../data/poler-jupiter.js';
+import { RING_IND, RING_UD, TAU_ENHED, ringProfil } from '../data/ringe-jupiter.js';
 
 const JUPITER_R = 71492; // km ved ækvator (1 bar, NSSDC)
 const JUPITER_POL = 66854; // km ved polerne: fladtrykt 6,5 %
@@ -54,6 +59,19 @@ const VIND_SKALA = 1e-3; // tallene i vindens tekstur er uv pr. sekund delt med 
 const PILE = 24; // højst så mange rækker af pile (én ved hver jetstrøm)
 const GRAD = Math.PI / 180;
 const SOL_VINKEL = 0.00089; // Solens vinkelradius set fra Jupiter (0,051°, ca. 0,10° bred): halvskyggens bredde
+// Ringene: så mange gange lysere end i virkeligheden. Med τ ca. 5 · 10⁻⁶ ville de ellers være ca. 1.000 gange svagere
+// end skyerne og ikke kunne ses (står i "Ærligt talt")
+const RING_LYS = 1000;
+// Amalthea- og Thebe-ringen (τ ca. 10⁻⁷) er ca. 50 gange svagere end hovedringen og kan ikke ses, heller ikke med RING_LYS.
+// Derfor tegnes fladen kun ud til lidt uden for hovedringen.
+const RING_TEGNET = 132000;
+const POL_EKS = 2.5; // ved polerne er billedet gjort så mange gange lysere (Solen står kun få grader over horisonten)
+// Nordlyset (tegnet forenklet som om magnetfeltet var en stangmagnet): magnetfeltets akse hælder 9,4° (NSSDC) mod ca.
+// 200° vestlig længde (et skøn, tegnet). Hovedringen ca. 16° fra den magnetiske pol og Io's fodspor ca. 22° (tegnet).
+const MAGNET_HÆLD = 9.4 * (Math.PI / 180);
+const MAGNET_LÆNGDE = 160; // østlig længde (200° V)
+const OVAL = 16 * (Math.PI / 180);
+const IO_FOD = 22 * (Math.PI / 180);
 
 // De fire store måner (docs/fakta-solsystemet.md, del 5): afstand fra Jupiters midte (JPL), radius (NSSDC og JPL) og
 // omløbstid i døgn (NSSDC, ikke kolonnen "P" i JPL's tabel). lys: kortets lysstyrke, så gennemsnittet er ca. 0,53 gange
@@ -140,9 +158,17 @@ function pileRækker() {
 const TRÆ = {
   rod: 'jupiter',
   grupper: [
-    { navn: 'Steder', punkter: [{ id: 'plet', navn: 'Den Store Røde Plet', undertitel: 'En storm, lige så bred som Jorden', ikon: '🔴' }] },
+    {
+      navn: 'Steder',
+      punkter: [
+        { id: 'plet', navn: 'Den Store Røde Plet', undertitel: 'En storm, lige så bred som Jorden', ikon: '🔴' },
+        { id: 'sydpol', navn: 'Sydpolen', undertitel: 'Junos cykloner, fem om én' },
+        { id: 'nordpol', navn: 'Nordpolen', undertitel: 'Otte cykloner om én' },
+        { id: 'ringe', navn: 'Ringene', undertitel: 'Støv, der ses i modlys' },
+      ],
+    },
     { navn: 'Måner', id: 'maaner', titel: 'Månerne', undertitel: 'De fire store måner i deres baner', punkter: MÅNER.map((m) => ({ id: m.id, navn: m.navn })) },
-  ], // polerne og ringene kommer i J5
+  ],
 };
 // Underteksten ved pletten (bjælkens linje, under ca. 160 tegn). Faktatjekket i fakta-solsystemet.md, del 5.
 const PLET_STOP = {
@@ -150,10 +176,19 @@ const PLET_STOP = {
   tekst: 'En storm, der er omtrent lige så bred som Jorden. Den drejer rundt mod uret på ca. 4½ døgn og er set sikkert siden 1831.',
 };
 const PLET_NU = `<p><b>Lige nu:</b> Her står Jupiters døgn stille, så pletten bliver i sollys. Vindene og pletten bevæger sig videre. Med ⏩ går det ${HURTIG} gange hurtigere.</p>`;
+// Polerne og ringene (J5): underteksten (bjælkens linje, under ca. 160 tegn, faktatjekket i fakta-solsystemet.md,
+// "Faktatjek J5") og "Lige nu"
+const POL_STOP = {
+  sydpol: { titel: 'Sydpolen', tekst: 'Fem cykloner står i en ring om en sjette lige over polen. Hver er flere tusind km bred. Rumsonden Juno opdagede dem.' },
+  nordpol: { titel: 'Nordpolen', tekst: 'Otte cykloner står i en ring om en niende lige over polen. Rumsonden Juno har set dem holde det mønster i flere år.' },
+};
+const POL_NU = `<p><b>Lige nu:</b> Solen står lavt over polen, og her står Jupiters døgn stille. Cyklonerne drejer stadig. Slå ${kontakt('Ultraviolet')} til, så ser du nordlyset. ${tid('hurtig', 'Prøv ⏩')}</p>`;
+const RINGE_STOP = { titel: 'I Jupiters skygge', tekst: 'Her bag Jupiter er Solen skjult. Nu ses ringene af fint støv, som forfra næsten er usynlige.' };
+const RINGE_NU = `<p><b>Lige nu:</b> Solen står bag Jupiter. Ringene er gjort lysere, end de er. Slå ${kontakt('Ultraviolet')} til, så ser du nordlyset på natsiden.</p>`;
 
-// Flybyen (jeres svar 7. november 2026, plan-jupiter.md): 3 stop nu. Sydpolen og "I Jupiters skygge" kommer i J5 med
-// cyklonerne, nordlyset og ringene. id: stedet i træet (dets side står i panelet). tekst: underteksten (under ca. 160
-// tegn, faktatjekket i fakta-solsystemet.md, "Faktatjek J4"). nu: "Lige nu" i panelet ved stoppet.
+// Flybyen (jeres svar 6.-7. november 2026, plan-jupiter.md): 5 stop. Io kommer med, når månerne er bygget færdige.
+// id: stedet i træet (dets side står i panelet). tekst: underteksten (under ca. 160 tegn, faktatjekket i
+// fakta-solsystemet.md, "Faktatjek J4" og "Faktatjek J5"). nu: "Lige nu" i panelet ved stoppet.
 const TUR = [
   {
     id: 'maaner', titel: 'Jupiter og de fire store måner', knap: 'månerne',
@@ -168,6 +203,8 @@ const TUR = [
     nu: `<p><b>Lige nu:</b> Slå ${kontakt('Vindene')} til, så viser pilene vindene. ${tid('hurtig', 'Prøv ⏩')}</p>`,
   },
   { id: 'plet', ...PLET_STOP, knap: 'pletten', nu: PLET_NU },
+  { id: 'sydpol', ...POL_STOP.sydpol, knap: 'sydpolen', nu: POL_NU },
+  { id: 'ringe', ...RINGE_STOP, knap: 'skyggen', nu: RINGE_NU },
 ];
 const TUR_SLUT = '<p><b>Turen er slut.</b> Drej selv rundt, tryk på en måne for at besøge den, eller vælg et sted i listen.</p>';
 const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på månernes kort (som ved Saturn)
@@ -203,6 +240,8 @@ export default {
     let vinde = false; // kontakten "Vindene": pile over båndene
     let pileStyrke = 0; // pilene toner ind og ud
     let hurtig = false; // ⏩
+    let uv = false; // kontakten "Ultraviolet": nordlyset
+    let uvStyrke = 0; // nordlyset toner ind og ud
     const sol = new THREE.Vector3(1, 0.03, 0.6).normalize(); // Solens retning i systemets retninger (lyset kommer herfra)
     const solNu = new THREE.Vector3(); // Solens retning i verden (systemet kan være drejet ved pletten)
 
@@ -213,6 +252,20 @@ export default {
     jupiterG.updateMatrix();
     const vindTekstur = lavVindTekstur();
     const pletV = 0.5 + tilParametrisk(PLET.bredde) / Math.PI;
+    // Junos cykloner (js/data/poler-jupiter.js) i kuglens egne retninger: midten, retningen mod øst, radius og drejning
+    const retningPå = (bredde, længde) => {
+      const b = tilParametrisk(bredde), u = længde / 360;
+      return new THREE.Vector3(-Math.cos(2 * Math.PI * u) * Math.cos(b), Math.sin(b), Math.sin(2 * Math.PI * u) * Math.cos(b));
+    };
+    const cykloner = ['nord', 'syd'].flatMap((pol) => cyklonListe(pol).map((c) => {
+      const retning = retningPå(c.bredde, c.længde);
+      const u = c.længde / 360;
+      // Ved polen er "øst" en vilkårlig retning vinkelret på aksen
+      const øst = Math.abs(c.bredde) >= 90 ? new THREE.Vector3(0, 0, 1) : new THREE.Vector3(Math.sin(2 * Math.PI * u), 0, Math.cos(2 * Math.PI * u));
+      // Mod uret set udefra ved nordpolen, med uret ved sydpolen (cykloner)
+      const spin = (pol === 'nord' ? 1 : -1) * ((2 * Math.PI) / (omløb(POLER[pol]) / SEK_PR_SEK));
+      return { pol, ...c, retning, øst, a: c.bred / 2 / JUPITER_R, spin };
+    }));
     const planet = lavGasplanet({
       skala: S, radius: JUPITER_R, polRadius: JUPITER_POL, segmenter: SEGMENTER,
       vind: { tekstur: vindTekstur, skala: VIND_SKALA, fase: FASE },
@@ -226,10 +279,20 @@ export default {
       detaljer: DETALJER,
       pile: PILE,
       måner: MÅNER.length,
+      cykloner,
     });
     const pile = pileRækker();
     planet.sætPile(pile, 0);
     jupiterG.add(planet.mesh);
+    // Nordlyset: et tyndt lag over skyerne, som drejer med Jupiter (kontakten "Ultraviolet")
+    const nordlys = lavNordlys({ R, segmenter: SEGMENTER / 2 });
+    const magnetPol = retningPå(90 - MAGNET_HÆLD / GRAD, MAGNET_LÆNGDE);
+    nordlys.sætPol(magnetPol, OVAL);
+    planet.mesh.add(nordlys.mesh);
+    // Ringene: fint støv, der spreder lyset fremad (js/data/ringe-jupiter.js)
+    const ringBillede = ringTekstur(4096, ringProfil);
+    const ringe = lavRinge({ skala: S, tekstur: ringBillede, planetRadius: JUPITER_R, flad: FLAD, ind: RING_IND, ud: RING_UD, støv: true, tauEnhed: TAU_ENHED, lys: RING_LYS, tegnUd: RING_TEGNET });
+    jupiterG.add(ringe.mesh);
     system.add(jupiterG);
     gruppe.add(system);
     let hentet = false;
@@ -310,7 +373,8 @@ export default {
     let vindTid = 0; // vindene og pletten (sekunder i programmets ur)
     let døgn = 0; // Jupiters drejning (radianer)
     let drejTur = null; // Jupiter drejer hen til det rigtige tidspunkt på dagen ved pletten, mens kameraet flyver
-    let visning = 'jupiter'; // 'jupiter' (hele planeten) eller 'plet'
+    let visning = 'jupiter'; // 'jupiter' (hele planeten), 'plet', 'sydpol', 'nordpol', 'ringe', 'maaner' eller en måne
+    const døgnStår = () => visning === 'plet' || visning === 'sydpol' || visning === 'nordpol'; // her står Jupiters døgn stille
 
     // ---------- Pletten: punktet, lodret, nord og øst i systemets retninger ----------
     const qDøgn = new THREE.Quaternion();
@@ -407,6 +471,44 @@ export default {
       fase(PLET_STOP.titel, PLET_STOP.tekst);
       forklaring(PLET_NU);
     }
+    // ---------- Polerne (J5): kameraet over polen, Solen lavt ----------
+    const akseSystem = () => Y.clone().applyQuaternion(jupiterG.quaternion); // nordpolens retning i systemets retninger
+    const polPunkt = new THREE.Vector3();
+    const polOp = new THREE.Vector3();
+    function flyvTilPol(navn) {
+      visning = navn;
+      drejTur = null;
+      const fortegn = navn === 'nordpol' ? 1 : -1;
+      polOp.copy(akseSystem()).multiplyScalar(fortegn);
+      polPunkt.copy(polOp).multiplyScalar(R * FLAD);
+      // Kameraet står på Solens side af polen (så den lyse halvdel ses) og kigger skråt ned
+      const vandret = sol.clone().addScaledVector(polOp, -sol.dot(polOp)).normalize();
+      const v = 78 * GRAD;
+      const retning = vandret.multiplyScalar(Math.cos(v)).addScaledVector(polOp, Math.sin(v));
+      const afstand = passer(0.95); // cyklonernes ring er ca. 22.000 km bred
+      rejse.flyv({ fokus: () => polPunkt, op: () => polOp, afstand, retning, min: 0.3, max: Math.max(8, afstand * 1.3) });
+    }
+    function tilPol(navn) {
+      flyvTilPol(navn);
+      fase(POL_STOP[navn].titel, POL_STOP[navn].tekst);
+      forklaring(POL_NU);
+    }
+    // ---------- I Jupiters skygge (J5): kameraet bag Jupiter, Solen skjult, ringene i modlys ----------
+    function flyvTilSkygge() {
+      visning = 'ringe';
+      drejTur = null;
+      const afstand = passer(R * 2.1); // hovedringen ud til ca. 1,8 radier
+      // Kameraet står lidt over ringenes plan. Solen skal være skjult bag Jupiter: Vinklen mellem Jupiters midte og Solen
+      // set fra kameraet skal være mindre end Jupiters vinkelradius (over polen er Jupiter lavest).
+      const skjul = Math.asin((R * FLAD) / afstand) * 0.55;
+      const retning = sol.clone().negate().addScaledVector(akseSystem(), Math.tan(skjul)).normalize();
+      rejse.flyv({ fokus: () => nul, afstand, retning, min: R * 1.15, max: 450 });
+    }
+    function tilSkygge() {
+      flyvTilSkygge();
+      fase(RINGE_STOP.titel, RINGE_STOP.tekst);
+      forklaring(RINGE_NU);
+    }
     // En retning ud fra en vinkel i ækvatorplanet og en højde over planet (grader), i systemets retninger
     const retningFra = (vinkel, højde) => new THREE.Vector3(Math.cos(højde * GRAD) * Math.cos(vinkel * GRAD), Math.sin(højde * GRAD), -Math.cos(højde * GRAD) * Math.sin(vinkel * GRAD)).applyQuaternion(jupiterG.quaternion);
     const fokusHjælp = new THREE.Vector3();
@@ -455,18 +557,22 @@ export default {
       if (id === visning) return;
       flyby.afslut();
       if (id === 'plet') tilPlet();
+      else if (id === 'sydpol' || id === 'nordpol') tilPol(id);
+      else if (id === 'ringe') tilSkygge();
       else if (id === 'jupiter') tilJupiter();
       else if (id === 'maaner') tilMåner();
       else if (erMåne(id)) besøg(måneMed(id));
     }
     let første = true; // i første billede står kameraet der med det samme (når panelerne har fået deres plads)
 
-    // ---------- Flybyen (js/solsystem/flyby.js): oversigten, båndene og pletten ----------
+    // ---------- Flybyen (js/solsystem/flyby.js): oversigten, båndene, pletten, sydpolen og skyggen ----------
     // Båndene: hele Jupiter med Solen næsten bag kameraet (ca. 20° fra), så hele skiven er lys
     const BÅND = sol.clone().lerp(START, 0.4).setY(0.12).normalize();
     function flyvTilStop(stop, nr) {
       if (stop.id === 'maaner') flyvTilMåner();
       else if (stop.id === 'plet') flyvTilPlet();
+      else if (stop.id === 'sydpol') flyvTilPol('sydpol');
+      else if (stop.id === 'ringe') flyvTilSkygge();
       else {
         visning = 'jupiter';
         drejTur = null;
@@ -485,6 +591,7 @@ export default {
       styring.length = 0;
       styring.push({ tekst: 'Vindene', til: vinde, skift: (til) => { vinde = til; } });
       styring.push({ tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } });
+      styring.push({ tekst: 'Ultraviolet', til: uv, skift: (til) => { uv = til; } });
       // Uden navne kan man stadig trykke på selve månerne
       styring.push(navneKnap((til) => { if (!til) for (const m of måner) m.etiket.visible = false; }));
       opdaterKnapper();
@@ -522,6 +629,10 @@ export default {
     // ---------- Hvert billede: kameraet, systemets skala og lyset ----------
     const op = new THREE.Vector3(0, 1, 0);
     const midt = new THREE.Vector3();
+    const ioLokal = new THREE.Vector3();
+    let ringeSkjult = false; // kun til tests (billedet med og uden ringene)
+    let eks = 1; // hvor meget lysere billedet er gjort (ved polerne)
+    let drejFør = false; // kameraet drejede af sig selv, før det kom til skyggen eller en pol
     function hvertBillede(dt) {
       if (første) {
         første = false;
@@ -542,8 +653,34 @@ export default {
         solNu.copy(kamPos).multiplyScalar(-1).addScaledVector(op, 0.22).normalize();
       } else solNu.copy(sol).applyQuaternion(rejse.drejning);
       for (const s of [solKerne, solGlød]) s.position.copy(kamera.position).addScaledVector(solNu, 600);
+      // Står Solen bag Jupiter, skjules gløden også (ellers stikker den frem ved kanten)
+      planet.mesh.getWorldPosition(midt);
+      kamPos.copy(midt).sub(kamera.position);
+      const jAfstand = kamPos.length();
+      const solFri = kamPos.normalize().angleTo(solNu) - Math.asin(Math.min(1, (R * FLAD * rejse.skala) / jAfstand));
+      const solSes = THREE.MathUtils.smoothstep(solFri, 0, 0.02);
+      solKerne.material.opacity = solSes;
+      solGlød.material.opacity = 0.55 * solSes;
+      // Ved polerne står Solen lavt, så billedet gøres lysere (som et kamera med længere lukketid)
+      eks = THREE.MathUtils.clamp(eks + Math.sign((visning === 'sydpol' || visning === 'nordpol' ? POL_EKS : 1) - eks) * Math.min(dt, 0.1) * 1.5, 1, POL_EKS);
+      planet.sætEksponering(eks);
+      // I skyggen og ved polerne drejer kameraet ikke af sig selv (så Solen bliver skjult, og polen bliver i billedet)
+      if (visning === 'ringe' || visning === 'sydpol' || visning === 'nordpol') {
+        if (orbit.autoRotate) { drejFør = true; orbit.autoRotate = false; }
+      } else if (drejFør) { orbit.autoRotate = true; drejFør = false; }
       const { midt: jMidt, akse: jAkse } = planet.sæt(solNu, vindTid);
+      ringe.sæt(solNu, jMidt, jAkse);
+      ringe.mesh.visible = !døgnStår() && !ringeSkjult; // tæt på skyerne kan ringene ikke ses (og de koster tid at tegne)
       opdaterMåner(dt, jMidt, jAkse);
+      // Nordlyset: toner ind og ud med kontakten, og Io's fodspor følger Io
+      uvStyrke = THREE.MathUtils.clamp(uvStyrke + (uv ? 1 : -1) * Math.min(dt, 0.1) * 2.5, 0, 1);
+      nordlys.sætStyrke(uvStyrke);
+      if (uvStyrke > 0) {
+        måner[0].plads.getWorldPosition(ioLokal);
+        planet.mesh.worldToLocal(ioLokal).normalize();
+        nordlys.sætFod(ioLokal, IO_FOD);
+        nordlys.sætTid(vindTid);
+      }
       planet.sætHvirvel(((vindTid / PLET_OMGANG) % 1) * Math.PI * 2);
       pileStyrke = THREE.MathUtils.clamp(pileStyrke + (vinde ? 1 : -1) * Math.min(dt, 0.1) * 3, 0, 1);
       planet.sætPile(null, pileStyrke);
@@ -556,7 +693,7 @@ export default {
     const skygger = måner.map(() => ({ midt: new THREE.Vector3(), r: 0 }));
     function opdaterMåner(dt, jMidt, jAkse) {
       const k = rejse.skala;
-      const mål = visning === 'plet' || erMåne(visning) ? 1 : 0;
+      const mål = døgnStår() || erMåne(visning) ? 1 : 0;
       nær = THREE.MathUtils.clamp(nær + Math.sign(mål - nær) * Math.min(dt, 0.1) * 1.2, 0, 1);
       // Banerne ses kun langt ude (tæt på ville de skære tværs gennem billedet). Hele Jupiter står ca. 33 enheder væk på
       // pc og over 80 på tablet på højkant og telefon, oversigten over 500.
@@ -602,7 +739,7 @@ export default {
       opdater(dt) {
         const d = dt * (hurtig ? HURTIG : 1);
         vindTid += d;
-        if (!drejTur && visning !== 'plet') døgn += d * DREJ; // mod uret set fra nord: skyerne flytter sig mod øst
+        if (!drejTur && !døgnStår()) døgn += d * DREJ; // mod uret set fra nord: skyerne flytter sig mod øst
         // Månerne følger det samme ur, men står stille, mens man besøger en af dem
         if (!erMåne(visning)) { måneTid += d; placerMåner(); }
       },
@@ -618,7 +755,9 @@ export default {
         }
         verden.opdateringer.delete(hvertBillede);
         rejse.stop();
+        if (drejFør) orbit.autoRotate = true;
         vindTekstur.dispose();
+        ringBillede.dispose();
         orbit.minDistance = gammelt.min;
         orbit.maxDistance = gammelt.max;
         kamera.near = gammelt.nær;
@@ -698,6 +837,24 @@ export default {
           return { x: r.left + ((månePos.x + 1) / 2) * r.width, y: r.top + ((1 - månePos.y) / 2) * r.height, foran: månePos.z < 1 };
         },
         visning: () => visning,
+        // J5: cyklonerne (bredde i grader, bredde i km og drejning: + er mod uret set udefra), nordlyset og ringene
+        cykloner: () => cykloner.map((c) => ({ pol: c.pol, bredde: c.bredde, længde: c.længde, bred: c.bred, spin: c.spin })),
+        cyklonerSat: () => planet.mesh.material.uniforms.uCyk.value.length,
+        nordlys: () => ({ styrke: uvStyrke, synlig: nordlys.mesh.visible, fod: nordlys.fod().map((f) => f.toArray()) }),
+        // Solen skjult bag Jupiter set fra kameraet? Vinklen mellem Jupiters midte og Solen og Jupiters vinkelradius (grader)
+        solSkjult() {
+          const j = planet.mesh.getWorldPosition(new THREE.Vector3());
+          const mod = j.clone().sub(kamera.position);
+          const afstand = mod.length();
+          const vinkel = mod.normalize().angleTo(solNu) / GRAD;
+          const radius = Math.asin(Math.min(1, (R * FLAD * rejse.skala) / afstand)) / GRAD;
+          return { vinkel, radius, skjult: vinkel < radius };
+        },
+        // Hvor høj Solen står over polen (grader)
+        solVedPol(navn) { const a = Y.clone().applyQuaternion(jupiterG.quaternion).applyQuaternion(rejse.drejning).multiplyScalar(navn === 'nordpol' ? 1 : -1); return Math.asin(THREE.MathUtils.clamp(a.dot(solNu), -1, 1)) / GRAD; },
+        ringeSynlige: (til) => { ringeSkjult = !til; },
+        drejSelv: (til) => { orbit.autoRotate = til; }, // kameraet drejer af sig selv (til billeder, der skal sammenlignes)
+        eksponering: () => eks, // hvor meget lysere billedet er gjort (ved polerne)
         pile: () => ({ styrke: pileStyrke, rækker: pile.map((p) => ({ bredde: p.phi, vind: Math.round(p.vind), længde: p.længde })) }),
       },
     };

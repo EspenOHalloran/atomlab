@@ -3,7 +3,8 @@
 // Stederne: hel (hele Jupiter), plet (Den Store Røde Plet), vinde (hele Jupiter med kontakten "Vindene"),
 // hurtig (hele Jupiter efter 40 sekunder med ⏩), modlys, skygge (hele Jupiter med Io's skygge, J3), maaner (oversigten)
 // og månerne io, europa, ganymedes og callisto (besøg, venter på 8k-kortet på pc), og flybyens stop (J4): stop1, stop2 og
-// stop3 (startes med "▶ Start flyby" og "Næste" i bjælken). Uden steder: hel og plet.
+// stop3 (startes med "▶ Start flyby" og "Næste" i bjælken). J5: sydpol, nordpol og ringe (I Jupiters skygge), stop4 og
+// stop5, og "-uv" efter et sted slår kontakten "Ultraviolet" til (fx sydpol-uv). Uden steder: hel og plet.
 // Størrelserne: pc, tablet (på langs), tablet-hoejkant, tlf-hoejkant og tlf-langs. Uden størrelse: pc og tablet.
 // Mål én browser ad gangen (to samtidig halverer tallene, tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
@@ -25,8 +26,10 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
   const f = (fn, a) => s.evaluate(fn, a);
   const måling = () => f(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const g = () => { n++; if (performance.now() - t0 < 4000) requestAnimationFrame(g); else r(n / ((performance.now() - t0) / 1000)); }; requestAnimationFrame(g); }));
   const kontakt = (tekst) => f((t) => [...document.querySelectorAll('#solsystem .kontakt, #solsystem button')].find((k) => k.textContent.trim().startsWith(t))?.click(), tekst);
-  for (const sted of steder.length ? steder : ['hel', 'plet']) {
-    const MÅNER = ['io', 'europa', 'ganymedes', 'callisto'];
+  for (const navnSted of steder.length ? steder : ['hel', 'plet']) {
+    const medUv = navnSted.endsWith('-uv');
+    const sted = navnSted.replace(/-uv$/, '');
+    const MÅNER = ['io', 'europa', 'ganymedes', 'callisto', 'sydpol', 'nordpol', 'ringe'];
     const stop = /^stop(\d)$/.exec(sted)?.[1];
     if (stop) {
       // Flybyen: "Start flyby" er grå, indtil månernes kort er hentet
@@ -44,17 +47,19 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
     await f(() => atomlabTest.solsystem.fænomen().hop());
     await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver);
     if (sted === 'vinde' || sted === 'modlys') await kontakt(sted === 'vinde' ? 'Vindene' : 'Modlys');
+    if (medUv) await kontakt('Ultraviolet');
     if (sted === 'hurtig') {
       await s.click('#solsystemTid button[data-tid="hurtig"]');
       await s.waitForTimeout(40000);
     }
-    if (MÅNER.includes(sted)) await s.waitForFunction((id) => Object.keys(atomlabTest.solsystem.fænomen().billeder()).some((n) => n.startsWith(id + '-') && !n.endsWith('-2k.jpg')), sted, { timeout: 60000, polling: 300 }).catch(() => console.log('kortet kom ikke'));
+    if (MÅNER.slice(0, 4).includes(sted)) await s.waitForFunction((id) => Object.keys(atomlabTest.solsystem.fænomen().billeder()).some((n) => n.startsWith(id + '-') && !n.endsWith('-2k.jpg')), sted, { timeout: 60000, polling: 300 }).catch(() => console.log('kortet kom ikke'));
     if (sted === 'skygge') await s.click('#solsystemTid button[data-tid="pause"]');
     await s.waitForTimeout(1500);
     if (sted === 'skygge') await f(() => atomlabTest.solsystem.fænomen().sætMåneUr(0));
     const fps = await måling();
-    console.log(navn, sted, 'billeder i sekundet:', fps.toFixed(1));
-    await s.screenshot({ path: `${UD}/${navn}-${sted}.png` });
+    console.log(navn, navnSted, 'billeder i sekundet:', fps.toFixed(1));
+    await s.screenshot({ path: `${UD}/${navn}-${navnSted}.png` });
+    if (medUv) await kontakt('Ultraviolet');
     if (sted === 'vinde' || sted === 'modlys') await kontakt(sted === 'vinde' ? 'Vindene' : 'Modlys');
     if (sted === 'hurtig' || sted === 'skygge') await s.click('#solsystemTid button[data-tid="spil"]');
   }
