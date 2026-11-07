@@ -13,3 +13,4 @@
 - [ ] En ny til/fra-knap er en kontakt med et fast navn (`lavKontakt` i `js/kontakt.js`, i Kosmos og Solsystemet en kontakt i Styr-boksen), ikke en knap, der skifter tekst. Tiden styres med tidsknappen (`lavTidsknap`), ikke med egne pause- eller tempoknapper (U4).
 - [ ] En handling i bjælken er tjekket i alle tilstande, fænomenet kan være i (fx "▶ Start flyby", mens man står på Mars, U2).
 - [ ] En handling, der fører ind i en ny tilstand midt på en tur (fx "🧍 Stå på Mars" på flybyen), sætter turen på pause, så dens "Næste" ikke virker i den forkerte tilstand, og giver én tydelig knap tilbage til turen (fundet af brugeren efter M8b).
+- [ ] Et element, der skjules med `hidden`, men har `display` i CSS (flex, grid, block), får en regel `.x[hidden] { display: none; }`. Ellers står det gamle indhold fremme (plutonium ved copernicium, 7. november 2026).

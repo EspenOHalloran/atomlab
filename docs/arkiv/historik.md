@@ -2,6 +2,15 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 7. november 2026 (Jupiter J3)
+**Senest lavet (7. november 2026): Jupiter J3, de fire store måner.** Jeres go: "Go til j3, Jupiters måner".
+- **Tryk og et kort besøg** var en lille opgave (genbrug fra Saturn), så det er med: Io, Europa, Ganymedes og Callisto i træet under "Måner", tryk på en måne, en undertekst og en side for hver (faktatjekket mod del 5, "Faktatjek J3"). Oversigten "Månerne" viser alle fire baner.
+- **Kortene** fra USGS (Galileo og Voyager): 8k på pc, 4k på tablet og telefon, 2k i tests. Huller ved polerne er fyldt med spejlede rækker. Io er grå med en dæmpet gul tone fra USGS' forstærkede farvekort.
+- **Den rigtige fart og resonansen:** Månerne følger Jupiters døgn (Io rundt på ca. 4,3 Jupiter-døgn) og opfylder Laplace-relationen. ⏩ viser resonansen. De står stille under et besøg.
+- **Skygger:** Månerne kaster skygger på Jupiter, og Jupiter kaster skygge på månerne. Io's skygge ses som en sort prik i startbilledet.
+- **Størrelsen** (større langt væk, rigtig tæt på) er en fælles funktion, som Mars også bruger nu.
+- **Tests:** `jupiter` har 49 tjek (15 nye). `--ændret` (10 tests): Alle bestod efter en rettelse i `saturn` (tjekket af 8k-kort talte også Jupiters måner med). Billeder i sekundet: se "Status efter J3" i [plan-jupiter.md](plan-jupiter.md).
+
 ## "Senest lavet" 6. november 2026 (Det sorte hul, før Jupiter J3)
 **Senest lavet (6. november 2026): Det sorte hul er bygget om med rigtig lysbøjning.** Jeres go: "vi går med dine anbefalinger. go." (efter planen og prøvebilledet, [docs/arkiv/plan-sorthul.md](arkiv/plan-sorthul.md), [oversigt](arkiv/sorthul-proeve.jpg)).
 - **En shader** (`js/kosmos/linse.js`) følger lyset baglæns for hver pixel om et hul, der ikke drejer: Skivens bagside ses som en bue over og under skyggen, der er en tynd fotonring, den side, der kommer mod os, er lysere og hvidere (g⁴), og stjernerne bag hullet bøjes. Fysikken står i `js/data/sorthul.js` og testes i Node (ny test `sorthul`: skyggen ved √27 M, fotonkuglen 3M, ISCO 6M).

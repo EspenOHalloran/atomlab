@@ -42,6 +42,12 @@ for (const [id, l] of Object.entries(LINKS)) {
   }
 }
 tjek(`alle ${Object.keys(LINKS).length} links peger på et sted, hvor ordet står`, !forkerte.length, forkerte.join(', '));
+// "Hvorfor?" og "Hvordan?" (mere) står kun i Ordbogen: spørgsmålene ender med "?", og boblernes tekst er stadig kort
+const dårligeMere = ORDBOG.filter((o) => o.mere && !(Array.isArray(o.mere) && o.mere.every(([sp, svar]) => sp.endsWith('?') && svar.length > 40)));
+tjek('alle "Hvorfor?"/"Hvordan?" er spørgsmål med et svar', !dårligeMere.length, dårligeMere.map((o) => o.id).join());
+const lange = ORDBOG.filter((o) => o.tekst.length > 260);
+tjek('boblernes tekst er højst 260 tegn', !lange.length, lange.map((o) => `${o.id} (${o.tekst.length})`).join());
+tjek('søgning finder ord ud fra "Hvorfor?"-svarene ("plasmaskærm" → Plasma)', navne(søgOrd('plasmaskærm'))[0] === 'Plasma', navne(søgOrd('plasmaskærm')).join());
 
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -68,6 +74,8 @@ await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'),
 const start = await T(() => ({ ord: document.querySelectorAll('#ordbogListe li').length, fokus: document.activeElement?.id, første: document.querySelector('#ordbogListe h3')?.textContent }));
 tjek('kortet åbner Ordbogen med alle ordene, og søgefeltet har fokus (pc)', start.ord === ORDBOG.length && start.fokus === 'ordbogSøg' && start.første === ORDNE[0].ord, JSON.stringify(start));
 tjek('rækkefølgen på siden er den samme som i listen', JSON.stringify(await T(() => [...document.querySelectorAll('#ordbogListe h3')].map((h) => h.textContent))) === JSON.stringify(navne(ORDNE)));
+const plasma = await T(() => { const li = document.getElementById('ord-plasma'); return { mere: li.querySelectorAll('.ordbog-mere').length, tegning: !!li.querySelector('.ordbog-tegning svg') }; });
+tjek('plasma: "Hvorfor?"-afsnit og en tegning i Ordbogen', plasma.mere === ORDBOG.find((o) => o.id === 'plasma').mere.length && plasma.tegning, JSON.stringify(plasma));
 tjek('ingen ordforklaringer (prikkede ord) inde i Ordbogen', (await T(() => document.querySelectorAll('#ordbog .fagord').length)) === 0);
 
 // Søgning med tastaturet, ingen resultater og Esc
