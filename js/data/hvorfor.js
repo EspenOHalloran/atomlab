@@ -97,4 +97,19 @@ export const HVORFOR = {
     spørgsmål: 'Hvorfor lyser stjernerne?',
     svar: 'Inde i midten af stjernen smelter brintkerner sammen til helium, og det frigør energi (fusion). Energien varmer hele stjernen op, og den varme overflade lyser, ligesom glødende jern. I Solen tager det titusinder af år, måske over 100.000 år, før energien fra midten når ud til overfladen. Energien i det sollys, du ser, blev altså frigjort i midten for længe siden, selvom lyset kun bruger ca. 8 minutter fra Solens overflade til Jorden.',
   },
+  // Byttebørsen (Molekyler M1). Kilder: docs/fakta-molekyler.md, afsnit 1, 6 og 7.
+  bytteKoster: {
+    spørgsmål: 'Hvorfor koster det at flytte elektronen?',
+    svar: 'Natriums kerne trækker i sin yderste elektron, så det kræver 5,1 eV (elektronvolt) at rive den løs. Chlor trækker også, så den giver 3,6 eV tilbage, når den får elektronen. Det er mindre, end det kostede. To frie atomer taber altså 1,5 eV ved at bytte. Gevinsten kommer bagefter, når Na⁺ og Cl⁻ trækker i hinanden.\n\nDerfor passer "atomer vil gerne have en fuld skal" ikke alene. Den fulde skal forklarer, hvilke ioner der bliver (Na⁺ og Cl⁻), men ikke hvorfor det sker.',
+    næste: 'bytteBetaler',
+    nørd: 'De 5,14 eV hedder ioniseringsenergien (NIST), og de 3,61 eV hedder chlors elektronaffinitet. En elektronvolt er den energi, en elektron får af 1 volt. Det passer til atomer: Synligt lys har ca. 2-3 eV pr. lysglimt (foton).',
+  },
+  bytteBetaler: {
+    spørgsmål: 'Hvad betaler så?',
+    svar: 'Plus og minus trækker i hinanden. Jo tættere Na⁺ og Cl⁻ kommer, jo mere energi bliver frigjort. Når de er ca. 9 Å fra hinanden, har tiltrækningen betalt de 1,5 eV, og helt inde ved hinanden er der frigjort ca. 4,3 eV mere, end det kostede. I et saltkorn har hver ion seks naboer med modsat ladning, så der bliver frigjort endnu mere.',
+  },
+  bytteIon: {
+    spørgsmål: 'Hvad er en ion?',
+    svar: 'Et atom har normalt lige mange protoner (plus) og elektroner (minus), så det er neutralt. Mister det en elektron, bliver det plusladet, og får det en ekstra, bliver det minusladet. Et atom med for få eller for mange elektroner hedder en ion. Natrium, der har mistet sin yderste elektron, skrives Na⁺, og chlor med en ekstra skrives Cl⁻. Protonerne i kernen ændrer sig ikke, så det er stadig natrium og chlor.',
+  },
 };
