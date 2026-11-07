@@ -25,7 +25,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   const kort = await s.evaluate(() => [...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), k.querySelector('.kort-fremgang')?.textContent]));
   const i = kort.findIndex(([h]) => h === '#solsystem');
   tjek('menuen: Solsystemet står lige før Kosmos', i >= 0 && kort[i + 1][0] === '#kosmos', JSON.stringify(kort));
-  tjek('menuen: 2/9 set i Solsystemet og 1/11 i Kosmos', kort[i][1] === '2/9 set' && kort[i + 1][1] === '1/11 set', JSON.stringify(kort));
+  tjek('menuen: 2/9 set i Solsystemet og 1/12 i Kosmos', kort[i][1] === '2/9 set' && kort[i + 1][1] === '1/12 set', JSON.stringify(kort));
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
   tjek('det sidst valgte (Saturn) åbner i Solsystemet', sol.valgt === 'saturn', JSON.stringify(sol));
@@ -37,7 +37,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
   await vis(s, 'kosmos');
   const kos = await s.evaluate(() => ({ valgt: atomlabTest.kosmos.valgt(), set: document.getElementById('kosmosSet').textContent, gemt: JSON.parse(localStorage.getItem('atomlabKosmosSet')) }));
-  tjek('Kosmos starter på Big Bang og har 1 af 11 set', kos.valgt === 'bigbang' && kos.set === '1 af 11 set', JSON.stringify(kos));
+  tjek('Kosmos starter på Big Bang og har 1 af 12 set', kos.valgt === 'bigbang' && kos.set === '1 af 12 set', JSON.stringify(kos));
   tjek('de flyttede er væk fra Kosmos\' gemte liste', !kos.gemt.some((id) => FLYTTET.includes(id)), JSON.stringify(kos.gemt));
   // Linket under Kosmos-listen og linket i Hvid dværg
   tjek('Kosmos: linket til Solsystemet under listen', await s.isVisible('#kosmos .kosmos-videre'));

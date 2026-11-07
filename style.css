@@ -1404,6 +1404,32 @@ button.sol-gruppe-navn::after { content: " ›"; }
 @media (orientation: portrait) {
   :is(#kosmos, #solsystem) .jord-ur { position: absolute; left: 0; bottom: 0; width: max-content; max-width: calc(100% - 116px); }
 }
+/* Rejsen i tid (js/kosmos/tid.js): "Dit ur" og "Jordens ur" med urskiven, og lysuret (et lærred) */
+.tid-ure { display: flex; gap: 8px; align-items: stretch; max-width: 100%; }
+.tid-ur { display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 150px; padding: 6px 12px; border-radius: 12px; background: rgba(8, 12, 28, 0.8); border: 1px solid var(--panel-kant); line-height: 1.2; }
+.tid-ur-jord { flex-direction: row; align-items: center; gap: 10px; }
+.tid-ur-tekst { display: flex; flex-direction: column; gap: 1px; }
+.tid-ur-navn { font-size: 12px; font-weight: 600; color: var(--svag); }
+.tid-ur-tal { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; color: #9fe6ff; }
+.tid-ur-jord .tid-ur-tal { color: #ffd27a; }
+.tid-ur-alder { font-size: 12.5px; color: var(--tekst); white-space: nowrap; }
+.tid-skive { width: 46px; height: 46px; flex: none; }
+.tid-skive > circle:first-child { fill: rgba(255, 210, 122, 0.08); stroke: rgba(255, 210, 122, 0.55); stroke-width: 1.5; }
+.tid-streger line { stroke: rgba(255, 210, 122, 0.6); stroke-width: 1.4; }
+.tid-viser { stroke: #ffd27a; stroke-width: 2.4; stroke-linecap: round; }
+.tid-midt { fill: #ffd27a; }
+.tid-ure[hidden], .tid-lysur[hidden] { display: none; }
+.tid-lysur { width: min(560px, 100%); }
+.tid-lysur canvas { display: block; width: 100%; aspect-ratio: 2.4; height: auto; }
+@media (max-width: 560px), (max-height: 500px) {
+  .tid-ure { gap: 6px; }
+  .tid-ur { min-width: 0; padding: 4px 8px; }
+  .tid-ur-jord { gap: 6px; }
+  .tid-ur-tal { font-size: 16px; }
+  .tid-ur-navn, .tid-ur-alder { font-size: 11px; }
+  .tid-skive { width: 34px; height: 34px; }
+  .tid-lysur canvas { aspect-ratio: 2.1; }
+}
 .bjælke-række { order: 2; width: 100%; display: flex; align-items: flex-end; gap: 6px; pointer-events: none; }
 /* Plads til venstre, der svarer til tidsknappen, så knapperne står midt i billedet (men kun, når der er plads) */
 .bjælke { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; pointer-events: none; padding-left: clamp(0px, calc(100% - 430px), 92px); }

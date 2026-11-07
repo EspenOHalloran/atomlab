@@ -61,3 +61,5 @@
 - "LiF er det letteste salt." LiH er lettere. Skriv hellere, hvad der gør det særligt (fluor trækker hårdest i elektronerne).
 - "Na + Na sker ikke." Der sker ingen *ionbinding*, men natrium deler elektronerne i stedet (et metal, og Na₂ i damp). Skriv "de bytter ikke", ikke "de binder sig ikke" (Molekyler M1, 7. november 2026).
 - "Atomets radius er X pm." Der findes flere slags radier (empirisk, beregnet, kovalent, van der Waals, metallisk), og de er meget forskellige (chlor: 79-175 pm). Ionernes radier er målt i krystaller. Sig, hvilken slags, eller sammenlign kun inden for samme slags (Slater 1964 for atomer, Shannon 1976 for ioner).
+- "Tiden går langsommere for dig" (når man flyver næsten med lysets fart). Du mærker intet: Dit eget ur går ét sekund pr. sekund. Skriv "set fra Jorden går dit ur langsommere" (Rejsen i tid, T1).
+- "Intet kan bevæge sig hurtigere end lyset." Gælder lokalt. Fjerne galakser fjerner sig hurtigere end lyset, fordi Universet udvider sig. Om et skib: "Skibet kan ikke flyve hurtigere end lyset" (Rejsen i tid, T1).
