@@ -75,7 +75,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 **Opus' anbefaling:** Start med **A** som et prøvestykke med lysuret og tvillingerejsen. Den kan bygges uden at vente på menuen. Bliver han grebet, kan det senere vokse til **B** (sammen med Kvantefysik), med Rumtidskortet som det næste. Idé 4 (lysets forsinkelse) og 5 (cæsiumuret) er så billige og stærke, at de kan komme med uanset hvad (fx når Solsystemet eller Værkstedet alligevel bliver rørt).
 
-## Trinene (Trin 0, 7. november 2026, venter på jeres go)
+## Trinene (Trin 0, 7. november 2026, go til T1 givet samme dag)
 *Tallene og kilderne står i [fakta-tid.md](fakta-tid.md), og udregningerne i `docs/fakta-tid/regn.py`. Hvert trin får sin egen session og prompt (`docs/prompt-tid-t1.md` osv.), og hvert trin får sit eget go. Model: Opus med høj effort, også til teksterne i T3. Cockpitudsigten (T4) har sit eget go senere.*
 
 **Rammen (gælder alle trin):**
@@ -95,7 +95,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - [ ] **På tabletten:** Kan urene læses på højkant og på langs? Rammer man skyderens trin med fingeren? Kører lysuret glat, og forstår man zigzaggen?
 
 **T2. Alle mål, "1 g hele vejen" og afstanden, der skrumper** *(mellem, én session)*
-- [ ] Mælkevejens centrum og Andromedagalaksen. Skyderen går op til 12 ni-taller (γ ≈ 707.000, se spørgsmål 4).
+- [ ] Mælkevejens centrum og Andromedagalaksen. Skyderen går op til 14 ni-taller (γ ≈ 7,1 mio., jeres svar på spørgsmål 4). Så giver Mælkevejens centrum ud og hjem ca. 3 dage i skibet mod ca. 54.000 år på Jorden.
 - [ ] Kontakten "1 g hele vejen" (speed op med 1 g til midtvejs og brems med 1 g resten): ca. 3,6 år til Alpha Centauri, ca. 20 år til Mælkevejens centrum og ca. 29 år til Andromeda, i skibet og én vej.
 - [ ] "Set fra skibet": Afstanden til målet står med to tal (set fra Jorden og set fra skibet), og målet rykker tættere, når farten stiger.
 - [ ] Hjemkomsten sammenligner med fortiden (listen "Sammenligninger med fortiden" i fakta-tid.md) og viser årstallet på Jorden.
@@ -135,6 +135,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 4. ✅ Besvaret 7. november 2026: Idéerne skrives ind her, så en anden session kan arbejde videre.
 
 ## Spørgsmål til jer efter Trin 0 (7. november 2026, Opus' anbefaling først)
+**✅ Jeres svar (7. november 2026): "Go. Følg dine anbefalinger".** Svaret er altså a på alle fem: fast fart med en ærlig linje og kontakten "1 g hele vejen", to digitale ure og en urskive for Jorden, tvillingen som beskrevet i 3a, op til 14 ni-taller og listen over fortiden, som den er. Go til T1.
 1. **Skyderen og accelerationen.** Med 1 g (som at stå på Jorden) tager turen *år* i skibet, aldrig dage. "Et par dage mod tusinder af år" kræver ca. 11.500 g, og det ville knuse en (fakta-tid.md, afsnit 6).
    - **a (anbefalet):** Skyderen med fast fart (vi springer over, hvordan man kommer op i fart, og siger det ærligt i underteksten) *og* en kontakt "1 g hele vejen" med de realistiske tider. Man får både "wow" og sandheden.
    - b: Kun 1 g. Det er ærligt, men "et par dage" forsvinder.
@@ -155,9 +156,9 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 ## Model og effort
 - **Faktagrundlaget og planen (Trin 0):** lavet med Opus, høj effort (7. november 2026).
-- **T1-T3:** Opus med høj effort, én ny session pr. trin med en prompt i `docs/prompt-tid-t1.md` osv. (skrives, når jeres svar på spørgsmålene ovenfor er her).
+- **T1-T3:** Opus med høj effort, én ny session pr. trin. Prompten til T1 er [prompt-tid-t1.md](prompt-tid-t1.md). Prompterne til T2 og T3 skrives, når trinet før er færdigt.
 - **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul.
 - **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-Når jeres svar på spørgsmålene ovenfor er skrevet ind, skrives prompten til T1 (`docs/prompt-tid-t1.md`). Så: ny session med Opus (høj effort) og "Læs docs/prompt-tid-t1.md".
+Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t1.md".
