@@ -17,7 +17,8 @@ const RAD = Math.PI / 180;
 
 // ---------- Billederne ----------
 // Kun de filer, der findes, står her, så der ikke bliver spurgt efter filer, der mangler.
-// navn: fast filnavn. størrelse: true betyder, at filen findes som -4k.jpg (pc) og -2k.jpg (tablet og telefon).
+// navn: fast filnavn. størrelse: true betyder, at filen findes som -4k.jpg (pc) og -2k.jpg (tablet og telefon)
+// (og -8k.jpg med stor, se strFor).
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url).href; // virker også fra andre sider (fx tests/vaerktoejer/kloder.html)
 const STØRRELSE = LAV_KVALITET || TEST_HURTIG ? '2k' : '4k';
 const BILLEDER = {
@@ -26,9 +27,15 @@ const BILLEDER = {
   skyer: { navn: 'jorden-skyer', størrelse: true, kanaler: 1 }, // kun én kanal i grafikkortet (sparer hukommelse)
   højde: { navn: 'jorden-hoejde-2k.png', kanaler: 2 }, // 16 bit i rød og grøn (se lav_billeder.py)
   hav: { navn: 'jorden-hav.png', kanaler: 1 }, // hvidt = hav (til Solens glimt)
-  måne: { navn: 'maanen', størrelse: true, farve: true }, // LRO (CGI Moon Kit)
+  måne: { navn: 'maanen', størrelse: true, farve: true, stor: true }, // LRO (CGI Moon Kit). stor: også 8k (se strFor)
   måneHøjde: { navn: 'maanen-hoejde-1k.png', kanaler: 2 },
 };
+// Størrelsen for et billede: 4k på pc og 2k på tablet og i tests. Med stor (Månen, jeres ønske 7. november 2026):
+// 8k på pc, hvis grafikkortet kan (maxTextureSize ≥ 8192, ellers 4k), og 4k på tablet og telefon.
+function strFor(b) {
+  if (!b.stor || TEST_HURTIG) return STØRRELSE;
+  return !LAV_KVALITET && (verden.renderer?.capabilities.maxTextureSize ?? 0) >= 8192 ? '8k' : '4k';
+}
 // Dagen i året midt i de fire måneder med dagbilleder (januar, april, juli og oktober)
 const BILLEDDAGE = [15, 105, 196, 288];
 
@@ -55,7 +62,7 @@ function hentFil(fil, farve, kanaler) {
 }
 const filerFor = (b, str) => (Array.isArray(b.navn) ? b.navn : [b.navn]).map((n) => (b.størrelse ? `${n}-${str}.jpg` : n));
 // Er billedet (eller listen) hentet før i den størrelse, der skal bruges? Så ses det med det samme (ingen toning).
-const iForvejen = (nøgle) => filerFor(BILLEDER[nøgle], STØRRELSE).every((f) => færdige.has(f));
+const iForvejen = (nøgle) => filerFor(BILLEDER[nøgle], strFor(BILLEDER[nøgle])).every((f) => færdige.has(f));
 // Henter et billede (eller en liste af billeder) og kalder sæt(t) med det, eller med null, hvis det ikke findes.
 // På pc (4k) kommer det i to trin: først 2k (er der hurtigt), og så 4k, som skiftes ind. 2k fjernes bagefter fra
 // grafikkortet. Er 4k hentet før, kommer det med det samme.
@@ -63,10 +70,11 @@ function hent(nøgle, sæt) {
   const b = BILLEDER[nøgle];
   const samlet = (str) => Promise.all(filerFor(b, str).map((f) => hentFil(f, b.farve, b.kanaler)))
     .then((l) => (l.every(Boolean) ? (Array.isArray(b.navn) ? l : l[0]) : null));
-  if (!b.størrelse || STØRRELSE === '2k' || iForvejen(nøgle)) return samlet(STØRRELSE).then(sæt);
+  const str = strFor(b);
+  if (!b.størrelse || str === '2k' || iForvejen(nøgle)) return samlet(str).then(sæt);
   let stor = false;
   const lille = samlet('2k').then((t) => { if (!stor && t) sæt(t); return t; });
-  return samlet(STØRRELSE).then(async (t) => {
+  return samlet(str).then(async (t) => {
     stor = true;
     if (!t) { if (!(await lille)) sæt(null); return; }
     sæt(t);

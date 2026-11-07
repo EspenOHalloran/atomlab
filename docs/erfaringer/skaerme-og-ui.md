@@ -32,3 +32,8 @@
 - **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
 - **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
 - **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
+
+## Ventetid ved skift af klode (7. november 2026)
+- **Mål først, hvad ventetiden er:** Brugeren så 4-5 sekunder uden noget, når man skiftede fra Jupiter til Mars. Bjælken "Henter …" kom ikke, for tiden gik ikke med at hente billeder, men med JS, der låste browseren (målt med en CPU-profil). Efter rettelsen tager klikket ca. 0,6 s i testbrowseren.
+- **En ventebesked kan kun bevæge sig, mens browseren er låst, hvis den er en CSS-animation af transform eller opacity,** og den skal være tegnet, før arbejdet starter. Rejseskiltet venter derfor på et billede (`requestAnimationFrame` og så `setTimeout`), før kloden bygges, og toner først ind efter 0,2 s, så hurtige skift ikke blinker.
+- **En kontakt, som fænomenet selv slår fra:** `opdaterKnapper()` bygger hele Styr-boksen om, også en skyder, man trækker i. Brug `sætKontakt(navn, til)`, når det sker midt i et træk (roverens foto, der slukkes, når klokken flyttes).

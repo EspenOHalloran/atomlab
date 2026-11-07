@@ -1475,3 +1475,19 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 /* "Start forfra" nederst i listen med opgaver */
 .opgaver li.forfra { list-style: none; display: block; padding: 6px 0 0; border: 0; background: none; cursor: default; }
 .knap.spørg { color: #ffd43b; border-color: rgba(255, 212, 59, 0.5); }
+
+/* Rejseskiltet i Solsystemet (js/rejseskilt.js): "Kurs mod Mars", mens den nye klode bygges. Kun transform og opacity
+   animeres, så browseren kan køre animationen, mens programmet arbejder. Toner ind efter 0,2 s (et hurtigt skift blinker ikke). */
+.rejseskilt { position: absolute; left: 50%; top: 50%; z-index: 3; width: min(300px, calc(100% - 32px)); padding: 16px 18px 14px; transform: translate(-50%, -50%);
+  border-radius: 14px; background: rgba(8, 12, 28, 0.82); border: 1px solid var(--panel-kant); box-shadow: 0 0 40px rgba(127, 247, 255, 0.08);
+  text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+.rejseskilt.vist { opacity: 1; transition-delay: 0.2s; }
+.rejse-bane { position: relative; width: 84px; height: 84px; margin: 4px auto 12px; border: 1px dashed rgba(127, 247, 255, 0.35); border-radius: 50%; }
+.rejse-maal { position: absolute; inset: 0; display: grid; place-items: center; font-size: 34px; filter: drop-shadow(0 0 10px rgba(255, 180, 120, 0.35)); }
+.rejse-arm { position: absolute; inset: -1px; animation: rejse-kredser 1.6s linear infinite; }
+.rejse-raket { position: absolute; top: -13px; left: 50%; font-size: 20px; transform: translateX(-50%) rotate(45deg); }
+.rejseskilt.rolig .rejse-arm { animation: none; }
+.rejse-titel { margin: 0; color: var(--tekst, #e8ecff); font-size: 17px; font-weight: 600; }
+.rejse-tekst { margin: 6px 0 0; color: var(--svag); font-size: 14px; }
+@keyframes rejse-kredser { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .rejse-arm { animation: none; } }
