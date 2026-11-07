@@ -2,14 +2,13 @@
 
 *Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session (sammen med CLAUDE.md og DESIGN.md). Stod før øverst i DESIGN.md (flyttet 6. november 2026). Højst ca. 10 KB: Det forrige "Senest lavet" flyttes til [docs/arkiv/historik.md](arkiv/historik.md), når noget nyt er lavet. Sidst opdateret: 7. november 2026 (M1a).*
 
-**Senest lavet (7. november 2026): Rettelser i Det periodiske system, gruppernes navne og plasma (PR A).** Jeres go: "go" (efter jeres opsamling på brugen).
-- **"‹ Tilbage"** i stedet for "✕ Luk" på grundstofkortet, så man ikke trykker på "Menu" for at komme tilbage til tabellen.
-- **Fejl rettet:** Tekster fra et tidligere grundstof (fx plutonium) stod på kort uden linjerne "I din hverdag" osv. CSS vandt over `hidden`. En test fanger det nu.
-- **Større navne på felterne** (18-23 i stedet for 12-14 af 128), symbolet en smule mindre. På tablet på højkant er felterne stadig små.
-- **Gruppernes navne** (`navnet`): Hvorfor de hedder alkali, jordalkali, overgang osv. Det står på kategorikortet og i "Hvorfor?"-kortet. Faktatjekket mod Wikipedia (kilderne står i [fakta-grundstofkort.md](fakta-grundstofkort.md)). Overgangsmetal kommer af elektronerne (Bury 1921), ikke kun af pladsen.
-- **Plasma i Ordbogen:** Fem afsnit med "Hvorfor?" og "Hvordan?" (ioner, hvordan en gas bliver til plasma, hvorfor det lyser, plasmaskærme, hvor det findes) og en tegning af gas mod plasma. Det nye felt `mere` står kun i Ordbogen, ikke i boblerne.
+**Senest lavet (7. november 2026): Menuen som en ring af kort (K1, kun med `?karrusel` sidst i adressen).** Jeres go: "go" (prototypen), "fint med elektronbane … nærmest noget apple kunne have lavet" og "retningen er god. go" (efter billedet). Planen og jeres svar: [plan-menu.md](plan-menu.md).
+- **Ringen:** Kortene kredser om menuens atom på en skrå, lysende elektronbane med tre lysprikker. Kortet forrest er stort og skarpt, kortene til siden mindre og mørkere, og kortene svæver let. Ringen følger fingeren, tager farten med og falder blødt på plads (fjeder). Musehjul, piletaster og tryk på et kort til siden drejer den. Kun kortet forrest åbner delen.
+- **Rækkefølgen efter størrelse:** Stjerneovnen, Reaktoren, Værkstedet, Det periodiske system, Batteriet, Solsystemet, Kosmos og Ordbogen. Docken af glas nederst har alle ikonerne under "‹ mindre … større ›".
+- **Fremgangen mindre fremme:** Kun et ✓ på en klaret del. Tallene står bag "★ Din fremgang". Ringen starter på den del, man sidst var i (`atomlabSidsteDel`). Citatet er skjult i ringen.
+- **Den almindelige menu er uændret.** Testen `karrusel` har 96 tjek. Hele samlingen: se nedenfor under "Åbne punkter".
 
-**Før det:** Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
+**Før det:** Rettelser i Det periodiske system, gruppernes navne og plasma (PR A, 7. november 2026), Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
 
 **Næste (venter på jeres go):**
 0. **Ordbogen, PR B (jeres svar 7. november 2026):** "Hvorfor?" og "Hvordan?" (`mere`) til de ca. 15-20 ord, hvor det giver mest mening (fx tøris, ion, isotop, fusion, halveringstid). Forklaringerne må gerne være ca. dobbelt så lange, men kun i Ordbogen. Boblerne forbliver korte. Opus høj. Mit forslag: et lille link "Mere i Ordbogen ›" i boblen (ikke besluttet).
@@ -19,7 +18,7 @@
 
 **Kursen (jeres svar 5. november 2026):** M8c del 1, Småtingspakken, tabletrunden ([docs/tjekliste-tablet.md](tjekliste-tablet.md)), Formørkelser, Det sorte hul og Molekyler M1a er lavet. Molekyler kører sideløbende med planeterne (den ligger i Værkstedet).
 
-**Menuen som en karrusel (7. november 2026, [plan-menu.md](plan-menu.md)):** Jeres svar er skrevet ind. K1 (prototypen bag `?karrusel`) er bygget på grenen `ccr-b08a749d-v9v3q3`. Åbent: jeres besked "Ellipseformet skulle der stå".
+**Menuen som en ring (K2 og K3 venter, [plan-menu.md](plan-menu.md)):** Først jeres runde på tabletten med `?karrusel` (spørgsmålene i [ikke-afproevet.md](ikke-afproevet.md)). K2: baggrunden skifter med kortet forrest (fx en stjerne ved Stjerneovnen, planetbane ved Solsystemet), mellem til stor, eget go. K3: ringen bliver standard, og gitteret, de gule piller og "Næste eventyr" fjernes.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 0. **Jupiter bygges videre** (J1-J4 ✅, J5 venter, Opus høj, [docs/plan-jupiter.md](plan-jupiter.md)). Jeres svar på de fem spørgsmål er givet (6. november 2026, står i planen under "Jeres svar"): OPAL-kortet, vulkanerne venter, månerne som kugler (tryk og besøg kun, hvis det er lille og i Saturns kvalitet), 5 stop uden Io, den rigtige fart. Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md). Kan køre samtidig med rettelsespakken og Det sorte hul.
