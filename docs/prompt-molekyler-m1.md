@@ -1,0 +1,29 @@
+# Prompt: Molekyler M1 (Byttebørsen)
+
+*Skrevet 7. november 2026 efter jeres valg: Molekyler M1 kører sideløbende med Jupiter (J3-J5) i stedet for en ny planet. Kopiér teksten nedenfor ind i en ny session. **Model: Opus. Effort: høj** (xhigh er ikke nødvendig her. Den er sparet til faktagrundlaget for M2). Én session til hele M1: Den laver et kort tjek først og bygger derefter M1a og M1b med et go før hver.*
+
+---
+
+Byg Molekyler M1 (Byttebørsen) efter planen i `docs/plan-molekyler.md`. Læs først CLAUDE.md, "Lige nu" (`docs/lige-nu.md`), DESIGN.md, hele `docs/plan-molekyler.md` (jeres svar står under afsnit 7) og afsnit 1, 2, 6 og "Forslag til Ærligt talt-linjer" i `docs/fakta-molekyler.md`. Læs også `docs/kode/skaerme.md` (Værkstedet og Reaktorens del-knapper), `docs/kode/faelles.md` (`Atom`, `lag.js`, `beskeder.js`, `fremgang.js`, `pause.js` og `kontakt.js`), tjekliste C, D og E i `docs/tjeklister/`, erfaringerne `docs/erfaringer/skaerme-og-ui.md`, `docs/erfaringer/tid-timere-tilstand.md` og `docs/erfaringer/fakta-faelder.md`. Er du i tvivl om noget, så spørg, før du bygger det.
+
+**Jeres svar (gælder over planen, hvis de er uenige):** Molekylerne ligger i Atomværkstedet med knapper øverst ("Byg et atom", "Byttebørsen" og senere "Byg molekyler", som del-knapperne i Reaktoren). Atomerne og elektronen trækkes med fingeren eller musen. Elektronerne vises som prikker på ringe. Byttebørsen bygges først. Infopanelet må ikke få en rullebjælke.
+
+**Trin 0: Kort tjek, før der bygges (stop bagefter og vent på go):**
+1. **Planen er fra 23. oktober 2026,** før U1-U4, `lag.js` ("Hvorfor?"-kort, foldebokse og "Næste skridt"), den fælles tidsknap og kontakterne. Skriv kort i planen (et nyt afsnit "M1 i dag"), hvordan Byttebørsen passer ind i det, der findes nu: hvor del-knapperne står (også på telefon og tablet på højkant), hvordan panelet deles i lag, hvordan opgaverne kommer i `fremgang.js`, og om menuen skal vise fremgangen for Molekyler.
+2. **Tallene til de andre par mangler i faktagrundlaget.** Skriv et nyt afsnit i `docs/fakta-molekyler.md` med kilder: ioniseringsenergien for Li, Mg (1. og 2.) og Ca (1. og 2.), elektronaffiniteten for F og O (og at O²⁻ er ustabil som fri ion, så den 2. elektron *koster* energi: en fælde), gitterenergien for LiF, MgO og CaCl₂ og ionernes radier (Shannon) for Na⁺, Cl⁻, Li⁺, F⁻, Mg²⁺, O²⁻ og Ca²⁺ og de neutrale atomers radier, så Na⁺ krymper og Cl⁻ vokser i det rigtige forhold. Slå også tallene i afsnit 1 op i kilderne (de er kun set i uddrag), og tilføj Na + Na (hvorfor der ikke sker noget).
+3. **Fælde 1** ("atomer vil gerne have en fuld skal"): Tjek hjælpens "Hvad er en ion?" i `index.html` og halogen-kortets `forsøg` i `js/data/kategorier.js`. Foreslå en rettelse, hvis teksten giver det forkerte indtryk.
+4. **Domæner:** `en.wikipedia.org` er åben. `physics.nist.gov`, `webbook.nist.gov`, `chem.libretexts.org` og `openstax.org` var lukket 7. november 2026 (se "Lige nu", om I har åbnet dem). Tjek med curl. Er en kilde, du har brug for, lukket, så spørg, før du arbejder videre.
+5. Spørg om det, der er uklart, med din anbefaling først (fx hvad energimåleren viser, og om "Sådan sker det i virkeligheden" (harpunen) kommer med i M1a eller M1b).
+
+**M1a (eget go, egen PR):** del-knapperne i Værkstedet, Byttebørsen med Na + Cl trin for trin (de to atomer, træk elektronen over, energimåleren i minus, ionerne trækker i hinanden, og måleren går over nul), harpunen og "Ærligt talt". Det, man har bygget i "Byg et atom", står klar (planen, afsnit 1).
+**M1b (eget go, egen PR):** saltkrystallen (InstancedMesh, terningemønstret, kameraet zoomer ud), opgaverne Li + F, Mg + O, Ca + 2 Cl og Na + Na, og fremgangen.
+
+**Kode:** Nye filer `js/molekyler.js` (Byttebørsen) og `js/molekyle3d.js` (et let atom med yderste skal og prikker, genbruger farver og glød fra `Atom`, men ikke kernens fysik), data i `js/data/molekyler.js` (kan testes i Node). Lav `molekyle3d.js`, så M2 (Byg molekyler) kan genbruge det. Brug `dt` og `tid` fra opdateringen (ikke `performance.now()`), og lad tidsknappen virke. Testadgang under `window.atomlabTest` (skriv den i `docs/kode/testadgang.md`). Nye gemte data i `docs/kode/gemte-data.md`.
+
+**Tekster:** Al tekst på dansk til en 13-årig, med fagord forklaret første gang (ion, ionbinding, elektronaffinitet, gitter). Nye ord i Ordbogen. Brug `/faktatjek` på alle tekster med tal, før de kommer med, og læs fælderne først.
+
+**Tests:** Ny `tests/molekyler.mjs` (Node-test af data og regnestykket: koster ved Na → Cl, gevinst ved mødet, de rigtige ladninger for alle par, Na + Na giver ingenting) og en Playwright-test af Byttebørsen (knapperne, træk elektronen, måleren, ingen konsolfejl, panelet uden rullebjælke). `vaerksted` skal stadig bestå. `node tests/koer-alle.mjs --ændret`, mens du arbejder og før merge. Skærmbilleder af Byttebørsen i pc, tablet (begge veje) og telefon. Kendt fejl: `ordforklaring` fejler på `main` (se "Åbne punkter"), så den skal ikke rettes her, men nævnes, hvis den fejler.
+
+**Jupiter bygges samtidig** i en anden session (J3-J5, filer i `js/kosmos/`, `js/solsystem/` og `docs/plan-jupiter.md`). I deler `index.html`, `style.css`, `js/fremgang.js`, Ordbogen, `docs/lige-nu.md` og `docs/ikke-afproevet.md`. Rør kun de linjer, du skal bruge. Før hver merge: `git fetch origin main`, flet `main` ind, løs konflikter (især i `docs/lige-nu.md`), og kør `--ændret` igen.
+
+**Efter hver delopgave:** `/faerdig`. Opdater "Lige nu" (flyt det forrige "Senest lavet" til `docs/arkiv/historik.md`), sæt ✅ ved M1a/M1b i planens trin-tabel, skriv erfaringer i `docs/erfaringer/`, beskriv de nye filer i `docs/kode/` og det, der skal prøves på tabletten, i `docs/ikke-afproevet.md`. Opdater artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe, læs det først, og behold linket). Når M1b er færdig, flyttes denne prompt til `docs/arkiv/`.
