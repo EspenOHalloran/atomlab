@@ -34,3 +34,10 @@
 - **Kameraets vinkel ved et besøg regnes fra Solen, ikke fra planeten:** Med månens egen vinkel + 50° så kameraet Io næsten fra natsiden, efter at uret var spolet ud af skyggen.
 - **Forstærkede farver dæmpes mere end man tror:** 40 % af farvekortets farve gav en næsten hvid Io. 80 % gav en dæmpet gul. Se på et billede med fuld grafik, før tallet låses.
 - **Startpladser og resonans:** Vælg vinklerne fra Solens retning, og regn den tredje ud af Laplace-relationen (Io = 180° + 3·Europa − 2·Ganymedes). Så holder den, også når uret spoles frem.
+
+## Jupiter J4: flybyen, siderne og citatet (7. november 2026)
+- **Byg ikke et stop før det, det skal vise:** Planen havde stop ved sydpolen og i skyggen, men cyklonerne, nordlyset og ringene kommer først i J5. Da hver delopgave merges til `main`, blev de to stop flyttet til J5 (jeres svar), i stedet for at vise en sløret pol og en skygge uden ringe.
+- **Gentag ikke flybyens tekst i planetens egen funktion:** `flyby.js` skriver underteksten med prikkerne, før `flyvTil` kaldes. Kalder stoppet den samme funktion som træet (`tilPlet`), overskrives underteksten uden prikker. Del den op i en, der kun flyver (`flyvTilPlet`), og en, der også skriver teksten.
+- **Ting, der skal ses langt ude, skal regnes fra den største afstand på en smal skærm:** Banerne begyndte at tone frem ved afstand 35. Hele Jupiter står 33 væk på pc, men over 80 på tablet på højkant, så banerne skar hen over billedet dér. Se stoppene i alle størrelser.
+- **Citater fra gamle bøger:** archive.org har skanninger af førsteudgaver med OCR (`_djvu.txt`) og en sidefil (`_djvu.xml`), der viser, hvilken side en tekst står på. Hent siden som billede (`/page/n40_w1400.jpg`), og læs ordlyden i billedet, for OCR'en blander det lange s og f sammen.
+- **Lukkede kilder:** nature.com, pubmed og europepmc var lukket, så Li m.fl. 2018 kunne ikke læses. Wikipedias rå wikitekst viste henvisningen. Børneteksten blev skrevet, så den holder med både det gamle og det nye tal ("ca. dobbelt så meget").

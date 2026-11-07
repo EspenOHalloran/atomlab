@@ -49,10 +49,14 @@ await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'jupiter' && ato
 tjek('Jupiter åbner, og kortet er hentet (1k i tests, i farver)', (await fm(() => atomlabTest.solsystem.fænomen().hentet())) && (await fm(() => atomlabTest.solsystem.fænomen().billeder()))['jupiter-1k.jpg'] === 'farver', JSON.stringify(await fm(() => atomlabTest.solsystem.fænomen().billeder())));
 tjek('sort himmel (ingen tågeskyer)', !(await fm(() => atomlabTest.solsystem.tåger())));
 const træ = await fm(() => atomlabTest.solsystem.træ());
-tjek('træet: Jupiter, Den Store Røde Plet, Månerne og de fire store måner (flybyen kommer i J4)', træ.filter((p) => p.id).map((p) => p.id).join() === 'jupiter,plet,maaner,io,europa,ganymedes,callisto' && træ[0].valgt, JSON.stringify(træ));
-tjek('Styr-boksen: kontakterne Vindene, Modlys og Navne', JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['Vindene', 'Modlys', 'Navne']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+tjek('træet: "▶ Flyby · 3 stop" øverst, så Jupiter, Den Store Røde Plet, Månerne og de fire store måner', træ.map((p) => p.id).join() === 'tur,jupiter,plet,maaner,io,europa,ganymedes,callisto' && træ[0].navn.includes('Flyby · 3 stop') && træ[1].valgt, JSON.stringify(træ));
+// "Start flyby" er grå, indtil månernes kort er hentet og lagt i grafikkortet (som ved Saturn)
+const flybyKlar = await s.waitForFunction(() => atomlabTest.solsystem.knapper()[0] === '▶ Start flyby', null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
+tjek('"Start flyby" bliver aktiv, når månernes kort er hentet, og Styr-boksen har kontakterne Vindene, Modlys og Navne', flybyKlar && JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['▶ Start flyby', 'Vindene', 'Modlys', 'Navne']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+const citat = await fm(() => { const c = document.getElementById('solsystemCitat'); return { vist: c && !c.hidden, tekst: c?.textContent ?? '', latin: c?.querySelector('.citat-tekst')?.title ?? '' }; });
+tjek('Jupiter viser citatet af Galilei med den latinske ordlyd fra 1610', citat.vist && citat.tekst.includes('Galileo Galilei') && citat.latin.startsWith('Die itaque septima'), JSON.stringify(citat));
 const side = await fm(() => atomlabTest.solsystem.side());
-tjek('siden: fladtrykt, Billederne og "Ærligt talt" sidst', /fladtrykt/.test(side.tekst) && side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
+tjek('siden: fladtrykt, båndene, det indre, "mislykket stjerne", kometerne, Billederne og "Ærligt talt" sidst', ['Hvorfor er Jupiter fladtrykt?', 'Hvorfor har Jupiter bånd?', 'Hvad er inden i?', 'Er Jupiter en mislykket stjerne?', 'Beskytter Jupiter Jorden?'].every((t) => side.bokse.includes(t)) && /fladtrykt/.test(side.tekst) && side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
 
 // ---------- Formen og drejningen ----------
 const form = await fm(() => atomlabTest.solsystem.fænomen().form());
@@ -211,6 +215,67 @@ await J(() => atomlabTest.solsystem.gåTil('jupiter'));
 await J(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver && atomlabTest.solsystem.fænomen().nær() === 0, null, { timeout: 10000, polling: 100 }).catch(() => {});
 tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(await J(() => atomlabTest.solsystem.fase())) && (await J(() => atomlabTest.solsystem.fænomen().visning())) === 'jupiter');
+
+// ---------- Flybyen (J4): oversigten, båndene og pletten ----------
+{
+  const stop = await J(() => atomlabTest.solsystem.fænomen().flybyStop());
+  tjek('flybyen: 3 stop (oversigten, båndene og pletten), sydpolen og skyggen kommer i J5', stop.map((t) => t.id).join() === 'maaner,jupiter,plet', JSON.stringify(stop.map((t) => t.id)));
+  tjek('flybyen: alle undertekster er under 160 tegn og slutter med et punktum', stop.every((t) => t.tekst.length < 160 && t.tekst.endsWith('.')), JSON.stringify(stop.map((t) => t.tekst.length)));
+  await s.click('#solsystemTræ button[data-tur]');
+  tjek('flybyen startes fra træet, og punktet lyser', (await J(() => atomlabTest.solsystem.træ()))[0].valgt && (await J(() => atomlabTest.solsystem.fænomen().tur().trin)) === 0);
+  const set = [];
+  for (let i = 0; i < 3; i++) {
+    await J(() => atomlabTest.solsystem.fænomen().hop());
+    await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 15000, polling: 100 }).catch(() => {});
+    await s.waitForTimeout(400); // panelet opdateres fire gange i sekundet
+    set.push(await J(() => ({
+      fase: document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', prikker: document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin button').length,
+      trin: atomlabTest.solsystem.fænomen().tur().trin, visning: atomlabTest.solsystem.fænomen().visning(), side: atomlabTest.solsystem.side().nøgle,
+      lige: document.querySelector('#solsystemForklaring')?.textContent ?? '', knapper: [...document.querySelectorAll('#solsystemForklaring .side-knap')].map((k) => k.dataset.kontakt ?? k.dataset.tid),
+      afstand: atomlabTest.solsystem.fænomen().tur().afstand,
+    })));
+    await s.screenshot({ path: `${UD}/7-flyby-${i + 1}.png` });
+    if (i < 2) await s.click('#solsystemBjælke button:has-text("Næste")');
+  }
+  tjek('flybyen: stoppene i rækkefølge med 3 prikker, og panelet viser stedets side', set.every((x, i) => x.fase.includes(stop[i].titel) && x.prikker === 3 && x.visning === stop[i].id) && set[0].side === 'jupiter:maaner' && set[1].side === 'jupiter' && set[2].side === 'jupiter:plet', JSON.stringify(set.map((x) => [x.fase.slice(0, 25), x.prikker, x.visning, x.side])));
+  tjek('flybyen: oversigten langt ude, båndene ved hele Jupiter, pletten tæt på', set[0].afstand > 150 && set[1].afstand > 10 && set[1].afstand < 60 && set[2].afstand < 8, JSON.stringify(set.map((x) => x.afstand)));
+  tjek('flybyen: "Lige nu" ved båndene har kontakten Vindene og ⏩, og turen er slut ved pletten', set[1].knapper.join() === 'Vindene,hurtig' && set[0].trin === 0 && set[1].trin === 1 && set[2].trin === null && /Turen er slut/.test(set[2].lige) && /døgn stille/.test(set[2].lige), JSON.stringify(set.map((x) => [x.trin, x.knapper, x.lige.slice(0, 40)])));
+  tjek('flybyen: ved pletten står Jupiters døgn stille, og Solen står over pletten', (await J(() => atomlabTest.solsystem.fænomen().plet())).ved && (await J(() => atomlabTest.solsystem.fænomen().plet())).solHøjde > 30);
+  // "‹" fra en ny tur og ✕ midt på turen
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await s.click('#solsystemBjælke button:has-text("Næste")');
+  await s.click('#solsystemBjælke button:has-text("‹")');
+  tjek('flybyen: "‹" går tilbage til oversigten', (await J(() => [atomlabTest.solsystem.fænomen().visning(), atomlabTest.solsystem.fænomen().tur().trin].join())) === 'maaner,0');
+  // Et tryk på en måne under turen gør ingenting (som ved Saturn)
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  const tp = await J(() => atomlabTest.solsystem.fænomen().månePlads('Ganymedes'));
+  await s.mouse.click(tp.x, tp.y);
+  await s.waitForTimeout(300);
+  tjek('flybyen: et tryk på en måne under turen afbryder den ikke', (await J(() => atomlabTest.solsystem.fænomen().visning())) === 'maaner' && (await J(() => atomlabTest.solsystem.fænomen().tur().trin)) === 0);
+  await s.click('#solsystemBjælke button[aria-label="Stop flyby"]');
+  await s.waitForTimeout(300);
+  tjek('✕ stopper flybyen og fjerner underteksten', !(await J(() => document.querySelector('#solsystemVindue .undertekst.fase'))) && (await J(() => atomlabTest.solsystem.knapper()))[0] === '▶ Start flyby');
+  // Et sted i træet midt på turen stopper turen
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
+  await s.click('#solsystemTræ button[data-sted="europa"]');
+  tjek('et sted i træet midt på turen stopper turen og besøger stedet', (await J(() => atomlabTest.solsystem.fænomen().tur().trin)) === null && (await J(() => atomlabTest.solsystem.fase()))?.titel === 'Europa');
+  await J(() => atomlabTest.solsystem.gåTil('jupiter'));
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+}
+
+// ---------- Knapperne i teksterne (siden i lag) ----------
+{
+  const { SIDE, SIDER } = await import('../js/data/sider/jupiter.js');
+  const alle = [SIDE, ...Object.values(SIDER)].map((x) => JSON.stringify(x)).join(' ');
+  const steder = [...alle.matchAll(/data-sted=\\"([^"\\]+)/g)].map((m) => m[1]);
+  const kontakter = [...alle.matchAll(/data-kontakt=\\"([^"\\]+)/g)].map((m) => m[1]);
+  const iTræ = (await J(() => atomlabTest.solsystem.træ())).map((p) => p.id);
+  const iStyr = await J(() => atomlabTest.solsystem.knapper());
+  tjek('teksterne: alle steder i knapperne findes i træet', steder.length > 5 && steder.every((id) => iTræ.includes(id)), JSON.stringify([...new Set(steder)]));
+  tjek('teksterne: alle kontakter i knapperne findes i Styr-boksen', kontakter.length >= 2 && kontakter.every((k) => iStyr.includes(k)), JSON.stringify([...new Set(kontakter)]));
+  tjek('teksterne: alle sider har Ærligt talt, og der står intet om, at flybyen kommer senere', Object.values(SIDER).every((x) => x.ærligt) && !/flybyen kommer/i.test(SIDE.ærligt), SIDE.ærligt);
+}
 
 // ---------- Kortet (lavet af billeder/solsystem/lav_jupiter.py) ----------
 const kort = await fm(async () => {

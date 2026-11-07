@@ -1,6 +1,7 @@
 // Teksterne i højre panel ved Jupiter (siden i lag, U3 i docs/plan-ux.md). J1 og J2 i docs/plan-jupiter.md: Jupiters
-// egen side og pletten, kort. J3: månerne (faktatjekket i fakta-solsystemet.md, "Faktatjek J3"). De andre steder og
-// flybyen får deres sider i J4 (og faktatjekkes igen dér). Underteksten ved en måne står i MÅNER i js/kosmos/jupiter.js.
+// egen side og pletten. J3: månerne (faktatjekket i fakta-solsystemet.md, "Faktatjek J3"). J4: emnerne på Jupiters side
+// (faktatjekket i "Faktatjek J4"). Polerne og ringene får deres sider i J5. Underteksterne ved en måne og på flybyen står
+// i MÅNER og TUR i js/kosmos/jupiter.js.
 // Tallene er fra docs/fakta-solsystemet.md, "Del 5: Jupiter" (NSSDC). Uden Three.js, så teksterne kan testes i Node.
 
 import { kontakt, sted, tid } from '../../sideknap.js';
@@ -15,13 +16,28 @@ export const SIDE = {
       tekst: '<p>Jupiter drejer om sig selv på 9 timer og 56 minutter. Det er det korteste døgn af alle planeterne. Fordi Jupiter er af gas og drejer så hurtigt, buler den ud ved ækvator. Fra pol til pol er den ca. 6,5 % kortere end hen over ækvator, og det kan man se.</p>',
     },
     {
+      titel: 'Hvorfor har Jupiter bånd?', kontakt: 'Vindene',
+      tekst: '<p>Båndene er skyer af ammoniak og vand. De lyse bånd kaldes zoner, og de mørke, orange bånd kaldes bælter. Mellem båndene blæser jetstrømme skiftevis mod øst og mod vest og holder dem adskilt. Vindene går ca. 3.000 km ned i planeten.</p>'
+        + `<p>Slå ${kontakt('Vindene')} til, så viser pilene vinden: jo længere pil, jo hurtigere. Gule pile blæser mod øst, blå mod vest. Den hurtigste vind blæser ca. 150 meter i sekundet (ca. 540 km/t) mod øst, 24 grader nord for ækvator.</p>`
+        + `<p>Vindene måles i forhold til Jupiters døgn. Selvom de er hurtige, flytter skyerne sig højst ca. 5 grader, mens Jupiter drejer én gang. ${tid('hurtig', 'Prøv ⏩')}</p>`,
+    },
+    {
       titel: 'Hvad er den røde plet?',
       tekst: `<p>Den Store Røde Plet er en kæmpe storm, omtrent lige så bred som Jorden. Den ligger syd for ækvator og har været set sikkert siden 1831. Den er blevet mindre i de sidste 150 år. ${sted('plet', 'Flyv derhen')}</p>`,
     },
     {
-      titel: 'Hvor hurtigt blæser det?', kontakt: 'Vindene',
-      tekst: `<p>Skybåndene blæser skiftevis mod øst og mod vest. Slå ${kontakt('Vindene')} til, så viser pilene vinden: jo længere pil, jo hurtigere. Gule pile blæser mod øst, blå mod vest. Den hurtigste vind blæser ca. 150 meter i sekundet (ca. 540 km/t) mod øst, 24 grader nord for ækvator.</p>`
-        + `<p>Vindene måles i forhold til Jupiters døgn. Selvom de er hurtige, flytter skyerne sig højst ca. 5 grader, mens Jupiter drejer én gang. ${tid('hurtig', 'Prøv ⏩')}</p>`,
+      titel: 'Hvad er inden i?',
+      tekst: '<p>Jupiter er mest brint og helium, ligesom Solen. Under skyerne bliver trykket større og større, og brinten bliver til en væske. Måske halvvejs inde mod midten er trykket så stort, at brinten leder strøm som et metal. Forskerne mener, at det flydende metal laver Jupiters kæmpe magnetfelt, når planeten drejer.</p>'
+        + '<p>Inderst er der en kerne af tungere stoffer. Rumsonden Juno har målt, at den er større end ventet og delvis opløst, så den har ingen skarp kant.</p>',
+    },
+    {
+      titel: 'Er Jupiter en mislykket stjerne?',
+      tekst: '<p>Nej, ikke rigtigt. Jupiter er lavet af det samme som Solen, men den er alt for let til at blive en stjerne. Den skulle veje ca. 80 gange så meget, før brint kunne smelte sammen inde i den. Selv en brun dværg vejer mindst ca. 13 gange så meget som Jupiter.</p>'
+        + '<p>Alligevel sender Jupiter ca. dobbelt så meget varme ud, som den suger til sig af sollyset. Varmen er rester fra dengang, Jupiter blev dannet, og den slipper langsomt ud.</p>',
+    },
+    {
+      titel: 'Beskytter Jupiter Jorden?',
+      tekst: '<p>Mange har sagt, at Jupiter er et skjold, der holder kometer væk fra Jorden. Computerberegninger viser, at det er mere blandet: Jupiter skubber nogle kometer væk, men sender også asteroider og kometer ind mod os. Alt i alt er den ikke det store skjold, man troede.</p>',
     },
     {
       titel: 'Hvordan ser Jupiter ud bagfra?', kontakt: 'Modlys',
@@ -30,10 +46,12 @@ export const SIDE = {
   ],
   nørd: '<p><b>Døgnet</b> er svært at måle på en planet uden fast overflade, for skyerne blæser hver sin vej. Derfor måles det efter radiobølgerne fra Jupiters magnetfelt, som drejer med planetens indre: 9 t 55,5 min. Det kaldes System III.</p>'
     + '<p><b>Vindene er målt af os.</b> Hubble fotograferede Jupiter to omgange i træk den 11.-12. december 2025, med 9 timer og 25 minutter imellem. For hver stribe af skyer har vi fundet, hvor langt den har flyttet sig mellem de to billeder (krydskorrelation). Det giver ca. 149 m/s ved 24° N. Forskerne bag Hubbles kort målte 153 m/s samme sted i 2015, Cassini 138 m/s i 2000 og Voyager 184 m/s i 1979. Vindene ændrer sig lidt fra år til år.</p>'
+    + '<p><b>Varmen indefra:</b> Det gamle tal er, at Jupiter sender ca. 1,7 gange så meget varme ud, som den optager fra Solen. Nyere målinger fra Cassini (Li m.fl. 2018) tyder på, at Jupiter optager mindre sollys og har mere varme indefra end antaget, så tallet bliver nærmere 2.</p>'
+    + '<p><b>Grænserne:</b> Brint smelter sammen ved ca. 75-80 gange Jupiters masse (en stjerne), deuterium ved ca. 13 gange (en brun dværg). Beregningerne om kometerne er fra Horner og Jones (2008-2012).</p>'
     + '<p><b>Kortet ligger på en fladtrykt kugle.</b> Hubbles kort bruger "planetografisk" bredde (vinklen mellem lodret og ækvator), Cassinis "planetocentrisk" (vinklen fra Jupiters midte). Ved 45° er forskellen næsten 4°, så begge kort er regnet om, før de lægges på kloden.</p>',
   billeder: '<p>Kortet er Hubbles foto fra 11.-12. december 2025 (OPAL: NASA, ESA, A. Simon, CC BY 4.0). Farverne er justeret efter Cassinis kort fra december 2000 (NASA/JPL/Space Science Institute), som har farver tæt på dem, øjet ville se. Nær polerne, hvor Hubble ikke kan se, er kortet fra Cassini.</p>',
   videre: [sted('plet', 'Den Store Røde Plet'), sted('maaner', 'Månerne'), sted('io', 'Io'), sted('europa', 'Europa')],
-  ærligt: '<p>Jupiter bliver bygget lige nu. Ringene og flybyen kommer senere. Båndene glider med den fart, vi har målt, men skyerne i dem ændrer sig ikke, som de gør i virkeligheden: De toner langsomt ud og kommer igen, hvor de stod på Hubbles foto. Nær polerne er vindene ikke målt, så der står skyerne stille. Hubbles farver er justeret efter Cassinis, og skyerne ved polerne er fra år 2000.</p>',
+  ærligt: '<p>Jupiter bliver bygget lige nu. Polerne, nordlyset og ringene kommer senere. Båndene glider med den fart, vi har målt, men skyerne i dem ændrer sig ikke, som de gør i virkeligheden: De toner langsomt ud og kommer igen, hvor de stod på Hubbles foto. Nær polerne er vindene ikke målt, så der står skyerne stille. Hubbles farver er justeret efter Cassinis, og skyerne ved polerne er fra år 2000.</p>',
 };
 
 export const SIDER = {

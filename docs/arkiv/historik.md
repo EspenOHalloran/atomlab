@@ -2,8 +2,17 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
-## "Senest lavet" 7. november 2026 (Jupiter J3, før Molekyler M1a)
+## "Senest lavet" 7. november 2026 (Jupiter J4, før Molekyler M1a)
 
+**Senest lavet (7. november 2026): Jupiter J4, flybyen, siderne og citatet.** Jeres go: "Go til Jupiter j4".
+- **Jeres svar:** 3 stop nu (oversigten med månerne, båndene og pletten). Sydpolen og "I Jupiters skygge" kommer i J5 sammen med cyklonerne, nordlyset og ringene, så der ikke kommer halvfærdige stop på `main`. Citatet af Galilei er med.
+- **Flybyen:** "▶ Flyby · 3 stop" øverst i træet, med undertekster og "Lige nu" ved hvert stop. "Start flyby" er grå, indtil månernes kort er hentet (som Saturn).
+- **Jupiters side:** nye emner om båndene, det indre, "mislykket stjerne" og kometerne. **Ordbogen:** zone, bælte, jetstrøm, antikyklon, cyklon, resonans og nordlys. **Citatet:** Galilei 7. januar 1610, læst i skanningen af førsteudgaven (archive.org).
+- **Faktatjek J4** står i `docs/fakta-solsystemet.md`. Li m.fl. 2018 (varmen indefra) kunne ikke åbnes, så nørd-teksten er skrevet forsigtigt.
+- **Rettet:** Månernes baner skar hen over hele Jupiter på tablet på højkant. De ses nu først langt ude.
+- **Tests:** `jupiter` har 64 tjek (15 nye). `--ændret` valgte 23 tests, og alle bestod (20 min). Billeder i sekundet: se "Status efter J4" i [plan-jupiter.md](plan-jupiter.md).
+
+## "Senest lavet" 7. november 2026 (Jupiter J3, før J4)
 **Senest lavet (7. november 2026): Jupiter J3, de fire store måner.** Jeres go: "Go til j3, Jupiters måner".
 - **Tryk og et kort besøg** var en lille opgave (genbrug fra Saturn), så det er med: Io, Europa, Ganymedes og Callisto i træet under "Måner", tryk på en måne, en undertekst og en side for hver (faktatjekket mod del 5, "Faktatjek J3"). Oversigten "Månerne" viser alle fire baner.
 - **Kortene** fra USGS (Galileo og Voyager): 8k på pc, 4k på tablet og telefon, 2k i tests. Huller ved polerne er fyldt med spejlede rækker. Io er grå med en dæmpet gul tone fra USGS' forstærkede farvekort.

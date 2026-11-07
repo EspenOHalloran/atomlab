@@ -337,4 +337,42 @@ export const ORDBOG = [
     // Solen giver ca. en tredjedel af tidevandet på Jorden
     tekst: 'Forskellen i tyngdekraften fra et andet legeme på den nære og den fjerne side. Den strækker legemet lidt. Sådan giver Månen og Solen ebbe og flod på Jorden. Tidevandskraften kan også bremse en måne eller rive den i stykker, hvis den kommer for tæt på.',
   },
+  // Jupiter J4, faktatjekket 7. november 2026 (docs/fakta-solsystemet.md, "Faktatjek J4")
+  {
+    id: 'zone', ord: 'Zone',
+    former: ['zone', 'zonen', 'zoner', 'zonerne'],
+    tekst: 'Et lyst bånd af skyer, der går hele vejen rundt om Jupiter eller Saturn. Mellem de lyse zoner ligger mørkere bånd, der kaldes bælter. Mellem båndene blæser jetstrømme skiftevis mod øst og mod vest.',
+  },
+  {
+    id: 'baelte', ord: 'Bælte',
+    former: ['bælte', 'bæltet', 'bælter', 'bælterne'],
+    tekst: 'Et mørkere bånd af skyer, der går hele vejen rundt om Jupiter eller Saturn, mellem to lyse zoner. På Jupiter er bælterne mørkt orange.',
+  },
+  {
+    id: 'jetstroem', ord: 'Jetstrøm',
+    former: ['jetstrøm', 'jetstrømmen', 'jetstrømme', 'jetstrømmene'],
+    // Vores måling i Hubbles kort: ca. 149 m/s ved 24° N (js/data/vinde-jupiter.js). NASA: "over a dozen prevailing winds"
+    tekst: 'En smal flod af meget hurtig vind højt oppe i luften. Jorden har også jetstrømme, og fly kan få medvind af dem. På Jupiter blæser over et dusin jetstrømme skiftevis mod øst og mod vest, den hurtigste med ca. 150 meter i sekundet.',
+  },
+  {
+    id: 'antikyklon', ord: 'Antikyklon',
+    former: ['antikyklon', 'antikyklonen', 'antikykloner', 'antikyklonerne'],
+    tekst: 'Et højtryk, som vinden drejer rundt om. Den drejer den modsatte vej af en cyklon: med uret på den nordlige halvkugle og mod uret på den sydlige. Den Store Røde Plet på Jupiter er en antikyklon.',
+  },
+  {
+    id: 'cyklon', ord: 'Cyklon',
+    former: ['cyklon', 'cyklonen', 'cykloner', 'cyklonerne'],
+    tekst: 'Et lavtryk, som vinden drejer rundt om: mod uret på den nordlige halvkugle og med uret på den sydlige. Orkaner er kraftige cykloner. Ved Jupiters poler står kæmpestore cykloner i en ring om en cyklon i midten.',
+  },
+  {
+    id: 'resonans', ord: 'Resonans',
+    former: ['resonans', 'resonansen', 'resonanser'],
+    tekst: 'Når ting svinger eller kredser i et fast talforhold og giver hinanden et lille skub igen og igen på samme sted, som når man skubber en gynge i takt. Io, Europa og Ganymedes er i resonans: Io går fire omgange, mens Ganymedes går én.',
+  },
+  {
+    id: 'nordlys', ord: 'Nordlys',
+    former: ['nordlys', 'nordlyset'],
+    // Jupiter: "hundreds of times brighter than those seen on Earth" (Webb 2025, Hubble 2016), fakta del 5, A7
+    tekst: 'Lys højt oppe i luften nær polerne. Ladede partikler bliver ført ned mod polerne af planetens magnetfelt og rammer luften, så den lyser. På Jorden kommer partiklerne fra Solen. Jupiters nordlys er hundredvis af gange kraftigere end Jordens.',
+  },
 ];
