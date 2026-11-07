@@ -117,11 +117,13 @@ Senere kan det også blive et trin i delen Liv.
 |---|---|---|
 | M0 | ✅ Plan og faktagrundlag med kilder (denne fil og [fakta-molekyler.md](fakta-molekyler.md)) | lavet |
 | M1 | ✅ **Færdig 7. november 2026** (prompt i [arkiv/prompt-molekyler-m1.md](arkiv/prompt-molekyler-m1.md)). **M1a:** del-knapperne, Byttebørsen med Na + Cl, måleren, harpunen og "Ærligt talt". **M1b:** krystallen (InstancedMesh, terningemønstret og rutil for CaCl₂), Li + F, Mg + O, Ca + 2 Cl og Na + Na som opgaver med ★, og fremgangen på Værkstedets kort. | lavet |
-| M2 | **Byg molekyler:** paletten, bindingerne, formen, ladningerne, de kendte molekyler og opgaverne | stor (faktagrundlaget med **xhigh**, byggeriet med høj) |
+| M2 | **Byg molekyler** ([prompt](prompt-molekyler-m2.md)). **Trin 0:** faktagrundlaget i `fakta-molekyler/m2.md` og "M2 i dag". **M2a:** paletten, bindingerne, formen, det ulovlige og navnene. **M2b:** ladningerne, kortene, opgaverne og fremgangen | stor (Trin 0 med **xhigh**, M2a og M2b med høj) |
 | M3 | **Knaldgas:** boksen, gnisten, kæden og energimåleren | mellem |
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |
 
 ## 7. Spørgsmål til jer
+**Jeres svar til M2 (7. november 2026):** Trin 0 (faktagrundlaget med xhigh og "M2 i dag") laves i sin egen session. Byggeriet deles i M2a (paletten, bindingerne, formen, det ulovlige og navnene) og M2b (ladningerne, kortene, opgaverne og fremgangen) med hver sit go og sin egen PR. Opgaverne tæller med på Værkstedets kort i menuen, og der kommer intet nyt kort og ingen ny linje. Prompten står i [prompt-molekyler-m2.md](prompt-molekyler-m2.md).
+
 **Jeres svar (23. oktober 2026):** i Atomværkstedet med knapper øverst, atomerne trækkes med fingeren eller musen, elektronerne vises som prikker på ringe, og Byttebørsen bygges først. Navnene "Byttebørsen" og "Byg molekyler" bruges, indtil I siger andet. Næste skridt er M1 (Byttebørsen), når I giver et go.
 
 1. **Hvor:** i Atomværkstedet med knapper øverst (forslag), eller som en egen del i menuen (fx "Kemilab")?
