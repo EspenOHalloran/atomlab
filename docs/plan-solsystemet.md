@@ -245,6 +245,8 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 4. **Pluto kommer med nu** (i denne runde, med Charon som lille kugle).
 5. **De store måner står som små kugler med rigtige kort fra start** (fx Jupiters fire), så planeterne ikke ser tomme ud. Besøgene på månerne og "Land på måner" kommer senere (se nedenfor).
 
+**Planen for Uranus og Neptun er lavet (7. november 2026):** [plan-uranus-neptun.md](plan-uranus-neptun.md). Rækkefølgen blev ændret 7. november 2026 (jeres svar): Uranus og Neptun før Venus og Merkur.
+
 **Planen for Jupiter er lavet (6. november 2026):** [plan-jupiter.md](plan-jupiter.md). **Det oprindelige næste skridt:** Opus laver planen for Jupiter med høj effort (data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag med kilder i `fakta-solsystemet.md`). Domæner, der ikke er åbne, nævnes før arbejdet. Venter på et go, og jeres runde på tabletten bør komme før byggeriet.
 
 **Senere: månerne og "Land på måner" (jeres idé 5. november 2026, skrevet ind i planen):** Når planeterne og overblikket er på plads, kommer de store måner med besøg og evt. "Stå på" med teknikken fra Stå på Mars. Kun Titan af Europa, Titan og Enceladus har haft en landingssonde (Huygens 2005), så "Land med Huygens" kan bygges på rigtige data. Europa og Enceladus vil være tegnet ud fra fotos fra kredsløb og skal siges at være det. Opus' forslag: Månen ved Apollo 11 (LRO har skarpe højdekort ved landingsstederne). Hænger sammen med afsnit 2 ("Liv i solsystemet?") og idé A (Saturns måner).
