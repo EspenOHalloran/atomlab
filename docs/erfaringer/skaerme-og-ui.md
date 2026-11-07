@@ -32,3 +32,11 @@
 - **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
 - **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
 - **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
+
+## Byttebørsen (Molekyler M1a, 7. november 2026)
+- **Træk i 3D uden at dreje kameraet:** Elektronen fanges i `pointerdown` med `capture` på lærredet, før kameraets styring hører det (`stopImmediatePropagation`), og styringen er slået fra, til fingeren slipper. Testen trækker med `page.mouse` fra skærmpladsen i testadgangen (`elektronPå()`), og et træk et andet sted drejer stadig kameraet.
+- **En vælger uden afgrænsning i en anden skærm:** Reaktoren finder sine del-knapper med `.del-knap[data-del]` i hele dokumentet. Værkstedets knapper har derfor `data-vaerksted-del`. Tjek altid med `grep`, om en klasse eller data-attribut allerede bruges uafgrænset et andet sted.
+- **En stejl frastødning kræver små skridt:** Born-Mayer-formlen, der skal få parret til at stoppe ved 2,36 Å med 4,26 eV, har ρ ≈ 0,12 Å. Med ét skridt pr. billede ville ionerne skyde igennem hinanden. Skridt på højst 2 ms holder det stabilt. Tempoet blev valgt ved at simulere i Node først (ankommer efter ca. 1,7 s), ikke ved at prøve i browseren.
+- **Ingen rullebjælke med foldebokse:** To foldebokse, der begge er åbne, gav en rullebjælke på pc (921 mod 724 px). `name` på `<details>` gør dem til en harmonika, så kun én er åben ad gangen, og testen åbner hver af dem på pc og tablet på langs.
+- **Tal, der skrives om, når de ændrer sig:** Tallene i panelet blev kun skrevet, når summen ændrede sig. Den sidste linje (+5,78) passede så ikke med summen, efter at ionerne var landet (+5,79). Skriv hele teksten og sammenlign den, ikke kun ét tal.
+

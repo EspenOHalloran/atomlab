@@ -35,6 +35,26 @@ export const ORDBOG = [
     tekst: 'Et atom med for få eller for mange elektroner. Så er det elektrisk ladet: plus, hvis der mangler elektroner, og minus, hvis der er for mange.',
   },
   {
+    id: 'ionbinding', ord: 'Ionbinding',
+    former: ['ionbinding', 'ionbindingen', 'ionbindinger'],
+    tekst: 'Når et atom har givet en elektron til et andet, og de to ioner (plus og minus) holder sammen, fordi de trækker i hinanden. Køkkensalt (Na⁺ og Cl⁻) er holdt sammen af ionbindinger.',
+  },
+  {
+    id: 'ioniseringsenergi', ord: 'Ioniseringsenergi',
+    former: ['ioniseringsenergi', 'ioniseringsenergien'],
+    tekst: 'Den energi, det koster at rive en elektron løs fra et atom. For natriums yderste elektron er det ca. 5,1 eV. Den næste elektron sidder længere inde og koster langt mere.',
+  },
+  {
+    id: 'elektronaffinitet', ord: 'Elektronaffinitet',
+    former: ['elektronaffinitet', 'elektronaffiniteten'],
+    tekst: 'Den energi, et atom giver fra sig, når det får en ekstra elektron. Chlor giver ca. 3,6 eV. En ekstra elektron nr. to koster altid energi, for så er atomet allerede minusladet.',
+  },
+  {
+    id: 'elektronvolt', ord: 'Elektronvolt (eV)',
+    former: ['elektronvolt', 'ev'],
+    tekst: 'En lille energienhed, der passer til atomer: den energi, en elektron får, når den bliver skubbet gennem en spænding på 1 volt. Synligt lys har ca. 2-3 eV pr. foton.',
+  },
+  {
     id: 'mev', ord: 'MeV',
     former: ['mev'],
     tekst: 'Mega-elektronvolt: en million elektronvolt. En elektronvolt er den energi, en elektron får, når den bliver skubbet gennem en spænding på 1 volt. En kemisk reaktion giver nogle få elektronvolt pr. atom, en kernereaktion millioner.',

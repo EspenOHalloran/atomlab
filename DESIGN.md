@@ -64,6 +64,7 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - [x] **Trin 18: Forbedringer efter F1**
 - [x] **Trin 19: Saturn med måner og flyby, en sort himmel og små ønsker** (24. oktober 2026, PR #10-#14)
 - [x] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (U1-U4)
+- [ ] **Molekyler:** M1a (Byttebørsen med Na + Cl) ✅ 7. november 2026, M1b (krystallen og de andre par) venter ([docs/plan-molekyler.md](docs/plan-molekyler.md))
 - [ ] **Solsystemet:** Mars (M1-M8b lavet, M8c del 1 tilbage, [docs/plan-mars.md](docs/plan-mars.md)), så planeterne og overblikket ([docs/plan-solsystemet.md](docs/plan-solsystemet.md))
 
 **Ikke lavet fra de gamle trin** (fra Trin 11, delvist lavet senere, tjekkes, før de tages op):

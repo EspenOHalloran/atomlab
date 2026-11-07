@@ -115,7 +115,7 @@ Senere kan det også blive et trin i delen Liv.
 | Trin | Hvad | Størrelse |
 |---|---|---|
 | M0 | ✅ Plan og faktagrundlag med kilder (denne fil og [fakta-molekyler.md](fakta-molekyler.md)) | lavet |
-| M1 | (Prompt: [prompt-molekyler-m1.md](prompt-molekyler-m1.md), delt i M1a og M1b) Knapperne i Værkstedet og **Byttebørsen** med Na + Cl, energimåleren og krystallen. Opgaverne Li + F, Mg + O og Ca + 2 Cl. | stor |
+| M1 | (Prompt: [prompt-molekyler-m1.md](prompt-molekyler-m1.md), delt i M1a og M1b. **M1a ✅ 7. november 2026:** del-knapperne, Byttebørsen med Na + Cl, måleren, harpunen og "Ærligt talt". M1b venter: krystallen, de andre par og fremgangen.) Knapperne i Værkstedet og **Byttebørsen** med Na + Cl, energimåleren og krystallen. Opgaverne Li + F, Mg + O og Ca + 2 Cl. | stor |
 | M2 | **Byg molekyler:** paletten, bindingerne, formen, ladningerne, de kendte molekyler og opgaverne | stor (faktagrundlaget med **xhigh**, byggeriet med høj) |
 | M3 | **Knaldgas:** boksen, gnisten, kæden og energimåleren | mellem |
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |

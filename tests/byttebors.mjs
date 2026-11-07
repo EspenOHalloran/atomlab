@@ -1,0 +1,208 @@
+// Byttebørsen (Molekyler M1a) i Atomværkstedet: del-knapperne, træk elektronen med musen, regnskabet (måleren),
+// ionerne, mødet, harpunen, tidsknappen, panelet uden rullebjælke, tasterne kun i "Byg et atom", knappen i hjælpen,
+// og tablet og telefon (begge veje) med "Vis mig".
+import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
+const UD = billedmappe('byttebors');
+const URL = `${ADRESSE}/index.html?test#vaerksted`;
+const browser = await chromium.launch({ args: ARGS });
+const fejl = [];
+let ok = 0, dårlig = 0;
+function tjek(navn, betingelse, ekstra = '') { if (betingelse) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } }
+const nær = (a, b, tol) => Math.abs(a - b) <= tol;
+
+async function side(opts) {
+  const ctx = await browser.newContext(opts);
+  const page = await ctx.newPage();
+  page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
+  page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  page.on('requestfailed', (r) => fejl.push('requestfailed: ' + r.url()));
+  await page.goto(URL);
+  await page.waitForFunction(() => window.atomlabTest?.vaerksted?.bytte);
+  return { ctx, page };
+}
+const B = (page, f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.vaerksted.bytte[f](...a), [f, a]);
+const spol = (page, sek) => B(page, 'spol', sek);
+
+const { ctx, page } = await side({ viewport: { width: 1280, height: 800 } });
+
+// Del-knapperne
+tjek('del-knapperne står i toplinjen', await page.isVisible('[data-vaerksted-del="atom"]') && await page.isVisible('[data-vaerksted-del="bytte"]'));
+tjek('"Byg et atom" er valgt fra start', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'atom'
+  && await page.getAttribute('[data-vaerksted-del="atom"]', 'aria-pressed') === 'true');
+tjek('Byttebørsens paneler er skjult i "Byg et atom"', !(await page.isVisible('#byttePanel')) && !(await page.isVisible('#bytteMåler')));
+await page.click('[data-vaerksted-del="bytte"]');
+await page.waitForTimeout(600);
+tjek('Byttebørsen er valgt', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte'
+  && await page.evaluate(() => document.getElementById('vaerksted').classList.contains('bytte')));
+tjek('byggepanel, infopanel og det lille periodiske system er skjult', !(await page.isVisible('#byggepanel')) && !(await page.isVisible('#infopanel')) && !(await page.isVisible('#minitabelPanel')));
+tjek('opgavepillen og "Elektronsky" er skjult', !(await page.isVisible('#opgavePille')) && !(await page.isVisible('#knapVisning')));
+tjek('Byttebørsens paneler, måleren, tidsknappen og "Næste skridt" vises', await page.isVisible('#byttePanel') && await page.isVisible('#bytteInfo')
+  && await page.isVisible('#bytteMåler') && await page.isVisible('#bytteTid') && await page.isVisible('#bytteMission'));
+tjek('Reaktorens del-knapper er ikke rørt (stadig to med data-del)', await page.evaluate(() => document.querySelectorAll('.del-knap[data-del]').length) === 2);
+tjek('start: to neutrale atomer, regnskabet er 0', await B(page, 'tilstand') === 'start' && (await B(page, 'regnskab')).iAlt === 0);
+tjek('"Lad dem mødes" og harpunen kan ikke trykkes endnu', await page.isDisabled('#bytteMødes') && await page.isDisabled('#bytteHarpun'));
+tjek('måleren siger 0,00 eV', (await page.textContent('#bytteMålerTal')).includes('0,00 eV'));
+await page.screenshot({ path: UD + '/1-start.png' });
+
+// Træk elektronen et stykke væk og slip den: Den flyver tilbage
+async function træk(tilX, tilY) {
+  const e = await B(page, 'elektronPå');
+  await page.mouse.move(e.x, e.y);
+  await page.mouse.down();
+  await page.mouse.move((e.x + tilX) / 2, (e.y + tilY) / 2 - 30, { steps: 6 });
+  return e;
+}
+const n0 = await B(page, 'natriumPå');
+const c0 = await B(page, 'chlorPå');
+await træk(n0.x, n0.y - 200);
+tjek('trækker: elektronen er fri', await B(page, 'tilstand') === 'trækker' && await B(page, 'elektron') === 'fri');
+tjek('fri elektron: regnskabet −5,14 eV', nær((await B(page, 'regnskab')).iAlt, -5.139, 0.001));
+await page.waitForTimeout(400);
+tjek('måleren viser −5,14 eV, og tallene står i panelet', (await page.textContent('#bytteMålerTal')).includes('−5,14') && (await page.textContent('#bytteTal')).includes('−5,14'));
+await page.mouse.move(n0.x, n0.y - 220, { steps: 3 });
+await page.mouse.up();
+await spol(page, 1);
+tjek('slippet langt fra chlor: elektronen flyver hjem', await B(page, 'tilstand') === 'start' && await B(page, 'elektron') === 'hjemme' && (await B(page, 'regnskab')).iAlt === 0);
+
+// Et træk et andet sted drejer kameraet (ikke elektronen)
+await page.mouse.move(c0.x, c0.y - 150);
+await page.mouse.down();
+await page.mouse.move(c0.x + 60, c0.y - 150, { steps: 4 });
+await page.mouse.up();
+tjek('et træk et andet sted flytter ikke elektronen', await B(page, 'tilstand') === 'start');
+
+// Træk elektronen over til chlor
+await spol(page, 0.5);
+const c = await B(page, 'chlorPå');
+await træk(c.x, c.y);
+await page.mouse.move(c.x - 15, c.y, { steps: 6 });
+await page.mouse.up();
+await spol(page, 1);
+tjek('ved chlor: nu er de ioner', await B(page, 'tilstand') === 'ioner' && await B(page, 'elektron') === 'flyttet');
+const ioner = await B(page, 'regnskab');
+tjek(`ioner langt fra hinanden: regnskabet i minus (${ioner.iAlt.toFixed(2)})`, ioner.iAlt < 0 && ioner.iAlt > -1.53);
+tjek('delene: −5,14, +3,61 og lidt tiltrækning', nær(ioner.tage, -5.139, 0.001) && nær(ioner.give, 3.613, 0.001) && ioner.træk > 0 && ioner.træk < 1.5);
+const ringe = await B(page, 'ringe');
+tjek(`Na⁺ har 2 · 8 og er krympet (${ringe.na.toFixed(2)} Å)`, JSON.stringify(ringe.naSkaller) === '[2,8]' && ringe.na < 1.1);
+tjek(`Cl⁻ har 2 · 8 · 8 og er vokset (${ringe.cl.toFixed(2)} Å)`, JSON.stringify(ringe.clSkaller) === '[2,8,8]' && ringe.cl > 1.6);
+tjek('"Lad dem mødes" kan trykkes', !(await page.isDisabled('#bytteMødes')));
+await page.screenshot({ path: UD + '/2-ioner.png' });
+
+// Tidsknappen: under pause står ionerne stille
+await page.click('#bytteMødes');
+await spol(page, 0.3);
+await page.click('#bytteTid [data-tid="pause"]');
+const rPause = await B(page, 'afstand');
+await spol(page, 2);
+tjek('pause: ionerne står stille', await B(page, 'afstand') === rPause && await B(page, 'tidsknap') === 'pause');
+await page.click('#bytteTid [data-tid="spil"]');
+await spol(page, 6);
+const samlet = await B(page, 'regnskab');
+tjek('mødet: et par ved 2,36 Å', await B(page, 'tilstand') === 'samlet' && nær(await B(page, 'afstand'), 2.36, 0.001));
+tjek(`regnskabet ender på +4,26 eV (${samlet.iAlt.toFixed(3)})`, nær(samlet.iAlt, 4.26, 0.001));
+await page.waitForTimeout(400);
+tjek('måleren viser +4,26 eV og er grøn', (await page.textContent('#bytteMålerTal')).includes('+4,26') && await page.evaluate(() => document.getElementById('bytteMålerFyld').classList.contains('plus')));
+tjek('panelet siger "ionbinding"', (await page.textContent('#bytteTrinTekst')).includes('ionbinding'));
+tjek('nu kan man se harpunen', !(await page.isDisabled('#bytteHarpun')));
+await page.screenshot({ path: UD + '/3-par.png' });
+
+// Panelet har ingen rullebjælke (heller ikke med "For nørder" åben)
+const ingenRul = () => page.evaluate(() => { const p = document.getElementById('bytteInfo'); return p.scrollHeight <= p.clientHeight + 1; });
+tjek('højre panel uden rullebjælke', await ingenRul());
+await page.click('[data-lag="bytte-nørd"] summary');
+tjek('højre panel uden rullebjælke med "For nørder" åben', await ingenRul(), await page.evaluate(() => { const p = document.getElementById('bytteInfo'); return `${p.scrollHeight}/${p.clientHeight}`; }));
+await page.click('[data-lag="bytte-ærligt"] summary');
+tjek('"Ærligt talt" lukker "For nørder" (én ad gangen)', await page.evaluate(() => !document.querySelector('[data-lag="bytte-nørd"]').open && document.querySelector('[data-lag="bytte-ærligt"]').open));
+tjek('højre panel uden rullebjælke med "Ærligt talt" åben', await ingenRul(), await page.evaluate(() => { const p = document.getElementById('bytteInfo'); return `${p.scrollHeight}/${p.clientHeight}`; }));
+await page.click('[data-lag="bytte-ærligt"] summary');
+
+// "Hvorfor?"-kortet
+await page.click('button[data-hvorfor="bytteKoster"]');
+tjek('"Hvorfor koster det?" åbner et kort', (await page.evaluate(() => atomlabTest.hvorfor.vist())) === 'Hvorfor koster det at flytte elektronen?');
+await page.keyboard.press('Escape');
+
+// Harpunen
+await page.click('#bytteHarpun');
+tjek('harpunen: neutrale atomer nærmer sig', await B(page, 'tilstand') === 'nærmer' && await B(page, 'elektron') === 'hjemme');
+const hvis = await B(page, 'regnskab');
+tjek(`langt ude: et hop ville koste (${hvis.iAlt.toFixed(2)})`, hvis.hvis && hvis.iAlt < 0);
+await page.waitForTimeout(400);
+tjek('måleren skriver "Hvis den hoppede nu"', (await page.textContent('#bytteMålerNavn')).includes('Hvis den hoppede nu'));
+let hopVed = null;
+for (let i = 0; i < 400 && !hopVed; i++) {
+  await spol(page, 0.05);
+  if ((await B(page, 'elektron')) !== 'hjemme') hopVed = await B(page, 'afstand');
+}
+tjek(`elektronen hopper ved ca. 9,4 Å (${hopVed?.toFixed(2)})`, hopVed !== null && nær(hopVed, await B(page, 'harpunAfstand'), 0.05) && nær(hopVed, 9.43, 0.1));
+await spol(page, 8);
+tjek('harpunen ender også i et par med +4,26 eV', await B(page, 'tilstand') === 'samlet' && nær((await B(page, 'regnskab')).iAlt, 4.26, 0.001));
+await page.screenshot({ path: UD + '/4-harpun.png' });
+
+// Forfra
+await page.click('#bytteForfra');
+tjek('Forfra: to neutrale atomer igen', await B(page, 'tilstand') === 'start' && nær(await B(page, 'afstand'), 16, 0.001) && JSON.stringify((await B(page, 'ringe')).naSkaller) === '[2,8,1]');
+
+// Tasterne P, N og E bygger kun i "Byg et atom"
+await page.keyboard.press('p');
+await page.click('[data-vaerksted-del="atom"]');
+await page.waitForTimeout(500);
+tjek('tasten P byggede ikke i Byttebørsen', (await page.textContent('#antalP')) === '0');
+tjek('"Byg et atom": byggepanelet og infopanelet er tilbage', await page.isVisible('#byggepanel') && await page.isVisible('#infopanel') && !(await page.isVisible('#byttePanel')));
+for (const k of ['p', 'p', 'n', 'n', 'e', 'e']) await page.keyboard.press(k);
+await page.waitForTimeout(300);
+tjek('tasterne bygger igen i "Byg et atom"', (await page.textContent('#antalP')) === '2');
+
+// Knappen i hjælpen ("Hvad er en ion?") fører til Byttebørsen
+await page.click('#knapHjælp');
+await page.click('#hjælpTilBytte');
+await page.waitForTimeout(400);
+tjek('hjælpen: "Prøv det i Byttebørsen" skifter del og lukker hjælpen', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && !(await page.isVisible('#hjælp')));
+tjek('hjælpen siger ikke længere, at atomer "vil" have en fyldt skal', !(await page.textContent('#hjælp')).includes('mest "tilfredse"'));
+
+// Skærmskift midt i et træk: elektronen går hjem, og Byttebørsen er der stadig, når man kommer tilbage
+const e2 = await B(page, 'elektronPå');
+await page.mouse.move(e2.x, e2.y);
+await page.mouse.down();
+await page.mouse.move(e2.x + 40, e2.y - 40, { steps: 3 });
+await page.evaluate(() => { location.hash = '#reaktor'; });
+await page.waitForTimeout(500);
+await page.mouse.up();
+await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.waitForTimeout(600);
+tjek('tilbage i Værkstedet: stadig Byttebørsen, elektronen hjemme', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'tilstand') === 'start');
+tjek('kameraets styring virker igen', await page.evaluate(() => atomlabTest.vaerksted.bytte.styring()));
+await ctx.close();
+
+// Tablet og telefon: del-knapperne, 3D-billedet øverst og "Vis mig"
+for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['tablet-langs', { width: 1180, height: 820 }], ['tlf', { width: 390, height: 844 }], ['tlf-langs', { width: 844, height: 390 }]]) {
+  const { ctx: c2, page: p } = await side({ viewport: vp, hasTouch: true, isMobile: navn.startsWith('tlf') });
+  await p.click('[data-vaerksted-del="bytte"]');
+  await p.waitForTimeout(800);
+  const vindue = await p.evaluate(() => document.getElementById('vaerkstedVindue').getBoundingClientRect().toJSON());
+  tjek(`${navn}: 3D-billedet er stort nok (${Math.round(vindue.width)} × ${Math.round(vindue.height)})`, vindue.width > 300 && vindue.height > 170);
+  tjek(`${navn}: ingen vandret rulning`, await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+  const knapper = await p.evaluate(() => [...document.querySelectorAll('[data-vaerksted-del]')].map((b) => b.getBoundingClientRect()).every((r) => r.width > 0 && r.right <= innerWidth + 1));
+  tjek(`${navn}: del-knapperne er inde på skærmen`, knapper);
+  // Panelet ved siden af 3D-billedet (pc og tablet på langs): ingen rullebjælke, heller ikke med en foldeboks åben
+  if (vp.width > vp.height && vp.height > 500) {
+    const rul = () => p.evaluate(() => { const el = document.getElementById('bytteInfo'); return el.scrollHeight <= el.clientHeight + 1 ? '' : `${el.scrollHeight}/${el.clientHeight}`; });
+    const fejlRul = [await rul()];
+    for (const lag of ['bytte-nørd', 'bytte-ærligt']) {
+      await p.click(`[data-lag="${lag}"] summary`);
+      fejlRul.push(await rul());
+      await p.click(`[data-lag="${lag}"] summary`);
+    }
+    tjek(`${navn}: højre panel uden rullebjælke`, fejlRul.every((x) => !x), fejlRul.join(' '));
+  }
+  await p.click('#bytteMission .mission-vis');
+  await B(p, 'spol', 3);
+  tjek(`${navn}: "Vis mig" flytter elektronen`, await B(p, 'tilstand') === 'ioner');
+  await p.waitForTimeout(800);
+  await p.screenshot({ path: `${UD}/5-${navn}.png` });
+  await c2.close();
+}
+
+tjek('ingen konsolfejl', fejl.length === 0, fejl.join('\n'));
+await browser.close();
+console.log(`\n${ok} OK, ${dårlig} fejl`);
+process.exit(dårlig ? 1 : 0);

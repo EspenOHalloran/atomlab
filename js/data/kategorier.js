@@ -71,7 +71,7 @@ export const KATEGORI_INFO = {
     fælles: 'Meget reaktive ikkemetaller, der laver salte sammen med metaller. Navnet betyder "saltdanner".',
     eksempel: 17, vis: 'mangler',
     hvorfor: 'De har syv elektroner i den yderste skal og mangler kun én. Derfor river de gerne en elektron til sig.',
-    forsøg: { titel: 'Natrium + chlor = salt', tekst: 'Natrium er et metal, der reagerer voldsomt med vand, og chlor er en giftig gas. Sammen bliver de til bordsalt: Natrium giver sin ene yderste elektron til chlor, så begge får en fuld yderste skal.' },
+    forsøg: { titel: 'Natrium + chlor = salt', tekst: 'Natrium er et metal, der reagerer voldsomt med vand, og chlor er en giftig gas. Sammen bliver de til bordsalt: Natriums yderste elektron hopper over til chlor. Så har begge en fyldt yderste skal, og Na⁺ og Cl⁻ trækker i hinanden. Det er tiltrækningen, der giver energien.' },
     tendens: '↑ Mere voldsomme, jo længere oppe i tabellen. Fluor er det mest reaktive af alle grundstoffer.',
     medlemmer: [9, 17, 35, 53],
     links: [{ tekst: 'Byg chlor i værkstedet', værksted: 17 }],

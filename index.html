@@ -124,6 +124,10 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Atomværkstedet</h2>
+      <div class="del-vælger" id="værkstedDele">
+        <button class="del-knap" data-vaerksted-del="atom">Byg et atom</button>
+        <button class="del-knap" data-vaerksted-del="bytte">Byttebørsen</button>
+      </div>
       <div class="opgave-pille" id="opgavePille">
         <button class="opgave-mærke" id="knapOpgaver" title="Se alle opgaver">★ <span id="opgaveTæller"></span></button>
         <span class="opgave-indhold">
@@ -245,6 +249,39 @@
       </div>
       <div class="minitabel" id="minitabel"></div>
     </div>
+
+    <!-- Byttebørsen (Molekyler M1, js/molekyler.js): vises i stedet for panelerne ovenfor -->
+    <aside class="panel side-panel venstre-panel bytte-panel" id="byttePanel">
+      <h4 class="panel-overskrift">Natrium + chlor</h4>
+      <p class="klik-tip">Træk den lysende elektron fra natrium over til chlor med fingeren eller musen. Træk et andet sted for at dreje billedet.</p>
+      <p class="klik-tip bytte-dit" id="bytteDit" hidden></p>
+      <div class="knap-række">
+        <button class="knap" id="bytteMødes" disabled>Lad dem mødes</button>
+        <button class="knap svag" id="bytteForfra">Forfra</button>
+      </div>
+      <button class="knap" id="bytteHarpun" disabled>Sådan sker det i virkeligheden</button>
+      <p class="klik-tip">Ringene er skallerne. Den yderste er tydelig, og de inderste er svage. Prikkerne er elektronerne.</p>
+    </aside>
+    <aside class="panel side-panel højre-panel bytte-panel" id="bytteInfo">
+      <div class="forklaring-boks bytte-trin">
+        <strong id="bytteTrinTitel"></strong>
+        <p id="bytteTrinTekst"></p>
+      </div>
+      <dl class="tal lille bytte-regnskab" id="bytteTal"></dl>
+      <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="bytteKoster">Hvorfor koster det?</button> <button class="hvorfor" data-hvorfor="bytteIon">Hvad er en ion?</button></p>
+      <details class="forklaring-boks lag-boks" data-lag="bytte-nørd" name="bytte-lag">
+        <summary><strong>For nørder</strong><span class="lag-kort">Tallene og modellen bag måleren.</span></summary>
+        <p>Natriums ioniseringsenergi er <b>5,14 eV</b>, og chlors elektronaffinitet er <b>3,61 eV</b>. Plus og minus trækker med 14,4 eV delt med afstanden i Å (ångstrøm, en tiendedel af en milliardtedel meter). Det betaler de 1,53 eV, når de er tættere end ca. <b>9,4 Å</b>.</p>
+        <p>Frastødningen tæt på er en enkel formel, der er tilpasset, så parret stopper ved <b>2,36 Å</b> med 4,26 eV. Størrelserne er målt: natrium 180 pm, Na⁺ 102 pm, chlor 100 pm og Cl⁻ 181 pm. Ionernes ringe er tegnet lidt mindre, for de størrelser er målt i en krystal.</p>
+      </details>
+      <details class="forklaring-boks lag-boks ærligt" data-lag="bytte-ærligt" name="bytte-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Det, modellen snyder med.</span></summary>
+        <p>Natrium giver ikke sin elektron væk af lyst. Det koster energi. Gevinsten kommer, når plus og minus bagefter trækker i hinanden.</p>
+        <p>Elektronerne er skyer, ikke prikker på ringe. Ringene viser, hvor mange der er i hver skal.</p>
+        <p>Enkelte par af natriumchlorid findes kun i damp. Et saltkorn er et kæmpe gitter, hvor hver ion har seks naboer med modsat ladning.</p>
+        <p>Atomerne er tegnet millioner af gange større, og i virkeligheden går det meget hurtigere.</p>
+      </details>
+    </aside>
   </section>
 
   <!-- ===== Det periodiske system ===== -->
@@ -808,9 +845,9 @@
         <p><strong>Stråling kan også bruges til noget godt:</strong> kræftbehandling, skanninger på hospitaler, røgalarmer og til at finde ud af, hvor gamle fund fra fortiden er (carbon-14).</p>
         <h4 id="hjælpIoner">Hvad er en ion?</h4>
         <p>Et atom er normalt <strong>neutralt</strong>: Det har lige mange plusladede protoner og minusladede elektroner, så ladningerne går lige op. Protonerne sidder dybt inde i kernen og kan kun ændres ved kernereaktioner. Men elektronerne sidder udenpå, og de yderste sidder løst. De kan flyttes fra ét atom til et andet, når atomerne mødes. Har atomet for få eller for mange elektroner, kaldes det en <strong>ion</strong>.</p>
-        <p><strong>Hvorfor giver et atom en elektron væk?</strong> Atomer er mest "tilfredse" med en fyldt yderste skal, ligesom ædelgasserne. Det er en forenkling, men den passer godt for de lette grundstoffer. Natrium har skallerne 2 · 8 · 1. Den ene elektron yderst sidder løst, og giver natrium den væk, har det kun fyldte skaller tilbage (2 · 8). Så har det 11 protoner, men kun 10 elektroner. Det er nu en positiv ion: <strong>Na⁺</strong>.</p>
-        <p><strong>Og hvorfor tager et andet atom én ekstra?</strong> Chlor har 2 · 8 · 7 og mangler kun én elektron i at fylde den yderste skal. Det tager gerne én, og så har det 17 protoner og 18 elektroner. Det er nu en negativ ion: <strong>Cl⁻</strong>.</p>
-        <p>Plus og minus tiltrækker hinanden, så Na⁺ og Cl⁻ holder sammen. Det er <strong>køkkensalt</strong>! Ioner er overalt: Dine nerver sender signaler med natrium- og kalium-ioner, og batteriet i en telefon virker, fordi lithium-ioner vandrer frem og tilbage.</p>
+        <p><strong>Hvilke ioner bliver der?</strong> Natrium har skallerne 2 · 8 · 1. Den ene elektron yderst sidder løst, og mister natrium den, har det kun fyldte skaller tilbage (2 · 8), ligesom ædelgassen neon. Så har det 11 protoner, men kun 10 elektroner. Det er nu en positiv ion: <strong>Na⁺</strong>. Chlor har 2 · 8 · 7 og mangler kun én elektron i at fylde den yderste skal. Får det én, har det 17 protoner og 18 elektroner. Det er nu en negativ ion: <strong>Cl⁻</strong>. Den fyldte skal forklarer altså, hvilke ladninger ionerne får. For de lette grundstoffer passer det godt.</p>
+        <p><strong>Men hvorfor sker det?</strong> Ikke fordi atomerne "vil" have en fyldt skal. Det koster faktisk ca. 5,1 eV (elektronvolt, en lille energienhed, der passer til atomer) at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage, når det får den. Gevinsten kommer bagefter: Plus og minus trækker i hinanden, og den tiltrækning betaler regningen og mere til. Så holder Na⁺ og Cl⁻ sammen, og det er <strong>køkkensalt</strong>! <button class="knap lille" id="hjælpTilBytte">Prøv det i Byttebørsen ›</button></p>
+        <p>Ioner er overalt: Dine nerver sender signaler med natrium- og kalium-ioner, og batteriet i en telefon virker, fordi lithium-ioner vandrer frem og tilbage.</p>
         <p><strong>Hvorfor ikke uendeligt mange?</strong> Jo flere elektroner et atom har mistet, jo mere plusladet bliver det, og jo hårdere holder det på resten. Og en negativ ion skubber nye elektroner væk. Derfor ser man oftest ladninger som +1, +2, +3, −1 og −2. Et frit atom kan i virkeligheden højst holde på én ekstra elektron. O²⁻ findes kun inde i fx krystaller, og ædelgasserne kan næsten ikke holde på en ekstra. I værkstedet kan et atom alligevel få 2 ekstra elektroner, så du kan prøve det.</p>
         <p>Du kender det også fra statisk elektricitet: Gnider du en ballon mod håret, flytter elektroner sig fra håret over på ballonen. Så bliver ballonen minusladet og kan hænge fast på væggen.</p>
         <h4 id="hjælpNeutroner">Hvorfor neutroner?</h4>

@@ -2,6 +2,15 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 6. november 2026 (Det sorte hul, før Molekyler M1a)
+
+**Senest lavet (6. november 2026): Det sorte hul er bygget om med rigtig lysbøjning.** Jeres go: "vi går med dine anbefalinger. go." (efter planen og prøvebilledet, [docs/arkiv/plan-sorthul.md](arkiv/plan-sorthul.md), [oversigt](arkiv/sorthul-proeve.jpg)).
+- **En shader** (`js/kosmos/linse.js`) følger lyset baglæns for hver pixel om et hul, der ikke drejer: Skivens bagside ses som en bue over og under skyggen, der er en tynd fotonring, den side, der kommer mod os, er lysere og hvidere (g⁴), og stjernerne bag hullet bøjes. Fysikken står i `js/data/sorthul.js` og testes i Node (ny test `sorthul`: skyggen ved √27 M, fotonkuglen 3M, ISCO 6M).
+- **Jeres svar:** g⁴, 6.000 K, mindste afstand 15 (ca. 20 M), astronauten og stjernen bøjes ikke, og dynamisk opløsning på pc og tablet.
+- **Gløden:** Masken (`GemPass`/`SkyggePass`) blev, for skyggen blev grå uden den, når skiven lyser op.
+- **Teksterne** (faktatjekket): ringen og fotonringen, et nyt emne om dopplereffekten (Interstellar tog alle frekvensskift ud, M87* er lysest nederst), "Ærligt talt", ca. 27.000 lysår (før 26.000), og to nye ord i ordbogen (Fotonring, Dopplereffekt). `grafik` måler skyggens kant, den lyse side og den dynamiske opløsning.
+- **Tests:** Ny Node-test `sorthul` (19 OK). Hele samlingen efter mergen af `main` (#81-#84, i bidder, for containeren genstartede to gange): 32 af 33 bestod. **`ordforklaring` fejler 2 tjek ("klik viser forklaringen" ved supernovaens "neutrino"), også på `main` alene efter #84** (se Åbne punkter). `grafik` fejlede én gang under belastning på "lærredet følger med en ny størrelse" (fast ventetid på 1,5 s): rettet, så den venter på størrelsen, og den bestod derefter under samme belastning.
+
 ## "Senest lavet" 6. november 2026 (Jupiter J2, før Det sorte hul)
 **Senest lavet (6. november 2026): Jupiter J2, vindene og Den Store Røde Plet.** Jeres go: "J1 er færdig og merget. Go til J2" ([prompt-jupiter.md](prompt-jupiter.md)).
 - **Vindene er målt af os** i Hubbles to omgange (9 t 25 min imellem, fire filtre, `lav_jupiter.py vinde` → `js/data/vinde-jupiter.js`): ca. 149 m/s ved 24° N (forskerne målte 153 i 2015), ca. 72 m/s ved ækvator og ca. −56 m/s ved 20° S. Målt fra ca. 65° S til 66° N. Ved polerne står skyerne stille.

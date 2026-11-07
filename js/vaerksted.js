@@ -9,10 +9,12 @@ import { stabilitet, isotopNavn, typiskeNeutroner, henfaldsmåde, stabileNeutron
 import { Stabilitetskort } from './stabilitetskort.js';
 import * as fremgang from './fremgang.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
-import { visBesked } from './beskeder.js';
+import { visBesked, rydBeskeder } from './beskeder.js';
+import { lukHvorfor } from './lag.js';
 import { toTrinsKnap } from './forfra.js';
 import { citatHTML } from './data/citater.js';
 import { kategoriKnap } from './system.js';
+import { lavByttebørs, startByttebørs, stopByttebørs, testAdgang as bytteTest } from './molekyler.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -74,7 +76,7 @@ export const OPGAVER = [
   {
     id: 'natrium-ion', titel: 'Lav en natrium-ion: Na⁺', mål: { p: 11, n: 12, e: 10 },
     tip: 'Byg natrium-23 (nr. 11), og tag så én elektron væk.',
-    fakta: 'Natrium giver gerne sin yderste elektron væk. Så har den kun fyldte skaller tilbage, men bliver plusladet.',
+    fakta: 'Natriums yderste elektron sidder løst og er let at tage. Bagefter har natrium kun fyldte skaller tilbage, men det er plusladet. Hvad der så sker, kan du se i Byttebørsen.',
   },
   {
     id: 'chlorid', titel: 'Lav en chlorid-ion: Cl⁻', mål: { p: 17, n: 18, e: 18 },
@@ -175,6 +177,8 @@ let neutralVenter = false; // man forlod værkstedet, mens atomet var en ion eft
 const ION_TID = 3000; // så længe (ms) er atomet en ion efter et henfald, før det bliver neutralt igen
 let kæde = null; // { alfa, beta } når man følger uran-238 ned til bly
 let skyKontakt = null; // kontakten "Elektronsky" (tændt = elektronsky, slukket = ringe)
+let del = 'atom'; // 'atom' (Byg et atom) eller 'bytte' (Byttebørsen, js/molekyler.js)
+const DELE = ['atom', 'bytte'];
 
 function $(id) {
   return document.getElementById(id);
@@ -206,10 +210,53 @@ export function lavVærksted() {
   lavOpgaveliste();
   vælgNæsteOpgave();
   opdaterAlt();
+  // Byttebørsen kender det atom, man har bygget (står der et neutralt natrium, nævnes det)
+  lavByttebørs({ værkstedAtom: () => ({ ...tilstand }) });
+  $('hjælpTilBytte').addEventListener('click', () => {
+    lyd.klik();
+    $('hjælp').classList.add('skjult');
+    if (!aktiv) location.hash = '#vaerksted';
+    sætDel('bytte');
+  });
+  for (const b of document.querySelectorAll('[data-vaerksted-del]')) {
+    b.addEventListener('click', () => {
+      lyd.klik();
+      sætDel(b.dataset.vaerkstedDel);
+    });
+  }
+  visDel();
+}
+
+// Skifter mellem "Byg et atom" og "Byttebørsen" (del-knapperne i toplinjen)
+export function sætDel(ny) {
+  if (!DELE.includes(ny)) ny = 'atom';
+  if (ny === del) return;
+  if (aktiv) {
+    (del === 'bytte' ? stopByttebørs : stopAtomDel)();
+    rydBeskeder(); // underteksterne og "Hvorfor?"-kortet hører til den del, de blev vist i
+    lukHvorfor();
+  }
+  del = ny;
+  visDel();
+  if (aktiv) (del === 'bytte' ? startByttebørs : startAtomDel)();
+}
+
+function visDel() {
+  $('vaerksted').classList.toggle('bytte', del === 'bytte');
+  for (const b of document.querySelectorAll('[data-vaerksted-del]')) {
+    b.classList.toggle('valgt', b.dataset.vaerkstedDel === del);
+    b.setAttribute('aria-pressed', String(b.dataset.vaerkstedDel === del));
+  }
 }
 
 export function startVærksted() {
   aktiv = true;
+  opdaterLydknap();
+  if (del === 'bytte') startByttebørs();
+  else startAtomDel();
+}
+
+function startAtomDel() {
   atom.gruppe.visible = true;
   // Ringe eller sky, som man sidst valgte (måske i Det periodiske system)
   if (atom.visning !== gemtVisning()) atom.sætVisning(gemtVisning());
@@ -228,6 +275,11 @@ export function startVærksted() {
 
 export function stopVærksted() {
   aktiv = false;
+  if (del === 'bytte') stopByttebørs();
+  else stopAtomDel();
+}
+
+function stopAtomDel() {
   // Et henfald, der venter, bliver færdigt nu. Ellers er værkstedet låst, når man kommer tilbage (fx fra Det periodiske system).
   atom.afslutHenfald();
   if (neutralTimer) {
@@ -251,6 +303,7 @@ function startNeutralTimer() {
 
 // Åbner et grundstof fra Det periodiske system. Er det ikke opdaget endnu, får man en opgave om at bygge det.
 export function åbnGrundstof(nr) {
+  sætDel('atom');
   const g = grundstof(nr);
   const n = Math.min(MAX_N, typiskeNeutroner(nr));
   if (fremgang.erOpdaget(nr)) {
@@ -309,6 +362,9 @@ function lavUdgaveVælger() {
 
 export function testAdgang() {
   return {
+    del: () => del,
+    sætDel,
+    bytte: bytteTest(),
     udgave: () => hentUdgave(),
     orbitaler: () => atom.orbitalListe(),
     // Spol atomet frem i små skridt, som på en skærm med 60 billeder i sekundet (testbrowseren tegner kun få)
@@ -601,6 +657,7 @@ function lavKnapper() {
       if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
       return;
     }
+    if (del !== 'atom') return; // tasterne bygger kun i "Byg et atom"
     const tast = h.key.toLowerCase();
     const type = { p: 'p', n: 'n', e: 'e' }[tast];
     if (type) {
