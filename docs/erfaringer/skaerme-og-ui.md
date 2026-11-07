@@ -48,6 +48,9 @@
 - **Ingen rullebjælke med foldebokse:** To foldebokse, der begge er åbne, gav en rullebjælke på pc (921 mod 724 px). `name` på `<details>` gør dem til en harmonika, så kun én er åben ad gangen, og testen åbner hver af dem på pc og tablet på langs.
 - **Tal, der skrives om, når de ændrer sig:** Tallene i panelet blev kun skrevet, når summen ændrede sig. Den sidste linje (+5,78) passede så ikke med summen, efter at ionerne var landet (+5,79). Skriv hele teksten og sammenlign den, ikke kun ét tal.
 
+- **Krystallen og kortene oven på 3D-billedet (M1b):** `passerTilBoks` regner med hele 3D-vinduet, men "Næste skridt", underteksterne og måleren ligger oven på det. En krystal, der drejer, skal zoomes efter den kugle, der omslutter den, med ekstra luft foroven og forneden (× 1,4). På telefonen på højkant dækker kortene stadig en del (som i M1a).
+- **Farver på kugler med stærkt lys:** `MeshStandardMaterial` med hovedlyset (1,9) gjorde de lyse farver næsten hvide. Brug mørkere og mere mættede farver (orange 0,9 · 0,4 · 0,13) og se dem i et skærmbillede.
+- **Test: vent på kameraet efter et skift:** Et skift af par zoomer kameraet blødt. Trækker testen med musen med det samme, står elektronen et andet sted på skærmen end i `elektronPå()`. Vent på `kameraStille()` (målAfstand er null). En fast ventetid på 0,9 s virkede alene, men fejlede, da testene kørte to ad gangen.
 
 ## Ventetid ved skift af klode (7. november 2026)
 - **Mål først, hvad ventetiden er:** Brugeren så 4-5 sekunder uden noget, når man skiftede fra Jupiter til Mars. Bjælken "Henter …" kom ikke, for tiden gik ikke med at hente billeder, men med JS, der låste browseren (målt med en CPU-profil). Efter rettelsen tager klikket ca. 0,6 s i testbrowseren.

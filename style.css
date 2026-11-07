@@ -267,6 +267,15 @@ button { font: inherit; color: inherit; }
 .bytte-regnskab dd { font-variant-numeric: tabular-nums; text-align: right; }
 .bytte-regnskab .i-alt { border-top: 1px solid var(--panel-kant); padding-top: 4px; font-weight: 700; }
 .hvorfor-række { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+/* Parrene (opgaverne) øverst i venstre panel. ★ = klaret. */
+.bytte-parvalg { display: flex; flex-wrap: wrap; gap: 6px; }
+.bytte-par { cursor: pointer; font: inherit; font-size: 12.5px; padding: 4px 9px; }
+.bytte-par.valgt { background: rgba(95, 227, 255, 0.2); border-color: rgba(95, 227, 255, 0.7); color: var(--tekst); }
+.bytte-par .bp-stjerne { color: var(--svag); }
+.bytte-par.klaret .bp-stjerne { color: var(--gul); }
+#bytteNørd p { margin: 0 0 6px; }
+#bytteNørd p:last-child { margin-bottom: 0; }
+#bytteKrystal[hidden], #bytteMødes[hidden], #bytteHarpun[hidden] { display: none; }
 /* Regnskabet nederst i 3D-billedet: nul i midten, rød = koster, grøn = gevinst */
 .bytte-måler { flex: 1 1 auto; max-width: 300px; min-width: 0; padding: 6px 10px 5px; border-radius: 12px; background: rgba(14, 24, 56, 0.88); border: 1px solid var(--panel-kant); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); font-size: 12px; pointer-events: auto; }
 .bm-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
@@ -592,6 +601,8 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .opgaver li:hover { border-color: var(--panel-kant); }
+.opgaver li.opgave-gruppe { display: block; padding: 8px 4px 0; background: none; cursor: default; font-weight: 700; color: var(--svag); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+.opgaver li.opgave-gruppe:hover { border-color: transparent; }
 .opgaver li.aktiv { border-color: rgba(255, 212, 59, 0.6); }
 .opgaver .flueben { grid-row: span 2; font-size: 20px; color: var(--svag); }
 .opgaver li.løst .flueben { color: var(--gul); text-shadow: 0 0 10px rgba(255, 212, 59, 0.7); }

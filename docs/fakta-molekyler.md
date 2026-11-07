@@ -129,7 +129,7 @@ Kilderne giver 799-805 for C=O. Gennemsnitsværdier varierer lidt fra tabel til 
 
 ## 7. Tallene til Byttebørsen (slået op 7. november 2026, til M1)
 
-*Slået op i kilderne af Opus (høj effort) under Trin 0 i [prompt-molekyler-m1.md](prompt-molekyler-m1.md). Denne gang kunne siderne åbnes: NIST, NIST WebBook, OpenStax og Wikipedia (som citerer CRC, Shannon og Shriver & Atkins).*
+*Slået op i kilderne af Opus (høj effort) under Trin 0 i [prompt-molekyler-m1.md](arkiv/prompt-molekyler-m1.md). Denne gang kunne siderne åbnes: NIST, NIST WebBook, OpenStax og Wikipedia (som citerer CRC, Shannon og Shriver & Atkins).*
 
 **Tallene i afsnit 1 er nu set i selve kilderne:**
 - Na: ioniseringsenergi 5,139076 eV (NIST Handbook of Basic Atomic Spectroscopic Data, https://physics.nist.gov/PhysRefData/Handbook/Tables/sodiumtable1.htm). **Sikker.**
@@ -187,26 +187,8 @@ Det 2. tal for Li og Na viser, hvorfor de kun giver én: Den næste elektron sid
 
 **Na + Na:** Begge trækker lige hårdt (samme elektronegativitet, 0,93). At flytte en elektron fra det ene til det andet koster 5,14 − 0,55 = 4,59 eV, og det kan tiltrækningen ikke betale, før de er tættere end ca. 3 Å (14,40 / 4,59). Så overlapper skyerne, og de deler elektronerne i stedet (fast natrium er et metal, og i dampen findes Na₂). Spillet skal sige "de bytter ikke", ikke "de binder sig ikke" (fælde 13). Udregningen er min, mekanismen er **sikker**.
 
-## 8. Faktatjek af teksterne i M1a (7. november 2026)
-
-Tjekket af Opus mod kilderne fra afsnit 1 og 7, som kunne åbnes direkte (ingen hjælpeagenter, for siderne var allerede læst).
-
-| Påstand (hvor) | Resultat | Kilde |
-|---|---|---|
-| Det koster 5,14 eV (ca. 5,1) at tage natriums yderste elektron (panelet, hjælpen, "Hvorfor?", Ordbogen) | OK | NIST Handbook |
-| Chlor giver 3,61 eV (ca. 3,6) tilbage | OK | Berzinsh m.fl. 1995 (Wikipedia) |
-| Langt fra hinanden koster det 1,53 eV | OK | OpenStax §9.1 (1,52 eV) |
-| Plus og minus trækker med 14,4 eV delt med afstanden i Å | OK | Coulombs lov, e²/4πε₀ = 14,40 eV·Å |
-| Harpunen ved ca. 9,4 Å, fire gange afstanden i parret | OK (9,43 / 2,36 = 4,0) | min udregning |
-| Parret stopper ved 2,36 Å, 4,26 eV i alt | OK | OpenStax §9.1 |
-| Natrium 180 pm, Na⁺ 102, chlor 100, Cl⁻ 181; ionernes størrelse er målt i krystaller (2,82 Å) | OK | Slater 1964, Shannon 1976 (Wikipedia), afsnit 1 |
-| Enkelte NaCl-par findes kun i damp, et saltkorn er et gitter med seks naboer | OK | fælde 2, Housecroft |
-| En ekstra elektron nr. to koster altid energi (Ordbogen) | OK: alle 2. elektronaffiniteter er negative | Rayner-Canham/Huheey (Wikipedia) |
-| Natriums næste elektron koster langt mere (47 eV) | OK | NIST Handbook |
-| Synligt lys ca. 2-3 eV pr. foton | OK (1,6-3,1 eV) | lærebogsviden, også i ordbog.js |
-| Halogenkortet: tiltrækningen giver energien | OK: gitterenergien (787 kJ/mol) er større end alt det, der koster | afsnit 7 |
-| Atomerne tegnet "mange millioner gange større" | OK: ca. 1 cm på skærmen mod 0,18 nm, altså ca. 50 millioner gange | min udregning |
-| Fjernet: "Atomer er mest tilfredse med en fyldt yderste skal" som forklaring på, *hvorfor* det sker (hjælpen) og "så begge får en fuld yderste skal" (halogenkortet) | rettet (fælde 1) | afsnit 6 |
+## 8. og 9. Faktatjek af teksterne i M1a og M1b
+Flyttet til [fakta-molekyler/faktatjek-m1.md](fakta-molekyler/faktatjek-m1.md) (7. november 2026), så denne fil holder sig under ca. 30 KB.
 
 ## Forslag til "Ærligt talt"-linjer
 
