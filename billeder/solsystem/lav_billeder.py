@@ -8,7 +8,8 @@
 #   nat.jpg          Black Marble 2016: https://eoimages.gsfc.nasa.gov/images/imagerecords/144000/144898/BlackMarble_2016_3km.jpg
 #   skyer.tif        Blue Marble: Clouds: https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57747/cloud_combined_8192.tif
 #   hoejde.png       Topografi (GEBCO): https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73934/gebco_08_rev_elev_21600x10800.png
-#   maane.tif        CGI Moon Kit (LRO): https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_4k.tif
+#   maane.tif        CGI Moon Kit (LRO): https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_8k.tif
+#                    (8k fra 7. november 2026, før 4k-udgaven lroc_color_poles_4k.tif)
 #   maane-hoejde.tif CGI Moon Kit (LRO): https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/ldem_16_uint.tif
 #
 # Højdekortene gemmes med 16 bit fordelt på rød (den store del) og grøn (den lille del) i en PNG,
@@ -22,8 +23,8 @@ Image.MAX_IMAGE_PIXELS = None
 ind, ud = sys.argv[1], sys.argv[2]
 os.makedirs(ud, exist_ok=True)
 
-def gem_jpg(im, navn, kvalitet):
-    for størrelse, b in (('4k', 4096), ('2k', 2048)):
+def gem_jpg(im, navn, kvalitet, størrelser=(('4k', 4096), ('2k', 2048))):
+    for størrelse, b in størrelser:
         lille = im.resize((b, b // 2), Image.LANCZOS)
         lille.save(os.path.join(ud, f'{navn}-{størrelse}.jpg'), quality=kvalitet, optimize=True, progressive=True)
 
@@ -56,7 +57,7 @@ h = np.asarray(Image.open(os.path.join(ind, 'hoejde.png')).convert('L'), np.floa
 gem_hoejde(h, 'jorden-hoejde-2k', 2048)
 print('jordens højder')
 # Månen
-gem_jpg(Image.open(os.path.join(ind, 'maane.tif')).convert('RGB'), 'maanen', 88)
+gem_jpg(Image.open(os.path.join(ind, 'maane.tif')).convert('RGB'), 'maanen', 88, (('8k', 8192), ('4k', 4096), ('2k', 2048)))
 mh = np.asarray(Image.open(os.path.join(ind, 'maane-hoejde.tif')), np.float32)
 gem_hoejde((mh - mh.min()) / (mh.max() - mh.min()), 'maanen-hoejde-1k', 1024) # Månen er lille på skærmen
 print('månen', 'højdeforskel i km:', round(float(mh.max() - mh.min()) / 2000, 2))

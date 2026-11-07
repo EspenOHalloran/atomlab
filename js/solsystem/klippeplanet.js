@@ -420,7 +420,46 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
   const n = new THREE.Vector3();
   // Kuglens hul, hvor de lokale net er klar (et hul på 0 × 0 skjuler intet), og hvilke trekanter der tegnes
   let dele = null; // { uden, rand, inde: [antal under hvert lokalt net] } (trekanternes rækkefølge i kuglens liste)
+  let sorteringVenter = false;
+  // sin og cos i kuglens net (til de lokale net, som slår op i dem mange gange)
+  const trig = {
+    cosPhi: Float64Array.from({ length: net[0] + 2 }, (_, i) => Math.cos((i / net[0]) * 2 * Math.PI)),
+    sinPhi: Float64Array.from({ length: net[0] + 2 }, (_, i) => Math.sin((i / net[0]) * 2 * Math.PI)),
+    cosTh: Float64Array.from({ length: net[1] + 2 }, (_, i) => Math.cos((i / net[1]) * Math.PI)),
+    sinTh: Float64Array.from({ length: net[1] + 2 }, (_, i) => Math.sin((i / net[1]) * Math.PI)),
+  };
+  // Kuglens trekanter i rækkefølgen: uden for alle lokale net, på kanten af et og helt inde under hvert af dem
+  function sorterTrekanter() {
+    const uvA = mesh.geometry.attributes.uv.array;
+    const antal = alle.length / 3;
+    const slags = new Int16Array(antal); // −2: uden for, −1: på kanten, k: inde under net k
+    const tæl = new Uint32Array(lokale.length + 2);
+    for (let t = 0; t < antal; t++) {
+      const a = alle[t * 3] * 2, b = alle[t * 3 + 1] * 2, c = alle[t * 3 + 2] * 2;
+      const uMin = Math.min(uvA[a], uvA[b], uvA[c]), uMaks = Math.max(uvA[a], uvA[b], uvA[c]);
+      const vMin = Math.min(uvA[a + 1], uvA[b + 1], uvA[c + 1]), vMaks = Math.max(uvA[a + 1], uvA[b + 1], uvA[c + 1]);
+      let s = -2;
+      for (let k = 0; k < lokale.length; k++) {
+        const o = lokale[k].hul;
+        if (uMin > o.x && uMaks < o.z && vMin > o.y && vMaks < o.w) s = k;
+        else if (s === -2 && uMaks > o.x && uMin < o.z && vMaks > o.y && vMin < o.w) s = -1;
+      }
+      slags[t] = s;
+      tæl[s + 2]++;
+    }
+    const start = new Uint32Array(tæl.length);
+    for (let k = 1; k < tæl.length; k++) start[k] = start[k - 1] + tæl[k - 1] * 3;
+    const ud = mesh.geometry.index.array;
+    for (let t = 0; t < antal; t++) {
+      const p = start[slags[t] + 2];
+      ud[p] = alle[t * 3]; ud[p + 1] = alle[t * 3 + 1]; ud[p + 2] = alle[t * 3 + 2];
+      start[slags[t] + 2] = p + 3;
+    }
+    mesh.geometry.index.needsUpdate = true;
+    dele = { uden: tæl[0] * 3, rand: tæl[1] * 3, inde: [...tæl.slice(2)].map((x) => x * 3) };
+  }
   function opdaterHuller() {
+    if (!dele) return; // trekanterne er ikke sorteret endnu (det sker lige om lidt, og så kaldes den igen)
     lokale.forEach((l, k) => { if (l.klar) u.huller.value[k].copy(l.hul); else u.huller.value[k].set(0, 0, 0, 0); });
     const g = mesh.geometry;
     g.clearGroups();
@@ -510,48 +549,61 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       const kugle = new Float32Array(antal * 3);
       // Et punkt i kuglens net uden bjerge (som i THREE.SphereGeometry, trykket flad)
       const [W, H] = net;
-      const kp = (ix, iy) => {
-        const phi = (ix / W) * 2 * Math.PI, th = (iy / H) * Math.PI;
-        return [-Math.cos(phi) * Math.sin(th), Math.cos(th) * flad, Math.sin(phi) * Math.sin(th)];
+      // (skrevet uden nye lister pr. punkt: nettene har ca. 260.000 punkter hver, og det tog før sekunder at lave dem)
+      const hj = new Float64Array(9); // tre punkter: b, d og c
+      const kp = (ix, iy, o) => {
+        const st = trig.sinTh[iy];
+        hj[o] = -trig.cosPhi[ix] * st;
+        hj[o + 1] = trig.cosTh[iy] * flad;
+        hj[o + 2] = trig.sinPhi[ix] * st;
       };
       const sæt = (k, i, j, s) => {
-        const b = rad(nord + ((syd - nord) * j) / (N - 1)), lg = rad(vest + ((øst - vest) * i) / (M - 1));
-        pos.set([Math.cos(b) * Math.cos(lg), Math.sin(b), -Math.cos(b) * Math.sin(lg)], k * 3);
+        const b = rad(nord + ((syd - nord) * j) / (N - 1)), lg = rad(vest + ((øst - vest) * i) / (M - 1)), cb = Math.cos(b);
+        pos[k * 3] = cb * Math.cos(lg);
+        pos[k * 3 + 1] = Math.sin(b);
+        pos[k * 3 + 2] = -cb * Math.sin(lg);
         const u = (lg / Math.PI + 1) / 2, v = b / Math.PI + 0.5;
-        uv.set([u, v], k * 2);
+        uv[k * 2] = u;
+        uv[k * 2 + 1] = v;
         skørt[k] = s;
         // Trekanten i kuglens net (som i shaderen)
         const gx = u * W, gy = (1 - v) * H, i0 = Math.floor(gx), j0 = Math.floor(gy), fx = gx - i0, fy = gy - j0;
-        const [vb, vd, vc] = [kp(i0, j0), kp(i0 + 1, j0 + 1), fx >= fy ? kp(i0 + 1, j0) : kp(i0, j0 + 1)];
-        const [wb, wc, wd] = fx >= fy ? [1 - fx, fx - fy, fy] : [1 - fy, fy - fx, fx];
-        kugle.set([0, 1, 2].map((a) => vb[a] * wb + vc[a] * wc + vd[a] * wd), k * 3);
+        kp(i0, j0, 0);
+        kp(i0 + 1, j0 + 1, 3);
+        if (fx >= fy) kp(i0 + 1, j0, 6);
+        else kp(i0, j0 + 1, 6);
+        const wb = fx >= fy ? 1 - fx : 1 - fy, wc = fx >= fy ? fx - fy : fy - fx, wd = fx >= fy ? fy : fx;
+        for (let a = 0; a < 3; a++) kugle[k * 3 + a] = hj[a] * wb + hj[6 + a] * wc + hj[3 + a] * wd;
       };
       for (let j = 0; j < N; j++) for (let i = 0; i < M; i++) sæt(j * M + i, i, j, 0);
       const skørtNr = new Map();
       kantPunkter.forEach(([i, j], k) => { sæt(M * N + k, i, j, 1); skørtNr.set(j * M + i, M * N + k); });
-      const index = [];
-      for (let j = 0; j < N - 1; j++) {
-        for (let i = 0; i < M - 1; i++) {
-          const a = j * M + i, b = a + 1, c = a + M, d = c + 1;
-          index.push(a, c, b, b, c, d);
-        }
-      }
       // Skørtet: fra kanten og ned
       const kantRundt = [];
       for (let i = 0; i < M - 1; i++) kantRundt.push(i);
       for (let j = 0; j < N - 1; j++) kantRundt.push(j * M + M - 1);
       for (let i = M - 1; i > 0; i--) kantRundt.push((N - 1) * M + i);
       for (let j = N - 1; j > 0; j--) kantRundt.push(j * M);
+      const index = new Uint32Array((M - 1) * (N - 1) * 6 + kantRundt.length * 12);
+      let ni = 0;
+      const læg = (...a) => { for (const x of a) index[ni++] = x; };
+      for (let j = 0; j < N - 1; j++) {
+        for (let i = 0; i < M - 1; i++) {
+          const a = j * M + i, b = a + 1, c = a + M, d = c + 1;
+          index[ni++] = a; index[ni++] = c; index[ni++] = b;
+          index[ni++] = b; index[ni++] = c; index[ni++] = d;
+        }
+      }
       kantRundt.forEach((a, k) => {
         const b = kantRundt[(k + 1) % kantRundt.length], sa = skørtNr.get(a), sb = skørtNr.get(b);
-        index.push(a, b, sa, b, sb, sa, a, sa, b, b, sa, sb); // begge veje, så skørtet ses fra begge sider
+        læg(a, b, sa, b, sb, sa, a, sa, b, b, sa, sb); // begge veje, så skørtet ses fra begge sider
       });
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
       geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
       geo.setAttribute('skoert', new THREE.BufferAttribute(skørt, 1));
       geo.setAttribute('kugle', new THREE.BufferAttribute(kugle, 3));
-      geo.setIndex(index);
+      geo.setIndex(new THREE.BufferAttribute(index, 1));
       geo.computeBoundingSphere();
       geo.boundingSphere.radius += 0.07; // bjergene, også 10 gange højere
       const lm = new THREE.ShaderMaterial({
@@ -598,24 +650,12 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       u.huller.value.push(new THREE.Vector4());
       matHul.defines.HULLER = lokale.length;
       matHul.needsUpdate = true;
-      const uvK = mesh.geometry.attributes.uv;
-      const uden = [], rand = [], inde = lokale.map(() => []);
-      for (let t = 0; t < alle.length; t += 3) {
-        const tre = [alle[t], alle[t + 1], alle[t + 2]];
-        const us = tre.map((i) => uvK.getX(i)), vs = tre.map((i) => uvK.getY(i));
-        let liste = uden;
-        lokale.forEach(({ hul: o }, k) => {
-          const inden = Math.min(...us) > o.x && Math.max(...us) < o.z && Math.min(...vs) > o.y && Math.max(...vs) < o.w;
-          const rører = Math.max(...us) > o.x && Math.min(...us) < o.z && Math.max(...vs) > o.y && Math.min(...vs) < o.w;
-          if (inden) liste = inde[k];
-          else if (rører && liste === uden) liste = rand;
-        });
-        liste.push(...tre);
+      // Trekanterne sorteres én gang, når alle de lokale net er lavet (Mars laver fem lige efter hinanden), men før
+      // kuglen tegnes første gang (en mikroopgave kører, før browseren tegner igen)
+      if (!sorteringVenter) {
+        sorteringVenter = true;
+        queueMicrotask(() => { sorteringVenter = false; sorterTrekanter(); opdaterHuller(); });
       }
-      mesh.geometry.index.array.set([...uden, ...rand, ...inde.flat()]);
-      mesh.geometry.index.needsUpdate = true;
-      dele = { uden: uden.length, rand: rand.length, inde: inde.map((a) => a.length) };
-      opdaterHuller();
       return {
         mesh: lmesh,
         get harTabel() { return !!l.tabel; },

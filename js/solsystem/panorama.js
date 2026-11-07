@@ -115,11 +115,22 @@ export function lavPanorama({ renderer, hent, mappe }) {
       kugle.visible = true;
       klar?.();
     };
+    hentAlt(id, færdig, (t) => { foto = t; færdig(); }, (t) => { maske = t; færdig(); });
+  }
+  // Fotoet, masken og vinklerne (hent.js husker billederne, så de kun hentes én gang)
+  const jsonVenter = {}; // id → hentningen af vinklerne, mens den er i gang
+  function hentAlt(id, json, foto, maske) {
     if (!data[id]) {
-      fetch(new URL(`landskab/pano-${id}.json`, mappe)).then((s) => s.json()).then((d) => { data[id] = d; færdig(); }).catch(() => {});
+      jsonVenter[id] ??= fetch(new URL(`landskab/pano-${id}.json`, mappe)).then((s) => s.json()).then((d) => { data[id] = d; }).catch(() => { delete jsonVenter[id]; });
+      jsonVenter[id].then(json);
     }
-    hent(`landskab/pano-${id}-${størrelse}.jpg`, (t) => { foto = t; færdig(); }, { anisotropi });
-    hent(`landskab/pano-${id}-maske.png`, (t) => { maske = t; færdig(); }, { farve: false, kanaler: 1 });
+    hent(`landskab/pano-${id}-${størrelse}.jpg`, foto, { anisotropi });
+    hent(`landskab/pano-${id}-maske.png`, maske, { farve: false, kanaler: 1 });
+  }
+  // Hent fotoet på forhånd (mens kameraet flyver ned), så det er klar, når man lander
+  function forhånd(id) {
+    const ingenting = () => {};
+    hentAlt(id, ingenting, ingenting, ingenting);
   }
   // Skjul fotoet. straks: uden at tone ud (fx når man letter eller går til et andet sted)
   function skjul(straks = false) {
@@ -136,6 +147,7 @@ export function lavPanorama({ renderer, hent, mappe }) {
     kugle,
     vis,
     skjul,
+    forhånd,
     // Er fotoet slået til (også mens det hentes eller toner ind)?
     get til() { return mål === 1; },
     get vist() { return vist; },
