@@ -2,7 +2,15 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
-## "Senest lavet" 7. november 2026 (menuen som en ring, før roverens foto, rejseskiltet og Månen i 8k)
+## "Senest lavet" 7. november 2026 (Jupiter J5, før roverens foto, rejseskiltet og Månen i 8k)
+**Senest lavet (7. november 2026): Jupiter J5, polerne, nordlyset og ringene. Jupiter er færdig (J1-J5).** Jeres go: "Go til J5".
+- **Cyklonerne:** 8 om 1 ved nordpolen og 5 om 1 ved sydpolen, ved ca. 84° og 4.000-7.000 km brede (Juno, Gavriel og Kaspi 2021). Tegnet som spiraler, der drejer med den målte vind. Ved polerne står døgnet stille, og billedet er gjort 2,5 gange lysere (Solen står kun få grader oppe).
+- **Nordlyset:** kun med den nye kontakt "Ultraviolet", i falsk farve (lilla), en ring om hver magnetisk pol og Io's fodspor, der følger Io. Ringen er forenklet (som en stangmagnet).
+- **Ringene:** glorien og hovedringen af støv (NSSDC), der spreder lyset fremad. Næsten usynlige forfra, tydelige i Jupiters skygge. Gjort ca. 1.000 gange lysere (står i "Ærligt talt"). De to yderste ringe er for svage til at ses og tegnes ikke.
+- **Flybyen har 5 stop:** sydpolen og "I Jupiters skygge" er kommet til. Træet har Sydpolen, Nordpolen og Ringene med egne sider. "Ultraviolet" er i Ordbogen. Faktatjek J5 står i `fakta-solsystemet.md`.
+- **Tests:** `jupiter` har 81 tjek (17 nye, nordlyset og ringene målt i billedet). Hele samlingen: 34 af 34 bestod (27 min). Billeder i sekundet: se "Status efter J5" i [plan-jupiter.md](plan-jupiter.md) (ved hele Jupiter ca. 12 % langsommere på tablet end før J5).
+
+## "Senest lavet" 7. november 2026 (menuen som en ring, før Jupiter J5)
 **Senest lavet (7. november 2026): Menuen som en ring af kort (K1, kun med `?karrusel` sidst i adressen).** Jeres go: "go" (prototypen), "fint med elektronbane … nærmest noget apple kunne have lavet" og "retningen er god. go" (efter billedet). Planen og jeres svar: [plan-menu.md](plan-menu.md).
 - **Ringen:** Kortene kredser om menuens atom på en skrå, lysende elektronbane med tre lysprikker. Kortet forrest er stort og skarpt, kortene til siden mindre og mørkere, og kortene svæver let. Ringen følger fingeren, tager farten med og falder blødt på plads (fjeder). Musehjul, piletaster og tryk på et kort til siden drejer den. Kun kortet forrest åbner delen.
 - **Rækkefølgen efter størrelse:** Stjerneovnen, Reaktoren, Værkstedet, Det periodiske system, Batteriet, Solsystemet, Kosmos og Ordbogen. Docken af glas nederst har alle ikonerne under "‹ mindre … større ›".
