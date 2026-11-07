@@ -54,3 +54,5 @@
 - JPL SSD's tabel over månernes baner (`sats/elem`) har en kolonne "P", som ikke er den sideriske omløbstid (Io 1,7627 mod 1,7691 døgn). Brug NSSDC's omløbstider, ellers passer resonansen 1 : 2 : 4 ikke.
 - USGS' farvemosaik af Io er forstærket (violet, grøn og nær-infrarød). "De ægte farver er meget mere dæmpede" (USGS).
 - "Interstellar fjernede dopplereffekten for at gøre billedet pænere." Filmen fjernede alle frekvensskift (også tyngdekraftens rødforskydning), fordi skiven ellers blev så skæv, at det var svært at forstå for publikum (James m.fl. 2015, arXiv:1502.03808). Og afstanden til Mælkevejens sorte hul er ca. 27.000 lysår (GRAVITY 2021), ikke 26.000.
+- "Jupiters hurtigste vind blæser ved ækvator (539 km/t)" (NASA "Jupiter Facts"). Den hurtigste jetstrøm er ved ca. 24° N (ca. 150 m/s, Hubble 2015 og vores egen måling). Ved ækvator er det ca. 70-100 m/s.
+- "Jupiter sender 1,7 gange så meget varme ud, som den får." Det er det gamle tal, og det gælder den varme, Jupiter *optager* (ikke alt sollyset, der rammer den). Nyere målinger fra Cassini giver nærmere 2.

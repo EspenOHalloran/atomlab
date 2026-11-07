@@ -1709,3 +1709,31 @@ Teksterne i `js/data/sider/jupiter.js` (Månerne, Io, Europa, Ganymedes og Calli
 | Ganymedes: størst, ca. 8 % bredere end Merkur, under halvt så tung (45 %), magnetfelt 1996, hav (Hubble 2015) ca. 100 km under ca. 150 km is, mere vand end Jordens have, ca. 1/3 mørk, JUICE op 2023 og frem 2031 | OK. Bane om Ganymedes er skrevet uden årstal (2034 er kun et søgeresultat) | B4 |
 | Callisto: ældste overflade med flest kratere, ca. 4 mia. år, mættet, Valhalla ca. 3.800 km med ringene, svag stråling, NASA's undersøgelse af en base (HOPE), måske et hav ca. 250 km nede, ikke i resonansen | OK. Valhallas centrum er udeladt (fælden) | B5 |
 | Albedoen (kun til lysstyrken i tegningen) | Io er tegnet lidt mørkere (0,46 i stedet for 0,53 gange albedoen), så tonen kan ses | NSSDC |
+
+## Faktatjek J4: flybyen, Jupiters side, Ordbogen og citatet (7. november 2026)
+
+Opus (høj effort) med `/faktatjek`. Teksterne: underteksterne i `TUR` i `js/kosmos/jupiter.js`, emnerne og "For nørder" på Jupiters side i `js/data/sider/jupiter.js`, syv nye ord i `js/data/ordbog.js` og citatet `galileiJupiter` i `js/data/citater.js`. Næsten alt står i del 5 med åbnede kilder, så der blev ikke sat hjælpeagenter i gang. De nye påstande er slået op direkte (NASA "Jupiter Facts" åbnet igen 7. november 2026, Wikipedia som rå wikitekst og førsteudgaven af Sidereus Nuncius på archive.org).
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Jupiter vejer næsten 2½ gange så meget som alle de andre planeter tilsammen | OK (regnet): 317,83 Jordmasser mod 0,055 + 0,815 + 1 + 0,107 + 95,16 + 14,54 + 17,15 = 128,8. Forholdet er 2,47 | NSSDC (del 5) |
+| De fire store måner fandt Galilei i januar 1610 | OK | Del 5, B6 |
+| Båndene er skyer af ammoniak og vand. Lyse zoner, mørke orange bælter, der blæser hver sin vej | OK: "clouds of ammonia and water", "dark orange stripes are called belts, while the lighter bands are called zones" | NASA Jupiter Facts (åbnet) |
+| Jetstrømmene holder båndene adskilt og går ca. 3.000 km ned | OK: "Strong east-west winds ... separate the bands", "about 2,000 miles (roughly 3,200 kilometers)". Juno-siden siger ca. 3.000 km | NASA Jupiter Facts (åbnet), del 5 punkt 5 |
+| Den hurtigste vind ca. 540 km/t | OK: vores måling 149 m/s = 536 km/t. NASA skriver 539 km/t ved ækvator, men vi måler ca. 72 m/s ved ækvator og den hurtigste ved 24° N. Teksten siger "den hurtigste" uden at nævne ækvator | Egen måling, del 5 |
+| Brinten bliver flydende under skyerne, måske halvvejs inde leder den strøm som et metal, og det laver nok magnetfeltet | OK ("Scientists think", "is thought to drive", derfor "Forskerne mener") | NASA Jupiter Facts (åbnet) |
+| Kernen er større end ventet, delvis opløst og uden skarp kant (Juno) | OK: "much larger than expected, and not solid ... partially dissolved, with no clear separation" | NASA Jupiter Facts (åbnet) |
+| Ca. 80 gange Jupiters masse til en stjerne, ca. 13 til en brun dværg | OK: 78,5 (Chabrier m.fl. 2023), 13,0 ± 0,8 (Spiegel m.fl. 2011) | Del 5 punkt 3 |
+| Sender ca. dobbelt så meget varme ud, som den suger til sig af sollyset. Rester fra dannelsen | OK: 1,7 (gamle tal) og ca. 2,2 (regnet med Li m.fl. 2018) giver begge "ca. dobbelt". Wikipedia: "radiates more heat than it receives ... Kelvin-Helmholtz mechanism" | Del 5 punkt 3, Wikipedia "Jupiter" (rå wikitekst) |
+| Li m.fl. 2018 (nørd) | **Skrevet forsigtigere:** Artiklen kunne ikke åbnes (nature.com og pubmed lukket). Tallet 7,5 W/m² er fjernet. Nu: "tyder på ... nærmere 2" | Del 5 punkt 3 (søgeresultat), Wikipedia (henvisning) |
+| Jupiter er ikke det store skjold mod kometer | OK, som forslaget i del 5 | Horner & Jones 2008-2012 (del 5 punkt 4) |
+| Antikyklon: med uret på den nordlige halvkugle, mod uret på den sydlige. Cyklon omvendt | OK: "High-pressure systems rotate clockwise in the Northern Hemisphere and counterclockwise in the Southern Hemisphere" | Wikipedia "High-pressure area" (rå wikitekst) |
+| Ved Jupiters poler står cykloner i en ring om en i midten | OK: 8 om 1 ved nordpolen, 5 om 1 ved sydpolen. Antallet er ikke skrevet (fælden "seks ved sydpolen") | Del 5 punkt 6 |
+| Over et dusin jetstrømme, den hurtigste ca. 150 m/s | OK: "over a dozen prevailing winds" | NASA Jupiter Facts, egen måling |
+| Jupiters nordlys hundredvis af gange kraftigere end Jordens | OK ("hundreds of times brighter") | Del 5 punkt 7 |
+| Io : Ganymedes = 4 : 1 omgange | OK (4,04) | Del 5, B1 |
+| **Citatet:** "Die itaque septima Ianuarij ... tres illi adstare stellulas, exiguas quidem, veruntamen clarissimas, cognoui" | OK: læst i skanningen af førsteudgaven (Venedig 1610, side 17, Smithsonian Libraries, archive.org `Sidereusnuncius00Gali`). Det lange s er skrevet som s, ellers som i bogen. En parentes er udeladt ("(…)"), og det står som "forkortet". Den danske oversættelse er Opus' egen | Archive.org (skanningen set) |
+| 13. januar så han fire, og snart forstod han, at de kredser om Jupiter | OK: "On January 13, he saw all four at once", "By January 15, Galileo concluded ... orbiting Jupiter" | Wikipedia "Galilean moons" (rå wikitekst), del 5 B6 |
+| De mediceiske stjerner efter Medici i Firenze. Navnene kom senere | OK: titelbladet ("Medicea sidera"), Galilei var fra Firenze ("patritio Florentino"), Cosimo II de' Medici. Navnene valgte Simon Marius (fælden: skriv bare "senere") | Titelbladet (archive.org), Wikipedia "Galilean moons" |
+
+**Ny fælde:** NASA skriver "up to 539 km/h at the equator", men ifølge Hubbles målinger (og vores) blæser det hurtigste ved 24° N, ikke ved ækvator.
