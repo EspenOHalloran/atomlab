@@ -29,3 +29,4 @@
     5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
     6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
     - Hjernen og AI venter (jeres svar). Nye dele kræver en beslutning om menuen (i dag 8 kort).
+6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" med lysuret og tvillingerejsen og flere idéer. Alt fra samtalen står i [plan-tid.md](plan-tid.md). Tre åbne spørgsmål (hvor det skal ligge, hvor i køen, og hvem der bliver hjemme) skal besvares før start (mellem til stor).
