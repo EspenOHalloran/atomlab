@@ -14,9 +14,9 @@ await s.goto(`${ADRESSE}/?test#solsystem`);
 await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
 await s.evaluate(() => document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click());
 // Rejseskiltet (7. november 2026): vises med det samme ved et tryk på en anden klode og forsvinder, når Mars er bygget
-const skilt = await f(() => { const k = document.querySelector('#solsystemVindue .rejseskilt'); return { vist: k?.classList.contains('vist'), titel: k?.querySelector('.rejse-titel').textContent }; });
+const skilt = await s.evaluate(() => { const k = document.querySelector('#solsystemVindue .rejseskilt'); return { vist: k?.classList.contains('vist'), titel: k?.querySelector('.rejse-titel').textContent }; });
 await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt').classList.contains('vist') && atomlabTest.solsystem.valgt() === 'mars', null, { timeout: 20000, polling: 50 }).catch(() => {});
-tjek('rejseskiltet "Kurs mod Mars" vises ved trykket og forsvinder, når Mars er bygget', skilt.vist && skilt.titel === 'Kurs mod Mars' && !(await f(() => document.querySelector('#solsystemVindue .rejseskilt').classList.contains('vist'))), JSON.stringify(skilt));
+tjek('rejseskiltet "Kurs mod Mars" vises ved trykket og forsvinder, når Mars er bygget', skilt.vist && skilt.titel === 'Kurs mod Mars' && !(await s.evaluate(() => document.querySelector('#solsystemVindue .rejseskilt').classList.contains('vist'))), JSON.stringify(skilt));
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.kort, null, { timeout: 60000 });
 const f = (fn, a) => s.evaluate(fn, a);
 const fm = (fn) => s.evaluate(fn);

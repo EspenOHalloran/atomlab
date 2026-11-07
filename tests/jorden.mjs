@@ -93,6 +93,7 @@ await s.waitForFunction(() => document.querySelector('#solsystem:not(.skjult)'))
 
 // ---------- Jorden ----------
 await s.click('#solsystem .sol-klode[data-id="jorden"]');
+await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt')?.classList.contains('vist'), null, { timeout: 20000, polling: 50 }); // rejseskiltet (kloden bygges, når det er tegnet)
 tjek('et tryk på Jorden åbner Jorden', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'jorden');
 const knapper = await s.evaluate(() => atomlabTest.solsystem.knapper());
 tjek('ingen knapper i bjælken og Styr-boksen ("Drej Jorden" er ⏩, og Månen står i træet)', knapper.length === 0, JSON.stringify(knapper));
@@ -177,6 +178,7 @@ await f(s, 'f.hop()');
 tjek('"Jorden" i træet: tilbage ved Jorden', (await f(s, 'f.ved()')) === 'jorden');
 // Skift væk: Jordens ur forsvinder
 await s.click('#solsystem .kosmos-valg[data-id="mars"]');
+await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt')?.classList.contains('vist'), null, { timeout: 20000, polling: 50 }); // rejseskiltet
 tjek('Jordens ur er væk, når Mars vælges', (await s.$$('#solsystemOverlag .jord-ur')).length === 0);
 await s.context().close();
 
