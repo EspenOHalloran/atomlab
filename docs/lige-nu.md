@@ -23,6 +23,8 @@
 - **Tabletten før Jupiter bygges.** Tjeklisten (15 punkter) står i [docs/tjekliste-tablet.md](tjekliste-tablet.md). Fejl rettes, før planeterne genbruger den fælles kode. Planen for Jupiter kan laves imens.
 - **Indskydes mellem planeterne** (jeres valg, alle tre): Formørkelser med et grafisk løft (✅ lavet 6. november 2026, før tabletrunden), Molekyler M1 (stor, kan køre samtidig med planeterne, for den ligger i Værkstedet) og Det sorte hul (stor, Opus xhigh). Hver får sit eget go. Opus' forslag til rækkefølgen: Formørkelser mellem Jupiter og Venus, Molekyler M1 sideløbende, og Det sorte hul, når en planet er færdig, og der er plads til en dyr opgave.
 
+**Menuen som en karrusel (7. november 2026, [plan-menu.md](plan-menu.md)):** Jeres svar er skrevet ind. K1 (prototypen bag `?karrusel`) er bygget på grenen `ccr-b08a749d-v9v3q3`. Åbent: jeres besked "Ellipseformet skulle der stå".
+
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 0. **Jupiter bygges videre** (J1-J3 ✅, J4 og J5 venter, Opus høj, [docs/plan-jupiter.md](plan-jupiter.md)). Jeres svar på de fem spørgsmål er givet (6. november 2026, står i planen under "Jeres svar"): OPAL-kortet, vulkanerne venter, månerne som kugler (tryk og besøg kun, hvis det er lille og i Saturns kvalitet), 5 stop uden Io, den rigtige fart. Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md). Kan køre samtidig med rettelsespakken og Det sorte hul.
 1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).

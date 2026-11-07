@@ -22,6 +22,7 @@ import { lavLag, lukHvorfor, vistHvorfor } from './lag.js';
 import { lavPaneler, startPaneler, testAdgang as panelTest } from './paneler.js';
 import { lavOrdbog, startOrdbog, stopOrdbog } from './ordbog.js';
 import { ORDNE, søgOrd } from './data/ordbogliste.js';
+import { lavKarrusel, startKarrusel, gemSidsteDel } from './karrusel.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -71,6 +72,7 @@ function start() {
   lavSolsystem(); // før Kosmos, så det gemte flytter med først
   lavKosmos();
   lavOrdbog();
+  lavKarrusel({ fremgang: fremgangPrDel }); // kun med ?karrusel (prototype, docs/plan-menu.md)
   lavPaneler();
   lavFuldSkærmKnapper();
   lavRulleTip();
@@ -120,6 +122,7 @@ function visSkærm() {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }
   aktivSkærm = ny;
+  if (ny !== 'menu') gemSidsteDel(ny);
   stopKamera();
   nulstilStyring();
   opdaterLydknapper();
@@ -169,10 +172,26 @@ function startMenu() {
   const ny = fremgang.antalOpdaget() === 0 && fremgang.antalLøste(alle) === 0;
   document.querySelector('.menukort a[href="#vaerksted"]').classList.toggle('start-her', ny);
   visFremgangIMenu(ny);
+  startKarrusel();
+}
+
+// Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af kortene i menuen og af "Din fremgang" (karrusel.js).
+function fremgangPrDel() {
+  const ud = {};
+  for (const [id, liste] of [['vaerksted', OPGAVER], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
+    ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
+  }
+  ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };
+  for (const [id, liste] of [['solsystem', SOL_FÆNOMENER], ['kosmos', FÆNOMENER]]) {
+    let set = [];
+    try { set = JSON.parse(localStorage.getItem(NØGLER[id].set)) || []; } catch { /* ingen lagring */ }
+    ud[id] = { løst: liste.filter((f) => set.includes(f.id)).length, ialt: liste.length, slags: 'set' };
+  }
+  return ud;
 }
 
 // Fremgang på hvert kort i menuen ("3/7 ★"). Når en del er klaret, foreslås næste eventyr:
-// den første del i rækkefølgen, der ikke er klaret endnu.
+// den første del i rækkefølgen, der ikke er klaret endnu. En klaret del får klassen "klaret" (✓ i karrusellen).
 function visFremgangIMenu(ny) {
   const mærke = (id, tekst, færdig) => {
     const kort = document.querySelector(`.menukort a[href="#${id}"]`);
@@ -184,24 +203,20 @@ function visFremgangIMenu(ny) {
     }
     m.textContent = tekst;
     m.classList.toggle('færdig', færdig);
+    kort.classList.toggle('klaret', færdig);
     return kort;
   };
+  const data = fremgangPrDel();
   let næste = null;
   let klaret = 0;
-  for (const [id, liste] of [['vaerksted', OPGAVER], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
-    const løst = fremgang.antalLøste(liste.map((o) => o.id));
-    const kort = mærke(id, løst === liste.length ? `✓ ${løst}/${liste.length} ★` : `${løst}/${liste.length} ★`, løst === liste.length);
-    if (løst === liste.length) klaret++;
+  for (const id of ['vaerksted', 'fusion', 'reaktor', 'batteri']) {
+    const { løst, ialt } = data[id];
+    const kort = mærke(id, løst === ialt ? `✓ ${løst}/${ialt} ★` : `${løst}/${ialt} ★`, løst === ialt);
+    if (løst === ialt) klaret++;
     else if (!næste) næste = kort;
   }
-  const opdaget = fremgang.antalOpdaget();
-  mærke('system', `${opdaget}/118 opdaget`, opdaget === 118);
-  for (const [id, liste] of [['solsystem', SOL_FÆNOMENER], ['kosmos', FÆNOMENER]]) {
-    let set = [];
-    try { set = JSON.parse(localStorage.getItem(NØGLER[id].set)) || []; } catch { /* ingen lagring */ }
-    const antalSet = liste.filter((f) => set.includes(f.id)).length;
-    mærke(id, `${antalSet}/${liste.length} set`, antalSet === liste.length);
-  }
+  mærke('system', `${data.system.løst}/118 opdaget`, data.system.løst === 118);
+  for (const id of ['solsystem', 'kosmos']) mærke(id, `${data[id].løst}/${data[id].ialt} set`, data[id].løst === data[id].ialt);
   mærke('ordbog', `${ORDNE.length} fagord`, false);
   for (const k of document.querySelectorAll('.menukort .kort')) k.classList.toggle('næste-eventyr', !ny && klaret > 0 && k === næste);
 }

@@ -4,6 +4,7 @@
 
 **Ikke afprøvet (samlet 5. november 2026, til jeres runde på tabletten, på langs og på højkant):** De fulde spørgsmål med baggrund står i historikken under hver delopgave.
 - **Hentebjælken og de mørke kloder (6. november 2026):** Hvor længe står bjælken på tabletten på GitHub Pages (Mars, Jorden, Stå på Mars)? Kan I se toningen ind og skiftet fra 2k til 8k (Mars) og 4k (Jorden)? Er midten af billedet det rigtige sted til bjælken?
+- **Menuen som en karrusel (K1, 7. november 2026, åbn med `?karrusel` sidst i adressen, fx espenohalloran.github.io/atomlab/?karrusel):** Føles det godt at stryge med fingeren på tabletten, på langs og på højkant? Er det tydeligt, at et tryk på et kort ved siden af flytter det ind i midten, og at først kortet i midten åbner delen? Giver "‹ mindre … større ›" over ikonerne mening? Er ✓ på en klaret del nok, og finder jeres søn "Din fremgang"? Står atomet godt over kortene på tablet på langs?
 - **Hele programmet:** Lyden og hvordan det føles med fingre. NASA-billederne på en telefon. Menuen med 8 kort. Atomet B (orbitalernes former).
 - **Værkstedet, Det periodiske system og Ordbogen:** Er det tydeligt, at "Elektronsky" med ✓ viser skyen? Er kategorien under navnet let at ramme, og står kortet godt? Ordbogen: Er bogstaverne og linkene lette at ramme, ruller listen glat, og dækker tastaturet listen?
 - **Stjerneovnen og Reaktoren (U4):** Forstår I ▷ (langsom)? Er tidsknappens fire små knapper lette at ramme? Virker mellemrum på pc (pause og tilbage til tempoet)? Savner I tempoknapperne i panelet?
