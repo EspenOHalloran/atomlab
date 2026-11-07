@@ -6,7 +6,7 @@
 - **Ringen:** Kortene kredser om menuens atom på en skrå, lysende elektronbane med tre lysprikker. Kortet forrest er stort og skarpt, kortene til siden mindre og mørkere, og kortene svæver let. Ringen følger fingeren, tager farten med og falder blødt på plads (fjeder). Musehjul, piletaster og tryk på et kort til siden drejer den. Kun kortet forrest åbner delen.
 - **Rækkefølgen efter størrelse:** Stjerneovnen, Reaktoren, Værkstedet, Det periodiske system, Batteriet, Solsystemet, Kosmos og Ordbogen. Docken af glas nederst har alle ikonerne under "‹ mindre … større ›".
 - **Fremgangen mindre fremme:** Kun et ✓ på en klaret del. Tallene står bag "★ Din fremgang". Ringen starter på den del, man sidst var i (`atomlabSidsteDel`). Citatet er skjult i ringen.
-- **Den almindelige menu er uændret.** Testen `karrusel` har 96 tjek. Hele samlingen: se nedenfor under "Åbne punkter".
+- **Den almindelige menu er uændret.** Testen `karrusel` har 96 tjek. Hele samlingen efter fletningen med `main` (J4, M1a og PR A): alle 35 tests bestod (30 min), også `ordforklaring`.
 
 **Før det:** Rettelser i Det periodiske system, gruppernes navne og plasma (PR A, 7. november 2026), Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
 
