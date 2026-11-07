@@ -13,3 +13,8 @@
 - **Dataservere skifter navn:** archive.org sender filerne videre til `ia….us.archive.org` eller `dn….eu.archive.org`. Bed om `*.archive.org` på én gang.
 - **Søg efter faste tal i testene, når noget fælles ændres:** Testen `kosmos` tjekkede "7 kort i menuen", så det ottende kort fik den til at fejle. Søg efter tallet (`grep`) i `tests/`, før hele samlingen køres.
 - **Giv en lang testkørsel tid nok:** `koer-alle.mjs` med alle tests tog 26-27 minutter i denne session. En baggrundskørsel med 10 minutters grænse blev stoppet midt i og skulle køres forfra.
+
+## Kilderne til Molekyler M2 (7. november 2026)
+- **Standardmiljøet ("Default") havde ingen åbne domæner,** så NIST og OpenStax var lukket, selvom de virkede i M1. Et personligt miljø "atomlab" (kun til dette repo) med `cccbdb.nist.gov`, `webbook.nist.gov`, `openstax.org`, `chem.libretexts.org` og `en.wikipedia.org` blev lavet med værktøjet til miljøer (brugeren godkender det på et kort), og sessionen skiftede net med det samme. Hosts, der skal bruges senere (fx NASA til Solsystemet), skal også på dette miljø.
+- **Wikipedia:** API'et (`w/api.php` og `api/rest_v1`) svarede 429 ("too many requests") med det samme. De almindelige sider (`/wiki/Navn`) virkede, hvis der var 3-8 sekunder mellem dem. Teksten kan trækkes ud af HTML med et lille Python-script (fjern `<script>`, `<style>` og fodnoterne).
+- **CCCBDB (NIST)** giver målte molekyler med kilde for hvert tal: geometrien på `expgeom2x.asp?casno=<CAS uden bindestreger>` og dipolmoment, frekvenser osv. på `exp2x.asp?casno=…`. Siderne virkede med curl og en cookie-fil (`-c jar.txt -b jar.txt`). Kilden bag et tal står som en forkortelse (fx "1970Shi"). Den fulde henvisning står nederst på siden og skal slås op, ikke gættes (tjekliste B).
