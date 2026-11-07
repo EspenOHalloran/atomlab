@@ -9,6 +9,7 @@ import supernova from './kosmos/supernova.js';
 import pulsar from './kosmos/pulsar.js';
 import kilonova from './kosmos/kilonova.js';
 import rumtid from './kosmos/rumtid.js';
+import tid from './kosmos/tid.js';
 import tyngdebolger from './kosmos/tyngdebolger.js';
 import sorthul from './kosmos/sorthul.js';
 import kvasar from './kosmos/kvasar.js';
@@ -18,7 +19,7 @@ import ormehul from './kosmos/ormehul.js';
 // og ormehuller. Vores eget solsystem (Solen, Jorden, Mars og Saturn) ligger i Solsystemet (solsystem.js).
 const skærm = lavFænomenSkærm({
   skærm: 'kosmos',
-  liste: [bigbang, stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova, rumtid, tyngdebolger, sorthul, kvasar, ormehul],
+  liste: [bigbang, stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova, rumtid, tid, tyngdebolger, sorthul, kvasar, ormehul],
 });
 
 export const FÆNOMENER = skærm.FÆNOMENER;

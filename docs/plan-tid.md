@@ -84,15 +84,15 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Scenen:** Jorden, skibet og målet under en stjernehimmel, med de byggeklodser, der allerede findes i `js/kosmos/faelles.js`. **De to ure** står i et lag oven på 3D-billedet (HTML, så de er skarpe og kan læses på tabletten).
 - **Ærligt fra start:** Med skyderen springer vi over, hvordan man kommer op i fart. Det siges i underteksten og i "Ærligt talt" (se spørgsmål 1).
 
-**T1. Lysuret og rejsen til Alpha Centauri** *(mellem, én session)*
-- [ ] `js/data/tid.js` med gammafaktoren og rejsen med fast fart (ud og hjem).
-- [ ] Fænomenet med ét mål, Alpha Centauri, og skyderen "Fart" fra 90 % til 99,9999 % (1-6 ni-taller).
-- [ ] Rejsen i faser: afgang, ude ved målet, vende om og hjemkomst, med "Dit ur", "Jordens ur" og tvillingens alder. Tiden kan spoles (⏩).
-- [ ] Hjemkomsten med en kort tekst (se spørgsmål 2 og 3).
-- [ ] Handlingen "⏱ Vis lysuret": to lysure side om side, i skibet (lyset hopper lige op og ned) og set fra Jorden (zigzag). Farten følger skyderen. Det er det vigtigste "aha".
-- [ ] Teksten "kort", to emner og et første "Ærligt talt".
-- [ ] **Tests:** En ny `tests/tid.mjs` (og linjen i `koer-alle.mjs`) tjekker tallene (γ ved 90 % til 99,9999 % og rejsetiderne til Alpha Centauri mod fakta-tid.md), at skyderen ændrer urene, og at en rejse spolet frem ender ved hjemkomsten med den rigtige tekst.
-- [ ] **På tabletten:** Kan urene læses på højkant og på langs? Rammer man skyderens trin med fingeren? Kører lysuret glat, og forstår man zigzaggen?
+**T1. Lysuret og rejsen til Alpha Centauri** *(mellem, én session) ✅ lavet 7. november 2026*
+- [x] `js/data/tid.js` med gammafaktoren og rejsen med fast fart (ud og hjem).
+- [x] Fænomenet med ét mål, Alpha Centauri, og skyderen "Fart" fra 90 % til 99,9999 % (1-6 ni-taller).
+- [x] Rejsen i faser: afgang, ude ved målet, vende om og hjemkomst, med "Dit ur", "Jordens ur" og tvillingens alder. Tiden kan spoles (⏩).
+- [x] Hjemkomsten med en kort tekst (se spørgsmål 2 og 3).
+- [x] Handlingen "⏱ Vis lysuret": to lysure side om side, i skibet (lyset hopper lige op og ned) og set fra Jorden (zigzag). Farten følger skyderen. Det er det vigtigste "aha".
+- [x] Teksten "kort", to emner og et første "Ærligt talt".
+- [x] **Tests:** En ny `tests/tid.mjs` (og linjen i `koer-alle.mjs`) tjekker tallene (γ ved 90 % til 99,9999 % og rejsetiderne til Alpha Centauri mod fakta-tid.md), at skyderen ændrer urene, og at en rejse spolet frem ender ved hjemkomsten med den rigtige tekst.
+- [ ] **På tabletten** (står i [ikke-afproevet.md](ikke-afproevet.md)): Kan urene læses på højkant og på langs? Rammer man skyderens trin med fingeren? Kører lysuret glat, og forstår man zigzaggen?
 
 **T2. Alle mål, "1 g hele vejen" og afstanden, der skrumper** *(mellem, én session)*
 - [ ] Mælkevejens centrum og Andromedagalaksen. Skyderen går op til 14 ni-taller (γ ≈ 7,1 mio., jeres svar på spørgsmål 4). Så giver Mælkevejens centrum ud og hjem ca. 3 dage i skibet mod ca. 54.000 år på Jorden.
