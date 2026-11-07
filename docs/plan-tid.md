@@ -99,4 +99,4 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 ## Sådan startes næste session
 Ny session med Opus (høj effort). Prompt, der kan kopieres:
 
-> Læs CLAUDE.md, docs/lige-nu.md, DESIGN.md og docs/plan-tid.md. Vi skal arbejde videre med idéen "Tid og rum". Mine svar på de åbne spørgsmål: 1) … 2) … 3) … Lav først faktagrundlaget (Trin 0) med kilder i docs/fakta-tid.md og en plan med trin i docs/plan-tid.md, og vent på mit go, før der bygges.
+> Læs docs/lige-nu.md, DESIGN.md og docs/plan-tid.md. Spor: Solsystemet og Kosmos (docs/lige-nu/solsystemet.md), hvis det bliver et fænomen i Kosmos (A), ellers et nyt spor "Tid og rum" (B). Vi skal arbejde videre med idéen "Tid og rum". Mine svar på de åbne spørgsmål: 1) … 2) … 3) … Lav først faktagrundlaget (Trin 0) med kilder i docs/fakta-tid.md og en plan med trin i docs/plan-tid.md, og vent på mit go, før der bygges.
