@@ -22,7 +22,7 @@ import { lavLag, lukHvorfor, vistHvorfor } from './lag.js';
 import { lavPaneler, startPaneler, testAdgang as panelTest } from './paneler.js';
 import { lavOrdbog, startOrdbog, stopOrdbog } from './ordbog.js';
 import { ORDNE, søgOrd } from './data/ordbogliste.js';
-import { lavKarrusel, startKarrusel, gemSidsteDel } from './karrusel.js';
+import { lavKarrusel, startKarrusel, stopKarrusel, gemSidsteDel, testAdgang as karrusselTest } from './karrusel.js';
 
 const skærme = {
   menu: { start: startMenu, stop: stopMenu },
@@ -72,7 +72,7 @@ function start() {
   lavSolsystem(); // før Kosmos, så det gemte flytter med først
   lavKosmos();
   lavOrdbog();
-  lavKarrusel({ fremgang: fremgangPrDel }); // kun med ?karrusel (prototype, docs/plan-menu.md)
+  lavKarrusel({ fremgang: fremgangPrDel, radius: () => menuAtom.størrelse() }); // kun med ?karrusel (prototype, docs/plan-menu.md)
   lavPaneler();
   lavFuldSkærmKnapper();
   lavRulleTip();
@@ -103,7 +103,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) } };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) }, karrusel: karrusselTest() };
   visSkærm();
   skjulHenter();
 }
@@ -159,6 +159,7 @@ function opdaterMenuAtom(dt) {
 function startMenu() {
   menuAtom.gruppe.visible = true;
   verden.opdateringer.add(opdaterMenuAtom);
+  startKarrusel(); // kun med ?karrusel: lægger ringen og flytter atomets vindue, før kameraet zoomer ind
   sætVindue(document.getElementById('menuVindue'));
   verden.styring.autoRotate = true;
   flyInd(menuAtom.størrelse());
@@ -172,7 +173,6 @@ function startMenu() {
   const ny = fremgang.antalOpdaget() === 0 && fremgang.antalLøste(alle) === 0;
   document.querySelector('.menukort a[href="#vaerksted"]').classList.toggle('start-her', ny);
   visFremgangIMenu(ny);
-  startKarrusel();
 }
 
 // Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af kortene i menuen og af "Din fremgang" (karrusel.js).
@@ -233,6 +233,7 @@ function skjulHenter() {
 }
 
 function stopMenu() {
+  stopKarrusel();
   menuAtom.gruppe.visible = false;
   verden.opdateringer.delete(opdaterMenuAtom);
 }

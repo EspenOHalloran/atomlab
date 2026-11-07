@@ -18,7 +18,7 @@
 Fra det mindste til det største: **Stjerneovnen** (lette kerner smelter sammen) → **Reaktoren** (en tung kerne flækker) → **Atomværkstedet** → **Det periodiske system** → **Batteriet** (ioner i et stof) → **Solsystemet** → **Kosmos**, og til sidst **Ordbogen** (et opslagsværk, ikke et sted). En ny bruger starter på Atomværkstedet, næsten i midten. Stjerneovnen kunne også stå ved Solsystemet (den foregår inde i Solen), men det, man ser, er kerner. Nye dele senere: Kvantefysik helt til venstre, Molekyler, Ild og Liv efter Batteriet, og Gåderne efter Kosmos.
 
 ## Trin
-- [ ] **K1: Prototypen bag `?karrusel`** (bygget 7. november 2026, testen `karrusel` har 80 tjek; venter på jeres svar om "ellipseformet", se nedenfor) (lille til mellem, Opus medium): karrusellen (stryg, pile, musehjul, tastatur, tryk på et kort ved siden af flytter det ind i midten), rækkefølgen, ikonrækken, ✓ på klarede dele, "Din fremgang" og start på den del, man sidst var i (`atomlabSidsteDel`). Den almindelige menu er uændret. Kortet i midten står i `#menu[data-midt]`, så K2 kan bygges ovenpå.
+- [x] **K1: Prototypen bag `?karrusel`** (lavet 7. november 2026, først som en lige række og samme dag bygget om til ringen på elektronbanen, se nedenfor; testen `karrusel` har 96 tjek): ringen (træk og kast med fjeder, musehjul, piletaster, tryk på et kort til siden drejer det frem), rækkefølgen, docken med ikonerne, ✓ på klarede dele, "Din fremgang" og start på den del, man sidst var i (`atomlabSidsteDel`). Den almindelige menu er uændret. Kortet forrest står i `#menu[data-midt]`, så K2 kan bygges ovenpå. Citatet er skjult i ringen (ingen plads).
 - [ ] **K2: Baggrunden skifter med (B)** (mellem til stor, eget go). 3D-billedet bag kortene skifter til delens emne. Skal holdes let på tabletten (ingen 8k-kort i menuen).
 - [ ] **K3: Karrusellen bliver standard** efter jeres runde på tabletten: gitteret, de gule piller, linjen med tallene og "Næste eventyr" fjernes, og testene rettes (`system` tjekker i dag "Næste eventyr").
 
@@ -28,4 +28,6 @@ Fra det mindste til det største: **Stjerneovnen** (lette kerner smelter sammen)
 - **Ikke i billedet, men i byggeriet:** bevægelsen (det vigtigste), svæven, at banen går bag om atomet, vip mod musen på pc og en billigere udgave på tabletten, hvis sløringen koster for meget.
 
 ## Åbent (7. november 2026)
-- **"Ellipseformet skulle der stå"** er afklaret: ringen på elektronbanen ovenfor. Venter på jeres mening om billedet og et go til at bygge ringen.
+- **"Ellipseformet skulle der stå"** er afklaret: ringen på elektronbanen ovenfor. Jeres svar på billedet: "retningen er god. go". Ringen er bygget (K1).
+- **Jeres runde på tabletten** (spørgsmålene står i [ikke-afproevet.md](ikke-afproevet.md)): Hvordan føles fjederen og kastet? Kører den glat? Savner I citatet? På højkant er der lidt tom plads øverst.
+- **Ringen går rundt**, så Ordbogen står mellem Kosmos og Stjerneovnen. Docken viser rækkefølgen fra mindst til størst. Med 12 dele senere skal kortene stå tættere (vinklen mellem dem er 360° delt med antallet).
