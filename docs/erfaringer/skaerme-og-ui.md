@@ -39,6 +39,9 @@
   - **Atomets størrelse styres af vinduet:** `passerTil` passer atomet ind i det mindste af vinduets bredde og højde. Ringen giver derfor `#menuVindue` en kvadratisk størrelse og plads (`position: absolute`) og kalder `centrerVindue` og `passerTil`.
   - **CSS-filtre, der ændres hvert billede, tegner elementet om.** Lysstyrken på kortene skrives kun, når den ændrer sig synligt (afrundet). Den lette svæven er kun `transform`.
   - **Et træk på et link** starter browserens eget træk af linket: `draggable = false` og `-webkit-user-drag: none`. Et klik lige efter et træk skal ikke åbne delen.
+  - **Et lag, der skal følge kameraet** (baggrunden i K2): Gør det til barn af kameraet, og læg kameraet i scenen (`scene.add(kamera)`). Flyttes laget i en opdatering, halter det et billede bagefter, fordi `styring.update` kører efter opdateringerne. Med `setViewOffset` er `kamera.fov` hele det store billede, så laget skal skaleres efter det for at fylde skærmen.
+  - **Æ, ø og å i shaderkode igen** (`slør` i K2): Søg efter tegn, der ikke er ASCII, i alle `/* glsl */`-strenge, før billedet tages. Kommentarerne i GLSL er også skrevet med `oe`, `ae` og `aa` for en sikkerheds skyld.
+  - **Prikker på få pixel forsvinder næsten** med en blød kant (`a * a`). Store, svage prikker ses bedre end små, lyse. Mål billedets højde i pixel (`kamera.view.fullHeight`), og giv størrelsen i pixel ved 1000 px højde.
 - **`hidden` virker ikke, når CSS sætter `display`:** `.sys-lag { display: flex }` vandt over `hidden`, så linjerne fra det forrige grundstof (plutonium) stod på kortet for copernicium. Fundet af brugeren 7. november 2026. Giv elementet en regel `.x[hidden] { display: none; }`, og test med et grundstof uden data lige efter et med.
 
 ## Byttebørsen (Molekyler M1a, 7. november 2026)

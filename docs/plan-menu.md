@@ -12,7 +12,7 @@
 - **Karrusellen bruges alle steder** (pc, tablet og telefon), ikke kun på tablet og telefon.
 - **Rækkefølgen er efter størrelse** (C).
 - **Ordbogen bliver i karrusellen** (ikke en knap i hjørnet).
-- **Svar på K3 (7. november 2026):** "go" til K3. Citatet må gerne forsvinde fra menuen, og den tomme plads øverst på højkant skal rettes. Men K2 laves først, og K3 bagefter.
+- **Svar på K3 (7. november 2026):** "go" til K3. Citatet må gerne forsvinde fra menuen, og den tomme plads øverst på højkant skal rettes. Men K2 laves først, og K3 bagefter. Pladsen på højkant blev rettet i K2. **K3 kommer nu efter K4** (verdenerne, [plan-verdener.md](plan-verdener.md)), så gitteret kun fjernes én gang.
 - **Prototype først:** Karrusellen vises kun med `?karrusel` i adressen, så I kan prøve den på tabletten på GitHub Pages, uden at menuen ændrer sig.
 
 ## Rækkefølgen (efter størrelse)
@@ -20,7 +20,7 @@ Fra det mindste til det største: **Stjerneovnen** (lette kerner smelter sammen)
 
 ## Trin
 - [x] **K1: Prototypen bag `?karrusel`** (lavet 7. november 2026, først som en lige række og samme dag bygget om til ringen på elektronbanen, se nedenfor; testen `karrusel` har 96 tjek): ringen (træk og kast med fjeder, musehjul, piletaster, tryk på et kort til siden drejer det frem), rækkefølgen, docken med ikonerne, ✓ på klarede dele, "Din fremgang" og start på den del, man sidst var i (`atomlabSidsteDel`). Den almindelige menu er uændret. Kortet forrest står i `#menu[data-midt]`, så K2 kan bygges ovenpå. Citatet er skjult i ringen (ingen plads).
-- [ ] **K2: Baggrunden skifter med (B)** (mellem til stor, eget go). 3D-billedet bag kortene skifter til delens emne. Skal holdes let på tabletten (ingen 8k-kort i menuen).
+- [x] **K2: Baggrunden skifter med (B)** (lavet 7. november 2026, stadig kun med `?karrusel`, jeres go efter billedet af idéen): Bag atomet toner et let motiv frem for kortet forrest, og to motiver glider blødt over i hinanden, når ringen drejes (`js/menubaggrund.js`). Motiverne: kanten af en stjerne, der bobler (Stjerneovnen), reaktorbassinet med blåt Tjerenkov-lys (Reaktoren), elektronskyer og partikler (Værkstedet), det periodiske system svagt og skråt med ét felt, der lyser op ad gangen, ioner gennem midten og elektroner i en bue over atomet samme vej (Batteriet), planetbaner med de rigtige omløbstider mod uret og afstandene presset sammen (Solsystemet), en spiralgalakse (Kosmos) og ord fra Ordbogen, der svæver op. Ingen billeder, der skal hentes. Tabletten får færre prikker og en enklere stjerne. Samtidig går banen højere op på højkant (ingen tom plads under titlen). Testen `karrusel` har 107 tjek.
 - [ ] **K3: Karrusellen bliver standard** efter jeres runde på tabletten: gitteret, de gule piller, linjen med tallene og "Næste eventyr" fjernes, og testene rettes (`system` tjekker i dag "Næste eventyr").
 
 ## Ringen på en elektronbane (jeres ønske 7. november 2026)
