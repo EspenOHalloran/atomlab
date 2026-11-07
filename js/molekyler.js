@@ -1203,6 +1203,7 @@ export function testAdgang() {
     natriumPå: () => skærmPos(giver.gruppe.position),
     tidsknap: () => pause.tilstand,
     styring: () => verden.styring.enabled,
+    kameraStille: () => verden.målAfstand == null, // kameraet er færdigt med at zoome
     // Spol frem i små skridt (som på en skærm med 60 billeder i sekundet)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) opdater(1 / 60); },
   };

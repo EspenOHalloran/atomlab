@@ -57,5 +57,7 @@
 - "Jupiters hurtigste vind blæser ved ækvator (539 km/t)" (NASA "Jupiter Facts"). Den hurtigste jetstrøm er ved ca. 24° N (ca. 150 m/s, Hubble 2015 og vores egen måling). Ved ækvator er det ca. 70-100 m/s.
 - "Jupiter sender 1,7 gange så meget varme ud, som den får." Det er det gamle tal, og det gælder den varme, Jupiter *optager* (ikke alt sollyset, der rammer den). Nyere målinger fra Cassini giver nærmere 2.
 - "Jupiters ringe kan ses i modlys." Kun med lang lukketid: Selv bagfra er hovedringen ca. 1.000 gange svagere end skyerne. Og nordlyset har ingen kendt farve for øjet (billederne er i ultraviolet og infrarødt, farvelagt).
+- "Den 2. elektron koster mere, fordi den sidder tættere på kernen." For Mg og Ca sidder den i samme skal som den 1. Den koster mere, fordi atomet allerede er plusladet. Kun ved Na og Li (hvor den næste er i en skal længere inde) er afstanden årsagen (Molekyler M1b, 7. november 2026).
+- "LiF er det letteste salt." LiH er lettere. Skriv hellere, hvad der gør det særligt (fluor trækker hårdest i elektronerne).
 - "Na + Na sker ikke." Der sker ingen *ionbinding*, men natrium deler elektronerne i stedet (et metal, og Na₂ i damp). Skriv "de bytter ikke", ikke "de binder sig ikke" (Molekyler M1, 7. november 2026).
 - "Atomets radius er X pm." Der findes flere slags radier (empirisk, beregnet, kovalent, van der Waals, metallisk), og de er meget forskellige (chlor: 79-175 pm). Ionernes radier er målt i krystaller. Sig, hvilken slags, eller sammenlign kun inden for samme slags (Slater 1964 for atomer, Shannon 1976 for ioner).

@@ -80,7 +80,7 @@ await page.click('#minitabel .felt[data-nr="2"]');
 await page.waitForTimeout(1200);
 tekst = await info();
 tjek('hop til helium efter genindlæsning', tekst.includes('Helium-4'), tekst);
-tjek('opgavetæller', /^[3-9]\/16$/.test(await page.textContent('#opgaveTæller')), await page.textContent('#opgaveTæller'));
+tjek('opgavetæller (16 byggeopgaver og Byttebørsens 5 par)', /^[3-9]\/21$/.test(await page.textContent('#opgaveTæller')), await page.textContent('#opgaveTæller'));
 
 // Ikke-opdaget grundstof kan ikke vælges
 await page.click('#minitabel .felt[data-nr="26"]');

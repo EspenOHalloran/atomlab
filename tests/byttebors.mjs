@@ -185,10 +185,11 @@ async function ingenRulAlle(navn) {
   }
   tjek(`${navn}: ingen rullebjælke i panelerne (også med foldeboksene)`, res.every((x) => !x), res.join(' | '));
 }
-// Vælg et par, og vent, til kameraet har zoomet færdig (ellers står elektronen et andet sted, når musen trækker)
+// Vælg et par, og vent, til kameraet har zoomet færdig (ellers står elektronen et andet sted, når musen trækker).
+// Ikke en fast ventetid: Kører testene to ad gangen, tager zoomet længere tid.
 async function vælg(id) {
   await page.click(`[data-bytte-par-id="${id}"]`);
-  await page.waitForTimeout(900);
+  await page.waitForFunction(() => atomlabTest.vaerksted.bytte.kameraStille(), null, { timeout: 15000 });
 }
 const stjerne = (id) => page.textContent(`[data-bytte-par-id="${id}"] .bp-stjerne`);
 // Træk den næste elektron med musen hen til et sted på skærmen og slip

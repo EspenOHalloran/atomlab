@@ -1,6 +1,6 @@
 # Gemte data (localStorage)
 
-- `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`
+- `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`. Byttebørsens par har id'erne `bytte-nacl`, `bytte-lif`, `bytte-mgo`, `bytte-cacl2` og `bytte-nana` (M1b, `OPGAVER_BYTTE` i `js/data/molekyler.js`). De tæller med i Værkstedet og nulstilles med Værkstedets "Opgaver forfra".
 - `atomlabLyd`: `'til'` eller `'fra'`
 - `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
