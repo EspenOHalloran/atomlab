@@ -4,6 +4,7 @@
 // Under ringen står en dok med ikonerne, så man kan hoppe direkte, og knappen "Din fremgang".
 
 import { ROLIG, LAV_KVALITET, centrerVindue, passerTil } from './scene3d.js';
+import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } from './menubaggrund.js';
 
 export const KARRUSEL = new URLSearchParams(location.search).has('karrusel');
 
@@ -117,6 +118,7 @@ export function lavKarrusel({ fremgang, radius }) {
   ramme.after(under);
 
   lavTræk();
+  lavMenuBaggrund(kort.map(delAf), () => pos); // baggrunden skifter med kortet forrest (K2)
 
   // Tryk på et kort til siden drejer det frem. Kortet forrest åbner delen. Efter et træk tæller "klikket" ikke.
   ramme.addEventListener('click', (h) => {
@@ -222,10 +224,13 @@ export function startKarrusel() {
   cancelAnimationFrame(løkke);
   sidstTid = 0;
   løkke = requestAnimationFrame(trin);
+  startMenuBaggrund();
 }
 
 export function stopKarrusel() {
+  if (!KARRUSEL) return;
   cancelAnimationFrame(løkke);
+  stopMenuBaggrund();
 }
 
 function gåTil(i) {
@@ -245,7 +250,8 @@ function læg() {
   const anker = Math.min(40, h * 0.3); // kortet hænger i banen så langt under sin overkant
   const forTop = S.height - 14 - h; // kortets overkant forrest
   const yF = forTop + anker;
-  const ry = Math.max(24, Math.min(rx * (højkant ? 0.7 : lav ? 0.22 : 0.3), (yF - S.height * 0.06) / 2));
+  // På højkant går banen højere op, så der ikke er tom plads mellem titlen og ringen (jeres runde på tabletten)
+  const ry = Math.max(24, Math.min(rx * (højkant ? 0.88 : lav ? 0.22 : 0.3), (yF - S.height * 0.03) / 2));
   const cx = S.width / 2;
   const cy = yF - ry;
   geo = { cx, cy, rx, ry, b, anker };
@@ -379,7 +385,7 @@ function sætMidt(i) {
 
 // Adgang for testene (?test, docs/kode/testadgang.md)
 export function testAdgang() {
-  return { geo: () => geo, pos: () => pos, stille: () => pos === mål && fart === 0 && !træk };
+  return { geo: () => geo, pos: () => pos, stille: () => pos === mål && fart === 0 && !træk, baggrund: baggrundTest };
 }
 
 // "Din fremgang": tallene for hver del, som man selv åbner (i stedet for gule piller på alle kort)

@@ -61,11 +61,21 @@ for (const [navn, opts] of størrelser) {
       inde: forrest.top >= 0 && forrest.left >= 0 && forrest.right <= innerWidth,
       atomOver: atom.top + atom.height / 2 < forrest.top,
       skjulte: [...document.querySelectorAll('#menu .menukort a.kort')].filter((k) => k.style.visibility === 'hidden').length,
+      // Afstanden fra undertitlen til toppen af elektronbanen (højkant: ingen tom plads øverst)
+      luft: (() => { const g = window.atomlabTest.karrusel.geo(); return r(document.querySelector('.karrusel')).top + g.cy - g.ry - r(document.querySelector('#menu .undertitel')).bottom; })(),
+      højkant: innerHeight > innerWidth * 1.05,
     };
   });
   tjek(`${navn}: kortet forrest står i midten, over docken og helt på skærmen`, Math.abs(ring.midtX) < 6 && ring.overDok && ring.inde, JSON.stringify(ring));
   tjek(`${navn}: atomet står over kortet forrest`, ring.atomOver, JSON.stringify(ring));
   tjek(`${navn}: 3 kort bagerst er skjult`, ring.skjulte === 3, ring.skjulte);
+  if (ring.højkant) tjek(`${navn}: på højkant går banen helt op under titlen (under 70 px luft)`, ring.luft < 70, ring.luft);
+  // Baggrunden (K2): motivet for kortet forrest toner ind, og de andre er skjult
+  const vægte = () => p.evaluate(() => window.atomlabTest.karrusel.baggrund());
+  await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.vaerksted > 0.999, null, { timeout: 10000 }).catch(() => {});
+  let bg = await vægte();
+  const andre = (v, id) => Object.entries(v).filter(([k]) => k !== id).reduce((s, [, x]) => s + x, 0);
+  tjek(`${navn}: baggrunden viser Atomværkstedets motiv og kun det`, bg.synlig && bg.vægte.vaerksted > 0.999 && andre(bg.vægte, 'vaerksted') === 0 && Object.keys(bg.vægte).length === 8, JSON.stringify(bg));
   await p.screenshot({ path: `${UD}/${navn}-start.png` });
 
   // Træk: et roligt træk (holdt stille før man slipper) drejer ét kort, og et kast drejer flere
@@ -119,10 +129,14 @@ for (const [navn, opts] of størrelser) {
   let åbnet = true;
   try { await p.waitForFunction(() => location.hash === '#reaktor' && !document.getElementById('reaktor').classList.contains('skjult'), null, { timeout: 8000 }); } catch { åbnet = false; }
   tjek(`${navn}: tryk på kortet forrest åbner Reaktoren`, åbnet);
+  tjek(`${navn}: baggrunden er skjult inde i Reaktoren`, !(await vægte()).synlig);
   await p.evaluate(() => { location.hash = ''; });
   await p.waitForFunction(() => !document.getElementById('menu').classList.contains('skjult'));
   tjek(`${navn}: tilbage i menuen står Reaktoren forrest`, (await venMidt('reaktor')) === 'reaktor', await midt());
   tjek(`${navn}: den sidste del er gemt`, (await p.evaluate(() => localStorage.getItem('atomlabSidsteDel'))) === 'reaktor');
+  await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.reaktor > 0.999, null, { timeout: 10000 }).catch(() => {});
+  bg = await vægte();
+  tjek(`${navn}: tilbage i menuen viser baggrunden Reaktorens motiv`, bg.synlig && bg.vægte.reaktor > 0.999 && andre(bg.vægte, 'reaktor') === 0, JSON.stringify(bg));
 
   if (navn === 'pc') {
     await p.keyboard.press('ArrowRight');
