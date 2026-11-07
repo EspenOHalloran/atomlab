@@ -305,7 +305,11 @@ function trin(t) {
   const dt = sidstTid ? Math.min(0.05, (t - sidstTid) / 1000) : 0;
   sidstTid = t;
   tid += dt;
-  if (!træk) {
+  if (!træk && ROLIG) {
+    // "Reducer bevægelse": ringen står straks på plads uden fjeder
+    pos = mål;
+    fart = 0;
+  } else if (!træk) {
     // Fjederen i små skridt, så den er stabil, også når et billede tager lang tid
     for (let s = 0; s < 4; s++) {
       const a = FJEDER * (mål - pos) - DÆMPNING * fart;
