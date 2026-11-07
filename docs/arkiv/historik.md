@@ -1,6 +1,6 @@
 # Historik: "Lige nu" fra DESIGN.md (arkiv)
 
-*Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
+*Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. **Lukket 7. november 2026:** Nye "Senest lavet" flyttes nu til historikken for sporet i `docs/arkiv/historik/<spor>.md` (se [docs/lige-nu.md](../lige-nu.md)). Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
 ## "Senest lavet" 7. november 2026 (Jupiter J5, før roverens foto, rejseskiltet og Månen i 8k)
 **Senest lavet (7. november 2026): Jupiter J5, polerne, nordlyset og ringene. Jupiter er færdig (J1-J5).** Jeres go: "Go til J5".

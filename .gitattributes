@@ -1,0 +1,5 @@
+# Filer, man kun tilføjer linjer til: Ved en merge beholdes begge sessioners nye linjer i stedet for en konflikt.
+# Tjek efter en merge med git diff, at der ikke står en linje to gange (det sker, hvis begge har rettet i den samme linje).
+docs/ikke-afproevet.md merge=union
+docs/lige-nu/aabne-punkter.md merge=union
+docs/erfaringer/*.md merge=union

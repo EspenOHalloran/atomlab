@@ -1,0 +1,13 @@
+# Åbne punkter
+
+*Spor i [oversigten](../lige-nu.md). Alle sessioner må skrive her: Tilføj nye punkter som nye linjer (filen merges med `merge=union`, så to sessioners nye linjer begge bliver beholdt), og fjern punkter, der er løst. Ret ikke i en linje, en anden session måske også retter i.*
+
+- **Testen `henter`** (fra #79) fejlede én gang sammen med en anden test ("pc: bjælken er fyldt et stykke (100 %)", 6. november 2026, Det sorte hul) og bestod alene. Under belastning nåede bjælken nok 100 %, før testen målte. Ikke undersøgt nærmere.
+- **`ordforklaring`** fejlede på `main` efter #84, men bestod i begge kørsler 7. november 2026 (M1a). I PR A (samme dag) fejlede "klik viser forklaringen null" og "klik igen lukker den" igen sammen med de andre tests og bestod alene. Ikke undersøgt.
+- **`guide`** fejler nu og da under belastning i Reaktorens del: "måleren i 3D-billedet" (fast ventetid på 1,5 s efter `reaktor.spol(4)`) og "forklaring bagefter" (7. november 2026: kædereaktionen døde tilfældigt ud efter "Vis mig", så underteksten sagde "Den døde ud" i stedet for "vokser"). Begge bestod alene. Testen bør vente på måleren (`waitForFunction`) og tåle, at reaktoren dør ud efter "Vis mig" (eller "Vis mig" bør altid ende i en reaktor, der kører).
+- **`reaktor`** ("Vis mig", 100 tilfældige forsøg) og **`stjerneovn`** ("opgave: for koldt") fejlede én gang sammen med en anden test og bestod alene (7. november 2026, roverens foto). Ikke undersøgt.
+- **Testen `stjerneovn-mus`** fejlede én gang sammen med en anden test ("klik i listen vælger en deuterium", 5. november 2026) og bestod alene. Ikke undersøgt.
+- **Grene, der kan slettes (tjekket 5. november 2026):** `claude/relaxed-cori-h0yxvd`, `ccr-3efa96d6-kxmhu1`, `ccr-5c420c09-zzdxp0`, `claude/pensive-edison-41cgwd` og `claude/eloquent-bohr-ka3lia`. Indholdet er på `main` (#68). PR #45 er lukket. Sletningen fra sessionen blev afvist af miljøets sikkerhedstjek, så I skal slette dem på GitHub (Branches). De gamle grene fra 23.-24. oktober (`ccr-447e405b`, `ccr-848a5828`, `exciting-meitner`, `jolly-rubin` og `electron-exchange-molecules`) er efter commit-navnene merget dengang, men ikke tjekket fil for fil.
+- **Kendt fejl i kilden:** Højdekortet over Jezero-krateret har to tynde, lige streger fra sømmene mellem striberne (se plan-mars.md).
+- **Domæner:** Listen over domæner til Network access står i [plan-mars.md](../plan-mars.md) under "Domæner, der skal på listen".
+- **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne alle kildesider. Det, der skal tjekkes, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen i del 1). Jupiter: se "Mindst sikre påstande" i del 5.
