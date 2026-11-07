@@ -21,5 +21,8 @@
 - **`pkill` med et mønster**, der også passer på ens egen kommando, lukker ens egen terminal. Brug process-id i stedet. Det skete igen i F1 med `pkill -f "http.server 8765"`.
 - **Netadgang:** WebSearch virker herfra, men WebFetch kan ikke slå de fleste sider op (DNS). Kilder findes derfor via søgeresultater. Skriv det, når en kilde ikke kunne læses direkte.
 
+- **Elementer, der svæver, er aldrig "stabile"** for Playwright, så `click` venter, til tiden løber ud. Brug `click(…, { force: true })` (kortene i ringen, `tests/karrusel.mjs`).
+- **Testbrowseren sender kun en musebevægelse ca. hvert halve sekund**, når siden tegner 3D. Et hurtigt stryg (kast) kan derfor ikke laves med `mouse.move`. Send `PointerEvent`s inde på siden med korte pauser i stedet. `setPointerCapture` kaster en fejl for et kunstigt træk, så koden kalder den i en `try`.
+
 ### Testsamlingen
 Testene ligger i [tests/](../../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.

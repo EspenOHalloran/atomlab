@@ -2,6 +2,14 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 7. november 2026 (PR A i Det periodiske system, før menuen som en ring)
+**Senest lavet (7. november 2026): Rettelser i Det periodiske system, gruppernes navne og plasma (PR A).** Jeres go: "go" (efter jeres opsamling på brugen).
+- **"‹ Tilbage"** i stedet for "✕ Luk" på grundstofkortet, så man ikke trykker på "Menu" for at komme tilbage til tabellen.
+- **Fejl rettet:** Tekster fra et tidligere grundstof (fx plutonium) stod på kort uden linjerne "I din hverdag" osv. CSS vandt over `hidden`. En test fanger det nu.
+- **Større navne på felterne** (18-23 i stedet for 12-14 af 128), symbolet en smule mindre. På tablet på højkant er felterne stadig små.
+- **Gruppernes navne** (`navnet`): Hvorfor de hedder alkali, jordalkali, overgang osv. Det står på kategorikortet og i "Hvorfor?"-kortet. Faktatjekket mod Wikipedia (kilderne står i [fakta-grundstofkort.md](fakta-grundstofkort.md)). Overgangsmetal kommer af elektronerne (Bury 1921), ikke kun af pladsen.
+- **Plasma i Ordbogen:** Fem afsnit med "Hvorfor?" og "Hvordan?" (ioner, hvordan en gas bliver til plasma, hvorfor det lyser, plasmaskærme, hvor det findes) og en tegning af gas mod plasma. Det nye felt `mere` står kun i Ordbogen, ikke i boblerne.
+
 ## "Senest lavet" 7. november 2026 (Molekyler M1a, før PR A i Det periodiske system)
 **Senest lavet (7. november 2026): Molekyler M1a, Byttebørsen.** Jeres go: "Go med dine anbefalinger" (efter Trin 0, se nedenfor).
 - **Trin 0:** Tallene til alle par (Li + F, Mg + O, Ca + 2 Cl, Na + Na) står med kilder i [docs/fakta-molekyler.md](fakta-molekyler.md) afsnit 7 (NIST, OpenStax, Shannon, Shriver & Atkins, Born-Haber regnet efter), og "M1 i dag" står i [planen](plan-molekyler.md). To nye fælder: O²⁻'s anden elektron koster ca. 7,7 eV, og Na + Na "bytter ikke" (men deler).
