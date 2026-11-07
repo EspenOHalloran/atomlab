@@ -12,6 +12,7 @@
 - **Karrusellen bruges alle steder** (pc, tablet og telefon), ikke kun på tablet og telefon.
 - **Rækkefølgen er efter størrelse** (C).
 - **Ordbogen bliver i karrusellen** (ikke en knap i hjørnet).
+- **Svar på K3 (7. november 2026):** "go" til K3. Citatet må gerne forsvinde fra menuen, og den tomme plads øverst på højkant skal rettes. Men K2 laves først, og K3 bagefter.
 - **Prototype først:** Karrusellen vises kun med `?karrusel` i adressen, så I kan prøve den på tabletten på GitHub Pages, uden at menuen ændrer sig.
 
 ## Rækkefølgen (efter størrelse)
