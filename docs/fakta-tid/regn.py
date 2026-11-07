@@ -30,8 +30,8 @@ print(f"  Hvert ekstra 9-tal: γ ganges med ca. √10 = {math.sqrt(10):.3f} (for
 
 print("\n== 2. Afstandene (lysår) ==")
 mål = {
-    'Alpha Centauri A/B': 4.37,      # Wikipedia: 4,344 ± 0,002 ly (A og B), Proxima 4,2465 ly
-    'Mælkevejens centrum (Sgr A*)': 26_996,  # GRAVITY 2021: 8,275 kpc
+    'Alpha Centauri A/B': 4.344,     # Wikipedia: parallakse 750,81 mas (Akeson m.fl. 2021) = 1,3319 pc = 4,344 ly. Proxima 4,2465 ly
+    'Mælkevejens centrum (Sgr A*)': 26_996,  # GRAVITY 2023: 8,277 kpc = 26.996 ly (2021: 8,275 kpc)
     'Andromedagalaksen': 2.5e6,      # Wikipedia: ca. 2,5 mio. ly (765 ± 11 kpc)
 }
 kpc = 3.0856775814913673e19      # m

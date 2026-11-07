@@ -30,4 +30,4 @@
     5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
     6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
     - Hjernen og AI venter (jeres svar). Nye dele kræver en beslutning om menuen (i dag 8 kort).
-6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" med lysuret og tvillingerejsen og flere idéer. Alt fra samtalen står i [plan-tid.md](plan-tid.md). Jeres svar: Tid kommer nu, før Uranus og Neptun og Liv, og en tvilling bliver hjemme. Kun placeringen (A, B eller C) er åben. Go til Trin 0 med [prompt-tid.md](prompt-tid.md) (mellem til stor).
+6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" som et fænomen i Kosmos (placering A). Trin 0 er lavet: faktagrundlaget i [fakta-tid.md](fakta-tid.md) og trinene T1-T4 i [plan-tid.md](plan-tid.md). Venter på jeres svar på fem spørgsmål (i [lige-nu/tid.md](lige-nu/tid.md)) og så go til T1 (mellem).

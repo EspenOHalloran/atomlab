@@ -130,16 +130,34 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 ## Åbne spørgsmål (skal besvares før start)
 1. ✅ Besvaret 7. november 2026: **A**, et nyt fænomen i Kosmos ("Rejsen i tid"), der senere kan vokse til B. (Spørgsmålet var: **A, B eller C** (eller noget andet)?)
-2. ✅ Besvaret 7. november 2026: **Tid kommer nu**, før Uranus og Neptun og Liv (det mindste af de tre). Prompten til Trin 0 er [prompt-tid.md](prompt-tid.md). (Spørgsmålet var: **Hvor i køen?** 7. november 2026 venter Jupiter J5 og Molekyler M1b, og Liv kommer lige efter Molekyler (se [lige-nu.md](lige-nu.md)).)
+2. ✅ Besvaret 7. november 2026: **Tid kommer nu**, før Uranus og Neptun og Liv (det mindste af de tre). Prompten til Trin 0 er [prompt-tid.md](arkiv/prompt-tid.md). (Spørgsmålet var: **Hvor i køen?** 7. november 2026 venter Jupiter J5 og Molekyler M1b, og Liv kommer lige efter Molekyler (se [lige-nu.md](lige-nu.md)).)
 3. ✅ Besvaret 7. november 2026: **en tvilling.** (Spørgsmålet var: **Hvem bliver hjemme?** En tvilling (klassisk) eller noget mere personligt, fx "din far"? Det sidste rammer hårdere (far er der ikke, når man kommer hjem efter 3.000 år): stærkt, men måske lidt trist.)
 4. ✅ Besvaret 7. november 2026: Idéerne skrives ind her, så en anden session kan arbejde videre.
 
+## Spørgsmål til jer efter Trin 0 (7. november 2026, Opus' anbefaling først)
+1. **Skyderen og accelerationen.** Med 1 g (som at stå på Jorden) tager turen *år* i skibet, aldrig dage. "Et par dage mod tusinder af år" kræver ca. 11.500 g, og det ville knuse en (fakta-tid.md, afsnit 6).
+   - **a (anbefalet):** Skyderen med fast fart (vi springer over, hvordan man kommer op i fart, og siger det ærligt i underteksten) *og* en kontakt "1 g hele vejen" med de realistiske tider. Man får både "wow" og sandheden.
+   - b: Kun 1 g. Det er ærligt, men "et par dage" forsvinder.
+   - c: Speed op med 1 g til den fart, skyderen viser. Det er mest korrekt, men forvirrende: Til Alpha Centauri når man aldrig over ca. 95 %, før man skal bremse.
+2. **Urene.**
+   - **a (anbefalet):** To store digitale ure: "Dit ur" i dage og år siden afgang og "Jordens ur" som årstal (fx "år 2026" → "år 56.026"). Under dem står begges alder. Jordens ur får også en lille urskive, hvor viseren drøner rundt, så man kan *se* forskellen.
+   - b: Kun to urskiver. De er flotte, men kan ikke vise tusinder af år.
+3. **Hjemkomsten og tvillingen.** Hvad står der, når der er gået mere end et menneskeliv?
+   - **a (anbefalet):** I er begge 13 år ved afgang. Op til ca. 100 år står tvillingens alder ("Du er 13 år og 45 dage. Din tvilling er 21."). Derover står årstallet og en sammenligning med fortiden ("Der er gået ca. 54.000 år, længere end siden de sidste neandertalere levede"), og kun en kort, rolig linje om tvillingen ("Din tvilling levede et langt liv, mens du var væk").
+   - b: Nævn ikke tvillingen, når der er gået over 100 år.
+   - c: En selvvalgt alder ved afgang (fx jeres søns alder).
+4. **Hvor mange 9-taller?**
+   - **a (anbefalet):** Op til 14 (γ ≈ 7 mio.). Så kan man ramme jeres eget spørgsmål præcist: ca. 3 dage i skibet mod ca. 54.000 år på Jorden til Mælkevejens centrum og hjem. Ved 12 ni-taller er det 28 dage.
+   - b: Op til 12 ni-taller.
+5. **Sammenligningerne med fortiden.** Listen i fakta-tid.md (afsnit 13) er dansk og verdens historie (Lindisfarne, Jellingstenen, Tollundmanden, Egtvedpigen, Solvognen, pyramiden, istiden, Lascaux, neandertalerne, de første mennesker og Lucy).
+   - **a (anbefalet):** Brug den.
+   - b: Tilføj eller fjern noget, fx noget fra jeres egen familie eller by.
+
 ## Model og effort
-- **Faktagrundlaget og planen:** Opus med høj effort. Regningen er enkel, men fysikken er let at forklare forkert (se fælderne). Kilderne skrives i en fil i `docs/` (fx `docs/fakta-tid.md`), som ved de andre dele.
-- **Byggeriet:** Opus med høj effort. Cockpitudsigten (hvis den kommer med) er en shader, men enklere end lysbøjningen ved Det sorte hul, så høj effort er nok.
-- **Domæner til faktatjekket** (spørg om adgang før start, hvis de ikke er åbne): fx NIST (allerede åben), NASA/JPL (Voyager), Wikipedia (allerede åben), BIPM (definitionen af sekundet).
+- **Faktagrundlaget og planen (Trin 0):** lavet med Opus, høj effort (7. november 2026).
+- **T1-T3:** Opus med høj effort, én ny session pr. trin med en prompt i `docs/prompt-tid-t1.md` osv. (skrives, når jeres svar på spørgsmålene ovenfor er her).
+- **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul.
+- **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-Ny session med Opus (høj effort). Prompt, der kan kopieres:
-
-> Læs docs/lige-nu.md, DESIGN.md og docs/plan-tid.md. Spor: Solsystemet og Kosmos (docs/lige-nu/solsystemet.md), hvis det bliver et fænomen i Kosmos (A), ellers et nyt spor "Tid og rum" (B). Vi skal arbejde videre med idéen "Tid og rum". Mine svar på de åbne spørgsmål: 1) … 2) … 3) … Lav først faktagrundlaget (Trin 0) med kilder i docs/fakta-tid.md og en plan med trin i docs/plan-tid.md, og vent på mit go, før der bygges.
+Når jeres svar på spørgsmålene ovenfor er skrevet ind, skrives prompten til T1 (`docs/prompt-tid-t1.md`). Så: ny session med Opus (høj effort) og "Læs docs/prompt-tid-t1.md".
