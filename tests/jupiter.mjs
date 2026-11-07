@@ -172,11 +172,12 @@ const laplace = (l) => ((((ved('io', l).vinkel - 3 * ved('europa', l).vinkel + 2
 tjek('månerne: Laplace-relationen (Io − 3·Europa + 2·Ganymedes = 180°)', Math.abs(laplace(mm) - 180) < 0.5, laplace(mm));
 // Mod uret set fra nord: vinklen vokser, og Io går ca. 4 gange så hurtigt som Ganymedes
 await J(() => atomlabTest.solsystem.fænomen().sætMåneUr(0));
-const u0m = await J(() => atomlabTest.solsystem.fænomen().måneUr());
-const mA = await Mf();
+// Uret og pladserne læses i samme kald: Under belastning kan der ellers blive tegnet et billede imellem (fejlede én
+// gang 7. november 2026, Io 2,5 % for hurtig)
+const urOgMåner = () => J(() => ({ ur: atomlabTest.solsystem.fænomen().måneUr(), m: atomlabTest.solsystem.fænomen().måner() }));
+const { ur: u0m, m: mA } = await urOgMåner();
 await s.waitForFunction((u) => atomlabTest.solsystem.fænomen().måneUr() > u + 2, u0m, { timeout: 15000, polling: 100 }).catch(() => {});
-const u1m = await J(() => atomlabTest.solsystem.fænomen().måneUr());
-const mB = await Mf();
+const { ur: u1m, m: mB } = await urOgMåner();
 const fartM = (id) => ((((ved(id, mB).vinkel - ved(id, mA).vinkel) % 360) + 540) % 360 - 180) / (u1m - u0m);
 const forventet = (id) => (360 * SEK) / (P[id] * 86400);
 tjek('månerne kredser mod uret set fra nord med den rigtige fart i forhold til Jupiters døgn', ['io', 'europa', 'ganymedes', 'callisto'].every((id) => fartM(id) > 0 && Math.abs(fartM(id) / forventet(id) - 1) < 0.02) && Math.abs(laplace(mB) - 180) < 0.5, JSON.stringify({ io: fartM('io'), forventet: forventet('io'), laplace: laplace(mB) }));

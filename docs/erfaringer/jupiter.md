@@ -53,3 +53,4 @@
 - **Test af noget, man ser, i billedet:** Tag to skærmbilleder (med og uden), og tæl pixel, der bliver tydeligt lysere, minus dem, der bliver mørkere. Stjerner og skyer, der flytter sig lidt, giver begge dele og går ud med hinanden. Vent på overgange (fx `eksponering()` tilbage til 1), før det første billede tages.
 - **Ingen æ, ø og å i shaderkode** gik galt igen (`frø` i nordlyset). Fejlen ses kun i konsollen, når shaderen oversættes.
 - **Kilder:** Cyklonernes bredde (ca. 84°) stod ikke i faktagrundlaget og ikke i NASA's sider. Gavriel og Kaspi (2021 og 2023) lå på arXiv og kunne læses. Copernicus, NSF og CNR var lukket.
+- **Læs et ur og det, det styrer, i samme kald:** Testen af månernes fart (J3) læste `måneUr()` og `måner()` i to kald. Under belastning blev der tegnet et billede imellem, og Io så 2,5 % for hurtig ud (grænsen var 2 %). Nu læses begge i ét `evaluate`.
