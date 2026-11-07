@@ -1535,3 +1535,108 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 /* "Start forfra" nederst i listen med opgaver */
 .opgaver li.forfra { list-style: none; display: block; padding: 6px 0 0; border: 0; background: none; cursor: default; }
 .knap.spørg { color: #ffd43b; border-color: rgba(255, 212, 59, 0.5); }
+
+/* ---------- Menuen som en karrusel (prototype med ?karrusel, js/karrusel.js og docs/plan-menu.md) ----------
+   Kortene kredser om atomet på en elektronbane. karrusel.js sætter hvert korts plads (transform), lysstyrke og lag,
+   og flytter atomets vindue (#menuVindue), så atomet står midt i ringen. */
+#menu.karrusel-tilstand { grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; overflow: hidden; }
+#menu.karrusel-tilstand.mere { -webkit-mask-image: none; mask-image: none; }
+#menu.karrusel-tilstand .menu-status, #menu.karrusel-tilstand .kort-fremgang, #menu.karrusel-tilstand .menu-citat { display: none; }
+#menu.karrusel-tilstand .kort.næste-eventyr::after { content: none; }
+#menu.karrusel-tilstand > #menuVindue { position: absolute; }
+.karrusel { --kb: 290px; position: relative; justify-self: stretch; align-self: stretch; margin: 0 -12px; min-height: 0; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.karrusel-bane { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.karrusel-gulv { position: absolute; height: 54px; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none;
+  background: radial-gradient(closest-side, rgba(95, 227, 255, 0.24), rgba(95, 227, 255, 0.05) 60%, transparent); }
+#menu.karrusel-tilstand .menukort { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; max-width: none; margin: 0; padding: 0; }
+#menu.karrusel-tilstand .menukort > .kort {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--kb);
+  min-height: 186px;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 20px 18px 18px;
+  border-radius: 24px;
+  text-align: center;
+  will-change: transform;
+  -webkit-user-drag: none;
+  background: linear-gradient(165deg, rgba(70, 90, 150, 0.5), rgba(18, 24, 52, 0.86) 55%, rgba(14, 20, 44, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+/* Frostet glas på pc (sløringen bag kortet). På tablet og telefon er glasset tættere i stedet. */
+#menu.karrusel-glas .menukort > .kort {
+  background: linear-gradient(165deg, rgba(70, 90, 150, 0.42), rgba(18, 24, 52, 0.72) 55%, rgba(14, 20, 44, 0.8));
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+#menu.karrusel-tilstand .kort.åben:hover { transform: none; }
+#menu.karrusel-tilstand .menukort > .kort.åben:hover { border-color: rgba(160, 240, 255, 0.3); }
+#menu.karrusel-tilstand .menukort > .kort.midt {
+  border-color: rgba(160, 240, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(127, 247, 255, 0.12), 0 0 36px rgba(95, 227, 255, 0.22), 0 40px 80px -24px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.karrusel.trækkes .kort { cursor: grabbing; }
+#menu.karrusel-tilstand .kort .kort-tekst { align-items: center; }
+#menu.karrusel-tilstand .kort .kort-tekst strong { font-size: 20px; font-weight: 650; letter-spacing: -0.01em; }
+#menu.karrusel-tilstand .kort .kort-tekst small { font-size: 13.5px; line-height: 1.4; color: rgba(220, 228, 255, 0.68); }
+#menu.karrusel-tilstand .kort .kort-ikon { flex: 0 0 52px; width: 52px; height: 52px; transform: scale(1.25); margin: 6px 0 10px; }
+#menu.karrusel-tilstand .kort.klaret .kort-tekst strong::after { content: " ✓"; color: var(--gul); }
+/* Docken: ikonerne i en kapsel af glas med en prik under den valgte del, og "Din fremgang" under */
+.menu-under { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; padding-bottom: 2px; }
+.menu-dok { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.skala-tekst { display: flex; justify-content: space-between; padding: 0 22px; font-size: 11.5px; letter-spacing: 0.04em; color: rgba(200, 210, 240, 0.55); }
+.menu-ikoner { display: flex; align-items: center; gap: 8px; padding: 9px 14px 13px; border-radius: 22px;
+  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 20px 40px -20px rgba(0, 0, 0, 0.7); }
+#menu.karrusel-glas .menu-ikoner { -webkit-backdrop-filter: blur(20px) saturate(150%); backdrop-filter: blur(20px) saturate(150%); }
+.dok-skille { width: 1px; height: 26px; margin: 0 2px; background: rgba(255, 255, 255, 0.14); }
+.menu-ikon { position: relative; width: 38px; height: 38px; padding: 0; border: 0; border-radius: 12px; background: transparent; cursor: pointer; transition: transform 0.2s; }
+.menu-ikon:hover { transform: translateY(-2px); }
+.menu-ikon .kort-ikon, .fremgang-ikon .kort-ikon { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; transform: scale(0.62); }
+.menu-ikon.valgt::after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #7ff7ff; box-shadow: 0 0 6px #7ff7ff; }
+.menu-fremgang-knap { font: inherit; font-size: 13.5px; color: rgba(220, 228, 255, 0.72); padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04); cursor: pointer; }
+.menu-fremgang-knap:hover { color: #fff; border-color: rgba(160, 240, 255, 0.35); }
+/* Dialogen "Din fremgang" */
+.fremgang-intro { margin: 0 0 12px; color: var(--svag); }
+.fremgang-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.fremgang-linje { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; grid-template-areas: "ikon navn tal" "ikon spor spor"; align-items: center; gap: 4px 10px; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--panel-kant); }
+.fremgang-ikon { grid-area: ikon; position: relative; width: 30px; height: 30px; }
+.fremgang-ikon .kort-ikon { transform: scale(0.45); }
+.fremgang-navn { grid-area: navn; font-weight: 700; }
+.fremgang-tal { grid-area: tal; color: var(--svag); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.fremgang-spor { grid-area: spor; height: 5px; border-radius: 3px; background: var(--panel-kant); overflow: hidden; }
+.fremgang-fyld { display: block; height: 100%; background: linear-gradient(90deg, #7ff7ff, #8c7bff); }
+.fremgang-linje.færdig { border-color: rgba(255, 212, 59, 0.45); }
+.fremgang-linje.færdig .fremgang-tal { color: var(--gul); font-weight: 700; }
+.fremgang-linje.færdig .fremgang-fyld { background: var(--gul); }
+.fremgang-ialt { margin: 12px 0 0; text-align: right; color: var(--svag); font-size: 14px; }
+/* Telefon på højkant: mindre kort og ikoner */
+@media (max-width: 560px) and (orientation: portrait) {
+  .karrusel { --kb: 236px; }
+  #menu.karrusel-tilstand .menukort > .kort { min-height: 168px; padding: 16px 14px 14px; }
+  #menu.karrusel-tilstand .kort .kort-tekst strong { font-size: 18px; }
+  #menu.karrusel-tilstand .kort .kort-tekst small { font-size: 13px; }
+  .menu-ikoner { gap: 2px; padding: 7px 8px 11px; }
+  .menu-ikon { width: 34px; height: 34px; }
+  .menu-ikon .kort-ikon { transform: scale(0.56); }
+  .skala-tekst { padding: 0 12px; }
+}
+/* Telefon på langs: lave kort med ikonet til venstre, og docken på én linje */
+@media (max-height: 500px) and (orientation: landscape) {
+  #menu.karrusel-tilstand { grid-template-rows: auto minmax(0, 1fr) auto; gap: 4px; }
+  .karrusel { --kb: 230px; }
+  #menu.karrusel-tilstand .menukort > .kort { flex-direction: row; min-height: 0; padding: 8px 12px; text-align: left; border-radius: 18px; }
+  #menu.karrusel-tilstand .kort .kort-ikon { transform: none; margin: 0; }
+  #menu.karrusel-tilstand .kort .kort-tekst { align-items: flex-start; }
+  #menu.karrusel-tilstand .kort .kort-tekst strong { font-size: 16px; }
+  .menu-under { flex-direction: row; gap: 12px; }
+  .skala-tekst { display: none; }
+  .menu-ikoner { padding: 5px 10px 9px; }
+  .menu-ikon { width: 32px; height: 32px; }
+  .menu-ikon .kort-ikon { transform: scale(0.52); }
+}

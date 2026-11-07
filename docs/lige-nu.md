@@ -9,7 +9,7 @@
 - **Flybyen har 5 stop:** sydpolen og "I Jupiters skygge" er kommet til. Træet har Sydpolen, Nordpolen og Ringene med egne sider. "Ultraviolet" er i Ordbogen. Faktatjek J5 står i `fakta-solsystemet.md`.
 - **Tests:** `jupiter` har 81 tjek (17 nye, nordlyset og ringene målt i billedet). Hele samlingen: 34 af 34 bestod (27 min). Billeder i sekundet: se "Status efter J5" i [plan-jupiter.md](plan-jupiter.md) (ved hele Jupiter ca. 12 % langsommere på tablet end før J5).
 
-**Før det:** Rettelser i Det periodiske system (PR A, 7. november 2026), Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
+**Før det:** Menuen som en ring af kort (K1, kun med `?karrusel`, 7. november 2026), rettelser i Det periodiske system (PR A), Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
 
 **Næste (venter på jeres go):**
 0. **Ordbogen, PR B (jeres svar 7. november 2026):** "Hvorfor?" og "Hvordan?" (`mere`) til de ca. 15-20 ord, hvor det giver mest mening (fx tøris, ion, isotop, fusion, halveringstid). Forklaringerne må gerne være ca. dobbelt så lange, men kun i Ordbogen. Boblerne forbliver korte. Opus høj. Mit forslag: et lille link "Mere i Ordbogen ›" i boblen (ikke besluttet).
@@ -18,6 +18,8 @@
 3. **Jupiter er færdig (J1-J5, 6.-7. november 2026).** Næste planet er Venus (plan og faktagrundlag, Opus høj, efter [plan-solsystemet.md](plan-solsystemet.md), afsnit 9, med Jupiter som skabelon). Io's vulkaner (J6) venter til månerne-runden. Prompten til Jupiter ligger i [arkiv/prompt-jupiter.md](arkiv/prompt-jupiter.md).
 
 **Kursen (jeres svar 5. november 2026):** M8c del 1, Småtingspakken, tabletrunden ([docs/tjekliste-tablet.md](tjekliste-tablet.md)), Formørkelser, Det sorte hul og Molekyler M1a er lavet. Molekyler kører sideløbende med planeterne (den ligger i Værkstedet).
+
+**Menuen som en ring (K2 og K3 venter, [plan-menu.md](plan-menu.md)):** Først jeres runde på tabletten med `?karrusel` (spørgsmålene i [ikke-afproevet.md](ikke-afproevet.md)). K2: baggrunden skifter med kortet forrest (fx en stjerne ved Stjerneovnen, planetbane ved Solsystemet), mellem til stor, eget go. K3: ringen bliver standard, og gitteret, de gule piller og "Næste eventyr" fjernes.
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).

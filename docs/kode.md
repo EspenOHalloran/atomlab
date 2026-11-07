@@ -8,7 +8,7 @@
 
 | Fil | Beskriver |
 |---|---|
-| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `js/data/hvorfor.js`. |
+| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `karrusel.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `js/data/hvorfor.js`. |
 | [kode/skaerme.md](kode/skaerme.md) | Værkstedet (`vaerksted.js`, `stabilitetskort.js`) og Molekyler (Byttebørsen: `molekyler.js`, `molekyle3d.js`), Det periodiske system (`system.js`, `kategorikort.js`, `js/data/kategorier.js`), Stjerneovnen (`fusion.js`), Reaktoren (`reaktor.js`), Batteriet (`batteri.js`) og Ordbogen (`ordbog.js`, `js/data/ordbogliste.js`, `js/data/ordbog.js`). |
 | [kode/data.md](kode/data.md) | `js/data/`: molekyler, orbitaler, fakta, grundstoffer, himmel, solbane, skygge, landkort, kerne, citater, isotoper. |
 | [kode/kosmos.md](kode/kosmos.md) | Den fælles skal (`faenomenskaerm.js`: siden, bjælken, Styr-boksen, tidsknappen), `kosmos.js`, `js/kosmos/*.js`, det sorte hul, `sideknap.js`, `js/kosmos/faelles.js`, Formørkelser, `js/kosmos/jorden.js`, "Nyt fænomen". |

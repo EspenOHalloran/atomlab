@@ -32,6 +32,13 @@
 - **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
 - **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
 - **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
+- **Menuen som en ring (`js/karrusel.js`, 7. november 2026):**
+  - **Glød bliver klippet af et rullefelt:** Et element med `overflow-x: auto` klipper også lodret, så kortenes `box-shadow` stod som et firkantet bånd (den første, lige karrusel). Giv rullefeltet luft (`padding`) og træk det ind igen med negativ `margin`, eller gør gløden mindre.
+  - **Et absolut lag med `inset: 0` blev 0 px bredt** midt i en grid-celle (laget med kortene i ringen). `left: 0; top: 0; width: 100%; height: 100%` virkede. Mål laget (`getBoundingClientRect`), når kort står forkert.
+  - **En ResizeObserver fyrer, når et skjult element vises igen.** I den lige karrusel centrerede den igen og afbrød et tryk på en pil, der var i gang. Reagér kun, når bredden faktisk ændrer sig.
+  - **Atomets størrelse styres af vinduet:** `passerTil` passer atomet ind i det mindste af vinduets bredde og højde. Ringen giver derfor `#menuVindue` en kvadratisk størrelse og plads (`position: absolute`) og kalder `centrerVindue` og `passerTil`.
+  - **CSS-filtre, der ændres hvert billede, tegner elementet om.** Lysstyrken på kortene skrives kun, når den ændrer sig synligt (afrundet). Den lette svæven er kun `transform`.
+  - **Et træk på et link** starter browserens eget træk af linket: `draggable = false` og `-webkit-user-drag: none`. Et klik lige efter et træk skal ikke åbne delen.
 - **`hidden` virker ikke, når CSS sætter `display`:** `.sys-lag { display: flex }` vandt over `hidden`, så linjerne fra det forrige grundstof (plutonium) stod på kortet for copernicium. Fundet af brugeren 7. november 2026. Giv elementet en regel `.x[hidden] { display: none; }`, og test med et grundstof uden data lige efter et med.
 
 ## Byttebørsen (Molekyler M1a, 7. november 2026)
