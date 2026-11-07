@@ -32,6 +32,7 @@
 - **Testens egne lister skal følge med koden:** `ordforklaring.mjs` har sin egen kopi af `ZONER`, og `ordbog.mjs` og `ordforklaring.mjs` læser filer fra bestemte mapper. Begge fejlede først, da teksterne flyttede til `js/data/sider/` og boksene fik `.side-del`.
 - **En kontakt, der kun findes i nogle tilstande** (fx "Uden hældning" efter Formørkelsernes trin, "Vis lagene" er en kontakt og ikke en handling): Knappen i teksten er grå, indtil den findes, og testen går derhen først. Tjek, om et punkt er en kontakt eller en handling, før det bliver en knap i teksten.
 - **Faktatjek finder også det, der mangler:** "De seks store måner" ved Saturn passer ikke helt: Iapetus (ca. 1.470 km) er den tredjestørste og ikke med. Det står nu i "Ærligt talt".
+- **`hidden` virker ikke, når CSS sætter `display`:** `.sys-lag { display: flex }` vandt over `hidden`, så linjerne fra det forrige grundstof (plutonium) stod på kortet for copernicium. Fundet af brugeren 7. november 2026. Giv elementet en regel `.x[hidden] { display: none; }`, og test med et grundstof uden data lige efter et med.
 
 ## Byttebørsen (Molekyler M1a, 7. november 2026)
 - **Træk i 3D uden at dreje kameraet:** Elektronen fanges i `pointerdown` med `capture` på lærredet, før kameraets styring hører det (`stopImmediatePropagation`), og styringen er slået fra, til fingeren slipper. Testen trækker med `page.mouse` fra skærmpladsen i testadgangen (`elektronPå()`), og et træk et andet sted drejer stadig kameraet.

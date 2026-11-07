@@ -800,6 +800,8 @@ button { font: inherit; color: inherit; }
 .kat-hoved .farveprik { width: 14px; height: 14px; background: var(--farve); }
 .kat-hoved h3 { margin: 0; flex: 1; font-size: 20px; color: var(--farve); }
 .kat-fælles { font-size: 15px; }
+.kat-navnet { font-size: 13.5px; }
+.kat-navnet strong { color: var(--accent); }
 .kat-atom { display: flex; gap: 12px; align-items: center; }
 .kat-atom canvas { flex: 0 0 120px; width: 120px; height: 120px; }
 .kat-lille { margin-top: 4px !important; font-size: 12.5px; color: var(--svag); }
@@ -1021,6 +1023,20 @@ button { font: inherit; color: inherit; }
 .ordbog-ord { padding: 10px 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.07); scroll-margin-top: 4px; }
 .ordbog-ord h3 { margin: 0 0 3px; font-size: 16px; color: var(--accent); }
 .ordbog-ord p { margin: 0; line-height: 1.45; }
+/* "Hvorfor?" og "Hvordan?" og tegningerne (kun i Ordbogen) */
+.ordbog-ord .ordbog-mere { margin-top: 7px; }
+.ordbog-mere b { color: var(--gul); font-weight: 600; }
+.ordbog-tegning { margin: 10px 0 2px; max-width: 420px; }
+.ordbog-tegning svg { display: block; width: 100%; height: auto; }
+.ordbog-tegning figcaption { font-size: 12.5px; color: var(--svag); margin-top: 3px; }
+.ordbog-tegning .t-boks { fill: rgba(255, 255, 255, 0.04); stroke: var(--panel-kant); }
+.ordbog-tegning .t-titel { fill: var(--tekst); font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+.ordbog-tegning .t-lille { fill: var(--svag); font: 11px system-ui, sans-serif; text-anchor: middle; }
+.ordbog-tegning .t-kerne { fill: var(--proton); }
+.ordbog-tegning .t-plus { fill: #fff; font: 700 10px system-ui, sans-serif; text-anchor: middle; }
+.ordbog-tegning .t-bane { fill: none; stroke: rgba(111, 243, 255, 0.3); stroke-dasharray: 2 3; }
+.ordbog-tegning .t-elektron { fill: var(--elektron); }
+.ordbog-tegning .t-fart { stroke: rgba(111, 243, 255, 0.45); stroke-width: 1.5; stroke-linecap: round; }
 .ordbog-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px !important; }
 .ordbog-links button.hvorfor { margin: 0; }
 .ordbog-ingen { margin: 0; color: var(--svag); }
@@ -1490,6 +1506,8 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .sys-lag { list-style: none; margin: 8px 0 10px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .sys-lag li { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; line-height: 1.4; }
 .sys-lag b { color: var(--accent); font-weight: 600; }
+/* display: flex ovenfor vinder ellers over hidden, så teksten fra det sidste grundstof bliver stående */
+.sys-lag[hidden], .sys-mere[hidden] { display: none; }
 .sys-ikon { flex: 0 0 auto; width: 20px; text-align: center; }
 .sys-mere { margin: 0 0 10px; }
 .sys-eksempler { margin: 6px 0 8px; padding-left: 18px; font-size: 13px; line-height: 1.45; }

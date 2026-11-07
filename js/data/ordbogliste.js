@@ -59,7 +59,7 @@ export function søgOrd(tekst) {
   const q = tekst.trim().toLowerCase();
   if (!q) return ORDNE;
   const iNavn = ORDNE.filter((o) => o.ord.toLowerCase().includes(q) || o.former.some((f) => f.includes(q)));
-  const iTekst = ORDNE.filter((o) => !iNavn.includes(o) && o.tekst.toLowerCase().includes(q));
+  const iTekst = ORDNE.filter((o) => !iNavn.includes(o) && [o.tekst, ...(o.mere ?? []).flat()].join(' ').toLowerCase().includes(q));
   return [...iNavn, ...iTekst];
 }
 

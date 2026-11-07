@@ -2,6 +2,14 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 7. november 2026 (Molekyler M1a, før PR A i Det periodiske system)
+**Senest lavet (7. november 2026): Molekyler M1a, Byttebørsen.** Jeres go: "Go med dine anbefalinger" (efter Trin 0, se nedenfor).
+- **Trin 0:** Tallene til alle par (Li + F, Mg + O, Ca + 2 Cl, Na + Na) står med kilder i [docs/fakta-molekyler.md](fakta-molekyler.md) afsnit 7 (NIST, OpenStax, Shannon, Shriver & Atkins, Born-Haber regnet efter), og "M1 i dag" står i [planen](plan-molekyler.md). To nye fælder: O²⁻'s anden elektron koster ca. 7,7 eV, og Na + Na "bytter ikke" (men deler).
+- **Værkstedet har to dele:** del-knapperne "Byg et atom" og "Byttebørsen" i toplinjen. Byttebørsen: Træk natriums yderste elektron over til chlor (eller "Vis mig"). Måleren "Regnskabet" nederst i 3D-billedet viser −5,14 eV, mens elektronen er fri, −0,63 eV som ioner (16 Å fra hinanden), og +4,26 eV, når Na⁺ og Cl⁻ har mødt hinanden ved 2,36 Å. Na⁺ krymper og Cl⁻ vokser (Shannon-radierne). Bagefter viser "Sådan sker det i virkeligheden" harpunen: Elektronen hopper ved ca. 9,4 Å. "For nørder", "Ærligt talt", tre nye "Hvorfor?"-kort og fire nye ord i Ordbogen (Ionbinding, Ioniseringsenergi, Elektronaffinitet, Elektronvolt).
+- **Jeres svar (Trin 0):** måleren som én bjælke i 3D-billedet med tallene i panelet, harpunen i M1a, og fælde 1 rettet nu (hjælpens "Hvad er en ion?", halogenkortet og opgaven Na⁺ siger ikke længere, at atomer "vil" have en fyldt skal). Fremgangen (M1b): Byttebørsens opgaver tæller på Værkstedets kort, og der kommer ingen ny linje "Molekyler" før M2.
+- **Nye filer:** `js/molekyler.js`, `js/molekyle3d.js` (kan genbruges i M2), `js/data/molekyler.js`, `tests/molekyler.mjs` (Node, 48 tjek) og `tests/byttebors.mjs` (64 tjek, pc, tablet og telefon begge veje).
+- **Tests:** `--ændret` valgte alle 34 (index.html er ændret). Før fletningen med `main` (J3): alle 34 bestod. Efter fletningen: alle 34 bestod, men `guide` fejlede 2 tjek sammen med de andre og bestod alene (se Åbne punkter). `ordforklaring` består nu. Efter fletningen med J4 (#90, #91): de 8 tests, der deler filer med J4 (molekyler, byttebors, vaerksted, ordforklaring, ordbog, kategorier, lag og jupiter), bestod alle.
+
 ## "Senest lavet" 7. november 2026 (Jupiter J4, før Molekyler M1a)
 
 **Senest lavet (7. november 2026): Jupiter J4, flybyen, siderne og citatet.** Jeres go: "Go til Jupiter j4".

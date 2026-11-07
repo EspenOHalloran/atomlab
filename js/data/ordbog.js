@@ -1,6 +1,8 @@
 // Ordforklaringer: korte forklaringer af fagord. Første gang et ord står i en tekst, kan man trykke på det (se js/ordforklaring.js).
 // ord: overskriften i forklaringen. former: alle de måder, ordet står på i teksterne (små bogstaver, mellemrum er tilladt).
 // Hold teksterne korte (2-3 sætninger) og i et sprog, en 13-årig forstår. Tal skal være tjekket (se docs/erfaringer.md, tjekliste B).
+// mere: [[spørgsmål, svar], ...] står kun i Ordbogen ("Hvorfor?" og "Hvordan?", brugerens ønske 7. november 2026), ikke i boblerne.
+// tegning: en lille tegning i Ordbogen (se TEGNINGER i js/ordbog.js).
 
 export const ORDBOG = [
   {
@@ -62,7 +64,16 @@ export const ORDBOG = [
   {
     id: 'plasma', ord: 'Plasma',
     former: ['plasma', 'plasmaet'],
-    tekst: 'Gas, der er så varm, at nogle af eller alle elektronerne er revet løs fra atomkernerne. Stjerner og lyn er plasma. Det kaldes stoffets fjerde tilstand (efter fast stof, væske og gas).',
+    tekst: 'Gas, hvor mange af atomerne har mistet elektroner, fx fordi gassen er meget varm. Elektronerne og ionerne farer rundt hver for sig. Stjerner, lyn og neonrør er plasma. Det kaldes stoffets fjerde tilstand (efter fast stof, væske og gas).',
+    // Kilder: en.wikipedia.org "Plasma (physics)" og "Plasma display" (tjekket 7. november 2026)
+    mere: [
+      ['Er det ikke bare ioner?', 'Jo, hvert atom, der har mistet elektroner, er en ion. Men plasma er en hel gas, hvor så mange atomer har mistet elektroner, at elektronerne og ionerne farer rundt hver for sig. Tilsammen er der lige meget plus og minus. Fordi de ladede partikler kan bevæge sig frit, leder plasma strøm og kan styres af magneter. Det kan en almindelig gas ikke, og derfor kaldes plasma en tilstand for sig.'],
+      ['Hvordan bliver en gas til plasma?', 'Med varme eller med strøm. Bliver en gas mange tusind grader varm, støder atomerne så hårdt sammen, at elektroner bliver slået løs. I et lyn eller et neonrør trækker en stærk spænding i de få frie elektroner, der altid er. De suser af sted og slår flere elektroner løs, som slår endnu flere løs, som en lavine.'],
+      ['Hvorfor lyser plasma?', 'Elektronerne støder ind i atomerne og giver dem ekstra energi, eller de bliver fanget af en ion igen. Bagefter sender atomet energien ud som lys. Hvert stof har sine egne farver: Neon lyser rødorange.'],
+      ['Hvad har det med plasmaskærme at gøre?', 'En plasmaskærm har millioner af bittesmå rum med neon og xenon. Når der går strøm gennem et rum, bliver gassen til plasma og sender usynligt ultraviolet lys ud. Det rammer et selvlysende lag, der lyser rødt, grønt eller blåt, og tre rum giver tilsammen én prik i billedet. De sidste plasmaskærme blev lavet omkring 2014-2016, for LCD- og OLED-skærme blev bedre og billigere.'],
+      ['Hvor findes plasma?', 'Stjernerne er næsten rene kugler af plasma, og over 99 % af det almindelige stof, man kan se i universet, er plasma. På Jorden er det sjældent: lyn, gnister, neonrør, den tynde luft højt oppe, hvor nordlyset lyser, og fusionsforsøg, hvor magneter holder plasmaet svævende.'],
+    ],
+    tegning: 'plasma',
   },
   {
     id: 'fusion', ord: 'Fusion',
