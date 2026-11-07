@@ -87,8 +87,8 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 ## Åbne spørgsmål (skal besvares før start)
 1. **A, B eller C** (eller noget andet)?
-2. **Hvor i køen?** 7. november 2026 venter Jupiter J5 og Molekyler M1b, og Liv kommer lige efter Molekyler (se [lige-nu.md](lige-nu.md)).
-3. **Hvem bliver hjemme?** En tvilling (klassisk) eller noget mere personligt, fx "din far"? Det sidste rammer hårdere (far er der ikke, når man kommer hjem efter 3.000 år): stærkt, men måske lidt trist.
+2. ✅ Besvaret 7. november 2026: **Tid kommer nu**, før Uranus og Neptun og Liv (det mindste af de tre). Prompten til Trin 0 er [prompt-tid.md](prompt-tid.md). (Spørgsmålet var: **Hvor i køen?** 7. november 2026 venter Jupiter J5 og Molekyler M1b, og Liv kommer lige efter Molekyler (se [lige-nu.md](lige-nu.md)).)
+3. ✅ Besvaret 7. november 2026: **en tvilling.** (Spørgsmålet var: **Hvem bliver hjemme?** En tvilling (klassisk) eller noget mere personligt, fx "din far"? Det sidste rammer hårdere (far er der ikke, når man kommer hjem efter 3.000 år): stærkt, men måske lidt trist.)
 4. ✅ Besvaret 7. november 2026: Idéerne skrives ind her, så en anden session kan arbejde videre.
 
 ## Model og effort
