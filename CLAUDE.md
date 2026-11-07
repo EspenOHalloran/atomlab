@@ -8,12 +8,12 @@ Dokumenterne er delt op i små filer (6. november 2026), så en ny session ikke 
 
 | Hvornår | Læs |
 |---|---|
-| **Altid, før det første svar** | [docs/lige-nu.md](docs/lige-nu.md) (oversigten over sporene og det, der venter på et go), filen for dit spor i `docs/lige-nu/` (hvad der senest er lavet, og hvad der er næste) og [DESIGN.md](DESIGN.md) (sådan arbejder vi, grundregler, trin). Byg ét trin ad gangen, få et "go" før hvert trin, og sæt kryds, når et trin er færdigt. Denne fil er allerede indlæst og skal ikke læses igen. |
+| **Altid, før det første svar** | [docs/lige-nu.md](docs/lige-nu.md) (oversigten over sporene, og det, der venter på et go, står i [docs/koereplan.md](docs/koereplan.md)), filen for dit spor i `docs/lige-nu/` (hvad der senest er lavet, og hvad der er næste) og [DESIGN.md](DESIGN.md) (sådan arbejder vi, grundregler, trin). Byg ét trin ad gangen, få et "go" før hvert trin, og sæt kryds, når et trin er færdigt. Denne fil er allerede indlæst og skal ikke læses igen. |
 | Før du arbejder i koden | Oversigten [docs/kode.md](docs/kode.md) og den fil i `docs/kode/`, der beskriver de filer, du skal røre. Hold den opdateret. |
 | Før arbejdet går i gang | Den tjekliste i [docs/tjeklister/](docs/tjeklister/), der passer: **C** ny regel eller spillogik, **D** ny del, skærm, knapper eller kontakter, **E** animation, grafik, shader, kort, kamera eller fælles funktion, **F** tests. Og emnet i [docs/erfaringer/](docs/erfaringer/) (oversigt i [docs/erfaringer.md](docs/erfaringer.md)), du arbejder med, fx Mars, flybyen eller tests. |
 | Tekster med fakta | `/faktatjek` (tjekliste **B** og [de kendte fælder](docs/erfaringer/fakta-faelder.md)). Læs fælderne, før teksten skrives, ikke først bagefter. |
 | Før arbejdet er færdigt | `/faerdig` (tjekliste **A** og de andre, der passer). |
-| Når opgaven nævner dem | Planen i `docs/plan-*.md` eller prompten i `docs/prompt-*.md`, [Ikke afprøvet](docs/ikke-afproevet.md), [Idéer til senere](docs/ideer.md) og [Før vi deler](docs/foer-vi-deler.md). |
+| Når opgaven nævner dem | Planen i `docs/plan-*.md` eller prompten i `docs/prompt-*.md`, [Ikke afprøvet](docs/ikke-afproevet.md), [Idéer til senere](docs/ideer.md) (kun løse idéer, sorteret efter verden) og [Før vi deler](docs/foer-vi-deler.md). |
 
 - **Søg i stedet for at læse alt:** Lange filer (planerne, `docs/fakta-*.md`, `docs/arkiv/`) læses med `grep` eller i det afsnit, der skal bruges. Store opslag på tværs af mange filer kan en Haiku-hjælpeagent lave.
 - **Skriv nye erfaringer ind løbende** i den rigtige fil i `docs/erfaringer/`, både når noget virker godt, og når noget gik galt. Får en fejl en ny rodårsag, skal den også ind i [rodårsagerne](docs/erfaringer/rodaarsager.md) og en tjekliste.
