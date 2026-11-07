@@ -14,7 +14,8 @@
 
 **Næste (venter på jeres go):**
 1. **Tabletrunden er lavet (6. november 2026),** og rettelsespakken (fund 1, 5, 6 og 7) er færdig (se ovenfor). Fund 2-4 hører til andre opgaver (G1 i [docs/plan-grafik.md](plan-grafik.md), M8c del 3 og L2 i [docs/plan-mars.md](plan-mars.md)). Jeres ønske: Det sorte hul bygges om, før det testes på tabletten (✅ lavet 6. november 2026, se ovenfor).
-2. **Jupiter bygges (J1-J5).** J1-J3 er færdige (6.-7. november 2026). **J4 (flybyen, træet og siderne) venter på jeres go.** Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md) (Opus høj). Hver delopgave får sit eget go.
+2. **Molekyler M1 (Byttebørsen) kører sideløbende med Jupiter (jeres valg 7. november 2026)** i stedet for en ny planet. Venus bygges først, når Jupiter J4 er færdig (flybyen og siderne er skabelonen for de næste planeter). Prompten: [docs/prompt-molekyler-m1.md](prompt-molekyler-m1.md) (Opus høj). Den starter med et kort tjek (planen mod koden i dag og tallene til de andre par), og M1a og M1b får hver sit go. **Domæner:** `physics.nist.gov`, `webbook.nist.gov`, `chem.libretexts.org` og `openstax.org` var lukket 7. november 2026 (`en.wikipedia.org` er åben).
+3. **Jupiter bygges (J1-J5).** J1-J3 er færdige (6.-7. november 2026). **J4 (flybyen, træet og siderne) venter på jeres go.** Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md) (Opus høj). Hver delopgave får sit eget go.
 
 **Kursen (jeres svar 5. november 2026, planlægningen efter oprydningen):**
 - **M8c del 1** er færdig og merget (#69).
@@ -25,7 +26,7 @@
 **Venter på et go** (ikke startet, størrelsen står i parentes):
 0. **Jupiter bygges videre** (J1-J3 ✅, J4 og J5 venter, Opus høj, [docs/plan-jupiter.md](plan-jupiter.md)). Jeres svar på de fem spørgsmål er givet (6. november 2026, står i planen under "Jeres svar"): OPAL-kortet, vulkanerne venter, månerne som kugler (tryk og besøg kun, hvis det er lille og i Saturns kvalitet), 5 stop uden Io, den rigtige fart. Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md). Kan køre samtidig med rettelsespakken og Det sorte hul.
 1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
-2. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
+2. **Molekyler, M1 (Byttebørsen):** Planen og jeres svar ligger klar i [docs/plan-molekyler.md](plan-molekyler.md) (stor). Prompten er skrevet (7. november 2026, [docs/prompt-molekyler-m1.md](prompt-molekyler-m1.md)) og kører sideløbende med Jupiter. Faktagrundlaget til M2 laves med xhigh.
 3. **Liv, lige efter Molekyler (opprioriteret, jeres go 5. november 2026):** Liv bygger på molekylerne (byggesten, hinder, RNA og DNA), så den kommer efter M1/M2. Opus laver faktagrundlaget med xhigh og planen, og Fable 5.5 tjekker det, hvis den kommer. Venter ikke længere på Fable. DNA (før punkt 8.6) er en del af Liv. Se "Ny del: Liv" i [ideer.md](ideer.md) (stor).
 4. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
 5. **Mars ekstra** (efter planeterne eller når I vil): Curiosity som 3D-model (M8c del 2), Nordpolen tæt på (M7b-pol), stenene og terrænet i Stå på Mars (M8c del 3, jeres fund 3. november 2026: stenene ser ens ud) og lyset, den dyre del (L2, kræver en session på jeres pc). Se [docs/plan-mars.md](plan-mars.md).
