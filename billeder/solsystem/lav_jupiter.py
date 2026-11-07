@@ -3,6 +3,7 @@
 #   python3 lav_jupiter.py <mappe med originaler> <ud-mappe>              kortene jupiter-4k/2k/1k.jpg
 #   python3 lav_jupiter.py <mappe med originaler> <ud-mappe> sammenlign   et billede med OPAL og Cassini side om side
 #   python3 lav_jupiter.py <mappe med originaler> js/data vinde          vindene målt i OPAL (js/data/vinde-jupiter.js)
+#   python3 lav_jupiter.py <mappe med originaler> <ud-mappe> maaner      månernes kort (J3, se "Månerne" nedenfor)
 #
 #   hlsp_opal_hst_wfc3-uvis_jupiter-2025a_f395n-f502n-f631n_v1_globalmap.tif
 #       Hubble OPAL, cyklus 32 (11.-12. dec. 2025), farvebilledet fra tre smalle filtre, 3600 x 1800 (10 pixel pr. grad).
@@ -358,11 +359,133 @@ export function vindVed(bredde) {{
         f.write(tekst)
 
 
+# ---------- Månerne (J3) ----------
+# USGS' globale mosaikker (NASA/JPL/USGS Astrogeology, Galileo SSI og Voyager, public domain), hentet fra
+# https://planetarymaps.usgs.gov/mosaic/<fil> (sender videre til asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/):
+#   Io_GalileoSSI-Voyager_Global_Mosaic_1km.tif            Io i gråtoner, 11445 x 5723, midten er 0 grader
+#   Io_GalileoSSI-Voyager_Global_Mosaic_ClrMerge_1km.tif   Io i forstærkede farver (kun til en svag tone, se nedenfor)
+#   Europa_Voyager_GalileoSSI_global_mosaic_500m.tif       Europa, 19631 x 9816, midten er 180 grader
+#   Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif      Ganymedes, 16539 x 8270, midten er 180 grader
+#   Callisto_Voyager_GalileoSSI_global_mosaic_1km.tif      Callisto, 15138 x 7569, midten er 180 grader
+# Alle er "Positive West": den vestlige længde falder mod højre, altså står øst til højre, som i de andre kort. De dækker
+# præcis 360 grader (GeoTIFF-felterne: bredden i meter er 2 pi gange USGS' radius). Kortene rulles, så 0 grader (siden,
+# der vender mod Jupiter) står i midten, som ved Saturns måner. Målt (tjekliste E):
+# - Kanterne: Europa og Ganymedes har en tom første søjle (spring på ca. 150 og 70 mod 1-2 mellem naboer). Den fyldes med
+#   gennemsnittet af naboerne på begge sider af sømmen. Ingen kort har en kopieret søjle.
+# - Hullerne (værdien 0) ved polerne: Europa syd for ca. 76,6 grader S (helt tomt fra ca. 84 grader S), Ganymedes nord for
+#   77 grader N og syd for 79,8 grader S, Callisto nord for 83,7 grader N og pletvis syd for 66 grader S. De fyldes med
+#   rækkerne spejlet i hullets kant (som ved Phobos), så der ikke kommer en lige streg. Resten (små huller) fyldes med
+#   en sløret udgave af naboerne.
+# - Io: Farvekortet er forstærket ("de ægte farver er meget mere dæmpede", USGS). Programmet bruger det grå kort og en
+#   svag tone (io-tone.jpg, 1024 x 512): farven delt med lysstyrken i farvekortet, trukket 20 % mod gråt.
+# Størrelser: 8k (pc), 4k (tablet og telefon) og 2k (tests), én kanal. Lysstyrken (gennemsnittet) skrives ud, så "lys" i
+# jupiter.js kan sættes efter albedoen.
+MÅNE_FILER = {
+    'io': ('Io_GalileoSSI-Voyager_Global_Mosaic_1km.tif', False),
+    'europa': ('Europa_Voyager_GalileoSSI_global_mosaic_500m.tif', True),
+    'ganymedes': ('Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif', True),
+    'callisto': ('Callisto_Voyager_GalileoSSI_global_mosaic_1km.tif', True),
+}
+IO_FARVE = 'Io_GalileoSSI-Voyager_Global_Mosaic_ClrMerge_1km.tif'
+TONE_STYRKE = 0.8  # så meget af farvekortets farve, der bruges (resten er gråt)
+TONE_SKALA = 1.5  # tonen gemmes delt med dette tal (så den ikke klippes), jupiter.js ganger igen
+
+
+def sløret_fyld(a, maske, n=1024):
+    # Et groft kort, hvor hullerne er fyldt med naboerne (en pyramide af gennemsnit, der kun tæller de gode pixel)
+    H, W = a.shape
+    v = Image.fromarray((a * maske).astype(np.float32), 'F').resize((n, n // 2), Image.BOX)
+    m = Image.fromarray(maske.astype(np.float32), 'F').resize((n, n // 2), Image.BOX)
+    v, m = np.asarray(v, np.float64), np.asarray(m, np.float64)
+    lag = []
+    while v.shape[1] > 4:
+        lag.append((v, m))
+        v = 0.25 * (v[0::2, 0::2] + v[1::2, 0::2] + v[0::2, 1::2] + v[1::2, 1::2])
+        m = 0.25 * (m[0::2, 0::2] + m[1::2, 0::2] + m[0::2, 1::2] + m[1::2, 1::2])
+    groft = v.sum() / max(m.sum(), 1e-9) * np.ones_like(v)
+    for v, m in reversed(lag):
+        op = np.kron(groft, np.ones((2, 2)))[:v.shape[0], :v.shape[1]]
+        groft = np.where(m > 0.05, v / np.maximum(m, 1e-9), op)
+        groft = groft * np.minimum(m / 0.5, 1) + op * (1 - np.minimum(m / 0.5, 1))
+    return np.asarray(Image.fromarray(groft.astype(np.float32), 'F').resize((W, H), Image.BILINEAR))
+
+
+def fyld_poler(a):
+    # Hullerne ved polerne fyldes med rækkerne spejlet i hullets kant. Kanten er den første række (fra ækvator mod polen),
+    # hvor over 1 % af pixlerne er tomme.
+    H = a.shape[0]
+    tom = (a == 0).mean(axis=1)
+    for retning in (-1, 1):  # -1: nordpolen (række 0), 1: sydpolen
+        midt = H // 2
+        rækker = range(midt, H) if retning == 1 else range(midt, -1, -1)
+        kant = None
+        for i in rækker:
+            if tom[i] > 0.01:
+                kant = i
+                break
+        if kant is None:
+            continue
+        print(f'  hul ved {"syd" if retning == 1 else "nord"}polen fra {90 - (kant + 0.5) * 180 / H:.1f} grader')
+        for i in (range(kant, H) if retning == 1 else range(kant, -1, -1)):
+            kilde = 2 * kant - i - retning
+            if not 0 <= kilde < H:
+                continue
+            nul = a[i] == 0
+            a[i, nul] = a[kilde, nul]
+    return a
+
+
+def lav_måne(mappe, ud, navn):
+    fil, rul = MÅNE_FILER[navn]
+    sti = os.path.join(mappe, fil)
+    if not os.path.exists(sti):
+        print('springer over (mangler):', fil)
+        return
+    a = np.array(Image.open(sti).convert('L'))
+    H, W = a.shape
+    if a[:, 0].max() == 0:  # tom første søjle (Europa og Ganymedes)
+        a[:, 0] = ((a[:, 1].astype(np.uint16) + a[:, -1]) // 2).astype(np.uint8)
+    a = fyld_poler(a)
+    maske = a > 0
+    if not maske.all():
+        print(f'  små huller: {(~maske).mean() * 100:.3f} %')
+        a = np.where(maske, a, np.clip(np.round(sløret_fyld(a.astype(np.float32), maske)), 1, 255).astype(np.uint8))
+    if rul:  # 180 grader i midten: rulles en halv omgang, så 0 grader (mod Jupiter) står i midten
+        a = np.roll(a, W // 2, axis=1)
+    im = Image.fromarray(a)
+    for størrelse, b in (('8k', 8192), ('4k', 4096), ('2k', 2048)):
+        im.resize((b, b // 2), Image.LANCZOS).save(os.path.join(ud, f'{navn}-{størrelse}.jpg'), quality=85, optimize=True, progressive=True)
+    lille = np.asarray(Image.open(os.path.join(ud, f'{navn}-2k.jpg')).convert('L'), np.float64) / 255
+    print(f'{navn}: {W} x {H}, gennemsnit (2k) {lille.mean():.3f}')
+
+
+def lav_io_tone(mappe, ud):
+    sti = os.path.join(mappe, IO_FARVE)
+    if not os.path.exists(sti):
+        print('springer over (mangler):', IO_FARVE)
+        return
+    rgb = np.asarray(Image.open(sti).convert('RGB').resize((1024, 512), Image.BOX), np.float64)
+    lys = rgb.mean(axis=2, keepdims=True)
+    farve = rgb / np.maximum(lys, 1)
+    farve[lys[:, :, 0] < 2] = farve[lys[:, :, 0] >= 2].mean(axis=0)  # den tomme øverste række
+    tone = 1 + TONE_STYRKE * (farve - 1)
+    print(f'io-tone: gennemsnit {tone.reshape(-1, 3).mean(axis=0).round(3)}, mindst {tone.min():.2f}, størst {tone.max():.2f}')
+    Image.fromarray(np.clip(np.round(tone / TONE_SKALA * 255), 0, 255).astype(np.uint8), 'RGB').save(os.path.join(ud, 'io-tone.jpg'), quality=90, optimize=True)
+
+
+def lav_måner(mappe, ud):
+    for navn in MÅNE_FILER:
+        lav_måne(mappe, ud, navn)
+    lav_io_tone(mappe, ud)
+
+
 if __name__ == '__main__':
     ind, ud = sys.argv[1], sys.argv[2]
     os.makedirs(ud, exist_ok=True)
     if len(sys.argv) > 3 and sys.argv[3] == 'vinde':
         skriv_vinde(ind, ud)
+    elif len(sys.argv) > 3 and sys.argv[3] == 'maaner':
+        lav_måner(ind, ud)
     elif len(sys.argv) > 3 and sys.argv[3] == 'sammenlign':
         sammenlign(ind, ud)
     else:

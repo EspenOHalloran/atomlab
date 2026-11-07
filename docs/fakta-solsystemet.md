@@ -1691,3 +1691,21 @@ Ny fælde: Positive West betyder, at længdegraden **falder** mod højre i bille
 | Undertekst, alder, 1600-tallet, 41.000 km, rundere, højtryk, 640 km/t, 350-500 km | OK | Del 5, punkt 1 og 2 |
 
 **Ny fælde:** Pletten drejer ikke som en stiv skive. Kanten er hurtigst, og midten er næsten stille (måske drejer den endda lidt den anden vej). Programmet drejer den som en skive, og det står i "Ærligt talt".
+
+## Faktatjek J3: månerne (7. november 2026)
+
+Teksterne i `js/data/sider/jupiter.js` (Månerne, Io, Europa, Ganymedes og Callisto) og underteksterne i `MÅNER` i `js/kosmos/jupiter.js`. Alle påstande er tjekket mod del 5 (punkt B1-B9, kilderne er åbnet dér). Der er ikke kørt en ny søgning på nettet, for der kom ingen nye påstande uden for faktagrundlaget. Tallene er fra NSSDC's Jovian Satellite Fact Sheet (åbnet igen 7. november 2026: radier 1.821,5, 1.560,8, 2.631,2 og 2.410,3 km, albedo 0,62, 0,68, 0,44 og 0,19).
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Bredderne ca. 3.640, 3.120, 5.260 og 4.820 km | OK (2 × NSSDC-radius) | NSSDC |
+| Io lidt større end Månen, Europa lidt mindre | OK: 1.821,5 og 1.560,8 mod Månens 1.737,4 km | NSSDC |
+| Omgange: ca. 42½ t, 3½ d, 7 d og 16,7 d. Afstande 421.800, 671.100, 1,07 mio. og 1,88 mio. km | OK | Del 5, B1 og plan afsnit 3 (JPL) |
+| "Næsten præcis" 4 : 2 : 1, Laplace = 180°, aldrig alle tre på linje | OK | B1 |
+| Galilei 7. januar 1610 tre prikker, 13. januar fire, de første måner om en anden planet | OK | B6 |
+| 115 kendte måner (april 2026) | OK | A11 |
+| Io: over 150 set i udbrud, ca. 400 i alt (skøn), lava 1.300-1.600 K af sten, svovl giver farverne, Pele ca. 300 km, Voyager 1 1979, æltet op til ca. 100 m | OK (ikke "400 aktive", fælden) | B2, B1 |
+| Europa: is 15-25 km (NASA), Juno ca. 29 km i ét område i 2022, kun yderlaget, hav 60-150 km, dobbelt så meget vand, induceret magnetfelt, striber over 1.000 km, en af de glatteste, intet liv fundet, Clipper april 2030 og ca. 50 forbiflyvninger | OK ("efter planen" om Clipper) | B3 |
+| Ganymedes: størst, ca. 8 % bredere end Merkur, under halvt så tung (45 %), magnetfelt 1996, hav (Hubble 2015) ca. 100 km under ca. 150 km is, mere vand end Jordens have, ca. 1/3 mørk, JUICE op 2023 og frem 2031 | OK. Bane om Ganymedes er skrevet uden årstal (2034 er kun et søgeresultat) | B4 |
+| Callisto: ældste overflade med flest kratere, ca. 4 mia. år, mættet, Valhalla ca. 3.800 km med ringene, svag stråling, NASA's undersøgelse af en base (HOPE), måske et hav ca. 250 km nede, ikke i resonansen | OK. Valhallas centrum er udeladt (fælden) | B5 |
+| Albedoen (kun til lysstyrken i tegningen) | Io er tegnet lidt mørkere (0,46 i stedet for 0,53 gange albedoen), så tonen kan ses | NSSDC |
