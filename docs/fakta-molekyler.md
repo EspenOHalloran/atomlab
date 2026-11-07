@@ -42,7 +42,7 @@ Grænserne er en konvention, og lærebøgerne bruger 1,7, 1,8 eller 2,0. **Ret s
 
 ## 3. Molekylernes form og tal
 
-Tallene i tabellen er fra min viden. Kun vinklen i NH₃ er bekræftet i et uddrag.
+Tallene i tabellen er fra min viden. Kun vinklen i NH₃ er bekræftet i et uddrag. **Tjekket 7. november 2026 i [fakta-molekyler/m2.md](fakta-molekyler/m2.md)** (CCCBDB): Alle tal passer inden for afrundingen. Brug tallene dér.
 
 | Molekyle | Form | Tal | Sikkerhed |
 |---|---|---|---|
@@ -214,4 +214,4 @@ Flyttet til [fakta-molekyler/faktatjek-m1.md](fakta-molekyler/faktatjek-m1.md) (
 - Mandt 2024 mod Altwegg 2015: Debatten er ikke afgjort.
 - At Glavin er forfatter på Bennu-artiklen, og D/H for Bennu (ikke fundet).
 - Young m.fl. 2023 (fra min viden, ikke tjekket).
-- Ammoniaks vinkel (106,6-107,8° i forskellige kilder, brug "ca. 107°").
+- Ammoniaks vinkel (106,6-107,8° i forskellige kilder, brug "ca. 107°"). **Løst:** 106,67° (CCCBDB, Herzberg 1966), se [fakta-molekyler/m2.md](fakta-molekyler/m2.md).
