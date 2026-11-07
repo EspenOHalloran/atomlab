@@ -52,6 +52,16 @@ export const ORDBOG = [
     tekst: 'Den energi, et atom giver fra sig, når det får en ekstra elektron. Chlor giver ca. 3,6 eV. En ekstra elektron nr. to koster altid energi, for så er atomet allerede minusladet.',
   },
   {
+    id: 'gitter', ord: 'Gitter (krystalgitter)',
+    former: ['gitter', 'gitteret', 'krystalgitter', 'krystalgitteret'],
+    tekst: 'Et fast mønster, som ionerne eller atomerne i en krystal ligger i. Mønstret gentager sig igen og igen. I køkkensalt har hver Na⁺ seks Cl⁻ omkring sig, og hver Cl⁻ har seks Na⁺.',
+  },
+  {
+    id: 'gitterenergi', ord: 'Gitterenergi',
+    former: ['gitterenergi', 'gitterenergien'],
+    tekst: 'Den energi, der bliver frigjort, når frie plus- og minus-ioner samler sig til en krystal. For køkkensalt er det ca. 8,2 eV for hvert par Na⁺ og Cl⁻. Det er den, der betaler for at flytte elektronerne.',
+  },
+  {
     id: 'elektronvolt', ord: 'Elektronvolt (eV)',
     former: ['elektronvolt', 'ev'],
     tekst: 'En lille energienhed, der passer til atomer: den energi, en elektron får, når den bliver skubbet gennem en spænding på 1 volt. Synligt lys har ca. 2-3 eV pr. foton.',

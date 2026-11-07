@@ -67,5 +67,84 @@ for (const s of ['Li', 'Na', 'Mg', 'Ca']) tjek(`${s} krymper (${M.størrelsesFor
 for (const s of ['F', 'Cl', 'O']) tjek(`${s} vokser (${M.størrelsesForhold(s).toFixed(2)})`, M.størrelsesForhold(s) > 1.5);
 tjek('Na⁺ + Cl⁻ = afstanden i saltkrystallen (282 pm)', nær(M.STOFFER.Na.ion + M.STOFFER.Cl.ion, 282, 2));
 
+// ---------- M1b: de andre par, krystallen og opgaverne ----------
+// Prisen for at flytte elektronerne langt fra hinanden (ioniseringsenergi minus elektronaffinitet, afsnit 7)
+const pris = (id) => { const p = M.PAR[id]; const b = M.byttePris(p, M.iAltElektroner(p)); return b.tage + b.give; };
+for (const [id, forventet] of [['nacl', -1.53], ['lif', -1.99], ['mgo', -28.93], ['cacl2', -10.76], ['nana', -4.59]]) {
+  tjek(`${id}: at flytte elektronerne koster ${-forventet} eV (${pris(id).toFixed(2)})`, nær(pris(id), forventet, 0.01));
+}
+tjek('Na → Cl: byttePris passer med flytEnergi', nær(-pris('nacl'), M.flytEnergi('Na', 'Cl'), 1e-12));
+// Gitterenergierne (Shriver & Atkins, CaCl₂ med Born-Haber) og vejen fra frie atomer til krystallen
+for (const [id, gitter, gevinst] of [['nacl', 8.15, 6.6], ['lif', 10.7, 8.9], ['mgo', 39.3, 10.3], ['cacl2', 23.4, 12.6]]) {
+  const p = M.PAR[id];
+  tjek(`${id}: gitterenergien er ca. ${gitter} eV (${M.gitterEnergi(p).toFixed(2)})`, nær(M.gitterEnergi(p), gitter, 0.06));
+  // Afsnit 7 regner "fra atomer til krystal" med Born-Haber (enthalpier). Gitter minus prisen må højst afvige ca. 2,5 %.
+  tjek(`${id}: fra atomer til krystal ca. +${gevinst} eV (${M.krystalGevinst(p).toFixed(2)})`, M.krystalGevinst(p) > 0 && Math.abs(M.krystalGevinst(p) - gevinst) <= 0.025 * gevinst + 0.01);
+}
+tjek('Mg + O koster mest, men giver også mest i krystallen', pris('mgo') < pris('cacl2') && M.gitterEnergi(M.PAR.mgo) > M.gitterEnergi(M.PAR.cacl2));
+// O²⁻: Den anden elektron koster, når den lander (fælde 12)
+{
+  const p = M.PAR.mgo;
+  const fri = M.byttePris(p, 1, true);
+  const landet = M.byttePris(p, 2);
+  tjek('Mg + O: regnskabet falder, når den 2. elektron lander hos O⁻', landet.tage + landet.give < fri.tage + fri.give);
+  tjek('Mg + O: den første elektron giver noget tilbage (+1,46 eV)', nær(M.byttePris(p, 1).give, 1.461, 0.001));
+}
+// Ladningerne går op: metallet giver lige så mange elektroner, som ikkemetallerne tager
+for (const id of M.PAR_RÆKKE) {
+  const p = M.PAR[id];
+  const n = M.iAltElektroner(p);
+  if (p.bytter === false) {
+    tjek('Na + Na: én elektron (ingen ionbinding, de bytter ikke)', n === 1 && !p.gitter && !p.krystal && !M.bytter('Na', 'Na'));
+    continue;
+  }
+  tjek(`${id}: metallet giver ${n} (ladning +${M.STOFFER[p.metal].ladning}), hvert ikkemetal tager ${p.hver}`,
+    M.STOFFER[p.metal].ladning === n && -M.STOFFER[p.ikkemetal].ladning === p.hver && M.bytter(p.metal, p.ikkemetal));
+  tjek(`${id}: fordelingen fylder ét atom ad gangen`, ens(M.fordeling(p, n), Array(p.tagere).fill(p.hver)) && M.fordeling(p, 0).every((k) => k === 0));
+}
+tjek('Ca + 2 Cl: den første elektron til det første chloratom', ens(M.fordeling(M.PAR.cacl2, 1), [1, 0]));
+tjek('ionSkaller undervejs: Mg⁺ 2 · 8 · 1, O⁻ 2 · 7, Na⁻ 2 · 8 · 2', ens(M.ionSkaller('Mg', -1), [2, 8, 1]) && ens(M.ionSkaller('O', 1), [2, 7]) && ens(M.ionSkaller('Na', 1), [2, 8, 2]));
+// Plus og minus langt fra hinanden (punktladninger)
+tjek('ladningsTræk: +1 og −1 i 2,36 Å trækker med 6,10 eV', nær(M.ladningsTræk([{ q: 1, x: 0, y: 0 }, { q: -1, x: 2.36, y: 0 }]), 6.10, 0.01));
+tjek('ladningsTræk: +2 og −2 trækker fire gange så hårdt', nær(M.ladningsTræk([{ q: 2, x: 0, y: 0 }, { q: -2, x: 5, y: 0 }]), 4 * M.KE / 5, 1e-9));
+tjek('ladningsTræk: ens ladninger skubber, neutrale tæller ikke', M.ladningsTræk([{ q: -1, x: 0, y: 0 }, { q: -1, x: 3, y: 0 }]) < 0 && M.ladningsTræk([{ q: 0, x: 0, y: 0 }, { q: -1, x: 3, y: 0 }]) === 0);
+// Måleren kan vise alt, hvad der sker undervejs
+for (const id of M.PAR_RÆKKE) {
+  const p = M.PAR[id];
+  const sk = M.målerSkala(p);
+  const værdier = [];
+  for (let k = 0; k < M.iAltElektroner(p); k++) for (const [n, fri] of [[k, true], [k + 1, false]]) { const b = M.byttePris(p, n, fri); værdier.push(b.tage + b.give); }
+  if (p.gitter) værdier.push(M.krystalGevinst(p));
+  tjek(`${id}: måleren går til ±${sk} eV og kan vise alt`, værdier.every((x) => Math.abs(x) <= sk) && sk <= 31);
+}
+// Krystallerne: terningemønstret (seks naboer med modsat ladning) og rutil (CaCl₂: 6 og 3)
+const naboer = (pladser, p, d) => pladser.filter((q) => q !== p && Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z) < d * 1.08);
+for (const id of ['nacl', 'lif', 'mgo']) {
+  const p = M.PAR[id];
+  const pl = M.krystalPladser(p, 6);
+  const d = (M.STOFFER[p.metal].ion + M.STOFFER[p.ikkemetal].ion) / 100;
+  const inde = pl.filter((q) => Math.max(Math.abs(q.x), Math.abs(q.y), Math.abs(q.z)) < d * 2);
+  tjek(`${id}: 216 ioner, lige mange af hver`, pl.length === 216 && pl.filter((q) => q.metal).length === 108);
+  tjek(`${id}: hver ion inde i krystallen har seks naboer med modsat ladning`, inde.length > 0 && inde.every((q) => { const n = naboer(pl, q, d); return n.length === 6 && n.every((x) => x.metal !== q.metal); }));
+}
+{
+  const p = M.PAR.cacl2;
+  const pl = M.krystalPladser(p);
+  const d = (M.STOFFER.Ca.ion + M.STOFFER.Cl.ion) / 100;
+  const ca = pl.filter((q) => q.metal);
+  tjek(`cacl2: ${pl.length} ioner, en Ca for hver to Cl`, pl.length <= 300 && 2 * ca.length === pl.length - ca.length);
+  const inde = pl.filter((q) => Math.hypot(q.x, q.y, q.z) < 4);
+  tjek('cacl2: Ca²⁺ inde i krystallen har seks Cl⁻', inde.filter((q) => q.metal).length > 0 && inde.filter((q) => q.metal).every((q) => naboer(pl, q, d).filter((x) => !x.metal).length === 6));
+  tjek('cacl2: Cl⁻ inde i krystallen har tre Ca²⁺', inde.filter((q) => !q.metal).length > 0 && inde.filter((q) => !q.metal).every((q) => naboer(pl, q, d).filter((x) => x.metal).length === 3));
+  let mindst = Infinity;
+  for (const a of pl) for (const b of pl) if (a !== b && !a.metal && !b.metal) mindst = Math.min(mindst, Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z));
+  tjek(`cacl2: Cl⁻-ionerne overlapper ikke (${mindst.toFixed(2)} Å)`, mindst >= 2 * M.STOFFER.Cl.ion / 100);
+  const mid = pl.reduce((s, q) => s + q.x + q.y + q.z, 0) / pl.length;
+  tjek('cacl2: krystallen står i midten', nær(mid, 0, 1e-9));
+}
+// Opgaverne: én for hvert par
+tjek('fem opgaver, én for hvert par', M.OPGAVER_BYTTE.length === M.PAR_RÆKKE.length && M.PAR_RÆKKE.every((id) => M.OPGAVER_BYTTE.some((o) => o.par === id && o.id === `bytte-${id}`)));
+tjek('opgaverne har titel, tip og fakta', M.OPGAVER_BYTTE.every((o) => o.titel && o.tip && o.fakta));
+
 console.log(`\n${ok} OK, ${dårlig} fejl`);
 process.exit(dårlig ? 1 : 0);

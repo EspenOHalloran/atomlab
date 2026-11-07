@@ -26,3 +26,4 @@
 
 ### Testsamlingen
 Testene ligger i [tests/](../../tests/README.md). Kør dem med `node tests/koer-alle.mjs`. Se README'en for, hvad hver test tjekker.
+- **`--ændret` efter en commit på en gren uden upstream:** Den sammenligner med `@{upstream}` og ellers med `HEAD`. Er alt committet, og har grenen ingen upstream, vælger den ingen tests ("Ændrede filer: ingen"). Giv filerne selv: `node tests/koer-alle.mjs --ændret $(git diff --name-only origin/main)` (Molekyler M1b, 7. november 2026).

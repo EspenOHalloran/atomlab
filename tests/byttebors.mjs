@@ -1,5 +1,6 @@
-// Byttebørsen (Molekyler M1a) i Atomværkstedet: del-knapperne, træk elektronen med musen, regnskabet (måleren),
+// Byttebørsen (Molekyler M1a og M1b) i Atomværkstedet: del-knapperne, træk elektronen med musen, regnskabet (måleren),
 // ionerne, mødet, harpunen, tidsknappen, panelet uden rullebjælke, tasterne kun i "Byg et atom", knappen i hjælpen,
+// M1b: krystallen, Li + F, Mg + O, Ca + 2 Cl, Na + Na og fremgangen (opgavelisten og menuen),
 // og tablet og telefon (begge veje) med "Vis mig".
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('byttebors');
@@ -171,6 +172,145 @@ await page.evaluate(() => { location.hash = '#vaerksted'; });
 await page.waitForTimeout(600);
 tjek('tilbage i Værkstedet: stadig Byttebørsen, elektronen hjemme', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'tilstand') === 'start');
 tjek('kameraets styring virker igen', await page.evaluate(() => atomlabTest.vaerksted.bytte.styring()));
+
+// ---------- M1b: krystallen, de andre par og fremgangen ----------
+const rulInfo = () => page.evaluate(() => ['bytteInfo', 'byttePanel'].map((id) => { const el = document.getElementById(id); return el.scrollHeight <= el.clientHeight + 1 ? '' : `${id} ${el.scrollHeight}/${el.clientHeight}`; }).filter(Boolean).join(' '));
+// Ingen rullebjælke i begge paneler, heller ikke med en foldeboks åben
+async function ingenRulAlle(navn) {
+  const res = [await rulInfo()];
+  for (const lag of ['bytte-nørd', 'bytte-ærligt']) {
+    await page.click(`[data-lag="${lag}"] summary`);
+    res.push(await rulInfo());
+    await page.click(`[data-lag="${lag}"] summary`);
+  }
+  tjek(`${navn}: ingen rullebjælke i panelerne (også med foldeboksene)`, res.every((x) => !x), res.join(' | '));
+}
+// Vælg et par, og vent, til kameraet har zoomet færdig (ellers står elektronen et andet sted, når musen trækker).
+// Ikke en fast ventetid: Kører testene to ad gangen, tager zoomet længere tid.
+async function vælg(id) {
+  await page.click(`[data-bytte-par-id="${id}"]`);
+  await page.waitForFunction(() => atomlabTest.vaerksted.bytte.kameraStille(), null, { timeout: 15000 });
+}
+const stjerne = (id) => page.textContent(`[data-bytte-par-id="${id}"] .bp-stjerne`);
+// Træk den næste elektron med musen hen til et sted på skærmen og slip
+async function trækTil(mål) {
+  const e = await B(page, 'elektronPå');
+  await page.mouse.move(e.x, e.y);
+  await page.mouse.down();
+  await page.mouse.move((e.x + mål.x) / 2, (e.y + mål.y) / 2 - 20, { steps: 5 });
+  await page.mouse.move(mål.x - 10, mål.y, { steps: 5 });
+  await page.mouse.up();
+  await spol(page, 1);
+}
+tjek('fem par-knapper i venstre panel, Na + Cl er valgt', await page.locator('.bytte-par').count() === 5
+  && await page.getAttribute('[data-bytte-par-id="nacl"]', 'aria-pressed') === 'true' && (await stjerne('nacl')) === '☆');
+
+// Na + Cl: par, så krystal
+await B(page, 'handling'); // Vis mig
+await spol(page, 3);
+await B(page, 'handling'); // Lad dem mødes
+await spol(page, 7);
+tjek('Na + Cl: parret er samlet, og "Byg krystallen" kan trykkes', await B(page, 'tilstand') === 'samlet' && !(await page.isDisabled('#bytteKrystal')));
+await page.click('#bytteKrystal');
+tjek('krystallen bygges: 216 ioner, 108 Na⁺', await B(page, 'tilstand') === 'bygger' && (await B(page, 'krystal')).antal === 216 && (await B(page, 'krystal')).plus === 108);
+await spol(page, 0.6);
+await page.click('#bytteTid [data-tid="pause"]');
+const andelPause = (await B(page, 'krystal')).andel;
+await spol(page, 2);
+tjek('pause: krystallen står stille', (await B(page, 'krystal')).andel === andelPause && await B(page, 'tilstand') === 'bygger');
+await page.click('#bytteTid [data-tid="spil"]');
+await spol(page, 5);
+const kr = await B(page, 'regnskab');
+tjek(`Na + Cl: krystallen er færdig, regnskabet +6,62 eV (${kr.iAlt.toFixed(2)})`, await B(page, 'tilstand') === 'krystal' && nær(kr.iAlt, 6.62, 0.01) && nær(kr.træk, 8.15, 0.01));
+await page.waitForTimeout(400);
+tjek('måleren viser +6,62 eV, panelet tæller ionerne', (await page.textContent('#bytteMålerTal')).includes('+6,62') && (await page.textContent('#bytteTal')).includes('216'));
+tjek('Na + Cl er klaret: ★ på knappen og gemt', (await stjerne('nacl')) === '★' && await page.evaluate(() => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang')).opgaver['bytte-nacl'])));
+tjek('panelet siger "terninger"', (await page.textContent('#bytteTrinTekst')).includes('terninger'));
+await ingenRulAlle('Na + Cl-krystal');
+await page.screenshot({ path: UD + '/6-krystal-nacl.png' });
+
+// Li + F: direkte til krystallen
+await vælg('lif');
+tjek('Li + F: to neutrale atomer, "Lad dem mødes" og harpunen er skjult', await B(page, 'par') === 'lif' && await B(page, 'tilstand') === 'start'
+  && !(await page.isVisible('#bytteMødes')) && !(await page.isVisible('#bytteHarpun')) && await page.isVisible('#bytteKrystal'));
+tjek('Li + F: overskriften skifter', (await page.textContent('#bytteParTitel')).includes('Lithium + fluor'));
+await trækTil(await B(page, 'tagerPå', 0));
+const lif = await B(page, 'regnskab');
+tjek(`Li + F: Li⁺ og F⁻, −5,39 og +3,40 eV (${lif.tage.toFixed(2)}, ${lif.give.toFixed(2)})`, await B(page, 'tilstand') === 'ioner'
+  && JSON.stringify(await B(page, 'ladninger')) === '[1,-1]' && nær(lif.tage, -5.392, 0.001) && nær(lif.give, 3.401, 0.001) && lif.iAlt < 0);
+await page.click('#bytteKrystal');
+await spol(page, 5);
+tjek(`Li + F: krystallen ender på +8,68 eV (${(await B(page, 'regnskab')).iAlt.toFixed(2)})`, await B(page, 'tilstand') === 'krystal' && nær((await B(page, 'regnskab')).iAlt, 8.68, 0.01));
+await ingenRulAlle('Li + F-krystal');
+
+// Mg + O: to elektroner, og den anden koster hos oxygen
+await vælg('mgo');
+await B(page, 'handling'); // Vis mig: den første
+await spol(page, 3);
+const mg1 = await B(page, 'regnskab');
+tjek('Mg + O: efter den første er det Mg⁺ og O⁻, og man kan trække igen', await B(page, 'tilstand') === 'start' && await B(page, 'flyttet') === 1
+  && JSON.stringify(await B(page, 'ladninger')) === '[1,-1]' && nær(mg1.tage, -7.646, 0.001) && nær(mg1.give, 1.461, 0.001));
+await trækTil(await B(page, 'tagerPå', 0));
+const mg2 = await B(page, 'regnskab');
+tjek(`Mg + O: Mg²⁺ og O²⁻, −22,68 og −6,25 eV (${mg2.tage.toFixed(2)}, ${mg2.give.toFixed(2)})`, await B(page, 'tilstand') === 'ioner'
+  && JSON.stringify(await B(page, 'ladninger')) === '[2,-2]' && nær(mg2.tage, -22.68, 0.01) && nær(mg2.give, -6.25, 0.01));
+tjek('Mg + O: panelet siger, at den anden elektron kostede hos oxygen', (await page.textContent('#bytteTrinTekst')).includes('O⁻ er allerede minus'));
+tjek('Mg + O: måleren går til ±30 eV', await B(page, 'skala') === 30 && await page.getAttribute('#bytteMåler', 'aria-valuemin') === '-30');
+await ingenRulAlle('Mg + O-ioner');
+await page.screenshot({ path: UD + '/7-mgo-ioner.png' });
+await B(page, 'handling'); // Byg krystallen
+await spol(page, 5);
+tjek(`Mg + O: krystallen ender på +10,40 eV (${(await B(page, 'regnskab')).iAlt.toFixed(2)})`, await B(page, 'tilstand') === 'krystal' && nær((await B(page, 'regnskab')).iAlt, 10.40, 0.01));
+
+// Ca + 2 Cl: én elektron til hvert chloratom
+await vælg('cacl2');
+await B(page, 'handling'); // Vis mig: den første til det første chloratom
+await spol(page, 3);
+tjek('Ca + 2 Cl: Ca⁺, Cl⁻ og Cl', JSON.stringify(await B(page, 'ladninger')) === '[1,-1,0]' && await B(page, 'tilstand') === 'start');
+await trækTil(await B(page, 'tagerPå', 0));
+tjek('Ca + 2 Cl: Cl⁻ er fuld, så elektronen flyver hjem', await B(page, 'flyttet') === 1 && await B(page, 'tilstand') === 'start' && JSON.stringify(await B(page, 'ladninger')) === '[1,-1,0]');
+await trækTil(await B(page, 'tagerPå', 1));
+const ca = await B(page, 'regnskab');
+tjek(`Ca + 2 Cl: Ca²⁺ og to Cl⁻, −17,98 og +7,23 eV (${ca.tage.toFixed(2)}, ${ca.give.toFixed(2)})`, await B(page, 'tilstand') === 'ioner'
+  && JSON.stringify(await B(page, 'ladninger')) === '[2,-1,-1]' && nær(ca.tage, -17.98, 0.01) && nær(ca.give, 7.23, 0.01));
+await page.click('#bytteKrystal');
+await spol(page, 5);
+const caK = await B(page, 'krystal');
+tjek(`Ca + 2 Cl: krystallen har en Ca for hver to Cl (${caK.plus}/${caK.antal}) og ender på +12,61 eV`, await B(page, 'tilstand') === 'krystal'
+  && caK.antal === 3 * caK.plus && nær((await B(page, 'regnskab')).iAlt, 12.61, 0.01));
+tjek('Ca + 2 Cl: panelet siger, at mønstret er et andet end i køkkensalt', (await page.textContent('#bytteTrinTekst')).includes('andet mønster'));
+await ingenRulAlle('Ca + 2 Cl-krystal');
+await page.screenshot({ path: UD + '/8-krystal-cacl2.png' });
+
+// Na + Na: elektronen flyver hjem igen
+await vælg('nana');
+tjek('Na + Na: ingen krystal-knap', !(await page.isVisible('#bytteKrystal')) && !(await page.isVisible('#bytteMødes')));
+await trækTil(await B(page, 'tagerPå', 0));
+const nana = await B(page, 'regnskab');
+tjek(`Na + Na: Na⁺ og Na⁻ koster −5,14 + 0,55 eV (${nana.tage.toFixed(2)}, ${nana.give.toFixed(2)})`, await B(page, 'tilstand') === 'afvist'
+  && nær(nana.tage, -5.139, 0.001) && nær(nana.give, 0.548, 0.001) && nana.iAlt < -3);
+await spol(page, 3);
+tjek('Na + Na: elektronen er fløjet hjem, begge er neutrale', await B(page, 'tilstand') === 'start' && JSON.stringify(await B(page, 'ladninger')) === '[0,0]' && (await B(page, 'regnskab')).iAlt === 0);
+tjek('Na + Na: panelet siger "de bytter ikke", ikke "binder sig ikke"', (await page.textContent('#bytteTrinTekst')).includes('bytter ikke') && !(await page.textContent('#bytteInfo')).includes('binder sig ikke'));
+tjek('alle fem par har ★', (await Promise.all(['nacl', 'lif', 'mgo', 'cacl2', 'nana'].map(stjerne))).every((x) => x === '★'));
+await ingenRulAlle('Na + Na');
+
+// Fremgangen: Værkstedets tæller og opgaveliste og kortet i menuen
+await page.click('[data-vaerksted-del="atom"]');
+await page.waitForTimeout(300);
+const tæller = await page.textContent('#opgaveTæller');
+await page.click('#knapOpgaver');
+const liste = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent));
+tjek('opgavelisten har Byttebørsens fem par med ★', liste.includes('Byttebørsen') && liste.filter((t) => t.startsWith('★') && /Na \+ Cl|Lithium|Magnesium|Calcium|Natrium \+ natrium/.test(t)).length === 5, liste.join(' / '));
+await page.locator('#opgaver li', { hasText: 'Magnesium + oxygen' }).click();
+await page.waitForTimeout(400);
+tjek('et tryk på et par i listen åbner Byttebørsen med det par', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'par') === 'mgo');
+await page.evaluate(() => { location.hash = '#menu'; });
+await page.waitForTimeout(800);
+const kort = await page.textContent('.menukort a[href="#vaerksted"] .kort-fremgang');
+tjek(`menuen tæller Byttebørsen med på Værkstedets kort (${kort.trim()} / ${tæller})`, kort.includes(tæller.trim()) && Number(tæller.split('/')[0]) >= 5);
+await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.waitForTimeout(600);
 await ctx.close();
 
 // Tablet og telefon: del-knapperne, 3D-billedet øverst og "Vis mig"
@@ -199,6 +339,15 @@ for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['t
   tjek(`${navn}: "Vis mig" flytter elektronen`, await B(p, 'tilstand') === 'ioner');
   await p.waitForTimeout(800);
   await p.screenshot({ path: `${UD}/5-${navn}.png` });
+  // Krystallen: Den skal være inde i 3D-billedet, og parrene står i venstre panel
+  await B(p, 'handling');
+  await B(p, 'spol', 7);
+  await B(p, 'handling');
+  await B(p, 'spol', 5);
+  tjek(`${navn}: krystallen er bygget`, await B(p, 'tilstand') === 'krystal');
+  tjek(`${navn}: parrenes knapper er inde på skærmen`, await p.evaluate(() => [...document.querySelectorAll('.bytte-par')].every((b) => { const r = b.getBoundingClientRect(); return r.width > 0 && r.right <= innerWidth + 1; })));
+  await p.waitForTimeout(1200);
+  await p.screenshot({ path: `${UD}/9-krystal-${navn}.png` });
   await c2.close();
 }
 

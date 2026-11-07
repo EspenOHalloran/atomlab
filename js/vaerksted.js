@@ -14,7 +14,8 @@ import { lukHvorfor } from './lag.js';
 import { toTrinsKnap } from './forfra.js';
 import { citatHTML } from './data/citater.js';
 import { kategoriKnap } from './system.js';
-import { lavByttebørs, startByttebørs, stopByttebørs, testAdgang as bytteTest } from './molekyler.js';
+import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, opdaterFremgang as opdaterByttebørsen, testAdgang as bytteTest } from './molekyler.js';
+import { OPGAVER_BYTTE } from './data/molekyler.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -616,7 +617,8 @@ function lavKnapper() {
   });
   // Starter kun Værkstedets opgaver forfra (de andre dele har deres egen knap). De opdagede grundstoffer bliver.
   toTrinsKnap($('knapOpgaverForfra'), () => {
-    fremgang.nulstilDel(OPGAVER.map((o) => o.id));
+    fremgang.nulstilDel([...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id)); // Byttebørsens par hører til Værkstedet
+    opdaterByttebørsen();
     vælgNæsteOpgave();
     lavOpgaveliste();
     opdaterAlt();
@@ -626,6 +628,7 @@ function lavKnapper() {
   $('knapNulstil').addEventListener('click', () => {
     if (!confirm('Vil du slette alle løste opgaver og opdagede grundstoffer?')) return;
     fremgang.nulstilFremgang();
+    opdaterByttebørsen();
     lavMinitabel();
     lavOpgaveliste();
     vælgNæsteOpgave();
@@ -774,15 +777,39 @@ function lavOpgaveliste() {
     });
     liste.append(li);
   }
+  // Byttebørsens par (Molekyler M1b). Et tryk skifter til Byttebørsen med det par.
+  const gruppe = document.createElement('li');
+  gruppe.className = 'opgave-gruppe';
+  gruppe.textContent = 'Byttebørsen';
+  liste.append(gruppe);
+  for (const o of OPGAVER_BYTTE) {
+    const li = document.createElement('li');
+    const løst = fremgang.erLøst(o.id);
+    li.className = løst ? 'løst' : '';
+    li.innerHTML = `<span class="flueben">${løst ? '★' : '☆'}</span><span class="opgave-titel"></span><small></small>`;
+    li.querySelector('.opgave-titel').textContent = o.titel.replace('Byttebørsen: ', '');
+    li.querySelector('small').textContent = løst ? o.fakta : o.tip;
+    li.addEventListener('click', () => {
+      lyd.klik();
+      $('opgaveliste').classList.add('skjult');
+      sætDel('bytte');
+      vælgPar(o.par);
+    });
+    liste.append(li);
+  }
 }
 
 function opdaterOpgave() {
-  const ider = OPGAVER.map((o) => o.id);
-  elementer.opgaveTæller.textContent = `${fremgang.antalLøste(ider)}/${OPGAVER.length}`;
+  // Tælleren tæller også Byttebørsens par (de står på Værkstedets kort i menuen)
+  const ider = [...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id);
+  elementer.opgaveTæller.textContent = `${fremgang.antalLøste(ider)}/${ider.length}`;
   const krav = elementer.opgaveKrav;
   krav.innerHTML = '';
   if (!aktivOpgave) {
-    elementer.opgaveTekst.textContent = 'Alle opgaver er klaret! Byg frit, og opdag flere grundstoffer.';
+    const mangler = OPGAVER_BYTTE.filter((o) => !fremgang.erLøst(o.id)).length;
+    elementer.opgaveTekst.textContent = mangler
+      ? `Alle byggeopgaver er klaret! Prøv Byttebørsen: ${mangler} par mangler.`
+      : 'Alle opgaver er klaret! Byg frit, og opdag flere grundstoffer.';
     return;
   }
   const o = aktivOpgave;
