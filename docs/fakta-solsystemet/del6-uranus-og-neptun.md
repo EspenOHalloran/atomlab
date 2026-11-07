@@ -95,6 +95,20 @@ Solens bredde på planeten (kolonne 15 i Horizons, set fra Jorden, `CENTER=500@3
 - **Mirandas klippe Verona Rupes** er ca. 20 km høj, en af de højeste i solsystemet. **U**.
 - **Navnene** kommer fra Shakespeare og Alexander Pope. **RS**.
 
+**De små indre måner, der kan støde sammen** (jeres spørgsmål 7. november 2026). Radius og afstand fra NSSDC (**S**):
+| Måne | Radius | Afstand | Omløb |
+|---|---|---|---|
+| Cressida | 41 km | 61.800 km | 0,4636 døgn |
+| Desdemona | 35 km | 62.700 km | 0,4737 døgn |
+| Cupid | 9 km | 74.390 km | 0,613 døgn |
+| Belinda | 45 km | 75.300 km | 0,6235 døgn |
+| Perdita | 13 km | 76.420 km | 0,638 døgn |
+- **Cressida og Desdemona** støder sandsynligvis sammen inden for 100 millioner år: Duncan og Lissauer (1997) fandt sammenstød mellem de indre måner på 4-100 millioner år, French og Showalter (2012) fandt det samme med Cressida og Desdemona som de første, og Ćuk m.fl. (2022) bekræfter det. **S** (Ćuk m.fl. 2022, "Cupid Is Not Doomed Yet: On the Stability of the Inner Moons of Uranus", arXiv:2205.14272, resumé og indledning).
+- **Cupid og Belinda:** French og Showalter (2012) fandt, at Belinda-gruppen (Cupid, Belinda og Perdita) bliver ustabil på ca. 100.000 år, oftest med et sammenstød mellem Belinda og Cupid. Ćuk m.fl. (2022) fandt med nyere baner, at en resonans 44 : 43 mellem Belinda og Perdita kan holde gruppen stabil i 50-100 millioner år. **S** (samme).
+- **Tidligere sammenstød:** Ćuk m.fl. foreslår, at de indre måner er samlet igen efter tidligere sammenstød og opløsning, "possibly hundreds of Myr ago". Det er et forslag, ikke bevist. **S** (samme).
+- **Cressida overhaler Desdemona** ca. hver 21,8. døgn (regnet: 1/(1/0,4636 − 1/0,4737)). **S** (regnet).
+- **Fælde:** "To af Uranus' måner støder snart sammen." "Snart" betyder her millioner af år, og det er de små indre måner, ikke de fem store. Og for Cupid er det ikke længere sikkert.
+
 **Triton** (NSSDC): radius 1.353,4 km, tæthed 2.050 kg/m³, afstand 354.760 km, omløb 5,877 døgn **baglæns** (hældning 157,3°), vender samme side mod Neptun. Den eneste store måne i solsystemet, der kredser baglæns. Opdaget 1846 af Lassell (17 dage efter Neptun, **RS**). **S**.
 - **Set fra Neptuns skyer er Triton 0,47° bred**, næsten som Månen set fra Jorden (0,53°). Neptun set fra Triton: 8,0°. **S** (regnet).
 - **Gejsere:** Voyager 2 så mørke skyer, der steg ca. 8 km op fra Tritons sydpolare kappe. **RS** (højden **U**).
