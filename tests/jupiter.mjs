@@ -2,7 +2,8 @@
 // rigtigt (pletten syd for ækvator, ingen søm, ingen sorte poler), Jupiter er fladtrykt, drejer mod uret set fra nord og
 // står stille i pause. J2: vindene (målt i Hubbles to omgange, testes først uden browser), at skyerne glider den rigtige
 // vej og står stille i pause, ⏩, kontakten "Vindene" og pletten (kameraet følger pletten, døgnet står stille, pletten
-// drejer mod uret). Ingen fejl i konsollen.
+// drejer mod uret). J3: månerne (omløbstiderne og resonansen, mod uret, stille i pause, rigtig størrelse tæt på, tryk og
+// besøg, kortene og skyggerne). Ingen fejl i konsollen.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { VIND, TRIN, PLET, vindVed } from '../js/data/vinde-jupiter.js';
 const UD = billedmappe('jupiter');
@@ -48,8 +49,8 @@ await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'jupiter' && ato
 tjek('Jupiter åbner, og kortet er hentet (1k i tests, i farver)', (await fm(() => atomlabTest.solsystem.fænomen().hentet())) && (await fm(() => atomlabTest.solsystem.fænomen().billeder()))['jupiter-1k.jpg'] === 'farver', JSON.stringify(await fm(() => atomlabTest.solsystem.fænomen().billeder())));
 tjek('sort himmel (ingen tågeskyer)', !(await fm(() => atomlabTest.solsystem.tåger())));
 const træ = await fm(() => atomlabTest.solsystem.træ());
-tjek('træet: Jupiter og Den Store Røde Plet (månerne kommer i J3, flybyen i J4)', træ.filter((p) => p.id).map((p) => p.id).join() === 'jupiter,plet' && træ[0].valgt, JSON.stringify(træ));
-tjek('Styr-boksen: kontakterne Vindene og Modlys', JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['Vindene', 'Modlys']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+tjek('træet: Jupiter, Den Store Røde Plet, Månerne og de fire store måner (flybyen kommer i J4)', træ.filter((p) => p.id).map((p) => p.id).join() === 'jupiter,plet,maaner,io,europa,ganymedes,callisto' && træ[0].valgt, JSON.stringify(træ));
+tjek('Styr-boksen: kontakterne Vindene, Modlys og Navne', JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['Vindene', 'Modlys', 'Navne']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
 const side = await fm(() => atomlabTest.solsystem.side());
 tjek('siden: fladtrykt, Billederne og "Ærligt talt" sidst', /fladtrykt/.test(side.tekst) && side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
 
@@ -134,6 +135,82 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, nu
 const d0 = await J(() => atomlabTest.solsystem.fænomen().drejning());
 await s.waitForFunction((d0) => atomlabTest.solsystem.fænomen().drejning() > d0 + 0.02, d0, { timeout: 15000, polling: 100 }).catch(() => {});
 tjek('tilbage til Jupiter: Jupiter drejer igen, og underteksten er væk', (await J(() => atomlabTest.solsystem.fænomen().drejning())) > d0 + 0.02 && !(await J(() => atomlabTest.solsystem.fase())) && !(await J(() => atomlabTest.solsystem.fænomen().plet().ved)));
+
+// ---------- Månerne (J3) ----------
+const Mf = () => J(() => atomlabTest.solsystem.fænomen().måner());
+const SEK = (9.925 * 3600) / 80; // sekunder i virkeligheden pr. sekund i programmet
+let mm = await Mf();
+const ved = (id, l = mm) => l.find((m) => m.id === id);
+tjek('månerne: Io, Europa, Ganymedes og Callisto', mm.map((m) => m.id).join() === 'io,europa,ganymedes,callisto', JSON.stringify(mm.map((m) => m.id)));
+const P = Object.fromEntries(mm.map((m) => [m.id, m.døgn]));
+tjek('månerne: omløbstiderne giver resonansen (Europa/Io 2,007, Ganymedes/Europa 2,015, Ganymedes/Io 4,04, NSSDC)', Math.abs(P.europa / P.io - 2.007) < 0.001 && Math.abs(P.ganymedes / P.europa - 2.015) < 0.001 && Math.abs(P.ganymedes / P.io - 4.044) < 0.001, JSON.stringify(P));
+const laplace = (l) => ((((ved('io', l).vinkel - 3 * ved('europa', l).vinkel + 2 * ved('ganymedes', l).vinkel) % 360) + 360) % 360);
+tjek('månerne: Laplace-relationen (Io − 3·Europa + 2·Ganymedes = 180°)', Math.abs(laplace(mm) - 180) < 0.5, laplace(mm));
+// Mod uret set fra nord: vinklen vokser, og Io går ca. 4 gange så hurtigt som Ganymedes
+await J(() => atomlabTest.solsystem.fænomen().sætMåneUr(0));
+const u0m = await J(() => atomlabTest.solsystem.fænomen().måneUr());
+const mA = await Mf();
+await s.waitForFunction((u) => atomlabTest.solsystem.fænomen().måneUr() > u + 2, u0m, { timeout: 15000, polling: 100 }).catch(() => {});
+const u1m = await J(() => atomlabTest.solsystem.fænomen().måneUr());
+const mB = await Mf();
+const fartM = (id) => ((((ved(id, mB).vinkel - ved(id, mA).vinkel) % 360) + 540) % 360 - 180) / (u1m - u0m);
+const forventet = (id) => (360 * SEK) / (P[id] * 86400);
+tjek('månerne kredser mod uret set fra nord med den rigtige fart i forhold til Jupiters døgn', ['io', 'europa', 'ganymedes', 'callisto'].every((id) => fartM(id) > 0 && Math.abs(fartM(id) / forventet(id) - 1) < 0.02) && Math.abs(laplace(mB) - 180) < 0.5, JSON.stringify({ io: fartM('io'), forventet: forventet('io'), laplace: laplace(mB) }));
+await s.click('#solsystemTid button[data-tid="pause"]');
+const pm0 = await J(() => atomlabTest.solsystem.fænomen().måneUr());
+await s.waitForTimeout(800);
+tjek('månerne står stille i pause', pm0 === (await J(() => atomlabTest.solsystem.fænomen().måneUr())));
+// Ved start står Io mellem Solen og Jupiter: dens skygge rammer skyerne, og den er sat i shaderen
+await J(() => atomlabTest.solsystem.fænomen().sætMåneUr(0));
+await s.waitForTimeout(200);
+mm = await Mf();
+tjek('Io\'s skygge rammer Jupiter ved start (og er sendt til shaderen), de andres ikke', ved('io').skyggePåJupiter && ved('io').skyggeSat && !ved('callisto').skyggePåJupiter, JSON.stringify(mm.map((m) => [m.id, m.skyggePåJupiter, m.skyggeSat])));
+tjek('ved hele Jupiter: månerne tegnes større (mindst 0,25° i radius), så de kan ses', mm.every((m) => m.tegnet >= 0.25 && m.tegnet >= m.rigtig), JSON.stringify(mm.map((m) => [m.id, m.tegnet.toFixed(3), m.rigtig.toFixed(3)])));
+await s.click('#solsystemTid button[data-tid="spil"]');
+// Månerne og deres kort
+await J(() => atomlabTest.solsystem.gåTil('maaner'));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => { const b = atomlabTest.solsystem.fænomen().billeder(); return ['io-2k.jpg', 'europa-2k.jpg', 'ganymedes-2k.jpg', 'callisto-2k.jpg', 'io-tone.jpg'].every((n) => b[n]); }, null, { timeout: 30000, polling: 200 }).catch(() => {});
+const bm = await J(() => atomlabTest.solsystem.fænomen().billeder());
+tjek('månernes kort er hentet (2k i tests, én kanal) og Io\'s tone', ['io', 'europa', 'ganymedes', 'callisto'].every((n) => bm[`${n}-2k.jpg`] === 'én kanal') && bm['io-tone.jpg'], JSON.stringify(bm));
+tjek('oversigten: siden "Månerne" med tal', (await J(() => atomlabTest.solsystem.side())).nøgle === 'jupiter:maaner');
+await s.waitForTimeout(400);
+await s.screenshot({ path: UD + '/4-maanerne.png' });
+// Tryk på Europa i oversigten
+const ep = await J(() => atomlabTest.solsystem.fænomen().månePlads('Europa'));
+await s.mouse.click(ep.x, ep.y);
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().visning() === 'europa', null, { timeout: 5000, polling: 100 }).catch(() => {});
+tjek('tryk på Europa besøger den', (await J(() => atomlabTest.solsystem.fænomen().visning())) === 'europa', JSON.stringify(ep));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver && atomlabTest.solsystem.fænomen().nær() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+const faseE = await J(() => atomlabTest.solsystem.fase());
+const sideE = await J(() => atomlabTest.solsystem.side());
+tjek('Europa: underteksten (under 160 tegn), egen side og stedet i træet', faseE?.titel === 'Europa' && faseE.tekst.length < 160 && sideE.nøgle === 'jupiter:europa' && sideE.sidst === 'Ærligt talt' && (await J(() => atomlabTest.solsystem.sted())) === 'europa', JSON.stringify({ faseE, n: sideE.nøgle }));
+const ue0 = await J(() => atomlabTest.solsystem.fænomen().måneUr());
+await s.waitForTimeout(700);
+tjek('månerne står stille, mens man besøger en måne', ue0 === (await J(() => atomlabTest.solsystem.fænomen().måneUr())));
+mm = await Mf();
+// Ved en måne har de andre den rigtige størrelse (Io set fra Europa er op til 0,72° bred, fakta del 5, 7c)
+const andre = mm.filter((m) => m.id !== 'europa');
+tjek('ved Europa: de andre måner i den rigtige størrelse (højst 0,8 pixel større), og ingen navne', andre.every((m) => m.tegnet - m.rigtig < 0.02 && !m.navn) && ved('io').rigtig * 2 > 0.1 && ved('io').rigtig * 2 < 0.8, JSON.stringify(andre.map((m) => [m.id, m.tegnet.toFixed(4), m.rigtig.toFixed(4)])));
+await s.screenshot({ path: UD + '/5-europa.png' });
+// En måne i Jupiters skygge: Månernes ur spoles frem, så den er i sollys, når man kommer
+const sol0 = ved('io', await (async () => { await J(() => atomlabTest.solsystem.fænomen().sætMåneUr(0)); return Mf(); })()).vinkel + 7;
+await J(() => atomlabTest.solsystem.gåTil('maaner'));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await J((t) => atomlabTest.solsystem.fænomen().sætMåneUr(t), (176 / 360) * (P.io * 86400) / SEK);
+await J(() => atomlabTest.solsystem.gåTil('io'));
+mm = await Mf();
+const fraSkygge = Math.abs((((ved('io').vinkel - sol0 - 180) % 360) + 540) % 360 - 180);
+tjek('besøg ved Io, der står i Jupiters skygge: månerne spoles frem, så Io er i sollys', fraSkygge >= 13.9 && Math.abs(laplace(mm) - 180) < 0.5, JSON.stringify({ fraSkygge, l: laplace(mm) }));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 10000, polling: 100 }).catch(() => {});
+await s.waitForTimeout(400);
+await s.screenshot({ path: UD + '/6-io.png' });
+await J(() => atomlabTest.solsystem.gåTil('jupiter'));
+await J(() => atomlabTest.solsystem.fænomen().hop());
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver && atomlabTest.solsystem.fænomen().nær() === 0, null, { timeout: 10000, polling: 100 }).catch(() => {});
+tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(await J(() => atomlabTest.solsystem.fase())) && (await J(() => atomlabTest.solsystem.fænomen().visning())) === 'jupiter');
 
 // ---------- Kortet (lavet af billeder/solsystem/lav_jupiter.py) ----------
 const kort = await fm(async () => {

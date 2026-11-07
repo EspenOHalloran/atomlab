@@ -32,7 +32,8 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 | [Faldgruber: kamera og layout](erfaringer/kamera-og-layout.md) | Kamera, layout, links i teksterne, dansk sortering, citater, testtal. |
 | [Faldgruber: tid, timere og tilstand](erfaringer/tid-timere-tilstand.md) | Pause, `dt`, timere, tilstand ved skærmskift. |
 | [Faldgruber: tests og værktøjer](erfaringer/tests-og-vaerktoejer.md) | Playwright, `koer-alle.mjs`, ventetider, processer. Også "Testsamlingen". |
-| [Planeter og måner](erfaringer/planeter-og-maaner.md) | Billeder, højdekort, net, luft, skyer, Phobos og Deimos, Jupiter. |
+| [Planeter og måner](erfaringer/planeter-og-maaner.md) | Billeder, højdekort, net, luft, skyer, Phobos og Deimos. |
+| [Jupiter](erfaringer/jupiter.md) | Kortet (OPAL og Cassini), vindene, pletten, månerne og skyggerne. |
 | [Kameraet, rejsen og flybyen](erfaringer/kamera-rejse-flyby.md) | Saturn i skala, kameraet ned til et sted, flybyerne, hop ved stop, hent på forhånd. |
 | [Stå på Mars](erfaringer/staa-paa-mars.md) | Landskabet, lyset, Gale, Jezero og rovernes fotos. |
 | [Shadere og lysbøjningen](erfaringer/shadere.md) | Det sorte hul: fysikken i Node først, lysets bane i shaderen, tynde ting under en pixel, `dFdx`, dybden, langsom testbrowser. |
