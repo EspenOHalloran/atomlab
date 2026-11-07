@@ -1,6 +1,7 @@
 // Jupiter (docs/plan-jupiter.md). J1: kloden og skelettet. J2: vindene og Den Store Røde Plet. J3: de fire store måner.
 // Kortet er Hubbles OPAL-kort fra december 2025 med farverne stemt af efter Cassini (billeder/solsystem/lav_jupiter.py).
-// Flybyen og effekterne ved polerne kommer i J4-J5. Tal fra docs/fakta-solsystemet.md, "Del 5: Jupiter".
+// J4: flybyen med 3 stop (oversigten, båndene og pletten). Effekterne ved polerne, ringene og stoppene ved sydpolen og i
+// Jupiters skygge kommer i J5. Tal fra docs/fakta-solsystemet.md, "Del 5: Jupiter".
 //
 // Systemet er én gruppe (1 enhed = 10.000 km, som Saturn), som rejsen (js/solsystem/rejse.js) skalerer og flytter.
 // Kortet: u = østlig længde / 360 (0° System III i venstre kant, øst til højre), rækkerne følger den parametriske
@@ -26,6 +27,8 @@ import { lavRejse } from '../solsystem/rejse.js';
 import { lavIsmåne } from '../solsystem/maane.js';
 import { måneForstørrelse } from '../solsystem/maanestr.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
+import { lavFlyby } from '../solsystem/flyby.js';
+import { kontakt, tid } from '../sideknap.js';
 import { hent, hentedeBilleder } from '../solsystem/hent.js';
 import { SIDE, SIDER } from '../data/sider/jupiter.js';
 import { PLET, vindVed } from '../data/vinde-jupiter.js';
@@ -139,13 +142,35 @@ const TRÆ = {
   grupper: [
     { navn: 'Steder', punkter: [{ id: 'plet', navn: 'Den Store Røde Plet', undertitel: 'En storm, lige så bred som Jorden', ikon: '🔴' }] },
     { navn: 'Måner', id: 'maaner', titel: 'Månerne', undertitel: 'De fire store måner i deres baner', punkter: MÅNER.map((m) => ({ id: m.id, navn: m.navn })) },
-  ], // flybyen og de andre steder kommer i J4 og J5
+  ], // polerne og ringene kommer i J5
 };
 // Underteksten ved pletten (bjælkens linje, under ca. 160 tegn). Faktatjekket i fakta-solsystemet.md, del 5.
 const PLET_STOP = {
   titel: 'Den Store Røde Plet',
   tekst: 'En storm, der er omtrent lige så bred som Jorden. Den drejer rundt mod uret på ca. 4½ døgn og er set sikkert siden 1831.',
 };
+const PLET_NU = `<p><b>Lige nu:</b> Her står Jupiters døgn stille, så pletten bliver i sollys. Vindene og pletten bevæger sig videre. Med ⏩ går det ${HURTIG} gange hurtigere.</p>`;
+
+// Flybyen (jeres svar 7. november 2026, plan-jupiter.md): 3 stop nu. Sydpolen og "I Jupiters skygge" kommer i J5 med
+// cyklonerne, nordlyset og ringene. id: stedet i træet (dets side står i panelet). tekst: underteksten (under ca. 160
+// tegn, faktatjekket i fakta-solsystemet.md, "Faktatjek J4"). nu: "Lige nu" i panelet ved stoppet.
+const TUR = [
+  {
+    id: 'maaner', titel: 'Jupiter og de fire store måner', knap: 'månerne',
+    // 317,83 Jordmasser mod ca. 128,8 for de andre planeter tilsammen (NSSDC): 2,47 gange
+    tekst: 'Jupiter vejer næsten 2½ gange så meget som alle de andre planeter tilsammen. De fire store måner fandt Galileo Galilei i januar 1610.',
+    nu: '<p><b>Lige nu:</b> Langt væk er månerne tegnet større, ellers kunne de ikke ses. Banerne har den rigtige størrelse.</p>',
+  },
+  {
+    id: 'jupiter', titel: 'Båndene og vindene', knap: 'båndene',
+    // Vores måling: ca. 149 m/s ved 24° N (js/data/vinde-jupiter.js), 149 · 3,6 = 536 km/t
+    tekst: 'De lyse og mørke bånd er skyer, som vindene trækker hver sin vej, mod øst og mod vest. Den hurtigste vind blæser ca. 540 km/t.',
+    nu: `<p><b>Lige nu:</b> Slå ${kontakt('Vindene')} til, så viser pilene vindene. ${tid('hurtig', 'Prøv ⏩')}</p>`,
+  },
+  { id: 'plet', ...PLET_STOP, knap: 'pletten', nu: PLET_NU },
+];
+const TUR_SLUT = '<p><b>Turen er slut.</b> Drej selv rundt, tryk på en måne for at besøge den, eller vælg et sted i listen.</p>';
+const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på månernes kort (som ved Saturn)
 
 export default {
   id: 'jupiter',
@@ -154,6 +179,7 @@ export default {
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Den største planet',
   træ: TRÆ,
+  citat: 'galileiJupiter',
   kamera: { retning: [0.2, 0.1, 1], radius: 21 },
   tal: [
     ['Jupiters bredde', 'ca. 143.000 km'],
@@ -254,10 +280,21 @@ export default {
         klar?.();
       }, { farve: false, kanaler: 1, rundt: false, fejl: klar });
     }
-    // Efter Jupiters kort hentes månernes, én ad gangen (som ved Saturn)
+    // Efter Jupiters kort hentes månernes, én ad gangen, og lægges i grafikkortet (som ved Saturn). Indtil de er klar,
+    // er "Start flyby" grå (højst FORHÅND_TID), så det ikke hakker under den første flyvning.
+    let flybyKlar = false;
+    let forhåndUr = null;
+    function flybyErKlar() {
+      if (flybyKlar || !aktiv) return;
+      flybyKlar = true;
+      clearTimeout(forhåndUr);
+      lavKnapper();
+    }
     function hentMåner(i = 0) {
-      if (!aktiv || i >= måner.length) return;
-      hentKort(måner[i], { forhånd: true, klar: () => hentMåner(i + 1) });
+      if (!aktiv) return;
+      if (i === 0) forhåndUr = setTimeout(flybyErKlar, FORHÅND_TID);
+      if (i >= måner.length) flybyErKlar();
+      else hentKort(måner[i], { forhånd: true, klar: () => hentMåner(i + 1) });
     }
 
     // Solen: en lille, skarp prik. Fra Jupiter er den ca. 0,10° bred (ca. 1/5 af det, vi ser fra Jorden).
@@ -355,7 +392,7 @@ export default {
       return kamPos.normalize().addScaledVector(Y, START.y).normalize();
     }
 
-    function tilPlet() {
+    function flyvTilPlet() {
       visning = 'plet';
       const til = døgnVedPlet();
       drejTur = { fra: døgn, til };
@@ -364,21 +401,27 @@ export default {
         fokus: () => pletVed().punkt, op: () => pletNu.op,
         afstand, retning: fraPlet(til, 180, 55), min: 0.12, max: Math.max(6, afstand * 1.25),
       });
+    }
+    function tilPlet() {
+      flyvTilPlet();
       fase(PLET_STOP.titel, PLET_STOP.tekst);
-      forklaring(`<p><b>Lige nu:</b> Her står Jupiters døgn stille, så pletten bliver i sollys. Vindene og pletten bevæger sig videre. Med ⏩ går det ${HURTIG} gange hurtigere.</p>`);
+      forklaring(PLET_NU);
     }
     // En retning ud fra en vinkel i ækvatorplanet og en højde over planet (grader), i systemets retninger
     const retningFra = (vinkel, højde) => new THREE.Vector3(Math.cos(højde * GRAD) * Math.cos(vinkel * GRAD), Math.sin(højde * GRAD), -Math.cos(højde * GRAD) * Math.sin(vinkel * GRAD)).applyQuaternion(jupiterG.quaternion);
     const fokusHjælp = new THREE.Vector3();
     const fokusPå = (m) => () => fokusHjælp.copy(m.plads.position).applyMatrix4(jupiterG.matrix);
     // Oversigten: alle fire baner, lidt fra oven
-    function tilMåner() {
+    function flyvTilMåner() {
       visning = 'maaner';
       drejTur = null;
-      fase(null);
-      forklaring('');
       const afstand = passer((MÅNER[3].afstand / S) * 1.06);
       rejse.flyv({ fokus: () => nul, afstand, retning: retningFra(solVinkel - 60, 30), min: R * 1.15, max: Math.max(1500, afstand * 1.5) });
+    }
+    function tilMåner() {
+      flyvTilMåner();
+      fase(null);
+      forklaring('');
       lavKnapper();
     }
     // Står månen i Jupiters skygge, spoles månernes ur frem, til den er ude (ellers er den helt sort og ser ud, som om
@@ -410,12 +453,32 @@ export default {
     }
     function gåTil(id) {
       if (id === visning) return;
+      flyby.afslut();
       if (id === 'plet') tilPlet();
       else if (id === 'jupiter') tilJupiter();
       else if (id === 'maaner') tilMåner();
       else if (erMåne(id)) besøg(måneMed(id));
     }
     let første = true; // i første billede står kameraet der med det samme (når panelerne har fået deres plads)
+
+    // ---------- Flybyen (js/solsystem/flyby.js): oversigten, båndene og pletten ----------
+    // Båndene: hele Jupiter med Solen næsten bag kameraet (ca. 20° fra), så hele skiven er lys
+    const BÅND = sol.clone().lerp(START, 0.4).setY(0.12).normalize();
+    function flyvTilStop(stop, nr) {
+      if (stop.id === 'maaner') flyvTilMåner();
+      else if (stop.id === 'plet') flyvTilPlet();
+      else {
+        visning = 'jupiter';
+        drejTur = null;
+        helJupiter(BÅND);
+      }
+      forklaring(stop.nu + (nr === TUR.length - 1 ? TUR_SLUT : ''));
+    }
+    const flyby = lavFlyby({ stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(), slut: TUR_SLUT });
+    function startTur() {
+      for (const m of måner) hentKort(m);
+      flyby.start();
+    }
 
     const styring = [];
     function lavKnapper() {
@@ -438,7 +501,7 @@ export default {
     let ned = null;
     const vedNed = (h) => { ned = { x: h.clientX, y: h.clientY }; };
     const vedOp = (h) => {
-      if (!ned || rejse.flyver || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
+      if (!ned || rejse.flyver || flyby.kører || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
       const r = lærred.getBoundingClientRect();
       peg.set(((h.clientX - r.left) / r.width) * 2 - 1, -((h.clientY - r.top) / r.height) * 2 + 1);
       stråle.setFromCamera(peg, kamera);
@@ -495,8 +558,9 @@ export default {
       const k = rejse.skala;
       const mål = visning === 'plet' || erMåne(visning) ? 1 : 0;
       nær = THREE.MathUtils.clamp(nær + Math.sign(mål - nær) * Math.min(dt, 0.1) * 1.2, 0, 1);
-      // Banerne ses kun langt ude (tæt på ville de skære tværs gennem billedet)
-      const baneLys = 0.22 * THREE.MathUtils.smoothstep(rejse.afstand, 35, 80) * (1 - nær);
+      // Banerne ses kun langt ude (tæt på ville de skære tværs gennem billedet). Hele Jupiter står ca. 33 enheder væk på
+      // pc og over 80 på tablet på højkant og telefon, oversigten over 500.
+      const baneLys = 0.22 * THREE.MathUtils.smoothstep(rejse.afstand, 130, 260) * (1 - nær);
       måner.forEach((m, i) => {
         m.bane.material.opacity = baneLys;
         m.bane.visible = baneLys > 0.005;
@@ -530,6 +594,9 @@ export default {
       styring,
       gåTil,
       sted: () => visning,
+      // Flybyen: øverst i træet og i bjælken i 3D-billedet
+      tur: { navn: 'Flyby', stop: TUR.length, klar: () => flybyKlar, kører: () => flyby.kører, start: startTur },
+      trin: () => flyby.bjælke(),
       hurtig: `tiden går ${HURTIG} gange hurtigere`,
       tempo: (t) => { hurtig = t === 'hurtig'; },
       opdater(dt) {
@@ -541,6 +608,8 @@ export default {
       },
       stop() {
         aktiv = false;
+        clearTimeout(forhåndUr);
+        flyby.afslut();
         lærred.removeEventListener('pointerdown', vedNed);
         lærred.removeEventListener('pointerup', vedOp);
         for (const m of måner) {
@@ -571,7 +640,8 @@ export default {
           planet.mesh.localToWorld(p);
           return [p.x, p.y, p.z];
         },
-        tur: () => ({ flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        flybyStop: () => TUR.map((t) => ({ id: t.id, titel: t.titel, tekst: t.tekst })),
         hop: () => rejse.hop(),
         sol: () => solNu.toArray(),
         sætUr: (t) => { vindTid = t; }, // til billeder: vindene og pletten på et bestemt tidspunkt
