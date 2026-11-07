@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Helium: 2 protoner (røde), 2 neutroner (blå) og 2 elektroner på én ring -->
+  <rect width="64" height="64" rx="14" fill="#03040c"/>
+  <circle cx="32" cy="32" r="22" fill="none" stroke="#5fe3ff" stroke-width="2.8" opacity=".85"/>
+  <circle cx="47.6" cy="16.4" r="4.4" fill="#5fe3ff"/>
+  <circle cx="16.4" cy="47.6" r="4.4" fill="#5fe3ff"/>
+  <circle cx="28" cy="28" r="6" fill="#ff5a5a"/>
+  <circle cx="36" cy="28" r="6" fill="#6b8cff"/>
+  <circle cx="28" cy="36" r="6" fill="#6b8cff"/>
+  <circle cx="36" cy="36" r="6" fill="#ff5a5a"/>
+</svg>
