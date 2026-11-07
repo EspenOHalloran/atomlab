@@ -355,4 +355,10 @@ export const ORDBOG = [
     // Jupiter: "hundreds of times brighter than those seen on Earth" (Webb 2025, Hubble 2016), fakta del 5, A7
     tekst: 'Lys højt oppe i luften nær polerne. Ladede partikler bliver ført ned mod polerne af planetens magnetfelt og rammer luften, så den lyser. På Jorden kommer partiklerne fra Solen. Jupiters nordlys er hundredvis af gange kraftigere end Jordens.',
   },
+  {
+    id: 'ultraviolet', ord: 'Ultraviolet lys',
+    former: ['ultraviolet', 'ultraviolette', 'uv-lys'],
+    // J5 (Jupiters nordlys). Bølgelængden ca. 10-400 nm, kortere end violet lys (ca. 380-400 nm)
+    tekst: 'Lys med kortere bølgelængde end det violette lys, vi kan se. Vores øjne kan ikke se det, men det er det, der giver solskoldning. Rumteleskopet Hubble kan se det, og Jupiters nordlys lyser kraftigt i ultraviolet lys.',
+  },
 ];

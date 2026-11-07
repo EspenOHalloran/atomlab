@@ -14,13 +14,16 @@
 // - pile: højst så mange rækker af pile, der viser vindene (sættes med sætPile).
 // - måner (Jupiter, J3): højst så mange måner, der kaster en skygge på planeten (sættes med sætMåner). Skyggen har en
 //   kerneskygge og en halvskygge efter Solens vinkel og afstanden fra månen.
+// - cykloner (Jupiter, J5): [{ retning, øst, a, spin }] i kuglens egne retninger (før den trykkes sammen): midten
+//   (enhedsvektor), en retning mod øst, radius (som en korde på enhedskuglen) og hvor hurtigt den drejer (radianer pr.
+//   sekund, positiv er mod uret set udefra). Skyerne i hver cyklon tegnes som spiraler, der drejer, oven på kortet.
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0 }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -31,6 +34,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   if (vind && detaljer) defines.DETALJER = '';
   if (pile) defines.PILE = pile;
   if (måner) defines.MAANER = måner;
+  if (cykloner?.length) defines.CYKLONER = cykloner.length;
   const mat = new THREE.ShaderMaterial({
     defines,
     uniforms: {
@@ -45,6 +49,8 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uPileR: { value: Array.from({ length: Math.max(1, pile) }, () => new THREE.Vector4()) },
       uMaane: { value: Array.from({ length: Math.max(1, måner) }, () => new THREE.Vector4()) },
       uSolVinkel: { value: 0.00089 },
+      uCyk: { value: (cykloner ?? [null]).map((c) => (c ? new THREE.Vector4(c.retning.x, c.retning.y, c.retning.z, c.a) : new THREE.Vector4())) },
+      uCykOest: { value: (cykloner ?? [null]).map((c) => (c ? new THREE.Vector4(c.øst.x, c.øst.y, c.øst.z, c.spin) : new THREE.Vector4())) },
       tKort: { value: kort },
       uHarKort: { value: kort ? 1 : 0 },
       tRing: { value: ringTekstur },
@@ -54,13 +60,16 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uAkse: { value: new THREE.Vector3(0, 1, 0) },
       uMidt: { value: new THREE.Vector3() },
       uTid: { value: 0 },
+      uEks: { value: 1 },
     },
     vertexShader: /* glsl */ `
       varying vec3 vNormal;
       varying vec3 vVerden;
       varying vec2 vUv;
+      varying vec3 vLokal;
       void main() {
         vUv = uv;
+        vLokal = normalize(position); // retningen på kuglen, før den trykkes sammen (drejer med planeten)
         vNormal = normalize(transpose(inverse(mat3(modelMatrix))) * normal); // rigtig normal på en fladtrykt kugle
         vec4 v = modelMatrix * vec4(position, 1.0);
         vVerden = v.xyz;
@@ -71,13 +80,19 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       ${RING_GLSL}
       #endif
       uniform sampler2D tKort;
-      uniform float uHarKort, uTid;
+      uniform float uHarKort, uTid, uEks;
       uniform vec3 uSol, uAkse, uMidt;
       varying vec3 vNormal;
       varying vec3 vVerden;
       varying vec2 vUv;
+      varying vec3 vLokal;
       float hash(float n) { return fract(sin(n) * 43758.5453); }
       float stoej(float x) { float i = floor(x); float f = fract(x); f = f * f * (3.0 - 2.0 * f); return mix(hash(i), hash(i + 1.0), f); }
+      float hash2(vec2 p) { p = fract(p * vec2(0.1031, 0.1030)); p += dot(p, p.yx + 33.33); return fract((p.x + p.y) * p.x); }
+      float stoej2(vec2 p) {
+        vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash2(i), hash2(i + vec2(1.0, 0.0)), f.x), mix(hash2(i + vec2(0.0, 1.0)), hash2(i + 1.0), f.x), f.y);
+      }
       #ifdef VIND
       uniform sampler2D tVind;
       uniform float uVindSkala, uFase;
@@ -86,11 +101,6 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uniform float uPletVinkel;
       #ifdef DETALJER
       uniform float uKortHoejde;
-      float hash2(vec2 p) { p = fract(p * vec2(0.1031, 0.1030)); p += dot(p, p.yx + 33.33); return fract((p.x + p.y) * p.x); }
-      float stoej2(vec2 p) {
-        vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
-        return mix(mix(hash2(i), hash2(i + vec2(1.0, 0.0)), f.x), mix(hash2(i + vec2(0.0, 1.0)), hash2(i + 1.0), f.x), f.y);
-      }
       // Fine skyer: støj i grader på overfladen, trukket ud mod øst og vest som båndene (3 lag, 0,12° til 0,03°)
       float fine(vec2 uv) {
         float b = (uv.y - 0.5) * 3.14159;
@@ -160,6 +170,38 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         return s;
       }
       #endif
+      #ifdef CYKLONER
+      uniform vec4 uCyk[CYKLONER]; // midten (enhedsvektor) og radius
+      uniform vec4 uCykOest[CYKLONER]; // retningen mod øst og drejningen (radianer pr. sekund, + er mod uret set udefra)
+      // Skyerne i cyklonerne: spiralarme, der drejer, og lidt uro imellem. Giver en faktor på lysstyrken (omkring 1).
+      float cykloner(vec3 p) {
+        float ud = 1.0;
+        for (int i = 0; i < CYKLONER; i++) {
+          vec3 c = uCyk[i].xyz;
+          float a = uCyk[i].w;
+          float d = dot(p, c);
+          if (d < 0.9) continue;
+          vec3 q = p - c * d;
+          vec3 e = uCykOest[i].xyz;
+          vec3 n = cross(c, e);
+          vec2 xy = vec2(dot(q, e), dot(q, n)) / a;
+          float r = length(xy);
+          if (r > 1.6) continue;
+          float th = atan(xy.y, xy.x) - uCykOest[i].w * uTid;
+          float fortegn = sign(uCykOest[i].w); // spiralerne vrides med drejningen
+          float seed = float(i) * 7.31;
+          // Spiralarme (logaritmisk spiral) brudt op af støj, så de ligner skybånd
+          float arm = th * (3.0 + mod(float(i), 2.0)) - fortegn * 4.5 * log(r + 0.04) + seed;
+          float s = 0.5 + 0.5 * sin(arm + 1.6 * stoej2(xy * 3.0 + seed));
+          s = mix(s, stoej2(xy * 9.0 + seed), 0.3);
+          float kappe = 1.0 - smoothstep(0.55, 1.05, r); // skyerne i cyklonen
+          float kant = smoothstep(0.8, 1.05, r) * (1.0 - smoothstep(1.05, 1.5, r)); // en mørkere kant om den
+          float oeje = 1.0 - smoothstep(0.0, 0.12, r); // midten
+          ud *= 1.0 + kappe * (s - 0.4) * 1.1 - kant * 0.22 + oeje * 0.15;
+        }
+        return ud;
+      }
+      #endif
       #ifdef PILE
       uniform float uPile;
       uniform vec4 uPileR[PILE]; // for hver række: bredden (v), farten (uv pr. sekund), længden (grader) og antal pile
@@ -214,6 +256,18 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         #else
         farve = uHarKort > 0.5 ? texture2D(tKort, vUv).rgb : baand(vUv);
         #endif
+        #ifdef CYKLONER
+        // Ved polerne (fra ca. 76°): Junos cykloner og lidt uro i skyerne imellem dem
+        // Kortet er uskarpt ved polerne og samler sig i striber mod polen, så her bruges en udglattet farve (et lille
+        // niveau i kortet) med uro i skyerne
+        float pol = smoothstep(0.955, 0.985, abs(vLokal.y));
+        if (pol > 0.0) {
+          if (uHarKort > 0.5) farve = mix(farve, textureLod(tKort, vec2(0.5, vUv.y), 7.0).rgb, smoothstep(0.97, 0.99, abs(vLokal.y)));
+          vec2 pp = vLokal.xz * 40.0;
+          float uro = 0.8 + 0.4 * (0.5 * stoej2(pp) + 0.3 * stoej2(pp * 2.7 + 5.0) + 0.2 * stoej2(pp * 7.3 + 11.0));
+          farve *= mix(1.0, cykloner(vLokal) * uro, pol);
+        }
+        #endif
         float lys = max(dot(N, uSol), 0.0);
         // Blød overgang ved grænsen mellem dag og nat (lyset spredes i de øverste skyer)
         lys = smoothstep(-0.05, 0.35, dot(N, uSol)) * (0.35 + 0.65 * lys);
@@ -237,7 +291,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         float rand = 0.75 + 0.25 * max(dot(N, V), 0.0);
         // I modlys lyser atmosfæren som en tynd ring i kanten (lyset spredes fremad i de øverste lag)
         float kant = pow(1.0 - max(dot(N, V), 0.0), 6.0) * pow(max(dot(-V, uSol), 0.0), 3.0);
-        vec3 ud = farve * lys * mix(0.12, 1.0, skygge) * rand * 0.98 + vec3(1.0, 0.85, 0.6) * kant * 0.9;
+        vec3 ud = farve * lys * mix(0.12, 1.0, skygge) * rand * 0.98 * uEks + vec3(1.0, 0.85, 0.6) * kant * 0.9;
         #ifdef PILE
         if (uPile > 0.0) {
           vec4 p = pile(vUv);
@@ -270,6 +324,10 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       mat.uniforms.uPile.value = styrke;
     },
     // Månernes skygger: [{ midt (verden), r (verden) }], højst måner
+    // Billedet gjort lysere (fx ved polerne, hvor Solen står lavt): 1 er det normale
+    sætEksponering(e) { mat.uniforms.uEks.value = e; },
+    // Cyklonerne drejer med planetens ur (uTid)
+    cykloner: cykloner ?? [],
     sætMåner(liste) {
       mat.uniforms.uMaane.value.forEach((v, i) => { const m = liste[i]; if (m) v.set(m.midt.x, m.midt.y, m.midt.z, m.r); else v.set(0, 0, 0, 0); });
     },

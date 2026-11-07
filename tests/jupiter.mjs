@@ -3,9 +3,13 @@
 // står stille i pause. J2: vindene (målt i Hubbles to omgange, testes først uden browser), at skyerne glider den rigtige
 // vej og står stille i pause, ⏩, kontakten "Vindene" og pletten (kameraet følger pletten, døgnet står stille, pletten
 // drejer mod uret). J3: månerne (omløbstiderne og resonansen, mod uret, stille i pause, rigtig størrelse tæt på, tryk og
-// besøg, kortene og skyggerne). Ingen fejl i konsollen.
+// besøg, kortene og skyggerne). J4: flybyen, siderne og citatet. J5: cyklonerne ved polerne, nordlyset (kun med
+// kontakten "Ultraviolet", målt i billedet), ringene (næsten usynlige forfra og synlige i Jupiters skygge, målt i
+// billedet) og stoppene ved sydpolen og i skyggen. Ingen fejl i konsollen.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { VIND, TRIN, PLET, vindVed } from '../js/data/vinde-jupiter.js';
+import { POLER, cykloner as cyklonListe, omløb } from '../js/data/poler-jupiter.js';
+import { RINGE, tauVed } from '../js/data/ringe-jupiter.js';
 const UD = billedmappe('jupiter');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -31,6 +35,22 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
   tjek('pletten i Hubbles kort: ved 21-25° S, bredere end høj, 10.000-16.000 km lang', PLET.bredde < -21 && PLET.bredde > -25 && PLET.halvLængde > PLET.halvBredde && PLET.halvLængde * 2 * 1162 > 10000 && PLET.halvLængde * 2 * 1162 < 16000, JSON.stringify(PLET));
 }
 
+// ---------- Polerne og ringene uden browser (J5) ----------
+{
+  const n = cyklonListe('nord'), sy = cyklonListe('syd');
+  tjek('cyklonerne: 8 om 1 ved nordpolen og 5 om 1 ved sydpolen (Juno)', n.length === 9 && sy.length === 6 && n[0].bredde === 90 && sy[0].bredde === -90, JSON.stringify([n.length, sy.length]));
+  tjek('cyklonerne: ringene ved ca. 84° N og S, lige langt imellem', n.slice(1).every((c) => c.bredde === 84) && sy.slice(1).every((c) => c.bredde === -84) && Math.abs(((n[2].længde - n[1].længde + 360) % 360) - 45) < 1e-9 && Math.abs(((sy[2].længde - sy[1].længde + 360) % 360) - 72) < 1e-9);
+  tjek('cyklonerne: 4.000-7.000 km brede, størst ved sydpolen', [...n, ...sy].every((c) => c.bred >= 4000 && c.bred <= 7000) && sy[1].bred > n[1].bred);
+  // Ringen af cykloner: Afstanden mellem to naboer (langs ringen ved 84°, ca. 1.250 km pr. grad nær polen) skal være
+  // større end deres bredde, så de ikke overlapper
+  const iRing = (p) => (2 * Math.PI * 6 * 1250) / p.antal;
+  tjek('cyklonerne: naboerne i ringen overlapper ikke', iRing(POLER.nord) > POLER.nord.bred && iRing(POLER.syd) > POLER.syd.bred, [iRing(POLER.nord), iRing(POLER.syd)].join());
+  tjek('cyklonerne: én omgang på ca. 15-30 timer (vinden ca. 80-85 m/s)', [POLER.nord, POLER.syd].every((p) => omløb(p) / 3600 > 15 && omløb(p) / 3600 < 30), [omløb(POLER.nord) / 3600, omløb(POLER.syd) / 3600].join());
+  tjek('ringene (NSSDC): glorien, hovedringen, Amalthea- og Thebe-ringen', RINGE.map((r) => r.navn).join() === 'Glorien,Hovedringen,Amalthea-ringen,Thebe-ringen');
+  tjek('ringene: τ ca. 5 · 10⁻⁶ i hovedringen, ca. 10⁻⁷ i de to yderste, og intet inden for glorien og uden for 280.000 km', Math.abs(tauVed(126000) - 5e-6) < 1e-7 && Math.abs(tauVed(150000) - 1e-7) < 1e-9 && Math.abs(tauVed(200000) - 1e-7) < 1e-9 && tauVed(89000) === 0 && tauVed(281000) === 0, [tauVed(126000), tauVed(150000), tauVed(200000)].join());
+  tjek('ringene: hovedringen har en skarp ydre kant ved Adrastea (128.940 km)', tauVed(128500) > 4e-6 && tauVed(129300) < 2e-7, [tauVed(128500), tauVed(129300)].join());
+}
+
 const b = await chromium.launch({ args: ARGS });
 const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
 s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
@@ -49,14 +69,14 @@ await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'jupiter' && ato
 tjek('Jupiter åbner, og kortet er hentet (1k i tests, i farver)', (await fm(() => atomlabTest.solsystem.fænomen().hentet())) && (await fm(() => atomlabTest.solsystem.fænomen().billeder()))['jupiter-1k.jpg'] === 'farver', JSON.stringify(await fm(() => atomlabTest.solsystem.fænomen().billeder())));
 tjek('sort himmel (ingen tågeskyer)', !(await fm(() => atomlabTest.solsystem.tåger())));
 const træ = await fm(() => atomlabTest.solsystem.træ());
-tjek('træet: "▶ Flyby · 3 stop" øverst, så Jupiter, Den Store Røde Plet, Månerne og de fire store måner', træ.map((p) => p.id).join() === 'tur,jupiter,plet,maaner,io,europa,ganymedes,callisto' && træ[0].navn.includes('Flyby · 3 stop') && træ[1].valgt, JSON.stringify(træ));
+tjek('træet: "▶ Flyby · 5 stop" øverst, så Jupiter, stederne (pletten, polerne og ringene), Månerne og de fire store måner', træ.map((p) => p.id).join() === 'tur,jupiter,plet,sydpol,nordpol,ringe,maaner,io,europa,ganymedes,callisto' && træ[0].navn.includes('Flyby · 5 stop') && træ[1].valgt, JSON.stringify(træ));
 // "Start flyby" er grå, indtil månernes kort er hentet og lagt i grafikkortet (som ved Saturn)
 const flybyKlar = await s.waitForFunction(() => atomlabTest.solsystem.knapper()[0] === '▶ Start flyby', null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
-tjek('"Start flyby" bliver aktiv, når månernes kort er hentet, og Styr-boksen har kontakterne Vindene, Modlys og Navne', flybyKlar && JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['▶ Start flyby', 'Vindene', 'Modlys', 'Navne']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+tjek('"Start flyby" bliver aktiv, når månernes kort er hentet, og Styr-boksen har kontakterne Vindene, Modlys, Ultraviolet og Navne', flybyKlar && JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['▶ Start flyby', 'Vindene', 'Modlys', 'Ultraviolet', 'Navne']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
 const citat = await fm(() => { const c = document.getElementById('solsystemCitat'); return { vist: c && !c.hidden, tekst: c?.textContent ?? '', latin: c?.querySelector('.citat-tekst')?.title ?? '' }; });
 tjek('Jupiter viser citatet af Galilei med den latinske ordlyd fra 1610', citat.vist && citat.tekst.includes('Galileo Galilei') && citat.latin.startsWith('Die itaque septima'), JSON.stringify(citat));
 const side = await fm(() => atomlabTest.solsystem.side());
-tjek('siden: fladtrykt, båndene, det indre, "mislykket stjerne", kometerne, Billederne og "Ærligt talt" sidst', ['Hvorfor er Jupiter fladtrykt?', 'Hvorfor har Jupiter bånd?', 'Hvad er inden i?', 'Er Jupiter en mislykket stjerne?', 'Beskytter Jupiter Jorden?'].every((t) => side.bokse.includes(t)) && /fladtrykt/.test(side.tekst) && side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
+tjek('siden: fladtrykt, båndene, det indre, "mislykket stjerne", kometerne, polerne, nordlyset, Billederne og "Ærligt talt" sidst', ['Hvorfor er Jupiter fladtrykt?', 'Hvorfor har Jupiter bånd?', 'Hvad er inden i?', 'Er Jupiter en mislykket stjerne?', 'Beskytter Jupiter Jorden?', 'Hvad er der ved polerne?', 'Har Jupiter nordlys?'].every((t) => side.bokse.includes(t)) && /fladtrykt/.test(side.tekst) && side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
 
 // ---------- Formen og drejningen ----------
 const form = await fm(() => atomlabTest.solsystem.fænomen().form());
@@ -219,12 +239,12 @@ tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(aw
 // ---------- Flybyen (J4): oversigten, båndene og pletten ----------
 {
   const stop = await J(() => atomlabTest.solsystem.fænomen().flybyStop());
-  tjek('flybyen: 3 stop (oversigten, båndene og pletten), sydpolen og skyggen kommer i J5', stop.map((t) => t.id).join() === 'maaner,jupiter,plet', JSON.stringify(stop.map((t) => t.id)));
+  tjek('flybyen: 5 stop (oversigten, båndene, pletten, sydpolen og skyggen)', stop.map((t) => t.id).join() === 'maaner,jupiter,plet,sydpol,ringe', JSON.stringify(stop.map((t) => t.id)));
   tjek('flybyen: alle undertekster er under 160 tegn og slutter med et punktum', stop.every((t) => t.tekst.length < 160 && t.tekst.endsWith('.')), JSON.stringify(stop.map((t) => t.tekst.length)));
   await s.click('#solsystemTræ button[data-tur]');
   tjek('flybyen startes fra træet, og punktet lyser', (await J(() => atomlabTest.solsystem.træ()))[0].valgt && (await J(() => atomlabTest.solsystem.fænomen().tur().trin)) === 0);
   const set = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 5; i++) {
     await J(() => atomlabTest.solsystem.fænomen().hop());
     await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 15000, polling: 100 }).catch(() => {});
     await s.waitForTimeout(400); // panelet opdateres fire gange i sekundet
@@ -235,12 +255,12 @@ tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(aw
       afstand: atomlabTest.solsystem.fænomen().tur().afstand,
     })));
     await s.screenshot({ path: `${UD}/7-flyby-${i + 1}.png` });
-    if (i < 2) await s.click('#solsystemBjælke button:has-text("Næste")');
+    if (i < 4) await s.click('#solsystemBjælke button:has-text("Næste")');
   }
-  tjek('flybyen: stoppene i rækkefølge med 3 prikker, og panelet viser stedets side', set.every((x, i) => x.fase.includes(stop[i].titel) && x.prikker === 3 && x.visning === stop[i].id) && set[0].side === 'jupiter:maaner' && set[1].side === 'jupiter' && set[2].side === 'jupiter:plet', JSON.stringify(set.map((x) => [x.fase.slice(0, 25), x.prikker, x.visning, x.side])));
-  tjek('flybyen: oversigten langt ude, båndene ved hele Jupiter, pletten tæt på', set[0].afstand > 150 && set[1].afstand > 10 && set[1].afstand < 60 && set[2].afstand < 8, JSON.stringify(set.map((x) => x.afstand)));
-  tjek('flybyen: "Lige nu" ved båndene har kontakten Vindene og ⏩, og turen er slut ved pletten', set[1].knapper.join() === 'Vindene,hurtig' && set[0].trin === 0 && set[1].trin === 1 && set[2].trin === null && /Turen er slut/.test(set[2].lige) && /døgn stille/.test(set[2].lige), JSON.stringify(set.map((x) => [x.trin, x.knapper, x.lige.slice(0, 40)])));
-  tjek('flybyen: ved pletten står Jupiters døgn stille, og Solen står over pletten', (await J(() => atomlabTest.solsystem.fænomen().plet())).ved && (await J(() => atomlabTest.solsystem.fænomen().plet())).solHøjde > 30);
+  tjek('flybyen: stoppene i rækkefølge med 5 prikker, og panelet viser stedets side', set.every((x, i) => x.fase.includes(stop[i].titel) && x.prikker === 5 && x.visning === stop[i].id && x.side === (stop[i].id === 'jupiter' ? 'jupiter' : `jupiter:${stop[i].id}`)), JSON.stringify(set.map((x) => [x.fase.slice(0, 25), x.prikker, x.visning, x.side])));
+  tjek('flybyen: oversigten langt ude, båndene ved hele Jupiter, pletten og sydpolen tæt på, skyggen længere ude', set[0].afstand > 150 && set[1].afstand > 10 && set[1].afstand < 60 && set[2].afstand < 8 && set[3].afstand < 8 && set[4].afstand > 30, JSON.stringify(set.map((x) => x.afstand)));
+  tjek('flybyen: "Lige nu" ved båndene har Vindene og ⏩, ved pletten står døgnet stille, ved sydpolen og i skyggen kontakten Ultraviolet, og turen er slut i skyggen', set[1].knapper.join() === 'Vindene,hurtig' && /døgn stille/.test(set[2].lige) && set[3].knapper.includes('Ultraviolet') && set[4].knapper.includes('Ultraviolet') && set.slice(0, 4).every((x, i) => x.trin === i) && set[4].trin === null && /Turen er slut/.test(set[4].lige), JSON.stringify(set.map((x) => [x.trin, x.knapper, x.lige.slice(0, 40)])));
+  tjek('flybyen: i skyggen er Solen skjult bag Jupiter', (await J(() => atomlabTest.solsystem.fænomen().solSkjult())).skjult, JSON.stringify(await J(() => atomlabTest.solsystem.fænomen().solSkjult())));
   // "‹" fra en ny tur og ✕ midt på turen
   await s.click('#solsystemBjælke button:has-text("Start flyby")');
   await J(() => atomlabTest.solsystem.fænomen().hop());
@@ -262,6 +282,117 @@ tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(aw
   tjek('et sted i træet midt på turen stopper turen og besøger stedet', (await J(() => atomlabTest.solsystem.fænomen().tur().trin)) === null && (await J(() => atomlabTest.solsystem.fase()))?.titel === 'Europa');
   await J(() => atomlabTest.solsystem.gåTil('jupiter'));
   await J(() => atomlabTest.solsystem.fænomen().hop());
+}
+
+// ---------- Polerne, nordlyset og ringene (J5) ----------
+{
+  // Billedet i 3D-området: summen af lyset og antallet af lilla pixel (nordlyset), målt i et skærmbillede
+  const måleBillede = async (navn) => {
+    const r = await J(() => { const k = document.getElementById('solsystemVindue').getBoundingClientRect(); return { x: k.left, y: k.top, w: k.width, h: k.height }; });
+    const png = (await s.screenshot({ clip: { x: r.x, y: r.y + r.h * 0.3, width: r.w, height: r.h * 0.4 }, path: navn ? `${UD}/maal-${navn}.png` : undefined })).toString('base64');
+    return J(async (png) => {
+      const im = new Image();
+      im.src = 'data:image/png;base64,' + png;
+      await im.decode();
+      const c = document.createElement('canvas');
+      c.width = im.width; c.height = im.height;
+      const g = c.getContext('2d');
+      g.drawImage(im, 0, 0);
+      const d = g.getImageData(0, 0, c.width, c.height).data;
+      let lilla = 0, sum = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        sum += d[i] + d[i + 1] + d[i + 2];
+        if (d[i + 2] > d[i + 1] + 40 && d[i] > d[i + 1] + 15) lilla++;
+      }
+      return { lilla, sum: sum / (d.length / 4) };
+    }, png);
+  };
+  // Hvor mange flere pixel i båndet om ringenes plan, der er tydeligt lysere (over 40 i r + g + b) med ringene end uden
+  const båndBillede = async (navn) => {
+    const r = await J(() => { const k = document.getElementById('solsystemVindue').getBoundingClientRect(); return { x: k.left, y: k.top, w: k.width, h: k.height }; });
+    return (await s.screenshot({ clip: { x: r.x, y: r.y + r.h * 0.3, width: r.w, height: r.h * 0.4 }, path: `${UD}/maal-${navn}.png` })).toString('base64');
+  };
+  const forskel = (a, b) => J(async ([a, b]) => {
+    const læs = async (png) => {
+      const im = new Image();
+      im.src = 'data:image/png;base64,' + png;
+      await im.decode();
+      const c = document.createElement('canvas');
+      c.width = im.width; c.height = im.height;
+      c.getContext('2d').drawImage(im, 0, 0);
+      return c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    };
+    const da = await læs(a), db = await læs(b);
+    let n = 0;
+    // Ringene lægger kun lys til: pixel, der bliver lysere, minus pixel, der bliver mørkere (fx stjerner, der flytter sig)
+    for (let i = 0; i < da.length; i += 4) { const f = da[i] + da[i + 1] + da[i + 2] - db[i] - db[i + 1] - db[i + 2]; if (f > 40) n++; else if (f < -40) n--; }
+    return n;
+  }, [a, b]);
+  const vent = () => s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 15000, polling: 100 }).catch(() => {});
+  const cyk = await J(() => atomlabTest.solsystem.fænomen().cykloner());
+  tjek('cyklonerne er sendt til shaderen: 9 ved nordpolen og 6 ved sydpolen', cyk.filter((c) => c.pol === 'nord').length === 9 && cyk.filter((c) => c.pol === 'syd').length === 6 && (await J(() => atomlabTest.solsystem.fænomen().cyklonerSat())) === 15);
+  // Cykloner drejer mod uret set fra oven på den nordlige halvkugle og med uret på den sydlige
+  tjek('cyklonerne drejer mod uret ved nordpolen og med uret ved sydpolen', cyk.every((c) => (c.pol === 'nord' ? c.spin > 0 : c.spin < 0)), JSON.stringify(cyk.map((c) => c.spin)));
+  // Sydpolen
+  await J(() => atomlabTest.solsystem.gåTil('sydpol'));
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await vent();
+  await s.waitForTimeout(400);
+  const faseS = await J(() => atomlabTest.solsystem.fase());
+  const sideS = await J(() => atomlabTest.solsystem.side());
+  const solS = await J(() => atomlabTest.solsystem.fænomen().solVedPol('sydpol'));
+  tjek('sydpolen: undertekst under 160 tegn, egen side, og Solen står lavt over polen (0-5°)', faseS?.titel === 'Sydpolen' && faseS.tekst.length < 160 && sideS.nøgle === 'jupiter:sydpol' && sideS.sidst === 'Ærligt talt' && solS > 0 && solS < 5, JSON.stringify({ faseS, n: sideS.nøgle, solS }));
+  const dS = await J(() => atomlabTest.solsystem.fænomen().drejning());
+  await s.waitForTimeout(800);
+  tjek('sydpolen: Jupiters døgn står stille', dS === (await J(() => atomlabTest.solsystem.fænomen().drejning())));
+  // Nordlyset ses kun med kontakten "Ultraviolet"
+  const uden = await måleBillede();
+  await J(() => atomlabTest.solsystem.trykPå('Ultraviolet'));
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().nordlys().styrke === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  const med = await måleBillede();
+  const nl = await J(() => atomlabTest.solsystem.fænomen().nordlys());
+  tjek('nordlyset: ingen lilla pixel uden kontakten, mange med "Ultraviolet"', uden.lilla < 20 && med.lilla > 500 && nl.synlig, JSON.stringify({ uden: uden.lilla, med: med.lilla }));
+  tjek('nordlyset: Io\'s fodspor på den nordlige og den sydlige halvkugle', nl.fod[0][1] > 0.5 && nl.fod[1][1] < -0.5, JSON.stringify(nl.fod));
+  await s.screenshot({ path: UD + '/8-sydpol-uv.png' });
+  await J(() => atomlabTest.solsystem.trykPå('Ultraviolet'));
+  await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().nordlys().synlig, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  tjek('nordlyset: væk igen, når kontakten slås fra', !(await J(() => atomlabTest.solsystem.fænomen().nordlys().synlig)));
+  // Ringene forfra (hele Jupiter): næsten usynlige
+  await J(() => atomlabTest.solsystem.gåTil('jupiter'));
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await vent();
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().eksponering() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  await s.click('#solsystemTid button[data-tid="pause"]');
+  await J(() => atomlabTest.solsystem.fænomen().drejSelv(false));
+  await s.waitForTimeout(300);
+  const forfraMed = await båndBillede('forfraMed');
+  await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(false));
+  await s.waitForTimeout(300);
+  const forfraUden = await båndBillede('forfraUden');
+  await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(true));
+  await J(() => atomlabTest.solsystem.fænomen().drejSelv(true));
+  // I Jupiters skygge: Solen er skjult, og ringene lyser op
+  await J(() => atomlabTest.solsystem.gåTil('ringe'));
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await vent();
+  await s.waitForTimeout(300);
+  const bagMed = await båndBillede('bagMed');
+  await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(false));
+  await s.waitForTimeout(300);
+  const bagUden = await båndBillede('bagUden');
+  await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(true));
+  const ændretForfra = await forskel(forfraMed, forfraUden), ændretBag = await forskel(bagMed, bagUden);
+  tjek(`ringene: næsten usynlige forfra (${ændretForfra} pixel lysere), tydelige i Jupiters skygge (${ændretBag})`, ændretForfra < 50 && ændretBag > 1000, JSON.stringify({ ændretForfra, ændretBag }));
+  await s.click('#solsystemTid button[data-tid="spil"]');
+  const sk0 = await J(() => atomlabTest.solsystem.fænomen().solSkjult());
+  await s.waitForTimeout(2500);
+  const sk1 = await J(() => atomlabTest.solsystem.fænomen().solSkjult());
+  const sideR = await J(() => atomlabTest.solsystem.side());
+  tjek('skyggen: Solen bliver skjult (kameraet drejer ikke af sig selv), og siden "Ringene"', sk0.skjult && sk1.skjult && Math.abs(sk0.vinkel - sk1.vinkel) < 0.05 && sideR.nøgle === 'jupiter:ringe', JSON.stringify({ sk0, sk1, n: sideR.nøgle }));
+  await s.screenshot({ path: UD + '/9-skyggen.png' });
+  await J(() => atomlabTest.solsystem.gåTil('jupiter'));
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await vent();
 }
 
 // ---------- Knapperne i teksterne (siden i lag) ----------
