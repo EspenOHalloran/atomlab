@@ -20,10 +20,10 @@ Byg verdenerne i menuens ring efter `docs/plan-verdener.md`.
 
 **K4 (eget go):**
 - Ringen viser verdenerne. Delene under den forreste verden er små kort, man trykker direkte på. En verden med kun én del åbner delen direkte.
-- Byttebørsen skal kunne åbnes direkte (fx `#vaerksted/bytte`, efter jeres svar). Rør kun den linje i `js/vaerksted.js`, der vælger delen, og sig det i sporet Molekyler.
+- Molekylerne ligger i Værkstedet (fanen "Byg et molekyle", sporet Molekyler). Verdenen "Atomer og molekyler" har derfor delene Atomværkstedet og Det periodiske system. Rør ikke `js/vaerksted.js`.
 - Bevægelsen (fjederen, kastet, svæven) og den billige udgave på tabletten skal være som i K1/K2.
 - Udvid `tests/karrusel.mjs`. Kør `node tests/koer-alle.mjs --ændret`. Skærmbilleder på pc, tablet begge veje og telefon.
 - "Ikke afprøvet": Finder man delene under verdenen? Er det tydeligt, at man skal trykke på den lille del og ikke på verdenen?
 - `/faerdig` til sidst.
 
-**Andre sessioner kører samtidig** (se "Parallelle sessioner" i CLAUDE.md). Dit spor er **Menuen** (`docs/lige-nu/menuen.md`). Du ejer `js/karrusel.js`, `tests/karrusel.mjs`, `docs/plan-menu.md`, `docs/plan-verdener.md` og menuens blok i `js/main.js`, `index.html` og `style.css` (sidst i filen). Rør ikke de andre skærmes filer, bortset fra linjen i `js/vaerksted.js` nævnt ovenfor. Merge `main` ind, når du starter, og igen lige før dokumenterne rettes og PR'en laves.
+**Andre sessioner kører samtidig** (se "Parallelle sessioner" i CLAUDE.md). Dit spor er **Menuen** (`docs/lige-nu/menuen.md`). Du ejer `js/karrusel.js`, `tests/karrusel.mjs`, `docs/plan-menu.md`, `docs/plan-verdener.md` og menuens blok i `js/main.js`, `index.html` og `style.css` (sidst i filen). Rør ikke de andre skærmes filer. Merge `main` ind, når du starter, og igen lige før dokumenterne rettes og PR'en laves.

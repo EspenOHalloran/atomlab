@@ -122,6 +122,8 @@ Senere kan det også blive et trin i delen Liv.
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |
 
 ## 7. Spørgsmål til jer
+**Jeres svar om fanerne og navnet (7. november 2026):** Fra 7. november 2026 (drøftelsen af menuen): **Fanerne øverst i Værkstedet bliver "Byg et atom | Byg et molekyle".** Inde i "Byg et molekyle" vælger man mellem to måder: **"Del elektroner"** (Byg molekyler, M2, standard, når den findes) og **"Giv elektroner"** (det, der hed Byttebørsen). Navnet Byttebørsen forsvinder fra programmet (fanen, hjælpens knap "Prøv det i Byttebørsen", overskrifter og tests). Teksten i "Giv elektroner" siger ærligt, at salt ender som en krystal (et gitter) og ikke som separate molekyler. Id'erne i koden (`bytte`, `bytte-` i fremgangen) må blive, så de gemte stjerner ikke går tabt.
+
 **Jeres svar til M2 (7. november 2026):** Trin 0 (faktagrundlaget med xhigh og "M2 i dag") laves i sin egen session. Byggeriet deles i M2a (paletten, bindingerne, formen, det ulovlige og navnene) og M2b (ladningerne, kortene, opgaverne og fremgangen) med hver sit go og sin egen PR. Opgaverne tæller med på Værkstedets kort i menuen, og der kommer intet nyt kort og ingen ny linje. Prompten står i [prompt-molekyler-m2.md](prompt-molekyler-m2.md).
 
 **Jeres svar (23. oktober 2026):** i Atomværkstedet med knapper øverst, atomerne trækkes med fingeren eller musen, elektronerne vises som prikker på ringe, og Byttebørsen bygges først. Navnene "Byttebørsen" og "Byg molekyler" bruges, indtil I siger andet. Næste skridt er M1 (Byttebørsen), når I giver et go.

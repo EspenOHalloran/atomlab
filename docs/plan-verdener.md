@@ -6,16 +6,17 @@
 Menuen har 8 dele, og 12-15 er på vej (Kvantefysik, Ild, Liv, Elektricitet og radio, Gåderne, Videnskabsfolkene, Tidslinjen …). Det kan ringen fra K1 ikke rumme pænt, for vinklen mellem kortene er 360° delt med antallet. Kosmos har også 12 fænomener på én liste, og flere er på vej.
 
 ## Jeres svar (7. november 2026)
-- **Verdener i ringen:** Ringen får 5-6 kort, ét pr. verden. Når en verden står forrest, vises dens dele som små kort lige under. Man trykker direkte på en del, så der stadig kun er ét tryk ind (ingen mappe og ingen ekstra skærm). Har en verden kun én del, går man lige ind.
+- **Verdener i ringen:** Ringen får 5 kort (senere 6), ét pr. verden. Når en verden står forrest, vises dens dele som små kort lige under. Man trykker direkte på en del, så der stadig kun er ét tryk ind (ingen mappe og ingen ekstra skærm). Har en verden kun én del, går man lige ind.
 - **Bygges lige efter K2** (ikke først efter Molekyler M2). Det betyder, at nogle verdener har kun én eller to dele i et stykke tid.
-- **Elektricitet står mellem Kemi og liv og Rummet** (ioner → strøm → lyn → radiobølger fra rummet).
+- **Elektricitet står mellem Kernerne og Rummet** (ioner → strøm → lyn → radiobølger fra rummet). Når Ild og liv kommer, står Ild og liv mellem Kernerne og Elektricitet (som "Kemi og liv" i jeres valg).
+- **Molekylerne hører til atomerne** (jeres spørgsmål, Opus' svar og jeres valg): Verdenen hedder **Atomer og molekyler**, og molekylerne ligger i Værkstedet med fanerne "Byg et atom | Byg et molekyle" (to måder indeni: "Del elektroner" og "Giv elektroner", det, der hed Byttebørsen). Detaljerne står i [plan-molekyler.md](plan-molekyler.md). **Ild og liv** kommer først i ringen, når Ild eller Liv findes. Indtil da er der 5 verdener.
 
 ## Verdenerne (rækkefølgen er stadig fra det mindste til det største)
 | Verden | Dele nu | Dele senere |
 |---|---|---|
-| ⚛️ Atomerne | Atomværkstedet, Det periodiske system | Kvantefysik (med kvantecomputeren) |
+| ⚛️ Atomer og molekyler | Atomværkstedet (med fanerne "Byg et atom" og "Byg et molekyle"), Det periodiske system | Kvantefysik (med kvantecomputeren) |
 | ☢️ Kernerne | Stjerneovnen, Reaktoren | Tjernobyl (i Reaktoren), måske Antistof |
-| 🧪 Kemi og liv | Byttebørsen (i dag inde i Værkstedet) | Byg molekyler (M2), Ild, Liv med DNA |
+| 🔥 Ild og liv (først, når Ild eller Liv findes) | – | Ild, Liv med DNA |
 | ⚡ Elektricitet | Batteriet | Strøm og spænding, magnetisme, radiobølger, lyn, nerver |
 | 🔭 Rummet | Solsystemet, Kosmos | Gåderne, Planet X (Tid og rum ligger i Kosmos) |
 | 📚 Biblioteket | Ordbogen | Videnskabsfolkene, Tidslinjen, Uddrag fra gamle bøger |
@@ -24,7 +25,7 @@ Navnene er forslag (se Åbent).
 
 ## Åbent (afgøres i Trin 0 af K4, med en anbefaling og jeres valg)
 1. **Navnene på verdenerne:** Er det ord, en 13-årig har lyst til at trykke på? Forslag: Lad sønnen vælge mellem 2-3 bud pr. verden.
-2. **Byttebørsen under Kemi og liv:** Den ligger i Værkstedet (`del = 'bytte'` i `js/vaerksted.js`) og har ingen egen adresse. Kortet skal kunne åbne Værkstedet direkte i Byttebørsen (fx `#vaerksted/bytte`). Bør den også stå under Atomerne, eller kun ét sted?
+2. ✅ Afgjort 7. november 2026: Molekylerne ligger i Værkstedet under Atomer og molekyler (se Jeres svar).
 3. **K2's baggrunde:** Skal baggrunden følge verdenen (5-6 baggrunde) eller delen, man peger på under den?
 4. **Docken og "Din fremgang":** Viser docken verdenerne eller alle delene? Får en verden et ✓, når alle dens dele er klaret?
 5. **Start på den del, man sidst var i** (`atomlabSidsteDel`): Ringen drejer til verdenen, og delen er fremhævet?
