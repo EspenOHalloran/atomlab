@@ -1,26 +1,25 @@
 # Lige nu (status til næste session)
 
-*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session (sammen med CLAUDE.md og DESIGN.md). Stod før øverst i DESIGN.md (flyttet 6. november 2026). Højst ca. 10 KB: Det forrige "Senest lavet" flyttes til [docs/arkiv/historik.md](arkiv/historik.md), når noget nyt er lavet. Sidst opdateret: 7. november 2026 (M1a).*
+*Opdateres, hver gang et stykke arbejde slutter (se `/faerdig`). Læs det først i en ny session (sammen med CLAUDE.md og DESIGN.md). Stod før øverst i DESIGN.md (flyttet 6. november 2026). Højst ca. 10 KB: Det forrige "Senest lavet" flyttes til [docs/arkiv/historik.md](arkiv/historik.md), når noget nyt er lavet. Sidst opdateret: 7. november 2026 (Jupiter J5).*
 
-**Senest lavet (7. november 2026): Rettelser i Det periodiske system, gruppernes navne og plasma (PR A).** Jeres go: "go" (efter jeres opsamling på brugen).
-- **"‹ Tilbage"** i stedet for "✕ Luk" på grundstofkortet, så man ikke trykker på "Menu" for at komme tilbage til tabellen.
-- **Fejl rettet:** Tekster fra et tidligere grundstof (fx plutonium) stod på kort uden linjerne "I din hverdag" osv. CSS vandt over `hidden`. En test fanger det nu.
-- **Større navne på felterne** (18-23 i stedet for 12-14 af 128), symbolet en smule mindre. På tablet på højkant er felterne stadig små.
-- **Gruppernes navne** (`navnet`): Hvorfor de hedder alkali, jordalkali, overgang osv. Det står på kategorikortet og i "Hvorfor?"-kortet. Faktatjekket mod Wikipedia (kilderne står i [fakta-grundstofkort.md](fakta-grundstofkort.md)). Overgangsmetal kommer af elektronerne (Bury 1921), ikke kun af pladsen.
-- **Plasma i Ordbogen:** Fem afsnit med "Hvorfor?" og "Hvordan?" (ioner, hvordan en gas bliver til plasma, hvorfor det lyser, plasmaskærme, hvor det findes) og en tegning af gas mod plasma. Det nye felt `mere` står kun i Ordbogen, ikke i boblerne.
+**Senest lavet (7. november 2026): Jupiter J5, polerne, nordlyset og ringene. Jupiter er færdig (J1-J5).** Jeres go: "Go til J5".
+- **Cyklonerne:** 8 om 1 ved nordpolen og 5 om 1 ved sydpolen, ved ca. 84° og 4.000-7.000 km brede (Juno, Gavriel og Kaspi 2021). Tegnet som spiraler, der drejer med den målte vind. Ved polerne står døgnet stille, og billedet er gjort 2,5 gange lysere (Solen står kun få grader oppe).
+- **Nordlyset:** kun med den nye kontakt "Ultraviolet", i falsk farve (lilla), en ring om hver magnetisk pol og Io's fodspor, der følger Io. Ringen er forenklet (som en stangmagnet).
+- **Ringene:** glorien og hovedringen af støv (NSSDC), der spreder lyset fremad. Næsten usynlige forfra, tydelige i Jupiters skygge. Gjort ca. 1.000 gange lysere (står i "Ærligt talt"). De to yderste ringe er for svage til at ses og tegnes ikke.
+- **Flybyen har 5 stop:** sydpolen og "I Jupiters skygge" er kommet til. Træet har Sydpolen, Nordpolen og Ringene med egne sider. "Ultraviolet" er i Ordbogen. Faktatjek J5 står i `fakta-solsystemet.md`.
+- **Tests:** `jupiter` har 81 tjek (17 nye, nordlyset og ringene målt i billedet). Hele samlingen: 34 af 34 bestod (27 min). Billeder i sekundet: se "Status efter J5" i [plan-jupiter.md](plan-jupiter.md) (ved hele Jupiter ca. 12 % langsommere på tablet end før J5).
 
-**Før det:** Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
+**Før det:** Rettelser i Det periodiske system (PR A, 7. november 2026), Molekyler M1a, Byttebørsen (7. november 2026), Jupiter J4 (#90), Jupiter J3 (#89), Det sorte hul (#86), Jupiter J2 (#85) og flere i begyndelsen af november. Detaljerne står i [historikken](arkiv/historik.md).
 
 **Næste (venter på jeres go):**
 0. **Ordbogen, PR B (jeres svar 7. november 2026):** "Hvorfor?" og "Hvordan?" (`mere`) til de ca. 15-20 ord, hvor det giver mest mening (fx tøris, ion, isotop, fusion, halveringstid). Forklaringerne må gerne være ca. dobbelt så lange, men kun i Ordbogen. Boblerne forbliver korte. Opus høj. Mit forslag: et lille link "Mere i Ordbogen ›" i boblen (ikke besluttet).
 1. **Tabletrunden er lavet (6. november 2026),** og rettelsespakken (fund 1, 5, 6 og 7) er færdig (se ovenfor). Fund 2-4 hører til andre opgaver (G1 i [docs/plan-grafik.md](plan-grafik.md), M8c del 3 og L2 i [docs/plan-mars.md](plan-mars.md)). Jeres ønske: Det sorte hul bygges om, før det testes på tabletten (✅ lavet 6. november 2026, se ovenfor).
-2. **Molekyler M1b (krystallen, Li + F, Mg + O, Ca + 2 Cl, Na + Na og fremgangen) venter på jeres go.** M1a er færdig. Kører sideløbende med Jupiter (jeres valg 7. november 2026). Venus kan bygges efter Jupiter J5. Prompten: [docs/prompt-molekyler-m1.md](prompt-molekyler-m1.md) (Opus høj). Domænerne NIST, OpenStax, LibreTexts og Wikipedia er åbne.
-3. **Jupiter bygges (J1-J5).** J1-J4 er færdige (6.-7. november 2026). **J5 (polerne, nordlyset, ringene og stoppene ved sydpolen og i skyggen) venter på jeres go.** Venus kan bygges efter J5. Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md) (Opus høj). Hver delopgave får sit eget go.
+2. **Molekyler M1b (krystallen, Li + F, Mg + O, Ca + 2 Cl, Na + Na og fremgangen) venter på jeres go.** M1a er færdig. Kører sideløbende med Jupiter (jeres valg 7. november 2026). Venus kan bygges nu, hvor Jupiter er færdig. Prompten: [docs/prompt-molekyler-m1.md](prompt-molekyler-m1.md) (Opus høj). Domænerne NIST, OpenStax, LibreTexts og Wikipedia er åbne.
+3. **Jupiter er færdig (J1-J5, 6.-7. november 2026).** Næste planet er Venus (plan og faktagrundlag, Opus høj, efter [plan-solsystemet.md](plan-solsystemet.md), afsnit 9, med Jupiter som skabelon). Io's vulkaner (J6) venter til månerne-runden. Prompten til Jupiter ligger i [arkiv/prompt-jupiter.md](arkiv/prompt-jupiter.md).
 
 **Kursen (jeres svar 5. november 2026):** M8c del 1, Småtingspakken, tabletrunden ([docs/tjekliste-tablet.md](tjekliste-tablet.md)), Formørkelser, Det sorte hul og Molekyler M1a er lavet. Molekyler kører sideløbende med planeterne (den ligger i Værkstedet).
 
 **Venter på et go** (ikke startet, størrelsen står i parentes):
-0. **Jupiter bygges videre** (J1-J4 ✅, J5 venter, Opus høj, [docs/plan-jupiter.md](plan-jupiter.md)). Jeres svar på de fem spørgsmål er givet (6. november 2026, står i planen under "Jeres svar"): OPAL-kortet, vulkanerne venter, månerne som kugler (tryk og besøg kun, hvis det er lille og i Saturns kvalitet), 5 stop uden Io, den rigtige fart. Prompten: [docs/prompt-jupiter.md](prompt-jupiter.md). Kan køre samtidig med rettelsespakken og Det sorte hul.
 1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
 2. **Molekyler M1b og M2-M4:** se "Næste" punkt 2 og [docs/plan-molekyler.md](plan-molekyler.md) (stor). Faktagrundlaget til M2 laves med xhigh.
 3. **Liv, lige efter Molekyler (opprioriteret, jeres go 5. november 2026):** Liv bygger på molekylerne (byggesten, hinder, RNA og DNA), så den kommer efter M1/M2. Opus laver faktagrundlaget med xhigh og planen, og Fable 5.5 tjekker det, hvis den kommer. Venter ikke længere på Fable. DNA (før punkt 8.6) er en del af Liv. Se "Ny del: Liv" i [ideer.md](ideer.md) (stor).
