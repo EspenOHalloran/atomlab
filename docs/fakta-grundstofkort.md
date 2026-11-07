@@ -240,3 +240,20 @@ Teksterne passer med `FAKTA` i js/data/fakta.js og med de korte fakta i js/data/
 5. Radon-tallet på 300, som er fra et ældre skøn.
 
 Kør `/faktatjek` på punkterne med (H), før teksterne kommer med.
+
+## Gruppernes navne og plasma (7. november 2026)
+
+Brugerens ønske: Hvorfor hedder grupperne det, de gør? (`navnet` i `js/data/kategorier.js`), og mere om plasma i Ordbogen. Tjekket mod en.wikipedia.org 7. november 2026 (artiklerne har kilder til lærebøger og originalartikler):
+- **Alkali:** arabisk al-qalīy, "den brændte aske" (af Salicornia, en salturt). Pottaske fra planteaske. Davy lavede kalium og natrium i 1807 (elektrolyse af smeltet KOH og NaOH). ("Alkali")
+- **Jordalkali:** "Earth" var de gamle kemikeres ord for ikkemetalliske stoffer, der ikke opløses i vand og tåler opvarmning. Oxiderne (magnesia, kalk, strontia, baryta) var basiske. Davy fik de første af metallerne ud i 1808 (Mg, Ca, Sr). Beryllium først 1828. ("Alkaline earth metal")
+- **Overgangsmetal:** Charles Bury brugte ordet "transition" i 1921 om en overgangsrække, hvor et indre lag elektroner ændrer sig (fx skal 3 fra 8 til 18). Navnet kommer altså af elektronerne, ikke kun af pladsen. Mit første udkast sagde "af pladsen", og det blev rettet. ("Transition metal")
+- **Andre metaller:** kaldes bl.a. post-transition metals, poor metals, other metals. ("Post-transition metal")
+- **Halvmetal/metalloid:** latin metallum + græsk -oeidēs, "ligner". Ingen fast definition. ("Metalloid")
+- **Halogen:** "saltdanner", græsk hals (salt) + genein. Foreslået af Schweigger 1811. ("Halogen")
+- **Ædelgas:** tysk Edelgas (Hugo Erdmann, ca. 1898-1900), i analogi med ædelmetallerne. Første forbindelse: Bartlett 1962 (xenon-hexafluoroplatinat). ("Noble gas")
+- **Lanthan:** græsk lanthanein, "at ligge skjult". Mosander 1839, som urenhed i ceriumnitrat. ("Lanthanum")
+- **Actinium:** græsk aktis/aktinos, "stråle". ("Actinium")
+- **Plasma:** Neonrør og lyn er delvist ioniseret plasma. Plasma er samlet set næsten neutralt. Over 99 % af det almindelige stof, man kan se i universet, er plasma. ("Plasma (physics)")
+- **Plasmaskærm:** Hver celle er som et lille lysstofrør. Neon og xenon giver UV-lys, og et selvlysende lag giver rød, grøn eller blå. Tre celler pr. pixel. Produktionen stoppede 2014 (USA, Panasonic, LG og Samsung) og 2016 (Kina). ("Plasma display")
+
+**Mindst sikker:** "Det lå gemt i et ceriumstof" (Wikipedia: en urenhed i ceriumnitrat). Tegningen af plasma er forenklet og siger det.

@@ -156,11 +156,12 @@ function lavFeltTekstur(g, opdaget = fremgang.erOpdaget(g.nr)) {
   }
   k.fillStyle = '#ffffff';
   k.textAlign = 'center';
-  k.font = `800 ${(g.symbol.length > 1 ? 50 : 56) * s}px system-ui, sans-serif`;
-  k.fillText(g.symbol, 64 * s, 80 * s);
-  k.font = `600 ${(g.navn.length > 10 ? 12 : 14) * s}px system-ui, sans-serif`;
-  k.fillStyle = 'rgba(255,255,255,0.85)';
-  k.fillText(g.navn, 64 * s, 110 * s, 118 * s);
+  // Symbolet fylder mest, men navnet skal kunne læses (brugerens ønske 7. november 2026)
+  k.font = `800 ${(g.symbol.length > 1 ? 42 : 48) * s}px system-ui, sans-serif`;
+  k.fillText(g.symbol, 64 * s, 70 * s);
+  k.font = `700 ${(g.navn.length > 10 ? 18 : g.navn.length > 7 ? 21 : 23) * s}px system-ui, sans-serif`;
+  k.fillStyle = '#ffffff';
+  k.fillText(g.navn, 64 * s, 108 * s, 122 * s);
   const tekstur = new THREE.CanvasTexture(c);
   tekstur.colorSpace = THREE.SRGBColorSpace;
   tekstur.anisotropy = 4;
@@ -198,7 +199,7 @@ function visKategoriKort(kat, knap) {
   if (!info) return;
   visHvorfor({
     spørgsmål: info.flertal,
-    svar: `${info.fælles}\n\n${info.hvorfor}`,
+    svar: `${info.fælles}\n\n${info.hvorfor}\n\nNavnet: ${info.navnet}`,
     link: { tekst: 'Se hele kategorien ›', handling: () => visKategori(kat) },
   }, knap);
 }

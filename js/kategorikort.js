@@ -519,6 +519,7 @@ export function lavKategorikort({ åbnGrundstof, åbnIVærksted, luk }) {
     $('systemKategori').style.setProperty('--farve', k.farve);
     $('katNavn').textContent = info.flertal;
     $('katFælles').textContent = info.fælles;
+    $('katNavnet').textContent = info.navnet;
     $('katHvorfor').textContent = info.hvorfor;
     const g = grundstof(info.eksempel);
     $('katAtomTekst').textContent = `${g.navn}: ${skaller(info.eksempel).join(' · ')}`;
