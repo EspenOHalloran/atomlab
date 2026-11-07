@@ -5,6 +5,6 @@
 **Senest lavet (7. november 2026): Menuen som en ring af kort (K1, kun med `?karrusel` sidst i adressen).** Kortene kredser om menuens atom på en elektronbane. Den almindelige menu er uændret. Detaljerne står i den lukkede [historik](../arkiv/historik.md) under "menuen som en ring", og planen og jeres svar i [plan-menu.md](../plan-menu.md).
 
 **Næste (venter på jeres go):**
-1. **Jeres runde på tabletten** med `?karrusel` (spørgsmålene står i [ikke-afproevet.md](../ikke-afproevet.md)).
+1. ✅ **Runden på tabletten** (7. november 2026): Jeres svar: "karrusellen er godkendt på tablet". Ingen fejl fundet. K2 og K3 kan få et go.
 2. **K2:** Baggrunden skifter med kortet forrest (fx en stjerne ved Stjerneovnen, en planetbane ved Solsystemet), mellem til stor, eget go.
 3. **K3:** Ringen bliver standard, og gitteret, de gule piller og "Næste eventyr" fjernes.
