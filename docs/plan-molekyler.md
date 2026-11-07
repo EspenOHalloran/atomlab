@@ -49,6 +49,8 @@ Det, man har bygget i "Byg et atom", tager man med: Har man bygget et neutralt n
 **Grafik:** Atomerne genbruger skallerne fra `Atom` (ringe), men kernen er lille og rolig, for den ændrer sig ikke. Elektronen, der skifter, får et lysspor. Na⁺ krymper, når den mister sin yderste skal, og Cl⁻ vokser lidt (ionernes rigtige størrelsesforhold, se faktagrundlaget). Krystallen er en InstancedMesh.
 
 ## M1 i dag (Trin 0, 7. november 2026)
+**Jeres svar (7. november 2026):** del-knapperne som i Reaktoren (A, pillen flytter ned i 3D-billedet), energimåleren som en glidende bjælke i eV, Byttebørsens opgaver som en linje på Værkstedets kort i menuen, og fælde 1 rettes i M1a efter forslaget i punkt 9 (med `/faktatjek`). Harpunen kommer med i M1a (prompten). Jeres idé om menuen som en karrusel står i [ideer.md](ideer.md).
+
 *Planen er fra 23. oktober, før U1-U4, `lag.js`, den fælles tidsknap og kontakterne. Her står, hvordan Byttebørsen passer ind i det, der findes nu. Punkter med **(spørgsmål)** venter på jeres svar. Tallene står i [fakta-molekyler.md](fakta-molekyler.md), afsnit 1b.*
 
 **1. Del-knapperne (spørgsmål).** Toplinjen i Værkstedet er fuld i dag: Menu, overskriften, opgavepillen (ca. 600 px på pc), "Elektronsky" og fire ikonknapper. På tablet på langs (1024 px) er opgaveteksten allerede skåret af ("Byg et hydrogen…"). Tre del-knapper (ca. 300 px) kan ikke stå ved siden af pillen uden at noget flyttes. Mulighederne:
