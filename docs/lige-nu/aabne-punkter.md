@@ -12,3 +12,4 @@
 - **Kendt fejl i kilden:** Højdekortet over Jezero-krateret har to tynde, lige streger fra sømmene mellem striberne (se plan-mars.md).
 - **Domæner:** Listen over domæner til Network access står i [plan-mars.md](../plan-mars.md) under "Domæner, der skal på listen".
 - **Faktatjek, der mangler:** Hjælpeagenterne kunne ikke åbne alle kildesider. Det, der skal tjekkes, står i `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` (især del 2 om Voyager og afsnit 4b om flybyen i del 1). Jupiter: se "Mindst sikre påstande" i del 5.
+- **`solsystem`** gik ned efter 4 sekunder sammen med en anden test (`karrusel`), 7. november 2026 (Tid T1): "Cannot read properties of null (reading 'classList')" i linje 37 (`#solsystemTræ button[data-id="solstorm"]` lige efter klikket på Solen). Bestod alene. Testen venter nok ikke på, at træet er tegnet. Ikke undersøgt.
