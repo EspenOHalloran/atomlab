@@ -12,6 +12,7 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når testene er grønne (se nedenfor), så det kommer på GitHub Pages med det samme (https://espenohalloran.github.io/atomlab/). Bagefter startes arbejdsgrenen forfra fra `main`.
 - Beslutninger og jeres svar skrives ind her med det samme, ikke kun i chatten.
 - **Når et punkt er færdigt (jeres ønske 7. november 2026):** Skriv altid, hvordan næste punkt bedst startes: ny session eller samme, hvilken prompt (en fil i `docs/prompt-*.md` eller en tekst til at kopiere), og hvilken model og effort. Standard er en ny session til hver delopgave (se "Tokens" i CLAUDE.md).
+- **Når I skal beslutte noget (jeres ønske 7. november 2026, gælder altid):** Præsentér sagen kort, giv min anbefaling, og lad jer vælge mellem et par muligheder (gerne som spørgsmål med valgmuligheder, anbefalingen først). Skriv ikke bare et åbent spørgsmål.
 - **Parallelle sessioner (jeres svar 7. november 2026):** I kører ofte flere sessioner samtidig. Hver session hører til ét spor og skriver sin status i sporets egen fil i `docs/lige-nu/`. Reglerne står under "Parallelle sessioner" i CLAUDE.md.
 - **Artefaktet "AtomLab Overblik" (jeres svar 7. november 2026):** opdateres, når en serie er færdig (fx hele Jupiter), ikke efter hver delopgave.
 - Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).

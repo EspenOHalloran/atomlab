@@ -2,11 +2,6 @@
 
 *Spor i [oversigten](../lige-nu.md) til små rettelser på tværs, tests, dokumenterne og arbejdsgangen. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/smaating.md](../arkiv/historik/smaating.md). Højst ca. 5 KB. Sidst opdateret: 7. november 2026.*
 
-**Senest lavet (7. november 2026): Arbejdsgangen gjort billigere i tokens og sikker for parallelle sessioner.** Jeres go: "go - men vent til de nævnte sessioner er færdige" (svar: 1 ja til én statusfil pr. spor, 2 artefaktet "AtomLab Overblik" opdateres efter en serie, 3 Sonnet deler faktafilen op).
-- **Status pr. spor:** `docs/lige-nu.md` er en kort oversigt, og hvert spor har sin egen fil i `docs/lige-nu/` og sin egen historik i `docs/arkiv/historik/`. Den gamle historik er lukket.
-- **`.gitattributes`** med `merge=union` for filer, man kun tilføjer linjer til (Ikke afprøvet, Åbne punkter og erfaringerne). Afprøvet i et lille test-repo: To sessioners nye linjer øverst i samme liste blev begge beholdt uden konflikt.
-- **Nye regler** i CLAUDE.md ("Parallelle sessioner" og "Tokens"), DESIGN.md, `/faerdig`, `/faktatjek` og tjekliste A (som sagde "hele testsamlingen" i strid med reglen om `--ændret`).
-- **`docs/fakta-solsystemet.md`** (230 KB) er delt op i 11 filer på 10-31 KB i `docs/fakta-solsystemet/`, og den gamle fil er nu et indeks (4 KB). Tjekket: Delene samlet igen er identiske med originalen (bortset fra 3 rettede links).
-- **Ryddet op:** De færdige trin i DESIGN.md og den brugte prompt til Småtingspakken er flyttet til `docs/arkiv/`.
+**Senest lavet (7. november 2026): Drøftelse af idéerne og menuens struktur.** Jeres svar: verdener i ringen (5-6 verdener med delene som små kort under den forreste), bygget lige efter K2, Elektricitet mellem Kemi og liv og Rummet, og oprydning i idéerne med en ny køreplan. Beslutningen står i [plan-verdener.md](../plan-verdener.md), og prompten til sporet Menuen er [prompt-menu-k4.md](../prompt-menu-k4.md). Ny regel i DESIGN.md: Når I skal beslutte noget, præsenterer jeg sagen, giver min anbefaling, og I vælger mellem mulighederne.
 
-**Næste:** Intet venter i dette spor.
+**Næste (venter på et go):** Oprydning i idéerne: `ideer.md` får kun de løse idéer sorteret efter verden (færdige punkter flyttes til arkivet), og en ny `docs/koereplan.md` samler det besluttede i rækkefølge. "Venter på et go" i `lige-nu.md` linker dertil (lille).
