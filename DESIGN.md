@@ -11,6 +11,7 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
 - Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når testene er grønne (se nedenfor), så det kommer på GitHub Pages med det samme (https://espenohalloran.github.io/atomlab/). Bagefter startes arbejdsgrenen forfra fra `main`.
 - Beslutninger og jeres svar skrives ind her med det samme, ikke kun i chatten.
+- **Når et punkt er færdigt (jeres ønske 7. november 2026):** Skriv altid, hvordan næste punkt bedst startes: ny session eller samme, hvilken prompt (en fil i `docs/prompt-*.md` eller en tekst til at kopiere), og hvilken model og effort.
 - Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).
 - Tabletten bruges lige meget på langs og på højkant. Lyd: ingen baggrundsmusik, de små lyde bliver.
 - **Tests (jeres svar 24. oktober 2026):** Test, når det giver mening i forhold til prisen. I tester selv på den rigtige tablet. Derfor:
@@ -64,6 +65,7 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - [x] **Trin 18: Forbedringer efter F1**
 - [x] **Trin 19: Saturn med måner og flyby, en sort himmel og små ønsker** (24. oktober 2026, PR #10-#14)
 - [x] **Trin 20: Ny opbygning af Solsystemet og Kosmos (UX)** (U1-U4)
+- [ ] **Molekyler:** M1a (Byttebørsen med Na + Cl) ✅ 7. november 2026, M1b (krystallen og de andre par) venter ([docs/plan-molekyler.md](docs/plan-molekyler.md))
 - [ ] **Solsystemet:** Mars (M1-M8b lavet, M8c del 1 tilbage, [docs/plan-mars.md](docs/plan-mars.md)), så planeterne og overblikket ([docs/plan-solsystemet.md](docs/plan-solsystemet.md))
 
 **Ikke lavet fra de gamle trin** (fra Trin 11, delvist lavet senere, tjekkes, før de tages op):

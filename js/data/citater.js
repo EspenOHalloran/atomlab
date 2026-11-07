@@ -142,6 +142,16 @@ export const CITATER = {
   },
   // Kilden er læst i bogen selv (Systema Saturnium, 1659, McGill-eksemplaret på archive.org). Anagrammet har 7 a'er,
   // så der står "cohaerente" (Wikipedias "coherente" er en slåfejl). "Ekliptika" er oversat til "Jordens baneplan".
+  // Ordlyden er læst i førsteudgaven (Venedig 1610, side 17, Smithsonian Libraries på archive.org,
+  // Sidereusnuncius00Gali). Det lange s er skrevet som s, ellers som i bogen. Udeladt: "(quod antea ob alterius Organi
+  // debilitatem minime contigerat)", altså "(hvad der ikke var sket før, fordi det andet instrument var for svagt)".
+  galileiJupiter: {
+    tekst: 'Den 7. januar i dette år 1610, i nattens første time, mens jeg så på himlens stjerner gennem kikkerten, viste Jupiter sig. Og da jeg havde gjort et virkelig godt instrument klar, så jeg, at der stod tre små stjerner ved den, ganske små, men meget klare.',
+    person: 'Galileo Galilei',
+    kilde: 'Sidereus Nuncius (Stjernebudbringeren), 1610 (forkortet)',
+    original: 'Die itaque septima Ianuarij instantis anni millesimi sexcentesimi decimi, hora sequentis noctis prima, cum cęlestia sydera per Perspicillum spectarem, Iuppiter se se obuiam fecit, cumque admodum excellens mihi parassem instrumentum, (…) tres illi adstare stellulas, exiguas quidem, veruntamen clarissimas, cognoui.',
+    kommentar: 'Galilei troede først, at prikkerne var stjerner langt ude i rummet. Men de flyttede sig fra nat til nat og fulgte med Jupiter. Den 13. januar så han fire, og snart forstod han, at de kredser om Jupiter. Han kaldte dem de mediceiske stjerner efter fyrstefamilien Medici i Firenze. Navnene Io, Europa, Ganymedes og Callisto kom senere.',
+  },
   huygensSaturn: {
     tekst: 'Den er omgivet af en tynd, flad ring, der ingen steder hænger fast i den og hælder i forhold til Jordens baneplan.',
     person: 'Christiaan Huygens',

@@ -48,6 +48,17 @@ Det, man har bygget i "Byg et atom", tager man med: Har man bygget et neutralt n
 
 **Grafik:** Atomerne genbruger skallerne fra `Atom` (ringe), men kernen er lille og rolig, for den ændrer sig ikke. Elektronen, der skifter, får et lysspor. Na⁺ krymper, når den mister sin yderste skal, og Cl⁻ vokser lidt (ionernes rigtige størrelsesforhold, se faktagrundlaget). Krystallen er en InstancedMesh.
 
+### M1 i dag (tjekket mod koden 7. november 2026, Trin 0)
+Planen er fra før U1-U4, `lag.js`, tidsknappen og kontakterne. Sådan passer Byttebørsen ind i det, der findes nu:
+- **Del-knapperne** står i Værkstedets toplinje lige efter overskriften, som i Reaktoren (`.del-vælger` med to knapper: "Byg et atom" og "Byttebørsen"). De får `data-vaerksted-del`, ikke `data-del`: Reaktoren finder sine knapper med `document.querySelectorAll('.del-knap[data-del]')` uden at afgrænse (tjekliste D). På tablet på højkant og telefon (≤ 820 px) får de deres egen linje i toplinjen (`order: 3`), og opgavepillen kommer under dem.
+- **Hvad der skifter:** I Byttebørsen skjules byggepanelet, infopanelet, det lille periodiske system, kontakten "Elektronsky" (prikkerne på ringe er altid prikker) og opgavepillen (i M1a er der ingen opgaver endnu). Byttebørsen får sit eget venstre og højre panel og sit eget gitter, hvor 3D-billedet er stort nok til at trække i på telefonen (som Reaktoren: 3D øverst og panelerne nedenunder ≤ 820 px). Atomet fra "Byg et atom" skjules og står uændret, når man skifter tilbage.
+- **Panelet i lag:** Højre panel har trinnet lige nu (kort tekst), måleren med tallene og "Hvorfor?"-knapper (`visHvorfor`) til "Hvorfor koster det?" og "Hvad er en ion?". Tallene og modellen står i en foldeboks "For nørder" (`lag-boks`), og "Ærligt talt" i en foldeboks. Ingen rullebjælke: Det, der ikke kan være, går ind bag "Hvorfor?". "Næste skridt" (`lavNæsteSkridtKort`) står øverst til venstre i 3D-billedet og siger, hvad man skal gøre nu ("Træk den yderste elektron fra natrium over til chlor").
+- **Tiden:** Tidsknappen (`lavTidsknap`, ⏸ ▶) står nederst til højre i 3D-billedet. Alt i Byttebørsen bruger `dt` fra opdateringen, så pausen virker. Knapper, der starter noget (fx harpunen), lader tiden gå igen (`fortsæt`).
+- **Fremgangen (M1b):** Opgaverne får id'er med `bytte-` foran i `fremgang.js` (ingen ændring i selve modulet). Forslag: De tæller med på Værkstedets kort i menuen (de ligger i Værkstedet), og der kommer ikke en ny linje i menuen, før "Byg molekyler" (M2) findes. Besluttes ved M1b.
+- **Det, man har bygget:** Har man et neutralt natrium- eller chloratom i "Byg et atom", står der "Dit natriumatom fra værkstedet" under det i Byttebørsen. Byttebørsen er ikke låst.
+- **Energimåleren:** én vandret bjælke med et nul i midten ("Regnskabet": det, man har fået, minus det, det har kostet, i eV), og under den tre små linjer: "Tage elektronen fra natrium: −5,14", "Chlor tager den: +3,61" og "Plus og minus trækker: +x,xx". Bjælken står i 3D-billedet (så den ses, mens man trækker, også på telefonen), og tallene står i højre panel.
+- **Fysikken i mødet:** Energien for parret er −14,40/r eV·Å (Coulomb) plus en frastødning, der vokser hurtigt tæt på (Born-Mayer, `A·e^(−r/ρ)`), valgt så parret stopper ved 2,36 Å med 4,26 eV i alt fra de neutrale atomer (OpenStax). Afstandene tegnes større, men i det rigtige forhold. Det står i "For nørder".
+
 ## 3. Byg molekyler (kovalente bindinger)
 **Frit byggeri:**
 - En lille palet med H, C, N, O og Cl (måske senere F, S og P). Man trækker et atom ind i 3D-billedet.
@@ -104,7 +115,7 @@ Senere kan det også blive et trin i delen Liv.
 | Trin | Hvad | Størrelse |
 |---|---|---|
 | M0 | ✅ Plan og faktagrundlag med kilder (denne fil og [fakta-molekyler.md](fakta-molekyler.md)) | lavet |
-| M1 | (Prompt: [prompt-molekyler-m1.md](prompt-molekyler-m1.md), delt i M1a og M1b) Knapperne i Værkstedet og **Byttebørsen** med Na + Cl, energimåleren og krystallen. Opgaverne Li + F, Mg + O og Ca + 2 Cl. | stor |
+| M1 | (Prompt: [prompt-molekyler-m1.md](prompt-molekyler-m1.md), delt i M1a og M1b. **M1a ✅ 7. november 2026:** del-knapperne, Byttebørsen med Na + Cl, måleren, harpunen og "Ærligt talt". M1b venter: krystallen, de andre par og fremgangen.) Knapperne i Værkstedet og **Byttebørsen** med Na + Cl, energimåleren og krystallen. Opgaverne Li + F, Mg + O og Ca + 2 Cl. | stor |
 | M2 | **Byg molekyler:** paletten, bindingerne, formen, ladningerne, de kendte molekyler og opgaverne | stor (faktagrundlaget med **xhigh**, byggeriet med høj) |
 | M3 | **Knaldgas:** boksen, gnisten, kæden og energimåleren | mellem |
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |

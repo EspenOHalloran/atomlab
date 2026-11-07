@@ -124,6 +124,89 @@ Kilderne giver 799-805 for C=O. Gennemsnitsværdier varierer lidt fra tabel til 
 9. **"Knaldgas eksploderer af sig selv"** / **"en flamme med hydrogen giver kun vand."** Der skal en gnist til (en meget lille en). I luft dannes også lidt NOx. **Ret sikker.**
 10. **"Jordens vand kom fra kometer."** Det meste nok ikke, men se Mandt 2024.
 11. **Elektronegativitetsreglen er en skarp grænse.** Den er en tommelfingerregel, se HF.
+12. **"Oxygen tager gerne to elektroner."** Et frit oxygenatom tager én (det giver 1,46 eV), men den anden *koster* 7,71 eV, fordi O⁻ allerede er minusladet. O²⁻ findes kun inde i en krystal (fx MgO), hvor de plusladede naboer betaler. Det samme gælder alle ioner med −2.
+13. **"Na + Na sker ikke, fordi der ikke sker noget."** Der sker ingen *ionbinding* (ingen elektron flytter sig for at lave Na⁺ og Na⁻), men natriumatomer binder sig til hinanden ved at *dele* elektronerne: Fast natrium er et metal, og i natriumdamp findes der enkelte Na₂-molekyler. Skriv "de bytter ikke", ikke "de binder sig ikke".
+
+## 7. Tallene til Byttebørsen (slået op 7. november 2026, til M1)
+
+*Slået op i kilderne af Opus (høj effort) under Trin 0 i [prompt-molekyler-m1.md](prompt-molekyler-m1.md). Denne gang kunne siderne åbnes: NIST, NIST WebBook, OpenStax og Wikipedia (som citerer CRC, Shannon og Shriver & Atkins).*
+
+**Tallene i afsnit 1 er nu set i selve kilderne:**
+- Na: ioniseringsenergi 5,139076 eV (NIST Handbook of Basic Atomic Spectroscopic Data, https://physics.nist.gov/PhysRefData/Handbook/Tables/sodiumtable1.htm). **Sikker.**
+- Cl: elektronaffinitet 3,612725(28) eV (Wikipedia, "Electron affinity (data page)", efter Berzinsh m.fl. 1995). **Sikker.**
+- OpenStax University Physics 3, §9.1 (åbnet): "5,14 eV − 3,62 eV = 1,52 eV", NaCl-parret i gas er 0,236 nm langt, og dissociationsenergien er 4,26 eV. **Sikker.** (Matcha: 4,22 eV. Brug "ca. 4,2 eV".)
+
+**Ioniseringsenergi (eV), NIST Handbook, tabel 1 for hvert grundstof** (fx `.../Tables/magnesiumtable1.htm`):
+
+| Atom | 1. elektron | 2. elektron | I alt for ionen |
+|---|---|---|---|
+| Li | 5,391719 | (75,64, en inderste skal) | Li⁺: 5,39 |
+| Na | 5,139076 | (47,29, en inderste skal) | Na⁺: 5,14 |
+| Mg | 7,646235 | 15,03527 | Mg²⁺: 22,68 |
+| Ca | 6,11316 | 11,87172 | Ca²⁺: 17,98 |
+
+Det 2. tal for Li og Na viser, hvorfor de kun giver én: Den næste elektron sidder i en fyldt skal længere inde og koster 9-14 gange mere. **Sikker.**
+
+**Elektronaffinitet (eV)** (Wikipedia, "Electron affinity (data page)"):
+- F: 3,4011898 (Blondel m.fl. 1989 og 2001). **Sikker.**
+- Cl: 3,612725 (Berzinsh m.fl. 1995). **Sikker.** Cl tager altså lidt lettere end F (en kendt undtagelse: F er så lille, at elektronerne trænges).
+- O (1. elektron): 1,46111297 (Kristiansson m.fl.). **Sikker.**
+- O⁻ → O²⁻ (2. elektron): **−7,71 eV** (−744 kJ/mol): Den koster energi. Tabellen "Second and third electron affinities" efter Rayner-Canham og Huheey m.fl. 1993. **Ret sikker** (lærebøgerne bruger −744 til −844 kJ/mol, for tallet kan ikke måles direkte, men regnes fra Born-Haber).
+- Na: 0,547926 (Hotop og Lineberger 1985). Bruges til Na + Na. **Sikker.**
+- Mg: ca. −0,4 (skøn): Mg kan ikke holde på en ekstra elektron. Ca: 0,02455 (næsten ingenting).
+
+**Regnestykket "fra frie atomer til frie ioner"** (min udregning: ioniseringsenergi minus elektronaffinitet, i eV pr. formelenhed):
+
+| Par | Koster | Fra atomer til krystal | Gitterenergi (fra ioner) |
+|---|---|---|---|
+| Na + Cl | 5,14 − 3,61 = **1,53** | 6,6 eV | 786 kJ/mol = **8,15 eV** |
+| Li + F | 5,39 − 3,40 = **1,99** | 8,9 eV | 1.030 kJ/mol = **10,7 eV** |
+| Mg + O | 22,68 − (1,46 − 7,71) = **28,9** | 10,3 eV | 3.795 kJ/mol = **39,3 eV** |
+| Ca + 2 Cl | 17,98 − 2 × 3,61 = **10,8** | 12,6 eV | ca. 2.255 kJ/mol = **23,4 eV** |
+| Na + Na | 5,14 − 0,55 = **4,59** | (ingen ionkrystal) | - |
+
+- **Gitterenergierne** for LiF, NaCl og MgO: Shriver & Atkins' Inorganic Chemistry, 5. udgave (2010), gengivet i Wikipedia, "Lattice energy" (tabellen "Representative lattice energies"). **Sikker.** CaCl₂ står ikke i den tabel. Jeg regnede den med Born-Haber (ΔfH(CaCl₂) = −795,42 kJ/mol fra CRC via Wikipedia, Ca(g) 177,8 og Cl(g) 121,30 kJ/mol fra NIST WebBook): 2.254 kJ/mol. CRC skriver 2.255 (fra min viden). **Ret sikker.**
+- **Kontrol:** Det samme kredsløb giver 787 (NaCl), 1.047 (LiF) og 3.789 (MgO) kJ/mol, altså inden for 2 % af tabellen. Kolonnen "fra atomer til krystal" er regnet sådan: ΔfH af atomerne i gas (NIST WebBook: Li 159,3, Na 107,5, Mg 147,1, Ca 177,8, F 79,38, Cl 121,30, O 249,18 kJ/mol) minus ΔfH af krystallen (Wikipedia/CRC: LiF −616, NaCl −411,12, MgO −601,6, CaCl₂ −795,42). **Ret sikker.**
+- **Til en 13-årig:** Mg + O koster næsten 29 eV, mest fordi Mg's 2. elektron og O's 2. elektron er dyre. Krystallen betaler 39 eV tilbage, fordi ladningerne er dobbelt så store (+2 og −2), og tiltrækningen er fire gange så stærk. Derfor brænder magnesium så voldsomt.
+- **Ærligt om modellen:** Born-Haber bruger enthalpier, og tallene i eV er afrundet. Forskellen på ca. 2 % er mindre end det, man kan se på en måler.
+
+**Ionernes radier (pm)**, Shannon 1976 ("effective ionic radii", seks naboer, Acta Cryst. A 32, 751), gengivet i Wikipedia, "Ionic radius":
+
+| Ion | Radius | Atomets radius (Slater 1964, empirisk) | Forhold ion/atom |
+|---|---|---|---|
+| Li⁺ | 76 | Li 145 | 0,52 |
+| Na⁺ | 102 | Na 180 | 0,57 |
+| Mg²⁺ | 72 | Mg 150 | 0,48 |
+| Ca²⁺ | 100 | Ca 180 | 0,56 |
+| F⁻ | 133 | F 50 | 2,7 |
+| Cl⁻ | 181 | Cl 100 | 1,8 |
+| O²⁻ | 140 | O 60 | 2,3 |
+
+- **Kontrol:** Na⁺ + Cl⁻ = 102 + 181 = 283 pm, og afstanden i krystallen er 282 pm (afsnit 1). **Sikker.**
+- **Fælde:** Atomernes radier findes i flere udgaver (empirisk, beregnet, kovalent, van der Waals, metallisk), og de er ret forskellige (Cl: 100, 79, 99 eller 175 pm). Ionen er altid målt i en krystal. Forholdet ion/atom er derfor kun groft. Det sikre er retningen og størrelsesordenen: **Metalatomer bliver ca. halvt så store**, når de mister den yderste skal, og **ikkemetallerne bliver ca. dobbelt så store** eller mere. Programmet kan bruge Slater-tallene (de er alle målt på samme måde) og skrive i "For nørder", at atomets størrelse kan måles på flere måder.
+
+**Na + Na:** Begge trækker lige hårdt (samme elektronegativitet, 0,93). At flytte en elektron fra det ene til det andet koster 5,14 − 0,55 = 4,59 eV, og det kan tiltrækningen ikke betale, før de er tættere end ca. 3 Å (14,40 / 4,59). Så overlapper skyerne, og de deler elektronerne i stedet (fast natrium er et metal, og i dampen findes Na₂). Spillet skal sige "de bytter ikke", ikke "de binder sig ikke" (fælde 13). Udregningen er min, mekanismen er **sikker**.
+
+## 8. Faktatjek af teksterne i M1a (7. november 2026)
+
+Tjekket af Opus mod kilderne fra afsnit 1 og 7, som kunne åbnes direkte (ingen hjælpeagenter, for siderne var allerede læst).
+
+| Påstand (hvor) | Resultat | Kilde |
+|---|---|---|
+| Det koster 5,14 eV (ca. 5,1) at tage natriums yderste elektron (panelet, hjælpen, "Hvorfor?", Ordbogen) | OK | NIST Handbook |
+| Chlor giver 3,61 eV (ca. 3,6) tilbage | OK | Berzinsh m.fl. 1995 (Wikipedia) |
+| Langt fra hinanden koster det 1,53 eV | OK | OpenStax §9.1 (1,52 eV) |
+| Plus og minus trækker med 14,4 eV delt med afstanden i Å | OK | Coulombs lov, e²/4πε₀ = 14,40 eV·Å |
+| Harpunen ved ca. 9,4 Å, fire gange afstanden i parret | OK (9,43 / 2,36 = 4,0) | min udregning |
+| Parret stopper ved 2,36 Å, 4,26 eV i alt | OK | OpenStax §9.1 |
+| Natrium 180 pm, Na⁺ 102, chlor 100, Cl⁻ 181; ionernes størrelse er målt i krystaller (2,82 Å) | OK | Slater 1964, Shannon 1976 (Wikipedia), afsnit 1 |
+| Enkelte NaCl-par findes kun i damp, et saltkorn er et gitter med seks naboer | OK | fælde 2, Housecroft |
+| En ekstra elektron nr. to koster altid energi (Ordbogen) | OK: alle 2. elektronaffiniteter er negative | Rayner-Canham/Huheey (Wikipedia) |
+| Natriums næste elektron koster langt mere (47 eV) | OK | NIST Handbook |
+| Synligt lys ca. 2-3 eV pr. foton | OK (1,6-3,1 eV) | lærebogsviden, også i ordbog.js |
+| Halogenkortet: tiltrækningen giver energien | OK: gitterenergien (787 kJ/mol) er større end alt det, der koster | afsnit 7 |
+| Atomerne tegnet "mange millioner gange større" | OK: ca. 1 cm på skærmen mod 0,18 nm, altså ca. 50 millioner gange | min udregning |
+| Fjernet: "Atomer er mest tilfredse med en fyldt yderste skal" som forklaring på, *hvorfor* det sker (hjælpen) og "så begge får en fuld yderste skal" (halogenkortet) | rettet (fælde 1) | afsnit 6 |
 
 ## Forslag til "Ærligt talt"-linjer
 
@@ -139,7 +222,8 @@ Kilderne giver 799-805 for C=O. Gennemsnitsværdier varierer lidt fra tabel til 
 
 ## Det, jeg er mindst sikker på
 
-- Alle kilder er kun set i søgeuddrag. Ingen sider kunne åbnes (DNS- og proxyfejl).
+- Alle kilder er kun set i søgeuddrag. Ingen sider kunne åbnes (DNS- og proxyfejl). **Undtagen afsnit 7 og tallene i afsnit 1, som er slået op i kilderne 7. november 2026.**
+- O²⁻'s anden elektronaffinitet (−7,71 eV): kan ikke måles direkte, og lærebøgerne er uenige (−744 til −844 kJ/mol). Spillet bør skrive "koster mange eV" eller "ca. 8 eV".
 - NaCl-parrets energi (4,2 eV til atomer, 5,8 eV til ioner) og "ca. 80 % ionisk": udregninger på tal fra uddrag. Huber & Herzberg eller NIST blev ikke åbnet.
 - C=O i CO₂ (799-805 kJ/mol) og C–H (413-416): Tabellerne er uenige.
 - Selvantændelsen for hydrogen (500-585 °C).

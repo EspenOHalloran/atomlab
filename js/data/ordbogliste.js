@@ -39,6 +39,12 @@ export const LINKS = {
   skjoldvulkan: { gaa: ['solsystem:mars:olympus', 'Solsystemet: Olympus Mons'] },
   caldera: { gaa: ['solsystem:mars:caldera', 'Solsystemet: Calderaen på Olympus Mons'] },
   optiskdybde: { gaa: ['solsystem:saturn:ringe', 'Solsystemet: Saturns ringe'] },
+  zone: { gaa: ['solsystem:jupiter', 'Solsystemet: Jupiter'] },
+  baelte: { gaa: ['solsystem:jupiter', 'Solsystemet: Jupiter'] },
+  jetstroem: { gaa: ['solsystem:jupiter', 'Solsystemet: Jupiter'] },
+  antikyklon: { gaa: ['solsystem:jupiter:plet', 'Solsystemet: Den Store Røde Plet'] },
+  resonans: { gaa: ['solsystem:jupiter:maaner', 'Solsystemet: Jupiters måner'] },
+  nordlys: { gaa: ['solsystem:solstorm', 'Solsystemet: Solstorm'] },
 };
 
 const sorter = new Intl.Collator('da', { sensitivity: 'base' });

@@ -1,6 +1,6 @@
 # Prompt: Jupiter bygges (J1-J5)
 
-*Skrevet 6. november 2026. Kopiér teksten nedenfor ind i en ny session. Model: Opus, høj effort (J3 kan klares med medium, hvis I vil skifte). Det sorte hul ([arkiv/prompt-sorthul.md](arkiv/prompt-sorthul.md)) er færdigt. Rettelsespakken ([arkiv/prompt-rettelsespakken.md](arkiv/prompt-rettelsespakken.md)) er færdig og har ændret `rejse.flyv`: Grænserne for zoom udvides nu selv, så stoppets afstand ligger inden for (ellers hopper kameraet). Én session til hele Jupiter: Den bygger én delopgave ad gangen og venter på jeres go mellem hver.*
+*Skrevet 6. november 2026. **J1-J4 er færdige (7. november 2026). Start J5 i en ny session med: "Læs docs/prompt-jupiter.md. Go til J5."** (Opus, høj effort). Kopiér teksten nedenfor ind i en ny session. Model: Opus, høj effort (J3 kan klares med medium, hvis I vil skifte). Det sorte hul ([arkiv/prompt-sorthul.md](arkiv/prompt-sorthul.md)) er færdigt. Rettelsespakken ([arkiv/prompt-rettelsespakken.md](arkiv/prompt-rettelsespakken.md)) er færdig og har ændret `rejse.flyv`: Grænserne for zoom udvides nu selv, så stoppets afstand ligger inden for (ellers hopper kameraet). Én session til hele Jupiter: Den bygger én delopgave ad gangen og venter på jeres go mellem hver.*
 
 ---
 
@@ -10,7 +10,7 @@ Byg Jupiter efter planen i `docs/plan-jupiter.md`. Jeres go er givet til **J1**.
 1. **Kortet:** "Brug det bedste billede, der giver den flotteste repræsentation af planeten. Som udgangspunkt din anbefaling." Altså OPAL 2025 med farverne stemt af efter Cassini og Cassinis poler. Lav i J1 et billede med OPAL og Cassini side om side (hele kloden og pletten tæt på). Er Cassini tydeligt flottest, så vis os billedet og spørg.
 2. **Effekterne:** båndene og pletten, cyklonerne, nordlyset og ringene i modlys. **Io's vulkaner (J6) venter** til månerne-runden.
 3. **Månerne:** Io, Europa, Ganymedes og Callisto står som kugler med rigtige kort i deres baner. Tryk og et kort besøg kommer kun med, hvis det er en lille opgave (genbrug fra Saturn), og så i samme kvalitet som Saturns måner. Vurder det ved starten af J3, og spørg, hvis det ikke er lille.
-4. **Flybyen har 5 stop:** oversigten, båndene, pletten, sydpolen og "I Jupiters skygge". Stoppet ved Io er udskudt. Månerne kommer med i flybyen, når de er bygget færdige.
+4. **Flybyen har 5 stop:** oversigten, båndene, pletten, sydpolen og "I Jupiters skygge". Stoppet ved Io er udskudt. Månerne kommer med i flybyen, når de er bygget færdige. **J4 byggede de 3 første stop, og J5 tilføjer sydpolen og skyggen** sammen med effekterne (jeres svar 7. november 2026).
 5. **Vindene:** den rigtige fart i forhold til Jupiters døgn.
 6. **Jupiter ligger i Solsystemet fra J1** (mellem Mars og Saturn), selvom den er halvfærdig. Hver delopgave merges til `main` for sig, når testene er grønne.
 

@@ -14,3 +14,5 @@
 - [ ] En handling i bjælken er tjekket i alle tilstande, fænomenet kan være i (fx "▶ Start flyby", mens man står på Mars, U2).
 - [ ] En handling, der fører ind i en ny tilstand midt på en tur (fx "🧍 Stå på Mars" på flybyen), sætter turen på pause, så dens "Næste" ikke virker i den forkerte tilstand, og giver én tydelig knap tilbage til turen (fundet af brugeren efter M8b).
 - [ ] Et element, der skjules med `hidden`, men har `display` i CSS (flex, grid, block), får en regel `.x[hidden] { display: none; }`. Ellers står det gamle indhold fremme (plutonium ved copernicium, 7. november 2026).
+- [ ] Skifter en skærm mellem dele (del-knapper som i Reaktoren og Værkstedet), så gør delskiftet det, main.js gør ved et skærmskift: stop kameraets sving og zoom (`stopKamera`), ryd beskeder og "Hvorfor?"-kortet, og nulstil kameraets styring (Byttebørsen, M1a).
+- [ ] Et træk i 3D-billedet, der ikke skal dreje kameraet (fx en elektron, man flytter), fanges i `pointerdown` med `{ capture: true }` på lærredet, og `verden.styring.enabled` sættes til falsk, til fingeren slipper. Et skærmskift midt i trækket skal sætte styringen til igen.

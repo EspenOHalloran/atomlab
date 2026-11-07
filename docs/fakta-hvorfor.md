@@ -122,6 +122,11 @@
 
 **Faktatjek (23. oktober 2026):** Kilderne spænder fra ca. 10.000 år (UNLV) over 30.000 år (Ohio State) til ca. 170.000 år (Mitalas og Sills 1992). "Titusinder af år, måske over 100.000" er forsigtigt nok og står også i Stjerneovnens hjælp. Lyset bruger ca. 8 min 20 s (490-507 s).
 
+## 13-15. Byttebørsen: "Hvorfor koster det?", "Hvad betaler så?" og "Hvad er en ion?" ✅ (7. november 2026, Molekyler M1a)
+**Hvor:** Byttebørsen i Atomværkstedet (`bytteKoster`, `bytteBetaler`, `bytteIon` i `js/data/hvorfor.js`).
+
+**Faktatjek:** Tallene er slået op i kilderne under Trin 0 (se [fakta-molekyler.md](fakta-molekyler.md), afsnit 1 og 7): Na's ioniseringsenergi 5,139 eV (NIST Handbook), Cl's elektronaffinitet 3,613 eV (Berzinsh m.fl. 1995 via Wikipedias dataside), 5,14 − 3,62 = 1,52 eV, parret 0,236 nm og 4,26 eV (OpenStax University Physics 3, §9.1, åbnet). "Ca. 9 Å": 14,40 eV·Å / 1,53 eV = 9,4 Å (min udregning). "Ca. 4,3 eV mere, end det kostede" = 4,26 eV fra neutrale atomer. Synligt lys 1,6-3,1 eV pr. foton (skrevet "ca. 2-3 eV"). "Seks naboer med modsat ladning": stensaltstrukturen (Housecroft). "Endnu mere i et saltkorn": 6,6 eV pr. NaCl fra atomer mod 4,26 eV i et par (Born-Haber, afsnit 7).
+
 ## Fotoner (ordbogen og Stjerneovnen), 29. oktober 2026
 Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brint til carbon, trin for trin" (trin 2) og "Fotonerne af gammastråling" i hjælpens "Lys og neutrinoer". Kilderne er åbnet direkte med curl (Wikipedias kildetekst).
 
