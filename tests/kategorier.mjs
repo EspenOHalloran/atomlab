@@ -98,13 +98,23 @@ await T(() => atomlabTest.system.åbn(26));
 await page.click('#sysUndertitel .kategori-link');
 tjek('jern: kategorien viser kortet "Overgangsmetaller" med det, de har til fælles, og hvorfor',
   (await hvorforVist()) === 'Overgangsmetaller' && (await page.textContent('#hvorforKort .hk-tekst')).includes(KATEGORI_INFO.overgang.hvorfor) && (await page.isVisible('#hvorforKort .hk-link')));
+tjek('jern: kortet forklarer navnet "overgangsmetal"', (await page.textContent('#hvorforKort .hk-tekst')).includes('Navnet: ' + KATEGORI_INFO.overgang.navnet));
+tjek('alle kategorier forklarer deres navn', Object.values(KATEGORI_INFO).every((k) => k.navnet?.length > 40));
 await page.keyboard.press('Escape');
 tjek('Esc lukker kortet, men grundstoffet er stadig åbent', (await hvorforVist()) === null && (await T(() => atomlabTest.system.valgt())) === 26);
 await page.click('#sysUndertitel .kategori-link');
 await page.click('#hvorforKort .hk-link');
 await page.waitForFunction(() => !atomlabTest.system.valgt() && atomlabTest.system.kategori() === 'overgang', null, { timeout: 5000 }).then(() => true, () => false)
   .then((v) => tjek('"Se hele kategorien ›" lukker grundstoffet og viser kategorikortet', v));
+tjek('kategorikortet viser navnet', (await page.textContent('#katNavnet')) === KATEGORI_INFO.overgang.navnet);
 tjek('kortet er lukket bagefter', (await hvorforVist()) === null);
+// Et grundstof uden linjerne "I din hverdag" osv. må ikke vise dem fra det forrige (plutonium ved copernicium, fundet 7. november 2026)
+await T(() => atomlabTest.system.åbn(94));
+const plutonium = await page.isVisible('#sysLag');
+await T(() => atomlabTest.system.åbn(112));
+const cn = await page.evaluate(() => ({ lag: getComputedStyle(document.getElementById('sysLag')).display, mere: getComputedStyle(document.getElementById('sysMere')).display }));
+tjek('copernicium viser ikke plutoniums linjer', plutonium && cn.lag === 'none' && cn.mere === 'none', JSON.stringify(cn));
+tjek('knappen hedder "‹ Tilbage"', (await page.textContent('#systemLuk')).trim() === '‹ Tilbage');
 // Fra værkstedet (et andet grundstof er åbent i Det periodiske system, når man kommer tilbage)
 await T(() => atomlabTest.system.åbn(10));
 await page.click('#systemByg');

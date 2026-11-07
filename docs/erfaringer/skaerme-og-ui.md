@@ -39,3 +39,12 @@
   - **Atomets størrelse styres af vinduet:** `passerTil` passer atomet ind i det mindste af vinduets bredde og højde. Ringen giver derfor `#menuVindue` en kvadratisk størrelse og plads (`position: absolute`) og kalder `centrerVindue` og `passerTil`.
   - **CSS-filtre, der ændres hvert billede, tegner elementet om.** Lysstyrken på kortene skrives kun, når den ændrer sig synligt (afrundet). Den lette svæven er kun `transform`.
   - **Et træk på et link** starter browserens eget træk af linket: `draggable = false` og `-webkit-user-drag: none`. Et klik lige efter et træk skal ikke åbne delen.
+- **`hidden` virker ikke, når CSS sætter `display`:** `.sys-lag { display: flex }` vandt over `hidden`, så linjerne fra det forrige grundstof (plutonium) stod på kortet for copernicium. Fundet af brugeren 7. november 2026. Giv elementet en regel `.x[hidden] { display: none; }`, og test med et grundstof uden data lige efter et med.
+
+## Byttebørsen (Molekyler M1a, 7. november 2026)
+- **Træk i 3D uden at dreje kameraet:** Elektronen fanges i `pointerdown` med `capture` på lærredet, før kameraets styring hører det (`stopImmediatePropagation`), og styringen er slået fra, til fingeren slipper. Testen trækker med `page.mouse` fra skærmpladsen i testadgangen (`elektronPå()`), og et træk et andet sted drejer stadig kameraet.
+- **En vælger uden afgrænsning i en anden skærm:** Reaktoren finder sine del-knapper med `.del-knap[data-del]` i hele dokumentet. Værkstedets knapper har derfor `data-vaerksted-del`. Tjek altid med `grep`, om en klasse eller data-attribut allerede bruges uafgrænset et andet sted.
+- **En stejl frastødning kræver små skridt:** Born-Mayer-formlen, der skal få parret til at stoppe ved 2,36 Å med 4,26 eV, har ρ ≈ 0,12 Å. Med ét skridt pr. billede ville ionerne skyde igennem hinanden. Skridt på højst 2 ms holder det stabilt. Tempoet blev valgt ved at simulere i Node først (ankommer efter ca. 1,7 s), ikke ved at prøve i browseren.
+- **Ingen rullebjælke med foldebokse:** To foldebokse, der begge er åbne, gav en rullebjælke på pc (921 mod 724 px). `name` på `<details>` gør dem til en harmonika, så kun én er åben ad gangen, og testen åbner hver af dem på pc og tablet på langs.
+- **Tal, der skrives om, når de ændrer sig:** Tallene i panelet blev kun skrevet, når summen ændrede sig. Den sidste linje (+5,78) passede så ikke med summen, efter at ionerne var landet (+5,79). Skriv hele teksten og sammenlign den, ikke kun ét tal.
+

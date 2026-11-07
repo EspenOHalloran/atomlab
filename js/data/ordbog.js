@@ -1,6 +1,8 @@
 // Ordforklaringer: korte forklaringer af fagord. Første gang et ord står i en tekst, kan man trykke på det (se js/ordforklaring.js).
 // ord: overskriften i forklaringen. former: alle de måder, ordet står på i teksterne (små bogstaver, mellemrum er tilladt).
 // Hold teksterne korte (2-3 sætninger) og i et sprog, en 13-årig forstår. Tal skal være tjekket (se docs/erfaringer.md, tjekliste B).
+// mere: [[spørgsmål, svar], ...] står kun i Ordbogen ("Hvorfor?" og "Hvordan?", brugerens ønske 7. november 2026), ikke i boblerne.
+// tegning: en lille tegning i Ordbogen (se TEGNINGER i js/ordbog.js).
 
 export const ORDBOG = [
   {
@@ -35,6 +37,26 @@ export const ORDBOG = [
     tekst: 'Et atom med for få eller for mange elektroner. Så er det elektrisk ladet: plus, hvis der mangler elektroner, og minus, hvis der er for mange.',
   },
   {
+    id: 'ionbinding', ord: 'Ionbinding',
+    former: ['ionbinding', 'ionbindingen', 'ionbindinger'],
+    tekst: 'Når et atom har givet en elektron til et andet, og de to ioner (plus og minus) holder sammen, fordi de trækker i hinanden. Køkkensalt (Na⁺ og Cl⁻) er holdt sammen af ionbindinger.',
+  },
+  {
+    id: 'ioniseringsenergi', ord: 'Ioniseringsenergi',
+    former: ['ioniseringsenergi', 'ioniseringsenergien'],
+    tekst: 'Den energi, det koster at rive en elektron løs fra et atom. For natriums yderste elektron er det ca. 5,1 eV. Den næste elektron sidder længere inde og koster langt mere.',
+  },
+  {
+    id: 'elektronaffinitet', ord: 'Elektronaffinitet',
+    former: ['elektronaffinitet', 'elektronaffiniteten'],
+    tekst: 'Den energi, et atom giver fra sig, når det får en ekstra elektron. Chlor giver ca. 3,6 eV. En ekstra elektron nr. to koster altid energi, for så er atomet allerede minusladet.',
+  },
+  {
+    id: 'elektronvolt', ord: 'Elektronvolt (eV)',
+    former: ['elektronvolt', 'ev'],
+    tekst: 'En lille energienhed, der passer til atomer: den energi, en elektron får, når den bliver skubbet gennem en spænding på 1 volt. Synligt lys har ca. 2-3 eV pr. foton.',
+  },
+  {
     id: 'mev', ord: 'MeV',
     former: ['mev'],
     tekst: 'Mega-elektronvolt: en million elektronvolt. En elektronvolt er den energi, en elektron får, når den bliver skubbet gennem en spænding på 1 volt. En kemisk reaktion giver nogle få elektronvolt pr. atom, en kernereaktion millioner.',
@@ -42,7 +64,16 @@ export const ORDBOG = [
   {
     id: 'plasma', ord: 'Plasma',
     former: ['plasma', 'plasmaet'],
-    tekst: 'Gas, der er så varm, at nogle af eller alle elektronerne er revet løs fra atomkernerne. Stjerner og lyn er plasma. Det kaldes stoffets fjerde tilstand (efter fast stof, væske og gas).',
+    tekst: 'Gas, hvor mange af atomerne har mistet elektroner, fx fordi gassen er meget varm. Elektronerne og ionerne farer rundt hver for sig. Stjerner, lyn og neonrør er plasma. Det kaldes stoffets fjerde tilstand (efter fast stof, væske og gas).',
+    // Kilder: en.wikipedia.org "Plasma (physics)" og "Plasma display" (tjekket 7. november 2026)
+    mere: [
+      ['Er det ikke bare ioner?', 'Jo, hvert atom, der har mistet elektroner, er en ion. Men plasma er en hel gas, hvor så mange atomer har mistet elektroner, at elektronerne og ionerne farer rundt hver for sig. Tilsammen er der lige meget plus og minus. Fordi de ladede partikler kan bevæge sig frit, leder plasma strøm og kan styres af magneter. Det kan en almindelig gas ikke, og derfor kaldes plasma en tilstand for sig.'],
+      ['Hvordan bliver en gas til plasma?', 'Med varme eller med strøm. Bliver en gas mange tusind grader varm, støder atomerne så hårdt sammen, at elektroner bliver slået løs. I et lyn eller et neonrør trækker en stærk spænding i de få frie elektroner, der altid er. De suser af sted og slår flere elektroner løs, som slår endnu flere løs, som en lavine.'],
+      ['Hvorfor lyser plasma?', 'Elektronerne støder ind i atomerne og giver dem ekstra energi, eller de bliver fanget af en ion igen. Bagefter sender atomet energien ud som lys. Hvert stof har sine egne farver: Neon lyser rødorange.'],
+      ['Hvad har det med plasmaskærme at gøre?', 'En plasmaskærm har millioner af bittesmå rum med neon og xenon. Når der går strøm gennem et rum, bliver gassen til plasma og sender usynligt ultraviolet lys ud. Det rammer et selvlysende lag, der lyser rødt, grønt eller blåt, og tre rum giver tilsammen én prik i billedet. De sidste plasmaskærme blev lavet omkring 2014-2016, for LCD- og OLED-skærme blev bedre og billigere.'],
+      ['Hvor findes plasma?', 'Stjernerne er næsten rene kugler af plasma, og over 99 % af det almindelige stof, man kan se i universet, er plasma. På Jorden er det sjældent: lyn, gnister, neonrør, den tynde luft højt oppe, hvor nordlyset lyser, og fusionsforsøg, hvor magneter holder plasmaet svævende.'],
+    ],
+    tegning: 'plasma',
   },
   {
     id: 'fusion', ord: 'Fusion',
@@ -316,5 +347,43 @@ export const ORDBOG = [
     former: ['tidevandskraft', 'tidevandskraften', 'tidevandskræfter', 'tidevandskræfterne'],
     // Solen giver ca. en tredjedel af tidevandet på Jorden
     tekst: 'Forskellen i tyngdekraften fra et andet legeme på den nære og den fjerne side. Den strækker legemet lidt. Sådan giver Månen og Solen ebbe og flod på Jorden. Tidevandskraften kan også bremse en måne eller rive den i stykker, hvis den kommer for tæt på.',
+  },
+  // Jupiter J4, faktatjekket 7. november 2026 (docs/fakta-solsystemet.md, "Faktatjek J4")
+  {
+    id: 'zone', ord: 'Zone',
+    former: ['zone', 'zonen', 'zoner', 'zonerne'],
+    tekst: 'Et lyst bånd af skyer, der går hele vejen rundt om Jupiter eller Saturn. Mellem de lyse zoner ligger mørkere bånd, der kaldes bælter. Mellem båndene blæser jetstrømme skiftevis mod øst og mod vest.',
+  },
+  {
+    id: 'baelte', ord: 'Bælte',
+    former: ['bælte', 'bæltet', 'bælter', 'bælterne'],
+    tekst: 'Et mørkere bånd af skyer, der går hele vejen rundt om Jupiter eller Saturn, mellem to lyse zoner. På Jupiter er bælterne mørkt orange.',
+  },
+  {
+    id: 'jetstroem', ord: 'Jetstrøm',
+    former: ['jetstrøm', 'jetstrømmen', 'jetstrømme', 'jetstrømmene'],
+    // Vores måling i Hubbles kort: ca. 149 m/s ved 24° N (js/data/vinde-jupiter.js). NASA: "over a dozen prevailing winds"
+    tekst: 'En smal flod af meget hurtig vind højt oppe i luften. Jorden har også jetstrømme, og fly kan få medvind af dem. På Jupiter blæser over et dusin jetstrømme skiftevis mod øst og mod vest, den hurtigste med ca. 150 meter i sekundet.',
+  },
+  {
+    id: 'antikyklon', ord: 'Antikyklon',
+    former: ['antikyklon', 'antikyklonen', 'antikykloner', 'antikyklonerne'],
+    tekst: 'Et højtryk, som vinden drejer rundt om. Den drejer den modsatte vej af en cyklon: med uret på den nordlige halvkugle og mod uret på den sydlige. Den Store Røde Plet på Jupiter er en antikyklon.',
+  },
+  {
+    id: 'cyklon', ord: 'Cyklon',
+    former: ['cyklon', 'cyklonen', 'cykloner', 'cyklonerne'],
+    tekst: 'Et lavtryk, som vinden drejer rundt om: mod uret på den nordlige halvkugle og med uret på den sydlige. Orkaner er kraftige cykloner. Ved Jupiters poler står kæmpestore cykloner i en ring om en cyklon i midten.',
+  },
+  {
+    id: 'resonans', ord: 'Resonans',
+    former: ['resonans', 'resonansen', 'resonanser'],
+    tekst: 'Når ting svinger eller kredser i et fast talforhold og giver hinanden et lille skub igen og igen på samme sted, som når man skubber en gynge i takt. Io, Europa og Ganymedes er i resonans: Io går fire omgange, mens Ganymedes går én.',
+  },
+  {
+    id: 'nordlys', ord: 'Nordlys',
+    former: ['nordlys', 'nordlyset'],
+    // Jupiter: "hundreds of times brighter than those seen on Earth" (Webb 2025, Hubble 2016), fakta del 5, A7
+    tekst: 'Lys højt oppe i luften nær polerne. Ladede partikler bliver ført ned mod polerne af planetens magnetfelt og rammer luften, så den lyser. På Jorden kommer partiklerne fra Solen. Jupiters nordlys er hundredvis af gange kraftigere end Jordens.',
   },
 ];

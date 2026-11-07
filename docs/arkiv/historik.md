@@ -2,7 +2,35 @@
 
 *Flyttet hertil ordret 5. november 2026, da "Lige nu" blev gjort kort igen. Nyeste øverst. Fremover flyttes det forrige "Senest lavet" hertil (øverst under denne linje), når noget nyt er lavet. Detaljerne om hver delopgave står også i planerne (`docs/plan-*.md` og `docs/arkiv/`).*
 
+## "Senest lavet" 7. november 2026 (Molekyler M1a, før PR A i Det periodiske system)
+**Senest lavet (7. november 2026): Molekyler M1a, Byttebørsen.** Jeres go: "Go med dine anbefalinger" (efter Trin 0, se nedenfor).
+- **Trin 0:** Tallene til alle par (Li + F, Mg + O, Ca + 2 Cl, Na + Na) står med kilder i [docs/fakta-molekyler.md](fakta-molekyler.md) afsnit 7 (NIST, OpenStax, Shannon, Shriver & Atkins, Born-Haber regnet efter), og "M1 i dag" står i [planen](plan-molekyler.md). To nye fælder: O²⁻'s anden elektron koster ca. 7,7 eV, og Na + Na "bytter ikke" (men deler).
+- **Værkstedet har to dele:** del-knapperne "Byg et atom" og "Byttebørsen" i toplinjen. Byttebørsen: Træk natriums yderste elektron over til chlor (eller "Vis mig"). Måleren "Regnskabet" nederst i 3D-billedet viser −5,14 eV, mens elektronen er fri, −0,63 eV som ioner (16 Å fra hinanden), og +4,26 eV, når Na⁺ og Cl⁻ har mødt hinanden ved 2,36 Å. Na⁺ krymper og Cl⁻ vokser (Shannon-radierne). Bagefter viser "Sådan sker det i virkeligheden" harpunen: Elektronen hopper ved ca. 9,4 Å. "For nørder", "Ærligt talt", tre nye "Hvorfor?"-kort og fire nye ord i Ordbogen (Ionbinding, Ioniseringsenergi, Elektronaffinitet, Elektronvolt).
+- **Jeres svar (Trin 0):** måleren som én bjælke i 3D-billedet med tallene i panelet, harpunen i M1a, og fælde 1 rettet nu (hjælpens "Hvad er en ion?", halogenkortet og opgaven Na⁺ siger ikke længere, at atomer "vil" have en fyldt skal). Fremgangen (M1b): Byttebørsens opgaver tæller på Værkstedets kort, og der kommer ingen ny linje "Molekyler" før M2.
+- **Nye filer:** `js/molekyler.js`, `js/molekyle3d.js` (kan genbruges i M2), `js/data/molekyler.js`, `tests/molekyler.mjs` (Node, 48 tjek) og `tests/byttebors.mjs` (64 tjek, pc, tablet og telefon begge veje).
+- **Tests:** `--ændret` valgte alle 34 (index.html er ændret). Før fletningen med `main` (J3): alle 34 bestod. Efter fletningen: alle 34 bestod, men `guide` fejlede 2 tjek sammen med de andre og bestod alene (se Åbne punkter). `ordforklaring` består nu. Efter fletningen med J4 (#90, #91): de 8 tests, der deler filer med J4 (molekyler, byttebors, vaerksted, ordforklaring, ordbog, kategorier, lag og jupiter), bestod alle.
+
+## "Senest lavet" 7. november 2026 (Jupiter J4, før Molekyler M1a)
+
+**Senest lavet (7. november 2026): Jupiter J4, flybyen, siderne og citatet.** Jeres go: "Go til Jupiter j4".
+- **Jeres svar:** 3 stop nu (oversigten med månerne, båndene og pletten). Sydpolen og "I Jupiters skygge" kommer i J5 sammen med cyklonerne, nordlyset og ringene, så der ikke kommer halvfærdige stop på `main`. Citatet af Galilei er med.
+- **Flybyen:** "▶ Flyby · 3 stop" øverst i træet, med undertekster og "Lige nu" ved hvert stop. "Start flyby" er grå, indtil månernes kort er hentet (som Saturn).
+- **Jupiters side:** nye emner om båndene, det indre, "mislykket stjerne" og kometerne. **Ordbogen:** zone, bælte, jetstrøm, antikyklon, cyklon, resonans og nordlys. **Citatet:** Galilei 7. januar 1610, læst i skanningen af førsteudgaven (archive.org).
+- **Faktatjek J4** står i `docs/fakta-solsystemet.md`. Li m.fl. 2018 (varmen indefra) kunne ikke åbnes, så nørd-teksten er skrevet forsigtigt.
+- **Rettet:** Månernes baner skar hen over hele Jupiter på tablet på højkant. De ses nu først langt ude.
+- **Tests:** `jupiter` har 64 tjek (15 nye). `--ændret` valgte 23 tests, og alle bestod (20 min). Billeder i sekundet: se "Status efter J4" i [plan-jupiter.md](plan-jupiter.md).
+
+## "Senest lavet" 7. november 2026 (Jupiter J3, før J4)
+**Senest lavet (7. november 2026): Jupiter J3, de fire store måner.** Jeres go: "Go til j3, Jupiters måner".
+- **Tryk og et kort besøg** var en lille opgave (genbrug fra Saturn), så det er med: Io, Europa, Ganymedes og Callisto i træet under "Måner", tryk på en måne, en undertekst og en side for hver (faktatjekket mod del 5, "Faktatjek J3"). Oversigten "Månerne" viser alle fire baner.
+- **Kortene** fra USGS (Galileo og Voyager): 8k på pc, 4k på tablet og telefon, 2k i tests. Huller ved polerne er fyldt med spejlede rækker. Io er grå med en dæmpet gul tone fra USGS' forstærkede farvekort.
+- **Den rigtige fart og resonansen:** Månerne følger Jupiters døgn (Io rundt på ca. 4,3 Jupiter-døgn) og opfylder Laplace-relationen. ⏩ viser resonansen. De står stille under et besøg.
+- **Skygger:** Månerne kaster skygger på Jupiter, og Jupiter kaster skygge på månerne. Io's skygge ses som en sort prik i startbilledet.
+- **Størrelsen** (større langt væk, rigtig tæt på) er en fælles funktion, som Mars også bruger nu.
+- **Tests:** `jupiter` har 49 tjek (15 nye). `--ændret` (10 tests): Alle bestod efter en rettelse i `saturn` (tjekket af 8k-kort talte også Jupiters måner med). Billeder i sekundet: se "Status efter J3" i [plan-jupiter.md](plan-jupiter.md).
+
 ## "Senest lavet" 6. november 2026 (Det sorte hul, før Jupiter J3)
+
 **Senest lavet (6. november 2026): Det sorte hul er bygget om med rigtig lysbøjning.** Jeres go: "vi går med dine anbefalinger. go." (efter planen og prøvebilledet, [docs/arkiv/plan-sorthul.md](arkiv/plan-sorthul.md), [oversigt](arkiv/sorthul-proeve.jpg)).
 - **En shader** (`js/kosmos/linse.js`) følger lyset baglæns for hver pixel om et hul, der ikke drejer: Skivens bagside ses som en bue over og under skyggen, der er en tynd fotonring, den side, der kommer mod os, er lysere og hvidere (g⁴), og stjernerne bag hullet bøjes. Fysikken står i `js/data/sorthul.js` og testes i Node (ny test `sorthul`: skyggen ved √27 M, fotonkuglen 3M, ISCO 6M).
 - **Jeres svar:** g⁴, 6.000 K, mindste afstand 15 (ca. 20 M), astronauten og stjernen bøjes ikke, og dynamisk opløsning på pc og tablet.
