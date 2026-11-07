@@ -22,5 +22,10 @@ Fra det mindste til det største: **Stjerneovnen** (lette kerner smelter sammen)
 - [ ] **K2: Baggrunden skifter med (B)** (mellem til stor, eget go). 3D-billedet bag kortene skifter til delens emne. Skal holdes let på tabletten (ingen 8k-kort i menuen).
 - [ ] **K3: Karrusellen bliver standard** efter jeres runde på tabletten: gitteret, de gule piller, linjen med tallene og "Næste eventyr" fjernes, og testene rettes (`system` tjekker i dag "Næste eventyr").
 
+## Ringen på en elektronbane (jeres ønske 7. november 2026)
+- **Jeres ord:** "Kan vi gøre karussellen flottere? Lidt mere svævende måske. Og måske lidt mere ellipseformet. Kan vi tage inspiration fra en elektron eller en planets kredsløb?" Og: "fint med elektronbane. det skal være lækkert at se på. rigtig lækkert. nærmest noget apple kunne have lavet." Effort: høj (Opus' anbefaling). Et billede af idéen før grafikken bygges.
+- **Idéen (billedet er lavet 7. november 2026):** Kortene kredser om menuens atom på en skrå, lysende elektronbane (klar fortil, svag bagtil, små lysprikker med hale). Kortet forrest er stort og skarpt, kortene til siden mindre og mørkere (lysstyrke, ikke gennemsigtighed, så de ikke skinner igennem). Kun forrest, ±1 og ±2 vises. Kort af tæt, frostet glas med en lyskant foroven. Ikonrækken bliver en dok af glas med en lille prik under den valgte del. Ringen drejer med fjeder og fart, og kortene svæver let.
+- **Ikke i billedet, men i byggeriet:** bevægelsen (det vigtigste), svæven, at banen går bag om atomet, vip mod musen på pc og en billigere udgave på tabletten, hvis sløringen koster for meget.
+
 ## Åbent (7. november 2026)
-- **"Ellipseformet skulle der stå"** (jeres besked, mens K1 blev bygget). Ikke afklaret endnu, hvad det retter. Opus' gæt: kortene skal stå på en ellipse (som en rigtig karrusel, hvor kortene bagved er mindre og står højere), i stedet for på en lige række.
+- **"Ellipseformet skulle der stå"** er afklaret: ringen på elektronbanen ovenfor. Venter på jeres mening om billedet og et go til at bygge ringen.
