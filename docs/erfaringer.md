@@ -34,6 +34,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 | [Faldgruber: tests og værktøjer](erfaringer/tests-og-vaerktoejer.md) | Playwright, `koer-alle.mjs`, ventetider, processer. Også "Testsamlingen". |
 | [Planeter og måner](erfaringer/planeter-og-maaner.md) | Billeder, højdekort, net, luft, skyer, Phobos og Deimos. |
 | [Jupiter](erfaringer/jupiter.md) | Kortet (OPAL og Cassini), vindene, pletten, månerne og skyggerne. |
+| [Uranus og Neptun](erfaringer/uranus-neptun.md) | Kilderne til isgiganterne: grumsede kort, månernes kort, Horizons og domænerne. |
 | [Kameraet, rejsen og flybyen](erfaringer/kamera-rejse-flyby.md) | Saturn i skala, kameraet ned til et sted, flybyerne, hop ved stop, hent på forhånd. |
 | [Stå på Mars](erfaringer/staa-paa-mars.md) | Landskabet, lyset, Gale, Jezero og rovernes fotos. |
 | [Shadere og lysbøjningen](erfaringer/shadere.md) | Det sorte hul: fysikken i Node først, lysets bane i shaderen, tynde ting under en pixel, `dFdx`, dybden, langsom testbrowser. |
