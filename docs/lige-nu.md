@@ -1,6 +1,6 @@
 # Lige nu (oversigt)
 
-*Status står i én fil for hvert spor i `docs/lige-nu/` (besluttet 7. november 2026), så sessioner, der kører samtidig, ikke skriver i den samme fil. **Læs denne oversigt og filen for dit eget spor.** Skal du give et samlet overblik (fx "hvad nu?"), så læs alle filerne i mappen. Denne fil holdes under ca. 5 KB og rettes kun, når et spor starter eller slutter, eller når listen "Venter på et go" ændres.*
+*Status står i én fil for hvert spor i `docs/lige-nu/` (besluttet 7. november 2026), så sessioner, der kører samtidig, ikke skriver i den samme fil. **Læs denne oversigt og filen for dit eget spor.** Skal du give et samlet overblik (fx "hvad nu?"), så læs alle filerne i mappen og [koereplan.md](koereplan.md). Denne fil holdes under ca. 5 KB og rettes kun, når et spor starter eller slutter, eller når køreplanen får en ny fil.*
 
 ## Sporene
 | Spor | Fil | Hvad |
@@ -17,19 +17,5 @@
 
 **Sådan bruges sporene** (reglerne står under "Parallelle sessioner" i CLAUDE.md): Kun én session ad gangen pr. spor. Sporets fil har "Senest lavet" (kun det sidste), "Næste" og "Spørgsmål til jer" og holdes under ca. 5 KB. Når noget nyt er lavet, flyttes det forrige "Senest lavet" øverst i `docs/arkiv/historik/<spor>.md` (samme navn som sporets fil). Den gamle [arkiv/historik.md](arkiv/historik.md) er lukket (til og med 7. november 2026). Et nyt spor får en ny fil og en linje i tabellen ovenfor.
 
-## Venter på et go (ikke startet, størrelsen står i parentes)
-1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
-2. **Liv, lige efter Molekyler (opprioriteret, jeres go 5. november 2026):** Liv bygger på molekylerne (byggesten, hinder, RNA og DNA), så den kommer efter M1/M2. Opus laver faktagrundlaget med xhigh og planen, og Fable 5.5 tjekker det, hvis den kommer. DNA er en del af Liv. Se "Ny del: Liv" i [ideer.md](ideer.md) (stor).
-3. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
-4. **Mere grafik i hele AtomLab** ([plan-grafik.md](plan-grafik.md), 3. november 2026): Tablet og pc er lige vigtige, så alt nyt får en billig udgave til tabletten. Start med G1 (måling og kvalitetstrin) og G2 (kantudglatning og glød). Fire beslutninger til jer står i planen.
-5. **Planen efter planeterne (jeres svar 5. november 2026, rækkefølgen er Opus' forslag og kan ændres):** Hver får sin egen plan og sit eget go. Vurderingerne står i [ideer.md](ideer.md).
-    1. **Ild** sammen med Molekyler: forbrænding, kædereaktionen med radikaler og flammefarverne.
-    2. **Kvantefysik** med kvantecomputeren som sidste kapitel.
-    3. **Antistof** og **Mørkt stof** som fænomener i Kosmos.
-    4. **Gåderne:** 5-10 uløste gåder med links ud i programmet (også Planet X). Fable tjekker listen.
-    5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
-    6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
-    - Hjernen og AI venter (jeres svar). Nye dele kræver en beslutning om menuen (i dag 8 kort).
-6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri) er lavet. **T2** (alle mål, "1 g hele vejen" og afstanden, der skrumper) venter på et go: start med [prompt-tid-t2.md](prompt-tid-t2.md) (mellem).
-7. **Verdenerne i menuen (K4)** (jeres svar 7. november 2026): Ringen får 5 verdener (Atomer og molekyler, Kernerne, Elektricitet, Rummet og Biblioteket, senere Ild og liv) med delene som små kort under den forreste. Bygges lige efter K2: start med [prompt-menu-k4.md](prompt-menu-k4.md) (mellem til stor). Plan: [plan-verdener.md](plan-verdener.md).
-8. **Oprydning i idéerne** (jeres svar 7. november 2026, sporet Småting): `ideer.md` får kun de løse idéer sorteret efter verden, og en ny `docs/koereplan.md` samler det besluttede i rækkefølge (lille).
+## Venter på et go
+Listen med det, der er besluttet, men ikke startet (i rækkefølge og med størrelsen), står i [koereplan.md](koereplan.md) fra 7. november 2026. Løse idéer står i [ideer.md](ideer.md), sorteret efter verdenerne i menuen.

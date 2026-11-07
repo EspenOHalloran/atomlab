@@ -5,7 +5,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 ## Lige nu
 **Status til næste session står i [docs/lige-nu.md](docs/lige-nu.md)** (en kort oversigt) og i én fil pr. spor i `docs/lige-nu/` (7. november 2026). Rammer du en merge-konflikt i `docs/lige-nu.md`, fordi en session, der startede før opdelingen, har skrevet i det gamle "Lige nu", så flyt teksten over i filen for sporet.
 
-Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til jeres runde på tabletten), [Idéer til senere](docs/ideer.md) og [Før vi deler AtomLab med andre](docs/foer-vi-deler.md).
+Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til jeres runde på tabletten), [Køreplanen](docs/koereplan.md) (det besluttede i rækkefølge), [Idéer til senere](docs/ideer.md) (det løse) og [Før vi deler AtomLab med andre](docs/foer-vi-deler.md).
 
 ## Sådan arbejder vi (jeres svar)
 - Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
