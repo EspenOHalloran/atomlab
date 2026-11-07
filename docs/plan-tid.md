@@ -1,6 +1,6 @@
 # Idé og plan: Tid og rum (relativitet)
 
-*Startet 7. november 2026. Idéen er jeres. Opus' forklaring, idéer og forslag står i samtalen fra 7. november 2026 og er skrevet ind her, så en ny session kan arbejde videre. **Intet er besluttet eller bygget endnu**, og **ingen tal er faktatjekket** (de er Opus' egne udregninger og hukommelse og skal gennem `/faktatjek`, før de kommer i programmet).*
+*Startet 7. november 2026. Idéen er jeres. Opus' forklaring, idéer og forslag står i samtalen fra 7. november 2026 og er skrevet ind her, så en ny session kan arbejde videre. **Besluttet:** placering A (et fænomen i Kosmos) og en tvilling. **Trin 0 er lavet** (7. november 2026): Tallene er regnet efter og tjekket i [fakta-tid.md](fakta-tid.md), og trinene står under "Trinene" nedenfor. Teksterne i afsnittet "Forklaringen" er stadig udkast. Brug tallene fra fakta-tid.md, hvor de to er forskellige.*
 
 ## Jeres idé (jeres ord)
 "Vi er nødt til at dykke længere ned i fænomenet 'tid'. Hvordan kan det være, at hvis man rejser tæt på lysets hastighed, så kan man have været væk fra Jorden i et par dage (i ens egen tid), men når man kommer tilbage, kan der være gået tusinder af år eller noget i den stil? Kan vi lave noget interaktivt, så man kan 'lege' med tid, der kan hjælpe med at forklare dette svære og uhyre interessante koncept? Kan det passe ind i noget af det, vi allerede har?" Og: Flere idéer til, hvordan vi kan forklare tid og sammenhængen med rum.
@@ -68,12 +68,55 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 9. **"Nu" er ikke det samme for alle (samtidighed):** To lyn rammer et tog. Den på perronen ser dem samtidig, den i toget gør ikke. Den sværeste idé, men den forklarer tvillingeparadokset helt. Kan ligge i nørd-laget under Rumtidskortet. *Mellem.*
 10. **Kan man rejse tilbage i tiden?** Fremad: Ja, astronauterne har gjort det en lillebitte smule. Bagud: De fleste fysikere tror nej (Ormehul nævner det allerede). Kan ligge i Gåderne sammen med Ormehul. *Lille.*
 
-## Hvor skal det ligge? (ikke besluttet)
+## Hvor skal det ligge? (besluttet: A, 7. november 2026)
 - **A. Et nyt fænomen i Kosmos,** "Rejsen i tid", ved siden af Rumtid. Bygges på fænomenskærmen (`js/faenomenskaerm.js`: faser, handlingsknapper, "Hvorfor?"-kort, "For nørder", "Ærligt talt"). Idé 2 kan blive emner eller handlinger i Rumtid og Sort hul. *Mellem til stor.*
 - **B. En ny del "Tid og rum"** (eller "Relativitet") i menuen med flere stationer: lysuret, rejsen, Rumtidskortet, urenes stige og myonerne. En naturlig tvilling til den planlagte del Kvantefysik: de to store teorier fra 1900-tallet. Menuen bliver en karrusel ([plan-menu.md](plan-menu.md)), som kan rumme flere dele. Rækkefølgen er efter størrelse, så det skal afgøres, hvor "Tid og rum" står (måske ved Kosmos). *Stor.*
 - **C. Kun små kroge** rundt omkring (lysets forsinkelse i Solsystemet, cæsiumuret, urene ved Sort hul). Billigt, men der er ikke noget sted at lege for alvor.
 
 **Opus' anbefaling:** Start med **A** som et prøvestykke med lysuret og tvillingerejsen. Den kan bygges uden at vente på menuen. Bliver han grebet, kan det senere vokse til **B** (sammen med Kvantefysik), med Rumtidskortet som det næste. Idé 4 (lysets forsinkelse) og 5 (cæsiumuret) er så billige og stærke, at de kan komme med uanset hvad (fx når Solsystemet eller Værkstedet alligevel bliver rørt).
+
+## Trinene (Trin 0, 7. november 2026, venter på jeres go)
+*Tallene og kilderne står i [fakta-tid.md](fakta-tid.md), og udregningerne i `docs/fakta-tid/regn.py`. Hvert trin får sin egen session og prompt (`docs/prompt-tid-t1.md` osv.), og hvert trin får sit eget go. Model: Opus med høj effort, også til teksterne i T3. Cockpitudsigten (T4) har sit eget go senere.*
+
+**Rammen (gælder alle trin):**
+- **Fænomenet** `js/kosmos/tid.js`, "Rejsen i tid" (ikon ⏳), står i listen i `js/kosmos.js` lige efter Rumtid. Det bygges på fænomenskærmen som de andre fænomener: faserne i underteksten, handlinger i bjælken, en skyder og en kontakt i Styr-boksen og siden i lag.
+- **Regningen uden Three.js** i `js/data/tid.js`, så den kan testes i Node: gammafaktoren, rejsen med fast fart og med 1 g, og teksterne til hjemkomsten. Gammafaktoren regnes ud fra antallet af 9-taller (1 − v/c = 10⁻ⁿ, så γ = 1/√(ε(2 − ε))), for ellers bliver 0,999999999999 til 1 i computeren.
+- **Scenen:** Jorden, skibet og målet under en stjernehimmel, med de byggeklodser, der allerede findes i `js/kosmos/faelles.js`. **De to ure** står i et lag oven på 3D-billedet (HTML, så de er skarpe og kan læses på tabletten).
+- **Ærligt fra start:** Med skyderen springer vi over, hvordan man kommer op i fart. Det siges i underteksten og i "Ærligt talt" (se spørgsmål 1).
+
+**T1. Lysuret og rejsen til Alpha Centauri** *(mellem, én session)*
+- [ ] `js/data/tid.js` med gammafaktoren og rejsen med fast fart (ud og hjem).
+- [ ] Fænomenet med ét mål, Alpha Centauri, og skyderen "Fart" fra 90 % til 99,9999 % (1-6 ni-taller).
+- [ ] Rejsen i faser: afgang, ude ved målet, vende om og hjemkomst, med "Dit ur", "Jordens ur" og tvillingens alder. Tiden kan spoles (⏩).
+- [ ] Hjemkomsten med en kort tekst (se spørgsmål 2 og 3).
+- [ ] Handlingen "⏱ Vis lysuret": to lysure side om side, i skibet (lyset hopper lige op og ned) og set fra Jorden (zigzag). Farten følger skyderen. Det er det vigtigste "aha".
+- [ ] Teksten "kort", to emner og et første "Ærligt talt".
+- [ ] **Tests:** En ny `tests/tid.mjs` (og linjen i `koer-alle.mjs`) tjekker tallene (γ ved 90 % til 99,9999 % og rejsetiderne til Alpha Centauri mod fakta-tid.md), at skyderen ændrer urene, og at en rejse spolet frem ender ved hjemkomsten med den rigtige tekst.
+- [ ] **På tabletten:** Kan urene læses på højkant og på langs? Rammer man skyderens trin med fingeren? Kører lysuret glat, og forstår man zigzaggen?
+
+**T2. Alle mål, "1 g hele vejen" og afstanden, der skrumper** *(mellem, én session)*
+- [ ] Mælkevejens centrum og Andromedagalaksen. Skyderen går op til 12 ni-taller (γ ≈ 707.000, se spørgsmål 4).
+- [ ] Kontakten "1 g hele vejen" (speed op med 1 g til midtvejs og brems med 1 g resten): ca. 3,6 år til Alpha Centauri, ca. 20 år til Mælkevejens centrum og ca. 29 år til Andromeda, i skibet og én vej.
+- [ ] "Set fra skibet": Afstanden til målet står med to tal (set fra Jorden og set fra skibet), og målet rykker tættere, når farten stiger.
+- [ ] Hjemkomsten sammenligner med fortiden (listen "Sammenligninger med fortiden" i fakta-tid.md) og viser årstallet på Jorden.
+- [ ] **Tests:** tallene for 1 g, og et lille script, der skriver alle hjemkomstteksterne ud (alle mål og farter) og læses igennem (tjekliste B).
+- [ ] **På tabletten:** Forstår man forskellen på skyderen og 1 g? Er de store tal (år 2.502.026) til at læse?
+
+**T3. Lagene og teksterne** *(lille til mellem, én session)*
+- [ ] Emner: "Hvorfor går Jordens ur så hurtigt?" (lysuret), "Hvorfor ikke omvendt?" (tvillingeparadokset), "Set fra skibet" (længdeforkortelsen), "Er det målt?" (myonerne, urene i flyene, GPS med et link til Rumtid, astronauterne og urene, der løftes 33 cm) og "Kunne man?" (energien, støvkornet, gassen i rummet og de ca. 11.500 g).
+- [ ] Et "Hvorfor?"-kort i `js/data/hvorfor.js`, fx "Hvorfor kan intet nå lysets fart?".
+- [ ] "For nørder": formlen for γ, reglen om √10 for hvert 9-tal, formlerne for 1 g, tvillingeparadokset (omvejen giver *mindre* tid, rumtidens minus) og et par linjer om samtidighed ("nu" er ikke det samme for alle).
+- [ ] "Ærligt talt": fælderne fra listen nedenfor (de flyttes til `docs/erfaringer/fakta-faelder.md`, når teksterne er skrevet).
+- [ ] Cæsiumuret: "Hvad er et sekund?" i "Er det målt?" eller "For nørder" med en knap til cæsium i Det periodiske system.
+- [ ] Ordbogen: *tidsforlængelse* og *myon* er nye. *Lysår* og *kosmisk stråling* findes allerede.
+- [ ] `/faktatjek` af de færdige tekster mod fakta-tid.md.
+- [ ] **Tests:** teksterne og knapperne i lagene (som i `lag.mjs`).
+
+**T4. Udsigten fra cockpittet** *(mellem til stor, eget go senere)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
+
+**De billige idéer:**
+- **Lysets forsinkelse:** I "Rejsen i tid" som én linje ved målet ("En besked hjem tager 4,4 år"), i T2. Den store udgave ("Send et lysglimt" fra Jorden til Månen, Solen, Mars, Voyager 1 og Andromeda) hører hjemme i Solsystemet og er et lille trin i Solsystemets spor. Tallene står allerede i fakta-tid.md.
+- **Cæsiumuret:** I T3 (se ovenfor). Senere kan det også stå på cæsiums kort i Det periodiske system (sporet Ordbogen og Det periodiske system).
 
 ## Fælder, vi skal undgå
 *Flyttes til [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md), når de er tjekket og arbejdet går i gang.*
@@ -86,17 +129,35 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **"Rum og tid er det samme som tre retninger plus én"** (bevægelse gennem rumtiden med "lysets fart"). Et populært billede, der har noget om sig, men rumtidens geometri har et minus: Derfor giver omvejen *mindre* tid, ikke mere.
 
 ## Åbne spørgsmål (skal besvares før start)
-1. **A, B eller C** (eller noget andet)?
-2. ✅ Besvaret 7. november 2026: **Tid kommer nu**, før Uranus og Neptun og Liv (det mindste af de tre). Prompten til Trin 0 er [prompt-tid.md](prompt-tid.md). (Spørgsmålet var: **Hvor i køen?** 7. november 2026 venter Jupiter J5 og Molekyler M1b, og Liv kommer lige efter Molekyler (se [lige-nu.md](lige-nu.md)).)
+1. ✅ Besvaret 7. november 2026: **A**, et nyt fænomen i Kosmos ("Rejsen i tid"), der senere kan vokse til B. (Spørgsmålet var: **A, B eller C** (eller noget andet)?)
+2. ✅ Besvaret 7. november 2026: **Tid kommer nu**, før Uranus og Neptun og Liv (det mindste af de tre). Prompten til Trin 0 er [prompt-tid.md](arkiv/prompt-tid.md). (Spørgsmålet var: **Hvor i køen?** 7. november 2026 venter Jupiter J5 og Molekyler M1b, og Liv kommer lige efter Molekyler (se [lige-nu.md](lige-nu.md)).)
 3. ✅ Besvaret 7. november 2026: **en tvilling.** (Spørgsmålet var: **Hvem bliver hjemme?** En tvilling (klassisk) eller noget mere personligt, fx "din far"? Det sidste rammer hårdere (far er der ikke, når man kommer hjem efter 3.000 år): stærkt, men måske lidt trist.)
 4. ✅ Besvaret 7. november 2026: Idéerne skrives ind her, så en anden session kan arbejde videre.
 
+## Spørgsmål til jer efter Trin 0 (7. november 2026, Opus' anbefaling først)
+1. **Skyderen og accelerationen.** Med 1 g (som at stå på Jorden) tager turen *år* i skibet, aldrig dage. "Et par dage mod tusinder af år" kræver ca. 11.500 g, og det ville knuse en (fakta-tid.md, afsnit 6).
+   - **a (anbefalet):** Skyderen med fast fart (vi springer over, hvordan man kommer op i fart, og siger det ærligt i underteksten) *og* en kontakt "1 g hele vejen" med de realistiske tider. Man får både "wow" og sandheden.
+   - b: Kun 1 g. Det er ærligt, men "et par dage" forsvinder.
+   - c: Speed op med 1 g til den fart, skyderen viser. Det er mest korrekt, men forvirrende: Til Alpha Centauri når man aldrig over ca. 95 %, før man skal bremse.
+2. **Urene.**
+   - **a (anbefalet):** To store digitale ure: "Dit ur" i dage og år siden afgang og "Jordens ur" som årstal (fx "år 2026" → "år 56.026"). Under dem står begges alder. Jordens ur får også en lille urskive, hvor viseren drøner rundt, så man kan *se* forskellen.
+   - b: Kun to urskiver. De er flotte, men kan ikke vise tusinder af år.
+3. **Hjemkomsten og tvillingen.** Hvad står der, når der er gået mere end et menneskeliv?
+   - **a (anbefalet):** I er begge 13 år ved afgang. Op til ca. 100 år står tvillingens alder ("Du er 13 år og 45 dage. Din tvilling er 21."). Derover står årstallet og en sammenligning med fortiden ("Der er gået ca. 54.000 år, længere end siden de sidste neandertalere levede"), og kun en kort, rolig linje om tvillingen ("Din tvilling levede et langt liv, mens du var væk").
+   - b: Nævn ikke tvillingen, når der er gået over 100 år.
+   - c: En selvvalgt alder ved afgang (fx jeres søns alder).
+4. **Hvor mange 9-taller?**
+   - **a (anbefalet):** Op til 14 (γ ≈ 7 mio.). Så kan man ramme jeres eget spørgsmål præcist: ca. 3 dage i skibet mod ca. 54.000 år på Jorden til Mælkevejens centrum og hjem. Ved 12 ni-taller er det 28 dage.
+   - b: Op til 12 ni-taller.
+5. **Sammenligningerne med fortiden.** Listen i fakta-tid.md (afsnit 13) er dansk og verdens historie (Lindisfarne, Jellingstenen, Tollundmanden, Egtvedpigen, Solvognen, pyramiden, istiden, Lascaux, neandertalerne, de første mennesker og Lucy).
+   - **a (anbefalet):** Brug den.
+   - b: Tilføj eller fjern noget, fx noget fra jeres egen familie eller by.
+
 ## Model og effort
-- **Faktagrundlaget og planen:** Opus med høj effort. Regningen er enkel, men fysikken er let at forklare forkert (se fælderne). Kilderne skrives i en fil i `docs/` (fx `docs/fakta-tid.md`), som ved de andre dele.
-- **Byggeriet:** Opus med høj effort. Cockpitudsigten (hvis den kommer med) er en shader, men enklere end lysbøjningen ved Det sorte hul, så høj effort er nok.
-- **Domæner til faktatjekket** (spørg om adgang før start, hvis de ikke er åbne): fx NIST (allerede åben), NASA/JPL (Voyager), Wikipedia (allerede åben), BIPM (definitionen af sekundet).
+- **Faktagrundlaget og planen (Trin 0):** lavet med Opus, høj effort (7. november 2026).
+- **T1-T3:** Opus med høj effort, én ny session pr. trin med en prompt i `docs/prompt-tid-t1.md` osv. (skrives, når jeres svar på spørgsmålene ovenfor er her).
+- **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul.
+- **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-Ny session med Opus (høj effort). Prompt, der kan kopieres:
-
-> Læs docs/lige-nu.md, DESIGN.md og docs/plan-tid.md. Spor: Solsystemet og Kosmos (docs/lige-nu/solsystemet.md), hvis det bliver et fænomen i Kosmos (A), ellers et nyt spor "Tid og rum" (B). Vi skal arbejde videre med idéen "Tid og rum". Mine svar på de åbne spørgsmål: 1) … 2) … 3) … Lav først faktagrundlaget (Trin 0) med kilder i docs/fakta-tid.md og en plan med trin i docs/plan-tid.md, og vent på mit go, før der bygges.
+Når jeres svar på spørgsmålene ovenfor er skrevet ind, skrives prompten til T1 (`docs/prompt-tid-t1.md`). Så: ny session med Opus (høj effort) og "Læs docs/prompt-tid-t1.md".
