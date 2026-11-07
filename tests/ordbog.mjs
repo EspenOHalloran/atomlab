@@ -88,13 +88,13 @@ await page.focus('#ordbogSøg');
 await page.keyboard.press('Escape');
 tjek('Esc tømmer søgningen, og alle ord er tilbage', (await page.inputValue('#ordbogSøg')) === '' && (await T(() => document.querySelectorAll('#ordbogListe li').length)) === ORDBOG.length && (await T(() => location.hash)) === '#ordbog');
 
-// Bogstaverne hopper til det første ord med bogstavet
+// Bogstaverne hopper til det første ord med bogstavet (blød rulning: under belastning nåede den ikke frem inden for 5 s, 7. november 2026)
 await page.click('#ordbogBogstaver button[data-bogstav="K"]');
 await page.waitForFunction(() => {
   const li = document.querySelector('#ordbogListe li[data-bogstav="K"]');
   const liste = document.getElementById('ordbogListe');
   return Math.abs(li.getBoundingClientRect().top - liste.getBoundingClientRect().top) < 12;
-}, null, { timeout: 5000 }).then(() => tjek('bogstavet K ruller til "Kerneskygge"', true), () => tjek('bogstavet K ruller til "Kerneskygge"', false));
+}, null, { timeout: 10000 }).then(() => tjek('bogstavet K ruller til "Kerneskygge"', true), () => tjek('bogstavet K ruller til "Kerneskygge"', false));
 
 // Links: "Hvorfor?"-kort, en skærm og et fænomen
 await page.click('#ord-tunneleffekt button.hvorfor');
