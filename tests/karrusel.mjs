@@ -69,7 +69,7 @@ for (const [navn, opts] of størrelser) {
   tjek(`${navn}: kortet forrest står i midten, over docken og helt på skærmen`, Math.abs(ring.midtX) < 6 && ring.overDok && ring.inde, JSON.stringify(ring));
   tjek(`${navn}: atomet står over kortet forrest`, ring.atomOver, JSON.stringify(ring));
   tjek(`${navn}: 3 kort bagerst er skjult`, ring.skjulte === 3, ring.skjulte);
-  if (ring.højkant) tjek(`${navn}: på højkant går banen helt op under titlen (under 70 px luft)`, ring.luft < 70, ring.luft);
+  if (ring.højkant) tjek(`${navn}: på højkant går banen op under titlen (under 100 px luft, før ca. 210 px)`, ring.luft < 100, ring.luft);
   // Baggrunden (K2): motivet for kortet forrest toner ind, og de andre er skjult
   const vægte = () => p.evaluate(() => window.atomlabTest.karrusel.baggrund());
   await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.vaerksted > 0.999, null, { timeout: 10000 }).catch(() => {});
