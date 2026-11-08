@@ -67,3 +67,5 @@
 - "Reglerne passer, så molekylet findes." Prik-reglen tillader fx H–O–O–O–H, som falder fra hinanden. Skriv "reglerne passer", ikke "det er et rigtigt molekyle" (Molekyler M2, Trin 0).
 - "Brintoverilte (H₂O₂) er flad som vand." Den er vredet ca. 110-120° om O–O. Den enkle model med frie par som punkter giver det forkerte (flad), og uden drejningen ville den ikke være polær (Molekyler M2, Trin 0).
 - "C–H er polær (ΔEN 0,4)." Med Paulings nyere tal er det 0,35, under grænsen 0,4. OpenStax bruger ældre, rundede tal (C 2,5, H 2,1) og markerer C–H med δ, men kalder alt under 0,4 upolært. Sig, hvilken tabel tallet kommer fra (Molekyler M2, Trin 0).
+- "Brintoverilte bruges til at rense sår." Det blev det før, men virkningen er omstridt, og nogle forsøg viser, at det forsinker helingen (Wikipedia "Hydrogen peroxide"). Skriv "blege hår" eller "dræbe bakterier" (Molekyler M2b, 8. november 2026).
+- "Kulilte binder 200 gange fastere end oxygen." Kilderne siger både ca. 200 og ca. 240 (Wikipedia "Carbon monoxide poisoning" har begge). Skriv "over 200 gange" (Molekyler M2b).

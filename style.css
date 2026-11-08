@@ -288,7 +288,18 @@ button { font: inherit; color: inherit; }
 .bf-sky { width: 14px; height: 14px; }
 .bf-sky.delt { background: radial-gradient(circle, rgba(70, 140, 255, 0.85), rgba(70, 140, 255, 0)); }
 .bf-sky.fri { background: radial-gradient(circle, rgba(150, 80, 255, 0.85), rgba(150, 80, 255, 0)); }
-#bygÆrligtMolekyle[hidden] { display: none; }
+#bygÆrligtMolekyle[hidden], #bygKort[hidden], #bygLadning[hidden] { display: none; }
+/* M2b: ladningen, kortet og opgaverne (★ = klaret) */
+.byg-trin .byg-ladning { margin-top: 5px; }
+/* En åben foldeboks skjuler kortet, tallene og "Hvorfor?"-knapperne imens (ellers får panelet en rullebjælke på pc og tablet) */
+#bygInfo:has(details[open]) :is(#bygKort, #bygTal, .hvorfor-række) { display: none; }
+.byg-kort strong { color: var(--gul); }
+.byg-kort p { margin: 0; }
+.byg-opgavetæller { color: var(--svag); font-weight: 600; font-size: 0.9em; }
+.byg-opgaver { display: flex; flex-wrap: wrap; gap: 6px; }
+.byg-opgave { cursor: pointer; font: inherit; font-size: 12.5px; padding: 4px 9px; }
+.byg-opgave .bo-stjerne { color: var(--svag); }
+.byg-opgave.klaret .bo-stjerne { color: var(--gul); }
 .bytte-panel > .knap { align-self: flex-start; }
 .bytte-trin p { margin: 0; }
 .bytte-regnskab { margin: 0; }

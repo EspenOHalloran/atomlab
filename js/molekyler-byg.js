@@ -1,7 +1,9 @@
-// Byg et molekyle → "Del elektroner" (Molekyler M2a, docs/plan-molekyler.md afsnit 3 og "M2 i dag").
+// Byg et molekyle → "Del elektroner" (Molekyler M2a og M2b, docs/plan-molekyler.md afsnit 3 og "M2 i dag").
 // Man trækker H, C, N, O og Cl fra paletten ind i 3D-billedet. Slipper man et atom tæt på et andet, og har begge en
 // elektron uden partner, deler de et elektronpar (en binding). Dobbelt- og tripelbindingerne og formen regnes i
 // js/data/molekyler-byg.js (uden Three.js). Tegningen er MolekyleTegning i js/molekyle3d.js.
+// M2b: ladningerne (parret ligger tættest på det atom, der trækker hårdest, og enderne får δ+ og δ−), pilene (kontakten
+// "Pile"), kortet om hvert kendt molekyle og de seks opgaver med ★ (tæller på Værkstedets kort i menuen).
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTil, stopKamera, begrænsDrejning } from './scene3d.js';
@@ -11,6 +13,8 @@ import { lyd } from './lyd.js';
 import { visBesked, bundIVindue } from './beskeder.js';
 import { lavTidsknap } from './pause.js';
 import { lavNæsteSkridt, lavNæsteSkridtKort } from './lag.js';
+import { lavKontakt } from './kontakt.js';
+import * as fremgang from './fremgang.js';
 
 const S = 3; // enheder i 3D pr. ångstrøm (Å). Bindingslængderne er i det rigtige forhold.
 const SKRIDT_PR_SEKUND = 1800; // så mange skridt af formen pr. sekund (formen falder på plads på ca. 1 sekund)
@@ -21,6 +25,8 @@ const BRYD_FINGER = 140; // px: trækkes et atom så meget længere væk end bin
 const BRYD_MUS = 110; // i stykker, når man slipper. I px, så det ikke afhænger af, hvor tæt kameraet er på.
 const SKUB_TID = 0.35; // sekunder: et atom, der ikke må binde, skubbes væk
 const LYS_TID = 1.6; // sekunder: et færdigt molekyle lyser op
+const PIL_SIDE = 0.62; // enheder: bindingens pil står så langt ved siden af pinden (længere ved dobbelt- og tripelbindinger)
+const SUM_LÆNGDE = 1.2; // enheder pr. enhed elektronegativitet: så meget længere er molekylets pil (summen)
 
 let aktiv = false;
 let rod = null;
@@ -44,6 +50,11 @@ let skub = null; // { i, fra, til, tid }
 let panelTekst = '';
 let panelTid = 0;
 let sidsteRadius = 0;
+let pileKontakt = null;
+let panelPolær = '–'; // det, panelet siger under "Polært" (til testene)
+let drejet = 0; // grader: så meget er kameraet drejet, siden metan blev færdig (opgaven "Byg metan, og drej den")
+const sidsteSyn = new THREE.Vector3();
+let harSyn = false;
 const stråle = new THREE.Raycaster();
 const plan = new THREE.Plane();
 const hjælpV = new THREE.Vector3();
@@ -53,6 +64,10 @@ const tegneAtomer = []; // genbruges hvert billede
 const tegneBånd = [];
 const tegneRet = [];
 const tegneNavne = [];
+const tegnePile = [];
+for (let i = 0; i < 24; i++) tegnePile.push({ fra: new THREE.Vector3(), til: new THREE.Vector3(), tyk: 0.05, sum: false });
+const tSide = new THREE.Vector3();
+const tSyn = new THREE.Vector3();
 
 const $ = (id) => document.getElementById(id);
 const navn = (symbol) => D.STOFFER_BYG[symbol].navn;
@@ -65,7 +80,7 @@ export function lavBygMolekyler() {
   tegning = new MolekyleTegning();
   rod.add(tegning.gruppe);
   for (let i = 0; i < D.MAX_ATOMER; i++) {
-    tegneAtomer.push({ symbol: 'H', p: new THREE.Vector3(), lys: 0, stor: false });
+    tegneAtomer.push({ symbol: 'H', p: new THREE.Vector3(), lys: 0, stor: false, q: 0 });
   }
   lavPanel();
   lavTræk();
@@ -115,6 +130,96 @@ function lavPanel() {
     lyd.klik();
     ryd();
   });
+  // Pilene: hvilken vej hver binding trækker i elektronerne, og summen for hele molekylet
+  pileKontakt = lavKontakt($('bygPile'));
+  pileKontakt.knap.addEventListener('click', () => {
+    lyd.klik();
+    pileKontakt.sæt(!pileKontakt.til);
+    tjekOpgaver();
+    panelTekst = '';
+    opdaterPanel();
+  });
+  // Opgaverne (★ = klaret). Et tryk viser tippet.
+  const liste = $('bygOpgaver');
+  for (const o of D.OPGAVER_BYG) {
+    const b = document.createElement('button');
+    b.className = 'chip byg-opgave';
+    b.dataset.bygOpgave = o.id;
+    b.innerHTML = '<span class="bo-stjerne" aria-hidden="true"></span> <span class="bo-navn"></span>';
+    b.querySelector('.bo-navn').textContent = o.kort;
+    b.addEventListener('click', () => {
+      lyd.klik();
+      visOpgave(o.id);
+    });
+    liste.append(b);
+  }
+  opdaterStjerner();
+}
+
+// ---------- Opgaverne ----------
+function opdaterStjerner() {
+  let løste = 0;
+  for (const b of document.querySelectorAll('.byg-opgave')) {
+    const o = D.OPGAVER_BYG.find((x) => x.id === b.dataset.bygOpgave);
+    const løst = fremgang.erLøst(o.id);
+    if (løst) løste++;
+    b.querySelector('.bo-stjerne').textContent = løst ? '★' : '☆';
+    b.classList.toggle('klaret', løst);
+    b.title = løst ? `${o.fakta} (klaret ★)` : o.tip;
+  }
+  $('bygOpgaveTæller').textContent = `${løste}/${D.OPGAVER_BYG.length}`;
+}
+
+// Viser opgaven og dens tip (fra knapperne her og fra Værkstedets opgaveliste)
+export function visOpgave(id) {
+  const o = D.OPGAVER_BYG.find((x) => x.id === id);
+  if (!o) return;
+  const løst = fremgang.erLøst(o.id);
+  visBesked({ titel: `${løst ? '★ ' : ''}${o.titel.replace('Del elektroner: ', '')}`, tekst: løst ? o.fakta : `Tip: ${o.tip}`, type: 'info', varighed: 9000 });
+}
+
+// Stjernerne igen (fx efter "Opgaver forfra" i Værkstedet)
+export function opdaterFremgang() {
+  opdaterStjerner();
+  if (aktiv) {
+    panelTekst = '';
+    opdaterPanel();
+  }
+}
+
+// Er en opgave lige blevet klaret? Giver true, hvis der kom en pille (så spiller lyden "klaret" i stedet for "opdaget").
+function tjekOpgaver() {
+  if (!aktiv) return false;
+  const kendte = status.filter((st) => st.færdig && st.kendt).map((st) => st.kendt.id);
+  const s = form.struktur;
+  const tripel = Boolean(s) && status.some((st) => st.færdig && s.bånd.some(([a], k) => s.ordener[k] === 3 && st.atomer.includes(a)));
+  const nu = { kendte, tripel, pile: pileKontakt.til, drejet };
+  let besked = false;
+  for (const o of D.OPGAVER_BYG) {
+    if (fremgang.erLøst(o.id) || !D.opgaveKlaret(o, nu)) continue;
+    fremgang.løs(o.id);
+    if (!besked) {
+      lyd.klaret();
+      visBesked({ titel: `Opgave klaret: ${o.kort} ★`, tekst: o.fakta, type: 'klaret', varighed: 9000 });
+      besked = true;
+    }
+  }
+  if (besked) opdaterStjerner();
+  return besked;
+}
+
+// Metan: hvor meget kameraet er drejet, siden den blev færdig (kun mens en færdig metan står der)
+function følgDrejning() {
+  if (fremgang.erLøst('byg-metan') || !status.some((st) => st.færdig && st.kendt?.id === 'metan')) {
+    harSyn = false;
+    drejet = 0;
+    return;
+  }
+  tSyn.subVectors(verden.kamera.position, verden.styring.target).normalize();
+  if (harSyn && !træk) drejet += Math.acos(Math.max(-1, Math.min(1, tSyn.dot(sidsteSyn)))) * 180 / Math.PI;
+  sidsteSyn.copy(tSyn);
+  harSyn = true;
+  if (drejet >= D.DREJ_GRADER) tjekOpgaver();
 }
 
 // ---------- Atomerne ----------
@@ -194,6 +299,7 @@ function ændret() {
   status = grupper.map((liste) => D.status(atomer, bånd, liste));
   // Molekyler, der lige er blevet færdige: de lyser op, og navnet kommer
   const nu = new Set();
+  let besked = null;
   for (const st of status) {
     if (!st.færdig) continue;
     const u = D.udsnit(atomer, bånd, st.atomer);
@@ -202,13 +308,18 @@ function ændret() {
     if (færdigeFør.has(nøgle)) continue;
     for (const i of st.atomer) lys[i] = 1;
     if (aktiv && st.atomer.includes(sidstRørt)) {
-      lyd.opdaget();
-      visBesked(st.kendt
+      besked = st.kendt
         ? { titel: `${st.kendt.navn} (${st.kendt.formel})`, tekst: `Færdigt! Alle elektronerne har fået en partner. ${st.kendt.form}`, type: 'info' }
-        : { titel: `${st.formel}: reglerne passer`, tekst: UKENDT, type: 'info' });
+        : { titel: `${st.formel}: reglerne passer`, tekst: UKENDT, type: 'info' };
     }
   }
   færdigeFør = nu;
+  // En klaret opgave er en pille (øverst) med lyden "klaret", og navnet på molekylet er en undertekst (nederst)
+  const klaret = tjekOpgaver();
+  if (besked) {
+    if (!klaret) lyd.opdaget();
+    visBesked(besked);
+  }
   zoomEfterBehov();
   panelTekst = '';
   opdaterPanel();
@@ -474,6 +585,7 @@ function opdater(dt) {
     s.target.add(hjælpV);
     verden.kamera.position.add(hjælpV);
   }
+  følgDrejning();
   tegn();
   if (træk) træk.mål = findMål(træk);
   panelTid += dt;
@@ -494,14 +606,19 @@ function tegn() {
     pos3D(i, a.p);
     a.lys = lys[i];
     a.stor = træk?.i === i;
+    a.q = s?.q?.[i] ?? 0;
   }
   tegneBånd.length = 0;
   if (s) {
     s.bånd.forEach(([a, b], k) => {
       const strakt = træk && ((a === træk.i && træk.strakte.includes(b)) || (b === træk.i && træk.strakte.includes(a)));
-      tegneBånd.push({ a, b, orden: s.ordener[k], strakt });
+      // Parret ligger tættest på det atom, der trækker hårdest (ikke i kulilte, se "Ærligt talt")
+      const p = s.dativ < 0 ? D.polærBinding(atomer[a].symbol, atomer[b].symbol) : null;
+      const skæv = p ? Math.min(1, p.delta / 1.24) * (atomer[b].symbol === p.minus ? 1 : -1) : 0;
+      tegneBånd.push({ a, b, orden: s.ordener[k], strakt, skæv });
     });
   }
+  const pile = pileKontakt.til ? lavPile(liste) : [];
   tegneRet.length = 0;
   form.retninger.forEach((liste2, i) => { for (const x of liste2 ?? []) tegneRet.push({ atom: i, v: x.v, slags: x.slags }); });
   // Navnene over de færdige molekyler (over det øverste atom på skærmen)
@@ -522,7 +639,59 @@ function tegn() {
     mål = { atom: træk.mål.atom, ok: træk.mål.ok };
     linje = { fra: liste[træk.i].p, til: liste[træk.mål.atom].p, ok: træk.mål.ok };
   }
-  tegning.tegn({ atomer: liste, bånd: tegneBånd, retninger: tegneRet, mål, linje, navne: tegneNavne, kamera: verden.kamera, tid });
+  tegning.tegn({ atomer: liste, bånd: tegneBånd, retninger: tegneRet, mål, linje, navne: tegneNavne, pile, kamera: verden.kamera, tid });
+}
+
+// Pilene (kontakten "Pile"): en gul pil ved siden af hver polær binding, mod det atom, der trækker hårdest, og så lang som
+// forskellen i elektronegativitet (OpenStax 7.6). En orange pil gennem midten af hvert færdigt molekyle er summen.
+function lavPile(liste) {
+  const ud = [];
+  const s = form.struktur;
+  if (!s) return ud;
+  for (const st of status) {
+    if (st.enligt) continue;
+    const t = D.træk(form, st.atomer);
+    for (const pil of t.pile) {
+      if (ud.length >= tegnePile.length - 6) break;
+      const a = liste[pil.fra].p;
+      const b = liste[pil.til].p;
+      const orden = s.ordener[s.bånd.findIndex(([x, y]) => (x === pil.fra && y === pil.til) || (x === pil.til && y === pil.fra))] ?? 1;
+      hjælpV.subVectors(b, a);
+      const l = hjælpV.length();
+      if (l < 1e-3) continue;
+      hjælpV.divideScalar(l);
+      midt.addVectors(a, b).multiplyScalar(0.5);
+      tSyn.copy(verden.kamera.position).sub(midt).normalize();
+      tSide.crossVectors(hjælpV, tSyn);
+      if (tSide.lengthSq() < 1e-6) tSide.set(0, 1, 0);
+      tSide.normalize();
+      const halv = l * (0.18 + 0.2 * Math.min(1, pil.delta / 1.24));
+      const x = tegnePile[ud.length];
+      const side = PIL_SIDE + (orden - 1) * 0.22;
+      x.fra.copy(midt).addScaledVector(tSide, side).addScaledVector(hjælpV, -halv);
+      x.til.copy(midt).addScaledVector(tSide, side).addScaledVector(hjælpV, halv);
+      x.tyk = 0.045;
+      x.sum = false;
+      ud.push(x);
+    }
+    // Summen: kun for færdige molekyler, og kun når den ikke er 0 (i CO₂ ophæver trækkene hinanden)
+    const længde = Math.hypot(...t.sum);
+    if (!st.færdig || længde < D.POLÆR_SUM || ud.length >= tegnePile.length) continue;
+    const c = [0, 0, 0];
+    for (const i of st.atomer) for (let q = 0; q < 3; q++) c[q] += form.pos[i][q] / st.atomer.length;
+    const x = tegnePile[ud.length];
+    hjælpV.set(t.sum[0], t.sum[1], t.sum[2]).divideScalar(længde);
+    // Gennem hele molekylet, så spidsen stikker ud på den side, der er minus (længere, jo mere polært)
+    let ud1 = 0;
+    for (const i of st.atomer) ud1 = Math.max(ud1, Math.abs((form.pos[i][0] - c[0]) * hjælpV.x + (form.pos[i][1] - c[1]) * hjælpV.y + (form.pos[i][2] - c[2]) * hjælpV.z));
+    const halv = ud1 * S + 0.9 + længde * SUM_LÆNGDE * 0.5;
+    x.fra.set(c[0] * S, c[1] * S, c[2] * S).addScaledVector(hjælpV, -halv);
+    x.til.set(c[0] * S, c[1] * S, c[2] * S).addScaledVector(hjælpV, halv);
+    x.tyk = 0.085;
+    x.sum = true;
+    ud.push(x);
+  }
+  return ud;
 }
 
 // ---------- Panelet ----------
@@ -578,26 +747,45 @@ function panelIndhold() {
     };
   }
   if (st.kendt) {
+    const k = st.kendt;
     return {
-      titel: `${st.kendt.navn} (${st.kendt.formel})`,
-      tekst: `Færdigt! Alle elektronerne har fået en partner. ${st.kendt.form}`,
-      næste: 'Færdigt! Drej molekylet med fingeren eller musen, så du kan se formen. Prøv så et nyt.',
-      ærligt: ÆRLIGT[st.kendt.id] ?? '',
+      titel: `${k.navn} (${k.formel})`,
+      tekst: `Færdigt! ${k.form}`,
+      ladning: k.ladning,
+      kort: k.kort,
+      polær: k.polær ? 'ja' : 'nej',
+      næste: næsteForKendt(k),
+      ærligt: ÆRLIGT[k.id] ?? '',
     };
   }
+  const polær = D.polærForm(form, st.atomer);
   return {
     titel: `${st.formel}: reglerne passer`,
     tekst: UKENDT,
+    ladning: polær ? 'Bindingernes træk ophæver ikke hinanden, så molekylet er polært (det har en plus- og en minus-ende).'
+      : 'Molekylet er ikke polært: Bindingerne er ikke skæve, eller deres træk ophæver hinanden.',
+    polær: polær ? 'ja' : 'nej',
     næste: 'Færdigt, men AtomLab kender det ikke. Prøv at bygge vand, metan eller ammoniak.',
     ærligt: 'At reglerne passer, betyder ikke altid, at molekylet findes. Det afgøres af energien, og den regner spillet ikke på.',
   };
 }
 
+// "Næste skridt" for et færdigt, kendt molekyle (peger på en opgave, der ikke er klaret, når den passer)
+function næsteForKendt(k) {
+  if (k.id === 'co2' && !fremgang.erLøst('byg-co2') && !pileKontakt.til) return 'Slå "Pile" til, og se, hvilken vej de to bindinger trækker. Hvorfor er CO₂ så ikke polært?';
+  if (k.id === 'metan' && !fremgang.erLøst('byg-metan')) return 'Drej metan med fingeren eller musen (træk et tomt sted), til du kan se tetraederen.';
+  if (k.id === 'vand' && !pileKontakt.til) return 'Færdigt! Drej vand, så du kan se, at det er bøjet. Slå "Pile" til for at se, hvilken vej bindingerne trækker.';
+  const mangler = D.OPGAVER_BYG.find((o) => !fremgang.erLøst(o.id));
+  return mangler ? `Færdigt! Næste opgave: ${mangler.kort}. ${mangler.tip}` : 'Færdigt! Drej molekylet med fingeren eller musen, så du kan se formen. Prøv så et nyt.';
+}
+
 // Det, modellen snyder med, for nogle af de kendte molekyler (faktagrundlaget, afsnit 5)
+const CH = 'C–H er en anelse skæv (H er en lille smule plus), men så lidt, at kemikere kalder den upolær. Derfor har den ingen farver her.';
 const ÆRLIGT = {
   o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden makker, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det.',
-  co: 'Prik-reglen kan ikke bygge kulilte. Her låner oxygen et af sine frie par ud, når C og O er alene, så det bliver en tripelbinding. I det rigtige kulilte kommer det ene af de tre par også helt fra oxygen.',
-  h2o2: 'Den enkle model ville lægge brintoverilte fladt. Det rigtige molekyle er vredet som en halvt åben bog, så spillet drejer det med et ekstra led. Hvorfor, kræver kvantemekanik.',
+  co: 'Prik-reglen kan ikke bygge kulilte. Her låner oxygen et af sine frie par ud, når C og O er alene, så det bliver en tripelbinding. Fordi det ene par kommer helt fra oxygen, er det kulstof-enden, der er en lille smule minus, selvom oxygen trækker hårdest. Derfor viser spillet ingen δ her.',
+  h2o2: 'Den enkle model ville lægge brintoverilte fladt. Det rigtige molekyle er vredet som en halvt åben bog, så spillet drejer det med et ekstra led. Hvorfor, kræver kvantemekanik. Uden drejningen ville det heller ikke være polært.',
+  metan: CH, ethan: CH, ethen: CH, ethyn: CH,
 };
 
 function opdaterPanel() {
@@ -609,12 +797,18 @@ function opdaterPanel() {
     ['Atomer', `${atomer.length} af ${D.MAX_ATOMER}`],
     ['Bindinger', st && s ? bindingTal(st) : 'ingen'],
     ['Uden partner', st ? ental(st.uden, 'elektron', 'elektroner') : '–'],
+    ['Polært', p.polær ?? '–'],
   ];
   const nøgle = JSON.stringify([p, tal]);
   if (nøgle === panelTekst) return;
   panelTekst = nøgle;
   $('bygTitel').textContent = p.titel;
+  panelPolær = p.polær ?? '–';
   $('bygTekst').textContent = p.tekst;
+  $('bygLadning').textContent = p.ladning ?? '';
+  $('bygLadning').hidden = !p.ladning;
+  $('bygKortTekst').textContent = p.kort ?? '';
+  $('bygKort').hidden = !p.kort;
   $('bygTal').innerHTML = tal.map(([a, b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join('');
   const æ = $('bygÆrligtMolekyle');
   æ.textContent = p.ærligt;
@@ -703,6 +897,22 @@ export function testAdgang() {
       return verden.målAfstand == null && (!atomer.length || verden.styring.target.distanceTo(hjælpV.set(c[0] * S, c[1] * S, c[2] * S)) < 0.03);
     },
     tid: () => tid,
+    // M2b: ladningerne (plus = δ+), om gruppen med atom i er polær (det, panelet siger), pilene og opgaverne
+    ladninger: () => [...(form.struktur?.q ?? [])],
+    polær: () => panelPolær,
+    pile: () => (pileKontakt.til ? lavPile(tegneAtomer.slice(0, atomer.length)).map((x) => ({ sum: x.sum, fra: x.fra.toArray(), til: x.til.toArray() })) : []),
+    sætPile: (til) => { pileKontakt.sæt(til); tjekOpgaver(); panelTekst = ''; opdaterPanel(); },
+    opgaver: () => D.OPGAVER_BYG.map((o) => ({ id: o.id, løst: fremgang.erLøst(o.id) })),
+    drejet: () => drejet,
+    // Drejer kameraet om molekylets midte (som et træk et tomt sted), i skridt på 5°
+    drej: (grader) => {
+      const akse = new THREE.Vector3(0, 1, 0);
+      for (let g = 0; g < grader; g += 5) {
+        hjælpV.subVectors(verden.kamera.position, verden.styring.target).applyAxisAngle(akse, (5 * Math.PI) / 180);
+        verden.kamera.position.copy(verden.styring.target).add(hjælpV);
+        opdater(1 / 60);
+      }
+    },
     // Spol frem i små skridt (som på en skærm med 60 billeder i sekundet)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) opdater(1 / 60); },
   };
