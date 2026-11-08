@@ -1626,9 +1626,9 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .opgaver li.forfra { list-style: none; display: block; padding: 6px 0 0; border: 0; background: none; cursor: default; }
 .knap.spørg { color: #ffd43b; border-color: rgba(255, 212, 59, 0.5); }
 
-/* ---------- Menuen som en karrusel (prototype med ?karrusel, js/karrusel.js og docs/plan-menu.md) ----------
-   Kortene kredser om atomet på en elektronbane. karrusel.js sætter hvert korts plads (transform), lysstyrke og lag,
-   og flytter atomets vindue (#menuVindue), så atomet står midt i ringen. */
+/* ---------- Menuen som en karrusel (prototype med ?karrusel, js/karrusel.js, docs/plan-menu.md og plan-verdener.md) ----------
+   Verdenernes kort kredser om atomet på en elektronbane. karrusel.js sætter hvert korts plads (transform), lysstyrke og lag,
+   og flytter atomets vindue (#menuVindue), så atomet står midt i ringen. Delene er knapper inde i verdenens kort (K4). */
 #menu.karrusel-tilstand { grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; overflow: hidden; }
 #menu.karrusel-tilstand.mere { -webkit-mask-image: none; mask-image: none; }
 #menu.karrusel-tilstand .menu-status, #menu.karrusel-tilstand .kort-fremgang, #menu.karrusel-tilstand .menu-citat { display: none; }
@@ -1639,8 +1639,10 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .karrusel-gulv { position: absolute; height: 54px; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none;
   background: radial-gradient(closest-side, rgba(95, 227, 255, 0.24), rgba(95, 227, 255, 0.05) 60%, transparent); }
 #menu.karrusel-tilstand .menukort { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; max-width: none; margin: 0; padding: 0; }
-#menu.karrusel-tilstand .menukort > .kort {
+#menu.karrusel-tilstand .menukort > .verden {
   position: absolute;
+  display: flex;
+  align-items: center;
   left: 0;
   top: 0;
   width: var(--kb);
@@ -1648,9 +1650,11 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   flex-direction: column;
   justify-content: flex-start;
   gap: 8px;
-  padding: 20px 18px 18px;
+  padding: 20px 16px 16px;
   border-radius: 24px;
   text-align: center;
+  color: var(--tekst);
+  cursor: pointer;
   will-change: transform;
   -webkit-user-drag: none;
   background: linear-gradient(165deg, rgba(70, 90, 150, 0.5), rgba(18, 24, 52, 0.86) 55%, rgba(14, 20, 44, 0.92));
@@ -1659,23 +1663,76 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 /* Frostet glas på pc (sløringen bag kortet). På tablet og telefon er glasset tættere i stedet. */
-#menu.karrusel-glas .menukort > .kort {
+#menu.karrusel-glas .menukort > .verden {
   background: linear-gradient(165deg, rgba(70, 90, 150, 0.42), rgba(18, 24, 52, 0.72) 55%, rgba(14, 20, 44, 0.8));
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   backdrop-filter: blur(18px) saturate(150%);
 }
-#menu.karrusel-tilstand .kort.åben:hover { transform: none; }
-#menu.karrusel-tilstand .menukort > .kort.åben:hover { border-color: rgba(160, 240, 255, 0.3); }
-#menu.karrusel-tilstand .menukort > .kort.midt {
+#menu.karrusel-tilstand .menukort > .verden:hover { border-color: rgba(160, 240, 255, 0.3); }
+#menu.karrusel-tilstand .menukort > .verden.midt { cursor: default; }
+#menu.karrusel-tilstand .menukort > .verden.midt.én-del { cursor: pointer; }
+#menu.karrusel-tilstand .menukort > .verden.midt {
   border-color: rgba(160, 240, 255, 0.45);
   box-shadow: 0 0 0 1px rgba(127, 247, 255, 0.12), 0 0 36px rgba(95, 227, 255, 0.22), 0 40px 80px -24px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-.karrusel.trækkes .kort { cursor: grabbing; }
-#menu.karrusel-tilstand .kort .kort-tekst { align-items: center; }
-#menu.karrusel-tilstand .kort .kort-tekst strong { font-size: 20px; font-weight: 650; letter-spacing: -0.01em; }
-#menu.karrusel-tilstand .kort .kort-tekst small { font-size: 13.5px; line-height: 1.4; color: rgba(220, 228, 255, 0.68); }
-#menu.karrusel-tilstand .kort .kort-ikon { flex: 0 0 52px; width: 52px; height: 52px; transform: scale(1.25); margin: 6px 0 10px; }
-#menu.karrusel-tilstand .kort.klaret .kort-tekst strong::after { content: " ✓"; color: var(--gul); }
+.karrusel.trækkes .verden, .karrusel.trækkes .verden-knap { cursor: grabbing; }
+.verden-tekst { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.verden-navn { font-size: 20px; font-weight: 650; letter-spacing: -0.01em; }
+.verden-tekst small { font-size: 13.5px; line-height: 1.4; color: rgba(220, 228, 255, 0.68); }
+.verden > .verden-ikon { flex: 0 0 52px; width: 52px; height: 52px; transform: scale(1.25); margin: 6px 0 10px; }
+.verden.klaret .verden-navn::after { content: " ✓"; color: var(--gul); }
+/* Delene: knapper af glas inde i verdenens kort (ikon, navn og en lille pil) */
+.verden-dele { display: flex; flex-direction: column; gap: 8px; align-self: stretch; margin-top: 6px; }
+.verden.én-del .verden-dele { margin: 0; }
+.verden-knap { position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 12px 6px 6px; border-radius: 14px;
+  color: var(--tekst); text-decoration: none; text-align: left; -webkit-user-drag: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; }
+.verden-knap .kort-ikon { flex-shrink: 0; margin: -8px -10px; transform: scale(0.62); }
+.verden-knap .kort-tekst { flex: 1 1 auto; min-width: 0; }
+.verden-knap .kort-tekst strong { font-size: 15.5px; font-weight: 600; }
+.verden-knap .kort-tekst small { display: none; }
+.verden-knap.klaret .kort-tekst strong::after { content: " ✓"; color: var(--gul); }
+.verden-pil { flex: 0 0 auto; font-size: 22px; line-height: 1; color: rgba(160, 240, 255, 0.7); transition: transform 0.2s; }
+.verden.midt .verden-knap:hover, .verden.midt .verden-knap:focus-visible { border-color: rgba(160, 240, 255, 0.5); background: linear-gradient(180deg, rgba(127, 247, 255, 0.16), rgba(127, 247, 255, 0.05)); }
+.verden.midt .verden-knap:hover .verden-pil { transform: translateX(3px); }
+.verden.midt .verden-knap:active { background: rgba(127, 247, 255, 0.2); }
+/* Den del, man sidst var i: en svag glød og en lille prik */
+.verden-knap.sidst { border-color: rgba(127, 247, 255, 0.38); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 18px rgba(95, 227, 255, 0.22); }
+.verden-knap.sidst::before { content: ""; position: absolute; left: -4px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: #7ff7ff; box-shadow: 0 0 8px #7ff7ff; }
+.verden-knap.start-her::after { content: "Start her"; position: absolute; top: -9px; right: 10px; padding: 1px 9px; border-radius: 99px; font-size: 11px; font-weight: 800;
+  background: var(--gul); color: #1d1600; box-shadow: 0 0 14px rgba(255, 212, 59, 0.55); animation: start-her 2.4s ease-in-out infinite; }
+/* En verden med kun én del: delens link dækker hele kortet, og delens navn står nederst */
+.verden-knap.verden-hel { position: absolute; inset: 0; min-height: 0; padding: 0; border: 0; border-radius: 24px; background: none; box-shadow: none; }
+.verden-knap.verden-hel > * { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.verden-knap.verden-hel.sidst { box-shadow: inset 0 0 0 1px rgba(127, 247, 255, 0.3), inset 0 0 26px rgba(95, 227, 255, 0.14); }
+.verden-knap.verden-hel.sidst::before { left: 50%; top: auto; bottom: 9px; margin: 0 0 0 -3px; }
+#menu.karrusel-tilstand .menukort > .verden.én-del { justify-content: center; }
+.verden-del { margin-top: 4px; font-size: 14.5px; font-weight: 600; color: rgba(160, 240, 255, 0.85); }
+.verden.midt.én-del:hover .verden-del { color: #c4f9ff; }
+/* Ikoner for verdenerne (tegnet med CSS som de andre) */
+.ikon-v-atomer { background:
+  radial-gradient(circle at 50% 56%, #ff6b6b 0 8px, #c92a2a 10px, transparent 11px),
+  radial-gradient(circle at 22% 34%, #e7f5ff 0 5px, #74c0fc 7px, transparent 8px),
+  radial-gradient(circle at 80% 34%, #e7f5ff 0 5px, #74c0fc 7px, transparent 8px); }
+.ikon-v-atomer::before, .ikon-v-atomer::after { content: ""; position: absolute; top: 21px; width: 13px; height: 3px; border-radius: 2px; background: rgba(230, 240, 255, 0.7); }
+.ikon-v-atomer::before { left: 13px; transform: rotate(33deg); }
+.ikon-v-atomer::after { right: 13px; transform: rotate(-33deg); }
+.ikon-v-kerner { background:
+  radial-gradient(circle at 40% 38%, #ff8787 0 5px, #e03131 7px, transparent 7.5px),
+  radial-gradient(circle at 60% 40%, #a5d8ff 0 5px, #4c6ef5 7px, transparent 7.5px),
+  radial-gradient(circle at 34% 60%, #a5d8ff 0 5px, #4c6ef5 7px, transparent 7.5px),
+  radial-gradient(circle at 56% 62%, #ff8787 0 5px, #e03131 7px, transparent 7.5px),
+  radial-gradient(circle, rgba(255, 140, 80, 0.35), transparent 70%); }
+.ikon-v-elektricitet { background: linear-gradient(160deg, #fff3bf, #ffd43b 45%, #fab005);
+  clip-path: polygon(58% 4%, 22% 56%, 46% 56%, 38% 96%, 78% 40%, 54% 40%); border-radius: 0; }
+.ikon-v-rummet { background: radial-gradient(circle at 42% 40%, #ffe8cc 0 4px, #f2b35b 10px, #b06a2a 15px, transparent 15.5px); }
+.ikon-v-rummet::before { content: ""; position: absolute; inset: 19px 1px; border-radius: 50%; border: 3px solid rgba(240, 210, 160, 0.85); border-top-color: transparent; transform: rotate(-16deg); box-shadow: 0 0 8px rgba(255, 190, 110, 0.4); }
+.ikon-v-biblioteket { border-radius: 4px; background:
+  linear-gradient(90deg, transparent 0 7px, #4dabf7 7px 15px, transparent 15px 17px, #ff8787 17px 24px, transparent 24px 26px, #ffd43b 26px 35px, transparent 35px) 0 10px / 100% 34px no-repeat,
+  linear-gradient(#d6dcf5, #d6dcf5) 5px 44px / 42px 3px no-repeat; }
+.ikon-v-biblioteket::before { content: ""; position: absolute; left: 36px; top: 12px; width: 8px; height: 32px; border-radius: 1px; background: #8ce99a; transform: rotate(14deg); transform-origin: bottom left; }
 /* Docken: ikonerne i en kapsel af glas med en prik under den valgte del, og "Din fremgang" under */
 .menu-under { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; padding-bottom: 2px; }
 .menu-dok { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
@@ -1688,6 +1745,7 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .menu-ikon { position: relative; width: 38px; height: 38px; padding: 0; border: 0; border-radius: 12px; background: transparent; cursor: pointer; transition: transform 0.2s; }
 .menu-ikon:hover { transform: translateY(-2px); }
 .menu-ikon .kort-ikon, .fremgang-ikon .kort-ikon { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; transform: scale(0.62); }
+.menu-ikon.klaret::before { content: "✓"; position: absolute; right: -3px; top: -3px; z-index: 1; width: 14px; height: 14px; border-radius: 50%; font-size: 9.5px; font-weight: 800; line-height: 14px; text-align: center; color: #1d1600; background: var(--gul); }
 .menu-ikon.valgt::after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: #7ff7ff; box-shadow: 0 0 6px #7ff7ff; }
 .menu-fremgang-knap { font: inherit; font-size: 13.5px; color: rgba(220, 228, 255, 0.72); padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04); cursor: pointer; }
 .menu-fremgang-knap:hover { color: #fff; border-color: rgba(160, 240, 255, 0.35); }
@@ -1704,13 +1762,20 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fremgang-linje.færdig { border-color: rgba(255, 212, 59, 0.45); }
 .fremgang-linje.færdig .fremgang-tal { color: var(--gul); font-weight: 700; }
 .fremgang-linje.færdig .fremgang-fyld { background: var(--gul); }
+.fremgang-verden { display: flex; align-items: center; gap: 10px; margin-top: 6px; padding: 0 4px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(200, 210, 240, 0.7); }
+.fremgang-verden:first-child { margin-top: 0; }
+.fremgang-verden.færdig::after { content: "✓"; color: var(--gul); }
+.fremgang-verden .fremgang-ikon { width: 24px; height: 24px; }
+.fremgang-verden .fremgang-ikon .kort-ikon { transform: scale(0.36); }
 .fremgang-ialt { margin: 12px 0 0; text-align: right; color: var(--svag); font-size: 14px; }
 /* Telefon på højkant: mindre kort og ikoner */
 @media (max-width: 560px) and (orientation: portrait) {
   .karrusel { --kb: 236px; }
-  #menu.karrusel-tilstand .menukort > .kort { min-height: 168px; padding: 16px 14px 14px; }
-  #menu.karrusel-tilstand .kort .kort-tekst strong { font-size: 18px; }
-  #menu.karrusel-tilstand .kort .kort-tekst small { font-size: 13px; }
+  #menu.karrusel-tilstand .menukort > .verden { min-height: 168px; padding: 14px 12px 12px; gap: 6px; }
+  .verden-navn { font-size: 18px; }
+  .verden-tekst small { font-size: 13px; }
+  .verden > .verden-ikon { transform: scale(1.05); margin: 2px 0 4px; }
+  .verden-knap { min-height: 44px; }
   .menu-ikoner { gap: 2px; padding: 7px 8px 11px; }
   .menu-ikon { width: 34px; height: 34px; }
   .menu-ikon .kort-ikon { transform: scale(0.56); }
@@ -1719,11 +1784,21 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 /* Telefon på langs: lave kort med ikonet til venstre, og docken på én linje */
 @media (max-height: 500px) and (orientation: landscape) {
   #menu.karrusel-tilstand { grid-template-rows: auto minmax(0, 1fr) auto; gap: 4px; }
-  .karrusel { --kb: 230px; }
-  #menu.karrusel-tilstand .menukort > .kort { flex-direction: row; min-height: 0; padding: 8px 12px; text-align: left; border-radius: 18px; }
-  #menu.karrusel-tilstand .kort .kort-ikon { transform: none; margin: 0; }
-  #menu.karrusel-tilstand .kort .kort-tekst { align-items: flex-start; }
-  #menu.karrusel-tilstand .kort .kort-tekst strong { font-size: 16px; }
+  .karrusel { --kb: 300px; }
+  #menu.karrusel-tilstand .menukort > .verden { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: center; min-height: 0; gap: 4px 10px; padding: 8px 10px; text-align: left; border-radius: 18px; }
+  .verden > .verden-ikon { flex: none; transform: scale(0.75); margin: -6px; }
+  .verden-tekst { align-items: flex-start; }
+  .verden-navn { font-size: 16px; }
+  .verden-tekst small { display: none; }
+  .verden.én-del .verden-tekst small { display: block; font-size: 12px; }
+  .verden-dele { grid-column: 1 / -1; flex-direction: row; gap: 6px; margin-top: 2px; }
+  .verden-knap { flex: 1 1 0; min-height: 40px; padding: 4px 8px 4px 2px; gap: 4px; }
+  .verden-knap .kort-ikon { transform: scale(0.5); margin: -12px -14px; }
+  .verden-knap .kort-tekst strong { font-size: 13px; }
+  .verden-pil { display: none; }
+  .verden-del { display: none; }
+  .verden-knap.verden-hel { border-radius: 18px; }
+  #menu.karrusel-tilstand .menukort > .verden.én-del { align-content: center; }
   .menu-under { flex-direction: row; gap: 12px; }
   .skala-tekst { display: none; }
   .menu-ikoner { padding: 5px 10px 9px; }

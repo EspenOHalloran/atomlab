@@ -84,7 +84,7 @@ export const ORDBOG = [
     tekst: 'Et molekyle er polært, når det har en ende, der er lidt plus, og en, der er lidt minus. Vand er polært. CO₂ er ikke: Dets to bindinger trækker lige hårdt hver sin vej, så de ophæver hinanden.',
   },
   {
-    id: 'delta', ord: 'δ+ og δ− (delta plus og minus)',
+    id: 'delta-ladning', ord: 'δ+ og δ− (delta plus og minus)',
     former: ['δ+ og δ−', 'δ+', 'δ−'],
     tekst: 'Betyder "lidt plus" og "lidt minus" (δ er det græske bogstav delta). Atomet, der trækker hårdest i de delte elektroner, bliver lidt minus, og det andet bliver lidt plus. Det er meget mindre end en hel ladning, som en ion har.',
   },

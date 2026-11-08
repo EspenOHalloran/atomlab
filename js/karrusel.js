@@ -1,19 +1,29 @@
-// Menuen som en karrusel (prototype: kun med ?karrusel i adressen, se docs/plan-menu.md).
-// Kortene kredser om menuens atom på en skrå elektronbane (en ellipse). Kortet forrest er i fokus, og dets del
-// står i #menu[data-midt]. Ringen drejer med en fjeder: den følger fingeren, tager farten med og falder blødt på plads.
-// Under ringen står en dok med ikonerne, så man kan hoppe direkte, og knappen "Din fremgang".
+// Menuen som en karrusel (prototype: kun med ?karrusel i adressen, se docs/plan-menu.md og docs/plan-verdener.md).
+// Ringen har ét kort pr. verden (K4), og kortene kredser om menuens atom på en skrå elektronbane (en ellipse).
+// Verdenen forrest står i #menu[data-midt]. Dens dele er knapper inde i kortet (de gamle menukort, flyttet ind),
+// og en verden med kun én del åbner delen, når man trykker et sted på kortet.
+// Ringen drejer med en fjeder: den følger fingeren, tager farten med og falder blødt på plads.
+// Under ringen står en dok med verdenerne, så man kan hoppe direkte, og knappen "Din fremgang".
 
 import { ROLIG, LAV_KVALITET, centrerVindue, passerTil } from './scene3d.js';
 import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } from './menubaggrund.js';
 
 export const KARRUSEL = new URLSearchParams(location.search).has('karrusel');
 
-// Fra det mindste til det største (C i plan-menu.md). Ordbogen er et opslagsværk og står sidst.
-const RÆKKEFØLGE = ['fusion', 'reaktor', 'vaerksted', 'system', 'batteri', 'solsystem', 'kosmos', 'ordbog'];
-const OPSLAG = new Set(['ordbog']); // står uden for skalaen "mindre … større"
+// Verdenerne i ringens rækkefølge (docs/plan-verdener.md, jeres svar 7. november 2026). Biblioteket er et opslagsværk
+// og står sidst. motiv: baggrunden bag ringen (js/menubaggrund.js), ét motiv pr. verden.
+// Når Ild og liv kommer, står den mellem Kernerne og Elektricitet.
+export const VERDENER = [
+  { id: 'atomer', navn: 'Atomer og molekyler', tekst: 'Byg atomer og molekyler, og mød alle 118 grundstoffer', dele: ['vaerksted', 'system'], motiv: 'vaerksted' },
+  { id: 'kerner', navn: 'Kernerne', tekst: 'Atomkerner, der smelter sammen i stjernerne eller flækker i en reaktor', dele: ['fusion', 'reaktor'], motiv: 'fusion' },
+  { id: 'elektricitet', navn: 'Elektricitet', dele: ['batteri'], motiv: 'batteri' },
+  { id: 'rummet', navn: 'Rummet', tekst: 'Rejs til planeterne, og se sorte huller og supernovaer', dele: ['solsystem', 'kosmos'], motiv: 'solsystem' },
+  { id: 'biblioteket', navn: 'Biblioteket', dele: ['ordbog'], motiv: 'ordbog' },
+];
+const OPSLAG = new Set(['biblioteket']); // står uden for skalaen "mindre … større"
 const START = 'vaerksted';
 const NØGLE = 'atomlabSidsteDel';
-const SYNLIG = 2.6; // kort længere end dette (i kort) fra forreste plads er skjult
+const SYNLIG = 1.6; // kort længere end dette (i kort) fra forreste plads er skjult (de to bagerste står bag atomet)
 const FJEDER = 120; // fjederens stivhed, og dæmpningen giver et ganske lille sving
 const DÆMPNING = 2 * Math.sqrt(FJEDER) * 0.9;
 const ELEKTRONER = [0, 2.3, 4.1]; // startvinkler for lysprikkerne på banen
@@ -21,8 +31,9 @@ const HALE = 9; // prikker i halen bag hver lysprik
 
 let menu = null;
 let ramme = null;
-let kort = [];
+let kort = []; // verdenernes kort i ringen
 let ikoner = [];
+let dele = []; // delenes knapper (de gamle menukort) i verdenernes rækkefølge
 let midt = -1;
 let hentFremgang = () => ({});
 let atomRadius = () => 1;
@@ -50,6 +61,7 @@ function sidsteDel() {
 }
 
 const delAf = (k) => k.getAttribute('href').slice(1);
+const verdenAf = (k) => k.dataset.verden;
 const N = () => kort.length;
 // Afstand i kort fra a til b den korteste vej rundt om ringen (-N/2 … N/2)
 const rundt = (d) => ((((d + N() / 2) % N()) + N()) % N()) - N() / 2;
@@ -62,6 +74,55 @@ function lilleIkon(k) {
   return ikon;
 }
 
+// Et verdenskort: ikon, navn og en linje, og delene som knapper. Har verdenen kun én del, dækker delens link hele kortet.
+function lavVerden(v, bane) {
+  const el = document.createElement('div');
+  el.className = 'verden';
+  el.dataset.verden = v.id;
+  el.setAttribute('role', 'group');
+  el.setAttribute('aria-label', v.navn);
+  const links = v.dele.map((id) => bane.querySelector(`a[href="#${id}"]`)).filter(Boolean);
+  const én = links.length === 1;
+  el.classList.toggle('én-del', én);
+  const ikon = document.createElement('span');
+  ikon.className = `kort-ikon verden-ikon ikon-v-${v.id}`;
+  ikon.setAttribute('aria-hidden', 'true');
+  const tekst = document.createElement('span');
+  tekst.className = 'verden-tekst';
+  const navn = document.createElement('strong');
+  navn.className = 'verden-navn';
+  navn.textContent = v.navn;
+  const linje = document.createElement('small');
+  linje.textContent = én ? links[0].querySelector('.kort-tekst small').textContent : v.tekst;
+  tekst.append(navn, linje);
+  el.append(ikon, tekst);
+  if (én) {
+    // Hele kortet er et link til delen. Delens navn står nederst, så man kan se, hvad man åbner.
+    const del = document.createElement('span');
+    del.className = 'verden-del';
+    del.setAttribute('aria-hidden', 'true');
+    del.textContent = `${links[0].querySelector('.kort-tekst strong').textContent} ›`;
+    el.append(del);
+  }
+  const knapper = document.createElement('div');
+  knapper.className = 'verden-dele';
+  for (const a of links) {
+    a.classList.remove('kort', 'åben');
+    a.classList.add('verden-knap');
+    a.classList.toggle('verden-hel', én);
+    a.draggable = false;
+    const pil = document.createElement('span');
+    pil.className = 'verden-pil';
+    pil.setAttribute('aria-hidden', 'true');
+    pil.textContent = '›';
+    a.append(pil);
+    knapper.append(a);
+    dele.push(a);
+  }
+  el.append(knapper);
+  return el;
+}
+
 export function lavKarrusel({ fremgang, radius }) {
   if (!KARRUSEL) return;
   hentFremgang = fremgang;
@@ -70,12 +131,9 @@ export function lavKarrusel({ fremgang, radius }) {
   menu.classList.add('karrusel-tilstand');
   if (!LAV_KVALITET) menu.classList.add('karrusel-glas');
   const bane = menu.querySelector('.menukort');
-  for (const id of RÆKKEFØLGE) {
-    const k = bane.querySelector(`a[href="#${id}"]`);
-    if (k) bane.append(k);
-  }
-  kort = [...bane.querySelectorAll('a.kort')];
-  for (const k of kort) k.draggable = false;
+  // Verdenernes kort, med de gamle menukort flyttet ind som knapper (main.js finder dem stadig i .menukort)
+  kort = VERDENER.map((v) => lavVerden(v, bane));
+  bane.prepend(...kort);
 
   // Scenen: elektronbanen (SVG), et lys under kortet forrest og kortene
   ramme = document.createElement('div');
@@ -100,13 +158,13 @@ export function lavKarrusel({ fremgang, radius }) {
   ikoner = kort.map((k, i) => {
     const knap = document.createElement('button');
     knap.className = 'menu-ikon';
-    const navn = k.querySelector('.kort-tekst strong').textContent;
+    const navn = VERDENER[i].navn;
     knap.setAttribute('aria-label', navn);
     knap.title = navn;
-    knap.dataset.del = delAf(k);
+    knap.dataset.verden = verdenAf(k);
     knap.append(lilleIkon(k));
     knap.addEventListener('click', () => gåTil(i));
-    if (OPSLAG.has(delAf(k))) række.append(skille);
+    if (OPSLAG.has(verdenAf(k))) række.append(skille);
     række.append(knap);
     return knap;
   });
@@ -118,11 +176,11 @@ export function lavKarrusel({ fremgang, radius }) {
   ramme.after(under);
 
   lavTræk();
-  lavMenuBaggrund(kort.map(delAf), () => pos); // baggrunden skifter med kortet forrest (K2)
+  lavMenuBaggrund(VERDENER.map((v) => v.motiv), () => pos); // baggrunden skifter med verdenen forrest (K2, K4)
 
-  // Tryk på et kort til siden drejer det frem. Kortet forrest åbner delen. Efter et træk tæller "klikket" ikke.
+  // Tryk på en verden til siden drejer den frem. I verdenen forrest åbner knapperne delene. Efter et træk tæller "klikket" ikke.
   ramme.addEventListener('click', (h) => {
-    const k = h.target.closest('a.kort');
+    const k = h.target.closest('.verden');
     if (undertrykKlik) {
       undertrykKlik = false;
       h.preventDefault();
@@ -209,12 +267,22 @@ function lavTræk() {
   ramme.addEventListener('pointercancel', slip);
 }
 
-// Kaldes fra startMenu (før atomet zoomes ind): banen lægges, og ringen starter på den del, man sidst var i
+// Kaldes fra startMenu (før atomet zoomes ind): banen lægges, og ringen starter på verdenen for den del,
+// man sidst var i. Den dels knap har en svag glød og en lille prik.
 export function startKarrusel() {
   if (!KARRUSEL) return;
   const sidst = sidsteDel();
-  let i = kort.findIndex((k) => delAf(k) === sidst);
-  if (i < 0) i = kort.findIndex((k) => delAf(k) === START);
+  let i = VERDENER.findIndex((v) => v.dele.includes(sidst));
+  if (i < 0) i = VERDENER.findIndex((v) => v.dele.includes(START));
+  for (const a of dele) a.classList.toggle('sidst', delAf(a) === sidst);
+  // ✓ på en verden, når alle dens dele er klaret (delene får selv ✓ fra main.js, klassen "klaret")
+  const data = hentFremgang();
+  const klaret = (id) => Boolean(data[id]) && data[id].løst === data[id].ialt;
+  VERDENER.forEach((v, j) => {
+    const færdig = v.dele.every(klaret);
+    kort[j].classList.toggle('klaret', færdig);
+    ikoner[j].classList.toggle('klaret', færdig);
+  });
   pos = mål = i;
   fart = 0;
   træk = null;
@@ -245,7 +313,10 @@ function læg() {
   const højkant = innerHeight > innerWidth * 1.05;
   const lav = innerHeight < 500;
   const b = kort[0].offsetWidth;
+  // Alle verdenerne er lige høje (dem med knapper er højest), og en verden med én del står i midten af sit kort
+  for (const k of kort) k.style.minHeight = '';
   const h = Math.max(...kort.map((k) => k.offsetHeight));
+  for (const k of kort) k.style.minHeight = `${h}px`;
   const rx = højkant ? Math.max(S.width * 0.45, b * 1.05) : Math.min(S.width * 0.34, 520);
   const anker = Math.min(40, h * 0.3); // kortet hænger i banen så langt under sin overkant
   const forTop = S.height - 14 - h; // kortets overkant forrest
@@ -378,14 +449,21 @@ function tegn(dt) {
 
 function sætMidt(i) {
   midt = i;
-  kort.forEach((k, j) => k.classList.toggle('midt', j === i));
+  kort.forEach((k, j) => {
+    k.classList.toggle('midt', j === i);
+    // Kun delene i verdenen forrest kan nås med tabulatortasten
+    for (const a of k.querySelectorAll('.verden-knap')) {
+      if (j === i) a.removeAttribute('tabindex');
+      else a.tabIndex = -1;
+    }
+  });
   ikoner.forEach((b, j) => b.classList.toggle('valgt', j === i));
-  menu.dataset.midt = delAf(kort[i]);
+  menu.dataset.midt = verdenAf(kort[i]);
 }
 
 // Adgang for testene (?test, docs/kode/testadgang.md)
 export function testAdgang() {
-  return { geo: () => geo, pos: () => pos, stille: () => pos === mål && fart === 0 && !træk, baggrund: baggrundTest };
+  return { geo: () => geo, pos: () => pos, stille: () => pos === mål && fart === 0 && !træk, baggrund: baggrundTest, verdener: () => VERDENER.map((v) => ({ id: v.id, dele: [...v.dele] })) };
 }
 
 // "Din fremgang": tallene for hver del, som man selv åbner (i stedet for gule piller på alle kort)
@@ -397,33 +475,48 @@ function visDinFremgang() {
   liste.replaceChildren();
   let løste = 0;
   let opgaver = 0;
-  for (const k of kort) {
-    const f = data[delAf(k)];
-    if (!f) continue;
-    if (f.slags === 'opgaver') { løste += f.løst; opgaver += f.ialt; }
-    const færdig = f.løst === f.ialt;
-    const linje = document.createElement('li');
-    linje.className = 'fremgang-linje';
-    linje.classList.toggle('færdig', færdig);
-    linje.dataset.del = delAf(k);
-    const ikon = document.createElement('span');
-    ikon.className = 'fremgang-ikon';
-    ikon.append(lilleIkon(k));
-    const navn = document.createElement('span');
-    navn.className = 'fremgang-navn';
-    navn.textContent = k.querySelector('.kort-tekst strong').textContent;
-    const spor = document.createElement('span');
-    spor.className = 'fremgang-spor';
-    const fyld = document.createElement('span');
-    fyld.className = 'fremgang-fyld';
-    fyld.style.width = `${Math.round((100 * f.løst) / f.ialt)}%`;
-    spor.append(fyld);
-    const tal = document.createElement('span');
-    tal.className = 'fremgang-tal';
-    tal.textContent = `${færdig ? '✓ ' : ''}${f.løst} af ${f.ialt} ${ENHED[f.slags]}`;
-    linje.append(ikon, navn, spor, tal);
-    liste.append(linje);
-  }
+  VERDENER.forEach((v, i) => {
+    const mine = v.dele.filter((id) => data[id]);
+    if (!mine.length) return; // Biblioteket har ingen fremgang
+    const hoved = document.createElement('li');
+    hoved.className = 'fremgang-verden';
+    hoved.dataset.verden = v.id;
+    hoved.classList.toggle('færdig', kort[i].classList.contains('klaret'));
+    const vIkon = document.createElement('span');
+    vIkon.className = 'fremgang-ikon';
+    vIkon.append(lilleIkon(kort[i]));
+    const vNavn = document.createElement('span');
+    vNavn.textContent = v.navn;
+    hoved.append(vIkon, vNavn);
+    liste.append(hoved);
+    for (const id of mine) {
+      const f = data[id];
+      const k = dele.find((a) => delAf(a) === id);
+      if (f.slags === 'opgaver') { løste += f.løst; opgaver += f.ialt; }
+      const færdig = f.løst === f.ialt;
+      const linje = document.createElement('li');
+      linje.className = 'fremgang-linje';
+      linje.classList.toggle('færdig', færdig);
+      linje.dataset.del = id;
+      const ikon = document.createElement('span');
+      ikon.className = 'fremgang-ikon';
+      ikon.append(lilleIkon(k));
+      const navn = document.createElement('span');
+      navn.className = 'fremgang-navn';
+      navn.textContent = k.querySelector('.kort-tekst strong').textContent;
+      const spor = document.createElement('span');
+      spor.className = 'fremgang-spor';
+      const fyld = document.createElement('span');
+      fyld.className = 'fremgang-fyld';
+      fyld.style.width = `${Math.round((100 * f.løst) / f.ialt)}%`;
+      spor.append(fyld);
+      const tal = document.createElement('span');
+      tal.className = 'fremgang-tal';
+      tal.textContent = `${færdig ? '✓ ' : ''}${f.løst} af ${f.ialt} ${ENHED[f.slags]}`;
+      linje.append(ikon, navn, spor, tal);
+      liste.append(linje);
+    }
+  });
   document.getElementById('fremgangIalt').textContent = `I alt ${løste} af ${opgaver} opgaver klaret ★`;
   document.getElementById('dinFremgang').classList.remove('skjult');
 }
