@@ -43,7 +43,9 @@ await page.click('#reaktorStart');
 await page.waitForTimeout(6000);
 await page.screenshot({ path: UD + '/r3-kæde.png' });
 tjek('opgave start', (await fr())['r-start']);
-const r = await page.evaluate(() => atomlabTest.reaktor.kør(40, 0));
+// Kædereaktionen går tilfældigt i stå lige efter start (8 af 500 gange inden for 4 s, 8. november 2026). Så startes den
+// igen, ellers er der ingen neutroner til et nødstop.
+const r = await page.evaluate(() => { const t = atomlabTest.reaktor; if (t.kør(0).neutroner === 0) t.start(); return t.kør(40, 0); });
 console.log('     stave 0 % i 40 s:', JSON.stringify(r));
 tjek('nødstop ved stave helt oppe', r.nødstop);
 await page.waitForTimeout(1500);

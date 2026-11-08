@@ -20,11 +20,15 @@ const synlig = (sel) => T((s) => { const e = document.querySelector(s); if (!e) 
 await page.goto(`${ADRESSE}/?test#fusion`);
 await T(() => localStorage.clear());
 await page.reload();
-tjek('rejsen starter første gang', await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 0, 5000));
+// Rejsen styres af uret (rigtig tid), og fase 0 varer 3,2 sekunder. Under belastning tog det første billede med Solen
+// længere tid end det (8. november 2026), så fase 0 var forbi, før testen så den. Derfor fryses rejsen, så snart den findes.
+const rejseFindes = await page.waitForFunction(() => window.atomlabTest?.fusion.rejse() != null, null, { timeout: 20000, polling: 50 }).then(() => true, () => false);
+if (rejseFindes) await T(() => atomlabTest.fusion.rejseTid(0.5));
+tjek('rejsen starter første gang', rejseFindes && (await venTil(async () => (await T(() => atomlabTest.fusion.rejse())) === 0, 8000)));
 tjek('"Spring over" vises', await synlig('#fusRejseSpring'));
 tjek('næste skridt skjult under rejsen', !(await synlig('#fusMission')));
 tjek('tidsknappen skjult under rejsen', !(await synlig('#fusTid')));
-// Rejsen styres af uret (rigtig tid). På en travl maskine kan testen komme for sent, så vi fryser rejsen på bestemte tidspunkter.
+// Rejsen fryses på bestemte tidspunkter, så en travl maskine ikke kommer for sent.
 await T(() => atomlabTest.fusion.rejseTid(1));
 await page.waitForTimeout(800);
 tjek('undertekst om Solen', /Solen/.test(await undertekst()), await undertekst());
@@ -146,8 +150,10 @@ if (!harD) {
   await page.waitForTimeout(400);
   tjek('besked, når der ingen deuterium er', /ingen deuterium/i.test(await undertekst()), await undertekst());
 }
+// Pause, så den nye deuterium ikke når at smelte sammen med en proton, før der klikkes (det skete en gang under belastning)
+await page.click('#fusTid [data-tid="pause"]');
 await T(() => atomlabTest.fusion.tilføj('d', 1));
-await page.waitForTimeout(500);
+await page.waitForFunction(() => atomlabTest.fusion.partikler().some((p) => p.type === 'd'));
 await page.click('#fusKerner li[data-type="d"]');
 await page.waitForTimeout(300);
 const valgtType = await T(() => { const f = atomlabTest.fusion; const id = f.valgt(); return f.partikler().find((p) => p.id === id)?.type; });
@@ -159,6 +165,7 @@ await page.waitForTimeout(300);
 const valgtType2 = await T(() => { const f = atomlabTest.fusion; const id = f.valgt(); return f.partikler().find((p) => p.id === id)?.type; });
 tjek('klik i opskriften vælger en proton', valgtType2 === 'p', valgtType2);
 await page.keyboard.press('Escape');
+await page.click('#fusTid [data-tid="spil"]');
 
 // ---------- Grafen ----------
 const graf = async (t) => { await T((t) => atomlabTest.fusion.temperatur(t), t); return T(() => document.querySelector('#fusGrafTekst').textContent); };
