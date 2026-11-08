@@ -60,57 +60,58 @@
       <p class="undertitel">Byg atomer, opdag grundstofferne, lav kernereaktioner, og udforsk rummet</p>
     </header>
     <div class="vindue" id="menuVindue"></div>
+    <!-- Delene. karrusel.js flytter dem ind som knapper i verdenernes kort i ringen (VERDENER) -->
     <nav class="menukort">
-      <a class="kort åben" href="#vaerksted">
+      <a href="#vaerksted">
         <span class="kort-ikon ikon-atom"></span>
         <span class="kort-tekst">
           <strong>Atomværkstedet</strong>
           <small>Byg atomer af protoner, neutroner og elektroner</small>
         </span>
       </a>
-      <a class="kort åben" href="#system">
+      <a href="#system">
         <span class="kort-ikon ikon-tabel"></span>
         <span class="kort-tekst">
           <strong>Det periodiske system</strong>
           <small>Alle 118 grundstoffer i 3D</small>
         </span>
       </a>
-      <a class="kort åben" href="#fusion">
+      <a href="#fusion">
         <span class="kort-ikon ikon-stjerne"></span>
         <span class="kort-tekst">
           <strong>Stjerneovnen</strong>
           <small>Fusion: lav helium af hydrogen ligesom Solen</small>
         </span>
       </a>
-      <a class="kort åben" href="#reaktor">
+      <a href="#reaktor">
         <span class="kort-ikon ikon-reaktor"></span>
         <span class="kort-tekst">
           <strong>Reaktoren</strong>
           <small>Fission: spalt uran og styr en kædereaktion</small>
         </span>
       </a>
-      <a class="kort åben" href="#batteri">
+      <a href="#batteri">
         <span class="kort-ikon ikon-batteri"></span>
         <span class="kort-tekst">
           <strong>Batteriet</strong>
           <small>Se ioner og elektroner, når et lithium-ion-batteri lades</small>
         </span>
       </a>
-      <a class="kort åben" href="#solsystem">
+      <a href="#solsystem">
         <span class="kort-ikon ikon-solsystem"></span>
         <span class="kort-tekst">
           <strong>Solsystemet</strong>
           <small>Besøg Solen, Jorden, Mars, Jupiter og Saturn i den rigtige størrelse</small>
         </span>
       </a>
-      <a class="kort åben" href="#kosmos">
+      <a href="#kosmos">
         <span class="kort-ikon ikon-kosmos"></span>
         <span class="kort-tekst">
           <strong>Kosmos</strong>
           <small>Sorte huller, supernovaer, tyngdebølger og andre vilde ting i rummet</small>
         </span>
       </a>
-      <a class="kort åben" href="#ordbog">
+      <a href="#ordbog">
         <span class="kort-ikon ikon-ordbog" aria-hidden="true">Aa</span>
         <span class="kort-tekst">
           <strong>Ordbogen</strong>
@@ -118,11 +119,9 @@
         </span>
       </a>
     </nav>
-    <p class="menu-status" id="menuStatus"></p>
-    <blockquote class="citat menu-citat" id="menuCitat"></blockquote>
   </section>
 
-  <!-- "Din fremgang" i menuen som karrusel (prototype med ?karrusel, js/karrusel.js) -->
+  <!-- "Din fremgang" i menuen (js/karrusel.js) -->
   <div class="overlag skjult" id="dinFremgang" role="dialog" aria-label="Din fremgang">
     <div class="dialog">
       <header><h3>Din fremgang</h3><button class="knap lille luk" data-luk>Luk</button></header>

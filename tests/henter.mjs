@@ -30,9 +30,9 @@ for (const [navn, opts] of STØRRELSER) {
   tjek(`${navn}: bjælken er væk, når siden er klar`, !(await p.$('#henter')));
   const hentet = await p.evaluate(() => window.atomlabHentet());
   tjek(`${navn}: skønnet passer (${hentet} filer, FORVENTET ${FORVENTET})`, hentet >= FORVENTET * 0.85 && hentet <= FORVENTET * 1.15, `ret FORVENTET i index.html til ca. ${hentet}`);
-  await p.click('#menu a.kort.åben');
+  await p.click('#menu .verden.midt a.verden-knap', { force: true }); // kortene svæver, så Playwright ellers venter på, at de står stille
   await p.waitForTimeout(500);
-  tjek(`${navn}: menukortet kan trykkes på bagefter`, (await p.evaluate(() => location.hash)) !== '');
+  tjek(`${navn}: en del i menuen kan trykkes på bagefter`, (await p.evaluate(() => location.hash)) !== '');
   tjek(`${navn}: ingen konsolfejl`, fejl.length === 0, fejl.join('\n'));
   await p.context().close();
 }

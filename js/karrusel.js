@@ -1,14 +1,13 @@
-// Menuen som en karrusel (prototype: kun med ?karrusel i adressen, se docs/plan-menu.md og docs/plan-verdener.md).
+// Menuen som en karrusel (standard siden K3, 8. november 2026, se docs/plan-menu.md og docs/plan-verdener.md).
 // Ringen har ét kort pr. verden (K4), og kortene kredser om menuens atom på en skrå elektronbane (en ellipse).
 // Verdenen forrest står i #menu[data-midt]. Dens dele er knapper inde i kortet (de gamle menukort, flyttet ind),
 // og en verden med kun én del åbner delen, når man trykker et sted på kortet.
 // Ringen drejer med en fjeder: den følger fingeren, tager farten med og falder blødt på plads.
 // Under ringen står en dok med verdenerne, så man kan hoppe direkte, og knappen "Din fremgang".
+// ✓ på delene og verdenerne og "Start her" for en ny bruger sættes også her (startKarrusel).
 
 import { ROLIG, LAV_KVALITET, centrerVindue, passerTil } from './scene3d.js';
 import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } from './menubaggrund.js';
-
-export const KARRUSEL = new URLSearchParams(location.search).has('karrusel');
 
 // Verdenerne i ringens rækkefølge (docs/plan-verdener.md, jeres svar 7. november 2026). Biblioteket er et opslagsværk
 // og står sidst. motiv: baggrunden bag ringen (js/menubaggrund.js), ét motiv pr. verden.
@@ -51,7 +50,7 @@ let sidstTid = 0;
 let tid = 0;
 const sidsteFilter = new Map();
 
-// Husker den del, man sidst var i, så karrusellen starter dér (gemmes også uden ?karrusel)
+// Husker den del, man sidst var i, så karrusellen starter dér
 export function gemSidsteDel(id) {
   try { localStorage.setItem(NØGLE, id); } catch { /* ingen lagring */ }
 }
@@ -74,7 +73,7 @@ function lilleIkon(k) {
   return ikon;
 }
 
-// Et verdenskort: ikon, navn og en linje, og delene som knapper. Har verdenen kun én del, dækker delens link hele kortet.
+// Et verdenskort: ikon, navn og en linje, og delene (linkene i .menukort i index.html) som knapper. Har verdenen kun én del, dækker delens link hele kortet.
 function lavVerden(v, bane) {
   const el = document.createElement('div');
   el.className = 'verden';
@@ -107,7 +106,6 @@ function lavVerden(v, bane) {
   const knapper = document.createElement('div');
   knapper.className = 'verden-dele';
   for (const a of links) {
-    a.classList.remove('kort', 'åben');
     a.classList.add('verden-knap');
     a.classList.toggle('verden-hel', én);
     a.draggable = false;
@@ -124,14 +122,13 @@ function lavVerden(v, bane) {
 }
 
 export function lavKarrusel({ fremgang, radius }) {
-  if (!KARRUSEL) return;
   hentFremgang = fremgang;
   atomRadius = radius;
   menu = document.getElementById('menu');
   menu.classList.add('karrusel-tilstand');
   if (!LAV_KVALITET) menu.classList.add('karrusel-glas');
   const bane = menu.querySelector('.menukort');
-  // Verdenernes kort, med de gamle menukort flyttet ind som knapper (main.js finder dem stadig i .menukort)
+  // Verdenernes kort, med delenes links flyttet ind som knapper
   kort = VERDENER.map((v) => lavVerden(v, bane));
   bane.prepend(...kort);
 
@@ -270,14 +267,19 @@ function lavTræk() {
 // Kaldes fra startMenu (før atomet zoomes ind): banen lægges, og ringen starter på verdenen for den del,
 // man sidst var i. Den dels knap har en svag glød og en lille prik.
 export function startKarrusel() {
-  if (!KARRUSEL) return;
   const sidst = sidsteDel();
   let i = VERDENER.findIndex((v) => v.dele.includes(sidst));
   if (i < 0) i = VERDENER.findIndex((v) => v.dele.includes(START));
-  for (const a of dele) a.classList.toggle('sidst', delAf(a) === sidst);
-  // ✓ på en verden, når alle dens dele er klaret (delene får selv ✓ fra main.js, klassen "klaret")
+  // ✓ (klassen "klaret") på en del, der er klaret, og på en verden, når alle dens dele er klaret.
+  // En helt ny bruger (ingen opgaver og intet grundstof) får "Start her" på Atomværkstedet.
   const data = hentFremgang();
   const klaret = (id) => Boolean(data[id]) && data[id].løst === data[id].ialt;
+  const ny = Object.values(data).every((f) => f.slags === 'set' || f.løst === 0);
+  for (const a of dele) {
+    a.classList.toggle('sidst', delAf(a) === sidst);
+    a.classList.toggle('klaret', klaret(delAf(a)));
+    a.classList.toggle('start-her', ny && delAf(a) === START);
+  }
   VERDENER.forEach((v, j) => {
     const færdig = v.dele.every(klaret);
     kort[j].classList.toggle('klaret', færdig);
@@ -296,7 +298,6 @@ export function startKarrusel() {
 }
 
 export function stopKarrusel() {
-  if (!KARRUSEL) return;
   cancelAnimationFrame(løkke);
   stopMenuBaggrund();
 }

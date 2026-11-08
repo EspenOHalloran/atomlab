@@ -20,7 +20,7 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   tjek(`${navn}: fuld skærm efter klik`, await p.evaluate(() => Boolean(document.fullscreenElement)));
   const t = await venTitel('#menu .knap-fuldskaerm', 'Forlad fuld skærm');
   tjek(`${navn}: titlen skifter til "Forlad fuld skærm"`, t === 'Forlad fuld skærm', t);
-  await p.click('a.kort.åben');
+  await p.click('.menukort a[href="#vaerksted"]', { force: true }); // forrest i ringen for en ny bruger (kortene svæver)
   await p.waitForTimeout(800);
   tjek(`${navn}: stadig fuld skærm i værkstedet`, await p.evaluate(() => Boolean(document.fullscreenElement)));
   await p.screenshot({ path: `${UD}/${navn}.png` });
