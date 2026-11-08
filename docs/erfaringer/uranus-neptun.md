@@ -41,3 +41,17 @@
 - **Skyer inde i en mørk plet:** Båndet af skyer ved 22° S lå oven på Den Store Mørke Plet, så den forsvandt. Pletterne fjerner nu skyerne inden for deres kant.
 - **Den tætte skyfordeling fra første forsøg var for meget:** Med dækningen 0,75 blev båndet ved 27° N en hvid ring om hele planeten. Voyagers billeder viser spredte striber (0,45).
 - **Billeder i sekundet** (testbrowseren uden grafikkort, målt alene, ikke mens testene kører): Neptun 4,7 (4,0 med "Neptun i 1989") mod Uranus 5,4 samme dag på pc, og 9,9 (8,0) på tablet. Vejret koster ca. 15 % i testbrowseren.
+
+## UN4: Uranus' måner (8. november 2026)
+- **Led efter færdige kort, før du laver dem selv:** Wikimedia Commons' søgning (API, `srnamespace=6`) fandt "Miranda/Ariel/… map JPL USGS.jpg" (public domain, fra JPL's gamle planetkort). USGS har dem ikke, men JPL havde dem. Det sparede hele arbejdet med Voyagers rå billeder fra PDS.
+- **Commons svarer 429 på originalerne** fra en maskine som vores (også langsomt og med en ærlig User-Agent), men småbillederne i en standardstørrelse (`/thumb/…/1280px-…`) virkede med det samme. Fejlsiden siger selv, at man skal bruge småbilleder.
+- **Småbilledernes sidste søjle og række var ødelagt** (springet til naboen ca. 25 mod 1-3 ellers). Mål springet ved ±180° og ved polen, før kortet bruges (tjekliste E).
+- **Tjek kortets længdegrader med et kendt sted:** Wunda på Umbriel (7,9° S, 273,6° Ø) og Inverness Corona på Miranda (66,9° S, 325,7° Ø) passede med 0° i midten og øst til højre. Robin Gilberts skarpere Miranda-kort passede kun svagt med JPL's (forskudt et par grader), så det blev ikke brugt.
+- **Månerne kredser med uret om IAU's nordpol ved Uranus:** Vinklen ganges med `P.retning`. Med `krop.rotation.y = vinkel + π` peger længde 90° Ø bagud i banen (den bageste halvkugle), som IAU's østlige længde skal ved en måne, der kredser "baglæns".
+- **Et fast kamera ved en måne virker ikke med skyderen "År":** Solens retning over Uranus flytter sig over 100° fra 1986 til 2026, så man så kun en tynd skive i 1986. Kameraet følger nu Solen med det samme (`flyv` og `hop`), og højden er 0,65 gange Solens bredde, så der ikke er et spring ved jævndøgn.
+- **Den halvdel, der har sol nu, er den, ingen har fotograferet.** Det er ærligt, men kedeligt (en grå kugle). Siden siger det og foreslår 1986 (spørgsmål til brugeren).
+- **Små måner med albedo 0,07 er sorte på skærmen** (shaderen giver lineært lys uden omregning, som ved Jupiters måner). Med 2 gange lysere kunne de stadig ikke ses ved "Små måner". 5 gange og det står i "Ærligt talt".
+- **Navne over en måne skal stå over den på skærmen:** Ved Uranus peger aksen (banens "op") ofte mod kameraet, så et navn flyttet langs aksen lå oven i månen. Brug kameraets op-retning.
+- **En test, der læser to tal i to kald, kan få et billede imellem:** Neptuns buer og uret blev læst hver for sig og fejlede en gang. Læs dem i samme `evaluate`.
+- **En overhaling målt med vinkler skal være under en halv omgang:** Første forsøg spolede 3.600 sekunder (309° forskel), så vinklen gik rundt og gav 135 døgn i stedet for 22.
+- **Billeder i sekundet** (testbrowseren uden grafikkort, fuld grafik): Pc ved Titania 4,5-5,2 og "Små måner" 4,9-6,1 (Uranus alene 5,4 ved UN3). Tablet på højkant: hele Uranus 9,7, oversigten 15, Ariel 17. Månerne koster ikke noget, man kan måle.

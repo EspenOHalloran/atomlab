@@ -14,15 +14,21 @@
 //   (planet.js, som Jupiter J2). Fasen er kort (FASE), for vindene er hurtige i forhold til planeternes størrelse.
 // - UN3 (Neptun, cfg.vejr): høje skyer med skygge, pletterne fra 1989 (kontakten "Neptun i 1989"), Voyagers farver,
 //   pilene "Vindene" og ringene med buerne (js/data/vejr-neptun.js og ringe-neptun.js).
+// - UN4 (Uranus, cfg.måner): de fem store måner med Voyagers kort og fire små klumper i ækvatorplanet
+//   (js/data/maaner-uranus.js). De kredser den samme vej, som Uranus drejer, og vender samme side mod Uranus.
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, passerTil } from '../scene3d.js';
-import { glød } from '../kosmos/faelles.js';
+import { glød, skilt } from '../kosmos/faelles.js';
 import { lavGasplanet } from './planet.js';
 import { lavRejse } from './rejse.js';
 import { lavRinge, ringTekstur } from './ringe.js';
 import { hent, hentedeBilleder } from './hent.js';
-import { PLANETER, pol, knude, solRetning, baneNormal } from '../data/isgiganter.js';
+import { lavIsmåne } from './maane.js';
+import { måneForstørrelse } from './maanestr.js';
+import { navneTil, navneKnap } from './navne.js';
+import { PLANETER, pol, knude, solRetning, baneNormal, solAfstand } from '../data/isgiganter.js';
+import * as MÅNER_URANUS from '../data/maaner-uranus.js';
 import { vindVed } from '../data/vinde-isgiganter.js';
 import * as RINGE_URANUS from '../data/ringe-uranus.js';
 import * as RINGE_NEPTUN from '../data/ringe-neptun.js';
@@ -50,6 +56,12 @@ const RINGDATA = { uranus: RINGE_URANUS, neptun: RINGE_NEPTUN };
 // ringen, og ved kontakten "Neptun i 1989" toner buerne fra 1989 ind og de senest kendte ud (to sæt, 10 pladser).
 const NEPTUN_RING_LYS = 6;
 const TONING = 2; // kontakterne toner ind og ud på ca. et halvt sekund
+// Månerne (UN4): kortene er Voyagers (JPL/USGS, 1280 × 640) på alle skærme. De små måner er mørke som ringene
+// (albedo 0,07-0,08) og gjort LILLE_LYS gange lysere, så de kan ses (tegnet). Banerne ses kun langt ude.
+const MÅNEDATA = { uranus: MÅNER_URANUS };
+const MÅNE_SEG = TEST_HURTIG || LAV_KVALITET ? 64 : 96;
+const LILLE_LYS = 5;
+const BANE_FRA = 30, BANE_TIL = 60; // banerne toner frem, når kameraet er så langt ude (enheder af 10.000 km)
 
 // Årstal (med decimaler) og dato
 export const årTilDato = (år) => new Date(Date.UTC(2000, 0, 1, 12) + (år - 2000) * 365.25 * 864e5);
@@ -108,7 +120,10 @@ export function lavIsgigant(cfg) {
     ikon: cfg.ikon,
     tåger: false, // vores eget solsystem: sort himmel med stjerner
     undertitel: cfg.undertitel,
-    træ: { rod: cfg.id, grupper: [] },
+    træ: { rod: cfg.id, grupper: cfg.måner ? [{
+      navn: 'Måner', id: 'maaner', titel: 'Månerne', undertitel: 'De fem store måner i deres baner',
+      punkter: [...MÅNEDATA[cfg.måner].MÅNER.map((m) => ({ id: m.id, navn: m.navn })), { id: 'smaa', navn: 'Små måner', undertitel: 'To par, der kan støde sammen' }],
+    }] : [] },
     kamera: { retning: [0.2, 0.1, 1], radius: 21 },
     tal: cfg.tal,
     side: cfg.side,
@@ -156,6 +171,7 @@ export function lavIsgigant(cfg) {
         // Neptuns vejr: høje skyer (ikke i tests, kun pc har de fine striber), pletterne, Voyagers farver og pilene
         ...(VEJR ? { højeSkyer: TEST_HURTIG ? null : { bånd: BÅND.length, højde: SKY_HØJDE / P.radius, fine: DETALJER }, pletter: PLETTER.length, voyager: true, pile: pile.length } : {}),
         // Kappen toner ud mod farven ved 25° på samme halvkugle, fra ca. 35° til 60° (sinus til den parametriske bredde)
+        ...(cfg.måner ? { måner: MÅNEDATA[cfg.måner].MÅNER.length } : {}),
         kapper: cfg.kapper ? { fra: Math.sin(tilParametrisk(35)), til: Math.sin(tilParametrisk(60)), vNord: 0.5 + tilParametrisk(25) / Math.PI, vSyd: 0.5 - tilParametrisk(25) / Math.PI } : null,
       });
       planetG.add(planet.mesh);
@@ -186,6 +202,8 @@ export function lavIsgigant(cfg) {
         år = v;
         sol.set(...solRetning(cfg.id, årTilDato(v)));
         sætKapper();
+        // Ved en måne følger kameraet Solen (ellers ser man kun en tynd skive, når Solen flytter sig)
+        if (erMåne(visning)) { flyvTilMåne(måneMed(visning)); rejse.hop(); }
       }
       sætKapper();
       // Buerne: de senest kendte (plads 0-4) og dem fra 1989 (plads 5-9), tonet efter kontakten "Neptun i 1989"
@@ -220,7 +238,84 @@ export function lavIsgigant(cfg) {
       system.add(planetG);
       gruppe.add(system);
       let hentet = false;
-      hent(`${cfg.kort}-${STØRRELSE}.jpg`, (t) => { planet.sætKort(t); hentet = true; }, { anisotropi: LAV_KVALITET ? 2 : 4 });
+      let aktiv = true;
+      hent(`${cfg.kort}-${STØRRELSE}.jpg`, (t) => { planet.sætKort(t); hentet = true; queueMicrotask(hentMåner); }, { anisotropi: LAV_KVALITET ? 2 : 4, fejl: () => queueMicrotask(hentMåner) });
+
+      // ---------- UN4: månerne i ækvatorplanet (cfg.måner) ----------
+      // De kredser den vej, planeten drejer (Uranus: med uret set fra IAU's nordpol), og vender samme side mod den
+      // (længde 0° i kortets midte). Miranda hælder 4,34° (knuden er tegnet). Vinklen i banen måles fra Solens retning i
+      // ækvatorplanet ved starten (solVinkel) og vokser mod uret set fra IAU's nordpol.
+      const MD = cfg.måner ? MÅNEDATA[cfg.måner] : null;
+      const solLokal = sol.clone().applyQuaternion(planetG.quaternion.clone().invert());
+      const solVinkel = Math.atan2(-solLokal.z, solLokal.x) / GRAD;
+      // Solens vinkelradius set fra planeten (radianer): halvskyggens bredde ved skyggerne
+      const SOL_VINKEL = 695700 / (solAfstand(cfg.id, nu) * 1.496e8);
+      if (MD) planet.mesh.material.uniforms.uSolVinkel.value = SOL_VINKEL;
+      let måneTid = 0; // månernes ur (programmets sekunder). Står stille, mens man besøger en måne.
+      let visning = cfg.id; // planeten, 'maaner' (oversigten), 'smaa' (de små måner) eller en måne
+      const måner = MD ? [...MD.MÅNER.map((m) => ({ ...m, lille: false })), ...MD.SMÅ.map((m) => ({ ...m, lille: true }))].map((m) => {
+        const r = m.r / S;
+        const baneG = new THREE.Group(); // banens plan (Miranda hælder lidt)
+        baneG.rotation.x = (m.hældning ?? 0) * GRAD;
+        const bane = new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(Array.from({ length: 360 }, (_, j) => new THREE.Vector3(Math.cos((j / 360) * Math.PI * 2), 0, Math.sin((j / 360) * Math.PI * 2)).multiplyScalar(m.afstand / S))),
+          new THREE.LineBasicMaterial({ color: 0xa9d6e6, transparent: true, opacity: 0, depthWrite: false }),
+        );
+        const g = (0.53 * m.albedo * LILLE_LYS) / 0.6; // uden kort tegnes månen i farven gange 0,6
+        const klode = m.lille
+          ? lavIsmåne(r, { farve: [g, g, g * 0.97], segmenter: 32, klump: { frø: m.frø, styrke: 0.22 } })
+          : lavIsmåne(r, { lys: m.lys, segmenter: MÅNE_SEG });
+        const plads = new THREE.Group(); // stedet i banen
+        const krop = new THREE.Group(); // drejes, så samme side vender mod planeten, og gøres større langt væk
+        krop.add(klode.gruppe);
+        plads.add(krop);
+        const etiket = skilt(m.navn, '#d8f2ff', 1);
+        etiket.visible = false;
+        baneG.add(bane, plads, etiket);
+        planetG.add(baneG);
+        return { ...m, r, klode, plads, krop, etiket, bane, baneG, forhold: etiket.scale.x / etiket.scale.y, vinkel: 0, hentet: false };
+      }) : [];
+      const store = måner.filter((m) => !m.lille);
+      const erMåne = (id) => store.some((m) => m.id === id);
+      const måneMed = (id) => måner.find((m) => m.id === id);
+      // Vinklen i banen (grader, mod uret set fra IAU's nordpol) ved månernes ur t
+      const vinkelVed = (m, t = måneTid) => solVinkel + P.retning * (m.start + (360 * t * SEK_PR_SEK) / (m.døgn * 86400));
+      function placerMåner() {
+        for (const m of måner) {
+          m.vinkel = vinkelVed(m) * GRAD;
+          m.plads.position.set(Math.cos(m.vinkel), 0, -Math.sin(m.vinkel)).multiplyScalar(m.afstand / S);
+          m.krop.rotation.y = m.vinkel + Math.PI; // længde 0° vender mod planeten
+        }
+      }
+      placerMåner();
+      // Kortene hentes efter planetens, én ad gangen, og lægges i grafikkortet med det samme
+      function hentKort(m, klar) {
+        if (m.hentet) return klar?.();
+        m.hentet = true;
+        hent(`${m.id}-1280.jpg`, (t) => {
+          m.klode.sætKort(t);
+          if (aktiv) verden.renderer.initTexture(t);
+          klar?.();
+        }, { farve: false, kanaler: 1, fejl: klar });
+      }
+      function hentMåner(i = 0) {
+        if (!aktiv || i >= store.length) return;
+        hentKort(store[i], () => hentMåner(i + 1));
+      }
+      // Står en måne i planetens skygge, spoles månernes ur frem, til den er ude (ellers er den sort og ser ud, som om den
+      // mangler). Det sker kun omkring jævndøgn (skyderen "År"), for ellers står Solen højt over ækvatorplanet.
+      const skyggeH = new THREE.Vector3();
+      function iSkygge(m) {
+        skyggeH.copy(m.plads.position).applyEuler(m.baneG.rotation).applyQuaternion(planetG.quaternion);
+        const t = -skyggeH.dot(sol);
+        return t > 0 && skyggeH.addScaledVector(sol, t).length() < R * 1.15 + m.r;
+      }
+      function udAfSkygge(m) {
+        for (let i = 0; i < 12 && iSkygge(m); i++) {
+          måneTid += ((Math.asin(Math.min(1, (R * 0.5) / (m.afstand / S))) / (Math.PI * 2)) * m.døgn * 86400) / SEK_PR_SEK;
+          placerMåner();
+        }
+      }
 
       // Solen: en lille, skarp prik (fra Uranus ca. 1,7 bueminutter, fra Neptun ca. 1,1)
       const solKerne = glød(new THREE.Color(3, 2.85, 2.5), LAV_KVALITET ? 0.009 : 0.007);
@@ -267,12 +362,61 @@ export function lavIsgigant(cfg) {
         if (kamPos.lengthSq() < 1e-9) return START.clone();
         return kamPos.normalize();
       }
+      // ---------- Månerne: oversigten, de små måner og et besøg ----------
+      const tekster = cfg.måneTekster ?? {};
+      // En retning i systemet: vinklen om aksen fra Solens retning (grader, mod uret set fra IAU's nordpol) og højden over
+      // ækvatorplanet mod den pol, der har sol (grader)
+      const retningVed = (vinkel, højde) => {
+        const polSol = akse.clone().multiplyScalar(Math.sign(sol.dot(akse)) || 1);
+        const vandret = sol.clone().addScaledVector(akse, -sol.dot(akse)).normalize().applyAxisAngle(akse, vinkel * GRAD);
+        return vandret.multiplyScalar(Math.cos(højde * GRAD)).addScaledVector(polSol, Math.sin(højde * GRAD)).normalize();
+      };
+      const fokusHjælp = new THREE.Vector3();
+      const fokusPå = (m) => () => fokusHjælp.copy(m.plads.position).applyEuler(m.baneG.rotation).applyQuaternion(planetG.quaternion);
+      // Oversigten: alle fem baner set fra den pol, der har sol, så de ligner en skydeskive
+      function tilMåner() {
+        visning = 'maaner';
+        fase(null);
+        forklaring('');
+        const afstand = passer((MD.MÅNER[MD.MÅNER.length - 1].afstand / S) * 1.06);
+        rejse.flyv({ fokus: () => midtNul, afstand, retning: retningVed(-30, 55), min: R * 1.15, max: Math.max(450, afstand * 1.5) });
+      }
+      // De små måner: banerne set næsten fra polen, og månerne kredser videre (med ⏩ ses Cressida indhente Desdemona)
+      function tilSmå() {
+        visning = 'smaa';
+        const ud = Math.max(...MD.SMÅ.map((m) => m.afstand)) / S;
+        rejse.flyv({ fokus: () => midtNul, afstand: passer(ud * 1.15), retning: retningVed(-20, 70), min: R * 1.15, max: 450 });
+        fase(tekster.små?.titel ?? null, tekster.små?.tekst);
+        forklaring(tekster.småNu ?? '');
+      }
+      // Et kort besøg (som ved Jupiter): kameraet flyver hen til månen, og Solen lyser skråt fra siden
+      // Kameraet ved en måne: 60° fra Solen om aksen og på 0,65 gange Solens bredde, så der er lidt skygge at se. Det
+      // følger skyderen "År" uden spring ved jævndøgn: I 2026 ses den nordlige halvdel (aldrig fotograferet), i 1986 den
+      // sydlige (Voyagers billeder).
+      function måneRetning() {
+        const b = Math.asin(THREE.MathUtils.clamp(sol.dot(akse), -1, 1));
+        const vandret = sol.clone().addScaledVector(akse, -sol.dot(akse)).normalize().applyAxisAngle(akse, 60 * GRAD);
+        return vandret.multiplyScalar(Math.cos(b * 0.65)).addScaledVector(akse, Math.sin(b * 0.65)).normalize();
+      }
+      const flyvTilMåne = (m) => rejse.flyv({ fokus: fokusPå(m), afstand: passer(m.r * 1.08), retning: måneRetning(), min: m.r * 1.15, max: 450 });
+      function besøg(m) {
+        visning = m.id;
+        udAfSkygge(m);
+        hentKort(m);
+        flyvTilMåne(m);
+        fase(m.navn, tekster.stop?.[m.id]);
+        forklaring(tekster.nu ?? '');
+      }
       function gåTil(id) {
+        if (id === visning && id !== cfg.id) return;
         if (id === cfg.id) {
+          visning = cfg.id;
           fase(null);
           forklaring('');
           helPlanet(kameraRetning());
-        }
+        } else if (MD && id === 'maaner') tilMåner();
+        else if (MD && id === 'smaa') tilSmå();
+        else if (erMåne(id)) besøg(måneMed(id));
       }
       let første = true; // i første billede står kameraet der med det samme (når panelerne har fået deres plads)
 
@@ -292,9 +436,80 @@ export function lavIsgigant(cfg) {
           styring.push({ tekst: 'Voyagers farver (1989)', til: voyager, skift: (til) => { voyager = til; } });
         }
         if (URANUS_RINGE) styring.push({ tekst: 'Infrarødt (som JWST)', til: infrarødt, skift: (til) => { infrarødt = til; } });
+        // Uden navne kan man stadig trykke på selve månerne
+        if (MD) styring.push(navneKnap((til) => { if (!til) for (const m of måner) m.etiket.visible = false; }));
         opdaterKnapper();
       }
       lavKnapper();
+
+      // ---------- Tryk på en af de store måner for at besøge den (som ved Jupiter) ----------
+      const lærred = verden.renderer.domElement;
+      const stråle = new THREE.Raycaster();
+      const peg = new THREE.Vector2();
+      const skalaH = new THREE.Vector3(), trykH = new THREE.Vector3(), trykH2 = new THREE.Vector3();
+      let ned = null;
+      const vedNed = (h) => { ned = { x: h.clientX, y: h.clientY }; };
+      const vedOp = (h) => {
+        if (!ned || rejse.flyver || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
+        const r = lærred.getBoundingClientRect();
+        peg.set(((h.clientX - r.left) / r.width) * 2 - 1, -((h.clientY - r.top) / r.height) * 2 + 1);
+        stråle.setFromCamera(peg, kamera);
+        // Den måne, der er tættest på strålen (inden for et lille stykke, så de er lette at ramme med en finger)
+        let bedst = null;
+        for (const m of store) {
+          if (m.id === visning) continue;
+          m.krop.getWorldPosition(trykH2);
+          const afstand = stråle.ray.distanceToPoint(trykH2);
+          const grænse = Math.max(m.r * m.krop.getWorldScale(skalaH).x * 2.2, trykH2.distanceTo(kamera.position) * 0.03);
+          if (afstand < grænse && stråle.ray.direction.dot(trykH.copy(trykH2).sub(kamera.position)) > 0 && (!bedst || afstand < bedst.afstand)) bedst = { m, afstand };
+        }
+        if (bedst) besøg(bedst.m);
+      };
+      if (MD) {
+        lærred.addEventListener('pointerdown', vedNed);
+        lærred.addEventListener('pointerup', vedOp);
+      }
+
+      // Månerne hvert billede: størrelsen (større langt væk), banerne, navnene, lyset og skyggerne
+      let nær = 0; // 0: ude i rummet (månerne større), 1: ved en måne (den rigtige størrelse)
+      let fSmå = 0; // de små måner: 1 ved "Små måner" (tegnet større og med baner og navne), ellers 0 (rigtig størrelse)
+      const månePos = new THREE.Vector3(), kamOp = new THREE.Vector3();
+      const skygger = store.map(() => ({ midt: new THREE.Vector3(), r: 0 }));
+      function opdaterMåner(dt, pMidt, pAkse) {
+        const k = rejse.skala;
+        const skridt = Math.min(dt, 0.1) * 1.2;
+        nær = THREE.MathUtils.clamp(nær + Math.sign((erMåne(visning) ? 1 : 0) - nær) * skridt, 0, 1);
+        fSmå = THREE.MathUtils.clamp(fSmå + Math.sign((visning === 'smaa' ? 1 : 0) - fSmå) * skridt, 0, 1);
+        const baneLys = 0.22 * THREE.MathUtils.smoothstep(rejse.afstand, BANE_FRA, BANE_TIL) * (1 - nær);
+        kamOp.set(0, 1, 0).applyQuaternion(kamera.quaternion);
+        let i = 0;
+        for (const m of måner) {
+          const lys = m.lille ? 0.22 * fSmå : baneLys;
+          m.bane.material.opacity = lys;
+          m.bane.visible = lys > 0.005;
+          m.plads.getWorldPosition(månePos);
+          const afstand = månePos.distanceTo(kamera.position);
+          const rVerden = m.r * k;
+          const større = måneForstørrelse({ afstand, rVerden, nær: m.lille ? 1 - fSmå : nær, kamera, højde: lærred.clientHeight });
+          m.krop.scale.setScalar(større);
+          const str = afstand * 0.02; // navnets højde i verden
+          m.etiket.visible = navneTil() && !rejse.flyver && m.id !== visning && (m.lille ? fSmå > 0.5 : nær < 0.5) && (rVerden * større) / afstand < 0.03;
+          if (m.etiket.visible) {
+            // Navnet over månen på skærmen (aksen peger ofte mod kameraet, så "op" i banen duer ikke)
+            månePos.addScaledVector(kamOp, rVerden * større + str * 0.8);
+            m.baneG.worldToLocal(m.etiket.position.copy(månePos));
+            m.etiket.scale.set((m.forhold * str) / k, str / k, 1);
+          }
+          m.klode.sæt(solNu);
+          m.klode.skygge(pMidt, R * k, pAkse, FLAD, SOL_VINKEL);
+          if (!m.lille) {
+            m.plads.getWorldPosition(skygger[i].midt);
+            skygger[i].r = rVerden; // skyggen har den rigtige størrelse, også når månen er tegnet større
+            i++;
+          }
+        }
+        planet.sætMåner(skygger);
+      }
 
       // ---------- Hvert billede ----------
       const op = new THREE.Vector3(0, 1, 0);
@@ -322,6 +537,7 @@ export function lavIsgigant(cfg) {
         solKerne.material.opacity = solSes;
         solGlød.material.opacity = 0.45 * solSes;
         const { midt: pMidt, akse: pAkse } = planet.sæt(solNu, vindTid);
+        if (MD) opdaterMåner(dt, pMidt, pAkse);
         // Infrarødt: toner ind og ud (planeten mørkere, ringene lysere)
         ir = THREE.MathUtils.clamp(ir + (infrarødt ? 1 : -1) * Math.min(dt, 0.1) * 2.5, 0, 1);
         planet.sætEksponering(THREE.MathUtils.lerp(1, IR_PLANET, ir));
@@ -367,15 +583,26 @@ export function lavIsgigant(cfg) {
       return {
         styring,
         gåTil,
-        sted: () => cfg.id,
+        sted: () => visning,
         hurtig: `tiden går ${HURTIG} gange hurtigere`,
         tempo: (t) => { hurtig = t === 'hurtig'; },
         opdater(dt) {
           const d = dt * (hurtig ? HURTIG : 1);
           vindTid += d;
           døgn += d * DREJ;
+          // Månerne følger deres eget ur, men står stille, mens man besøger en af dem
+          if (MD && !erMåne(visning)) { måneTid += d; placerMåner(); }
         },
         stop() {
+          aktiv = false;
+          lærred.removeEventListener('pointerdown', vedNed);
+          lærred.removeEventListener('pointerup', vedOp);
+          for (const m of måner) {
+            m.etiket.material.map?.dispose();
+            m.etiket.material.dispose();
+            m.bane.geometry.dispose();
+            m.bane.material.dispose();
+          }
           verden.opdateringer.delete(hvertBillede);
           rejse.stop();
           vindTekstur.dispose();
@@ -440,6 +667,37 @@ export function lavIsgigant(cfg) {
           } : null),
           buer: () => (ringe && !URANUS_RINGE ? { vinkel: bueVinkel(), tau: [...ringe.mesh.material.uniforms.uBueTau.value], fra: ringe.mesh.material.uniforms.uBue.value.map((v) => v.z / GRAD), omløb: ringData.ADAMS_OMLØB } : null),
           sætUr: (t) => { vindTid = t; },
+          // UN4: månerne. Vinklen i banen målt i geometrien (grader, atan2(−z, x) i banens plan, vokser mod uret set fra
+          // IAU's nordpol), omløbstiden, hvor stor månen er tegnet, og hvor stor den er (vinkelradius i grader set fra
+          // kameraet), om navnet ses, om kortet er hentet, banens hældning, og om skyggerne er sat
+          måner: () => måner.map((m) => {
+            m.plads.getWorldPosition(månePos);
+            const afstand = månePos.distanceTo(kamera.position);
+            const rVerden = m.r * rejse.skala;
+            const u = planet.mesh.material.uniforms;
+            return {
+              id: m.id, lille: m.lille, vinkel: Math.atan2(-m.plads.position.z, m.plads.position.x) / GRAD, døgn: m.døgn,
+              tegnet: Math.atan((rVerden * m.krop.scale.x) / afstand) / GRAD, rigtig: Math.atan(rVerden / afstand) / GRAD,
+              navn: m.etiket.visible, hentet: m.hentet, kort: !!m.klode.gruppe.children[0].material.uniforms.tKort.value,
+              hældning: m.baneG.rotation.x / GRAD, bane: m.bane.visible,
+              planetSkygge: m.klode.gruppe.children[0].material.uniforms.uPlanetR.value > 0,
+              skyggeSat: !m.lille && u.uMaane.value.some((v) => Math.abs(v.w - rVerden) < 1e-9 && v.w > 0),
+            };
+          }),
+          // Månernes ur (programmets sekunder)
+          måneUr: () => måneTid,
+          sætMåneUr: (t) => { måneTid = t; placerMåner(); },
+          nær: () => nær,
+          visning: () => visning,
+          // Hvor en måne står på skærmen (i pixels), så testen kan trykke på den
+          månePlads(navn) {
+            const m = måner.find((x) => x.navn === navn);
+            m.krop.getWorldPosition(månePos).project(kamera);
+            const r = verden.renderer.domElement.getBoundingClientRect();
+            return { x: r.left + ((månePos.x + 1) / 2) * r.width, y: r.top + ((1 - månePos.y) / 2) * r.height, foran: månePos.z < 1 };
+          },
+          // Månen i planetens skygge (til testen af skyggerne): spol månernes ur, til månen står bag planeten
+          iSkygge: (id) => iSkygge(måneMed(id)),
           // Tæt på et sted på breddegraden `bredde` ved grænsen mellem dag og nat (Solen 78° fra lodret, om eftermiddagen),
           // hvor skyernes skygger er længst (til billeder). afstand i planetradier.
           tætPå: (bredde = 27, afstand = 0.15) => {
