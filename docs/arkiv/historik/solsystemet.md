@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (8. november 2026): Uranus og Neptun UN3, Neptuns vejr og ringbuer.** Jeres go: "start un3".
+- **Høje, hvide skyer** af metan-is i bånd ved de breddegrader, Voyager så dem. De kaster blålige skygger ca. 50 km under sig (som på Voyagers foto), som ses tæt på ved grænsen mellem dag og nat. Skyerne er tegnet, og der er få i 2025 (de forsvandt næsten i 2019).
+- **Kontakten "Neptun i 1989":** Den Store Mørke Plet (22° S, 13.000 km lang, med den lyse sky ved kanten), Scooter og den lille mørke plet D2 ved de rigtige breddegrader og med Voyagers målte omgange, så de driver fra hinanden. Flere skyer og buerne, som de var i 1989.
+- **"Voyagers farver (1989)"** (dybblå, målt på Solar System Scopes kort) og **"Vindene"** (pile). **Ringene:** fem tynde, støvede ringe, usynlige forfra og synlige i modlys, med de fem buer i Adams-ringen, der kredser på 10,5 timer. Tre nye emner på Neptuns side (faktatjekket).
+- **Spørgsmål til jer:** (1) Skal Uranus også have "Voyagers farver (1986)"? Anbefaling: nej, for Voyagers billeder af Uranus var tæt på de ægte farver (tjekkes, før det skrives). (2) Webb tog også et berømt billede af Neptuns ringe i infrarødt lys. Skal Neptun have "Infrarødt (som JWST)" som Uranus? Anbefaling: ja, det er lille, og det kan komme med i UN5. (3) Spørgsmålet fra UN2 om kameraet ved skyderen "År" står stadig (anbefaling: lad det være, og vis det fra siden i flybyen).
+
 **Senest lavet (8. november 2026): Uranus og Neptun UN2, Uranus' årstider og ringe.** Jeres go: "Go un2".
 - **Skyderen "År"** (1986-2070) flytter kun Solen. Solens højde over Uranus passer med Horizons (1986: −82,5°, 2007: 0°, 2026: +74°). **Kappen over polen** er lys, når Solen står højt over den (tegnet).
 - **Ringene** (NSSDC): 10 tætte ringe, mørke som kul, så forfra er de næsten usynlige. Støvet mellem dem ses i modlys, og kontakten **"Infrarødt (som JWST)"** gør planeten mørkere og ringene 40 gange lysere. To nye emner på Uranus' side (årene og ringene).

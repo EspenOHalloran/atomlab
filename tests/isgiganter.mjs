@@ -5,7 +5,9 @@
 // browser. Ingen fejl i konsollen. UN2: skyderen "År" (Solens bredde i 3D-billedet passer med Horizons i 1986, 2007 og
 // 2026), kappen over polerne følger årstiden, ringene (NSSDC) og kontakten "Infrarødt". UN3 (Neptun): ringene og buerne
 // (NSSDC, Wikipedia), pletterne fra 1989 kun med kontakten, skyerne og pletterne flytter sig den rigtige vej og står
-// stille i pause, buerne kredser mod uret på ca. 10,5 timer, "Voyagers farver" og "Vindene".
+// stille i pause, buerne kredser mod uret på ca. 10,5 timer, "Voyagers farver" og "Vindene". UN4 (Uranus' måner):
+// tallene (NSSDC), omløbstiderne og retningen målt i 3D-billedet, den rigtige størrelse ved en måne, Cressida indhenter
+// Desdemona hver ca. 22. døgn, kortene hentes, skyggerne er sat, en måne i Uranus' skygge spoles ud, og tryk på en måne.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { PLANETER, solBredde, pol, baneNormal } from '../js/data/isgiganter.js';
 import { vindVed, neptunRå, uranusRå } from '../js/data/vinde-isgiganter.js';
@@ -14,6 +16,8 @@ import { RINGE, YDRE, ANTAL, ringProfil, støvVed, RING_IND, RING_UD, ALBEDO } f
 import { SIDE as NEPTUN_SIDE } from '../js/data/sider/neptun.js';
 import * as RN from '../js/data/ringe-neptun.js';
 import { PLETTER, BÅND, VOYAGER, pletFart, vindOmgang, pileBredder } from '../js/data/vejr-neptun.js';
+import * as MU from '../js/data/maaner-uranus.js';
+import { SIDER as URANUS_SIDER, MÅNE_STOP, SMÅ_STOP } from '../js/data/sider/uranus.js';
 const UD = billedmappe('isgiganter');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -71,6 +75,12 @@ const vinkel = (a, b) => Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] *
   tjek('flere høje skyer i 1989 end i 2025 (de forsvandt næsten i 2019)', BÅND.every((b) => b.år1989 > b.nu));
   tjek('"Voyagers farver" er meget blåere (blå/rød over 3 gange vores)', VOYAGER.gain[2] / VOYAGER.gain[0] > 3);
   tjek('pilene: ingen ved ±50° (næsten stille) og den længste ved ækvator (mod vest)', pileBredder().every((r) => Math.abs(r.bredde) !== 50) && pileBredder().find((r) => r.bredde === 0).vind < -390);
+  // UN4: Uranus' måner (NSSDC)
+  const mu = Object.fromEntries([...MU.MÅNER, ...MU.SMÅ].map((m) => [m.id, m]));
+  tjek('Uranus\' fem store måner: afstand, radius og omløb fra NSSDC (Miranda 129.900 km og 1,413 døgn, Titania størst med 788,9 km)', mu.miranda.afstand === 129900 && Math.abs(mu.miranda.døgn - 1.413479) < 1e-6 && mu.titania.r === 788.9 && mu.oberon.afstand === 583500 && MU.MÅNER.every((m) => m.r <= 788.9) && Math.abs(mu.miranda.hældning - 4.34) < 1e-9);
+  tjek('Cressida indhenter Desdemona hver ca. 21,8 døgn (regnet fra omløbene)', Math.abs(MU.overhaling(mu.cressida, mu.desdemona) - 21.8) < 0.05, MU.overhaling(mu.cressida, mu.desdemona));
+  tjek('set fra Uranus\' skyer er Ariel ca. 0,40° bred og Miranda 0,26°, og fra Miranda fylder Uranus ca. 22°', Math.abs(MU.synsvinkel(mu.ariel.r, mu.ariel.afstand - 25559) - 0.40) < 0.01 && Math.abs(MU.synsvinkel(mu.miranda.r, mu.miranda.afstand - 25559) - 0.26) < 0.01 && Math.abs(MU.synsvinkel(25559, mu.miranda.afstand) - 22.7) < 0.5);
+  tjek('29 kendte måner med dato, og ved månerne er underteksterne under 160 tegn, og hver måne har en side', MU.ANTAL === 29 && MU.ANTAL_DATO && [...Object.values(MÅNE_STOP), SMÅ_STOP.tekst].every((t) => t.length < 160 && t.endsWith('.')) && [...MU.MÅNER.map((m) => m.id), 'maaner', 'smaa'].every((id) => URANUS_SIDER[id]?.kort && URANUS_SIDER[id].ærligt));
   tjek('vindene dæmpes til 0 ved polerne (ikke målt), men ikke før 75°', vindVed('uranus', 90) === 0 && vindVed('neptun', -90) === 0 && vindVed('uranus', 75) === uranusRå(75) && vindVed('neptun', 75) === neptunRå(75));
 }
 
@@ -117,6 +127,85 @@ async function uranusUN2() {
   tjek('"Infrarødt": ringene 40 gange lysere og planeten mørkere, og bagefter som før', irR.synlige && Math.abs(irR.lys / 0.015 - 40) < 1e-6 && Math.abs(irEks - 0.4) < 1e-6 && Math.abs(efter.lys - 0.015) < 1e-9 && Math.abs((await F('eksponering')) - 1) < 1e-6, JSON.stringify({ irR, irEks, efter }));
 }
 
+// ---------- UN4: Uranus' måner ----------
+async function uranusUN4() {
+  const M = async () => Object.fromEntries((await F('måner')).map((m) => [m.id, m]));
+  const træ = await fm(() => atomlabTest.solsystem.træ());
+  tjek('træet har "Måner" med de fem store og "Små måner"', ['maaner', 'miranda', 'ariel', 'umbriel', 'titania', 'oberon', 'smaa'].every((id) => træ.some((t) => t.id === id)), JSON.stringify(træ.map((t) => t.id)));
+  // Omløbstiden og retningen målt i geometrien: Vinklen falder (med uret set fra IAU's nordpol, som Uranus drejer)
+  await F('sætMåneUr', 0);
+  const m0 = await M();
+  const dt = 40;
+  await F('sætMåneUr', dt);
+  const m1 = await M();
+  const gr = (a) => ((a % 360) + 540) % 360 - 180;
+  const fejlOmløb = Object.values(m0).map((m) => {
+    const målt = gr(m1[m.id].vinkel - m.vinkel);
+    const ventet = -(360 * dt * 450) / (m.døgn * 86400);
+    return Math.abs(målt - gr(ventet));
+  });
+  tjek('månerne kredser med uret set fra IAU\'s nordpol (den vej, Uranus drejer), med NSSDC\'s omløbstider', fejlOmløb.every((f) => f < 0.01) && gr(m1.miranda.vinkel - m0.miranda.vinkel) < 0, JSON.stringify(fejlOmløb.map((f) => f.toFixed(4))));
+  // Cressida indhenter Desdemona: forskellen i vinkel vokser med 360° på ca. 21,8 døgn
+  const forskel = (m) => gr(m.desdemona.vinkel - m.cressida.vinkel);
+  const t2 = 600; // forskellen vokser ca. 52° (under en halv omgang)
+  await F('sætMåneUr', t2);
+  const m2 = await M();
+  const synodisk = (360 * t2 * 450) / 86400 / Math.abs(gr(forskel(m2) - forskel(m0)));
+  tjek(`Cressida indhenter Desdemona hver ${synodisk.toFixed(1)}. døgn (målt i 3D-billedet)`, Math.abs(synodisk - 21.8) < 0.2 && Math.abs(m0.miranda.hældning - 4.34) < 1e-9);
+  // Kortene og skyggerne
+  await s.waitForFunction(() => Object.values(atomlabTest.solsystem.fænomen().måner()).filter((m) => !m.lille).every((m) => m.kort), null, { timeout: 30000, polling: 200 }).catch(() => {});
+  const bm = await F('billeder');
+  const mm = await M();
+  tjek('månernes kort er hentet (Voyagers kort, én kanal)', ['miranda', 'ariel', 'umbriel', 'titania', 'oberon'].every((n) => mm[n].kort), JSON.stringify(Object.keys(bm)));
+  tjek('skyggerne: de store måner kaster skygge på Uranus, og alle får Uranus\' skygge', Object.values(mm).every((m) => m.planetSkygge && (m.lille || m.skyggeSat)));
+  // Oversigten: banerne ses, månerne er tegnet større (mindst 0,26° i radius), og siden "Månerne"
+  await fm(() => atomlabTest.solsystem.gåTil('maaner'));
+  await F('hop');
+  await toBilleder();
+  const mo = await M();
+  tjek('oversigten: banerne ses, og de store måner er tegnet større end de er (mindst 0,26°)', ['miranda', 'oberon'].every((n) => mo[n].bane && mo[n].tegnet > 0.25 && mo[n].tegnet > mo[n].rigtig) && (await fm(() => atomlabTest.solsystem.side())).nøgle === 'uranus:maaner', JSON.stringify([mo.oberon, (await fm(() => atomlabTest.solsystem.side())).nøgle]));
+  await s.waitForTimeout(300);
+  await s.screenshot({ path: `${UD}/uranus-maaner.png` });
+  // Tryk på Titania
+  const tp = await F('månePlads', 'Titania');
+  await s.mouse.click(tp.x, tp.y);
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().visning() === 'titania', null, { timeout: 5000, polling: 100 }).catch(() => {});
+  tjek('tryk på Titania besøger den', (await F('visning')) === 'titania', JSON.stringify(tp));
+  await F('hop');
+  await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver && atomlabTest.solsystem.fænomen().nær() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  const fase = await fm(() => atomlabTest.solsystem.fase());
+  const side = await fm(() => atomlabTest.solsystem.side());
+  tjek('Titania: underteksten, egen side og stedet i træet', fase?.titel === 'Titania' && side.nøgle === 'uranus:titania' && side.sidst === 'Ærligt talt' && (await fm(() => atomlabTest.solsystem.sted())) === 'titania', JSON.stringify({ fase, n: side.nøgle }));
+  const mt = await M();
+  const andre = Object.values(mt).filter((m) => m.id !== 'titania' && !m.lille);
+  tjek('ved Titania: de andre måner i den rigtige størrelse (højst 0,8 pixel større), og ingen navne', andre.every((m) => m.tegnet - m.rigtig < 0.02 && !m.navn), JSON.stringify(andre.map((m) => [m.id, m.tegnet.toFixed(4), m.rigtig.toFixed(4)])));
+  const u0 = await F('måneUr');
+  await s.waitForTimeout(600);
+  tjek('månerne står stille, mens man besøger en måne', u0 === (await F('måneUr')));
+  await s.waitForTimeout(300);
+  await s.screenshot({ path: `${UD}/uranus-titania.png` });
+  // En måne i Uranus' skygge (ved jævndøgn, 2007): månernes ur spoles frem, så den er i sollys, når man kommer
+  await fm(() => atomlabTest.solsystem.gåTil('maaner'));
+  await F('sætÅr', 2007.94);
+  let fundet = false;
+  for (let t = 0; t < 8000 && !fundet; t += 4) { await F('sætMåneUr', t); fundet = await F('iSkygge', 'ariel'); }
+  await fm(() => atomlabTest.solsystem.gåTil('ariel'));
+  tjek('besøg ved Ariel, der står i Uranus\' skygge (2007): månerne spoles frem, så Ariel er i sollys', fundet && !(await F('iSkygge', 'ariel')));
+  await F('sætÅr', 2026.85);
+  // De små måner: tegnet større med baner og navne, og de kredser videre
+  await fm(() => atomlabTest.solsystem.gåTil('smaa'));
+  await F('hop');
+  await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  await s.waitForTimeout(1200);
+  const ms = await M();
+  const u1 = await F('måneUr');
+  await s.waitForTimeout(400);
+  tjek('"Små måner": de fire små er tegnet større med baner, og månerne kredser videre', ['cressida', 'desdemona', 'cupid', 'belinda'].every((n) => ms[n].bane && ms[n].tegnet > ms[n].rigtig * 2) && (await F('måneUr')) > u1 && (await fm(() => atomlabTest.solsystem.fase()))?.titel === 'Små måner, der kan støde sammen', JSON.stringify(ms.cressida));
+  await s.screenshot({ path: `${UD}/uranus-smaa.png` });
+  await fm(() => atomlabTest.solsystem.gåTil('uranus'));
+  await F('hop');
+}
+
 // ---------- UN3: Neptuns vejr og ringbuer ----------
 const venteKontakt = (navn, felt, mål) => s.waitForFunction(([felt, mål]) => atomlabTest.solsystem.fænomen().vejr()[felt] === mål, [felt, mål], { timeout: 10000, polling: 100 }).catch(() => {});
 const uDiff = (a, b) => { let d = b - a; d -= Math.round(d); return d; }; // forskel i u, der går hele vejen rundt
@@ -129,7 +218,9 @@ async function neptunUN3() {
   tjek('Neptun: ringene fra 40.000 til 64.000 km', r && r.synlige && r.ind === 40000 && r.ud === 64000, JSON.stringify(r));
   // Skyerne og pletterne flytter sig med vinden: ved 27° N mod vest, ved 70° S mod øst, pletten mod vest
   await s.waitForTimeout(1500);
-  const v1 = await F('vejr'), bu1 = await F('buer'), t1 = (await F('ur')).vind;
+  const v1 = await F('vejr');
+  // Buerne og uret i samme kald (ellers kan et billede gå imellem)
+  const [bu1, t1] = await fm(() => { const f = atomlabTest.solsystem.fænomen(); return [f.buer(), f.ur().vind]; });
   const nord = (v) => v.bånd.find((b) => b.bredde === 27).u, syd = (v) => v.bånd.find((b) => b.bredde === -70).u, plet = (v) => v.pletter[0].u;
   tjek('Neptun: skyerne ved 27° N flytter sig mod vest og ved 70° S mod øst, og pletten mod vest', uDiff(nord(v0), nord(v1)) < 0 && uDiff(syd(v0), syd(v1)) > 0 && uDiff(plet(v0), plet(v1)) < 0, JSON.stringify([uDiff(nord(v0), nord(v1)), uDiff(syd(v0), syd(v1)), uDiff(plet(v0), plet(v1))]));
   tjek('Neptun: buerne kredser mod uret set fra nordpolen og kommer rundt på ca. 10,5 timer', bu1.vinkel > b0.vinkel && Math.abs(bu1.vinkel - (((t1 * 450) / b0.omløb) % 1) * 2 * Math.PI) < 1e-3 && Math.abs(b0.omløb / 3600 - 10.54) < 0.02, JSON.stringify([b0.vinkel, bu1.vinkel, b0.omløb]));
@@ -165,7 +256,7 @@ for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559,
   const billeder = await F('billeder');
   tjek(`${navn} åbner, og kortet er hentet (1k i tests, i farver)`, (await F('hentet')) && billeder[kort] === 'farver', JSON.stringify(billeder));
   tjek(`${navn}: sort himmel (ingen tågeskyer)`, !(await fm(() => atomlabTest.solsystem.tåger())));
-  const styr = id === 'uranus' ? ['År', 'Modlys', 'Infrarødt (som JWST)'] : ['Vindene', 'Modlys', 'Neptun i 1989', 'Voyagers farver (1989)'];
+  const styr = id === 'uranus' ? ['År', 'Modlys', 'Infrarødt (som JWST)', 'Navne'] : ['Vindene', 'Modlys', 'Neptun i 1989', 'Voyagers farver (1989)'];
   tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
   const form = await F('form');
   tjek(`${navn} er fladtrykt (NSSDC), og aksen hælder ${hæld}° mod banen`, Math.abs(form.flad - flad) < 1e-6 && Math.abs(form.hældning - hæld) < 0.15, JSON.stringify(form));
@@ -201,7 +292,7 @@ for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559,
   tjek(`${navn}: siden har Billederne og "Ærligt talt" sidst`, side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
   await s.waitForTimeout(300);
   await s.screenshot({ path: `${UD}/${id}.png` });
-  if (id === 'uranus') await uranusUN2();
+  if (id === 'uranus') { await uranusUN2(); await uranusUN4(); }
   if (id === 'neptun') await neptunUN3();
 }
 

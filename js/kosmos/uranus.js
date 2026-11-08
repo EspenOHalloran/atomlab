@@ -1,8 +1,8 @@
-// Uranus (docs/plan-uranus-neptun.md). UN1: kloden og skelettet. UN2: årstiderne (skyderen "År" og kappen) og ringene. Koden er fælles med Neptun (js/solsystem/isgigant.js).
+// Uranus (docs/plan-uranus-neptun.md). UN1: kloden og skelettet. UN2: årstiderne (skyderen "År" og kappen) og ringene. UN4: månerne. Koden er fælles med Neptun (js/solsystem/isgigant.js).
 // Tallene står i docs/fakta-solsystemet/del6-uranus-og-neptun.md og js/data/isgiganter.js.
 
 import { lavIsgigant } from '../solsystem/isgigant.js';
-import { SIDE } from '../data/sider/uranus.js';
+import { SIDE, SIDER, MÅNE_STOP, SMÅ_STOP, MÅNE_NU, SMÅ_NU } from '../data/sider/uranus.js';
 
 export default lavIsgigant({
   id: 'uranus',
@@ -15,6 +15,9 @@ export default lavIsgigant({
   år: { fra: 1986, til: 2070 },
   ringe: 'uranus',
   kapper: true,
+  // UN4: de fem store måner og fire små (js/data/maaner-uranus.js)
+  måner: 'uranus',
+  måneTekster: { stop: MÅNE_STOP, små: SMÅ_STOP, nu: MÅNE_NU, småNu: SMÅ_NU },
   tal: [
     ['Uranus\' bredde', 'ca. 51.000 km'],
     ['Døgn', '17 t 14 min'],
@@ -22,4 +25,5 @@ export default lavIsgigant({
     ['Afstand til Solen', 'ca. 2,9 mia. km'],
   ],
   side: SIDE,
+  sider: SIDER,
 });
