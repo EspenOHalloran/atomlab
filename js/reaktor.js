@@ -100,6 +100,12 @@ let startet = false;
 let nødstop = false;
 let effekt = 0; // spaltninger pr. sekund (glidende gennemsnit)
 let forHøjTid = 0;
+// Neutronkilden sender neutroner ind i de første sekunder efter start. Med kun de første 8 gik kædereaktionen
+// af sig selv i stå i ca. 1,6 % af gangene inden for 4 sekunder (8 af 500, 8. november 2026).
+const KILDE_TID = 3; // sekunder
+const KILDE_HYPPIGHED = 2.5; // neutroner i sekundet
+let kildeTid = 0;
+let kildeRest = 0;
 let stabilTid = 0;
 let spaltningerDetteBillede = 0;
 let brændselMesh = null;
@@ -495,6 +501,7 @@ function startVisKæde() {
   for (const b of brændsel) b.brugt = 0;
   nødstop = false;
   forHøjTid = 0;
+  kildeTid = 0; // "Vis mig" starter med én neutron
   $('reaktorStave').disabled = false;
   // Stavene trækkes et godt stykke op, så man kan se kædereaktionen vokse
   stavDybde = 0.25;
@@ -792,17 +799,23 @@ function startKæde() {
     $('reaktorStave').value = 50;
   }
   startet = true;
-  for (let i = 0; i < 8; i++) {
-    const vinkel = Math.random() * Math.PI * 2;
-    neutroner.push({ x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2, vx: Math.cos(vinkel) * LANGSOM, vy: Math.sin(vinkel) * LANGSOM, sidst: -1 });
-  }
+  for (let i = 0; i < 8; i++) kildeNeutron();
+  kildeTid = KILDE_TID;
+  kildeRest = 0;
   løs('r-start');
   $('reaktorStart').textContent = 'Genstart reaktoren';
   visBesked({ titel: 'Reaktoren er startet', tekst: 'En neutronkilde sender de første neutroner ind. Det er en lille kapsel med fx californium-252, der hele tiden sender neutroner ud af sig selv. Hold effekten i det grønne felt med kontrolstavene.', varighed: 8000 });
 }
 
+// En langsom neutron fra neutronkilden i midten
+function kildeNeutron() {
+  const vinkel = Math.random() * Math.PI * 2;
+  neutroner.push({ x: (Math.random() - 0.5) * 2, y: (Math.random() - 0.5) * 2, vx: Math.cos(vinkel) * LANGSOM, vy: Math.sin(vinkel) * LANGSOM, sidst: -1 });
+}
+
 function lavNødstop(grund) {
   nødstop = true;
+  kildeTid = 0;
   stavDybde = 1;
   $('reaktorStave').value = 100;
   $('reaktorStave').disabled = true;
@@ -897,6 +910,11 @@ function kædeFysik(h) {
 
 function opdaterKæde(dt) {
   spaltningerDetteBillede = 0;
+  if (startet && !nødstop && kildeTid > 0) {
+    kildeTid -= dt;
+    kildeRest += dt * KILDE_HYPPIGHED;
+    for (; kildeRest >= 1 && neutroner.length < MAX_NEUTRONER; kildeRest--) kildeNeutron();
+  }
   const skridt = Math.min(10, Math.ceil(dt / 0.01));
   for (let i = 0; i < skridt; i++) kædeFysik(dt / skridt);
   // Effekten = spaltninger pr. sekund, udglattet
@@ -916,7 +934,7 @@ function opdaterKæde(dt) {
     if (neutroner.length === 0 && visKæde) {
       startet = false;
       slutVisning(true);
-    } else if (neutroner.length === 0) {
+    } else if (neutroner.length === 0 && kildeTid <= 0) {
       startet = false;
       visBesked({ titel: 'Kædereaktionen gik i stå', tekst: 'Der var ikke nok neutroner til at holde den i gang. Træk stavene lidt op, og start igen.', varighed: 6000 });
     }
@@ -1028,7 +1046,7 @@ export function testAdgang() {
       for (let t = 0; t < sek; t += 0.05) opdaterKæde(0.05);
       return { effekt, nødstop, neutroner: neutroner.length };
     },
-    nulstil: () => { neutroner = []; for (const b of brændsel) b.brugt = 0; nødstop = false; startet = false; },
+    nulstil: () => { neutroner = []; for (const b of brændsel) b.brugt = 0; nødstop = false; startet = false; kildeTid = 0; },
     vand: (til) => { vand = til; },
     visMig: () => visMig(),
     // Spol hele Reaktoren frem (testbrowseren tegner kun få billeder i sekundet)
