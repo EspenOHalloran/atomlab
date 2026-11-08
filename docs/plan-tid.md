@@ -104,6 +104,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - [ ] **På tabletten:** Forstår man forskellen på skyderen og 1 g? Er de store tal (år 2.502.026) til at læse?
 
 **T3. Lagene og teksterne** *(lille til mellem, én session)*
+- **Allerede lavet 8. november 2026 (jeres ønsker efter T2):** emnet "Hurtigere end lyset? Nej!" (længdeforkortelsen og "lysglimtet kommer kun knap 4 timer før", `kontakt: 'Set fra skibet'`) og emnet "Fast fart eller 1 g?" (`kontakt: '1 g hele vejen'`, de ca. 11.500 g står nu dér og ikke i "Ærligt talt"). Lysuret går trin for trin med sin egen fart (87 %). Målet vælges med tre kontakter. T3 bygger videre på det.
 - [ ] Emner: "Hvorfor går Jordens ur så hurtigt?" (lysuret), "Hvorfor ikke omvendt?" (tvillingeparadokset), "Set fra skibet" (længdeforkortelsen), "Er det målt?" (myonerne, urene i flyene, GPS med et link til Rumtid, astronauterne og urene, der løftes 33 cm) og "Kunne man?" (energien, støvkornet, gassen i rummet og de ca. 11.500 g).
 - [ ] Et "Hvorfor?"-kort i `js/data/hvorfor.js`, fx "Hvorfor kan intet nå lysets fart?".
 - [ ] "For nørder": formlen for γ, reglen om √10 for hvert 9-tal, formlerne for 1 g, tvillingeparadokset (omvejen giver *mindre* tid, rumtidens minus) og et par linjer om samtidighed ("nu" er ikke det samme for alle).

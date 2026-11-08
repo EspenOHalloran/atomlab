@@ -18,6 +18,8 @@ Byg T3 i "Rejsen i tid" efter planen i `docs/plan-tid.md`.
 - Hjemkomsten sammenligner med fortiden (`FORTIDEN` i `js/data/tid.js`), og over ca. 100 år for dig står "Så længe kan ingen leve". `tests/vaerktoejer/tid-tekster.mjs` skriver alle hjemkomster ud.
 - Siden har i dag to emner ("Hvorfor går Jordens ur så hurtigt?" og "Hvad gør farten?"). T2 har allerede skrevet noget i "For nørder" (1 g og længdeforkortelsen kort) og "Ærligt talt" (brændstoffet, "Set fra skibet" og at skibet flytter sig jævnt med 1 g). Læs dem, og skriv dem om, så de passer med de nye emner (intet må stå to steder).
 
+**Lavet efter T2 (8. november 2026, se `docs/lige-nu/tid.md`):** emnerne "Hurtigere end lyset? Nej!" (længdeforkortelsen, folder sig ud med "Set fra skibet") og "Fast fart eller 1 g?" (folder sig ud med 1 g), lysuret trin for trin med sin egen fart, målet som tre kontakter og skyderen "Fast fart". Emnet "Set fra skibet" i punkt 1 skal derfor ikke skrives: Byg videre på "Hurtigere end lyset? Nej!", og flyt ikke det samme ind et andet sted.
+
 **T3 (se tjeklisten i planen):**
 1. **Emnerne:** "Hvorfor ikke omvendt?" (tvillingeparadokset), "Set fra skibet" (længdeforkortelsen, med `kontakt: 'Set fra skibet'`, så emnet folder sig ud, når kontakten slås til), "Er det målt?" (myonerne, urene i flyene, GPS med et link til Rumtid, astronauterne og urene, der løftes 33 cm) og "Kunne man?" (energien, støvkornet, gassen i rummet og de ca. 11.500 g). Hold de to emner fra T1. Overvej et emne om 1 g ("Hvorfor tager det år med 1 g?"), eller læg det i "Kunne man?".
 2. **"Hvorfor?"-kortet** i `js/data/hvorfor.js`, fx "Hvorfor kan intet nå lysets fart?" (fælden "man bliver tungere": sig "det kræver mere og mere energi").

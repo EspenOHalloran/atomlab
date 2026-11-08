@@ -123,7 +123,10 @@ const sæt = (navn, v) => E(([navn, v]) => {
   i.dispatchEvent(new Event('input'));
 }, [navn, v]);
 const vist = (navn) => E((navn) => [...document.querySelectorAll('#kosmosStyr .skyder-boks')].find((x) => x.querySelector('.skyder-top > span').textContent === navn)?.querySelector('strong').textContent ?? null, navn);
-const sætFart = (v) => sæt('Fart', v);
+const sætFart = (v) => sæt('Fast fart', v);
+// Målet vælges med tre kontakter, hvor præcis én er tændt (8. november 2026)
+const vælgMål = (navn) => E((navn) => atomlabTest.kosmos.trykPå(`🎯 ${navn}`), navn);
+const målTændt = async () => (await E(() => atomlabTest.kosmos.styr())).filter((s) => s.navn.startsWith('🎯') && s.til).map((s) => s.navn.slice(3)).join('|');
 
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForFunction(() => window.atomlabTest?.kosmos);
@@ -133,14 +136,18 @@ await E(() => atomlabTest.kosmos.vælg('tid'));
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.ure);
 tjek('navnet er "Rejsen i tid"', (await page.textContent('#kosmosNavn')) === 'Rejsen i tid');
 const styr = await E(() => atomlabTest.kosmos.styr());
-tjek('Styr-boksen: skyderne "Mål" (Alpha Centauri) og "Fart" (99,99 %) og kontakterne "1 g hele vejen" og "Set fra skibet"', styr.map((s) => `${s.slags}:${s.navn}`).join('|') === 'skyder:Mål|skyder:Fart|kontakt:1 g hele vejen|kontakt:Set fra skibet' && (await vist('Mål')) === 'Alpha Centauri' && (await vist('Fart')) === '99,99 %', JSON.stringify(styr));
+tjek('Styr-boksen: tre mål (Alpha Centauri tændt), skyderen "Fast fart" (99,99 %) og kontakterne "1 g hele vejen" og "Set fra skibet"', styr.map((s) => `${s.slags}:${s.navn}`).join('|') === 'kontakt:🎯 Alpha Centauri|kontakt:🎯 Mælkevejens centrum|kontakt:🎯 Andromeda|skyder:Fast fart|kontakt:1 g hele vejen|kontakt:Set fra skibet' && (await målTændt()) === 'Alpha Centauri' && (await vist('Fast fart')) === '99,99 %', JSON.stringify(styr));
+tjek('et tryk på det valgte mål slukker det ikke', (await vælgMål('Alpha Centauri')) && (await målTændt()) === 'Alpha Centauri');
 tjek('⏩ findes (tidsknappen)', await page.isVisible('#kosmosTid [data-tid="hurtig"]'));
 let u = await ure();
 tjek('før afgang: "0 dage 0 timer", år nu, begge er 13', u.vist && u.skib === '0 dage 0 timer' && u.jord === `år ${await E(() => atomlabTest.kosmos.fænomen().startÅr)}` && u.skibAlder === 'Du: 13 år' && u.jordAlder === 'Tvillingen: 13 år', JSON.stringify(u));
 const side = await E(() => atomlabTest.kosmos.side());
-tjek('siden: Kort, to emner, For nørder og Ærligt talt sidst', side.kort.length > 40 && side.emner.length === 2 && side.bokse.includes('For nørder') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
+tjek('siden: Kort, fire emner, For nørder og Ærligt talt sidst', side.kort.length > 40 && side.emner.length === 4 && side.bokse.includes('For nørder') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
 tjek('siden: knappen "Vis lysuret" i teksten virker', side.knapper.some((k) => k.tekst.includes('Vis lysuret') && k.findes), JSON.stringify(side.knapper));
 tjek('"Lige nu" siger 45 dage og 8,7 år ved 99,99 %', /45 dage.*8,7 år/.test(await page.textContent('#kosmosForklaring')), await page.textContent('#kosmosForklaring'));
+tjek('"Lige nu" forklarer fast fart og "Hurtigere end lyset? Nej" (22 dage, 4,3 år, lysglimtet 4 timer før)', /Fast fart:.*snyder/.test(await page.textContent('#kosmosForklaring')) && /Hurtigere end lyset\? Nej\. At nå ca\. 4,3 lysår på 22 dage.*4,3 år én vej.*kun komme 4 timer før dig/.test(await page.textContent('#kosmosForklaring')), await page.textContent('#kosmosForklaring'));
+tjek('forspringet: knap 4 timer ved 99,99 %, under et sekund ved 14 ni-taller, 1,6 år med 1 g', T.forspringTekst(4.344, T.rejse(4.344, 4).ud.jordÅr) === '4 timer' && T.forspringTekst(4.344, T.rejse(4.344, 14).ud.jordÅr) === 'under et sekund' && T.forspringTekst(4.344, T.enG(4.344).jordÅr) === '1,6 år');
+tjek('emnet "Hurtigere end lyset? Nej!" folder sig ud med "Set fra skibet", og "Fast fart eller 1 g?" med 1 g', side.emner.some((e) => /Hurtigere end lyset/.test(e.titel) && e.kontakt === 'Set fra skibet') && side.emner.some((e) => /Fast fart eller 1 g/.test(e.titel) && e.kontakt === '1 g hele vejen'), JSON.stringify(side.emner));
 
 // Skyderen ændrer urene: forholdet mellem urene undervejs er 1/γ, og det følger skyderen
 await E(() => { atomlabTest.kosmos.trykPå('Flyv til Alpha Centauri'); atomlabTest.kosmos.spol(3); });
@@ -152,7 +159,7 @@ tjek('"Flyv" er grå undervejs', (await E(() => atomlabTest.kosmos.bjælke())).s
 // Skyderen flyttes og urene læses i samme skridt: Siden tegner videre i rigtig tid imellem, og ellers kommer der
 // billeder med den gamle fart med i målingen (forholdet blev 2,31 i stedet for 2,29)
 const før = await E(() => {
-  const b = [...document.querySelectorAll('#kosmosStyr .skyder-boks')].find((x) => x.querySelector('.skyder-top > span').textContent === 'Fart');
+  const b = [...document.querySelectorAll('#kosmosStyr .skyder-boks')].find((x) => x.querySelector('.skyder-top > span').textContent === 'Fast fart');
   const i = b.querySelector('input');
   i.value = 1;
   i.dispatchEvent(new Event('input'));
@@ -162,7 +169,7 @@ await E(() => atomlabTest.kosmos.spol(2));
 u = await ure();
 const forhold = (u.jordÅr - før.jordÅr) / (u.skibÅr - før.skibÅr);
 tjek('skyderen på 90 % undervejs: nu går Jordens ur kun 2,29 gange hurtigere', nær(forhold, T.gamma(1), 0.01), forhold);
-tjek('skyderen viser "90 %"', (await vist('Fart')) === '90 %');
+tjek('skyderen viser "90 %"', (await vist('Fast fart')) === '90 %');
 await page.screenshot({ path: `${UD}/undervejs.png` });
 
 // En hel rejse ved 99,99 %, spolet frem
@@ -196,29 +203,37 @@ tjek('"Vis lysuret" i bjælken', await E(() => atomlabTest.kosmos.trykPå('Vis l
 await E(() => atomlabTest.kosmos.spol(3));
 let l = await E(() => atomlabTest.kosmos.fænomen().lysur());
 tjek('lysuret vises, og urene er skjult', l.vist && !(await ure()).vist && l.bredde > 200, JSON.stringify(l));
-tjek('lysuret: skibets ur tikker 70,7 gange så tit som det set fra Jorden', nær(l.skib / l.jord, T.gamma(4), 0.01) && l.skib > 1.5, JSON.stringify(l));
-tjek('lysuret: spejlene farer forbi, og sporet tegnes', l.x > 100 && l.spor > 2, JSON.stringify(l));
+tjek('lysuret starter i trin 1 ved 87 %: skibets ur tikker 2 gange så tit som det set fra Jorden', l.trin === 0 && nær(l.fart, Math.sqrt(3) / 2, 1e-9) && nær(l.skib / l.jord, 2, 0.001) && l.skib > 1.5, JSON.stringify(l));
+tjek('lysuret: spejlene farer forbi, og billedet følger med dem', l.x > 100 && l.forskud > 0 && l.spor >= 3, JSON.stringify(l));
 tjek('rejsen står stille, mens lysuret vises', (await ure()).jordÅr === (await ure()).jordÅr && (await E(() => atomlabTest.kosmos.fænomen().tilstand())) !== 'færdig');
 const rejseFør = (await ure()).jordÅr;
 await E(() => atomlabTest.kosmos.spol(2));
 tjek('rejsens ure går ikke, mens lysuret vises', (await ure()).jordÅr === rejseFør);
-tjek('bjælken: "Tilbage til rejsen", ikke "Flyv"', (await E(() => atomlabTest.kosmos.bjælke())).map((k) => k.tekst).join('|') === '↩ Tilbage til rejsen', JSON.stringify(await E(() => atomlabTest.kosmos.bjælke())));
-await sætFart(1);
+tjek('bjælken: ‹, "Næste: Set fra Jorden" og "Tilbage til rejsen", ikke "Flyv"', (await E(() => atomlabTest.kosmos.bjælke())).map((k) => k.tekst).join('|') === '‹|Næste: Set fra Jorden ›|↩ Tilbage til rejsen', JSON.stringify(await E(() => atomlabTest.kosmos.bjælke())));
+tjek('lysuret: ingen skyder i de første trin (Styr-boksen er tom)', (await E(() => atomlabTest.kosmos.styr())).length === 0);
+await E(() => { atomlabTest.kosmos.trykPå('Næste'); atomlabTest.kosmos.trykPå('Næste'); atomlabTest.kosmos.spol(5); });
+l = await E(() => atomlabTest.kosmos.fænomen().lysur());
+tjek('trin 3 "Den skrå vej er længere": står stille med lyset oppe set fra Jorden (et halvt tik) og et helt tik i skibet', l.trin === 2 && l.stille && l.jord === 0.5 && nær(l.skib, 1, 1e-9) && (await E(() => atomlabTest.kosmos.fase()))?.titel === 'Den skrå vej er længere', JSON.stringify(l));
+await page.waitForTimeout(300);
+await page.screenshot({ path: `${UD}/lysur-skraa-vej.png` });
+await E(() => { atomlabTest.kosmos.trykPå('Næste'); atomlabTest.kosmos.trykPå('Næste'); });
+tjek('sidste trin: skyderen "Fart i lysuret" (87 %), og ingen "Næste"', (await vist('Fart i lysuret')) === '87 %' && !(await E(() => atomlabTest.kosmos.bjælke())).some((k) => k.tekst.startsWith('Næste')));
+await sæt('Fart i lysuret', 4);
 const l1 = await E(() => atomlabTest.kosmos.fænomen().lysur());
 await E(() => atomlabTest.kosmos.spol(2));
 const l2 = await E(() => atomlabTest.kosmos.fænomen().lysur());
-tjek('lysuret følger skyderen: ved 90 % tager et tik 2,29 gange så lang tid set fra Jorden', nær((l2.skib - l1.skib) / (l2.jord - l1.jord), T.gamma(1), 0.01));
+tjek('lysuret følger sin skyder: ved 99 % tager et tik 7,09 gange så lang tid set fra Jorden', nær((l2.skib - l1.skib) / (l2.jord - l1.jord), T.lysurGamma(0.99), 0.01) && /7,1 gange/.test(await page.textContent('#kosmosForklaring')));
 await page.waitForTimeout(300);
-await page.screenshot({ path: `${UD}/lysur-90.png` });
+await page.screenshot({ path: `${UD}/lysur-99.png` });
 tjek('"Tilbage til rejsen"', await E(() => atomlabTest.kosmos.trykPå('Tilbage til rejsen')));
 tjek('urene vises igen', (await ure()).vist && !(await E(() => atomlabTest.kosmos.fænomen().lysur())).vist);
 
 // ---------- T2: målene ----------
 await sætFart(14);
-await sæt('Mål', 1);
-tjek('skyderen "Mål": Mælkevejens centrum', (await vist('Mål')) === 'Mælkevejens centrum' && (await E(() => atomlabTest.kosmos.fænomen().mål())) === 'centrum');
+await vælgMål('Mælkevejens centrum');
+tjek('målet: Mælkevejens centrum (og kun det er tændt)', (await målTændt()) === 'Mælkevejens centrum' && (await E(() => atomlabTest.kosmos.fænomen().mål())) === 'centrum');
 tjek('scenen viser kun Mælkevejens centrum, og knappen hedder "Flyv til Mælkevejens centrum"', (await E(() => atomlabTest.kosmos.fænomen().scene())).synlige.join() === 'centrum' && (await E(() => atomlabTest.kosmos.bjælke())).some((k) => k.tekst === '🚀 Flyv til Mælkevejens centrum'));
-tjek('farten viser "99,9…9 % (14 ni-taller)"', (await vist('Fart')) === '99,9…9 % (14 ni-taller)');
+tjek('farten viser "99,9…9 % (14 ni-taller)"', (await vist('Fast fart')) === '99,9…9 % (14 ni-taller)');
 const centrumVed = await E(() => {
   atomlabTest.kosmos.trykPå('Forfra');
   atomlabTest.kosmos.trykPå('Flyv til Mælkevejens centrum');
@@ -238,10 +253,10 @@ tjek('Jordens ur viser fx "år 56.018" (med punktum), og urskiven gløder ikke l
 await page.screenshot({ path: `${UD}/centrum-hjemme.png` });
 
 // ---------- T2: "1 g hele vejen" og "Set fra skibet" ----------
-await sæt('Mål', 2);
+await vælgMål('Andromeda');
 tjek('"1 g hele vejen"', await E(() => atomlabTest.kosmos.trykPå('1 g hele vejen')));
 const s2 = await E(() => atomlabTest.kosmos.styr());
-tjek('med 1 g er skyderen "Fart" væk, og kontakten er tændt', s2.map((s) => s.navn).join('|') === 'Mål|1 g hele vejen|Set fra skibet' && s2[1].til, JSON.stringify(s2));
+tjek('med 1 g er skyderen "Fart" væk, og kontakten er tændt', s2.map((s) => s.navn).join('|') === '🎯 Alpha Centauri|🎯 Mælkevejens centrum|🎯 Andromeda|1 g hele vejen|Set fra skibet' && s2[3].til, JSON.stringify(s2));
 tjek('"Lige nu" med 1 g: ca. 57 år for dig, ca. 5,0 mio. år på Jorden og den største fart', /Med 1 g hele vejen.*57 år for dig.*5,0 mio\. år på Jorden.*størst midtvejs: 99,9…9 % \(12 ni-taller\)/.test(await page.textContent('#kosmosForklaring')), await page.textContent('#kosmosForklaring'));
 await E(() => atomlabTest.kosmos.trykPå('Set fra skibet'));
 const midt = await E(() => { atomlabTest.kosmos.trykPå('Flyv til Andromeda'); atomlabTest.kosmos.spol(6.25); const f = atomlabTest.kosmos.fænomen(); return { ...f.fart(), ...f.scene(), u: f.ure() }; });
@@ -258,15 +273,15 @@ await E(() => atomlabTest.kosmos.spol(2));
 tjek('hjemme står skibet stille, og scenen er ikke trykket sammen', nær((await E(() => atomlabTest.kosmos.fænomen().scene())).klem, 1, 0.02));
 // Et skift af mål undervejs starter forfra
 await E(() => { atomlabTest.kosmos.trykPå('Flyv til Andromeda'); atomlabTest.kosmos.spol(2); });
-await sæt('Mål', 0);
+await vælgMål('Alpha Centauri');
 tjek('skift af mål undervejs: tilbage ved Jorden med Alpha Centauri', (await E(() => atomlabTest.kosmos.fænomen().tilstand())) === 'hjemme' && (await E(() => atomlabTest.kosmos.fænomen().scene())).synlige.join() === 'alpha' && (await ure()).jordÅr === 0);
-// Lysuret med 1 g: kun skyderen "Fart" i Styr-boksen, og bagefter er den væk igen
+// Lysuret med 1 g: ingen skyder i første trin, og bagefter er "Fast fart" stadig væk
 await E(() => atomlabTest.kosmos.trykPå('Vis lysuret'));
-tjek('lysuret med 1 g: kun skyderen "Fart"', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Fart');
+tjek('lysuret med 1 g: tom Styr-boks i første trin', (await E(() => atomlabTest.kosmos.styr())).length === 0);
 await E(() => atomlabTest.kosmos.trykPå('Tilbage til rejsen'));
-tjek('tilbage fra lysuret med 1 g: ingen "Fart"', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Mål|1 g hele vejen|Set fra skibet');
+tjek('tilbage fra lysuret med 1 g: ingen "Fart"', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === '🎯 Alpha Centauri|🎯 Mælkevejens centrum|🎯 Andromeda|1 g hele vejen|Set fra skibet');
 await E(() => atomlabTest.kosmos.trykPå('1 g hele vejen'));
-tjek('1 g slået fra: skyderen "Fart" er tilbage', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Mål|Fart|1 g hele vejen|Set fra skibet');
+tjek('1 g slået fra: skyderen "Fast fart" er tilbage', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === '🎯 Alpha Centauri|🎯 Mælkevejens centrum|🎯 Andromeda|Fast fart|1 g hele vejen|Set fra skibet');
 
 // Skift til et andet fænomen og tilbage: urene er væk og kommer igen én gang
 await E(() => atomlabTest.kosmos.vælg('rumtid'));

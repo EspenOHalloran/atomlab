@@ -239,3 +239,20 @@ export function hjemkomst(skibÅr, jordÅr, startÅr) {
   const mellem = før ? `Der er gået længere tid end siden ${før}.` : `Der er gået ca. ${varighed(jordÅr)}.`;
   return `Du har været væk i ${varighed(skibÅr)}. På Jorden er det år ${årstal}. ${mellem} Din tvilling levede et langt liv.`;
 }
+
+// ---------- Lysuret (forklaret trin for trin, jeres ønske 8. november 2026) ----------
+// Lysuret har sin egen fart, for ved rejsens farter (99,99 %) ville spejlene fare mange gange hen over billedet for
+// hvert tik. Ved 86,6 % (√3/2) er γ = 2: Den skrå vej er præcis 2 gange så lang som den lige vej. Vist som "87 %".
+export const LYSUR_FARTER = [0, 0.5, Math.sqrt(3) / 2, 0.95, 0.99];
+export const LYSUR_START = 2; // 87 %
+export const lysurGamma = (v) => 1 / Math.sqrt(1 - v * v);
+export const lysurFartTekst = (v) => `${tal(Math.round(v * 100))} %`;
+
+// "Hurtigere end lyset?": Set fra Jorden er turen én vej (jordÅr) lidt længere end lysets (lysår), så et lysglimt, der
+// blev sendt af sted samtidig med skibet, kommer kun forspringet før. Ved 99,99 % til Alpha Centauri: knap 4 timer.
+export const forspring = (lysår, jordÅr) => Math.max(0, jordÅr - lysår);
+// Forspringet som tekst: "knap 4 timer" bliver "4 timer", og under et sekund (14 ni-taller) "under et sekund"
+export function forspringTekst(lysår, jordÅr) {
+  const år = forspring(lysår, jordÅr);
+  return år * DAGE_PR_ÅR * 86400 < 1 ? 'under et sekund' : varighed(år);
+}
