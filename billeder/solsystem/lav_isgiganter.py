@@ -25,9 +25,8 @@
 # 1. Båndene: medianen af hver breddegrad i de tre filtre (blåt F467M, grønt F547M og rødt F657N).
 #    - Uranus: 2025 fra nordpolen til 5° S (resten var i mørke). 2014 fra 5° S til 45° S, ganget med forholdet mellem
 #      2025 og 2014 ved ækvator for hvert filter (2014 brugte F658N i stedet for F657N, og årstiden er en anden).
-#      Syd for ca. 50° S er der ingen målinger siden Voyager 2 (1986): Her er båndene nordpolens bånd fra 2025 spejlet
-#      (glidende fra 45° S til 62° S)
-#      (Voyager så en lys sydpol, da den havde sommer). Det står i KILDER.md og skal stå i "Ærligt talt".
+#      Syd for ca. 50° S har OPAL ingen målinger (sydpolen har været i mørke siden jævndøgnet i 2007): Her er båndene
+#      nordpolens bånd fra 2025 spejlet (glidende fra 45° S til 62° S). Voyager 2 så en lys sydpol, da den havde sommer. Det står i KILDER.md og skal stå i "Ærligt talt".
 #    - Neptun: 2025 fra 50° N til sydpolen. Nord for ca. 55° N (i mørke og på skrå) er sydens bånd spejlet (glidende fra 48° N til 64° N).
 # 2. Plettene: forholdet mellem hver pixel og båndets median (kappen, de lyse skyer og de mørke pletter), der hvor der
 #    er målt, og glidende mod 1 mod kanten af målingerne. Sømmene mellem Hubbles delkort (striber langs en søjle) er
