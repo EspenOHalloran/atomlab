@@ -72,6 +72,22 @@ export const ORDBOG = [
     former: ['tripelbinding', 'tripelbindingen', 'tripelbindinger'],
     tekst: 'Når to atomer deler tre elektronpar. Nitrogen i luften (N₂) holdes sammen af en tripelbinding, som er så stærk, at nitrogen næsten ikke reagerer med noget ved stuetemperatur.',
   },
+  // Molekyler M2b (ladningerne). Kilder: docs/fakta-molekyler/m2.md, afsnit 1 og fælde 4 og 5.
+  {
+    id: 'elektronegativitet', ord: 'Elektronegativitet',
+    former: ['elektronegativitet', 'elektronegativiteten'],
+    tekst: 'Hvor hårdt et atom trækker i de elektroner, det deler med et andet atom. Oxygen trækker hårdere end hydrogen. Derfor ligger de delte par i vand tættest på oxygen.',
+  },
+  {
+    id: 'polaer', ord: 'Polær',
+    former: ['polær', 'polært', 'polære', 'upolær', 'upolært', 'upolære'],
+    tekst: 'Et molekyle er polært, når det har en ende, der er lidt plus, og en, der er lidt minus. Vand er polært. CO₂ er ikke: Dets to bindinger trækker lige hårdt hver sin vej, så de ophæver hinanden.',
+  },
+  {
+    id: 'delta-ladning', ord: 'δ+ og δ− (delta plus og minus)',
+    former: ['δ+ og δ−', 'δ+', 'δ−'],
+    tekst: 'Betyder "lidt plus" og "lidt minus" (δ er det græske bogstav delta). Atomet, der trækker hårdest i de delte elektroner, bliver lidt minus, og det andet bliver lidt plus. Det er meget mindre end en hel ladning, som en ion har.',
+  },
   {
     id: 'ioniseringsenergi', ord: 'Ioniseringsenergi',
     former: ['ioniseringsenergi', 'ioniseringsenergien'],

@@ -13,7 +13,8 @@ import { lavSolsystem, startSolsystem, stopSolsystem, FÆNOMENER as SOL_FÆNOMEN
 import { NØGLER } from './faenomenskaerm.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
-import { OPGAVER_BYTTE } from './data/molekyler.js'; // Byttebørsens par tæller med i Værkstedet
+import { OPGAVER_BYTTE } from './data/molekyler.js'; // "Byg et molekyle" tæller med i Værkstedet
+import { OPGAVER_BYG } from './data/molekyler-byg.js';
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 import { lavBeskeder, rydBeskeder, testAdgang as beskederTest } from './beskeder.js';
 import { stopGuide } from './guide.js';
@@ -169,7 +170,7 @@ function startMenu() {
 // Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af menuen (✓, "Start her" og "Din fremgang" i karrusel.js).
 function fremgangPrDel() {
   const ud = {};
-  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
+  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };

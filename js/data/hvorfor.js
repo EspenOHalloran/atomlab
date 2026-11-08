@@ -130,6 +130,11 @@ export const HVORFOR = {
     svar: 'Elektronparrene omkring et atom skubber hinanden så langt væk som muligt. Oxygen i vand har fire par: to bindinger til H og to frie par. Fire par stiller sig som hjørnerne i en tetraeder (en pyramide med trekanter på alle sider). De frie par skubber lidt hårdere end bindingerne, så vinklen mellem de to H bliver ca. 104,5° i stedet for 109,5°.\n\nI CO₂ har kulstof ingen frie par. De to bindinger skubber hinanden ud til hver sin side, så molekylet er lige.',
     nørd: 'Modellen hedder VSEPR (Valence Shell Electron Pair Repulsion: elektronpar i den yderste skal skubber hinanden). Den forklarer formen godt, men elektronparrene er ikke rigtige kugler. Den præcise forklaring kræver kvantemekanik.',
   },
+  bygPolær: {
+    spørgsmål: 'Hvorfor er nogle ender plus og andre minus?',
+    svar: 'Nogle atomer trækker hårdere i de delte elektroner end andre. Det kaldes elektronegativitet. Oxygen trækker hårdere end hydrogen, så i vand ligger de delte par tættest på oxygen. Oxygen-enden bliver lidt minus (δ−, sig "delta minus"), og H-enderne bliver lidt plus (δ+).\n\nEt molekyle er polært, når det har en plus-ende og en minus-ende. I CO₂ trækker de to oxygen lige hårdt, men hver sin vej, så trækkene ophæver hinanden, og CO₂ er ikke polært. Slå "Pile" til for at se trækket.',
+    nørd: 'Spillet bruger Paulings tal for elektronegativiteten: H 2,20, C 2,55, N 3,04, O 3,44 og Cl 3,16. Er forskellen mellem to atomer mindst 0,4, får bindingen farver og en pil. C–H har kun 0,35, så den regnes som upolær. Pilene er længere, jo større forskellen er, og molekylets pil er bindingernes pile lagt sammen.',
+  },
   // Oxygens elektroner (8. november 2026). Kilder: docs/fakta-hvorfor.md, afsnit 17-19.
   bygUdenPartner: {
     spørgsmål: 'Hvorfor har oxygen to elektroner uden partner?',

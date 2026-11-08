@@ -214,6 +214,7 @@ const MAX_PINDE = 80;
 const MAX_PRIKKER = 160;
 const MAX_SKYER = 110;
 const MAX_NAVNE = 6;
+const MAX_PILE = 24; // bindingernes pile (højst 11 bånd) og molekylernes pile (højst 6)
 export const KERNE_R = { H: 0.5, C: 0.75, N: 0.72, O: 0.7, Cl: 0.95 }; // kuglernes radius (enheder)
 const KERNE_FARVE = { // kemikernes farver (CPK), mørke nok til lyset i scenen
   H: new THREE.Color(0.6, 0.62, 0.68), C: new THREE.Color(0.26, 0.28, 0.32), N: new THREE.Color(0.12, 0.24, 0.85),
@@ -226,6 +227,31 @@ const SKY_FRI = new THREE.Color(0.2, 0.09, 0.38);
 const PRIK_LYS = 0.5; // prikkerne sidder tæt, så de gløder mindre end i Atom
 const PRIK_AFSTAND = 0.17; // halv afstand mellem de to prikker i et par
 const UDE = 0.5; // frie par og enlige elektroner står så langt uden for kuglen
+// Ladningerne (M2b): svage glorier, blå for δ+ og røde for δ−, og et lille mærke ved atomet
+const GLORIE_PLUS = new THREE.Color(0.08, 0.3, 1.0);
+const GLORIE_MINUS = new THREE.Color(1.0, 0.16, 0.08);
+const SKÆV = 0.32; // så stor en del af mellemrummet flytter parret mod det atom, der trækker hårdest (ved forskellen 1,24 eller mere)
+const PIL_FARVE = new THREE.Color(1.0, 0.83, 0.23);
+const SUM_FARVE = new THREE.Color(1.0, 0.55, 0.2);
+
+const deltaTeksturer = {};
+function deltaTekstur(tegn) {
+  if (deltaTeksturer[tegn]) return deltaTeksturer[tegn];
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.font = '800 66px system-ui, sans-serif';
+  g.shadowColor = 'rgba(0,0,0,0.95)';
+  g.shadowBlur = 12;
+  g.fillStyle = tegn === '+' ? '#8fc0ff' : '#ff9a8a';
+  g.fillText(tegn === '+' ? 'δ+' : 'δ−', 64, 66);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  deltaTeksturer[tegn] = t;
+  return t;
+}
 
 const symbolTeksturer = {};
 function symbolTekstur(symbol) {
@@ -254,6 +280,8 @@ const tS = new THREE.Vector3();
 const tM = new THREE.Matrix4();
 const tF = new THREE.Color();
 const OP = new THREE.Vector3(0, 1, 0);
+const tHøjre = new THREE.Vector3();
+const tOp = new THREE.Vector3();
 
 export class MolekyleTegning {
   constructor() {
@@ -287,6 +315,35 @@ export class MolekyleTegning {
       size: 1.5, map: glødTekstur, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     }));
     this.skyer.frustumCulled = false;
+    // Glorierne om atomer med ladning (δ+ blå, δ− rød) og mærkerne
+    const glorieGeo = new THREE.BufferGeometry();
+    glorieGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_KERNER * 3), 3));
+    glorieGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(MAX_KERNER * 3), 3));
+    glorieGeo.setDrawRange(0, 0);
+    this.glorier = new THREE.Points(glorieGeo, new THREE.PointsMaterial({
+      size: 4.4, map: glødTekstur, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    this.glorier.frustumCulled = false;
+    this.deltaer = [];
+    for (let i = 0; i < MAX_KERNER; i++) {
+      const d = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, depthWrite: false }));
+      d.visible = false;
+      d.renderOrder = 6;
+      this.deltaer.push(d);
+    }
+    // Pilene: hvilken vej bindingerne trækker (gule), og summen for hele molekylet (orange, ses gennem atomerne)
+    this.pilGeo = new THREE.CylinderGeometry(1, 1, 1, LAV_KVALITET ? 6 : 10, 1);
+    this.spidsGeo = new THREE.ConeGeometry(1, 1, LAV_KVALITET ? 8 : 14, 1);
+    const pilMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.92, depthTest: false });
+    this.pile = new THREE.InstancedMesh(this.pilGeo, pilMat, MAX_PILE);
+    this.spidser = new THREE.InstancedMesh(this.spidsGeo, pilMat, MAX_PILE);
+    for (const m of [this.pile, this.spidser]) {
+      m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      m.frustumCulled = false;
+      m.renderOrder = 8;
+      for (let i = 0; i < MAX_PILE; i++) m.setColorAt(i, PIL_FARVE);
+      m.count = 0;
+    }
     // Symbolerne på kernerne
     this.symboler = [];
     for (let i = 0; i < MAX_KERNER; i++) {
@@ -317,13 +374,15 @@ export class MolekyleTegning {
       s.scale.set(8, 1.5, 1);
       this.navne.push({ s, lærred, tekstur, tekst: '' });
     }
-    this.gruppe.add(this.kerner, this.pinde, this.prikker, this.skyer, this.ring, this.linje, ...this.symboler, ...this.navne.map((n) => n.s));
+    this.gruppe.add(this.kerner, this.pinde, this.prikker, this.skyer, this.glorier, this.pile, this.spidser, this.ring, this.linje,
+      ...this.symboler, ...this.deltaer, ...this.navne.map((n) => n.s));
   }
 
-  // atomer: [{ symbol, p: Vector3 (enheder), lys (0-1), stor }]. bånd: [{ a, b, orden, strakt }].
+  // atomer: [{ symbol, p: Vector3 (enheder), lys (0-1), stor, q (ladning: plus = δ+, minus = δ−, 0 = ingen) }].
+  // bånd: [{ a, b, orden, strakt, skæv (0-1 mod b, minus mod a: parret ligger tættest på det atom, der trækker hårdest) }].
   // retninger: [{ atom, v: [x, y, z], slags: 'frit' | 'enlig' }]. mål: { atom, ok } eller null. linje: { fra, til, ok } eller null.
-  // navne: [{ tekst, p }]. kamera: til prikkernes side og symbolerne. tid: til blinket.
-  tegn({ atomer, bånd, retninger, mål = null, linje = null, navne = [], kamera, tid = 0 }) {
+  // navne: [{ tekst, p }]. pile: [{ fra, til (Vector3), tyk, sum }]. kamera: til prikkernes side og symbolerne. tid: til blinket.
+  tegn({ atomer, bånd, retninger, mål = null, linje = null, navne = [], pile = [], kamera, tid = 0 }) {
     // Kernerne og symbolerne
     const n = Math.min(atomer.length, MAX_KERNER);
     for (let i = 0; i < MAX_KERNER; i++) this.symboler[i].visible = i < n;
@@ -345,6 +404,36 @@ export class MolekyleTegning {
     this.kerner.count = n;
     this.kerner.instanceMatrix.needsUpdate = true;
     this.kerner.instanceColor.needsUpdate = true;
+
+    // Ladningerne: en svag glorie og et mærke (δ+ eller δ−) oppe til højre for atomet på skærmen
+    const gPos = this.glorier.geometry.attributes.position;
+    const gFarve = this.glorier.geometry.attributes.color;
+    tHøjre.setFromMatrixColumn(kamera.matrixWorld, 0).normalize();
+    tOp.setFromMatrixColumn(kamera.matrixWorld, 1).normalize();
+    let gi = 0;
+    for (let i = 0; i < MAX_KERNER; i++) {
+      const a = atomer[i];
+      const d = this.deltaer[i];
+      const q = i < n ? a.q ?? 0 : 0;
+      d.visible = q !== 0;
+      if (!q) continue;
+      const styrke = 0.75 + 0.6 * Math.min(1, Math.abs(q) / 2.5);
+      const f = q > 0 ? GLORIE_PLUS : GLORIE_MINUS;
+      gPos.setXYZ(gi, a.p.x, a.p.y, a.p.z);
+      gFarve.setXYZ(gi, f.r * styrke, f.g * styrke, f.b * styrke);
+      gi++;
+      const t = deltaTekstur(q > 0 ? '+' : '-');
+      if (d.material.map !== t) {
+        d.material.map = t;
+        d.material.needsUpdate = true;
+      }
+      const r = KERNE_R[a.symbol];
+      d.position.copy(a.p).addScaledVector(tHøjre, r * 0.95 + 0.3).addScaledVector(tOp, r * 0.95 + 0.2);
+      d.scale.setScalar(1.05);
+    }
+    this.glorier.geometry.setDrawRange(0, gi);
+    gPos.needsUpdate = true;
+    gFarve.needsUpdate = true;
 
     let pi = 0; // pinde
     let ei = 0; // prikker
@@ -394,8 +483,9 @@ export class MolekyleTegning {
         this.pinde.setColorAt(pi, b.strakt ? PIND_STRAKT : PIND_FARVE);
         pi++;
       }
-      // Parrene midt i mellemrummet mellem kuglerne
-      const t = ra + Math.max(0, l - ra - rb) / 2;
+      // Parrene midt i mellemrummet mellem kuglerne (skubbet mod det atom, der trækker hårdest)
+      const mellem = Math.max(0, l - ra - rb);
+      const t = ra + mellem / 2 + (b.skæv ?? 0) * SKÆV * mellem;
       for (let k = 0; k < b.orden; k++) {
         tV3.copy(pa).addScaledVector(tV1, t);
         if (b.orden === 1) {
@@ -435,6 +525,34 @@ export class MolekyleTegning {
     this.skyer.geometry.setDrawRange(0, si);
     skyPos.needsUpdate = true;
     skyFarve.needsUpdate = true;
+
+    // Pilene: et skaft og en spids (spidsen peger mod det atom, der trækker hårdest)
+    let ai = 0;
+    for (const pil of pile) {
+      if (ai >= MAX_PILE) break;
+      tV1.subVectors(pil.til, pil.fra);
+      const l = tV1.length();
+      if (l < 1e-3) continue;
+      tV1.divideScalar(l);
+      const tyk = pil.tyk ?? 0.05;
+      const spids = Math.min(l * 0.45, tyk * 7);
+      tQ.setFromUnitVectors(OP, tV1);
+      tV2.copy(pil.fra).addScaledVector(tV1, (l - spids) / 2);
+      tM.compose(tV2, tQ, tS.set(tyk, l - spids, tyk));
+      this.pile.setMatrixAt(ai, tM);
+      tV2.copy(pil.til).addScaledVector(tV1, -spids / 2);
+      tM.compose(tV2, tQ, tS.set(tyk * 3.2, spids, tyk * 3.2));
+      this.spidser.setMatrixAt(ai, tM);
+      const farve = pil.sum ? SUM_FARVE : PIL_FARVE;
+      this.pile.setColorAt(ai, farve);
+      this.spidser.setColorAt(ai, farve);
+      ai++;
+    }
+    for (const m of [this.pile, this.spidser]) {
+      m.count = ai;
+      m.instanceMatrix.needsUpdate = true;
+      if (m.instanceColor) m.instanceColor.needsUpdate = true;
+    }
 
     // Ringen og den stiplede streg, mens man trækker
     this.ring.visible = Boolean(mål && atomer[mål.atom]);
@@ -478,14 +596,20 @@ export class MolekyleTegning {
 
   fjern() {
     this.pindGeo.dispose();
-    for (const m of [this.kerner.material, this.pinde.material, this.prikker.material, this.skyer.material, this.ring.material, this.linje.material]) m.dispose();
+    this.pilGeo.dispose();
+    this.spidsGeo.dispose();
+    for (const m of [this.kerner.material, this.pinde.material, this.prikker.material, this.skyer.material, this.glorier.material, this.pile.material, this.ring.material, this.linje.material]) m.dispose();
+    for (const d of this.deltaer) d.material.dispose();
     this.skyer.geometry.dispose();
+    this.glorier.geometry.dispose();
     this.linje.geometry.dispose();
     for (const s of this.symboler) s.material.dispose();
     for (const n of this.navne) { n.tekstur.dispose(); n.s.material.dispose(); }
     this.kerner.dispose();
     this.pinde.dispose();
     this.prikker.dispose();
+    this.pile.dispose();
+    this.spidser.dispose();
     this.gruppe.removeFromParent();
   }
 }
