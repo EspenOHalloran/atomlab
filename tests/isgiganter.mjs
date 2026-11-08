@@ -8,6 +8,8 @@
 // stille i pause, buerne kredser mod uret på ca. 10,5 timer, "Voyagers farver" og "Vindene". UN4 (Uranus' måner):
 // tallene (NSSDC), omløbstiderne og retningen målt i 3D-billedet, den rigtige størrelse ved en måne, Cressida indhenter
 // Desdemona hver ca. 22. døgn, kortene hentes, skyggerne er sat, en måne i Uranus' skygge spoles ud, og tryk på en måne.
+// UN5: træet med stederne, flybyerne (Uranus 5 stop, hvor skyderen "År" kører tilbage til 1986, Neptun 4 stop),
+// underteksterne under 160 tegn, Solen skjult i skyggen og ved ringbuerne, pletten i sollys, og "Infrarødt" ved Neptun.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { PLANETER, solBredde, pol, baneNormal } from '../js/data/isgiganter.js';
 import { vindVed, neptunRå, uranusRå } from '../js/data/vinde-isgiganter.js';
@@ -17,7 +19,9 @@ import { SIDE as NEPTUN_SIDE } from '../js/data/sider/neptun.js';
 import * as RN from '../js/data/ringe-neptun.js';
 import { PLETTER, BÅND, VOYAGER, pletFart, vindOmgang, pileBredder } from '../js/data/vejr-neptun.js';
 import * as MU from '../js/data/maaner-uranus.js';
-import { SIDER as URANUS_SIDER, MÅNE_STOP, SMÅ_STOP } from '../js/data/sider/uranus.js';
+import { SIDER as URANUS_SIDER, MÅNE_STOP, SMÅ_STOP, TUR as URANUS_TUR, STED_STOP as URANUS_STED } from '../js/data/sider/uranus.js';
+import { SIDER as NEPTUN_SIDER, TUR as NEPTUN_TUR, STED_STOP as NEPTUN_STED } from '../js/data/sider/neptun.js';
+import { HVORFOR } from '../js/data/hvorfor.js';
 const UD = billedmappe('isgiganter');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -81,6 +85,12 @@ const vinkel = (a, b) => Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] *
   tjek('Cressida indhenter Desdemona hver ca. 21,8 døgn (regnet fra omløbene)', Math.abs(MU.overhaling(mu.cressida, mu.desdemona) - 21.8) < 0.05, MU.overhaling(mu.cressida, mu.desdemona));
   tjek('set fra Uranus\' skyer er Ariel ca. 0,40° bred og Miranda 0,26°, og fra Miranda fylder Uranus ca. 22°', Math.abs(MU.synsvinkel(mu.ariel.r, mu.ariel.afstand - 25559) - 0.40) < 0.01 && Math.abs(MU.synsvinkel(mu.miranda.r, mu.miranda.afstand - 25559) - 0.26) < 0.01 && Math.abs(MU.synsvinkel(25559, mu.miranda.afstand) - 22.7) < 0.5);
   tjek('29 kendte måner med dato, og ved månerne er underteksterne under 160 tegn, og hver måne har en side', MU.ANTAL === 29 && MU.ANTAL_DATO && [...Object.values(MÅNE_STOP), SMÅ_STOP.tekst].every((t) => t.length < 160 && t.endsWith('.')) && [...MU.MÅNER.map((m) => m.id), 'maaner', 'smaa'].every((id) => URANUS_SIDER[id]?.kort && URANUS_SIDER[id].ærligt));
+  // UN5: flybyerne og stederne
+  const tekster = [...URANUS_TUR, ...NEPTUN_TUR, ...Object.values(URANUS_STED), ...Object.values(NEPTUN_STED)];
+  tjek('flybyerne har 5 og 4 stop, og alle undertekster ved stop og steder er under 160 tegn og slutter med et punktum', URANUS_TUR.length === 5 && NEPTUN_TUR.length === 4 && tekster.every((t) => t.tekst.length < 160 && t.tekst.endsWith('.') && t.nu.startsWith('<p><b>Lige nu:</b>')), JSON.stringify(tekster.map((t) => t.tekst.length)));
+  const harSide = (sider, rod) => (t) => ['skygge', rod].includes(t.visning ?? t.id) || sider[t.visning ?? t.id]; // Uranus' skygge viser planetens side
+  tjek('hvert stop og sted har sin egen side (eller planetens), og "Hvorfor?"-kortene findes', URANUS_TUR.every(harSide(URANUS_SIDER, 'uranus')) && NEPTUN_TUR.every(harSide(NEPTUN_SIDER, 'neptun')) && Object.keys(URANUS_STED).every((id) => URANUS_SIDER[id]) && Object.keys(NEPTUN_STED).every((id) => NEPTUN_SIDER[id]) && [URANUS_SIDE, NEPTUN_SIDE].flatMap((x) => x.emner).flatMap((e) => e.hvorfor ?? []).every((id) => HVORFOR[id]));
+  tjek('Uranus\' flyby: i dag, så tilbage til 1986, og resten i 1986 (Voyager 2)', URANUS_TUR.map((t) => t.år).join() === 'nu,tilbage,voyager,voyager,voyager');
   tjek('vindene dæmpes til 0 ved polerne (ikke målt), men ikke før 75°', vindVed('uranus', 90) === 0 && vindVed('neptun', -90) === 0 && vindVed('uranus', 75) === uranusRå(75) && vindVed('neptun', 75) === neptunRå(75));
 }
 
@@ -250,14 +260,91 @@ async function neptunUN3() {
   await fm(() => atomlabTest.solsystem.trykPå('Vindene'));
 }
 
+// ---------- UN5: træet, stederne og flybyerne ----------
+const J = (f) => s.evaluate(f);
+const efterFlyvning = () => s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 15000, polling: 100 }).catch(() => {});
+async function flybyUN5(id) {
+  const navn = id === 'uranus' ? 'Uranus' : 'Neptun';
+  const træ = await J(() => atomlabTest.solsystem.træ());
+  const ventet = id === 'uranus' ? 'tur,uranus,nordpol,ringe,maaner' : 'tur,neptun,plet,buer';
+  tjek(`${navn}: træet har "▶ Flyby · ${id === 'uranus' ? 5 : 4} stop" øverst og Steder`, træ.map((p) => p.id).join().startsWith(ventet) && træ[0].navn.includes(`Flyby · ${id === 'uranus' ? 5 : 4} stop`), JSON.stringify(træ.map((p) => p.id)));
+  const klar = await s.waitForFunction(() => atomlabTest.solsystem.fænomen().tur().klar, null, { timeout: 30000, polling: 200 }).then(() => true, () => false);
+  tjek(`${navn}: "Start flyby" bliver aktiv, når kortene er hentet`, klar);
+  const stop = await J(() => atomlabTest.solsystem.fænomen().flybyStop());
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
+  const set = [];
+  for (let i = 0; i < stop.length; i++) {
+    await J(() => atomlabTest.solsystem.fænomen().hop());
+    await efterFlyvning();
+    // Uranus' stop 2: skyderen kører af sig selv tilbage til 1986
+    if (id === 'uranus' && i === 1) {
+      const kører = await J(() => atomlabTest.solsystem.fænomen().tur().årTur);
+      await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().årTur, null, { timeout: 30000, polling: 200 }).catch(() => {});
+      tjek('Uranus\' stop 2: skyderen "År" kører af sig selv fra i dag til januar 1986 og viser 1986', kører && Math.abs((await F('år')) - 1986.07) < 0.01 && (await J(() => [...document.querySelectorAll('#solsystem .skyder-boks')].find((b) => b.textContent.includes('År'))?.querySelector('strong').textContent)) === '1986');
+    }
+    await s.waitForTimeout(400); // panelet opdateres fire gange i sekundet
+    // Neptuns plet: døgnet står stille ved stoppet
+    const stille = id === 'neptun' && stop[i].id === 'plet' ? await (async () => { const a = (await F('ur')).døgn; await s.waitForTimeout(500); return a === (await F('ur')).døgn; })() : null;
+    set.push(await J(() => ({
+      fase: document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', prikker: document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin button').length,
+      trin: atomlabTest.solsystem.fænomen().tur().trin, visning: atomlabTest.solsystem.fænomen().visning(), side: atomlabTest.solsystem.side().nøgle,
+      lige: document.querySelector('#solsystemForklaring')?.textContent ?? '', knapper: [...document.querySelectorAll('#solsystemForklaring .side-knap')].map((k) => k.dataset.kontakt ?? k.dataset.tid),
+      afstand: atomlabTest.solsystem.fænomen().tur().afstand, år: atomlabTest.solsystem.fænomen().år(), skjult: atomlabTest.solsystem.fænomen().solSkjult().skjult,
+      plet: atomlabTest.solsystem.fænomen().pletSol(), vejr: atomlabTest.solsystem.fænomen().vejr()?.år1989,
+    })));
+    set.at(-1).stille = stille;
+    await s.screenshot({ path: `${UD}/${id}-flyby-${i + 1}.png` });
+    if (i < stop.length - 1) await s.click('#solsystemBjælke button:has-text("Næste")');
+  }
+  tjek(`${navn}: flybyen går gennem alle stop i rækkefølge med ${stop.length} prikker, og panelet viser stedets side`, set.every((x, i) => x.fase.includes(stop[i].titel) && x.prikker === stop.length && x.visning === stop[i].visning && x.side === (stop[i].egenSide ? `${id}:${stop[i].visning}` : id)) && set.slice(0, -1).every((x, i) => x.trin === i) && set.at(-1).trin === null && /Turen er slut/.test(set.at(-1).lige), JSON.stringify(set.map((x) => [x.fase.slice(0, 20), x.prikker, x.visning, x.side, x.trin])));
+  tjek(`${navn}: i det sidste stop står Solen bag planeten`, set.at(-1).skjult, JSON.stringify(set.map((x) => x.skjult)));
+  if (id === 'uranus') {
+    tjek('Uranus\' flyby: oversigten i dag, Miranda, ringene og skyggen i 1986, og kontakten "Infrarødt" ved ringene', Math.abs(set[0].år - 2026.85) < 0.3 && set.slice(2).every((x) => Math.abs(x.år - 1986.07) < 0.01) && set[3].knapper.includes('Infrarødt (som JWST)'), JSON.stringify(set.map((x) => [x.år, x.knapper])));
+    tjek('Uranus\' flyby: oversigten langt ude, Miranda tæt på', set[0].afstand > 50 && set[2].afstand < 1, JSON.stringify(set.map((x) => x.afstand)));
+  } else {
+    tjek('Neptuns flyby: "Lige nu" ved vindene har Vindene og ⏩, og ved pletten er "Neptun i 1989" slået til', set[1].knapper.join() === 'Vindene,hurtig' && set[2].vejr > 0 && set[2].knapper.includes('Neptun i 1989'), JSON.stringify(set.map((x) => [x.knapper, x.vejr])));
+    tjek('Neptuns flyby: pletten står i formiddagssol (ca. 45° over horisonten), og døgnet står stille dér', Math.abs(set[2].plet.højde - 45) < 6 && set[2].stille, JSON.stringify([set[2].plet, set[2].stille]));
+  }
+  // ✕ midt på turen, og et sted i træet midt på turen stopper turen
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await s.click('#solsystemBjælke button[aria-label="Stop flyby"]');
+  await s.waitForTimeout(300);
+  tjek(`${navn}: ✕ stopper flybyen og fjerner underteksten`, !(await J(() => document.querySelector('#solsystemVindue .undertekst.fase'))) && (await J(() => atomlabTest.solsystem.knapper()))[0] === '▶ Start flyby');
+  const sted = id === 'uranus' ? 'nordpol' : 'buer';
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
+  await s.click(`#solsystemTræ button[data-sted="${sted}"]`);
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+  await efterFlyvning();
+  await s.waitForTimeout(400);
+  const ved = await J(() => ({ trin: atomlabTest.solsystem.fænomen().tur().trin, fase: atomlabTest.solsystem.fase()?.titel, side: atomlabTest.solsystem.side().nøgle, skjult: atomlabTest.solsystem.fænomen().solSkjult().skjult }));
+  tjek(`${navn}: et sted i træet midt på turen stopper turen og viser stedet (${sted})`, ved.trin === null && ved.fase === (id === 'uranus' ? 'Nordpolen' : 'Ringbuerne i modlys') && ved.side === `${id}:${sted}` && (id === 'uranus' || ved.skjult), JSON.stringify(ved));
+  await s.screenshot({ path: `${UD}/${id}-${sted}.png` });
+  if (id === 'neptun') {
+    // "Infrarødt (som JWST)" ved Neptun: ringene og buerne lysere, planeten mørkere
+    const før = (await F('ringe')).lys;
+    await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+    await s.waitForFunction(() => atomlabTest.solsystem.fænomen().infrarødt() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+    const efter = (await F('ringe')).lys, eks = await F('eksponering');
+    const stadig = (await F('solSkjult')).skjult; // kameraet drejer ikke af sig selv ved buerne
+    await s.screenshot({ path: `${UD}/neptun-buer-ir.png` });
+    await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+    tjek('Neptun: "Infrarødt" gør ringene 5 gange lysere og planeten mørkere, og Solen er stadig skjult bagefter', Math.abs(efter / før - 5) < 1e-6 && Math.abs(eks - 0.4) < 1e-6 && stadig, JSON.stringify([før, efter, eks, stadig]));
+  }
+  await J(() => atomlabTest.solsystem.gåTil(atomlabTest.solsystem.valgt()));
+  await J(() => atomlabTest.solsystem.fænomen().hop());
+}
+
 for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559, 97.77, 'uranus-1k.jpg'], ['neptun', 'Neptun', 24341 / 24764, 28.32, 'neptun-1k.jpg']]) {
   await s.click(`#solsystem .sol-klode[data-id="${id}"]`);
   await s.waitForFunction((id) => atomlabTest.solsystem.valgt() === id && atomlabTest.solsystem.fænomen()?.hentet(), id, { timeout: 30000, polling: 200 }).catch(() => {});
   const billeder = await F('billeder');
   tjek(`${navn} åbner, og kortet er hentet (1k i tests, i farver)`, (await F('hentet')) && billeder[kort] === 'farver', JSON.stringify(billeder));
   tjek(`${navn}: sort himmel (ingen tågeskyer)`, !(await fm(() => atomlabTest.solsystem.tåger())));
-  const styr = id === 'uranus' ? ['År', 'Modlys', 'Infrarødt (som JWST)', 'Navne'] : ['Vindene', 'Modlys', 'Neptun i 1989', 'Voyagers farver (1989)'];
-  tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+  const styr = id === 'uranus' ? ['▶ Start flyby', 'År', 'Modlys', 'Infrarødt (som JWST)', 'Navne'] : ['▶ Start flyby', 'Vindene', 'Modlys', 'Neptun i 1989', 'Voyagers farver (1989)', 'Infrarødt (som JWST)'];
+  // "Start flyby" kan stadig hedde "(henter kort …)", hvis kortene ikke er hentet endnu
+  const udenHent = (k) => k.map((x) => x.replace(/ \(henter kort …\)$/, ''));
+  tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(udenHent(await fm(() => atomlabTest.solsystem.knapper()))) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
   const form = await F('form');
   tjek(`${navn} er fladtrykt (NSSDC), og aksen hælder ${hæld}° mod banen`, Math.abs(form.flad - flad) < 1e-6 && Math.abs(form.hældning - hæld) < 0.15, JSON.stringify(form));
   // Solens bredde i 3D-billedet (planetocentrisk) passer med tallene for i dag
@@ -294,6 +381,7 @@ for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559,
   await s.screenshot({ path: `${UD}/${id}.png` });
   if (id === 'uranus') { await uranusUN2(); await uranusUN4(); }
   if (id === 'neptun') await neptunUN3();
+  await flybyUN5(id);
 }
 
 await s.context().close();

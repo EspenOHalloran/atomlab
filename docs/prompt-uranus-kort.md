@@ -1,0 +1,29 @@
+# Prompt: Uranus lukkes (bedre kort over planeten og månerne)
+
+*Skrevet 8. november 2026 efter jeres beslutning (punkt 0 under "Næste" i `docs/lige-nu/solsystemet.md`, første gang skrevet i PR 131): **Uranus lukkes ikke, før Uranus' måner og selve planeten er på plads.** Start en ny session med "Læs docs/prompt-uranus-kort.md". **Model: Opus. Effort: høj** (søgning efter kort, licenser og billedbehandling, hvor et forkert valg er svært at se bagefter). Opgaven har brug for sit eget go. Spørg kun, hvis noget er uklart.*
+
+---
+
+Find ud af, om der findes bedre kort over Uranus og dens fem store måner end dem, vi bruger nu, og brug dem, hvis de findes. Til sidst lukkes Uranus for nu.
+
+**Det, der allerede er lavet (læs det, før du leder):**
+- **Månerne (UN4, 8. november 2026):** Miranda, Ariel, Umbriel, Titania og Oberon har Voyager 2's kort fra Caltech/JPL/USGS (public domain, fra Wikimedia Commons). Den nordlige halvdel er en jævn, grå flade, og siderne siger allerede, at den er "aldrig fotograferet tæt på" (`js/data/sider/uranus.js`). Beslutningens første del er altså i hovedsagen opfyldt. **Det, der mangler:** Kortene er Commons' småbilleder i 1280 × 640, fordi Commons svarede 429 på originalerne i 1440 × 720 (se `docs/erfaringer/uranus-neptun.md`).
+- **Planeten (UN1):** Kortet er bygget af Hubbles OPAL-kort (721 × 361, ca. 2 pixel pr. grad) fra 2025 og 2014. Syd for 5° S er det ældre målinger eller spejlede bånd. Fine skyer tegnes af shaderen.
+
+**Læs først (kun disse dele):**
+- `docs/lige-nu/solsystemet.md` og DESIGN.md.
+- I `docs/plan-uranus-neptun.md`: "Kort fortalt", afsnit 0 (Kilderne), 1 (Kloderne), 3 (Månerne), spørgsmål og svar 4 og "Status" (UN1 og UN4).
+- `docs/erfaringer/uranus-neptun.md`, afsnittet "Uranus og Neptun" i `billeder/solsystem/KILDER.md`, `docs/kode/isgiganter.md` og tjekliste E og F.
+- I koden kun det, du skal ændre: `billeder/solsystem/lav_isgiganter.py`, `lav_uranus_maaner.py` og der, hvor kortene hentes i `js/solsystem/isgigant.js`.
+
+**Opgaven:**
+1. **Tjek domænerne først** med en hurtig curl-løkke (se erfaringerne). Et domæne, der ikke er åbent, spørges der om, før arbejdet går i gang.
+2. **Månerne:** Led efter kort, der er bedre end JPL's (højere opløsning eller nyere behandling af Voyagers billeder), med fri licens, fx hos USGS Astrogeology, LPI, NASA's Photojournal og planetarymaps.usgs.gov. Findes der ingen, så hent originalerne i 1440 × 720 et andet sted fra (fx JPL's gamle planetkort, maps.jpl.nasa.gov) og byg kortene igen med `lav_uranus_maaner.py`. Den grå flade og teksten "aldrig fotograferet" bliver. Er der ingen gevinst, så skriv det, og lad kortene være. **Hvor der nok er noget at hente (foreløbig vurdering, 8. november 2026, tjek tallene):** Et kort på 1280 pixel rundt er ca. 1,2 km pr. pixel på Miranda, men Voyagers bedste billeder af Miranda var meget skarpere (op mod nogle hundrede meter pr. pixel). Ved Ariel er gevinsten lille, og ved Titania, Umbriel og Oberon næsten ingen, for Voyager så dem mindre skarpt. Start derfor med Miranda (fx Photojournals mosaikker af Miranda, public domain), og overvej et skarpere kort kun til den, også på tablet, hvis det kan bære. Originalerne i 1440 × 720 giver kun ca. 12 % mere.
+3. **Planeten:** Led efter kort, der er bedre end Hubbles OPAL (højere opløsning, mere af den sydlige halvdel eller begge dele), med fri licens. Steder at se: nyere OPAL-cyklusser, Keck og Gemini (adaptiv optik), JWST (ESA/Webb, ofte CC BY 4.0, men infrarødt og ikke et kort) og Voyager 2 fra 1986. **Skal siges ærligt:** Uranus er næsten uden detaljer i synligt lys, så måske findes der ikke noget bedre. Forventningen er, at der er lidt at hente: Keck har skarpere billeder i infrarødt lys, men licensen er nok ikke fri, og JWST er ikke skarpere end Hubble (den er bygget til infrarødt lys) og viser andre ting. Hubbles kort plus shaderens bånd er måske allerede det bedste. Et billede, der ikke er et kort, eller et kort i infrarødt lys må kun bruges, hvis det siges tydeligt (fx som et svagt lag med pletter, som i dag). Licensen skal stå klart. Står den ikke klart, så brug det ikke.
+4. **Brug det, der findes:** Nye kort laves med Python-værktøjerne, så de kan laves igen, og står i `KILDER.md` med kilde og licens. Kortet skal stadig være 2048 × 1024 på pc og 1024 × 512 på tablet, medmindre der er flere detaljer at hente (og så ikke større på tablet). Ret "Billederne" og "Ærligt talt" på Uranus' side, hvis kilden skifter, og kør `/faktatjek` på ændrede tekster.
+5. **Tests:** `node tests/koer-alle.mjs --ændret` i baggrunden (mindst `tests/isgiganter.mjs`). Skærmbilleder af Uranus og en måne før og efter, på pc og tablet på højkant.
+6. **Uranus lukkes for nu:** Skriv i "Status" i planen, hvad der blev fundet og brugt (eller at der ikke findes bedre, og hvorfor). Fjern punkt 0 fra "Næste" i `docs/lige-nu/solsystemet.md`, og flyt det forrige "Senest lavet" til historikken. Næste er Venus. Idéen om to af Uranus' måner, der støder sammen (`docs/ideer.md`), kommer først bagefter og har brug for sit eget go.
+
+**Andre sessioner kører samtidig** (se "Parallelle sessioner" i CLAUDE.md). Dit spor er **Solsystemet og Kosmos** (`docs/lige-nu/solsystemet.md`). Du ejer billederne af Uranus og månerne, `lav_isgiganter.py`, `lav_uranus_maaner.py`, `js/kosmos/uranus.js`, `js/data/sider/uranus.js`, `js/data/maaner-uranus.js`, `tests/isgiganter.mjs`, `docs/plan-uranus-neptun.md` og `docs/lige-nu/solsystemet.md`. `js/solsystem/isgigant.js` deles med Neptun: Ret kun det, Uranus bruger, og tjek Neptun bagefter. I `KILDER.md`, `docs/erfaringer/uranus-neptun.md` og `docs/kode/isgiganter.md` rører du kun Uranus' linjer. Merge `main` ind, når du starter, og igen lige før dokumenterne rettes og PR'en laves.
+
+**Når opgaven er færdig:** Kør `/faerdig`. Opdater artefaktet "AtomLab Overblik" (Uranus er lukket), og skriv, hvordan Venus startes (DESIGN.md, "Når et punkt er færdigt").

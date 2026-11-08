@@ -132,6 +132,11 @@
 
 **Faktatjek:** Lysets fart er den samme for alle (Wikipedia "Speed of light"). Ét ton ved 99 %: 5,5 · 10²⁰ J, og ved 99,99 %: 6,3 · 10²¹ J, mod verdens energiforbrug 592 EJ om året (2024), altså ca. 0,9 og ca. 10 år ([fakta-tid.md](fakta-tid.md), afsnit 8, og regn.py). Uendelig energi ved lysets fart følger af E = (γ − 1)mc². Nørd-bidden: "relativistisk masse" er "often avoided" (Wikipedia "Mass in special relativity"), derfor "som de fleste fysikere undgår i dag". Tabellen står i fakta-tid.md under "Faktatjek af T3".
 
+## Uranus og Neptun: "Hvorfor får Uranus' poler sol i 42 år?" og "Hvorfor kan man ikke stå på Neptun?" ✅ (8. november 2026, UN5)
+**Hvor:** Emnerne "Et år på Uranus varer 84 år" og "Hvorfor blæser det så meget?" i Solsystemet (`uranusSol` og `neptunStaa` i `js/data/hvorfor.js`).
+
+**Faktatjek:** Omløbstiden 84 år og aksen, der peger samme vej i rummet, Jordens akse ca. 23°, ingen fast overflade og en kappe af vand, ammoniak og metan. Kilderne står i [fakta-solsystemet/del6-uranus-og-neptun.md](fakta-solsystemet/del6-uranus-og-neptun.md), "Faktatjek UN5".
+
 ## 17-19. Oxygens elektroner: "Hvorfor har oxygen to elektroner uden partner?", "Har oxygen altid 6 elektroner yderst?" og "Hvad sker der med elektronerne i O₂?" ✅ (8. november 2026, Molekyler)
 **Hvor:** "Del elektroner" i Atomværkstedet (`bygUdenPartner`, `bygOxygenAndre`, `bygO2` i `js/data/hvorfor.js`). Knappen står i panelet, når der er ét atom alene (`bygUdenPartner`), og når O₂ er færdigt (`bygO2`). Brugerens spørgsmål: "Hvorfor har oxygenet to elektroner uden partner? Kan den have kun 6 elektroner? Hvornår forekommer det? Og når den bliver til O₂, deler de så de to elektroner?"
 

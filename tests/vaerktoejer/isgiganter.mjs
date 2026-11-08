@@ -6,7 +6,8 @@
 // farver"), vinde (kontakten "Vindene"), plet (drejet, så Den Store Mørke Plet vender mod kameraet, med "Neptun i 1989"),
 // ringe (hele ringsystemet), ringemodlys (hele ringsystemet med "Modlys"), og terminator (skyerne ved 27° N tæt på ved grænsen
 // mellem dag og nat, hvor skyernes skygger er længst). UN4 (Uranus): maaner, smaa eller en måne (miranda … oberon),
-// og et årstal bagefter tages fra samme sted (fx titania 1986). Uden størrelse: pc og
+// og et årstal bagefter tages fra samme sted (fx titania 1986). UN5: sted:<id> (et sted i træet, fx sted:ringe 1986
+// eller sted:buer ir). Uden størrelse: pc og
 // tablet. Uden planet: begge. Uden steder: hel.
 // Mål én browser ad gangen (to samtidig halverer tallene, tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
@@ -47,6 +48,12 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
         await f(() => atomlabTest.solsystem.fænomen().hop());
         await s.waitForTimeout(2500);
       }
+      // UN5: et sted i træet, fx sted:nordpol, sted:ringe (Uranus), sted:plet eller sted:buer (Neptun)
+      if (sted.startsWith('sted:')) {
+        await f((id) => atomlabTest.solsystem.gåTil(id), sted.slice(5));
+        await f(() => atomlabTest.solsystem.fænomen().hop());
+        await s.waitForTimeout(2500);
+      }
       if (/^\d{4}$/.test(sted)) await f((v) => atomlabTest.solsystem.fænomen().sætÅr(v), Number(sted));
       if (sted === 'hurtig') {
         await s.click('#solsystemTid button[data-tid="hurtig"]');
@@ -55,7 +62,7 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
       }
       await s.waitForTimeout(1500);
       const bps = await måling();
-      await s.screenshot({ path: `${UD}/${navn}-${planet}-${sted}.png` });
+      await s.screenshot({ path: `${UD}/${navn}-${planet}-${sted.replace(":", "-")}.png` });
       console.log(`${navn} ${planet} ${sted}: ${bps.toFixed(1)} billeder i sekundet`);
       if (sted === 'modlys') await kontakt('Modlys');
       if (sted === 'ir') await kontakt('Infrarødt');

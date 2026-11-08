@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (8. november 2026): Uranus og Neptun UN4, Uranus' måner.** Jeres go: "start un4".
+- **De fem store måner** (Miranda, Ariel, Umbriel, Titania og Oberon) med Voyager 2's kort (Caltech/JPL/USGS, public domain, fundet på Wikimedia Commons, som nu er åben). Voyager så kun den sydlige halvdel, så den nordlige er en blød, grå flade ("aldrig fotograferet tæt på"). Den halvdel har sol nu, så træk **År** til 1986 ved en måne: Kameraet følger Solen, og man ser Voyagers billeder.
+- **Banerne** (NSSDC) i Uranus' ækvatorplan som en skydeskive, den rigtige vej (med uret om IAU's nordpol, som Uranus drejer), Miranda hælder 4,3°, alle vender samme side mod Uranus. Den rigtige størrelse ved en måne, større langt væk. Skygger begge veje, navne, tryk på en måne og "Måner" i træet med sider (faktatjekket, 14 påstande).
+- **"Små måner":** Cressida, Desdemona, Cupid og Belinda som små, grå klumper (formen tegnet, 5 gange lysere end de er). Cressida indhenter Desdemona ca. hver 22. døgn (⏩).
+- **Spørgsmål til jer:** (1) Ved et besøg i 2026 er månen en grå kugle, for den side, der har sol nu, er aldrig fotograferet. Skal besøget i stedet starte i 1986 (så man ser Voyagers billeder med det samme), eller skal det blive ved den ærlige grå og "Træk År til 1986"? Anbefaling: lad det være, og lad flybyen (UN5) vise en måne i 1986. (2) Spørgsmålene fra UN3 (Uranus i "Voyagers farver" og "Infrarødt" ved Neptun) og UN2 (kameraet ved skyderen) står stadig.
+
 **Senest lavet (8. november 2026): Uranus og Neptun UN3, Neptuns vejr og ringbuer.** Jeres go: "start un3".
 - **Høje, hvide skyer** af metan-is i bånd ved de breddegrader, Voyager så dem. De kaster blålige skygger ca. 50 km under sig (som på Voyagers foto), som ses tæt på ved grænsen mellem dag og nat. Skyerne er tegnet, og der er få i 2025 (de forsvandt næsten i 2019).
 - **Kontakten "Neptun i 1989":** Den Store Mørke Plet (22° S, 13.000 km lang, med den lyse sky ved kanten), Scooter og den lille mørke plet D2 ved de rigtige breddegrader og med Voyagers målte omgange, så de driver fra hinanden. Flere skyer og buerne, som de var i 1989.

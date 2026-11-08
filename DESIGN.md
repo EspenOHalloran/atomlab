@@ -46,7 +46,7 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 *Alle trin med detaljer står i [docs/arkiv/trin.md](docs/arkiv/trin.md). Nye trin skrives her med et kryds, når de er færdige, og flyttes til arkivet, når de er gamle.*
 
 - [x] **Trin 1-20** (Atomværkstedet, Det periodiske system, Stjerneovnen, Reaktoren, Batteriet, Kosmos, telefon og tablet, Saturn og den nye opbygning af Solsystemet og Kosmos). Trin 11 (rettelser efter den store gennemgang) er kun delvist lavet, se nedenfor.
-- [ ] **Solsystemet:** Mars og Jupiter er færdige. Så de andre planeter og overblikket ([docs/plan-solsystemet.md](docs/plan-solsystemet.md), status i [docs/lige-nu/solsystemet.md](docs/lige-nu/solsystemet.md)).
+- [ ] **Solsystemet:** Mars, Jupiter, Uranus og Neptun er færdige. Så de andre planeter og overblikket ([docs/plan-solsystemet.md](docs/plan-solsystemet.md), status i [docs/lige-nu/solsystemet.md](docs/lige-nu/solsystemet.md)).
 
 **Ikke lavet fra de gamle trin** (fra Trin 11, delvist lavet senere, tjekkes, før de tages op):
 - Links mellem delene ("Se også"). Fremgangen i menuen er lavet (Trin 18).
