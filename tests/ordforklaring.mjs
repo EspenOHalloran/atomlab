@@ -35,6 +35,12 @@ const side = async (opsætning) => {
 const { ctx, page } = await side({ viewport: { width: 1280, height: 800 } });
 const T = (f, a) => page.evaluate(f, a);
 const vist = () => T(() => atomlabTest.ord.vist());
+// Rul ordet frem, og vent to billeder, før der klikkes. Ellers ruller Playwright selv, og rulle-hændelsen kan komme
+// lige efter klikket og lukke forklaringen igen (den lukker ved rulning). På en hurtig maskine skete det hver gang.
+const rulFrem = async (p, vælger) => {
+  await p.locator(vælger).first().scrollIntoViewIfNeeded();
+  await p.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+};
 
 // Kosmos: neutrino i supernovaens nørd-tekst
 await page.goto(`${ADRESSE}/?test#kosmos`);
@@ -44,6 +50,7 @@ await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary'); // fo
 // Hold øje med ordet i stedet for at vente en fast tid (testbrowseren tegner langsomt)
 const markeret = await page.waitForSelector('#kosmosTekst .fagord[data-ord="neutrino"]', { timeout: 3000 }).then(() => true, () => false);
 tjek('supernova: "neutrino" er markeret', markeret);
+await rulFrem(page, '#kosmosTekst .fagord[data-ord="neutrino"]');
 await page.click('#kosmosTekst .fagord[data-ord="neutrino"]');
 await page.waitForTimeout(250);
 tjek('klik viser forklaringen', (await vist()) === 'Neutrino', await vist());
@@ -102,6 +109,7 @@ await page.waitForTimeout(1200);
 await page.click('#batteriHjælp');
 await page.waitForTimeout(300);
 tjek('batteri-hjælpen har "elektrolyt" markeret', await page.isVisible('#hjælpBatteri .fagord[data-ord="elektrolyt"]'));
+await rulFrem(page, '#hjælpBatteri .fagord[data-ord="elektrolyt"]');
 await page.click('#hjælpBatteri .fagord[data-ord="elektrolyt"]');
 await page.waitForTimeout(200);
 tjek('forklaringen vises oven på hjælpen', (await vist()) === 'Elektrolyt');
@@ -133,7 +141,7 @@ await tlf.page.waitForTimeout(1500);
 await tlf.page.click('#fusHjælp');
 await tlf.page.waitForTimeout(300);
 const ord = tlf.page.locator('#hjælpFusion .fagord').first();
-await ord.scrollIntoViewIfNeeded();
+await rulFrem(tlf.page, '#hjælpFusion .fagord');
 await ord.tap();
 await tlf.page.waitForTimeout(300);
 const tv = await tlf.page.evaluate(() => { const e = document.getElementById('ordforklaring'); const r = e.getBoundingClientRect(); return { vist: atomlabTest.ord.vist(), l: r.left, rr: r.right }; });

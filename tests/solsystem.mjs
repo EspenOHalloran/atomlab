@@ -17,6 +17,8 @@ async function side(vp, gemt, opt = {}) {
   await s.waitForFunction(() => window.atomlabTest);
   return s;
 }
+// Et tryk på en anden klode viser først rejseskiltet. Kloden bygges, når det er tegnet, så testen venter på det.
+const efterRejsen = (s) => s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt')?.classList.contains('vist'), null, { timeout: 20000, polling: 50 });
 const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, skærm).then(() => s.waitForFunction((sk) => document.querySelector(`#${sk}:not(.skjult)`), skærm));
 
 // ---------- Gemte data flytter med fra Kosmos ----------
@@ -36,6 +38,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
   tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden,jupiter,uranus,neptun', JSON.stringify(prikker));
   await s.click('#solsystem .sol-klode[data-id="solen"]');
+  await efterRejsen(s);
   // Træet tegnes ved næste tjek (fire gange i sekundet), så vent på knappen (under belastning var den der ikke endnu)
   await s.waitForSelector('#solsystemTræ button[data-id="solstorm"]', { timeout: 10000 }).catch(() => {});
   tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
@@ -69,6 +72,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('træet ved Solen: Solen og forsøgene Solstorm og Solens fremtid', t.map((p) => p.id).join() === 'solen,solstorm,solensfremtid' && t[0].valgt, JSON.stringify(t));
   tjek('gruppen hedder "Forsøg"', (await s.textContent('#solsystemTræ .sol-gruppe-navn')) === 'Forsøg');
   await s.click('#solsystem .sol-klode[data-id="jorden"]');
+  await efterRejsen(s);
   tjek('et tryk på Jorden åbner Jordens egen visning', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'jorden');
   tjek('Jordens klode er markeret', await s.evaluate(() => document.querySelector('#solsystem .sol-klode[data-id="jorden"]').classList.contains('valgt')));
   t = await træ();
@@ -85,12 +89,12 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   await s.click('#solsystemTræ button[data-id="aarstider"]');
   tjek('forsøget Årstiderne åbner og er markeret, og vejen er › Jorden › Årstiderne', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'aarstider' && (await træ()).find((p) => p.id === 'aarstider').valgt && (await s.textContent('#solsystemVej')) === '› Jorden › Årstiderne');
   await s.click('#solsystemTræ button[data-sted="månen"]');
-  await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt')?.classList.contains('vist'), null, { timeout: 20000, polling: 50 }); // rejseskiltet (kloden bygges, når det er tegnet)
+  await efterRejsen(s);
   tjek('fra Årstiderne: Månen i træet åbner Jorden og flyver til Månen', (await s.evaluate(() => [atomlabTest.solsystem.valgt(), atomlabTest.solsystem.sted()].join())) === 'jorden,månen');
   tjek('"Månen" er ikke en kontakt i Styr-boksen', !(await s.evaluate(() => atomlabTest.solsystem.knapper())).includes('Månen'));
   tjek('"Prøv selv" og pauseknappen i panelet er væk', !(await s.$('#solsystemStyring')) && !(await s.$('#solsystemPause')));
   await s.click('#solsystem .kosmos-valg[data-id="mars"]');
-  await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt')?.classList.contains('vist'), null, { timeout: 20000, polling: 50 }); // rejseskiltet (kloden bygges, når det er tegnet)
+  await efterRejsen(s);
   tjek('Mars kan vælges', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'mars' && (await s.textContent('#solsystemNavn')) === 'Mars');
   await s.screenshot({ path: `${UD}/pc-mars.png` });
   await s.click('#solsystemHjælp');

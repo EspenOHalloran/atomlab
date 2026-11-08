@@ -20,3 +20,6 @@
 - [ ] En test åbner ikke en ny side, mens en anden side i samme test stadig tegner 3D. Luk den første først, og vent på, at skærmen er klar (`waitForFunction`), ikke på sidens load-hændelse (`page.goto` giver op efter 30 sekunder).
 - [ ] En rettelse af en test, der fejler under belastning, vises først at fejle uden rettelsen (fx med fire travle CPU-løkker ved siden af), og bestå med den flere gange i træk.
 - [ ] To billeder, der sammenlignes (med og uden noget), tages, når kameraet står stille (samme plads i to tegnede billeder i træk), og efter mindst to tegnede billeder (`requestAnimationFrame`) efter ændringen, ikke efter en fast ventetid (Jupiters ringe, 8. november 2026).
+- [ ] Et klik på noget, der skal rulles frem (fx et ord under skærmkanten), ruller testen selv frem og venter to billeder før klikket. Ellers kan Playwrights egen rulning nå siden efter klikket og fx lukke en forklaring (Småting, 8. november 2026).
+- [ ] Et klik, der først gør arbejdet efter næste billede (fx rejseskiltet i Solsystemet), ventes der på (`waitForFunction`), før resultatet tjekkes.
+- [ ] Noget tilfældigt, der kan gå i stå (fx kædereaktionen lige efter start), tåler testen: Tjek det, og start forfra, som man selv ville gøre.
