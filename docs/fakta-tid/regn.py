@@ -145,3 +145,44 @@ tau = 2 * 86400                        # 2 døgn i skibet
 a = 4 * u * c / tau                    # τ = 4 (c/a) u
 print(f"  u = {u:.2f}, acceleration = {a:.3g} m/s² = {a/g:,.0f} g")
 print(f"  Med 1 g tager det {cpa*math.acosh(365_250):.1f} år (skibets tid) bare at nå γ = 365.250")
+
+print("\n== 15. T5 'Hvorfor går tiden langsommere?' (Trin 0, 8. november 2026) ==")
+kmt = c * 3.6                                # lysets fart i km/t (m/s × 3,6)
+print(f"  Lysets fart: {c/1000:,.3f} km/s = {kmt:.4e} km/t")
+# Scene 1: bolden i toget. Den rigtige regel: w = (u + v)/(1 + u·v/c²)
+u, v = 50.0, 100.0                            # km/t
+w = (u + v) / (1 + u * v / kmt**2)
+print(f"  Bolden: 50 + 100 km/t = {w:.15f} km/t  (mangler {150 - w:.2e} km/t, dvs. {(150-w)/150:.1e} af farten)")
+for b in (0.5, 0.9):
+    print(f"  Lys fra et tog med {b:.0%} af c: (1 + {b})/(1 + {b}) = 1, altså c. Bold med 50 % fra toget: {(0.5+b)/(1+0.5*b):.3f} c (ikke {0.5+b:.1f} c)")
+# Michelson og Morley 1887: forventet 0,40 fringe, højst 0,02 målt (gennemsnit under 0,01). Forskydningen går som v², så
+for f in (1/40, 1/36, 1/16):
+    print(f"  Målt/forventet = {f:.4f} → æthervinden højst ca. √{f:.4f} = {math.sqrt(f):.2f} af 30 km/s = {30*math.sqrt(f):.1f} km/s")
+print(f"  0,02/0,40 = {0.02/0.40:.3f} (1/20)")
+# Scene 2: trekanten i lysuret ved 87 % (v = √3/2 c): halvt tik har siderne L, √3·L og 2L
+b = math.sqrt(3) / 2
+G = 1 / math.sqrt(1 - b * b)
+print(f"  Lysuret: v = {b:.4f} c, γ = {G:.4f}; siderne 1 : {b*G:.4f} : {G:.4f}  (1 + 3 = 4)")
+for p in (0.5, 0.87, 0.95, 0.99):
+    print(f"    v = {p:.0%}: γ = {1/math.sqrt(1-p*p):.3f}")
+# Scene 3: myonerne fra 15 km
+tau_mu, m_mu, h = 2.1969811e-6, 105.6583755, 15_000.0
+print(f"  c·τ = {c*tau_mu:.1f} m. Uden tidsforlængelse når e^(−15 km/{c*tau_mu:.0f} m) = {math.exp(-h/(c*tau_mu)):.2e} ned (1 ud af {1/math.exp(-h/(c*tau_mu)):.2g})")
+for navn, Gm in [('99 %', 1/math.sqrt(1-0.99**2)), ('99,9 %', 1/math.sqrt(1-0.999**2)), ('4 GeV (impuls)', math.sqrt(1 + (4000/m_mu)**2)), ('4 GeV (energi)', 4000/m_mu)]:
+    bm = math.sqrt(1 - 1/Gm**2)
+    l = Gm * bm * c * tau_mu
+    print(f"    {navn:15s}: γ = {Gm:6.2f}, v = {bm:.5f} c, middel-vej {l/1000:5.1f} km, når ned fra 15 km: {math.exp(-h/l):.0%},"
+          f" luften set fra myonen {h/Gm:5.0f} m, turen {h/bm/c*1e6:.1f} µs på Jorden = {h/bm/c/Gm*1e6:.2f} µs for myonen")
+# Scene 4: lampen midt i togvognen. Set fra perronen (vognen har længden L/γ): bagenden efter (L/2γ)/(c+v), forenden (L/2γ)/(c−v)
+for b, L in ((0.6, 1.0),):
+    G = 1 / math.sqrt(1 - b * b)
+    tb, tf = (L / 2 / G) / (1 + b), (L / 2 / G) / (1 - b)
+    print(f"  Togvogn ved {b:.0%}: γ = {G}, bag {tb:.4f} L/c, for {tf:.4f} L/c, forskel {tf-tb:.4f} = γ·v·L/c² = {G*b*L:.4f}; i toget begge {L/2:.2f} L/c")
+L, v = 20.0, 100 / 3.6
+print(f"  Rigtig togvogn 20 m ved 100 km/t: forskel γ·v·L/c² = {L*v/c/c:.2e} s (ca. {L*v/c/c*1e15:.0f} femtosekunder)")
+# Scene 5: rumtidskortet (år og lysår, c = 1). Hjemme 10 år, vendepunkt x lysår ude ved 5 år
+T = 10.0
+for x in (0, 3, 4, 4.9):
+    print(f"  Vendepunkt {x} lysår: den rejsende får 2·√(5² − {x}²) = {2*math.sqrt(25-x*x):.2f} år, fart {x/5:.0%}")
+b = 0.8
+print(f"  Ved 80 %: 'nu' derhjemme set fra den rejsende ved vendingen springer fra {5 - b*4:.1f} år til {5 + b*4:.1f} år (hjemme ældes {3/(1/math.sqrt(1-b*b)):.1f} år pr. 3 år ud)")

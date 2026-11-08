@@ -41,7 +41,7 @@
 - **Besøg:** `måneRetning()` er 60° fra Solen om aksen og 0,65 gange Solens bredde. Flyttes skyderen "År" ved en måne, flyver kameraet med det samme med (`sætÅr`), så man i 1986 ser Voyagers halvdel i sollys. `udAfSkygge` spoler `måneTid`, hvis månen står i planetens skygge (kun omkring jævndøgn).
 - **Størrelsen:** `måneForstørrelse` med `nær` (1 ved en måne). De små måner har `nær = 1 − fSmå`, så de kun er tegnet større ved "Små måner". Banerne toner frem fra `BANE_FRA` (30) til `BANE_TIL` (60) enheder (de små kun ved "Små måner"). Navnene står over månen på skærmen (kameraets op), ikke langs aksen.
 - **Skyggerne:** `planet.js` med `måner: 5` (`uSolVinkel` sat til Solens vinkelradius set fra Uranus, `SOL_VINKEL`), og hver måne får planetens skygge (`klode.skygge`).
-- **Kortene:** `<måne>-1280.jpg` på alle skærme (`hentMåner` efter planetens kort, én ad gangen med `initTexture`). De små måner har ingen kort: `lavIsmåne` med `klump` (ny, valgfri i `maane.js`: bølger efter retningen og normalerne lagt sammen i sømmen), gjort `LILLE_LYS` (5) gange lysere.
+- **Kortene:** `<måne>-1440.jpg` (JPL's originaler, 8. november 2026) på alle skærme (`hentMåner` efter planetens kort, én ad gangen med `initTexture`). De små måner har ingen kort: `lavIsmåne` med `klump` (ny, valgfri i `maane.js`: bølger efter retningen og normalerne lagt sammen i sømmen), gjort `LILLE_LYS` (5) gange lysere.
 - **Tryk** på en stor måne besøger den (`vedNed`/`vedOp` som Jupiter).
 
 ## UN5: stederne og flybyerne (valgfrit i `cfg`)
