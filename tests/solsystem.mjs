@@ -6,7 +6,7 @@ const b = await chromium.launch({ args: ARGS });
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const FLYTTET = ['solstorm', 'solensfremtid', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
-const ALLE = ['solen', 'solstorm', 'solensfremtid', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn'];
+const ALLE = ['solen', 'solstorm', 'solensfremtid', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun'];
 
 async function side(vp, gemt, opt = {}) {
   const s = await (await b.newContext({ viewport: vp, ...opt })).newPage();
@@ -25,15 +25,17 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   const kort = await s.evaluate(() => [...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), k.querySelector('.kort-fremgang')?.textContent]));
   const i = kort.findIndex(([h]) => h === '#solsystem');
   tjek('menuen: Solsystemet står lige før Kosmos', i >= 0 && kort[i + 1][0] === '#kosmos', JSON.stringify(kort));
-  tjek('menuen: 2/9 set i Solsystemet og 1/12 i Kosmos', kort[i][1] === '2/9 set' && kort[i + 1][1] === '1/12 set', JSON.stringify(kort));
+  tjek('menuen: 2/11 set i Solsystemet og 1/12 i Kosmos', kort[i][1] === '2/11 set' && kort[i + 1][1] === '1/12 set', JSON.stringify(kort));
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
   tjek('det sidst valgte (Saturn) åbner i Solsystemet', sol.valgt === 'saturn', JSON.stringify(sol));
-  tjek('Solsystemet: 2 af 9 set', sol.set === '2 af 9 set', sol.set);
-  tjek('Solsystemet har Solen, Jorden, Jupiter og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
+  tjek('Solsystemet: 2 af 11 set', sol.set === '2 af 11 set', sol.set);
+  tjek('Solsystemet har Solen, Jorden, Jupiter, Uranus, Neptun og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
-  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden,jupiter', JSON.stringify(prikker));
+  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden,jupiter,uranus,neptun', JSON.stringify(prikker));
   await s.click('#solsystem .sol-klode[data-id="solen"]');
+  // Træet tegnes ved næste tjek (fire gange i sekundet), så vent på knappen (under belastning var den der ikke endnu)
+  await s.waitForSelector('#solsystemTræ button[data-id="solstorm"]', { timeout: 10000 }).catch(() => {});
   tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
   await vis(s, 'kosmos');
   const kos = await s.evaluate(() => ({ valgt: atomlabTest.kosmos.valgt(), set: document.getElementById('kosmosSet').textContent, gemt: JSON.parse(localStorage.getItem('atomlabKosmosSet')) }));
@@ -58,7 +60,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   await vis(s, 'solsystem');
   // U1 (docs/plan-ux.md): kloderne på én række og et træ med den valgte klodes steder, måner og forsøg
   const kloder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => k.textContent));
-  tjek('kloderne: Solen, Jorden, Mars, Jupiter og Saturn (efter afstanden til Solen)', kloder.join() === '☀️Solen,🌍Jorden,🔴Mars,🟠Jupiter,🪐Saturn', JSON.stringify(kloder));
+  tjek('kloderne: Solen, Jorden, Mars, Jupiter, Saturn, Uranus og Neptun (efter afstanden til Solen)', kloder.join() === '☀️Solen,🌍Jorden,🔴Mars,🟠Jupiter,🪐Saturn,🩵Uranus,🔵Neptun', JSON.stringify(kloder));
   tjek('første gang åbner Solen', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solen');
   const træ = () => s.evaluate(() => atomlabTest.solsystem.træ());
   let t = await træ();
@@ -134,8 +136,10 @@ for (const [navn, vp, kol] of STØRRELSER) {
   await s.evaluate(() => atomlabTest.solsystem.vælg('formoerkelser'));
   await s.waitForTimeout(400);
   const hoveder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => { const r = k.getBoundingClientRect(); return { y: Math.round(r.top), x: Math.round(r.left), synlig: r.width > 0 }; }));
-  const klodeRækker = navn === 'telefon-langs' ? 2 : 1; // på telefon på langs er venstre kolonne smal: to og to
-  tjek(`${navn}: kloderne står på ${klodeRækker} række(r)`, new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
+  // Syv kloder i et gitter (fem pr. række på pc, tre ved smalle paneler): alle rækker er fulde undtagen den sidste
+  const iRække1 = hoveder.filter((h) => h.y === hoveder[0].y).length;
+  const klodeRækker = Math.ceil(hoveder.length / iRække1);
+  tjek(`${navn}: de ${hoveder.length} kloder står i ${klodeRækker} rækker med ${iRække1} i hver`, hoveder.length === 7 && iRække1 >= 3 && new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
   tjek(`${navn}: kun Jordens forsøg står i træet`, (await s.isVisible('#solsystemTræ button[data-id="aarstider"]')) && !(await s.$('#solsystemTræ button[data-id="solstorm"]')));
   const vindue = await s.evaluate(() => document.getElementById('solsystemVindue').getBoundingClientRect().height);
   tjek(`${navn}: 3D-billedet har plads`, vindue > 150, vindue);

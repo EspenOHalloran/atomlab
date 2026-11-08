@@ -17,13 +17,14 @@
 // - cykloner (Jupiter, J5): [{ retning, øst, a, spin }] i kuglens egne retninger (før den trykkes sammen): midten
 //   (enhedsvektor), en retning mod øst, radius (som en korde på enhedskuglen) og hvor hurtigt den drejer (radianer pr.
 //   sekund, positiv er mod uret set udefra). Skyerne i hver cyklon tegnes som spiraler, der drejer, oven på kortet.
+// - kantFarve (Uranus og Neptun, UN1): farven på kanten i modlys (standard en varm, gullig farve som Saturn og Jupiter).
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6] }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -61,6 +62,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uMidt: { value: new THREE.Vector3() },
       uTid: { value: 0 },
       uEks: { value: 1 },
+      uKant: { value: new THREE.Vector3(...kantFarve) },
     },
     vertexShader: /* glsl */ `
       varying vec3 vNormal;
@@ -81,7 +83,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       #endif
       uniform sampler2D tKort;
       uniform float uHarKort, uTid, uEks;
-      uniform vec3 uSol, uAkse, uMidt;
+      uniform vec3 uSol, uAkse, uMidt, uKant;
       varying vec3 vNormal;
       varying vec3 vVerden;
       varying vec2 vUv;
@@ -291,7 +293,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         float rand = 0.75 + 0.25 * max(dot(N, V), 0.0);
         // I modlys lyser atmosfæren som en tynd ring i kanten (lyset spredes fremad i de øverste lag)
         float kant = pow(1.0 - max(dot(N, V), 0.0), 6.0) * pow(max(dot(-V, uSol), 0.0), 3.0);
-        vec3 ud = farve * lys * mix(0.12, 1.0, skygge) * rand * 0.98 * uEks + vec3(1.0, 0.85, 0.6) * kant * 0.9;
+        vec3 ud = farve * lys * mix(0.12, 1.0, skygge) * rand * 0.98 * uEks + uKant * kant * 0.9;
         #ifdef PILE
         if (uPile > 0.0) {
           vec4 p = pile(vUv);

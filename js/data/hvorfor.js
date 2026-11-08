@@ -97,6 +97,13 @@ export const HVORFOR = {
     spørgsmål: 'Hvorfor lyser stjernerne?',
     svar: 'Inde i midten af stjernen smelter brintkerner sammen til helium, og det frigør energi (fusion). Energien varmer hele stjernen op, og den varme overflade lyser, ligesom glødende jern. I Solen tager det titusinder af år, måske over 100.000 år, før energien fra midten når ud til overfladen. Energien i det sollys, du ser, blev altså frigjort i midten for længe siden, selvom lyset kun bruger ca. 8 minutter fra Solens overflade til Jorden.',
   },
+  // Rejsen i tid (T3). Kilder: docs/fakta-tid.md, afsnit 1, 2 og 8 (ét ton: 5,5·10²⁰ J ved 99 % og 6,3·10²¹ J ved 99,99 %,
+  // verdens energiforbrug 592 EJ om året)
+  lysfart: {
+    spørgsmål: 'Hvorfor kan intet nå lysets fart?',
+    svar: 'Lysets fart er den samme for alle. Uanset hvor hurtigt du flyver, farer lyset stadig væk fra dig med lysets fart, så du kommer aldrig tættere på at indhente det. Og jo hurtigere du flyver, jo mere energi kræver det at komme bare lidt hurtigere. At få ét ton op på 99 % af lysets fart kræver næsten et års energi for hele verden, og 99,99 % ca. 10 år. For at nå helt op på lysets fart skulle der bruges uendelig meget energi.',
+    nørd: 'Bevægelsesenergien er E = (γ − 1) · m · c². Når farten nærmer sig lysets, vokser γ uden grænse. Man hører tit, at man bliver tungere, jo hurtigere man flyver. Det er en gammeldags måde at sige det på, som de fleste fysikere undgår i dag. De siger i stedet, at massen er den samme, og at det er energien, der vokser.',
+  },
   // Byttebørsen (Molekyler M1). Kilder: docs/fakta-molekyler.md, afsnit 1, 6 og 7.
   bytteKoster: {
     spørgsmål: 'Hvorfor koster det at flytte elektronen?',
@@ -123,7 +130,7 @@ export const HVORFOR = {
     svar: 'Elektronparrene omkring et atom skubber hinanden så langt væk som muligt. Oxygen i vand har fire par: to bindinger til H og to frie par. Fire par stiller sig som hjørnerne i en tetraeder (en pyramide med trekanter på alle sider). De frie par skubber lidt hårdere end bindingerne, så vinklen mellem de to H bliver ca. 104,5° i stedet for 109,5°.\n\nI CO₂ har kulstof ingen frie par. De to bindinger skubber hinanden ud til hver sin side, så molekylet er lige.',
     nørd: 'Modellen hedder VSEPR (Valence Shell Electron Pair Repulsion: elektronpar i den yderste skal skubber hinanden). Den forklarer formen godt, men elektronparrene er ikke rigtige kugler. Den præcise forklaring kræver kvantemekanik.',
   },
-  // Oxygens elektroner (8. november 2026). Kilder: docs/fakta-hvorfor.md, afsnit 16-18.
+  // Oxygens elektroner (8. november 2026). Kilder: docs/fakta-hvorfor.md, afsnit 17-19.
   bygUdenPartner: {
     spørgsmål: 'Hvorfor har oxygen to elektroner uden partner?',
     svar: 'Oxygen har 6 elektroner i sin yderste skal. Skallen har 4 pladser, og hver plads kan rumme 2 elektroner. Elektronerne sætter sig først én på hver plads og deler kun plads, når der ikke er flere tomme. Så bliver de 6 til 2 par og 2 alene, og det er de 2 alene, der kan lave par med elektroner fra andre atomer.\n\nDe 2 uden partner er altså en del af de 6, ikke nogen ekstra. Nitrogen har 5 (1 par og 3 alene), chlor har 7 (3 par og 1 alene), og hydrogen har 1.',
