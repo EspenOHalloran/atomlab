@@ -2,6 +2,9 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/menuen.md](../../lige-nu/menuen.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+## "Senest lavet" 7. november 2026 (K4 Trin 0, før K4)
+**Senest lavet (7. november 2026): K4 Trin 0, verdenerne i ringen.** Et billede af idéen i to udgaver (A: delene som små kort under verdenen, B: delene som knapper inde i verdenens kort) på pc og tablet på højkant. Jeres valg: **B**, ét baggrundsmotiv pr. verden, docken viser de 5 verdener (✓ på delen og på verdenen, når alle dens dele er klaret), start på verdenen med den sidste del fremhævet, forslagene til navnene nu (sønnen vælger senere), grupperne i Kosmos som en egen opgave efter K4 og Antistof under Kernerne. Alt står i [plan-verdener.md](../../plan-verdener.md) under "Jeres svar".
+
 ## "Senest lavet" 7. november 2026 (K2, før K4 Trin 0)
 **Senest lavet (7. november 2026): Baggrunden skifter med kortet forrest (K2, stadig kun med `?karrusel` sidst i adressen).** Jeres go: "go" (efter forslaget med de otte motiver) og "go" (efter billedet af idéen). Bag atomet toner et motiv frem for kortet forrest (en stjerne, reaktorbassinet, elektronskyer, det periodiske system, ioner og elektroner, planetbaner, en galakse og ord fra Ordbogen), og motiverne glider over i hinanden, når ringen drejes. Banen går højere op på højkant (jeres ønske, før ca. 210 px tom plads under titlen, nu ca. 76 px på 820 × 1180). Citatet må gerne forsvinde fra menuen (jeres svar). Detaljerne står i [plan-menu.md](../plan-menu.md) under K2.
 
