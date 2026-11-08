@@ -198,6 +198,8 @@ button { font: inherit; color: inherit; }
 #vaerksted .del-vælger { flex: none; margin: 0; }
 #vaerksted:not(.bytte) .bytte-panel, #vaerksted:not(.bytte) .bytte-kun { display: none; }
 #vaerksted:not(.del-elektroner) .byg-panel, #vaerksted:not(.del-elektroner) .byg-kun { display: none; }
+/* Knaldgas (Molekyler M3, js/knaldgas.js): vises i stedet for paletten og panelet til højre */
+#vaerksted:not(.knaldgas) .knald-panel, #vaerksted:not(.knaldgas) .knald-kun, #vaerksted.knaldgas .byg-panel, #vaerksted.knaldgas .byg-kun { display: none; }
 #vaerksted:is(.bytte, .del-elektroner) > #byggepanel, #vaerksted:is(.bytte, .del-elektroner) > #infopanel, #vaerksted:is(.bytte, .del-elektroner) > #minitabelPanel,
 #vaerksted:is(.bytte, .del-elektroner) .opgave-pille, #vaerksted:is(.bytte, .del-elektroner) #knapVisning, #vaerksted:is(.bytte, .del-elektroner) #udgaveVælger { display: none; }
 #vaerksted:is(.bytte, .del-elektroner) { grid-template-areas: "top top top" "venstre vindue højre" "venstre vindue højre"; }
@@ -235,6 +237,22 @@ button { font: inherit; color: inherit; }
 .byg-trin .byg-ladning { margin-top: 5px; }
 /* En åben foldeboks skjuler kortet, tallene og "Hvorfor?"-knapperne imens (ellers får panelet en rullebjælke på pc og tablet) */
 #bygInfo:has(details[open]) :is(#bygKort, #bygTal, .hvorfor-række) { display: none; }
+#knaldInfo:has(details[open]) :is(#knaldTal, .hvorfor-række) { display: none; }
+#knaldInfo .lag-boks p { margin: 0 0 6px; }
+#knaldInfo .lag-boks p:last-child { margin-bottom: 0; }
+#knaldPanel > #knaldTilbage { align-self: flex-start; }
+/* Måleren nederst i 3D-billedet: rød = brudt (koster), grøn = dannet (får), forskellen er varmen */
+.knald-måler { flex: 1 1 auto; max-width: 320px; min-width: 0; padding: 6px 10px 5px; border-radius: 12px; background: rgba(14, 24, 56, 0.88); border: 1px solid var(--panel-kant); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); font-size: 12px; pointer-events: auto; }
+.km-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; margin-bottom: 3px; }
+.km-navn { color: var(--svag); white-space: nowrap; }
+.km-sum strong { font-size: 14px; font-variant-numeric: tabular-nums; }
+.knald-måler.varm .km-sum strong { color: #ffb35c; }
+.km-række { display: grid; grid-template-columns: 88px minmax(0, 1fr) 34px; gap: 6px; align-items: center; }
+.km-række strong { text-align: right; font-variant-numeric: tabular-nums; }
+.km-spor { position: relative; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.km-fyld { position: absolute; top: 0; bottom: 0; left: 0; width: 0; transition: width 0.25s; }
+.km-fyld.brudt { background: #ff6b6b; }
+.km-fyld.dannet { background: #5ee08a; }
 .byg-kort strong { color: var(--gul); }
 .byg-kort p { margin: 0; }
 .byg-opgavetæller { color: var(--svag); font-weight: 600; font-size: 0.9em; }
@@ -1243,6 +1261,8 @@ button.sol-gruppe-navn::after { content: " ›"; }
   /* Paletten kommer lige under 3D-billedet, så man kan trække et atom op i det */
   #vaerksted.del-elektroner { grid-template-areas: "top" "vindue" "venstre" "højre"; }
   .bytte-måler { font-size: 11px; padding: 5px 8px 4px; }
+  .knald-måler { font-size: 11px; padding: 5px 8px 4px; }
+  .km-række { grid-template-columns: 78px minmax(0, 1fr) 30px; }
   /* Kosmos: fænomenerne på én vandret række, så knapperne kommer lige under animationen */
   .kosmos-liste { display: flex; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
   .kosmos-liste::-webkit-scrollbar { display: none; }

@@ -337,12 +337,22 @@ export const OPGAVER_BYG = [
   { id: 'byg-ethanol', kendt: 'ethanol', titel: 'Del elektroner: Byg ethanol', kort: 'Byg ethanol',
     tip: 'C–C–O som en kæde. Fyld så op med H, til ingen elektroner blinker.',
     fakta: 'Ethanol (C₂H₅OH) er alkoholen i øl og vin. De samme atomer kan også sættes sammen som dimethylether, som er en gas (drivgas i spraydåser).' },
+  // Knaldgas (Molekyler M3, js/knaldgas.js)
+  { id: 'byg-uden-gnist', knaldgas: 'stød', titel: 'Del elektroner: Find ud af, hvorfor intet sker uden gnist', kort: 'Intet sker uden gnist',
+    tip: 'Se molekylerne i knaldgassen støde sammen 20 gange uden gnist. Går der nogen bindinger i stykker?',
+    fakta: 'Ved stuetemperatur har et molekyle kun ca. 0,04 eV fart-energi, men det koster 4,5 eV at bryde H₂. De fleste stød er over 100 gange for svage. Derfor kan knaldgas stå i årevis uden at brænde.' },
+  { id: 'byg-knaldgas', knaldgas: 'vand', titel: 'Del elektroner: Tænd knaldgassen', kort: 'Tænd knaldgassen',
+    tip: 'Giv knaldgassen en gnist. Se kæden, og se, hvad der er tilbage til sidst.',
+    fakta: '4 H₂ og 2 O₂ blev til 4 H₂O. De nye bindinger i vand er stærkere end de gamle, så forskellen bliver til varme. Rumfærgens og SLS-rakettens motorer brænder hydrogen og oxygen på samme måde.' },
 ];
+export const KNALD_STØD = 20; // så mange stød uden gnist (opgaven "Intet sker uden gnist")
 export const DREJ_GRADER = 90; // metan: så meget skal molekylet drejes (kameraet), efter at det er færdigt
 
 // Er opgaven klaret? { kendte: ids af færdige kendte molekyler, tripel: om et færdigt molekyle har en tripelbinding,
-// pile: om pilene er tændt, drejet: grader, metan er drejet, efter at den blev færdig }
-export function opgaveKlaret(o, { kendte, tripel, pile, drejet }) {
+// pile: om pilene er tændt, drejet: grader, metan er drejet, efter at den blev færdig,
+// knald: { stød: stød uden gnist, vand: antal H₂O } i knaldgassen }
+export function opgaveKlaret(o, { kendte = [], tripel, pile, drejet, knald = null }) {
+  if (o.knaldgas) return Boolean(knald) && (o.knaldgas === 'stød' ? knald.stød >= KNALD_STØD : knald.vand >= 4);
   if (o.tripel) return tripel;
   if (!kendte.includes(o.kendt)) return false;
   if (o.pile && !pile) return false;

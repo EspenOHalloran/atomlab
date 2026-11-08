@@ -4,6 +4,8 @@
 // "Næste skridt", foldeboksene uden rullebjælke, ingen konsolfejl, og tablet og telefon begge veje.
 // M2b: ladningerne (δ+ og δ−), "Polært", kortet, kontakten "Pile", de seks opgaver med ★, Værkstedets opgaveliste og tæller,
 // Værkstedets kort i menuen og "Opgaver forfra".
+// M3: knaldgassen (knappen, ingenting uden gnist, gnisten, kæden, måleren, energien, tidsknappen, opgaverne, "Tilbage til
+// byggeriet" og panelerne uden rullebjælke på pc og tablet).
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('byg-molekyler');
 const URL = `${ADRESSE}/index.html?test#vaerksted`;
@@ -208,14 +210,14 @@ for (let k = 0; k < 4; k++) await G(page, 'tilføj', 'H');
 tjek('højst 12 atomer: paletten er slået fra', (await G(page, 'atomer')).length === 12 && await page.isDisabled('.palet-atom[data-symbol="C"]'));
 
 // Panelet: ingen rullebjælke, heller ikke med en foldeboks åben (kun én ad gangen)
-async function ingenRul(p, navn) {
-  const rul = () => p.evaluate(() => ['bygInfo', 'bygPanel'].map((id) => { const el = document.getElementById(id); return el.scrollHeight <= el.clientHeight + 1 ? '' : `${id} ${el.scrollHeight}/${el.clientHeight}`; }).join(''));
+async function ingenRul(p, navn, ider = ['bygInfo', 'bygPanel'], lagene = ['byg-nørd', 'byg-ærligt']) {
+  const rul = () => p.evaluate((ider) => ider.map((id) => { const el = document.getElementById(id); return el.scrollHeight <= el.clientHeight + 1 ? '' : `${id} ${el.scrollHeight}/${el.clientHeight}`; }).join(''), ider);
   const r = [await rul()];
-  for (const lag of ['byg-nørd', 'byg-ærligt']) {
+  for (const lag of lagene) {
     await p.click(`[data-lag="${lag}"] summary`);
     r.push(await rul());
   }
-  await p.click('[data-lag="byg-ærligt"] summary');
+  await p.click(`[data-lag="${lagene[1]}"] summary`);
   tjek(`${navn}: panelerne uden rullebjælke (også med en foldeboks åben)`, r.every((x) => !x), r.join(' | '));
 }
 await byg(['C', 'O'], [[1, 0]], []); // kulilte har den længste "Ærligt talt"
@@ -300,7 +302,7 @@ await page.click('#knapOpgaver');
 const listeV = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent));
 const iListen = listeV.filter((t) => /Byg H₂|Byg vand|CO₂|metan|tripelbinding|ethanol/.test(t) && !t.includes('Giv'));
 tjek('opgavelisten har gruppen "Del elektroner" med de seks opgaver (5 med ★)', listeV.some((t) => t === 'Byg et molekyle: Del elektroner') && iListen.length === 6 && iListen.filter((t) => t.startsWith('★')).length === 5, iListen.join(' / '));
-tjek(`tælleren tæller dem med (${tællerV})`, /^\d+\/27$/.test(tællerV) && Number(tællerV.split('/')[0]) >= 5);
+tjek(`tælleren tæller dem med (${tællerV})`, /^\d+\/29$/.test(tællerV) && Number(tællerV.split('/')[0]) >= 5);
 await page.locator('#opgaver li', { hasText: 'Byg ethanol' }).click();
 await page.waitForTimeout(400);
 tjek('et tryk på "Byg ethanol" åbner "Del elektroner" og viser tippet', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg' && (await undertekst(page)).includes('C–C–O'));
@@ -340,6 +342,48 @@ tjek('skærmskift midt i et træk: kameraets styring er slået til igen', await 
 await page.evaluate(() => { location.hash = '#vaerksted'; });
 await page.waitForTimeout(500);
 tjek('tilbage i Værkstedet: stadig "Del elektroner" med atomet', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg' && (await G(page, 'atomer')).length === 1);
+
+// ---------- M3: knaldgas ----------
+const KG = (f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.vaerksted.byg.knaldgas[f](...a), [f, a]);
+const synlig = (...sel) => Promise.all(sel.map((x) => page.isVisible(x))).then((l) => l.every(Boolean));
+await page.click('#bygKnaldgas');
+await page.waitForTimeout(300);
+tjek('"Knaldgas" viser boksen, måleren og knaldgassens paneler i stedet for byggeriet', await KG('aktiv') && await synlig('#knaldPanel', '#knaldInfo', '#knaldMåler', '#knaldTid', '#knaldMission')
+  && !(await page.isVisible('#bygPalet')) && !(await page.isVisible('#bygInfo')) && !(await page.isVisible('#bygMission')));
+await KG('forfra', 11);
+let k = await KG('boks');
+tjek('boksen: 4 H₂ og 2 O₂ (8 H og 4 O), måleren står på 0', k.tæl.H2 === 4 && k.tæl.O2 === 2 && k.atomer.H === 8 && k.atomer.O === 4 && k.brudt === 0 && (await page.textContent('#knaldForskel')) === '0,0 eV');
+await KG('spol', 12);
+k = await KG('boks');
+tjek(`uden gnist: ${k.stød} stød, ingen reaktioner, stadig 4 H₂ og 2 O₂, energien bevaret`, k.stød >= 20 && k.reaktioner === 0 && k.tæl.H2 === 4 && k.tæl.O2 === 2 && Math.abs(k.energi - k.forventet) < 1e-9);
+tjek('opgaven "Intet sker uden gnist" er klaret (★), og panelet siger det', await løst('byg-uden-gnist') && (await stjerne('byg-uden-gnist')) === '★'
+  && (await page.textContent('#knaldTitel')).includes('ingenting') && await page.isVisible('#knaldMission .mission-vis'));
+await page.click('[data-hvorfor="knaldBakke"]');
+tjek('"Hvorfor sker der ingenting?" åbner et kort om bakken', ((await page.evaluate(() => atomlabTest.hvorfor.vist())) ?? '').includes('gnist'));
+await page.keyboard.press('Escape');
+await page.click('#knaldMission .mission-vis'); // "Vis mig" giver gnisten
+k = await KG('boks');
+tjek('"Vis mig" giver en gnist: to frie H, og knappen "Gnist" er slået fra', k.tændt && k.tæl.H === 2 && k.tæl.H2 === 3 && await page.isDisabled('#knaldGnist'));
+await page.click('#knaldTid [data-tid="pause"]');
+const tPause = await KG('tid');
+const rPause = (await KG('boks')).reaktioner;
+await KG('spol', 1);
+tjek('tidsknappen: under pause står kæden stille', (await KG('tid')) === tPause && (await KG('boks')).reaktioner === rPause);
+await page.click('#knaldTid [data-tid="spil"]');
+await KG('spol', 40);
+await page.waitForTimeout(400);
+k = await KG('boks');
+tjek(`kæden ender med 4 H₂O og intet tilbage (${k.reaktioner} reaktioner)`, k.færdig && k.tæl.H2O === 4 && k.tæl.H2 + k.tæl.O2 + k.tæl.H + k.tæl.O + k.tæl.OH === 0 && k.radikaler === 0);
+tjek(`måleren: brudt ${k.brudt.toFixed(1)}, dannet ${k.dannet.toFixed(1)}, forskel +10,0 eV`, nær(k.forskel, 10.024, 1e-3) && (await page.textContent('#knaldForskel')) === '+10,0 eV'
+  && (await page.textContent('#knaldBrudt')) === k.brudt.toFixed(1).replace('.', ','));
+tjek(`energien er bevaret (fart + bindinger + gnist, afvigelse ${Math.abs(k.energi - k.forventet).toExponential(1)} eV)`, Math.abs(k.energi - k.forventet) < 1e-9);
+tjek(`varmen: molekylerne har ${Math.round(k.varme)} gange så meget fart-energi som ved stuetemperatur`, k.varme > 50);
+tjek('opgaven "Tænd knaldgassen" er klaret, tælleren viser 2/2', await løst('byg-knaldgas') && (await page.textContent('#knaldOpgaveTæller')) === '2/2');
+await ingenRul(page, 'pc, knaldgassen', ['knaldInfo', 'knaldPanel'], ['knald-nørd', 'knald-ærligt']);
+await page.screenshot({ path: UD + '/4-knaldgas.png' });
+await page.click('#knaldTilbage');
+await page.waitForTimeout(300);
+tjek('"Tilbage til byggeriet" viser paletten igen med det, man havde bygget', !(await KG('aktiv')) && await page.isVisible('#bygPalet') && !(await page.isVisible('#knaldPanel')) && (await G(page, 'atomer')).length === 1);
 await ctx.close();
 
 // Tablet og telefon: fanerne, 3D-billedet øverst, paletten lige under, et træk med fingeren og ingen rullebjælke
@@ -378,6 +422,15 @@ for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['t
   await p.waitForFunction(() => atomlabTest.vaerksted.byg.kameraStille(), null, { timeout: 15000 }).catch(() => {});
   await p.waitForTimeout(600);
   await p.screenshot({ path: `${UD}/3-${navn}.png` });
+  // Knaldgassen: måleren og knapperne kan ses, og panelerne har ingen rullebjælke på tablet på langs
+  await G(p, 'åbnKnaldgas');
+  await p.evaluate(() => { const k = atomlabTest.vaerksted.byg.knaldgas; k.forfra(4); k.gnist(); k.spol(30); });
+  await p.waitForTimeout(500);
+  const mR = await p.evaluate(() => document.getElementById('knaldMåler').getBoundingClientRect().toJSON());
+  tjek(`${navn}: knaldgassen er færdig, og måleren er inde på skærmen`, await p.evaluate(() => atomlabTest.vaerksted.byg.knaldgas.boks().færdig) && mR.width > 150 && mR.right <= vp.width + 1 && await p.isVisible('#knaldGnist'));
+  if (vp.width > vp.height && vp.height > 500) await ingenRul(p, `${navn}, knaldgassen`, ['knaldInfo', 'knaldPanel'], ['knald-nørd', 'knald-ærligt']);
+  await p.screenshot({ path: `${UD}/4-knald-${navn}.png` });
+  await G(p, 'tilbage');
   await c2.close();
 }
 

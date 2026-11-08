@@ -270,10 +270,11 @@
       </div>
       <h4 class="panel-overskrift">Paletten</h4>
       <div class="palet" id="bygPalet" role="group" aria-label="Atomer, du kan trække ind"></div>
-      <p class="klik-tip">Træk et atom ind i billedet, og slip det tæt på et andet. Så deler de et elektronpar. Træk et atom tilbage hertil for at fjerne det. Træk et andet sted for at dreje.</p>
+      <p class="klik-tip">Træk et atom ind i billedet, og slip det tæt på et andet, så deler de et elektronpar. Træk det tilbage hertil for at fjerne det. Træk et tomt sted for at dreje.</p>
       <div class="knap-række">
         <button class="knap svag" id="bygForfra">Forfra</button>
         <button id="bygPile" title="Pile viser, hvilken vej bindingerne trækker i elektronerne">Pile</button>
+        <button class="knap" id="bygKnaldgas" title="Se vand blive til: 4 H₂ og 2 O₂ i en lukket boks">Knaldgas</button>
       </div>
       <h4 class="panel-overskrift">Opgaver <span class="byg-opgavetæller" id="bygOpgaveTæller"></span></h4>
       <div class="byg-opgaver" id="bygOpgaver" role="group" aria-label="Opgaver (★ = klaret)"></div>
@@ -301,6 +302,44 @@
         <p>Elektronerne er skyer, ikke prikker. Prikkerne viser, hvor mange der er, og hvilke der er i par.</p>
         <p id="bygÆrligtMolekyle" hidden></p>
         <p>Kuglerne er tegnet meget mindre end atomerne, så man kan se prikkerne og bindingerne. I et rigtigt molekyle går atomernes elektronskyer ind i hinanden.</p>
+      </details>
+    </aside>
+
+    <!-- Del elektroner → Knaldgas (Molekyler M3, js/knaldgas.js). Vises i stedet for paletten og panelet til højre. -->
+    <aside class="panel side-panel venstre-panel knald-panel" id="knaldPanel">
+      <div class="del-vælger måde-vælger" role="group" aria-label="Hvordan atomerne binder">
+        <button class="del-knap" data-vaerksted-maade="byg">Del elektroner</button>
+        <button class="del-knap" data-vaerksted-maade="bytte">Giv elektroner</button>
+      </div>
+      <h4 class="panel-overskrift">Knaldgas</h4>
+      <p class="klik-tip">4 H₂ og 2 O₂ i en lukket boks. Se dem støde ind i hinanden, og tænd så blandingen med en gnist. Træk i billedet for at dreje.</p>
+      <div class="knap-række">
+        <button class="knap" id="knaldGnist">⚡ Gnist</button>
+        <button class="knap svag" id="knaldForfra">Forfra</button>
+      </div>
+      <button class="knap svag" id="knaldTilbage">‹ Tilbage til byggeriet</button>
+      <h4 class="panel-overskrift">Opgaver <span class="byg-opgavetæller" id="knaldOpgaveTæller"></span></h4>
+      <div class="byg-opgaver" id="knaldOpgaver" role="group" aria-label="Opgaver (★ = klaret)"></div>
+      <p class="klik-tip byg-forklaring"><span class="bf-prik"></span>En prik, der blinker, er en elektron uden partner. Atomer og molekyler med sådan en hedder radikaler. Hvert lysglimt er en reaktion.</p>
+    </aside>
+    <aside class="panel side-panel højre-panel knald-panel" id="knaldInfo">
+      <div class="forklaring-boks byg-trin">
+        <strong id="knaldTitel"></strong>
+        <p id="knaldTekst"></p>
+      </div>
+      <dl class="tal lille byg-tal" id="knaldTal"></dl>
+      <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="knaldBakke">Hvorfor sker der ingenting?</button> <button class="hvorfor" data-hvorfor="knaldKæde">Hvorfor en kæde?</button> <button class="hvorfor" data-hvorfor="knaldVarme">Hvor kommer varmen fra?</button></p>
+      <details class="forklaring-boks lag-boks" data-lag="knald-nørd" name="knald-lag">
+        <summary><strong>For nørder</strong><span class="lag-kort">Tallene bag måleren.</span></summary>
+        <p>Bindingerne (fra NIST): H–H 4,52 eV, O=O 5,17 eV, O–H i OH 4,44 eV, og når OH bliver til vand, 5,17 eV. Kemikere skriver det som 436, 498, 428 og 499 kJ pr. mol. De to O–H-bindinger i vand er altså ikke lige stærke. Tabeller bruger gennemsnittet, ca. 464 kJ pr. mol.</p>
+        <p>Kæden kan gå forskellige veje, så "brudt" og "dannet" kan blive større, men forskellen ender altid på 10,0 eV for 4 H₂O (Hess' lov).</p>
+      </details>
+      <details class="forklaring-boks lag-boks ærligt" data-lag="knald-ærligt" name="knald-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Det, boksen snyder med.</span></summary>
+        <p>Den rigtige reaktion går gennem ca. 20 mellemtrin. Spillet viser en forenklet kæde.</p>
+        <p>Al varmen bliver til fart. I virkeligheden går meget af den til, at molekylerne drejer og vibrerer, og til beholderen.</p>
+        <p>Når to bliver til én (H + OH → H₂O), skal et tredje molekyle tage energien. Her ryster det nye molekyle i stedet, til det støder ind i noget.</p>
+        <p>Med kun 6 molekyler fylder gnisten meget. I en rigtig beholder er der milliarder af milliarder, så gnisten er bitte lille i forhold til det, der kommer ud. Og her går kæden aldrig i stå, før alt er vand.</p>
       </details>
     </aside>
 

@@ -112,6 +112,22 @@ export const ORDBOG = [
     former: ['δ+ og δ−', 'δ+', 'δ−'],
     tekst: 'Betyder "lidt plus" og "lidt minus" (δ er det græske bogstav delta). Atomet, der trækker hårdest i de delte elektroner, bliver lidt minus, og det andet bliver lidt plus. Det er meget mindre end en hel ladning, som en ion har.',
   },
+  // Molekyler M3 (knaldgas). Kilder: docs/fakta-molekyler/m3.md og docs/fakta-molekyler.md, afsnit 4.
+  {
+    id: 'aktiveringsenergi', ord: 'Aktiveringsenergi',
+    former: ['aktiveringsenergi', 'aktiveringsenergien'],
+    tekst: 'Den energi, der skal til for at få en reaktion i gang, fordi nogle bindinger først skal i stykker. Den er som en bakke, man skal op over, før man kan trille ned på den anden side. Derfor brænder knaldgas ikke af sig selv, men en lille gnist er nok.',
+  },
+  {
+    id: 'radikal', ord: 'Radikal',
+    former: ['radikal', 'radikaler', 'radikalet', 'radikalerne'],
+    tekst: 'Et atom eller molekyle med en elektron uden partner, fx et frit H-atom eller OH. Radikaler er meget ivrige efter at binde sig og river let andre molekyler over.',
+  },
+  {
+    id: 'kaedereaktion', ord: 'Kædereaktion',
+    former: ['kædereaktion', 'kædereaktionen', 'kædereaktioner'],
+    tekst: 'En reaktion, hvor hvert trin selv starter et eller flere nye, så den kører videre af sig selv. I Reaktoren er det neutroner, der flækker nye urankerner. I knaldgas er det radikaler, der river nye molekyler over.',
+  },
   {
     id: 'ioniseringsenergi', ord: 'Ioniseringsenergi',
     former: ['ioniseringsenergi', 'ioniseringsenergien'],

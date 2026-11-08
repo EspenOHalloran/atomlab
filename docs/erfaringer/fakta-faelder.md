@@ -86,3 +86,5 @@
 - "Mælkevejen er 100.000 lysår bred." Wikipedia siger nu ca. 26,8 kpc (ca. 87.000 lysår) og advarer mod 100.000 eller mere. Skriv "ca. 90.000 lysår" eller "næsten 100.000" (Ordbogen PR B).
 
 - "Ariel sender 39 % af lyset tilbage" (fra NSSDC's albedo 0,39). NSSDC's tal er den geometriske albedo (lysstyrken set lige forfra i forhold til en hvid skive), ikke andelen af alt lyset (Bond-albedoen). Skriv "den lyseste" eller "mørk som kul" i stedet for en procent (UN4).
+- "En gnist på 0,02 mJ kan tænde knaldgas." 0,02 mJ er for hydrogen i **luft** (Wikipedia "Hydrogen safety"). Med rent oxygen er det ca. 0,007 mJ (Wikipedia "Oxyhydrogen"). Tjek, om et tal gælder blandingen med luft eller med oxygen (Molekyler M3, 8. november 2026).
+- "Lægger man kædens trin sammen, bliver ét H til tre." Det passer kun, når OH + H₂ → H₂O + H tælles to gange. Regn summen efter, før den skrives (Molekyler M3).
