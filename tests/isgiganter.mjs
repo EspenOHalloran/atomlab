@@ -342,7 +342,9 @@ for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559,
   tjek(`${navn} åbner, og kortet er hentet (1k i tests, i farver)`, (await F('hentet')) && billeder[kort] === 'farver', JSON.stringify(billeder));
   tjek(`${navn}: sort himmel (ingen tågeskyer)`, !(await fm(() => atomlabTest.solsystem.tåger())));
   const styr = id === 'uranus' ? ['▶ Start flyby', 'År', 'Modlys', 'Infrarødt (som JWST)', 'Navne'] : ['▶ Start flyby', 'Vindene', 'Modlys', 'Neptun i 1989', 'Voyagers farver (1989)', 'Infrarødt (som JWST)'];
-  tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+  // "Start flyby" kan stadig hedde "(henter kort …)", hvis kortene ikke er hentet endnu
+  const udenHent = (k) => k.map((x) => x.replace(/ \(henter kort …\)$/, ''));
+  tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(udenHent(await fm(() => atomlabTest.solsystem.knapper()))) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
   const form = await F('form');
   tjek(`${navn} er fladtrykt (NSSDC), og aksen hælder ${hæld}° mod banen`, Math.abs(form.flad - flad) < 1e-6 && Math.abs(form.hældning - hæld) < 0.15, JSON.stringify(form));
   // Solens bredde i 3D-billedet (planetocentrisk) passer med tallene for i dag
