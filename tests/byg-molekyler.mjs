@@ -224,6 +224,21 @@ await page.click('[data-hvorfor="bygForm"]');
 tjek('"Hvorfor er vand bøjet?" åbner et kort', (await page.evaluate(() => atomlabTest.hvorfor.vist())) === 'Hvorfor er vand bøjet?');
 await page.keyboard.press('Escape');
 
+// Oxygens elektroner: et O alene og O₂ får hver deres ekstra "Hvorfor?"-kort, og kortene hænger sammen med "Og hvorfor det?"
+const ekstra = () => page.evaluate(() => { const b = document.getElementById('bygHvorforEkstra'); return b.hidden ? '' : `${b.dataset.hvorfor}|${b.textContent}`; });
+await byg(['O'], [], []);
+tjek('et O alene: knappen "Hvorfor to uden partner?"', (await ekstra()) === 'bygUdenPartner|Hvorfor to uden partner?', await ekstra());
+await page.click('#bygHvorforEkstra');
+const kæde = [await page.evaluate(() => atomlabTest.hvorfor.vist())];
+for (let k = 0; k < 2; k++) { await page.click('.hk-næste'); kæde.push(await page.evaluate(() => atomlabTest.hvorfor.vist())); }
+tjek('kortene om oxygen hænger sammen', kæde.join(' › ') === 'Hvorfor har oxygen to elektroner uden partner? › Har oxygen altid 6 elektroner yderst? › Hvad sker der med elektronerne i O₂?', kæde.join(' › '));
+await page.keyboard.press('Escape');
+await byg(['O', 'O'], [[0, 1]], []);
+tjek('O₂: knappen "Hvad sker der i O₂?"', (await ekstra()) === 'bygO2|Hvad sker der i O₂?', await ekstra());
+await ingenRul(page, 'pc, O₂');
+await byg(['O'], [], [2]);
+tjek('vand: ingen ekstra knap, og "Hvorfor er vand bøjet?" er tilbage', (await ekstra()) === '' && await page.isVisible('#bygInfo [data-hvorfor="bygForm"]'), await ekstra());
+
 // Skærmskift midt i et træk: styringen slås til igen
 await G(page, 'ryd');
 await G(page, 'tilføj', 'C');
