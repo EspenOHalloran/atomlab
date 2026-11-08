@@ -2,6 +2,8 @@
 // Saturn: tallene (grænserne og tætheden) står i js/data/ringe.js. Isklumperne kaster lyset tilbage forfra.
 // Jupiter (J5): js/data/ringe-jupiter.js. Fint støv (støv: true), som næsten kun ses i modlys, fordi det spreder lyset
 // fremad (Henyey-Greensteins formel).
+// Neptun (UN3): buer (buer: højst så mange klumper i én ring, sat med sætBuer), som ikke kan stå i en tekstur med kun
+// radius. De kredser med ringen (sætBueVinkel).
 
 import * as THREE from 'three';
 import { RING_IND, RING_UD, TAU_N, ringProfil } from '../data/ringe.js';
@@ -49,12 +51,15 @@ export const RING_GLSL = /* glsl */ `
 // Ringene. skala: km pr. scene-enhed. planetRadius og flad til planetens skygge på ringene. ind og ud: ringenes grænser
 // (km, Saturns som standard). støv: fint støv (Jupiter), hvor τ i teksturen er ganget med 1/tauEnhed, og lys gør dem
 // lysere end i virkeligheden, så de kan ses. tegnUd: hvor langt ud fladen tegnes (km), hvis de yderste ringe er for svage
-// til at ses (så koster de ikke tid).
-export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING_IND, ud: udKm = RING_UD, støv = false, tauEnhed = 1, lys = 0.54, tegnUd = udKm }) {
+// til at ses (så koster de ikke tid). buer: højst så mange buer (Neptun), standard ingen.
+export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING_IND, ud: udKm = RING_UD, støv = false, tauEnhed = 1, lys = 0.54, tegnUd = udKm, buer = 0 }) {
   const ind = indKm / skala;
   const ud = udKm / skala;
+  const defines = {};
+  if (støv) defines.STOEV = '';
+  if (buer) defines.BUER = buer;
   const mat = new THREE.ShaderMaterial({
-    defines: støv ? { STOEV: '' } : {},
+    defines,
     ...(støv ? { blending: THREE.AdditiveBlending } : {}),
     transparent: true,
     depthWrite: false,
@@ -72,6 +77,9 @@ export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING
       uTauEnhed: { value: tauEnhed },
       tFarve: { value: null },
       uHarFarve: { value: 0 },
+      uBue: { value: Array.from({ length: Math.max(1, buer) }, () => new THREE.Vector4()) },
+      uBueTau: { value: new Array(Math.max(1, buer)).fill(0) },
+      uBueVinkel: { value: 0 },
     },
     vertexShader: /* glsl */ `
       varying vec3 vLokal;
@@ -89,6 +97,34 @@ export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING
       uniform sampler2D tFarve;
       varying vec3 vLokal;
       varying vec3 vVerden;
+      #ifdef BUER
+      uniform vec4 uBue[BUER]; // indre og ydre radius (scene-enheder), og hvor buen begynder og slutter (radianer)
+      uniform float uBueTau[BUER];
+      uniform float uBueVinkel; // hvor langt buerne er kredset (radianer, mod uret set fra planetens nordpol)
+      float bueHash(float n) { return fract(sin(n) * 43758.5453); }
+      // τ fra buerne. Radialt og langs ringen bredes en bue ud over mindst én pixel, så den samlede tæthed bevares og den
+      // ikke flimrer. Buerne er klumpede (ca. 0,1-0,2° mellem klumperne, Voyager 2).
+      float bueTau(float r, float vinkel) {
+        float t = 0.0;
+        float dr = fwidth(r);
+        for (int i = 0; i < BUER; i++) {
+          vec4 b = uBue[i];
+          if (uBueTau[i] <= 0.0) continue;
+          float midt = 0.5 * (b.x + b.y), halv = 0.5 * (b.y - b.x);
+          float h = max(halv, dr);
+          float rad = (1.0 - smoothstep(h * 0.7, h, abs(r - midt))) * halv / h;
+          if (rad <= 0.0) continue;
+          float a = mod(vinkel - uBueVinkel - b.z, 6.28318);
+          float l = b.w - b.z;
+          float kant = 0.004; // ca. 0,25°: buerne toner ud i enderne
+          float langs = smoothstep(-kant, kant, a) * (1.0 - smoothstep(l - kant, l + kant, a));
+          float k = a * 57.2958 / 0.15;
+          float klump = 0.65 + 0.7 * mix(bueHash(floor(k) + float(i) * 17.0), bueHash(floor(k) + 1.0 + float(i) * 17.0), fract(k));
+          t += uBueTau[i] * rad * langs * klump;
+        }
+        return t;
+      }
+      #endif
       // Står punktet i Saturns skygge? Saturn er fladtrykt langs aksen (uNormal), så rummet strækkes langs aksen først.
       float planetSkygge(vec3 p) {
         vec3 d = p - uPlanet;
@@ -111,6 +147,9 @@ export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING
         vec4 ring = (ringData(r - dr) + ringData(r - dr * 0.5) + ringData(r) + ringData(r + dr * 0.5) + ringData(r + dr)) * 0.2;
         #endif
         float tau = ring.a * uTauEnhed;
+        #ifdef BUER
+        tau += bueTau(r, atan(vLokal.y, vLokal.x));
+        #endif
         if (tau <= 0.0) discard;
         vec3 V = normalize(cameraPosition - vVerden);
         float vn = dot(uNormal, V);
@@ -155,6 +194,12 @@ export function lavRinge({ skala, tekstur, planetRadius, flad, ind: indKm = RING
   const hjælpS = new THREE.Vector3();
   return {
     mesh,
+    // Buerne: [{ ind, ud (km), fra, til (radianer), tau }], højst buer
+    sætBuer(liste) {
+      mat.uniforms.uBue.value.forEach((v, i) => { const b = liste[i]; if (b) v.set(b.ind / skala, b.ud / skala, b.fra, b.til); else v.set(0, 0, 0, 0); });
+      mat.uniforms.uBueTau.value = mat.uniforms.uBueTau.value.map((_, i) => liste[i]?.tau ?? 0);
+    },
+    sætBueVinkel(v) { mat.uniforms.uBueVinkel.value = v; },
     sætFarve(t) { mat.uniforms.tFarve.value = t; mat.uniforms.uHarFarve.value = t ? 1 : 0; },
     // Kaldes hvert billede: Solens retning (verden), Saturns midte og akse.
     // Skyggen regnes i verdens enheder, så Saturns radius ganges med den samlede skala.
