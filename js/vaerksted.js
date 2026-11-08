@@ -15,6 +15,7 @@ import { toTrinsKnap } from './forfra.js';
 import { citatHTML } from './data/citater.js';
 import { kategoriKnap } from './system.js';
 import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, opdaterFremgang as opdaterByttebørsen, testAdgang as bytteTest } from './molekyler.js';
+import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, testAdgang as bygTest } from './molekyler-byg.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js';
 
 const MAX_P = 118;
@@ -77,7 +78,7 @@ export const OPGAVER = [
   {
     id: 'natrium-ion', titel: 'Lav en natrium-ion: Na⁺', mål: { p: 11, n: 12, e: 10 },
     tip: 'Byg natrium-23 (nr. 11), og tag så én elektron væk.',
-    fakta: 'Natriums yderste elektron sidder løst og er let at tage. Bagefter har natrium kun fyldte skaller tilbage, men det er plusladet. Hvad der så sker, kan du se i Byttebørsen.',
+    fakta: 'Natriums yderste elektron sidder løst og er let at tage. Bagefter har natrium kun fyldte skaller tilbage, men det er plusladet. Hvad der så sker, kan du se under "Byg et molekyle" → "Giv elektroner".',
   },
   {
     id: 'chlorid', titel: 'Lav en chlorid-ion: Cl⁻', mål: { p: 17, n: 18, e: 18 },
@@ -178,8 +179,13 @@ let neutralVenter = false; // man forlod værkstedet, mens atomet var en ion eft
 const ION_TID = 3000; // så længe (ms) er atomet en ion efter et henfald, før det bliver neutralt igen
 let kæde = null; // { alfa, beta } når man følger uran-238 ned til bly
 let skyKontakt = null; // kontakten "Elektronsky" (tændt = elektronsky, slukket = ringe)
-let del = 'atom'; // 'atom' (Byg et atom) eller 'bytte' (Byttebørsen, js/molekyler.js)
-const DELE = ['atom', 'bytte'];
+// 'atom' (Byg et atom), 'byg' (Byg et molekyle → Del elektroner, js/molekyler-byg.js) eller
+// 'bytte' (Byg et molekyle → Giv elektroner, det der hed Byttebørsen, js/molekyler.js)
+let del = 'atom';
+let molekyleMåde = 'byg'; // den måde, fanen "Byg et molekyle" åbner med (den sidst valgte)
+const DELE = ['atom', 'byg', 'bytte'];
+const START = { atom: () => startAtomDel(), byg: () => startBygMolekyler(), bytte: () => startByttebørs() };
+const STOP = { atom: () => stopAtomDel(), byg: () => stopBygMolekyler(), bytte: () => stopByttebørs() };
 
 function $(id) {
   return document.getElementById(id);
@@ -211,50 +217,65 @@ export function lavVærksted() {
   lavOpgaveliste();
   vælgNæsteOpgave();
   opdaterAlt();
-  // Byttebørsen kender det atom, man har bygget (står der et neutralt natrium, nævnes det)
+  // "Giv elektroner" kender det atom, man har bygget (står der et neutralt natrium, nævnes det)
   lavByttebørs({ værkstedAtom: () => ({ ...tilstand }) });
+  lavBygMolekyler();
   $('hjælpTilBytte').addEventListener('click', () => {
     lyd.klik();
     $('hjælp').classList.add('skjult');
     if (!aktiv) location.hash = '#vaerksted';
     sætDel('bytte');
   });
+  // Fanerne i toplinjen ("Byg et atom | Byg et molekyle") og måderne i "Byg et molekyle" ("Del elektroner | Giv elektroner")
   for (const b of document.querySelectorAll('[data-vaerksted-del]')) {
     b.addEventListener('click', () => {
       lyd.klik();
       sætDel(b.dataset.vaerkstedDel);
     });
   }
+  for (const b of document.querySelectorAll('[data-vaerksted-maade]')) {
+    b.addEventListener('click', () => {
+      lyd.klik();
+      sætDel(b.dataset.vaerkstedMaade);
+    });
+  }
   visDel();
 }
 
-// Skifter mellem "Byg et atom" og "Byttebørsen" (del-knapperne i toplinjen)
+// Skifter del: 'atom', 'byg' eller 'bytte'. 'molekyle' (fanen) åbner den måde, man sidst brugte.
 export function sætDel(ny) {
+  if (ny === 'molekyle') ny = molekyleMåde;
   if (!DELE.includes(ny)) ny = 'atom';
   if (ny === del) return;
   if (aktiv) {
-    (del === 'bytte' ? stopByttebørs : stopAtomDel)();
+    STOP[del]();
     rydBeskeder(); // underteksterne og "Hvorfor?"-kortet hører til den del, de blev vist i
     lukHvorfor();
   }
   del = ny;
+  if (del !== 'atom') molekyleMåde = del;
   visDel();
-  if (aktiv) (del === 'bytte' ? startByttebørs : startAtomDel)();
+  if (aktiv) START[del]();
 }
 
 function visDel() {
   $('vaerksted').classList.toggle('bytte', del === 'bytte');
+  $('vaerksted').classList.toggle('del-elektroner', del === 'byg'); // ikke 'byg': den klasse har byggepanelet
+  const fane = del === 'atom' ? 'atom' : 'molekyle';
   for (const b of document.querySelectorAll('[data-vaerksted-del]')) {
-    b.classList.toggle('valgt', b.dataset.vaerkstedDel === del);
-    b.setAttribute('aria-pressed', String(b.dataset.vaerkstedDel === del));
+    b.classList.toggle('valgt', b.dataset.vaerkstedDel === fane);
+    b.setAttribute('aria-pressed', String(b.dataset.vaerkstedDel === fane));
+  }
+  for (const b of document.querySelectorAll('[data-vaerksted-maade]')) {
+    b.classList.toggle('valgt', b.dataset.vaerkstedMaade === del);
+    b.setAttribute('aria-pressed', String(b.dataset.vaerkstedMaade === del));
   }
 }
 
 export function startVærksted() {
   aktiv = true;
   opdaterLydknap();
-  if (del === 'bytte') startByttebørs();
-  else startAtomDel();
+  START[del]();
 }
 
 function startAtomDel() {
@@ -276,8 +297,7 @@ function startAtomDel() {
 
 export function stopVærksted() {
   aktiv = false;
-  if (del === 'bytte') stopByttebørs();
-  else stopAtomDel();
+  STOP[del]();
 }
 
 function stopAtomDel() {
@@ -366,6 +386,7 @@ export function testAdgang() {
     del: () => del,
     sætDel,
     bytte: bytteTest(),
+    byg: bygTest(),
     udgave: () => hentUdgave(),
     orbitaler: () => atom.orbitalListe(),
     // Spol atomet frem i små skridt, som på en skærm med 60 billeder i sekundet (testbrowseren tegner kun få)
@@ -617,7 +638,7 @@ function lavKnapper() {
   });
   // Starter kun Værkstedets opgaver forfra (de andre dele har deres egen knap). De opdagede grundstoffer bliver.
   toTrinsKnap($('knapOpgaverForfra'), () => {
-    fremgang.nulstilDel([...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id)); // Byttebørsens par hører til Værkstedet
+    fremgang.nulstilDel([...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id)); // parrene i "Giv elektroner" hører til Værkstedet
     opdaterByttebørsen();
     vælgNæsteOpgave();
     lavOpgaveliste();
@@ -777,17 +798,17 @@ function lavOpgaveliste() {
     });
     liste.append(li);
   }
-  // Byttebørsens par (Molekyler M1b). Et tryk skifter til Byttebørsen med det par.
+  // Parrene i "Byg et molekyle → Giv elektroner" (Molekyler M1b). Et tryk skifter dertil med det par.
   const gruppe = document.createElement('li');
   gruppe.className = 'opgave-gruppe';
-  gruppe.textContent = 'Byttebørsen';
+  gruppe.textContent = 'Byg et molekyle: Giv elektroner';
   liste.append(gruppe);
   for (const o of OPGAVER_BYTTE) {
     const li = document.createElement('li');
     const løst = fremgang.erLøst(o.id);
     li.className = løst ? 'løst' : '';
     li.innerHTML = `<span class="flueben">${løst ? '★' : '☆'}</span><span class="opgave-titel"></span><small></small>`;
-    li.querySelector('.opgave-titel').textContent = o.titel.replace('Byttebørsen: ', '');
+    li.querySelector('.opgave-titel').textContent = o.titel.replace('Giv elektroner: ', '');
     li.querySelector('small').textContent = løst ? o.fakta : o.tip;
     li.addEventListener('click', () => {
       lyd.klik();
@@ -800,7 +821,7 @@ function lavOpgaveliste() {
 }
 
 function opdaterOpgave() {
-  // Tælleren tæller også Byttebørsens par (de står på Værkstedets kort i menuen)
+  // Tælleren tæller også parrene i "Giv elektroner" (de står på Værkstedets kort i menuen)
   const ider = [...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id);
   elementer.opgaveTæller.textContent = `${fremgang.antalLøste(ider)}/${ider.length}`;
   const krav = elementer.opgaveKrav;
@@ -808,7 +829,7 @@ function opdaterOpgave() {
   if (!aktivOpgave) {
     const mangler = OPGAVER_BYTTE.filter((o) => !fremgang.erLøst(o.id)).length;
     elementer.opgaveTekst.textContent = mangler
-      ? `Alle byggeopgaver er klaret! Prøv Byttebørsen: ${mangler} par mangler.`
+      ? `Alle byggeopgaver er klaret! Prøv "Byg et molekyle" → "Giv elektroner": ${mangler} par mangler.`
       : 'Alle opgaver er klaret! Byg frit, og opdag flere grundstoffer.';
     return;
   }
