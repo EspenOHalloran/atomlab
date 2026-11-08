@@ -227,6 +227,18 @@ export const ORDBOG = [
     tekst: 'Den afstand, lyset når på et år: ca. 9.500 milliarder km. Det er altså en afstand, ikke en tid.',
   },
   {
+    id: 'tidsforlaengelse', ord: 'Tidsforlængelse',
+    former: ['tidsforlængelse', 'tidsforlængelsen'],
+    // docs/fakta-tid.md, afsnit 2, 3 og 10
+    tekst: 'Når et ur går langsommere set fra os, fordi det farer forbi næsten med lysets fart. Den, der rejser, mærker intet, for alt om bord følger med. Ure tæt på noget tungt, som en planet, går også langsommere.',
+  },
+  {
+    id: 'laengdeforkortelse', ord: 'Længdeforkortelse',
+    former: ['længdeforkortelse', 'længdeforkortelsen'],
+    // docs/fakta-tid.md, afsnit 7: d/γ, γ = 70,7 ved 99,99 %
+    tekst: 'Når en afstand langs farten er kortere set fra den, der farer af sted. Ved 99,99 % af lysets fart er vejen til Alpha Centauri ca. 71 gange kortere set fra skibet end set fra Jorden.',
+  },
+  {
     id: 'roedkaempe', ord: 'Rød kæmpe',
     former: ['rød kæmpe', 'røde kæmpe', 'røde kæmper'],
     // Solen er størst om ca. 7,6 mia. år (Schröder & Smith 2008)
@@ -335,6 +347,12 @@ export const ORDBOG = [
     id: 'kosmiskstraaling', ord: 'Kosmisk stråling',
     former: ['kosmisk stråling', 'kosmiske stråling'],
     tekst: 'Atomkerner (mest protoner), der suser gennem rummet med næsten lysets fart. Rammer de en anden atomkerne, kan de slå den i stykker. Sådan er det meste beryllium og bor blevet lavet. Det er ikke det samme som den kosmiske baggrundsstråling.',
+  },
+  {
+    id: 'myon', ord: 'Myon',
+    former: ['myon', 'myonen', 'myoner', 'myonerne'],
+    // docs/fakta-tid.md, afsnit 10: 105,66 MeV (elektronen 0,511 MeV, ca. 207 gange), levetid 2,197 µs, ca. 15 km oppe
+    tekst: 'En tung fætter til elektronen: minusladet som den, men ca. 200 gange tungere. En myon lever i gennemsnit kun ca. 2 milliontedele sekund. Myoner bliver lavet højt oppe i luften, når den kosmiske stråling rammer den.',
   },
   {
     id: 'halvskygge', ord: 'Halvskygge',

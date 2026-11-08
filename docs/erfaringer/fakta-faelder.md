@@ -69,3 +69,15 @@
 - "C–H er polær (ΔEN 0,4)." Med Paulings nyere tal er det 0,35, under grænsen 0,4. OpenStax bruger ældre, rundede tal (C 2,5, H 2,1) og markerer C–H med δ, men kalder alt under 0,4 upolært. Sig, hvilken tabel tallet kommer fra (Molekyler M2, Trin 0).
 - "Brintoverilte bruges til at rense sår." Det blev det før, men virkningen er omstridt, og nogle forsøg viser, at det forsinker helingen (Wikipedia "Hydrogen peroxide"). Skriv "blege hår" eller "dræbe bakterier" (Molekyler M2b, 8. november 2026).
 - "Kulilte binder 200 gange fastere end oxygen." Kilderne siger både ca. 200 og ca. 240 (Wikipedia "Carbon monoxide poisoning" har begge). Skriv "over 200 gange" (Molekyler M2b).
+- "Det er accelerationen, der gør det" (tvillingeparadokset). Kun en del af historien: Det er vejen gennem rumtiden, der tæller. Der findes forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem (Wikipedia "Twin paradox"). Den rejsende er ikke ligestillet med den hjemmeblevne, fordi den vender om (Rejsen i tid, T3).
+- "For lyset står tiden stille." Lyset har ikke sit eget ur: Egentiden er ikke defineret for lys (Wikipedia "Proper time") (Rejsen i tid, T3).
+- "Man bliver tungere, når man flyver hurtigt" ("relativistisk masse"). Gammeldags og undgås af de fleste fysikere. Skriv "det kræver mere og mere energi og uendelig meget at nå lysets fart" (Rejsen i tid, T3).
+- Interstellar (1 time = 7 år på Millers planet) er tyngden, ikke farten, og kræver et sort hul, der drejer næsten så hurtigt som muligt. Nævn det kun med det forbehold (Rejsen i tid, T3).
+- "Rumtiden er tre retninger plus én" (bevægelse gennem rumtiden med lysets fart). Rumtidens "Pythagoras" har et minus (τ² = t² − (x/c)²). Derfor giver omvejen *mindre* tid, ikke mere (Rejsen i tid, T3).
+- "Alpha Centauri er 4,37 (eller 4,4) lysår væk." Ældre tal. Det er ca. 4,34 lysår for A og B (parallakse 750,81 mas, Akeson 2021) (Rejsen i tid, Trin 0).
+- "Et par dage i skibet mod tusinder af år på Jorden" kan kun lade sig gøre, hvis man springer over, hvordan man kommer op i fart. Med 1 g bliver det år eller årtier i skibet. "Et par dage" kræver ca. 11.500 g (Rejsen i tid, Trin 0).
+- "De mest præcise ure er cæsiumure." Cæsium bestemmer sekundet, men strontium- og aluminiumure er mere præcise i dag (Rejsen i tid, Trin 0).
+- "Ved γ = 365.250 rammer gassen som de kraftigste partikler i den kosmiske stråling." De kraftigste er ca. en million gange stærkere (ca. 10²⁰ eV). Sammenlign med LHC (ca. 50 gange LHC) (Rejsen i tid, Trin 0).
+- "Hafele og Keating: Urene i flyene gik langsommere." Kun mod øst. Mod vest gik de hurtigere, fordi Jorden selv drejer mod øst (Rejsen i tid, Trin 0).
+- "Et typisk støvkorn i rummet vejer 1 µg." Et typisk korn er ca. 0,1 µm. Kornet på 1 µg (ca. 0,09 mm) er et stort korn: Skriv "et bittelille sandkorn", ikke "et typisk støvkorn" (Rejsen i tid, Trin 0).
+- Tal fra et gammelt forsøg (fx Frisch og Smiths myoner, 563 og 412 i timen) skal findes i en kilde, man kan læse, før de skrives. Faktagrundlaget havde tallene, men de stod ikke i kilden, det henviste til (Rejsen i tid, T3).
