@@ -238,6 +238,7 @@ button { font: inherit; color: inherit; }
 /* En åben foldeboks skjuler kortet, tallene og "Hvorfor?"-knapperne imens (ellers får panelet en rullebjælke på pc og tablet) */
 #bygInfo:has(details[open]) :is(#bygKort, #bygTal, .hvorfor-række) { display: none; }
 #knaldInfo:has(details[open]) :is(#knaldTal, .hvorfor-række) { display: none; }
+#knaldInfo button.hvorfor[hidden] { display: none; }
 #knaldInfo .lag-boks p { margin: 0 0 6px; }
 #knaldInfo .lag-boks p:last-child { margin-bottom: 0; }
 #knaldPanel > #knaldTilbage { align-self: flex-start; }

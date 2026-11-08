@@ -313,6 +313,9 @@ function opdaterPanel() {
     $('knaldTal').innerHTML = tal.map(([a, b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join('');
     næste.sæt({ tekst: p.næste, kanVise: p.kanVise });
     $('knaldGnist').disabled = boks.tændt || boks.færdig;
+    // M4: når alt er vand, kommer "Hvor kom Jordens vand fra?" i stedet for "Hvorfor sker der ingenting?"
+    $('knaldJordensVand').hidden = !boks.færdig;
+    document.querySelector('#knaldInfo [data-hvorfor="knaldBakke"]').hidden = boks.færdig;
   }
   // Måleren
   const r = K.regnskab(boks);

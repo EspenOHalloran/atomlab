@@ -178,4 +178,11 @@ export const HVORFOR = {
     svar: 'Det koster energi at bryde en binding, og man får energi, når en ny bliver lavet. Bindingerne i vand er stærkere end dem i H₂ og O₂, så man får mere tilbage, end man betalte: 10,0 eV for de fire vandmolekyler, ca. 2,5 eV for hvert. Det bliver til fart, og fart er varme.\n\nMange tror, at energien sidder i bindingerne og kommer ud, når de går i stykker. Det er omvendt: At bryde en binding koster altid. Energien kommer, når de nye, stærkere bindinger bliver lavet.',
     nørd: 'Kemikere regner i kJ pr. mol (et mol er ca. 6 · 10²³ molekyler): 2 H₂ + O₂ → 2 H₂O giver 483,6 kJ, når vandet er damp. Regner man med en tabel over bindinger, får man ca. 480-486 kJ, fordi tabellens tal er gennemsnit over mange molekyler. Uanset hvilken vej kæden går, ender forskellen på det samme (Hess\' lov).',
   },
+  // Hvor kom Jordens vand fra? (Molekyler M4). Kilder: docs/fakta-molekyler.md, afsnit 5.
+  bygJordensVand: {
+    spørgsmål: 'Hvor kom Jordens vand fra?',
+    svar: 'Det ved man ikke helt sikkert, men der er gode spor.\n\nMeget af vandet blev nok lavet, før Solen fandtes. I kolde skyer af gas og støv i rummet (ca. −260 °C) sætter H-atomer sig på O-atomer på små iskolde støvkorn, og de bliver til vand. En udregning tyder på, at op til halvdelen af havenes vand kan være ældre end Solen.\n\nVandet kom nok mest til Jorden med de sten, den blev bygget af, og med asteroider. Kometer bidrog nok mindre, men hvor meget, er forskerne stadig uenige om.',
+    nørd: 'Forskerne sammenligner, hvor meget tungt hydrogen (deuterium, med en neutron i kernen) der er i vandet. I havet er det ca. 1 ud af 6.400 H-atomer. Prøver fra asteroiden Ryugu ligner havet. Kometen 67P så først ud til at have ca. 3 gange så meget, men en ny gennemregning i 2024 fandt, at støv havde trukket tallet op. Prøven fra asteroiden Bennu indeholdt endda køkkensalt fra fordampet saltvand.',
+    link: { tekst: 'Se en stjerne blive født i Kosmos ›', handling: () => import('../faenomenskaerm.js').then((m) => m.åbnFænomen('kosmos', 'stjernefoedsel')) },
+  },
 };

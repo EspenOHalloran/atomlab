@@ -808,6 +808,8 @@ function næsteForKendt(k) {
   if (k.id === 'co2' && !fremgang.erLøst('byg-co2') && !pileKontakt.til) return 'Slå "Pile" til, og se, hvilken vej de to bindinger trækker. Hvorfor er CO₂ så ikke polært?';
   if (k.id === 'metan' && !fremgang.erLøst('byg-metan')) return 'Drej metan med fingeren eller musen (træk et tomt sted), til du kan se tetraederen.';
   if (k.id === 'vand' && !pileKontakt.til) return 'Færdigt! Drej vand, så du kan se, at det er bøjet. Slå "Pile" til for at se, hvilken vej bindingerne trækker.';
+  // M3 og M4: vand fører videre til knaldgassen (og kortet om Jordens vand, når alt er blevet til vand dér)
+  if (k.id === 'vand' && !fremgang.erLøst('byg-knaldgas')) return 'Færdigt! Vil du se vand blive til af hydrogen og oxygen? Tryk "Knaldgas".';
   const mangler = D.OPGAVER_BYG.find((o) => !fremgang.erLøst(o.id));
   return mangler ? `Færdigt! Næste opgave: ${mangler.kort}. ${mangler.tip}` : 'Færdigt! Drej molekylet med fingeren eller musen, så du kan se formen. Prøv så et nyt.';
 }

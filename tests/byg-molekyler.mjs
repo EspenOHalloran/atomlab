@@ -361,10 +361,10 @@ tjek('opgaven "Intet sker uden gnist" er klaret (★), og panelet siger det', aw
 await page.click('[data-hvorfor="knaldBakke"]');
 tjek('"Hvorfor sker der ingenting?" åbner et kort om bakken', ((await page.evaluate(() => atomlabTest.hvorfor.vist())) ?? '').includes('gnist'));
 await page.keyboard.press('Escape');
+await page.click('#knaldTid [data-tid="pause"]'); // (ellers når H-atomerne at reagere, før testen ser dem)
 await page.click('#knaldMission .mission-vis'); // "Vis mig" giver gnisten
 k = await KG('boks');
 tjek('"Vis mig" giver en gnist: to frie H, og knappen "Gnist" er slået fra', k.tændt && k.tæl.H === 2 && k.tæl.H2 === 3 && await page.isDisabled('#knaldGnist'));
-await page.click('#knaldTid [data-tid="pause"]');
 const tPause = await KG('tid');
 const rPause = (await KG('boks')).reaktioner;
 await KG('spol', 1);
@@ -379,11 +379,24 @@ tjek(`måleren: brudt ${k.brudt.toFixed(1)}, dannet ${k.dannet.toFixed(1)}, fors
 tjek(`energien er bevaret (fart + bindinger + gnist, afvigelse ${Math.abs(k.energi - k.forventet).toExponential(1)} eV)`, Math.abs(k.energi - k.forventet) < 1e-9);
 tjek(`varmen: molekylerne har ${Math.round(k.varme)} gange så meget fart-energi som ved stuetemperatur`, k.varme > 50);
 tjek('opgaven "Tænd knaldgassen" er klaret, tælleren viser 2/2', await løst('byg-knaldgas') && (await page.textContent('#knaldOpgaveTæller')) === '2/2');
+// M4: "Hvor kom Jordens vand fra?" kommer i stedet for "Hvorfor sker der ingenting?", når alt er vand
+tjek('M4: knappen "Hvor kom Jordens vand fra?" vises, når alt er vand', await page.isVisible('#knaldJordensVand') && !(await page.isVisible('#knaldInfo [data-hvorfor="knaldBakke"]')));
+await page.click('#knaldJordensVand');
+tjek('M4: kortet om Jordens vand har et link til Kosmos', ((await page.evaluate(() => atomlabTest.hvorfor.vist())) ?? '').includes('Jordens vand')
+  && (await page.textContent('#hvorforKort .hk-link')).includes('Kosmos') && await page.isVisible('#hvorforKort .hk-link'));
+await page.keyboard.press('Escape');
 await ingenRul(page, 'pc, knaldgassen', ['knaldInfo', 'knaldPanel'], ['knald-nørd', 'knald-ærligt']);
 await page.screenshot({ path: UD + '/4-knaldgas.png' });
 await page.click('#knaldTilbage');
 await page.waitForTimeout(300);
 tjek('"Tilbage til byggeriet" viser paletten igen med det, man havde bygget', !(await KG('aktiv')) && await page.isVisible('#bygPalet') && !(await page.isVisible('#knaldPanel')) && (await G(page, 'atomer')).length === 1);
+// M4: linket i kortet åbner "Ny stjerne" i Kosmos
+await G(page, 'åbnKnaldgas');
+await page.waitForTimeout(300);
+await page.click('#knaldJordensVand');
+await page.click('#hvorforKort .hk-link');
+await page.waitForFunction(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'stjernefoedsel', null, { timeout: 15000 }).catch(() => {});
+tjek('M4: linket åbner "Ny stjerne" i Kosmos, og knaldgassen er stoppet', await page.evaluate(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'stjernefoedsel') && !(await KG('aktiv')));
 await ctx.close();
 
 // Tablet og telefon: fanerne, 3D-billedet øverst, paletten lige under, et træk med fingeren og ingen rullebjælke
