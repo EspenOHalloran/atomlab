@@ -138,7 +138,9 @@ tjek('⏩ findes (tidsknappen)', await page.isVisible('#kosmosTid [data-tid="hur
 let u = await ure();
 tjek('før afgang: "0 dage 0 timer", år nu, begge er 13', u.vist && u.skib === '0 dage 0 timer' && u.jord === `år ${await E(() => atomlabTest.kosmos.fænomen().startÅr)}` && u.skibAlder === 'Du: 13 år' && u.jordAlder === 'Tvillingen: 13 år', JSON.stringify(u));
 const side = await E(() => atomlabTest.kosmos.side());
-tjek('siden: Kort, to emner, For nørder og Ærligt talt sidst', side.kort.length > 40 && side.emner.length === 2 && side.bokse.includes('For nørder') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
+const EMNER = ['Hvorfor går Jordens ur så hurtigt?', 'Hvad gør farten?', 'Hvorfor ikke omvendt?', 'Set fra skibet', 'Hvorfor tager det år med 1 g?', 'Er det målt?', 'Kunne man?'];
+tjek('siden: Kort, de syv emner (T3), For nørder og Ærligt talt sidst', side.kort.length > 40 && side.emner.map((e) => e.titel).join('|') === EMNER.join('|') && side.bokse.includes('For nørder') && side.sidst === 'Ærligt talt', JSON.stringify(side.emner.map((e) => e.titel)));
+tjek('siden: emnerne starter foldet sammen, og to hører til en kontakt', side.emner.every((e) => !e.åben) && side.emner.filter((e) => e.kontakt).map((e) => `${e.titel}:${e.kontakt}`).join('|') === 'Set fra skibet:Set fra skibet|Hvorfor tager det år med 1 g?:1 g hele vejen', JSON.stringify(side.emner));
 tjek('siden: knappen "Vis lysuret" i teksten virker', side.knapper.some((k) => k.tekst.includes('Vis lysuret') && k.findes), JSON.stringify(side.knapper));
 tjek('"Lige nu" siger 45 dage og 8,7 år ved 99,99 %', /45 dage.*8,7 år/.test(await page.textContent('#kosmosForklaring')), await page.textContent('#kosmosForklaring'));
 
@@ -268,11 +270,63 @@ tjek('tilbage fra lysuret med 1 g: ingen "Fart"', (await E(() => atomlabTest.kos
 await E(() => atomlabTest.kosmos.trykPå('1 g hele vejen'));
 tjek('1 g slået fra: skyderen "Fart" er tilbage', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Mål|Fart|1 g hele vejen|Set fra skibet');
 
+// ---------- T3: lagene og teksterne ----------
+await E(() => atomlabTest.kosmos.vælg('rumtid'));
+await E(() => atomlabTest.kosmos.vælg('tid'));
+await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.ure);
+let s3 = await E(() => atomlabTest.kosmos.side());
+const tekst3 = s3.tekst.toLowerCase();
+// Ét eksempel fra hvert lag (tallene er tjekket mod fakta-tid.md, og de skal stå der)
+for (const [navn, bid] of [
+  ['tvillingeparadokset: den lige vej giver den længste tid', 'den lige vej, at blive hjemme, giver den længste tid'],
+  ['længdeforkortelsen: ca. 0,061 lysår set fra skibet', 'ca. 0,061 lysår væk set fra skibet'],
+  ['1 g: ca. 11.500 g for 2 dage mod 2.000 år', 'ca. 11.500 g'],
+  ['myonerne: ca. 660 m uden tidsforlængelse, og de fleste når ned', 'de fleste nåede ned'],
+  ['Hafele og Keating: mod vest vandt urene ca. 273', 'urene mod vest vandt ca. 273'],
+  ['Kononenko: 1.111 døgn og ca. 27 tusindedele sekund', 'ca. 27 tusindedele sekund yngre'],
+  ['energien: over 50.000 års energi for hele verden', 'over 50.000 år'],
+  ['For nørder: rumtidens minus', 'τ² = t² − (x/c)²'],
+  ['For nørder: reglen om √10', 'ca. √10 ≈ 3,16 gange større'],
+  ['For nørder: samtidighed', '"nu" er ikke det samme for alle'],
+  ['For nørder: sekundet er 9.192.631.770 svingninger', '9.192.631.770 svingninger'],
+  ['Ærligt talt: lyset har ikke sit eget ur', 'lyset har ikke sit eget ur'],
+  ['Ærligt talt: Interstellar', 'interstellar'],
+]) tjek(`teksten: ${navn}`, tekst3.includes(bid.toLowerCase()));
+tjek('teksten: ingen "tungere" uden forbehold (fælden om massen står kun i "Hvorfor?"-kortet)', !/bliver tungere/.test(tekst3));
+tjek('teksten: brændstoffet og 11.500 g står kun ét sted', (tekst3.match(/780 millioner/g) ?? []).length === 1 && (tekst3.match(/11\.500 g/g) ?? []).length === 1);
+// Knapperne i teksten
+const k3 = (fn) => s3.knapper.find(fn);
+tjek('knap: "Set fra skibet" i teksten er en kontakt, der findes', k3((k) => k.slags === 'kontakt' && k.mål === 'Set fra skibet')?.findes === true, JSON.stringify(s3.knapper));
+tjek('knap: "1 g hele vejen" i teksten', k3((k) => k.slags === 'kontakt' && k.mål === '1 g hele vejen')?.findes === true);
+tjek('knap: Rumtid i "Er det målt?" og cæsium i For nørder', Boolean(k3((k) => k.slags === 'gaa' && k.mål === 'kosmos:rumtid')) && k3((k) => k.slags === 'gaa' && k.mål === 'system:55')?.findes === true, JSON.stringify(s3.knapper.filter((k) => k.slags === 'gaa')));
+tjek('ordene: tidsforlængelse, længdeforkortelse og myon kan trykkes på', await E(() => ['tidsforlaengelse', 'laengdeforkortelse', 'myon'].every((id) => document.querySelector(`#kosmosTekst .fagord[data-ord="${id}"]`))));
+// Emnet "Set fra skibet" folder sig ud, når kontakten slås til (også fra knappen i teksten)
+await E(() => atomlabTest.kosmos.trykPå('Set fra skibet'));
+s3 = await E(() => atomlabTest.kosmos.side());
+tjek('kontakten "Set fra skibet" folder emnet ud (og kun det)', s3.emner.filter((e) => e.åben).map((e) => e.titel).join() === 'Set fra skibet', JSON.stringify(s3.emner));
+tjek('knappen "Set fra skibet" i teksten viser, at den er tændt', s3.knapper.find((k) => k.mål === 'Set fra skibet')?.til === true);
+await E(() => atomlabTest.kosmos.trykISide('1 g hele vejen'));
+s3 = await E(() => atomlabTest.kosmos.side());
+tjek('knappen "1 g hele vejen" i teksten slår 1 g til og folder emnet om 1 g ud (og "Set fra skibet" sammen)', (await E(() => atomlabTest.kosmos.fænomen().enG())) && s3.emner.filter((e) => e.åben).map((e) => e.titel).join() === 'Hvorfor tager det år med 1 g?', JSON.stringify(s3.emner));
+await E(() => { atomlabTest.kosmos.trykPå('1 g hele vejen'); atomlabTest.kosmos.trykPå('Set fra skibet'); });
+tjek('begge kontakter er slået fra igen', (await E(() => atomlabTest.kosmos.styr())).filter((x) => x.slags === 'kontakt').every((x) => !x.til));
+// "Hvorfor?"-kortet ved "Hvad gør farten?"
+await E(() => [...document.querySelectorAll('#kosmosTekst details.side-emne')].find((d) => d.querySelector('summary').textContent.includes('Hvad gør farten?')).open = true);
+await page.click('#kosmosTekst button.hvorfor[data-hvorfor="lysfart"]');
+tjek('"Hvorfor?"-kortet: "Hvorfor kan intet nå lysets fart?"', (await E(() => atomlabTest.hvorfor.vist())) === 'Hvorfor kan intet nå lysets fart?');
+await page.keyboard.press('Escape');
+
 // Skift til et andet fænomen og tilbage: urene er væk og kommer igen én gang
 await E(() => atomlabTest.kosmos.vælg('rumtid'));
 tjek('urene forsvinder med fænomenet', !(await page.$('#kosmosOverlag .tid-ure')));
 await E(() => atomlabTest.kosmos.vælg('tid'));
 tjek('ét sæt ure, når man kommer tilbage', (await page.$$('#kosmosOverlag .tid-ure')).length === 1);
+
+// Knappen til cæsium åbner cæsiums kort i Det periodiske system (sidst, for den forlader Kosmos)
+tjek('knappen "Cæsium" i For nørder kan trykkes på', await E(() => atomlabTest.kosmos.trykISide('Cæsium')));
+await page.waitForFunction(() => document.querySelector('#system:not(.skjult)') && atomlabTest.system.valgt() === 55, null, { timeout: 15000 }).catch(() => {});
+tjek('knappen "Cæsium" åbner grundstof nr. 55 i Det periodiske system', (await E(() => atomlabTest.system.valgt())) === 55 && /cæsium/i.test(await page.textContent('#system')));
+await page.screenshot({ path: `${UD}/caesium.png` });
 
 console.log(fejl.length ? 'Konsol: ' + fejl.join(' | ') : 'Konsol: ingen fejl');
 await b.close();
