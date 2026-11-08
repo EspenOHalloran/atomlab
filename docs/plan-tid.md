@@ -118,7 +118,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 **T4. Udsigten fra cockpittet** *(mellem til stor. Besluttet 8. november 2026: ikke lavet nu, men en mulig udvidelse i fremtiden)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
 
-**T5. Hvorfor går tiden langsommere?** *(jeres ønske 8. november 2026, venter på jeres svar og et go. Stor i alt)*
+**T5. Hvorfor går tiden langsommere?** *(jeres ønske 8. november 2026. Go til Trin 0 givet samme dag, prompten er [prompt-tid-t5.md](prompt-tid-t5.md). Stor i alt)*
 
 Jeres ord: "Tidsrejsen er bedre nu. Tidsudvidelse er et uhyre interessant begreb og utrolig svært at forstå. Kan vi bruge lidt flere ressourcer på at forklare det, gerne med illustrationer eller animationer. Jeg ved det er svært. Men det kunne være vildt fedt, hvis vi kunne forklare hvorfor tiden 'går langsommere' når man flyver rigtig hurtigt."
 
@@ -140,6 +140,8 @@ Jeres ord: "Tidsrejsen er bedre nu. Tidsudvidelse er et uhyre interessant begreb
 2. **Hvilke scener?** a) Alle fem (anbefalet). b) Kun 1-3 (reglen, lysuret og myonerne), som er de letteste. c) Jeres eget valg.
 3. **Skitser først?** a) Ja: Trin 0 laver også et artefakt med skitserne som små animationer, så I kan prøve forklaringen af med jeres søn, før den bygges ind (anbefalet, fordi den er svær at ramme første gang. Koster lidt ekstra). b) Nej, drejebogen i tekst er nok.
 4. **Hvornår?** a) Næste i sporet Tid og rum. Det kan køre ved siden af de andre spor (anbefalet). b) Senere i køreplanen.
+
+**✅ Jeres svar (8. november 2026):** 1a: et nyt fænomen i Kosmos ved siden af Rejsen i tid. 2a: alle fem scener. 3a: skitser som artefakt i Trin 0. 4: start nu (I bad om prompten til at starte). Afklarende spørgsmål stilles sådan (jeres ord): "Afklarende spørgsmål stilles ved at du forklarer problem, giver din anbefaling og lader mig vælge."
 
 **De billige idéer:**
 - **Lysets forsinkelse:** I "Rejsen i tid" som én linje ved målet ("En besked hjem tager 4,4 år"), i T2. Den store udgave ("Send et lysglimt" fra Jorden til Månen, Solen, Mars, Voyager 1 og Andromeda) hører hjemme i Solsystemet og er et lille trin i Solsystemets spor. Tallene står allerede i fakta-tid.md.
@@ -190,4 +192,4 @@ Jeres ord: "Tidsrejsen er bedre nu. Tidsudvidelse er et uhyre interessant begreb
 ## Sådan startes næste session
 T1-T3 er lavet, og sporet er lukket for nu (8. november 2026). Skal T4 (cockpitudsigten) laves en dag, kræver det et nyt go: Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t4.md".
 
-**T5 (jeres ønske 8. november 2026):** Når I har svaret på de fire spørgsmål under T5, og I giver go: Ny session med Opus (høj effort) og "Læs afsnittet T5 i docs/plan-tid.md og docs/lige-nu/tid.md, og lav T5 Trin 0". Trin 0 skriver selv prompterne til T5a-T5c.
+**T5 (jeres ønske og go 8. november 2026):** Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t5.md". Trin 0 skriver selv prompterne til T5a-T5c.
