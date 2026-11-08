@@ -6,6 +6,8 @@
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { PLANETER, solBredde, pol, baneNormal } from '../js/data/isgiganter.js';
 import { vindVed, neptunRå, uranusRå } from '../js/data/vinde-isgiganter.js';
+import { SIDE as URANUS_SIDE } from '../js/data/sider/uranus.js';
+import { SIDE as NEPTUN_SIDE } from '../js/data/sider/neptun.js';
 const UD = billedmappe('isgiganter');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -37,6 +39,8 @@ const vinkel = (a, b) => Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] *
   // Vindene (fakta-solsystemet/del6, afsnit 4)
   tjek('Neptuns vind: ca. 398 m/s mod drejningen (mod vest) ved ækvator, næsten stille ved ±50° og ca. 235 m/s med drejningen ved ±70°', Math.abs(vindVed('neptun', 0) + 398) < 1 && Math.abs(neptunRå(50)) < 10 && Math.abs(vindVed('neptun', 70) - 235) < 2 && Math.abs(vindVed('neptun', -70) - 235) < 2, [vindVed('neptun', 0), neptunRå(50), vindVed('neptun', 70)].join());
   tjek('Uranus\' vind: ca. 111 m/s mod drejningen ved ækvator og ca. 221 m/s med drejningen ved ±60°', Math.abs(vindVed('uranus', 0) + 111) < 1 && Math.abs(vindVed('uranus', 60) - 221) < 1 && Math.abs(vindVed('uranus', -60) - 221) < 1, [vindVed('uranus', 0), vindVed('uranus', 60)].join());
+  // Siderne kan indlæses (en apostrof i en tekst med enkelte anførselstegn stoppede engang hele programmet)
+  tjek('siderne ved Uranus og Neptun har en kort tekst, Billederne og "Ærligt talt"', [URANUS_SIDE, NEPTUN_SIDE].every((x) => x.kort.length > 50 && x.billeder && x.ærligt));
   tjek('vindene dæmpes til 0 ved polerne (ikke målt), men ikke før 75°', vindVed('uranus', 90) === 0 && vindVed('neptun', -90) === 0 && vindVed('uranus', 75) === uranusRå(75) && vindVed('neptun', 75) === neptunRå(75));
 }
 
