@@ -45,6 +45,8 @@ tjek(`alle ${Object.keys(LINKS).length} links peger på et sted, hvor ordet stå
 // "Hvorfor?" og "Hvordan?" (mere) står kun i Ordbogen: spørgsmålene ender med "?", og boblernes tekst er stadig kort
 const dårligeMere = ORDBOG.filter((o) => o.mere && !(Array.isArray(o.mere) && o.mere.every(([sp, svar]) => sp.endsWith('?') && svar.length > 40)));
 tjek('alle "Hvorfor?"/"Hvordan?" er spørgsmål med et svar', !dårligeMere.length, dårligeMere.map((o) => o.id).join());
+const medMere = ORDBOG.filter((o) => o.mere);
+tjek(`mindst 15 ord har "Hvorfor?" og "Hvordan?" (${medMere.length})`, medMere.length >= 15);
 const lange = ORDBOG.filter((o) => o.tekst.length > 260);
 tjek('boblernes tekst er højst 260 tegn', !lange.length, lange.map((o) => `${o.id} (${o.tekst.length})`).join());
 tjek('søgning finder ord ud fra "Hvorfor?"-svarene ("plasmaskærm" → Plasma)', navne(søgOrd('plasmaskærm'))[0] === 'Plasma', navne(søgOrd('plasmaskærm')).join());
@@ -75,6 +77,8 @@ tjek('kortet åbner Ordbogen med alle ordene, og søgefeltet har fokus (pc)', st
 tjek('rækkefølgen på siden er den samme som i listen', JSON.stringify(await T(() => [...document.querySelectorAll('#ordbogListe h3')].map((h) => h.textContent))) === JSON.stringify(navne(ORDNE)));
 const plasma = await T(() => { const li = document.getElementById('ord-plasma'); return { mere: li.querySelectorAll('.ordbog-mere').length, tegning: !!li.querySelector('.ordbog-tegning svg') }; });
 tjek('plasma: "Hvorfor?"-afsnit og en tegning i Ordbogen', plasma.mere === ORDBOG.find((o) => o.id === 'plasma').mere.length && plasma.tegning, JSON.stringify(plasma));
+const halv = await T(() => document.querySelectorAll('#ord-halveringstid .ordbog-tegning svg circle.t-kerne').length);
+tjek(`halveringstid: tegningen har 64 + 32 + 16 + 8 + 4 kerner tilbage (${halv})`, halv === 124);
 tjek('ingen ordforklaringer (prikkede ord) inde i Ordbogen', (await T(() => document.querySelectorAll('#ordbog .fagord').length)) === 0);
 
 // Søgning med tastaturet, ingen resultater og Esc
@@ -106,6 +110,25 @@ await T(() => { location.hash = '#ordbog'; });
 await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
 await page.click('#ord-hviddvaerg [data-gaa]');
 await page.waitForFunction(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'hviddvaerg', null, { timeout: 8000 }).then(() => true, () => false).then((v) => tjek('hvid dværg: linket åbner fænomenet i Kosmos', v));
+
+// Boblen: kun den korte tekst, og "Mere i Ordbogen ›" ved ord med mere, som åbner Ordbogen på ordet
+await T(() => { location.hash = '#vaerksted'; });
+await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: 8000 });
+await page.click('#knapHjælp');
+const medMereId = await T((ider) => [...document.querySelectorAll('#hjælp .fagord')].find((k) => ider.includes(k.dataset.ord))?.dataset.ord, medMere.map((o) => o.id));
+const udenMereId = await T((ider) => [...document.querySelectorAll('#hjælp .fagord')].find((k) => !ider.includes(k.dataset.ord))?.dataset.ord, medMere.map((o) => o.id));
+await T((id) => document.querySelector(`#hjælp .fagord[data-ord="${id}"]`).scrollIntoView({ block: 'center', behavior: 'instant' }), udenMereId); // rulning lukker boblen
+await page.click(`#hjælp .fagord[data-ord="${udenMereId}"]`);
+tjek(`boblen for "${udenMereId}" (uden mere) har intet link`, (await T(() => atomlabTest.ord.vist())) && !(await T(() => atomlabTest.ord.link())));
+await T((id) => document.querySelector(`#hjælp .fagord[data-ord="${id}"]`).scrollIntoView({ block: 'center', behavior: 'instant' }), medMereId); // rulning lukker boblen
+await page.click(`#hjælp .fagord[data-ord="${medMereId}"]`);
+const boble = await T(() => document.getElementById('ordforklaring').textContent);
+const o = ORDBOG.find((x) => x.id === medMereId);
+tjek(`boblen for "${medMereId}" viser kun den korte tekst og linket, ikke "Hvorfor?"`, boble === o.ord + o.tekst + 'Mere i Ordbogen ›' && (await T(() => atomlabTest.ord.link())), boble);
+await page.click('#ordforklaring .ordforklaring-mere');
+await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 }).catch(() => {});
+const åbnet = await T((id) => { const li = document.getElementById(`ord-${id}`); const liste = document.getElementById('ordbogListe').getBoundingClientRect(); return { hash: location.hash, fremhævet: li.classList.contains('fremhævet'), top: Math.round(li.getBoundingClientRect().top - liste.top), hjælp: document.getElementById('hjælp').classList.contains('skjult') }; }, medMereId);
+tjek(`"Mere i Ordbogen ›" åbner Ordbogen på "${medMereId}"`, åbnet.hash === '#ordbog' && åbnet.fremhævet && Math.abs(åbnet.top) < 12 && åbnet.hjælp, JSON.stringify(åbnet));
 
 // Hjælpen i værkstedet har et link, og hjælpen lukker, når Ordbogen åbner
 await T(() => { location.hash = '#vaerksted'; });
