@@ -18,9 +18,11 @@ import { LAV_KVALITET, TEST_HURTIG, passerTil } from '../scene3d.js';
 import { glød } from '../kosmos/faelles.js';
 import { lavGasplanet } from './planet.js';
 import { lavRejse } from './rejse.js';
+import { lavRinge, ringTekstur } from './ringe.js';
 import { hent, hentedeBilleder } from './hent.js';
 import { PLANETER, pol, knude, solRetning, baneNormal } from '../data/isgiganter.js';
 import { vindVed } from '../data/vinde-isgiganter.js';
+import * as RINGE_URANUS from '../data/ringe-uranus.js';
 
 const S = 10000; // km pr. enhed i systemet
 export const SEK_PR_SEK = 450; // sekunder i virkeligheden pr. sekund i programmet (som Jupiter, ca. 447)
@@ -30,13 +32,29 @@ const VIND_SKALA = 1e-3; // tallene i vindens tekstur er uv pr. sekund delt med 
 const VIND_RÆKKER = 512;
 const MARGEN = 0.03; // kameraet holdes mindst 300 km over skyerne
 const GRAD = Math.PI / 180;
+// Ringene (UN2): pc 8.192 punkter (ca. 1,7 km pr. punkt ved Uranus), tablet og telefon 4.096, tests 2.048
+const RING_N = TEST_HURTIG ? 2048 : LAV_KVALITET ? 4096 : 8192;
+const STØV_LYS = 8; // støvet mellem ringene er gjort så mange gange lysere, så det kan ses i modlys (tegnet)
+// Kontakten "Infrarødt (som JWST)": metan opsuger infrarødt lys, så planeten bliver mørkere, og ringene træder frem
+const IR_PLANET = 0.4; // planetens lysstyrke
+const IR_RINGE = 40; // ringene så mange gange lysere
+const IR_STØV = 3;
+// Kappen over polen (UN2, tegnet): fuld, når Solen står mindst KAPPE_TIL over ækvator mod den pol, væk under KAPPE_FRA
+const KAPPE_FRA = 15, KAPPE_TIL = 55;
+const RINGDATA = { uranus: RINGE_URANUS };
+
+// Årstal (med decimaler) og dato
+export const årTilDato = (år) => new Date(Date.UTC(2000, 0, 1, 12) + (år - 2000) * 365.25 * 864e5);
+export const datoTilÅr = (d) => 2000 + (d.getTime() - Date.UTC(2000, 0, 1, 12)) / (365.25 * 864e5);
 
 // Billederne (billeder/solsystem/KILDER.md): pc 2k, tablet, telefon og tests 1k (Hubbles kort har ikke flere detaljer)
 const STØRRELSE = TEST_HURTIG || LAV_KVALITET ? '1k' : '2k';
 const SEGMENTER = TEST_HURTIG ? 64 : LAV_KVALITET ? 128 : 192;
 const DETALJER = !LAV_KVALITET && !TEST_HURTIG; // fine skyer tæt på (kun pc)
 
-// cfg: { id, navn, ikon, undertitel, tal, side, sider, kort (filnavnets start), kantFarve }
+// cfg: { id, navn, ikon, undertitel, tal, side, sider, kort (filnavnets start), kantFarve }. Valgfrit (Uranus, UN2):
+// år: { fra, til } (skyderen "År", som kun flytter Solen), ringe: 'uranus' (js/data/ringe-uranus.js) og kapper: true
+// (kappen over polerne følger årstiden).
 export function lavIsgigant(cfg) {
   const P = PLANETER[cfg.id];
   const R = P.radius / S;
@@ -88,12 +106,17 @@ export function lavIsgigant(cfg) {
       let modlys = false;
       let hurtig = false;
       const nu = new Date();
+      let år = datoTilÅr(nu); // skyderen "År" (kun Uranus): Solens retning for dette år
       const sol = new THREE.Vector3(...solRetning(cfg.id, nu)); // Solens retning i systemets retninger
+      let infrarødt = false; // kontakten "Infrarødt (som JWST)"
+      let ir = 0; // toner ind og ud
       const solNu = new THREE.Vector3(); // i verden
 
       // ---------- Kloden: aksen mod IAU's nordpol, kortets længde 0° mod knuden ----------
       const system = new THREE.Group();
       const planetG = new THREE.Group();
+      const ringData = cfg.ringe ? RINGDATA[cfg.ringe] : null;
+      const ringBillede = ringData ? ringTekstur(RING_N, ringData.ringProfil) : null;
       const akse = new THREE.Vector3(...pol(cfg.id, nu));
       const nul = new THREE.Vector3(...knude(cfg.id, nu)); // længde 0°
       const øst = new THREE.Vector3().crossVectors(akse, nul); // længde 90° Ø (mod uret set fra nordpolen)
@@ -105,8 +128,36 @@ export function lavIsgigant(cfg) {
         vind: { tekstur: vindTekstur, skala: VIND_SKALA, fase: FASE },
         detaljer: DETALJER,
         kantFarve: cfg.kantFarve,
+        ...(ringData ? { ringTekstur: ringBillede, ringInd: ringData.RING_IND, ringUd: ringData.RING_UD } : {}),
+        // Kappen toner ud mod farven ved 25° på samme halvkugle, fra ca. 35° til 60° (sinus til den parametriske bredde)
+        kapper: cfg.kapper ? { fra: Math.sin(tilParametrisk(35)), til: Math.sin(tilParametrisk(60)), vNord: 0.5 + tilParametrisk(25) / Math.PI, vSyd: 0.5 - tilParametrisk(25) / Math.PI } : null,
       });
       planetG.add(planet.mesh);
+      // Ringene i ækvatorplanet: de tætte, mørke ringe og støvet, der næsten kun ses i modlys
+      let ringe = null, støv = null, støvBillede = null;
+      if (ringData) {
+        ringe = lavRinge({ skala: S, tekstur: ringBillede, planetRadius: P.radius, flad: FLAD, ind: ringData.RING_IND, ud: ringData.RING_UD, lys: ringData.ALBEDO });
+        støvBillede = ringTekstur(1024, ringData.støvProfil);
+        støv = lavRinge({ skala: S, tekstur: støvBillede, planetRadius: P.radius, flad: FLAD, ind: ringData.RING_IND, ud: ringData.RING_UD, støv: true, tauEnhed: ringData.STØV_ENHED, lys: STØV_LYS });
+        planetG.add(ringe.mesh, støv.mesh);
+      }
+      let ringeSkjult = false; // kun til tests (billedet med og uden ringene)
+      // Kappen over hver pol: fuld, når Solen står højt over den pol (tegnet, se KAPPE_FRA og KAPPE_TIL)
+      const kapper = [1, 1];
+      function sætKapper() {
+        if (!cfg.kapper) return;
+        const b = Math.asin(THREE.MathUtils.clamp(sol.dot(akse), -1, 1)) / GRAD;
+        kapper[0] = THREE.MathUtils.smoothstep(b, KAPPE_FRA, KAPPE_TIL);
+        kapper[1] = THREE.MathUtils.smoothstep(-b, KAPPE_FRA, KAPPE_TIL);
+        planet.sætKapper(kapper[0], kapper[1]);
+      }
+      // Skyderen "År": kun Solens retning (og kappen) skifter, ikke planeten, månerne eller kameraet
+      function sætÅr(v) {
+        år = v;
+        sol.set(...solRetning(cfg.id, årTilDato(v)));
+        sætKapper();
+      }
+      sætKapper();
       system.add(planetG);
       gruppe.add(system);
       let hentet = false;
@@ -149,6 +200,8 @@ export function lavIsgigant(cfg) {
       const Y = new THREE.Vector3(0, 1, 0);
       const START = sol.clone().applyAxisAngle(Y, 28 * GRAD).addScaledVector(Y, 0.15).normalize();
       const helPlanet = (retning) => rejse.flyv({ fokus: () => midtNul, afstand: passer(R * 1.08), retning, min: R * 1.15, max: 450 });
+      // Hele ringsystemet i billedet (ud til lidt uden for epsilon-ringen)
+      const helSystem = (retning) => rejse.flyv({ fokus: () => midtNul, afstand: passer((ringData ? ringData.RING_UD / S : R) * 1.1), retning, min: R * 1.15, max: 450 });
       const kamPos = new THREE.Vector3();
       function kameraRetning() {
         rejse.kameraPunkt(kamPos);
@@ -167,7 +220,14 @@ export function lavIsgigant(cfg) {
       const styring = [];
       function lavKnapper() {
         styring.length = 0;
+        if (cfg.år) {
+          styring.push({
+            skyder: true, navn: 'År', min: cfg.år.fra, max: cfg.år.til, trin: 0.1, værdi: Math.round(år * 10) / 10,
+            vis: (v) => String(Math.floor(v)), ændring: sætÅr,
+          });
+        }
         styring.push({ tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } });
+        if (ringe) styring.push({ tekst: 'Infrarødt (som JWST)', til: infrarødt, skift: (til) => { infrarødt = til; } });
         opdaterKnapper();
       }
       lavKnapper();
@@ -197,7 +257,17 @@ export function lavIsgigant(cfg) {
         const solSes = THREE.MathUtils.smoothstep(solFri, 0, 0.02);
         solKerne.material.opacity = solSes;
         solGlød.material.opacity = 0.45 * solSes;
-        planet.sæt(solNu, vindTid);
+        const { midt: pMidt, akse: pAkse } = planet.sæt(solNu, vindTid);
+        // Infrarødt: toner ind og ud (planeten mørkere, ringene lysere)
+        ir = THREE.MathUtils.clamp(ir + (infrarødt ? 1 : -1) * Math.min(dt, 0.1) * 2.5, 0, 1);
+        planet.sætEksponering(THREE.MathUtils.lerp(1, IR_PLANET, ir));
+        if (ringe) {
+          ringe.sæt(solNu, pMidt, pAkse);
+          støv.sæt(solNu, pMidt, pAkse);
+          ringe.mesh.material.uniforms.uLys.value = ringData.ALBEDO * THREE.MathUtils.lerp(1, IR_RINGE, ir);
+          støv.mesh.material.uniforms.uLys.value = STØV_LYS * THREE.MathUtils.lerp(1, IR_STØV, ir);
+          ringe.mesh.visible = støv.mesh.visible = !ringeSkjult;
+        }
       }
       verden.opdateringer.add(hvertBillede);
 
@@ -226,6 +296,8 @@ export function lavIsgigant(cfg) {
           verden.opdateringer.delete(hvertBillede);
           rejse.stop();
           vindTekstur.dispose();
+          ringBillede?.dispose();
+          støvBillede?.dispose();
           orbit.minDistance = gammelt.min;
           orbit.maxDistance = gammelt.max;
           kamera.near = gammelt.nær;
@@ -264,6 +336,16 @@ export function lavIsgigant(cfg) {
             return { ms: (P.retning * fart * 2 * Math.PI * P.radius * 1000 * Math.cos(tilParametrisk(bredde))) / SEK_PR_SEK, uv: fart };
           },
           tur: () => ({ flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+          // UN2: skyderen "År", kappen over polerne, ringene og "Infrarødt"
+          år: () => år,
+          sætÅr: (v) => { sætÅr(v); const s = styring.find((x) => x.skyder); s?.sæt?.(v); },
+          kapper: () => [...kapper],
+          ringeSynlige: (til) => { ringeSkjult = !til; },
+          ringe: () => (ringe ? { synlige: ringe.mesh.visible, ind: ringData.RING_IND, ud: ringData.RING_UD, lys: ringe.mesh.material.uniforms.uLys.value, støvLys: støv.mesh.material.uniforms.uLys.value, punkter: ringBillede.image.width } : null),
+          infrarødt: () => ir,
+          eksponering: () => planet.mesh.material.uniforms.uEks.value,
+          drejSelv: (til) => { orbit.autoRotate = til; },
+          visRinge: () => { helSystem(kameraRetning()); rejse.hop(); },
           hop: () => rejse.hop(),
         },
       };
