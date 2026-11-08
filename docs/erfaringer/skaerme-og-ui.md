@@ -42,6 +42,10 @@
   - **Et lag, der skal følge kameraet** (baggrunden i K2): Gør det til barn af kameraet, og læg kameraet i scenen (`scene.add(kamera)`). Flyttes laget i en opdatering, halter det et billede bagefter, fordi `styring.update` kører efter opdateringerne. Med `setViewOffset` er `kamera.fov` hele det store billede, så laget skal skaleres efter det for at fylde skærmen.
   - **Æ, ø og å i shaderkode igen** (`slør` i K2): Søg efter tegn, der ikke er ASCII, i alle `/* glsl */`-strenge, før billedet tages. Kommentarerne i GLSL er også skrevet med `oe`, `ae` og `aa` for en sikkerheds skyld.
   - **Prikker på få pixel forsvinder næsten** med en blød kant (`a * a`). Store, svage prikker ses bedre end små, lyse. Mål billedets højde i pixel (`kamera.view.fullHeight`), og giv størrelsen i pixel ved 1000 px højde.
+  - **Kort i HTML står altid oven på 3D-billedet** (verdenerne i K4): Med 5 kort i ringen står de to bagerste bag atomet på banen, men de tegnes oven på det, fordi lærredet ligger under al HTML. De er derfor skjult (`SYNLIG` 1,6). Tænk på det, når antallet af kort ændrer sig.
+  - **`border-radius: inherit` arver fra forælderen i HTML**, ikke fra det element, et absolut placeret barn står i: Linket over hele kortet (en verden med én del) arvede 0 fra `.verden-dele` og fik firkantede hjørner. Giv radius direkte.
+  - **Et link med `inset: 0` er 2 px mindre end kortet**, fordi kortets kant (1 px) ligger uden om. En test, der sammenligner størrelserne, skal tillade et par pixel.
+  - **Gamle elementer kan flyttes i stedet for at kopieres:** Menukortene fra index.html blev flyttet ind i verdenernes kort som knapper. Så finder main.js dem stadig (✓ og "Start her"), og der er ikke to links til samme del, som testene kunne ramme forkert.
 - **`hidden` virker ikke, når CSS sætter `display`:** `.sys-lag { display: flex }` vandt over `hidden`, så linjerne fra det forrige grundstof (plutonium) stod på kortet for copernicium. Fundet af brugeren 7. november 2026. Giv elementet en regel `.x[hidden] { display: none; }`, og test med et grundstof uden data lige efter et med.
 
 ## Byttebørsen (Molekyler M1a, 7. november 2026)

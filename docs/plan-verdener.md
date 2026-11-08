@@ -1,6 +1,6 @@
 # Plan: Verdenerne i menuen (K4)
 
-*Startet 7. november 2026 i en drøftelse af idéerne (sporet Småting). Beslutningen hører til sporet **Menuen** ([lige-nu/menuen.md](lige-nu/menuen.md)). Den står i sin egen fil, fordi K2 var i gang i [plan-menu.md](plan-menu.md) samtidig. Byggeriet startes med [prompt-menu-k4.md](prompt-menu-k4.md).*
+*Startet 7. november 2026 i en drøftelse af idéerne (sporet Småting). Beslutningen hører til sporet **Menuen** ([lige-nu/menuen.md](lige-nu/menuen.md)). Den står i sin egen fil, fordi K2 var i gang i [plan-menu.md](plan-menu.md) samtidig. Byggeriet blev startet med [prompt-menu-k4.md](arkiv/prompt-menu-k4.md). K4 er lavet (8. november 2026). K3 startes med [prompt-menu-k3.md](prompt-menu-k3.md).*
 
 ## Hvorfor
 Menuen har 8 dele, og 12-15 er på vej (Kvantefysik, Ild, Liv, Elektricitet og radio, Gåderne, Videnskabsfolkene, Tidslinjen …). Det kan ringen fra K1 ikke rumme pænt, for vinklen mellem kortene er 360° delt med antallet. Kosmos har også 12 fænomener på én liste, og flere er på vej.
@@ -42,5 +42,6 @@ Navnene er forslag, som jeres søn vælger mellem senere (se Jeres svar).
 
 ## Trin
 - [x] **K4 Trin 0:** Svar på punkterne under Åbent og et billede af idéen (lavet 7. november 2026, svarene står under Jeres svar).
-- [ ] **K4 (venter på jeres go):** Verdenerne i ringen (udgave B, stadig bag `?karrusel`, hvis K3 ikke er lavet). Testen `karrusel` udvidet.
+- [x] **K4: Verdenerne i ringen** (lavet 8. november 2026, udgave B, stadig bag `?karrusel`). `VERDENER` i `js/karrusel.js` bestemmer verdenerne, deres dele, rækkefølgen og baggrundsmotivet. De gamle menukort flyttes ind i verdenernes kort som knapper (`.del-knap`), så main.js stadig finder dem (✓ og "Start her"). En verden med én del har et link over hele kortet (`.del-hel`) og delens navn nederst. Alle verdenerne er lige høje, og de to bagerste er skjult (de ville stå oven på atomet). Nye ikoner for verdenerne tegnet med CSS (`ikon-v-*`). ✓ på verdenen og i docken, når alle delene er klaret. "Din fremgang" samlet under verdenerne. Testen `karrusel` udvidet.
+  - **En ny del** bliver en ny linje i `dele` under sin verden i `VERDENER` (og et kort i `index.html`, som i dag). **Ild og liv** bliver en ny verden mellem Kernerne og Elektricitet med sit eget motiv i `js/menubaggrund.js` og sit eget ikon (`ikon-v-<id>`).
 - [ ] **K3** (ringen bliver standard) kommer efter K4, så gitteret kun fjernes én gang.
