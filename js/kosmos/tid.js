@@ -1,30 +1,36 @@
-// Rejsen i tid (tvillingerejsen, T1 i docs/plan-tid.md): Du flyver til Alpha Centauri og hjem igen næsten med lysets
-// fart, mens din tvilling bliver hjemme. To ure i et HTML-lag oven på 3D-billedet viser "Dit ur" og "Jordens ur".
-// Regningen står i js/data/tid.js (testes i Node), og tallene i docs/fakta-tid.md.
+// Rejsen i tid (tvillingerejsen, T1 og T2 i docs/plan-tid.md): Du flyver til Alpha Centauri, Mælkevejens centrum eller
+// Andromedagalaksen og hjem igen næsten med lysets fart, mens din tvilling bliver hjemme. To ure i et HTML-lag oven på
+// 3D-billedet viser "Dit ur" og "Jordens ur". Regningen står i js/data/tid.js (testes i Node), og tallene i docs/fakta-tid.md.
 //
-// Skyderen giver fast fart (vi springer over, hvordan man kommer op i fart, se "Ærligt talt"). Skærmens tid følger
-// tiden på Jorden: ÅR_PR_SEKUND år pr. sekund (⏩ HURTIG gange mere). Tiden i skibet er Jordens tid delt med γ. Farten
-// kan skiftes undervejs: Urene lægger tiden sammen bid for bid, så regnestykket passer også da.
-// "⏱ Vis lysuret" viser to lysure side om side i et lærred (2D) i stedet for urene. Imens står rejsen stille.
+// To måder at flyve på: Skyderen "Fart" giver fast fart (vi springer over, hvordan man kommer op i fart, se "Ærligt
+// talt"), og kontakten "1 g hele vejen" speeder op med 1 g til midtvejs og bremser med 1 g resten. Hver vej tager
+// SKÆRM_VEJ sekunder på skærmen uanset målet (ellers ville Andromeda tage timer): Med fast fart følger skærmen tiden på
+// Jorden (målets lysår / SKÆRM_VEJ år pr. sekund), og med 1 g tiden i skibet. Farten kan skiftes undervejs: Urene lægger
+// tiden sammen bid for bid, så regnestykket passer også da.
+// "Set fra skibet" trykker scenen sammen om skibet, når farten stiger (længdeforkortelsen, men meget mindre end i
+// virkeligheden). "⏱ Vis lysuret" viser to lysure side om side i et lærred (2D) i stedet for urene. Imens står rejsen stille.
+// Styr-boksen bygges om efter tilstanden (styring er en liste, der rettes på stedet, og opdaterKnapper() tegner den igen).
 
 import * as THREE from 'three';
 import { handling, tid as tidKnap, gå } from '../sideknap.js';
-import { stjerne, glød, skilt, hale, KVALITET } from './faelles.js';
+import { stjerne, glød, skilt, hale, prikSky, KVALITET } from './faelles.js';
 import { lavJorden } from './jorden.js';
 import { ROLIG } from '../scene3d.js';
 import * as T from '../data/tid.js';
 
-const MÅL = T.MÅL.alpha;
-const ÅR_PR_SEKUND = 0.36; // ▶: år på Jorden pr. sekund på skærmen (én vej til Alpha Centauri tager ca. 12 sekunder)
-const HURTIG = 6; // ⏩
+const SKÆRM_VEJ = 12.5; // ▶: sekunder på skærmen for hver vej (ud og hjem ca. 25 sekunder), uanset målet
+const HURTIG = 4; // ⏩: en tur tager ca. 6 sekunder
 const START_ÅR = new Date().getFullYear(); // Jordens ur starter i år (jeres svar: "fra år 2026")
 const START_NI = 4; // 99,99 %: ca. 45 dage i skibet mod ca. 8,7 år på Jorden
-// Scenen (ikke i skala): Jorden til venstre, Alpha Centauri til højre og skibets vej imellem
+const LØBSK = 2.5; // år på Jorden pr. sekund på skærmen, hvor urskivens viser drejer så hurtigt, at den bliver en skive
+// Scenen (ikke i skala): Jorden til venstre, målet til højre og skibets vej imellem
 const JORD_X = -12.5;
 const MÅL_X = 12.5;
 const SKIB_FRA = JORD_X + 2.1;
 const SKIB_TIL = MÅL_X - 2.4;
 const SKIB_Y = 0.45;
+// "Set fra skibet": afstandene i scenen ganges med γ^(−1/3) (i virkeligheden 1/γ, men så ville målet ligge oven i skibet)
+const KLEM = 1 / 3;
 // Lysuret: et tik (op og ned) tager LYS_TIK sekunder på skærmen i skibet
 const LYS_TIK = 1.4;
 
@@ -36,12 +42,12 @@ export default {
   kamera: { retning: [0, 0.3, 1], radius: 14.5, drej: false },
   tal: [
     ['Alpha Centauri', 'ca. 4,3 lysår væk'],
-    ['Lysets fart', 'ca. 300.000 km/s'],
-    ['Ved 99,99 %, ud og hjem', '45 dage mod 8,7 år'],
+    ['Andromedagalaksen', 'ca. 2,5 mio. lysår væk'],
+    ['Med 1 g til Andromeda', 'ca. 29 år i skibet (én vej)'],
     ['Teorien', 'Einstein, 1905'],
   ],
   side: {
-    kort: 'Kan man rejse ind i fremtiden? Ja, hvis man flyver næsten med lysets fart. Set fra Jorden går alle ure i skibet langsommere. Det kaldes tidsforlængelse. Flyv til Alpha Centauri og hjem, og se, hvor gammel din tvilling er blevet.',
+    kort: 'Kan man rejse ind i fremtiden? Ja, hvis man flyver næsten med lysets fart. Set fra Jorden går alle ure i skibet langsommere. Det kaldes tidsforlængelse. Flyv til Alpha Centauri, Mælkevejens centrum eller Andromeda og hjem, og se, hvor meget tid der er gået på Jorden.',
     emner: [
       {
         titel: 'Hvorfor går Jordens ur så hurtigt?',
@@ -56,38 +62,79 @@ export default {
     ],
     videre: [gå('kosmos:rumtid', 'Rumtid'), gå('kosmos:sorthul', 'Sort hul')],
     nørd: `
-      <p><b>Gammafaktoren:</b> γ = 1/√(1 − v²/c²), hvor v er farten og c lysets fart. Et ur, der farer forbi med farten v, går γ gange langsommere set fra os. Ved 99,99 % er γ ca. 70,7.</p>
+      <p><b>Gammafaktoren:</b> γ = 1/√(1 − v²/c²), hvor v er farten og c lysets fart. Et ur, der farer forbi med farten v, går γ gange langsommere set fra os. Ved 99,99 % er γ ca. 70,7, og med 14 ni-taller ca. 7,1 millioner.</p>
       <p><b>Lysuret:</b> Spejlene står L fra hinanden, så ét tik (op og ned) tager 2L/c. Set fra Jorden går lyset skråt, og Pythagoras giver, at hvert tik tager γ · 2L/c. Med 1,5 m mellem spejlene ville et lysur tikke ca. 100 millioner gange i sekundet.</p>
-      <p><b>Rejsen:</b> Tiden på Jorden er 2 · afstanden / farten. Tiden i skibet er den tid delt med γ.</p>`,
-    ærligt: `<p><b>Skyderen springer over, hvordan man kommer op i fart.</b> Man skulle speede knusende hårdt op. Skal en tur tage 2 dage for dig og 2.000 år på Jorden, skal man speede op med ca. 11.500 g (1 g er lige så hårdt, som tyngden trykker her på Jorden). Med 1 g tager det år i skibet at komme op i fart, ikke dage.</p>
+      <p><b>Rejsen med fast fart:</b> Tiden på Jorden er 2 · afstanden / farten. Tiden i skibet er den tid delt med γ.</p>
+      <p><b>1 g hele vejen:</b> Med accelerationen a over afstanden d tager én vej τ = 2(c/a) · arcosh(1 + a·d/(2c²)) i skibet. Med 1 g er c/a ca. 0,97 år, og c²/a ca. 0,97 lysår. Midtvejs er γ = 1 + a·d/(2c²): ca. 3,2 til Alpha Centauri og ca. 1,3 millioner til Andromeda.</p>
+      <p><b>Set fra skibet</b> er afstanden γ gange kortere (længdeforkortelse). Derfor når du frem på kort tid i dit eget ur, selv om du flyver lidt langsommere end lyset. Begge forklaringer giver det samme tal.</p>
+      <p><b>På skærmen</b> tager hver vej lige lang tid (ca. 12 sekunder), uanset målet. Med fast fart følger skærmen Jordens ur, og med 1 g dit ur.</p>`,
+    ærligt: `<p><b>Skyderen springer over, hvordan man kommer op i fart.</b> Man skulle speede knusende hårdt op. Skal en tur tage 2 dage for dig og 2.000 år på Jorden, skal man speede op med ca. 11.500 g (1 g er lige så hårdt, som tyngden trykker her på Jorden). Med 1 g tager det år i skibet at komme op i fart, ikke dage. Det viser kontakten "1 g hele vejen".</p>
+      <p><b>Brændstoffet:</b> Med 1 g hele vejen skulle selv en perfekt raket, der skyder lys ud bagud, veje ca. 40 gange så meget ved starten som ved Alpha Centauri (én vej), og ca. 780 millioner gange så meget til Mælkevejens centrum. Vi kender ingen måde at bygge sådan en raket.</p>
       <p><b>Du mærker intet om bord.</b> Dit eget ur går helt normalt, ét sekund pr. sekund, og dit hjerte slår, som det plejer. Det er først, når I sammenligner urene derhjemme, at du er den yngste.</p>
-      <p>Jorden og stjernerne er tegnet alt for store, og skibet flyver selvfølgelig ikke med lysets fart hen over skærmen. I lysuret går lyset ufatteligt meget langsommere end i virkeligheden, og man kan ikke se et lysglimt undervejs. Animationen viser det, man ville regne sig frem til. Forholdet mellem de to lysure passer.</p>`,
+      <p><b>Set fra skibet</b> er scenen trykket meget mindre sammen end i virkeligheden. Ellers ville målet ligge oven i skibet. Tallene under "Lige nu" er de rigtige. Man ville heller ikke <i>se</i> det sådan: Når man flyver så hurtigt, ser lyset fra stjernerne helt anderledes ud.</p>
+      <p>Jorden, stjernerne og galakserne er tegnet alt for store, og skibet flyver selvfølgelig ikke med lysets fart hen over skærmen. Med 1 g flytter skibet sig jævnt hen over skærmen. Set fra Jorden kryber det af sted i starten og farer gennem midten. I lysuret går lyset ufatteligt meget langsommere end i virkeligheden, og man kan ikke se et lysglimt undervejs. Animationen viser det, man ville regne sig frem til.</p>`,
   },
 
   lav(gruppe, { fase, lyd, forklaring, overlag, opdaterKnapper }) {
-    // ---------- Scenen: Jorden, Alpha Centauri og skibet ----------
+    // ---------- Scenen: Jorden, målene og skibet ----------
     const jorden = lavJorden(1.3);
     jorden.klode.position.set(JORD_X, 0, 0);
     jorden.sætLys(new THREE.Vector3(JORD_X + 40, 18, 70), 1);
     gruppe.add(jorden.klode);
 
+    // Alpha Centauri A og B
+    const alpha = new THREE.Group();
     const alphaA = stjerne(0.95, '#fff4d6', '#e8a040', new THREE.Color(2.0, 1.7, 1.0), 3.0);
-    alphaA.position.set(MÅL_X - 0.1, 0.25, -0.8);
+    alphaA.position.set(-0.1, 0.25, -0.8);
     const alphaB = stjerne(0.72, '#ffd6a0', '#c8601c', new THREE.Color(1.9, 1.0, 0.45), 2.8);
-    alphaB.position.set(MÅL_X + 1.4, -0.45, 0.7);
-    gruppe.add(alphaA, alphaB);
+    alphaB.position.set(1.4, -0.45, 0.7);
+    alpha.add(alphaA, alphaB);
+
+    // Mælkevejens centrum: en tæt, gullig bule af stjerner med et lyst midtpunkt (det sorte hul Sgr A* kan ikke ses)
+    const centrum = new THREE.Group();
+    const NB = Math.round(2600 * KVALITET);
+    const bule = prikSky(NB, 0.13, (i, c) => { const v = 0.75 + Math.random() * 0.5; c.setRGB(1.5 * v, 1.2 * v, 0.75 * v); });
+    {
+      const a = bule.geometry.attributes.position.array;
+      for (let i = 0; i < NB; i++) {
+        // En gaussisk sky, lidt fladere end en kugle (skrevet med Box-Muller)
+        const r = Math.sqrt(-2 * Math.log(1 - Math.random())) * 0.75;
+        const u = Math.random() * 2 - 1, v = Math.random() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+        a.set([r * s * Math.cos(v) * 1.2, r * u * 0.7, r * s * Math.sin(v) * 1.2], i * 3);
+      }
+    }
+    const kerne = glød(new THREE.Color(1.8, 1.4, 0.9), 2.6, 0.9);
+    centrum.add(bule, kerne);
+
+    // Andromedagalaksen: en flad, skrå spiral af stjerner med en lys kerne
+    const andromeda = new THREE.Group();
+    const NA = Math.round(3200 * KVALITET);
+    const skive = prikSky(NA, 0.11, (i, c) => { const ydre = (i % 7) / 7; c.setRGB(1.3 - 0.5 * ydre, 1.15 - 0.2 * ydre, 0.85 + 0.7 * ydre); });
+    {
+      const a = skive.geometry.attributes.position.array;
+      for (let i = 0; i < NA; i++) {
+        const r = 0.15 + Math.pow(Math.random(), 0.8) * 2.4;
+        const arm = (i % 2) * Math.PI;
+        const v = arm + r * 1.9 + (Math.random() - 0.5) * 0.9;
+        a.set([Math.cos(v) * r, (Math.random() - 0.5) * 0.08, Math.sin(v) * r], i * 3);
+      }
+    }
+    const andKerne = glød(new THREE.Color(1.7, 1.45, 1.0), 1.9, 0.9);
+    andromeda.add(skive, andKerne);
+    andromeda.rotation.set(1.15, 0.4, 0.25); // skråt set, som på billederne fra Jorden
+
+    const målGrupper = { alpha, centrum, andromeda };
+    for (const g of Object.values(målGrupper)) gruppe.add(g);
 
     const navnJord = skilt('Jorden', '#cfe0ff', 1.25);
-    navnJord.position.set(JORD_X, 2.6, 0);
-    const navnMål = skilt(MÅL.navn, '#ffe6b0', 1.25);
-    navnMål.position.set(MÅL_X + 0.4, 2.6, 0);
-    const navnAfstand = skilt('ca. 4,3 lysår', '#9fb4d8', 1.0);
-    navnAfstand.position.set(0, -0.95, 0);
-    gruppe.add(navnJord, navnMål, navnAfstand);
+    const navneMål = Object.fromEntries(T.MÅL_RÆKKE.map((k) => [k, skilt(T.MÅL[k].navn, '#ffe6b0', 1.25)]));
+    const afstande = Object.fromEntries(T.MÅL_RÆKKE.map((k) => [k, skilt(T.MÅL[k].afstand, '#9fb4d8', 1.0)]));
+    const klemt = skilt('kortere set fra skibet', '#9fe6ff', 1.0);
+    gruppe.add(navnJord, klemt, ...Object.values(navneMål), ...Object.values(afstande));
 
-    // Vejen imellem (stiplet)
-    const vejGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(SKIB_FRA, 0, 0), new THREE.Vector3(SKIB_TIL, 0, 0)]);
-    const vej = new THREE.Line(vejGeo, new THREE.LineDashedMaterial({ color: 0x6f8fc8, dashSize: 0.35, gapSize: 0.3, transparent: true, opacity: 0.55 }));
+    // Vejen imellem (stiplet), fra x = 0 til 1, så den kan strækkes, når scenen trykkes sammen
+    const vejGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(1, 0, 0)]);
+    const vej = new THREE.Line(vejGeo, new THREE.LineDashedMaterial({ color: 0x6f8fc8, dashSize: 0.35 / 20, gapSize: 0.3 / 20, transparent: true, opacity: 0.55 }));
     vej.computeLineDistances();
     gruppe.add(vej);
 
@@ -124,12 +171,13 @@ export default {
     ure.innerHTML = `
       <div class="tid-ur"><span class="tid-ur-navn">🚀 Dit ur</span><strong class="tid-ur-tal"></strong><span class="tid-ur-alder"></span></div>
       <div class="tid-ur tid-ur-jord">
-        <svg class="tid-skive" viewBox="-21 -21 42 42" aria-hidden="true"><circle r="20"/><g class="tid-streger">${streger}</g><line class="tid-viser" x1="0" y1="3" x2="0" y2="-15"/><circle class="tid-midt" r="2"/></svg>
+        <svg class="tid-skive" viewBox="-21 -21 42 42" aria-hidden="true"><circle r="20"/><circle class="tid-sløret" r="16"/><g class="tid-streger">${streger}</g><line class="tid-viser" x1="0" y1="3" x2="0" y2="-15"/><circle class="tid-midt" r="2"/></svg>
         <div class="tid-ur-tekst"><span class="tid-ur-navn">🌍 Jordens ur</span><strong class="tid-ur-tal"></strong><span class="tid-ur-alder"></span></div>
       </div>`;
     const [skibTal, jordTal] = ure.querySelectorAll('.tid-ur-tal');
     const [skibAlder, jordAlder] = ure.querySelectorAll('.tid-ur-alder');
     const viser = ure.querySelector('.tid-viser');
+    const jordUr = ure.querySelector('.tid-ur-jord');
 
     // ---------- Lysuret (et lærred med to lysure side om side) ----------
     const lysur = document.createElement('div');
@@ -141,45 +189,86 @@ export default {
 
     // ---------- Tilstanden ----------
     let ni = START_NI; // antallet af 9-taller på skyderen
+    let målNr = 0; // skyderen "Mål" (T.MÅL_RÆKKE)
+    let enG = false; // kontakten "1 g hele vejen"
+    let fraSkib = false; // kontakten "Set fra skibet"
     let tilstand = 'hjemme'; // 'hjemme' (før afgang), 'ud', 'hjem' eller 'færdig'
     let skibÅr = 0; // tiden i skibet siden afgang
     let jordÅr = 0; // tiden på Jorden siden afgang
     let pos = 0; // skibets afstand fra Jorden i lysår
-    let ved = { skibÅr: 0, jordÅr: 0 }; // urene, da skibet nåede Alpha Centauri
+    let vejS = 0; // med 1 g: tiden i skibet på denne vej
+    let vejStart = { skibÅr: 0, jordÅr: 0 }; // urene, da denne vej begyndte
+    let gammaNu = 1; // γ lige nu (1, når skibet står stille)
+    let fartNu = 0; // v/c lige nu
+    let ved = { skibÅr: 0, jordÅr: 0 }; // urene, da skibet nåede målet
+    let turKort = false; // turen tager under en dag i skibet: "Dit ur" viser timer og minutter
     let hurtig = false; // ⏩
     let lysurVist = false;
     let faseNr = 0;
-    let vending = 0; // skibets drejning: 0 = mod Alpha Centauri, 1 = mod Jorden
+    let vending = 0; // skibets drejning: 0 = mod målet, 1 = mod Jorden
+    let klem = 1; // "Set fra skibet": hvor meget scenen er trykket sammen (1 = ikke)
+    let jordFart = 0; // år på Jorden pr. sekund på skærmen (til urskiven)
     // Lysurets egne ure: fasen i skibet og set fra Jorden (i tik) og spejlenes vej set fra Jorden (i lysurets højder)
     const ly = { skib: 0, jord: 0, x: 0, spor: [] };
 
+    const mål = () => T.MÅL[T.MÅL_RÆKKE[målNr]];
     const flyver = () => tilstand === 'ud' || tilstand === 'hjem';
+    // Hele turen ud og hjem, som den er planlagt nu: { skibÅr, jordÅr, gamma (fast fart eller størst midtvejs) }
+    function plan() {
+      if (enG) {
+        const r = T.enG(mål().lysår);
+        return { skibÅr: 2 * r.skibÅr, jordÅr: 2 * r.jordÅr, gamma: r.gamma };
+      }
+      const r = T.rejse(mål().lysår, ni);
+      return { skibÅr: r.skibÅr, jordÅr: r.jordÅr, gamma: r.gamma };
+    }
 
     function visUre() {
-      const t1 = T.ditUr(skibÅr);
-      const t2 = `år ${T.jordÅrstal(START_ÅR, jordÅr)}`;
-      const a1 = `Du: ${T.alderTekst(T.START_ALDER + skibÅr)}`;
+      const t1 = T.ditUr(skibÅr, turKort);
+      const t2 = `år ${T.årstalTekst(T.jordÅrstal(START_ÅR, jordÅr))}`;
+      const a1 = T.forGammel(skibÅr) ? 'Du: over 100 år' : `Du: ${T.alderTekst(T.START_ALDER + skibÅr)}`;
       const tvilling = T.tvillingAlder(jordÅr);
       const a2 = tvilling !== null ? `Tvillingen: ${tvilling} år` : 'Tvillingen levede et langt liv';
       if (skibTal.textContent !== t1) skibTal.textContent = t1;
       if (jordTal.textContent !== t2) jordTal.textContent = t2;
       if (skibAlder.textContent !== a1) skibAlder.textContent = a1;
       if (jordAlder.textContent !== a2) jordAlder.textContent = a2;
-      // Viseren går én gang rundt pr. år på Jorden
+      // Viseren går én gang rundt pr. år på Jorden. Går den så hurtigt, at man ikke kan følge den, bliver den en skive.
+      const løbsk = flyver() && jordFart > LØBSK;
+      if (jordUr.classList.contains('løbsk') !== løbsk) jordUr.classList.toggle('løbsk', løbsk);
       viser.setAttribute('transform', `rotate(${(((jordÅr % 1) * 360)).toFixed(1)})`);
     }
 
     // "Lige nu" i panelet: hvad farten betyder (skrives kun om, når teksten ændrer sig)
     function visLigeNu() {
-      const r = T.rejse(MÅL.lysår, ni);
-      const f = T.fartTekst(ni);
+      const m = mål();
       if (lysurVist) {
-        forklaring(`<p><b>Lige nu:</b> To billeder af det samme lysur ved ${f} af lysets fart. Set fra Jorden tager hvert tik ${T.gammaTekst(r.gamma)} gange så lang tid.</p>`);
+        forklaring(`<p><b>Lige nu:</b> To billeder af det samme lysur ved ${T.fartTekst(ni)} af lysets fart. Set fra Jorden tager hvert tik ${T.gammaTekst(T.gamma(ni))} gange så lang tid.</p>`);
         return;
       }
-      const prognose = `<p><b>Lige nu:</b> Ved ${f} af lysets fart tager turen ud og hjem ca. ${T.varighed(r.skibÅr)} for dig og ca. ${T.varighed(r.jordÅr)} på Jorden. For hver dag i skibet går der ca. ${T.dagePåJorden(ni)} dage på Jorden.</p>`;
-      const ekstra = flyver() ? '<p>Du kan skifte fart undervejs.</p>' : tilstand === 'færdig' ? '<p>Vælg en anden fart, og flyv igen.</p>' : '<p>Du og din tvilling er begge 13 år.</p>';
-      forklaring(prognose + ekstra);
+      const p = plan();
+      const hvordan = enG ? 'Med 1 g hele vejen' : `Ved ${T.fartTekst(ni)} af lysets fart`;
+      let html = `<p><b>Lige nu:</b> ${hvordan} tager turen til ${m.navn} og hjem ca. ${T.varighed(p.skibÅr)} for dig og ca. ${T.varighed(p.jordÅr)} på Jorden.`;
+      if (enG) html += ` Farten er størst midtvejs: ${T.fartFraGamma(p.gamma)} af lysets fart.`;
+      else html += ` For hver dag i skibet går der ca. ${T.prDagTekst(p.gamma)} på Jorden.`;
+      html += '</p>';
+      if (T.forGammel(p.skibÅr)) html += `<p>Det er længere, end et menneske kan leve. ${enG ? 'Prøv et nærmere mål.' : 'Skru op for farten.'}</p>`;
+      // Afstanden med to tal: set fra Jorden og set fra skibet (d/γ)
+      if (flyver()) {
+        const tilbage = tilstand === 'ud' ? m.lysår - pos : pos;
+        const hvorhen = tilstand === 'ud' ? m.navn : 'Jorden';
+        html += `<p>Til ${hvorhen}: ${T.lysårTekst(tilbage)} set fra Jorden`;
+        // Først når farten er høj, er vejen tydeligt kortere set fra skibet (γ = 1,1 ved ca. 42 %)
+        html += gammaNu > 1.1 ? `, men kun ${T.lysårTekst(tilbage / gammaNu)} set fra skibet.` : '.';
+        if (enG) html += ` Farten nu: ${T.fartFraGamma(gammaNu)}.`;
+        html += '</p>';
+        if (faseNr === 2) html += `<p>En radiobesked hjem tager ${T.varighed(m.lysår)}, for den går med lysets fart.</p>`;
+        else if (!enG) html += '<p>Du kan skifte fart undervejs.</p>';
+      } else {
+        html += `<p>Afstanden: ${m.afstand} set fra Jorden. ${enG ? 'Midtvejs' : 'Under turen'} er den kun ${T.lysårTekst(m.lysår / p.gamma)} set fra skibet.</p>`;
+        html += tilstand === 'færdig' ? '<p>Vælg et andet mål eller en anden fart, og flyv igen.</p>' : '<p>Du og din tvilling er begge 13 år.</p>';
+      }
+      forklaring(html);
     }
 
     function visFase() {
@@ -187,18 +276,58 @@ export default {
         fase('Lysuret', 'Lyset har samme fart i begge billeder. Set fra Jorden går det en længere, skrå vej, så hvert tik tager længere tid.');
         return;
       }
-      const f = T.fartTekst(ni);
+      const m = mål();
+      const gange = gammaNu < 10 ? T.tal(gammaNu, 1) : T.rundTal(gammaNu);
       if (faseNr === 0) fase(null);
-      else if (faseNr === 1) fase('Afgang', `Du flyver med ${f} af lysets fart. Se urene: Jordens ur løber fra dit. Om bord mærker du intet.`, [1, 4]);
-      else if (faseNr === 2) fase(`Ude ved ${MÅL.navn}`, `For dig har turen taget ${T.varighed(ved.skibÅr)}. På Jorden er der gået ${T.varighed(ved.jordÅr)}. Nu vender du om.`, [2, 4]);
-      else if (faseNr === 3) fase('På vej hjem', `Set fra Jorden går alle ure i skibet ca. ${T.dagePåJorden(ni)} gange langsommere end Jordens. Dit ur går stadig helt normalt for dig.`, [3, 4]);
-      else fase('Hjemme igen', T.hjemkomst(skibÅr, jordÅr, START_ÅR), [4, 4]);
+      else if (faseNr === 1) {
+        if (enG) fase('Afgang', 'Du speeder op med 1 g. Det føles, som når du står på Jorden. Midtvejs vender skibet om og bremser resten af vejen.', [1, 4]);
+        else fase('Afgang', `Du flyver med ${T.fartTekst(ni)} af lysets fart. Se urene: Jordens ur løber fra dit. Om bord mærker du intet.`, [1, 4]);
+      } else if (faseNr === 2) fase(`Ude ved ${m.ved}`, `For dig har turen taget ${T.varighed(ved.skibÅr)}. På Jorden er der gået ${T.varighed(ved.jordÅr)}. Nu vender du om.`, [2, 4]);
+      else if (faseNr === 3) {
+        if (enG) fase('På vej hjem', 'Du speeder op mod Jorden og bremser igen. Jordens ur løber hurtigst, når farten er størst. Dit ur går stadig helt normalt for dig.', [3, 4]);
+        else fase('På vej hjem', `Set fra Jorden går alle ure i skibet ca. ${gange} gange langsommere end Jordens. Dit ur går stadig helt normalt for dig.`, [3, 4]);
+      } else fase(T.forGammel(skibÅr) ? 'Turen er slut' : 'Hjemme igen', T.hjemkomst(skibÅr, jordÅr, START_ÅR), [4, 4]);
     }
 
-    function stilSkib() {
-      const x = SKIB_FRA + (SKIB_TIL - SKIB_FRA) * (pos / MÅL.lysår);
-      skib.position.set(x, SKIB_Y, 0);
+    // Skibets plads på skærmen (0 ved Jorden, 1 ved målet). Med 1 g flytter det sig jævnt i sin egen tid.
+    function andel() {
+      if (!enG || !flyver()) return pos / mål().lysår;
+      const f = vejS / T.enG(mål().lysår).skibÅr;
+      return tilstand === 'ud' ? f : 1 - f;
+    }
+
+    // Scenen: Skibet står på sin plads, og med "Set fra skibet" trykkes afstandene sammen om skibet
+    function stilScene() {
+      const sx = SKIB_FRA + (SKIB_TIL - SKIB_FRA) * andel();
+      skib.position.set(sx, SKIB_Y, 0);
       skib.rotation.y = Math.PI * vending;
+      const tæt = (fra, mindst) => Math.max(fra * klem, Math.min(fra, mindst));
+      const k = T.MÅL_RÆKKE[målNr];
+      const jx = sx - tæt(sx - JORD_X, 3.2);
+      const mx = sx + tæt(MÅL_X - sx, k === 'alpha' ? 3.2 : 4.2); // en galakse er bredere end to stjerner
+      jorden.klode.position.x = jx;
+      navnJord.position.set(jx, 2.6, 0);
+      målGrupper[k].position.set(mx, 0, 0);
+      navneMål[k].position.set(mx + (k === 'alpha' ? 0.4 : 0), k === 'alpha' ? 2.6 : 2.9, 0);
+      const a = Math.min(sx, jx + 2.1);
+      const b = Math.max(sx, mx - 2.4);
+      vej.position.x = a;
+      vej.scale.x = Math.max(0.01, b - a);
+      // Når scenen er trykket sammen, står "kortere set fra skibet" under skibet i stedet for afstanden (ellers står
+      // teksten oven i galaksen)
+      klemt.visible = fraSkib && klem < 0.97;
+      afstande[k].visible = !klemt.visible;
+      afstande[k].position.set((a + b) / 2, -0.95, 0);
+      klemt.position.set(sx, -2.7, 0);
+    }
+
+    function visMål() {
+      const k = T.MÅL_RÆKKE[målNr];
+      for (const id of T.MÅL_RÆKKE) {
+        målGrupper[id].visible = id === k;
+        navneMål[id].visible = id === k;
+        afstande[id].visible = false; // stilScene() viser afstanden til det valgte mål
+      }
     }
 
     function nulstil() {
@@ -206,10 +335,16 @@ export default {
       skibÅr = 0;
       jordÅr = 0;
       pos = 0;
+      vejS = 0;
+      vejStart = { skibÅr: 0, jordÅr: 0 };
+      gammaNu = 1;
+      fartNu = 0;
+      jordFart = 0;
       vending = 0;
       faseNr = 0;
       flamme.material.opacity = 0;
-      stilSkib();
+      visMål();
+      stilScene();
       skibHale.nulstil(skib.position);
       visUre();
       visFase();
@@ -220,7 +355,10 @@ export default {
       nulstil();
       tilstand = 'ud';
       faseNr = 1;
+      turKort = plan().skibÅr * T.DAGE_PR_ÅR < 1;
+      if (enG) { gammaNu = 1; fartNu = 0; } else { gammaNu = T.gamma(ni); fartNu = T.fart(ni); }
       lyd.sus?.(2);
+      visUre();
       visFase();
       visLigeNu();
     }
@@ -236,43 +374,85 @@ export default {
         ly.spor.length = 0;
         tegnLysur();
       }
+      byg();
+      opdaterKnapper();
       visFase();
       visLigeNu();
     }
 
-    // Rejsen frem med dJord år på Jorden. Ved målet og ved hjemkomsten deles skridtet, så tallene passer præcist.
+    // Skibet er nået frem til målet eller hjem
+    function vejSlut() {
+      if (tilstand === 'ud') {
+        pos = mål().lysår;
+        tilstand = 'hjem';
+        ved = { skibÅr, jordÅr };
+        vejStart = { skibÅr, jordÅr };
+        vejS = 0;
+        faseNr = 2;
+        visFase();
+        visLigeNu();
+      } else {
+        pos = 0;
+        tilstand = 'færdig';
+        faseNr = 4;
+        gammaNu = 1;
+        fartNu = 0;
+        flamme.material.opacity = 0;
+        lyd.klaret?.();
+        visFase();
+        visLigeNu();
+        opdaterKnapper();
+      }
+    }
+
+    // Med fast fart: rejsen frem med dJord år på Jorden. Ved målet og ved hjemkomsten deles skridtet, så tallene passer.
     function rejs(dJord) {
       const v = T.fart(ni);
       const g = T.gamma(ni);
+      gammaNu = g;
+      fartNu = v;
       while (dJord > 0 && flyver()) {
-        const tilbage = tilstand === 'ud' ? MÅL.lysår - pos : pos; // lysår til næste vending eller hjem
+        const tilbage = tilstand === 'ud' ? mål().lysår - pos : pos; // lysår til næste vending eller hjem
         const tidTil = tilbage / v;
         const d = Math.min(dJord, tidTil);
         jordÅr += d;
         skibÅr += d / g;
         pos += (tilstand === 'ud' ? 1 : -1) * v * d;
         dJord -= d;
-        if (d >= tidTil) {
-          if (tilstand === 'ud') {
-            pos = MÅL.lysår;
-            tilstand = 'hjem';
-            ved = { skibÅr, jordÅr };
-            faseNr = 2;
-            visFase();
-          } else {
-            pos = 0;
-            tilstand = 'færdig';
-            faseNr = 4;
-            flamme.material.opacity = 0;
-            lyd.klaret?.();
-            visFase();
-            visLigeNu();
-            opdaterKnapper();
-          }
+        if (d >= tidTil) vejSlut();
+      }
+    }
+
+    // Med 1 g: rejsen frem med dSkib år i skibet. Hver vej regnes forfra fra sin start (T.enGUndervejs), så der ikke
+    // samler sig fejl op, når tiden lægges sammen bid for bid.
+    function rejs1g(dSkib) {
+      while (dSkib > 0 && flyver()) {
+        const r = T.enG(mål().lysår);
+        const d = Math.min(dSkib, r.skibÅr - vejS);
+        vejS += d;
+        dSkib -= d;
+        const u = T.enGUndervejs(mål().lysår, vejS);
+        skibÅr = vejStart.skibÅr + vejS;
+        jordÅr = vejStart.jordÅr + u.jordÅr;
+        pos = tilstand === 'ud' ? u.pos : mål().lysår - u.pos;
+        gammaNu = u.gamma;
+        fartNu = u.fart;
+        if (vejS >= r.skibÅr - 1e-12) {
+          skibÅr = vejStart.skibÅr + r.skibÅr;
+          jordÅr = vejStart.jordÅr + r.jordÅr;
+          vejSlut();
         }
       }
+    }
+
+    function skridt(dt) {
+      const før = jordÅr;
+      const m = mål();
+      if (enG) rejs1g(dt * (T.enG(m.lysår).skibÅr / SKÆRM_VEJ));
+      else rejs(dt * (m.lysår / SKÆRM_VEJ));
+      jordFart = dt > 0 ? (jordÅr - før) / dt : 0;
       // På vej hjem: Efter ca. en tredjedel af hjemturen skifter underteksten fra "Ude ved målet" til "På vej hjem"
-      if (tilstand === 'hjem' && faseNr === 2 && pos < MÅL.lysår * 0.7) {
+      if (tilstand === 'hjem' && faseNr === 2 && andel() < 0.7) {
         faseNr = 3;
         visFase();
       }
@@ -396,21 +576,48 @@ export default {
     }
 
     // ---------- Styringen ----------
-    const styring = [
-      { tekst: `🚀 Flyv til ${MÅL.navn}`, handling: flyv, deaktiv: flyver, skjul: () => lysurVist },
-      { tekst: '⏱ Vis lysuret', handling: () => visLysur(true), skjul: () => lysurVist },
-      { tekst: '↩ Tilbage til rejsen', handling: () => visLysur(false), skjul: () => !lysurVist },
-      { tekst: '↺ Forfra', handling: nulstil, skjul: () => lysurVist || tilstand === 'hjemme' },
-      {
-        skyder: true, navn: 'Fart', min: T.MINDST_NI, max: T.FLEST_NI, værdi: ni, vis: T.fartTekst,
-        ændring: (v) => {
-          ni = v;
-          if (lysurVist) ly.spor.length = 0; // en ny vinkel: sporet starter forfra
-          if (faseNr === 1 || faseNr === 3) visFase();
-          visLigeNu();
-        },
+    // Et skift af mål eller af 1 g starter forfra: En halv tur kan ikke regnes om til en anden slags tur. Styr-boksen
+    // bygges ikke om her (det ville afbryde et træk i skyderen "Mål"). Bjælken følger selv med 4 gange i sekundet.
+    function startForfra() {
+      if (tilstand !== 'hjemme') nulstil();
+      else { visMål(); stilScene(); visFase(); visLigeNu(); }
+    }
+    const flyvKnap = { get tekst() { return `🚀 Flyv til ${mål().kort}`; }, handling: flyv, deaktiv: flyver, skjul: () => lysurVist };
+    const målSkyder = {
+      skyder: true, navn: 'Mål', min: 0, max: T.MÅL_RÆKKE.length - 1, værdi: målNr, vis: (i) => T.MÅL[T.MÅL_RÆKKE[i]].kort,
+      ændring: (v) => { målNr = v; startForfra(); },
+    };
+    const fartSkyder = {
+      skyder: true, navn: 'Fart', min: T.MINDST_NI, max: T.FLEST_NI, værdi: ni, vis: T.fartTekst,
+      ændring: (v) => {
+        ni = v;
+        if (lysurVist) ly.spor.length = 0; // en ny vinkel: sporet starter forfra
+        if (flyver() && !enG) { gammaNu = T.gamma(ni); fartNu = T.fart(ni); }
+        if (faseNr === 1 || faseNr === 3) visFase();
+        visLigeNu();
       },
-    ];
+    };
+    const enGKontakt = {
+      tekst: '1 g hele vejen', til: false,
+      skift: (til) => { enG = til; byg(); startForfra(); opdaterKnapper(); },
+    };
+    const skibKontakt = {
+      tekst: 'Set fra skibet', til: false,
+      skift: (til) => { fraSkib = til; },
+    };
+    const styring = [];
+    // Styr-boksen efter tilstanden: Med 1 g er der ingen fast fart (skyderen er væk), og i lysuret kun farten
+    function byg() {
+      const liste = [
+        flyvKnap,
+        { tekst: '⏱ Vis lysuret', handling: () => visLysur(true), skjul: () => lysurVist },
+        { tekst: '↩ Tilbage til rejsen', handling: () => visLysur(false), skjul: () => !lysurVist },
+        { tekst: '↺ Forfra', handling: nulstil, skjul: () => lysurVist || tilstand === 'hjemme' },
+        ...(lysurVist ? [fartSkyder] : [målSkyder, ...(enG ? [] : [fartSkyder]), enGKontakt, skibKontakt]),
+      ];
+      styring.splice(0, styring.length, ...liste);
+    }
+    byg();
 
     nulstil();
     let panelTid = 0;
@@ -422,19 +629,24 @@ export default {
       tempo: (t) => { hurtig = t === 'hurtig'; },
       opdater(dt) {
         jorden.omdrejning.rotation.y += dt * 0.12;
+        centrum.rotation.y += dt * 0.04;
+        skive.rotation.y += dt * 0.03;
         if (lysurVist) {
           opdaterLysur(dt * (hurtig ? 3 : 1)); // ⏩ går 3 gange hurtigere her, så man stadig kan følge lyset
           return;
         }
         if (flyver()) {
-          rejs(dt * ÅR_PR_SEKUND * (hurtig ? HURTIG : 1));
+          skridt(dt * (hurtig ? HURTIG : 1));
           flamme.material.opacity = 0.9;
           visUre();
         }
         // Skibet vender om ved målet (kun at se på: vendingen tager ingen tid i regnestykket)
         const målVending = tilstand === 'hjem' || tilstand === 'færdig' ? 1 : 0;
         vending = ROLIG ? målVending : vending + Math.sign(målVending - vending) * Math.min(Math.abs(målVending - vending), dt * 2.5);
-        stilSkib();
+        // "Set fra skibet": scenen trykkes sammen med γ^(−1/3), og det glider, så man kan se det ske
+        const målKlem = fraSkib ? Math.pow(gammaNu, -KLEM) : 1;
+        klem = ROLIG ? målKlem : klem + (målKlem - klem) * Math.min(1, dt * 3);
+        stilScene();
         skibHale.følg(skib.localToWorld(bag.set(-0.5, 0, 0)));
         panelTid += dt;
         if (panelTid > 0.25) { panelTid = 0; visLigeNu(); }
@@ -442,7 +654,11 @@ export default {
       test: {
         tilstand: () => tilstand,
         ni: () => ni,
-        ure: () => ({ skibÅr, jordÅr, skib: skibTal.textContent, jord: jordTal.textContent, skibAlder: skibAlder.textContent, jordAlder: jordAlder.textContent, vist: !ure.hidden }),
+        mål: () => T.MÅL_RÆKKE[målNr],
+        enG: () => enG,
+        ure: () => ({ skibÅr, jordÅr, skib: skibTal.textContent, jord: jordTal.textContent, skibAlder: skibAlder.textContent, jordAlder: jordAlder.textContent, vist: !ure.hidden, løbsk: jordUr.classList.contains('løbsk') }),
+        fart: () => ({ gamma: gammaNu, fart: fartNu, pos, andel: andel() }),
+        scene: () => ({ klem, skib: skib.position.x, jord: jorden.klode.position.x, mål: målGrupper[T.MÅL_RÆKKE[målNr]].position.x, synlige: T.MÅL_RÆKKE.filter((k) => målGrupper[k].visible) }),
         startÅr: START_ÅR,
         lysur: () => ({ vist: !lysur.hidden, skib: ly.skib, jord: ly.jord, x: ly.x, spor: ly.spor.length, bredde: lærred.clientWidth }),
       },

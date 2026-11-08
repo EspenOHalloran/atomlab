@@ -1456,6 +1456,10 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .tid-streger line { stroke: rgba(255, 210, 122, 0.6); stroke-width: 1.4; }
 .tid-viser { stroke: #ffd27a; stroke-width: 2.4; stroke-linecap: round; }
 .tid-midt { fill: #ffd27a; }
+/* Jordens ur løber løbsk (mange år i sekundet): Viseren kan ikke følges, så skiven gløder i stedet */
+.tid-sløret { fill: rgba(255, 210, 122, 0); transition: fill 0.4s; }
+.tid-ur-jord.løbsk .tid-sløret { fill: rgba(255, 210, 122, 0.45); }
+.tid-ur-jord.løbsk .tid-viser { opacity: 0.2; }
 .tid-ure[hidden], .tid-lysur[hidden] { display: none; }
 .tid-lysur { width: min(560px, 100%); }
 .tid-lysur canvas { display: block; width: 100%; aspect-ratio: 2.4; height: auto; }
