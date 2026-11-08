@@ -1,4 +1,4 @@
-// Ordbogen (#ordbog): dansk sortering, søgning, links til steder, hvor ordene bruges, menukortet, hjælpen og layoutet
+// Ordbogen (#ordbog): dansk sortering, søgning, links til steder, hvor ordene bruges, Biblioteket i menuen, hjælpen og layoutet
 import { readFileSync } from 'fs';
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -63,13 +63,12 @@ const side = async (opsætning, hash = '') => {
 const page = await side({ viewport: { width: 1280, height: 800 } });
 const T = (f, a) => page.evaluate(f, a);
 
-// Menuen: 8 kort i to hele rækker, og Ordbogen viser antallet af fagord
-const menu = await T(() => {
-  const kort = [...document.querySelectorAll('.menukort .kort')];
-  return { antal: kort.length, rækker: new Set(kort.map((k) => Math.round(k.getBoundingClientRect().top))).size, mærke: document.querySelector('.menukort a[href="#ordbog"] .kort-fremgang')?.textContent };
-});
-tjek(`pc: 8 kort i menuen i 2 rækker, og Ordbogen viser "${menu.mærke}"`, menu.antal === 8 && menu.rækker === 2 && menu.mærke === `${ORDBOG.length} fagord`, JSON.stringify(menu));
-await page.click('.menukort a[href="#ordbog"]');
+// Menuen: Ordbogen er den eneste del i Biblioteket. Docken drejer Biblioteket frem, og et tryk på kortet åbner Ordbogen.
+const menu = await T(() => ({ dele: atomlabTest.karrusel.verdener().find((v) => v.id === 'biblioteket')?.dele, navn: document.querySelector('.verden[data-verden="biblioteket"] .verden-del')?.textContent }));
+tjek(`pc: Biblioteket i menuen har kun Ordbogen ("${menu.navn}")`, menu.dele?.join() === 'ordbog' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
+await page.click('.menu-ikon[data-verden="biblioteket"]');
+await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 6000 });
+await page.click('.menukort a[href="#ordbog"]', { force: true });
 await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
 const start = await T(() => ({ ord: document.querySelectorAll('#ordbogListe li').length, fokus: document.activeElement?.id, første: document.querySelector('#ordbogListe h3')?.textContent }));
 tjek('kortet åbner Ordbogen med alle ordene, og søgefeltet har fokus (pc)', start.ord === ORDBOG.length && start.fokus === 'ordbogSøg' && start.første === ORDNE[0].ord, JSON.stringify(start));
@@ -118,15 +117,15 @@ tjek('hjælpen: linket åbner Ordbogen og lukker hjælpen', (await T(() => locat
 
 // Layout: listen kan ses og rulles, og siden ruller ikke til siden
 const størrelser = [
-  ['tablet-langs', { viewport: { width: 1180, height: 820 }, hasTouch: true }, 2],
-  ['tablet-højkant', { viewport: { width: 820, height: 1180 }, hasTouch: true }, 4],
-  ['tlf-højkant', { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true }, 8],
-  ['tlf-langs', { viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true }, 2],
+  ['tablet-langs', { viewport: { width: 1180, height: 820 }, hasTouch: true }],
+  ['tablet-højkant', { viewport: { width: 820, height: 1180 }, hasTouch: true }],
+  ['tlf-højkant', { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true }],
+  ['tlf-langs', { viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true }],
 ];
-for (const [navn, opsætning, rækker] of størrelser) {
+for (const [navn, opsætning] of størrelser) {
   const p = await side(opsætning);
-  const m = await p.evaluate(() => new Set([...document.querySelectorAll('.menukort .kort')].map((k) => Math.round(k.getBoundingClientRect().top))).size);
-  tjek(`${navn}: menuen har ${rækker} rækker kort`, m === rækker, m);
+  const m = await p.evaluate(() => { const menu = document.getElementById('menu'); return { verdener: menu.querySelectorAll('.verden').length, rul: menu.scrollHeight - menu.clientHeight }; });
+  tjek(`${navn}: menuen er en ring med 5 verdener og skal ikke rulles`, m.verdener === 5 && m.rul <= 1, JSON.stringify(m));
   await p.evaluate(() => { location.hash = '#ordbog'; });
   await p.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
   const l = await p.evaluate(() => {

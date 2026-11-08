@@ -1,4 +1,4 @@
-// Baggrunden bag ringen i menuen (K2 i docs/plan-menu.md, kun med ?karrusel): Bag atomet toner et let motiv frem,
+// Baggrunden bag ringen i menuen (K2 i docs/plan-menu.md): Bag atomet toner et let motiv frem,
 // der passer til kortet forrest (en stjerne ved Stjerneovnen, en galakse ved Kosmos osv.). Når ringen drejes,
 // glider det ene motiv blødt over i det næste.
 // Motiverne hænger i et lag, der følger kameraet langt bag atomet, så de fylder hele billedet, mens kameraet

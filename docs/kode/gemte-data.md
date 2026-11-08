@@ -13,5 +13,5 @@
 - `atomlabNavne`: `'til'` eller `'fra'`, knappen "Navne" ved planeterne i Solsystemet (navnene på Mars og Saturns måner). Til fra start.
 - `atomlabSolsystem` og `atomlabSolsystemSet`: det samme for Solsystemet. De flyttede fænomener flyttes fra Kosmos' nøgler første gang (`flytGemt`).
 - `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`, `batteri`) og `fusion-rejse` (rejsen ind i Solen)
-- `atomlabSidsteDel`: id på den del, man sidst var i (fx `'kosmos'`). Karrusellen i menuen (`?karrusel`) starter dér. Gemmes også uden `?karrusel`.
+- `atomlabSidsteDel`: id på den del, man sidst var i (fx `'kosmos'`). Ringen i menuen starter på verdenen for den del.
 - `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.

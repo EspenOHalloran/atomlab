@@ -17,7 +17,7 @@ import { OPGAVER_BYTTE } from './data/molekyler.js'; // Byttebørsens par tælle
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 import { lavBeskeder, rydBeskeder, testAdgang as beskederTest } from './beskeder.js';
 import { stopGuide } from './guide.js';
-import { citatHTML, MENU_CITATER } from './data/citater.js';
+import { citatHTML } from './data/citater.js';
 import { lavOrdforklaringer, testAdgang as ordTest } from './ordforklaring.js';
 import { lavLag, lukHvorfor, vistHvorfor } from './lag.js';
 import { lavPaneler, startPaneler, testAdgang as panelTest } from './paneler.js';
@@ -73,7 +73,7 @@ function start() {
   lavSolsystem(); // før Kosmos, så det gemte flytter med først
   lavKosmos();
   lavOrdbog();
-  lavKarrusel({ fremgang: fremgangPrDel, radius: () => menuAtom.størrelse() }); // kun med ?karrusel (prototype, docs/plan-menu.md)
+  lavKarrusel({ fremgang: fremgangPrDel, radius: () => menuAtom.størrelse() }); // menuen som en ring af verdenerne (docs/plan-menu.md)
   lavPaneler();
   lavFuldSkærmKnapper();
   lavRulleTip();
@@ -160,23 +160,13 @@ function opdaterMenuAtom(dt) {
 function startMenu() {
   menuAtom.gruppe.visible = true;
   verden.opdateringer.add(opdaterMenuAtom);
-  startKarrusel(); // kun med ?karrusel: lægger ringen og flytter atomets vindue, før kameraet zoomer ind
+  startKarrusel(); // lægger ringen og flytter atomets vindue, før kameraet zoomer ind (✓ og "Start her" står i karrusel.js)
   sætVindue(document.getElementById('menuVindue'));
   verden.styring.autoRotate = true;
   flyInd(menuAtom.størrelse());
-  // Et nyt citat hver gang man kommer til menuen
-  const nøgle = MENU_CITATER[Math.floor(Math.random() * MENU_CITATER.length)];
-  document.getElementById('menuCitat').innerHTML = citatHTML(nøgle);
-  const alle = [...OPGAVER, ...OPGAVER_BYTTE, ...OPGAVER_FUSION, ...OPGAVER_REAKTOR, ...OPGAVER_BATTERI].map((o) => o.id);
-  document.getElementById('menuStatus').textContent =
-    `Opdagede grundstoffer: ${fremgang.antalOpdaget()} af 118 · Opgaver klaret: ${fremgang.antalLøste(alle)} af ${alle.length}`;
-  // Er man helt ny, viser et lille mærke, hvor man kan starte
-  const ny = fremgang.antalOpdaget() === 0 && fremgang.antalLøste(alle) === 0;
-  document.querySelector('.menukort a[href="#vaerksted"]').classList.toggle('start-her', ny);
-  visFremgangIMenu(ny);
 }
 
-// Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af kortene i menuen og af "Din fremgang" (karrusel.js).
+// Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af menuen (✓, "Start her" og "Din fremgang" i karrusel.js).
 function fremgangPrDel() {
   const ud = {};
   for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
@@ -189,37 +179,6 @@ function fremgangPrDel() {
     ud[id] = { løst: liste.filter((f) => set.includes(f.id)).length, ialt: liste.length, slags: 'set' };
   }
   return ud;
-}
-
-// Fremgang på hvert kort i menuen ("3/7 ★"). Når en del er klaret, foreslås næste eventyr:
-// den første del i rækkefølgen, der ikke er klaret endnu. En klaret del får klassen "klaret" (✓ i karrusellen).
-function visFremgangIMenu(ny) {
-  const mærke = (id, tekst, færdig) => {
-    const kort = document.querySelector(`.menukort a[href="#${id}"]`);
-    let m = kort.querySelector('.kort-fremgang');
-    if (!m) {
-      m = document.createElement('span');
-      m.className = 'kort-fremgang';
-      kort.querySelector('.kort-tekst strong').after(m);
-    }
-    m.textContent = tekst;
-    m.classList.toggle('færdig', færdig);
-    kort.classList.toggle('klaret', færdig);
-    return kort;
-  };
-  const data = fremgangPrDel();
-  let næste = null;
-  let klaret = 0;
-  for (const id of ['vaerksted', 'fusion', 'reaktor', 'batteri']) {
-    const { løst, ialt } = data[id];
-    const kort = mærke(id, løst === ialt ? `✓ ${løst}/${ialt} ★` : `${løst}/${ialt} ★`, løst === ialt);
-    if (løst === ialt) klaret++;
-    else if (!næste) næste = kort;
-  }
-  mærke('system', `${data.system.løst}/118 opdaget`, data.system.løst === 118);
-  for (const id of ['solsystem', 'kosmos']) mærke(id, `${data[id].løst}/${data[id].ialt} set`, data[id].løst === data[id].ialt);
-  mærke('ordbog', `${ORDNE.length} fagord`, false);
-  for (const k of document.querySelectorAll('.menukort .kort')) k.classList.toggle('næste-eventyr', !ny && klaret > 0 && k === næste);
 }
 
 // Bjælken "Henter AtomLab" (index.html): fyldes helt og tones væk, når det første 3D-billede er tegnet
