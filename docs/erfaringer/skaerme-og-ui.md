@@ -55,6 +55,14 @@
 - **Farver på kugler med stærkt lys:** `MeshStandardMaterial` med hovedlyset (1,9) gjorde de lyse farver næsten hvide. Brug mørkere og mere mættede farver (orange 0,9 · 0,4 · 0,13) og se dem i et skærmbillede.
 - **Test: vent på kameraet efter et skift:** Et skift af par zoomer kameraet blødt. Trækker testen med musen med det samme, står elektronen et andet sted på skærmen end i `elektronPå()`. Vent på `kameraStille()` (målAfstand er null). En fast ventetid på 0,9 s virkede alene, men fejlede, da testene kørte to ad gangen.
 
+## Byg molekyler (Molekyler M2a, 8. november 2026)
+- **En klasse, der allerede findes:** `#vaerksted.byg` fik byggepanelets regler (`.byg { grid-area: byg; … }`), så hele skærmen faldt fra hinanden. Tjek altid med `grep`, om et klassenavn bruges i style.css, før det sættes på en skærm (her blev det `del-elektroner`).
+- **En fælles regel i `@media`:** `#vaerksted .del-vælger { order: 3 }` (fanerne får deres egen linje) ramte også "Del | Giv elektroner" inde i panelet, som røg ned i bunden. Afgræns reglen, eller giv den nye en regel med samme id lige efter.
+- **Det atom, man trækker, må ikke skubbe til de andre:** Frastødningen mellem løse atomer skubbede målatomet væk, mens man nærmede sig, så bindingen aldrig sprang. Og fjedrene trak hele molekylet med, så en binding ikke kunne strækkes og brydes. Begge er slået fra for `form.fast`.
+- **Grænser på skærmen, ikke i Å:** Kameraet zoomer efter molekylets størrelse, så 1,6 Å kunne være 250 px på pc. Grænsen for at bryde en binding er nu i px.
+- **En symmetrisk form kan hænge fast:** Atomer, der trækkes ind i samme plan, gav metan som et kvadrat (90°, et sadelpunkt i modellen). Et lille puf, når strukturen ændres, og en bitte rystelse løser det. Rystelsen må ikke tælle med, når man ser, om formen ligger stille (ellers sover den aldrig).
+- **Test: vent på, at kameraet også er færdigt med at følge midten:** `kameraStille()` tjekker både zoom og kameraets mål. Ellers står atomet et andet sted på skærmen end i `atomPå()`, når musen trykker.
+
 ## Ventetid ved skift af klode (7. november 2026)
 - **Mål først, hvad ventetiden er:** Brugeren så 4-5 sekunder uden noget, når man skiftede fra Jupiter til Mars. Bjælken "Henter …" kom ikke, for tiden gik ikke med at hente billeder, men med JS, der låste browseren (målt med en CPU-profil). Efter rettelsen tager klikket ca. 0,6 s i testbrowseren.
 - **En ventebesked kan kun bevæge sig, mens browseren er låst, hvis den er en CSS-animation af transform eller opacity,** og den skal være tegnet, før arbejdet starter. Rejseskiltet venter derfor på et billede (`requestAnimationFrame` og så `setTimeout`), før kloden bygges, og toner først ind efter 0,2 s, så hurtige skift ikke blinker.

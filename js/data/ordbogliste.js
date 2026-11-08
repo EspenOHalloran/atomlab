@@ -10,6 +10,8 @@ export const LINKS = {
   tunneleffekt: { hvorfor: 'tunnel' },
   kernekraft: { hvorfor: 'kernen' },
   bindingsenergi: { hvorfor: 'binding' },
+  'kovalent-binding': { hvorfor: 'bygBinder' },
+  'frit-par': { hvorfor: 'bygForm' },
   fission: { skærm: ['reaktor', 'Reaktoren'] },
   moderator: { skærm: ['reaktor', 'Reaktoren'] },
   fusion: { skærm: ['fusion', 'Stjerneovnen'] },

@@ -255,10 +255,40 @@ button { font: inherit; color: inherit; }
 /* Byttebørsen (Molekyler M1, js/molekyler.js): del-knapperne i toplinjen og Byttebørsens egne paneler */
 #vaerksted .del-vælger { flex: none; margin: 0; }
 #vaerksted:not(.bytte) .bytte-panel, #vaerksted:not(.bytte) .bytte-kun { display: none; }
-#vaerksted.bytte > #byggepanel, #vaerksted.bytte > #infopanel, #vaerksted.bytte > #minitabelPanel,
-#vaerksted.bytte .opgave-pille, #vaerksted.bytte #knapVisning, #vaerksted.bytte #udgaveVælger { display: none; }
-#vaerksted.bytte { grid-template-areas: "top top top" "venstre vindue højre" "venstre vindue højre"; }
-.bytte-panel .knap-række { display: flex; flex-wrap: wrap; gap: 8px; }
+#vaerksted:not(.del-elektroner) .byg-panel, #vaerksted:not(.del-elektroner) .byg-kun { display: none; }
+#vaerksted:is(.bytte, .del-elektroner) > #byggepanel, #vaerksted:is(.bytte, .del-elektroner) > #infopanel, #vaerksted:is(.bytte, .del-elektroner) > #minitabelPanel,
+#vaerksted:is(.bytte, .del-elektroner) .opgave-pille, #vaerksted:is(.bytte, .del-elektroner) #knapVisning, #vaerksted:is(.bytte, .del-elektroner) #udgaveVælger { display: none; }
+#vaerksted:is(.bytte, .del-elektroner) { grid-template-areas: "top top top" "venstre vindue højre" "venstre vindue højre"; }
+:is(.bytte-panel, .byg-panel) .knap-række { display: flex; flex-wrap: wrap; gap: 8px; }
+/* "Del elektroner | Giv elektroner" øverst i begge venstre paneler (Byg et molekyle) */
+#vaerksted .måde-vælger { margin: 0; align-self: stretch; }
+#vaerksted .måde-vælger .del-knap { flex: 1 1 0; padding: 6px 8px; font-size: 13px; white-space: nowrap; }
+/* Byg et molekyle → Del elektroner: paletten (træk et atom ind i 3D-billedet) */
+.palet { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.palet-atom { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px 5px; border-radius: 12px; border: 1px solid var(--panel-kant);
+  background: rgba(255, 255, 255, 0.04); color: var(--tekst); font: inherit; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.palet-atom:hover:not(:disabled) { background: rgba(95, 227, 255, 0.12); }
+.palet-atom:disabled { opacity: 0.4; cursor: not-allowed; }
+.pa-kugle { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff;
+  box-shadow: inset -4px -5px 8px rgba(0, 0, 0, 0.35), 0 0 10px rgba(127, 247, 255, 0.15); }
+.pa-H { background: radial-gradient(circle at 35% 30%, #ffffff, #c7ccd8); color: #1b2340; }
+.pa-C { background: radial-gradient(circle at 35% 30%, #8a8f99, #3d4048); }
+.pa-N { background: radial-gradient(circle at 35% 30%, #6f8cff, #2235b8); }
+.pa-O { background: radial-gradient(circle at 35% 30%, #ff6a5c, #b8180f); }
+.pa-Cl { background: radial-gradient(circle at 35% 30%, #7ff06c, #2a9a1e); width: 38px; height: 38px; }
+.pa-navn { font-size: 11.5px; font-weight: 700; }
+.pa-hænder { font-size: 10.5px; color: var(--svag); }
+.byg-trin p { margin: 0; }
+.byg-tal { margin: 0; }
+#vaerksted .byg-tal div { grid-template-columns: minmax(0, 1fr) auto; }
+.byg-tal dd { text-align: right; }
+.byg-forklaring { line-height: 1.6; }
+.bf-prik, .bf-sky { display: inline-block; vertical-align: middle; margin-right: 4px; border-radius: 50%; }
+.bf-prik { width: 8px; height: 8px; background: #8fe6ff; box-shadow: 0 0 6px #5fe3ff; }
+.bf-sky { width: 14px; height: 14px; }
+.bf-sky.delt { background: radial-gradient(circle, rgba(70, 140, 255, 0.85), rgba(70, 140, 255, 0)); }
+.bf-sky.fri { background: radial-gradient(circle, rgba(150, 80, 255, 0.85), rgba(150, 80, 255, 0)); }
+#bygÆrligtMolekyle[hidden] { display: none; }
 .bytte-panel > .knap { align-self: flex-start; }
 .bytte-trin p { margin: 0; }
 .bytte-regnskab { margin: 0; }
@@ -1201,13 +1231,14 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .topbjælke h2 { font-size: 18px; }
   .opgave-pille { order: 4; flex: 1 1 100%; margin: 0; }
   #vaerksted .del-vælger { order: 3; }
-  #vaerksted.bytte {
+  #vaerksted .side-panel > .måde-vælger { order: 0; } /* (kun fanerne i toplinjen får deres egen linje) */
+  #vaerksted:is(.bytte, .del-elektroner) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto minmax(46vh, 1fr) auto;
     grid-template-areas: "top top" "vindue vindue" "venstre højre";
     overflow-y: auto;
   }
-  #vaerksted.bytte .side-panel { overflow: visible; min-height: auto; max-height: none; }
+  #vaerksted:is(.bytte, .del-elektroner) .side-panel { overflow: visible; min-height: auto; max-height: none; }
   .info { max-height: 36vh; padding: 10px; gap: 8px; }
   .grundstofkort { flex-basis: 70px; height: 70px; }
   .grundstofkort .symbol { font-size: 28px; }
@@ -1255,11 +1286,13 @@ button.sol-gruppe-navn::after { content: " ›"; }
     grid-template-rows: auto minmax(44vh, 1fr) auto auto;
     grid-template-areas: "top" "vindue" "venstre" "højre";
   }
-  #vaerksted.bytte {
+  #vaerksted:is(.bytte, .del-elektroner) {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(44vh, 1fr) auto auto;
     grid-template-areas: "top" "vindue" "højre" "venstre";
   }
+  /* Paletten kommer lige under 3D-billedet, så man kan trække et atom op i det */
+  #vaerksted.del-elektroner { grid-template-areas: "top" "vindue" "venstre" "højre"; }
   .bytte-måler { font-size: 11px; padding: 5px 8px 4px; }
   /* Kosmos: fænomenerne på én vandret række, så knapperne kommer lige under animationen */
   .kosmos-liste { display: flex; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
@@ -1289,6 +1322,11 @@ button.sol-gruppe-navn::after { content: " ›"; }
 /* ---------- Telefoner på langs (lav skærm) ---------- */
 @media (max-height: 500px) and (orientation: landscape) {
   .skærm { gap: 6px; padding: 6px max(6px, env(safe-area-inset-right)) 6px max(6px, env(safe-area-inset-left)); }
+  /* Paletten i "Del elektroner": kun kuglerne (navnet står i knappens titel), og "Del | Giv" lidt mindre */
+  .palet-atom .pa-navn, .palet-atom .pa-hænder { display: none; }
+  .pa-kugle { width: 30px; height: 30px; font-size: 13px; }
+  .pa-Cl { width: 32px; height: 32px; }
+  #vaerksted .måde-vælger .del-knap { padding: 5px 4px; font-size: 12px; }
   .knap.lille { padding: 5px 9px; font-size: 13px; }
   .knap.ikon { width: 32px; }
   .topbjælke { gap: 8px; }

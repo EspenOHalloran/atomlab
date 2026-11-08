@@ -1,4 +1,4 @@
-// Et let atom til Molekyler (Byttebørsen nu, Byg molekyler senere): en lille kerne, skallerne som ringe og
+// Et let atom til Molekyler ("Giv elektroner", det der hed Byttebørsen): en lille kerne, skallerne som ringe og
 // elektronerne som prikker på ringene. Den yderste skal er tydelig, de inderste er svage. Kernen ændrer sig ikke
 // (det er kemi, ikke kernefysik), så den er en enkel kugle med glød, ikke Atom-klassens protoner og neutroner.
 // Ringene ligger fladt mod kameraet (x-y-planen), så man kan trække elektroner med fingeren i samme plan.
@@ -201,6 +201,291 @@ export class MolekyleAtom {
     for (const m of [this.kerneMat, this.ringMat, this.indreRingMat, this.eMat, this.skær.material, this.skilt.material]) m.dispose();
     this.skiltTekstur.dispose();
     this.eMesh.dispose();
+    this.gruppe.removeFromParent();
+  }
+}
+
+// ---------- Byg molekyler (M2, "Del elektroner"): hele molekylet i 3D (prøve A) ----------
+// Kun de yderste elektroner vises. Et delt par er to prikker midt i bindingen med en svag blå sky, et frit par er to prikker
+// på atomets frie side med en svag violet sky, og en elektron uden partner er én prik, der blinker. Kernerne er kugler i de
+// farver, kemikere bruger, med symbolet på. Alle kerner er én InstancedMesh, alle pinde én og alle prikker én.
+const MAX_KERNER = 12;
+const MAX_PINDE = 80;
+const MAX_PRIKKER = 160;
+const MAX_SKYER = 110;
+const MAX_NAVNE = 6;
+export const KERNE_R = { H: 0.5, C: 0.75, N: 0.72, O: 0.7, Cl: 0.95 }; // kuglernes radius (enheder)
+const KERNE_FARVE = { // kemikernes farver (CPK), mørke nok til lyset i scenen
+  H: new THREE.Color(0.6, 0.62, 0.68), C: new THREE.Color(0.26, 0.28, 0.32), N: new THREE.Color(0.12, 0.24, 0.85),
+  O: new THREE.Color(0.78, 0.07, 0.05), Cl: new THREE.Color(0.16, 0.62, 0.13),
+};
+const PIND_FARVE = new THREE.Color(0.42, 0.52, 0.85);
+const PIND_STRAKT = new THREE.Color(1.0, 0.32, 0.25);
+const SKY_DELT = new THREE.Color(0.07, 0.17, 0.38);
+const SKY_FRI = new THREE.Color(0.2, 0.09, 0.38);
+const PRIK_LYS = 0.5; // prikkerne sidder tæt, så de gløder mindre end i Atom
+const PRIK_AFSTAND = 0.17; // halv afstand mellem de to prikker i et par
+const UDE = 0.5; // frie par og enlige elektroner står så langt uden for kuglen
+
+const symbolTeksturer = {};
+function symbolTekstur(symbol) {
+  if (symbolTeksturer[symbol]) return symbolTeksturer[symbol];
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.font = `800 ${symbol.length > 1 ? 62 : 74}px system-ui, sans-serif`;
+  g.fillStyle = symbol === 'H' ? '#1b2340' : '#ffffff';
+  g.fillText(symbol, 64, 70);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  symbolTeksturer[symbol] = t;
+  return t;
+}
+
+const tV1 = new THREE.Vector3();
+const tV2 = new THREE.Vector3();
+const tV3 = new THREE.Vector3();
+const tSide = new THREE.Vector3();
+const tSyn = new THREE.Vector3();
+const tQ = new THREE.Quaternion();
+const tS = new THREE.Vector3();
+const tM = new THREE.Matrix4();
+const tF = new THREE.Color();
+const OP = new THREE.Vector3(0, 1, 0);
+
+export class MolekyleTegning {
+  constructor() {
+    fælles();
+    this.gruppe = new THREE.Group();
+    // Kernerne
+    this.kerner = new THREE.InstancedMesh(kerneGeo, new THREE.MeshStandardMaterial({ roughness: 0.38, metalness: 0.05 }), MAX_KERNER);
+    this.kerner.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.kerner.frustumCulled = false;
+    for (let i = 0; i < MAX_KERNER; i++) this.kerner.setColorAt(i, KERNE_FARVE.C);
+    this.kerner.count = 0;
+    // Pindene (bindingerne). Dobbelt- og tripelbindinger er to og tre pinde side om side.
+    this.pindGeo = new THREE.CylinderGeometry(0.07, 0.07, 1, LAV_KVALITET ? 6 : 10, 1);
+    this.pinde = new THREE.InstancedMesh(this.pindGeo, new THREE.MeshStandardMaterial({ roughness: 0.5, transparent: true, opacity: 0.8 }), MAX_PINDE);
+    this.pinde.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.pinde.frustumCulled = false;
+    for (let i = 0; i < MAX_PINDE; i++) this.pinde.setColorAt(i, PIND_FARVE);
+    this.pinde.count = 0;
+    // Elektronerne som prikker (gløder som i Atom)
+    this.prikker = new THREE.InstancedMesh(eGeo, new THREE.MeshBasicMaterial({ color: 0xffffff }), MAX_PRIKKER);
+    this.prikker.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.prikker.frustumCulled = false;
+    for (let i = 0; i < MAX_PRIKKER; i++) this.prikker.setColorAt(i, ELEKTRON_FARVE);
+    this.prikker.count = 0;
+    // Skyerne om parrene (punkter med glød-tekstur)
+    const skyGeo = new THREE.BufferGeometry();
+    skyGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_SKYER * 3), 3));
+    skyGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(MAX_SKYER * 3), 3));
+    skyGeo.setDrawRange(0, 0);
+    this.skyer = new THREE.Points(skyGeo, new THREE.PointsMaterial({
+      size: 1.5, map: glødTekstur, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    }));
+    this.skyer.frustumCulled = false;
+    // Symbolerne på kernerne
+    this.symboler = [];
+    for (let i = 0; i < MAX_KERNER; i++) {
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, depthWrite: false }));
+      s.visible = false;
+      s.renderOrder = 5;
+      this.symboler.push(s);
+    }
+    // Ringen om det atom, bindingen vil gå til, og den stiplede streg
+    this.ring = new THREE.Sprite(new THREE.SpriteMaterial({ map: glødTekstur, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    this.ring.visible = false;
+    const linjeGeo = new THREE.BufferGeometry();
+    linjeGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
+    this.linje = new THREE.Line(linjeGeo, new THREE.LineDashedMaterial({ color: 0x7ff7ff, dashSize: 0.35, gapSize: 0.25, transparent: true, opacity: 0.9 }));
+    this.linje.visible = false;
+    this.linje.frustumCulled = false;
+    // Navnene over de færdige molekyler
+    this.navne = [];
+    for (let i = 0; i < MAX_NAVNE; i++) {
+      const lærred = document.createElement('canvas');
+      lærred.width = 512;
+      lærred.height = 96;
+      const tekstur = new THREE.CanvasTexture(lærred);
+      tekstur.colorSpace = THREE.SRGBColorSpace;
+      const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tekstur, transparent: true, depthTest: false }));
+      s.renderOrder = 12;
+      s.visible = false;
+      s.scale.set(8, 1.5, 1);
+      this.navne.push({ s, lærred, tekstur, tekst: '' });
+    }
+    this.gruppe.add(this.kerner, this.pinde, this.prikker, this.skyer, this.ring, this.linje, ...this.symboler, ...this.navne.map((n) => n.s));
+  }
+
+  // atomer: [{ symbol, p: Vector3 (enheder), lys (0-1), stor }]. bånd: [{ a, b, orden, strakt }].
+  // retninger: [{ atom, v: [x, y, z], slags: 'frit' | 'enlig' }]. mål: { atom, ok } eller null. linje: { fra, til, ok } eller null.
+  // navne: [{ tekst, p }]. kamera: til prikkernes side og symbolerne. tid: til blinket.
+  tegn({ atomer, bånd, retninger, mål = null, linje = null, navne = [], kamera, tid = 0 }) {
+    // Kernerne og symbolerne
+    const n = Math.min(atomer.length, MAX_KERNER);
+    for (let i = 0; i < MAX_KERNER; i++) this.symboler[i].visible = i < n;
+    for (let i = 0; i < n; i++) {
+      const a = atomer[i];
+      const r = KERNE_R[a.symbol] * (a.stor ? 1.12 : 1);
+      tM.compose(a.p, tQ.identity(), tS.setScalar(r));
+      this.kerner.setMatrixAt(i, tM);
+      this.kerner.setColorAt(i, tF.copy(KERNE_FARVE[a.symbol]).multiplyScalar(1 + (a.lys ?? 0) * 1.6));
+      const s = this.symboler[i];
+      if (s.material.map !== symbolTekstur(a.symbol)) {
+        s.material.map = symbolTekstur(a.symbol);
+        s.material.needsUpdate = true;
+      }
+      tSyn.copy(kamera.position).sub(a.p).normalize();
+      s.position.copy(a.p).addScaledVector(tSyn, r * 1.02);
+      s.scale.setScalar(r * 1.5);
+    }
+    this.kerner.count = n;
+    this.kerner.instanceMatrix.needsUpdate = true;
+    this.kerner.instanceColor.needsUpdate = true;
+
+    let pi = 0; // pinde
+    let ei = 0; // prikker
+    let si = 0; // skyer
+    const skyPos = this.skyer.geometry.attributes.position;
+    const skyFarve = this.skyer.geometry.attributes.color;
+    const prik = (p, lys = 1) => {
+      if (ei >= MAX_PRIKKER) return;
+      tM.makeTranslation(p.x, p.y, p.z);
+      this.prikker.setMatrixAt(ei, tM);
+      this.prikker.setColorAt(ei, tF.copy(ELEKTRON_FARVE).multiplyScalar(lys * PRIK_LYS));
+      ei++;
+    };
+    const sky = (p, farve) => {
+      if (si >= MAX_SKYER) return;
+      skyPos.setXYZ(si, p.x, p.y, p.z);
+      skyFarve.setXYZ(si, farve.r, farve.g, farve.b);
+      si++;
+    };
+    // En retning på tværs af v, som vender mod kameraet (så prikkerne i et par ikke står bag hinanden)
+    const tværs = (v, midt, ud) => {
+      tSyn.copy(kamera.position).sub(midt).normalize();
+      ud.crossVectors(v, tSyn);
+      if (ud.lengthSq() < 1e-6) ud.crossVectors(v, OP);
+      if (ud.lengthSq() < 1e-6) ud.set(1, 0, 0);
+      return ud.normalize();
+    };
+
+    // Bindingerne: pinde og de delte par
+    for (const b of bånd) {
+      const pa = atomer[b.a].p;
+      const pb = atomer[b.b].p;
+      const ra = KERNE_R[atomer[b.a].symbol];
+      const rb = KERNE_R[atomer[b.b].symbol];
+      tV1.subVectors(pb, pa);
+      const l = tV1.length();
+      if (l < 1e-4) continue;
+      tV1.divideScalar(l);
+      tV2.addVectors(pa, pb).multiplyScalar(0.5);
+      tværs(tV1, tV2, tSide);
+      tQ.setFromUnitVectors(OP, tV1);
+      for (let k = 0; k < b.orden && pi < MAX_PINDE; k++) {
+        const off = (k - (b.orden - 1) / 2) * 0.3;
+        tV3.copy(tV2).addScaledVector(tSide, off);
+        tM.compose(tV3, tQ, tS.set(1, l, 1));
+        this.pinde.setMatrixAt(pi, tM);
+        this.pinde.setColorAt(pi, b.strakt ? PIND_STRAKT : PIND_FARVE);
+        pi++;
+      }
+      // Parrene midt i mellemrummet mellem kuglerne
+      const t = ra + Math.max(0, l - ra - rb) / 2;
+      for (let k = 0; k < b.orden; k++) {
+        tV3.copy(pa).addScaledVector(tV1, t);
+        if (b.orden === 1) {
+          sky(tV3, SKY_DELT);
+          prik(tS.copy(tV3).addScaledVector(tSide, PRIK_AFSTAND));
+          prik(tS.copy(tV3).addScaledVector(tSide, -PRIK_AFSTAND));
+        } else {
+          tV3.addScaledVector(tSide, (k - (b.orden - 1) / 2) * 0.5);
+          sky(tV3, SKY_DELT);
+          prik(tS.copy(tV3).addScaledVector(tV1, PRIK_AFSTAND));
+          prik(tS.copy(tV3).addScaledVector(tV1, -PRIK_AFSTAND));
+        }
+      }
+    }
+    // Frie par og elektroner uden partner
+    for (const x of retninger) {
+      const a = atomer[x.atom];
+      if (!a) continue;
+      tV1.set(x.v[0], x.v[1], x.v[2]);
+      tV3.copy(a.p).addScaledVector(tV1, KERNE_R[a.symbol] + UDE);
+      if (x.slags === 'frit') {
+        tværs(tV1, tV3, tSide);
+        sky(tV3, SKY_FRI);
+        prik(tS.copy(tV3).addScaledVector(tSide, PRIK_AFSTAND), 0.8);
+        prik(tS.copy(tV3).addScaledVector(tSide, -PRIK_AFSTAND), 0.8);
+      } else {
+        // Blinker svagt (står stille med "reducer bevægelse")
+        prik(tV3, ROLIG ? 1 : 0.45 + 0.75 * (0.5 + 0.5 * Math.sin(tid * 4.5 + x.atom * 1.7)));
+      }
+    }
+    this.pinde.count = pi;
+    this.pinde.instanceMatrix.needsUpdate = true;
+    this.pinde.instanceColor.needsUpdate = true;
+    this.prikker.count = ei;
+    this.prikker.instanceMatrix.needsUpdate = true;
+    this.prikker.instanceColor.needsUpdate = true;
+    this.skyer.geometry.setDrawRange(0, si);
+    skyPos.needsUpdate = true;
+    skyFarve.needsUpdate = true;
+
+    // Ringen og den stiplede streg, mens man trækker
+    this.ring.visible = Boolean(mål && atomer[mål.atom]);
+    if (this.ring.visible) {
+      this.ring.position.copy(atomer[mål.atom].p);
+      this.ring.scale.setScalar(KERNE_R[atomer[mål.atom].symbol] * 5);
+      this.ring.material.color.setRGB(...(mål.ok ? [0.4, 1.6, 2.0] : [2.2, 0.35, 0.3]));
+    }
+    this.linje.visible = Boolean(linje);
+    if (linje) {
+      const p = this.linje.geometry.attributes.position;
+      p.setXYZ(0, linje.fra.x, linje.fra.y, linje.fra.z);
+      p.setXYZ(1, linje.til.x, linje.til.y, linje.til.z);
+      p.needsUpdate = true;
+      this.linje.computeLineDistances();
+      this.linje.material.color.set(linje.ok ? 0x7ff7ff : 0xff6b5b);
+    }
+
+    // Navnene
+    for (let i = 0; i < MAX_NAVNE; i++) {
+      const nv = this.navne[i];
+      const x = navne[i];
+      nv.s.visible = Boolean(x);
+      if (!x) continue;
+      if (nv.tekst !== x.tekst) {
+        nv.tekst = x.tekst;
+        const g = nv.lærred.getContext('2d');
+        g.clearRect(0, 0, 512, 96);
+        g.textAlign = 'center';
+        g.textBaseline = 'middle';
+        g.font = '700 46px system-ui, sans-serif';
+        g.shadowColor = 'rgba(0,0,0,0.95)';
+        g.shadowBlur = 10;
+        g.fillStyle = '#ffe9a8';
+        g.fillText(x.tekst, 256, 50);
+        nv.tekstur.needsUpdate = true;
+      }
+      nv.s.position.copy(x.p);
+    }
+  }
+
+  fjern() {
+    this.pindGeo.dispose();
+    for (const m of [this.kerner.material, this.pinde.material, this.prikker.material, this.skyer.material, this.ring.material, this.linje.material]) m.dispose();
+    this.skyer.geometry.dispose();
+    this.linje.geometry.dispose();
+    for (const s of this.symboler) s.material.dispose();
+    for (const n of this.navne) { n.tekstur.dispose(); n.s.material.dispose(); }
+    this.kerner.dispose();
+    this.pinde.dispose();
+    this.prikker.dispose();
     this.gruppe.removeFromParent();
   }
 }
