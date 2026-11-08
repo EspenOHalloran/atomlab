@@ -132,23 +132,57 @@ export function elektroner(atomer, bånd, { ordener, dativ }) {
 // tunge: atomerne uden H, bånd mellem dem, h: antal H på hvert. Navn og formel som de skrives i spillet. form: kort tekst
 // om formen (faktagrundlaget afsnit 3 og 4).
 const KENDTE_LISTE = [
-  { id: 'h2', navn: 'Hydrogen', formel: 'H₂', tunge: ['H'], bånd: [], h: [1], form: 'To atomer ligger altid på en lige linje.' },
-  { id: 'o2', navn: 'Oxygen', formel: 'O₂', tunge: ['O', 'O'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje. Her deler de to par (en dobbeltbinding).' },
-  { id: 'n2', navn: 'Nitrogen', formel: 'N₂', tunge: ['N', 'N'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje. Her deler de tre par (en tripelbinding).' },
-  { id: 'cl2', navn: 'Chlor', formel: 'Cl₂', tunge: ['Cl', 'Cl'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje.' },
-  { id: 'hcl', navn: 'Hydrogenchlorid', formel: 'HCl', tunge: ['Cl'], bånd: [], h: [1], form: 'To atomer ligger altid på en lige linje.' },
-  { id: 'vand', navn: 'Vand', formel: 'H₂O', tunge: ['O'], bånd: [], h: [2], form: 'Det er bøjet (ca. 104,5°), fordi oxygens to frie par skubber de to bindinger lidt sammen.' },
-  { id: 'h2o2', navn: 'Brintoverilte', formel: 'H₂O₂', tunge: ['O', 'O'], bånd: [[0, 1]], h: [1, 1], form: 'Det er vredet som en halvt åben bog.' },
-  { id: 'co2', navn: 'Kuldioxid', formel: 'CO₂', tunge: ['C', 'O', 'O'], bånd: [[0, 1], [0, 2]], h: [0, 0, 0], form: 'Det er lige, for kulstof har ingen frie par. De to dobbeltbindinger skubber hinanden ud til hver sin side.' },
-  { id: 'co', navn: 'Kulilte', formel: 'CO', tunge: ['C', 'O'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje. Her deler de tre par (en tripelbinding).' },
-  { id: 'metan', navn: 'Metan', formel: 'CH₄', tunge: ['C'], bånd: [], h: [4], form: 'De fire H sidder i hjørnerne af en tetraeder (en pyramide med trekanter på alle sider), så vinklerne er 109,5°.' },
-  { id: 'ammoniak', navn: 'Ammoniak', formel: 'NH₃', tunge: ['N'], bånd: [], h: [3], form: 'Det er en lav pyramide. Det frie par på nitrogen skubber de tre H lidt sammen (ca. 107°).' },
-  { id: 'ethan', navn: 'Ethan', formel: 'C₂H₆', tunge: ['C', 'C'], bånd: [[0, 1]], h: [3, 3], form: 'To tetraedre, hvor H\'erne står forskudt, så de er så langt fra hinanden som muligt.' },
-  { id: 'ethen', navn: 'Ethen', formel: 'C₂H₄', tunge: ['C', 'C'], bånd: [[0, 1]], h: [2, 2], form: 'Det er fladt. Dobbeltbindingen holder de to ender i samme plan.' },
-  { id: 'ethyn', navn: 'Ethyn', formel: 'C₂H₂', tunge: ['C', 'C'], bånd: [[0, 1]], h: [1, 1], form: 'Det er lige. Tripelbindingen og de to H ligger på én linje.' },
-  { id: 'methanol', navn: 'Methanol', formel: 'CH₃OH', tunge: ['C', 'O'], bånd: [[0, 1]], h: [3, 1], form: 'Kulstof er en tetraeder, og molekylet er bøjet ved oxygen.' },
-  { id: 'ethanol', navn: 'Ethanol', formel: 'C₂H₅OH', tunge: ['C', 'C', 'O'], bånd: [[0, 1], [1, 2]], h: [3, 2, 1], form: 'En kæde med to kulstof, der er bøjet ved oxygen.' },
-  { id: 'hcn', navn: 'Hydrogencyanid', formel: 'HCN', tunge: ['C', 'N'], bånd: [[0, 1]], h: [1, 0], form: 'Det er lige: H, C og N ligger på én linje.' },
+  { id: 'h2', navn: 'Hydrogen', formel: 'H₂', tunge: ['H'], bånd: [], h: [1], form: 'To atomer ligger altid på en lige linje.',
+    polær: false, kort: 'Den letteste gas. Flydende hydrogen og flydende oxygen var brændstoffet i rumfærgens hovedmotorer.',
+    ladning: 'De to atomer trækker lige hårdt, så parret ligger midt imellem. Molekylet er ikke polært.' },
+  { id: 'o2', navn: 'Oxygen', formel: 'O₂', tunge: ['O', 'O'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje. Her deler de to par (en dobbeltbinding).',
+    polær: false, kort: 'Ca. 21 % af luften. Du ånder den ind, og planterne laver den, når de bruger sollys (fotosyntese).',
+    ladning: 'De to atomer trækker lige hårdt, så molekylet er ikke polært.' },
+  { id: 'n2', navn: 'Nitrogen', formel: 'N₂', tunge: ['N', 'N'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje. Her deler de tre par (en tripelbinding).',
+    polær: false, kort: 'Ca. 78 % af luften. Tripelbindingen er så stærk, at nitrogen næsten ikke reagerer ved stuetemperatur. Derfor bruges den i madpakninger i stedet for luft.',
+    ladning: 'De to atomer trækker lige hårdt, så molekylet er ikke polært.' },
+  { id: 'cl2', navn: 'Chlor', formel: 'Cl₂', tunge: ['Cl', 'Cl'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje.',
+    polær: false, kort: 'En gulgrøn gas, der er farlig at indånde. Chlor bruges til at lave plastikken PVC og til at dræbe bakterier i vand.',
+    ladning: 'De to atomer trækker lige hårdt, så molekylet er ikke polært.' },
+  { id: 'hcl', navn: 'Hydrogenchlorid', formel: 'HCl', tunge: ['Cl'], bånd: [], h: [1], form: 'To atomer ligger altid på en lige linje.',
+    polær: true, kort: 'Opløst i vand hedder det saltsyre. Din mavesyre er mest saltsyre, og den hjælper med at fordøje maden.',
+    ladning: 'Chlor trækker hårdere end hydrogen, så Cl-enden er lidt minus (δ−), og H-enden er lidt plus (δ+). Molekylet er polært.' },
+  { id: 'vand', navn: 'Vand', formel: 'H₂O', tunge: ['O'], bånd: [], h: [2], form: 'Det er bøjet (ca. 104,5°), fordi oxygens to frie par skubber de to bindinger lidt sammen.',
+    polær: true, kort: 'Dækker ca. 71 % af Jordens overflade. Fordi vand har en plus-ende og en minus-ende, kan det opløse salt.',
+    ladning: 'Oxygen trækker hårdest i de delte par, så O-enden er lidt minus (δ−), og H-enderne er lidt plus (δ+). Fordi vand er bøjet, ophæver de to træk ikke hinanden: Vand er polært.' },
+  { id: 'h2o2', navn: 'Brintoverilte', formel: 'H₂O₂', tunge: ['O', 'O'], bånd: [[0, 1]], h: [1, 1], form: 'Det er vredet som en halvt åben bog.',
+    polær: true, kort: 'Fortyndet brintoverilte bruges til at blege hår og til at dræbe bakterier.',
+    ladning: 'Oxygen trækker hårdere end hydrogen, så H-enderne er lidt plus (δ+). Fordi molekylet er vredet, ophæver trækkene ikke hinanden: Det er polært.' },
+  { id: 'co2', navn: 'Kuldioxid', formel: 'CO₂', tunge: ['C', 'O', 'O'], bånd: [[0, 1], [0, 2]], h: [0, 0, 0], form: 'Det er lige, for kulstof har ingen frie par. De to dobbeltbindinger skubber hinanden ud til hver sin side.',
+    polær: false, kort: 'Du ånder den ud, og planterne tager den op. Den giver boblerne i sodavand. Ca. 0,04 % af luften.',
+    ladning: 'Hver binding er polær: Oxygen trækker hårdere end kulstof. Men de to træk er lige store og peger hver sin vej, så de ophæver hinanden. CO₂ er ikke polært.' },
+  { id: 'co', navn: 'Kulilte', formel: 'CO', tunge: ['C', 'O'], bånd: [[0, 1]], h: [0, 0], form: 'To atomer ligger altid på en lige linje. Her deler de tre par (en tripelbinding).',
+    polær: false, kort: 'Dannes, når noget brænder uden nok luft. Den er giftig, fordi den sætter sig over 200 gange fastere i blodet end oxygen, og man kan hverken se eller lugte den. Derfor findes der kulilte-alarmer.',
+    ladning: 'Kulilte er kun en lille smule polært, og på en mærkelig måde (se "Ærligt talt"). Spillet viser ingen δ her.' },
+  { id: 'metan', navn: 'Metan', formel: 'CH₄', tunge: ['C'], bånd: [], h: [4], form: 'De fire H sidder i hjørnerne af en tetraeder (en pyramide med trekanter på alle sider), så vinklerne er 109,5°.',
+    polær: false, kort: 'Det meste af naturgassen. Den dannes også i moser og i maven på køer, som bøvser den ud.',
+    ladning: 'C–H-bindingerne er næsten ikke skæve, og de fire peger i hver sin retning. Metan er ikke polært.' },
+  { id: 'ammoniak', navn: 'Ammoniak', formel: 'NH₃', tunge: ['N'], bånd: [], h: [3], form: 'Det er en lav pyramide. Det frie par på nitrogen skubber de tre H lidt sammen (ca. 107°).',
+    polær: true, kort: 'En gas med en skarp lugt. Ca. 70 % af den bruges til at lave kunstgødning. Den findes også i nogle rengøringsmidler.',
+    ladning: 'Nitrogen trækker hårdere end hydrogen, så N-enden er lidt minus (δ−). Fordi molekylet er en pyramide, ophæver trækkene ikke hinanden: Ammoniak er polært.' },
+  { id: 'ethan', navn: 'Ethan', formel: 'C₂H₆', tunge: ['C', 'C'], bånd: [[0, 1]], h: [3, 3], form: 'To tetraedre, hvor H\'erne står forskudt, så de er så langt fra hinanden som muligt.',
+    polær: false, kort: 'Den næststørste del af naturgassen. På Saturns måne Titan er der søer, som nok er flydende metan og ethan.',
+    ladning: 'Der er kun C–C og C–H, som næsten ikke er skæve. Ethan er ikke polært.' },
+  { id: 'ethen', navn: 'Ethen', formel: 'C₂H₄', tunge: ['C', 'C'], bånd: [[0, 1]], h: [2, 2], form: 'Det er fladt. Dobbeltbindingen holder de to ender i samme plan.',
+    polær: false, kort: 'Et plantehormon, der får frugt til at modne. Den bruges også til at lave plastikken polyethylen.',
+    ladning: 'Der er kun C=C og C–H, som næsten ikke er skæve. Ethen er ikke polært.' },
+  { id: 'ethyn', navn: 'Ethyn', formel: 'C₂H₂', tunge: ['C', 'C'], bånd: [[0, 1]], h: [1, 1], form: 'Det er lige. Tripelbindingen og de to H ligger på én linje.',
+    polær: false, kort: 'Brænder den med ren oxygen, bliver flammen over 3.300 °C. Den bruges til at svejse og skære i metal.',
+    ladning: 'Der er kun C≡C og C–H, som næsten ikke er skæve. Ethyn er ikke polært.' },
+  { id: 'methanol', navn: 'Methanol', formel: 'CH₃OH', tunge: ['C', 'O'], bånd: [[0, 1]], h: [3, 1], form: 'Kulstof er en tetraeder, og molekylet er bøjet ved oxygen.',
+    polær: true, kort: 'Ligner ethanol, men er giftig at drikke og kan gøre en blind. Den bruges i industrien og som brændstof.',
+    ladning: 'Oxygen trækker hårdest, så O-enden er lidt minus (δ−). Molekylet er polært.' },
+  { id: 'ethanol', navn: 'Ethanol', formel: 'C₂H₅OH', tunge: ['C', 'C', 'O'], bånd: [[0, 1], [1, 2]], h: [3, 2, 1], form: 'En kæde med to kulstof, der er bøjet ved oxygen.',
+    polær: true, kort: 'Alkoholen i øl og vin. Den bruges også i håndsprit og som brændstof i biler.',
+    ladning: 'Oxygen trækker hårdest, så O-enden er lidt minus (δ−). Molekylet er polært.' },
+  { id: 'hcn', navn: 'Hydrogencyanid', formel: 'HCN', tunge: ['C', 'N'], bånd: [[0, 1]], h: [1, 0], form: 'Det er lige: H, C og N ligger på én linje.',
+    polær: true, kort: 'Meget giftig. Den findes også i rummet, fx i luften på Saturns måne Titan, og den kan have været en af byggestenene til livets første molekyler.',
+    ladning: 'Nitrogen trækker hårdere end kulstof, så N-enden er lidt minus (δ−). Molekylet er polært.' },
 ];
 
 // Bygger et kendt molekyle som atomer og bånd (H'erne til sidst). Bruges af genkendelsen og testene.
@@ -224,6 +258,96 @@ export function status(atomer, bånd, liste) {
   const færdig = !enligt && uden === 0;
   const kendt = færdig ? genkend(u.atomer, u.bånd) : null;
   return { atomer: liste, færdig, uden, kendt, formel: kendt ? kendt.formel : formelHill(u.atomer), enligt };
+}
+
+// ---------- Ladningerne (M2b) ----------
+// Trækker det ene atom hårdere i et delt par (højere elektronegativitet), bliver det lidt minus (δ−) og det andet lidt plus
+// (δ+). Kun når forskellen er mindst 0,4 (faktagrundlaget afsnit 1 og fælde 4: C–H med 0,35 regnes som upolær).
+export const POLÆR_GRÆNSE = 0.4;
+export const forskel = (a, b) => Math.round(Math.abs(STOFFER_BYG[a].en - STOFFER_BYG[b].en) * 100) / 100;
+
+// Er bindingen mellem a og b polær? Giver { delta, minus } (minus: symbolet, der er δ−) eller null.
+export function polærBinding(a, b) {
+  const delta = forskel(a, b);
+  if (delta < POLÆR_GRÆNSE) return null;
+  return { delta, minus: STOFFER_BYG[a].en > STOFFER_BYG[b].en ? a : b };
+}
+
+// Ladningen på hvert atom som et tal: plus er δ+, minus er δ−, 0 er ingen (summen af forskellene på de polære bindinger).
+// Kulilte (dativ) får ingen: Dipolen peger den "forkerte" vej, og prik-reglen kan ikke se det (fælde 1).
+export function ladninger(atomer, bånd, { dativ }) {
+  const q = atomer.map(() => 0);
+  if (dativ >= 0) return q;
+  for (const [i, j] of bånd) {
+    const p = polærBinding(atomer[i].symbol, atomer[j].symbol);
+    if (!p) continue;
+    const minus = atomer[i].symbol === p.minus ? i : j;
+    q[minus] -= p.delta;
+    q[minus === i ? j : i] += p.delta;
+  }
+  return q.map((x) => Math.round(x * 100) / 100);
+}
+
+// Bindingernes træk som pile (OpenStax 7.6: fra det atom, der trækker mindst, mod det, der trækker mest, og så lange som
+// forskellen). Giver { pile: [{ fra, til, delta }], sum: [x, y, z] } for atomerne i liste (pladserne fra formen).
+// Er summen 0, ophæver trækkene hinanden, og molekylet er ikke polært (fælde 5).
+export function træk(form, liste) {
+  const s = form.struktur;
+  const pile = [];
+  const sum = [0, 0, 0];
+  if (!s || s.dativ >= 0) return { pile, sum };
+  const med = new Set(liste);
+  for (const [i, j] of s.bånd) {
+    if (!med.has(i)) continue;
+    const p = polærBinding(s.atomer[i].symbol, s.atomer[j].symbol);
+    if (!p) continue;
+    const [fra, til] = s.atomer[i].symbol === p.minus ? [j, i] : [i, j];
+    const v = norm(sub(form.pos[til], form.pos[fra]));
+    pile.push({ fra, til, delta: p.delta });
+    for (let q = 0; q < 3; q++) sum[q] += v[q] * p.delta;
+  }
+  return { pile, sum };
+}
+export const POLÆR_SUM = 0.2; // en sum over dette (i elektronegativitet) betyder polær
+
+// Er molekylet polært ud fra formen? (Kendte molekyler har deres eget flag, som testene sammenligner med.)
+export function polærForm(form, liste) {
+  return len(træk(form, liste).sum) > POLÆR_SUM;
+}
+
+// ---------- Opgaverne (M2b) ----------
+// Tæller med på Værkstedets kort i menuen og i Værkstedets "Opgaver forfra". Id'erne har byg- foran (fremgang.js).
+// hvad: hvornår den er klaret (molekyler-byg.js tjekker det): et kendt molekyle, med pilene tændt, drejet eller en tripelbinding.
+export const OPGAVER_BYG = [
+  { id: 'byg-h2', kendt: 'h2', titel: 'Del elektroner: Byg H₂', kort: 'Byg H₂',
+    tip: 'Træk to H ind, og slip det ene tæt på det andet.',
+    fakta: 'Hydrogen (H₂) er det enkleste molekyle: to protoner, der deler ét elektronpar.' },
+  { id: 'byg-vand', kendt: 'vand', titel: 'Del elektroner: Byg vand, og se, at det er bøjet', kort: 'Byg vand',
+    tip: 'Sæt to H på et O. Drej molekylet bagefter, så du kan se vinklen.',
+    fakta: 'Vand er bøjet (ca. 104,5°), fordi oxygens to frie par skubber de to H lidt sammen.' },
+  { id: 'byg-co2', kendt: 'co2', pile: true, titel: 'Del elektroner: Hvorfor er CO₂ ikke polært?', kort: 'CO₂ uden plus og minus',
+    tip: 'Byg CO₂ (et C med et O på hver side), og slå "Pile" til. Se, hvilken vej bindingerne trækker.',
+    fakta: 'Begge bindinger er polære, men de trækker lige hårdt hver sin vej. Trækkene ophæver hinanden, så CO₂ har ingen plus- og minus-ende.' },
+  { id: 'byg-metan', kendt: 'metan', drej: true, titel: 'Del elektroner: Byg metan, og drej den', kort: 'Metan og tetraederen',
+    tip: 'Sæt fire H på et C. Drej molekylet med fingeren eller musen, til du ser tetraederen.',
+    fakta: 'Metan er en tetraeder: De fire H sidder så langt fra hinanden som muligt, med 109,5° mellem hver binding.' },
+  { id: 'byg-tripel', tripel: true, titel: 'Del elektroner: Byg et molekyle med en tripelbinding', kort: 'En tripelbinding',
+    tip: 'To atomer, der deler tre par. Prøv to N.',
+    fakta: 'Nitrogen (N₂) har en tripelbinding og er ca. 78 % af luften. Bindingen er så stærk, at nitrogen næsten ikke reagerer ved stuetemperatur.' },
+  { id: 'byg-ethanol', kendt: 'ethanol', titel: 'Del elektroner: Byg ethanol', kort: 'Byg ethanol',
+    tip: 'C–C–O som en kæde. Fyld så op med H, til ingen elektroner blinker.',
+    fakta: 'Ethanol (C₂H₅OH) er alkoholen i øl og vin. De samme atomer kan også sættes sammen som dimethylether, som er en gas (drivgas i spraydåser).' },
+];
+export const DREJ_GRADER = 90; // metan: så meget skal molekylet drejes (kameraet), efter at det er færdigt
+
+// Er opgaven klaret? { kendte: ids af færdige kendte molekyler, tripel: om et færdigt molekyle har en tripelbinding,
+// pile: om pilene er tændt, drejet: grader, metan er drejet, efter at den blev færdig }
+export function opgaveKlaret(o, { kendte, tripel, pile, drejet }) {
+  if (o.tripel) return tripel;
+  if (!kendte.includes(o.kendt)) return false;
+  if (o.pile && !pile) return false;
+  if (o.drej && drejet < DREJ_GRADER) return false;
+  return true;
 }
 
 // ---------- Formen ----------
@@ -302,7 +426,7 @@ export function opdaterStruktur(form, atomer, bånd) {
     vægte[a].push({ m: b, w: VÆGT[ordener[k]] });
     vægte[b].push({ m: a, w: VÆGT[ordener[k]] });
   });
-  form.struktur = { atomer, bånd, ordener, dativ, e, nb, gruppe, afst, vrid, vægte };
+  form.struktur = { atomer, bånd, ordener, dativ, e, nb, gruppe, afst, vrid, vægte, q: ladninger(atomer, bånd, { dativ }) };
 }
 
 // Faste "tilfældige" retninger (så testene altid giver det samme)

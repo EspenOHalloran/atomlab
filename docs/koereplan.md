@@ -22,7 +22,7 @@
 | Spor | Næste |
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Uranus og Neptun, så Venus → Merkur → Pluto → overblikket. Mars ekstra og Månen bagefter. |
-| [Molekyler](lige-nu/molekyler.md) | M2a og M2b (Byg et molekyle med "Del elektroner" og "Giv elektroner"), så M3 og M4, så Liv. |
+| [Molekyler](lige-nu/molekyler.md) | M2 er færdig (Byg et molekyle med "Del elektroner" og "Giv elektroner"). Næste: M3 (knaldgas, [prompt](prompt-molekyler-m3.md)) og M4, så Liv. |
 | [Tid og rum](lige-nu/tid.md) | T4 ([prompt-tid-t4.md](prompt-tid-t4.md)), det sidste trin. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
 | [Småting](lige-nu/smaating.md) | Intet. |
