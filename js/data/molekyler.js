@@ -1,4 +1,4 @@
-// Tallene til Molekyler (Byttebørsen): ioniseringsenergi, elektronaffinitet, radier og energien for et ionpar.
+// Tallene til Molekyler ("Giv elektroner", det der hed Byttebørsen): ioniseringsenergi, elektronaffinitet, radier og energien for et ionpar.
 // Uden Three.js, så det kan testes i Node (tests/molekyler.mjs). Kilderne står i docs/fakta-molekyler.md (afsnit 1 og 7).
 
 // e²/(4πε₀) i eV·Å: to ladninger på ±1 i afstanden r Å trækker med energien KE / r eV
@@ -51,11 +51,11 @@ export const PAR_RÆKKE = ['nacl', 'lif', 'mgo', 'cacl2', 'nana'];
 
 // Opgaverne i Byttebørsen (fremgang.js). Et par er klaret, når krystallen er bygget (Na + Na: når man har prøvet).
 export const OPGAVER_BYTTE = [
-  { id: 'bytte-nacl', par: 'nacl', titel: 'Byttebørsen: Byg en saltkrystal (Na + Cl)', tip: 'Flyt elektronen, lad ionerne mødes, og byg krystallen.', fakta: 'Køkkensalt er et gitter, hvor hver Na⁺ har seks Cl⁻ omkring sig. Derfor er saltkorn små terninger.' },
-  { id: 'bytte-lif', par: 'lif', titel: 'Byttebørsen: Lithium + fluor', tip: 'Flyt lithiums yderste elektron over til fluor, og byg krystallen.', fakta: 'Fluor er det grundstof, der trækker hårdest i elektronerne. Lithiumfluorid holder bedre sammen end salt, for ionerne er mindre og kommer tættere på hinanden.' },
-  { id: 'bytte-mgo', par: 'mgo', titel: 'Byttebørsen: Magnesium + oxygen', tip: 'Flyt begge magnesiums yderste elektroner over til oxygen.', fakta: 'Mg²⁺ og O²⁻ har dobbelt så store ladninger som Na⁺ og Cl⁻, så de trækker fire gange så hårdt. Magnesiumoxid smelter først ved ca. 2.850 °C (salt ved 801 °C).' },
-  { id: 'bytte-cacl2', par: 'cacl2', titel: 'Byttebørsen: Calcium + 2 chlor', tip: 'Calcium har to yderste elektroner. Giv én til hvert chloratom.', fakta: 'Calciumchlorid bruges til at smelte is på vejene. Det virker også, når det er så koldt, at almindeligt salt ikke kan følge med.' },
-  { id: 'bytte-nana', par: 'nana', titel: 'Byttebørsen: Natrium + natrium', tip: 'Prøv at flytte en elektron fra det ene natriumatom til det andet.', fakta: 'To natriumatomer bytter ikke, for de trækker lige hårdt i elektronerne. I stedet deler de dem: Fast natrium er et metal.' },
+  { id: 'bytte-nacl', par: 'nacl', titel: 'Giv elektroner: Byg en saltkrystal (Na + Cl)', tip: 'Flyt elektronen, lad ionerne mødes, og byg krystallen.', fakta: 'Køkkensalt er et gitter, hvor hver Na⁺ har seks Cl⁻ omkring sig. Derfor er saltkorn små terninger.' },
+  { id: 'bytte-lif', par: 'lif', titel: 'Giv elektroner: Lithium + fluor', tip: 'Flyt lithiums yderste elektron over til fluor, og byg krystallen.', fakta: 'Fluor er det grundstof, der trækker hårdest i elektronerne. Lithiumfluorid holder bedre sammen end salt, for ionerne er mindre og kommer tættere på hinanden.' },
+  { id: 'bytte-mgo', par: 'mgo', titel: 'Giv elektroner: Magnesium + oxygen', tip: 'Flyt begge magnesiums yderste elektroner over til oxygen.', fakta: 'Mg²⁺ og O²⁻ har dobbelt så store ladninger som Na⁺ og Cl⁻, så de trækker fire gange så hårdt. Magnesiumoxid smelter først ved ca. 2.850 °C (salt ved 801 °C).' },
+  { id: 'bytte-cacl2', par: 'cacl2', titel: 'Giv elektroner: Calcium + 2 chlor', tip: 'Calcium har to yderste elektroner. Giv én til hvert chloratom.', fakta: 'Calciumchlorid bruges til at smelte is på vejene. Det virker også, når det er så koldt, at almindeligt salt ikke kan følge med.' },
+  { id: 'bytte-nana', par: 'nana', titel: 'Giv elektroner: Natrium + natrium', tip: 'Prøv at flytte en elektron fra det ene natriumatom til det andet.', fakta: 'To natriumatomer bytter ikke, for de trækker lige hårdt i elektronerne. I stedet deler de dem: Fast natrium er et metal.' },
 ];
 
 // Hvor mange elektroner hvert ikkemetal-atom har, når `flyttet` elektroner er flyttet (de fyldes op ét atom ad gangen)

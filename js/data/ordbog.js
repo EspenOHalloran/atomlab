@@ -41,6 +41,37 @@ export const ORDBOG = [
     former: ['ionbinding', 'ionbindingen', 'ionbindinger'],
     tekst: 'Når et atom har givet en elektron til et andet, og de to ioner (plus og minus) holder sammen, fordi de trækker i hinanden. Køkkensalt (Na⁺ og Cl⁻) er holdt sammen af ionbindinger.',
   },
+  // Byg et molekyle → "Del elektroner" (Molekyler M2a). Kilder: docs/fakta-molekyler/m2.md, afsnit 2 og 4.
+  {
+    id: 'molekyle', ord: 'Molekyle',
+    former: ['molekyle', 'molekylet', 'molekyler', 'molekylerne', 'molekylets'],
+    tekst: 'To eller flere atomer, der holder sammen, fordi de deler elektroner. Vand (H₂O) er et molekyle af ét oxygenatom og to hydrogenatomer.',
+  },
+  {
+    id: 'kovalent-binding', ord: 'Kovalent binding',
+    former: ['kovalent binding', 'kovalente bindinger', 'kovalent'],
+    tekst: 'En binding, hvor to atomer deler et par elektroner. Parret sidder mellem de to kerner, og begge kerner trækker i det. Sådan holder atomerne i et molekyle sammen.',
+  },
+  {
+    id: 'elektronpar', ord: 'Elektronpar',
+    former: ['elektronpar', 'elektronparret', 'elektronparrene'],
+    tekst: 'To elektroner, der hører sammen. Et delt par sidder mellem to atomer og er en binding. Et frit par hører kun til ét atom.',
+  },
+  {
+    id: 'frit-par', ord: 'Frit elektronpar',
+    former: ['frit elektronpar', 'frie elektronpar', 'frit par', 'frie par'],
+    tekst: 'Et elektronpar, der kun hører til ét atom og ikke binder. Oxygen i vand har to frie par. De skubber til bindingerne, så vandmolekylet bliver bøjet.',
+  },
+  {
+    id: 'dobbeltbinding', ord: 'Dobbeltbinding',
+    former: ['dobbeltbinding', 'dobbeltbindingen', 'dobbeltbindinger', 'dobbeltbindingerne'],
+    tekst: 'Når to atomer deler to elektronpar i stedet for ét. I kuldioxid (CO₂) har kulstof en dobbeltbinding til hvert oxygen.',
+  },
+  {
+    id: 'tripelbinding', ord: 'Tripelbinding',
+    former: ['tripelbinding', 'tripelbindingen', 'tripelbindinger'],
+    tekst: 'Når to atomer deler tre elektronpar. Nitrogen i luften (N₂) holdes sammen af en tripelbinding, som er så stærk, at nitrogen næsten ikke reagerer med noget ved stuetemperatur.',
+  },
   {
     id: 'ioniseringsenergi', ord: 'Ioniseringsenergi',
     former: ['ioniseringsenergi', 'ioniseringsenergien'],
