@@ -1231,6 +1231,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .topbjælke h2 { font-size: 18px; }
   .opgave-pille { order: 4; flex: 1 1 100%; margin: 0; }
   #vaerksted .del-vælger { order: 3; }
+  #vaerksted .side-panel > .måde-vælger { order: 0; } /* (kun fanerne i toplinjen får deres egen linje) */
   #vaerksted:is(.bytte, .del-elektroner) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto minmax(46vh, 1fr) auto;
@@ -1321,6 +1322,11 @@ button.sol-gruppe-navn::after { content: " ›"; }
 /* ---------- Telefoner på langs (lav skærm) ---------- */
 @media (max-height: 500px) and (orientation: landscape) {
   .skærm { gap: 6px; padding: 6px max(6px, env(safe-area-inset-right)) 6px max(6px, env(safe-area-inset-left)); }
+  /* Paletten i "Del elektroner": kun kuglerne (navnet står i knappens titel), og "Del | Giv" lidt mindre */
+  .palet-atom .pa-navn, .palet-atom .pa-hænder { display: none; }
+  .pa-kugle { width: 30px; height: 30px; font-size: 13px; }
+  .pa-Cl { width: 32px; height: 32px; }
+  #vaerksted .måde-vælger .del-knap { padding: 5px 4px; font-size: 12px; }
   .knap.lille { padding: 5px 9px; font-size: 13px; }
   .knap.ikon { width: 32px; }
   .topbjælke { gap: 8px; }

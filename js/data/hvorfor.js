@@ -116,7 +116,7 @@ export const HVORFOR = {
   bygBinder: {
     spørgsmål: 'Hvorfor holder atomerne sammen?',
     svar: 'To atomer deler et par elektroner. Parret sidder mellem de to kerner, og begge kerner trækker i det. Derfor holder atomerne sammen. Det kaldes en kovalent binding.\n\nEt atom kan lave lige så mange bindinger, som det har elektroner uden partner: H én, O to, N tre og C fire. Deler to atomer to eller tre par, er det en dobbelt- eller tripelbinding.',
-    nørd: 'Atomer i 2. række af det periodiske system (C, N og O) ender med 8 elektroner omkring sig, når man tæller de delte par med (oktetreglen). Hydrogen ender med 2. Det er en tommelfingerregel, der passer på alle molekylerne her, undtagen at oxygen-molekylet O₂ i virkeligheden har to elektroner uden makker.',
+    nørd: 'Atomer i 2. række af det periodiske system (C, N og O) ender med 8 elektroner omkring sig, når man tæller de delte par med (oktetreglen). Hydrogen ender med 2. Det er en tommelfingerregel. Den passer på alle molekylerne her, men den kan ikke se, at oxygen-molekylet O₂ i virkeligheden har to elektroner uden makker.',
   },
   bygForm: {
     spørgsmål: 'Hvorfor er vand bøjet?',
