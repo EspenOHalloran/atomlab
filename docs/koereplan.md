@@ -15,7 +15,7 @@
     5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
     6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
     - Hjernen og AI venter (jeres svar). Nye dele kræver en beslutning om menuen (i dag 8 kort).
-6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri) er lavet. **T2** (alle mål, "1 g hele vejen" og afstanden, der skrumper) venter på et go: start med [prompt-tid-t2.md](prompt-tid-t2.md) (mellem).
+6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri) og T2 (alle mål, "1 g hele vejen" og afstanden, der skrumper) er lavet. **T3** (lagene og teksterne) venter på et go: start med [prompt-tid-t3.md](prompt-tid-t3.md) (lille til mellem).
 7. **Verdenerne i menuen (K4)** (jeres svar 7. november 2026): Ringen får 5 verdener (Atomer og molekyler, Kernerne, Elektricitet, Rummet og Biblioteket, senere Ild og liv) med delene som knapper inde i det forreste kort (udgave B, valgt i Trin 0 7. november 2026). Start K4 med [prompt-menu-k4.md](prompt-menu-k4.md) (mellem til stor). Plan: [plan-verdener.md](plan-verdener.md).
 8. **Grupper i Kosmos' liste** (jeres valg i K4 Trin 0, 7. november 2026): De 12 fænomener deles i grupper som i Solsystemet (fx "Stjernernes liv", "Sorte huller og rumtid"). En egen, lille opgave efter K4 i sporet Solsystemet og Kosmos (lille).
 
@@ -24,7 +24,7 @@
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Uranus og Neptun, så Venus → Merkur → Pluto → overblikket. Mars ekstra og Månen bagefter. |
 | [Molekyler](lige-nu/molekyler.md) | M2a og M2b (Byg et molekyle med "Del elektroner" og "Giv elektroner"), så M3 og M4, så Liv. |
-| [Tid og rum](lige-nu/tid.md) | T2 ([prompt-tid-t2.md](prompt-tid-t2.md)). |
+| [Tid og rum](lige-nu/tid.md) | T3 ([prompt-tid-t3.md](prompt-tid-t3.md)). |
 | [Menuen](lige-nu/menuen.md) | K2 (i gang 7. november 2026), så K4 med verdenerne ([plan-verdener.md](plan-verdener.md)), så K3. |
 | [Småting](lige-nu/smaating.md) | Intet. |
 
@@ -64,7 +64,7 @@
 - **Tjernobyl i Reaktoren** (foreslået af jer): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md). En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
 
 ### Tid og rum
-*T1 er færdig. Planen er [plan-tid.md](plan-tid.md).*
+*T1 og T2 er færdige. Planen er [plan-tid.md](plan-tid.md).*
 
 - **Tid og rum (relativitet)** (jeres idé, 7. november 2026, ikke besluttet): Hvorfor kan man være væk i et par dage tæt på lysets fart, mens der går tusinder af år på Jorden? Noget interaktivt, hvor man kan lege med tiden ("Rejsen i tid" med lysuret og tvillingerejsen), og ti idéer mere om tid og rum. Alt fra samtalen (forklaringen, idéerne, hvor det kan ligge, fælderne og de åbne spørgsmål) står i [plan-tid.md](plan-tid.md). Venter på jeres svar og et go.
 
