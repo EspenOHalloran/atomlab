@@ -108,11 +108,11 @@ function lavVerden(v, bane) {
   knapper.className = 'verden-dele';
   for (const a of links) {
     a.classList.remove('kort', 'åben');
-    a.classList.add('del-knap');
-    a.classList.toggle('del-hel', én);
+    a.classList.add('verden-knap');
+    a.classList.toggle('verden-hel', én);
     a.draggable = false;
     const pil = document.createElement('span');
-    pil.className = 'del-pil';
+    pil.className = 'verden-pil';
     pil.setAttribute('aria-hidden', 'true');
     pil.textContent = '›';
     a.append(pil);
@@ -452,7 +452,7 @@ function sætMidt(i) {
   kort.forEach((k, j) => {
     k.classList.toggle('midt', j === i);
     // Kun delene i verdenen forrest kan nås med tabulatortasten
-    for (const a of k.querySelectorAll('.del-knap')) {
+    for (const a of k.querySelectorAll('.verden-knap')) {
       if (j === i) a.removeAttribute('tabindex');
       else a.tabIndex = -1;
     }

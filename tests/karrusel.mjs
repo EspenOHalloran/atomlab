@@ -36,18 +36,18 @@ for (const [navn, opts] of størrelser) {
     return {
       tilstand: menu.classList.contains('karrusel-tilstand'),
       orden: [...menu.querySelectorAll('.menukort > .verden')].map((k) => k.dataset.verden),
-      dele: Object.fromEntries([...menu.querySelectorAll('.menukort > .verden')].map((k) => [k.dataset.verden, [...k.querySelectorAll('a.del-knap')].map((a) => a.getAttribute('href').slice(1))])),
+      dele: Object.fromEntries([...menu.querySelectorAll('.menukort > .verden')].map((k) => [k.dataset.verden, [...k.querySelectorAll('a.verden-knap')].map((a) => a.getAttribute('href').slice(1))])),
       løse: menu.querySelectorAll('.menukort > a').length,
       startHer: menu.querySelector('a[href="#vaerksted"]').classList.contains('start-her'),
-      sidst: menu.querySelectorAll('.del-knap.sidst').length,
-      knapper: [...menu.querySelectorAll('.verden[data-verden="atomer"] .del-knap')].map((a) => ({ hel: a.classList.contains('del-hel'), h: a.getBoundingClientRect().height, tab: a.tabIndex })),
-      bagved: [...menu.querySelectorAll('.verden[data-verden="kerner"] .del-knap')].map((a) => a.tabIndex),
+      sidst: menu.querySelectorAll('.verden-knap.sidst').length,
+      knapper: [...menu.querySelectorAll('.verden[data-verden="atomer"] .verden-knap')].map((a) => ({ hel: a.classList.contains('verden-hel'), h: a.getBoundingClientRect().height, tab: a.tabIndex })),
+      bagved: [...menu.querySelectorAll('.verden[data-verden="kerner"] .verden-knap')].map((a) => a.tabIndex),
       // En verden med én del: delens link dækker hele kortet
       hel: (() => {
         const v = menu.querySelector('.verden[data-verden="elektricitet"]');
-        const a = v.querySelector('a.del-knap');
+        const a = v.querySelector('a.verden-knap');
         const [r, s] = [v.getBoundingClientRect(), a.getBoundingClientRect()];
-        return a.classList.contains('del-hel') && Math.abs(r.width - s.width) <= 3 && Math.abs(r.height - s.height) <= 3 && v.querySelector('.verden-del').textContent.includes('Batteriet');
+        return a.classList.contains('verden-hel') && Math.abs(r.width - s.width) <= 3 && Math.abs(r.height - s.height) <= 3 && v.querySelector('.verden-del').textContent.includes('Batteriet');
       })(),
       højder: [...menu.querySelectorAll('.menukort > .verden')].map((k) => k.offsetHeight),
       piller: [...menu.querySelectorAll('.kort-fremgang')].filter(vist).length,
@@ -155,7 +155,7 @@ for (const [navn, opts] of størrelser) {
   await p.waitForFunction(() => !document.getElementById('menu').classList.contains('skjult'));
   tjek(`${navn}: tilbage i menuen står Kernerne forrest`, (await venMidt('kerner')) === 'kerner', await midt());
   tjek(`${navn}: den sidste del er gemt`, (await p.evaluate(() => localStorage.getItem('atomlabSidsteDel'))) === 'reaktor');
-  tjek(`${navn}: Reaktorens knap er fremhævet (glød og prik) og kun den`, await p.evaluate(() => [...document.querySelectorAll('#menu .del-knap.sidst')].map((a) => a.getAttribute('href')).join() === '#reaktor'));
+  tjek(`${navn}: Reaktorens knap er fremhævet (glød og prik) og kun den`, await p.evaluate(() => [...document.querySelectorAll('#menu .verden-knap.sidst')].map((a) => a.getAttribute('href')).join() === '#reaktor'));
   await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.fusion > 0.999, null, { timeout: 10000 }).catch(() => {});
   bg = await vægte();
   tjek(`${navn}: tilbage i menuen viser baggrunden Kernernes motiv (stjernen)`, bg.synlig && bg.vægte.fusion > 0.999 && andre(bg.vægte, 'fusion') === 0, JSON.stringify(bg));
