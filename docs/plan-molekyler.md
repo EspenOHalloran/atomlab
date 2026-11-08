@@ -106,6 +106,8 @@ Faktagrundlaget står i [fakta-molekyler/m2.md](fakta-molekyler/m2.md). Sådan p
 3. **Kulilte (CO):** O låner et par ud, når C og O er alene (anbefaling, så man kan bygge kulilte, og "Ærligt talt" forklarer det), eller kan CO ikke bygges (C=O står som "ikke færdig")?
 4. **Små valg, hvor jeg foreslår:** alle 17 kendte molekyler med navn allerede i M2a (kortene i M2b), højst 12 atomer, ingen δ på C–H, H₂O₂ drejes med et ekstra led, teksten ved ukendte molekyler fra fælde 6, og at M2b må rette de 3 linjer i `js/main.js` (importen og de to lister, som M1b også rettede), så opgaverne tæller på Værkstedets kort. Sporet Menuen venter på et go til K2, så risikoen for en konflikt er lille.
 
+**Bygget i M2a (8. november 2026), hvor det afviger fra forslaget ovenfor:** Klassen på `#vaerksted` er `del-elektroner`, ikke `byg` (den klasse har byggepanelet). "Del elektroner | Giv elektroner" står øverst i begge venstre paneler (`data-vaerksted-maade`), og fanen "Byg et molekyle" (`data-vaerksted-del="molekyle"`) åbner den måde, man sidst brugte. Et atom, man trækker i, trækker ikke resten af molekylet med (fjedrene til det er slået fra), så bindingen kan strækkes: Er den mere end ca. 140 px (finger) eller 110 px (mus) for lang på skærmen, når man slipper, går den i stykker. Slippes et atom over paletten, forsvinder det. Formen fik et ekstra led for "forskudt" om enkeltbindinger mellem to tetraedre (ethan), og et lille puf, når noget ændrer sig, så den ikke hænger fast i en flad form (metan som et kvadrat).
+
 **Jeres svar til M2a (7. november 2026): "Go til M2a, brug dine anbefalinger".** Altså: (1) prøve A (prikkerne i bindingerne og de frie par, kernerne i kemikernes farver), (2) paletten H, C, N, O og Cl, (3) kulilte: O låner et par ud, når C og O er alene, og (4) ja til de små valg (alle 17 navne i M2a, højst 12 atomer, ingen δ på C–H, H₂O₂ drejes, teksten ved ukendte molekyler fra fælde 6, og M2b må rette de 3 linjer i `js/main.js`).
 
 ## 4. Se vand blive til (knaldgas)
@@ -145,7 +147,7 @@ Senere kan det også blive et trin i delen Liv.
 |---|---|---|
 | M0 | ✅ Plan og faktagrundlag med kilder (denne fil og [fakta-molekyler.md](fakta-molekyler.md)) | lavet |
 | M1 | ✅ **Færdig 7. november 2026** (prompt i [arkiv/prompt-molekyler-m1.md](arkiv/prompt-molekyler-m1.md)). **M1a:** del-knapperne, Byttebørsen med Na + Cl, måleren, harpunen og "Ærligt talt". **M1b:** krystallen (InstancedMesh, terningemønstret og rutil for CaCl₂), Li + F, Mg + O, Ca + 2 Cl og Na + Na som opgaver med ★, og fremgangen på Værkstedets kort. | lavet |
-| M2 | **Byg molekyler** ([prompt](prompt-molekyler-m2.md)). **Trin 0:** ✅ faktagrundlaget i [fakta-molekyler/m2.md](fakta-molekyler/m2.md) og "M2 i dag" (7. november 2026, spørgsmålene står under "M2 i dag"). **M2a:** paletten, bindingerne, formen, det ulovlige og navnene. **M2b:** ladningerne, kortene, opgaverne og fremgangen | stor (Trin 0 med **xhigh**, M2a og M2b med høj) |
+| M2 | **Byg molekyler** ([prompt](prompt-molekyler-m2.md)). **Trin 0:** ✅ faktagrundlaget i [fakta-molekyler/m2.md](fakta-molekyler/m2.md) og "M2 i dag" (7. november 2026, spørgsmålene står under "M2 i dag"). **M2a:** ✅ paletten, bindingerne, formen, det ulovlige og navnene (8. november 2026). **M2b:** ladningerne, kortene, opgaverne og fremgangen | stor (Trin 0 med **xhigh**, M2a og M2b med høj) |
 | M3 | **Knaldgas:** boksen, gnisten, kæden og energimåleren | mellem |
 | M4 | "Hvorfor?"-kortet om Jordens vand og links til Kosmos og senere Liv | lille |
 
