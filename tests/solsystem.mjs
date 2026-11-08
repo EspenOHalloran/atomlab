@@ -34,6 +34,8 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
   tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden,jupiter,uranus,neptun', JSON.stringify(prikker));
   await s.click('#solsystem .sol-klode[data-id="solen"]');
+  // Træet tegnes ved næste tjek (fire gange i sekundet), så vent på knappen (under belastning var den der ikke endnu)
+  await s.waitForSelector('#solsystemTræ button[data-id="solstorm"]', { timeout: 10000 }).catch(() => {});
   tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
   await vis(s, 'kosmos');
   const kos = await s.evaluate(() => ({ valgt: atomlabTest.kosmos.valgt(), set: document.getElementById('kosmosSet').textContent, gemt: JSON.parse(localStorage.getItem('atomlabKosmosSet')) }));
