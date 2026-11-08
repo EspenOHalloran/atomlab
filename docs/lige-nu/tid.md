@@ -10,6 +10,6 @@
 - Faktatjekket mod fakta-tid.md og kilderne (tabellen står i `docs/fakta-tid.md` under "Faktatjek af T3"). Fælderne er flyttet til `docs/erfaringer/fakta-faelder.md`.
 - Test: `tests/tid.mjs` (173 tjek, nu også teksterne, knapperne i teksten, at emnerne folder sig ud med kontakterne, "Hvorfor?"-kortet og cæsium).
 
-**Næste (venter på et go):** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`, faktagrundlaget laves i samme session). Start en ny session med "Læs docs/prompt-tid-t4.md" (Opus, høj effort), når I giver go. Når T4 er færdig, er serien slut, og artefaktet "AtomLab Overblik" opdateres.
+**Næste: intet. Sporet er lukket for nu (besluttet 8. november 2026).** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" opdateres med, at "Rejsen i tid" er færdig (T1-T3).
 
 **Spørgsmål til jer:** ingen lige nu.

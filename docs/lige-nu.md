@@ -7,7 +7,7 @@
 |---|---|---|
 | Solsystemet og Kosmos | [lige-nu/solsystemet.md](lige-nu/solsystemet.md) | Planeterne, månerne, Mars ekstra og Kosmos |
 | Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 (senere Ild og Liv) |
-| Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)) |
+| Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). Lukket for nu (T4 er en mulig udvidelse) |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | Menuen som en ring (K1-K3) |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | Ordbogen, grundstofkortene og kategorierne |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
