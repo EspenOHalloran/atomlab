@@ -101,7 +101,7 @@
 
 ## 10. Det er målt (ikke science fiction)
 - **Myonerne** (en tung fætter til elektronen) dannes, når den kosmiske stråling rammer luften, typisk ca. 15 km oppe (arXiv:1906.03934: "most atmospheric muons are produced at a height of around 15 km"). Myonens middellevetid er 2,197 µs (Wikipedia "Muon", fra PDG), og massen er 105,66 MeV/c² (NIST CODATA, physics.nist.gov).
-  - **Frisch og Smith** (Am. J. Phys. 31, 342-355, 1963) talte ca. 563 myoner i timen på toppen af Mount Washington (1.917 m) og ca. 412 i timen ved havet. Uden tidsforlængelse skulle der kun være kommet ca. 27. Myonernes ure gik ca. 8,8 gange langsommere (Wikipedia "Experimental testing of time dilation"). Rossi og Hall gjorde det første, mere grove forsøg i 1940 (Phys. Rev. 59, 223, 1941).
+  - **Frisch og Smith** (Am. J. Phys. 31, 342-355, 1963) talte ca. 563 myoner i timen på toppen af Mount Washington (1.917 m) og ca. 412 i timen ved havet. Uden tidsforlængelse skulle der kun være kommet ca. 27. Myonernes ure gik ca. 8,8 gange langsommere (Wikipedia "Experimental testing of time dilation"). Rossi og Hall gjorde det første, mere grove forsøg i 1940 (Phys. Rev. 59, 223, 1941). **⚠️ T3 (8. november 2026):** Tallene 563, 412 og 27 kunne ikke bekræftes (de står ikke i Wikipedia "Experimental testing of time dilation", og en websøgning fandt dem ikke). Wikipedia giver i dag faktoren 8,4 ± 2 (ikke 8,8) og året 1962 for målingerne (artiklen kom i 1963). Teksten i fænomenet nævner derfor ingen tal fra forsøget.
   - **CERN 1977** (Bailey m.fl., Nature 268, 301-305): Myoner, der kørte rundt i en ring med γ = 29,33, levede 64,4 µs i stedet for 2,2 µs. Det passede med Einstein inden for ca. 1 promille (Wikipedia "Time dilation"). *Det tydeligste forsøg: 29 gange længere liv.*
 - **Ives og Stilwell** (J. Opt. Soc. Am. 28, 215, 1938) målte tidsforlængelsen første gang direkte i laboratoriet, i lyset fra hurtige brintioner (Wikipedia "Ives–Stilwell experiment").
 - **Hafele og Keating** (oktober 1971, Science 177, 166, 1972) fløj fire cæsiumure jorden rundt i passagerfly, først mod øst og så mod vest, og sammenlignede dem med urene på jorden. Mod øst var forudsigelsen −40 ± 23 ns, og målingen −59 ± 10 ns. Mod vest var forudsigelsen +275 ± 21 ns, og målingen +273 ± 7 ns (Wikipedia "Hafele–Keating experiment"). Både farten og højden (tyngden) talte med. *Fælde:* Urene i flyet mod øst tabte tid, og dem mod vest vandt tid, fordi Jorden selv drejer mod øst. Det er sammenlignet med et ur, der står stille i forhold til Jordens centrum.
@@ -149,6 +149,29 @@ Udregnet:
 - **Hvad passer til hvad:** Alpha Centauri ud og hjem giver ca. 9-12 år på Jorden (et menneskeliv: "din tvilling går nu i gymnasiet"). Mælkevejens centrum ud og hjem giver ca. 54.000 år (før de sidste neandertalere). Andromeda ud og hjem giver ca. 5 mio. år (før Lucy).
 - **Fælde:** "Lige så lang tid som siden Solvognen" passer kun med ca. 3.400 år. Planens eksempel ("6 dage mod 3.400 år") kræver γ ≈ 207.000 (ca. 11 ni-taller) og et mål ca. 1.700 lysår væk. Det findes ikke blandt de tre mål, så hjemkomstens tekst må vælge den sammenligning, der passer bedst til tallet (en tabel som ovenfor), i stedet for et fast eksempel.
 - **Interstellar** (filmen): På Millers planet svarer 1 time til 7 år på Jorden (en faktor ca. 60.000). Det kræver et sort hul, der drejer næsten så hurtigt, som det overhovedet kan (a/M ≈ 1 − 10⁻¹⁴), og en planet meget tæt på horisonten (arXiv:1910.00940, og James m.fl. 2015, Class. Quantum Grav. 32, 065001, arXiv:1502.03808, hvor billederne i filmen bruger a/M = 0,6). Nævnes kun med det forbehold.
+
+## Faktatjek af T3 (8. november 2026)
+*Teksterne i `js/kosmos/tid.js` (siden), `lysfart` i `js/data/hvorfor.js` og ordene tidsforlængelse, længdeforkortelse og myon. Ca. 35 påstande: Dem, der står ovenfor med kilde (tallene i afsnit 2-10 og 12), er tjekket mod denne fil og regn.py af Opus. De 17 påstande, der var nye eller skrevet med nye ord, fandt en Sonnet-hjælpeagent kilderne til (Wikipedias wikitekst, physics.nist.gov og arXiv), og Opus vurderede dem.*
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Myonen er minusladet som elektronen og ca. 200 gange tungere | OK (206,77) | NIST CODATA (mμ/me), Wikipedia "Muon" |
+| Kononenko: 1.111 døgn, mere end nogen anden | OK (ingen over ham i kilderne, artiklen går til september 2026) | Wikipedia "List of spaceflight records" |
+| Sekundet siden 1967: 9.192.631.770 svingninger i cæsium-133 | OK | Wikipedia "Second" |
+| Strontium- og aluminiumure er mere præcise end cæsiumure | OK | Wikipedia "Atomic clock" |
+| Forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem | OK ("the issue is how long the world-lines are, not how bent") | Wikipedia "Twin paradox", "Role of acceleration" |
+| Lyset har ikke sit eget ur | OK ("for lightlike paths, there exists no concept of proper time") | Wikipedia "Proper time" |
+| Fjerne galakser fjerner sig hurtigere end lyset, fordi rummet udvider sig | OK | Wikipedia "Expansion of the universe" |
+| Interstellar: 1 time = 7 år, kræver et sort hul, der drejer næsten maksimalt | OK | arXiv:1910.00940 (og afsnit 13 ovenfor) |
+| "Man bliver tungere" er gammeldags | Ret: "som de fleste fysikere undgår i dag" (kilden siger "often avoided", ikke "alle") | Wikipedia "Mass in special relativity" |
+| Lysets fart er den samme for alle | OK | Wikipedia "Speed of light" |
+| Uendelig energi for at nå lysets fart | OK (følger af E = (γ − 1)mc², afsnit 8) | Afsnit 8 |
+| Gassen omkring Solen er mest brint | OK (91 % af atomerne) | Wikipedia "Interstellar medium" |
+| Ure tæt på noget tungt går langsommere | OK | Wikipedia "Gravitational time dilation" |
+| Frisch og Smith: 563 og 412 i timen mod ca. 27 | **Fjernet** (ikke bekræftet, se afsnit 10). Nu: "de fleste nåede ned" | APS og Mount Washington Observatory (kun forsøget, ikke tallene) |
+| Hafele og Keating: −59 ns mod øst og +273 ns mod vest | OK | Wikipedia "Hafele–Keating experiment" |
+| Chou m.fl. 2010: et ur løftet 33 cm går hurtigere | OK | Wikipedia "Hafele–Keating experiment" |
+| CERN 1977: γ = 29,3, 64,4 µs, ca. 29 gange længere | OK | Wikipedia "Time dilation" |
 
 ## Kilderne
 **Sådan er kilderne læst:** Op til ca. 15 påstande tjekkes af hovedsessionen. Her var der ca. 35, så en Sonnet-hjælpeagent fandt kilderne og ordlyden (7. november 2026), og Opus vurderede dem og læste selv de vigtigste efter (Alpha Centauris parallakse, energitabellen, tvillingeparadokset om accelerationen og LHC's energi). De fleste er læst i Wikipedias wikitekst (`action=raw`), som har henvisningerne til de oprindelige artikler. Primærkilderne er læst direkte på arxiv.org (GRAVITY 2021, Bothwell 2022, James 2015 og "Life on Miller's planet"), physics.nist.gov (myonens masse), science.nasa.gov (Voyager 1) og nssdc.gsfc.nasa.gov (Mars og Månen). Lukkede domæner: www.nist.gov, pdg.lbl.gov, energyinst.org, natmus.dk, da.wikipedia.org, www.bipm.org, hyperphysics og math.ucr.edu. Ingen af dem var nødvendige, for tallene findes i de åbne kilder.
