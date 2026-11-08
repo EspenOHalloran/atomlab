@@ -83,9 +83,9 @@ Der kører ofte flere sessioner samtidig. Næsten alle merge-konflikter var i de
 
 ## Automatiske tests
 Testene ligger i `tests/` (Playwright-scripts, se [tests/README.md](tests/README.md)).
-- Mens man arbejder og før merge: `node tests/koer-alle.mjs --ændret` (kun de tests, de ændrede filer kan påvirke, og alle, hvis en fælles fil er ændret).
+- Mens man arbejder og før merge: `node tests/koer-alle.mjs --ændret` (røgtesten `tests/roeg.mjs` og de tests, de ændrede filer kan påvirke. I `index.html` og `style.css` kun de skærme, de ændrede linjer hører til, og alle, hvis `main.js`, `scene3d.js` eller en fælles linje er ændret).
 - Hele samlingen (`node tests/koer-alle.mjs`, to ad gangen) kun, når en ændring rører fælles moduler eller data, som afslutning på en serie af opgaver og før et større mål.
-- Lav en ny test eller nye tjek til nye funktioner. Skærmbilleder i alle størrelser: `node tests/vaerktoejer/skaermbilleder.mjs <skærm>`.
+- Lav nye tjek til nye funktioner: 5-10 af det vigtigste, ikke præcise kameravinkler og pixel (se "Tests" i DESIGN.md). En test, der kun fejler sammen med andre og består alene, skrives under "Åbne punkter", og arbejdet går videre. Skærmbilleder i alle størrelser: `node tests/vaerktoejer/skaermbilleder.mjs <skærm>`.
 - Med `?test` i adressen findes `window.atomlabTest` med adgang til simuleringerne (listen står i `docs/kode/testadgang.md`). Testene tegner hurtigt uden glød og i lav opløsning (`TEST_HURTIG`). Forløb skal spoles frem eller holdes øje med (`waitForFunction`) i stedet for at ventes på.
 
 ## Afprøv
