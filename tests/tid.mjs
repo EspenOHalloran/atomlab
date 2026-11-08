@@ -1,6 +1,6 @@
 // Rejsen i tid (js/kosmos/tid.js og js/data/tid.js): tallene mod tabellerne i docs/fakta-tid.md (uden browser), og
-// fænomenet i Kosmos: åbner uden konsolfejl, skyderen ændrer urene, "Vis lysuret" virker, og en rejse spolet frem ender
-// ved hjemkomsten med den rigtige tekst.
+// fænomenet i Kosmos: åbner uden konsolfejl, skyderen ændrer urene, "Vis lysuret" virker, en rejse spolet frem ender
+// ved hjemkomsten med den rigtige tekst, og (T2) målene, "1 g hele vejen" og "Set fra skibet".
 import * as T from '../js/data/tid.js';
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 
@@ -19,6 +19,9 @@ for (const [n, tekst, g] of GAMMA) {
 tjek('γ som tekst: 2,294 og 70,71 og 707,1', T.gammaTekst(T.gamma(1)) === '2,294' && T.gammaTekst(T.gamma(4)) === '70,71' && T.gammaTekst(T.gamma(6)) === '707,1');
 tjek('14 ni-taller giver γ ≈ 7,1 mio. (ikke uendelig)', nær(T.gamma(14), 7.07e6, 0.01e6), T.gamma(14));
 tjek('Alpha Centauri er 4,344 lysår væk (ikke 4,37 eller 4,4)', T.MÅL.alpha.lysår === 4.344);
+tjek('Mælkevejens centrum 26.996 lysår, Andromeda 2,5 mio. lysår (som i regn.py)', T.MÅL.centrum.lysår === 26996 && T.MÅL.andromeda.lysår === 2.5e6 && T.MÅL_RÆKKE.join() === 'alpha,centrum,andromeda');
+tjek('skyderen går op til 14 ni-taller', T.FLEST_NI === 14 && T.MINDST_NI === 1);
+tjek('farten over 6 ni-taller: "99,9…9 % (12 ni-taller)"', T.fartTekst(12) === '99,9…9 % (12 ni-taller)' && T.fartTekst(6) === '99,9999 %', T.fartTekst(12));
 
 // ---------- Rejsen med fast fart (fakta-tid.md, afsnit 5) ----------
 // [ni-taller, år på Jorden, tid i skibet som tekst, afstand set fra skibet]
@@ -31,6 +34,37 @@ for (const [n, jord, skib, afstand] of REJSE) {
 const r4 = T.rejse(4.344, 4);
 tjek('én vej ved 99,99 %: ca. 22 dage i skibet og ca. 4,3 år på Jorden', T.varighed(r4.ud.skibÅr) === '22 dage' && T.varighed(r4.ud.jordÅr) === '4,3 år');
 tjek('99 % i skibet er ca. 452 dage', nær(T.rejse(4.344, 2).skibÅr * T.DAGE_PR_ÅR, 452, 1));
+// De nye mål (fakta-tid.md, afsnit 5): [lysår, ni-taller, år på Jorden (tolerance), år i skibet (tolerance), afstand set fra skibet]
+const STORE = [
+  [26996, 2, 54500, 100, 7700, 10, 3800], [26996, 6, 54000, 100, 76, 0.5, 38], [26996, 12, 54000, 100, 28 / 365.25, 0.5 / 365.25, 0.038],
+  [2.5e6, 6, 5.0e6, 0.01e6, 7071, 1, 3536], [2.5e6, 12, 5.0e6, 0.01e6, 7.1, 0.05, 3.5],
+];
+for (const [d, n, jord, tj, skib, ts, afst] of STORE) {
+  const r = T.rejse(d, n);
+  tjek(`${T.tal(d)} lysår ved ${n} ni-taller: ${T.tal(jord)} år på Jorden og ${T.varighed(skib)} i skibet`, nær(r.jordÅr, jord, tj) && nær(r.skibÅr, skib, ts), `${r.jordÅr} ${r.skibÅr}`);
+  tjek(`${T.tal(d)} lysår ved ${n} ni-taller: ${afst} lysår set fra skibet`, nær(r.afstandFraSkibet, afst, afst * 0.02), r.afstandFraSkibet);
+}
+tjek('14 ni-taller til Mælkevejens centrum og hjem: ca. 3 dage (2,8) mod ca. 54.000 år', T.varighed(T.rejse(26996, 14).skibÅr) === '2,8 dage' && T.varighed(T.rejse(26996, 14).jordÅr) === '54.000 år', T.varighed(T.rejse(26996, 14).skibÅr));
+tjek('store tider: "54.500 år", "5,0 mio. år", "7.693 år"', T.varighed(T.rejse(26996, 2).jordÅr) === '54.500 år' && T.varighed(5.0e6) === '5,0 mio. år' && T.varighed(T.rejse(26996, 2).skibÅr) === '7.693 år');
+tjek('korte tider: 14 ni-taller til Alpha Centauri er 39 sekunder, 12 ni-taller 6 minutter', T.varighed(T.rejse(4.344, 14).skibÅr) === '39 sekunder' && T.varighed(T.rejse(4.344, 12).skibÅr) === '6 minutter', `${T.varighed(T.rejse(4.344, 14).skibÅr)} | ${T.varighed(T.rejse(4.344, 12).skibÅr)}`);
+tjek('afstande som tekst: 0,061 lysår, 1,9 lysår, 3.536 lysår, 5,8 mio. km', T.lysårTekst(0.06143) === '0,061 lysår' && T.lysårTekst(1.894) === '1,9 lysår' && T.lysårTekst(3536) === '3.536 lysår' && T.lysårTekst(T.rejse(4.344, 14).afstandFraSkibet) === '5,8 mio. km', `${T.lysårTekst(0.06143)} | ${T.lysårTekst(T.rejse(4.344, 14).afstandFraSkibet)}`);
+tjek('pr. dag i skibet: "2,3 dage", "707 dage", "6,1 år" og "19.400 år" (14 ni-taller)', T.prDagTekst(T.gamma(1)) === '2,3 dage' && T.prDagTekst(T.gamma(6)) === '707 dage' && T.prDagTekst(T.gamma(7)) === '6,1 år' && T.prDagTekst(T.gamma(14)) === '19.400 år');
+
+// ---------- "1 g hele vejen" (fakta-tid.md, afsnit 6) ----------
+tjek('c/a med 1 g er 0,9687 år', nær(T.K, 0.9687, 0.0001), T.K);
+// [lysår, i skibet én vej, på Jorden én vej (tolerance), største γ (tolerance)]
+const ENG = [[4.344, 3.574, 5.975, 0.01, 3.242, 0.001], [26996, 19.83, 26998, 1, 13935, 5], [2.5e6, 28.60, 2.5e6 + 1.9, 1, 1.29e6, 0.001e6]];
+for (const [d, skib, jord, tj, g, tg] of ENG) {
+  const r = T.enG(d);
+  tjek(`1 g til ${T.tal(d)} lysår: ${skib} år i skibet, ${T.tal(jord)} år på Jorden, γ ${g} midtvejs`, nær(r.skibÅr, skib, 0.005) && nær(r.jordÅr, jord, tj) && nær(r.gamma, g, tg), JSON.stringify(r));
+  const start = T.enGUndervejs(d, 0), midt = T.enGUndervejs(d, r.skibÅr / 2), slut = T.enGUndervejs(d, r.skibÅr);
+  tjek(`1 g til ${T.tal(d)} lysår undervejs: står stille ved start og mål, midtvejs halvvejs med største γ`, start.pos === 0 && start.gamma === 1 && nær(slut.pos, d, d * 1e-9) && nær(slut.jordÅr, r.jordÅr, r.jordÅr * 1e-9) && nær(midt.pos, d / 2, d * 1e-9) && nær(midt.jordÅr, r.jordÅr / 2, r.jordÅr * 1e-9) && nær(midt.gamma, r.gamma, r.gamma * 1e-9), JSON.stringify({ start, midt, slut }));
+  // Bremsningen er speedningen baglæns: samme γ et stykke før og efter midtvejs
+  tjek(`1 g til ${T.tal(d)} lysår: bremsningen spejler speedningen`, nær(T.enGUndervejs(d, r.skibÅr * 0.3).gamma, T.enGUndervejs(d, r.skibÅr * 0.7).gamma, 1e-6 * r.gamma));
+}
+tjek('1 g: Alpha Centauri ud og hjem 7,1 år mod 12 år, Andromeda 57 år', T.varighed(2 * T.enG(4.344).skibÅr) === '7,1 år' && T.varighed(2 * T.enG(4.344).jordÅr) === '12 år' && T.varighed(2 * T.enG(2.5e6).skibÅr) === '57 år');
+tjek('største fart: "95 %" til Alpha Centauri, 8 ni-taller til Mælkevejens centrum, 12 til Andromeda', T.fartFraGamma(T.enG(4.344).gamma) === '95 %' && T.fartFraGamma(T.enG(26996).gamma) === T.fartTekst(8) && T.fartFraGamma(T.enG(2.5e6).gamma) === T.fartTekst(12), `${T.fartFraGamma(T.enG(4.344).gamma)} ${T.fartFraGamma(T.enG(26996).gamma)}`);
+tjek('fart fra γ passer med ni-tallene (lidt over γ ved 4 ni-taller giver "99,99 %")', [2, 3, 4, 6, 10, 14].every((n) => T.fartFraGamma(T.gamma(n) * 1.0001) === T.fartTekst(n)));
 
 // ---------- Teksterne ----------
 const hjem4 = T.hjemkomst(r4.skibÅr, r4.jordÅr, 2026);
@@ -42,6 +76,26 @@ for (let n = 1; n <= 6; n++) {
   const t = T.hjemkomst(r.skibÅr, r.jordÅr, 2026);
   tjek(`hjemkomsten ved ${T.fartTekst(n)} er under 160 tegn (${t.length})`, t.length < 160, t);
 }
+// Sammenligningerne med fortiden (fakta-tid.md, afsnit 13)
+tjek('fortiden: 54.000 år er længere end siden neandertalerne, 5 mio. år end siden Lucy, 500 år ingen', /neandertalere/.test(T.fortiden(54000)) && /Lucy/.test(T.fortiden(5e6)) && T.fortiden(500) === null && /Jellingsten/.test(T.fortiden(1100)) && /istid/.test(T.fortiden(12000)));
+tjek('fortiden står i rækkefølge (ældst sidst)', T.FORTIDEN.every(([år], i) => i === 0 || år > T.FORTIDEN[i - 1][0]));
+tjek('årstal: "2026" uden punktum, "56.018" og "5.002.026" med', T.årstalTekst(2026) === '2026' && T.årstalTekst(56018) === '56.018' && T.årstalTekst(5002026) === '5.002.026');
+tjek('"Dit ur" over 1.000 år uden dage, og timer og minutter på en kort tur', T.ditUr(2421783.4) === '2.421.783 år' && T.ditUr(12.5 / 24 / 365.25, true) === '12 timer 30 min', `${T.ditUr(2421783.4)} | ${T.ditUr(12.5 / 24 / 365.25, true)}`);
+// Alle hjemkomster (alle mål, alle farter og 1 g) er under 160 tegn og siger det rigtige
+for (const id of T.MÅL_RÆKKE) {
+  const d = T.MÅL[id].lysår;
+  const ture = [...Array.from({ length: T.FLEST_NI }, (_, i) => [T.fartTekst(i + 1), T.rejse(d, i + 1)]), ['1 g', { skibÅr: 2 * T.enG(d).skibÅr, jordÅr: 2 * T.enG(d).jordÅr }]];
+  const lange = ture.map(([navn, r]) => [navn, T.hjemkomst(r.skibÅr, r.jordÅr, 2026)]).filter(([, t]) => t.length >= 160);
+  tjek(`hjemkomsterne til ${T.MÅL[id].navn} er under 160 tegn`, !lange.length, JSON.stringify(lange.map(([n, t]) => `${n}: ${t.length}`)));
+  const forkert = ture.filter(([, r]) => {
+    const t = T.hjemkomst(r.skibÅr, r.jordÅr, 2026);
+    if (T.forGammel(r.skibÅr)) return !t.includes('ingen leve');
+    if (r.jordÅr < 87) return !/Din tvilling er \d+\./.test(t);
+    return !t.includes(`år ${T.årstalTekst(T.jordÅrstal(2026, r.jordÅr))}`) || !t.includes('langt liv') || !t.includes(T.fortiden(r.jordÅr));
+  });
+  tjek(`hjemkomsterne til ${T.MÅL[id].navn}: tvillingens alder, årstallet med fortiden, eller "ingen kan leve så længe"`, !forkert.length, JSON.stringify(forkert.map(([n]) => n)));
+}
+tjek('for gammel: 99,9999 % til Andromeda tager 7.071 år for dig, men ikke 76 år til Mælkevejens centrum', T.forGammel(T.rejse(2.5e6, 6).skibÅr) && !T.forGammel(T.rejse(26996, 6).skibÅr));
 // Over ca. 100 år (fra T2): årstallet og en rolig linje om tvillingen, ingen alder
 const lang = T.hjemkomst(3 / 365.25, 54000, 2026);
 tjek('over 100 år: årstallet og "levede et langt liv", ingen alder', lang.includes('år 56.026') && lang.includes('levede et langt liv') && !lang.includes('tvilling er'), lang);
@@ -61,7 +115,15 @@ page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') 
 const E = (f, a) => page.evaluate(f, a);
 const K = 'atomlabTest.kosmos';
 const ure = () => E(() => atomlabTest.kosmos.fænomen().ure());
-const sætFart = (v) => E((v) => { const i = document.querySelector('#kosmosStyr input[type=range]'); i.value = v; i.dispatchEvent(new Event('input')); }, v);
+// En skyder i Styr-boksen ud fra navnet ("Mål" eller "Fart"): sæt værdien, eller læs teksten, den viser
+const sæt = (navn, v) => E(([navn, v]) => {
+  const b = [...document.querySelectorAll('#kosmosStyr .skyder-boks')].find((x) => x.querySelector('.skyder-top > span').textContent === navn);
+  const i = b.querySelector('input');
+  i.value = v;
+  i.dispatchEvent(new Event('input'));
+}, [navn, v]);
+const vist = (navn) => E((navn) => [...document.querySelectorAll('#kosmosStyr .skyder-boks')].find((x) => x.querySelector('.skyder-top > span').textContent === navn)?.querySelector('strong').textContent ?? null, navn);
+const sætFart = (v) => sæt('Fart', v);
 
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForFunction(() => window.atomlabTest?.kosmos);
@@ -71,7 +133,7 @@ await E(() => atomlabTest.kosmos.vælg('tid'));
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.ure);
 tjek('navnet er "Rejsen i tid"', (await page.textContent('#kosmosNavn')) === 'Rejsen i tid');
 const styr = await E(() => atomlabTest.kosmos.styr());
-tjek('Styr-boksen har skyderen "Fart" (99,99 % fra start)', styr.length === 1 && styr[0].slags === 'skyder' && styr[0].navn === 'Fart' && (await page.textContent('#kosmosStyr .skyder-top strong')) === '99,99 %', JSON.stringify(styr));
+tjek('Styr-boksen: skyderne "Mål" (Alpha Centauri) og "Fart" (99,99 %) og kontakterne "1 g hele vejen" og "Set fra skibet"', styr.map((s) => `${s.slags}:${s.navn}`).join('|') === 'skyder:Mål|skyder:Fart|kontakt:1 g hele vejen|kontakt:Set fra skibet' && (await vist('Mål')) === 'Alpha Centauri' && (await vist('Fart')) === '99,99 %', JSON.stringify(styr));
 tjek('⏩ findes (tidsknappen)', await page.isVisible('#kosmosTid [data-tid="hurtig"]'));
 let u = await ure();
 tjek('før afgang: "0 dage 0 timer", år nu, begge er 13', u.vist && u.skib === '0 dage 0 timer' && u.jord === `år ${await E(() => atomlabTest.kosmos.fænomen().startÅr)}` && u.skibAlder === 'Du: 13 år' && u.jordAlder === 'Tvillingen: 13 år', JSON.stringify(u));
@@ -90,7 +152,8 @@ tjek('"Flyv" er grå undervejs', (await E(() => atomlabTest.kosmos.bjælke())).s
 // Skyderen flyttes og urene læses i samme skridt: Siden tegner videre i rigtig tid imellem, og ellers kommer der
 // billeder med den gamle fart med i målingen (forholdet blev 2,31 i stedet for 2,29)
 const før = await E(() => {
-  const i = document.querySelector('#kosmosStyr input[type=range]');
+  const b = [...document.querySelectorAll('#kosmosStyr .skyder-boks')].find((x) => x.querySelector('.skyder-top > span').textContent === 'Fart');
+  const i = b.querySelector('input');
   i.value = 1;
   i.dispatchEvent(new Event('input'));
   return atomlabTest.kosmos.fænomen().ure();
@@ -99,7 +162,7 @@ await E(() => atomlabTest.kosmos.spol(2));
 u = await ure();
 const forhold = (u.jordÅr - før.jordÅr) / (u.skibÅr - før.skibÅr);
 tjek('skyderen på 90 % undervejs: nu går Jordens ur kun 2,29 gange hurtigere', nær(forhold, T.gamma(1), 0.01), forhold);
-tjek('skyderen viser "90 %"', (await page.textContent('#kosmosStyr .skyder-top strong')) === '90 %');
+tjek('skyderen viser "90 %"', (await vist('Fart')) === '90 %');
 await page.screenshot({ path: `${UD}/undervejs.png` });
 
 // En hel rejse ved 99,99 %, spolet frem
@@ -124,7 +187,8 @@ tjek('under pause står urene stille', (await ure()).jordÅr === pause1.jordÅr)
 await E(() => atomlabTest.kosmos.sætTid('hurtig'));
 // Læses i samme skridt som spolingen (ellers kommer billeder i rigtig tid med imellem)
 const [h1, h2] = await E(() => { const f = atomlabTest.kosmos.fænomen(); const a = f.ure(); atomlabTest.kosmos.spol(0.5); return [a, f.ure()]; });
-tjek('⏩: 6 gange hurtigere (0,5 s giver ca. 1,08 år på Jorden)', nær(h2.jordÅr - h1.jordÅr, 0.5 * 0.36 * 6, 0.12), h2.jordÅr - h1.jordÅr);
+// Hver vej tager 12,5 sekunder på skærmen: til Alpha Centauri går Jordens ur 4,344/12,5 år pr. sekund
+tjek('⏩: 4 gange hurtigere (0,5 s giver ca. 0,70 år på Jorden)', nær(h2.jordÅr - h1.jordÅr, 0.5 * (4.344 / 12.5) * 4, 0.08), h2.jordÅr - h1.jordÅr);
 await E(() => atomlabTest.kosmos.sætTid('spil'));
 
 // Lysuret
@@ -148,6 +212,61 @@ await page.waitForTimeout(300);
 await page.screenshot({ path: `${UD}/lysur-90.png` });
 tjek('"Tilbage til rejsen"', await E(() => atomlabTest.kosmos.trykPå('Tilbage til rejsen')));
 tjek('urene vises igen', (await ure()).vist && !(await E(() => atomlabTest.kosmos.fænomen().lysur())).vist);
+
+// ---------- T2: målene ----------
+await sætFart(14);
+await sæt('Mål', 1);
+tjek('skyderen "Mål": Mælkevejens centrum', (await vist('Mål')) === 'Mælkevejens centrum' && (await E(() => atomlabTest.kosmos.fænomen().mål())) === 'centrum');
+tjek('scenen viser kun Mælkevejens centrum, og knappen hedder "Flyv til Mælkevejens centrum"', (await E(() => atomlabTest.kosmos.fænomen().scene())).synlige.join() === 'centrum' && (await E(() => atomlabTest.kosmos.bjælke())).some((k) => k.tekst === '🚀 Flyv til Mælkevejens centrum'));
+tjek('farten viser "99,9…9 % (14 ni-taller)"', (await vist('Fart')) === '99,9…9 % (14 ni-taller)');
+const centrumVed = await E(() => {
+  atomlabTest.kosmos.trykPå('Forfra');
+  atomlabTest.kosmos.trykPå('Flyv til Mælkevejens centrum');
+  atomlabTest.kosmos.spol(6);
+  const u = atomlabTest.kosmos.fænomen().ure();
+  atomlabTest.kosmos.spol(7);
+  return { u, ved: atomlabTest.kosmos.fase(), lige: document.querySelector('#kosmosForklaring').textContent };
+});
+tjek('undervejs til Mælkevejens centrum løber Jordens ur løbsk (skiven gløder)', centrumVed.u.løbsk && centrumVed.u.jordÅr > 10000, JSON.stringify(centrumVed.u));
+tjek('ved Mælkevejens centrum: 1,4 dage for dig og 27.000 år på Jorden', /Ude ved Mælkevejens centrum/.test(centrumVed.ved?.titel) && /1,4 dage.*27\.000 år/.test(centrumVed.ved?.tekst), JSON.stringify(centrumVed.ved));
+tjek('"Lige nu" ved målet: to afstande og "En radiobesked hjem tager 27.000 år"', /set fra Jorden, men kun .* set fra skibet/.test(centrumVed.lige) && /En radiobesked hjem tager 27\.000 år/.test(centrumVed.lige), centrumVed.lige);
+await E(() => atomlabTest.kosmos.spol(15));
+const centrumHjem = await E(() => ({ fase: atomlabTest.kosmos.fase(), u: atomlabTest.kosmos.fænomen().ure(), år: atomlabTest.kosmos.fænomen().startÅr }));
+const rC = T.rejse(26996, 14);
+tjek('hjemme fra Mælkevejens centrum: årstallet, neandertalerne og tvillingen', centrumHjem.fase?.titel === 'Hjemme igen' && centrumHjem.fase.tekst === T.hjemkomst(rC.skibÅr, rC.jordÅr, centrumHjem.år) && /neandertalere/.test(centrumHjem.fase.tekst), JSON.stringify(centrumHjem.fase));
+tjek('Jordens ur viser fx "år 56.018" (med punktum), og urskiven gløder ikke længere', centrumHjem.u.jord === `år ${T.årstalTekst(T.jordÅrstal(centrumHjem.år, rC.jordÅr))}` && !centrumHjem.u.løbsk && centrumHjem.u.jordAlder === 'Tvillingen levede et langt liv', JSON.stringify(centrumHjem.u));
+await page.screenshot({ path: `${UD}/centrum-hjemme.png` });
+
+// ---------- T2: "1 g hele vejen" og "Set fra skibet" ----------
+await sæt('Mål', 2);
+tjek('"1 g hele vejen"', await E(() => atomlabTest.kosmos.trykPå('1 g hele vejen')));
+const s2 = await E(() => atomlabTest.kosmos.styr());
+tjek('med 1 g er skyderen "Fart" væk, og kontakten er tændt', s2.map((s) => s.navn).join('|') === 'Mål|1 g hele vejen|Set fra skibet' && s2[1].til, JSON.stringify(s2));
+tjek('"Lige nu" med 1 g: ca. 57 år for dig, ca. 5,0 mio. år på Jorden og den største fart', /Med 1 g hele vejen.*57 år for dig.*5,0 mio\. år på Jorden.*størst midtvejs: 99,9…9 % \(12 ni-taller\)/.test(await page.textContent('#kosmosForklaring')), await page.textContent('#kosmosForklaring'));
+await E(() => atomlabTest.kosmos.trykPå('Set fra skibet'));
+const midt = await E(() => { atomlabTest.kosmos.trykPå('Flyv til Andromeda'); atomlabTest.kosmos.spol(6.25); const f = atomlabTest.kosmos.fænomen(); return { ...f.fart(), ...f.scene(), u: f.ure() }; });
+tjek('1 g midtvejs til Andromeda: γ over 100.000, skibet halvvejs på skærmen', midt.gamma > 1e5 && nær(midt.andel, 0.5, 0.05), JSON.stringify(midt));
+tjek('Set fra skibet: scenen er trykket sammen, og Jorden og Andromeda er rykket ind mod skibet', midt.klem < 0.1 && midt.mål - midt.skib < 5 && midt.skib - midt.jord < 4, JSON.stringify(midt));
+tjek('1 g midtvejs: dit ur har gået ca. 14 år, Jordens over 0,5 mio. år', nær(midt.u.skibÅr, 14.3, 0.6) && midt.u.jordÅr > 0.5e6, JSON.stringify(midt.u));
+await page.screenshot({ path: `${UD}/andromeda-1g-midtvejs.png` });
+await E(() => atomlabTest.kosmos.spol(20));
+const g1 = await E(() => ({ tilstand: atomlabTest.kosmos.fænomen().tilstand(), u: atomlabTest.kosmos.fænomen().ure(), fase: atomlabTest.kosmos.fase(), år: atomlabTest.kosmos.fænomen().startÅr }));
+const rG = T.enG(2.5e6);
+tjek('1 g hjem fra Andromeda: 57,2 år for dig og ca. 5,0 mio. år på Jorden', g1.tilstand === 'færdig' && nær(g1.u.skibÅr, 2 * rG.skibÅr, 1e-6) && nær(g1.u.jordÅr, 2 * rG.jordÅr, 1e-3) && g1.u.skibAlder === `Du: ${T.alderTekst(13 + 2 * rG.skibÅr)}`, JSON.stringify(g1.u));
+tjek('1 g hjem fra Andromeda: teksten nævner Lucy', g1.fase?.tekst === T.hjemkomst(2 * rG.skibÅr, 2 * rG.jordÅr, g1.år) && /Lucy/.test(g1.fase.tekst), JSON.stringify(g1.fase));
+await E(() => atomlabTest.kosmos.spol(2));
+tjek('hjemme står skibet stille, og scenen er ikke trykket sammen', nær((await E(() => atomlabTest.kosmos.fænomen().scene())).klem, 1, 0.02));
+// Et skift af mål undervejs starter forfra
+await E(() => { atomlabTest.kosmos.trykPå('Flyv til Andromeda'); atomlabTest.kosmos.spol(2); });
+await sæt('Mål', 0);
+tjek('skift af mål undervejs: tilbage ved Jorden med Alpha Centauri', (await E(() => atomlabTest.kosmos.fænomen().tilstand())) === 'hjemme' && (await E(() => atomlabTest.kosmos.fænomen().scene())).synlige.join() === 'alpha' && (await ure()).jordÅr === 0);
+// Lysuret med 1 g: kun skyderen "Fart" i Styr-boksen, og bagefter er den væk igen
+await E(() => atomlabTest.kosmos.trykPå('Vis lysuret'));
+tjek('lysuret med 1 g: kun skyderen "Fart"', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Fart');
+await E(() => atomlabTest.kosmos.trykPå('Tilbage til rejsen'));
+tjek('tilbage fra lysuret med 1 g: ingen "Fart"', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Mål|1 g hele vejen|Set fra skibet');
+await E(() => atomlabTest.kosmos.trykPå('1 g hele vejen'));
+tjek('1 g slået fra: skyderen "Fart" er tilbage', (await E(() => atomlabTest.kosmos.styr())).map((s) => s.navn).join('|') === 'Mål|Fart|1 g hele vejen|Set fra skibet');
 
 // Skift til et andet fænomen og tilbage: urene er væk og kommer igen én gang
 await E(() => atomlabTest.kosmos.vælg('rumtid'));

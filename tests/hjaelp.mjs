@@ -22,13 +22,33 @@ const playwright = await hentPlaywright();
 // billede, så animationerne kører i slowmotion. Derfor tegner testene som standard hurtigt (uden glød og i lav opløsning,
 // se TEST_HURTIG i js/scene3d.js). Det giver 3-8 gange flere billeder i sekundet.
 // Fuld grafik: chromium.launch({ args: ARGS, fuldGrafik: true }) eller FULD_GRAFIK=1 (fx til skærmbilleder).
+// Chromium på Windows skriver "GL Driver Message (… GPU stall due to ReadPixels)" som en advarsel i konsollen, når der
+// tages skærmbilleder. Det er grafikdriverens støj, ikke en fejl i AtomLab, så testene får den aldrig at se
+// (ellers fejler alle tests med billeder på Windows, Tid T2 7. november 2026).
+const STØJ = /GL Driver Message/;
+function udenStøj(side) {
+  const på = side.on.bind(side);
+  side.on = (hvad, f) => på(hvad, hvad === 'console' ? (m) => { if (!STØJ.test(m.text())) f(m); } : f);
+  return side;
+}
+function stilleKontekst(ctx) {
+  const nySide = ctx.newPage.bind(ctx);
+  ctx.newPage = async (...a) => udenStøj(await nySide(...a));
+  return ctx;
+}
+
 export const chromium = {
   async launch({ fuldGrafik = process.env.FULD_GRAFIK === '1', ...valg } = {}) {
     const browser = await playwright.chromium.launch(valg);
-    if (fuldGrafik) return browser;
     const nyKontekst = browser.newContext.bind(browser);
+    if (fuldGrafik) {
+      browser.newContext = async (...a) => stilleKontekst(await nyKontekst(...a));
+      const nySide = browser.newPage.bind(browser);
+      browser.newPage = async (...a) => udenStøj(await nySide(...a));
+      return browser;
+    }
     browser.newContext = async (...a) => {
-      const ctx = await nyKontekst(...a);
+      const ctx = stilleKontekst(await nyKontekst(...a));
       await ctx.addInitScript(() => { globalThis.atomlabTestHurtig = true; });
       return ctx;
     };

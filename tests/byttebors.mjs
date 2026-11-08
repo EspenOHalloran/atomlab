@@ -1,4 +1,4 @@
-// Byttebørsen (Molekyler M1a og M1b) i Atomværkstedet: del-knapperne, træk elektronen med musen, regnskabet (måleren),
+// "Byg et molekyle" → "Giv elektroner" (det, der hed Byttebørsen, Molekyler M1a og M1b) i Atomværkstedet: fanerne, træk elektronen med musen, regnskabet (måleren),
 // ionerne, mødet, harpunen, tidsknappen, panelet uden rullebjælke, tasterne kun i "Byg et atom", knappen i hjælpen,
 // M1b: krystallen, Li + F, Mg + O, Ca + 2 Cl, Na + Na og fremgangen (opgavelisten og menuen),
 // og tablet og telefon (begge veje) med "Vis mig".
@@ -27,12 +27,18 @@ const spol = (page, sek) => B(page, 'spol', sek);
 const { ctx, page } = await side({ viewport: { width: 1280, height: 800 } });
 
 // Del-knapperne
-tjek('del-knapperne står i toplinjen', await page.isVisible('[data-vaerksted-del="atom"]') && await page.isVisible('[data-vaerksted-del="bytte"]'));
+tjek('fanerne "Byg et atom | Byg et molekyle" står i toplinjen', await page.isVisible('[data-vaerksted-del="atom"]') && await page.isVisible('[data-vaerksted-del="molekyle"]')
+  && (await page.textContent('#værkstedDele')).replace(/\s+/g, ' ').trim() === 'Byg et atom Byg et molekyle');
+tjek('navnet Byttebørsen står ingen steder i programmet', !(await page.evaluate(() => document.body.innerText + [...document.querySelectorAll('[title],[aria-label]')].map((e) => e.title + e.getAttribute('aria-label')).join(' '))).toLowerCase().includes('byttebørs'));
 tjek('"Byg et atom" er valgt fra start', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'atom'
   && await page.getAttribute('[data-vaerksted-del="atom"]', 'aria-pressed') === 'true');
 tjek('Byttebørsens paneler er skjult i "Byg et atom"', !(await page.isVisible('#byttePanel')) && !(await page.isVisible('#bytteMåler')));
-await page.click('[data-vaerksted-del="bytte"]');
+await page.click('[data-vaerksted-del="molekyle"]');
+tjek('"Byg et molekyle" åbner med "Del elektroner"', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg');
+await page.click('#bygPanel [data-vaerksted-maade="bytte"]');
 await page.waitForTimeout(600);
+tjek('"Giv elektroner" er valgt, og fanen "Byg et molekyle" er stadig valgt', await page.getAttribute('[data-vaerksted-del="molekyle"]', 'aria-pressed') === 'true'
+  && await page.getAttribute('#byttePanel [data-vaerksted-maade="bytte"]', 'aria-pressed') === 'true');
 tjek('Byttebørsen er valgt', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte'
   && await page.evaluate(() => document.getElementById('vaerksted').classList.contains('bytte')));
 tjek('byggepanel, infopanel og det lille periodiske system er skjult', !(await page.isVisible('#byggepanel')) && !(await page.isVisible('#infopanel')) && !(await page.isVisible('#minitabelPanel')));
@@ -157,7 +163,7 @@ tjek('tasterne bygger igen i "Byg et atom"', (await page.textContent('#antalP'))
 await page.click('#knapHjælp');
 await page.click('#hjælpTilBytte');
 await page.waitForTimeout(400);
-tjek('hjælpen: "Prøv det i Byttebørsen" skifter del og lukker hjælpen', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && !(await page.isVisible('#hjælp')));
+tjek('hjælpen: "Prøv det selv: Giv elektroner" skifter del og lukker hjælpen', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && !(await page.isVisible('#hjælp')));
 tjek('hjælpen siger ikke længere, at atomer "vil" have en fyldt skal', !(await page.textContent('#hjælp')).includes('mest "tilfredse"'));
 
 // Skærmskift midt i et træk: elektronen går hjem, og Byttebørsen er der stadig, når man kommer tilbage
@@ -301,7 +307,7 @@ await page.waitForTimeout(300);
 const tæller = await page.textContent('#opgaveTæller');
 await page.click('#knapOpgaver');
 const liste = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent));
-tjek('opgavelisten har Byttebørsens fem par med ★', liste.includes('Byttebørsen') && liste.filter((t) => t.startsWith('★') && /Na \+ Cl|Lithium|Magnesium|Calcium|Natrium \+ natrium/.test(t)).length === 5, liste.join(' / '));
+tjek('opgavelisten har de fem par i "Giv elektroner" med ★', liste.some((t) => t.includes('Giv elektroner')) && liste.filter((t) => t.startsWith('★') && /Na \+ Cl|Lithium|Magnesium|Calcium|Natrium \+ natrium/.test(t)).length === 5, liste.join(' / '));
 await page.locator('#opgaver li', { hasText: 'Magnesium + oxygen' }).click();
 await page.waitForTimeout(400);
 tjek('et tryk på et par i listen åbner Byttebørsen med det par', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'par') === 'mgo');
@@ -316,7 +322,8 @@ await ctx.close();
 // Tablet og telefon: del-knapperne, 3D-billedet øverst og "Vis mig"
 for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['tablet-langs', { width: 1180, height: 820 }], ['tlf', { width: 390, height: 844 }], ['tlf-langs', { width: 844, height: 390 }]]) {
   const { ctx: c2, page: p } = await side({ viewport: vp, hasTouch: true, isMobile: navn.startsWith('tlf') });
-  await p.click('[data-vaerksted-del="bytte"]');
+  await p.click('[data-vaerksted-del="molekyle"]');
+  await p.click('#bygPanel [data-vaerksted-maade="bytte"]');
   await p.waitForTimeout(800);
   const vindue = await p.evaluate(() => document.getElementById('vaerkstedVindue').getBoundingClientRect().toJSON());
   tjek(`${navn}: 3D-billedet er stort nok (${Math.round(vindue.width)} × ${Math.round(vindue.height)})`, vindue.width > 300 && vindue.height > 170);
