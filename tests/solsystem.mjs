@@ -22,10 +22,12 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
 // ---------- Gemte data flytter med fra Kosmos ----------
 {
   const s = await side({ width: 1280, height: 800 }, { atomlabKosmos: 'saturn', atomlabKosmosSet: JSON.stringify(['bigbang', 'mars', 'saturn']) });
-  const kort = await s.evaluate(() => [...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), k.querySelector('.kort-fremgang')?.textContent]));
-  const i = kort.findIndex(([h]) => h === '#solsystem');
-  tjek('menuen: Solsystemet står lige før Kosmos', i >= 0 && kort[i + 1][0] === '#kosmos', JSON.stringify(kort));
-  tjek('menuen: 2/11 set i Solsystemet og 1/12 i Kosmos', kort[i][1] === '2/11 set' && kort[i + 1][1] === '1/12 set', JSON.stringify(kort));
+  const rummet = await s.evaluate(() => atomlabTest.karrusel.verdener().find((v) => v.id === 'rummet')?.dele);
+  tjek('menuen: Solsystemet står lige før Kosmos i Rummet', rummet?.join() === 'solsystem,kosmos', JSON.stringify(rummet));
+  await s.click('.menu-fremgang-knap');
+  const tal = await s.evaluate(() => ['solsystem', 'kosmos'].map((id) => document.querySelector(`#fremgangListe [data-del="${id}"] .fremgang-tal`)?.textContent));
+  tjek('"Din fremgang": 2 af 11 besøgt i Solsystemet og 1 af 12 i Kosmos', tal[0] === '2 af 11 besøgt' && tal[1] === '1 af 12 besøgt', JSON.stringify(tal));
+  await s.keyboard.press('Escape');
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
   tjek('det sidst valgte (Saturn) åbner i Solsystemet', sol.valgt === 'saturn', JSON.stringify(sol));
@@ -114,23 +116,20 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
 
 // ---------- Menuen og listen i alle størrelser ----------
 const STØRRELSER = [
-  ['pc', { width: 1440, height: 900 }, 4],
-  ['tablet-langs', { width: 1180, height: 820 }, 4],
-  ['tablet-hoejkant', { width: 820, height: 1180 }, 2],
-  ['telefon', { width: 390, height: 844 }, 1],
-  ['telefon-langs', { width: 844, height: 390 }, 4],
+  ['pc', { width: 1440, height: 900 }],
+  ['tablet-langs', { width: 1180, height: 820 }],
+  ['tablet-hoejkant', { width: 820, height: 1180 }],
+  ['telefon', { width: 390, height: 844 }],
+  ['telefon-langs', { width: 844, height: 390 }],
 ];
-for (const [navn, vp, kol] of STØRRELSER) {
+for (const [navn, vp] of STØRRELSER) {
   const s = await side(vp, null, navn === 'pc' ? {} : { hasTouch: true, isMobile: true });
-  const kort = await s.evaluate(() => [...document.querySelectorAll('.menukort .kort')].map((k) => { const r = k.getBoundingClientRect(); return { x: r.left, y: Math.round(r.top), b: r.width }; }));
-  const rækker = [...new Set(kort.map((k) => k.y))];
-  const iFørste = kort.filter((k) => k.y === rækker[0]).length;
-  tjek(`${navn}: menuen har ${kol} kolonner`, iFørste === kol, JSON.stringify(kort));
-  // Den sidste række står i midten
-  const sidste = kort.filter((k) => k.y === rækker.at(-1));
-  const midt = (sidste[0].x + sidste.at(-1).x + sidste.at(-1).b) / 2;
-  const alleMidt = (Math.min(...kort.map((k) => k.x)) + Math.max(...kort.map((k) => k.x + k.b))) / 2;
-  tjek(`${navn}: den sidste række står i midten`, Math.abs(midt - alleMidt) < 3, `${midt} ${alleMidt}`);
+  // Menuen (ringen): verdenen forrest står i midten og helt inde på skærmen, og intet stikker ud til siden
+  const menu = await s.evaluate(() => {
+    const r = document.querySelector('#menu .verden.midt').getBoundingClientRect();
+    return { midt: (r.left + r.right) / 2 - innerWidth / 2, inde: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight, bredde: document.documentElement.scrollWidth - innerWidth };
+  });
+  tjek(`${navn}: menuen: verdenen forrest står i midten og helt inde på skærmen`, Math.abs(menu.midt) < 3 && menu.inde && menu.bredde <= 0, JSON.stringify(menu));
   await s.screenshot({ path: `${UD}/${navn}-menu.png` });
   await vis(s, 'solsystem');
   await s.evaluate(() => atomlabTest.solsystem.vælg('formoerkelser'));

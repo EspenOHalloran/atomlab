@@ -24,7 +24,7 @@ tjek('menu vises', await page.isVisible('#menu'));
 const fps = await page.evaluate(() => new Promise((ok) => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 2000) requestAnimationFrame(f); else ok(n / 2); }; requestAnimationFrame(f); }));
 console.log('Billeder pr. sekund i testbrowseren:', fps);
 
-await page.click('a.kort.åben');
+await page.click('.menukort a[href="#vaerksted"]', { force: true }); // forrest i ringen for en ny bruger (kortene svæver)
 await page.waitForTimeout(800);
 tjek('værksted vises', await page.isVisible('#vaerksted'));
 const info = () => page.textContent('#infopanel');

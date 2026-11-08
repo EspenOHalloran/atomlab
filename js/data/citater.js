@@ -197,12 +197,6 @@ export const CITATER = {
   },
 };
 
-// Citater, der passer godt i menuen
-export const MENU_CITATER = [
-  'feynman', 'saganÆbletærte', 'einsteinNysgerrighed', 'rutherford', 'saganStjernestof', 'einsteinEnergi',
-  'hawkingStjerner', 'faraday', 'saganKosmos', 'eddington', 'tycho', 'einsteinForstå', 'haldane',
-];
-
 // Laver HTML til et citat (teksten er vores egen, så den kan sættes direkte ind)
 export function citatHTML(nøgle) {
   const c = CITATER[nøgle];

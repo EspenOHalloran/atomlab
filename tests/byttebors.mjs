@@ -301,7 +301,7 @@ tjek('Na + Na: panelet siger "de bytter ikke", ikke "binder sig ikke"', (await p
 tjek('alle fem par har ★', (await Promise.all(['nacl', 'lif', 'mgo', 'cacl2', 'nana'].map(stjerne))).every((x) => x === '★'));
 await ingenRulAlle('Na + Na');
 
-// Fremgangen: Værkstedets tæller og opgaveliste og kortet i menuen
+// Fremgangen: Værkstedets tæller og opgaveliste og "Din fremgang" i menuen
 await page.click('[data-vaerksted-del="atom"]');
 await page.waitForTimeout(300);
 const tæller = await page.textContent('#opgaveTæller');
@@ -313,8 +313,11 @@ await page.waitForTimeout(400);
 tjek('et tryk på et par i listen åbner Byttebørsen med det par', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'par') === 'mgo');
 await page.evaluate(() => { location.hash = '#menu'; });
 await page.waitForTimeout(800);
-const kort = await page.textContent('.menukort a[href="#vaerksted"] .kort-fremgang');
-tjek(`menuen tæller Byttebørsen med på Værkstedets kort (${kort.trim()} / ${tæller})`, kort.includes(tæller.trim()) && Number(tæller.split('/')[0]) >= 5);
+await page.click('.menu-fremgang-knap');
+const kort = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
+const [løst, ialt] = tæller.trim().split('/');
+tjek(`"Din fremgang" i menuen tæller Byttebørsen med i Værkstedet (${kort.trim()} / ${tæller})`, kort.includes(`${løst} af ${ialt} opgaver`) && Number(løst) >= 5);
+await page.keyboard.press('Escape');
 await page.evaluate(() => { location.hash = '#vaerksted'; });
 await page.waitForTimeout(600);
 await ctx.close();

@@ -730,6 +730,7 @@ function panelIndhold() {
     return {
       titel: `${navn(a.symbol)} (${a.symbol})`,
       tekst: `${navn(a.symbol)} har ${ental(n, 'elektron', 'elektroner')} uden partner (${n === 1 ? 'den blinker' : 'de blinker'}). Hver af dem kan danne et par med en elektron fra et andet atom.`,
+      hvorfor: ['bygUdenPartner', a.symbol === 'O' ? 'Hvorfor to uden partner?' : 'Hvorfor uden partner?'],
       næste: plads() ? `Træk et atom mere ind, og slip det tæt på ${navn(a.symbol).toLowerCase()}, så de kan dele et elektronpar.` : `Der er ${D.MAX_ATOMER} atomer, det højeste. Tryk "Forfra", eller træk et atom tilbage til paletten.`,
       ærligt: '',
     };
@@ -756,6 +757,7 @@ function panelIndhold() {
       polær: k.polær ? 'ja' : 'nej',
       næste: næsteForKendt(k),
       ærligt: ÆRLIGT[k.id] ?? '',
+      hvorfor: HVORFOR_EKSTRA[k.id] ?? null,
     };
   }
   const polær = D.polærForm(form, st.atomer);
@@ -770,6 +772,11 @@ function panelIndhold() {
   };
 }
 
+// Et ekstra "Hvorfor?"-kort for nogle af de kendte molekyler: [id i HVORFOR, teksten på knappen]
+const HVORFOR_EKSTRA = {
+  o2: ['bygO2', 'Hvad sker der i O₂?'],
+};
+
 // "Næste skridt" for et færdigt, kendt molekyle (peger på en opgave, der ikke er klaret, når den passer)
 function næsteForKendt(k) {
   if (k.id === 'co2' && !fremgang.erLøst('byg-co2') && !pileKontakt.til) return 'Slå "Pile" til, og se, hvilken vej de to bindinger trækker. Hvorfor er CO₂ så ikke polært?';
@@ -782,7 +789,7 @@ function næsteForKendt(k) {
 // Det, modellen snyder med, for nogle af de kendte molekyler (faktagrundlaget, afsnit 5)
 const CH = 'C–H er en anelse skæv (H er en lille smule plus), men så lidt, at kemikere kalder den upolær. Derfor har den ingen farver her.';
 const ÆRLIGT = {
-  o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden makker, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det.',
+  o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden makker, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det (se "Hvad sker der i O₂?").',
   co: 'Prik-reglen kan ikke bygge kulilte. Her låner oxygen et af sine frie par ud, når C og O er alene, så det bliver en tripelbinding. Fordi det ene par kommer helt fra oxygen, er det kulstof-enden, der er en lille smule minus, selvom oxygen trækker hårdest. Derfor viser spillet ingen δ her.',
   h2o2: 'Den enkle model ville lægge brintoverilte fladt. Det rigtige molekyle er vredet som en halvt åben bog, så spillet drejer det med et ekstra led. Hvorfor, kræver kvantemekanik. Uden drejningen ville det heller ikke være polært.',
   metan: CH, ethan: CH, ethen: CH, ethyn: CH,
@@ -813,6 +820,12 @@ function opdaterPanel() {
   const æ = $('bygÆrligtMolekyle');
   æ.textContent = p.ærligt;
   æ.hidden = !p.ærligt;
+  const ekstra = $('bygHvorforEkstra');
+  // Det ekstra kort tager pladsen fra "Hvorfor er vand bøjet?", så panelet ikke får en rullebjælke
+  ekstra.hidden = !p.hvorfor;
+  document.querySelector('#bygInfo [data-hvorfor="bygForm"]').hidden = !!p.hvorfor;
+  if (p.hvorfor) [ekstra.dataset.hvorfor, ekstra.textContent] = p.hvorfor;
+  else delete ekstra.dataset.hvorfor;
   næste.sæt({ tekst: p.næste });
   for (const b of document.querySelectorAll('.palet-atom')) b.disabled = !plads();
 }
