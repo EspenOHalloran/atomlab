@@ -5,6 +5,9 @@
 // Valgfrit (Jupiter, J3): en tone (et lille farvekort, der ganges på, Io) og planetens skygge: Står månen bag planeten
 // set fra Solen, bliver den mørk. Skyggen er en cylinder bag den fladtrykte planet, og kanten er så blød som
 // halvskyggen (Solens vinkel gange afstanden bag planeten).
+//
+// Valgfrit (Uranus, UN4): klump: { frø, styrke } giver en lille måne uden kort en klumpet form (tegnet): Kuglen skubbes
+// ud og ind af nogle få bølger, der afhænger af retningen (samme frø giver samme form), og normalerne regnes igen.
 
 import * as THREE from 'three';
 
@@ -50,8 +53,8 @@ const VERTEX = /* glsl */ `
   }`;
 
 // radius i scene-enheder. farve: et svagt skær (rgb). lys: ganges på kortet, så månerne får den rigtige lysstyrke i forhold til hinanden.
-// segmenter: felter rundt om kuglen.
-export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96 } = {}) {
+// segmenter: felter rundt om kuglen. klump: { frø, styrke } (se øverst).
+export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96, klump = null } = {}) {
   const mat = new THREE.ShaderMaterial({
     uniforms: {
       uSol: { value: new THREE.Vector3(1, 0, 0) },
@@ -72,7 +75,9 @@ export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96 
     fragmentShader: FRAGMENT,
   });
   const gruppe = new THREE.Group();
-  gruppe.add(new THREE.Mesh(new THREE.SphereGeometry(radius, segmenter, Math.round(segmenter * 2 / 3)), mat));
+  const geo = new THREE.SphereGeometry(radius, segmenter, Math.round(segmenter * 2 / 3));
+  if (klump) klumpet(geo, radius, klump);
+  gruppe.add(new THREE.Mesh(geo, mat));
   return {
     gruppe,
     sætKort(t) { mat.uniforms.tKort.value = t; mat.uniforms.uHarKort.value = t ? 1 : 0; },
@@ -89,4 +94,41 @@ export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96 
       u.uSolVinkel.value = solVinkel;
     },
   };
+}
+
+// En klumpet form (tegnet): radius ganges med 1 + summen af nogle bølger langs tilfældige retninger. Bølgerne afhænger
+// kun af retningen, så punkterne i sømmen og ved polerne flytter sig ens, og normalerne i dem lægges sammen bagefter.
+function klumpet(geo, radius, { frø = 1, styrke = 0.25 }) {
+  let x = frø * 9301 + 49297;
+  const tilfældig = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+  const bølger = Array.from({ length: 6 }, (_, i) => {
+    const z = tilfældig() * 2 - 1, a = tilfældig() * Math.PI * 2, s = Math.sqrt(1 - z * z);
+    return { d: new THREE.Vector3(s * Math.cos(a), z, s * Math.sin(a)), k: 1 + i * 0.6, fase: tilfældig() * Math.PI * 2, a: styrke / (1 + i * 0.7) };
+  });
+  const pos = geo.attributes.position, p = new THREE.Vector3();
+  let største = 0;
+  const faktor = [];
+  for (let i = 0; i < pos.count; i++) {
+    p.fromBufferAttribute(pos, i).normalize();
+    let f = 1;
+    for (const b of bølger) f += b.a * Math.sin(b.k * 2 * p.dot(b.d) + b.fase);
+    faktor.push(Math.max(0.4, f));
+    største = Math.max(største, faktor[i]);
+  }
+  // Den længste akse bliver månens radius
+  for (let i = 0; i < pos.count; i++) {
+    p.fromBufferAttribute(pos, i).normalize().multiplyScalar((radius * faktor[i]) / største);
+    pos.setXYZ(i, p.x, p.y, p.z);
+  }
+  geo.computeVertexNormals();
+  // Punkter på samme sted (sømmen og polerne) får den samme normal
+  const n = geo.attributes.normal, samlet = new Map(), nøgle = (i) => `${pos.getX(i).toFixed(6)},${pos.getY(i).toFixed(6)},${pos.getZ(i).toFixed(6)}`;
+  for (let i = 0; i < pos.count; i++) {
+    const k = nøgle(i), v = samlet.get(k) ?? new THREE.Vector3();
+    samlet.set(k, v.add(p.fromBufferAttribute(n, i)));
+  }
+  for (let i = 0; i < pos.count; i++) {
+    const v = samlet.get(nøgle(i)).clone().normalize();
+    n.setXYZ(i, v.x, v.y, v.z);
+  }
 }

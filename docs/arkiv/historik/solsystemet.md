@@ -2,6 +2,23 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (8. november 2026): Uranus og Neptun UN4, Uranus' måner.** Jeres go: "start un4".
+- **De fem store måner** (Miranda, Ariel, Umbriel, Titania og Oberon) med Voyager 2's kort (Caltech/JPL/USGS, public domain, fundet på Wikimedia Commons, som nu er åben). Voyager så kun den sydlige halvdel, så den nordlige er en blød, grå flade ("aldrig fotograferet tæt på"). Den halvdel har sol nu, så træk **År** til 1986 ved en måne: Kameraet følger Solen, og man ser Voyagers billeder.
+- **Banerne** (NSSDC) i Uranus' ækvatorplan som en skydeskive, den rigtige vej (med uret om IAU's nordpol, som Uranus drejer), Miranda hælder 4,3°, alle vender samme side mod Uranus. Den rigtige størrelse ved en måne, større langt væk. Skygger begge veje, navne, tryk på en måne og "Måner" i træet med sider (faktatjekket, 14 påstande).
+- **"Små måner":** Cressida, Desdemona, Cupid og Belinda som små, grå klumper (formen tegnet, 5 gange lysere end de er). Cressida indhenter Desdemona ca. hver 22. døgn (⏩).
+- **Spørgsmål til jer:** (1) Ved et besøg i 2026 er månen en grå kugle, for den side, der har sol nu, er aldrig fotograferet. Skal besøget i stedet starte i 1986 (så man ser Voyagers billeder med det samme), eller skal det blive ved den ærlige grå og "Træk År til 1986"? Anbefaling: lad det være, og lad flybyen (UN5) vise en måne i 1986. (2) Spørgsmålene fra UN3 (Uranus i "Voyagers farver" og "Infrarødt" ved Neptun) og UN2 (kameraet ved skyderen) står stadig.
+
+**Senest lavet (8. november 2026): Uranus og Neptun UN3, Neptuns vejr og ringbuer.** Jeres go: "start un3".
+- **Høje, hvide skyer** af metan-is i bånd ved de breddegrader, Voyager så dem. De kaster blålige skygger ca. 50 km under sig (som på Voyagers foto), som ses tæt på ved grænsen mellem dag og nat. Skyerne er tegnet, og der er få i 2025 (de forsvandt næsten i 2019).
+- **Kontakten "Neptun i 1989":** Den Store Mørke Plet (22° S, 13.000 km lang, med den lyse sky ved kanten), Scooter og den lille mørke plet D2 ved de rigtige breddegrader og med Voyagers målte omgange, så de driver fra hinanden. Flere skyer og buerne, som de var i 1989.
+- **"Voyagers farver (1989)"** (dybblå, målt på Solar System Scopes kort) og **"Vindene"** (pile). **Ringene:** fem tynde, støvede ringe, usynlige forfra og synlige i modlys, med de fem buer i Adams-ringen, der kredser på 10,5 timer. Tre nye emner på Neptuns side (faktatjekket).
+- **Spørgsmål til jer:** (1) Skal Uranus også have "Voyagers farver (1986)"? Anbefaling: nej, for Voyagers billeder af Uranus var tæt på de ægte farver (tjekkes, før det skrives). (2) Webb tog også et berømt billede af Neptuns ringe i infrarødt lys. Skal Neptun have "Infrarødt (som JWST)" som Uranus? Anbefaling: ja, det er lille, og det kan komme med i UN5. (3) Spørgsmålet fra UN2 om kameraet ved skyderen "År" står stadig (anbefaling: lad det være, og vis det fra siden i flybyen).
+
+**Senest lavet (8. november 2026): Uranus og Neptun UN2, Uranus' årstider og ringe.** Jeres go: "Go un2".
+- **Skyderen "År"** (1986-2070) flytter kun Solen. Solens højde over Uranus passer med Horizons (1986: −82,5°, 2007: 0°, 2026: +74°). **Kappen over polen** er lys, når Solen står højt over den (tegnet).
+- **Ringene** (NSSDC): 10 tætte ringe, mørke som kul, så forfra er de næsten usynlige. Støvet mellem dem ses i modlys, og kontakten **"Infrarødt (som JWST)"** gør planeten mørkere og ringene 40 gange lysere. To nye emner på Uranus' side (årene og ringene).
+- **Spørgsmål til jer:** Startbilledet er set fra Solens side i 2026. Trækker I skyderen til 1986, står Solen bag Uranus, og man ser natsiden (rigtig fysik). Skal kameraet i stedet stå, så man ser begge poler fra siden, når man bruger skyderen? Anbefaling: Lad det være, og lav flybyens stop 2 ("Et år er 84 år") set fra siden i UN5.
+
 **Senest lavet (8. november 2026): Uranus og Neptun UN1, kloderne og skelettet.** Jeres go: "go, og ja til emSign".
 - **Begge kloder står i Solsystemet efter Saturn** (🩵 Uranus og 🔵 Neptun) med Hubbles kort fra 2025: båndene i de ægte farver (lyst grønlig blå, Neptun lidt mere blå) og et svagt lag med de største pletter. Uranus' sydlige halvdel er fra Hubble i 2014, og længst mod syd er nordpolen spejlet (sydpolen har været i mørke siden 2007). Det står i "Ærligt talt".
 - **Aksen og Solen er rigtige for dagens dato:** Polens retning (NSSDC) og banen (JPL) giver Solens bredde inden for 0,05° af Horizons, så Uranus' nordpol har sol nu. Uranus drejer "baglæns", Neptun den almindelige vej. Vindene blæser med de målte formler, og de står stille i pause.

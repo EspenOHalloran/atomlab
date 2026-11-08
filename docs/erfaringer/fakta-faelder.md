@@ -82,3 +82,7 @@
 - "Hafele og Keating: Urene i flyene gik langsommere." Kun mod øst. Mod vest gik de hurtigere, fordi Jorden selv drejer mod øst (Rejsen i tid, Trin 0).
 - "Et typisk støvkorn i rummet vejer 1 µg." Et typisk korn er ca. 0,1 µm. Kornet på 1 µg (ca. 0,09 mm) er et stort korn: Skriv "et bittelille sandkorn", ikke "et typisk støvkorn" (Rejsen i tid, Trin 0).
 - Tal fra et gammelt forsøg (fx Frisch og Smiths myoner, 563 og 412 i timen) skal findes i en kilde, man kan læse, før de skrives. Faktagrundlaget havde tallene, men de stod ikke i kilden, det henviste til (Rejsen i tid, T3).
+- "Tøristågen er vanddamp fra luften." Den tykke tåge kommer fra vandet, tørisen lægges i (Wikipedia "Dry ice": "not from atmospheric water vapor (as is commonly assumed)") (Ordbogen PR B, 8. november 2026).
+- "Mælkevejen er 100.000 lysår bred." Wikipedia siger nu ca. 26,8 kpc (ca. 87.000 lysår) og advarer mod 100.000 eller mere. Skriv "ca. 90.000 lysår" eller "næsten 100.000" (Ordbogen PR B).
+
+- "Ariel sender 39 % af lyset tilbage" (fra NSSDC's albedo 0,39). NSSDC's tal er den geometriske albedo (lysstyrken set lige forfra i forhold til en hvid skive), ikke andelen af alt lyset (Bond-albedoen). Skriv "den lyseste" eller "mørk som kul" i stedet for en procent (UN4).

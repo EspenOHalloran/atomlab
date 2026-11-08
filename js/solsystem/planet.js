@@ -21,13 +21,23 @@
 // - kapper (Uranus, UN2): { fra, til, vNord, vSyd }. Kortet har en lys kappe over polerne. Den toner ud mod farven ved
 //   rækkerne vNord og vSyd (samme halvkugle), når kappen er slukket (sætKapper(nord, syd), 0 til 1). fra og til er
 //   sinus til den parametriske bredde, hvor kappen begynder og er fuld.
+// - Neptuns vejr (UN3), alt valgfrit:
+//   højeSkyer: { bånd, højde, fine }: højst så mange bånd af høje, hvide skyer (metan-is), der kaster skygge på skylaget
+//   under dem. Hvert bånd (sætSkyer) har midten og den halve bredde i kortets v, en forskydning i u (båndet flytter
+//   sig med vinden ved sin bredde som én stiv blok, så skyerne ikke trækkes ud) og hvor meget af båndet der er skyer
+//   (0 til 1). højde: skyernes højde over skylaget i planetradier (skyggens længde er højde gange tan til Solens
+//   vinkel). fine: tynde striber inde i skyerne (kun pc).
+//   pletter: højst så mange pletter (sætPletter): mørke ovaler (Den Store Mørke Plet), lyse skyer ved kanten og i
+//   midten og lyse skyer uden mørk plet (Scooter). sætPletStyrke toner dem ind og ud (kontakten "Neptun i 1989").
+//   voyager: kontakten "Voyagers farver (1989)": kortets farve gjort blåere og med mere kontrast, som Voyagers billeder
+//   blev behandlet (sætVoyager(styrke, gain, midt, kontrast)).
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null, højeSkyer = null, pletter = 0, voyager = false }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -40,6 +50,11 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   if (måner) defines.MAANER = måner;
   if (cykloner?.length) defines.CYKLONER = cykloner.length;
   if (kapper) defines.KAPPER = '';
+  if (højeSkyer) defines.HOEJE_SKYER = højeSkyer.bånd;
+  if (højeSkyer?.fine) defines.FINE_SKYER = '';
+  if (pletter) defines.PLETTER = pletter;
+  if (højeSkyer || pletter) defines.NEPTUN_VEJR = '';
+  if (voyager) defines.VOYAGER = '';
   const mat = new THREE.ShaderMaterial({
     defines,
     uniforms: {
@@ -68,6 +83,16 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uEks: { value: 1 },
       uKant: { value: new THREE.Vector3(...kantFarve) },
       uKappe: { value: new THREE.Vector2(1, 1) },
+      uSky: { value: Array.from({ length: Math.max(1, højeSkyer?.bånd ?? 0) }, () => new THREE.Vector4()) },
+      uSkyHoejde: { value: højeSkyer?.højde ?? 0.002 },
+      uSolLokal: { value: new THREE.Vector3(1, 0, 0) },
+      uPletter: { value: Array.from({ length: Math.max(1, pletter) }, () => new THREE.Vector4(0, 0, 1, 1)) },
+      uPletterB: { value: Array.from({ length: Math.max(1, pletter) }, () => new THREE.Vector4()) },
+      uPletStyrke: { value: 0 },
+      uVoy: { value: 0 },
+      uVoyGain: { value: new THREE.Vector3(1, 1, 1) },
+      uVoyMidt: { value: new THREE.Vector3(0.5, 0.5, 0.5) },
+      uVoyKontrast: { value: 1 },
       uKappeOmr: { value: new THREE.Vector4(kapper?.fra ?? 0.6, kapper?.til ?? 0.85, kapper?.vNord ?? 0.6, kapper?.vSyd ?? 0.4) },
     },
     vertexShader: /* glsl */ `
@@ -242,6 +267,103 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         return ud;
       }
       #endif
+      #ifdef NEPTUN_VEJR
+      // Støj, der går hele vejen rundt (per celler i u), så der ikke er en søm ved længde 0°
+      float hashP(vec2 i, float per) { i.x = mod(i.x, per); return hash2(i + 0.5); }
+      float stoejP(vec2 p, float per) {
+        vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hashP(i, per), hashP(i + vec2(1.0, 0.0), per), f.x), mix(hashP(i + vec2(0.0, 1.0), per), hashP(i + 1.0, per), f.x), f.y);
+      }
+      #endif
+      #ifdef HOEJE_SKYER
+      uniform vec4 uSky[HOEJE_SKYER]; // midten (v), den halve bredde (v), forskydningen (u) og dækningen (0 til 1)
+      uniform float uSkyHoejde;
+      uniform vec3 uSolLokal; // Solens retning i kuglens egne retninger
+      float gFin = 0.0; // tæt på: tynde striber i skyerne (sat i main efter, hvor stor en pixel er)
+      // Skyerne i båndene: aflange skyer langs breddekredsen (ca. 9° lange celler, 7 gange så lange som brede). Tæt på
+      // består de af tynde striber, ca. 50-150 km brede (som på Voyagers foto PIA00058).
+      float skyBaand(vec2 uv) {
+        float c = 0.0;
+        for (int i = 0; i < HOEJE_SKYER; i++) {
+          vec4 b = uSky[i];
+          if (b.w <= 0.0) continue;
+          float dy = (uv.y - b.x) / b.y;
+          if (abs(dy) >= 1.0) continue;
+          float x = fract(uv.x - b.z);
+          vec2 p = vec2(x * 40.0, dy * 2.5 + float(i) * 7.3);
+          float n = 0.65 * stoejP(p, 40.0) + 0.35 * stoejP(p * vec2(2.0, 2.7) + vec2(0.0, 3.1), 80.0);
+          n *= 1.0 - smoothstep(0.45, 1.0, abs(dy));
+          float e = smoothstep(1.0 - b.w, 1.12 - b.w, n);
+          #ifdef FINE_SKYER
+          if (gFin > 0.0 && e > 0.0) {
+            // Striber: 160 celler rundt (ca. 2,3° lange) og 40 på tværs af båndet (ca. 0,15° brede)
+            float st = stoejP(vec2(x * 160.0, dy * 20.0 + float(i) * 3.3), 160.0);
+            e *= mix(1.0, mix(0.25, 1.0, smoothstep(0.42, 0.62, st)), gFin);
+          }
+          #endif
+          c = max(c, e);
+        }
+        return c;
+      }
+      #endif
+      #ifdef PLETTER
+      uniform vec4 uPletter[PLETTER]; // midten (u, v) og halvakserne (u, v)
+      uniform vec4 uPletterB[PLETTER]; // mørk (0 til 1), lys midte (0 til 1), lys sky ved den sydlige kant (0 til 1), vinkel
+      uniform float uPletStyrke;
+      vec2 pletQ(vec2 uv, int i) { vec2 d = uv - uPletter[i].xy; d.x -= floor(d.x + 0.5); return d / uPletter[i].zw; }
+      // Hvor mørke pletterne gør skylaget (0 til 1). Kanten bølger som en spiral, der drejer med pletten.
+      float pletMoerke(vec2 uv) {
+        float m = 0.0;
+        for (int i = 0; i < PLETTER; i++) {
+          vec4 b = uPletterB[i];
+          if (b.x <= 0.0) continue;
+          vec2 q = pletQ(uv, i);
+          float r = length(q);
+          if (r > 1.6) continue;
+          float th = atan(q.y, q.x) - b.w;
+          float kant = 1.0 + 0.1 * sin(2.0 * th + 3.0 * r) + 0.06 * (stoej2(vec2(th * 2.0, r * 3.0) + float(i)) - 0.5);
+          m = max(m, b.x * (1.0 - smoothstep(0.55 * kant, kant, r)));
+        }
+        return m * uPletStyrke;
+      }
+      // De lyse skyer ved pletterne: lyse fjer langs kanten, en lys sky ved den sydlige kant og en lys midte
+      float pletSkyer(vec2 uv) {
+        float c = 0.0;
+        for (int i = 0; i < PLETTER; i++) {
+          vec4 b = uPletterB[i];
+          vec2 q = pletQ(uv, i);
+          float r = length(q);
+          if (r > 1.8) continue;
+          float th = atan(q.y, q.x) - b.w;
+          float fjer = b.x * 0.8 * smoothstep(0.62, 0.85, stoej2(vec2(th * 2.5 + r * 2.0, r * 5.0) + float(i) * 5.0)) * (1.0 - smoothstep(0.12, 0.3, abs(r - 1.05)));
+          vec2 s = (q - vec2(0.25, -1.0)) / vec2(0.5, 0.18); // ca. 1.000 km fra nord til syd ved Den Store Mørke Plet
+          float syd = b.z * (1.0 - smoothstep(0.5, 1.0, length(s) + 0.25 * (stoej2(q * 6.0 + float(i)) - 0.5)));
+          float midt = b.y * (1.0 - smoothstep(0.25, 0.6, r + 0.3 * (stoej2(q * 5.0 - float(i)) - 0.5)));
+          c = max(c, max(fjer, max(syd, midt)));
+        }
+        return c * uPletStyrke;
+      }
+      #endif
+      #ifdef NEPTUN_VEJR
+      // Alle de høje, hvide skyer på ét sted i kortet (0 til 1)
+      float hoejeSkyer(vec2 uv) {
+        float c = 0.0;
+        #ifdef HOEJE_SKYER
+        c = skyBaand(uv);
+        #ifdef PLETTER
+        c *= 1.0 - pletMoerke(uv); // inde i de mørke pletter er der ingen skyer
+        #endif
+        #endif
+        #ifdef PLETTER
+        c = max(c, pletSkyer(uv));
+        #endif
+        return c;
+      }
+      #endif
+      #ifdef VOYAGER
+      uniform float uVoy, uVoyKontrast;
+      uniform vec3 uVoyGain, uVoyMidt;
+      #endif
       // Skybånd uden billede: lyse zoner og mørkere bælter, der følger breddegraden
       vec3 baand(vec2 uv) {
         float b = uv.y * 2.0 - 1.0; // -1 (sydpol) til 1 (nordpol)
@@ -279,6 +401,38 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
           float uro = 0.8 + 0.4 * (0.5 * stoej2(pp) + 0.3 * stoej2(pp * 2.7 + 5.0) + 0.2 * stoej2(pp * 7.3 + 11.0));
           farve *= mix(1.0, cykloner(vLokal) * uro, pol);
         }
+        #endif
+        #ifdef PLETTER
+        // De mørke pletter er huller i det øverste skylag: dybere blå
+        float pm = pletMoerke(vUv);
+        farve = mix(farve, farve * vec3(0.5, 0.64, 0.9), pm);
+        #endif
+        #ifdef NEPTUN_VEJR
+        // De høje skyer: hvide (over det meste af metanen) og med skygge på skylaget, der ligger ca. 50 km under dem. Skyggen
+        // falder væk fra Solen, så punktet ligger i skygge, hvis der står en sky mellem det og Solen i skyernes højde.
+        #ifdef FINE_SKYER
+        gFin = 1.0 - smoothstep(0.5, 1.5, fwidth(vUv.y) * 2500.0);
+        #endif
+        float sky = hoejeSkyer(vUv);
+        float skyggeSky = 0.0;
+        #ifdef HOEJE_SKYER
+        float cosS = dot(vLokal, uSolLokal);
+        if (cosS > 0.02) {
+          vec3 t = (uSolLokal - vLokal * cosS) / cosS; // mod Solen langs overfladen, længden er tan til Solens vinkel
+          float tl = length(t);
+          if (tl > 20.0) t *= 20.0 / tl;
+          vec3 qs = normalize(vLokal + t * uSkyHoejde);
+          vec2 uvS = vec2(fract(atan(qs.z, -qs.x) / 6.28318), 0.5 + asin(clamp(qs.y, -1.0, 1.0)) / 3.14159);
+          skyggeSky = hoejeSkyer(uvS) * (1.0 - sky);
+        }
+        #endif
+        // Skyggen er blålig: lys, der spredes i luften over skylaget, falder ind i den (Voyager, PIA00058)
+        farve *= mix(vec3(1.0), vec3(0.5, 0.64, 0.9), skyggeSky * 0.8);
+        farve = mix(farve, vec3(0.93, 0.96, 1.0), sky * 0.9);
+        #endif
+        #ifdef VOYAGER
+        // Voyagers farver: blåere og med mere kontrast omkring kortets middelfarve
+        farve = mix(farve, max(uVoyGain * (uVoyMidt + (farve - uVoyMidt) * uVoyKontrast), 0.0), uVoy);
         #endif
         #ifdef KAPPER
         // Kappen over polerne: slukket toner den ud mod farven længere fra polen på samme halvkugle (et lille niveau i
@@ -329,6 +483,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   const akse = new THREE.Vector3();
   const midt = new THREE.Vector3();
   const hjælpS = new THREE.Vector3();
+  const hjælpQ = new THREE.Quaternion();
   return {
     mesh,
     radius: R,
@@ -350,6 +505,21 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
     sætEksponering(e) { mat.uniforms.uEks.value = e; },
     // Kappen over hver pol: 1 er som på kortet, 0 er slukket (kapper)
     sætKapper(nord, syd) { mat.uniforms.uKappe.value.set(nord, syd); },
+    // Neptuns vejr (UN3): båndene [{ v, halv, u, dækning }], pletterne [{ u, v, au, av, mørk, midt, syd, vinkel }]
+    sætSkyer(bånd) {
+      mat.uniforms.uSky.value.forEach((x, i) => { const b = bånd[i]; if (b) x.set(b.v, b.halv, b.u, b.dækning); else x.set(0, 1, 0, 0); });
+    },
+    sætPletter(liste) {
+      mat.uniforms.uPletter.value.forEach((x, i) => { const p = liste[i]; if (p) x.set(p.u, p.v, p.au, p.av); else x.set(0, 0, 1, 1); });
+      mat.uniforms.uPletterB.value.forEach((x, i) => { const p = liste[i]; if (p) x.set(p.mørk, p.midt, p.syd, p.vinkel); else x.set(0, 0, 0, 0); });
+    },
+    sætPletStyrke(s) { mat.uniforms.uPletStyrke.value = s; },
+    sætVoyager(styrke, gain, midt, kontrast) {
+      mat.uniforms.uVoy.value = styrke;
+      if (gain) mat.uniforms.uVoyGain.value.set(...gain);
+      if (midt) mat.uniforms.uVoyMidt.value.set(...midt);
+      if (kontrast) mat.uniforms.uVoyKontrast.value = kontrast;
+    },
     // Cyklonerne drejer med planetens ur (uTid)
     cykloner: cykloner ?? [],
     sætMåner(liste) {
@@ -368,6 +538,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       mat.uniforms.uAkse.value.copy(akse);
       mat.uniforms.uMidt.value.copy(midt);
       mat.uniforms.uTid.value = tid;
+      if (højeSkyer) mat.uniforms.uSolLokal.value.copy(solRetning).applyQuaternion(mesh.getWorldQuaternion(hjælpQ).invert());
       return { midt, akse };
     },
   };
