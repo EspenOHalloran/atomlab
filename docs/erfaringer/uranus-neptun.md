@@ -32,3 +32,12 @@
 - **Støv, der spreder fremad, er meget følsomt for vinklen:** Med samme lysstyrke var støvet en bred, tåget skive, når Solen stod lige bag Uranus (1986 set fra Solens side i 2026), men næsten usynligt med "Modlys", hvor Solen står 12° fra. Se begge, før tallet låses.
 - **Skyderen "År" med et fast kamera:** Startbilledet er set fra Solens side i 2026. Flytter man til 1986, står Solen bag Uranus, og man ser natsiden. Det er rigtig fysik, men det kan forvirre (spørgsmål til brugeren efter UN2).
 - **Billeder i sekundet svinger fra dag til dag:** Pc gav 6,9 i UN1 og 3,4-5,5 i UN2 for samme billede. Skiftevis med og uden ringe i samme browser viste, at ringene ikke koster noget, man kan måle.
+
+## UN3: Neptuns vejr og ringbuer (8. november 2026)
+- **Voyagers billedtekster er en god kilde til tal:** NASA's Photojournal (`photojournal.jpl.nasa.gov/catalog/PIAxxxxx`, sender videre til science.nasa.gov) har breddegrader, omløbstider og størrelser for pletterne og skyerne i teksten under hvert billede. Hent flere numre i en løkke, og søg efter "latitude" og "hours".
+- **To navne i samme shader:** `uPlet` fandtes allerede (Jupiters hvirvel), så Neptuns pletter gav en kompileringsfejl. Søg efter et uniform-navn i `planet.js`, før det bruges.
+- **Skyer, der flytter sig med vinden, skal være stive blokke:** Med tofase-metoden (som kortet) ville skarpe skyer stå dobbelt, og hvis hver række flytter sig for sig, trækkes en sky ud til en stribe på kort tid (Neptuns vind ændrer sig ca. 9 m/s pr. grad ved 25°). Hvert bånd og hver plet flytter sig derfor som én blok med vinden ved sin midte.
+- **Skygger fra 50 km høje skyer ses kun tæt på:** Med den rigtige højde er skyggen kun ca. 235 km væk fra skyen, selv når Solen står 78° fra lodret. En prøve med 500 km viste, at skyggen faldt den rigtige vej. Skyerne skal selv være tynde (50-200 km, som på Voyagers foto), ellers dækker de deres egen skygge. Brug `tætPå(27)` i billedværktøjet.
+- **Skyer inde i en mørk plet:** Båndet af skyer ved 22° S lå oven på Den Store Mørke Plet, så den forsvandt. Pletterne fjerner nu skyerne inden for deres kant.
+- **Den tætte skyfordeling fra første forsøg var for meget:** Med dækningen 0,75 blev båndet ved 27° N en hvid ring om hele planeten. Voyagers billeder viser spredte striber (0,45).
+- **Billeder i sekundet** (testbrowseren uden grafikkort, målt alene, ikke mens testene kører): Neptun 4,7 (4,0 med "Neptun i 1989") mod Uranus 5,4 samme dag på pc, og 9,9 (8,0) på tablet. Vejret koster ca. 15 % i testbrowseren.

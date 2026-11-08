@@ -2,7 +2,10 @@
 // Kør: node tests/vaerktoejer/isgiganter.mjs [pc|tablet|tablet-hoejkant|tlf-hoejkant|tlf-langs] [uranus|neptun] [sted ...]
 // (billederne lægges i tests/billeder/isgiganter-fuld/). Stederne: hel (hele planeten fra start), modlys (kontakten
 // "Modlys") og hurtig (efter 20 sekunder med ⏩). UN2 (Uranus): et årstal (fx 1986, 2007 eller 2030, skyderen "År"), ir
-// (kontakten "Infrarødt (som JWST)"). Uden størrelse: pc og
+// (kontakten "Infrarødt (som JWST)"). UN3 (Neptun): n1989 (kontakten "Neptun i 1989"), voyager (kontakten "Voyagers
+// farver"), vinde (kontakten "Vindene"), plet (drejet, så Den Store Mørke Plet vender mod kameraet, med "Neptun i 1989"),
+// ringe (hele ringsystemet), ringemodlys (hele ringsystemet med "Modlys"), og terminator (skyerne ved 27° N tæt på ved grænsen
+// mellem dag og nat, hvor skyernes skygger er længst). Uden størrelse: pc og
 // tablet. Uden planet: begge. Uden steder: hel.
 // Mål én browser ad gangen (to samtidig halverer tallene, tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
@@ -30,6 +33,13 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
     for (const sted of steder.length ? steder : ['hel']) {
       if (sted === 'modlys') await kontakt('Modlys');
       if (sted === 'ir') await kontakt('Infrarødt');
+      if (['n1989', 'plet', 'terminator'].includes(sted)) await kontakt('Neptun i 1989');
+      if (sted === 'voyager') await kontakt('Voyagers farver');
+      if (sted === 'vinde') await kontakt('Vindene');
+      if (sted === 'plet') { await s.waitForTimeout(800); await f(() => atomlabTest.solsystem.fænomen().visPlet()); }
+      if (sted === 'terminator') { await s.click('#solsystemTid button[data-tid="pause"]'); await f(() => atomlabTest.solsystem.fænomen().tætPå(27)); }
+      if (sted === 'ringe' || sted === 'ringemodlys') await f(() => atomlabTest.solsystem.fænomen().visRinge());
+      if (sted === 'ringemodlys') await kontakt('Modlys');
       if (/^\d{4}$/.test(sted)) await f((v) => atomlabTest.solsystem.fænomen().sætÅr(v), Number(sted));
       if (sted === 'hurtig') {
         await s.click('#solsystemTid button[data-tid="hurtig"]');
@@ -42,6 +52,11 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
       console.log(`${navn} ${planet} ${sted}: ${bps.toFixed(1)} billeder i sekundet`);
       if (sted === 'modlys') await kontakt('Modlys');
       if (sted === 'ir') await kontakt('Infrarødt');
+      if (['n1989', 'plet', 'terminator'].includes(sted)) await kontakt('Neptun i 1989');
+      if (sted === 'voyager') await kontakt('Voyagers farver');
+      if (sted === 'vinde') await kontakt('Vindene');
+      if (sted === 'ringemodlys') await kontakt('Modlys');
+      if (sted === 'terminator') await s.click('#solsystemTid button[data-tid="spil"]');
     }
   }
   if (fejl.length) console.log('Konsol:', fejl.join('\n'));
