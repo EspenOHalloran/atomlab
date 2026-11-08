@@ -18,13 +18,16 @@
 //   (enhedsvektor), en retning mod øst, radius (som en korde på enhedskuglen) og hvor hurtigt den drejer (radianer pr.
 //   sekund, positiv er mod uret set udefra). Skyerne i hver cyklon tegnes som spiraler, der drejer, oven på kortet.
 // - kantFarve (Uranus og Neptun, UN1): farven på kanten i modlys (standard en varm, gullig farve som Saturn og Jupiter).
+// - kapper (Uranus, UN2): { fra, til, vNord, vSyd }. Kortet har en lys kappe over polerne. Den toner ud mod farven ved
+//   rækkerne vNord og vSyd (samme halvkugle), når kappen er slukket (sætKapper(nord, syd), 0 til 1). fra og til er
+//   sinus til den parametriske bredde, hvor kappen begynder og er fuld.
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6] }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -36,6 +39,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   if (pile) defines.PILE = pile;
   if (måner) defines.MAANER = måner;
   if (cykloner?.length) defines.CYKLONER = cykloner.length;
+  if (kapper) defines.KAPPER = '';
   const mat = new THREE.ShaderMaterial({
     defines,
     uniforms: {
@@ -63,6 +67,8 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uTid: { value: 0 },
       uEks: { value: 1 },
       uKant: { value: new THREE.Vector3(...kantFarve) },
+      uKappe: { value: new THREE.Vector2(1, 1) },
+      uKappeOmr: { value: new THREE.Vector4(kapper?.fra ?? 0.6, kapper?.til ?? 0.85, kapper?.vNord ?? 0.6, kapper?.vSyd ?? 0.4) },
     },
     vertexShader: /* glsl */ `
       varying vec3 vNormal;
@@ -84,6 +90,10 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uniform sampler2D tKort;
       uniform float uHarKort, uTid, uEks;
       uniform vec3 uSol, uAkse, uMidt, uKant;
+      #ifdef KAPPER
+      uniform vec2 uKappe;
+      uniform vec4 uKappeOmr;
+      #endif
       varying vec3 vNormal;
       varying vec3 vVerden;
       varying vec2 vUv;
@@ -270,6 +280,16 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
           farve *= mix(1.0, cykloner(vLokal) * uro, pol);
         }
         #endif
+        #ifdef KAPPER
+        // Kappen over polerne: slukket toner den ud mod farven længere fra polen på samme halvkugle (et lille niveau i
+        // kortet, så båndene ikke ses)
+        float kN = smoothstep(uKappeOmr.x, uKappeOmr.y, vLokal.y) * (1.0 - uKappe.x);
+        float kS = smoothstep(uKappeOmr.x, uKappeOmr.y, -vLokal.y) * (1.0 - uKappe.y);
+        if (kN + kS > 0.0 && uHarKort > 0.5) {
+          vec3 uden = textureLod(tKort, vec2(vUv.x, kN > 0.0 ? uKappeOmr.z : uKappeOmr.w), 6.0).rgb;
+          farve = mix(farve, uden, kN + kS);
+        }
+        #endif
         float lys = max(dot(N, uSol), 0.0);
         // Blød overgang ved grænsen mellem dag og nat (lyset spredes i de øverste skyer)
         lys = smoothstep(-0.05, 0.35, dot(N, uSol)) * (0.35 + 0.65 * lys);
@@ -328,6 +348,8 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
     // Månernes skygger: [{ midt (verden), r (verden) }], højst måner
     // Billedet gjort lysere (fx ved polerne, hvor Solen står lavt): 1 er det normale
     sætEksponering(e) { mat.uniforms.uEks.value = e; },
+    // Kappen over hver pol: 1 er som på kortet, 0 er slukket (kapper)
+    sætKapper(nord, syd) { mat.uniforms.uKappe.value.set(nord, syd); },
     // Cyklonerne drejer med planetens ur (uTid)
     cykloner: cykloner ?? [],
     sætMåner(liste) {

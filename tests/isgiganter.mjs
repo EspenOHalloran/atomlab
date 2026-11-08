@@ -2,11 +2,13 @@
 // fladtrykte, aksen hælder 97,8° og 28,3° (regnet fra polens retning og banen), Solens retning passer med JPL Horizons,
 // Uranus drejer med uret og Neptun mod uret set fra IAU's nordpol, de står stille i pause, og vindene blæser den
 // rigtige vej (fælden ved Uranus: IAU's "vest" er med drejningen). Vindformlerne og Solens bredde testes først uden
-// browser. Ingen fejl i konsollen.
+// browser. Ingen fejl i konsollen. UN2: skyderen "År" (Solens bredde i 3D-billedet passer med Horizons i 1986, 2007 og
+// 2026), kappen over polerne følger årstiden, ringene (NSSDC) og kontakten "Infrarødt".
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { PLANETER, solBredde, pol, baneNormal } from '../js/data/isgiganter.js';
 import { vindVed, neptunRå, uranusRå } from '../js/data/vinde-isgiganter.js';
 import { SIDE as URANUS_SIDE } from '../js/data/sider/uranus.js';
+import { RINGE, YDRE, ANTAL, ringProfil, støvVed, RING_IND, RING_UD, ALBEDO } from '../js/data/ringe-uranus.js';
 import { SIDE as NEPTUN_SIDE } from '../js/data/sider/neptun.js';
 const UD = billedmappe('isgiganter');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -41,6 +43,13 @@ const vinkel = (a, b) => Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] *
   tjek('Uranus\' vind: ca. 111 m/s mod drejningen ved ækvator og ca. 221 m/s med drejningen ved ±60°', Math.abs(vindVed('uranus', 0) + 111) < 1 && Math.abs(vindVed('uranus', 60) - 221) < 1 && Math.abs(vindVed('uranus', -60) - 221) < 1, [vindVed('uranus', 0), vindVed('uranus', 60)].join());
   // Siderne kan indlæses (en apostrof i en tekst med enkelte anførselstegn stoppede engang hele programmet)
   tjek('siderne ved Uranus og Neptun har en kort tekst, Billederne og "Ærligt talt"', [URANUS_SIDE, NEPTUN_SIDE].every((x) => x.kort.length > 50 && x.billeder && x.ærligt));
+  // Ringene (NSSDC, fakta-solsystemet/del6, afsnit 6)
+  const eps = RINGE.find((g) => g.navn === 'Epsilon');
+  tjek('ringene: 13 kendte, epsilon ved 51.149 km med τ 0,5-2,3, ring 6 ved 41.837 km, de to ydre ved 67.300 og 97.700 km', ANTAL === 13 && eps.r === 51149 && eps.tau >= 0.5 && eps.tau <= 2.3 && RINGE[0].r === 41837 && YDRE.map((g) => g.r).join() === '67300,97700');
+  const d = (RING_UD - RING_IND) / 2048;
+  const sumP = ringProfil(2048).reduce((s, x) => s + x.tau * d, 0), sumR = RINGE.reduce((s, g) => s + g.tau * g.bred, 0);
+  tjek('ringene: teksturen bevarer hver rings samlede tæthed (τ gange bredde), også når den er smallere end et punkt', Math.abs(sumP - sumR) < 0.01, [sumP, sumR].join());
+  tjek('ringene: mørke som kul (albedo ca. 0,015), og støvet kun mellem 38.000 og 51.600 km', Math.abs(ALBEDO - 0.015) < 1e-9 && støvVed(45000) > 0 && støvVed(37000) === 0 && støvVed(52000) === 0);
   tjek('vindene dæmpes til 0 ved polerne (ikke målt), men ikke før 75°', vindVed('uranus', 90) === 0 && vindVed('neptun', -90) === 0 && vindVed('uranus', 75) === uranusRå(75) && vindVed('neptun', 75) === neptunRå(75));
 }
 
@@ -56,13 +65,45 @@ const F = (navn, ...a) => fm(([navn, a]) => atomlabTest.solsystem.fænomen()[nav
 const ids = await fm(() => atomlabTest.solsystem.fænomener);
 tjek('Uranus og Neptun står i listen efter Saturn', ids.indexOf('uranus') === ids.indexOf('saturn') + 1 && ids.indexOf('neptun') === ids.indexOf('uranus') + 1, JSON.stringify(ids));
 
+// ---------- UN2: skyderen "År", kappen og ringene (Uranus) ----------
+const årTilDato = (år) => new Date(Date.UTC(2000, 0, 1, 12) + (år - 2000) * 365.25 * 864e5);
+const toBilleder = () => s.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+async function uranusUN2() {
+  // Skyderen "År": Solens bredde i 3D-billedet (fra midten) passer med banen, og omregnet til planetografisk med Horizons
+  const Rf = (24973 / 25559) ** -2;
+  for (const [år, h, kappe] of [[1986.07, -82.5, [0, 1]], [2007.94, 0, [0, 0]], [2026.85, 74.3, [1, 0]]]) {
+    await F('sætÅr', år);
+    await toBilleder();
+    const sol = await F('sol'), p = await F('pol');
+    const c = 90 - vinkel(sol, p);
+    const g = Math.atan(Rf * Math.tan(c / GRAD)) * GRAD;
+    tjek(`skyderen "År" ${Math.floor(år)}: Solen står ${h}° over Uranus' ækvator (Horizons)`, Math.abs(c - solBredde('uranus', årTilDato(år), false)) < 0.05 && Math.abs(g - h) < 0.3, [c, g].join());
+    const k = await F('kapper');
+    tjek(`kappen over polerne ${Math.floor(år)}: nord ${kappe[0]}, syd ${kappe[1]}`, Math.abs(k[0] - kappe[0]) < 0.02 && Math.abs(k[1] - kappe[1]) < 0.02, JSON.stringify(k));
+  }
+  const ui = await fm(() => { const s = [...document.querySelectorAll('#solsystem .skyder-boks')].find((b) => b.textContent.includes('År')); const i = s?.querySelector('input'); return i ? { min: i.min, max: i.max, vis: s.querySelector('strong').textContent } : null; });
+  tjek('skyderen "År" går fra 1986 til 2070 og viser årstallet', ui && ui.min === '1986' && ui.max === '2070' && ui.vis === '2026', JSON.stringify(ui));
+  const r = await F('ringe');
+  tjek(`ringene: ${r?.punkter} punkter i tests, fra 38.000 til 52.000 km, med albedoen som lysstyrke`, r && r.punkter === 2048 && r.ind === 38000 && r.ud === 52000 && Math.abs(r.lys - 0.015) < 1e-9, JSON.stringify(r));
+  // "Infrarødt": ringene 40 gange lysere og planeten mørkere (metan opsuger infrarødt lys), væk igen bagefter.
+  // Hvordan ringene ser ud forfra, i modlys og med kontakten, tjekkes med billedværktøjet og på tabletten (DESIGN.md).
+  await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().infrarødt() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  const irR = await F('ringe'), irEks = await F('eksponering');
+  await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().infrarødt() === 0, null, { timeout: 10000, polling: 100 }).catch(() => {});
+  const efter = await F('ringe');
+  tjek('"Infrarødt": ringene 40 gange lysere og planeten mørkere, og bagefter som før', irR.synlige && Math.abs(irR.lys / 0.015 - 40) < 1e-6 && Math.abs(irEks - 0.4) < 1e-6 && Math.abs(efter.lys - 0.015) < 1e-9 && Math.abs((await F('eksponering')) - 1) < 1e-6, JSON.stringify({ irR, irEks, efter }));
+}
+
 for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559, 97.77, 'uranus-1k.jpg'], ['neptun', 'Neptun', 24341 / 24764, 28.32, 'neptun-1k.jpg']]) {
   await s.click(`#solsystem .sol-klode[data-id="${id}"]`);
   await s.waitForFunction((id) => atomlabTest.solsystem.valgt() === id && atomlabTest.solsystem.fænomen()?.hentet(), id, { timeout: 30000, polling: 200 }).catch(() => {});
   const billeder = await F('billeder');
   tjek(`${navn} åbner, og kortet er hentet (1k i tests, i farver)`, (await F('hentet')) && billeder[kort] === 'farver', JSON.stringify(billeder));
   tjek(`${navn}: sort himmel (ingen tågeskyer)`, !(await fm(() => atomlabTest.solsystem.tåger())));
-  tjek(`${navn}: Styr-boksen har kontakten Modlys`, JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(['Modlys']), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
+  const styr = id === 'uranus' ? ['År', 'Modlys', 'Infrarødt (som JWST)'] : ['Modlys'];
+  tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
   const form = await F('form');
   tjek(`${navn} er fladtrykt (NSSDC), og aksen hælder ${hæld}° mod banen`, Math.abs(form.flad - flad) < 1e-6 && Math.abs(form.hældning - hæld) < 0.15, JSON.stringify(form));
   // Solens bredde i 3D-billedet (planetocentrisk) passer med tallene for i dag
@@ -97,6 +138,7 @@ for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559,
   tjek(`${navn}: siden har Billederne og "Ærligt talt" sidst`, side.bokse.includes('Billederne') && side.sidst === 'Ærligt talt', JSON.stringify(side.bokse));
   await s.waitForTimeout(300);
   await s.screenshot({ path: `${UD}/${id}.png` });
+  if (id === 'uranus') await uranusUN2();
 }
 
 await s.context().close();

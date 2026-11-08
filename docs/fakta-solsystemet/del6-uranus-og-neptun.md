@@ -139,3 +139,11 @@ Solens bredde på planeten (kolonne 15 i Horizons, set fra Jorden, `CENTER=500@3
 | Triton i farver, hele kloden (huller udfyldt), 600 m pr. pixel, 299 MB | USGS, `planetarymaps.usgs.gov/mosaic/Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif` | Public domain |
 | Uranus' fem store måner | **Ingen globale kort hos USGS** (kun kontrolnet og navne). Voyagers rå billeder ligger i PDS Rings (`pds-rings.seti.org/holdings/volumes/VGISS_7xxx/`, Neptun i `VGISS_8xxx`) | Public domain (NASA) |
 | JWST's billeder af Uranus og ringene | `esawebb.org` | CC BY 4.0 |
+
+## Faktatjek UN2 (8. november 2026, Opus selv, 15 påstande)
+Teksterne på Uranus' side om årene og ringene (`js/data/sider/uranus.js`):
+- 84 år om Solen og ca. 42 års sol og mørke ved hver pol (NSSDC: 84,01 år) **S**. Sydpolen mod Solen i januar 1986, Solen over ækvator i 2007 og højest over nordpolen omkring 2030 (afsnit 2, JPL Horizons, og regnet af `js/data/isgiganter.js`) **S**.
+- "Den pol, der har sommer, får en lys kappe af dis": NASA's billeder fra Webb (2023) kalder den Uranus' årstidsbestemte polarkappe, og Hubbles kort fra 2025 viser den **RS**. Hvor hurtigt den kommer og går, er tegnet og står i "Ærligt talt".
+- 13 ringe, opdaget 10. marts 1977, da Uranus gik foran en stjerne, som blinkede før og efter planeten (Elliot m.fl. 1977) **RS**. Albedo ca. 1,5 % (NSSDC) **S**.
+- Epsilon-ringen ca. 51.000 km fra midten og 20-96 km bred, fordi den ikke er rund (excentricitet 0,0079), de andre 1-11 km (NSSDC) **S**. De to yderste (R/2003 U 1 og U 2) fundet med Hubble i 2003 **RS**.
+- Webb har fotograferet Uranus og ringene i infrarødt lys, hvor metan opsuger lyset, så planeten er mørkere, og ringene træder frem **RS**. Støvet mellem ringene ses i modlys (Voyager 2, 1986) **RS**.

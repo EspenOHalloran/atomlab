@@ -1,7 +1,9 @@
 // Billeder af Uranus og Neptun med fuld grafik og billeder i sekundet (UN1 i docs/plan-uranus-neptun.md).
 // Kør: node tests/vaerktoejer/isgiganter.mjs [pc|tablet|tablet-hoejkant|tlf-hoejkant|tlf-langs] [uranus|neptun] [sted ...]
 // (billederne lægges i tests/billeder/isgiganter-fuld/). Stederne: hel (hele planeten fra start), modlys (kontakten
-// "Modlys") og hurtig (efter 20 sekunder med ⏩). Uden størrelse: pc og tablet. Uden planet: begge. Uden steder: hel.
+// "Modlys") og hurtig (efter 20 sekunder med ⏩). UN2 (Uranus): et årstal (fx 1986, 2007 eller 2030, skyderen "År"), ir
+// (kontakten "Infrarødt (som JWST)"). Uden størrelse: pc og
+// tablet. Uden planet: begge. Uden steder: hel.
 // Mål én browser ad gangen (to samtidig halverer tallene, tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('isgiganter-fuld');
@@ -27,6 +29,8 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
     await s.waitForFunction((id) => atomlabTest.solsystem.valgt() === id && atomlabTest.solsystem.fænomen()?.hentet(), planet, { timeout: 60000, polling: 200 });
     for (const sted of steder.length ? steder : ['hel']) {
       if (sted === 'modlys') await kontakt('Modlys');
+      if (sted === 'ir') await kontakt('Infrarødt');
+      if (/^\d{4}$/.test(sted)) await f((v) => atomlabTest.solsystem.fænomen().sætÅr(v), Number(sted));
       if (sted === 'hurtig') {
         await s.click('#solsystemTid button[data-tid="hurtig"]');
         await s.waitForTimeout(20000);
@@ -37,6 +41,7 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
       await s.screenshot({ path: `${UD}/${navn}-${planet}-${sted}.png` });
       console.log(`${navn} ${planet} ${sted}: ${bps.toFixed(1)} billeder i sekundet`);
       if (sted === 'modlys') await kontakt('Modlys');
+      if (sted === 'ir') await kontakt('Infrarødt');
     }
   }
   if (fejl.length) console.log('Konsol:', fejl.join('\n'));
