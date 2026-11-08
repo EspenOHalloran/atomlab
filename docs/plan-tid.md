@@ -103,15 +103,17 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Valg i T2:** Hver vej tager 12,5 sekunder på skærmen uanset målet (med fast fart følger skærmen Jordens ur, med 1 g dit ur, og skibet flytter sig jævnt). Solvognen er ikke med i sammenligningerne: Egtvedpigen har samme alder og en præcis datering. Et skift af mål eller af 1 g undervejs starter forfra.
 - [ ] **På tabletten:** Forstår man forskellen på skyderen og 1 g? Er de store tal (år 2.502.026) til at læse?
 
-**T3. Lagene og teksterne** *(lille til mellem, én session)*
-- [ ] Emner: "Hvorfor går Jordens ur så hurtigt?" (lysuret), "Hvorfor ikke omvendt?" (tvillingeparadokset), "Set fra skibet" (længdeforkortelsen), "Er det målt?" (myonerne, urene i flyene, GPS med et link til Rumtid, astronauterne og urene, der løftes 33 cm) og "Kunne man?" (energien, støvkornet, gassen i rummet og de ca. 11.500 g).
-- [ ] Et "Hvorfor?"-kort i `js/data/hvorfor.js`, fx "Hvorfor kan intet nå lysets fart?".
-- [ ] "For nørder": formlen for γ, reglen om √10 for hvert 9-tal, formlerne for 1 g, tvillingeparadokset (omvejen giver *mindre* tid, rumtidens minus) og et par linjer om samtidighed ("nu" er ikke det samme for alle).
-- [ ] "Ærligt talt": fælderne fra listen nedenfor (de flyttes til `docs/erfaringer/fakta-faelder.md`, når teksterne er skrevet).
-- [ ] Cæsiumuret: "Hvad er et sekund?" i "Er det målt?" eller "For nørder" med en knap til cæsium i Det periodiske system.
-- [ ] Ordbogen: *tidsforlængelse* og *myon* er nye. *Lysår* og *kosmisk stråling* findes allerede.
-- [ ] `/faktatjek` af de færdige tekster mod fakta-tid.md.
-- [ ] **Tests:** teksterne og knapperne i lagene (som i `lag.mjs`).
+**T3. Lagene og teksterne** *(lille til mellem, én session) ✅ lavet 8. november 2026*
+- [x] Emner: "Hvorfor går Jordens ur så hurtigt?" (lysuret), "Hvorfor ikke omvendt?" (tvillingeparadokset), "Set fra skibet" (længdeforkortelsen), "Er det målt?" (myonerne, urene i flyene, GPS med et link til Rumtid, astronauterne og urene, der løftes 33 cm) og "Kunne man?" (energien, støvkornet, gassen i rummet og de ca. 11.500 g).
+- [x] Et "Hvorfor?"-kort i `js/data/hvorfor.js`, fx "Hvorfor kan intet nå lysets fart?".
+- [x] "For nørder": formlen for γ, reglen om √10 for hvert 9-tal, formlerne for 1 g, tvillingeparadokset (omvejen giver *mindre* tid, rumtidens minus) og et par linjer om samtidighed ("nu" er ikke det samme for alle).
+- [x] "Ærligt talt": fælderne fra listen nedenfor (de flyttes til `docs/erfaringer/fakta-faelder.md`, når teksterne er skrevet).
+- [x] Cæsiumuret: "Hvad er et sekund?" i "Er det målt?" eller "For nørder" med en knap til cæsium i Det periodiske system.
+- [x] Ordbogen: *tidsforlængelse*, *længdeforkortelse* og *myon* er nye. *Lysår* og *kosmisk stråling* findes allerede.
+- [x] `/faktatjek` af de færdige tekster mod fakta-tid.md.
+- [x] **Tests:** teksterne og knapperne i lagene (som i `lag.mjs`).
+- **Valg i T3:** Et syvende emne, "Hvorfor tager det år med 1 g?", folder sig ud med kontakten "1 g hele vejen" og har de 11.500 g (ellers blev "Kunne man?" for langt). Cæsiumuret står i "For nørder" ("Er det målt?" var lang nok). Knappen "Cæsium ›" er `gå('system:55', …)`, og `js/system.js` åbner grundstoffet (før kunne man kun åbne en kategori fra en anden skærm).
+- [ ] **På tabletten** (står i [ikke-afproevet.md](ikke-afproevet.md)): Er emnerne til at forstå, og er de to lange for lange?
 
 **T4. Udsigten fra cockpittet** *(mellem til stor, eget go senere)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
 
@@ -120,7 +122,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Cæsiumuret:** I T3 (se ovenfor). Senere kan det også stå på cæsiums kort i Det periodiske system (sporet Ordbogen og Det periodiske system).
 
 ## Fælder, vi skal undgå
-*Flyttes til [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md), når de er tjekket og arbejdet går i gang.*
+*✅ Flyttet til [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md) 8. november 2026 (T3). Listen står her som historik.*
 - **"Tiden går langsommere for dig."** Du mærker intet. Dit eget ur går altid ét sekund pr. sekund. Det er en sammenligning mellem to veje gennem rumtiden.
 - **"Det er accelerationen, der gør det."** Kun en del af historien. Det afgørende er vejen gennem rumtiden (den rejsende skifter ramme, når den vender om).
 - **"For lyset står tiden stille."** Populært, men lyset har ikke sit eget ur (ingen hvileramme) i relativitetsteorien.
@@ -158,8 +160,8 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 ## Model og effort
 - **Faktagrundlaget og planen (Trin 0):** lavet med Opus, høj effort (7. november 2026).
 - **T1-T3:** Opus med høj effort, én ny session pr. trin. Prompterne er [prompt-tid-t1.md](prompt-tid-t1.md), [prompt-tid-t2.md](prompt-tid-t2.md) og [prompt-tid-t3.md](prompt-tid-t3.md).
-- **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul.
+- **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul. Prompten er [prompt-tid-t4.md](prompt-tid-t4.md).
 - **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t3.md" (T1 og T2 er lavet).
+T1-T3 er lavet. T4 (cockpitudsigten) venter på sit eget go: Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t4.md".

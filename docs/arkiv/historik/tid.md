@@ -2,6 +2,15 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (7. november 2026): T2, alle mål, "1 g hele vejen" og afstanden, der skrumper.** I "⏳ Rejsen i tid" (`js/kosmos/tid.js`, regningen i `js/data/tid.js`):
+- Skyderen "Mål" (Alpha Centauri, Mælkevejens centrum og Andromeda, med en bule af stjerner og en skrå spiral lavet med `prikSky`) og skyderen "Fart" op til 14 ni-taller ("99,9…9 % (12 ni-taller)"). Et skift af mål starter forfra. Hver vej tager 12,5 sekunder på skærmen uanset målet (⏩ 4 gange hurtigere). Med fast fart følger skærmen Jordens ur, med 1 g dit ur.
+- Kontakten "1 g hele vejen": speed op med 1 g til midtvejs og brems resten (3,6 / 19,8 / 28,6 år i skibet én vej). Skyderen "Fart" forsvinder, og "Lige nu" viser farten nu og den største fart midtvejs.
+- Kontakten "Set fra skibet": scenen trykkes sammen om skibet med γ^(−1/3) (meget mindre end i virkeligheden, siges ærligt). "Lige nu" viser altid to afstande (set fra Jorden og d/γ set fra skibet) og ved målet "En radiobesked hjem tager 4,3 år".
+- Hjemkomsten: over 100 år årstallet ("år 56.018"), en sammenligning med fortiden (neandertalerne, Lucy) og tvillingen. Er turen over ca. 87 år for dig: "Så længe kan ingen leve" og overskriften "Turen er slut". Urskiven gløder, når Jordens ur løber mange år i sekundet. Årstal under 10.000 uden punktum.
+- "For nørder" og "Ærligt talt" har fået 1 g, brændstoffet og "Set fra skibet". Resten af teksterne er T3. Faktatjekket mod fakta-tid.md.
+- Test: `tests/tid.mjs` (146 tjek, også 1 g mod afsnit 6 og de nye mål mod afsnit 5) og `tests/vaerktoejer/tid-tekster.mjs` (alle hjemkomster til gennemlæsning).
+- Node.js og Playwright er nu installeret på Windows-pc'en, så testene kan køre her (se tests-og-vaerktoejer.md under erfaringerne).
+
 **Senest lavet (7. november 2026): T1, lysuret og rejsen til Alpha Centauri.** Et nyt fænomen i Kosmos lige efter Rumtid: "⏳ Rejsen i tid" (`js/kosmos/tid.js`, regningen i `js/data/tid.js`).
 - Jorden, skibet og Alpha Centauri A og B. Skyderen "Fart" går fra 90 % til 99,9999 % (99,99 % fra start) og kan skiftes undervejs. "🚀 Flyv til Alpha Centauri" går gennem fire faser: afgang, ude ved målet (med tiden for én vej), på vej hjem og hjemkomsten ("Du har været væk i 45 dage, men på Jorden er der gået 8,7 år. Du er 13 år og 45 dage. Din tvilling er 21.").
 - To ure oven på 3D-billedet: "Dit ur" (dage og timer, eller år og dage) og "Jordens ur" (årstallet fra i år) med en urskive, der går én gang rundt pr. år. Under dem står din og tvillingens alder. ⏩ går 6 gange hurtigere, og pausen virker.

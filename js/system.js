@@ -40,6 +40,7 @@ let tipVist = false;
 let kategorikort = null; // kortet om den valgte kategori (js/kategorikort.js)
 let kategoriTid = 0; // sekunder siden kategorien blev valgt (væggen laver en bølge)
 let ventKategori = null; // kategorien, der skal vises, når skærmen starter (fra værkstedet)
+let ventGrundstof = null; // grundstoffet, der skal åbnes, når skærmen starter (fra en knap i en anden del)
 const stråle = new THREE.Raycaster();
 const mus = new THREE.Vector2();
 const hjælpV = new THREE.Vector3();
@@ -218,6 +219,21 @@ function visKategori(kat) {
   opdaterFilterKnapper();
 }
 
+// Knapper med data-gaa="system:55" i teksterne (js/sideknap.js: gå('system:55', 'Cæsium')) åbner et grundstof her,
+// fx cæsium fra "Hvad er et sekund?" i Rejsen i tid. Fra en anden skærm skiftes der først hertil.
+document.addEventListener('click', (h) => {
+  const b = h.target.closest?.('[data-gaa^="system:"]');
+  if (!b) return;
+  const nr = Number(b.dataset.gaa.split(':')[1]);
+  if (!(nr >= 1 && nr <= 118)) return;
+  lyd.klik();
+  if (aktiv) visDetalje(nr, false);
+  else {
+    ventGrundstof = nr;
+    location.hash = '#system';
+  }
+});
+
 export function startSystem() {
   aktiv = true;
   // Fra værkstedet til en kategori: væggen skal vises, ikke det grundstof, der sidst var åbent
@@ -230,7 +246,10 @@ export function startSystem() {
   verden.styring.autoRotate = false;
   begrænsDrejning({ vandret: 0.55, lodret: 0.4 });
   opdaterFelter();
-  if (valgt) {
+  if (ventGrundstof) {
+    visDetalje(ventGrundstof, false);
+    ventGrundstof = null;
+  } else if (valgt) {
     visDetalje(valgt, false);
   } else {
     vægStyring(true);
