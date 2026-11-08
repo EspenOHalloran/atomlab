@@ -519,7 +519,8 @@ function slutVisning(døde = false) {
   tidsFaktor = 1;
   if (visKæde) {
     visKæde = null;
-    for (const n of neutroner) n.gen = 0;
+    // Bagefter er alle neutroner almindelige igen (ellers kunne de sikre flyve rundt for evigt)
+    for (const n of neutroner) { n.gen = 0; n.sikker = false; }
     // Stavene sænkes til omkring det stabile punkt, så reaktoren ikke løber løbsk bagefter
     if (!nødstop) {
       stavDybde = 0.5;
@@ -840,18 +841,18 @@ function kædeFysik(h) {
     }
     n.x += n.vx * h;
     n.y += n.vy * h;
-    // Ud af kernen: nogle bliver kastet tilbage af beholderen, resten forsvinder
+    // Ud af kernen: nogle bliver kastet tilbage af beholderen, resten forsvinder ("Vis mig"s sikre neutroner kommer altid tilbage)
     if (Math.abs(n.x) > KERNE_B / 2 + 1 || Math.abs(n.y) > KERNE_H / 2 + 1) {
-      if (Math.random() < 0.45) {
+      if (n.sikker || Math.random() < 0.45) {
         if (Math.abs(n.x) > KERNE_B / 2 + 1) n.vx = -n.vx;
         if (Math.abs(n.y) > KERNE_H / 2 + 1) n.vy = -n.vy;
         n.x = THREE.MathUtils.clamp(n.x, -KERNE_B / 2 - 1, KERNE_B / 2 + 1);
         n.y = THREE.MathUtils.clamp(n.y, -KERNE_H / 2 - 1, KERNE_H / 2 + 1);
       } else continue;
     }
-    // Kontrolstavene suger neutroner op
+    // Kontrolstavene suger neutroner op (ikke "Vis mig"s sikre neutroner: Mistede den dem alle, døde demoen nu og da ud)
     let opsuget = false;
-    for (const sx of STAVE_X) {
+    if (!n.sikker) for (const sx of STAVE_X) {
       if (Math.abs(n.x - sx) < 0.3 && n.y > stavBund) { opsuget = true; break; }
     }
     if (opsuget) continue;

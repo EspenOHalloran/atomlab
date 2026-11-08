@@ -26,15 +26,19 @@ await T(() => atomlabTest.fusion.temperatur(3));
 await page.click('#fusTid [data-tid="hurtig"]');
 // Spol frem i stedet for at vente (testbrowseren tegner kun få billeder i sekundet)
 const koldtLøst = () => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').opgaver?.['f-koldt']);
-for (let forsøg = 0; forsøg < 2; forsøg++) {
-  await T(() => { const ps = atomlabTest.fusion.partikler().filter((p) => p.type === 'p'); atomlabTest.fusion.skyd(ps[0].id, ps[1].id); });
+// Et nyt par hver gang. Det fejlede én gang under belastning (7. november 2026), men 300 af 300 skud løste opgaven
+// alene (8. november 2026). Derfor skriver testen, hvad der skete med skuddene, hvis det sker igen.
+const skud = [];
+for (let forsøg = 0; forsøg < 4; forsøg++) {
+  const par = await page.evaluate((i) => { const ps = atomlabTest.fusion.partikler().filter((p) => p.type === 'p'); atomlabTest.fusion.skyd(ps[2 * i].id, ps[2 * i + 1].id); return [ps[2 * i].id, ps[2 * i + 1].id]; }, forsøg);
   const løst = await page.evaluate(`(() => { const løst = ${koldtLøst}; for (let i = 0; i < 100 && !løst(); i++) atomlabTest.fusion.spolAlt(0.25); return løst(); })()`);
   if (løst) break;
+  skud.push(await page.evaluate(([a, b]) => { const p = atomlabTest.fusion.partikler().find((x) => x.id === a); return { a, b, findes: Boolean(p), type: p?.type, tættest: p && Math.round(p.tættest * 100) / 100, temperatur: document.getElementById('fusTempSkyder').value, undertekst: [...document.querySelectorAll('#beskeder .undertekst')].map((e) => e.textContent).join(' | ') }; }, par));
 }
 await page.screenshot({ path: UD + '/f1b-koldt.png' });
 await page.click('#fusTid [data-tid="spil"]');
 let fr = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang') || '{}'));
-tjek('opgave: for koldt', fr.opgaver?.['f-koldt'], JSON.stringify(fr));
+tjek('opgave: for koldt', fr.opgaver?.['f-koldt'], JSON.stringify({ fr, skud }));
 // Varmt og hurtigt: lad reaktionerne ske af sig selv
 await T(() => atomlabTest.fusion.temperatur(110));
 await page.click('#fusTid [data-tid="hurtig"]');

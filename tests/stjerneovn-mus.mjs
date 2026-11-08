@@ -146,8 +146,10 @@ if (!harD) {
   await page.waitForTimeout(400);
   tjek('besked, når der ingen deuterium er', /ingen deuterium/i.test(await undertekst()), await undertekst());
 }
+// Pause, så den nye deuterium ikke når at smelte sammen med en proton, før der klikkes (det skete en gang under belastning)
+await page.click('#fusTid [data-tid="pause"]');
 await T(() => atomlabTest.fusion.tilføj('d', 1));
-await page.waitForTimeout(500);
+await page.waitForFunction(() => atomlabTest.fusion.partikler().some((p) => p.type === 'd'));
 await page.click('#fusKerner li[data-type="d"]');
 await page.waitForTimeout(300);
 const valgtType = await T(() => { const f = atomlabTest.fusion; const id = f.valgt(); return f.partikler().find((p) => p.id === id)?.type; });
@@ -159,6 +161,7 @@ await page.waitForTimeout(300);
 const valgtType2 = await T(() => { const f = atomlabTest.fusion; const id = f.valgt(); return f.partikler().find((p) => p.id === id)?.type; });
 tjek('klik i opskriften vælger en proton', valgtType2 === 'p', valgtType2);
 await page.keyboard.press('Escape');
+await page.click('#fusTid [data-tid="spil"]');
 
 // ---------- Grafen ----------
 const graf = async (t) => { await T((t) => atomlabTest.fusion.temperatur(t), t); return T(() => document.querySelector('#fusGrafTekst').textContent); };
