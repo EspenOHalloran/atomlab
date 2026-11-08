@@ -1,4 +1,4 @@
-// Rejsen i tid (tvillingerejsen, T1 og T2 i docs/plan-tid.md): Du flyver til Alpha Centauri, Mælkevejens centrum eller
+// Rejsen i tid (tvillingerejsen, T1-T3 i docs/plan-tid.md): Du flyver til Alpha Centauri, Mælkevejens centrum eller
 // Andromedagalaksen og hjem igen næsten med lysets fart, mens din tvilling bliver hjemme. To ure i et HTML-lag oven på
 // 3D-billedet viser "Dit ur" og "Jordens ur". Regningen står i js/data/tid.js (testes i Node), og tallene i docs/fakta-tid.md.
 //
