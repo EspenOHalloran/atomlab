@@ -52,7 +52,6 @@ for (const s of Object.values(STOFFER)) {
   s.atomer = s.atomer.map(([sym, x, y, z]) => [sym, x * S, y * S, z * S]);
   s.energi = -s.bindinger.reduce((sum, b) => sum + BINDING[b], 0); // eV: bindingerne holder på energien (minus)
 }
-export const ENHED = S;
 
 // ---------- Reaktionerne (kæden, forenklet) ----------
 // Et stød mellem a og b bliver til produkterne, hvis stødet (farten ind mod hinanden) har mindst bakke eV.
@@ -131,7 +130,7 @@ export function lavBoks(tilf = Math.random) {
 
 function nyPartikel(b, art, p, v, indre = 0) {
   const tilf = b.tilf;
-  return { id: b.næsteId++, art, p, v, indre, akse: enhedsvektor(tilf), vinkel: tilf() * Math.PI * 2, drej: 1 + tilf() * 2, ryst: 0, født: b.tid };
+  return { id: b.næsteId++, art, p, v, indre, akse: enhedsvektor(tilf), vinkel: tilf() * Math.PI * 2, drej: 1 + tilf() * 2 };
 }
 
 // Hele energien i eV: fart + indre rysten + bindingerne (minus). Gnisten lægger energi til.
@@ -303,7 +302,6 @@ function lilleSkridt(b, h) {
       }
     }
     p.vinkel += p.drej * h * (0.6 + Math.min(4, Math.sqrt(kin(p) / STUE) * 0.5));
-    p.ryst = Math.max(0, p.ryst - h);
   }
   // Stød mellem to (kun når de nærmer sig hinanden)
   for (let i = 0; i < ps.length; i++) {
