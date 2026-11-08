@@ -94,12 +94,13 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - [x] **Tests:** En ny `tests/tid.mjs` (og linjen i `koer-alle.mjs`) tjekker tallene (γ ved 90 % til 99,9999 % og rejsetiderne til Alpha Centauri mod fakta-tid.md), at skyderen ændrer urene, og at en rejse spolet frem ender ved hjemkomsten med den rigtige tekst.
 - [ ] **På tabletten** (står i [ikke-afproevet.md](ikke-afproevet.md)): Kan urene læses på højkant og på langs? Rammer man skyderens trin med fingeren? Kører lysuret glat, og forstår man zigzaggen?
 
-**T2. Alle mål, "1 g hele vejen" og afstanden, der skrumper** *(mellem, én session)*
-- [ ] Mælkevejens centrum og Andromedagalaksen. Skyderen går op til 14 ni-taller (γ ≈ 7,1 mio., jeres svar på spørgsmål 4). Så giver Mælkevejens centrum ud og hjem ca. 3 dage i skibet mod ca. 54.000 år på Jorden.
-- [ ] Kontakten "1 g hele vejen" (speed op med 1 g til midtvejs og brems med 1 g resten): ca. 3,6 år til Alpha Centauri, ca. 20 år til Mælkevejens centrum og ca. 29 år til Andromeda, i skibet og én vej.
-- [ ] "Set fra skibet": Afstanden til målet står med to tal (set fra Jorden og set fra skibet), og målet rykker tættere, når farten stiger.
-- [ ] Hjemkomsten sammenligner med fortiden (listen "Sammenligninger med fortiden" i fakta-tid.md) og viser årstallet på Jorden.
-- [ ] **Tests:** tallene for 1 g, og et lille script, der skriver alle hjemkomstteksterne ud (alle mål og farter) og læses igennem (tjekliste B).
+**T2. Alle mål, "1 g hele vejen" og afstanden, der skrumper** *(mellem, én session) ✅ lavet 7. november 2026*
+- [x] Mælkevejens centrum og Andromedagalaksen (skyderen "Mål"). Skyderen går op til 14 ni-taller (γ ≈ 7,1 mio., jeres svar på spørgsmål 4). Så giver Mælkevejens centrum ud og hjem ca. 3 dage i skibet mod ca. 54.000 år på Jorden.
+- [x] Kontakten "1 g hele vejen" (speed op med 1 g til midtvejs og brems med 1 g resten): ca. 3,6 år til Alpha Centauri, ca. 20 år til Mælkevejens centrum og ca. 29 år til Andromeda, i skibet og én vej.
+- [x] "Set fra skibet": Afstanden til målet står med to tal (set fra Jorden og set fra skibet), og målet rykker tættere, når farten stiger (kontakten "Set fra skibet", trykket sammen med γ^(−1/3)).
+- [x] Hjemkomsten sammenligner med fortiden (listen "Sammenligninger med fortiden" i fakta-tid.md) og viser årstallet på Jorden.
+- [x] **Tests:** tallene for 1 g, og et lille script, der skriver alle hjemkomstteksterne ud (alle mål og farter) og læses igennem (tjekliste B): `tests/vaerktoejer/tid-tekster.mjs`.
+- **Valg i T2:** Hver vej tager 12,5 sekunder på skærmen uanset målet (med fast fart følger skærmen Jordens ur, med 1 g dit ur, og skibet flytter sig jævnt). Solvognen er ikke med i sammenligningerne: Egtvedpigen har samme alder og en præcis datering. Et skift af mål eller af 1 g undervejs starter forfra.
 - [ ] **På tabletten:** Forstår man forskellen på skyderen og 1 g? Er de store tal (år 2.502.026) til at læse?
 
 **T3. Lagene og teksterne** *(lille til mellem, én session)*
@@ -156,9 +157,9 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 ## Model og effort
 - **Faktagrundlaget og planen (Trin 0):** lavet med Opus, høj effort (7. november 2026).
-- **T1-T3:** Opus med høj effort, én ny session pr. trin. Prompten til T1 er [prompt-tid-t1.md](prompt-tid-t1.md). Prompterne til T2 og T3 skrives, når trinet før er færdigt.
+- **T1-T3:** Opus med høj effort, én ny session pr. trin. Prompterne er [prompt-tid-t1.md](prompt-tid-t1.md), [prompt-tid-t2.md](prompt-tid-t2.md) og [prompt-tid-t3.md](prompt-tid-t3.md).
 - **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul.
 - **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t1.md".
+Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t3.md" (T1 og T2 er lavet).
