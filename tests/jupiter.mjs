@@ -331,6 +331,19 @@ tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(aw
     return n;
   }, [a, b]);
   const vent = () => s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 15000, polling: 100 }).catch(() => {});
+  // Kameraet står stille (dæmpningen efter kameraets egen drejning er færdig): samme plads i to tegnede billeder i træk.
+  // To billeder tegnet efter en ændring (fx ringene slået fra). Faste ventetider var for korte under belastning, når
+  // testbrowseren kun tegner få billeder i sekundet (ringene forfra gav 50-126 pixel i stedet for ca. 5).
+  const toBilleder = () => s.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  const stille = async () => {
+    for (let i = 0; i < 40; i++) {
+      const a = await s.evaluate(() => atomlabTest.solsystem.kamera?.() ?? null);
+      await toBilleder();
+      const b2 = await s.evaluate(() => atomlabTest.solsystem.kamera?.() ?? null);
+      if (!a || JSON.stringify(a) === JSON.stringify(b2)) break;
+    }
+    await toBilleder();
+  };
   const cyk = await J(() => atomlabTest.solsystem.fænomen().cykloner());
   tjek('cyklonerne er sendt til shaderen: 9 ved nordpolen og 6 ved sydpolen', cyk.filter((c) => c.pol === 'nord').length === 9 && cyk.filter((c) => c.pol === 'syd').length === 6 && (await J(() => atomlabTest.solsystem.fænomen().cyklonerSat())) === 15);
   // Cykloner drejer mod uret set fra oven på den nordlige halvkugle og med uret på den sydlige
@@ -366,10 +379,10 @@ tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(aw
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().eksponering() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
   await s.click('#solsystemTid button[data-tid="pause"]');
   await J(() => atomlabTest.solsystem.fænomen().drejSelv(false));
-  await s.waitForTimeout(300);
+  await stille();
   const forfraMed = await båndBillede('forfraMed');
   await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(false));
-  await s.waitForTimeout(300);
+  await toBilleder();
   const forfraUden = await båndBillede('forfraUden');
   await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(true));
   await J(() => atomlabTest.solsystem.fænomen().drejSelv(true));
@@ -377,10 +390,10 @@ tjek('tilbage til Jupiter: månerne kredser igen, og underteksten er væk', !(aw
   await J(() => atomlabTest.solsystem.gåTil('ringe'));
   await J(() => atomlabTest.solsystem.fænomen().hop());
   await vent();
-  await s.waitForTimeout(300);
+  await stille();
   const bagMed = await båndBillede('bagMed');
   await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(false));
-  await s.waitForTimeout(300);
+  await toBilleder();
   const bagUden = await båndBillede('bagUden');
   await J(() => atomlabTest.solsystem.fænomen().ringeSynlige(true));
   const ændretForfra = await forskel(forfraMed, forfraUden), ændretBag = await forskel(bagMed, bagUden);
