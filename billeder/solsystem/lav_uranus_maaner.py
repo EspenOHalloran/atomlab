@@ -1,15 +1,18 @@
 # Laver kortene over Uranus' fem store måner (UN4 i docs/plan-uranus-neptun.md, js/solsystem/isgigant.js).
 # Hent originalerne til en mappe (navnene nedenfor), og kør:
-#   python3 -I lav_uranus_maaner.py <mappe med originaler> <ud-mappe>        miranda-1280.jpg ... oberon-1280.jpg
+#   python3 -I lav_uranus_maaner.py <mappe med originaler> <ud-mappe>        miranda-1440.jpg ... oberon-1440.jpg
 #
-# Originalerne (Caltech/JPL/USGS, mosaikker af Voyager 2's billeder fra januar 1986, public domain), fra Wikimedia
-# Commons' småbilleder i 1280 pixels bredde (originalerne er 1440 x 720, men Commons svarede 429 på dem):
-#   https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Miranda_map_JPL_USGS.jpg/1280px-Miranda_map_JPL_USGS.jpg
-#   https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Ariel_map_JPL_USGS.jpg/1280px-Ariel_map_JPL_USGS.jpg
-#   https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Umbriel_map_JPL_USGS.jpg/1280px-Umbriel_map_JPL_USGS.jpg
-#   https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Titania_map_JPL_USGS.jpg/1280px-Titania_map_JPL_USGS.jpg
-#   https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Oberon_map_JPL_USGS.jpg/1280px-Oberon_map_JPL_USGS.jpg
-# Gem dem som Miranda.jpg, Ariel.jpg, Umbriel.jpg, Titania.jpg og Oberon.jpg. Hent dem langsomt (Commons' grænse).
+# Originalerne (Caltech/JPL/USGS, mosaikker af Voyager 2's billeder fra januar 1986, public domain) i 1440 x 720, som TIF
+# fra NASA 3D Resources på GitHub (samme kort som JPL's gamle planetkort og "File:<Måne>_map_JPL_USGS.jpg" på Wikimedia
+# Commons, men Commons svarede 429 på originalerne, og Oberons JPG har tydelige JPEG-blokke, som TIF'en ikke har):
+#   https://raw.githubusercontent.com/nasa/NASA-3D-Resources/master/Images%20and%20Textures/Uranus%20-%20Miranda/Uranus%20-%20Miranda.tif
+#   (og det samme med Ariel, Umbriel, Titania og Oberon)
+# Gem dem som Miranda.tif, Ariel.tif, Umbriel.tif, Titania.tif og Oberon.tif.
+#
+# Et skarpere kort over Miranda blev prøvet og givet op (8. november 2026): USGS' mosaik set fra sydpolen (PIA01490,
+# 1581 x 1600) blev lagt på JPL's kort (ortografisk, midten ved 85,7° S og 55,8° Ø), men JPL's kort havde lige så mange
+# eller flere detaljer, også tegnet i PIA01490's egen opløsning. JPL's 0,125° pr. pixel er ca. 0,5 km på Miranda, og
+# Voyagers bedste globale mosaik har 560-740 m pr. pixel (PIA00043), så et større kort giver ikke flere detaljer.
 #
 # Kortene er gråtoner, 0° (siden mod Uranus) i midten og østlig længde til højre (som programmets måner). Det er tjekket
 # med Wunda på Umbriel (7,9° S, 273,6° Ø) og Inverness Corona på Miranda (66,9° S, 325,7° Ø). Voyager 2 så kun den
@@ -28,11 +31,11 @@ BLØD = 7  # pixel (ca. 2°), som det fotograferede glider over i den grå flade
 
 def lav(ind, ud):
     for navn in MÅNER:
-        im = Image.open(os.path.join(ind, f'{navn}.jpg')).convert('L')
+        im = Image.open(os.path.join(ind, f'{navn}.tif')).convert('L')
         a = np.asarray(im).astype(np.float64)
         h, w = a.shape
         assert w == 2 * h, (navn, a.shape)
-        # Småbillederne har en ødelagt sidste søjle og række (springet til naboen er ca. 25 mod 1-3 ellers). Søjlen
+        # Kortene har en ødelagt sidste søjle og række (springet til naboen er ca. 25 mod 1-3 ellers). Søjlen
         # bliver gennemsnittet af naboerne på begge sider af ±180°, og rækken ved sydpolen bliver én værdi (et punkt).
         a[:, -1] = (a[:, -2] + a[:, 0]) / 2
         a[-1, :] = a[-2, :].mean()
@@ -51,7 +54,7 @@ def lav(ind, ud):
         # Kanten ved ±180°: springet mellem første og sidste søjle (tjekliste E)
         spring = np.abs(ny[:, 0] - ny[:, -1]).mean()
         nabo = np.abs(np.diff(ny, axis=1)).mean()
-        Image.fromarray(np.clip(ny + 0.5, 0, 255).astype(np.uint8)).save(os.path.join(ud, f'{navn.lower()}-1280.jpg'), quality=90)
+        Image.fromarray(np.clip(ny + 0.5, 0, 255).astype(np.uint8)).save(os.path.join(ud, f'{navn.lower()}-1440.jpg'), quality=90)
         print(f'{navn}: {w} x {h}, gennemsnit {grå / 255:.3f}, fotograferet {dækket * 100:.0f} % af overfladen, '
               f'spring ved ±180° {spring:.1f} (naboer {nabo:.1f})')
 

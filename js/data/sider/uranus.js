@@ -64,7 +64,7 @@ export const MÅNE_NU = '<p><b>Lige nu:</b> Voyager 2 så kun den sydlige halvde
 // Overhalingen: 1 / (1/0,46357 − 1/0,47365) = 21,8 døgn
 export const SMÅ_NU = `<p><b>Lige nu:</b> Cressida kredser lidt hurtigere end Desdemona og indhenter den ca. hver 22. døgn. ${tid('hurtig', 'Se det med ⏩')} De små måner er tegnet meget større og lysere, end de er.</p>`;
 
-const VOYAGER_KORT = '<p>Kortet er lavet af Caltech/JPL/USGS af billeder fra Voyager 2 (januar 1986). Det er hentet fra Wikimedia Commons.</p>';
+const VOYAGER_KORT = '<p>Kortet er lavet af Caltech/JPL/USGS af billeder fra Voyager 2 (januar 1986). Det er hentet fra NASA\'s samling af 3D-modeller og kort (NASA 3D Resources).</p>';
 const MÅNE_ÆRLIGT = '<p>Den nordlige halvdel er en jævn, grå flade, for den er aldrig fotograferet tæt på. Månen står stille, mens du besøger den, og vender samme side mod Uranus. Pladserne i banerne er tegnet og ikke dem for i dag.</p>';
 const måne = (bredde, omgang, afstand, opdaget, kort, ekstra = {}) => ({
   tal: [['Bredde', bredde], ['En omgang', omgang], ['Fra Uranus', afstand], ['Opdaget', opdaget]],
