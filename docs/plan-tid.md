@@ -76,7 +76,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 **Opus' anbefaling:** Start med **A** som et prøvestykke med lysuret og tvillingerejsen. Den kan bygges uden at vente på menuen. Bliver han grebet, kan det senere vokse til **B** (sammen med Kvantefysik), med Rumtidskortet som det næste. Idé 4 (lysets forsinkelse) og 5 (cæsiumuret) er så billige og stærke, at de kan komme med uanset hvad (fx når Solsystemet eller Værkstedet alligevel bliver rørt).
 
 ## Trinene (Trin 0, 7. november 2026, go til T1 givet samme dag)
-*Tallene og kilderne står i [fakta-tid.md](fakta-tid.md), og udregningerne i `docs/fakta-tid/regn.py`. Hvert trin får sin egen session og prompt (`docs/prompt-tid-t1.md` osv.), og hvert trin får sit eget go. Model: Opus med høj effort, også til teksterne i T3. Cockpitudsigten (T4) har sit eget go senere.*
+*Tallene og kilderne står i [fakta-tid.md](fakta-tid.md), og udregningerne i `docs/fakta-tid/regn.py`. Hvert trin får sin egen session og prompt (`docs/prompt-tid-t1.md` osv., færdige prompter ligger i `docs/arkiv/`), og hvert trin får sit eget go. Model: Opus med høj effort, også til teksterne i T3. Cockpitudsigten (T4) har sit eget go senere.*
 
 **Rammen (gælder alle trin):**
 - **Fænomenet** `js/kosmos/tid.js`, "Rejsen i tid" (ikon ⏳), står i listen i `js/kosmos.js` lige efter Rumtid. Det bygges på fænomenskærmen som de andre fænomener: faserne i underteksten, handlinger i bjælken, en skyder og en kontakt i Styr-boksen og siden i lag.
@@ -159,7 +159,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 ## Model og effort
 - **Faktagrundlaget og planen (Trin 0):** lavet med Opus, høj effort (7. november 2026).
-- **T1-T3:** Opus med høj effort, én ny session pr. trin. Prompterne er [prompt-tid-t1.md](prompt-tid-t1.md), [prompt-tid-t2.md](prompt-tid-t2.md) og [prompt-tid-t3.md](prompt-tid-t3.md).
+- **T1-T3:** Opus med høj effort, én ny session pr. trin. Prompterne er [prompt-tid-t1.md](arkiv/prompt-tid-t1.md), [prompt-tid-t2.md](arkiv/prompt-tid-t2.md) og [prompt-tid-t3.md](arkiv/prompt-tid-t3.md) (i arkivet, da de var lavet).
 - **T4 (cockpitudsigten):** Opus med høj effort. Det er en shader, men enklere end lysbøjningen ved Det sorte hul. Prompten er [prompt-tid-t4.md](prompt-tid-t4.md).
 - **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
