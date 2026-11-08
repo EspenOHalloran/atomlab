@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (8. november 2026): Uranus og Neptun UN5, flybyerne, stederne og siderne. Serien UN1-UN5 er færdig.** Jeres go: "Go" og anbefalingerne på de tre åbne spørgsmål.
+- **Uranus' flyby (5 stop):** Oversigten i dag, "Et år er 84 år" set fra siden, mens skyderen **År** kører tilbage til januar 1986, Miranda med Voyagers billeder i sollys, de mørke ringe (med epsilon-ringen foran Uranus, prøv "Infrarødt") og "I Uranus' skygge", hvor støvet lyser. Skyderen står på 1986 bagefter.
+- **Neptuns flyby (4 stop):** Oversigten, de hurtigste vinde, Den Store Mørke Plet i formiddagssol ("Neptun i 1989" slås til) og ringbuerne i modlys. Neptun har fået **"Infrarødt (som JWST)"**.
+- **"Steder" i træet:** Uranus' nordpol og ringe, Neptuns plet og ringbuer, hver med sin egen side. **Nye emner** (opdagelserne, farven, hvorfor Uranus ligger på siden, Neptuns vinde, Triton), to "Hvorfor?"-kort og "isgigant" og "ringbue" i Ordbogen. Alt faktatjekket. **Rettet:** "Ringene kaster 1,5 % af lyset tilbage" er nu "højst ca. 2 %" (samme fælde som ved Ariel).
+- **Spørgsmål til jer:** Ingen nye. Triton og Neptuns gejsere (UN6) venter til månerne-runden, som I har besluttet.
+
 **Senest lavet (8. november 2026): Uranus og Neptun UN4, Uranus' måner.** Jeres go: "start un4".
 - **De fem store måner** (Miranda, Ariel, Umbriel, Titania og Oberon) med Voyager 2's kort (Caltech/JPL/USGS, public domain, fundet på Wikimedia Commons, som nu er åben). Voyager så kun den sydlige halvdel, så den nordlige er en blød, grå flade ("aldrig fotograferet tæt på"). Den halvdel har sol nu, så træk **År** til 1986 ved en måne: Kameraet følger Solen, og man ser Voyagers billeder.
 - **Banerne** (NSSDC) i Uranus' ækvatorplan som en skydeskive, den rigtige vej (med uret om IAU's nordpol, som Uranus drejer), Miranda hælder 4,3°, alle vender samme side mod Uranus. Den rigtige størrelse ved en måne, større langt væk. Skygger begge veje, navne, tryk på en måne og "Måner" i træet med sider (faktatjekket, 14 påstande).

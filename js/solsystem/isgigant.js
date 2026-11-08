@@ -61,7 +61,7 @@ const RINGDATA = { uranus: RINGE_URANUS, neptun: RINGE_NEPTUN };
 // ringen, og ved kontakten "Neptun i 1989" toner buerne fra 1989 ind og de senest kendte ud (to sæt, 10 pladser).
 const NEPTUN_RING_LYS = 6;
 const TONING = 2; // kontakterne toner ind og ud på ca. et halvt sekund
-// Månerne (UN4): kortene er Voyagers (JPL/USGS, 1280 × 640) på alle skærme. De små måner er mørke som ringene
+// Månerne (UN4): kortene er Voyagers (JPL/USGS, 1440 × 720) på alle skærme. De små måner er mørke som ringene
 // (albedo 0,07-0,08) og gjort LILLE_LYS gange lysere, så de kan ses (tegnet). Banerne ses kun langt ude.
 const MÅNEDATA = { uranus: MÅNER_URANUS };
 const MÅNE_SEG = TEST_HURTIG || LAV_KVALITET ? 64 : 96;
@@ -314,7 +314,7 @@ export function lavIsgigant(cfg) {
       function hentKort(m, klar) {
         if (m.hentet) return klar?.();
         m.hentet = true;
-        hent(`${m.id}-1280.jpg`, (t) => {
+        hent(`${m.id}-1440.jpg`, (t) => {
           m.klode.sætKort(t);
           if (aktiv) verden.renderer.initTexture(t);
           klar?.();
