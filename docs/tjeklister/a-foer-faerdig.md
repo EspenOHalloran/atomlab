@@ -1,6 +1,6 @@
 # Tjekliste A. Før et stykke arbejde er færdigt (commit og push)
 
-- [ ] `main` er merget ind i grenen, og `node tests/koer-alle.mjs --ændret` er kørt bagefter og bestået (hele samlingen kun, når DESIGN.md siger det). En fejl er undersøgt, før den kaldes "ustabil".
+- [ ] `main` er merget ind i grenen, og `node tests/koer-alle.mjs --ændret` er kørt bagefter og bestået (hele samlingen kun, når DESIGN.md siger det). En fejl, der også sker alene, er undersøgt. En fejl, der kun sker sammen med andre, står i `docs/lige-nu/aabne-punkter.md` (tjekliste F).
 - [ ] Nye funktioner har fået nye tjek i en test.
 - [ ] Ved ændringer i layout eller kamera: skærmbilleder på pc, tablet og telefon (`node tests/vaerktoejer/skaermbilleder.mjs <skærm>`), og de er set igennem.
 - [ ] Egen ændring er læst kritisk igennem: ubrugt kode, ting der sker to gange, lyde, timere.

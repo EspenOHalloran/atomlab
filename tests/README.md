@@ -9,11 +9,12 @@ Spillet selv bruger ikke testene. Der er stadig ingen npm og intet byggetrin i p
 node tests/koer-alle.mjs              # alle, to ad gangen (ca. 10 minutter)
 node tests/koer-alle.mjs --samtidig=1  # alle, én ad gangen (ca. 15 minutter)
 node tests/koer-alle.mjs pause guide  # kun de nævnte
-node tests/koer-alle.mjs --ændret     # kun dem, de ændrede filer kan påvirke
+node tests/koer-alle.mjs --ændret     # røgtesten og de tests, de ændrede filer kan påvirke
+node tests/roeg.mjs                   # kun røgtesten (ca. 20 sekunder)
 node tests/koer-alle.mjs --ændret --vis js/atom.js  # vis kun, hvilke tests en ændring ville køre
 node tests/guide.mjs pc               # én test (nogle kan nøjes med "pc" eller "tlf")
 ```
-**Mens man arbejder:** brug `--ændret`. Den sammenligner med GitHub (og tager nye filer med) og følger import-linjerne fra de ændrede filer op til skærmene. Så kører den de tests, der besøger skærmen, og tests med samme navn som et fælles modul (fx `beskeder`). Ændres `index.html`, `style.css`, `main.js`, `scene3d.js` eller testhjælperen, køres alle. **Før merge** køres `--ændret` (den vælger selv alle, når en fælles fil er ændret). Hele samlingen køres, når en ændring rører fælles moduler eller data, som afslutning på en serie af opgaver og før et større mål.
+**Mens man arbejder og før merge:** brug `--ændret`. Den sammenligner med det sted, grenen gik ud fra `main` (`git merge-base HEAD origin/main`, så den virker også efter push og uden upstream), og tager nye filer med. Den kører altid røgtesten (`roeg`) og følger import-linjerne fra de ændrede filer op til skærmene. Så kører den de tests, der besøger skærmen, og tests med samme navn som et fælles modul (fx `beskeder`). I `index.html` og `style.css` ser den på de ændrede linjer: En linje inde i en skærms `<section>`, eller i en CSS-regel med skærmens id eller en klasse, der kun bruges på den skærm, giver kun den skærms tests. Kan en linje ikke føres tilbage til en skærm (fx `<head>`, en dialog eller en regel for `.knap`), køres alle. Ændres `main.js`, `scene3d.js`, `lib/` eller testhjælperen, køres alle. Er kun dokumenter ændret, køres ingen. Hele samlingen køres kun som afslutning på en serie af opgaver, når fælles moduler eller data er ændret, og før et større mål.
 
 **Hurtig tegning:** Testbrowseren tegner uden grafikkort og nåede kun 3-6 billeder i sekundet. Spillet regner højst 0,05 sekund frem pr. billede, så alle animationer kørte i slowmotion. Derfor tegner testene som standard uden glød og i lav opløsning (`TEST_HURTIG` i `js/scene3d.js`, slået til af `tests/hjaelp.mjs`). Det giver 3-8 gange flere billeder i sekundet. Testen `grafik` og billedværktøjerne tegner med fuld grafik (`chromium.launch({ args: ARGS, fuldGrafik: true })` eller `FULD_GRAFIK=1`).
 `koer-alle.mjs` starter selv en lille server (`python -m http.server 8765`), hvis der ikke kører en. Kører du en enkelt test, skal serveren køre i forvejen.
@@ -30,6 +31,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 ## Testene
 | Test | Hvad den tjekker |
 |---|---|
+| `roeg` | Røgtesten (ca. 20 sekunder, køres altid af `--ændret`): alle datafiler i `js/data/` og `js/data/sider/` kan indlæses i Node, programmet starter, og hver skærm og hvert fænomen i Kosmos og Solsystemet åbner uden fejl i konsollen. Den tjekker ikke, at noget virker rigtigt. Den fangede Uranus-fejlen fra UN1 (en apostrof i en tekst) på få sekunder. |
 | `henfaldsregler` | Henfaldsreglerne mod ca. 140 kendte kerner, de letteste kerners grænser, at alle kæder ender stabilt, og at de tre naturlige kæder (uran-238, uran-235 og thorium-232) følger den rigtige vej. Kører uden browser. |
 | `orbitaler` | Orbitalerne (`js/data/orbitaler.js`): antallet af knuder, middelafstanden, formerne (p langs aksen, d med fire blade), at neutrale atomer følger konfigurationen, og at ioner har de rigtige orbitaler (fx Fe²⁺ mister 4s før 3d). Kører uden browser. |
 | `sorthul` | Det sorte hul (`js/data/sorthul.js`): skyggens kant ved √27 M (også med shaderens skridt på pc og tablet), fotonkuglen ved 3M, ISCO ved 6M, afbøjningen langt fra hullet, skyggens vinkel, skivens krydsninger med shaderens skridt, rødforskydningen (g = √0,5 ovenfra ved ISCO, blå- og rødforskudt side), farten ved ISCO (c/2), temperaturen og sortlegeme-farverne. Kører uden browser. |
@@ -87,7 +89,9 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 - `vaerktoejer/kloder.mjs` tager billeder af Jorden og Månen tæt på i forskelligt lys (dag, glimt i havet, tusmørke, nat, modlys, kanten, fuldmåne og halvmåne). Siden `vaerktoejer/kloder.html` viser dem alene, og man kan selv dreje og zoome.
 
 ## Gode råd
-- `koer-alle.mjs` kører to tests ad gangen (målt stabilt i to hele kørsler). Kør ikke flere end to, og start ikke to `koer-alle.mjs` på samme tid. Fejler en test, mens to kører, køres den igen alene, og det bliver skrevet med "OBS". Undersøg det, før det kaldes ustabilt.
+- `koer-alle.mjs` kører to tests ad gangen (målt stabilt i to hele kørsler). Kør ikke flere end to, og start ikke to `koer-alle.mjs` på samme tid. Fejler en test, mens to kører, køres den igen alene, og det bliver skrevet med "OBS".
+- **Loft over jagten på sjældne fejl (8. november 2026):** Fejler en test kun sammen med andre ("OBS") eller kun under belastning, men består alene, så skriv den som en ny linje i `docs/lige-nu/aabne-punkter.md`, og gå videre. Den undersøges kun, hvis den også fejler alene, hvis den fejler igen i en senere kørsel, eller hvis fejlen kan være en ægte fejl, man selv ville se (fx en knap, der ikke virker). Start ikke med at genskabe den under kunstig belastning.
+- **Hvor meget en ny test tjekker (8. november 2026):** 5-10 tjek af det vigtigste i en ny funktion: at den åbner, at knapperne gør det, de skal, at regler og fakta er rigtige, og at der ryddes op. Præcise kameravinkler, pixel, afstande og tekstlængder tjekkes kun, når de er fakta eller har givet en fejl før. Ting, man kan se, tjekkes med skærmbilleder og af jer på den rigtige tablet.
 - Testbrowseren tegner 10-35 billeder i sekundet med hurtig tegning (3-6 med fuld grafik). Spol frem med testadgangen, eller frys tiden, i stedet for at vente. Vent på en tilstand (`waitForFunction`) i stedet for en fast tid. Fejl, der kun sker ved mange billeder i sekundet, kræver spoling i små skridt (fx `atomlabTest.vaerksted.spol`).
 - En test af en rettet fejl skal først fejle uden rettelsen.
 - Skriv nye erfaringer ind i den rigtige fil i `docs/erfaringer/` (oversigt i [docs/erfaringer.md](../docs/erfaringer.md)), fx `tests-og-vaerktoejer.md`.
