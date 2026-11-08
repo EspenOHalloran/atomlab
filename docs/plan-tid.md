@@ -120,6 +120,8 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 **T5. Hvorfor går tiden langsommere?** *(jeres ønske 8. november 2026. Go til Trin 0 givet samme dag, prompten er [prompt-tid-t5.md](prompt-tid-t5.md). Stor i alt)*
 
+**Trin 0 (8. november 2026):** Drejebogen er [plan-tid-t5.md](plan-tid-t5.md) (jeres svar: navnet, rejse med "Næste" og spring, lampen og én pointe i scene 4, træk vendepunktet i scene 5), faktagrundlaget er [fakta-tid/hvorfor-langsommere.md](fakta-tid/hvorfor-langsommere.md) (afsnit 15), og skitserne er [skitser/tid-t5.html](skitser/tid-t5.html) (artefaktet "Hvorfor går tiden langsommere?": https://claude.ai/artifact/Nu7KusfgHNENpZxcTDBWL9). Venter på jeres runde med jeres søn.
+
 Jeres ord: "Tidsrejsen er bedre nu. Tidsudvidelse er et uhyre interessant begreb og utrolig svært at forstå. Kan vi bruge lidt flere ressourcer på at forklare det, gerne med illustrationer eller animationer. Jeg ved det er svært. Men det kunne være vildt fedt, hvis vi kunne forklare hvorfor tiden 'går langsommere' når man flyver rigtig hurtigt."
 
 **Hvad mangler i dag?** Lysuret (fem trin) viser, *at* et ur i fart går langsommere, *hvis* lysets fart er den samme for alle. Men den regel, som alt hviler på (punkt 1 under "Forklaringen"), står kun som én sætning. Myonerne, "nu" og tvillingeparadokset står kun som tekst.
