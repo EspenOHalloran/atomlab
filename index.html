@@ -60,57 +60,58 @@
       <p class="undertitel">Byg atomer, opdag grundstofferne, lav kernereaktioner, og udforsk rummet</p>
     </header>
     <div class="vindue" id="menuVindue"></div>
+    <!-- Delene. karrusel.js flytter dem ind som knapper i verdenernes kort i ringen (VERDENER) -->
     <nav class="menukort">
-      <a class="kort åben" href="#vaerksted">
+      <a href="#vaerksted">
         <span class="kort-ikon ikon-atom"></span>
         <span class="kort-tekst">
           <strong>Atomværkstedet</strong>
           <small>Byg atomer af protoner, neutroner og elektroner</small>
         </span>
       </a>
-      <a class="kort åben" href="#system">
+      <a href="#system">
         <span class="kort-ikon ikon-tabel"></span>
         <span class="kort-tekst">
           <strong>Det periodiske system</strong>
           <small>Alle 118 grundstoffer i 3D</small>
         </span>
       </a>
-      <a class="kort åben" href="#fusion">
+      <a href="#fusion">
         <span class="kort-ikon ikon-stjerne"></span>
         <span class="kort-tekst">
           <strong>Stjerneovnen</strong>
           <small>Fusion: lav helium af hydrogen ligesom Solen</small>
         </span>
       </a>
-      <a class="kort åben" href="#reaktor">
+      <a href="#reaktor">
         <span class="kort-ikon ikon-reaktor"></span>
         <span class="kort-tekst">
           <strong>Reaktoren</strong>
           <small>Fission: spalt uran og styr en kædereaktion</small>
         </span>
       </a>
-      <a class="kort åben" href="#batteri">
+      <a href="#batteri">
         <span class="kort-ikon ikon-batteri"></span>
         <span class="kort-tekst">
           <strong>Batteriet</strong>
           <small>Se ioner og elektroner, når et lithium-ion-batteri lades</small>
         </span>
       </a>
-      <a class="kort åben" href="#solsystem">
+      <a href="#solsystem">
         <span class="kort-ikon ikon-solsystem"></span>
         <span class="kort-tekst">
           <strong>Solsystemet</strong>
           <small>Besøg Solen, Jorden, Mars, Jupiter og Saturn i den rigtige størrelse</small>
         </span>
       </a>
-      <a class="kort åben" href="#kosmos">
+      <a href="#kosmos">
         <span class="kort-ikon ikon-kosmos"></span>
         <span class="kort-tekst">
           <strong>Kosmos</strong>
           <small>Sorte huller, supernovaer, tyngdebølger og andre vilde ting i rummet</small>
         </span>
       </a>
-      <a class="kort åben" href="#ordbog">
+      <a href="#ordbog">
         <span class="kort-ikon ikon-ordbog" aria-hidden="true">Aa</span>
         <span class="kort-tekst">
           <strong>Ordbogen</strong>
@@ -118,11 +119,9 @@
         </span>
       </a>
     </nav>
-    <p class="menu-status" id="menuStatus"></p>
-    <blockquote class="citat menu-citat" id="menuCitat"></blockquote>
   </section>
 
-  <!-- "Din fremgang" i menuen som karrusel (prototype med ?karrusel, js/karrusel.js) -->
+  <!-- "Din fremgang" i menuen (js/karrusel.js) -->
   <div class="overlag skjult" id="dinFremgang" role="dialog" aria-label="Din fremgang">
     <div class="dialog">
       <header><h3>Din fremgang</h3><button class="knap lille luk" data-luk>Luk</button></header>
@@ -274,20 +273,28 @@
       <p class="klik-tip">Træk et atom ind i billedet, og slip det tæt på et andet. Så deler de et elektronpar. Træk et atom tilbage hertil for at fjerne det. Træk et andet sted for at dreje.</p>
       <div class="knap-række">
         <button class="knap svag" id="bygForfra">Forfra</button>
+        <button id="bygPile" title="Pile viser, hvilken vej bindingerne trækker i elektronerne">Pile</button>
       </div>
+      <h4 class="panel-overskrift">Opgaver <span class="byg-opgavetæller" id="bygOpgaveTæller"></span></h4>
+      <div class="byg-opgaver" id="bygOpgaver" role="group" aria-label="Opgaver (★ = klaret)"></div>
       <p class="klik-tip byg-forklaring"><span class="bf-prik"></span>De yderste elektroner. <span class="bf-sky delt"></span>Delt par (en binding). <span class="bf-sky fri"></span>Frit par. En prik, der blinker, har ingen partner.</p>
     </aside>
     <aside class="panel side-panel højre-panel byg-panel" id="bygInfo">
       <div class="forklaring-boks byg-trin">
         <strong id="bygTitel"></strong>
         <p id="bygTekst"></p>
+        <p id="bygLadning" class="byg-ladning" hidden></p>
+      </div>
+      <div class="forklaring-boks byg-kort" id="bygKort" hidden>
+        <strong>Hvor møder du det?</strong>
+        <p id="bygKortTekst"></p>
       </div>
       <dl class="tal lille byg-tal" id="bygTal"></dl>
-      <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="bygBinder">Hvorfor holder de sammen?</button> <button class="hvorfor" data-hvorfor="bygForm">Hvorfor er vand bøjet?</button></p>
+      <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="bygBinder">Hvorfor holder de sammen?</button> <button class="hvorfor" data-hvorfor="bygForm">Hvorfor er vand bøjet?</button> <button class="hvorfor" id="bygHvorforEkstra" hidden></button> <button class="hvorfor" data-hvorfor="bygPolær">Hvorfor plus og minus?</button></p>
       <details class="forklaring-boks lag-boks" data-lag="byg-nørd" name="byg-lag">
         <summary><strong>For nørder</strong><span class="lag-kort">Modellen bag prikkerne og formen.</span></summary>
-        <p>Prikkerne og stregerne er en model, som kemikere kalder Lewis-strukturer. Hvert atom binder med sine elektroner uden partner: H én, O to, N tre og C fire. Spillet regner selv dobbelt- og tripelbindingerne ud, så så mange elektroner som muligt får en partner.</p>
-        <p>Formen kommer fra VSEPR-modellen: Elektronparrene om et atom skubber hinanden så langt væk som muligt. Her er bindingerne fjedre med længder omtrent i det rigtige forhold (de målte, hvor de kunne slås op), og de frie par skubber 1,245 gange så hårdt som en binding. Tallet er valgt, så vand får 104,5°. Så får ammoniak 106,7° af sig selv, ligesom det målte. Det er en enkel model, ikke en kvanteudregning.</p>
+        <p>Prikkerne og stregerne er en model, som kemikere kalder Lewis-strukturer. Spillet regner selv dobbelt- og tripelbindingerne ud, så så mange elektroner som muligt får en partner.</p>
+        <p>Formen kommer fra VSEPR-modellen: Elektronparrene skubber hinanden væk. Bindingerne er fjedre, og de frie par skubber 1,245 gange så hårdt som en binding. Tallet er valgt, så vand får 104,5°. Så får ammoniak 106,7° af sig selv, ligesom det målte. Det er en enkel model, ikke en kvanteudregning.</p>
       </details>
       <details class="forklaring-boks lag-boks ærligt" data-lag="byg-ærligt" name="byg-lag">
         <summary><strong>Ærligt talt</strong><span class="lag-kort">Det, modellen snyder med.</span></summary>
@@ -633,7 +640,7 @@
         <p><strong>Hvor kommer de første neutroner fra?</strong> Fra en <em>neutronkilde</em>: en lille kapsel, der hele tiden sender neutroner ud. Det kan være californium-252, som af sig selv spalter og sender neutroner ud. Eller americium blandet med beryllium: Americium skyder alfapartikler (heliumkerner) ud, og når de rammer beryllium, slår de en neutron løs. Desuden spalter lidt af uranet af sig selv en gang imellem. Når reaktoren først kører, laver den selv alle de neutroner, den skal bruge.</p>
         <p><strong>Pause:</strong> Mellemrumstasten (eller ⏸ nederst til højre i billedet) stopper tiden, og ▶ lader den gå igen. Så kan du tælle neutronerne og dreje kameraet. Kontrolstavene kan stadig flyttes.</p>
         <p><strong>Kan en reaktor eksplodere som en bombe?</strong> Nej. Uranet i et kraftværk er ikke beriget nok til det. Men der kan ske alvorlige ulykker. I Tjernobyl i 1986 løb reaktoren løbsk under et forsøg, effekten steg voldsomt på få sekunder, og en dampeksplosion sprængte den. I Fukushima i 2011 svigtede kølingen efter en tsunami, brændslet smeltede, og der skete brinteksplosioner. Begge steder blev radioaktive stoffer spredt. Derfor har reaktorer mange sikkerhedssystemer.</p>
-        <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
+        <p><strong>Ærligt talt:</strong> I spillet bliver brugt brændsel frisk igen efter nogle sekunder, så reaktoren kan køre. I virkeligheden holder brændslet i flere år, og det brugte brændsel er stærkt radioaktivt i meget lang tid. Neutronkilden sender i spillet kun neutroner ind i de første 3 sekunder efter start. "Vis mig" snyder også lidt: De første neutroner spalter altid en kerne, når de rammer, og de slipper hverken ud eller bliver suget op af stavene, så kædereaktionen ikke dør ud, før den er kommet i gang.</p>
         <blockquote class="citat" data-citat="meitnerFrisch"></blockquote>
         <p class="nulstil-linje"><button class="knap lille" id="reaktorGuideIgen">Vis guiden igen</button></p>
       </div>

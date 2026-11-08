@@ -2,6 +2,8 @@
 // træk et atom hen til et andet (bindingen), vand bliver færdigt og får sit navn, det ulovlige (atomet skubbes væk,
 // og der står hvorfor), træk tilbage til paletten fjerner atomet, et træk et andet sted drejer kameraet, tidsknappen,
 // "Næste skridt", foldeboksene uden rullebjælke, ingen konsolfejl, og tablet og telefon begge veje.
+// M2b: ladningerne (δ+ og δ−), "Polært", kortet, kontakten "Pile", de seks opgaver med ★, Værkstedets opgaveliste og tæller,
+// Værkstedets kort i menuen og "Opgaver forfra".
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('byg-molekyler');
 const URL = `${ADRESSE}/index.html?test#vaerksted`;
@@ -223,6 +225,104 @@ await ingenRul(page, 'pc');
 await page.click('[data-hvorfor="bygForm"]');
 tjek('"Hvorfor er vand bøjet?" åbner et kort', (await page.evaluate(() => atomlabTest.hvorfor.vist())) === 'Hvorfor er vand bøjet?');
 await page.keyboard.press('Escape');
+
+// Oxygens elektroner: et O alene og O₂ får hver deres ekstra "Hvorfor?"-kort, og kortene hænger sammen med "Og hvorfor det?"
+const ekstra = () => page.evaluate(() => { const b = document.getElementById('bygHvorforEkstra'); return b.hidden ? '' : `${b.dataset.hvorfor}|${b.textContent}`; });
+await byg(['O'], [], []);
+tjek('et O alene: knappen "Hvorfor to uden partner?"', (await ekstra()) === 'bygUdenPartner|Hvorfor to uden partner?', await ekstra());
+await page.click('#bygHvorforEkstra');
+const kæde = [await page.evaluate(() => atomlabTest.hvorfor.vist())];
+for (let k = 0; k < 2; k++) { await page.click('.hk-næste'); kæde.push(await page.evaluate(() => atomlabTest.hvorfor.vist())); }
+tjek('kortene om oxygen hænger sammen', kæde.join(' › ') === 'Hvorfor har oxygen to elektroner uden partner? › Har oxygen altid 6 elektroner yderst? › Hvad sker der med elektronerne i O₂?', kæde.join(' › '));
+await page.keyboard.press('Escape');
+await byg(['O', 'O'], [[0, 1]], []);
+tjek('O₂: knappen "Hvad sker der i O₂?"', (await ekstra()) === 'bygO2|Hvad sker der i O₂?', await ekstra());
+await ingenRul(page, 'pc, O₂');
+await byg(['O'], [], [2]);
+tjek('vand: ingen ekstra knap, og "Hvorfor er vand bøjet?" er tilbage', (await ekstra()) === '' && await page.isVisible('#bygInfo [data-hvorfor="bygForm"]'), await ekstra());
+
+// ---------- M2b: ladningerne, kortet, pilene og opgaverne ----------
+await page.click('[data-hvorfor="bygPolær"]');
+tjek('"Hvorfor plus og minus?" åbner et kort', ((await page.evaluate(() => atomlabTest.hvorfor.vist())) ?? '').includes('plus'));
+await page.keyboard.press('Escape');
+const stjerne = (id) => page.textContent(`.byg-opgave[data-byg-opgave="${id}"] .bo-stjerne`);
+const løst = async (id) => (await G(page, 'opgaver')).find((o) => o.id === id).løst;
+// Start forfra med opgaverne (de første tests har allerede bygget vand, N₂ og ethanol)
+await page.evaluate(async () => { (await import('./js/fremgang.js')).nulstilFremgang(); });
+await page.evaluate(() => atomlabTest.vaerksted.sætDel('atom'));
+await page.evaluate(() => atomlabTest.vaerksted.sætDel('byg'));
+await page.waitForTimeout(300);
+await page.evaluate(() => atomlabTest.beskeder.frysPiller(true));
+
+g = await byg(['O'], [], [2]);
+await page.waitForTimeout(400);
+const qV = await G(page, 'ladninger');
+tjek(`vand: O er δ−, H'erne δ+ (${qV.join(', ')})`, qV[0] < 0 && qV[1] > 0 && qV[2] > 0);
+tjek('vand: "Polært: ja", teksten om ladningen og kortet "Hvor møder du det?"', await G(page, 'polær') === 'ja'
+  && (await page.textContent('#bygLadning')).includes('δ−') && await page.isVisible('#bygKort') && (await page.textContent('#bygKortTekst')).includes('71 %'));
+tjek('opgaven "Byg vand" er klaret med ★', await løst('byg-vand') && (await stjerne('byg-vand')) === '★' && (await page.textContent('#bygOpgaveTæller')) === '1/6');
+await ingenRul(page, 'pc med vand (kortet og ladningen)');
+// Pilene
+tjek('pilene er slukket fra start', (await G(page, 'pile')).length === 0 && await page.getAttribute('#bygPile', 'aria-checked') === 'false');
+await page.click('#bygPile');
+let pile = await G(page, 'pile');
+tjek(`vand med "Pile": to pile og summen (${pile.length})`, pile.filter((x) => !x.sum).length === 2 && pile.filter((x) => x.sum).length === 1 && await page.getAttribute('#bygPile', 'aria-checked') === 'true');
+await page.screenshot({ path: UD + '/3-vand-pile.png' });
+// CO₂ med pilene tændt: to pile, ingen sum, ikke polær, og opgaven er klaret
+g = await byg(['C', 'O', 'O'], [[1, 0], [2, 0]], []);
+await page.waitForTimeout(400);
+pile = await G(page, 'pile');
+tjek(`kuldioxid: to pile, men ingen sum, "Polært: nej" (${pile.length})`, pile.length === 2 && !pile.some((x) => x.sum) && await G(page, 'polær') === 'nej');
+const piller = await page.$$eval('#vaerkstedVindue .pille', (l) => l.map((p) => p.textContent).join(' '));
+tjek('opgaven "Hvorfor er CO₂ ikke polært?" er klaret, og en pille viser det', await løst('byg-co2') && piller.includes('CO₂ uden plus og minus'), piller);
+await page.click('#bygPile');
+// Metan: klares først, når den er drejet
+g = await byg(['C'], [], [4]);
+tjek(`metan: ingen δ (C–H er næsten ikke skæv), "Polært: nej"`, (await G(page, 'ladninger')).every((x) => x === 0) && await G(page, 'polær') === 'nej');
+tjek('metan er ikke klaret, før den er drejet', !(await løst('byg-metan')) && (await page.textContent('#bygMission')).includes('Drej'));
+await G(page, 'drej', 120);
+tjek(`metan drejet ${Math.round(await G(page, 'drejet'))}°: opgaven er klaret`, await løst('byg-metan'));
+// Kulilte: ingen δ (fælde 1)
+g = await byg(['C', 'O'], [[1, 0]], []);
+tjek('kulilte: ingen δ, og kulilte tæller som en tripelbinding', (await G(page, 'ladninger')).every((x) => x === 0) && await løst('byg-tripel'));
+g = await byg(['H', 'H'], [[1, 0]], []);
+tjek('H₂: klaret', await løst('byg-h2') && (await page.textContent('#bygOpgaveTæller')) === '5/6');
+// Ammoniak: N δ− og polær
+g = await byg(['N'], [], [3]);
+const qN = await G(page, 'ladninger');
+tjek(`ammoniak: N δ−, H δ+, polær (${qN.join(', ')})`, qN[0] < 0 && qN.slice(1).every((x) => x > 0) && await G(page, 'polær') === 'ja');
+
+// Værkstedets opgaveliste og tæller
+await page.click('[data-vaerksted-del="atom"]');
+await page.waitForTimeout(300);
+const tællerV = await page.textContent('#opgaveTæller');
+await page.click('#knapOpgaver');
+const listeV = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent));
+const iListen = listeV.filter((t) => /Byg H₂|Byg vand|CO₂|metan|tripelbinding|ethanol/.test(t) && !t.includes('Giv'));
+tjek('opgavelisten har gruppen "Del elektroner" med de seks opgaver (5 med ★)', listeV.some((t) => t === 'Byg et molekyle: Del elektroner') && iListen.length === 6 && iListen.filter((t) => t.startsWith('★')).length === 5, iListen.join(' / '));
+tjek(`tælleren tæller dem med (${tællerV})`, /^\d+\/27$/.test(tællerV) && Number(tællerV.split('/')[0]) >= 5);
+await page.locator('#opgaver li', { hasText: 'Byg ethanol' }).click();
+await page.waitForTimeout(400);
+tjek('et tryk på "Byg ethanol" åbner "Del elektroner" og viser tippet', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg' && (await undertekst(page)).includes('C–C–O'));
+// Værkstedets kort i menuen
+await page.evaluate(() => { location.hash = '#menu'; });
+await page.waitForTimeout(800);
+await page.click('.menu-fremgang-knap');
+const kortV = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
+const [løstV, ialtV] = tællerV.trim().split('/');
+tjek(`"Din fremgang" i menuen tæller "Del elektroner" med i Værkstedet (${kortV.trim()} / ${tællerV})`, kortV.includes(`${løstV} af ${ialtV} opgaver`));
+await page.keyboard.press('Escape');
+await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.waitForTimeout(600);
+// "Opgaver forfra" i Værkstedet nulstiller også stjernerne her
+await page.click('[data-vaerksted-del="atom"]');
+await page.click('#knapOpgaver');
+await page.click('#knapOpgaverForfra');
+await page.click('#knapOpgaverForfra');
+await page.waitForTimeout(400);
+await page.click('[data-vaerksted-del="molekyle"]');
+await page.waitForTimeout(300);
+tjek('"Opgaver forfra" nulstiller opgaverne i "Del elektroner"', (await G(page, 'opgaver')).every((o) => !o.løst) && (await page.textContent('#bygOpgaveTæller')) === '0/6' && (await stjerne('byg-h2')) === '☆');
 
 // Skærmskift midt i et træk: styringen slås til igen
 await G(page, 'ryd');

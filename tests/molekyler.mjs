@@ -294,5 +294,71 @@ tjek(`bindingslængden O–H 0,958 Å (${Math.hypot(...fV.pos[1].map((x, i) => x
   tjek(`ethyn og HCN er lige (${B.vinkel(y, 2, 0, 1).toFixed(1)}°, ${B.vinkel(form('hcn'), 2, 0, 1).toFixed(1)}°)`, nær(B.vinkel(y, 2, 0, 1), 180, 1) && nær(B.vinkel(form('hcn'), 2, 0, 1), 180, 1));
 }
 
+// ---------- M2b: ladningerne, kortene og opgaverne. Kilder: docs/fakta-molekyler/m2.md, afsnit 1, 3 og 5 ----------
+{
+  const alle = B.KENDTE_RÆKKE.map((id) => [id, B.bygKendt(B.KENDTE[id])]);
+  // δ-fortegnene: For hver polær binding (forskel ≥ 0,4) er det atom med højest elektronegativitet δ−
+  let fortegn = true;
+  for (const [id, { atomer, bånd }] of alle) {
+    const b = B.bindinger(atomer, bånd);
+    const q = B.ladninger(atomer, bånd, b);
+    if (b.dativ >= 0) { if (q.some((x) => x !== 0)) fortegn = false; continue; }
+    for (const [i, j] of bånd) {
+      const d = B.forskel(atomer[i].symbol, atomer[j].symbol);
+      const høj = B.STOFFER_BYG[atomer[i].symbol].en > B.STOFFER_BYG[atomer[j].symbol].en ? i : j;
+      const lav = høj === i ? j : i;
+      // Et atom med flere bindinger kan få begge dele (fx C i methanol), så der tjekkes kun atomer med én binding
+      const én = (k) => bånd.filter(([x, y]) => x === k || y === k).length === 1;
+      if (d >= 0.4 && ((én(høj) && q[høj] >= 0) || (én(lav) && q[lav] <= 0))) { fortegn = false; console.log('  ', id, i, j, q); }
+      if (d < 0.4 && atomer[i].symbol !== atomer[j].symbol && én(lav) && q[lav] !== 0) { fortegn = false; console.log('  ', id, 'upolær', i, j, q); }
+    }
+  }
+  tjek('δ-fortegnene passer med elektronegativiteten (den, der trækker hårdest, er δ−), og kulilte har ingen δ', fortegn);
+  const tegn = (id) => { const { atomer, bånd } = B.bygKendt(B.KENDTE[id]); const q = B.ladninger(atomer, bånd, B.bindinger(atomer, bånd)); return atomer.map((a, i) => a.symbol + (q[i] > 0 ? '+' : q[i] < 0 ? '−' : '0')).join(' '); };
+  tjek(`vand: O δ−, H δ+ (${tegn('vand')})`, tegn('vand') === 'O− H+ H+');
+  tjek(`ammoniak: N δ−, H δ+ (${tegn('ammoniak')})`, tegn('ammoniak') === 'N− H+ H+ H+');
+  tjek(`HCl: Cl δ−, H δ+ (${tegn('hcl')})`, tegn('hcl') === 'Cl− H+');
+  tjek(`kuldioxid: C δ+, O δ− (${tegn('co2')})`, tegn('co2') === 'C+ O− O−');
+  tjek(`metan: ingen δ, for C–H er kun 0,35 (fælde 4) (${tegn('metan')})`, tegn('metan') === 'C0 H0 H0 H0 H0');
+  tjek(`HCN: C δ+, N δ−, H ingen (${tegn('hcn')})`, tegn('hcn') === 'C+ N− H0');
+  tjek(`kulilte: ingen δ, dipolen peger den "forkerte" vej (fælde 1) (${tegn('co')})`, tegn('co') === 'C0 O0');
+  tjek('N–O er lige på grænsen (0,40) og regnes som polær, C–H (0,35) og O–Cl (0,28) ikke', B.polærBinding('N', 'O')?.minus === 'O' && !B.polærBinding('C', 'H') && !B.polærBinding('O', 'Cl'));
+  // Polær eller ej: målt dipol over 0 (CCCBDB) giver polær i formen, målt 0 giver ikke (undtagen CO, fælde 1)
+  const MÅLT_POLÆR = { h2: false, o2: false, n2: false, cl2: false, hcl: true, vand: true, h2o2: true, co2: false, co: false, metan: false, ammoniak: true, ethan: false, ethen: false, ethyn: false, methanol: true, ethanol: true, hcn: true };
+  let polære = true;
+  for (const [id, { atomer, bånd }] of alle) {
+    const f = B.formAf(atomer, bånd);
+    const ud = B.polærForm(f, atomer.map((_, i) => i));
+    if (ud !== MÅLT_POLÆR[id] || B.KENDTE[id].polær !== MÅLT_POLÆR[id]) { polære = false; console.log('  ', id, ud, B.KENDTE[id].polær); }
+  }
+  tjek('polær ud fra formen = målt dipol over 0 for alle 17 (CO undtaget, se fælde 1), og flaget passer', polære);
+  const co2 = B.formAf(...Object.values(B.bygKendt(B.KENDTE.co2)));
+  const t = B.træk(co2, [0, 1, 2]);
+  tjek(`kuldioxid: to pile mod hvert sit O, summen ${Math.hypot(...t.sum).toFixed(4)} (ophæver hinanden)`, t.pile.length === 2 && t.pile.every((p) => p.fra === 0) && Math.hypot(...t.sum) < 0.01);
+  const v = B.formAf(...Object.values(B.bygKendt(B.KENDTE.vand)));
+  const tv = B.træk(v, [0, 1, 2]);
+  // Summen peger fra H'ernes midte mod O
+  const mH = [0, 1, 2].map((q) => (v.pos[1][q] + v.pos[2][q]) / 2 - v.pos[0][q]);
+  tjek(`vand: pilene peger mod O, summen ${Math.hypot(...tv.sum).toFixed(2)} peger mod O-enden`, tv.pile.every((p) => p.til === 0) && mH.reduce((s2, x, q) => s2 + x * tv.sum[q], 0) < 0);
+  const h2o2 = B.formAf(...Object.values(B.bygKendt(B.KENDTE.h2o2)));
+  const flad = B.lavForm();
+  // H₂O₂ lagt fladt (vredet 180°) er ikke polær: Det er drejningen, der gør den polær (fælde 3 og 5)
+  flad.pos = [[0, 0, 0], [1.475, 0, 0], [-0.25, 0.92, 0], [1.725, -0.92, 0]];
+  B.opdaterStruktur(flad, ...Object.values(B.bygKendt(B.KENDTE.h2o2)));
+  flad.pos = [[0, 0, 0], [1.475, 0, 0], [-0.25, 0.92, 0], [1.725, -0.92, 0]];
+  tjek('brintoverilte er kun polær, fordi den er vredet (flad: ikke polær)', B.polærForm(h2o2, [0, 1, 2, 3]) && !B.polærForm(flad, [0, 1, 2, 3]));
+  tjek('alle 17 har et kort og en tekst om ladningen', B.KENDTE_RÆKKE.every((id) => B.KENDTE[id].kort?.length > 20 && B.KENDTE[id].ladning?.length > 20 && typeof B.KENDTE[id].polær === 'boolean'));
+  // Opgaverne
+  tjek('seks opgaver med byg- foran, titel, tip og fakta', B.OPGAVER_BYG.length === 6 && B.OPGAVER_BYG.every((o) => o.id.startsWith('byg-') && o.titel && o.tip && o.fakta && o.kort)
+    && B.OPGAVER_BYG.map((o) => o.id).join(' ') === 'byg-h2 byg-vand byg-co2 byg-metan byg-tripel byg-ethanol');
+  tjek('opgaverne peger på kendte molekyler', B.OPGAVER_BYG.every((o) => o.tripel || B.KENDTE[o.kendt]));
+  const O = Object.fromEntries(B.OPGAVER_BYG.map((o) => [o.id, o]));
+  const ingen = { kendte: [], tripel: false, pile: false, drejet: 0 };
+  tjek('vand klares af vand, ikke af andet', B.opgaveKlaret(O['byg-vand'], { ...ingen, kendte: ['vand'] }) && !B.opgaveKlaret(O['byg-vand'], { ...ingen, kendte: ['h2'] }));
+  tjek('CO₂ kræver, at pilene er tændt', !B.opgaveKlaret(O['byg-co2'], { ...ingen, kendte: ['co2'] }) && B.opgaveKlaret(O['byg-co2'], { ...ingen, kendte: ['co2'], pile: true }));
+  tjek(`metan kræver, at den er drejet mindst ${B.DREJ_GRADER}°`, !B.opgaveKlaret(O['byg-metan'], { ...ingen, kendte: ['metan'], drejet: 30 }) && B.opgaveKlaret(O['byg-metan'], { ...ingen, kendte: ['metan'], drejet: 95 }));
+  tjek('tripelbindingen klares af en hvilken som helst tripelbinding', B.opgaveKlaret(O['byg-tripel'], { ...ingen, tripel: true }) && !B.opgaveKlaret(O['byg-tripel'], { ...ingen, kendte: ['o2'] }));
+}
+
 console.log(`\n${ok} OK, ${dårlig} fejl`);
 process.exit(dårlig ? 1 : 0);

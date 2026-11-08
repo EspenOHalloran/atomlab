@@ -24,7 +24,7 @@ tjek('menu vises', await page.isVisible('#menu'));
 const fps = await page.evaluate(() => new Promise((ok) => { let n = 0; const t0 = performance.now(); const f = () => { n++; if (performance.now() - t0 < 2000) requestAnimationFrame(f); else ok(n / 2); }; requestAnimationFrame(f); }));
 console.log('Billeder pr. sekund i testbrowseren:', fps);
 
-await page.click('a.kort.åben');
+await page.click('.menukort a[href="#vaerksted"]', { force: true }); // forrest i ringen for en ny bruger (kortene svæver)
 await page.waitForTimeout(800);
 tjek('værksted vises', await page.isVisible('#vaerksted'));
 const info = () => page.textContent('#infopanel');
@@ -80,7 +80,7 @@ await page.click('#minitabel .felt[data-nr="2"]');
 await page.waitForTimeout(1200);
 tekst = await info();
 tjek('hop til helium efter genindlæsning', tekst.includes('Helium-4'), tekst);
-tjek('opgavetæller (16 byggeopgaver og Byttebørsens 5 par)', /^[3-9]\/21$/.test(await page.textContent('#opgaveTæller')), await page.textContent('#opgaveTæller'));
+tjek('opgavetæller (16 byggeopgaver, 6 i "Del elektroner" og 5 par i "Giv elektroner")', /^[3-9]\/27$/.test(await page.textContent('#opgaveTæller')), await page.textContent('#opgaveTæller'));
 
 // Ikke-opdaget grundstof kan ikke vælges
 await page.click('#minitabel .felt[data-nr="26"]');

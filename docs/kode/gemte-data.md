@@ -1,6 +1,6 @@
 # Gemte data (localStorage)
 
-- `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`. Byttebørsens par har id'erne `bytte-nacl`, `bytte-lif`, `bytte-mgo`, `bytte-cacl2` og `bytte-nana` (M1b, `OPGAVER_BYTTE` i `js/data/molekyler.js`). De tæller med i Værkstedet og nulstilles med Værkstedets "Opgaver forfra".
+- `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`. Byttebørsens par har id'erne `bytte-nacl`, `bytte-lif`, `bytte-mgo`, `bytte-cacl2` og `bytte-nana` (M1b, `OPGAVER_BYTTE` i `js/data/molekyler.js`). De tæller med i Værkstedet og nulstilles med Værkstedets "Opgaver forfra". Det samme gør opgaverne i "Del elektroner": `byg-h2`, `byg-vand`, `byg-co2`, `byg-metan`, `byg-tripel` og `byg-ethanol` (M2b, `OPGAVER_BYG` i `js/data/molekyler-byg.js`). (`byg-<atomnr>` fra Det periodiske system gemmes ikke.)
 - `atomlabLyd`: `'til'` eller `'fra'`
 - `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
@@ -13,5 +13,5 @@
 - `atomlabNavne`: `'til'` eller `'fra'`, knappen "Navne" ved planeterne i Solsystemet (navnene på Mars og Saturns måner). Til fra start.
 - `atomlabSolsystem` og `atomlabSolsystemSet`: det samme for Solsystemet. De flyttede fænomener flyttes fra Kosmos' nøgler første gang (`flytGemt`).
 - `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`, `batteri`) og `fusion-rejse` (rejsen ind i Solen)
-- `atomlabSidsteDel`: id på den del, man sidst var i (fx `'kosmos'`). Karrusellen i menuen (`?karrusel`) starter dér. Gemmes også uden `?karrusel`.
+- `atomlabSidsteDel`: id på den del, man sidst var i (fx `'kosmos'`). Ringen i menuen starter på verdenen for den del.
 - `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.

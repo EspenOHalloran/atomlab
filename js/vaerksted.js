@@ -15,8 +15,9 @@ import { toTrinsKnap } from './forfra.js';
 import { citatHTML } from './data/citater.js';
 import { kategoriKnap } from './system.js';
 import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, opdaterFremgang as opdaterByttebørsen, testAdgang as bytteTest } from './molekyler.js';
-import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, testAdgang as bygTest } from './molekyler-byg.js';
+import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, visOpgave as visBygOpgave, opdaterFremgang as opdaterBygMolekyler, testAdgang as bygTest } from './molekyler-byg.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js';
+import { OPGAVER_BYG } from './data/molekyler-byg.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -638,8 +639,9 @@ function lavKnapper() {
   });
   // Starter kun Værkstedets opgaver forfra (de andre dele har deres egen knap). De opdagede grundstoffer bliver.
   toTrinsKnap($('knapOpgaverForfra'), () => {
-    fremgang.nulstilDel([...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id)); // parrene i "Giv elektroner" hører til Værkstedet
+    fremgang.nulstilDel([...OPGAVER, ...OPGAVER_BYTTE, ...OPGAVER_BYG].map((o) => o.id)); // "Byg et molekyle" hører til Værkstedet
     opdaterByttebørsen();
+    opdaterBygMolekyler();
     vælgNæsteOpgave();
     lavOpgaveliste();
     opdaterAlt();
@@ -650,6 +652,7 @@ function lavKnapper() {
     if (!confirm('Vil du slette alle løste opgaver og opdagede grundstoffer?')) return;
     fremgang.nulstilFremgang();
     opdaterByttebørsen();
+    opdaterBygMolekyler();
     lavMinitabel();
     lavOpgaveliste();
     vælgNæsteOpgave();
@@ -798,6 +801,26 @@ function lavOpgaveliste() {
     });
     liste.append(li);
   }
+  // Opgaverne i "Byg et molekyle → Del elektroner" (Molekyler M2b). Et tryk skifter dertil og viser tippet.
+  const bygGruppe = document.createElement('li');
+  bygGruppe.className = 'opgave-gruppe';
+  bygGruppe.textContent = 'Byg et molekyle: Del elektroner';
+  liste.append(bygGruppe);
+  for (const o of OPGAVER_BYG) {
+    const li = document.createElement('li');
+    const løst = fremgang.erLøst(o.id);
+    li.className = løst ? 'løst' : '';
+    li.innerHTML = `<span class="flueben">${løst ? '★' : '☆'}</span><span class="opgave-titel"></span><small></small>`;
+    li.querySelector('.opgave-titel').textContent = o.titel.replace('Del elektroner: ', '');
+    li.querySelector('small').textContent = løst ? o.fakta : o.tip;
+    li.addEventListener('click', () => {
+      lyd.klik();
+      $('opgaveliste').classList.add('skjult');
+      sætDel('byg');
+      visBygOpgave(o.id);
+    });
+    liste.append(li);
+  }
   // Parrene i "Byg et molekyle → Giv elektroner" (Molekyler M1b). Et tryk skifter dertil med det par.
   const gruppe = document.createElement('li');
   gruppe.className = 'opgave-gruppe';
@@ -821,15 +844,15 @@ function lavOpgaveliste() {
 }
 
 function opdaterOpgave() {
-  // Tælleren tæller også parrene i "Giv elektroner" (de står på Værkstedets kort i menuen)
-  const ider = [...OPGAVER, ...OPGAVER_BYTTE].map((o) => o.id);
+  // Tælleren tæller også opgaverne i "Byg et molekyle" (de står på Værkstedets kort i menuen)
+  const ider = [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE].map((o) => o.id);
   elementer.opgaveTæller.textContent = `${fremgang.antalLøste(ider)}/${ider.length}`;
   const krav = elementer.opgaveKrav;
   krav.innerHTML = '';
   if (!aktivOpgave) {
-    const mangler = OPGAVER_BYTTE.filter((o) => !fremgang.erLøst(o.id)).length;
+    const mangler = [...OPGAVER_BYG, ...OPGAVER_BYTTE].filter((o) => !fremgang.erLøst(o.id)).length;
     elementer.opgaveTekst.textContent = mangler
-      ? `Alle byggeopgaver er klaret! Prøv "Byg et molekyle" → "Giv elektroner": ${mangler} par mangler.`
+      ? `Alle atom-opgaver er klaret! Prøv "Byg et molekyle": ${mangler} ${mangler === 1 ? 'opgave mangler' : 'opgaver mangler'}.`
       : 'Alle opgaver er klaret! Byg frit, og opdag flere grundstoffer.';
     return;
   }

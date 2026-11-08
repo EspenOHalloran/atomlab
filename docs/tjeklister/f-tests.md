@@ -9,8 +9,10 @@
 - [ ] Billedværktøjer, der skal vise fuld grafik, starter browseren med `fuldGrafik: true` (`tests/vaerktoejer/saturn.mjs` manglede det, så billederne var uden glød og med 2k-kort, uden at nogen så det). Tjek, hvilke filer siden faktisk henter (`side.on('request')`), når billeders størrelse eller kvalitet er det, der testes.
 - [ ] Skærmbilleder tages først, når kameraet er færdigt med at zoome. Ellers ser layoutet forkert ud (`skaermbilleder.mjs` venter 7 sekunder).
 - [ ] Ved ændringer i tegningen (renderer, efterbehandling): mål billeder i sekundet før og efter. Mål én browser ad gangen (to samtidig halverer tallene).
-- [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder, og hele samlingen før push. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
-- [ ] `--ændret` sammenligner med grenens egen udgave på GitHub (`@{upstream}`). Kør den før push, ellers finder den ingen ændringer (U4). Efter push: nævn testene, eller kør hele samlingen.
+- [ ] Brug `node tests/koer-alle.mjs --ændret`, mens du arbejder og før merge (den kører altid røgtesten og sammenligner med `main`, også efter push). Hele samlingen kun, når DESIGN.md siger det. Vent på en tilstand (`waitForFunction`) eller spol frem i stedet for at vente en fast tid.
+- [ ] En ny funktion får 5-10 tjek af det vigtigste (åbner, knapperne virker, regler og fakta er rigtige, der ryddes op), ikke 50. Præcise kameravinkler, pixel og tekstlængder tjekkes kun, når de er fakta eller har givet en fejl før.
+- [ ] En test, der kun fejler sammen med andre eller under belastning og består alene, skrives i `docs/lige-nu/aabne-punkter.md`, og arbejdet går videre. Den undersøges kun, hvis den også fejler alene, fejler igen senere, eller kan være en ægte fejl, man selv ville se.
+- [ ] CSS for én skærm skrives med skærmens id foran (`#reaktor .del-vælger`) eller med en klasse, der kun bruges dér. Så kører `--ændret` kun den skærms tests.
 - [ ] Knapper findes ud fra deres tekst (`trykPå(tekst)` i Kosmos og Solsystemet), ikke deres nummer. Numrene skifter, når knapper flytter eller kommer til (U2).
 - [ ] Vent ikke på en proces med `pgrep -f navn` i en løkke: Løkkens egen kommandolinje indeholder navnet, så den venter for evigt (U2). Start i stedet testen selv i baggrunden (`run_in_background`), og få besked, når den er færdig.
 - [ ] `pkill -f navn` køres i sin egen kommando, ikke i samme kommandolinje som noget, der skal blive ved (den rammer sig selv, S2). Svar fra `fetch` læses færdigt (`await svar.arrayBuffer()`), ellers kan Node 22.23 gå ned.
@@ -20,3 +22,6 @@
 - [ ] En test åbner ikke en ny side, mens en anden side i samme test stadig tegner 3D. Luk den første først, og vent på, at skærmen er klar (`waitForFunction`), ikke på sidens load-hændelse (`page.goto` giver op efter 30 sekunder).
 - [ ] En rettelse af en test, der fejler under belastning, vises først at fejle uden rettelsen (fx med fire travle CPU-løkker ved siden af), og bestå med den flere gange i træk.
 - [ ] To billeder, der sammenlignes (med og uden noget), tages, når kameraet står stille (samme plads i to tegnede billeder i træk), og efter mindst to tegnede billeder (`requestAnimationFrame`) efter ændringen, ikke efter en fast ventetid (Jupiters ringe, 8. november 2026).
+- [ ] Et klik på noget, der skal rulles frem (fx et ord under skærmkanten), ruller testen selv frem og venter to billeder før klikket. Ellers kan Playwrights egen rulning nå siden efter klikket og fx lukke en forklaring (Småting, 8. november 2026).
+- [ ] Et klik, der først gør arbejdet efter næste billede (fx rejseskiltet i Solsystemet), ventes der på (`waitForFunction`), før resultatet tjekkes.
+- [ ] Noget tilfældigt, der kan gå i stå (fx kædereaktionen lige efter start), tåler testen: Tjek det, og start forfra, som man selv ville gøre.
