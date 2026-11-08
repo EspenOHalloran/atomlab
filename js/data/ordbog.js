@@ -557,6 +557,18 @@ export const ORDBOG = [
     tekst: 'Når ting svinger eller kredser i et fast talforhold og giver hinanden et lille skub igen og igen på samme sted, som når man skubber en gynge i takt. Io, Europa og Ganymedes er i resonans: Io går fire omgange, mens Ganymedes går én.',
   },
   {
+    id: 'isgigant', ord: 'Isgigant',
+    former: ['isgigant', 'isgiganten', 'isgiganter', 'isgiganterne'],
+    // UN5. Kilder: fakta-solsystemet/del6, fælde 2 ("is" er varme væsker), og Wikipedia "Neptune" (kappen af vand, ammoniak og metan)
+    tekst: 'En stor planet som Uranus og Neptun. Yderst er der luft af brint og helium, men inde i dem er der mest vand, ammoniak og metan. Astronomer kalder dem "is", men inde i planeten er de varme, tætte væsker.',
+  },
+  {
+    id: 'ringbue', ord: 'Ringbue',
+    former: ['ringbue', 'ringbuen', 'ringbuer', 'ringbuerne'],
+    // UN5. Neptuns Adams-ring (NSSDC, Wikipedia "Rings of Neptune")
+    tekst: 'Et stykke af en planetring, hvor støvet er samlet i en klump i stedet for at være spredt hele vejen rundt. Neptuns yderste ring har buer. Voyager 2 så fem i 1989.',
+  },
+  {
     id: 'nordlys', ord: 'Nordlys',
     former: ['nordlys', 'nordlyset'],
     // Jupiter: "hundreds of times brighter than those seen on Earth" (Webb 2025, Hubble 2016), fakta del 5, A7

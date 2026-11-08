@@ -97,6 +97,16 @@ export const HVORFOR = {
     spørgsmål: 'Hvorfor lyser stjernerne?',
     svar: 'Inde i midten af stjernen smelter brintkerner sammen til helium, og det frigør energi (fusion). Energien varmer hele stjernen op, og den varme overflade lyser, ligesom glødende jern. I Solen tager det titusinder af år, måske over 100.000 år, før energien fra midten når ud til overfladen. Energien i det sollys, du ser, blev altså frigjort i midten for længe siden, selvom lyset kun bruger ca. 8 minutter fra Solens overflade til Jorden.',
   },
+  // Uranus og Neptun (UN5, 8. november 2026). Kilder: docs/fakta-solsystemet/del6-uranus-og-neptun.md, "Faktatjek UN5".
+  uranusSol: {
+    spørgsmål: 'Hvorfor får Uranus\' poler sol i 42 år?',
+    svar: 'Uranus ligger på siden, og aksen peger hele tiden samme vej ud i rummet, mens Uranus kredser om Solen. På den ene side af banen peger nordpolen mod Solen, og et halvt omløb senere er det sydpolen. Et omløb tager 84 år, så hver pol har sol i ca. 42 år og mørke i ca. 42 år.',
+    nørd: 'På Jorden sker det samme, men aksen hælder kun ca. 23°. Derfor er det kun egnene tæt på polerne, der får midnatssol og mørketid.',
+  },
+  neptunStaa: {
+    spørgsmål: 'Hvorfor kan man ikke stå på Neptun?',
+    svar: 'Neptun har ingen fast overflade. Yderst er der luft af brint og helium. Jo dybere man kommer, jo tættere og varmere bliver den, og den går langsomt over i en varm, tæt væske af vand, ammoniak og metan. Der er intet sted at lande, og længe før ville trykket knuse et rumskib.',
+  },
   // Rejsen i tid (T3). Kilder: docs/fakta-tid.md, afsnit 1, 2 og 8 (ét ton: 5,5·10²⁰ J ved 99 % og 6,3·10²¹ J ved 99,99 %,
   // verdens energiforbrug 592 EJ om året)
   lysfart: {
