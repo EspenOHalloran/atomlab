@@ -561,6 +561,7 @@ function panelIndhold() {
     return {
       titel: `${navn(a.symbol)} (${a.symbol})`,
       tekst: `${navn(a.symbol)} har ${ental(n, 'elektron', 'elektroner')} uden partner (${n === 1 ? 'den blinker' : 'de blinker'}). Hver af dem kan danne et par med en elektron fra et andet atom.`,
+      hvorfor: ['bygUdenPartner', a.symbol === 'O' ? 'Hvorfor to uden partner?' : 'Hvorfor uden partner?'],
       næste: plads() ? `Træk et atom mere ind, og slip det tæt på ${navn(a.symbol).toLowerCase()}, så de kan dele et elektronpar.` : `Der er ${D.MAX_ATOMER} atomer, det højeste. Tryk "Forfra", eller træk et atom tilbage til paletten.`,
       ærligt: '',
     };
@@ -583,6 +584,7 @@ function panelIndhold() {
       tekst: `Færdigt! Alle elektronerne har fået en partner. ${st.kendt.form}`,
       næste: 'Færdigt! Drej molekylet med fingeren eller musen, så du kan se formen. Prøv så et nyt.',
       ærligt: ÆRLIGT[st.kendt.id] ?? '',
+      hvorfor: HVORFOR_EKSTRA[st.kendt.id] ?? null,
     };
   }
   return {
@@ -593,9 +595,14 @@ function panelIndhold() {
   };
 }
 
+// Et ekstra "Hvorfor?"-kort for nogle af de kendte molekyler: [id i HVORFOR, teksten på knappen]
+const HVORFOR_EKSTRA = {
+  o2: ['bygO2', 'Hvad sker der i O₂?'],
+};
+
 // Det, modellen snyder med, for nogle af de kendte molekyler (faktagrundlaget, afsnit 5)
 const ÆRLIGT = {
-  o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden makker, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det.',
+  o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden makker, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det (se "Hvad sker der i O₂?").',
   co: 'Prik-reglen kan ikke bygge kulilte. Her låner oxygen et af sine frie par ud, når C og O er alene, så det bliver en tripelbinding. I det rigtige kulilte kommer det ene af de tre par også helt fra oxygen.',
   h2o2: 'Den enkle model ville lægge brintoverilte fladt. Det rigtige molekyle er vredet som en halvt åben bog, så spillet drejer det med et ekstra led. Hvorfor, kræver kvantemekanik.',
 };
@@ -619,6 +626,10 @@ function opdaterPanel() {
   const æ = $('bygÆrligtMolekyle');
   æ.textContent = p.ærligt;
   æ.hidden = !p.ærligt;
+  const ekstra = $('bygHvorforEkstra');
+  ekstra.hidden = !p.hvorfor;
+  if (p.hvorfor) [ekstra.dataset.hvorfor, ekstra.textContent] = p.hvorfor;
+  else delete ekstra.dataset.hvorfor;
   næste.sæt({ tekst: p.næste });
   for (const b of document.querySelectorAll('.palet-atom')) b.disabled = !plads();
 }

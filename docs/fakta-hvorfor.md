@@ -127,6 +127,20 @@
 
 **Faktatjek:** Tallene er slået op i kilderne under Trin 0 (se [fakta-molekyler.md](fakta-molekyler.md), afsnit 1 og 7): Na's ioniseringsenergi 5,139 eV (NIST Handbook), Cl's elektronaffinitet 3,613 eV (Berzinsh m.fl. 1995 via Wikipedias dataside), 5,14 − 3,62 = 1,52 eV, parret 0,236 nm og 4,26 eV (OpenStax University Physics 3, §9.1, åbnet). "Ca. 9 Å": 14,40 eV·Å / 1,53 eV = 9,4 Å (min udregning). "Ca. 4,3 eV mere, end det kostede" = 4,26 eV fra neutrale atomer. Synligt lys 1,6-3,1 eV pr. foton (skrevet "ca. 2-3 eV"). "Seks naboer med modsat ladning": stensaltstrukturen (Housecroft). "Endnu mere i et saltkorn": 6,6 eV pr. NaCl fra atomer mod 4,26 eV i et par (Born-Haber, afsnit 7).
 
+## 16-18. Oxygens elektroner: "Hvorfor har oxygen to elektroner uden partner?", "Har oxygen altid 6 elektroner yderst?" og "Hvad sker der med elektronerne i O₂?" ✅ (8. november 2026, Molekyler)
+**Hvor:** "Del elektroner" i Atomværkstedet (`bygUdenPartner`, `bygOxygenAndre`, `bygO2` i `js/data/hvorfor.js`). Knappen står i panelet, når der er ét atom alene (`bygUdenPartner`), og når O₂ er færdigt (`bygO2`). Brugerens spørgsmål: "Hvorfor har oxygenet to elektroner uden partner? Kan den have kun 6 elektroner? Hvornår forekommer det? Og når den bliver til O₂, deler de så de to elektroner?"
+
+**Faktatjek** (hovedsessionen selv, Wikipedias kildetekst åbnet med curl 8. november 2026):
+- O har 6 i yderste skal, 2s² 2p⁴ fordelt som [↑↓] [↑] [↑], ikke [↑↓] [↑↓] [ ] (Wikipedia "Hund's rule of maximum multiplicity", der bruger oxygen som eksempel). "4 pladser à 2" er 2s og de tre 2p (forenkling, der passer til prik-modellen). N 2s² 2p³ (1 par, 3 alene), Cl 3 par og 1 alene: OK.
+- **Fælde:** Grunden til Hunds regel. Samme artikel: "An early but incorrect explanation ... reducing electron-electron repulsion", og beregninger siden 1970'erne viser "a decrease in the screening of electron-nuclear attractions". Derfor siger svaret kun, *at* de sætter sig én på hver plads, og nørd-laget fortæller begge forklaringer.
+- Kulstof har 2 uparrede alene (2s² 2p²) og bruger den tomme plads, når det binder (promovering og hybridisering, forenklet til "bruger også sin tomme plads"): OK.
+- O²⁻ i magnesiumoxid: "a lattice of Mg²⁺ ions and O²⁻ ions held together by ionic bonding" (Wikipedia "Magnesium oxide"). Det hvide pulver efter brændende magnesium er MgO: OK. (Sand, SiO₂, er mest kovalent og er derfor ikke brugt som eksempel.)
+- Over ca. 200 km dominerer atomart oxygen (Wikipedia "Thermosphere": "atomic oxygen (O), helium (He), and hydrogen (H) successively dominate above an altitude of about 200 km"). UV-lys deler O₂ og river elektroner af (fotoionisering, O⁺ er den almindeligste ion i ionosfærens F-lag): OK.
+- Det grønne (557,7 nm) og røde (630,0 nm) nordlys kommer fra oxygen-atomer (Wikipedia "Aurora"): OK.
+- O₂'s grundtilstand er triplet med to uparrede elektroner i to lige gode π*-orbitaler (Hund-artiklen: "two degenerate pi antibonding molecular orbitals (π*) occupied by only two electrons ... two unpaired electrons"). Bindingsorden 2, altså lige så stærk som en dobbeltbinding (MO-teorien): OK.
+- Flydende oxygen hænger mellem polerne på en magnet ("temporarily suspended between the magnet poles, owing to its paramagnetism") og koger ved −183 °C (90 K) (Wikipedia "Liquid oxygen"): OK.
+- Singlet-oxygen ligger 94,x kJ/mol over grundtilstanden (= 0,98 eV, skrevet "ca. 1 eV") og er "far more reactive toward organic compounds" (Wikipedia "Singlet oxygen"): OK.
+
 ## Fotoner (ordbogen og Stjerneovnen), 29. oktober 2026
 Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brint til carbon, trin for trin" (trin 2) og "Fotonerne af gammastråling" i hjælpens "Lys og neutrinoer". Kilderne er åbnet direkte med curl (Wikipedias kildetekst).
 
