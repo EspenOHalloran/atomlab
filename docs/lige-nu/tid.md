@@ -10,6 +10,8 @@
 - Faktatjek: alle tal regnet efter med `js/data/tid.js` mod fakta-tid.md (22 dage, 3,8 timer, 71, 0,061 lysår, 95 % midtvejs med 1 g, over 96 % efter 2 år, γ = 2 ved 86,6 %).
 - Test: `tests/tid.mjs` (alle T3's tjek og de nye).
 
-**Næste: intet. Sporet er lukket for nu (besluttet 8. november 2026).** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" opdateres med, at "Rejsen i tid" er færdig (T1-T3).
+**Jeres ønske (8. november 2026): T5, "Hvorfor går tiden langsommere?"** Jeres ord: "Tidsrejsen er bedre nu", men tidsudvidelse er "utrolig svært at forstå", og I vil gerne bruge flere ressourcer på at forklare *hvorfor* tiden går langsommere, gerne med illustrationer og animationer. Opus' forslag (fem scener med små animationer: bolden og lyset, lysuret med trekanten, myonernes kapløb, "nu" er ikke det samme for alle og rumtidskortet), opdelingen og fire spørgsmål til jer står under **T5** i [plan-tid.md](../plan-tid.md). Venter på jeres svar og et go.
 
-**Spørgsmål til jer:** ingen lige nu.
+**Ellers: Sporet er lukket for nu (besluttet 8. november 2026).** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" opdateres med, at "Rejsen i tid" er færdig (T1-T3).
+
+**Spørgsmål til jer:** De fire spørgsmål om T5 (hvor, hvilke scener, skitser først og hvornår) under T5 i [plan-tid.md](../plan-tid.md).
