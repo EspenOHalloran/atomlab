@@ -6,9 +6,9 @@
 - **De to planeter ligner hinanden** (samme størrelse, samme farve, samme slags ringe og luft), så de deler værktøj, shader og ringkode. De bygges som to visninger efter hinanden, ligesom Saturn og Jupiter.
 - **Der findes ingen skarpe kort.** Hubbles kort har 2 pixel pr. grad (720 rundt), og Voyager 2 er den eneste sonde, der har været der. Overfladen bygges derfor af **målte bånd** (lysstyrke og farve for hver breddegrad fra Hubble) og **målte vinde**. Detaljerne er tegnet af shaderen, og det siges ærligt.
 - **Uranus' wow:** Den ligger på siden. En skyder for årene viser, hvordan hver pol har sol i 42 år og mørke i 42 år. Ringene og månerne kredser om Uranus som en skydeskive, og ringene er mørke som kul.
-- **Neptuns wow:** Solsystemets hurtigste vinde, hvide skyer, der kaster skygge, Den Store Mørke Plet fra 1989, de mærkelige ringbuer og Triton, der kredser baglæns.
+- **Neptuns wow:** Solsystemets hurtigste vinde, hvide skyer, der kaster skygge, Den Store Mørke Plet fra 1989 og de mærkelige ringbuer. Triton venter til månerne-runden (jeres svar).
 - **Farverne:** de ægte farver (næsten ens for de to) og en kontakt med "Voyagers blå" fra 1989, så man kan se myten.
-- **Delopgaver:** UN1-UN6, hver med sit eget go. Ca. 6-8 sessioner. Opus med høj effort.
+- **Delopgaver:** UN1-UN5, hver med sit eget go (UN6 venter). Ca. 5-7 sessioner. Opus med høj effort.
 - **Seks spørgsmål til jer** står sidst.
 
 ## 0. Kilderne (tjekket med curl 7. november 2026)
@@ -68,7 +68,7 @@
 - **Størrelsen:** Reglen fra `maanestr.js` (store langt væk, rigtige tæt på). Set fra Uranus' skyer er Ariel 0,40° og Miranda 0,26°. Fra Miranda fylder Uranus 22° af himlen.
 - **De små måner** (24 andre, i alt 29 i august 2026) tegnes ikke. Siden nævner tallet med datoen.
 
-**Neptuns Triton** (radius 1.353 km, afstand 354.760 km, omløb 5,88 døgn baglæns, hældning 157°).
+**Neptuns Triton venter til månerne-runden (jeres svar 5).** Det, der er undersøgt, gemmes her: (radius 1.353 km, afstand 354.760 km, omløb 5,88 døgn baglæns, hældning 157°).
 - **Kortet:** USGS' farvekort med udfyldte huller (600 m pr. pixel). Det skaleres til 4k på pc og 2k på tablet (som Jupiters måner). Hullerne er udfyldt af USGS, og det siges ærligt.
 - **Set fra Neptuns skyer er Triton 0,47° bred**, næsten som vores Måne. Neptun set fra Triton er 8° bred.
 - **Proteus og Nereid** tegnes ikke (Nereids aflange bane kan nævnes under For nørder). Siden nævner 16 måner.
@@ -93,8 +93,6 @@ Neptun
 STEDER
   Den Store Mørke Plet (1989)
   Ringbuerne
-MÅNER
-  Triton
 ```
 - **Styr-boksen:** "Navne", "Modlys", "Voyagers farver (1989)". Ved Uranus også skyderen "År" og "Infrarødt (som JWST)". Ved Neptun også "Neptun i 1989" og "Vindene" (pile som ved Jupiter).
 - **Tiden:** kun tidsknappen. Skyderen "År" flytter kun Solens retning, ikke månerne.
@@ -106,10 +104,10 @@ MÅNER
 4. **I Uranus' skygge** (Solen bag Uranus, støvet mellem ringene lyser op, som Voyager så det). *"Bag Uranus ses støvet mellem ringene, som forfra er usynligt."*
 
 **Neptuns flyby (4 stop):**
-1. **Neptun og Triton** (oversigten). *"Den yderste planet. Lyset fra Solen er over 4 timer om at nå herud, og Solen er kun en lille skarp prik."*
+1. **Neptun** (oversigten). *"Den yderste planet. Lyset fra Solen er over 4 timer om at nå herud, og Solen er kun en lille skarp prik."*
 2. **De hurtigste vinde** (hele kloden, kontakten "Vindene" foreslås). *"Ved ækvator blæser det ca. 1.400 km/t mod vest. Ingen anden planet har så hurtige vinde."*
 3. **Neptun i 1989** (Den Store Mørke Plet og høje skyer med skygge, kontakten "Voyagers farver" kan prøves). *"Voyager 2 så en mørk storm på størrelse med Jorden. Få år senere var den væk."*
-4. **Triton** (Triton foran og Neptun bagved, eller ringbuerne i modlys, se spørgsmål 5). *"Triton kredser baglæns om Neptun. Den er nok en indfanget dværgplanet."*
+4. **Ringbuerne i modlys** (Solen bag Neptun, jeres svar 5). *"Neptuns yderste ring har fem klumper af støv, som har navne fra den franske revolution: frihed, lighed og broderskab."* (Courage er den femte, tjekkes i UN5.)
 
 **"Stå på":** Ingen af planeterne har en overflade. Ingen "Stå på" og ingen knap, der ligner den.
 
@@ -152,9 +150,9 @@ Hver får sit eget go. Model: Opus. Effort: høj, undtagen UN4 (medium, mest gen
 | **UN1: Kloderne og skelettet** | `billeder/solsystem/lav_isgiganter.py` (OPAL FITS → bånd, farve, pletlag, 2k/1k, sammenligning med Irwins farver), `KILDER.md`. `js/kosmos/uranus.js` og `neptun.js` efter mønstret fra `jupiter.js`, i `js/solsystem.js` efter Saturn. Aksen fra polens RA og Dec. Vindene fra Jupiter J2 med de nye formler i `js/data/vinde-isgiganter.js` | `planet.js`, `rejse.js`, `navne.js`, `hent.js` | Ny `tests/isgiganter.mjs`: starter, henter kortene, fladtrykt, aksen hælder 97,8° og 28,3°, drejer den rigtige vej, står stille i pause, ingen konsolfejl. Node: vindformlerne (fortegn ved ækvator og ved ±60°) | Mellem-stor |
 | **UN2: Uranus' årstider og ringe** | Skyderen "År" (Solens retning fra banen og aksen, tjekket mod Horizons), kappen over polen, `js/data/ringe-uranus.js` (NSSDC), mørke ringe, "Infrarødt", støvet i modlys | `ringe.js`, `planet.js` | Solens bredde passer med Horizons (1986: −82,5°, 2007: 0°, 2026: +74°), ringenes radier, ringene næsten usynlige forfra og synlige i modlys | Mellem |
 | **UN3: Neptuns vejr og ringbuer** | Høje skyer med skygge, "Neptun i 1989" (pletten og Scooter), "Voyagers farver", ringbuerne i `js/data/ringe-neptun.js` | `planet.js`, `ringe.js` | Pletten kun med kontakten, buerne de rigtige steder, skyerne flytter sig den rigtige vej og står stille i pause | Mellem |
-| **UN4: Månerne** | Triton (USGS) og Uranus' fem (efter jeres svar på spørgsmål 4), baner (NSSDC), Triton baglæns, størrelsesreglen, skygger, tryk og "Måner" i træet | `maane.js`, `maanestr.js`, Jupiters tryk og besøg | Omløbstider, retning (Triton baglæns), rigtig størrelse tæt på (målt i grader), skyggerne findes | Mellem |
+| **UN4: Uranus' måner** | Uranus' fem store (kortene efter jeres svar 4), Cressida, Desdemona, Cupid og Belinda som små klumper, baner (NSSDC), størrelsesreglen, skygger, tryk og "Måner" i træet. Triton venter (jeres svar 5) | `maane.js`, `maanestr.js`, Jupiters tryk og besøg | Omløbstider, retning, rigtig størrelse tæt på (målt i grader), Cressida overhaler Desdemona hver ca. 22. døgn, skyggerne findes | Mellem |
 | **UN5: Flybyerne, træet og siderne** | To `TUR` med 4 stop, `js/data/sider/uranus.js` og `neptun.js`, Ordbogen, faktatjek af alle tekster (`/faktatjek`, med fælderne i del 6) | `flyby.js`, `sideknap.js` | Flybyerne igennem alle stop, underteksterne under 160 tegn, knapperne findes ud fra teksten, skærmbilleder af alle stop | Mellem-stor |
-| **UN6: Tritons gejsere** (hvis I vil) | Partikler over sydpolen | `fontaener.js` | Står stille i pause, antallet under loftet | Lille |
+| ~~UN6: Tritons gejsere~~ | Venter til månerne-runden med Triton (jeres svar 5) | | | |
 
 **Til sidst:** hele testsamlingen, billeder i sekundet, "Ikke afprøvet" til jeres runde på tabletten, artefaktet "AtomLab Overblik" og `/faerdig`.
 
@@ -166,8 +164,21 @@ Hver får sit eget go. Model: Opus. Effort: høj, undtagen UN4 (medium, mest gen
 5. **Neptuns stop 4:** **Triton med Neptun bagved** (anbefalet: Triton er halvdelen af historien om Neptun, og der er kun én stor måne). Eller ringbuerne i modlys, og Triton først med månerne-runden?
 6. **Skyderen "År" ved Uranus:** **En skyder fra 1986 til 2070, der kun flytter Solen** (anbefalet). Eller knapper med faste år (1986, 2007, 2030)?
 
-### Jeres svar
-*(Venter.)*
+### Jeres svar (7. november 2026)
+"For øvrige spørgsmål følger vi dine anbefalinger. Skriv prompten."
+1. **Rækkefølgen:** UN1 laver begge kloder, så Uranus (UN2) og så Neptun (UN3).
+2. **Farverne:** de ægte farver som standard og kontakten "Voyagers farver (1989)".
+3. **Neptuns plet:** Neptun som i 2025 og kontakten "Neptun i 1989".
+4. **Uranus' måner:** "Lav Uranus' måner, hvis du kan." UN4 leder først efter færdige kort med fri licens (spørg om domænet), ellers laves de af Voyagers fotos med den nordlige halvdel som en blød grå flade ("aldrig fotograferet"). **Jeres spørgsmål om to måner, der måske støder sammen,** er undersøgt (se nedenfor), og de små måner, det handler om, kommer med i UN4.
+5. **Neptuns måner venter** til månerne-runden ("Neptuns måner kan vente"). Triton og dens gejsere (UN6) er derfor ikke med nu, og **Neptuns stop 4 bliver ringbuerne i modlys**.
+6. **Skyderen "År"** fra 1986 til 2070, der kun flytter Solen.
+
+### Måner, der kan støde sammen (jeres spørgsmål, undersøgt 7. november 2026)
+Det passer, men det handler om to par af Uranus' små indre måner, ikke de fem store:
+- **Cressida og Desdemona** (ca. 41 og 35 km i radius) kredser kun ca. 900 km fra hinanden (61.800 og 62.700 km fra Uranus). Flere beregninger siden 1997 finder, at de sandsynligvis støder sammen inden for 100 millioner år (måske allerede om 4 millioner år).
+- **Cupid og Belinda** (ca. 9 og 45 km) kredser også ca. 900 km fra hinanden. En beregning fra 2012 gav et sammenstød inden for ca. 100.000 år, men en ny fra 2022 ("Cupid Is Not Doomed Yet") fandt, at Belinda og Perdita holder takt (resonansen 44 : 43), så gruppen kan holde i 50-100 millioner år.
+- **Måske er det sket før:** Forskerne foreslår, at de indre måner er stumper fra tidligere sammenstød, der er samlet igen.
+- **I programmet (UN4):** De fire små måner som små, grå klumper (der findes ingen kort over dem) i deres rigtige baner. Med ⏩ kan man se Cressida overhale Desdemona (hver ca. 22. døgn). Et emne "Måner, der kan støde sammen" på Uranus' side. Kilder i faktagrundlaget, afsnit 7.
 
 ## Status
-*(Intet bygget endnu.)*
+*(Intet bygget endnu. Prompten er [prompt-uranus-neptun.md](prompt-uranus-neptun.md).)*
