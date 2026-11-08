@@ -122,6 +122,8 @@ I "Byg molekyler" står knappen **"Knaldgas"**: en lille boks med 4 H₂ og 2 O�
 
 **Fysikken:** En lille 3D-boks med 6-30 molekyler, der støder sammen, ligesom kernerne i Stjerneovnen. En binding går i stykker, hvis stødet er hårdt nok, og en ny bliver lavet, når to atomer med elektroner uden partner mødes. Energien skal være bevaret (test).
 
+**Jeres svar til M3 (8. november 2026), alle efter min anbefaling:** (1) Boksen står **i stedet for byggeriet**: 3D-billedet viser kun boksen, og "Tilbage til byggeriet" bringer det byggede tilbage uændret. (2) **Fast blanding 4 H₂ + 2 O₂** (ender altid med 4 H₂O). Rumfærgens blanding (for meget hydrogen) kommer i `docs/ideer.md`. (3) **De rigtige trin:** H–H 436, O=O 498, O–H 428 i OH og 499 i vand (NIST, se [fakta-molekyler/m3.md](fakta-molekyler/m3.md)), så summen ender på 484 kJ. "For nørder" forklarer tabellens gennemsnit på 464. (4) **To opgaver med ★:** "Tænd knaldgassen" og "Intet sker uden gnist" (fx 20 stød uden gnist, så et "Hvorfor?"-kort om aktiveringsenergien med Stjerneovnens bakke).
+
 ## 5. Hvor kom Jordens vand fra?
 **Forslag:** Ikke en ny del, men et **"Hvorfor?"-kort** i "Byg molekyler" (når man har bygget vand) med lag til den nysgerrige og et link til Kosmos (Stjerner bliver født: de kolde skyer af gas og støv). Det, man ved, og det, man ikke ved, står i faktagrundlaget. Hovedpunkterne:
 - Meget af vandet blev nok dannet som is på små støvkorn i kolde skyer, før Solen fandtes.

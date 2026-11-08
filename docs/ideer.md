@@ -3,7 +3,7 @@
 *Kun løse idéer, der **ikke er besluttet** endnu, sorteret efter verdenerne i menuen ([plan-verdener.md](plan-verdener.md)). Når en idé får et go eller en plads i rækkefølgen, flyttes den til [koereplan.md](koereplan.md). Sådan så filen ud før opdelingen 7. november 2026: [arkiv/ideer-til-2026-11-07.md](arkiv/ideer-til-2026-11-07.md). Nye idéer skrives under den verden, de hører til, med dato.*
 
 ## Atomer og molekyler
-*(ingen lige nu)*
+- **Rumfærgens blanding i knaldgassen** (8. november 2026, fra M3): en knap med 6 H₂ + 2 O₂ (for meget hydrogen, som RS-25-motoren kører med). Det ender med 4 H₂O og 2 H₂ tilbage, og en opgave "For meget hydrogen".
 
 ## Kernerne
 *(ingen lige nu)*
