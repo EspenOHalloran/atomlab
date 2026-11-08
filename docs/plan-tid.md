@@ -113,6 +113,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - [x] `/faktatjek` af de færdige tekster mod fakta-tid.md.
 - [x] **Tests:** teksterne og knapperne i lagene (som i `lag.mjs`).
 - **Valg i T3:** Et syvende emne, "Hvorfor tager det år med 1 g?", folder sig ud med kontakten "1 g hele vejen" og har de 11.500 g (ellers blev "Kunne man?" for langt). Cæsiumuret står i "For nørder" ("Er det målt?" var lang nok). Knappen "Cæsium ›" er `gå('system:55', …)`, og `js/system.js` åbner grundstoffet (før kunne man kun åbne en kategori fra en anden skærm).
+- **Efter T3 (8. november 2026, jeres ønsker):** emnet "Hurtigere end lyset? Nej!" øverst, "Hvorfor tager det år med 1 g?" hedder nu "Fast fart eller 1 g?" og forklarer begge måder, lysuret går trin for trin med sin egen fart (87 %), og målet vælges med tre kontakter (skyderen hedder "Fast fart"). Se `docs/lige-nu/tid.md`.
 - [ ] **På tabletten** (står i [ikke-afproevet.md](ikke-afproevet.md)): Er emnerne til at forstå, og er de to lange for lange?
 
 **T4. Udsigten fra cockpittet** *(mellem til stor, eget go senere)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.

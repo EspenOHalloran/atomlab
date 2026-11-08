@@ -12,7 +12,7 @@ await page.goto(`${ADRESSE}/?test`);
 await page.evaluate(() => localStorage.setItem('atomlabGuide', JSON.stringify({ fusion: 1, 'fusion-rejse': 1 })));
 await page.reload();
 await page.waitForTimeout(600);
-await page.click('a.kort[href="#fusion"]');
+await page.evaluate(() => { location.hash = '#fusion'; }); // delen står ikke forrest i ringen
 const T = (f) => page.evaluate(f);
 // Vent, til ovnen er fyldt, og kameraet har zoomet på plads (til billedet)
 await page.waitForFunction(() => window.atomlabTest?.fusion.partikler().length >= 38, null, { timeout: 20000 });

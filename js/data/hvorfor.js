@@ -130,4 +130,21 @@ export const HVORFOR = {
     svar: 'Elektronparrene omkring et atom skubber hinanden så langt væk som muligt. Oxygen i vand har fire par: to bindinger til H og to frie par. Fire par stiller sig som hjørnerne i en tetraeder (en pyramide med trekanter på alle sider). De frie par skubber lidt hårdere end bindingerne, så vinklen mellem de to H bliver ca. 104,5° i stedet for 109,5°.\n\nI CO₂ har kulstof ingen frie par. De to bindinger skubber hinanden ud til hver sin side, så molekylet er lige.',
     nørd: 'Modellen hedder VSEPR (Valence Shell Electron Pair Repulsion: elektronpar i den yderste skal skubber hinanden). Den forklarer formen godt, men elektronparrene er ikke rigtige kugler. Den præcise forklaring kræver kvantemekanik.',
   },
+  // Oxygens elektroner (8. november 2026). Kilder: docs/fakta-hvorfor.md, afsnit 17-19.
+  bygUdenPartner: {
+    spørgsmål: 'Hvorfor har oxygen to elektroner uden partner?',
+    svar: 'Oxygen har 6 elektroner i sin yderste skal. Skallen har 4 pladser, og hver plads kan rumme 2 elektroner. Elektronerne sætter sig først én på hver plads og deler kun plads, når der ikke er flere tomme. Så bliver de 6 til 2 par og 2 alene, og det er de 2 alene, der kan lave par med elektroner fra andre atomer.\n\nDe 2 uden partner er altså en del af de 6, ikke nogen ekstra. Nitrogen har 5 (1 par og 3 alene), chlor har 7 (3 par og 1 alene), og hydrogen har 1.',
+    næste: 'bygOxygenAndre',
+    nørd: 'Sådan har atomet mindst energi (Hunds regel). Lærebøger forklarede det længe med, at elektronerne skubber mindre til hinanden, når de sidder hver for sig. Udregninger siden 1970\'erne viser, at grunden mest er en anden: Elektroner hver for sig skygger mindre for kernen, så den trækker hårdere i dem. Kulstof snyder lidt på tegningen: Alene har det kun 2 uden partner, men når det binder, bruger det også sin tomme plads, så det kan lave 4 bindinger.',
+  },
+  bygOxygenAndre: {
+    spørgsmål: 'Har oxygen altid 6 elektroner yderst?',
+    svar: 'Et neutralt oxygen-atom har altid 6. I et molekyle som vand deler det 2 par med andre atomer, så det har 8 omkring sig, når man tæller de delte med. Sammen med et metal tager oxygen i stedet 2 elektroner og bliver til ionen O²⁻ med 8 helt for sig selv, fx i magnesiumoxid, det hvide pulver, der bliver tilbage, når magnesium brænder.\n\nFærre end 6 får det kun med meget energi, fx højt oppe i luften, hvor solens UV-lys river elektroner af. Et oxygen-atom helt alene finder man næsten ikke ved jorden, for det binder sig med det samme. Men over ca. 200 km\'s højde er enlige O-atomer det almindeligste, fordi UV-lyset deler O₂ i to, og det grønne og røde nordlys kommer fra dem.',
+    næste: 'bygO2',
+  },
+  bygO2: {
+    spørgsmål: 'Hvad sker der med elektronerne i O₂?',
+    svar: 'I prik-modellen lægger hvert oxygen sine 2 elektroner uden partner ind i midten. Så deler de 2 par, og det er en dobbeltbinding. Hvert oxygen har nu 2 frie par og 2 delte par, altså 8 elektroner omkring sig.\n\nMen her snyder modellen: Det rigtige O₂ har stadig 2 elektroner uden makker. De hører til hele molekylet, ikke til ét af atomerne. Man kan se det, fordi flydende oxygen (−183 °C koldt) hænger fast mellem polerne på en stærk magnet. Bindingen er alligevel lige så stærk som en dobbeltbinding.',
+    nørd: 'Den rigtige forklaring bruger molekyleorbitaler: pladser til elektronerne, der hører til hele molekylet. De 2 sidste elektroner skal i to pladser, der er lige gode, og ligesom i atomet sætter de sig én på hver (Hunds regel). Giver man O₂ ca. 1 eV energi, kan de 2 lægge sig i par på samme plads. Det hedder singlet-oxygen, og det er meget mere reaktivt end almindeligt oxygen.',
+  },
 };

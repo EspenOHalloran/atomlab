@@ -1,8 +1,8 @@
-// Menuen som en karrusel (prototype med ?karrusel, js/karrusel.js, docs/plan-menu.md og docs/plan-verdener.md):
+// Menuen som en karrusel (standard siden K3, js/karrusel.js, docs/plan-menu.md og docs/plan-verdener.md):
 // verdenerne i ringen (K4) med delene som knapper i kortet, ringen (kortet forrest i midten, atomet over det), træk og kast,
 // docken med verdenerne, tryk på en verden til siden, tastatur, musehjul og at ringen går rundt, en verden med én del,
 // start på verdenen for den del, man sidst var i (med delen fremhævet), ✓ på en del og en verden, "Din fremgang"
-// samlet under verdenerne, og at den almindelige menu er uændret.
+// samlet under verdenerne, og at det gamle gitter, de gule piller, tallene, citatet og "Næste eventyr" er væk (K3).
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('karrusel');
 const b = await chromium.launch({ args: ARGS });
@@ -28,7 +28,7 @@ for (const [navn, opts] of størrelser) {
   };
 
   // Ny bruger
-  await p.goto(`${ADRESSE}/?test&karrusel#`);
+  await p.goto(`${ADRESSE}/?test#`);
   await p.waitForFunction(() => document.getElementById('menu').dataset.midt);
   const start = await p.evaluate(() => {
     const menu = document.getElementById('menu');
@@ -50,8 +50,7 @@ for (const [navn, opts] of størrelser) {
         return a.classList.contains('verden-hel') && Math.abs(r.width - s.width) <= 3 && Math.abs(r.height - s.height) <= 3 && v.querySelector('.verden-del').textContent.includes('Batteriet');
       })(),
       højder: [...menu.querySelectorAll('.menukort > .verden')].map((k) => k.offsetHeight),
-      piller: [...menu.querySelectorAll('.kort-fremgang')].filter(vist).length,
-      status: vist(document.getElementById('menuStatus')),
+      gammelt: [...menu.querySelectorAll('.kort-fremgang, .kort, .næste-eventyr, #menuStatus, #menuCitat')].length,
       ikoner: menu.querySelectorAll('.menu-ikon').length,
       sideBredde: document.documentElement.scrollWidth - innerWidth,
       rul: menu.scrollHeight - menu.clientHeight,
@@ -65,7 +64,7 @@ for (const [navn, opts] of størrelser) {
   tjek(`${navn}: knapperne i en verden til siden kan ikke nås med tabulatortasten`, start.bagved.length === 2 && start.bagved.every((t) => t === -1), JSON.stringify(start.bagved));
   tjek(`${navn}: i Elektricitet (én del) dækker Batteriets link hele kortet`, start.hel);
   tjek(`${navn}: alle verdenerne er lige høje`, new Set(start.højder).size === 1, start.højder.join());
-  tjek(`${navn}: ingen gule piller og ingen linje med tal`, start.piller === 0 && !start.status, JSON.stringify(start));
+  tjek(`${navn}: ingen gule piller, linje med tal, citat, "Næste eventyr" eller gamle kort (K3)`, start.gammelt === 0, JSON.stringify(start));
   tjek(`${navn}: docken har 5 ikoner`, start.ikoner === 5, start.ikoner);
   tjek(`${navn}: siden er ikke bredere end skærmen`, start.sideBredde <= 0, start.sideBredde);
   tjek(`${navn}: menuen skal ikke rulles`, start.rul <= 1, start.rul);
@@ -234,17 +233,6 @@ for (const [navn, opts] of størrelser) {
   await p.keyboard.press('Escape');
   tjek(`${navn}: Esc lukker "Din fremgang"`, await p.evaluate(() => document.getElementById('dinFremgang').classList.contains('skjult')));
 
-  // Uden ?karrusel er menuen den samme som før
-  await p.goto(`${ADRESSE}/?test#`);
-  await p.waitForFunction(() => document.querySelector('#menu .kort-fremgang'));
-  const gammel = await p.evaluate(() => ({
-    tilstand: document.getElementById('menu').classList.contains('karrusel-tilstand'),
-    første: document.querySelector('#menu .menukort a.kort').getAttribute('href'),
-    kort: document.querySelectorAll('#menu .menukort > a.kort').length,
-    under: Boolean(document.querySelector('.menu-under')),
-    verdener: document.querySelectorAll('#menu .verden').length,
-  }));
-  tjek(`${navn}: uden ?karrusel er menuen uændret`, !gammel.tilstand && gammel.første === '#vaerksted' && gammel.kort === 8 && !gammel.under && !gammel.verdener, JSON.stringify(gammel));
   tjek(`${navn}: ingen konsolfejl`, fejl.length === 0, fejl.join('\n'));
   await ctx.close();
 }

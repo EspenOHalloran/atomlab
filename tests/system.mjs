@@ -9,7 +9,7 @@ page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await page.goto(`${ADRESSE}/`);
 await page.waitForTimeout(800);
-await page.click('a.kort[href="#system"]');
+await page.click('.menukort a[href="#system"]', { force: true }); // en ny bruger starter på Atomer og molekyler, forrest i ringen
 await page.waitForTimeout(9000);
 await page.screenshot({ path: UD + '/s1-væg.png' });
 tjek('væggen vises', await page.isVisible('#system'));
@@ -109,7 +109,7 @@ tjek('stjerne-tæller', (await page.textContent('#systemOpdaget')).includes('1 a
   await s.context().close();
 }
 
-// Menuen: fremgang på hvert kort og "Næste eventyr", når en del er klaret
+// Menuen: ✓ på en klaret del og tallene i "Din fremgang" (siden K3 ingen gule piller og intet "Næste eventyr")
 {
   const s = await (await b.newContext({ viewport: { width: 1280, height: 800 } })).newPage();
   s.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
@@ -121,10 +121,13 @@ tjek('stjerne-tæller', (await page.textContent('#systemOpdaget')).includes('1 a
   });
   await s.goto(`${ADRESSE}/?test`);
   await s.waitForTimeout(1500);
-  const m = await s.evaluate(() => Object.fromEntries([...document.querySelectorAll('.menukort .kort')].map((k) => [k.getAttribute('href'), { tal: k.querySelector('.kort-fremgang')?.textContent, færdig: k.querySelector('.kort-fremgang')?.classList.contains('færdig'), næste: k.classList.contains('næste-eventyr') }])));
-  tjek('menuen: Batteriet er klaret', m['#batteri'].færdig && m['#batteri'].tal === '✓ 5/5 ★', JSON.stringify(m['#batteri']));
-  tjek('menuen: opdagede grundstoffer og sete fænomener', m['#system'].tal === '2/118 opdaget' && m['#kosmos'].tal === '2/12 set' && /^1\/\d+ set$/.test(m['#solsystem'].tal), JSON.stringify(m));
-  tjek('menuen: næste eventyr er Værkstedet', m['#vaerksted'].næste && !m['#batteri'].næste && m['#vaerksted'].tal.endsWith('★'), JSON.stringify(m));
+  const klaret = await s.evaluate(() => [...document.querySelectorAll('.menukort a.verden-knap.klaret')].map((a) => a.getAttribute('href')));
+  tjek('menuen: kun Batteriet er klaret (✓), og ingen "Start her"', klaret.join() === '#batteri' && !(await s.$('.start-her')), JSON.stringify(klaret));
+  await s.click('.menu-fremgang-knap');
+  const m = await s.evaluate(() => Object.fromEntries([...document.querySelectorAll('#fremgangListe [data-del]')].map((li) => [li.dataset.del, li.querySelector('.fremgang-tal').textContent])));
+  tjek('"Din fremgang": Batteriet er klaret', m.batteri === '✓ 5 af 5 opgaver', JSON.stringify(m));
+  tjek('"Din fremgang": opdagede grundstoffer og sete fænomener', m.system === '2 af 118 opdaget' && m.kosmos === '2 af 12 besøgt' && /^1 af \d+ besøgt$/.test(m.solsystem), JSON.stringify(m));
+  tjek('menuen: intet "Næste eventyr" og ingen gule piller', !(await s.$('.næste-eventyr, .kort-fremgang, #menuStatus, #menuCitat')));
   await s.screenshot({ path: UD + '/s5-menu.png' });
   await s.context().close();
 }

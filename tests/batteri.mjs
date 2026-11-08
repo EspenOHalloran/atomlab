@@ -10,7 +10,7 @@ page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await page.goto(`${ADRESSE}/?test`);
 await page.waitForTimeout(800);
-await page.click('a.kort[href="#batteri"]');
+await page.evaluate(() => { location.hash = '#batteri'; }); // delen står ikke forrest i ringen
 // Guiden kommer første gang (vent på boblen, for under belastning kan skærmen være længe om at starte)
 await page.waitForSelector('.guide-boble:not(.skjult)', { timeout: 20000 }).catch(() => {});
 await page.waitForTimeout(500);

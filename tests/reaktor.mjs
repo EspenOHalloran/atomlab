@@ -10,7 +10,7 @@ page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') 
 page.on('dialog', (d) => d.accept());
 await page.goto(`${ADRESSE}/?test`);
 await page.waitForTimeout(600);
-await page.click('a.kort[href="#reaktor"]');
+await page.evaluate(() => { location.hash = '#reaktor'; }); // delen står ikke forrest i ringen
 await page.waitForTimeout(6000);
 await page.screenshot({ path: UD + '/r1-uran.png' });
 const forklaring = () => page.textContent('#reaktorForklaring');
