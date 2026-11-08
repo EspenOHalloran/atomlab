@@ -112,4 +112,15 @@ export const HVORFOR = {
     spørgsmål: 'Hvad er en ion?',
     svar: 'Et atom har normalt lige mange protoner (plus) og elektroner (minus), så det er neutralt. Mister det en elektron, bliver det plusladet, og får det en ekstra, bliver det minusladet. Et atom med for få eller for mange elektroner hedder en ion. Natrium, der har mistet sin yderste elektron, skrives Na⁺, og chlor med en ekstra skrives Cl⁻. Protonerne i kernen ændrer sig ikke, så det er stadig natrium og chlor.',
   },
+  // Byg et molekyle → "Del elektroner" (Molekyler M2a). Kilder: docs/fakta-molekyler/m2.md, afsnit 2-4.
+  bygBinder: {
+    spørgsmål: 'Hvorfor holder atomerne sammen?',
+    svar: 'To atomer deler et par elektroner. Parret sidder mellem de to kerner, og begge kerner trækker i det. Derfor holder atomerne sammen. Det kaldes en kovalent binding.\n\nEt atom kan lave lige så mange bindinger, som det har elektroner uden partner: H én, O to, N tre og C fire. Deler to atomer to eller tre par, er det en dobbelt- eller tripelbinding.',
+    nørd: 'Atomer i 2. række af det periodiske system (C, N og O) ender med 8 elektroner omkring sig, når man tæller de delte par med (oktetreglen). Hydrogen ender med 2. Det er en tommelfingerregel, der passer på alle molekylerne her, undtagen at oxygen-molekylet O₂ i virkeligheden har to elektroner uden makker.',
+  },
+  bygForm: {
+    spørgsmål: 'Hvorfor er vand bøjet?',
+    svar: 'Elektronparrene omkring et atom skubber hinanden så langt væk som muligt. Oxygen i vand har fire par: to bindinger til H og to frie par. Fire par stiller sig som hjørnerne i en tetraeder (en pyramide med trekanter på alle sider). De frie par skubber lidt hårdere end bindingerne, så vinklen mellem de to H bliver ca. 104,5° i stedet for 109,5°.\n\nI CO₂ har kulstof ingen frie par. De to bindinger skubber hinanden ud til hver sin side, så molekylet er lige.',
+    nørd: 'Modellen hedder VSEPR (Valence Shell Electron Pair Repulsion: elektronpar i den yderste skal skubber hinanden). Den forklarer formen godt, men elektronparrene er ikke rigtige kugler. Den præcise forklaring kræver kvantemekanik.',
+  },
 };

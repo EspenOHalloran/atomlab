@@ -106,6 +106,8 @@ Faktagrundlaget står i [fakta-molekyler/m2.md](fakta-molekyler/m2.md). Sådan p
 3. **Kulilte (CO):** O låner et par ud, når C og O er alene (anbefaling, så man kan bygge kulilte, og "Ærligt talt" forklarer det), eller kan CO ikke bygges (C=O står som "ikke færdig")?
 4. **Små valg, hvor jeg foreslår:** alle 17 kendte molekyler med navn allerede i M2a (kortene i M2b), højst 12 atomer, ingen δ på C–H, H₂O₂ drejes med et ekstra led, teksten ved ukendte molekyler fra fælde 6, og at M2b må rette de 3 linjer i `js/main.js` (importen og de to lister, som M1b også rettede), så opgaverne tæller på Værkstedets kort. Sporet Menuen venter på et go til K2, så risikoen for en konflikt er lille.
 
+**Jeres svar til M2a (7. november 2026): "Go til M2a, brug dine anbefalinger".** Altså: (1) prøve A (prikkerne i bindingerne og de frie par, kernerne i kemikernes farver), (2) paletten H, C, N, O og Cl, (3) kulilte: O låner et par ud, når C og O er alene, og (4) ja til de små valg (alle 17 navne i M2a, højst 12 atomer, ingen δ på C–H, H₂O₂ drejes, teksten ved ukendte molekyler fra fælde 6, og M2b må rette de 3 linjer i `js/main.js`).
+
 ## 4. Se vand blive til (knaldgas)
 I "Byg molekyler" står knappen **"Knaldgas"**: en lille boks med 4 H₂ og 2 O₂, der flyver rundt.
 1. **Der sker ingenting:** Molekylerne støder ind i hinanden og hopper væk. Bindingerne er for stærke til, at de går i stykker af et stød. (Aktiveringsenergi forklaret med Stjerneovnens "bakke", som man kender.)
