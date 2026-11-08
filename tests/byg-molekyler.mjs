@@ -237,7 +237,7 @@ await byg(['O', 'O'], [[0, 1]], []);
 tjek('O₂: knappen "Hvad sker der i O₂?"', (await ekstra()) === 'bygO2|Hvad sker der i O₂?', await ekstra());
 await ingenRul(page, 'pc, O₂');
 await byg(['O'], [], [2]);
-tjek('vand: ingen ekstra knap', (await ekstra()) === '', await ekstra());
+tjek('vand: ingen ekstra knap, og "Hvorfor er vand bøjet?" er tilbage', (await ekstra()) === '' && await page.isVisible('#bygInfo [data-hvorfor="bygForm"]'), await ekstra());
 
 // Skærmskift midt i et træk: styringen slås til igen
 await G(page, 'ryd');

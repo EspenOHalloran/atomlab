@@ -288,7 +288,7 @@ button { font: inherit; color: inherit; }
 .bf-sky { width: 14px; height: 14px; }
 .bf-sky.delt { background: radial-gradient(circle, rgba(70, 140, 255, 0.85), rgba(70, 140, 255, 0)); }
 .bf-sky.fri { background: radial-gradient(circle, rgba(150, 80, 255, 0.85), rgba(150, 80, 255, 0)); }
-#bygÆrligtMolekyle[hidden] { display: none; }
+#bygÆrligtMolekyle[hidden], #bygInfo button.hvorfor[hidden] { display: none; }
 .bytte-panel > .knap { align-self: flex-start; }
 .bytte-trin p { margin: 0; }
 .bytte-regnskab { margin: 0; }

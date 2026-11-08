@@ -627,7 +627,9 @@ function opdaterPanel() {
   æ.textContent = p.ærligt;
   æ.hidden = !p.ærligt;
   const ekstra = $('bygHvorforEkstra');
+  // Det ekstra kort tager pladsen fra "Hvorfor er vand bøjet?", så panelet ikke får en rullebjælke
   ekstra.hidden = !p.hvorfor;
+  document.querySelector('#bygInfo [data-hvorfor="bygForm"]').hidden = !!p.hvorfor;
   if (p.hvorfor) [ekstra.dataset.hvorfor, ekstra.textContent] = p.hvorfor;
   else delete ekstra.dataset.hvorfor;
   næste.sæt({ tekst: p.næste });
