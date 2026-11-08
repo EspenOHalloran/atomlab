@@ -64,7 +64,11 @@ export function lavOrdforklaringer() {
   boble.className = 'ordforklaring skjult';
   boble.setAttribute('role', 'tooltip');
   boble.id = 'ordforklaring';
-  boble.innerHTML = '<strong></strong><p></p>';
+  boble.innerHTML = '<strong></strong><p></p><a class="ordforklaring-mere" href="#ordbog" hidden>Mere i Ordbogen ›</a>';
+  // Ord med "Hvorfor?" og "Hvordan?" (mere) har et link til ordet i Ordbogen. Ordbogen får ordet at vide, før skærmen skifter.
+  boble.querySelector('a').addEventListener('click', () => {
+    if (vistFor) dispatchEvent(new CustomEvent('ordbog-ord', { detail: vistFor.dataset.ord }));
+  });
   document.body.append(boble);
 
   // Markér alt, der står i siden nu, og hold øje med nye tekster
@@ -132,6 +136,7 @@ function vis(knap, klik) {
   if (!o) return;
   boble.querySelector('strong').textContent = o.ord;
   boble.querySelector('p').textContent = o.tekst;
+  boble.querySelector('a').hidden = !o.mere;
   vistFor?.setAttribute('aria-expanded', 'false');
   vistFor = knap;
   fastholdt = klik;
@@ -159,6 +164,7 @@ function skjul() {
 export function testAdgang() {
   return {
     vist: () => (boble.classList.contains('skjult') ? null : boble.querySelector('strong').textContent),
+    link: () => !boble.classList.contains('skjult') && !boble.querySelector('a').hidden,
     ord: () => ORDBOG.map((o) => o.id),
   };
 }

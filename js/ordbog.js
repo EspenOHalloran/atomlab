@@ -9,6 +9,7 @@ import { lyd } from './lyd.js';
 
 const $ = (id) => document.getElementById(id);
 let lavet = false;
+let visOrdId = null; // ordet, Ordbogen skal åbne på (linket "Mere i Ordbogen ›" i boblerne)
 
 function linkHTML(id) {
   const l = LINKS[id];
@@ -39,7 +40,34 @@ function plasmaTegning() {
     + `<text x="81" y="143" class="t-lille">hele atomer</text><text x="258" y="143" class="t-lille">ioner (+) og løse elektroner</text>`
     + `</svg><figcaption>Forenklet: I rigtigt plasma er der langt flere partikler, og de farer meget hurtigere rundt.</figcaption></figure>`;
 }
-const TEGNINGER = { plasma: plasmaTegning };
+// Halveringstid: kurven (100 %, 50 %, 25 % …) og under den 64 kerner, der henfalder tilfældigt, men halvdelen hver gang.
+// Hvilke kerner der henfalder, vælges med et fast frø, så tegningen er den samme hver gang.
+function halveringTegning() {
+  const x = (t) => 44 + 62 * t; // én halveringstid = 62 enheder
+  const y = (t) => 96 - 76 * 0.5 ** t;
+  const kurve = Array.from({ length: 45 }, (_, i) => `${i ? 'L' : 'M'}${x(i / 10).toFixed(1)} ${y(i / 10).toFixed(1)}`).join(' ');
+  const pct = ['100 %', '50 %', '25 %', '12,5 %', '6,25 %'];
+  const punkter = pct.map((p, t) => `<circle cx="${x(t)}" cy="${y(t)}" r="3.2" class="t-punkt"/><text x="${x(t) + (t ? 0 : 4)}" y="${y(t) - 7}" class="t-lille">${p}</text>`).join('');
+  // Kernerne: 8 × 8 i hver boks. For hver halveringstid henfalder halvdelen af dem, der er tilbage.
+  let frø = 7;
+  const tilfældig = () => (frø = (frø * 16807) % 2147483647) / 2147483647;
+  let tilbage = [...Array(64).keys()];
+  const levende = [new Set(tilbage)];
+  for (let t = 1; t < 5; t++) {
+    tilbage = tilbage.map((k) => [tilfældig(), k]).sort((a, b) => a[0] - b[0]).slice(0, tilbage.length / 2).map(([, k]) => k);
+    levende.push(new Set(tilbage));
+  }
+  const bokse = levende.map((sæt, t) => {
+    let prikker = '';
+    for (let k = 0; k < 64; k++) prikker += `<circle cx="${x(t) - 24.5 + (k % 8) * 7}" cy="${123.5 + Math.floor(k / 8) * 7}" r="2.4" class="${sæt.has(k) ? 't-kerne' : 't-henfaldet'}"/>`;
+    return `<rect x="${x(t) - 29}" y="116" width="58" height="58" rx="6" class="t-boks"/>${prikker}<text x="${x(t)}" y="188" class="t-lille">${t}</text>`;
+  }).join('');
+  return `<figure class="ordbog-tegning"><svg viewBox="0 0 340 204" role="img" aria-label="En kurve, der halveres for hver halveringstid: 100 %, 50 %, 25 %, 12,5 % og 6,25 %. Under den fem bokse med 64 kerner. For hver halveringstid er halvdelen af de kerner, der var tilbage, henfaldet, men hvilke er tilfældigt.">`
+    + `<line x1="${x(0)}" y1="96" x2="${x(4.4)}" y2="96" class="t-akse"/><path d="${kurve}" class="t-kurve"/>${punkter}${bokse}`
+    + `<text x="${x(2)}" y="201" class="t-lille">antal halveringstider</text>`
+    + `</svg><figcaption>Hver prik er en kerne, og de grå er henfaldet. Forenklet: Et rigtigt stof har milliarder af milliarder af kerner, ikke 64.</figcaption></figure>`;
+}
+const TEGNINGER = { plasma: plasmaTegning, halveringstid: halveringTegning };
 
 function mereHTML(o) {
   // Tegningen står lige under forklaringen, så den viser det, man lige har læst
@@ -79,10 +107,24 @@ export function lavOrdbog() {
     }
   });
   vis(ORDNE);
+  // Linket i boblen (js/ordforklaring.js) siger, hvilket ord der skal vises, lige før Ordbogen åbner
+  addEventListener('ordbog-ord', (h) => { visOrdId = h.detail; });
+}
+
+// Rul hen til et ord (søgningen tømmes, så ordet kan ses) og fremhæv det et øjeblik
+function visOrd(id) {
+  if ($('ordbogSøg').value) { $('ordbogSøg').value = ''; vis(ORDNE); }
+  const li = $(`ord-${id}`);
+  if (!li) return;
+  li.scrollIntoView({ block: 'start' });
+  li.classList.remove('fremhævet');
+  void li.offsetWidth; // start fremhævningen forfra
+  li.classList.add('fremhævet');
 }
 
 export function startOrdbog() {
   sætVindue($('ordbog'));
+  if (visOrdId) { visOrd(visOrdId); visOrdId = null; }
   verden.styring.autoRotate = !ROLIG; // stjernehimlen drejer langsomt bag listen
   // Med mus og tastatur kan man skrive med det samme (på en tablet ville tastaturet dække skærmen)
   if (!LAV_KVALITET) $('ordbogSøg').focus({ preventScroll: true });
