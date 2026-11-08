@@ -1,4 +1,4 @@
-// Rejsen i tid (tvillingerejsen, T1 og T2 i docs/plan-tid.md): Du flyver til Alpha Centauri, Mælkevejens centrum eller
+// Rejsen i tid (tvillingerejsen, T1-T3 i docs/plan-tid.md): Du flyver til Alpha Centauri, Mælkevejens centrum eller
 // Andromedagalaksen og hjem igen næsten med lysets fart, mens din tvilling bliver hjemme. To ure i et HTML-lag oven på
 // 3D-billedet viser "Dit ur" og "Jordens ur". Regningen står i js/data/tid.js (testes i Node), og tallene i docs/fakta-tid.md.
 //
@@ -12,7 +12,7 @@
 // Styr-boksen bygges om efter tilstanden (styring er en liste, der rettes på stedet, og opdaterKnapper() tegner den igen).
 
 import * as THREE from 'three';
-import { handling, tid as tidKnap, gå } from '../sideknap.js';
+import { handling, kontakt, tid as tidKnap, gå } from '../sideknap.js';
 import { stjerne, glød, skilt, hale, prikSky, KVALITET } from './faelles.js';
 import { lavJorden } from './jorden.js';
 import { ROLIG } from '../scene3d.js';
@@ -48,29 +48,70 @@ export default {
   ],
   side: {
     kort: 'Kan man rejse ind i fremtiden? Ja, hvis man flyver næsten med lysets fart. Set fra Jorden går alle ure i skibet langsommere. Det kaldes tidsforlængelse. Flyv til Alpha Centauri, Mælkevejens centrum eller Andromeda og hjem, og se, hvor meget tid der er gået på Jorden.',
+    // T3: teksterne er tjekket mod docs/fakta-tid.md (afsnittet står ved hvert emne) og regnet efter med regn.py
     emner: [
       {
+        // Afsnit 3
         titel: 'Hvorfor går Jordens ur så hurtigt?',
         tekst: `<p>Lyset har altid den samme fart, uanset hvem der måler den. Forestil dig et ur, hvor et lysglimt hopper op og ned mellem to spejle. I skibet går lyset lige op og ned. Set fra Jorden flytter spejlene sig, mens lyset er undervejs, så lyset går en længere, skrå vej. Derfor tager hvert tik længere tid set fra Jorden. ${handling('Vis lysuret', '⏱ Vis lysuret')}</p>
           <p>Det gælder ikke kun lysure. Alt om bord følger med: atomurene, dit hjerte og dine tanker.</p>`,
       },
       {
-        titel: 'Hvad gør farten?',
+        // Afsnit 2 og 4
+        titel: 'Hvad gør farten?', hvorfor: ['lysfart'],
         tekst: `<p>Ved 90 % af lysets fart går der ca. 2,3 dage på Jorden for hver dag i skibet. Ved 99,99 % er det ca. 71 dage, og ved 99,9999 % ca. 707 dage, næsten 2 år. Hvert ekstra 9-tal gør forskellen ca. 3 gange større.</p>
           <p>Alpha Centauri er ca. 4,3 lysår væk. Et lysår er den vej, lyset når på et år. Set fra Jorden tager turen ud og hjem derfor altid mindst ca. 8,7 år, for skibet kan ikke flyve hurtigere end lyset. Det er kun dit ur, der går langsommere og langsommere. ${tidKnap('hurtig', 'Prøv ⏩')}</p>`,
+      },
+      {
+        // Afsnit 9
+        titel: 'Hvorfor ikke omvendt?',
+        tekst: `<p>Set fra skibet er det jo Jorden, der farer af sted. Burde din tvilling så ikke være den yngste? Nej, for I er ikke ligestillede. Din tvilling bliver hjemme hele tiden, men du skal vende om for at komme hjem. Det mærker du, når motoren bremser og speeder op igen.</p>
+          <p>Tænk på rumtiden (rum og tid tilsammen) som et kort over både hvor og hvornår. Hvert ur måler længden af sin egen vej gennem rumtiden. Den lige vej, at blive hjemme, giver den længste tid, og din omvej ud og hjem giver mindre. Det er det modsatte af et landkort, hvor omvejen er længst.</p>`,
+      },
+      {
+        // Afsnit 7 (0,0614 lysår er ca. 3.900 gange afstanden til Solen, 22 dage er én vej ved 99,99 %)
+        titel: 'Set fra skibet', kontakt: 'Set fra skibet',
+        tekst: `<p>I skibet er det dig, der står stille, og stjernerne, der farer forbi. Så bliver afstanden langs farten kortere. Det kaldes længdeforkortelse. Ved 99,99 % af lysets fart er Alpha Centauri kun ca. 0,061 lysår væk set fra skibet (ca. 3.900 gange afstanden til Solen) i stedet for 4,3 lysår. Derfor er du kun ca. 22 dage om at nå derhen i dit eget ur. ${kontakt('Set fra skibet')}</p>
+          <p>På Jorden siger de, at dit ur går langsomt. I skibet siger du, at vejen er kort. I har begge ret, og I får det samme tal.</p>`,
+      },
+      {
+        // Afsnit 6 (11.500 g og 13 år: regn.py, punkt 13)
+        titel: 'Hvorfor tager det år med 1 g?', kontakt: '1 g hele vejen',
+        tekst: `<p>1 g er lige så hårdt, som tyngden trykker på dig her på Jorden, så med 1 g kunne man leve om bord i årevis. Men det går langsomt. Til Alpha Centauri når man kun op på ca. 95 % af lysets fart, før man skal bremse midtvejs, og turen tager ca. 3,6 år for dig (én vej). ${kontakt('1 g hele vejen')}</p>
+          <p>Jo længere væk målet er, jo længere tid har man til at speede op. Til Mælkevejens centrum tager det ca. 20 år for dig og ca. 27.000 år på Jorden (én vej). Skulle en tur tage 2 dage for dig og 2.000 år på Jorden, skulle man speede op med ca. 11.500 g, og det ville knuse en. Med 1 g tager det ca. 13 år bare at nå den fart.</p>`,
+      },
+      {
+        // Afsnit 10 (GPS står i Rumtid. Frisch og Smiths tal er ikke bekræftet i T3's faktatjek, derfor uden tal). Kononenko: 1.111 døgn, ca. 27 ms. 33 cm: ca. 1 ns pr. år
+        titel: 'Er det målt?',
+        tekst: `<p>Ja, mange gange. Myoner (tunge fætre til elektronen) bliver lavet ca. 15 km oppe, når den kosmiske stråling rammer luften. En myon lever i gennemsnit kun ca. 2,2 milliontedele sekund, og på den tid når den kun ca. 660 m, selv med næsten lysets fart. Alligevel når mange af dem helt ned til jorden, fordi deres ure går langsommere set fra os. I begyndelsen af 1960'erne talte Frisch og Smith myonerne på toppen af et bjerg i USA og ved havet. Uden tidsforlængelse skulle kun en lille del af dem være nået ned til havet, men de fleste nåede ned. På CERN levede myoner, der kørte rundt i en ring, i 1977 ca. 29 gange længere end ellers, præcis som Einstein havde regnet ud.</p>
+          <p>I 1971 fløj Hafele og Keating fire atomure jorden rundt i passagerfly, først mod øst og så mod vest. Urene mod øst tabte ca. 59 milliardtedele sekund, og urene mod vest vandt ca. 273, næsten som forudsagt. Forskellen mellem øst og vest kommer af, at Jorden selv drejer mod øst. Højden talte også med, for ure højt oppe går lidt hurtigere. Det samme skal rettes i GPS-satellitternes ure. ${gå('kosmos:rumtid', 'Rumtid')}</p>
+          <p>Astronauten Oleg Kononenko har været 1.111 døgn i rummet på rumstationen ISS, mere end nogen anden. Han er derfor ca. 27 tusindedele sekund yngre, end hvis han var blevet hjemme. Og i 2010 målte forskere, at et atomur går hurtigere, når det bliver løftet bare 33 cm, ca. 1 milliardtedel sekund om året. Det er tyngden, ikke farten.</p>`,
+      },
+      {
+        // Afsnit 8 (γ = 365.250, ét ton og et korn på 1 µg) og 6 (brændstoffet)
+        titel: 'Kunne man?',
+        tekst: `<p>Fysikken forbyder det ikke, men det er langt ud over alt, vi kan. Et skib på ét ton, der skal flyve så hurtigt, at 2 dage for dig er 2.000 år på Jorden, skal have mere energi, end hele verden bruger på over 50.000 år. Så meget lys sender Solen ud på knap en tiendedel sekund.</p>
+          <p>Med 1 g hele vejen skulle selv en perfekt raket, der skyder lys ud bagud, veje ca. 40 gange så meget ved starten som ved Alpha Centauri (én vej), og ca. 780 millioner gange så meget til Mælkevejens centrum. Vi kender ingen måde at bygge sådan en raket.</p>
+          <p>Og rummet er ikke helt tomt. Ved den fart ville et bittelille sandkorn på 1 mikrogram (under en tiendedel millimeter) ramme skibet med lige så meget energi som ca. 8.000 ton sprængstof (TNT). Selv ved 99,99 % er det som ca. 1,5 ton. Her omkring Solen er der også ca. 0,3 atomer i hver kubikcentimeter af rummet, mest brint. Hvert brintatom ville ramme med ca. 50 gange mere energi end protonerne i verdens største partikelaccelerator (LHC ved CERN), og der ville komme milliarder af dem hvert sekund på hver kvadratcentimeter. Det er dræbende stråling.</p>`,
       },
     ],
     videre: [gå('kosmos:rumtid', 'Rumtid'), gå('kosmos:sorthul', 'Sort hul')],
     nørd: `
       <p><b>Gammafaktoren:</b> γ = 1/√(1 − v²/c²), hvor v er farten og c lysets fart. Et ur, der farer forbi med farten v, går γ gange langsommere set fra os. Ved 99,99 % er γ ca. 70,7, og med 14 ni-taller ca. 7,1 millioner.</p>
+      <p><b>Reglen om 9-tallene:</b> Med ε = 1 − v/c er γ = 1/√(ε(2 − ε)), og det er ca. 1/√(2ε), når ε er lille. Hvert ekstra 9-tal gør ε 10 gange mindre og γ ca. √10 ≈ 3,16 gange større. Computeren regner også sådan, for ellers regner den forkert, når der er mange 9-taller.</p>
       <p><b>Lysuret:</b> Spejlene står L fra hinanden, så ét tik (op og ned) tager 2L/c. Set fra Jorden går lyset skråt, og Pythagoras giver, at hvert tik tager γ · 2L/c. Med 1,5 m mellem spejlene ville et lysur tikke ca. 100 millioner gange i sekundet.</p>
-      <p><b>Rejsen med fast fart:</b> Tiden på Jorden er 2 · afstanden / farten. Tiden i skibet er den tid delt med γ.</p>
-      <p><b>1 g hele vejen:</b> Med accelerationen a over afstanden d tager én vej τ = 2(c/a) · arcosh(1 + a·d/(2c²)) i skibet. Med 1 g er c/a ca. 0,97 år, og c²/a ca. 0,97 lysår. Midtvejs er γ = 1 + a·d/(2c²): ca. 3,2 til Alpha Centauri og ca. 1,3 millioner til Andromeda.</p>
-      <p><b>Set fra skibet</b> er afstanden γ gange kortere (længdeforkortelse). Derfor når du frem på kort tid i dit eget ur, selv om du flyver lidt langsommere end lyset. Begge forklaringer giver det samme tal.</p>
+      <p><b>Rejsen med fast fart:</b> Tiden på Jorden er 2 · afstanden / farten. Tiden i skibet er den tid delt med γ. Set fra skibet er afstanden d/γ, og d/γ delt med farten giver præcis den samme tid.</p>
+      <p><b>1 g hele vejen:</b> Med accelerationen a over afstanden d tager én vej τ = 2(c/a) · arcosh(1 + a·d/(2c²)) i skibet og t = 2(c/a) · √((1 + a·d/(2c²))² − 1) på Jorden. Med 1 g er c/a ca. 0,97 år, og c²/a ca. 0,97 lysår. Midtvejs er γ = 1 + a·d/(2c²): ca. 3,2 til Alpha Centauri og ca. 1,3 millioner til Andromeda.</p>
+      <p><b>Tvillingeparadokset:</b> Hvert ur måler sin egentid τ, længden af sin vej gennem rumtiden. Rumtidens "Pythagoras" har et minus: For et stykke af vejen med fast fart er τ² = t² − (x/c)², hvor t er tiden og x afstanden set fra Jorden. Jo længere du flytter dig, jo mindre bliver τ. Derfor giver omvejen <i>mindre</i> tid og ikke mere. Rumtiden er altså ikke bare tre retninger plus én: Tiden tæller med minus.</p>
+      <p><b>"Nu" er ikke det samme for alle.</b> To ting, der sker samtidig set fra Jorden, sker ikke samtidig set fra skibet. Når du vender om ved målet, skifter dit "nu" derhjemme: Lige før vendingen er "nu" på Jorden kun lidt efter afgangen, og lige efter er det næsten ved hjemkomsten. Det er dér, de mange år derhjemme "forsvinder" set fra skibet.</p>
+      <p><b>Hvad er et sekund?</b> Siden 1967 er et sekund 9.192.631.770 svingninger i den stråling, der hører til et bestemt lille spring mellem to energiniveauer i et cæsium-133-atom. Sådan et atomur fløj Hafele og Keating med. I dag er ure med strontium og aluminium endnu mere præcise, men det er stadig cæsium, der bestemmer sekundet. ${gå('system:55', 'Cæsium')}</p>
       <p><b>På skærmen</b> tager hver vej lige lang tid (ca. 12 sekunder), uanset målet. Med fast fart følger skærmen Jordens ur, og med 1 g dit ur.</p>`,
-    ærligt: `<p><b>Skyderen springer over, hvordan man kommer op i fart.</b> Man skulle speede knusende hårdt op. Skal en tur tage 2 dage for dig og 2.000 år på Jorden, skal man speede op med ca. 11.500 g (1 g er lige så hårdt, som tyngden trykker her på Jorden). Med 1 g tager det år i skibet at komme op i fart, ikke dage. Det viser kontakten "1 g hele vejen".</p>
-      <p><b>Brændstoffet:</b> Med 1 g hele vejen skulle selv en perfekt raket, der skyder lys ud bagud, veje ca. 40 gange så meget ved starten som ved Alpha Centauri (én vej), og ca. 780 millioner gange så meget til Mælkevejens centrum. Vi kender ingen måde at bygge sådan en raket.</p>
+    ærligt: `<p><b>Skyderen "Fart" springer over, hvordan man kommer op i fart.</b> I virkeligheden ville det tage år, og at gøre det på dage ville knuse en (se "Hvorfor tager det år med 1 g?").</p>
       <p><b>Du mærker intet om bord.</b> Dit eget ur går helt normalt, ét sekund pr. sekund, og dit hjerte slår, som det plejer. Det er først, når I sammenligner urene derhjemme, at du er den yngste.</p>
+      <p><b>"Det er accelerationen, der gør det"</b> er kun en del af historien. Man kan lave forsøg, hvor begge ure speeder op og bremser lige meget og alligevel kommer forskelligt hjem. Det er vejen gennem rumtiden, der tæller.</p>
+      <p><b>"For lyset står tiden stille"</b> hører man tit. Men lyset har ikke sit eget ur, for intet kan følge med lyset og se det stå stille.</p>
+      <p><b>"Intet kan flyve hurtigere end lyset"</b> gælder for ting, der farer forbi hinanden. Fjerne galakser fjerner sig fra os hurtigere end lyset, fordi rummet imellem os udvider sig.</p>
+      <p><b>I filmen Interstellar</b> svarer 1 time på en planet til 7 år på Jorden. Det er tyngden, ikke farten, og det kræver et sort hul, der drejer næsten så hurtigt, som det overhovedet kan, og en planet meget tæt på det.</p>
       <p><b>Set fra skibet</b> er scenen trykket meget mindre sammen end i virkeligheden. Ellers ville målet ligge oven i skibet. Tallene under "Lige nu" er de rigtige. Man ville heller ikke <i>se</i> det sådan: Når man flyver så hurtigt, ser lyset fra stjernerne helt anderledes ud.</p>
       <p>Jorden, stjernerne og galakserne er tegnet alt for store, og skibet flyver selvfølgelig ikke med lysets fart hen over skærmen. Med 1 g flytter skibet sig jævnt hen over skærmen. Set fra Jorden kryber det af sted i starten og farer gennem midten. I lysuret går lyset ufatteligt meget langsommere end i virkeligheden, og man kan ikke se et lysglimt undervejs. Animationen viser det, man ville regne sig frem til.</p>`,
   },

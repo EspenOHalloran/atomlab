@@ -127,6 +127,11 @@
 
 **Faktatjek:** Tallene er slået op i kilderne under Trin 0 (se [fakta-molekyler.md](fakta-molekyler.md), afsnit 1 og 7): Na's ioniseringsenergi 5,139 eV (NIST Handbook), Cl's elektronaffinitet 3,613 eV (Berzinsh m.fl. 1995 via Wikipedias dataside), 5,14 − 3,62 = 1,52 eV, parret 0,236 nm og 4,26 eV (OpenStax University Physics 3, §9.1, åbnet). "Ca. 9 Å": 14,40 eV·Å / 1,53 eV = 9,4 Å (min udregning). "Ca. 4,3 eV mere, end det kostede" = 4,26 eV fra neutrale atomer. Synligt lys 1,6-3,1 eV pr. foton (skrevet "ca. 2-3 eV"). "Seks naboer med modsat ladning": stensaltstrukturen (Housecroft). "Endnu mere i et saltkorn": 6,6 eV pr. NaCl fra atomer mod 4,26 eV i et par (Born-Haber, afsnit 7).
 
+## 16. Hvorfor kan intet nå lysets fart? ✅ (8. november 2026, Rejsen i tid T3)
+**Hvor:** Emnet "Hvad gør farten?" i Rejsen i tid (`lysfart` i `js/data/hvorfor.js`).
+
+**Faktatjek:** Lysets fart er den samme for alle (Wikipedia "Speed of light"). Ét ton ved 99 %: 5,5 · 10²⁰ J, og ved 99,99 %: 6,3 · 10²¹ J, mod verdens energiforbrug 592 EJ om året (2024), altså ca. 0,9 og ca. 10 år ([fakta-tid.md](fakta-tid.md), afsnit 8, og regn.py). Uendelig energi ved lysets fart følger af E = (γ − 1)mc². Nørd-bidden: "relativistisk masse" er "often avoided" (Wikipedia "Mass in special relativity"), derfor "som de fleste fysikere undgår i dag". Tabellen står i fakta-tid.md under "Faktatjek af T3".
+
 ## Fotoner (ordbogen og Stjerneovnen), 29. oktober 2026
 Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brint til carbon, trin for trin" (trin 2) og "Fotonerne af gammastråling" i hjælpens "Lys og neutrinoer". Kilderne er åbnet direkte med curl (Wikipedias kildetekst).
 
