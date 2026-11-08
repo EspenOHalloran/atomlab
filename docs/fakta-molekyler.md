@@ -70,7 +70,7 @@ Kilderne giver 799-805 for C=O. Gennemsnitsværdier varierer lidt fra tabel til 
 
 ## 4. Knaldgas
 
-- **Reaktionsenergien:** 2 H₂ + O₂ → 2 H₂O frigør **483,6 kJ** (vanddamp) eller **571,7 kJ** (flydende vand). Pr. vandmolekyle er det 2,5 eV (damp) eller 3,0 eV (flydende). Det bygger på ΔfH = −241,8 og −285,8 kJ/mol, som kun blev bekræftet i uddrag fra svage kilder. Tallene er standard (CODATA/NIST). **Sikker.**
+- **Reaktionsenergien:** 2 H₂ + O₂ → 2 H₂O frigør **483,6 kJ** (vanddamp) eller **571,7 kJ** (flydende vand). Pr. vandmolekyle er det 2,5 eV (damp) eller 3,0 eV (flydende). Det bygger på ΔfH = −241,8 og −285,8 kJ/mol, som kun blev bekræftet i uddrag fra svage kilder. **Slået op i NIST 8. november 2026 (passer), og O–H er 464 i OpenStax' tabel, ikke 463: se [fakta-molekyler/m3.md](fakta-molekyler/m3.md).** Tallene er standard (CODATA/NIST). **Sikker.**
 - **Udregnet med bindinger:** Det koster 2·436 + 498 = 1370 kJ at bryde bindingerne. Der kommer 4·463 = 1852 kJ tilbage, når de nye O–H-bindinger dannes. Netto frigøres ca. 480 kJ. Pointen: **Energien kommer fra, at de nye bindinger er stærkere end de gamle.** **Sikker.**
 - **Sammenligninger** (min udregning):
   - 1 kg hydrogen giver 120 MJ (damp) eller 142 MJ (flydende vand). https://nap.nationalacademies.org/read/10922/chapter/240.html (uddrag). **Sikker.** Det er ca. 2,8 gange så meget som benzin (ca. 43 MJ/kg) pr. kg brændstof.

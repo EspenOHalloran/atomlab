@@ -22,7 +22,7 @@
 | Spor | Næste |
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Venus (planen først) → Merkur → Pluto → overblikket. Uranus og Neptun er færdige (UN1-UN5). Mars ekstra og Månen bagefter. |
-| [Molekyler](lige-nu/molekyler.md) | M2 er færdig (Byg et molekyle med "Del elektroner" og "Giv elektroner"). Næste: M3 (knaldgas, [prompt](prompt-molekyler-m3.md)) og M4, så Liv. |
+| [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026, M3 er knaldgassen og M4 kortet om Jordens vand). Næste: Liv (faktagrundlag og plan først). |
 | [Tid og rum](lige-nu/tid.md) | T5 Trin 0 ("Hvorfor går tiden langsommere?", go 8. november 2026): drejebogen og skitserne, [prompt-tid-t5.md](prompt-tid-t5.md). T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
 | [Småting](lige-nu/smaating.md) | Intet. |
@@ -47,7 +47,7 @@
   - **Opus' anbefalede rækkefølge (når planeterne er på plads, og kun hvis I er enige):** 1) Ild sammen med Molekyler, 2) Kvantefysik (med kvantecomputeren til sidst), 3) Antistof og Mørkt stof i Kosmos, 4) Gåderne, 5) Land på måner (med månerne i Solsystemet), 6) DNA i Liv, 7) Hjernen og AI. **Ændret 5. november 2026 (jeres go):** Liv med DNA er rykket op lige efter Molekyler, og Tjernobyl er rykket ned som nr. 6. Nye dele bliver knapper i en af verdenerne i menuen (K4, besluttet 7. november 2026).
 
 ### Molekyler (M3 og M4: knaldgas og Jordens vand)
-*M1 er færdig, og M2 er i gang. Planen er [plan-molekyler.md](plan-molekyler.md). Fanerne er ændret 7. november 2026: "Byg et atom | Byg et molekyle", og Byttebørsen hedder nu "Giv elektroner".*
+*M1-M4 er færdige (8. november 2026). Planen er [plan-molekyler.md](plan-molekyler.md). Fanerne er ændret 7. november 2026: "Byg et atom | Byg et molekyle", og Byttebørsen hedder nu "Giv elektroner".*
 
 - **Molekyler i Atomværkstedet** (jeres ønske, 21. oktober 2026): se, hvordan atomer giver og tager elektroner, og byg molekyler, fx vand.
   - **Give og tage elektroner (ionbinding):** Man ser en elektron hoppe fra et atom til et andet, fx fra natrium til chlor. Så bliver de til Na⁺ og Cl⁻, som trækker i hinanden (køkkensalt). Det bygger videre på opgaverne Na⁺ og Cl⁻ og på "Hvad er en ion?" i hjælpen.

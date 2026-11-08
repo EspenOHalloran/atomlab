@@ -25,3 +25,4 @@
 - [ ] Et klik på noget, der skal rulles frem (fx et ord under skærmkanten), ruller testen selv frem og venter to billeder før klikket. Ellers kan Playwrights egen rulning nå siden efter klikket og fx lukke en forklaring (Småting, 8. november 2026).
 - [ ] Et klik, der først gør arbejdet efter næste billede (fx rejseskiltet i Solsystemet), ventes der på (`waitForFunction`), før resultatet tjekkes.
 - [ ] Noget tilfældigt, der kan gå i stå (fx kædereaktionen lige efter start), tåler testen: Tjek det, og start forfra, som man selv ville gøre.
+- [ ] Kommer der nye opgaver, så søg efter det gamle antal i alle tests (`grep -rn "/27" tests`). Værkstedets antal stod i tre tests (Knaldgas M3).

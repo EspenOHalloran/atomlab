@@ -162,4 +162,27 @@ export const HVORFOR = {
     svar: 'I prik-modellen lægger hvert oxygen sine 2 elektroner uden partner ind i midten. Så deler de 2 par, og det er en dobbeltbinding. Hvert oxygen har nu 2 frie par og 2 delte par, altså 8 elektroner omkring sig.\n\nMen her snyder modellen: Det rigtige O₂ har stadig 2 elektroner uden makker. De hører til hele molekylet, ikke til ét af atomerne. Man kan se det, fordi flydende oxygen (−183 °C koldt) hænger fast mellem polerne på en stærk magnet. Bindingen er alligevel lige så stærk som en dobbeltbinding.',
     nørd: 'Den rigtige forklaring bruger molekyleorbitaler: pladser til elektronerne, der hører til hele molekylet. De 2 sidste elektroner skal i to pladser, der er lige gode, og ligesom i atomet sætter de sig én på hver (Hunds regel). Giver man O₂ ca. 1 eV energi, kan de 2 lægge sig i par på samme plads. Det hedder singlet-oxygen, og det er meget mere reaktivt end almindeligt oxygen.',
   },
+  // Knaldgas (Molekyler M3). Kilder: docs/fakta-molekyler/m3.md og docs/fakta-molekyler.md, afsnit 4.
+  knaldBakke: {
+    spørgsmål: 'Hvorfor sker der ingenting uden gnist?',
+    svar: 'Før der kan blive vand, skal nogle bindinger i stykker, og det koster energi. Ved stuetemperatur har et molekyle kun ca. 0,04 eV fart-energi, men det koster 4,5 eV at bryde H₂ og 5,2 eV at bryde O₂. De fleste stød er over 100 gange for svage, så molekylerne hopper bare fra hinanden.\n\nDet ligner bakken i Stjerneovnen: Protonerne skal være hurtige nok til at komme over bakken, før de kan smelte sammen. Her hedder bakken aktiveringsenergi. Derfor kan knaldgas stå i årevis uden at brænde, men en lille gnist er nok til at starte den.',
+    nørd: 'Den mindste gnist, der kan tænde knaldgas, har kun ca. 0,007 millijoule (hydrogen i luft ca. 0,02). Den varmer en bitte lille sky af gas så meget op, at nogle bindinger går i stykker. Resten klarer kæden selv, for de næste trin har meget lavere bakker.',
+  },
+  knaldKæde: {
+    spørgsmål: 'Hvorfor bliver det til en kædereaktion?',
+    svar: 'Gnisten river et H₂ over i to frie H-atomer. De er radikaler: De har en elektron uden partner (den blinker), og de river let andre molekyler over. Når et radikal reagerer, kommer der et nyt radikal ud. Ved H + O₂ → OH + O kommer der endda to ud, for O har to elektroner uden partner. Så vokser antallet som en lavine, og derfor eksploderer knaldgas.\n\nDet ligner kædereaktionen i Reaktoren, hvor én neutron kan give flere nye. Her er det radikaler i stedet for neutroner.',
+    nørd: 'Kæden i spillet: H + O₂ → OH + O, O + H₂ → OH + H og OH + H₂ → H₂O + H. Til sidst sætter H og OH sig sammen til vand. Lægger man trinene sammen (det sidste to gange), bliver ét H-atom til tre, og der dannes to vandmolekyler. Den rigtige reaktion har ca. 20 trin, fx også med HO₂ og H₂O₂.',
+  },
+  knaldVarme: {
+    spørgsmål: 'Hvor kommer varmen fra?',
+    svar: 'Det koster energi at bryde en binding, og man får energi, når en ny bliver lavet. Bindingerne i vand er stærkere end dem i H₂ og O₂, så man får mere tilbage, end man betalte: 10,0 eV for de fire vandmolekyler, ca. 2,5 eV for hvert. Det bliver til fart, og fart er varme.\n\nMange tror, at energien sidder i bindingerne og kommer ud, når de går i stykker. Det er omvendt: At bryde en binding koster altid. Energien kommer, når de nye, stærkere bindinger bliver lavet.',
+    nørd: 'Kemikere regner i kJ pr. mol (et mol er ca. 6 · 10²³ molekyler): 2 H₂ + O₂ → 2 H₂O giver 483,6 kJ, når vandet er damp. Regner man med en tabel over bindinger, får man ca. 480-486 kJ, fordi tabellens tal er gennemsnit over mange molekyler. Uanset hvilken vej kæden går, ender forskellen på det samme (Hess\' lov).',
+  },
+  // Hvor kom Jordens vand fra? (Molekyler M4). Kilder: docs/fakta-molekyler.md, afsnit 5.
+  bygJordensVand: {
+    spørgsmål: 'Hvor kom Jordens vand fra?',
+    svar: 'Det ved man ikke helt sikkert, men der er gode spor.\n\nMeget af vandet blev nok lavet, før Solen fandtes. I kolde skyer af gas og støv i rummet (ca. −260 °C) sætter H-atomer sig på O-atomer på små iskolde støvkorn, og de bliver til vand. En udregning tyder på, at op til halvdelen af havenes vand kan være ældre end Solen.\n\nVandet kom nok mest til Jorden med de sten, den blev bygget af, og med asteroider. Kometer bidrog nok mindre, men hvor meget, er forskerne stadig uenige om.',
+    nørd: 'Forskerne sammenligner, hvor meget tungt hydrogen (deuterium, med en neutron i kernen) der er i vandet. I havet er det ca. 1 ud af 6.400 H-atomer. Prøver fra asteroiden Ryugu ligner havet. Kometen 67P så først ud til at have ca. 3 gange så meget, men en ny gennemregning i 2024 fandt, at støv havde trukket tallet op. Prøven fra asteroiden Bennu indeholdt endda køkkensalt fra fordampet saltvand.',
+    link: { tekst: 'Se en stjerne blive født i Kosmos ›', handling: () => import('../faenomenskaerm.js').then((m) => m.åbnFænomen('kosmos', 'stjernefoedsel')) },
+  },
 };

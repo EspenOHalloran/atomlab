@@ -4,17 +4,19 @@
 // js/data/molekyler-byg.js (uden Three.js). Tegningen er MolekyleTegning i js/molekyle3d.js.
 // M2b: ladningerne (parret ligger tættest på det atom, der trækker hårdest, og enderne får δ+ og δ−), pilene (kontakten
 // "Pile"), kortet om hvert kendt molekyle og de seks opgaver med ★ (tæller på Værkstedets kort i menuen).
+// M3: knappen "Knaldgas" viser boksen med 4 H₂ og 2 O₂ i stedet for byggeriet (js/knaldgas.js). Det byggede bliver.
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTil, stopKamera, begrænsDrejning } from './scene3d.js';
 import { MolekyleTegning, KERNE_R } from './molekyle3d.js';
 import * as D from './data/molekyler-byg.js';
 import { lyd } from './lyd.js';
-import { visBesked, bundIVindue } from './beskeder.js';
+import { visBesked, bundIVindue, rydBeskeder } from './beskeder.js';
 import { lavTidsknap } from './pause.js';
-import { lavNæsteSkridt, lavNæsteSkridtKort } from './lag.js';
+import { lavNæsteSkridt, lavNæsteSkridtKort, lukHvorfor } from './lag.js';
 import { lavKontakt } from './kontakt.js';
 import * as fremgang from './fremgang.js';
+import { lavKnaldgas, startKnaldgas, stopKnaldgas, knaldgasAktiv, testAdgang as knaldTest } from './knaldgas.js';
 
 const S = 3; // enheder i 3D pr. ångstrøm (Å). Bindingslængderne er i det rigtige forhold.
 const SKRIDT_PR_SEKUND = 1800; // så mange skridt af formen pr. sekund (formen falder på plads på ca. 1 sekund)
@@ -85,6 +87,24 @@ export function lavBygMolekyler() {
   lavPanel();
   lavTræk();
   ryd();
+  lavKnaldgas({ tilbage: () => slutKnaldgas(), stjerner: () => opdaterStjerner() });
+}
+
+// Knaldgas (M3): byggeriet står stille imens, og "Tilbage til byggeriet" viser det igen, som det var
+function åbnKnaldgas() {
+  if (!aktiv) return;
+  stopBygMolekyler();
+  rydBeskeder();
+  lukHvorfor();
+  startKnaldgas();
+}
+
+function slutKnaldgas() {
+  if (!knaldgasAktiv()) return;
+  stopKnaldgas();
+  rydBeskeder();
+  lukHvorfor();
+  startBygMolekyler();
 }
 
 function lavPanel() {
@@ -130,6 +150,10 @@ function lavPanel() {
     lyd.klik();
     ryd();
   });
+  $('bygKnaldgas').addEventListener('click', () => {
+    lyd.klik();
+    åbnKnaldgas();
+  });
   // Pilene: hvilken vej hver binding trækker i elektronerne, og summen for hele molekylet
   pileKontakt = lavKontakt($('bygPile'));
   pileKontakt.knap.addEventListener('click', () => {
@@ -141,7 +165,7 @@ function lavPanel() {
   });
   // Opgaverne (★ = klaret). Et tryk viser tippet.
   const liste = $('bygOpgaver');
-  for (const o of D.OPGAVER_BYG) {
+  for (const o of D.OPGAVER_BYG.filter((x) => !x.knaldgas)) { // knaldgassens to står i dens eget panel
     const b = document.createElement('button');
     b.className = 'chip byg-opgave';
     b.dataset.bygOpgave = o.id;
@@ -157,23 +181,25 @@ function lavPanel() {
 }
 
 // ---------- Opgaverne ----------
+// (også knaldgassens to i dens eget panel, js/knaldgas.js). Hvert panel tæller sine egne.
 function opdaterStjerner() {
-  let løste = 0;
   for (const b of document.querySelectorAll('.byg-opgave')) {
     const o = D.OPGAVER_BYG.find((x) => x.id === b.dataset.bygOpgave);
     const løst = fremgang.erLøst(o.id);
-    if (løst) løste++;
     b.querySelector('.bo-stjerne').textContent = løst ? '★' : '☆';
     b.classList.toggle('klaret', løst);
     b.title = løst ? `${o.fakta} (klaret ★)` : o.tip;
   }
-  $('bygOpgaveTæller').textContent = `${løste}/${D.OPGAVER_BYG.length}`;
+  const tæl = (liste) => `${liste.filter((o) => fremgang.erLøst(o.id)).length}/${liste.length}`;
+  $('bygOpgaveTæller').textContent = tæl(D.OPGAVER_BYG.filter((o) => !o.knaldgas));
+  $('knaldOpgaveTæller').textContent = tæl(D.OPGAVER_BYG.filter((o) => o.knaldgas));
 }
 
 // Viser opgaven og dens tip (fra knapperne her og fra Værkstedets opgaveliste)
 export function visOpgave(id) {
   const o = D.OPGAVER_BYG.find((x) => x.id === id);
   if (!o) return;
+  if (o.knaldgas && !knaldgasAktiv()) åbnKnaldgas();
   const løst = fremgang.erLøst(o.id);
   visBesked({ titel: `${løst ? '★ ' : ''}${o.titel.replace('Del elektroner: ', '')}`, tekst: løst ? o.fakta : `Tip: ${o.tip}`, type: 'info', varighed: 9000 });
 }
@@ -782,6 +808,8 @@ function næsteForKendt(k) {
   if (k.id === 'co2' && !fremgang.erLøst('byg-co2') && !pileKontakt.til) return 'Slå "Pile" til, og se, hvilken vej de to bindinger trækker. Hvorfor er CO₂ så ikke polært?';
   if (k.id === 'metan' && !fremgang.erLøst('byg-metan')) return 'Drej metan med fingeren eller musen (træk et tomt sted), til du kan se tetraederen.';
   if (k.id === 'vand' && !pileKontakt.til) return 'Færdigt! Drej vand, så du kan se, at det er bøjet. Slå "Pile" til for at se, hvilken vej bindingerne trækker.';
+  // M3 og M4: vand fører videre til knaldgassen (og kortet om Jordens vand, når alt er blevet til vand dér)
+  if (k.id === 'vand' && !fremgang.erLøst('byg-knaldgas')) return 'Færdigt! Vil du se vand blive til af hydrogen og oxygen? Tryk "Knaldgas".';
   const mangler = D.OPGAVER_BYG.find((o) => !fremgang.erLøst(o.id));
   return mangler ? `Færdigt! Næste opgave: ${mangler.kort}. ${mangler.tip}` : 'Færdigt! Drej molekylet med fingeren eller musen, så du kan se formen. Prøv så et nyt.';
 }
@@ -853,6 +881,7 @@ export function startBygMolekyler() {
 }
 
 export function stopBygMolekyler() {
+  stopKnaldgas();
   aktiv = false;
   rod.visible = false;
   verden.opdateringer.delete(opdater);
@@ -928,5 +957,9 @@ export function testAdgang() {
     },
     // Spol frem i små skridt (som på en skærm med 60 billeder i sekundet)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) opdater(1 / 60); },
+    // M3: knaldgassen (atomlabTest.vaerksted.byg.knaldgas)
+    åbnKnaldgas: () => åbnKnaldgas(),
+    tilbage: () => slutKnaldgas(),
+    knaldgas: knaldTest(),
   };
 }

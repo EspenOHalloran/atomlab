@@ -2,6 +2,7 @@
 // energien for ionparret. Kører uden browser. Tallene står med kilder i docs/fakta-molekyler.md (afsnit 1 og 7).
 import * as M from '../js/data/molekyler.js';
 import * as B from '../js/data/molekyler-byg.js';
+import * as K from '../js/data/knaldgas.js';
 
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -349,15 +350,68 @@ tjek(`bindingslængden O–H 0,958 Å (${Math.hypot(...fV.pos[1].map((x, i) => x
   tjek('brintoverilte er kun polær, fordi den er vredet (flad: ikke polær)', B.polærForm(h2o2, [0, 1, 2, 3]) && !B.polærForm(flad, [0, 1, 2, 3]));
   tjek('alle 17 har et kort og en tekst om ladningen', B.KENDTE_RÆKKE.every((id) => B.KENDTE[id].kort?.length > 20 && B.KENDTE[id].ladning?.length > 20 && typeof B.KENDTE[id].polær === 'boolean'));
   // Opgaverne
-  tjek('seks opgaver med byg- foran, titel, tip og fakta', B.OPGAVER_BYG.length === 6 && B.OPGAVER_BYG.every((o) => o.id.startsWith('byg-') && o.titel && o.tip && o.fakta && o.kort)
-    && B.OPGAVER_BYG.map((o) => o.id).join(' ') === 'byg-h2 byg-vand byg-co2 byg-metan byg-tripel byg-ethanol');
-  tjek('opgaverne peger på kendte molekyler', B.OPGAVER_BYG.every((o) => o.tripel || B.KENDTE[o.kendt]));
+  tjek('otte opgaver med byg- foran, titel, tip og fakta (to i knaldgassen)', B.OPGAVER_BYG.length === 8 && B.OPGAVER_BYG.every((o) => o.id.startsWith('byg-') && o.titel && o.tip && o.fakta && o.kort)
+    && B.OPGAVER_BYG.map((o) => o.id).join(' ') === 'byg-h2 byg-vand byg-co2 byg-metan byg-tripel byg-ethanol byg-uden-gnist byg-knaldgas');
+  tjek('opgaverne peger på kendte molekyler', B.OPGAVER_BYG.every((o) => o.tripel || o.knaldgas || B.KENDTE[o.kendt]));
   const O = Object.fromEntries(B.OPGAVER_BYG.map((o) => [o.id, o]));
   const ingen = { kendte: [], tripel: false, pile: false, drejet: 0 };
   tjek('vand klares af vand, ikke af andet', B.opgaveKlaret(O['byg-vand'], { ...ingen, kendte: ['vand'] }) && !B.opgaveKlaret(O['byg-vand'], { ...ingen, kendte: ['h2'] }));
   tjek('CO₂ kræver, at pilene er tændt', !B.opgaveKlaret(O['byg-co2'], { ...ingen, kendte: ['co2'] }) && B.opgaveKlaret(O['byg-co2'], { ...ingen, kendte: ['co2'], pile: true }));
   tjek(`metan kræver, at den er drejet mindst ${B.DREJ_GRADER}°`, !B.opgaveKlaret(O['byg-metan'], { ...ingen, kendte: ['metan'], drejet: 30 }) && B.opgaveKlaret(O['byg-metan'], { ...ingen, kendte: ['metan'], drejet: 95 }));
   tjek('tripelbindingen klares af en hvilken som helst tripelbinding', B.opgaveKlaret(O['byg-tripel'], { ...ingen, tripel: true }) && !B.opgaveKlaret(O['byg-tripel'], { ...ingen, kendte: ['o2'] }));
+  tjek(`knaldgassens opgaver: ${B.KNALD_STØD} stød uden gnist og 4 H₂O`, !B.opgaveKlaret(O['byg-uden-gnist'], { ...ingen, knald: { stød: 19, vand: 0 } })
+    && B.opgaveKlaret(O['byg-uden-gnist'], { ...ingen, knald: { stød: 20, vand: 0 } }) && !B.opgaveKlaret(O['byg-knaldgas'], { ...ingen, knald: { stød: 0, vand: 3 } })
+    && B.opgaveKlaret(O['byg-knaldgas'], { ...ingen, knald: { stød: 0, vand: 4 } }) && !B.opgaveKlaret(O['byg-knaldgas'], ingen));
+}
+
+// ---------- Knaldgas (Molekyler M3, js/data/knaldgas.js) ----------
+{
+  // Tallene (NIST, docs/fakta-molekyler/m3.md): 2 H₂ + O₂ → 2 H₂O giver 483,6 kJ/mol (damp)
+  tjek(`2 H₂ + O₂ → 2 H₂O: ${(K.NETTO / 2 * K.KJ_PR_EV).toFixed(1)} kJ/mol (NIST: 483,6)`, nær(K.NETTO / 2 * K.KJ_PR_EV, 483.6, 0.1));
+  tjek(`ca. 2,5 eV pr. vandmolekyle (${(K.NETTO / 4).toFixed(3)})`, nær(K.NETTO / 4, 2.506, 0.002));
+  const kj = (r) => K.reaktionsEnergi(K.REAKTIONER.find((x) => x.navn.startsWith(r))) * K.KJ_PR_EV;
+  tjek('kædens trin: H + O₂ koster ca. 70, O + H₂ ca. 8, OH + H₂ giver ca. 63 kJ/mol', nær(kj('H + O₂'), 70.2, 0.2) && nær(kj('O + H₂'), 7.8, 0.2) && nær(kj('OH + H₂'), -62.8, 0.2));
+  tjek('bakkerne er mindst det, trinnet koster (ellers kan energien ikke passe)', K.REAKTIONER.every((r) => r.bakke >= K.reaktionsEnergi(r) - 1e-9));
+  tjek('to molekyler (H₂, O₂, H₂O) reagerer ikke med hinanden', ['H2', 'O2', 'H2O'].every((a) => ['H2', 'O2', 'H2O'].every((b) => !K.findReaktion(a, b))));
+  tjek('alle reaktioner bevarer atomerne', K.REAKTIONER.every((r) => {
+    const t = (arter) => arter.flatMap((a) => K.STOFFER[a].atomer.map(([s]) => s)).sort().join('');
+    return t([r.a, r.b]) === t(r.til);
+  }));
+  // Uden gnist sker der ingenting (30 sekunder, mange stød), og energien er bevaret i hvert stød
+  const u = K.lavBoks(K.lavTilfældig(3));
+  let afvig = 0;
+  for (let t = 0; t < 30; t += 1 / 60) { K.skridt(u, 1 / 60); afvig = Math.max(afvig, Math.abs(K.energi(u) - u.energiStart)); }
+  tjek(`uden gnist: ${u.stød} stød, ingen reaktioner, stadig 4 H₂ og 2 O₂`, u.stød >= 40 && u.reaktioner === 0 && K.tæl(u).H2 === 4 && K.tæl(u).O2 === 2 && u.brudt === 0);
+  tjek(`uden gnist: det hårdeste stød (${u.hårdeste.toFixed(3)} eV) er under en tiendedel af H–H (4,52 eV)`, u.hårdeste < K.BINDING.HH / 10);
+  tjek(`uden gnist: energien er bevaret (afvigelse ${afvig.toExponential(1)} eV)`, afvig < 1e-9);
+  // 60 forsøg med gnist: altid 4 H₂O og intet andet, energien er bevaret, og forskellen er altid den samme (Hess' lov)
+  let alle = true, bevaret = 0, atomer = true, forskel = true, tider = [];
+  for (let frø = 1; frø <= 60; frø++) {
+    const b = K.lavBoks(K.lavTilfældig(frø * 7919));
+    for (let t = 0; t < 1; t += 1 / 60) K.skridt(b, 1 / 60);
+    K.gnist(b);
+    const forventet = b.energiStart + b.gnist;
+    let t = 0;
+    for (; t < 90 && !b.færdig; t += 1 / 60) {
+      K.skridt(b, 1 / 60);
+      bevaret = Math.max(bevaret, Math.abs(K.energi(b) - forventet));
+      const a = K.atomTal(b);
+      if (a.H !== 8 || a.O !== 4) atomer = false;
+    }
+    tider.push(t);
+    const tl = K.tæl(b);
+    if (!b.færdig || tl.H2O !== 4 || b.partikler.length !== 4 || K.radikaler(b) !== 0) alle = false;
+    if (!nær(K.regnskab(b).varme, K.NETTO, 1e-9)) forskel = false;
+  }
+  tider.sort((x, y) => x - y);
+  tjek(`60 forsøg: altid 4 H₂O og 0 H₂, O₂ og radikaler (længst ${tider[59].toFixed(1)} s, i midten ${tider[30].toFixed(1)} s)`, alle);
+  tjek(`60 forsøg: energien er bevaret i hvert stød og hver reaktion (afvigelse ${bevaret.toExponential(1)} eV)`, bevaret < 1e-9);
+  tjek('60 forsøg: altid 8 H og 4 O i boksen', atomer);
+  tjek(`60 forsøg: dannet − brudt er altid ${K.NETTO.toFixed(2)} eV, uanset vejen`, forskel);
+  // Gnisten virker kun én gang, og heller ikke, når alt er vand
+  const g = K.lavBoks(K.lavTilfældig(5));
+  const e1 = K.gnist(g);
+  tjek('gnisten river et H₂ over og giver energi (mindst 4,52 eV)', e1 > K.BINDING.HH && K.tæl(g).H === 2 && K.tæl(g).H2 === 3);
 }
 
 console.log(`\n${ok} OK, ${dårlig} fejl`);
