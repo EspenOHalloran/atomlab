@@ -10,4 +10,6 @@
 
 **Åbent:** Artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe) skulle opdateres, da M2 blev færdig, men det kunne ikke åbnes fra sessionen 8. november 2026 ("not found", måske en anden konto). Opdater det næste gang, det kan åbnes (M2 færdig, M3 næste).
 
+**Jeres svar om testene (8. november 2026):** Testreglen bliver, som den er (`--ændret` vælger stadig alle tests, når en fælles fil er ændret). M2b blev merget, da de berørte tests var grønne efter den sidste merge af main (`byg-molekyler`, `vaerksted`, `byttebors`, `lag`, `ordbog`, `karrusel` og `molekyler`), uden at vente på en fjerde fuld kørsel.
+
 Prøv gerne "Del elektroner" (også pilene og δ-farverne) på tabletten (listen i [ikke-afproevet.md](../ikke-afproevet.md)).
