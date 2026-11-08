@@ -116,7 +116,30 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Efter T3 (8. november 2026, jeres ønsker):** emnet "Hurtigere end lyset? Nej!" øverst, "Hvorfor tager det år med 1 g?" hedder nu "Fast fart eller 1 g?" og forklarer begge måder, lysuret går trin for trin med sin egen fart (87 %), og målet vælges med tre kontakter (skyderen hedder "Fast fart"). Se `docs/lige-nu/tid.md`.
 - [ ] **På tabletten** (står i [ikke-afproevet.md](ikke-afproevet.md)): Er emnerne til at forstå, og er de to lange for lange?
 
-**T4. Udsigten fra cockpittet** *(mellem til stor, eget go senere)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
+**T4. Udsigten fra cockpittet** *(mellem til stor. Besluttet 8. november 2026: ikke lavet nu, men en mulig udvidelse i fremtiden)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
+
+**T5. Hvorfor går tiden langsommere?** *(jeres ønske 8. november 2026, venter på jeres svar og et go. Stor i alt)*
+
+Jeres ord: "Tidsrejsen er bedre nu. Tidsudvidelse er et uhyre interessant begreb og utrolig svært at forstå. Kan vi bruge lidt flere ressourcer på at forklare det, gerne med illustrationer eller animationer. Jeg ved det er svært. Men det kunne være vildt fedt, hvis vi kunne forklare hvorfor tiden 'går langsommere' når man flyver rigtig hurtigt."
+
+**Hvad mangler i dag?** Lysuret (fem trin) viser, *at* et ur i fart går langsommere, *hvis* lysets fart er den samme for alle. Men den regel, som alt hviler på (punkt 1 under "Forklaringen"), står kun som én sætning. Myonerne, "nu" og tvillingeparadokset står kun som tekst.
+
+**Opus' forslag: en kort rejse i fem scener.** Hver scene får en lille 2D-animation (tegnet på et lærred som lysuret, billigt på tabletten), én eller to sætninger og "Næste". Hver scene svarer på det spørgsmål, den forrige rejser:
+1. **Den ene mærkelige regel (bolden og lyset):** Et tog kører 100 km/t, og nogen kaster en bold fremad med 50 km/t. Set fra perronen flyver bolden 150 km/t. Tænd en lygte i stedet: Lyset har lysets fart både set fra toget og fra perronen, ikke lysets fart plus togets. Michelson og Morley ledte efter forskellen i 1887 og fandt den ikke. Einstein fortalte selv, at han som 16-årig forestillede sig at løbe efter en lysstråle. Spørgsmålet til næste scene: Når lyset ikke kan køre hurtigere, hvad må så give efter?
+2. **Lysuret** (det, der findes, trin 1-4): Svaret er tiden. Nyt: Trekanten tegnes ind, så man kan se, hvor "2 gange så lang" kommer fra (for nørder: formlen for γ kommer ud af Pythagoras).
+3. **Det er målt: myonernes kapløb** (idé 3 ovenfor): Myoner regner ned fra ca. 15 km. "Uden Einstein" når næsten ingen ned, "Med Einstein" når mange ned, som Frisch og Smith målte. "Set fra myonen" bliver luften presset sammen i stedet. Samme svar, to forklaringer (kobler til "Set fra skibet").
+4. **"Nu" er ikke det samme for alle** (idé 9): En lampe midt i en togvogn blinker. Set fra toget rammer lyset begge ender samtidig. Set fra perronen rammer det bagenden først, fordi bagenden kører lyset i møde. Det er nøglen til, at begge kan se den andens ur gå langsomt, uden at det er en modsigelse.
+5. **Rumtidskortet: hvem bliver yngst?** (idé 1): Tegn rejsen med fingeren (op er tid, til siden er rum). Et ur tikker langs stregen. Den lige streg (at blive hjemme) får flest tik, og en omvej får færre. Det er svaret på tvillingeparadokset og fører tilbage til Rejsen i tid.
+
+Ærligt hele vejen: "Du mærker intet" og de andre fælder i [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md). Billedet "man bevæger sig altid gennem rumtiden med lysets fart" bruges ikke, eller kun med forbehold, fordi rumtidens geometri har et minus (se fælderne ovenfor). Tallene og påstandene faktatjekkes i Trin 0 (fx Frisch og Smiths tal, som T3 ikke fik bekræftet).
+
+**Opdeling:** T5 Trin 0 er drejebogen: rækkefølgen, teksten til hver scene og en skitse af hver animation, faktatjekket og til jeres godkendelse. Derefter én session pr. en til to scener (fx T5a: scene 1-2, T5b: scene 3, T5c: scene 4-5). Model: Opus med høj effort (fysik og danske tekster).
+
+**Spørgsmål til jer** (Opus' anbefaling først):
+1. **Hvor skal det ligge?** a) Et nyt fænomen i Kosmos, "Hvorfor går tiden langsommere?", ved siden af Rejsen i tid, og de to henviser til hinanden. Anbefalet: Der er plads til store animationer, og `js/kosmos/tid.js` er allerede stor (ca. 51 KB). b) Flere trin i lysuret i Rejsen i tid: billigere, men mere klemt. c) Spredt ud: myonerne i Rejsen i tid og rumtidskortet i Rumtid.
+2. **Hvilke scener?** a) Alle fem (anbefalet). b) Kun 1-3 (reglen, lysuret og myonerne), som er de letteste. c) Jeres eget valg.
+3. **Skitser først?** a) Ja: Trin 0 laver også et artefakt med skitserne som små animationer, så I kan prøve forklaringen af med jeres søn, før den bygges ind (anbefalet, fordi den er svær at ramme første gang. Koster lidt ekstra). b) Nej, drejebogen i tekst er nok.
+4. **Hvornår?** a) Næste i sporet Tid og rum. Det kan køre ved siden af de andre spor (anbefalet). b) Senere i køreplanen.
 
 **De billige idéer:**
 - **Lysets forsinkelse:** I "Rejsen i tid" som én linje ved målet ("En besked hjem tager 4,4 år"), i T2. Den store udgave ("Send et lysglimt" fra Jorden til Månen, Solen, Mars, Voyager 1 og Andromeda) hører hjemme i Solsystemet og er et lille trin i Solsystemets spor. Tallene står allerede i fakta-tid.md.
@@ -165,4 +188,6 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-T1-T3 er lavet. T4 (cockpitudsigten) venter på sit eget go: Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t4.md".
+T1-T3 er lavet, og sporet er lukket for nu (8. november 2026). Skal T4 (cockpitudsigten) laves en dag, kræver det et nyt go: Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t4.md".
+
+**T5 (jeres ønske 8. november 2026):** Når I har svaret på de fire spørgsmål under T5, og I giver go: Ny session med Opus (høj effort) og "Læs afsnittet T5 i docs/plan-tid.md og docs/lige-nu/tid.md, og lav T5 Trin 0". Trin 0 skriver selv prompterne til T5a-T5c.
