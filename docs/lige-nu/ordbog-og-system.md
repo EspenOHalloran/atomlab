@@ -7,4 +7,4 @@
 **Næste (venter på jeres go):**
 1. **Ordbogen, PR B (jeres svar 7. november 2026):** "Hvorfor?" og "Hvordan?" (`mere`) til de ca. 15-20 ord, hvor det giver mest mening (fx tøris, ion, isotop, fusion, halveringstid). Forklaringerne må gerne være ca. dobbelt så lange, men kun i Ordbogen. Boblerne forbliver korte. Opus høj. Prompten står i [prompt-ordbog-pr-b.md](../prompt-ordbog-pr-b.md) (8. november 2026).
 
-**Spørgsmål til jer:** Skal boblerne have et lille link "Mere i Ordbogen ›"? (Opus' forslag, ikke besluttet.)
+**Jeres svar til PR B (8. november 2026):** Go til listen med 19 ord (tøris, ion, isotop, fusion, fission, halveringstid, radioaktiv, bindingsenergi, tunneleffekt, antistof, neutrino, foton, kvark, lysår, tidsforlængelse, neutronstjerne, baggrundsstrålingen, nordlys, tidevandskraft) med 2-3 spørgsmål hver. Ja til linket "Mere i Ordbogen ›" i boblerne ved de ord, der har `mere`. Ja til én tegning: kurven til halveringstid.

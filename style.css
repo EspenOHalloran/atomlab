@@ -1029,6 +1029,13 @@ button { font: inherit; color: inherit; }
 .ordbog-tegning .t-bane { fill: none; stroke: rgba(111, 243, 255, 0.3); stroke-dasharray: 2 3; }
 .ordbog-tegning .t-elektron { fill: var(--elektron); }
 .ordbog-tegning .t-fart { stroke: rgba(111, 243, 255, 0.45); stroke-width: 1.5; stroke-linecap: round; }
+.ordbog-tegning .t-kurve { fill: none; stroke: var(--gul); stroke-width: 2; }
+.ordbog-tegning .t-punkt { fill: var(--gul); }
+.ordbog-tegning .t-akse { stroke: var(--panel-kant); }
+.ordbog-tegning .t-henfaldet { fill: rgba(147, 160, 196, 0.3); }
+/* Åbnet fra "Mere i Ordbogen ›" i en boble: ordet lyser op et øjeblik */
+.ordbog-ord.fremhævet { animation: ordbog-fremhæv 2.2s ease-out; }
+@keyframes ordbog-fremhæv { from { background: rgba(95, 227, 255, 0.16); } to { background: transparent; } }
 .ordbog-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px !important; }
 .ordbog-links button.hvorfor { margin: 0; }
 .ordbog-ingen { margin: 0; color: var(--svag); }
@@ -1350,6 +1357,9 @@ button.sol-gruppe-navn::after { content: " ›"; }
 }
 .ordforklaring strong { display: block; margin-bottom: 3px; color: var(--accent); }
 .ordforklaring p { margin: 0; }
+.ordforklaring-mere { display: inline-block; margin-top: 6px; color: var(--accent); font-weight: 600; text-decoration: none; }
+.ordforklaring-mere:hover { text-decoration: underline; }
+.ordforklaring-mere[hidden] { display: none; }
 .ordforklaring.skjult { display: none; }
 
 /* ---------- Vis eller skjul panelerne (js/paneler.js) ---------- */
