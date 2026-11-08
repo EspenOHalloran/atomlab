@@ -15,7 +15,7 @@
     5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
     6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
     - Hjernen og AI venter (jeres svar). Nye dele bliver knapper i en af verdenerne i menuen (K4, [plan-verdener.md](plan-verdener.md)).
-6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri) og T2 (alle mål, "1 g hele vejen" og afstanden, der skrumper) er lavet. **T3** (lagene og teksterne) venter på et go: start med [prompt-tid-t3.md](prompt-tid-t3.md) (lille til mellem).
+6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri), T2 (alle mål, "1 g hele vejen" og afstanden, der skrumper) og T3 (lagene og teksterne, 8. november 2026) er lavet. **T4** (udsigten fra cockpittet, en shader) venter på et go: start med [prompt-tid-t4.md](prompt-tid-t4.md) (mellem til stor).
 7. **Grupper i Kosmos' liste** (jeres valg i K4 Trin 0, 7. november 2026): De 12 fænomener deles i grupper som i Solsystemet (fx "Stjernernes liv", "Sorte huller og rumtid"). En egen, lille opgave efter K4 i sporet Solsystemet og Kosmos (lille).
 
 ## Sporenes næste trin (detaljerne står i sporets fil)
@@ -23,7 +23,7 @@
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Uranus og Neptun, så Venus → Merkur → Pluto → overblikket. Mars ekstra og Månen bagefter. |
 | [Molekyler](lige-nu/molekyler.md) | M2a og M2b (Byg et molekyle med "Del elektroner" og "Giv elektroner"), så M3 og M4, så Liv. |
-| [Tid og rum](lige-nu/tid.md) | T3 ([prompt-tid-t3.md](prompt-tid-t3.md)). |
+| [Tid og rum](lige-nu/tid.md) | T4 ([prompt-tid-t4.md](prompt-tid-t4.md)), det sidste trin. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
 | [Småting](lige-nu/smaating.md) | Intet. |
 
