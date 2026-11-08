@@ -116,7 +116,7 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Efter T3 (8. november 2026, jeres ønsker):** emnet "Hurtigere end lyset? Nej!" øverst, "Hvorfor tager det år med 1 g?" hedder nu "Fast fart eller 1 g?" og forklarer begge måder, lysuret går trin for trin med sin egen fart (87 %), og målet vælges med tre kontakter (skyderen hedder "Fast fart"). Se `docs/lige-nu/tid.md`.
 - [ ] **På tabletten** (står i [ikke-afproevet.md](ikke-afproevet.md)): Er emnerne til at forstå, og er de to lange for lange?
 
-**T4. Udsigten fra cockpittet** *(mellem til stor, eget go senere)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
+**T4. Udsigten fra cockpittet** *(mellem til stor. Besluttet 8. november 2026: ikke lavet nu, men en mulig udvidelse i fremtiden)*: stjernerne samler sig foran, blå foran og røde bagude (aberration, dopplereffekt og "beaming"). En shader i familie med `js/kosmos/linse.js`. Opus med høj effort. Faktagrundlaget laves i samme session.
 
 **De billige idéer:**
 - **Lysets forsinkelse:** I "Rejsen i tid" som én linje ved målet ("En besked hjem tager 4,4 år"), i T2. Den store udgave ("Send et lysglimt" fra Jorden til Månen, Solen, Mars, Voyager 1 og Andromeda) hører hjemme i Solsystemet og er et lille trin i Solsystemets spor. Tallene står allerede i fakta-tid.md.
@@ -165,4 +165,4 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 - **Domæner:** Wikipedia, arxiv.org, physics.nist.gov, science.nasa.gov og nssdc.gsfc.nasa.gov var nok til Trin 0. Ingen nye domæner er nødvendige.
 
 ## Sådan startes næste session
-T1-T3 er lavet. T4 (cockpitudsigten) venter på sit eget go: Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t4.md".
+T1-T3 er lavet, og sporet er lukket for nu (8. november 2026). Skal T4 (cockpitudsigten) laves en dag, kræver det et nyt go: Ny session med Opus (høj effort) og "Læs docs/prompt-tid-t4.md".

@@ -10,6 +10,6 @@
 - Faktatjek: alle tal regnet efter med `js/data/tid.js` mod fakta-tid.md (22 dage, 3,8 timer, 71, 0,061 lysår, 95 % midtvejs med 1 g, over 96 % efter 2 år, γ = 2 ved 86,6 %).
 - Test: `tests/tid.mjs` (alle T3's tjek og de nye).
 
-**Næste (venter på et go):** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`, faktagrundlaget laves i samme session). Start en ny session med "Læs docs/prompt-tid-t4.md" (Opus, høj effort), når I giver go. Når T4 er færdig, er serien slut, og artefaktet "AtomLab Overblik" opdateres.
+**Næste: intet. Sporet er lukket for nu (besluttet 8. november 2026).** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" opdateres med, at "Rejsen i tid" er færdig (T1-T3).
 
 **Spørgsmål til jer:** ingen lige nu.
