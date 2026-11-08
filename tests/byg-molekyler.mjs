@@ -307,8 +307,11 @@ tjek('et tryk på "Byg ethanol" åbner "Del elektroner" og viser tippet', await 
 // Værkstedets kort i menuen
 await page.evaluate(() => { location.hash = '#menu'; });
 await page.waitForTimeout(800);
-const kortV = await page.textContent('.menukort a[href="#vaerksted"] .kort-fremgang');
-tjek(`menuen tæller "Del elektroner" med på Værkstedets kort (${kortV.trim()})`, kortV.includes(tællerV.trim()));
+await page.click('.menu-fremgang-knap');
+const kortV = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
+const [løstV, ialtV] = tællerV.trim().split('/');
+tjek(`"Din fremgang" i menuen tæller "Del elektroner" med i Værkstedet (${kortV.trim()} / ${tællerV})`, kortV.includes(`${løstV} af ${ialtV} opgaver`));
+await page.keyboard.press('Escape');
 await page.evaluate(() => { location.hash = '#vaerksted'; });
 await page.waitForTimeout(600);
 // "Opgaver forfra" i Værkstedet nulstiller også stjernerne her
