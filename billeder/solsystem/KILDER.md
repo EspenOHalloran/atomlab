@@ -50,6 +50,15 @@ NASA's billeder er offentligt ejede (public domain), men NASA skal nævnes som k
 
 **Neptuns vejr (UN3)** har ingen billeder: Skyerne, pletterne fra 1989 og buerne er tegnet af shaderen efter tallene i `js/data/vejr-neptun.js` og `js/data/ringe-neptun.js` (Voyager 2's billedtekster i NASA's Photojournal, NSSDC og Wikipedia). Kontakten "Voyagers farver (1989)" bruger kun to tal, der er målt på Solar System Scopes `2k_neptune.jpg` (www.solarsystemscope.com, CC BY 4.0, bygget på Voyagers forstærkede billeder): middelfarven og kontrasten mellem 54° N og 54° S. Billedet ligger ikke i programmet.
 
+## Venus
+
+`lav_venus.py` laver kortene til Venus (`js/kosmos/venus.js`, V1 i `docs/plan-venus.md`) ud fra Magellans kort hos USGS (adresserne står øverst i filen). Kræver numpy, Pillow og tifffile.
+
+| Fil | Hvad | Kilde | Licens |
+|---|---|---|---|
+| `venus-radar-8k.jpg`, `-4k.jpg` og `-2k.jpg` (V1) | Magellans radarkort i gråtoner (én kanal), 0° i midten og øst til højre, præcis 360° × 180°. Lyst betyder ru eller skrå jord, ikke en lys farve (programmet toner det orange). Hullerne (ca. 3,4 % af overfladen, mest syd for ca. 82,5° S og i striber) og de for mørke kanter omkring dem (værdier under 50 og en pixel ind) er fyldt med et blødt gennemsnit af det, der er omkring. Den sidste søjle (tom) og den næstsidste (for mørk) er huller. 177 stykker af rækker ved sømme mellem strimlerne, der var over 7 % mørkere end naboerne, er gjort lysere | NASA/JPL (Magellan), USGS Astrogeology: `Venus_Magellan_C3-MDIR_Global_Mosaic_2025m.tif` (2.025 m pr. pixel, kugle med radius 6.051,0 km) | Public domain. Krediteres "NASA/JPL/USGS" |
+| `venus-hoejde-4k.png` og `-2k.png` (V1) | Venus' højder i meter over kuglen med radius 6.051,0 km (fra −3.500 til 12.500 m, 16 bit i rød og grøn som Mars). Hullerne (ca. 2,6 % af overfladen, mest omkring polerne og ved 180°) er fyldt blødt. Kilden har et spring på ca. 120 m ved 180°, som er fordelt over 12 søjler på hver side | NASA/JPL (Magellan, GTDR), USGS Astrogeology: `Venus_Magellan_Topography_Global_4641m_v02.tif` (4.641 m pr. pixel) | Public domain. Krediteres "NASA/JPL/USGS" |
+
 ## Mars
 
 `lav_mars.py` laver billederne til Mars (`js/kosmos/mars.js`) ud fra originalerne hos USGS (adresserne står øverst i filen). `lav_steder.py` laver de lokale kort over stederne (først Olympus Mons, Mars M7a) og læser kun vinduet om stedet direkte hos USGS. Kortene har længdegrad 0° i midten og øst til højre. `-8k` er 8192 × 4096 (pc og, som en prøve, tablet), `-4k` bruges, hvis grafikkortet ikke kan klare 8k, og `-2k` bruges af testene.
