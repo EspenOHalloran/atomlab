@@ -3,6 +3,7 @@
 *Startet 7. november 2026 (jeres svar i drøftelsen af idéerne). Her står det, der er **besluttet**, men ikke startet, i den rækkefølge, vi har aftalt. Løse idéer, der ikke er besluttet, står i [ideer.md](ideer.md). Det, der er i gang, står i sporenes filer ([lige-nu.md](lige-nu.md)). Når et punkt starter, får det sin egen plan (`docs/plan-*.md`), og linjen her peger på den. Når det er færdigt, flyttes punktet til `docs/arkiv/`. Nye beslutninger skrives ind her med det samme.*
 
 ## Venter på et go (størrelsen står i parentes)
+0. **Det store eftersyn med Fable 5.2** (jeres ønske 9. november 2026): når T5c er færdig. Fable vurderer helheden, indholdet, UI, UX, ydelsen og arbejdsgangen, laver et kort over, hvor alt (også det planlagte) skal ligge i ringen, og må udfordre beslutningerne. Opus bygger bagefter. Plan: [plan-fable-eftersyn.md](plan-fable-eftersyn.md). Jeres svar: egen Fable-session, ca. 20-40 $, en ny runde med sønnen først, og kun nye store dele venter imens. Rækkefølgen nedenfor kan ændre sig efter eftersynet (mellem).
 1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
 2. **Liv, lige efter Molekyler (opprioriteret, jeres go 5. november 2026):** Liv bygger på molekylerne (byggesten, hinder, RNA og DNA), så den kommer efter M1/M2. Opus laver faktagrundlaget med xhigh og planen, og Fable 5.5 tjekker det, hvis den kommer. DNA er en del af Liv. Se "Liv" under Baggrund nedenfor (stor). **L0 er lavet (9. november 2026):** [plan-liv.md](plan-liv.md) og [fakta-liv.md](fakta-liv.md). Jeres svar er givet samme dag (anbefalingen på alle, afsnit 9 i planen). Venter på et go til L1 (stigen i 3D).
 3. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
@@ -25,7 +26,7 @@
 | [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026). Liv L0 (planen og faktagrundlaget) er lavet 9. november 2026 ([plan-liv.md](plan-liv.md)). Jeres svar er givet. Næste: L1 (stigen i 3D). |
 | [Tid og rum](lige-nu/tid.md) | T5a ("Hvorfor går tiden langsommere?": rammen og scene 1-2), [prompt-tid-t5a.md](prompt-tid-t5a.md), så T5b (scene 3) og T5c (scene 4-5). T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
-| [Småting](lige-nu/smaating.md) | Intet. |
+| [Småting](lige-nu/smaating.md) | Det store eftersyn med Fable 5.2 ([plan-fable-eftersyn.md](plan-fable-eftersyn.md)), når T5c er færdig: runden med sønnen, så E0 ([prompt-fable-e0.md](prompt-fable-e0.md)), så E1 (Fable). Fra E0 starter, til I har valgt i E2, venter nye store dele (fx Liv L2 og Venus V3). |
 
 ## Baggrund (jeres idéer og Opus' vurderinger, flyttet ordret fra ideer.md 7. november 2026)
 

@@ -16,7 +16,7 @@ Fable må ikke bruges på noget, Opus kan lave lige så godt.
 - I tager skærmbilleder på tabletten (se F0).
 
 ## Grundidéen: Opus forbereder, Fable vurderer, Opus bygger
-- Fable koster 2,5 gange så meget som Opus. Anthropics priser pr. million tokens er 10 $ ind og 50 $ ud for Fable 5.1 og 4 $ og 20 $ for Opus 5.5. Det, Fable skriver og tænker, koster altså 5 gange så meget som det, den læser. Fable skal derfor læse meget og skrive kort.
+- Fable koster 2,5 gange så meget som Opus. Anthropics priser pr. million tokens er 10 $ ind og 50 $ ud for Fable 5.1 og 4 $ og 20 $ for Opus 5.5. **Fable 5.2 (november 2026) koster 8 $ og 40 $, altså 2 gange Opus.** Det, Fable skriver og tænker, koster altså 5 gange så meget som det, den læser. Fable skal derfor læse meget og skrive kort.
 - Ifølge Anthropics vejledning er Fables forspring størst ved kodeeftersyn, ved at bedømme billeder, ved uklare opgaver og ved lange, svære opgaver. Ved rutinearbejde er forskellen lille.
 - Fable arbejder bedst, når den får målet, grunden og rammerne, og ikke en lang tjekliste. Den skal også have at vide, hvad der allerede er fundet, så vi ikke betaler for at finde det igen.
 
@@ -146,3 +146,4 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
   - Rådet er, at et bredt F2 ikke betaler sig nu. Det gør en kort UI-plan for lagene (punkt 1, 3 og 10), og den kan laves uden Fable.
   - Næste skridt står i "Lige nu" (`docs/lige-nu.md`).
 - [ ] **Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer.** I mener, at Fable 5.1 ligger for tæt på Opus 5.5 til at være pengene værd. Opus laver F1 i stedet i en ny session med høj effort ud fra den samme brief (som nu ikke nævner, hvilken model der læser den). Tjernobyl og Liv venter også, til Fable 5.5 kommer (Molekyler og Solsystemet laver Opus med høj effort og `/faktatjek`). Når Fable 5.5 kommer, vurderer vi igen, om den skal lave F2-F4 eller faktagrundlaget for Tjernobyl og Liv. **Ændret 5. november 2026:** Liv venter ikke længere. Opus laver den med xhigh lige efter Molekyler, og Fable tjekker den senere. Tjernobyl venter stadig og er rykket ned.
+- [ ] **Besluttet 9. november 2026: Det store eftersyn laves nu med Fable 5.2,** når T5c er færdig, i jeres egen Fable-session. Planen er [plan-fable-eftersyn.md](plan-fable-eftersyn.md) (trin E0-E3). Den erstatter F2 og et nyt F1. F3 og F4 gælder stadig, men om Tjernobyl fortsat skal vente, afgøres i E2.
