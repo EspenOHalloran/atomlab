@@ -1260,6 +1260,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
     grid-template-areas: "top top" "vindue vindue" "venstre højre";
     overflow-y: auto;
   }
+  #kosmos:has(.tidh) { grid-template-rows: auto minmax(76vh, 1fr) auto; /* Hvorfor går tiden langsommere?: søjlen i scene 3 fylder højden */ }
   /* Reaktorens del-knapper får deres egen linje i toplinjen (ikke Kosmos' "Kort fortalt / For nørder" i panelet) */
   #reaktor .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
