@@ -87,7 +87,7 @@ for (const [navn, opts] of størrelser) {
   });
   tjek(`${navn}: kortet forrest står i midten, over docken og helt på skærmen`, Math.abs(ring.midtX) < 6 && ring.overDok && ring.inde, JSON.stringify(ring));
   tjek(`${navn}: atomet står over kortet forrest`, ring.atomOver, JSON.stringify(ring));
-  tjek(`${navn}: de 2 verdener bagerst (bag atomet) er skjult`, ring.skjulte === 2, ring.skjulte);
+  tjek(`${navn}: de 3 verdener bagerst (bag atomet) er skjult`, ring.skjulte === 3, ring.skjulte);
   if (ring.højkant) tjek(`${navn}: på højkant går banen op under titlen (under 100 px luft, før ca. 210 px)`, ring.luft < 100, ring.luft);
   // Baggrunden (K2, K4): motivet for verdenen forrest toner ind, og de andre er skjult (Atomer og molekyler: elektronskyerne)
   const vægte = () => p.evaluate(() => window.atomlabTest.karrusel.baggrund());
