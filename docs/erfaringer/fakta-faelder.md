@@ -103,3 +103,7 @@
 - "Ler laver lange RNA-kæder af sig selv." Ferris m.fl. 1996 nåede 55 led, men kun med kemisk "aktiverede" byggesten og mange fodringer.
 - "Cheyava Falls er det bedste spor af liv i hele rummet." Forskerne siger "på Mars". "Det tætteste, vi er kommet" er pressesprog: NASA sagde det også om Enceladus i 2017.
 - "Alle seks CHNOPS er fundet på Enceladus." Svovl er kun antydet (Peter m.fl. 2023). Og "meteoritterne forklarer, hvorfor liv er venstrehåndet" holder ikke: Bennu og Ryugu har lige meget af begge hænder (Glavin m.fl. 2025).
+- "Næsten alle celler har en kerne." Målt i antal er ca. 84 % af kroppens celler røde blodlegemer, og de har ingen kerne (Sender m.fl. 2016). Skriv "cellen her har en kerne" (Liv L1).
+- "Tyndere end et hår." Hår er 0,017-0,18 mm (Wikipedia "Hair"), så de tyndeste er tyndere end DNA-tråden på 0,033 mm i 10-cm-kernen. Skriv "et hår fra dit hoved" (60-120 µm) (Liv L1).
+- "Kromosomets to kopier hænger sammen på midten." Centromeren sidder kun midt på nogle kromosomer. Skriv "ét sted" (Liv L1).
+- "Genet for hæmoglobin." HBB er genet for β-kæden. Hæmoglobin er bygget af to slags kæder, så skriv "et af generne for hæmoglobin" (Liv L1).

@@ -113,6 +113,27 @@ export const ORDBOG = [
     tekst: 'Betyder "lidt plus" og "lidt minus" (δ er det græske bogstav delta). Atomet, der trækker hårdest i de delte elektroner, bliver lidt minus, og det andet bliver lidt plus. Det er meget mindre end en hel ladning, som en ion har.',
   },
   // Molekyler M3 (knaldgas). Kilder: docs/fakta-molekyler/m3.md og docs/fakta-molekyler.md, afsnit 4.
+  // Liv L1 (9. november 2026). Kilder: docs/fakta-liv/dna-stigen.md (OpenStax 2-1, 3-5 og 14-2, genome.gov) og docs/fakta-liv.md (OpenStax 10-1)
+  {
+    id: 'dna', ord: 'DNA',
+    former: ['dna', "dna'et", "dna'ets"],
+    tekst: 'Det stof, opskriften på et levende væsen er skrevet i. Det er en lang, snoet stige, og trinene er lavet af fire slags baser: A, T, G og C. DNA står for deoxyribonukleinsyre.',
+  },
+  {
+    id: 'kromosom', ord: 'Kromosom',
+    former: ['kromosom', 'kromosomet', 'kromosomer', 'kromosomerne'],
+    tekst: 'Et af de lange stykker DNA i cellekernen, viklet om små kugler af protein. Mennesker har 46 kromosomer i 23 par: et sæt fra mor og et fra far.',
+  },
+  {
+    id: 'basepar', ord: 'Basepar',
+    former: ['basepar', 'baseparret', 'baseparrene'],
+    tekst: 'Et trin i DNA-stigen: to baser, der passer sammen. A passer til T, og G passer til C. Der er ca. 6,1 milliarder basepar i én af dine celler.',
+  },
+  {
+    id: 'hydrogenbinding', ord: 'Hydrogenbinding',
+    former: ['hydrogenbinding', 'hydrogenbindingen', 'hydrogenbindinger', 'hydrogenbindingerne'],
+    tekst: 'Et svagt træk mellem et H, der er lidt plus (δ+), og et atom i et andet molekyle, der er lidt minus (δ−), typisk et O eller N. Hydrogenbindinger holder A til T og G til C i DNA.',
+  },
   {
     id: 'aktiveringsenergi', ord: 'Aktiveringsenergi',
     former: ['aktiveringsenergi', 'aktiveringsenergien'],

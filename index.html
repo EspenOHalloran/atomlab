@@ -32,7 +32,7 @@
     // Bjælken fyldes efter, hvor mange JavaScript-filer der er hentet. Det er et skøn: Forsiden henter ca. FORVENTET filer
     // (tests/henter.mjs tjekker, at tallet stadig passer). Den står højst på 95 %, indtil main.js er færdig.
     (() => {
-      const FORVENTET = 113;
+      const FORVENTET = 139;
       const fyld = document.getElementById('henterFyld');
       const tekst = document.getElementById('henterTekst');
       let hentet = 0;
@@ -88,6 +88,13 @@
         <span class="kort-tekst">
           <strong>Reaktoren</strong>
           <small>Fission: spalt uran og styr en kædereaktion</small>
+        </span>
+      </a>
+      <a href="#liv">
+        <span class="kort-ikon ikon-liv"></span>
+        <span class="kort-tekst">
+          <strong>Liv</strong>
+          <small>DNA: opskriften på liv, fra cellen helt ind til atomerne</small>
         </span>
       </a>
       <a href="#batteri">
@@ -687,6 +694,76 @@
   </div>
 
   <!-- ===== Batteriet ===== -->
+  <section id="liv" class="skærm skjult" aria-label="Liv">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Liv</h2>
+      <span class="system-status">Opskriften: DNA fra cellen helt ind til atomerne</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="livHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <h4 class="panel-overskrift">Zoom ind</h4>
+      <div class="liv-niveauer" id="livNiveauer"></div>
+      <button class="kontakt løs" id="livVisH">Vis hydrogen</button>
+      <div class="liv-byg" id="livByg">
+        <button class="knap" id="livBygStart">🧩 Byg stigen</button>
+        <div class="liv-byg-i-gang" id="livBygIGang" hidden>
+          <p class="liv-byg-tekst" id="livBygTekst"></p>
+          <div class="liv-palet" id="livPalet">
+            <button class="liv-base" data-liv-base="A" style="--farve:#3ddc84">A</button>
+            <button class="liv-base" data-liv-base="T" style="--farve:#ff5a5f">T</button>
+            <button class="liv-base" data-liv-base="G" style="--farve:#ffc93c">G</button>
+            <button class="liv-base" data-liv-base="C" style="--farve:#4ea8ff">C</button>
+          </div>
+          <div class="valg-række">
+            <button class="knap lille svag" id="livBygNy">Ny stige</button>
+            <button class="knap lille svag" id="livBygStop">Stop</button>
+          </div>
+        </div>
+      </div>
+      <details class="lag-boks opgave-boks" data-lag="liv-opgaver">
+        <summary><strong>Opgaver</strong> <span class="opgave-tal" id="livOpgaveTal"></span></summary>
+        <ol class="opgaver kompakt" id="livOpgaver"></ol>
+      </details>
+    </aside>
+    <div class="vindue" id="livVindue" data-log>
+      <ul class="liv-farver" id="livFarver" aria-label="Farverne"></ul>
+    </div>
+    <aside class="panel side-panel højre-panel">
+      <h3 class="liv-titel" id="livTitel"></h3>
+      <p class="liv-tekst" id="livTekst"></p>
+      <dl class="liv-tal" id="livTal"></dl>
+      <p class="liv-ekstra" id="livEkstra"></p>
+      <button class="hvorfor" id="livHvorfor" data-hvorfor="livSammen" hidden>Hvorfor? Hvad holder stigen sammen?</button>
+      <details class="forklaring-boks lag-boks" data-lag="liv-nørd" name="liv-lag">
+        <summary><strong>For nørder</strong><span class="lag-kort">Hvor atomernes pladser kommer fra</span></summary>
+        <p>Atomernes pladser er målt med røntgen i en rigtig DNA-krystal (1BNA, Drew, Dickerson og kolleger 1981, fra Protein Data Bank). Røntgen kan ikke se H-atomerne, så dem har vi regnet ud. Krystallens stige er bøjet og har 9,8 trin pr. omgang. I vand er det ca. 10,5, og det bruger stigen her.</p>
+        <p>To sæt kromosomer er ca. 6,1 milliarder basepar hos en pige og lidt færre hos en dreng, fordi Y-kromosomet er meget mindre end X.</p>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="liv-ærligt" name="liv-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
+        <p>Atomerne er kugler og bindingerne pinde, men rigtige atomer er skyer af elektroner. I cellen er fosfatet minusladet, og der er plusioner (fx natrium og magnesium) omkring stigen. Dem har vi ikke tegnet.</p>
+        <p>Cellen og kernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i kernen.</p>
+      </details>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpLiv" role="dialog" aria-label="Hjælp til Liv">
+    <div class="dialog">
+      <header><h3>Liv: opskriften</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Kernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
+        <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
+        <p><strong>De gule streger</strong> helt tæt på er hydrogenbindinger. De holder A og T sammen med to og G og C med tre.</p>
+        <p><strong>Farverne:</strong> Atomerne har kemikernes farver: C grå, H lysegrå, N blå, O rød og P orange. Baserne har hver sin farve: A grøn, T rød, G gul og C blå.</p>
+      </div>
+    </div>
+  </div>
+
   <section id="batteri" class="skærm skjult">
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>

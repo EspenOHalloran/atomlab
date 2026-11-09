@@ -8,6 +8,7 @@ import { lavSystem, startSystem, stopSystem, testAdgang as systemTest } from './
 import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
 import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
+import { lavLiv, startLiv, stopLiv, OPGAVER_LIV, testAdgang as livTest } from './liv.js';
 import { lavKosmos, startKosmos, stopKosmos, FÆNOMENER, testAdgang as kosmosTest } from './kosmos.js';
 import { lavSolsystem, startSolsystem, stopSolsystem, FÆNOMENER as SOL_FÆNOMENER, testAdgang as solsystemTest } from './solsystem.js';
 import { NØGLER } from './faenomenskaerm.js';
@@ -32,6 +33,7 @@ const skærme = {
   system: { start: startSystem, stop: stopSystem },
   fusion: { start: startFusion, stop: stopFusion },
   reaktor: { start: startReaktor, stop: stopReaktor },
+  liv: { start: startLiv, stop: stopLiv },
   batteri: { start: startBatteri, stop: stopBatteri },
   solsystem: { start: startSolsystem, stop: stopSolsystem },
   kosmos: { start: startKosmos, stop: stopKosmos },
@@ -70,6 +72,7 @@ function start() {
   });
   lavFusion();
   lavReaktor();
+  lavLiv();
   lavBatteri();
   lavSolsystem(); // før Kosmos, så det gemte flytter med først
   lavKosmos();
@@ -105,7 +108,7 @@ function start() {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
   // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) }, karrusel: karrusselTest() };
+  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), liv: livTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) }, karrusel: karrusselTest() };
   visSkærm();
   skjulHenter();
 }
@@ -134,7 +137,7 @@ function visSkærm() {
 
 // Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult)
 function lavRulleTip() {
-  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #solsystem, #kosmos')];
+  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #liv, #solsystem, #kosmos')];
   const tjek = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
   let venter = false;
   const tjekAlle = () => {
@@ -170,7 +173,7 @@ function startMenu() {
 // Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af menuen (✓, "Start her" og "Din fremgang" i karrusel.js).
 function fremgangPrDel() {
   const ud = {};
-  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
+  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };

@@ -113,7 +113,7 @@ Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring 
 | Trin | Hvad | Størrelse |
 |---|---|---|
 | L0 | ✅ Plan og faktagrundlag (denne fil og [fakta-liv.md](fakta-liv.md), 9. november 2026) | lavet |
-| L1 | Skærmen, verdenen "Ild og liv" i menuen og **stigen i 3D**: zoom-rejsen, atomerne tæt på, tallene og "Byg stigen" med de første opgaver | stor |
+| L1 | ✅ (9. november 2026) Skærmen, verdenen "Ild og liv" i menuen og **stigen i 3D**: zoom-rejsen, atomerne tæt på, tallene og "Byg stigen" med de første opgaver | stor |
 | L2 | **Fra opskrift til protein:** aflæsningen, ribosomet, kodehjulet og "Læs selv" med HBB og mutationerne | stor |
 | L3 | **Kopien:** "Lyn op og kopiér", fejlene og "Hvorfor?"-kortene om DNA | mellem |
 | L4 | **Millers kolbe** med valget af luft | mellem til stor |
@@ -166,4 +166,4 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 - **Domæner:** Til L0 blev `www.ncbi.nlm.nih.gov`, `pmc.ncbi.nlm.nih.gov`, `pubmed.ncbi.nlm.nih.gov`, `bio.libretexts.org`, `www.genome.gov`, `www.nobelprize.org`, `pdb101.rcsb.org`, `www.science.org`, `www.pnas.org` og `academic.oup.com` åbnet (9. november 2026). Science, PNAS og Oxford svarer 403 til curl (sidernes egen bot-beskyttelse), og PubMed, PMC og NCBI Bookshelf gav reCAPTCHA i perioder. Artiklerne blev derfor læst på PMC, i NASA's arkiv NTRS, på arXiv eller via Wikipedias henvisninger (det står ved hver påstand). **Før L1:** `files.rcsb.org` (atompladserne). **Før L5, hvis Darwins brev skal citeres:** `www.darwinproject.ac.uk`.
 
 ## 11. Sådan startes næste session
-Spørgsmålene er besvaret (afsnit 9). L1 startes i en ny session med Opus (høj effort) og denne tekst: "Lav L1 i docs/plan-liv.md (stigen i 3D, jeres svar står i afsnit 9). Læs planen (afsnit 1, 2, 6, 7 og 9), docs/fakta-liv/dna-stigen.md og docs/kode/molekyler.md (`MolekyleTegning`). Spørg om domænet files.rcsb.org, før arbejdet går i gang, og vis mig et skærmbillede af stigen, før resten bygges." L1 skriver selv en prompt til L2 (`docs/prompt-liv-l2.md`), når den er færdig.
+L1 er lavet (9. november 2026). L2 startes i en ny session med Opus (høj effort): "Læs docs/prompt-liv-l2.md".

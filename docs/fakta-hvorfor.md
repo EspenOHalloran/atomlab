@@ -151,6 +151,9 @@
 - Flydende oxygen hænger mellem polerne på en magnet ("temporarily suspended between the magnet poles, owing to its paramagnetism") og koger ved −183 °C (90 K) (Wikipedia "Liquid oxygen"): OK.
 - Singlet-oxygen ligger 94,x kJ/mol over grundtilstanden (= 0,98 eV, skrevet "ca. 1 eV") og er "far more reactive toward organic compounds" (Wikipedia "Singlet oxygen"): OK.
 
+## 20. Hvad holder DNA-stigen sammen? ✅ (9. november 2026, Liv L1)
+Kilderne står i [fakta-liv/dna-stigen.md](fakta-liv/dna-stigen.md), afsnit 1: Yakovchuk, Protozanova og Frank-Kamenetskii 2006, NAR 34(2):564-574, PMC1360284 ("base-stacking is the main stabilizing factor in the DNA double helix. A•T pairing is always destabilizing and G•C pairing contributes almost no stabilization"), og "destabiliserende" er i forhold til, at baserne ellers binder til vandet. Parrene afgør, hvem der passer (OpenStax 14-2). En hydrogenbinding er et svagt træk (OpenStax 2-1: "a weak interaction").
+
 ## Fotoner (ordbogen og Stjerneovnen), 29. oktober 2026
 Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brint til carbon, trin for trin" (trin 2) og "Fotonerne af gammastråling" i hjælpens "Lys og neutrinoer". Kilderne er åbnet direkte med curl (Wikipedias kildetekst).
 
