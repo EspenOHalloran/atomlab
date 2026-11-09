@@ -31,13 +31,18 @@
 //   midten og lyse skyer uden mørk plet (Scooter). sætPletStyrke toner dem ind og ud (kontakten "Neptun i 1989").
 //   voyager: kontakten "Voyagers farver (1989)": kortets farve gjort blåere og med mere kontrast, som Voyagers billeder
 //   blev behandlet (sætVoyager(styrke, gain, midt, kontrast)).
+// - Venus (V2), valgfrit:
+//   toner: kortet er gråtoner i én kanal (RedFormat, 0,5 er middel). Farven er uTone · (1 + (grå − 0,5) · uKontrast), så
+//   samme kort kan vise skyerne i synligt lys (gullig hvid, næsten uden mønster) og i ultraviolet (sætToner(tone,
+//   kontrast)).
+//   gennemsigtig: skylaget kan gøres gennemsigtigt (sætAlfa(a), 1 er helt dækkende), så jorden under det ses.
 
 import * as THREE from 'three';
 import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null, højeSkyer = null, pletter = 0, voyager = false }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null, højeSkyer = null, pletter = 0, voyager = false, toner = false, gennemsigtig = false }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -55,9 +60,15 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   if (pletter) defines.PLETTER = pletter;
   if (højeSkyer || pletter) defines.NEPTUN_VEJR = '';
   if (voyager) defines.VOYAGER = '';
+  if (toner) defines.TONER = '';
+  if (gennemsigtig) defines.GENNEMSIGTIG = '';
   const mat = new THREE.ShaderMaterial({
     defines,
+    transparent: gennemsigtig,
     uniforms: {
+      uTone: { value: new THREE.Vector3(1, 1, 1) },
+      uKontrast: { value: 1 },
+      uAlfa: { value: 1 },
       tVind: { value: vind?.tekstur ?? null },
       uVindSkala: { value: vind?.skala ?? 1 },
       uFase: { value: vind?.fase ?? 40 },
@@ -364,6 +375,13 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uniform float uVoy, uVoyKontrast;
       uniform vec3 uVoyGain, uVoyMidt;
       #endif
+      #ifdef TONER
+      uniform vec3 uTone;
+      uniform float uKontrast;
+      #endif
+      #ifdef GENNEMSIGTIG
+      uniform float uAlfa;
+      #endif
       // Skybånd uden billede: lyse zoner og mørkere bælter, der følger breddegraden
       vec3 baand(vec2 uv) {
         float b = uv.y * 2.0 - 1.0; // -1 (sydpol) til 1 (nordpol)
@@ -389,6 +407,10 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
         #endif
         #else
         farve = uHarKort > 0.5 ? texture2D(tKort, vUv).rgb : baand(vUv);
+        #endif
+        #ifdef TONER
+        // Gråtoner i én kanal (Venus): farven og kontrasten sættes udefra
+        farve = uTone * max(1.0 + ((uHarKort > 0.5 ? farve.r : 0.5) - 0.5) * uKontrast, 0.0);
         #endif
         #ifdef CYKLONER
         // Ved polerne (fra ca. 76°): Junos cykloner og lidt uro i skyerne imellem dem
@@ -475,7 +497,11 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
           ud = mix(ud, p.rgb * (0.5 + 0.5 * dag), p.a * uPile * 0.9 * dag);
         }
         #endif
+        #ifdef GENNEMSIGTIG
+        gl_FragColor = vec4(ud, uAlfa);
+        #else
         gl_FragColor = vec4(ud, 1.0);
+        #endif
       }`,
   });
   const mesh = new THREE.Mesh(new THREE.SphereGeometry(R, segmenter, segmenter / 2), mat);
@@ -514,6 +540,9 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       mat.uniforms.uPletterB.value.forEach((x, i) => { const p = liste[i]; if (p) x.set(p.mørk, p.midt, p.syd, p.vinkel); else x.set(0, 0, 0, 0); });
     },
     sætPletStyrke(s) { mat.uniforms.uPletStyrke.value = s; },
+    // Venus (toner): farven og kontrasten i gråtonekortet, og hvor dækkende skylaget er (gennemsigtig)
+    sætToner(tone, kontrast) { mat.uniforms.uTone.value.set(...tone); mat.uniforms.uKontrast.value = kontrast; },
+    sætAlfa(a) { mat.uniforms.uAlfa.value = a; },
     sætVoyager(styrke, gain, midt, kontrast) {
       mat.uniforms.uVoy.value = styrke;
       if (gain) mat.uniforms.uVoyGain.value.set(...gain);

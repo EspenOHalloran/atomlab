@@ -2,6 +2,13 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (9. november 2026): Venus V1, jorden og skelettet.** Jeres go: "Læs docs/prompt-venus.md og kør V1."
+- **Venus står i Solsystemet** mellem Solen og Jorden (halvfærdig, som aftalt): Magellans radarkort med højderne (`klippeplanet.js` som Mars), tonet orange, for radaren ser ikke farver. "Bjergene 10 gange højere" og "Modlys". En kort side, der siger ærligt, at skyerne kommer snart.
+- **Venus står, som den gør i dag:** Aksen peger mod IAU's nordpol, drejningen følger IAU's formel, og Solen følger banen. Punktet under Solen passer med JPL Horizons inden for 0,02°. Venus drejer baglæns, og Solen står op i vest (prøv ⏩: et døgn i sekundet).
+- **Kortene:** `lav_venus.py` (radar 8k/4k/2k, højder 4k/2k). Ca. 3 % af overfladen mangler (mest ved sydpolen) og er fyldt blødt. Mørke sømme mellem Magellans strimler og et spring på ca. 120 m ved 180° i højderne er rettet.
+- **Tests:** `tests/venus.mjs` (26 tjek). Koden står i [kode/venus.md](../kode/venus.md), erfaringerne i [erfaringer/venus.md](../erfaringer/venus.md).
+- **Spørgsmål til jer:** Ingen. `darts.isas.jaxa.jp` svarede i dag, så Akatsukis kort kan nok bruges i V2.
+
 **Senest lavet (9. november 2026): Planen for Venus.** Jeres go: "Skriv planen for Venus efter mønstret fra plan-uranus-neptun.md."
 - **Planen:** [plan-venus.md](../plan-venus.md) med kilderne (tjekket med curl), to lag (skyerne udenpå og Magellans radarkort med højder indeni), otte signatur-effekter, flybyen med 6 stop, himlen og delopgaverne V1-V5 (V6 er valgfri). Faktagrundlaget med kilder står i [fakta-solsystemet/del7-venus.md](../fakta-solsystemet/del7-venus.md) med 14 fælder.
 - **Kilderne:** Magellans kort ligger frit hos USGS (radar 2 km og 225 m pr. pixel, højder 4,6 km). Venera 13's farvepanorama og Parker Solar Probes billeder af natsiden er public domain. Akatsukis kort over skyerne ligger i `darts.isas.jaxa.jp`, som er lukket.

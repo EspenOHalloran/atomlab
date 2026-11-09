@@ -622,4 +622,10 @@ export const ORDBOG = [
     // J5 (Jupiters nordlys). Bølgelængden ca. 10-400 nm, kortere end violet lys (ca. 380-400 nm)
     tekst: 'Lys med kortere bølgelængde end det violette lys, vi kan se. Vores øjne kan ikke se det, men det er det, der giver solskoldning. Rumteleskopet Hubble kan se det, og Jupiters nordlys lyser kraftigt i ultraviolet lys.',
   },
+  {
+    id: 'superrotation', ord: 'Superrotation',
+    former: ['superrotation', 'superrotationen'],
+    // Venus V2. Kilder: fakta-solsystemet/del7, afsnit 3, og vindene målt i Akatsukis billeder (js/data/vinde-venus.js)
+    tekst: 'Når luften om en planet drejer rundt meget hurtigere end planeten selv. På Venus suser toppen af skyerne rundt på ca. 4 jorddøgn, mens Venus selv er 243 jorddøgn om at dreje én gang.',
+  },
 ];
