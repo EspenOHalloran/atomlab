@@ -93,3 +93,13 @@
 - arXiv:1906.03934 skriver "γ ≈ 20" for myoner med 4 GeV, men det er ca. 38 (√(1 + (4000/105,66)²)), og artiklens egen vej på 24 km passer med 38. Regn γ efter, også i en fagfællebedømt kilde (T5 Trin 0).
 - En kilde kan ændre sig, eller man kan have kigget det forkerte sted: T3 fandt ikke Frisch og Smiths tal i Wikipedia, men T5 fandt dem samme dag i samme artikel (med henvisning til Am. J. Phys. 1963). Søg i hele wikiteksten (`action=raw` og `grep`), før et tal kaldes "ikke bekræftet". Og "8,4 ± 2" var forudsigelsen, mens målingen var 8,8 ± 0,8 (T5 Trin 0).
 - "Set fra perronen" (eller "set fra Jorden") i relativitetsteorien er ikke det, øjet ser: Lysets rejsetid er trukket fra. Sig det i "Ærligt talt", når en animation viser to billeder (T5 Trin 0).
+
+*Liv L0 (9. november 2026). Hele listerne med kilder står i [fakta-liv.md](../fakta-liv.md) og filerne i `docs/fakta-liv/`.*
+- "DNA er en tegning af kroppen." Mere en opskrift. Og både "det meste er skrald" og "80 % har en funktion" (ENCODE 2012, der talte biokemisk aktivitet) er for skarpe: Ca. 8 % er bevaret af evolutionen (Rands m.fl. 2014), og forskerne er uenige.
+- "Hydrogenbindingerne holder DNA sammen." Stablingen af baserne giver det meste (Yakovchuk m.fl. 2006). Hydrogenbindingerne afgør, hvem der passer sammen.
+- "Et menneske har 6,2 milliarder basepar" (2 × 3,1). Tallet 3,1 tæller både X og Y. En kvinde har ca. 6,1 milliarder (2 × 3,055), en mand lidt færre.
+- "Watson og Crick stjal Franklins billede, og det gav dem svaret." For enkelt (Cobb og Comfort, Nature 2023): Hun var en ligeværdig del af arbejdet, men de brugte hendes målinger uden at spørge.
+- "Forskerne har lavet kunstigt liv" (Venter-instituttet 2010). Det kemisk byggede genom kom ind i en celle, der levede i forvejen.
+- "Ler laver lange RNA-kæder af sig selv." Ferris m.fl. 1996 nåede 55 led, men kun med kemisk "aktiverede" byggesten og mange fodringer.
+- "Cheyava Falls er det bedste spor af liv i hele rummet." Forskerne siger "på Mars". "Det tætteste, vi er kommet" er pressesprog: NASA sagde det også om Enceladus i 2017.
+- "Alle seks CHNOPS er fundet på Enceladus." Svovl er kun antydet (Peter m.fl. 2023). Og "meteoritterne forklarer, hvorfor liv er venstrehåndet" holder ikke: Bennu og Ryugu har lige meget af begge hænder (Glavin m.fl. 2025).
