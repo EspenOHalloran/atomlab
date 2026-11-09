@@ -7,7 +7,7 @@
 |---|---|---|
 | Solsystemet og Kosmos | [lige-nu/solsystemet.md](lige-nu/solsystemet.md) | Planeterne, månerne, Mars ekstra og Kosmos |
 | Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0 og L1 er lavet, L2 venter på et go), senere Ild |
-| Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 er lavet. T5 ("Hvorfor går tiden langsommere?") Trin 0 er godkendt 9. november 2026. Næste: T5a ([prompt-tid-t5a.md](prompt-tid-t5a.md)). T4 er en mulig udvidelse |
+| Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 er lavet. T5 ("Hvorfor går tiden langsommere?") T5a og T5b (scene 1-3) er lavet 9. november 2026. Næste: T5c ([prompt-tid-t5c.md](prompt-tid-t5c.md)). T4 er en mulig udvidelse |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | Menuen som en ring (K1-K3) |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | Ordbogen, grundstofkortene og kategorierne |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
