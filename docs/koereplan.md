@@ -4,7 +4,7 @@
 
 ## Venter på et go (størrelsen står i parentes)
 1. **Orbitalerne i store atomer** (fx jern) er svære at læse. **Jeres svar:** behold som nu, men tag det op igen. Forslaget er én underskal ad gangen (fx "4s" og "3d") med en kort tekst (mellem).
-2. **Liv, lige efter Molekyler (opprioriteret, jeres go 5. november 2026):** Liv bygger på molekylerne (byggesten, hinder, RNA og DNA), så den kommer efter M1/M2. Opus laver faktagrundlaget med xhigh og planen, og Fable 5.5 tjekker det, hvis den kommer. DNA er en del af Liv. Se "Liv" under Baggrund nedenfor (stor). **L0 er lavet (9. november 2026):** [plan-liv.md](plan-liv.md) og [fakta-liv.md](fakta-liv.md). Venter på jeres svar på spørgsmålene i planen (afsnit 9) og et go til L1.
+2. **Liv, lige efter Molekyler (opprioriteret, jeres go 5. november 2026):** Liv bygger på molekylerne (byggesten, hinder, RNA og DNA), så den kommer efter M1/M2. Opus laver faktagrundlaget med xhigh og planen, og Fable 5.5 tjekker det, hvis den kommer. DNA er en del af Liv. Se "Liv" under Baggrund nedenfor (stor). **L0 er lavet (9. november 2026):** [plan-liv.md](plan-liv.md) og [fakta-liv.md](fakta-liv.md). Jeres svar er givet samme dag (anbefalingen på alle, afsnit 9 i planen). Venter på et go til L1 (stigen i 3D).
 3. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens (mellem).
 4. **Mere grafik i hele AtomLab** ([plan-grafik.md](plan-grafik.md), 3. november 2026): Tablet og pc er lige vigtige, så alt nyt får en billig udgave til tabletten. Start med G1 (måling og kvalitetstrin) og G2 (kantudglatning og glød). Fire beslutninger til jer står i planen.
 5. **Planen efter planeterne (jeres svar 5. november 2026, rækkefølgen er Opus' forslag og kan ændres):** Hver får sin egen plan og sit eget go. Vurderingerne står under Baggrund nedenfor.
@@ -22,7 +22,7 @@
 | Spor | Næste |
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Venus ([planen](plan-venus.md) er lavet 9. november 2026, jeres svar er givet, venter på et go til V1, [prompt-venus.md](prompt-venus.md)) → Merkur → Pluto → overblikket. Uranus og Neptun er færdige (UN1-UN5). Mars ekstra og Månen bagefter. |
-| [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026). Liv L0 (planen og faktagrundlaget) er lavet 9. november 2026 ([plan-liv.md](plan-liv.md)). Næste: jeres svar i planen og så L1 (stigen i 3D). |
+| [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026). Liv L0 (planen og faktagrundlaget) er lavet 9. november 2026 ([plan-liv.md](plan-liv.md)). Jeres svar er givet. Næste: L1 (stigen i 3D). |
 | [Tid og rum](lige-nu/tid.md) | T5 Trin 0 ("Hvorfor går tiden langsommere?", go 8. november 2026): drejebogen og skitserne, [prompt-tid-t5.md](prompt-tid-t5.md). T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
 | [Småting](lige-nu/smaating.md) | Intet. |
