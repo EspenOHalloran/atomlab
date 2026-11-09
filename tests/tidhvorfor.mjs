@@ -33,8 +33,11 @@ const sæt = (navn, v) => E(([navn, v]) => {
   i.dispatchEvent(new Event('input'));
 }, [navn, v]);
 const fase = () => E(() => atomlabTest.kosmos.fase());
-// Lærredet må ikke dække Styr-boksen (når den er åben), underteksten eller bjælken
-const dækker = () => E(() => {
+// Lærredet må ikke dække Styr-boksen (når den er åben), underteksten eller bjælken. Der ventes to billeder først:
+// Lærredets størrelse rettes af en ResizeObserver, som først kører lige før det næste billede (under belastning
+// kunne testen ellers måle mellem en ændring i bjælken og det næste billede, T5c)
+const dækker = () => E(async () => {
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   const l = document.querySelector('#kosmosOverlag .tidh canvas').getBoundingClientRect();
   const over = (e) => { if (!e || !e.offsetWidth) return false; const r = e.getBoundingClientRect(); return r.bottom > l.top + 1 && r.top < l.bottom - 1 && r.right > l.left + 1 && r.left < l.right - 1; };
   return ['#kosmosStyr', '#kosmosVindue .undertekst', '#kosmosBjælke'].filter((s) => over(document.querySelector(s)));

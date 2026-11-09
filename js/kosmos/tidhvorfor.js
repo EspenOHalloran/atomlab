@@ -823,6 +823,9 @@ export default {
       // Underteksten, bjælken og mellemrummene (målt hver for sig: .vindue-bund har en største højde og bliver ikke højere)
       const mellemrum = parseFloat(getComputedStyle(bund).rowGap) || 6;
       const andre = [...bund.children].filter((e) => e !== lag && e.offsetHeight > 0).reduce((sum, e) => sum + e.offsetHeight + mellemrum, 0);
+      // Underteksten og bjælken holdes også øje med: Når lærredet fylder pladsen, har .vindue-bund sin største højde og
+      // skifter ikke størrelse, når de bliver højere. Så ville lærredet blive skubbet op under Styr-boksen (T5c).
+      for (const e of bund.children) if (e !== lag && iagt && !iagttaget.has(e)) { iagttaget.add(e); iagt.observe(e); }
       const styr = vindue.querySelector('.styr');
       const sR = styr && styr.offsetHeight > 0 ? styr.getBoundingClientRect() : null;
       const øverst = Math.max(vR.top + 44, sR ? sR.bottom + 8 : 0);
@@ -835,6 +838,7 @@ export default {
       lærred.style.height = `${H}px`;
     }
     const iagt = typeof ResizeObserver === 'function' ? new ResizeObserver(() => størrelse()) : null;
+    const iagttaget = new WeakSet(); // underteksten og bjælken, når de er iagttaget (størrelse())
     if (iagt && vindue) {
       iagt.observe(vindue);
       iagt.observe(bund);
