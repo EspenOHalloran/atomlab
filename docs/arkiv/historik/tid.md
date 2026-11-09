@@ -2,6 +2,13 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (9. november 2026): T5a, fænomenet "Hvorfor går tiden langsommere?" med scene 1 og 2.**
+- **Fænomenet** `js/kosmos/tidhvorfor.js` (🔦, "Lysets mærkelige regel") står lige efter Rejsen i tid i Kosmos (13 fænomener). Fem scener er trin i bjælken (‹, fem prikker og "Næste"). Første gang går man frem med "Næste", og en prik længere fremme går kun til den næste scene. Det huskes kun, mens AtomLab er åben (intet i localStorage). Scene 3-5 siger "kommer snart".
+- **Scene 1** (⚾ Bold / 🔦 Lygte og "Togets fart") og **scene 2** (skyderen "Fart" og kontakten "△ Vis trekanten", der stopper uret, når lyset er oppe, og tegner trekanten med 1² + 1,73² = 2²). Teksterne er drejebogens ordret. Underteksten er "altid fremme", og "Lige nu" viser scenens spørgsmål og overgangen.
+- **Lærredet** står i overlaget og får den højde, der er plads til mellem Styr-boksen og underteksten med bjælken. På telefon på højkant får 3D-billedet 76 % af højden, når fænomenet er åbent.
+- **Lysuret er delt:** `js/kosmos/lysur.js` (uret, spejlene, lyset, zigzaggen og trekanten) bruges af både Rejsen i tid og det nye fænomen. Rejsen i tid ser ud som før. Den har fået knappen "🔦 Hvorfor? Se det trin for trin" i emnet "Hvorfor går Jordens ur så hurtigt?".
+- **Tests:** `tests/tidhvorfor.mjs` (23 tjek), `tests/kosmos.mjs` med 13 fænomener.
+
 **Senest lavet (9. november 2026): T5 Trin 0, drejebogen, faktagrundlaget og skitserne til "Hvorfor går tiden langsommere?".**
 - **Drejebogen** [plan-tid-t5.md](../plan-tid-t5.md): fem scener (bolden og lyset, lysuret med trekanten, myonernes kapløb, "nu" er ikke det samme for alle og rumtidskortet) med teksterne i lag, rammen, henvisningerne til Rejsen i tid og layoutet på højkant. Jeres svar 8. november: navnet, en rejse med "Næste" og spring, lampen og én pointe i scene 4 og vendepunktet, man trækker, i scene 5.
 - **Faktagrundlaget** [fakta-tid/hvorfor-langsommere.md](../fakta-tid/hvorfor-langsommere.md) (afsnit 15) med tallene i regn.py. Frisch og Smiths tal (563, 412 og 27 i timen) er nu bekræftet i Wikipedia. Nye fælder i fakta-faelder.md.
