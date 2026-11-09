@@ -1,6 +1,6 @@
 # Plan: Liv (DNA og livets begyndelse)
 
-*Udkast, 9. november 2026 (punkt 2 i [koereplan.md](koereplan.md), sporet [Molekyler](lige-nu/molekyler.md)). Lavet af Opus. Faktagrundlaget er lavet af tre hjælpeagenter (Opus, effort xhigh) og vurderet af Opus: [fakta-liv.md](fakta-liv.md). Fable 5.5 tjekker det, hvis den kommer ([plan-fable.md](plan-fable.md), F3). Punkter mærket **(foreslået)** er mine anbefalinger. Spørgsmålene i afsnit 9 skal I svare på, før vi bygger.*
+*Udkast, 9. november 2026 (punkt 2 i [koereplan.md](koereplan.md), sporet [Molekyler](lige-nu/molekyler.md)). Lavet af Opus. Faktagrundlaget er lavet af tre hjælpeagenter (Opus, effort xhigh) og vurderet af Opus: [fakta-liv.md](fakta-liv.md). Fable 5.5 tjekker det, hvis den kommer ([plan-fable.md](plan-fable.md), F3). Punkter mærket **(foreslået)** er mine anbefalinger. Spørgsmålene i afsnit 9 er besvaret 9. november 2026 (anbefalingen på alle).*
 
 ## Hvad det går ud på
 Jeres idéer (køreplanen, 5. november 2026):
@@ -134,6 +134,8 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 - "Kromosomer ligner et X." Kun lige før cellen deler sig.
 
 ## 9. Spørgsmål til jer (Opus' anbefaling først)
+**✅ Jeres svar (9. november 2026):** 1a (én del, "Liv", med de tre faner), 2a (DNA først: L1-L3, så Begyndelsen og til sidst Liv i rummet), 3a (zoom helt ind til atomerne med atompladser fra Protein Data Bank, så `files.rcsb.org` skal åbnes før L1) og 4a (Millers kolbe med valget af luft og "Trappen til liv", hvor man blander ingredienserne). Spørgsmål 5-7 blev ikke stillet særskilt, så de følger anbefalingen: 5a (hæmoglobin med seglcelle-mutationen og "Skriv LIV"), 6a (korte kort med links) og 7a ("Liv" nu, og jeres søn vælger navnet senere). Næste skridt er L1.
+
 1. **Én del med faner eller to dele?**
    - **a (anbefalet):** Én del, "Liv", med fanerne Opskriften, Begyndelsen og Liv i rummet. Verdenen "Ild og liv" har så én del, indtil Ild kommer.
    - b: To dele i verdenen ("DNA" og "Livets begyndelse"), så verdenen har to knapper fra starten.
@@ -164,4 +166,4 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 - **Domæner:** Til L0 blev `www.ncbi.nlm.nih.gov`, `pmc.ncbi.nlm.nih.gov`, `pubmed.ncbi.nlm.nih.gov`, `bio.libretexts.org`, `www.genome.gov`, `www.nobelprize.org`, `pdb101.rcsb.org`, `www.science.org`, `www.pnas.org` og `academic.oup.com` åbnet (9. november 2026). Science, PNAS og Oxford svarer 403 til curl (sidernes egen bot-beskyttelse), og PubMed, PMC og NCBI Bookshelf gav reCAPTCHA i perioder. Artiklerne blev derfor læst på PMC, i NASA's arkiv NTRS, på arXiv eller via Wikipedias henvisninger (det står ved hver påstand). **Før L1:** `files.rcsb.org` (atompladserne). **Før L5, hvis Darwins brev skal citeres:** `www.darwinproject.ac.uk`.
 
 ## 11. Sådan startes næste session
-Når I har svaret på spørgsmålene, skriver Opus prompten til L1 (`docs/prompt-liv-l1.md`). Så: ny session med Opus (høj effort) og "Læs docs/prompt-liv-l1.md".
+Spørgsmålene er besvaret (afsnit 9). L1 startes i en ny session med Opus (høj effort) og denne tekst: "Lav L1 i docs/plan-liv.md (stigen i 3D, jeres svar står i afsnit 9). Læs planen (afsnit 1, 2, 6, 7 og 9), docs/fakta-liv/dna-stigen.md og docs/kode/molekyler.md (`MolekyleTegning`). Spørg om domænet files.rcsb.org, før arbejdet går i gang, og vis mig et skærmbillede af stigen, før resten bygges." L1 skriver selv en prompt til L2 (`docs/prompt-liv-l2.md`), når den er færdig.
