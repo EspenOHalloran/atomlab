@@ -14,7 +14,7 @@ Jeres idéer (køreplanen, 5. november 2026):
 3. **Stigen hænger sammen, fordi A passer til T og G til C.** Det er de samme små plus og minus (δ+ og δ−), man har set i vand i "Del elektroner". Derfor kan DNA kopieres: Hver halvdel er en skabelon for den anden.
 4. **Små fejl i kopien (mutationer)** gør oftest ingenting, nogle gange skade og en sjælden gang noget godt. Sådan har livet ændret sig over milliarder af år.
 5. **Byggestenene laver sig selv** (Millers kolbe, meteoritter og prøverne fra asteroiden Bennu), og fedtstoffer laver hinder af sig selv i vand. **Men ingen har lavet liv fra bunden,** og ingen ved, hvordan det første liv opstod.
-6. **Når man leder efter liv i rummet, skal man være forsigtig.** Det bedste spor indtil nu (Cheyava Falls på Mars) er et *muligt* biospor, ikke et bevis.
+6. **Når man leder efter liv i rummet, skal man være forsigtig.** Det bedste spor indtil nu (Cheyava Falls på Mars) er et *muligt* biospor, ikke et bevis. Ærligt om ordet "bedste": Forskerne siger "det stærkeste på Mars". At der ikke er fundet noget stærkere andre steder, er vores egen sammenfatning (fundene på Venus og exoplaneten K2-18b er omstridte), så teksten skal sige det sådan.
 
 ## 1. Hvor delen ligger
 **Besluttet i K4** ([plan-verdener.md](plan-verdener.md)): Liv kommer i en ny verden, **Ild og liv**, mellem Kernerne og Elektricitet. Verdenen kommer først i ringen, når Ild eller Liv findes. Så længe Ild ikke er bygget, har verdenen kun én del, og hele kortet åbner Liv (som Elektricitet og Biblioteket i dag).
@@ -37,11 +37,13 @@ Grunden til én del: Verdenen bliver ikke fyldt med knapper, og når Ild kommer,
 4. **Stigen:** den snoede stige (dobbeltspiralen) med de fire baser i hver sin farve.
 5. **Atomerne:** et kort stykke, hvor man ser hvert atom (C, H, N, O og P, i kemikernes farver som i "Del elektroner"), og hvordan A og T holder fast i hinanden med to hydrogenbindinger og G og C med tre.
 
-Panelet viser tallene for "én af dine celler" (ca. 6,2 milliarder basepar, ca. 2 m DNA, hvis det blev trukket ud, i en kerne på ca. 6 µm). Tallene står i [fakta-liv/dna.md](fakta-liv/dna.md).
+Panelet viser tallene for "én af dine celler" (ca. 6,1 milliarder basepar, ca. 2 m DNA, hvis det blev trukket ud, i en kerne på ca. 6 µm). Gjort så stor, at kernen er en kugle på 10 cm, er tråden ca. 33 km lang og tyndere end et hår. Tallene står i [fakta-liv/dna-stigen.md](fakta-liv/dna-stigen.md).
+
+**Ærligt om, hvad der holder stigen sammen:** Baserne ligger stablet som mønter og klæber mest til dem over og under. Hydrogenbindingerne afgør, *hvem* der passer sammen (A med T og G med C). Det kan stå i et "Hvorfor?"-kort.
 
 **Byg stigen (opgave med ★):** Den ene streng er givet. Man vælger partneren til hver base (A, T, G eller C). Et forkert par passer ikke, og man ser hvorfor: To store baser er for brede, to små for smalle, og A–C kan ikke holde fast, fordi plus og minus ikke står over for hinanden.
 
-**Kopien ("Lyn op og kopiér"):** Stigen åbner sig som en lynlås, og nye byggestykker sætter sig på begge halvdele, så der bliver to ens stiger. Panelet viser farten (ca. 50 baser i sekundet hos mennesker og ca. 1.000 hos bakterier) og hvor sjældent, der sker en fejl, når cellen har rettet sine egne fejl (ca. én pr. milliard). Hver gang man trykker, er der en lille chance for en fejl, så man kan se en mutation opstå. Tidsknappen styrer farten.
+**Kopien ("Lyn op og kopiér"):** Stigen åbner sig som en lynlås, og nye byggestykker sætter sig på begge halvdele, så der bliver to ens stiger. Panelet viser farten (ca. 25 baser i sekundet pr. "lynlås" hos mennesker og ca. 1.000 hos bakterier) og hvor sjældent, der sker en fejl, når cellen har rettet sine egne fejl (under ca. én pr. milliard). Én lynlås alene ville være ca. 8 år om at kopiere alt dit DNA. Derfor åbner cellen 30.000-50.000 steder på én gang, og så tager det timer. Hvert barn har ca. 70 nye "stavefejl", som ingen af forældrene har. Hver gang man trykker, er der en lille chance for en fejl, så man kan se en mutation opstå. Tidsknappen styrer farten.
 
 **Fra opskrift til protein:**
 - **Aflæsningen:** Et enzym laver en kopi af et gen som RNA (med U i stedet for T), og kopien sendes ud af kernen.
@@ -54,12 +56,12 @@ Panelet viser tallene for "én af dine celler" (ca. 6,2 milliarder basepar, ca. 
   - Lav et stop for tidligt, så proteinet bliver for kort.
 - **Ekstra (foreslået):** "Skriv LIV med aminosyrer". Aminosyrerne har hver sit bogstav, og L, I og V findes. Ikke alle bogstaver findes (fx B, J, O, U, X, Z, Æ, Ø og Å), så man kan ikke skrive alt.
 
-**"Hvorfor?"-kort (forslag):** "Hvad er et gen?", "Er det meste af DNA'et skrald?", "Er DNA en tegning af kroppen?", "Hvorfor ligner jeg mine forældre?", "Hvad laver proteinerne?", "Hvorfor kan de fleste danskere tåle mælk?" (en ændring i en "kontakt" uden for selve genet), "Hvorfor kan ét forkert bogstav give en sygdom?" og "Hvem fandt stigen?" (Franklin, Gosling, Wilkins, Watson og Crick, 1953, og danskeren Wilhelm Johannsen, der fandt på ordet "gen" i 1909).
+**"Hvorfor?"-kort (forslag):** "Hvad er et gen?", "Er det meste af DNA'et skrald?", "Er DNA en tegning af kroppen?", "Hvorfor ligner jeg mine forældre?", "Hvad laver proteinerne?", "Hvorfor kan de fleste danskere tåle mælk?" (ca. 94 %, fordi en ændring i en "kontakt" uden for selve genet holder genet tændt), "Hvorfor kan ét forkert bogstav give en sygdom?" og "Hvem fandt stigen?" (Franklin, Gosling, Wilkins, Watson og Crick, 1953, og danskeren Wilhelm Johannsen, der fandt på ordet "gen" i 1909). Historien om Franklin skal fortælles ærligt: Hun var en ligeværdig del af arbejdet, og Watson og Crick brugte hendes målinger uden at spørge, men "de stjal billedet" er for enkelt ([fakta-liv/dna-opskriften.md](fakta-liv/dna-opskriften.md), afsnit 5).
 
 **Ærligt talt:** Atomerne er tegnet som kugler, og farverne er kemikernes. Stigen er tegnet uden de proteiner, den er viklet om. Ribosomet er meget større og mere indviklet end på tegningen. RNA'et bliver klippet til, før det forlader kernen (står under "For nørder"). Foldningen er vist forenklet.
 
 ## 3. Begyndelsen (laboratoriet)
-**Millers kolbe (foreslået):** En kolbe med vand, der koger, og en luft af metan, ammoniak, hydrogen og vanddamp: tre af de molekyler, man selv har bygget i "Del elektroner". Med **"⚡ Gnist"** (som i knaldgassen) går molekylerne i stykker og sætter sig sammen på nye måder, og i vandet samles der aminosyrer (fx glycin og alanin). En tæller viser, hvilke der er fundet.
+**Millers kolbe (foreslået):** Millers forsøg fra 1953 med en kolbe på 5 liter. En lille kolbe med vand, der koger, og en luft af metan, ammoniak, hydrogen og vanddamp: tre af de molekyler, man selv har bygget i "Del elektroner". Med **"⚡ Gnist"** (som i knaldgassen) går molekylerne i stykker og sætter sig sammen på nye måder, og i vandet samles der aminosyrer (fx glycin og alanin). En tæller viser, hvilke der er fundet. Miller fandt selv 5. Da hans gamle glas blev analyseret igen i 2008, fandt man 22 i en af udgaverne af forsøget.
 - **Vælg luften:** "Millers luft (1953)" eller "Den unge Jords luft, bedste bud i dag" (mest CO₂ og N₂). Den sidste giver færre aminosyrer. Det viser ærligt, at videnskaben har lært mere siden 1953, og at forskerne stadig diskuterer det.
 - **Ærligt talt:** Kemien har mange trin, som er vist forenklet. Forsøget tog en uge, og her tager det sekunder. Tallene fra Miller 1953 og fra genanalysen af hans glas i 2008 står i [fakta-liv/begyndelsen.md](fakta-liv/begyndelsen.md).
 
@@ -67,23 +69,25 @@ Panelet viser tallene for "én af dine celler" (ca. 6,2 milliarder basepar, ca. 
 
 | Trin | Status |
 |---|---|
-| 1. Byggesten (aminosyrer, baser, sukre, fedtsyrer) | ✓ Lavet i laboratoriet og fundet i meteoritter og i prøverne fra Ryugu og Bennu |
-| 2. Hinder (små bobler af fedtsyrer) | ✓ Laver sig selv i vand |
-| 3. Kæder (korte RNA-kæder) | ½ Korte kæder på ler |
-| 4. Et molekyle, der kopierer sig selv | ½ RNA, der kan kopiere andre RNA, men ikke sig selv helt |
+| 1. Byggesten (aminosyrer, baser, sukre, fedtstoffer) | ✓ Lavet i laboratoriet og fundet i meteoritter og i prøverne fra Ryugu og Bennu (i Bennu 14 af de 20 aminosyrer, alle fem baser og sukkeret ribose) |
+| 2. Hinder (små bobler af fedtstoffer) | ✓ Laver sig selv i vand |
+| 3. Kæder (RNA-kæder) | ½ Op til 55 led på ler, men kun med "aktiverede" byggesten, som forskerne selv laver |
+| 4. Et molekyle, der kopierer sig selv | ½ Et lille RNA (QT45, 2026) kan lave sin modstreng og en kopi af sig selv, langsomt og kun lidt ad gangen. Det kører endnu ikke af sig selv igen og igen |
 | 5. En celle, der lever og kan udvikle sig | ✗ Ingen er nået hertil |
+
+Trin 4 er den nyeste forskning (februar 2026), så teksten skal slås op i artiklen igen før L5 ([fakta-liv.md](fakta-liv.md), "Opus' vurdering").
 
 Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring og vædning, fedtsyrer) og se, hvilket trin man når. Hvert resultat svarer til et rigtigt forsøg med en kilde. Det sidste trin siger altid: "Her stopper videnskaben (indtil videre)". Kortet "Har nogen lavet liv?" forklarer, at forskerne i 2010 satte et kunstigt genom ind i en bakterie, der levede i forvejen. Det er ikke liv fra bunden.
 
-**Tidslinjen (foreslået):** Jordens historie som et døgn. Jorden dannes ved midnat. De ældste sikre spor af liv kommer før kl. 6 om morgenen, og mennesket kommer de sidste få sekunder før midnat. Omstridte fund (fx Isua i Grønland, ca. 3,7 milliarder år) står med et "måske". Udregningen skal laves i L5 ud fra tallene i faktagrundlaget.
+**Tidslinjen (foreslået):** Jordens historie som et døgn. Jorden dannes ved midnat (for 4,54 milliarder år siden). De ældste spor af liv, som de fleste godtager (stromatolitter i Australien, ca. 3,48 milliarder år), kommer kl. ca. 5.36 om morgenen ((4,54 − 3,48) / 4,54 × 24 timer = 5,6 timer), og mennesket kommer de sidste få sekunder før midnat (skal slås op i L5). Omstridte fund står med et "måske": Isua i Grønland (ca. 3,7 milliarder år, med den grønlandske geolog Minik Rosing, som selv har været med til at sætte fundet i tvivl) og LUCA, den fælles forfader (måske ca. 4,2 milliarder år, men skønnene spænder fra ca. 3,9 til 4,5).
 
-**"Hvorfor?"-kort (forslag):** "Hvor kom byggestenene fra?", "Hvorfor laver fedt bobler i vand?" (vand er polært, som i "Del elektroner"), "Hvad er RNA-verdenen?", "Hvorfor opstår der ikke nyt liv i dag?" (Darwins pointe: i dag bliver nye byggesten spist af det liv, der findes), "Hvorfor bruger liv kun den ene hånd?" (spejlbillederne) og et link til kortet "Hvor kom Jordens vand fra?" (M4).
+**"Hvorfor?"-kort (forslag):** "Hvor kom byggestenene fra?", "Hvorfor laver fedt bobler i vand?" (vand er polært, som i "Del elektroner"), "Hvad er RNA-verdenen?" (ribosomets kerne er RNA, vist af bl.a. danskeren Poul Nissen i 2000), "Hvorfor opstår der ikke nyt liv i dag?" (Darwins pointe: i dag bliver nye byggesten spist af det liv, der findes), "Hvorfor bruger liv kun den ene hånd?" (spejlbillederne) og et link til kortet "Hvor kom Jordens vand fra?" (M4).
 
 ## 4. Liv i rummet
 **(Foreslået) Korte kort med links:**
-- **Mars, Cheyava Falls:** 3-4 sætninger om leopardpletterne, hvorfor det er det bedste spor indtil nu, og hvorfor det ikke er bevist. Link til stedet i Solsystemet, hvor den lange tekst står i dag (`js/data/sider/mars.js`). Teksterne må ikke sige noget andet end dér.
-- **Enceladus, Europa og Titan:** hav eller søer, og hvad der er fundet (fx fosfat og hydrogen i fontænerne fra Enceladus). Intet liv. Links til månerne.
-- **Hvad er et bevis?** Et biospor kan også være lavet uden liv. Historien om meteoritten ALH84001 fra 1996, som næsten ingen i dag mener viser liv, viser, hvorfor forskerne er forsigtige. Prøverne fra Cheyava Falls skal til Jorden for at blive undersøgt ordentligt, og det er usikkert, hvornår det sker.
+- **Mars, Cheyava Falls:** 3-4 sætninger om leopardpletterne (0,2-1 mm, med mineraler, som mikrober på Jorden ofte laver), hvorfor det er det stærkeste spor af liv, der er fundet på Mars, og hvorfor det ikke er bevist (en vej uden liv er ikke udelukket). Link til stedet i Solsystemet, hvor den lange tekst står i dag (`js/data/sider/mars.js`). Teksterne må ikke sige noget andet end dér.
+- **Enceladus, Europa og Titan:** hav eller søer, og hvad der er fundet (fx fosfat og hydrogen i fontænerne fra Enceladus, fem af de seks vigtigste grundstoffer i liv, og svovl måske). Intet liv. Europa Clipper og Dragonfly er ikke bygget til at finde liv, men til at se, om der er betingelser for det. Links til månerne.
+- **Hvad er et bevis? (foreslået med NASA's 7 trin):** Forskerne har en skala med 7 trin fra "et signal, som liv kan give" til "andre har bekræftet det" (CoLD-skalaen, Green m.fl. 2021). NASA kaldte Cheyava Falls trin 1 i 2024, og hovedforfatteren mener selv trin 3. En rover kan højst nå trin 3: Resten kræver, at prøven kommer til Jorden, og det er usikkert, hvornår det sker (NASA's plan for Mars Sample Return er lukket). Historien om meteoritten ALH84001 fra 1996, som de fleste i dag mener ikke viser liv, viser, hvorfor forskerne er forsigtige.
 
 ## 5. Kobler til resten af AtomLab
 - **Del elektroner (M2):** δ+ og δ− i vand bliver til hydrogenbindingerne i DNA og forklarer, hvorfor fedt laver hinder i vand.
@@ -97,8 +101,8 @@ Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring 
 ## 6. Teknik (foreslået)
 - **Nye filer:** `js/liv.js` (skærmen, fanerne, start og stop, panelerne), `js/liv/stige.js` (DNA i 3D), `js/liv/protein.js` (aflæsningen og ribosomet), `js/liv/kolbe.js` (Millers kolbe og trappen).
 - **Data uden Three.js** (kan testes i Node): `js/data/liv/kode.js` (de 64 kodoner), `js/data/liv/gener.js` (stykket af HBB med kilden), `js/data/liv/trappen.js` (trinene, forsøgene og kilderne) og tallene.
-- **DNA'et i 3D:** én skabelon for et basepar, gentaget med en drejning og et skridt for hvert trin (ca. 0,34 nm og ca. 34°, så der er ca. 10,5 basepar pr. omgang). Skabelonen tages fra en rigtig, målt struktur i Protein Data Bank (fx 1BNA, PDB-data er frie). **Domænet `files.rcsb.org` skal åbnes før L1.**
-  - **Tæt på:** atomerne som én InstancedMesh (op til ca. 24 basepar, ca. 1.600 kugler) og bindingerne som én til. På tabletten (`LAV_KVALITET`) halvdelen og færre kanter på kuglerne. Kontakten "Vis hydrogen" kan skjule H.
+- **DNA'et i 3D:** én skabelon for et basepar, gentaget med en drejning og et skridt for hvert trin (ca. 0,34 nm og ca. 34,3°, så der er ca. 10,5 basepar pr. omgang). Atomernes pladser i skabelonen tages fra en rigtig, målt struktur i Protein Data Bank (1BNA, Drew m.fl. 1981, PDB-data er frie, CC0). 1BNA er selv bøjet og har kun 12 basepar og 9,8 pr. omgang, så den bruges kun til ét par, ikke til hele stigen. Den har nok ingen H-atomer (målt med røntgen), så de skal regnes ud eller udelades. **Domænet `files.rcsb.org` skal åbnes før L1.**
+  - **Tæt på:** atomerne som én InstancedMesh (op til ca. 24 basepar: ca. 1.600 kugler med H og ca. 1.000 uden, for begge slags par har 41 atomer uden H) og bindingerne som én til. På tabletten (`LAV_KVALITET`) halvdelen og færre kanter på kuglerne. Kontakten "Vis hydrogen" kan skjule H.
   - **Længere væk:** rygraden som to bånd og trinene som én InstancedMesh (op til nogle hundrede basepar). De to udgaver toner over i hinanden.
   - Kemikernes farver genbruges fra `js/molekyle3d.js` (eksporteres).
 - **Menuen:** en ny linje i `VERDENER` i `js/karrusel.js` (verdenen `ildogliv` med delen `liv`), et motiv i `js/menubaggrund.js` (fx en spiral, der drejer langsomt) og ikonet `ikon-v-ildogliv`. Et link i `.menukort` i `index.html`.
@@ -123,8 +127,10 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 - "DNA er en tegning af kroppen." Det er snarere en opskrift på proteiner og på, hvornår de skal laves.
 - "Det meste af DNA'et er skrald" og det modsatte, "80 % har en funktion" (ENCODE 2012). Forskerne er uenige.
 - "Forskerne har lavet kunstigt liv" (Venter-instituttet 2010). Genomet blev sat ind i en celle, der levede i forvejen.
-- "Perseverance har fundet liv på Mars." Det er et muligt biospor.
+- "Perseverance har fundet liv på Mars" og "det bedste spor i hele rummet". Det er et muligt biospor, og kilderne siger "på Mars".
 - "Millers forsøg viste, hvordan livet opstod." Det viste, at byggesten kan laves let. Luften var nok en anden.
+- "Det er hydrogenbindingerne, der holder DNA sammen." Stablingen af baserne giver det meste.
+- "Watson og Crick stjal Franklins billede." For enkelt (se afsnit 2).
 - "Kromosomer ligner et X." Kun lige før cellen deler sig.
 
 ## 9. Spørgsmål til jer (Opus' anbefaling først)
@@ -155,7 +161,7 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 - **L0 (denne plan og faktagrundlaget):** Opus. Faktagrundlaget er slået op af tre Opus-hjælpeagenter med effort xhigh og vurderet af Opus (9. november 2026).
 - **L1-L6:** Opus med høj effort, én ny session pr. trin. L1 (3D-stigen med to udgaver, der toner over i hinanden) er det sværeste.
 - **Fable 5.5**, hvis den kommer: tjekker faktagrundlaget kritisk (F3, ca. 5-10 $).
-- **Domæner:** Til L0 blev `www.ncbi.nlm.nih.gov`, `pmc.ncbi.nlm.nih.gov`, `pubmed.ncbi.nlm.nih.gov`, `bio.libretexts.org`, `www.genome.gov`, `www.nobelprize.org`, `pdb101.rcsb.org`, `www.science.org`, `www.pnas.org` og `academic.oup.com` åbnet (9. november 2026). De tre sidste svarer 403 til curl (sidernes egen bot-beskyttelse), så deres artikler blev læst som resuméer på PubMed og kopier på PMC. **Før L1:** `files.rcsb.org` (atompladserne).
+- **Domæner:** Til L0 blev `www.ncbi.nlm.nih.gov`, `pmc.ncbi.nlm.nih.gov`, `pubmed.ncbi.nlm.nih.gov`, `bio.libretexts.org`, `www.genome.gov`, `www.nobelprize.org`, `pdb101.rcsb.org`, `www.science.org`, `www.pnas.org` og `academic.oup.com` åbnet (9. november 2026). Science, PNAS og Oxford svarer 403 til curl (sidernes egen bot-beskyttelse), og PubMed, PMC og NCBI Bookshelf gav reCAPTCHA i perioder. Artiklerne blev derfor læst på PMC, i NASA's arkiv NTRS, på arXiv eller via Wikipedias henvisninger (det står ved hver påstand). **Før L1:** `files.rcsb.org` (atompladserne). **Før L5, hvis Darwins brev skal citeres:** `www.darwinproject.ac.uk`.
 
 ## 11. Sådan startes næste session
 Når I har svaret på spørgsmålene, skriver Opus prompten til L1 (`docs/prompt-liv-l1.md`). Så: ny session med Opus (høj effort) og "Læs docs/prompt-liv-l1.md".
