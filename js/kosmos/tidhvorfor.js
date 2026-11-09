@@ -1,7 +1,7 @@
 // "Hvorfor går tiden langsommere?" (T5, drejebogen er docs/plan-tid-t5.md, faktagrundlaget
 // docs/fakta-tid/hvorfor-langsommere.md, skitsen docs/skitser/tid-t5.html). Fem små scener, der går frem med "Næste" i
 // bjælken (fænomenets trin()): 1 bolden og lyset, 2 lysuret med trekanten, 3 myonernes kapløb, 4 "nu" er ikke det
-// samme for alle og 5 rumtidskortet. T5a har scene 1 og 2, T5b scene 3. Scene 4-5 siger "kommer snart", til T5c bygger dem.
+// samme for alle og 5 rumtidskortet. T5a lavede scene 1 og 2, T5b scene 3 og T5c scene 4 og 5.
 //
 // Hovedsagen er et 2D-lærred i overlaget (som lysuret i Rejsen i tid) over en rolig stjernehimmel. Lærredet får den
 // højde, der er plads til mellem Styr-boksen og underteksten med bjælken (størrelse()), så det aldrig dækker dem.
@@ -14,7 +14,7 @@ import * as Lys from './lysur.js';
 
 const MAKS_BREDDE = 760; // lærredets største bredde i pixel
 const BRED2 = 520; // scene 2: lysurene ved siden af hinanden fra denne bredde, ellers over hinanden (telefon på højkant)
-const FARVE = { ...Lys.FARVE, tog: '#33456f', bold: '#ff9f43', myon: '#c9a2ff', grøn: '#8ce99a' };
+const FARVE = { ...Lys.FARVE, tog: '#33456f', bold: '#ff9f43', myon: '#c9a2ff', grøn: '#8ce99a', nu: '#ff8fd0', rød: '#ff6b6b' };
 const fmt = (x, d = 0) => x.toLocaleString('da-DK', { minimumFractionDigits: d, maximumFractionDigits: d });
 const { læggesSammen } = T; // farter lægges sammen med Einsteins formel (js/data/tid.js)
 
@@ -76,16 +76,62 @@ function linje3(tilstand, b) {
 const linealSkridt = (pxPrM) => [100, 200, 500, 1000, 5000].find((m) => m * pxPrM >= 44) ?? 5000;
 const linealTekst = (m, skridt) => (m === 0 ? (skridt >= 1000 ? '0 km' : '0 m') : m >= 1000 ? `${fmt(m / 1000, m % 1000 ? 1 : 0)} km` : `${m} m`);
 
-// Scenerne: navn (bjælken og prikkerne), titel (underteksten) og spørgsmålet (Lige nu). klar: bygget (T5a: 1-2, T5b: 3).
+// ---------- Scene 4: lampen i togvognen (afsnit 15.7) ----------
+// Tiden måles i L/c: den tid, lyset er om at gå vognens længde (L er vognens længde i toget). Ved 60 % er γ = 1,25,
+// vognen er 0,8 L set fra perronen, og lyset når bagenden efter 0,5/(γ(1 + β)) = 0,25 og forenden efter
+// 0,5/(γ(1 − β)) = 1,0. I toget når det begge efter 0,5.
+const FARTER4 = [
+  { navn: 'Toget står stille', b: 0 },
+  { navn: 'Toget kører 60 % af lysets fart', b: 0.6 },
+];
+const SKÆRM_LC = 3.2; // sekunder på skærmen for 1 L/c (lyset når enderne efter 1,6 s i toget)
+const HOLD4 = 1; // L/c, billedet står færdigt, før lampen blinker igen
+const FØR4 = 'Lampen midt i vognen blinker. Set fra toget når lyset begge ender samtidig. Set fra perronen når det bagenden først, for bagenden kører lyset i møde.';
+const EFTER4 = 'Begge har ret: Om to ting sker "samtidig", kommer an på, hvem der kigger.';
+const STILLE4 = 'Står toget stille, er de to billeder ens: Lyset fra lampen når begge ender samtidig.';
+// Hvornår lyset rammer enderne (i L/c) ved farten b
+function lys4(b) {
+  const gam = T.lysurGamma(b);
+  const bag = 0.5 / (gam * (1 + b)), forende = 0.5 / (gam * (1 - b));
+  return { gam, tog: 0.5, bag, for: forende, slut: Math.max(0.5, forende) };
+}
+
+// ---------- Scene 5: rumtidskortet (afsnit 15.8) ----------
+// Op er tid (0-10 år på Jorden), til siden rum (−5 til 5 lysår). Den rejsende flyver lige ud til vendepunktet (x, t)
+// og lige hjem. Egentiden for hvert lige stykke er τ = √(t² − x²) (år og lysår, c = 1).
+const TSLUT = 10;
+const MAKS5 = 0.98; // højst 98 % af lysets fart
+const START5 = { x: 4, t: 5 };
+const SPIL_TID = 7; // sekunder på skærmen for de 10 år
+const HOLD5 = 2.5; // sekunder, urene står ved målet, før "Spil rejsen" stopper
+const FREMME5 = 'Op er tid, til siden er rum. Lyset går skråt (de gule streger). Træk i vendepunktet: Den lige streg (at blive hjemme) får altid flest tik.';
+// Vendepunktet holdes inden for lyset: t mellem 0,4 og 9,6 år og |x| højst 98 % af den mindste af t og 10 − t
+function grænse5(x, t) {
+  const tt = Math.max(0.4, Math.min(TSLUT - 0.4, t));
+  const g = MAKS5 * Math.min(tt, TSLUT - tt);
+  return { x: Math.max(-g, Math.min(g, x)), t: tt, for: Math.abs(x) > g + 1e-9 };
+}
+// Rejsen: farterne (v/c), γ, egentiden ud og hjem og "nu derhjemme" lige før og lige efter vendingen
+function rejse5({ x, t }) {
+  const v1 = x / t, v2 = -x / (TSLUT - t);
+  const g1 = 1 / Math.sqrt(1 - v1 * v1), g2 = 1 / Math.sqrt(1 - v2 * v2);
+  const ud = Math.sqrt(t * t - x * x), hjem = Math.sqrt((TSLUT - t) ** 2 - x * x);
+  const før = t - v1 * x, efter = t - v2 * x; // den rejsendes "nu" rammer Jordens streg her (år)
+  return { v1, v2, g1, g2, ud, hjem, egen: ud + hjem, før, efter, spring: efter - før };
+}
+
+// Scenerne: navn (bjælken og prikkerne), titel (underteksten) og spørgsmålet (Lige nu).
 const SCENER = [
-  { navn: 'Bolden og lyset', titel: 'Den mærkelige regel', spm: 'Hvorfor skulle tiden overhovedet kunne gå forskelligt?', klar: true,
+  { navn: 'Bolden og lyset', titel: 'Den mærkelige regel', spm: 'Hvorfor skulle tiden overhovedet kunne gå forskelligt?',
     overgang: 'Når lyset ikke kan køre hurtigere, må noget andet give efter. Hvad? Næste: Lysuret.' },
-  { navn: 'Lysuret', titel: 'Lysuret: tiden giver efter', spm: 'Hvad giver efter, når lysets fart ikke gør?', klar: true,
+  { navn: 'Lysuret', titel: 'Lysuret: tiden giver efter', spm: 'Hvad giver efter, når lysets fart ikke gør?',
     overgang: 'Er det bare en tanke, eller kan man måle det? Næste: Myonernes kapløb.' },
-  { navn: 'Myonerne', titel: 'Myonernes kapløb', spm: 'Er det målt, eller er det bare en tanke?', klar: true,
+  { navn: 'Myonerne', titel: 'Myonernes kapløb', spm: 'Er det målt, eller er det bare en tanke?',
     overgang: 'Men vent: Set fra myonen er det Jordens ure, der farer forbi. Så må de gå langsomt set fra myonen. Hvordan kan begge have ret? Næste: "Nu" er ikke det samme for alle.' },
-  { navn: '"Nu"', titel: '"Nu" er ikke det samme for alle', spm: 'Hvordan kan begge se den andens ur gå langsomt?' },
-  { navn: 'Rumtidskortet', titel: 'Rumtidskortet: Hvem bliver yngst?', spm: 'Hvorfor er det den rejsende, der bliver yngst, og ikke den, der bliver hjemme?' },
+  { navn: '"Nu"', titel: '"Nu" er ikke det samme for alle', spm: 'Hvordan kan begge se den andens ur gå langsomt?',
+    overgang: 'Hvem bliver så yngst, når den ene tvilling rejser ud og kommer hjem igen? Næste: Rumtidskortet.' },
+  { navn: 'Rumtidskortet', titel: 'Rumtidskortet: Hvem bliver yngst?', spm: 'Hvorfor er det den rejsende, der bliver yngst, og ikke den, der bliver hjemme?',
+    overgang: `Prøv det på en rigtig rejse: ${gå('kosmos:tid', '⏳ Rejsen i tid')}` },
 ];
 
 export default {
@@ -102,7 +148,7 @@ export default {
   ],
   // Siden bygges én gang og skifter ikke med scenen: ét emne pr. scene (scenens titel og dens "Hvorfor?"), og For
   // nørder og Ærligt talt med ét afsnit pr. scene. Teksterne er fra drejebogen (faktatjekket i T5 Trin 0, afsnit 15
-  // i docs/fakta-tid/hvorfor-langsommere.md). T5c sætter scene 4-5 ind.
+  // i docs/fakta-tid/hvorfor-langsommere.md).
   side: {
     kort: 'Hvorfor går et ur langsommere, når det farer af sted? Fem små scener viser det trin for trin, fra lysets mærkelige regel til tvillingen, der kommer yngst hjem.',
     emner: [
@@ -122,6 +168,17 @@ export default {
           <p>Myonen er elektronens tunge fætter (ca. 200 gange tungere). Den laves, når den kosmiske stråling (partikler fra rummet) rammer luften. En myon i hvile lever i gennemsnit 2,2 milliontedele sekund. Ved havets overflade suser omkring 100 myoner gennem hver kvadratmeter hvert sekund, også gennem dig.</p>
           <p>Set fra Jorden er turen 15 km lang og tager ca. 50 milliontedele sekund. Men myonens ur går så langsomt, at det kun når ca. 1,3 milliontedele sekund. Set fra myonen er turen kun ca. 400 m, og den tager ca. 1,3 milliontedele sekund. Samme ur, samme svar, to forklaringer: Hvad der er tid for den ene, er afstand for den anden.</p>`,
       },
+      {
+        titel: '"Nu" er ikke det samme for alle',
+        tekst: `<p>Set fra perronen har lyset den samme fart begge veje (regel 1!). Men bagenden kører lyset i møde, og forenden kører fra det. Derfor når lyset bagenden først. I toget er begge ender lige langt fra lampen, så lyset når dem samtidig. Begge har ret.</p>
+          <p>Det løser gåden fra myonerne: For at sammenligne to ure, der er langt fra hinanden, skal man vide, hvad de viser "på samme tid". Og det er de to ikke enige om. Derfor kan begge se den andens ur gå langsomt, uden at nogen tager fejl. Først når de mødes igen, kan de lægge urene ved siden af hinanden. Det er det, rumtidskortet viser.</p>`,
+      },
+      {
+        titel: 'Rumtidskortet: Hvem bliver yngst?',
+        tekst: `<p>Hver prik er ét år på den rejsendes eller den hjemmeblevnes eget ur. På et landkort er den lige vej den korteste. I rumtiden er det omvendt: Den lige vej giver mest tid, og en omvej giver mindre. Det skyldes, at rumtidens Pythagoras har et minus: Vejen ud til 4 lysår på 5 år giver 5² − 4² = 3², altså 3 år. Ud og hjem giver 6 år, mens der går 10 år derhjemme.</p>
+          <p>De to tvillinger er ikke ligestillede: Kun den rejsendes streg har et knæk. Den rejsende vender om og mærker det. Den hjemmeblevne gør ikke.</p>
+          <p>Prøv det på en rigtig rejse: ${gå('kosmos:tid', '⏳ Rejsen i tid')}</p>`,
+      },
     ],
     videre: [gå('kosmos:tid', '⏳ Rejsen i tid'), gå('kosmos:rumtid', 'Rumtid')],
     nørd: `
@@ -130,10 +187,17 @@ export default {
       <p><b>Lysuret:</b> Kald tiden for et tik set fra Jorden for t. På et halvt tik går lyset c·t/2 på skrå, mens spejlene flytter sig v·t/2. Højden er L. Pythagoras: (c·t/2)² = L² + (v·t/2)². Løs for t: t = (2L/c) · 1/√(1 − v²/c²). Det sidste stykke er γ (gamma), tidsforlængelsen. Ved 50 % er γ = 1,15, ved 87 % 2, ved 95 % 3,2 og ved 99 % 7,1.</p>
       <p>Hvorfor skal alt følge med? Hvis dit hjerte fulgte lysuret, men dit armbåndsur ikke gjorde, kunne du se på urene, at skibet bevæger sig. Men regel 1 siger, at fysikken er den samme for alle, der bevæger sig jævnt. Så alt følger med.</p>
       <p><b>Myonernes kapløb:</b> Rossi og Hall målte i 1940 myonerne højt oppe på et bjerg i Colorado og længere nede i Denver. Myonerne fór over 99 % af lysets fart, og der kom flere ned, end der burde uden tidsforlængelse. Frisch og Smith gjorde det mere præcist i 1962 og filmede det: På toppen af Mount Washington (1.917 m) talte de ca. 563 myoner i timen. Uden tidsforlængelse skulle der kun være kommet ca. 27 i timen ned til havet, men de talte ca. 412. Det tydeligste forsøg er fra CERN i 1977: Myoner, der kørte rundt i en ring med γ = 29,3, levede 64,4 milliontedele sekund i stedet for 2,2, altså ca. 29 gange længere.</p>
-      <p>Typiske myoner ved jorden har en energi på ca. 4 GeV (γ ≈ 38). Deres gennemsnitlige vej bliver ca. 25 km i stedet for 660 m.</p>`,
+      <p>Typiske myoner ved jorden har en energi på ca. 4 GeV (γ ≈ 38). Deres gennemsnitlige vej bliver ca. 25 km i stedet for 660 m.</p>
+      <p><b>"Nu" er ikke det samme for alle:</b> I animationen kører toget 60 % af lysets fart. Set fra perronen er vognen også kortere (80 % af sin længde), og lyset når bagenden efter 0,25 og forenden efter 1,0 (målt i den tid, lyset er om at gå vognens længde). I toget når det begge efter 0,5.</p>
+      <p>For en rigtig togvogn på 20 m ved 100 km/t er forskellen ca. 6 femtosekunder (6 milliontedele af en milliardtedel sekund). Derfor opdagede ingen det før Einstein. Han forklarede det selv i en bog fra 1917 med to lyn, der rammer hver sin ende af et tog.</p>
+      <p><b>Rumtidskortet:</b> Tænd "Vis den rejsendes 'nu'". Hver stiplede linje viser, hvad der sker derhjemme "lige nu" set fra den rejsende (scene 4). Med vendepunktet 4 lysår ude ser den rejsende på vejen ud Jordens ur gå langsomt: Efter 3 år i skibet er der kun gået 1,8 år derhjemme. Det samme på vejen hjem. Men i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år. Dér ligger de manglende år.</p>
+      <p>Det er ikke accelerationen, der gør det: Man kan lave forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem. Det er vejens længde, der tæller.</p>
+      <p>Formlen for et lige stykke er <span class="formel">τ² = t² − (x/c)²</span>. Tiden på ens eget ur kaldes egentiden, og den lige streg giver mest. Tæt på lysets streger bliver der næsten ingen tid, men lyset selv har ikke noget ur.</p>`,
     ærligt: `<p><b>Den mærkelige regel:</b> Et tog kan ikke køre med en mærkbar del af lysets fart, og lyset er tegnet meget langsommere, end det er. Men det har den samme fart i begge billeder. Billederne viser, hvad man ville måle, ikke hvad øjet ser (lyset skal også nå frem til øjet).</p>
       <p><b>Lysuret:</b> Lysuret er et tankeeksperiment, som står i de fleste lærebøger. Man kan ikke se lysglimtet undervejs. Animationen viser, hvad man ville regne sig frem til. "87 %" er 86,6 %, hvor γ er præcis 2. Lysuret trin for trin står også i Rejsen i tid.</p>
-      <p><b>Myonernes kapløb:</b> Myonerne taber fart på vejen ned, luften er tyndere foroven, og ikke alle laves præcis 15 km oppe. Tallene i animationen er en enkel udregning. Levetiden er et gennemsnit: Nogle myoner går i stykker før, andre efter, helt tilfældigt (som atomkerner, der henfalder). Man kan ikke se myonerne. Man måler dem med en detektor. Animationen er sat meget ned i fart, og "Set fra myonen" endnu mere (urene viser de rigtige tider).</p>`,
+      <p><b>Myonernes kapløb:</b> Myonerne taber fart på vejen ned, luften er tyndere foroven, og ikke alle laves præcis 15 km oppe. Tallene i animationen er en enkel udregning. Levetiden er et gennemsnit: Nogle myoner går i stykker før, andre efter, helt tilfældigt (som atomkerner, der henfalder). Man kan ikke se myonerne. Man måler dem med en detektor. Animationen er sat meget ned i fart, og "Set fra myonen" endnu mere (urene viser de rigtige tider).</p>
+      <p><b>"Nu" er ikke det samme for alle:</b> "Set fra perronen" er ikke det, øjet ser: Lyset skal også nå frem til den, der kigger. Det er det, man får, når man har trukket lysets rejsetid fra (eller har ure i takt langs hele perronen). Et tog kan heller ikke køre 60 % af lysets fart.</p>
+      <p><b>Rumtidskortet:</b> Vendingen er tegnet som et knæk. I virkeligheden tager det tid at vende, og det koster masser af energi. Rejsen går lige ud og hjem med fast fart.</p>`,
   },
 
   lav(gruppe, { fase, forklaring, overlag, opdaterKnapper, sætKontakt }) {
@@ -155,6 +219,10 @@ export default {
     // Scene 3: kontakten (0-2), farten, bygens levetider (µs på myonens eget ur) og pladser, tiden i turen (µs på
     // Jorden, i "Set fra myonen" på myonens ur), fasen ('klem', 'zoom' eller 'løb'), og om den fælles sætning står
     const sc3 = { tilstand: 1, fart: FARTER3.length - 1, liv: [], xs: [], t: 0, fase: 'løb', faseT: 0, hold: 0, fælles: true };
+    // Scene 4: farten (0 eller 1 i FARTER4), tiden siden blinket (L/c), og om forenden er ramt (så skifter underteksten)
+    const sc4 = { fart: 1, t: 0, efter: false };
+    // Scene 5: vendepunktet (lysår, år), om man trækker, "nu"-linjerne, "Spil rejsen" (T: år på Jorden) og advarslen
+    const sc5 = { p: { ...START5 }, træk: false, nu: false, spil: false, T: 0, advar: 0 };
 
     const lille = () => W < 520;
     const skrift = () => (lille() ? 12 : 14);
@@ -500,18 +568,248 @@ export default {
       }
     }
 
-    // ---------- Scene 4-5: kommer snart (T5c) ----------
-    function tegnSnart() {
-      panel(0, 0, W, H, '');
-      tekst(`${aktiv + 1}. ${SCENER[aktiv].titel}`, W / 2, H / 2 - 6, { vægt: 700, str: skrift() + 2 });
-      tekst('Denne scene kommer snart.', W / 2, H / 2 + skrift() + 8, { farve: FARVE.svag, vægt: 500 });
+    function streg(x1, y1, x2, y2, farve, bredde = 2, stiplet = null) {
+      g.strokeStyle = farve;
+      g.lineWidth = bredde;
+      g.setLineDash(stiplet || []);
+      g.beginPath();
+      g.moveTo(x1, y1);
+      g.lineTo(x2, y2);
+      g.stroke();
+      g.setLineDash([]);
     }
+    function prik(x, y, r, farve) {
+      g.fillStyle = farve;
+      g.beginPath();
+      g.arc(x, y, r, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    // ---------- Scene 4: lampen i togvognen (altid to billeder over hinanden) ----------
+    // Lyset har den samme fart på skærmen i begge billeder: én vognlængde (i toget) pr. L/c.
+    const hoejde4 = () => 2 * Math.max(140, Math.min(170, W * 0.3)) + 10; // plads over vognen til numrene og forklaringen
+    const ramt4 = () => {
+      const L = lys4(FARTER4[sc4.fart].b), t = sc4.t;
+      return { tog: t >= L.tog, bag: t >= L.bag, for: t >= L.for };
+    };
+    // Et skridt (dt i sekunder på skærmen). Giver true, når underteksten skal skifte (forenden er ramt første gang).
+    function skridt4(dt) {
+      const L = lys4(FARTER4[sc4.fart].b);
+      sc4.t += dt / SKÆRM_LC;
+      let skift = false;
+      if (!sc4.efter && FARTER4[sc4.fart].b > 0 && sc4.t >= L.for) { sc4.efter = true; skift = true; }
+      if (sc4.t > L.slut + HOLD4) sc4.t = 0; // lampen blinker igen
+      return skift;
+    }
+    function tegn4() {
+      const ph = (H - 10) / 2, b = FARTER4[sc4.fart].b, L = lys4(b), t = sc4.t, sk = skrift(), ramt = ramt4();
+      const vh = Math.min(46, ph * 0.34);
+      const Lw = 0.46 * W, c = Lw; // vognens længde i toget (pixel), og lyset går den på 1 L/c
+      const stille = b === 0;
+      const vogn = (x0, y, l, lampe) => {
+        g.fillStyle = FARVE.tog;
+        g.strokeStyle = 'rgba(160,190,255,0.5)';
+        g.lineWidth = 1;
+        g.beginPath();
+        g.roundRect(x0, y - vh, l, vh, 5);
+        g.fill();
+        g.stroke();
+        g.fillStyle = 'rgba(190,220,255,0.18)';
+        g.fillRect(x0 + 4, y - vh + 6, l - 8, vh * 0.45);
+        prik(lampe, y - vh + 6, 4, '#ffe9a8');
+      };
+      const ende = (x, y, nr) => {
+        g.fillStyle = FARVE.skrå;
+        g.shadowColor = FARVE.skrå;
+        g.shadowBlur = 12;
+        g.fillRect(x - 2, y - vh, 4, vh);
+        g.shadowBlur = 0;
+        if (nr) tekst(nr, x, y - vh - 8, { farve: FARVE.skrå, vægt: 800, str: sk + 1 });
+      };
+      const pæle = (y0, forskydning, afstand) => {
+        const start = ((forskydning % afstand) + afstand) % afstand;
+        for (let x = start - afstand; x < W + afstand; x += afstand) streg(x, y0, x, y0 - 16, 'rgba(150,170,220,0.3)', 2);
+        streg(0, y0 + 0.5, W, y0 + 0.5, 'rgba(150,170,220,0.5)', 1);
+      };
+      const blink = (x, y) => {
+        if (t >= 0.08 || ROLIG) return;
+        g.globalAlpha = 1 - t / 0.08;
+        Lys.glimt(g, x, y, 9);
+        g.globalAlpha = 1;
+      };
+      const hjørne = (s) => { if (ph >= 120) tekst(s, W - 12, sk + 7, { side: 'right', farve: FARVE.svag, str: sk - 1, vægt: 500 }); };
+
+      // Øverst: set fra toget (vognen står stille, og perronen glider baglæns med pælene γ gange tættere)
+      g.save();
+      panel(0, 0, W, ph, 'Set fra toget');
+      const y1 = ph - 30, x0 = (W - Lw) / 2, xm = W / 2, ly1 = y1 - vh * 0.45;
+      pæle(y1 + 3, -b * c * t, (0.1 * W) / L.gam);
+      vogn(x0, y1, Lw, xm);
+      blink(xm, y1 - vh + 6);
+      if (!ramt.tog) {
+        const r = c * t;
+        streg(xm - r, ly1, xm + r, ly1, 'rgba(255,210,74,0.25)', 2);
+        Lys.glimt(g, xm - r, ly1, 4);
+        Lys.glimt(g, xm + r, ly1, 4);
+      } else {
+        ende(x0, y1, '');
+        ende(x0 + Lw, y1, '');
+        tekst('samtidig!', xm, y1 - vh - 10, { farve: FARVE.skrå, vægt: 800, str: sk + 2 });
+      }
+      if (!stille) hjørne('← perronen: 60 % af lysets fart');
+      g.restore();
+
+      // Nederst: set fra perronen (vognen kører og er γ gange kortere, og lyset har den samme fart begge veje)
+      g.save();
+      g.translate(0, ph + 10);
+      panel(0, 0, W, ph, 'Set fra perronen');
+      const y2 = ph - 30, L2 = Lw / L.gam, xc0 = stille ? W / 2 : 0.3 * W, xc = xc0 + b * c * t, ly2 = y2 - vh * 0.45;
+      pæle(y2 + 3, 0, 0.1 * W);
+      vogn(xc - L2 / 2, y2, L2, xc);
+      blink(xc0, y2 - vh + 6);
+      const bagX = xc0 - c * Math.min(t, L.bag), forX = xc0 + c * Math.min(t, L.for);
+      if (!ramt.for) {
+        streg(ramt.bag ? xc - L2 / 2 : bagX, ly2, forX, ly2, 'rgba(255,210,74,0.25)', 2); // lyset bagud er stoppet af bagenden
+        if (!ramt.bag) Lys.glimt(g, bagX, ly2, 4);
+        Lys.glimt(g, forX, ly2, 4);
+      }
+      // Mærker på perronen, hvor lyset ramte
+      const mærke = (x, nr) => {
+        streg(x, y2 + 3, x, y2 + 12, FARVE.skrå, 2);
+        if (nr) tekst(nr, x + 4, y2 + 14 + sk * 0.6, { farve: FARVE.skrå, str: sk - 1, vægt: 700, side: 'left' });
+      };
+      if (ramt.bag) { ende(xc - L2 / 2, y2, stille ? '' : '1.'); mærke(xc0 - c * L.bag, stille ? '' : '1.'); }
+      if (ramt.for) { ende(xc + L2 / 2, y2, stille ? '' : '2.'); mærke(xc0 + c * L.for, stille ? '' : '2.'); }
+      if (stille && ramt.for) tekst('samtidig!', xc, y2 - vh - 10, { farve: FARVE.skrå, vægt: 800, str: sk + 2 });
+      else if (ramt.bag) tekst(ramt.for ? 'bagenden først!' : 'bagenden …', xc, y2 - vh - 10, { farve: FARVE.skrå, vægt: 800, str: sk + 2 });
+      if (!stille) hjørne('toget: 60 % af lysets fart →');
+      if (ramt.bag && !stille && ph >= 120) tekst(lille() ? 'stregerne: hvor lyset ramte' : 'stregerne på perronen: hvor lyset ramte', 12, 2 * sk + 14, { side: 'left', farve: FARVE.svag, str: sk - 2, vægt: 500 });
+      g.restore();
+    }
+
+    // ---------- Scene 5: rumtidskortet (kvadratisk, fylder bredden på højkant) ----------
+    const hoejde5 = () => Math.min(W, 620) + 84;
+    function geo5() {
+      const S = Math.max(120, Math.min(W - 24, H - 118)), ox = W / 2, oy = H - 58, k = S / 10.6; // pixel pr. år (og lysår)
+      return { ox, oy, k, X: (x) => ox + x * k, Y: (t) => oy - t * k };
+    }
+    // Et tryk eller træk på lærredet (CSS-pixel i lærredet): vendepunktet flytter derhen, men ikke uden for lyset
+    function sæt5(px, py) {
+      const G = geo5();
+      const p = grænse5((px - G.ox) / G.k, (G.oy - py) / G.k);
+      if (p.for) sc5.advar = 1.6;
+      sc5.p = { x: p.x, t: p.t };
+      sc5.T = 0;
+      if (sc5.spil) { sc5.spil = false; opdaterKnapper(); }
+    }
+    function skridt5(dt) {
+      if (sc5.advar > 0) sc5.advar = Math.max(0, sc5.advar - dt);
+      if (!sc5.spil) return;
+      sc5.T += (dt * TSLUT) / SPIL_TID;
+      if (sc5.T > TSLUT + (HOLD5 * TSLUT) / SPIL_TID) { sc5.spil = false; sc5.T = 0; opdaterKnapper(); }
+    }
+    function tegn5() {
+      const G = geo5(), { X, Y } = G, sk = skrift(), P = sc5.p, R = rejse5(P);
+      panel(0, 0, W, H, '');
+      // Gitteret
+      for (let x = -5; x <= 5; x++) streg(X(x), Y(0), X(x), Y(TSLUT), 'rgba(120,150,210,0.12)', 1);
+      for (let t = 0; t <= TSLUT; t++) streg(X(-5), Y(t), X(5), Y(t), 'rgba(120,150,210,0.12)', 1);
+      tekst('rum (lysår) →', X(0), Y(0) + 2 * sk + 18, { farve: FARVE.svag, str: sk - 1, vægt: 500 });
+      for (let x = -4; x <= 4; x += 2) tekst(fmt(x), X(x), Y(0) + sk + 10, { farve: FARVE.svag, str: sk - 2, vægt: 500 });
+      tekst('↑ tid (år)', X(-5), Y(TSLUT) - 8, { side: 'left', farve: FARVE.svag, str: sk - 1, vægt: 500 });
+      for (let t = 2; t <= TSLUT; t += 2) tekst(fmt(t), X(-5) - 4, Y(t) + 4, { side: 'right', farve: FARVE.svag, str: sk - 2, vægt: 500 });
+      // Lyset: sendt ud ved start og hjem ved slut (45°). Vendepunktet kan kun være inden for de gule streger.
+      g.fillStyle = 'rgba(255,210,74,0.05)';
+      g.beginPath();
+      g.moveTo(X(0), Y(0));
+      g.lineTo(X(5), Y(5));
+      g.lineTo(X(0), Y(TSLUT));
+      g.lineTo(X(-5), Y(5));
+      g.closePath();
+      g.fill();
+      for (const [a, b2, c2, d] of [[0, 0, 5, 5], [0, 0, -5, 5], [5, 5, 0, TSLUT], [-5, 5, 0, TSLUT]]) streg(X(a), Y(b2), X(c2), Y(d), 'rgba(255,210,74,0.55)', 1.5, [5, 5]);
+      tekst('lys', X(3.4) + 8, Y(3.4) + 4, { side: 'left', farve: 'rgba(255,210,74,0.8)', str: sk - 2 });
+      // Hvor den rejsende er, når der er gået tau år på hendes eller hans eget ur
+      const punkt = (tau) => (tau <= R.ud ? { x: R.v1 * tau * R.g1, t: tau * R.g1 } : { x: P.x + R.v2 * (tau - R.ud) * R.g2, t: P.t + (tau - R.ud) * R.g2 });
+      // Den rejsendes "nu": en skrå linje med hældningen v/c, der rammer Jordens streg ved t − v·x
+      if (sc5.nu) {
+        const linje = (q, v) => {
+          const th = q.t - v * q.x;
+          streg(X(q.x), Y(q.t), X(0), Y(th), 'rgba(255,143,208,0.6)', 1.2, [4, 4]);
+          prik(X(0), Y(th), 2.5, FARVE.nu);
+        };
+        for (let tau = 1; tau < R.ud - 0.05; tau++) linje(punkt(tau), R.v1);
+        for (let tau = Math.ceil(R.ud + 0.05); tau < R.egen - 0.05; tau++) linje(punkt(tau), R.v2);
+        linje(P, R.v1);
+        linje(P, R.v2);
+        // Springet derhjemme i vendingen
+        const bx = X(0) - 12 * Math.sign(P.x || 1);
+        streg(bx, Y(R.før), bx, Y(R.efter), FARVE.nu, 3);
+        const sy = (Y(R.før) + Y(R.efter)) / 2, sx = P.x >= 0 ? X(-5) + 4 : X(5) - 4, sd = P.x >= 0 ? 'left' : 'right';
+        tekst('springet i "nu"', sx, sy - 4, { side: sd, farve: FARVE.nu, str: sk - 1, vægt: 700 });
+        tekst(`derhjemme: ${fmt(R.spring, 1)} år`, sx, sy + sk, { side: sd, farve: FARVE.nu, str: sk - 1, vægt: 700 });
+      }
+      // Den hjemmeblevne (blå) med en prik for hvert år
+      streg(X(0), Y(0), X(0), Y(TSLUT), FARVE.lige, 3);
+      for (let t = 1; t <= TSLUT; t++) prik(X(0), Y(t), 3.5, FARVE.lige);
+      // Den rejsende (gul) med en prik for hvert år på eget ur
+      streg(X(0), Y(0), X(P.x), Y(P.t), FARVE.skrå, 3);
+      streg(X(P.x), Y(P.t), X(0), Y(TSLUT), FARVE.skrå, 3);
+      for (let tau = 1; tau <= R.egen + 1e-9; tau++) { const q = punkt(tau); prik(X(q.x), Y(q.t), 3.5, FARVE.skrå); }
+      // Vendepunktet: en stor prik (44 px), så den er let at ramme. Et tryk hvor som helst på kortet flytter den også.
+      g.fillStyle = 'rgba(255,210,74,0.18)';
+      g.beginPath();
+      g.arc(X(P.x), Y(P.t), 22, 0, Math.PI * 2);
+      g.fill();
+      g.strokeStyle = FARVE.skrå;
+      g.lineWidth = 2;
+      g.beginPath();
+      g.arc(X(P.x), Y(P.t), 11, 0, Math.PI * 2);
+      g.stroke();
+      const højre = P.x >= 0 ? X(P.x) + 66 < W : X(P.x) - 66 < 0; // "træk" står på den side, hvor der er plads
+      tekst('træk', X(P.x) + (højre ? 26 : -26), Y(P.t) + 4, { side: højre ? 'left' : 'right', farve: FARVE.skrå, str: sk - 1 });
+      // "Spil rejsen": to små ure kører langs stregerne (Jordens tid T)
+      if (sc5.spil) {
+        const T5 = Math.min(TSLUT, sc5.T);
+        const rx = T5 <= P.t ? R.v1 * T5 : P.x + R.v2 * (T5 - P.t);
+        const rTau = T5 <= P.t ? T5 / R.g1 : R.ud + (T5 - P.t) / R.g2;
+        prik(X(0), Y(T5), 6, '#fff');
+        prik(X(rx), Y(T5), 6, '#fff');
+        tekst(`${fmt(T5, 1)} år`, X(0) - 10, Y(T5) - 8, { side: 'right', farve: FARVE.lige, vægt: 700 });
+        tekst(`${fmt(rTau, 1)} år`, X(rx) + (P.x >= 0 ? 10 : -10), Y(T5) - 8, { side: P.x >= 0 ? 'left' : 'right', farve: FARVE.skrå, vægt: 700 });
+      }
+      // Tallene øverst
+      const fart = (v) => `${fmt(Math.abs(v) * 100)} %`;
+      tekst(`Hjemme: ${fmt(TSLUT)} år`, 14, 24, { side: 'left', farve: FARVE.lige, vægt: 700, str: sk + 1 });
+      tekst(`Rejsende: ${fmt(R.egen, 1)} år`, 14, 46, { side: 'left', farve: FARVE.skrå, vægt: 700, str: sk + 1 });
+      const ens = Math.abs(Math.abs(R.v1) - Math.abs(R.v2)) < 0.005;
+      tekst(ens ? `${fart(R.v1)} af lysets fart` : `ud: ${fart(R.v1)} · hjem: ${fart(R.v2)}`, W - 14, 24, { side: 'right', farve: FARVE.svag, str: sk - 1, vægt: 500 });
+      if (sc5.advar > 0) tekst('Hurtigere end lyset kan man ikke!', W / 2, Y(TSLUT) + 18, { farve: FARVE.rød, vægt: 800, str: sk + 1 });
+    }
+    // Træk i vendepunktet (kun i scene 5: her tager lærredet imod fingeren, og siden ruller ikke, mens man trækker)
+    const iLærred = (e) => {
+      const r = lærred.getBoundingClientRect();
+      return [((e.clientX - r.left) * W) / (r.width || W), ((e.clientY - r.top) * H) / (r.height || H)];
+    };
+    lærred.addEventListener('pointerdown', (e) => {
+      if (aktiv !== 4) return;
+      sc5.træk = true;
+      try { lærred.setPointerCapture(e.pointerId); } catch { /* ikke vigtigt */ }
+      sæt5(...iLærred(e));
+      e.preventDefault();
+    });
+    lærred.addEventListener('pointermove', (e) => { if (aktiv === 4 && sc5.træk) sæt5(...iLærred(e)); });
+    const slip = () => { sc5.træk = false; };
+    lærred.addEventListener('pointerup', slip);
+    lærred.addEventListener('pointercancel', slip);
 
     const scene = () => [
       { hoejde: hoejde1, tegn: tegn1 },
       { hoejde: hoejde2, tegn: tegn2 },
       { hoejde: hoejde3, tegn: tegn3 },
-    ][aktiv] ?? { hoejde: () => 200, tegn: tegnSnart };
+      { hoejde: hoejde4, tegn: tegn4 },
+      { hoejde: hoejde5, tegn: tegn5 },
+    ][aktiv];
 
     // ---------- Lærredets størrelse ----------
     // Bredden følger 3D-billedet (højst MAKS_BREDDE). Højden er scenens egen, men højst det, der er plads til mellem
@@ -563,7 +861,8 @@ export default {
         return LIGE_TEKST;
       }
       if (aktiv === 2) return sc3.fælles ? FÆLLES3 : linje3(sc3.tilstand, FARTER3[sc3.fart].b);
-      return 'Denne scene kommer snart. Indtil da kan du gå tilbage til scene 1-3.';
+      if (aktiv === 3) return FARTER4[sc4.fart].b === 0 ? STILLE4 : sc4.efter ? EFTER4 : FØR4;
+      return FREMME5;
     }
     function visTekst() {
       const s = SCENER[aktiv];
@@ -618,9 +917,40 @@ export default {
       ændring: (i) => { sc3.fart = i; sc3.fælles = false; forfra3(); visTekst(); },
     };
     const nyByge = { tekst: '↻ Ny byge', handling: () => { nyByge3(); sc3.fælles = false; visTekst(); } };
+    // Scene 4: to kontakter (præcis én tændt, starter ved 60 %) og "💡 Blink igen" i bjælken
+    const togKontakter = FARTER4.map((f, i) => ({
+      tekst: f.navn, til: sc4.fart === i,
+      skift: () => {
+        for (const k of togKontakter) { k.til = k.tekst === f.navn; sætKontakt(k.tekst, k.til); }
+        if (sc4.fart === i) return;
+        sc4.fart = i;
+        sc4.t = 0;
+        sc4.efter = false;
+        visTekst();
+      },
+    }));
+    const blinkIgen = { tekst: '💡 Blink igen', handling: () => { sc4.t = 0; } };
+    // Scene 5: "▶ Spil rejsen" (og "■ Stop") og "↺ Vendepunkt 4 lysår ude" i bjælken, og for nørder kontakten med "nu"
+    const spilRejsen = {
+      get tekst() { return sc5.spil ? '■ Stop' : '▶ Spil rejsen'; },
+      handling: () => { sc5.spil = !sc5.spil; sc5.T = 0; opdaterKnapper(); },
+    };
+    const vendTilbage = {
+      tekst: '↺ Vendepunkt 4 lysår ude',
+      handling: () => { sc5.p = { ...START5 }; sc5.spil = false; sc5.T = 0; opdaterKnapper(); },
+      // Grå (ikke skjult), når vendepunktet allerede er der: Ellers ændrer bjælken højde, og kortet flytter sig under fingeren
+      deaktiv: () => Math.abs(sc5.p.x - START5.x) < 1e-9 && Math.abs(sc5.p.t - START5.t) < 1e-9,
+    };
+    const nuKontakt = { tekst: "Vis den rejsendes 'nu'", til: sc5.nu, skift: (til) => { sc5.nu = til; } };
     const styring = [];
     function byg() {
-      const liste = aktiv === 0 ? [...boldKontakter, fart1] : aktiv === 1 ? [fart2, trekantKontakt] : aktiv === 2 ? [...myonKontakter, fart3, nyByge] : [];
+      const liste = [
+        [...boldKontakter, fart1],
+        [fart2, trekantKontakt],
+        [...myonKontakter, fart3, nyByge],
+        [...togKontakter, blinkIgen],
+        [spilRejsen, vendTilbage, nuKontakt],
+      ][aktiv];
       styring.splice(0, styring.length, ...liste);
     }
 
@@ -634,6 +964,15 @@ export default {
       Lys.nulstilUr(sc2.ur);
       sc3.fælles = true; // den fælles sætning står, når man kommer til scene 3
       forfra3();
+      sc4.t = 0;
+      sc4.efter = false;
+      sc5.spil = false;
+      sc5.træk = false;
+      sc5.T = 0;
+      // Kun rumtidskortet tager imod fingeren: Ellers går tryk igennem til 3D-billedet, og siden kan rulles
+      lærred.style.pointerEvents = aktiv === 4 ? 'auto' : '';
+      lærred.style.touchAction = aktiv === 4 ? 'none' : '';
+      lærred.style.cursor = aktiv === 4 ? 'pointer' : '';
       byg();
       opdaterKnapper();
       visTekst();
@@ -656,7 +995,11 @@ export default {
           const G = geo2();
           const stoppet = Lys.skridtUr(sc2.ur, dt, { v: T.LYSUR_FARTER[sc2.fart], c: G.c, bredde: G.we, stopOppe: sc2.trekant });
           if (stoppet) visTekst();
-        } else if (aktiv === 2 && skridt3(dt)) visTekst();
+        } else if (aktiv === 2) {
+          if (skridt3(dt)) visTekst();
+        } else if (aktiv === 3) {
+          if (skridt4(dt)) visTekst();
+        } else skridt5(dt);
       },
       // Lærredet tegnes hvert billede, også under pause (fx når trekanten slås til, eller skærmen skifter størrelse)
       altid: () => tegn(),
@@ -684,6 +1027,21 @@ export default {
         }),
         // En fast byge (levetider i µs på myonens ur), så testen ved, hvad der skal ske
         sætByge: (liv) => nyByge3(liv),
+        // Scene 4: tiderne i L/c, hvor langt lyset er (t), hvad det har ramt, og vognens længde set fra perronen
+        scene4: () => {
+          const L = lys4(FARTER4[sc4.fart].b);
+          return { fart: FARTER4[sc4.fart].b, t: sc4.t, tog: L.tog, bag: L.bag, for: L.for, ramt: ramt4(), efter: sc4.efter, vogn: 1 / L.gam };
+        },
+        // Scene 5: vendepunktet, egentiden, farterne, "nu" derhjemme før og efter vendingen og "Spil rejsen"
+        scene5: () => {
+          const R = rejse5(sc5.p);
+          return { ...sc5.p, egen: R.egen, ud: R.ud, hjem: R.hjem, v1: R.v1, v2: R.v2, før: R.før, efter: R.efter, spring: R.spring, nu: sc5.nu, spil: sc5.spil, T: sc5.T, advar: sc5.advar > 0, træk: sc5.træk };
+        },
+        // Hvor punktet (x lysår, t år) står på skærmen (CSS-pixel i vinduet), så testen kan trykke og trække med musen
+        kortPunkt: (x, t) => {
+          const G = geo5(), r = lærred.getBoundingClientRect();
+          return { x: r.left + (G.X(x) * r.width) / W, y: r.top + (G.Y(t) * r.height) / H };
+        },
       },
     };
   },

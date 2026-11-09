@@ -355,6 +355,18 @@ export const ORDBOG = [
     tekst: 'Når en afstand langs farten er kortere set fra den, der farer af sted. Ved 99,99 % af lysets fart er vejen til Alpha Centauri ca. 71 gange kortere set fra skibet end set fra Jorden.',
   },
   {
+    id: 'samtidighed', ord: 'Samtidighed',
+    former: ['samtidighed', 'samtidigheden'],
+    // docs/fakta-tid/hvorfor-langsommere.md, afsnit 15.7 (Wikipedia "Relativity of simultaneity", Einstein 1905 og 1917)
+    tekst: 'At to ting sker på samme tid. Ifølge Einsteins relativitetsteori kommer det an på, hvem der kigger: To ting langt fra hinanden kan ske samtidig for den ene og efter hinanden for en anden, der farer forbi. Begge har ret.',
+  },
+  {
+    id: 'egentid', ord: 'Egentid',
+    former: ['egentid', 'egentiden'],
+    // docs/fakta-tid/hvorfor-langsommere.md, afsnit 15.8 (Wikipedia "Proper time" og "Twin paradox"): den lige streg giver mest
+    tekst: 'Den tid, der går på ens eget ur. Skilles to ure og mødes igen, kan de vise forskellig egentid. Det ur, der har bevæget sig jævnt hele vejen uden at vende om, viser mest, som tvillingen, der blev hjemme.',
+  },
+  {
     id: 'roedkaempe', ord: 'Rød kæmpe',
     former: ['rød kæmpe', 'røde kæmpe', 'røde kæmper'],
     // Solen er størst om ca. 7,6 mia. år (Schröder & Smith 2008)

@@ -138,8 +138,8 @@ Formlen for et lige stykke er τ² = t² − (x/c)². Tiden på ens eget ur kald
 
 ## Byggeriet (forslag, rettes efter jeres runde)
 - [x] **T5a** (færdig 9. november 2026, lysuret deles i `js/kosmos/lysur.js`): Fænomenet (filen, listen, rammen med fem scener, prikkerne, "Næste" og spring, lærredet og layoutet på telefon og tablet), scene 1 og 2. Lysurets tegnekode deles mellem `tid.js` og `tidhvorfor.js` (fx `js/kosmos/lysur.js`), så de ikke glider fra hinanden.
-- **T5b:** Scene 3 (myonerne).
-- **T5c:** Scene 4 og 5, henvisningerne begge veje og nye ord i Ordbogen (fx samtidighed og egentid, tjek først, hvad der findes).
+- [x] **T5b** (færdig 9. november 2026): Scene 3 (myonerne).
+- [x] **T5c** (færdig 9. november 2026): Scene 4 og 5, henvisningerne begge veje og nye ord i Ordbogen (samtidighed og egentid fandtes ikke og er tilføjet).
 - Model: Opus, høj effort. Tegnekoden i skitsen genbruges (`docs/skitser/tid-t5.html`). Tallene i skitsen er regnet med de samme formler som i regn.py.
 
 ## Jeres runde med jeres søn

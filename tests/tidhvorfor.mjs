@@ -5,6 +5,9 @@
 // underteksten (pc, tablet og telefon på højkant), Rejsen i tids lysur virker stadig, og knappen derfra åbner fænomenet.
 // Scene 3 (T5b, med en fast byge): uden Einstein når ingen ned, med Einstein viser myonens ur ca. 1,32 µs ved ankomsten,
 // "Set fra myonen" klemmer luften til ca. 396 m og giver de samme overlevende, og skyderen styrer γ og luftens længde.
+// Scene 4 og 5 (T5c): lyset rammer enderne efter 0,25, 1,0 og 0,5 (L/c), den nye undertekst, vendepunktet (4, 5) giver
+// 6 år og et tryk på (3, 5) 8 år, man kan ikke trække uden for lyset, springet i "nu" er 6,4 år, "Spil rejsen",
+// layoutet på højkant, og knapperne mellem Rejsen i tid og det nye fænomen virker begge veje.
 import { læggesSammen } from '../js/data/tid.js';
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 
@@ -182,6 +185,104 @@ tjek('tablet på højkant: søjlen (60 % af bredden) er højere end bred, og læ
 await page.setViewportSize({ width: 1280, height: 800 });
 await page.waitForTimeout(300);
 
+// ---------- Scene 4: "Nu" er ikke det samme for alle (T5c) ----------
+const s4 = () => E(() => atomlabTest.kosmos.fænomen().scene4());
+const næste = () => E(() => document.querySelector('#kosmosBjælke .bjælke-næste').click());
+await næste();
+styr = await E(() => atomlabTest.kosmos.styr());
+bj = await E(() => atomlabTest.kosmos.bjælke());
+f = await fase();
+tjek('scene 4: kontakterne (60 % tændt), "💡 Blink igen" i bjælken og underteksten om lampen under 160 tegn',
+  (await E(() => atomlabTest.kosmos.trin().nr)) === 3 && styr.map((s) => `${s.slags}:${s.navn}:${s.til ?? ''}`).join('|') === 'kontakt:Toget står stille:false|kontakt:Toget kører 60 % af lysets fart:true'
+  && bj.some((x) => x.tekst === '💡 Blink igen') && /^Lampen midt i vognen blinker/.test(f?.tekst) && f.tekst.length < 160, JSON.stringify([styr, bj, f]));
+let q = await s4();
+tjek('scene 4 ved 60 %: lyset når bagenden efter 0,25 og forenden efter 1,0 (L/c), i toget begge efter 0,5, og vognen er 80 % så lang',
+  nær(q.bag, 0.25, 1e-9) && nær(q.for, 1, 1e-9) && nær(q.tog, 0.5, 1e-9) && nær(q.vogn, 0.8, 1e-9), JSON.stringify(q));
+await E(() => atomlabTest.kosmos.trykPå('Blink igen'));
+await E(() => atomlabTest.kosmos.spol(0.6 * 3.2)); // 0,6 L/c efter blinket
+q = await s4();
+f = await fase();
+tjek('scene 4 efter 0,6 L/c: begge ender ramt i toget, kun bagenden set fra perronen, og underteksten er stadig den første',
+  q.ramt.tog && q.ramt.bag && !q.ramt.for && !q.efter && /^Lampen/.test(f?.tekst), JSON.stringify([q, f]));
+await E(() => atomlabTest.kosmos.spol(0.5 * 3.2));
+q = await s4();
+f = await fase();
+tjek('scene 4: når forenden er ramt, kommer den nye undertekst ("Om to ting sker "samtidig" …")',
+  q.ramt.for && q.efter && /Om to ting sker "samtidig", kommer an på, hvem der kigger/.test(f?.tekst) && f.tekst.length < 160, JSON.stringify([q, f]));
+await page.screenshot({ path: `${UD}/scene4-pc.png` });
+await E(() => atomlabTest.kosmos.trykPå('Toget står stille'));
+q = await s4();
+f = await fase();
+tjek('scene 4, toget står stille: lyset når begge ender efter 0,5 i begge billeder, og vognen er lige lang',
+  q.fart === 0 && nær(q.bag, 0.5, 1e-9) && nær(q.for, 0.5, 1e-9) && nær(q.vogn, 1, 1e-9) && /to billeder ens/.test(f?.tekst), JSON.stringify([q, f]));
+tjek('lærredet dækker ikke Styr-boksen, underteksten eller bjælken (scene 4, pc)', (await dækker()).length === 0, JSON.stringify(await dækker()));
+await E(() => atomlabTest.kosmos.trykPå('Toget kører 60 % af lysets fart'));
+
+// ---------- Scene 5: rumtidskortet (T5c) ----------
+const s5 = () => E(() => atomlabTest.kosmos.fænomen().scene5());
+const punkt = (x, t) => E(([x, t]) => atomlabTest.kosmos.fænomen().kortPunkt(x, t), [x, t]);
+await næste();
+styr = await E(() => atomlabTest.kosmos.styr());
+bj = await E(() => atomlabTest.kosmos.bjælke());
+f = await fase();
+q = await s5();
+tjek('scene 5: vendepunktet 4 lysår ude ved 5 år giver 6 år for den rejsende, "▶ Spil rejsen" i bjælken og kontakten "nu" i Styr',
+  nær(q.x, 4, 1e-9) && nær(q.t, 5, 1e-9) && nær(q.egen, 6, 1e-9) && nær(q.v1, 0.8, 1e-9) && bj.some((x) => x.tekst === '▶ Spil rejsen')
+  && styr.map((s) => s.navn).join() === "Vis den rejsendes 'nu'" && /^Op er tid, til siden er rum/.test(f?.tekst) && f.tekst.length < 160, JSON.stringify([q, bj, styr, f]));
+// Et tryk med musen på kortet flytter vendepunktet derhen (3 lysår ude ved 5 år giver 8 år)
+let p = await punkt(3, 5);
+await page.mouse.click(p.x, p.y);
+q = await s5();
+tjek('et tryk på kortet (3 lysår, 5 år) flytter vendepunktet: den rejsende får 8 år (60 % af lysets fart)', nær(q.x, 3, 0.03) && nær(q.t, 5, 0.03) && nær(q.egen, 8, 0.06) && !q.træk, JSON.stringify(q));
+// Træk uden for lyset: vendepunktet bliver ved 98 % af lysets fart, og advarslen kommer
+p = await punkt(3, 5);
+const p2 = await punkt(7, 5);
+await page.mouse.move(p.x, p.y);
+await page.mouse.down();
+await page.mouse.move(p2.x, p2.y, { steps: 5 });
+q = await s5();
+await page.mouse.up();
+tjek('trækker man uden for lyset, stopper vendepunktet ved 98 % af lysets fart, og "Hurtigere end lyset kan man ikke!" vises',
+  q.træk && nær(q.x, 4.9, 1e-6) && q.advar && Math.abs(q.v1) <= 0.98 + 1e-9 && q.egen > 1.9 && q.egen < 2.1, JSON.stringify(q));
+await E(() => atomlabTest.kosmos.trykPå('Vendepunkt 4 lysår ude'));
+await E(() => atomlabTest.kosmos.trykPå("Vis den rejsendes 'nu'"));
+q = await s5();
+tjek('"nu"-linjerne: i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år (6,4 år)', q.nu && nær(q.egen, 6, 1e-9) && nær(q.før, 1.8, 1e-9) && nær(q.efter, 8.2, 1e-9) && nær(q.spring, 6.4, 1e-9), JSON.stringify(q));
+await E(() => atomlabTest.kosmos.trykPå('Spil rejsen'));
+await E(() => atomlabTest.kosmos.spol(3.5));
+q = await s5();
+bj = await E(() => atomlabTest.kosmos.bjælke());
+const halvvejs = q.spil && nær(q.T, 5, 0.1) && bj.some((x) => x.tekst === '■ Stop');
+await page.screenshot({ path: `${UD}/scene5-pc.png` });
+await E(() => atomlabTest.kosmos.spol(6.5));
+q = await s5();
+bj = await E(() => atomlabTest.kosmos.bjælke());
+tjek('"▶ Spil rejsen" kører de 10 år (halvvejs efter 3,5 s) og stopper selv bagefter', halvvejs && !q.spil && bj.some((x) => x.tekst === '▶ Spil rejsen'), JSON.stringify([q, bj]));
+tjek('lærredet dækker ikke Styr-boksen, underteksten eller bjælken (scene 5, pc)', (await dækker()).length === 0, JSON.stringify(await dækker()));
+
+// Højkant: scene 4 over hinanden og scene 5 kvadratisk i hele bredden (tablet og telefon)
+for (const [navn, vp] of [['tablet', { width: 820, height: 1180 }], ['telefon', { width: 390, height: 844 }]]) {
+  await page.setViewportSize(vp);
+  await page.waitForTimeout(400);
+  const l5 = await E(() => atomlabTest.kosmos.fænomen().lærred());
+  const ok5 = (await dækker()).length === 0 && l5.bredde >= Math.min(760, vp.width - 60) && l5.højde >= l5.bredde * 0.9;
+  await page.screenshot({ path: `${UD}/scene5-${navn}.png` });
+  await E(() => atomlabTest.kosmos.trykPå('‹'));
+  await E(() => atomlabTest.kosmos.spol(1.2 * 3.2));
+  const l4 = await E(() => atomlabTest.kosmos.fænomen().lærred());
+  await page.screenshot({ path: `${UD}/scene4-${navn}.png` });
+  tjek(`${navn}: scene 5 fylder bredden og er (næsten) kvadratisk, scene 4 står over hinanden, og lærredet dækker intet`, ok5 && l4.højde > 280 && (await dækker()).length === 0, JSON.stringify([l5, l4, await dækker()]));
+  await næste();
+}
+await page.setViewportSize({ width: 1280, height: 800 });
+await page.waitForTimeout(300);
+
+// Knappen "⏳ Rejsen i tid" i scene 5 åbner Rejsen i tid
+tjek('scene 5: knappen "⏳ Rejsen i tid" findes i siden', (await E(() => atomlabTest.kosmos.side())).knapper.some((k) => k.tekst.includes('Rejsen i tid') && k.findes));
+await E(() => atomlabTest.kosmos.trykISide('⏳ Rejsen i tid'));
+await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.lysur, null, { timeout: 5000 }).catch(() => {});
+tjek('knappen åbner Rejsen i tid', (await page.textContent('#kosmosNavn')) === 'Rejsen i tid');
+
 // Rejsen i tids lysur virker stadig med det fælles lysur, og knappen derfra åbner det nye fænomen
 await E(() => atomlabTest.kosmos.vælg('tid'));
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.lysur);
@@ -189,6 +290,10 @@ await E(() => atomlabTest.kosmos.trykPå('Vis lysuret'));
 await E(() => atomlabTest.kosmos.spol(3));
 const l = await E(() => atomlabTest.kosmos.fænomen().lysur());
 tjek('Rejsen i tid: lysuret tikker stadig 2 gange så tit i skibet ved 87 %, og billedet følger spejlene', l.vist && nær(l.skib / l.jord, 2, 0.001) && l.forskud > 0 && l.spor >= 3, JSON.stringify(l));
+// Lysurets sidste trin nævner det nye fænomen (med en knap i Lige nu)
+for (let i = 0; i < 4; i++) await E(() => document.querySelector('#kosmosBjælke .bjælke-næste').click());
+tjek('Rejsen i tid: lysurets sidste trin har knappen "🔦 Hvorfor går tiden langsommere?"', (await E(() => atomlabTest.kosmos.fænomen().lysur().trin)) === 4
+  && (await E(() => [...document.querySelectorAll('#kosmosForklaring [data-gaa="kosmos:tidhvorfor"]')].length)) === 1);
 await E(() => atomlabTest.kosmos.trykPå('Tilbage til rejsen'));
 const knap = (await E(() => atomlabTest.kosmos.side())).knapper.find((k) => k.tekst.includes('Se det trin for trin'));
 tjek('Rejsen i tid: knappen "🔦 Hvorfor? Se det trin for trin" i teksten findes', knap?.findes, JSON.stringify(knap));

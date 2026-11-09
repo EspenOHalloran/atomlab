@@ -120,6 +120,8 @@ Du flyver, og din tvilling (eller en anden, se spørgsmål 3) bliver hjemme.
 
 **T5. Hvorfor går tiden langsommere?** *(jeres ønske 8. november 2026. Go til Trin 0 givet samme dag, prompten er [prompt-tid-t5.md](prompt-tid-t5.md). Stor i alt)*
 
+**Status (9. november 2026): T5 er færdig.** T5a (rammen og scene 1-2), T5b (scene 3) og T5c (scene 4-5, henvisningerne og Ordbogen) er lavet. Fænomenet er `js/kosmos/tidhvorfor.js`.
+
 **Trin 0 (8. november 2026):** Drejebogen er [plan-tid-t5.md](plan-tid-t5.md) (jeres svar: navnet, rejse med "Næste" og spring, lampen og én pointe i scene 4, træk vendepunktet i scene 5), faktagrundlaget er [fakta-tid/hvorfor-langsommere.md](fakta-tid/hvorfor-langsommere.md) (afsnit 15), og skitserne er [skitser/tid-t5.html](skitser/tid-t5.html) (artefaktet "Hvorfor går tiden langsommere?": https://claude.ai/artifact/Nu7KusfgHNENpZxcTDBWL9). Jeres runde 9. november 2026: "Skitsen er afprøvet. Den er god." Trin 0 er færdig. Byggeriet: [prompt-tid-t5a.md](prompt-tid-t5a.md) (rammen og scene 1-2), [t5b](prompt-tid-t5b.md) (scene 3) og [t5c](prompt-tid-t5c.md) (scene 4-5).
 
 Jeres ord: "Tidsrejsen er bedre nu. Tidsudvidelse er et uhyre interessant begreb og utrolig svært at forstå. Kan vi bruge lidt flere ressourcer på at forklare det, gerne med illustrationer eller animationer. Jeg ved det er svært. Men det kunne være vildt fedt, hvis vi kunne forklare hvorfor tiden 'går langsommere' når man flyver rigtig hurtigt."
