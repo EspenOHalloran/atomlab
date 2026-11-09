@@ -17,6 +17,7 @@ import { stjerne, glød, skilt, hale, prikSky, KVALITET } from './faelles.js';
 import { lavJorden } from './jorden.js';
 import { ROLIG } from '../scene3d.js';
 import * as T from '../data/tid.js';
+import * as Lys from './lysur.js'; // lysurets regning og tegning (delt med tidhvorfor.js)
 
 const SKÆRM_VEJ = 12.5; // ▶: sekunder på skærmen for hver vej (ud og hjem ca. 25 sekunder), uanset målet
 const HURTIG = 4; // ⏩: en tur tager ca. 6 sekunder
@@ -31,8 +32,6 @@ const SKIB_TIL = MÅL_X - 2.4;
 const SKIB_Y = 0.45;
 // "Set fra skibet": afstandene i scenen ganges med γ^(−1/3) (i virkeligheden 1/γ, men så ville målet ligge oven i skibet)
 const KLEM = 1 / 3;
-// Lysuret: et tik (op og ned) tager LYS_TIK sekunder på skærmen i skibet
-const LYS_TIK = 1.4;
 // Lysuret trin for trin (jeres ønske 8. november 2026: "tag brugeren i hånden"). Trin 1-4 er ved 87 % (γ = 2), og i det
 // sidste kan man selv vælge farten.
 const LYS_TRIN = [
@@ -71,7 +70,7 @@ export default {
         // Afsnit 3
         titel: 'Hvorfor går Jordens ur så hurtigt?',
         tekst: `<p>Lyset har altid den samme fart, uanset hvem der måler den. Forestil dig et ur, hvor et lysglimt hopper op og ned mellem to spejle. I skibet går lyset lige op og ned. Set fra Jorden flytter spejlene sig, mens lyset er undervejs, så lyset går en længere, skrå vej. Derfor tager hvert tik længere tid set fra Jorden. ${handling('Vis lysuret', '⏱ Vis lysuret')} viser det trin for trin.</p>
-          <p>Det gælder ikke kun lysure. Alt om bord følger med: atomurene, dit hjerte og dine tanker.</p>`,
+          <p>Det gælder ikke kun lysure. Alt om bord følger med: atomurene, dit hjerte og dine tanker. ${gå('kosmos:tidhvorfor', '🔦 Hvorfor? Se det trin for trin')}</p>`,
       },
       {
         // Afsnit 2 og 4
@@ -271,7 +270,7 @@ export default {
     // Lysurets egne ure: fasen i skibet og set fra Jorden (i tik) og spejlenes vej set fra Jorden (i lysurets højder)
     // spor: zigzaggens knæk set fra Jorden som [x (pixel, før billedet følger med), fase i tik]. stille: trinnet med
     // den skrå vej står stille, når lyset er nået op.
-    const ly = { skib: 0, jord: 0, x: 0, stille: false, spor: [] };
+    const ly = Lys.nytUr();
     let lysTrin = 0; // trinnet i lysuret (LYS_TRIN)
     let lysFart = T.LYSUR_START; // skyderen "Fart i lysuret" i det sidste trin (T.LYSUR_FARTER)
 
@@ -555,145 +554,50 @@ export default {
       const L = Math.min(H - top - skrift - 14, we * 0.45); // samme afstand mellem spejlene i begge billeder
       const sw = Math.min(40, ws * 0.3);
       const xs0 = sw / 2 + 8; // spejlenes start i billedet fra Jorden
-      return { W, H, lille, skrift, mellem, ws, we, top, L, bund: top + L, sw, xs0, c: (2 * L) / LYS_TIK };
+      return { W, H, lille, skrift, mellem, ws, we, top, L, bund: top + L, sw, xs0, c: (2 * L) / Lys.LYS_TIK };
     }
     // Hvor meget billedet fra Jorden er rykket med spejlene
-    const lysForskud = (G) => Math.max(0, G.xs0 + ly.x - (G.we - G.sw / 2 - 6));
+    const lysForskud = (G) => Lys.jordForskud(ly, G);
 
-    function nulstilLy() {
-      ly.skib = 0;
-      ly.jord = 0;
-      ly.x = 0;
-      ly.stille = false;
-      ly.spor.length = 0;
-      ly.spor.push([0, 0]);
-    }
+    const nulstilLy = () => Lys.nulstilUr(ly);
 
     function tegnLysur() {
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
       const G = lysGeo();
-      const { W, H, lille, skrift, mellem, ws, we, top, bund, L, sw } = G;
-      if (lærred.width !== Math.round(W * dpr) || lærred.height !== Math.round(H * dpr)) {
-        lærred.width = Math.round(W * dpr);
-        lærred.height = Math.round(H * dpr);
-      }
-      const g = lærred.getContext('2d');
-      g.setTransform(dpr, 0, 0, dpr, 0, 0);
-      g.clearRect(0, 0, W, H);
+      const { W, H, lille, skrift, mellem, ws, we, top, L: højde, sw } = G;
+      const g = Lys.klarLærred(lærred, W, H);
       const v = lysV();
       const gam = T.lysurGamma(v);
-      const LIGE = '#7fe0ff'; // den lige vej
-      const SKRÅ = '#ffd24a'; // den skrå vej
-
-      const spejl = (x, y) => {
-        g.fillStyle = '#cfe3ff';
-        g.shadowColor = 'rgba(140,200,255,0.8)';
-        g.shadowBlur = 6;
-        g.fillRect(x - sw / 2, y - 2, sw, 4);
-        g.shadowBlur = 0;
-      };
-      const glimt = (x, y) => {
-        const r = lille ? 5 : 6;
-        const grad = g.createRadialGradient(x, y, 0, x, y, r * 2.4);
-        grad.addColorStop(0, 'rgba(255,255,230,1)');
-        grad.addColorStop(0.35, 'rgba(255,236,140,0.85)');
-        grad.addColorStop(1, 'rgba(255,200,80,0)');
-        g.fillStyle = grad;
-        g.beginPath();
-        g.arc(x, y, r * 2.4, 0, Math.PI * 2);
-        g.fill();
-      };
-      // Højden over det nederste spejl for en fase i tik (0 = nede, ½ = oppe, 1 = nede igen)
-      const højde = (f) => { const r = f - Math.floor(f); return L * (r < 0.5 ? 2 * r : 2 - 2 * r); };
-      const tekst = (s, x, y, farve = '#c9d6ee', vægt = 600, side = 'center') => {
-        g.font = `${vægt} ${skrift}px system-ui, sans-serif`;
-        g.fillStyle = farve;
-        g.textAlign = side;
-        g.fillText(s, x, y);
-      };
-      const boks = (x0, w, aktiv) => {
-        g.fillStyle = 'rgba(8,12,28,0.96)'; // næsten uigennemsigtig, så scenen bag ikke forstyrrer
-        g.strokeStyle = aktiv ? 'rgba(160,200,255,0.75)' : 'rgba(120,150,210,0.35)';
-        g.lineWidth = aktiv ? 1.6 : 1;
-        g.beginPath();
-        g.roundRect(x0 + 0.5, 0.5, w - 1, H - 1, 10);
-        g.fill();
-        g.stroke();
-        g.clip();
-      };
+      const r = lille ? 5 : 6;
+      const tekst = (s, x, y, farve = Lys.FARVE.tekst, vægt = 600) => Lys.tekst(g, s, x, y, { farve, vægt, str: skrift });
       const tikTekst = (n) => `Tik: ${T.tal(Math.floor(n + 1e-9))}`;
       const trekant = lysTrin === 2;
-      const tæl = !trekant;
 
       // Til venstre: i skibet står spejlene stille, og lyset går lige op og ned
       g.save();
-      boks(0, ws, lysTrin === 0);
+      Lys.boks(g, 0, 0, ws, H, { aktiv: lysTrin === 0 });
       tekst(lille ? 'I skibet' : 'Set i skibet', ws / 2, skrift + 3);
-      const mx = ws / 2;
-      g.strokeStyle = trekant ? LIGE : 'rgba(255,230,140,0.35)';
-      g.lineWidth = trekant ? 3 : 2;
-      if (trekant) g.setLineDash([6, 5]);
-      g.beginPath();
-      g.moveTo(mx, bund);
-      g.lineTo(mx, top);
-      g.stroke();
-      g.setLineDash([]);
-      spejl(mx, top);
-      spejl(mx, bund);
-      glimt(mx, bund - højde(ly.skib));
-      if (tæl) tekst(tikTekst(ly.skib), mx, H - 5, '#ffe08a', 700);
-      else tekst('lige vej', mx, H - 5, LIGE, 700);
+      Lys.tegnSkibUr(g, ly, { x: ws / 2, top, L: højde, sw, lige: trekant, r });
+      if (trekant) tekst('lige vej', ws / 2, H - 5, Lys.FARVE.lige, 700);
+      else tekst(tikTekst(ly.skib), ws / 2, H - 5, Lys.FARVE.tik, 700);
       g.restore();
 
       // Til højre: set fra Jorden farer spejlene forbi, og lyset går skråt (zigzag)
-      const x0 = ws + mellem;
       g.save();
-      g.translate(x0, 0);
-      boks(0, we, lysTrin === 1);
+      g.translate(ws + mellem, 0);
+      Lys.boks(g, 0, 0, we, H, { aktiv: lysTrin === 1 });
       if (lysTrin === 0) {
         // Første trin: kun uret i skibet
         tekst('Set fra Jorden', we / 2, skrift + 3, 'rgba(201,214,238,0.45)');
-        tekst('kommer i næste trin ›', we / 2, top + L / 2 + skrift / 2, 'rgba(201,214,238,0.45)', 600);
+        tekst('kommer i næste trin ›', we / 2, top + højde / 2 + skrift / 2, 'rgba(201,214,238,0.45)');
         g.restore();
         return;
       }
-      tekst(v > 0 ? `Set fra Jorden: skibet farer forbi →` : 'Set fra Jorden: skibet står stille', we / 2, skrift + 3);
-      const forskud = lysForskud(G);
-      const sx = (wx) => G.xs0 + wx - forskud;
-      // Lodrette streger, der står stille i forhold til Jorden (de glider, når billedet følger spejlene)
-      g.strokeStyle = 'rgba(120,150,210,0.16)';
-      g.lineWidth = 1;
-      for (let gx = -(forskud % 40); gx < we; gx += 40) {
-        g.beginPath();
-        g.moveTo(gx, top - 6);
-        g.lineTo(gx, bund + 6);
-        g.stroke();
-      }
-      // Sporet
-      g.strokeStyle = trekant ? SKRÅ : 'rgba(255,230,140,0.6)';
-      g.lineWidth = trekant ? 3 : 2;
-      g.beginPath();
-      ly.spor.forEach(([wx, f], j) => (j ? g.lineTo(sx(wx), bund - højde(f)) : g.moveTo(sx(wx), bund - højde(f))));
-      g.lineTo(sx(ly.x), bund - højde(ly.jord));
-      g.stroke();
-      if (trekant) {
-        // Den lige vej ved siden af den skrå, så man kan se, at den skrå er længere
-        const ax = sx(ly.x - v * gam * L);
-        g.strokeStyle = LIGE;
-        g.setLineDash([6, 5]);
-        g.beginPath();
-        g.moveTo(ax, bund);
-        g.lineTo(ax, top);
-        g.stroke();
-        g.setLineDash([]);
-      }
-      spejl(sx(ly.x), top);
-      spejl(sx(ly.x), bund);
-      glimt(sx(ly.x), bund - højde(ly.jord));
-      if (tæl) tekst(tikTekst(ly.jord), we / 2, H - 5, '#ffe08a', 700);
+      tekst(v > 0 ? 'Set fra Jorden: skibet farer forbi →' : 'Set fra Jorden: skibet står stille', we / 2, skrift + 3);
+      Lys.tegnJordUr(g, ly, { v, top, L: højde, sw, xs0: G.xs0, we, skrå: trekant, r });
+      if (!trekant) tekst(tikTekst(ly.jord), we / 2, H - 5, Lys.FARVE.tik, 700);
       else if (ly.stille) {
-        tekst('lige vej', we * 0.27, H - 5, LIGE, 700);
-        tekst(`${lille ? 'skrå' : 'skrå vej'}: ${T.tal(gam, 1).replace(',0', '')} gange så lang`, we * 0.66, H - 5, SKRÅ, 700);
+        tekst('lige vej', we * 0.27, H - 5, Lys.FARVE.lige, 700);
+        tekst(`${lille ? 'skrå' : 'skrå vej'}: ${T.tal(gam, 1).replace(',0', '')} gange så lang`, we * 0.66, H - 5, Lys.FARVE.skrå, 700);
       }
       g.restore();
     }
@@ -701,26 +605,8 @@ export default {
     function opdaterLysur(dt) {
       if (ly.stille) return;
       const G = lysGeo();
-      const v = lysV();
-      const gam = T.lysurGamma(v);
-      let d = dt;
       // Trinnet "Den skrå vej er længere" stopper, når lyset set fra Jorden er nået op til det øverste spejl
-      if (lysTrin === 2) d = Math.min(dt, (0.5 - ly.jord) * LYS_TIK * gam);
-      const før = { jord: ly.jord, x: ly.x };
-      ly.skib += d / LYS_TIK;
-      ly.jord += d / (LYS_TIK * gam);
-      ly.x += v * G.c * d;
-      // Spidserne i zigzaggen sættes præcist (ellers bliver de skåret af, når et billede springer over dem)
-      for (let k = Math.floor(før.jord * 2) + 1; k / 2 <= ly.jord; k++) {
-        const f = k / 2;
-        ly.spor.push([før.x + ((f - før.jord) / (ly.jord - før.jord)) * (ly.x - før.x), f]);
-      }
-      // Gamle punkter langt ude til venstre smides væk
-      while (ly.spor.length > 2 && ly.spor[1][0] < ly.x - 3 * G.we) ly.spor.shift();
-      if (lysTrin === 2 && ly.jord >= 0.5 - 1e-9) {
-        ly.jord = 0.5;
-        ly.stille = true;
-      }
+      Lys.skridtUr(ly, dt, { v: lysV(), c: G.c, bredde: G.we, stopOppe: lysTrin === 2 });
       tegnLysur();
     }
 

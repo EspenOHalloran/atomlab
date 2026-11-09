@@ -247,6 +247,9 @@ export const LYSUR_FARTER = [0, 0.5, Math.sqrt(3) / 2, 0.95, 0.99];
 export const LYSUR_START = 2; // 87 %
 export const lysurGamma = (v) => 1 / Math.sqrt(1 - v * v);
 export const lysurFartTekst = (v) => `${tal(Math.round(v * 100))} %`;
+// Farter lægges sammen (Einstein, "Hvorfor går tiden langsommere?", scene 1): w = (u + v)/(1 + u·v/c²) i andele af
+// lysets fart. 50 % + 50 % giver 80 %, og med lyset (u = 1) giver det altid 1.
+export const læggesSammen = (u, v) => (u + v) / (1 + u * v);
 
 // "Hurtigere end lyset?": Set fra Jorden er turen én vej (jordÅr) lidt længere end lysets (lysår), så et lysglimt, der
 // blev sendt af sted samtidig med skibet, kommer kun forspringet før. Ved 99,99 % til Alpha Centauri: knap 4 timer.
