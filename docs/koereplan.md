@@ -15,7 +15,7 @@
     5. **Månerne og "Land på måner"** i Solsystemet (Titan med Huygens, Europa, Enceladus og evt. Månen ved Apollo 11).
     6. **Tjernobyl** i Reaktoren (rykket ned, jeres go 5. november 2026). Venter stadig på Fable 5.5 (se [plan-fable.md](plan-fable.md)). Laver Opus den før, så med xhigh til faktagrundlaget.
     - Hjernen og AI venter (jeres svar). Nye dele bliver knapper i en af verdenerne i menuen (K4, [plan-verdener.md](plan-verdener.md)).
-6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri), T2 (alle mål, "1 g hele vejen" og afstanden, der skrumper) og T3 (lagene og teksterne, 8. november 2026) er lavet. Sporet er **lukket for nu** (8. november 2026). **T4** (udsigten fra cockpittet, en shader) er ikke lavet, men ligger som en mulig udvidelse i fremtiden: start i så fald med [prompt-tid-t4.md](prompt-tid-t4.md) (mellem til stor). **T5, "Hvorfor går tiden langsommere?"** (jeres ønske 8. november 2026): flere ressourcer på at forklare tidsudvidelsen med animationer. Forslaget og jeres svar står under T5 i [plan-tid.md](plan-tid.md) (stor i alt). Go til Trin 0 (drejebogen og skitserne) 8. november 2026: [prompt-tid-t5.md](prompt-tid-t5.md).
+6. **Tid og rum (relativitet)** (jeres idé, 7. november 2026): "Rejsen i tid" i Kosmos. T1 (lysuret og rejsen til Alpha Centauri), T2 (alle mål, "1 g hele vejen" og afstanden, der skrumper) og T3 (lagene og teksterne, 8. november 2026) er lavet. Sporet er **lukket for nu** (8. november 2026). **T4** (udsigten fra cockpittet, en shader) er ikke lavet, men ligger som en mulig udvidelse i fremtiden: start i så fald med [prompt-tid-t4.md](prompt-tid-t4.md) (mellem til stor). **T5, "Hvorfor går tiden langsommere?"** (jeres ønske 8. november 2026): flere ressourcer på at forklare tidsudvidelsen med animationer. Forslaget og jeres svar står under T5 i [plan-tid.md](plan-tid.md) (stor i alt). Trin 0 (drejebogen og skitserne) er godkendt 9. november 2026. Byggeriet: T5a ([prompt-tid-t5a.md](prompt-tid-t5a.md)), T5b og T5c.
 7. **Grupper i Kosmos' liste** (jeres valg i K4 Trin 0, 7. november 2026): De 12 fænomener deles i grupper som i Solsystemet (fx "Stjernernes liv", "Sorte huller og rumtid"). En egen, lille opgave efter K4 i sporet Solsystemet og Kosmos (lille).
 
 ## Sporenes næste trin (detaljerne står i sporets fil)
@@ -23,7 +23,7 @@
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Venus ([planen](plan-venus.md), V1 og V2 er lavet, venter på et go til V3, [prompt-venus.md](prompt-venus.md)) → Merkur → Pluto → overblikket. Uranus og Neptun er færdige (UN1-UN5). Mars ekstra og Månen bagefter. |
 | [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026). Liv L0 (planen og faktagrundlaget) er lavet 9. november 2026 ([plan-liv.md](plan-liv.md)). Jeres svar er givet. Næste: L1 (stigen i 3D). |
-| [Tid og rum](lige-nu/tid.md) | T5 Trin 0 ("Hvorfor går tiden langsommere?", go 8. november 2026): drejebogen og skitserne, [prompt-tid-t5.md](prompt-tid-t5.md). T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
+| [Tid og rum](lige-nu/tid.md) | T5a ("Hvorfor går tiden langsommere?": rammen og scene 1-2), [prompt-tid-t5a.md](prompt-tid-t5a.md), så T5b (scene 3) og T5c (scene 4-5). T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
 | [Småting](lige-nu/smaating.md) | Intet. |
 

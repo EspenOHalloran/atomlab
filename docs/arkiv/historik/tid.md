@@ -2,6 +2,14 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (8. november 2026): Jeres ønsker til "Rejsen i tid" (efter T3).** I `js/kosmos/tid.js` og `js/data/tid.js`:
+- **"Hurtigere end lyset? Nej!"** (jeres spørgsmål: 4 lysår på 21 dage): et nyt emne øverst, der henviser til T3's "Set fra skibet" med tre trin: set fra Jorden (turen tager 4,3 år, et lysglimt sendt samtidig kommer kun knap 4 timer før, men dit ur går 71 gange langsommere), set fra skibet (vejen er skrumpet til 0,061 lysår) og "begge dele er rigtige". "Lige nu" siger det samme kort med de rigtige tal for målet og farten (`forspring`, `forspringTekst`), før afgang, ved målet og hjemme.
+- **Målet er tre kontakter** (🎯 Alpha Centauri, Mælkevejens centrum, Andromeda), hvor præcis én er tændt, i stedet for skyderen "Mål". Skyderen "Fart" hedder nu "Fast fart".
+- **"Fast fart eller 1 g?"**: T3's emne "Hvorfor tager det år med 1 g?" hedder nu sådan og forklarer også fast fart (folder sig stadig ud med 1 g), og "Lige nu" siger før afgang, hvad den valgte måde betyder (fast fart er snyd, 1 g er den realistiske). Alternativet til 1 g er skyderen "Fast fart".
+- **Lysuret trin for trin** (bjælken ‹ og "Næste", `LYS_TRIN`): 1 Et lysur (kun skibets), 2 Set fra Jorden, 3 Den skrå vej er længere (står stille med den lige og den skrå vej, 2 gange så lang), 4 Uret går langsommere (tæl tikkene), 5 Alt om bord følger med (skyderen "Fart i lysuret": 0, 50, 87, 95 og 99 %). Lysuret har sin egen fart (87 %, γ = 2): Ved rejsens 99,99 % fór spejlene mange gange hen over billedet for hvert tik, så zigzaggen var umulig at forstå. Billedet fra Jorden følger nu spejlene, så de aldrig forsvinder ud af det.
+- Faktatjek: alle tal regnet efter med `js/data/tid.js` mod fakta-tid.md (22 dage, 3,8 timer, 71, 0,061 lysår, 95 % midtvejs med 1 g, over 96 % efter 2 år, γ = 2 ved 86,6 %).
+- Test: `tests/tid.mjs` (alle T3's tjek og de nye).
+
 **Senest lavet (8. november 2026): T3, lagene og teksterne.** I "⏳ Rejsen i tid" (`js/kosmos/tid.js`):
 - Syv emner: de to fra T1 og nu "Hvorfor ikke omvendt?" (tvillingeparadokset), "Set fra skibet" (længdeforkortelsen, folder sig ud med kontakten), "Hvorfor tager det år med 1 g?" (folder sig ud med "1 g hele vejen", har nu de 11.500 g), "Er det målt?" (myonerne, Hafele og Keating, GPS med en knap til Rumtid, Kononenko og urene, der løftes 33 cm) og "Kunne man?" (energien, brændstoffet, sandkornet og gassen). Knapperne "Set fra skibet" og "1 g hele vejen" står også i teksten.
 - "For nørder": reglen om √10, 1 g med Jordens tid, tvillingeparadokset med rumtidens minus, samtidighed og "Hvad er et sekund?" med knappen "Cæsium ›". Den åbner cæsiums kort i Det periodiske system (ny lytter efter `data-gaa="system:55"` i `js/system.js`).
