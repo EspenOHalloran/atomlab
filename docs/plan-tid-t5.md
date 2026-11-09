@@ -1,6 +1,6 @@
 # Drejebog: "Hvorfor går tiden langsommere?" (T5)
 
-*T5 Trin 0, 8. november 2026 (Opus, høj effort). Prompten er [prompt-tid-t5.md](prompt-tid-t5.md), og jeres ønske og opdelingen står under T5 i [plan-tid.md](plan-tid.md). Faktagrundlaget er [fakta-tid/hvorfor-langsommere.md](fakta-tid/hvorfor-langsommere.md) (afsnit 15), og tallene er regnet efter i [fakta-tid/regn.py](fakta-tid/regn.py). Skitserne er [skitser/tid-t5.html](skitser/tid-t5.html) (også udgivet som artefakt). Teksterne her og i skitsen er de samme. Ret dem begge steder.*
+*T5 Trin 0, 8. november 2026 (Opus, høj effort). Prompten er [prompt-tid-t5.md](arkiv/prompt-tid-t5.md), og jeres ønske og opdelingen står under T5 i [plan-tid.md](plan-tid.md). Faktagrundlaget er [fakta-tid/hvorfor-langsommere.md](fakta-tid/hvorfor-langsommere.md) (afsnit 15), og tallene er regnet efter i [fakta-tid/regn.py](fakta-tid/regn.py). Skitserne er [skitser/tid-t5.html](skitser/tid-t5.html) (også udgivet som artefakt). Teksterne her og i skitsen er de samme. Ret dem begge steder.*
 
 ## Jeres svar (8. november 2026)
 - **Hvor:** Et nyt fænomen i Kosmos ved siden af Rejsen i tid, og de to henviser til hinanden. **Alle fem scener.** Trin 0 laver skitserne som små animationer i et artefakt.
@@ -151,4 +151,4 @@ Formlen for et lige stykke er τ² = t² − (x/c)². Tiden på ens eget ur kald
 5. Scene 5: Opdager han selv, at den lige streg får flest tik? Hvad siger han til "nu"-linjerne?
 6. Hvor faldt han af, og hvor blev han nysgerrig? Var teksterne for lange?
 
-**Svarene (9. november 2026):** Jeres ord: "Skitsen er afprøvet. Den er god. Lad os få det ind i AtomLab." Drejebogen og skitsen er godkendt uden ændringer, og T5 Trin 0 er færdig. Byggeriet: [prompt-tid-t5a.md](prompt-tid-t5a.md), [prompt-tid-t5b.md](prompt-tid-t5b.md) og [prompt-tid-t5c.md](prompt-tid-t5c.md).
+**Svarene (9. november 2026):** Jeres ord: "Skitsen er afprøvet. Den er god. Lad os få det ind i AtomLab." Drejebogen og skitsen er godkendt uden ændringer, og T5 Trin 0 er færdig. Byggeriet: [prompt-tid-t5a.md](arkiv/prompt-tid-t5a.md), [prompt-tid-t5b.md](arkiv/prompt-tid-t5b.md) og [prompt-tid-t5c.md](arkiv/prompt-tid-t5c.md).
