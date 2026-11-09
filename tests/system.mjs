@@ -126,7 +126,7 @@ tjek('stjerne-tæller', (await page.textContent('#systemOpdaget')).includes('1 a
   await s.click('.menu-fremgang-knap');
   const m = await s.evaluate(() => Object.fromEntries([...document.querySelectorAll('#fremgangListe [data-del]')].map((li) => [li.dataset.del, li.querySelector('.fremgang-tal').textContent])));
   tjek('"Din fremgang": Batteriet er klaret', m.batteri === '✓ 5 af 5 opgaver', JSON.stringify(m));
-  tjek('"Din fremgang": opdagede grundstoffer og sete fænomener', m.system === '2 af 118 opdaget' && m.kosmos === '2 af 12 besøgt' && /^1 af \d+ besøgt$/.test(m.solsystem), JSON.stringify(m));
+  tjek('"Din fremgang": opdagede grundstoffer og sete fænomener', m.system === '2 af 118 opdaget' && m.kosmos === '2 af 13 besøgt' && /^1 af \d+ besøgt$/.test(m.solsystem), JSON.stringify(m));
   tjek('menuen: intet "Næste eventyr" og ingen gule piller', !(await s.$('.næste-eventyr, .kort-fremgang, #menuStatus, #menuCitat')));
   await s.screenshot({ path: UD + '/s5-menu.png' });
   await s.context().close();

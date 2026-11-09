@@ -2,6 +2,11 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (9. november 2026): T5 Trin 0, drejebogen, faktagrundlaget og skitserne til "Hvorfor går tiden langsommere?".**
+- **Drejebogen** [plan-tid-t5.md](../plan-tid-t5.md): fem scener (bolden og lyset, lysuret med trekanten, myonernes kapløb, "nu" er ikke det samme for alle og rumtidskortet) med teksterne i lag, rammen, henvisningerne til Rejsen i tid og layoutet på højkant. Jeres svar 8. november: navnet, en rejse med "Næste" og spring, lampen og én pointe i scene 4 og vendepunktet, man trækker, i scene 5.
+- **Faktagrundlaget** [fakta-tid/hvorfor-langsommere.md](../fakta-tid/hvorfor-langsommere.md) (afsnit 15) med tallene i regn.py. Frisch og Smiths tal (563, 412 og 27 i timen) er nu bekræftet i Wikipedia. Nye fælder i fakta-faelder.md.
+- **Skitserne** [skitser/tid-t5.html](../skitser/tid-t5.html) (artefaktet "Hvorfor går tiden langsommere?"). Jeres runde 9. november: "Skitsen er afprøvet. Den er god." Godkendt uden ændringer.
+
 **Senest lavet (8. november 2026): Jeres ønsker til "Rejsen i tid" (efter T3).** I `js/kosmos/tid.js` og `js/data/tid.js`:
 - **"Hurtigere end lyset? Nej!"** (jeres spørgsmål: 4 lysår på 21 dage): et nyt emne øverst, der henviser til T3's "Set fra skibet" med tre trin: set fra Jorden (turen tager 4,3 år, et lysglimt sendt samtidig kommer kun knap 4 timer før, men dit ur går 71 gange langsommere), set fra skibet (vejen er skrumpet til 0,061 lysår) og "begge dele er rigtige". "Lige nu" siger det samme kort med de rigtige tal for målet og farten (`forspring`, `forspringTekst`), før afgang, ved målet og hjemme.
 - **Målet er tre kontakter** (🎯 Alpha Centauri, Mælkevejens centrum, Andromeda), hvor præcis én er tændt, i stedet for skyderen "Mål". Skyderen "Fart" hedder nu "Fast fart".

@@ -17,9 +17,9 @@ await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('12 fænomener', ids.length === 12, ids);
+tjek('13 fænomener', ids.length === 13, ids);
 tjek('vores eget solsystem er flyttet', !ids.some((id) => ['aarstider', 'formoerkelser', 'solstorm', 'solensfremtid', 'mars', 'saturn'].includes(id)), ids);
-tjek('12 knapper i listen', (await page.$$('#kosmos .kosmos-valg')).length === 12);
+tjek('13 knapper i listen', (await page.$$('#kosmos .kosmos-valg')).length === 13);
 const K = () => page.evaluate(() => window.atomlabTest.kosmos);
 const objekter = {};
 for (const id of ids) {
@@ -36,7 +36,7 @@ for (const id of ids) {
   const styr = await page.evaluate(() => window.atomlabTest.kosmos.styr());
   tjek(`${id}: Styr-boksen har kun kontakter og skydere`, styr.every((x) => x.slags === 'kontakt' || x.slags === 'skyder'), JSON.stringify(styr));
   const bjælke = await page.evaluate(() => window.atomlabTest.kosmos.bjælke());
-  tjek(`${id}: bjælken har en handling (fx "Start")`, bjælke.length > 0 && !bjælke[0].slået, JSON.stringify(bjælke));
+  tjek(`${id}: bjælken har en handling (fx "Start") eller "Næste"`, bjælke.some((k) => !k.slået), JSON.stringify(bjælke));
   // tryk på alle knapper (efter teksten), og spol lidt frem efter hver
   for (const tekst of knapper) {
     await page.evaluate((t) => { const k = window.atomlabTest.kosmos; k.trykPå(t); k.spol(3); }, tekst);
