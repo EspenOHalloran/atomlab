@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (9. november 2026): Planen for Venus.** Jeres go: "Skriv planen for Venus efter mønstret fra plan-uranus-neptun.md."
+- **Planen:** [plan-venus.md](../plan-venus.md) med kilderne (tjekket med curl), to lag (skyerne udenpå og Magellans radarkort med højder indeni), otte signatur-effekter, flybyen med 6 stop, himlen og delopgaverne V1-V5 (V6 er valgfri). Faktagrundlaget med kilder står i [fakta-solsystemet/del7-venus.md](../fakta-solsystemet/del7-venus.md) med 14 fælder.
+- **Kilderne:** Magellans kort ligger frit hos USGS (radar 2 km og 225 m pr. pixel, højder 4,6 km). Venera 13's farvepanorama og Parker Solar Probes billeder af natsiden er public domain. Akatsukis kort over skyerne ligger i `darts.isas.jaxa.jp`, som er lukket.
+- **Jeres svar (9. november 2026):** "Vi følger dine anbefalinger." Svarene står i planen under "Jeres svar". Prompten er [prompt-venus.md](../prompt-venus.md).
+- **Til jer før V2:** Åbn `darts.isas.jaxa.jp` i miljøets Network access (Akatsukis kort over skyerne).
+
 **Senest lavet (8. november 2026): Uranus lukket for nu (bedre kort over planeten og månerne).** Jeres go: "Læs docs/prompt-uranus-kort.md og kør".
 - **Månerne:** Kortene er nu JPL's originaler i 1440 × 720 (før Commons' småbilleder i 1280 × 640), hentet som TIF fra NASA 3D Resources på GitHub (Commons svarede stadig 429). Oberon har ikke længere JPEG-blokke. Det er ca. 12 % flere pixel, så forskellen er lille at se.
 - **Et skarpere Miranda-kort blev prøvet og givet op:** USGS' mosaik set fra sydpolen (PIA01490) blev lagt præcist på kortet, men JPL's kort havde lige så mange eller flere detaljer. Det er allerede på højde med Voyagers bedste billeder af hele Miranda (ca. 0,5 km pr. pixel mod 560-740 m), så et større kort giver intet.

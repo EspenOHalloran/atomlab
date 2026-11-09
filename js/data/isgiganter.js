@@ -32,6 +32,9 @@ export const PLANETER = {
   },
 };
 
+// navn: 'uranus' eller 'neptun', eller tallene for en anden planet i samme form (Venus, js/data/venus.js)
+const tal = (navn) => (typeof navn === 'string' ? PLANETER[navn] : navn);
+
 // Julianske århundreder siden J2000 (1. januar 2000 kl. 12 TT, regnet som UT: forskellen er under et minut)
 export function århundreder(dato) {
   return (dato.getTime() - Date.UTC(2000, 0, 1, 12)) / 864e5 / 36525;
@@ -42,7 +45,7 @@ const tilProgram = ([X, Y, Z]) => [Y, Z, X];
 
 // Planetens plads om Solen (AU) i ekliptikkens retninger (X, Y, Z)
 export function plads(navn, dato) {
-  const p = PLANETER[navn];
+  const p = tal(navn);
   const T = århundreder(dato);
   const [a, e, I, L, ϖ, Ω] = p.bane.map((v, i) => v + p.rate[i] * T);
   const ω = (ϖ - Ω) * RAD;
@@ -66,14 +69,14 @@ function fraÆkvator(ra, dec) {
 
 // IAU's nordpol i programmets retninger (enhedsvektor)
 export function pol(navn, dato) {
-  const { ra, dec } = PLANETER[navn].pol(århundreder(dato));
+  const { ra, dec } = tal(navn).pol(århundreder(dato));
   return tilProgram(fraÆkvator(ra, dec));
 }
 
 // Knuden Q mellem planetens ækvator og Jordens ækvator (IAU), i programmets retninger. Kortets længde 0° lægges her ved
 // start (den rigtige primærmeridian står W grader øst for Q, men programmets døgn følger ikke datoen).
 export function knude(navn, dato) {
-  const { ra } = PLANETER[navn].pol(århundreder(dato));
+  const { ra } = tal(navn).pol(århundreder(dato));
   return tilProgram(fraÆkvator(ra + 90, 0));
 }
 
