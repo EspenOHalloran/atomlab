@@ -6,7 +6,7 @@
 | Spor | Fil | Hvad |
 |---|---|---|
 | Solsystemet og Kosmos | [lige-nu/solsystemet.md](lige-nu/solsystemet.md) | Planeterne, månerne, Mars ekstra og Kosmos |
-| Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0 er lavet), senere Ild |
+| Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0 og L1 er lavet, L2 venter på et go), senere Ild |
 | Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 er lavet. T5 (forklar, hvorfor tiden går langsommere) har fået go til Trin 0 ([prompt-tid-t5.md](prompt-tid-t5.md)). T4 er en mulig udvidelse |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | Menuen som en ring (K1-K3) |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | Ordbogen, grundstofkortene og kategorierne |
