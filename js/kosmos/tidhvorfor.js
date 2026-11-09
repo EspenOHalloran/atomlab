@@ -188,7 +188,8 @@ export default {
       const boldTog = hverdag ? '50 km/t' : '50 % af lysets fart';
       const boldPerron = hverdag ? '150 km/t' : `${boldProcent(sc1.fart)} % af lysets fart`;
       const togNavn = hverdag ? '100 km/t' : FARTER1[sc1.fart].navn;
-      const hjørne = (s) => tekst(s, W - 12, skrift() + 7, { side: 'right', farve: FARVE.svag, str: skrift() - 1, vægt: 500 });
+      // Hjørneteksten skjules, når billedet er lavt (telefon på langs), så den ikke rammer pilens tekst
+      const hjørne = (s) => { if (ph >= 120) tekst(s, W - 12, skrift() + 7, { side: 'right', farve: FARVE.svag, str: skrift() - 1, vægt: 500 }); };
       const pilFarve = lys ? FARVE.skrå : FARVE.bold;
 
       // Øverst: set fra toget (toget står stille, og perronen glider baglæns med pælene γ gange tættere)
@@ -285,7 +286,9 @@ export default {
       const faner = [...vindue.querySelectorAll(':scope > .panel-fane')].some((f) => f.offsetWidth > 0) ? 36 : 0;
       const nyW = Math.max(240, Math.min(MAKS_BREDDE, bund.clientWidth - faner));
       const vR = vindue.getBoundingClientRect();
-      const andre = bund.getBoundingClientRect().height - holder.offsetHeight; // underteksten, bjælken og mellemrummene
+      // Underteksten, bjælken og mellemrummene (målt hver for sig: .vindue-bund har en største højde og bliver ikke højere)
+      const mellemrum = parseFloat(getComputedStyle(bund).rowGap) || 6;
+      const andre = [...bund.children].filter((e) => e !== lag && e.offsetHeight > 0).reduce((sum, e) => sum + e.offsetHeight + mellemrum, 0);
       const styr = vindue.querySelector('.styr');
       const sR = styr && styr.offsetHeight > 0 ? styr.getBoundingClientRect() : null;
       const øverst = Math.max(vR.top + 44, sR ? sR.bottom + 8 : 0);
