@@ -216,9 +216,9 @@ const MAX_SKYER = 110;
 const MAX_NAVNE = 6;
 const MAX_PILE = 24; // bindingernes pile (højst 11 bånd) og molekylernes pile (højst 6)
 export const KERNE_R = { H: 0.5, C: 0.75, N: 0.72, O: 0.7, Cl: 0.95 }; // kuglernes radius (enheder)
-const KERNE_FARVE = { // kemikernes farver (CPK), mørke nok til lyset i scenen
+export const KERNE_FARVE = { // kemikernes farver (CPK), mørke nok til lyset i scenen (P bruges af DNA-stigen i Liv)
   H: new THREE.Color(0.6, 0.62, 0.68), C: new THREE.Color(0.26, 0.28, 0.32), N: new THREE.Color(0.12, 0.24, 0.85),
-  O: new THREE.Color(0.78, 0.07, 0.05), Cl: new THREE.Color(0.16, 0.62, 0.13),
+  O: new THREE.Color(0.78, 0.07, 0.05), Cl: new THREE.Color(0.16, 0.62, 0.13), P: new THREE.Color(0.95, 0.42, 0.04),
 };
 const PIND_FARVE = new THREE.Color(0.42, 0.52, 0.85);
 const PIND_STRAKT = new THREE.Color(1.0, 0.32, 0.25);

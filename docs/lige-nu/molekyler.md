@@ -6,6 +6,8 @@
 
 **Jeres svar (9. november 2026):** anbefalingen på alle spørgsmålene i planen: én del "Liv" med tre faner, DNA først, zoom helt ind til atomerne og Millers kolbe med "Trappen til liv" (afsnit 9 i planen).
 
+**I gang (9. november 2026): Liv L1.** Domænet `files.rcsb.org` er åbnet, og 1BNA er hentet (`js/data/liv/1BNA.pdb`). Værktøjet `js/data/liv/lav-dna-atomer.mjs` laver fire målte basepar (A–T, T–A, G–C, C–G) med H regnet ud og én fælles målt rygrad (så kæden O3'–P er 1,60 Å i den ideelle stige), i `js/data/liv/dna-atomer.js`. Stigen (`js/data/liv/stige.js` og `js/liv/stige.js`) har 10,5 basepar pr. omgang, 3,38 Å pr. trin og en diameter på 19,9 Å, atomerne tæt på og båndene længere væk, der toner over i hinanden. En foreløbig skærm `#liv` (ikke i menuen endnu). Skærmbilledet af stigen er vist til jer, og resten af L1 venter på jeres svar.
+
 **Næste (venter på jeres go):**
 1. **L1:** skærmen, verdenen "Ild og liv" i menuen og stigen i 3D, zoomet helt ind til atomerne (Opus, høj effort, ny session). Domænet `files.rcsb.org` (atompladserne fra Protein Data Bank) skal åbnes før L1. Teksten til at starte sessionen står i [plan-liv.md](../plan-liv.md), afsnit 11.
 2. Idéen "Rumfærgens blanding" (for meget hydrogen) i knaldgassen står i [ideer.md](../ideer.md).
