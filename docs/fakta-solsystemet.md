@@ -19,6 +19,7 @@
 | 5b | Jupiter: månerne og himlen | [del5b-jupiter-maanerne-og-himlen.md](fakta-solsystemet/del5b-jupiter-maanerne-og-himlen.md) | 31 KB |
 | 5c | Jupiter: faktatjek J2 til J5 | [del5c-jupiter-faktatjek-j2-j5.md](fakta-solsystemet/del5c-jupiter-faktatjek-j2-j5.md) | 14 KB |
 | 6 | Uranus og Neptun: planeterne, årstiderne, farverne, vindene, ringene, månerne, fælder og billeder | [del6-uranus-og-neptun.md](fakta-solsystemet/del6-uranus-og-neptun.md) | 15 KB |
+| 7 | Venus: planeten, døgnet, skyerne og vindene, overfladen (Magellan), vulkanerne, sonderne, liv i skyerne, himlen, fælder og billeder | [del7-venus.md](fakta-solsystemet/del7-venus.md) | 16 KB |
 
 Læs kun den fil, du skal bruge. Nyt faktatjek skrives i filen for den planet eller del, det handler om (eller en ny fil i mappen, fx `del6-venus.md`), og indekset får en linje.
 
