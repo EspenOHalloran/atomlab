@@ -245,6 +245,8 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 4. **Pluto kommer med nu** (i denne runde, med Charon som lille kugle).
 5. **De store måner står som små kugler med rigtige kort fra start** (fx Jupiters fire), så planeterne ikke ser tomme ud. Besøgene på månerne og "Land på måner" kommer senere (se nedenfor).
 
+**Planen for Venus er lavet (9. november 2026):** [plan-venus.md](plan-venus.md). Jeres svar (samme dag): anbefalingerne følges.
+
 **Planen for Uranus og Neptun er lavet (7. november 2026):** [plan-uranus-neptun.md](plan-uranus-neptun.md). Rækkefølgen blev ændret 7. november 2026 (jeres svar): Uranus og Neptun før Venus og Merkur.
 
 **Planen for Jupiter er lavet (6. november 2026):** [plan-jupiter.md](plan-jupiter.md). **Det oprindelige næste skridt:** Opus laver planen for Jupiter med høj effort (data og licenser tjekket med curl, stop, signatur-effekter og faktagrundlag med kilder i `fakta-solsystemet.md`). Domæner, der ikke er åbne, nævnes før arbejdet. Venter på et go, og jeres runde på tabletten bør komme før byggeriet.
