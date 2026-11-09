@@ -15,3 +15,16 @@
 - `js/data/sider/venus.js`: siden i V1 (den korte tekst, to emner, "For nørder", billederne og "Ærligt talt"). Resten kommer i V5.
 - `billeder/solsystem/lav_venus.py`: radarkortet (8k, 4k, 2k i gråtoner) og højderne (4k, 2k) fra USGS' to GeoTIFF-filer (tifffile, ikke rasterio). Hullerne fyldes med en pyramide (`fyld`, med en fjerdedel af kortet lånt fra den anden side, `fyldRundt`), mørke sømme i radaren rettes (`streger`), og springet i højderne ved 180° fordeles (`sømmen`). Se `billeder/solsystem/KILDER.md`.
 - Test: `tests/venus.mjs`.
+
+## V2: skyerne og superrotationen (9. november 2026)
+- **Skyerne** (`js/kosmos/venus.js`): `lavGasplanet` (planet.js) med `toner` og `gennemsigtig`, en kugle i skyernes top (`SKY_KM` = 6.051,8 + 70 km, som Akatsukis kort) i gruppen `skyDrej` under `hæld`. Kortet `venus-skyer-1k.jpg` toner ind fra mørk (`skyTone`), og så skiftes 4k (pc) eller 2k (touch) ind. Tests 1k. Skyerne hentes før radaren, og bjælken "Henter Venus …" følger skyerne.
+  - **Farven:** `SYNLIG` (gullig hvid, kontrast `SKY_ÆGTE` · 0,1) og `UV` (kølig, kontrast `SKY_ÆGTE` · 2,4) glider blødt (`fUv`) med kontakten "Ultraviolet (som Akatsuki)". `SKY_ÆGTE` (0,94 = 8 · spredning / middel) passer til kortets gråtoner fra `lav_venus_skyer.py`. UV's lyseste punkter er ca. 1, ellers breder gløden sig ud over himlen.
+  - **Vindene:** `skyDrej` drejer med vinkelfarten ved ækvator (`SKY_OMEGA`, ca. 4,3 døgn pr. omgang) oven på planetens drejning (`drejSkyer`), og kortet glider i to faser (`FASE` = 24 s ved ▶, et døgn) med resten (`restUv`, højst ca. 6° pr. døgn ved 40°). `skySek` er sekunder i virkeligheden, siden Venus blev åbnet. Skyerne står stille i pause.
+  - **"Under skyerne"** (`underSkyder`, `sætUnder`): 0-100 %. Alfa er 1 − v/100. Ved 0 tegnes skylaget og disen ikke. Ved helt dækkende skyer tegnes jorden ikke (`venus.mesh.visible`), det gav ca. dobbelt så mange billeder i sekundet.
+  - **Disen** (`lavLuft` fra atmosfaere.js, H = 4 km, top 30 km) over skyerne lyser i modlys.
+  - **"Bjergene 10 gange højere"** gør også skyerne 10 gange højere (`skyFaktor`), så bjergene ikke stikker op gennem dem. `minOverblik` holder kameraet over skyerne.
+  - **Tiden:** ▶ en time i sekundet, ⏩ `HURTIG` = 6 (seks timer i sekundet: skyerne er ca. 17 sekunder om en omgang, og soldøgnet ca. 8 minutter).
+  - **Testadgang:** `skyer()` (alfa, synlig, under, uv, tone, kontrast, radius, harKort, tid), `skyVinkel(phi)`, `vind(phi)`, `vindTekstur(phi)`, `sætUnder(v)`, `hurtigGange` og `tætPå()` (til billeder).
+- `js/data/vinde-venus.js` (uden Three.js): `MÅLT` (vinden hver 2. grad fra 42° S til 42° N, målt af `lav_venus_skyer.py`), `vindVed(phi)` (lineært til 0 ved polerne fra ±42°, som Venus Express), `omgang(phi)` og `SKY_HØJDE`. Samme profil bruges i `lav_venus_skyer.py`, når billederne flyttes til samme tidspunkt. Ændres den ene, så kør den anden igen.
+- `billeder/solsystem/lav_venus_skyer.py`: henter 48 L3b-billeder fra DARTS (banen r0057, august 2017), retter lyset med Minnaerts lov, måler vindene med krydskorrelation og lægger billederne sammen. Se `KILDER.md`.
+- `tests/vaerktoejer/venus.mjs`: billeder med fuld grafik og billeder i sekundet (hel, uv, under50, under100, modlys, tæt, hurtig).

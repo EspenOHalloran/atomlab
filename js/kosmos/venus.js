@@ -38,7 +38,7 @@ export const HØJDE_MIN = -3500;
 export const HØJDE_MAX = 12500;
 const OVERDRIV = 10; // "Bjergene 10 gange højere"
 const MARGEN = 2; // km: så tæt på jorden må kameraet komme
-// Tiden: ▶ en time i sekundet (skyerne kredser på ca. 1½ minut), ⏩ seks timer i sekundet (ca. 16 sekunder, og Solen
+// Tiden: ▶ en time i sekundet (skyerne kredser på knap 2 minutter), ⏩ seks timer i sekundet (ca. 17 sekunder, og Solen
 // står op i vest: 116,75 døgn er ca. 8 minutter)
 export const SEK_PR_SEK = 3600;
 export const HURTIG = 6;
