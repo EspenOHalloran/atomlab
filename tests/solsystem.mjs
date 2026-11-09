@@ -28,15 +28,15 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('menuen: Solsystemet står lige før Kosmos i Rummet', rummet?.join() === 'solsystem,kosmos', JSON.stringify(rummet));
   await s.click('.menu-fremgang-knap');
   const tal = await s.evaluate(() => ['solsystem', 'kosmos'].map((id) => document.querySelector(`#fremgangListe [data-del="${id}"] .fremgang-tal`)?.textContent));
-  tjek('"Din fremgang": 2 af 11 besøgt i Solsystemet og 1 af 12 i Kosmos', tal[0] === '2 af 11 besøgt' && tal[1] === '1 af 12 besøgt', JSON.stringify(tal));
+  tjek('"Din fremgang": 2 af 12 besøgt i Solsystemet og 1 af 12 i Kosmos', tal[0] === '2 af 12 besøgt' && tal[1] === '1 af 12 besøgt', JSON.stringify(tal));
   await s.keyboard.press('Escape');
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
   tjek('det sidst valgte (Saturn) åbner i Solsystemet', sol.valgt === 'saturn', JSON.stringify(sol));
-  tjek('Solsystemet: 2 af 11 set', sol.set === '2 af 11 set', sol.set);
+  tjek('Solsystemet: 2 af 12 set', sol.set === '2 af 12 set', sol.set);
   tjek('Solsystemet har Solen, Jorden, Jupiter, Uranus, Neptun og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
-  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,jorden,jupiter,uranus,neptun', JSON.stringify(prikker));
+  tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,venus,jorden,jupiter,uranus,neptun', JSON.stringify(prikker));
   await s.click('#solsystem .sol-klode[data-id="solen"]');
   await efterRejsen(s);
   // Træet tegnes ved næste tjek (fire gange i sekundet), så vent på knappen (under belastning var den der ikke endnu)
@@ -65,7 +65,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   await vis(s, 'solsystem');
   // U1 (docs/plan-ux.md): kloderne på én række og et træ med den valgte klodes steder, måner og forsøg
   const kloder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => k.textContent));
-  tjek('kloderne: Solen, Jorden, Mars, Jupiter, Saturn, Uranus og Neptun (efter afstanden til Solen)', kloder.join() === '☀️Solen,🌍Jorden,🔴Mars,🟠Jupiter,🪐Saturn,🩵Uranus,🔵Neptun', JSON.stringify(kloder));
+  tjek('kloderne: Solen, Venus, Jorden, Mars, Jupiter, Saturn, Uranus og Neptun (efter afstanden til Solen)', kloder.join() === '☀️Solen,🟡Venus,🌍Jorden,🔴Mars,🟠Jupiter,🪐Saturn,🩵Uranus,🔵Neptun', JSON.stringify(kloder));
   tjek('første gang åbner Solen', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solen');
   const træ = () => s.evaluate(() => atomlabTest.solsystem.træ());
   let t = await træ();
@@ -139,10 +139,10 @@ for (const [navn, vp] of STØRRELSER) {
   await s.evaluate(() => atomlabTest.solsystem.vælg('formoerkelser'));
   await s.waitForTimeout(400);
   const hoveder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => { const r = k.getBoundingClientRect(); return { y: Math.round(r.top), x: Math.round(r.left), synlig: r.width > 0 }; }));
-  // Syv kloder i et gitter (fem pr. række på pc, tre ved smalle paneler): alle rækker er fulde undtagen den sidste
+  // Otte kloder (Venus kom med 9. november 2026) i et gitter (fem pr. række på pc, tre ved smalle paneler): alle rækker er fulde undtagen den sidste
   const iRække1 = hoveder.filter((h) => h.y === hoveder[0].y).length;
   const klodeRækker = Math.ceil(hoveder.length / iRække1);
-  tjek(`${navn}: de ${hoveder.length} kloder står i ${klodeRækker} rækker med ${iRække1} i hver`, hoveder.length === 7 && iRække1 >= 3 && new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
+  tjek(`${navn}: de ${hoveder.length} kloder står i ${klodeRækker} rækker med ${iRække1} i hver`, hoveder.length === 8 && iRække1 >= 3 && new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
   tjek(`${navn}: kun Jordens forsøg står i træet`, (await s.isVisible('#solsystemTræ button[data-id="aarstider"]')) && !(await s.$('#solsystemTræ button[data-id="solstorm"]')));
   const vindue = await s.evaluate(() => document.getElementById('solsystemVindue').getBoundingClientRect().height);
   tjek(`${navn}: 3D-billedet har plads`, vindue > 150, vindue);
