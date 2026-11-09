@@ -107,3 +107,4 @@
 - "Tyndere end et hår." Hår er 0,017-0,18 mm (Wikipedia "Hair"), så de tyndeste er tyndere end DNA-tråden på 0,033 mm i 10-cm-kernen. Skriv "et hår fra dit hoved" (60-120 µm) (Liv L1).
 - "Kromosomets to kopier hænger sammen på midten." Centromeren sidder kun midt på nogle kromosomer. Skriv "ét sted" (Liv L1).
 - "Genet for hæmoglobin." HBB er genet for β-kæden. Hæmoglobin er bygget af to slags kæder, så skriv "et af generne for hæmoglobin" (Liv L1).
+- "Einstein opdagede, at samtidighed er relativ." Poincaré nævnte muligheden allerede i 1900. Einstein gjorde den til en del af den særlige relativitetsteori i 1905 (Wikipedia "Relativity of simultaneity"). Skriv "Ifølge Einsteins relativitetsteori …" (T5c, 9. november 2026).

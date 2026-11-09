@@ -33,6 +33,8 @@ export const LINKS = {
   rproces: { gaa: ['kosmos:kilonova', 'Kosmos: Kilonova'] },
   tidsforlaengelse: { gaa: ['kosmos:tid', 'Kosmos: Rejsen i tid'] },
   laengdeforkortelse: { gaa: ['kosmos:tid', 'Kosmos: Rejsen i tid'] },
+  samtidighed: { gaa: ['kosmos:tidhvorfor', 'Kosmos: Hvorfor går tiden langsommere?'] },
+  egentid: { gaa: ['kosmos:tidhvorfor', 'Kosmos: Hvorfor går tiden langsommere?'] },
   myon: { gaa: ['kosmos:tid', 'Kosmos: Rejsen i tid'] },
   roedkaempe: { gaa: ['solsystem:solensfremtid', 'Solsystemet: Solens fremtid'] },
   jaevndoegn: { gaa: ['solsystem:aarstider', 'Solsystemet: Årstiderne'] },

@@ -309,7 +309,9 @@ export default {
         const v = lysV();
         let html = `<p><b>Lige nu:</b> To billeder af det samme lysur, der farer forbi Jorden med ${T.lysurFartTekst(v)} af lysets fart.`;
         html += v > 0 ? ` Set fra Jorden tager hvert tik ${T.tal(T.lysurGamma(v), 1).replace(',0', '')} gange så lang tid.</p>` : ' Ved 0 % står skibet stille, og de to billeder er ens.</p>';
-        html += `<p>Gå frem med "Næste" i bjælken. ${enG ? '' : `På rejsen flyver du med ${T.fartTekst(ni)}: Der tager hvert tik ${T.gammaTekst(T.gamma(ni))} gange så lang tid set fra Jorden.`}</p>`;
+        html += `<p>${lysTrin === LYS_TRIN.length - 1 ? '' : 'Gå frem med "Næste" i bjælken. '}${enG ? '' : `På rejsen flyver du med ${T.fartTekst(ni)}: Der tager hvert tik ${T.gammaTekst(T.gamma(ni))} gange så lang tid set fra Jorden.`}</p>`;
+        // Det sidste trin peger videre til "Hvorfor går tiden langsommere?" (T5c): fem scener, der forklarer hvorfor
+        if (lysTrin === LYS_TRIN.length - 1) html += `<p>Vil du se hvorfor, trin for trin, og hvorfor det er den rejsende, der kommer yngst hjem? ${gå('kosmos:tidhvorfor', '🔦 Hvorfor går tiden langsommere?')}</p>`;
         forklaring(html);
         return;
       }

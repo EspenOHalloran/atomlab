@@ -2,6 +2,13 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (9. november 2026): T5b, scene 3, myonernes kapløb.**
+- **Scene 3** i `js/kosmos/tidhvorfor.js` som i skitsen: en høj søjle med 15 km luft og en byge på 24 myoner med hver sin tilfældige levetid (middel 2,197 µs), de samme i alle tre kontakter ("Uden Einstein", "Med Einstein" og "Set fra myonen"), til man trykker "↻ Ny byge" i bjælken. Skyderen "Fart" (99 %, 99,9 % og 99,97 %, γ ≈ 38), "Jordens ur" og "Myonens ur" i µs og "Nåede ned: k af 24".
+- **Set fra myonen:** Luften klemmes til 15 km/γ (ca. 396 m), billedet zoomer γ gange ind, og jorden suser op. Linealen skifter til meter. Myonens ur viser ca. 1,32 µs ved ankomsten, det samme som "Med Einstein", og det er de samme myoner, der når ned. Jordens ur vises ikke.
+- **Underteksten:** den fælles sætning, når man kommer til scenen, og bagefter kontaktens linje (når den første byge er nede, eller man ændrer noget). γ, luftens længde og "1 ud af 8 milliarder" (10 milliarder ved 99 %) følger skyderen. Siden har emnet "Myonernes kapløb" og afsnittene i "For nørder" og "Ærligt talt" ordret fra drejebogen.
+- **Layout:** på langs (også pc) søjlen til venstre og urene til højre, på højkant urene øverst. Tablet på højkant får 76 vh til 3D-billedet ligesom telefonen, så søjlen fylder højden. Telefon på langs er trang, men kan bruges.
+- **Tests:** `tests/tidhvorfor.mjs` har nu 32 tjek (9 nye for scene 3 med en fast byge).
+
 **Senest lavet (9. november 2026): T5a, fænomenet "Hvorfor går tiden langsommere?" med scene 1 og 2.**
 - **Fænomenet** `js/kosmos/tidhvorfor.js` (🔦, "Lysets mærkelige regel") står lige efter Rejsen i tid i Kosmos (13 fænomener). Fem scener er trin i bjælken (‹, fem prikker og "Næste"). Første gang går man frem med "Næste", og en prik længere fremme går kun til den næste scene. Det huskes kun, mens AtomLab er åben (intet i localStorage). Scene 3-5 siger "kommer snart".
 - **Scene 1** (⚾ Bold / 🔦 Lygte og "Togets fart") og **scene 2** (skyderen "Fart" og kontakten "△ Vis trekanten", der stopper uret, når lyset er oppe, og tegner trekanten med 1² + 1,73² = 2²). Teksterne er drejebogens ordret. Underteksten er "altid fremme", og "Lige nu" viser scenens spørgsmål og overgangen.
