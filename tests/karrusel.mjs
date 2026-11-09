@@ -8,8 +8,8 @@ const UD = billedmappe('karrusel');
 const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
-const VERDENER = ['atomer', 'kerner', 'elektricitet', 'rummet', 'biblioteket'];
-const DELE = { atomer: ['vaerksted', 'system'], kerner: ['fusion', 'reaktor'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog'] };
+const VERDENER = ['atomer', 'kerner', 'ildogliv', 'elektricitet', 'rummet', 'biblioteket'];
+const DELE = { atomer: ['vaerksted', 'system'], kerner: ['fusion', 'reaktor'], ildogliv: ['liv'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog'] };
 const størrelser = [
   ['pc', { viewport: { width: 1280, height: 800 } }],
   ['tablet', { viewport: { width: 820, height: 1180 }, hasTouch: true, isMobile: true }],
@@ -57,7 +57,7 @@ for (const [navn, opts] of størrelser) {
     };
   });
   tjek(`${navn}: karrusellen er slået til`, start.tilstand);
-  tjek(`${navn}: ringen har de 5 verdener i rækkefølge`, start.orden.join() === VERDENER.join(), start.orden.join());
+  tjek(`${navn}: ringen har de 6 verdener i rækkefølge`, start.orden.join() === VERDENER.join(), start.orden.join());
   tjek(`${navn}: hver verden har sine dele som knapper, og ingen kort står løst`, JSON.stringify(start.dele) === JSON.stringify(DELE) && start.løse === 0, JSON.stringify(start.dele));
   tjek(`${navn}: en ny bruger starter på Atomer og molekyler med "Start her" på Atomværkstedet og ingen sidste del`, (await midt()) === 'atomer' && start.startHer && start.sidst === 0);
   tjek(`${navn}: knapperne i verdenen forrest er store nok til en finger og kan nås med tabulatortasten`, start.knapper.length === 2 && start.knapper.every((k) => !k.hel && k.h >= 40 && k.tab === 0), JSON.stringify(start.knapper));
@@ -65,7 +65,7 @@ for (const [navn, opts] of størrelser) {
   tjek(`${navn}: i Elektricitet (én del) dækker Batteriets link hele kortet`, start.hel);
   tjek(`${navn}: alle verdenerne er lige høje`, new Set(start.højder).size === 1, start.højder.join());
   tjek(`${navn}: ingen gule piller, linje med tal, citat, "Næste eventyr" eller gamle kort (K3)`, start.gammelt === 0, JSON.stringify(start));
-  tjek(`${navn}: docken har 5 ikoner`, start.ikoner === 5, start.ikoner);
+  tjek(`${navn}: docken har 6 ikoner`, start.ikoner === 6, start.ikoner);
   tjek(`${navn}: siden er ikke bredere end skærmen`, start.sideBredde <= 0, start.sideBredde);
   tjek(`${navn}: menuen skal ikke rulles`, start.rul <= 1, start.rul);
   // Ringen: kortet forrest står i midten over docken, atomet står over kortet forrest, og kun 5 kort er synlige
@@ -94,7 +94,7 @@ for (const [navn, opts] of størrelser) {
   await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.vaerksted > 0.999, null, { timeout: 10000 }).catch(() => {});
   let bg = await vægte();
   const andre = (v, id) => Object.entries(v).filter(([k]) => k !== id).reduce((s, [, x]) => s + x, 0);
-  tjek(`${navn}: baggrunden har ét motiv pr. verden og viser elektronskyerne og kun dem`, bg.synlig && bg.vægte.vaerksted > 0.999 && andre(bg.vægte, 'vaerksted') === 0 && Object.keys(bg.vægte).sort().join() === 'batteri,fusion,ordbog,solsystem,vaerksted', JSON.stringify(bg));
+  tjek(`${navn}: baggrunden har ét motiv pr. verden og viser elektronskyerne og kun dem`, bg.synlig && bg.vægte.vaerksted > 0.999 && andre(bg.vægte, 'vaerksted') === 0 && Object.keys(bg.vægte).sort().join() === 'batteri,fusion,liv,ordbog,solsystem,vaerksted', JSON.stringify(bg));
   await p.screenshot({ path: `${UD}/${navn}-start.png` });
 
   // Træk: et roligt træk (holdt stille før man slipper) drejer ét kort, og et kast drejer flere.
@@ -161,11 +161,11 @@ for (const [navn, opts] of størrelser) {
 
   if (navn === 'pc') {
     await p.keyboard.press('ArrowRight');
-    tjek('pc: piletasten → drejer Elektricitet frem', (await venMidt('elektricitet')) === 'elektricitet', await midt());
+    tjek('pc: piletasten → drejer Ild og liv frem', (await venMidt('ildogliv')) === 'ildogliv', await midt());
     const boks = await p.locator('#menu .karrusel').boundingBox();
     await p.mouse.move(boks.x + boks.width / 2, boks.y + 40);
     await p.mouse.wheel(0, 120);
-    tjek('pc: musehjulet drejer ét kort (Rummet)', (await venMidt('rummet')) === 'rummet', await midt());
+    tjek('pc: musehjulet drejer ét kort (Elektricitet)', (await venMidt('elektricitet')) === 'elektricitet', await midt());
     await p.click('.menu-ikon[data-verden="atomer"]');
     await venMidt('atomer');
     await p.keyboard.press('ArrowLeft');
@@ -224,8 +224,8 @@ for (const [navn, opts] of størrelser) {
     };
   });
   tjek(`${navn}: "Din fremgang" åbner`, dialog.vist);
-  tjek(`${navn}: … med alle dele undtagen Ordbogen i verdenernes rækkefølge`, dialog.linjer.join() === Object.values(DELE).flat().slice(0, 7).join(), dialog.linjer.join());
-  tjek(`${navn}: … samlet under verdenerne (uden Biblioteket), og Elektricitet er færdig`, dialog.grupper.join() === 'atomer,kerner,elektricitet✓,rummet' && dialog.først === 'atomer', dialog.grupper.join());
+  tjek(`${navn}: … med alle dele undtagen Ordbogen i verdenernes rækkefølge`, dialog.linjer.join() === Object.values(DELE).flat().slice(0, 8).join(), dialog.linjer.join());
+  tjek(`${navn}: … samlet under verdenerne (uden Biblioteket), og Elektricitet er færdig`, dialog.grupper.join() === 'atomer,kerner,ildogliv,elektricitet✓,rummet' && dialog.først === 'atomer', dialog.grupper.join());
   tjek(`${navn}: … Batteriet er færdigt`, dialog.batteriFærdig && /✓ (\d+) af \1 opgaver/.test(dialog.batteri), dialog.batteri);
   tjek(`${navn}: … grundstofferne og Kosmos`, dialog.system.includes('2 af 118 opdaget') && /0 af \d+ besøgt/.test(dialog.kosmos), `${dialog.system} | ${dialog.kosmos}`);
   tjek(`${navn}: … og opgaverne i alt`, /^I alt \d+ af \d+ opgaver klaret/.test(dialog.ialt), dialog.ialt);

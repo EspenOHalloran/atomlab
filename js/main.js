@@ -8,7 +8,7 @@ import { lavSystem, startSystem, stopSystem, testAdgang as systemTest } from './
 import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
 import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
 import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
-import { lavLiv, startLiv, stopLiv, testAdgang as livTest } from './liv.js';
+import { lavLiv, startLiv, stopLiv, OPGAVER_LIV, testAdgang as livTest } from './liv.js';
 import { lavKosmos, startKosmos, stopKosmos, FÆNOMENER, testAdgang as kosmosTest } from './kosmos.js';
 import { lavSolsystem, startSolsystem, stopSolsystem, FÆNOMENER as SOL_FÆNOMENER, testAdgang as solsystemTest } from './solsystem.js';
 import { NØGLER } from './faenomenskaerm.js';
@@ -173,7 +173,7 @@ function startMenu() {
 // Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af menuen (✓, "Start her" og "Din fremgang" i karrusel.js).
 function fremgangPrDel() {
   const ud = {};
-  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['batteri', OPGAVER_BATTERI]]) {
+  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };

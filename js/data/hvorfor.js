@@ -185,4 +185,10 @@ export const HVORFOR = {
     nørd: 'Forskerne sammenligner, hvor meget tungt hydrogen (deuterium, med en neutron i kernen) der er i vandet. I havet er det ca. 1 ud af 6.400 H-atomer. Prøver fra asteroiden Ryugu ligner havet. Kometen 67P så først ud til at have ca. 3 gange så meget, men en ny gennemregning i 2024 fandt, at støv havde trukket tallet op. Prøven fra asteroiden Bennu indeholdt endda køkkensalt fra fordampet saltvand.',
     link: { tekst: 'Se en stjerne blive født i Kosmos ›', handling: () => import('../faenomenskaerm.js').then((m) => m.åbnFænomen('kosmos', 'stjernefoedsel')) },
   },
+  // Hvad holder DNA-stigen sammen? (Liv L1). Kilder: docs/fakta-liv/dna-stigen.md, afsnit 1 (Yakovchuk m.fl. 2006, OpenStax 2-1 og 14-2).
+  livSammen: {
+    spørgsmål: 'Hvad holder stigen sammen?',
+    svar: 'Man skulle tro, det var hydrogenbindingerne. Men baserne ligger stablet som mønter, og hver base klæber mest til dem over og under sig. Det er stablingen, der holder stigen sammen.\n\nHydrogenbindingerne afgør, hvem der passer sammen: A med T og G med C. De er svage, så stigen kan lynes op, når cellen skal kopiere den.',
+    nørd: 'Et forsøg fra 2006 målte, hvor meget hvert par og hver stabling betyder. Stablingen giver næsten det hele. G–C-parret giver næsten intet ekstra, og A–T endda en lille smule minus, fordi baserne ellers ville binde sig til vandet omkring dem i stedet (Yakovchuk, Protozanova og Frank-Kamenetskii 2006).',
+  },
 };

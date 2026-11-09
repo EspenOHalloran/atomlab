@@ -15,6 +15,7 @@ import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } fr
 export const VERDENER = [
   { id: 'atomer', navn: 'Atomer og molekyler', tekst: 'Byg atomer og molekyler, og mød alle 118 grundstoffer', dele: ['vaerksted', 'system'], motiv: 'vaerksted' },
   { id: 'kerner', navn: 'Kernerne', tekst: 'Atomkerner, der smelter sammen i stjernerne eller flækker i en reaktor', dele: ['fusion', 'reaktor'], motiv: 'fusion' },
+  { id: 'ildogliv', navn: 'Ild og liv', dele: ['liv'], motiv: 'liv' },
   { id: 'elektricitet', navn: 'Elektricitet', dele: ['batteri'], motiv: 'batteri' },
   { id: 'rummet', navn: 'Rummet', tekst: 'Rejs til planeterne, og se sorte huller og supernovaer', dele: ['solsystem', 'kosmos'], motiv: 'solsystem' },
   { id: 'biblioteket', navn: 'Biblioteket', dele: ['ordbog'], motiv: 'ordbog' },

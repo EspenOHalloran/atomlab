@@ -457,6 +457,39 @@ function kosmos() {
   return { gruppe: g, uniforms: g.children.map((c) => c.material.uniforms) };
 }
 
+// ---------- Liv: DNA-stigen som to spiraler af prikker med trin imellem, der drejer langsomt ----------
+const BASE_PRIK = [0x3ddc84, 0xff5a5f, 0xffc93c, 0x4ea8ff]; // A, T, G og C (som i js/liv/stige.js)
+function liv() {
+  const liste = [];
+  const ryg = [farve(0x7f9cff), farve(0xb08cff)];
+  const trin = Math.round(42 * (LAV_KVALITET ? 0.7 : 1));
+  const højde = 1.15; // i billedhøjder (stigen går ud over billedets kant)
+  for (let k = 0; k < trin; k++) {
+    const y = -højde / 2 + (k / (trin - 1)) * højde;
+    const v = (k * 34.3 * Math.PI) / 180;
+    const base = Math.floor(Math.random() * 4);
+    const partner = [1, 0, 3, 2][base];
+    for (const s of [0, 1]) {
+      // Rygraden: en prik pr. trin i hver streng (streng II står ca. 150° fra streng I, så der er en stor og en lille fure)
+      liste.push({ p: [0, y, 0], str: 7, farve: ryg[s], data: [0.11, v + s * 2.6, 0, 0.75] });
+      // Trinet: prikker ind mod midten i basens farve
+      for (let t = 1; t <= 3; t++) {
+        liste.push({ p: [0, y, 0], str: 4.2, farve: farve(BASE_PRIK[s ? partner : base]), data: [0.11 * (1 - t / 3.6), v + s * 2.6, 0, 0.55] });
+      }
+    }
+  }
+  const mat = prikMateriale(/* glsl */ `
+    // aData: radius, vinkel, -, lys. Stigen drejer langsomt om sin akse (y).
+    float v = aData.y + uTid * 0.12;
+    p = vec3(aData.x * cos(v), p.y, -aData.x * sin(v));
+    lys = aData.w;`);
+  const g = new THREE.Group();
+  g.add(lavPrikker(liste, mat));
+  g.rotation.set(0.18, 0, -0.42); // skråt, så den går gennem billedet bag atomet
+  g.position.set(0.05, 0, 0);
+  return { gruppe: g, uniforms: [mat.uniforms] };
+}
+
 // ---------- Ordbogen: ord fra Ordbogen, der svæver langsomt op og toner ud ----------
 function ordbog() {
   const g = new THREE.Group();
@@ -508,7 +541,7 @@ function ordbog() {
   };
 }
 
-const BYGGERE = { fusion: stjerne, reaktor, vaerksted: værksted, system, batteri, solsystem, kosmos, ordbog };
+const BYGGERE = { fusion: stjerne, reaktor, vaerksted: værksted, system, liv, batteri, solsystem, kosmos, ordbog };
 
 // Laves én gang (fra lavKarrusel). dele: delene i ringens rækkefølge, pos: ringens drejning (i kort)
 export function lavMenuBaggrund(delListe, pos) {

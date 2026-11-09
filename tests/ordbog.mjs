@@ -148,7 +148,7 @@ const størrelser = [
 for (const [navn, opsætning] of størrelser) {
   const p = await side(opsætning);
   const m = await p.evaluate(() => { const menu = document.getElementById('menu'); return { verdener: menu.querySelectorAll('.verden').length, rul: menu.scrollHeight - menu.clientHeight }; });
-  tjek(`${navn}: menuen er en ring med 5 verdener og skal ikke rulles`, m.verdener === 5 && m.rul <= 1, JSON.stringify(m));
+  tjek(`${navn}: menuen er en ring med 6 verdener og skal ikke rulles`, m.verdener === 6 && m.rul <= 1, JSON.stringify(m));
   await p.evaluate(() => { location.hash = '#ordbog'; });
   await p.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
   const l = await p.evaluate(() => {
