@@ -21,7 +21,7 @@
 ## Sporenes næste trin (detaljerne står i sporets fil)
 | Spor | Næste |
 |---|---|
-| [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Venus (planen først) → Merkur → Pluto → overblikket. Uranus og Neptun er færdige (UN1-UN5). Mars ekstra og Månen bagefter. |
+| [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Venus ([planen](plan-venus.md) er lavet 9. november 2026, venter på jeres svar og et go til V1) → Merkur → Pluto → overblikket. Uranus og Neptun er færdige (UN1-UN5). Mars ekstra og Månen bagefter. |
 | [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026, M3 er knaldgassen og M4 kortet om Jordens vand). Næste: Liv (faktagrundlag og plan først). |
 | [Tid og rum](lige-nu/tid.md) | T5 Trin 0 ("Hvorfor går tiden langsommere?", go 8. november 2026): drejebogen og skitserne, [prompt-tid-t5.md](prompt-tid-t5.md). T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
