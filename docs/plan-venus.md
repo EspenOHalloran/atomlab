@@ -148,5 +148,14 @@ Hver får sit eget go. Model: Opus. Effort: høj (faktatjekket i V5 kræver det,
 5. **Ned gennem skyerne:** **Som sidste stop på flybyen og som en knap ved Venera 13 i træet** (anbefalet). Eller kun som knap?
 6. **Rækkefølgen:** **V1 → V2 → V3 → V4 → V5** (anbefalet), og V6 kun hvis I vil. Eller V5 før V4, så Venus er færdig hurtigere og V4 kommer bagefter?
 
+### Jeres svar (9. november 2026)
+"Vi følger dine anbefalinger."
+1. **Skyernes kort:** `darts.isas.jaxa.jp` åbnes i miljøets Network access før V2, så skyernes mønster i UV er målt (Akatsukis kort). Er det ikke åbent, når V2 starter, så spørg igen.
+2. **Hvad man ser først:** Venus, som den ser ud (lyst gullig hvid og næsten glat), med kontakterne "Ultraviolet (som Akatsuki)" og "Under skyerne".
+3. **Farven under skyerne:** radarens gråtoner tonet orange som lyset dernede, med teksten om, at radaren ikke ser farver.
+4. **Stå ved Venera 13:** kun Veneras foto om kameraet, uden et tegnet landskab.
+5. **Ned gennem skyerne:** sidste stop på flybyen og en knap ved Venera 13 i træet.
+6. **Rækkefølgen:** V1 → V2 → V3 → V4 → V5. V6 (polhvirvlen) kun, hvis I vil.
+
 ## Status
-*Planen er lavet. Venter på jeres svar på spørgsmålene og et go til V1. Prompten skrives, når svarene er her.*
+*Prompten er [prompt-venus.md](prompt-venus.md). Venter på jeres go til V1.*

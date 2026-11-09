@@ -245,7 +245,7 @@ Begge er jeres idéer og venter på et go. Ingen af dem er faktatjekket endnu. T
 4. **Pluto kommer med nu** (i denne runde, med Charon som lille kugle).
 5. **De store måner står som små kugler med rigtige kort fra start** (fx Jupiters fire), så planeterne ikke ser tomme ud. Besøgene på månerne og "Land på måner" kommer senere (se nedenfor).
 
-**Planen for Venus er lavet (9. november 2026):** [plan-venus.md](plan-venus.md). Seks spørgsmål venter på jeres svar.
+**Planen for Venus er lavet (9. november 2026):** [plan-venus.md](plan-venus.md). Jeres svar (samme dag): anbefalingerne følges.
 
 **Planen for Uranus og Neptun er lavet (7. november 2026):** [plan-uranus-neptun.md](plan-uranus-neptun.md). Rækkefølgen blev ændret 7. november 2026 (jeres svar): Uranus og Neptun før Venus og Merkur.
 
