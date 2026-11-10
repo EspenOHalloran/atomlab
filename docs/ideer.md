@@ -10,6 +10,7 @@
 
 ## Ild og liv
 - **Hjernen og AI (neuroner og neurale netværk).** Længst fra kernen i AtomLab (fysik, kemi og rummet), men der er en ægte bro: Nervesignaler er ioner (Na⁺ og K⁺), der strømmer gennem små kanaler, som i Batteriet og Værkstedet. Et lille neuralt netværk, der lærer noget i browseren mens man ser på, kan laves flot og ærligt. Skal sige, at kunstige netværk kun er løst inspireret af hjernen. Størst risiko for at gøre AtomLab for bred, så den kommer sidst. Stor. **Jeres svar (5. november 2026):** venter.
+- **"Skriv dit navn med aminosyrer" i Liv** (Opus' idé, L2, 10. november 2026): Et skrivefelt, der laver DNA'et til et ord (ét kodon pr. bogstav) og siger, hvilke bogstaver der ikke findes (B, J, O, U, X, Z, Æ, Ø og Å). I L2 blev "Skriv LIV" i stedet en opgave i genet. Lille.
 
 ## Elektricitet
 - **Elektromagnetisme og radiosignaler** (jeres idé, 7. november 2026, kun noteret): Skal med. **Opus' forslag:** Radiobølger er det samme som lys, bare med meget længere bølgelængde (elektromagnetiske bølger, fotoner). Kan kobles til Kosmos (lys, rødforskydning, mikrobølgebaggrunden) og til Batteriet/Elektricitet (en elektrisk ladning, der svinger, sender bølger ud). Kunne vise en antenne, hvor elektroner, der svinger frem og tilbage, sender en bølge ud, som sætter elektroner i bevægelse i en anden antenne. Skal siges ærligt: bølge og partikel er to modeller af det samme. Skal faktatjekkes.

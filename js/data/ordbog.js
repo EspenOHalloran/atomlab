@@ -134,6 +134,48 @@ export const ORDBOG = [
     former: ['hydrogenbinding', 'hydrogenbindingen', 'hydrogenbindinger', 'hydrogenbindingerne'],
     tekst: 'Et svagt træk mellem et H, der er lidt plus (δ+), og et atom i et andet molekyle, der er lidt minus (δ−), typisk et O eller N. Hydrogenbindinger holder A til T og G til C i DNA.',
   },
+  // Liv L2 (10. november 2026). Kilder: docs/fakta-liv/dna-opskriften.md (OpenStax 3-4, 3-5, 15-1, 15-5 og 19-2, genome.gov),
+  // docs/fakta-liv/dna-stigen.md (19.400 gener, GENCODE 47) og docs/fakta-liv.md (L2)
+  {
+    id: 'gen', ord: 'Gen',
+    former: ['gen', 'genet', 'gener', 'generne'],
+    tekst: 'Et stykke DNA med opskriften på et protein (eller på et RNA, der selv har en opgave). Du har ca. 19.400 gener, der laver proteiner. Danskeren Wilhelm Johannsen fandt på ordet i 1909.',
+  },
+  {
+    id: 'protein', ord: 'Protein',
+    former: ['protein', 'proteinet', 'proteiner', 'proteinerne', 'proteinets'],
+    tekst: 'En lang kæde af aminosyrer, der har foldet sig til en bestemt form. Formen bestemmer, hvad proteinet kan: Hæmoglobin bærer ilt, enzymer får kemiske reaktioner til at ske, og keratin er dit hår og dine negle.',
+  },
+  {
+    id: 'aminosyre', ord: 'Aminosyre',
+    former: ['aminosyre', 'aminosyren', 'aminosyrer', 'aminosyrerne'],
+    tekst: 'Byggestenene i et protein. Der er 20 almindelige aminosyrer, og hver har sit eget bogstav, fx V for valin. Nogle skyr vand, andre kan lide vand, og nogle er plus- eller minusladede.',
+  },
+  {
+    id: 'kodon', ord: 'Kodon',
+    former: ['kodon', 'kodonet', 'kodoner', 'kodonerne'],
+    tekst: 'Et ord på tre bogstaver i RNA\'et, fx AUG. Der er 64 ord: 61 giver en aminosyre, og 3 betyder stop. AUG giver methionin og er også ordet, hvor ribosomet begynder at læse.',
+  },
+  {
+    id: 'rna', ord: 'RNA',
+    former: ['rna', "rna'et", "rna'ets", 'rna-kopien', 'rna-kopi'],
+    tekst: 'DNA\'ets lillebror: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne.',
+  },
+  {
+    id: 'ribosom', ord: 'Ribosom',
+    former: ['ribosom', 'ribosomet', 'ribosomer', 'ribosomerne'],
+    tekst: 'Cellens proteinfabrik. Det læser RNA\'et tre bogstaver ad gangen og sætter aminosyrerne sammen i den rigtige rækkefølge. Det er bygget af RNA og mange proteiner i to dele, en lille og en stor.',
+  },
+  {
+    id: 'mutation', ord: 'Mutation',
+    former: ['mutation', 'mutationen', 'mutationer', 'mutationerne'],
+    tekst: 'En ændring i DNA\'et, fx et bogstav, der er skiftet ud. Mange mutationer gør ingenting, nogle skader, og nogle få hjælper. Du har ca. 70 nye mutationer, som ingen af dine forældre har.',
+  },
+  {
+    id: 'enzym', ord: 'Enzym',
+    former: ['enzym', 'enzymet', 'enzymer', 'enzymerne'],
+    tekst: 'Et protein, der får en bestemt kemisk reaktion til at ske meget hurtigere, uden selv at blive brugt op. Fx klipper enzymer i maven maden i små stykker, og RNA-polymerasen bygger RNA.',
+  },
   {
     id: 'aktiveringsenergi', ord: 'Aktiveringsenergi',
     former: ['aktiveringsenergi', 'aktiveringsenergien'],

@@ -114,11 +114,13 @@ Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring 
 |---|---|---|
 | L0 | ✅ Plan og faktagrundlag (denne fil og [fakta-liv.md](fakta-liv.md), 9. november 2026) | lavet |
 | L1 | ✅ (9. november 2026) Skærmen, verdenen "Ild og liv" i menuen og **stigen i 3D**: zoom-rejsen, atomerne tæt på, tallene og "Byg stigen" med de første opgaver | stor |
-| L2 | **Fra opskrift til protein:** aflæsningen, ribosomet, kodehjulet og "Læs selv" med HBB og mutationerne | stor |
+| L2 | ✅ (10. november 2026) **Fra opskrift til protein:** aflæsningen, ribosomet, kodehjulet og "Læs selv" med HBB og mutationerne (se "Bygget i L2" nedenfor) | stor |
 | L3 | **Kopien:** "Lyn op og kopiér", fejlene og "Hvorfor?"-kortene om DNA | mellem |
 | L4 | **Millers kolbe** med valget af luft | mellem til stor |
 | L5 | **Trappen til liv**, tidslinjen og "Har nogen lavet liv?" | mellem |
 | L6 | **Liv i rummet:** kortene, linkene og "Hvad er et bevis?" | lille til mellem |
+
+**Bygget i L2 (10. november 2026, hvor det afviger fra forslaget):** Ingen faner endnu og intet nyt trin i zoom-rejsen: Boksen **"Fra opskrift til protein"** i venstre panel har tre knapper, så det passer med fanerne i L4-L6 (alt ligger i Opskriften). **"Se genet blive læst"** viser hele den kodende del af HBB (444 baser): polymerasen og RNA-kopien, "Ud af kernen", ribosomet med budbringerne (147 aminosyrer, de første 10 ord langsomt) og foldningen (de vandskyende inderst). Tidsknappen: ⏩ er 4 gange hurtigere. **"Læs selv"**: Man er ribosomet og vælger aminosyren til de 9 første ord blandt fire svar, med kodehjulet ved siden af. Bagefter kan ribosomet læse resten. **"Skift et bogstav"**: de 10 første ord, ATG kan ikke skiftes. "Skriv LIV" er en opgave i genet (kodon 4 er allerede L, så kodon 5 og 6 skal laves om), ikke et frit skrivefelt (idéen "Skriv dit navn" står i [ideer.md](ideer.md)). En ekstra opgave, `liv-protein` ("Se et gen blive til et protein"), og "Hvorfor?"-kortet `livSegl`. Kodehjulet er en kontakt og står øverst til højre i 3D-billedet.
 
 Hvert trin får sit eget `/faktatjek` af teksterne (mod faktagrundlaget), nye ord i Ordbogen og linjer i "Ikke afprøvet".
 
@@ -166,4 +168,4 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 - **Domæner:** Til L0 blev `www.ncbi.nlm.nih.gov`, `pmc.ncbi.nlm.nih.gov`, `pubmed.ncbi.nlm.nih.gov`, `bio.libretexts.org`, `www.genome.gov`, `www.nobelprize.org`, `pdb101.rcsb.org`, `www.science.org`, `www.pnas.org` og `academic.oup.com` åbnet (9. november 2026). Science, PNAS og Oxford svarer 403 til curl (sidernes egen bot-beskyttelse), og PubMed, PMC og NCBI Bookshelf gav reCAPTCHA i perioder. Artiklerne blev derfor læst på PMC, i NASA's arkiv NTRS, på arXiv eller via Wikipedias henvisninger (det står ved hver påstand). **Før L1:** `files.rcsb.org` (atompladserne). **Før L5, hvis Darwins brev skal citeres:** `www.darwinproject.ac.uk`.
 
 ## 11. Sådan startes næste session
-L1 er lavet (9. november 2026). L2 startes i en ny session med Opus (høj effort): "Læs docs/prompt-liv-l2.md".
+L1 og L2 er lavet (9. og 10. november 2026). L3 startes i en ny session med Opus (høj effort): "Læs docs/prompt-liv-l3.md". Den brugte prompt til L2 ligger i [arkiv/prompt-liv-l2.md](arkiv/prompt-liv-l2.md).

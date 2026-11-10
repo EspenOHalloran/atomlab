@@ -4,6 +4,8 @@
 //   samme tegning (js/liv/stige.js), der toner over i hinanden efter kameraets afstand.
 // - "Byg stigen": streng I er givet, og man vælger partneren til hver base. Et forkert par vises rødt med grunden.
 // - Opgaverne liv-rejse, liv-forkert og liv-byg (js/data/liv/opskriften.js).
+// - L2, fra opskrift til protein (js/liv-protein.js): "Se genet blive læst", "Læs selv" og "Skift et bogstav".
+//   Tegningen (js/liv/protein.js) er trinet 'protein', der ikke er en del af zoom-rejsen.
 
 import * as THREE from 'three';
 import { verden, sætVindue, stopKamera, centrerVindue, ROLIG } from './scene3d.js';
@@ -15,6 +17,9 @@ import { forfraKnap } from './forfra.js';
 import * as fremgang from './fremgang.js';
 import { DnaStige, S } from './liv/stige.js';
 import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
+import { ProteinTegning } from './liv/protein.js';
+import { lavLivProtein } from './liv-protein.js';
+import { HVORFOR } from './data/hvorfor.js';
 import { SKRIDT } from './data/liv/stige.js';
 import { NIVEAUER, NIVEAU_IDER, OPGAVER_LIV, HBB_START, BYG_TRIN, nyByggestreng, parGrund, PAR_TEKST } from './data/liv/opskriften.js';
 
@@ -41,6 +46,8 @@ let byg = null; // { streng, bygget } mens man bygger stigen
 let visH = null;
 let mission = null;
 let panelNøgle = '';
+let protein = null; // tegningen til L2
+let lp = null; // knapperne og panelet til L2 (js/liv-protein.js)
 
 // Kameraets afstand, så en kasse (halv bredde og højde) passer i 3D-vinduet (som passerTilBoks, uden at zoome)
 function afstandTilBoks(halvB, halvH) {
@@ -55,6 +62,7 @@ const afstandTilKugle = (r) => afstandTilBoks(r * 1.1, r * 1.1);
 function afstand(id) {
   if (id === 'atomer') return afstandTilBoks(11 * S, 3 * SKRIDT * S);
   if (id === 'stige') return afstandTilBoks(14 * S, stige.halvHøjde() * 1.05);
+  if (id === 'protein') return afstandTilBoks(...protein.halvMål());
   return afstandTilKugle(tegninger[id].radius);
 }
 // Hvor atomerne begynder at tone over i stigen, og hvor kun stigen er tilbage
@@ -68,7 +76,8 @@ const tegningFor = (id) => (id === 'stige' || id === 'atomer' ? stige : tegninge
 export function lavLiv() {
   stige = new DnaStige();
   stige.sætSekvens(HBB_START);
-  tegninger = { celle: lavCelle(), kerne: lavKerne(), kromosom: lavKromosom(), stige };
+  protein = new ProteinTegning();
+  tegninger = { celle: lavCelle(), kerne: lavKerne(), kromosom: lavKromosom(), stige, protein };
   for (const t of Object.values(tegninger)) {
     t.gruppe.visible = false;
     t.sætSynlighed(0);
@@ -84,6 +93,7 @@ export function lavLiv() {
     b.addEventListener('click', () => {
       lyd.klik();
       if (byg) stopByg();
+      lp.stop(false);
       gåTil(n.id);
     });
     liste.append(b);
@@ -108,22 +118,42 @@ export function lavLiv() {
     if (h.target.id === 'hjælpLiv' || h.target.closest('[data-luk]')) $('hjælpLiv').classList.add('skjult');
   });
   mission = lavNæsteSkridt(lavNæsteSkridtKort($('livVindue'), 'livMission'), { visMig });
+  lp = lavLivProtein({
+    tegning: protein,
+    vindue: $('livVindue'),
+    aktiv: () => aktiv,
+    vis: () => {
+      if (byg) stopByg();
+      gåTil('protein');
+      opdaterByg();
+    },
+    forlad: () => gåTil('stige'),
+    stoppet: () => opdaterByg(),
+    løs,
+    panel: (kunTal) => opdaterPanel(kunTal),
+    mission: () => opdaterMission(),
+    kamera: () => {
+      if (niveau !== 'protein') return;
+      sætGrænser('protein');
+      verden.målAfstand = afstand('protein');
+    },
+  });
 }
 
 // ---------- Trinene ----------
 // Skifter til et trin. retning: 'ind' eller 'ud' (fra en zoom) giver en blød overgang, hvor kameraet fortsætter
 // samme vej. Uden retning (en knap) flyver kameraet til trinets afstand.
 function gåTil(id, retning = null) {
-  if (!NIVEAU_IDER.includes(id)) id = 'celle';
+  if (!NIVEAU_IDER.includes(id) && id !== 'protein') id = 'celle';
   const ny = tegningFor(id);
   const fraIndeks = NIVEAU_IDER.indexOf(niveau);
   niveau = id;
-  besøg(id);
+  if (id !== 'protein') besøg(id);
   opdaterPanel(); // først, så 3D-vinduet har sin endelige størrelse (panelerne under det på højkant), før afstanden regnes
   const d = afstand(id);
   sætGrænser(id);
   if (ny !== vist) {
-    overgang = { fra: vist, til: ny, t: 0, retning: retning ?? (NIVEAU_IDER.indexOf(id) > fraIndeks ? 'ind' : 'ud') };
+    overgang = { fra: vist, til: ny, t: 0, retning: retning ?? (id === 'protein' || NIVEAU_IDER.indexOf(id) > fraIndeks ? 'ind' : 'ud') };
     vist = ny;
     // Kameraet starter lidt længere væk (ind) eller tættere på (ud) og glider til trinets afstand
     if (!ROLIG) {
@@ -140,6 +170,10 @@ function sætGrænser(id) {
   if (id === 'stige' || id === 'atomer') {
     s.minDistance = 4;
     s.maxDistance = afstand('stige') * (UD + 0.15);
+  } else if (id === 'protein') {
+    const d = afstand('protein');
+    s.minDistance = d * 0.3;
+    s.maxDistance = d * 2.2;
   } else {
     const d = afstand(id);
     s.minDistance = d * (IND - 0.07);
@@ -160,7 +194,7 @@ function næsteNiveau(retning) {
 
 // Tjekker kameraets afstand: zoomet langt nok ind eller ud giver næste eller forrige trin
 function tjekZoom() {
-  if (overgang || verden.målAfstand != null) return; // kun når man selv zoomer
+  if (overgang || verden.målAfstand != null || niveau === 'protein') return; // kun når man selv zoomer, og ikke i L2
   const d = verden.kamera.position.distanceTo(verden.styring.target);
   if (vist === stige) {
     const nu = stige.blanding > 0.5 ? 'stige' : 'atomer';
@@ -204,11 +238,13 @@ function opdater(dt, tid) {
   stige.sætBlanding(b * b * (3 - 2 * b));
   stige.opdater(dt, tid);
   for (const t of Object.values(tegninger)) if (t !== stige && t.gruppe.visible) t.opdater(dt);
+  lp.opdater(dt);
   tjekZoom();
 }
 
 // ---------- Byg stigen ----------
 function startByg() {
+  lp.stop(false);
   rydBeskeder();
   lukHvorfor();
   byg = { streng: nyByggestreng(), bygget: 0 };
@@ -254,6 +290,8 @@ function vælgBase(b) {
 function opdaterByg() {
   $('livBygStart').hidden = Boolean(byg);
   $('livBygIGang').hidden = !byg;
+  $('livByg').hidden = Boolean(lp.tilstand); // mens L2 kører, står kun dens knapper fremme
+  $('livProtein').hidden = Boolean(byg);
   if (!byg) return;
   const færdig = byg.bygget >= BYG_TRIN;
   $('livBygTekst').innerHTML = færdig
@@ -264,19 +302,31 @@ function opdaterByg() {
 }
 
 // ---------- Panelet ----------
-function opdaterPanel() {
-  const n = NIVEAUER.find((x) => x.id === niveau);
-  const nøgle = `${niveau}|${Boolean(byg)}`;
+// kunTal: kun tallene har ændret sig (L2 opdaterer dem undervejs)
+function opdaterPanel(kunTal = false) {
+  const iProtein = niveau === 'protein' && lp?.tilstand;
+  const n = iProtein ? lp.tekster() : NIVEAUER.find((x) => x.id === niveau) ?? NIVEAUER[0];
+  const nøgle = iProtein ? `protein|${lp.tilstand}|${lp.trin()}` : `${niveau}|${Boolean(byg)}`;
+  const tal = () => n.tal.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  if (nøgle === panelNøgle && iProtein) {
+    const html = tal();
+    if ($('livTal').innerHTML !== html) $('livTal').innerHTML = html;
+    if (kunTal) return;
+  }
   for (const b of document.querySelectorAll('[data-liv-niveau]')) b.classList.toggle('valgt', b.dataset.livNiveau === niveau);
   $('livVisH').hidden = niveau !== 'atomer' && niveau !== 'stige';
   if (nøgle !== panelNøgle) {
     panelNøgle = nøgle;
     $('livTitel').textContent = n.titel;
     $('livTekst').textContent = n.tekst;
-    $('livTal').innerHTML = n.tal.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+    $('livTal').innerHTML = tal();
     $('livEkstra').textContent = n.ekstra ?? '';
     $('livHvorfor').hidden = !n.hvorfor;
-    const farver = FARVER[niveau === 'atomer' ? 'atomer' : niveau === 'stige' ? 'stige' : ''] ?? [];
+    if (n.hvorfor) {
+      $('livHvorfor').dataset.hvorfor = n.hvorfor;
+      $('livHvorfor').textContent = `Hvorfor? ${HVORFOR[n.hvorfor].spørgsmål}`;
+    }
+    const farver = iProtein ? lp.farver() : FARVER[niveau === 'atomer' ? 'atomer' : niveau === 'stige' ? 'stige' : ''] ?? [];
     $('livFarver').innerHTML = farver.map(([t, f]) => `<li><span class="farveprik" style="background:${f}"></span>${t}</li>`).join('');
     $('livFarver').hidden = !farver.length;
     centrerVindue(); // på højkant ændrer panelernes tekst 3D-vinduets højde
@@ -296,11 +346,15 @@ function opdaterMission() {
   if (!mission) return;
   let tekst;
   let kanVise = false;
-  if (byg) tekst = byg.bygget >= BYG_TRIN ? 'Zoom ind og se atomerne, eller byg en ny stige.' : 'Vælg den base, der passer til den, der lyser.';
+  if (lp?.tilstand) tekst = lp.mission();
+  else if (byg) tekst = byg.bygget >= BYG_TRIN ? 'Zoom ind og se atomerne, eller byg en ny stige.' : 'Vælg den base, der passer til den, der lyser.';
   else if (!fremgang.erLøst('liv-rejse')) {
     tekst = MISSION[niveau];
     kanVise = niveau !== 'atomer';
   } else if (!fremgang.erLøst('liv-byg') || !fremgang.erLøst('liv-forkert')) tekst = 'Tryk "Byg stigen", og byg den anden halvdel.';
+  else if (!fremgang.erLøst('liv-protein')) tekst = 'Tryk "Se genet blive læst", og se et gen blive til et protein.';
+  else if (!fremgang.erLøst('liv-læs')) tekst = 'Tryk "Læs selv", og læs genet som et ribosom.';
+  else if (OPGAVER_LIV.some((o) => !fremgang.erLøst(o.id))) tekst = 'Tryk "Skift et bogstav", og lav en mutation.';
   else tekst = 'Du har klaret opgaverne her ★. Zoom rundt, og se det hele igen.';
   mission.sæt({ tekst, kanVise });
 }
@@ -326,7 +380,7 @@ function lavOpgaveliste() {
     li.addEventListener('click', () => visBesked({ titel: o.titel, tekst: løst ? o.fakta : `Tip: ${o.tip}`, varighed: 8000 }));
     liste.append(li);
   }
-  forfraKnap(liste, { ider: OPGAVER_LIV.map((o) => o.id), del: 'Liv', efter: () => { besøgt = new Set([niveau]); lavOpgaveliste(); opdaterMission(); } });
+  forfraKnap(liste, { ider: OPGAVER_LIV.map((o) => o.id), del: 'Liv', efter: () => { besøgt = new Set(NIVEAU_IDER.includes(niveau) ? [niveau] : []); lavOpgaveliste(); opdaterMission(); } });
 }
 
 function løs(id) {
@@ -349,6 +403,7 @@ export function startLiv() {
   lavOpgaveliste();
   vist = null;
   niveau = 'celle';
+  panelNøgle = '';
   gåTil('celle', 'ind');
   opdaterByg();
 }
@@ -356,6 +411,7 @@ export function startLiv() {
 export function stopLiv() {
   aktiv = false;
   if (byg) stopByg();
+  lp.stop(false);
   verden.opdateringer.delete(opdater);
   overgang = null;
   for (const t of Object.values(tegninger)) {
@@ -392,5 +448,12 @@ export function testAdgang() {
     markører: () => stige.markører.count,
     synlige: () => Object.entries(tegninger).filter(([, t]) => t.gruppe.visible).map(([id]) => id),
     mission: () => document.querySelector('#livMission .mission-tekst').textContent,
+    protein: () => lp.test(),
+    proteinStart: (t) => lp.start(t),
+    proteinStop: () => lp.stop(),
+    proteinSpol: (sek) => lp.spol(sek),
+    proteinSvar: (aa) => lp.svar(aa),
+    proteinSkift: (i, pos, base) => lp.skiftBogstav(i, pos, base),
+    proteinKodon: (i) => lp.vælgKodon(i),
   };
 }

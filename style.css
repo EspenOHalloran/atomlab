@@ -940,6 +940,41 @@ button { font: inherit; color: inherit; }
 .liv-farver li { display: flex; align-items: center; gap: 5px; font-weight: 700; }
 .liv-farver[hidden] { display: none; }
 #livVindue:has(.undertekst) .liv-farver { display: none; }
+/* Liv L2: fra opskrift til protein */
+.liv-protein { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
+.liv-protein .panel-overskrift { margin: 0; }
+.liv-protein[hidden], #livByg[hidden], .liv-protein-valg[hidden], .liv-protein-i-gang[hidden], .liv-svar[hidden], .liv-ret[hidden], #livProtein [hidden] { display: none; }
+.liv-protein-valg, .liv-protein-i-gang, .liv-ret { display: flex; flex-direction: column; gap: 8px; }
+.liv-protein-valg .knap { text-align: left; }
+.liv-svar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.liv-svar-knap { min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 4px; border-radius: 12px; border: 2px solid var(--farve); background: color-mix(in srgb, var(--farve) 18%, transparent); color: var(--tekst); cursor: pointer; font: inherit; }
+.liv-svar-knap strong { font-size: 18px; line-height: 1; }
+.liv-svar-knap small { font-size: 11.5px; color: var(--svag); }
+.liv-svar-knap:hover { background: color-mix(in srgb, var(--farve) 34%, transparent); }
+.liv-kodoner { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.liv-kodon { min-height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px 0; border-radius: 9px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.05); color: var(--tekst); cursor: pointer; font: inherit; }
+.liv-kodon small { font: 600 10.5px ui-monospace, monospace; color: var(--svag); letter-spacing: 0.5px; }
+.liv-kodon strong { font-size: 15px; line-height: 1.1; }
+.liv-kodon.valgt { border-color: var(--accent); background: rgba(95, 227, 255, 0.18); }
+.liv-kodon.ændret strong { color: var(--gul); }
+.liv-kodon:disabled { opacity: 0.55; cursor: default; }
+.liv-bogstaver { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.liv-bogstav-søjle { display: grid; gap: 4px; }
+.liv-base.liv-base-lille { min-height: 30px; font-size: 15px; border-radius: 9px; border-width: 1.5px; }
+.liv-base.valgt { background: var(--farve); color: #0b0f1e; }
+.liv-bogstav { display: inline-block; min-width: 1.2em; text-align: center; border-radius: 5px; padding: 0 2px; color: #0b0f1e; background: var(--farve); font-weight: 800; }
+/* Kodehjulet: øverst til højre i 3D-billedet */
+.liv-hjul { position: absolute; z-index: 3; top: 8px; right: 8px; height: min(360px, calc(100% - 64px)); aspect-ratio: 1 / 1.1; max-width: 48%; display: flex; flex-direction: column; padding: 6px; border-radius: 14px; background: rgba(8, 12, 28, 0.82); border: 1px solid var(--panel-kant); box-sizing: border-box; }
+.liv-hjul[hidden], #livBund[hidden] { display: none; }
+.liv-hjul svg { flex: 1 1 auto; min-height: 0; width: 100%; }
+.liv-hjul text { fill: #f2f4ff; text-anchor: middle; dominant-baseline: central; font-family: system-ui, sans-serif; font-weight: 700; pointer-events: none; }
+.liv-hjul .hjul-felt { fill: color-mix(in srgb, var(--farve) 30%, #0b1024); stroke: #0b1024; stroke-width: 0.5; cursor: pointer; }
+.liv-hjul .hjul-felt:hover { fill: color-mix(in srgb, var(--farve) 50%, #0b1024); }
+.liv-hjul .hjul-felt.lyser { fill: var(--farve); stroke: #fff; stroke-width: 0.9; }
+.liv-hjul .hjul-aa-navn { font-weight: 600; }
+.liv-hjul .hjul-midte { fill: #141a36; stroke: var(--panel-kant); stroke-width: 0.6; }
+.liv-hjul-tekst { margin: 4px 0 0; font-size: 12.5px; text-align: center; color: var(--svag); }
+@media (max-width: 560px) { .liv-hjul { max-width: 76%; top: 6px; right: 6px; } /* på telefonen skal hjulet kunne læses */ }
 .batteri-tal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
 .batteri-tal span { font-size: 12.5px; color: var(--svag); }

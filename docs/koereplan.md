@@ -23,7 +23,7 @@
 | Spor | Næste |
 |---|---|
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Venus ([planen](plan-venus.md), V1 og V2 er lavet, venter på et go til V3, [prompt-venus.md](prompt-venus.md)) → Merkur → Pluto → overblikket. Uranus og Neptun er færdige (UN1-UN5). Mars ekstra og Månen bagefter. |
-| [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026). Liv L0 (planen og faktagrundlaget) er lavet 9. november 2026 ([plan-liv.md](plan-liv.md)). Jeres svar er givet. Næste: L1 (stigen i 3D). |
+| [Molekyler](lige-nu/molekyler.md) | M1-M4 er færdige (8. november 2026). Liv L0 og L1 er lavet 9. november 2026 og L2 (fra opskrift til protein) 10. november 2026 ([plan-liv.md](plan-liv.md)). Næste: L3 (kopien), [prompt-liv-l3.md](prompt-liv-l3.md). |
 | [Tid og rum](lige-nu/tid.md) | T5 ("Hvorfor går tiden langsommere?") er færdig (9. november 2026). Intet venter. T4 ([prompt-tid-t4.md](prompt-tid-t4.md)) er en mulig udvidelse senere. |
 | [Menuen](lige-nu/menuen.md) | K1-K4 og K3 er lavet (8. november 2026): ringen er den almindelige menu. Jeres runde på tabletten. |
 | [Småting](lige-nu/smaating.md) | Det store eftersyn med Fable 5.2 ([plan-fable-eftersyn.md](plan-fable-eftersyn.md)), nu hvor T5c er færdig: runden med sønnen, så E0 ([prompt-fable-e0.md](prompt-fable-e0.md)), så E1 (Fable). Fra E0 starter, til I har valgt i E2, venter nye store dele (fx Liv L2 og Venus V3). |
