@@ -2,10 +2,12 @@
 // Kilderne står i docs/fakta-liv/dna-stigen.md og docs/fakta-liv.md (kromosomet og perlerne: OpenStax 10-1).
 
 import { PARTNER, STOR } from './stige.js';
+import { HBB } from './gener.js';
+import { OPGAVER_PROTEIN } from './protein.js';
 
 // Begyndelsen af genet HBB (β-kæden i hæmoglobin), de første ti kodoner (NCBI RefSeq NM_000518.5, docs/fakta-liv.md).
 // Det er streng I, læst fra 5' mod 3' (opad i stigen).
-export const HBB_START = 'ATGGTGCATCTGACTCCTGAGGAGAAGTCT';
+export const HBB_START = HBB.dna.slice(0, 30);
 
 // Trinene på rejsen, udefra og ind. tal: [navn, værdi]. ekstra: en linje under tallene.
 export const NIVEAUER = [
@@ -57,6 +59,7 @@ export const OPGAVER_LIV = [
     id: 'liv-byg', titel: 'Byg en stige med 8 trin', tip: 'Tryk "Byg stigen", og vælg partneren til hver base.',
     fakta: 'Fordi A altid passer til T og G til C, bestemmer den ene halvdel af stigen den anden. Det bruger cellen, når den kopierer sit DNA.',
   },
+  ...OPGAVER_PROTEIN, // L2: fra opskrift til protein (js/data/liv/protein.js)
 ];
 
 export const BYG_TRIN = 8;

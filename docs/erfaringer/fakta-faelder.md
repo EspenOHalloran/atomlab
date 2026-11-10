@@ -108,3 +108,5 @@
 - "Kromosomets to kopier hænger sammen på midten." Centromeren sidder kun midt på nogle kromosomer. Skriv "ét sted" (Liv L1).
 - "Genet for hæmoglobin." HBB er genet for β-kæden. Hæmoglobin er bygget af to slags kæder, så skriv "et af generne for hæmoglobin" (Liv L1).
 - "Einstein opdagede, at samtidighed er relativ." Poincaré nævnte muligheden allerede i 1900. Einstein gjorde den til en del af den særlige relativitetsteori i 1905 (Wikipedia "Relativity of simultaneity"). Skriv "Ifølge Einsteins relativitetsteori …" (T5c, 9. november 2026).
+- "Seglcellen sidder i kodon 6." Traditionelt ja, fordi den første methionin fjernes i det færdige protein. Tæller man i genet fra ATG, er det kodon 7 (GAG). Sig, hvordan der tælles (Liv L2, 10. november 2026).
+- "Fem år efter Nirenberg (1961) kendte man hele koden." Nobelkomitéen siger "less than five years later". Regn årstal efter kilden, ikke efter hukommelsen (Liv L2).

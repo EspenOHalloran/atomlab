@@ -191,4 +191,11 @@ export const HVORFOR = {
     svar: 'Man skulle tro, det var hydrogenbindingerne. Men baserne ligger stablet som mønter, og hver base klæber mest til dem over og under sig. Det er stablingen, der holder stigen sammen.\n\nHydrogenbindingerne afgør, hvem der passer sammen: A med T og G med C. De er svage, så stigen kan lynes op, når cellen skal kopiere den.',
     nørd: 'Et forsøg fra 2006 målte, hvor meget hvert par og hver stabling betyder. Stablingen giver næsten det hele. G–C-parret giver næsten intet ekstra, og A–T endda en lille smule minus, fordi baserne ellers ville binde sig til vandet omkring dem i stedet (Yakovchuk, Protozanova og Frank-Kamenetskii 2006).',
   },
+  // Liv L2. Kilder: OpenStax Biology 2e 3-4 (formen, 147 aminosyrer, de lange tråde og seglen) og
+  // docs/fakta-liv/dna-opskriften.md (GAG → GTG, malaria: Hedrick 2011)
+  livSegl: {
+    spørgsmål: 'Hvorfor kan ét forkert bogstav give en sygdom?',
+    svar: 'Rækkefølgen af aminosyrerne bestemmer, hvordan kæden folder sig, og formen bestemmer, hvad proteinet kan. Ved seglcelleanæmi er kun ét bogstav i genet HBB skiftet: GAG er blevet til GTG. Så sidder der valin, der skyr vand, i stedet for glutaminsyre, der er minusladet.\n\nDet får hæmoglobinet til at klumpe sammen i lange tråde. De røde blodlegemer bliver krumme som en segl og kan sætte sig fast i de små blodårer.',
+    nørd: 'Man får sygdommen, når man har det ændrede gen fra både sin mor og sin far. Har man det kun fra den ene (man er bærer), får man sjældnere den farlige form af malaria (Hedrick 2011). Bærere kan godt få malaria.',
+  },
 };

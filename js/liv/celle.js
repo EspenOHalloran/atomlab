@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { LAV_KVALITET, lavPrikTekstur } from '../scene3d.js';
 
 // En hinde (cellens eller kernens): gennemsigtig i midten og tydelig i kanten (som en sæbeboble)
-function hindeMateriale(farve, styrke = 1) {
+export function hindeMateriale(farve, styrke = 1) {
   return new THREE.ShaderMaterial({
     uniforms: { uFarve: { value: new THREE.Color(farve) }, uOpacitet: { value: 1 }, uStyrke: { value: styrke } },
     vertexShader: /* glsl */ `

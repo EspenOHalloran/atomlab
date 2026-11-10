@@ -725,6 +725,28 @@
           </div>
         </div>
       </div>
+      <div class="liv-protein" id="livProtein">
+        <h4 class="panel-overskrift">Fra opskrift til protein</h4>
+        <div class="liv-protein-valg" id="livProteinValg">
+          <button class="knap" data-liv-protein="genet">🧬 Se genet blive læst</button>
+          <button class="knap" data-liv-protein="læs">📖 Læs selv</button>
+          <button class="knap" data-liv-protein="ret">✏️ Skift et bogstav</button>
+        </div>
+        <div class="liv-protein-i-gang" id="livProteinIGang" hidden>
+          <p class="liv-byg-tekst" id="livProteinTekst"></p>
+          <div class="liv-svar" id="livSvar" hidden></div>
+          <div class="liv-ret" id="livRet" hidden>
+            <div class="liv-kodoner" id="livKodoner" aria-label="De første 10 ord i genet"></div>
+            <div class="liv-bogstaver" id="livBogstaver" aria-label="Skift et bogstav"></div>
+          </div>
+          <button class="kontakt løs" id="livHjulKontakt">Kodehjulet</button>
+          <div class="valg-række">
+            <button class="knap lille svag" id="livProteinVidere" hidden>Lad ribosomet læse resten</button>
+            <button class="knap lille svag" id="livProteinNulstil" hidden>↺ Som i genet</button>
+            <button class="knap lille svag" id="livProteinStop">Stop</button>
+          </div>
+        </div>
+      </div>
       <details class="lag-boks opgave-boks" data-lag="liv-opgaver">
         <summary><strong>Opgaver</strong> <span class="opgave-tal" id="livOpgaveTal"></span></summary>
         <ol class="opgaver kompakt" id="livOpgaver"></ol>
@@ -740,14 +762,18 @@
       <p class="liv-ekstra" id="livEkstra"></p>
       <button class="hvorfor" id="livHvorfor" data-hvorfor="livSammen" hidden>Hvorfor? Hvad holder stigen sammen?</button>
       <details class="forklaring-boks lag-boks" data-lag="liv-nørd" name="liv-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Hvor atomernes pladser kommer fra</span></summary>
+        <summary><strong>For nørder</strong><span class="lag-kort">Atomernes pladser, RNA'et og koden</span></summary>
         <p>Atomernes pladser er målt med røntgen i en rigtig DNA-krystal (1BNA, Drew, Dickerson og kolleger 1981, fra Protein Data Bank). Røntgen kan ikke se H-atomerne, så dem har vi regnet ud. Krystallens stige er bøjet og har 9,8 trin pr. omgang. I vand er det ca. 10,5, og det bruger stigen her.</p>
         <p>To sæt kromosomer er ca. 6,1 milliarder basepar hos en pige og lidt færre hos en dreng, fordi Y-kromosomet er meget mindre end X.</p>
+        <p><strong>Genet:</strong> Bogstaverne er de rigtige fra genet HBB (NCBI, NM_000518.5). I genet er opskriften delt i flere stykker. Før RNA'et forlader kernen, bliver stykkerne imellem klippet væk, og resten bliver sat sammen. RNA'et har også et stykke før det første AUG og efter stop, som ikke bliver til protein.</p>
+        <p><strong>Koden:</strong> Selvom der er 64 ord, er der kun 20 aminosyrer, så de fleste har flere ord. I 1961 fandt Marshall Nirenberg og Heinrich Matthaei det første ord: UUU giver phenylalanin. Under fem år senere kendte man hele koden.</p>
+        <p>Den første methionin bliver fjernet, når β-kæden er færdig. Derfor kaldes kodon 7 (seglcellen) traditionelt nr. 6.</p>
       </details>
       <details class="forklaring-boks lag-boks" data-lag="liv-ærligt" name="liv-lag">
         <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
         <p>Atomerne er kugler og bindingerne pinde, men rigtige atomer er skyer af elektroner. I cellen er fosfatet minusladet, og der er plusioner (fx natrium og magnesium) omkring stigen. Dem har vi ikke tegnet.</p>
         <p>Cellen og kernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i kernen.</p>
+        <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i kernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
       </details>
     </aside>
   </section>
@@ -759,7 +785,9 @@
         <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Kernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
         <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
         <p><strong>De gule streger</strong> helt tæt på er hydrogenbindinger. De holder A og T sammen med to og G og C med tre.</p>
-        <p><strong>Farverne:</strong> Atomerne har kemikernes farver: C grå, H lysegrå, N blå, O rød og P orange. Baserne har hver sin farve: A grøn, T rød, G gul og C blå.</p>
+        <p><strong>Farverne:</strong> Atomerne har kemikernes farver: C grå, H lysegrå, N blå, O rød og P orange. Baserne har hver sin farve: A grøn, T rød, G gul og C blå. U i RNA er lyserød.</p>
+        <p><strong>Fra opskrift til protein:</strong> "Se genet blive læst" viser, hvordan cellen laver en RNA-kopi af genet, og hvordan ribosomet læser kopien tre bogstaver ad gangen og bygger en kæde af aminosyrer. ⏩ går hurtigere, og mellemrum stopper tiden. I "Læs selv" er du ribosomet: Find ordet i kodehjulet, og vælg aminosyren. I "Skift et bogstav" kan du lave mutationer og se, hvad der sker med proteinet.</p>
+        <p><strong>Kodehjulet:</strong> Det første bogstav står i midten, det andet i næste ring og det tredje yderst. Helt yderst står aminosyren. Tryk på et ord for at se, hvad det betyder. Aminosyrernes farver viser, om de skyr vand (gule), kan lide vand (grønne), er plus (blå) eller minus (røde).</p>
       </div>
     </div>
   </div>
