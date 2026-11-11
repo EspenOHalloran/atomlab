@@ -7,3 +7,5 @@
 - [ ] Er en fil rettet efter testene (også bare én tekst), så kør den nye test og en import af datafilen igen før push (Uranus UN1: en apostrof stoppede hele programmet).
 - [ ] Er et tal eller en tekst ændret, så søg efter alle andre steder, hvor det samme står (`grep`). Det samme tal må ikke stå forskelligt to steder.
 - [ ] Sporets fil i `docs/lige-nu/`, den rigtige fil i `docs/kode/` og nye erfaringer i `docs/erfaringer/` er opdateret, og CLAUDE.md og DESIGN.md, hvis en regel er ændret (se `/faerdig`). De fælles dokumenter er rettet lige efter, at `main` er merget ind.
+- [ ] **Er lag 1 inden for budgettet?** ([retning.md](../retning.md), "Skærmen"): Er der lagt noget i et panel, er der også flyttet noget ned i et lag eller ud. Højst to nye fagord pr. trin i det, der altid er fremme.
+- [ ] En ny stor del eller et nyt forløb har status "prøve" i sporets fil og i "Ikke afprøvet", til et barn har prøvet det ([guide-proeven.md](../guide-proeven.md)).

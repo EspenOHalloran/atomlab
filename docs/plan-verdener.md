@@ -1,47 +1,45 @@
-# Plan: Verdenerne i menuen (K4)
+# Plan: Verdenerne i ringen (udgave 2)
 
-*Startet 7. november 2026 i en drøftelse af idéerne (sporet Småting). Beslutningen hører til sporet **Menuen** ([lige-nu/menuen.md](lige-nu/menuen.md)). Den står i sin egen fil, fordi K2 var i gang i [plan-menu.md](plan-menu.md) samtidig. Byggeriet blev startet med [prompt-menu-k4.md](arkiv/prompt-menu-k4.md). K4 er lavet (8. november 2026). K3 startes med [prompt-menu-k3.md](prompt-menu-k3.md).*
+*Udgave 2 lavet 11. november 2026 i E2 ud fra Fables kort ([fable/E1-verdener.md](fable/E1-verdener.md)) og jeres valg ([fable/E1-noter.md](fable/E1-noter.md)). Den første udgave (K4, 7.-8. november 2026) med de tekniske detaljer om ringen står i [arkiv/plan-verdener-k4.md](arkiv/plan-verdener-k4.md). Hører til sporet **Menuen** ([lige-nu/menuen.md](lige-nu/menuen.md)). Reglerne for vækst står også i [retning.md](retning.md).*
 
-## Hvorfor
-Menuen har 8 dele, og 12-15 er på vej (Kvantefysik, Ild, Liv, Elektricitet og radio, Gåderne, Videnskabsfolkene, Tidslinjen …). Det kan ringen fra K1 ikke rumme pænt, for vinklen mellem kortene er 360° delt med antallet. Kosmos har også 12 fænomener på én liste, og flere er på vej.
+## Princippet
+- **Ringen er et kort efter størrelse,** fra atomkernen til universet. Så lærer menuen selv noget, og "mindre … større" bliver sandt. **Kernerne står først** (jeres valg 11. november 2026).
+- **Rejsen** (eftersynets nr. 9) er ruten efter historien. Den går på tværs af verdenerne og bestemmer, hvor man starter. Nye brugere lander stadig på Atomer med "Start her".
+- **Biblioteket står uden for skalaen** og sidst.
 
-## Jeres svar (7. november 2026)
-- **Verdener i ringen:** Ringen får 5 kort (senere 6), ét pr. verden. Når en verden står forrest, vises dens dele som små kort lige under. Man trykker direkte på en del, så der stadig kun er ét tryk ind (ingen mappe og ingen ekstra skærm). Har en verden kun én del, går man lige ind.
-- **Bygges lige efter K2** (ikke først efter Molekyler M2). Det betyder, at nogle verdener har kun én eller to dele i et stykke tid.
-- **Elektricitet står mellem Kernerne og Rummet** (ioner → strøm → lyn → radiobølger fra rummet). Når Ild og liv kommer, står Ild og liv mellem Kernerne og Elektricitet (som "Kemi og liv" i jeres valg).
-- **Molekylerne hører til atomerne** (jeres spørgsmål, Opus' svar og jeres valg): Verdenen hedder **Atomer og molekyler**, og molekylerne ligger i Værkstedet med fanerne "Byg et atom | Byg et molekyle" (to måder indeni: "Del elektroner" og "Giv elektroner", det, der hed Byttebørsen). Detaljerne står i [plan-molekyler.md](plan-molekyler.md). **Ild og liv** kommer først i ringen, når Ild eller Liv findes. Indtil da er der 5 verdener.
-- **Svar i K4 Trin 0 (7. november 2026, efter billedet af idéen):** Billedet blev lavet i to udgaver på pc og tablet på højkant: A (delene som små kort under verdenen) og B (delene som knapper inde i verdenens kort).
-  - **Udseende: B.** Verdenens kort forrest bliver højere og har én knap pr. del (ikon, navn og en lille pil ›). Så ligner verdenens kort en kasse med knapper og ikke selv en knap. En verden med kun én del (Elektricitet, Biblioteket) har ingen knapper: hele kortet åbner delen. Kortene til siden er som i dag (uden knapper). På billedet blev pladsen til ringen ca. 96 px lavere på pc og tablet, så kortet ikke går ned over docken.
-  - **Baggrunden: ét motiv pr. verden.** Atomer og molekyler: elektronskyerne. Kernerne: stjernen, der bobler. Elektricitet: ionerne. Rummet: planetbanerne. Biblioteket: ordene. Reaktorbassinet, det periodiske system og galaksen bruges ikke indtil videre, men koden bliver i `js/menubaggrund.js`.
-  - **Docken og ✓:** Docken viser de 5 verdener. En del får ✓ på sin knap, når den er klaret, og verdenen får ✓, når alle dens dele er klaret. "Din fremgang" viser alle delene samlet under deres verden.
-  - **Start:** Ringen starter på verdenen for den del, man sidst var i (`atomlabSidsteDel`), og den dels knap har en svag glød og en lille prik.
-  - **Navnene:** Forslagene bruges nu (Atomer og molekyler, Kernerne, Elektricitet, Rummet og Biblioteket). Jeres søn vælger bagefter på tabletten mellem dem og bud 2: Byggeklodserne, Atomkernerne, Strøm og lyn, Universet og Biblioteket (spørgsmålet står i "Ikke afprøvet").
-  - **Kosmos indeni:** Grupperne i Kosmos' liste (fx "Stjernernes liv", "Sorte huller og rumtid") bliver en egen, lille opgave efter K4 i sporet Solsystemet og Kosmos.
-  - **Antistof:** under Kernerne (beta-plus-henfald, positronerne fra Solens fusion og PET-scanning). Gåden om, hvorfor der er mere stof end antistof, får et kort afsnit dér og måske et kort fænomen i Kosmos senere.
+## Verdenerne
+| # | Verden | Handler om | Dele nu | Planlagt, og hvor |
+|---|---|---|---|---|
+| 1 | ☢️ **Kernerne** | Kerner, der smelter sammen, spaltes og henfalder | Stjerneovnen, Reaktoren | **Tjernobyl** som tredje fane i Reaktoren. **Antistof** som en lille del (positronen og PET-scanning) |
+| 2 | ⚛️ **Atomer** (i dag "Atomer og molekyler") | Hvad et atom er, og de 118 slags | Atomværkstedet, Det periodiske system. **Molekyler** bliver en egen del her (Serie 1) | **Kvantefysik** som egen del (orbitalerne i store atomer hører til her, kvantecomputeren er dens sidste kapitel, hvis den kommer). **Fotos af grundstofferne** på væggen. Molekyler flytter til Stof og kemi, når den kommer |
+| 3 | 🧪 **Stof og kemi** *(kommer, når Ild findes)* | Atomer, der sætter sig sammen og bytter plads | – | **Molekyler** (flytter fra Atomer, med knaldgassen) og **Ild** (knaldgassen som det første bål). Rumfærgens blanding |
+| 4 | 🧬 **Liv** (i dag "Ild og liv") | Molekyler, der kan kopiere sig selv | Liv | **Begyndelsen** (L4-L5) og **Liv i rummet** (L6) som knapper i verdenens kort. "Skriv dit navn" |
+| 5 | ⚡ **Elektricitet** (senere måske "Lys og strøm") | Ladninger i bevægelse, det man kan holde i hånden | Batteriet | **Strøm og magneter**, **Lys** (farver, spektret og radiobølger), lyn. Nerver som et "Hvorfor?"-kort med link til Liv |
+| 6 | 🔭 **Rummet** | Planeterne, stjernerne, og rum og tid | Solsystemet, Kosmos | Solsystemet: **overblikket** som forside, **månerne** med mulige betingelser for liv, Venus kort, Merkur og Pluto i lille udgave, Mars ekstra. **Rumrejsen** som egen del, når overblikket findes. Kosmos i fire grupper: *Universet* (Big Bang, **Mørkt stof**, Andromeda), *Stjernernes liv*, *Sorte huller* og *Tid og rum* (med "Tid" som ét punkt) |
+| – | 📚 **Biblioteket** | Videnskaben selv: ordene, menneskene og det, vi ikke ved | Ordbogen | **Gåderne** (med Planet X og gåden om antistof). **Opdagelserne:** tidslinjen, videnskabsfolkene og siderne fra de gamle bøger, hver person knyttet til en opdagelse, man kan gøre efter i programmet |
 
-## Verdenerne (rækkefølgen er stadig fra det mindste til det største)
-| Verden | Dele nu | Dele senere |
-|---|---|---|
-| ⚛️ Atomer og molekyler | Atomværkstedet (med fanerne "Byg et atom" og "Byg et molekyle"), Det periodiske system | Kvantefysik (med kvantecomputeren) |
-| ☢️ Kernerne | Stjerneovnen, Reaktoren | Tjernobyl (i Reaktoren), måske Antistof |
-| 🔥 Ild og liv (først, når Ild eller Liv findes) | – | Ild, Liv med DNA |
-| ⚡ Elektricitet | Batteriet | Strøm og spænding, magnetisme, radiobølger, lyn, nerver |
-| 🔭 Rummet | Solsystemet, Kosmos | Gåderne, Planet X (Tid og rum ligger i Kosmos) |
-| 📚 Biblioteket | Ordbogen | Videnskabsfolkene, Tidslinjen, Uddrag fra gamle bøger |
+Indtil Ild findes, er der seks verdener. Batteriet bliver i Elektricitet. Får Elektricitet ikke en del mere inden for et halvt år, tages det op igen (Fables mulighed B: Batteriet til Stof og kemi).
 
-Navnene er forslag, som jeres søn vælger mellem senere (se Jeres svar).
+**Uden for ringen:** "Test dig selv" bliver "gæt først" i forløbene. "Zoom ind fra hverdagen" bliver indledningen til et forløb. Grundstoffernes rejse (F1) *er* Rejsen. Hjernen og AI og en chat kommer ikke med.
 
-## Åbent (alle punkter afgjort i K4 Trin 0, 7. november 2026, se Jeres svar)
-1. ✅ **Navnene på verdenerne:** Er det ord, en 13-årig har lyst til at trykke på? Forslag: Lad sønnen vælge mellem 2-3 bud pr. verden.
-2. ✅ Afgjort 7. november 2026: Molekylerne ligger i Værkstedet under Atomer og molekyler (se Jeres svar).
-3. ✅ **K2's baggrunde:** Skal baggrunden følge verdenen (5-6 baggrunde) eller delen, man peger på under den?
-4. ✅ **Docken og "Din fremgang":** Viser docken verdenerne eller alle delene? Får en verden et ✓, når alle dens dele er klaret?
-5. ✅ **Start på den del, man sidst var i** (`atomlabSidsteDel`): Ringen drejer til verdenen, og delen er fremhævet?
-6. ✅ **Kosmos indeni:** Skal Kosmos' liste deles i under-punkter som i Solsystemet (fx "Stjernernes liv", "Sorte huller og rumtid")? Det kan være en egen, lille opgave efter K4.
-7. ✅ **Antistof:** under Kernerne (kobler til beta-plus og PET-scanning) eller som fænomen i Kosmos (som i planen)?
+## Regler for vækst
+1. **Højst syv verdener.** Noget nyt bliver en del i en verden, der findes. En ny verden kræver mindst to dele fra starten.
+2. **To til fire dele pr. verden.** Bliver der flere, er to af dem nok i virkeligheden én (som Tjernobyl i Reaktoren).
+3. **En liste med flere end otte punkter får grupper** (Kosmos nu, Solsystemet har dem).
+4. **En verden med én del er et løfte:** Enten kommer del nummer to på køreplanen, eller også lægges delen ind i en nabo.
+5. **Hver ny ting får sin plads her, før den får en plan.**
 
-## Trin
-- [x] **K4 Trin 0:** Svar på punkterne under Åbent og et billede af idéen (lavet 7. november 2026, svarene står under Jeres svar).
-- [x] **K4: Verdenerne i ringen** (lavet 8. november 2026, udgave B, stadig bag `?karrusel`). `VERDENER` i `js/karrusel.js` bestemmer verdenerne, deres dele, rækkefølgen og baggrundsmotivet. De gamle menukort flyttes ind i verdenernes kort som knapper (`.verden-knap`), så main.js stadig finder dem (✓ og "Start her"). En verden med én del har et link over hele kortet (`.verden-hel`) og delens navn nederst. Alle verdenerne er lige høje, og de to bagerste er skjult (de ville stå oven på atomet). Nye ikoner for verdenerne tegnet med CSS (`ikon-v-*`). ✓ på verdenen og i docken, når alle delene er klaret. "Din fremgang" samlet under verdenerne. Testen `karrusel` udvidet.
-  - **En ny del** bliver en ny linje i `dele` under sin verden i `VERDENER` (og et link i `.menukort` i `index.html`). **Ild og liv** bliver en ny verden mellem Kernerne og Elektricitet med sit eget motiv i `js/menubaggrund.js` og sit eget ikon (`ikon-v-<id>`).
-- [x] **K3** (ringen bliver standard, lavet 8. november 2026, se [plan-menu.md](plan-menu.md)).
+## Opgaverne
+| Opgave | Hvornår | Størrelse | Hvad det rører |
+|---|---|---|---|
+| **Ringen:** Kernerne først, "Atomer og molekyler" bliver "Atomer", "Ild og liv" bliver "Liv" (navn, ikon og tekst) | Serie 2 (nr. 8), eller før, hvis den passer ind | lille | `VERDENER` i `js/karrusel.js`, `js/menubaggrund.js` (motivet) og testen `karrusel` |
+| **Molekyler som egen del i Atomer** med sit forløb (eftersynets nr. 5 og 10b) | Serie 1, efter skærmlisten (10a) og Forløb-klodsen | mellem (1-2 sessioner) | En ny skærm i skærmlisten med egen HTML og CSS. `js/molekyler.js`, `js/molekyler-byg.js` og `js/knaldgas.js` er allerede adskilt. Opgaverne får deres egen linje i "Din fremgang" (i dag under Værkstedet, `js/main.js:17-18`), og de gemte stjerner flytter med. Testene `byg-molekyler`, `byttebors`, `molekyler`, `vaerksted` og `karrusel` |
+| **Kosmos i fire grupper,** og de to punkter om tid bliver ét | Serie 1 (sammen med Tid, nr. 6) | lille til mellem | `js/kosmos.js` og fænomenerne `tid` og `tidhvorfor` |
+| **Stof og kemi** ind i ringen, og Molekyler flytter dertil | Når Ild bygges | lille (selve flytningen) | `VERDENER`, et nyt motiv og et nyt ikon (`ikon-v-<id>`) |
+
+**En ny del i en verden, der findes:** en ny linje i `dele` under verdenen i `VERDENER` (og i skærmlisten fra nr. 10a). Detaljerne om knapperne, ✓ og "Din fremgang" står i [arkiv/plan-verdener-k4.md](arkiv/plan-verdener-k4.md).
+
+## Åbent
+- **Navnene:** "Stof og kemi" er et arbejdsnavn. Sønnen vælger, når verdenen kommer (fx mellem "Stof og kemi", "Molekyler og ild" og "Kemi"). Hans valg mellem navnene fra K4 står stadig i [ikke-afproevet.md](ikke-afproevet.md).
+- **Tid og rum:** en gruppe i Kosmos (valgt nu). Bliver gruppen over seks punkter (fx med T4), kan den blive en del for sig i Rummet.
+- **Gåderne:** Biblioteket (valgt nu). Ender listen med næsten kun at handle om rummet, kan de flytte til Rummet.

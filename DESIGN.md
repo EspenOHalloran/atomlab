@@ -15,7 +15,11 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - **Når I skal beslutte noget (jeres ønske 7. november 2026, gælder altid):** Præsentér sagen kort, giv min anbefaling, og lad jer vælge mellem et par muligheder (gerne som spørgsmål med valgmuligheder, anbefalingen først). Skriv ikke bare et åbent spørgsmål.
 - **Parallelle sessioner (jeres svar 7. november 2026):** I kører ofte flere sessioner samtidig. Hver session hører til ét spor og skriver sin status i sporets egen fil i `docs/lige-nu/`. Reglerne står under "Parallelle sessioner" i CLAUDE.md.
 - **Artefaktet "AtomLab Overblik" (jeres svar 7. november 2026):** opdateres, når en serie er færdig (fx hele Jupiter), ikke efter hver delopgave.
-- Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026).
+- **Efter eftersynet med Fable (jeres go 11. november 2026, [retning.md](docs/retning.md) og [E1-noter.md](docs/fable/E1-noter.md)):**
+  - **Prøv før næste:** En ny stor del eller et nyt forløb har status "prøve", til et barn på 12-14 år har prøvet det i ti minutter uden hjælp, og en voksen bagefter kan sige kernesætningen med egne ord. Prøven er en fast aften om ugen ([guide-proeven.md](docs/guide-proeven.md)). Der må bygges videre imens, men højst én ny stor del ad gangen ud over Solsystemet. "Ikke afprøvet" holdes under ca. 10 punkter, og resten flyttes til arkivet.
+  - **Én sætning før planen:** Hver ny del starter med "Efter fem minutter kan brugeren sige: …". Jeres go gælder den sætning før og resultatet på tabletten efter, ikke planens detaljer.
+  - **Træk fra, når I lægger til:** Lægger en opgave noget i et panel, siger den også, hvad der flytter ned i et lag eller ud. Budgettet for lag 1 står i Retningen.
+- Det er kun jer, der bruger AtomLab indtil videre. Prototyper må derfor gerne ligge i den almindelige udgave (24. oktober 2026). Før andre får linket, kommer der to udgaver: en stabil og en prøveudgave med `?lab` (køreplanen, Serie 3). Frigivet er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp (jeres valg 11. november 2026).
 - Tabletten bruges lige meget på langs og på højkant. Lyd: ingen baggrundsmusik, de små lyde bliver.
 - **Tests (jeres svar 24. oktober 2026):** Test, når det giver mening i forhold til prisen. I tester selv på den rigtige tablet. Derfor:
   - Mens der arbejdes og før merge: kun `node tests/koer-alle.mjs --ændret`. Den kører altid røgtesten (ca. 20 sekunder) og de tests, ændringen kan påvirke. Ændringer i `index.html` og `style.css` giver kun testene for de skærme, de ændrede linjer hører til. Hele samlingen køres kun som afslutning på en serie af opgaver, når fælles moduler eller data er ændret, og før et større mål (fx at dele AtomLab med andre).
@@ -29,14 +33,15 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - **Værktøjer (jeres svar 24. oktober 2026):** Billedværktøjerne må bruge Python-pakker (fx `rasterio`). Bed altid om værktøjer (eller adgang til netsider), når noget kan gøre arbejdet hurtigere, billigere eller bedre.
 - **Mars på tabletten (jeres svar 24. oktober 2026):** kører fint med 8k-kortet. KTX2 er derfor ikke nødvendigt lige nu.
 
-**Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Kvaliteten og oplevelsen skal være så flot og imponerende som muligt ("Det hele skal med", om Mars 24. oktober 2026).
+**Jeres mål for Solsystemet** (jeres ord): Man skal få oplevelsen af at besøge planeterne, også deres måner. Kvaliteten og oplevelsen skal være så flot og imponerende som muligt ("Det hele skal med", om Mars 24. oktober 2026). **Ændret 11. november 2026 (E2):** "Det hele skal med" gælder det, der er bygget. Det kommende får en lille udgave (kloden, tre-fire steder og flyby), medmindre I vælger andet, og overblikket og månerne med mulige betingelser for liv kommer først.
 
 **Himlen i Solsystemet (jeres ord 5. november 2026):** "Helt generelt skal baggrundene (det ydre rum) se realistiske ud, dog uden at det behøver decideret modelleres op." Der var prikker, der bevægede sig hurtigt, alle steder i Solsystemet. De var efter alt at dømme rumstøvet, som nu er skjult i hele Solsystemet.
 
 **Svar fra 23. oktober 2026, som stadig gælder:** Fotos af grundstofferne kommer efter teksterne i lag, fra Wikimedia Commons med navn og licens. Solsystemets spørgsmål 1-5 følger planens forslag, indtil I siger andet. Noterne fra afprøvningen med jeres søn ligger i `docs/fable/soen-og-espens-noter.md`.
 
 ## Grundregler
-- Dansk tekst i et enkelt sprog. Fagord forklares.
+- Dansk tekst i et enkelt sprog. Fagord forklares. Højst to nye fagord pr. trin i det, der altid er fremme (11. november 2026).
+- **Retningen** ([docs/retning.md](docs/retning.md)) læses, før en ny del planlægges: én kernesætning, forløbet først, budgettet for lagene, én udgave af hver klods og grænserne for ydelsen.
 - Tæt på den rigtige fysik. Forenklinger siges ærligt.
 - **Dybde i lag** (jeres princip, 23. oktober 2026): Brugeroplevelsen skal være i top, med flot UI og gode informationer de rigtige steder. Man skal ikke bombarderes med informationer, men de skal være lette at nå for den nysgerrige, fx med et klik. AtomLab skal have stor dybde og tyngde, men føles let, og man bestemmer selv, hvor dybt man vil bore. F1 foreslår, hvordan det kan gøres: Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" og "For nørder").
 - Virker på pc (mus og tastatur) og tablet (fingre).

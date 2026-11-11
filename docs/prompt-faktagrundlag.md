@@ -1,0 +1,15 @@
+# Prompt: Faktagrundlag på forhånd (parallelt)
+
+*Skrevet 11. november 2026 i E2. Kun dokumenter, så de kan køre samtidig med andre sessioner og med hinanden. Én ny session pr. emne. Hver session skriver kun sin egen fil i `docs/` og en linje i sporets fil (Småting). Kopiér den fælles tekst og ét emne ind i en ny session.*
+
+**Før I starter:** Kilderne ligger ofte på domæner, der ikke er åbne i miljøet (fx nasa.gov, esa.int, wikimedia.org og archive.org). Se "Miljøet" i [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md), og åbn dem, sessionen beder om, før den går i gang.
+
+---
+
+**Fælles tekst:** Du laver faktagrundlaget for et kommende emne i AtomLab. Der skal ikke skrives kode eller tekster til programmet, kun en faktafil med kilder. Læs først CLAUDE.md (står i samtalen), [docs/retning.md](retning.md) (afsnittet Indhold), `/faktatjek` og [fakta-fælderne](erfaringer/fakta-faelder.md). Se, hvordan `docs/fakta-liv.md` er bygget op. Skriv én fil `docs/fakta-<emne>.md` (højst ca. 30 KB): påstandene med tal, kilde (helst primær) og hvor sikre de er, fælderne (det, der ofte siges forkert), forslag til **én kernesætning**, og hvad man kan *gøre* i programmet. Skriv nye fælder i `fakta-faelder.md`. Spørg om domæner, før du går i gang. Commit, PR og merge med det samme (CLAUDE.md).
+
+**Emnerne:**
+1. **De første 6-8 videnskabsfolk** (Opus, effort høj): Forslag fra Fable: Tycho Brahe (supernovaen 1572), Ole Rømer (lysets fart ved Io), Christiaan Huygens (Saturns ring), H.C. Ørsted (strøm og magnetisme), Niels Bohr (skallerne), Inge Lehmann (Jordens indre kerne), Marie Curie og Einstein. Pr. person: én opdagelse, man kan gøre efter i AtomLab, og hvor. Myterne som "Ærligt talt" (Newtons æble, Galilei og tårnet i Pisa). **Bogsiderne:** hvilket værk og hvilken side, hvor et scan findes, og rettighederne (originalen og scannet, også at en ny oversættelse har sine egne rettigheder). Fil: `docs/fakta-videnskabsfolk.md`.
+2. **Månerne med mulige betingelser for liv** (Opus, effort høj): Europa, Enceladus og Titan. Havet under isen, fanerne på Enceladus, Titans søer og Huygens' landing (fotos og data). Hvad der er målt, og hvad der er gætværk. Hvilke kort og billeder der findes med fri licens. Fil: `docs/fakta-maaner-liv.md`.
+3. **Strøm og magneter og Lys** (Opus, effort høj): strøm, spænding, magnetfelter, Ørsteds forsøg, induktion, lys som bølger, spektret, spektrallinjer og flammefarver, radiobølger. Forslag til to-tre dele, der kan gøres med hænderne. Hvad der står i Fælles Mål for fysik/kemi i udskolingen (tjek det, Fable skrev efter hukommelsen). Fil: `docs/fakta-strom-og-lys.md`.
+4. **Gåderne i en tynd udgave** (**Fable 5.2**, effort high, som hjælpeagent eller i jeres egen session, fordi stoffet er omstridt, jeres valg i E2): fem kort, der allerede har et sted i programmet (liv andre steder, det indre af et sort hul, stof og antistof, livets begyndelse og mørkt stof). Hvert med tre spørgsmål: Hvad ved vi? Hvad ved vi ikke? Hvordan finder vi ud af det? Tjek den lange liste i køreplanens Baggrund (fx Planet X og Hubble-spændingen), og sig, hvilke fem der bør med. Fil: `docs/fakta-gaader.md`.
