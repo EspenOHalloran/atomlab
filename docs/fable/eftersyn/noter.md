@@ -20,7 +20,3 @@ Alt. Hvad der kan gøres bedre, og hvad der måske skal genovervejes. Målet er 
 
 ## 6. Ekstra opgave til Fable: guidede forløb
 Fable skal vurdere, om vi kan lave **forløb, hvor brugeren ledes igennem og tages i hånden**, så man ved, hvor man skal starte, og får forståelsen. Der er allerede noget i den stil (fx "Næste skridt" og "Vis mig", opgaverne og de fem scener i Tid), men det kan måske **styrkes**. Det hænger tæt sammen med punkt 2: en blid indføring i svære koncepter.
-
-## Hvad det betyder for eftersynet (Opus' læsning, ikke Espens ord)
-- Målstregen er skoler og almindelige brugere, så **forståelighed og enkelhed** (indgang, antal knapper, tekstmængde) vejer tungere end flere funktioner.
-- Espens egen kamp med at forstå Tid og Liv er et vigtigt signal: Hvis far ikke kan følge dem, kan en 12-årig det næppe. Fable bør vurdere, om de skal forenkles, deles op eller udsættes.
