@@ -44,7 +44,7 @@ I alt ca. 3-4 sessioner. Lav flytningen af Molekyler sammen med dens forløb (ef
 5. **Hver ny ting får sin plads i dette kort, før den får en plan.**
 
 ## Hvor jeg er i tvivl
-1. **Rækkefølgen.** *A (mit råd):* Kernerne først, så skalaen er ægte. *B:* Atomer først som i dag, og teksten "mindre … større" fjernes. B er lidt enklere for en ny bruger, men så er ringen bare en række.
+1. **Rækkefølgen (afgjort 11. november 2026: A).** *A (mit råd):* Kernerne først, så skalaen er ægte. *B:* Atomer først som i dag, og teksten "mindre … større" fjernes. B er lidt enklere for en ny bruger, men så er ringen bare en række.
 2. **Batteriet.** *A (mit råd):* bliver i Elektricitet, og verdenen får Lys og Strøm og magneter. *B:* Hvis Elektricitet ikke får mere inden for et halvt år, flytter Batteriet til Stof og kemi (det er kemi med ioner), og verdenen lukkes. Så er der seks.
 3. **Tid og rum.** *A (mit råd):* en gruppe i Kosmos. *B:* en tredje del i Rummet, hvis T4 og flere scener kommer, og gruppen får over seks punkter.
 4. **Gåderne.** *A (mit råd):* Biblioteket. *B:* Rummet, som i `plan-verdener.md`, hvis listen ender med næsten kun at handle om rummet.

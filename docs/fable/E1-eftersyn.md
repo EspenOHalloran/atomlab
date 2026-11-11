@@ -152,5 +152,12 @@ Det er 35-45 sessioner i alt. I uge 45 lavede I 76 PR'er. **I kan altså gøre h
 6. Hvornår er "frigivet": en fast dato, eller når fem børn og en lærer har brugt det uden hjælp? Mit råd: det sidste.
 7. Skal jeg lave skabelonen for forløb og drejebogen til Liv som E3? Det er det ene sted, jeg vil anbefale at bruge mig igen nu.
 
+## Jeres svar (11. november 2026, i samtalen efter eftersynet)
+- **Spørgsmål 1 (pause for Liv L3 og Venus V3, til Serie 1 er lavet og prøvet):** Ja.
+- **Spørgsmål 2 (en fast prøve):** Ja. Men I vil også gerne bygge videre imens, med et skarpt fokus på, at det ikke bliver for indviklet, og stadig med faglig dybde. Jeres idé: flere "sider" eller forklaringer, så det hele ikke kommer på én gang. Det er det samme som forløbene i nr. 1.
+- **Spørgsmål 3 (ringen):** Mit råd følges: en rigtig skala med Kernerne først.
+- **Det, I glæder jer mest til:** de store videnskabsfolk og uddrag fra de rigtige bøger (billeder af siderne), elektromagnetisme, kvantefysik, at få Solsystemet færdigt, månerne med mulige betingelser for liv og Gåderne som en sektion. I har meget forbrug til rådighed de næste par uger.
+- Spørgsmål 4-7 er ikke besvaret endnu.
+
 ## Det har jeg ikke tjekket
 Lyden. Hvordan det føles med fingre, og om det hakker (kun jeres ord). Ca. halvdelen af testbillederne (mest planeter og menuens varianter). Fakta om fysik og kemi. GitHub Pages' grænser og Fælles Mål (efter hukommelsen). Skønnene i sessioner er mine egne og kan være forkerte med en faktor to. Størst risiko for fagfejl ser jeg i de nyeste og tætteste tekster: Liv L2 og Tid scene 3-5.
