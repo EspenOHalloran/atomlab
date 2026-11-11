@@ -49,6 +49,7 @@ Når T5c er færdig, stopper vi op og får en ekspert til at vurdere hele AtomLa
 - **Svaret:** `docs/fable/E1-eftersyn.md` (højst ca. 8 sider), `docs/fable/E1-verdener.md` (kortet over verdenerne med de planlagte ting på deres plads, højst ca. 6 KB) og `docs/fable/E1-retning.md` (udkastet til Retningen, højst ca. 5 KB).
 - **Bagefter:** I læser det og taler med Fable i samme session: spørg ind, og udfordr. Bliver I enige om en ændring, retter Fable sine egne filer. Hold samtalen kort og til overblikket.
 - Tjek saldoen før og efter, så vi ved, hvad det kostede.
+- **Før og efter (Opus' råd 11. november 2026):** Bed Fable om først at tjekke med `get_session`, hvilken model den kører på (en session kan falde tilbage til en anden model uden at sige det), og tjek igen, når svaret er skrevet. Hold samtalen bagefter kort, for de ca. 100 billeder sendes med i hver ny besked. Tjek til sidst, at de tre E1-filer ligger på `main`, før E2 starter.
 
 ### E2: Fra råd til plan (Opus, høj effort)
 - Ny session med "Læs docs/fable/E1-eftersyn.md og lav E2" (prompten står i E1-filen eller skrives af Opus).
