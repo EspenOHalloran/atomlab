@@ -1,5 +1,6 @@
 # Tjekliste D. Ny del (skærm), eller ændring i start og stop
 
+- [ ] **En ny del** (11. november 2026): [retning.md](../retning.md) er læst. Kernesætningen ("Efter fem minutter kan brugeren sige: …") er skrevet før planen og har fået jeres go. Delen har sit forløb efter [skabelonen](../fable/E3-forloeb.md) og sin plads i [plan-verdener.md](../plan-verdener.md). Den bruger de fælles klodser og ikke en ny variant.
 - [ ] Stop-funktionen rydder **alt**: timere, kameraets mål, kamerabegrænsninger, pause, guide, beskeder og cursor.
 - [ ] Alle `setTimeout` tjekker `aktiv` eller bliver ryddet i stop.
 - [ ] Opgavelister og tal bygges, når delen startes, så de passer efter "Start forfra" og nulstilling.

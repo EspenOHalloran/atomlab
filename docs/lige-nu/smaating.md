@@ -2,13 +2,14 @@
 
 *Spor i [oversigten](../lige-nu.md) til små rettelser på tværs, tests, dokumenterne og arbejdsgangen. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/smaating.md](../arkiv/historik/smaating.md). Højst ca. 5 KB. Sidst opdateret: 11. november 2026.*
 
-**Senest lavet (11. november 2026): E0, materialet til Fables store eftersyn.** Jeres go: "go" (med de to rettelser i briefen: den nye målgruppe og guidede forløb som opgave 9).
-- **Briefen** [fable/brief-eftersyn.md](../fable/brief-eftersyn.md) er fyldt ud: status for F1, 22 beslutninger med dato og grund, det planlagte og tallene. Den nye målgruppe (skoler og alle fra ca. 12 år, også voksne) står i "Hvem og hvorfor", og guidede forløb er opgave 9. Briefen er 16,8 KB (lidt over de ca. 15 KB, fordi beslutningerne står i den).
-- **Detaljerne** i `docs/fable/eftersyn/`: [tal.md](../fable/eftersyn/tal.md) (F1, de nye dele, koden, billederne, dokumenterne, git, testene og målingerne), [planlagt.md](../fable/eftersyn/planlagt.md) (ringen og alt det planlagte), `maalinger.json` og de nye skærmbilleder i `billeder/` med `LISTE.md`.
-- **To nye værktøjer:** `tests/vaerktoejer/eftersyn-billeder.mjs` og `tests/vaerktoejer/maal-eftersyn.mjs` (se `tests/README.md`).
-- **Hele testsamlingen:** alle 42 bestod (3.089 tjek, 30,9 minutter).
-- **Fund fra målingerne** (kun fakta, til Fable): Al koden hentes ved start (4,4 MB). Solsystemet åbner ved Solen og henter Jordens kort med det samme. Kloderne henter 10-25 MB på pc.
+**Senest lavet (11. november 2026): E2, fra Fables råd til en plan.** Fable lavede E1 (eftersynet) og E3 (skabelonen for et forløb og drejebogen til Liv) samme dag. Opus har i E2:
+- skrevet sine noter: [fable/E1-noter.md](../fable/E1-noter.md) (hvad der er nyt, hvad der var kendt, hvor Opus er uenig, og jeres valg)
+- lagt jeres valg ind: Molekyler bliver en egen del i Atomer nu, og "Stof og kemi" kommer med Ild. Nr. 10 deles (10a: skærmlisten først og alene). I kan låne en ældre iPad og en Chromebook. Frigivet, når 3-5 børn og en lærer har brugt det. Det kommende i Solsystemet får en lille udgave. Tjernobyl bliver sent, og Fable 5.2 laver faktagrundlaget. En fast aften om ugen med prøven
+- flyttet Retningen til [retning.md](../retning.md) med Opus' rettelser og givet den en linje i læsekortet i CLAUDE.md
+- skrevet de fire nye regler ind i DESIGN.md, tjekliste A og D og `/faerdig` (prøv før næste, én sætning før planen, træk fra, når I lægger til, og højst to nye fagord pr. trin)
+- lavet udgave 2 af [plan-verdener.md](../plan-verdener.md) (den gamle er i arkivet) og lagt [køreplanen](../koereplan.md) om i Serie 1-3 og nyt indhold i rækkefølge (den gamle liste er i arkivet)
+- skrevet [guide-proeven.md](../guide-proeven.md), de tre prompter [prompt-skaermliste.md](../prompt-skaermliste.md), [prompt-forloeb.md](../prompt-forloeb.md) og [prompt-faktagrundlag.md](../prompt-faktagrundlag.md), og startet sporet [Forløb](forloeb.md)
 
-**Næste:** E1 i jeres egen session med **Fable 5.2** og effort **high**. Tjek saldoen før og efter, og skriv: *Læs docs/fable/brief-eftersyn.md og lav eftersynet.* Bagefter E2 med Opus ([plan-fable-eftersyn.md](../plan-fable-eftersyn.md)). Indtil I har valgt i E2, venter nye store dele.
+**Næste:** Skærmlisten og hentning efter behov (10a), **først og alene**: ny session med Opus, effort høj, med [prompt-skaermliste.md](../prompt-skaermliste.md). Imens må faktagrundlagene køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
-Bagefter (fra før): Trin 2 i forslaget om tests: faktatjek af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md`, én ny session pr. fil med `/faktatjek`. Først skal I godkende de domæner, der mangler (fx NASA, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).
+Bagefter i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes til arkivet, Retningen), testen `mars` (585 sekunder) delt i to, og faktatjekket af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` fra før (én session pr. fil med `/faktatjek`, når I har åbnet de domæner, der mangler, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).

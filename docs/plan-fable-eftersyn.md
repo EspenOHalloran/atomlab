@@ -80,5 +80,6 @@ Skønnene er usikre og kan være 2 gange forkert begge veje. Priserne er Anthrop
 - [x] Planen, briefen, prompten til E0 og guiden til runden med sønnen er skrevet (9. november 2026).
 - [x] T5c er færdig (9. november 2026).
 - [x] E0: materialet (11. november 2026): jeres svar og tabletbilleder, briefen fyldt ud, `docs/fable/eftersyn/` (tal, det planlagte, målinger og skærmbilleder). Sønnens runde kom ikke med (jeres valg).
-- [ ] E1: Fables eftersyn.
-- [ ] E2: Opus' noter og jeres valg.
+- [x] E1: Fables eftersyn (11. november 2026): [E1-eftersyn.md](fable/E1-eftersyn.md), [E1-verdener.md](fable/E1-verdener.md) og [E1-retning.md](fable/E1-retning.md).
+- [x] E2: Opus' noter og jeres valg (11. november 2026): [E1-noter.md](fable/E1-noter.md), [retning.md](retning.md), [plan-verdener.md](plan-verdener.md) (udgave 2) og [koereplan.md](koereplan.md) lagt om. Pausen for nye store dele er afløst af de tre betingelser i køreplanen.
+- [x] E3: Fables skabelon for et forløb og drejebogen til Liv (11. november 2026, jeres go): [E3-forloeb.md](fable/E3-forloeb.md) og [E3-liv-drejebog.md](fable/E3-liv-drejebog.md). Flere E3-områder kun med jeres go.
