@@ -2,7 +2,7 @@
 
 *Skrevet 11. november 2026 i E2. Kun dokumenter, så de kan køre samtidig med andre sessioner og med hinanden. Én ny session pr. emne. Hver session skriver kun sin egen fil i `docs/` og en linje i sporets fil (Småting). Kopiér den fælles tekst og ét emne ind i en ny session.*
 
-**Før I starter:** Kilderne ligger ofte på domæner, der ikke er åbne i miljøet (fx nasa.gov, esa.int, wikimedia.org og archive.org). Se "Miljøet" i [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md), og åbn dem, sessionen beder om, før den går i gang.
+**Før I starter:** Start sessionen i miljøet "Default". Dér er de fleste kildedomæner åbne (12. november 2026), fx `science.nasa.gov`, `www.esa.int`, `commons.wikimedia.org`, `upload.wikimedia.org`, `archive.org`, `en.wikipedia.org` og `da.wikipedia.org`. Mangler et domæne alligevel, så spørg om det, før arbejdet går i gang (se "Miljøet" i [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md)).
 
 ---
 
