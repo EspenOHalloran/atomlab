@@ -57,7 +57,7 @@ function net(page) {
     n.sidst = Date.now();
     if (!ok) return;
     let str = 0;
-    try { str = (await r.sizes()).responseBodySize; } catch { /* siden er lukket */ }
+    try { str = Math.max(0, (await r.sizes()).responseBodySize); } catch { /* siden er lukket */ }
     n.filer.push({ url: r.url(), slags: slags(r.url()), str });
   };
   page.on('requestfinished', (r) => færdig(r, true));
@@ -158,7 +158,8 @@ for (const enhed of enheder) {
         await page.evaluate(([h, id]) => atomlabTest[h].vælg(id), [hvor, id]);
       }
       const sek = await n.stille();
-      r.sek = sek === null ? null : (Date.now() - t1 - 2500) / 1000;
+      // Tiden fra skiftet, til det sidste blev hentet (0, hvis intet blev hentet)
+      r.sek = sek === null ? null : n.filer.length ? Math.max(0, n.sidst - t1) / 1000 : 0;
       r.hentet = n.sum();
       r.grafik = await grafik(page);
       const på = await heap(page, cdp);
@@ -181,12 +182,12 @@ const mb = (x) => (x / 1048576).toFixed(1).replace('.', ',');
 const tal = (x, d = 0) => (x === null || x === undefined ? '–' : Number(x).toFixed(d).replace('.', ','));
 for (const enhed of enheder) {
   console.log(`\n### ${enhed === 'pc' ? 'Pc (1440 × 900)' : 'Tablet (1280 × 800, touch, LAV_KVALITET)'}\n`);
-  console.log('| Skærm | Hentet MB (Three/kode/billeder/andet) | Filer | Sek. til alt er hentet | Kald pr. billede | Trekanter | Geometrier / teksturer | Teksturer i scenen, MB (skøn) | Heap MB før → på → efter | Geometrier / teksturer efter |');
+  console.log('| Skærm | Hentet MB (Three/kode/billeder/andet) | Filer | Sek. til alt er hentet | Kald pr. billede | Trekanter / punkter | Geometrier / teksturer | Teksturer i scenen, MB (skøn) | Heap MB før → på → efter | Geometrier / teksturer efter |');
   console.log('|---|---|---|---|---|---|---|---|---|---|');
   for (const r of resultater.filter((x) => x.enhed === enhed)) {
     const h = r.hentet;
     const g = r.grafik ?? {};
     const heapTekst = r.id === 'start' ? tal(r.heapMB, 1) : `${tal(r.heapFørMB, 1)} → ${tal(r.heapPåMB, 1)} → ${tal(r.heapEfterMB, 1)}`;
-    console.log(`| ${r.tekst} | ${mb(h.ialt)} (${mb(h.three)}/${mb(h.kode)}/${mb(h.billeder)}/${mb(h.andet)}) | ${h.filer} | ${tal(r.sek, 1)} | ${tal(g.kald)} | ${tal(g.trekanter)} | ${tal(g.geometrier)} / ${tal(g.teksturer)} | ${tal(g.teksturMB, 0)} | ${heapTekst} | ${r.efter ? `${tal(r.efter.geometrier)} / ${tal(r.efter.teksturer)}` : ''} |${r.fejl.length ? ' FEJL: ' + r.fejl.join('; ') : ''}`);
+    console.log(`| ${r.tekst} | ${mb(h.ialt)} (${mb(h.three)}/${mb(h.kode)}/${mb(h.billeder)}/${mb(h.andet)}) | ${h.filer} | ${tal(r.sek, 1)} | ${tal(g.kald)} | ${tal(g.trekanter)} / ${tal(g.punkter)} | ${tal(g.geometrier)} / ${tal(g.teksturer)} | ${tal(g.teksturMB, 0)} | ${heapTekst} | ${r.efter ? `${tal(r.efter.geometrier)} / ${tal(r.efter.teksturer)}` : ''} |${r.fejl.length ? ' FEJL: ' + r.fejl.join('; ') : ''}`);
   }
 }

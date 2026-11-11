@@ -78,3 +78,9 @@
 
 - **Spor:** 7 (Solsystemet og Kosmos, Molekyler, Tid og rum, Menuen, Ordbogen og Det periodiske system, Småting, Åbne punkter). **Åbne punkter:** 16 (de fleste er tests, der fejlede én gang under belastning og bestod alene). **"Ikke afprøvet"** (til runden på tabletten): 47 punkter.
 
+## 5. Testene
+- **42 tests** i `node tests/koer-alle.mjs` (Playwright-scripts, ét pr. emne, ikke et testframework). Testen `hentning` ligger ved siden af og køres for sig (den fejler også på `main` i miljøet, se Åbne punkter). Testene tjekker logik, tal og tekster med testadgangen `?test` (`window.atomlabTest`), ikke pixel.
+- **Hele samlingen 11. november 2026:** alle 42 bestod på **30,9 minutter** (to tests ad gangen, 4 CPU-kerner, uden grafikkort). **3.089 tjek** (plus 21.556 i `henfaldsregler`, der gennemløber alle kerner i data). De langsomste: `mars` 585 s, `grafik` 349 s, `guide` 146 s, `solsystem` 145 s, `kosmos` 138 s, `karrusel` 135 s og `jupiter` 129 s. Den samme samling tog ca. 10 minutter med 18 tests (oktober).
+- **`--ændret` (tre typiske eksempler,** skønnet ud fra tiderne ovenfor, to ad gangen): en ændring i `js/liv-protein.js` kører `roeg` og `liv` (ca. 1 minut). En ændring i `js/fusion.js` kører 9 tests (ca. 5 minutter). En ændring i `js/kosmos/venus.js` kører 12 tests, også `mars` (ca. 10-12 minutter). En ændring i et fælles modul som `js/lag.js` kører 38 af de 42 (næsten hele samlingen). Røgtesten tager ca. 30 sekunder.
+- **Fejl, der kun kom under belastning:** 10 af de 16 punkter i `docs/lige-nu/aabne-punkter.md` er tests, der fejlede én gang, mens to kørte samtidig, og bestod alene. Ingen af dem fejlede i kørslen 11. november.
+
