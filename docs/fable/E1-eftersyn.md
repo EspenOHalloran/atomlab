@@ -43,7 +43,7 @@
 
 **2. Prøv før næste: byg ikke hurtigere, end nogen kan prøve** *(arbejdsgang · lille · en regel · sikker · nyt)*
 - **Hvorfor:** Det er rodårsagen til nr. 1, 4, 5 og 6. "Ikke afprøvet" har 47 punkter. Liv L1-L2 blev bygget på to dage oven på Molekyler, som ingen havde prøvet. Tid blev godkendt som skitse af en voksen, der selv siger, at den er svær. Runden med sønnen blev sprunget over før eftersynet.
-- **Forslag:** En ny stor del eller et nyt forløb er først færdigt, når et barn på 12-14 år har prøvet det i ti minutter uden hjælp, og en voksen bagefter kan sige idéen med egne ord. Tre faste spørgsmål: Hvad gjorde du først? Hvor gik du i stå? Hvad handlede det om? Intet nyt stort starter i et spor, før det forrige er prøvet. "Ikke afprøvet" holdes under ca. 10 punkter. Resten slettes, for de bliver aldrig besvaret.
+- **Forslag:** En ny stor del eller et nyt forløb er først færdigt, når et barn på 12-14 år har prøvet det i ti minutter uden hjælp, og en voksen bagefter kan sige idéen med egne ord. Tre faste spørgsmål: Hvad gjorde du først? Hvor gik du i stå? Hvad handlede det om? Der må gerne bygges videre imens (jeres svar 11. november 2026), men en ny del har status "prøve", til den er prøvet, og der er højst én ny stor del i gang ad gangen ud over Solsystemet. "Ikke afprøvet" holdes under ca. 10 punkter. Resten slettes, for de bliver aldrig besvaret.
 
 **3. Indgangen: det første minut** *(UX · lille til mellem · Opus direkte · sikker · delvist kendt: guiden i Værkstedet har ventet siden oktober)*
 - **Hvorfor:** "Start her" fører til en sort, tom scene med tre tællere på nul og ingen guide (E1-billede a). Den vigtigste linje på skærmen, opgaven, er klippet af: "Byg et h…" (testbillede 017). På tabletten på langs ligger pillerne oven i hinanden, og "Tip" dækker "Elektronsky" (testbillede 037). Opgaverne går til isotoper (deuterium og tritium) som nr. 4 og 5, før man har bygget carbon (`js/vaerksted.js:30-60`).
@@ -81,7 +81,7 @@
 
 **12. Solsystemet: overblikket nu, og en lille udgave af resten** *(indhold · stor · Opus med den plan, der findes · sandsynlig · nyt som prioritering)*
 - **Hvorfor:** Solsystemet er jeres stærkeste del og samtidig den dyreste. Venus, Merkur, Pluto, månerne, landinger og Rumrejsen på Mars-niveau er mange uger. Imens mangler det enkleste: at se planeterne kredse om Solen.
-- **Forslag:** Overblikket rykkes frem og bliver Solsystemets forside. Venus gøres færdig i en kort udgave. Merkur og Pluto får "lille udgave" (kloden, tre-fire steder og flyby). "Det hele skal med" gælder det, der er bygget, ikke alt det kommende.
+- **Forslag:** Overblikket rykkes frem og bliver Solsystemets forside. Derefter månerne med mulige betingelser for liv (Enceladus, Europa og Titan), for dér er historien, og de binder Liv og Gåderne sammen. På Europa og Enceladus er det spændende havet under isen, så et snit gennem månen giver mere end en landing. Kun Titan har rigtige billeder fra overfladen (Huygens). Venus gøres færdig i en kort udgave. Merkur og Pluto får "lille udgave" (kloden, tre-fire steder og flyby). "Det hele skal med" gælder det, der er bygget, ikke alt det kommende.
 
 **13. Før I deler: to udgaver og det praktiske** *(udgivelse · mellem i alt · Opus direkte · sikker · mest kendt, to-udgaver er nyt)*
 - En **stabil udgave** til andre og en **prøveudgave** til jer: Hver del får en status i listen fra nr. 10, og dele under arbejde vises kun med `?lab`. Det afløser beslutningen om prototyper i den almindelige udgave, den dag den første fremmede får linket.
@@ -122,17 +122,24 @@
 Det er 35-45 sessioner i alt. I uge 45 lavede I 76 PR'er. **I kan altså gøre hele pakken på en måned med en fjerdedel af det nuværende tempo.** Penge og tokens er ikke det, der begrænser AtomLab. Det er, hvor meget I og et par børn kan nå at prøve. Mit råd er derfor at sætte tempoet ned og kvaliteten op: to-tre delopgaver ad gangen, og en fast aften om ugen, hvor det nye bliver prøvet.
 
 ## 7. Køreplanen, som jeg ville lægge den
+*Rettet 11. november 2026 efter samtalen med jer (jeres go). I vil bygge videre imens og har meget forbrug de næste uger. Det ændrer tre ting:*
+- ***Nr. 10 (hver skærm får sine egne filer) trækkes frem og laves først og alene,*** *fordi den rører de fælles filer. Bagefter er parallelle sessioner billigere.*
+- ***Faktagrundlag laves på forhånd og parallelt*** *(videnskabsfolkene, gåderne, månerne og elektromagnetismen). Det er kun dokumenter, så det gør ikke programmet mere indviklet og støder ikke sammen med andet.*
+- ***Nyt indhold må bygges, mens Serie 1 kører, på tre betingelser:*** *(1) Forløb-klodsen findes først, så nye dele ikke får den gamle form. (2) Hver ny del fødes med én kernesætning og sit forløb (Retningen). (3) Den har status "prøve", til et barn har prøvet den.*
+
 **Serie 1, "Forståelig" (nu):** Forløb-klodsen og "Dit første atom" (nr. 1 og 3) → Liv som ét forløb (nr. 4) → Molekyler som egen del med forløb (nr. 5) → Tid som ét punkt og grupper i Kosmos' liste (nr. 6, og køreplanens punkt 7). En prøve med sønnen efter hvert.
 
 **Serie 2, "Ét produkt":** byggeklodser og panelbudget (nr. 7) → ringen (nr. 8) → Rejsen med de første stationer og "Se også" (nr. 9).
 
 **Serie 3, "Klar til andre":** skærmene hentes efter behov (nr. 10) → måling og trinnet "Let" (nr. 11, køreplanens G1) → to udgaver, app, tilgængelighed og lærerside (nr. 13) → 3-5 børn og en lærer prøver, og fundene rettes.
 
-**Senere, i denne rækkefølge:** Solsystemets overblik og Venus kort (nr. 12) · Liv L3 og derefter L4-L6 som forløb · Ild (sammen med knaldgassen) · **Lys** (se nedenfor) og strøm og magneter · Kvantefysik uden kvantecomputeren · Mørkt stof · Gåderne · Antistof · Tjernobyl · månerne · fotos af grundstofferne · Merkur og Pluto i lille udgave.
+**Nyt indhold, i denne rækkefølge** (må starte, når Forløb-klodsen findes): Solsystemets overblik (nr. 12) · **Gåderne i en tynd udgave** (fem kort, der allerede har et sted i programmet: liv andre steder, det indre af et sort hul, stof og antistof, livets begyndelse og mørkt stof, hvert med tre faste spørgsmål: hvad ved vi, hvad ved vi ikke, og hvordan finder vi ud af det) · **de første 6-8 videnskabsfolk** med sider fra de rigtige bøger (se nedenfor) · månerne med mulige betingelser for liv · Liv L3 og derefter L4-L6 som forløb · Ild (sammen med knaldgassen) · **Strøm og magneter, så Lys, så Kvantefysik** (i den rækkefølge, fordi dobbeltspalten handler om bølger, og spektrallinjer er lys; Kvantefysik får en drejebog først og tre idéer: dobbeltspalten, energitrin med spektrallinjer og tunneleffekten) · Mørkt stof · Antistof · Tjernobyl · Venus kort · fotos af grundstofferne · Merkur og Pluto i lille udgave.
+
+**Videnskabsfolkene og bogsiderne:** Risikoen er et leksikon, man læser, i et program, hvis styrke er, at man gør noget. Derfor er hver person knyttet til én opdagelse, man kan gøre efter i programmet (fx Rømer og lysets fart ved Jupiters måne Io, Tycho Brahe og supernovaen, Huygens og Saturns ring, Bohr og skallerne i Værkstedet). Den danske vinkel (Brahe, Rømer, Ørsted, Bohr og Inge Lehmann) er stærk over for danske skoler. "Ærligt talt" om myterne (Newtons æble, Galilei og tårnet i Pisa). Rettighederne tjekkes side for side: De gamle værker er frie, Einsteins tekster burde være blevet frie i EU i 2026, men Bohrs og Lehmanns er det ikke (efter hukommelsen, ikke juridisk rådgivning). Alle navne, årstal og rettigheder her skal faktatjekkes.
 
 **Ikke nu:** kvantecomputeren (ændrer sig hurtigt og er svær at gøre både ærlig og til at røre ved), T4 (cockpittet), grafik G4, at gå rundt på Mars, Mars som koloniseret, Uranus' måner der støder sammen, Rumrejsen (først når overblikket findes) og den engelske udgave (først når den danske er prøvet, men hold teksterne i datafiler, så det er muligt). **Aldrig i AtomLab:** Hjernen og AI (et andet produkt) og en chat (kræver server og kan svare forkert).
 
-**Hvad jeg flytter, og hvorfor:** Liv L3 og Venus V3 ned, fordi forståelse kommer før mere. Overblikket op foran planeterne. Ild efter Molekylers flytning, så de lander samme sted. G1 op, fordi målet nu er skoler.
+**Hvad jeg flytter, og hvorfor:** Liv L3 og Venus V3 ned, fordi forståelse kommer før mere. Overblikket op foran planeterne. Månerne med mulige betingelser for liv op foran Merkur og Pluto. Gåderne op, fordi formen selv holder mængden nede. Elektromagnetisme foran Kvantefysik, fordi den ene bygger på den anden. Ild efter Molekylers flytning, så de lander samme sted. Nr. 10 og G1 op, fordi målet nu er skoler, og fordi der skal bygges meget.
 
 **To muligheder, ingen har nævnt:**
 - **Lys** er det manglende led. Elektroner, der hopper mellem skaller, giver farver. Farverne er grunden til, at vi ved, hvad Solen er lavet af, og at universet udvider sig. Lys binder Værkstedet, Ild, Kvantefysik og Kosmos sammen, og bølger og stråling fylder meget i fysik/kemi i udskolingen (efter hukommelsen, ikke tjekket mod Fælles Mål). I dag ligger det spredt som idéer (flammefarver, spektrallinjer og radiobølger).
@@ -157,7 +164,13 @@ Det er 35-45 sessioner i alt. I uge 45 lavede I 76 PR'er. **I kan altså gøre h
 - **Spørgsmål 2 (en fast prøve):** Ja. Men I vil også gerne bygge videre imens, med et skarpt fokus på, at det ikke bliver for indviklet, og stadig med faglig dybde. Jeres idé: flere "sider" eller forklaringer, så det hele ikke kommer på én gang. Det er det samme som forløbene i nr. 1.
 - **Spørgsmål 3 (ringen):** Mit råd følges: en rigtig skala med Kernerne først.
 - **Det, I glæder jer mest til:** de store videnskabsfolk og uddrag fra de rigtige bøger (billeder af siderne), elektromagnetisme, kvantefysik, at få Solsystemet færdigt, månerne med mulige betingelser for liv og Gåderne som en sektion. I har meget forbrug til rådighed de næste par uger.
-- Spørgsmål 4-7 er ikke besvaret endnu.
+- **Go til den ændrede rækkefølge og de tre betingelser** (afsnit 7 og Retningen er rettet samme dag).
+- Spørgsmål 4-7 er ikke besvaret endnu. Opus lægger dem frem som valg i E2.
+
+## Sådan kommer vi videre
+1. **E2 (Opus tager over):** en ny session med Opus, høj effort. Prompt: *"Læs docs/plan-fable-eftersyn.md (afsnittet E2), docs/fable/E1-eftersyn.md, docs/fable/E1-verdener.md og docs/fable/E1-retning.md, og lav E2."* Opus skriver sine noter, lægger de åbne valg frem (spørgsmål 4-7 og de udfordrede beslutninger i afsnit 5), retter køreplanen og `docs/plan-verdener.md`, og flytter Retningen til `docs/retning.md`, når I har godkendt den.
+2. **Derefter, i hver sin session med Opus:** en plan for nr. 10 (først og alene) og faktagrundlagene (parallelt). Opus skriver prompterne i E2.
+3. **E3 (kun med jeres go):** skabelonen for et forløb og drejebogen til Liv. Det er det ene sted, hvor jeg anbefaler dybde fra mig, fordi hele Serie 1 får sin form derfra. Forløb-klodsen bygges af Opus bagefter. En detaljeret plan for resten laver Opus lige så godt og billigere.
 
 ## Det har jeg ikke tjekket
 Lyden. Hvordan det føles med fingre, og om det hakker (kun jeres ord). Ca. halvdelen af testbillederne (mest planeter og menuens varianter). Fakta om fysik og kemi. GitHub Pages' grænser og Fælles Mål (efter hukommelsen). Skønnene i sessioner er mine egne og kan være forkerte med en faktor to. Størst risiko for fagfejl ser jeg i de nyeste og tætteste tekster: Liv L2 og Tid scene 3-5.

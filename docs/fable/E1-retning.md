@@ -17,6 +17,7 @@
 6. **Rigtige data er krydderi.** Rigtige gener, krystaller og målinger må gerne ligge bag, men de må ikke gøre det første møde sværere.
 7. **Ærligt:** Forenklinger siges ("Ærligt talt"), og fakta har en kilde i `docs/`. Hvor det passer, siges også, *hvordan vi ved det*.
 8. **Hver oplysning bor ét sted.** Forklaringer i kortene og Ordbogen. Hjælpen siger kun, hvordan man styrer.
+9. **Læsestof hænger på noget, man kan gøre.** En person, en bogside eller en gåde peger altid på et sted i programmet, hvor man selv kan se det.
 
 ## Skærmen
 1. **Forløbet kommer først.** Første gang i en del starter et forløb på 3-6 trin (højst fem minutter). Imens er kun scenen og forløbets linje fremme. Bagefter åbner laboratoriet. Forløbet kan springes over og tages igen.
@@ -40,7 +41,7 @@
 - der er 5-10 tjek af det vigtigste, og konsollen er uden fejl
 - den har sin plads i kortet over verdenerne, og dokumenterne er rettet
 
-Intet nyt stort starter i et spor, før det forrige er prøvet. "Ikke afprøvet" holdes under ca. 10 punkter.
+Der må bygges videre, mens noget venter på at blive prøvet, men en del har status "prøve", til den er prøvet, og der er højst én ny stor del i gang ad gangen ud over Solsystemet. "Ikke afprøvet" holdes under ca. 10 punkter.
 
 ## Ydelse
 *Tallene er et udgangspunkt fra målingerne 11. november 2026. De rettes, når en ældre iPad og en Chromebook er målt.*

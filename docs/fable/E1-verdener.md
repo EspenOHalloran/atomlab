@@ -16,7 +16,7 @@
 | 4 | 🧬 **Liv** | Molekyler, der kan kopiere sig selv | Liv (Opskriften) | **Begyndelsen** (L4-L5) og **Liv i rummet** (L6) bliver knapper i verdenens kort, så Liv ikke er én del med tre faner. "Skriv dit navn" |
 | 5 | ⚡ **Elektricitet** (senere "Lys og strøm") | Det, man kan holde i hånden: ladninger i bevægelse | Batteriet | **Strøm og magneter**. **Lys** (farver, spektret og radiobølger). Lyn. Nerver som et "Hvorfor?"-kort med link til Liv |
 | 6 | 🔭 **Rummet** | Planeterne, stjernerne, og rum og tid | Solsystemet, Kosmos | Solsystemet: **overblikket** som forside, Venus, Merkur, Pluto, **månerne** og landingerne, Mars ekstra og "Yderst ude". **Rumrejsen** som egen del (det er et spil). Kosmos i grupper: *Universet* (Big Bang, **Mørkt stof**, Andromeda), *Stjernernes liv* (Ny stjerne, Hvid dværg, Supernova, Pulsar, Kilonova), *Sorte huller* (Sort hul, Kvasar) og *Tid og rum* (Rumtid, Tid, Tyngdebølger, Ormehul, T4) |
-| – | 📚 **Biblioteket** | Videnskaben selv: ordene, menneskene, og det vi ikke ved | Ordbogen | **Gåderne** (med Planet X og gåden om antistof som kort). **Opdagelserne:** én del med tidslinjen, videnskabsfolkene og uddragene fra de gamle bøger |
+| – | 📚 **Biblioteket** | Videnskaben selv: ordene, menneskene, og det vi ikke ved | Ordbogen | **Gåderne** (med Planet X og gåden om antistof som kort). **Opdagelserne:** én del med tidslinjen, videnskabsfolkene og siderne fra de gamle bøger, hver person knyttet til en opdagelse, man kan gøre efter i programmet |
 
 **Hvorfor de hører sammen sådan:**
 - **Stof og kemi** samler det, der i dag er spredt: molekylerne gemt i Værkstedet og Ild parret med Liv. Knaldgas og ild er samme sag (en kædereaktion med radikaler), og det er skolens kemi.
