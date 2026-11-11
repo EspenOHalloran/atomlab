@@ -35,7 +35,7 @@ Når T5c er færdig, stopper vi op og får en ekspert til at vurdere hele AtomLa
 
 ### E0: Materialet (I og Opus, høj effort, ca. 3-6 $)
 - **I:** Runden med jeres søn og 5-10 skærmbilleder fra tabletten ([guiden](fable/runde-med-soennen.md)). Svar også på spørgsmålene til jer som far nederst i guiden.
-- **Opus:** Ny session med "Læs docs/prompt-fable-e0.md". Opus samler materialet i `docs/fable/eftersyn/` og retter tallene i briefen:
+- **Opus:** Ny session med "Læs docs/arkiv/prompt-fable-e0.md". Opus samler materialet i `docs/fable/eftersyn/` og retter tallene i briefen:
   - nye skærmbilleder af alle verdener og dele på pc, tablet på langs og på højkant og telefon (de gamle fra 22. oktober bliver liggende)
   - målinger af download, hukommelse og opstart pr. skærm, koden, dokumenterne og testene
   - status for F1's ti punkter (én linje hver)
@@ -77,7 +77,7 @@ Skønnene er usikre og kan være 2 gange forkert begge veje. Priserne er Anthrop
 
 ## Status
 - [x] Planen, briefen, prompten til E0 og guiden til runden med sønnen er skrevet (9. november 2026).
-- [ ] T5c er færdig.
-- [ ] E0: runden med sønnen og materialet.
+- [x] T5c er færdig (9. november 2026).
+- [x] E0: materialet (11. november 2026): jeres svar og tabletbilleder, briefen fyldt ud, `docs/fable/eftersyn/` (tal, det planlagte, målinger og skærmbilleder). Sønnens runde kom ikke med (jeres valg).
 - [ ] E1: Fables eftersyn.
 - [ ] E2: Opus' noter og jeres valg.

@@ -39,4 +39,4 @@ Fable vil gerne kende målet. Svar kort, gerne med stikord:
 5. Er der noget, du gerne vil have, at Fable er helt ærlig om?
 
 ## Sådan kommer det videre
-Skriv noterne ind i chatten i E0-sessionen (start den med "Læs docs/prompt-fable-e0.md"), eller læg dem i `docs/fable/eftersyn/noter.md` på GitHub. Opus skriver dem rent, uden at ændre meningen.
+Skriv noterne ind i chatten i E0-sessionen (start den med "Læs docs/arkiv/prompt-fable-e0.md"), eller læg dem i `docs/fable/eftersyn/noter.md` på GitHub. Opus skriver dem rent, uden at ændre meningen.

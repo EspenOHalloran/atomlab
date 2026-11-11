@@ -1,0 +1,1258 @@
+{
+ "dato": "2026-11-11T19:57:38.848Z",
+ "adresse": "http://localhost:8765",
+ "resultater": [
+  {
+   "enhed": "pc",
+   "id": "start",
+   "tekst": "Starten (menuen)",
+   "fejl": [],
+   "hentet": {
+    "three": 2214998,
+    "kode": 2158087,
+    "billeder": 0,
+    "andet": 218792,
+    "filer": 149,
+    "ialt": 4591877
+   },
+   "sek": 5.291,
+   "heapMB": 12.405536651611328,
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 31,
+    "trekanter": 15984,
+    "punkter": 5664,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 23,
+    "programmer": 23,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "dcl": 0.8645,
+   "load": 1.2046000000000932
+  },
+  {
+   "enhed": "pc",
+   "id": "vaerksted",
+   "tekst": "Atomværkstedet",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 25,
+    "trekanter": 24,
+    "punkter": 2880,
+    "linjer": 0,
+    "geometrier": 30,
+    "teksturer": 27,
+    "programmer": 23,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.460128784179688,
+   "heapPåMB": 12.58685302734375,
+   "heapEfterMB": 12.675243377685547,
+   "efter": {
+    "geometrier": 30,
+    "teksturer": 27
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "molekyle",
+   "tekst": "Byg et molekyle",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 22,
+    "trekanter": 18,
+    "punkter": 2880,
+    "linjer": 0,
+    "geometrier": 37,
+    "teksturer": 28,
+    "programmer": 27,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.476337432861328,
+   "heapPåMB": 13.479286193847656,
+   "heapEfterMB": 13.520763397216797,
+   "efter": {
+    "geometrier": 37,
+    "teksturer": 28
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "system",
+   "tekst": "Det periodiske system",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 256,
+    "trekanter": 1670,
+    "punkter": 2880,
+    "linjer": 0,
+    "geometrier": 28,
+    "teksturer": 141,
+    "programmer": 25,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.483341217041016,
+   "heapPåMB": 13.066295623779297,
+   "heapEfterMB": 13.119159698486328,
+   "efter": {
+    "geometrier": 28,
+    "teksturer": 141
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "fusion",
+   "tekst": "Stjerneovnen",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 24,
+    "trekanter": 15860,
+    "punkter": 3280,
+    "linjer": 0,
+    "geometrier": 29,
+    "teksturer": 26,
+    "programmer": 24,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.402690887451172,
+   "heapPåMB": 12.581405639648438,
+   "heapEfterMB": 12.72781753540039,
+   "efter": {
+    "geometrier": 30,
+    "teksturer": 26
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "reaktor",
+   "tekst": "Reaktoren",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 27,
+    "trekanter": 207764,
+    "punkter": 4068,
+    "linjer": 0,
+    "geometrier": 30,
+    "teksturer": 27,
+    "programmer": 23,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.601680755615234,
+   "heapPåMB": 12.701416015625,
+   "heapEfterMB": 12.790092468261719,
+   "efter": {
+    "geometrier": 31,
+    "teksturer": 27
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "batteri",
+   "tekst": "Batteriet",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 43,
+    "trekanter": 135442,
+    "punkter": 3060,
+    "linjer": 978,
+    "geometrier": 43,
+    "teksturer": 32,
+    "programmer": 28,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.509376525878906,
+   "heapPåMB": 12.764720916748047,
+   "heapEfterMB": 12.850200653076172,
+   "efter": {
+    "geometrier": 44,
+    "teksturer": 32
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "liv",
+   "tekst": "Liv",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 37,
+    "trekanter": 10778,
+    "punkter": 4242,
+    "linjer": 0,
+    "geometrier": 33,
+    "teksturer": 25,
+    "programmer": 25,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.464473724365234,
+   "heapPåMB": 12.536273956298828,
+   "heapEfterMB": 12.645503997802734,
+   "efter": {
+    "geometrier": 34,
+    "teksturer": 25
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "ordbog",
+   "tekst": "Ordbogen",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 20,
+    "trekanter": 18,
+    "punkter": 2880,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 23,
+    "programmer": 23,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.60744857788086,
+   "heapPåMB": 12.586421966552734,
+   "heapEfterMB": 12.692115783691406,
+   "efter": {
+    "geometrier": 44,
+    "teksturer": 41
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "solsystem",
+   "tekst": "Solsystemet (første fænomen)",
+   "fejl": [],
+   "sek": 6.578,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 10631586,
+    "andet": 0,
+    "filer": 28,
+    "ialt": 10631586
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 19,
+    "trekanter": 5520,
+    "punkter": 2520,
+    "linjer": 0,
+    "geometrier": 27,
+    "teksturer": 24,
+    "programmer": 24,
+    "teksturerIScenen": 210,
+    "teksturMB": 227.07031249999991
+   },
+   "heapFørMB": 12.43764877319336,
+   "heapPåMB": 12.795841217041016,
+   "heapEfterMB": 12.869075775146484,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "kosmos",
+   "tekst": "Kosmos (første fænomen)",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 27,
+    "trekanter": 32,
+    "punkter": 2880,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 24,
+    "programmer": 23,
+    "teksturerIScenen": 204,
+    "teksturMB": 35.00781249999996
+   },
+   "heapFørMB": 12.443981170654297,
+   "heapPåMB": 12.656272888183594,
+   "heapEfterMB": 12.736888885498047,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "mars",
+   "tekst": "Mars",
+   "fejl": [],
+   "sek": 10.5,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 26678333,
+    "andet": 0,
+    "filer": 46,
+    "ialt": 26678333
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 35,
+    "trekanter": 1062686,
+    "punkter": 2520,
+    "linjer": 512,
+    "geometrier": 30,
+    "teksturer": 36,
+    "programmer": 28,
+    "teksturerIScenen": 218,
+    "teksturMB": 329.09342447916646
+   },
+   "heapFørMB": 12.619270324707031,
+   "heapPåMB": 13.604339599609375,
+   "heapEfterMB": 13.614559173583984,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 30
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "jupiter",
+   "tekst": "Jupiter",
+   "fejl": [],
+   "sek": 4.502,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 18513142,
+    "andet": 0,
+    "filer": 36,
+    "ialt": 18513142
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 21,
+    "trekanter": 49104,
+    "punkter": 2520,
+    "linjer": 0,
+    "geometrier": 29,
+    "teksturer": 31,
+    "programmer": 26,
+    "teksturerIScenen": 214,
+    "teksturMB": 592.6731770833334
+   },
+   "heapFørMB": 12.483936309814453,
+   "heapPåMB": 13.153453826904297,
+   "heapEfterMB": 13.350406646728516,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 28
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "saturn",
+   "tekst": "Saturn",
+   "fejl": [],
+   "sek": 4.604,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 23682780,
+    "andet": 0,
+    "filer": 38,
+    "ialt": 23682780
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 35,
+    "trekanter": 65048,
+    "punkter": 18520,
+    "linjer": 2160,
+    "geometrier": 42,
+    "teksturer": 37,
+    "programmer": 31,
+    "teksturerIScenen": 216,
+    "teksturMB": 632.8619791666667
+   },
+   "heapFørMB": 12.529396057128906,
+   "heapPåMB": 13.276371002197266,
+   "heapEfterMB": 13.365699768066406,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 31
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "venus",
+   "tekst": "Venus",
+   "fejl": [],
+   "sek": 2.523,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 25294910,
+    "andet": 0,
+    "filer": 38,
+    "ialt": 25294910
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 19,
+    "trekanter": 52622,
+    "punkter": 2520,
+    "linjer": 0,
+    "geometrier": 27,
+    "teksturer": 26,
+    "programmer": 25,
+    "teksturerIScenen": 207,
+    "teksturMB": 290.9879557291666
+   },
+   "heapFørMB": 12.549545288085938,
+   "heapPåMB": 12.96115493774414,
+   "heapEfterMB": 13.091789245605469,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 25
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "jordkloden",
+   "tekst": "Jorden",
+   "fejl": [],
+   "sek": 1.24,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 10631586,
+    "andet": 0,
+    "filer": 28,
+    "ialt": 10631586
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 19,
+    "trekanter": 5520,
+    "punkter": 2520,
+    "linjer": 0,
+    "geometrier": 27,
+    "teksturer": 24,
+    "programmer": 24,
+    "teksturerIScenen": 210,
+    "teksturMB": 227.07031249999991
+   },
+   "heapFørMB": 12.44186019897461,
+   "heapPåMB": 12.754806518554688,
+   "heapEfterMB": 12.824081420898438,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "sorthul",
+   "tekst": "Sort hul",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 32,
+    "trekanter": 37,
+    "punkter": 2520,
+    "linjer": 98,
+    "geometrier": 29,
+    "teksturer": 33,
+    "programmer": 29,
+    "teksturerIScenen": 212,
+    "teksturMB": 40.58740234374997
+   },
+   "heapFørMB": 12.470420837402344,
+   "heapPåMB": 12.731830596923828,
+   "heapEfterMB": 12.755386352539062,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "tidhvorfor",
+   "tekst": "Hvorfor går tiden langsommere?",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 20,
+    "trekanter": 18,
+    "punkter": 2880,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 24,
+    "programmer": 23,
+    "teksturerIScenen": 202,
+    "teksturMB": 34.96614583333329
+   },
+   "heapFørMB": 12.393669128417969,
+   "heapPåMB": 12.691726684570312,
+   "heapEfterMB": 12.683219909667969,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "start",
+   "tekst": "Starten (menuen)",
+   "fejl": [],
+   "hentet": {
+    "three": 2214998,
+    "kode": 2158087,
+    "billeder": 0,
+    "andet": 218792,
+    "filer": 149,
+    "ialt": 4591877
+   },
+   "sek": 3.325,
+   "heapMB": 11.047992706298828,
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 31,
+    "trekanter": 6720,
+    "punkter": 2711,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 23,
+    "programmer": 23,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "dcl": 0.7618999999999069,
+   "load": 0.9956000000000931
+  },
+  {
+   "enhed": "tablet",
+   "id": "vaerksted",
+   "tekst": "Atomværkstedet",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 25,
+    "trekanter": 24,
+    "punkter": 1420,
+    "linjer": 0,
+    "geometrier": 30,
+    "teksturer": 27,
+    "programmer": 23,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.184669494628906,
+   "heapPåMB": 11.300025939941406,
+   "heapEfterMB": 11.438934326171875,
+   "efter": {
+    "geometrier": 30,
+    "teksturer": 27
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "molekyle",
+   "tekst": "Byg et molekyle",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 22,
+    "trekanter": 18,
+    "punkter": 1420,
+    "linjer": 0,
+    "geometrier": 37,
+    "teksturer": 28,
+    "programmer": 27,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.172340393066406,
+   "heapPåMB": 12.220531463623047,
+   "heapEfterMB": 12.276588439941406,
+   "efter": {
+    "geometrier": 37,
+    "teksturer": 28
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "system",
+   "tekst": "Det periodiske system",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 256,
+    "trekanter": 1670,
+    "punkter": 1420,
+    "linjer": 0,
+    "geometrier": 28,
+    "teksturer": 141,
+    "programmer": 25,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.184173583984375,
+   "heapPåMB": 11.803665161132812,
+   "heapEfterMB": 11.85837173461914,
+   "efter": {
+    "geometrier": 28,
+    "teksturer": 141
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "fusion",
+   "tekst": "Stjerneovnen",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 24,
+    "trekanter": 6740,
+    "punkter": 1620,
+    "linjer": 0,
+    "geometrier": 29,
+    "teksturer": 26,
+    "programmer": 24,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.06536865234375,
+   "heapPåMB": 11.3502197265625,
+   "heapEfterMB": 11.475666046142578,
+   "efter": {
+    "geometrier": 30,
+    "teksturer": 26
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "reaktor",
+   "tekst": "Reaktoren",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 27,
+    "trekanter": 59244,
+    "punkter": 2618,
+    "linjer": 0,
+    "geometrier": 30,
+    "teksturer": 27,
+    "programmer": 23,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.014236450195312,
+   "heapPåMB": 11.272762298583984,
+   "heapEfterMB": 11.448589324951172,
+   "efter": {
+    "geometrier": 31,
+    "teksturer": 27
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "batteri",
+   "tekst": "Batteriet",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 43,
+    "trekanter": 117282,
+    "punkter": 1600,
+    "linjer": 660,
+    "geometrier": 43,
+    "teksturer": 32,
+    "programmer": 28,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.214496612548828,
+   "heapPåMB": 11.413890838623047,
+   "heapEfterMB": 11.498371124267578,
+   "efter": {
+    "geometrier": 44,
+    "teksturer": 32
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "liv",
+   "tekst": "Liv",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 37,
+    "trekanter": 10778,
+    "punkter": 2047,
+    "linjer": 0,
+    "geometrier": 33,
+    "teksturer": 25,
+    "programmer": 25,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.324073791503906,
+   "heapPåMB": 11.303047180175781,
+   "heapEfterMB": 11.459617614746094,
+   "efter": {
+    "geometrier": 34,
+    "teksturer": 25
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "ordbog",
+   "tekst": "Ordbogen",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 20,
+    "trekanter": 18,
+    "punkter": 1420,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 23,
+    "programmer": 23,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.073997497558594,
+   "heapPåMB": 11.152591705322266,
+   "heapEfterMB": 11.3629150390625,
+   "efter": {
+    "geometrier": 38,
+    "teksturer": 35
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "solsystem",
+   "tekst": "Solsystemet (første fænomen)",
+   "fejl": [],
+   "sek": 0.248,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 3457247,
+    "andet": 0,
+    "filer": 16,
+    "ialt": 3457247
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 19,
+    "trekanter": 2176,
+    "punkter": 1260,
+    "linjer": 0,
+    "geometrier": 27,
+    "teksturer": 24,
+    "programmer": 24,
+    "teksturerIScenen": 204,
+    "teksturMB": 85.27864583333337
+   },
+   "heapFørMB": 11.201053619384766,
+   "heapPåMB": 11.429649353027344,
+   "heapEfterMB": 11.59368896484375,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "kosmos",
+   "tekst": "Kosmos (første fænomen)",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 27,
+    "trekanter": 32,
+    "punkter": 1420,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 24,
+    "programmer": 23,
+    "teksturerIScenen": 198,
+    "teksturMB": 21.216145833333382
+   },
+   "heapFørMB": 11.085906982421875,
+   "heapPåMB": 11.372623443603516,
+   "heapEfterMB": 11.494491577148438,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "mars",
+   "tekst": "Mars",
+   "fejl": [],
+   "sek": 5.944,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 19503994,
+    "andet": 0,
+    "filer": 34,
+    "ialt": 19503994
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 36,
+    "trekanter": 604448,
+    "punkter": 1260,
+    "linjer": 512,
+    "geometrier": 30,
+    "teksturer": 36,
+    "programmer": 28,
+    "teksturerIScenen": 212,
+    "teksturMB": 315.3017578125001
+   },
+   "heapFørMB": 11.156623840332031,
+   "heapPåMB": 12.244956970214844,
+   "heapEfterMB": 12.237480163574219,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 30
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "jupiter",
+   "tekst": "Jupiter",
+   "fejl": [],
+   "sek": 1.867,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 8806769,
+    "andet": 0,
+    "filer": 28,
+    "ialt": 8806769
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 21,
+    "trekanter": 22032,
+    "punkter": 1260,
+    "linjer": 0,
+    "geometrier": 29,
+    "teksturer": 32,
+    "programmer": 26,
+    "teksturerIScenen": 209,
+    "teksturMB": 205.5481770833334
+   },
+   "heapFørMB": 11.69936752319336,
+   "heapPåMB": 11.904251098632812,
+   "heapEfterMB": 12.001628875732422,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 29
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "saturn",
+   "tekst": "Saturn",
+   "fejl": [],
+   "sek": 3.283,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 14038002,
+    "andet": 0,
+    "filer": 32,
+    "ialt": 14038002
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 35,
+    "trekanter": 65048,
+    "punkter": 7260,
+    "linjer": 2160,
+    "geometrier": 42,
+    "teksturer": 39,
+    "programmer": 31,
+    "teksturerIScenen": 212,
+    "teksturMB": 320.40364583333337
+   },
+   "heapFørMB": 11.293903350830078,
+   "heapPåMB": 11.975318908691406,
+   "heapEfterMB": 11.942230224609375,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 32
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "venus",
+   "tekst": "Venus",
+   "fejl": [],
+   "sek": 1.523,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 13825894,
+    "andet": 0,
+    "filer": 26,
+    "ialt": 13825894
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 19,
+    "trekanter": 32270,
+    "punkter": 1260,
+    "linjer": 0,
+    "geometrier": 27,
+    "teksturer": 26,
+    "programmer": 25,
+    "teksturerIScenen": 201,
+    "teksturMB": 117.19628906250004
+   },
+   "heapFørMB": 11.069561004638672,
+   "heapPåMB": 11.687026977539062,
+   "heapEfterMB": 11.78152084350586,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 25
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "jordkloden",
+   "tekst": "Jorden",
+   "fejl": [],
+   "sek": 0.373,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 3457247,
+    "andet": 0,
+    "filer": 16,
+    "ialt": 3457247
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 19,
+    "trekanter": 2176,
+    "punkter": 1260,
+    "linjer": 0,
+    "geometrier": 27,
+    "teksturer": 24,
+    "programmer": 24,
+    "teksturerIScenen": 204,
+    "teksturMB": 85.27864583333337
+   },
+   "heapFørMB": 11.157493591308594,
+   "heapPåMB": 11.481922149658203,
+   "heapEfterMB": 11.619892120361328,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "sorthul",
+   "tekst": "Sort hul",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 32,
+    "trekanter": 37,
+    "punkter": 1260,
+    "linjer": 98,
+    "geometrier": 29,
+    "teksturer": 33,
+    "programmer": 29,
+    "teksturerIScenen": 206,
+    "teksturMB": 22.828450520833375
+   },
+   "heapFørMB": 11.141807556152344,
+   "heapPåMB": 11.42672348022461,
+   "heapEfterMB": 11.488311767578125,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "tidhvorfor",
+   "tekst": "Hvorfor går tiden langsommere?",
+   "fejl": [],
+   "sek": 0,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 0,
+    "andet": 0,
+    "filer": 0,
+    "ialt": 0
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 20,
+    "trekanter": 18,
+    "punkter": 1420,
+    "linjer": 0,
+    "geometrier": 26,
+    "teksturer": 24,
+    "programmer": 23,
+    "teksturerIScenen": 196,
+    "teksturMB": 21.174479166666714
+   },
+   "heapFørMB": 11.15439224243164,
+   "heapPåMB": 11.370445251464844,
+   "heapEfterMB": 11.453773498535156,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 24
+   }
+  }
+ ]
+}

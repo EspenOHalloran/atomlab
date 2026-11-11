@@ -1,6 +1,6 @@
 # Brief: Det store eftersyn af AtomLab (E1)
 
-*Skrevet af Opus 9. november 2026 ([plan-fable-eftersyn.md](../plan-fable-eftersyn.md)). Afsnittene med ⟨E0⟩ fyldes ud i E0, lige før du starter. Dit svar skrives i `docs/fable/E1-eftersyn.md`, `docs/fable/E1-verdener.md` og `docs/fable/E1-retning.md`.*
+*Skrevet af Opus 9. november 2026 ([plan-fable-eftersyn.md](../plan-fable-eftersyn.md)). Afsnittene med beslutningerne, det planlagte og tallene er fyldt ud i E0 (11. november 2026), og detaljerne står i `docs/fable/eftersyn/`. Dit svar skrives i `docs/fable/E1-eftersyn.md`, `docs/fable/E1-verdener.md` og `docs/fable/E1-retning.md`.*
 
 ## Hvem og hvorfor
 AtomLab er et interaktivt 3D-program i browseren om atomer, molekyler, kernereaktioner, liv, tid og rummet. En far startede det til sin søn på 13 år. Sønnen bruger det, men koder ikke. Faren koder heller ikke selv: Alt er bygget af Opus over mange sessioner, ofte flere ad gangen, i spor, med en plan og et "go" før hvert trin.
@@ -82,10 +82,16 @@ De vigtigste med dato og den grund, der blev givet dengang (fra CLAUDE.md, DESIG
 22. Domæner og værktøjer spørges om, før arbejdet går i gang (24. og 29. oktober).
 
 ## Det planlagte
-Ringen, som den er nu (verdenerne med deres dele og fænomener), og alt det planlagte, én linje hver med indhold, størrelse og den plads, det er tænkt til i dag, står i **`docs/fable/eftersyn/planlagt.md`**. Kort fortalt: 6 verdener i ringen (Atomer og molekyler, Kernerne, Ild og liv, Elektricitet, Rummet og Biblioteket) med 10 dele. Elektricitet, Ild og liv og Biblioteket har kun én del hver. Kosmos har 13 fænomener på én liste, og Solsystemet har 8 kloder med underpunkter. Besluttet, men ikke bygget: bl.a. Liv L3-L6, Ild, Kvantefysik, Antistof, Mørkt stof, Gåderne, månerne og "Land på måner", Tjernobyl, Venus V3-V5, Merkur, Pluto, overblikket og Rumrejsen i Solsystemet. Idéer: bl.a. videnskabsfolkene, Elektricitets indhold, Hjernen og AI, en engelsk udgave og "Før vi deler" (skolerne).
+Ringen, som den er nu (verdenerne med deres dele og fænomener), og alt det planlagte, én linje hver med indhold, størrelse og den plads, det er tænkt til i dag, står i **`docs/fable/eftersyn/planlagt.md`**. Kort fortalt: 6 verdener i ringen (Atomer og molekyler, Kernerne, Ild og liv, Elektricitet, Rummet og Biblioteket) med 10 dele. Elektricitet, Ild og liv og Biblioteket har kun én del hver. Kosmos har 13 fænomener på én liste, og Solsystemet har 8 kloder med underpunkter. Besluttet, men ikke bygget: bl.a. Liv L3-L6, Ild, Kvantefysik, Antistof, Mørkt stof, Gåderne, månerne, Tjernobyl, resten af planeterne, overblikket og Rumrejsen.
 
-## Tallene ⟨E0⟩
-*Opus skriver her det, der er målt: download, opstart og hukommelse pr. skærm, koden pr. mappe, dokumenterne (og hvad en ny session mindst læser), testene og arbejdsgangen. Og hvad der ikke kan måles i testbrowseren.*
+## Tallene
+Alt står i **`docs/fable/eftersyn/tal.md`** (målt 11. november 2026). Det vigtigste:
+- **Kode:** 40.618 linjer JavaScript i 133 moduler. Største fil: `js/kosmos/mars.js` (1.599 linjer). `billeder/` fylder 309 MB i repoet, men kun én størrelse af hvert kort hentes.
+- **Start:** Al koden hentes ved start (149 filer, 4,4 MB ukomprimeret). Skærmene uden kloder henter derefter intet. En klode i Solsystemet henter 10-25 MB på pc og 3-19 MB på tablet. Teksturerne i scenen er skønnet til op til ca. 630 MB på pc (Saturn) og 320 MB på tablet.
+- **Tests:** 42 tests med 3.089 tjek, alle grønne, 30,9 minutter for hele samlingen. Et typisk `--ændret` tager 1-12 minutter.
+- **Dokumenter:** 148 filer (1,9 MB). En ny session læser mindst ca. 29 KB, og ca. 55-60 KB før arbejde i koden.
+- **Tempo:** 572 commits og 136 merget PR'er på fire uger, flest i uge 45 (171 commits og 76 PR'er).
+- **Kan ikke måles her:** billeder i sekundet, varme og den rigtige grafikhukommelse på en tablet. Brug farens billeder og ord for det.
 
 ## Sådan skal svaret se ud
 Skriv på dansk til faren, i et klart og enkelt sprog med korte sætninger. Forklar fagord. **Udvælg hellere end at komprimere:** Det vigtigste skal stå tydeligt, og resten må gerne udelades.
