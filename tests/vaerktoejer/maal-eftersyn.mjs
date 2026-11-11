@@ -28,7 +28,7 @@ const MÅL = [
   ['jupiter', 'solsystem', 'Jupiter'],
   ['saturn', 'solsystem', 'Saturn'],
   ['venus', 'solsystem', 'Venus'],
-  ['jordkloden', 'solsystem', 'Jorden'],
+  ['jorden', 'solsystem', 'Jorden'],
   ['sorthul', 'kosmos', 'Sort hul'],
   ['tidhvorfor', 'kosmos', 'Hvorfor går tiden langsommere?'],
 ];

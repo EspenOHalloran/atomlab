@@ -85,7 +85,7 @@
 - **Fejl, der kun kom under belastning:** 10 af de 16 punkter i `docs/lige-nu/aabne-punkter.md` er tests, der fejlede én gang, mens to kørte samtidig, og bestod alene. Ingen af dem fejlede i kørslen 11. november.
 
 ## 6. Målingerne (download, grafik og hukommelse)
-Målt 11. november 2026 med `tests/vaerktoejer/maal-eftersyn.mjs` på en lokal server (Python, uden komprimering) i testbrowseren med fuld grafik, men uden grafikkort. Hver række er et første besøg med tom cache: siden åbnes, menuen er klar, og så skiftes der til skærmen. Rådata i [maalinger.json](maalinger.json).
+Målt 11. november 2026 med `tests/vaerktoejer/maal-eftersyn.mjs` på en lokal server (Python, uden komprimering) i testbrowseren med fuld grafik, men uden grafikkort. Hver række er et første besøg med tom cache: siden åbnes, menuen er klar, og så skiftes der til skærmen. Rådata i [maalinger.json](maalinger.json). Jorden er målt igen samme dag (første kørsel valgte Solen ved en fejl i værktøjet).
 
 **Sådan læses tabellerne:**
 - **Hentet:** Ved starten hentes **al koden på én gang** (149 filer, 4,4 MB: Three.js 2,1 MB og egen kode 2,1 MB, `js/main.js` importerer alle skærme). Derfor henter skærmene uden store billeder intet, når man går ind. Kun kloderne i Solsystemet henter billeder. GitHub Pages komprimerer tekstfiler, så JavaScript fylder mindre over nettet end her. Billederne (JPG og PNG) er allerede komprimerede.
@@ -115,7 +115,7 @@ Målt 11. november 2026 med `tests/vaerktoejer/maal-eftersyn.mjs` på en lokal s
 | Jupiter | 17,7 (0,0/0,0/17,7/0,0) | 36 | 4,5 | 21 | 49104 / 2520 | 29 / 31 | 593 | 12,5 → 13,2 → 13,4 | 35 / 28 |
 | Saturn | 22,6 (0,0/0,0/22,6/0,0) | 38 | 4,6 | 35 | 65048 / 18520 | 42 / 37 | 633 | 12,5 → 13,3 → 13,4 | 35 / 31 |
 | Venus | 24,1 (0,0/0,0/24,1/0,0) | 38 | 2,5 | 19 | 52622 / 2520 | 27 / 26 | 291 | 12,5 → 13,0 → 13,1 | 35 / 25 |
-| Jorden | 10,1 (0,0/0,0/10,1/0,0) | 28 | 1,2 | 19 | 5520 / 2520 | 27 / 24 | 227 | 12,4 → 12,8 → 12,8 | 35 / 24 |
+| Jorden | 17,5 (0,0/0,0/17,5/0,0) | 34 | 6,5 | 22 | 24210 / 2520 | 29 / 30 | 400 | 12,6 → 12,9 → 13,1 | 35 / 30 |
 | Sort hul | 0,0 (0,0/0,0/0,0/0,0) | 0 | 0,0 | 32 | 37 / 2520 | 29 / 33 | 41 | 12,5 → 12,7 → 12,8 | 35 / 24 |
 | Hvorfor går tiden langsommere? | 0,0 (0,0/0,0/0,0/0,0) | 0 | 0,0 | 20 | 18 / 2880 | 26 / 24 | 35 | 12,4 → 12,7 → 12,7 | 35 / 24 |
 
@@ -138,7 +138,7 @@ Målt 11. november 2026 med `tests/vaerktoejer/maal-eftersyn.mjs` på en lokal s
 | Jupiter | 8,4 (0,0/0,0/8,4/0,0) | 28 | 1,9 | 21 | 22032 / 1260 | 29 / 32 | 206 | 11,7 → 11,9 → 12,0 | 35 / 29 |
 | Saturn | 13,4 (0,0/0,0/13,4/0,0) | 32 | 3,3 | 35 | 65048 / 7260 | 42 / 39 | 320 | 11,3 → 12,0 → 11,9 | 35 / 32 |
 | Venus | 13,2 (0,0/0,0/13,2/0,0) | 26 | 1,5 | 19 | 32270 / 1260 | 27 / 26 | 117 | 11,1 → 11,7 → 11,8 | 35 / 25 |
-| Jorden | 3,3 (0,0/0,0/3,3/0,0) | 16 | 0,4 | 19 | 2176 / 1260 | 27 / 24 | 85 | 11,2 → 11,5 → 11,6 | 35 / 24 |
+| Jorden | 6,2 (0,0/0,0/6,2/0,0) | 22 | 1,4 | 22 | 24210 / 1260 | 29 / 30 | 131 | 11,1 → 11,6 → 11,6 | 35 / 30 |
 | Sort hul | 0,0 (0,0/0,0/0,0/0,0) | 0 | 0,0 | 32 | 37 / 1260 | 29 / 33 | 23 | 11,1 → 11,4 → 11,5 | 35 / 24 |
 | Hvorfor går tiden langsommere? | 0,0 (0,0/0,0/0,0/0,0) | 0 | 0,0 | 20 | 18 / 1420 | 26 / 24 | 21 | 11,2 → 11,4 → 11,5 | 35 / 24 |
 

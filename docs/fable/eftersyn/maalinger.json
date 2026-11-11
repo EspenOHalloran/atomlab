@@ -525,41 +525,6 @@
   },
   {
    "enhed": "pc",
-   "id": "jordkloden",
-   "tekst": "Jorden",
-   "fejl": [],
-   "sek": 1.24,
-   "hentet": {
-    "three": 0,
-    "kode": 0,
-    "billeder": 10631586,
-    "andet": 0,
-    "filer": 28,
-    "ialt": 10631586
-   },
-   "grafik": {
-    "lav": false,
-    "pixelforhold": 1,
-    "kald": 19,
-    "trekanter": 5520,
-    "punkter": 2520,
-    "linjer": 0,
-    "geometrier": 27,
-    "teksturer": 24,
-    "programmer": 24,
-    "teksturerIScenen": 210,
-    "teksturMB": 227.07031249999991
-   },
-   "heapFørMB": 12.44186019897461,
-   "heapPåMB": 12.754806518554688,
-   "heapEfterMB": 12.824081420898438,
-   "efter": {
-    "geometrier": 35,
-    "teksturer": 24
-   }
-  },
-  {
-   "enhed": "pc",
    "id": "sorthul",
    "tekst": "Sort hul",
    "fejl": [],
@@ -1151,41 +1116,6 @@
   },
   {
    "enhed": "tablet",
-   "id": "jordkloden",
-   "tekst": "Jorden",
-   "fejl": [],
-   "sek": 0.373,
-   "hentet": {
-    "three": 0,
-    "kode": 0,
-    "billeder": 3457247,
-    "andet": 0,
-    "filer": 16,
-    "ialt": 3457247
-   },
-   "grafik": {
-    "lav": true,
-    "pixelforhold": 1,
-    "kald": 19,
-    "trekanter": 2176,
-    "punkter": 1260,
-    "linjer": 0,
-    "geometrier": 27,
-    "teksturer": 24,
-    "programmer": 24,
-    "teksturerIScenen": 204,
-    "teksturMB": 85.27864583333337
-   },
-   "heapFørMB": 11.157493591308594,
-   "heapPåMB": 11.481922149658203,
-   "heapEfterMB": 11.619892120361328,
-   "efter": {
-    "geometrier": 35,
-    "teksturer": 24
-   }
-  },
-  {
-   "enhed": "tablet",
    "id": "sorthul",
    "tekst": "Sort hul",
    "fejl": [],
@@ -1252,6 +1182,76 @@
    "efter": {
     "geometrier": 35,
     "teksturer": 24
+   }
+  },
+  {
+   "enhed": "pc",
+   "id": "jorden",
+   "tekst": "Jorden",
+   "fejl": [],
+   "sek": 6.539,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 18349859,
+    "andet": 0,
+    "filer": 34,
+    "ialt": 18349859
+   },
+   "grafik": {
+    "lav": false,
+    "pixelforhold": 1,
+    "kald": 22,
+    "trekanter": 24210,
+    "punkter": 2520,
+    "linjer": 240,
+    "geometrier": 29,
+    "teksturer": 30,
+    "programmer": 26,
+    "teksturerIScenen": 212,
+    "teksturMB": 400.40364583333326
+   },
+   "heapFørMB": 12.579948425292969,
+   "heapPåMB": 12.90106201171875,
+   "heapEfterMB": 13.133441925048828,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 30
+   }
+  },
+  {
+   "enhed": "tablet",
+   "id": "jorden",
+   "tekst": "Jorden",
+   "fejl": [],
+   "sek": 1.399,
+   "hentet": {
+    "three": 0,
+    "kode": 0,
+    "billeder": 6486030,
+    "andet": 0,
+    "filer": 22,
+    "ialt": 6486030
+   },
+   "grafik": {
+    "lav": true,
+    "pixelforhold": 1,
+    "kald": 22,
+    "trekanter": 24210,
+    "punkter": 1260,
+    "linjer": 240,
+    "geometrier": 29,
+    "teksturer": 30,
+    "programmer": 26,
+    "teksturerIScenen": 206,
+    "teksturMB": 130.6119791666667
+   },
+   "heapFørMB": 11.064399719238281,
+   "heapPåMB": 11.617389678955078,
+   "heapEfterMB": 11.631488800048828,
+   "efter": {
+    "geometrier": 35,
+    "teksturer": 30
    }
   }
  ]

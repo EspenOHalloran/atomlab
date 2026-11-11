@@ -50,7 +50,7 @@ async function gåTil(page, skærm) {
 
 async function skud(page, navn, tekst) {
   const fil = `${String(++nr).padStart(3, '0')}-${navn}-${page.størrelse}.jpg`;
-  await page.screenshot({ path: UD + fil, type: 'jpeg', quality: 75 });
+  await page.screenshot({ path: UD + fil, type: 'jpeg', quality: 75, timeout: 180000 }); // Stå på Mars tegner langsomt
   liste.push(`| ${fil} | ${NAVN[page.størrelse]} | ${tekst} |`);
   console.log(fil);
 }
@@ -150,7 +150,7 @@ if (med('dele')) {
 const FÆNOMENER = [
   ['solen', [], 2, 'Solsystemet: Solen'],
   ['venus', [], 2, 'Solsystemet: Venus'],
-  ['jordkloden', [], 2, 'Solsystemet: Jorden'],
+  ['jorden', [], 2, 'Solsystemet: Jorden'],
   ['aarstider', [], 2, 'Solsystemet: Årstiderne (under Jorden)'],
   ['formoerkelser', ['Næste'], 3, 'Solsystemet: Formørkelser (under Jorden), solformørkelse'],
   ['mars', [], 2, 'Solsystemet: Mars'],
