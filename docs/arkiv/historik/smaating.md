@@ -2,6 +2,10 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/smaating.md](../../lige-nu/smaating.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (9. november 2026): Planen for det store eftersyn med Fable 5.2.** Jeres ønske: Når T5c er færdig, skal Fable kigge hele AtomLab igennem som en konsulent eller arkitekt (helheden, indholdet, UI, UX, ydelsen og arbejdsgangen) og må udfordre beslutningerne. Den skal også lave et kort over verdenerne i ringen med de planlagte ting (fx de store videnskabsfolk, Gåderne, Mørkt stof og Kvantefysik) på deres plads. Opus 5.5 bygger bagefter. Jeres svar: egen Fable-session, ca. 20-40 $, kun nye store dele venter imens, og en ny runde med sønnen først.
+- **Planen** [plan-fable-eftersyn.md](../plan-fable-eftersyn.md) (E0 materialet, E1 Fables eftersyn, E2 fra råd til plan, E3 dybde kun ved go). Fable ser meget og skriver kort, får fakta og ikke Opus' meninger, og læser F1 først til sidst.
+- **Briefen til Fable** [fable/brief-eftersyn.md](../fable/brief-eftersyn.md) (afsnittene med tal og beslutninger fyldes ud i E0) og **guiden til runden med sønnen** [fable/runde-med-soennen.md](../fable/runde-med-soennen.md).
+
 **Senest lavet (8. november 2026): Mindre test for pengene.** Jeres spørgsmål: finder testene noget, eller er de spild? Svaret: De har fundet ægte fejl (Reaktorens kædereaktion, henfaldsreglen, Uranus-apostroffen, Batteriets lampe), men meget af arbejdet gik til at holde testene selv stabile, og mange af de store fejl fandt I eller skærmbillederne. Jeres go til alle seks forslag:
 - **Røgtesten `tests/roeg.mjs`** (ca. 20 sekunder): alle datafiler kan indlæses, og alle skærme og 23 fænomener åbner uden fejl i konsollen. Den køres altid af `--ændret` og fangede Uranus-fejlen igen, da den blev sat ind for sjov.
 - **`--ændret` er smallere:** `index.html` og `style.css` giver kun testene for de skærme, de ændrede linjer hører til (alle, hvis linjen er fælles). Den sammenligner med `main` (merge-base), så den også virker efter push. Kun dokumenter ændret: ingen tests.
