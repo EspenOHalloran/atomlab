@@ -12,4 +12,4 @@
 
 **Næste:** Skærmlisten og hentning efter behov (10a), **først og alene**: ny session med Opus, effort høj, med [prompt-skaermliste.md](../prompt-skaermliste.md). Imens må faktagrundlagene køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
-Bagefter i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes til arkivet, Retningen), testen `mars` (585 sekunder) delt i to, og faktatjekket af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` fra før (én session pr. fil med `/faktatjek`, når I har åbnet de domæner, der mangler, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).
+Bagefter i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes til arkivet, Retningen), testen `mars` (585 sekunder) delt i to, og faktatjekket af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` fra før (én session pr. fil med `/faktatjek`, startet i miljøet "Default", hvor domænerne nu er åbne, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).
