@@ -93,6 +93,7 @@ Taget 2026-11-11 med `tests/vaerktoejer/eftersyn-billeder.mjs` i testbrowseren, 
 | 088-lag-noerd-pc.jpg | pc 1440 × 900 | Lag 3: "For nørder" foldet ud ved Sort hul |
 | 089-lag-hvorfor-tabhoej.jpg | tablet på højkant 800 × 1280 | Lag 2: et åbent "Hvorfor?"-kort (Hvad er et magnetfelt?) i Solstorm |
 | 090-lag-noerd-tabhoej.jpg | tablet på højkant 800 × 1280 | Lag 3: "For nørder" foldet ud ved Sort hul |
+| 091-staa-paa-mars-pc.jpg | pc 1440 × 900 | Solsystemet: Stå på Mars ved Gale (Naukluft), efter landingen, med roverens foto (taget om samme dag med længere ventetid: billedet tegner langsomt i testbrowseren) |
 
 ## Kunne ikke fotograferes
-- Stå på Mars: page.screenshot: Timeout 30000ms exceeded.
+Intet. (Ved første kørsel fik Stå på Mars timeout, og Jorden viste Kosmos på grund af et forkert id. Begge er taget om.)
