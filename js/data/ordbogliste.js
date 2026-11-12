@@ -5,7 +5,7 @@ import { ORDBOG } from './ordbog.js';
 
 // Kun links, der er enkle og sikre: et "Hvorfor?"-kort, en skærm eller et fænomen, hvor ordet står i teksten.
 // hvorfor: id i HVORFOR, skærm: [adresse, navn], gaa: [skærm:id eller skærm:id:sted, navn] (åbnes af knapper
-// med data-gaa).
+// med data-gaa, også gaader:id til et kort i Gåderne).
 export const LINKS = {
   tunneleffekt: { hvorfor: 'tunnel' },
   kernekraft: { hvorfor: 'kernen' },
@@ -24,6 +24,7 @@ export const LINKS = {
   hydrogenbinding: { skærm: ['liv', 'Liv'] },
   dendrit: { skærm: ['batteri', 'Batteriet'] },
   horisont: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
+  singularitet: { gaa: ['gaader:sorthul', 'Gåden: Hvad er der inde i et sort hul?'] },
   fotonring: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
   doppler: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
   hviddvaerg: { gaa: ['kosmos:hviddvaerg', 'Kosmos: Hvid dværg'] },

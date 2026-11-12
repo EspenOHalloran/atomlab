@@ -2,6 +2,11 @@
 
 *Trin 0, skrevet 12. november 2026 af Opus efter [prompt-gaader.md](prompt-gaader.md). Faktagrundlaget står i [fakta-gaader.md](fakta-gaader.md). Status står i Småting ([lige-nu/smaating.md](lige-nu/smaating.md)). **Valgene nedenfor er mine anbefalinger:** I bad mig køre videre med dem i stedet for at spørge (12. november 2026). De kan ændres, før G1 bygges. Hver delopgave får sit eget go og en ny session.*
 
+## Jeres svar før G1 (12. november 2026)
+- **Oversigten i G1** viser alle fem gåder. De fire, der ikke er bygget, er grå med "Kommer senere" og kan ikke åbnes, før G2 og G3 bygger dem.
+- **"Målt eller gæt?"** bliver stående på alle kort. På Sort hul siger "Ærligt talt", at singulariteten er en forudsigelse fra Einsteins teori og ikke et vildt gæt.
+- **Teksten til Sort hul** (udkastet efter faktatjekket) har fået jeres go.
+
 ## Kernesætningen (jeres valg 12. november 2026)
 "Efter fem minutter kan brugeren sige: **Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den.**"
 

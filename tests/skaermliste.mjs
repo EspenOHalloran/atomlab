@@ -6,7 +6,7 @@ import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 const b = await chromium.launch({ args: ARGS, ventPåSkærme: false }); // testen ser selv hentningen undervejs
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
-const SKÆRMMODULER = /\/js\/(vaerksted|system|fusion|reaktor|batteri|liv|kosmos|solsystem|ordbog|faenomenskaerm)\.js$/;
+const SKÆRMMODULER = /\/js\/(vaerksted|system|fusion|reaktor|batteri|liv|kosmos|solsystem|ordbog|gaader|faenomenskaerm)\.js$/;
 
 async function nySide(før) {
   const ctx = await b.newContext({ viewport: { width: 1280, height: 800 } });
@@ -34,7 +34,7 @@ const vist = (p, id) => vent(p, (id) => window.atomlabTest?.aktiv() === id && do
   await p.goto(`${ADRESSE}/?test`);
   await vent(p, () => window.atomlabTest && document.getElementById('menu').dataset.midt);
   tjek('menuen henter ingen skærmmoduler', hentet.length === 0, hentet.join(', '));
-  tjek('ingen skærm er bygget i menuen', await p.evaluate(() => ['vaerksted', 'system', 'fusion', 'reaktor', 'batteri', 'liv', 'kosmos', 'solsystem', 'ordbog'].every((id) => !atomlabTest.hentet(id))));
+  tjek('ingen skærm er bygget i menuen', await p.evaluate(() => ['vaerksted', 'system', 'fusion', 'reaktor', 'batteri', 'liv', 'kosmos', 'solsystem', 'ordbog', 'gaader'].every((id) => !atomlabTest.hentet(id))));
   tjek('✓ på Solsystemet uden at hente det', await p.evaluate(() => document.querySelector('#menu a[href="#solsystem"]').classList.contains('klaret')));
 
   // 2. Listerne over fænomener i js/data/faenomener.js passer med skærmenes egne
@@ -122,7 +122,7 @@ const vist = (p, id) => vent(p, (id) => window.atomlabTest?.aktiv() === id && do
 // 5. Hver skærm kan åbnes som den første (et link direkte til skærmen)
 {
   const { p, fejl, luk } = await nySide();
-  for (const id of ['vaerksted', 'fusion', 'reaktor', 'batteri', 'liv', 'kosmos', 'ordbog']) {
+  for (const id of ['vaerksted', 'fusion', 'reaktor', 'batteri', 'liv', 'kosmos', 'ordbog', 'gaader']) {
     await p.goto(`${ADRESSE}/?test#${id}`);
     await vist(p, id);
   }
