@@ -1,5 +1,7 @@
 # Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
 
+*Fælderne om Liv (DNA og livets begyndelse) og om videnskabsfolk, bogsider og rettigheder står i [fakta-faelder-liv-og-videnskabsfolk.md](fakta-faelder-liv-og-videnskabsfolk.md). Læs begge.*
+
 - "Stickney fylder halvdelen af Phobos" (NASA's egen side). Krateret er ca. 9 km på en måne, der er ca. 26 km lang, og dækker kun få procent af overfladen.
 - "Phobos er kun i Mars' skygge omkring jævndøgn." Det er Deimos. Phobos er i skygge på næsten hver omgang, undtagen omkring solhverv.
 - "Hall brugte verdens største kikkert." Det var verdens største *linsekikkert*. Spejlkikkerter var større.
@@ -94,19 +96,24 @@
 - En kilde kan ændre sig, eller man kan have kigget det forkerte sted: T3 fandt ikke Frisch og Smiths tal i Wikipedia, men T5 fandt dem samme dag i samme artikel (med henvisning til Am. J. Phys. 1963). Søg i hele wikiteksten (`action=raw` og `grep`), før et tal kaldes "ikke bekræftet". Og "8,4 ± 2" var forudsigelsen, mens målingen var 8,8 ± 0,8 (T5 Trin 0).
 - "Set fra perronen" (eller "set fra Jorden") i relativitetsteorien er ikke det, øjet ser: Lysets rejsetid er trukket fra. Sig det i "Ærligt talt", når en animation viser to billeder (T5 Trin 0).
 
-*Liv L0 (9. november 2026). Hele listerne med kilder står i [fakta-liv.md](../fakta-liv.md) og filerne i `docs/fakta-liv/`.*
-- "DNA er en tegning af kroppen." Mere en opskrift. Og både "det meste er skrald" og "80 % har en funktion" (ENCODE 2012, der talte biokemisk aktivitet) er for skarpe: Ca. 8 % er bevaret af evolutionen (Rands m.fl. 2014), og forskerne er uenige.
-- "Hydrogenbindingerne holder DNA sammen." Stablingen af baserne giver det meste (Yakovchuk m.fl. 2006). Hydrogenbindingerne afgør, hvem der passer sammen.
-- "Et menneske har 6,2 milliarder basepar" (2 × 3,1). Tallet 3,1 tæller både X og Y. En kvinde har ca. 6,1 milliarder (2 × 3,055), en mand lidt færre.
-- "Watson og Crick stjal Franklins billede, og det gav dem svaret." For enkelt (Cobb og Comfort, Nature 2023): Hun var en ligeværdig del af arbejdet, men de brugte hendes målinger uden at spørge.
-- "Forskerne har lavet kunstigt liv" (Venter-instituttet 2010). Det kemisk byggede genom kom ind i en celle, der levede i forvejen.
-- "Ler laver lange RNA-kæder af sig selv." Ferris m.fl. 1996 nåede 55 led, men kun med kemisk "aktiverede" byggesten og mange fodringer.
-- "Cheyava Falls er det bedste spor af liv i hele rummet." Forskerne siger "på Mars". "Det tætteste, vi er kommet" er pressesprog: NASA sagde det også om Enceladus i 2017.
-- "Alle seks CHNOPS er fundet på Enceladus." Svovl er kun antydet (Peter m.fl. 2023). Og "meteoritterne forklarer, hvorfor liv er venstrehåndet" holder ikke: Bennu og Ryugu har lige meget af begge hænder (Glavin m.fl. 2025).
-- "Næsten alle celler har en kerne." Målt i antal er ca. 84 % af kroppens celler røde blodlegemer, og de har ingen kerne (Sender m.fl. 2016). Skriv "cellen her har en kerne" (Liv L1).
-- "Tyndere end et hår." Hår er 0,017-0,18 mm (Wikipedia "Hair"), så de tyndeste er tyndere end DNA-tråden på 0,033 mm i 10-cm-kernen. Skriv "et hår fra dit hoved" (60-120 µm) (Liv L1).
-- "Kromosomets to kopier hænger sammen på midten." Centromeren sidder kun midt på nogle kromosomer. Skriv "ét sted" (Liv L1).
-- "Genet for hæmoglobin." HBB er genet for β-kæden. Hæmoglobin er bygget af to slags kæder, så skriv "et af generne for hæmoglobin" (Liv L1).
 - "Einstein opdagede, at samtidighed er relativ." Poincaré nævnte muligheden allerede i 1900. Einstein gjorde den til en del af den særlige relativitetsteori i 1905 (Wikipedia "Relativity of simultaneity"). Skriv "Ifølge Einsteins relativitetsteori …" (T5c, 9. november 2026).
-- "Seglcellen sidder i kodon 6." Traditionelt ja, fordi den første methionin fjernes i det færdige protein. Tæller man i genet fra ATG, er det kodon 7 (GAG). Sig, hvordan der tælles (Liv L2, 10. november 2026).
-- "Fem år efter Nirenberg (1961) kendte man hele koden." Nobelkomitéen siger "less than five years later". Regn årstal efter kilden, ikke efter hukommelsen (Liv L2).
+
+- "Man kan lave forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem" (tvillingeparadokset). Det er tankeforsøg (Wikipedia "Twin paradox": "one imagines"). Det rigtige forsøg er CERN 1977: Myonerne blev slynget rundt med ca. 10¹⁸ g, og deres ure fulgte kun farten (Wikipedia "Experimental testing of time dilation"). Skriv "man kan tænke sig", og nævn CERN (Fable E4, 12. november 2026).
+- "Den rejsende ser Jordens ur gå langsomt, og i vendingen springer det." "Ser" er regnet (lysets rejsetid er trukket fra). I en kikkert ser den rejsende Jordens ur gå langsomt på vejen ud og hurtigt på vejen hjem (ved 80 % af lysets fart 3 gange langsommere og 3 gange hurtigere), og intet springer derhjemme: Det er den rejsendes måde at regne "nu" på, der skifter (Wikipedia "Twin paradox", "What it looks like") (Fable E4).
+- To ure side om side under en rejse ("Dit ur" og "Jordens ur") viser Jordens "nu". Set fra skibet er "nu" på Jorden et andet, og på vejen ud går Jordens ur langsomt set fra skibet. Kun ved afgang og hjemkomst er alle enige. Sig det i "Ærligt talt" (Fable E4).
+- "De fleste myoner når ned" står i kilden, men den enkle udregning giver 55 %. Står sætningen ved siden af en tæller med 24 myoner, når højst halvdelen ned i 4 ud af 10 byger. Skriv "ca. halvdelen", når tallet kan ses (Fable E4).
+- "Ingen opdagede det før Einstein" (om samtidighed) strider mod fælden om Poincaré ovenfor. Skriv "ingen har mærket det i hverdagen" (Fable E4).
+- "Tidsforlængelse sker, når man flyver næsten med lysets fart." Den sker ved alle farter og er målt i passagerfly. Den er bare bittelille, indtil farten nærmer sig lysets (Fable E4).
+- "Intet kan nå lysets fart." Lyset kan. Skriv "et rumskib" eller "intet, der vejer noget" (Fable E4).
+- "Toget står næsten stille i forhold til lyset." At stå stille i forhold til lyset er netop det, der ikke kan lade sig gøre. Skriv "100 km/t er næsten ingenting mod lysets fart" (Fable E4).
+- Meget små forskelle (fx at bolden mangler 6 · 10⁻¹³ km/t i 150 km/t) kan ikke regnes med almindelige kommatal: regn.py gav 6,25 · 10⁻¹³, og det rigtige er 6,44 · 10⁻¹³. Brug `decimal` i Python (Fable E4).
+*Gåderne (12. november 2026). Kilderne står i [fakta-gaader.md](../fakta-gaader.md).*
+- "Mørkt stof og mørk energi er det samme" og "85 % af Universet er mørkt stof." To forskellige ting, og tallet er ca. 84 % af alt *stof*, men ca. 27 % af alt (Planck).
+- "LZ fandt mørkt stof i 2026." Én hændelse, 2,6 sigma (arXiv:2609.02823). I partikelfysik kræves 5 sigma. Skriv signaler under grænsen som "et spor", med dato.
+- "Singulariteten er et punkt, hvor alt er uendelig tæt." Uendelig betyder, at teorien bryder sammen. Og et hul, der drejer, giver en ring, hvis indre er ustabilt i teorien.
+- "Jo mere man kæmper imod i et sort hul, jo hurtigere går det." Raketter kan give lidt mere tid, men højst πGM/c³: ca. et minut i Mælkevejens sorte hul (Lewis og Kwan 2007).
+- Wikipedia "Hawking radiation" skriver 10⁻⁷ K for 3 solmasser. Formlen samme sted giver 2 × 10⁻⁸ K. Regn selv efter.
+- "LHCb løste gåden om antistof i 2025." CP-brud i baryoner blev set for første gang, men forskellen er alt for lille til at forklare, at der er stof tilovers (T2K 2020).
+- "Antistof falder opad." Udelukket af ALPHA-g i 2023. Og "én ud af en milliard blev tilovers" er en størrelsesorden (6 × 10⁻¹⁰ pr. lyspartikel).
+- "Planet X": Forskernes navn er Planet 9 (Batygin og Brown 2016). Den er hverken fundet eller modbevist.
+- Planer rykker: Mars Sample Return blev lukket i 2026, og Euclids første store datasæt (DR1) blev delt i to: en første del 12. november 2026 og resten midt i 2027. Skriv "efter planen" og et årstal, og slå det op igen, før teksten skrives.

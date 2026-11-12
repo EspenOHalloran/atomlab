@@ -1,6 +1,6 @@
 # Lige nu: Tid og rum
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/tid.md`. Højst ca. 5 KB. Sidst opdateret: 9. november 2026.*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/tid.md`. Højst ca. 5 KB. Sidst opdateret: 12. november 2026.*
 
 **Senest lavet (9. november 2026): T5c, scene 4 og 5. "Hvorfor går tiden langsommere?" er færdig (T5).**
 - **Scene 4, "Nu" er ikke det samme for alle:** lampen midt i togvognen, "Set fra toget" over "Set fra perronen", kontakterne "Toget står stille" og "Toget kører 60 % af lysets fart" og "💡 Blink igen" i bjælken. Ved 60 % er vognen 80 % så lang set fra perronen, og lyset rammer bagenden efter 0,25 og forenden efter 1,0 (L/c), i toget begge efter 0,5. Mærker på perronen viser, hvor lyset ramte (1. og 2.). Når forenden er ramt, skifter underteksten til "Begge har ret: Om to ting sker "samtidig", kommer an på, hvem der kigger."
@@ -13,4 +13,8 @@
 
 **Ellers: Sporet er lukket for nu (besluttet 8. november 2026).** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" er opdateret med, at "Hvorfor går tiden langsommere?" er færdig (T5).
 
-**Spørgsmål til jer:** ingen lige nu.
+**Næste (besluttet 12. november 2026): Fable gennemgår Tid inden runden med jeres søn** (tekster, tal, opbygning, drejebog til "Tid som ét punkt", idéer og en liste til runden). Prompten er [prompt-fable-tid.md](../prompt-fable-tid.md).
+
+**Fables eftersyn er skrevet (12. november 2026), se `docs/fable/E4-tid.md`** (billeder i `docs/fable/E4-billeder/`). Kort: Tallene holder, 12 formuleringer er upræcise (F1-F4 bør rettes før runden), oplevelsen er ikke sat i scene, og forslaget er ét punkt "Tid" med to korte forløb. Nye fælder står nederst i [fakta-faelder.md](../erfaringer/fakta-faelder.md). **Næste** ("Efter Fables svar" i prompten): Opus skriver `docs/fable/E4-noter.md`, retter F1-F4 med `/faktatjek`, og I får Fables fem spørgsmål som dialog. Derefter jeres runde med jeres søn (listen i E4, afsnit 6).
+
+**Spørgsmål til jer:** Fables fem spørgsmål i `docs/fable/E4-tid.md`, afsnit 7 (ét eller to forløb, TRAPPIST-1 som mål, runden nu eller senere, scene 4 og "nu"-linjerne, og navnet på forløb B).

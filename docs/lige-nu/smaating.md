@@ -10,6 +10,10 @@
 - lavet udgave 2 af [plan-verdener.md](../plan-verdener.md) (den gamle er i arkivet) og lagt [køreplanen](../koereplan.md) om i Serie 1-3 og nyt indhold i rækkefølge (den gamle liste er i arkivet)
 - skrevet [guide-proeven.md](../guide-proeven.md), de tre prompter [prompt-skaermliste.md](../prompt-skaermliste.md), [prompt-forloeb.md](../prompt-forloeb.md) og [prompt-faktagrundlag.md](../prompt-faktagrundlag.md), og startet sporet [Forløb](forloeb.md)
 
+**Også lavet (12. november 2026):** Faktagrundlaget for de første 8 videnskabsfolk og deres bogsider: [fakta-videnskabsfolk.md](../fakta-videnskabsfolk.md) (emne 1 i prompt-faktagrundlag, med rettighederne og fire spørgsmål til jer til sidst). Og faktagrundlaget for Gåderne i en tynd udgave: [fakta-gaader.md](../fakta-gaader.md) (emne 4, lavet af Fable 5.2: de fem kort, vurderingen af den lange liste, fælderne og fire spørgsmål til jer til sidst).
+
 **Næste:** Skærmlisten og hentning efter behov (10a), **først og alene**: ny session med Opus, effort høj, med [prompt-skaermliste.md](../prompt-skaermliste.md). Imens må faktagrundlagene køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
+
+**Lille opgave (kan tages når som helst):** Citatet `tycho` i `js/data/citater.js` har en engelsk oversættelse som `original`. Prompt til en ny session (Opus, effort medium): *"Spor: Småting. Læs docs/fakta-videnskabsfolk.md (afsnit 1, Tycho Brahe, punktet om citatet `tycho`). Ret citatet `tycho` i js/data/citater.js, så `original` er Tychos latin fra De nova stella (faksimilen 1901, archive.org `operumprimitiasd00brahuoft`), og så den danske `tekst` er vores egen oversættelse af netop det latin. Kør /faktatjek på citatet og /faerdig."*
 
 Bagefter i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes til arkivet, Retningen), testen `mars` (585 sekunder) delt i to, og faktatjekket af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` fra før (én session pr. fil med `/faktatjek`, startet i miljøet "Default", hvor domænerne nu er åbne, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).
