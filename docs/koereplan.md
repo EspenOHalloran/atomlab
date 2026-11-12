@@ -40,7 +40,7 @@ En prøve med sønnen efter hvert punkt.
 
 ## Nyt indhold, i denne rækkefølge (må starte, når Forløb-klodsen findes)
 1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside.
-2. **Gåderne** i en tynd udgave (fem kort i Biblioteket).
+2. **Gåderne** i en tynd udgave (fem kort i Biblioteket). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). Start: [prompt-gaader.md](prompt-gaader.md) (Opus, høj, plan først).
 3. **De første 6-8 videnskabsfolk** med sider fra bøgerne (Opdagelserne i Biblioteket).
 4. **Månerne med mulige betingelser for liv** (et snit gennem Europa og Enceladus, Titan med Huygens).
 5. **Liv L3, derefter L4-L6** som forløb ([plan-liv.md](plan-liv.md), [prompt-liv-l3.md](prompt-liv-l3.md) skal skrives om til et forløb først).
