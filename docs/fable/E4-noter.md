@@ -82,3 +82,22 @@ Fælderne for F1-F3 har Fable allerede skrevet nederst i [fakta-faelder.md](../e
 - **Skyderen "fra gåben til lysets fart":** "Bil: 0,2 milliontedele sekund" passer ved ca. 130 km/t. Ved 100 km/t er det 0,14. Farten skal stå ved tallet. Gåben, fly, rumstation, 50 % og 99 % passer.
 - **Fødselsdagshilsnerne** ved 80 % (1 og 9 til den rejsende, 3 og 3 til tvillingen) passer med Doppler-faktoren 3.
 - **Runden med jeres søn:** I blev spurgt igen og bekræftede, at den venter, til forløbene er bygget.
+
+## TRAPPIST-1 og 50 % (12. november 2026, bygget før Forløb-klodsen)
+**Jeres svar:** Go til drejebogen (E4, afsnit 4). TRAPPIST-1 og 50 % bygges nu, forløbene ikke endnu. TRAPPIST-1 er valgt ved start. Lukkede domæner skal altid åbnes (Gaia-arkivet, VizieR og SIMBAD er åbnet).
+
+**Faktatjek (`/faktatjek`, regnet med `js/data/tid.js`):**
+| Påstand | Dom | Kilde |
+|---|---|---|
+| TRAPPIST-1 er ca. 41 lysår væk (40,66) | OK | Gaia DR3 i Gaia-arkivet: parallakse 80,2123 ± 0,0716 mas → 12,467 pc = 40,66 ± 0,04 lysår. Wikipedia "TRAPPIST-1" har samme tal (Gaia EDR3) |
+| En lille, rød stjerne med syv planeter | OK | Wikipedia "TRAPPIST-1" ("red dwarf … with seven known exoplanets"), Gillon m.fl. 2017, Nature 542, 456 |
+| 99,99 %: 1,2 år for dig, 81,3 år på Jorden, du er 14 år og 55 dage, tvillingen 94 | OK | 2 · 40,66/0,9999 = 81,33 år, /70,71 = 1,150 år (420 dage) |
+| Ved målet: 210 dage og 41 år, lysglimtet 1,5 dage før dig, 0,58 lysår set fra skibet | OK | Samme regning, én vej |
+| 99 %: "12 år" og "Du er 24 år og 215 dage" | **Rettet** (F10) | 11,59 år. Nu "11,5 år" (én decimal, rundet ned som alderen) |
+| 1 g: "15 år" og "Du er 27 år og 241 dage" | **Rettet** (F10) | 14,66 år. Nu "14,6 år" og "85,1 år", tvillingen 98 |
+| 90 %: "Der er gået ca. 90 år. Din tvilling levede et langt liv." | OK | 90,4 år, tvillingen ville være 103 |
+| 50 % til Alpha Centauri: 17,4 og 15,0 år, du er 28, tvillingen 30 | OK | γ = 1,1547 |
+| 50 %: "ca. 1,15 dage på Jorden for hver dag i skibet" og "Jordens ur går kun lidt hurtigere end dit" | OK | γ = 1,1547 |
+| 12 ni-taller til TRAPPIST-1: "60 minutter" | **Rettet** | Nu "1 time" |
+
+**Ikke rettet:** "Dit ur" runder dagene ned ("1 år 54 dage"), og alderen runder til nærmeste dag ("14 år og 55 dage"). Det er sådan for alle mål (også "44 dage" og "45 dage" ved Alpha Centauri) og tages med ombygningen, hvis jeres søn undrer sig. "Og 4 dage" under 10 dage (resten af F10) er heller ikke rørt.
