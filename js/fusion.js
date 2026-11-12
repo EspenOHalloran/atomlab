@@ -14,6 +14,7 @@ import { startGuide, harSetGuide, markérSet } from './guide.js';
 import { stjerne } from './kosmos/faelles.js';
 import { lavTidsknap } from './pause.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
+import { OPGAVER_FUSION } from './data/opgaver.js';
 
 const R_OVN = 12; // radius på det område, kernerne er i
 const RN = 0.3; // radius på en proton eller neutron
@@ -63,37 +64,6 @@ const REAKTIONER = [
   },
 ];
 
-export const OPGAVER_FUSION = [
-  {
-    id: 'f-koldt', titel: 'Prøv at skyde to protoner sammen, mens det er for koldt',
-    tip: 'Skru temperaturen ned under 10 mio. °C, og skyd en proton mod en anden.',
-    fakta: 'Protoner er plusladede og frastøder hinanden. Kun ved enorm varme, som i en stjernes kerne, kommer de så tæt på hinanden, at de en sjælden gang kan smelte sammen.',
-  },
-  {
-    id: 'f-d', titel: 'Lav deuterium (p + p)', tip: 'Skyd en proton mod en anden proton ved Solens temperatur (15 mio. °C). Det kan kræve flere forsøg.',
-    fakta: 'Det første skridt er det sværeste: En proton skal laves om til en neutron, mens de rører hinanden. I Solen venter en proton i gennemsnit milliarder af år på det!',
-  },
-  {
-    id: 'f-he3', titel: 'Lav helium-3', tip: 'Skyd en proton mod en deuteriumkerne (de orange).',
-    fakta: 'Deuterium og en proton bliver hurtigt til helium-3. Energien kommer ud som gammastråling.',
-  },
-  {
-    id: 'f-he4', titel: 'Lav helium-4', tip: 'Skyd en helium-3 mod en anden helium-3 (de gule).',
-    fakta: 'Fire protoner er blevet til én heliumkerne, og 0,7 % af massen er blevet til energi. Sådan lyser Solen.',
-  },
-  {
-    id: 'f-fem', titel: 'Lav 5 heliumkerner', tip: 'Skru op for varmen, sæt tiden på ⏩, eller skyd selv kernerne sammen.',
-    fakta: 'Hvert sekund laver Solen ca. 600 millioner ton hydrogen om til helium.',
-  },
-  {
-    id: 'f-energi', titel: 'Frigør 100 MeV energi', tip: 'Hver heliumkerne giver ca. 27 MeV i alt.',
-    fakta: 'I Solen bliver ca. 4 millioner ton masse til energi hvert sekund. Det er derfor, den lyser og varmer.',
-  },
-  {
-    id: 'f-carbon', titel: 'Bonus: Lav carbon som en rød kæmpe', tip: 'Skru op til mindst 80 mio. °C (i spillet; i rigtige stjerner ca. 100 mio. °C). To heliumkerner bliver til beryllium-8, som hurtigt skal rammes af en tredje heliumkerne.',
-    fakta: 'Alt carbon i din krop er lavet sådan i gamle stjerner. Vi er lavet af stjernestof!',
-  },
-];
 
 // ---------- Tilstand ----------
 let rod = null;
@@ -1269,3 +1239,6 @@ function flytEtiket(el, p) {
   const y = THREE.MathUtils.clamp(((1 - hjælpV.y) / 2) * innerHeight - TYPER[p.type].radius * 1.7 * pxPrEnhed - h - 6, top + 4, top + height - h - 4);
   el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavFusion as lav, startFusion as start, stopFusion as stop };

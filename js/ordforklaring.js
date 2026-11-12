@@ -25,6 +25,14 @@ const MØNSTER = new RegExp(
 
 let boble = null; // forklaringen, der vises
 let vistFor = null; // knappen, forklaringen hører til
+let ordTilOrdbog = null; // ordet fra "Mere i Ordbogen ›", indtil Ordbogen har vist det
+
+// Ordet, Ordbogen skal vise, når den starter (eller null). Glemmes, når det er hentet.
+export function tagOrdTilOrdbog() {
+  const ord = ordTilOrdbog;
+  ordTilOrdbog = null;
+  return ord;
+}
 let fastholdt = false; // vist med et klik (ellers med musen over ordet)
 let musTimer = null;
 
@@ -65,9 +73,10 @@ export function lavOrdforklaringer() {
   boble.setAttribute('role', 'tooltip');
   boble.id = 'ordforklaring';
   boble.innerHTML = '<strong></strong><p></p><a class="ordforklaring-mere" href="#ordbog" hidden>Mere i Ordbogen ›</a>';
-  // Ord med "Hvorfor?" og "Hvordan?" (mere) har et link til ordet i Ordbogen. Ordbogen får ordet at vide, før skærmen skifter.
+  // Ord med "Hvorfor?" og "Hvordan?" (mere) har et link til ordet i Ordbogen. Ordet huskes her, før skærmen skifter,
+  // og Ordbogen henter det, når den starter (tagOrdTilOrdbog). Ordbogen er måske ikke hentet endnu (10a).
   boble.querySelector('a').addEventListener('click', () => {
-    if (vistFor) dispatchEvent(new CustomEvent('ordbog-ord', { detail: vistFor.dataset.ord }));
+    if (vistFor) ordTilOrdbog = vistFor.dataset.ord;
   });
   document.body.append(boble);
 

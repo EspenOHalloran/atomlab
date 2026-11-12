@@ -6,10 +6,10 @@ import { ORDNE, LINKS, søgOrd, forbogstav } from './data/ordbogliste.js';
 import { HVORFOR } from './data/hvorfor.js';
 import { sætVindue, verden, LAV_KVALITET, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
+import { tagOrdTilOrdbog } from './ordforklaring.js';
 
 const $ = (id) => document.getElementById(id);
 let lavet = false;
-let visOrdId = null; // ordet, Ordbogen skal åbne på (linket "Mere i Ordbogen ›" i boblerne)
 
 function linkHTML(id) {
   const l = LINKS[id];
@@ -107,8 +107,6 @@ export function lavOrdbog() {
     }
   });
   vis(ORDNE);
-  // Linket i boblen (js/ordforklaring.js) siger, hvilket ord der skal vises, lige før Ordbogen åbner
-  addEventListener('ordbog-ord', (h) => { visOrdId = h.detail; });
 }
 
 // Rul hen til et ord (søgningen tømmes, så ordet kan ses) og fremhæv det et øjeblik
@@ -124,7 +122,9 @@ function visOrd(id) {
 
 export function startOrdbog() {
   sætVindue($('ordbog'));
-  if (visOrdId) { visOrd(visOrdId); visOrdId = null; }
+  // Linket i ordforklaringens boble (js/ordforklaring.js) siger, hvilket ord der skal vises
+  const ord = tagOrdTilOrdbog();
+  if (ord) visOrd(ord);
   verden.styring.autoRotate = !ROLIG; // stjernehimlen drejer langsomt bag listen
   // Med mus og tastatur kan man skrive med det samme (på en tablet ville tastaturet dække skærmen)
   if (!LAV_KVALITET) $('ordbogSøg').focus({ preventScroll: true });
@@ -134,3 +134,6 @@ export function stopOrdbog() {
   verden.styring.autoRotate = false;
   $('ordbogSøg').blur();
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavOrdbog as lav, startOrdbog as start, stopOrdbog as stop };

@@ -18,95 +18,12 @@ import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, opdaterFremga
 import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, visOpgave as visBygOpgave, opdaterFremgang as opdaterBygMolekyler, testAdgang as bygTest } from './molekyler-byg.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js';
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
+import { OPGAVER } from './data/opgaver.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
 const EKSTRA_ELEKTRONER = 2; // så mange ekstra elektroner kan man give et atom (fx O²⁻, som kun findes i krystaller)
 
-// Opgaver. mål: det antal der skal bygges (null = lige meget).
-// hændelse: opgaven løses af noget, der sker (fx et henfald), i stedet for et bestemt atom.
-export const OPGAVER = [
-  {
-    id: 'hydrogen', titel: 'Byg et hydrogenatom', mål: { p: 1, n: 0, e: 1 },
-    tip: 'Hydrogen er grundstof nr. 1. Det har ingen neutroner.',
-    fakta: 'Hydrogen er det mest almindelige grundstof i universet. Det har kun én proton og én elektron.',
-  },
-  {
-    id: 'uden-lim', titel: 'Prøv to protoner uden neutroner', mål: { p: 2, n: 0, e: null },
-    tip: 'Læg to protoner i kernen og ingen neutroner. Hvad sker der?',
-    fakta: 'To protoner alene kan ikke holde sammen. Kernekraften mellem kun to protoner er en tand for svag, og de frastøder også hinanden. (To neutroner kan heller ikke!) Med både protoner og neutroner bliver limen stærk nok.',
-  },
-  {
-    id: 'helium', titel: 'Byg helium-4', mål: { p: 2, n: 2, e: 2 },
-    tip: 'Helium er nr. 2. Massetallet 4 = protoner + neutroner.',
-    fakta: 'Helium-4 er det, Solen laver af hydrogen. Det kan du selv prøve i Stjerneovnen.',
-  },
-  {
-    id: 'deuterium', titel: 'Lav tung brint (deuterium)', mål: { p: 1, n: 1, e: 1 },
-    tip: 'Deuterium er hydrogen med én neutron i kernen.',
-    fakta: 'Deuterium er stabilt. Det er det første skridt, når Solen laver helium.',
-  },
-  {
-    id: 'tritium', titel: 'Byg tritium: hydrogen med 2 neutroner', mål: { p: 1, n: 2, e: 1 },
-    tip: '1 proton, 2 neutroner og 1 elektron.',
-    fakta: 'Tritium er radioaktivt. Tryk på "Se den henfalde", og se den blive til helium-3!',
-  },
-  {
-    id: 'henfald', titel: 'Se en kerne henfalde', hændelse: true,
-    tip: 'Byg en ustabil kerne, fx tritium eller carbon-14, og tryk på "Se den henfalde".',
-    fakta: 'Ved alfa- og betahenfald bliver kernen til et andet grundstof. Det var præcis det, alkymisterne drømte om!',
-  },
-  {
-    id: 'carbon', titel: 'Byg carbon-12 (kulstof)', mål: { p: 6, n: 6, e: 6 },
-    tip: 'Carbon er nr. 6. Massetal 12, og atomet skal være neutralt.',
-    fakta: 'Alt liv på Jorden er bygget op omkring carbon. Du består af ca. 18 % carbon.',
-  },
-  {
-    id: 'carbon-graense', titel: 'Find den tungeste stabile carbon', mål: { p: 6, n: 7, e: null },
-    tip: 'Start med carbon-12, og læg én neutron på ad gangen. Hold øje med boksen om stabilitet.',
-    fakta: 'Carbon-13 er den tungeste stabile carbon. Med én neutron mere (carbon-14) bliver kernen radioaktiv.',
-  },
-  {
-    id: 'oxygen', titel: 'Byg oxygen-16 (ilt)', mål: { p: 8, n: 8, e: 8 },
-    tip: 'Oxygen er nr. 8. Massetal 16.',
-    fakta: 'Oxygen-16 er langt det mest almindelige oxygen. Det er dannet inde i store stjerner.',
-  },
-  {
-    id: 'neon', titel: 'Byg neon-20 med fyldt yderste skal', mål: { p: 10, n: 10, e: 10 },
-    tip: 'Neon er nr. 10. Massetal 20.',
-    fakta: 'Neon har 2 + 8 elektroner, så den yderste skal er fyldt. Derfor reagerer neon næsten ikke med andre stoffer.',
-  },
-  {
-    id: 'natrium-ion', titel: 'Lav en natrium-ion: Na⁺', mål: { p: 11, n: 12, e: 10 },
-    tip: 'Byg natrium-23 (nr. 11), og tag så én elektron væk.',
-    fakta: 'Natriums yderste elektron sidder løst og er let at tage. Bagefter har natrium kun fyldte skaller tilbage, men det er plusladet. Hvad der så sker, kan du se under "Byg et molekyle" → "Giv elektroner".',
-  },
-  {
-    id: 'chlorid', titel: 'Lav en chlorid-ion: Cl⁻', mål: { p: 17, n: 18, e: 18 },
-    tip: 'Byg chlor-35 (nr. 17), og giv den én ekstra elektron.',
-    fakta: 'Na⁺ og Cl⁻ trækker i hinanden, fordi plus og minus tiltrækker hinanden. Sammen bliver de til køkkensalt!',
-  },
-  {
-    id: 'carbon14', titel: 'Byg den radioaktive carbon-14', mål: { p: 6, n: 8, e: 6 },
-    tip: 'Samme antal protoner som carbon-12, men to neutroner mere.',
-    fakta: 'Carbon-14 bruges til at finde ud af, hvor gamle knogler og træ fra fortiden er.',
-  },
-  {
-    id: 'jern', titel: 'Byg jern-56', mål: { p: 26, n: 30, e: 26 },
-    tip: 'Jern er nr. 26. Knappen "Stabil kerne" kan hjælpe med neutronerne.',
-    fakta: 'Jern-56 er en af de mest stabile kerner, der findes. Store stjerner ender med en kerne af jern, og så eksploderer de som en supernova.',
-  },
-  {
-    id: 'uran', titel: 'Byg uran-235', mål: { p: 92, n: 143, e: 92 },
-    tip: 'Uran er nr. 92. Massetal 235. Hold knapperne inde!',
-    fakta: 'Uran-235 er det, man spalter i atomkraftværker. Det kan du prøve i Reaktoren.',
-  },
-  {
-    id: 'uran-kaede', titel: 'Følg uran-238 hele vejen ned til bly', hændelse: true,
-    tip: 'Byg uran-238 (hop til uran, og tryk "Stabil kerne"). Tryk så "Se den henfalde" igen og igen.',
-    fakta: 'Uran-238 bliver til bly-206 efter 8 alfahenfald og 6 betahenfald. I naturen tager hele rejsen milliarder af år.',
-  },
-];
 
 const HENFALD_TEKST = {
   'beta-': 'Betahenfald: En neutron blev til en proton. I samme øjeblik blev der skabt en helt ny elektron, som skød ud af kernen (sammen med en næsten usynlig antineutrino). Elektronen fandtes ikke i kernen før!',
@@ -1144,3 +1061,6 @@ function opdaterKort(st) {
   }
   t.textContent = tekst;
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavVærksted as lav, startVærksted as start, stopVærksted as stop };

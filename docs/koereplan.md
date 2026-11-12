@@ -10,7 +10,7 @@
 - **Frigivet** er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp, og fundene er rettet (slutningen af Serie 3).
 
 ## Først og alene
-0. **Skærmlisten og hentning efter behov** (eftersynets nr. 10a, sporet Småting): Én liste over skærmene (id, verden, titel, hvor koden ligger og status), og hver skærm hentes med `import()` og bygges først, når den åbnes. Egen HTML og CSS pr. skærm kommer gradvist (10b), når en skærm alligevel åbnes. Start: [prompt-skaermliste.md](prompt-skaermliste.md) (mellem, 2-3 sessioner). Kør ikke andre sessioner, der rører `js/main.js`, `index.html` eller `style.css`, imens.
+0. ✓ **Skærmlisten og hentning efter behov** (eftersynets nr. 10a, sporet Småting, **lavet 12. november 2026**, se [smaating.md](lige-nu/smaating.md)): Én liste over skærmene (id, verden, titel, hvor koden ligger og status), og hver skærm hentes med `import()` og bygges først, når den åbnes. Egen HTML og CSS pr. skærm kommer gradvist (10b), når en skærm alligevel åbnes. Prompten og planen er i arkivet ([prompt](arkiv/prompt-skaermliste.md), [plan](arkiv/plan-skaermliste.md)).
 
 ## Parallelt: faktagrundlag (kun dokumenter, kan starte nu)
 Start: [prompt-faktagrundlag.md](prompt-faktagrundlag.md), én ny session pr. emne.
@@ -58,7 +58,7 @@ En prøve med sønnen efter hvert punkt.
 ## Sporenes næste trin (detaljerne står i sporets fil)
 | Spor | Næste |
 |---|---|
-| [Småting](lige-nu/smaating.md) | Skærmlisten (10a), først og alene: [prompt-skaermliste.md](prompt-skaermliste.md). Bagefter: "Ikke afprøvet" ned under ca. 10 punkter (resten til arkivet), testen `mars` delt i to, og faktatjekket af de tre faktafiler fra før. |
+| [Småting](lige-nu/smaating.md) | Skærmlisten (10a) er lavet. Næste: "Ikke afprøvet" ned under ca. 10 punkter (resten til arkivet), testen `mars` delt i to, og faktatjekket af de tre faktafiler fra før. |
 | [Forløb](lige-nu/forloeb.md) | Forløb-klodsen og "Dit første atom" efter skærmlisten: [prompt-forloeb.md](prompt-forloeb.md). |
 | [Molekyler](lige-nu/molekyler.md) | Liv som to forløb og Molekyler som egen del (Serie 1 nr. 2 og 3), når Forløb-klodsen findes. L3 holder pause. |
 | [Tid og rum](lige-nu/tid.md) | Tid som ét punkt og Kosmos i grupper (Serie 1 nr. 4), når Forløb-klodsen findes. |

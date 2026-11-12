@@ -1,6 +1,6 @@
 # Kendte fælder i fakta (populære påstande, der er forkerte eller for skarpe)
 
-*Fælderne om Liv (DNA og livets begyndelse) og om videnskabsfolk, bogsider og rettigheder står i [fakta-faelder-liv-og-videnskabsfolk.md](fakta-faelder-liv-og-videnskabsfolk.md). Læs begge.*
+*Fælderne om Liv (DNA, livets begyndelse og månerne med mulige betingelser for liv) og om videnskabsfolk, bogsider og rettigheder står i [fakta-faelder-liv-og-videnskabsfolk.md](fakta-faelder-liv-og-videnskabsfolk.md). Læs begge.*
 
 - "Stickney fylder halvdelen af Phobos" (NASA's egen side). Krateret er ca. 9 km på en måne, der er ca. 26 km lang, og dækker kun få procent af overfladen.
 - "Phobos er kun i Mars' skygge omkring jævndøgn." Det er Deimos. Phobos er i skygge på næsten hver omgang, undtagen omkring solhverv.

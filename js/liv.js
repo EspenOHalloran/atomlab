@@ -457,3 +457,6 @@ export function testAdgang() {
     proteinKodon: (i) => lp.vælgKodon(i),
   };
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavLiv as lav, startLiv as start, stopLiv as stop };

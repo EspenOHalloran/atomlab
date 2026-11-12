@@ -1,7 +1,7 @@
 // Solsystemet: Solen, Venus, Jorden, Mars, Jupiter, Saturn, Uranus og Neptun i den rigtige størrelse (trin 1 i docs/plan-solsystemet.md og Mars M4).
 // Skallen (listen, panelet, knapperne, pausen og underteksterne) er fælles med Kosmos (faenomenskaerm.js).
 
-import { lavFænomenSkærm, NØGLER } from './faenomenskaerm.js';
+import { lavFænomenSkærm } from './faenomenskaerm.js';
 import solen from './kosmos/solen.js';
 import jordkloden from './kosmos/jordkloden.js';
 import aarstider from './kosmos/aarstider.js';
@@ -35,31 +35,8 @@ export const startSolsystem = skærm.start;
 export const stopSolsystem = skærm.stop;
 export const testAdgang = skærm.testAdgang;
 
-// Fænomenerne lå i Kosmos før 26. oktober 2026. Det, man har set og sidst valgt, flytter med.
-export function flytGemt() {
-  const ider = new Set(FÆNOMENER.map((f) => f.id));
-  try {
-    const k = NØGLER.kosmos;
-    const s = NØGLER.solsystem;
-    const kosmosSet = JSON.parse(localStorage.getItem(k.set) || '[]');
-    const flyttes = kosmosSet.filter((id) => ider.has(id));
-    if (flyttes.length) {
-      const solSet = new Set(JSON.parse(localStorage.getItem(s.set) || '[]'));
-      for (const id of flyttes) solSet.add(id);
-      localStorage.setItem(s.set, JSON.stringify([...solSet]));
-      localStorage.setItem(k.set, JSON.stringify(kosmosSet.filter((id) => !ider.has(id))));
-    }
-    const sidst = localStorage.getItem(k.valgt);
-    if (ider.has(sidst)) {
-      if (!localStorage.getItem(s.valgt)) localStorage.setItem(s.valgt, sidst);
-      localStorage.removeItem(k.valgt); // Kosmos starter så på Big Bang
-    }
-  } catch {
-    // ingen lagring
-  }
-}
+// Det gemte fra før 26. oktober 2026 (da fænomenerne lå i Kosmos) flyttes ved start i main.js (flytGemt i js/data/faenomener.js).
+export const lavSolsystem = skærm.lav;
 
-export function lavSolsystem() {
-  flytGemt();
-  skærm.lav();
-}
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavSolsystem as lav, startSolsystem as start, stopSolsystem as stop };

@@ -2,6 +2,16 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/smaating.md](../../lige-nu/smaating.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (11. november 2026): E2, fra Fables råd til en plan.** Fable lavede E1 (eftersynet) og E3 (skabelonen for et forløb og drejebogen til Liv) samme dag. Opus har i E2:
+- skrevet sine noter: [fable/E1-noter.md](../../fable/E1-noter.md) (hvad der er nyt, hvad der var kendt, hvor Opus er uenig, og jeres valg)
+- lagt jeres valg ind: Molekyler bliver en egen del i Atomer nu, og "Stof og kemi" kommer med Ild. Nr. 10 deles (10a: skærmlisten først og alene). I kan låne en ældre iPad og en Chromebook. Frigivet, når 3-5 børn og en lærer har brugt det. Det kommende i Solsystemet får en lille udgave. Tjernobyl bliver sent, og Fable 5.2 laver faktagrundlaget. En fast aften om ugen med prøven
+- flyttet Retningen til [retning.md](../../retning.md) med Opus' rettelser og givet den en linje i læsekortet i CLAUDE.md
+- skrevet de fire nye regler ind i DESIGN.md, tjekliste A og D og `/faerdig` (prøv før næste, én sætning før planen, træk fra, når I lægger til, og højst to nye fagord pr. trin)
+- lavet udgave 2 af [plan-verdener.md](../../plan-verdener.md) (den gamle er i arkivet) og lagt [køreplanen](../../koereplan.md) om i Serie 1-3 og nyt indhold i rækkefølge (den gamle liste er i arkivet)
+- skrevet [guide-proeven.md](../../guide-proeven.md), de tre prompter [prompt-skaermliste.md](../prompt-skaermliste.md), [prompt-forloeb.md](../../prompt-forloeb.md) og [prompt-faktagrundlag.md](../../prompt-faktagrundlag.md), og startet sporet [Forløb](../../lige-nu/forloeb.md)
+
+**Også lavet (12. november 2026):** Faktagrundlaget for de første 8 videnskabsfolk og deres bogsider: [fakta-videnskabsfolk.md](../../fakta-videnskabsfolk.md) (emne 1 i prompt-faktagrundlag, med rettighederne og fire spørgsmål til jer til sidst). Og faktagrundlaget for Gåderne i en tynd udgave: [fakta-gaader.md](../../fakta-gaader.md) (emne 4, lavet af Fable 5.2: de fem kort, vurderingen af den lange liste, fælderne og fire spørgsmål til jer til sidst).
+
 **Senest lavet (11. november 2026): E0, materialet til Fables store eftersyn.** Jeres go: "go" (med de to rettelser i briefen: den nye målgruppe og guidede forløb som opgave 9).
 - **Briefen** [fable/brief-eftersyn.md](../../fable/brief-eftersyn.md) er fyldt ud: status for F1, 22 beslutninger med dato og grund, det planlagte og tallene. Den nye målgruppe (skoler og alle fra ca. 12 år, også voksne) står i "Hvem og hvorfor", og guidede forløb er opgave 9. Briefen er 16,8 KB (lidt over de ca. 15 KB, fordi beslutningerne står i den).
 - **Detaljerne** i `docs/fable/eftersyn/`: [tal.md](../../fable/eftersyn/tal.md) (F1, de nye dele, koden, billederne, dokumenterne, git, testene og målingerne), [planlagt.md](../../fable/eftersyn/planlagt.md) (ringen og alt det planlagte), `maalinger.json` og de nye skærmbilleder i `billeder/` med `LISTE.md`.
