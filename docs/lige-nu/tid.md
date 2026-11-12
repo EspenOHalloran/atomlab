@@ -13,4 +13,6 @@
 
 **Ellers: Sporet er lukket for nu (besluttet 8. november 2026).** T4, udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" er opdateret med, at "Hvorfor går tiden langsommere?" er færdig (T5).
 
+**Næste (besluttet 12. november 2026): Fable gennemgår Tid inden runden med jeres søn** (tekster, tal, opbygning, drejebog til "Tid som ét punkt", idéer og en liste til runden). Prompten er [prompt-fable-tid.md](../prompt-fable-tid.md), og svaret skal ligge i `docs/fable/E4-tid.md`. Ikke startet endnu, venter på, at I starter Fable-sessionen.
+
 **Spørgsmål til jer:** ingen lige nu.
