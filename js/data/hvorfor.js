@@ -195,7 +195,7 @@ export const HVORFOR = {
   // docs/fakta-liv/dna-opskriften.md (GAG → GTG, malaria: Hedrick 2011)
   livSegl: {
     spørgsmål: 'Hvorfor kan ét forkert bogstav give en sygdom?',
-    svar: 'Rækkefølgen af aminosyrerne bestemmer, hvordan kæden folder sig, og formen bestemmer, hvad proteinet kan. Ved seglcelleanæmi er kun ét bogstav i genet HBB skiftet: GAG er blevet til GTG. Så sidder der valin, der skyr vand, i stedet for glutaminsyre, der er minusladet.\n\nDet får hæmoglobinet til at klumpe sammen i lange tråde. De røde blodlegemer bliver krumme som en segl og kan sætte sig fast i de små blodårer.',
-    nørd: 'Man får sygdommen, når man har det ændrede gen fra både sin mor og sin far. Har man det kun fra den ene (man er bærer), får man sjældnere den farlige form af malaria (Hedrick 2011). Bærere kan godt få malaria.',
+    svar: 'Rækkefølgen af aminosyrerne bestemmer, hvordan kæden folder sig, og formen bestemmer, hvad proteinet kan. Ved seglcelleanæmi er kun ét bogstav i genet HBB skiftet: GAG er blevet til GTG. Så sidder der valin, der skyr vand, i stedet for glutaminsyre, der er minusladet.\n\nHar man ændringen fra både sin mor og sin far, klumper hæmoglobinet sammen i lange tråde, når det har afleveret ilten. De røde blodlegemer bliver krumme som en segl og kan sætte sig fast i de små blodårer.',
+    nørd: 'Har man det ændrede gen kun fra den ene forælder, er man bærer og bliver normalt ikke syg (genome.gov). Bærere får sjældnere den farlige form af malaria (Hedrick 2011), men de kan godt få malaria. Derfor er genet almindeligt, hvor der er meget malaria.',
   },
 };

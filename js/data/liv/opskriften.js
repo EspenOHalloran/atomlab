@@ -13,9 +13,9 @@ export const HBB_START = HBB.dna.slice(0, 30);
 export const NIVEAUER = [
   {
     id: 'celle', knap: 'Cellen', titel: 'En af dine celler',
-    tekst: 'Din krop er bygget af ca. 30 billioner celler. Cellen her har en kerne (den violette kugle), og i kernen ligger hele opskriften på dig: dit DNA. Zoom ind mod kernen.',
-    tal: [['Celler i din krop', 'ca. 30 billioner'], ['Kernens bredde', 'ca. 6 µm']],
-    ekstra: 'µm (mikrometer) er en tusindedel af en millimeter. Røde blodlegemer har ingen kerne, og de er ca. 84 % af dine celler.',
+    tekst: 'En voksen krop har ca. 30 billioner celler, og din har lidt færre. Cellen her har en kerne (den violette kugle), og i kernen ligger hele opskriften på dig: dit DNA. Zoom ind mod kernen.',
+    tal: [['Celler i en voksen', 'ca. 30 billioner'], ['Kernens bredde', 'ca. 6 µm']],
+    ekstra: 'µm (mikrometer) er en tusindedel af en millimeter. Røde blodlegemer har ingen kerne, og de er langt de fleste af dine celler.',
   },
   {
     id: 'kerne', knap: 'Kernen', titel: 'Cellekernen',
