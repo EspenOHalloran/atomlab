@@ -117,3 +117,12 @@
 - "Antistof falder opad." Udelukket af ALPHA-g i 2023. Og "én ud af en milliard blev tilovers" er en størrelsesorden (6 × 10⁻¹⁰ pr. lyspartikel).
 - "Planet X": Forskernes navn er Planet 9 (Batygin og Brown 2016). Den er hverken fundet eller modbevist.
 - Planer rykker: Mars Sample Return blev lukket i 2026, og Euclids første store datasæt (DR1) blev delt i to: en første del 12. november 2026 og resten midt i 2027. Skriv "efter planen" og et årstal, og slå det op igen, før teksten skrives.
+*Strøm og magneter og Lys (12. november 2026). Kilderne står i [fakta-strom-og-lys.md](../fakta-strom-og-lys.md) afsnit 10.*
+- "Elektroner, der hopper mellem skallerne, giver flammefarverne." For Na, Li og K er det et skift inden for samme skal (3s → 3p, 2s → 2p, 4s → 4p, NIST). Kun hydrogens synlige linjer er hop mellem skaller. Skriv "hopper op på et højere energitrin".
+- "Fyrværkeriets farver kommer fra atomerne." Rød (Sr), grøn (Ba) og blå (Cu) kommer mest fra små molekyler i flammen (SrCl, SrOH, BaCl, BaOH, CuCl).
+- "Elektronerne i ledningen farer af sted med lysets fart." De kravler ca. 0,02 mm/s (1 A i 2 mm kobber). Signalet går med 50-99 % af lysets fart.
+- "Strømmen løber fra plus til minus ligesom elektronerne." Retningen er en aftale (Franklin). Elektronerne går fra minus til plus.
+- "Kompasset peger mod Jordens magnetiske nordpol, som er en nordpol." Den er fysisk en sydpol.
+- "Mikrobølgeovnen rammer vandets resonans." Wikipedia kalder det en udbredt misforståelse.
+- "Lys og stråling fylder meget i Fælles Mål." I udkastet til den nye fagplan (juni 2026) står "lys" og "stråling" slet ikke, kun "bølger". Og den bindende bekendtgørelse (BEK 1715/2024) har kun fire generelle kompetencemål. Slå Fælles Mål op i kilden, ikke efter hukommelsen.
+- "Hertz sagde: Det er til ingen nytte" og "Marconi sendte over Atlanten i 1901": citatet har ingen god kilde, og Marconis signal blev aldrig bekræftet. Skriv "Marconi meldte, at …".
