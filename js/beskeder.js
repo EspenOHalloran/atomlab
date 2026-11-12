@@ -33,6 +33,7 @@ const piller = []; // { el, timer }
 const kø = []; // piller, der venter på plads
 const forsinkede = new Set();
 let holdPillerne = false; // mens guiden kører, venter belønningerne
+let dæmpPillerne = false; // mens et forløb kører, vises belønningerne slet ikke (de står kun i loggen)
 let pillerFrosset = false; // kun i tests: pillerne står, til testen selv lader tiden løbe ud
 
 function $(id) {
@@ -74,8 +75,9 @@ export function visBesked(besked) {
   // Loggen får hele forklaringen med
   if (b.hvorfor && typeof b.hvorfor === 'object') b.logTekst ??= `${b.tekst} ${b.hvorfor.svar}`;
   if (b.log !== false) gemILog(b);
-  if (b.type === 'klaret' || b.type === 'opdaget') visPille(b);
-  else visUndertekst(b);
+  if (b.type === 'klaret' || b.type === 'opdaget') {
+    if (!dæmpPillerne) visPille(b);
+  } else visUndertekst(b);
 }
 
 // Skjuler underteksten (fx når en fase i Kosmos er slut). Med en type skjules den kun, hvis den er af den type.
@@ -87,6 +89,11 @@ export function skjulUndertekst(type = null) {
 export function holdPiller(til) {
   holdPillerne = til;
   if (!til && kø.length && !piller.length) visPille(kø.shift()); // resten kommer én ad gangen, når pillerne forsvinder
+}
+
+// Et forløb (js/forloeb.js) har sin egen linje. Imens vises belønningspillerne ikke, men de gemmes i loggen.
+export function dæmpPiller(til) {
+  dæmpPillerne = til;
 }
 
 // Fjerner alle beskeder med det samme (når man skifter skærm)

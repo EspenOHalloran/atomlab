@@ -1,4 +1,4 @@
-// Gemmer, hvad man har klaret: løste opgaver og opdagede grundstoffer.
+// Gemmer, hvad man har klaret: løste opgaver, opdagede grundstoffer og forløb (js/forloeb.js).
 // Det ligger i browserens localStorage under nøglen 'atomlabFremgang'.
 
 const NØGLE = 'atomlabFremgang';
@@ -9,12 +9,12 @@ function hent() {
   try {
     const gemt = JSON.parse(localStorage.getItem(NØGLE));
     if (gemt && typeof gemt === 'object') {
-      return { opgaver: gemt.opgaver || {}, opdaget: Array.isArray(gemt.opdaget) ? gemt.opdaget : [] };
+      return { opgaver: gemt.opgaver || {}, opdaget: Array.isArray(gemt.opdaget) ? gemt.opdaget : [], forløb: gemt.forløb || {} };
     }
   } catch {
     // ødelagte data: start forfra
   }
-  return { opgaver: {}, opdaget: [] };
+  return { opgaver: {}, opdaget: [], forløb: {} };
 }
 
 function gem() {
@@ -70,7 +70,7 @@ export function nulstilOpgaver() {
 }
 
 export function nulstilFremgang() {
-  data = { opgaver: {}, opdaget: [] };
+  data = { opgaver: {}, opdaget: [], forløb: {} };
   gem();
   try {
     localStorage.removeItem('atomlabKosmosSet'); // de fænomener, man har set i Kosmos
@@ -78,4 +78,22 @@ export function nulstilFremgang() {
   } catch {
     // ingen lagring
   }
+}
+
+// ---------- Forløb (js/forloeb.js) ----------
+// forløb[id] = { taget, sprunget }: taget = gennemført til "Det så du" (✓ i "Din fremgang"), sprunget = "Spring over".
+// Med ingen af dem starter forløbet af sig selv, når man åbner delen. Tallene er tidspunkter.
+export function forløbTaget(id) {
+  return Boolean(data.forløb[id]?.taget);
+}
+
+export function forløbSprunget(id) {
+  return Boolean(data.forløb[id]?.sprunget);
+}
+
+// hvad: 'taget' eller 'sprunget'
+export function markérForløb(id, hvad) {
+  const f = (data.forløb[id] ??= {});
+  f[hvad] ??= Date.now();
+  gem();
 }

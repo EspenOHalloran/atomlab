@@ -9,7 +9,11 @@ import { ORDBOG } from './data/ordbog.js';
 const ZONER = [
   '.hjælp-indhold', '.forklaring-boks', '.seneste-boks', '.side-del', '.kosmos-forklaring', '.fane',
   '.system-kort', '.system-kategori', '.ærligt', '.ut-tekst', '.pille-mere', '#logListe li', '.hk-tekst', '.hk-nørd', '.liv-tekst', '.liv-ekstra',
+  '.fl-tekst',
 ].join(', ');
+// Et sted med data-ord-kun="proton atomkerne" markerer kun de ord (forløbets linje, js/forloeb.js: trinets egne fagord).
+// Et ord med kunI (fx de helt grundlæggende som proton og elektron) markeres kun i de steder, der passer på vælgeren,
+// så de ikke får prikker i alle tekster.
 // Her markeres aldrig (knapper, overskrifter, citater og fremhævet tekst)
 const ALDRIG = 'button, a, input, textarea, select, label, h1, h2, h3, h4, strong, b, summary, blockquote, .fagord, .ordforklaring, canvas, svg';
 
@@ -39,6 +43,7 @@ let musTimer = null;
 // Markér fagordene i et sted (zone), som ikke allerede er markeret der
 export function markérFagord(zone) {
   const markeret = new Set([...zone.querySelectorAll('.fagord')].map((k) => k.dataset.ord));
+  const kun = zone.dataset.ordKun != null ? zone.dataset.ordKun.split(' ') : null;
   const gå = document.createTreeWalker(zone, NodeFilter.SHOW_TEXT, {
     acceptNode: (n) => (n.nodeValue.trim() && !n.parentElement.closest(ALDRIG) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
   });
@@ -49,7 +54,7 @@ export function markérFagord(zone) {
     let m;
     while ((m = MØNSTER.exec(node.nodeValue))) {
       const o = OPSLAG.get(m[1].toLowerCase().replace(/\s+/g, ' '));
-      if (!o || markeret.has(o.id)) continue;
+      if (!o || markeret.has(o.id) || (kun && !kun.includes(o.id)) || (o.kunI && !zone.matches(o.kunI))) continue;
       markeret.add(o.id);
       // Del teksten: før | ordet (som knap) | efter, og fortsæt i resten
       const ordNode = node.splitText(m.index);

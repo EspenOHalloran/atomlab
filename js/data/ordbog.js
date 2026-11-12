@@ -6,6 +6,33 @@
 // tegning: en lille tegning i Ordbogen (se TEGNINGER i js/ordbog.js).
 
 export const ORDBOG = [
+  // Atomets dele (forløbet "Dit første atom", 12. november 2026). De er så almindelige, at de kun får prikker i forløbets
+  // linje (kunI), ikke i alle tekster. Kilder: docs/drejebog-foerste-atom.md, punkt 6.
+  {
+    id: 'proton', ord: 'Proton', kunI: '.fl-tekst',
+    former: ['proton', 'protonen', 'protoner', 'protonerne'],
+    tekst: 'En lille, plusladet partikel i atomets kerne. Antallet af protoner bestemmer, hvilket grundstof atomet er: 1 er hydrogen, 2 er helium, og 6 er carbon.',
+  },
+  {
+    id: 'neutron', ord: 'Neutron', kunI: '.fl-tekst',
+    former: ['neutron', 'neutronen', 'neutroner', 'neutronerne'],
+    tekst: 'En partikel i atomets kerne uden elektrisk ladning. Den vejer næsten det samme som en proton og hjælper med at holde kernen sammen.',
+  },
+  {
+    id: 'elektron', ord: 'Elektron', kunI: '.fl-tekst',
+    former: ['elektron', 'elektronen', 'elektroner', 'elektronerne'],
+    tekst: 'En meget let, minusladet partikel rundt om atomets kerne. Den vejer ca. 1.800 gange mindre end en proton. Plus og minus trækker i hinanden, så kernen holder på elektronerne.',
+  },
+  {
+    id: 'atomkerne', ord: 'Atomkerne', kunI: '.fl-tekst',
+    former: ['atomkerne', 'atomkernen', 'atomkerner', 'atomkernerne', 'kerne', 'kernen', 'kerner', 'kernerne'],
+    tekst: 'Midten af et atom, bygget af protoner og neutroner. Næsten hele atomets vægt sidder i kernen, men den er 10.000 til 100.000 gange mindre end hele atomet.',
+  },
+  {
+    id: 'grundstof', ord: 'Grundstof', kunI: '.fl-tekst',
+    former: ['grundstof', 'grundstoffet', 'grundstoffer', 'grundstofferne'],
+    tekst: 'Et stof, hvor alle atomerne har lige mange protoner, fx hydrogen, oxygen eller guld. Man kender 118 grundstoffer, og alt omkring dig er bygget af dem.',
+  },
   {
     id: 'neutrino', ord: 'Neutrino',
     former: ['neutrino', 'neutrinoen', 'neutrinoer', 'neutrinoerne'],

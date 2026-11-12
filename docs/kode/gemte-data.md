@@ -1,6 +1,6 @@
 # Gemte data (localStorage)
 
-- `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre] }`. Byttebørsens par har id'erne `bytte-nacl`, `bytte-lif`, `bytte-mgo`, `bytte-cacl2` og `bytte-nana` (M1b, `OPGAVER_BYTTE` i `js/data/molekyler.js`). De tæller med i Værkstedet og nulstilles med Værkstedets "Opgaver forfra". Det samme gør opgaverne i "Del elektroner": `byg-h2`, `byg-vand`, `byg-co2`, `byg-metan`, `byg-tripel` og `byg-ethanol` (M2b, `OPGAVER_BYG` i `js/data/molekyler-byg.js`). (`byg-<atomnr>` fra Det periodiske system gemmes ikke.)
+- `atomlabFremgang`: `{ opgaver: { id: tidspunkt }, opdaget: [atomnumre], forløb: { id: { taget, sprunget } } }` (forløb fra 12. november 2026: tidspunkter for, hvornår forløbet blev taget eller sprunget over. Uden nogen af dem starter det af sig selv. "Nulstil al fremgang" sletter dem også). Byttebørsens par har id'erne `bytte-nacl`, `bytte-lif`, `bytte-mgo`, `bytte-cacl2` og `bytte-nana` (M1b, `OPGAVER_BYTTE` i `js/data/molekyler.js`). De tæller med i Værkstedet og nulstilles med Værkstedets "Opgaver forfra". Det samme gør opgaverne i "Del elektroner": `byg-h2`, `byg-vand`, `byg-co2`, `byg-metan`, `byg-tripel` og `byg-ethanol` (M2b, `OPGAVER_BYG` i `js/data/molekyler-byg.js`). (`byg-<atomnr>` fra Det periodiske system gemmes ikke.)
 - `atomlabLyd`: `'til'` eller `'fra'`
 - `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen

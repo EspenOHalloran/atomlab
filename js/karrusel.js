@@ -9,6 +9,9 @@
 import { ROLIG, LAV_KVALITET, centrerVindue, passerTil } from './scene3d.js';
 import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } from './menubaggrund.js';
 import { VERDENER } from './skaerme.js';
+import { forløbTaget } from './fremgang.js';
+import { forløbI } from './data/forloeb/liste.js';
+import { åbnForløb } from './gaa.js';
 
 // Verdenerne i ringens rækkefølge og deres dele står i skærmlisten (js/skaerme.js, 10a, og docs/plan-verdener.md).
 // Biblioteket er et opslagsværk og står sidst.
@@ -510,6 +513,25 @@ function visDinFremgang() {
       tal.textContent = `${færdig ? '✓ ' : ''}${f.løst} af ${f.ialt} ${ENHED[f.slags]}`;
       linje.append(ikon, navn, spor, tal);
       liste.append(linje);
+      // Delens forløb (js/forloeb.js) med ✓, når det er taget. Et tryk starter det.
+      for (const f of forløbI(id)) {
+        const taget = forløbTaget(f.id);
+        const fl = document.createElement('li');
+        fl.className = 'fremgang-forløb';
+        fl.classList.toggle('færdig', taget);
+        fl.dataset.forloeb = f.id;
+        const knap = document.createElement('button');
+        knap.innerHTML = '<span class="ff-mærke"></span><span class="ff-navn"></span><span class="ff-tal"></span>';
+        knap.querySelector('.ff-mærke').textContent = taget ? '✓' : '▶';
+        knap.querySelector('.ff-navn').textContent = `Forløb: ${f.titel}`;
+        knap.querySelector('.ff-tal').textContent = taget ? 'taget' : 'ikke taget endnu';
+        knap.addEventListener('click', () => {
+          document.getElementById('dinFremgang').classList.add('skjult');
+          åbnForløb(f.del, f.id);
+        });
+        fl.append(knap);
+        liste.append(fl);
+      }
     }
   });
   document.getElementById('fremgangIalt').textContent = `I alt ${løste} af ${opgaver} opgaver klaret ★`;
