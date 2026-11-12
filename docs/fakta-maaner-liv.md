@@ -1,6 +1,6 @@
 # Faktagrundlag: Månerne med mulige betingelser for liv (Europa, Enceladus og Titan)
 
-*Emne 2 i [prompt-faktagrundlag.md](prompt-faktagrundlag.md). Lavet 12. november 2026 af Opus (effort høj), spor Småting. Kun dokumenter, ingen kode eller tekster til programmet endnu. Før en tekst kommer med, skal den stadig gennem `/faktatjek` mod denne fil.*
+*Emne 2 i [prompt-faktagrundlag.md](prompt-faktagrundlag.md). Lavet 12. november 2026 af Opus (effort høj), spor Småting. Kun dokumenter, ingen kode eller tekster til programmet endnu. Før en tekst kommer med, skal den stadig gennem `/faktatjek` mod denne fil. Tjekket af Fable 5.2 12. november 2026 ([E5-liv.md](fable/E5-liv.md)). Opus' vurdering af fundene står i [E5-noter.md](fable/E5-noter.md), og rettelserne står ved påstandene ("Fable E5").*
 
 **Sikkerhed:** **S** = sikker (åbnet i en primær eller officiel kilde), **RS** = ret sikker (en god sekundær kilde, fx Wikipedia med henvisning, eller kun to kilder, der er enige), **U** = usikker (kun et søgeresultat, kilderne er uenige, eller det er ikke slået op). "Åbnet" betyder, at jeg selv har læst teksten i kilden i dag.
 
@@ -22,6 +22,8 @@
 2. "… Liv har brug for vand, energi og de rigtige stoffer. Vi har målt dem på Enceladus, gættet dem på Europa, og på Titan er det hele lavet af metan i stedet for vand."
 3. "… Kun på Titan er der landet en sonde. Den så sten af is i et tørt flodleje."
 
+**Jeres valg 12. november 2026 (efter Fables E5):** Forslag 1 med en ny slutning: "… så vi har kunnet smage på det og fundet næsten alt, liv har brug for, men ingen har endnu kunnet se efter, om der er liv." Cassini kunne ikke se liv, så "men ikke liv" lød, som om nogen havde ledt.
+
 Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* og evt. *biospor* er). Titan og Huygens bliver så et næste trin eller et lag ("Land med Huygens").
 
 ---
@@ -42,7 +44,7 @@ Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* 
 | De seks grundstoffer (CHNOPS) | NASA: Forskerne "believe Europa has … the right chemical elements … including carbon, hydrogen, nitrogen, oxygen, phosphorus, and sulfur" | NASA "Europa Facts" (åbnet) | **tro, ikke måling.** C, H og O er set (vand og CO₂), svovlforbindelser nok på overfladen, N og P er ikke målt | S (at det er en tro) |
 | Overfladen er dødelig | "Europa's surface is blasted by radiation from Jupiter. That's a bad thing for life on the surface – it couldn't survive. But the radiation may create fuel for life in an ocean below" | NASA "Europa Facts" (åbnet) | målt (strålingen), resten er en mulighed | S |
 | Strålingsdosis | Wikipedia: ca. 5,4 Sv pr. døgn. Kilden er noter til et kursus fra 2000 | Wikipedia "Europa (moon)" | – | **U**. Brug ikke tallet. Skriv "dødelig for et menneske på kort tid" |
-| Fontæner | Hubble 2013-2017 og Galileo-data (Jia m.fl. 2018): "tentative". Webb så ingen i 2023 | del5b (åbnet) | usikkert | S (at det er usikkert) |
+| Fontæner | Hubble 2013-2017 og Galileo-data (Jia m.fl. 2018): "tentative". Webb så ingen i 2023 | del5b (åbnet) | usikkert | S (at det er usikkert) **Fable E5 (12. nov. 2026):** **Forældet:** Roth m.fl. 2026 (A&A 709:A59, arXiv:2604.20324, 5. maj 2026) fandt ingen vanddamp i nogen af Hubble-billederne, heller ikke det, der før blev set som bevis. Tilbage er to indirekte spor (Sparks 2016-17 og Jia 2018). Ingen ved, om Europa har fontæner. |
 | Alder | Havet kan have været der i ca. 4 milliarder år | NASA "Europa Facts" (åbnet) | gættet | RS |
 | Liv | Ikke fundet. "One of the most promising places in the solar system to look for life" | NASA (åbnet) | – | S |
 
@@ -60,7 +62,7 @@ Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* 
 |---|---|---|---|---|
 | Størrelse | Ca. 504 km i diameter (radius 252 km) | del1, Wikipedia (Park m.fl. 2024: 252,04 km) | målt | S |
 | Fontænerne | Over 100 gejsere (Porco 2014: 101) langs fire "tigerstriber" ved sydpolen. Opdaget i 2005 | del1 | målt | S |
-| Hvor meget der sprøjter ud | Ca. 200 kg i sekundet | Wikipedia "Enceladus" (henviser kun til Czechowski 2014, en artikel om månens udvikling, ikke til målingen) | målt, men tallet svinger | U. Find målingen (UVIS, Hansen m.fl.), før tallet skrives |
+| Hvor meget der sprøjter ud | Ca. 200 kg i sekundet | Wikipedia "Enceladus" (henviser kun til Czechowski 2014, en artikel om månens udvikling, ikke til målingen) | målt, men tallet svinger | U. Find målingen (UVIS, Hansen m.fl.), før tallet skrives **Fable E5 (12. nov. 2026):** Hansen m.fl. 2006 og senere (efter hukommelsen): ca. 150-300 kg vanddamp i sekundet. Skriv "et par hundrede kg vand i sekundet". |
 | Havet er globalt | Månen vugger for meget til, at isen kan sidde fast på stenkernen | Thomas m.fl. 2016, *Icarus* 264:37-47 (fakta-liv/rummet.md) | **målt, indirekte** | S |
 | Isen og havet | Isen ca. 20 km, under 5 km ved sydpolen. Havet ca. 25-45 km dybt | del1 (Čadek 2016, Thomas 2016) | skøn ud fra tyngde og vuggen | RS |
 | Varmt vand ved havbunden | Små korn af kiselsyre i E-ringen. De kan kun dannes i vand på mindst ca. 90 °C | Hsu m.fl. 2015, *Nature* 519:207-210 (del1) | målt (kornene), varmen er regnet | S |
@@ -68,7 +70,7 @@ Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* 
 | Store organiske molekyler | "macromolecular organic material with molecular masses above 200 u" | Postberg m.fl. 2018, *Nature* 558:564-568 | målt | S |
 | Fosfat | Mindst 100 gange mere fosfor i havet end i Jordens have (skøn ud fra korn i E-ringen) | Postberg m.fl. 2023, *Nature* 618:489-493 | målt (kornene), mængden i havet er et skøn | S |
 | CHNOPS | Fem af seks er fundet. Svovl kun "tentative" | Peter m.fl. 2023, *Nature Astronomy* (fakta-liv/rummet.md) | målt | S |
-| Havets surhed (pH) | Én model: pH 11-12 (meget basisk, som sæbevand), fordi vand reagerer med sten (serpentinisering) og laver brint | Glein, Baross m.fl. 2015, *Geochimica et Cosmochimica Acta* 162:202 (via Wikipedia) | **model**. Andre modeller giver andre tal (ikke slået op) | U |
+| Havets surhed (pH) | Én model: pH 11-12 (meget basisk, som sæbevand), fordi vand reagerer med sten (serpentinisering) og laver brint | Glein, Baross m.fl. 2015, *Geochimica et Cosmochimica Acta* 162:202 (via Wikipedia) | **model**. Andre modeller giver andre tal (ikke slået op) | U **Fable E5 (12. nov. 2026):** Nyere skøn spænder fra ca. 8 til 12. Skriv "basisk" uden tal. |
 | Nyt i 2026 | Saltet i iskornene er sorteret i mindst fem slags korn | *Science Advances*, september 2026 (kun søgeresultat) | målt (gamle Cassini-data) | U |
 | Brinten kan være ændret | Et resumé fra EGU 2026 mener, at stoffet i fontænerne kan være ændret på vejen ud | EGU26-abstract (kun søgeresultat) | – | U |
 | Liv | Ikke fundet | – | – | S |
@@ -116,7 +118,7 @@ Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* 
 | Ud af disen | Ca. 30 km over jorden, halvt så højt som ventet (50-70 km) | samme | S |
 | Lampen | Tændt 700 m over jorden, ikke for at lyse op, men for at måle farven på jorden | samme | S |
 | Vinden | Vinden blæser samme vej, som Titan drejer, men hurtigere (superrotation). Næsten vindstille i 60-100 km. Kun ca. 1 m/s de nederste 5 km | Bird m.fl. 2005, *Nature* 438:800 (abstract åbnet) | S |
-| Landingen | Ca. 12:43 UTC (i rumsondens tid). Faret som at tabe en bold fra ca. 1 m på Jorden. Lavede et hul på 12 cm, hoppede, gled 30-40 cm og vippede frem og tilbage | Wikipedia "Huygens (spacecraft)" efter NASA/JPL 2012 "Bounce, Skid, Wobble" (jpl.nasa.gov er lukket) | RS |
+| Landingen | Ca. 12:43 UTC (i rumsondens tid). Faret som at tabe en bold fra ca. 1 m på Jorden. Lavede et hul på 12 cm, hoppede, gled 30-40 cm og vippede frem og tilbage | Wikipedia "Huygens (spacecraft)" efter NASA/JPL 2012 "Bounce, Skid, Wobble" (jpl.nasa.gov er lukket) | RS **Fable E5 (12. nov. 2026):** **Forkert mærket:** 12:43 er, da signalet nåede Jorden. Ved Titan var klokken ca. 11:38 UTC (ESA, sci.esa.int 36280: start 09:06, landing "around 11:30"). Skriv "ca. kl. 11.38 UTC ved Titan" eller bare datoen. |
 | Stedet | 10,573° S, 192,335° V, tæt på Adiri. Landingsstedet hedder "Hubert Curien Memorial Station" | Wikipedia (Kazeminejad m.fl. 2011), ESA's side linker til navnet | RS |
 | Jorden | "a relatively soft solid surface whose properties are analogous to wet clay, lightly packed snow and wet or dry sand" | Zarnecki m.fl. 2005, *Nature* 438:792 (abstract åbnet) | S |
 | Stenene | "Initially thought to be rocks or ice blocks, they are more pebble-sized." De to midt i billedet er ca. **15 cm og 4 cm**, ca. 85 cm fra Huygens. Is af vand og kulbrinter. Ingen sten over 15 cm, få under 5 cm | ESA (sci.esa.int 36379, åbnet), Wikipedia efter Tomasko 2005 | S |

@@ -103,7 +103,7 @@ export const SIDER = {
       },
       {
         titel: 'Hvad fandt Cassini i fontænerne?',
-        tekst: '<p>Rumsonden Cassini fløj gennem fontænerne og fandt salt, organiske stoffer og fosfat. Det tyder på, at havet under isen har noget af det, liv har brug for. Liv har man ikke fundet.</p>',
+        tekst: '<p>Rumsonden Cassini fløj gennem fontænerne og fandt salt, brint og organiske stoffer. I iskorn fra fontænerne er der også fosfat. Det tyder på, at havet under isen har meget af det, liv har brug for. Cassini kunne ikke se, om der er liv, og det har ingen endnu kunnet se efter.</p>',
       },
     ],
     videre: [sted('mimas', 'Mimas'), sted('tethys', 'Tethys')],
