@@ -17,7 +17,7 @@ tjek('ordbogens egne ord står i rækkefølge ("Tunneleffekt" før "Tøris", "Mo
   navne(ORDNE).indexOf('Tunneleffekt') < navne(ORDNE).indexOf('Tøris') && navne(ORDNE).indexOf('Moderator') < navne(ORDNE).indexOf('Mørk energi'));
 tjek('fotonen fra Stjerneovnen er med', navne(ORDNE).includes('Foton'));
 const s1 = navne(søgOrd('neutr'));
-tjek('søgning: ord, hvor navnet passer, kommer først', s1.slice(0, 3).join() === 'Antineutrino,Neutrino,Neutronstjerne', s1.join());
+tjek('søgning: ord, hvor navnet passer, kommer først', s1.slice(0, 4).join() === 'Antineutrino,Neutrino,Neutron,Neutronstjerne', s1.join());
 tjek('søgning: store og små bogstaver er lige gode', navne(søgOrd('KVARK'))[0] === 'Kvark');
 tjek('søgning: bøjninger findes ("fotonerne" → Foton)', navne(søgOrd('fotonerne'))[0] === 'Foton');
 tjek('søgning: et ord, der ikke findes, giver ingenting', søgOrd('zzqx').length === 0);
@@ -84,7 +84,7 @@ tjek('ingen ordforklaringer (prikkede ord) inde i Ordbogen', (await T(() => docu
 // Søgning med tastaturet, ingen resultater og Esc
 await page.keyboard.type('neutr');
 const søgt = await T(() => ({ h: [...document.querySelectorAll('#ordbogListe h3')].map((h) => h.textContent), antal: document.getElementById('ordbogAntal').textContent }));
-tjek(`søgning "neutr" viser ${søgt.h.length} ord med Antineutrino, Neutrino og Neutronstjerne først (${søgt.antal})`, søgt.h.slice(0, 3).join() === 'Antineutrino,Neutrino,Neutronstjerne' && søgt.antal.startsWith(`${søgt.h.length} af`), søgt.h.join());
+tjek(`søgning "neutr" viser ${søgt.h.length} ord med Antineutrino, Neutrino, Neutron og Neutronstjerne først (${søgt.antal})`, søgt.h.slice(0, 4).join() === 'Antineutrino,Neutrino,Neutron,Neutronstjerne' && søgt.antal.startsWith(`${søgt.h.length} af`), søgt.h.join());
 await page.fill('#ordbogSøg', 'zzqx');
 tjek('ingen resultater: "Ingen fagord passer"', (await page.isVisible('#ordbogIngen')) && (await T(() => document.querySelectorAll('#ordbogListe li').length)) === 0);
 await page.focus('#ordbogSøg');
