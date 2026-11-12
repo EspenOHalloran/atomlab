@@ -2,6 +2,8 @@
 
 *Skrevet 12. november 2026 af sessionen, der lavede faktagrundlaget ([fakta-gaader.md](fakta-gaader.md)). Gåderne er nr. 2 under "Nyt indhold" i [køreplanen](koereplan.md) og **må først starte, når Forløb-klodsen findes** (Serie 1, punkt 1). Ny session med Opus, effort høj. Kopiér teksten nedenfor.*
 
+**Trin 0 er lavet 12. november 2026:** [plan-gaader.md](plan-gaader.md). Prompten til G1 står nederst i planen.
+
 ---
 
 Du planlægger Gåderne i en tynd udgave i AtomLab: fem kort i Biblioteket (liv andre steder, det indre af et sort hul, stof og antistof, livets begyndelse og mørkt stof), hvert med tre spørgsmål: Hvad ved vi? Hvad ved vi ikke? Hvordan finder vi ud af det?

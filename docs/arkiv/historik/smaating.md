@@ -2,6 +2,8 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/smaating.md](../../lige-nu/smaating.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (12. november 2026): Citatet `tycho` på latin.** `original` i `js/data/citater.js` er nu Tychos latin fra *De nova stella*, læst på sidebilledet i faksimilen 1901 (side A, archive.org-billede n36), og `oversat` er fjernet (tooltip'en sagde "Engelsk oversættelse"). Den danske `tekst` er vores egen oversættelse og har nu både "enten" og "eller" (Solen, der stod stille for Josva). Kommentaren forklarer Josva i én sætning. Ny fælde i `docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md`.
+
 **Senest lavet (12. november 2026): 10a, skærmlisten og hentning efter behov** ([plan](../arkiv/plan-skaermliste.md), jeres go: "go med dine anbefalinger", ingen gennemlæsning af Fable, Liv har status "prøve").
 - `js/skaerme.js`: listen over delene (id, verden, titel, modul, status) og verdenerne. Hver skærm hentes med `import()` og bygges første gang, den åbnes. "Henter Kosmos …" efter 1 sekund, og en hentning, der fejler, beder om at genindlæse siden (browseren husker en mislykket `import()`).
 - Det, menuen bruger, står i `js/data/opgaver.js` og `js/data/faenomener.js`. Fem ting virkede kun, fordi alt blev bygget ved start, og er rettet: knapperne med `data-gaa` (nu `js/gaa.js`, også `system:55`), "Mere i Ordbogen ›", hoppet System → Værksted, det gemte fra Kosmos og panelerne, der kan rulles.
