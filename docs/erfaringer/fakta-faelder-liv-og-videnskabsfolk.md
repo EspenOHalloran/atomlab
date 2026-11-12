@@ -25,6 +25,7 @@
 - "Einstein skrev E = mc² i 1905." Han skrev, at massen bliver L/V² mindre (Annalen der Physik 18, s. 641).
 - "Bogen er fri, så billedet af siden er frit." Ikke i Danmark: Et foto eller en skanning har sin egen ret i 50 år (ophavsretslovens § 70). Undtagelsen i § 70 stk. 4 gælder kun billedkunst, ikke tekstsider. Brug gamle faksimiler eller skanninger, som biblioteket selv har frigivet. En ny oversættelse har også sine egne rettigheder.
 - Et citat i `citater.js`, hvor `original` står på engelsk, kan være en oversættelse (Tycho). Tjek, at `original` er på originalsproget.
+- Forkort ikke et citat midt i "enten … eller": Den gamle danske tekst til `tycho` sluttede efter "enten det største" uden "eller", så meningen blev skæv. Læs hele sætningen i bogen, før der skæres (rettet 12. november 2026).
 - Samme Wikipedia-artikel kan give to årstal (Niels Bohr Institutet: "opened in 1920" i indledningen, 3. marts 1921 længere nede). Læs hele artiklen.
 *Månerne med mulige betingelser for liv (12. november 2026). Kilderne står i [fakta-maaner-liv.md](../fakta-maaner-liv.md).*
 - "Europa har alle seks byggesten for liv (CHNOPS)." NASA skriver "believe". Målt er vand, salt og CO₂. Nitrogen og fosfor er ikke målt på Europa. Og at CO₂ kommer fra havet, er sandsynligt, ikke sikkert (Trumbo og Brown 2023: "we cannot rule out formation on the surface").

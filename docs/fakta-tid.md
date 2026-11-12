@@ -41,6 +41,7 @@
 | Mål | Afstand | Kilde |
 |---|---|---|
 | Alpha Centauri A og B | **ca. 4,3 lysår** (4,344 lysår). Proxima Centauri, den lille tredje stjerne, er ca. 4,25 lysår væk og er den nærmeste stjerne. | Wikipedia "Alpha Centauri": parallakse 750,81 mas (Akeson m.fl. 2021, ApJ). 1/0,75081 = 1,3319 pc = 4,344 lysår. Wikipedia "Proxima Centauri": 4,2465 lysår (Gaia DR3). |
+| TRAPPIST-1 (12. november 2026) | **ca. 41 lysår** (40,66 ± 0,04 lysår). En lille, rød stjerne (en rød dværg) med syv kendte planeter. | Gaia DR3, slået op direkte i Gaia-arkivet (gea.esac.esa.int) 12. november 2026: source_id 2635476908753563008, parallakse 80,2123 ± 0,0716 mas. 1/0,0802123 = 12,467 pc = 40,66 lysår. Wikipedia "TRAPPIST-1" har samme parallakse (Gaia EDR3) og "seven known exoplanets" (Gillon m.fl. 2017, Nature 542, 456: "Seven temperate terrestrial planets …"). NASA: "about 40 light-years". |
 | Mælkevejens centrum (Sgr A*) | **ca. 27.000 lysår** | GRAVITY 2021 (A&A 647, A59, arXiv:2101.12098): 8.275 pc = 26.989 lysår. Wikipedia "Sagittarius A*" bruger GRAVITY 2023 (A&A 677, L10): 8.277 pc = 26.996 lysår. |
 | Andromedagalaksen | **ca. 2,5 mio. lysår** | Wikipedia "Andromeda Galaxy": 765 kpc (Riess m.fl. 2012, ApJ 745, 156), "around 2.5 million light-years". Den nærmer sig Mælkevejen med ca. 110 km/s. Det flytter den kun ca. 900 lysår på 2,5 mio. år, så det kan vi se bort fra. |
 
@@ -57,6 +58,10 @@
 | | 99,99 % | 8,7 år | 45 dage | 0,061 lysår |
 | | 99,999 % | 8,7 år | 14 dage | 0,019 lysår |
 | | 99,9999 % | 8,7 år | 4,5 dage | 0,0061 lysår |
+| | 50 % | 17,4 år | 15,0 år | 3,8 lysår |
+| TRAPPIST-1 | 99 % | 82,1 år | 11,6 år | 5,7 lysår |
+| | 99,99 % | 81,3 år | 1,15 år (420 dage) | 0,58 lysår |
+| | 50 % | 162,6 år | 140,9 år (for længe til at leve) | 35 lysår |
 | Mælkevejens centrum | 99 % | 54.500 år | 7.700 år | 3.800 lysår |
 | | 99,9999 % | 54.000 år | 76 år | 38 lysår |
 | | 12 ni-taller | 54.000 år | 28 dage | 0,038 lysår |
@@ -64,6 +69,8 @@
 | | 12 ni-taller | 5,0 mio. år | 7,1 år | 3,5 lysår |
 
 - Én vej til Alpha Centauri ved 99,99 %: ca. 22 dage i skibet og ca. 4,3 år på Jorden. Planen skrev 23 dage og 4,4 år (med det gamle tal 4,37 lysår).
+- **TRAPPIST-1 ved 99,99 % (den første rejse, 12. november 2026):** Du er 14 år og 55 dage, og tvillingen er 94 (13 + 81,3). Én vej: 210 dage i skibet og 41 år på Jorden, og et lysglimt kommer 1,5 dage før dig. Med 1 g: 14,6 år i skibet og 85,1 år på Jorden (27 og 98 år), største fart 99 %.
+- **50 % (halv lysfart):** γ = 1,155. Til Alpha Centauri er du 28 og tvillingen 30 (Fables trin A3).
 - Over ca. 99 % er tiden på Jorden næsten bare afstanden i lysår (gange 2 for ud og hjem). Det er kun tiden i skibet, der falder.
 
 ## 6. "1 g hele vejen" (speed op med 1 g til midtvejs, brems med 1 g resten)

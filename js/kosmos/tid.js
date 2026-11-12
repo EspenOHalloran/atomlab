@@ -1,5 +1,5 @@
-// Rejsen i tid (tvillingerejsen, T1-T3 i docs/plan-tid.md): Du flyver til Alpha Centauri, Mælkevejens centrum eller
-// Andromedagalaksen og hjem igen næsten med lysets fart, mens din tvilling bliver hjemme. To ure i et HTML-lag oven på
+// Rejsen i tid (tvillingerejsen, T1-T3 i docs/plan-tid.md): Du flyver til Alpha Centauri, TRAPPIST-1, Mælkevejens
+// centrum eller Andromedagalaksen og hjem igen næsten med lysets fart, mens din tvilling bliver hjemme. To ure i et HTML-lag oven på
 // 3D-billedet viser "Dit ur" og "Jordens ur". Regningen står i js/data/tid.js (testes i Node), og tallene i docs/fakta-tid.md.
 //
 // To måder at flyve på: Skyderen "Fart" giver fast fart (vi springer over, hvordan man kommer op i fart, se "Ærligt
@@ -50,12 +50,13 @@ export default {
   kamera: { retning: [0, 0.3, 1], radius: 14.5, drej: false },
   tal: [
     ['Alpha Centauri', 'ca. 4,3 lysår væk'],
+    ['TRAPPIST-1', 'ca. 41 lysår væk'],
     ['Andromedagalaksen', 'ca. 2,5 mio. lysår væk'],
     ['Med 1 g til Andromeda', 'ca. 29 år i skibet (én vej)'],
     ['Teorien', 'Einstein, 1905'],
   ],
   side: {
-    kort: 'Kan man rejse ind i fremtiden? Ja, hvis man flyver næsten med lysets fart. Set fra Jorden går alle ure i skibet langsommere. Det kaldes tidsforlængelse. Flyv til Alpha Centauri, Mælkevejens centrum eller Andromeda og hjem, og se, hvor meget tid der er gået på Jorden.',
+    kort: 'Kan man rejse ind i fremtiden? Ja, hvis man flyver næsten med lysets fart. Set fra Jorden går alle ure i skibet langsommere. Det kaldes tidsforlængelse. Flyv til TRAPPIST-1 (en lille, rød stjerne med syv planeter) eller et andet mål og hjem, og se, hvor meget tid der er gået på Jorden.',
     // T3: teksterne er tjekket mod docs/fakta-tid.md (afsnittet står ved hvert emne) og regnet efter med regn.py
     emner: [
       {
@@ -75,7 +76,7 @@ export default {
       {
         // Afsnit 2 og 4
         titel: 'Hvad gør farten?', hvorfor: ['lysfart'],
-        tekst: `<p>Ved 90 % af lysets fart går der ca. 2,3 dage på Jorden for hver dag i skibet. Ved 99,99 % er det ca. 71 dage, og ved 99,9999 % ca. 707 dage, næsten 2 år. Hvert ekstra 9-tal gør forskellen ca. 3 gange større.</p>
+        tekst: `<p>Ved halv lysfart (50 %) går der kun ca. 1,15 dage på Jorden for hver dag i skibet, og ved 90 % ca. 2,3 dage. Ved 99,99 % er det ca. 71 dage, og ved 99,9999 % ca. 707 dage, næsten 2 år. Hvert ekstra 9-tal gør forskellen ca. 3 gange større.</p>
           <p>Alpha Centauri er ca. 4,3 lysår væk. Et lysår er den vej, lyset når på et år. Set fra Jorden tager turen ud og hjem derfor altid mindst ca. 8,7 år, for skibet kan ikke flyve hurtigere end lyset. Det, der bliver kortere og kortere, er tiden på dit ur. ${tidKnap('hurtig', 'Prøv ⏩')}</p>`,
       },
       {
@@ -150,6 +151,32 @@ export default {
     alphaB.position.set(1.4, -0.45, 0.7);
     alpha.add(alphaA, alphaB);
 
+    // TRAPPIST-1: en lille, rød stjerne (en rød dværg) med syv planeter, der kredser tæt om den. Ikke i skala: Planeterne
+    // er tegnet meget større og længere ude. Den relative fart følger omløbstiderne (1,5-19 døgn står i Wikipedia
+    // "TRAPPIST-1", de enkelte tal er efter hukommelsen og bruges kun til farten), men alle går langt hurtigere på skærmen.
+    const trappist = new THREE.Group();
+    const trappistStjerne = stjerne(0.55, '#ffb070', '#b8300c', new THREE.Color(1.9, 0.7, 0.3), 2.4);
+    trappist.add(trappistStjerne);
+    const OMLØB = [1.51, 2.42, 4.05, 6.10, 9.21, 12.35, 18.77]; // b-h, døgn
+    const planetMat = new THREE.MeshStandardMaterial({ color: 0xb89a84, roughness: 0.9 });
+    const planeter = OMLØB.map((p, i) => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 8), planetMat);
+      m.userData = { r: 0.85 + i * 0.2, fart: 3 / p, v: i * 2.4 };
+      trappist.add(m);
+      return m;
+    });
+    const planetLys = new THREE.PointLight(0xff9a60, 3, 0, 1.2);
+    trappist.add(planetLys);
+    trappist.rotation.set(0.35, 0, 0.12); // banerne set lidt fra oven
+    function drejPlaneter(dt) {
+      for (const m of planeter) {
+        const u = m.userData;
+        u.v += dt * u.fart;
+        m.position.set(Math.cos(u.v) * u.r, 0, Math.sin(u.v) * u.r);
+      }
+    }
+    drejPlaneter(0);
+
     // Mælkevejens centrum: en tæt, gullig bule af stjerner med et lyst midtpunkt (det sorte hul Sgr A* kan ikke ses)
     const centrum = new THREE.Group();
     const NB = Math.round(2600 * KVALITET);
@@ -183,7 +210,7 @@ export default {
     andromeda.add(skive, andKerne);
     andromeda.rotation.set(1.15, 0.4, 0.25); // skråt set, som på billederne fra Jorden
 
-    const målGrupper = { alpha, centrum, andromeda };
+    const målGrupper = { alpha, trappist, centrum, andromeda };
     for (const g of Object.values(målGrupper)) gruppe.add(g);
 
     const navnJord = skilt('Jorden', '#cfe0ff', 1.25);
@@ -249,7 +276,7 @@ export default {
 
     // ---------- Tilstanden ----------
     let ni = START_NI; // antallet af 9-taller på skyderen
-    let målNr = 0; // skyderen "Mål" (T.MÅL_RÆKKE)
+    let målNr = T.MÅL_RÆKKE.indexOf(T.START_MÅL); // målets kontakt (T.MÅL_RÆKKE), TRAPPIST-1 først
     let enG = false; // kontakten "1 g hele vejen"
     let fraSkib = false; // kontakten "Set fra skibet"
     let tilstand = 'hjemme'; // 'hjemme' (før afgang), 'ud', 'hjem' eller 'færdig'
@@ -363,6 +390,7 @@ export default {
       if (faseNr === 0) fase(null);
       else if (faseNr === 1) {
         if (enG) fase('Afgang', 'Du speeder op med 1 g. Det føles, som når du står på Jorden. Midtvejs vender skibet om og bremser resten af vejen.', [1, 4]);
+        else if (ni === 0) fase('Afgang', 'Du flyver med halv lysfart. Se urene: Jordens ur går kun lidt hurtigere end dit. Om bord mærker du intet.', [1, 4]);
         else fase('Afgang', `Du flyver med ${T.fartTekst(ni)} af lysets fart. Se urene: Jordens ur løber fra dit. Om bord mærker du intet.`, [1, 4]);
       } else if (faseNr === 2) fase(`Ude ved ${m.ved}`, `For dig har turen taget ${T.varighed(ved.skibÅr)}. På Jorden er der gået ${T.varighed(ved.jordÅr)}. Nu vender du om.`, [2, 4]);
       else if (faseNr === 3) {
@@ -386,7 +414,8 @@ export default {
       const tæt = (fra, mindst) => Math.max(fra * klem, Math.min(fra, mindst));
       const k = T.MÅL_RÆKKE[målNr];
       const jx = sx - tæt(sx - JORD_X, 3.2);
-      const mx = sx + tæt(MÅL_X - sx, k === 'alpha' ? 3.2 : 4.2); // en galakse er bredere end to stjerner
+      const stjerner = k === 'alpha' || k === 'trappist';
+      const mx = sx + tæt(MÅL_X - sx, stjerner ? 3.2 : 4.2); // en galakse er bredere end stjernerne
       jorden.klode.position.x = jx;
       navnJord.position.set(jx, 2.6, 0);
       målGrupper[k].position.set(mx, 0, 0);
@@ -637,7 +666,7 @@ export default {
       else { visMål(); stilScene(); visFase(); visLigeNu(); }
     }
     const flyvKnap = { get tekst() { return `🚀 Flyv til ${mål().kort}`; }, handling: flyv, deaktiv: flyver, skjul: () => lysurVist };
-    // Målene er tre kontakter, hvor præcis én er tændt (jeres ønske 8. november 2026: målet skal ikke vælges med en
+    // Målene er fire kontakter, hvor præcis én er tændt (jeres ønske 8. november 2026: målet skal ikke vælges med en
     // skyder). Et tryk på det mål, der allerede er valgt, slukker det ikke.
     const målKontakter = T.MÅL_RÆKKE.map((k, i) => ({
       tekst: `🎯 ${T.MÅL[k].kort}`, til: i === målNr,
@@ -690,6 +719,7 @@ export default {
       opdater(dt) {
         jorden.omdrejning.rotation.y += dt * 0.12;
         centrum.rotation.y += dt * 0.04;
+        if (trappist.visible) drejPlaneter(dt);
         skive.rotation.y += dt * 0.03;
         if (lysurVist) {
           opdaterLysur(dt * (hurtig ? 3 : 1)); // ⏩ går 3 gange hurtigere her, så man stadig kan følge lyset

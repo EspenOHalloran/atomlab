@@ -2,6 +2,7 @@
 // Tallene og kilderne står i docs/fakta-tid.md (afsnit 2, 4, 5, 6, 7 og 13), og udregningerne i docs/fakta-tid/regn.py.
 //
 // Farten gives som antallet af 9-taller n: 90 % (n = 1), 99 % (n = 2) … 99,9999 % (n = 6). Så er 1 − v/c = ε = 10⁻ⁿ,
+// og trinnet n = 0 er halv lysfart, 50 % (ε = 0,5, Fables drejebog E4 trin A3: "det sker først tæt på lysets fart"),
 // og gammafaktoren regnes som γ = 1/√(ε(2 − ε)). Det er det samme som 1/√(1 − v²/c²), men med 14 ni-taller (T2) ville
 // v/c = 0,99999999999999 give for store afrundingsfejl i 1 − v², og ved 16 ni-taller bliver det 1 i computeren.
 
@@ -10,20 +11,24 @@ export const START_ALDER = 13; // du og din tvilling er begge 13 år ved afgang 
 export const TVILLING_GRÆNSE = 100; // op til ca. 100 år står tvillingens alder (jeres svar 3)
 
 // Målene (fakta-tid.md, afsnit 4, de samme tal som i regn.py). Alpha Centauri: parallaksen 750,81 mas giver
-// 1,3319 pc = 4,344 lysår. Mælkevejens centrum (Sgr A*): 8,277 kpc = 26.996 lysår (GRAVITY 2023). Andromeda: ca. 2,5 mio.
+// 1,3319 pc = 4,344 lysår. TRAPPIST-1 (en lille, rød stjerne med syv kendte planeter): Gaia DR3 (source_id
+// 2635476908753563008, slået op i Gaia-arkivet 12. november 2026) har parallaksen 80,2123 ± 0,0716 mas, som giver
+// 12,467 pc = 40,66 ± 0,04 lysår. Ved 99,99 % er tvillingen 94, når du lander (E4, trin A1). Mælkevejens centrum (Sgr A*): 8,277 kpc = 26.996 lysår (GRAVITY 2023). Andromeda: ca. 2,5 mio.
 // lysår (765 kpc). kort står på knappen og skyderen, afstand i scenen og ved i "Ude ved …".
 export const MÅL = {
   alpha: { navn: 'Alpha Centauri', kort: 'Alpha Centauri', ved: 'Alpha Centauri', lysår: 4.344, afstand: 'ca. 4,3 lysår' },
+  trappist: { navn: 'TRAPPIST-1', kort: 'TRAPPIST-1', ved: 'TRAPPIST-1', lysår: 40.66, afstand: 'ca. 41 lysår' },
   centrum: { navn: 'Mælkevejens centrum', kort: 'Mælkevejens centrum', ved: 'Mælkevejens centrum', lysår: 26996, afstand: 'ca. 27.000 lysår' },
   andromeda: { navn: 'Andromedagalaksen', kort: 'Andromeda', ved: 'Andromedagalaksen', lysår: 2.5e6, afstand: 'ca. 2,5 mio. lysår' },
 };
-export const MÅL_RÆKKE = ['alpha', 'centrum', 'andromeda']; // rækkefølgen på skyderen "Mål"
+export const MÅL_RÆKKE = ['alpha', 'trappist', 'centrum', 'andromeda']; // rækkefølgen på kontakterne (efter afstand)
+export const START_MÅL = 'trappist'; // den første rejse (jeres svar 12. november 2026, E4-noter)
 
-// Skyderen: fra 90 % (1 ni-tal) til 14 ni-taller (γ ≈ 7,1 mio., jeres svar 4)
-export const MINDST_NI = 1;
+// Skyderen: fra 50 % (trin 0) og 90 % (1 ni-tal) til 14 ni-taller (γ ≈ 7,1 mio., jeres svar 4)
+export const MINDST_NI = 0;
 export const FLEST_NI = 14;
 
-export const epsilon = (n) => 10 ** -n; // 1 − v/c
+export const epsilon = (n) => (n === 0 ? 0.5 : 10 ** -n); // 1 − v/c
 export const fart = (n) => 1 - epsilon(n); // v/c
 export function gamma(n) {
   const e = epsilon(n);
@@ -38,8 +43,8 @@ export function tal(x, decimaler = 0) {
   return (x < 0 ? '−' : '') + medPunktum + (dec ? ',' + dec : '');
 }
 
-// Farten som tekst: n = 4 → "99,99 %". Over 6 ni-taller kan man ikke tælle dem, så der står fx "99,9…9 % (12 ni-taller)".
-export const fartTekst = (n) => (n === 1 ? '90 %' : n === 2 ? '99 %' : n <= 6 ? `99,${'9'.repeat(n - 2)} %` : `99,9…9 % (${n} ni-taller)`);
+// Farten som tekst: n = 0 → "50 %", n = 4 → "99,99 %". Over 6 ni-taller kan man ikke tælle dem, så der står fx "99,9…9 % (12 ni-taller)".
+export const fartTekst = (n) => (n === 0 ? '50 %' : n === 1 ? '90 %' : n === 2 ? '99 %' : n <= 6 ? `99,${'9'.repeat(n - 2)} %` : `99,9…9 % (${n} ni-taller)`);
 
 // γ som tekst med 3-4 betydende cifre (som i tabellen i fakta-tid.md): 2,294, 7,089, 22,37, 70,71, 223,6, 707,1
 export function gammaTekst(g) {
@@ -68,7 +73,7 @@ export function varighed(år) {
   const dage = år * DAGE_PR_ÅR;
   const sek = dage * 86400;
   if (sek < 90) return `${Math.max(1, Math.round(sek))} sekunder`; // 14 ni-taller til Alpha Centauri: ca. 39 sekunder
-  if (sek < 5400) return `${Math.round(sek / 60)} minutter`;
+  if (sek < 3570) return `${Math.round(sek / 60)} minutter`; // fra 59,5 minutter står der "1 time", ikke "60 minutter"
   if (dage < 1) {
     const timer = Math.round(dage * 24);
     return timer === 1 ? '1 time' : `${timer} timer`;
@@ -224,6 +229,13 @@ export function fortiden(jordÅr) {
 // Du er ældre end et menneske kan blive (over ca. 100 år) ved hjemkomsten
 export const forGammel = (skibÅr) => START_ALDER + skibÅr > TVILLING_GRÆNSE;
 
+// Hjemkomstens tider: Fra 10 til 100 år står én decimal, rundet ned som alderen (Fables F10 i E4): 11,59 år er "11,5 år"
+// og ikke "12 år", så "11,5 år" og "Du er 24 år og 215 dage" passer sammen. Ellers som varighed().
+function hjemTid(år) {
+  if (år < 10 || år >= 100) return varighed(år);
+  return `${tal(Math.floor(år * 10 + 1e-9) / 10, 1).replace(/,0$/, '')} år`;
+}
+
 // Teksten ved hjemkomsten (underteksten, under ca. 160 tegn, pointen først). skibÅr og jordÅr er hele rejsen.
 // Over ca. 100 år står årstallet, en sammenligning med fortiden og en kort, rolig linje om tvillingen.
 export function hjemkomst(skibÅr, jordÅr, startÅr) {
@@ -233,7 +245,7 @@ export function hjemkomst(skibÅr, jordÅr, startÅr) {
     return `Turen tog ${varighed(skibÅr)} for dig. Så længe kan ingen leve, så du ville ikke nå hjem. På Jorden er det år ${årstal}.`;
   }
   if (tvilling !== null) {
-    return `Du har været væk i ${varighed(skibÅr)}, men på Jorden er der gået ${varighed(jordÅr)}. Du er ${alderTekst(START_ALDER + skibÅr)}. Din tvilling er ${tvilling}.`;
+    return `Du har været væk i ${hjemTid(skibÅr)}, men på Jorden er der gået ${hjemTid(jordÅr)}. Du er ${alderTekst(START_ALDER + skibÅr)}. Din tvilling er ${tvilling}.`;
   }
   const før = fortiden(jordÅr);
   const mellem = før ? `Der er gået længere tid end siden ${før}.` : `Der er gået ca. ${varighed(jordÅr)}.`;

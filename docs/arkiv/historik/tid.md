@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (12. november 2026): Opus' noter til Fables gennemgang og rettelserne.**
+- [E4-noter.md](../fable/E4-noter.md): Hvad der er tjekket, nyt og kendt, og hvor Opus er uenig. Fables fund holder.
+- **Rettet med `/faktatjek`:** F1-F9, F11 og F12 fra E4 (fx "ingen opdagede det før Einstein", tankeforsøget med ens acceleration og CERN 1977 med ca. 10¹⁸ g, "ca. halvdelen" af myonerne, "Urene på skærmen" i "Ærligt talt", springet i "nu" og "Hvorfor kan et rumskib aldrig nå lysets fart?"). F10 (afrundingen i hjemkomstteksterne) venter til ombygningen.
+- **Tillæg fra en parallel session (samme dag):** Myonernes undertekst følger nu skyderens fart ("ca. halvdelen", "ca. 1 ud af 3" og "ca. 1 ud af 26"), faktagrundlaget om tankeforsøget er rettet, og forslag til trin A3 og skyderens bil står i [E4-noter.md](../fable/E4-noter.md), "Tillæg".
+- **Jeres svar på Fables fem spørgsmål:** to korte forløb ("Rejsen i tid" og "Hvordan kan det ske?"), TRAPPIST-1 som første rejse, scene 4 og "nu"-linjerne under "For nørder" (fødselsdagshilsnerne senere), og **runden med jeres søn venter, til forløbene er bygget.**
+
 **Senest lavet (9. november 2026): T5c, scene 4 og 5. "Hvorfor går tiden langsommere?" er færdig (T5).**
 - **Scene 4, "Nu" er ikke det samme for alle:** lampen midt i togvognen, "Set fra toget" over "Set fra perronen", kontakterne "Toget står stille" og "Toget kører 60 % af lysets fart" og "💡 Blink igen" i bjælken. Ved 60 % er vognen 80 % så lang set fra perronen, og lyset rammer bagenden efter 0,25 og forenden efter 1,0 (L/c), i toget begge efter 0,5. Mærker på perronen viser, hvor lyset ramte (1. og 2.). Når forenden er ramt, skifter underteksten til "Begge har ret: Om to ting sker "samtidig", kommer an på, hvem der kigger."
 - **Scene 5, rumtidskortet:** tid 0-10 år op, rum −5 til 5 lysår, lysets streger, den hjemmeblevnes og den rejsendes streg med en prik for hvert år på eget ur. Et tryk hvor som helst på kortet flytter vendepunktet, og man kan trække (kun kortet tager imod fingeren, `touch-action: none`). Højst 98 % af lysets fart, ellers "Hurtigere end lyset kan man ikke!". 4 lysår ude giver 6 år og 3 lysår 8 år. "▶ Spil rejsen" (stopper selv), "↺ Vendepunkt 4 lysår ude" (grå, når den er der, så bjælken ikke flytter kortet under fingeren) og kontakten "Vis den rejsendes 'nu'" (springet 1,8 → 8,2 år).
