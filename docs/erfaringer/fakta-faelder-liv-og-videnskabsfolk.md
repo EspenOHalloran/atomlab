@@ -37,3 +37,19 @@
 - "Der kan være liv i Titans metansøer" (azotosomerne fra 2015). Beregninger fra 2020 og forsøg fra marts 2026 tyder på, at den slags hinder ikke er stabile. Skriv det som spekulation, hvis det skal med.
 - Wikipedias tal kan have en svag eller forkert kilde: Enceladus' "200 kg i sekundet" henviser til en artikel om månens udvikling, ikke til målingen. Følg henvisningen, før tallet skrives.
 - USGS-kortene vender forskelligt: Enceladus (Schenk 2024) er Positive East, Europa og Titan er Positive West.
+*Fables faktatjek af Liv og månerne (12. november 2026). Kilderne står i [E5-liv.md](../fable/E5-liv.md).*
+- "Et enzym er et protein." Næsten alle. Ribosomets kerne er RNA, så ribosomet er selv et enzym af RNA. Skriv "næsten alle enzymer er proteiner", ellers strider det mod RNA-verdenen.
+- "Ét forkert bogstav giver seglcelleanæmi." Kun hvis man har ændringen fra begge forældre. Har man den fra den ene, er man bærer og bliver normalt ikke syg (genome.gov). Sig det i hovedteksten, ikke kun under "For nørder".
+- "β-kæden i hæmoglobin har 147 aminosyrer" (OpenStax). Ribosomet bygger 147, men den første (M) klippes af, så den færdige kæde har 146 (NCBI NP_000509). Sig, om tallet gælder opskriften eller det færdige protein.
+- "Næsten hver celle har 2 m DNA." Målt i antal har de fleste celler ingen kerne (røde blodlegemer). Skriv "hver celle med en cellekerne".
+- "Et skift, der giver samme aminosyre, gør ingenting." Næsten altid. Men RNA'et kan blive klippet forkert (et kendt tilfælde i HBB, kodon 24). Skriv "næsten altid".
+- "G og T kan ikke holde sammen." De kan, hvis de rykker sig skævt (et "wobble"-par med to hydrogenbindinger). Det er en af de almindeligste kopifejl. Sig forenklingen under "For nørder".
+- "Ribosomet sætter 6-9 aminosyrer på i sekundet hos os." Det er Wikipedias øvre tal. Målt i museceller er det 5,6 (Ingolia m.fl. 2011).
+- "Kroppen har 30 billioner celler." En voksen. Et barn på 10 år har ca. 17 billioner (Hatton m.fl. 2023).
+- "Mennesker og chimpanser er 98,8 % (eller 96 %) ens." Begge tal gælder kun de dele, der kan lægges side om side. De hele abe-genomer (Yoo m.fl. 2025) viser, at 12,5-27,3 % af et abe-genom ikke kan det. Skriv ikke et tal uden at sige, hvad der tælles.
+- "Hubble har set vanddamp fra fontæner på Europa." Forskeren bag (Roth) trak det tilbage i maj 2026: Ingen af billederne viser vanddamp (arXiv:2604.20324). Tilbage er to indirekte spor. Havet er der stadig gode beviser for.
+- "Huygens landede 12:43 UTC i rumsondens tid" (Wikipedia). 12:43 er, da signalet nåede Jorden. Ved Titan var klokken ca. 11:38 UTC (ESA). Tjek altid, om en tid er ved rumsonden eller på Jorden.
+- "En rover kan højst nå trin 3 på CoLD-skalaen." Artiklen (Green m.fl. 2021) giver et eksempel med Perseverance, ikke en regel for alle rovere.
+- "Miller-forsøget gav 22 (eller 23) aminosyrer." Det er to forsøg: 22 i vulkan-udgaven (analyseret 2008) og 23 i forsøget med H₂S fra 1958 (analyseret 2011). Bland dem ikke.
+- "Cassini fandt ikke liv på Enceladus." Den kunne ikke have set det. Skriv "ingen har endnu kunnet se efter liv".
+- "Mutationer gør, at livet udvikler sig." Kun sammen med naturligt udvalg. Og evolution er en kendsgerning: skriv den ikke med "måske".
