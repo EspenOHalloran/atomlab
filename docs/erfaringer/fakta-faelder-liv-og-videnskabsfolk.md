@@ -26,3 +26,13 @@
 - "Bogen er fri, så billedet af siden er frit." Ikke i Danmark: Et foto eller en skanning har sin egen ret i 50 år (ophavsretslovens § 70). Undtagelsen i § 70 stk. 4 gælder kun billedkunst, ikke tekstsider. Brug gamle faksimiler eller skanninger, som biblioteket selv har frigivet. En ny oversættelse har også sine egne rettigheder.
 - Et citat i `citater.js`, hvor `original` står på engelsk, kan være en oversættelse (Tycho). Tjek, at `original` er på originalsproget.
 - Samme Wikipedia-artikel kan give to årstal (Niels Bohr Institutet: "opened in 1920" i indledningen, 3. marts 1921 længere nede). Læs hele artiklen.
+*Månerne med mulige betingelser for liv (12. november 2026). Kilderne står i [fakta-maaner-liv.md](../fakta-maaner-liv.md).*
+- "Europa har alle seks byggesten for liv (CHNOPS)." NASA skriver "believe". Målt er vand, salt og CO₂. Nitrogen og fosfor er ikke målt på Europa. Og at CO₂ kommer fra havet, er sandsynligt, ikke sikkert (Trumbo og Brown 2023: "we cannot rule out formation on the surface").
+- "Europa har varme kilder på havbunden." Ikke målt, og en model fra januar 2026 (Byrne m.fl., Nature Communications) tyder på, at havbunden er stille i dag. Kun Enceladus har spor af varmt vand (Hsu 2015).
+- "Strålingen på Europa er 5,4 Sv om dagen" (Wikipedia). Kilden er kursusnoter fra 2000. Skriv "dødelig for et menneske".
+- "Huygens sendte i 72 minutter fra Titans overflade." ESA siger både 1 t 10 min og 71-72 min, Wikipedia ca. 90 min. Skriv "over en time". Og der kom 350 billeder, ikke de planlagte 700 (Cassini lyttede ikke på kanal A).
+- "Huygens landede i mudder" eller "på crème brûlée". Det var det første gæt. Zarnecki 2005: blød, fast jord som våd ler, let sammenpresset sne eller sand.
+- "Huygens' billeder er frie." ESA bruger sin standardlicens (undervisning er tilladt med credit "ESA/NASA/JPL/University of Arizona"), selvom Commons kalder dem `PD-USGov-NASA`. Tjek licensen hos den, der ejer billedet, ikke kun på Commons.
+- "Der kan være liv i Titans metansøer" (azotosomerne fra 2015). Beregninger fra 2020 og forsøg fra marts 2026 tyder på, at den slags hinder ikke er stabile. Skriv det som spekulation, hvis det skal med.
+- Wikipedias tal kan have en svag eller forkert kilde: Enceladus' "200 kg i sekundet" henviser til en artikel om månens udvikling, ikke til målingen. Følg henvisningen, før tallet skrives.
+- USGS-kortene vender forskelligt: Enceladus (Schenk 2024) er Positive East, Europa og Titan er Positive West.
