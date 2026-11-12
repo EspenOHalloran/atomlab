@@ -1252,6 +1252,13 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .kosmos-valg-ikon { font-size: 15px; }
 }
 
+/* Værkstedets opgave får sin egen række under toplinjen, når der ikke er plads ved siden af fanerne og knapperne
+   (før blev teksten klippet væk på pc, og P, N, E og Tip lå oven i "Elektronsky" på tabletten på langs, 12. november 2026) */
+@media (max-width: 1400px) {
+  #vaerksted .topbjælke { flex-wrap: wrap; row-gap: 6px; }
+  #vaerksted .opgave-pille { order: 4; flex: 1 1 100%; margin: 0; }
+}
+
 /* ---------- Smalle skærme (tablet på højkant og telefoner på højkant) ---------- */
 @media (max-width: 820px) and (orientation: portrait), (max-width: 820px) and (min-height: 501px) {
   .skærm { gap: 8px; padding: 8px; }
@@ -1774,6 +1781,11 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fremgang-linje.færdig { border-color: rgba(255, 212, 59, 0.45); }
 .fremgang-linje.færdig .fremgang-tal { color: var(--gul); font-weight: 700; }
 .fremgang-linje.færdig .fremgang-fyld { background: var(--gul); }
+.fremgang-forløb button { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; min-height: 44px; margin-top: -2px; padding: 4px 10px; border: 0; border-radius: 10px; background: none; color: var(--tekst); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+.fremgang-forløb button:hover { background: rgba(95, 227, 255, 0.08); }
+.fremgang-forløb .ff-mærke { justify-self: center; color: var(--accent); }
+.fremgang-forløb .ff-tal { color: var(--svag); font-size: 13.5px; }
+.fremgang-forløb.færdig .ff-mærke, .fremgang-forløb.færdig .ff-tal { color: var(--gul); font-weight: 700; }
 .fremgang-verden { display: flex; align-items: center; gap: 10px; margin-top: 6px; padding: 0 4px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(200, 210, 240, 0.7); }
 .fremgang-verden:first-child { margin-top: 0; }
 .fremgang-verden.færdig::after { content: "✓"; color: var(--gul); }
@@ -1832,3 +1844,74 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .rejse-tekst { margin: 6px 0 0; color: var(--svag); font-size: 14px; }
 @keyframes rejse-kredser { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .rejse-arm { animation: none; } }
+
+/* ---------- Forløb (js/forloeb.js): kun scenen og forløbets linje under den ---------- */
+/* Gælder alle dele (også Liv, som ikke er i js/paneler.js). !important, fordi skærmenes gitre har id'er. */
+.skærm.i-forløb {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: auto minmax(0, 1fr) auto auto !important;
+  grid-template-areas: "top" "vindue" "fl-vis" "forløb" !important;
+  overflow: hidden !important;
+}
+.skærm.i-forløb > :not(.topbjælke, .vindue, .forløb-linje, .fl-vis, .overlag) { display: none !important; }
+.skærm.i-forløb > .vindue { grid-area: vindue !important; }
+.skærm.i-forløb > .fl-vis { grid-area: fl-vis !important; justify-self: center; width: min(560px, 100%); }
+.skærm.i-forløb .topbjælke > :not(a.knap, h2, .topknapper) { display: none !important; }
+.skærm.i-forløb .topknapper > :is(.kontakt, .knap-kungrafik, .udgave-vælger) { display: none !important; }
+.skærm.i-forløb .vindue :is(.panel-fane, .logknap, .næste-skridt, .bjælke-række) { display: none !important; }
+#vaerksted.i-forløb #knapMinitabel { display: none; }
+#minitabel .felt.forløb-mål { color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent); animation: forløbPuls 1.6s ease-in-out infinite; }
+@keyframes forløbPuls { 50% { box-shadow: 0 0 22px var(--accent); } }
+
+.forløb-linje {
+  grid-area: forløb;
+  justify-self: center;
+  width: min(720px, 100%);
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px 12px 16px;
+  border-radius: 16px;
+  background: rgba(8, 12, 30, 0.88);
+  border: 1px solid var(--panel-kant);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.fl-hoved { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 13px; color: var(--svag); }
+.fl-titel { color: var(--accent); white-space: nowrap; }
+.fl-prikker { display: inline-flex; align-items: center; gap: 5px; }
+.fl-prikker i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.22); }
+.fl-prikker i.ja { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.fl-prikker i.nu { width: 10px; height: 10px; background: rgba(95, 227, 255, 0.45); }
+.fl-nr { white-space: nowrap; }
+.fl-spring { margin-left: auto; min-height: 32px; padding: 0 4px; border: 0; background: none; color: var(--svag); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.fl-spring:hover { color: var(--tekst); }
+.fl-tekst { margin: 0; }
+.fl-svag { color: var(--svag); }
+.fl-så { color: #dff7ff; }
+.fl-lille { margin: -2px 0 0; font-size: 13px; color: var(--svag); }
+.fl-række { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fl-række button { min-height: 44px; font: inherit; font-size: 15px; font-weight: 700; color: var(--tekst); cursor: pointer; }
+.fl-gæt { padding: 0 16px; border-radius: 22px; border: 1px solid rgba(95, 227, 255, 0.5); background: rgba(95, 227, 255, 0.08); }
+.fl-gæt:hover { background: rgba(95, 227, 255, 0.18); }
+.fl-handling { --farve: var(--accent); display: inline-flex; align-items: center; gap: 9px; padding: 0 18px 0 8px; border-radius: 24px; border: 1px solid var(--farve); background: color-mix(in srgb, var(--farve) 14%, transparent); box-shadow: 0 0 16px color-mix(in srgb, var(--farve) 35%, transparent); }
+.fl-handling.proton { --farve: var(--proton); }
+.fl-handling.neutron { --farve: var(--neutron); }
+.fl-handling.elektron { --farve: var(--elektron); }
+.fl-handling .kugle { width: 28px; height: 28px; }
+.fl-handling small { color: var(--svag); font-weight: 600; }
+.fl-handling:disabled { opacity: 0.45; box-shadow: none; cursor: default; }
+.fl-vismig { padding: 0 14px; border-radius: 12px; border: 1px dashed rgba(255, 212, 59, 0.7); background: rgba(255, 212, 59, 0.1); }
+.fl-vej { padding: 0 16px; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.06); }
+.fl-vej.primær, .fl-næste { background: var(--accent); border: 1px solid var(--accent); color: #031018 !important; }
+.fl-vej:hover, .fl-gæt:hover { border-color: var(--accent); }
+.fl-nav { margin-left: auto; display: flex; gap: 8px; }
+.fl-nav:empty { display: none; }
+.fl-tilbage { min-width: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.06); color: var(--svag) !important; }
+.fl-næste { padding: 0 16px; border-radius: 12px; }
+@media (max-width: 560px) and (orientation: portrait), (max-height: 500px) and (orientation: landscape) {
+  .forløb-linje { padding: 10px 10px 10px 12px; font-size: 15px; gap: 6px; }
+  .fl-række button { font-size: 14px; }
+  .fl-nr { display: none; }
+}

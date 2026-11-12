@@ -53,3 +53,29 @@ document.addEventListener('click', (h) => {
   lyd.klik();
   åbnFænomen(skærm, id, sted);
 });
+
+// ---------- Forløb (js/forloeb.js) ----------
+// Et forløb, delen skal starte, når den starter: fra "Din fremgang" i menuen eller fra forløbets eget link
+// (?forloeb=foerste-atom#vaerksted, fx fra en lærer). Linket starter forløbet, også selvom man har taget det.
+let ventForløb = new URLSearchParams(location.search).get('forloeb');
+
+// Starter forløbet id i delen del (en skærm i js/skaerme.js)
+export function åbnForløb(del, id) {
+  ventForløb = id;
+  location.hash = `#${del}`;
+}
+
+// Det forløb, der venter på delens forløb (eller null). Glemmes, når det er hentet, og ?forloeb fjernes fra adressen,
+// så det ikke starter igen, når man genindlæser siden.
+export function tagVentForløb(ider) {
+  if (!ventForløb || !ider.includes(ventForløb)) return null;
+  const id = ventForløb;
+  ventForløb = null;
+  const søg = new URLSearchParams(location.search);
+  if (søg.has('forloeb')) {
+    søg.delete('forloeb');
+    const s = søg.toString();
+    history.replaceState(history.state, '', location.pathname + (s ? `?${s}` : '') + location.hash);
+  }
+  return id;
+}

@@ -32,7 +32,7 @@
     // Bjælken fyldes efter, hvor mange JavaScript-filer der er hentet. Det er et skøn: Forsiden henter ca. FORVENTET filer
     // (tests/henter.mjs tjekker, at tallet stadig passer). Den står højst på 95 %, indtil main.js er færdig.
     (() => {
-      const FORVENTET = 46;
+      const FORVENTET = 48;
       const fyld = document.getElementById('henterFyld');
       const tekst = document.getElementById('henterTekst');
       let hentet = 0;
@@ -57,7 +57,7 @@
     <button class="knap lille ikon knap-fuldskaerm menu-hjørne" title="Fuld skærm"></button>
     <header class="menu-top">
       <h1 class="logo">Atom<span>Lab</span></h1>
-      <p class="undertitel">Byg atomer, opdag grundstofferne, lav kernereaktioner, og udforsk rummet</p>
+      <p class="undertitel">Byg atomer og molekyler, lav kernereaktioner, se livets opskrift, og udforsk rummet</p>
     </header>
     <div class="vindue" id="menuVindue"></div>
     <!-- Delene. karrusel.js flytter dem ind som knapper i verdenernes kort i ringen (VERDENER) -->
@@ -1033,6 +1033,7 @@
         <p><span class="kugle neutron lille"></span> <strong>Neutroner</strong> har ingen ladning. De er en slags lim, der holder kernen sammen, for protonerne frastøder hinanden. Atomer af samme grundstof med forskelligt antal neutroner kaldes <strong>isotoper</strong>.</p>
         <p><span class="kugle elektron lille"></span> <strong>Elektroner</strong> er minusladede og meget lettere. De befinder sig i skaller rundt om kernen. Har atomet for mange eller for få elektroner, kaldes det en <strong>ion</strong>.</p>
         <p><strong>Massetal</strong> = protoner + neutroner. Carbon-14 har 6 protoner og 8 neutroner.</p>
+        <p><button class="knap lille" id="hjælpForløb">Tag forløbet "Dit første atom" ›</button></p>
         <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Det virker i hele AtomLab. Alle fagordene står også i <a href="#ordbog">Ordbogen</a>.</p>
         <h4 id="hjælpRadioaktivitet">Hvad er radioaktivitet, og hvorfor er det farligt?</h4>
         <p>Et stof er <strong>radioaktivt</strong>, når dets atomkerner er ustabile: De har for mange eller for få neutroner, eller de er simpelthen for store. Før eller siden henfalder kernen og skyder noget ud. Det er <strong>strålingen</strong>:</p>

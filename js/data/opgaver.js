@@ -4,6 +4,8 @@
 
 // Atomværkstedet
 // Opgaver. mål: det antal der skal bygges (null = lige meget).
+// Isotoperne (deuterium og tritium) kommer efter carbon, oxygen og neon (eftersynet E1 nr. 3, 12. november 2026):
+// Man skal kende grundstofferne, før man leger med neutronerne. De tre første løses også af forløbet "Dit første atom".
 // hændelse: opgaven løses af noget, der sker (fx et henfald), i stedet for et bestemt atom.
 export const OPGAVER = [
   {
@@ -22,6 +24,21 @@ export const OPGAVER = [
     fakta: 'Helium-4 er det, Solen laver af hydrogen. Det kan du selv prøve i Stjerneovnen.',
   },
   {
+    id: 'carbon', titel: 'Byg carbon-12 (kulstof)', mål: { p: 6, n: 6, e: 6 },
+    tip: 'Carbon er nr. 6. Massetal 12, og atomet skal være neutralt.',
+    fakta: 'Alt liv på Jorden er bygget op omkring carbon. Du består af ca. 18 % carbon.',
+  },
+  {
+    id: 'oxygen', titel: 'Byg oxygen-16 (ilt)', mål: { p: 8, n: 8, e: 8 },
+    tip: 'Oxygen er nr. 8. Massetal 16.',
+    fakta: 'Oxygen-16 er langt det mest almindelige oxygen. Det er dannet inde i store stjerner.',
+  },
+  {
+    id: 'neon', titel: 'Byg neon-20 med fyldt yderste skal', mål: { p: 10, n: 10, e: 10 },
+    tip: 'Neon er nr. 10. Massetal 20.',
+    fakta: 'Neon har 2 + 8 elektroner, så den yderste skal er fyldt. Derfor reagerer neon næsten ikke med andre stoffer.',
+  },
+  {
     id: 'deuterium', titel: 'Lav tung brint (deuterium)', mål: { p: 1, n: 1, e: 1 },
     tip: 'Deuterium er hydrogen med én neutron i kernen.',
     fakta: 'Deuterium er stabilt. Det er det første skridt, når Solen laver helium.',
@@ -37,24 +54,9 @@ export const OPGAVER = [
     fakta: 'Ved alfa- og betahenfald bliver kernen til et andet grundstof. Det var præcis det, alkymisterne drømte om!',
   },
   {
-    id: 'carbon', titel: 'Byg carbon-12 (kulstof)', mål: { p: 6, n: 6, e: 6 },
-    tip: 'Carbon er nr. 6. Massetal 12, og atomet skal være neutralt.',
-    fakta: 'Alt liv på Jorden er bygget op omkring carbon. Du består af ca. 18 % carbon.',
-  },
-  {
     id: 'carbon-graense', titel: 'Find den tungeste stabile carbon', mål: { p: 6, n: 7, e: null },
     tip: 'Start med carbon-12, og læg én neutron på ad gangen. Hold øje med boksen om stabilitet.',
     fakta: 'Carbon-13 er den tungeste stabile carbon. Med én neutron mere (carbon-14) bliver kernen radioaktiv.',
-  },
-  {
-    id: 'oxygen', titel: 'Byg oxygen-16 (ilt)', mål: { p: 8, n: 8, e: 8 },
-    tip: 'Oxygen er nr. 8. Massetal 16.',
-    fakta: 'Oxygen-16 er langt det mest almindelige oxygen. Det er dannet inde i store stjerner.',
-  },
-  {
-    id: 'neon', titel: 'Byg neon-20 med fyldt yderste skal', mål: { p: 10, n: 10, e: 10 },
-    tip: 'Neon er nr. 10. Massetal 20.',
-    fakta: 'Neon har 2 + 8 elektroner, så den yderste skal er fyldt. Derfor reagerer neon næsten ikke med andre stoffer.',
   },
   {
     id: 'natrium-ion', titel: 'Lav en natrium-ion: Na⁺', mål: { p: 11, n: 12, e: 10 },

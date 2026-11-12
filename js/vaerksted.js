@@ -19,6 +19,9 @@ import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, visOpgave as visB
 import { OPGAVER_BYTTE } from './data/molekyler.js';
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
 import { OPGAVER } from './data/opgaver.js';
+import { FØRSTE_ATOM } from './data/forloeb/foerste-atom.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest } from './forloeb.js';
+import { tagVentForløb } from './gaa.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -101,6 +104,8 @@ let skyKontakt = null; // kontakten "Elektronsky" (tændt = elektronsky, slukket
 // 'bytte' (Byg et molekyle → Giv elektroner, det der hed Byttebørsen, js/molekyler.js)
 let del = 'atom';
 let molekyleMåde = 'byg'; // den måde, fanen "Byg et molekyle" åbner med (den sidst valgte)
+let tabelValgt = false; // forløbets sidste trin: har man trykket på H eller He i det lille periodiske system?
+let tabelVarLukket = false; // var det lille periodiske system foldet sammen, før forløbet viste det?
 const DELE = ['atom', 'byg', 'bytte'];
 const START = { atom: () => startAtomDel(), byg: () => startBygMolekyler(), bytte: () => startByttebørs() };
 const STOP = { atom: () => stopAtomDel(), byg: () => stopBygMolekyler(), bytte: () => stopByttebørs() };
@@ -138,6 +143,11 @@ export function lavVærksted() {
   // "Giv elektroner" kender det atom, man har bygget (står der et neutralt natrium, nævnes det)
   lavByttebørs({ værkstedAtom: () => ({ ...tilstand }) });
   lavBygMolekyler();
+  $('hjælpForløb').addEventListener('click', () => {
+    lyd.klik();
+    $('hjælp').classList.add('skjult');
+    startFørsteAtom();
+  });
   $('hjælpTilBytte').addEventListener('click', () => {
     lyd.klik();
     $('hjælp').classList.add('skjult');
@@ -165,6 +175,7 @@ export function sætDel(ny) {
   if (ny === 'molekyle') ny = molekyleMåde;
   if (!DELE.includes(ny)) ny = 'atom';
   if (ny === del) return;
+  if (ny !== 'atom') stopForløb(); // (fx knappen "Prøv det selv: Giv elektroner" i hjælpen midt i forløbet)
   if (aktiv) {
     STOP[del]();
     rydBeskeder(); // underteksterne og "Hvorfor?"-kortet hører til den del, de blev vist i
@@ -193,7 +204,14 @@ function visDel() {
 export function startVærksted() {
   aktiv = true;
   opdaterLydknap();
+  // Forløbet "Dit første atom" starter af sig selv første gang, og når man kommer fra dets link eller "Din fremgang"
+  const forløb = tagVentForløb([FØRSTE_ATOM.id]) ?? (starterSelv(FØRSTE_ATOM) ? FØRSTE_ATOM.id : null);
+  if (forløb && del !== 'atom') {
+    del = 'atom';
+    visDel();
+  }
   START[del]();
+  if (forløb) startFørsteAtom();
 }
 
 function startAtomDel() {
@@ -215,7 +233,79 @@ function startAtomDel() {
 
 export function stopVærksted() {
   aktiv = false;
+  stopForløb();
   STOP[del]();
+}
+
+// ---------- Forløbet "Dit første atom" (js/forloeb.js, drejebogen i docs/drejebog-foerste-atom.md) ----------
+// Teksterne står i js/data/forloeb/foerste-atom.js. Her står det, der rører scenen i hvert trin.
+// Hvert trins start sætter atomet, som det var, da trinet begyndte (så "‹" virker). Knapperne stopper ved trinets mål,
+// så man ikke kan bygge forbi det.
+function plus(type, tekst, kugle, maks) {
+  return { id: type, tekst: `+ ${tekst}`, kugle, gør: () => ændr(type, 1), aktiv: () => tilstand[type] < maks };
+}
+function trinStart(p, n, e) {
+  return () => {
+    visTabelMål(false);
+    sæt({ p, n, e });
+  };
+}
+function visTabelMål(til) {
+  for (const nr of [1, 2]) document.querySelector(`#minitabel .felt[data-nr="${nr}"]`)?.classList.toggle('forløb-mål', til);
+}
+function sætTabelÅben(åben) {
+  $('minitabelPanel').classList.toggle('lukket', !åben);
+  $('knapMinitabel').textContent = åben ? 'Skjul' : 'Vis';
+}
+const FØRSTE_ATOM_DEL = {
+  trin: {
+    proton: { start: trinStart(0, 0, 0), knapper: [plus('p', 'Proton', 'proton', 1)], færdig: () => tilstand.p === 1, visMig: () => ændr('p', 1) },
+    elektron: { start: trinStart(1, 0, 0), knapper: [plus('e', 'Elektron', 'elektron', 1)], færdig: () => tilstand.e === 1, visMig: () => ændr('e', 1) },
+    proton2: { start: trinStart(1, 0, 1), knapper: [plus('p', 'Proton', 'proton', 2)], færdig: () => tilstand.p === 2, visMig: () => ændr('p', 1) },
+    neutroner: {
+      start: trinStart(2, 0, 1),
+      knapper: [
+        { ...plus('n', 'Neutron', 'neutron', 2), tæller: () => `${tilstand.n}/2` },
+        { ...plus('e', 'Elektron', 'elektron', 2), tæller: () => `${tilstand.e}/2` },
+      ],
+      færdig: () => tilstand.n === 2 && tilstand.e === 2,
+      visMig: () => {
+        lyd.neutron();
+        sæt({ p: 2, n: 2, e: 2 });
+      },
+    },
+    tabel: {
+      start: () => {
+        sæt({ p: 2, n: 2, e: 2 });
+        tabelValgt = false;
+        sætTabelÅben(true);
+        visTabelMål(true);
+      },
+      vis: ['#minitabelPanel'],
+      færdig: () => tabelValgt,
+      visMig: () => vælgFraTabel(2),
+    },
+  },
+  layout: () => passerTil(atom.størrelse()),
+  slutTekst: () => `Opdaget: ${fremgang.antalOpdaget()} af 118 grundstoffer.`,
+  veje: [
+    { tekst: 'Byg videre selv', primær: true },
+    { tekst: 'Se Solen lave helium', gør: () => { location.hash = '#fusion'; } },
+    { tekst: 'Hvorfor holder kernen?', hvorfor: 'kernen' },
+  ],
+  slut: () => {
+    visTabelMål(false);
+    sætTabelÅben(!tabelVarLukket);
+    vælgNæsteOpgave();
+    opdaterAlt();
+  },
+};
+
+function startFørsteAtom() {
+  sætDel('atom');
+  atom.afslutHenfald(); // et henfald, der er i gang, gøres færdigt, så forløbet kan sætte atomet
+  tabelVarLukket = $('minitabelPanel').classList.contains('lukket');
+  startForløb(FØRSTE_ATOM, FØRSTE_ATOM_DEL);
 }
 
 function stopAtomDel() {
@@ -303,6 +393,9 @@ export function testAdgang() {
   return {
     del: () => del,
     sætDel,
+    tilstand: () => ({ ...tilstand }),
+    forløb: forløbTest(),
+    startForløb: () => startFørsteAtom(),
     bytte: bytteTest(),
     byg: bygTest(),
     udgave: () => hentUdgave(),
@@ -601,7 +694,7 @@ function lavKnapper() {
       if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
       return;
     }
-    if (del !== 'atom') return; // tasterne bygger kun i "Byg et atom"
+    if (del !== 'atom' || kørerForløb()) return; // tasterne bygger kun i "Byg et atom", og ikke under forløbet
     const tast = h.key.toLowerCase();
     const type = { p: 'p', n: 'n', e: 'e' }[tast];
     if (type) {
@@ -685,6 +778,7 @@ function vælgFraTabel(nr) {
   lyd.klik();
   kameraSving();
   sæt({ p: nr, n: Math.min(MAX_N, typiskeNeutroner(nr)), e: nr });
+  if (kørerForløb() && nr <= 2) tabelValgt = true;
 }
 
 // ---------- Opgaver ----------
@@ -701,6 +795,25 @@ function passer(o, t) {
 function lavOpgaveliste() {
   const liste = $('opgaver');
   liste.innerHTML = '';
+  // Forløbet øverst: et tryk tager det (igen)
+  const fGruppe = document.createElement('li');
+  fGruppe.className = 'opgave-gruppe';
+  fGruppe.textContent = 'Forløb';
+  const fLi = document.createElement('li');
+  const taget = fremgang.forløbTaget(FØRSTE_ATOM.id);
+  fLi.className = 'forløb-punkt' + (taget ? ' løst' : '');
+  fLi.innerHTML = `<span class="flueben">${taget ? '✓' : '▶'}</span><span class="opgave-titel"></span><small></small>`;
+  fLi.querySelector('.opgave-titel').textContent = FØRSTE_ATOM.titel;
+  fLi.querySelector('small').textContent = taget ? 'Taget. Tryk for at tage det igen.' : 'Fem korte trin: Hvad er et atom bygget af?';
+  fLi.addEventListener('click', () => {
+    lyd.klik();
+    $('opgaveliste').classList.add('skjult');
+    startFørsteAtom();
+  });
+  const oGruppe = document.createElement('li');
+  oGruppe.className = 'opgave-gruppe';
+  oGruppe.textContent = 'Byg et atom';
+  liste.append(fGruppe, fLi, oGruppe);
   for (const o of OPGAVER) {
     const li = document.createElement('li');
     const løst = fremgang.erLøst(o.id);
