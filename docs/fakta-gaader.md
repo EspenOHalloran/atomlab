@@ -4,7 +4,7 @@
 
 **Sikkerhed:** **Sikker** = læst i den oprindelige artikel (resuméet på arXiv eller hele teksten) eller hos NASA/ESA. **Ret sikker** = én pålidelig sekundær kilde (Wikipedia med henvisning), eller fra hukommelsen og passer med kilderne. **Usikker** = kilderne er uenige, eller det kunne ikke læses direkte.
 
-**Kilderne (åbnet 12. november 2026):** arXiv (resuméer via `export.arxiv.org/api`, numrene står ved påstandene), engelsk Wikipedia som wikitekst (`action=raw`, artiklen står ved påstanden), science.nasa.gov og www.esa.int. De to kort om liv bygger på det, der allerede er slået op i [fakta-liv/rummet.md](fakta-liv/rummet.md) og [fakta-liv/begyndelsen.md](fakta-liv/begyndelsen.md) (9. november 2026), og er ikke slået op igen. **Lukket:** home.cern, pdg.lbl.gov, pmc.ncbi.nlm.nih.gov, nature.com, science.org, ligo.caltech.edu, eventhorizontelescope.org, rubinobservatory.org, cosmos.esa.int, desi.lbl.gov og nobelprize.org (se spørgsmål 3).
+**Kilderne (åbnet 12. november 2026):** arXiv (resuméer via `export.arxiv.org/api`, numrene står ved påstandene), engelsk Wikipedia som wikitekst (`action=raw`, artiklen står ved påstanden), science.nasa.gov og www.esa.int. De to kort om liv bygger på det, der allerede er slået op i [fakta-liv/rummet.md](fakta-liv/rummet.md) og [fakta-liv/begyndelsen.md](fakta-liv/begyndelsen.md) (9. november 2026), og er ikke slået op igen. **Åbnet bagefter (12. november 2026, jeres svar):** home.cern, pdg.lbl.gov og pmc.ncbi.nlm.nih.gov. Kun ALPHA-g er slået op dér. **Lukket:** nature.com, science.org, ligo.caltech.edu, eventhorizontelescope.org, rubinobservatory.org, cosmos.esa.int, desi.lbl.gov og nobelprize.org (se spørgsmål 3).
 
 ## Hvilke fem bør med?
 **Mit råd: de fem fra prompten.** De har alle tre klare svar på de tre spørgsmål, og de fire af dem har et sted i programmet i dag. Den lange liste fra køreplanen, vurderet én for én:
@@ -24,7 +24,7 @@
 
 **Ærligt om de fem:** To af dem handler om liv. De skal skilles tydeligt: "Er vi alene?" (hvor) og "Hvordan begyndte livet?" (hvordan). Og tre af de fem (sort hul, antistof og mørkt stof) har svar, som ingen ved, om man nogensinde får. Det skal siges, og det er en del af pointen.
 
-## Forslag til kernesætning
+## Kernesætningen (valgt 12. november 2026)
 "Efter fem minutter kan brugeren sige: **Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den.**"
 
 Alternativ (mere om metoden): "… Jeg kender forskel på det, vi har målt, og det, vi gætter på."
@@ -77,7 +77,7 @@ Alternativ (mere om metoden): "… Jeg kender forskel på det, vi har målt, og 
 ## 3. Hvorfor er der stof og næsten intet antistof?
 **Hvad ved vi?**
 - **Antistof findes.** Dirac forudsagde det i 1928, og Carl Anderson fandt positronen i 1932 (Wikipedia "Positron"). Antiprotonen blev fundet i 1955 (Wikipedia "Antimatter"). **Ret sikker.** Hospitaler bruger positroner hver dag (PET-skanning med fx fluor-18, som står i `isotoper.js`).
-- **Antistof ligner stof meget præcist.** Protonen og antiprotonen har samme forhold mellem ladning og masse inden for 16 billiontedele (BASE, Nature 601: 53, 2022, via Wikipedia). **Ret sikker.** Antibrint falder nedad: ALPHA-g, Nature 621: 716-722 (27. september 2023), "Observation of the effect of gravity on the motion of antimatter" (titel og dato fra Wikipedia). Tallet (ca. 0,75 gange Jordens tyngde med en usikkerhed på 0,2-0,3, og "falder opad" er udelukket) er fra hukommelsen, fordi Nature og PMC er lukket: **Ret sikker**, slå tallet op, før det skrives.
+- **Antistof ligner stof meget præcist.** Protonen og antiprotonen har samme forhold mellem ladning og masse inden for 16 billiontedele (BASE, Nature 601: 53, 2022, via Wikipedia). **Ret sikker.** Antibrint falder nedad: ALPHA-g, Nature 621: 716-722 (27. september 2023), læst i PMC (PMC10533407): "the local gravitational acceleration of antihydrogen is directed towards the Earth and has magnitude (0.75 ± 0.13 (statistical + systematic) ± 0.16 (simulation)) g", og "Repulsive 'antigravity' is ruled out". Tallet passer altså med 1 g inden for usikkerheden. **Sikker** (slået op 12. november 2026, efter at PMC blev åbnet).
 - **Universet er lavet af stof.** Var der store områder af antistof, ville grænsen til stoffet lyse i gammastråling, og det ses ikke (Wikipedia "Antimatter"). **Ret sikker.** Der er ca. 6 × 10⁻¹⁰ kernepartikler for hver lyspartikel fra Big Bang (Wikipedia "Big Bang nucleosynthesis" med Planck som kilde). Stof og antistof udslettede altså næsten alt, og ca. én ud af en milliard blev tilovers. **Ret sikker** (størrelsesorden).
 - **Naturen gør en lille forskel på stof og antistof** (CP-brud): fundet i 1964 (Cronin og Fitch, Nobelpris 1980), i B-mesoner fra 2001, i charm-partikler i 2019 (LHCb, arXiv:1903.08726) og for første gang i partikler af tre kvarker, som protonen er bygget af, i 2025 (LHCb, Nature 643: 1223, arXiv:2503.16954: "the first observation of CP violation in baryon decays"). **Sikker.**
 
@@ -163,9 +163,11 @@ Alternativ (mere om metoden): "… Jeg kender forskel på det, vi har målt, og 
 - LZ's hændelse på 248 keV: Har XENONnT eller LZ selv set flere? Kom Euclids DR1-Foundation 12. november 2026?
 - Antallet af exoplaneter, Rosalind Franklin (2028), Tianwen-3, Europa Clipper (april 2030) og Dragonfly.
 - Hyper-Kamiokande (2028), DUNE, LISA (2035) og ELT (marts 2029): Planer rykker ofte.
-- ALPHA-g's tal og QT45 (se ovenfor). Nobelpriserne (2011, 2015, 2020) står kun efter Wikipedia og hukommelsen.
+- QT45 (se ovenfor). Nobelpriserne (2011, 2015, 2020) står kun efter Wikipedia og hukommelsen.
 
 ## Spørgsmål til jer (min anbefaling først)
+**Jeres svar (12. november 2026):** 1: **A**, de fem fra prompten, og mørk energi som nr. 6 bagefter. 2: **A**, "Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den." 3: De tre vigtigste domæner åbnes (`home.cern`, `pdg.lbl.gov` og `pmc.ncbi.nlm.nih.gov`). Spørgsmål 4 (navnet Planet 9) er ikke besvaret.
+
 1. **Hvilke fem?** A (mit råd): de fem fra prompten, og mørk energi som nr. 6 bagefter. B: mørk energi i stedet for mørkt stof nu, fordi den har et sted i programmet i dag. C: seks kort fra start.
 2. **Kernesætningen:** A (mit råd): "Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den." B: den om forskellen på målt og gæt.
 3. **Domæner:** Skal `home.cern`, `pdg.lbl.gov`, `pmc.ncbi.nlm.nih.gov`, `www.ligo.caltech.edu`, `eventhorizontelescope.org`, `rubinobservatory.org` og `www.cosmos.esa.int` åbnes, før teksterne skrives? Mit råd: ja til de tre første (CERN's egne tal, partikelfysikkens opslagsværk og ALPHA-g's artikel). Resten er dækket af arXiv.

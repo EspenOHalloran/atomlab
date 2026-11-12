@@ -17,7 +17,7 @@ Start: [prompt-faktagrundlag.md](prompt-faktagrundlag.md), én ny session pr. em
 - **De første 6-8 videnskabsfolk** og siderne fra deres bøger (Opus, høj): hver person knyttet til én opdagelse, man kan gøre efter i programmet. Rettighederne tjekkes side for side.
 - **Månerne med mulige betingelser for liv** (Opus, høj): Europa, Enceladus og Titan.
 - **Strøm og magneter og Lys** (Opus, høj).
-- **Gåderne i en tynd udgave** (Fable 5.2, high, omstridt stof): fem kort med tre faste spørgsmål.
+- **Gåderne i en tynd udgave** (Fable 5.2, high, omstridt stof): fem kort med tre faste spørgsmål. **Lavet 12. november 2026:** [fakta-gaader.md](fakta-gaader.md). Jeres valg: de fem fra prompten (mørk energi som nr. 6 bagefter), og kernesætningen "Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den."
 
 ## Serie 1, "Forståelig" (efter skærmlisten)
 1. **Forløb-klodsen og "Dit første atom"** (nr. 1 og 3, nyt spor [Forløb](lige-nu/forloeb.md)): klodsen efter [skabelonen](fable/E3-forloeb.md), forløbet i Værkstedet, toplinjen med opgaven, undertitlen i menuen og isotoperne flyttet til senere. Start: [prompt-forloeb.md](prompt-forloeb.md) (mellem til stor).
