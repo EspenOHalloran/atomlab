@@ -7,7 +7,7 @@
 **Jeres svar (9. november 2026):** Skærmbilledet af stigen blev godkendt: udseendet som nu, basernes farver A grøn, T rød, G gul og C blå, og resten af L1 blev lavet i samme session.
 
 **Næste (venter på jeres go):**
-0. **Fables faktatjek af Liv og månerne er skrevet (12. november 2026), se `docs/fable/E5-liv.md`.** Faktagrundlaget holder, og programmet har ingen grove fejl, men 12 små ting skal rettes. Næste: Opus skriver `docs/fable/E5-noter.md`, retter fejlene i programmet med `/faktatjek` og viser jer Fables fem spørgsmål (se "Efter Fables svar" i [prompt-fable-liv.md](../prompt-fable-liv.md)). Ny session med Opus, høj effort.
+0. **Fables faktatjek af Liv og månerne er skrevet (12. november 2026), se `docs/fable/E5-liv.md`.** Faktagrundlaget holder, og programmet har ingen grove fejl, men 12 små ting skal rettes. Næste: Opus skriver `docs/fable/E5-noter.md`, retter fejlene i programmet med `/faktatjek` og viser jer Fables fem spørgsmål (nr. 2, kernesætningen for månerne, er besvaret 12. november 2026: forslag 1 med Fables nye slutning, se afsnit 9 i [fakta-maaner-liv.md](../fakta-maaner-liv.md)) (se "Efter Fables svar" i [prompt-fable-liv.md](../prompt-fable-liv.md)). Ny session med Opus, høj effort.
 1. **L3:** kopien ("Lyn op og kopiér"), fejlene og "Hvorfor?"-kortene om DNA. Ny session med Opus, høj effort: "Læs docs/prompt-liv-l3.md". Det store eftersyn med Fable (E0) bør komme først, hvis I vil have det før flere store dele (køreplanen).
 2. Idéen "Rumfærgens blanding" (for meget hydrogen) i knaldgassen står i [ideer.md](../ideer.md).
 
