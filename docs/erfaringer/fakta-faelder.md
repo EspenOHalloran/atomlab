@@ -97,3 +97,13 @@
 - "Set fra perronen" (eller "set fra Jorden") i relativitetsteorien er ikke det, øjet ser: Lysets rejsetid er trukket fra. Sig det i "Ærligt talt", når en animation viser to billeder (T5 Trin 0).
 
 - "Einstein opdagede, at samtidighed er relativ." Poincaré nævnte muligheden allerede i 1900. Einstein gjorde den til en del af den særlige relativitetsteori i 1905 (Wikipedia "Relativity of simultaneity"). Skriv "Ifølge Einsteins relativitetsteori …" (T5c, 9. november 2026).
+
+- "Man kan lave forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem" (tvillingeparadokset). Det er tankeforsøg (Wikipedia "Twin paradox": "one imagines"). Det rigtige forsøg er CERN 1977: Myonerne blev slynget rundt med ca. 10¹⁸ g, og deres ure fulgte kun farten (Wikipedia "Experimental testing of time dilation"). Skriv "man kan tænke sig", og nævn CERN (Fable E4, 12. november 2026).
+- "Den rejsende ser Jordens ur gå langsomt, og i vendingen springer det." "Ser" er regnet (lysets rejsetid er trukket fra). I en kikkert ser den rejsende Jordens ur gå langsomt på vejen ud og hurtigt på vejen hjem (ved 80 % af lysets fart 3 gange langsommere og 3 gange hurtigere), og intet springer derhjemme: Det er den rejsendes måde at regne "nu" på, der skifter (Wikipedia "Twin paradox", "What it looks like") (Fable E4).
+- To ure side om side under en rejse ("Dit ur" og "Jordens ur") viser Jordens "nu". Set fra skibet er "nu" på Jorden et andet, og på vejen ud går Jordens ur langsomt set fra skibet. Kun ved afgang og hjemkomst er alle enige. Sig det i "Ærligt talt" (Fable E4).
+- "De fleste myoner når ned" står i kilden, men den enkle udregning giver 55 %. Står sætningen ved siden af en tæller med 24 myoner, når højst halvdelen ned i 4 ud af 10 byger. Skriv "ca. halvdelen", når tallet kan ses (Fable E4).
+- "Ingen opdagede det før Einstein" (om samtidighed) strider mod fælden om Poincaré ovenfor. Skriv "ingen har mærket det i hverdagen" (Fable E4).
+- "Tidsforlængelse sker, når man flyver næsten med lysets fart." Den sker ved alle farter og er målt i passagerfly. Den er bare bittelille, indtil farten nærmer sig lysets (Fable E4).
+- "Intet kan nå lysets fart." Lyset kan. Skriv "et rumskib" eller "intet, der vejer noget" (Fable E4).
+- "Toget står næsten stille i forhold til lyset." At stå stille i forhold til lyset er netop det, der ikke kan lade sig gøre. Skriv "100 km/t er næsten ingenting mod lysets fart" (Fable E4).
+- Meget små forskelle (fx at bolden mangler 6 · 10⁻¹³ km/t i 150 km/t) kan ikke regnes med almindelige kommatal: regn.py gav 6,25 · 10⁻¹³, og det rigtige er 6,44 · 10⁻¹³. Brug `decimal` i Python (Fable E4).
