@@ -36,6 +36,7 @@ Dokumenterne er delt op i små filer (6. november 2026), så en ny session ikke 
 Der kører ofte flere sessioner samtidig. Næsten alle merge-konflikter var i de fælles dokumenter, ikke i koden. Derfor:
 - **Tjek først, om det allerede er bygget (jeres ønske 12. november 2026):** Før noget bygges: `git fetch origin`, og se efter i `origin/main`, ikke kun i den lokale kopi: `git log origin/main --oneline -30`, sporets fil med `git show origin/main:docs/lige-nu/<spor>.md` og `git grep <emne> origin/main`. Se også åbne PR'er og andre grene (`git branch -r`). Er det lavet eller i gang, så stop og sig det, før der bygges videre.
 - **Ét spor pr. session:** Hver session hører til ét spor og skriver kun sin status i sporets fil i `docs/lige-nu/` (oversigten er [docs/lige-nu.md](docs/lige-nu.md)). Kun én session ad gangen pr. spor. Passer opgaven ikke i et spor, så brug `smaating.md`.
+- **Navngiv chatten "Spor · trin"** (fx "Forløb · Serie 1 nr. 1: Forløb-klodsen") med `set_session_title`, så snart opgaven er kendt, og omdøb den, hvis opgaven skifter (brugerens ønske 12. november 2026).
 - **Prompten til en session, der kører samtidig med andre,** siger, hvilket spor den hører til, hvilke filer den ejer, og hvilke den ikke må røre. I fælles kodefiler (`index.html`, `style.css`, `js/main.js`, `js/data/ordbog.js`) skrives kun i sin egen blok eller på det sted, hvor linjen hører til efter alfabetet eller rækkefølgen.
 - **De fælles dokumenter rettes til sidst:** CLAUDE.md, DESIGN.md, `docs/lige-nu.md`, `docs/kode.md`, `docs/kode/*.md`, `docs/erfaringer.md`, tjeklisterne og `tests/README.md`. Først `git fetch origin main` og merge `main` ind i grenen, så ret dokumenterne, og så commit, PR og merge med det samme. Så kan en anden session kun nå at komme imellem i få minutter.
 - **PR'er merges med det samme** (besluttet 8. november 2026): Brugeren er den eneste, der arbejder i repoet (gennem Claude-sessioner), og ingen læser reviews. Når arbejdet er færdigt og testet: push, lav PR'en og merge den straks selv. Vent ikke på review, og spørg ikke først.
@@ -83,7 +84,7 @@ Der kører ofte flere sessioner samtidig. Næsten alle merge-konflikter var i de
 - Nye planeter og måner bruger kontakten "Navne" fra `js/solsystem/navne.js`, kameraets rejse (`rejse.js`) og flybyen (`flyby.js`).
 - Konstanter, der hænger sammen med noget andet, står i `docs/kode/` (fx `BAKKE` i Stjerneovnen, stavene i Reaktoren og Mars' højder i `lav_mars.py`). Ændres de, skal det andet også ændres eller måles igen.
 - Nye gemte data (localStorage) skrives i `docs/kode/gemte-data.md`.
-- Billeder og netsider: Et domæne, der ikke er åbent i miljøet, spørges der om, før arbejdet går i gang (se "Sådan arbejder vi" i DESIGN.md).
+- Billeder og netsider: Et domæne, der ikke er åbent i miljøet, spørges der om, før arbejdet går i gang, altid som en anmodning til miljøet (`update_environment`), som brugeren bare kan godkende (se "Sådan arbejder vi" i DESIGN.md).
 
 ## Automatiske tests
 Testene ligger i `tests/` (Playwright-scripts, se [tests/README.md](tests/README.md)).
