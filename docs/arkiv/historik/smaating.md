@@ -2,6 +2,17 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/smaating.md](../../lige-nu/smaating.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (12. november 2026): 10a, skærmlisten og hentning efter behov** ([plan](../arkiv/plan-skaermliste.md), jeres go: "go med dine anbefalinger", ingen gennemlæsning af Fable, Liv har status "prøve").
+- `js/skaerme.js`: listen over delene (id, verden, titel, modul, status) og verdenerne. Hver skærm hentes med `import()` og bygges første gang, den åbnes. "Henter Kosmos …" efter 1 sekund, og en hentning, der fejler, beder om at genindlæse siden (browseren husker en mislykket `import()`).
+- Det, menuen bruger, står i `js/data/opgaver.js` og `js/data/faenomener.js`. Fem ting virkede kun, fordi alt blev bygget ved start, og er rettet: knapperne med `data-gaa` (nu `js/gaa.js`, også `system:55`), "Mere i Ordbogen ›", hoppet System → Værksted, det gemte fra Kosmos og panelerne, der kan rulles.
+- **Menuen før → efter** (`maal-eftersyn.mjs`, lokal server uden komprimering): 4,4 → 2,7 MB (egen kode 2,1 → 0,4 MB, Three.js er de 2,1), 149 → 48 filer, 6,7 → 0,9 s på pc, heap 12,5 → 5,6 MB. `FORVENTET` i index.html er 46.
+- Testene: `tests/hjaelp.mjs` venter selv på skærmen efter `goto`, `reload`, `evaluate` og `click` (`atomlabTest.klar()`). Ny test `skaermliste` (17 tjek). Hele samlingen består. `aarstider` fejlede én gang under belastning (Åbne punkter).
+- Afvigelse fra planen: Alle skærme blev gjort "dovne" på én gang (fundamentet gjorde det), ikke én ad gangen. Hele samlingen dækkede det.
+
+**Også lavet (12. november 2026):** Faktagrundlaget for månerne med mulige betingelser for liv (emne 2 i prompt-faktagrundlag): [fakta-maaner-liv.md](../fakta-maaner-liv.md) med Europa, Enceladus, Titan, Huygens' landing, kortene og licenserne, hvad der er målt og gættet, fælderne og fire spørgsmål til jer til sidst.
+
+**Også lavet (12. november 2026):** Faktagrundlaget for Strøm og magneter og Lys (emne 3): [fakta-strom-og-lys.md](../fakta-strom-og-lys.md) med Fælles Mål tjekket i kilderne (bekendtgørelsen og udkastet til fagplanen fra juni 2026), strøm, magneter, Ørsted, induktion, lys, spektrallinjer, flammefarver, radiobølger, tre dele at gøre med hænderne, fælderne og fire spørgsmål til jer til sidst. uvm.dk, emu.dk og www.bipm.org er åbnet i miljøet "Default".
+
 **Senest lavet (11. november 2026): E2, fra Fables råd til en plan.** Fable lavede E1 (eftersynet) og E3 (skabelonen for et forløb og drejebogen til Liv) samme dag. Opus har i E2:
 - skrevet sine noter: [fable/E1-noter.md](../../fable/E1-noter.md) (hvad der er nyt, hvad der var kendt, hvor Opus er uenig, og jeres valg)
 - lagt jeres valg ind: Molekyler bliver en egen del i Atomer nu, og "Stof og kemi" kommer med Ild. Nr. 10 deles (10a: skærmlisten først og alene). I kan låne en ældre iPad og en Chromebook. Frigivet, når 3-5 børn og en lærer har brugt det. Det kommende i Solsystemet får en lille udgave. Tjernobyl bliver sent, og Fable 5.2 laver faktagrundlaget. En fast aften om ugen med prøven

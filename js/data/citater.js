@@ -132,13 +132,16 @@ export const CITATER = {
     original: '… within the area of the great north group (the size of which had previously excited general remark), two patches of intensely bright and white light broke out …',
     kommentar: 'Det var det første solglimt, nogen har beskrevet (1. september 1859). Dagen efter ramte solstormen Jorden: Der var nordlys helt ned til Caribien, og telegraflinjer slog gnister.',
   },
+  // Ordlyden er læst i faksimilen fra 1901 (Videnskabernes Selskab, Toronto-eksemplaret på archive.org,
+  // operumprimitiasd00brahuoft, side A, billede n36). Det lange s er skrevet som s, ellers som i bogen.
+  // Udeladt til sidst: "vel eiusdem obscuratione, tempore Victimæ cœlestis facta, contigisse sacra testantur oracula",
+  // altså "eller da den blev mørk, da Jesus døde, som de hellige skrifter fortæller". Den danske tekst er vores egen.
   tycho: {
-    tekst: 'Sandelig et mirakel, enten det største af alle dem, der er sket i hele naturen siden verdens begyndelse …',
+    tekst: 'Sandelig et mirakel. Enten det største af alle, der har vist sig i hele naturen siden verdens begyndelse, eller i hvert fald lige så stort som dengang, Solen standsede i sit løb, fordi Josva bad om det …',
     person: 'Tycho Brahe',
-    kilde: 'De nova stella, 1573',
-    original: 'A miracle indeed, either the greatest of all that have occurred in the whole range of nature since the beginning of the world, …',
-    oversat: 'latin',
-    kommentar: 'Tycho Brahe så en ny stjerne i stjernebilledet Cassiopeia i november 1572. Han målte, at den var meget længere væk end Månen, så himlen var ikke uforanderlig, som man troede. I dag ved vi, at det var en supernova.',
+    kilde: 'De nova stella, 1573 (forkortet)',
+    original: 'Miraculum sanè inter omnia, quæ à mundi exordio, in tota rerum natura extiterunt, aut maximum, aut illi certè æquiparandum, quod in Solaris cursus retentione, Iosuæ precibus impetrata …',
+    kommentar: 'Tycho Brahe så en ny stjerne i stjernebilledet Cassiopeia i november 1572. Josva er en person i Bibelen, og ifølge fortællingen stod Solen stille, da han bad om det. Tycho målte, at stjernen var meget længere væk end Månen, så himlen var ikke uforanderlig, som man troede. I dag ved vi, at det var en supernova.',
   },
   // Kilden er læst i bogen selv (Systema Saturnium, 1659, McGill-eksemplaret på archive.org). Anagrammet har 7 a'er,
   // så der står "cohaerente" (Wikipedias "coherente" er en slåfejl). "Ekliptika" er oversat til "Jordens baneplan".
