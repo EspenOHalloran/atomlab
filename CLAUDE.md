@@ -83,7 +83,7 @@ Der kører ofte flere sessioner samtidig. Næsten alle merge-konflikter var i de
 - Nye planeter og måner bruger kontakten "Navne" fra `js/solsystem/navne.js`, kameraets rejse (`rejse.js`) og flybyen (`flyby.js`).
 - Konstanter, der hænger sammen med noget andet, står i `docs/kode/` (fx `BAKKE` i Stjerneovnen, stavene i Reaktoren og Mars' højder i `lav_mars.py`). Ændres de, skal det andet også ændres eller måles igen.
 - Nye gemte data (localStorage) skrives i `docs/kode/gemte-data.md`.
-- Billeder og netsider: Et domæne, der ikke er åbent i miljøet, spørges der om, før arbejdet går i gang (se "Sådan arbejder vi" i DESIGN.md).
+- Billeder og netsider: Et domæne, der ikke er åbent i miljøet, spørges der om, før arbejdet går i gang, altid som en anmodning til miljøet (`update_environment`), som brugeren bare kan godkende (se "Sådan arbejder vi" i DESIGN.md).
 
 ## Automatiske tests
 Testene ligger i `tests/` (Playwright-scripts, se [tests/README.md](tests/README.md)).
