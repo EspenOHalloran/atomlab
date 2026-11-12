@@ -6,7 +6,7 @@
 
 Du er i sporet Småting og laver eftersynets nr. 10a: skærmlisten og hentning efter behov.
 
-**Læs først:** CLAUDE.md (står allerede i samtalen), `docs/lige-nu/smaating.md`, [docs/retning.md](retning.md) (afsnittet Ydelse), afsnittet "nr. 10" i `docs/fable/E1-eftersyn.md` og punkt 1 under "Hvor jeg er uenig" i `docs/fable/E1-noter.md`. Derefter `docs/kode.md`, `docs/kode/faelles.md` og `js/main.js`. Tjekliste D og E.
+**Læs først:** CLAUDE.md (står allerede i samtalen), `docs/lige-nu/smaating.md`, [docs/retning.md](../retning.md) (afsnittet Ydelse), afsnittet "nr. 10" i `docs/fable/E1-eftersyn.md` og punkt 1 under "Hvor jeg er uenig" i `docs/fable/E1-noter.md`. Derefter `docs/kode.md`, `docs/kode/faelles.md` og `js/main.js`. Tjekliste D og E.
 
 **Målet:** I dag importerer `js/main.js` alle skærme og bygger alle ni ved start (`lavVærksted()`, `lavSystem()` … linje 66-80). Fremover:
 1. **Én liste over skærmene** (fx `js/skaerme.js`): id, verden, titel, hvor koden ligger, og status ("færdig" eller "prøve"). `VERDENER` i `js/karrusel.js` og "Din fremgang" bruger listen i stedet for egne lister, hvor det giver mening.

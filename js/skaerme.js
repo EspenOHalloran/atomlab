@@ -1,4 +1,4 @@
-// Listen over AtomLabs dele (skærme) og verdener (10a i docs/plan-skaermliste.md). Menuen, "Din fremgang" og
+// Listen over AtomLabs dele (skærme) og verdener (10a i docs/arkiv/plan-skaermliste.md). Menuen, "Din fremgang" og
 // skærmskiftet i main.js bruger den. En skærm hentes med import() og bygges (lav) første gang, den åbnes.
 //
 // En ny del: en linje i SKÆRME, en sektion med samme id i index.html (og et link i .menukort) og et modul, der

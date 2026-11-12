@@ -37,7 +37,7 @@ function stilleKontekst(ctx) {
   return ctx;
 }
 
-// Skærmene hentes først, når de åbnes (10a, docs/plan-skaermliste.md). En test, der sætter location.hash eller trykker
+// Skærmene hentes først, når de åbnes (10a, docs/arkiv/plan-skaermliste.md). En test, der sætter location.hash eller trykker
 // på en del i menuen, venter derfor her, til skærmen er hentet og vist (atomlabTest.klar()), ligesom man selv venter på
 // "Henter …". Det sker efter goto, reload, evaluate og click. Uden ?test (ingen atomlabTest) ventes der ikke.
 // En test, der selv vil se hentningen undervejs, starter browseren med ventPåSkærme: false (tests/skaermliste.mjs).

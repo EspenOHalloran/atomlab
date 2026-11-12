@@ -1,6 +1,6 @@
 # Plan: Skærmlisten og hentning efter behov (10a)
 
-*Skrevet 12. november 2026 i sporet Småting efter [prompt-skaermliste.md](prompt-skaermliste.md). Venter på et go.*
+*Skrevet 12. november 2026 i sporet Småting efter [prompt-skaermliste.md](prompt-skaermliste.md). Lavet samme dag (se docs/lige-nu/smaating.md), derfor i arkivet.*
 
 **Én sætning:** Menuen henter kun det, menuen bruger, og en skærm hentes og bygges første gang, den åbnes.
 

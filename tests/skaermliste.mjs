@@ -1,4 +1,4 @@
-// Skærmlisten og hentning efter behov (10a, docs/plan-skaermliste.md): menuen henter ingen skærme, fremgangen og ✓
+// Skærmlisten og hentning efter behov (10a, docs/arkiv/plan-skaermliste.md): menuen henter ingen skærme, fremgangen og ✓
 // passer uden dem, hver skærm hentes første gang, den åbnes, og knapper, der springer mellem skærmene, virker, også
 // før målet er hentet. Desuden "Henter …", tilbage under hentningen og en hentning, der fejler.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';

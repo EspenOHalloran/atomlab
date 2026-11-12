@@ -1,6 +1,6 @@
 # Prompt: Forløb-klodsen og "Dit første atom" (Serie 1, nr. 1)
 
-*Skrevet 11. november 2026 i E2. Sporet [Forløb](lige-nu/forloeb.md). Model: Opus, effort høj. Starter, når skærmlisten (10a, [prompt-skaermliste.md](prompt-skaermliste.md)) er færdig. Kopiér teksten nedenfor ind i en ny session.*
+*Skrevet 11. november 2026 i E2. Sporet [Forløb](lige-nu/forloeb.md). Model: Opus, effort høj. Starter, når skærmlisten (10a, [prompt-skaermliste.md](arkiv/prompt-skaermliste.md)) er færdig (lavet 12. november 2026). Kopiér teksten nedenfor ind i en ny session.*
 
 ---
 
