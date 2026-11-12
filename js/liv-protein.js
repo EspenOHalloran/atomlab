@@ -163,7 +163,7 @@ export function lavLivProtein({ tegning, vindue, vis, forlad, stoppet, løs, pan
 
   function færdig() {
     if (!fremgang.erLøst('liv-protein')) løs('liv-protein');
-    else visBesked({ titel: 'Proteinet er færdigt', tekst: 'Kæden af 147 aminosyrer har foldet sig. Prøv nu at læse selv, eller skift et bogstav.', varighed: 7000 });
+    else visBesked({ titel: 'Proteinet er færdigt', tekst: 'Ribosomet har bygget 147 aminosyrer, og kæden har foldet sig. Prøv nu at læse selv, eller skift et bogstav.', varighed: 7000 });
     skriv('Proteinet er færdigt ★. Prøv "Læs selv" eller "Skift et bogstav".');
     mission();
   }

@@ -1,5 +1,5 @@
 # Faktagrundlag: Liv, del B (Livets begyndelse)
-*Lavet 9. november 2026 af en hjælpeagent (Opus, xhigh) til planen for Liv. Ikke tjekket af Fable.*
+*Lavet 9. november 2026 af en hjælpeagent (Opus, xhigh) til planen for Liv. Tjekket af Fable 5.2 12. november 2026 ([E5-liv.md](../fable/E5-liv.md)). Opus' vurdering af fundene står i [E5-noter.md](../fable/E5-noter.md), og rettelserne står ved påstandene ("Fable E5").*
 
 **Adgang:** PubMed, PMC, NCBI Bookshelf og ADS gav en bot-udfordring, ScienceDirect 403, og nature.com kræver det lukkede idp.nature.com (ikke forsøgt omgået). Nature, Science og PNAS er derfor slået op i Wikipedias henvisninger ("via Wikipedia") eller i NASA's arkiv NTRS. Også lukket: darwinproject, biorxiv, europepmc, springer og jcvi.org. Åbne uden for listen: www.esa.int og discovery.ucl.ac.uk.
 
@@ -69,7 +69,7 @@
 - **Tørring og vædning:** "RNA-like polymers can be synthesized in wet-dry cycling and UV light exposure" (Wikipedia "Abiogenesis"). **Ret sikker.**
 - **Nukleotider:** Powner, Gerland og Sutherland, Nature 459 (7244): 239-242 (2009), "Synthesis of activated pyrimidine ribonucleotides in prebiotically plausible conditions" (C og U) (via Wikipedia). **Ret sikker.**
 - **Ribozymer, Nobelprisen i kemi 1989** (https://www.nobelprize.org/prizes/chemistry/1989/press-release/): Altman og Cech "for their discovery of catalytic properties of RNA". "Cech in 1982 became the first to show that RNA molecules can have a catalytic function". Altman (RNase P fra 1978) viste det "five years later", altså ca. 1983. **Sikker.**
-- **Navnet:** Gilbert, Nature 319 (6055): 618 (20. februar 1986) (via Wikipedia). "Alexander Rich first proposed the concept of the RNA world in 1962, and Walter Gilbert coined the term in 1986" (Wikipedia "RNA world"). **Ret sikker.**
+- **Navnet:** Gilbert, Nature 319 (6055): 618 (20. februar 1986) (via Wikipedia). "Alexander Rich first proposed the concept of the RNA world in 1962, and Walter Gilbert coined the term in 1986" (Wikipedia "RNA world"). **Ret sikker.** **Fable E5 (12. nov. 2026):** For skarpt at give Rich idéen. Skriv "Idéen er fra 1960'erne (bl.a. Woese, Crick og Orgel). Navnet gav Gilbert i 1986."
 - **Ribosomets kerne er RNA.** Nobelkomitéens "Advanced information" 2009 (https://www.nobelprize.org/uploads/2018/06/advanced-chemistryprize2009.pdf): "no visible peptide chain within 18Å from the identified peptidyltransferase centre (Nissen et al., 2000)", af mange taget som bevis for, "that the ribosome is a ribozyme", og for en tidligere "'RNA world'". Nissen m.fl., Science 289: 920-930 (2000). Prisen 2009: Ramakrishnan, Steitz og Yonath, "for studies of the structure and function of the ribosome". **Sikker.**
   - **Dansk vinkel:** Poul Nissen er dansk, professor i Aarhus, postdoc hos Steitz 1997-2000 (da.wikipedia). **Ret sikker.**
   - **Men** proteinhaler (L27, L16) hjælper også: "a more complex starting point … than a pure RNA world" (samme dokument). **Sikker.**
@@ -78,7 +78,7 @@
   - Joyce ca. 1993 (NTRS): "probably only a matter of time, to be measured in years rather than decades". **Sikker.** Det er ikke sket helt endnu, over 30 år senere.
   - Lincoln og Joyce, Science 323: 1229-1232 (2009): RNA-enzymer, der kopierer hinanden ved at sætte færdige stykker sammen. Horning og Joyce, PNAS 113: 9786-9791 (2016): ribozymet 24-3 kopierer mange andre RNA (begge via Wikipedia). **Ret sikker.**
   - Papastavrou, Horning og Joyce, PNAS 121 (11) (2024), "RNA-catalyzed evolution of catalytic RNA" (NTRS-metadata). Indholdet kun fra et søgeresultat: ribozymet 71-89 kopierede et andet ribozym gennem otte runder, og nye varianter, der virkede, opstod. **Ret sikker.**
-  - **Nyt:** Gianni m.fl., Science 391: 1022-1028 (12. februar 2026): ribozymet QT45 (45 nukleotider) "can synthesize both its complementary strand and a copy of itself with fair accuracy" (Wikipedia "RNA world"). **Ret sikker** på artiklen, **usikker** på detaljerne.
+  - **Nyt:** Gianni m.fl., Science 391: 1022-1028 (12. februar 2026): ribozymet QT45 (45 nukleotider) "can synthesize both its complementary strand and a copy of itself with fair accuracy" (Wikipedia "RNA world"). **Ret sikker** på artiklen, **usikker** på detaljerne. **Fable E5 (12. nov. 2026):** Nu **sikker**: forfatternes manuskript i PMC7618777 (45 baser, i is ved −7 °C, 94,1 % rigtige bogstaver, udbytte ca. 0,2 % på 72 dage, de to trin i hver sin reaktion). 0,941⁴⁵ ≈ 6 %, så kun ca. hver femtende kopi er fejlfri.
   - Status: Ingen kilde siger, at et RNA har kopieret sig selv igen og igen helt uden hjælp. Skriv "Forskerne er tæt på, men ingen har lavet et RNA, der klarer sig selv".
 - **RNA-verdenen er en hypotese:** "a hypothetical stage", og "Opinions differ … as to whether RNA constituted the first autonomous self-replicating system or was a derivative of a still-earlier system" (Wikipedia "RNA world"). Joyce: "very good circumstantial evidence" (NASA). Andre: "metabolism-first" (Wikipedia "Abiogenesis"). Bennus ribose uden deoxyribose "supports the 'RNA world' hypothesis" (NASA 2025). **Ret sikker.**
 
@@ -96,7 +96,7 @@
 
 ## 9. Har nogen lavet liv?
 - **Nej:** "The transition from non-life to life has not been observed experimentally" (Wikipedia "Abiogenesis"). **Ret sikker.**
-- **JCVI-syn1.0:** Gibson m.fl., Science 329 (5987): 52-56 (online 20. maj 2010), "Creation of a Bacterial Cell Controlled by a Chemically Synthesized Genome" (via Wikipedia). Genomet blev sat ind i en celle af *M. capricolum*, "that had its DNA removed", og "There has been controversy over whether JCVI-syn1.0 is a true synthetic organism" (Wikipedia). 1,08 mio. basepar kun fra et søgeresultat. Vandmærke med Feynman: "What I cannot build, I cannot understand" (Wikipedia). **Ret sikker.**
+- **JCVI-syn1.0:** Gibson m.fl., Science 329 (5987): 52-56 (online 20. maj 2010), "Creation of a Bacterial Cell Controlled by a Chemically Synthesized Genome" (via Wikipedia). Genomet blev sat ind i en celle af *M. capricolum*, "that had its DNA removed", og "There has been controversy over whether JCVI-syn1.0 is a true synthetic organism" (Wikipedia). 1,08 mio. basepar kun fra et søgeresultat. Vandmærke med Feynman: "What I cannot build, I cannot understand" (Wikipedia). **Ret sikker.** **Fable E5 (12. nov. 2026):** Cellen blev ikke tømt først: Hele celler fik det nye genom, og det gamle forsvandt bagefter (efter hukommelsen). Skriv ikke "en tømt celle". Feynman-citatet i vandmærket var et fejlcitat: brug det ikke.
 - **JCVI-syn3.0:** Hutchison m.fl., Science 351 (6280): aad6253 (2016): "531,560 base pairs and 473 genes, 149 of which have functions that are completely unknown" (Wikipedia). 531.560 / 1.080.000 ≈ 0,49, ca. halvt så stort. **Ret sikker.**
 - **Pasteur:** "experiments in the late 1850s" med svanehalskolben (Wikipedia "Spontaneous generation"), 1859 ifølge Wikipedia "Miller–Urey experiment". **Ret sikker.** Skriv "omkring 1860". Han viste, at liv ikke opstår af sig selv i en kolbe i dag, ikke at det aldrig er sket.
 
@@ -124,7 +124,7 @@
 
 ## 11. Ikke fundet eller usikkert
 - Årstallet 1994 for NASA's definition, Darwins ordlyd i DCP selv og Gibsons "1,08 mio. basepar" (se ovenfor).
-- Johnson 2008: "22" er talt i Wikipedias tabel. Tabellen giver 22 for H₂S-forsøget, men Parker 2011 siger selv 23. Brug 23.
+- Johnson 2008: "22" er talt i Wikipedias tabel. Tabellen giver 22 for H₂S-forsøget, men Parker 2011 siger selv 23. Brug 23. **Fable E5 (12. nov. 2026):** Det er to forsøg: 22 i vulkan-udgaven (Johnson 2008) og 23 i H₂S-forsøget (Parker 2011). Planens "22 i 2008" er rigtig.
 - Hanczyc, Fujikawa og Szostak 2003: forfatterne, titlen og "RNA indeni" er ikke set i en kilde, og heller ikke status for protoceller, der vokser og deler sig. Gebicki og Hicks 1973 og Hargreaves og Deamer 1978 er ikke slået op.
 - Oba 2023: mængderne af uracil (ca. 6-32 ppb) kun i et søgeresultat. Et søgeresultat nævnte alle fem baser i Ryugu (Nature Astronomy, marts 2026): ikke bekræftet.
 - Ikke slået op: Lost Citys pH og Kelley m.fl. 2001, "ler først" (Cairns-Smith) og "proteiner først", og at Pasteurs kolber stadig skulle være sterile (brug det ikke).

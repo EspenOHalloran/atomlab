@@ -186,7 +186,7 @@ export const ORDBOG = [
   {
     id: 'rna', ord: 'RNA',
     former: ['rna', "rna'et", "rna'ets", 'rna-kopien', 'rna-kopi'],
-    tekst: 'DNA\'ets lillebror: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne.',
+    tekst: 'DNA\'ets nære slægtning: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne.',
   },
   {
     id: 'ribosom', ord: 'Ribosom',
@@ -201,7 +201,7 @@ export const ORDBOG = [
   {
     id: 'enzym', ord: 'Enzym',
     former: ['enzym', 'enzymet', 'enzymer', 'enzymerne'],
-    tekst: 'Et protein, der får en bestemt kemisk reaktion til at ske meget hurtigere, uden selv at blive brugt op. Fx klipper enzymer i maven maden i små stykker, og RNA-polymerasen bygger RNA.',
+    tekst: 'Et stof, næsten altid et protein, der får en bestemt kemisk reaktion til at ske meget hurtigere, uden selv at blive brugt op. Fx klipper enzymer i maven maden i små stykker, og RNA-polymerasen bygger RNA.',
   },
   {
     id: 'aktiveringsenergi', ord: 'Aktiveringsenergi',
