@@ -37,18 +37,55 @@ function stilleKontekst(ctx) {
   return ctx;
 }
 
+// Skærmene hentes først, når de åbnes (10a, docs/plan-skaermliste.md). En test, der sætter location.hash eller trykker
+// på en del i menuen, venter derfor her, til skærmen er hentet og vist (atomlabTest.klar()), ligesom man selv venter på
+// "Henter …". Det sker efter goto, reload, evaluate og click. Uden ?test (ingen atomlabTest) ventes der ikke.
+// En test, der selv vil se hentningen undervejs, starter browseren med ventPåSkærme: false (tests/skaermliste.mjs).
+function ventendeSide(side) {
+  const org = { goto: side.goto.bind(side), reload: side.reload.bind(side), evaluate: side.evaluate.bind(side), click: side.click.bind(side), vent: side.waitForFunction.bind(side) };
+  const vent = (f) => org.vent(f, null, { timeout: 120000, polling: 50 });
+  const efter = async (svar) => {
+    try {
+      await vent(() => !window.atomlabTest?.klar || window.atomlabTest.klar());
+    } catch {
+      // siden er lukket eller skiftet undervejs
+    }
+    return svar;
+  };
+  const efterNavigering = async (svar, valg) => {
+    if (valg?.waitUntil === 'commit' || !/[?&]test\b/.test(side.url())) return svar;
+    try {
+      await vent(() => window.atomlabTest);
+    } catch {
+      // ingen testadgang (fx ingen 3D)
+    }
+    return efter(svar);
+  };
+  side.goto = async (url, valg) => efterNavigering(await org.goto(url, valg), valg);
+  side.reload = async (valg) => efterNavigering(await org.reload(valg), valg);
+  side.evaluate = async (...a) => efter(await org.evaluate(...a));
+  side.click = async (...a) => efter(await org.click(...a));
+  return side;
+}
+
 export const chromium = {
-  async launch({ fuldGrafik = process.env.FULD_GRAFIK === '1', ...valg } = {}) {
+  async launch({ fuldGrafik = process.env.FULD_GRAFIK === '1', ventPåSkærme = true, ...valg } = {}) {
     const browser = await playwright.chromium.launch(valg);
+    const forbered = ventPåSkærme ? ventendeSide : (side) => side;
+    const nySideI = (ctx) => {
+      const ny = ctx.newPage.bind(ctx);
+      ctx.newPage = async (...a) => forbered(await ny(...a));
+      return ctx;
+    };
     const nyKontekst = browser.newContext.bind(browser);
     if (fuldGrafik) {
-      browser.newContext = async (...a) => stilleKontekst(await nyKontekst(...a));
+      browser.newContext = async (...a) => nySideI(stilleKontekst(await nyKontekst(...a)));
       const nySide = browser.newPage.bind(browser);
-      browser.newPage = async (...a) => udenStøj(await nySide(...a));
+      browser.newPage = async (...a) => forbered(udenStøj(await nySide(...a)));
       return browser;
     }
     browser.newContext = async (...a) => {
-      const ctx = stilleKontekst(await nyKontekst(...a));
+      const ctx = nySideI(stilleKontekst(await nyKontekst(...a)));
       await ctx.addInitScript(() => { globalThis.atomlabTestHurtig = true; });
       return ctx;
     };

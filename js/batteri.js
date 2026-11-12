@@ -13,6 +13,7 @@ import { forfraKnap } from './forfra.js';
 import { startGuide } from './guide.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
 import { lavKontakt } from './kontakt.js';
+import { OPGAVER_BATTERI } from './data/opgaver.js';
 
 const ANTAL_LI = 24; // så mange lithium-ioner viser vi (24 = 100 %)
 const REJSETID = 1.8; // sekunder for en ion gennem elektrolytten
@@ -34,28 +35,6 @@ function spændingVed(andel) {
   return 4.2;
 }
 
-export const OPGAVER_BATTERI = [
-  {
-    id: 'b-fuld', titel: 'Lad batteriet helt op', tip: 'Tryk "Oplad", og vent til 100 %.',
-    fakta: 'Fuldt opladet er en LiPo-celle 4,2 V. Til sidst skifter laderen til konstant spænding, så strømmen falder, og cellen ikke bliver overladet.',
-  },
-  {
-    id: 'b-lampe', titel: 'Få lampen til at lyse med batteriet', tip: 'Lad batteriet lidt op, og tryk så "Aflad".',
-    fakta: 'Elektronerne laver arbejde, når de løber gennem lampen. Det er den energi, du gemte, da du ladede batteriet op.',
-  },
-  {
-    id: 'b-tom', titel: 'Aflad batteriet, til beskyttelsen slår fra', tip: 'Aflad, til spændingen når 3,0 V.',
-    fakta: 'Mange LiPo-batterier, fx i telefoner, har et lille beskyttelseskredsløb. I fx droner passer laderen og elektronikken på i stedet. Går en celle meget længere ned end 3 V, kan kobberet i den begynde at opløses, og cellen tager skade.',
-  },
-  {
-    id: 'b-hurtig', titel: 'Lad hurtigt, og hold øje med varmen', tip: 'Vælg "Hurtig", og tryk "Oplad".',
-    fakta: 'Jo hurtigere man lader, jo varmere bliver batteriet. Laderen når også 4,2 V tidligere, så den sidste del tager længere tid. Varme slider på batteriet, så det holder kortere.',
-  },
-  {
-    id: 'b-overlad', titel: 'Se hvad der sker, hvis man overlader', tip: 'Slå "Snyd laderen" til, og lad videre efter 100 %.',
-    fakta: 'Derfor må man aldrig lade en LiPo med en forkert lader. Gode ladere stopper ved 4,2 V og balancerer cellerne, så ingen bliver overladet.',
-  },
-];
 
 // ---------- Tilstand ----------
 let rod = null;
@@ -830,3 +809,6 @@ export function testAdgang() {
     snyd: (s) => { snyd = s; },
   };
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavBatteri as lav, startBatteri as start, stopBatteri as stop };

@@ -3,44 +3,32 @@
 
 import { lavVerden, verden, sætVindue, flyInd, stopKamera, centrerVindue, nulstilStyring } from './scene3d.js';
 import { Atom } from './atom.js';
-import { lavVærksted, startVærksted, stopVærksted, OPGAVER, åbnGrundstof, testAdgang as værkstedTest } from './vaerksted.js';
-import { lavSystem, startSystem, stopSystem, testAdgang as systemTest } from './system.js';
-import { lavFusion, startFusion, stopFusion, OPGAVER_FUSION, testAdgang as fusionTest } from './fusion.js';
-import { lavReaktor, startReaktor, stopReaktor, OPGAVER_REAKTOR, testAdgang as reaktorTest } from './reaktor.js';
-import { lavBatteri, startBatteri, stopBatteri, OPGAVER_BATTERI, testAdgang as batteriTest } from './batteri.js';
-import { lavLiv, startLiv, stopLiv, OPGAVER_LIV, testAdgang as livTest } from './liv.js';
-import { lavKosmos, startKosmos, stopKosmos, FÆNOMENER, testAdgang as kosmosTest } from './kosmos.js';
-import { lavSolsystem, startSolsystem, stopSolsystem, FÆNOMENER as SOL_FÆNOMENER, testAdgang as solsystemTest } from './solsystem.js';
-import { NØGLER } from './faenomenskaerm.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
+import { OPGAVER, OPGAVER_FUSION, OPGAVER_REAKTOR, OPGAVER_BATTERI } from './data/opgaver.js';
+import { OPGAVER_LIV } from './data/liv/opskriften.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js'; // "Byg et molekyle" tæller med i Værkstedet
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
+import { FÆNOMEN_IDER, setFænomener, flytGemt } from './data/faenomener.js';
+import { SKÆRME, skærmMed, hentSkærm, hentetSkærm } from './skaerme.js';
+import './gaa.js'; // knapperne med data-gaa virker, før Kosmos og Solsystemet er hentet
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
-import { lavBeskeder, rydBeskeder, testAdgang as beskederTest } from './beskeder.js';
+import { lavBeskeder, rydBeskeder, visBesked, testAdgang as beskederTest } from './beskeder.js';
 import { stopGuide } from './guide.js';
 import { citatHTML } from './data/citater.js';
 import { lavOrdforklaringer, testAdgang as ordTest } from './ordforklaring.js';
 import { lavLag, lukHvorfor, vistHvorfor } from './lag.js';
 import { lavPaneler, startPaneler, testAdgang as panelTest } from './paneler.js';
-import { lavOrdbog, startOrdbog, stopOrdbog } from './ordbog.js';
 import { ORDNE, søgOrd } from './data/ordbogliste.js';
 import { lavKarrusel, startKarrusel, stopKarrusel, gemSidsteDel, testAdgang as karrusselTest } from './karrusel.js';
+import { lavHentebjælke } from './hentning.js';
 
-const skærme = {
-  menu: { start: startMenu, stop: stopMenu },
-  vaerksted: { start: startVærksted, stop: stopVærksted },
-  system: { start: startSystem, stop: stopSystem },
-  fusion: { start: startFusion, stop: stopFusion },
-  reaktor: { start: startReaktor, stop: stopReaktor },
-  liv: { start: startLiv, stop: stopLiv },
-  batteri: { start: startBatteri, stop: stopBatteri },
-  solsystem: { start: startSolsystem, stop: stopSolsystem },
-  kosmos: { start: startKosmos, stop: stopKosmos },
-  ordbog: { start: startOrdbog, stop: stopOrdbog },
-};
+// Skærmene står i js/skaerme.js og hentes først, når de åbnes (10a). Menuen er altid hentet.
+const MENU = { start: startMenu, stop: stopMenu };
+const SKÆRM_IDER = ['menu', ...SKÆRME.map((s) => s.id)];
 
 let aktivSkærm = null;
+let aktivModul = null;
 let menuAtom = null;
 
 function start() {
@@ -63,20 +51,7 @@ function start() {
   verden.scene.add(menuAtom.gruppe);
 
   lavBeskeder();
-  lavVærksted();
-  lavSystem({
-    åbnIVærksted: (nr) => {
-      åbnGrundstof(nr);
-      location.hash = '#vaerksted';
-    },
-  });
-  lavFusion();
-  lavReaktor();
-  lavLiv();
-  lavBatteri();
-  lavSolsystem(); // før Kosmos, så det gemte flytter med først
-  lavKosmos();
-  lavOrdbog();
+  flytGemt(); // det gemte fra før 26. oktober 2026 flytter fra Kosmos til Solsystemet, før menuen tæller
   lavKarrusel({ fremgang: fremgangPrDel, radius: () => menuAtom.størrelse() }); // menuen som en ring af verdenerne (docs/plan-menu.md)
   lavPaneler();
   lavFuldSkærmKnapper();
@@ -107,50 +82,119 @@ function start() {
   addEventListener('keydown', (h) => {
     if (h.key === 'Escape') document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
   });
-  // Adgang for automatiske tests
-  if (new URLSearchParams(location.search).has('test')) window.atomlabTest = { ord: ordTest(), vaerksted: værkstedTest(), system: systemTest(), fusion: fusionTest(), reaktor: reaktorTest(), batteri: batteriTest(), liv: livTest(), kosmos: kosmosTest(), solsystem: solsystemTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) }, karrusel: karrusselTest() };
-  visSkærm();
-  skjulHenter();
+  // Den første skærm (fx et link direkte til #solsystem) hentes, før bjælken "Henter AtomLab" forsvinder.
+  // Adgangen for automatiske tests kommer først bagefter, så testene ved, at skærmen er klar.
+  visSkærm().then(() => {
+    if (new URLSearchParams(location.search).has('test')) lavTestAdgang();
+    skjulHenter();
+  });
 }
 
-function visSkærm() {
+// Adgang for automatiske tests (?test, docs/kode/testadgang.md). En skærms adgang (fx atomlabTest.fusion) findes først,
+// når skærmen er hentet (ellers undefined). atomlabTest.hent(id) henter en skærm uden at åbne den.
+function lavTestAdgang() {
+  const t = { ord: ordTest(), paneler: panelTest(), beskeder: beskederTest(), hvorfor: { vist: vistHvorfor }, ordbog: { rækkefølge: () => ORDNE.map((o) => o.ord), søg: (t) => søgOrd(t).map((o) => o.ord) }, karrusel: karrusselTest() };
+  const adgang = new Map();
+  for (const { id } of SKÆRME) {
+    if (id in t) continue; // atomlabTest.ordbog er Ordbogens data
+    Object.defineProperty(t, id, {
+      enumerable: true,
+      get() {
+        const m = hentetSkærm(id);
+        if (!m?.testAdgang) return undefined;
+        if (!adgang.has(id)) adgang.set(id, m.testAdgang());
+        return adgang.get(id);
+      },
+    });
+  }
+  t.hentet = (id) => !!hentetSkærm(id);
+  t.hent = (id) => hentSkærm(id).then(() => true);
+  t.aktiv = () => aktivSkærm;
+  // Sand, når den skærm, # peger på, er hentet og vist (tests/hjaelp.mjs venter på den efter et skift)
+  t.klar = () => aktivSkærm === (skærmMed(location.hash.slice(1)) ? location.hash.slice(1) : 'menu');
+  window.atomlabTest = t;
+}
+
+let skift = 0; // tæller skærmskift, så en langsom hentning ikke viser en skærm, man allerede har forladt
+let bjælke = null; // "Henter …", mens en skærm hentes
+let bjælkeNr = 0; // det skærmskift, bjælken venter for
+
+async function visSkærm() {
   const navn = location.hash.slice(1);
-  const ny = skærme[navn] ? navn : 'menu';
+  const ny = skærmMed(navn) ? navn : 'menu';
+  const nr = ++skift;
   if (ny === aktivSkærm) return;
-  if (aktivSkærm) skærme[aktivSkærm].stop();
+  let modul = ny === 'menu' ? MENU : hentetSkærm(ny);
+  if (!modul) {
+    // Den gamle skærm står, mens den nye hentes. "Henter …" ses først efter 1 sekund (js/hentning.js).
+    bjælke ??= lavHentebjælke();
+    bjælkeNr = nr;
+    bjælke.vent(`Henter ${skærmMed(ny).titel} …`, () => nr === skift);
+    try {
+      modul = await hentSkærm(ny);
+    } catch (fejl) {
+      console.error(fejl);
+      if (bjælkeNr === nr) bjælke.færdig();
+      if (nr === skift) {
+        // Bliv på den skærm, man var på (eller menuen ved start), og sig det. Browseren husker en mislykket import(),
+        // så et nyt forsøg på samme side ville fejle igen. Derfor skal siden genindlæses.
+        history.replaceState(null, '', aktivSkærm && aktivSkærm !== 'menu' ? `#${aktivSkærm}` : location.pathname + location.search);
+        if (!aktivSkærm) await visSkærm();
+        visBesked({ titel: `${skærmMed(ny).titel} kunne ikke hentes`, tekst: 'Tjek forbindelsen til nettet, og genindlæs siden.', type: 'advarsel', log: false });
+      }
+      return;
+    }
+    if (bjælkeNr === nr) bjælke.færdig();
+    if (nr !== skift) return; // man er gået videre, mens skærmen blev hentet
+  }
+  if (ny !== 'menu') følgRulning(document.getElementById(ny)); // panelerne, skærmen lavede, da den blev bygget
+  if (aktivSkærm) aktivModul.stop();
   rydBeskeder(); // beskeder, guiden og "Hvorfor?"-kortet hører til den skærm, de blev vist på
   stopGuide();
   lukHvorfor();
   // Dialoger (fx hjælpen med linket til Ordbogen) hører til den skærm, de blev åbnet på
   document.querySelectorAll('.overlag').forEach((o) => o.classList.add('skjult'));
-  for (const id of Object.keys(skærme)) {
+  for (const id of SKÆRM_IDER) {
     document.getElementById(id).classList.toggle('skjult', id !== ny);
   }
   aktivSkærm = ny;
+  aktivModul = modul;
   if (ny !== 'menu') gemSidsteDel(ny);
   stopKamera();
   nulstilStyring();
   opdaterLydknapper();
   startPaneler(ny);
-  skærme[ny].start();
+  modul.start();
 }
 
-// Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult)
-function lavRulleTip() {
-  const paneler = [...document.querySelectorAll('.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #liv, #solsystem, #kosmos')];
-  const tjek = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
-  let venter = false;
-  const tjekAlle = () => {
-    if (venter) return;
-    venter = true;
-    requestAnimationFrame(() => { venter = false; paneler.forEach(tjek); });
-  };
-  const størrelse = new ResizeObserver(tjekAlle);
-  for (const el of paneler) {
-    el.addEventListener('scroll', () => tjek(el), { passive: true });
-    størrelse.observe(el);
+// Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult).
+// følgRulning(rod) holder øje med panelerne i rod. Kaldes ved start og, når en skærm er hentet og bygget (10a).
+const RULLEPANELER = '.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #liv, #solsystem, #kosmos';
+const rullepaneler = new Set();
+const tjekRulning = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
+let rulleVenter = false;
+function tjekAlleRulning() {
+  if (rulleVenter) return;
+  rulleVenter = true;
+  requestAnimationFrame(() => { rulleVenter = false; rullepaneler.forEach(tjekRulning); });
+}
+const rulleStørrelse = new ResizeObserver(tjekAlleRulning);
+
+function følgRulning(rod) {
+  const nye = [...rod.querySelectorAll(RULLEPANELER)];
+  if (rod.matches?.(RULLEPANELER)) nye.push(rod);
+  for (const el of nye) {
+    if (rullepaneler.has(el)) continue;
+    rullepaneler.add(el);
+    el.addEventListener('scroll', () => tjekRulning(el), { passive: true });
+    rulleStørrelse.observe(el);
   }
-  new MutationObserver(tjekAlle).observe(document.body, { childList: true, subtree: true, characterData: true });
+  tjekAlleRulning();
+}
+
+function lavRulleTip() {
+  følgRulning(document.body);
+  new MutationObserver(tjekAlleRulning).observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 
 function opdaterLydknapper() {
@@ -171,16 +215,17 @@ function startMenu() {
 }
 
 // Fremgangen i hver del: { id: { løst, ialt, slags } }. Bruges af menuen (✓, "Start her" og "Din fremgang" i karrusel.js).
+// Tallene kommer fra js/data/, så skærmene ikke skal hentes for at tælle (10a).
 function fremgangPrDel() {
   const ud = {};
   for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };
-  for (const [id, liste] of [['solsystem', SOL_FÆNOMENER], ['kosmos', FÆNOMENER]]) {
-    let set = [];
-    try { set = JSON.parse(localStorage.getItem(NØGLER[id].set)) || []; } catch { /* ingen lagring */ }
-    ud[id] = { løst: liste.filter((f) => set.includes(f.id)).length, ialt: liste.length, slags: 'set' };
+  for (const id of ['solsystem', 'kosmos']) {
+    const set = setFænomener(id);
+    const liste = FÆNOMEN_IDER[id];
+    ud[id] = { løst: liste.filter((f) => set.includes(f)).length, ialt: liste.length, slags: 'set' };
   }
   return ud;
 }

@@ -6,7 +6,7 @@ import { KATEGORIER, grundstof, skaller } from './data/grundstoffer.js';
 import { KATEGORI_INFO } from './data/kategorier.js';
 import { ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
-import { åbnFænomen } from './faenomenskaerm.js';
+import { åbnFænomen } from './gaa.js';
 
 const TAU = Math.PI * 2;
 

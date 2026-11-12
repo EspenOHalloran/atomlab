@@ -11,7 +11,7 @@
 - `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`)
 - `atomlabKosmosSet`: liste med id på de fænomener i Kosmos, man har kigget på (de andre har en lille prik)
 - `atomlabNavne`: `'til'` eller `'fra'`, knappen "Navne" ved planeterne i Solsystemet (navnene på Mars og Saturns måner). Til fra start.
-- `atomlabSolsystem` og `atomlabSolsystemSet`: det samme for Solsystemet. De flyttede fænomener flyttes fra Kosmos' nøgler første gang (`flytGemt`).
+- `atomlabSolsystem` og `atomlabSolsystemSet`: det samme for Solsystemet. De flyttede fænomener flyttes fra Kosmos' nøgler første gang (`flytGemt` i `js/data/faenomener.js`, ved start).
 - `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`, `batteri`) og `fusion-rejse` (rejsen ind i Solen)
 - `atomlabSidsteDel`: id på den del, man sidst var i (fx `'kosmos'`). Ringen i menuen starter på verdenen for den del.
 - `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.

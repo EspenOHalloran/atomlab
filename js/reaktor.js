@@ -15,6 +15,7 @@ import { startGuide, stopGuide } from './guide.js';
 import { lavTidsknap } from './pause.js';
 import { lavKontakt } from './kontakt.js';
 import { visLag, lavNæsteSkridt } from './lag.js';
+import { OPGAVER_REAKTOR } from './data/opgaver.js';
 
 // De tre måder, uran-235 spaltes på her (rigtige par; tæl efter: protoner 92, nukleoner 236)
 const PAR = [
@@ -23,36 +24,6 @@ const PAR = [
   { a: [52, 85], b: [40, 57], neutroner: 2 }, // tellur-137 + zirconium-97
 ];
 
-export const OPGAVER_REAKTOR = [
-  {
-    id: 'r-spalt', titel: 'Spalt en uran-235-kerne', tip: 'Vælg uran-235 og en langsom neutron, og tryk "Skyd neutron".',
-    fakta: 'Når uran-235 spalter, frigøres ca. 200 MeV. Det er ca. 7-8 gange mere end hele Solens opskrift (ca. 27 MeV). Men pr. gram brændsel giver fusion ca. 8 gange mere, fordi brintkerner er så lette.',
-  },
-  {
-    id: 'r-hurtig', titel: 'Skyd en hurtig neutron mod uran-235', tip: 'Vælg "Hurtig" neutron.',
-    fakta: 'Hurtige neutroner preller oftest af. Derfor bremser man dem med vand i en reaktor. Vandet kaldes en moderator.',
-  },
-  {
-    id: 'r-u238', titel: 'Skyd en neutron mod uran-238', tip: 'Vælg uran-238 og en langsom neutron.',
-    fakta: 'Uran-238 fanger neutronen og bliver til uran-239. Efter to betahenfald er det blevet til plutonium-239, som også kan spaltes.',
-  },
-  {
-    id: 'r-tre', titel: 'Find alle tre måder at spalte på', tip: 'Spalt uran-235 flere gange. Den spalter tilfældigt.',
-    fakta: 'I virkeligheden kan uran-235 spalte på mere end hundrede forskellige måder. Stumperne har næsten altid tilsammen 92 protoner. En sjælden gang flyver der også en lille heliumkerne ud.',
-  },
-  {
-    id: 'r-start', titel: 'Start en kædereaktion', tip: 'Gå til "Kædereaktion", og tryk "Start reaktoren".',
-    fakta: 'Hver spaltning giver 2-3 nye neutroner, som kan spalte nye kerner. Derfor kan det tage fart.',
-  },
-  {
-    id: 'r-stabil', titel: 'Hold reaktoren stabil i 30 sekunder', tip: 'Brug kontrolstavene, så effekten bliver i det grønne felt.',
-    fakta: 'I et atomkraftværk styrer man reaktoren præcis sådan: Kontrolstavene suger neutroner op, så hver spaltning i gennemsnit giver præcis én ny spaltning.',
-  },
-  {
-    id: 'r-nødstop', titel: 'Få reaktoren til at lave nødstop', tip: 'Træk kontrolstavene helt op, og se hvad der sker.',
-    fakta: 'Ved nødstop kommer alle kontrolstavene ind på få sekunder, og kædereaktionen stopper. Men brændslet bliver ved med at lave varme længe bagefter, så det skal stadig køles.',
-  },
-];
 
 // ---------- Tilstand ----------
 let tilstand = 'kerne'; // 'kerne' (spalt én) eller 'kæde' (kædereaktion)
@@ -1060,3 +1031,6 @@ export function testAdgang() {
     stavVist: () => stavVist,
   };
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavReaktor as lav, startReaktor as start, stopReaktor as stop };

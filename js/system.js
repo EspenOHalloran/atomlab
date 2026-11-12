@@ -16,7 +16,8 @@ import { visBesked } from './beskeder.js';
 import { lavKategorikort } from './kategorikort.js';
 import { KATEGORI_INFO } from './data/kategorier.js';
 import { visHvorfor, lukHvorfor } from './lag.js';
-import { åbnFænomen } from './faenomenskaerm.js';
+import { åbnFænomen, tagVentGrundstof } from './gaa.js';
+import { hentSkærm } from './skaerme.js';
 
 const AFSTAND = 1.07; // afstand mellem felterne
 const BUE = 26; // radius på væggens bue
@@ -35,12 +36,10 @@ let filter = { kategori: null, tilstand: null, opdaget: false };
 let søgning = ''; // teksten i søgefeltet (små bogstaver)
 let fundne = new Set(); // de grundstoffer, der passer til søgningen
 let vægTilbage = 0; // 0 = væggen fremme, 1 = væggen trukket tilbage (detaljevisning)
-let tilVærksted = null; // funktion, der åbner et grundstof i værkstedet
 let tipVist = false;
 let kategorikort = null; // kortet om den valgte kategori (js/kategorikort.js)
 let kategoriTid = 0; // sekunder siden kategorien blev valgt (væggen laver en bølge)
 let ventKategori = null; // kategorien, der skal vises, når skærmen starter (fra værkstedet)
-let ventGrundstof = null; // grundstoffet, der skal åbnes, når skærmen starter (fra en knap i en anden del)
 const stråle = new THREE.Raycaster();
 const mus = new THREE.Vector2();
 const hjælpV = new THREE.Vector3();
@@ -52,8 +51,14 @@ function $(id) {
   return document.getElementById(id);
 }
 
-export function lavSystem({ åbnIVærksted }) {
-  tilVærksted = åbnIVærksted;
+// Åbner et grundstof i Værkstedet. Værkstedet hentes først, hvis det ikke er hentet (10a).
+async function tilVærksted(nr) {
+  const værksted = await hentSkærm('vaerksted');
+  værksted.åbnGrundstof(nr);
+  location.hash = '#vaerksted';
+}
+
+export function lavSystem() {
   væg = new THREE.Group();
   væg.visible = false;
   verden.scene.add(væg);
@@ -220,19 +225,11 @@ function visKategori(kat) {
 }
 
 // Knapper med data-gaa="system:55" i teksterne (js/sideknap.js: gå('system:55', 'Cæsium')) åbner et grundstof her,
-// fx cæsium fra "Hvad er et sekund?" i Rejsen i tid. Fra en anden skærm skiftes der først hertil.
-document.addEventListener('click', (h) => {
-  const b = h.target.closest?.('[data-gaa^="system:"]');
-  if (!b) return;
-  const nr = Number(b.dataset.gaa.split(':')[1]);
-  if (!(nr >= 1 && nr <= 118)) return;
-  lyd.klik();
+// fx cæsium fra "Hvad er et sekund?" i Rejsen i tid. Klikket fanges i js/gaa.js (også før denne skærm er hentet).
+// Står man allerede her, åbnes kortet med det samme. Ellers åbnes det, når skærmen starter (tagVentGrundstof).
+export function visGrundstofFraLink(nr) {
   if (aktiv) visDetalje(nr, false);
-  else {
-    ventGrundstof = nr;
-    location.hash = '#system';
-  }
-});
+}
 
 export function startSystem() {
   aktiv = true;
@@ -246,9 +243,9 @@ export function startSystem() {
   verden.styring.autoRotate = false;
   begrænsDrejning({ vandret: 0.55, lodret: 0.4 });
   opdaterFelter();
+  const ventGrundstof = tagVentGrundstof();
   if (ventGrundstof) {
     visDetalje(ventGrundstof, false);
-    ventGrundstof = null;
   } else if (valgt) {
     visDetalje(valgt, false);
   } else {
@@ -783,3 +780,6 @@ export function testAdgang() {
     søg: (tekst) => { $('systemSøg').value = tekst; søg(tekst); return [...$('systemResultater').querySelectorAll('.søg-valg')].map((b) => b.textContent); },
   };
 }
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavSystem as lav, startSystem as start, stopSystem as stop };

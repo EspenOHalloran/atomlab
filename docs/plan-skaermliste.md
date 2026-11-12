@@ -49,3 +49,6 @@ export async function hentSkærm(id) { /* import(), lav() én gang, samme løfte
 - En skærm, der i dag regner med, at en anden er bygget, ses først, når den åbnes alene. Derfor åbner den nye test hver skærm som den første.
 - Tests, der kun venter med `waitForTimeout`, kan blive ustabile. De rettes til at vente på skærmen.
 - Status "prøve" vises ikke anderledes endnu (det er nr. 13 med `?lab`).
+
+## Jeres svar (12. november 2026)
+Go til planen med Opus' anbefalinger: Fable læser den ikke igennem. Liv har status "prøve" (L1-L2 er ikke prøvet af et barn), og resten er "færdig".
