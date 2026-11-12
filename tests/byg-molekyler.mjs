@@ -395,8 +395,8 @@ await G(page, 'åbnKnaldgas');
 await page.waitForTimeout(300);
 await page.click('#knaldJordensVand');
 await page.click('#hvorforKort .hk-link');
-await page.waitForFunction(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'stjernefoedsel', null, { timeout: 15000 }).catch(() => {});
-tjek('M4: linket åbner "Ny stjerne" i Kosmos, og knaldgassen er stoppet', await page.evaluate(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'stjernefoedsel') && !(await KG('aktiv')));
+await page.waitForFunction(() => location.hash === '#kosmos' && window.atomlabTest?.kosmos?.valgt() === 'stjernefoedsel', null, { timeout: 15000 }).catch(() => {});
+tjek('M4: linket åbner "Ny stjerne" i Kosmos, og knaldgassen er stoppet', await page.evaluate(() => location.hash === '#kosmos' && atomlabTest.kosmos?.valgt() === 'stjernefoedsel') && !(await KG('aktiv')));
 await ctx.close();
 
 // Tablet og telefon: fanerne, 3D-billedet øverst, paletten lige under, et træk med fingeren og ingen rullebjælke

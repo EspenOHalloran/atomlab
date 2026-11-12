@@ -18,3 +18,4 @@
 - **`fuldskaerm` under belastning (9. november 2026, Tid T5c):** "pc: fuld skærm efter klik" fejlede én gang i hele samlingen (to tests ad gangen) og bestod alene (12 af 12). Ikke undersøgt.
 - **`hentning` fejler også på `main` (10. november 2026, Liv L2):** "Stå på Mars: bjælken viser landskabet og MB ("Henter landskabet …")" fejler både på grenen og på en ren `main` i miljøet, også alene. Liv L2 rører ikke Mars eller hentningen. Måske er landskabet allerede i cachen eller hentes for hurtigt i miljøet. Ikke undersøgt (sporet Solsystemet).
 - **`ordbog` under belastning (10. november 2026, Liv L2):** En `TimeoutError` efter 11 sekunder i hele samlingen (to ad gangen). Bestod alene to gange (44 OK). Ikke undersøgt.
+- **`aarstider` under belastning (12. november 2026, Småting 10a):** "første trin: Jorden kører rundt …, og skyderen følger med" fejlede én gang i hele samlingen (to ad gangen, skyderen viste 1. januar) og bestod alene (46 OK). Ikke undersøgt.
