@@ -2,7 +2,9 @@
 
 *Spor i [oversigten](../lige-nu.md) til små rettelser på tværs, tests, dokumenterne og arbejdsgangen. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/smaating.md](../arkiv/historik/smaating.md). Højst ca. 5 KB. Sidst opdateret: 12. november 2026.*
 
-**Senest lavet (12. november 2026): Citatet `tycho` på latin.** `original` i `js/data/citater.js` er nu Tychos latin fra *De nova stella*, læst på sidebilledet i faksimilen 1901 (side A, archive.org-billede n36), og `oversat` er fjernet (tooltip'en sagde "Engelsk oversættelse"). Den danske `tekst` er vores egen oversættelse og har nu både "enten" og "eller" (Solen, der stod stille for Josva). Kommentaren forklarer Josva i én sætning. Ny fælde i `docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md`.
+**Senest lavet (12. november 2026): Gåderne, trin 0 (planen).** [plan-gaader.md](../plan-gaader.md): en ny del `gaader` i Biblioteket efter Ordbogen, en side uden 3D med en oversigt over de fem kort. Hvert kort er et lille forløb på tre trin (Hvad ved vi? / Hvad ved vi ikke? med "Målt eller gæt?" / Hvordan finder vi ud af det?), med dato, "Se det selv", "For nørder" og det fælles "Hvorfor?"-kort "Hvornår er noget opdaget?" (sigma). Kun klodser, der findes, og `gaa.js` lærer `gaader:id`. Valgene er mine anbefalinger (I bad mig køre med dem), og de kan ændres før G1. Afvigelse fra Retningen sagt ærligt: ingen Forløb-klods, fordi siden ikke har en scene. Kun dokumenter, ingen kode.
+
+**Næste i Gåderne:** G1 (siden og kortet Sort hul) med jeres go, ny session med Opus, høj. Prompten står nederst i planen. Så G2 (de to kort om liv) og G3 (antistof, mørkt stof og sigma).
 
 **Næste:** 10a er færdig, så parallelle sessioner er billigere igen (de rører ikke længere skærmenes start i `main.js`). 10b (egen HTML og CSS pr. skærm) sker gradvist, først med Molekyler. Faktagrundlagene kan køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
