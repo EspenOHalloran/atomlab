@@ -383,7 +383,7 @@ export const ORDBOG = [
     id: 'tidsforlaengelse', ord: 'Tidsforlængelse',
     former: ['tidsforlængelse', 'tidsforlængelsen'],
     // docs/fakta-tid.md, afsnit 2, 3 og 10
-    tekst: 'Når et ur går langsommere set fra os, fordi det farer forbi næsten med lysets fart. Den, der rejser, mærker intet, for alt om bord følger med. Ure tæt på noget tungt, som en planet, går også langsommere.',
+    tekst: 'Når et ur går langsommere set fra os, fordi det bevæger sig i forhold til os. Forskellen er bittelille, indtil farten nærmer sig lysets. Den, der rejser, mærker intet, for alt om bord følger med. Ure tæt på noget tungt, som en planet, går også langsommere.',
     // Kilder: docs/fakta-ordbog.md, "Tidsforlængelse". c · 2,2 µs ≈ 660 m. GPS: 3,87 km/s ≈ 14.000 km/t.
     mere: [
       ['Hvordan ved man, at det er sandt?', 'Det er målt mange gange. Myoner er partikler, der dannes mange km oppe i luften, når kosmisk stråling rammer den, og de lever i gennemsnit kun ca. 2 milliontedele af et sekund. Selv med næsten lysets fart ville de på så kort tid kun nå nogle hundrede meter. Alligevel når masser af dem ned til jorden, fordi deres ure set fra os går langsommere. Man har også fløjet atomure jorden rundt i fly og målt forskellen.'],

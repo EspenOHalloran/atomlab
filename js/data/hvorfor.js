@@ -110,7 +110,7 @@ export const HVORFOR = {
   // Rejsen i tid (T3). Kilder: docs/fakta-tid.md, afsnit 1, 2 og 8 (ét ton: 5,5·10²⁰ J ved 99 % og 6,3·10²¹ J ved 99,99 %,
   // verdens energiforbrug 592 EJ om året)
   lysfart: {
-    spørgsmål: 'Hvorfor kan intet nå lysets fart?',
+    spørgsmål: 'Hvorfor kan et rumskib aldrig nå lysets fart?',
     svar: 'Lysets fart er den samme for alle. Uanset hvor hurtigt du flyver, farer lyset stadig væk fra dig med lysets fart, så du kommer aldrig tættere på at indhente det. Og jo hurtigere du flyver, jo mere energi kræver det at komme bare lidt hurtigere. At få ét ton op på 99 % af lysets fart kræver næsten et års energi for hele verden, og 99,99 % ca. 10 år. For at nå helt op på lysets fart skulle der bruges uendelig meget energi.',
     nørd: 'Bevægelsesenergien er E = (γ − 1) · m · c². Når farten nærmer sig lysets, vokser γ uden grænse. Man hører tit, at man bliver tungere, jo hurtigere man flyver. Det er en gammeldags måde at sige det på, som de fleste fysikere undgår i dag. De siger i stedet, at massen er den samme, og at det er energien, der vokser.',
   },

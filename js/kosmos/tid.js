@@ -61,7 +61,7 @@ export default {
       {
         // Jeres spørgsmål 8. november 2026: "4 lysår på 21 dage uden at flyve hurtigere end lyset?" (afsnit 5 og 7)
         titel: 'Hurtigere end lyset? Nej!',
-        tekst: `<p>Ved 99,99 % af lysets fart tager turen til Alpha Centauri kun ca. 22 dage i dit ur, selv om den er 4,3 lysår lang. Det lyder, som om du flyver ca. 70 gange hurtigere end lyset. Men det gør du ikke. Det kommer an på, hvis ur man kigger på.</p>
+        tekst: `<p>Ved 99,99 % af lysets fart tager turen til Alpha Centauri kun ca. 22 dage i dit ur, selv om den er 4,3 lysår lang. Det lyder, som om du flyver ca. 71 gange hurtigere end lyset. Men det gør du ikke. Det kommer an på, hvis ur man kigger på.</p>
           <p><b>1. Set fra Jorden</b> flyver du lidt langsommere end lyset, så turen tager lidt over 4,3 år. Et lysglimt, der blev sendt af sted samtidig med dig, ville kun nå frem knap 4 timer før dig. Men alle ure i skibet går ca. 71 gange langsommere end Jordens. Derfor viser dit ur kun ca. 22 dage, når du når frem.</p>
           <p><b>2. Set fra dig i skibet</b> går dit ur helt normalt. Til gengæld er vejen skrumpet til ca. 0,061 lysår, og den korte vej klarer du på ca. 22 dage (se "Set fra skibet"). ${kontakt('Set fra skibet')}</p>
           <p><b>3. Begge dele er rigtige på samme tid</b> og giver det samme tal. Ingen ser dig flyve hurtigere end lyset: Set fra Jorden er du lige bag lyset, og set fra skibet er vejen bare kortere.</p>`,
@@ -76,7 +76,7 @@ export default {
         // Afsnit 2 og 4
         titel: 'Hvad gør farten?', hvorfor: ['lysfart'],
         tekst: `<p>Ved 90 % af lysets fart går der ca. 2,3 dage på Jorden for hver dag i skibet. Ved 99,99 % er det ca. 71 dage, og ved 99,9999 % ca. 707 dage, næsten 2 år. Hvert ekstra 9-tal gør forskellen ca. 3 gange større.</p>
-          <p>Alpha Centauri er ca. 4,3 lysår væk. Et lysår er den vej, lyset når på et år. Set fra Jorden tager turen ud og hjem derfor altid mindst ca. 8,7 år, for skibet kan ikke flyve hurtigere end lyset. Det er kun dit ur, der går langsommere og langsommere. ${tidKnap('hurtig', 'Prøv ⏩')}</p>`,
+          <p>Alpha Centauri er ca. 4,3 lysår væk. Et lysår er den vej, lyset når på et år. Set fra Jorden tager turen ud og hjem derfor altid mindst ca. 8,7 år, for skibet kan ikke flyve hurtigere end lyset. Det, der bliver kortere og kortere, er tiden på dit ur. ${tidKnap('hurtig', 'Prøv ⏩')}</p>`,
       },
       {
         // Afsnit 6 (11.500 g og 13 år: regn.py, punkt 13). Fast fart forklaret efter jeres spørgsmål 8. november 2026
@@ -126,7 +126,8 @@ export default {
       <p><b>På skærmen</b> tager hver vej lige lang tid (ca. 12 sekunder), uanset målet. Med fast fart følger skærmen Jordens ur, og med 1 g dit ur.</p>`,
     ærligt: `<p><b>Skyderen "Fast fart" springer over, hvordan man kommer op i fart.</b> I virkeligheden ville det tage år, og at gøre det på dage ville knuse en (se "Fast fart eller 1 g?").</p>
       <p><b>Du mærker intet om bord.</b> Dit eget ur går helt normalt, ét sekund pr. sekund, og dit hjerte slår, som det plejer. Det er først, når I sammenligner urene derhjemme, at du er den yngste.</p>
-      <p><b>"Det er accelerationen, der gør det"</b> er kun en del af historien. Man kan lave forsøg, hvor begge ure speeder op og bremser lige meget og alligevel kommer forskelligt hjem. Det er vejen gennem rumtiden, der tæller.</p>
+      <p><b>Urene på skærmen</b> viser tiden, som man regner den på Jorden. Set fra skibet er "nu" på Jorden et andet. Kun når I står ved siden af hinanden, er alle enige om, hvem der er ældst.</p>
+      <p><b>"Det er accelerationen, der gør det"</b> er kun en del af historien. Man kan tænke sig en rejse, hvor begge ure speeder op og bremser lige meget og alligevel kommer forskelligt hjem. Og i et rigtigt forsøg på CERN i 1977 fulgte myonernes ure kun farten, selv om de blev slynget rundt i en ring med ca. en milliard milliarder g. Det er vejen gennem rumtiden, der tæller.</p>
       <p><b>"For lyset står tiden stille"</b> hører man tit. Men lyset har ikke sit eget ur, for intet kan følge med lyset og se det stå stille.</p>
       <p><b>"Intet kan flyve hurtigere end lyset"</b> gælder for ting, der farer forbi hinanden. Fjerne galakser fjerner sig fra os hurtigere end lyset, fordi rummet imellem os udvider sig.</p>
       <p><b>I filmen Interstellar</b> svarer 1 time på en planet til 7 år på Jorden. Det er tyngden, ikke farten, og det kræver et sort hul, der drejer næsten så hurtigt, som det overhovedet kan, og en planet meget tæt på det.</p>
@@ -331,7 +332,7 @@ export default {
       // "Hurtigere end lyset?" Tiden i dit ur er kortere, end lyset bruger (jeres spørgsmål 8. november 2026)
       const ud = enG ? T.enG(m.lysår) : T.rejse(m.lysår, ni).ud;
       if ((!flyver() || faseNr === 2) && ud.skibÅr < m.lysår) {
-        html += `<p><b>Hurtigere end lyset?</b> Nej. At nå ${m.afstand} på ${T.varighed(ud.skibÅr)} lyder sådan, men set fra Jorden tager turen ${T.varighed(ud.jordÅr)} én vej, og et lysglimt, der blev sendt af sted samtidig med dig, ville kun komme ${T.forspringTekst(m.lysår, ud.jordÅr)} før dig. Det er dit ur, der går langsommere. Læs emnet "Hurtigere end lyset? Nej!" nedenfor.</p>`;
+        html += `<p><b>Hurtigere end lyset?</b> Nej. At nå ${m.afstand} på ${T.varighed(ud.skibÅr)} lyder sådan, men set fra Jorden tager turen ${T.varighed(ud.jordÅr)} én vej, og et lysglimt, der blev sendt af sted samtidig med dig, ville kun komme ${T.forspringTekst(m.lysår, ud.jordÅr)} før dig. Set fra Jorden går dit ur langsommere. Læs emnet "Hurtigere end lyset? Nej!" nedenfor.</p>`;
       }
       // Afstanden med to tal: set fra Jorden og set fra skibet (d/γ)
       if (flyver()) {

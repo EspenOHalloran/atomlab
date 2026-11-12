@@ -69,7 +69,7 @@ function linje3(tilstand, b) {
     const milliarder = Math.round(Math.exp(HØJDE3 / (b * C_KM_US * TAU)) / 1e9);
     return `Uden tidsforlængelse går næsten alle i stykker højt oppe. Kun ca. 1 ud af ${fmt(milliarder)} milliarder ville nå ned.`;
   }
-  if (tilstand === 1) return `Set fra Jorden går myonens ur ca. ${fmt(gam)} gange langsommere. Derfor når mange flere ned. Ved den typiske fart når de fleste ned, og det er det, man måler.`;
+  if (tilstand === 1) return `Set fra Jorden går myonens ur ca. ${fmt(gam)} gange langsommere. Ved den typiske fart når ca. halvdelen ned i stedet for næsten ingen. Det er målt (se For nørder).`;
   return `Set fra myonen går dens ur helt normalt. Til gengæld er luften presset sammen til ${luftTekst(luft)}, og jorden suser op mod den. Samme svar!`;
 }
 // Linealen: et pænt skridt i meter, så mærkerne står mindst 44 px fra hinanden
@@ -170,7 +170,7 @@ export default {
       },
       {
         titel: '"Nu" er ikke det samme for alle',
-        tekst: `<p>Set fra perronen har lyset den samme fart begge veje (regel 1!). Men bagenden kører lyset i møde, og forenden kører fra det. Derfor når lyset bagenden først. I toget er begge ender lige langt fra lampen, så lyset når dem samtidig. Begge har ret.</p>
+        tekst: `<p>Set fra perronen har lyset den samme fart begge veje (den mærkelige regel!). Men bagenden kører lyset i møde, og forenden kører fra det. Derfor når lyset bagenden først. I toget er begge ender lige langt fra lampen, så lyset når dem samtidig. Begge har ret.</p>
           <p>Det løser gåden fra myonerne: For at sammenligne to ure, der er langt fra hinanden, skal man vide, hvad de viser "på samme tid". Og det er de to ikke enige om. Derfor kan begge se den andens ur gå langsomt, uden at nogen tager fejl. Først når de mødes igen, kan de lægge urene ved siden af hinanden. Det er det, rumtidskortet viser.</p>`,
       },
       {
@@ -185,19 +185,19 @@ export default {
       <p><b>Den mærkelige regel:</b> Einstein fortalte selv mange år senere, at han som 16-årig forestillede sig at løbe efter en lysstråle med lysets fart. Så burde lyset se ud, som om det stod stille. Men sådan noget lys findes ikke. I 1905 byggede han relativitetsteorien på to regler: Fysikkens love er de samme for alle, der bevæger sig jævnt, og lysets fart er den samme, uanset hvor hurtigt lampen bevæger sig.</p>
       <p>Farter lægges i virkeligheden sammen med w = (u + v)/(1 + u·v/c²). Bolden flyver derfor ikke præcis 150 km/t. Den mangler ca. 6 · 10⁻¹³ km/t, under en milliontedel millimeter i timen. Ved store farter kan man se det: Kører toget 50 % af lysets fart og kaster bolden 50 % fremad, flyver bolden 80 %, ikke 100 %. Og med lyset (u = c) giver formlen altid c.</p>
       <p><b>Lysuret:</b> Kald tiden for et tik set fra Jorden for t. På et halvt tik går lyset c·t/2 på skrå, mens spejlene flytter sig v·t/2. Højden er L. Pythagoras: (c·t/2)² = L² + (v·t/2)². Løs for t: t = (2L/c) · 1/√(1 − v²/c²). Det sidste stykke er γ (gamma), tidsforlængelsen. Ved 50 % er γ = 1,15, ved 87 % 2, ved 95 % 3,2 og ved 99 % 7,1.</p>
-      <p>Hvorfor skal alt følge med? Hvis dit hjerte fulgte lysuret, men dit armbåndsur ikke gjorde, kunne du se på urene, at skibet bevæger sig. Men regel 1 siger, at fysikken er den samme for alle, der bevæger sig jævnt. Så alt følger med.</p>
+      <p>Hvorfor skal alt følge med? Hvis dit hjerte fulgte lysuret, men dit armbåndsur ikke gjorde, kunne du se på urene, at skibet bevæger sig. Men fysikken er den samme for alle, der bevæger sig jævnt (den første af Einsteins to regler). Så alt følger med.</p>
       <p><b>Myonernes kapløb:</b> Rossi og Hall målte i 1940 myonerne højt oppe på et bjerg i Colorado og længere nede i Denver. Myonerne fór over 99 % af lysets fart, og der kom flere ned, end der burde uden tidsforlængelse. Frisch og Smith gjorde det mere præcist i 1962 og filmede det: På toppen af Mount Washington (1.917 m) talte de ca. 563 myoner i timen. Uden tidsforlængelse skulle der kun være kommet ca. 27 i timen ned til havet, men de talte ca. 412. Det tydeligste forsøg er fra CERN i 1977: Myoner, der kørte rundt i en ring med γ = 29,3, levede 64,4 milliontedele sekund i stedet for 2,2, altså ca. 29 gange længere.</p>
       <p>Typiske myoner ved jorden har en energi på ca. 4 GeV (γ ≈ 38). Deres gennemsnitlige vej bliver ca. 25 km i stedet for 660 m.</p>
       <p><b>"Nu" er ikke det samme for alle:</b> I animationen kører toget 60 % af lysets fart. Set fra perronen er vognen også kortere (80 % af sin længde), og lyset når bagenden efter 0,25 og forenden efter 1,0 (målt i den tid, lyset er om at gå vognens længde). I toget når det begge efter 0,5.</p>
-      <p>For en rigtig togvogn på 20 m ved 100 km/t er forskellen ca. 6 femtosekunder (6 milliontedele af en milliardtedel sekund). Derfor opdagede ingen det før Einstein. Han forklarede det selv i en bog fra 1917 med to lyn, der rammer hver sin ende af et tog.</p>
-      <p><b>Rumtidskortet:</b> Tænd "Vis den rejsendes 'nu'". Hver stiplede linje viser, hvad der sker derhjemme "lige nu" set fra den rejsende (scene 4). Med vendepunktet 4 lysår ude ser den rejsende på vejen ud Jordens ur gå langsomt: Efter 3 år i skibet er der kun gået 1,8 år derhjemme. Det samme på vejen hjem. Men i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år. Dér ligger de manglende år.</p>
-      <p>Det er ikke accelerationen, der gør det: Man kan lave forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem. Det er vejens længde, der tæller.</p>
+      <p>For en rigtig togvogn på 20 m ved 100 km/t er forskellen ca. 6 femtosekunder (6 milliontedele af en milliardtedel sekund). Derfor har ingen nogensinde mærket det i hverdagen. Einstein forklarede det selv i en bog fra 1917 med to lyn, der rammer hver sin ende af et tog.</p>
+      <p><b>Rumtidskortet:</b> Tænd "Vis den rejsendes 'nu'". Hver stiplede linje viser, hvad der sker derhjemme "lige nu" set fra den rejsende (scene 4). Med vendepunktet 4 lysår ude regner den rejsende på vejen ud med, at Jordens ur går langsomt: Efter 3 år i skibet er der kun gået 1,8 år derhjemme. Det samme på vejen hjem. Men i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år. Dér ligger de manglende år.</p>
+      <p>Det er ikke accelerationen, der gør det: Man kan tænke sig en rejse, hvor begge ure speeder op og bremser lige meget og alligevel kommer forskelligt hjem. Og i CERN's ring fulgte myonernes ure kun farten, selv om de blev slynget rundt med ca. en milliard milliarder g. Det er vejens længde, der tæller.</p>
       <p>Formlen for et lige stykke er <span class="formel">τ² = t² − (x/c)²</span>. Tiden på ens eget ur kaldes egentiden, og den lige streg giver mest. Tæt på lysets streger bliver der næsten ingen tid, men lyset selv har ikke noget ur.</p>`,
     ærligt: `<p><b>Den mærkelige regel:</b> Et tog kan ikke køre med en mærkbar del af lysets fart, og lyset er tegnet meget langsommere, end det er. Men det har den samme fart i begge billeder. Billederne viser, hvad man ville måle, ikke hvad øjet ser (lyset skal også nå frem til øjet).</p>
       <p><b>Lysuret:</b> Lysuret er et tankeeksperiment, som står i de fleste lærebøger. Man kan ikke se lysglimtet undervejs. Animationen viser, hvad man ville regne sig frem til. "87 %" er 86,6 %, hvor γ er præcis 2. Lysuret trin for trin står også i Rejsen i tid.</p>
       <p><b>Myonernes kapløb:</b> Myonerne taber fart på vejen ned, luften er tyndere foroven, og ikke alle laves præcis 15 km oppe. Tallene i animationen er en enkel udregning. Levetiden er et gennemsnit: Nogle myoner går i stykker før, andre efter, helt tilfældigt (som atomkerner, der henfalder). Man kan ikke se myonerne. Man måler dem med en detektor. Animationen er sat meget ned i fart, og "Set fra myonen" endnu mere (urene viser de rigtige tider).</p>
       <p><b>"Nu" er ikke det samme for alle:</b> "Set fra perronen" er ikke det, øjet ser: Lyset skal også nå frem til den, der kigger. Det er det, man får, når man har trukket lysets rejsetid fra (eller har ure i takt langs hele perronen). Et tog kan heller ikke køre 60 % af lysets fart.</p>
-      <p><b>Rumtidskortet:</b> Vendingen er tegnet som et knæk. I virkeligheden tager det tid at vende, og det koster masser af energi. Rejsen går lige ud og hjem med fast fart.</p>`,
+      <p><b>Rumtidskortet:</b> Springet fra 1,8 til 8,2 år sker ikke derhjemme. Det er den rejsendes måde at regne "nu" på, der skifter, når skibet vender. Med en kikkert ville den rejsende se Jordens ur vise 1 år ved vendingen og derefter gå 3 gange så hurtigt. Vendingen er tegnet som et knæk. I virkeligheden tager det tid at vende, og det koster masser af energi. Rejsen går lige ud og hjem med fast fart.</p>`,
   },
 
   lav(gruppe, { fase, forklaring, overlag, opdaterKnapper, sætKontakt }) {
@@ -322,7 +322,7 @@ export default {
       if (xo1 < W + 10) ting(xo1, y1 - h1 * 0.55);
       pil(xa + Ltog + 4, y1 - h1 - 16, xa + Ltog + 4 + Math.max(36, Math.min(0.25 * W, uS * 0.9)), pilFarve, lys ? 'lyset: lysets fart' : `bolden: ${boldTog}`);
       if (vS > 0) hjørne(`← perronen: ${togNavn}`);
-      else if (lys) hjørne('toget står næsten stille i forhold til lyset');
+      else if (lys) hjørne('100 km/t er næsten ingenting mod lysets fart');
       g.restore();
 
       // Nederst: set fra perronen (toget kører, og det er γ gange kortere ved høj fart)

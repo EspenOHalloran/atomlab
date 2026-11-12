@@ -126,3 +126,4 @@
 - "Mikrobølgeovnen rammer vandets resonans." Wikipedia kalder det en udbredt misforståelse.
 - "Lys og stråling fylder meget i Fælles Mål." I udkastet til den nye fagplan (juni 2026) står "lys" og "stråling" slet ikke, kun "bølger". Og den bindende bekendtgørelse (BEK 1715/2024) har kun fire generelle kompetencemål. Slå Fælles Mål op i kilden, ikke efter hukommelsen.
 - "Hertz sagde: Det er til ingen nytte" og "Marconi sendte over Atlanten i 1901": citatet har ingen god kilde, og Marconis signal blev aldrig bekræftet. Skriv "Marconi meldte, at …".
+- Einsteins to regler: Den første er, at fysikkens love er ens for alle, der bevæger sig jævnt. Den anden er lysets fart. Kald ikke lysets fart "regel 1" ét sted, når en anden tekst tæller omvendt. Brug navne eller samme rækkefølge som Einstein (E4 F7, 12. november 2026).
