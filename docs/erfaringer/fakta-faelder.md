@@ -107,6 +107,8 @@
 - "Intet kan nå lysets fart." Lyset kan. Skriv "et rumskib" eller "intet, der vejer noget" (Fable E4).
 - "Toget står næsten stille i forhold til lyset." At stå stille i forhold til lyset er netop det, der ikke kan lade sig gøre. Skriv "100 km/t er næsten ingenting mod lysets fart" (Fable E4).
 - Meget små forskelle (fx at bolden mangler 6 · 10⁻¹³ km/t i 150 km/t) kan ikke regnes med almindelige kommatal: regn.py gav 6,25 · 10⁻¹³, og det rigtige er 6,44 · 10⁻¹³. Brug `decimal` i Python (Fable E4).
+- En undertekst med et tal, der hører til en skyder, skal passe ved alle skyderens værdier. "Ca. halvdelen af myonerne når ned" passede kun ved 99,97 %, ikke ved 99 % (ca. 4 %) og 99,9 % (ca. 36 %). Regn tallet af farten (Tid, F3, 12. november 2026).
+- "10¹⁸ g" for myonerne i CERN's ring (Bailey 1977) er den acceleration, myonen selv mærker. Set fra laboratoriet er den ca. γ² gange mindre (ca. 10¹⁵ g). Skriv "op til ca. 10¹⁸ g" som kilden, og regn ikke om (Tid, F2, 12. november 2026).
 *Gåderne (12. november 2026). Kilderne står i [fakta-gaader.md](../fakta-gaader.md).*
 - "Mørkt stof og mørk energi er det samme" og "85 % af Universet er mørkt stof." To forskellige ting, og tallet er ca. 84 % af alt *stof*, men ca. 27 % af alt (Planck).
 - "LZ fandt mørkt stof i 2026." Én hændelse, 2,6 sigma (arXiv:2609.02823). I partikelfysik kræves 5 sigma. Skriv signaler under grænsen som "et spor", med dato.

@@ -144,9 +144,9 @@ await E(() => atomlabTest.kosmos.spol(6.5));
 m = await s3();
 f = await fase();
 const medEinstein = m.levende;
-tjek('Med Einstein (γ ≈ 38): myonens ur er ca. 1,32 µs ved ankomsten, Jordens ca. 50 µs, og 13 af 24 når ned',
+tjek('Med Einstein (γ ≈ 38): myonens ur er ca. 1,32 µs ved ankomsten, Jordens ca. 50 µs, 13 af 24 når ned, og underteksten siger "ca. halvdelen"',
   m.færdig && nær(m.gamma, 37.8, 0.05) && nær(m.myonUr, 1.324, 0.002) && nær(m.jordUr, 50.05, 0.02) && medEinstein.join() === OVERLEVER.join() && OVERLEVER.length === 13
-  && /ca\. 38 gange langsommere/.test(f?.tekst) && f.tekst.length < 160, JSON.stringify([m, f]));
+  && /ca\. 38 gange langsommere/.test(f?.tekst) && /ca\. halvdelen/.test(f.tekst) && f.tekst.length < 160, JSON.stringify([m, f]));
 await page.screenshot({ path: `${UD}/scene3-med-pc.png` });
 
 await E(() => atomlabTest.kosmos.trykPå('Set fra myonen'));
@@ -168,8 +168,8 @@ await sæt('Fart', 0);
 const ved99 = (await fase())?.tekst;
 await E(() => atomlabTest.kosmos.trykPå('Med Einstein'));
 const med99 = (await fase())?.tekst;
-tjek('skyderen: "ca. 670 m" ved 99,9 %, "ca. 2,1 km" ved 99 % og "ca. 7 gange" med Einstein ved 99 %',
-  /ca\. 670 m/.test(ved999) && /ca\. 2,1 km/.test(ved99) && /ca\. 7 gange/.test(med99), JSON.stringify([ved999, ved99, med99]));
+tjek('skyderen: "ca. 670 m" ved 99,9 %, "ca. 2,1 km" ved 99 % og "ca. 7 gange" og "1 ud af 26" med Einstein ved 99 %',
+  /ca\. 670 m/.test(ved999) && /ca\. 2,1 km/.test(ved99) && /ca\. 7 gange/.test(med99) && /1 ud af 26 ned/.test(med99), JSON.stringify([ved999, ved99, med99]));
 await sæt('Fart', 2);
 await E(() => atomlabTest.kosmos.trykPå('↻ Ny byge'));
 m = await s3();
