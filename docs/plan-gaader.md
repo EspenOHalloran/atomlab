@@ -2,6 +2,11 @@
 
 *Trin 0, skrevet 12. november 2026 af Opus efter [prompt-gaader.md](prompt-gaader.md). Faktagrundlaget står i [fakta-gaader.md](fakta-gaader.md). Status står i Småting ([lige-nu/smaating.md](lige-nu/smaating.md)). **Valgene nedenfor er mine anbefalinger:** I bad mig køre videre med dem i stedet for at spørge (12. november 2026). De kan ændres, før G1 bygges. Hver delopgave får sit eget go og en ny session.*
 
+## Jeres svar før G1 (12. november 2026)
+- **Oversigten i G1** viser alle fem gåder. De fire, der ikke er bygget, er grå med "Kommer senere" og kan ikke åbnes, før G2 og G3 bygger dem.
+- **"Målt eller gæt?"** bliver stående på alle kort. På Sort hul siger "Ærligt talt", at singulariteten er en forudsigelse fra Einsteins teori og ikke et vildt gæt.
+- **Teksten til Sort hul** (udkastet efter faktatjekket) har fået jeres go.
+
 ## Kernesætningen (jeres valg 12. november 2026)
 "Efter fem minutter kan brugeren sige: **Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den.**"
 
@@ -83,12 +88,12 @@ Bagefter **"Det så du"** med højst tre veje: "Se det selv ›" (ind til stedet
 - **Mørkt stof** peger på lysbøjningen ved Rumtid, til fænomenet Mørkt stof er bygget. Så flyttes "Se det selv".
 
 ## Delopgaverne (hver med et go og en ny session)
-- [ ] **G1: Siden og det første kort (Sort hul).** Delen `gaader` i `SKÆRME`, sektionen i `index.html`, `js/gaader.js` (oversigten, kortet med tre trin, "Det så du", ✓ i `atomlabGaader`), `js/data/gaader.js`, `gaader:id` i `js/gaa.js`, Ordbogens ord "singularitet" og linket fra Sort hul. Datoerne for kortet tjekkes (LISA, GW250114), og teksten faktatjekkes. 5-8 tjek (se nedenfor). Skærmbilleder på pc, tablet på højkant og telefon. Opus, høj.
+- [x] **G1: Siden og det første kort (Sort hul)** (færdig 12. november 2026, status i [lige-nu/smaating.md](lige-nu/smaating.md)). Delen `gaader` i `SKÆRME`, sektionen i `index.html`, `js/gaader.js` (oversigten, kortet med tre trin, "Det så du", ✓ i `atomlabGaader`), `js/data/gaader.js`, `gaader:id` i `js/gaa.js`, Ordbogens ord "singularitet" og linket fra Sort hul. Datoerne for kortet tjekkes (LISA, GW250114), og teksten faktatjekkes. 5-8 tjek (se nedenfor). Skærmbilleder på pc, tablet på højkant og telefon. Opus, høj.
 - [ ] **G2: De to kort om liv** (liv andre steder og livets begyndelse) med "Se også" fra Mars, Enceladus og Liv. Datoerne (exoplaneter, Rosalind Franklin, Tianwen-3, Europa Clipper, Dragonfly, ELT, QT45) og `/faktatjek` mod fakta-liv/. Opus, høj.
 - [ ] **G3: Antistof, mørkt stof og "Hvornår er noget opdaget?"** med "Se også" fra Big Bang og Rumtid, Ordbogens "mørkt stof" og "sigma". Datoerne (LZ og XENONnT, Euclid DR1, Hyper-Kamiokande, DUNE, Nobelpriserne) og `/faktatjek`. Kortet om liv får linket til "Hvorfor?"-kortet. Til sidst "Ikke afprøvet" (hvad I skal kigge efter på tabletten) og prøven med jeres søn. Opus, høj.
 - [ ] **Senere:** nr. 6 mørk energi (efter prøven), og "Se det selv" for mørkt stof, når fænomenet Mørkt stof findes.
 
 **Tests (G1, udvidet i G2 og G3):** i Node: hvert kort har tre trin, Spørg er højst ca. 15 ord, hvert gæt har 2-3 valg med `efter`, hvert kort har en dato og et `seDet`, der peger på et fænomen eller en del, der findes, og højst to nye fagord. I browseren: `#gaader` åbner oversigten, `gaader:sorthul` åbner kortet (også som den første skærm), et gæt viser sit svar, "Se det selv" åbner Sort hul, ✓ huskes, ingen fejl i konsollen og ingen vandret rullebjælke på telefon.
 
-## Prompt til G1 (kopiér)
-> Du bygger G1 i Gåderne i AtomLab: siden `#gaader` i Biblioteket og det første kort (Sort hul). Spor: Småting. Læs først (kun dette): `docs/lige-nu/smaating.md`, `DESIGN.md`, hele `docs/plan-gaader.md`, afsnit 2 ("Hvad er der inde i et sort hul?"), "Fælles for alle kortene", "Fælder" og "Tjek igen" i `docs/fakta-gaader.md`, `docs/kode/forloeb.md` og linjerne om `gaa.js`, `lag.js` og `hvorfor.js` i `docs/kode/faelles.md`, Ordbogen i `docs/kode/skaerme.md`, tjekliste D og F og `docs/erfaringer/fakta-faelder.md`. Tjek først i `origin/main`, at G1 ikke er bygget. Slå datoerne for kortet op, skriv teksten ud fra eksemplet i planen, og kør `/faktatjek`, før koden bygges færdig. Spørg med valgmuligheder, hvis noget er uklart, og vent på et go. Til sidst `/faerdig`, PR og merge med det samme.
+## Prompt til G2 (kopiér)
+> Du bygger G2 i Gåderne i AtomLab: de to kort om liv ("Er der liv andre steder?" og "Hvordan begyndte livet?") med "Se også" fra Mars (Neretva Vallis), Enceladus og Liv. Spor: Småting. Siden `#gaader` og kortet Sort hul findes (G1), så kortene er nye linjer i `js/data/gaader.js`. Læs først (kun dette): `docs/lige-nu/smaating.md`, `DESIGN.md`, hele `docs/plan-gaader.md`, afsnit 1 ("Er der liv andre steder?"), 4 ("Hvordan begyndte livet?"), "Fælles for alle kortene", "Fælder" og "Tjek igen" i `docs/fakta-gaader.md`, de afsnit i `docs/fakta-liv/rummet.md` og `docs/fakta-liv/begyndelsen.md`, kortene bygger på (med `grep`), Gåderne i `docs/kode/skaerme.md`, tjekliste B og F, `docs/erfaringer/fakta-faelder.md` og `docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md`. Tjek først i `origin/main`, at G2 ikke er bygget. Slå datoerne for kortene op (exoplaneter, Rosalind Franklin, Tianwen-3, Europa Clipper, Dragonfly, ELT, QT45), skriv teksterne ud fra skabelonen i planen og kortet Sort hul, og kør `/faktatjek`, før koden bygges færdig. Spørg med valgmuligheder, hvis noget er uklart, og vent på et go. Til sidst `/faerdig`, PR og merge med det samme.

@@ -15,6 +15,7 @@ export const SKÆRME = [
   { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig' },
   { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
   { id: 'ordbog', verden: 'biblioteket', titel: 'Ordbogen', modul: './ordbog.js', status: 'færdig' },
+  { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve' },
 ];
 
 // Verdenerne i ringens rækkefølge (menuen, js/karrusel.js). dele er delene i SKÆRME med samme verden, i listens rækkefølge.

@@ -478,6 +478,12 @@ export const ORDBOG = [
     tekst: 'Grænsen omkring et sort hul. Indenfor kan intet slippe ud igen, ikke engang lys.',
   },
   {
+    // Gåderne G1 (12. november 2026). Kilde: docs/fakta-gaader.md afsnit 2 (Wikipedia "Gravitational singularity")
+    id: 'singularitet', ord: 'Singularitet',
+    former: ['singularitet', 'singulariteten', 'singulariteter'],
+    tekst: 'Stedet i midten af et sort hul, hvor Einsteins teori siger, at alt bliver presset uendelig meget sammen. »Uendelig« betyder her, at teorien holder op med at virke. Ingen ved, hvad der virkelig er dér.',
+  },
+  {
     id: 'baggrundsstraaling', ord: 'Den kosmiske baggrundsstråling',
     former: ['baggrundsstråling', 'baggrundsstrålingen'],
     // 2,725 K = ca. −270 °C

@@ -32,10 +32,12 @@ for (const [id, l] of Object.entries(LINKS)) {
   if (l.hvorfor && !(HVORFOR[l.hvorfor] && har(HVORFOR[l.hvorfor].spørgsmål + HVORFOR[l.hvorfor].svar + (HVORFOR[l.hvorfor].nørd ?? '')))) forkerte.push(`${id} → ${l.hvorfor}`);
   if (l.skærm && !har(sektion(l.skærm[0]) + html.slice(html.indexOf(`aria-label="Hjælp til`)))) forkerte.push(`${id} → #${l.skærm[0]}`);
   if (l.gaa) {
-    // Teksten står i fænomenets fil eller (Mars, Saturn og Jorden) i js/data/sider/
+    // Teksten står i fænomenets fil eller (Mars, Saturn og Jorden) i js/data/sider/, og en gåde i js/data/gaader.js
     const navn = l.gaa[0].split(':')[1];
     let tekst = '';
-    for (const sti of [`../js/kosmos/${navn}.js`, `../js/data/sider/${navn === 'jordkloden' ? 'jorden' : navn}.js`]) {
+    const stier = l.gaa[0].startsWith('gaader:') ? ['../js/data/gaader.js']
+      : [`../js/kosmos/${navn}.js`, `../js/data/sider/${navn === 'jordkloden' ? 'jorden' : navn}.js`];
+    for (const sti of stier) {
       try { tekst += readFileSync(new URL(sti, import.meta.url), 'utf8'); } catch { /* mangler */ }
     }
     if (!har(tekst)) forkerte.push(`${id} → ${l.gaa[0]}`);
@@ -65,9 +67,9 @@ const side = async (opsætning, hash = '') => {
 const page = await side({ viewport: { width: 1280, height: 800 } });
 const T = (f, a) => page.evaluate(f, a);
 
-// Menuen: Ordbogen er den eneste del i Biblioteket. Docken drejer Biblioteket frem, og et tryk på kortet åbner Ordbogen.
-const menu = await T(() => ({ dele: atomlabTest.karrusel.verdener().find((v) => v.id === 'biblioteket')?.dele, navn: document.querySelector('.verden[data-verden="biblioteket"] .verden-del')?.textContent }));
-tjek(`pc: Biblioteket i menuen har kun Ordbogen ("${menu.navn}")`, menu.dele?.join() === 'ordbog' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
+// Menuen: Ordbogen er den første del i Biblioteket (Gåderne er den anden). Docken drejer Biblioteket frem, og et tryk på kortet åbner Ordbogen.
+const menu = await T(() => ({ dele: atomlabTest.karrusel.verdener().find((v) => v.id === 'biblioteket')?.dele, navn: document.querySelector('.verden[data-verden="biblioteket"] .verden-knap strong')?.textContent }));
+tjek(`pc: Biblioteket i menuen har Ordbogen og Gåderne ("${menu.navn}")`, menu.dele?.join() === 'ordbog,gaader' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
 await page.click('.menu-ikon[data-verden="biblioteket"]');
 await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 6000 });
 await page.click('.menukort a[href="#ordbog"]', { force: true });

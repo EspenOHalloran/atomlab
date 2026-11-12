@@ -117,6 +117,7 @@
 - Wikipedia "Hawking radiation" skriver 10⁻⁷ K for 3 solmasser. Formlen samme sted giver 2 × 10⁻⁸ K. Regn selv efter.
 - "LHCb løste gåden om antistof i 2025." CP-brud i baryoner blev set for første gang, men forskellen er alt for lille til at forklare, at der er stof tilovers (T2K 2020).
 - "Antistof falder opad." Udelukket af ALPHA-g i 2023. Og "én ud af en milliard blev tilovers" er en størrelsesorden (6 × 10⁻¹⁰ pr. lyspartikel).
+- "Alle rigtige sorte huller drejer" (fakta-gaader.md). De to huller i GW250114 drejede næsten ikke (χ ≤ 0,26, arXiv:2509.08054). Skriv "drejer som regel", som Sort hul gør. Og "ca. et minut" fra horisonten til midten gælder kun Mælkevejens sorte hul: ved et hul på 10 sole er det ca. 0,15 millisekunder (Gåderne G1, 12. november 2026).
 - "Planet X": Forskernes navn er Planet 9 (Batygin og Brown 2016). Den er hverken fundet eller modbevist.
 - Planer rykker: Mars Sample Return blev lukket i 2026, og Euclids første store datasæt (DR1) blev delt i to: en første del 12. november 2026 og resten midt i 2027. Skriv "efter planen" og et årstal, og slå det op igen, før teksten skrives.
 *Strøm og magneter og Lys (12. november 2026). Kilderne står i [fakta-strom-og-lys.md](../fakta-strom-og-lys.md) afsnit 10.*
