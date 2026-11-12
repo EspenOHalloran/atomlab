@@ -9,6 +9,8 @@
 - Testene: `tests/hjaelp.mjs` venter selv på skærmen efter `goto`, `reload`, `evaluate` og `click` (`atomlabTest.klar()`). Ny test `skaermliste` (17 tjek). Hele samlingen består. `aarstider` fejlede én gang under belastning (Åbne punkter).
 - Afvigelse fra planen: Alle skærme blev gjort "dovne" på én gang (fundamentet gjorde det), ikke én ad gangen. Hele samlingen dækkede det.
 
+**Også lavet (12. november 2026):** Faktagrundlaget for månerne med mulige betingelser for liv (emne 2 i prompt-faktagrundlag): [fakta-maaner-liv.md](../fakta-maaner-liv.md) med Europa, Enceladus, Titan, Huygens' landing, kortene og licenserne, hvad der er målt og gættet, fælderne og fire spørgsmål til jer til sidst.
+
 **Næste:** 10a er færdig, så parallelle sessioner er billigere igen (de rører ikke længere skærmenes start i `main.js`). 10b (egen HTML og CSS pr. skærm) sker gradvist, først med Molekyler. Faktagrundlagene kan køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
 **Lille opgave (kan tages når som helst):** Citatet `tycho` i `js/data/citater.js` har en engelsk oversættelse som `original`. Prompt til en ny session (Opus, effort medium): *"Spor: Småting. Læs docs/fakta-videnskabsfolk.md (afsnit 1, Tycho Brahe, punktet om citatet `tycho`). Ret citatet `tycho` i js/data/citater.js, så `original` er Tychos latin fra De nova stella (faksimilen 1901, archive.org `operumprimitiasd00brahuoft`), og så den danske `tekst` er vores egen oversættelse af netop det latin. Kør /faktatjek på citatet og /faerdig."*
