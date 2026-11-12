@@ -20,7 +20,7 @@ Jeg er enig i Fables hovedfund: Tallene holder, men oplevelsen er ikke sat i sce
 | F1 | `tidhvorfor.js:192` | "Derfor opdagede ingen det før Einstein. Han forklarede det …" | "Derfor har ingen nogensinde mærket det i hverdagen. Einstein forklarede det …" ("Han" ville ellers mangle et navn) | Wikipedia "Relativity of simultaneity" |
 | F2 | `tid.js:129` | "Man kan lave forsøg, hvor begge ure speeder op og bremser lige meget …" | "Man kan tænke sig en rejse, hvor …" + "Og i et rigtigt forsøg på CERN i 1977 fulgte myonernes ure kun farten, selv om de blev slynget rundt i en ring med ca. en milliard milliarder g." | "Twin paradox" og "Experimental testing of time dilation" |
 | F2 | `tidhvorfor.js:194` | "Man kan lave forsøg, hvor begge ure accelererer lige meget …" | Samme som ovenfor, kortere ("Og i CERN's ring …"), fordi forsøget står lige over i "Myonernes kapløb" | Samme |
-| F3 | `tidhvorfor.js:72` | "Derfor når mange flere ned. Ved den typiske fart når de fleste ned, og det er det, man måler." | "Derfor når ca. halvdelen ned ved den typiske fart i stedet for næsten ingen. Det er målt (se For nørder)." | Egen udregning (55 %) |
+| F3 | `tidhvorfor.js:72` | "Derfor når mange flere ned. Ved den typiske fart når de fleste ned, og det er det, man måler." | "Ved den typiske fart når ca. halvdelen ned i stedet for næsten ingen. Det er målt (se For nørder)." (højst 160 tegn, så underteksten passer) | Egen udregning (55 %) |
 | F4 | `tidhvorfor.js:325` | "toget står næsten stille i forhold til lyset" | "100 km/t er næsten ingenting mod lysets fart" | – |
 
 Fælderne for F1-F3 har Fable allerede skrevet nederst i [fakta-faelder.md](../erfaringer/fakta-faelder.md). Der er ingen nye.

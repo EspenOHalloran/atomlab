@@ -69,7 +69,7 @@ function linje3(tilstand, b) {
     const milliarder = Math.round(Math.exp(HØJDE3 / (b * C_KM_US * TAU)) / 1e9);
     return `Uden tidsforlængelse går næsten alle i stykker højt oppe. Kun ca. 1 ud af ${fmt(milliarder)} milliarder ville nå ned.`;
   }
-  if (tilstand === 1) return `Set fra Jorden går myonens ur ca. ${fmt(gam)} gange langsommere. Derfor når ca. halvdelen ned ved den typiske fart i stedet for næsten ingen. Det er målt (se For nørder).`;
+  if (tilstand === 1) return `Set fra Jorden går myonens ur ca. ${fmt(gam)} gange langsommere. Ved den typiske fart når ca. halvdelen ned i stedet for næsten ingen. Det er målt (se For nørder).`;
   return `Set fra myonen går dens ur helt normalt. Til gengæld er luften presset sammen til ${luftTekst(luft)}, og jorden suser op mod den. Samme svar!`;
 }
 // Linealen: et pænt skridt i meter, så mærkerne står mindst 44 px fra hinanden
