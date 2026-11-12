@@ -22,7 +22,7 @@
 2. "… Liv har brug for vand, energi og de rigtige stoffer. Vi har målt dem på Enceladus, gættet dem på Europa, og på Titan er det hele lavet af metan i stedet for vand."
 3. "… Kun på Titan er der landet en sonde. Den så sten af is i et tørt flodleje."
 
-**Jeres valg 12. november 2026 (efter Fables E5):** Forslag 1 med en ny slutning: "… så vi har kunnet smage på det og fundet næsten alt, liv har brug for, men ingen har endnu kunnet se efter, om der er liv." Cassini kunne ikke se liv, så "men ikke liv" lød, som om nogen havde ledt.
+**Valgt 12. november 2026:** forslag 1 med Fables nye slutning ("… men ingen har endnu kunnet se efter, om der er liv"), se "Jeres svar" i afsnit 9.
 
 Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* og evt. *biospor* er). Titan og Huygens bliver så et næste trin eller et lag ("Land med Huygens").
 
@@ -199,3 +199,9 @@ Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* 
 2. **Første handling:** snittet gennem månerne (1), tavlen med de tre ting (2) eller flyveturen gennem fontænen (3)? Jeg anbefaler snittet med tavlen ved siden af, fordi det viser *hvordan vi ved det*.
 3. **Huygens' billeder:** bruge ESA's billeder med credit og en note om ESA's standardlicens (anbefalet), eller kun bruge USGS' kort og tegne landskabet selv?
 4. **"Land med Huygens"** nu i den lille udgave (nedstigningen og billederne) eller først senere sammen med "Land på måner" i køreplanen? Jeg anbefaler den lille udgave nu, fordi det er det eneste af de tre steder, hvor vi har rigtige data fra jorden.
+
+**Jeres svar (12. november 2026): "Ja til dine anbefalinger".**
+1. **Kernesætningen:** Forslag 1 med Fables nye slutning: "Under isen på Europa og Enceladus er der et hav. Enceladus sprøjter havet ud i rummet, så vi har kunnet smage på det og fundet næsten alt, liv har brug for, men ingen har endnu kunnet se efter, om der er liv." Titan kommer som næste trin.
+2. **Første handling:** Snittet gennem Europa og Enceladus med tavlen med de tre ting (vand, energi og stoffer: grøn = målt, gul = regnet eller gættet, grå = ukendt) ved siden af. Flyveturen gennem fontænen med Cassini er trin 2, og det er dér, Enceladus' felter på tavlen bliver grønne.
+3. **Huygens' billeder:** ESA's billeder med hele credit-linjen ("ESA/NASA/JPL/University of Arizona") og en note om ESA's standardlicens, også i `KILDER.md`.
+4. **"Land med Huygens":** Den lille udgave (nedstigningen spolet frem og billederne fra jorden, ingen gåtur) som det næste lille trin efter Europa og Enceladus. Den venter ikke på den store "Land på måner".
