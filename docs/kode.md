@@ -8,7 +8,9 @@
 
 | Fil | Beskriver |
 |---|---|
-| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `karrusel.js`, `menubaggrund.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `js/data/hvorfor.js`. |
+| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `js/data/hvorfor.js`. |
+| [kode/forloeb.md](kode/forloeb.md) | Forløb-klodsen (`js/forloeb.js`): linjen under scenen, faserne, hvad delen leverer, og hvornår et forløb starter af sig selv. |
+| [kode/menu.md](kode/menu.md) | Menuen som en ring af verdenerne (`karrusel.js`, "Din fremgang" med forløbenes ✓) og baggrunden bag den (`menubaggrund.js`). |
 | [kode/molekyler.md](kode/molekyler.md) | Molekyler ("Byg et molekyle": "Giv elektroner" i `molekyler.js`, "Del elektroner" i `molekyler-byg.js`, knaldgassen i `knaldgas.js`, tegningen i `molekyle3d.js`). |
 | [kode/liv.md](kode/liv.md) | Liv i verdenen "Ild og liv" (`liv.js`, `liv-protein.js`, `js/liv/stige.js`, `js/liv/celle.js`, `js/liv/protein.js` og `js/liv/kodehjul.js`, data i `js/data/liv/` med atompladserne fra 1BNA, værktøjet `lav-dna-atomer.mjs`, koden, genet HBB og teksterne til L2). |
 | [kode/skaerme.md](kode/skaerme.md) | Værkstedet (`vaerksted.js`, `stabilitetskort.js`), Det periodiske system (`system.js`, `kategorikort.js`, `js/data/kategorier.js`), Stjerneovnen (`fusion.js`), Reaktoren (`reaktor.js`), Batteriet (`batteri.js`) og Ordbogen (`ordbog.js`, `js/data/ordbogliste.js`, `js/data/ordbog.js`). |
