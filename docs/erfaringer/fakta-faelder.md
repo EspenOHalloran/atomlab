@@ -97,3 +97,14 @@
 - "Set fra perronen" (eller "set fra Jorden") i relativitetsteorien er ikke det, øjet ser: Lysets rejsetid er trukket fra. Sig det i "Ærligt talt", når en animation viser to billeder (T5 Trin 0).
 
 - "Einstein opdagede, at samtidighed er relativ." Poincaré nævnte muligheden allerede i 1900. Einstein gjorde den til en del af den særlige relativitetsteori i 1905 (Wikipedia "Relativity of simultaneity"). Skriv "Ifølge Einsteins relativitetsteori …" (T5c, 9. november 2026).
+
+*Gåderne (12. november 2026). Kilderne står i [fakta-gaader.md](../fakta-gaader.md).*
+- "Mørkt stof og mørk energi er det samme" og "85 % af Universet er mørkt stof." To forskellige ting, og tallet er ca. 84 % af alt *stof*, men ca. 27 % af alt (Planck).
+- "LZ fandt mørkt stof i 2026." Én hændelse, 2,6 sigma (arXiv:2609.02823). I partikelfysik kræves 5 sigma. Skriv signaler under grænsen som "et spor", med dato.
+- "Singulariteten er et punkt, hvor alt er uendelig tæt." Uendelig betyder, at teorien bryder sammen. Og et hul, der drejer, giver en ring, hvis indre er ustabilt i teorien.
+- "Jo mere man kæmper imod i et sort hul, jo hurtigere går det." Raketter kan give lidt mere tid, men højst πGM/c³: ca. et minut i Mælkevejens sorte hul (Lewis og Kwan 2007).
+- Wikipedia "Hawking radiation" skriver 10⁻⁷ K for 3 solmasser. Formlen samme sted giver 2 × 10⁻⁸ K. Regn selv efter.
+- "LHCb løste gåden om antistof i 2025." CP-brud i baryoner blev set for første gang, men forskellen er alt for lille til at forklare, at der er stof tilovers (T2K 2020).
+- "Antistof falder opad." Udelukket af ALPHA-g i 2023. Og "én ud af en milliard blev tilovers" er en størrelsesorden (6 × 10⁻¹⁰ pr. lyspartikel).
+- "Planet X": Forskernes navn er Planet 9 (Batygin og Brown 2016). Den er hverken fundet eller modbevist.
+- Planer rykker: Mars Sample Return blev lukket i 2026, og Euclids første store datasæt (DR1) blev delt i to: en første del 12. november 2026 og resten midt i 2027. Skriv "efter planen" og et årstal, og slå det op igen, før teksten skrives.
