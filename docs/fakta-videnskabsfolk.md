@@ -8,25 +8,16 @@
 - **archive.org:** skanningerne af de oprindelige bøger og artikler, med deres OCR-tekst (`<id>_djvu.txt`) og metadata (`archive.org/metadata/<id>`). Hvert værk står med sit id nedenfor.
 - **Wikipedia (engelsk og dansk)**, hentet som wikitekst (`action=raw`) og læst med `grep`. Artiklerne står ved hver påstand.
 - **Wikimedia Commons:** filernes licens (API'et `prop=imageinfo`, kræver en User-Agent) og siderne "Commons:Copyright rules by territory/Denmark" og "Commons:Reuse of PD-Art photographs".
-- **Lukkede domæner** (ikke åbnet, se spørgsmålene til sidst): nobelprize.org, gallica.bnf.fr, kb.dk, retsinformation.dk, lex.dk, web.archive.org, babel.hathitrust.org, zenodo.org, einsteinpapers.press.princeton.edu, gutenberg.org og articles.adsabs.harvard.edu.
+- **Åbnet senere samme dag** (efter jeres svar): www.nobelprize.org (begrundelserne for priserne), www.retsinformation.dk (ophavsretsloven, LBK nr. 1093 af 20. august 2023, hentet som XML fra `/eli/lta/2023/1093/xml`) og www.kb.dk ("Copyright and use of our materials"). Bemærk: Domænerne skal stå med "www." i miljøet, ellers bliver man sendt videre til en lukket adresse.
+- **Afviser automatiske opslag (403):** gallica.bnf.fr og babel.hathitrust.org. **Stadig lukket** (ikke nødvendige): web.archive.org, zenodo.org, lex.dk, gutenberg.org, einsteinpapers.press.princeton.edu og articles.adsabs.harvard.edu.
 
 ## Forslag til kernesætning
 **"Efter fem minutter kan brugeren sige: De fandt det ved at se efter og måle, ikke ved at gætte, og jeg kan selv se det samme her i AtomLab."**
 
 Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9). Først gør man det, så ser man bogsiden.
 
-## Rettighederne (fælles for alle bogsiderne)
-*Efter hukommelsen og Wikipedia/Commons, ikke juridisk rådgivning. Tjekkes igen, før en side kommer med.*
-
-- **Teksten selv:** Beskyttet i 70 år efter forfatterens død, regnet fra årets udgang (Commons: Denmark, med henvisning til ophavsretsloven nr. 1144/2014 § 63). **Sikker.**
-  - Einstein døde 18. april 1955, så hans tekster er frie i EU fra **1. januar 2026** (nu). Marie Curie døde 4. juli 1934, så hendes er frie siden 2005. **Bohr** døde 18. november 1962, så hans tekster er beskyttet til og med **2032**. **Lehmann** døde 21. februar 1993, så hendes er beskyttet til og med **2063**. Tycho, Rømer, Huygens og Ørsted er frie. **Sikker** (dødsdatoerne fra Wikipedia, reglen fra Commons).
-- **Skanningen eller fotoet af siden har sine egne rettigheder i Danmark.** Ophavsretslovens § 70 giver den, der tager et "fotografisk billede" (også et helt almindeligt foto uden kunstnerisk værdi), eneret i **50 år** efter året, hvor det blev taget. Billeder taget før 1. januar 1970 følger den gamle regel på 25 år (Commons: Denmark, § 70 stk. 2 og § 89 stk. 5). Commons skriver om Norden: Et foto af et frit værk er først frit, når *både* værket og fotoet er frit ("Generally not OK"). **Ret sikker.**
-  - EU's direktiv 2019/790 (art. 14) siger, at en tro gengivelse af et frit *billedkunstværk* ikke får nye rettigheder. Det gælder billedkunst (fx kobberstik og tegninger i bøgerne), og det er uklart, om det også gælder en side med tekst. Om og hvordan Danmark har skrevet art. 14 ind i § 70, kunne ikke tjekkes (retsinformation.dk er lukket). **Usikker.**
-  - **Den sikre vej:** gamle **faksimileudgaver**, hvis fotos er taget før ca. 1950 (fx Videnskabernes Selskabs faksimile af Tychos *De nova stella* fra 1901), eller skanninger, hvor biblioteket selv har frigivet dem (Public Domain Mark eller "no longer under copyright", fx Smithsonian Libraries).
-- **En oversættelse er et nyt værk** med sine egne 70 år efter oversætterens død. Engelske oversættelser fra 1900-tallet er derfor ofte ikke frie i EU. Vi oversætter selv til dansk fra originalsproget og siger, at det er vores oversættelse. **Sikker** (almindelig regel, som ideer.md også nævner).
-- **Citatretten:** Et kort citat i en forklaring må normalt bruges, også fra et beskyttet værk, "i overensstemmelse med god skik" (ophavsretslovens § 22, efter hukommelsen). Et billede af en hel side fra Bohr eller Lehmann er mere end et citat. **Usikker:** Bohr og Lehmann vises derfor med vores egen tegning af figuren og et kort citat, ikke med et foto af siden, til deres tekster er frie.
-- **Bibliotekernes vilkår:** archive.org-kopier fra Google Books ("…goog") og JSTOR's "Early Journal Content" beder om ikke-kommerciel brug. AtomLab er gratis og ikke kommerciel, men vælg hellere en kopi med Public Domain Mark. BnF (Gallica) tillader efter hukommelsen fri ikke-kommerciel genbrug med kildeangivelse ("Source gallica.bnf.fr / BnF"), men det kunne ikke tjekkes. **Usikker.**
-- Hvert billede skrives i `KILDER.md` med værk, side, bibliotek og licens.
+## Rettighederne
+Står for sig selv i [fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.md) (ophavsretsloven §§ 22, 63, 70 og 91, faksimilerne, oversættelserne og bibliotekernes vilkår). Kort sagt: Teksten er fri 70 år efter forfatterens død, men et nyt foto af en tekstside har sin egen ret i 50 år. Brug faksimiler fra før 1970 eller skanninger, som biblioteket selv har frigivet.
 
 ## 1. Tycho Brahe (1546-1601): Den nye stjerne i 1572
 
@@ -46,7 +37,7 @@ Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9).
 **Bogsiden:** *De nova stella* (1573), første side af hovedteksten (datoen og "iuxta capitis verticem") og stjernekortet over Cassiopeia, hvor den nye stjerne er mærket **I**.
 - **Bedst:** Videnskabernes Selskabs faksimile fra **1901** ("Fototypi. Pacht & Crone"), Toronto-eksemplaret `operumprimitiasd00brahuoft` ("NOT_IN_COPYRIGHT"). Fotoene er fra 1901, så de er frie efter den danske regel. Bemærk: Forordet (s. VII-XVI) er skrevet i 1901 på latin af en ukendt forfatter (ikke tjekket), så brug kun Tychos egne sider. **Ret sikker.**
 - **Stjernekortet** findes allerede på Commons: "Tycho Cas SN1572.jpg" (fra faksimilen 1901), "Public domain" (PD-Art, PD-old-100). **Sikker.**
-- KB's eksemplar fra 1573 (`den-kbd-pil-130018098815-001`) har ingen licens i metadata, og det er et dansk foto (§ 70). Brug det ikke, før KB's vilkår er tjekket (kb.dk er lukket). **Usikker.**
+- KB's eksemplar fra 1573 (`den-kbd-pil-130018098815-001`) har ingen licens i metadata, og det er et dansk foto (§ 70). KB's side om ophavsret frigiver ikke skanningerne (se [rettighederne](fakta-bogsider-rettigheder.md)), så brug faksimilen fra 1901 i stedet, eller spørg KB (kb@kb.dk). **Ret sikker.**
 - **Citatet `tycho` i `js/data/citater.js`:** Feltet `original` er en *engelsk oversættelse* ("A miracle indeed …"), ikke Tychos latin. Det latinske står i faksimilen: "Miraculum sane inter omnia, quae a mundi exordio, in tota rerum natura extiterunt, aut maximum, aut illi certe aequiparandum, quod in Solaris cursus retentione, Iosuae precibus impetrata …" (altså "enten det største eller i hvert fald på højde med" Solen, der stod stille for Josva). Hvem der har lavet den engelske oversættelse, og om den er fri, er ikke tjekket. Bør rettes til latin i Ordbogen og citaterne (Småting).
 
 ## 2. Ole Rømer (1644-1710): Lyset er ikke uendelig hurtigt
@@ -113,14 +104,14 @@ Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9).
 | Bohr kaldte skallerne **"ringe"**. Hans opstilling fra 1913 for de lette atomer står i del II (september 1913), **s. 496** | Skanningen af bd. 26, s. 496 ("possible scheme for the arrangement of the electrons in light atoms") | Sikker |
 | **Den var anderledes end i dag:** neon står som **(8, 2)**, natrium som (8, 2, 1) og argon som (8, 8, 2), altså med den store ring inderst. I dag skriver vi neon 2, 8. Bohr skrev selv, at der allerede i neon "will occur" en indre ring på otte (s. 494) | s. 494 og 496 | Sikker |
 | Modellen virkede for hydrogen og ioner med én elektron, men ikke for større atomer. Omkring 1919 gik Bohr selv væk fra baner | Wikipedia "Niels Bohr" | Ret sikker |
-| Nobelprisen i fysik **1922** "for his services in the investigation of the structure of atoms and of the radiation emanating from them" | Wikipedia (nobelprize.org er lukket) | Ret sikker |
+| Nobelprisen i fysik **1922** "for his services in the investigation of the structure of atoms and of the radiation emanating from them" | nobelprize.org ("The Nobel Prize in Physics 1922") | Sikker |
 | Instituttet for teoretisk fysik (i dag Niels Bohr Institutet) **åbnede 3. marts 1921**. Wikipedias indledning skriver "opened in 1920" | Wikipedia (samme artikel, to forskellige år) | Ret sikker (1921) |
 | Grundstoffet **bohrium** (107) er opkaldt efter ham | `js/data/fakta.js` og Wikipedia | Sikker |
 
 **Gør det i AtomLab:** **Værkstedet** (Byg et atom): Byg neon, og se 2 og 8 elektroner i ringene. Knappen "Elektronsky" viser bagefter, hvorfor ringene er en forenkling (teksten og citatet `bohr` står allerede i hjælpen). *Til "Ærligt talt":* "Bohr tegnede selv neon med otte elektroner inderst og to yderst. Det var forkert, og han rettede det selv nogle år senere."
 
 **Bogsiden:** *The London, Edinburgh and Dublin Philosophical Magazine*, 6. række, bd. 26 (juli-december 1913), s. 1 (del I) og s. 496 (skemaet over ringene).
-- **Smithsonian Libraries** `londonedinburg6261913lond` (ingen licens i metadata). **Rettighederne:** Bohrs tekst er beskyttet i EU til og med 2032 (men fri i USA, fordi den udkom før 1931). **Vis ikke et foto af siden før 2033.** Brug vores egen tegning af skemaet og et kort citat. **Ret sikker** (se Rettighederne).
+- **Smithsonian Libraries** `londonedinburg6261913lond` (ingen licens i metadata). **Rettighederne:** Bohrs tekst er beskyttet i EU til og med 2032 (men fri i USA, fordi den udkom før 1931). **Vis ikke et foto af siden før 2033.** Brug vores egen tegning af skemaet og et kort citat. **Ret sikker** (se [rettighederne](fakta-bogsider-rettigheder.md)).
 
 ## 6. Inge Lehmann (1888-1993): Jorden har en indre kerne
 
@@ -150,7 +141,7 @@ Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9).
 | **Juli 1898:** Pierre og Marie Curie fandt **polonium**: "nous proposons de l'appeler polonium, du nom du pays d'origine de l'un de nous" (efter Polen) | *Comptes rendus* bd. 127, s. 175-178 | Sikker |
 | **26. december 1898:** **radium** (sammen med Gustave Bémont): "auquel nous proposons de donner le nom de radium" | *Comptes rendus* bd. 127, s. 1215-1217 | Sikker |
 | Ordet **"radio-active"** står i titlen på artiklen om polonium ("Sur une substance nouvelle radio-active …"). Wikipedia siger, at hun fandt på ordet | *Comptes rendus* bd. 127; Wikipedia | Ret sikker (at det var første gang: slå op) |
-| **Nobelpriser:** fysik **1903** (med Pierre Curie og Becquerel) og kemi **1911**. Første kvinde med en nobelpris og den eneste, der har fået den i to forskellige naturvidenskaber | Wikipedia (nobelprize.org er lukket) | Ret sikker |
+| **Nobelpriser:** fysik **1903**: Halvdelen til Becquerel "for his discovery of spontaneous radioactivity", den anden halvdel til Pierre og Marie Curie "for their joint researches on the radiation phenomena discovered by Professor Henri Becquerel". Kemi **1911** alene "by the discovery of the elements radium and polonium, by the isolation of radium …". Første kvinde med en nobelpris og den eneste, der har fået den i to forskellige naturvidenskaber (Pauling fik kemi og fred) | nobelprize.org (1903, 1911 og "Nobel Prize facts"); "første kvinde" og "eneste i to" fra Wikipedia | Sikker |
 | Doktorafhandlingen *Recherches sur les substances radioactives* (juni 1903) | Wikipedia; archive.org `recherchessurles00curi` (2. udgave 1904) | Sikker |
 
 **Gør det i AtomLab:** **Værkstedet:** Byg polonium (84) eller radium (88), og tryk **H**, så kernen henfalder. **Det periodiske system:** kortene for Po, Ra og Cm nævner allerede Curie. Citatet `curie` står i opgavelisten. *Forbindelse:* Einstein foreslog i 1905 at teste E = mc² med **radiumsalte** (se Einstein).
@@ -166,7 +157,7 @@ Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9).
 | I **1905** skrev han fire store artikler i *Annalen der Physik*, mens han arbejdede på patentkontoret i Bern: lyset som kvanter (bd. 17, s. 132-148), Brownske bevægelser (bd. 17, s. 549-560), den særlige relativitetsteori, "Zur Elektrodynamik bewegter Körper" (bd. 17, s. 891-921, modtaget 30. juni) og E = mc² (bd. 18, s. 639-641, modtaget 27. september) | Wikipedia "Annus mirabilis papers" (med bibcodes); s. 641 og datoen set i skanningen | Sikker |
 | **Han skrev ikke "E = mc²".** Han skrev: "Gibt ein Körper die Energie L in Form von Strahlung ab, so verkleinert sich seine Masse um L/V²" (L er energien, V er lysets fart) | Skanningen af bd. 18, **s. 641** | Sikker |
 | På samme side foreslog han at teste teorien med **radiumsalte**, fordi deres energi ændrer sig meget | s. 641 ("Es ist nicht ausgeschlossen, daß bei Körpern, deren Energieinhalt in hohem Maße veränderlich ist (z. B. bei den Radiumsalzen), eine Prüfung der Theorie gelingen wird") | Sikker |
-| Nobelprisen i fysik for **1921** (givet i 1922) "for his services to Theoretical Physics, and especially for his discovery of the law of the photoelectric effect", **ikke** for relativitetsteorien | Wikipedia (nobelprize.org er lukket) | Ret sikker |
+| Nobelprisen i fysik for **1921** (givet i 1922) "for his services to Theoretical Physics, and especially for his discovery of the law of the photoelectric effect", **ikke** for relativitetsteorien. Komitéen fandt i 1921 ingen af årets indstillinger gode nok, så prisen blev gemt til året efter | nobelprize.org ("The Nobel Prize in Physics 1921") | Sikker |
 | "Einstein dumpede i matematik" er en myte. Han dumpede den almene del af optagelsesprøven til ETH som 16-årig (et år før tiden), men klarede sig "med udmærkelse" i fysik og matematik | Wikipedia ("performed with distinction in physics and mathematics") | Ret sikker |
 
 **Gør det i AtomLab:** **Kosmos → "Rejsen i tid"** (tvillingen og myonerne, `js/kosmos/tid.js`), **Stjerneovnen** (foldeboksen "Hvor kommer energien fra?" med E = mc²) og **Reaktoren** (citatet `einsteinEnergi`). Fælderne om Einstein står allerede i fakta-fælderne (Michelson-Morley, lysstrålen som 16-årig og samtidighed).
@@ -202,8 +193,8 @@ Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9).
 - **Rækkefølgen** (en tidslinje): Tycho 1572 → Huygens 1655-1659 → Rømer 1676 → Ørsted 1820 → Curie 1898 → Einstein 1905 → Bohr 1913 → Lehmann 1936.
 - **Billeder af personerne:** kun fra Commons med fri licens (ikke tjekket her, se ideer.md).
 
-## Spørgsmål til jer (samlet)
-1. **Domæner:** Vil I åbne `kb.dk` (KB's vilkår for skanningerne), `retsinformation.dk` (§ 70 og art. 14), `www.nobelprize.org`, `gallica.bnf.fr` og `babel.hathitrust.org` (Lehmanns artikel)? De øvrige påstande kan bruges uden.
-2. **Bohr og Lehmann:** Er I enige i, at de vises med vores egen tegning og et kort citat, ikke med et foto af siden, til 2033 og 2064?
-3. **Lehmann har intet at gøre i programmet i dag.** Skal hun vente på et snit gennem Jorden, eller nøjes med et "Hvordan ved vi det?"-kort ved magnetfeltet?
-4. **Citatet `tycho`** har en engelsk oversættelse som `original`. Skal det rettes til Tychos latin (fra faksimilen 1901) i en Småting-opgave?
+## Jeres svar (12. november 2026)
+1. **Domænerne:** åbnet (se Kilderne øverst). Opslagene er lavet samme dag og rettet ind ovenfor.
+2. **Bohr og Lehmann** vises med vores egen tegning og et kort citat, ikke med et foto af siden, til 2033 og 2064.
+3. **Lehmann** (Opus' råd, som I fulgte): nu kun et "Hvordan ved vi det?"-kort ved Jordens magnetfelt (`js/data/hvorfor.js`). Et snit gennem Jorden med jordskælvsbølger kommer først, når Solsystemets Jorden får en ny del, og står som idé i `docs/ideer.md`.
+4. **Citatet `tycho`** rettes til Tychos latin i en lille Småting-opgave. Prompten står under "Næste" i [lige-nu/smaating.md](lige-nu/smaating.md).
