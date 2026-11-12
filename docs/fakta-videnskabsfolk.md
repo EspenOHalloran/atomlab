@@ -38,7 +38,7 @@ Står for sig selv i [fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.
 - **Bedst:** Videnskabernes Selskabs faksimile fra **1901** ("Fototypi. Pacht & Crone"), Toronto-eksemplaret `operumprimitiasd00brahuoft` ("NOT_IN_COPYRIGHT"). Fotoene er fra 1901, så de er frie efter den danske regel. Bemærk: Forordet (s. VII-XVI) er skrevet i 1901 på latin af en ukendt forfatter (ikke tjekket), så brug kun Tychos egne sider. **Ret sikker.**
 - **Stjernekortet** findes allerede på Commons: "Tycho Cas SN1572.jpg" (fra faksimilen 1901), "Public domain" (PD-Art, PD-old-100). **Sikker.**
 - KB's eksemplar fra 1573 (`den-kbd-pil-130018098815-001`) har ingen licens i metadata, og det er et dansk foto (§ 70). KB's side om ophavsret frigiver ikke skanningerne (se [rettighederne](fakta-bogsider-rettigheder.md)), så brug faksimilen fra 1901 i stedet, eller spørg KB (kb@kb.dk). **Ret sikker.**
-- **Citatet `tycho` i `js/data/citater.js`:** Feltet `original` er en *engelsk oversættelse* ("A miracle indeed …"), ikke Tychos latin. Det latinske står i faksimilen: "Miraculum sane inter omnia, quae a mundi exordio, in tota rerum natura extiterunt, aut maximum, aut illi certe aequiparandum, quod in Solaris cursus retentione, Iosuae precibus impetrata …" (altså "enten det største eller i hvert fald på højde med" Solen, der stod stille for Josva). Hvem der har lavet den engelske oversættelse, og om den er fri, er ikke tjekket. Bør rettes til latin i Ordbogen og citaterne (Småting).
+- **Citatet `tycho` i `js/data/citater.js`:** Rettet 12. november 2026. `original` er nu Tychos latin, læst på sidebilledet i faksimilen 1901 (side A, archive.org-billede n36): "Miraculum sanè inter omnia, quæ à mundi exordio, in tota rerum natura extiterunt, aut maximum, aut illi certè æquiparandum, quod in Solaris cursus retentione, Iosuæ precibus impetrata …". Sætningen fortsætter "vel eiusdem obscuratione, tempore Victimæ cœlestis facta, contigisse sacra testantur oracula" (eller da Solen blev mørk, da Jesus døde). Den danske tekst er vores egen oversættelse. Den engelske oversættelse er fjernet. **Sikker.**
 
 ## 2. Ole Rømer (1644-1710): Lyset er ikke uendelig hurtigt
 
@@ -197,4 +197,4 @@ Står for sig selv i [fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.
 1. **Domænerne:** åbnet (se Kilderne øverst). Opslagene er lavet samme dag og rettet ind ovenfor.
 2. **Bohr og Lehmann** vises med vores egen tegning og et kort citat, ikke med et foto af siden, til 2033 og 2064.
 3. **Lehmann** (Opus' råd, som I fulgte): nu kun et "Hvordan ved vi det?"-kort ved Jordens magnetfelt (`js/data/hvorfor.js`). Et snit gennem Jorden med jordskælvsbølger kommer først, når Solsystemets Jorden får en ny del, og står som idé i `docs/ideer.md`.
-4. **Citatet `tycho`** rettes til Tychos latin i en lille Småting-opgave. Prompten står under "Næste" i [lige-nu/smaating.md](lige-nu/smaating.md).
+4. **Citatet `tycho`** er rettet til Tychos latin (Småting, 12. november 2026).
