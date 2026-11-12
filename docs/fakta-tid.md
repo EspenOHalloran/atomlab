@@ -99,7 +99,7 @@
 - Set fra skibet er det Jorden, der farer af sted. Hvorfor er det så ikke tvillingen derhjemme, der er yngst? Fordi de to ikke er ligestillede: Den rejsende vender om (og mærker det, når motoren speeder op og bremser), og den hjemmeblevne gør ikke.
 - Den præcise forklaring: Hver tvilling har sin vej gennem rumtiden, og hvert ur måler længden af sin egen vej (egentiden). I rumtiden giver den lige vej (at blive hjemme) **den længste tid**, og en omvej giver mindre. Det skyldes minusset i rumtidens "Pythagoras": τ² = t² − (x/c)². Det er det modsatte af et landkort.
 - Når den rejsende vender om, skifter den rejsende syn på, hvad der sker "nu" derhjemme (samtidighed er ikke det samme for alle). Det er dér, de mange år derhjemme "forsvinder" set fra skibet.
-- **Fælden "det er accelerationen":** Accelerationen er ikke årsagen. Man kan lave forsøg, hvor begge ure accelererer lige meget, og de alligevel kommer forskelligt hjem. Det er vejens længde, der tæller. Kilde: Wikipedia "Twin paradox".
+- **Fælden "det er accelerationen":** Accelerationen er ikke årsagen. Man kan *tænke sig* en rejse, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem (Wiechert 1911, en udregning, ikke et forsøg). Det rigtige forsøg er CERN 1977 (Bailey m.fl.): Myonerne blev slynget rundt med op til ca. 10¹⁸ g, og deres levetid fulgte kun farten. Det er vejens længde, der tæller. Kilder: Wikipedia "Twin paradox" og "Experimental testing of time dilation" (rettet 12. november 2026 efter Fable E4, F2).
 
 ## 10. Det er målt (ikke science fiction)
 - **Myonerne** (en tung fætter til elektronen) dannes, når den kosmiske stråling rammer luften, typisk ca. 15 km oppe (arXiv:1906.03934: "most atmospheric muons are produced at a height of around 15 km"). Myonens middellevetid er 2,197 µs (Wikipedia "Muon", fra PDG), og massen er 105,66 MeV/c² (NIST CODATA, physics.nist.gov).
@@ -161,7 +161,7 @@ Udregnet:
 | Kononenko: 1.111 døgn, mere end nogen anden | OK (ingen over ham i kilderne, artiklen går til september 2026) | Wikipedia "List of spaceflight records" |
 | Sekundet siden 1967: 9.192.631.770 svingninger i cæsium-133 | OK | Wikipedia "Second" |
 | Strontium- og aluminiumure er mere præcise end cæsiumure | OK | Wikipedia "Atomic clock" |
-| Forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem | OK ("the issue is how long the world-lines are, not how bent") | Wikipedia "Twin paradox", "Role of acceleration" |
+| Forsøg, hvor begge ure accelererer lige meget og alligevel kommer forskelligt hjem | Ret: Det er tankeforsøg (Wiechert 1911). Det rigtige forsøg er CERN 1977, op til ca. 10¹⁸ g (Fable E4, F2, rettet 12. november 2026). "the issue is how long the world-lines are, not how bent" | Wikipedia "Twin paradox", "Role of acceleration" |
 | Lyset har ikke sit eget ur | OK ("for lightlike paths, there exists no concept of proper time") | Wikipedia "Proper time" |
 | Fjerne galakser fjerner sig hurtigere end lyset, fordi rummet udvider sig | OK | Wikipedia "Expansion of the universe" |
 | Interstellar: 1 time = 7 år, kræver et sort hul, der drejer næsten maksimalt | OK | arXiv:1910.00940 (og afsnit 13 ovenfor) |

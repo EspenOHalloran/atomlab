@@ -63,13 +63,17 @@ function myonTur(b) {
 const luftTekst = (m) => (m >= 1000 ? `ca. ${fmt(m / 1000, 1)} km` : `ca. ${fmt(Math.round(m / 10) * 10)} m`);
 // Underteksten for kontakten. Uden Einstein: andelen, der når ned, er e^(−15 km/(v·τ)) (ca. 1 ud af 8 milliarder
 // ved 99,9 % og 99,97 %, ca. 1 ud af 10 milliarder ved 99 %).
+// Med Einstein: e^(−15 km/(γ·v·τ)), altså ca. 4 % ved 99 %, 36 % ved 99,9 % og 55 % ved 99,965 % (Fable E4, F3: ikke "de fleste",
+// for af 24 i tælleren når højst 12 ned i ca. 4 ud af 10 byger).
+const andel3 = (b) => Math.exp(-HØJDE3 / (b * C_KM_US * TAU * T.lysurGamma(b)));
+const andelTekst = (p) => (p >= 0.45 ? 'ca. halvdelen' : `ca. 1 ud af ${fmt(Math.round(1 / p))}`);
 function linje3(tilstand, b) {
   const { gam, luft } = myonTur(b);
   if (tilstand === 0) {
     const milliarder = Math.round(Math.exp(HØJDE3 / (b * C_KM_US * TAU)) / 1e9);
     return `Uden tidsforlængelse går næsten alle i stykker højt oppe. Kun ca. 1 ud af ${fmt(milliarder)} milliarder ville nå ned.`;
   }
-  if (tilstand === 1) return `Set fra Jorden går myonens ur ca. ${fmt(gam)} gange langsommere. Ved den typiske fart når ca. halvdelen ned i stedet for næsten ingen. Det er målt (se For nørder).`;
+  if (tilstand === 1) return `Set fra Jorden går myonens ur ca. ${fmt(gam)} gange langsommere. Derfor når ${andelTekst(andel3(b))} ned i stedet for næsten ingen. At de lever længere i fart, er målt.`;
   return `Set fra myonen går dens ur helt normalt. Til gengæld er luften presset sammen til ${luftTekst(luft)}, og jorden suser op mod den. Samme svar!`;
 }
 // Linealen: et pænt skridt i meter, så mærkerne står mindst 44 px fra hinanden

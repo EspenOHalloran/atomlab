@@ -73,3 +73,12 @@ Fælderne for F1-F3 har Fable allerede skrevet nederst i [fakta-faelder.md](../e
 1. "Tid som ét punkt" med de to forløb, når Forløb-klodsen findes (køreplanen, Serie 1 nr. 4). Drejebogen (E4, afsnit 4) skal have jeres go før.
 2. Det, der kan bygges før klodsen, hvis I vil: TRAPPIST-1 som mål (med faktatjek) og 50 % på skyderen.
 3. Runden med jeres søn, når forløbene er bygget, med listen i [E4-tid.md](E4-tid.md), afsnit 6.
+
+## Tillæg fra en parallel session (12. november 2026, eftermiddag)
+*En anden session fik samme prompt og lavede E4-noterne og F1-F12 en gang til. Det, der var nyt i forhold til ovenfor, er flyttet hertil. Resten er droppet.*
+- **F3 følger nu farten (jeres valg):** Myonernes undertekst regner andelen af skyderens fart, e^(−15 km/(γ·v·τ)): "ca. halvdelen" ved 99,97 %, "ca. 1 ud af 3" ved 99,9 % og "ca. 1 ud af 26" ved 99 %. Så passer den med tælleren ved alle tre farter. `tests/tidhvorfor.mjs` tjekker "ca. halvdelen" og "1 ud af 26".
+- **10¹⁸ g** er den acceleration, myonen selv mærker. Set fra laboratoriet er den ca. γ² ≈ 860 gange mindre (ca. 10¹⁵ g, med ringens radius på ca. 7 m efter hukommelsen). Kilden ("Experimental testing of time dilation") skriver "up to ~10¹⁸ g", og Wiechert (1911) er kilden til tankeforsøget med ens acceleration ("Twin paradox"). Faktagrundlaget (`docs/fakta-tid.md`) er rettet, så det ikke længere kalder tankeforsøget et forsøg.
+- **Trin A3 ændrer to ting på én gang** (målet og farten), men spørgsmålet er, om det er farten, der gør det. Forslag: Flyv til Alpha Centauri med 50 % og så med 99,99 % (30 og 28 år mod 21 år og 13 år og 45 dage). Den sidste er rejsen, Tid starter med i dag. Tallene: 4,344 lysår ved 50 % giver 17,4 år på Jorden og 15,0 i skibet.
+- **Skyderen "fra gåben til lysets fart":** "Bil: 0,2 milliontedele sekund" passer ved ca. 130 km/t. Ved 100 km/t er det 0,14. Farten skal stå ved tallet. Gåben, fly, rumstation, 50 % og 99 % passer.
+- **Fødselsdagshilsnerne** ved 80 % (1 og 9 til den rejsende, 3 og 3 til tvillingen) passer med Doppler-faktoren 3.
+- **Runden med jeres søn:** I blev spurgt igen og bekræftede, at den venter, til forløbene er bygget.
