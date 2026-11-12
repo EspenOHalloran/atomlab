@@ -23,6 +23,6 @@
 - "Rømer målte lysets fart." Han viste, at lyset bruger tid (22 min for Jordbanens bredde, i dag 16 min 38 s). Farten i km/s regnede Huygens ud.
 - "Bohrs skaller var 2, 8, 8." Hans skema fra 1913 (Phil. Mag. 26, s. 496) har neon som (8, 2) med den store ring inderst.
 - "Einstein skrev E = mc² i 1905." Han skrev, at massen bliver L/V² mindre (Annalen der Physik 18, s. 641).
-- "Bogen er fri, så billedet af siden er frit." Ikke i Danmark: Et foto eller en skanning har sin egen ret i 50 år (ophavsretslovens § 70). Brug gamle faksimiler eller skanninger, som biblioteket selv har frigivet. En ny oversættelse har også sine egne rettigheder.
+- "Bogen er fri, så billedet af siden er frit." Ikke i Danmark: Et foto eller en skanning har sin egen ret i 50 år (ophavsretslovens § 70). Undtagelsen i § 70 stk. 4 gælder kun billedkunst, ikke tekstsider. Brug gamle faksimiler eller skanninger, som biblioteket selv har frigivet. En ny oversættelse har også sine egne rettigheder.
 - Et citat i `citater.js`, hvor `original` står på engelsk, kan være en oversættelse (Tycho). Tjek, at `original` er på originalsproget.
 - Samme Wikipedia-artikel kan give to årstal (Niels Bohr Institutet: "opened in 1920" i indledningen, 3. marts 1921 længere nede). Læs hele artiklen.

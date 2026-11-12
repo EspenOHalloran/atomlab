@@ -14,4 +14,6 @@
 
 **Næste:** Skærmlisten og hentning efter behov (10a), **først og alene**: ny session med Opus, effort høj, med [prompt-skaermliste.md](../prompt-skaermliste.md). Imens må faktagrundlagene køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
+**Lille opgave (kan tages når som helst):** Citatet `tycho` i `js/data/citater.js` har en engelsk oversættelse som `original`. Prompt til en ny session (Opus, effort medium): *"Spor: Småting. Læs docs/fakta-videnskabsfolk.md (afsnit 1, Tycho Brahe, punktet om citatet `tycho`). Ret citatet `tycho` i js/data/citater.js, så `original` er Tychos latin fra De nova stella (faksimilen 1901, archive.org `operumprimitiasd00brahuoft`), og så den danske `tekst` er vores egen oversættelse af netop det latin. Kør /faktatjek på citatet og /faerdig."*
+
 Bagefter i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes til arkivet, Retningen), testen `mars` (585 sekunder) delt i to, og faktatjekket af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` fra før (én session pr. fil med `/faktatjek`, startet i miljøet "Default", hvor domænerne nu er åbne, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).
