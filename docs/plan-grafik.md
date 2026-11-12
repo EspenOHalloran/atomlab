@@ -67,3 +67,4 @@
 
 ## 6. Status
 Intet er bygget. Venter på jeres svar og go.
+- **12. november 2026:** Go til trin 1 af G1: måleren `?maal` og en gennemgang af hakkene på Mars (Mars hakker lidt, også på pc). Prompten står i [prompt-maaler.md](prompt-maaler.md).
