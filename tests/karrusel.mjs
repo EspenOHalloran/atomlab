@@ -185,8 +185,7 @@ for (const [navn, opts] of størrelser) {
 
   // En klaret del får ✓, og "Din fremgang" viser tallene
   await p.evaluate(async () => {
-    const { OPGAVER_BATTERI } = await import('./js/batteri.js');
-    const { OPGAVER_FUSION } = await import('./js/fusion.js');
+    const { OPGAVER_BATTERI, OPGAVER_FUSION } = await import('./js/data/opgaver.js'); // opgaverne ligger i js/data/ siden 10a
     const opgaver = Object.fromEntries([...OPGAVER_BATTERI, ...OPGAVER_FUSION].map((o) => [o.id, 1]));
     localStorage.setItem('atomlabFremgang', JSON.stringify({ opgaver, opdaget: [1, 2] }));
   });

@@ -28,3 +28,6 @@ export const lavKosmos = skærm.lav;
 export const startKosmos = skærm.start;
 export const stopKosmos = skærm.stop;
 export const testAdgang = skærm.testAdgang;
+
+// De fælles navne, som skærmlisten (js/skaerme.js) bruger
+export { lavKosmos as lav, startKosmos as start, stopKosmos as stop };

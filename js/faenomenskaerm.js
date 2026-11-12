@@ -26,38 +26,16 @@ import { HVORFOR } from './data/hvorfor.js';
 import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavTidsknap } from './pause.js';
 import { lavRejseskilt } from './rejseskilt.js';
+import { NØGLER } from './data/faenomener.js';
+import { tagVentSted } from './gaa.js';
 
 // Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
 const SMAL = matchMedia('(max-width: 820px), (max-height: 500px)');
 
-// Hvor hver skærm husker det sidst valgte fænomen og de fænomener, man har kigget på
-export const NØGLER = {
-  kosmos: { valgt: 'atomlabKosmos', set: 'atomlabKosmosSet' },
-  solsystem: { valgt: 'atomlabSolsystem', set: 'atomlabSolsystemSet' },
-};
-
-// Et sted i træet, som skærmen skal gå til, når den starter (fx Olympus Mons fra Ordbogen): { skærm, sted }
-let ventSted = null;
-
-// Åbner et fænomen på en anden skærm (fx fra grundstofkortet eller en tekst i Kosmos). sted er et sted i fænomenets
-// træ (fx 'olympus'), som kameraet flyver hen til.
-export function åbnFænomen(skærm, id, sted) {
-  if (id) {
-    try { localStorage.setItem(NØGLER[skærm].valgt, id); } catch { /* ingen lagring */ }
-  }
-  ventSted = sted ? { skærm, sted } : null;
-  location.hash = `#${skærm}`;
-}
-
-// Knapper med data-gaa="skærm:id" (eller bare "skærm", eller "skærm:id:sted") i teksterne åbner et fænomen et andet sted
-document.addEventListener('click', (h) => {
-  const b = h.target.closest?.('[data-gaa]');
-  if (!b) return;
-  const [skærm, id, sted] = b.dataset.gaa.split(':');
-  if (!NØGLER[skærm]) return;
-  lyd.klik();
-  åbnFænomen(skærm, id, sted);
-});
+// Nøglerne til det gemte og springet til et fænomen på en anden skærm ligger uden for skallen, så menuen kan bruge dem
+// uden at hente den (10a). De eksporteres også herfra som før.
+export { NØGLER } from './data/faenomener.js';
+export { åbnFænomen } from './gaa.js';
 
 // skærm: navnet (fx 'kosmos'). liste: fænomenerne i rækkefølge, eller grupper { navn, ikon, f, under: [fænomener] },
 // hvor f er gruppens eget fænomen (uden f åbner gruppen sit første underpunkt).
@@ -181,8 +159,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // ingen lagring
     }
     vælg(id);
-    if (ventSted?.skærm === skærm) gå(åbenGruppe(), ventSted.sted);
-    ventSted = null;
+    const sted = tagVentSted(skærm);
+    if (sted) gå(åbenGruppe(), sted);
   }
 
   function stop() {
