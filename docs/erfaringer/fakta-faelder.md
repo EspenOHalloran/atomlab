@@ -117,3 +117,4 @@
 - "Antistof falder opad." Udelukket af ALPHA-g i 2023. Og "én ud af en milliard blev tilovers" er en størrelsesorden (6 × 10⁻¹⁰ pr. lyspartikel).
 - "Planet X": Forskernes navn er Planet 9 (Batygin og Brown 2016). Den er hverken fundet eller modbevist.
 - Planer rykker: Mars Sample Return blev lukket i 2026, og Euclids første store datasæt (DR1) blev delt i to: en første del 12. november 2026 og resten midt i 2027. Skriv "efter planen" og et årstal, og slå det op igen, før teksten skrives.
+- Einsteins to regler: Den første er, at fysikkens love er ens for alle, der bevæger sig jævnt. Den anden er lysets fart. Kald ikke lysets fart "regel 1" ét sted, når en anden tekst tæller omvendt. Brug navne eller samme rækkefølge som Einstein (E4 F7, 12. november 2026).
