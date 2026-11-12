@@ -23,7 +23,7 @@ Start: [prompt-faktagrundlag.md](prompt-faktagrundlag.md), én ny session pr. em
 1. **Forløb-klodsen og "Dit første atom"** (nr. 1 og 3, nyt spor [Forløb](lige-nu/forloeb.md)): klodsen efter [skabelonen](fable/E3-forloeb.md), forløbet i Værkstedet, toplinjen med opgaven, undertitlen i menuen og isotoperne flyttet til senere. Start: [prompt-forloeb.md](prompt-forloeb.md) (mellem til stor).
 2. **Liv som to forløb** (nr. 4, sporet Molekyler): [drejebogen](fable/E3-liv-drejebog.md) er klar. "Cellekernen" alle steder (mellem).
 3. **Molekyler som egen del i verdenen Atomer** med sit forløb (nr. 5 og 10b, sporet Molekyler): Opus skriver drejebogen efter skabelonen først. Regnskabet i eV flyttes til "For nørder" (mellem).
-4. **Tid som ét punkt og Kosmos i fire grupper** (nr. 6 og det gamle punkt 7, sporet Tid og rum): Rejsen først, så "Hvordan kan det ske?" og scene 1-2. Scene 3-5 bliver "Vil du vide mere?" (lille til mellem).
+4. **Tid som ét punkt og Kosmos i fire grupper** (nr. 6 og det gamle punkt 7, sporet Tid og rum): To korte forløb efter Fables drejebog ([E4-tid.md](fable/E4-tid.md), afsnit 4, jeres svar 12. november 2026 i [E4-noter.md](fable/E4-noter.md)): "Rejsen i tid" med TRAPPIST-1 som første rejse, og "Hvordan kan det ske?" med scene 1-2 og myonerne (scene 3) som sidste trin. Scene 4 og "nu"-linjerne under "For nørder". Drejebogen mangler jeres go. Runden med sønnen kommer, når forløbene er bygget (lille til mellem).
 
 En prøve med sønnen efter hvert punkt.
 

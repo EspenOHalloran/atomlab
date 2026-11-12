@@ -327,7 +327,7 @@ tjek('begge kontakter er slået fra igen', (await E(() => atomlabTest.kosmos.sty
 // "Hvorfor?"-kortet ved "Hvad gør farten?"
 await E(() => [...document.querySelectorAll('#kosmosTekst details.side-emne')].find((d) => d.querySelector('summary').textContent.includes('Hvad gør farten?')).open = true);
 await page.click('#kosmosTekst button.hvorfor[data-hvorfor="lysfart"]');
-tjek('"Hvorfor?"-kortet: "Hvorfor kan intet nå lysets fart?"', (await E(() => atomlabTest.hvorfor.vist())) === 'Hvorfor kan intet nå lysets fart?');
+tjek('"Hvorfor?"-kortet: "Hvorfor kan et rumskib aldrig nå lysets fart?"', (await E(() => atomlabTest.hvorfor.vist())) === 'Hvorfor kan et rumskib aldrig nå lysets fart?');
 await page.keyboard.press('Escape');
 
 // Skift til et andet fænomen og tilbage: urene er væk og kommer igen én gang
