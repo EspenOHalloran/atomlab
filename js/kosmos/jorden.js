@@ -11,7 +11,7 @@ import { glød } from './faelles.js';
 import { LANDKORT } from '../data/landkort.js';
 import { dagIDag } from '../data/solbane.js';
 import { verden, LAV_KVALITET, TEST_HURTIG } from '../scene3d.js';
-import { hentBillede, lavHentebjælke, tonInd } from '../hentning.js';
+import { hentBillede, lavHentebjælke, tonInd, billedEjer, vedFrigiv } from '../hentning.js';
 
 const RAD = Math.PI / 180;
 
@@ -39,14 +39,22 @@ function strFor(b) {
 // Dagen i året midt i de fire måneder med dagbilleder (januar, april, juli og oktober)
 const BILLEDDAGE = [15, 105, 196, 288];
 
-const hentede = new Map(); // filnavn → Promise med teksturen (eller null). De bliver i grafikkortet, så det går hurtigt at skifte fænomen.
+// filnavn → { løfte (Promise med teksturen eller null), ejere, glemt }. Et billede bliver i grafikkortet, så længe et
+// fænomen bruger det (billedEjer i js/hentning.js). Skifter man mellem to fænomener med Jorden (fx Årstiderne og
+// Formørkelser), bliver det liggende, for det nye fænomen henter det, før det forrige frigives (G1 trin 3).
+const hentede = new Map();
 const færdige = new Set(); // filnavne, der er hentet
 function hentFil(fil, farve, kanaler) {
-  if (!hentede.has(fil)) {
-    hentede.set(fil, new Promise((klar) => {
+  let h = hentede.get(fil);
+  if (!h) {
+    h = { ejere: new Set(), glemt: false, tekstur: null };
+    hentede.set(fil, h);
+    h.løfte = new Promise((klar) => {
       // (hentBillede tæller de hentede MB til bjælken)
       hentBillede(MAPPE + fil).then((billede) => {
+        if (h.glemt) { klar(null); return; } // (frigivet, mens det blev hentet)
         const t = new THREE.Texture(billede);
+        h.tekstur = t;
         t.needsUpdate = true;
         færdige.add(fil);
         t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
@@ -56,10 +64,22 @@ function hentFil(fil, farve, kanaler) {
         t.anisotropy = verden.renderer ? Math.min(8, verden.renderer.capabilities.getMaxAnisotropy()) : 1;
         klar(t);
       }, () => klar(null));
-    }));
+    });
   }
-  return hentede.get(fil);
+  const ejer = billedEjer();
+  if (ejer) h.ejere.add(ejer);
+  return h.løfte;
 }
+function smid(fil, h) {
+  h.glemt = true;
+  h.tekstur?.dispose();
+  if (hentede.get(fil) === h) hentede.delete(fil);
+  færdige.delete(fil);
+}
+// Ejeren e bruger ikke sine billeder mere: de billeder, ingen andre bruger, slettes (kaldes fra frigivBilleder)
+vedFrigiv((e) => {
+  for (const [fil, h] of [...hentede]) if (h.ejere.delete(e) && !h.ejere.size) smid(fil, h);
+});
 const filerFor = (b, str) => (Array.isArray(b.navn) ? b.navn : [b.navn]).map((n) => (b.størrelse ? `${n}-${str}.jpg` : n));
 // Er billedet (eller listen) hentet før i den størrelse, der skal bruges? Så ses det med det samme (ingen toning).
 const iForvejen = (nøgle) => filerFor(BILLEDER[nøgle], strFor(BILLEDER[nøgle])).every((f) => færdige.has(f));
@@ -79,9 +99,8 @@ function hent(nøgle, sæt) {
     if (!t) { if (!(await lille)) sæt(null); return; }
     sæt(t);
     for (const f of filerFor(b, '2k')) {
-      hentede.get(f)?.then((x) => x?.dispose());
-      hentede.delete(f);
-      færdige.delete(f);
+      const h = hentede.get(f);
+      if (h) smid(f, h);
     }
   });
 }
@@ -114,7 +133,7 @@ function tonVedKort(kugle, u, nøgle, tekst = null) {
 }
 // Til tests: venter, til alle billeder, der er spurgt efter, er hentet
 export function billederHentet() {
-  return Promise.all(hentede.values());
+  return Promise.all([...hentede.values()].map((h) => h.løfte));
 }
 
 // ---------- Kort, der tegnes, hvis billederne mangler ----------

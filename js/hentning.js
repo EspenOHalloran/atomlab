@@ -60,6 +60,18 @@ export async function hentBillede(url, { vendt = false } = {}) {
   }
 }
 
+// Hvem bruger billederne (G1 trin 3, forslag G i docs/plan-grafik.md): Lagrene med billeder (js/solsystem/hent.js og
+// js/kosmos/jorden.js) husker, hvem der har hentet hvert billede (dets ejere). Fænomenskærmen sætter ejeren (det valgte
+// fænomen), før fænomenet laves, og frigiver den forrige, når man skifter fænomen eller forlader skærmen. Et billede
+// uden ejere slettes fra grafikkortet og lageret, så hukommelsen holder sig under budgettet i docs/retning.md.
+let ejer = null;
+const frigivere = new Set();
+export const billedEjer = () => ejer;
+export function sætBilledEjer(e) { ejer = e; }
+// Et lager melder sig med sin funktion, der frigiver én ejers billeder
+export function vedFrigiv(f) { frigivere.add(f); }
+export function frigivBilleder(e) { if (e) for (const f of frigivere) f(e); }
+
 // Kan browseren vende et ImageBitmap, mens det pakkes ud? Prøves én gang med et billede på 1 × 2 punkter (rød over
 // blå): Vendt skal blå stå øverst. (En browser, der ikke kender imageOrientation, ville ellers give kort på hovedet.)
 let kanVendeSvar = null;
