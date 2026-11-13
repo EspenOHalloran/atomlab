@@ -11,7 +11,7 @@
 - **Panelet:** `#livTitel`, `#livTekst`, `#livTal` (to kolonner), `#livEkstra`, "Hvorfor?" (`#livHvorfor`, kortet `livSammen`, kun ved stigen og atomerne), en knap til en gåde (`#livGaade`, når trinet har `gåde: [data-gaa, tekst]`, i dag kun Ribosomet i `TRIN_PROTEIN`, Gåderne G2), "For nørder" og "Ærligt talt" (`name="liv-lag"`). Skrives kun, når trinet skifter (`panelNøgle`). `.liv-tekst` og `.liv-ekstra` står i `ZONER` i `js/ordforklaring.js`. Farverne i vinduet (`#livFarver`): atomernes ved Atomerne, basernes ved Stigen.
 - **"Næste skridt"** (`lavNæsteSkridtKort`, id `livMission`): "Vis mig" zoomer ind til næste trin.
 - **Opgaverne** `OPGAVER_LIV` (`liv-rejse`: alle fem trin besøgt i samme besøg, `liv-forkert`, `liv-byg` og de seks fra L2: `liv-protein`, `liv-læs`, `liv-segl`, `liv-tavs`, `liv-stop` og `liv-skriv`) i `#livOpgaver` med "Start forfra". Fremgangen står i main.js (`fremgangPrDel`).
-- **Fra Gåderne:** `visDel('protein')` (eksporteret) starter "Se genet blive læst". `startLiv` kalder den med `tagVentLiv()` fra `js/gaa.js` (`data-gaa="liv:protein"`).
+- **Fra Gåderne:** `visDel('protein')` (eksporteret) starter "Se genet blive læst". `startLiv` kalder den med `tagVentLiv()` fra `js/gaa.js` (`data-gaa="liv:protein"`). Kommer man derfra, starter forløbet "Opskriften i dig" ikke af sig selv, og står det åbent, stopper `visDel` det først.
 - **Stop** rydder byggeriet, overgangen, tegningerne (synlighed 0, skala 1), kameraets zoom og hjælpen. `nulstilStyring()` i main.js sætter `minDistance` og `maxDistance` tilbage.
 
 ## L2: fra opskrift til protein (`js/liv-protein.js`)
