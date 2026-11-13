@@ -15,7 +15,7 @@ const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
   'roeg', 'henfaldsregler', 'orbitaler', 'sorthul', 'molekyler', 'vaerksted', 'byttebors', 'byg-molekyler', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
-  'batteri', 'liv', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'kategorier', 'ordforklaring', 'ordbog', 'beskeder', 'beskeder-2', 'guide', 'lag', 'pause', 'fuldskaerm', 'grafik', 'saturn', 'jupiter', 'isgiganter', 'venus', 'mars', 'landskab', 'solsystem', 'jorden', 'henter', 'karrusel', 'tid', 'tidhvorfor', 'skaermliste', 'forloeb', 'gaader', 'liv-forloeb',
+  'batteri', 'liv', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'kategorier', 'ordforklaring', 'ordbog', 'beskeder', 'beskeder-2', 'guide', 'lag', 'pause', 'fuldskaerm', 'maaler', 'grafik', 'saturn', 'jupiter', 'isgiganter', 'venus', 'mars', 'landskab', 'solsystem', 'jorden', 'henter', 'karrusel', 'tid', 'tidhvorfor', 'skaermliste', 'forloeb', 'gaader', 'liv-forloeb',
 ];
 const argumenter = process.argv.slice(2);
 const filArg = argumenter.filter((a) => !a.startsWith('--') && (a.includes('/') || a.includes('.')));
