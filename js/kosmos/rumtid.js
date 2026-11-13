@@ -31,7 +31,7 @@ export default {
       },
       {
         titel: 'Bøjer lys også?',
-        tekst: `<p>Ja. Ved en solformørkelse i 1919 målte man, at stjernelys bøjer om Solen, omtrent som Einstein havde regnet ud og dobbelt så meget, som Newtons tyngdelov gav. Senere målinger har bekræftet det meget præcist. Det gjorde ham verdensberømt. ${handling('lysstråle', '💡 Send en lysstråle forbi')}</p>`,
+        tekst: `<p>Ja. Ved en solformørkelse i 1919 målte man, at stjernelys bøjer om Solen, omtrent som Einstein havde regnet ud og dobbelt så meget, som Newtons tyngdelov gav. Senere målinger har bekræftet det meget præcist. Det gjorde ham verdensberømt. I dag bruger astronomerne det til at veje det, man ikke kan se. ${handling('lysstråle', '💡 Send en lysstråle forbi')} ${gå('gaader:moerktstof', 'Gåden: Hvad er mørkt stof?')}</p>`,
       },
     ],
     videre: [gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:tyngdebolger', 'Tyngdebølger')],

@@ -2,7 +2,8 @@
 // et lille forløb på tre trin (Hvad ved vi? / Hvad ved vi ikke? / Hvordan finder vi ud af det?) med samme form som
 // forløbene i js/data/forloeb/. Uden Three.js, så det kan testes i Node (tests/gaader.mjs).
 //
-// Et kort: { id, spørgsmål, linje (til oversigten), dato, trin: [{ overskrift, spørg, gæt: { valg: [{ tekst, efter }] }, så }],
+// Et kort: { id, spørgsmål, linje (til oversigten), dato, trin: [{ overskrift, spørg, gæt: { valg: [{ tekst, efter }] }, så,
+// hvorfor (id i HVORFOR, en knap under Så) }],
 // slut (kernen i én-to sætninger), seDet: [data-gaa, tekst], nørd (HTML), ærligt (HTML), ord (fagord på kortet, id'er i
 // Ordbogen) }. Et kort uden trin er ikke bygget endnu og står gråt i oversigten ("Kommer senere").
 // Kilderne står i docs/fakta-gaader.md. Hvert kort har en dato, fordi stoffet flytter sig: Slå "Tjek igen" op, før
@@ -124,6 +125,7 @@ export const GÅDER = [
             { tekst: 'Kig på luften om fjerne planeter', efter: 'Godt tænkt. James Webb-teleskopet måler gasserne om fjerne planeter, men intet spor efter liv er bekræftet.' },
           ],
         },
+        hvorfor: 'opdaget', // Gåderne G3: DMS på K2-18b er 3 sigma
         så: 'Kina vil efter planen sende Tianwen-3 af sted i 2028 og have prøver fra Mars hjem i 2031. Europa Clipper når Jupiter i 2030 og skal flyve tæt forbi månen Europa mange gange, og Dragonfly skal efter planen lande på Saturns måne Titan i 2034.',
       },
     ],
@@ -142,7 +144,74 @@ export const GÅDER = [
     ærligt: '<p>"Målt eller gæt?" er forenklet. At pletterne er lavet af liv, er ikke et vildt gæt: Mikrober på Jorden laver de samme stoffer. Men kemi uden liv er ikke udelukket, og flere fund, der lignede liv, holdt ikke.</p><p>Vi kender kun ét eksempel på liv, vores eget. Derfor ved ingen, om liv opstår let, når der er vand og de rigtige stoffer.</p>',
   },
   // Kortene om liv står ikke ved siden af hinanden, så "hvor" og "hvordan" ikke flyder sammen (jeres valg 13. november 2026)
-  { id: 'antistof', spørgsmål: 'Hvor blev antistoffet af?', linje: 'Alt omkring os er stof, næsten intet er antistof' },
+  // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 3.
+  {
+    id: 'antistof',
+    spørgsmål: 'Hvor blev antistoffet af?',
+    linje: 'Alt omkring os er stof, næsten intet er antistof',
+    // Datoerne er slået op 13. november 2026: Hyper-Kamiokande (måler fra 2028) og DUNE (strålen i begyndelsen af
+    // 2030'erne) på Wikipedia, BASE's lastbil (home.cern 24. marts 2026) og Nobelprisen 2015 (nobelprize.org)
+    dato: 'Sådan stod det i november 2026',
+    ord: ['antistof'],
+    trin: [
+      {
+        overskrift: 'Hvad ved vi?',
+        spørg: 'Big Bang burde have lavet lige meget stof og antistof. Hvor meget antistof er tilbage?',
+        gæt: {
+          valg: [
+            // Wikipedia "Antimatter": "the gamma rays produced in annihilation reactions along the boundary ... would be detectable"
+            { tekst: 'Lige så meget som stof', efter: 'Det skulle man tro. Men så ville grænserne mellem stof og antistof lyse af stråling, og det ser man ingen steder.' },
+            { tekst: 'Næsten intet', efter: 'Rigtigt. Næsten alt, man har fundet i universet, er stof.' },
+          ],
+          rigtigt: 1,
+        },
+        // Ca. 6 · 10⁻¹⁰ kernepartikler pr. lyspartikel (Planck, via Wikipedia "Big Bang nucleosynthesis"): en størrelsesorden
+        så: 'Stof og antistof bliver til stråling, når de mødes, og næsten alt blev udslettet. Men for hver milliard par var der ca. én partikel stof i overskud, og det er den rest, stjernerne og du er lavet af.',
+      },
+      {
+        overskrift: 'Hvad ved vi ikke?',
+        // Her er svaret "Målt", så man ikke lærer, at svaret altid er "Gæt"
+        spørg: 'Målt eller gæt? »Naturen behandler stof og antistof en lille smule forskelligt.«',
+        gæt: {
+          valg: [
+            { tekst: 'Målt', efter: 'Rigtigt. Det blev målt første gang i 1964 og senest på CERN i 2025.' },
+            { tekst: 'Gæt', efter: 'Nej, det er faktisk målt, første gang i 1964 og senest på CERN i 2025.' },
+          ],
+          rigtigt: 0,
+        },
+        // T2K, arXiv:1910.03887: "it is too small to explain the matter-antimatter imbalance of the universe"
+        så: 'Men den forskel, man har målt, er alt for lille til at forklare, at der blev stof tilovers. Derfor tror forskerne, at der findes en forskel mere, som ingen har fundet endnu.',
+      },
+      {
+        overskrift: 'Hvordan finder vi ud af det?',
+        spørg: 'Hvordan kan forskerne lede efter den forskel, ingen har fundet?',
+        gæt: {
+          valg: [
+            // ALPHA-g 2023 (falder nedad), BASE 2022 (samme forhold mellem ladning og masse inden for 16 billiontedele)
+            { tekst: 'Mål antistof meget præcist', efter: 'Godt tænkt. På CERN laver de antistof og måler fx, om det vejer og falder præcis som stof. Indtil nu passer alt.' },
+            { tekst: 'Studér neutrinoer', efter: 'Godt tænkt. Neutrinoer (næsten usynlige partikler) skifter mellem tre slags, mens de flyver. Måske gør deres antitvillinger det på en anden måde.' },
+            // AMS-02: "The result remains to be verified" (Wikipedia "Alpha Magnetic Spectrometer")
+            { tekst: 'Led efter antistof i rummet', efter: 'Godt tænkt. Et instrument på Rumstationen leder. Det har set nogle få mulige tegn, men intet er bekræftet.' },
+          ],
+        },
+        // Hyper-Kamiokande: "2028: The expected beginning of data-taking". DUNE: "neutrino-beam start-date for the early-2030s"
+        så: 'Japans Hyper-Kamiokande skal efter planen begynde at måle i 2028, og USA\'s DUNE skal efter planen få sin stråle af neutrinoer i begyndelsen af 2030\'erne. De skal se, om neutrinoer og deres antitvillinger opfører sig forskelligt.',
+      },
+    ],
+    slut: 'Antistof findes, men næsten alt blev udslettet. Hvorfor der blev stof tilovers, ved ingen.',
+    seDet: ['kosmos:bigbang', 'Se det selv: Kosmos, Big Bang'],
+    // Nobelpriserne (nobelprize.org): 1980 Cronin og Fitch ("violations of fundamental symmetry principles in the decay of
+    // neutral K-mesons"), 2008 Kobayashi og Maskawa, 2015 Kajita og McDonald ("neutrino oscillations, which shows that
+    // neutrinos have mass"). LHCb 2025: arXiv:2503.16954. ALPHA-g: Nature 621:716 (PMC10533407). BASE 2022: Nature 601:53.
+    // BASE-STEP: 92 antiprotoner, 24. marts 2026 (home.cern). "A few nanograms" (Wikipedia "Antimatter").
+    nørd: `
+      <p><b>Fundet:</b> Paul Dirac forudsagde antistof i 1928 ud fra en ligning for elektronen, og i 1932 fandt Carl Anderson positronen (en plusladet elektron). Antiprotonen blev fundet i 1955. Hospitaler bruger positroner hver dag i PET-skannere. I Atomværkstedet kan du se det selv: Byg fluor-18 eller kulstof-11, og se positronen møde en elektron og blive til et glimt.</p>
+      <p><b>Hvor meget tilovers?</b> I dag er der ca. 6 kernepartikler for hver 10 milliarder lyspartikler fra Big Bang. "Én ud af en milliard" er en afrunding.</p>
+      <p><b>Forskellen, der er målt (CP-brud):</b> James Cronin og Val Fitch målte den i 1964 i partikler, der hedder K-mesoner, og fik Nobelprisen i 1980. Makoto Kobayashi og Toshihide Maskawa forklarede, hvordan den kan opstå hos kvarkerne (Nobelprisen 2008). I 2025 så LHCb på CERN den for første gang i partikler af tre kvarker, samme slags som protonen.</p>
+      <p><b>Ens indtil videre:</b> Protonen og antiprotonen har samme forhold mellem ladning og masse inden for 16 billiontedele (BASE 2022), og i 2023 viste ALPHA-g, at antibrint falder nedad som alt andet. Den 24. marts 2026 kørte BASE 92 antiprotoner i en fælde på en lastbil tværs over CERN. Målet er at kunne måle dem i roligere laboratorier. Alt det antistof, der er lavet, vejer kun nogle få nanogram (milliardtedele af et gram).</p>
+      <p><b>Neutrinoerne:</b> Takaaki Kajita og Arthur McDonald fik Nobelprisen i 2015 for at vise, at neutrinoer skifter mellem tre slags og derfor har en masse. Det åbner for, at neutrinoer og antineutrinoer kan skifte forskelligt. T2K i Japan og NOvA i USA har målt i årevis, men har ikke fundet et klart svar.</p>`,
+    ærligt: '<p>At Big Bang lavede lige meget stof og antistof, er det, fysikkens love tyder på, men ingen har set det. Og "Målt eller gæt?" er her den anden vej rundt: Forskellen er målt, men hvad den skyldes i sidste ende, og om der er flere, er ikke afgjort.</p>',
+  },
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/begyndelsen.md (Fable E5) og fakta-gaader.md afsnit 4.
   {
     id: 'begyndelsen',
@@ -214,7 +283,75 @@ export const GÅDER = [
       <p><b>Kunstigt liv?</b> I 2010 byggede forskere en bakteries arvemasse kemisk og satte den ind i levende celler. Det er ikke liv lavet fra bunden.</p>`,
     ærligt: '<p>"Målt eller gæt?" er forenklet. RNA-verdenen er ikke et vildt gæt: RNA kan både gemme en opskrift og arbejde, og ribosomet ligner en rest fra den tid. Men nogle forskere tror, at kemien fx i varme væld kom før RNA ("stofskiftet først"), og det er ikke afgjort.</p>',
   },
-  { id: 'moerktstof', spørgsmål: 'Hvad er mørkt stof?', linje: 'Noget usynligt trækker i galakserne' },
+  // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 5.
+  {
+    id: 'moerktstof',
+    spørgsmål: 'Hvad er mørkt stof?',
+    linje: 'Noget usynligt trækker i galakserne',
+    // Datoerne er slået op 13. november 2026: LZ's hændelse (arXiv:2609.02823, 2. september 2026; XENONnT og PandaX-4T
+    // har ikke meldt noget om den på arXiv), Euclid DR1-Foundation (ESA 12. november 2026) og DR1 (midt 2027, ESA)
+    dato: 'Sådan stod det i november 2026',
+    ord: ['moerktstof'],
+    trin: [
+      {
+        overskrift: 'Hvad ved vi?',
+        spørg: 'Galakserne drejer så hurtigt, at de burde flyve fra hinanden. Hvorfor gør de ikke?',
+        gæt: {
+          valg: [
+            { tekst: 'Noget usynligt holder på dem', efter: 'Det tror næsten alle forskere.' },
+            // MOND (Milgrom 1983): "a few dozens of scientists ... several thousand" (Hossenfelder og McGaugh 2018)
+            { tekst: 'Tyngdekraften virker anderledes langt ude', efter: 'Det tror et lille mindretal af forskerne. Men så er det svært at forklare andre målinger.' },
+          ],
+        },
+        // Planck 2018: Ω_c h² = 0,120 og Ω_b h² = 0,0224, altså 5,4 gange så meget. Bullet-hoben: Clowe m.fl. 2006.
+        så: 'Der er ca. fem gange så meget usynligt stof som almindeligt stof, og det kaldes mørkt stof. Man kan se, hvor det er, fordi dets tyngdekraft bøjer lyset fra galakser bagved.',
+      },
+      {
+        overskrift: 'Hvad ved vi ikke?',
+        spørg: 'Målt eller gæt? »Mørkt stof er lavet af en ukendt slags partikel.«',
+        gæt: {
+          valg: [
+            { tekst: 'Målt', efter: 'Nej. Det er det bedste bud, men ingen har fanget sådan en partikel.' },
+            { tekst: 'Gæt', efter: 'Rigtigt. Det er det bedste bud, men ingen har fanget sådan en partikel.' },
+          ],
+          rigtigt: 1,
+        },
+        // LZ: "one event ... 248 ± 23 (stat) ± 23 (sys) keV", "global significance of 2.6σ" (arXiv:2609.02823)
+        så: 'Store detektorer dybt under jorden venter på, at en partikel af mørkt stof rammer dem. I september 2026 så detektoren LZ én hændelse, der måske kunne være det, men det er langt fra nok til at kalde det et fund.',
+        hvorfor: 'opdaget',
+      },
+      {
+        overskrift: 'Hvordan finder vi ud af det?',
+        spørg: 'Mørkt stof er usynligt. Hvordan kan man så undersøge det?',
+        gæt: {
+          valg: [
+            // LZ (South Dakota), XENONnT (Gran Sasso, Italien) og PandaX-4T (Jinping, Kina)
+            { tekst: 'Fang en partikel', efter: 'Godt tænkt. Detektorer i USA, Italien og Kina leder dybt under jorden, hvor de er skærmet mod stråling fra rummet.' },
+            { tekst: 'Tegn et kort over det', efter: 'Godt tænkt. Det gør rumteleskopet Euclid ved at måle, hvordan lyset fra galakser bliver bøjet.' },
+            // Wikipedia "Dark matter": LHC har ikke fundet supersymmetriske partikler, "cast doubt on the simplest WIMP hypothesis"
+            { tekst: 'Lav det selv', efter: 'Godt tænkt. Partikelacceleratoren LHC på CERN leder efter nye partikler, der forsvinder uden spor, men har ikke fundet nogen.' },
+          ],
+        },
+        // ESA 12. november 2026: "Over 900 million galaxies", og DR1 "to come in mid-2027 ... observations of weak lensing"
+        så: 'Rumteleskopet Euclid sendte den 12. november 2026 sit første store datasæt med over 900 millioner galakser. De målinger, der skal tegne kortet over det mørke stof, kommer efter planen i 2027.',
+      },
+    ],
+    slut: 'Mørkt stof trækker i galakserne, men ingen ved, hvad det er.',
+    seDet: ['kosmos:rumtid', 'Se det selv: Kosmos, Rumtid'],
+    // Zwicky 1933 og Rubin og Ford 1970 (Wikipedia "Dark matter"). Clowe m.fl. 2006 (arXiv:astro-ph/0608407): "An 8-sigma
+    // significance spatial offset". Planck 2013: 4,9, 26,8 og 68,3 %. 0,120 / (0,120 + 0,0224) = 84 %. LZ: 7 tons xenon
+    // ca. 1.500 m nede (Wikipedia "LZ experiment"), solneutrinoer 4,5σ (arXiv:2512.08065). Euclid: sendt op 1. juli 2023,
+    // ca. en tredjedel af himlen, DR1-Foundation: "Around 15 000 strong gravitational lensing candidates", ca. 14 % af
+    // området (ESA). Nobelprisen 2011: Perlmutter, Schmidt og Riess (nobelprize.org).
+    nørd: `
+      <p><b>Opdaget to gange:</b> Fritz Zwicky målte i 1933, at galakserne i hoben Coma bevæger sig for hurtigt til, at det synlige stof kan holde på dem. Vera Rubin og Kent Ford målte fra 1970, at stjernerne yderst i galakser kredser lige så hurtigt som dem tættere på midten.</p>
+      <p><b>Bullet-hoben:</b> Her er to hobe af galakser stødt sammen. Den varme gas, der vejer mest af det almindelige stof, er bremset op i midten, men det meste af massen er fortsat videre. Det er målt med 8 sigma (Clowe m.fl. 2006), og det er svært at forklare med en ændret tyngdelov.</p>
+      <p><b>Hvor meget:</b> Ca. 5 % af universet er almindeligt stof, ca. 27 % mørkt stof og ca. 68 % mørk energi. Mørkt stof er altså ca. 84 % af alt stof. Mørk energi er noget helt andet: Den får universet til at udvide sig hurtigere, og det gav Nobelprisen i 2011 til Saul Perlmutter, Brian Schmidt og Adam Riess.</p>
+      <p><b>Forslagene:</b> en tung, ukendt partikel (WIMP), en meget let partikel (axion), som forsøget ADMX lytter efter, eller små sorte huller fra Big Bang. Ingen er fundet.</p>
+      <p><b>LZ</b> er 7 tons flydende xenon ca. 1,5 km nede i en gammel guldmine i South Dakota. Den er så følsom, at den har målt neutrinoer fra Solen. Hændelsen fra 2026 havde 248 keV og er 2,6 sigma (se "Hvornår er noget opdaget?"). Mange teoriartikler har allerede foreslået, hvad den kan være.</p>
+      <p><b>Euclid</b> blev sendt op 1. juli 2023 og skal kortlægge ca. en tredjedel af himlen. Det første store datasæt dækker ca. 14 % af det og har ca. 15.000 mulige steder, hvor en galakse bøjer lyset fra en anden bagved, så den ses som buer eller en ring. Det er flere end alle tidligere fundet tilsammen.</p>`,
+    ærligt: '<p>"Mørkt" er et dårligt navn: Det er ikke sort, men usynligt. Det sender intet lys ud og kaster ingen skygge. Og at der er ekstra tyngdekraft, er målt mange gange, men at den kommer fra en slags partikler, er et gæt, som næsten alle forskere deler. Et lille mindretal mener, at det er tyngdeloven, der skal ændres.</p>',
+  },
 ];
 
 export const gådeMed = (id) => GÅDER.find((g) => g.id === id) ?? null;

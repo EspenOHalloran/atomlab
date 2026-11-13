@@ -10,15 +10,18 @@ import { SKÆRME } from '../js/skaerme.js';
 import { SIDER as MARS } from '../js/data/sider/mars.js';
 import { SIDER as SATURN } from '../js/data/sider/saturn.js';
 import { TRIN_PROTEIN } from '../js/data/liv/protein.js';
+import { HVORFOR } from '../js/data/hvorfor.js';
+import { readFileSync } from 'node:fs';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
 // ---------- Uden browser: teksterne ----------
 const kort = GÅDER.filter(bygget);
-tjek(`fem gåder i oversigten, de to om liv skilt ad, og Sort hul, liv og begyndelsen er bygget (${kort.map((g) => g.id).join()})`,
-  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof' && kort.map((g) => g.id).join() === 'sorthul,liv,begyndelsen');
+tjek(`fem gåder i oversigten, de to om liv skilt ad, og alle fem er bygget (${kort.map((g) => g.id).join()})`,
+  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof' && kort.length === 5);
 const ord = (t) => t.split(/\s+/).filter(Boolean).length;
-const sætninger = (t) => t.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
+// "ca." og datoer som "12. november" slutter ikke en sætning
+const sætninger = (t) => t.replace(/\bca\./g, 'ca').replace(/\b\d+\. (?=[a-zæøå])/g, '1 ').split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
 const fejlTekst = [];
 for (const g of kort) {
   if (g.trin.length !== 3) fejlTekst.push(`${g.id}: ${g.trin.length} trin`);
@@ -35,6 +38,7 @@ for (const g of kort) {
   if (sted && !(skærm === 'solsystem' && id === 'mars' && MARS[sted])) fejlTekst.push(`${g.id}: stedet ${sted} findes ikke`);
   if (!(FÆNOMEN_IDER[skærm]?.includes(id) || g.seDet[0] === 'liv:protein' || (!id && SKÆRME.some((s) => s.id === skærm)))) fejlTekst.push(`${g.id}: "Se det selv" peger på ${g.seDet[0]}`);
   if (g.ord.length > 2 || !g.ord.every((o) => ORDBOG.some((x) => x.id === o))) fejlTekst.push(`${g.id}: fagordene ${g.ord.join()}`);
+  for (const t of g.trin) if (t.hvorfor && !HVORFOR[t.hvorfor]) fejlTekst.push(`${g.id}: "Hvorfor?" ${t.hvorfor} findes ikke`);
 }
 tjek('hvert kort: tre trin, dato, Spørg højst 15 ord, 2-3 gæt med svar, Så højst to sætninger, "Se det selv" findes, højst to fagord fra Ordbogen', !fejlTekst.length, fejlTekst.join('; '));
 const gåLiv = 'data-gaa="gaader:liv"';
@@ -42,6 +46,19 @@ tjek('"Se også": Jezero, Stå ved randen og Enceladus peger på gåden om liv, 
   MARS.jezero.emner.some((e) => e.tekst.includes(gåLiv)) && MARS['stå-randen'].videre.some((v) => v.includes(gåLiv)) && MARS['stå-randen'].videre.length <= 3
   && SATURN.enceladus.emner.some((e) => e.tekst.includes(gåLiv)) && TRIN_PROTEIN.oversæt.gåde?.[0] === 'gaader:begyndelsen');
 tjek('Ordbogen har "singularitet" med et link til gåden', ORDBOG.some((o) => o.id === 'singularitet') && LINKS.singularitet?.gaa?.[0] === 'gaader:sorthul');
+// G3: "Se også" fra Big Bang (et af højst fire spørgsmål, "Gå videre" er fuld) og Rumtid, Ordbogen og "Hvornår er noget opdaget?"
+// Fænomenerne bruger Three.js, så de læses som tekst i stedet for at blive importeret
+const kilde = (fil) => readFileSync(new URL(`../js/kosmos/${fil}.js`, import.meta.url), 'utf8');
+const bigbang = kilde('bigbang');
+const rumtidLys = kilde('rumtid').split("titel: 'Bøjer lys også?'")[1]?.split('titel:')[0] ?? '';
+tjek('"Se også": Big Bang (højst fire spørgsmål) peger på antistof og Rumtid (lysbøjningen) på mørkt stof',
+  (bigbang.split('emner:')[1].split('videre:')[0].match(/titel: '/g) ?? []).length <= 4 && /titel: 'Hvor blev antistoffet af\?'[^}]*gaader:antistof/.test(bigbang)
+  && rumtidLys.includes("gaader:moerktstof"));
+tjek('Ordbogen: "mørkt stof" og "antistof" peger på gåderne, og "sigma" på "Hvornår er noget opdaget?"',
+  ['moerktstof', 'sigma'].every((id) => ORDBOG.some((o) => o.id === id)) && LINKS.moerktstof?.gaa?.[0] === 'gaader:moerktstof'
+  && LINKS.antistof?.gaa?.[0] === 'gaader:antistof' && LINKS.sigma?.hvorfor === 'opdaget');
+tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
+  !!HVORFOR.opdaget && ['moerktstof', 'liv'].every((id) => GÅDER.find((g) => g.id === id).trin.some((t) => t.hvorfor === 'opdaget')));
 
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -66,7 +83,7 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
     lukkede: document.querySelectorAll('#gaaderListe .gaade-valg:disabled').length,
     start: document.querySelector('.gaade-mærke.start')?.closest('button').dataset.gaade,
   }));
-  tjek('#gaader viser oversigten: fem gåder, to "Kommer senere", "Start her" på Sort hul', oversigt.antal === 5 && oversigt.lukkede === 2 && oversigt.start === 'sorthul', JSON.stringify(oversigt));
+  tjek('#gaader viser oversigten: fem gåder, ingen "Kommer senere", "Start her" på Sort hul', oversigt.antal === 5 && oversigt.lukkede === 0 && oversigt.start === 'sorthul', JSON.stringify(oversigt));
 
   // Et kort fra start til slut: gæt, svar, Næste
   await page.click('.gaade-valg[data-gaade="sorthul"]');
@@ -114,6 +131,27 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   await vent(page, () => !document.getElementById('livGaade').hidden);
   await T(() => document.querySelector('#livGaade [data-gaa]').click());
   tjek(`knappen ved Ribosomet åbner gåden om livets begyndelse (trin ${trin})`, await vent(page, () => location.hash === '#gaader' && atomlabTest.gaader.vist()?.id === 'begyndelsen'));
+  await ctx.close();
+}
+
+// Mørkt stof: knappen "Hvornår er noget opdaget?" kommer under Så i trin 2 og åbner "Hvorfor?"-kortet, og "Se det selv" åbner Rumtid
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await page.click('.gaade-valg[data-gaade="moerktstof"]');
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  const trin1 = await T(() => !!document.querySelector('#gaadeTrin button.hvorfor'));
+  await page.click('#gaadeTrin .fl-næste');
+  const før = await T(() => !!document.querySelector('#gaadeTrin button.hvorfor'));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await page.click('#gaadeTrin button.hvorfor[data-hvorfor="opdaget"]');
+  const kortet = await vent(page, () => !document.getElementById('hvorforKort')?.classList.contains('skjult') && document.querySelector('#hvorforKort .hk-titel').textContent === 'Hvornår er noget opdaget?');
+  tjek('mørkt stof: "Hvornår er noget opdaget?" står først efter gættet i trin 2 og åbner "Hvorfor?"-kortet', !trin1 && !før && kortet, JSON.stringify({ trin1, før, kortet }));
+  await page.keyboard.press('Escape');
+  for (let i = 0; i < 2; i++) { await page.click('#gaadeTrin .fl-næste'); if (i === 0) await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); }
+  await page.click('#gaadeTrin [data-gaa="kosmos:rumtid"]');
+  tjek('"Se det selv" åbner Rumtid i Kosmos', await vent(page, () => location.hash === '#kosmos' && atomlabTest.kosmos?.valgt() === 'rumtid', null, 20000));
   await ctx.close();
 }
 
