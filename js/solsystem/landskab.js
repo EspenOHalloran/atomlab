@@ -369,8 +369,9 @@ function lavNet(retninger, ringe) {
   return geo;
 }
 
-// data: kraterets JSON fra lav_landskab.py. hent(navn, færdig, valg) fra js/solsystem/hent.js (billederne bliver i
-// grafikkortet). bredde: stedets bredde (grader) til Solens bane. deklination: Solens deklination (grader).
+// data: kraterets JSON fra lav_landskab.py. hent(navn, færdig, valg) fra js/solsystem/hent.js (Mars giver en, der
+// henter med Stå på Mars som ejer, så billederne kan slettes fra grafikkortet, når man letter, se frigiv()).
+// bredde: stedets bredde (grader) til Solens bane. deklination: Solens deklination (grader).
 export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   const gruppe = new THREE.Group();
   const maks = renderer.capabilities.maxTextureSize;
@@ -573,6 +574,14 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     get højde() { return u.uH0.value; },
     // Kun til tests
     test: () => ({ sted: stedId, tid: timer, højde: u.uH0.value, net: [retninger, ringe], skygger: u.uSkygger.value, solHøjde: THREE.MathUtils.radToDeg(Math.asin(u.uSol.value.y)), måner: hu.uMaane.value.map((m) => ({ højde: THREE.MathUtils.radToDeg(Math.asin(m.y)), kompas: (THREE.MathUtils.radToDeg(Math.atan2(m.x, -m.z)) + 360) % 360, bredde: THREE.MathUtils.radToDeg(2 * m.w) })) }),
+    // Billederne bruges ikke mere (man er lettet, G1 trin 3): slip dem, så de kan slettes fra grafikkortet. Nettet og
+    // shaderne bliver, og gåTil henter billederne igen næste gang.
+    frigiv() {
+      hentId++;
+      stedId = null;
+      hentet.h0 = null;
+      for (const n of Object.keys(u)) if (u[n].value?.isTexture && /^t(H|F)\d$|^tFarve$/.test(n)) u[n].value = tom;
+    },
     stop() {
       geo.dispose();
       mat.dispose();

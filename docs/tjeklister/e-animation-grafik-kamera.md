@@ -3,6 +3,7 @@
 - [ ] "Reducer bevægelse" (`ROLIG`) er respekteret: kamerature, lysglimt og blød rulning.
 - [ ] Pause: alt bevægeligt bruger `dt` og `tid`, som det får, og ikke `performance.now()`. Søg efter `performance.now`, når noget skal kunne sættes på pause.
 - [ ] Grafik, der laves under brug (geometri, materiale, tekstur), bliver frigivet eller genbrugt.
+- [ ] Store billeder hentes med `hent` (js/solsystem/hent.js) eller `hentFil` (jorden.js), så de får en ejer og frigives, når man forlader planeten (G1 trin 3). En del, der kan forlades inde i en planet (som Stå på Mars), får sin egen ejer. Mål "Teksturer i grafikkortet" med `?maal` før og efter (budgettet står i retning.md).
 - [ ] Ingen nye `Vector3`, `Color` eller `Quaternion` i løkker, der kører hvert billede.
 - [ ] Klikbare ting er knapper (`<button>`), så de kan bruges med tastatur.
 - [ ] Grafik med en fast størrelse (fx `InstancedMesh` med plads til et bestemt antal) kan ikke løbe over, heller ikke et kort øjeblik, når nogle kugler er på vej ud og andre på vej ind.
