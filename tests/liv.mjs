@@ -117,6 +117,10 @@ tjek('Stop giver HBB-stigen tilbage', (await L('sekvens')) === HBB_START && (awa
 
 // L2: "Se genet blive læst" til ende (spolet frem): 147 aminosyrer, foldet, og opgaven liv-protein
 const Pr = () => L('protein');
+// "Fra opskrift til protein" er en foldeboks i venstre panel (forløb 2, 13. november 2026): foldet sammen første gang
+const foldet = !(await page.isVisible('[data-liv-protein="genet"]'));
+await page.click('#livProtein > summary');
+tjek('"Fra opskrift til protein" er foldet sammen første gang og kan foldes ud', foldet && await page.isVisible('[data-liv-protein="genet"]'));
 await page.click('[data-liv-protein="genet"]');
 tjek('"Se genet blive læst": aflæsningen, panelet og tidsknappen', (await Pr()).tegning === 'aflæs' && (await page.textContent('#livTitel')) === 'Aflæsningen' && await page.isVisible('#livTid') && !(await page.isVisible('#livByg')));
 await L('proteinSpol', 200);
