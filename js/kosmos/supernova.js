@@ -4,6 +4,7 @@
 import * as THREE from 'three';
 import { kontakt, gå } from '../sideknap.js';
 import { stjerne, stjerneTid, glød, prikSky, KVALITET } from './faelles.js';
+import { lavBetelgeuse } from './betelgeuse.js';
 
 const R = 6; // stjernens radius
 // Lagene udefra og ind: navn, ydre radius, farve
@@ -46,11 +47,11 @@ export default {
       },
       {
         titel: 'Hvad bliver der tilbage?',
-        tekst: '<p>En lille, ekstremt tung neutronstjerne eller et sort hul. Hvad det bliver, afhænger af, hvor tung resten i midten er: Vejer den mere end ca. 2-3 sole, kan intet holde den oppe, og den falder sammen til et sort hul. Det sker oftest for stjerner, der fra starten var mere end ca. 20-25 gange tungere end Solen. Betelgeuse bliver nok til en neutronstjerne.</p>',
+        tekst: '<p>En lille, ekstremt tung neutronstjerne eller et sort hul. Hvad det bliver, afhænger af, hvor tung resten i midten er: Vejer den mere end ca. 2-3 sole, kan intet holde den oppe, og den falder sammen til et sort hul. Det sker oftest for stjerner, der fra starten var mere end ca. 20-25 gange tungere end Solen. Betelgeuse bliver nok til en neutronstjerne.</p><p>Gassen, der bliver blæst ud, bliver en dag til nye stjerner og planeter. Oxygenet, du ånder, er lavet i sådan en stjerne.</p>',
       },
       {
-        titel: 'Hvad har det med dig at gøre?',
-        tekst: '<p>Stoffet, der bliver blæst ud, bliver en dag til nye stjerner og planeter. Oxygenet, du ånder, er lavet i sådan en stjerne.</p>',
+        titel: 'Hvad sker der, når Betelgeuse eksploderer?', kontakt: '🌃 Betelgeuse set fra Jorden',
+        tekst: `<p>Betelgeuse er den røde stjerne øverst til venstre i stjernebilledet Orion. Du kan selv finde den på vinterhimlen. ${kontakt('🌃 Betelgeuse set fra Jorden')}</p><p>Når den eksploderer, bliver den omtrent lige så lysende som en halvmåne. Man kan se den om dagen i flere måneder, måske et år, og om natten kaster den skygger. Men den er alt for langt væk til at være farlig for os.</p><p>Lyset er ca. 550 år om at nå hertil. Vi ser altså stjernen, som den så ud for 550 år siden. Den kan i princippet allerede være eksploderet, men det er meget usandsynligt.</p>`,
       },
     ],
     videre: [gå('kosmos:pulsar', 'Pulsar'), gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:hviddvaerg', 'Hvid dværg')],
@@ -58,15 +59,23 @@ export default {
       <p><b>Hvorfor stopper det ved jern?</b> Jern og nikkel har den højeste bindingsenergi pr. nukleon. Fusion af lette kerner giver energi, men at lave noget tungere end jern <i>koster</i> energi. Se Nørd-fanen i Atomværkstedet, når du har bygget jern-56.</p>
       <p><b>Sammenfaldet:</b> Jernkernen i midten af stjernen vejer ca. 1,4 gange så meget som hele vores Sol, men den er kun på størrelse med Jorden. På under et sekund falder den sammen til en kugle på ca. 20 km. Elektronerne bliver presset ind i protonerne og bliver til neutroner og <b>neutrinoer</b>. En neutrino er en bittelille partikel uden ladning, der næsten ikke vejer noget. Den reagerer næsten aldrig med noget og flyver lige gennem stjerner, planeter og hele Jorden. Det er betahenfald baglæns (se Atomværkstedet). 99 % af energien forsvinder som neutrinoer.</p>
       <p><b>Supernova 1987A:</b> Da en stjerne eksploderede i en nabogalakse i 1987, fangede detektorer på Jorden ca. 25 neutrinoer, et par timer før man kunne se lyset. Det var første gang, man fangede neutrinoer fra en anden stjerne end Solen.</p>
-      <p><b>Krabbetågen</b> er resterne af en supernova, som kinesiske astronomer så i år 1054. Den kunne ses om dagen i 23 dage. I midten snurrer en neutronstjerne 30 gange i sekundet.</p>`,
-    ærligt: '<p>I virkeligheden er kernen bittelille i forhold til stjernen. Betelgeuse er så stor, at den ville nå langt ud forbi Mars, hvis den stod, hvor Solen står. Lagene er tegnet tykkere, så man kan se dem. Og selve jernkernen bliver til neutronstjernen. Det jern, der bliver blæst ud, bliver lavet i selve eksplosionen.</p>',
+      <p><b>Krabbetågen</b> er resterne af en supernova, som kinesiske astronomer så i år 1054. Den kunne ses om dagen i 23 dage. I midten snurrer en neutronstjerne 30 gange i sekundet.</p>
+      <p><b>Betelgeuse set fra Jorden:</b> Lyskurven i animationen er et skøn. Forskerne regner med, at supernovaen bliver mellem en kvart og en fuld måne lysende i ca. tre måneder, og at man kan se den uden kikkert i flere år. Lyset kommer først ca. et døgn efter neutrinoerne, fordi chokbølgen skal hele vejen ud gennem den kæmpestore stjerne.</p>
+      <p><b>En advarsel i forvejen:</b> I de sidste timer før sammenfaldet smelter stjernen silicium sammen og sender så mange neutrinoer ud, at detektoren Super-Kamiokande i Japan kan give en advarsel op til ca. 9 timer før.</p>
+      <p><b>Den store formørkelse:</b> I vinteren 2019-20 mistede Betelgeuse over to tredjedele af sit lys, og mange spurgte, om den var ved at eksplodere. Den havde pustet en kæmpe boble af gas ud, og da gassen blev kølet af, blev den til støv, der skyggede for stjernen.</p>
+      <p><b>En lille makker:</b> I 2025 fandt man tegn på en lille stjerne, der kredser tæt om Betelgeuse på ca. seks år. Den har fået navnet Siwarha ("hendes armbånd"). Den er så svær at se ved siden af kæmpen, at fundet endnu ikke er helt sikkert.</p>`,
+    ærligt: '<p>I virkeligheden er kernen bittelille i forhold til stjernen. Betelgeuse er så stor, at den ville nå langt ud forbi Mars, hvis den stod, hvor Solen står. Lagene er tegnet tykkere, så man kan se dem. Og selve jernkernen bliver til neutronstjernen. Det jern, der bliver blæst ud, bliver lavet i selve eksplosionen.</p><p>Betelgeuse set fra Jorden: Stjernerne står, hvor de rigtigt står, set fra Danmark. Men årene er skruet sammen til et halvt minut, lyskurven er et skøn, og landskabet er lysere, end øjet ville se det. Om dagen er det en eftermiddag i marts, hvor Orion står samme sted på himlen, og Solen står lavt i vest.</p>',
   },
 
-  lav(gruppe, { effekter, lyd, fase, kamera, verden, opdaterKnapper, forklaring }) {
+  lav(gruppe, ctx) {
+    const { effekter, lyd, fase, kamera, verden, opdaterKnapper, forklaring } = ctx;
+    // Stjernen og eksplosionen (skjult, når man ser Betelgeuse fra Jorden)
+    const del = new THREE.Group();
+    gruppe.add(del);
     // Hele stjernen
     const hel = stjerne(R, '#ffb066', '#9a2a0c', new THREE.Color(1.6, 0.45, 0.12), 2.2, { styrke: 1.25, skala: 2.0, kant: 0.3 });
     const stjerneMat = hel.userData.materiale;
-    gruppe.add(hel);
+    del.add(hel);
 
     // Stjernen skåret op: lag uden på lag
     const snit = new THREE.Group();
@@ -82,26 +91,26 @@ export default {
         new THREE.MeshStandardMaterial({ color: farve, emissive: farve, emissiveIntensity: 0.12, roughness: 0.8, side: THREE.DoubleSide }),
       ));
     }
-    gruppe.add(snit);
+    del.add(snit);
 
     // Jernkernen (en hel kugle i midten)
     const kerne = new THREE.Mesh(new THREE.SphereGeometry(LAG[6][1], 32, 20), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.9, 0.95, 1.05) }));
     kerne.visible = false;
-    gruppe.add(kerne);
+    del.add(kerne);
 
     // Chokbølgen
     const chok = new THREE.Mesh(
       new THREE.SphereGeometry(1, 40, 24),
       new THREE.MeshBasicMaterial({ color: new THREE.Color(1.5, 1.0, 0.6), transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.FrontSide }),
     );
-    gruppe.add(chok);
+    del.add(chok);
 
     // Neutrinoer: et hurtigt, svagt glimt af prikker, der flyver lige igennem det hele
     const NN = Math.round(300 * KVALITET);
     const neutrinoer = prikSky(NN, 0.16, (i, c) => c.setRGB(0.8, 1.1, 1.6));
     neutrinoer.visible = false;
     const nRetning = Array.from({ length: NN }, () => new THREE.Vector3().randomDirection());
-    gruppe.add(neutrinoer);
+    del.add(neutrinoer);
 
     // Resterne: gas i klumper og tråde i lagenes farver
     const ND = Math.round(2600 * KVALITET);
@@ -118,7 +127,7 @@ export default {
       c.copy(lagFarver[lag]).multiplyScalar(1.6);
     });
     rest.visible = false;
-    gruppe.add(rest);
+    del.add(rest);
     const dPos = rest.geometry.attributes.position.array;
     const dFarve = rest.geometry.attributes.color.array;
     const dFarveStart = dFarve.slice();
@@ -127,11 +136,11 @@ export default {
       const t = glød(lagFarver[i % 5].clone().multiplyScalar(0.9), 4, 0);
       t.userData.retning = klumper[i * 2];
       t.userData.fart = 4 + Math.random() * 4;
-      gruppe.add(t);
+      del.add(t);
       tåger.push(t);
     }
     const lysglimt = glød(new THREE.Color(2.2, 1.9, 1.6), 40, 0);
-    gruppe.add(lysglimt);
+    del.add(lysglimt);
 
     // Neutronstjernen, der bliver tilbage
     const neutronstjerne = new THREE.Group();
@@ -153,7 +162,7 @@ export default {
     snurre.add(stråler);
     neutronstjerne.add(snurre);
     neutronstjerne.visible = false;
-    gruppe.add(neutronstjerne);
+    del.add(neutronstjerne);
 
     let t = -1; // sekunder siden sammenfaldet startede (-1 = stjernen lever)
     let trin = 0;
@@ -193,7 +202,7 @@ export default {
       trin = 1;
       // Vis lagene, så man kan se kernen falde sammen
       visLag = true;
-      styring[1].til = true;
+      lagKontakt.til = true;
       opdaterKnapper();
       opdaterVisning();
       lyd.opbygning();
@@ -229,20 +238,49 @@ export default {
       fase('Supernova!', 'Stjernen bliver blæst ud i rummet med 10.000 km i sekundet. I nogle uger lyser den som flere hundrede millioner sole.', [3, 4]);
     }
 
-    const styring = [
-      { tekst: '💥 Lad stjernen eksplodere', handling: eksplodér, deaktiv: () => t >= 0 },
-      {
-        tekst: '🧅 Vis lagene', til: false, skift: (til) => {
-          visLag = til;
-          opdaterVisning();
-        },
+    const lagKontakt = {
+      tekst: '🧅 Vis lagene', til: false, skift: (til) => {
+        visLag = til;
+        opdaterVisning();
       },
+    };
+    // Betelgeuse set fra Jorden (js/kosmos/betelgeuse.js): bygges første gang, kontakten slås til
+    let jord = null;
+    const himmelKontakt = {
+      tekst: '🌃 Betelgeuse set fra Jorden', til: false, skift: (til) => {
+        if (til) {
+          nulstil();
+          del.visible = false;
+          jord ??= lavBetelgeuse(gruppe, ctx, himmelKontakt);
+          jord.vis();
+          styring.splice(0, styring.length, ...jord.styring);
+        } else {
+          jord?.skjul();
+          del.visible = true;
+          styring.splice(0, styring.length, ...stjerneStyring);
+          nulstil();
+          kamera({ retning: [0.35, 0.3, 1], radius: 8.5, flyv: true });
+        }
+        opdaterKnapper();
+      },
+    };
+    const stjerneStyring = [
+      { tekst: '💥 Lad stjernen eksplodere', handling: eksplodér, deaktiv: () => t >= 0 },
+      lagKontakt,
+      himmelKontakt,
       { tekst: '↺ Ny stjerne', handling: nulstil, skjul: () => t < 0 },
     ];
+    const styring = [...stjerneStyring];
 
     return {
       styring,
+      stop: () => jord?.skjul(),
+      test: { jord: () => jord?.test, set: () => Boolean(jord?.aktiv()) },
       opdater(dt, tid) {
+        if (jord?.aktiv()) {
+          jord.opdater(dt, tid);
+          return;
+        }
         // Snittet vender altid mod kameraet
         const k = verden.kamera.position;
         snit.rotation.y = Math.atan2(k.x, k.z) + SNIT_VINKEL;
