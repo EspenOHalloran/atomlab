@@ -147,4 +147,9 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
   - Næste skridt står i "Lige nu" (`docs/lige-nu.md`).
 - [ ] **Besluttet 23. oktober 2026: Fable venter, til Fable 5.5 kommer.** I mener, at Fable 5.1 ligger for tæt på Opus 5.5 til at være pengene værd. Opus laver F1 i stedet i en ny session med høj effort ud fra den samme brief (som nu ikke nævner, hvilken model der læser den). Tjernobyl og Liv venter også, til Fable 5.5 kommer (Molekyler og Solsystemet laver Opus med høj effort og `/faktatjek`). Når Fable 5.5 kommer, vurderer vi igen, om den skal lave F2-F4 eller faktagrundlaget for Tjernobyl og Liv. **Ændret 5. november 2026:** Liv venter ikke længere. Opus laver den med xhigh lige efter Molekyler, og Fable tjekker den senere. Tjernobyl venter stadig og er rykket ned.
 - [ ] **Besluttet 9. november 2026: Det store eftersyn laves nu med Fable 5.2,** når T5c er færdig, i jeres egen Fable-session. Planen er [plan-fable-eftersyn.md](plan-fable-eftersyn.md) (trin E0-E3). Den erstatter F2 og et nyt F1. F3 og F4 gælder stadig, men om Tjernobyl fortsat skal vente, afgøres i E2.
-- [ ] **Fable tjekker Liv og månerne** (F3, go 12. november 2026): [prompt-fable-liv.md](prompt-fable-liv.md), svaret i `docs/fable/E5-liv.md`.
+- [x] **Fable tjekker Liv og månerne** (F3, go 12. november 2026): [prompt-fable-liv.md](prompt-fable-liv.md), svaret i `docs/fable/E5-liv.md`.
+- [ ] **Næste gang Fable bruges** (jeres svar 13. november 2026): Ikke nu. Gåderne G2 og Liv forløb 1 bygger på Fables eget grundlag, og `/faktatjek` med Opus er nok. I denne rækkefølge:
+  1. **Drejebogen til Molekyler** (Serie 1 nr. 3): Opus skriver udkastet, Fable tjekker det kritisk (`high`), før der bygges.
+  2. **Eftersyn af Serie 1** (F4), når alle fire forløb er bygget, og sønnen har prøvet dem. Hans reaktioner kommer med i briefen.
+  3. **Faktagrundlag og drejebog til Kvantefysik** (`xhigh`), når den rykker op i køreplanen. Kvantefysik er stadig en del af planen.
+  - **Tjernobyl er parkeret** (13. november 2026). Den står i køreplanen, men planlægges ikke, før I tager den op igen.
