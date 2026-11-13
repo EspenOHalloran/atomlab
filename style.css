@@ -919,9 +919,23 @@ button { font: inherit; color: inherit; }
 /* ---------- Liv (Opskriften) ---------- */
 #liv { --base-A: #3ddc84; --base-T: #ff5a5f; --base-G: #ffc93c; --base-C: #4ea8ff; }
 .liv-niveauer { display: flex; flex-wrap: wrap; gap: 6px; }
+/* Forløbet øverst i venstre panel (forløbet "Opskriften i dig", js/liv.js). Én linje, så panelet stadig passer på tablet på højkant */
+.liv-forløb { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 6px 12px; border-radius: 12px; border: 1px solid rgba(95, 227, 255, 0.45); background: rgba(95, 227, 255, 0.08); color: var(--tekst); font: inherit; font-size: 15px; text-align: left; cursor: pointer; }
+.liv-forløb:hover { border-color: var(--accent); background: rgba(95, 227, 255, 0.16); }
+.liv-forløb .flueben { color: var(--accent); font-weight: 700; }
+.liv-forløb-mærke { color: var(--svag); }
+.liv-forløb-navn { font-weight: 700; }
+.liv-forløb.løst { border-color: var(--panel-kant); background: rgba(255, 255, 255, 0.04); }
+/* Basernes knapper i forløbets linje (byggestigen) */
+#liv .fl-handling .kugle.liv-base-kugle { width: 22px; height: 22px; background: var(--farve); box-shadow: 0 0 10px var(--farve); }
+#liv .fl-handling.base-A { --farve: var(--base-A); }
+#liv .fl-handling.base-T { --farve: var(--base-T); }
+#liv .fl-handling.base-G { --farve: var(--base-G); }
+#liv .fl-handling.base-C { --farve: var(--base-C); }
+#liv .fl-handling:has(.liv-base-kugle) { min-width: 64px; font-size: 18px; }
 .liv-byg { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
 .liv-byg-i-gang { display: flex; flex-direction: column; gap: 8px; }
-.liv-byg-i-gang[hidden], #livBygStart[hidden], #livVisH[hidden], #livHvorfor[hidden] { display: none; }
+.liv-byg-i-gang[hidden], #livBygStart[hidden], #livVisH[hidden], #livHvorfor[hidden], #livGaade[hidden] { display: none; }
 .liv-byg-tekst { margin: 0; font-size: 14px; }
 .liv-bogstav { display: inline-block; min-width: 1.4em; text-align: center; border-radius: 6px; padding: 0 4px; color: #0b0f1e; background: var(--farve); }
 .liv-palet { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
@@ -1117,6 +1131,42 @@ button { font: inherit; color: inherit; }
 .ordbog-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px !important; }
 .ordbog-links button.hvorfor { margin: 0; }
 .ordbog-ingen { margin: 0; color: var(--svag); }
+.ikon-gaader { display: grid; place-items: center; background: radial-gradient(circle, rgba(255, 212, 59, 0.26), rgba(255, 212, 59, 0.05) 70%); border: 2px solid rgba(255, 212, 59, 0.55); color: #fff6d6; font: 700 24px/1 Georgia, 'Times New Roman', serif; text-shadow: 0 0 8px rgba(255, 212, 59, 0.8); }
+#gaader { /* Gåderne (js/gaader.js) */ grid-template-columns: minmax(0, 640px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top" "panel"; justify-content: center; }
+#gaader .gaader-panel { grid-area: panel; align-self: start; max-height: 100%; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: 16px; }
+#gaader .gaader-panel::-webkit-scrollbar { display: none; }
+#gaader .gaader-intro { margin: 0 0 12px; line-height: 1.5; }
+#gaader .gaader-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+#gaader .gaade-valg { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 56px; text-align: left; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.05); cursor: pointer; }
+#gaader .gaade-valg:hover:not(:disabled) { border-color: var(--accent); background: rgba(95, 227, 255, 0.08); }
+#gaader .gaade-valg.senere { cursor: default; opacity: 0.5; }
+#gaader .gaade-nr { flex: 0 0 auto; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255, 212, 59, 0.6); color: var(--gul); font-weight: 700; }
+#gaader .gaade-tekst { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+#gaader .gaade-tekst strong { font-size: 16px; }
+#gaader .gaade-tekst small { color: var(--svag); font-size: 13px; line-height: 1.35; }
+#gaader .gaade-mærke { flex: 0 0 auto; font-size: 12.5px; color: var(--svag); white-space: nowrap; }
+#gaader .gaade-mærke.start { padding: 3px 9px; border-radius: 12px; background: var(--accent); color: #031018; font-weight: 700; }
+#gaader .gaade-mærke.færdig { color: var(--accent); font-size: 18px; font-weight: 700; }
+#gaader .gaade-kort[hidden], #gaader .gaader-oversigt[hidden] { display: none; }
+#gaader .gaade-kort { display: flex; flex-direction: column; gap: 10px; }
+#gaader .gaade-tilbage { align-self: flex-start; }
+#gaader .gaade-spørgsmål { margin: 2px 0 0; font-size: 21px; line-height: 1.25; color: var(--tekst); }
+#gaader .gaade-dato { margin: -6px 0 0; font-size: 13px; color: var(--svag); }
+#gaader .gaade-trin { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid rgba(95, 227, 255, 0.25); background: rgba(95, 227, 255, 0.04); }
+#gaader .gaade-hoved { display: flex; align-items: center; gap: 10px; }
+#gaader .gaade-overskrift { color: var(--accent); font-weight: 700; }
+#gaader .fl-tekst { line-height: 1.5; }
+#gaader .gaade-spørg { font-size: 16px; }
+#gaader .gaade-efter { color: var(--gul); }
+#gaader .fl-gæt:disabled { cursor: default; opacity: 0.45; }
+#gaader .fl-gæt.valgt:disabled { opacity: 1; background: rgba(95, 227, 255, 0.22); border-color: var(--accent); }
+#gaader .fl-vej { text-align: left; }
+#gaader .gaade-lag { display: flex; flex-direction: column; gap: 8px; }
+#gaader .gaade-lag .lag-boks { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.03); }
+#gaader .gaade-lag .lag-boks p { margin: 0 0 8px; line-height: 1.45; }
+#gaader .gaade-lag .lag-boks p:last-child { margin-bottom: 0; }
+#gaader .gaade-lag .lag-boks b { color: var(--gul); font-weight: 600; }
+@media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaade-mærke.senere { display: none; } #gaader .gaade-valg.senere small::after { content: ' · Kommer senere'; } }
 
 /* ---------- Kosmos ---------- */
 .ikon-kosmos { background: radial-gradient(circle, #000 0 9px, #fff3c4 10px, #ffb347 12px, rgba(255, 120, 60, 0.45) 16px, transparent 24px); }
@@ -1860,6 +1910,7 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .skærm.i-forløb .topknapper > :is(.kontakt, .knap-kungrafik, .udgave-vælger) { display: none !important; }
 .skærm.i-forløb .vindue :is(.panel-fane, .logknap, .næste-skridt, .bjælke-række) { display: none !important; }
 #vaerksted.i-forløb #knapMinitabel { display: none; }
+#liv.i-forløb #livMission { display: none !important; }
 #minitabel .felt.forløb-mål { color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent); animation: forløbPuls 1.6s ease-in-out infinite; }
 @keyframes forløbPuls { 50% { box-shadow: 0 0 22px var(--accent); } }
 

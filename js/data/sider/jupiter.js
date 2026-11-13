@@ -190,7 +190,7 @@ export const SIDER = {
     emner: [
       {
         titel: 'Hvor tyk er isen?',
-        tekst: '<p>NASA regner med 15-25 km. I 2022 fløj rumsonden Juno forbi og målte ca. 29 km i det område, den kunne se. De mørke striber er revner i isen. Nogle er over 1.000 km lange.</p>',
+        tekst: '<p>NASA regner med 15-25 km. I 2022 fløj rumsonden Juno forbi og målte ca. 30 km (et sted mellem 20 og 40) i det område, den kunne se. De mørke striber er revner i isen. Nogle er over 1.000 km lange.</p>',
       },
       {
         titel: 'Kan der være liv?',
@@ -198,7 +198,7 @@ export const SIDER = {
       },
     ],
     videre: [sted('io', 'Io'), sted('ganymedes', 'Ganymedes')],
-    nørd: '<p>Det bedste bevis for havet kom fra Galileo: Jupiters magnetfelt skaber et svagt magnetfelt i Europa, og det kan kun forklares med et lag, der leder strøm, som saltvand. Junos 29 km gælder det kolde, stive yderlag af isen. Med et varmere lag under kan skorpen være tykkere.</p>',
+    nørd: '<p>Det bedste bevis for havet kom fra Galileo: Jupiters magnetfelt skaber et svagt magnetfelt i Europa, og det forklares bedst med et lag, der leder strøm, som saltvand. Junos ca. 30 km gælder det kolde, stive yderlag af isen. Med et varmere lag under kan skorpen være tykkere.</p>',
     billeder: USGS,
     ærligt: '<p>Galileo og Voyager så ikke det hele skarpt, så nogle egne er slørede. Syd for ca. 77° S mangler der billeder. Hullet er fyldt med det spejlede billede af egnen lige nord for. Månen står stille, mens du besøger den, og vender samme side mod Jupiter.</p>',
   },

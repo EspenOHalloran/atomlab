@@ -12,7 +12,7 @@ page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
 await page.goto(`${ADRESSE}/?test`);
 await page.waitForTimeout(1200);
-tjek('9 dele i menuen', (await page.$$('.menukort a.verden-knap')).length === 9);
+tjek('10 dele i menuen', (await page.$$('.menukort a.verden-knap')).length === 10);
 await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));

@@ -2,6 +2,17 @@
 
 *Trin 0, skrevet 12. november 2026 af Opus efter [prompt-gaader.md](prompt-gaader.md). Faktagrundlaget står i [fakta-gaader.md](fakta-gaader.md). Status står i Småting ([lige-nu/smaating.md](lige-nu/smaating.md)). **Valgene nedenfor er mine anbefalinger:** I bad mig køre videre med dem i stedet for at spørge (12. november 2026). De kan ændres, før G1 bygges. Hver delopgave får sit eget go og en ny session.*
 
+## Jeres svar før G1 (12. november 2026)
+- **Oversigten i G1** viser alle fem gåder. De fire, der ikke er bygget, er grå med "Kommer senere" og kan ikke åbnes, før G2 og G3 bygger dem.
+- **"Målt eller gæt?"** bliver stående på alle kort. På Sort hul siger "Ærligt talt", at singulariteten er en forudsigelse fra Einsteins teori og ikke et vildt gæt.
+- **Teksten til Sort hul** (udkastet efter faktatjekket) har fået jeres go.
+
+## Jeres svar før G2 (13. november 2026)
+- **Mars:** "Se det selv" på kortet om liv åbner Jezero (hurtigt, og teksten "Har Perseverance fundet liv?" står dér), ikke "Stå ved randen" (tungt landskab). Linket tilbage står som en knap i Jezeros tekst og som tredje knap i `videre` på "Stå ved randen", hvor Neretva Vallis nævnes.
+- **Liv:** "Se det selv" på kortet om livets begyndelse åbner Liv og starter "Se genet blive læst" med det samme (`liv:protein` i `gaa.js`). Ved trinet Ribosomet står en lille knap "Gåden: Hvordan begyndte livet? ›" under teksten.
+- **Rækkefølgen:** De to kort om liv skilles ad: Sort hul, Liv andre steder, Antistof, Livets begyndelse, Mørkt stof.
+- **Teksterne** (udkastet efter faktatjekket) har fået jeres go.
+
 ## Kernesætningen (jeres valg 12. november 2026)
 "Efter fem minutter kan brugeren sige: **Videnskaben er ikke færdig. Jeg kan nævne en gåde, ingen har løst, og sige, hvordan forskerne prøver at løse den.**"
 
@@ -83,12 +94,12 @@ Bagefter **"Det så du"** med højst tre veje: "Se det selv ›" (ind til stedet
 - **Mørkt stof** peger på lysbøjningen ved Rumtid, til fænomenet Mørkt stof er bygget. Så flyttes "Se det selv".
 
 ## Delopgaverne (hver med et go og en ny session)
-- [ ] **G1: Siden og det første kort (Sort hul).** Delen `gaader` i `SKÆRME`, sektionen i `index.html`, `js/gaader.js` (oversigten, kortet med tre trin, "Det så du", ✓ i `atomlabGaader`), `js/data/gaader.js`, `gaader:id` i `js/gaa.js`, Ordbogens ord "singularitet" og linket fra Sort hul. Datoerne for kortet tjekkes (LISA, GW250114), og teksten faktatjekkes. 5-8 tjek (se nedenfor). Skærmbilleder på pc, tablet på højkant og telefon. Opus, høj.
-- [ ] **G2: De to kort om liv** (liv andre steder og livets begyndelse) med "Se også" fra Mars, Enceladus og Liv. Datoerne (exoplaneter, Rosalind Franklin, Tianwen-3, Europa Clipper, Dragonfly, ELT, QT45) og `/faktatjek` mod fakta-liv/. Opus, høj.
+- [x] **G1: Siden og det første kort (Sort hul)** (færdig 12. november 2026, status i [lige-nu/smaating.md](lige-nu/smaating.md)). Delen `gaader` i `SKÆRME`, sektionen i `index.html`, `js/gaader.js` (oversigten, kortet med tre trin, "Det så du", ✓ i `atomlabGaader`), `js/data/gaader.js`, `gaader:id` i `js/gaa.js`, Ordbogens ord "singularitet" og linket fra Sort hul. Datoerne for kortet tjekkes (LISA, GW250114), og teksten faktatjekkes. 5-8 tjek (se nedenfor). Skærmbilleder på pc, tablet på højkant og telefon. Opus, høj.
+- [x] **G2: De to kort om liv** (færdig 13. november 2026, status i [lige-nu/smaating.md](lige-nu/smaating.md)). Liv andre steder og livets begyndelse med "Se også" fra Mars (Jezero og Stå ved randen), Enceladus og Liv (Ribosomet). Datoerne er slået op, og teksterne er tjekket mod fakta-liv/. Jeres svar står øverst.
 - [ ] **G3: Antistof, mørkt stof og "Hvornår er noget opdaget?"** med "Se også" fra Big Bang og Rumtid, Ordbogens "mørkt stof" og "sigma". Datoerne (LZ og XENONnT, Euclid DR1, Hyper-Kamiokande, DUNE, Nobelpriserne) og `/faktatjek`. Kortet om liv får linket til "Hvorfor?"-kortet. Til sidst "Ikke afprøvet" (hvad I skal kigge efter på tabletten) og prøven med jeres søn. Opus, høj.
 - [ ] **Senere:** nr. 6 mørk energi (efter prøven), og "Se det selv" for mørkt stof, når fænomenet Mørkt stof findes.
 
 **Tests (G1, udvidet i G2 og G3):** i Node: hvert kort har tre trin, Spørg er højst ca. 15 ord, hvert gæt har 2-3 valg med `efter`, hvert kort har en dato og et `seDet`, der peger på et fænomen eller en del, der findes, og højst to nye fagord. I browseren: `#gaader` åbner oversigten, `gaader:sorthul` åbner kortet (også som den første skærm), et gæt viser sit svar, "Se det selv" åbner Sort hul, ✓ huskes, ingen fejl i konsollen og ingen vandret rullebjælke på telefon.
 
-## Prompt til G1 (kopiér)
-> Du bygger G1 i Gåderne i AtomLab: siden `#gaader` i Biblioteket og det første kort (Sort hul). Spor: Småting. Læs først (kun dette): `docs/lige-nu/smaating.md`, `DESIGN.md`, hele `docs/plan-gaader.md`, afsnit 2 ("Hvad er der inde i et sort hul?"), "Fælles for alle kortene", "Fælder" og "Tjek igen" i `docs/fakta-gaader.md`, `docs/kode/forloeb.md` og linjerne om `gaa.js`, `lag.js` og `hvorfor.js` i `docs/kode/faelles.md`, Ordbogen i `docs/kode/skaerme.md`, tjekliste D og F og `docs/erfaringer/fakta-faelder.md`. Tjek først i `origin/main`, at G1 ikke er bygget. Slå datoerne for kortet op, skriv teksten ud fra eksemplet i planen, og kør `/faktatjek`, før koden bygges færdig. Spørg med valgmuligheder, hvis noget er uklart, og vent på et go. Til sidst `/faerdig`, PR og merge med det samme.
+## Prompt til G3 (kopiér)
+> Du bygger G3 i Gåderne i AtomLab: kortene "Hvor blev antistoffet af?" og "Hvad er mørkt stof?" og det fælles "Hvorfor?"-kort "Hvornår er noget opdaget?" (sigma) med "Se også" fra Kosmos → Big Bang og Rumtid, Ordbogens nye ord "mørkt stof" og "sigma", og linket fra kortet om liv til "Hvorfor?"-kortet. Spor: Småting. Siden `#gaader` og kortene Sort hul, liv og begyndelsen findes (G1 og G2), så kortene er nye linjer i `js/data/gaader.js` (pladsholderne `antistof` og `moerktstof` står der). Læs først (kun dette): `docs/lige-nu/smaating.md`, `DESIGN.md`, hele `docs/plan-gaader.md`, afsnit 3 (antistof), 5 (mørkt stof), "Fælles for alle kortene", "Fælder" og "Tjek igen" i `docs/fakta-gaader.md`, Gåderne i `docs/kode/skaerme.md`, tjekliste B og F og `docs/erfaringer/fakta-faelder.md`. Tjek først i `origin/main`, at G3 ikke er bygget. Slå datoerne op (LZ og XENONnT, Euclid DR1, Hyper-Kamiokande, DUNE, Nobelpriserne 2011, 2015 og 2020), regn mønten for 5 sigma efter, skriv teksterne ud fra skabelonen og kortene, der findes, og kør `/faktatjek`, før koden bygges færdig. Spørg med valgmuligheder, hvis noget er uklart, og vent på et go. Til sidst "Ikke afprøvet" (hvad I skal kigge efter på tabletten), `/faerdig`, PR og merge med det samme.

@@ -3,7 +3,7 @@
 // TUR og MÅNER i js/kosmos/saturn.js og må ikke stå igen her. Faktatjekket i docs/fakta-solsystemet.md (del 1, afsnit
 // 1-4b, og "Faktatjek U3"). Uden Three.js, så teksterne kan testes i Node.
 
-import { sted, kontakt, tur } from '../../sideknap.js';
+import { sted, kontakt, tur, gå } from '../../sideknap.js';
 
 // Det samme ved alle månerne
 const MÅNE_ÆRLIGT = '<p>Månen står stille, mens du besøger den, og vender samme side mod Saturn, ligesom Månen mod Jorden. På flybyen er månerne stillet op, så de er nemme at besøge efter hinanden med Solen fra siden. Langt væk er de tegnet større, så man kan se dem.</p>';
@@ -103,7 +103,7 @@ export const SIDER = {
       },
       {
         titel: 'Hvad fandt Cassini i fontænerne?',
-        tekst: '<p>Rumsonden Cassini fløj gennem fontænerne og fandt salt, organiske stoffer og fosfat. Det tyder på, at havet under isen har noget af det, liv har brug for. Liv har man ikke fundet.</p>',
+        tekst: `<p>Rumsonden Cassini fløj gennem fontænerne og fandt salt, brint og organiske stoffer. I iskorn fra fontænerne er der også fosfat. Det tyder på, at havet under isen har meget af det, liv har brug for. Cassini kunne ikke se, om der er liv, og det har ingen endnu kunnet se efter. ${gå('gaader:liv', 'Gåden: Er der liv andre steder?')}</p>`,
       },
     ],
     videre: [sted('mimas', 'Mimas'), sted('tethys', 'Tethys')],

@@ -141,6 +141,19 @@ export const ORDBOG = [
   },
   // Molekyler M3 (knaldgas). Kilder: docs/fakta-molekyler/m3.md og docs/fakta-molekyler.md, afsnit 4.
   // Liv L1 (9. november 2026). Kilder: docs/fakta-liv/dna-stigen.md (OpenStax 2-1, 3-5 og 14-2, genome.gov) og docs/fakta-liv.md (OpenStax 10-1)
+  // Forløbet "Opskriften i dig" (13. november 2026). Kilder: docs/fakta-liv.md (30 billioner celler, OpenStax) og
+  // docs/fakta-liv/dna-stigen.md (cellekernen ca. 6 µm, mitokondriernes eget DNA). De står så tit i Liv, at de kun får
+  // prikker i forløbets linje og i panelets første tekst.
+  {
+    id: 'celle', ord: 'Celle', kunI: '.fl-tekst, .liv-tekst',
+    former: ['celle', 'cellen', 'celler', 'cellerne'],
+    tekst: 'Den mindste del af et levende væsen, der selv kan leve. En voksen krop har ca. 30 billioner celler, og næsten alle er så små, at man skal bruge et mikroskop for at se dem.',
+  },
+  {
+    id: 'cellekerne', ord: 'Cellekerne', kunI: '.fl-tekst, .liv-tekst',
+    former: ['cellekerne', 'cellekernen', 'cellekerner', 'cellekernerne'],
+    tekst: 'Et lille rum med en hinde omkring inde i cellen. Her ligger næsten alt DNA\'et. I dine celler er den ca. 6 µm (seks tusindedele af en millimeter) bred. Røde blodlegemer har ingen. Det er ikke det samme som en atomkerne.',
+  },
   {
     id: 'dna', ord: 'DNA',
     former: ['dna', "dna'et", "dna'ets"],
@@ -186,7 +199,7 @@ export const ORDBOG = [
   {
     id: 'rna', ord: 'RNA',
     former: ['rna', "rna'et", "rna'ets", 'rna-kopien', 'rna-kopi'],
-    tekst: 'DNA\'ets lillebror: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne.',
+    tekst: 'DNA\'ets nære slægtning: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne.',
   },
   {
     id: 'ribosom', ord: 'Ribosom',
@@ -201,7 +214,7 @@ export const ORDBOG = [
   {
     id: 'enzym', ord: 'Enzym',
     former: ['enzym', 'enzymet', 'enzymer', 'enzymerne'],
-    tekst: 'Et protein, der får en bestemt kemisk reaktion til at ske meget hurtigere, uden selv at blive brugt op. Fx klipper enzymer i maven maden i små stykker, og RNA-polymerasen bygger RNA.',
+    tekst: 'Et stof, næsten altid et protein, der får en bestemt kemisk reaktion til at ske meget hurtigere, uden selv at blive brugt op. Fx klipper enzymer i maven maden i små stykker, og RNA-polymerasen bygger RNA.',
   },
   {
     id: 'aktiveringsenergi', ord: 'Aktiveringsenergi',
@@ -476,6 +489,12 @@ export const ORDBOG = [
     id: 'horisont', ord: 'Begivenhedshorisont',
     former: ['begivenhedshorisont', 'begivenhedshorisonten'],
     tekst: 'Grænsen omkring et sort hul. Indenfor kan intet slippe ud igen, ikke engang lys.',
+  },
+  {
+    // Gåderne G1 (12. november 2026). Kilde: docs/fakta-gaader.md afsnit 2 (Wikipedia "Gravitational singularity")
+    id: 'singularitet', ord: 'Singularitet',
+    former: ['singularitet', 'singulariteten', 'singulariteter'],
+    tekst: 'Stedet i midten af et sort hul, hvor Einsteins teori siger, at alt bliver presset uendelig meget sammen. »Uendelig« betyder her, at teorien holder op med at virke. Ingen ved, hvad der virkelig er dér.',
   },
   {
     id: 'baggrundsstraaling', ord: 'Den kosmiske baggrundsstråling',

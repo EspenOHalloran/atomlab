@@ -49,7 +49,7 @@ export default {
       {
         titel: 'Hvad sker der med en astronaut?',
         tekst: `<p>${handling('astronaut', '🧑‍🚀 Send en astronaut ind')} Tyngdekraften er stærkere ved fødderne end ved hovedet, hvis man falder med fødderne først. Tæt på et lille sort hul bliver man derfor strakt ud som spaghetti. Ved et kæmpe sort hul er forskellen mindre, og man kunne krydse horisonten uden at mærke noget.</p>
-          <p>Set udefra bliver astronauten langsommere og rødere tæt på horisonten, og man ser aldrig astronauten nå helt ind. For astronauten selv går det hurtigt.</p>`,
+          <p>Set udefra bliver astronauten langsommere og rødere tæt på horisonten, og man ser aldrig astronauten nå helt ind. For astronauten selv går det hurtigt: I Mælkevejens sorte hul går der højst ca. et minut fra horisonten til midten. Hvad der sker dér, ved ingen. ${gå('gaader:sorthul', 'Gåden: Hvad er der inde?')}</p>`,
       },
     ],
     videre: [gå('kosmos:kvasar', 'Kvasar'), gå('kosmos:rumtid', 'Rumtid'), gå('kosmos:ormehul', 'Ormehul')],

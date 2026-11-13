@@ -16,22 +16,23 @@ export const TRIN_PROTEIN = {
     ekstra: 'Baserne i RNA\'et passer til den streng, der bliver læst. Derfor har kopien de samme bogstaver som den anden streng, bare med U i stedet for T.',
   },
   ud: {
-    titel: 'Ud af kernen',
-    tekst: 'RNA-kopien bliver klippet til og sendt ud af kernen. Derude venter ribosomerne, der skal læse den. DNA\'et bliver i kernen.',
+    titel: 'Ud af cellekernen',
+    tekst: 'RNA-kopien bliver klippet til og sendt ud af cellekernen. Derude venter ribosomerne, der skal læse den. DNA\'et bliver i cellekernen.',
     tal: [['RNA\'et', '444 bogstaver i opskriften'], ['Ord på tre bogstaver', '148']],
-    ekstra: 'Et enzym er et protein, der får en bestemt kemisk reaktion til at ske. RNA-polymerasen er et af dem.',
+    ekstra: 'Et enzym får en bestemt kemisk reaktion til at ske. Næsten alle enzymer er proteiner, og RNA-polymerasen er et af dem.',
   },
   oversæt: {
     titel: 'Ribosomet',
     tekst: 'Ribosomet læser RNA\'et tre bogstaver ad gangen. Hvert ord hedder et kodon. Små budbringere (tRNA) kommer med den aminosyre, der passer til ordet, og kæden vokser.',
-    tal: [['Ordet nu', '{ord}'], ['Aminosyrer i kæden', '{n}'], ['I dine celler', 'op til ca. 6-9 i sekundet']],
+    tal: [['Ordet nu', '{ord}'], ['Aminosyrer i kæden', '{n}'], ['I celler som dine', 'ca. 5-6 i sekundet']],
     ekstra: 'Bunden af hver budbringer har tre baser, der passer til ordet: A til U og G til C, ligesom i stigen.',
+    gåde: ['gaader:begyndelsen', 'Gåden: Hvordan begyndte livet?'], // Gåderne G2: kernen i ribosomet er RNA
   },
   fold: {
     titel: 'Proteinet',
     tekst: 'Ved ordet "stop" slipper ribosomet kæden, og den folder sig til en bestemt form. De aminosyrer, der skyr vand (gule), gemmer sig inde i midten.',
     tal: [['Aminosyrer', '147'], ['Proteinet', 'β-kæden i hæmoglobin']],
-    ekstra: 'To β-kæder og to α-kæder bliver til ét hæmoglobin. Det kan bære fire iltmolekyler (O₂) rundt i dit blod.',
+    ekstra: 'Den første aminosyre klippes af bagefter, så kæden i blodet har 146. To β-kæder og to α-kæder bliver til ét hæmoglobin, der kan bære fire iltmolekyler (O₂).',
   },
   læs: {
     titel: 'Læs selv',
@@ -41,7 +42,7 @@ export const TRIN_PROTEIN = {
   },
   ret: {
     titel: 'Skift et bogstav',
-    tekst: 'Et skift af ét bogstav i DNA\'et hedder en mutation. Skift et bogstav i genet, og se, hvad der sker med proteinet.',
+    tekst: 'Et skift af ét bogstav i DNA\'et er en mutation. Skift et bogstav i genet, og se, hvad der sker med proteinet.',
     tal: [['Kodonet', '{ord}'], ['Proteinet', '{n}']],
     ekstra: '',
     hvorfor: 'livSegl',
@@ -51,19 +52,19 @@ export const TRIN_PROTEIN = {
 export const OPGAVER_PROTEIN = [
   {
     id: 'liv-protein', titel: 'Se et gen blive til et protein', tip: 'Tryk "Se genet blive læst", og se det hele til ende (⏩ går hurtigere).',
-    fakta: 'Kæden af 147 aminosyrer er β-kæden i hæmoglobin. Et typisk protein i din krop har ca. 375 aminosyrer.',
+    fakta: 'Ribosomet bygger en kæde på 147 aminosyrer. Den første klippes af bagefter, og resten er β-kæden i hæmoglobin. Et typisk protein i din krop har ca. 375 aminosyrer.',
   },
   {
     id: 'liv-læs', titel: 'Læs de første 9 ord i genet', tip: 'Tryk "Læs selv", og find hvert ord i kodehjulet.',
     fakta: 'De første 9 ord giver MVHLTPEEK. Koden er næsten den samme i alt liv, fra bakterier til dig.',
   },
   {
-    id: 'liv-segl', titel: 'Skift ét bogstav, så du får seglcelleanæmi', tip: 'Tryk "Skift et bogstav". Kodon 7 er GAG (glutaminsyre). Lav det om til valin (V).',
-    fakta: 'GAG → GTG gør glutaminsyre til valin. Så klumper hæmoglobinet sammen i lange tråde, og de røde blodlegemer bliver krumme som en segl.',
+    id: 'liv-segl', titel: 'Lav den ændring, der giver seglcelleanæmi', tip: 'Tryk "Skift et bogstav". Kodon 7 er GAG (glutaminsyre). Lav det om til valin (V).',
+    fakta: 'GAG → GTG gør glutaminsyre til valin. Har man ændringen fra både sin mor og sin far, klumper hæmoglobinet sammen i lange tråde, når det har afleveret ilten. Så bliver de røde blodlegemer krumme som en segl.',
   },
   {
     id: 'liv-tavs', titel: 'Find et skift, der ikke gør noget', tip: 'Skift det tredje bogstav i et ord. Mange aminosyrer har flere ord.',
-    fakta: 'Mange mutationer gør ingenting, nogle skader, og nogle få hjælper. Over meget lang tid er det mutationerne, der gør, at livet kan udvikle sig.',
+    fakta: 'Mange mutationer gør ingenting, nogle skader, og nogle få hjælper. Dem, der hjælper, bliver oftere givet videre, fordi den, der har dem, får flere børn. Sådan udvikler livet sig over meget lang tid.',
   },
   {
     id: 'liv-stop', titel: 'Lav et stop for tidligt', tip: 'Der er tre stop-ord: TAA, TAG og TGA. Kan du lave et af dem med ét skift?',
@@ -112,14 +113,14 @@ export function vurderSkift(før, nu, i) {
   }
   if (a1 === a0) {
     return {
-      ...ud, type: 'tavs', titel: 'Det gør ingenting',
-      tekst: `${ord0} → ${ord1}: Begge ord giver ${aaNavn(a1)}. Proteinet bliver det samme, så skiftet gør ingenting.`,
+      ...ud, type: 'tavs', titel: 'Samme aminosyre',
+      tekst: `${ord0} → ${ord1}: Begge ord giver ${aaNavn(a1)}. Proteinet bliver det samme. Sådan et skift gør næsten altid ingenting.`,
     };
   }
   if (i === SEGL_KODON && a1 === 'V') {
     return {
       ...ud, type: 'segl', titel: 'Seglcelleanæmi',
-      tekst: `${ord0} → ${ord1}: Glutaminsyre (minus) bliver til valin, der skyr vand. Så klumper hæmoglobinet sammen i lange tråde, og de røde blodlegemer bliver krumme som en segl.`,
+      tekst: `${ord0} → ${ord1}: Glutaminsyre bliver til valin. Har man ændringen fra både mor og far, klumper hæmoglobinet sammen, og de røde blodlegemer bliver krumme som en segl.`,
     };
   }
   const skrevet = protein.includes('LIV');

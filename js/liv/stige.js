@@ -5,6 +5,8 @@
 //   De store baser (A og G, to ringe) fylder mere af trinet end de små (T og C, én ring).
 // "Byg stigen": Kun de første `bygget` trin har streng II. Hullet, hvor næste base skal sidde, lyser, og et par,
 // der ikke passer, vises som et rødt stykke (for langt, for kort eller med plus over for plus).
+// Forløbet "Opskriften i dig" (js/liv.js): trinVed(stråle) finder det trin, man trykker på, og fremhæv(k) lyser det op
+// med de to bogstaver ved siden af (skilte).
 // Alle kugler er én InstancedMesh, alle pinde én, stregerne én, trinene én og markørerne én. Stigen står lodret (y).
 
 import * as THREE from 'three';
@@ -42,6 +44,34 @@ const tB = new THREE.Vector3();
 const tD = new THREE.Vector3();
 const OP = new THREE.Vector3(0, 1, 0);
 const tF = new THREE.Color();
+const tP = new THREE.Vector3();
+const tP2 = new THREE.Vector3();
+const VALGT_FARVE = new THREE.Color(1.6, 1.6, 1.7); // det trin, man har trykket på (over 1, så det gløder)
+const TRYK_AFSTAND = 3.2 * S; // så tæt (i enheder) skal fingeren ramme et trin
+
+// Skiltene med bogstaverne til det fremhævede trin (ét kanvas pr. bogstav, laves første gang)
+const bogstavTeksturer = {};
+function bogstavTekstur(b) {
+  if (bogstavTeksturer[b]) return bogstavTeksturer[b];
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  g.fillStyle = 'rgba(8, 12, 30, 0.82)';
+  g.beginPath();
+  g.arc(64, 64, 58, 0, Math.PI * 2);
+  g.fill();
+  g.lineWidth = 8;
+  g.strokeStyle = BASE_FARVE[b];
+  g.stroke();
+  g.fillStyle = BASE_FARVE[b];
+  g.font = 'bold 76px system-ui, sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText(b, 64, 68);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return (bogstavTeksturer[b] = t);
+}
 
 // Sætter en cylinder (højde 1 langs y) mellem to punkter
 function pindMellem(mesh, i, a, b, r) {
@@ -112,9 +142,18 @@ export class DnaStige {
     for (let i = 0; i < 4; i++) this.markører.setColorAt(i, HUL_FARVE);
     this.fjern = new THREE.Group();
     this.fjern.add(this.trinene);
-    this.gruppe.add(this.nær, this.fjern, this.markører);
+    // Skiltene ved det fremhævede trin (forløbet)
+    this.skilte = [0, 1].map(() => {
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, depthTest: false, depthWrite: false }));
+      sp.scale.setScalar(3.4);
+      sp.renderOrder = 10;
+      sp.visible = false;
+      return sp;
+    });
+    this.gruppe.add(this.nær, this.fjern, this.markører, ...this.skilte);
     this.sekvens = '';
     this.bygget = 0;
+    this.valgt = -1; // det fremhævede trin (eller -1)
   }
 
   // sekvens: streng I (fx 'ATGC…'). bygget: så mange trin har streng II (resten venter på at blive bygget).
@@ -131,6 +170,8 @@ export class DnaStige {
   sætBygget(bygget) {
     this.bygget = Math.max(0, Math.min(bygget, this.sekvens.length));
     this.fejl = null;
+    this.valgt = -1;
+    for (const sp of this.skilte) sp.visible = false;
     this.byggAtomer();
     this.byggStige();
     this.byggMarkører();
@@ -218,11 +259,17 @@ export class DnaStige {
     }
   }
 
-  // Hullet ved det næste trin, der skal bygges, og det røde stykke for et par, der ikke passer
+  // Hullet ved det næste trin, der skal bygges, og det røde stykke for et par, der ikke passer.
+  // Eller det fremhævede trin (forløbet), der lyser i hele sin længde.
   byggMarkører() {
     let i = 0;
     const k = this.bygget;
-    if (k < this.sekvens.length) {
+    if (this.valgt >= 0) {
+      for (const [a, b] of trinVej(this.stige.trin[this.valgt]).stykker(0, 1)) {
+        pindMellem(this.markører, i, a, b, R_TRIN * S * 1.25);
+        this.markører.setColorAt(i++, VALGT_FARVE);
+      }
+    } else if (k < this.sekvens.length) {
       const t = this.stige.trin[k];
       const vej = trinVej(t);
       const f = STOR[t.base] ? STOR_ANDEL : 1 - STOR_ANDEL;
@@ -244,6 +291,44 @@ export class DnaStige {
     this.markører.instanceColor.needsUpdate = true;
   }
 
+  // Det trin, en stråle fra kameraet (i verdens koordinater) rammer nærmest, eller -1. Kun trin med begge baser.
+  trinVed(stråle) {
+    if (!this.stige || !this.gruppe.visible) return -1;
+    this.gruppe.updateMatrixWorld();
+    let bedst = -1;
+    let min = TRYK_AFSTAND * this.gruppe.getWorldScale(tP).x;
+    min *= min;
+    this.stige.trin.forEach((t, k) => {
+      if (k >= this.bygget) return;
+      this.gruppe.localToWorld(iVerden(t.sukkerI, tP));
+      this.gruppe.localToWorld(iVerden(t.sukkerII, tP2));
+      const d = stråle.distanceSqToSegment(tP, tP2);
+      if (d < min) {
+        min = d;
+        bedst = k;
+      }
+    });
+    return bedst;
+  }
+
+  // Lyser trin k op med bogstaverne ved siden af (k = -1 slukker)
+  fremhæv(k) {
+    this.valgt = k >= 0 && k < this.bygget ? k : -1;
+    const t = this.stige?.trin[this.valgt];
+    this.skilte.forEach((sp, s) => {
+      sp.visible = Boolean(t);
+      if (!t) return;
+      const b = s === 0 ? t.base : t.partner;
+      sp.material.map = bogstavTekstur(b);
+      sp.material.needsUpdate = true;
+      // Lidt uden for rygraden, på linjen fra midten gennem sukkeret
+      const sukker = iVerden(s === 0 ? t.sukkerI : t.sukkerII, tP);
+      const m = iVerden(t.midt, tP2);
+      sp.position.copy(sukker).sub(m).multiplyScalar(1.45).add(m);
+    });
+    this.byggMarkører();
+  }
+
   visForkert(base) {
     this.fejl = { base, tid: 0 };
     this.byggMarkører();
@@ -259,7 +344,8 @@ export class DnaStige {
       }
     }
     const puls = ROLIG ? 0.7 : 0.55 + 0.35 * Math.sin(tid * 4);
-    this.markørMat.opacity = (this.fejl ? 0.95 : puls * Math.max(0.35, this.blanding)) * this.synlighed;
+    this.markørMat.opacity = (this.fejl ? 0.95 : this.valgt >= 0 ? 0.3 + 0.12 * puls : puls * Math.max(0.35, this.blanding)) * this.synlighed;
+    for (const sp of this.skilte) sp.material.opacity = this.synlighed;
   }
 
   // Stigens halve højde i enheder (til kameraet)

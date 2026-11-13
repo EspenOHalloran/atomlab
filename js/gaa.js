@@ -1,4 +1,4 @@
-// Spring til et fænomen eller et grundstof på en anden skærm (fx fra grundstofkortet, Ordbogen eller en tekst i Kosmos).
+// Spring til et fænomen, et grundstof eller en gåde på en anden skærm (fx fra grundstofkortet, Ordbogen eller en tekst i Kosmos).
 // Ligger for sig selv og hentes ved start, så knapperne virker, før Kosmos, Solsystemet og Det periodiske system er
 // hentet (10a).
 import { lyd } from './lyd.js';
@@ -25,6 +25,23 @@ export function tagVentGrundstof() {
   return nr;
 }
 
+// Gåden, Gåderne skal åbne, når de starter (fra en knap data-gaa="gaader:sorthul" på en anden skærm)
+let ventGåde = null;
+export function tagVentGåde() {
+  const id = ventGåde;
+  ventGåde = null;
+  return id;
+}
+
+// Det, Liv skal åbne, når den starter (fra en knap data-gaa="liv:protein", fx "Se det selv" i Gåderne): 'protein'
+// starter "Se genet blive læst"
+let ventLiv = null;
+export function tagVentLiv() {
+  const id = ventLiv;
+  ventLiv = null;
+  return id;
+}
+
 // Det sted, skærmen skal gå til, når den starter (eller null). Glemmes, når det er hentet.
 export function tagVentSted(skærm) {
   const sted = ventSted?.skærm === skærm ? ventSted.sted : null;
@@ -33,7 +50,8 @@ export function tagVentSted(skærm) {
 }
 
 // Knapper med data-gaa="skærm:id" (eller bare "skærm", eller "skærm:id:sted") i teksterne åbner et fænomen et andet sted,
-// og data-gaa="system:55" et grundstof i Det periodiske system
+// data-gaa="system:55" et grundstof i Det periodiske system, data-gaa="gaader:sorthul" et kort i Gåderne og
+// data-gaa="liv:protein" "Fra opskrift til protein" i Liv
 document.addEventListener('click', (h) => {
   const b = h.target.closest?.('[data-gaa]');
   if (!b) return;
@@ -46,6 +64,24 @@ document.addEventListener('click', (h) => {
     else {
       ventGrundstof = nr;
       location.hash = '#system';
+    }
+    return;
+  }
+  if (skærm === 'gaader') {
+    lyd.klik();
+    if (location.hash === '#gaader' && hentetSkærm('gaader')) hentetSkærm('gaader').visGåde(id);
+    else {
+      ventGåde = id ?? null;
+      location.hash = '#gaader';
+    }
+    return;
+  }
+  if (skærm === 'liv') {
+    lyd.klik();
+    if (location.hash === '#liv' && hentetSkærm('liv')) hentetSkærm('liv').visDel(id);
+    else {
+      ventLiv = id ?? null;
+      location.hash = '#liv';
     }
     return;
   }

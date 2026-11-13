@@ -13,15 +13,15 @@ export const HBB_START = HBB.dna.slice(0, 30);
 export const NIVEAUER = [
   {
     id: 'celle', knap: 'Cellen', titel: 'En af dine celler',
-    tekst: 'Din krop er bygget af ca. 30 billioner celler. Cellen her har en kerne (den violette kugle), og i kernen ligger hele opskriften på dig: dit DNA. Zoom ind mod kernen.',
-    tal: [['Celler i din krop', 'ca. 30 billioner'], ['Kernens bredde', 'ca. 6 µm']],
-    ekstra: 'µm (mikrometer) er en tusindedel af en millimeter. Røde blodlegemer har ingen kerne, og de er ca. 84 % af dine celler.',
+    tekst: 'En voksen krop har ca. 30 billioner celler, og din har lidt færre. Cellen her har en cellekerne (den violette kugle), og i den ligger næsten hele opskriften på dig: dit DNA. Zoom ind mod cellekernen.',
+    tal: [['Celler i en voksen', 'ca. 30 billioner'], ['Cellekernens bredde', 'ca. 6 µm']],
+    ekstra: 'µm (mikrometer) er en tusindedel af en millimeter. Røde blodlegemer har ingen cellekerne, og de er langt de fleste af dine celler.',
   },
   {
-    id: 'kerne', knap: 'Kernen', titel: 'Cellekernen',
-    tekst: 'Inde i kernen er DNA\'et delt i 46 lange tråde, kromosomerne. Du har 23 par: Det ene sæt har du fra din mor og det andet fra din far. Her har hvert par sin egen farve.',
+    id: 'kerne', knap: 'Cellekernen', titel: 'Cellekernen',
+    tekst: 'Inde i cellekernen er DNA\'et delt i 46 lange tråde, kromosomerne. Du har 23 par: Det ene sæt har du fra din mor og det andet fra din far. Her har hvert par sin egen farve.',
     tal: [['Kromosomer', '46 (23 par)'], ['Basepar i alt', 'ca. 6,1 milliarder'], ['Trukket helt ud', 'ca. 2 m DNA']],
-    ekstra: 'Var kernen en kugle på 10 cm, ville tråden være ca. 33 km lang og tyndere end et hår fra dit hoved.',
+    ekstra: 'Var cellekernen en kugle på 10 cm, ville tråden være ca. 33 km lang og tyndere end et hår fra dit hoved.',
   },
   {
     id: 'kromosom', knap: 'Kromosomet', titel: 'Kromosomet',
@@ -49,7 +49,7 @@ export const NIVEAU_IDER = NIVEAUER.map((n) => n.id);
 export const OPGAVER_LIV = [
   {
     id: 'liv-rejse', titel: 'Rejs fra cellen helt ind til atomerne', tip: 'Zoom ind, eller tryk på knapperne fra Cellen til Atomerne.',
-    fakta: 'Kernen er ca. 6 µm bred, og DNA-stigen er ca. 2 nm. Kernen er altså ca. 3.000 gange bredere end stigen.',
+    fakta: 'Cellekernen er ca. 6 µm bred, og DNA-stigen er ca. 2 nm. Cellekernen er altså ca. 3.000 gange bredere end stigen.',
   },
   {
     id: 'liv-forkert', titel: 'Prøv et par, der ikke passer', tip: 'Tryk "Byg stigen", og vælg fx A over for A.',

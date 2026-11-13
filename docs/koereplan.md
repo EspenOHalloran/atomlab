@@ -21,7 +21,7 @@ Start: [prompt-faktagrundlag.md](prompt-faktagrundlag.md), én ny session pr. em
 
 ## Serie 1, "Forståelig" (efter skærmlisten)
 1. ✓ **Forløb-klodsen og "Dit første atom"** (nr. 1 og 3, sporet [Forløb](lige-nu/forloeb.md)): **lavet 12. november 2026** ([drejebogen](drejebog-foerste-atom.md)). Status "prøve", til sønnen har prøvet det.
-2. **Liv som to forløb** (nr. 4, sporet Molekyler): [drejebogen](fable/E3-liv-drejebog.md) er klar. "Cellekernen" alle steder (mellem).
+2. **Liv som to forløb** (nr. 4, sporet Molekyler): [drejebogen](fable/E3-liv-drejebog.md) er klar. "Cellekernen" alle steder (mellem). **Forløb 1 ("Opskriften i dig") er lavet 13. november 2026** (status "prøve"). Næste: forløb 2 og laboratoriet bagefter, prompten er [prompt-liv-forloeb2.md](prompt-liv-forloeb2.md) (Opus, høj).
 3. **Molekyler som egen del i verdenen Atomer** med sit forløb (nr. 5 og 10b, sporet Molekyler): Opus skriver drejebogen efter skabelonen først. Regnskabet i eV flyttes til "For nørder" (mellem).
 4. **Tid som ét punkt og Kosmos i fire grupper** (nr. 6 og det gamle punkt 7, sporet Tid og rum): To korte forløb efter Fables drejebog ([E4-tid.md](fable/E4-tid.md), afsnit 4, jeres svar 12. november 2026 i [E4-noter.md](fable/E4-noter.md)): "Rejsen i tid" med TRAPPIST-1 som første rejse, og "Hvordan kan det ske?" med scene 1-2 og myonerne (scene 3) som sidste trin. Scene 4 og "nu"-linjerne under "For nørder". Drejebogen mangler jeres go. Runden med sønnen kommer, når forløbene er bygget (lille til mellem).
 
@@ -40,7 +40,7 @@ En prøve med sønnen efter hvert punkt.
 
 ## Nyt indhold, i denne rækkefølge (må starte, når Forløb-klodsen findes)
 1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside.
-2. **Gåderne** i en tynd udgave (fem kort i Biblioteket). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). **Planen er lavet 12. november 2026:** [plan-gaader.md](plan-gaader.md) (G1-G3). Næste: G1 (siden og kortet Sort hul) med et go, prompten står nederst i planen (Opus, høj).
+2. **Gåderne** i en tynd udgave (fem kort i Biblioteket). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). **Planen er lavet 12. november 2026:** [plan-gaader.md](plan-gaader.md) (G1-G3). G1 (siden og kortet Sort hul) er færdig 12. november 2026. Næste: G2 (de to kort om liv) med et go, prompten står nederst i planen (Opus, høj).
 3. **De første 6-8 videnskabsfolk** med sider fra bøgerne (Opdagelserne i Biblioteket).
 4. **Månerne med mulige betingelser for liv** (et snit gennem Europa og Enceladus, Titan med Huygens). Jeres svar på kernesætningen, den første handling, Huygens' billeder og "Land med Huygens" står i afsnit 9 i [fakta-maaner-liv.md](fakta-maaner-liv.md) (12. november 2026).
 5. **Liv L3, derefter L4-L6** som forløb ([plan-liv.md](plan-liv.md), [prompt-liv-l3.md](prompt-liv-l3.md) skal skrives om til et forløb først).
@@ -60,7 +60,7 @@ En prøve med sønnen efter hvert punkt.
 |---|---|
 | [Småting](lige-nu/smaating.md) | Skærmlisten (10a) er lavet. Næste: "Ikke afprøvet" ned under ca. 10 punkter (resten til arkivet), testen `mars` delt i to, og faktatjekket af de tre faktafiler fra før. |
 | [Forløb](lige-nu/forloeb.md) | Klodsen og "Dit første atom" er lavet (12. november 2026) og venter på prøven. Derefter Serie 2 nr. 5 (plan først). |
-| [Molekyler](lige-nu/molekyler.md) | Liv som to forløb og Molekyler som egen del (Serie 1 nr. 2 og 3), når Forløb-klodsen findes. L3 holder pause. |
+| [Molekyler](lige-nu/molekyler.md) | Liv som to forløb (forløb 1 er lavet, forløb 2 er næste) og Molekyler som egen del (Serie 1 nr. 2 og 3). L3 holder pause. |
 | [Tid og rum](lige-nu/tid.md) | Tid som ét punkt og Kosmos i grupper (Serie 1 nr. 4), når Forløb-klodsen findes. |
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Overblikket, når Forløb-klodsen findes. Venus V3 holder pause til Serie 1 er prøvet. |
 | [Menuen](lige-nu/menuen.md) | Ringen (Serie 2 nr. 6), [plan-verdener.md](plan-verdener.md). |

@@ -6,6 +6,8 @@
 // - Opgaverne liv-rejse, liv-forkert og liv-byg (js/data/liv/opskriften.js).
 // - L2, fra opskrift til protein (js/liv-protein.js): "Se genet blive læst", "Læs selv" og "Skift et bogstav".
 //   Tegningen (js/liv/protein.js) er trinet 'protein', der ikke er en del af zoom-rejsen.
+// - Forløbet "Opskriften i dig" (js/forloeb.js, teksterne i js/data/forloeb/opskriften.js) starter første gang. Imens kan
+//   man trykke i 3D (cellekernen, en tråd og et trin), og zoom-rejsen springer kromosomet over.
 
 import * as THREE from 'three';
 import { verden, sætVindue, stopKamera, centrerVindue, ROLIG } from './scene3d.js';
@@ -19,7 +21,10 @@ import { DnaStige, S } from './liv/stige.js';
 import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbTest } from './forloeb.js';
+import { OPSKRIFTEN } from './data/forloeb/opskriften.js';
 import { HVORFOR } from './data/hvorfor.js';
+import { tagVentLiv, tagVentForløb } from './gaa.js';
 import { SKRIDT } from './data/liv/stige.js';
 import { NIVEAUER, NIVEAU_IDER, OPGAVER_LIV, HBB_START, BYG_TRIN, nyByggestreng, parGrund, PAR_TEKST } from './data/liv/opskriften.js';
 
@@ -48,6 +53,14 @@ let mission = null;
 let panelNøgle = '';
 let protein = null; // tegningen til L2
 let lp = null; // knapperne og panelet til L2 (js/liv-protein.js)
+// Forløbet "Opskriften i dig": det trin, der kører (id fra js/data/forloeb/opskriften.js, eller null), det trin, man må
+// zoome ind til (eller null), og om man har trykket på et trin med A
+let flTrin = null;
+let flZoom = null;
+let flFundetA = false;
+const FL_BYGGET = 5; // byggestigen i forløbet: de første 5 af 8 trin er bygget, så der er 3 tilbage
+const stråle = new THREE.Raycaster();
+const tV = new THREE.Vector3();
 
 // Kameraets afstand, så en kasse (halv bredde og højde) passer i 3D-vinduet (som passerTilBoks, uden at zoome)
 function afstandTilBoks(halvB, halvH) {
@@ -117,6 +130,16 @@ export function lavLiv() {
   $('hjælpLiv').addEventListener('click', (h) => {
     if (h.target.id === 'hjælpLiv' || h.target.closest('[data-luk]')) $('hjælpLiv').classList.add('skjult');
   });
+  $('livForløbOpskriften').addEventListener('click', () => {
+    lyd.klik();
+    startOpskriften();
+  });
+  $('livHjælpForløb').addEventListener('click', () => {
+    lyd.klik();
+    $('hjælpLiv').classList.add('skjult');
+    startOpskriften();
+  });
+  lavTryk();
   mission = lavNæsteSkridt(lavNæsteSkridtKort($('livVindue'), 'livMission'), { visMig });
   lp = lavLivProtein({
     tegning: protein,
@@ -195,6 +218,12 @@ function næsteNiveau(retning) {
 // Tjekker kameraets afstand: zoomet langt nok ind eller ud giver næste eller forrige trin
 function tjekZoom() {
   if (overgang || verden.målAfstand != null || niveau === 'protein') return; // kun når man selv zoomer, og ikke i L2
+  if (kørerForløb()) {
+    // I forløbet kan man kun zoome ind til det trin, forløbet venter på (og fra cellekernen direkte til stigen)
+    const d = verden.kamera.position.distanceTo(verden.styring.target);
+    if (flZoom && vist !== stige && forløbFase() === 'gør' && d < afstand(niveau) * IND) gåTil(flZoom, 'ind');
+    return;
+  }
   const d = verden.kamera.position.distanceTo(verden.styring.target);
   if (vist === stige) {
     const nu = stige.blanding > 0.5 ? 'stige' : 'atomer';
@@ -234,7 +263,8 @@ function opdater(dt, tid) {
   // Stigen: atomerne tæt på, båndene længere væk
   const d = verden.kamera.position.distanceTo(verden.styring.target);
   const [fra, til] = blandGrænser();
-  const b = THREE.MathUtils.clamp((d - fra) / (til - fra), 0, 1);
+  // I forløbets trin 3 og 4 står kameraet tættere på, men atomerne skal ikke tone frem (kun trinene og bogstaverne)
+  const b = flTrin === 'par' || flTrin === 'byg' ? 1 : THREE.MathUtils.clamp((d - fra) / (til - fra), 0, 1);
   stige.sætBlanding(b * b * (3 - 2 * b));
   stige.opdater(dt, tid);
   for (const t of Object.values(tegninger)) if (t !== stige && t.gruppe.visible) t.opdater(dt);
@@ -243,12 +273,15 @@ function opdater(dt, tid) {
 }
 
 // ---------- Byg stigen ----------
-function startByg() {
+// iForløb: forløbets byggestige, hvor de første FL_BYGGET trin er bygget, og de sidste har både A/T og G/C
+function startByg(iForløb = false) {
   lp.stop(false);
   rydBeskeder();
   lukHvorfor();
-  byg = { streng: nyByggestreng(), bygget: 0 };
-  stige.sætSekvens(byg.streng, 0);
+  let streng = nyByggestreng();
+  while (iForløb && !(/[AT]/.test(streng.slice(FL_BYGGET)) && /[GC]/.test(streng.slice(FL_BYGGET)))) streng = nyByggestreng();
+  byg = { streng, bygget: iForløb ? FL_BYGGET : 0, forløb: iForløb };
+  stige.sætSekvens(byg.streng, byg.bygget);
   $('livByg').classList.add('i-gang');
   gåTil('stige');
   verden.styring.autoRotateSpeed = 0.2;
@@ -274,7 +307,7 @@ function vælgBase(b) {
     lyd.proton();
     byg.bygget++;
     stige.sætBygget(byg.bygget);
-    if (byg.bygget >= BYG_TRIN) {
+    if (byg.bygget >= BYG_TRIN && !byg.forløb) { // udfordringen "Byg en stige med 8 trin" er ikke en del af forløbet
       løs('liv-byg');
       visBesked({ titel: 'Stigen er færdig', tekst: 'Zoom ind, og se atomerne og de gule hydrogenbindinger mellem baserne.', varighed: 7000 });
     }
@@ -326,6 +359,13 @@ function opdaterPanel(kunTal = false) {
       $('livHvorfor').dataset.hvorfor = n.hvorfor;
       $('livHvorfor').textContent = `Hvorfor? ${HVORFOR[n.hvorfor].spørgsmål}`;
     }
+    // Et link til en gåde (Gåderne G2: ved Ribosomet)
+    $('livGaade').hidden = !n.gåde;
+    if (n.gåde) {
+      const k = $('livGaade').firstElementChild;
+      k.dataset.gaa = n.gåde[0];
+      k.textContent = `${n.gåde[1]} ›`;
+    }
     const farver = iProtein ? lp.farver() : FARVER[niveau === 'atomer' ? 'atomer' : niveau === 'stige' ? 'stige' : ''] ?? [];
     $('livFarver').innerHTML = farver.map(([t, f]) => `<li><span class="farveprik" style="background:${f}"></span>${t}</li>`).join('');
     $('livFarver').hidden = !farver.length;
@@ -335,7 +375,7 @@ function opdaterPanel(kunTal = false) {
 }
 
 const MISSION = {
-  celle: 'Zoom ind mod kernen (den violette kugle).',
+  celle: 'Zoom ind mod cellekernen (den violette kugle).',
   kerne: 'Zoom ind på de farvede tråde: kromosomerne.',
   kromosom: 'Zoom ind på tråden, der er viklet om perlerne.',
   stige: 'Zoom helt ind til atomerne.',
@@ -363,6 +403,147 @@ function opdaterMission() {
 function visMig() {
   const næste = næsteNiveau('ind');
   if (næste) gåTil(næste, 'ind');
+}
+
+// ---------- Forløbet "Opskriften i dig" (js/forloeb.js, drejebogen i docs/fable/E3-liv-drejebog.md) ----------
+// Teksterne står i js/data/forloeb/opskriften.js. Her står det, der rører scenen i hvert trin. Hvert trins start sætter
+// scenen, som den skal være (så "‹" virker).
+// Stigen i trin 3 og 4 står tættere på end i laboratoriet, så trinene er store nok at ramme med en finger
+const FL_TÆT = 0.62;
+const flAfstand = () => afstand(niveau === 'atomer' ? 'stige' : niveau) * (flTrin === 'par' || flTrin === 'byg' ? FL_TÆT : 1);
+
+function flStart(id, niveauId, zoom) {
+  flTrin = id;
+  flZoom = zoom;
+  if (byg) stopByg();
+  lp.stop(false);
+  stige.fremhæv(-1);
+  if (niveau !== niveauId || vist !== tegningFor(niveauId)) gåTil(niveauId);
+  verden.målAfstand = flAfstand();
+}
+
+// Lyser et trin op (et tryk eller "Vis mig"). Er der et A, er trinet gjort, ellers siger en besked, hvad det var.
+function flVælgTrin(k) {
+  if (k < 0) return;
+  const t = stige.stige.trin[k];
+  stige.fremhæv(k);
+  if (t.base === 'A' || t.partner === 'A') {
+    flFundetA = true;
+    lyd.proton();
+  } else {
+    lyd.klik();
+    visBesked({ titel: `${t.base} og ${t.partner}`, tekst: 'Det trin har ikke et A. Find et grønt.', varighed: 4000 });
+  }
+}
+
+// "Vis mig": et trin med A tæt på midten af stigen, helst et andet end det, der lyser
+function flTrinMedA() {
+  const trin = stige.stige.trin;
+  const midt = (trin.length - 1) / 2;
+  const med = trin.map((t, k) => k).filter((k) => trin[k].base === 'A' || trin[k].partner === 'A');
+  med.sort((a, b) => Math.abs(a - midt) - Math.abs(b - midt));
+  return med.find((k) => k !== stige.valgt) ?? med[0] ?? -1;
+}
+
+const baseKnap = (b) => ({ id: b, tekst: b, kugle: `liv-base-kugle base-${b}`, gør: () => vælgBase(b), aktiv: () => Boolean(byg) && byg.bygget < BYG_TRIN });
+
+const OPSKRIFT_DEL = {
+  trin: {
+    celle: {
+      start: () => flStart('celle', 'celle', 'kerne'),
+      knapper: [{ id: 'ind', tekst: 'Zoom ind ›', gør: () => gåTil('kerne', 'ind'), aktiv: () => niveau === 'celle' }],
+      færdig: () => niveau === 'kerne',
+      visMig: () => gåTil('kerne', 'ind'),
+    },
+    traade: {
+      start: () => flStart('traade', 'kerne', 'stige'),
+      knapper: [{ id: 'ind', tekst: 'Kom helt tæt på ›', gør: () => gåTil('stige', 'ind'), aktiv: () => niveau === 'kerne' }],
+      færdig: () => vist === stige,
+      visMig: () => gåTil('stige', 'ind'),
+    },
+    par: {
+      start: () => {
+        flStart('par', 'stige', null);
+        flFundetA = false;
+      },
+      færdig: () => flFundetA,
+      visMig: () => flVælgTrin(flTrinMedA()),
+    },
+    byg: {
+      start: () => {
+        flStart('byg', 'stige', null);
+        startByg(true);
+        verden.målAfstand = flAfstand(); // startByg flyver til stigens afstand
+      },
+      knapper: ['A', 'T', 'G', 'C'].map(baseKnap),
+      færdig: () => Boolean(byg) && byg.bygget >= BYG_TRIN,
+      visMig: () => vælgBase(PARTNER_AF[byg.streng[byg.bygget]]),
+    },
+  },
+  layout: () => {
+    sætGrænser(niveau === 'atomer' ? 'stige' : niveau);
+    verden.målAfstand = flAfstand();
+  },
+  slutTekst: () => 'Du kendte kun den ene side, og så kendte du den anden. Sådan kopierer cellen sit DNA, hver gang den deler sig.',
+  // Forløb 2 ("Hvad står der i opskriften?") kommer som første vej, når det er bygget
+  veje: [
+    { tekst: 'Leg frit', primær: true },
+    { tekst: 'Zoom helt ind til atomerne', gør: () => requestAnimationFrame(() => { centrerVindue(); gåTil('atomer', 'ind'); }) },
+    { tekst: 'Hvad holder stigen sammen?', hvorfor: 'livSammen' },
+  ],
+  igen: 'fra listen til venstre eller fra hjælpen (?)',
+  slut: () => {
+    flTrin = null;
+    flZoom = null;
+    if (byg) stopByg(); // byggestigen bliver til HBB-stigen igen
+    stige.fremhæv(-1);
+    panelNøgle = '';
+    opdaterPanel();
+    lavForløbListe();
+  },
+};
+const PARTNER_AF = { A: 'T', T: 'A', G: 'C', C: 'G' };
+
+function startOpskriften() {
+  if (!aktiv) return;
+  startForløb(OPSKRIFTEN, OPSKRIFT_DEL);
+}
+
+// Tryk i 3D-billedet (kun i forløbet, når trinet venter på en handling): et kort tryk uden at trække
+function lavTryk() {
+  const lærred = verden.renderer.domElement;
+  let ned = null;
+  lærred.addEventListener('pointerdown', (h) => {
+    ned = aktiv && flTrin ? { id: h.pointerId, x: h.clientX, y: h.clientY, t: performance.now() } : null;
+  });
+  lærred.addEventListener('pointerup', (h) => {
+    if (!ned || h.pointerId !== ned.id) return;
+    const kort = performance.now() - ned.t < 600 && Math.hypot(h.clientX - ned.x, h.clientY - ned.y) < 12;
+    ned = null;
+    if (kort) tryk(h.clientX, h.clientY);
+  });
+}
+
+function tryk(x, y) {
+  if (!aktiv || !flTrin || forløbFase() !== 'gør' || overgang) return;
+  const r = verden.renderer.domElement.getBoundingClientRect();
+  stråle.setFromCamera({ x: ((x - r.left) / r.width) * 2 - 1, y: -((y - r.top) / r.height) * 2 + 1 }, verden.kamera);
+  const rammer = (t) => {
+    t.mål.getWorldPosition(tV);
+    return stråle.ray.distanceToPoint(tV) < t.målRadius * t.gruppe.scale.x;
+  };
+  if (flTrin === 'celle' && niveau === 'celle' && rammer(tegninger.celle)) gåTil('kerne', 'ind');
+  else if (flTrin === 'traade' && niveau === 'kerne' && rammer(tegninger.kerne)) gåTil('stige', 'ind');
+  else if (flTrin === 'par' && vist === stige) flVælgTrin(stige.trinVed(stråle.ray));
+}
+
+// Forløbet øverst i venstre panel (✓, når det er taget): et tryk tager det (igen)
+function lavForløbListe() {
+  const taget = fremgang.forløbTaget(OPSKRIFTEN.id);
+  const b = $('livForløbOpskriften');
+  b.classList.toggle('løst', taget);
+  b.querySelector('.flueben').textContent = taget ? '✓' : '▶';
+  b.title = taget ? 'Taget. Tryk for at tage det igen.' : 'Fire korte trin: Hvad er DNA?';
 }
 
 // ---------- Opgaverne ----------
@@ -406,9 +587,23 @@ export function startLiv() {
   panelNøgle = '';
   gåTil('celle', 'ind');
   opdaterByg();
+  lavForløbListe();
+  // Fra Gåderne (data-gaa="liv:protein") åbnes den del, man kom for. Ellers starter forløbet af sig selv første gang,
+  // og når man kommer fra dets link eller "Din fremgang".
+  const del = tagVentLiv();
+  if (del) visDel(del);
+  else if (tagVentForløb([OPSKRIFTEN.id]) ?? (starterSelv(OPSKRIFTEN) ? OPSKRIFTEN.id : null)) startOpskriften();
+}
+
+// Åbner en del af Liv fra en knap data-gaa="liv:protein" (js/gaa.js): 'protein' starter "Se genet blive læst"
+export function visDel(id) {
+  if (id !== 'protein') return;
+  stopForløb(); // et forløb, der står åbent, giver plads
+  lp.start('genet');
 }
 
 export function stopLiv() {
+  stopForløb();
   aktiv = false;
   if (byg) stopByg();
   lp.stop(false);
@@ -455,6 +650,24 @@ export function testAdgang() {
     proteinSvar: (aa) => lp.svar(aa),
     proteinSkift: (i, pos, base) => lp.skiftBogstav(i, pos, base),
     proteinKodon: (i) => lp.vælgKodon(i),
+    forløb: forløbTest(),
+    startForløb: () => startOpskriften(),
+    // Et tryk i 3D-billedet midt på et trin (k) eller på midten af tegningen (k udeladt), som en finger ville gøre det
+    trykPunkt: (k) => {
+      const p = new THREE.Vector3();
+      if (k == null) (vist === stige ? p.set(0, 0, 0) : tegningFor(niveau).mål.getWorldPosition(p));
+      else {
+        const t = stige.stige.trin[k];
+        p.set(t.midt[0] * S, t.midt[2] * S, -t.midt[1] * S);
+        stige.gruppe.localToWorld(p);
+      }
+      p.project(verden.kamera);
+      const r = verden.renderer.domElement.getBoundingClientRect();
+      return { x: r.left + ((p.x + 1) / 2) * r.width, y: r.top + ((1 - p.y) / 2) * r.height };
+    },
+    trinMedA: () => flTrinMedA(),
+    stille: () => !overgang && verden.målAfstand == null, // overgangen og kameraets zoom er færdige
+    valgtTrin: () => stige.valgt,
   };
 }
 

@@ -15,7 +15,7 @@ const MAPPE = fileURLToPath(new URL('.', import.meta.url));
 const PROJEKT = fileURLToPath(new URL('..', import.meta.url));
 const ALLE = [
   'roeg', 'henfaldsregler', 'orbitaler', 'sorthul', 'molekyler', 'vaerksted', 'byttebors', 'byg-molekyler', 'henfald', 'system', 'system-mobil', 'stjerneovn', 'stjerneovn-mus', 'reaktor',
-  'batteri', 'liv', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'kategorier', 'ordforklaring', 'ordbog', 'beskeder', 'beskeder-2', 'guide', 'lag', 'pause', 'fuldskaerm', 'maaler', 'grafik', 'saturn', 'jupiter', 'isgiganter', 'venus', 'mars', 'landskab', 'solsystem', 'jorden', 'henter', 'karrusel', 'tid', 'tidhvorfor', 'skaermliste', 'forloeb',
+  'batteri', 'liv', 'kosmos', 'kosmos-nye', 'aarstider', 'formoerkelser', 'kategorier', 'ordforklaring', 'ordbog', 'beskeder', 'beskeder-2', 'guide', 'lag', 'pause', 'fuldskaerm', 'maaler', 'grafik', 'saturn', 'jupiter', 'isgiganter', 'venus', 'mars', 'landskab', 'solsystem', 'jorden', 'henter', 'karrusel', 'tid', 'tidhvorfor', 'skaermliste', 'forloeb', 'gaader', 'liv-forloeb',
 ];
 const argumenter = process.argv.slice(2);
 const filArg = argumenter.filter((a) => !a.startsWith('--') && (a.includes('/') || a.includes('.')));
@@ -67,7 +67,7 @@ function vælgÆndrede(givne) {
   }
   const SKÆRME = { 'js/vaerksted.js': 'vaerksted', 'js/system.js': 'system', 'js/fusion.js': 'fusion', 'js/reaktor.js': 'reaktor', 'js/batteri.js': 'batteri', 'js/liv.js': 'liv', 'js/kosmos.js': 'kosmos', 'js/solsystem.js': 'solsystem' };
   const EGEN_TEST = {
-    'js/skaerme.js': ['skaermliste', 'karrusel', 'henter'], 'js/forloeb.js': ['forloeb'], 'js/fremgang.js': ['forloeb', 'karrusel'], 'js/gaa.js': ['skaermliste', 'ordbog'], 'js/data/faenomener.js': ['skaermliste', 'karrusel'], 'js/data/opgaver.js': ['karrusel'],
+    'js/skaerme.js': ['skaermliste', 'karrusel', 'henter'], 'js/forloeb.js': ['forloeb', 'liv-forloeb'], 'js/data/forloeb/opskriften.js': ['liv-forloeb'], 'js/fremgang.js': ['forloeb', 'karrusel'], 'js/gaa.js': ['skaermliste', 'ordbog', 'gaader'], 'js/gaader.js': ['gaader'], 'js/data/gaader.js': ['gaader', 'ordbog'], 'js/data/faenomener.js': ['skaermliste', 'karrusel'], 'js/data/opgaver.js': ['karrusel'],
     'js/beskeder.js': ['beskeder', 'beskeder-2'], 'js/guide.js': ['guide'], 'js/pause.js': ['pause'], 'js/fuldskaerm.js': ['fuldskaerm'],
     'js/ordforklaring.js': ['ordforklaring'], 'js/data/ordbog.js': ['ordforklaring', 'ordbog'], 'js/data/ordbogliste.js': ['ordbog'], 'js/ordbog.js': ['ordbog'], 'js/data/isotoper.js': ['henfaldsregler'], 'js/data/orbitaler.js': ['orbitaler'], 'js/data/sorthul.js': ['sorthul'], 'js/data/molekyler.js': ['molekyler', 'byttebors'], 'js/molekyle3d.js': ['byttebors', 'byg-molekyler'], 'js/data/molekyler-byg.js': ['molekyler', 'byg-molekyler'], 'js/molekyler-byg.js': ['byg-molekyler'], 'js/lag.js': ['lag'], 'js/paneler.js': ['lag'], 'js/data/hvorfor.js': ['lag'], 'js/data/kategorier.js': ['kategorier'], 'js/kosmos/saturn.js': ['saturn'], 'js/kosmos/jupiter.js': ['jupiter'], 'js/data/sider/jupiter.js': ['jupiter'], 'js/solsystem/isgigant.js': ['isgiganter'], 'js/kosmos/uranus.js': ['isgiganter'], 'js/kosmos/neptun.js': ['isgiganter'], 'js/data/isgiganter.js': ['isgiganter', 'venus'], 'js/kosmos/venus.js': ['venus'], 'js/data/venus.js': ['venus'], 'js/data/sider/venus.js': ['venus'], 'js/solsystem/klippeplanet.js': ['mars', 'landskab', 'venus'], 'js/data/vinde-isgiganter.js': ['isgiganter'], 'js/data/ringe-uranus.js': ['isgiganter'], 'js/data/sider/uranus.js': ['isgiganter'], 'js/data/sider/neptun.js': ['isgiganter'], 'js/solsystem/planet.js': ['saturn', 'jupiter', 'isgiganter'], 'js/solsystem/hent.js': ['saturn', 'jupiter', 'isgiganter', 'venus', 'mars', 'landskab'], 'js/kosmos/mars.js': ['mars', 'landskab'], 'js/solsystem/landskab.js': ['landskab'], 'js/kosmos/jordkloden.js': ['jorden'], 'js/kosmos/solen.js': ['jorden'], 'js/data/himmel.js': ['jorden'], 'js/kosmos/tid.js': ['tid', 'tidhvorfor'], 'js/data/tid.js': ['tid', 'tidhvorfor'], 'js/kosmos/tidhvorfor.js': ['tidhvorfor'], 'js/kosmos/lysur.js': ['tid', 'tidhvorfor'],
   };
@@ -75,7 +75,7 @@ function vælgÆndrede(givne) {
   const tests = new Set(['roeg']);
   const testsForSkærm = (s) => {
     for (const t of ALLE) if (besøger[t].includes(`#${s}`)) tests.add(t);
-    for (const t of { menu: ['karrusel'], ordbog: ['ordbog'] }[s] ?? []) tests.add(t);
+    for (const t of { menu: ['karrusel'], ordbog: ['ordbog'], gaader: ['gaader'] }[s] ?? []) tests.add(t);
   };
   for (const f of filer.filter((f) => f === 'index.html' || f === 'style.css')) {
     const skærme = skærmeForLinjer(f, mod, git, jsFiler, importører, SKÆRME);
@@ -176,7 +176,7 @@ function skærmeForLinjer(fil, mod, git, jsFiler, importører, SKÆRME) {
     }
     return ud;
   };
-  const SKÆRME_ID = new Set(Object.values(SKÆRME).concat(['menu', 'ordbog']));
+  const SKÆRME_ID = new Set(Object.values(SKÆRME).concat(['menu', 'ordbog', 'gaader']));
   const skærmeForSelektor = (sel) => {
     let alle = new Set();
     for (const del of sel.split(',')) {
