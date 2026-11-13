@@ -3,8 +3,9 @@
 // igen her. Faktatjekket i docs/fakta-solsystemet.md (del 3, "Faktatjek M5a", "M5b", "M6b", "M8a", "M8b" og "Faktatjek U3").
 // Uden Three.js, så teksterne kan testes i Node.
 
-import { sted, kontakt, handling, tur, tid } from '../../sideknap.js';
+import { sted, kontakt, handling, tur, tid, gå } from '../../sideknap.js';
 
+const GÅDE_LIV = gå('gaader:liv', 'Gåden: Er der liv andre steder?'); // Gåderne G2
 const BJERGE = 'Bjergene 10 gange højere';
 const TIDEN = tid('spil', '▶ Lad tiden gå');
 // Klokken på flybyen, stedets lys og at Mars står stille: det samme ved alle stederne
@@ -212,7 +213,7 @@ export const SIDER = {
       },
       {
         titel: 'Har Perseverance fundet liv?',
-        tekst: '<p>Indtil nu har Perseverance fyldt 30 rør med prøver: 27 stykker af sten, 2 med løs jord og 1 med luft fra Mars. I juli 2024 fandt den en sten (Cheyava Falls) med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv. Det har forskerne endnu ikke kunnet afgøre.</p>',
+        tekst: `<p>Indtil nu har Perseverance fyldt 30 rør med prøver: 27 stykker af sten, 2 med løs jord og 1 med luft fra Mars. I juli 2024 fandt den en sten (Cheyava Falls) med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv. Det har forskerne endnu ikke kunnet afgøre. ${GÅDE_LIV}</p>`,
       },
       {
         titel: 'Hvad lavede helikopteren Ingenuity?',
@@ -428,7 +429,7 @@ SIDER['stå-randen'] = {
     },
     SOLNEDGANG,
   ],
-  videre: [sted('stå-landing', '🧍 Landingsstedet'), sted('jezero', 'Op i kredsløb over Jezero')],
+  videre: [sted('stå-landing', '🧍 Landingsstedet'), sted('jezero', 'Op i kredsløb over Jezero'), GÅDE_LIV],
   billeder: JEZERO_BILLEDER,
   ærligt: LANDSKAB_ÆRLIGT,
 };

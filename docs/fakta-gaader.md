@@ -161,7 +161,7 @@ Alternativ (mere om metoden): "… Jeg kender forskel på det, vi har målt, og 
 
 ## Tjek igen, før teksterne skrives (det flytter sig)
 - LZ's hændelse på 248 keV: Har XENONnT eller LZ selv set flere? Kom Euclids DR1-Foundation 12. november 2026?
-- Antallet af exoplaneter, Rosalind Franklin (2028), Tianwen-3, Europa Clipper (april 2030) og Dragonfly.
+- Antallet af exoplaneter, Rosalind Franklin (2028), Tianwen-3, Europa Clipper (april 2030) og Dragonfly. **Slået op 13. november 2026 (G2):** over 6.000 (NASA), Rosalind Franklin 2028, Tianwen-3 opsendes 2028 og hjem 2031, Europa Clipper april 2030 (NASA), Dragonfly tidligst juli 2028 og Titan 2034 (NASA), ELT marts 2029 og JUICE juli 2031 (Wikipedia). Alle uændrede.
 - Hyper-Kamiokande (2028), DUNE, LISA (2035) og ELT (marts 2029): Planer rykker ofte.
 - QT45 (se ovenfor). Nobelpriserne (2011, 2015, 2020) står kun efter Wikipedia og hukommelsen.
 
