@@ -11,7 +11,7 @@
 - **Gløden gjorde de lyseste skyer til hvide klatter** midt på dagsiden. Skyerne må højst være ca. 0,8 lyse.
 - **Kameraet inde i Kosmos er svært at styre i tests:** Fænomenet flytter selv kameraet, og Jorden glider langs banen. Siden `kloder.html` viser Jorden og Månen alene med fast lys og kamera.
 - **En "fejl" kan være rigtig fysik:** En rød plet på Månen i et testbillede var Jordens skygge, der lige strejfede den. Regn efter, før det rettes.
-- **Billeder med én eller to kanaler** kan lægges i grafikkortet som `RedFormat` og `RGFormat` (sparer 50-75 %). Billederne frigives ikke, når et fænomen ryddes, for så skulle de lægges op igen, hver gang man skifter mellem Årstiderne og Formørkelser.
+- **Billeder med én eller to kanaler** kan lægges i grafikkortet som `RedFormat` og `RGFormat` (sparer 50-75 %). Billederne frigives med ejere (G1 trin 3, 13. november 2026): Før blev de aldrig frigivet (så de ikke skulle lægges op igen mellem Årstiderne og Formørkelser), og efter Mars, Stå på Mars og Saturn lå ca. 940 MB i grafikkortet, også i menuen. Nu frigives det forrige fænomen først, når det nye har hentet sine billeder, så de delte bliver liggende.
 
 ## Mars med rigtige højder (M2, oktober 2026)
 - **Store GeoTIFF-filer hos USGS** er ukomprimerede og uden små udgaver (oversigter), så `rasterio` kan ikke læse en lille udgave billigt over nettet. Det gik hurtigere at hente hele filerne (0,8 og 2,1 GB på 1-3 minutter) til scratchpad og lave billederne lokalt.

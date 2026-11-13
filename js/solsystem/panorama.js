@@ -64,7 +64,7 @@ const FRAGMENT = /* glsl */ `
 
 const TONE_TID = 0.6; // sekunder, som fotoet toner ind og ud over
 
-// hent(navn, færdig, valg) fra js/solsystem/hent.js (billederne bliver i grafikkortet). mappe: billeder/solsystem/.
+// hent(navn, færdig, valg) fra js/solsystem/hent.js (med Stå på Mars som ejer, se frigiv()). mappe: billeder/solsystem/.
 export function lavPanorama({ renderer, hent, mappe }) {
   const maks = renderer.capabilities.maxTextureSize;
   const størrelse = TEST_HURTIG ? 'lille' : LAV_KVALITET || maks < 8192 ? '4k' : '8k';
@@ -174,6 +174,11 @@ export function lavPanorama({ renderer, hent, mappe }) {
       return { kompas: (THREE.MathUtils.radToDeg(Math.atan2(f.y, f.x)) + 360) % 360, vinkel: THREE.MathUtils.radToDeg(Math.asin(-f.z)) };
     },
     test: () => ({ vist, til: mål === 1, synlig: u.uSynlig.value, størrelse, foto: u.tFoto.value?.image?.dataset?.fil ?? null }),
+    // Billederne bruges ikke mere (man er lettet, G1 trin 3): slip dem, så de kan slettes fra grafikkortet
+    frigiv() {
+      skjul(true);
+      u.tFoto.value = u.tMaske.value = null;
+    },
     stop() {
       kugle.geometry.dispose();
       mat.dispose();
