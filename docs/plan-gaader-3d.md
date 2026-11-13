@@ -78,8 +78,8 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Kræver en sce
 - [ ] **Senere, én ad gangen:** gåderne 6-10, når Fable har tjekket listen. Planet 9 kommer sammen med Solsystemets overblik, og "Hvor stopper kvanteverdenen?" sammen med Kvantefysik forløb 1 (køreplanen).
 
 ## Fable
-- **Ikke til G4a-G4d:** Det er grafik og kode, og stoffet er tjekket.
-- **Til listen over gåderne 6-10** (Fable 5.2, high, kun dokumenter, kan køre parallelt): Hvilke fem gåder skal fylde pladserne, hvilke fælder er der, og hvad er det sikre og det usikre i hver? Det er omstridt stof og nemt at skrive for sikkert. Prompten skrives, når I giver go.
+- **Ikke til at bygge G4a-G4d:** Det er grafik og kode, og stoffet er tjekket.
+- **Før G4a (jeres go 13. november 2026, "Koncept + liste før G4a"):** Fable 5.2 (high) vurderer konceptet (wow-øjeblikket og kernesætningen i hver scene, universet og de slørede pladser) og vælger gåderne 6-10 med fælder. Prompten er [prompt-fable-gaader-3d.md](prompt-fable-gaader-3d.md), og svaret kommer i `docs/fable/E8-gaader-3d.md`. Fable kan kun bruges til og med 16. november 2026. Bagefter skriver Opus noterne, retter denne plan, og I giver go til G4a.
 
-## Prompt til G4a (start en ny session, Opus, høj effort)
+## Prompt til G4a (start en ny session, Opus, høj effort, efter Fables vurdering og jeres go)
 > Læs docs/plan-gaader-3d.md og byg G4a. Du hører til sporet Småting og ejer js/gaader.js, js/gaader/ (ny), js/data/gaader.js, Gådernes sektion i index.html, blokken `#gaader` i style.css og tests/gaader.mjs. Rør ikke de andre skærme. Læs først docs/retning.md (afsnittene Skærmen og Ydelse), tjeklisterne D og E, docs/kode/kosmos.md om js/kosmos/faelles.js og docs/erfaringer/kamera-og-layout.md. Vis mig et skærmbillede af oversigten på pc og tablet på højkant, før kortene flyttes ind i det nye panel.

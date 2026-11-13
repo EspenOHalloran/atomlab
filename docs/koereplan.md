@@ -39,7 +39,7 @@ En prøve med sønnen efter hvert punkt.
 11. **3-5 børn og en lærer prøver**, og fundene rettes. Så er AtomLab frigivet.
 
 ## Nyt indhold, i denne rækkefølge (må starte, når Forløb-klodsen findes)
-1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside.
+1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside. **Jeres valg 13. november 2026:** Opus skriver drejebogen nu ([prompt-overblik.md](prompt-overblik.md)), og Fable tjekker den før 16. november. Bygges efter G1 trin 3.
 2. **Gåderne** (fem kort i Biblioteket, plads til 10). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). G1-G3 er lavet 12.-13. november 2026 ([plan-gaader.md](plan-gaader.md)). **Jeres ønske 13. november 2026:** Gåderne i fuld 3D som ét univers med "sense of wonder" og plads til 10 gåder. Planen er [plan-gaader-3d.md](plan-gaader-3d.md) (G4a-G4d, Opus høj, et go pr. del). Fable tjekker listen over gåderne 6-10.
 3. **De første 6-8 videnskabsfolk** med sider fra bøgerne (Opdagelserne i Biblioteket).
 4. **Månerne med mulige betingelser for liv** (et snit gennem Europa og Enceladus, Titan med Huygens). Jeres svar på kernesætningen, den første handling, Huygens' billeder og "Land med Huygens" står i afsnit 9 i [fakta-maaner-liv.md](fakta-maaner-liv.md) (12. november 2026).
