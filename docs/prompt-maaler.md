@@ -57,11 +57,11 @@ Testbrowseren kan ikke vise rigtige billeder i sekundet. Men den kan godt måle 
 
 1. Åbn **https://espenohalloran.github.io/atomlab/?maal#solsystem** (eller den adresse, I plejer at bruge, med `?maal` før `#`). Feltet med tallene står nederst til venstre. "⇲" flytter det til et andet hjørne, og "–" folder det sammen.
 2. **Første gang Mars åbnes:** Vælg Mars, og vent, til "▶ Start flyby" kan trykkes.
-3. **Rejs mellem stederne:** Start flybyen og tryk "Næste" hele vejen (eller tryk på navnene på kloden). Zoom helt ned til Olympus Mons og Calderaen. Prøv også "🧍 Stå på Mars" ved Gale.
+3. **Rejs mellem stederne:** Start flybyen og tryk "Næste" hele vejen (eller tryk på navnene på kloden). Zoom helt ned til Olympus Mons og Calderaen. Prøv også "🧍 Stå på Mars" ved Gale og bagefter ved Jezero (Ved randen). Luk gerne andre programmer først, og mål helst to gange.
 4. Tryk **"Kopiér"**, og sæt teksten ind i chatten (den siger også, hvilket grafikkort og hvilken browser I har). Kan den ikke kopiere, står teksten markeret i et felt, så I kan kopiere den selv.
 5. Gør det samme på tabletten. Sig gerne med egne ord, om det hakker mindre end før.
 
-Tallene øverst i feltet: billeder i sekundet (60 er glat, under 30 føles tungt), "værst" er det længste billede de sidste 5 sekunder, og listen er rykkene med det, der skete lige før.
+Tallene øverst i feltet: billeder i sekundet (60 er glat, under 30 føles tungt), "værst" er det længste billede de sidste 5 sekunder, og listen er rykkene med det, der skete lige før. "Teksturer i grafikkortet" er et skøn over, hvor meget billederne fylder i grafikkortet (fra 13. november 2026).
 
 ## Prompt til trin 3 (start en ny session, Opus, høj effort)
 
