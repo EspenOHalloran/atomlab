@@ -8,4 +8,6 @@
 
 **Næste:** 10a er færdig, så parallelle sessioner er billigere igen (de rører ikke længere skærmenes start i `main.js`). 10b (egen HTML og CSS pr. skærm) sker gradvist, først med Molekyler. Faktagrundlagene kan køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
+**Næste i Kvantefysik:** Fables faktagrundlag og drejebog til Kvantefysik er skrevet (`docs/fakta-kvantefysik.md`, `docs/drejebog-kvantefysik.md`) 13. november 2026. Nu: Opus skriver `docs/fable/E7-kvantefysik-noter.md`, og I svarer på de fem spørgsmål sidst i drejebogen ([prompt-fable-kvantefysik.md](../prompt-fable-kvantefysik.md), "Efter Fables svar").
+
 Desuden i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes til arkivet, Retningen), testen `mars` (585 sekunder) delt i to, og faktatjekket af `docs/fakta-grundstofkort.md`, `docs/fakta-molekyler.md` og `docs/fakta-solsystemet.md` fra før (én session pr. fil med `/faktatjek`, startet i miljøet "Default", hvor domænerne nu er åbne, se "Miljøet" i [aabne-punkter.md](aabne-punkter.md)).
