@@ -1,5 +1,7 @@
 # Prompt: Drejebogen til Solsystemets overblik (Opus' udkast, som Fable tjekker)
 
+**Lavet 13. november 2026:** [drejebog-overblik.md](drejebog-overblik.md) og [prompt-fable-overblik.md](prompt-fable-overblik.md).
+
 *Skrevet 13. november 2026 efter jeres valg ("Opus' udkast nu, før G1"). Hører til sporet Solsystemet og Kosmos og er nr. 1 under "Nyt indhold" i [koereplan.md](koereplan.md). **Fable kan kun bruges til og med 16. november 2026**, så udkastet skal skrives nu, før G1 trin 3 (hakkene på Mars). Kun dokumenter, ingen kode.*
 
 ## Sådan startes den
