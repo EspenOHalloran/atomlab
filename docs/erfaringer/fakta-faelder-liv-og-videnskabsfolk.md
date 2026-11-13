@@ -44,6 +44,7 @@
 - "Næsten hver celle har 2 m DNA." Målt i antal har de fleste celler ingen kerne (røde blodlegemer). Skriv "hver celle med en cellekerne".
 - "I hver af mine celler ligger DNA" (kernesætningen i drejebogen til Liv). Modne røde blodlegemer har hverken cellekerne eller mitokondrier, så de har intet DNA, og de er ca. 84 % af cellerne. Skriv "I mine celler" eller "i hver celle med en cellekerne". Tjek også kernesætninger og overskrifter, ikke kun brødteksten (Liv som forløb, 13. november 2026).
 - "I cellekernen ligger hele opskriften." Mitokondrierne har deres eget lille DNA (16.569 basepar). Skriv "næsten hele" (Liv som forløb, 13. november 2026).
+- "Ordene i DNA står adskilt." Der er ingen mellemrum mellem kodonerne: Læserammen kommer af, at cellen starter ved ATG og tæller tre ad gangen. Tegner man mellemrum for at gøre det let (forløbet "Hvad står der i opskriften?"), så sig det i "Ærligt talt" (13. november 2026).
 - "Et skift, der giver samme aminosyre, gør ingenting." Næsten altid. Men RNA'et kan blive klippet forkert (et kendt tilfælde i HBB, kodon 24). Skriv "næsten altid".
 - "G og T kan ikke holde sammen." De kan, hvis de rykker sig skævt (et "wobble"-par med to hydrogenbindinger). Det er en af de almindeligste kopifejl. Sig forenklingen under "For nørder".
 - "Ribosomet sætter 6-9 aminosyrer på i sekundet hos os." Det er Wikipedias øvre tal. Målt i museceller er det 5,6 (Ingolia m.fl. 2011).

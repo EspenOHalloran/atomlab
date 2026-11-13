@@ -10,7 +10,7 @@ import { lavKontakt } from './kontakt.js';
 import { lavTidsknap } from './pause.js';
 import { lyd } from './lyd.js';
 import { visBesked, rydBeskeder, bundIVindue } from './beskeder.js';
-import { lukHvorfor } from './lag.js';
+import { lukHvorfor, visLag } from './lag.js';
 import * as fremgang from './fremgang.js';
 import { lavKodehjul, U_FARVE } from './liv/kodehjul.js';
 import { BASE_FARVE } from './liv/stige.js';
@@ -105,6 +105,7 @@ export function lavLivProtein({ tegning, vindue, vis, forlad, stoppet, løs, pan
     // Kodehjulet er fremme, når man selv skal læse
     visHjul(ny !== 'genet');
     hjul.fremhæv(null);
+    visLag('liv-protein'); // foldeboksen "Fra opskrift til protein" (også når man kommer fra Gåderne eller forløbet)
     $('livProteinValg').hidden = true;
     $('livProteinIGang').hidden = false;
     $('livSvar').hidden = ny !== 'læs';
@@ -113,7 +114,7 @@ export function lavLivProtein({ tegning, vindue, vis, forlad, stoppet, løs, pan
     $('livProteinNulstil').hidden = ny !== 'ret';
     række.hidden = ny === 'ret';
     skriv({
-      genet: 'Genet HBB bliver læst. ⏩ går hurtigere, og ⏸ stopper tiden.',
+      genet: 'Sådan gør cellen det i virkeligheden (tegnet forenklet). Genet HBB bliver læst. ⏩ går hurtigere, og ⏸ stopper tiden.',
       læs: 'Du er ribosomet. Find ordet i kodehjulet.',
       ret: 'Tryk på et ord i genet, og skift et bogstav.',
     }[ny]);

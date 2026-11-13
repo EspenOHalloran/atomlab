@@ -713,7 +713,10 @@
       </div>
     </header>
     <aside class="panel side-panel venstre-panel">
-      <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Forløb:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
+      <div class="liv-forløb-liste">
+        <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Forløb 1:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
+        <button class="liv-forløb" id="livForløbOrdene"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Forløb 2:</span> <span class="liv-forløb-navn">Hvad står der i opskriften?</span></span></button>
+      </div>
       <h4 class="panel-overskrift">Leg frit</h4>
       <div class="liv-niveauer" id="livNiveauer"></div>
       <button class="kontakt løs" id="livVisH">Vis hydrogen</button>
@@ -733,8 +736,8 @@
           </div>
         </div>
       </div>
-      <div class="liv-protein" id="livProtein">
-        <h4 class="panel-overskrift">Fra opskrift til protein</h4>
+      <details class="liv-protein lag-boks" id="livProtein" data-lag="liv-protein">
+        <summary><strong>Fra opskrift til protein</strong></summary>
         <div class="liv-protein-valg" id="livProteinValg">
           <button class="knap" data-liv-protein="genet">🧬 Se genet blive læst</button>
           <button class="knap" data-liv-protein="læs">📖 Læs selv</button>
@@ -754,7 +757,7 @@
             <button class="knap lille svag" id="livProteinStop">Stop</button>
           </div>
         </div>
-      </div>
+      </details>
       <details class="lag-boks opgave-boks" data-lag="liv-opgaver">
         <summary><strong>Opgaver</strong> <span class="opgave-tal" id="livOpgaveTal"></span></summary>
         <ol class="opgaver kompakt" id="livOpgaver"></ol>
@@ -784,6 +787,7 @@
         <p>Når du bygger stigen, holder kun A–T og G–C. I virkeligheden kan G og T godt holde lidt sammen, hvis de rykker sig skævt. Så buler stigen, og cellen finder som regel fejlen. Det er en af de almindeligste fejl, når DNA bliver kopieret.</p>
         <p>Cellen og cellekernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i cellekernen. Lidt af dit DNA ligger også uden for cellekernen, i mitokondrierne (de orange pølser).</p>
         <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i cellekernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
+        <p>I forløbet "Hvad står der i opskriften?" ligger stigen lige ud, og der er små mellemrum mellem ordene, så de er lette at se. I virkeligheden er stigen snoet, og der er ingen mellemrum: Cellen ved, hvor ordene står, fordi den begynder ved ATG og tæller tre ad gangen. Byggestenene har alle samme farve, og den orange er en, der er blevet skiftet ud.</p>
       </details>
     </aside>
   </section>
@@ -793,6 +797,7 @@
       <header><h3>Liv: opskriften</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
         <p><strong>Forløbet "Opskriften i dig"</strong> viser i fire korte trin, hvad DNA er. Det starter første gang, du åbner Liv. <button class="knap lille" id="livHjælpForløb">Tag forløbet ›</button></p>
+        <p><strong>Forløbet "Hvad står der i opskriften?"</strong> viser i fem korte trin, hvordan cellen læser bogstaverne og bygger et protein, og hvad der sker, når ét bogstav er forkert. <button class="knap lille" id="livHjælpOrdene">Tag forløbet ›</button></p>
         <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Cellekernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
         <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
         <p><strong>De gule streger</strong> helt tæt på er hydrogenbindinger. De holder A og T sammen med to og G og C med tre.</p>
