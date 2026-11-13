@@ -5,7 +5,9 @@
 // Teksterne står som data i js/data/forloeb/ ({ id, del, titel, kernesætning, trin: [{ id, spørg, gæt, gør, så, ord }] }).
 // Delen leverer det, der rører scenen, pr. trin-id:
 //   start()       sætter scenen op til trinet (kaldes også, når man går tilbage, så den skal kunne gentages)
-//   knapper       [{ id, tekst, kugle, gør(), aktiv(), tæller() }]: trinets handling (de eneste knapper, der er fremme)
+//   knapper       [{ id, tekst, kugle, gør(), aktiv(), tæller(), valgt() }]: trinets handling (de eneste knapper, der er
+//                 fremme). Må være en getter, hvis knapperne skifter undervejs (linjen tegnes igen efter hvert tryk og
+//                 efter tegnForløb()). valgt() giver knappen klassen valgt.
 //   færdig()      er handlingen gjort?
 //   visMig()      gør handlingen for brugeren (tilbydes efter ca. 20 sekunder uden noget)
 //   vis           CSS-vælgere for det, der skal være fremme i trinet ud over scenen (fx det lille periodiske system)
@@ -40,6 +42,11 @@ export function starterSelv(data) {
 
 export function kørerForløb() {
   return k ? k.data.id : null;
+}
+
+// Tegner linjen igen (fx når et tryk i scenen har ændret trinets knapper)
+export function tegnForløb() {
+  if (k && k.fase === 'gør') tegn();
 }
 
 // Fasen i det forløb, der kører ('gæt', 'gør', 'så' eller 'slut'), fx så et tryk i scenen kun tæller, når trinet venter på det
@@ -228,7 +235,7 @@ function tegn() {
     html += `<p class="fl-tekst" data-ord-kun="${ord}">${esc(t.spørg)}${efter}</p>`;
     række = (d.knapper ?? []).map((b) => {
       const tæller = b.tæller ? ` <small>${esc(b.tæller())}</small>` : '';
-      return `<button class="fl-handling ${b.kugle ?? ''}" data-knap="${b.id}"${b.aktiv && !b.aktiv() ? ' disabled' : ''}>`
+      return `<button class="fl-handling ${b.kugle ?? ''}${b.valgt?.() ? ' valgt' : ''}" data-knap="${b.id}"${b.aktiv && !b.aktiv() ? ' disabled' : ''}>`
         + `${b.kugle ? `<span class="kugle ${b.kugle}"></span>` : ''}${esc(b.tekst)}${tæller}</button>`;
     }).join('');
     if (k.visMig && d.visMig) række += '<button class="fl-vismig" data-nav="vismig">Vis mig</button>';

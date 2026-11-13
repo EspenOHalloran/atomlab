@@ -8,6 +8,9 @@
 //   flyver væk. Kæden vokser ud af toppen af ribosomet.
 // - 'fold': Ved stop slipper ribosomet kæden, og den folder sig. Aminosyrerne, der skyr vand, gemmer sig inde i midten.
 // - 'ret': "Skift et bogstav": begyndelsen af RNA'et ligger stille, og kæden står over den, én perle pr. ord.
+// - 'ord', 'vokser' og så 'fold' og 'færdig' (enkel = true): forløbet "Hvad står der i opskriften?" (js/liv-ordene.js).
+//   DNA'et (begge sider, lige ud, med bogstaverne på den side, man læser) og kæden over det, én perle pr. ord, der er
+//   læst. Ingen RNA, ribosom eller budbringere. "Læs resten" (læsResten): kæden vokser til hele længden og folder sig.
 // fart (sættes af js/liv-protein.js fra tidsknappen): 0 = pause, 1 = normal, 4 = hurtigere.
 
 import * as THREE from 'three';
@@ -15,7 +18,7 @@ import { LAV_KVALITET, ROLIG } from '../scene3d.js';
 import { hindeMateriale } from './celle.js';
 import { BASE_FARVE } from './stige.js';
 import { U_FARVE } from './kodehjul.js';
-import { KODE, STOP, AMINOSYRER, SLAGS, tilRNA, kodoner } from '../data/liv/kode.js';
+import { KODE, STOP, AMINOSYRER, SLAGS, tilRNA, kodoner, aminosyre } from '../data/liv/kode.js';
 
 const D = 0.9; // afstand mellem to bogstaver
 const R_RYG = 0.24; // rygradens kugler
@@ -39,6 +42,21 @@ const STI_START = [[-1.3, 4.6, 0.15], [-1.0, 5.6, 0.3], [-0.7, 6.6, 0.4]]; // tu
 const KÆDE_MIDT = new THREE.Vector3(-3, 11.5, 0);
 const FOLD_MIDT = new THREE.Vector3(0, 7.5, 0);
 const FOLD_R = 3.6;
+// Forløbet ('ord'): DNA'ets to sider lige ud, bogstaverne over den side, man læser, og kæden over dem
+const ORD_RYG_I = 0; // rygraden på den side, der bliver læst
+const ORD_RYG_II = -2.1; // den anden side
+const ORD_BOGSTAV = 0.9;
+const ORD_PERLE = 3.0;
+const ORD_NAVN = 4.15;
+const ORD_EKSTRA = 2; // grå ord efter de læste, så det ligner et stykke af en længere opskrift
+const ORD_RÆKKE = 7.6; // afstanden mellem de to rækker, når 3D-vinduet er smalt (smal)
+const ORD_HUL = 0.5; // ekstra plads mellem to ord, så man kan se, at der står tre bogstaver i hvert
+// x for bogstav n af nMax i 'ord' (midten af rækken i x = 0)
+const ordX = (n, nMax) => (n - (nMax - 1) / 2) * D + (Math.floor(n / 3) - (nMax / 3 - 1) / 2) * ORD_HUL;
+const VOKS_MIDT = new THREE.Vector3(0, 9.5, 0); // kæden vokser ud mod det her punkt, før den folder sig
+const VOKS_TID = 3; // sekunder
+const BYGGESTEN = new THREE.Color('#b9a2ff').multiplyScalar(0.8); // alle perler har samme farve i forløbet
+const ÆNDRET = new THREE.Color('#ff8a3d').multiplyScalar(0.9); // en byggesten, der er blevet en anden
 
 const FARVE = {};
 for (const [b, f] of Object.entries({ ...BASE_FARVE, U: U_FARVE })) FARVE[b] = new THREE.Color(f).multiplyScalar(LYS);
@@ -97,11 +115,12 @@ function skiltMat(tegn, lys) {
   const nøgle = `${tegn}|${lys}`;
   if (skilte[nøgle]) return skilte[nøgle];
   const bred = tegn.length > 1;
+  const lang = tegn.length > 4; // navnet på en byggesten, fx "histidin"
   const c = document.createElement('canvas');
-  c.width = bred ? 128 : 64;
+  c.width = lang ? 320 : bred ? 128 : 64;
   c.height = 64;
   const g = c.getContext('2d');
-  g.font = `800 ${bred ? 38 : 46}px system-ui, sans-serif`;
+  g.font = `800 ${lang ? 40 : bred ? 38 : 46}px system-ui, sans-serif`;
   g.textAlign = 'center';
   g.textBaseline = 'middle';
   g.lineWidth = 8;
@@ -206,6 +225,8 @@ export class ProteinTegning {
     this.u = 0;
     this.f = 3;
     this.ret = null;
+    this.enkel = false;
+    this.ordInfo = null;
     for (const b of this.budbringere) this.skjulBudbringer(b);
     this.tegn();
   }
@@ -240,6 +261,95 @@ export class ProteinTegning {
     this.tegn();
   }
 
+  // Forløbet "Hvad står der i opskriften?": DNA'et (begge sider) og kæden for de læste ord. dna: stykket (30 bogstaver),
+  // original: som i genet, læst: så mange ord har en perle, lys: ordet, der lyser (-1: ingen), plads: bogstavet i det, der
+  // er valgt (-1: ingen), navn: ordet, hvis byggesten får sit navn over perlen (-1: intet navn)
+  visOrd(dna, original, { læst = 0, lys = -1, plads = -1, navn = -1 } = {}) {
+    if (this.tilstand !== 'ord') {
+      this.tøm();
+      this.tilstand = 'ord';
+    }
+    this.enkel = true;
+    this.sætGen(dna);
+    this.ordInfo = { original, læst, lys, plads, navn };
+    this.tegn();
+  }
+
+  // "Læs resten": kæden vokser fra de læste ord til hele proteinet (fx 147 byggesten) og folder sig bagefter
+  læsResten(protein) {
+    if (this.tilstand !== 'ord') return;
+    this.kæde = protein;
+    this.t = 0;
+    this.voksFra = this.ordPerler().length;
+    this.foldFra = this.ordPerler(this.ord.length); // rækken fyldes først
+    // Resten vokser ud fra enden af rækken mod VOKS_MIDT (samme kurve hver gang)
+    const r = frø(23);
+    const ret = new THREE.Vector3(0.3, 1, 0.2).normalize();
+    const p = this.foldFra.at(-1).clone();
+    while (this.foldFra.length < protein.length) {
+      ret.x += (r() - 0.5) * 0.9;
+      ret.y += (r() - 0.5) * 0.9;
+      ret.z += (r() - 0.5) * 0.9;
+      tD.subVectors(VOKS_MIDT, p);
+      if (tD.length() > 4.8) ret.addScaledVector(tD.normalize(), 0.45);
+      ret.normalize();
+      p.addScaledVector(ret, 0.88);
+      this.foldFra.push(p.clone());
+    }
+    this.foldTil = this.lavFold(protein);
+    this.tilstand = 'vokser';
+    this.skift();
+  }
+
+  // Perlernes pladser i 'ord' (én over hvert ord, der er læst, til første stop)
+  ordPerler(antal = this.ordInfo?.læst ?? 0) {
+    const ud = [];
+    for (let i = 0; i < Math.min(antal, this.ord.length); i++) {
+      if (KODE[this.ord[i]] === STOP) break;
+      const [x, dy] = this.ordSted(3 * i + 1);
+      ud.push(new THREE.Vector3(x, ORD_PERLE + dy, 0));
+    }
+    return ud;
+  }
+
+  // Så mange bogstaver tegnes i 'ord' (de grå ord efter genet kun på én række)
+  get ordAntal() {
+    return this.dna.length + (this.smal ? 0 : 3 * ORD_EKSTRA);
+  }
+
+  // Hvor bogstav n står i 'ord': [x, rækkens y]. smal (sættes af js/liv-ordene.js): to rækker med 5 ord hver, så
+  // bogstaverne kan læses og rammes på tablet på højkant
+  ordSted(n) {
+    if (!this.smal) return [ordX(n, this.ordAntal), 0];
+    const pr = this.dna.length / 2;
+    const r = Math.floor(n / pr);
+    return [ordX(n - r * pr, pr), (0.5 - r) * ORD_RÆKKE];
+  }
+
+  // Ordet (0-baseret), en stråle rammer i 'ord' (bogstaverne eller stigen under dem), eller -1
+  ordVed(stråle) {
+    if (this.tilstand !== 'ord') return -1;
+    let bedst = -1;
+    let afstand = 1.6 * this.gruppe.scale.x;
+    for (let i = 0; i < this.ord.length; i++) {
+      for (const y of [ORD_BOGSTAV, (ORD_RYG_I + ORD_RYG_II) / 2]) {
+        const d = stråle.distanceToPoint(this.ordPunkt(i, tA, y));
+        if (d < afstand) {
+          afstand = d;
+          bedst = i;
+        }
+      }
+    }
+    return bedst;
+  }
+
+  // Punktet midt på ord i i verdens koordinater (til tryk og tests)
+  ordPunkt(i, ud = new THREE.Vector3(), y = ORD_BOGSTAV) {
+    const [x, dy] = this.ordSted(3 * i + 1);
+    ud.set(x, y + dy, 0);
+    return this.indhold.localToWorld(ud);
+  }
+
   sætGen(dna) {
     this.dna = dna;
     this.rna = tilRNA(dna);
@@ -270,6 +380,7 @@ export class ProteinTegning {
     else if (this.tilstand === 'ud') this.kørUd(d);
     else if (this.tilstand === 'oversæt') this.kørOversæt(d);
     else if (this.tilstand === 'fold') this.kørFold(d);
+    else if (this.tilstand === 'vokser') this.kørVokser(d);
     else if (this.tilstand === 'færdig') this.indhold.rotation.y += ROLIG ? 0 : d * 0.15;
     if (this.tilstand !== 'tom') this.tegn();
   }
@@ -339,6 +450,21 @@ export class ProteinTegning {
       this.u = 0;
       this.skift();
     }
+  }
+
+  kørVokser(d) {
+    this.t = Math.min(1, this.t + d / VOKS_TID);
+    if (this.t >= 1) {
+      this.tilstand = 'fold';
+      this.t = 0;
+      this.skift();
+    }
+  }
+
+  // Så mange perler er fremme, mens kæden vokser (rækken fyldes først, så resten)
+  get vokset() {
+    const t = this.t;
+    return Math.round(this.voksFra + (this.kæde.length - this.voksFra) * t * t);
   }
 
   kørFold(d) {
@@ -422,9 +548,12 @@ export class ProteinTegning {
     const s = this.tilstand;
     const dnaA = s === 'aflæs' ? 1 : s === 'ud' ? 1 - glat(this.t * 2) : 0;
     const polA = dnaA;
-    const riboA = s === 'oversæt' ? 1 : s === 'ud' ? glat(this.t * 2 - 1) : s === 'fold' ? 1 - glat(this.t * 1.6) : 0;
-    let rnaA = s === 'aflæs' || s === 'oversæt' || s === 'ret' ? 1 : s === 'ud' ? Math.abs(1 - 2 * this.t) : s === 'fold' ? 1 - glat(this.t * 1.6) : 0;
-    const kædeA = s === 'oversæt' || s === 'fold' || s === 'færdig' || s === 'ret' ? 1 : 0;
+    const enkel = this.enkel;
+    const riboA = enkel ? 0 : s === 'oversæt' ? 1 : s === 'ud' ? glat(this.t * 2 - 1) : s === 'fold' ? 1 - glat(this.t * 1.6) : 0;
+    let rnaA = enkel ? 0 : s === 'aflæs' || s === 'oversæt' || s === 'ret' ? 1 : s === 'ud' ? Math.abs(1 - 2 * this.t) : s === 'fold' ? 1 - glat(this.t * 1.6) : 0;
+    const kædeA = s === 'oversæt' || s === 'fold' || s === 'færdig' || s === 'ret' || s === 'ord' || s === 'vokser' ? 1 : 0;
+    // I forløbet er DNA'et fremme, til kæden folder sig
+    const ordA = !enkel ? 0 : s === 'ord' || s === 'vokser' ? 1 : s === 'fold' ? 1 - glat(this.t * 1.6) : 0;
     const iUd = s === 'ud' && this.t > 0.5; // anden halvdel: RNA'et ligger i ribosomet
 
     // DNA'et og RNA'et under aflæsningen
@@ -478,8 +607,40 @@ export class ProteinTegning {
       }
     }
 
+    // Forløbet: DNA'et lige ud, begge sider, med bogstaverne over den side, der bliver læst
+    if (enkel && ordA > 0) {
+      const info = this.ordInfo;
+      const nMax = this.ordAntal;
+      const før = [null, null];
+      for (let n = 0; n < nMax; n++) {
+        const [x, dy] = this.ordSted(n);
+        const ekstra = n >= this.dna.length;
+        const b = ekstra ? 'ATGC'[(n * 5 + 1) & 3] : this.dna[n];
+        const bII = { A: 'T', T: 'A', G: 'C', C: 'G' }[b];
+        for (const [side, base, yR, yB] of [[0, b, ORD_RYG_I, ORD_RYG_I - 0.95], [1, bII, ORD_RYG_II, ORD_RYG_II + 0.95]]) {
+          tA.set(x, yR + dy, 0);
+          tB.set(x, yB + dy, 0);
+          kugleVed(this.dnaKugler, nd, tA, R_RYG);
+          this.dnaKugler.setColorAt(nd++, RYG_DNA);
+          pindMellem(this.dnaPinde, ndp, tA, tB, R_BASE);
+          this.dnaPinde.setColorAt(ndp++, ekstra ? GRÅ : FARVE[base]);
+          if (før[side] && før[side].y === tA.y) { // ikke fra den ene række til den næste
+            pindMellem(this.dnaPinde, ndp, før[side], tA, R_BASE * 0.7);
+            this.dnaPinde.setColorAt(ndp++, RYG_DNA);
+          }
+          før[side] = (før[side] ?? new THREE.Vector3()).copy(tA);
+        }
+        if (!ekstra && s === 'ord') {
+          const k = Math.floor(n / 3);
+          const ændret = info.original[n] !== b;
+          const valgt = k === info.lys && n % 3 === info.plads;
+          skilte.push([b, x, ORD_BOGSTAV + dy, 0.3, k === info.lys || ændret, valgt ? 1.45 : 1]);
+        }
+      }
+    }
+
     // RNA'et i ribosomet (og i "Skift et bogstav")
-    if (s === 'oversæt' || iUd || s === 'fold' || s === 'ret') {
+    if (!enkel && (s === 'oversæt' || iUd || s === 'fold' || s === 'ret')) {
       const ret = s === 'ret';
       let f = 3;
       if (s === 'oversæt' && this.k > 0) f = 3 * this.k + (this.u > 0.55 ? 3 * glat((this.u - 0.55) / 0.4) : 0);
@@ -518,16 +679,41 @@ export class ProteinTegning {
     }
 
     // Kæden
-    if (s === 'oversæt' || s === 'fold' || s === 'færdig') {
-      const pladser = s === 'oversæt' ? this.kædePladser() : null;
-      const ft = s === 'fold' ? glat(this.t) : 1;
+    if (s === 'ord') {
+      // Én perle over hvert ord, der er læst (alle med samme farve, og orange, hvis byggestenen er blevet en anden)
+      const info = this.ordInfo;
+      const orig = kodoner(info.original);
       let før = null;
-      for (let i = 0; i < this.kæde.length; i++) {
+      for (let i = 0; i < Math.min(info.læst, this.ord.length); i++) {
+        const [x, dy] = this.ordSted(3 * i + 1);
+        const aa = KODE[this.ord[i]];
+        if (aa === STOP) {
+          skilte.push(['STOP', x, ORD_PERLE + dy, 0.6, true]);
+          break;
+        }
+        tA.set(x, ORD_PERLE + dy, 0);
+        kugleVed(this.perler, np, tA, R_PERLE * 1.15);
+        const ændret = aminosyre(orig[i]) !== aa;
+        this.perler.setColorAt(np++, ændret ? ÆNDRET : BYGGESTEN);
+        if (før && før.y === tA.y) { // på to rækker: ingen pind fra den ene række til den næste
+          pindMellem(this.kædePinde, nkp, før, tA, 0.12);
+          this.kædePinde.setColorAt(nkp++, TRNA_FARVE);
+        }
+        før = (før ?? new THREE.Vector3()).copy(tA);
+        if (i === info.navn) skilte.push([AMINOSYRER[aa].navn, x, ORD_NAVN + dy, 0.6, true]);
+      }
+    } else if (s === 'oversæt' || s === 'fold' || s === 'færdig' || s === 'vokser') {
+      const pladser = s === 'oversæt' ? this.kædePladser() : null;
+      const ft = s === 'fold' ? glat(this.t) : s === 'vokser' ? 0 : 1;
+      const antal = s === 'vokser' ? this.vokset : this.kæde.length;
+      const brud = enkel && this.smal && s === 'vokser' ? this.ord.length / 2 : -1; // ingen pind mellem de to rækker
+      let før = null;
+      for (let i = 0; i < antal; i++) {
         if (pladser) tA.copy(pladser[i]);
         else tA.lerpVectors(this.foldFra[i], this.foldTil[i], ft);
         kugleVed(this.perler, np, tA, R_PERLE);
-        this.perler.setColorAt(np++, AA_FARVE[this.kæde[i]]);
-        if (før) {
+        this.perler.setColorAt(np++, enkel ? BYGGESTEN : AA_FARVE[this.kæde[i]]);
+        if (før && i !== brud) {
           pindMellem(this.kædePinde, nkp, før, tA, 0.12);
           this.kædePinde.setColorAt(nkp++, TRNA_FARVE);
         }
@@ -576,15 +762,15 @@ export class ProteinTegning {
       r.visible = riboA * syn > 0.01;
       r.material.uniforms.uOpacitet.value = riboA * syn * 0.9;
     }
-    this.sætAlpha(this.dnaMat, dnaA);
+    this.sætAlpha(this.dnaMat, enkel ? ordA : dnaA);
     this.sætAlpha(this.rnaMat, rnaA);
     this.sætAlpha(this.kædeMat, kædeA);
     // Billedet flytter sig, så kæden over ribosomet kan ses
-    const k = ROLIG || s === 'ret' || s === 'aflæs' || s === 'tom' ? 1 : 1 - Math.exp(-(this.dt ?? 0) * 2.5);
+    const k = ROLIG || s === 'ret' || s === 'ord' || s === 'aflæs' || s === 'tom' ? 1 : 1 - Math.exp(-(this.dt ?? 0) * 2.5);
     const k0 = ROLIG || s === 'tom' ? 1 : 1 - Math.exp(-(this.dt ?? 0.05) * 4);
     // Står kodehjulet fremme (øverst til højre), rykker tegningen lidt ned og til venstre
     this.indhold.position.x += (this.flyt.x - this.indhold.position.x) * k0;
-    const mål = this.flyt.y + (s === 'oversæt' ? -2 - 4.5 * glat(this.kæde.length / 40) : s === 'fold' || s === 'færdig' ? -6.5 : s === 'ret' ? -1.4 : iUd ? -2 : 0);
+    const mål = this.flyt.y + (s === 'oversæt' ? -2 - 4.5 * glat(this.kæde.length / 40) : s === 'fold' || s === 'færdig' ? -6.5 : s === 'ret' ? -1.4 : s === 'ord' ? -1 : s === 'vokser' ? -5.5 : iUd ? -2 : 0);
     this.indhold.position.y += (mål - this.indhold.position.y) * k;
     if (s !== 'færdig') this.indhold.rotation.y = 0;
   }
@@ -661,11 +847,11 @@ export class ProteinTegning {
       const s = liste[i];
       sp.visible = Boolean(s) && this.synlighed > 0.05;
       if (!s) return;
-      const [tegn, x, y, z, lys] = s;
+      const [tegn, x, y, z, lys, stor = 1] = s;
       sp.material = skiltMat(tegn, lys);
       sp.position.set(x, y, z);
-      const str = tegn.length > 1 ? 1.1 : 0.85;
-      sp.scale.set(str * (tegn.length > 1 ? 2 : 1), str, 1);
+      const str = (tegn.length > 1 ? 1.1 : 0.85) * stor;
+      sp.scale.set(str * (tegn.length > 4 ? 5 : tegn.length > 1 ? 2 : 1), str, 1);
     });
     for (const m of Object.values(skilte)) m.opacity = m.userData.fuld * this.synlighed;
   }
@@ -687,6 +873,8 @@ export class ProteinTegning {
   halvMål() {
     if (this.tilstand === 'aflæs' || this.tilstand === 'ud') return [11, 5.5];
     if (this.tilstand === 'ret') return [15.5, 4.5];
+    if (this.tilstand === 'ord') return this.smal ? [9.2, 7.4] : [19.2, 3.6];
+    if (this.tilstand === 'vokser') return this.smal ? [9.2, 11] : [19.2, 9.5];
     if (this.tilstand === 'fold' || this.tilstand === 'færdig') return [6.5, 6.5];
     return [11, 9.5];
   }

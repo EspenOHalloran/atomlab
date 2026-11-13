@@ -926,6 +926,9 @@ button { font: inherit; color: inherit; }
 .liv-forløb-mærke { color: var(--svag); }
 .liv-forløb-navn { font-weight: 700; }
 .liv-forløb.løst { border-color: var(--panel-kant); background: rgba(255, 255, 255, 0.04); }
+.liv-forløb-liste { display: flex; flex-direction: column; gap: 6px; }
+.liv-forløb-liste .liv-forløb { font-size: 14px; padding: 4px 10px; }
+#liv .fl-handling.valgt { background: color-mix(in srgb, var(--farve) 45%, transparent); outline: 2px solid #fff; outline-offset: 1px; }
 /* Basernes knapper i forløbets linje (byggestigen) */
 #liv .fl-handling .kugle.liv-base-kugle { width: 22px; height: 22px; background: var(--farve); box-shadow: 0 0 10px var(--farve); }
 #liv .fl-handling.base-A { --farve: var(--base-A); }
@@ -957,6 +960,8 @@ button { font: inherit; color: inherit; }
 /* Liv L2: fra opskrift til protein */
 .liv-protein { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
 .liv-protein .panel-overskrift { margin: 0; }
+details.liv-protein { display: block; }
+details.liv-protein[open] > summary { margin-bottom: 8px; }
 .liv-protein[hidden], #livByg[hidden], .liv-protein-valg[hidden], .liv-protein-i-gang[hidden], .liv-svar[hidden], .liv-ret[hidden], #livProtein [hidden] { display: none; }
 .liv-protein-valg, .liv-protein-i-gang, .liv-ret { display: flex; flex-direction: column; gap: 8px; }
 .liv-protein-valg .knap { text-align: left; }
