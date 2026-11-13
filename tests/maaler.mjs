@@ -32,6 +32,21 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await p.waitForFunction(() => /^\d+(,\d)? billeder\/s$/.test(document.querySelector('.maaler-fps').textContent) && atomlabMålerTest.tallene().fps > 0, null, { timeout: 15000 });
   const t = await p.evaluate(() => atomlabMålerTest.tallene());
   tjek(`${navn}: tallene opdateres (billeder i sekundet, kald, trekanter og lærredet)`, t.fps > 0 && t.prBillede > 0 && t.kald > 0 && t.trekanter > 0 && t.bredde > 0 && t.programmer > 0, JSON.stringify(t));
+  // Kald for hele billedet (ikke kun det sidste trin) og skønnet over teksturerne i grafikkortet: en tekstur på
+  // 512 × 512 (RGBA8, 10 niveauer) giver ca. 1,4 MB mere, og den forsvinder igen, når den slettes
+  const mb = await p.evaluate(async () => {
+    const gl = document.getElementById('lærred').getContext('webgl2');
+    const før = atomlabMålerTest.tallene().teksturMB;
+    const tx = gl.createTexture();
+    const gammel = gl.getParameter(gl.TEXTURE_BINDING_2D);
+    gl.bindTexture(gl.TEXTURE_2D, tx);
+    gl.texStorage2D(gl.TEXTURE_2D, 10, gl.RGBA8, 512, 512);
+    gl.bindTexture(gl.TEXTURE_2D, gammel);
+    const med = atomlabMålerTest.tallene().teksturMB;
+    gl.deleteTexture(tx);
+    return { før, med, efter: atomlabMålerTest.tallene().teksturMB };
+  });
+  tjek(`${navn}: kald for hele billedet, og teksturerne i grafikkortet tælles (MB)`, t.kald > 2 && t.trekanter > 100 && Math.abs(mb.med - mb.før - 1.398) < 0.01 && Math.abs(mb.efter - mb.før) < 1e-6, JSON.stringify({ kald: t.kald, trekanter: t.trekanter, mb }));
 
   // Et ryk: et billede, der tager ca. 150 ms, med en hændelse lige før. Det står i listen med hændelsen.
   const førRyk = await p.evaluate(() => atomlabMålerTest.antalRyk());

@@ -22,8 +22,8 @@
 - **Under flyvningerne** (2. kørsel): kun 3 små ryk (51-71 ms, ukendt årsag). Ingen nye shadere og ingen store kort. Trin 1 ser ud til at virke dér.
 - **Tilbage er de store kort:** når Mars åbnes (8k-farvekortet og 4k-højden) og især ved landingen i Stå på Mars (landskabets kort på 8k og 4k, ca. 1,6-1,8 s på Iris Xe). De hentes med `<img>` i dag (ikke `vendt`).
 - **Grafikkortet har luft** (ca. 9-10 ms pr. billede ved 60 billeder i sekundet). Forslag C, D og E (lavere opløsning, gløden og færre trekanter) ser ikke nødvendige ud på de to pc'er.
-- **Fejl i måleren:** "Kald 1, trekanter 1" er forkert. `renderer.info` nulstilles ved hvert `render`, så den viser kun gløden sidste trin. Grafikkortets tid er for hele billedet og er rigtig.
-- **Fanen døde ved Jezero (1. kørsel):** Ikke forklaret. Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
+- **Fejl i måleren (rettet 13. november 2026):** "Kald 1, trekanter 1" var forkert. `renderer.info` blev nulstillet ved hvert `render`, så den viste kun gløden sidste trin. Grafikkortets tid var for hele billedet og var rigtig. Nu viser måleren også teksturerne i grafikkortet i MB (skøn). Med fuld grafik i testbrowseren: Mars ca. 256 MB, 36 kald og 1,06 mio. trekanter.
+- **Fanen døde ved Jezero (1. kørsel):** Jeres svar: "Jeg tror, det skyldtes, at pc'en var optaget af andre ting. Den kom igen, da jeg vendte tilbage til skærmen." Den frøs altså og kom tilbage, den gik ikke ned. Tidligere tekst: Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
 - **Mangler:** tabletten, og en gentagelse på Iris Xe.
 
 ## 2. kørsel: Iris Xe efter genstart

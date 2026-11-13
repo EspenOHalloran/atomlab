@@ -5,7 +5,7 @@
 // Hentes kun med ?maal (main.js), så starten ikke bliver større. Hænger sig på verden (scene3d.js) udefra: et punkt
 // forrest i verden.opdateringer, en indpakning af komponist.render og renderer.render og af nogle få kald på
 // WebGL-konteksten (teksturer og shadere). Den virker også under pause, for billederne tegnes stadig.
-import { verden, LAV_KVALITET } from './scene3d.js';
+import { verden, LAV_KVALITET, tilpasStørrelse } from './scene3d.js';
 
 const RYK = 50; // ms: et billede, der tager længere, er et ryk
 const VINDUE = 5000; // ms: "det værste billede" ses over de sidste 5 sekunder
@@ -27,6 +27,7 @@ const hist = new Uint32Array(MAKS_HIST + 1); // antal billeder pr. ms (til media
 const total = { billeder: 0, tid: 0, ryk: 0, upload: 0, uploads: 0, shader: 0, shadere: 0, start: nu() };
 const shaderListe = []; // hvert shaderprogram: { navn, ms, t } (ms: den tid, der blev ventet på det)
 const kortListe = []; // hvert kort lagt i grafikkortet (over 2 ms): { navn, dt, forhånd, t }
+const hukommelse = { nu: 0, højst: 0, pr: new Map() }; // teksturerne i grafikkortet (skøn i byte), pr. tekstur pr. niveau
 let gpu = null; // måling af tiden på grafikkortet (kun hvis browseren kan: EXT_disjoint_timer_query_webgl2)
 
 // Det, der sker i det billede, der tegnes nu (nulstilles, når et nyt billede starter)
@@ -49,6 +50,9 @@ export function start() {
   if (!verden.renderer || globalThis.atomlabMåler) return;
   globalThis.atomlabMåler = hændelse; // andre moduler kan melde noget (fx en kamerarejse): atomlabMåler?.('…')
   hægtPå();
+  // Gløden laver sine billeder forfra (ved en anden størrelse), så de kommer med i hukommelsen
+  verden.komponist.setSize(2, 2);
+  tilpasStørrelse();
   lytTil();
   lavFelt();
   if (new URLSearchParams(location.search).has('test')) globalThis.atomlabMålerTest = testAdgang();
@@ -64,6 +68,10 @@ function hægtPå() {
   verden.opdateringer.clear();
   verden.opdateringer.add(billedStart);
   for (const f of gamle) verden.opdateringer.add(f);
+
+  // Kald og trekanter for hele billedet (alle gløde-trin og billeder tegnet undervejs): Three.js nulstiller ellers
+  // tallene ved hvert render, så kun gløden sidste trin blev vist. Nulstilles i billedStart.
+  renderer.info.autoReset = false;
 
   // Tegningen: tiden i komponist.render (eller renderer.render i testene og ved tegning af andre billeder undervejs)
   const pakInd = (obj, navn) => {
@@ -90,6 +98,7 @@ function hægtPå() {
   };
 
   const gl = renderer.getContext();
+  hægtHukommelsePå(gl);
   // Teksturer: tiden for at lægge et billede i grafikkortet (pakkes billedet først ud her, er det med i tiden)
   for (const navn of ['texImage2D', 'texSubImage2D', 'texImage3D', 'texSubImage3D', 'compressedTexImage2D', 'compressedTexSubImage2D']) {
     const før = gl[navn];
@@ -179,16 +188,75 @@ function shaderNavn(k) {
   return egne.length ? egne.slice(0, 3).join(', ') : 'uden navn';
 }
 
+// Bredde og højde i et kald, der lægger et billede i grafikkortet
+function størrelse(kald, a) {
+  const kilde = a.find((x) => x && typeof x === 'object' && 'width' in x && !ArrayBuffer.isView(x));
+  if (kilde) return [kilde.width, kilde.height, kilde];
+  if (/Sub/.test(kald)) return [a[4], a[5]]; // texSubImage2D(mål, niveau, x, y, bredde, højde, …)
+  return [a[3], a[4]]; // texImage2D(mål, niveau, format, bredde, højde, …)
+}
+
 // Navnet på et billede, der lægges i grafikkortet: bredde × højde og filnavnet, hvis det kendes
 function teksturNavn(kald, a) {
-  const kilde = a.find((x) => x && typeof x === 'object' && 'width' in x && !ArrayBuffer.isView(x));
-  let b, h, fil = '';
-  if (kilde) {
-    b = kilde.width; h = kilde.height;
-    fil = kilde.dataset?.fil ?? (kilde instanceof HTMLCanvasElement ? 'tegnet' : '');
-  } else if (/Sub/.test(kald)) { b = a[4]; h = a[5]; } // texSubImage2D(mål, niveau, x, y, bredde, højde, …)
-  else { b = a[3]; h = a[4]; } // texImage2D(mål, niveau, format, bredde, højde, …)
+  const [b, h, kilde] = størrelse(kald, a);
+  const fil = kilde ? kilde.dataset?.fil ?? (kilde instanceof HTMLCanvasElement ? 'tegnet' : '') : '';
   return `${b}×${h}${fil ? ' ' + fil : ''}`;
+}
+
+// Hukommelsen til teksturerne i grafikkortet (et skøn): Hver gang plads til en tekstur laves (texStorage2D/3D og
+// texImage2D), regnes bredde × højde × byte pr. punkt for hvert niveau, og det trækkes fra igen, når teksturen slettes.
+// Det, der blev lavet, før måleren startede, er ikke med (kun det lille omgivelseskort til refleksionerne: Gløden
+// laves forfra i start, og skærmenes billeder hentes, efter måleren er startet).
+function hægtHukommelsePå(gl) {
+  const BYTE = new Map([
+    [gl.R8, 1], [gl.RG8, 2], [gl.RGB8, 3], [gl.RGBA8, 4], [gl.SRGB8, 3], [gl.SRGB8_ALPHA8, 4], [gl.R16F, 2], [gl.RG16F, 4],
+    [gl.RGB16F, 6], [gl.RGBA16F, 8], [gl.R32F, 4], [gl.RG32F, 8], [gl.RGB32F, 12], [gl.RGBA32F, 16], [gl.R11F_G11F_B10F, 4],
+    [gl.RGB565, 2], [gl.RGBA4, 2], [gl.RGB5_A1, 2], [gl.RED, 1], [gl.RG, 2], [gl.RGB, 3], [gl.RGBA, 4], [gl.LUMINANCE, 1],
+    [gl.ALPHA, 1], [gl.LUMINANCE_ALPHA, 2], [gl.DEPTH_COMPONENT24, 4], [gl.DEPTH24_STENCIL8, 4], [gl.DEPTH_COMPONENT32F, 4],
+  ]);
+  const KUBE = new Set([0, 1, 2, 3, 4, 5].map((i) => gl.TEXTURE_CUBE_MAP_POSITIVE_X + i));
+  const bundet = (mål) => gl.getParameter(
+    mål === gl.TEXTURE_2D ? gl.TEXTURE_BINDING_2D : mål === gl.TEXTURE_3D ? gl.TEXTURE_BINDING_3D
+      : mål === gl.TEXTURE_2D_ARRAY ? gl.TEXTURE_BINDING_2D_ARRAY : gl.TEXTURE_BINDING_CUBE_MAP);
+  const sæt = (tekstur, nøgle, byte) => {
+    if (!tekstur) return;
+    let niveauer = hukommelse.pr.get(tekstur);
+    if (!niveauer) hukommelse.pr.set(tekstur, niveauer = new Map());
+    hukommelse.nu += byte - (niveauer.get(nøgle) ?? 0);
+    niveauer.set(nøgle, byte);
+    hukommelse.højst = Math.max(hukommelse.højst, hukommelse.nu);
+  };
+  const pak = (navn, efter) => {
+    const før = gl[navn];
+    if (!før) return;
+    gl[navn] = function (...a) {
+      const svar = før.apply(gl, a);
+      try { efter(a); } catch { /* et skøn: må aldrig stoppe tegningen */ }
+      return svar;
+    };
+  };
+  // texStorage2D(mål, niveauer, format, bredde, højde): alle niveauer på én gang (en kube har seks sider)
+  pak('texStorage2D', ([mål, niveauer, format, b, h]) => {
+    let byte = 0;
+    for (let i = 0; i < niveauer; i++) byte += Math.max(1, b >> i) * Math.max(1, h >> i);
+    sæt(bundet(mål), 'alle', byte * (BYTE.get(format) ?? 4) * (mål === gl.TEXTURE_CUBE_MAP ? 6 : 1));
+  });
+  pak('texStorage3D', ([mål, niveauer, format, b, h, d]) => {
+    let byte = 0;
+    for (let i = 0; i < niveauer; i++) byte += Math.max(1, b >> i) * Math.max(1, h >> i) * (mål === gl.TEXTURE_3D ? Math.max(1, d >> i) : d);
+    sæt(bundet(mål), 'alle', byte * (BYTE.get(format) ?? 4));
+  });
+  // texImage2D(mål, niveau, format, …): ét niveau (og én side af en kube)
+  pak('texImage2D', (a) => {
+    const [b, h] = størrelse('texImage2D', a);
+    sæt(bundet(KUBE.has(a[0]) ? gl.TEXTURE_CUBE_MAP : a[0]), `${a[0]}:${a[1]}`, b * h * (BYTE.get(a[2]) ?? 4));
+  });
+  pak('deleteTexture', ([tekstur]) => {
+    const niveauer = hukommelse.pr.get(tekstur);
+    if (!niveauer) return;
+    for (const byte of niveauer.values()) hukommelse.nu -= byte;
+    hukommelse.pr.delete(tekstur);
+  });
 }
 
 function gpuStart() {
@@ -221,6 +289,7 @@ function gpuSlut() {
 // Et nyt billede starter: det forrige gøres op
 function billedStart() {
   const t = nu();
+  verden.renderer.info.reset(); // (kald og trekanter for hele billedet, se hægtPå)
   gpuSlut(); // grafikkortets tid måles fra et billede starter til det næste
   if (forrigeStart && !skjult) gørOp(t);
   gørRykFærdige(t);
@@ -346,6 +415,9 @@ function tallene() {
     højde: lærred.height,
     pixelRatio: verden.renderer.getPixelRatio(),
     gpu: gpuMs,
+    teksturMB: hukommelse.nu / 1e6,
+    teksturMBHøjst: hukommelse.højst / 1e6,
+    heapMB: performance.memory ? performance.memory.usedJSHeapSize / 1e6 : null,
   };
 }
 
@@ -381,7 +453,8 @@ export function tekst() {
     `Lærred ${t.bredde}×${t.højde} (pixelRatio ${t.pixelRatio})`,
     '',
     `Nu: ${ms(t.fps)} billeder/s, ${ms(t.prBillede)} ms pr. billede, værst (5 s) ${ms(t.værst)} ms${t.gpu != null ? `, grafikkortet ${ms(t.gpu)} ms pr. billede` : ''}`,
-    `Kald ${t.kald}, trekanter ${tal(t.trekanter)}, geometrier ${t.geometrier}, teksturer ${t.teksturer}, shaderprogrammer ${t.programmer}`,
+    `Kald ${t.kald}, trekanter ${tal(t.trekanter)} (hele billedet), geometrier ${t.geometrier}, teksturer ${t.teksturer}, shaderprogrammer ${t.programmer}`,
+    `Teksturer i grafikkortet (skøn): ${tal(t.teksturMB)} MB nu, højst ${tal(t.teksturMBHøjst)} MB${t.heapMB != null ? `. JavaScript-hukommelse: ${tal(t.heapMB)} MB` : ''}`,
     `Siden start (${tal(sek)} s): ${tal(total.billeder)} billeder, gennemsnit ${ms(total.billeder ? (total.billeder * 1000) / total.tid : 0)} billeder/s, median ${percentil(0.5)} ms, 95 % under ${percentil(0.95)} ms, 99 % under ${percentil(0.99)} ms, ryk over ${RYK} ms: ${total.ryk}`,
     `Kort lagt i grafikkortet: ${total.uploads} (${tal(total.upload)} ms i alt). Shaderprogrammer lavet: ${total.shadere} (${tal(total.shader)} ms i alt)`,
     `De dyreste shadere: ${dyreste(shaderListe, (p) => p.ms, (p) => `${p.navn} ${ms(p.ms)} ms (${ur(p.t)})`)}`,
@@ -453,6 +526,7 @@ function lavFelt() {
     shaderListe.length = 0;
     kortListe.length = 0;
     hist.fill(0);
+    hukommelse.højst = hukommelse.nu;
     Object.assign(total, { billeder: 0, tid: 0, ryk: 0, upload: 0, uploads: 0, shader: 0, shadere: 0, start: nu() });
   });
   $('.maaler-kopier').addEventListener('click', () => kopiér($('.maaler-kopier')));
@@ -468,6 +542,7 @@ function lavFelt() {
       `Ryk over ${RYK} ms: ${t.ryk}${t.gpu != null ? ` · grafikkort ${ms(t.gpu)} ms` : ''}<br>` +
       `Kald ${t.kald} · trekanter ${tal(t.trekanter)}<br>` +
       `Geometrier ${t.geometrier} · teksturer ${t.teksturer} · shadere ${t.programmer}<br>` +
+      `Teksturer i grafikkortet ca. ${tal(t.teksturMB)} MB (højst ${tal(t.teksturMBHøjst)})<br>` +
       `Lærred ${t.bredde}×${t.højde} · pixelRatio ${t.pixelRatio}`;
     const kasse = $('.maaler-ryk');
     kasse.textContent = '';
