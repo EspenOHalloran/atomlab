@@ -65,6 +65,8 @@ molekyle, elektronpar, ion og krystal (fire ord). **Molekyle, elektronpar og ion
 3. **Formen:** kun "Se, det er bøjet" i trin 2 (anbefaling), eller et trin, hvor man drejer vand og ser, hvorfor det er bøjet (så skal et andet trin ud)?
 4. **Ordet krystal:** et eget ord i Ordbogen (anbefaling, fordi børn kender ordet), eller en henvisning til "Gitter"?
 
+**Jeres svar (13. november 2026): "Gå med dine anbefalinger".** Altså: (1) forløbet bygges samtidig med, at Molekyler bliver en egen del i verdenen Atomer, (2) knaldgassen er vej 2 nu og måske et eget forløb senere, (3) kun "Se, det er bøjet" i trin 2, og (4) "krystal" bliver et eget ord i Ordbogen. Fable kan stadig anbefale andet i sit tjek, og så tager I stilling igen.
+
 ## Sådan bygges det (kort)
 - `js/data/forloeb/molekyler.js` (teksterne) og trinene i `js/molekyler-byg.js` og `js/molekyler.js` (`start`, `knapper`, `færdig` og `visMig` pr. trin), som i "Dit første atom".
 - Skiftet mellem "Del elektroner" og "Giv elektroner" midt i forløbet går gennem den måde, man skifter i dag (`data-vaerksted-maade`), eller gennem den nye dels egen funktion, hvis flytningen kommer først.

@@ -22,6 +22,7 @@
 - "Natrium giver sin elektron til chlor, fordi begge vil have en fuld skal." For to frie atomer koster det energi: Det kræver ca. 5,1 eV at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage. Gevinsten kommer, når Na⁺ og Cl⁻ trækker i hinanden (i saltkrystallen eller som et par).
 - Supertunge grundstoffer: Halveringstiden spænder fra under et millisekund (Og) til over et døgn (Db-268). Skriv ikke "henfalder med det samme" om dem alle.
 - "Zirkonia er kunstige diamanter." Det er en efterligning af diamant, ikke diamant.
+- "5 sigma betyder, at fundet er 99,99997 % sikkert." Tallet siger kun, hvor tit tilfældige udsving alene ville give et så stort signal. Fejl i udstyret tæller ikke med: OPERA målte i 2011 neutrinoer "hurtigere end lyset" med 6 sigma, men en forbindelse til uret sad løst (Gåderne G3).
 - "Antistof har den modsatte ladning." Også partikler uden ladning (neutronen, neutrinoen) har en antitvilling.
 - "Protoner og neutroner blev dannet efter en milliontedel af et sekund." Nærmere 10-20 milliontedele (en hundredtusindedel).
 - "Big Bang lavede kun hydrogen og helium" og "alle tungere grundstoffer kommer fra stjerner". Der kom også lidt lithium, og meget guld kommer fra neutronstjerner, der støder sammen.
@@ -132,3 +133,19 @@
 - "Hertz sagde: Det er til ingen nytte" og "Marconi sendte over Atlanten i 1901": citatet har ingen god kilde, og Marconis signal blev aldrig bekræftet. Skriv "Marconi meldte, at …".
 - Einsteins to regler: Den første er, at fysikkens love er ens for alle, der bevæger sig jævnt. Den anden er lysets fart. Kald ikke lysets fart "regel 1" ét sted, når en anden tekst tæller omvendt. Brug navne eller samme rækkefølge som Einstein (E4 F7, 12. november 2026).
 - "To protoner kan ikke holde sammen, fordi plus skubber plus væk." Det er kun en del af grunden: To neutroner (uden ladning) kan heller ikke holde sammen. Kernekraften mellem to ens partikler er en tand for svag, og frastødningen gør det værre. Skriv begge dele som to ting, ikke "så" (arXiv 0904.1807, forløbet "Dit første atom", 12. november 2026).
+*Kvantefysik (13. november 2026). Kilderne og "skriv i stedet" står i [fakta-kvantefysik.md](../fakta-kvantefysik.md) afsnit 7.*
+- "Partiklen er to steder på én gang." Ingen måling har fundet en partikel to steder. Skriv "Bølgen breder sig over begge veje. Partiklen bliver altid fundet ét sted".
+- "Observatøren er en bevidsthed" og "elektronen ved, at vi kigger." At måle er, at noget (lys, luft, en måler) mærker, hvilken vej partiklen tog. Varme C₇₀-molekyler mister striberne helt af sig selv (Hackermüller m.fl. 2004).
+- "Sammenfiltring sender beskeder hurtigere end lyset." Svarene passer sammen, men hvert svar er tilfældigt, og man kan ikke bestemme sit eget.
+- "Kvantecomputeren prøver alle svar på én gang." Den får de forkerte svar til at udslukke hinanden (interferens), og kun for få slags opgaver. Og "en qubit er 0 og 1 på samme tid": Den er en pil med en bestemt retning, og en måling giver 0 eller 1.
+- "Elektronen kredser om kernen som en planet" (Bohr 1913, forældet). I det laveste trin har elektronen ingen omdrejning. Og Bohr forklarede ikke, hvorfor atomet holder: Han satte det som en regel. Forklaringen (en stående bølge, og intet lavere trin at falde ned til) kom i 1925-26.
+- "Et kvantespring er et kæmpe spring, og det sker øjeblikkeligt." Det er det mindste spring, der findes, og det tager tid (Minev m.fl. 2019).
+- "Usikkerhedsrelationen skyldes, at målingen skubber til partiklen." Det var Heisenbergs første forklaring (1927). I dag: En bølge kan ikke både have et skarpt sted og en skarp bølgelængde.
+- "Ved tunneleffekten låner partiklen energi" (eller graver sig igennem, eller går hurtigere end lyset). Bølgen rækker gennem bakken, og energien er den samme før og efter.
+- "En proton i Solen venter 9 milliarder år på grund af tunneleffekten." Det meste af ventetiden skyldes den svage kernekraft (den ene proton skal blive til en neutron). Og grafen i Stjerneovnen viser spillets bakke: I den rigtige Sol kommer ingen proton over (andelen er ca. 10⁻¹⁷⁶).
+- "Schrödingers kat er både levende og død." Schrödinger fandt på katten i 1935 som en indvending ("quite ridiculous case").
+- "Atomet ligner kløverblade." Lægges orbitalerne i en fyldt underskal sammen, er skyen rund. Og de inderste skyer i tunge atomer er meget mindre end tegnet.
+- "Einstein troede ikke på kvantefysikken." Han var med til at grundlægge den (lyskvanter, 1905) og fandt selv sammenfiltringen (1935). Han troede ikke på, at tilfældet er grundlæggende. Citatet om terninger skal slås op, før det bruges.
+- "Google viste, at kvantecomputeren er 10.000 år (eller 10²⁵ år) foran." Opgaven er lavet til formålet, og de 10.000 år fra 2019 blev til sekunder i 2024. Det største tal, der er delt med Shors algoritme, er stadig 21 (november 2026).
+- Tonomuras forsøg (Hitachi 1989): Hitachis egen side siger 10 elektroner i sekundet og 20 minutter (12.000 elektroner), men de kendte billeder går op til 140.000. Skriv "én ad gangen" og "ca. 20 minutter". Og Wikipedia skriver ét sted, at C₆₀ gav striber "in 2002": Det var 1999.
+- Tal om kvantecomputere (antal qubits, skøn for RSA-2048, "kvantefordel", Magne) skal have måned og år og slås op igen: Skønnet for RSA-2048 faldt fra 20 millioner qubits (2019) til under 1 million (2025) og lavere endnu i fortryk fra 2026.
