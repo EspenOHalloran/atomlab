@@ -803,7 +803,8 @@ export default {
     // øjenhøjde. Landskabet er sin egen verden (Mars-kloden skjules imens), og kameraet drejer kun hovedet.
     const landskaber = new Map(); // krater → { data, land } (hentes første gang)
     // Landskabets og fotoets billeder har deres egen ejer (G1 trin 3), så de slettes fra grafikkortet, når man letter
-    // (ca. 200 MB pr. sted på pc). Mars' egne kort, som landskabet også bruger (fx kraterets farvekort), bliver liggende.
+    // (ca. 350 MB ved Naukluft med fotoet på pc). Mars' egne kort, som landskabet også bruger (fx kraterets
+    // farvekort), bliver liggende.
     const STÅ = { navn: 'Stå på Mars' };
     const hentStå = (navn, færdig, valg) => hent(navn, færdig, { ...valg, ejer: STÅ });
     function frigivStå() {

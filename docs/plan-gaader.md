@@ -1,5 +1,7 @@
 # Plan: Gåderne i en tynd udgave (fem kort i Biblioteket)
 
+**Fortsættes i [plan-gaader-3d.md](plan-gaader-3d.md) (13. november 2026):** Jeres ønske er fuld 3D med "sense of wonder", ét univers og plads til 10 gåder. "En side uden 3D" og "ingen billeder og 3D på kortene" nedenfor gælder derfor ikke længere. Teksterne, trinene og testene bliver.
+
 *Trin 0, skrevet 12. november 2026 af Opus efter [prompt-gaader.md](prompt-gaader.md). Faktagrundlaget står i [fakta-gaader.md](fakta-gaader.md). Status står i Småting ([lige-nu/smaating.md](lige-nu/smaating.md)). **Valgene nedenfor er mine anbefalinger:** I bad mig køre videre med dem i stedet for at spørge (12. november 2026). De kan ændres, før G1 bygges. Hver delopgave får sit eget go og en ny session.*
 
 ## Jeres svar før G1 (12. november 2026)
