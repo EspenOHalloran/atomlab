@@ -26,6 +26,34 @@
 - **Fanen døde ved Jezero (1. kørsel):** Jeres svar: "Jeg tror, det skyldtes, at pc'en var optaget af andre ting. Den kom igen, da jeg vendte tilbage til skærmen." Den frøs altså og kom tilbage, den gik ikke ned. Tidligere tekst: Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
 - **Mangler:** tabletten, og en gentagelse på Iris Xe.
 
+## 3. kørsel: Iris Xe om aftenen, med den rettede måler (13. november 2026, kl. 18.56-19.00)
+Mars (flyby, Stå på Mars ved Gale), så menuen, Solsystemet igen og Saturn. Kopieret i menuen.
+- **Det nye: teksturerne i grafikkortet er ca. 937 MB** (skøn, højst 938 MB), også efter man er gået tilbage til menuen. JavaScript-hukommelsen er 324 MB. Billederne fra `hent.js` bliver i grafikkortet, når man forlader en planet (med vilje, så den åbner hurtigt igen), men det strider mod [retning.md](../retning.md) ("Når man forlader en skærm, frigives dens billeder", højst ca. 350 MB på tablet). Det kan have været med til frysningen i 1. kørsel, og det er en risiko på tabletten.
+- **Flyvningerne er stadig rene:** under flybyen kun ryk på 50-53 ms.
+- **Store kort, der stadig hakker:** Mars' 8k-kort 678 ms, Stå på Mars ved Gale 1.576 ms (8k-fotoet 740 ms), panoramaet 203 ms. **Saturn:** månernes 8k-kort lægges i grafikkortet på forhånd lige efter hinanden: Enceladus 462, Tethys 420, Dione 679 og Rhea 391 ms (ca. 2 s i alt i fem ryk), og Saturns 7 shadere 268 ms.
+- Uddrag af teksten:
+```
+AtomLab-måler 13.11.2026, 19.00.51, skærm #menu
+Grafikkort: ANGLE (Intel, Intel(R) Iris(R) Xe Graphics (0x00009A49) Direct3D11 vs_5_0 ps_5_0, D3D11)
+Lærred 1920×1080 (pixelRatio 1.25)
+Nu: 60 billeder/s, 17 ms pr. billede, værst (5 s) 47 ms, grafikkortet 6,8 ms pr. billede
+Kald 39, trekanter 15.984 (hele billedet), geometrier 35, teksturer 58, shaderprogrammer 24
+Teksturer i grafikkortet (skøn): 937 MB nu, højst 938 MB. JavaScript-hukommelse: 324 MB
+Siden start (273 s): 15.854 billeder, gennemsnit 58 billeder/s, median 17 ms, 95 % under 18 ms, 99 % under 21 ms, ryk over 50 ms: 39
+Kort lagt i grafikkortet: 72 (4.954 ms i alt). Shaderprogrammer lavet: 44 (660 ms i alt)
+De dyreste kort: 8192×8192 gale-naukluft-f0-8k.jpg 740 ms; 8192×4096 dione-8k.jpg på forhånd 679 ms; 8192×4096 mars-8k.jpg 678 ms; 8192×4096 enceladus-8k.jpg på forhånd 462 ms; 8192×4096 tethys-8k.jpg på forhånd 420 ms; 8192×4096 rhea-8k.jpg på forhånd 391 ms; 4096×4096 gale-h2.png 238 ms; 8192×1883 pano-naukluft-8k.jpg 203 ms
+18.56.19  785 ms: kort i grafikkortet 678 ms: 8192×4096 mars-8k.jpg
+18.56.49  51 ms: tryk: ▶ Start flyby; kamerarejse starter
+18.57.12  50 ms: tryk: Næste: Tharsis ›; kamerarejse starter
+18.57.56  1576 ms: ny shader 3,6 ms (bLag, uPx, uSolL); kort i grafikkortet 1520 ms: gale-naukluft-f0-8k.jpg 740 ms, gale-h2.png 238 ms, gale-naukluft-f1.jpg 174 ms, 6 små
+18.58.02  215 ms: kort i grafikkortet 207 ms: pano-naukluft-8k.jpg 203 ms
+18.59.25  281 ms: 7 nye shadere 268 ms (Saturn: tRing, uRingInd, tKort | uSol, tKort, uHarKort …)
+18.59.27  476 ms: enceladus-8k.jpg på forhånd 462 ms
+18.59.28  430 ms: tethys-8k.jpg på forhånd 420 ms
+18.59.30  695 ms: dione-8k.jpg på forhånd 679 ms
+18.59.31  405 ms: rhea-8k.jpg på forhånd 391 ms
+```
+
 ## 2. kørsel: Iris Xe efter genstart
 ```
 AtomLab-måler 13.11.2026, 13.39.26, skærm #solsystem
