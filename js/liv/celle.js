@@ -111,6 +111,7 @@ export function lavCelle() {
   const tone = lavTone(g);
   return {
     gruppe: g, radius: R,
+    mål: kerne, målRadius: 7, // det, man trykker på i forløbet "Opskriften i dig": cellekernen
     sætSynlighed: tone,
     opdater(dt) { g.rotation.y += dt * 0.05; },
   };
@@ -155,6 +156,7 @@ export function lavKerne() {
   const tone = lavTone(g);
   return {
     gruppe: g, radius: R,
+    mål: g, målRadius: R * 0.95, // trådene fylder kernen, så et tryk inde i den rammer en tråd (forløbet)
     sætSynlighed: tone,
     opdater(dt) { g.rotation.y += dt * 0.04; },
   };

@@ -16,8 +16,8 @@ export const TRIN_PROTEIN = {
     ekstra: 'Baserne i RNA\'et passer til den streng, der bliver læst. Derfor har kopien de samme bogstaver som den anden streng, bare med U i stedet for T.',
   },
   ud: {
-    titel: 'Ud af kernen',
-    tekst: 'RNA-kopien bliver klippet til og sendt ud af kernen. Derude venter ribosomerne, der skal læse den. DNA\'et bliver i kernen.',
+    titel: 'Ud af cellekernen',
+    tekst: 'RNA-kopien bliver klippet til og sendt ud af cellekernen. Derude venter ribosomerne, der skal læse den. DNA\'et bliver i cellekernen.',
     tal: [['RNA\'et', '444 bogstaver i opskriften'], ['Ord på tre bogstaver', '148']],
     ekstra: 'Et enzym får en bestemt kemisk reaktion til at ske. Næsten alle enzymer er proteiner, og RNA-polymerasen er et af dem.',
   },
