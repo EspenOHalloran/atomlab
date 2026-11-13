@@ -9,7 +9,11 @@ const igang = new Set(); // hentninger, der ikke er færdige: { modtaget, total 
 const målere = new Set(); // bjælker, der venter lige nu (hver tæller de hentninger, der er i gang, mens den venter)
 
 // Henter et billede og giver et færdigt afkodet <img> (Promise). Fejler, hvis billedet ikke findes.
-export async function hentBillede(url) {
+// vendt: giver i stedet et ImageBitmap, der er vendt på hovedet, mens det pakkes ud (uden for hovedtråden), med
+// billede.vendt = true. Så skal tekstur.flipY være false, og det går 4-6 gange hurtigere at lægge det i grafikkortet
+// (målt med ?maal, G1 i docs/plan-grafik.md). Et <img> pakkes nemlig ud igen på hovedtråden, når det lægges i
+// grafikkortet uden farvestyring. Kan browseren ikke vende et ImageBitmap, gives et <img> som før.
+export async function hentBillede(url, { vendt = false } = {}) {
   const h = { modtaget: 0, total: null };
   igang.add(h);
   for (const m of målere) m.hentninger.add(h);
@@ -32,6 +36,13 @@ export async function hentBillede(url) {
       blob = await svar.blob();
     }
     h.modtaget = h.total = blob.size;
+    if (vendt && await kanVende()) {
+      // Som et <img> i grafikkortet: vendt, uden at gange alfa ind i farverne (premultiply) og uden farvestyring
+      const bm = await createImageBitmap(blob, { imageOrientation: 'flipY', premultiplyAlpha: 'none', colorSpaceConversion: 'none' });
+      bm.vendt = true;
+      bm.dataset = { fil: url.split('/').pop() }; // filnavnet, som på et <img> (til tests og måleren)
+      return bm;
+    }
     const img = new Image();
     img.dataset.fil = url.split('/').pop(); // filnavnet (src er en blob-adresse), til tests
     const adresse = URL.createObjectURL(blob);
@@ -47,6 +58,34 @@ export async function hentBillede(url) {
     h.færdig = true;
     igang.delete(h);
   }
+}
+
+// Kan browseren vende et ImageBitmap, mens det pakkes ud? Prøves én gang med et billede på 1 × 2 punkter (rød over
+// blå): Vendt skal blå stå øverst. (En browser, der ikke kender imageOrientation, ville ellers give kort på hovedet.)
+let kanVendeSvar = null;
+function kanVende() {
+  kanVendeSvar ??= (async () => {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 1;
+      c.height = 2;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.fillStyle = '#f00';
+      g.fillRect(0, 0, 1, 1);
+      g.fillStyle = '#00f';
+      g.fillRect(0, 1, 1, 1);
+      const blob = await new Promise((r) => c.toBlob(r));
+      const bm = await createImageBitmap(blob, { imageOrientation: 'flipY', premultiplyAlpha: 'none', colorSpaceConversion: 'none' });
+      g.clearRect(0, 0, 1, 2);
+      g.drawImage(bm, 0, 0);
+      bm.close();
+      const øverst = g.getImageData(0, 0, 1, 1).data;
+      return øverst[2] > 200 && øverst[0] < 50;
+    } catch {
+      return false;
+    }
+  })();
+  return kanVendeSvar;
 }
 
 // Bjælken. vent(tekst, aktiv) starter den (vises efter FORSINKELSE), færdig() skjuler den. Den tæller alle billeder, der

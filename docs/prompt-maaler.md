@@ -4,6 +4,8 @@
 
 *Hele forløbet: (1) Opus laver måleren og gennemgår koden til Mars og retter de billige årsager, (2) I måler på pc og tablet og sender tallene, (3) Opus retter de dyre årsager ud fra målingen, (4) eventuelt et eftersyn af grafikken med Fable ud fra jeres egne billeder. Hvert trin kræver et go.*
 
+*Trin 1 er lavet 13. november 2026 (status i `docs/plan-grafik.md`). Vejledningen til trin 2 og prompten til trin 3 står nederst.*
+
 ---
 
 Lav trin 1 af G1 i `docs/plan-grafik.md`: en måler for billeder i sekundet og en gennemgang af hakkene på Mars. Du hører til sporet **Solsystemet og Kosmos** og skriver kun status i `docs/lige-nu/solsystemet.md`. Jeres go gælder kun trin 1. Når det er lavet, stopper du og fortæller, hvordan måleren bruges.
@@ -48,3 +50,21 @@ Testbrowseren kan ikke vise rigtige billeder i sekundet. Men den kan godt måle 
 - Tests: `node tests/koer-alle.mjs --ændret` i baggrunden (`mars` tager ca. 10 minutter). Lav 3-5 tjek af måleren (den vises kun med `?maal`, tallene opdateres, og "Kopiér" virker).
 - Kør `/faerdig`, og merge PR'en med det samme (se CLAUDE.md).
 - Skriv til sidst en kort vejledning til jer: hvilken adresse der skal åbnes, hvad der skal gøres på Mars (rejs mellem stederne, zoom ned til Olympus Mons, flyby, Stå på Mars ved Gale) på pc og tablet, og at I skal sende teksten fra "Kopiér" tilbage. Skriv også prompten til trin 3 i denne fil, så næste session kan starte med tallene.
+
+---
+
+## Trin 2: sådan måler I (efter trin 1, 13. november 2026)
+
+1. Åbn **https://espenohalloran.github.io/atomlab/?maal#solsystem** (eller den adresse, I plejer at bruge, med `?maal` før `#`). Feltet med tallene står nederst til venstre. "⇲" flytter det til et andet hjørne, og "–" folder det sammen.
+2. **Første gang Mars åbnes:** Vælg Mars, og vent, til "▶ Start flyby" kan trykkes.
+3. **Rejs mellem stederne:** Start flybyen og tryk "Næste" hele vejen (eller tryk på navnene på kloden). Zoom helt ned til Olympus Mons og Calderaen. Prøv også "🧍 Stå på Mars" ved Gale.
+4. Tryk **"Kopiér"**, og sæt teksten ind i chatten (den siger også, hvilket grafikkort og hvilken browser I har). Kan den ikke kopiere, står teksten markeret i et felt, så I kan kopiere den selv.
+5. Gør det samme på tabletten. Sig gerne med egne ord, om det hakker mindre end før.
+
+Tallene øverst i feltet: billeder i sekundet (60 er glat, under 30 føles tungt), "værst" er det længste billede de sidste 5 sekunder, og listen er rykkene med det, der skete lige før.
+
+## Prompt til trin 3 (start en ny session, Opus, høj effort)
+
+> Læs docs/prompt-maaler.md og lav trin 3 af G1 i docs/plan-grafik.md: Ret de dyre årsager til hakkene på Mars ud fra vores målinger med `?maal` (teksten fra "Kopiér" står nedenfor). Du hører til sporet Solsystemet og Kosmos. Læs først "Status" i docs/plan-grafik.md (fundene og forslag A-F fra trin 1), `docs/kode/faelles.md` om `js/maaler.js` og `docs/kode/solsystem.md` om `shadere.js` og `hent(…, { vendt })`. Vælg forslag ud fra tallene (fx mange ryk med "kort i grafikkortet" → A eller B, højt "grafikkort … ms" og lave billeder i sekundet hele tiden → C, D eller E), skriv pris og gevinst, og spørg om go, før noget, der ændrer udseendet, bygges. Mål før og efter med måleren.
+>
+> [Sæt teksten fra "Kopiér" ind her: pc og tablet]

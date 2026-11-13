@@ -105,6 +105,7 @@ export function lavRejse({ system, verden, nær = 1.9, maks = 550, bund = null, 
     // kameraets plads (kam) og det punkt, kameraet kigger på (mål), i systemets retninger. Ved e = 1 skal mål være
     // fokus(), og afstanden mellem dem afstand.
     flyv({ fokus: hvor, afstand, retning: ny, op = null, min = 0.01, max = Infinity, tid, færdig, bane = null }) {
+      globalThis.atomlabMåler?.('kamerarejse starter'); // måleren (?maal, js/maaler.js)
       const til = hvor();
       const vej = glatVej(fokus.distanceTo(til), D, afstand);
       const fraRetning = retning.clone().applyQuaternion(omvendt.copy(drejning).invert()); // i systemets retninger

@@ -40,6 +40,9 @@ function start() {
     return;
   }
 
+  // Måleren for billeder i sekundet og ryk (G1, js/maaler.js): hentes kun med ?maal i adressen
+  if (new URLSearchParams(location.search).has('maal')) import('./maaler.js').then((m) => m.start());
+
   // Foldeboksene og "Hvorfor?"-kortene (først, så Esc lukker et åbent kort før alt andet)
   lavLag();
 

@@ -2,6 +2,15 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (9. november 2026): Venus V2, skyerne og superrotationen.** Jeres go: "Læs docs/prompt-venus.md og kør V2."
+- **Skyerne fra Akatsuki:** 48 billeder i ultraviolet fra 13.-19. august 2017 (JAXA's arkiv DARTS) er lagt sammen til ét kort over hele kloden (`lav_venus_skyer.py`). Fra start ser Venus ud, som den gør: lyst gullig hvid og næsten glat. "Ultraviolet (som Akatsuki)" viser striberne. Skyderen "Under skyerne" toner dem væk, og en tynd dis lyser i "Modlys".
+- **Vindene er målt:** i de samme billeder (som Jupiters vinde): ca. 103 m/s mod vest ved ækvator, en omgang på ca. 4,3 døgn, som Venus Express. Over 42° aftager de til 0 ved polerne (ikke målt her). Skyerne kører samme vej som Venus, ca. 55 gange hurtigere.
+- **Tempoet:** ▶ en time i sekundet (skyerne er knap 2 minutter om en omgang), ⏩ seks timer i sekundet. "Bjergene 10 gange højere" løfter også skyerne.
+- **Hurtigere end V1:** Jorden tegnes ikke, når skyerne dækker helt.
+- **Domænet:** Dataene lå på `data.darts.isas.jaxa.jp`, ikke `darts.isas.jaxa.jp`. Jeg åbnede det i miljøet (I godkendte det).
+- **Tests:** `tests/venus.mjs` (38 tjek). Koden: [kode/venus.md](../kode/venus.md).
+- **Spørgsmål til jer:** Ingen.
+
 **Senest lavet (9. november 2026): Venus V1, jorden og skelettet.** Jeres go: "Læs docs/prompt-venus.md og kør V1."
 - **Venus står i Solsystemet** mellem Solen og Jorden (halvfærdig, som aftalt): Magellans radarkort med højderne (`klippeplanet.js` som Mars), tonet orange, for radaren ser ikke farver. "Bjergene 10 gange højere" og "Modlys". En kort side, der siger ærligt, at skyerne kommer snart.
 - **Venus står, som den gør i dag:** Aksen peger mod IAU's nordpol, drejningen følger IAU's formel, og Solen følger banen. Punktet under Solen passer med JPL Horizons inden for 0,02°. Venus drejer baglæns, og Solen står op i vest (prøv ⏩: et døgn i sekundet).

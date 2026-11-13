@@ -9,6 +9,7 @@
 **Jeres svar (9. november 2026):** Skærmbilledet af stigen blev godkendt: udseendet som nu, basernes farver A grøn, T rød, G gul og C blå, og resten af L1 blev lavet i samme session.
 
 **Næste (venter på jeres go):**
+- **Molekyler som egen del** (Serie 1 nr. 3): Opus' udkast til drejebogen er skrevet 13. november 2026 ([drejebog-molekyler.md](../drejebog-molekyler.md)). Fable tjekker det før 16. november: egen Fable-session, "Læs `docs/prompt-fable-molekyler.md`, og gør det, der står under 'Prompten'". Bagefter retter Opus drejebogen, og I svarer på de fire spørgsmål og giver go.
 0. **Forløb 2, "Hvad står der i opskriften?"** og laboratoriet bagefter (budgettet for panelerne). Ny session med Opus, høj effort: "Læs docs/prompt-liv-forloeb2.md". Prompten nævner fem ting, der skal besluttes først (bl.a. DNA i stedet for RNA i scenen og pladsen i venstre panel).
 1. **L3:** kopien ("Lyn op og kopiér"), fejlene og "Hvorfor?"-kortene om DNA, nu også kortet om naturligt udvalg (punkt 5b i prompten). Ny session med Opus, høj effort: "Læs docs/prompt-liv-l3.md". Det store eftersyn med Fable (E0) bør komme først, hvis I vil have det før flere store dele (køreplanen).
 2. Idéen "Rumfærgens blanding" (for meget hydrogen) i knaldgassen står i [ideer.md](../ideer.md).

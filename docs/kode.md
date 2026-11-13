@@ -8,7 +8,7 @@
 
 | Fil | Beskriver |
 |---|---|
-| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `js/data/hvorfor.js`. |
+| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `maaler.js` (måleren, `?maal`), `js/data/hvorfor.js`. |
 | [kode/forloeb.md](kode/forloeb.md) | Forløb-klodsen (`js/forloeb.js`): linjen under scenen, faserne, hvad delen leverer, og hvornår et forløb starter af sig selv. |
 | [kode/menu.md](kode/menu.md) | Menuen som en ring af verdenerne (`karrusel.js`, "Din fremgang" med forløbenes ✓) og baggrunden bag den (`menubaggrund.js`). |
 | [kode/molekyler.md](kode/molekyler.md) | Molekyler ("Byg et molekyle": "Giv elektroner" i `molekyler.js`, "Del elektroner" i `molekyler-byg.js`, knaldgassen i `knaldgas.js`, tegningen i `molekyle3d.js`). |
@@ -17,7 +17,7 @@
 | [kode/data.md](kode/data.md) | `js/data/`: opgaver, faenomener, molekyler, molekyler-byg, knaldgas, orbitaler, fakta, grundstoffer, himmel, solbane, skygge, landkort, kerne, citater, isotoper. |
 | [kode/kosmos.md](kode/kosmos.md) | Den fælles skal (`faenomenskaerm.js`: siden, bjælken, Styr-boksen, tidsknappen), `kosmos.js`, `js/kosmos/*.js`, det sorte hul, `sideknap.js`, `js/kosmos/faelles.js`, Formørkelser, `js/kosmos/jorden.js`, "Nyt fænomen". |
 | [kode/tid.md](kode/tid.md) | Tid og rum: Rejsen i tid (`js/kosmos/tid.js`, `js/data/tid.js`), "Hvorfor går tiden langsommere?" (`js/kosmos/tidhvorfor.js`) og det fælles lysur (`js/kosmos/lysur.js`). |
-| [kode/solsystem.md](kode/solsystem.md) | `solsystem.js`, Saturn (træ, flyby, kort), Solen, Jorden, `js/solsystem/` (hent, planet, ringe, nordlys, rejse, flyby, navne …), `js/data/sider/`, `js/data/ringe.js`. |
+| [kode/solsystem.md](kode/solsystem.md) | `solsystem.js`, Saturn (træ, flyby, kort), Solen, Jorden, `js/solsystem/` (hent, shadere, planet, ringe, nordlys, rejse, flyby, navne …), `js/data/sider/`, `js/data/ringe.js`. |
 | [kode/jupiter.md](kode/jupiter.md) | Jupiter (`js/kosmos/jupiter.js`): kortet, vindene, pletten, månerne, flybyen, polerne, nordlyset og ringene, `js/data/vinde-jupiter.js`, `poler-jupiter.js` og `ringe-jupiter.js`. |
 | [kode/isgiganter.md](kode/isgiganter.md) | Uranus og Neptun (`js/solsystem/isgigant.js`, `js/kosmos/uranus.js` og `neptun.js`): aksen fra polens retning, Solen for dagens dato, vindene, `js/data/isgiganter.js` og `vinde-isgiganter.js`, Uranus' ringe og årstider (UN2) og Neptuns vejr og ringbuer (`vejr-neptun.js`, `ringe-neptun.js`, UN3), Uranus' måner (UN4) og stederne og flybyerne (UN5). |
 | [kode/venus.md](kode/venus.md) | Venus (`js/kosmos/venus.js`): Magellans radarkort og højder (`lav_venus.py`), aksen og drejningen efter datoen (`js/data/venus.js`), skyerne fra Akatsuki og vindene (`lav_venus_skyer.py`, `js/data/vinde-venus.js`) og siden (`js/data/sider/venus.js`). |
