@@ -140,4 +140,9 @@ I Rejsen er Kvantefysik stationen længst inde mod det mindste.
 5. **Kvantecomputeren (forløb 4):** (a) Vent, til forløb 1-3 er prøvet, og slå tallene op igen dér. (b) Byg den lige efter forløb 1, fordi det er den, han spørger til.
 
 ## Jeres svar
-*(skrives ind her)*
+*13. november 2026. I valgte anbefalingen i alle fem. Opus' noter står i [fable/E7-kvantefysik-noter.md](fable/E7-kvantefysik-noter.md) og skal læses sammen med denne drejebog: Afsnit 3 dér siger, hvad der rettes i trinene, når der bygges.*
+1. **Hvor meget bygges nu:** (a) Kun forløb 1 med bænken, så prøven med jeres søn, og derefter forløb 2 og 3.
+2. **Elektronen på vej til bagvæggen:** (a) Den tegnes ikke. Kun et blink ved kilden og prikken på væggen. Bølgen kan slås til som et svagt skær i laboratoriet.
+3. **Energitrinene:** (a) I Kvantefysik. Kvantefysik ejer *hvorfor* der er trin, og Lys ejer *hvad* man ser. Lys kommer før Kvantefysik i køreplanen, så "Elektronens trin" i Værkstedet bliver bygget af Lys, og forløb 2 bruger det bagefter. Med Opus' tilføjelse: Forløb 2 gøres mindre (E7-noterne, afsnit 3, punkt 4 og 5).
+4. **Fortolkningerne:** (a) Et nyt kort i Gåderne, "Hvor stopper kvanteverdenen?", bygget sammen med forløb 1. De tre fortolkninger står kun under "For nørder".
+5. **Kvantecomputeren (forløb 4):** (a) Vent, til forløb 1-3 er prøvet, og slå tallene op igen dér. Med Opus' tilføjelse: Sammenfiltring flyttes fra trin 4 til et "Hvorfor?"-kort (E7-noterne, afsnit 3, punkt 6).
