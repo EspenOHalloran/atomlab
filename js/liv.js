@@ -20,6 +20,7 @@ import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
 import { HVORFOR } from './data/hvorfor.js';
+import { tagVentLiv } from './gaa.js';
 import { SKRIDT } from './data/liv/stige.js';
 import { NIVEAUER, NIVEAU_IDER, OPGAVER_LIV, HBB_START, BYG_TRIN, nyByggestreng, parGrund, PAR_TEKST } from './data/liv/opskriften.js';
 
@@ -326,6 +327,13 @@ function opdaterPanel(kunTal = false) {
       $('livHvorfor').dataset.hvorfor = n.hvorfor;
       $('livHvorfor').textContent = `Hvorfor? ${HVORFOR[n.hvorfor].spørgsmål}`;
     }
+    // Et link til en gåde (Gåderne G2: ved Ribosomet)
+    $('livGaade').hidden = !n.gåde;
+    if (n.gåde) {
+      const k = $('livGaade').firstElementChild;
+      k.dataset.gaa = n.gåde[0];
+      k.textContent = `${n.gåde[1]} ›`;
+    }
     const farver = iProtein ? lp.farver() : FARVER[niveau === 'atomer' ? 'atomer' : niveau === 'stige' ? 'stige' : ''] ?? [];
     $('livFarver').innerHTML = farver.map(([t, f]) => `<li><span class="farveprik" style="background:${f}"></span>${t}</li>`).join('');
     $('livFarver').hidden = !farver.length;
@@ -406,6 +414,12 @@ export function startLiv() {
   panelNøgle = '';
   gåTil('celle', 'ind');
   opdaterByg();
+  visDel(tagVentLiv());
+}
+
+// Åbner en del af Liv fra en knap data-gaa="liv:protein" (js/gaa.js): 'protein' starter "Se genet blive læst"
+export function visDel(id) {
+  if (id === 'protein') lp.start('genet');
 }
 
 export function stopLiv() {

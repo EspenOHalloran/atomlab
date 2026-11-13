@@ -7,12 +7,16 @@ import { ORDBOG } from '../js/data/ordbog.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
 import { SKÆRME } from '../js/skaerme.js';
+import { SIDER as MARS } from '../js/data/sider/mars.js';
+import { SIDER as SATURN } from '../js/data/sider/saturn.js';
+import { TRIN_PROTEIN } from '../js/data/liv/protein.js';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
 // ---------- Uden browser: teksterne ----------
 const kort = GÅDER.filter(bygget);
-tjek(`fem gåder i oversigten, og Sort hul er bygget (${kort.map((g) => g.id).join()})`, GÅDER.length === 5 && kort[0]?.id === 'sorthul');
+tjek(`fem gåder i oversigten, de to om liv skilt ad, og Sort hul, liv og begyndelsen er bygget (${kort.map((g) => g.id).join()})`,
+  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof' && kort.map((g) => g.id).join() === 'sorthul,liv,begyndelsen');
 const ord = (t) => t.split(/\s+/).filter(Boolean).length;
 const sætninger = (t) => t.split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
 const fejlTekst = [];
@@ -27,10 +31,16 @@ for (const g of kort) {
     if (/\bsnart\b|om få år/i.test(t.så)) fejlTekst.push(`${g.id} trin ${i + 1}: "snart" uden årstal`);
   });
   const [skærm, id] = g.seDet[0].split(':');
-  if (!(FÆNOMEN_IDER[skærm]?.includes(id) || (!id && SKÆRME.some((s) => s.id === skærm)))) fejlTekst.push(`${g.id}: "Se det selv" peger på ${g.seDet[0]}`);
+  const [, , sted] = g.seDet[0].split(':');
+  if (sted && !(skærm === 'solsystem' && id === 'mars' && MARS[sted])) fejlTekst.push(`${g.id}: stedet ${sted} findes ikke`);
+  if (!(FÆNOMEN_IDER[skærm]?.includes(id) || g.seDet[0] === 'liv:protein' || (!id && SKÆRME.some((s) => s.id === skærm)))) fejlTekst.push(`${g.id}: "Se det selv" peger på ${g.seDet[0]}`);
   if (g.ord.length > 2 || !g.ord.every((o) => ORDBOG.some((x) => x.id === o))) fejlTekst.push(`${g.id}: fagordene ${g.ord.join()}`);
 }
 tjek('hvert kort: tre trin, dato, Spørg højst 15 ord, 2-3 gæt med svar, Så højst to sætninger, "Se det selv" findes, højst to fagord fra Ordbogen', !fejlTekst.length, fejlTekst.join('; '));
+const gåLiv = 'data-gaa="gaader:liv"';
+tjek('"Se også": Jezero, Stå ved randen og Enceladus peger på gåden om liv, og Ribosomet i Liv på livets begyndelse',
+  MARS.jezero.emner.some((e) => e.tekst.includes(gåLiv)) && MARS['stå-randen'].videre.some((v) => v.includes(gåLiv)) && MARS['stå-randen'].videre.length <= 3
+  && SATURN.enceladus.emner.some((e) => e.tekst.includes(gåLiv)) && TRIN_PROTEIN.oversæt.gåde?.[0] === 'gaader:begyndelsen');
 tjek('Ordbogen har "singularitet" med et link til gåden', ORDBOG.some((o) => o.id === 'singularitet') && LINKS.singularitet?.gaa?.[0] === 'gaader:sorthul');
 
 // ---------- I browseren ----------
@@ -56,7 +66,7 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
     lukkede: document.querySelectorAll('#gaaderListe .gaade-valg:disabled').length,
     start: document.querySelector('.gaade-mærke.start')?.closest('button').dataset.gaade,
   }));
-  tjek('#gaader viser oversigten: fem gåder, fire "Kommer senere", "Start her" på Sort hul', oversigt.antal === 5 && oversigt.lukkede === 4 && oversigt.start === 'sorthul', JSON.stringify(oversigt));
+  tjek('#gaader viser oversigten: fem gåder, to "Kommer senere", "Start her" på Sort hul', oversigt.antal === 5 && oversigt.lukkede === 2 && oversigt.start === 'sorthul', JSON.stringify(oversigt));
 
   // Et kort fra start til slut: gæt, svar, Næste
   await page.click('.gaade-valg[data-gaade="sorthul"]');
@@ -87,6 +97,23 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   tjek('"Se det selv" åbner Sort hul i Kosmos', await vent(page, () => location.hash === '#kosmos' && atomlabTest.kosmos?.valgt() === 'sorthul', null, 20000));
   await T(() => document.querySelector('#kosmos [data-gaa="gaader:sorthul"]')?.click());
   tjek('knappen ved astronauten i Sort hul åbner gåden', await vent(page, () => location.hash === '#gaader' && atomlabTest.gaader.vist()?.id === 'sorthul' && atomlabTest.gaader.vist()?.trin === 0));
+  await ctx.close();
+}
+
+// Livets begyndelse: "Se det selv" åbner Liv og starter "Se genet blive læst", og knappen ved Ribosomet går tilbage
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
+  for (let i = 0; i < 3; i++) { await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); await page.click('#gaadeTrin .fl-næste'); }
+  await page.click('#gaadeTrin [data-gaa="liv:protein"]');
+  tjek('"Se det selv" åbner Liv og starter "Se genet blive læst"', await vent(page, () => location.hash === '#liv' && atomlabTest.liv?.protein().tilstand === 'genet', null, 20000));
+  let trin = '';
+  for (let i = 0; i < 40 && trin !== 'oversæt'; i++) trin = await T(() => { atomlabTest.liv.proteinSpol(2); return atomlabTest.liv.protein().trin; });
+  await vent(page, () => !document.getElementById('livGaade').hidden);
+  await T(() => document.querySelector('#livGaade [data-gaa]').click());
+  tjek(`knappen ved Ribosomet åbner gåden om livets begyndelse (trin ${trin})`, await vent(page, () => location.hash === '#gaader' && atomlabTest.gaader.vist()?.id === 'begyndelsen'));
   await ctx.close();
 }
 
