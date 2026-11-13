@@ -48,7 +48,7 @@ En prøve med sønnen efter hvert punkt.
 7. **Strøm og magneter, så Lys, så Kvantefysik** (Kvantefysik får en drejebog først og tre idéer: dobbeltspalten, energitrin med spektrallinjer og tunneleffekten. Orbitalerne i store atomer hører med).
 8. **Mørkt stof** (Kosmos, gruppen Universet).
 9. **Antistof** (Kernerne).
-10. **Tjernobyl** (tredje fane i Reaktoren): Fable 5.2 laver faktagrundlaget og drejebogen, når den står for tur, og Opus bygger (jeres valg i E2. Ventetiden på "Fable 5.5" er slut).
+10. **Tjernobyl** (tredje fane i Reaktoren, **parkeret 13. november 2026**): Fable 5.2 laver faktagrundlaget og drejebogen, når den står for tur, og Opus bygger (jeres valg i E2. Ventetiden på "Fable 5.5" er slut).
 11. **Venus i en kort udgave** ([plan-venus.md](plan-venus.md), V3 holder pause til Serie 1 er prøvet).
 12. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens.
 13. **Merkur og Pluto i en lille udgave** (kloden, tre-fire steder og flyby). "Det hele skal med" gælder det, der er bygget, ikke det kommende (jeres valg i E2).
