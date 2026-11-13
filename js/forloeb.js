@@ -10,8 +10,8 @@
 //   visMig()      gør handlingen for brugeren (tilbydes efter ca. 20 sekunder uden noget)
 //   vis           CSS-vælgere for det, der skal være fremme i trinet ud over scenen (fx det lille periodiske system)
 // og for hele forløbet: slutTekst() (en linje under kernesætningen), veje [{ tekst, primær, gør }] (højst tre veje videre,
-// eller { tekst, hvorfor: id } for et "Hvorfor?"-kort), layout() (scenen har fået ny størrelse) og slut() (kaldes, når
-// forløbet slutter, springes over eller stoppes).
+// eller { tekst, hvorfor: id } for et "Hvorfor?"-kort), layout() (scenen har fået ny størrelse), slut() (kaldes, når
+// forløbet slutter, springes over eller stoppes) og igen (hvor man kan tage forløbet igen, til beskeden ved "Spring over").
 // Klodsen husker i fremgang.js, om forløbet er taget (✓ i "Din fremgang") eller sprunget over. Uden noget af det starter
 // delen forløbet af sig selv (starterSelv).
 
@@ -40,6 +40,11 @@ export function starterSelv(data) {
 
 export function kørerForløb() {
   return k ? k.data.id : null;
+}
+
+// Fasen i det forløb, der kører ('gæt', 'gør', 'så' eller 'slut'), fx så et tryk i scenen kun tæller, når trinet venter på det
+export function forløbFase() {
+  return k ? k.fase : null;
 }
 
 export function startForløb(data, del) {
@@ -91,7 +96,7 @@ function afslut({ sprunget = false, stille = false } = {}) {
     });
   }
   if (sprunget && !stille) {
-    visBesked({ titel: 'Forløbet er sprunget over', tekst: `Du kan tage "${data.titel}" igen fra listen med opgaver (★) eller fra hjælpen (?).`, varighed: 7000 });
+    visBesked({ titel: 'Forløbet er sprunget over', tekst: `Du kan tage "${data.titel}" igen ${del.igen ?? 'fra listen med opgaver (★) eller fra hjælpen (?)'}.`, varighed: 7000 });
   }
 }
 

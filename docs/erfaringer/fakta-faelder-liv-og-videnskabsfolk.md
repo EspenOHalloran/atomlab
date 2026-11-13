@@ -42,6 +42,8 @@
 - "Ét forkert bogstav giver seglcelleanæmi." Kun hvis man har ændringen fra begge forældre. Har man den fra den ene, er man bærer og bliver normalt ikke syg (genome.gov). Sig det i hovedteksten, ikke kun under "For nørder".
 - "β-kæden i hæmoglobin har 147 aminosyrer" (OpenStax). Ribosomet bygger 147, men den første (M) klippes af, så den færdige kæde har 146 (NCBI NP_000509). Sig, om tallet gælder opskriften eller det færdige protein.
 - "Næsten hver celle har 2 m DNA." Målt i antal har de fleste celler ingen kerne (røde blodlegemer). Skriv "hver celle med en cellekerne".
+- "I hver af mine celler ligger DNA" (kernesætningen i drejebogen til Liv). Modne røde blodlegemer har hverken cellekerne eller mitokondrier, så de har intet DNA, og de er ca. 84 % af cellerne. Skriv "I mine celler" eller "i hver celle med en cellekerne". Tjek også kernesætninger og overskrifter, ikke kun brødteksten (Liv som forløb, 13. november 2026).
+- "I cellekernen ligger hele opskriften." Mitokondrierne har deres eget lille DNA (16.569 basepar). Skriv "næsten hele" (Liv som forløb, 13. november 2026).
 - "Et skift, der giver samme aminosyre, gør ingenting." Næsten altid. Men RNA'et kan blive klippet forkert (et kendt tilfælde i HBB, kodon 24). Skriv "næsten altid".
 - "G og T kan ikke holde sammen." De kan, hvis de rykker sig skævt (et "wobble"-par med to hydrogenbindinger). Det er en af de almindeligste kopifejl. Sig forenklingen under "For nørder".
 - "Ribosomet sætter 6-9 aminosyrer på i sekundet hos os." Det er Wikipedias øvre tal. Målt i museceller er det 5,6 (Ingolia m.fl. 2011).

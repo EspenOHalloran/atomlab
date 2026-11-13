@@ -713,7 +713,8 @@
       </div>
     </header>
     <aside class="panel side-panel venstre-panel">
-      <h4 class="panel-overskrift">Zoom ind</h4>
+      <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Forløb:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
+      <h4 class="panel-overskrift">Leg frit</h4>
       <div class="liv-niveauer" id="livNiveauer"></div>
       <button class="kontakt løs" id="livVisH">Vis hydrogen</button>
       <div class="liv-byg" id="livByg">
@@ -773,7 +774,7 @@
         <summary><strong>For nørder</strong><span class="lag-kort">Atomernes pladser, RNA'et og koden</span></summary>
         <p>Atomernes pladser er målt med røntgen i en rigtig DNA-krystal (1BNA, Drew, Dickerson og kolleger 1981, fra Protein Data Bank). Røntgen kan ikke se H-atomerne, så dem har vi regnet ud. Krystallens stige er bøjet og har 9,8 trin pr. omgang. I vand er det ca. 10,5, og det bruger stigen her.</p>
         <p>To sæt kromosomer er ca. 6,1 milliarder basepar hos en pige og lidt færre hos en dreng, fordi Y-kromosomet er meget mindre end X.</p>
-        <p><strong>Genet:</strong> Bogstaverne er de rigtige fra genet HBB (NCBI, NM_000518.5). I genet er opskriften delt i tre stykker. Før RNA'et forlader kernen, bliver stykkerne imellem klippet væk, og resten bliver sat sammen. RNA'et har også et stykke før det første AUG og efter stop, som ikke bliver til protein.</p>
+        <p><strong>Genet:</strong> Bogstaverne er de rigtige fra genet HBB (NCBI, NM_000518.5). I genet er opskriften delt i tre stykker. Før RNA'et forlader cellekernen, bliver stykkerne imellem klippet væk, og resten bliver sat sammen. RNA'et har også et stykke før det første AUG og efter stop, som ikke bliver til protein.</p>
         <p><strong>Koden:</strong> Selvom der er 64 ord, er der kun 20 aminosyrer, så de fleste har flere ord. I 1961 fandt Marshall Nirenberg og Heinrich Matthaei det første ord: UUU giver phenylalanin. Under fem år senere kendte man hele koden.</p>
         <p>Den første methionin bliver fjernet, når β-kæden er færdig. Derfor kaldes kodon 7 (seglcellen) traditionelt nr. 6.</p>
       </details>
@@ -781,8 +782,8 @@
         <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
         <p>Atomerne er kugler og bindingerne pinde, men rigtige atomer er skyer af elektroner. I cellen er fosfatet minusladet, og der er plusioner (fx natrium og magnesium) omkring stigen. Dem har vi ikke tegnet.</p>
         <p>Når du bygger stigen, holder kun A–T og G–C. I virkeligheden kan G og T godt holde lidt sammen, hvis de rykker sig skævt. Så buler stigen, og cellen finder som regel fejlen. Det er en af de almindeligste fejl, når DNA bliver kopieret.</p>
-        <p>Cellen og kernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i kernen.</p>
-        <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i kernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
+        <p>Cellen og cellekernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i cellekernen. Lidt af dit DNA ligger også uden for cellekernen, i mitokondrierne (de orange pølser).</p>
+        <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i cellekernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
       </details>
     </aside>
   </section>
@@ -791,7 +792,8 @@
     <div class="dialog">
       <header><h3>Liv: opskriften</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
-        <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Kernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
+        <p><strong>Forløbet "Opskriften i dig"</strong> viser i fire korte trin, hvad DNA er. Det starter første gang, du åbner Liv. <button class="knap lille" id="livHjælpForløb">Tag forløbet ›</button></p>
+        <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Cellekernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
         <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
         <p><strong>De gule streger</strong> helt tæt på er hydrogenbindinger. De holder A og T sammen med to og G og C med tre.</p>
         <p><strong>Farverne:</strong> Atomerne har kemikernes farver: C grå, H lysegrå, N blå, O rød og P orange. Baserne har hver sin farve: A grøn, T rød, G gul og C blå. U i RNA er lyserød.</p>
