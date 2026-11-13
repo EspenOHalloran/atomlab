@@ -101,3 +101,23 @@ Fælderne for F1-F3 har Fable allerede skrevet nederst i [fakta-faelder.md](../e
 | 12 ni-taller til TRAPPIST-1: "60 minutter" | **Rettet** | Nu "1 time" |
 
 **Ikke rettet:** "Dit ur" runder dagene ned ("1 år 54 dage"), og alderen runder til nærmeste dag ("14 år og 55 dage"). Det er sådan for alle mål (også "44 dage" og "45 dage" ved Alpha Centauri) og tages med ombygningen, hvis jeres søn undrer sig. "Og 4 dage" under 10 dage (resten af F10) er heller ikke rørt.
+
+## Forløb 1 "Rejsen i tid" (13. november 2026, `/faktatjek`)
+*Teksterne i `js/data/forloeb/tid.js`, kortet `tidMaalt` i `js/data/hvorfor.js`, "Dit ur" i `js/kosmos/tid.js` og hjælpen i Kosmos. Tallene er regnet med `js/data/tid.js` i `tests/tid-forloeb.mjs`. Resten står med kilde i [fakta-tid.md](../fakta-tid.md). Ingen ny websøgning.*
+
+| Påstand | Dom | Kilde |
+|---|---|---|
+| En stjerne 41 lysår væk (TRAPPIST-1) | OK | Gaia DR3, 40,66 lysår (tabellen ovenfor) |
+| 99,99 % ud og hjem: Du er 14, tvillingen 94 | OK | `T.rejse(40,66; 4)`: 1,150 og 81,33 år |
+| "Du var væk i godt et år" | OK | 1,150 år i skibet |
+| Alpha Centauri "4 lysår væk" | **Rettet** | 4,344 lysår (fakta-faelder: ikke 4,37). Nu "godt 4 lysår" |
+| 50 %: 28 og 30, 99,99 %: 13 og 21 | OK | `T.rejse(4,344; 0)` 15,05 og 17,38 år, `T.rejse(4,344; 4)` 0,1229 og 8,689 år |
+| "Det sker først for alvor tæt på lysets fart" | OK | γ = 1,15 ved 50 % mod 70,7 ved 99,99 % |
+| Kernesætningen (Fables) | OK | Om bord går alle ure normalt (fakta-faelder: "Tiden går langsommere for dig") |
+| "Dit ur": sekundviseren går ét sekund ad gangen, hjertet slår som det plejer | OK | Egentid. Hjertet i spillet slår 72 gange i minuttet (står ikke i teksten) |
+| Myoner dannes ca. 15 km oppe og lever ca. 2 milliontedele sekund | OK | fakta-tid.md, afsnit 10 (arXiv:1906.03934, PDG 2,197 µs) |
+| "Mange af dem når helt ned" | OK | Ca. halvdelen ved γ ≈ 38 (F3). Ikke "de fleste" |
+| 1971: fire atomure jorden rundt i passagerfly | OK | Hafele og Keating (fakta-tid.md, afsnit 11) |
+| "Næsten præcis som regnet ud" | **Rettet** | Mod øst −59 ± 10 ns mod forudsagt −40 ± 23 ns. Nu "næsten som regnet ud" |
+| GPS: ellers ca. 10 km fejl om dagen | OK | +38,5 µs/døgn · c ≈ 11,5 km (som i Rumtid) |
+| Nørd: Frisch og Smith, bjerg i USA, begyndelsen af 1960'erne; −59 og +273 ns; GPS hurtigere af højden, langsommere af farten | OK | fakta-tid.md, afsnit 10-12 (+45,7 og −7,2 µs/døgn) |

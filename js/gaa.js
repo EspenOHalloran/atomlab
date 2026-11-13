@@ -101,6 +101,13 @@ export function åbnForløb(del, id) {
   location.hash = `#${del}`;
 }
 
+// Forløbet, der venter, uden at glemme det (Kosmos ser efter, hvilket fænomen der skal vælges, fx Rejsen i tid), og et
+// forløb, der skal vente på delen, når man allerede er der (fx fra hjælpen i Kosmos)
+export const ventendeForløb = () => ventForløb;
+export function sætVentForløb(id) {
+  ventForløb = id;
+}
+
 // Det forløb, der venter på delens forløb (eller null). Glemmes, når det er hentet, og ?forloeb fjernes fra adressen,
 // så det ikke starter igen, når man genindlæser siden.
 export function tagVentForløb(ider) {

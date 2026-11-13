@@ -2,6 +2,13 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (12. november 2026): TRAPPIST-1 som første rejse og 50 % på skyderen (før Forløb-klodsen).**
+- **Jeres svar (12. november 2026):** Go til drejebogen i [E4-tid.md](../fable/E4-tid.md), afsnit 4. TRAPPIST-1 og 50 % bygges nu, før Forløb-klodsen, men forløbene ikke endnu. TRAPPIST-1 er valgt, når man åbner Rejsen i tid (dialogen). Lukkede domæner: **Bed altid om at få dem åbnet** (miljøets Network access), også når der findes en anden kilde. gea.esac.esa.int, vizier.cds.unistra.fr og simbad.cds.unistra.fr er åbnet.
+- **TRAPPIST-1** (`js/data/tid.js`, `MÅL.trappist`, `START_MÅL`): 40,66 lysår efter Gaia DR3 (parallakse 80,2123 ± 0,0716 mas, slået op i Gaia-arkivet). Ved 99,99 % er du 14 år og 55 dage, og tvillingen er 94. Fire mål efter afstand. I scenen en lille, rød stjerne med syv planeter, der kredser (ikke i skala).
+- **50 %** er trin 0 på skyderen "Fast fart" (`MINDST_NI = 0`, ε = 0,5). Til Alpha Centauri er du 28 og tvillingen 30. Underteksten siger "Jordens ur går kun lidt hurtigere end dit", og "Hvad gør farten?" nævner 1,15 dage.
+- **F10 delvist (`/faktatjek`):** Hjemkomstens tider fra 10 til 100 år har én decimal, rundet ned ("11,5 år" og "Du er 24 år og 215 dage"), så de passer med alderen. "60 minutter" er blevet til "1 time". Tabellen står i [E4-noter.md](../fable/E4-noter.md), "TRAPPIST-1 og 50 %".
+- **Kig efter på tabletten:** TRAPPIST-1 og planeterne i scenen, de fire mål i Styr på højkant, og om "Dit ur: 1 år 54 dage" og "Du: 14 år og 55 dage" (uret runder ned, alderen til nærmeste dag) undrer jeres søn.
+
 **Senest lavet (12. november 2026): Opus' noter til Fables gennemgang og rettelserne.**
 - [E4-noter.md](../fable/E4-noter.md): Hvad der er tjekket, nyt og kendt, og hvor Opus er uenig. Fables fund holder.
 - **Rettet med `/faktatjek`:** F1-F9, F11 og F12 fra E4 (fx "ingen opdagede det før Einstein", tankeforsøget med ens acceleration og CERN 1977 med ca. 10¹⁸ g, "ca. halvdelen" af myonerne, "Urene på skærmen" i "Ærligt talt", springet i "nu" og "Hvorfor kan et rumskib aldrig nå lysets fart?"). F10 (afrundingen i hjemkomstteksterne) venter til ombygningen.

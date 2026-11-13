@@ -15,9 +15,13 @@ import * as THREE from 'three';
 import { handling, kontakt, tid as tidKnap, gå } from '../sideknap.js';
 import { stjerne, glød, skilt, hale, prikSky, KVALITET } from './faelles.js';
 import { lavJorden } from './jorden.js';
-import { ROLIG } from '../scene3d.js';
+import { ROLIG, passerTil, passerTilBoks } from '../scene3d.js';
 import * as T from '../data/tid.js';
 import * as Lys from './lysur.js'; // lysurets regning og tegning (delt med tidhvorfor.js)
+import { figurSVG } from './tidfigur.js'; // de tegnede figurer ved hjemkomsten (E4, trin A1)
+import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbTest } from '../forloeb.js';
+import { tagVentForløb } from '../gaa.js';
+import { REJSEN_I_TID } from '../data/forloeb/tid.js'; // forløbet "Rejsen i tid" (E4, forløb A)
 
 const SKÆRM_VEJ = 12.5; // ▶: sekunder på skærmen for hver vej (ud og hjem ca. 25 sekunder), uanset målet
 const HURTIG = 4; // ⏩: en tur tager ca. 6 sekunder
@@ -136,7 +140,7 @@ export default {
       <p>Jorden, stjernerne og galakserne er tegnet alt for store, og skibet flyver selvfølgelig ikke med lysets fart hen over skærmen. Med 1 g flytter skibet sig jævnt hen over skærmen. Set fra Jorden kryber det af sted i starten og farer gennem midten. I lysuret går lyset ufatteligt meget langsommere end i virkeligheden, og man kan ikke se et lysglimt undervejs. Lysuret har sin egen fart (højst 99 %), for ved rejsens farter ville spejlene fare forbi alt for hurtigt til, at man kan følge dem. Animationen viser det, man ville regne sig frem til.</p>`,
   },
 
-  lav(gruppe, { fase, lyd, forklaring, overlag, opdaterKnapper, sætKontakt }) {
+  lav(gruppe, { fase, lyd, forklaring, overlag, opdaterKnapper, sætKontakt, vælgFænomen, tiden }) {
     // ---------- Scenen: Jorden, målene og skibet ----------
     const jorden = lavJorden(1.3);
     jorden.klode.position.set(JORD_X, 0, 0);
@@ -256,14 +260,16 @@ export default {
       return `<line x1="${(Math.sin(v) * 15).toFixed(2)}" y1="${(-Math.cos(v) * 15).toFixed(2)}" x2="${(Math.sin(v) * 18).toFixed(2)}" y2="${(-Math.cos(v) * 18).toFixed(2)}"/>`;
     }).join('');
     ure.innerHTML = `
-      <div class="tid-ur"><span class="tid-ur-navn">🚀 Dit ur</span><strong class="tid-ur-tal"></strong><span class="tid-ur-alder"></span></div>
-      <div class="tid-ur tid-ur-jord">
+      <div class="tid-ur"><span class="tid-figur" hidden></span><span class="tid-ur-navn">🚀 Dit ur</span><strong class="tid-ur-tal"></strong><span class="tid-ur-alder"></span></div>
+      <div class="tid-ur tid-ur-jord"><span class="tid-figur" hidden></span>
         <svg class="tid-skive" viewBox="-21 -21 42 42" aria-hidden="true"><circle r="20"/><circle class="tid-sløret" r="16"/><g class="tid-streger">${streger}</g><line class="tid-viser" x1="0" y1="3" x2="0" y2="-15"/><circle class="tid-midt" r="2"/></svg>
         <div class="tid-ur-tekst"><span class="tid-ur-navn">🌍 Jordens ur</span><strong class="tid-ur-tal"></strong><span class="tid-ur-alder"></span></div>
       </div>`;
     const [skibTal, jordTal] = ure.querySelectorAll('.tid-ur-tal');
     const [skibAlder, jordAlder] = ure.querySelectorAll('.tid-ur-alder');
     const viser = ure.querySelector('.tid-viser');
+    // Figurerne står oven på urene (position: absolute), så urene ikke flytter sig, når de kommer frem
+    const [skibFigur, jordFigur] = ure.querySelectorAll('.tid-figur');
     const jordUr = ure.querySelector('.tid-ur-jord');
 
     // ---------- Lysuret (et lærred med to lysure side om side) ----------
@@ -272,7 +278,27 @@ export default {
     lysur.hidden = true;
     const lærred = document.createElement('canvas');
     lysur.append(lærred);
-    overlag().append(ure, lysur);
+    // ---------- "Dit ur" stort (forløbets trin A2): et helt almindeligt sekund om bord ----------
+    // Sekundviseren går ét sekund ad gangen, og hjertet slår 72 gange i minuttet. Imens holder rejsen pause, for på
+    // skærmen går skibets tid også meget hurtigt (en tur på 1,2 år tager 25 sekunder).
+    const mitUr = document.createElement('div');
+    mitUr.className = 'tid-mit-ur';
+    mitUr.hidden = true;
+    const mærker = Array.from({ length: 12 }, (_, i) => {
+      const v = (i / 12) * Math.PI * 2;
+      return `<line x1="${(Math.sin(v) * 31).toFixed(2)}" y1="${(-Math.cos(v) * 31).toFixed(2)}" x2="${(Math.sin(v) * 36).toFixed(2)}" y2="${(-Math.cos(v) * 36).toFixed(2)}"/>`;
+    }).join('');
+    mitUr.innerHTML = `
+      <svg class="tid-mit-skive" viewBox="-42 -42 84 84" aria-hidden="true"><circle r="40"/><g class="tid-mit-mærker">${mærker}</g>
+        <line class="tid-mit-time" x1="0" y1="4" x2="13" y2="-12"/><line class="tid-mit-minut" x1="0" y1="5" x2="-6" y2="-27"/>
+        <line class="tid-mit-sekund" x1="0" y1="8" x2="0" y2="-33"/><circle class="tid-mit-midt" r="2.6"/></svg>
+      <svg class="tid-hjerte" viewBox="0 0 32 29" aria-hidden="true"><path d="M16 28 C 6 20 0 14 0 8 A 8 8 0 0 1 16 5 A 8 8 0 0 1 32 8 C 32 14 26 20 16 28 Z"/></svg>
+      <div class="tid-mit-tekst"><b>Om bord, lige nu</b><span>Sekundviseren går ét sekund ad gangen, og dit hjerte slår, som det plejer. Rejsen holder pause, mens du kigger.</span></div>`;
+    const sekundViser = mitUr.querySelector('.tid-mit-sekund');
+    const hjerte = mitUr.querySelector('.tid-hjerte');
+    let mitUrVist = false;
+    let mitUrSek = 0; // sekunder, mens "Dit ur" er fremme (står stille under pause)
+    overlag().append(mitUr, ure, lysur);
 
     // ---------- Tilstanden ----------
     let ni = START_NI; // antallet af 9-taller på skyderen
@@ -328,6 +354,25 @@ export default {
       const løbsk = flyver() && jordFart > LØBSK;
       if (jordUr.classList.contains('løbsk') !== løbsk) jordUr.classList.toggle('løbsk', løbsk);
       viser.setAttribute('transform', `rotate(${(((jordÅr % 1) * 360)).toFixed(1)})`);
+      visFigurer();
+    }
+
+    // De tegnede figurer (jeres valg 13. november 2026): før afgang to ens 13-årige, undervejs bliver tvillingen ældre,
+    // mens Jordens ur løber, og ved hjemkomsten står I der begge. Tegnet efter alderen (T.figurSlags). Over ca. 100 år
+    // står kun teksten.
+    function visFigurer() {
+      const dig = T.forGammel(skibÅr) ? null : T.figurSlags(Math.floor(T.START_ALDER + skibÅr));
+      const tvilling = T.figurSlags(T.tvillingAlder(jordÅr));
+      for (const [el, slags, spejl] of [[skibFigur, dig, false], [jordFigur, tvilling, true]]) {
+        if ((el.dataset.slags ?? '') === (slags ?? '')) continue;
+        el.dataset.slags = slags ?? '';
+        el.innerHTML = slags ? figurSVG(slags, { spejl }) : '';
+        el.hidden = !slags;
+        // Toningen ind kører igen, når figuren skifter (fx når tvillingen bliver voksen)
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = '';
+      }
     }
 
     // "Lige nu" i panelet: hvad farten betyder (skrives kun om, når teksten ændrer sig)
@@ -472,6 +517,7 @@ export default {
       visUre();
       visFase();
       visLigeNu();
+      tegnForløb(); // forløbets knapper følger med (fx er "Dit ur" kun aktiv undervejs)
     }
 
     function visLysur(til) {
@@ -510,6 +556,10 @@ export default {
         fartNu = 0;
         flamme.material.opacity = 0;
         lyd.klaret?.();
+        hjemMed.add(enG ? 'g' : ni);
+        if (kørerForløb()) hurtig = false; // ⏩ i forløbets linje gælder én tur (ellers styrer tidsknappen det)
+        visUre();
+        tegnForløb();
         visFase();
         visLigeNu();
         opdaterKnapper();
@@ -708,6 +758,134 @@ export default {
     }
     byg();
 
+    // ---------- Forløbet "Rejsen i tid" (js/forloeb.js, drejebogen i docs/fable/E4-tid.md, afsnit 4) ----------
+    // Teksterne står i js/data/forloeb/tid.js. Her står det, der rører scenen. Hvert trins start stiller målet og farten
+    // og starter forfra, så "‹" kan gå tilbage. Imens er kun scenen, urene og forløbets linje fremme (style.css).
+    const hjemMed = new Set(); // de farter (ni-taller, eller 'g'), man er fløjet hjem med, siden trinet startede (trin A3)
+
+    // "Dit ur" stort: rejsen holder pause imens
+    function visMitUr(til) {
+      if (mitUrVist === til) return;
+      mitUrVist = til;
+      mitUr.hidden = !til;
+      if (til) {
+        mitUrSek = 0;
+        harSetMitUr = true;
+      }
+    }
+    let harSetMitUr = false;
+
+    // Stiller målet og farten (som kontakterne og skyderen i Styr), slår 1 g, "Set fra skibet" og lysuret fra og starter forfra
+    function stilTil(målId, n) {
+      if (lysurVist) visLysur(false);
+      enG = false;
+      enGKontakt.til = false;
+      sætKontakt(enGKontakt.tekst, false);
+      fraSkib = false;
+      skibKontakt.til = false;
+      sætKontakt(skibKontakt.tekst, false);
+      målNr = T.MÅL_RÆKKE.indexOf(målId);
+      for (const [j, mk] of målKontakter.entries()) {
+        mk.til = j === målNr;
+        sætKontakt(mk.tekst, mk.til);
+      }
+      ni = n;
+      fartSkyder.værdi = n;
+      hurtig = false;
+      visMitUr(false);
+      hjemMed.clear();
+      byg();
+      opdaterKnapper();
+      nulstil();
+    }
+
+    const flyvMed = (n) => {
+      if (ni !== n) {
+        ni = n;
+        fartSkyder.værdi = n;
+      }
+      flyv();
+    };
+    // ⏩ under en tur (tidsknappen er skjult i forløbet)
+    const hurtigKnap = { id: 'hurtig', tekst: '⏩ Hurtigere', gør: () => { hurtig = !hurtig; }, aktiv: () => flyver() && !mitUrVist, valgt: () => hurtig };
+    const flyvIgen = (tekst) => ({ id: 'flyv', tekst, gør: flyv, aktiv: () => !flyver() });
+    const visMigFlyv = (gør) => () => {
+      if (!flyver()) gør();
+      else hurtig = true;
+    };
+
+    const FL_DEL = {
+      igen: 'fra hjælpen (?) i Kosmos eller fra "Din fremgang" i menuen',
+      trin: {
+        // A1: til TRAPPIST-1 (40,66 lysår) ved 99,99 % og hjem: du er 14, tvillingen 94
+        flyv: {
+          start: () => stilTil('trappist', 4),
+          get knapper() { return [flyvIgen(tilstand === 'færdig' ? '🚀 Flyv igen' : '🚀 Flyv til TRAPPIST-1'), hurtigKnap]; },
+          færdig: () => tilstand === 'færdig',
+          visMig: visMigFlyv(flyv),
+        },
+        // A2: samme tur igen, og "Dit ur" undervejs
+        maerke: {
+          start: () => { stilTil('trappist', 4); harSetMitUr = false; },
+          get knapper() {
+            return [
+              flyvIgen('🚀 Flyv igen'),
+              { id: 'mitur', tekst: mitUrVist ? '↩ Tilbage til rejsen' : '⌚ Dit ur', gør: () => visMitUr(!mitUrVist), aktiv: () => flyver(), valgt: () => mitUrVist },
+              hurtigKnap,
+            ];
+          },
+          færdig: () => harSetMitUr && tilstand === 'færdig' && !mitUrVist,
+          visMig: () => {
+            if (!flyver()) flyv();
+            else if (!harSetMitUr) visMitUr(true);
+            else if (mitUrVist) visMitUr(false);
+            else hurtig = true;
+          },
+        },
+        // A3: Alpha Centauri (4,344 lysår) med 50 % (28 og 30) og med 99,99 % (13 år og 45 dage og 21). Først 50 %.
+        // Begge ture starter med ⏩: Ved 50 % tager turen ellers 50 sekunder (skibet flyver halvt så hurtigt), og her er
+        // det alderen, der skal sammenlignes. Man kan slå ⏩ fra.
+        farten: {
+          start: () => stilTil('alpha', 0),
+          get knapper() {
+            return [
+              { id: 'halv', tekst: `🚀 Flyv med 50 %${hjemMed.has(0) ? ' ✓' : ''}`, gør: () => { flyvMed(0); hurtig = true; }, aktiv: () => !flyver() },
+              { id: 'naesten', tekst: `🚀 Flyv med 99,99 %${hjemMed.has(4) ? ' ✓' : ''}`, gør: () => { flyvMed(4); hurtig = true; }, aktiv: () => !flyver() && hjemMed.has(0) },
+              hurtigKnap,
+            ];
+          },
+          færdig: () => hjemMed.has(0) && hjemMed.has(4) && tilstand === 'færdig',
+          visMig: visMigFlyv(() => { flyvMed(hjemMed.has(0) ? 4 : 0); hurtig = true; }),
+        },
+      },
+      slutTekst: () => 'Vælg "Leg frit" for at prøve andre mål, farter og "1 g hele vejen".',
+      veje: [
+        // Til forløb 2 "Hvordan kan det ske?" findes (næste session): fænomenet med de fem scener (jeres valg 13. november 2026)
+        { tekst: '🔦 Hvordan kan det ske?', primær: true, gør: () => vælgFænomen('tidhvorfor') },
+        { tekst: 'Leg frit' },
+        { tekst: 'Er det målt?', hvorfor: 'tidMaalt' },
+      ],
+      // Scenen har fået ny størrelse: I forløbet er panelerne væk, så billedet zoomes efter bredden (hele vejen fra Jorden
+      // til målet), og bagefter som før (fænomenets kamera)
+      layout: () => {
+        if (kørerForløb()) passerTilBoks(16.5, 4.5);
+        else passerTil(14.5);
+      },
+      // Efter forløbet: laboratoriet som før (TRAPPIST-1 ved 99,99 %)
+      slut: () => {
+        visMitUr(false);
+        hurtig = false;
+        tiden('spil'); // tidsknappen kommer frem igen og skal passe med rejsen
+      },
+    };
+    const startRejsen = () => startForløb(REJSEN_I_TID, FL_DEL);
+    // Første gang, man åbner Rejsen i tid, og fra "Din fremgang", linket ?forloeb=rejsen-i-tid#kosmos eller hjælpen.
+    // Startes, når fænomenet er bygget færdigt (skallen viser siden og Styr-boksen lige efter lav()).
+    let stoppet = false; // fænomenet er lukket, før forløbet nåede at starte
+    if (tagVentForløb([REJSEN_I_TID.id]) || starterSelv(REJSEN_I_TID)) {
+      requestAnimationFrame(() => { if (!stoppet) startRejsen(); });
+    }
+
     nulstil();
     let panelTid = 0;
     const bag = new THREE.Vector3(); // punktet bag skibet, hvor halen starter
@@ -723,6 +901,16 @@ export default {
         skive.rotation.y += dt * 0.03;
         if (lysurVist) {
           opdaterLysur(dt * (hurtig ? 3 : 1)); // ⏩ går 3 gange hurtigere her, så man stadig kan følge lyset
+          return;
+        }
+        // "Dit ur" stort: rejsen holder pause, sekundviseren hopper ét sekund ad gangen, og hjertet slår 72 gange i minuttet
+        if (mitUrVist) {
+          mitUrSek += dt;
+          sekundViser.setAttribute('transform', `rotate(${Math.floor(mitUrSek) * 6})`);
+          if (!ROLIG) {
+            const f = (mitUrSek * 72 / 60) % 1; // fasen i hjerteslaget
+            hjerte.style.transform = `scale(${(1 + 0.16 * Math.exp(-f * 9) + 0.08 * Math.exp(-Math.abs(f - 0.22) * 14)).toFixed(3)})`;
+          }
           return;
         }
         if (flyver()) {
@@ -741,6 +929,10 @@ export default {
         panelTid += dt;
         if (panelTid > 0.25) { panelTid = 0; visLigeNu(); }
       },
+      stop: () => {
+        stoppet = true;
+        stopForløb();
+      },
       // Lysuret går frem trin for trin med bjælken (‹ og "Næste")
       trin: () => (lysurVist ? { nr: lysTrin, ialt: LYS_TRIN.length, næste: LYS_TRIN[lysTrin + 1]?.titel ?? '', gå: gåLysTrin } : null),
       test: {
@@ -748,6 +940,13 @@ export default {
         ni: () => ni,
         mål: () => T.MÅL_RÆKKE[målNr],
         enG: () => enG,
+        forløb: forløbTest(),
+        startForløb: () => startRejsen(),
+        kørerForløb: () => kørerForløb(),
+        mitUr: () => ({ vist: mitUrVist, set: harSetMitUr, sek: mitUrSek }),
+        hjemMed: () => [...hjemMed],
+        hurtig: () => hurtig,
+        figurer: () => ({ dig: skibFigur.dataset.slags || null, tvilling: jordFigur.dataset.slags || null }),
         ure: () => ({ skibÅr, jordÅr, skib: skibTal.textContent, jord: jordTal.textContent, skibAlder: skibAlder.textContent, jordAlder: jordAlder.textContent, vist: !ure.hidden, løbsk: jordUr.classList.contains('løbsk') }),
         fart: () => ({ gamma: gammaNu, fart: fartNu, pos, andel: andel() }),
         scene: () => ({ klem, skib: skib.position.x, jord: jorden.klode.position.x, mål: målGrupper[T.MÅL_RÆKKE[målNr]].position.x, synlige: T.MÅL_RÆKKE.filter((k) => målGrupper[k].visible) }),
