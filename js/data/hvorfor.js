@@ -198,4 +198,15 @@ export const HVORFOR = {
     svar: 'Rækkefølgen af aminosyrerne bestemmer, hvordan kæden folder sig, og formen bestemmer, hvad proteinet kan. Ved seglcelleanæmi er kun ét bogstav i genet HBB skiftet: GAG er blevet til GTG. Så sidder der valin, der skyr vand, i stedet for glutaminsyre, der er minusladet.\n\nHar man ændringen fra både sin mor og sin far, klumper hæmoglobinet sammen i lange tråde, når det har afleveret ilten. De røde blodlegemer bliver krumme som en segl og kan sætte sig fast i de små blodårer.',
     nørd: 'Har man det ændrede gen kun fra den ene forælder, er man bærer og bliver normalt ikke syg (genome.gov). Bærere får sjældnere den farlige form af malaria (Hedrick 2011), men de kan godt få malaria. Derfor er genet almindeligt, hvor der er meget malaria.',
   },
+  // Hvornår er noget opdaget? (Gåderne G3, fælles for kortene). Kilder: docs/fakta-gaader.md, "Fælles for alle kortene".
+  // 5σ ensidet: p = ½·erfc(5/√2) = 2,87 · 10⁻⁷, altså 1 ud af 3,49 millioner. log₂(3,49 · 10⁶) = 21,7, så ca. 22 gange
+  // plat i træk (2²² = 4,19 millioner). 3σ: 1 ud af 741 (ca. 10 gange plat). LIGO: "greater than 5.1σ" (arXiv:1602.03837).
+  // OPERA 2011: "six sigma", og "A link from a GPS receiver to the OPERA master clock was loose" (Wikipedia
+  // "2011 OPERA faster-than-light neutrino anomaly"). LZ 2,6σ (arXiv:2609.02823), DMS 3σ (Madhusudhan 2025, ikke
+  // bekræftet), DESI DR2 2,8-4,2σ (arXiv:2503.14738).
+  opdaget: {
+    spørgsmål: 'Hvornår er noget opdaget?',
+    svar: 'Målinger svinger altid lidt tilfældigt, og et tilfældigt udsving kan ligne et fund. Derfor regner forskerne ud, hvor tit tilfældet alene ville give et signal, der er så stort. Det måles i sigma. Ved 3 sigma siger fysikerne kun »tegn på«, og først ved 5 sigma siger de »opdaget«. 5 sigma er lige så sjældent som at slå plat ca. 22 gange i træk med en ærlig mønt.\n\nLige nu er der flere spændende signaler under grænsen, fx den ene hændelse i LZ (2,6 sigma). De fleste små signaler forsvinder igen, når der bliver målt mere.',
+    nørd: '5 sigma betyder, at tilfældet alene kun giver et så stort signal ca. 1 gang ud af 3,5 millioner. Det betyder ikke, at fundet er helt sikkert: En fejl i udstyret tæller ikke med. I 2011 målte forsøget OPERA neutrinoer, der så ud til at være hurtigere end lyset, med 6 sigma, men en forbindelse til forsøgets ur sad løst. Andre signaler under grænsen lige nu: gassen DMS på planeten K2-18b (3 sigma, ikke bekræftet) og mørk energi, der måske ændrer sig (2,8-4,2 sigma). Tyngdebølgerne i 2015 var over 5,1 sigma.',
+  },
 };

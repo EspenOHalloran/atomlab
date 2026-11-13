@@ -22,6 +22,7 @@
 - "Natrium giver sin elektron til chlor, fordi begge vil have en fuld skal." For to frie atomer koster det energi: Det kræver ca. 5,1 eV at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage. Gevinsten kommer, når Na⁺ og Cl⁻ trækker i hinanden (i saltkrystallen eller som et par).
 - Supertunge grundstoffer: Halveringstiden spænder fra under et millisekund (Og) til over et døgn (Db-268). Skriv ikke "henfalder med det samme" om dem alle.
 - "Zirkonia er kunstige diamanter." Det er en efterligning af diamant, ikke diamant.
+- "5 sigma betyder, at fundet er 99,99997 % sikkert." Tallet siger kun, hvor tit tilfældige udsving alene ville give et så stort signal. Fejl i udstyret tæller ikke med: OPERA målte i 2011 neutrinoer "hurtigere end lyset" med 6 sigma, men en forbindelse til uret sad løst (Gåderne G3).
 - "Antistof har den modsatte ladning." Også partikler uden ladning (neutronen, neutrinoen) har en antitvilling.
 - "Protoner og neutroner blev dannet efter en milliontedel af et sekund." Nærmere 10-20 milliontedele (en hundredtusindedel).
 - "Big Bang lavede kun hydrogen og helium" og "alle tungere grundstoffer kommer fra stjerner". Der kom også lidt lithium, og meget guld kommer fra neutronstjerner, der støder sammen.

@@ -509,6 +509,18 @@ export const ORDBOG = [
     ],
   },
   {
+    // Gåderne G3. Kilder: docs/fakta-gaader.md afsnit 5 (Planck 2018: 0,120 / 0,0224 = 5,4)
+    id: 'moerktstof', ord: 'Mørkt stof',
+    former: ['mørkt stof', 'mørke stof'],
+    tekst: 'Usynligt stof, der kun mærkes på sin tyngdekraft. Der er ca. fem gange så meget af det som af almindeligt stof, og det holder sammen på galakserne. Ingen ved, hvad det er. Det er ikke det samme som mørk energi.',
+  },
+  {
+    // Gåderne G3. 3 sigma: 1 ud af 741, 5 sigma: 1 ud af 3,5 millioner (ensidet)
+    id: 'sigma', ord: 'Sigma (σ)',
+    former: ['sigma'],
+    tekst: 'Et mål for, hvor sikkert et signal er: Jo flere sigma, jo sjældnere ville tilfældige udsving alene give et så stort signal. I fysik siger man »tegn på« ved 3 sigma og »opdaget« ved 5 sigma.',
+  },
+  {
     id: 'moerkenergi', ord: 'Mørk energi',
     former: ['mørk energi', 'mørke energi'],
     tekst: 'Navnet på det ukendte, der får universet til at udvide sig hurtigere og hurtigere. Ingen ved endnu, hvad det er.',

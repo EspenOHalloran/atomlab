@@ -1,9 +1,11 @@
 // Gåderne (#gaader, docs/plan-gaader.md): en side uden 3D i Biblioteket med det, videnskaben ikke ved endnu.
 // Først en oversigt over kortene, så ét kort ad gangen: tre trin (Spørg, Gæt, Så) og bagefter "Det så du".
 // Teksterne står i js/data/gaader.js. Gættets knapper og prikkerne har samme udseende som forløbene (js/forloeb.js),
-// "For nørder" og "Ærligt talt" er de fælles foldebokse (js/lag.js), og "Se det selv" er en data-gaa-knap (js/gaa.js).
+// "For nørder" og "Ærligt talt" er de fælles foldebokse (js/lag.js), "Se det selv" er en data-gaa-knap (js/gaa.js), og et trin
+// med hvorfor får det fælles "Hvorfor?"-kort under Så (fx "Hvornår er noget opdaget?", Gåderne G3).
 
 import { GÅDER, gådeMed, bygget } from './data/gaader.js';
+import { HVORFOR } from './data/hvorfor.js';
 import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavLagBokse } from './lag.js';
@@ -115,7 +117,8 @@ function visTrin() {
   const t = gåde.trin[trin];
   const svar = valgt === null ? '' : `
       <p class="fl-tekst gaade-efter" ${ord}>${tegn(t.gæt.valg[valgt].efter)}</p>
-      <p class="fl-tekst fl-så" ${ord}>${tegn(t.så)}</p>`;
+      <p class="fl-tekst fl-så" ${ord}>${tegn(t.så)}</p>
+      ${t.hvorfor ? `<p class="hvorfor-linje"><button class="hvorfor" data-hvorfor="${t.hvorfor}">${tegn(HVORFOR[t.hvorfor].spørgsmål)}</button></p>` : ''}`;
   boks.innerHTML = `
     <div class="gaade-hoved">${prikker()}<span class="gaade-overskrift">${trin + 1}. ${tegn(t.overskrift)}</span></div>
     <p class="fl-tekst gaade-spørg" ${ord}>${tegn(t.spørg)}</p>
@@ -161,7 +164,7 @@ export function lavGåder() {
   panel.addEventListener('click', (h) => {
     const b = h.target.closest('button');
     if (!b || b.disabled) return;
-    if (b.dataset.gaa) return; // "Se det selv" klares af js/gaa.js
+    if (b.dataset.gaa || b.dataset.hvorfor) return; // "Se det selv" klares af js/gaa.js og "Hvorfor?" af js/lag.js
     lyd.klik();
     if (b.dataset.gaade) visGåde(b.dataset.gaade);
     else if (b.hasAttribute('data-alle')) visOversigt();
