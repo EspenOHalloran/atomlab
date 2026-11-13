@@ -26,6 +26,7 @@ export const TRIN_PROTEIN = {
     tekst: 'Ribosomet læser RNA\'et tre bogstaver ad gangen. Hvert ord hedder et kodon. Små budbringere (tRNA) kommer med den aminosyre, der passer til ordet, og kæden vokser.',
     tal: [['Ordet nu', '{ord}'], ['Aminosyrer i kæden', '{n}'], ['I celler som dine', 'ca. 5-6 i sekundet']],
     ekstra: 'Bunden af hver budbringer har tre baser, der passer til ordet: A til U og G til C, ligesom i stigen.',
+    gåde: ['gaader:begyndelsen', 'Gåden: Hvordan begyndte livet?'], // Gåderne G2: kernen i ribosomet er RNA
   },
   fold: {
     titel: 'Proteinet',

@@ -120,6 +120,7 @@
 - "Alle rigtige sorte huller drejer" (fakta-gaader.md). De to huller i GW250114 drejede næsten ikke (χ ≤ 0,26, arXiv:2509.08054). Skriv "drejer som regel", som Sort hul gør. Og "ca. et minut" fra horisonten til midten gælder kun Mælkevejens sorte hul: ved et hul på 10 sole er det ca. 0,15 millisekunder (Gåderne G1, 12. november 2026).
 - "Planet X": Forskernes navn er Planet 9 (Batygin og Brown 2016). Den er hverken fundet eller modbevist.
 - Planer rykker: Mars Sample Return blev lukket i 2026, og Euclids første store datasæt (DR1) blev delt i to: en første del 12. november 2026 og resten midt i 2027. Skriv "efter planen" og et årstal, og slå det op igen, før teksten skrives.
+- Wikipedia "RNA world" kalder QT45 "a 2024 study". Det var fortrykket: Artiklen kom i Science 12. februar 2026 (Fable E5 læste manuskriptet). Tjek, om et årstal på Wikipedia gælder fortrykket eller artiklen (Gåderne G2, 13. november 2026).
 *Strøm og magneter og Lys (12. november 2026). Kilderne står i [fakta-strom-og-lys.md](../fakta-strom-og-lys.md) afsnit 10.*
 - "Elektroner, der hopper mellem skallerne, giver flammefarverne." For Na, Li og K er det et skift inden for samme skal (3s → 3p, 2s → 2p, 4s → 4p, NIST). Kun hydrogens synlige linjer er hop mellem skaller. Skriv "hopper op på et højere energitrin".
 - "Fyrværkeriets farver kommer fra atomerne." Rød (Sr), grøn (Ba) og blå (Cu) kommer mest fra små molekyler i flammen (SrCl, SrOH, BaCl, BaOH, CuCl).

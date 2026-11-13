@@ -22,9 +22,9 @@ import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbTest } from './forloeb.js';
-import { tagVentForløb } from './gaa.js';
 import { OPSKRIFTEN } from './data/forloeb/opskriften.js';
 import { HVORFOR } from './data/hvorfor.js';
+import { tagVentLiv, tagVentForløb } from './gaa.js';
 import { SKRIDT } from './data/liv/stige.js';
 import { NIVEAUER, NIVEAU_IDER, OPGAVER_LIV, HBB_START, BYG_TRIN, nyByggestreng, parGrund, PAR_TEKST } from './data/liv/opskriften.js';
 
@@ -359,6 +359,13 @@ function opdaterPanel(kunTal = false) {
       $('livHvorfor').dataset.hvorfor = n.hvorfor;
       $('livHvorfor').textContent = `Hvorfor? ${HVORFOR[n.hvorfor].spørgsmål}`;
     }
+    // Et link til en gåde (Gåderne G2: ved Ribosomet)
+    $('livGaade').hidden = !n.gåde;
+    if (n.gåde) {
+      const k = $('livGaade').firstElementChild;
+      k.dataset.gaa = n.gåde[0];
+      k.textContent = `${n.gåde[1]} ›`;
+    }
     const farver = iProtein ? lp.farver() : FARVER[niveau === 'atomer' ? 'atomer' : niveau === 'stige' ? 'stige' : ''] ?? [];
     $('livFarver').innerHTML = farver.map(([t, f]) => `<li><span class="farveprik" style="background:${f}"></span>${t}</li>`).join('');
     $('livFarver').hidden = !farver.length;
@@ -581,8 +588,18 @@ export function startLiv() {
   gåTil('celle', 'ind');
   opdaterByg();
   lavForløbListe();
-  // Forløbet starter af sig selv første gang, og når man kommer fra dets link eller "Din fremgang"
-  if (tagVentForløb([OPSKRIFTEN.id]) ?? (starterSelv(OPSKRIFTEN) ? OPSKRIFTEN.id : null)) startOpskriften();
+  // Fra Gåderne (data-gaa="liv:protein") åbnes den del, man kom for. Ellers starter forløbet af sig selv første gang,
+  // og når man kommer fra dets link eller "Din fremgang".
+  const del = tagVentLiv();
+  if (del) visDel(del);
+  else if (tagVentForløb([OPSKRIFTEN.id]) ?? (starterSelv(OPSKRIFTEN) ? OPSKRIFTEN.id : null)) startOpskriften();
+}
+
+// Åbner en del af Liv fra en knap data-gaa="liv:protein" (js/gaa.js): 'protein' starter "Se genet blive læst"
+export function visDel(id) {
+  if (id !== 'protein') return;
+  stopForløb(); // et forløb, der står åbent, giver plads
+  lp.start('genet');
 }
 
 export function stopLiv() {
