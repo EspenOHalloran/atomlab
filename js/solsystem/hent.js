@@ -12,14 +12,17 @@ export const lager = new Map(); // filnavn → { tekstur, fejlet, venter, fejlVe
 // hent(navn, færdig, valg): færdig(tekstur) kaldes, når billedet er klar (med det samme, hvis det allerede er hentet).
 // farve: et farvefoto (sRGB), ellers målinger, der bruges, som de er. kanaler: 1 (gråtoner, RedFormat) eller 2 (højden i
 // rød og grøn, RGFormat) sparer hukommelse i grafikkortet. rundt: kortet går hele vejen rundt (de lokale kort gør ikke).
-// fejl kaldes, hvis billedet ikke kan hentes (så bruges det tegnede).
-export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl } = {}) {
+// fejl kaldes, hvis billedet ikke kan hentes (så bruges det tegnede). vendt: billedet pakkes ud som et ImageBitmap, der
+// er vendt (hentBillede), så det går hurtigere at lægge det i grafikkortet. Kun til billeder, der ikke læses som et
+// <img> bagefter (lavTabel i klippeplanet.js kender billede.vendt).
+export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl, vendt = false } = {}) {
   let b = lager.get(navn);
   if (!b) {
     b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [] };
     lager.set(navn, b);
-    hentBillede(new URL(navn, MAPPE).href).then((billede) => {
+    hentBillede(new URL(navn, MAPPE).href, { vendt }).then((billede) => {
       const t = new THREE.Texture(billede);
+      t.flipY = !billede.vendt; // (et ImageBitmap er vendt, da det blev pakket ud)
       t.needsUpdate = true;
       t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
       if (kanaler === 2) t.format = THREE.RGFormat;

@@ -316,7 +316,8 @@ function lavTabel(billede, hMin, hSpan, størrelse, færdig) {
     g.drawImage(billede, 0, -y0);
     const px = g.getImageData(0, 0, c.width, h).data;
     for (let y = 0; y < h; y++) {
-      const række = Math.min(H - 1, Math.floor((y0 + y) / fy)) * B;
+      const yy = billede.vendt ? billede.height - 1 - (y0 + y) : y0 + y; // (et ImageBitmap fra hent(…, { vendt }) står på hovedet)
+      const række = Math.min(H - 1, Math.floor(yy / fy)) * B;
       for (let x = 0; x < c.width; x++) {
         const i = (y * c.width + x) * 4;
         const j = række + Math.min(B - 1, Math.floor(x / fx));

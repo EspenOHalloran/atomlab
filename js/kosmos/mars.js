@@ -25,6 +25,7 @@ import { lavFormmåne } from '../solsystem/maane-form.js';
 import { lavLandskab, ØJE, eksponering } from '../solsystem/landskab.js';
 import { lavPanorama } from '../solsystem/panorama.js';
 import { hent, MAPPE, glem, iLager } from '../solsystem/hent.js';
+import { lavShadereFørst } from '../solsystem/shadere.js';
 import { kontakt } from '../sideknap.js';
 import { lavHentebjælke, tonInd } from '../hentning.js';
 
@@ -325,20 +326,29 @@ export default {
         l.henter = true;
         let mangler = 2;
         const ét = (t) => {
-          if (t && forhånd && aktiv) verden.renderer.initTexture(t);
+          if (t && forhånd) påForhånd(t);
           if (--mangler > 0) return;
           l.klar = true;
           for (const f of l.vedKlar) f();
           l.vedKlar.length = 0;
         };
-        hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; ét(t); }, { anisotropi, rundt: false, fejl: ét });
-        hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; ét(t); }, { farve: false, kanaler: 2, rundt: false, fejl: ét });
+        // (vendt: pakkes ud uden for hovedtråden, så de går 4-6 gange hurtigere at lægge i grafikkortet, G1)
+        hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; ét(t); }, { anisotropi, rundt: false, fejl: ét, vendt: true });
+        hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; ét(t); }, { farve: false, kanaler: 2, rundt: false, fejl: ét, vendt: true });
       }
       if (st.detalje && l.detalje && !l.detalje.henter) {
         l.detalje.henter = true;
-        hent(`mars-${id}-detalje-hoejde-${lokaltStr}.png`, (t) => { l.net.sætDetalje(t); l.detalje.hentet = true; }, { farve: false, kanaler: 2, anisotropi, rundt: false });
+        hent(`mars-${id}-detalje-hoejde-${lokaltStr}.png`, (t) => {
+          l.net.sætDetalje(t);
+          l.detalje.hentet = true;
+          if (forhånd) påForhånd(t);
+        }, { farve: false, kanaler: 2, anisotropi, rundt: false, vendt: true });
       }
     }
+    // Kort, der lægges i grafikkortet på forhånd (ellers sker det, første gang de tegnes, og det hakker). Det sker ikke
+    // midt i en flyvning (hentNæste henter, mens kameraet flyver), men når kameraet står stille, ét pr. billede (G1).
+    const tilKortet = [];
+    const påForhånd = (t) => { if (aktiv) tilKortet.push(t); };
     // Kun nettene ved stedet og det sted, man flyver hen til, tegnes (ids). De andre skjules, og kuglen tegnes dér.
     function aktivér(ids) {
       for (const [id, l] of lokale) l.net.aktiv = ids.includes(id);
@@ -363,10 +373,11 @@ export default {
       hentLokalt(stedMed(TUR[1].id), { forhånd: true, klar: flybyErKlar });
       hentMåner();
     }
-    // Ved et stop på flybyen hentes kortene til det næste stop, så de er klar, når man trykker "Næste"
+    // Ved et stop på flybyen hentes kortene til det næste stop, så de er klar, når man trykker "Næste". De lægges i
+    // grafikkortet, når de er hentet (mens man står ved stoppet), og ikke midt i den næste flyvning (G1).
     function hentNæste(st) {
       const i = TUR.findIndex((s) => s.id === st.id);
-      if (i >= 0 && i + 1 < TUR.length) hentLokalt(stedMed(TUR[i + 1].id));
+      if (i >= 0 && i + 1 < TUR.length) hentLokalt(stedMed(TUR[i + 1].id), { forhånd: true });
     }
 
     // Solen: en lille, skarp prik langt væk i lysets retning (fra Mars ser den ca. ⅔ så stor ud som fra Jorden)
@@ -506,7 +517,7 @@ export default {
           m.form.sætKort(t);
           verden.renderer.initTexture(t);
           m.hentet.kort = true;
-        }, { farve: false, kanaler: 1, anisotropi });
+        }, { farve: false, kanaler: 1, anisotropi, vendt: true });
       }
     }
     // Månens midte i systemets retninger
@@ -852,6 +863,7 @@ export default {
         ny.land = lavLandskab({ renderer: verden.renderer, data, hent, krater, deklination: dekl });
         ny.land.gruppe.visible = false;
         gruppe.add(ny.land.gruppe);
+        lavShadereFørst(ny.land.gruppe, () => aktiv, { hovedtråd: false }); // (kun i baggrunden, se shadere.js)
         for (const f of ny.venter) f(ny);
         ny.venter.length = 0;
       }).catch(() => {});
@@ -1317,6 +1329,7 @@ export default {
         rejse.grænser(minNu, R * 15);
       }
       rejse.opdater(dt);
+      if (tilKortet.length && !rejse.flyver) verden.renderer.initTexture(tilKortet.shift());
       opdaterNavne();
       const k = rejse.skala;
       // I modlys står Solen lige bag den øverste kant af Mars, set fra kameraet. Står den midt bag Mars, ligger
@@ -1355,6 +1368,9 @@ export default {
       }
     }
     verden.opdateringer.add(hvertBillede);
+    // Alle shaderne (også de lokale net, kuglen med huller og månerne, som først ses senere) laves nu, så det ikke
+    // hakker første gang kameraet flyver til et sted (G1, målt med ?maal)
+    lavShadereFørst(gruppe, () => aktiv);
 
     // Kun til tests: hvor kameraet er i forhold til et sted
     const stedTest = new THREE.Vector3();
@@ -1423,6 +1439,7 @@ export default {
       },
       stop() {
         aktiv = false;
+        tilKortet.length = 0;
         clearTimeout(forhåndUr);
         forladLandskab();
         ståVent = null;

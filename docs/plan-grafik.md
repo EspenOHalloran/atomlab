@@ -68,3 +68,4 @@
 ## 6. Status
 Intet er bygget. Venter på jeres svar og go.
 - **12. november 2026:** Go til trin 1 af G1: måleren `?maal` og en gennemgang af hakkene på Mars (Mars hakker lidt, også på pc). Prompten står i [prompt-maaler.md](prompt-maaler.md).
+- **Jeres svar 13. november 2026:** Det hakker, **når kameraet flyver** til et nyt sted, og **første gang et sted besøges** (ikke hele tiden). Pc'en er en **bærbar uden særskilt grafikkort**. Derfor ledes der først efter kort, der lægges i grafikkortet, og shadere, der laves første gang.
