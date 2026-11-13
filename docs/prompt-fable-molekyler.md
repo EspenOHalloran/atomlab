@@ -30,7 +30,7 @@ Bliver det et forløb, en 13-årig kan tage alene på fem minutter og bagefter s
 2. **Kernesætningen:** holder den, og er den for lang?
 3. **Trinene:** for hvert trin, der skal ændres: hvad, hvorfor og et forslag til ny tekst (kort dansk, til en 13-årig). Tjek reglerne i skabelonen (3-6 trin, gæt i mindst to trin, én handling, højst ca. 15 og 20 ord, højst to ord pr. trin).
 4. **Fakta:** de påstande i afsnit 6 i udkastet, der er forkerte, upræcise eller for sikre, med kilde. Skriv ikke det, der holder, op én for én.
-5. **Opus' fire spørgsmål til jer** (afsnit 7 i udkastet): din anbefaling til hvert, kort.
+5. **Opus' fire spørgsmål** (afsnit 7 i udkastet): Brugeren har valgt Opus' anbefalinger (se "Jeres svar" i udkastet). Skriv kun, hvor du er uenig, og hvorfor.
 6. **Det, der mangler,** fx en bedre første handling, et bedre gæt eller noget, der vil få barnet til at gå i stå.
 
 ### Regler for dig
