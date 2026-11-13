@@ -26,6 +26,35 @@
 - **Fanen døde ved Jezero (1. kørsel):** Jeres svar: "Jeg tror, det skyldtes, at pc'en var optaget af andre ting. Den kom igen, da jeg vendte tilbage til skærmen." Den frøs altså og kom tilbage, den gik ikke ned. Tidligere tekst: Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
 - **Mangler:** tabletten, og en gentagelse på Iris Xe.
 
+## Tabletten (13. november 2026, kl. 19.04-19.08)
+Mali-G615 MC2 (Android, Chrome), lærred 1920 × 1200 (pixelRatio 1,5, `LAV_KVALITET`). Jorden, Venus, Uranus, Neptun, Jupiter, Mars, Stå på Mars ved Gale og ved Jezero.
+- **Gennemsnit 62 billeder i sekundet** (median 16 ms, 95 % under 29 ms, 99 % under 50 ms), 151 ryk på 238 s. Grafikkortets tid kan ikke måles på denne tablet.
+- **Teksturerne i grafikkortet var ca. 849 MB** (skøn), selvom tabletten henter mindre kort. Det er over dobbelt så meget som budgettet i [retning.md](../retning.md) (ca. 350 MB på tablet). Den gik ikke ned.
+- **Stå på Mars er tungt på tabletten:** Mens man stod ved Gale (fra 19.06.32 til "Tilbage til flybyen" 19.06.38) og ved Jezero (19.07.09-19.07.16), var næsten hvert billede 50-120 ms (ca. 10-18 billeder i sekundet) uden kendt årsag og med under 3 ms på hovedtråden. Så er det næsten sikkert grafikkortet (det kan ikke måles her). Måske da der blev kigget rundt.
+- **Landingen:** Gale 1.362 ms (landskabets 3 shadere 242 ms og kortene 1.097 ms: `gale-h2.png` 310 ms, `gale-naukluft-f0.jpg` 179 ms …), Jezero 1.028 ms (kortene 1.010 ms). Landskabets shadere blev ikke lavet på forhånd, så tabletten kan nok ikke oversætte i baggrunden.
+- **Andre ryk:** Mars åbnes 434 ms, Jupiters månekort på forhånd ca. 110 ms hver (fire ryk), Jordens kort 164 ms.
+- Uddrag af teksten:
+```
+AtomLab-måler 13.11.2026, 19.08.01, skærm #solsystem
+Browser: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36
+Grafikkort: ANGLE (ARM, Mali-G615 MC2, OpenGL ES 3.2)
+Skærm 1280×800, vindue 1280×800, devicePixelRatio 1.5, touch (LAV_KVALITET): ja
+Lærred 1920×1200 (pixelRatio 1.5)
+Nu: 62 billeder/s, 16 ms pr. billede, værst (5 s) 21 ms
+Kald 27, trekanter 669.456 (hele billedet), geometrier 57, teksturer 93, shaderprogrammer 40
+Teksturer i grafikkortet (skøn): 849 MB nu, højst 849 MB. JavaScript-hukommelse: 10 MB
+Siden start (238 s): 14.790 billeder, gennemsnit 62 billeder/s, median 16 ms, 95 % under 29 ms, 99 % under 50 ms, ryk over 50 ms: 151
+Kort lagt i grafikkortet: 72 (2.937 ms i alt). Shaderprogrammer lavet: 24 (607 ms i alt)
+De dyreste shadere: tF0, bF3, tS0 106 ms; bLag, uPx, uSolL 82 ms; uMaane, uMaaneLys, uSol 54 ms; tRing, uRingInd, tKort 43 ms; uSol, rot, skySted 42 ms; kort, harKort, farve 40 ms
+De dyreste kort: 4096×4096 gale-h2.png 310 ms; 4096×4096 jezero-h2.png 301 ms; 4096×4096 gale-naukluft-f0.jpg 179 ms; 4096×4096 gale-naukluft-f1.jpg 165 ms; 4096×4096 jezero-f2.jpg 164 ms; 4096×4096 jezero-randen-f1.jpg 149 ms; 4096×4096 gale-f2.jpg 148 ms; 4096×4096 jezero-randen-f0.jpg 138 ms
+19.04.34-36  ca. 85-120 ms × 4: io-, europa-, ganymedes- og callisto-4k.jpg på forhånd
+19.04.43  434 ms: 9 nye shadere 0,2 ms; tryk: 🔴Mars; lang opgave 430 ms
+19.06.14  1362 ms (tegn 1355): 3 nye shadere 242 ms (bLag, uPx, uSolL | tF0, bF3, tS0 | uMaane, uMaaneLys, uSol); kort i grafikkortet 1097 ms: gale-h2.png 310 ms, gale-naukluft-f0.jpg 179 ms, gale-naukluft-f1.jpg 165 ms, 6 små
+19.06.32-38  ca. 60 billeder på 50-134 ms, ingen kendt årsag (opdater og tegn under 3 ms), indtil "↑ Tilbage til flybyen"
+19.07.00  1028 ms (tegn 1021): kort i grafikkortet 1010 ms: jezero-h2.png 301 ms, jezero-f2.jpg 164 ms, jezero-randen-f1.jpg 149 ms, 6 små
+19.07.09-16  ca. 15 billeder på 50-100 ms, ingen kendt årsag (stående ved Jezero)
+```
+
 ## 3. kørsel: Iris Xe om aftenen, med den rettede måler (13. november 2026, kl. 18.56-19.00)
 Mars (flyby, Stå på Mars ved Gale), så menuen, Solsystemet igen og Saturn. Kopieret i menuen.
 - **Det nye: teksturerne i grafikkortet er ca. 937 MB** (skøn, højst 938 MB), også efter man er gået tilbage til menuen. JavaScript-hukommelsen er 324 MB. Billederne fra `hent.js` bliver i grafikkortet, når man forlader en planet (med vilje, så den åbner hurtigt igen), men det strider mod [retning.md](../retning.md) ("Når man forlader en skærm, frigives dens billeder", højst ca. 350 MB på tablet). Det kan have været med til frysningen i 1. kørsel, og det er en risiko på tabletten.
