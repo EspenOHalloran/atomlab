@@ -51,6 +51,7 @@ await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().står, nul
 let t = await stå();
 tjek('står ved Naukluft, og Mars-kloden er skjult', t.står && t.sted === 'naukluft' && !t.kloden);
 tjek('lander (kameraet er højt oppe først)', t.lander && t.øjne > 100, JSON.stringify(t));
+tjek('landskabet er gjort klar, før billedet toner over (skyggerne er regnet, G1 trin 3, del 3)', t.skygger === 1 && !t.regner, JSON.stringify({ skygger: t.skygger, regner: t.regner }));
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
 t = await stå();
