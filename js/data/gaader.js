@@ -211,6 +211,23 @@ export const GÅDER = [
       <p><b>Ens indtil videre:</b> Protonen og antiprotonen har samme forhold mellem ladning og masse inden for 16 billiontedele (BASE 2022), og i 2023 viste ALPHA-g, at antibrint falder nedad som alt andet. Den 24. marts 2026 kørte BASE 92 antiprotoner i en fælde på en lastbil tværs over CERN. Målet er at kunne måle dem i roligere laboratorier. Alt det antistof, der er lavet, vejer kun nogle få nanogram (milliardtedele af et gram).</p>
       <p><b>Neutrinoerne:</b> Takaaki Kajita og Arthur McDonald fik Nobelprisen i 2015 for at vise, at neutrinoer skifter mellem tre slags og derfor har en masse. Det åbner for, at neutrinoer og antineutrinoer kan skifte forskelligt. T2K i Japan og NOvA i USA har målt i årevis, men har ikke fundet et klart svar.</p>`,
     ærligt: '<p>At Big Bang lavede lige meget stof og antistof, er det, fysikkens love tyder på, men ingen har set det. Og "Målt eller gæt?" er her den anden vej rundt: Forskellen er målt, men hvad den skyldes i sidste ende, og om der er flere, er ikke afgjort.</p>',
+    // Scenen i 3D (G4a, js/gaader/antistof.js). Lys bliver til en elektron og en positron, hvis det har mindst 1,022 MeV
+    // (2 × 0,511) og er tæt på en kerne, der tager en del af stødet (Wikipedia "Pair production"). Synligt lys har ca.
+    // 1,6-3,3 eV, så det er 300.000-650.000 gange mindre. Et par i ro bliver til to (af og til tre) gammafotoner
+    // (Wikipedia "Electron–positron annihilation"). Tusind par i stedet for en milliard: fakta-faelder.md (antistof).
+    scene: {
+      start: 'Tryk i mørket, så bliver lys til stof.',
+      par: 'Lyset blev til to: én stof og én antistof. Træk dem sammen.',
+      lys: 'De blev til lys igen. Prøv at lave kun stof.',
+      kunStof: 'Ingen har set lys blive til kun stof. Der kommer altid én af hver.',
+      bang: [
+        'Lige efter Big Bang: næsten lige meget stof og antistof. Her ca. tusind par.',
+        'De mødes og bliver til lys.',
+        'Én partikel stof blev tilovers. Her én for tusind par, i virkeligheden ca. én for en milliard.',
+        'Alt, du kan se, er resten.',
+      ],
+      ærligt: '<p>I scenen er partiklerne elektroner og positroner (antielektroner). Lys kan kun blive til et par, hvis det har energi nok, flere hundrede tusind gange så meget som synligt lys, og er tæt på en atomkerne. Lige efter Big Bang var der mange slags partikler, og ingen ved, hvordan resten blev til.</p>',
+    },
   },
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/begyndelsen.md (Fable E5) og fakta-gaader.md afsnit 4.
   {
