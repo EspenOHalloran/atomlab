@@ -1,6 +1,6 @@
 # Lige nu: Solsystemet og Kosmos
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 13. november 2026.*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 14. november 2026.*
 
 **Senest lavet (13. november 2026): G1 trin 3, del 1, forslag G (billederne frigives).** Jeres go: "Go med dine anbefalinger" (alt frigives, når man forlader Solsystemet eller Kosmos, og landskabet, når man letter fra Stå på Mars).
 - Hvert billede har nu en ejer (planeten eller Stå på Mars) og slettes fra grafikkortet, når ejeren forlades. Delte billeder bliver liggende (fx Jorden mellem Årstiderne og Formørkelser). Udseendet er det samme.
@@ -10,7 +10,7 @@
 **Før det:** Måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
 
 **Næste (venter på jeres go):**
-00. **Fable tjekker drejebogen til overblikket (før 16. november 2026):** Opus' udkast er skrevet 13. november 2026 med jeres svar ([drejebog-overblik.md](../drejebog-overblik.md)). Start en ny session med **Fable 5.2, `high`**: "Læs `docs/prompt-fable-overblik.md`, og gør det, der står under 'Prompten'." Kan køre samtidig med G1 trin 3. Overblikket bygges efter G1 trin 3. Jeres ønske samme dag: Merkur og Pluto skal bygges, og indtil da står de som en lille kugle med et kort panel i overblikket.
+00. **Fables tjek af drejebogen til overblikket er skrevet (14. november 2026), se `docs/fable/E9-overblik.md`.** Kan bygges, men trin 1 og 3-5, tidsskyderen og tre ting om "Forstørret" bør rettes først. Næste (ny session, Opus, høj effort): "Læs 'Efter Fables svar' i `docs/prompt-fable-overblik.md` og `docs/fable/E9-overblik.md`. Skriv `docs/fable/E9-overblik-noter.md`, og ret drejebogen." Så svarer I og giver go, og overblikket bygges efter G1 trin 3. Jeres ønske 13. november 2026: Merkur og Pluto skal bygges, og indtil da står de som en lille kugle med et kort panel.
 0. **Hakkene på Mars, trin 3 (G1):** Del 1 (G) er lavet. Næste er del 2, forslag H (Stå på Mars lettere på tablet), og så del 3, forslag A og F (`vendt` for de store kort), hver med et go. Målingerne står i [maalinger/mars-g1.md](../maalinger/mars-g1.md), og prompten i [prompt-maaler.md](../prompt-maaler.md).
 1. **Venus V3** (natsiden gløder og stederne under skyerne, [plan-venus.md](../plan-venus.md)). Venter på jeres go. Start en ny session (Opus, høj effort) med teksten: "Læs docs/prompt-venus.md og kør V3." Bagefter V4-V5, og så Merkur → Pluto → overblikket.
 2. **Mars ekstra** (efter planeterne eller når I vil, kan samles i én plan med et go pr. del): Curiosity som 3D-model (M8c del 2), Nordpolen tæt på (M7b-pol, jeres fund 7. november 2026: nordpolen er ikke skarp), stenene og terrænet i Stå på Mars (M8c del 3, jeres fund 3. november 2026: stenene ser ens ud) og lyset, den dyre del (L2, kræver en session på jeres pc). Se [plan-mars.md](../plan-mars.md).
