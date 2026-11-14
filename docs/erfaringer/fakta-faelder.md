@@ -163,3 +163,8 @@
 - "Elektronen hopper, når natrium og chlor er 9,4 Å fra hinanden" (harpunen). 9,4 Å er den største afstand, hvor hoppet *kan* betale sig (Wikipedia "Harpoon reaction", efter Atkins), ikke stedet, hvor det altid sker. Skriv "kan hoppe, når de er tættere end ca. 9 Å" (Fable E6, 14. november 2026).
 - "Natrium holder løst på sin elektron, og chlor trækker hårdt, så chlor tager den." Sandt sammenlignet med andre grundstoffer, men mod hinanden holder natrium hårdest (5,14 eV mod 3,61 eV), når atomerne er langt fra hinanden. Det er først tæt på, at chlor vinder. Skriv "når de mødes" (Fable E6).
 - "Saltkorn er terninger." Kun fint salt. Flagesalt og knust groft salt er det ikke, og krystaller, der vokser hurtigt, bliver trappeformede (Wikipedia "Halite"). Skriv "kornene i fint salt" (Fable E6).
+
+*Strøm og Lys, drejebøgerne (Fable E11, 14. november 2026). Kilderne står i [E11-strom-lys-drejebog.md](../fable/E11-strom-lys-drejebog.md) afsnit 5.*
+- "Helium blev fundet som en mørk linje i sollyset." Det var en *lys* gul linje i lyset fra Solens kant (protuberanserne) under den totale formørkelse 18. august 1868, og den blev først taget for natrium. Linjen ligger ved 587,56 nm (NIST), ikke 587,49 som Wikipedia skriver.
+- "Helium blev først fundet på Jorden i 1895." Palmieri meldte linjen fra Vesuv i 1881. Ramsay fik gassen ud af et mineral i 1895. Skriv "27 år, før nogen fik fat i det på Jorden". At Frankland var med til at vælge navnet, er tvivlsomt.
+- "I en vindmølle drejer magneter forbi spoler." Rigtigt som princip, men i mange møller er magneterne elektromagneter og ikke faste magneter (Wikipedia "Wind turbine"). Og vindens andel af strømmen er forskellig, alt efter om man måler mod det, Danmark laver, eller det, Danmark bruger.
