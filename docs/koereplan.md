@@ -29,7 +29,7 @@ En prøve med sønnen efter hvert punkt.
 
 ## Serie 2, "Ét produkt"
 5. **Byggeklodserne og budgettet for panelerne** (nr. 7): én udgave af hver klods, højst fire spørgsmål fremme, brødtekst mindst 15 px skærm for skærm, tegnede ikoner i stedet for emoji, klokken fjernet eller lagt ind i forløbet, og de syv hjælpetekster slanket til "sådan styrer du" (mellem, kort plan først).
-6. **Ringen** (nr. 8, sporet Menuen): Kernerne først, "Atomer" og "Liv" ([plan-verdener.md](plan-verdener.md)) (lille) **Jeres go 14. november 2026:** Runden på tabletten er taget (menuen ser fin ud), så det laves nu, og sporet Menuen lukkes bagefter (nr. 4 i [prompt-naeste-fem.md](prompt-naeste-fem.md)).
+6. ✅ **Ringen** (nr. 8, sporet Menuen, **lavet 14. november 2026, og sporet Menuen er lukket**): Kernerne først, "Atomer" og "Liv" ([plan-verdener.md](plan-verdener.md)) (lille) **Jeres go 14. november 2026:** Runden på tabletten er taget (menuen ser fin ud), så det laves nu, og sporet Menuen lukkes bagefter (nr. 4 i [prompt-naeste-fem.md](prompt-naeste-fem.md)).
 7. **Rejsen og "Se også"** (nr. 9): de første stationer, hver med sit eget link (mellem til stor, plan først).
 
 ## Serie 3, "Klar til andre"
@@ -63,7 +63,7 @@ En prøve med sønnen efter hvert punkt.
 | [Molekyler](lige-nu/molekyler.md) | Liv som to forløb (begge lavet, status "prøve") og Molekyler som egen del (Serie 1 nr. 2 og 3). L3 holder pause. |
 | [Tid og rum](lige-nu/tid.md) | Runden med sønnen (begge forløb om tid og Kosmos i fire grupper er bygget, Serie 1 nr. 4). |
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Overblikket, når Forløb-klodsen findes. Venus V3 holder pause til Serie 1 er prøvet. |
-| [Menuen](lige-nu/menuen.md) | Ringen (Serie 2 nr. 6, jeres go 14. november 2026), så lukkes sporet. |
+| [Menuen](lige-nu/menuen.md) | **Lukket 14. november 2026** (Ringen er lavet). Det, der skal rettes i menuen, tages i Småting eller i den del, der giver menuen en ny verden. |
 
 ## Baggrund (jeres idéer og Opus' vurderinger, flyttet ordret fra ideer.md 7. november 2026)
 

@@ -1,4 +1,4 @@
-# Koden: Liv (verdenen "Ild og liv")
+# Koden: Liv (verdenen "Liv")
 
 *Lavet 9. november 2026 (Liv L1), L2 10. november 2026. Planen står i [plan-liv.md](../plan-liv.md), faktagrundlaget i [fakta-liv.md](../fakta-liv.md).*
 
@@ -52,5 +52,5 @@
 - `js/data/liv/opskriften.js`: `HBB_START` (de første 10 kodoner af HBB, fra `HBB.dna`), `NIVEAUER` (teksterne og tallene), `OPGAVER_LIV`, `BYG_TRIN` 8, `nyByggestreng`, `parGrund` ('passer', 'bred', 'smal', 'ladning') og `PAR_TEKST`.
 
 ## Menuen
-- `VERDENER` i `js/karrusel.js`: `{ id: 'ildogliv', navn: 'Ild og liv', dele: ['liv'], motiv: 'liv' }` mellem Kernerne og Elektricitet. Linket `#liv` i `.menukort` i index.html (ikonet `.ikon-liv` og `.ikon-v-ildogliv` i style.css).
+- `VERDENER` i `js/skaerme.js`: `{ id: 'liv', navn: 'Liv', motiv: 'liv' }` (hed `ildogliv` og "Ild og liv" til 14. november 2026) mellem Atomer og Elektricitet. Linket `#liv` i `.menukort` i index.html (ikonet `.ikon-liv` og `.ikon-v-liv` i style.css).
 - Motivet `liv` i `js/menubaggrund.js`: to spiraler af prikker med trin i basernes farver, der drejer langsomt.
