@@ -123,7 +123,7 @@ Nye fagord i forslag 1: *magnetfelt* og *induktion* (kan undgås: "en magnet, de
 | **Wollaston** så de første mørke linjer i sollyset i **1802**. **Fraunhofer** fandt dem igen i **1814** og målte over 570 | Wikipedia "Fraunhofer lines" | RS |
 | **Kirchhoff** viste i **1859**, at Solen indeholder **natrium**. Kirchhoff og Bunsen fandt **cæsium (1860)** og **rubidium (1861)** ved deres linjer. Cæsium er opkaldt efter de blå linjer (latin *caesius*, blågrå), rubidium efter de dybrøde (*rubidus*) | Wikipedia "Gustav Kirchhoff", "Caesium" og "Rubidium" | RS |
 | **Comte, 1835:** "nous ne saurions jamais étudier par aucun moyen leur composition chimique" (om stjernerne). Vores oversættelse: "vi vil aldrig på nogen måde kunne undersøge deres kemiske sammensætning". 24 år senere fandt Kirchhoff natrium i Solen | Comte, *Cours de philosophie positive*, bind 2, 19. lektion. Åbnet i 5. udgave 1892 ("identique à la première"), archive.org `coursdephilosoph02comt` | S (ordlyden), RS (året 1835) |
-| **Helium** blev set som en ukendt **gul linje** i Solen under formørkelsen **18. august 1868** (Rayet, Haig, Janssen og andre). **Lockyer** foreslog et nyt grundstof og opkaldte det efter Solen. På Jorden blev det fundet i **1895** (Ramsay, Cleve og Langlet). Linjen ligger ved **587,56 nm** | Wikipedia "Helium"; NIST ASD (He I) | RS (historien), S (linjen) |
+| **Helium** blev set som en ukendt **lys gul linje** i lyset fra Solens kant (protuberanserne) under formørkelsen **18. august 1868** (Rayet, Haig, Janssen og andre), *ikke* som en mørk linje i sollyset (rettet 14. november 2026 efter Fable E11). Den mangler blandt de mørke linjer i almindeligt sollys. **Lockyer** foreslog et nyt grundstof og opkaldte det efter Solen. På Jorden blev det fundet i **1895** (Ramsay, Cleve og Langlet). Linjen ligger ved **587,56 nm** | Wikipedia "Helium"; NIST ASD (He I) | RS (historien), S (linjen) |
 | **Hydrogens synlige linjer** (Balmer, **1885**): **656,28 nm** (rød), **486,14** (blågrøn), **434,05** (blå) og **410,17** (violet). De kommer, når elektronen falder til skal 2 fra skal 3, 4, 5 og 6. Bohr forklarede dem i 1913 | NIST ASD (H I, bølgelængder i luft); Wikipedia "Balmer series" | S |
 | **Natrium (gul):** to linjer ved **588,995 og 589,592 nm** (D-linjerne). Natrium er så stærk, at den skjuler de andre. Man kigger gennem **koboltblåt glas** for at se fx kalium | NIST ASD (Na I); Wikipedia "Flame test" | S (linjerne), RS (glasset) |
 | **Lithium (dybrød):** **670,78 nm**. **Kalium (lilla):** de stærke linjer ligger ved **766,5 og 769,9 nm** (mørkerødt, lige ved grænsen af det synlige) og svagere ved **404,4 og 404,7 nm** (violet). Det svage lilla er blandingen | NIST ASD (Li I, K I) | S (linjerne), RS (blandingen) |
@@ -159,8 +159,8 @@ Nye fagord i forslag 1: *magnetfelt* og *induktion* (kan undgås: "en magnet, de
 
 **Del B: Lys og farver** (bygger videre på Værkstedet og Kosmos)
 1. **Flammeprøven (første handling):** Drys et salt i flammen (natrium, lithium, kalium, kobber, strontium), og se farven. Kig så gennem et prisme: Farven deler sig i nogle få skarpe linjer.
-2. **Stregkoden:** Et ukendt salt brænder. Find grundstoffet ved at sammenligne linjerne. Til sidst: Sollyset med de mørke linjer. Find natrium og hydrogen, og en gul linje, der ikke passer med noget fra Jorden: helium (1868). "Hvordan ved vi det?": Comte, 1835 ("aldrig"), og Kirchhoff, 1859.
-3. **Elektronens trin (i Værkstedet):** Byg hydrogen, giv elektronen energi, og se den falde fra skal 3 til 2: rødt lys ved 656 nm. Linker til Bohr og senere Kvantefysik. Brug "trin" eller "energitrin", ikke "skal", om natrium (fælden nedenfor).
+2. **Stregkoden:** Et ukendt salt brænder. Find grundstoffet ved at sammenligne linjerne. Til sidst: lyset fra Solens kant under formørkelsen. Find hydrogen, og en gul linje, der ikke passer med noget fra Jorden: helium (1868). *(Rettet 14. november 2026: Heliums linje var lys og kom fra Solens kant, ikke en mørk linje i sollyset. De mørke linjer hører til laboratoriet, se [drejebog-lys.md](drejebog-lys.md).)* "Hvordan ved vi det?": Comte, 1835 ("aldrig"), og Kirchhoff, 1859.
+3. **Elektronens trin** (Fable foreslår et "Hvorfor?"-kort i Lys i stedet for Værkstedet, se [drejebog-lys.md](drejebog-lys.md) afsnit 6): Byg hydrogen, giv elektronen energi, og se den falde fra skal 3 til 2: rødt lys ved 656 nm. Linker til Bohr og senere Kvantefysik. Brug "trin" eller "energitrin", ikke "skal", om natrium (fælden nedenfor).
 
 **Del C (mulig senere): Bølgerne.** En skyder fra radiobølger til gamma, hvor bølgen bliver kortere, og man ser, hvad den bruges til (FM-radio 3 m, mikrobølgeovn og Wi-Fi ca. 12 cm, synligt lys, røntgen) og en streg ved ca. 10 eV: "herfra kan den rive elektroner løs". Kobler til hydrogens 21-cm-linje i Kosmos og til strålingen i Reaktoren. Passer til udkastets "bølgetyper, herunder … amplitude, bølgelængder og frekvens".
 
@@ -193,7 +193,7 @@ Nye fagord i forslag 1: *magnetfelt* og *induktion* (kan undgås: "en magnet, de
 ---
 
 ## 11. Ikke fundet eller skal tjekkes igen
-- Hvor stærkt Jordens magnetfelt er i Danmark (ca. 50 µT er et gæt). DTU Space eller IGRF-kortet.
+- ~~Hvor stærkt Jordens magnetfelt er i Danmark~~ **Fundet 14. november 2026:** regnet med IGRF-14 for København: 16,8 µT vandret, 50,7 µT i alt, 71° hældning (se [E11-noterne](fable/E11-strom-lys-noter.md) afsnit 1).
 - Vindmøllernes andel af Danmarks el (59 % i 2024 er fra Our World in Data via Wikipedia). Slå op hos Energistyrelsen (ens.dk er lukket i miljøet).
 - Hvorfor himlen ikke er violet (mindre violet i sollyset, øjet er mindre følsomt). Ikke åbnet.
 - Strømmen i et lyn (ofte sagt ca. 30.000 A). Ikke fundet i den tekst, der blev læst.
