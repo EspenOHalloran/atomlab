@@ -139,8 +139,7 @@ function visFokus(id) {
 // Ind i en gåde: kameraet flyver ind i lyset (et tryk springer over), og så vises kortet
 function flyvInd(id) {
   if (!aktiv || gåde || !skinne) return;
-  lyd.klik();
-  if (!skinne.flyvInd(() => { if (aktiv && !gåde) visGåde(id); })) return;
+  if (skinne.flyvInd(() => { if (aktiv && !gåde) visGåde(id); })) lyd.klik();
 }
 
 // Fra et kort tilbage til skinnen (‹ Alle gåder, Esc og "Alle gåder" under "Det så du")

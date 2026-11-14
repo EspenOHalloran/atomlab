@@ -218,6 +218,7 @@ export function testAdgang() {
   return {
     id: () => id,
     klar: () => Boolean(nu),
+    stille: () => verden.målAfstand == null, // kameraet er gledet på plads
     scene: () => nu?.test?.() ?? null,
     tryk: (x, y) => nu?.tryk?.(new THREE.Vector3(x, y, 0)),
     spol: (sek) => nu?.spol?.(sek),

@@ -241,6 +241,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   });
   tjek('G4a pc: kortet har en scene, og panelet (ca. 380 px) står til højre for den', klar && lay.påKort && lay.panelHøjre && Math.abs(lay.pB - 380) < 4 && lay.vB > 700, JSON.stringify(lay));
   const S = () => T(() => atomlabTest.gaader.scene().scene());
+  await vent(page, () => atomlabTest.gaader.scene().stille()); // ellers kan partiklerne flytte sig på skærmen under trækket
   await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(-3, 0); s.spol(1.5); });
   const par = await S();
   // Træk stoffet hen på antistoffet med musen
