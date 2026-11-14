@@ -15,4 +15,6 @@
 
 **Næste:** Forløb 2 "Hvordan kan det ske?" og oprydningen i en ny session med [prompt-tid-forloeb2.md](../prompt-tid-forloeb2.md) (Opus, høj). Derefter runden med jeres søn med Fables liste (E4, afsnit 6). Fødselsdagshilsnerne kommer senere.
 
+**I gang (14. november 2026): Forløb 2 og oprydningen.** Jeres svar (dialogen): B4 med et animeret målebånd ("📏 Mål", den lige vej lagt to gange langs den skrå), Styr viser de fire mål og "Fast fart" (1 g og "Set fra skibet" under "Mere"), "Hvorfor går tiden langsommere?" hedder "Hvordan kan det ske?", står ikke i listen og har stadig alle fem scener i bjælken (panelet som lag 2 og For nørder), og vejen "Prøv rejsen igen" åbner Rejsen i tid til at lege frit.
+
 **Spørgsmål til jer:** Ingen lige nu.
