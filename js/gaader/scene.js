@@ -3,9 +3,10 @@
 // (her kun antistof.js indtil videre). Kun én scene ad gangen: Den gamle ryddes (ryd), når man skifter kort eller går ud.
 //
 // ctx, som scenen får: gruppe (en THREE.Group i verden.scene), linje(tekst) (én linje nederst i billedet), knapper([{ tekst,
-// gør, id }]) (højst to knapper under linjen), passer(halvBredde, halvHøjde) (kameraet ser lige ind på planet z = 0, så
-// kassen passer i hullet), og punkt(hændelse, v) (hvor på planet z = 0 en finger eller mus er).
-// Scenen kan have ned(p) (true = den tager trækket), træk(p), op(p), tryk(p), opdater(dt, tid) og fjern().
+// gør, id, aktiv }]) (højst to knapper under linjen), passer(halvBredde, halvHøjde) (kameraet ser lige ind på planet z = 0, så
+// kassen passer i hullet, over linjen nederst) og ROLIG.
+// Scenen kan have ned(p) (true = den tager trækket), træk(p), op(p) og tryk(p) med p på planet z = 0, opdater(dt, tid),
+// drejer (må kameraet drejes), egetKamera (scenen styrer selv afstanden), test() og fjern().
 
 import * as THREE from 'three';
 import { verden, passerTilBoks, centrerVindue, ROLIG } from '../scene3d.js';
@@ -14,6 +15,25 @@ import { ryd } from '../kosmos/faelles.js';
 const SCENER = {
   antistof: () => import('./antistof.js'),
 };
+// Gåder uden egen scene endnu: deres lys (js/gaader/lys.js) står stort bag kortet, og kameraet drejer roligt om det
+const lysScene = (m, id, c) => {
+  const lys = m.lavLys(id);
+  if (lys) c.gruppe.add(lys.gruppe);
+  return {
+    drejer: true,
+    trin() {
+      if (this.stillet) return;
+      this.stillet = true;
+      c.passer(3.4, 2.8);
+      verden.styring.enabled = true;
+      verden.styring.autoRotate = !ROLIG;
+      verden.styring.autoRotateSpeed = 0.4;
+    },
+    opdater: (dt, tid) => lys?.opdater(dt, tid),
+    test: () => ({ lys: Boolean(lys) }),
+  };
+};
+const lavLysScene = () => import('./lys.js').then((m) => ({ lavNær: (c) => lysScene(m, id, c) }));
 
 const $ = (id) => document.getElementById(id);
 let aktiv = false;
@@ -49,20 +69,29 @@ function linje(tekst) {
 }
 let knapGør = [];
 function knapper(liste = []) {
-  const nøgle = liste.map((k) => k.tekst).join('|');
+  const nøgle = liste.map((k) => `${k.tekst}${k.aktiv ? '*' : ''}`).join('|');
   knapGør = liste.map((k) => k.gør);
   if (nøgle === sidsteKnapper) return;
   sidsteKnapper = nøgle;
-  $('gaadeSceneKnapper').innerHTML = liste.map((k, i) => `<button class="knap lille" data-scene-knap="${i}"${k.id ? ` data-id="${k.id}"` : ''}>${k.tekst}</button>`).join('');
+  // En knap med aktiv (true/false) er et valg mellem flere (fx DUNE eller Hyper-K) og viser, hvilket der er valgt
+  $('gaadeSceneKnapper').innerHTML = liste.map((k, i) => `<button class="knap lille" data-scene-knap="${i}"${k.id ? ` data-id="${k.id}"` : ''}${'aktiv' in k ? ` aria-pressed="${k.aktiv}"` : ''}>${k.tekst}</button>`).join('');
 }
 
+// Linjen og knapperne nederst i billedet må ikke ligge oven i scenen. Kassen stilles derfor over dem: Kameraet ser en
+// højere kasse (halvH / (1 - andel)) og flyttes ned, så kassens top er øverst i hullet. Pladsen er fast (ikke målt hver
+// gang linjen skifter), så kameraet ikke hopper, når teksten bliver to linjer.
+const PLADS_NEDERST = 110;
 function passer(halvB, halvH) {
   kasse = [halvB, halvH];
   const { kamera, styring } = verden;
-  styring.target.set(0, 0, 0);
+  const andel = Math.min(0.4, PLADS_NEDERST / Math.max(1, verden.hul.height));
+  const højere = halvH / (1 - andel);
+  const midt = halvH - højere;
+  const afstand = kamera.position.distanceTo(styring.target);
+  styring.target.set(0, midt, 0);
   // Kameraet ser lige ind på planet, så det, man trykker på, er der, hvor fingeren er
-  kamera.position.set(0, 0, Math.max(6, kamera.position.length()));
-  passerTilBoks(halvB, halvH);
+  kamera.position.set(0, midt, Math.max(6, afstand));
+  passerTilBoks(halvB, højere);
 }
 
 // ---------- Fingeren og musen ----------
@@ -111,7 +140,7 @@ function lavLyttere() {
   størrelse = new ResizeObserver(() => {
     if (!aktiv) return;
     centrerVindue();
-    if (kasse && !nu?.egetKamera) passerTilBoks(...kasse);
+    if (kasse && !nu?.egetKamera) passer(...kasse);
     nu?.tilpas?.();
   });
   størrelse.observe($('gaaderVindue'));
@@ -138,9 +167,7 @@ export async function vis(nytId, trin, valgt) {
   ventTrin = [trin, valgt];
   verden.styring.autoRotate = false;
   verden.opdateringer.add(opdater);
-  const hent = SCENER[nytId];
-  if (!hent) { ventTrin = null; return; } // de andre gåder får deres lys i en senere delopgave
-  const modul = await hent();
+  const modul = await (SCENER[nytId] ?? lavLysScene)();
   if (mit !== nr || !aktiv) return;
   gruppe = new THREE.Group();
   verden.scene.add(gruppe);

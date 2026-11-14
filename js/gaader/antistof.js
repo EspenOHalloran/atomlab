@@ -10,7 +10,8 @@ import * as THREE from 'three';
 import { verden, LAV_KVALITET } from '../scene3d.js';
 import { glød, skilt, prikTekstur } from '../kosmos/faelles.js';
 import { lyd } from '../lyd.js';
-import { gådeMed } from '../data/gaader.js';
+import { gådeMed, STREG_FORKLARING } from '../data/gaader.js';
+import { fuld, stiplet, tonUd, stempel } from './streg.js';
 
 const HB = 9; // den halve bredde og højde af det, kameraet skal se (planet z = 0)
 const HH = 6;
@@ -154,6 +155,8 @@ export function lavNær(ctx) {
     spol: (s) => { for (let i = 0; i < s * 30; i++) opdater(1 / 30, tid0 + i / 30); },
     test: () => ({
       tilstand, skridt, t,
+      søjler: søjler?.test() ?? null,
+      redskab: redskab?.test() ?? null,
       levende: partikler.filter((x) => x.levende).length,
       stof: partikler.filter((x) => x.levende && x.type === 'stof').length,
       // Hvor de levende partikler står på skærmen (punkter fra øverste venstre hjørne), så en test kan trække i dem
@@ -326,30 +329,36 @@ export function lavNær(ctx) {
     tegnSky(0);
   }
 
-  function visRest() {
-    tilstand = 'rest';
+  // Trin 2 og 3 (og det sidste billede, n = 3) bygges først, når man kommer dertil
+  let søjler = null;
+  let redskab = null;
+  function skjulBang() {
     rydLeg();
-    sky.visible = false;
-    skær.visible = false;
-    korn.visible = true;
-    korn.scale.setScalar(1);
-    rest.visible = true;
-    rest.material.opacity = 1;
-    obj.drejer = true;
-    obj.egetKamera = true;
-    verden.styring.enabled = true;
-    verden.styring.autoRotate = !ROLIG;
-    verden.styring.autoRotateSpeed = 0.25;
-    verden.målAfstand = 150;
-    linje(T.bang[3]);
-    knapper([{ tekst: '↺ Se det igen', id: 'igen', gør: startBang }]);
+    sky.visible = skær.visible = korn.visible = rest.visible = false;
+  }
+  function stilKamera() {
+    obj.drejer = false;
+    obj.egetKamera = false;
+    verden.styring.enabled = false;
+    verden.styring.autoRotate = false;
+    passer(HB, HH);
   }
 
   function trin(n, valgt) {
+    if (n !== 1) søjler?.skjul();
+    if (n < 2) redskab?.skjul();
     if (n === 0 && valgt === null) { if (tilstand !== 'leg') startLeg(); return; }
     if (n === 0) { if (tilstand === 'leg' || tilstand === null) startBang(); return; }
-    // Trin 2 og 3 kommer i næste skridt af G4a. Indtil da står resten (stjernerne) bag kortet.
-    if (tilstand !== 'rest') visRest();
+    if (n === 1) {
+      if (tilstand !== 'søjler') { tilstand = 'søjler'; skjulBang(); stilKamera(); knapper([]); }
+      søjler ??= lavSøjler(gruppe, T, ROLIG);
+      søjler.vis(valgt, linje);
+      return;
+    }
+    // Trin 3 og det sidste billede: redskaberne og "Sig det til en ven"
+    if (tilstand !== 'redskab') { tilstand = 'redskab'; skjulBang(); stilKamera(); }
+    redskab ??= lavRedskab(gruppe, T, ROLIG);
+    redskab.vis(linje, knapper, n >= 3, `Sig det til en ven: ${gådeMed('antistof').ven}`);
   }
 
   // ---------- Hvert billede ----------
@@ -446,6 +455,8 @@ export function lavNær(ctx) {
       g.s.material.opacity = ROLIG ? Math.sin(f * Math.PI) * 0.7 : 1 - f;
     }
     if (tilstand === 'bang') { opdaterBang(dt, tid); return; }
+    if (tilstand === 'søjler') { søjler.opdater(dt, linje); return; }
+    if (tilstand === 'redskab') { redskab.opdater(dt, linje); return; }
     if (tilstand !== 'leg') return;
     // Partiklerne driver langsomt og holder sig inden for kassen
     const dæmp = Math.exp(-dt * 1.8);
@@ -470,4 +481,259 @@ export function lavNær(ctx) {
   }
 
   return obj;
+}
+
+// ---------- Trin 2: de to søjler ----------
+// Den målte forskel (lille, i farve, når stemplet MÅLT er landet) og det, der skal til (hvid stiplet, ud over skærmen,
+// hvor den toner ud: Ingen ved, hvor høj den er). Før gættet er den lille søjle grå.
+const BUND = -4.2;
+function lavSøjler(gruppe, T, ROLIG) {
+  const g = new THREE.Group();
+  g.visible = false;
+  gruppe.add(g);
+  const grå = new THREE.Color(0.35, 0.37, 0.42);
+  const målt = new THREE.Color(0.37, 0.89, 1);
+  g.add(fuld([[-8, BUND, 0], [8, BUND, 0]], new THREE.Color(0.4, 0.45, 0.55), { bredde: 2 }));
+  const lille = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.55), new THREE.MeshBasicMaterial({ color: grå }));
+  lille.position.set(-3, BUND + 0.275, 0);
+  g.add(lille);
+  // Den stiplede søjle: to sider og bunden. Siderne vokser op ud over skærmen og toner ud.
+  const højde = 13;
+  const siderV = tonUd(1.9, BUND, BUND + højde, 0, { fra: 0.4 });
+  const siderH = tonUd(4.1, BUND, BUND + højde, 0, { fra: 0.4 });
+  const stor = new THREE.Group();
+  stor.add(stiplet(siderV.punkter, { lys: siderV.lys }), stiplet(siderH.punkter, { lys: siderH.lys }), stiplet([[1.9, BUND, 0], [4.1, BUND, 0]]));
+  g.add(stor);
+  const navn = T.søjler.map((tekst, i) => {
+    const s = skilt(tekst, i ? '#e8eeff' : '#8fe6ff', 0.62);
+    s.position.set(i ? 3 : -3, BUND - 0.75, 0.5);
+    g.add(s);
+    return s;
+  });
+  const førNavn = skilt(T.førSøjle, '#c8ccd6', 0.62);
+  førNavn.position.copy(navn[0].position);
+  g.add(førNavn);
+  const st = stempel('MÅLT', 1.25);
+  st.sprite.position.set(-3, BUND + 2.2, 1);
+  g.add(st.sprite);
+  let t = -1; // tiden siden gættet
+  return {
+    g,
+    vis(valgt, linje) {
+      g.visible = true;
+      førNavn.visible = valgt === null;
+      navn[0].visible = valgt !== null;
+      if (valgt === null) {
+        navn[1].visible = false;
+        t = -1;
+        lille.material.color.copy(grå);
+        stor.visible = false;
+        st.skjul();
+        linje(T.målt);
+        return;
+      }
+      if (t < 0) {
+        t = 0;
+        st.slå(ROLIG);
+        linje(STREG_FORKLARING);
+      }
+    },
+    skjul() { g.visible = false; },
+    opdater(dt, linje) {
+      if (!g.visible || t < 0) return;
+      t += dt;
+      st.opdater(dt);
+      if (st.landet()) lille.material.color.lerp(målt, Math.min(1, dt * 6));
+      // Den stiplede søjle vokser op, når stemplet er landet
+      const f = THREE.MathUtils.clamp((t - 0.8) / (ROLIG ? 0.01 : 1.4), 0, 1);
+      stor.visible = f > 0;
+      navn[1].visible = stor.visible;
+      stor.scale.y = Math.max(0.001, f);
+      stor.position.y = BUND * (1 - stor.scale.y);
+      if (t > 4.5 && t - dt <= 4.5) linje(T.forLidt);
+    },
+    test: () => ({ stempel: st.landet(), farve: lille.material.color.getHexString(), stor: stor.visible }),
+  };
+}
+
+// ---------- Trin 3: redskaberne ----------
+// DUNE: et snit gennem Jorden i rigtig skala (1.300 km), og strålen af neutrinoer i en lige linje gennem jorden.
+// Hyper-Kamiokande: tanken (68 × 71 m) med lysfølere på væggen. En neutrino, der rammer, giver en ring af lys (Cherenkov).
+// Strålen skifter mellem neutrinoer (gylden, som stof) og antineutrinoer (turkis, som antistof) hvert 4. sekund.
+const SKIFT = 4;
+function lavRedskab(gruppe, T, ROLIG) {
+  const N = T.navne;
+  const g = new THREE.Group();
+  g.visible = false;
+  gruppe.add(g);
+
+  // DUNE: 1.300 km = 14 enheder
+  const dune = new THREE.Group();
+  const km = 14 / 1300;
+  const R = 6371 * km;
+  const top = 1.2;
+  const midte = new THREE.Vector3(0, top - R, 0);
+  const bue = [];
+  for (let i = 0; i <= 64; i++) {
+    const a = -0.16 + 0.32 * (i / 64);
+    bue.push([midte.x + Math.sin(a) * R, midte.y + Math.cos(a) * R, 0]);
+  }
+  const jord = new THREE.Mesh(new THREE.CircleGeometry(R, 256, Math.PI / 2 - 0.16, 0.32), new THREE.MeshBasicMaterial({ color: 0x1a140f }));
+  jord.position.copy(midte);
+  dune.add(jord, fuld(bue, new THREE.Color(0.45, 0.75, 0.4), { bredde: 2.5 }));
+  const yKant = midte.y + Math.sqrt(R * R - 49);
+  const fra = new THREE.Vector3(-7, yKant, 0);
+  const til = new THREE.Vector3(7, yKant, 0);
+  for (const [p, navn] of [[fra, N.fermilab], [til, N.sanford]]) {
+    const hus = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.35, 0.3), new THREE.MeshBasicMaterial({ color: 0x9fb4d8 }));
+    hus.position.set(p.x, p.y + 0.15, 0);
+    const s = skilt(navn, '#cfe0ff', 0.55);
+    s.position.set(p.x, p.y + 0.8, 0.5);
+    dune.add(hus, s);
+  }
+  const afstand = skilt(N.km, '#e8eeff', 0.6);
+  afstand.position.set(0, top + 2.35, 0.5);
+  dune.add(afstand, fuld([[-7, top + 1.8, 0], [-7, top + 1.6, 0], [7, top + 1.6, 0], [7, top + 1.8, 0]], new THREE.Color(0.55, 0.6, 0.7), { bredde: 1.5 }));
+  g.add(dune);
+
+  // Strålen: prikker, der flyver fra Fermilab til Sanford Lab i en lige linje gennem jorden
+  const STRÅLE = 48;
+  const stråle = prikSkyEnkel(STRÅLE, 0.32);
+  dune.add(stråle.punkter);
+  const strålenavn = { neutrino: skilt(N.neutrino, '#ffd27a', 0.55), anti: skilt(N.anti, '#8fe6ff', 0.55) };
+  for (const s of Object.values(strålenavn)) { s.position.set(0, yKant - 1.1, 0.5); dune.add(s); }
+
+  // Hyper-Kamiokande: 68 × 71 m = 6,8 × 7,1 enheder, vippet lidt mod kameraet, så man ser ind i tanken
+  const hk = new THREE.Group();
+  hk.rotation.x = 0.32;
+  hk.scale.setScalar(0.85);
+  hk.position.y = 0.5;
+  const r = 3.4;
+  const h = 7.1;
+  const ring = (y) => Array.from({ length: 65 }, (_, i) => [Math.cos(i / 64 * Math.PI * 2) * r, y, Math.sin(i / 64 * Math.PI * 2) * r]);
+  const tankFarve = new THREE.Color(0.37, 0.75, 0.95);
+  hk.add(fuld(ring(-h / 2), tankFarve, { bredde: 2 }), fuld(ring(h / 2), tankFarve, { bredde: 2 }));
+  for (const x of [-r, r]) hk.add(fuld([[x, -h / 2, 0], [x, h / 2, 0]], tankFarve, { bredde: 2 }));
+  // Lysfølerne på væggen
+  const FØLERE = LAV_KVALITET ? 700 : 1100;
+  const følere = prikSkyEnkel(FØLERE, 0.2);
+  const fPos = følere.pos;
+  for (let i = 0; i < FØLERE; i++) {
+    const a = Math.random() * Math.PI * 2;
+    fPos.set([Math.cos(a) * r * 0.98, (Math.random() - 0.5) * h * 0.97, Math.sin(a) * r * 0.98], i * 3);
+  }
+  følere.punkter.geometry.attributes.position.needsUpdate = true;
+  const fLys = new Float32Array(FØLERE); // hvor meget hver føler lyser lige nu (ringen)
+  hk.add(følere.punkter);
+  const bred = skilt(N.bred, '#cfe0ff', 0.55);
+  bred.position.set(0, h / 2 + 0.9, 0);
+  const høj = skilt(N.høj, '#cfe0ff', 0.55);
+  høj.position.set(r + 1.1, 0, 0);
+  hk.add(bred, høj);
+  // Neutrinoerne kommer ind fra venstre (fra J-PARC, 295 km væk)
+  const ind = prikSkyEnkel(16, 0.3);
+  hk.add(ind.punkter);
+  g.add(hk);
+
+  let vis = 'dune';
+  let t = 0;
+  let nesteRing = 1.5;
+  let linjeTid = 0;
+  const v = new THREE.Vector3();
+  const retning = new THREE.Vector3();
+  const COS42 = Math.cos(THREE.MathUtils.degToRad(42));
+
+  function lysRing() {
+    // En neutrino rammer et sted i tanken, og den hurtige partikel, den skubber til, giver en kegle af lys (ca. 42° i vand),
+    // der rammer væggen som en ring
+    const start = v.set(-r * 0.5, (Math.random() - 0.5) * h * 0.5, (Math.random() - 0.5) * r * 0.6);
+    retning.set(1, (Math.random() - 0.5) * 0.3, (Math.random() - 0.5) * 0.3).normalize();
+    for (let i = 0; i < FØLERE; i++) {
+      const dx = fPos[i * 3] - start.x, dy = fPos[i * 3 + 1] - start.y, dz = fPos[i * 3 + 2] - start.z;
+      const l = Math.hypot(dx, dy, dz) || 1;
+      const cos = (dx * retning.x + dy * retning.y + dz * retning.z) / l;
+      if (Math.abs(cos - COS42) < 0.06) fLys[i] = 1;
+    }
+  }
+
+  const strålefarve = () => (Math.floor(t / SKIFT) % 2 ? FARVE.anti : FARVE.stof);
+
+  return {
+    g,
+    vis(linje, knapper, slut, ven) {
+      g.visible = true;
+      dune.visible = vis === 'dune';
+      hk.visible = vis === 'hk';
+      linjeTid = 0;
+      linje(slut ? ven : T[vis]);
+      knapper([
+        { tekst: 'DUNE (USA)', id: 'dune', aktiv: vis === 'dune', gør: () => { vis = 'dune'; this.vis(linje, knapper, slut, ven); } },
+        { tekst: 'Hyper-K (Japan)', id: 'hk', aktiv: vis === 'hk', gør: () => { vis = 'hk'; this.vis(linje, knapper, slut, ven); } },
+      ]);
+      this.slut = slut;
+    },
+    skjul() { g.visible = false; },
+    opdater(dt, linje) {
+      if (!g.visible) return;
+      t += dt;
+      linjeTid += dt;
+      // Efter et stykke tid: hvor mange neutrinoer der er (kun mens trinet står på, ikke på det sidste billede)
+      if (!this.slut && linjeTid > 7 && linjeTid - dt <= 7) linje(T.skiftevis);
+      if (!this.slut && linjeTid > 13 && linjeTid - dt <= 13) linje(T.tommel);
+      const farve = strålefarve();
+      const anti = farve === FARVE.anti;
+      if (dune.visible) {
+        strålenavn.neutrino.visible = !anti;
+        strålenavn.anti.visible = anti;
+        for (let i = 0; i < STRÅLE; i++) {
+          const f = ((i / STRÅLE) + t * 0.18) % 1;
+          const l = ROLIG ? 0.8 : 0.6 + 0.4 * Math.sin(f * Math.PI);
+          sæt(stråle.pos, i, fra.x + (til.x - fra.x) * f, yKant - 0.12, 0);
+          sæt(stråle.farve, i, farve.r * l, farve.g * l, farve.b * l);
+        }
+        stråle.opdateret();
+      }
+      if (hk.visible) {
+        for (let i = 0; i < 16; i++) {
+          const f = ((i / 16) + t * 0.35) % 1;
+          sæt(ind.pos, i, -12 + f * 9, Math.sin(i * 7.1) * 0.8, Math.cos(i * 3.3) * 0.8);
+          sæt(ind.farve, i, farve.r, farve.g, farve.b);
+        }
+        ind.opdateret();
+        if (t > nesteRing) { lysRing(); nesteRing = t + 2.2 + Math.random(); }
+        const dæmp = Math.exp(-dt * (ROLIG ? 1.5 : 2.5));
+        for (let i = 0; i < FØLERE; i++) {
+          fLys[i] *= dæmp;
+          const l = 0.25 + fLys[i] * 1.6;
+          sæt(følere.farve, i, 0.55 * l + fLys[i] * 0.4, 0.62 * l + fLys[i] * 0.5, 0.75 * l + fLys[i] * 0.8);
+        }
+        følere.opdateret();
+      }
+    },
+    test: () => ({ vis, anti: strålefarve() === FARVE.anti }),
+  };
+}
+
+// Skriver tre tal ind på plads i i en liste (uden at lave en ny liste hvert billede)
+function sæt(liste, i, a, b, c) {
+  liste[i * 3] = a;
+  liste[i * 3 + 1] = b;
+  liste[i * 3 + 2] = c;
+}
+
+// Prikker med egen farve pr. prik, som flyttes hvert billede
+function prikSkyEnkel(antal, størrelse) {
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(antal * 3);
+  const farve = new Float32Array(antal * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(farve, 3));
+  const punkter = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: størrelse, map: prikTekstur(), vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  punkter.frustumCulled = false;
+  return {
+    punkter, pos, farve,
+    opdateret() { geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true; },
+  };
 }

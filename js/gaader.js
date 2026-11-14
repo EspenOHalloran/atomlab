@@ -107,6 +107,8 @@ export function visGåde(id) {
     <button class="knap lille gaade-tilbage" data-alle>‹ Alle gåder</button>
     <h3 class="gaade-spørgsmål">${tegn(g.spørgsmål)}</h3>
     <p class="gaade-dato">${tegn(g.dato)}</p>
+    ${g.løst ? `<p class="gaade-løst">Løst! (${tegn(g.løst)})</p>` : ''}
+    ${g.nyt ? `<p class="gaade-nyt"><b>Nyt siden sidst (${tegn(g.nyt.dato)}):</b> ${tegn(g.nyt.tekst)}</p>` : ''}
     <div class="gaade-trin" id="gaadeTrin" aria-live="polite"></div>
     <div class="gaade-lag">
       ${g.nørd ? `<details class="lag-boks" data-lag="gaade-nørd"><summary><strong>For nørder</strong><span class="lag-kort">Tal, navne og flere detaljer</span></summary>${g.nørd}</details>` : ''}
