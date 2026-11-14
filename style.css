@@ -1211,6 +1211,9 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .sol-liste { display: flex; flex-direction: column; gap: 8px; }
 .sol-kloder { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
 .sol-klode { flex-direction: column; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
+/* Kosmos: de fire grupper to og to med ikonet ved siden af navnet, på telefon på én række (Serie 1 nr. 4) */
+#kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#kosmos .kosmos-grupper .sol-klode { flex-direction: row; justify-content: flex-start; gap: 6px; padding: 7px 14px 7px 8px; text-align: left; font-size: 13px; }
 /* Træet: en liste (ikke knapper) med "du er her" som en lys streg i siden */
 .sol-træ { display: flex; flex-direction: column; gap: 1px; }
 .sol-sted { display: flex; align-items: center; gap: 7px; width: 100%; padding: 4px 8px 4px 10px; border: 0; border-left: 3px solid transparent; border-radius: 0 8px 8px 0; background: none; color: var(--tekst); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; position: relative; }
@@ -1395,6 +1398,8 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .kosmos-liste::-webkit-scrollbar { display: none; }
   .kosmos-valg { flex: 0 0 auto; }
   .kosmos-videre { display: none; }
+  #kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #kosmos .kosmos-grupper .sol-klode { flex-direction: column; justify-content: center; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
   /* Træet som rækker af små punkter, der brydes (ellers skubber det "Prøv selv" langt ned) */
   .sol-træ { flex-direction: row; flex-wrap: wrap; gap: 4px; }
   .sol-sted, .sol-sted.niveau-1, .sol-sted.niveau-2 { width: auto; padding: 5px 9px; border: 1px solid var(--panel-kant); border-radius: 10px; font-size: 12.5px; }

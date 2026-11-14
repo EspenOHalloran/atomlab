@@ -43,10 +43,11 @@ await page.reload();
 await page.waitForFunction(() => window.atomlabTest?.kosmos);
 
 // Listen: ét punkt "Tid", og "Hvordan kan det ske?" står ikke i den, men markerer "Tid", når det er åbent
-const liste = await E(() => [...document.querySelectorAll('#kosmosListe .kosmos-valg')].map((x) => x.dataset.id));
+// (siden Serie 1 nr. 4 står punkterne i gruppen "Tid og rum" i træet under de fire grupper)
 await E(() => atomlabTest.kosmos.vælg('tidhvorfor'));
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.kørerForløb?.() === 'hvordan-kan-det-ske', null, { timeout: 15000 });
-const valgt = await E(() => [...document.querySelectorAll('#kosmosListe .kosmos-valg.valgt')].map((x) => x.dataset.id));
+const liste = await E(() => [...document.querySelectorAll('#kosmosTræ button[data-id]')].map((x) => x.dataset.id));
+const valgt = await E(() => [...document.querySelectorAll('#kosmosTræ button[data-id].valgt')].map((x) => x.dataset.id));
 tjek('listen: "Tid" står der, "Hvordan kan det ske?" ikke, og "Tid" er valgt, mens det er åbent, og tælles ikke med',
   liste.includes('tid') && !liste.includes('tidhvorfor') && valgt.join() === 'tid' && (await page.textContent('#kosmosNavn')) === 'Hvordan kan det ske?'
   && /af 12 set/.test(await page.textContent('#kosmosSet')), JSON.stringify({ liste, valgt }));

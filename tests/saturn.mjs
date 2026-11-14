@@ -57,7 +57,7 @@ const side = async (adresse) => {
   const støvÅrstider = await s.evaluate(() => atomlabTest.solsystem.rumstøv());
   await s.evaluate(() => { location.hash = '#kosmos'; });
   await s.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'));
-  await s.click('#kosmos .kosmos-valg[data-id="bigbang"]');
+  await s.evaluate(() => atomlabTest.kosmos.vælg('bigbang'));
   const iBigBang = await s.evaluate(() => atomlabTest.kosmos.tåger());
   tjek('tågeskyerne: væk i Årstiderne, med i Big Bang', !iÅrstiderne && iBigBang, JSON.stringify([iÅrstiderne, iBigBang]));
   const støvBigBang = await s.evaluate(() => atomlabTest.kosmos.rumstøv());

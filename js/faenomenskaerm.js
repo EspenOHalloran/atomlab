@@ -40,7 +40,8 @@ export { NØGLER } from './data/faenomener.js';
 export { åbnFænomen } from './gaa.js';
 
 // skærm: navnet (fx 'kosmos'). liste: fænomenerne i rækkefølge, eller grupper { navn, ikon, f, under: [fænomener] },
-// hvor f er gruppens eget fænomen (uden f åbner gruppen sit første underpunkt).
+// hvor f er gruppens eget fænomen (uden f åbner gruppen sit første underpunkt). Grupper uden f (Kosmos' fire grupper)
+// har ingen overskrift "Forsøg" over punkterne og intet rejseskilt.
 export function lavFænomenSkærm({ skærm, liste }) {
   const $ = (navn) => document.getElementById(skærm + navn);
   const sektion = document.getElementById(skærm);
@@ -111,7 +112,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // Kloderne på én række (fx Jorden), og under dem et træ med den valgte klodes steder, måner og forsøg
       const kloder = document.createElement('div');
       kloder.className = 'sol-kloder';
-      rejseskilt = lavRejseskilt($('Vindue'));
+      if (grupper.some((g) => g.f)) rejseskilt = lavRejseskilt($('Vindue')); // kun til kloder (Solsystemet)
       for (const [i, g] of grupper.entries()) {
         const b = document.createElement('button');
         b.className = 'kosmos-valg sol-klode';
@@ -272,7 +273,12 @@ export function lavFænomenSkærm({ skærm, liste }) {
     }
     if (grupperet) {
       const åben = åbenGruppe();
-      for (const b of sektion.querySelectorAll('.sol-klode')) b.classList.toggle('valgt', grupper[b.dataset.gruppe] === åben);
+      for (const b of sektion.querySelectorAll('.sol-klode')) {
+        const g = grupper[b.dataset.gruppe];
+        b.classList.toggle('valgt', g === åben);
+        // En gruppe uden eget fænomen (Kosmos) får prikken, så længe et af dens punkter ikke er set
+        if (!g.f) b.classList.toggle('ny', g.under.some((x) => !x.hørerTil && !set.has(x.id)));
+      }
     }
     stedVist = undefined; // træet, panelets hoved og vejen tegnes nedenfor (visSted)
     // Er listen en vandret række (på telefoner), rulles det valgte fænomen frem
@@ -326,13 +332,14 @@ export function lavFænomenSkærm({ skærm, liste }) {
       if (g.f.træ && stedNu() !== g.f.træ.rod) gå(g, g.f.træ.rod);
       return;
     }
+    if (!g.f && åbenGruppe() === g) return; // en åben gruppe uden klode (Kosmos): bliv ved det valgte punkt
     lyd.klik();
     rejsTil(g, () => vælg((g.f ?? g.under[0]).id));
   }
   // Til en anden klode: rejseskiltet ("Kurs mod Mars") vises, mens den bygges (kun i Solsystemet)
   let rejseskilt = null;
   function rejsTil(g, gør) {
-    if (!rejseskilt || !aktiv) gør();
+    if (!rejseskilt || !aktiv || !g.f) gør();
     else rejseskilt.rejs(g.f?.navn ?? g.navn, g.f?.ikon ?? g.ikon, () => { if (aktiv) gør(); });
   }
 
@@ -410,13 +417,13 @@ export function lavFænomenSkærm({ skærm, liste }) {
       }
     }
     if (g.under.length) {
-      overskrift('Forsøg');
-      for (const f of g.under) {
+      if (g.f) overskrift('Forsøg');
+      for (const f of g.under.filter((x) => !x.hørerTil)) {
         const k = stedKnap('', f.navn, 1, f.ikon);
         delete k.dataset.sted;
         k.dataset.id = f.id;
         k.title = f.undertitel;
-        k.classList.toggle('valgt', valgt === f);
+        k.classList.toggle('valgt', valgt === f || valgt?.hørerTil === f.id);
         k.classList.toggle('ny', !set.has(f.id));
         boks.append(k);
       }

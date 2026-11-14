@@ -19,11 +19,26 @@ tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
 tjek('12 fænomener i listen ("Hvordan kan det ske?" hører til "Tid")', ids.length === 12, ids);
 tjek('vores eget solsystem er flyttet', !ids.some((id) => ['aarstider', 'formoerkelser', 'solstorm', 'solensfremtid', 'mars', 'saturn'].includes(id)), ids);
-tjek('12 knapper i listen', (await page.$$('#kosmos .kosmos-valg')).length === 12);
+// De fire grupper (Serie 1 nr. 4): et tryk på en gruppe åbner dens første punkt, og under rækken står gruppens punkter
+const grupper = await page.$$eval('#kosmosListe .sol-klode', (b) => b.map((x) => x.textContent.trim()));
+tjek('fire grupper: Universet, Stjernernes liv, Tid og rum, Sorte huller', grupper.length === 4 && /Universet/.test(grupper[0]) && /Stjernernes liv/.test(grupper[1]) && /Tid og rum/.test(grupper[2]) && /Sorte huller/.test(grupper[3]), grupper);
+const træ = () => page.$$eval('#kosmosTræ button[data-id]', (b) => b.map((x) => x.dataset.id));
+await page.click('#kosmosListe .sol-klode[data-gruppe="3"]');
+await page.waitForTimeout(300);
+tjek('Sorte huller åbner Sort hul og viser tre punkter', (await page.textContent('#kosmosNavn')) === 'Sort hul' && (await træ()).join() === 'sorthul,kvasar,ormehul', await træ());
+await page.click('#kosmosTræ button[data-id="kvasar"]');
+await page.click('#kosmosListe .sol-klode[data-gruppe="3"]');
+await page.waitForTimeout(300);
+tjek('et tryk på den åbne gruppe bliver ved punktet', (await page.textContent('#kosmosNavn')) === 'Kvasar');
+await page.click('#kosmosListe .sol-klode[data-gruppe="2"]');
+await page.waitForTimeout(300);
+tjek('Tid og rum: Rumtid, Tid og Tyngdebølger uden "Hvordan kan det ske?" og uden overskriften "Forsøg"',
+  (await træ()).join() === 'rumtid,tid,tyngdebolger' && !(await page.$('#kosmosTræ .sol-gruppe-navn')), await træ());
+tjek('intet rejseskilt i Kosmos', !(await page.$('#kosmos .rejseskilt')));
 const K = () => page.evaluate(() => window.atomlabTest.kosmos);
 const objekter = {};
 for (const id of ids) {
-  await page.click(`.kosmos-valg[data-id="${id}"]`);
+  await page.evaluate((x) => window.atomlabTest.kosmos.vælg(x), id);
   await page.waitForTimeout(400);
   const navn = await page.textContent('#kosmosNavn');
   const side = await page.evaluate(() => window.atomlabTest.kosmos.side());
@@ -112,7 +127,8 @@ await page.evaluate(() => { const k = window.atomlabTest.kosmos; k.vælg('pulsar
 const igen = await page.evaluate(() => window.atomlabTest.kosmos.antalObjekter());
 tjek('ingen rester efter skift', igen <= 30, igen);
 // Det valgte fænomen huskes
-await page.click('.kosmos-valg[data-id="pulsar"]');
+await page.click('#kosmosListe .sol-klode[data-gruppe="1"]');
+await page.click('#kosmosTræ button[data-id="pulsar"]');
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForTimeout(1500);
 tjek('husker sidste fænomen', (await page.textContent('#kosmosNavn')) === 'Pulsar');

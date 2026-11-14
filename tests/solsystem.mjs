@@ -52,7 +52,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   await s.waitForFunction(() => document.querySelector('#solsystem:not(.skjult)'));
   tjek('linket åbner Solsystemet', true);
   await vis(s, 'kosmos');
-  await s.click('#kosmos .kosmos-valg[data-id="hviddvaerg"]');
+  await s.evaluate(() => atomlabTest.kosmos.vælg('hviddvaerg'));
   await s.click('#kosmosTekst [data-gaa="solsystem:solensfremtid"]');
   await s.waitForFunction(() => document.querySelector('#solsystem:not(.skjult)'));
   tjek('Hvid dværg: "Solens fremtid" åbner Solens fremtid i Solsystemet', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solensfremtid');
