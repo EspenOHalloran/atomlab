@@ -100,7 +100,7 @@ await page.click('#knapOpgaverForfra');
 await page.waitForTimeout(500);
 const fr3 = await page.evaluate(() => JSON.parse(localStorage.getItem('atomlabFremgang')));
 tjek('opgaver nulstillet, grundstoffer beholdt', Object.keys(fr3.opgaver).length === 0 && fr3.opdaget.length > 5, JSON.stringify(fr3));
-tjek('tæller 0/29 (16 byggeopgaver, 8 i "Del elektroner" og 5 par i "Giv elektroner")', (await page.textContent('#opgaveTæller')) === '0/29', await page.textContent('#opgaveTæller'));
+tjek('tæller 0/16 (kun byggeopgaverne, molekylernes står i Molekyler)', (await page.textContent('#opgaveTæller')) === '0/16', await page.textContent('#opgaveTæller'));
 tjek('opgaveliste lukket', !(await page.isVisible('#opgaveliste')));
 
 // Opgaven kan foldes sammen og huskes
