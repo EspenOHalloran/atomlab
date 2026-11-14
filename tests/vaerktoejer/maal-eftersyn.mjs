@@ -15,7 +15,7 @@ const ENHEDER = { pc: { viewport: { width: 1440, height: 900 } }, tablet: { view
 const MÅL = [
   ['start', null, 'Starten (menuen)'],
   ['vaerksted', '#vaerksted', 'Atomværkstedet'],
-  ['molekyle', '#vaerksted', 'Byg et molekyle'],
+  ['molekyle', '#molekyler', 'Molekyler'],
   ['system', '#system', 'Det periodiske system'],
   ['fusion', '#fusion', 'Stjerneovnen'],
   ['reaktor', '#reaktor', 'Reaktoren'],
@@ -150,7 +150,6 @@ for (const enhed of enheder) {
       const t1 = Date.now();
       if (hvor.startsWith('#')) {
         await page.evaluate((h) => { location.hash = h; }, hvor);
-        if (id === 'molekyle') { await page.waitForTimeout(800); await page.click('[data-vaerksted-del="molekyle"]'); }
       } else {
         await page.evaluate((h) => { location.hash = '#' + h; }, hvor);
         await page.waitForFunction((h) => window.atomlabTest?.[h]?.vælg, hvor);

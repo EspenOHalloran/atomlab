@@ -61,7 +61,7 @@ export const OPGAVER = [
   {
     id: 'natrium-ion', titel: 'Lav en natrium-ion: Na⁺', mål: { p: 11, n: 12, e: 10 },
     tip: 'Byg natrium-23 (nr. 11), og tag så én elektron væk.',
-    fakta: 'Natriums yderste elektron sidder løst og er let at tage. Bagefter har natrium kun fyldte skaller tilbage, men det er plusladet. Hvad der så sker, kan du se under "Byg et molekyle" → "Giv elektroner".',
+    fakta: 'Natriums yderste elektron sidder løst og er let at tage. Bagefter har natrium kun fyldte skaller tilbage, men det er plusladet. Hvad der så sker, kan du se i Molekyler under "Giv elektroner".',
   },
   {
     id: 'chlorid', titel: 'Lav en chlorid-ion: Cl⁻', mål: { p: 17, n: 18, e: 18 },

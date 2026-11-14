@@ -7,6 +7,7 @@
 // html og css er til 10b, når en skærm får sine egne filer (tomme indtil da).
 export const SKÆRME = [
   { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig' },
+  { id: 'molekyler', verden: 'atomer', titel: 'Molekyler', modul: './molekyler-skaerm.js', status: 'færdig' },
   { id: 'system', verden: 'atomer', titel: 'Det periodiske system', modul: './system.js', status: 'færdig' },
   { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig' },
   { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig' },
