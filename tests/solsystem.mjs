@@ -28,7 +28,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('menuen: Solsystemet står lige før Kosmos i Rummet', rummet?.join() === 'solsystem,kosmos', JSON.stringify(rummet));
   await s.click('.menu-fremgang-knap');
   const tal = await s.evaluate(() => ['solsystem', 'kosmos'].map((id) => document.querySelector(`#fremgangListe [data-del="${id}"] .fremgang-tal`)?.textContent));
-  tjek('"Din fremgang": 2 af 12 besøgt i Solsystemet og 1 af 13 i Kosmos', tal[0] === '2 af 12 besøgt' && tal[1] === '1 af 13 besøgt', JSON.stringify(tal));
+  tjek('"Din fremgang": 2 af 12 besøgt i Solsystemet og 1 af 12 i Kosmos', tal[0] === '2 af 12 besøgt' && tal[1] === '1 af 12 besøgt', JSON.stringify(tal));
   await s.keyboard.press('Escape');
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
@@ -44,7 +44,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('forsøgene, man ikke har set, har en prik i træet', await s.evaluate(() => document.querySelector('#solsystemTræ button[data-id="solstorm"]').classList.contains('ny')));
   await vis(s, 'kosmos');
   const kos = await s.evaluate(() => ({ valgt: atomlabTest.kosmos.valgt(), set: document.getElementById('kosmosSet').textContent, gemt: JSON.parse(localStorage.getItem('atomlabKosmosSet')) }));
-  tjek('Kosmos starter på Big Bang og har 1 af 13 set', kos.valgt === 'bigbang' && kos.set === '1 af 13 set', JSON.stringify(kos));
+  tjek('Kosmos starter på Big Bang og har 1 af 12 set', kos.valgt === 'bigbang' && kos.set === '1 af 12 set', JSON.stringify(kos));
   tjek('de flyttede er væk fra Kosmos\' gemte liste', !kos.gemt.some((id) => FLYTTET.includes(id)), JSON.stringify(kos.gemt));
   // Linket under Kosmos-listen og linket i Hvid dværg
   tjek('Kosmos: linket til Solsystemet under listen', await s.isVisible('#kosmos .kosmos-videre'));

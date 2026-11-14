@@ -17,9 +17,9 @@ await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('13 fænomener', ids.length === 13, ids);
+tjek('12 fænomener i listen ("Hvordan kan det ske?" hører til "Tid")', ids.length === 12, ids);
 tjek('vores eget solsystem er flyttet', !ids.some((id) => ['aarstider', 'formoerkelser', 'solstorm', 'solensfremtid', 'mars', 'saturn'].includes(id)), ids);
-tjek('13 knapper i listen', (await page.$$('#kosmos .kosmos-valg')).length === 13);
+tjek('12 knapper i listen', (await page.$$('#kosmos .kosmos-valg')).length === 12);
 const K = () => page.evaluate(() => window.atomlabTest.kosmos);
 const objekter = {};
 for (const id of ids) {
