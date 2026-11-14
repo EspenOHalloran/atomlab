@@ -2,6 +2,13 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (13. november 2026): Forløb 1 "Rejsen i tid" (Serie 1 nr. 4, forløb A, status "prøve").**
+- **Forløbet** (`js/data/forloeb/tid.js`, delen i `js/kosmos/tid.js`, koden i [kode/tid.md](../kode/tid.md)): A1 gæt tvillingens alder og flyv til TRAPPIST-1 (14 og 94), A2 "Mærkede du noget?" med "⌚ Dit ur" stort (sekundviser og hjerte, rejsen holder pause), A3 to ture til Alpha Centauri (50 % giver 28 og 30, 99,99 % giver 13 og 21, begge med ⏩). Til sidst "Det så du" med Fables kernesætning og vejene "Hvordan kan det ske?" (går til "Hvorfor går tiden langsommere?", til forløb 2 findes), "Leg frit" og "Er det målt?" (nyt "Hvorfor?"-kort `tidMaalt`). Starter første gang, man åbner Rejsen i tid, og fra hjælpen i Kosmos, "Din fremgang" og `?forloeb=rejsen-i-tid#kosmos`.
+- **Figurerne** (`js/kosmos/tidfigur.js`): piktogrammer oven på urene, også når man leger frit: ung (kasket), voksen og gammel (hvidt hår og stok). Tvillingen bliver ældre undervejs.
+- **Jeres svar (13. november 2026, dialogen):** A3 er to ture, så kun farten skifter. Oprydningen (ét punkt, Styr med fem valg, lysurets trin, fire spørgsmål) kommer med forløb 2. Figurerne er pudsede piktogrammer, før, undervejs og hjemme.
+- **Klodsen:** Det sidste trins Så-tekst vises nu før "Det så du" (gælder også Livs forløb 2, hvor sætningen om mutationen ikke kom frem før). Kosmos kan starte et forløb i et fænomen (`fænomen` i forløbets data).
+- `/faktatjek`: to rettelser ("godt 4 lysår", "næsten som regnet ud"), tabellen i [E4-noter.md](../fable/E4-noter.md). Ny test `tid-forloeb` (17 tjek).
+
 **Senest lavet (12. november 2026): TRAPPIST-1 som første rejse og 50 % på skyderen (før Forløb-klodsen).**
 - **Jeres svar (12. november 2026):** Go til drejebogen i [E4-tid.md](../fable/E4-tid.md), afsnit 4. TRAPPIST-1 og 50 % bygges nu, før Forløb-klodsen, men forløbene ikke endnu. TRAPPIST-1 er valgt, når man åbner Rejsen i tid (dialogen). Lukkede domæner: **Bed altid om at få dem åbnet** (miljøets Network access), også når der findes en anden kilde. gea.esac.esa.int, vizier.cds.unistra.fr og simbad.cds.unistra.fr er åbnet.
 - **TRAPPIST-1** (`js/data/tid.js`, `MÅL.trappist`, `START_MÅL`): 40,66 lysår efter Gaia DR3 (parallakse 80,2123 ± 0,0716 mas, slået op i Gaia-arkivet). Ved 99,99 % er du 14 år og 55 dage, og tvillingen er 94. Fire mål efter afstand. I scenen en lille, rød stjerne med syv planeter, der kredser (ikke i skala).
