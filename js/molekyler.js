@@ -1,4 +1,4 @@
-// Molekyler i Atomværkstedet (docs/plan-molekyler.md). M1: Byttebørsen.
+// Molekyler → "Giv elektroner" (docs/plan-molekyler.md, M1: det der hed Byttebørsen). Indtil 14. november 2026 i Atomværkstedet.
 // Man trækker metallets yderste elektron over til ikkemetallet. Måleren ("Regnskabet") viser ærligt, at det koster energi,
 // og at gevinsten først kommer, når plus og minus trækker i hinanden: i et par (kun Na + Cl, med harpunen) og i krystallen.
 // Parrene (M1b): Na + Cl, Li + F, Mg + O, Ca + 2 Cl og Na + Na (de bytter ikke). Hvert par er en opgave (fremgang.js).
@@ -136,7 +136,7 @@ export function lavByttebørs({ værkstedAtom } = {}) {
 }
 
 function lavPanel() {
-  const vindue = $('vaerkstedVindue');
+  const vindue = $('molekylerVindue');
   // "Næste skridt" øverst til venstre (kun i Byttebørsen). Knappen i kortet gør det, der er det næste.
   const kort = lavNæsteSkridtKort(vindue, 'bytteMission');
   kort.classList.add('bytte-kun');
@@ -216,7 +216,7 @@ function opdaterStjerner() {
   }
 }
 
-// Stjernerne og teksterne igen (fx efter "Opgaver forfra" i Værkstedet)
+// Stjernerne og teksterne igen (fx efter "Opgaver forfra" i Molekylers hjælp)
 export function opdaterFremgang() {
   opdaterStjerner();
   if (aktiv) opdaterAlt();
@@ -1128,26 +1128,26 @@ function ærligtTekst() {
   }
 }
 
-// Står der et neutralt atom fra parret i "Byg et atom", nævnes det
+// Står der et neutralt atom fra parret i Atomværkstedet, nævnes det
 function visDitAtom() {
   const t = hentVærkstedAtom();
   const el = $('bytteDit');
   let tekst = '';
   if (t && t.p === t.e && (t.p === metal.nr || t.p === ikke.nr)) {
     const navn = lille(t.p === metal.nr ? par.metal : par.ikkemetal);
-    tekst = `Dit ${navn}atom fra "Byg et atom" (${navn}-${t.p + t.n}) er med her.`;
+    tekst = `Dit ${navn}atom fra Atomværkstedet (${navn}-${t.p + t.n}) er med her.`;
   }
   el.hidden = !tekst;
   el.textContent = tekst;
 }
 
-// ---------- Start og stop (fra Værkstedet) ----------
+// ---------- Start og stop (fra js/molekyler-skaerm.js) ----------
 export function startByttebørs() {
   aktiv = true;
   rod.visible = true;
   verden.opdateringer.add(opdater);
   stopKamera(); // atomets sving i "Byg et atom" må ikke fortsætte her
-  sætVindue($('vaerkstedVindue'));
+  sætVindue($('molekylerVindue'));
   const k = verden.kamera;
   verden.styring.target.set(0, 0, 0);
   verden.styring.autoRotate = false;

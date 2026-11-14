@@ -105,6 +105,16 @@ tjek('Phobos står op i vest', pOp.length > 0 && pOp.every((k) => k > 200 && k <
 tjek('Deimos står op i øst', dOp.length > 0 && dOp.every((k) => k > 20 && k < 160), JSON.stringify(dOp));
 tjek('Phobos er ca. 0,2° bred, når den står højt', måner.some((m) => m[0].højde > 75 && Math.abs(m[0].bredde - 0.21) < 0.02));
 
+// Kun de stykker af nettet, der ses, tegnes (G1 trin 3, forslag H). Lodret ned tegnes alle
+// (der ventes på et billede, der er tegnet efter kig, for under belastning kan der gå et stykke tid)
+await fm(() => atomlabTest.solsystem.fænomen().kig(100, 0));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().stykker[0] < 16, null, { timeout: 10000, polling: 100 }).catch(() => {});
+const vandret = (await stå()).stykker;
+await fm(() => atomlabTest.solsystem.fænomen().kig(100, -85));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().stykker[0] === 16, null, { timeout: 10000, polling: 100 }).catch(() => {});
+const lodret = (await stå()).stykker;
+tjek('nettet: vandret tegnes kun nogle af de 16 stykker, lodret ned alle', vandret[1] === 16 && vandret[0] >= 3 && vandret[0] <= 7 && lodret[0] === 16, JSON.stringify({ vandret, lodret }));
+
 // Dreje hovedet: træk mod højre, så følger landskabet med (man kigger mere mod venstre)
 await f(() => { const y = atomlabTest.solsystem.fænomen(); y.sætTid(8.5); y.kig(100, 0); });
 const før = (await stå()).kompas;
@@ -130,6 +140,7 @@ await s.click('#solsystemTid button[data-tid="spil"]');
 await s.waitForFunction((x) => atomlabTest.solsystem.fænomen().stå().tid > x + 0.05, t0, { timeout: 20000, polling: 200 }).catch(() => {});
 tjek('▶: roverens foto skjules, når klokken går (det er taget på ét tidspunkt), og kontakten og knappen i teksten slukkes', !(await foto()).til && (await fm(() => atomlabTest.solsystem.styr().find((x) => x.navn === '📷 Roverens foto')?.til)) === false && !(await s.$eval('#solsystemForklaring button.side-kontakt', (k) => k.classList.contains('til'))));
 const skyder = await f(() => Number(document.querySelector('#solsystemStyr input[type=range]').value));
+tjek('pc: skyggerne er skarpe, mens dagen går (grove kun på tablet)', (await stå()).groveSkygger === false);
 tjek('▶: klokken går, og skyderen følger med', (await stå()).tid > t0 + 0.05 && skyder > t0 + 0.04, `${t0} → ${(await stå()).tid} (skyderen ${skyder})`);
 await s.click('#solsystemTid button[data-tid="pause"]');
 const t1 = (await stå()).tid;

@@ -13,7 +13,7 @@ s.on('console', (m) => { if (m.type() === 'error') fejl.push(m.text().slice(0, 4
 await s.goto(`${ADRESSE}/?test#solsystem`);
 await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
 await s.evaluate(() => document.querySelector('#solsystem .kosmos-valg[data-id="mars"]').click());
-await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.kort, null, { timeout: 60000 });
+await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'mars' && atomlabTest.solsystem.fænomen()?.billeder?.().hentet.kort, null, { timeout: 60000 });
 const f = (fn, a) => s.evaluate(fn, a);
 await f(() => atomlabTest.paneler.skiftKunGrafik('solsystem', true));
 await f((id) => atomlabTest.solsystem.fænomen().ståPå(id), sted);

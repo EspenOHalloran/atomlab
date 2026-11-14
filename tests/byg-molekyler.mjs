@@ -1,14 +1,14 @@
-// Byg et molekyle → "Del elektroner" (Molekyler M2a) i Atomværkstedet: fanen og måderne, paletten (træk og tryk),
+// Molekyler → "Del elektroner" (Molekyler M2a, en egen del siden 14. november 2026): måderne, paletten (træk og tryk),
 // træk et atom hen til et andet (bindingen), vand bliver færdigt og får sit navn, det ulovlige (atomet skubbes væk,
 // og der står hvorfor), træk tilbage til paletten fjerner atomet, et træk et andet sted drejer kameraet, tidsknappen,
 // "Næste skridt", foldeboksene uden rullebjælke, ingen konsolfejl, og tablet og telefon begge veje.
-// M2b: ladningerne (δ+ og δ−), "Polært", kortet, kontakten "Pile", de seks opgaver med ★, Værkstedets opgaveliste og tæller,
-// Værkstedets kort i menuen og "Opgaver forfra".
+// M2b: ladningerne (δ+ og δ−), "Polært", kortet, kontakten "Pile", de seks opgaver med ★, Molekylers kort i menuen
+// og "Opgaver forfra" i Molekylers hjælp.
 // M3: knaldgassen (knappen, ingenting uden gnist, gnisten, kæden, måleren, energien, tidsknappen, opgaverne, "Tilbage til
 // byggeriet" og panelerne uden rullebjælke på pc og tablet).
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('byg-molekyler');
-const URL = `${ADRESSE}/index.html?test#vaerksted`;
+const URL = `${ADRESSE}/index.html?test#molekyler`;
 const browser = await chromium.launch({ args: ARGS });
 const fejl = [];
 let ok = 0, dårlig = 0;
@@ -22,17 +22,17 @@ async function side(opts) {
   page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   page.on('requestfailed', (r) => fejl.push('requestfailed: ' + r.url()));
   await page.goto(URL);
-  await page.waitForFunction(() => window.atomlabTest?.vaerksted?.byg);
+  await page.waitForFunction(() => window.atomlabTest?.molekyler?.byg);
   return { ctx, page };
 }
-const G = (page, f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.vaerksted.byg[f](...a), [f, a]);
+const G = (page, f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.molekyler.byg[f](...a), [f, a]);
 const spol = (page, sek) => G(page, 'spol', sek);
 // Formen falder på plads, og kameraet bliver færdigt med at zoome og følge molekylet (først så står atomerne stille på skærmen)
 const stille = async (page) => {
   await spol(page, 1);
-  await page.waitForFunction(() => atomlabTest.vaerksted.byg.kameraStille(), null, { timeout: 15000, polling: 100 }).catch(() => console.log('     (kameraet blev ikke stille)'));
+  await page.waitForFunction(() => atomlabTest.molekyler.byg.kameraStille(), null, { timeout: 15000, polling: 100 }).catch(() => console.log('     (kameraet blev ikke stille)'));
 };
-const undertekst = (page) => page.evaluate(() => [...document.querySelectorAll('#vaerkstedVindue .undertekst')].map((e) => e.textContent).join(' '));
+const undertekst = (page) => page.evaluate(() => [...document.querySelectorAll('#molekylerVindue .undertekst')].map((e) => e.textContent).join(' '));
 
 // Trækker med musen fra (x, y) til (tx, ty) i små skridt
 async function træk(page, x, y, tx, ty) {
@@ -44,34 +44,35 @@ async function træk(page, x, y, tx, ty) {
 }
 // Et frit sted i 3D-billedet (midt i vinduet, lidt til venstre eller højre)
 const vinduePunkt = (page, fx, fy) => page.evaluate(([fx, fy]) => {
-  const r = document.getElementById('vaerkstedVindue').getBoundingClientRect();
+  const r = document.getElementById('molekylerVindue').getBoundingClientRect();
   return { x: r.left + r.width * fx, y: r.top + r.height * fy };
 }, [fx, fy]);
 
 const { ctx, page } = await side({ viewport: { width: 1280, height: 800 } });
 
-// Fanen og måderne
-await page.click('[data-vaerksted-del="molekyle"]');
+// Måderne
+const måde = (p = page) => p.evaluate(() => atomlabTest.molekyler.måde());
 await page.waitForTimeout(400);
-tjek('"Byg et molekyle" åbner med "Del elektroner"', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg'
-  && await page.evaluate(() => document.getElementById('vaerksted').classList.contains('del-elektroner'))
-  && await page.getAttribute('#bygPanel [data-vaerksted-maade="byg"]', 'aria-pressed') === 'true');
-tjek('byggepanel, infopanel, det lille periodiske system, opgavepillen og "Elektronsky" er skjult',
-  !(await page.isVisible('#byggepanel')) && !(await page.isVisible('#infopanel')) && !(await page.isVisible('#minitabelPanel'))
-  && !(await page.isVisible('#opgavePille')) && !(await page.isVisible('#knapVisning')));
+tjek('Molekyler åbner med "Del elektroner"', await måde() === 'byg'
+  && await page.evaluate(() => document.getElementById('molekyler').classList.contains('del-elektroner'))
+  && await page.getAttribute('#bygPanel [data-molekyle-maade="byg"]', 'aria-pressed') === 'true');
+tjek('Værkstedets paneler er ikke på skærmen', !(await page.isVisible('#byggepanel')) && !(await page.isVisible('#infopanel'))
+  && !(await page.isVisible('#minitabelPanel')) && !(await page.isVisible('#opgavePille')) && !(await page.isVisible('#knapVisning')));
 tjek('paletten, højre panel, "Næste skridt" og tidsknappen vises', await page.isVisible('#bygPalet') && await page.isVisible('#bygInfo')
   && await page.isVisible('#bygMission') && await page.isVisible('#bygTid'));
 tjek('paletten har H, C, N, O og Cl', (await page.$$eval('.palet-atom', (b) => b.map((x) => x.dataset.symbol))).join(' ') === 'H C N O Cl');
 tjek('"Giv elektroner" er skjult', !(await page.isVisible('#byttePanel')) && !(await page.isVisible('#bytteMåler')));
 tjek('Reaktorens del-knapper er ikke rørt (stadig to med data-del)', await page.evaluate(() => document.querySelectorAll('.del-knap[data-del]').length) === 2);
 tjek('"Næste skridt": træk et atom ind', (await page.textContent('#bygMission .mission-tekst')).includes('Træk et atom'));
-await page.click('#bygPanel [data-vaerksted-maade="bytte"]');
+await page.click('#bygPanel [data-molekyle-maade="bytte"]');
 await page.waitForTimeout(300);
-tjek('"Giv elektroner" skifter til Byttebørsens del', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await page.isVisible('#byttePanel') && !(await page.isVisible('#bygPanel')));
-await page.click('[data-vaerksted-del="atom"]');
-await page.click('[data-vaerksted-del="molekyle"]');
-tjek('fanen husker den sidste måde ("Giv elektroner")', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte');
-await page.click('#byttePanel [data-vaerksted-maade="byg"]');
+tjek('"Giv elektroner" skifter til Byttebørsens del', await måde() === 'bytte' && await page.isVisible('#byttePanel') && !(await page.isVisible('#bygPanel')));
+await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'));
+await page.evaluate(() => { location.hash = '#molekyler'; });
+await page.waitForFunction(() => document.querySelector('#molekyler:not(.skjult)'));
+tjek('Molekyler husker den sidste måde ("Giv elektroner")', await måde() === 'bytte' && await page.isVisible('#byttePanel'));
+await page.click('#byttePanel [data-molekyle-maade="byg"]');
 await page.waitForTimeout(400);
 await stille(page);
 
@@ -251,8 +252,8 @@ const stjerne = (id) => page.textContent(`.byg-opgave[data-byg-opgave="${id}"] .
 const løst = async (id) => (await G(page, 'opgaver')).find((o) => o.id === id).løst;
 // Start forfra med opgaverne (de første tests har allerede bygget vand, N₂ og ethanol)
 await page.evaluate(async () => { (await import('./js/fremgang.js')).nulstilFremgang(); });
-await page.evaluate(() => atomlabTest.vaerksted.sætDel('atom'));
-await page.evaluate(() => atomlabTest.vaerksted.sætDel('byg'));
+await page.evaluate(() => atomlabTest.molekyler.sætMåde('bytte'));
+await page.evaluate(() => atomlabTest.molekyler.sætMåde('byg'));
 await page.waitForTimeout(300);
 await page.evaluate(() => atomlabTest.beskeder.frysPiller(true));
 
@@ -275,7 +276,7 @@ g = await byg(['C', 'O', 'O'], [[1, 0], [2, 0]], []);
 await page.waitForTimeout(400);
 pile = await G(page, 'pile');
 tjek(`kuldioxid: to pile, men ingen sum, "Polært: nej" (${pile.length})`, pile.length === 2 && !pile.some((x) => x.sum) && await G(page, 'polær') === 'nej');
-const piller = await page.$$eval('#vaerkstedVindue .pille', (l) => l.map((p) => p.textContent).join(' '));
+const piller = await page.$$eval('#molekylerVindue .pille', (l) => l.map((p) => p.textContent).join(' '));
 tjek('opgaven "Hvorfor er CO₂ ikke polært?" er klaret, og en pille viser det', await løst('byg-co2') && piller.includes('CO₂ uden plus og minus'), piller);
 await page.click('#bygPile');
 // Metan: klares først, når den er drejet
@@ -294,37 +295,23 @@ g = await byg(['N'], [], [3]);
 const qN = await G(page, 'ladninger');
 tjek(`ammoniak: N δ−, H δ+, polær (${qN.join(', ')})`, qN[0] < 0 && qN.slice(1).every((x) => x > 0) && await G(page, 'polær') === 'ja');
 
-// Værkstedets opgaveliste og tæller
-await page.click('[data-vaerksted-del="atom"]');
-await page.waitForTimeout(300);
-const tællerV = await page.textContent('#opgaveTæller');
-await page.click('#knapOpgaver');
-const listeV = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent));
-const iListen = listeV.filter((t) => /Byg H₂|Byg vand|CO₂|metan|tripelbinding|ethanol/.test(t) && !t.includes('Giv'));
-tjek('opgavelisten har gruppen "Del elektroner" med de seks opgaver (5 med ★)', listeV.some((t) => t === 'Byg et molekyle: Del elektroner') && iListen.length === 6 && iListen.filter((t) => t.startsWith('★')).length === 5, iListen.join(' / '));
-tjek(`tælleren tæller dem med (${tællerV})`, /^\d+\/29$/.test(tællerV) && Number(tællerV.split('/')[0]) >= 5);
-await page.locator('#opgaver li', { hasText: 'Byg ethanol' }).click();
-await page.waitForTimeout(400);
-tjek('et tryk på "Byg ethanol" åbner "Del elektroner" og viser tippet', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg' && (await undertekst(page)).includes('C–C–O'));
-// Værkstedets kort i menuen
+// Molekylers kort i menuen (Værkstedet tæller ikke længere molekylernes opgaver)
+const tællerM = await page.textContent('#bygOpgaveTæller');
 await page.evaluate(() => { location.hash = '#menu'; });
 await page.waitForTimeout(800);
 await page.click('.menu-fremgang-knap');
-const kortV = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
-const [løstV, ialtV] = tællerV.trim().split('/');
-tjek(`"Din fremgang" i menuen tæller "Del elektroner" med i Værkstedet (${kortV.trim()} / ${tællerV})`, kortV.includes(`${løstV} af ${ialtV} opgaver`));
+const kortM = await page.textContent('#fremgangListe [data-del="molekyler"] .fremgang-tal');
+const løstM = Number(tællerM.split('/')[0]);
+tjek(`"Din fremgang" i menuen tæller "Del elektroner" med i Molekyler (${kortM.trim()} / ${tællerM})`, løstM >= 5 && kortM.includes(`${løstM} af 13 opgaver`));
 await page.keyboard.press('Escape');
-await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.evaluate(() => { location.hash = '#molekyler'; });
 await page.waitForTimeout(600);
-// "Opgaver forfra" i Værkstedet nulstiller også stjernerne her
-await page.click('[data-vaerksted-del="atom"]');
-await page.click('#knapOpgaver');
-await page.click('#knapOpgaverForfra');
-await page.click('#knapOpgaverForfra');
+// "Opgaver forfra" i Molekylers hjælp nulstiller stjernerne her
+await page.click('#molekylerHjælp');
+await page.click('#molekylerOpgaverForfra');
+await page.click('#molekylerOpgaverForfra');
 await page.waitForTimeout(400);
-await page.click('[data-vaerksted-del="molekyle"]');
-await page.waitForTimeout(300);
-tjek('"Opgaver forfra" nulstiller opgaverne i "Del elektroner"', (await G(page, 'opgaver')).every((o) => !o.løst) && (await page.textContent('#bygOpgaveTæller')) === '0/6' && (await stjerne('byg-h2')) === '☆');
+tjek('"Opgaver forfra" i hjælpen nulstiller opgaverne i "Del elektroner" og lukker hjælpen', (await G(page, 'opgaver')).every((o) => !o.løst) && (await page.textContent('#bygOpgaveTæller')) === '0/6' && (await stjerne('byg-h2')) === '☆' && !(await page.isVisible('#hjælpMolekyler')));
 
 // Skærmskift midt i et træk: styringen slås til igen
 await G(page, 'ryd');
@@ -338,13 +325,13 @@ await page.mouse.move(c0.x + 40, c0.y, { steps: 3 });
 await page.evaluate(() => { location.hash = '#menu'; });
 await page.waitForTimeout(500);
 await page.mouse.up();
-tjek('skærmskift midt i et træk: kameraets styring er slået til igen', await page.evaluate(() => atomlabTest.vaerksted.byg.styring()));
-await page.evaluate(() => { location.hash = '#vaerksted'; });
+tjek('skærmskift midt i et træk: kameraets styring er slået til igen', await page.evaluate(() => atomlabTest.molekyler.byg.styring()));
+await page.evaluate(() => { location.hash = '#molekyler'; });
 await page.waitForTimeout(500);
-tjek('tilbage i Værkstedet: stadig "Del elektroner" med atomet', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg' && (await G(page, 'atomer')).length === 1);
+tjek('tilbage i Molekyler: stadig "Del elektroner" med atomet', await måde() === 'byg' && (await G(page, 'atomer')).length === 1);
 
 // ---------- M3: knaldgas ----------
-const KG = (f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.vaerksted.byg.knaldgas[f](...a), [f, a]);
+const KG = (f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.molekyler.byg.knaldgas[f](...a), [f, a]);
 const synlig = (...sel) => Promise.all(sel.map((x) => page.isVisible(x))).then((l) => l.every(Boolean));
 await page.click('#bygKnaldgas');
 await page.waitForTimeout(300);
@@ -402,14 +389,11 @@ await ctx.close();
 // Tablet og telefon: fanerne, 3D-billedet øverst, paletten lige under, et træk med fingeren og ingen rullebjælke
 for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['tablet-langs', { width: 1180, height: 820 }], ['tlf', { width: 390, height: 844 }], ['tlf-langs', { width: 844, height: 390 }]]) {
   const { ctx: c2, page: p } = await side({ viewport: vp, hasTouch: true, isMobile: navn.startsWith('tlf') });
-  await p.click('[data-vaerksted-del="molekyle"]');
   await p.waitForTimeout(600);
-  const vindue = await p.evaluate(() => document.getElementById('vaerkstedVindue').getBoundingClientRect().toJSON());
+  const vindue = await p.evaluate(() => document.getElementById('molekylerVindue').getBoundingClientRect().toJSON());
   tjek(`${navn}: 3D-billedet er stort nok (${Math.round(vindue.width)} × ${Math.round(vindue.height)})`, vindue.width > 300 && vindue.height > 170);
   tjek(`${navn}: ingen vandret rulning`, await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-  const faner = await p.evaluate(() => [...document.querySelectorAll('[data-vaerksted-del]')].map((b) => b.getBoundingClientRect()));
-  tjek(`${navn}: fanerne er inde på skærmen og på én linje`, faner.every((r) => r.width > 0 && r.right <= vp.width + 1) && Math.abs(faner[0].top - faner[1].top) < 2);
-  const maade = await p.evaluate(() => [...document.querySelectorAll('#bygPanel [data-vaerksted-maade]')].map((b) => b.getBoundingClientRect()));
+  const maade = await p.evaluate(() => [...document.querySelectorAll('#bygPanel [data-molekyle-maade]')].map((b) => b.getBoundingClientRect()));
   tjek(`${navn}: "Del elektroner | Giv elektroner" er på én linje`, maade.every((r) => r.width > 0 && r.right <= vp.width + 1) && Math.abs(maade[0].top - maade[1].top) < 2);
   // Byg vand med testadgangen og se, at navnet kommer
   for (const s of ['O', 'H', 'H']) await G(p, 'tilføj', s);
@@ -432,15 +416,15 @@ for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['t
   }
   if (vp.width > vp.height && vp.height > 500) await ingenRul(p, navn);
   await G(p, 'spol', 1);
-  await p.waitForFunction(() => atomlabTest.vaerksted.byg.kameraStille(), null, { timeout: 15000 }).catch(() => {});
+  await p.waitForFunction(() => atomlabTest.molekyler.byg.kameraStille(), null, { timeout: 15000 }).catch(() => {});
   await p.waitForTimeout(600);
   await p.screenshot({ path: `${UD}/3-${navn}.png` });
   // Knaldgassen: måleren og knapperne kan ses, og panelerne har ingen rullebjælke på tablet på langs
   await G(p, 'åbnKnaldgas');
-  await p.evaluate(() => { const k = atomlabTest.vaerksted.byg.knaldgas; k.forfra(4); k.gnist(); k.spol(30); });
+  await p.evaluate(() => { const k = atomlabTest.molekyler.byg.knaldgas; k.forfra(4); k.gnist(); k.spol(30); });
   await p.waitForTimeout(500);
   const mR = await p.evaluate(() => document.getElementById('knaldMåler').getBoundingClientRect().toJSON());
-  tjek(`${navn}: knaldgassen er færdig, og måleren er inde på skærmen`, await p.evaluate(() => atomlabTest.vaerksted.byg.knaldgas.boks().færdig) && mR.width > 150 && mR.right <= vp.width + 1 && await p.isVisible('#knaldGnist'));
+  tjek(`${navn}: knaldgassen er færdig, og måleren er inde på skærmen`, await p.evaluate(() => atomlabTest.molekyler.byg.knaldgas.boks().færdig) && mR.width > 150 && mR.right <= vp.width + 1 && await p.isVisible('#knaldGnist'));
   if (vp.width > vp.height && vp.height > 500) await ingenRul(p, `${navn}, knaldgassen`, ['knaldInfo', 'knaldPanel'], ['knald-nørd', 'knald-ærligt']);
   await p.screenshot({ path: `${UD}/4-knald-${navn}.png` });
   await G(p, 'tilbage');

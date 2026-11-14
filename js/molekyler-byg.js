@@ -1,9 +1,9 @@
-// Byg et molekyle → "Del elektroner" (Molekyler M2a og M2b, docs/plan-molekyler.md afsnit 3 og "M2 i dag").
+// Molekyler → "Del elektroner" (Molekyler M2a og M2b, docs/plan-molekyler.md afsnit 3 og "M2 i dag").
 // Man trækker H, C, N, O og Cl fra paletten ind i 3D-billedet. Slipper man et atom tæt på et andet, og har begge en
 // elektron uden partner, deler de et elektronpar (en binding). Dobbelt- og tripelbindingerne og formen regnes i
 // js/data/molekyler-byg.js (uden Three.js). Tegningen er MolekyleTegning i js/molekyle3d.js.
 // M2b: ladningerne (parret ligger tættest på det atom, der trækker hårdest, og enderne får δ+ og δ−), pilene (kontakten
-// "Pile"), kortet om hvert kendt molekyle og de seks opgaver med ★ (tæller på Værkstedets kort i menuen).
+// "Pile"), kortet om hvert kendt molekyle og de seks opgaver med ★ (tæller på Molekylers kort i menuen).
 // M3: knappen "Knaldgas" viser boksen med 4 H₂ og 2 O₂ i stedet for byggeriet (js/knaldgas.js). Det byggede bliver.
 
 import * as THREE from 'three';
@@ -108,7 +108,7 @@ function slutKnaldgas() {
 }
 
 function lavPanel() {
-  const vindue = $('vaerkstedVindue');
+  const vindue = $('molekylerVindue');
   const kort = lavNæsteSkridtKort(vindue, 'bygMission');
   kort.classList.add('byg-kun');
   næste = lavNæsteSkridt(kort);
@@ -195,7 +195,7 @@ function opdaterStjerner() {
   $('knaldOpgaveTæller').textContent = tæl(D.OPGAVER_BYG.filter((o) => o.knaldgas));
 }
 
-// Viser opgaven og dens tip (fra knapperne her og fra Værkstedets opgaveliste)
+// Viser opgaven og dens tip (fra knapperne her)
 export function visOpgave(id) {
   const o = D.OPGAVER_BYG.find((x) => x.id === id);
   if (!o) return;
@@ -204,7 +204,7 @@ export function visOpgave(id) {
   visBesked({ titel: `${løst ? '★ ' : ''}${o.titel.replace('Del elektroner: ', '')}`, tekst: løst ? o.fakta : `Tip: ${o.tip}`, type: 'info', varighed: 9000 });
 }
 
-// Stjernerne igen (fx efter "Opgaver forfra" i Værkstedet)
+// Stjernerne igen (fx efter "Opgaver forfra" i Molekylers hjælp)
 export function opdaterFremgang() {
   opdaterStjerner();
   if (aktiv) {
@@ -858,13 +858,13 @@ function opdaterPanel() {
   for (const b of document.querySelectorAll('.palet-atom')) b.disabled = !plads();
 }
 
-// ---------- Start og stop (fra Værkstedet) ----------
+// ---------- Start og stop (fra js/molekyler-skaerm.js) ----------
 export function startBygMolekyler() {
   aktiv = true;
   rod.visible = true;
   verden.opdateringer.add(opdater);
   stopKamera();
-  sætVindue($('vaerkstedVindue'));
+  sætVindue($('molekylerVindue'));
   const k = verden.kamera;
   verden.styring.autoRotate = false;
   begrænsDrejning(null);
@@ -957,7 +957,7 @@ export function testAdgang() {
     },
     // Spol frem i små skridt (som på en skærm med 60 billeder i sekundet)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) opdater(1 / 60); },
-    // M3: knaldgassen (atomlabTest.vaerksted.byg.knaldgas)
+    // M3: knaldgassen (atomlabTest.molekyler.byg.knaldgas)
     åbnKnaldgas: () => åbnKnaldgas(),
     tilbage: () => slutKnaldgas(),
     knaldgas: knaldTest(),

@@ -42,7 +42,7 @@ if (!starter) {
   console.log(`\n${ok} OK, ${dårlig} FEJL`);
   process.exit(1);
 }
-for (const skærm of ['vaerksted', 'system', 'fusion', 'reaktor', 'batteri', 'kosmos', 'solsystem', 'ordbog']) {
+for (const skærm of ['vaerksted', 'molekyler', 'system', 'fusion', 'reaktor', 'batteri', 'kosmos', 'solsystem', 'ordbog']) {
   await page.evaluate((s) => { location.hash = '#' + s; }, skærm);
   const vist = await page.waitForFunction((s) => !document.getElementById(s).classList.contains('skjult'), skærm, { timeout: 20000 }).then(() => true, () => false);
   await toBilleder();

@@ -91,7 +91,7 @@ if (med('menu')) {
 // ---------- 2. Delene ----------
 const DELE = [
   ['vaerksted', '#vaerksted', 'Atomværkstedet, "Byg et atom", med carbon-12 (6 p, 6 n, 6 e)'],
-  ['molekyle', '#vaerksted', 'Atomværkstedet, "Byg et molekyle" (Del elektroner), som man møder det'],
+  ['molekyle', '#molekyler', 'Molekyler ("Del elektroner"), som man møder det'],
   ['system', '#system', 'Det periodiske system: den buede væg'],
   ['fusion', '#fusion', 'Stjerneovnen, når man kommer ind (guiden og rejsen ind i Solen er sprunget over)'],
   ['reaktor', '#reaktor', 'Reaktoren, del 1 "Spalt én kerne"'],
@@ -109,7 +109,6 @@ async function byg(page, p, n, e) {
 }
 async function forbered(page, navn) {
   if (navn === 'vaerksted') await byg(page, 6, 6, 6);
-  if (navn === 'molekyle') await page.click('[data-vaerksted-del="molekyle"]');
   if (navn === 'batteri') await page.evaluate(() => { atomlabTest.batteri.tilstand('oplad'); atomlabTest.batteri.kør(7); });
 }
 if (med('dele')) {
@@ -124,7 +123,6 @@ if (med('dele')) {
         await page.waitForTimeout(VENT);
         await skud(page, navn, tekst);
       });
-      if (navn === 'molekyle') await page.click('[data-vaerksted-del="atom"]').catch(() => {});
     }
     await page.context().close();
   }
@@ -226,11 +224,10 @@ if (med('forloeb')) {
   });
 
   await prøv('knaldgassen', async () => {
-    await gåTil(page, '#vaerksted');
-    await page.click('[data-vaerksted-del="molekyle"]');
+    await gåTil(page, '#molekyler');
     await page.click('#bygKnaldgas');
     await page.waitForTimeout(VENT);
-    const KG = (f, ...a) => page.evaluate(([f, a]) => atomlabTest.vaerksted.byg.knaldgas[f](...a), [f, a]);
+    const KG = (f, ...a) => page.evaluate(([f, a]) => atomlabTest.molekyler.byg.knaldgas[f](...a), [f, a]);
     await KG('spol', 6);
     await skud(page, 'forl-knaldgas-1', 'Knaldgassen 1/3: 4 H₂ og 2 O₂ i boksen, intet sker uden gnist');
     await page.click('#knaldMission .mission-vis').catch(() => page.click('#knaldGnist'));
@@ -240,7 +237,6 @@ if (med('forloeb')) {
     await KG('spol', 40);
     await page.waitForTimeout(1500);
     await skud(page, 'forl-knaldgas-3', 'Knaldgassen 3/3: kæden er færdig, 4 H₂O');
-    await page.click('[data-vaerksted-del="atom"]').catch(() => {});
   });
 
   await prøv('flybyen ved Jupiter', async () => {
