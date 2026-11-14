@@ -9,6 +9,7 @@
 **Jeres svar (9. november 2026):** Skærmbilledet af stigen blev godkendt: udseendet som nu, basernes farver A grøn, T rød, G gul og C blå, og resten af L1 blev lavet i samme session.
 
 **Næste (venter på jeres go):**
+- **Fable skriver drejebogen til Liv L3-L6 (jeres go 14. november 2026, før 16. november):** egen Fable-session (high), "Læs `docs/prompt-fable-liv-l3-l6.md`, og gør det, der står under 'Prompten'". Bagefter retter Opus planen, og L3 bygges efter Molekyler.
 - **Molekyler som egen del** (Serie 1 nr. 3): Opus' udkast til drejebogen er skrevet 13. november 2026 ([drejebog-molekyler.md](../drejebog-molekyler.md)). Fable tjekker det før 16. november: egen Fable-session, "Læs `docs/prompt-fable-molekyler.md`, og gør det, der står under 'Prompten'". Bagefter retter Opus drejebogen, og I svarer på de fire spørgsmål og giver go.
 0. **Højre panel i Liv efter budgettet** (rest fra forløb 2, ikke lavet): højst to tal og tre sætninger fremme, resten under "Flere tal" eller "For nørder". Teksterne i `NIVEAUER` og `TRIN_PROTEIN` har 3-4 tal og skal kortes og faktatjekkes. Drejebogen vil også flytte "enzym" og "RNA-polymerase" fra filmens første tekst til "For nørder". Lille opgave, Opus medium, kan tages efter prøven.
 1. **L3:** kopien ("Lyn op og kopiér"), fejlene og "Hvorfor?"-kortene om DNA, nu også kortet om naturligt udvalg (punkt 5b i prompten). Ny session med Opus, høj effort: "Læs docs/prompt-liv-l3.md". Det store eftersyn med Fable (E0) bør komme først, hvis I vil have det før flere store dele (køreplanen).
