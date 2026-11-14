@@ -26,6 +26,37 @@
 - **Fanen døde ved Jezero (1. kørsel):** Jeres svar: "Jeg tror, det skyldtes, at pc'en var optaget af andre ting. Den kom igen, da jeg vendte tilbage til skærmen." Den frøs altså og kom tilbage, den gik ikke ned. Tidligere tekst: Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
 - **Mangler:** tabletten, og en gentagelse på Iris Xe.
 
+## Tabletten efter H (14. november 2026, kl. 19.01-19.05)
+*Jeres måling efter G1 trin 3, del 2 (H, a + b, PR #225). Stå på Mars ved Gale (Naukluft) og Jezero (Ved randen) med ▶ og "🌅 Solnedgang". Skrevet ind af sessionen "Småting · Overblik og de næste fem sessioner". Hovedtallene og rykkene er gengivet nedenfor, og de mange ens linjer med "skyggerne regnes (grove, Solen flytter sig)" er slået sammen.*
+
+**Opus' læsning:**
+- **Mens man står stille:** 60 billeder i sekundet (17 ms), før ca. 10-18. **Forslag c (dynamisk opløsning) er ikke nødvendigt.**
+- **Mens Solen flytter sig** (▶ og Solnedgang): ca. 50-90 ms pr. billede (11-20 billeder i sekundet), mange gange i træk. `opdater` og `tegn` bruger kun ca. 1-2 ms, så tiden går i grafikkortet med de grove skygger. Det er tilbage at løse (fx skyggerne regnet sjældnere eller spredt over flere billeder).
+- **Ankomsten til Jezero:** ét ryk på 1.238 ms, hvor kortene lægges i grafikkortet (jezero-h2.png 358 ms, jezero-f2.jpg 198 ms og jezero-randen-f0.jpg 183 ms). Det er det, forslag A og F (`vendt`) skal løse. Gale: 82 ms med panoramaet (45 ms).
+
+```
+AtomLab-måler 14.11.2026, 19.05.03, skærm #solsystem
+Grafikkort: ANGLE (ARM, Mali-G615 MC2, OpenGL ES 3.2)
+Skærm 1280×800, vindue 1280×800, devicePixelRatio 1.5, touch (LAV_KVALITET): ja
+Lærred 1920×1200 (pixelRatio 1.5)
+Nu: 60 billeder/s, 17 ms pr. billede, værst (5 s) 38 ms
+Kald 26, trekanter 940.104 (hele billedet), geometrier 82, teksturer 59, shaderprogrammer 36
+Teksturer i grafikkortet (skøn): 403 MB nu, højst 568 MB. JavaScript-hukommelse: 18 MB
+Siden start (222 s): 12.347 billeder, gennemsnit 56 billeder/s, median 16 ms, 95 % under 36 ms, 99 % under 52 ms, ryk over 50 ms: 193
+Kort lagt i grafikkortet: 106 (3.321 ms i alt). Shaderprogrammer lavet: 15 (194 ms i alt)
+De dyreste shadere: kort, harKort, farve 43 ms; uSol, rot, skySted 28 ms; tRing, uRingInd, tKort 23 ms; uMaane, uMaaneLys, uSol 17 ms; tF0, bF3, tS0 16 ms
+De dyreste kort: 8192×4096 mars-8k.jpg 670 ms; 4096×4096 jezero-h2.png 358 ms; gale-h2.png 265 ms; jezero-f2.jpg 198 ms; jezero-randen-f0.jpg 183 ms; jezero-randen-f1.jpg 174 ms; gale-naukluft-f0.jpg 153 ms; gale-naukluft-f1.jpg 152 ms
+
+Ryk (udvalg af de sidste 100):
+19.03.10  82 ms (opdater 11, tegn 52): kort i grafikkortet 50 ms: pano-naukluft-4k.jpg 45 ms, pano-naukluft-maske.png 5,1 ms; skyggerne regnes; lang opgave 64 ms
+19.03.26-19.03.52  ca. 45 ryk på 50-129 ms (opdater 0,4-2,2, tegn 0,8-2,5): skyggerne regnes (grove, Solen flytter sig)
+19.03.46  138 ms: tryk: 🌅 Solnedgang
+19.04.10  111 ms: hentet jezero.json; lang opgave 106 ms
+19.04.13  79 ms: skyggerne regnes; lang opgave 71 ms
+19.04.13  1238 ms (opdater 0,5, tegn 1231): kort i grafikkortet 1217 ms: jezero-h2.png 358 ms, jezero-f2.jpg 198 ms, jezero-randen-f0.jpg 183 ms, 6 små; lang opgave 1234 ms
+19.04.26-19.04.54  ca. 40 ryk på 51-93 ms (opdater 0,4-2,3, tegn 0,6-2,0): skyggerne regnes (grove, Solen flytter sig)
+```
+
 ## Tabletten (13. november 2026, kl. 19.04-19.08)
 Mali-G615 MC2 (Android, Chrome), lærred 1920 × 1200 (pixelRatio 1,5, `LAV_KVALITET`). Jorden, Venus, Uranus, Neptun, Jupiter, Mars, Stå på Mars ved Gale og ved Jezero.
 - **Gennemsnit 62 billeder i sekundet** (median 16 ms, 95 % under 29 ms, 99 % under 50 ms), 151 ryk på 238 s. Grafikkortets tid kan ikke måles på denne tablet.

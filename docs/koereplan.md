@@ -5,7 +5,7 @@
 ## Sådan bygger vi nu (jeres go 11. november 2026)
 - **Forståelig før mere.** Serie 1 gør det, der findes, forståeligt med forløb. Liv L3 og Venus V3 holder pause, til Serie 1 er lavet og prøvet.
 - **Nyt indhold må bygges imens på tre betingelser:** (1) Forløb-klodsen findes først. (2) Hver ny del fødes med én kernesætning og sit forløb. (3) Den har status "prøve", til et barn har prøvet den ([guide-proeven.md](guide-proeven.md), en fast aften om ugen).
-- **Højst én ny stor del i gang ad gangen** ud over Solsystemet.
+- **Højst én ny stor del i gang ad gangen** ud over Solsystemet. **Undtagelse (jeres svar 14. november 2026):** Videnskabsfolkene (Huygens) bygges samtidig med Gåderne 3D. Solsystemet prioriteres også, og **andre nye spor (fx Lys og farver) starter først, når Solsystemet er færdigt** (Mars del 3 og overblikket først, så Venus V3-V5 og Merkur og Pluto). De næste fem sessioner står i [prompt-naeste-fem.md](prompt-naeste-fem.md).
 - **Faktagrundlag må laves på forhånd og parallelt** (kun dokumenter).
 - **Frigivet** er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp, og fundene er rettet (slutningen af Serie 3).
 
@@ -49,7 +49,7 @@ En prøve med sønnen efter hvert punkt.
 8. **Mørkt stof** (Kosmos, gruppen Universet).
 9. **Antistof** (Kernerne).
 10. ~~**Tjernobyl**~~: **flyttet til [idéerne](ideer.md) 14. november 2026** (parkeret på ubestemt tid, jeres ønske).
-11. **Venus i en kort udgave** ([plan-venus.md](plan-venus.md), V3 holder pause til Serie 1 er prøvet).
+11. **Venus i en kort udgave** ([plan-venus.md](plan-venus.md)). **Jeres svar 14. november 2026:** Solsystemet skal være færdigt, før nye spor starter, så V3-V5 kommer efter G1 trin 3 og overblikket (pausen til Serie 1 er prøvet er dermed ophævet).
 12. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens.
 13. **Merkur og Pluto i en lille udgave** (kloden, tre-fire steder og flyby). "Det hele skal med" gælder det, der er bygget, ikke det kommende (jeres valg i E2).
 
