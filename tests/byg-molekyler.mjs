@@ -79,9 +79,12 @@ await stille(page);
 // Træk et O fra paletten ind i billedet
 const midt = await vinduePunkt(page, 0.5, 0.55);
 const pO = await G(page, 'paletPå', 'O');
+// Atomets plads læses i selve slippet (en lytter efter Molekylers egen): Bagefter følger kameraet molekylets midte blødt,
+// og under belastning nåede et par billeder at flytte O mod midten, før testen kiggede (fejlede af og til).
+await page.evaluate(() => addEventListener('pointerup', () => { window.vedSlip = atomlabTest.molekyler.byg.atomPå(0); }, { once: true }));
 await træk(page, pO.x, pO.y, midt.x, midt.y);
 tjek('et O er trukket ind fra paletten', JSON.stringify(await G(page, 'atomer')) === '["O"]' && !(await G(page, 'trækker')));
-const o0 = await G(page, 'atomPå', 0);
+const o0 = await page.evaluate(() => window.vedSlip);
 tjek(`O står der, hvor det blev sluppet (${Math.round(o0.x)}, ${Math.round(o0.y)})`, nær(o0.x, midt.x, 6) && nær(o0.y, midt.y, 6));
 tjek('et enligt O har to elektroner uden partner', (await G(page, 'grupper'))[0].uden === 2);
 await page.waitForTimeout(400);

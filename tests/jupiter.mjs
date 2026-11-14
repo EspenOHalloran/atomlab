@@ -121,11 +121,11 @@ tjek('vindene og pletten står stille i pause', pa.a === pb.a && pu.vind === pv.
 // ⏩: tiden går HURTIG gange hurtigere (vindene og døgnet)
 tjek('tidsknappen har ⏩ ved Jupiter', await J(() => !!document.querySelector('#solsystemTid button[data-tid="hurtig"]')?.offsetWidth));
 await s.click('#solsystemTid button[data-tid="hurtig"]');
-const h0 = await J(() => ({ ...atomlabTest.solsystem.fænomen().ur(), t: performance.now() }));
-await s.waitForTimeout(1500);
-const h1 = await J(() => ({ ...atomlabTest.solsystem.fænomen().ur(), t: performance.now() }));
-const fart = (h1.vind - h0.vind) / ((h1.t - h0.t) / 1000);
-tjek('⏩: vindenes ur går mindst 5 gange hurtigere end uret på væggen, og døgnet følger med', h1.hurtig && fart > 5 && Math.abs((h1.døgn - h0.døgn) / (h1.vind - h0.vind) - (2 * Math.PI) / 80) < 1e-6, JSON.stringify({ fart, h0, h1 }));
+// Spol 1 s spiltid frem og læs urene i samme skridt. Før blev der målt mod uret på væggen i 1,5 s, men under belastning
+// tegner testbrowseren så få billeder (højst 0,05 s spiltid hver), at farten blev 4,6 i stedet for over 5.
+const [h0, h1] = await J(() => { const f = atomlabTest.solsystem.fænomen(); const a = f.ur(); atomlabTest.solsystem.spol(1); return [a, f.ur()]; });
+const fart = h1.vind - h0.vind; // spiltid pr. sekund
+tjek("⏩: vindenes ur går 20 gange hurtigere (HURTIG i js/kosmos/jupiter.js), og døgnet følger med", h1.hurtig && Math.abs(fart - 20) < 1.5 && Math.abs((h1.døgn - h0.døgn) / (h1.vind - h0.vind) - (2 * Math.PI) / 80) < 1e-6, JSON.stringify({ fart, h0, h1 }));
 await s.click('#solsystemTid button[data-tid="spil"]');
 // Kontakten "Vindene": pile over båndene, én række ved hver jetstrøm
 await J(() => atomlabTest.solsystem.trykPå('Vindene'));

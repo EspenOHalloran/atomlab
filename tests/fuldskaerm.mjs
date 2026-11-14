@@ -6,7 +6,8 @@ let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], ['tablet', { viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true }]]) {
   const fejl = [];
-  const p = await (await b.newContext(opts)).newPage();
+  const ctx = await b.newContext(opts);
+  const p = await ctx.newPage();
   p.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   p.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
   const titel = (sel) => p.getAttribute(sel, 'title');
@@ -16,18 +17,24 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await p.waitForTimeout(1200);
   tjek(`${navn}: knappen vises i menuen`, await p.isVisible('#menu .knap-fuldskaerm'));
   await p.click('#menu .knap-fuldskaerm');
-  await p.waitForTimeout(500);
+  // Vent på tilstanden, ikke 500 ms: Under belastning melder browseren skiftet senere
+  const fuld = (ja) => p.waitForFunction((ja) => Boolean(document.fullscreenElement) === ja, ja, { timeout: 10000, polling: 100 }).catch(() => {});
+  await fuld(true);
   tjek(`${navn}: fuld skærm efter klik`, await p.evaluate(() => Boolean(document.fullscreenElement)));
   const t = await venTitel('#menu .knap-fuldskaerm', 'Forlad fuld skærm');
   tjek(`${navn}: titlen skifter til "Forlad fuld skærm"`, t === 'Forlad fuld skærm', t);
   await p.click('.menukort a[href="#vaerksted"]', { force: true }); // forrest i ringen for en ny bruger (kortene svæver)
-  await p.waitForTimeout(800);
+  await p.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: 15000, polling: 100 }).catch(() => {});
+  await p.waitForTimeout(300);
   tjek(`${navn}: stadig fuld skærm i værkstedet`, await p.evaluate(() => Boolean(document.fullscreenElement)));
   await p.screenshot({ path: `${UD}/${navn}.png` });
   await p.click('#vaerksted .knap-fuldskaerm');
-  await p.waitForTimeout(500);
+  await fuld(false);
   tjek(`${navn}: ud af fuld skærm igen`, await p.evaluate(() => !document.fullscreenElement));
   tjek(`${navn}: ingen konsolfejl`, fejl.length === 0, fejl.join('\n'));
+  // Luk siden, før den næste åbnes: Den tegner stadig menuen eller Værkstedet i 3D, og under belastning gav
+  // tabletsidens goto så en TimeoutError efter 30 s (tjekliste F)
+  await ctx.close();
 }
 await b.close();
 console.log(`\n${ok} OK, ${dårlig} fejl`);
