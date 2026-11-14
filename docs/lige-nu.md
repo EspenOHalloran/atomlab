@@ -10,7 +10,7 @@
 | Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0-L2 er lavet). Næste: Liv som to forløb og Molekyler som egen del (Serie 1). L3 holder pause. Senere Ild |
 | Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 og T5 er lavet. Næste: Tid som ét punkt med rejsen først (Serie 1). T4 er en mulig udvidelse |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | Menuen som en ring (K1-K3) |
-| Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | Ordbogen, grundstofkortene og kategorierne |
+| Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | **Lukket 14. november 2026.** Nye ord tages i det spor, der bruger dem, og små rettelser i Småting |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
 | Åbne punkter | [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md) | Fejl og tests, der ikke er undersøgt, grene, domæner og faktatjek, der mangler |
 

@@ -33,6 +33,13 @@ export const ORDBOG = [
     former: ['grundstof', 'grundstoffet', 'grundstoffer', 'grundstofferne'],
     tekst: 'Et stof, hvor alle atomerne har lige mange protoner, fx hydrogen, oxygen eller guld. Man kender 118 grundstoffer, og alt omkring dig er bygget af dem.',
   },
+  // Kvantefysik E7, afsnit 5 (14. november 2026). Kilder: docs/fakta-kvantefysik.md, afsnit 4 og fælden "orbitalen er
+  // elektronens bane" i afsnit 7 (Wikipedia "Atomic orbital": én bølgeform pr. orbital, plads til 2 elektroner i hver).
+  {
+    id: 'orbital', ord: 'Orbital',
+    former: ['orbital', 'orbitalen', 'orbitaler', 'orbitalerne'],
+    tekst: 'Det område om atomets kerne, hvor en elektron sandsynligvis er. Det er ikke en bane, elektronen kører rundt i: Elektronen opfører sig som en bølge, og orbitalen er bølgens form. Der er plads til 2 elektroner i hver.',
+  },
   {
     id: 'neutrino', ord: 'Neutrino',
     former: ['neutrino', 'neutrinoen', 'neutrinoer', 'neutrinoerne'],

@@ -442,7 +442,7 @@ function tegnGraf() {
   g.fillText('Energi (fart) →', xPx(0), H - 6);
   const andel = andelOverBakken(temperatur);
   const procent = andel < 0.01 ? 'under 1 %' : `ca. ${Math.round(andel * 100)} %`;
-  $('fusGrafTekst').innerHTML = `Ved ${temperatur} mio. °C er <b>${procent}</b> af protonerne hurtige nok (gule) til at komme over frastødningens bakke (stiplet).`;
+  $('fusGrafTekst').innerHTML = `Ved ${temperatur} mio. °C er <b>${procent}</b> af protonerne i spillet hurtige nok (gule) til at komme over frastødningens bakke (stiplet).`;
 }
 
 // ---------- Rejsen ind i Solen ----------
