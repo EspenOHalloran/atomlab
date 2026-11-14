@@ -34,7 +34,7 @@ const vist = (p, id) => vent(p, (id) => window.atomlabTest?.aktiv() === id && do
   await p.goto(`${ADRESSE}/?test`);
   await vent(p, () => window.atomlabTest && document.getElementById('menu').dataset.midt);
   tjek('menuen henter ingen skærmmoduler', hentet.length === 0, hentet.join(', '));
-  tjek('ingen skærm er bygget i menuen', await p.evaluate(() => ['vaerksted', 'system', 'fusion', 'reaktor', 'batteri', 'liv', 'kosmos', 'solsystem', 'ordbog', 'gaader'].every((id) => !atomlabTest.hentet(id))));
+  tjek('ingen skærm er bygget i menuen', await p.evaluate(() => ['vaerksted', 'molekyler', 'system', 'fusion', 'reaktor', 'batteri', 'liv', 'kosmos', 'solsystem', 'ordbog', 'gaader'].every((id) => !atomlabTest.hentet(id))));
   tjek('✓ på Solsystemet uden at hente det', await p.evaluate(() => document.querySelector('#menu a[href="#solsystem"]').classList.contains('klaret')));
 
   // 2. Listerne over fænomener i js/data/faenomener.js passer med skærmenes egne

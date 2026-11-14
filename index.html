@@ -69,6 +69,13 @@
           <small>Byg atomer af protoner, neutroner og elektroner</small>
         </span>
       </a>
+      <a href="#molekyler">
+        <span class="kort-ikon ikon-molekyle"></span>
+        <span class="kort-tekst">
+          <strong>Molekyler</strong>
+          <small>Sæt atomer sammen: de deler eller giver elektroner</small>
+        </span>
+      </a>
       <a href="#system">
         <span class="kort-ikon ikon-tabel"></span>
         <span class="kort-tekst">
@@ -150,10 +157,6 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Atomværkstedet</h2>
-      <div class="del-vælger" id="værkstedDele">
-        <button class="del-knap" data-vaerksted-del="atom">Byg et atom</button>
-        <button class="del-knap" data-vaerksted-del="molekyle">Byg et molekyle</button>
-      </div>
       <div class="opgave-pille" id="opgavePille">
         <button class="opgave-mærke" id="knapOpgaver" title="Se alle opgaver">★ <span id="opgaveTæller"></span></button>
         <span class="opgave-indhold">
@@ -275,12 +278,27 @@
       </div>
       <div class="minitabel" id="minitabel"></div>
     </div>
+  </section>
 
-    <!-- Byg et molekyle (Molekyler M2a, js/molekyler-byg.js): "Del elektroner". Vises i stedet for panelerne ovenfor. -->
+  <!-- ===== Molekyler (js/molekyler-skaerm.js, indtil 14. november 2026 fanen "Byg et molekyle" i Atomværkstedet) ===== -->
+  <section id="molekyler" class="skærm skjult">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Molekyler</h2>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="molekylerHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+
+    <div class="vindue" id="molekylerVindue" data-log></div>
+
+    <!-- "Del elektroner" (Molekyler M2a, js/molekyler-byg.js) -->
     <aside class="panel side-panel venstre-panel byg-panel" id="bygPanel">
       <div class="del-vælger måde-vælger" role="group" aria-label="Hvordan atomerne binder">
-        <button class="del-knap" data-vaerksted-maade="byg">Del elektroner</button>
-        <button class="del-knap" data-vaerksted-maade="bytte">Giv elektroner</button>
+        <button class="del-knap" data-molekyle-maade="byg">Del elektroner</button>
+        <button class="del-knap" data-molekyle-maade="bytte">Giv elektroner</button>
       </div>
       <h4 class="panel-overskrift">Paletten</h4>
       <div class="palet" id="bygPalet" role="group" aria-label="Atomer, du kan trække ind"></div>
@@ -322,8 +340,8 @@
     <!-- Del elektroner → Knaldgas (Molekyler M3, js/knaldgas.js). Vises i stedet for paletten og panelet til højre. -->
     <aside class="panel side-panel venstre-panel knald-panel" id="knaldPanel">
       <div class="del-vælger måde-vælger" role="group" aria-label="Hvordan atomerne binder">
-        <button class="del-knap" data-vaerksted-maade="byg">Del elektroner</button>
-        <button class="del-knap" data-vaerksted-maade="bytte">Giv elektroner</button>
+        <button class="del-knap" data-molekyle-maade="byg">Del elektroner</button>
+        <button class="del-knap" data-molekyle-maade="bytte">Giv elektroner</button>
       </div>
       <h4 class="panel-overskrift">Knaldgas</h4>
       <p class="klik-tip">4 H₂ og 2 O₂ i en lukket boks. Se dem støde ind i hinanden, og tænd så blandingen med en gnist. Træk i billedet for at dreje.</p>
@@ -357,11 +375,11 @@
       </details>
     </aside>
 
-    <!-- Byg et molekyle → "Giv elektroner" (det, der hed Byttebørsen, Molekyler M1, js/molekyler.js) -->
+    <!-- "Giv elektroner" (det, der hed Byttebørsen, Molekyler M1, js/molekyler.js) -->
     <aside class="panel side-panel venstre-panel bytte-panel" id="byttePanel">
       <div class="del-vælger måde-vælger" role="group" aria-label="Hvordan atomerne binder">
-        <button class="del-knap" data-vaerksted-maade="byg">Del elektroner</button>
-        <button class="del-knap" data-vaerksted-maade="bytte">Giv elektroner</button>
+        <button class="del-knap" data-molekyle-maade="byg">Del elektroner</button>
+        <button class="del-knap" data-molekyle-maade="bytte">Giv elektroner</button>
       </div>
       <div class="bytte-parvalg" id="bytteParValg" role="group" aria-label="Vælg et par (★ = klaret)"></div>
       <h4 class="panel-overskrift" id="bytteParTitel">Natrium + chlor</h4>
@@ -394,6 +412,20 @@
       </details>
     </aside>
   </section>
+
+  <div class="overlag skjult" id="hjælpMolekyler" role="dialog" aria-label="Hjælp til Molekyler">
+    <div class="dialog">
+      <header><h3>Molekyler: når atomer mødes</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p>Atomer kan hænge sammen på to måder. Du vælger øverst i panelet til venstre.</p>
+        <p><strong>Del elektroner:</strong> Træk atomer fra paletten ind i billedet, og slip et atom tæt på et andet. Har begge en elektron uden partner, deler de et elektronpar, og det holder dem sammen. Knappen <em>Knaldgas</em> viser hydrogen og oxygen blive til vand.</p>
+        <p><strong>Giv elektroner:</strong> Træk den lysende elektron fra metallet over til det andet atom. Så bliver de til ioner, og plus og minus trækker i hinanden. Til sidst kan du bygge en krystal.</p>
+        <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Alle fagordene står også i <a href="#ordbog">Ordbogen</a>.</p>
+        <p><strong>Styring:</strong> Træk et tomt sted for at dreje billedet. Rul eller knib for at zoome.</p>
+        <p class="nulstil-linje"><button class="knap lille svag" id="molekylerOpgaverForfra">↺ Start forfra</button></p>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Det periodiske system ===== -->
   <section id="system" class="skærm skjult">
@@ -1085,7 +1117,7 @@
         <h4 id="hjælpIoner">Hvad er en ion?</h4>
         <p>Et atom er normalt <strong>neutralt</strong>: Det har lige mange plusladede protoner og minusladede elektroner, så ladningerne går lige op. Protonerne sidder dybt inde i kernen og kan kun ændres ved kernereaktioner. Men elektronerne sidder udenpå, og de yderste sidder løst. De kan flyttes fra ét atom til et andet, når atomerne mødes. Har atomet for få eller for mange elektroner, kaldes det en <strong>ion</strong>.</p>
         <p><strong>Hvilke ioner bliver der?</strong> Natrium har skallerne 2 · 8 · 1. Den ene elektron yderst sidder løst, og mister natrium den, har det kun fyldte skaller tilbage (2 · 8), ligesom ædelgassen neon. Så har det 11 protoner, men kun 10 elektroner. Det er nu en positiv ion: <strong>Na⁺</strong>. Chlor har 2 · 8 · 7 og mangler kun én elektron i at fylde den yderste skal. Får det én, har det 17 protoner og 18 elektroner. Det er nu en negativ ion: <strong>Cl⁻</strong>. Den fyldte skal forklarer altså, hvilke ladninger ionerne får. For de lette grundstoffer passer det godt.</p>
-        <p><strong>Men hvorfor sker det?</strong> Ikke fordi atomerne "vil" have en fyldt skal. Det koster faktisk ca. 5,1 eV (elektronvolt, en lille energienhed, der passer til atomer) at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage, når det får den. Gevinsten kommer bagefter: Plus og minus trækker i hinanden, og den tiltrækning betaler regningen og mere til. Så holder Na⁺ og Cl⁻ sammen, og det er <strong>køkkensalt</strong>! <button class="knap lille" id="hjælpTilBytte">Prøv det selv: Giv elektroner ›</button></p>
+        <p><strong>Men hvorfor sker det?</strong> Ikke fordi atomerne "vil" have en fyldt skal. Det koster faktisk ca. 5,1 eV (elektronvolt, en lille energienhed, der passer til atomer) at tage elektronen fra natrium, og chlor giver kun ca. 3,6 eV tilbage, når det får den. Gevinsten kommer bagefter: Plus og minus trækker i hinanden, og den tiltrækning betaler regningen og mere til. Så holder Na⁺ og Cl⁻ sammen, og det er <strong>køkkensalt</strong>! <button class="knap lille" id="hjælpTilBytte" data-gaa="molekyler:bytte">Prøv det selv i Molekyler: Giv elektroner ›</button></p>
         <p>Ioner er overalt: Dine nerver sender signaler med natrium- og kalium-ioner, og batteriet i en telefon virker, fordi lithium-ioner vandrer frem og tilbage.</p>
         <p><strong>Hvorfor ikke uendeligt mange?</strong> Jo flere elektroner et atom har mistet, jo mere plusladet bliver det, og jo hårdere holder det på resten. Og en negativ ion skubber nye elektroner væk. Derfor ser man oftest ladninger som +1, +2, +3, −1 og −2. Et frit atom kan i virkeligheden højst holde på én ekstra elektron. O²⁻ findes kun inde i fx krystaller, og ædelgasserne kan næsten ikke holde på en ekstra. I værkstedet kan et atom alligevel få 2 ekstra elektroner, så du kan prøve det.</p>
         <p>Du kender det også fra statisk elektricitet: Gnider du en ballon mod håret, flytter elektroner sig fra håret over på ballonen. Så bliver ballonen minusladet og kan hænge fast på væggen.</p>

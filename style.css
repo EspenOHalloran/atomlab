@@ -194,19 +194,24 @@ button { font: inherit; color: inherit; }
 .udgave-vælger[hidden] { display: none; }
 #vaerksted .vindue { grid-area: vindue; }
 
-/* Byttebørsen (Molekyler M1, js/molekyler.js): del-knapperne i toplinjen og Byttebørsens egne paneler */
-#vaerksted .del-vælger { flex: none; margin: 0; }
-#vaerksted:not(.bytte) .bytte-panel, #vaerksted:not(.bytte) .bytte-kun { display: none; }
-#vaerksted:not(.del-elektroner) .byg-panel, #vaerksted:not(.del-elektroner) .byg-kun { display: none; }
+/* ---------- Molekyler (js/molekyler-skaerm.js, indtil 14. november 2026 fanen "Byg et molekyle" i Værkstedet) ---------- */
+/* Samme kolonner som Værkstedet, så panelerne har den plads, de er lavet til */
+#molekyler {
+  grid-template-columns: minmax(250px, 290px) minmax(0, 1fr) minmax(280px, 340px);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: "top top top" "venstre vindue højre" "venstre vindue højre";
+}
+#molekyler .vindue { grid-area: vindue; }
+/* "Giv elektroner" (Molekyler M1, js/molekyler.js) og "Del elektroner" (M2, js/molekyler-byg.js): hver sine paneler */
+#molekyler .del-vælger { flex: none; margin: 0; }
+#molekyler:not(.bytte) .bytte-panel, #molekyler:not(.bytte) .bytte-kun { display: none; }
+#molekyler:not(.del-elektroner) .byg-panel, #molekyler:not(.del-elektroner) .byg-kun { display: none; }
 /* Knaldgas (Molekyler M3, js/knaldgas.js): vises i stedet for paletten og panelet til højre */
-#vaerksted:not(.knaldgas) .knald-panel, #vaerksted:not(.knaldgas) .knald-kun, #vaerksted.knaldgas .byg-panel, #vaerksted.knaldgas .byg-kun { display: none; }
-#vaerksted:is(.bytte, .del-elektroner) > #byggepanel, #vaerksted:is(.bytte, .del-elektroner) > #infopanel, #vaerksted:is(.bytte, .del-elektroner) > #minitabelPanel,
-#vaerksted:is(.bytte, .del-elektroner) .opgave-pille, #vaerksted:is(.bytte, .del-elektroner) #knapVisning, #vaerksted:is(.bytte, .del-elektroner) #udgaveVælger { display: none; }
-#vaerksted:is(.bytte, .del-elektroner) { grid-template-areas: "top top top" "venstre vindue højre" "venstre vindue højre"; }
+#molekyler:not(.knaldgas) .knald-panel, #molekyler:not(.knaldgas) .knald-kun, #molekyler.knaldgas .byg-panel, #molekyler.knaldgas .byg-kun { display: none; }
 :is(.bytte-panel, .byg-panel) .knap-række { display: flex; flex-wrap: wrap; gap: 8px; }
-/* "Del elektroner | Giv elektroner" øverst i begge venstre paneler (Byg et molekyle) */
-#vaerksted .måde-vælger { margin: 0; align-self: stretch; }
-#vaerksted .måde-vælger .del-knap { flex: 1 1 0; padding: 6px 8px; font-size: 13px; white-space: nowrap; }
+/* "Del elektroner | Giv elektroner" øverst i alle tre venstre paneler */
+#molekyler .måde-vælger { margin: 0; align-self: stretch; }
+#molekyler .måde-vælger .del-knap { flex: 1 1 0; padding: 6px 8px; font-size: 13px; white-space: nowrap; }
 /* Byg et molekyle → Del elektroner: paletten (træk et atom ind i 3D-billedet) */
 .palet { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .palet-atom { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px 5px; border-radius: 12px; border: 1px solid var(--panel-kant);
@@ -224,7 +229,7 @@ button { font: inherit; color: inherit; }
 .pa-hænder { font-size: 10.5px; color: var(--svag); }
 .byg-trin p { margin: 0; }
 .byg-tal { margin: 0; }
-#vaerksted .byg-tal div { grid-template-columns: minmax(0, 1fr) auto; }
+#molekyler .byg-tal div { grid-template-columns: minmax(0, 1fr) auto; }
 .byg-tal dd { text-align: right; }
 .byg-forklaring { line-height: 1.6; }
 .bf-prik, .bf-sky { display: inline-block; vertical-align: middle; margin-right: 4px; border-radius: 50%; }
@@ -264,7 +269,7 @@ button { font: inherit; color: inherit; }
 .bytte-panel > .knap { align-self: flex-start; }
 .bytte-trin p { margin: 0; }
 .bytte-regnskab { margin: 0; }
-#vaerksted .bytte-regnskab div { grid-template-columns: minmax(0, 1fr) auto; }
+#molekyler .bytte-regnskab div { grid-template-columns: minmax(0, 1fr) auto; }
 .bytte-regnskab .svag { opacity: 0.45; }
 .bytte-regnskab dd { font-variant-numeric: tabular-nums; text-align: right; }
 .bytte-regnskab .i-alt { border-top: 1px solid var(--panel-kant); padding-top: 4px; font-weight: 700; }
@@ -1298,7 +1303,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
 
 /* ---------- Mellemstore skærme (fx tablet på langs) ---------- */
 @media (max-width: 1150px) {
-  #vaerksted { grid-template-columns: 240px minmax(0, 1fr) 280px; }
+  #vaerksted, #molekyler { grid-template-columns: 240px minmax(0, 1fr) 280px; }
   #fusion, #reaktor, #batteri, #liv, #kosmos, #solsystem { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 290px); }
   .opgave-krav .navn-lang { display: none; }
   .opgave-krav .navn-kort { display: inline; }
@@ -1325,15 +1330,13 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .topbjælke { flex-wrap: wrap; row-gap: 6px; }
   .topbjælke h2 { font-size: 18px; }
   .opgave-pille { order: 4; flex: 1 1 100%; margin: 0; }
-  #vaerksted .del-vælger { order: 3; }
-  #vaerksted .side-panel > .måde-vælger { order: 0; } /* (kun fanerne i toplinjen får deres egen linje) */
-  #vaerksted:is(.bytte, .del-elektroner) {
+  #molekyler {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto minmax(46vh, 1fr) auto;
     grid-template-areas: "top top" "vindue vindue" "venstre højre";
     overflow-y: auto;
   }
-  #vaerksted:is(.bytte, .del-elektroner) .side-panel { overflow: visible; min-height: auto; max-height: none; }
+  #molekyler .side-panel { overflow: visible; min-height: auto; max-height: none; }
   .info { max-height: 36vh; padding: 10px; gap: 8px; }
   .grundstofkort { flex-basis: 70px; height: 70px; }
   .grundstofkort .symbol { font-size: 28px; }
@@ -1377,13 +1380,13 @@ button.sol-gruppe-navn::after { content: " ›"; }
     grid-template-areas: "top" "vindue" "venstre" "højre";
   }
   #kosmos:has(.tidh) { grid-template-rows: auto minmax(76vh, 1fr) auto auto; /* Hvorfor går tiden langsommere?: lærredet er hovedsagen */ }
-  #vaerksted:is(.bytte, .del-elektroner) {
+  #molekyler {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(44vh, 1fr) auto auto;
     grid-template-areas: "top" "vindue" "højre" "venstre";
   }
   /* Paletten kommer lige under 3D-billedet, så man kan trække et atom op i det */
-  #vaerksted.del-elektroner { grid-template-areas: "top" "vindue" "venstre" "højre"; }
+  #molekyler.del-elektroner { grid-template-areas: "top" "vindue" "venstre" "højre"; }
   .bytte-måler { font-size: 11px; padding: 5px 8px 4px; }
   .knald-måler { font-size: 11px; padding: 5px 8px 4px; }
   .km-række { grid-template-columns: 78px minmax(0, 1fr) 30px; }
@@ -1419,7 +1422,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .palet-atom .pa-navn, .palet-atom .pa-hænder { display: none; }
   .pa-kugle { width: 30px; height: 30px; font-size: 13px; }
   .pa-Cl { width: 32px; height: 32px; }
-  #vaerksted .måde-vælger .del-knap { padding: 5px 4px; font-size: 12px; }
+  #molekyler .måde-vælger .del-knap { padding: 5px 4px; font-size: 12px; }
   .knap.lille { padding: 5px 9px; font-size: 13px; }
   .knap.ikon { width: 32px; }
   .topbjælke { gap: 8px; }
@@ -1443,6 +1446,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas: "top top top" "byg vindue info" "byg tabel info";
   }
+  #molekyler { grid-template-columns: minmax(180px, 27%) minmax(0, 1fr) minmax(220px, 33%); }
   .byg { padding: 8px; gap: 6px; }
   .beskr, .hold-tip, .tastatur-tip, .model-note { display: none; }
   .partikel-række { padding: 6px 8px; }
@@ -1818,13 +1822,13 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .verden-del { margin-top: 4px; font-size: 14.5px; font-weight: 600; color: rgba(160, 240, 255, 0.85); }
 .verden.midt.én-del:hover .verden-del { color: #c4f9ff; }
 /* Ikoner for verdenerne (tegnet med CSS som de andre) */
-.ikon-v-atomer { background:
+.ikon-v-atomer, .ikon-molekyle { background:
   radial-gradient(circle at 50% 56%, #ff6b6b 0 8px, #c92a2a 10px, transparent 11px),
   radial-gradient(circle at 22% 34%, #e7f5ff 0 5px, #74c0fc 7px, transparent 8px),
   radial-gradient(circle at 80% 34%, #e7f5ff 0 5px, #74c0fc 7px, transparent 8px); }
-.ikon-v-atomer::before, .ikon-v-atomer::after { content: ""; position: absolute; top: 21px; width: 13px; height: 3px; border-radius: 2px; background: rgba(230, 240, 255, 0.7); }
-.ikon-v-atomer::before { left: 13px; transform: rotate(33deg); }
-.ikon-v-atomer::after { right: 13px; transform: rotate(-33deg); }
+.ikon-v-atomer::before, .ikon-v-atomer::after, .ikon-molekyle::before, .ikon-molekyle::after { content: ""; position: absolute; top: 21px; width: 13px; height: 3px; border-radius: 2px; background: rgba(230, 240, 255, 0.7); }
+.ikon-v-atomer::before, .ikon-molekyle::before { left: 13px; transform: rotate(33deg); }
+.ikon-v-atomer::after, .ikon-molekyle::after { right: 13px; transform: rotate(-33deg); }
 .ikon-v-kerner { background:
   radial-gradient(circle at 40% 38%, #ff8787 0 5px, #e03131 7px, transparent 7.5px),
   radial-gradient(circle at 60% 40%, #a5d8ff 0 5px, #4c6ef5 7px, transparent 7.5px),

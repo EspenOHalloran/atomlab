@@ -42,6 +42,15 @@ export function tagVentLiv() {
   return id;
 }
 
+// Den måde, Molekyler skal åbne med, når den starter (fra en knap data-gaa="molekyler:bytte", fx i Værkstedets hjælp):
+// 'byg' ("Del elektroner") eller 'bytte' ("Giv elektroner")
+let ventMolekyler = null;
+export function tagVentMolekyler() {
+  const id = ventMolekyler;
+  ventMolekyler = null;
+  return id;
+}
+
 // Det sted, skærmen skal gå til, når den starter (eller null). Glemmes, når det er hentet.
 export function tagVentSted(skærm) {
   const sted = ventSted?.skærm === skærm ? ventSted.sted : null;
@@ -51,7 +60,7 @@ export function tagVentSted(skærm) {
 
 // Knapper med data-gaa="skærm:id" (eller bare "skærm", eller "skærm:id:sted") i teksterne åbner et fænomen et andet sted,
 // data-gaa="system:55" et grundstof i Det periodiske system, data-gaa="gaader:sorthul" et kort i Gåderne og
-// data-gaa="liv:protein" "Fra opskrift til protein" i Liv
+// data-gaa="liv:protein" "Fra opskrift til protein" i Liv og data-gaa="molekyler:bytte" "Giv elektroner" i Molekyler
 document.addEventListener('click', (h) => {
   const b = h.target.closest?.('[data-gaa]');
   if (!b) return;
@@ -82,6 +91,15 @@ document.addEventListener('click', (h) => {
     else {
       ventLiv = id ?? null;
       location.hash = '#liv';
+    }
+    return;
+  }
+  if (skærm === 'molekyler') {
+    lyd.klik();
+    if (location.hash === '#molekyler' && hentetSkærm('molekyler')) hentetSkærm('molekyler').sætMåde(id);
+    else {
+      ventMolekyler = id ?? null;
+      location.hash = '#molekyler';
     }
     return;
   }

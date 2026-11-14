@@ -1,4 +1,4 @@
-// Byg et molekyle → "Del elektroner" → Knaldgas (Molekyler M3, docs/plan-molekyler.md afsnit 4).
+// Molekyler → "Del elektroner" → Knaldgas (Molekyler M3, docs/plan-molekyler.md afsnit 4).
 // En lukket boks med 4 H₂ og 2 O₂, der flyver rundt. Uden gnist sker der ingenting (stødene er alt for svage).
 // "Gnist" river et H₂ over, og en kæde af radikaler (H, O og OH) laver 4 H₂O. Måleren viser, hvad det har kostet at
 // bryde bindingerne, og hvad man har fået for de nye. Forskellen bliver til fart (varme), og boksen gløder.
@@ -84,7 +84,7 @@ export function lavKnaldgas({ tilbage: t, stjerner: s }) {
 }
 
 function lavPanel() {
-  const vindue = $('vaerkstedVindue');
+  const vindue = $('molekylerVindue');
   const kort = lavNæsteSkridtKort(vindue, 'knaldMission');
   kort.classList.add('knald-kun');
   næste = lavNæsteSkridt(kort, { visMig: () => tænd() });
@@ -336,9 +336,9 @@ export function startKnaldgas() {
   aktiv = true;
   rod.visible = true;
   verden.opdateringer.add(opdater);
-  $('vaerksted').classList.add('knaldgas');
+  $('molekyler').classList.add('knaldgas');
   stopKamera();
-  sætVindue($('vaerkstedVindue'));
+  sætVindue($('molekylerVindue'));
   verden.styring.autoRotate = false;
   begrænsDrejning(null);
   verden.styring.target.set(0, 0, 0);
@@ -355,7 +355,7 @@ export function stopKnaldgas() {
   aktiv = false;
   rod.visible = false;
   verden.opdateringer.delete(opdater);
-  $('vaerksted').classList.remove('knaldgas');
+  $('molekyler').classList.remove('knaldgas');
   pause.sæt('spil');
 }
 

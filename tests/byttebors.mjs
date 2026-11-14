@@ -1,10 +1,10 @@
-// "Byg et molekyle" → "Giv elektroner" (det, der hed Byttebørsen, Molekyler M1a og M1b) i Atomværkstedet: fanerne, træk elektronen med musen, regnskabet (måleren),
-// ionerne, mødet, harpunen, tidsknappen, panelet uden rullebjælke, tasterne kun i "Byg et atom", knappen i hjælpen,
-// M1b: krystallen, Li + F, Mg + O, Ca + 2 Cl, Na + Na og fremgangen (opgavelisten og menuen),
+// Molekyler → "Giv elektroner" (det, der hed Byttebørsen, Molekyler M1a og M1b, en egen del siden 14. november 2026): måderne,
+// træk elektronen med musen, regnskabet (måleren), ionerne, mødet, harpunen, tidsknappen, panelet uden rullebjælke,
+// Værkstedets taster, knappen i Værkstedets hjælp, M1b: krystallen, Li + F, Mg + O, Ca + 2 Cl, Na + Na og fremgangen (menuen),
 // og tablet og telefon (begge veje) med "Vis mig".
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('byttebors');
-const URL = `${ADRESSE}/index.html?test#vaerksted`;
+const URL = `${ADRESSE}/index.html?test#molekyler`;
 const browser = await chromium.launch({ args: ARGS });
 const fejl = [];
 let ok = 0, dårlig = 0;
@@ -18,31 +18,24 @@ async function side(opts) {
   page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   page.on('requestfailed', (r) => fejl.push('requestfailed: ' + r.url()));
   await page.goto(URL);
-  await page.waitForFunction(() => window.atomlabTest?.vaerksted?.bytte);
+  await page.waitForFunction(() => window.atomlabTest?.molekyler?.bytte);
   return { ctx, page };
 }
-const B = (page, f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.vaerksted.bytte[f](...a), [f, a]);
+const B = (page, f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.molekyler.bytte[f](...a), [f, a]);
 const spol = (page, sek) => B(page, 'spol', sek);
 
 const { ctx, page } = await side({ viewport: { width: 1280, height: 800 } });
 
-// Del-knapperne
-tjek('fanerne "Byg et atom | Byg et molekyle" står i toplinjen', await page.isVisible('[data-vaerksted-del="atom"]') && await page.isVisible('[data-vaerksted-del="molekyle"]')
-  && (await page.textContent('#værkstedDele')).replace(/\s+/g, ' ').trim() === 'Byg et atom Byg et molekyle');
+// Måderne: Molekyler er en egen del (14. november 2026), "Del elektroner | Giv elektroner" øverst i venstre panel
+const måde = (p = page) => p.evaluate(() => atomlabTest.molekyler.måde());
+tjek('Værkstedets fane "Byg et molekyle" findes ikke længere', await page.evaluate(() => !document.querySelector('[data-vaerksted-del], #værkstedDele')));
 tjek('navnet Byttebørsen står ingen steder i programmet', !(await page.evaluate(() => document.body.innerText + [...document.querySelectorAll('[title],[aria-label]')].map((e) => e.title + e.getAttribute('aria-label')).join(' '))).toLowerCase().includes('byttebørs'));
-tjek('"Byg et atom" er valgt fra start', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'atom'
-  && await page.getAttribute('[data-vaerksted-del="atom"]', 'aria-pressed') === 'true');
-tjek('Byttebørsens paneler er skjult i "Byg et atom"', !(await page.isVisible('#byttePanel')) && !(await page.isVisible('#bytteMåler')));
-await page.click('[data-vaerksted-del="molekyle"]');
-tjek('"Byg et molekyle" åbner med "Del elektroner"', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'byg');
-await page.click('#bygPanel [data-vaerksted-maade="bytte"]');
+tjek('Molekyler åbner med "Del elektroner", og "Giv elektroner" er skjult', await måde() === 'byg' && !(await page.isVisible('#byttePanel')) && !(await page.isVisible('#bytteMåler')));
+await page.click('#bygPanel [data-molekyle-maade="bytte"]');
 await page.waitForTimeout(600);
-tjek('"Giv elektroner" er valgt, og fanen "Byg et molekyle" er stadig valgt', await page.getAttribute('[data-vaerksted-del="molekyle"]', 'aria-pressed') === 'true'
-  && await page.getAttribute('#byttePanel [data-vaerksted-maade="bytte"]', 'aria-pressed') === 'true');
-tjek('Byttebørsen er valgt', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte'
-  && await page.evaluate(() => document.getElementById('vaerksted').classList.contains('bytte')));
-tjek('byggepanel, infopanel og det lille periodiske system er skjult', !(await page.isVisible('#byggepanel')) && !(await page.isVisible('#infopanel')) && !(await page.isVisible('#minitabelPanel')));
-tjek('opgavepillen og "Elektronsky" er skjult', !(await page.isVisible('#opgavePille')) && !(await page.isVisible('#knapVisning')));
+tjek('"Giv elektroner" er valgt', await måde() === 'bytte' && await page.getAttribute('#byttePanel [data-molekyle-maade="bytte"]', 'aria-pressed') === 'true'
+  && await page.evaluate(() => document.getElementById('molekyler').classList.contains('bytte')));
+tjek('Værkstedets paneler er ikke på skærmen', !(await page.isVisible('#byggepanel')) && !(await page.isVisible('#infopanel')) && !(await page.isVisible('#minitabelPanel')) && !(await page.isVisible('#opgavePille')));
 tjek('Byttebørsens paneler, måleren, tidsknappen og "Næste skridt" vises', await page.isVisible('#byttePanel') && await page.isVisible('#bytteInfo')
   && await page.isVisible('#bytteMåler') && await page.isVisible('#bytteTid') && await page.isVisible('#bytteMission'));
 tjek('Reaktorens del-knapper er ikke rørt (stadig to med data-del)', await page.evaluate(() => document.querySelectorAll('.del-knap[data-del]').length) === 2);
@@ -149,21 +142,24 @@ await page.screenshot({ path: UD + '/4-harpun.png' });
 await page.click('#bytteForfra');
 tjek('Forfra: to neutrale atomer igen', await B(page, 'tilstand') === 'start' && nær(await B(page, 'afstand'), 16, 0.001) && JSON.stringify((await B(page, 'ringe')).naSkaller) === '[2,8,1]');
 
-// Tasterne P, N og E bygger kun i "Byg et atom"
+// Tasterne P, N og E bygger ikke i Molekyler, men i Værkstedet
 await page.keyboard.press('p');
-await page.click('[data-vaerksted-del="atom"]');
+await page.evaluate(() => atomlabTest.molekyler.sætMåde('byg'));
+await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.waitForFunction(() => atomlabTest.vaerksted && document.querySelector('#vaerksted:not(.skjult)'));
 await page.waitForTimeout(500);
-tjek('tasten P byggede ikke i Byttebørsen', (await page.textContent('#antalP')) === '0');
-tjek('"Byg et atom": byggepanelet og infopanelet er tilbage', await page.isVisible('#byggepanel') && await page.isVisible('#infopanel') && !(await page.isVisible('#byttePanel')));
+tjek('tasten P byggede ikke i Molekyler', (await page.textContent('#antalP')) === '0');
+tjek('Værkstedet: byggepanelet og infopanelet vises, ikke Molekylers paneler', await page.isVisible('#byggepanel') && await page.isVisible('#infopanel') && !(await page.isVisible('#byttePanel')) && !(await page.isVisible('#bygPanel')));
 for (const k of ['p', 'p', 'n', 'n', 'e', 'e']) await page.keyboard.press(k);
 await page.waitForTimeout(300);
-tjek('tasterne bygger igen i "Byg et atom"', (await page.textContent('#antalP')) === '2');
+tjek('tasterne bygger i Værkstedet', (await page.textContent('#antalP')) === '2');
 
-// Knappen i hjælpen ("Hvad er en ion?") fører til Byttebørsen
+// Knappen i Værkstedets hjælp ("Hvad er en ion?") fører til Molekyler med "Giv elektroner" valgt (det gamle link virker)
 await page.click('#knapHjælp');
 await page.click('#hjælpTilBytte');
+await page.waitForFunction(() => document.querySelector('#molekyler:not(.skjult)'));
 await page.waitForTimeout(400);
-tjek('hjælpen: "Prøv det selv: Giv elektroner" skifter del og lukker hjælpen', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && !(await page.isVisible('#hjælp')));
+tjek('hjælpen: "Prøv det selv i Molekyler" åbner Molekyler med "Giv elektroner" og lukker hjælpen', await måde() === 'bytte' && await page.evaluate(() => location.hash) === '#molekyler' && !(await page.isVisible('#hjælp')));
 tjek('hjælpen siger ikke længere, at atomer "vil" have en fyldt skal', !(await page.textContent('#hjælp')).includes('mest "tilfredse"'));
 
 // Skærmskift midt i et træk: elektronen går hjem, og Byttebørsen er der stadig, når man kommer tilbage
@@ -174,10 +170,10 @@ await page.mouse.move(e2.x + 40, e2.y - 40, { steps: 3 });
 await page.evaluate(() => { location.hash = '#reaktor'; });
 await page.waitForTimeout(500);
 await page.mouse.up();
-await page.evaluate(() => { location.hash = '#vaerksted'; });
+await page.evaluate(() => { location.hash = '#molekyler'; });
 await page.waitForTimeout(600);
-tjek('tilbage i Værkstedet: stadig Byttebørsen, elektronen hjemme', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'tilstand') === 'start');
-tjek('kameraets styring virker igen', await page.evaluate(() => atomlabTest.vaerksted.bytte.styring()));
+tjek('tilbage i Molekyler: stadig "Giv elektroner", elektronen hjemme', await måde() === 'bytte' && await B(page, 'tilstand') === 'start');
+tjek('kameraets styring virker igen', await page.evaluate(() => atomlabTest.molekyler.bytte.styring()));
 
 // ---------- M1b: krystallen, de andre par og fremgangen ----------
 const rulInfo = () => page.evaluate(() => ['bytteInfo', 'byttePanel'].map((id) => { const el = document.getElementById(id); return el.scrollHeight <= el.clientHeight + 1 ? '' : `${id} ${el.scrollHeight}/${el.clientHeight}`; }).filter(Boolean).join(' '));
@@ -195,7 +191,7 @@ async function ingenRulAlle(navn) {
 // Ikke en fast ventetid: Kører testene to ad gangen, tager zoomet længere tid.
 async function vælg(id) {
   await page.click(`[data-bytte-par-id="${id}"]`);
-  await page.waitForFunction(() => atomlabTest.vaerksted.bytte.kameraStille(), null, { timeout: 15000 });
+  await page.waitForFunction(() => atomlabTest.molekyler.bytte.kameraStille(), null, { timeout: 15000 });
 }
 const stjerne = (id) => page.textContent(`[data-bytte-par-id="${id}"] .bp-stjerne`);
 // Træk den næste elektron med musen hen til et sted på skærmen og slip
@@ -301,38 +297,33 @@ tjek('Na + Na: panelet siger "de bytter ikke", ikke "binder sig ikke"', (await p
 tjek('alle fem par har ★', (await Promise.all(['nacl', 'lif', 'mgo', 'cacl2', 'nana'].map(stjerne))).every((x) => x === '★'));
 await ingenRulAlle('Na + Na');
 
-// Fremgangen: Værkstedets tæller og opgaveliste og "Din fremgang" i menuen
-await page.click('[data-vaerksted-del="atom"]');
-await page.waitForTimeout(300);
-const tæller = await page.textContent('#opgaveTæller');
-await page.click('#knapOpgaver');
-const liste = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent));
-tjek('opgavelisten har de fem par i "Giv elektroner" med ★', liste.some((t) => t.includes('Giv elektroner')) && liste.filter((t) => t.startsWith('★') && /Na \+ Cl|Lithium|Magnesium|Calcium|Natrium \+ natrium/.test(t)).length === 5, liste.join(' / '));
-await page.locator('#opgaver li', { hasText: 'Magnesium + oxygen' }).click();
-await page.waitForTimeout(400);
-tjek('et tryk på et par i listen åbner Byttebørsen med det par', await page.evaluate(() => atomlabTest.vaerksted.del()) === 'bytte' && await B(page, 'par') === 'mgo');
+// Fremgangen: "Din fremgang" i menuen tæller Molekyler for sig, og Værkstedet tæller kun atom-opgaverne
+const antalAtom = await page.evaluate(() => import('./js/data/opgaver.js').then((m) => m.OPGAVER.length));
 await page.evaluate(() => { location.hash = '#menu'; });
 await page.waitForTimeout(800);
 await page.click('.menu-fremgang-knap');
-const kort = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
-const [løst, ialt] = tæller.trim().split('/');
-tjek(`"Din fremgang" i menuen tæller Byttebørsen med i Værkstedet (${kort.trim()} / ${tæller})`, kort.includes(`${løst} af ${ialt} opgaver`) && Number(løst) >= 5);
+const kortM = await page.textContent('#fremgangListe [data-del="molekyler"] .fremgang-tal');
+const kortV = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
+tjek(`"Din fremgang": Molekyler har sine 13 opgaver (${kortM.trim()}), Værkstedet sine ${antalAtom} (${kortV.trim()})`,
+  /\b([5-9]|1[0-3]) af 13 opgaver/.test(kortM) && kortV.includes(`af ${antalAtom} opgaver`));
 await page.keyboard.press('Escape');
 await page.evaluate(() => { location.hash = '#vaerksted'; });
-await page.waitForTimeout(600);
+await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'));
+await page.click('#knapOpgaver');
+const liste = await page.evaluate(() => [...document.querySelectorAll('#opgaver li')].map((li) => li.textContent).join(' / '));
+tjek('Værkstedets opgaveliste har ikke længere molekylernes opgaver', !liste.includes('Giv elektroner') && !liste.includes('Del elektroner') && !liste.includes('Magnesium + oxygen'), liste);
 await ctx.close();
 
 // Tablet og telefon: del-knapperne, 3D-billedet øverst og "Vis mig"
 for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['tablet-langs', { width: 1180, height: 820 }], ['tlf', { width: 390, height: 844 }], ['tlf-langs', { width: 844, height: 390 }]]) {
   const { ctx: c2, page: p } = await side({ viewport: vp, hasTouch: true, isMobile: navn.startsWith('tlf') });
-  await p.click('[data-vaerksted-del="molekyle"]');
-  await p.click('#bygPanel [data-vaerksted-maade="bytte"]');
+  await p.click('#bygPanel [data-molekyle-maade="bytte"]');
   await p.waitForTimeout(800);
-  const vindue = await p.evaluate(() => document.getElementById('vaerkstedVindue').getBoundingClientRect().toJSON());
+  const vindue = await p.evaluate(() => document.getElementById('molekylerVindue').getBoundingClientRect().toJSON());
   tjek(`${navn}: 3D-billedet er stort nok (${Math.round(vindue.width)} × ${Math.round(vindue.height)})`, vindue.width > 300 && vindue.height > 170);
   tjek(`${navn}: ingen vandret rulning`, await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
-  const knapper = await p.evaluate(() => [...document.querySelectorAll('[data-vaerksted-del]')].map((b) => b.getBoundingClientRect()).every((r) => r.width > 0 && r.right <= innerWidth + 1));
-  tjek(`${navn}: del-knapperne er inde på skærmen`, knapper);
+  const knapper = await p.evaluate(() => [...document.querySelectorAll('#byttePanel [data-molekyle-maade]')].map((b) => b.getBoundingClientRect()).every((r) => r.width > 0 && r.right <= innerWidth + 1));
+  tjek(`${navn}: "Del | Giv elektroner" er inde på skærmen`, knapper);
   // Panelet ved siden af 3D-billedet (pc og tablet på langs): ingen rullebjælke, heller ikke med en foldeboks åben
   if (vp.width > vp.height && vp.height > 500) {
     const rul = () => p.evaluate(() => { const el = document.getElementById('bytteInfo'); return el.scrollHeight <= el.clientHeight + 1 ? '' : `${el.scrollHeight}/${el.clientHeight}`; });
