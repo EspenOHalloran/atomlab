@@ -270,7 +270,8 @@ tjek('lærredet dækker ikke Styr-boksen, underteksten eller bjælken (scene 5, 
 // Højkant: scene 4 over hinanden og scene 5 kvadratisk i hele bredden (tablet og telefon)
 for (const [navn, vp] of [['tablet', { width: 820, height: 1180 }], ['telefon', { width: 390, height: 844 }]]) {
   await page.setViewportSize(vp);
-  await page.waitForTimeout(400);
+  // Vent på, at lærredet har fået den nye størrelse (ikke 400 ms): Under belastning havde det stadig pc'ens 560 px
+  await page.waitForFunction((min) => atomlabTest.kosmos.fænomen().lærred().bredde >= min, Math.min(760, vp.width - 60), { timeout: 10000, polling: 100 }).catch(() => {});
   const l5 = await E(() => atomlabTest.kosmos.fænomen().lærred());
   const ok5 = (await dækker()).length === 0 && l5.bredde >= Math.min(760, vp.width - 60) && l5.højde >= l5.bredde * 0.9;
   await page.screenshot({ path: `${UD}/scene5-${navn}.png` });

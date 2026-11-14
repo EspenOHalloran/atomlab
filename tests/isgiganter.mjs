@@ -128,10 +128,10 @@ async function uranusUN2() {
   tjek(`ringene: ${r?.punkter} punkter i tests, fra 38.000 til 52.000 km, med albedoen som lysstyrke`, r && r.punkter === 2048 && r.ind === 38000 && r.ud === 52000 && Math.abs(r.lys - 0.015) < 1e-9, JSON.stringify(r));
   // "Infrarødt": ringene 40 gange lysere og planeten mørkere (metan opsuger infrarødt lys), væk igen bagefter.
   // Hvordan ringene ser ud forfra, i modlys og med kontakten, tjekkes med billedværktøjet og på tabletten (DESIGN.md).
-  await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+  await fm(() => { atomlabTest.solsystem.trykPå('Infrarødt'); atomlabTest.solsystem.spol(0.6); }); // toningen tager 0,4 s spiltid
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().infrarødt() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
   const irR = await F('ringe'), irEks = await F('eksponering');
-  await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+  await fm(() => { atomlabTest.solsystem.trykPå('Infrarødt'); atomlabTest.solsystem.spol(0.6); }); // toningen tager 0,4 s spiltid
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().infrarødt() === 0, null, { timeout: 10000, polling: 100 }).catch(() => {});
   const efter = await F('ringe');
   tjek('"Infrarødt": ringene 40 gange lysere og planeten mørkere, og bagefter som før', irR.synlige && Math.abs(irR.lys / 0.015 - 40) < 1e-6 && Math.abs(irEks - 0.4) < 1e-6 && Math.abs(efter.lys - 0.015) < 1e-9 && Math.abs((await F('eksponering')) - 1) < 1e-6, JSON.stringify({ irR, irEks, efter }));
@@ -326,7 +326,7 @@ async function flybyUN5(id) {
   if (id === 'neptun') {
     // "Infrarødt (som JWST)" ved Neptun: ringene og buerne lysere, planeten mørkere
     const før = (await F('ringe')).lys;
-    await fm(() => atomlabTest.solsystem.trykPå('Infrarødt'));
+    await fm(() => { atomlabTest.solsystem.trykPå('Infrarødt'); atomlabTest.solsystem.spol(0.6); }); // toningen tager 0,4 s spiltid
     await s.waitForFunction(() => atomlabTest.solsystem.fænomen().infrarødt() === 1, null, { timeout: 10000, polling: 100 }).catch(() => {});
     const efter = (await F('ringe')).lys, eks = await F('eksponering');
     const stadig = (await F('solSkjult')).skjult; // kameraet drejer ikke af sig selv ved buerne
