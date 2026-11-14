@@ -167,3 +167,8 @@
 - "Lyset er 8 min 19 s om at nå Jorden." Det gælder middelafstanden. Tallet svinger mellem 8 min 11 s (januar) og 8 min 27 s (juli). Et ur, der regner med dagens afstand, viser derfor noget andet end teksten: Skriv "ca. 8 minutter" (Fable E9).
 - "Et kort, hvor afstanden fra Solen tegnes som kvadratroden, viser banernes rigtige form." Hældningen og rækkefølgen holder, men banerne bliver rundere (Merkurs excentricitet 0,21 ser ud som 0,10), og Solen rykker ind mod midten (Fable E9).
 - "Planeterne er for små til at ses fra kanten af Solsystemet." Som kugler, ja. Som lysprikker kan de klareste ses: Voyager 1 fotograferede seks af dem fra 6 milliarder km 14. februar 1990 (NASA, "Voyager 1's Pale Blue Dot"). Mars og Merkur kunne ikke ses (Fable E9).
+
+*Strøm og Lys, drejebøgerne (Fable E11, 14. november 2026). Kilderne står i [E11-strom-lys-drejebog.md](../fable/E11-strom-lys-drejebog.md) afsnit 5.*
+- "Helium blev fundet som en mørk linje i sollyset." Det var en *lys* gul linje i lyset fra Solens kant (protuberanserne) under den totale formørkelse 18. august 1868, og den blev først taget for natrium. Linjen ligger ved 587,56 nm (NIST), ikke 587,49 som Wikipedia skriver.
+- "Helium blev først fundet på Jorden i 1895." Palmieri meldte linjen fra Vesuv i 1881. Ramsay fik gassen ud af et mineral i 1895. Skriv "27 år, før nogen fik fat i det på Jorden". At Frankland var med til at vælge navnet, er tvivlsomt.
+- "I en vindmølle drejer magneter forbi spoler." Rigtigt som princip, men i mange møller er magneterne elektromagneter og ikke faste magneter (Wikipedia "Wind turbine"). Og vindens andel af strømmen er forskellig, alt efter om man måler mod det, Danmark laver, eller det, Danmark bruger.

@@ -8,6 +8,8 @@
 
 **Fables vurdering af Gåderne i 3D er skrevet (13. november 2026), se [`docs/fable/E8-gaader-3d.md`](../fable/E8-gaader-3d.md).** Kort: Byg ét kort helt færdigt (Sort hul) før universet, én gåde i fokus langs stien, ingen slørede pladser, tre slags streg (målt, regnet ud, ingen ved det), og gåderne 6-10 er grundstof 119, mørk energi, "før Big Bang", Planet 9 og kvanteverdenen. Næste: Opus skriver `E8-gaader-3d-noter.md` og retter planen, og I vælger, før G4a.
 
+**Fables drejebøger til Strøm og magneter og Lys og farver er skrevet (14. november 2026), se [`docs/fable/E11-strom-lys-drejebog.md`](../fable/E11-strom-lys-drejebog.md).** Kort: Byg Lys først, helium var en lys linje fra Solens kant (ikke en mørk linje i sollyset), og hver del får ét forløb. Næste: Opus skriver `E11-strom-lys-noter.md`, flytter drejebøgerne til `docs/drejebog-strom.md` og `docs/drejebog-lys.md`, og I svarer på de fire spørgsmål.
+
 **Næste:** 10a er færdig, så parallelle sessioner er billigere igen (de rører ikke længere skærmenes start i `main.js`). 10b (egen HTML og CSS pr. skærm) sker gradvist, først med Molekyler. Faktagrundlagene kan køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
 **Næste i Kvantefysik:** Drejebogen er klar 13. november 2026: [drejebog-kvantefysik.md](../drejebog-kvantefysik.md) med jeres svar (anbefalingen i alle fem) og [Opus' noter](../fable/E7-kvantefysik-noter.md), der skal læses sammen med den. Næste skridt er forløb 1 (dobbeltspalten) med Gåde-kortet "Hvor stopper kvanteverdenen?". Det kommer i køreplanens rækkefølge efter Strøm og magneter og Lys, så det venter på et go. To små ting kan laves nu: "orbital" i Ordbogen og "i spillet" i Stjerneovnens graf (E7-noterne, afsnit 5).
