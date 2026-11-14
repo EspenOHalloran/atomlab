@@ -102,5 +102,7 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Nye påstande 
 
 **Jeres svar (14. november 2026): alle fire anbefalinger.** Antistof først, en skinne, scenerne til de andre kort venter på prøven efter G4b, og gåde 6 hedder "Hvor stopper det periodiske system?".
 
+**Jeres svar om skinnen (14. november 2026, G4b):** Go til skinnen, som den så ud på billederne (pc og tablet på højkant). Lyset for Sort hul får en fladere ring, så det ikke ligner Saturn. "Næste gåde ›" flyver ud, glider et skridt op ad stien og ind igen (ca. 3 s, et tryk springer over).
+
 ## Prompt til G4b (start en ny session, Opus, høj effort, efter jeres go)
 > Læs docs/plan-gaader-3d.md (afsnittet "Oversigten: Frontlinjen", tabellen "Gåderne" og G4b) og docs/kode/gaader.md, og byg G4b (skinnen og første gang). Du hører til sporet Småting og ejer js/gaader.js, js/gaader/, js/data/gaader.js, Gådernes sektion i index.html, blokken `#gaader` i style.css (én regel pr. linje, `@media` på én linje) og tests/gaader.mjs. Rør ikke de andre skærme. Lysene står allerede i js/gaader/lys.js (`lavLys(id)`), og rækkefølgen kommer fra `størrelse` i dataene. Læs først tjeklisterne D og E og docs/erfaringer/kamera-og-layout.md (de sidste punkter fra G4a). Vis mig et skærmbillede af skinnen på pc og tablet på højkant, før flyvningen ind og ud bygges.

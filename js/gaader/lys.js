@@ -26,7 +26,7 @@ const LYS = {
     const geo = new THREE.SphereGeometry(0.3, 20, 14);
     const a = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0xffb340, emissive: 0xffb340, emissiveIntensity: 0.8 }));
     const b = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0x52d9ff, emissive: 0x52d9ff, emissiveIntensity: 0.8 }));
-    const glimt = glød(new THREE.Color(1.5, 1.4, 1.2), 4, 0);
+    const glimt = glød(new THREE.Color(1.5, 1.4, 1.2), 2.4, 0);
     g.add(a, b, glimt);
     return {
       gruppe: g,
@@ -37,7 +37,7 @@ const LYS = {
         a.position.set(Math.cos(v) * r, Math.sin(v) * r * 0.5, 0);
         b.position.set(-a.position.x, -a.position.y, 0);
         a.visible = b.visible = f < 0.8;
-        glimt.material.opacity = f < 0.8 ? 0 : (ROLIG ? 0.6 : 1) * Math.sin(((f - 0.8) / 0.2) * Math.PI);
+        glimt.material.opacity = f < 0.8 ? 0 : (ROLIG ? 0.5 : 0.8) * Math.sin(((f - 0.8) / 0.2) * Math.PI) ** 2; // et kort glimt
       },
     };
   },
@@ -97,9 +97,10 @@ const LYS = {
     const g = new THREE.Group();
     const skive = new THREE.Mesh(new THREE.CircleGeometry(1, 48), new THREE.MeshBasicMaterial({ color: 0x000000 }));
     skive.renderOrder = 2;
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.12, 12, 96), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.25, 0.62, 0.22) }));
-    ring.rotation.x = 1.25;
-    const kant = new THREE.Mesh(new THREE.RingGeometry(1, 1.12, 64), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.75, 0.38, 0.14) }));
+    // Ringen ligger næsten vandret og er tynd (G4b: skrå og tyk lignede den Saturn), og skiven har en tynd, lysende kant
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(2, 0.06, 10, 128), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.05, 0.48, 0.14) }));
+    ring.rotation.x = 1.45;
+    const kant = new THREE.Mesh(new THREE.RingGeometry(1, 1.07, 64), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.1, 0.58, 0.22) }));
     kant.position.z = -0.01;
     const skær = glød(new THREE.Color(1, 0.5, 0.2), 6, 0.22);
     skær.position.z = -2; // bag skiven, så skiven forbliver sort
