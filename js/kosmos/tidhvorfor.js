@@ -2,15 +2,20 @@
 // docs/fakta-tid/hvorfor-langsommere.md, skitsen docs/skitser/tid-t5.html). Fem små scener, der går frem med "Næste" i
 // bjælken (fænomenets trin()): 1 bolden og lyset, 2 lysuret med trekanten, 3 myonernes kapløb, 4 "nu" er ikke det
 // samme for alle og 5 rumtidskortet. T5a lavede scene 1 og 2, T5b scene 3 og T5c scene 4 og 5.
+// Fra 14. november 2026 hedder fænomenet "Hvordan kan det ske?", står ikke i listen (det hører til punktet "Tid"), og
+// forløb B af samme navn (afsnittet "Forløbet" nederst) bruger scene 1-3 som de er.
 //
 // Hovedsagen er et 2D-lærred i overlaget (som lysuret i Rejsen i tid) over en rolig stjernehimmel. Lærredet får den
 // højde, der er plads til mellem Styr-boksen og underteksten med bjælken (størrelse()), så det aldrig dækker dem.
 // Teksten, der altid er fremme, står som fasens undertekst, og kontakterne og skyderne står i Styr-boksen og skifter
 // med scenen. Siden bygges én gang (ét emne pr. scene). Lysurets tegning er delt med tid.js (lysur.js).
 import { gå } from '../sideknap.js';
-import { ROLIG } from '../scene3d.js';
+import { ROLIG, centrerVindue } from '../scene3d.js';
 import * as T from '../data/tid.js';
 import * as Lys from './lysur.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbTest } from '../forloeb.js';
+import { tagVentForløb } from '../gaa.js';
+import { HVORDAN_KAN_DET_SKE } from '../data/forloeb/tid.js'; // forløbet "Hvordan kan det ske?" (E4, forløb B)
 
 const MAKS_BREDDE = 760; // lærredets største bredde i pixel
 const BRED2 = 520; // scene 2: lysurene ved siden af hinanden fra denne bredde, ellers over hinanden (telefon på højkant)
@@ -140,9 +145,11 @@ const SCENER = [
 
 export default {
   id: 'tidhvorfor',
-  navn: 'Hvorfor går tiden langsommere?',
+  navn: 'Hvordan kan det ske?',
   ikon: '🔦',
   undertitel: 'Lysets mærkelige regel',
+  // Står ikke i listen i Kosmos, men hører til punktet "Tid" (jeres valg 13. november 2026, faenomenskaerm.js)
+  hørerTil: 'tid',
   kamera: { retning: [0, 0.15, 1], radius: 30, drej: false },
   tal: [
     ['Lysets fart', 'ca. 300.000 km i sekundet'],
@@ -150,61 +157,49 @@ export default {
     ['Et ur ved 87 % af lysets fart', 'går halvt så hurtigt set fra Jorden'],
     ['Teorien', 'Einstein, 1905'],
   ],
-  // Siden bygges én gang og skifter ikke med scenen: ét emne pr. scene (scenens titel og dens "Hvorfor?"), og For
-  // nørder og Ærligt talt med ét afsnit pr. scene. Teksterne er fra drejebogen (faktatjekket i T5 Trin 0, afsnit 15
-  // i docs/fakta-tid/hvorfor-langsommere.md).
+  // Siden bygges én gang og skifter ikke med scenen. Efter forløbet "Hvordan kan det ske?" (scene 1-3) er emnerne lag 2
+  // ("Vil du vide mere?", E4 afsnit 4): to forklaringer med myonerne og "Hvorfor ikke omvendt?". Scene 4, "nu"-linjerne,
+  // Michelson og Morley, Einstein som 16-årig og Pythagoras står under For nørder. Teksterne er fra drejebogen
+  // (faktatjekket i T5 Trin 0, afsnit 15 i docs/fakta-tid/hvorfor-langsommere.md).
   side: {
-    kort: 'Hvorfor går et ur langsommere, når det farer af sted? Fem små scener viser det trin for trin, fra lysets mærkelige regel til tvillingen, der kommer yngst hjem.',
+    kort: 'Hvordan kan tiden gå forskelligt for to tvillinger? Det kommer af lysets mærkelige regel: Lyset har den samme fart for alle. Fem små scener i bjælken viser det, fra bolden i toget til tvillingen, der kommer yngst hjem.',
     emner: [
       {
-        titel: 'Den mærkelige regel',
-        tekst: `<p>Lysets fart er ca. 300.000 km i sekundet (ca. 1 milliard km/t). Den er den samme for alle, uanset hvor hurtigt de selv bevæger sig. Det er målt igen og igen. I 1887 ledte Michelson og Morley efter en forskel: Jorden farer om Solen med 30 km i sekundet, så lyset burde gå en anelse hurtigere den ene vej end den anden. De fandt ingen forskel.</p>
-          <p>Men hvordan kan det passe? Hvis toget og perronen måler den samme fart for det samme lys, selv om toget kører efter lyset, så må noget andet være anderledes for dem. Fart er jo vej delt med tid. Det, der giver efter, er tiden (og afstanden).</p>`,
+        titel: 'To forklaringer, samme svar',
+        tekst: `<p>Set fra Jorden er myonens tur 15 km lang og tager ca. 50 milliontedele sekund. Men myonens ur går så langsomt, at det kun når ca. 1,3 milliontedele sekund.</p>
+          <p>Set fra myonen går dens ur helt normalt. Til gengæld er luften klemt sammen til ca. 400 m, og den suser forbi på ca. 1,3 milliontedele sekund. Samme ur, samme svar, to forklaringer: Hvad der er tid for den ene, er afstand for den anden. ${gå('kosmos:tidhvorfor:myonen', '🔦 Se det fra myonen')}</p>`,
       },
       {
-        titel: 'Lysuret: tiden giver efter',
-        tekst: `<p>Tegn et halvt tik som en trekant: den lige vej op (1), det stykke, spejlene flytter sig, mens lyset er undervejs (1,73), og den skrå vej, lyset går (2). Pythagoras siger 1² + 1,73² = 2², altså 1 + 3 = 4. Den skrå vej er 2 gange så lang, og lyset har den samme fart, så det tager 2 gange så lang tid.</p>
-          <p>Om bord mærker du intet. Dit eget ur, dit hjerte og dine tanker går helt normalt for dig. Først når man sammenligner med urene på Jorden, viser forskellen sig.</p>`,
-      },
-      {
-        titel: 'Myonernes kapløb',
-        tekst: `<p>${FÆLLES3}</p>
-          <p>Myonen er elektronens tunge fætter (ca. 200 gange tungere). Den laves, når den kosmiske stråling (partikler fra rummet) rammer luften. En myon i hvile lever i gennemsnit 2,2 milliontedele sekund. Ved havets overflade suser omkring 100 myoner gennem hver kvadratmeter hvert sekund, også gennem dig.</p>
-          <p>Set fra Jorden er turen 15 km lang og tager ca. 50 milliontedele sekund. Men myonens ur går så langsomt, at det kun når ca. 1,3 milliontedele sekund. Set fra myonen er turen kun ca. 400 m, og den tager ca. 1,3 milliontedele sekund. Samme ur, samme svar, to forklaringer: Hvad der er tid for den ene, er afstand for den anden.</p>`,
-      },
-      {
-        titel: '"Nu" er ikke det samme for alle',
-        tekst: `<p>Set fra perronen har lyset den samme fart begge veje (den mærkelige regel!). Men bagenden kører lyset i møde, og forenden kører fra det. Derfor når lyset bagenden først. I toget er begge ender lige langt fra lampen, så lyset når dem samtidig. Begge har ret.</p>
-          <p>Det løser gåden fra myonerne: For at sammenligne to ure, der er langt fra hinanden, skal man vide, hvad de viser "på samme tid". Og det er de to ikke enige om. Derfor kan begge se den andens ur gå langsomt, uden at nogen tager fejl. Først når de mødes igen, kan de lægge urene ved siden af hinanden. Det er det, rumtidskortet viser.</p>`,
-      },
-      {
-        titel: 'Rumtidskortet: Hvem bliver yngst?',
-        tekst: `<p>Hver prik er ét år på den rejsendes eller den hjemmeblevnes eget ur. På et landkort er den lige vej den korteste. I rumtiden er det omvendt: Den lige vej giver mest tid, og en omvej giver mindre. Det skyldes, at rumtidens Pythagoras har et minus: Vejen ud til 4 lysår på 5 år giver 5² − 4² = 3², altså 3 år. Ud og hjem giver 6 år, mens der går 10 år derhjemme.</p>
-          <p>De to tvillinger er ikke ligestillede: Kun den rejsendes streg har et knæk. Den rejsende vender om og mærker det. Den hjemmeblevne gør ikke.</p>
-          <p>Prøv det på en rigtig rejse: ${gå('kosmos:tid', '⏳ Rejsen i tid')}</p>`,
+        titel: 'Hvorfor ikke omvendt?',
+        tekst: `<p>Set fra den rejsende er det jo Jorden, der farer af sted. Burde tvillingen derhjemme så ikke blive den yngste? Nej, for de to er ikke ligestillede: Kun den rejsendes vej har et knæk. Den rejsende vender om og mærker det. Den hjemmeblevne gør ikke.</p>
+          <p>På rumtidskortet er op tid og til siden rum, og hver prik er ét år på et af urene. På et landkort er den lige vej den korteste. I rumtiden er det omvendt: Den lige vej giver mest tid, og en omvej giver mindre. Vejen ud til 4 lysår på 5 år giver 5² − 4² = 3², altså 3 år. Ud og hjem giver 6 år, mens der går 10 år derhjemme. ${gå('kosmos:tidhvorfor:rumtid', '🗺 Se rumtidskortet')}</p>`,
       },
     ],
     videre: [gå('kosmos:tid', '⏳ Rejsen i tid'), gå('kosmos:rumtid', 'Rumtid')],
     nørd: `
-      <p><b>Den mærkelige regel:</b> Einstein fortalte selv mange år senere, at han som 16-årig forestillede sig at løbe efter en lysstråle med lysets fart. Så burde lyset se ud, som om det stod stille. Men sådan noget lys findes ikke. I 1905 byggede han relativitetsteorien på to regler: Fysikkens love er de samme for alle, der bevæger sig jævnt, og lysets fart er den samme, uanset hvor hurtigt lampen bevæger sig.</p>
+      <p><b>Den mærkelige regel:</b> Lysets fart er ca. 300.000 km i sekundet (ca. 1 milliard km/t), og den er den samme for alle, uanset hvor hurtigt de selv bevæger sig. Det er målt igen og igen. I 1887 ledte Michelson og Morley efter en forskel: Jorden farer om Solen med 30 km i sekundet, så lyset burde gå en anelse hurtigere den ene vej end den anden. De fandt ingen forskel. Fart er vej delt med tid, så når lysets fart ikke giver efter, må tiden (og afstanden) gøre det.</p>
+      <p>Einstein fortalte selv mange år senere, at han som 16-årig forestillede sig at løbe efter en lysstråle med lysets fart. Så burde lyset se ud, som om det stod stille. Men sådan noget lys findes ikke. I 1905 byggede han relativitetsteorien på to regler: Fysikkens love er de samme for alle, der bevæger sig jævnt, og lysets fart er den samme, uanset hvor hurtigt lampen bevæger sig.</p>
       <p>Farter lægges i virkeligheden sammen med w = (u + v)/(1 + u·v/c²). Bolden flyver derfor ikke præcis 150 km/t. Den mangler ca. 6 · 10⁻¹³ km/t, under en milliontedel millimeter i timen. Ved store farter kan man se det: Kører toget 50 % af lysets fart og kaster bolden 50 % fremad, flyver bolden 80 %, ikke 100 %. Og med lyset (u = c) giver formlen altid c.</p>
-      <p><b>Lysuret:</b> Kald tiden for et tik set fra Jorden for t. På et halvt tik går lyset c·t/2 på skrå, mens spejlene flytter sig v·t/2. Højden er L. Pythagoras: (c·t/2)² = L² + (v·t/2)². Løs for t: t = (2L/c) · 1/√(1 − v²/c²). Det sidste stykke er γ (gamma), tidsforlængelsen. Ved 50 % er γ = 1,15, ved 87 % 2, ved 95 % 3,2 og ved 99 % 7,1.</p>
+      <p><b>Lysuret:</b> Tegn et halvt tik som en trekant (kontakten "△ Vis trekanten" i scene 2): den lige vej op (1), det stykke, spejlene flytter sig, mens lyset er undervejs (1,73), og den skrå vej, lyset går (2). Pythagoras siger 1² + 1,73² = 2², altså 1 + 3 = 4. Den skrå vej er 2 gange så lang, og lyset har den samme fart, så det tager 2 gange så lang tid.</p>
+      <p>Kald tiden for et tik set fra Jorden for t. På et halvt tik går lyset c·t/2 på skrå, mens spejlene flytter sig v·t/2. Højden er L. Pythagoras: (c·t/2)² = L² + (v·t/2)². Løs for t: t = (2L/c) · 1/√(1 − v²/c²). Det sidste stykke er γ (gamma), tidsforlængelsen. Ved 50 % er γ = 1,15, ved 87 % 2, ved 95 % 3,2 og ved 99 % 7,1.</p>
       <p>Hvorfor skal alt følge med? Hvis dit hjerte fulgte lysuret, men dit armbåndsur ikke gjorde, kunne du se på urene, at skibet bevæger sig. Men fysikken er den samme for alle, der bevæger sig jævnt (den første af Einsteins to regler). Så alt følger med.</p>
       <p><b>Myonernes kapløb:</b> Rossi og Hall målte i 1940 myonerne højt oppe på et bjerg i Colorado og længere nede i Denver. Myonerne fór over 99 % af lysets fart, og der kom flere ned, end der burde uden tidsforlængelse. Frisch og Smith gjorde det mere præcist i 1962 og filmede det: På toppen af Mount Washington (1.917 m) talte de ca. 563 myoner i timen. Uden tidsforlængelse skulle der kun være kommet ca. 27 i timen ned til havet, men de talte ca. 412. Det tydeligste forsøg er fra CERN i 1977: Myoner, der kørte rundt i en ring med γ = 29,3, levede 64,4 milliontedele sekund i stedet for 2,2, altså ca. 29 gange længere.</p>
-      <p>Typiske myoner ved jorden har en energi på ca. 4 GeV (γ ≈ 38). Deres gennemsnitlige vej bliver ca. 25 km i stedet for 660 m.</p>
-      <p><b>"Nu" er ikke det samme for alle:</b> I animationen kører toget 60 % af lysets fart. Set fra perronen er vognen også kortere (80 % af sin længde), og lyset når bagenden efter 0,25 og forenden efter 1,0 (målt i den tid, lyset er om at gå vognens længde). I toget når det begge efter 0,5.</p>
+      <p>Typiske myoner ved jorden har en energi på ca. 4 GeV (γ ≈ 38). Deres gennemsnitlige vej bliver ca. 25 km i stedet for 660 m. Ved havets overflade suser omkring 100 myoner gennem hver kvadratmeter hvert sekund, også gennem dig.</p>
+      <p><b>"Nu" er ikke det samme for alle (scene 4):</b> Set fra perronen har lyset den samme fart begge veje (den mærkelige regel!). Men bagenden kører lyset i møde, og forenden kører fra det. Derfor når lyset bagenden først. I toget er begge ender lige langt fra lampen, så lyset når dem samtidig. Begge har ret. ${gå('kosmos:tidhvorfor:nu', '💡 Se det i scene 4')}</p>
+      <p>Det løser gåden fra myonerne: Set fra myonen er det Jordens ure, der farer forbi, så de må gå langsomt set fra myonen. For at sammenligne to ure, der er langt fra hinanden, skal man vide, hvad de viser "på samme tid", og det er de to ikke enige om. Derfor kan begge se den andens ur gå langsomt, uden at nogen tager fejl. Først når de mødes igen, kan de lægge urene ved siden af hinanden.</p>
+      <p>I animationen kører toget 60 % af lysets fart. Set fra perronen er vognen også kortere (80 % af sin længde), og lyset når bagenden efter 0,25 og forenden efter 1,0 (målt i den tid, lyset er om at gå vognens længde). I toget når det begge efter 0,5.</p>
       <p>For en rigtig togvogn på 20 m ved 100 km/t er forskellen ca. 6 femtosekunder (6 milliontedele af en milliardtedel sekund). Derfor har ingen nogensinde mærket det i hverdagen. Einstein forklarede det selv i en bog fra 1917 med to lyn, der rammer hver sin ende af et tog.</p>
       <p><b>Rumtidskortet:</b> Tænd "Vis den rejsendes 'nu'". Hver stiplede linje viser, hvad der sker derhjemme "lige nu" set fra den rejsende (scene 4). Med vendepunktet 4 lysår ude regner den rejsende på vejen ud med, at Jordens ur går langsomt: Efter 3 år i skibet er der kun gået 1,8 år derhjemme. Det samme på vejen hjem. Men i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år. Dér ligger de manglende år.</p>
       <p>Det er ikke accelerationen, der gør det: Man kan tænke sig en rejse, hvor begge ure speeder op og bremser lige meget og alligevel kommer forskelligt hjem. Og i CERN's ring fulgte myonernes ure kun farten, selv om de blev slynget rundt med ca. en milliard milliarder g. Det er vejens længde, der tæller.</p>
       <p>Formlen for et lige stykke er <span class="formel">τ² = t² − (x/c)²</span>. Tiden på ens eget ur kaldes egentiden, og den lige streg giver mest. Tæt på lysets streger bliver der næsten ingen tid, men lyset selv har ikke noget ur.</p>`,
     ærligt: `<p><b>Den mærkelige regel:</b> Et tog kan ikke køre med en mærkbar del af lysets fart, og lyset er tegnet meget langsommere, end det er. Men det har den samme fart i begge billeder. Billederne viser, hvad man ville måle, ikke hvad øjet ser (lyset skal også nå frem til øjet).</p>
-      <p><b>Lysuret:</b> Lysuret er et tankeeksperiment, som står i de fleste lærebøger. Man kan ikke se lysglimtet undervejs. Animationen viser, hvad man ville regne sig frem til. "87 %" er 86,6 %, hvor γ er præcis 2. Lysuret trin for trin står også i Rejsen i tid.</p>
+      <p><b>Lysuret:</b> Lysuret er et tankeeksperiment, som står i de fleste lærebøger. Man kan ikke se lysglimtet undervejs. Animationen viser, hvad man ville regne sig frem til. "87 %" er 86,6 %, hvor γ er præcis 2. Målebåndet er tegnet ved siden af vejen, så man kan se begge.</p>
       <p><b>Myonernes kapløb:</b> Myonerne taber fart på vejen ned, luften er tyndere foroven, og ikke alle laves præcis 15 km oppe. Tallene i animationen er en enkel udregning. Levetiden er et gennemsnit: Nogle myoner går i stykker før, andre efter, helt tilfældigt (som atomkerner, der henfalder). Man kan ikke se myonerne. Man måler dem med en detektor. Animationen er sat meget ned i fart, og "Set fra myonen" endnu mere (urene viser de rigtige tider).</p>
       <p><b>"Nu" er ikke det samme for alle:</b> "Set fra perronen" er ikke det, øjet ser: Lyset skal også nå frem til den, der kigger. Det er det, man får, når man har trukket lysets rejsetid fra (eller har ure i takt langs hele perronen). Et tog kan heller ikke køre 60 % af lysets fart.</p>
       <p><b>Rumtidskortet:</b> Springet fra 1,8 til 8,2 år sker ikke derhjemme. Det er den rejsendes måde at regne "nu" på, der skifter, når skibet vender. Med en kikkert ville den rejsende se Jordens ur vise 1 år ved vendingen og derefter gå 3 gange så hurtigt. Vendingen er tegnet som et knæk. I virkeligheden tager det tid at vende, og det koster masser af energi. Rejsen går lige ud og hjem med fast fart.</p>`,
   },
 
-  lav(gruppe, { fase, forklaring, overlag, opdaterKnapper, sætKontakt }) {
+  lav(gruppe, { fase, forklaring, overlag, opdaterKnapper, sætKontakt, vælgFænomen }) {
     // ---------- Lærredet i overlaget ----------
     const holder = document.createElement('div');
     holder.className = 'tidh';
@@ -218,11 +213,16 @@ export default {
     let W = 600, H = 300; // lærredets størrelse i CSS-pixel
 
     let aktiv = 0; // scenen (0-4)
-    const sc1 = { bold: true, fart: 0, t: 0 }; // scene 1: bolden eller lygten, togets fart og tiden i kastet
-    const sc2 = { fart: T.LYSUR_START, trekant: false, ur: Lys.nytUr(), sidst: null }; // scene 2 (sidst: trekanten)
+    // Scene 1: bolden eller lygten, togets fart og tiden i kastet. I forløbet står billedet stille, til man trykker
+    // "Kast" eller "Tænd lygten" (vent), og kast tæller trykkene.
+    const sc1 = { bold: true, fart: 0, t: 0, vent: false, kast: 0 };
+    // Scene 2 (sidst: trekanten). I forløbet venter uret på "Send uret forbi" (vent), og "Mål" (måler) stopper uret
+    // på toppen og lægger målebåndet langs den skrå vej (målT: sekunder i animationen).
+    const sc2 = { fart: T.LYSUR_START, trekant: false, ur: Lys.nytUr(), sidst: null, vent: false, måler: false, målT: 0 };
     // Scene 3: kontakten (0-2), farten, bygens levetider (µs på myonens eget ur) og pladser, tiden i turen (µs på
     // Jorden, i "Set fra myonen" på myonens ur), fasen ('klem', 'zoom' eller 'løb'), og om den fælles sætning står
-    const sc3 = { tilstand: 1, fart: FARTER3.length - 1, liv: [], xs: [], t: 0, fase: 'løb', faseT: 0, hold: 0, fælles: true };
+    // (medSet: en hel byge er nede "Med Einstein", forløbets trin B5)
+    const sc3 = { tilstand: 1, fart: FARTER3.length - 1, liv: [], xs: [], t: 0, fase: 'løb', faseT: 0, hold: 0, fælles: true, medSet: false };
     // Scene 4: farten (0 eller 1 i FARTER4), tiden siden blinket (L/c), og om forenden er ramt (så skifter underteksten)
     const sc4 = { fart: 1, t: 0, efter: false };
     // Scene 5: vendepunktet (lysår, år), om man trækker, "nu"-linjerne, "Spil rejsen" (T: år på Jorden) og advarslen
@@ -310,7 +310,8 @@ export default {
         g.stroke();
       };
       const boldTog = hverdag ? '50 km/t' : '50 % af lysets fart';
-      const boldPerron = hverdag ? '150 km/t' : `${boldProcent(sc1.fart)} % af lysets fart`;
+      // I forløbet står svaret ikke i billedet, før man har trykket (sc1.vent)
+      const boldPerron = sc1.vent ? '?' : hverdag ? '150 km/t' : `${boldProcent(sc1.fart)} % af lysets fart`;
       const togNavn = hverdag ? '100 km/t' : FARTER1[sc1.fart].navn;
       // Hjørneteksten skjules, når billedet er lavt (telefon på langs), så den ikke rammer pilens tekst
       const hjørne = (s) => { if (ph >= 120) tekst(s, W - 12, skrift() + 7, { side: 'right', farve: FARVE.svag, str: skrift() - 1, vægt: 500 }); };
@@ -339,7 +340,7 @@ export default {
       tegnTog(xr, y2, L2);
       const xo2 = 0.04 * W + L2 + wS * t; // tingen starter ved forenden (ved t = 0)
       if (xo2 < W + 10) ting(xo2, y2 - h1 * 0.55);
-      pil(xr + L2 + 4, y2 - h1 - 16, xr + L2 + 4 + Math.max(36, Math.min(0.3 * W, wS * 0.9)), pilFarve, lys ? (b > 0 ? 'lyset: lysets fart (ikke mere!)' : 'lyset: lysets fart') : `bolden: ${boldPerron}`);
+      pil(xr + L2 + 4, y2 - h1 - 16, xr + L2 + 4 + Math.max(36, Math.min(0.3 * W, wS * 0.9)), pilFarve, lys ? (sc1.vent ? 'lyset: ?' : b > 0 ? 'lyset: lysets fart (ikke mere!)' : 'lyset: lysets fart') : `bolden: ${boldPerron}`);
       if (vS > 0) hjørne(`toget: ${togNavn} →`);
       g.restore();
     }
@@ -378,7 +379,10 @@ export default {
       g.beginPath();
       g.roundRect(0, 0, G.we, G.hE, 12);
       g.clip();
-      if (tri) {
+      if (tri && sc2.måler) {
+        sc2.sidst = null;
+        tegnMålebånd(G, v);
+      } else if (tri) {
         sc2.sidst = Lys.tegnTrekant(g, { v, top: G.top, L: G.L, sw: G.sw, we: G.we, hE: G.hE, skrift: skrift() });
       } else {
         sc2.sidst = null;
@@ -387,6 +391,74 @@ export default {
         if (v > 0) tekst(`γ = ${fmt(gam, erTo(gam) ? 0 : 2)}`, G.we - 10, G.hE - 10, { side: 'right', farve: FARVE.svag, vægt: 500 });
       }
       g.restore();
+    }
+
+    // Målebåndet (forløbets trin B4, jeres valg 14. november 2026): Et halvt tik set fra Jorden som i trekanten (samme
+    // pladser som Lys.tegnTrekant). Et bånd, der er lige så langt som den lige vej, lægger sig først langs den lige vej,
+    // flytter sig så ned langs den skrå og lægges en gang til efter sig selv. Ved 87 % (γ = 2) når det præcis op.
+    function tegnMålebånd(G, v) {
+      const gam = T.lysurGamma(v), vand = v * gam, sk = skrift();
+      const s = Math.min(1, (G.we - 2 * (G.sw + 18)) / (vand * G.L + 1));
+      const Ls = G.L * s, Ax = 22 + G.sw / 2, Bx = Ax + vand * G.L * s;
+      const y0 = G.top + (G.L - Ls) / 2 + Ls, y1 = y0 - Ls;
+      const skrå = Math.atan2(y1 - y0, Bx - Ax), lige = -Math.PI / 2;
+      // Spejlene ved starten (svage) og på toppen, den skrå vej (gul) og den lige vej (stiplet)
+      g.globalAlpha = 0.35;
+      Lys.spejl(g, Ax, y0, G.sw);
+      Lys.spejl(g, Ax, y1, G.sw);
+      g.globalAlpha = 1;
+      g.strokeStyle = FARVE.skrå;
+      g.lineWidth = 3;
+      g.beginPath();
+      g.moveTo(Ax, y0);
+      g.lineTo(Bx, y1);
+      g.stroke();
+      g.strokeStyle = FARVE.lige;
+      g.setLineDash([6, 5]);
+      g.beginPath();
+      g.moveTo(Bx, y0);
+      g.lineTo(Bx, y1);
+      g.stroke();
+      g.setLineDash([]);
+      Lys.spejl(g, Bx, y0, G.sw);
+      Lys.spejl(g, Bx, y1, G.sw);
+      Lys.glimt(g, Bx, y1);
+      // Båndet: et stykke på længden Ls fra (x, y) i vinklen a, lidt ved siden af stregen, med streger for hver tiendedel
+      const bånd = (x, y, a, nr, alfa = 1) => {
+        g.save();
+        g.globalAlpha = alfa;
+        g.translate(x, y);
+        g.rotate(a);
+        g.fillStyle = 'rgba(127,224,255,0.82)';
+        g.fillRect(0, -15, Ls, 9);
+        g.strokeStyle = 'rgba(10,30,60,0.8)';
+        g.lineWidth = 1;
+        for (let i = 0; i <= 10; i++) {
+          const ende = i === 0 || i === 10; // enderne er tykke, så man kan se, hvor ét bånd slutter og det næste starter
+          g.lineWidth = ende ? 3 : 1;
+          g.beginPath();
+          g.moveTo((i * Ls) / 10, -15);
+          g.lineTo((i * Ls) / 10, ende ? -6 : i % 5 ? -11 : -8);
+          g.stroke();
+        }
+        g.translate(Ls / 2, -21);
+        if (Math.cos(a) < -0.01) g.rotate(Math.PI); // teksten står aldrig på hovedet
+        Lys.tekst(g, nr, 0, 0, { farve: FARVE.lige, str: sk, vægt: 700 });
+        g.restore();
+      };
+      const u = ROLIG ? 99 : sc2.målT, blød = (x) => { const k = Math.max(0, Math.min(1, x)); return k * k * (3 - 2 * k); };
+      const Mx = Ax + (Bx - Ax) / gam, My = y0 + (y1 - y0) / gam; // hvor det første bånd slutter på den skrå vej
+      if (u < 0.9) bånd(Bx, y0, lige, '1', blød(u / 0.5)); // langs den lige vej
+      else if (u < 2.1) {
+        const k = blød((u - 0.9) / 1.1);
+        bånd(Bx + (Ax - Bx) * k, y0, lige + (skrå - lige) * k, '1');
+      } else {
+        bånd(Ax, y0, skrå, '1');
+        const k = blød((u - 2.4) / 1.1);
+        if (u > 2.4) bånd(Ax + (Mx - Ax) * k, y0 + (My - y0) * k, skrå, '2', Math.min(1, (u - 2.4) / 0.3));
+      }
+      if (u >= 3.6) tekst(`Den skrå vej = ${gangeTekst(gam)} × den lige vej`, G.we / 2, G.hE - 10, { farve: FARVE.tik, vægt: 700 });
+      else tekst('Målebåndet er lige så langt som den lige vej', G.we / 2, G.hE - 10, { farve: FARVE.svag, vægt: 500 });
     }
 
     // ---------- Scene 3: myonernes kapløb (en høj søjle af luft) ----------
@@ -430,6 +502,7 @@ export default {
       }
       const varighed = varighed3();
       if (sc3.t < varighed) { sc3.t = Math.min(varighed, sc3.t + (dt * varighed) / SKÆRM_TUR); return false; }
+      if (sc3.tilstand === 1) sc3.medSet = true; // en hel byge er nede med Einstein (forløbets trin B5)
       sc3.hold += dt;
       if (sc3.hold < HOLD3) return false;
       forfra3();
@@ -911,14 +984,7 @@ export default {
     // forfra, og bagefter står kun kontaktens linje i underteksten.
     const myonKontakter = TILSTANDE3.map((tekst, i) => ({
       tekst, til: sc3.tilstand === i,
-      skift: () => {
-        for (const k of myonKontakter) { k.til = k.tekst === tekst; sætKontakt(k.tekst, k.til); }
-        if (sc3.tilstand === i) return;
-        sc3.tilstand = i;
-        sc3.fælles = false;
-        forfra3();
-        visTekst();
-      },
+      skift: () => sætTilstand3(i),
     }));
     const fart3 = {
       skyder: true, navn: 'Fart', min: 0, max: FARTER3.length - 1, værdi: sc3.fart, vis: (i) => FARTER3[i].navn,
@@ -963,13 +1029,18 @@ export default {
     }
 
     // ---------- Scenerne som trin i bjælken ----------
-    function gåTil(nr) {
+    // tving: forløbet og knapperne i siden går direkte til scenen
+    function gåTil(nr, tving = false) {
       // Man kan kun springe til en scene, man har set, eller den næste (et tryk længere frem går til den næste)
-      const ny = Math.max(0, Math.min(SCENER.length - 1, Math.min(nr, Math.max(højesteSet, aktiv) + 1)));
+      const ny = Math.max(0, Math.min(SCENER.length - 1, tving ? nr : Math.min(nr, Math.max(højesteSet, aktiv) + 1)));
       aktiv = ny;
       højesteSet = Math.max(højesteSet, aktiv);
       sc1.t = 0;
+      sc1.vent = false;
       Lys.nulstilUr(sc2.ur);
+      sc2.vent = false;
+      sc2.måler = false;
+      sc2.målT = 0;
       sc3.fælles = true; // den fælles sætning står, når man kommer til scene 3
       forfra3();
       sc4.t = 0;
@@ -993,15 +1064,152 @@ export default {
     størrelse();
     tegn();
 
+    // ---------- Steder, som knapperne i siden kan gå til (gå('kosmos:tidhvorfor:rumtid'), faenomenskaerm.js) ----------
+    // myonen: scene 3 med "Set fra myonen", nu: scene 4, rumtid: scene 5 med "nu"-linjerne slukket
+    let harSted = false; // fænomenet blev åbnet ved et sted: så starter forløbet ikke af sig selv
+    function gåTilSted(sted) {
+      const nr = { bold: 0, lysur: 1, myoner: 2, myonen: 2, nu: 3, rumtid: 4 }[sted];
+      if (nr === undefined) return;
+      harSted = true;
+      gåTil(nr, true);
+      if (sted === 'myonen') sætTilstand3(2);
+      if (sted === 'rumtid' && sc5.nu) { sc5.nu = false; nuKontakt.til = false; sætKontakt(nuKontakt.tekst, false); }
+    }
+    // Kontakterne i scene 3 (præcis én tændt), også fra forløbet
+    function sætTilstand3(i) {
+      for (const [j, k] of myonKontakter.entries()) { k.til = j === i; sætKontakt(k.tekst, k.til); }
+      if (sc3.tilstand === i) return;
+      sc3.tilstand = i;
+      sc3.fælles = false;
+      sc3.medSet = false;
+      forfra3();
+      visTekst();
+    }
+
+    // ---------- Forløbet "Hvordan kan det ske?" (js/forloeb.js, drejebogen i docs/fable/E4-tid.md, afsnit 4) ----------
+    // Teksterne står i js/data/forloeb/tid.js (HVORDAN_KAN_DET_SKE). Hvert trins start stiller sin scene (scene 1-3 som
+    // de er), så "‹" kan gå tilbage. Imens er kun scenen og forløbets linje fremme (style.css skjuler Styr og
+    // underteksten). Scene 1 og lysuret står stille, til man trykker.
+    function stilTrin1(bold, fart) {
+      gåTil(0, true);
+      for (const bk of boldKontakter) { bk.til = bk.tekst.includes(bold ? 'Bold' : 'Lygte'); sætKontakt(bk.tekst, bk.til); }
+      sc1.bold = bold;
+      sc1.fart = fart;
+      fart1.værdi = fart;
+      fart1.sæt?.(fart);
+      sc1.vent = true;
+      sc1.kast = 0;
+      visTekst();
+    }
+    function stilTrin2() {
+      gåTil(1, true);
+      sc2.fart = T.LYSUR_START; // 87 % (γ = 2)
+      fart2.værdi = sc2.fart;
+      fart2.sæt?.(sc2.fart);
+      sc2.trekant = false;
+      trekantKontakt.til = false;
+      sætKontakt(trekantKontakt.tekst, false);
+      visTekst();
+    }
+    const kast = () => { sc1.vent = false; sc1.t = 0; sc1.kast++; };
+    const sendUret = () => { Lys.nulstilUr(sc2.ur); sc2.vent = false; };
+    const mål = () => { sc2.måler = true; sc2.målT = 0; };
+    const målFærdig = () => sc2.måler && sc2.ur.stille && (ROLIG || sc2.målT >= 3.8);
+    // B5: En byge, hvor ca. halvdelen når ned med Einstein (11-15 af 24, middel 55 %), så Så-teksten passer hver gang
+    function forløbsByge() {
+      const egen = myonTur(FARTER3[FARTER3.length - 1].b).egen;
+      for (;;) {
+        const liv = Array.from({ length: N_MYON }, nyLevetid);
+        const nede = liv.filter((l) => l > egen).length;
+        if (nede >= 11 && nede <= 15) return liv;
+      }
+    }
+    const FL_DEL = {
+      igen: 'fra hjælpen (?) i Kosmos eller fra "Din fremgang" i menuen',
+      trin: {
+        // B1: bolden ved 100 km/t (150 km/t set fra perronen)
+        kast: {
+          start: () => stilTrin1(true, 0),
+          get knapper() { return [{ id: 'kast', tekst: sc1.kast ? '⚾ Kast igen' : '⚾ Kast', gør: () => { kast(); tegnForløb(); } }]; },
+          færdig: () => sc1.kast > 0 && !sc1.vent && sc1.t >= 2.5,
+          visMig: kast,
+        },
+        // B2: lygten ved 50 % (lyset har lysets fart set fra begge)
+        lygte: {
+          start: () => stilTrin1(false, 1),
+          get knapper() { return [{ id: 'lygte', tekst: sc1.kast ? '🔦 Tænd lygten igen' : '🔦 Tænd lygten', gør: () => { kast(); tegnForløb(); } }]; },
+          færdig: () => sc1.kast > 0 && !sc1.vent && sc1.t >= 2.5,
+          visMig: kast,
+        },
+        // B3: lysuret ved 87 % farer forbi (zigzag)
+        skraa: {
+          start: () => { stilTrin2(); sc2.vent = true; },
+          get knapper() { return [{ id: 'send', tekst: '🚀 Send uret forbi', gør: sendUret, aktiv: () => sc2.vent }]; },
+          færdig: () => !sc2.vent && sc2.ur.jord >= 1.5,
+          visMig: sendUret,
+        },
+        // B4: målebåndet langs den skrå vej (dobbelt så lang ved 87 %)
+        maal: {
+          start: () => stilTrin2(),
+          get knapper() { return [{ id: 'maal', tekst: '📏 Mål', gør: mål, aktiv: () => !sc2.måler }]; },
+          færdig: målFærdig,
+          visMig: mål,
+        },
+        // B5: myonerne, først uden og så med Einstein (ved 99,97 %, γ ≈ 38)
+        myoner: {
+          start: () => {
+            gåTil(2, true);
+            sc3.fart = FARTER3.length - 1;
+            fart3.værdi = sc3.fart;
+            fart3.sæt?.(sc3.fart);
+            sætTilstand3(0);
+            nyByge3(forløbsByge());
+            sc3.medSet = false;
+            sc3.fælles = false;
+            visTekst();
+          },
+          get knapper() {
+            return [
+              { id: 'uden', tekst: 'Uden Einstein', gør: () => { sætTilstand3(0); tegnForløb(); }, valgt: () => sc3.tilstand === 0 },
+              { id: 'med', tekst: 'Med Einstein', gør: () => { sætTilstand3(1); tegnForløb(); }, valgt: () => sc3.tilstand === 1 },
+            ];
+          },
+          færdig: () => sc3.tilstand === 1 && sc3.medSet,
+          visMig: () => sætTilstand3(1),
+        },
+      },
+      slutTekst: () => 'Vil du se mere, så gå gennem alle fem scener i bjælken forneden.',
+      veje: [
+        { tekst: '⏳ Prøv rejsen igen', primær: true, gør: () => vælgFænomen('tid') },
+        { tekst: 'Hvorfor ikke omvendt?', gør: () => { efterForløb(); gåTilSted('rumtid'); } },
+        { tekst: 'Set fra myonen', gør: () => { efterForløb(); gåTilSted('myonen'); } },
+      ],
+      layout: () => størrelse(),
+      slut: () => { efterForløb(); },
+    };
+    // Panelerne kommer frem igen: billedet centreres, og lærredet får ny størrelse
+    const efterForløb = () => requestAnimationFrame(() => { if (!stoppet) { centrerVindue(); størrelse(); } });
+    const startForløbet = () => startForløb(HVORDAN_KAN_DET_SKE, FL_DEL);
+    // Første gang, man åbner fænomenet, og fra "Din fremgang", linket ?forloeb=hvordan-kan-det-ske#kosmos, hjælpen og
+    // vejen "Hvordan kan det ske?" i Rejsen i tid. Startes, når fænomenet er bygget færdigt (som i tid.js).
+    let stoppet = false;
+    const venter = tagVentForløb([HVORDAN_KAN_DET_SKE.id]);
+    if (venter || starterSelv(HVORDAN_KAN_DET_SKE)) {
+      requestAnimationFrame(() => { if (!stoppet && (venter || !harSted)) startForløbet(); });
+    }
+
     return {
       styring,
       opdater(dt) {
         if (aktiv === 0) {
+          if (sc1.vent) return;
           sc1.t += dt;
           if (sc1.t > 4.6) sc1.t = 0;
         } else if (aktiv === 1) {
+          if (sc2.vent) return;
+          if (sc2.måler && sc2.ur.stille) sc2.målT += dt;
           const G = geo2();
-          const stoppet = Lys.skridtUr(sc2.ur, dt, { v: T.LYSUR_FARTER[sc2.fart], c: G.c, bredde: G.we, stopOppe: sc2.trekant });
+          const stoppet = Lys.skridtUr(sc2.ur, dt, { v: T.LYSUR_FARTER[sc2.fart], c: G.c, bredde: G.we, stopOppe: sc2.trekant || sc2.måler });
           if (stoppet) visTekst();
         } else if (aktiv === 2) {
           if (skridt3(dt)) visTekst();
@@ -1015,11 +1223,19 @@ export default {
         nr: aktiv, ialt: SCENER.length, næste: SCENER[aktiv + 1]?.navn ?? '',
         gå: gåTil, forfra: () => gåTil(0),
       }),
+      // Knapperne i siden (og ordbogen) går til en scene: gå('kosmos:tidhvorfor:myonen') osv.
+      gåTil: gåTilSted,
       stop() {
+        stoppet = true;
+        stopForløb();
         iagt?.disconnect();
         holder.remove();
       },
       test: {
+        forløb: forløbTest(),
+        startForløb: () => startForløbet(),
+        kørerForløb: () => kørerForløb(),
+        forløbsscene: () => ({ vent1: sc1.vent, kast: sc1.kast, t1: sc1.t, vent2: sc2.vent, måler: sc2.måler, målT: sc2.målT, medSet: sc3.medSet }),
         scene: () => aktiv,
         højesteSet: () => højesteSet,
         lærred: () => {

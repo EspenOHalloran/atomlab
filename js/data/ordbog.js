@@ -449,6 +449,18 @@ export const ORDBOG = [
     tekst: 'Den tid, der går på ens eget ur. Skilles to ure og mødes igen, kan de vise forskellig egentid. Det ur, der har bevæget sig jævnt hele vejen uden at vende om, viser mest, som tvillingen, der blev hjemme.',
   },
   {
+    // Forløbet "Hvordan kan det ske?" (B2, 14. november 2026). 299.792,458 km/s (præcis, fordi metren siden 1983 er defineret ud fra lysets fart). Samme for alle: docs/fakta-tid.md, afsnit 1
+    id: 'lysetsfart', ord: 'Lysets fart',
+    former: ['lysets fart'],
+    tekst: 'I det tomme rum farer lyset ca. 300.000 km i sekundet. Intet, der vejer noget, kan nå op på den fart. Og så er den den samme for alle, der måler den, uanset hvor hurtigt de selv farer af sted.',
+  },
+  {
+    // Forløbet "Hvordan kan det ske?" (B3) og scene 2 i tidhvorfor.js
+    id: 'lysur', ord: 'Lysur',
+    former: ['lysur', 'lysuret', 'lysure', 'lysurene'],
+    tekst: 'Et tænkt ur, hvor et lysglimt hopper op og ned mellem to spejle. Hver gang lyset er nede igen, siger uret "tik". Fordi lyset har den samme fart for alle, viser lysuret enkelt, hvorfor et ur, der farer forbi, går langsommere.',
+  },
+  {
     id: 'roedkaempe', ord: 'Rød kæmpe',
     former: ['rød kæmpe', 'røde kæmpe', 'røde kæmper'],
     // Solen er størst om ca. 7,6 mia. år (Schröder & Smith 2008)

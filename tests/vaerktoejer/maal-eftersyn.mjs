@@ -30,7 +30,7 @@ const MÅL = [
   ['venus', 'solsystem', 'Venus'],
   ['jorden', 'solsystem', 'Jorden'],
   ['sorthul', 'kosmos', 'Sort hul'],
-  ['tidhvorfor', 'kosmos', 'Hvorfor går tiden langsommere?'],
+  ['tidhvorfor', 'kosmos', 'Hvordan kan det ske?'],
 ];
 const args = process.argv.slice(2);
 const enheder = args.filter((a) => ENHEDER[a]).length ? args.filter((a) => ENHEDER[a]) : ['pc', 'tablet'];

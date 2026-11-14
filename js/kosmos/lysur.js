@@ -1,5 +1,5 @@
 // Lysuret: et tænkt ur, hvor et lysglimt hopper op og ned mellem to spejle. Delt mellem Rejsen i tid (tid.js) og
-// "Hvorfor går tiden langsommere?" (tidhvorfor.js), så de to ikke glider fra hinanden (T5a, 9. november 2026).
+// "Hvordan kan det ske?" (tidhvorfor.js, før "Hvorfor går tiden langsommere?"), så de to ikke glider fra hinanden (T5a, 9. november 2026).
 // Kun regning og tegning på et 2D-lærred, ingen Three.js. Hvert fænomen har sine egne billeder (bokse og tekster) og
 // bruger herfra: uret (nytUr, nulstilUr, skridtUr), spejlene og lyset (tegnSkibUr, tegnJordUr) og trekanten.
 //
