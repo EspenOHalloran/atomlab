@@ -2,6 +2,8 @@
 
 *Udkast, 9. november 2026 (punkt 2 i [koereplan.md](koereplan.md), sporet [Molekyler](lige-nu/molekyler.md)). Lavet af Opus. Faktagrundlaget er lavet af tre hjælpeagenter (Opus, effort xhigh) og vurderet af Opus: [fakta-liv.md](fakta-liv.md). Fable 5.5 tjekker det, hvis den kommer ([plan-fable.md](plan-fable.md), F3). Punkter mærket **(foreslået)** er mine anbefalinger. Spørgsmålene i afsnit 9 er besvaret 9. november 2026 (anbefalingen på alle).*
 
+*Rettet 14. november 2026 efter Fables drejebog (E10): **L3-L6 er nu tre forløb og ét kort.** Trinene står i [drejebog-liv.md](drejebog-liv.md), noterne i [fable/E10-liv-noter.md](fable/E10-liv-noter.md), og de nye delopgaver i afsnit 7. Afsnit 1-4 er det gamle forslag: Tallene og kilderne gælder stadig, men fanerne, "bland ingredienserne" og kortene om liv i rummet er erstattet (det står ved hvert afsnit).*
+
 ## Hvad det går ud på
 Jeres idéer (køreplanen, 5. november 2026):
 - **Et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme** (Miller-Urey, byggesten, hinder, RNA). Det skal siges ærligt, at ingen endnu har lavet liv fra bunden, og at ingen ved, hvordan livet opstod.
@@ -27,7 +29,9 @@ Jeres idéer (køreplanen, 5. november 2026):
 | **Begyndelsen** | Laboratoriet: Millers kolbe med gnister, "Trappen til liv" (hvor langt videnskaben er nået) og Jordens tidslinje. |
 | **Liv i rummet** | Korte kort om Mars (Cheyava Falls), Enceladus, Europa og Titan med links til stederne i Solsystemet, og "Hvad er et bevis?". |
 
-Grunden til én del: Verdenen bliver ikke fyldt med knapper, og når Ild kommer, får verdenen to dele (Ild og Liv). Grunden til, at Liv i rummet er en fane og ikke en hel del: Teksterne om Mars, Enceladus og Europa står allerede i Solsystemet ("hver oplysning står ét sted"). Liv giver et kort resumé og et link.
+**Ændret 14. november 2026 (jeres svar på E10):** Ingen faner. Liv har forløb 1-4 (Opskriften i dig, Hvad står der i opskriften?, Kopien og Fejlen, der hjalp), og **Begyndelsen** bliver en egen del i verdenen med forløb 5 (som i [plan-verdener.md](plan-verdener.md)). Liv i rummet bliver ét kort på Mars (afsnit 4).
+
+Grunden til én del (9. november): Verdenen bliver ikke fyldt med knapper, og når Ild kommer, får verdenen to dele (Ild og Liv). Grunden til, at Liv i rummet er en fane og ikke en hel del: Teksterne om Mars, Enceladus og Europa står allerede i Solsystemet ("hver oplysning står ét sted"). Liv giver et kort resumé og et link.
 
 ## 2. Opskriften (DNA)
 **Zoom-rejsen (foreslået):** Fem trin, man kan hoppe mellem med knapper eller ved at zoome:
@@ -43,7 +47,7 @@ Panelet viser tallene for "én af dine celler" (ca. 6,1 milliarder basepar, ca. 
 
 **Byg stigen (opgave med ★):** Den ene streng er givet. Man vælger partneren til hver base (A, T, G eller C). Et forkert par passer ikke, og man ser hvorfor: To store baser er for brede, to små for smalle, og A–C kan ikke holde fast, fordi plus og minus ikke står over for hinanden.
 
-**Kopien ("Lyn op og kopiér"):** Stigen åbner sig som en lynlås, og nye byggestykker sætter sig på begge halvdele, så der bliver to ens stiger. Panelet viser farten (ca. 25 baser i sekundet pr. "lynlås" hos mennesker og ca. 1.000 hos bakterier) og hvor sjældent, der sker en fejl, når cellen har rettet sine egne fejl (under ca. én pr. milliard). Én lynlås alene ville være ca. 8 år om at kopiere alt dit DNA. Derfor åbner cellen 30.000-50.000 steder på én gang, og så tager det timer. Hvert barn har ca. 70 nye "stavefejl", som ingen af forældrene har. Hver gang man trykker, er der en lille chance for en fejl, så man kan se en mutation opstå. Tidsknappen styrer farten.
+**Kopien ("Lyn op og kopiér"):** **Erstattet 14. november 2026** af forløbet "Kopien" og "Leg frit: Kopien" med to tal og én ★-opgave ([drejebog-liv.md](drejebog-liv.md), afsnit 2). Tallene nedenfor gælder stadig og står i "For nørder". Det gamle forslag: Stigen åbner sig som en lynlås, og nye byggestykker sætter sig på begge halvdele, så der bliver to ens stiger. Panelet viser farten (ca. 25 baser i sekundet pr. "lynlås" hos mennesker og ca. 1.000 hos bakterier) og hvor sjældent, der sker en fejl, når cellen har rettet sine egne fejl (under ca. én pr. milliard). Én lynlås alene ville være ca. 8 år om at kopiere alt dit DNA. Derfor åbner cellen 30.000-50.000 steder på én gang, og så tager det timer. Hvert barn har ca. 70 nye "stavefejl", som ingen af forældrene har. Hver gang man trykker, er der en lille chance for en fejl, så man kan se en mutation opstå. Tidsknappen styrer farten.
 
 **Fra opskrift til protein:**
 - **Aflæsningen:** Et enzym laver en kopi af et gen som RNA (med U i stedet for T), og kopien sendes ud af kernen.
@@ -56,11 +60,13 @@ Panelet viser tallene for "én af dine celler" (ca. 6,1 milliarder basepar, ca. 
   - Lav et stop for tidligt, så proteinet bliver for kort.
 - **Ekstra (foreslået):** "Skriv LIV med aminosyrer". Aminosyrerne har hver sit bogstav, og L, I og V findes. Ikke alle bogstaver findes (fx B, J, O, U, X, Z, Æ, Ø og Å), så man kan ikke skrive alt.
 
-**"Hvorfor?"-kort (forslag):** "Hvad er et gen?", "Er det meste af DNA'et skrald?", "Er DNA en tegning af kroppen?", "Hvorfor ligner jeg mine forældre?", "Hvad laver proteinerne?", "Hvorfor kan de fleste danskere tåle mælk?" (ca. 94 %, fordi en ændring i en "kontakt" uden for selve genet holder genet tændt), "Hvorfor kan ét forkert bogstav give en sygdom?" og "Hvem fandt stigen?" (Franklin, Gosling, Wilkins, Watson og Crick, 1953, og danskeren Wilhelm Johannsen, der fandt på ordet "gen" i 1909). Historien om Franklin skal fortælles ærligt: Hun var en ligeværdig del af arbejdet, og Watson og Crick brugte hendes målinger uden at spørge, men "de stjal billedet" er for enkelt ([fakta-liv/dna-opskriften.md](fakta-liv/dna-opskriften.md), afsnit 5).
+**"Hvorfor?"-kort:** **Valgt 14. november 2026:** fem kort ([drejebog-liv.md](drejebog-liv.md), afsnit 5): Hvem fandt stigen?, Hvorfor ligner jeg mine forældre, men ikke helt?, Hvordan ved vi, at hver kopi har en gammel og en ny side?, Sker det også hos mennesker? og Hvorfor kan de fleste danskere tåle mælk? Det gamle forslag: "Hvad er et gen?", "Er det meste af DNA'et skrald?", "Er DNA en tegning af kroppen?", "Hvorfor ligner jeg mine forældre?", "Hvad laver proteinerne?", "Hvorfor kan de fleste danskere tåle mælk?" (ca. 94 %, fordi en ændring i en "kontakt" uden for selve genet holder genet tændt), "Hvorfor kan ét forkert bogstav give en sygdom?" og "Hvem fandt stigen?" (Franklin, Gosling, Wilkins, Watson og Crick, 1953, og danskeren Wilhelm Johannsen, der fandt på ordet "gen" i 1909). Historien om Franklin skal fortælles ærligt: Hun var en ligeværdig del af arbejdet, og Watson og Crick brugte hendes målinger uden at spørge, men "de stjal billedet" er for enkelt ([fakta-liv/dna-opskriften.md](fakta-liv/dna-opskriften.md), afsnit 5).
 
 **Ærligt talt:** Atomerne er tegnet som kugler, og farverne er kemikernes. Stigen er tegnet uden de proteiner, den er viklet om. Ribosomet er meget større og mere indviklet end på tegningen. RNA'et bliver klippet til, før det forlader kernen (står under "For nørder"). Foldningen er vist forenklet.
 
 ## 3. Begyndelsen (laboratoriet)
+**Ændret 14. november 2026 (jeres svar på E10):** Begyndelsen er ét forløb med kolben og trappen, ét rigtigt forsøg pr. trin og fire kort ([drejebog-liv.md](drejebog-liv.md), afsnit 4). "Man kan blande ingredienserne" udgår, og tidslinjen bliver kortet "Hvornår skete det?". Millers luft er tre gasser og vand. Tallene og kilderne nedenfor gælder stadig.
+
 **Millers kolbe (foreslået):** Millers forsøg fra 1953 med en kolbe på 5 liter. En lille kolbe med vand, der koger, og en luft af metan, ammoniak, hydrogen og vanddamp: tre af de molekyler, man selv har bygget i "Del elektroner". Med **"⚡ Gnist"** (som i knaldgassen) går molekylerne i stykker og sætter sig sammen på nye måder, og i vandet samles der aminosyrer (fx glycin og alanin). En tæller viser, hvilke der er fundet. Miller fandt selv 5. Da hans gamle glas blev analyseret igen i 2008, fandt man 22 i en af udgaverne af forsøget.
 - **Vælg luften:** "Millers luft (1953)" eller "Den unge Jords luft, bedste bud i dag" (mest CO₂ og N₂). Den sidste giver færre aminosyrer. Det viser ærligt, at videnskaben har lært mere siden 1953, og at forskerne stadig diskuterer det.
 - **Ærligt talt:** Kemien har mange trin, som er vist forenklet. Forsøget tog en uge, og her tager det sekunder. Tallene fra Miller 1953 og fra genanalysen af hans glas i 2008 står i [fakta-liv/begyndelsen.md](fakta-liv/begyndelsen.md).
@@ -84,6 +90,8 @@ Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring 
 **"Hvorfor?"-kort (forslag):** "Hvor kom byggestenene fra?", "Hvorfor laver fedt bobler i vand?" (vand er polært, som i "Del elektroner"), "Hvad er RNA-verdenen?" (ribosomets kerne er RNA, vist af bl.a. danskeren Poul Nissen i 2000), "Hvorfor opstår der ikke nyt liv i dag?" (Darwins pointe: i dag bliver nye byggesten spist af det liv, der findes), "Hvorfor bruger liv kun den ene hånd?" (spejlbillederne) og et link til kortet "Hvor kom Jordens vand fra?" (M4).
 
 ## 4. Liv i rummet
+**Ændret 14. november 2026 (jeres svar på E10):** Intet forløb og ingen fane. Kun kortet **"Hvor sikkert er et spor?"** (de syv trin og ALH84001, punkt 3 nedenfor) ved Cheyava Falls på Mars, med links fra Gåden "Er der liv andre steder?" og fra Begyndelsen (L6). Punkt 1 og 2 står allerede i Mars, Gåden og månerne.
+
 **(Foreslået) Korte kort med links:**
 - **Mars, Cheyava Falls:** 3-4 sætninger om leopardpletterne (0,2-1 mm, med mineraler, som mikrober på Jorden ofte laver), hvorfor det er måske det stærkeste spor af liv, der er fundet på Mars (jeres valg 12. november 2026, Fable E5), og hvorfor det ikke er bevist (en vej uden liv er ikke udelukket). Link til stedet i Solsystemet, hvor den lange tekst står i dag (`js/data/sider/mars.js`). Teksterne må ikke sige noget andet end dér.
 - **Enceladus, Europa og Titan:** hav eller søer, og hvad der er fundet (fx fosfat og hydrogen i fontænerne fra Enceladus, fem af de seks vigtigste grundstoffer i liv, og svovl måske). Intet liv. Europa Clipper og Dragonfly er ikke bygget til at finde liv, men til at se, om der er betingelser for det. Links til månerne.
@@ -115,14 +123,16 @@ Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring 
 | L0 | ✅ Plan og faktagrundlag (denne fil og [fakta-liv.md](fakta-liv.md), 9. november 2026) | lavet |
 | L1 | ✅ (9. november 2026) Skærmen, verdenen "Ild og liv" i menuen og **stigen i 3D**: zoom-rejsen, atomerne tæt på, tallene og "Byg stigen" med de første opgaver | stor |
 | L2 | ✅ (10. november 2026) **Fra opskrift til protein:** aflæsningen, ribosomet, kodehjulet og "Læs selv" med HBB og mutationerne (se "Bygget i L2" nedenfor) | stor |
-| L3 | **Kopien:** "Lyn op og kopiér", fejlene og "Hvorfor?"-kortene om DNA | mellem |
-| L4 | **Millers kolbe** med valget af luft | mellem til stor |
-| L5 | **Trappen til liv**, tidslinjen og "Har nogen lavet liv?" | mellem |
-| L6 | **Liv i rummet:** kortene, linkene og "Hvad er et bevis?" | lille til mellem |
+| L3 | **Forløbet "Kopien"**, "Leg frit: Kopien" med to tal og ★-opgaven "Find en mutation, der blev", kort 1-3 og rettelsen af G–T i "Ærligt talt" ([drejebog-liv.md](drejebog-liv.md), afsnit 2). Prompten: [prompt-liv-l3.md](prompt-liv-l3.md) | mellem |
+| L4 | **Forløbet "Fejlen, der hjalp"** (naturligt udvalg på pladen fra Baym 2016), kort 4 og 5 og to nye ord (afsnit 3) | mellem |
+| L5 | **Delen "Begyndelsen"**: forløbet med Millers kolbe, hinden, RNA'et og trappen, og fire kort (afsnit 4) | stor |
+| L6 | **Kortet "Hvor sikkert er et spor?"** ved Cheyava Falls på Mars og links fra Gåden og Begyndelsen (afsnit 6). Bygges i sporet Molekyler lige efter L5 | lille |
 
 **Bygget i L2 (10. november 2026, hvor det afviger fra forslaget):** Ingen faner endnu og intet nyt trin i zoom-rejsen: Boksen **"Fra opskrift til protein"** i venstre panel har tre knapper, så det passer med fanerne i L4-L6 (alt ligger i Opskriften). **"Se genet blive læst"** viser hele den kodende del af HBB (444 baser): polymerasen og RNA-kopien, "Ud af kernen", ribosomet med budbringerne (147 aminosyrer, de første 10 ord langsomt) og foldningen (de vandskyende inderst). Tidsknappen: ⏩ er 4 gange hurtigere. **"Læs selv"**: Man er ribosomet og vælger aminosyren til de 9 første ord blandt fire svar, med kodehjulet ved siden af. Bagefter kan ribosomet læse resten. **"Skift et bogstav"**: de 10 første ord, ATG kan ikke skiftes. "Skriv LIV" er en opgave i genet (kodon 4 er allerede L, så kodon 5 og 6 skal laves om), ikke et frit skrivefelt (idéen "Skriv dit navn" står i [ideer.md](ideer.md)). En ekstra opgave, `liv-protein` ("Se et gen blive til et protein"), og "Hvorfor?"-kortet `livSegl`. Kodehjulet er en kontakt og står øverst til højre i 3D-billedet.
 
-**Efter Fables faktatjek (E5, 12. november 2026, [E5-noter.md](fable/E5-noter.md)):** **Før L3** (jeres valg): et "Hvorfor?"-kort om naturligt udvalg med seglcellen og malaria (og evt. mælken), og et afsnit om udvalget i faktagrundlaget. Evolution er en kendsgerning og skrives ikke med "måske". **Før L5:** "Kom livet fra rummet?", argumenterne i striden om stedet (damme: UV-lys til RNA's byggesten, Patel m.fl. 2015; væld: forskellen i surhed, Lane og Martin 2012, begge skal slås op), mennesket på døgnuret (300.000 år giver ca. 5,7 sekunder før midnat, alderen skal slås op) og en sætning i "Ærligt talt" om, at enkle hinder let går i stykker i saltvand. Mennesker og chimpanser: intet tal i lag 1, kun "vores nærmeste slægtning" (jeres valg).
+**Efter Fables drejebog (E10, 14. november 2026):** L3-L6 er skrevet om som forløb (tabellen ovenfor). Jeres svar: (a) i alle fire af Fables spørgsmål og alle fire anbefalinger i [noterne](fable/E10-liv-noter.md), afsnit 5. Hvert forløb får sit eget go. Molekyler er bygget, så L3 er det næste (Opus, høj).
+
+**Efter Fables faktatjek (E5, 12. november 2026, [E5-noter.md](fable/E5-noter.md)):** **Før L3** (jeres valg, **nu forløb 4 med kort 4 og 5**, se E10): et "Hvorfor?"-kort om naturligt udvalg med seglcellen og malaria (og evt. mælken), og et afsnit om udvalget i faktagrundlaget. Evolution er en kendsgerning og skrives ikke med "måske". **Før L5:** "Kom livet fra rummet?", argumenterne i striden om stedet (damme: UV-lys til RNA's byggesten, Patel m.fl. 2015; væld: forskellen i surhed, Lane og Martin 2012, begge skal slås op), mennesket på døgnuret (300.000 år giver ca. 5,7 sekunder før midnat, alderen skal slås op) og en sætning i "Ærligt talt" om, at enkle hinder let går i stykker i saltvand. Mennesker og chimpanser: intet tal i lag 1, kun "vores nærmeste slægtning" (jeres valg).
 
 Hvert trin får sit eget `/faktatjek` af teksterne (mod faktagrundlaget), nye ord i Ordbogen og linjer i "Ikke afprøvet".
 
@@ -139,6 +149,8 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 
 ## 9. Spørgsmål til jer (Opus' anbefaling først)
 **✅ Jeres svar (9. november 2026):** 1a (én del, "Liv", med de tre faner), 2a (DNA først: L1-L3, så Begyndelsen og til sidst Liv i rummet), 3a (zoom helt ind til atomerne med atompladser fra Protein Data Bank, så `files.rcsb.org` skal åbnes før L1) og 4a (Millers kolbe med valget af luft og "Trappen til liv", hvor man blander ingredienserne). Spørgsmål 5-7 blev ikke stillet særskilt, så de følger anbefalingen: 5a (hæmoglobin med seglcelle-mutationen og "Skriv LIV"), 6a (korte kort med links) og 7a ("Liv" nu, og jeres søn vælger navnet senere). Næste skridt er L1.
+
+**Ændret 14. november 2026 (jeres svar på E10):** 1a (faner) er erstattet af forløb og delen Begyndelsen, 4a ("bland ingredienserne") af ét rigtigt forsøg pr. trin, og 6a er nu kun ét kort på Mars.
 
 1. **Én del med faner eller to dele?**
    - **a (anbefalet):** Én del, "Liv", med fanerne Opskriften, Begyndelsen og Liv i rummet. Verdenen "Ild og liv" har så én del, indtil Ild kommer.
@@ -165,9 +177,9 @@ Den fulde liste med kilder står i [fakta-liv.md](fakta-liv.md). De vigtigste:
 
 ## 10. Model og effort
 - **L0 (denne plan og faktagrundlaget):** Opus. Faktagrundlaget er slået op af tre Opus-hjælpeagenter med effort xhigh og vurderet af Opus (9. november 2026).
-- **L1-L6:** Opus med høj effort, én ny session pr. trin. L1 (3D-stigen med to udgaver, der toner over i hinanden) er det sværeste.
+- **L1-L6:** Opus med høj effort, én ny session pr. trin (L6 kan klare sig med medium). L1 (3D-stigen med to udgaver, der toner over i hinanden) er det sværeste.
 - **Fable 5.5**, hvis den kommer: tjekker faktagrundlaget kritisk (F3, ca. 5-10 $).
 - **Domæner:** Til L0 blev `www.ncbi.nlm.nih.gov`, `pmc.ncbi.nlm.nih.gov`, `pubmed.ncbi.nlm.nih.gov`, `bio.libretexts.org`, `www.genome.gov`, `www.nobelprize.org`, `pdb101.rcsb.org`, `www.science.org`, `www.pnas.org` og `academic.oup.com` åbnet (9. november 2026). Science, PNAS og Oxford svarer 403 til curl (sidernes egen bot-beskyttelse), og PubMed, PMC og NCBI Bookshelf gav reCAPTCHA i perioder. Artiklerne blev derfor læst på PMC, i NASA's arkiv NTRS, på arXiv eller via Wikipedias henvisninger (det står ved hver påstand). **Før L1:** `files.rcsb.org` (atompladserne). **Før L5, hvis Darwins brev skal citeres:** `www.darwinproject.ac.uk`.
 
 ## 11. Sådan startes næste session
-L1 og L2 er lavet (9. og 10. november 2026). L3 startes i en ny session med Opus (høj effort): "Læs docs/prompt-liv-l3.md". Den brugte prompt til L2 ligger i [arkiv/prompt-liv-l2.md](arkiv/prompt-liv-l2.md).
+L1 og L2 er lavet (9. og 10. november 2026), og forløb 1 og 2 13. november 2026. L3 (forløbet "Kopien") startes i en ny session med Opus (høj effort), efter jeres go: "Læs docs/prompt-liv-l3.md". Den brugte prompt til L2 ligger i [arkiv/prompt-liv-l2.md](arkiv/prompt-liv-l2.md).
