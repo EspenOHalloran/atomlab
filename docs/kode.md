@@ -21,6 +21,7 @@
 | [kode/jupiter.md](kode/jupiter.md) | Jupiter (`js/kosmos/jupiter.js`): kortet, vindene, pletten, månerne, flybyen, polerne, nordlyset og ringene, `js/data/vinde-jupiter.js`, `poler-jupiter.js` og `ringe-jupiter.js`. |
 | [kode/isgiganter.md](kode/isgiganter.md) | Uranus og Neptun (`js/solsystem/isgigant.js`, `js/kosmos/uranus.js` og `neptun.js`): aksen fra polens retning, Solen for dagens dato, vindene, `js/data/isgiganter.js` og `vinde-isgiganter.js`, Uranus' ringe og årstider (UN2) og Neptuns vejr og ringbuer (`vejr-neptun.js`, `ringe-neptun.js`, UN3), Uranus' måner (UN4) og stederne og flybyerne (UN5). |
 | [kode/venus.md](kode/venus.md) | Venus (`js/kosmos/venus.js`): Magellans radarkort og højder (`lav_venus.py`), aksen og drejningen efter datoen (`js/data/venus.js`), skyerne fra Akatsuki og vindene (`lav_venus_skyer.py`, `js/data/vinde-venus.js`) og siden (`js/data/sider/venus.js`). |
-| [kode/mars.md](kode/mars.md) | Mars (`js/kosmos/mars.js`), Phobos og Deimos, flybyen ved månerne, Stå på Mars (`landskab.js`, `panorama.js`) og billederne i `billeder/solsystem/landskab/`. |
+| [kode/mars.md](kode/mars.md) | Mars (`js/kosmos/mars.js`), Phobos og Deimos, flybyen ved månerne og billederne til Mars. |
+| [kode/staa-paa-mars.md](kode/staa-paa-mars.md) | Stå på Mars (`landskab.js`, `panorama.js`) og billederne i `billeder/solsystem/landskab/`. |
 | [kode/gemte-data.md](kode/gemte-data.md) | Alt, der gemmes i localStorage. Nye gemte data skrives her. |
 | [kode/testadgang.md](kode/testadgang.md) | `window.atomlabTest` (`?test`): listen over, hvad testene kan spole, fryse og læse. |

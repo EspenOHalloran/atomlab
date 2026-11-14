@@ -341,8 +341,8 @@ const SKYGGE_FRAGMENT = /* glsl */ `
 
 // Nettet i ringe: punkt 0 er midten, så kommer ringene fra 0,3 m til MAKS. Det er delt i STYKKER lagkagestykker
 // (G1 trin 3, forslag H), så de stykker, der ligger uden for billedet, ikke tegnes: Vertex-shaderen slår højden op fem
-// gange i hvert punkt, og på tabletten var nettet ca. halvdelen af tiden pr. billede. Kigger man vandret, tegnes kun
-// ca. en tredjedel. Hvert stykke har sin egen midte og deler kanten med naboen, så der er ingen huller.
+// gange i hvert punkt, og med tablet-udgaven i testbrowseren var nettet ca. halvdelen af tiden pr. billede. Kigger man
+// vandret, tegnes kun ca. en fjerdedel. Hvert stykke har sin egen midte og deler kanten med naboen (ingen huller).
 const STYKKER = 16;
 function lavStykker(retninger, ringe) {
   const q = Math.pow(MAKS / 0.3, 1 / (ringe - 1));
