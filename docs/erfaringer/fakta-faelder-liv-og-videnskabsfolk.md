@@ -56,3 +56,10 @@
 - "Miller-forsøget gav 22 (eller 23) aminosyrer." Det er to forsøg: 22 i vulkan-udgaven (analyseret 2008) og 23 i forsøget med H₂S fra 1958 (analyseret 2011). Bland dem ikke.
 - "Cassini fandt ikke liv på Enceladus." Den kunne ikke have set det. Skriv "ingen har endnu kunnet se efter liv".
 - "Mutationer gør, at livet udvikler sig." Kun sammen med naturligt udvalg. Og evolution er en kendsgerning: skriv den ikke med "måske".
+*Fables drejebog til Liv L3-L6 (14. november 2026). Kilderne står i [E10-liv-drejebog.md](../fable/E10-liv-drejebog.md).*
+- "Bakterier vænner sig til antibiotika" eller "medicinen får dem til at mutere." Fejlene i kopien opstår tilfældigt, også uden medicin (Luria og Delbrück 1943). Medicinen afgør kun, hvem der kommer videre. Det samme gælder alt naturligt udvalg: Mutationen kommer først, ikke fordi der er brug for den.
+- "G–T er den almindeligste kopifejl, og parret buler, så cellen finder det." "Den almindeligste" står i en pressemeddelelse, ikke i artiklen (Kimsey m.fl. 2018), og G–T slipper netop ind, fordi parret kort kan ligne et rigtigt par. Skriv "et par, der ikke passer", og forklar ikke, hvordan cellen mærker det.
+- "Mennesket har eksisteret i 200.000 år." De ældste fossiler af vores art (Jebel Irhoud) er 315.000 ± 34.000 år (Richter m.fl. 2017). På døgnuret er det ca. 6 sekunder før midnat, ikke 4.
+- "På MEGA-pladen blev bakterierne 1.000 gange mere modstandsdygtige på 11 dage." Artiklen (Baym m.fl. 2016) siger ca. 10 dage med trimethoprim og 12 med ciprofloxacin, og båndene var 3, 30, 300 og 3.000 gange (eller 20 til 20.000). Skriv, hvilket bånd de nåede, ikke et tal for, hvor meget de tålte.
+- "Begge nye sider af DNA'et bygges på samme måde." Den ene bygges i små stykker, fordi cellen kun kan bygge i én retning (OpenStax Biology 14-4). Tegnes de ens, så sig det i "Ærligt talt".
+- En side kan være åben i miljøet og alligevel svare 403 til en robot (cell.com, ScienceDirect og science.org). Led efter samme forskergruppes artikel i PMC, og skriv, at den oprindelige kun er set som resumé.
