@@ -7,7 +7,7 @@ import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
 import { OPGAVER, OPGAVER_FUSION, OPGAVER_REAKTOR, OPGAVER_BATTERI } from './data/opgaver.js';
 import { OPGAVER_LIV } from './data/liv/opskriften.js';
-import { OPGAVER_BYTTE } from './data/molekyler.js'; // "Byg et molekyle" tæller med i Værkstedet
+import { OPGAVER_BYTTE } from './data/molekyler.js'; // Molekylers opgaver ("Del elektroner" og "Giv elektroner")
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
 import { FÆNOMEN_IDER, setFænomener, flytGemt } from './data/faenomener.js';
 import { SKÆRME, skærmMed, hentSkærm, hentetSkærm } from './skaerme.js';
@@ -222,7 +222,7 @@ function startMenu() {
 // Tallene kommer fra js/data/, så skærmene ikke skal hentes for at tælle (10a).
 function fremgangPrDel() {
   const ud = {};
-  for (const [id, liste] of [['vaerksted', [...OPGAVER, ...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
+  for (const [id, liste] of [['vaerksted', OPGAVER], ['molekyler', [...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };

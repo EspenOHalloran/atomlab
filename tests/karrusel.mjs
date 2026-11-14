@@ -9,7 +9,7 @@ const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const VERDENER = ['atomer', 'kerner', 'ildogliv', 'elektricitet', 'rummet', 'biblioteket'];
-const DELE = { atomer: ['vaerksted', 'system'], kerner: ['fusion', 'reaktor'], ildogliv: ['liv'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog', 'gaader'] };
+const DELE = { atomer: ['vaerksted', 'molekyler', 'system'], kerner: ['fusion', 'reaktor'], ildogliv: ['liv'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog', 'gaader'] };
 const størrelser = [
   ['pc', { viewport: { width: 1280, height: 800 } }],
   ['tablet', { viewport: { width: 820, height: 1180 }, hasTouch: true, isMobile: true }],
