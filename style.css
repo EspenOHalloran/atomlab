@@ -1179,8 +1179,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaade-lag .lag-boks p { margin: 0 0 8px; line-height: 1.45; }
 #gaader .gaade-lag .lag-boks p:last-child { margin-bottom: 0; }
 #gaader .gaade-lag .lag-boks b { color: var(--gul); font-weight: 600; }
-/* Et kort med sin scene (G4a): scenen fylder skærmen, og panelet står til højre (ca. 380 px) eller forneden på højkant */
-#gaader > .vindue { grid-area: vindue; }
+#gaader > .vindue { grid-area: vindue; } /* Et kort med sin scene (G4a): scenen fylder skærmen, og panelet står til højre (ca. 380 px) eller forneden på højkant */
 #gaader:not(.paa-kort) > .vindue { display: none; }
 #gaader.paa-kort { grid-template-columns: minmax(0, 1fr) 380px; grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top" "vindue panel"; justify-content: stretch; }
 #gaader.paa-kort .gaader-panel { align-self: stretch; }
@@ -1192,13 +1191,8 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaade-scene-knapper .knap { pointer-events: auto; min-height: 44px; background: rgba(14, 24, 56, 0.88); border-color: rgba(95, 227, 255, 0.6); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); }
 #gaader .gaade-scene-knapper .knap[aria-pressed="true"] { background: rgba(95, 227, 255, 0.22); border-color: var(--accent); }
 @media (max-height: 500px) and (orientation: landscape) { #gaader.paa-kort { grid-template-columns: minmax(0, 1fr) 320px; } #gaader .gaade-linje { font-size: 14px; padding: 5px 10px; } }
-/* Højkant: panelet forneden (højst ca. 45 % af højden). Mens man gætter, står kun spørgsmålet og valgene i panelet. */
-@media (max-width: 820px) and (orientation: portrait) {
-  #gaader.paa-kort { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "vindue" "panel"; }
-  #gaader.paa-kort .gaader-panel { max-height: 45vh; padding: 12px; }
-  #gaader.gaetter .gaade-kort > :not(.gaade-trin), #gaader.gaetter .gaade-hoved { display: none; }
-  #gaader.gaetter .gaade-trin { padding: 0; border: 0; background: none; }
-}
+@media (max-width: 820px) and (orientation: portrait) { #gaader.paa-kort { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "vindue" "panel"; } #gaader.paa-kort .gaader-panel { max-height: 45vh; padding: 12px; } }
+@media (max-width: 820px) and (orientation: portrait) { #gaader.gaetter .gaade-kort > :not(.gaade-trin), #gaader.gaetter .gaade-hoved { display: none; } #gaader.gaetter .gaade-trin { padding: 0; border: 0; background: none; } } /* Højkant: panelet forneden (højst ca. 45 %), og mens man gætter, kun spørgsmålet og valgene */
 @media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaade-mærke.senere { display: none; } #gaader .gaade-valg.senere small::after { content: ' · Kommer senere'; } }
 
 /* ---------- Kosmos ---------- */
