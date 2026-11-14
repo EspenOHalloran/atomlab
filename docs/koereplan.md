@@ -41,14 +41,14 @@ En prøve med sønnen efter hvert punkt.
 ## Nyt indhold, i denne rækkefølge (må starte, når Forløb-klodsen findes)
 1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside. **Jeres valg 13. november 2026:** Opus skriver drejebogen nu ([prompt-overblik.md](prompt-overblik.md)), og Fable tjekker den før 16. november. Bygges efter G1 trin 3.
 2. **Gåderne** (fem kort i Biblioteket, plads til 10). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). G1-G3 er lavet 12.-13. november 2026 ([plan-gaader.md](plan-gaader.md)). **Jeres ønske 13. november 2026:** Gåderne i fuld 3D som ét univers med "sense of wonder" og plads til 10 gåder. Planen er [plan-gaader-3d.md](plan-gaader-3d.md) (G4a-G4d, Opus høj, et go pr. del). Fable har vurderet konceptet og valgt gåderne 6-10 ([E8-gaader-3d-noter.md](fable/E8-gaader-3d-noter.md)). Jeres svar 14. november 2026: Antistof bygges helt færdigt først (G4a), så skinnen (G4b) og prøven, før resten.
-3. **De første 6-8 videnskabsfolk** med sider fra bøgerne (Opdagelserne i Biblioteket).
+3. **De første 6-8 videnskabsfolk** med sider fra bøgerne (Opdagelserne i Biblioteket). Faktagrundlaget er klar ([fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)). **Jeres ønske 14. november 2026:** flot visuelt med et tegnet portræt af hver, en indpakning i stil med personens egen tid (Huygens som en fortælling fra 1600-tallet), uddrag af værkerne og nøglesteder vist i de originale bøger. Engagerende for 12-13-årige og indholdsrigt nok til nørderne. Opus' forslag (en bog pr. person i lag, start med Huygens som prøve) og fire spørgsmål står i chatten og venter på jeres svar. Skrives ind i en plan, når I har svaret.
 4. **Månerne med mulige betingelser for liv** (et snit gennem Europa og Enceladus, Titan med Huygens). Jeres svar på kernesætningen, den første handling, Huygens' billeder og "Land med Huygens" står i afsnit 9 i [fakta-maaner-liv.md](fakta-maaner-liv.md) (12. november 2026).
 5. **Liv L3, derefter L4-L6** som forløb ([plan-liv.md](plan-liv.md), [prompt-liv-l3.md](prompt-liv-l3.md) skal skrives om til et forløb først). **Jeres go 14. november 2026:** Fable skriver drejebogen til L3-L6 som forløb før 16. november ([prompt-fable-liv-l3-l6.md](prompt-fable-liv-l3-l6.md)).
 6. **Ild** sammen med knaldgassen, og verdenen Stof og kemi kommer.
 7. **Lys og farver, så Strøm og magneter, så Kvantefysik** (rækkefølgen ændret 14. november 2026, jeres svar på E11: Lys først. Drejebøgerne er klar: [drejebog-lys.md](drejebog-lys.md) og [drejebog-strom.md](drejebog-strom.md) med [Opus' noter](fable/E11-strom-lys-noter.md), og jeres svar står i bunden af begge) (Kvantefysik får en drejebog først og tre idéer: dobbeltspalten, energitrin med spektrallinjer og tunneleffekten. Orbitalerne i store atomer hører med, og kvantecomputeren er sidste kapitel). **Drejebogen er klar 13. november 2026:** [drejebog-kvantefysik.md](drejebog-kvantefysik.md) (Fable) med jeres svar og [Opus' noter](fable/E7-kvantefysik-noter.md). Først bygges forløb 1 (dobbeltspalten) og Gåde-kortet "Hvor stopper kvanteverdenen?", så prøven, så forløb 2 og 3. Kvantecomputeren venter, til 1-3 er prøvet. **Jeres go 14. november 2026:** Fable skriver drejebøgerne til Strøm og magneter og Lys og farver før 16. november ([prompt-fable-strom-lys.md](prompt-fable-strom-lys.md)).
 8. **Mørkt stof** (Kosmos, gruppen Universet).
 9. **Antistof** (Kernerne).
-10. **Tjernobyl** (tredje fane i Reaktoren, **parkeret 13. november 2026**): Fable 5.2 laver faktagrundlaget og drejebogen, når den står for tur, og Opus bygger (jeres valg i E2. Ventetiden på "Fable 5.5" er slut).
+10. ~~**Tjernobyl**~~: **flyttet til [idéerne](ideer.md) 14. november 2026** (parkeret på ubestemt tid, jeres ønske).
 11. **Venus i en kort udgave** ([plan-venus.md](plan-venus.md), V3 holder pause til Serie 1 er prøvet).
 12. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens.
 13. **Merkur og Pluto i en lille udgave** (kloden, tre-fire steder og flyby). "Det hele skal med" gælder det, der er bygget, ikke det kommende (jeres valg i E2).
@@ -96,9 +96,6 @@ En prøve med sønnen efter hvert punkt.
   - Besluttet: både frit byggeri og trin for trin med opgaver.
   - Ærligt (se fælden i [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md)): "Atomer vil gerne have en fuld skal" er en forenkling. Hvis natrium giver sin elektron til chlor, og de to atomer er langt fra hinanden, koster det energi. Gevinsten kommer først, når plus og minus trækker i hinanden. Teksterne om salt i hjælpen og i kategorikortet skal tjekkes samtidig.
   - Plads: Infopanelet må ikke få en rullebjælke. Derfor skal molekylerne nok være en ny del i værkstedet med knapper øverst, som "Spalt én kerne" og "Kædereaktion" i Reaktoren.
-
-### Tjernobyl
-- **Tjernobyl i Reaktoren** (foreslået af jer): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md). En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
 
 ### Tid og rum
 *T1 og T2 er færdige. Planen er [plan-tid.md](plan-tid.md).*

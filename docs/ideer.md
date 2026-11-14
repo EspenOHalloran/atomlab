@@ -6,7 +6,7 @@
 - **Rumfærgens blanding i knaldgassen** (8. november 2026, fra M3): en knap med 6 H₂ + 2 O₂ (for meget hydrogen, som RS-25-motoren kører med). Det ender med 4 H₂O og 2 H₂ tilbage, og en opgave "For meget hydrogen".
 
 ## Kernerne
-*(ingen lige nu)*
+- **Tjernobyl i Reaktoren** (foreslået af jer, **parkeret på ubestemt tid 14. november 2026**, før stod den som nr. 10 i køreplanen): forstå, hvad der skete i 1986, trin for trin. Kræver en anden slags reaktor i spillet: I Tjernobyl bremsede grafit neutronerne, og vandet slugte dem mest, så damp gav flere spaltninger. I spillets reaktor er det omvendt. Se fælden om Tjernobyl i [erfaringer/fakta-faelder.md](erfaringer/fakta-faelder.md). En alvorlig ulykke med døde. Besluttet: Den skal behandles med respekt, og formålet er oplysning og læring (forstå, hvad der skete, og hvorfor), ikke at "vinde".
 
 ## Ild og liv
 - **Hjernen og AI (neuroner og neurale netværk).** Længst fra kernen i AtomLab (fysik, kemi og rummet), men der er en ægte bro: Nervesignaler er ioner (Na⁺ og K⁺), der strømmer gennem små kanaler, som i Batteriet og Værkstedet. Et lille neuralt netværk, der lærer noget i browseren mens man ser på, kan laves flot og ærligt. Skal sige, at kunstige netværk kun er løst inspireret af hjernen. Størst risiko for at gøre AtomLab for bred, så den kommer sidst. Stor. **Jeres svar (5. november 2026):** venter.
