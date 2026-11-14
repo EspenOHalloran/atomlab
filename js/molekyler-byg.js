@@ -840,7 +840,7 @@ function næsteForKendt(k) {
 // Det, modellen snyder med, for nogle af de kendte molekyler (faktagrundlaget, afsnit 5)
 const CH = 'C–H er en anelse skæv (H er en lille smule plus), men så lidt, at kemikere kalder den upolær. Derfor har den ingen farver her.';
 const ÆRLIGT = {
-  o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden makker, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det (se "Hvad sker der i O₂?").',
+  o2: 'Oxygen er lidt mærkelig: Det har i virkeligheden to elektroner uden partner, så flydende oxygen hænger fast på en magnet. Prik-modellen kan ikke se det (se "Hvad sker der i O₂?").',
   co: 'Prik-reglen kan ikke bygge kulilte. Her låner oxygen et af sine frie par ud, når C og O er alene, så det bliver en tripelbinding. Fordi det ene par kommer helt fra oxygen, er det kulstof-enden, der er en lille smule minus, selvom oxygen trækker hårdest. Derfor viser spillet ingen δ her.',
   h2o2: 'Den enkle model ville lægge brintoverilte fladt. Det rigtige molekyle er vredet som en halvt åben bog, så spillet drejer det med et ekstra led. Hvorfor, kræver kvantemekanik. Uden drejningen ville det heller ikke være polært.',
   metan: CH, ethan: CH, ethen: CH, ethyn: CH,
