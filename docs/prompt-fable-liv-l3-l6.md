@@ -45,4 +45,4 @@ Sig det, når noget i planen ikke holder, og sig hvorfor. Er du i tvivl, så sig
 
 ## Efter Fables svar
 1. Opus skriver `docs/fable/E10-liv-noter.md` (hvad der er nyt, og hvor Opus er uenig) og retter [plan-liv.md](plan-liv.md) og [prompt-liv-l3.md](prompt-liv-l3.md). Fables fil rettes ikke.
-2. I svarer på spørgsmålene og giver go. Molekyler bygges først (jeres valg 13. november 2026), så Liv L3 (Opus, høj).
+2. **Jeres svar (14. november 2026): "Gå med dine anbefalinger"**, altså (a) i alle fire spørgsmål i afsnit 6 i [E10-liv-drejebog.md](fable/E10-liv-drejebog.md): forløbet "Fejlen, der hjalp" og kort 4 og 5, Begyndelsen som ét forløb uden "bland ingredienserne" (ændrer jeres valg 4a fra 9. november), intet forløb om liv i rummet (ændrer fanerne i valg 1a), og kolben bygges én gang i Liv (ændrer E8 for gåden "Hvordan begyndte livet?"). Opus skriver svarene ind i planen under punkt 1. Hvert forløb får stadig sit eget go, før det bygges. Molekyler bygges først (jeres valg 13. november 2026), så Liv L3 (Opus, høj).
