@@ -49,6 +49,10 @@ await s.click('#solsystemTid button[data-tid="pause"]');
 const skarpe = await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().groveSkygger, null, { timeout: 20000, polling: 100 }).then(() => true).catch(() => false);
 t = await stå();
 tjek('⏸: skyggerne regnes skarpt igen', skarpe && t.skygger === 1, JSON.stringify({ grove: t.groveSkygger, skygger: t.skygger }));
+// G1 trin 3, del 3: skyggerne regnes i strimler (et lag over flere billeder), når Solen har flyttet sig
+await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().regner, null, { timeout: 30000, polling: 100 }).catch(() => {});
+t = await stå();
+tjek('de skarpe skygger er regnet i strimler (flere billeder pr. lag)', !t.regner && t.strimler > 1, JSON.stringify({ regner: t.regner, strimler: t.strimler }));
 
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join(' | '));
 await b.close();

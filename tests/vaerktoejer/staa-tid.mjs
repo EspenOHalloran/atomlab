@@ -68,12 +68,24 @@ console.log(await fm(async () => {
   for (let i = 0; i < 80; i++) opdater();
   for (const t of [8, 8.3]) {
     y.sætTid(t);
+    // (i strimler fra G1 trin 3, del 3: billederne tælles, til runden er færdig, og det dyreste billede vises)
     const t0 = performance.now();
-    for (let k = 0; k < 4; k++) { opdater(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); }
-    ud.push(`Skyggekortene (4 lag) kl. ${t}: ${(performance.now() - t0).toFixed(0)} ms i alt${y.stå().groveSkygger ? ' (grove)' : ''}`);
+    const tider = [];
+    do {
+      const t1 = performance.now();
+      opdater();
+      gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+      tider.push(performance.now() - t1);
+    } while (y.stå().regner && tider.length < 200);
+    ud.push(`Skyggekortene (4 lag) kl. ${t}: ${(performance.now() - t0).toFixed(0)} ms i alt på ${tider.length} billeder, højst ${Math.max(...tider).toFixed(0)} ms i ét${y.stå().groveSkygger ? ' (grove)' : ''}`);
+    ud.push(`  pr. billede: ${tider.map((x) => x.toFixed(0)).join(' ')}`);
   }
   for (let i = 0; i < 25; i++) opdater();
   ud.push(`  25 billeder senere: ${y.stå().groveSkygger ? 'stadig grove' : 'skarpe igen'}`);
+  while (y.stå().regner) opdater();
+  const uden = [];
+  for (let i = 0; i < 5; i++) { const t1 = performance.now(); opdater(); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); uden.push(performance.now() - t1); }
+  ud.push(`Til sammenligning uden skygger: ${uden.map((x) => x.toFixed(0)).join(' ')} ms pr. billede`);
   return ud.join('\n');
 }));
 await b.close();

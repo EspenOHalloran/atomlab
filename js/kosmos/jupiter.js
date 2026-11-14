@@ -336,12 +336,13 @@ export default {
     function hentKort(m, { forhånd = false, klar } = {}) {
       if (m.hentet && !klar) return;
       m.hentet = true;
-      if (m.tone) hent('io-tone.jpg', (t) => m.klode.sætTone(t, TONE_SKALA), { farve: false });
+      // (vendt: pakkes ud uden for hovedtråden, så de går hurtigere at lægge i grafikkortet, G1 trin 3, del 3)
+      if (m.tone) hent('io-tone.jpg', (t) => m.klode.sætTone(t, TONE_SKALA), { farve: false, vendt: true });
       hent(`${m.id}-${måneStørrelse()}.jpg`, (t) => {
         m.klode.sætKort(t);
         if (forhånd && aktiv) verden.renderer.initTexture(t);
         klar?.();
-      }, { farve: false, kanaler: 1, rundt: false, fejl: klar });
+      }, { farve: false, kanaler: 1, rundt: false, fejl: klar, vendt: true });
     }
     // Efter Jupiters kort hentes månernes, én ad gangen, og lægges i grafikkortet (som ved Saturn). Indtil de er klar,
     // er "Start flyby" grå (højst FORHÅND_TID), så det ikke hakker under den første flyvning.
