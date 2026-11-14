@@ -174,6 +174,7 @@ console.log(' ', g3, '|', g15, '|', g100);
 tjek('grafen: 15 mio. °C ca. 26 %', /ca\. 26 %/.test(g15), g15);
 tjek('grafen: 3 mio. °C under 1 %', /under 1 %/.test(g3), g3);
 tjek('grafen: 100 mio. °C ca. 90 %', /ca\. 90 %/.test(g100), g100);
+tjek('grafen siger "i spillet" (ikke det modsatte af HVORFOR.tunnel)', /i spillet/.test(g15), g15);
 await graf(15);
 await page.screenshot({ path: `${UD}/m4-graf.png` });
 await page.locator('#fusion .venstre-panel').screenshot({ path: `${UD}/m5-venstre.png` });
