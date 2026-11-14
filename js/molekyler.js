@@ -1181,7 +1181,7 @@ function skrivParTekster() {
 function nørdTekst() {
   const kJ = (eV) => Math.round(eV * KJ_PR_EV).toLocaleString('da-DK');
   if (par.id === 'nacl') {
-    return `<p>Natriums ioniseringsenergi er <b>5,14 eV</b>, og chlors elektronaffinitet er <b>3,61 eV</b>. Plus og minus trækker med 14,4 eV delt med afstanden i Å (ångstrøm, en tiendedel af en milliardtedel meter). Det betaler de 1,53 eV, når de er tættere end ca. <b>9,4 Å</b>. Parret kan kun blive sammen, hvis det kommer af med energien, fx ved at støde ind i et tredje atom.</p>
+    return `<p>Natriums ioniseringsenergi er <b>5,14 eV</b>, og chlors elektronaffinitet er <b>3,61 eV</b>. Plus og minus trækker med 14,4 eV delt med afstanden i Å (ångstrøm, en tiendedel af en milliardtedel meter). Det betaler de 1,53 eV, når de er tættere end ca. <b>9,4 Å</b>.</p>
       <p>Frastødningen tæt på er en enkel formel, der er tilpasset, så parret stopper ved <b>2,36 Å</b> med 4,26 eV. I krystallen giver hvert par <b>8,15 eV</b> (gitterenergien, 786 kJ/mol). Størrelserne er målt: natrium 180 pm, Na⁺ 102 pm, chlor 100 pm og Cl⁻ 181 pm.</p>`;
   }
   if (par.bytter === false) {
@@ -1199,7 +1199,8 @@ function nørdTekst() {
 
 function ærligtTekst() {
   switch (par.id) {
-    case 'nacl': return 'Ingen binding er helt delt eller helt givet. I salt er det næsten givet. Tit hopper elektronen slet ikke, og atomerne flyver forbi hinanden. Her ser du et møde, hvor den hopper. Enkelte par af natriumchlorid findes kun i damp. Et saltkorn er et kæmpe gitter, hvor hver ion har seks naboer med modsat ladning.';
+    // (Ærligt talt slutter med, at salt er et gitter og ikke par, så det står ikke også her. Panelet må ikke få en rullebjælke.)
+    case 'nacl': return 'Ingen binding er helt delt eller helt givet, men i salt er den næsten givet. Tit hopper elektronen slet ikke. Her ser du et møde, hvor den gør.';
     case 'lif': return 'Krystallen er tegnet med 216 ioner. Selv et lille korn har milliarder af milliarder.';
     case 'mgo': return 'Et frit O²⁻ kan ikke holde på den anden elektron. Det kan det kun inde i krystallen, hvor Mg²⁺-naboerne trækker. Spillet lader elektronen blive, så man kan se regnskabet.';
     case 'cacl2': return 'Krystallen er tegnet i den regelmæssige form, calciumchlorid har over 217 °C. Ved stuetemperatur er mønstret en lille smule skævt.';

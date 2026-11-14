@@ -8,9 +8,9 @@
 | "kan elektronen hoppe, når atomerne er tættere end ca. 9 Å (ca. fire gange afstanden i parret)" (Giv elektroner, harpunen) | OK | 14,4 / 1,53 = 9,4 Å. 9,4 / 2,36 = 4,0. Fælden om 9,4 Å i fakta-faelder.md |
 | "Chlor giver kun godt to tredjedele tilbage af det, det kostede" (`bytteKoster`) | OK | 3,61 / 5,14 = 0,70 (NIST: ioniseringsenergien 5,139 eV, elektronaffiniteten 3,613 eV) |
 | "har tiltrækningen givet næsten fire gange så meget, som der manglede" (`bytteBetaler`) | OK | Ved 2,36 Å: 4,26 + 1,53 = 5,79 eV, 5,79 / 1,53 = 3,8 (spillets model, `par.D` og `par.r0`) |
-| "Parret kan kun blive sammen, hvis det kommer af med energien, fx ved at støde ind i et tredje atom." (For nørder) | OK | Energien er bevaret: To ioner, der falder ind mod hinanden, flyver fra hinanden igen, hvis intet tager energien (Fable E6, afsnit 5) |
-| "Ingen binding er helt delt eller helt givet. I salt er det næsten givet." (Ærligt talt) | OK | Drejebogen, afsnit 3 (NaCl-parret er groft 80 % givet) |
-| "Tit hopper elektronen slet ikke, og atomerne flyver forbi hinanden." (Ærligt talt) | OK | E6-noterne, afsnit 2a |
+| "Parret kan kun blive sammen, hvis det kommer af med energien, fx ved at støde ind i et tredje atom." (For nørder på kortet "Hvad betaler så?", ikke i panelet, der ellers fik en rullebjælke) | OK | Energien er bevaret: To ioner, der falder ind mod hinanden, flyver fra hinanden igen, hvis intet tager energien (Fable E6, afsnit 5) |
+| "Ingen binding er helt delt eller helt givet, men i salt er den næsten givet." (Ærligt talt) | OK | Drejebogen, afsnit 3 (NaCl-parret er groft 80 % givet) |
+| "Tit hopper elektronen slet ikke." (Ærligt talt, kortet ned, så panelet ikke får en rullebjælke) | OK | E6-noterne, afsnit 2a |
 | "Derfor er kornene i fint salt små terninger." (opgaven `bytte-nacl`) | OK | Wikipedia "Sodium chloride": "Colorless cubic crystals", hver ion har seks naboer med modsat ladning. Fælden om flagesalt |
 | Ordbogen, Ion: "Natrium holder ret løst på sin yderste elektron. Byttet koster lidt energi, men når plus og minus mødes, får de mere igen." | OK | Fables ordlyd (E6-noterne, afsnit 5). "chlor trækker hårdt" er fjernet (fælden "Natrium holder løst …") |
 | Ordbogen, Krystal: "… Salt, sukker, is og diamant er krystaller." | OK | Alle fire er krystallinske faste stoffer (Fable E6, afsnit 4) |

@@ -132,7 +132,7 @@ export const HVORFOR = {
   bytteBetaler: {
     spørgsmål: 'Hvad betaler så?',
     svar: 'Plus og minus trækker i hinanden. Jo tættere Na⁺ og Cl⁻ kommer, jo mere energi bliver frigjort. Når de ligger helt inde ved hinanden, har tiltrækningen givet næsten fire gange så meget, som der manglede. I et saltkorn har hver ion seks naboer med modsat ladning, så der bliver frigjort endnu mere.',
-    nørd: 'Der manglede 1,53 eV. Ved ca. 9,4 Å har tiltrækningen betalt dem, og ved 2,36 Å, hvor parret ligger, har den givet ca. 5,8 eV. Så er parret 4,26 eV bedre stillet end de to frie atomer. I krystallen giver hvert par 8,15 eV (gitterenergien).',
+    nørd: 'Der manglede 1,53 eV. Ved ca. 9,4 Å har tiltrækningen betalt dem, og ved 2,36 Å, hvor parret ligger, har den givet ca. 5,8 eV. Så er parret 4,26 eV bedre stillet end de to frie atomer. I krystallen giver hvert par 8,15 eV (gitterenergien). Og parret kan kun blive sammen, hvis det kommer af med energien, fx ved at støde ind i et tredje atom.',
   },
   bytteIon: {
     spørgsmål: 'Hvad er en ion?',
