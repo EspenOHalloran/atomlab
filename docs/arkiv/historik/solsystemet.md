@@ -2,6 +2,11 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (13. november 2026): G1 trin 3, del 1, forslag G (billederne frigives).** Jeres go: "Go med dine anbefalinger" (alt frigives, når man forlader Solsystemet eller Kosmos, og landskabet, når man letter fra Stå på Mars).
+- Hvert billede har nu en ejer (planeten eller Stå på Mars) og slettes fra grafikkortet, når ejeren forlades. Delte billeder bliver liggende (fx Jorden mellem Årstiderne og Formørkelser). Udseendet er det samme.
+- **Målt (fuld grafik i testbrowseren, pc):** menuen efter turen 991 → 27 MB, Saturn 838 → 271 MB, Jorden 991 → 180 MB. Mens man står ved et sted med fotoet, er der stadig ca. 600 MB på pc. **Prisen:** En planet eller et landskab åbner lidt langsommere anden gang (hentes igen fra browserens cache). Detaljer under "Status" i [plan-grafik.md](../plan-grafik.md). Test: `tests/frigiv.mjs`.
+- **Spørgsmål til jer:** Mål gerne igen med `?maal` på tabletten (samme tur som før), og sig, om det føles langsomt at åbne en planet anden gang.
+
 **Senest lavet (13. november 2026): Måleren og hakkene på Mars (G1 trin 1).** Jeres go: "Læs docs/prompt-maaler.md og lav trin 1." Jeres svar: Det hakker, når kameraet flyver, og første gang et sted besøges, på en bærbar uden særskilt grafikkort.
 - **Måleren:** `?maal` i adressen (fx `…/atomlab/?maal#solsystem`) viser billeder i sekundet, det værste billede, ryk over 50 ms og en liste over rykkene med det, der skete lige før (nye shadere, kort lagt i grafikkortet, hentede billeder, kamerarejser, tryk). "Kopiér" giver teksten til chatten. Den hentes kun med `?maal` (`js/maaler.js`).
 - **Rettet på Mars (ingen ændring af udseendet):** Shaderne laves, når Mars åbnes, og ikke første gang kameraet flyver til et sted (før 200-500 ms pr. shader i testbrowseren, nu ingen under flyvningerne). De lokale kort og månernes kort pakkes ud uden for hovedtråden (4-6 gange hurtigere at lægge i grafikkortet), og kortene til næste stop lægges i grafikkortet, når kameraet står stille.

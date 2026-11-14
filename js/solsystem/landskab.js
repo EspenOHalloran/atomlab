@@ -339,34 +339,43 @@ const SKYGGE_FRAGMENT = /* glsl */ `
     gl_FragColor = vec4(smoothstep(-bred, bred, tanSol - maks));
   }`;
 
-// Nettet i ringe: punkt 0 er midten, så kommer ringene fra 0,3 m til MAKS
-function lavNet(retninger, ringe) {
+// Nettet i ringe: punkt 0 er midten, så kommer ringene fra 0,3 m til MAKS. Det er delt i STYKKER lagkagestykker
+// (G1 trin 3, forslag H), så de stykker, der ligger uden for billedet, ikke tegnes: Vertex-shaderen slår højden op fem
+// gange i hvert punkt, og på tabletten var nettet ca. halvdelen af tiden pr. billede. Kigger man vandret, tegnes kun
+// ca. en tredjedel. Hvert stykke har sin egen midte og deler kanten med naboen, så der er ingen huller.
+const STYKKER = 16;
+function lavStykker(retninger, ringe) {
   const q = Math.pow(MAKS / 0.3, 1 / (ringe - 1));
-  const polar = new Float32Array((1 + retninger * ringe) * 2);
-  for (let j = 0; j < ringe; j++) {
-    const r = 0.3 * Math.pow(q, j);
-    for (let i = 0; i < retninger; i++) {
-      const k = 1 + j * retninger + i;
-      polar[k * 2] = (i / retninger) * Math.PI * 2;
-      polar[k * 2 + 1] = r;
+  const n = retninger / STYKKER; // retninger pr. stykke (plus kanten mod naboen)
+  const stykker = [];
+  for (let s = 0; s < STYKKER; s++) {
+    const polar = new Float32Array((1 + (n + 1) * ringe) * 2);
+    for (let j = 0; j < ringe; j++) {
+      const r = 0.3 * Math.pow(q, j);
+      for (let i = 0; i <= n; i++) {
+        const k = 1 + j * (n + 1) + i;
+        polar[k * 2] = ((s * n + i) / retninger) * Math.PI * 2;
+        polar[k * 2 + 1] = r;
+      }
     }
-  }
-  const indeks = [];
-  for (let i = 0; i < retninger; i++) indeks.push(0, 1 + ((i + 1) % retninger), 1 + i);
-  for (let j = 0; j < ringe - 1; j++) {
-    for (let i = 0; i < retninger; i++) {
-      const a = 1 + j * retninger + i, b = 1 + j * retninger + ((i + 1) % retninger);
-      const c = a + retninger, d = b + retninger;
-      indeks.push(a, b, c, b, d, c);
+    const indeks = [];
+    for (let i = 0; i < n; i++) indeks.push(0, 1 + i + 1, 1 + i);
+    for (let j = 0; j < ringe - 1; j++) {
+      for (let i = 0; i < n; i++) {
+        const a = 1 + j * (n + 1) + i, b = a + 1;
+        const c = a + n + 1, d = b + n + 1;
+        indeks.push(a, b, c, b, d, c);
+      }
     }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('polar', new THREE.BufferAttribute(polar, 2));
+    // position er nødvendig for Three.js, men bruges ikke (vertex-shaderen regner punkterne ud)
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(polar.length / 2 * 3), 3));
+    geo.setIndex(new THREE.BufferAttribute(new Uint32Array(indeks), 1));
+    geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), MAKS / 1000);
+    stykker.push({ geo, midt: ((s + 0.5) / STYKKER) * Math.PI * 2 }); // midt: stykkets retning (fra nord mod øst)
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('polar', new THREE.BufferAttribute(polar, 2));
-  // position er nødvendig for Three.js, men bruges ikke (vertex-shaderen regner punkterne ud)
-  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array((1 + retninger * ringe) * 3), 3));
-  geo.setIndex(new THREE.BufferAttribute(new Uint32Array(indeks), 1));
-  geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), MAKS / 1000);
-  return geo;
+  return stykker;
 }
 
 // data: kraterets JSON fra lav_landskab.py. hent(navn, færdig, valg) fra js/solsystem/hent.js (Mars giver en, der
@@ -377,7 +386,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   const maks = renderer.capabilities.maxTextureSize;
   const anisotropi = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const [retninger, ringe] = TEST_HURTIG ? [256, 300] : LAV_KVALITET ? [640, 640] : [1024, 900];
-  const geo = lavNet(retninger, ringe);
+  const stykker = lavStykker(retninger, ringe);
   const tom = new THREE.DataTexture(new Uint8Array([128, 0, 0, 255]), 1, 1);
   tom.needsUpdate = true;
   const hvid = new THREE.DataTexture(new Uint8Array([255, 255, 255, 255]), 1, 1);
@@ -397,9 +406,61 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   }
   const mat = new THREE.ShaderMaterial({ uniforms: u, vertexShader: VERTEX, fragmentShader: FRAGMENT });
   mat.extensions = { derivatives: true };
-  const jord = new THREE.Mesh(geo, mat);
-  jord.frustumCulled = false;
-  gruppe.add(jord);
+  // Jorden: ét net pr. stykke med samme materiale. Lige før et stykke tegnes, tjekkes det, om stykkets retninger (set
+  // ovenfra) ligger uden for de retninger, billedet dækker. Så tegnes det ikke (drawRange). Kameraet står lige over
+  // midten (højst ca. 10 cm ved siden af, for man drejer om et punkt foran det), så det er nok at se på retningerne
+  // til billedets fire hjørner. Kigger man næsten lodret ned eller op, tegnes alle. Det sker i onBeforeRender, for her
+  // er kameraet flyttet færdigt i dette billede.
+  const mat4 = new THREE.Matrix4();
+  const kamLok = new THREE.Vector3();
+  const hj = new THREE.Vector3();
+  const HJØRNER = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+  const vinkler = [0, 0, 0, 0];
+  const stigende = (a, b) => a - b;
+  const HALV = Math.PI / STYKKER + THREE.MathUtils.degToRad(8); // et halvt stykke plus en margen
+  const NED = Math.sin(THREE.MathUtils.degToRad(55)); // et hjørne mere end 55° under vandret: tegn alle
+  const synlige = { midt: 0, halv: Math.PI, billede: -1 }; // retningerne, billedet dækker (midten og den halve bredde)
+  let tegnet = 0; // antal stykker tegnet i dette billede (til tests, nulstilles i opdater)
+  const vinkelForskel = (a, b) => Math.abs(((a - b + 3 * Math.PI) % (2 * Math.PI)) - Math.PI);
+  function regnSynlige(kamera, m) {
+    // Kameraets plads i nettet (km), og fra billedets koordinater (-1..1) til nettets
+    kamLok.setFromMatrixPosition(kamera.matrixWorld).applyMatrix4(mat4.copy(m.matrixWorld).invert());
+    mat4.multiplyMatrices(kamera.projectionMatrix, kamera.matrixWorldInverse).multiply(m.matrixWorld).invert();
+    let alle = false;
+    for (let i = 0; i < 4; i++) {
+      hj.set(HJØRNER[i][0], HJØRNER[i][1], 0.5).applyMatrix4(mat4).sub(kamLok).normalize();
+      if (hj.y < -NED) alle = true;
+      vinkler[i] = Math.atan2(hj.x, -hj.z); // fra nord mod øst
+    }
+    // Det mindste udsnit af cirklen, der rummer de fire retninger: det modsatte af det største hul mellem dem. Er
+    // hullet under en halv omgang, står lodret op eller ned inde i billedet, og så ses alle retninger.
+    const v = vinkler.sort(stigende);
+    let hul = 0, efter = 0;
+    for (let i = 0; i < 4; i++) {
+      const g = i < 3 ? v[i + 1] - v[i] : v[0] + 2 * Math.PI - v[3];
+      if (g > hul) { hul = g; efter = i; }
+    }
+    if (alle || hul < Math.PI) {
+      synlige.halv = Math.PI;
+      return;
+    }
+    const start = v[(efter + 1) % 4];
+    const bredde = 2 * Math.PI - hul;
+    synlige.midt = start + bredde / 2;
+    synlige.halv = bredde / 2;
+  }
+  stykker.forEach(({ geo, midt }) => {
+    const m = new THREE.Mesh(geo, mat);
+    m.frustumCulled = false;
+    m.onBeforeRender = (r, sc, kamera) => {
+      const nr = r.info.render.frame;
+      if (synlige.billede !== nr) { regnSynlige(kamera, m); synlige.billede = nr; }
+      const ses = synlige.halv >= Math.PI || vinkelForskel(midt, synlige.midt) <= synlige.halv + HALV;
+      geo.drawRange.count = ses ? Infinity : 0;
+      if (ses) tegnet++;
+    };
+    gruppe.add(m);
+  });
 
   // Himlen
   const hu = {
@@ -496,7 +557,15 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
 
   // ---------- Skyggekortene ----------
   const skyggeStr = TEST_HURTIG ? [256, 256, 256, 256] : LAV_KVALITET ? [1024, 512, 1024, 512] : [1024, 1024, 1024, 1024];
-  const mål = skyggeStr.map((n) => new THREE.WebGLRenderTarget(n, n, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false, generateMipmaps: false }));
+  const lavMål = (n) => new THREE.WebGLRenderTarget(n, n, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false, generateMipmaps: false });
+  const mål = skyggeStr.map(lavMål);
+  // Grove skygger på tablet (G1 trin 3, forslag H): Mens Solen flytter sig (dagen går, skyderen eller "Solnedgang"),
+  // regnes skyggerne igen hele tiden, ét lag pr. billede. Det kostede ca. en tredjedel ekstra pr. billede, når Solen
+  // står lavt. På tablet regnes de da i halv opløsning (en fjerdedel af prisen, lidt blødere kanter), og når Solen
+  // har stået stille i SKARP_EFTER billeder, regnes de skarpt igen.
+  const grovMål = LAV_KVALITET ? skyggeStr.map((n) => lavMål(n / 2)) : null;
+  const GROV_INDEN = 60; // billeder: flytter Solen sig igen inden da, efter skyggerne sidst blev regnet, bliver de grove
+  const SKARP_EFTER = 20; // billeder uden at Solen flytter sig, før de grove skygger regnes skarpt igen
   const su = { bLag: { value: new THREE.Vector4() }, uPx: { value: 1 }, uSolL: { value: new THREE.Vector3() }, uHMaks: { value: 2000 } };
   for (let k = 0; k < 4; k++) Object.assign(su, { [`tH${k}`]: u[`tH${k}`], [`bH${k}`]: u[`bH${k}`], [`rH${k}`]: u[`rH${k}`] });
   su.pxH = u.pxH;
@@ -506,20 +575,29 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   const skyggeKamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const regnetSol = new THREE.Vector3(0, -1, 0);
   let skyggeKø = [];
-  function nyeSkygger() { skyggeKø = [3, 2, 1, 0]; regnetSol.copy(u.uSol.value); }
+  let grov = false; // skyggerne regnes (eller er regnet) i halv opløsning
+  let billederSiden = Infinity; // billeder, siden skyggerne sidst blev sat til at blive regnet
+  function nyeSkygger(g = false) {
+    skyggeKø = [3, 2, 1, 0];
+    regnetSol.copy(u.uSol.value);
+    grov = g;
+    billederSiden = 0;
+    globalThis.atomlabMåler?.(g ? 'skyggerne regnes (grove, Solen flytter sig)' : 'skyggerne regnes');
+  }
   function regnSkygge(k) {
     const L = lagData[k];
     if (!L) return;
     bounds(su.bLag.value, L.øst, L.nord);
-    su.uPx.value = (L.øst[1] - L.øst[0]) / skyggeStr[k];
+    su.uPx.value = (L.øst[1] - L.øst[0]) / (grov ? skyggeStr[k] / 2 : skyggeStr[k]);
     const s = u.uSol.value;
     su.uSolL.value.set(s.x, -s.z, s.y);
     su.uHMaks.value = data.hMaks;
     const før = renderer.getRenderTarget();
-    renderer.setRenderTarget(mål[k]);
+    const m = grov ? grovMål[k] : mål[k];
+    renderer.setRenderTarget(m);
     renderer.render(skyggeScene, skyggeKamera);
     renderer.setRenderTarget(før);
-    u[`tS${k}`].value = mål[k].texture;
+    u[`tS${k}`].value = m.texture;
     if (k === 0) u.uSkygger.value = 1;
   }
 
@@ -552,7 +630,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
       const bag = fraMidt.dot(tilSol) < 0 && fraMidt.clone().addScaledVector(tilSol, -fraMidt.dot(tilSol)).length() < R / 1000;
       hu.uMaaneLys.value[k].set(tilSol.x, tilSol.y, tilSol.z, bag ? 0 : 1);
     });
-    if (stedId && regnetSol.angleTo(u.uSol.value) > 0.004 && !skyggeKø.length) nyeSkygger();
+    if (stedId && regnetSol.angleTo(u.uSol.value) > 0.004 && !skyggeKø.length) nyeSkygger(Boolean(grovMål) && billederSiden < GROV_INDEN);
   }
   opdaterHimmel();
 
@@ -567,13 +645,16 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     // Hvert billede: himlen følger kameraet, ét skyggekort ad gangen, og kameraets højde (til disen)
     opdater(kamera) {
       himmel.position.copy(kamera.position);
+      tegnet = 0;
       u.uKamH.value = u.uH0.value + kamera.position.y * 1000;
+      billederSiden++;
+      if (grov && !skyggeKø.length && billederSiden > SKARP_EFTER) nyeSkygger(false); // Solen står stille igen
       if (skyggeKø.length) regnSkygge(skyggeKø.pop());
     },
     // Højden under stedet (m over nulpunktet)
     get højde() { return u.uH0.value; },
     // Kun til tests
-    test: () => ({ sted: stedId, tid: timer, højde: u.uH0.value, net: [retninger, ringe], skygger: u.uSkygger.value, solHøjde: THREE.MathUtils.radToDeg(Math.asin(u.uSol.value.y)), måner: hu.uMaane.value.map((m) => ({ højde: THREE.MathUtils.radToDeg(Math.asin(m.y)), kompas: (THREE.MathUtils.radToDeg(Math.atan2(m.x, -m.z)) + 360) % 360, bredde: THREE.MathUtils.radToDeg(2 * m.w) })) }),
+    test: () => ({ sted: stedId, tid: timer, højde: u.uH0.value, net: [retninger, ringe], stykker: [tegnet, STYKKER], skygger: u.uSkygger.value, groveSkygger: grov, solHøjde: THREE.MathUtils.radToDeg(Math.asin(u.uSol.value.y)), måner: hu.uMaane.value.map((m) => ({ højde: THREE.MathUtils.radToDeg(Math.asin(m.y)), kompas: (THREE.MathUtils.radToDeg(Math.atan2(m.x, -m.z)) + 360) % 360, bredde: THREE.MathUtils.radToDeg(2 * m.w) })) }),
     // Billederne bruges ikke mere (man er lettet, G1 trin 3): slip dem, så de kan slettes fra grafikkortet. Nettet og
     // shaderne bliver, og gåTil henter billederne igen næste gang.
     frigiv() {
@@ -583,12 +664,12 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
       for (const n of Object.keys(u)) if (u[n].value?.isTexture && /^t(H|F)\d$|^tFarve$/.test(n)) u[n].value = tom;
     },
     stop() {
-      geo.dispose();
+      for (const { geo } of stykker) geo.dispose();
       mat.dispose();
       himmel.geometry.dispose();
       himmelMat.dispose();
       skyggeMat.dispose();
-      for (const m of mål) m.dispose();
+      for (const m of [...mål, ...(grovMål ?? [])]) m.dispose();
       tom.dispose();
       hvid.dispose();
     },
