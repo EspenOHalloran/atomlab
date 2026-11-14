@@ -26,6 +26,12 @@
 - **Fanen døde ved Jezero (1. kørsel):** Jeres svar: "Jeg tror, det skyldtes, at pc'en var optaget af andre ting. Den kom igen, da jeg vendte tilbage til skærmen." Den frøs altså og kom tilbage, den gik ikke ned. Tidligere tekst: Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
 - **Mangler:** tabletten, og en gentagelse på Iris Xe.
 
+## Testbrowseren før og efter del 3 (A, F og den glidende landing, 14. november 2026)
+*Målt med `node tests/vaerktoejer/maal-landing.mjs tablet` (fuld grafik, tablet-udgaven, uden grafikkort). Kun til at sammenligne: Testbrowserens tider svinger meget, fordi kortene skal vente på det, der stadig tegnes.*
+- **Før:** Billedet lige efter toningen var 2.294 ms ved Naukluft (3 shadere 644 ms og kortene 1.621 ms: gale-h2.png 344 ms, gale-naukluft-h1.png 297 ms, gale-naukluft-f0.jpg 247 ms …) og 2.051 ms ved Randen (kortene 2.020 ms). Mars åbnes: mars-8k.jpg 988 ms og mars-hoejde-4k.png 1.105 ms, hver i sit billede.
+- **Efter:** Ingen kort og ingen shadere i billedet efter toningen. Kortene står i listen som "på forhånd", ét pr. billede, mens kameraet står stille over stedet, og skyggerne er regnet, før billedet toner over. Mars åbnes: mars-8k.jpg 404 ms og mars-hoejde-4k.png 89 ms.
+- **Ét kort ad gangen** (intet andet tegnes, `<img>` → `vendt`): jezero-h2.png 571-598 → 323-437 ms, jezero-f2.jpg 350-396 → 193-201 ms, jezero-randen-h0.png 198-211 → 59-62 ms, mars-hoejde-4k.png 332-352 → 130-139 ms, mars-8k.jpg 2,7-2,9 → 2,3 s.
+
 ## Tabletten efter H (14. november 2026, kl. 19.01-19.05)
 *Jeres måling efter G1 trin 3, del 2 (H, a + b, PR #225). Stå på Mars ved Gale (Naukluft) og Jezero (Ved randen) med ▶ og "🌅 Solnedgang". Skrevet ind af sessionen "Småting · Overblik og de næste fem sessioner". Hovedtallene og rykkene er gengivet nedenfor, og de mange ens linjer med "skyggerne regnes (grove, Solen flytter sig)" er slået sammen.*
 

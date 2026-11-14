@@ -1,9 +1,9 @@
-# Koden: Liv (verdenen "Ild og liv")
+# Koden: Liv (verdenen "Liv")
 
 *Lavet 9. november 2026 (Liv L1), L2 10. november 2026. Planen står i [plan-liv.md](../plan-liv.md), faktagrundlaget i [fakta-liv.md](../fakta-liv.md).*
 
 ## Skærmen `#liv` (`js/liv.js`)
-- **Fanen Opskriften** (L1). Fanerne Begyndelsen og Liv i rummet kommer i L4-L6, så der er ingen faner endnu.
+- **Fanen Opskriften** (L1). Der kommer ingen faner (ændret 14. november 2026 efter E10): L3 og L4 bliver forløb i Liv, Begyndelsen en egen del (L5), og Liv i rummet ét kort på Mars (L6), se [drejebog-liv.md](../drejebog-liv.md).
 - **Zoom-rejsen:** fem trin i `NIVEAUER` (`celle`, `kerne`, `kromosom`, `stige`, `atomer`) med knapperne `[data-liv-niveau]` i `#livNiveauer`. `gåTil(id, retning)` skifter: Den gamle tegning toner ud på `OVERGANG` 0,6 s (og vokser ×2,5, når man zoomer ind), den nye toner ind, og kameraet starter 1,7 (ind) eller 0,6 (ud) gange trinets afstand væk og glider på plads (`verden.målAfstand`). `tjekZoom()` skifter trin, når man selv zoomer (kun når `verden.målAfstand` er null og ingen overgang kører): tættere end `IND` 0,55 eller længere væk end `UD` 1,9 gange trinets afstand. `sætGrænser` sætter `minDistance` og `maxDistance`, så man kan nå grænserne. Stigen og atomerne er den samme tegning: `niveau` følger `blanding` (over 0,5 = stigen).
 - **Afstandene** regnes med `afstandTilBoks` (samme formel som `passerTilBoks`, uden at zoome) ud fra `verden.hul`. **Hænger sammen:** `opdaterPanel()` skal køre før afstanden regnes og kalder selv `centrerVindue()`, når teksten skifter, for på tablet på højkant og på telefonen ændrer panelernes tekst 3D-vinduets højde (cellen var for stor, før det blev rettet).
 - **Overtoningen** mellem atomerne og stigen (`blandGrænser`): fra `min(2 × afstand('atomer'), 0,45 × afstand('stige'))` til `0,82 × afstand('stige')`. Så virker den både for HBB-stigen (30 trin) og byggestigen (8 trin).
@@ -52,5 +52,5 @@
 - `js/data/liv/opskriften.js`: `HBB_START` (de første 10 kodoner af HBB, fra `HBB.dna`), `NIVEAUER` (teksterne og tallene), `OPGAVER_LIV`, `BYG_TRIN` 8, `nyByggestreng`, `parGrund` ('passer', 'bred', 'smal', 'ladning') og `PAR_TEKST`.
 
 ## Menuen
-- `VERDENER` i `js/karrusel.js`: `{ id: 'ildogliv', navn: 'Ild og liv', dele: ['liv'], motiv: 'liv' }` mellem Kernerne og Elektricitet. Linket `#liv` i `.menukort` i index.html (ikonet `.ikon-liv` og `.ikon-v-ildogliv` i style.css).
+- `VERDENER` i `js/skaerme.js`: `{ id: 'liv', navn: 'Liv', motiv: 'liv' }` (hed `ildogliv` og "Ild og liv" til 14. november 2026) mellem Atomer og Elektricitet. Linket `#liv` i `.menukort` i index.html (ikonet `.ikon-liv` og `.ikon-v-liv` i style.css).
 - Motivet `liv` i `js/menubaggrund.js`: to spiraler af prikker med trin i basernes farver, der drejer langsomt.

@@ -1142,22 +1142,11 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .ordbog-links button.hvorfor { margin: 0; }
 .ordbog-ingen { margin: 0; color: var(--svag); }
 .ikon-gaader { display: grid; place-items: center; background: radial-gradient(circle, rgba(255, 212, 59, 0.26), rgba(255, 212, 59, 0.05) 70%); border: 2px solid rgba(255, 212, 59, 0.55); color: #fff6d6; font: 700 24px/1 Georgia, 'Times New Roman', serif; text-shadow: 0 0 8px rgba(255, 212, 59, 0.8); }
-#gaader { /* Gåderne (js/gaader.js) */ grid-template-columns: minmax(0, 640px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top" "panel"; justify-content: center; }
+#gaader { /* Gåderne (js/gaader.js): skinnen fylder skærmen (G4b), og et kort har panelet ved siden af scenen */ grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top" "vindue"; }
 #gaader .gaader-panel { grid-area: panel; align-self: start; max-height: 100%; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: 16px; }
 #gaader .gaader-panel::-webkit-scrollbar { display: none; }
-#gaader .gaader-intro { margin: 0 0 12px; line-height: 1.5; }
-#gaader .gaader-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-#gaader .gaade-valg { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px; min-height: 56px; text-align: left; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.05); cursor: pointer; }
-#gaader .gaade-valg:hover:not(:disabled) { border-color: var(--accent); background: rgba(95, 227, 255, 0.08); }
-#gaader .gaade-valg.senere { cursor: default; opacity: 0.5; }
-#gaader .gaade-nr { flex: 0 0 auto; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255, 212, 59, 0.6); color: var(--gul); font-weight: 700; }
-#gaader .gaade-tekst { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-#gaader .gaade-tekst strong { font-size: 16px; }
-#gaader .gaade-tekst small { color: var(--svag); font-size: 13px; line-height: 1.35; }
-#gaader .gaade-mærke { flex: 0 0 auto; font-size: 12.5px; color: var(--svag); white-space: nowrap; }
-#gaader .gaade-mærke.start { padding: 3px 9px; border-radius: 12px; background: var(--accent); color: #031018; font-weight: 700; }
-#gaader .gaade-mærke.færdig { color: var(--accent); font-size: 18px; font-weight: 700; }
-#gaader .gaade-kort[hidden], #gaader .gaader-oversigt[hidden] { display: none; }
+#gaader:not(.paa-kort) .gaader-panel { display: none; }
+#gaader .gaade-kort[hidden] { display: none; }
 #gaader .gaade-kort { display: flex; flex-direction: column; gap: 10px; }
 #gaader .gaade-tilbage { align-self: flex-start; }
 #gaader .gaade-spørgsmål { margin: 2px 0 0; font-size: 21px; line-height: 1.25; color: var(--tekst); }
@@ -1180,7 +1169,6 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaade-lag .lag-boks p:last-child { margin-bottom: 0; }
 #gaader .gaade-lag .lag-boks b { color: var(--gul); font-weight: 600; }
 #gaader > .vindue { grid-area: vindue; } /* Et kort med sin scene (G4a): scenen fylder skærmen, og panelet står til højre (ca. 380 px) eller forneden på højkant */
-#gaader:not(.paa-kort) > .vindue { display: none; }
 #gaader.paa-kort { grid-template-columns: minmax(0, 1fr) 380px; grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top" "vindue panel"; justify-content: stretch; }
 #gaader.paa-kort .gaader-panel { align-self: stretch; }
 #gaader .gaade-scene-bund { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
@@ -1193,7 +1181,18 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 @media (max-height: 500px) and (orientation: landscape) { #gaader.paa-kort { grid-template-columns: minmax(0, 1fr) 320px; } #gaader .gaade-linje { font-size: 14px; padding: 5px 10px; } }
 @media (max-width: 820px) and (orientation: portrait) { #gaader.paa-kort { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "vindue" "panel"; } #gaader.paa-kort .gaader-panel { max-height: 45vh; padding: 12px; } }
 @media (max-width: 820px) and (orientation: portrait) { #gaader.gaetter .gaade-kort > :not(.gaade-trin), #gaader.gaetter .gaade-hoved { display: none; } #gaader.gaetter .gaade-trin { padding: 0; border: 0; background: none; } } /* Højkant: panelet forneden (højst ca. 45 %), og mens man gætter, kun spørgsmålet og valgene */
-@media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaade-mærke.senere { display: none; } #gaader .gaade-valg.senere small::after { content: ' · Kommer senere'; } }
+#gaader .gaader-fokus { pointer-events: none; width: 100%; max-width: 720px; display: flex; align-items: center; justify-content: center; gap: 8px; } /* Skinnen (G4b): gåden i fokus og "‹ mindre · større ›" nederst i billedet */
+#gaader .gaader-fokus[hidden], #gaader .gaader-pil[hidden] { display: none; }
+#gaader .gaader-toning { position: absolute; inset: 0; z-index: 1; background: #03040c; opacity: 0; pointer-events: none; } /* Toningen, når man flyver ind i en gåde og ud igen (js/gaader/skinne.js) */
+#gaader .gaader-pil { pointer-events: auto; flex: 0 0 auto; min-width: 72px; min-height: 48px; padding: 0 12px; border-radius: 14px; border: 1px solid rgba(95, 227, 255, 0.45); background: rgba(14, 24, 56, 0.82); color: var(--tekst); font-size: 15px; cursor: pointer; }
+#gaader .gaader-pil:hover:not(:disabled) { border-color: var(--accent); }
+#gaader .gaader-pil:disabled { opacity: 0.3; cursor: default; }
+#gaader .gaader-ind { pointer-events: auto; flex: 0 1 460px; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 16px 12px; border-radius: 16px; border: 1px solid rgba(95, 227, 255, 0.7); background: rgba(8, 14, 36, 0.86); color: var(--tekst); text-align: center; cursor: pointer; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45); }
+#gaader .gaader-ind:hover { border-color: var(--accent); background: rgba(14, 26, 60, 0.92); }
+#gaader .gaader-ind strong { font-size: 19px; line-height: 1.25; }
+#gaader .gaader-ind small { color: var(--svag); font-size: 14px; line-height: 1.35; }
+#gaader .gaader-ind-knap { margin-top: 6px; padding: 6px 18px; border-radius: 20px; background: var(--accent); color: #031018; font-weight: 700; font-size: 15px; }
+@media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaader-pil span { display: none; } #gaader .gaader-pil { min-width: 44px; padding: 0 8px; } #gaader .gaader-ind strong { font-size: 17px; } }
 
 /* ---------- Kosmos ---------- */
 .ikon-kosmos { background: radial-gradient(circle, #000 0 9px, #fff3c4 10px, #ffb347 12px, rgba(255, 120, 60, 0.45) 16px, transparent 24px); }
@@ -1859,15 +1858,15 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   radial-gradient(circle, rgba(255, 140, 80, 0.35), transparent 70%); }
 .ikon-v-elektricitet { background: linear-gradient(160deg, #fff3bf, #ffd43b 45%, #fab005);
   clip-path: polygon(58% 4%, 22% 56%, 46% 56%, 38% 96%, 78% 40%, 54% 40%); border-radius: 0; }
-.ikon-v-ildogliv, .ikon-liv { background:
+.ikon-v-liv, .ikon-liv { background:
   radial-gradient(circle at 30% 16%, #8ea2ff 0 3.5px, transparent 4px), radial-gradient(circle at 70% 16%, #b99cff 0 3.5px, transparent 4px),
   linear-gradient(90deg, transparent 0 12px, #3ddc84 12px 26px, #ff5a5f 26px 40px, transparent 40px) 0 14px / 100% 4px no-repeat,
   linear-gradient(90deg, transparent 0 17px, #ffc93c 17px 26px, #4ea8ff 26px 35px, transparent 35px) 0 25px / 100% 4px no-repeat,
   linear-gradient(90deg, transparent 0 12px, #4ea8ff 12px 26px, #ffc93c 26px 40px, transparent 40px) 0 36px / 100% 4px no-repeat; }
-.ikon-v-ildogliv::before, .ikon-liv::before, .ikon-v-ildogliv::after, .ikon-liv::after { content: ""; position: absolute; inset: 4px 10px; border-radius: 50%;
+.ikon-v-liv::before, .ikon-liv::before, .ikon-v-liv::after, .ikon-liv::after { content: ""; position: absolute; inset: 4px 10px; border-radius: 50%;
   border: 3px solid transparent; border-left-color: #8ea2ff; border-right-color: #b99cff; transform: scaleY(0.52) rotate(0deg); }
-.ikon-v-ildogliv::before, .ikon-liv::before { top: -8px; bottom: 16px; }
-.ikon-v-ildogliv::after, .ikon-liv::after { top: 16px; bottom: -8px; border-left-color: #b99cff; border-right-color: #8ea2ff; }
+.ikon-v-liv::before, .ikon-liv::before { top: -8px; bottom: 16px; }
+.ikon-v-liv::after, .ikon-liv::after { top: 16px; bottom: -8px; border-left-color: #b99cff; border-right-color: #8ea2ff; }
 .ikon-v-rummet { background: radial-gradient(circle at 42% 40%, #ffe8cc 0 4px, #f2b35b 10px, #b06a2a 15px, transparent 15.5px); }
 .ikon-v-rummet::before { content: ""; position: absolute; inset: 19px 1px; border-radius: 50%; border: 3px solid rgba(240, 210, 160, 0.85); border-top-color: transparent; transform: rotate(-16deg); box-shadow: 0 0 8px rgba(255, 190, 110, 0.4); }
 .ikon-v-biblioteket { border-radius: 4px; background:

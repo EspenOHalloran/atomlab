@@ -298,14 +298,16 @@ export default {
     };
     const toTrin = kortStr !== '2k' && nyHentning;
     if (nyHentning) bjælke.vent('Henter Mars …');
-    if (toTrin) hent('mars-2k.jpg', (t) => { if (!hentet.kort) visKort(t); }, { anisotropi });
+    // (vendt: pakkes ud uden for hovedtråden, så de går hurtigere at lægge i grafikkortet, G1 trin 3, del 3. lavTabel i
+    // klippeplanet.js læser højdekortet baglæns, når det er vendt)
+    if (toTrin) hent('mars-2k.jpg', (t) => { if (!hentet.kort) visKort(t); }, { anisotropi, vendt: true });
     hent(`mars-${kortStr}.jpg`, (t) => {
       visKort(t);
       hentet.kort = true;
       if (toTrin) glem('mars-2k.jpg');
       egetKort();
-    }, { anisotropi, fejl: () => { if (!kortVist) { mars.sætFarve(RUST); bjælke.færdig(); } egetKort(); } });
-    hent(`mars-hoejde-${højdeStr}.png`, (t) => { mars.sætHøjde(t); hentet.højde = true; egetKort(); }, { farve: false, kanaler: 2, fejl: egetKort });
+    }, { anisotropi, vendt: true, fejl: () => { if (!kortVist) { mars.sætFarve(RUST); bjælke.færdig(); } egetKort(); } });
+    hent(`mars-hoejde-${højdeStr}.png`, (t) => { mars.sætHøjde(t); hentet.højde = true; egetKort(); }, { farve: false, kanaler: 2, vendt: true, fejl: egetKort });
 
     // De lokale net. Kortene hentes først, når flybyen eller et besøg skal derhen (lokaltStr: højdekortet).
     const lokalNet = TEST_HURTIG ? [128, 128] : LAV_KVALITET ? [384, 384] : [512, 512];
@@ -807,7 +809,20 @@ export default {
     // farvekort), bliver liggende.
     const STÅ = { navn: 'Stå på Mars' };
     const hentStå = (navn, færdig, valg) => hent(navn, færdig, { ...valg, ejer: STÅ });
+    // Landskabets kort lægges i grafikkortet ét pr. billede, mens kameraet står stille (G1 trin 3, del 3): over stedet,
+    // før billedet toner over, eller mens man står (et hop til et andet sted). Før skete det hele i det første billede
+    // af landskabet (ca. 1,2 s på tabletten ved Jezero og 1,6-1,8 s på Iris Xe).
+    let lægKø = null; // { teksturer, videre }
+    const læg = (teksturer, videre) => { lægKø = { teksturer, videre }; };
+    function lægÉt() {
+      const k = lægKø;
+      if (k.teksturer.length) verden.renderer.initTexture(k.teksturer.shift());
+      if (k.teksturer.length || lægKø !== k) return;
+      lægKø = null;
+      k.videre();
+    }
     function frigivStå() {
+      lægKø = null; // (billederne lukkes nu, så de kan ikke lægges i grafikkortet)
       for (const [, x] of landskaber) x.land?.frigiv();
       panorama.frigiv();
       frigivBilleder(STÅ);
@@ -816,7 +831,7 @@ export default {
     const panorama = lavPanorama({ renderer: verden.renderer, hent: hentStå, mappe: MAPPE });
     gruppe.add(panorama.kugle);
     let stående = null; // { krater, sd } mens man står på jorden
-    let ståVent = null; // { krater, sd, fløjet, klar } mens kameraet flyver ned, og lagene hentes
+    let ståVent = null; // { krater, sd, fløjet, hentet, shadere, klar } mens kameraet flyver ned, og lagene hentes
     // Flybyens stop, hvis man gik ned fra flybyen. Mens man står, er flybyen sat på pause (dens trin er væk fra
     // bjælken), og "↑ Tilbage til flybyen" letter og tager den op igen ved stoppet.
     let fraFlyby = null;
@@ -881,11 +896,12 @@ export default {
     // Flyv ned til stedet sd ved krateret, og stå der, når lagene er hentet
     function ståPå(krater, sd) {
       const st = { ...sd, ramme: mars.sted(sd.bredde, sd.længde), lokalt: krater, detalje: true }; // med detaljekortet (M8b)
-      const vent = { krater, sd, fløjet: false, klar: false };
+      const vent = { krater, sd, fløjet: false, hentet: false, shadere: null, foto: [], klar: false };
       ståVent = vent;
       bjælke.vent('Henter landskabet …'); // ca. 36-55 MB første gang
       hentLokalt(st);
-      if (sd.foto && fotoØnske) panorama.forhånd(sd.id); // roverens foto vises, når man er landet
+      // Roverens foto vises, når man er landet. Er det hentet, før billedet toner over, lægges det også i grafikkortet
+      if (sd.foto && fotoØnske) panorama.forhånd(sd.id, (t) => { if (vent === ståVent && !vent.klar) vent.foto.push(t); });
       const drej = drejningTil(st);
       drejHen(drej);
       hældHen(HÆLD.jævndøgn);
@@ -896,11 +912,32 @@ export default {
       // Kameraet står bag stedet og kigger i landingens retning, skråt ned
       flyv({ fokus: fokusVed(st), op: opVed(st), afstand: LANDING_HØJDE * 2.2 / S, retning: fraSted(st, drej, sd.blik + 180, 27), min: 0.003, max: 3,
         færdig: () => { vent.fløjet = true; land(vent); } });
-      hentLandskab(krater, (l) => l.land.gåTil(sd.id, () => {
-        vent.klar = true;
-        if (vent === ståVent) bjælke.færdig();
-        land(vent);
-      }));
+      hentLandskab(krater, (l) => {
+        if (vent !== ståVent) return;
+        l.land.tid = klokkenVed(sd); // (før skyggerne regnes, så de ikke regnes igen, når man lander)
+        l.land.gåTil(sd.id, () => {
+          vent.hentet = true;
+          if (vent === ståVent) bjælke.færdig();
+        }, læg);
+      });
+    }
+    // Klokken, man lander på: med roverens foto den tid, fotoet blev taget
+    const klokkenVed = (sd) => (sd.foto && fotoØnske ? sd.foto.tid : sd.tid);
+    // Over stedet, før billedet toner over (G1 trin 3, del 3): Kameraet står stille, og kortene er lagt i grafikkortet
+    // (lægÉt). Så gøres landskabets shadere færdige, og de første skygger regnes, ét lag pr. billede. Det koster ikke et
+    // synligt hak, når intet bevæger sig. Først derefter toner billedet over, og landskabet er let at tegne fra start.
+    function forbered(vent) {
+      const l = landskaber.get(vent.krater)?.land;
+      if (!l) return;
+      if (vent.foto.length) { verden.renderer.initTexture(vent.foto.shift()); return; }
+      if (!vent.shadere) {
+        vent.shadere = 'i gang';
+        lavShadereFørst(l.gruppe, () => aktiv && vent === ståVent, { færdig: () => { vent.shadere = 'klar'; } });
+        return;
+      }
+      if (vent.shadere !== 'klar' || !l.forbered()) return;
+      vent.klar = true;
+      land(vent);
     }
     function land(vent) {
       if (vent !== ståVent || !vent.fløjet || !vent.klar) return;
@@ -941,7 +978,7 @@ export default {
       orbit.minDistance = orbit.maxDistance = 1e-4; // man drejer om et punkt 10 cm foran kameraet (som at dreje hovedet)
       orbit.enableZoom = false;
       orbit.rotateSpeed = -0.35; // man "tager fat i" landskabet
-      l.land.tid = sd.foto && fotoØnske ? sd.foto.tid : sd.tid; // med fotoet: klokken, da det blev taget
+      l.land.tid = klokkenVed(sd); // med fotoet: klokken, da det blev taget
       landing = { t: 0, T: ROLIG ? 0 : LANDING_TID, sd };
       orbit.enabled = false;
       sætBlik(LANDING_HØJDE, sd.blik, -32);
@@ -998,7 +1035,7 @@ export default {
         if (gåNr !== nr) return;
         bjælke.færdig();
         ton(() => { if (gåNr === nr) visLandskab(krater, sd); });
-      });
+      }, læg);
     }
     // Klokken som tekst (lokal soltid)
     const klokken = (t) => `${String(Math.floor(t)).padStart(2, '0')}:${String(Math.floor((t % 1) * 60)).padStart(2, '0')}`;
@@ -1026,6 +1063,7 @@ export default {
     const polRet = new THREE.Vector3();
     function opdaterStående(dt) {
       const land = stående.land;
+      if (lægKø && !landing) lægÉt();
       if (landing) {
         landing.t = Math.min(landing.T, landing.t + dt);
         const e = landing.T ? landing.t / landing.T : 1;
@@ -1343,7 +1381,10 @@ export default {
         rejse.grænser(minNu, R * 15);
       }
       rejse.opdater(dt);
-      if (tilKortet.length && !rejse.flyver) verden.renderer.initTexture(tilKortet.shift());
+      if (ståVent?.fløjet) {
+        if (lægKø) lægÉt();
+        else if (ståVent.hentet) forbered(ståVent);
+      } else if (tilKortet.length && !rejse.flyver) verden.renderer.initTexture(tilKortet.shift());
       opdaterNavne();
       const k = rejse.skala;
       // I modlys står Solen lige bag den øverste kant af Mars, set fra kameraet. Står den midt bag Mars, ligger

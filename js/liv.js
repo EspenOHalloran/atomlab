@@ -1,4 +1,4 @@
-// Liv (verdenen "Ild og liv", docs/plan-liv.md), fanen Opskriften (L1):
+// Liv (verdenen "Liv", docs/plan-liv.md), fanen Opskriften (L1):
 // - Zoom-rejsen i fem trin: cellen, kernen, kromosomet, stigen og atomerne. Man hopper med knapperne eller zoomer:
 //   Zoomer man langt nok ind, kommer næste trin, og zoomer man ud, kommer det forrige. Stigen og atomerne er den
 //   samme tegning (js/liv/stige.js), der toner over i hinanden efter kameraets afstand.

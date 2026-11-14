@@ -1,8 +1,9 @@
 // Gåderne (#gaader, docs/plan-gaader.md): teksterne i Node (tre trin, korte spørgsmål, gæt med svar, dato, "Se det selv"
-// og højst to fagord), og i browseren oversigten, et kort fra start til slut, ✓, "Se det selv", linket fra Sort hul og
-// Ordbogen, og at telefonen ikke får en vandret rullebjælke.
+// og højst to fagord), og i browseren skinnen (G4b: første gang, flyvningen ind og ud, Esc, pile, tryk, træk, "Næste
+// gåde ›" og ROLIG), et kort fra start til slut, ✓, "Se det selv", linket fra Sort hul og Ordbogen, og at telefonen
+// ikke får en vandret rullebjælke.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
-import { GÅDER, bygget, STREG_FORKLARING } from '../js/data/gaader.js';
+import { GÅDER, bygget, STREG_FORKLARING, påSkinnen } from '../js/data/gaader.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
@@ -72,6 +73,10 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     kort.every((g) => Number.isFinite(g.størrelse)) && kort.every((g) => (g.nyt == null || (g.nyt.tekst && g.nyt.dato)) && (g.løst == null || typeof g.løst === 'string')));
 }
 
+// G4b: skinnen
+tjek('G4b: skinnen har de byggede gåder fra det mindste til det største, hver med et kort navn',
+  påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
+
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
 const fejl = [];
@@ -85,20 +90,50 @@ const nySide = async (opsætning, hash) => {
   return { page, ctx };
 };
 const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms }).then(() => true, () => false);
+const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window.atomlabTest?.gaader?.skinne()?.vist();
 
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
   const T = (f, a) => page.evaluate(f, a);
-  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
-  const oversigt = await T(() => ({
-    antal: document.querySelectorAll('#gaaderListe .gaade-valg').length,
-    lukkede: document.querySelectorAll('#gaaderListe .gaade-valg:disabled').length,
-    start: document.querySelector('.gaade-mærke.start')?.closest('button').dataset.gaade,
-  }));
-  tjek('#gaader viser oversigten: fem gåder, ingen "Kommer senere", "Start her" på Sort hul', oversigt.antal === 5 && oversigt.lukkede === 0 && oversigt.start === 'sorthul', JSON.stringify(oversigt));
+  await vent(page, påSkinne, null, 15000);
+  const K = () => T(() => {
+    const s = atomlabTest.gaader.skinne();
+    const l = document.getElementById('gaaderFørste');
+    return { fokus: s.fokus(), første: s.første(), tændte: s.tændte().length, ringe: s.ringe(), flyver: s.flyver(), zoom: s.zoom(), linje: l.hidden ? '' : l.textContent,
+      pile: !document.querySelector('[data-skinne="1"]').hidden, spm: document.getElementById('gaaderFokusSpm').textContent, kort: atomlabTest.gaader.vist()?.id ?? null };
+  });
+  const først = await K();
+  tjek('G4b første gang: kun Antistof er tændt, tæt foran, med linjen "Videnskaben er ikke færdig" og uden pilene',
+    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.startsWith('Videnskaben er ikke færdig') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
+  await page.click('#gaaderInd');
+  const flyver = await K();
+  const ind = await vent(page, () => atomlabTest.gaader.vist()?.id === 'antistof');
+  tjek('G4b: "Flyv ind" flyver ind i lyset og åbner kortet bagefter', flyver.flyver && !flyver.kort && ind, JSON.stringify(flyver));
+  await page.keyboard.press('Escape');
+  const ud = await K();
+  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 5 && !atomlabTest.gaader.skinne().flyver());
+  tjek('G4b: Esc går fra kortet til skinnen, kameraet trækker sig ud, og lysene tændes ("Der er flere.")',
+    !ud.kort && ud.flyver && ud.tændte === 1 && ud.linje === 'Der er flere.' && tændt && await T(() => localStorage.getItem('atomlabGaaderSkinne') === '1'), JSON.stringify(ud));
+  // Piletasten og knappen "større ›" flytter fokus op ad stien
+  await page.keyboard.press('ArrowRight');
+  await page.click('[data-skinne="1"]');
+  const flyttet = await K();
+  tjek('G4b: piletasten og "større ›" flytter til den næste større gåde, og linjen "Der er flere." går væk', flyttet.fokus === 'liv' && flyttet.spm === 'Er der liv andre steder?' && flyttet.linje === '', JSON.stringify(flyttet));
+  // Et tryk på lyset ved siden af glider derhen, og et træk mod venstre går mod de større
+  await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 2) < 0.02);
+  const nabo = await T(() => atomlabTest.gaader.skinne().skærm('sorthul'));
+  await page.mouse.click(nabo.x, nabo.y);
+  const trykket = (await K()).fokus;
+  await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 3) < 0.02);
+  await page.mouse.move(700, 300);
+  await page.mouse.down();
+  for (let i = 1; i <= 8; i++) await page.mouse.move(700 - i * 50, 300);
+  await page.mouse.up();
+  const trukket = (await K()).fokus;
+  tjek('G4b: et tryk på en nabo glider derhen, og et træk mod venstre går til en større gåde', trykket === 'sorthul' && trukket === 'moerktstof', JSON.stringify({ trykket, trukket }));
 
   // Et kort fra start til slut: gæt, svar, Næste
-  await page.click('.gaade-valg[data-gaade="sorthul"]');
+  await T(() => atomlabTest.gaader.visGåde('sorthul'));
   const før = await T(() => ({ spm: document.querySelector('.gaade-spørgsmål')?.textContent, gæt: document.querySelectorAll('#gaadeTrin .fl-gæt').length, næste: !!document.querySelector('#gaadeTrin .fl-næste'), nørd: !!document.querySelector('.gaade-lag details[data-lag="gaade-nørd"]') }));
   tjek('kortet åbner på trin 1 med to gæt, uden "Næste" før man har gættet, og med "For nørder"', før.spm === 'Hvad er der inde i et sort hul?' && før.gæt === 2 && !før.næste && før.nørd, JSON.stringify(før));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
@@ -114,10 +149,19 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   tjek('"Det så du" med kernen og "Se det selv", og kortet huskes som færdigt', slut.tekst === GÅDER[0].slut && slut.seDet === 'kosmos:sorthul' && slut.færdige.includes('sorthul'), JSON.stringify(slut));
   tjek(`trin 3 markerer ikke andre fagord end kortets (${ord2.join() || 'ingen'})`, ord2.every((o) => GÅDER[0].ord.includes(o)));
   await page.click('#gaadeTrin [data-alle]');
-  tjek('✓ i oversigten, og "Start her" er væk', await T(() => !!document.querySelector('.gaade-valg[data-gaade="sorthul"] .gaade-mærke.færdig') && !document.querySelector('.gaade-mærke.start')));
+  await vent(page, () => !atomlabTest.gaader.skinne().flyver());
+  const ring = await K();
+  tjek('"Alle gåder" lander ved samme gåde på skinnen, og den har en ring (✓)', ring.fokus === 'sorthul' && ring.ringe.includes('sorthul') && ring.linje === '', JSON.stringify(ring));
   await page.reload();
-  await vent(page, () => window.atomlabTest && document.querySelector('#gaader:not(.skjult) .gaade-valg'));
-  tjek('✓ huskes, når siden genindlæses', await T(() => !!document.querySelector('.gaade-valg[data-gaade="sorthul"] .gaade-mærke.færdig')));
+  await vent(page, påSkinne, null, 15000);
+  const igen = await K();
+  tjek('✓ huskes, når siden genindlæses, og første gang er forbi', igen.ringe.includes('sorthul') && !igen.første && igen.tændte === 5, JSON.stringify(igen));
+
+  // "Næste gåde ›" flyver ud, glider et skridt og ind i den næste større gåde
+  await T(() => { const g = atomlabTest.gaader; g.visGåde('sorthul'); for (let i = 0; i < 3; i++) { g.gæt(0); g.næste(); } });
+  await page.click('#gaadeTrin [data-naeste-gaade]');
+  const næste = await vent(page, () => atomlabTest.gaader.vist()?.id === 'moerktstof', null, 15000);
+  tjek('"Næste gåde ›" flyver ud og ind i den næste større gåde (mørkt stof)', næste);
 
   // "Se det selv" åbner Sort hul i Kosmos, og knappen i teksten dér åbner kortet igen
   await T(() => atomlabTest.gaader.visGåde('sorthul'));
@@ -126,6 +170,12 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   tjek('"Se det selv" åbner Sort hul i Kosmos', await vent(page, () => location.hash === '#kosmos' && atomlabTest.kosmos?.valgt() === 'sorthul', null, 20000));
   await T(() => document.querySelector('#kosmos [data-gaa="gaader:sorthul"]')?.click());
   tjek('knappen ved astronauten i Sort hul åbner gåden', await vent(page, () => location.hash === '#gaader' && atomlabTest.gaader.vist()?.id === 'sorthul' && atomlabTest.gaader.vist()?.trin === 0));
+  // Efter "Se det selv" og tilbage til Gåderne står man ved samme gåde på skinnen
+  for (let i = 0; i < 3; i++) { await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); await page.click('#gaadeTrin .fl-næste'); }
+  await page.click('#gaadeTrin [data-gaa="kosmos:sorthul"]');
+  await vent(page, () => location.hash === '#kosmos', null, 20000);
+  await page.evaluate(() => { location.hash = '#gaader'; });
+  tjek('efter "Se det selv" lander man ved samme gåde på skinnen', await vent(page, () => window.atomlabTest.gaader.skinne()?.vist() && atomlabTest.gaader.skinne().fokus() === 'sorthul', null, 15000));
   await ctx.close();
 }
 
@@ -133,7 +183,7 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
   const T = (f, a) => page.evaluate(f, a);
-  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
   for (let i = 0; i < 3; i++) { await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); await page.click('#gaadeTrin .fl-næste'); }
   await page.click('#gaadeTrin [data-gaa="liv:protein"]');
@@ -150,8 +200,8 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
   const T = (f, a) => page.evaluate(f, a);
-  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
-  await page.click('.gaade-valg[data-gaade="moerktstof"]');
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('moerktstof'));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   const trin1 = await T(() => !!document.querySelector('#gaadeTrin button.hvorfor'));
   await page.click('#gaadeTrin .fl-næste');
@@ -181,7 +231,7 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
   const T = (f, a) => page.evaluate(f, a);
-  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('antistof'));
   const klar = await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
   const lay = await T(() => {
@@ -191,6 +241,7 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   });
   tjek('G4a pc: kortet har en scene, og panelet (ca. 380 px) står til højre for den', klar && lay.påKort && lay.panelHøjre && Math.abs(lay.pB - 380) < 4 && lay.vB > 700, JSON.stringify(lay));
   const S = () => T(() => atomlabTest.gaader.scene().scene());
+  await vent(page, () => atomlabTest.gaader.scene().stille()); // ellers kan partiklerne flytte sig på skærmen under trækket
   await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(-3, 0); s.spol(1.5); });
   const par = await S();
   // Træk stoffet hen på antistoffet med musen
@@ -226,11 +277,11 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   const ven = await T(() => document.getElementById('gaadeLinje').textContent);
   tjek('G4a trin 3: knapperne skifter mellem DUNE og Hyper-K, og det sidste billede siger "Sig det til en ven"', hk?.vis === 'hk' && ven.startsWith('Sig det til en ven:'), JSON.stringify({ hk, ven }));
   await page.click('#gaadeTrin [data-alle]');
-  const ud = await T(() => ({ scene: atomlabTest.gaader.scene().id(), påKort: document.getElementById('gaader').classList.contains('paa-kort'), vindue: getComputedStyle(document.getElementById('gaaderVindue')).display }));
+  const ud = await T(() => ({ scene: atomlabTest.gaader.scene().id(), påKort: document.getElementById('gaader').classList.contains('paa-kort'), skinne: atomlabTest.gaader.skinne()?.vist(), panel: getComputedStyle(document.getElementById('gaaderPanel')).display }));
   // De andre kort viser deres lys som scene
   await T(() => atomlabTest.gaader.visGåde('moerktstof'));
   const lysKort = await vent(page, () => atomlabTest.gaader.scene()?.id() === 'moerktstof' && atomlabTest.gaader.scene().scene()?.lys);
-  tjek('G4a: "Alle gåder" rydder scenen, og de andre kort har deres lys som scene', ud.scene === null && !ud.påKort && ud.vindue === 'none' && lysKort, JSON.stringify(ud));
+  tjek('G4a: "Alle gåder" rydder scenen og viser skinnen uden panel, og de andre kort har deres lys som scene', ud.scene === null && !ud.påKort && ud.skinne && ud.panel === 'none' && lysKort, JSON.stringify(ud));
   await ctx.close();
 }
 
@@ -238,7 +289,7 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
 {
   const { page, ctx } = await nySide({ viewport: { width: 768, height: 1024 }, isMobile: true, hasTouch: true }, '#gaader');
   const T = (f, a) => page.evaluate(f, a);
-  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('antistof'));
   await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
   const mål = () => T(() => {
@@ -255,15 +306,28 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   await ctx.close();
 }
 
-// Telefon på højkant: ingen vandret rullebjælke, hverken i oversigten eller på kortet
+// G4b: "Reducer bevægelse" (ROLIG): ingen flyvning, kun toningen, og lysene står tændt med det samme
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' }, '#gaader');
+  await vent(page, påSkinne, null, 15000);
+  await page.click('#gaaderInd');
+  const z = await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(() => ok(atomlabTest.gaader.skinne().zoom())))));
+  const kort = await vent(page, () => atomlabTest.gaader.vist()?.id === 'antistof');
+  await page.keyboard.press('Escape');
+  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 5);
+  tjek('G4b ROLIG: kameraet hopper (ingen flyvning), kortet åbner efter toningen, og lysene står tændt med det samme', z === 2 && kort && tændt, JSON.stringify({ z, kort, tændt }));
+  await ctx.close();
+}
+
+// Telefon på højkant: ingen vandret rullebjælke, hverken på skinnen eller på kortet
 {
   const { page, ctx } = await nySide({ viewport: { width: 375, height: 667 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 }, '#gaader');
-  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await vent(page, påSkinne, null, 15000);
   const bred = () => page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.getElementById('gaaderPanel').scrollWidth) > window.innerWidth + 1);
   const o = await bred();
-  await page.click('.gaade-valg[data-gaade="sorthul"]');
+  await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
-  tjek('telefon: ingen vandret rullebjælke i oversigten og på kortet', !o && !(await bred()));
+  tjek('telefon: ingen vandret rullebjælke på skinnen og på kortet', !o && !(await bred()));
   await ctx.close();
 }
 
