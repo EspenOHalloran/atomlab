@@ -5,7 +5,7 @@
 ## Sådan bygger vi nu (jeres go 11. november 2026)
 - **Forståelig før mere.** Serie 1 gør det, der findes, forståeligt med forløb. Liv L3 og Venus V3 holder pause, til Serie 1 er lavet og prøvet.
 - **Nyt indhold må bygges imens på tre betingelser:** (1) Forløb-klodsen findes først. (2) Hver ny del fødes med én kernesætning og sit forløb. (3) Den har status "prøve", til et barn har prøvet den ([guide-proeven.md](guide-proeven.md), en fast aften om ugen).
-- **Højst én ny stor del i gang ad gangen** ud over Solsystemet.
+- **Højst én ny stor del i gang ad gangen** ud over Solsystemet. **Undtagelse (jeres svar 14. november 2026):** Videnskabsfolkene (Huygens) bygges samtidig med Gåderne 3D. Solsystemet prioriteres også, og **andre nye spor (fx Lys og farver) starter først, når Solsystemet er færdigt** (Mars del 3 og overblikket først, så Venus V3-V5 og Merkur og Pluto). De næste fem sessioner står i [prompt-naeste-fem.md](prompt-naeste-fem.md).
 - **Faktagrundlag må laves på forhånd og parallelt** (kun dokumenter).
 - **Frigivet** er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp, og fundene er rettet (slutningen af Serie 3).
 
@@ -41,7 +41,7 @@ En prøve med sønnen efter hvert punkt.
 ## Nyt indhold, i denne rækkefølge (må starte, når Forløb-klodsen findes)
 1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside. **Jeres valg 13. november 2026:** Opus skriver drejebogen nu ([prompt-overblik.md](prompt-overblik.md)), og Fable tjekker den før 16. november. Bygges efter G1 trin 3.
 2. **Gåderne** (fem kort i Biblioteket, plads til 10). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). G1-G3 er lavet 12.-13. november 2026 ([plan-gaader.md](plan-gaader.md)). **Jeres ønske 13. november 2026:** Gåderne i fuld 3D som ét univers med "sense of wonder" og plads til 10 gåder. Planen er [plan-gaader-3d.md](plan-gaader-3d.md) (G4a-G4d, Opus høj, et go pr. del). Fable har vurderet konceptet og valgt gåderne 6-10 ([E8-gaader-3d-noter.md](fable/E8-gaader-3d-noter.md)). Jeres svar 14. november 2026: Antistof bygges helt færdigt først (G4a), så skinnen (G4b) og prøven, før resten.
-3. **De første 6-8 videnskabsfolk** med sider fra bøgerne (Opdagelserne i Biblioteket). Faktagrundlaget er klar ([fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)). **Jeres ønske 14. november 2026:** flot visuelt med et tegnet portræt af hver, en indpakning i stil med personens egen tid (Huygens som en fortælling fra 1600-tallet), uddrag af værkerne og nøglesteder vist i de originale bøger. Engagerende for 12-13-årige og indholdsrigt nok til nørderne. **Jeres svar samme dag:** en bog i 2D i fem lag, rigtige portrætter fra tiden med et ens kobberstik-filter, Huygens alene som prøve først, og de otte fra faktagrundlaget før Newton og Galilei. Start: [prompt-videnskabsfolk.md](prompt-videnskabsfolk.md) (nyt spor Opdagelserne, kun plan og drejebog).
+3. **Videnskabsfolkene: de otte fra faktagrundlaget, så Galilei og Newton** (jeres svar 14. november 2026), med sider fra bøgerne (Opdagelserne i Biblioteket). Faktagrundlaget er klar ([fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)). **Jeres ønske 14. november 2026:** flot visuelt med et tegnet portræt af hver, en indpakning i stil med personens egen tid (Huygens som en fortælling fra 1600-tallet), uddrag af værkerne og nøglesteder vist i de originale bøger. Engagerende for 12-13-årige og indholdsrigt nok til nørderne. **Jeres svar samme dag:** en bog i 2D i fem lag, rigtige portrætter fra tiden med et ens kobberstik-filter, Huygens alene som prøve først, og de otte fra faktagrundlaget før Newton og Galilei. Start: [prompt-videnskabsfolk.md](prompt-videnskabsfolk.md) (nyt spor Videnskabsfolkene, kun plan og drejebog. Galilei og Newton mangler faktagrundlag).
 4. **Månerne med mulige betingelser for liv** (et snit gennem Europa og Enceladus, Titan med Huygens). Jeres svar på kernesætningen, den første handling, Huygens' billeder og "Land med Huygens" står i afsnit 9 i [fakta-maaner-liv.md](fakta-maaner-liv.md) (12. november 2026).
 5. **Liv L3, derefter L4-L6** som forløb ([plan-liv.md](plan-liv.md), [prompt-liv-l3.md](prompt-liv-l3.md) skal skrives om til et forløb først). **Jeres go 14. november 2026:** Fable skriver drejebogen til L3-L6 som forløb før 16. november ([prompt-fable-liv-l3-l6.md](prompt-fable-liv-l3-l6.md)).
 6. **Ild** sammen med knaldgassen, og verdenen Stof og kemi kommer.
@@ -49,7 +49,7 @@ En prøve med sønnen efter hvert punkt.
 8. **Mørkt stof** (Kosmos, gruppen Universet).
 9. **Antistof** (Kernerne).
 10. ~~**Tjernobyl**~~: **flyttet til [idéerne](ideer.md) 14. november 2026** (parkeret på ubestemt tid, jeres ønske).
-11. **Venus i en kort udgave** ([plan-venus.md](plan-venus.md), V3 holder pause til Serie 1 er prøvet).
+11. **Venus i en kort udgave** ([plan-venus.md](plan-venus.md)). **Jeres svar 14. november 2026:** Solsystemet skal være færdigt, før nye spor starter, så V3-V5 kommer efter G1 trin 3 og overblikket (pausen til Serie 1 er prøvet er dermed ophævet).
 12. **Fotos af grundstofferne** fra Wikimedia Commons med navn og licens.
 13. **Merkur og Pluto i en lille udgave** (kloden, tre-fire steder og flyby). "Det hele skal med" gælder det, der er bygget, ikke det kommende (jeres valg i E2).
 
