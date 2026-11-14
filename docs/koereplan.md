@@ -29,7 +29,7 @@ En prøve med sønnen efter hvert punkt.
 
 ## Serie 2, "Ét produkt"
 5. **Byggeklodserne og budgettet for panelerne** (nr. 7): én udgave af hver klods, højst fire spørgsmål fremme, brødtekst mindst 15 px skærm for skærm, tegnede ikoner i stedet for emoji, klokken fjernet eller lagt ind i forløbet, og de syv hjælpetekster slanket til "sådan styrer du" (mellem, kort plan først).
-6. **Ringen** (nr. 8, sporet Menuen): Kernerne først, "Atomer" og "Liv" ([plan-verdener.md](plan-verdener.md)) (lille).
+6. **Ringen** (nr. 8, sporet Menuen): Kernerne først, "Atomer" og "Liv" ([plan-verdener.md](plan-verdener.md)) (lille) **Jeres go 14. november 2026:** Runden på tabletten er taget (menuen ser fin ud), så det laves nu, og sporet Menuen lukkes bagefter (nr. 4 i [prompt-naeste-fem.md](prompt-naeste-fem.md)).
 7. **Rejsen og "Se også"** (nr. 9): de første stationer, hver med sit eget link (mellem til stor, plan først).
 
 ## Serie 3, "Klar til andre"
@@ -41,7 +41,7 @@ En prøve med sønnen efter hvert punkt.
 ## Nyt indhold, i denne rækkefølge (må starte, når Forløb-klodsen findes)
 1. **Solsystemets overblik** (planeterne om Solen) som Solsystemets forside. **Jeres valg 13. november 2026:** Opus skriver drejebogen nu ([prompt-overblik.md](prompt-overblik.md)), og Fable tjekker den før 16. november. Bygges efter G1 trin 3.
 2. **Gåderne** (fem kort i Biblioteket, plads til 10). Faktagrundlaget er klar ([fakta-gaader.md](fakta-gaader.md)). G1-G3 er lavet 12.-13. november 2026 ([plan-gaader.md](plan-gaader.md)). **Jeres ønske 13. november 2026:** Gåderne i fuld 3D som ét univers med "sense of wonder" og plads til 10 gåder. Planen er [plan-gaader-3d.md](plan-gaader-3d.md) (G4a-G4d, Opus høj, et go pr. del). Fable har vurderet konceptet og valgt gåderne 6-10 ([E8-gaader-3d-noter.md](fable/E8-gaader-3d-noter.md)). Jeres svar 14. november 2026: Antistof bygges helt færdigt først (G4a), så skinnen (G4b) og prøven, før resten.
-3. **Videnskabsfolkene: de otte fra faktagrundlaget, så Galilei og Newton** (jeres svar 14. november 2026), med sider fra bøgerne (Opdagelserne i Biblioteket). Faktagrundlaget er klar ([fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)). **Jeres ønske 14. november 2026:** flot visuelt med et tegnet portræt af hver, en indpakning i stil med personens egen tid (Huygens som en fortælling fra 1600-tallet), uddrag af værkerne og nøglesteder vist i de originale bøger. Engagerende for 12-13-årige og indholdsrigt nok til nørderne. **Jeres svar samme dag:** en bog i 2D i fem lag, rigtige portrætter fra tiden med et ens kobberstik-filter, Huygens alene som prøve først, og de otte fra faktagrundlaget før Newton og Galilei. Start: [prompt-videnskabsfolk.md](prompt-videnskabsfolk.md) (nyt spor Videnskabsfolkene, kun plan og drejebog. Galilei og Newton mangler faktagrundlag).
+3. **Videnskabsfolkene: de otte fra faktagrundlaget, så Galilei og Newton** (jeres svar 14. november 2026), med sider fra bøgerne (Opdagelserne i Biblioteket). Faktagrundlaget er klar ([fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)). **Jeres ønske 14. november 2026:** flot visuelt med et tegnet portræt af hver, en indpakning i stil med personens egen tid (Huygens som en fortælling fra 1600-tallet), uddrag af værkerne og nøglesteder vist i de originale bøger. Engagerende for 12-13-årige og indholdsrigt nok til nørderne. **Jeres svar samme dag:** en bog i 2D i fem lag, rigtige portrætter fra tiden med et ens kobberstik-filter, Huygens alene som prøve først, og de otte fra faktagrundlaget før Newton og Galilei. Start: [prompt-videnskabsfolk.md](prompt-videnskabsfolk.md) (nyt spor Videnskabsfolkene, kun plan og drejebog. Galilei og Newton mangler faktagrundlag). **Jeres svar 14. november 2026 (runde 5):** Planen og drejebogen laves 15. november lige før Fables tjek (nr. 6-8 i [prompt-naeste-fem.md](prompt-naeste-fem.md)).
 4. **Månerne med mulige betingelser for liv** (et snit gennem Europa og Enceladus, Titan med Huygens). Jeres svar på kernesætningen, den første handling, Huygens' billeder og "Land med Huygens" står i afsnit 9 i [fakta-maaner-liv.md](fakta-maaner-liv.md) (12. november 2026).
 5. **Liv L3, derefter L4-L6** som forløb ([plan-liv.md](plan-liv.md), [prompt-liv-l3.md](prompt-liv-l3.md) skal skrives om til et forløb først). **Jeres go 14. november 2026:** Fable skriver drejebogen til L3-L6 som forløb før 16. november ([prompt-fable-liv-l3-l6.md](prompt-fable-liv-l3-l6.md)).
 6. **Ild** sammen med knaldgassen, og verdenen Stof og kemi kommer.
@@ -63,7 +63,7 @@ En prøve med sønnen efter hvert punkt.
 | [Molekyler](lige-nu/molekyler.md) | Liv som to forløb (begge lavet, status "prøve") og Molekyler som egen del (Serie 1 nr. 2 og 3). L3 holder pause. |
 | [Tid og rum](lige-nu/tid.md) | Runden med sønnen (begge forløb om tid og Kosmos i fire grupper er bygget, Serie 1 nr. 4). |
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Overblikket, når Forløb-klodsen findes. Venus V3 holder pause til Serie 1 er prøvet. |
-| [Menuen](lige-nu/menuen.md) | Ringen (Serie 2 nr. 6), [plan-verdener.md](plan-verdener.md). |
+| [Menuen](lige-nu/menuen.md) | Ringen (Serie 2 nr. 6, jeres go 14. november 2026), så lukkes sporet. |
 
 ## Baggrund (jeres idéer og Opus' vurderinger, flyttet ordret fra ideer.md 7. november 2026)
 
