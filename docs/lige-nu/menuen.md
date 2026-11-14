@@ -8,6 +8,8 @@
 1. **Jeres runde på tabletten** (nu uden `?karrusel`, spørgsmålene står i [ikke-afproevet.md](../ikke-afproevet.md)). Det, I vil have rettet i ringen, kan tages i en ny session med en kort tekst, fx "Ret menuen: …" (Opus, effort medium).
 2. **Ild og liv** bliver en ny verden, når Ild eller Liv findes (se [plan-verdener.md](../plan-verdener.md), "En ny del"). Det laves sammen med den del, ikke i sporet Menuen.
 
-**Spørgsmål til jer:**
+**Jeres svar (14. november 2026):** Runden på tabletten er taget, og menuen ser fin ud. Rækkefølgen: anbefalingen, altså Kernerne først, "Atomer" og "Liv" (linjen "Ringen" i [plan-verdener.md](../plan-verdener.md)). Næste: nr. 4 i [prompt-naeste-fem.md](../prompt-naeste-fem.md), og så lukkes sporet.
+
+**Spørgsmål til jer:** *(besvaret ovenfor)*
 - **Rækkefølgen:** Planen siger "fra det mindste til det største", men Atomer og molekyler står før Kernerne (som i jeres tabel), og kerner er mindre end atomer. Skal Kernerne stå først? Det er én linje i `js/karrusel.js`. Indtil I svarer, står den som i tabellen.
 - Kører baggrundene glat på tabletten (mest Stjerneovnen), og er nogen af dem for kraftige eller for svage? Spørgsmålene står i [ikke-afproevet.md](../ikke-afproevet.md).
