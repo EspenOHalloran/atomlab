@@ -16,11 +16,17 @@ import sorthul from './kosmos/sorthul.js';
 import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
 
-// Rækkefølgen fortæller en historie: Big Bang, en stjerne bliver født, stjerner der dør, og til sidst sorte huller
-// og ormehuller. Vores eget solsystem (Solen, Jorden, Mars og Saturn) ligger i Solsystemet (solsystem.js).
+// Fire grupper (Serie 1 nr. 4, plan-verdener.md), som Solsystemets grupper, men uden en klode for hver. Rækkefølgen
+// fortæller stadig en historie: Big Bang, stjerner, der fødes og dør, rumtiden og til sidst sorte huller og ormehuller.
+// Universet får senere Mørkt stof og Andromeda. Vores eget solsystem ligger i Solsystemet (solsystem.js).
 const skærm = lavFænomenSkærm({
   skærm: 'kosmos',
-  liste: [bigbang, stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova, rumtid, tid, tidhvorfor, tyngdebolger, sorthul, kvasar, ormehul],
+  liste: [
+    { navn: 'Universet', ikon: '🌌', under: [bigbang] },
+    { navn: 'Stjernernes liv', ikon: '✴️', under: [stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova] },
+    { navn: 'Tid og rum', ikon: '🕰️', under: [rumtid, tid, tidhvorfor, tyngdebolger] },
+    { navn: 'Sorte huller', ikon: '🕳️', under: [sorthul, kvasar, ormehul] },
+  ],
 });
 
 export const FÆNOMENER = skærm.FÆNOMENER;
