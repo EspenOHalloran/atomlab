@@ -8,20 +8,21 @@
 // Jorden (målets lysår / SKÆRM_VEJ år pr. sekund), og med 1 g tiden i skibet. Farten kan skiftes undervejs: Urene lægger
 // tiden sammen bid for bid, så regnestykket passer også da.
 // "Set fra skibet" trykker scenen sammen om skibet, når farten stiger (længdeforkortelsen, men meget mindre end i
-// virkeligheden). "⏱ Vis lysuret" viser to lysure side om side i et lærred (2D) i stedet for urene. Imens står rejsen stille.
+// virkeligheden). Lysurets fem trin er væk (14. november 2026): Forløb B "Hvordan kan det ske?" i tidhvorfor.js tager over.
 // Styr-boksen bygges om efter tilstanden (styring er en liste, der rettes på stedet, og opdaterKnapper() tegner den igen).
+// Fra 14. november 2026 hedder punktet i listen "Tid", og "Hvordan kan det ske?" (tidhvorfor.js) hører til det.
 
 import * as THREE from 'three';
-import { handling, kontakt, tid as tidKnap, gå } from '../sideknap.js';
+import { kontakt, tid as tidKnap, gå } from '../sideknap.js';
 import { stjerne, glød, skilt, hale, prikSky, KVALITET } from './faelles.js';
 import { lavJorden } from './jorden.js';
 import { ROLIG, passerTil, passerTilBoks } from '../scene3d.js';
 import * as T from '../data/tid.js';
-import * as Lys from './lysur.js'; // lysurets regning og tegning (delt med tidhvorfor.js)
 import { figurSVG } from './tidfigur.js'; // de tegnede figurer ved hjemkomsten (E4, trin A1)
 import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbTest } from '../forloeb.js';
-import { tagVentForløb } from '../gaa.js';
-import { REJSEN_I_TID } from '../data/forloeb/tid.js'; // forløbet "Rejsen i tid" (E4, forløb A)
+import { tagVentForløb, sætVentForløb } from '../gaa.js';
+// Forløbet "Rejsen i tid" (E4, forløb A), og forløb B, som vejen "Hvordan kan det ske?" starter
+import { REJSEN_I_TID, HVORDAN_KAN_DET_SKE } from '../data/forloeb/tid.js';
 
 const SKÆRM_VEJ = 12.5; // ▶: sekunder på skærmen for hver vej (ud og hjem ca. 25 sekunder), uanset målet
 const HURTIG = 4; // ⏩: en tur tager ca. 6 sekunder
@@ -36,21 +37,12 @@ const SKIB_TIL = MÅL_X - 2.4;
 const SKIB_Y = 0.45;
 // "Set fra skibet": afstandene i scenen ganges med γ^(−1/3) (i virkeligheden 1/γ, men så ville målet ligge oven i skibet)
 const KLEM = 1 / 3;
-// Lysuret trin for trin (jeres ønske 8. november 2026: "tag brugeren i hånden"). Trin 1-4 er ved 87 % (γ = 2), og i det
-// sidste kan man selv vælge farten.
-const LYS_TRIN = [
-  { titel: 'Et lysur', tekst: 'Et lysur er et tænkt ur: Et lysglimt hopper op og ned mellem to spejle. Hver gang lyset er nede igen, siger uret "tik". Til venstre ser du uret, som du ser det om bord i skibet.' },
-  { titel: 'Set fra Jorden', tekst: 'Til højre er det samme ur set fra Jorden, mens skibet farer forbi med 87 % af lysets fart. Mens lyset er på vej op, flytter spejlene sig. Derfor går lyset skråt, i zigzag.' },
-  { titel: 'Den skrå vej er længere', tekst: 'Den skrå vej er 2 gange så lang som den lige vej. Lyset har altid den samme fart, også set fra Jorden. Så tager hvert tik 2 gange så lang tid.' },
-  { titel: 'Uret går langsommere', tekst: 'Tæl tikkene. Det er det samme ur, men set fra Jorden når det kun halvt så mange tik. Om bord mærker du intet: For dig går uret helt normalt.' },
-  { titel: 'Alt om bord følger med', tekst: 'Alle ure i skibet går langsommere set fra Jorden, også dit hjerte og dine tanker. Det kaldes tidsforlængelse. Skru op for farten under Styr, og se den skrå vej blive længere.' },
-];
 
 export default {
   id: 'tid',
-  navn: 'Rejsen i tid',
+  navn: 'Tid', // ét punkt i listen (jeres valg 13. november 2026), forløbet hedder "Rejsen i tid"
   ikon: '⏳',
-  undertitel: 'Flyv næsten med lysets fart',
+  undertitel: 'Rejsen i tid, og hvordan det kan ske',
   kamera: { retning: [0, 0.3, 1], radius: 14.5, drej: false },
   tal: [
     ['Alpha Centauri', 'ca. 4,3 lysår væk'],
@@ -61,7 +53,9 @@ export default {
   ],
   side: {
     kort: 'Kan man rejse ind i fremtiden? Ja, hvis man flyver næsten med lysets fart. Set fra Jorden går alle ure i skibet langsommere. Det kaldes tidsforlængelse. Flyv til TRAPPIST-1 (en lille, rød stjerne med syv planeter) eller et andet mål og hjem, og se, hvor meget tid der er gået på Jorden.',
-    // T3: teksterne er tjekket mod docs/fakta-tid.md (afsnittet står ved hvert emne) og regnet efter med regn.py
+    // T3: teksterne er tjekket mod docs/fakta-tid.md (afsnittet står ved hvert emne) og regnet efter med regn.py.
+    // Fire spørgsmål står fremme (jeres valg 13. november 2026, E4 afsnit 4). "Hvad gør farten?", "Fast fart eller 1 g?"
+    // og "Set fra skibet" er gemt (gemt), til man bruger deres skyder eller kontakt, og folder sig så ud.
     emner: [
       {
         // Jeres spørgsmål 8. november 2026: "4 lysår på 21 dage uden at flyve hurtigere end lyset?" (afsnit 5 og 7)
@@ -72,36 +66,30 @@ export default {
           <p><b>3. Begge dele er rigtige på samme tid</b> og giver det samme tal. Ingen ser dig flyve hurtigere end lyset: Set fra Jorden er du lige bag lyset, og set fra skibet er vejen bare kortere.</p>`,
       },
       {
-        // Afsnit 3
-        titel: 'Hvorfor går Jordens ur så hurtigt?',
-        tekst: `<p>Lyset har altid den samme fart, uanset hvem der måler den. Forestil dig et ur, hvor et lysglimt hopper op og ned mellem to spejle. I skibet går lyset lige op og ned. Set fra Jorden flytter spejlene sig, mens lyset er undervejs, så lyset går en længere, skrå vej. Derfor tager hvert tik længere tid set fra Jorden. ${handling('Vis lysuret', '⏱ Vis lysuret')} viser det trin for trin.</p>
-          <p>Det gælder ikke kun lysure. Alt om bord følger med: atomurene, dit hjerte og dine tanker. ${gå('kosmos:tidhvorfor', '🔦 Hvorfor? Se det trin for trin')}</p>`,
-      },
-      {
         // Afsnit 2 og 4
-        titel: 'Hvad gør farten?', hvorfor: ['lysfart'],
+        titel: 'Hvad gør farten?', hvorfor: ['lysfart'], kontakt: 'Fast fart', gemt: true,
         tekst: `<p>Ved halv lysfart (50 %) går der kun ca. 1,15 dage på Jorden for hver dag i skibet, og ved 90 % ca. 2,3 dage. Ved 99,99 % er det ca. 71 dage, og ved 99,9999 % ca. 707 dage, næsten 2 år. Hvert ekstra 9-tal gør forskellen ca. 3 gange større.</p>
           <p>Alpha Centauri er ca. 4,3 lysår væk. Et lysår er den vej, lyset når på et år. Set fra Jorden tager turen ud og hjem derfor altid mindst ca. 8,7 år, for skibet kan ikke flyve hurtigere end lyset. Det, der bliver kortere og kortere, er tiden på dit ur. ${tidKnap('hurtig', 'Prøv ⏩')}</p>`,
       },
       {
         // Afsnit 6 (11.500 g og 13 år: regn.py, punkt 13). Fast fart forklaret efter jeres spørgsmål 8. november 2026
-        titel: 'Fast fart eller 1 g?', kontakt: '1 g hele vejen',
+        titel: 'Fast fart eller 1 g?', kontakt: '1 g hele vejen', gemt: true,
         tekst: `<p>Du kan flyve på to måder.</p>
           <p><b>Fast fart (skyderen):</b> Du flyver med den fart, du vælger, fra første til sidste sekund. Det er snyd: I virkeligheden skal man først speede op og til sidst bremse. Men fast fart viser tydeligt, hvad farten gør ved tiden.</p>
           <p><b>1 g hele vejen</b> er sådan, det kunne gå i virkeligheden. 1 g er lige så hårdt, som tyngden trykker på dig her på Jorden, så med 1 g kunne man leve om bord i årevis. Raketten speeder op til midtvejs, vender om og bremser resten af vejen. Men det går langsomt. Til Alpha Centauri når man kun op på ca. 95 % af lysets fart, og turen tager ca. 3,6 år for dig (én vej). ${kontakt('1 g hele vejen')}</p>
           <p>Jo længere væk målet er, jo længere tid har man til at speede op. Efter ca. 2 år i dit ur flyver du over 96 % af lysets fart, og så går dit ur langsommere og langsommere. Til Mælkevejens centrum tager det ca. 20 år for dig og ca. 27.000 år på Jorden, og til Andromeda ca. 29 år for dig (én vej). Skulle en tur tage 2 dage for dig og 2.000 år på Jorden, skulle man speede op med ca. 11.500 g, og det ville knuse en. Med 1 g tager det ca. 13 år bare at nå den fart.</p>`,
       },
       {
+        // Afsnit 7 (0,0614 lysår er ca. 3.900 gange afstanden til Solen, 22 dage er én vej ved 99,99 %)
+        titel: 'Set fra skibet', kontakt: 'Set fra skibet', gemt: true,
+        tekst: `<p>I skibet er det dig, der står stille, og stjernerne, der farer forbi. Så bliver afstanden langs farten kortere. Det kaldes længdeforkortelse. Ved 99,99 % af lysets fart er Alpha Centauri kun ca. 0,061 lysår væk set fra skibet (ca. 3.900 gange afstanden til Solen) i stedet for 4,3 lysår. Derfor er du kun ca. 22 dage om at nå derhen i dit eget ur. ${kontakt('Set fra skibet')}</p>
+          <p>På Jorden siger de, at dit ur går langsomt. I skibet siger du, at vejen er kort. I har begge ret, og I får det samme tal.</p>`,
+      },
+      {
         // Afsnit 9
         titel: 'Hvorfor ikke omvendt?',
         tekst: `<p>Set fra skibet er det jo Jorden, der farer af sted. Burde din tvilling så ikke være den yngste? Nej, for I er ikke ligestillede. Din tvilling bliver hjemme hele tiden, men du skal vende om for at komme hjem. Det mærker du, når motoren bremser og speeder op igen.</p>
-          <p>Tænk på rumtiden (rum og tid tilsammen) som et kort over både hvor og hvornår. Hvert ur måler længden af sin egen vej gennem rumtiden. Den lige vej, at blive hjemme, giver den længste tid, og din omvej ud og hjem giver mindre. Det er det modsatte af et landkort, hvor omvejen er længst.</p>`,
-      },
-      {
-        // Afsnit 7 (0,0614 lysår er ca. 3.900 gange afstanden til Solen, 22 dage er én vej ved 99,99 %)
-        titel: 'Set fra skibet', kontakt: 'Set fra skibet',
-        tekst: `<p>I skibet er det dig, der står stille, og stjernerne, der farer forbi. Så bliver afstanden langs farten kortere. Det kaldes længdeforkortelse. Ved 99,99 % af lysets fart er Alpha Centauri kun ca. 0,061 lysår væk set fra skibet (ca. 3.900 gange afstanden til Solen) i stedet for 4,3 lysår. Derfor er du kun ca. 22 dage om at nå derhen i dit eget ur. ${kontakt('Set fra skibet')}</p>
-          <p>På Jorden siger de, at dit ur går langsomt. I skibet siger du, at vejen er kort. I har begge ret, og I får det samme tal.</p>`,
+          <p>Tænk på rumtiden (rum og tid tilsammen) som et kort over både hvor og hvornår. Hvert ur måler længden af sin egen vej gennem rumtiden. Den lige vej, at blive hjemme, giver den længste tid, og din omvej ud og hjem giver mindre. Det er det modsatte af et landkort, hvor omvejen er længst. ${gå('kosmos:tidhvorfor:rumtid', '🗺 Se det på rumtidskortet')}</p>`,
       },
       {
         // Afsnit 10 (GPS står i Rumtid. Frisch og Smiths tal er ikke bekræftet i T3's faktatjek, derfor uden tal). Kononenko: 1.111 døgn, ca. 27 ms. 33 cm: ca. 1 ns pr. år
@@ -118,7 +106,7 @@ export default {
           <p>Og rummet er ikke helt tomt. Ved den fart ville et bittelille sandkorn på 1 mikrogram (under en tiendedel millimeter) ramme skibet med lige så meget energi som ca. 8.000 ton sprængstof (TNT). Selv ved 99,99 % er det som ca. 1,5 ton. Her omkring Solen er der også ca. 0,3 atomer i hver kubikcentimeter af rummet, mest brint. Hvert brintatom ville ramme med ca. 50 gange mere energi end protonerne i verdens største partikelaccelerator (LHC ved CERN), og der ville komme milliarder af dem hvert sekund på hver kvadratcentimeter. Det er dræbende stråling.</p>`,
       },
     ],
-    videre: [gå('kosmos:rumtid', 'Rumtid'), gå('kosmos:sorthul', 'Sort hul')],
+    videre: [gå('kosmos:tidhvorfor', '🔦 Hvordan kan det ske?'), gå('kosmos:rumtid', 'Rumtid'), gå('kosmos:sorthul', 'Sort hul')],
     nørd: `
       <p><b>Gammafaktoren:</b> γ = 1/√(1 − v²/c²), hvor v er farten og c lysets fart. Et ur, der farer forbi med farten v, går γ gange langsommere set fra os. Ved 99,99 % er γ ca. 70,7, og med 14 ni-taller ca. 7,1 millioner.</p>
       <p><b>Reglen om 9-tallene:</b> Med ε = 1 − v/c er γ = 1/√(ε(2 − ε)), og det er ca. 1/√(2ε), når ε er lille. Hvert ekstra 9-tal gør ε 10 gange mindre og γ ca. √10 ≈ 3,16 gange større. Computeren regner også sådan, for ellers regner den forkert, når der er mange 9-taller.</p>
@@ -272,12 +260,6 @@ export default {
     const [skibFigur, jordFigur] = ure.querySelectorAll('.tid-figur');
     const jordUr = ure.querySelector('.tid-ur-jord');
 
-    // ---------- Lysuret (et lærred med to lysure side om side) ----------
-    const lysur = document.createElement('div');
-    lysur.className = 'tid-lysur';
-    lysur.hidden = true;
-    const lærred = document.createElement('canvas');
-    lysur.append(lærred);
     // ---------- "Dit ur" stort (forløbets trin A2): et helt almindeligt sekund om bord ----------
     // Sekundviseren går ét sekund ad gangen, og hjertet slår 72 gange i minuttet. Imens holder rejsen pause, for på
     // skærmen går skibets tid også meget hurtigt (en tur på 1,2 år tager 25 sekunder).
@@ -298,7 +280,7 @@ export default {
     const hjerte = mitUr.querySelector('.tid-hjerte');
     let mitUrVist = false;
     let mitUrSek = 0; // sekunder, mens "Dit ur" er fremme (står stille under pause)
-    overlag().append(mitUr, ure, lysur);
+    overlag().append(mitUr, ure);
 
     // ---------- Tilstanden ----------
     let ni = START_NI; // antallet af 9-taller på skyderen
@@ -316,17 +298,10 @@ export default {
     let ved = { skibÅr: 0, jordÅr: 0 }; // urene, da skibet nåede målet
     let turKort = false; // turen tager under en dag i skibet: "Dit ur" viser timer og minutter
     let hurtig = false; // ⏩
-    let lysurVist = false;
     let faseNr = 0;
     let vending = 0; // skibets drejning: 0 = mod målet, 1 = mod Jorden
     let klem = 1; // "Set fra skibet": hvor meget scenen er trykket sammen (1 = ikke)
     let jordFart = 0; // år på Jorden pr. sekund på skærmen (til urskiven)
-    // Lysurets egne ure: fasen i skibet og set fra Jorden (i tik) og spejlenes vej set fra Jorden (i lysurets højder)
-    // spor: zigzaggens knæk set fra Jorden som [x (pixel, før billedet følger med), fase i tik]. stille: trinnet med
-    // den skrå vej står stille, når lyset er nået op.
-    const ly = Lys.nytUr();
-    let lysTrin = 0; // trinnet i lysuret (LYS_TRIN)
-    let lysFart = T.LYSUR_START; // skyderen "Fart i lysuret" i det sidste trin (T.LYSUR_FARTER)
 
     const mål = () => T.MÅL[T.MÅL_RÆKKE[målNr]];
     const flyver = () => tilstand === 'ud' || tilstand === 'hjem';
@@ -378,16 +353,6 @@ export default {
     // "Lige nu" i panelet: hvad farten betyder (skrives kun om, når teksten ændrer sig)
     function visLigeNu() {
       const m = mål();
-      if (lysurVist) {
-        const v = lysV();
-        let html = `<p><b>Lige nu:</b> To billeder af det samme lysur, der farer forbi Jorden med ${T.lysurFartTekst(v)} af lysets fart.`;
-        html += v > 0 ? ` Set fra Jorden tager hvert tik ${T.tal(T.lysurGamma(v), 1).replace(',0', '')} gange så lang tid.</p>` : ' Ved 0 % står skibet stille, og de to billeder er ens.</p>';
-        html += `<p>${lysTrin === LYS_TRIN.length - 1 ? '' : 'Gå frem med "Næste" i bjælken. '}${enG ? '' : `På rejsen flyver du med ${T.fartTekst(ni)}: Der tager hvert tik ${T.gammaTekst(T.gamma(ni))} gange så lang tid set fra Jorden.`}</p>`;
-        // Det sidste trin peger videre til "Hvorfor går tiden langsommere?" (T5c): fem scener, der forklarer hvorfor
-        if (lysTrin === LYS_TRIN.length - 1) html += `<p>Vil du se hvorfor, trin for trin, og hvorfor det er den rejsende, der kommer yngst hjem? ${gå('kosmos:tidhvorfor', '🔦 Hvorfor går tiden langsommere?')}</p>`;
-        forklaring(html);
-        return;
-      }
       const p = plan();
       const hvordan = enG ? 'Med 1 g hele vejen' : `Ved ${T.fartTekst(ni)} af lysets fart`;
       let html = `<p><b>Lige nu:</b> ${hvordan} tager turen til ${m.navn} og hjem ca. ${T.varighed(p.skibÅr)} for dig og ca. ${T.varighed(p.jordÅr)} på Jorden.`;
@@ -399,7 +364,7 @@ export default {
       if (!flyver()) {
         html += enG
           ? '<p><b>1 g hele vejen:</b> Raketten trykker dig ned i sædet lige så hårdt, som tyngden gør på Jorden. Midtvejs vender den om og bremser. Sådan kunne det gå i virkeligheden, og derfor tager det år.</p>'
-          : '<p><b>Fast fart:</b> Vi snyder lidt: Du har fuld fart fra første sekund. I virkeligheden skal man først speede op. Prøv kontakten "1 g hele vejen" og se forskellen.</p>';
+          : '<p><b>Fast fart:</b> Vi snyder lidt: Du har fuld fart fra første sekund. I virkeligheden skal man først speede op. Prøv kontakten "1 g hele vejen" under "Mere" i Styr, og se forskellen.</p>';
       }
       // "Hurtigere end lyset?" Tiden i dit ur er kortere, end lyset bruger (jeres spørgsmål 8. november 2026)
       const ud = enG ? T.enG(m.lysår) : T.rejse(m.lysår, ni).ud;
@@ -425,11 +390,6 @@ export default {
     }
 
     function visFase() {
-      if (lysurVist) {
-        const t = LYS_TRIN[lysTrin];
-        fase(t.titel, t.tekst, [lysTrin + 1, LYS_TRIN.length]);
-        return;
-      }
       const m = mål();
       const gange = gammaNu < 10 ? T.tal(gammaNu, 1) : T.rundTal(gammaNu);
       if (faseNr === 0) fase(null);
@@ -520,23 +480,6 @@ export default {
       tegnForløb(); // forløbets knapper følger med (fx er "Dit ur" kun aktiv undervejs)
     }
 
-    function visLysur(til) {
-      lysurVist = til;
-      ure.hidden = til;
-      lysur.hidden = !til;
-      if (til) {
-        lysTrin = 0;
-        lysFart = T.LYSUR_START;
-        lysSkyder.værdi = lysFart;
-        nulstilLy();
-        tegnLysur();
-      }
-      byg();
-      opdaterKnapper();
-      visFase();
-      visLigeNu();
-    }
-
     // Skibet er nået frem til målet eller hjem
     function vejSlut() {
       if (tilstand === 'ud') {
@@ -619,95 +562,6 @@ export default {
       }
     }
 
-    // ---------- Lysuret (trin for trin, jeres ønske 8. november 2026) ----------
-    // To billeder: til venstre uret i skibet (smalt) og til højre det samme ur set fra Jorden (bredt). I billedet fra
-    // Jorden flytter spejlene sig mod højre. Når de er ved at nå kanten, følger billedet med dem, og de lodrette streger
-    // (som står stille i forhold til Jorden) glider mod venstre i stedet. Så kommer spejlene aldrig ud af billedet.
-    const lysV = () => T.LYSUR_FARTER[lysTrin === LYS_TRIN.length - 1 ? lysFart : T.LYSUR_START];
-    function lysGeo() {
-      const W = lærred.clientWidth || 520;
-      const H = lærred.clientHeight || 220;
-      const lille = W < 400;
-      const skrift = lille ? 11 : 13;
-      const mellem = 10;
-      const ws = (W - mellem) * 0.32; // skibets billede
-      const we = W - mellem - ws; // billedet fra Jorden
-      const top = skrift + 16;
-      const L = Math.min(H - top - skrift - 14, we * 0.45); // samme afstand mellem spejlene i begge billeder
-      const sw = Math.min(40, ws * 0.3);
-      const xs0 = sw / 2 + 8; // spejlenes start i billedet fra Jorden
-      return { W, H, lille, skrift, mellem, ws, we, top, L, bund: top + L, sw, xs0, c: (2 * L) / Lys.LYS_TIK };
-    }
-    // Hvor meget billedet fra Jorden er rykket med spejlene
-    const lysForskud = (G) => Lys.jordForskud(ly, G);
-
-    const nulstilLy = () => Lys.nulstilUr(ly);
-
-    function tegnLysur() {
-      const G = lysGeo();
-      const { W, H, lille, skrift, mellem, ws, we, top, L: højde, sw } = G;
-      const g = Lys.klarLærred(lærred, W, H);
-      const v = lysV();
-      const gam = T.lysurGamma(v);
-      const r = lille ? 5 : 6;
-      const tekst = (s, x, y, farve = Lys.FARVE.tekst, vægt = 600) => Lys.tekst(g, s, x, y, { farve, vægt, str: skrift });
-      const tikTekst = (n) => `Tik: ${T.tal(Math.floor(n + 1e-9))}`;
-      const trekant = lysTrin === 2;
-
-      // Til venstre: i skibet står spejlene stille, og lyset går lige op og ned
-      g.save();
-      Lys.boks(g, 0, 0, ws, H, { aktiv: lysTrin === 0 });
-      tekst(lille ? 'I skibet' : 'Set i skibet', ws / 2, skrift + 3);
-      Lys.tegnSkibUr(g, ly, { x: ws / 2, top, L: højde, sw, lige: trekant, r });
-      if (trekant) tekst('lige vej', ws / 2, H - 5, Lys.FARVE.lige, 700);
-      else tekst(tikTekst(ly.skib), ws / 2, H - 5, Lys.FARVE.tik, 700);
-      g.restore();
-
-      // Til højre: set fra Jorden farer spejlene forbi, og lyset går skråt (zigzag)
-      g.save();
-      g.translate(ws + mellem, 0);
-      Lys.boks(g, 0, 0, we, H, { aktiv: lysTrin === 1 });
-      if (lysTrin === 0) {
-        // Første trin: kun uret i skibet
-        tekst('Set fra Jorden', we / 2, skrift + 3, 'rgba(201,214,238,0.45)');
-        tekst('kommer i næste trin ›', we / 2, top + højde / 2 + skrift / 2, 'rgba(201,214,238,0.45)');
-        g.restore();
-        return;
-      }
-      tekst(v > 0 ? 'Set fra Jorden: skibet farer forbi →' : 'Set fra Jorden: skibet står stille', we / 2, skrift + 3);
-      Lys.tegnJordUr(g, ly, { v, top, L: højde, sw, xs0: G.xs0, we, skrå: trekant, r });
-      if (!trekant) tekst(tikTekst(ly.jord), we / 2, H - 5, Lys.FARVE.tik, 700);
-      else if (ly.stille) {
-        tekst('lige vej', we * 0.27, H - 5, Lys.FARVE.lige, 700);
-        tekst(`${lille ? 'skrå' : 'skrå vej'}: ${T.tal(gam, 1).replace(',0', '')} gange så lang`, we * 0.66, H - 5, Lys.FARVE.skrå, 700);
-      }
-      g.restore();
-    }
-
-    function opdaterLysur(dt) {
-      if (ly.stille) return;
-      const G = lysGeo();
-      // Trinnet "Den skrå vej er længere" stopper, når lyset set fra Jorden er nået op til det øverste spejl
-      Lys.skridtUr(ly, dt, { v: lysV(), c: G.c, bredde: G.we, stopOppe: lysTrin === 2 });
-      tegnLysur();
-    }
-
-    // Gå til et trin i lysuret (bjælken: ‹ og "Næste")
-    function gåLysTrin(nr) {
-      lysTrin = Math.max(0, Math.min(LYS_TRIN.length - 1, nr));
-      nulstilLy();
-      byg();
-      opdaterKnapper();
-      visFase();
-      visLigeNu();
-      tegnLysur();
-    }
-    const lysSkyder = {
-      skyder: true, navn: 'Fart i lysuret', min: 0, max: T.LYSUR_FARTER.length - 1, værdi: T.LYSUR_START,
-      vis: (i) => T.lysurFartTekst(T.LYSUR_FARTER[i]),
-      ændring: (v) => { lysFart = v; nulstilLy(); visLigeNu(); },
-    };
-
     // ---------- Styringen ----------
     // Et skift af mål eller af 1 g starter forfra: En halv tur kan ikke regnes om til en anden slags tur. Styr-boksen
     // bygges ikke om her (det ville afbryde et træk i skyderen "Mål"). Bjælken følger selv med 4 gange i sekundet.
@@ -715,7 +569,7 @@ export default {
       if (tilstand !== 'hjemme') nulstil();
       else { visMål(); stilScene(); visFase(); visLigeNu(); }
     }
-    const flyvKnap = { get tekst() { return `🚀 Flyv til ${mål().kort}`; }, handling: flyv, deaktiv: flyver, skjul: () => lysurVist };
+    const flyvKnap = { get tekst() { return `🚀 Flyv til ${mål().kort}`; }, handling: flyv, deaktiv: flyver };
     // Målene er fire kontakter, hvor præcis én er tændt (jeres ønske 8. november 2026: målet skal ikke vælges med en
     // skyder). Et tryk på det mål, der allerede er valgt, slukker det ikke.
     const målKontakter = T.MÅL_RÆKKE.map((k, i) => ({
@@ -736,23 +590,22 @@ export default {
         visLigeNu();
       },
     };
+    // 1 g og "Set fra skibet" står under "Mere" i Styr (højst fem valg fremme, jeres valg 14. november 2026)
     const enGKontakt = {
-      tekst: '1 g hele vejen', til: false,
+      tekst: '1 g hele vejen', til: false, mere: true,
       skift: (til) => { enG = til; byg(); startForfra(); opdaterKnapper(); },
     };
     const skibKontakt = {
-      tekst: 'Set fra skibet', til: false,
+      tekst: 'Set fra skibet', til: false, mere: true,
       skift: (til) => { fraSkib = til; },
     };
     const styring = [];
-    // Styr-boksen efter tilstanden: Med 1 g er der ingen fast fart (skyderen er væk), og i lysuret kun farten
+    // Styr-boksen efter tilstanden: Med 1 g er der ingen fast fart (skyderen er væk)
     function byg() {
       const liste = [
         flyvKnap,
-        { tekst: '⏱ Vis lysuret', handling: () => visLysur(true), skjul: () => lysurVist },
-        { tekst: '↩ Tilbage til rejsen', handling: () => visLysur(false), skjul: () => !lysurVist },
-        { tekst: '↺ Forfra', handling: nulstil, skjul: () => lysurVist || tilstand === 'hjemme' },
-        ...(lysurVist ? (lysTrin === LYS_TRIN.length - 1 ? [lysSkyder] : []) : [...målKontakter, ...(enG ? [] : [fartSkyder]), enGKontakt, skibKontakt]),
+        { tekst: '↺ Forfra', handling: nulstil, skjul: () => tilstand === 'hjemme' },
+        ...målKontakter, ...(enG ? [] : [fartSkyder]), enGKontakt, skibKontakt,
       ];
       styring.splice(0, styring.length, ...liste);
     }
@@ -775,9 +628,8 @@ export default {
     }
     let harSetMitUr = false;
 
-    // Stiller målet og farten (som kontakterne og skyderen i Styr), slår 1 g, "Set fra skibet" og lysuret fra og starter forfra
+    // Stiller målet og farten (som kontakterne og skyderen i Styr), slår 1 g, "Set fra skibet" fra og starter forfra
     function stilTil(målId, n) {
-      if (lysurVist) visLysur(false);
       enG = false;
       enGKontakt.til = false;
       sætKontakt(enGKontakt.tekst, false);
@@ -860,8 +712,8 @@ export default {
       },
       slutTekst: () => 'Vælg "Leg frit" for at prøve andre mål, farter og "1 g hele vejen".',
       veje: [
-        // Til forløb 2 "Hvordan kan det ske?" findes (næste session): fænomenet med de fem scener (jeres valg 13. november 2026)
-        { tekst: '🔦 Hvordan kan det ske?', primær: true, gør: () => vælgFænomen('tidhvorfor') },
+        // Starter forløb 2 "Hvordan kan det ske?" (jeres valg 13. november 2026), også hvis det er taget før
+        { tekst: '🔦 Hvordan kan det ske?', primær: true, gør: () => { sætVentForløb(HVORDAN_KAN_DET_SKE.id); vælgFænomen('tidhvorfor'); } },
         { tekst: 'Leg frit' },
         { tekst: 'Er det målt?', hvorfor: 'tidMaalt' },
       ],
@@ -899,10 +751,6 @@ export default {
         centrum.rotation.y += dt * 0.04;
         if (trappist.visible) drejPlaneter(dt);
         skive.rotation.y += dt * 0.03;
-        if (lysurVist) {
-          opdaterLysur(dt * (hurtig ? 3 : 1)); // ⏩ går 3 gange hurtigere her, så man stadig kan følge lyset
-          return;
-        }
         // "Dit ur" stort: rejsen holder pause, sekundviseren hopper ét sekund ad gangen, og hjertet slår 72 gange i minuttet
         if (mitUrVist) {
           mitUrSek += dt;
@@ -933,8 +781,6 @@ export default {
         stoppet = true;
         stopForløb();
       },
-      // Lysuret går frem trin for trin med bjælken (‹ og "Næste")
-      trin: () => (lysurVist ? { nr: lysTrin, ialt: LYS_TRIN.length, næste: LYS_TRIN[lysTrin + 1]?.titel ?? '', gå: gåLysTrin } : null),
       test: {
         tilstand: () => tilstand,
         ni: () => ni,
@@ -951,7 +797,6 @@ export default {
         fart: () => ({ gamma: gammaNu, fart: fartNu, pos, andel: andel() }),
         scene: () => ({ klem, skib: skib.position.x, jord: jorden.klode.position.x, mål: målGrupper[T.MÅL_RÆKKE[målNr]].position.x, synlige: T.MÅL_RÆKKE.filter((k) => målGrupper[k].visible) }),
         startÅr: START_ÅR,
-        lysur: () => ({ vist: !lysur.hidden, skib: ly.skib, jord: ly.jord, x: ly.x, spor: ly.spor.length, bredde: lærred.clientWidth, trin: lysTrin, fart: lysV(), stille: ly.stille, forskud: lysForskud(lysGeo()) }),
       },
     };
   },

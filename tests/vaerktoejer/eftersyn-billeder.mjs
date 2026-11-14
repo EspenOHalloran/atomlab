@@ -166,7 +166,7 @@ const FÆNOMENER = [
   ['sorthul', [], 2, 'Kosmos: Sort hul (lysbøjningen)'],
   ['kvasar', [], 2, 'Kosmos: Kvasar'],
   ['tid', [], 2, 'Kosmos: Rejsen i tid (før afgang)'],
-  ['tidhvorfor', [], 2, 'Kosmos: "Hvorfor går tiden langsommere?", scene 1 (toget)'],
+  ['tidhvorfor', [], 2, 'Kosmos: "Hvordan kan det ske?", scene 1 (toget)'],
 ];
 if (med('faenomener')) {
   const page = await nySide('pc');
@@ -256,21 +256,21 @@ if (med('forloeb')) {
     }
   });
 
-  await prøv('"Hvorfor går tiden langsommere?", scene 2 og 5', async () => {
+  await prøv('"Hvordan kan det ske?", scene 2 og 5', async () => {
     await vælg(page, 'tidhvorfor');
     await page.waitForTimeout(3000);
     const næste = () => page.evaluate(() => atomlabTest.kosmos.trykPå('Næste'));
     const scene = () => page.evaluate(() => atomlabTest.kosmos.fænomen().scene());
     await næste();
     await page.waitForTimeout(VENT);
-    await skud(page, 'forl-tid-1', `"Hvorfor går tiden langsommere?": scene ${(await scene()) + 1} (lysuret)`);
+    await skud(page, 'forl-tid-1', `"Hvordan kan det ske?": scene ${(await scene()) + 1} (lysuret)`);
     await page.evaluate(() => atomlabTest.kosmos.spol(4));
     await page.waitForTimeout(2000);
-    await skud(page, 'forl-tid-2', `"Hvorfor går tiden langsommere?": scene ${(await scene()) + 1}, 4 sekunder senere`);
+    await skud(page, 'forl-tid-2', `"Hvordan kan det ske?": scene ${(await scene()) + 1}, 4 sekunder senere`);
     // Scenerne skal ses i rækkefølge: spol hver scene lidt frem, før "Næste"
     for (let i = 0; i < 3; i++) { await page.evaluate(() => atomlabTest.kosmos.spol(10)); await næste(); await page.waitForTimeout(800); }
     await page.waitForTimeout(VENT);
-    await skud(page, 'forl-tid-3', `"Hvorfor går tiden langsommere?": scene ${(await scene()) + 1} (rumtidskortet)`);
+    await skud(page, 'forl-tid-3', `"Hvordan kan det ske?": scene ${(await scene()) + 1} (rumtidskortet)`);
   });
   await page.context().close();
 }

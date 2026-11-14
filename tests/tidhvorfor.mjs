@@ -1,8 +1,8 @@
-// "Hvorfor går tiden langsommere?" (js/kosmos/tidhvorfor.js og det fælles lysur js/kosmos/lysur.js, T5a): farterne
-// lægges sammen med Einsteins formel (uden browser), og i Kosmos: fænomenet åbner uden konsolfejl lige efter Rejsen i
-// tid, bjælken har fem trin, og "Næste" går fra scene 1 til 2, kontakten Lygte skifter underteksten, 50 % + 50 %
+// "Hvordan kan det ske?" (før 14. november 2026 "Hvorfor går tiden langsommere?", js/kosmos/tidhvorfor.js og det
+// fælles lysur js/kosmos/lysur.js, T5a): farterne lægges sammen med Einsteins formel (uden browser), og i Kosmos:
+// fænomenet åbner uden konsolfejl (det står ikke i listen, men hører til "Tid"), bjælken har fem trin, og "Næste" går fra scene 1 til 2, kontakten Lygte skifter underteksten, 50 % + 50 %
 // giver 80 %, trekanten stopper på toppen og viser γ = 2 ved 87 %, lærredet dækker ikke Styr-boksen eller
-// underteksten (pc, tablet og telefon på højkant), Rejsen i tids lysur virker stadig, og knappen derfra åbner fænomenet.
+// underteksten (pc, tablet og telefon på højkant), og knapperne mellem Tid og fænomenet virker.
 // Scene 3 (T5b, med en fast byge): uden Einstein når ingen ned, med Einstein viser myonens ur ca. 1,32 µs ved ankomsten,
 // "Set fra myonen" klemmer luften til ca. 396 m og giver de samme overlevende, og skyderen styrer γ og luftens længde.
 // Scene 4 og 5 (T5c): lyset rammer enderne efter 0,25, 1,0 og 0,5 (L/c), den nye undertekst, vendepunktet (4, 5) giver
@@ -46,10 +46,10 @@ const dækker = () => E(async () => {
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForFunction(() => window.atomlabTest?.kosmos);
 const ids = await E(() => atomlabTest.kosmos.fænomener);
-tjek('"Hvorfor går tiden langsommere?" står lige efter Rejsen i tid', ids[ids.indexOf('tid') + 1] === 'tidhvorfor', ids.join(','));
+tjek('"Hvordan kan det ske?" står ikke i listen (det hører til "Tid")', ids.includes('tid') && !ids.includes('tidhvorfor'), ids.join(','));
 await E(() => atomlabTest.kosmos.vælg('tidhvorfor'));
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.scene);
-tjek('navnet, ikonet og scene 1', (await page.textContent('#kosmosNavn')) === 'Hvorfor går tiden langsommere?' && (await page.textContent('#kosmosIkon')) === '🔦' && (await E(() => atomlabTest.kosmos.fænomen().scene())) === 0);
+tjek('navnet, ikonet og scene 1', (await page.textContent('#kosmosNavn')) === 'Hvordan kan det ske?' && (await page.textContent('#kosmosIkon')) === '🔦' && (await E(() => atomlabTest.kosmos.fænomen().scene())) === 0);
 let t = await E(() => atomlabTest.kosmos.trin());
 let bj = await E(() => atomlabTest.kosmos.bjælke());
 tjek('bjælken har fem trin: ‹ (slået fra) og "Næste: Lysuret ›"', t?.ialt === 5 && t.nr === 0 && bj.map((x) => x.tekst).join('|') === '‹|Næste: Lysuret ›' && bj[0].slået, JSON.stringify([t, bj]));
@@ -283,26 +283,13 @@ await page.waitForTimeout(300);
 // Knappen "⏳ Rejsen i tid" i scene 5 åbner Rejsen i tid
 tjek('scene 5: knappen "⏳ Rejsen i tid" findes i siden', (await E(() => atomlabTest.kosmos.side())).knapper.some((k) => k.tekst.includes('Rejsen i tid') && k.findes));
 await E(() => atomlabTest.kosmos.trykISide('⏳ Rejsen i tid'));
-await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.lysur, null, { timeout: 5000 }).catch(() => {});
-tjek('knappen åbner Rejsen i tid', (await page.textContent('#kosmosNavn')) === 'Rejsen i tid');
+await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.ure, null, { timeout: 5000 }).catch(() => {});
+tjek('knappen åbner Rejsen i tid (punktet "Tid")', (await page.textContent('#kosmosNavn')) === 'Tid');
 
-// Rejsen i tids lysur virker stadig med det fælles lysur, og knappen derfra åbner det nye fænomen
-await E(() => atomlabTest.kosmos.vælg('tid'));
-await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.lysur);
-await E(() => atomlabTest.kosmos.trykPå('Vis lysuret'));
-await E(() => atomlabTest.kosmos.spol(3));
-const l = await E(() => atomlabTest.kosmos.fænomen().lysur());
-tjek('Rejsen i tid: lysuret tikker stadig 2 gange så tit i skibet ved 87 %, og billedet følger spejlene', l.vist && nær(l.skib / l.jord, 2, 0.001) && l.forskud > 0 && l.spor >= 3, JSON.stringify(l));
-// Lysurets sidste trin nævner det nye fænomen (med en knap i Lige nu)
-for (let i = 0; i < 4; i++) await E(() => document.querySelector('#kosmosBjælke .bjælke-næste').click());
-tjek('Rejsen i tid: lysurets sidste trin har knappen "🔦 Hvorfor går tiden langsommere?"', (await E(() => atomlabTest.kosmos.fænomen().lysur().trin)) === 4
-  && (await E(() => [...document.querySelectorAll('#kosmosForklaring [data-gaa="kosmos:tidhvorfor"]')].length)) === 1);
-await E(() => atomlabTest.kosmos.trykPå('Tilbage til rejsen'));
-const knap = (await E(() => atomlabTest.kosmos.side())).knapper.find((k) => k.tekst.includes('Se det trin for trin'));
-tjek('Rejsen i tid: knappen "🔦 Hvorfor? Se det trin for trin" i teksten findes', knap?.findes, JSON.stringify(knap));
-await E(() => atomlabTest.kosmos.trykISide('Se det trin for trin'));
+// Fra Tid åbner knappen "🔦 Hvordan kan det ske?" i siden fænomenet igen (lysurets trin i Rejsen i tid er væk)
+await E(() => atomlabTest.kosmos.trykISide('Hvordan kan det ske?'));
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.scene, null, { timeout: 5000 }).catch(() => {});
-tjek('knappen åbner "Hvorfor går tiden langsommere?"', (await page.textContent('#kosmosNavn')) === 'Hvorfor går tiden langsommere?');
+tjek('knappen "Hvordan kan det ske?" i Tid åbner fænomenet', (await page.textContent('#kosmosNavn')) === 'Hvordan kan det ske?');
 
 console.log(fejl.length ? 'Konsol: ' + fejl.join(' | ') : 'Konsol: ingen fejl');
 await b.close();

@@ -49,7 +49,7 @@ for (const skærm of ['vaerksted', 'system', 'fusion', 'reaktor', 'batteri', 'ko
   tjek(`#${skærm} bliver vist`, vist);
   ingenFejl(`#${skærm}`);
   if (skærm === 'kosmos' || skærm === 'solsystem') {
-    const ids = await page.evaluate((s) => atomlabTest[s].fænomener, skærm);
+    const ids = await page.evaluate((s) => atomlabTest[s].alle, skærm); // også dem, der ikke står i listen (hørerTil)
     for (const id of ids) {
       const valgt = await page.evaluate(({ s, id }) => { atomlabTest[s].vælg(id); return atomlabTest[s].valgt(); }, { s: skærm, id });
       await toBilleder();

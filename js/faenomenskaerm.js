@@ -47,6 +47,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
   const nøgler = NØGLER[skærm];
   const grupper = liste.map((x) => (x.lav ? { f: x, under: [] } : { under: [], ...x }));
   const FÆNOMENER = grupper.flatMap((g) => [g.f, ...g.under].filter(Boolean));
+  // Et fænomen med hørerTil (fx "Hvordan kan det ske?" under "Tid") står ikke i listen og tælles ikke med i "x af y
+  // set". Det åbnes med knapper (gå('kosmos:tidhvorfor')), og imens er knappen for det, det hører til, valgt.
+  const LISTET = FÆNOMENER.filter((f) => !f.hørerTil);
   const grupperet = grupper.some((g) => g.under.length);
 
   let set = new Set();
@@ -102,8 +105,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
     bundIVindue($('Vindue')).append(række);
 
     const boks = $('Liste');
-    if (!grupperet) for (const g of grupper) boks.append(valgKnap(g.f));
-    else {
+    if (!grupperet) {
+      for (const g of grupper) if (!g.f.hørerTil) boks.append(valgKnap(g.f));
+    } else {
       // Kloderne på én række (fx Jorden), og under dem et træ med den valgte klodes steder, måner og forsøg
       const kloder = document.createElement('div');
       kloder.className = 'sol-kloder';
@@ -263,7 +267,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
     if (før !== f) frigivBilleder(før);
     tidsknap.hurtig(kørende.hurtig ?? null);
     for (const b of sektion.querySelectorAll('.kosmos-valg[data-id]')) {
-      b.classList.toggle('valgt', b.dataset.id === f.id);
+      b.classList.toggle('valgt', b.dataset.id === (f.hørerTil ?? f.id));
       b.classList.toggle('ny', !set.has(b.dataset.id));
     }
     if (grupperet) {
@@ -278,8 +282,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       const l = boks.getBoundingClientRect();
       boks.scrollTo({ left: boks.scrollLeft + (b.left - l.left) - (l.width - b.width) / 2, behavior: ROLIG ? 'auto' : 'smooth' });
     }
-    const antal = FÆNOMENER.filter((x) => set.has(x.id)).length;
-    $('Set').textContent = antal < FÆNOMENER.length ? `${antal} af ${FÆNOMENER.length} set` : 'Alle set ★';
+    const antal = LISTET.filter((x) => set.has(x.id)).length;
+    $('Set').textContent = antal < LISTET.length ? `${antal} af ${LISTET.length} set` : 'Alle set ★';
     $('Ikon').textContent = f.ikon;
     $('Navn').textContent = f.navn;
     $('Undertitel').textContent = f.undertitel;
@@ -492,7 +496,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
     const boks = (titel, indhold, lag, klasse = '') => `<details class="lag-boks side-boks side-del ${klasse}"${lag ? ` data-lag="${lag}"` : ''}><summary><strong>${titel}</strong></summary>${indhold}</details>`;
     let html = side.kort ? `<div class="side-del side-kort"><p>${side.kort}</p></div>` : '';
     for (const e of side.emner ?? []) {
-      html += boks(e.titel, e.tekst + hvorfor(e.hvorfor), null, 'side-emne').replace('<details ', `<details ${e.kontakt ? `data-kontakt="${e.kontakt}" ` : ''}`);
+      // gemt: emnet står først, når dets kontakt eller skyder bruges (foldUd), så panelet starter med få spørgsmål
+      html += boks(e.titel, e.tekst + hvorfor(e.hvorfor), null, 'side-emne').replace('<details ', `<details ${e.kontakt ? `data-kontakt="${e.kontakt}" ` : ''}${e.gemt ? 'hidden ' : ''}`);
     }
     if (side.videre?.length) html += `<p class="side-videre"><span>Gå videre</span>${side.videre.join('')}</p>`;
     if (side.nørd) html += boks('For nørder', side.nørd, 'side-nørd');
@@ -512,6 +517,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
   function foldUd(navn) {
     const boks = [...$('Tekst').querySelectorAll('details.side-emne[data-kontakt]')].find((d) => navn.startsWith(d.dataset.kontakt));
     if (!boks) return;
+    boks.hidden = false; // et gemt emne kommer frem og bliver stående
     for (const d of $('Tekst').querySelectorAll('details.side-emne[data-auto]')) {
       if (d === boks) continue;
       delete d.dataset.auto;
@@ -638,10 +644,25 @@ export function lavFænomenSkærm({ skærm, liste }) {
 
   // Styringen fra fænomenet: Kontakter (til/fra) og skydere står i Styr-boksen, og handlingerne (knapper, der
   // starter noget, fx "💥 Send en solstorm") står i bjælken. Et punkt med skjul() vises ikke, når den giver true.
+  // Et punkt med mere: true står foldet under "Mere" nederst (højst fem valg fremme, Tid 14. november 2026). Om "Mere"
+  // er foldet ud, huskes, når Styr-boksen bygges om (fx når en kontakt derinde slås til).
+  let mereÅben = false;
   function lavStyring() {
-    const boks = $('Styr').querySelector('.styr-indhold');
-    boks.replaceChildren();
+    const styrBoks = $('Styr').querySelector('.styr-indhold');
+    styrBoks.replaceChildren();
+    let mere = null;
     for (const s of kørende?.styring ?? []) {
+      let boks = styrBoks;
+      if (s.mere) {
+        if (!mere) {
+          mere = document.createElement('details');
+          mere.className = 'styr-mere';
+          mere.open = mereÅben;
+          mere.innerHTML = '<summary>Mere</summary><div></div>';
+          mere.addEventListener('toggle', () => { mereÅben = mere.open; });
+        }
+        boks = mere.lastChild;
+      }
       if (s.skyder) {
         const div = document.createElement('label');
         div.className = 'skyder-boks';
@@ -655,6 +676,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
           s.værdi = Number(input.value);
           vis.textContent = s.vis ? s.vis(s.værdi) : s.værdi;
           s.ændring(s.værdi);
+          foldUd(s.navn); // et emne om skyderen (kontakt: navnet) folder sig ud, som ved en kontakt
         });
         // Fænomenet kan selv flytte skyderen (fx når Jorden kører rundt i Årstidernes første trin)
         s.sæt = (v) => {
@@ -687,7 +709,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
         boks.append(b);
       }
     }
-    $('Styr').hidden = !boks.children.length;
+    if (mere) styrBoks.append(mere);
+    $('Styr').hidden = !styrBoks.children.length;
     bjælkeNøgle = null; // handlingerne kan have skiftet
     tjekKnapper();
   }
@@ -803,7 +826,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
   // Adgang for automatiske tests
   function testAdgang() {
     return {
-      fænomener: FÆNOMENER.map((f) => f.id),
+      fænomener: LISTET.map((f) => f.id), // dem i listen (som FÆNOMEN_IDER i js/data/faenomener.js)
+      alle: FÆNOMENER.map((f) => f.id), // også dem med hørerTil
       vælg: (id) => vælg(id),
       valgt: () => valgt?.id,
       // Teksterne på knapperne i bjælken og navnene i Styr-boksen
@@ -817,7 +841,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
         return [...$('Bjælke').querySelectorAll('button')].map((b) => ({ tekst: b.textContent.trim(), slået: b.disabled }));
       },
       // Punkterne i Styr-boksen: { slags: 'kontakt' | 'skyder' | 'andet', navn, til }
-      styr: () => [...$('Styr').querySelector('.styr-indhold').children].map((e) => ({
+      // (også dem under "Mere", i rækkefølge)
+      styr: () => [...$('Styr').querySelector('.styr-indhold').children].flatMap((e) => (e.classList.contains('styr-mere') ? [...e.lastChild.children] : [e])).map((e) => ({
         slags: e.classList.contains('kontakt') ? 'kontakt' : e.classList.contains('skyder-boks') ? 'skyder' : 'andet',
         navn: (e.classList.contains('kontakt') ? e : e.querySelector('.skyder-top > span'))?.textContent.trim(),
         til: e.classList.contains('kontakt') ? e.classList.contains('til') : undefined,
@@ -850,7 +875,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
           tal: [...$('Tal').querySelectorAll('dt')].map((x) => x.textContent),
           kort: boks.querySelector('.side-kort')?.textContent.trim() ?? '',
           tekst: boks.textContent.replace(/\s+/g, ' '),
-          emner: [...boks.querySelectorAll('details.side-emne')].map((d) => ({ titel: titel(d), åben: d.open, kontakt: d.dataset.kontakt ?? null })),
+          emner: [...boks.querySelectorAll('details.side-emne')].map((d) => ({ titel: titel(d), åben: d.open, kontakt: d.dataset.kontakt ?? null, gemt: d.hidden })),
           bokse: [...boks.querySelectorAll('details.side-boks')].map(titel),
           sidst: boks.lastElementChild ? titel(boks.lastElementChild) : null,
           knapper: [...sektion.querySelectorAll('.højre-panel .side-knap')].map((b) => ({

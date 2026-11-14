@@ -121,3 +121,23 @@ Fælderne for F1-F3 har Fable allerede skrevet nederst i [fakta-faelder.md](../e
 | "Næsten præcis som regnet ud" | **Rettet** | Mod øst −59 ± 10 ns mod forudsagt −40 ± 23 ns. Nu "næsten som regnet ud" |
 | GPS: ellers ca. 10 km fejl om dagen | OK | +38,5 µs/døgn · c ≈ 11,5 km (som i Rumtid) |
 | Nørd: Frisch og Smith, bjerg i USA, begyndelsen af 1960'erne; −59 og +273 ns; GPS hurtigere af højden, langsommere af farten | OK | fakta-tid.md, afsnit 10-12 (+45,7 og −7,2 µs/døgn) |
+
+## Forløb 2 "Hvordan kan det ske?" (14. november 2026, `/faktatjek`)
+*Teksterne i `js/data/forloeb/tid.js` (`HVORDAN_KAN_DET_SKE`), de to nye ord i `js/data/ordbog.js`, siden i `js/kosmos/tidhvorfor.js` (flyttet rundt, ikke skrevet om) og hjælpen i Kosmos. Tallene er regnet i `tests/tid-forloeb2.mjs`. Ingen ny websøgning: Alt står med kilde i [fakta-tid.md](../fakta-tid.md) og [fakta-tid/hvorfor-langsommere.md](../fakta-tid/hvorfor-langsommere.md).*
+
+| Påstand | Dom | Kilde |
+|---|---|---|
+| B1: 100 km/t + 50 km/t = 150 km/t set fra perronen | OK | Hverdagsfart (fejlen er ca. 6 · 10⁻¹³ km/t, står under For nørder) |
+| B2: Lyset fra et tog ved halv lysfart har lysets fart, ikke mere | OK | fakta-tid.md, afsnit 1 |
+| B3: Set udefra går lyset i lysuret på skrå | OK | fakta-tid.md, afsnit 3 |
+| B4: Ved 87 % er den skrå vej dobbelt så lang, og hvert tik tager dobbelt så lang tid set udefra | OK | γ = 2 ved √3/2 (86,6 %, står i Ærligt talt) |
+| B5: Myonerne burde gå i stykker højt oppe | OK | c·τ = 659 m mod 15 km (fakta-tid.md) |
+| B5: Ca. halvdelen når ned | OK | e^(−15/24,9) = 0,55 (forløbet trækker en byge med 11-15 af 24) |
+| B5: Deres ure går 38 gange langsommere set fra os | OK | 4 GeV giver γ ≈ 38 (arXiv:1906.03934, regnet efter) |
+| B5: De flyver gennem dig lige nu | OK | Ca. 100 i sekundet pr. m² (arXiv:1906.03934, hvorfor-langsommere.md) |
+| Kernesætningen ("Det er målt") | OK | Myonerne og CERN 1977 (hvorfor-langsommere.md) |
+| Ordbogen, lysets fart: ca. 300.000 km/s i tomt rum, intet, der vejer noget, når den, den samme for alle | OK | 299.792,458 km/s (SI), fakta-tid.md, afsnit 1. "Der vejer noget" er med, for lyset selv har farten |
+| Ordbogen, lysur: et tænkt ur med et lysglimt mellem to spejle | OK | Lærebogens tankeforsøg |
+| Siden, lag 2: 50 µs og 1,3 µs, ca. 400 m, 5² − 4² = 3² | OK | Fra T5 (tabellen i hvorfor-langsommere.md) |
+
+Ingen nye fælder.

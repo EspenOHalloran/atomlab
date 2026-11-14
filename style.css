@@ -1552,7 +1552,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .tid-sløret { fill: rgba(255, 210, 122, 0); transition: fill 0.4s; }
 .tid-ur-jord.løbsk .tid-sløret { fill: rgba(255, 210, 122, 0.45); }
 .tid-ur-jord.løbsk .tid-viser { opacity: 0.2; }
-.tid-ure[hidden], .tid-lysur[hidden] { display: none; }
+.tid-ure[hidden] { display: none; }
 /* De tegnede figurer ved hjemkomsten (js/kosmos/tidfigur.js): de står oven på hvert ur, så urene ikke flytter sig */
 .tid-ur { position: relative; }
 .tid-figur { position: absolute; bottom: 100%; left: 14px; height: 78px; pointer-events: none; }
@@ -1586,8 +1586,6 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .tid-figur:not([hidden]) { animation: tid-figur-ind 0.6s ease-out both; }
 }
 @keyframes tid-figur-ind { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.tid-lysur { width: min(560px, 100%); }
-.tid-lysur canvas { display: block; width: 100%; aspect-ratio: 2.4; height: auto; }
 @media (max-width: 560px), (max-height: 500px) {
   .tid-ure { gap: 6px; }
   .tid-ur { min-width: 0; padding: 4px 8px; }
@@ -1601,7 +1599,6 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .tid-hjerte { width: 30px; height: 27px; }
   .tid-mit-tekst { font-size: 13.5px; }
   .tid-ur-jord .tid-figur { right: 8px; }
-  .tid-lysur canvas { aspect-ratio: 2.1; }
 }
 .tidh { max-width: 100%; /* Hvorfor går tiden langsommere? (js/kosmos/tidhvorfor.js): bredden og højden sættes i JS */ }
 .tidh canvas { display: block; width: 100%; height: 300px; }
@@ -1634,6 +1631,11 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .styr:not([open]) > summary { padding: 7px 12px; color: var(--tekst); font-size: 13px; }
 .styr-indhold { display: flex; flex-direction: column; gap: 5px; padding: 0 8px 8px; }
 .styr .skyder-boks { padding: 4px 2px 0; gap: 2px; background: none; font-size: 12.5px; }
+/* "Mere" i Styr: højst fem valg står fremme, resten er foldet (Tid, 14. november 2026) */
+.styr-mere { border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 3px; }
+.styr-mere > summary { cursor: pointer; padding: 4px 8px; font-size: 12.5px; color: var(--svag); }
+.styr-mere > div { display: flex; flex-direction: column; gap: 5px; padding-top: 3px; }
+.side-emne[hidden] { display: none; }
 /* Kontakterne: tændt er fyldt med ✓, slukket er en tynd kant (de ligner aldrig en knap) */
 .kontakt { display: flex; align-items: center; gap: 8px; width: 100%; padding: 5px 8px; border: 1px solid transparent; border-radius: 9px; background: none; color: var(--tekst); font: inherit; font-size: 13.5px; text-align: left; cursor: pointer; }
 .kontakt:hover { background: rgba(255, 255, 255, 0.06); }

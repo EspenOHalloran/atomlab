@@ -109,22 +109,27 @@ tjek('"Det så du": kernesætningen, vejene "Hvordan kan det ske?", "Leg frit" o
 await page.screenshot({ path: `${UD}/slut.png` });
 await page.click('#kosmos .fl-vej >> nth=2');
 tjek('"Er det målt?" viser kortet', (await E(() => atomlabTest.hvorfor.vist())) === HVORFOR.tidMaalt.spørgsmål);
-await page.click('#kosmos .fl-vej >> nth=1');
+// Vejen "Hvordan kan det ske?" starter forløb 2 (jeres valg 13. november 2026). Springes det over, er Styr og
+// panelerne tilbage (som efter "Leg frit")
+await page.click('#kosmos .fl-vej >> nth=0');
+await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.kørerForløb?.() === 'hvordan-kan-det-ske', null, { timeout: 10000 });
+tjek('"Hvordan kan det ske?" starter forløb 2 i fænomenet af samme navn', (await page.textContent('#kosmosNavn')) === 'Hvordan kan det ske?' && (await E(() => atomlabTest.kosmos.fænomen().forløb.trin())) === 'kast');
+await page.click('#kosmos .forløb-linje [data-nav="spring"]');
 await page.waitForTimeout(300);
-tjek('"Leg frit": linjen er væk, og Styr og panelerne er tilbage', !(await synlig('#kosmos .forløb-linje')) && (await synlig('#kosmosStyr')) && (await synlig('#kosmos .højre-panel')) && !(await F()).kører);
+tjek('sprunget over: linjen er væk, og Styr og panelerne er tilbage', !(await synlig('#kosmos .forløb-linje')) && (await synlig('#kosmosStyr')) && (await synlig('#kosmos .højre-panel')) && !(await E(() => atomlabTest.kosmos.fænomen().kørerForløb())));
 
-// Fra hjælpen, og vejen til "Hvorfor går tiden langsommere?"
+// Fra hjælpen
 await E(() => atomlabTest.kosmos.vælg('bigbang'));
 await page.click('#kosmosHjælp');
 await page.click('#hjælpKosmos [data-forloeb="rejsen-i-tid"]');
 await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.kørerForløb?.() === 'rejsen-i-tid', null, { timeout: 10000 });
-tjek('hjælpen starter forløbet igen i Rejsen i tid', (await page.textContent('#kosmosNavn')) === 'Rejsen i tid' && (await F()).trin === 'flyv');
+tjek('hjælpen starter forløbet igen i Tid', (await page.textContent('#kosmosNavn')) === 'Tid' && (await F()).trin === 'flyv');
 await page.click('#kosmos .forløb-linje [data-nav="spring"]');
 
 // Linket ?forloeb=rejsen-i-tid#kosmos vælger Rejsen i tid, også når et andet fænomen var valgt
 await page.goto(`${ADRESSE}/?test&forloeb=rejsen-i-tid#kosmos`);
 await page.waitForFunction(() => atomlabTest.kosmos?.fænomen()?.kørerForløb?.() === 'rejsen-i-tid', null, { timeout: 15000 });
-tjek('linket starter forløbet i Rejsen i tid og fjernes fra adressen', (await page.textContent('#kosmosNavn')) === 'Rejsen i tid' && !page.url().includes('forloeb='), page.url());
+tjek('linket starter forløbet i Tid og fjernes fra adressen', (await page.textContent('#kosmosNavn')) === 'Tid' && !page.url().includes('forloeb='), page.url());
 
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join(' | '));
 await b.close();

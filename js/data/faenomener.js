@@ -1,8 +1,9 @@
 // Fænomenerne i Kosmos og Solsystemet som id'er, så menuen kan tælle "x af y set" uden at hente skærmene (10a).
 // Rækkefølgen er den samme som i js/kosmos.js og js/solsystem.js. Testen skaermliste.mjs tjekker, at listerne passer.
+// Kun dem i listen: "Hvordan kan det ske?" (tidhvorfor) hører til "Tid" og tælles ikke med (14. november 2026).
 
 export const FÆNOMEN_IDER = {
-  kosmos: ['bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tidhvorfor', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
+  kosmos: ['bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
   solsystem: ['solen', 'solstorm', 'solensfremtid', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun'],
 };
 
