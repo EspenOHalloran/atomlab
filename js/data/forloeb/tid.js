@@ -42,7 +42,7 @@ export const REJSEN_I_TID = {
     {
       // Jeres valg 13. november 2026: to ture til samme mål, så kun farten skifter
       id: 'farten',
-      spørg: 'Er det farten, der gør det? Flyv til Alpha Centauri, godt 4 lysår væk, med halv lysfart. Bliver der stor forskel?',
+      spørg: 'Er det farten? Flyv med halv lysfart til Alpha Centauri, godt 4 lysår væk. Bliver der stor forskel?',
       gæt: {
         valg: [
           { tekst: 'Stor forskel', efter: 'Flyv med 50 %, og bagefter med 99,99 % for at sammenligne.' },
