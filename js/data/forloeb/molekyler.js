@@ -1,7 +1,7 @@
 // Forløbet "Når atomer mødes" i Molekyler (Serie 1, nr. 3). Ren data uden Three.js, så det kan testes i Node.
 // Drejebogen står i docs/drejebog-molekyler.md (afsnit 2) og skabelonen i docs/fable/E3-forloeb.md.
 // Trin 1-2 foregår i "Del elektroner" og trin 3-4 i "Giv elektroner". Det, der rører scenen, står i js/molekyler-skaerm.js
-// under samme trin-id. Fakta er tjekket i drejebogen (afsnit 6) og i docs/fakta-molekyler/forloeb.md.
+// under samme trin-id. Fakta er tjekket i drejebogen (afsnit 6) og i docs/fakta-molekyler/faktatjek-forloeb.md.
 
 export const MØDES = {
   id: 'molekyler',

@@ -1,6 +1,6 @@
 # Prompt: Molekyler som egen del med forløbet "Når atomer mødes"
 
-*Skrevet 14. november 2026, efter at drejebogen er rettet efter Fables tjek, og I har svaret på spørgsmålene (anbefalingerne til alle fire). Sporet Molekyler, Serie 1 nr. 3 i [koereplan.md](koereplan.md). Venter på jeres go.*
+*Skrevet 14. november 2026, efter at drejebogen er rettet efter Fables tjek, og I har svaret på spørgsmålene (anbefalingerne til alle fire). Sporet Molekyler, Serie 1 nr. 3 i [koereplan.md](koereplan.md). **Lavet 14. november 2026** (begge PR'er, se [lige-nu/molekyler.md](lige-nu/molekyler.md)).*
 
 ## Sådan startes den
 - **Ny session med Opus, effort høj** (kode, der kommer med i programmet, og danske tekster med fakta).
