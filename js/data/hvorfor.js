@@ -125,13 +125,14 @@ export const HVORFOR = {
   // Byttebørsen (Molekyler M1). Kilder: docs/fakta-molekyler.md, afsnit 1, 6 og 7.
   bytteKoster: {
     spørgsmål: 'Hvorfor koster det at flytte elektronen?',
-    svar: 'Natriums kerne trækker i sin yderste elektron, så det kræver 5,1 eV (elektronvolt) at rive den løs. Chlor trækker også, så den giver 3,6 eV tilbage, når den får elektronen. Det er mindre, end det kostede. To frie atomer taber altså 1,5 eV ved at bytte. Gevinsten kommer bagefter, når Na⁺ og Cl⁻ trækker i hinanden.\n\nDerfor passer "atomer vil gerne have en fuld skal" ikke alene. Den fulde skal forklarer, hvilke ioner der bliver (Na⁺ og Cl⁻), men ikke hvorfor det sker.',
+    svar: 'Natriums kerne trækker i sin yderste elektron, så det koster energi at rive den løs. Chlor trækker også, så det giver energi tilbage, når det får elektronen. Men chlor giver kun godt to tredjedele tilbage af det, det kostede. To frie atomer taber altså ved at bytte. Gevinsten kommer bagefter, når Na⁺ og Cl⁻ trækker i hinanden.\n\nDerfor passer "atomer vil gerne have en fuld skal" ikke alene. Den fulde skal forklarer, hvilke ioner der bliver (Na⁺ og Cl⁻), men ikke hvorfor det sker.',
     næste: 'bytteBetaler',
-    nørd: 'De 5,14 eV hedder ioniseringsenergien (NIST), og de 3,61 eV hedder chlors elektronaffinitet. En elektronvolt er den energi, en elektron får af 1 volt. Det passer til atomer: Synligt lys har ca. 2-3 eV pr. lysglimt (foton).',
+    nørd: 'At rive elektronen løs koster 5,14 eV (elektronvolt). Det hedder ioniseringsenergien (NIST). Chlor giver 3,61 eV tilbage, og det hedder chlors elektronaffinitet. Forskellen er 1,53 eV. En elektronvolt er den energi, en elektron får af 1 volt. Det passer til atomer: Synligt lys har ca. 2-3 eV pr. lysglimt (foton).',
   },
   bytteBetaler: {
     spørgsmål: 'Hvad betaler så?',
-    svar: 'Plus og minus trækker i hinanden. Jo tættere Na⁺ og Cl⁻ kommer, jo mere energi bliver frigjort. Når de er ca. 9 Å fra hinanden, har tiltrækningen betalt de 1,5 eV, og helt inde ved hinanden er der frigjort ca. 4,3 eV mere, end det kostede. I et saltkorn har hver ion seks naboer med modsat ladning, så der bliver frigjort endnu mere.',
+    svar: 'Plus og minus trækker i hinanden. Jo tættere Na⁺ og Cl⁻ kommer, jo mere energi bliver frigjort. Når de ligger helt inde ved hinanden, har tiltrækningen givet næsten fire gange så meget, som der manglede. I et saltkorn har hver ion seks naboer med modsat ladning, så der bliver frigjort endnu mere.',
+    nørd: 'Der manglede 1,53 eV. Ved ca. 9,4 Å har tiltrækningen betalt dem, og ved 2,36 Å, hvor parret ligger, har den givet ca. 5,8 eV. Så er parret 4,26 eV bedre stillet end de to frie atomer. I krystallen giver hvert par 8,15 eV (gitterenergien).',
   },
   bytteIon: {
     spørgsmål: 'Hvad er en ion?',
@@ -141,7 +142,7 @@ export const HVORFOR = {
   bygBinder: {
     spørgsmål: 'Hvorfor holder atomerne sammen?',
     svar: 'To atomer deler et par elektroner. Parret sidder mellem de to kerner, og begge kerner trækker i det. Derfor holder atomerne sammen. Det kaldes en kovalent binding.\n\nEt atom kan lave lige så mange bindinger, som det har elektroner uden partner: H én, O to, N tre og C fire. Deler to atomer to eller tre par, er det en dobbelt- eller tripelbinding.',
-    nørd: 'Atomer i 2. række af det periodiske system (C, N og O) ender med 8 elektroner omkring sig, når man tæller de delte par med (oktetreglen). Hydrogen ender med 2. Det er en tommelfingerregel. Den passer på alle molekylerne her, men den kan ikke se, at oxygen-molekylet O₂ i virkeligheden har to elektroner uden makker.',
+    nørd: 'Atomer i 2. række af det periodiske system (C, N og O) ender med 8 elektroner omkring sig, når man tæller de delte par med (oktetreglen). Hydrogen ender med 2. Det er en tommelfingerregel. Den passer på alle molekylerne her, men den kan ikke se, at oxygen-molekylet O₂ i virkeligheden har to elektroner uden partner. Og to H-atomer binder kun, når deres elektroner har modsat spin (en slags indbygget drejning). I tre ud af fire møder skubber de hinanden væk.',
   },
   bygForm: {
     spørgsmål: 'Hvorfor er vand bøjet?',

@@ -7,7 +7,7 @@
 // M3: knappen "Knaldgas" viser boksen med 4 H₂ og 2 O₂ i stedet for byggeriet (js/knaldgas.js). Det byggede bliver.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, stopKamera, begrænsDrejning } from './scene3d.js';
+import { verden, sætVindue, passerTil, stopKamera, begrænsDrejning, ROLIG } from './scene3d.js';
 import { MolekyleTegning, KERNE_R } from './molekyle3d.js';
 import * as D from './data/molekyler-byg.js';
 import { lyd } from './lyd.js';
@@ -54,6 +54,15 @@ let panelTid = 0;
 let sidsteRadius = 0;
 let pileKontakt = null;
 let panelPolær = '–'; // det, panelet siger under "Polært" (til testene)
+// Forløbet "Når atomer mødes" (js/molekyler-skaerm.js): { kunTil, vink(tekst) }. kunTil: atomerne må kun binde til det
+// stof (H kun på O i trin 2). vink: forløbets linje forklarer, hvorfor et atom blev skubbet væk (underteksterne er skjult).
+let forløbRegel = null;
+let træksStartet = 0; // så mange træk, siden trinet startede (hånden i trin 1 vises kun, hvis man ikke har trukket)
+let drej = null; // vandet drejes, så man ser vinklen forfra: { liste, venter, tid, varighed, p0, c, q }
+const DREJ_TID = 1.2; // sekunder
+const hjælpQ = new THREE.Quaternion();
+const hjælpM = new THREE.Matrix4();
+const hjælpM2 = new THREE.Matrix4();
 let drejet = 0; // grader: så meget er kameraet drejet, siden metan blev færdig (opgaven "Byg metan, og drej den")
 const sidsteSyn = new THREE.Vector3();
 let harSyn = false;
@@ -90,8 +99,8 @@ export function lavBygMolekyler() {
   lavKnaldgas({ tilbage: () => slutKnaldgas(), stjerner: () => opdaterStjerner() });
 }
 
-// Knaldgas (M3): byggeriet står stille imens, og "Tilbage til byggeriet" viser det igen, som det var
-function åbnKnaldgas() {
+// Knaldgas (M3): byggeriet står stille imens, og "Tilbage til byggeriet" viser det igen, som det var (også forløbets vej 2)
+export function åbnKnaldgas() {
   if (!aktiv) return;
   stopBygMolekyler();
   rydBeskeder();
@@ -464,6 +473,7 @@ function lavTræk() {
 }
 
 function startTræk(i, id, finger) {
+  træksStartet++;
   træk = { id, i, finger, strakte: [], mål: null, x: 0, y: 0 };
   form.fast = i;
   sidstRørt = i;
@@ -509,6 +519,9 @@ function findMål(t) {
     }
   }
   if (bedst < 0) return null;
+  // Forløbet: kun bindinger til ét stof (rød ring, og atomet skubbes væk)
+  const kun = forløbRegel?.kunTil;
+  if (kun && atomer[i].symbol !== kun && atomer[bedst].symbol !== kun) return { atom: bedst, ok: false, grund: 'kunTil' };
   // Uden de bindinger, der går i stykker, når man slipper
   const tilbage = bånd.filter(([a, b]) => !((a === i && t.strakte.includes(b)) || (b === i && t.strakte.includes(a))));
   return { atom: bedst, ...D.kanBinde(atomer, tilbage, i, bedst) };
@@ -547,19 +560,28 @@ function slipAtom(t, x, y, afbrudt) {
   } else if (m && m.grund === 'fuld') {
     // Det ulovlige: atomet skubbes væk, og der står hvorfor
     const fuld = m.fuld;
-    const væk = sub3(form.pos[i], form.pos[m.atom]);
-    const l = Math.hypot(...væk) || 1;
-    const afstand = D.længde(atomer[i].symbol, atomer[m.atom].symbol) + 2.2;
-    skub = {
-      i, tid: 0,
-      fra: [...form.pos[i]],
-      til: form.pos[m.atom].map((v, q) => v + (væk[q] / l) * afstand),
-    };
-    form.fast = i;
-    lyd.nej();
+    skubVæk(i, m.atom);
     visBesked({ titel: `${navn(atomer[fuld].symbol)} kan ikke binde mere`, tekst: hvorforFuld(atomer[fuld].symbol), type: 'info' });
+    forløbRegel?.vink(`${navn(atomer[fuld].symbol)} har ikke flere elektroner uden partner.`);
+  } else if (m && m.grund === 'kunTil') {
+    skubVæk(i, m.atom);
+    forløbRegel?.vink(`Prøv at sætte det på ${navn(forløbRegel.kunTil).toLowerCase()}.`);
   }
   ændret();
+}
+
+// Atom i skubbes væk fra atom j (på 0,35 s)
+function skubVæk(i, j) {
+  const væk = sub3(form.pos[i], form.pos[j]);
+  const l = Math.hypot(...væk) || 1;
+  const afstand = D.længde(atomer[i].symbol, atomer[j].symbol) + 2.2;
+  skub = {
+    i, tid: 0,
+    fra: [...form.pos[i]],
+    til: form.pos[j].map((v, q) => v + (væk[q] / l) * afstand),
+  };
+  form.fast = i;
+  lyd.nej();
 }
 
 const sub3 = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -594,7 +616,8 @@ function opdater(dt) {
     }
     sover = false;
   }
-  if (!pause.til && !sover && form.struktur) {
+  const drejer = drej && !pause.til && opdaterDrej(dt);
+  if (!pause.til && !sover && !drejer && form.struktur) {
     const n = Math.min(MAX_SKRIDT_PR_BILLEDE, Math.max(1, Math.round(tiden * SKRIDT_PR_SEKUND)));
     let størst = 0;
     for (let k = 0; k < n; k++) størst = Math.max(størst, D.skridt(form));
@@ -882,6 +905,7 @@ export function startBygMolekyler() {
 
 export function stopBygMolekyler() {
   stopKnaldgas();
+  if (drej) slutDrej();
   aktiv = false;
   rod.visible = false;
   verden.opdateringer.delete(opdater);
@@ -902,6 +926,109 @@ export function stopBygMolekyler() {
   verden.renderer.domElement.style.cursor = '';
   pause.sæt('spil');
 }
+
+// ---------- Forløbet "Når atomer mødes" (trin 1 og 2, js/molekyler-skaerm.js) ----------
+// Vandet drejes, så det ligger i skærmens plan med oxygen øverst og de to H under (man ser vinklen forfra). Først når formen
+// er faldet på plads (højst 2,5 s), så vinklen er den rigtige. Formen står stille imens (den er ens fra alle sider).
+function opdaterDrej(dt) {
+  if (drej.tid < 0) {
+    drej.venter += dt;
+    if (!sover && drej.venter < 2.5) return false;
+    const v = (i) => new THREE.Vector3(...form.pos[i]);
+    const o = drej.liste.find((i) => atomer[i].symbol === 'O');
+    const h = drej.liste.filter((i) => i !== o);
+    if (o == null || h.length !== 2) return slutDrej();
+    const O = v(o);
+    const a = v(h[0]).sub(O);
+    const b = v(h[1]).sub(O);
+    const n = new THREE.Vector3().crossVectors(a, b).normalize();
+    const ned = a.clone().add(b).normalize(); // fra O ned mod midten mellem de to H
+    const nt = new THREE.Vector3().subVectors(verden.kamera.position, verden.styring.target).normalize();
+    if (n.dot(nt) < 0) n.negate();
+    const op = new THREE.Vector3().setFromMatrixColumn(verden.kamera.matrixWorld, 1);
+    const bt = op.negate().addScaledVector(nt, op.dot(nt)).normalize(); // skærmens "ned" i molekylets nye plan
+    hjælpM.makeBasis(ned, new THREE.Vector3().crossVectors(n, ned), n);
+    hjælpM2.makeBasis(bt, new THREE.Vector3().crossVectors(nt, bt), nt);
+    hjælpM2.multiply(hjælpM.transpose());
+    drej.q.setFromRotationMatrix(hjælpM2);
+    drej.p0 = drej.liste.map(v);
+    drej.c = drej.p0.reduce((s, p) => s.add(p), new THREE.Vector3()).divideScalar(drej.liste.length);
+    drej.tid = 0;
+  }
+  drej.tid += dt;
+  const t = Math.min(1, drej.tid / drej.varighed);
+  hjælpQ.identity().slerp(drej.q, t * t * (3 - 2 * t));
+  drej.liste.forEach((i, k) => {
+    hjælpV.subVectors(drej.p0[k], drej.c).applyQuaternion(hjælpQ).add(drej.c);
+    hjælpV.toArray(form.pos[i]);
+  });
+  if (t >= 1) slutDrej();
+  return true;
+}
+
+function slutDrej() {
+  drej = null;
+  sover = false;
+  stille = 0;
+  return false;
+}
+
+// Den færdige gruppe, der er det kendte molekyle id (fx 'h2' eller 'vand'), eller null
+const færdigGruppe = (id) => status.find((st) => st.færdig && st.kendt?.id === id) ?? null;
+
+export const forløbByg = {
+  // Atomerne til et trin, uden bindinger: [{ symbol, x, y }] i Å (x til højre og y op på skærmen). regel: { kunTil, vink }
+  sæt(liste, regel = null) {
+    forløbRegel = regel;
+    drej = null;
+    ryd();
+    for (const a of liste) nytAtom(a.symbol, [a.x, a.y, 0]);
+    sidstRørt = -1;
+    træksStartet = 0;
+    sidsteRadius = -10;
+    zoomEfterBehov();
+  },
+  regel(r) { forløbRegel = r; },
+  færdig: (id) => Boolean(færdigGruppe(id)),
+  trukket: () => træksStartet,
+  // "Vis mig": bindingerne, der mangler (H₂: de to H. Vand: de H, der ikke sidder på O, op til to)
+  visMig(id) {
+    if (færdigGruppe(id)) return;
+    if (id === 'h2') {
+      const h = atomer.map((a, i) => (a.symbol === 'H' ? i : -1)).filter((i) => i >= 0).slice(0, 2);
+      if (h.length === 2 && !bånd.length) bånd.push([h[1], h[0]]);
+    } else {
+      const o = atomer.findIndex((a) => a.symbol === 'O');
+      const nb = D.naboListe(atomer, bånd);
+      for (let i = 0; i < atomer.length && nb[o].length < 2; i++) {
+        if (atomer[i].symbol === 'H' && !nb[i].length) {
+          bånd.push([i, o]);
+          nb[o].push(i);
+          nb[i].push(o);
+        }
+      }
+    }
+    sidstRørt = bånd.length ? bånd[bånd.length - 1][0] : -1;
+    lyd.elektron();
+    ændret();
+  },
+  // Drej molekylet id forfra, når det er faldet på plads
+  drejForfra(id) {
+    const g = færdigGruppe(id);
+    if (g) drej = { liste: [...g.atomer], venter: 0, tid: -1, varighed: ROLIG ? 0.01 : DREJ_TID, p0: null, c: null, q: new THREE.Quaternion() };
+  },
+  drejer: () => Boolean(drej),
+  // Hvor atom i står på skærmen (til hånden i trin 1)
+  atomPå: (i) => (i < atomer.length ? skærmPos(pos3D(i, new THREE.Vector3())) : null),
+  zoom() {
+    sidsteRadius = -10;
+    zoomEfterBehov();
+  },
+  slut() {
+    forløbRegel = null;
+    if (drej) slutDrej();
+  },
+};
 
 // ---------- Kun til automatiske tests ----------
 export function testAdgang() {
@@ -961,5 +1088,14 @@ export function testAdgang() {
     åbnKnaldgas: () => åbnKnaldgas(),
     tilbage: () => slutKnaldgas(),
     knaldgas: knaldTest(),
+    drejer: () => Boolean(drej),
+    // Forløbet: vandets plan i forhold til skærmen (|cos| mellem planets normal og retningen mod kameraet, 1 = forfra)
+    vandForfra: () => {
+      const g = færdigGruppe('vand');
+      if (!g) return null;
+      const [a, b, c] = g.atomer.map((i) => new THREE.Vector3(...form.pos[i]));
+      const n = new THREE.Vector3().crossVectors(b.clone().sub(a), c.clone().sub(a)).normalize();
+      return Math.abs(n.dot(new THREE.Vector3().subVectors(verden.kamera.position, verden.styring.target).normalize()));
+    },
   };
 }

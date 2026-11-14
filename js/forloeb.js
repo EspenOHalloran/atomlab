@@ -14,6 +14,8 @@
 // og for hele forløbet: slutTekst() (en linje under kernesætningen), veje [{ tekst, primær, gør }] (højst tre veje videre,
 // eller { tekst, hvorfor: id } for et "Hvorfor?"-kort), layout() (scenen har fået ny størrelse), slut() (kaldes, når
 // forløbet slutter, springes over eller stoppes) og igen (hvor man kan tage forløbet igen, til beskeden ved "Spring over").
+// Forløbet kan have før: { id, del, tekst } (et andet forløb, der bør tages først): Er det ikke taget, står et link til det
+// i første trin. forløbVink(tekst) skriver en kort linje i linjen (fx hvorfor et træk ikke lykkedes), til trinet skifter.
 // Klodsen husker i fremgang.js, om forløbet er taget (✓ i "Din fremgang") eller sprunget over. Uden noget af det starter
 // delen forløbet af sig selv (starterSelv).
 
@@ -22,6 +24,7 @@ import { centrerVindue } from './scene3d.js';
 import { dæmpPiller, visBesked } from './beskeder.js';
 import { lukHvorfor, visHvorfor } from './lag.js';
 import * as fremgang from './fremgang.js';
+import { åbnForløb } from './gaa.js';
 
 const VIS_MIG_EFTER = 20000; // ms uden noget, før "Vis mig" tilbydes
 const SÅ_EFTER = 700; // ms efter handlingen, før Så kommer (man skal nå at se det ske)
@@ -49,6 +52,13 @@ export function tegnForløb() {
   if (k && k.fase === 'gør') tegn();
 }
 
+// En kort linje i forløbets linje (fx "Prøv at sætte det på oxygen"). Står, til trinet skifter, eller til næste vink.
+export function forløbVink(tekst) {
+  if (!k || k.vink === tekst) return;
+  k.vink = tekst;
+  tegn();
+}
+
 // Fasen i det forløb, der kører ('gæt', 'gør', 'så' eller 'slut'), fx så et tryk i scenen kun tæller, når trinet venter på det
 export function forløbFase() {
   return k ? k.fase : null;
@@ -66,7 +76,7 @@ export function startForløb(data, del) {
   linje.setAttribute('aria-label', `Forløb: ${data.titel}`);
   linje.addEventListener('click', klik);
   skærm.append(linje);
-  k = { data, del, skærm, linje, nr: 0, fase: 'gør', gæt: null, visMig: false, vist: [] };
+  k = { data, del, skærm, linje, nr: 0, fase: 'gør', gæt: null, visMig: false, vist: [], vink: '' };
   gåTil(0);
 }
 
@@ -116,6 +126,7 @@ function gåTil(nr) {
   k.nr = Math.max(0, Math.min(nr, k.data.trin.length - 1));
   k.gæt = null;
   k.visMig = false;
+  k.vink = '';
   for (const el of k.vist) el.classList.remove('fl-vis');
   const d = delTrin();
   d.start?.();
@@ -152,6 +163,7 @@ function startGør() {
       if (sidste() && !trin().så) tilSlut();
       else {
         k.fase = 'så';
+        k.vink = ''; // et vink fra gør (fx et forsøg, der ikke lykkedes) hører ikke til Så
         tegn();
       }
     }, SÅ_EFTER);
@@ -207,6 +219,12 @@ function klik(h) {
   } else if (b.dataset.nav === 'tilbage') {
     lyd.klik();
     gåTil(k.fase === 'slut' ? k.nr : k.nr - 1);
+  } else if (b.dataset.nav === 'før') {
+    // Det andet forløb først: dette stoppes uden at blive husket, så det starter igen næste gang
+    lyd.klik();
+    const før = k.data.før;
+    afslut({ stille: true });
+    åbnForløb(før.del, før.id);
   } else if (b.dataset.nav === 'spring') {
     lyd.klik();
     afslut({ sprunget: true });
@@ -254,6 +272,11 @@ function tegn() {
     html += `<p class="fl-tekst fl-så" data-ord-kun="">${esc(data.kernesætning)}</p>`;
     if (del.slutTekst) html += `<p class="fl-lille">${esc(del.slutTekst())}</p>`;
     række = (del.veje ?? []).map((v, i) => `<button class="fl-vej${v.primær ? ' primær' : ''}" data-vej="${i}">${esc(v.tekst)}</button>`).join('');
+  }
+  if (k.vink && (k.fase === 'gør' || k.fase === 'så')) html += `<p class="fl-lille fl-vink">${esc(k.vink)}</p>`;
+  const før = data.før;
+  if (før && k.nr === 0 && !slut && !fremgang.forløbTaget(før.id)) {
+    html += `<p class="fl-lille"><button class="link-knap fl-før" data-nav="før">${esc(før.tekst)} ›</button></p>`;
   }
   const nav = (k.nr > 0 || slut ? '<button class="fl-tilbage" data-nav="tilbage" title="Et trin tilbage" aria-label="Et trin tilbage">‹</button>' : '')
     + (k.fase === 'så' ? '<button class="fl-næste" data-nav="næste">Næste ›</button>' : '');

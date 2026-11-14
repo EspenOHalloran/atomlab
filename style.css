@@ -1961,6 +1961,24 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .skærm.i-forløb .vindue :is(.panel-fane, .logknap, .næste-skridt, .bjælke-række) { display: none !important; }
 #vaerksted.i-forløb #knapMinitabel { display: none; }
 #liv.i-forløb #livMission { display: none !important; }
+/* Molekyler, forløbet "Når atomer mødes" (js/molekyler-skaerm.js): laboratoriets undertekster og "Næste skridt" er skjult, så der kun er ét
+   sted at læse. Hånden viser trækket i trin 1, og toningen dækker skiftet mellem "Del elektroner" og "Giv elektroner". */
+#molekyler.i-forløb .vindue :is(.undertekst, .mission) { display: none !important; }
+.fl-vink { color: var(--gul); }
+.fl-hånd { position: absolute; left: 0; top: 0; z-index: 3; font-size: 34px; line-height: 1; pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7)); animation: fl-hånd 2.2s ease-in-out infinite; }
+.fl-hånd[hidden] { display: none; }
+@keyframes fl-hånd {
+  0%, 15% { transform: translate(calc(var(--fra-x) - 10px), calc(var(--fra-y) - 4px)); opacity: 0; }
+  25% { opacity: 1; transform: translate(calc(var(--fra-x) - 10px), calc(var(--fra-y) - 4px)); }
+  75% { opacity: 1; transform: translate(calc(var(--til-x) - 10px), calc(var(--til-y) - 4px)); }
+  90%, 100% { opacity: 0; transform: translate(calc(var(--til-x) - 10px), calc(var(--til-y) - 4px)); }
+}
+.fl-toning { position: absolute; inset: 0; z-index: 2; background: #000; opacity: 0; pointer-events: none; transition: opacity 0.26s; }
+.fl-toning.mørk { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .fl-hånd { animation: none; transform: translate(calc(var(--fra-x) - 10px), calc(var(--fra-y) - 4px)); }
+}
 /* Kosmos (forløbet "Rejsen i tid"): Styr-boksen og underteksten er skjult, for forløbets linje fortæller, hvad der sker */
 #kosmos.i-forløb .vindue :is(.styr, .undertekst.fase) { display: none !important; }
 #minitabel .felt.forløb-mål { color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent); animation: forløbPuls 1.6s ease-in-out infinite; }

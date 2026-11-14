@@ -26,6 +26,8 @@ const HARPUN_FART = 3; // Å pr. sekund, mens de neutrale atomer driver mod hina
 const TRÆK_FAKTOR = 400; // hvor hurtigt ionerne suser sammen (tegnet langsomt, så man kan følge det)
 const DÆMPNING = 5; // ionerne mister fart (i virkeligheden sendes energien væk som lys og varme)
 const HOP_TID = 0.55; // sekunder for elektronens hop (harpunen)
+const HOP_TID_FORLØB = 1.2; // i forløbet "Når atomer mødes": langsomt nok til at blive set
+const BLINK_TID = 0.5; // sekunder for blinket, når elektronen lander i forløbet
 const VIS_TID = 1.8; // sekunder for "Vis mig" (elektronen flyttes for en)
 const AFVIST_TID = 1.6; // sekunder, elektronen bliver hos det andet natriumatom, før den flyver hjem (Na + Na)
 const SKALA = 0.94; // ionernes ringe tegnes lidt mindre end Shannon-radierne, så parret ikke overlapper for meget
@@ -54,6 +56,14 @@ let sporPunkter = [];
 let pause = null;
 let næste = null;
 let hentVærkstedAtom = () => null;
+// Forløbet "Når atomer mødes" (trin 3 og 4, js/molekyler-skaerm.js): iForløb giver det langsomme hop med blinket, og
+// forløbTræk lader natrium trække hen mod chlor (kun afstanden), i stedet for at atomerne driver af sig selv (harpunen).
+let iForløb = false;
+let forløbTræk = false;
+let naTrækId = null; // fingeren eller musen, der trækker natrium
+let forskyd = 0; // Å: parret flyttet vandret (chlor står stille, mens man trækker natrium, og bagefter glider parret ind mod midten)
+let blink = null; // lysglimtet, hvor elektronen lander (kun i forløbet)
+let blinkTid = BLINK_TID;
 let tilstand = 'start'; // start, trækker, tilbage, hopper, ioner, mødes, samlet, nærmer, afvist, hjem, bygger, krystal
 let elektron = 'hjemme'; // hjemme, fri eller flyttet (til parret Na + Cl i gas)
 let flyttet = 0; // så mange elektroner er landet hos ikkemetallerne
@@ -116,6 +126,11 @@ export function lavByttebørs({ værkstedAtom } = {}) {
   spor.frustumCulled = false;
   sporPunkter = Array.from({ length: SPOR }, () => new THREE.Vector3());
   rod.add(elektronMesh, spor);
+  blink = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: lavPrikTekstur(true), color: new THREE.Color(1.2, 2.6, 3.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  blink.visible = false;
+  rod.add(blink);
 
   // Krystallen: én InstancedMesh med plads til alle ionerne (bygget én gang, kun antallet skifter)
   krystalGruppe = new THREE.Group();
@@ -249,6 +264,16 @@ function lavTræk() {
   const lærred = verden.renderer.domElement;
   // Fanges før kameraets styring (capture), så et træk i elektronen ikke drejer billedet
   lærred.addEventListener('pointerdown', (h) => {
+    // Forløbet, trin 3: natrium trækkes hen mod chlor
+    if (kanTrækkeNatrium() && naTrækId === null && vedNatrium(h.clientX, h.clientY, h.pointerType !== 'mouse')) {
+      h.stopImmediatePropagation();
+      h.preventDefault();
+      naTrækId = h.pointerId;
+      verden.styring.enabled = false;
+      lærred.style.cursor = 'grabbing';
+      lyd.klik();
+      return;
+    }
     if (!kanTrække() || trækId !== null) return;
     if (!vedElektronen(h.clientX, h.clientY, h.pointerType !== 'mouse')) return;
     h.stopImmediatePropagation();
@@ -264,12 +289,23 @@ function lavTræk() {
       flytTil(h.clientX, h.clientY);
       return;
     }
-    // Musen over elektronen: en hånd viser, at den kan trækkes
+    if (naTrækId === h.pointerId) {
+      flytNatrium(h.clientX, h.clientY);
+      return;
+    }
+    // Musen over elektronen (eller natrium i forløbet): en hånd viser, at den kan trækkes
     if (h.pointerType === 'mouse' && aktiv && h.target === lærred) {
-      lærred.style.cursor = kanTrække() && vedElektronen(h.clientX, h.clientY, false) ? 'grab' : '';
+      const kan = (kanTrække() && vedElektronen(h.clientX, h.clientY, false)) || (kanTrækkeNatrium() && vedNatrium(h.clientX, h.clientY, false));
+      lærred.style.cursor = kan ? 'grab' : '';
     }
   });
   const slip = (h) => {
+    if (naTrækId === h.pointerId) {
+      naTrækId = null;
+      verden.styring.enabled = true;
+      lærred.style.cursor = '';
+      return;
+    }
     if (trækId !== h.pointerId) return;
     trækId = null;
     verden.styring.enabled = true;
@@ -278,6 +314,29 @@ function lavTræk() {
   };
   addEventListener('pointerup', slip);
   addEventListener('pointercancel', slip);
+}
+
+// ---------- Forløbet: natrium trækkes hen mod chlor (kun afstanden) ----------
+function kanTrækkeNatrium() {
+  return aktiv && forløbTræk && tilstand === 'nærmer' && !hop;
+}
+
+// Er fingeren eller musen på natriumatomet (ringen og lidt uden om)?
+function vedNatrium(x, y, finger) {
+  const c = skærmPos(giver.gruppe.position);
+  const kant = skærmPos(hjælpV2.copy(giver.gruppe.position).add(hjælpV.set(giver.ydersteRadius(), 0, 0)));
+  return Math.hypot(c.x - x, c.y - y) < Math.hypot(kant.x - c.x, kant.y - c.y) + (finger ? 30 : 10);
+}
+
+// Natrium følger fingeren vandret, og chlor står stille (forskyd holder chlor på sin plads fra start).
+// Når de er tæt nok på, hopper elektronen (opdaterNærmer), og så kan natrium ikke trækkes mere.
+function flytNatrium(x, y) {
+  if (!kanTrækkeNatrium() || !punktI3D(x, y, hjælpV)) return;
+  const andel = MASSE[par.metal] / (MASSE[par.metal] + MASSE[par.ikkemetal]);
+  const clStart = R_START * andel;
+  r = Math.min(R_START + 4, Math.max(harpunAfstand(par.metal, par.ikkemetal), clStart - hjælpV.x / S));
+  forskyd = clStart - r * andel;
+  placer();
 }
 
 function startTræk() {
@@ -373,6 +432,11 @@ function ringRadius(stof, q) {
 // En elektron er landet hos et ikkemetal
 function land(t) {
   elektronMesh.visible = false;
+  if (iForløb) {
+    blink.position.copy(ePos);
+    blinkTid = 0;
+    blink.visible = true;
+  }
   t.fik++;
   flyttet++;
   giver.skjulYderste = false;
@@ -390,7 +454,7 @@ function land(t) {
     return;
   }
   if (harpun) {
-    visBesked({ titel: 'Harpunen!', tekst: `Elektronen hoppede ved ca. ${komma(harpunAfstand(par.metal, par.ikkemetal), 1)} Å. Nu trækker ionerne hinanden ind.`, type: 'fase', varighed: 6000 });
+    visBesked({ titel: 'Harpunen!', tekst: `Elektronen hoppede ved ca. ${Math.round(harpunAfstand(par.metal, par.ikkemetal))} Å. Nu trækker ionerne hinanden ind.`, type: 'fase', varighed: 6000 });
     ladDemMødes();
     return;
   }
@@ -468,6 +532,7 @@ function nulstil({ harpun: h = false } = {}) {
   flyttet = 0;
   r = par.id === 'nacl' ? R_START : R_ANDRE;
   v = h ? -HARPUN_FART : 0;
+  forskyd = 0;
   hop = null;
   iPlus = false;
   nanaPrøvet = false;
@@ -554,9 +619,9 @@ function placer() {
   } else {
     const mM = MASSE[par.metal];
     const mI = MASSE[par.ikkemetal];
-    giver.pos.x = -r * mI / (mM + mI);
+    giver.pos.x = -r * mI / (mM + mI) + forskyd;
     giver.pos.y = 0;
-    tagere[0].pos.x = r * mM / (mM + mI);
+    tagere[0].pos.x = r * mM / (mM + mI) + forskyd;
     tagere[0].pos.y = 0;
   }
   if (krystal) return; // under krystallen styrer den atomernes plads
@@ -594,6 +659,18 @@ function opdater(dt) {
       if (afvistTid >= AFVIST_TID) flyvHjemNaNa();
     }
     if (krystal) opdaterKrystal(dt);
+    // Efter trækket i forløbet glider parret ind mod midten (det sker, mens ionerne trækker hinanden ind)
+    if (forskyd && naTrækId === null && !['nærmer', 'hopper'].includes(tilstand)) {
+      forskyd = Math.abs(forskyd) < 0.01 ? 0 : forskyd * Math.exp(-dt * 2.5);
+      if (!krystal) placer();
+    }
+    if (blink.visible) {
+      blinkTid += dt;
+      const k = Math.min(1, blinkTid / BLINK_TID);
+      blink.scale.setScalar(1 + (ROLIG ? 2 : 5) * k);
+      blink.material.opacity = 1 - k;
+      if (k >= 1) blink.visible = false;
+    }
   }
   // Mens man trækker, følger elektronen fingeren, også under pause
   if (elektronMesh.visible) elektronMesh.position.copy(ePos);
@@ -604,7 +681,7 @@ function opdater(dt) {
     opdaterMåler();
   }
   zoomTid += dt;
-  if (zoomTid > 0.3 && (tilstand === 'mødes' || tilstand === 'nærmer')) {
+  if (zoomTid > 0.3 && (tilstand === 'mødes' || tilstand === 'nærmer') && naTrækId === null) {
     zoomTid = 0;
     zoom();
   }
@@ -632,8 +709,10 @@ function opdaterHop(dt) {
 // Harpunen: de neutrale atomer driver mod hinanden, til tiltrækningen kan betale for hoppet
 function opdaterNærmer(dt) {
   const rH = harpunAfstand(par.metal, par.ikkemetal);
-  r = Math.max(rH, r - HARPUN_FART * dt);
-  placer();
+  if (!forløbTræk) {
+    r = Math.max(rH, r - HARPUN_FART * dt);
+    placer();
+  }
   if (r <= rH && !hop) {
     giver.skjulYderste = true;
     ePos.copy(giver.ydersteElektron(hjælpV2));
@@ -642,7 +721,7 @@ function opdaterNærmer(dt) {
     elektron = 'fri';
     tilstand = 'hopper';
     const t = tagere[0];
-    hop = { fra: ePos.clone(), mål: t, tid: 0, varighed: HOP_TID, færdig: () => land(t) };
+    hop = { fra: ePos.clone(), mål: t, tid: 0, varighed: iForløb ? HOP_TID_FORLØB : HOP_TID, færdig: () => land(t) };
     opdaterAlt();
   }
 }
@@ -1030,7 +1109,7 @@ function trin() {
       return harpun
         ? {
           titel: 'Harpunen',
-          tekst: `I virkeligheden hopper elektronen, allerede når atomerne er ca. ${komma(harpunAfstand(par.metal, par.ikkemetal), 1)} Å fra hinanden (fire gange afstanden i parret). Så betaler tiltrækningen for hoppet, og ionerne trækker hinanden ind.`,
+          tekst: `I virkeligheden kan elektronen hoppe, når atomerne er tættere end ca. ${Math.round(harpunAfstand(par.metal, par.ikkemetal))} Å (ca. fire gange afstanden i parret). Så betaler tiltrækningen for hoppet, og ionerne trækker hinanden ind.`,
           næste: 'Byg en krystal med mange par.', knap: '▶ Byg krystallen',
         }
         : {
@@ -1102,7 +1181,7 @@ function skrivParTekster() {
 function nørdTekst() {
   const kJ = (eV) => Math.round(eV * KJ_PR_EV).toLocaleString('da-DK');
   if (par.id === 'nacl') {
-    return `<p>Natriums ioniseringsenergi er <b>5,14 eV</b>, og chlors elektronaffinitet er <b>3,61 eV</b>. Plus og minus trækker med 14,4 eV delt med afstanden i Å (ångstrøm, en tiendedel af en milliardtedel meter). Det betaler de 1,53 eV, når de er tættere end ca. <b>9,4 Å</b>.</p>
+    return `<p>Natriums ioniseringsenergi er <b>5,14 eV</b>, og chlors elektronaffinitet er <b>3,61 eV</b>. Plus og minus trækker med 14,4 eV delt med afstanden i Å (ångstrøm, en tiendedel af en milliardtedel meter). Det betaler de 1,53 eV, når de er tættere end ca. <b>9,4 Å</b>. Parret kan kun blive sammen, hvis det kommer af med energien, fx ved at støde ind i et tredje atom.</p>
       <p>Frastødningen tæt på er en enkel formel, der er tilpasset, så parret stopper ved <b>2,36 Å</b> med 4,26 eV. I krystallen giver hvert par <b>8,15 eV</b> (gitterenergien, 786 kJ/mol). Størrelserne er målt: natrium 180 pm, Na⁺ 102 pm, chlor 100 pm og Cl⁻ 181 pm.</p>`;
   }
   if (par.bytter === false) {
@@ -1120,7 +1199,7 @@ function nørdTekst() {
 
 function ærligtTekst() {
   switch (par.id) {
-    case 'nacl': return 'Enkelte par af natriumchlorid findes kun i damp. Et saltkorn er et kæmpe gitter, hvor hver ion har seks naboer med modsat ladning.';
+    case 'nacl': return 'Ingen binding er helt delt eller helt givet. I salt er det næsten givet. Tit hopper elektronen slet ikke, og atomerne flyver forbi hinanden. Her ser du et møde, hvor den hopper. Enkelte par af natriumchlorid findes kun i damp. Et saltkorn er et kæmpe gitter, hvor hver ion har seks naboer med modsat ladning.';
     case 'lif': return 'Krystallen er tegnet med 216 ioner. Selv et lille korn har milliarder af milliarder.';
     case 'mgo': return 'Et frit O²⁻ kan ikke holde på den anden elektron. Det kan det kun inde i krystallen, hvor Mg²⁺-naboerne trækker. Spillet lader elektronen blive, så man kan se regnskabet.';
     case 'cacl2': return 'Krystallen er tegnet i den regelmæssige form, calciumchlorid har over 217 °C. Ved stuetemperatur er mønstret en lille smule skævt.';
@@ -1165,6 +1244,7 @@ export function stopByttebørs() {
   verden.opdateringer.delete(opdater);
   begrænsDrejning(null);
   verden.styring.autoRotate = true;
+  naTrækId = null;
   if (trækId !== null) {
     trækId = null;
     // Et træk midt i et skærmskift: elektronen går hjem igen
@@ -1177,6 +1257,54 @@ export function stopByttebørs() {
   verden.renderer.domElement.style.cursor = '';
   pause.sæt('spil');
 }
+
+// ---------- Forløbet "Når atomer mødes" (trin 3 og 4, js/molekyler-skaerm.js) ----------
+export const forløbGiv = {
+  // Trin 3: natrium og chlor langt fra hinanden. Man trækker natrium, og elektronen hopper, når de er tæt nok på.
+  start() {
+    iForløb = true;
+    if (par.id !== 'nacl') vælgPar('nacl');
+    nulstil({ harpun: true });
+    forløbTræk = true;
+    blink.visible = false;
+  },
+  // "Vis mig": atomerne glider selv sammen (som harpunen i laboratoriet)
+  visMig() {
+    forløbTræk = false;
+    naTrækId = null;
+    verden.styring.enabled = true;
+  },
+  samlet: () => tilstand === 'samlet',
+  krystal: () => tilstand === 'krystal',
+  // Trin 4: parret ligger samlet (fx når man går tilbage fra "Det så du" eller trin 3 blev klaret med "Vis mig")
+  parSamlet() {
+    iForløb = true;
+    forløbTræk = false;
+    if (tilstand === 'samlet') return;
+    if (par.id !== 'nacl') vælgPar('nacl');
+    nulstil();
+    land(tagere[0]);
+    blink.visible = false;
+    r = par.r0;
+    v = 0;
+    placer();
+    tilstand = 'samlet';
+    mødtFør = true;
+    opdaterAlt();
+    zoom();
+  },
+  kanBygge: () => kanByggeKrystal(),
+  bygKrystal: () => bygKrystal(),
+  zoom: () => zoom(),
+  // Forløbet slutter: Står atomerne midt i trækket, starter laboratoriet forfra
+  slut() {
+    const midtI = forløbTræk && ['nærmer', 'hopper'].includes(tilstand);
+    iForløb = false;
+    forløbTræk = false;
+    naTrækId = null;
+    if (midtI) nulstil();
+  },
+};
 
 // ---------- Kun til automatiske tests ----------
 export function testAdgang() {
@@ -1201,6 +1329,7 @@ export function testAdgang() {
     chlorPå: () => skærmPos(tagere[0].gruppe.position),
     tagerPå: (i = 0) => skærmPos(tagere[i].gruppe.position),
     natriumPå: () => skærmPos(giver.gruppe.position),
+    blink: () => blink.visible,
     tidsknap: () => pause.tilstand,
     styring: () => verden.styring.enabled,
     kameraStille: () => verden.målAfstand == null, // kameraet er færdigt med at zoome
