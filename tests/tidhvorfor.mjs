@@ -252,7 +252,7 @@ await E(() => atomlabTest.kosmos.trykPå("Vis den rejsendes 'nu'"));
 q = await s5();
 tjek('"nu"-linjerne: i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år (6,4 år)', q.nu && nær(q.egen, 6, 1e-9) && nær(q.før, 1.8, 1e-9) && nær(q.efter, 8.2, 1e-9) && nær(q.spring, 6.4, 1e-9), JSON.stringify(q));
 // Tryk, spol og læs i ét skridt: Siden tegner videre i rigtig tid mellem to evaluate, og under belastning løb rejsen
-// 2-3 billeder (0,05 s hver) for langt, før testen kiggede (T = 5,2 i stedet for 5). Åbne punkter, 14. november 2026.
+// 2-3 billeder (0,05 s hver) for langt, før testen kiggede (T = 5,29 i stedet for 5). Åbne punkter, 14. november 2026.
 const midt = await E(() => {
   const k = atomlabTest.kosmos;
   k.trykPå('Spil rejsen');

@@ -208,8 +208,10 @@ async function uranusUN4() {
   await s.waitForTimeout(1200);
   const ms = await M();
   const u1 = await F('måneUr');
-  await s.waitForTimeout(400);
-  tjek('"Små måner": de fire små er tegnet større med baner, og månerne kredser videre', ['cressida', 'desdemona', 'cupid', 'belinda'].every((n) => ms[n].bane && ms[n].tegnet > ms[n].rigtig * 2) && (await F('måneUr')) > u1 && (await fm(() => atomlabTest.solsystem.fase()))?.titel === 'Små måner, der kan støde sammen', JSON.stringify(ms.cressida));
+  // Vent på tilstanden (månernes ur går, og underteksten er der), ikke 400 ms: fejlede én gang under belastning
+  await s.waitForFunction((u1) => atomlabTest.solsystem.fænomen().måneUr() > u1 && atomlabTest.solsystem.fase()?.titel === 'Små måner, der kan støde sammen', u1, { timeout: 10000, polling: 100 }).catch(() => {});
+  const u2 = await F('måneUr'), fs = (await fm(() => atomlabTest.solsystem.fase()))?.titel;
+  tjek('"Små måner": de fire små er tegnet større med baner, og månerne kredser videre', ['cressida', 'desdemona', 'cupid', 'belinda'].every((n) => ms[n].bane && ms[n].tegnet > ms[n].rigtig * 2) && u2 > u1 && fs === 'Små måner, der kan støde sammen', JSON.stringify([u1, u2, fs, ms.cressida]));
   await s.screenshot({ path: `${UD}/uranus-smaa.png` });
   await fm(() => atomlabTest.solsystem.gåTil('uranus'));
   await F('hop');
