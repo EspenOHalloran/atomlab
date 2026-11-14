@@ -192,7 +192,7 @@ export default {
         m.klode.sætKort(t);
         if (forhånd && aktiv) verden.renderer.initTexture(t);
         klar?.();
-      }, { farve: false, kanaler: 1, rundt: false, fejl: klar });
+      }, { farve: false, kanaler: 1, rundt: false, fejl: klar, vendt: true }); // (vendt: hurtigere i grafikkortet, G1 trin 3)
     }
 
     // Solen: en lille, skarp prik langt væk i den retning, lyset kommer fra (fra Saturn ser den ca. 9½ gange mindre ud end fra Jorden)

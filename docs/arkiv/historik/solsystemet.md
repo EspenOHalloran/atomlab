@@ -2,6 +2,11 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (14. november 2026): G1 trin 3, del 2, forslag H (Stå på Mars lettere på tablet).** Jeres go: a + b, så en ny måling på tabletten, før c (dynamisk opløsning) overvejes.
+- **(a)** Landskabets net er delt i 16 lagkagestykker, og kun dem i de retninger, billedet viser, tegnes (lodret ned tegnes alle). Udseendet er det samme. **(b)** På tablet regnes skyggerne i halv opløsning, mens Solen flytter sig (▶, skyderen eller "Solnedgang"), og skarpt igen, når den står stille. Pc'en er uændret.
+- **Målt i testbrowseren (tablet-udgaven, kun til sammenligning):** et billede vandret −39 %, op mod himlen −55 %, ned −36 %, lodret ned −23 %. Skyggerne, mens Solen flytter sig, koster ca. en femtedel. Detaljer under "Status" i [plan-grafik.md](../plan-grafik.md). Tests: `tests/landskab-tablet.mjs` (ny) og `tests/landskab.mjs`. Værktøj: `tests/vaerktoejer/staa-tid.mjs`.
+- **Spørgsmål til jer:** Mål med `?maal` på tabletten ved Gale og Jezero (se [ikke-afproevet.md](../ikke-afproevet.md)). Er det stadig under ca. 30 billeder i sekundet, mens man står, er (c) dynamisk opløsning det næste.
+
 **Senest lavet (13. november 2026): G1 trin 3, del 1, forslag G (billederne frigives).** Jeres go: "Go med dine anbefalinger" (alt frigives, når man forlader Solsystemet eller Kosmos, og landskabet, når man letter fra Stå på Mars).
 - Hvert billede har nu en ejer (planeten eller Stå på Mars) og slettes fra grafikkortet, når ejeren forlades. Delte billeder bliver liggende (fx Jorden mellem Årstiderne og Formørkelser). Udseendet er det samme.
 - **Målt (fuld grafik i testbrowseren, pc):** menuen efter turen 991 → 27 MB, Saturn 838 → 271 MB, Jorden 991 → 180 MB. Mens man står ved et sted med fotoet, er der stadig ca. 600 MB på pc. **Prisen:** En planet eller et landskab åbner lidt langsommere anden gang (hentes igen fra browserens cache). Detaljer under "Status" i [plan-grafik.md](../plan-grafik.md). Test: `tests/frigiv.mjs`.

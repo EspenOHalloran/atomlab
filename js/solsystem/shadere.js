@@ -11,10 +11,11 @@ import { verden, TEST_HURTIG } from '../scene3d.js';
 // aktiv(): om skærmen stadig er åben (ellers stoppes der). hovedtråd: false = kun hvis browseren kan oversætte i
 // baggrunden (fx landskabet i Stå på Mars, som bygges, mens kameraet flyver ned: Uden baggrund ville hakket flytte fra
 // landingen, hvor billedet er tonet ned, til flyvningen).
-export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true } = {}) {
+// færdig() kaldes, når alle programmerne er klar (eller ikke kunne laves her).
+export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true, færdig = () => {} } = {}) {
   const { renderer, komponist, kamera, scene } = verden;
   const baggrund = renderer.extensions.has('KHR_parallel_shader_compile');
-  if (!baggrund && !hovedtråd) return;
+  if (!baggrund && !hovedtråd) { færdig(); return; }
   const før = renderer.getRenderTarget();
   let materialer;
   // Samme mål som tegningen: Gløden tegner scenen i et billede uden tonemapping (komponistens buffer), testene direkte
@@ -23,6 +24,7 @@ export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true
   try {
     materialer = [...renderer.compile(objekt, kamera, scene)];
   } catch {
+    færdig();
     return;
   } finally {
     renderer.setRenderTarget(før);
@@ -40,6 +42,7 @@ export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true
       if (!baggrund) break; // ét pr. billede, når hovedtråden selv skal vente
     }
     if (færdige.size < materialer.length) requestAnimationFrame(trin);
+    else færdig();
   };
   requestAnimationFrame(trin);
 }

@@ -124,13 +124,14 @@ export function lavPanorama({ renderer, hent, mappe }) {
       jsonVenter[id] ??= fetch(new URL(`landskab/pano-${id}.json`, mappe)).then((s) => s.json()).then((d) => { data[id] = d; }).catch(() => { delete jsonVenter[id]; });
       jsonVenter[id].then(json);
     }
-    hent(`landskab/pano-${id}-${størrelse}.jpg`, foto, { anisotropi });
-    hent(`landskab/pano-${id}-maske.png`, maske, { farve: false, kanaler: 1 });
+    // (vendt: pakkes ud uden for hovedtråden, så det går hurtigere at lægge dem i grafikkortet, G1 trin 3, del 3)
+    hent(`landskab/pano-${id}-${størrelse}.jpg`, foto, { anisotropi, vendt: true });
+    hent(`landskab/pano-${id}-maske.png`, maske, { farve: false, kanaler: 1, vendt: true });
   }
-  // Hent fotoet på forhånd (mens kameraet flyver ned), så det er klar, når man lander
-  function forhånd(id) {
-    const ingenting = () => {};
-    hentAlt(id, ingenting, ingenting, ingenting);
+  // Hent fotoet på forhånd (mens kameraet flyver ned), så det er klar, når man lander. hentet(t) får fotoet og masken,
+  // så de kan lægges i grafikkortet, før man lander (mars.js).
+  function forhånd(id, hentet = () => {}) {
+    hentAlt(id, () => {}, hentet, hentet);
   }
   // Skjul fotoet. straks: uden at tone ud (fx når man letter eller går til et andet sted)
   function skjul(straks = false) {

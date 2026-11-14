@@ -37,7 +37,7 @@
 | Hvor stopper kvanteverdenen? | Senere, med Kvantefysik forløb 1 | Prikker, der danner striber |
 | Hvor blev antistoffet af? (`antistof`) | Bygget | Et par, der bliver til et glimt |
 | Gåde 6: Hvor stopper det periodiske system? (119 som krog, jeres svar) | Senere, efter prøven | En lille kerne af kugler |
-| Hvordan begyndte livet? (`begyndelsen`) | Bygget | En kolbe med et lyn |
+| Hvordan begyndte livet? (`begyndelsen`) | Bygget. **Ingen egen scene** (jeres svar på E10, 14. november 2026): Kolben bygges én gang, i Liv (L5), og kortet får en knap dertil | En kolbe med et lyn |
 | Er der liv andre steder? (`liv`) | Bygget | Et blåt lys blandt mange hvide |
 | Er der en planet mere i Solsystemet? (Planet 9) | Senere, med Solsystemets overblik | En stiplet klode og aflange baner |
 | Hvad er der inde i et sort hul? (`sorthul`) | Bygget | En sort skive med en glødende ring |
@@ -83,11 +83,11 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Nye påstande 
 
 ## Delopgaverne (hver med et go og en ny session)
 - [x] **G4a: Layoutet og det første kort helt færdigt** (lavet 14. november 2026, se [kode/gaader.md](kode/gaader.md). Afvigelser: Lysene for alle gåder står i én fil, `js/gaader/lys.js`, ikke i en fil pr. gåde, så skinnen i G4b kan hente dem på én gang. Farverne står i `lys.js`, ikke i dataene. Søjlerne i trin 2 har intet tal, se fakta-faelder.md.) (Opus, høj). Panelet (til højre eller forneden, kun spørgsmål og valg på højkant, mens man gætter), `streg.js` med `Line2`, stemplet med lyd, hele scenen for **Antistof** (jeres svar) med alle tre trin, "Sig det til en ven" og felterne `nyt` og `løst`. Oversigten er midlertidigt den gamle liste, og de fire andre kort står i det nye panel med deres lys som scene. Skærmbilleder på pc og tablet på højkant. Testen `gaader` plus 3-5 nye tjek. Mål på pc med `?maal`.
-- [ ] **G4b: Skinnen og første gang** (Opus, høj). Oversigten som skinne med én gåde i fokus, "Flyv ind" og ud, første gang foran det første kort, lysene, der tændes ("Der er flere"), "Næste gåde ›", Tilbage og Esc, "Se det selv" lander ved samme gåde og `ROLIG`. Mål på tabletten.
+- [x] **G4b: Skinnen og første gang** (lavet 14. november 2026, se [kode/gaader.md](kode/gaader.md). Afvigelser: "Ærligt talt" om skinnen står på alle kort (skinnen har intet panel). Stien er en svag bue, så kun naboerne ses. Kommer man første gang ind i et andet kort via en knap et andet sted, tændes lysene ud fra det. Målingen på tabletten mangler (jeres runde).) (Opus, høj). Oversigten som skinne med én gåde i fokus, "Flyv ind" og ud, første gang foran det første kort, lysene, der tændes ("Der er flere"), "Næste gåde ›", Tilbage og Esc, "Se det selv" lander ved samme gåde og `ROLIG`. Mål på tabletten.
 - [ ] **Prøven med jeres søn** (efter G4b): Kan han sige kernesætningen om det første kort, og vil han flyve ind i de andre? Scenerne til resten venter på prøven (jeres svar).
 - [ ] **G4c: Sort hul** (Opus, høj). Sort hul bygger på linsen og lægger kun det nye til (tonen, de to kanter og LISA). Mål på pc og tablet.
 - [ ] **G4d: Mørkt stof og liv andre steder** (Opus, høj).
-- [ ] **G4e: Livets begyndelse og det sidste** (Opus, høj). Måling på tabletten, "Ikke afprøvet" og dokumenterne ([kode/](kode/), gemte data og erfaringer).
+- [ ] **G4e: Livets begyndelse og det sidste** (Opus, høj). **Ændret 14. november 2026 (jeres svar på E10):** Livets begyndelse får ingen egen scene. Kortet beholder lyset og får en knap til delen Begyndelsen i Liv (L5, [drejebog-liv.md](drejebog-liv.md)), når den findes. Rækken "Livets begyndelse" i tabellen over scenerne bruges ikke. Måling på tabletten, "Ikke afprøvet" og dokumenterne ([kode/](kode/), gemte data og erfaringer).
 - [ ] **Senere, én ad gangen, efter prøven:** gåde 6 (det periodiske system), mørk energi og "før Big Bang". Planet 9 kommer med Solsystemets overblik, og kvanteverdenen med Kvantefysik forløb 1 (køreplanen). Tallene slås op igen, og hvert kort får `/faktatjek`.
 
 ## Fable
@@ -101,6 +101,8 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Nye påstande 
 4. Gåde 6: "Hvor stopper det periodiske system?" med 119 som krog (anbefalet) eller "Findes der et grundstof nr. 119?"?
 
 **Jeres svar (14. november 2026): alle fire anbefalinger.** Antistof først, en skinne, scenerne til de andre kort venter på prøven efter G4b, og gåde 6 hedder "Hvor stopper det periodiske system?".
+
+**Jeres svar om skinnen (14. november 2026, G4b):** Go til skinnen, som den så ud på billederne (pc og tablet på højkant). Lyset for Sort hul får en fladere ring, så det ikke ligner Saturn. "Næste gåde ›" flyver ud, glider et skridt op ad stien og ind igen (ca. 3 s, et tryk springer over).
 
 ## Prompt til G4b (start en ny session, Opus, høj effort, efter jeres go)
 > Læs docs/plan-gaader-3d.md (afsnittet "Oversigten: Frontlinjen", tabellen "Gåderne" og G4b) og docs/kode/gaader.md, og byg G4b (skinnen og første gang). Du hører til sporet Småting og ejer js/gaader.js, js/gaader/, js/data/gaader.js, Gådernes sektion i index.html, blokken `#gaader` i style.css (én regel pr. linje, `@media` på én linje) og tests/gaader.mjs. Rør ikke de andre skærme. Lysene står allerede i js/gaader/lys.js (`lavLys(id)`), og rækkefølgen kommer fra `størrelse` i dataene. Læs først tjeklisterne D og E og docs/erfaringer/kamera-og-layout.md (de sidste punkter fra G4a). Vis mig et skærmbillede af skinnen på pc og tablet på højkant, før flyvningen ind og ud bygges.

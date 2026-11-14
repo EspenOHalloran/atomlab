@@ -176,6 +176,12 @@ export async function vis(nytId, trin, valgt) {
   const [t, v] = ventTrin;
   ventTrin = null;
   nu.trin(t, v);
+  // En ny scene: kameraet hopper på plads (det kommer fx tæt fra skinnen, og toningen skjuler hoppet)
+  if (verden.målAfstand != null) {
+    const { kamera, styring } = verden;
+    kamera.position.sub(styring.target).setLength(verden.målAfstand).add(styring.target);
+    verden.målAfstand = null;
+  }
 }
 
 function fjern() {
@@ -212,6 +218,7 @@ export function testAdgang() {
   return {
     id: () => id,
     klar: () => Boolean(nu),
+    stille: () => verden.målAfstand == null, // kameraet er gledet på plads
     scene: () => nu?.test?.() ?? null,
     tryk: (x, y) => nu?.tryk?.(new THREE.Vector3(x, y, 0)),
     spol: (sek) => nu?.spol?.(sek),
