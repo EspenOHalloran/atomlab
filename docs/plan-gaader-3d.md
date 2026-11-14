@@ -37,7 +37,7 @@
 | Hvor stopper kvanteverdenen? | Senere, med Kvantefysik forløb 1 | Prikker, der danner striber |
 | Hvor blev antistoffet af? (`antistof`) | Bygget | Et par, der bliver til et glimt |
 | Gåde 6: Hvor stopper det periodiske system? (119 som krog, jeres svar) | Senere, efter prøven | En lille kerne af kugler |
-| Hvordan begyndte livet? (`begyndelsen`) | Bygget | En kolbe med et lyn |
+| Hvordan begyndte livet? (`begyndelsen`) | Bygget. **Ingen egen scene** (jeres svar på E10, 14. november 2026): Kolben bygges én gang, i Liv (L5), og kortet får en knap dertil | En kolbe med et lyn |
 | Er der liv andre steder? (`liv`) | Bygget | Et blåt lys blandt mange hvide |
 | Er der en planet mere i Solsystemet? (Planet 9) | Senere, med Solsystemets overblik | En stiplet klode og aflange baner |
 | Hvad er der inde i et sort hul? (`sorthul`) | Bygget | En sort skive med en glødende ring |
@@ -87,7 +87,7 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Nye påstande 
 - [ ] **Prøven med jeres søn** (efter G4b): Kan han sige kernesætningen om det første kort, og vil han flyve ind i de andre? Scenerne til resten venter på prøven (jeres svar).
 - [ ] **G4c: Sort hul** (Opus, høj). Sort hul bygger på linsen og lægger kun det nye til (tonen, de to kanter og LISA). Mål på pc og tablet.
 - [ ] **G4d: Mørkt stof og liv andre steder** (Opus, høj).
-- [ ] **G4e: Livets begyndelse og det sidste** (Opus, høj). Måling på tabletten, "Ikke afprøvet" og dokumenterne ([kode/](kode/), gemte data og erfaringer).
+- [ ] **G4e: Livets begyndelse og det sidste** (Opus, høj). **Ændret 14. november 2026 (jeres svar på E10):** Livets begyndelse får ingen egen scene. Kortet beholder lyset og får en knap til delen Begyndelsen i Liv (L5, [drejebog-liv.md](drejebog-liv.md)), når den findes. Rækken "Livets begyndelse" i tabellen over scenerne bruges ikke. Måling på tabletten, "Ikke afprøvet" og dokumenterne ([kode/](kode/), gemte data og erfaringer).
 - [ ] **Senere, én ad gangen, efter prøven:** gåde 6 (det periodiske system), mørk energi og "før Big Bang". Planet 9 kommer med Solsystemets overblik, og kvanteverdenen med Kvantefysik forløb 1 (køreplanen). Tallene slås op igen, og hvert kort får `/faktatjek`.
 
 ## Fable
