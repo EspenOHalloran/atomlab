@@ -1,6 +1,6 @@
 # Drejebog: Solsystemets overblik
 
-*Skrevet 13. november 2026 i sporet [Solsystemet og Kosmos](lige-nu/solsystemet.md) efter [prompt-overblik.md](prompt-overblik.md) og skemaet i [skabelonen](fable/E3-forloeb.md). **Rettet 14. november 2026** efter Fables tjek ([fable/E9-overblik.md](fable/E9-overblik.md)) og Opus' noter ([fable/E9-overblik-noter.md](fable/E9-overblik-noter.md)). De fire åbne spørgsmål står i afsnit 6. Bygges efter G1 trin 3, når I har givet go. Intet er bygget endnu.*
+*Skrevet 13. november 2026 i sporet [Solsystemet og Kosmos](lige-nu/solsystemet.md) efter [prompt-overblik.md](prompt-overblik.md) og skemaet i [skabelonen](fable/E3-forloeb.md). **Rettet 14. november 2026** efter Fables tjek ([fable/E9-overblik.md](fable/E9-overblik.md)) og Opus' noter ([fable/E9-overblik-noter.md](fable/E9-overblik-noter.md)). Jeres svar på de fire spørgsmål efter Fables tjek står i bunden (alle anbefalingerne). Bygges efter G1 trin 3, når I har givet go. Intet er bygget endnu.*
 
 **Hvad det er:** Solen, de otte planeter og Pluto i deres rigtige baner, som de står i dag, som Solsystemets forside. Et tryk på en planet flyver ind til den (filmisk overgang, besluttet 5. november 2026). Første gang et forløb på fem trin, bagefter laboratoriet.
 
@@ -122,7 +122,7 @@ Budgettet i [retning.md](retning.md): en skærm uden kloder ca. 1 MB, en klode c
 ## 6. Spørgsmål til jer
 **Fælder, der er fundet:** JPL har fjernet Pluto fra de korte formler (punkt 14), JPL's tabel 2 gælder ikke 1900-2100 (punkt 13), samme fase er ikke nok ved Saturn (afsnit 3), og kvadratroden gør banerne rundere (punkt 16).
 
-**Åbne spørgsmål efter Fables tjek** (min anbefaling først, begrundelsen i [E9-overblik-noter.md](fable/E9-overblik-noter.md)):
+**Spørgsmål efter Fables tjek** (besvaret 14. november 2026, se nederst. Min anbefaling først, begrundelsen i [E9-overblik-noter.md](fable/E9-overblik-noter.md)):
 1. **Tidsskyderens år:** 1800-2100 med tabel 1 (anbefalet, Fable er enig), eller 1800-2050, hvor tabellen gælder.
 2. **Merkur i trin 5:** mat, og et tryk siger "Merkur får sit besøg senere. Vælg en af de andre." (anbefalet, Fables forslag), eller den lille kugle med panelet også i trin 5.
 3. **Størrelserne i "Pustet op":** samme faktor for alle med en mindste størrelse (anbefalet, Fables forslag. De fire inderste bliver prikker på 2-4 px), eller de små forstørres mest (alle ses som kugler, men Jupiter ser kun ca. 3 gange så bred ud som Jorden).
@@ -132,3 +132,6 @@ Budgettet i [retning.md](retning.md): en skærm uden kloder ca. 1 MB, en klode c
 - **1-3:** anbefalingerne: kernesætning A, "Forstørret" med kvadratroden og overgangen gennem mørke med samme fase.
 - **4, Merkur og Pluto:** "Lad os få dem bygget, men indtil da en placeholder eller hvad du anbefaler." Indtil de er bygget: den lille kugle med et kort panel. Bagefter får de overgangen som de andre.
 - **5 og 6** var ikke spurgt. Spørgsmål 5 er nu spørgsmål 1 ovenfor. Spørgsmål 6 (Planet 9): kun som spørgsmål, når gåden findes (Fable er enig). Det gælder, indtil I siger andet.
+
+## Jeres svar (14. november 2026)
+Alle fire anbefalinger fra afsnit 6: **1800-2100** med tabel 1, **Merkur mat i trin 5** med beskeden (den lille kugle med panelet i laboratoriet), **samme faktor for alle planeter** med en mindste størrelse og **spole-skyderen** med ⏪ og ⏩ i tre tempi og "I dag". Drejebogen er klar til at blive bygget, når I giver go.
