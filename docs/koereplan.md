@@ -29,7 +29,7 @@ En prøve med sønnen efter hvert punkt.
 
 ## Serie 2, "Ét produkt"
 5. **Byggeklodserne og budgettet for panelerne** (nr. 7): én udgave af hver klods, højst fire spørgsmål fremme, brødtekst mindst 15 px skærm for skærm, tegnede ikoner i stedet for emoji, klokken fjernet eller lagt ind i forløbet, og de syv hjælpetekster slanket til "sådan styrer du" (mellem, kort plan først).
-6. **Ringen** (nr. 8, sporet Menuen): Kernerne først, "Atomer" og "Liv" ([plan-verdener.md](plan-verdener.md)) (lille) **Jeres go 14. november 2026:** Runden på tabletten er taget (menuen ser fin ud), så det laves nu, og sporet Menuen lukkes bagefter (nr. 4 i [prompt-naeste-fem.md](prompt-naeste-fem.md)).
+6. ✅ **Ringen** (nr. 8, sporet Menuen, **lavet 14. november 2026, og sporet Menuen er lukket**): Kernerne først, "Atomer" og "Liv" ([plan-verdener.md](plan-verdener.md)) (lille) **Jeres go 14. november 2026:** Runden på tabletten er taget (menuen ser fin ud), så det laves nu, og sporet Menuen lukkes bagefter (nr. 4 i [prompt-naeste-fem.md](prompt-naeste-fem.md)).
 7. **Rejsen og "Se også"** (nr. 9): de første stationer, hver med sit eget link (mellem til stor, plan først).
 
 ## Serie 3, "Klar til andre"
@@ -63,7 +63,7 @@ En prøve med sønnen efter hvert punkt.
 | [Molekyler](lige-nu/molekyler.md) | Liv som to forløb og Molekyler som egen del (alle lavet, status "prøve"). Næste: Liv L3 "Kopien" ([drejebog-liv.md](drejebog-liv.md)). |
 | [Tid og rum](lige-nu/tid.md) | Runden med sønnen (begge forløb om tid og Kosmos i fire grupper er bygget, Serie 1 nr. 4). |
 | [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Overblikket, når Forløb-klodsen findes. Venus V3 holder pause til Serie 1 er prøvet. |
-| [Menuen](lige-nu/menuen.md) | Ringen (Serie 2 nr. 6, jeres go 14. november 2026), så lukkes sporet. |
+| [Menuen](lige-nu/menuen.md) | **Lukket 14. november 2026** (Ringen er lavet). Det, der skal rettes i menuen, tages i Småting eller i den del, der giver menuen en ny verden. |
 
 ## Baggrund (jeres idéer og Opus' vurderinger, flyttet ordret fra ideer.md 7. november 2026)
 
@@ -71,7 +71,7 @@ En prøve med sønnen efter hvert punkt.
 - **Ny del: Liv** (foreslået af jer): et laboratorium, hvor man blander livets ingredienser og ser, hvor langt man kan komme (fx Miller-Urey-forsøget, byggesten, hinder, RNA). Vigtigt at sige ærligt, at ingen endnu har lavet liv fra bunden, og at det er uvist, hvordan det opstod. Med de nyeste fund på Mars (Perseverance, "leopardpletterne" i klippen Cheyava Falls). Besluttet: Forklar, hvad der er fundet, hvorfor det er så interessant, og hvorfor det er det bedste spor af liv på andre planeter indtil nu, men også ærligt, at det ikke er bevist. Teksten skal faktatjekkes grundigt. Molekyle-idéen ovenfor kan være første skridt. **Opprioriteret 5. november 2026 (jeres go):** Kommer lige efter Molekyler, og DNA hører med. Opus laver faktagrundlaget (xhigh) og planen uden at vente på Fable 5.5.
 
 ### Planen efter planeterne (Ild, Kvantefysik, Antistof, Mørkt stof, Gåderne, Land på måner og DNA)
-*Hjernen og AI er ikke besluttet og står i [ideer.md](ideer.md) under Ild og liv.*
+*Hjernen og AI er ikke besluttet og står i [ideer.md](ideer.md) under Liv.*
 
 - **Ni nye idéer (jeres idéer, 5. november 2026, intet er faktatjekket).** **Jeres svar (5. november 2026):** Alle undtagen Hjernen og AI skrives ind i planen (se "Planen efter planeterne" under "Venter på et go" øverst). Hjernen og AI venter. Opus' første vurdering står ved hver, og der er en samlet anbefaling til sidst. Rød tråd: AtomLab kan vokse i to retninger, ind mod det mindste (kvante → atom → molekyle → ild → liv → hjerne) og ud mod det største (planeter → stjerner → kosmos → gåder).
   - **Kvantefysik, hvad er det?** Meget relevant. Bygger direkte videre på orbitalerne (elektronskyen er allerede |ψ|²), tunneleffekten i Stjerneovnen og flammefarverne (se Ild). Forslag: en ny del eller en del af Værkstedet med dobbeltspalten (elektroner lander én ad gangen og bygger et mønster op), hvorfor elektronen ikke falder ind i kernen, spektrallinjer og tunneleffekt. Fælder: "observatøren er en bevidsthed", "partiklen er to steder på én gang" og "sammenfiltring sender beskeder hurtigere end lyset". Stor. Faktagrundlaget med høj effort.

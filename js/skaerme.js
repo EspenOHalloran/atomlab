@@ -11,7 +11,7 @@ export const SKÆRME = [
   { id: 'system', verden: 'atomer', titel: 'Det periodiske system', modul: './system.js', status: 'færdig' },
   { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig' },
   { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig' },
-  { id: 'liv', verden: 'ildogliv', titel: 'Liv', modul: './liv.js', status: 'prøve' },
+  { id: 'liv', verden: 'liv', titel: 'Liv', modul: './liv.js', status: 'prøve' },
   { id: 'batteri', verden: 'elektricitet', titel: 'Batteriet', modul: './batteri.js', status: 'færdig' },
   { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig' },
   { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
@@ -19,12 +19,13 @@ export const SKÆRME = [
   { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve' },
 ];
 
-// Verdenerne i ringens rækkefølge (menuen, js/karrusel.js). dele er delene i SKÆRME med samme verden, i listens rækkefølge.
+// Verdenerne i ringens rækkefølge (menuen, js/karrusel.js): fra det mindste til det største, Kernerne først og
+// Biblioteket sidst uden for skalaen (docs/plan-verdener.md). dele er delene i SKÆRME med samme verden, i listens rækkefølge.
 // motiv er baggrunden bag ringen (js/menubaggrund.js).
 export const VERDENER = [
-  { id: 'atomer', navn: 'Atomer og molekyler', tekst: 'Byg atomer og molekyler, og mød alle 118 grundstoffer', motiv: 'vaerksted' },
   { id: 'kerner', navn: 'Kernerne', tekst: 'Atomkerner, der smelter sammen i stjernerne eller flækker i en reaktor', motiv: 'fusion' },
-  { id: 'ildogliv', navn: 'Ild og liv', motiv: 'liv' },
+  { id: 'atomer', navn: 'Atomer', tekst: 'Byg atomer og molekyler, og mød alle 118 grundstoffer', motiv: 'vaerksted' },
+  { id: 'liv', navn: 'Liv', motiv: 'liv' },
   { id: 'elektricitet', navn: 'Elektricitet', motiv: 'batteri' },
   { id: 'rummet', navn: 'Rummet', tekst: 'Rejs til planeterne, og se sorte huller og supernovaer', motiv: 'solsystem' },
   { id: 'biblioteket', navn: 'Biblioteket', motiv: 'ordbog' },

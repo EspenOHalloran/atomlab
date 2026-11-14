@@ -9,7 +9,7 @@
 | Forløb | [lige-nu/forloeb.md](lige-nu/forloeb.md) | Forløb-klodsen, "Dit første atom", byggeklodserne og Rejsen (Serie 1 og 2 i [koereplan.md](koereplan.md), startet 11. november 2026) |
 | Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0-L2 er lavet). Liv forløb 1-2 og Molekyler som egen del er lavet (status "prøve"). Næste: Liv L3-L6 som tre forløb og ét kort ([drejebog-liv.md](drejebog-liv.md)). Senere Ild |
 | Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 og T5 er lavet. Næste: Tid som ét punkt med rejsen først (Serie 1). T4 er en mulig udvidelse |
-| Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | Menuen som en ring (K1-K3) |
+| Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | **Lukket 14. november 2026** (ringen efter størrelse er lavet). Små rettelser i Småting, en ny verden med den del, der skal bo i den |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | **Lukket 14. november 2026.** Nye ord tages i det spor, der bruger dem, og små rettelser i Småting |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
 | Åbne punkter | [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md) | Fejl og tests, der ikke er undersøgt, grene, domæner og faktatjek, der mangler |

@@ -12,7 +12,7 @@ await page.goto(`${ADRESSE}/`);
 await page.evaluate(() => localStorage.setItem('atomlabFremgang', JSON.stringify({ opgaver: {}, opdaget: [], forløb: { 'foerste-atom': { sprunget: 1 } } })));
 await page.reload();
 await page.waitForTimeout(800);
-await page.click('.menukort a[href="#system"]', { force: true }); // en ny bruger starter på Atomer og molekyler, forrest i ringen
+await page.click('.menukort a[href="#system"]', { force: true }); // en ny bruger starter på Atomer, forrest i ringen
 await page.waitForTimeout(9000);
 await page.screenshot({ path: UD + '/s1-væg.png' });
 tjek('væggen vises', await page.isVisible('#system'));

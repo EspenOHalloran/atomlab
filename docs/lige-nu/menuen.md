@@ -1,15 +1,12 @@
 # Lige nu: Menuen
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/menuen.md](../arkiv/historik/menuen.md). Højst ca. 5 KB. Sidst opdateret: 8. november 2026 (K3).*
+*Spor i [oversigten](../lige-nu.md). **Sporet er lukket 14. november 2026.** Det forrige "Senest lavet" står øverst i [arkiv/historik/menuen.md](../arkiv/historik/menuen.md). Sidst opdateret: 14. november 2026 (Ringen).*
 
-**Senest lavet (8. november 2026): K3, ringen er den almindelige menu.** Jeres go blev givet 7. november 2026. Ringen med verdenerne vises nu altid, og `?karrusel` er væk (der er ingen `?gammelmenu`). Fjernet: gitteret med 8 kort (og reglerne for det ved 1150, 820 og 560 px og under 500 px højde), de gule piller, linjen med tallene, citatet (og listen `MENU_CITATER`) og "Næste eventyr". "Start her" for en ny bruger står stadig på Atomværkstedets knap. ✓ på delene og "Start her" er flyttet fra main.js til karrusel.js, så alt om menuen står ét sted. `fremgangPrDel()` i main.js giver stadig tallene. Testene `system`, `solsystem`, `ordbog`, `kosmos`, `byttebors`, `henter` og `karrusel` er rettet: de tjekker nu ✓ og tallene i "Din fremgang" i stedet for de gule piller, og at det gamle er væk.
+**Senest lavet (14. november 2026): Ringen efter størrelse, og sporet lukkes.** Jeres runde på tabletten: Menuen ser fin ud, intet skal rettes. Jeres svar: anbefalingen ([plan-verdener.md](../plan-verdener.md), linjen "Ringen", Serie 2 nr. 6 i [koereplan.md](../koereplan.md)).
+- `VERDENER` i `js/skaerme.js` står nu fra det mindste til det største: **Kernerne, Atomer, Liv**, Elektricitet, Rummet og Biblioteket (uden for skalaen, sidst). "Atomer og molekyler" hedder "Atomer", og "Ild og liv" hedder "Liv". Verdenens id er `liv` (før `ildogliv`), så ikonet hedder `.ikon-v-liv` i style.css. Ikonet og baggrundsmotivet var allerede DNA-stigen uden ild, så `js/menubaggrund.js` er ikke ændret (motiverne følger rækkefølgen i `VERDENER`). Liv har én del, så kortets linje er stadig delens egen tekst.
+- En ny bruger starter stadig på Atomer med "Start her" på Atomværkstedet (ikke på Kernerne, der står først).
+- Testen `karrusel` følger den nye rækkefølge (piletasten fra Kernerne giver Atomer, musehjulet Liv, ← fra Kernerne giver Biblioteket, og "Din fremgang" starter med Kernerne). De gamle navne er rettet i `docs/` (ikke i Fables eftersyn og arkivet, der beskriver, hvordan det var).
 
-**Næste (venter på jeres go):**
-1. **Jeres runde på tabletten** (nu uden `?karrusel`, spørgsmålene står i [ikke-afproevet.md](../ikke-afproevet.md)). Det, I vil have rettet i ringen, kan tages i en ny session med en kort tekst, fx "Ret menuen: …" (Opus, effort medium).
-2. **Ild og liv** bliver en ny verden, når Ild eller Liv findes (se [plan-verdener.md](../plan-verdener.md), "En ny del"). Det laves sammen med den del, ikke i sporet Menuen.
+**Næste:** Intet i sporet. Små rettelser i menuen tages i [Småting](smaating.md). En ny verden (fx **Stof og kemi**, når Ild findes) laves sammen med den del, der skal bo i den ([plan-verdener.md](../plan-verdener.md), "En ny del").
 
-**Jeres svar (14. november 2026):** Runden på tabletten er taget, og menuen ser fin ud. Rækkefølgen: anbefalingen, altså Kernerne først, "Atomer" og "Liv" (linjen "Ringen" i [plan-verdener.md](../plan-verdener.md)). Næste: nr. 4 i [prompt-naeste-fem.md](../prompt-naeste-fem.md), og så lukkes sporet.
-
-**Spørgsmål til jer:** *(besvaret ovenfor)*
-- **Rækkefølgen:** Planen siger "fra det mindste til det største", men Atomer og molekyler står før Kernerne (som i jeres tabel), og kerner er mindre end atomer. Skal Kernerne stå først? Det er én linje i `js/karrusel.js`. Indtil I svarer, står den som i tabellen.
-- Kører baggrundene glat på tabletten (mest Stjerneovnen), og er nogen af dem for kraftige eller for svage? Spørgsmålene står i [ikke-afproevet.md](../ikke-afproevet.md).
+**Spørgsmål til jer:** Ingen. Det, der ikke er afprøvet (bl.a. om rækkefølgen giver mening for jeres søn), står i [ikke-afproevet.md](../ikke-afproevet.md).
