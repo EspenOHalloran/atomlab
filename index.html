@@ -1074,7 +1074,8 @@
     </div>
   </section>
   <section id="gaader" class="skærm skjult" aria-label="Gåderne">
-    <!-- Gåderne (js/gaader.js, teksterne i js/data/gaader.js): oversigten og ét kort ad gangen, uden 3D -->
+    <!-- Gåderne (js/gaader.js, teksterne i js/data/gaader.js): oversigten og ét kort ad gangen. Et kort har en scene i 3D
+         bag sig (js/gaader/scene.js), og panelet står til højre (pc og tablet på langs) eller forneden (højkant). -->
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Gåderne</h2>
@@ -1083,6 +1084,9 @@
         <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
       </div>
     </header>
+    <div class="vindue" id="gaaderVindue">
+      <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="gaade-scene-bund"><p class="gaade-linje" id="gaadeLinje" aria-live="polite" hidden></p><div class="gaade-scene-knapper" id="gaadeSceneKnapper"></div></div></div></div>
+    </div>
     <div class="panel gaader-panel" id="gaaderPanel">
       <div class="gaader-oversigt" id="gaaderOversigt">
         <p class="gaader-intro">Videnskaben er ikke færdig. Her er gåder, som ingen har løst endnu. Find ud af, hvad forskerne ved, hvad de ikke ved, og hvordan de prøver at finde svaret.</p>

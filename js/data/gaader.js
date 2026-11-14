@@ -6,12 +6,21 @@
 // hvorfor (id i HVORFOR, en knap under Så) }],
 // slut (kernen i én-to sætninger), seDet: [data-gaa, tekst], nørd (HTML), ærligt (HTML), ord (fagord på kortet, id'er i
 // Ordbogen) }. Et kort uden trin er ikke bygget endnu og står gråt i oversigten ("Kommer senere").
+// Gåderne i 3D (G4a, docs/plan-gaader-3d.md) lægger til: ven ("Sig det til en ven: …", én sætning, vises på det sidste
+// billede), nyt ({ tekst, dato }: "Nyt siden sidst" øverst på kortet), løst (en dato: "Løst!") og scene (teksterne i
+// kortets scene i js/gaader/<id>.js, og scene.ærligt lægges under kortets "Ærligt talt").
+// størrelse: størrelsesordenen i meter (10^størrelse). Bruges kun til rækkefølgen på skinnen i G4b (fra det mindste til
+// det største), ikke som et tal i spillet.
 // Kilderne står i docs/fakta-gaader.md. Hvert kort har en dato, fordi stoffet flytter sig: Slå "Tjek igen" op, før
 // teksten ændres.
+
+// De tre slags streg i scenerne (js/gaader/streg.js). Står under scenen første gang og altid i "Ærligt talt".
+export const STREG_FORKLARING = 'Farve er målt. Hvid stiplet er et bud. Hvor intet er tegnet, ved ingen det.';
 
 export const GÅDER = [
   {
     id: 'sorthul',
+    størrelse: 10, // Skyttens A*: horisonten er ca. 2,5 · 10¹⁰ m bred (4,3 mio. solmasser)
     spørgsmål: 'Hvad er der inde i et sort hul?',
     linje: 'Intet slipper ud, så hvordan kan man vide det?',
     // Datoerne er slået op 12. november 2026: LISA (efter planen 2035) og GW250114 (arXiv:2509.08054)
@@ -75,6 +84,7 @@ export const GÅDER = [
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/rummet.md (Fable E5) og fakta-gaader.md afsnit 1.
   {
     id: 'liv',
+    størrelse: 7, // planeter: Jorden er ca. 1,3 · 10⁷ m bred
     spørgsmål: 'Er der liv andre steder?',
     linje: 'På Mars, på en måne eller om en anden stjerne',
     // Datoerne er slået op 13. november 2026: over 6.000 exoplaneter (science.nasa.gov/exoplanets), Tianwen-3 (opsendes
@@ -147,6 +157,7 @@ export const GÅDER = [
   // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 3.
   {
     id: 'antistof',
+    størrelse: -15, // partikler: en proton er ca. 10⁻¹⁵ m
     spørgsmål: 'Hvor blev antistoffet af?',
     linje: 'Alt omkring os er stof, næsten intet er antistof',
     // Datoerne er slået op 13. november 2026: Hyper-Kamiokande (måler fra 2028) og DUNE (strålen i begyndelsen af
@@ -199,6 +210,9 @@ export const GÅDER = [
       },
     ],
     slut: 'Antistof findes, men næsten alt blev udslettet. Hvorfor der blev stof tilovers, ved ingen.',
+    ven: 'Alt, hvad du kan se, er en lille rest stof fra Big Bang, og ingen ved, hvorfor den blev tilovers.',
+    nyt: null,
+    løst: null,
     seDet: ['kosmos:bigbang', 'Se det selv: Kosmos, Big Bang'],
     // Nobelpriserne (nobelprize.org): 1980 Cronin og Fitch ("violations of fundamental symmetry principles in the decay of
     // neutral K-mesons"), 2008 Kobayashi og Maskawa, 2015 Kajita og McDonald ("neutrino oscillations, which shows that
@@ -211,10 +225,48 @@ export const GÅDER = [
       <p><b>Ens indtil videre:</b> Protonen og antiprotonen har samme forhold mellem ladning og masse inden for 16 billiontedele (BASE 2022), og i 2023 viste ALPHA-g, at antibrint falder nedad som alt andet. Den 24. marts 2026 kørte BASE 92 antiprotoner i en fælde på en lastbil tværs over CERN. Målet er at kunne måle dem i roligere laboratorier. Alt det antistof, der er lavet, vejer kun nogle få nanogram (milliardtedele af et gram).</p>
       <p><b>Neutrinoerne:</b> Takaaki Kajita og Arthur McDonald fik Nobelprisen i 2015 for at vise, at neutrinoer skifter mellem tre slags og derfor har en masse. Det åbner for, at neutrinoer og antineutrinoer kan skifte forskelligt. T2K i Japan og NOvA i USA har målt i årevis, men har ikke fundet et klart svar.</p>`,
     ærligt: '<p>At Big Bang lavede lige meget stof og antistof, er det, fysikkens love tyder på, men ingen har set det. Og "Målt eller gæt?" er her den anden vej rundt: Forskellen er målt, men hvad den skyldes i sidste ende, og om der er flere, er ikke afgjort.</p>',
+    // Scenen i 3D (G4a, js/gaader/antistof.js). Lys bliver til en elektron og en positron, hvis det har mindst 1,022 MeV
+    // (2 × 0,511) og er tæt på en kerne, der tager en del af stødet, eller rammer en anden foton (Wikipedia "Pair production"). Synligt lys har ca.
+    // 1,6-3,3 eV, så det er 300.000-650.000 gange mindre. Et par i ro bliver til to (af og til tre) gammafotoner
+    // (Wikipedia "Electron–positron annihilation"). Tusind par i stedet for en milliard: fakta-faelder.md (antistof).
+    scene: {
+      start: 'Tryk i mørket, så bliver lys til stof.',
+      par: 'Lyset blev til to: én stof og én antistof. Træk dem sammen.',
+      lys: 'De blev til lys igen. Prøv at lave kun stof.',
+      kunStof: 'Ingen har set lys blive til kun stof. Der kommer altid én af hver.',
+      bang: [
+        'Lige efter Big Bang: næsten lige meget stof og antistof. Her ca. tusind par.',
+        'De mødes og bliver til lys.',
+        'Én partikel stof blev tilovers. Her én for tusind par, i virkeligheden ca. én for en milliard.',
+        'Alt, du kan se, er resten.',
+      ],
+      // Trin 2. Hvor meget for lille den målte forskel er, er ikke regnet ud med sikkerhed: Skønnene i Standardmodellen
+      // spænder over mange størrelsesordener (fx 10⁻¹⁸ til 10⁻¹⁰ mod de målte ca. 6 · 10⁻¹⁰, arXiv:hep-ph/9603208 og
+      // 0903.5494), men alle er for små (T2K, arXiv:1910.03887). Derfor intet tal på søjlerne.
+      søjler: ['målt forskel', 'det, der skal til'],
+      førSøjle: 'en lille forskel', // navnet før gættet (ellers afslører det svaret)
+      målt: 'Den lille søjle er en forskel mellem stof og antistof. Er den målt?',
+      forLidt: 'Den målte forskel er alt for lille. Den stiplede søjle er det, der skal til, og ingen ved, hvor høj den er.',
+      // Trin 3. DUNE: 1.300 km, ca. 1,5 km nede (Wikipedia "Deep Underground Neutrino Experiment"). Buen: en korde på
+      // 1.300 km i en kugle med radius 6.371 km går ca. 33 km under overfladen. Hyper-Kamiokande: 68 × 71 m, 258.000 tons
+      // vand, 650 m under bjerget Nijuugo, strålen fra J-PARC 295 km væk, måler fra 2028 (Wikipedia "Hyper-Kamiokande").
+      // Ca. 65 milliarder neutrinoer fra Solen pr. cm² pr. sekund ved Jordens overflade (Wikipedia "Neutrino").
+      // Cherenkov-ringen: ca. 42° i vand (Wikipedia "Cherenkov radiation"). Strålen skifter mellem neutrinoer og antineutrinoer
+      // ved at vende strømmen i magnethornene, i perioder af måneder til år (DUNE TDR bind II, arXiv:2002.03005: fx 5 + 5 år).
+      dune: 'DUNE i USA skyder neutrinoer 1.300 km gennem jorden, op til ca. 30 km nede. Strålen skal efter planen starte i begyndelsen af 2030\'erne.',
+      hk: 'Hyper-Kamiokande i Japan er en tank med 258.000 tons vand 650 m inde under et bjerg. Den skal efter planen begynde at måle i 2028.',
+      skiftevis: 'De skyder skiftevis neutrinoer og antineutrinoer og tæller, hvor mange der skifter slags på vejen.',
+      tommel: 'Neutrinoer flyver gennem næsten alt. Hvert sekund suser ca. 65 milliarder fra Solen gennem hver kvadratcentimeter af dig.',
+      navne: { neutrino: 'neutrinoer', anti: 'antineutrinoer', fermilab: 'Fermilab', sanford: 'Sanford Lab', km: '1.300 km', bred: '68 m', høj: '71 m' },
+      ærligt: `<p>I scenen er partiklerne elektroner og positroner (antielektroner). Lys kan kun blive til et par, hvis det har energi nok, flere hundrede tusind gange så meget som synligt lys, og rammer noget, fx en atomkerne. Lige efter Big Bang var der mange slags partikler, og ingen ved, hvordan resten blev til.</p>
+        <p>Søjlerne har ingen tal, fordi forskerne er enige om, at den målte forskel er for lille, men ikke om hvor meget. ${STREG_FORKLARING}</p>
+        <p>Tanken og jorden er tegnet i rigtig skala, men neutrinoerne kan ikke ses: De er tegnet som prikker. Og strålen skifter i virkeligheden mellem neutrinoer og antineutrinoer efter måneder eller år, ikke hvert 4. sekund.</p>`,
+    },
   },
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/begyndelsen.md (Fable E5) og fakta-gaader.md afsnit 4.
   {
     id: 'begyndelsen',
+    størrelse: -8, // molekyler og de første celler
     spørgsmål: 'Hvordan begyndte livet?',
     linje: 'Fra stoffer uden liv til den første celle',
     // QT45 er slået op 13. november 2026: Gianni m.fl., Science 391:1022-1028 (12. februar 2026), læst af Fable i
@@ -286,6 +338,7 @@ export const GÅDER = [
   // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 5.
   {
     id: 'moerktstof',
+    størrelse: 21, // galakser: Mælkevejen er ca. 10²¹ m bred
     spørgsmål: 'Hvad er mørkt stof?',
     linje: 'Noget usynligt trækker i galakserne',
     // Datoerne er slået op 13. november 2026: LZ's hændelse (arXiv:2609.02823, 2. september 2026; XENONnT og PandaX-4T
