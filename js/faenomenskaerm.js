@@ -344,13 +344,15 @@ export function lavFænomenSkærm({ skærm, liste }) {
   }
 
   // Gå til et sted i træet. Er et forsøg valgt, vælges kloden først.
+  // I en gruppe uden klode (Kosmos) er stedet et sted i det valgte fænomen (fx 'kosmos:tidhvorfor:rumtid').
   function gå(g, id) {
-    if (!g?.f) return;
+    const mål = g?.f ?? (g?.under.includes(valgt) ? valgt : null);
+    if (!mål) return;
     lyd.klik();
-    if (valgt !== g.f) {
+    if (valgt !== mål) {
       rejsTil(g, () => {
-        vælg(g.f.id);
-        if (id === g.f.træ?.rod) return; // kloden starter selv der
+        vælg(mål.id);
+        if (id === mål.træ?.rod) return; // kloden starter selv der
         kørende?.gåTil?.(id);
         visSted();
       });
