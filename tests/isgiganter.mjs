@@ -143,11 +143,13 @@ async function uranusUN4() {
   const træ = await fm(() => atomlabTest.solsystem.træ());
   tjek('træet har "Måner" med de fem store og "Små måner"', ['maaner', 'miranda', 'ariel', 'umbriel', 'titania', 'oberon', 'smaa'].every((id) => træ.some((t) => t.id === id)), JSON.stringify(træ.map((t) => t.id)));
   // Omløbstiden og retningen målt i geometrien: Vinklen falder (med uret set fra IAU's nordpol, som Uranus drejer)
-  await F('sætMåneUr', 0);
-  const m0 = await M();
-  const dt = 40;
-  await F('sætMåneUr', dt);
-  const m1 = await M();
+  // Sæt uret og læs månerne i ét skridt: Ellers kører månerne videre i rigtig tid imellem (0,01-0,4° under belastning)
+  const dt = 40, t2 = 600; // t2: forskellen mellem Cressida og Desdemona vokser ca. 52° (under en halv omgang)
+  const [m0, m1, m2] = await fm(([dt, t2]) => {
+    const f = atomlabTest.solsystem.fænomen();
+    const læs = () => Object.fromEntries(f.måner().map((m) => [m.id, m]));
+    return [0, dt, t2].map((t) => { f.sætMåneUr(t); return læs(); });
+  }, [dt, t2]);
   const gr = (a) => ((a % 360) + 540) % 360 - 180;
   const fejlOmløb = Object.values(m0).map((m) => {
     const målt = gr(m1[m.id].vinkel - m.vinkel);
@@ -157,9 +159,6 @@ async function uranusUN4() {
   tjek('månerne kredser med uret set fra IAU\'s nordpol (den vej, Uranus drejer), med NSSDC\'s omløbstider', fejlOmløb.every((f) => f < 0.01) && gr(m1.miranda.vinkel - m0.miranda.vinkel) < 0, JSON.stringify(fejlOmløb.map((f) => f.toFixed(4))));
   // Cressida indhenter Desdemona: forskellen i vinkel vokser med 360° på ca. 21,8 døgn
   const forskel = (m) => gr(m.desdemona.vinkel - m.cressida.vinkel);
-  const t2 = 600; // forskellen vokser ca. 52° (under en halv omgang)
-  await F('sætMåneUr', t2);
-  const m2 = await M();
   const synodisk = (360 * t2 * 450) / 86400 / Math.abs(gr(forskel(m2) - forskel(m0)));
   tjek(`Cressida indhenter Desdemona hver ${synodisk.toFixed(1)}. døgn (målt i 3D-billedet)`, Math.abs(synodisk - 21.8) < 0.2 && Math.abs(m0.miranda.hældning - 4.34) < 1e-9);
   // Kortene og skyggerne
@@ -279,7 +278,10 @@ async function flybyUN5(id) {
     // Uranus' stop 2: skyderen kører af sig selv tilbage til 1986
     if (id === 'uranus' && i === 1) {
       const kører = await J(() => atomlabTest.solsystem.fænomen().tur().årTur);
-      await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().årTur, null, { timeout: 30000, polling: 200 }).catch(() => {});
+      // Turen tager 8 s spiltid (ÅR_TID) i højst 0,05 s pr. billede. Under belastning tegner testbrowseren så få billeder,
+      // at 30 s rigtig tid ikke var nok (skyderen stod ved 1986,5-1989,4). Spol derfor frem i stedet for at vente.
+      await J(() => atomlabTest.solsystem.spol(9));
+      await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().årTur, null, { timeout: 10000, polling: 200 }).catch(() => {});
       tjek('Uranus\' stop 2: skyderen "År" kører af sig selv fra i dag til januar 1986 og viser 1986', kører && Math.abs((await F('år')) - 1986.07) < 0.01 && (await J(() => [...document.querySelectorAll('#solsystem .skyder-boks')].find((b) => b.textContent.includes('År'))?.querySelector('strong').textContent)) === '1986');
     }
     await s.waitForTimeout(400); // panelet opdateres fire gange i sekundet
@@ -309,7 +311,8 @@ async function flybyUN5(id) {
   await s.click('#solsystemBjælke button:has-text("Start flyby")');
   await J(() => atomlabTest.solsystem.fænomen().hop());
   await s.click('#solsystemBjælke button[aria-label="Stop flyby"]');
-  await s.waitForTimeout(300);
+  // Vent på tilstanden, ikke 300 ms: Knapperne bygges om i et senere billede, og under belastning var det for kort
+  await s.waitForFunction(() => !document.querySelector('#solsystemVindue .undertekst.fase') && atomlabTest.solsystem.knapper()[0] === '▶ Start flyby', null, { timeout: 10000, polling: 100 }).catch(() => {});
   tjek(`${navn}: ✕ stopper flybyen og fjerner underteksten`, !(await J(() => document.querySelector('#solsystemVindue .undertekst.fase'))) && (await J(() => atomlabTest.solsystem.knapper()))[0] === '▶ Start flyby');
   const sted = id === 'uranus' ? 'nordpol' : 'buer';
   await s.click('#solsystemBjælke button:has-text("Start flyby")');
@@ -347,7 +350,10 @@ for (const [id, navn, flad, hæld, kort] of [['uranus', 'Uranus', 24973 / 25559,
   tjek(`${navn}: Styr-boksen har ${styr.join(', ')}`, JSON.stringify(udenHent(await fm(() => atomlabTest.solsystem.knapper()))) === JSON.stringify(styr), JSON.stringify(await fm(() => atomlabTest.solsystem.knapper())));
   const form = await F('form');
   tjek(`${navn} er fladtrykt (NSSDC), og aksen hælder ${hæld}° mod banen`, Math.abs(form.flad - flad) < 1e-6 && Math.abs(form.hældning - hæld) < 0.15, JSON.stringify(form));
-  // Solens bredde i 3D-billedet (planetocentrisk) passer med tallene for i dag
+  // Solens bredde i 3D-billedet (planetocentrisk) passer med tallene for i dag. Solens retning sættes først i fænomenets
+  // første billede: Før det er sol() (0, 0, 0), og vinklen til en nulvektor er 90°, så testen fik 0,00 under belastning,
+  // når kortet var hentet før det første billede (Neptun, seks gange). Vent derfor på, at Solen har en retning.
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().sol().some((v) => v !== 0), null, { timeout: 15000, polling: 100 }).catch(() => {});
   const sol = await F('sol'), p = await F('pol');
   const iBilledet = 90 - vinkel(sol, p);
   const regnet = solBredde(id, new Date(), false);

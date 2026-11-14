@@ -251,16 +251,20 @@ await E(() => atomlabTest.kosmos.trykPå('Vendepunkt 4 lysår ude'));
 await E(() => atomlabTest.kosmos.trykPå("Vis den rejsendes 'nu'"));
 q = await s5();
 tjek('"nu"-linjerne: i vendingen springer "nu derhjemme" fra 1,8 til 8,2 år (6,4 år)', q.nu && nær(q.egen, 6, 1e-9) && nær(q.før, 1.8, 1e-9) && nær(q.efter, 8.2, 1e-9) && nær(q.spring, 6.4, 1e-9), JSON.stringify(q));
-await E(() => atomlabTest.kosmos.trykPå('Spil rejsen'));
-await E(() => atomlabTest.kosmos.spol(3.5));
-q = await s5();
-bj = await E(() => atomlabTest.kosmos.bjælke());
-const halvvejs = q.spil && nær(q.T, 5, 0.1) && bj.some((x) => x.tekst === '■ Stop');
+// Tryk, spol og læs i ét skridt: Siden tegner videre i rigtig tid mellem to evaluate, og under belastning løb rejsen
+// 2-3 billeder (0,05 s hver) for langt, før testen kiggede (T = 5,2 i stedet for 5). Åbne punkter, 14. november 2026.
+const midt = await E(() => {
+  const k = atomlabTest.kosmos;
+  k.trykPå('Spil rejsen');
+  k.spol(3.5);
+  return { q: k.fænomen().scene5(), bj: k.bjælke() };
+});
+const halvvejs = midt.q.spil && nær(midt.q.T, 5, 0.1) && midt.bj.some((x) => x.tekst === '■ Stop');
 await page.screenshot({ path: `${UD}/scene5-pc.png` });
 await E(() => atomlabTest.kosmos.spol(6.5));
 q = await s5();
 bj = await E(() => atomlabTest.kosmos.bjælke());
-tjek('"▶ Spil rejsen" kører de 10 år (halvvejs efter 3,5 s) og stopper selv bagefter', halvvejs && !q.spil && bj.some((x) => x.tekst === '▶ Spil rejsen'), JSON.stringify([q, bj]));
+tjek('"▶ Spil rejsen" kører de 10 år (halvvejs efter 3,5 s) og stopper selv bagefter', halvvejs && !q.spil && bj.some((x) => x.tekst === '▶ Spil rejsen'), JSON.stringify([midt.q.T, q, bj]));
 tjek('lærredet dækker ikke Styr-boksen, underteksten eller bjælken (scene 5, pc)', (await dækker()).length === 0, JSON.stringify(await dækker()));
 
 // Højkant: scene 4 over hinanden og scene 5 kvadratisk i hele bredden (tablet og telefon)

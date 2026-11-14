@@ -60,10 +60,14 @@ const bjælke = () => T(() => atomlabTest.solsystem.bjælke().map((k) => k.tekst
 tjek('Årstiderne står under Jorden i Solsystemet', (await T(() => atomlabTest.solsystem.fænomener)).join(',').includes('aarstider,formoerkelser'));
 tjek('tabellen står i 3D-billedet med fire steder', (await T(() => document.querySelectorAll('#solsystemToplag tr').length)) === 5, await kort());
 // Første trin: Jorden kører rundt om Solen, og datoen på skyderen følger med tabellen
+// Spol og læs tabellen og skyderen i ét skridt: Jorden kører videre i rigtig tid mellem to evaluate, og krydses en uge
+// imellem (tabellen og skyderen skrives om én gang om ugen), viser de to forskellige datoer (fejlede under belastning).
 const datoFør = (await kort()).split(' · ')[0];
-await T(() => atomlabTest.solsystem.spol(3));
-const datoEfter = (await kort()).split(' · ')[0];
-const skyderDato = await T(() => document.querySelector('#solsystemStyr .skyder-boks strong').textContent);
+const [datoEfter, skyderDato] = await T(() => {
+  atomlabTest.solsystem.spol(3);
+  const k = document.querySelector('#solsystemToplag .aarstid-kort')?.textContent ?? '';
+  return [k.split(' · ')[0], document.querySelector('#solsystemStyr .skyder-boks strong').textContent];
+});
 tjek(`første trin: Jorden kører rundt (${datoFør} → ${datoEfter}), og skyderen følger med`, datoFør !== datoEfter && datoEfter.trim() === skyderDato.trim(), skyderDato);
 tjek('bjælken: "‹" og "Næste: forår i nord ›"', JSON.stringify(await bjælke()) === JSON.stringify(['‹', 'Næste: forår i nord ›']), JSON.stringify(await bjælke()));
 tjek('Styr-boksen: skyderen "Dato" og kontakten "Tæt på Jorden" ("Jorden drejer" er blevet til tidsknappen)', JSON.stringify(await T(() => atomlabTest.solsystem.styr().map((x) => x.navn))) === JSON.stringify(['Dato', 'Tæt på Jorden']), JSON.stringify(await T(() => atomlabTest.solsystem.styr())));
