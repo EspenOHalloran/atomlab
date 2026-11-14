@@ -1,5 +1,7 @@
-// Gåderne (#gaader, docs/plan-gaader.md): en side uden 3D i Biblioteket med det, videnskaben ikke ved endnu.
+// Gåderne (#gaader, docs/plan-gaader.md og plan-gaader-3d.md): det, videnskaben ikke ved endnu, i Biblioteket.
 // Først en oversigt over kortene, så ét kort ad gangen: tre trin (Spørg, Gæt, Så) og bagefter "Det så du".
+// Et kort har en scene i 3D bag sig (G4a): js/gaader/scene.js hentes med import() første gang og får trinet med
+// scene.vis(id, trin, valgt). Panelet står til højre eller forneden (klassen paa-kort på #gaader).
 // Teksterne står i js/data/gaader.js. Gættets knapper og prikkerne har samme udseende som forløbene (js/forloeb.js),
 // "For nørder" og "Ærligt talt" er de fælles foldebokse (js/lag.js), "Se det selv" er en data-gaa-knap (js/gaa.js), og et trin
 // med hvorfor får det fælles "Hvorfor?"-kort under Så (fx "Hvornår er noget opdaget?", Gåderne G3).
@@ -18,6 +20,27 @@ let lavet = false;
 let gåde = null; // kortet, der vises (eller null i oversigten)
 let trin = 0; // 0-2 er trinene, 3 er "Det så du"
 let valgt = null; // nummeret på det valgte svar i trinet (eller null, før man har gættet)
+let aktiv = false;
+let scene = null; // js/gaader/scene.js, når den er hentet
+let sceneLøfte = null;
+const hentScene = () => (sceneLøfte ??= import('./gaader/scene.js').then((m) => (scene = m)));
+
+// Scenen følger kortet: samme gåde og samme trin. Hentes den stadig, får den trinet, når den er klar.
+function følgScene() {
+  if (!aktiv || !gåde) return;
+  const id = gåde.id;
+  if (scene) scene.vis(id, trin, valgt);
+  else hentScene().then(() => { if (aktiv && gåde?.id === id) scene.vis(id, trin, valgt); });
+}
+
+// Panelet og 3D-vinduet skifter mellem oversigten (panelet i midten) og et kort (panelet ved siden af scenen)
+function sætLayout(påKort) {
+  const s = $('gaader');
+  s.classList.toggle('paa-kort', påKort);
+  if (!påKort) s.classList.remove('gaetter');
+  sætVindue(påKort ? $('gaaderVindue') : s);
+  verden.styring.autoRotate = !påKort && !ROLIG; // i oversigten drejer stjernehimlen langsomt bag siden
+}
 
 function hentFærdige() {
   try {
@@ -48,6 +71,8 @@ const tegn = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').repla
 // ---------- Oversigten ----------
 function visOversigt() {
   gåde = null;
+  sætLayout(false);
+  scene?.skjul();
   const færdige = hentFærdige();
   // "Start her" står på det første kort, der er bygget, indtil man har gjort et kort færdigt
   const start = Object.keys(færdige).length ? null : GÅDER.find(bygget)?.id;
@@ -75,16 +100,19 @@ export function visGåde(id) {
   trin = 0;
   valgt = null;
   $('gaaderOversigt').hidden = true;
+  sætLayout(true);
   const kort = $('gaadeKort');
   kort.hidden = false;
   kort.innerHTML = `
     <button class="knap lille gaade-tilbage" data-alle>‹ Alle gåder</button>
     <h3 class="gaade-spørgsmål">${tegn(g.spørgsmål)}</h3>
     <p class="gaade-dato">${tegn(g.dato)}</p>
+    ${g.løst ? `<p class="gaade-løst">Løst! (${tegn(g.løst)})</p>` : ''}
+    ${g.nyt ? `<p class="gaade-nyt"><b>Nyt siden sidst (${tegn(g.nyt.dato)}):</b> ${tegn(g.nyt.tekst)}</p>` : ''}
     <div class="gaade-trin" id="gaadeTrin" aria-live="polite"></div>
     <div class="gaade-lag">
       ${g.nørd ? `<details class="lag-boks" data-lag="gaade-nørd"><summary><strong>For nørder</strong><span class="lag-kort">Tal, navne og flere detaljer</span></summary>${g.nørd}</details>` : ''}
-      ${g.ærligt ? `<details class="lag-boks ærligt" data-lag="gaade-ærligt"><summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad kortet forenkler</span></summary>${g.ærligt}</details>` : ''}
+      ${g.ærligt ? `<details class="lag-boks ærligt" data-lag="gaade-ærligt"><summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad kortet forenkler</span></summary>${g.ærligt}${g.scene?.ærligt ?? ''}</details>` : ''}
     </div>`;
   lavLagBokse(kort);
   visTrin();
@@ -97,6 +125,8 @@ function prikker() {
 
 function visTrin() {
   tjekSnart();
+  $('gaader').classList.toggle('gaetter', trin < gåde.trin.length && valgt === null);
+  følgScene();
   const boks = $('gaadeTrin');
   const ord = `data-ord-kun="${gåde.ord.join(' ')}"`;
   if (trin >= gåde.trin.length) {
@@ -175,15 +205,17 @@ export function lavGåder() {
 }
 
 export function startGåder() {
-  sætVindue($('gaader'));
-  verden.styring.autoRotate = !ROLIG; // stjernehimlen drejer langsomt bag siden, som i Ordbogen
+  aktiv = true;
   const id = tagVentGåde();
   if (id) visGåde(id);
   else visOversigt();
 }
 
 export function stopGåder() {
+  aktiv = false;
+  scene?.stop();
   verden.styring.autoRotate = false;
+  $('gaader').classList.remove('paa-kort', 'gaetter');
 }
 
 export function testAdgang() {
@@ -194,6 +226,7 @@ export function testAdgang() {
     næste,
     tilbage,
     færdige: () => Object.keys(hentFærdige()),
+    scene: () => scene?.testAdgang() ?? null,
   };
 }
 
