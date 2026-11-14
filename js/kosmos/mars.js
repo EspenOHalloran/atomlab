@@ -27,7 +27,7 @@ import { lavPanorama } from '../solsystem/panorama.js';
 import { hent, MAPPE, glem, iLager } from '../solsystem/hent.js';
 import { lavShadereFørst } from '../solsystem/shadere.js';
 import { kontakt } from '../sideknap.js';
-import { lavHentebjælke, tonInd } from '../hentning.js';
+import { lavHentebjælke, tonInd, frigivBilleder } from '../hentning.js';
 
 const S = 1000; // km pr. enhed
 const MARS_R = 3396.19; // km ved ækvator (den kugle, kortene er lavet til)
@@ -802,8 +802,18 @@ export default {
     // "Stå på Mars" ved Gale: Kameraet flyver ned mod stedet, billedet toner over i landskabet, og kameraet lander i
     // øjenhøjde. Landskabet er sin egen verden (Mars-kloden skjules imens), og kameraet drejer kun hovedet.
     const landskaber = new Map(); // krater → { data, land } (hentes første gang)
+    // Landskabets og fotoets billeder har deres egen ejer (G1 trin 3), så de slettes fra grafikkortet, når man letter
+    // (ca. 350 MB ved Naukluft med fotoet på pc). Mars' egne kort, som landskabet også bruger (fx kraterets
+    // farvekort), bliver liggende.
+    const STÅ = { navn: 'Stå på Mars' };
+    const hentStå = (navn, færdig, valg) => hent(navn, færdig, { ...valg, ejer: STÅ });
+    function frigivStå() {
+      for (const [, x] of landskaber) x.land?.frigiv();
+      panorama.frigiv();
+      frigivBilleder(STÅ);
+    }
     // Roverens foto (M8c del 1): en kugle om kameraet, der toner ind over landskabet
-    const panorama = lavPanorama({ renderer: verden.renderer, hent, mappe: MAPPE });
+    const panorama = lavPanorama({ renderer: verden.renderer, hent: hentStå, mappe: MAPPE });
     gruppe.add(panorama.kugle);
     let stående = null; // { krater, sd } mens man står på jorden
     let ståVent = null; // { krater, sd, fløjet, klar } mens kameraet flyver ned, og lagene hentes
@@ -860,7 +870,7 @@ export default {
         const akse = new THREE.Vector3(0, 1, 0).applyQuaternion(HÆLD.jævndøgn);
         const dekl = 90 - THREE.MathUtils.radToDeg(akse.angleTo(sol));
         ny.data = data;
-        ny.land = lavLandskab({ renderer: verden.renderer, data, hent, krater, deklination: dekl });
+        ny.land = lavLandskab({ renderer: verden.renderer, data, hent: hentStå, krater, deklination: dekl });
         ny.land.gruppe.visible = false;
         gruppe.add(ny.land.gruppe);
         lavShadereFørst(ny.land.gruppe, () => aktiv, { hovedtråd: false }); // (kun i baggrunden, se shadere.js)
@@ -976,6 +986,7 @@ export default {
       orbit.enableZoom = true;
       orbit.rotateSpeed = 1;
       orbit.enabled = true;
+      frigivStå();
     }
     // Gå til et andet sted ved samme krater (et hop med en tone)
     function gåTilLandskab(sd) {
@@ -1203,7 +1214,10 @@ export default {
       if (stå?.krater !== (stående ?? ståVent)?.krater) fraFlyby = null;
       // Fra landskabet: et andet sted ved krateret er et hop, og alt andet letter først (som "op i kredsløb")
       if (stående) return stå?.krater === stående.krater ? gåTilLandskab(stå.sd) : tilbageOp(id);
-      if (ståVent) bjælke.færdig();
+      if (ståVent) {
+        bjælke.færdig();
+        if (!stå) frigivStå(); // landingen blev afbrudt: det, der blev hentet til den, bruges ikke
+      }
       ståVent = null;
       if (stå) {
         flyby.afslut();
@@ -1446,6 +1460,7 @@ export default {
         for (const [, l] of landskaber) if (l.land) { gruppe.remove(l.land.gruppe); l.land.stop(); }
         gruppe.remove(panorama.kugle);
         panorama.stop();
+        frigivBilleder(STÅ);
         tæppe.remove();
         bjælke.fjern();
         verden.renderer.domElement.removeEventListener('wheel', vedHjul);

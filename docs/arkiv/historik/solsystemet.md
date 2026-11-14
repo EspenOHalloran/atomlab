@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (13. november 2026): Måleren og hakkene på Mars (G1 trin 1).** Jeres go: "Læs docs/prompt-maaler.md og lav trin 1." Jeres svar: Det hakker, når kameraet flyver, og første gang et sted besøges, på en bærbar uden særskilt grafikkort.
+- **Måleren:** `?maal` i adressen (fx `…/atomlab/?maal#solsystem`) viser billeder i sekundet, det værste billede, ryk over 50 ms og en liste over rykkene med det, der skete lige før (nye shadere, kort lagt i grafikkortet, hentede billeder, kamerarejser, tryk). "Kopiér" giver teksten til chatten. Den hentes kun med `?maal` (`js/maaler.js`).
+- **Rettet på Mars (ingen ændring af udseendet):** Shaderne laves, når Mars åbnes, og ikke første gang kameraet flyver til et sted (før 200-500 ms pr. shader i testbrowseren, nu ingen under flyvningerne). De lokale kort og månernes kort pakkes ud uden for hovedtråden (4-6 gange hurtigere at lægge i grafikkortet), og kortene til næste stop lægges i grafikkortet, når kameraet står stille.
+- **Fundene og forslag A-F** (det, der ændrer udseendet, venter på jeres måling): "Status" i [plan-grafik.md](../plan-grafik.md). Tests: `tests/maaler.mjs`.
+- **Spørgsmål til jer:** Mål med `?maal` på pc og tablet (vejledningen står under "Trin 2" i [prompt-maaler.md](../prompt-maaler.md)), og send teksten fra "Kopiér".
+
 **Senest lavet (9. november 2026): Venus V2, skyerne og superrotationen.** Jeres go: "Læs docs/prompt-venus.md og kør V2."
 - **Skyerne fra Akatsuki:** 48 billeder i ultraviolet fra 13.-19. august 2017 (JAXA's arkiv DARTS) er lagt sammen til ét kort over hele kloden (`lav_venus_skyer.py`). Fra start ser Venus ud, som den gør: lyst gullig hvid og næsten glat. "Ultraviolet (som Akatsuki)" viser striberne. Skyderen "Under skyerne" toner dem væk, og en tynd dis lyser i "Modlys".
 - **Vindene er målt:** i de samme billeder (som Jupiters vinde): ca. 103 m/s mod vest ved ækvator, en omgang på ca. 4,3 døgn, som Venus Express. Over 42° aftager de til 0 ved polerne (ikke målt her). Skyerne kører samme vej som Venus, ca. 55 gange hurtigere.

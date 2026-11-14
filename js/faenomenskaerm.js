@@ -29,6 +29,7 @@ import { lavRejseskilt } from './rejseskilt.js';
 import { NØGLER } from './data/faenomener.js';
 import { tagVentSted, ventendeForløb, sætVentForløb } from './gaa.js';
 import { forløbMed } from './data/forloeb/liste.js';
+import { sætBilledEjer, frigivBilleder } from './hentning.js';
 
 // Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
 const SMAL = matchMedia('(max-width: 820px), (max-height: 500px)');
@@ -184,7 +185,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
     piletaster(false);
     visTåger(true);
     visRumstøv(true);
+    const før = valgt;
     luk();
+    frigivBilleder(før); // billederne slettes fra grafikkortet, når man forlader skærmen (G1 trin 3, retning.md)
     tidsknap.sæt('spil');
     stjerneUr.tid = null;
     verden.styring.target.set(0, 0, 0);
@@ -207,6 +210,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
 
   function vælg(id) {
     const f = FÆNOMENER.find((x) => x.id === id) ?? FÆNOMENER[0];
+    const før = valgt;
     luk();
     tidsknap.hurtig(null);
     tidsknap.sæt('spil'); // et nyt fænomen starter altid med tiden i gang
@@ -223,6 +227,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
     visRumstøv(f.tåger !== false); // og intet blåligt rumstøv (det hører til atomet og lignede prikker på himlen)
     $('Forklaring').innerHTML = '';
     forklaringVist = '';
+    sætBilledEjer(f); // de billeder, fænomenet henter, hører til det (js/hentning.js)
     kørende = f.lav(gruppe, {
       effekter,
       lyd,
@@ -254,6 +259,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       // Fænomenet vælger et andet fænomen på samme skærm (fx en vej videre fra et forløb)
       vælgFænomen: (id) => { if (valgt?.id !== id) vælg(id); },
     });
+    // Det forrige fænomens billeder frigives først nu, så de billeder, det nye også bruger (fx Jorden), bliver liggende
+    if (før !== f) frigivBilleder(før);
     tidsknap.hurtig(kørende.hurtig ?? null);
     for (const b of sektion.querySelectorAll('.kosmos-valg[data-id]')) {
       b.classList.toggle('valgt', b.dataset.id === f.id);
