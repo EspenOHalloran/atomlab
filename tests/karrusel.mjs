@@ -111,7 +111,7 @@ for (const [navn, opts] of størrelser) {
   };
   const ro = () => p.waitForFunction(() => window.atomlabTest.karrusel.stille(), null, { timeout: 8000 }).catch(() => {});
   await træk(1);
-  tjek(`${navn}: et roligt træk mod venstre drejer Kernerne frem`, (await venMidt('kerner')) === 'kerner', await midt());
+  tjek(`${navn}: et roligt træk mod venstre drejer Liv frem`, (await venMidt('liv')) === 'liv', await midt());
   tjek(`${navn}: … og åbner ingenting`, (await p.evaluate(() => location.hash)) === '');
   await ro();
   await p.click('.menu-ikon[data-verden="atomer"]');
