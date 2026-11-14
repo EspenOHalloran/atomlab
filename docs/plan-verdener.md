@@ -34,7 +34,7 @@ Indtil Ild findes, er der seks verdener. Batteriet bliver i Elektricitet. Får E
 |---|---|---|---|
 | **Ringen:** Kernerne først, "Atomer og molekyler" bliver "Atomer", "Ild og liv" bliver "Liv" (navn, ikon og tekst) | Serie 2 (nr. 8), eller før, hvis den passer ind | lille | `VERDENER` i `js/karrusel.js`, `js/menubaggrund.js` (motivet) og testen `karrusel` |
 | **Molekyler som egen del i Atomer** med sit forløb (eftersynets nr. 5 og 10b) | Serie 1, efter skærmlisten (10a) og Forløb-klodsen | mellem (1-2 sessioner) | En ny skærm i skærmlisten med egen HTML og CSS. `js/molekyler.js`, `js/molekyler-byg.js` og `js/knaldgas.js` er allerede adskilt. Opgaverne får deres egen linje i "Din fremgang" (i dag under Værkstedet, `js/main.js:17-18`), og de gemte stjerner flytter med. Testene `byg-molekyler`, `byttebors`, `molekyler`, `vaerksted` og `karrusel` |
-| **Kosmos i fire grupper,** og de to punkter om tid bliver ét | Serie 1 (sammen med Tid, nr. 6) | lille til mellem | `js/kosmos.js` og fænomenerne `tid` og `tidhvorfor` |
+| **Kosmos i fire grupper,** og de to punkter om tid bliver ét (**lavet 14. november 2026**) | Serie 1 (sammen med Tid, nr. 6) | lille til mellem | `js/kosmos.js` og fænomenerne `tid` og `tidhvorfor` |
 | **Stof og kemi** ind i ringen, og Molekyler flytter dertil | Når Ild bygges | lille (selve flytningen) | `VERDENER`, et nyt motiv og et nyt ikon (`ikon-v-<id>`) |
 
 **En ny del i en verden, der findes:** en ny linje i `dele` under verdenen i `VERDENER` (og i skærmlisten fra nr. 10a). Detaljerne om knapperne, ✓ og "Din fremgang" står i [arkiv/plan-verdener-k4.md](arkiv/plan-verdener-k4.md).
