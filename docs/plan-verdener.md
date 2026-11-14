@@ -10,7 +10,7 @@
 ## Verdenerne
 | # | Verden | Handler om | Dele nu | Planlagt, og hvor |
 |---|---|---|---|---|
-| 1 | ☢️ **Kernerne** | Kerner, der smelter sammen, spaltes og henfalder | Stjerneovnen, Reaktoren | **Tjernobyl** som tredje fane i Reaktoren. **Antistof** som en lille del (positronen og PET-scanning) |
+| 1 | ☢️ **Kernerne** | Kerner, der smelter sammen, spaltes og henfalder | Stjerneovnen, Reaktoren | **Tjernobyl** som tredje fane i Reaktoren (parkeret 14. november 2026, står i [ideer.md](ideer.md)). **Antistof** som en lille del (positronen og PET-scanning) |
 | 2 | ⚛️ **Atomer** (i dag "Atomer og molekyler") | Hvad et atom er, og de 118 slags | Atomværkstedet, Det periodiske system. **Molekyler** bliver en egen del her (Serie 1) | **Kvantefysik** som egen del (orbitalerne i store atomer hører til her, kvantecomputeren er dens sidste kapitel, hvis den kommer). **Fotos af grundstofferne** på væggen. Molekyler flytter til Stof og kemi, når den kommer |
 | 3 | 🧪 **Stof og kemi** *(kommer, når Ild findes)* | Atomer, der sætter sig sammen og bytter plads | – | **Molekyler** (flytter fra Atomer, med knaldgassen) og **Ild** (knaldgassen som det første bål). Rumfærgens blanding |
 | 4 | 🧬 **Liv** (i dag "Ild og liv") | Molekyler, der kan kopiere sig selv | Liv | **Begyndelsen** (L4-L5) og **Liv i rummet** (L6) som knapper i verdenens kort. "Skriv dit navn" |
