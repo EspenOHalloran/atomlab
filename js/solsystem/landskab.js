@@ -579,7 +579,8 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   // Skyggerne i strimler (G1 trin 3, del 3, jeres valg 14. november 2026): Et helt lag i ét billede kostede 50-90 ms
   // på tabletten, mens Solen flyttede sig (strålen mod Solen følges op til 110 trin for hver pixel). Nu regnes højst
   // STRIMMEL pixel pr. billede, og laget skiftes ind, når alle strimlerne er regnet. Skyggerne er de samme, men følger
-  // Solen i små trin (en runde med alle fire lag tager ca. 10-20 billeder).
+  // Solen i små trin (en runde med alle fire lag tager ca. 20 billeder med de grove skygger på tablet, 80 med de
+  // skarpe og 16 på pc).
   const STRIMMEL = TEST_HURTIG ? 128 * 128 : LAV_KVALITET ? 128 * 256 : 512 * 512;
   const su = { bLag: { value: new THREE.Vector4() }, uPx: { value: 1 }, uSolL: { value: new THREE.Vector3() }, uHMaks: { value: 2000 } };
   for (let k = 0; k < 4; k++) Object.assign(su, { [`tH${k}`]: u[`tH${k}`], [`bH${k}`]: u[`bH${k}`], [`rH${k}`]: u[`rH${k}`] });
