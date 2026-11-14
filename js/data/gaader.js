@@ -11,15 +11,21 @@
 // kortets scene i js/gaader/<id>.js, og scene.ærligt lægges under kortets "Ærligt talt").
 // størrelse: størrelsesordenen i meter (10^størrelse). Bruges kun til rækkefølgen på skinnen i G4b (fra det mindste til
 // det største), ikke som et tal i spillet.
+// Skinnen (G4b): navn (et kort navn under lyset på skinnen). Kun de byggede gåder står der, sorteret efter størrelse
+// (påSkinnen), og koden bruger ingen pladsnumre: En ny gåde rykker ind på sin plads.
 // Kilderne står i docs/fakta-gaader.md. Hvert kort har en dato, fordi stoffet flytter sig: Slå "Tjek igen" op, før
 // teksten ændres.
 
 // De tre slags streg i scenerne (js/gaader/streg.js). Står under scenen første gang og altid i "Ærligt talt".
 export const STREG_FORKLARING = 'Farve er målt. Hvid stiplet er et bud. Hvor intet er tegnet, ved ingen det.';
 
+// Skinnen (G4b): står i "Ærligt talt" på alle kort
+export const SKINNE_ÆRLIGT = 'På skinnen står gåderne side om side fra det mindste til det største. I virkeligheden er der et kæmpe spring mellem dem, og lysene er symboler, ikke i skala.';
+
 export const GÅDER = [
   {
     id: 'sorthul',
+    navn: 'Sorte huller', // det korte navn under lyset på skinnen
     størrelse: 10, // Skyttens A*: horisonten er ca. 2,5 · 10¹⁰ m bred (4,3 mio. solmasser)
     spørgsmål: 'Hvad er der inde i et sort hul?',
     linje: 'Intet slipper ud, så hvordan kan man vide det?',
@@ -84,6 +90,7 @@ export const GÅDER = [
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/rummet.md (Fable E5) og fakta-gaader.md afsnit 1.
   {
     id: 'liv',
+    navn: 'Liv andre steder', // det korte navn under lyset på skinnen
     størrelse: 7, // planeter: Jorden er ca. 1,3 · 10⁷ m bred
     spørgsmål: 'Er der liv andre steder?',
     linje: 'På Mars, på en måne eller om en anden stjerne',
@@ -157,6 +164,7 @@ export const GÅDER = [
   // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 3.
   {
     id: 'antistof',
+    navn: 'Antistof', // det korte navn under lyset på skinnen
     størrelse: -15, // partikler: en proton er ca. 10⁻¹⁵ m
     spørgsmål: 'Hvor blev antistoffet af?',
     linje: 'Alt omkring os er stof, næsten intet er antistof',
@@ -266,6 +274,7 @@ export const GÅDER = [
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/begyndelsen.md (Fable E5) og fakta-gaader.md afsnit 4.
   {
     id: 'begyndelsen',
+    navn: 'Livets begyndelse', // det korte navn under lyset på skinnen
     størrelse: -8, // molekyler og de første celler
     spørgsmål: 'Hvordan begyndte livet?',
     linje: 'Fra stoffer uden liv til den første celle',
@@ -338,6 +347,7 @@ export const GÅDER = [
   // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 5.
   {
     id: 'moerktstof',
+    navn: 'Mørkt stof', // det korte navn under lyset på skinnen
     størrelse: 21, // galakser: Mælkevejen er ca. 10²¹ m bred
     spørgsmål: 'Hvad er mørkt stof?',
     linje: 'Noget usynligt trækker i galakserne',
@@ -409,3 +419,5 @@ export const GÅDER = [
 
 export const gådeMed = (id) => GÅDER.find((g) => g.id === id) ?? null;
 export const bygget = (g) => Array.isArray(g?.trin) && g.trin.length > 0;
+// Gåderne på skinnen (G4b): de byggede, fra det mindste til det største
+export const påSkinnen = () => GÅDER.filter(bygget).sort((a, b) => a.størrelse - b.størrelse);

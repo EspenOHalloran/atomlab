@@ -1075,8 +1075,9 @@
     </div>
   </section>
   <section id="gaader" class="skærm skjult" aria-label="Gåderne">
-    <!-- Gåderne (js/gaader.js, teksterne i js/data/gaader.js): oversigten og ét kort ad gangen. Et kort har en scene i 3D
-         bag sig (js/gaader/scene.js), og panelet står til højre (pc og tablet på langs) eller forneden (højkant). -->
+    <!-- Gåderne (js/gaader.js, teksterne i js/data/gaader.js): skinnen med gåderne (js/gaader/skinne.js) og ét kort ad gangen.
+         Et kort har en scene i 3D bag sig (js/gaader/scene.js), og panelet står til højre (pc og tablet på langs) eller
+         forneden (højkant). På skinnen er panelet skjult. -->
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Gåderne</h2>
@@ -1086,13 +1087,18 @@
       </div>
     </header>
     <div class="vindue" id="gaaderVindue">
-      <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="gaade-scene-bund"><p class="gaade-linje" id="gaadeLinje" aria-live="polite" hidden></p><div class="gaade-scene-knapper" id="gaadeSceneKnapper"></div></div></div></div>
+      <div class="gaader-toning" id="gaaderToning" aria-hidden="true"></div>
+      <div class="vindue-lag"><div class="vindue-top"></div><div class="vindue-bund"><div class="gaade-scene-bund"><p class="gaade-linje" id="gaadeLinje" aria-live="polite" hidden></p><div class="gaade-scene-knapper" id="gaadeSceneKnapper"></div></div>
+        <!-- Skinnen (G4b, js/gaader/skinne.js): gåden i fokus med sit spørgsmål på én knap og "‹ mindre · større ›" -->
+        <p class="gaade-linje gaader-første" id="gaaderFørste" aria-live="polite" hidden></p>
+        <div class="gaader-fokus" id="gaaderFokus" hidden>
+          <button class="gaader-pil" data-skinne="-1" aria-label="Mindre">‹<span> mindre</span></button>
+          <button class="gaader-ind" id="gaaderInd" data-ind><strong id="gaaderFokusSpm"></strong><small id="gaaderFokusLinje"></small><span class="gaader-ind-knap">Flyv ind ›</span></button>
+          <button class="gaader-pil" data-skinne="1" aria-label="Større"><span>større </span>›</button>
+        </div>
+      </div></div>
     </div>
     <div class="panel gaader-panel" id="gaaderPanel">
-      <div class="gaader-oversigt" id="gaaderOversigt">
-        <p class="gaader-intro">Videnskaben er ikke færdig. Her er gåder, som ingen har løst endnu. Find ud af, hvad forskerne ved, hvad de ikke ved, og hvordan de prøver at finde svaret.</p>
-        <ul class="gaader-liste" id="gaaderListe"></ul>
-      </div>
       <article class="gaade-kort" id="gaadeKort" hidden></article>
     </div>
   </section>
