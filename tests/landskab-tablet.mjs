@@ -26,16 +26,17 @@ let t = await stå();
 tjek('tablet: står ved randen, og nettet er delt i 16 stykker (testene har et mindre net)', t.står && t.sted === 'randen' && t.stykker?.[1] === 16, JSON.stringify({ sted: t.sted, net: t.net, stykker: t.stykker }));
 
 // Kun de stykker, der ses
-const tegnet = async (k, v) => {
+// (der ventes på et billede, der er tegnet efter kig, for under belastning kan der gå et stykke tid)
+const tegnet = async (k, v, alle) => {
   await fm(([k, v]) => atomlabTest.solsystem.fænomen().kig(k, v), [k, v]);
-  await s.waitForTimeout(400);
+  await s.waitForFunction((alle) => (atomlabTest.solsystem.fænomen().stå().stykker[0] === 16) === alle, alle, { timeout: 10000, polling: 100 }).catch(() => {});
   return (await stå()).stykker[0];
 };
-const vandret = await tegnet(90, 0);
+const vandret = await tegnet(90, 0, false);
 tjek('kigger man vandret, tegnes kun nogle af stykkerne (3-7 af 16)', vandret >= 3 && vandret <= 7, String(vandret));
-const andenVej = await tegnet(270, 5);
+const andenVej = await tegnet(270, 5, false);
 tjek('også den anden vej', andenVej >= 3 && andenVej <= 7, String(andenVej));
-const ned = await tegnet(90, -85);
+const ned = await tegnet(90, -85, true);
 tjek('kigger man lodret ned, tegnes alle 16', ned === 16, String(ned));
 
 // Skyggerne, mens dagen går

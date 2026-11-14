@@ -106,11 +106,12 @@ tjek('Deimos står op i øst', dOp.length > 0 && dOp.every((k) => k > 20 && k < 
 tjek('Phobos er ca. 0,2° bred, når den står højt', måner.some((m) => m[0].højde > 75 && Math.abs(m[0].bredde - 0.21) < 0.02));
 
 // Kun de stykker af nettet, der ses, tegnes (G1 trin 3, forslag H). Lodret ned tegnes alle
+// (der ventes på et billede, der er tegnet efter kig, for under belastning kan der gå et stykke tid)
 await fm(() => atomlabTest.solsystem.fænomen().kig(100, 0));
-await s.waitForTimeout(400);
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().stykker[0] < 16, null, { timeout: 10000, polling: 100 }).catch(() => {});
 const vandret = (await stå()).stykker;
 await fm(() => atomlabTest.solsystem.fænomen().kig(100, -85));
-await s.waitForTimeout(400);
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().stykker[0] === 16, null, { timeout: 10000, polling: 100 }).catch(() => {});
 const lodret = (await stå()).stykker;
 tjek('nettet: vandret tegnes kun nogle af de 16 stykker, lodret ned alle', vandret[1] === 16 && vandret[0] >= 3 && vandret[0] <= 7 && lodret[0] === 16, JSON.stringify({ vandret, lodret }));
 
