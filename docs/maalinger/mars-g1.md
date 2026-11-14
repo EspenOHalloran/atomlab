@@ -217,3 +217,22 @@ De dyreste kort: 8192×4096 mars-8k.jpg 1990 ms; 8192×8192 gale-naukluft-f0-8k.
 13.27.33  1207 ms (opdater 487): lang opgave 720 ms; lang opgave 485 ms
 (… derefter døde fanen ved Jezero, Ved randen)
 ```
+
+## Telefonen (A56) og den gamle tablet (A7), 14. november 2026 kl. 20.53-21.05
+*Jeres to målinger i Solsystemet med Mars, flybyen og Stå på Mars (A7: Gale og Jezero, A56: kun Gale). Uddrag, ikke hele teksten.*
+
+**Jeres svar (14. november 2026):** Tab A7 er en gammel tablet, vi ikke skal bruge kræfter på. Målet er, at det kører godt på **Tab A11 (Mali-G615), telefonen A56 og pc'erne (Iris Xe og GeForce RTX 4060)**.
+
+| | A56 (Xclipse 540, lærred 1336 × 616) | A7 (Adreno 610, lærred 1999 × 1200) |
+|---|---|---|
+| Billeder i sekundet (gennemsnit / median) | 108 / 8 ms | 12 / 67 ms |
+| 99 % under | 20 ms | 250 ms |
+| Ryk over 50 ms | 26 på 161 s | 2.226 på 284 s |
+| Teksturer i grafikkortet (nu / højst) | 364 / 542 MB | 266 / 434 MB |
+| Landingen ved Gale (kortene i grafikkortet) | 1.128 ms (gale-h2.png 269 ms) | 3.570 ms (gale-h2.png 920 ms) |
+| Landingen ved Jezero | ikke målt | 4.865 ms (jezero-h2.png 1.211 ms) |
+
+**Opus' læsning:**
+- **A56:** flydende, også når man står ved Gale. Det eneste rigtige hak er landingen (1,1 s), hvor landskabets kort på 4096 lægges i grafikkortet i ét billede. Hukommelsen er højst 542 MB, over budgettet på ca. 350 MB i retning.md.
+- **A7:** langsom overalt, også under flybyen, hvor `tegn` kun bruger 2-3 ms. Grafikkortet kan ikke følge med pixlerne og trekanterne. Det er ikke et mål.
+- **Landingen er den samme fejl på alle enheder:** Kortene hentes allerede, mens kameraet flyver ned (gale-h2.png er hentet 2 s før rykket). Det, der fryser, er det næste skridt: Alle kortene lægges i grafikkortet i det samme billede, og landskabets kort hentes uden `vendt`, så Chrome pakker dem ud igen på hovedtråden. Det er del 3 (A) og eventuelt B (ét kort pr. billede eller i strimler, mens kameraet flyver ned). Jeres idé 14. november 2026: "Kan kortet preloades, mens man flyver ned?" Hentningen sker allerede, men at lægge kortene i grafikkortet under flyvningen er netop B.
