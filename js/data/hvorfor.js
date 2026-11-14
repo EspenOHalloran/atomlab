@@ -114,6 +114,14 @@ export const HVORFOR = {
     svar: 'Lysets fart er den samme for alle. Uanset hvor hurtigt du flyver, farer lyset stadig væk fra dig med lysets fart, så du kommer aldrig tættere på at indhente det. Og jo hurtigere du flyver, jo mere energi kræver det at komme bare lidt hurtigere. At få ét ton op på 99 % af lysets fart kræver næsten et års energi for hele verden, og 99,99 % ca. 10 år. For at nå helt op på lysets fart skulle der bruges uendelig meget energi.',
     nørd: 'Bevægelsesenergien er E = (γ − 1) · m · c². Når farten nærmer sig lysets, vokser γ uden grænse. Man hører tit, at man bliver tungere, jo hurtigere man flyver. Det er en gammeldags måde at sige det på, som de fleste fysikere undgår i dag. De siger i stedet, at massen er den samme, og at det er energien, der vokser.',
   },
+  // Forløbet "Rejsen i tid" (vejen "Er det målt?", 13. november 2026). Fra emnet "Er det målt?" i js/kosmos/tid.js, som er
+  // tjekket mod docs/fakta-tid.md (afsnit 11 og 12), og GPS fra Rumtid (ca. +45 og −7 µs pr. døgn, ca. 11,5 km).
+  // Fælden: Hafele og Keatings ure mod vest gik hurtigere (docs/erfaringer/fakta-faelder.md).
+  tidMaalt: {
+    spørgsmål: 'Er det målt, at tiden går langsommere?',
+    svar: 'Ja, mange gange. Myoner er små partikler, der bliver lavet ca. 15 km oppe i luften. De lever kun ca. 2 milliontedele sekund og burde gå i stykker højt oppe. Alligevel når mange af dem helt ned til jorden, fordi deres ure går langsommere set fra os.\n\nI 1971 fløj forskere fire atomure jorden rundt i passagerfly. Bagefter viste de en lidt anden tid end urene på jorden, næsten som regnet ud. Og GPS-satellitternes ure skal rettes, fordi tiden går anderledes deroppe. Ellers ville GPS\'en tage ca. 10 km fejl om dagen.',
+    nørd: 'Frisch og Smith talte myonerne på toppen af et bjerg i USA og ved havet i begyndelsen af 1960\'erne. Hafele og Keating fløj urene først mod øst og så mod vest. Urene mod øst tabte ca. 59 milliardtedele sekund, og dem mod vest vandt ca. 273, fordi Jorden selv drejer mod øst. I GPS\'en går urene hurtigere på grund af højden (tyngden er svagere deroppe) og langsommere på grund af farten. Mere står under "Er det målt?" i panelet.',
+  },
   // Byttebørsen (Molekyler M1). Kilder: docs/fakta-molekyler.md, afsnit 1, 6 og 7.
   bytteKoster: {
     spørgsmål: 'Hvorfor koster det at flytte elektronen?',

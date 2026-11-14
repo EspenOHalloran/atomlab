@@ -114,6 +114,13 @@ export function tvillingAlder(jordÅr) {
   return alder <= TVILLING_GRÆNSE ? alder : null;
 }
 
+// De tegnede figurer ved hjemkomsten (js/kosmos/tidfigur.js, E4 trin A1): 'ung' under 20, 'voksen' fra 20 til 59 og
+// 'gammel' fra 60. null over TVILLING_GRÆNSE (så står kun teksten).
+export function figurSlags(alder) {
+  if (alder === null || alder > TVILLING_GRÆNSE) return null;
+  return alder < 20 ? 'ung' : alder < 60 ? 'voksen' : 'gammel';
+}
+
 // "Dit ur" (tiden i skibet siden afgang, tæller op som et ur): "3 dage 7 timer" eller "4 år 75 dage". kort = turen tager
 // under en dag (fra 7 ni-taller til Alpha Centauri), så står der timer og minutter: "2 timer 13 min"
 const flertal = (x, en, flere) => `${tal(x)} ${x === 1 ? en : flere}`;

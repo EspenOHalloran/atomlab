@@ -1,16 +1,18 @@
 # Lige nu: Tid og rum
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/tid.md`. Højst ca. 5 KB. Sidst opdateret: 12. november 2026.*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/tid.md`. Højst ca. 5 KB. Sidst opdateret: 13. november 2026.*
 
-**Senest lavet (12. november 2026): TRAPPIST-1 som første rejse og 50 % på skyderen (før Forløb-klodsen).**
-- **Jeres svar (12. november 2026):** Go til drejebogen i [E4-tid.md](../fable/E4-tid.md), afsnit 4. TRAPPIST-1 og 50 % bygges nu, før Forløb-klodsen, men forløbene ikke endnu. TRAPPIST-1 er valgt, når man åbner Rejsen i tid (dialogen). Lukkede domæner: **Bed altid om at få dem åbnet** (miljøets Network access), også når der findes en anden kilde. gea.esac.esa.int, vizier.cds.unistra.fr og simbad.cds.unistra.fr er åbnet.
-- **TRAPPIST-1** (`js/data/tid.js`, `MÅL.trappist`, `START_MÅL`): 40,66 lysår efter Gaia DR3 (parallakse 80,2123 ± 0,0716 mas, slået op i Gaia-arkivet). Ved 99,99 % er du 14 år og 55 dage, og tvillingen er 94. Fire mål efter afstand. I scenen en lille, rød stjerne med syv planeter, der kredser (ikke i skala).
-- **50 %** er trin 0 på skyderen "Fast fart" (`MINDST_NI = 0`, ε = 0,5). Til Alpha Centauri er du 28 og tvillingen 30. Underteksten siger "Jordens ur går kun lidt hurtigere end dit", og "Hvad gør farten?" nævner 1,15 dage.
-- **F10 delvist (`/faktatjek`):** Hjemkomstens tider fra 10 til 100 år har én decimal, rundet ned ("11,5 år" og "Du er 24 år og 215 dage"), så de passer med alderen. "60 minutter" er blevet til "1 time". Tabellen står i [E4-noter.md](../fable/E4-noter.md), "TRAPPIST-1 og 50 %".
-- **Kig efter på tabletten:** TRAPPIST-1 og planeterne i scenen, de fire mål i Styr på højkant, og om "Dit ur: 1 år 54 dage" og "Du: 14 år og 55 dage" (uret runder ned, alderen til nærmeste dag) undrer jeres søn.
+**Senest lavet (13. november 2026): Forløb 1 "Rejsen i tid" (Serie 1 nr. 4, forløb A, status "prøve").**
+- **Forløbet** (`js/data/forloeb/tid.js`, delen i `js/kosmos/tid.js`, koden i [kode/tid.md](../kode/tid.md)): A1 gæt tvillingens alder og flyv til TRAPPIST-1 (14 og 94), A2 "Mærkede du noget?" med "⌚ Dit ur" stort (sekundviser og hjerte, rejsen holder pause), A3 to ture til Alpha Centauri (50 % giver 28 og 30, 99,99 % giver 13 og 21, begge med ⏩). Til sidst "Det så du" med Fables kernesætning og vejene "Hvordan kan det ske?" (går til "Hvorfor går tiden langsommere?", til forløb 2 findes), "Leg frit" og "Er det målt?" (nyt "Hvorfor?"-kort `tidMaalt`). Starter første gang, man åbner Rejsen i tid, og fra hjælpen i Kosmos, "Din fremgang" og `?forloeb=rejsen-i-tid#kosmos`.
+- **Figurerne** (`js/kosmos/tidfigur.js`): piktogrammer oven på urene, også når man leger frit: ung (kasket), voksen og gammel (hvidt hår og stok). Tvillingen bliver ældre undervejs.
+- **Jeres svar (13. november 2026, dialogen):** A3 er to ture, så kun farten skifter. Oprydningen (ét punkt, Styr med fem valg, lysurets trin, fire spørgsmål) kommer med forløb 2. Figurerne er pudsede piktogrammer, før, undervejs og hjemme.
+- **Klodsen:** Det sidste trins Så-tekst vises nu før "Det så du" (gælder også Livs forløb 2, hvor sætningen om mutationen ikke kom frem før). Kosmos kan starte et forløb i et fænomen (`fænomen` i forløbets data).
+- `/faktatjek`: to rettelser ("godt 4 lysår", "næsten som regnet ud"), tabellen i [E4-noter.md](../fable/E4-noter.md). Ny test `tid-forloeb` (17 tjek).
 
 **T4 venter (besluttet 8. november 2026):** Udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go. Artefaktet "AtomLab Overblik" er opdateret med, at "Hvorfor går tiden langsommere?" er færdig (T5).
 
-**Næste:** "Tid som ét punkt" med de to forløb (køreplanen, Serie 1 nr. 4), når Forløb-klodsen findes. Drejebogen har jeres go. Derefter runden med jeres søn med Fables liste ([E4-tid.md](../fable/E4-tid.md), afsnit 6). Fødselsdagshilsnerne kommer senere.
+**Status "prøve":** Forløb 1. Prøvens spørgsmål 1 står i [E4-tid.md](../fable/E4-tid.md), afsnit 4 ("Prøven"). Runden med jeres søn venter, til begge forløb er bygget (jeres svar 12. november 2026).
+
+**Næste:** Forløb 2 "Hvordan kan det ske?" og oprydningen i en ny session med [prompt-tid-forloeb2.md](../prompt-tid-forloeb2.md) (Opus, høj). Derefter runden med jeres søn med Fables liste (E4, afsnit 6). Fødselsdagshilsnerne kommer senere.
 
 **Spørgsmål til jer:** Ingen lige nu.

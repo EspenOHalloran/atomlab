@@ -148,15 +148,23 @@ function startGør() {
     clearTimeout(visMigTimer);
     såTimer = setTimeout(() => {
       if (mit !== token) return;
-      if (sidste()) {
-        k.fase = 'slut';
-        fremgang.markérForløb(k.data.id, 'taget');
-        lyd.klaret();
-      } else k.fase = 'så';
-      tegn();
+      // Det sidste trin går direkte til "Det så du", medmindre det har sin egen Så-tekst (så kommer den først)
+      if (sidste() && !trin().så) tilSlut();
+      else {
+        k.fase = 'så';
+        tegn();
+      }
     }, SÅ_EFTER);
   }, 150);
   venteVisMig();
+}
+
+// "Det så du": forløbet er taget
+function tilSlut() {
+  k.fase = 'slut';
+  fremgang.markérForløb(k.data.id, 'taget');
+  lyd.klaret();
+  tegn();
 }
 
 function venteVisMig() {
@@ -193,6 +201,7 @@ function klik(h) {
     venteVisMig();
     tegn();
   } else if (b.dataset.nav === 'næste') {
+    if (sidste()) return tilSlut(); // (lyd.klaret i stedet for klik)
     lyd.klik();
     gåTil(k.nr + 1);
   } else if (b.dataset.nav === 'tilbage') {
@@ -214,7 +223,7 @@ function klik(h) {
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 // Bygger linjen ud fra fasen: 'gæt' (Spørg og gættets knapper), 'gør' (Spørg og trinets knapper), 'så' (Så og "Næste ›")
-// og 'slut' ("Det så du": kernesætningen og vejene videre)
+// og 'slut' ("Det så du": kernesætningen og vejene videre). Har det sidste trin en Så-tekst, kommer den før "Det så du".
 function tegn() {
   const { data, del, linje } = k;
   const t = trin();

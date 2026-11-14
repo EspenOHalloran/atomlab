@@ -27,7 +27,8 @@ import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavTidsknap } from './pause.js';
 import { lavRejseskilt } from './rejseskilt.js';
 import { NØGLER } from './data/faenomener.js';
-import { tagVentSted } from './gaa.js';
+import { tagVentSted, ventendeForløb, sætVentForløb } from './gaa.js';
+import { forløbMed } from './data/forloeb/liste.js';
 import { sætBilledEjer, frigivBilleder } from './hentning.js';
 
 // Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
@@ -140,7 +141,17 @@ export function lavFænomenSkærm({ skærm, liste }) {
     }
     // Knapperne i teksterne (js/sideknap.js)
     sektion.querySelector('.højre-panel').addEventListener('click', brugSideKnap);
-    $('Hjælp').addEventListener('click', () => { lyd.klik(); document.getElementById(`hjælp${skærm[0].toUpperCase()}${skærm.slice(1)}`).classList.remove('skjult'); });
+    const hjælp = document.getElementById(`hjælp${skærm[0].toUpperCase()}${skærm.slice(1)}`);
+    $('Hjælp').addEventListener('click', () => { lyd.klik(); hjælp.classList.remove('skjult'); });
+    // Knapper med data-forloeb i hjælpen starter et forløb (js/forloeb.js): Fænomenet vælges forfra og starter det selv
+    hjælp.addEventListener('click', (h) => {
+      const fl = forløbMed(h.target.closest('[data-forloeb]')?.dataset.forloeb);
+      if (!fl?.fænomen || fl.del !== skærm) return;
+      lyd.klik();
+      hjælp.classList.add('skjult');
+      sætVentForløb(fl.id);
+      vælg(fl.fænomen);
+    });
     tidsknap = lavTidsknap({ holder: række, aktiv: () => aktiv, ændret: (t) => kørende?.tempo?.(t) });
     tidsknap.knap = række.querySelector('.tidsknap');
     tidsknap.knap.id = `${skærm}Tid`;
@@ -159,6 +170,9 @@ export function lavFænomenSkærm({ skærm, liste }) {
     } catch {
       // ingen lagring
     }
+    // Et forløb, der venter (fra "Din fremgang" i menuen eller ?forloeb=…), vælger sit fænomen. Fænomenet starter det selv.
+    const fl = forløbMed(ventendeForløb());
+    if (fl?.del === skærm && fl.fænomen) id = fl.fænomen;
     vælg(id);
     const sted = tagVentSted(skærm);
     if (sted) gå(åbenGruppe(), sted);
@@ -242,6 +256,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
       overlag: () => $('Overlag'),
       // Et sted øverst til venstre i 3D-billedet (fx en lille tabel)
       toplag: () => $('Toplag'),
+      // Fænomenet vælger et andet fænomen på samme skærm (fx en vej videre fra et forløb)
+      vælgFænomen: (id) => { if (valgt?.id !== id) vælg(id); },
     });
     // Det forrige fænomens billeder frigives først nu, så de billeder, det nye også bruger (fx Jorden), bliver liggende
     if (før !== f) frigivBilleder(før);

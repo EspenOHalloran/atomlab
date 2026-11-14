@@ -1553,6 +1553,39 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .tid-ur-jord.løbsk .tid-sløret { fill: rgba(255, 210, 122, 0.45); }
 .tid-ur-jord.løbsk .tid-viser { opacity: 0.2; }
 .tid-ure[hidden], .tid-lysur[hidden] { display: none; }
+/* De tegnede figurer ved hjemkomsten (js/kosmos/tidfigur.js): de står oven på hvert ur, så urene ikke flytter sig */
+.tid-ur { position: relative; }
+.tid-figur { position: absolute; bottom: 100%; left: 14px; height: 78px; pointer-events: none; }
+.tid-figur[hidden] { display: none; }
+.tid-figur-svg { display: block; height: 100%; width: auto; overflow: visible; }
+.tid-figur-svg circle { fill: #9fe6ff; }
+.tid-figur-svg line { stroke: #9fe6ff; stroke-linecap: round; }
+.tid-ur-jord .tid-figur { left: auto; right: 14px; }
+.tid-ur-jord .tid-figur-svg circle { fill: #ffd27a; }
+.tid-ur-jord .tid-figur-svg line { stroke: #ffd27a; }
+.tid-figur-svg { filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.8)); }
+/* "Dit ur" stort (forløbets trin A2): et almindeligt sekund om bord med sekundviser og hjerte */
+.tid-mit-ur { display: flex; align-items: center; gap: 14px; max-width: min(520px, 100%); margin-bottom: 84px; padding: 12px 16px; border-radius: 16px; background: rgba(8, 12, 28, 0.9); border: 1px solid rgba(159, 230, 255, 0.45); box-shadow: 0 0 30px rgba(80, 180, 255, 0.2); }
+.tid-mit-ur[hidden] { display: none; }
+#kosmosOverlag:has(.tid-mit-ur:not([hidden])) { flex-direction: column; align-items: center; }
+.tid-mit-skive { width: 104px; height: 104px; flex: none; }
+.tid-mit-skive > circle:first-child { fill: rgba(159, 230, 255, 0.08); stroke: #9fe6ff; stroke-width: 2.5; }
+.tid-mit-mærker line { stroke: rgba(159, 230, 255, 0.7); stroke-width: 2; }
+.tid-mit-time, .tid-mit-minut { stroke: #9fe6ff; stroke-linecap: round; }
+.tid-mit-time { stroke-width: 4; }
+.tid-mit-minut { stroke-width: 3; }
+.tid-mit-sekund { stroke: #ff7a7a; stroke-width: 1.6; stroke-linecap: round; }
+.tid-mit-midt { fill: #ff7a7a; }
+.tid-hjerte { width: 40px; height: 36px; flex: none; fill: #ff5d73; filter: drop-shadow(0 0 8px rgba(255, 80, 110, 0.6)); transform-origin: 50% 55%; }
+.tid-mit-tekst { display: flex; flex-direction: column; gap: 4px; font-size: 15px; line-height: 1.35; }
+.tid-mit-tekst b { color: #9fe6ff; }
+.tid-figur-svg .tid-figur-mørk { fill: #3d87a8; stroke: #3d87a8; stroke-linecap: round; }
+.tid-ur-jord .tid-figur-svg .tid-figur-mørk { fill: #a87a24; stroke: #a87a24; }
+.tid-figur-svg .tid-figur-hår { stroke: #f4f1ea; stroke-linecap: round; }
+@media (prefers-reduced-motion: no-preference) {
+  .tid-figur:not([hidden]) { animation: tid-figur-ind 0.6s ease-out both; }
+}
+@keyframes tid-figur-ind { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .tid-lysur { width: min(560px, 100%); }
 .tid-lysur canvas { display: block; width: 100%; aspect-ratio: 2.4; height: auto; }
 @media (max-width: 560px), (max-height: 500px) {
@@ -1562,6 +1595,12 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .tid-ur-tal { font-size: 16px; }
   .tid-ur-navn, .tid-ur-alder { font-size: 11px; }
   .tid-skive { width: 34px; height: 34px; }
+  .tid-figur { height: 56px; left: 8px; }
+  .tid-mit-ur { gap: 10px; padding: 8px 10px; margin-bottom: 62px; }
+  .tid-mit-skive { width: 72px; height: 72px; }
+  .tid-hjerte { width: 30px; height: 27px; }
+  .tid-mit-tekst { font-size: 13.5px; }
+  .tid-ur-jord .tid-figur { right: 8px; }
   .tid-lysur canvas { aspect-ratio: 2.1; }
 }
 .tidh { max-width: 100%; /* Hvorfor går tiden langsommere? (js/kosmos/tidhvorfor.js): bredden og højden sættes i JS */ }
@@ -1916,6 +1955,8 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .skærm.i-forløb .vindue :is(.panel-fane, .logknap, .næste-skridt, .bjælke-række) { display: none !important; }
 #vaerksted.i-forløb #knapMinitabel { display: none; }
 #liv.i-forløb #livMission { display: none !important; }
+/* Kosmos (forløbet "Rejsen i tid"): Styr-boksen og underteksten er skjult, for forløbets linje fortæller, hvad der sker */
+#kosmos.i-forløb .vindue :is(.styr, .undertekst.fase) { display: none !important; }
 #minitabel .felt.forløb-mål { color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent); animation: forløbPuls 1.6s ease-in-out infinite; }
 @keyframes forløbPuls { 50% { box-shadow: 0 0 22px var(--accent); } }
 

@@ -181,6 +181,11 @@ await page.waitForFunction(() => document.querySelectorAll('#liv .fl-handling').
 const bogstaver = await T(() => [...document.querySelectorAll('#liv .fl-handling')].map((k) => k.textContent.trim()).join(''));
 await page.click('#liv .fl-handling[data-knap="plads0"]');
 await page.click('#liv .fl-handling[data-knap="tilT"]');
+// Det sidste trins Så kommer før "Det så du" (js/forloeb.js, 13. november 2026)
+await fase('så');
+const så5 = await T(() => document.querySelector('#liv .fl-tekst').textContent);
+tjek('forløb 2, trin 5: Så siger, at sådan et skift er en mutation', /mutation/.test(så5), så5);
+await page.click('#liv .fl-næste');
 await fase('slut');
 o = await O();
 const slut2 = await T(() => ({ tekst: document.querySelector('#liv .fl-tekst').textContent, lille: document.querySelector('#liv .fl-lille')?.textContent, veje: [...document.querySelectorAll('#liv .fl-vej')].map((v) => v.textContent) }));
