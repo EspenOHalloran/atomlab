@@ -1,5 +1,7 @@
 # Grene, der kan slettes
 
+*Færdig 14. november 2026: 140 fjerngrene slettet på GitHub (alle helt merget, plus tre grene med kun idéer til DESIGN.md og en uden unikke commits). Filen herunder er den gamle liste fra 8. november.*
+
 *Tjekket 8. november 2026 (Småting) med hele historien hentet (`git fetch --unshallow`). Sessionerne må ikke selv slette grene (miljøets sikkerhedstjek afviser det), så I sletter dem på GitHub under Branches. Når de er slettet, flyttes filen til `docs/arkiv/`.*
 
 **Pas på:** En kort klon (kun de sidste ca. 50 commits) får de gamle grene til at se ud, som om de har en anden historie end `main`. Hent hele historien først, før grene tjekkes.

@@ -33,6 +33,13 @@ export const ORDBOG = [
     former: ['grundstof', 'grundstoffet', 'grundstoffer', 'grundstofferne'],
     tekst: 'Et stof, hvor alle atomerne har lige mange protoner, fx hydrogen, oxygen eller guld. Man kender 118 grundstoffer, og alt omkring dig er bygget af dem.',
   },
+  // Kvantefysik E7, afsnit 5 (14. november 2026). Kilder: docs/fakta-kvantefysik.md, afsnit 4 og fælden "orbitalen er
+  // elektronens bane" i afsnit 7 (Wikipedia "Atomic orbital": én bølgeform pr. orbital, plads til 2 elektroner i hver).
+  {
+    id: 'orbital', ord: 'Orbital',
+    former: ['orbital', 'orbitalen', 'orbitaler', 'orbitalerne'],
+    tekst: 'Det område om atomets kerne, hvor en elektron sandsynligvis er. Det er ikke en bane, elektronen kører rundt i: Elektronen opfører sig som en bølge, og orbitalen er bølgens form. Der er plads til 2 elektroner i hver.',
+  },
   {
     id: 'neutrino', ord: 'Neutrino',
     former: ['neutrino', 'neutrinoen', 'neutrinoer', 'neutrinoerne'],
@@ -82,7 +89,7 @@ export const ORDBOG = [
     tekst: 'Et atom med for få eller for mange elektroner. Så er det elektrisk ladet: plus, hvis der mangler elektroner, og minus, hvis der er for mange.',
     // Kilder: docs/fakta-ordbog.md, "Ion"
     mere: [
-      ['Hvorfor bliver et atom til en ion?', 'Elektroner kan rives løs, når atomet bliver ramt hårdt nok, fx af stærk varme eller af stråling med meget energi. Derfor kaldes den slags stråling ioniserende. Atomer kan også bytte elektroner: Natrium holder løst på sin yderste elektron, og chlor trækker hårdt i en ekstra. Selve byttet koster lidt energi, men bagefter trækker plus og minus i hinanden, og det giver mere energi tilbage.'],
+      ['Hvorfor bliver et atom til en ion?', 'Elektroner kan rives løs, når atomet bliver ramt hårdt nok, fx af stærk varme eller af stråling med meget energi. Derfor kaldes den slags stråling ioniserende. Atomer kan også bytte elektroner: Natrium holder ret løst på sin yderste elektron. Byttet koster lidt energi, men når plus og minus mødes, får de mere igen.'],
       ['Hvor møder jeg ioner i hverdagen?', 'Når salt opløses i vand, går det i stykker i Na⁺- og Cl⁻-ioner, og derfor kan saltvand lede strøm, som rent vand næsten ikke kan. Dine nerver sender signaler ved at lukke natrium- og kaliumioner ind og ud gennem cellernes væg. Og i et batteri vandrer ioner gennem elektrolytten, mens elektronerne løber gennem ledningen.'],
       ['Kan et atom miste alle sine elektroner?', 'Ja, så er der kun den nøgne kerne tilbage. I midten af Solen er det så varmt, at næsten alle hydrogen- og heliumatomer har mistet deres elektroner. Hos de tunge atomer sidder de inderste elektroner meget fastere, men i store partikelacceleratorer har man revet alle 92 elektroner af uran.'],
     ],
@@ -240,6 +247,12 @@ export const ORDBOG = [
     id: 'elektronaffinitet', ord: 'Elektronaffinitet',
     former: ['elektronaffinitet', 'elektronaffiniteten'],
     tekst: 'Den energi, et atom giver fra sig, når det får en ekstra elektron. Chlor giver ca. 3,6 eV. En ekstra elektron nr. to koster altid energi, for så er atomet allerede minusladet.',
+  },
+  {
+    // Forløbet "Når atomer mødes" (trin 4). Fables forklaring: ikke kun ioner (docs/fable/E6-molekyler.md, afsnit 4).
+    id: 'krystal', ord: 'Krystal',
+    former: ['krystal', 'krystallen', 'krystaller', 'krystallerne'],
+    tekst: 'Et fast stof, hvor atomerne, ionerne eller molekylerne ligger i et mønster, der gentager sig. Salt, sukker, is og diamant er krystaller.',
   },
   {
     id: 'gitter', ord: 'Gitter (krystalgitter)',

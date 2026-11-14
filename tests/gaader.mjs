@@ -2,7 +2,7 @@
 // og højst to fagord), og i browseren oversigten, et kort fra start til slut, ✓, "Se det selv", linket fra Sort hul og
 // Ordbogen, og at telefonen ikke får en vandret rullebjælke.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
-import { GÅDER, bygget } from '../js/data/gaader.js';
+import { GÅDER, bygget, STREG_FORKLARING } from '../js/data/gaader.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
@@ -59,6 +59,18 @@ tjek('Ordbogen: "mørkt stof" og "antistof" peger på gåderne, og "sigma" på "
   && LINKS.antistof?.gaa?.[0] === 'gaader:antistof' && LINKS.sigma?.hvorfor === 'opdaget');
 tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
   !!HVORFOR.opdaget && ['moerktstof', 'liv'].every((id) => GÅDER.find((g) => g.id === id).trin.some((t) => t.hvorfor === 'opdaget')));
+
+// G4a: scenen til Antistof og de nye felter
+{
+  const a = GÅDER.find((g) => g.id === 'antistof');
+  const sc = a.scene ?? {};
+  const linjer = [sc.start, sc.par, sc.lys, sc.kunStof, ...(sc.bang ?? []), sc.målt, sc.forLidt, sc.dune, sc.hk, sc.skiftevis, sc.tommel];
+  const lange = linjer.filter((l) => !l || ord(l) > 28);
+  tjek('G4a: Antistofs scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
+    !lange.length && sc.bang?.length === 4 && sætninger(a.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING), JSON.stringify(lange));
+  tjek('G4a: alle byggede kort har en størrelsesorden til skinnen, og nyt og løst har den rigtige form',
+    kort.every((g) => Number.isFinite(g.størrelse)) && kort.every((g) => (g.nyt == null || (g.nyt.tekst && g.nyt.dato)) && (g.løst == null || typeof g.løst === 'string')));
+}
 
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -162,6 +174,84 @@ const vent = (page, f, a, ms = 8000) => page.waitForFunction(f, a, { timeout: ms
   const hentetFør = await page.evaluate(() => atomlabTest.hentet('gaader'));
   await page.click('#ord-singularitet [data-gaa]');
   tjek('Ordbogens "singularitet" henter Gåderne og åbner kortet Sort hul', !hentetFør && await vent(page, () => atomlabTest.gaader?.vist()?.id === 'sorthul'));
+  await ctx.close();
+}
+
+// G4a: Antistof i 3D på pc: panelet til højre, par, lys, "Lav kun stof", den store udslettelse, søjlerne og redskaberne
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await T(() => atomlabTest.gaader.visGåde('antistof'));
+  const klar = await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
+  const lay = await T(() => {
+    const v = document.getElementById('gaaderVindue').getBoundingClientRect();
+    const p = document.getElementById('gaaderPanel').getBoundingClientRect();
+    return { påKort: document.getElementById('gaader').classList.contains('paa-kort'), vB: v.width, panelHøjre: p.left >= v.right - 1, pB: p.width };
+  });
+  tjek('G4a pc: kortet har en scene, og panelet (ca. 380 px) står til højre for den', klar && lay.påKort && lay.panelHøjre && Math.abs(lay.pB - 380) < 4 && lay.vB > 700, JSON.stringify(lay));
+  const S = () => T(() => atomlabTest.gaader.scene().scene());
+  await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(-3, 0); s.spol(1.5); });
+  const par = await S();
+  // Træk stoffet hen på antistoffet med musen
+  const [a, c] = par.skærm;
+  await page.mouse.move(a.x, a.y);
+  await page.mouse.down();
+  for (let i = 1; i <= 8; i++) await page.mouse.move(a.x + (c.x - a.x) * i / 8, a.y + (c.y - a.y) * i / 8);
+  await page.mouse.up();
+  const lys = await S();
+  await page.click('#gaadeSceneKnapper [data-id="kunStof"]');
+  await T(() => atomlabTest.gaader.scene().spol(1));
+  const kun = await S();
+  tjek('G4a: et tryk giver et par (én stof, én antistof), trukket sammen bliver de til lys, og "Lav kun stof" giver også et par',
+    par.levende === 2 && par.stof === 1 && lys.levende === 0 && lys.skridt === 2 && kun.levende === 2 && kun.stof === 1 && kun.skridt === 3,
+    JSON.stringify({ par, lys, kun }));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  const bang = await S();
+  await T(() => atomlabTest.gaader.scene().spol(10));
+  const rest = await S();
+  tjek('G4a: gættet starter den store udslettelse, og den ender i resten med "Se det igen"', bang.tilstand === 'bang' && rest.tilstand === 'rest'
+    && await T(() => !!document.querySelector('#gaadeSceneKnapper [data-id="igen"]')), JSON.stringify({ bang: bang.tilstand, rest: rest.tilstand }));
+  await page.click('#gaadeTrin .fl-næste');
+  const førStempel = await S();
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]'); // "Gæt" er forkert, men stemplet viser sandheden: MÅLT
+  await T(() => atomlabTest.gaader.scene().spol(3));
+  const søjler = (await S()).søjler;
+  tjek('G4a trin 2: stemplet lander først efter gættet, og så vokser den stiplede søjle op', førStempel.søjler && !førStempel.søjler.stempel && !førStempel.søjler.stor && søjler.stempel && søjler.stor, JSON.stringify({ før: førStempel.søjler, søjler }));
+  await page.click('#gaadeTrin .fl-næste');
+  await page.click('#gaadeSceneKnapper [data-id="hk"]');
+  const hk = (await S()).redskab;
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4a trin 3: knapperne skifter mellem DUNE og Hyper-K, og det sidste billede siger "Sig det til en ven"', hk?.vis === 'hk' && ven.startsWith('Sig det til en ven:'), JSON.stringify({ hk, ven }));
+  await page.click('#gaadeTrin [data-alle]');
+  const ud = await T(() => ({ scene: atomlabTest.gaader.scene().id(), påKort: document.getElementById('gaader').classList.contains('paa-kort'), vindue: getComputedStyle(document.getElementById('gaaderVindue')).display }));
+  // De andre kort viser deres lys som scene
+  await T(() => atomlabTest.gaader.visGåde('moerktstof'));
+  const lysKort = await vent(page, () => atomlabTest.gaader.scene()?.id() === 'moerktstof' && atomlabTest.gaader.scene().scene()?.lys);
+  tjek('G4a: "Alle gåder" rydder scenen, og de andre kort har deres lys som scene', ud.scene === null && !ud.påKort && ud.vindue === 'none' && lysKort, JSON.stringify(ud));
+  await ctx.close();
+}
+
+// G4a: tablet på højkant: panelet forneden (højst ca. 45 % af højden), og mens man gætter, kun spørgsmålet og valgene
+{
+  const { page, ctx } = await nySide({ viewport: { width: 768, height: 1024 }, isMobile: true, hasTouch: true }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, () => document.querySelector('#gaader:not(.skjult) .gaade-valg'));
+  await T(() => atomlabTest.gaader.visGåde('antistof'));
+  await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
+  const mål = () => T(() => {
+    const v = document.getElementById('gaaderVindue').getBoundingClientRect();
+    const p = document.getElementById('gaaderPanel').getBoundingClientRect();
+    const synlig = (sel) => { const e = document.querySelector(sel); return !!e && e.getClientRects().length > 0; };
+    return { under: p.top >= v.bottom - 1, andel: p.height / innerHeight, titel: synlig('.gaade-spørgsmål'), gæt: synlig('#gaadeTrin .fl-gæt') };
+  });
+  const før = await mål();
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  const efter = await mål();
+  tjek('G4a højkant: panelet står under scenen og fylder højst ca. 45 %, og titlen er skjult, mens man gætter',
+    før.under && før.andel < 0.46 && efter.andel < 0.46 && !før.titel && før.gæt && efter.titel, JSON.stringify({ før, efter }));
   await ctx.close();
 }
 
