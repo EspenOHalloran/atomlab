@@ -765,4 +765,32 @@ export const ORDBOG = [
     // Venus V2. Kilder: fakta-solsystemet/del7, afsnit 3, og vindene målt i Akatsukis billeder (js/data/vinde-venus.js)
     tekst: 'Når luften om en planet drejer rundt meget hurtigere end planeten selv. På Venus suser toppen af skyerne rundt på ca. 4 jorddøgn, mens Venus selv er 243 jorddøgn om at dreje én gang.',
   },
+  // Solsystemets overblik, forløbet "Rundt om Solen" (15. november 2026). Kilder: NASA "Asteroids: Facts" (under Månens
+  // masse, 1,1-1,9 mio. over 1 km), "Kuiper Belt: Facts" (30 til ca. 50 AU, en kilde til kometer, Pluto blandt de største)
+  // og "Dwarf Planets" (IAU 2006, fem dværgplaneter). Planet og bane er så almindelige, at de kun får prikker i forløbets linje.
+  {
+    id: 'planet', ord: 'Planet', kunI: '.fl-tekst',
+    former: ['planet', 'planeten', 'planeter', 'planeterne'],
+    tekst: 'En stor, rund klode, der går rundt om en stjerne. Solen har otte: Merkur, Venus, Jorden, Mars, Jupiter, Saturn, Uranus og Neptun. En planet er så tung, at den har ryddet sin bane for andre store kloder.',
+  },
+  {
+    id: 'bane', ord: 'Bane', kunI: '.fl-tekst',
+    former: ['bane', 'banen', 'baner', 'banerne'],
+    tekst: 'Den vej, en klode følger rundt om en anden, fx Jorden rundt om Solen eller Månen rundt om Jorden. Banerne er ellipser (lidt flade cirkler), men Jordens er næsten rund.',
+  },
+  {
+    id: 'dvaergplanet', ord: 'Dværgplanet',
+    former: ['dværgplanet', 'dværgplaneten', 'dværgplaneter', 'dværgplaneterne'],
+    tekst: 'En klode, der går rundt om Solen og er næsten rund, men som ikke har ryddet sin bane for andre kloder. Pluto blev kaldt en dværgplanet i 2006. Ceres i asteroidebæltet og Eris er også dværgplaneter.',
+  },
+  {
+    id: 'asteroidebaelte', ord: 'Asteroidebælte',
+    former: ['asteroidebælte', 'asteroidebæltet'],
+    tekst: 'Et bredt bælte mellem Mars og Jupiter, hvor de fleste asteroider (små klippekloder) går rundt om Solen. Der er millioner af dem, men der er langt imellem dem. Alle tilsammen vejer mindre end Månen.',
+  },
+  {
+    id: 'kuiperbaelte', ord: 'Kuiperbælte',
+    former: ['kuiperbælte', 'kuiperbæltet'],
+    tekst: 'Et bælte af iskolde småkloder uden for Neptuns bane, ca. 30 til 50 gange så langt fra Solen som Jorden. Pluto er en af de største. Nogle kometer kommer derfra.',
+  },
 ];
