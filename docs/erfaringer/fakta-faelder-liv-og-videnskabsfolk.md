@@ -66,3 +66,9 @@
 - "Millers kolbe havde fire gasser og vand." Det var tre gasser (metan, ammoniak og hydrogen) over kogende vand (Wikipedia "Miller–Urey experiment", Lazcano og Bada 2003). Vanddampen er den fjerde, hvis man tæller den med, men så er der ikke "og vand".
 - "Under 1 fejl pr. milliard bogstaver" og "ca. 70 nye mutationer pr. barn" i samme forløb ser ud til at modsige hinanden (6,1 milliarder × 10⁻⁹ ≈ 6 pr. kopi). De ca. 70 er samlet op gennem mange delinger i cellerne, der bliver til sæd og æg (flere jo ældre faren er, Jónsson m.fl. 2017), og nogle er skader, ikke kopifejl. Sig det, når begge tal står samme sted.
 - "Med den rigtige unge luft (CO₂ og nitrogen) giver Millers forsøg færre aminosyrer." For skarpt: Med en buffer i vandet blev der mange flere (Cleaves m.fl. 2008), og "significant yields … can still be synthesized" (Parker m.fl. 2011). Skriv, at det stadig virker, men afhænger af, hvad der er i vandet.
+*Huygens (15. november 2026). Kilderne står i [fakta-videnskabsfolk/huygens.md](../fakta-videnskabsfolk/huygens.md).*
+- "Skriftet om Titan kom i 1655" (Wikipedia "Titan (moon)"). Huygens skriver selv i *Systema Saturnium* s. 47, at det udkom 25. marts 1656 sammen med anagrammet.
+- "Huygens var 26, da han fandt Titan." Han var 25 (født 14. april 1629, Titan 25. marts 1655). Regn alderen ud fra begge datoer.
+- "Huygens' kikkert forstørrede 43 gange" eller "50 gange". Kilderne er uenige, og bogen giver kun længden (12 fod) og okularet (knap 3 tommer). Skriv "ca. 50 gange".
+- "Huygens fandt ud af, at ringen består af is og sten." Han troede, den var fast ("solidum ac permanentem", s. 48). Det var Maxwell (1859) og Keeler (1895).
+- "Huygens begyndte at slibe linser i 1655." Wikipedia siger 1655 i én artikel og "around 1650" i en anden. Skriv "midt i 1650'erne".

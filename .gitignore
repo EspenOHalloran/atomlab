@@ -1,3 +1,6 @@
 # Skærmbilleder fra testene
 tests/billeder/
 __pycache__/
+
+# Kildebilleder til Bibliotekets portrætter (billeder/biblioteket/lav_portraet.py)
+billeder/biblioteket/kilder/

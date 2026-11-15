@@ -74,6 +74,8 @@ Står for sig selv i [fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.
 
 **Gør det i AtomLab:** Solsystemet, **Saturn**: ringene, ringenes skygge og jævndøgn, hvor ringens skygge bliver en tynd streg (`js/data/sider/saturn.js`), og **Titan** (`js/kosmos/saturn.js`). Citatet `huygensSaturn` står allerede ved Saturn. *Til kortet:* "Drej Saturn, så du ser ringen fra kanten. Så forsvinder den næsten, præcis som Huygens forklarede."
 
+**Mere om Huygens** (15. november 2026, til drejebogen): [fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md).
+
 **Bogsiden:** *Systema Saturnium* (Haag 1659), **s. 47** (anagrammet afsløres) og figuren med Saturns skiftende udseende.
 - **Smithsonian Libraries** `CristianiHugeni00HuygA`: "Public domain. The Library considers that this work is no longer under copyright protection". **Sikker.** McGill (`McGillLibrary-osl_…`) har ingen licens i metadata, og Firenze-kopien (`ita-bnc-pos-0000044-001`) er ikke tjekket.
 
