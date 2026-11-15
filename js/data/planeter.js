@@ -154,6 +154,30 @@ export function kugleRetning(p, dato) {
 // Lyset fra Solen til planeten (sekunder) på datoen
 export const lysTid = (id, dato) => (solAfstand(id, dato) * AU) / LYS;
 
+// Lysets tid som tekst ("45 s", "8 min 14 s", "4 t 8 min")
+export function lysTekst(sek) {
+  const s = Math.floor(sek);
+  if (s < 60) return `${s} s`;
+  if (s < 3600) return `${Math.floor(s / 60)} min ${s % 60} s`;
+  return `${Math.floor(s / 3600)} t ${Math.floor((s % 3600) / 60)} min`;
+}
+
+// "Rejs med lyset" er spolet frem og går hurtigere og hurtigere: Efter w sekunder har lyset rejst A · w^P sekunder, så
+// det når Jorden (494 s i middel) efter 8 s og Neptun (ca. 14.900 s) efter 30 s (jeres valg 15. november 2026)
+const RP = Math.log(14900 / 494) / Math.log(30 / 8);
+const RA = 494 / 8 ** RP;
+export const lysRejseTid = (w) => RA * w ** RP;
+
+// En afstand i km som tekst ("16,3 milliarder km", "148 millioner km", "19.400 km")
+const komma = (x, d) => x.toFixed(d).replace('.', ',');
+export function kmTekst(km) {
+  if (km >= 1e9) return `${komma(km / 1e9, 1)} milliarder km`;
+  if (km >= 1e7) return `${Math.round(km / 1e6)} millioner km`;
+  if (km >= 1e6) return `${komma(km / 1e6, 1)} millioner km`;
+  const n = km >= 1e5 ? Math.round(km / 1e3) * 1e3 : km >= 1e4 ? Math.round(km / 100) * 100 : Math.round(km / 10) * 10;
+  return `${n.toLocaleString('da-DK')} km`;
+}
+
 // Den yderste dato, overblikket kan vise (jeres svar 14. november 2026: 1800-2100)
 export const FØRSTE = Date.UTC(1800, 0, 5);
 export const SIDSTE = Date.UTC(2100, 11, 31);

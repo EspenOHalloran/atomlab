@@ -1,5 +1,5 @@
 // Solsystemets overblik (docs/drejebog-overblik.md, trin 2 og 3 af byggeriet): Solen, de otte planeter og Pluto i
-// deres rigtige baner, som de står på datoen, som Solsystemets forside og første klode. Forløbet (trin 4) kommer senere.
+// deres rigtige baner, som de står på datoen, som Solsystemets forside og første klode.
 //
 // - Skalaen (skyderen "Skala" i Styr, glider selv i mål): "Pustet op og rykket sammen" (t = 0) tegner afstanden fra
 //   Solen som kvadratroden af den rigtige (Neptun NEPTUN_U enheder ude) og forstørrer alle planeterne lige meget
@@ -15,18 +15,23 @@
 //   glatVej i rejse.js), til kuglen fylder ca. en tredjedel af billedet, og billedet toner gennem mørke over i planetens
 //   egen visning. Merkur og Pluto er ikke bygget: De er steder i overblikket med et kort panel.
 // - Tilbage: Overblikket husker dato, skala og kamera (husk), og flyver ud fra den klode, man kom fra.
+// - Forløbet "Rundt om Solen" (drejebogens afsnit 2) står i js/solsystem/overblik-forloeb.js. Det styrer scenen gennem
+//   api'et nedenfor og flaget vis (navnene, ringene, Pluto, bælterne og tidsknapperne er skjult imens).
+// - "Rejs med lyset" (handlingen i bjælken) står i js/solsystem/overblik-lys.js.
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, ROLIG } from '../scene3d.js';
 import { glød, stjerne } from './faelles.js';
 import { glatVej } from '../solsystem/rejse.js';
 import { hent } from '../solsystem/hent.js';
-import { navneKnap, navneTil } from '../solsystem/navne.js';
+import { navneKnap, navneTil as navneTilFra } from '../solsystem/navne.js';
 import { lavShadereFørst } from '../solsystem/shadere.js';
 import { sætOverblikDato } from '../solsystem/dato.js';
 import { PLANETER, SOLEN, plads, tilProgram, kugleRetning, AU, FØRSTE, SIDSTE } from '../data/planeter.js';
 import { ringProfil, RING_IND, RING_UD } from '../data/ringe.js';
 import { SIDE, SIDER, TAL } from '../data/sider/overblik.js';
+import { lavOverblikForløb } from '../solsystem/overblik-forloeb.js';
+import { lavLysRejse } from '../solsystem/overblik-lys.js';
 
 const NEPTUN_A = 30.07; // AU
 export const NEPTUN_U = 20; // enheder: Neptuns afstand i begge skalaer
@@ -35,6 +40,9 @@ const SOL_R = 1.0; // Solens radius i "Pustet op" (større end Jupiter, under Me
 const F = JUPITER_R / 69911; // enheder pr. km for planeterne i "Pustet op"
 const RIGTIG = NEPTUN_U / NEPTUN_A / AU; // enheder pr. km i den rigtige skala
 const MIN_PX = 1.6; // mindste radius i pixel i "Pustet op"
+// Jordens luft i overblikket (lineære farver): Uden den er Jorden en mørk, brunlig prik langt væk, for kortets hav er
+// mørkt. Set fra rummet er Jorden blålig af luften og skyerne ("Pale Blue Dot")
+const LUFT_JORDEN = [0.05, 0.1, 0.28];
 const TRYK_PX = 44;
 const ÅR = 365.25 * 864e5;
 const TEMPI = [30.44 * 864e5, ÅR, 10 * ÅR]; // ⏩ én, to og tre gange: en måned, et år og ti år i sekundet
@@ -74,7 +82,7 @@ void main() {
   gl_Position = projectionMatrix * mv;
 }`;
 const KUGLE_F = /* glsl */ `
-uniform sampler2D uKort; uniform float uHarKort; uniform float uGraa; uniform vec3 uFarve; uniform vec3 uSol;
+uniform sampler2D uKort; uniform float uHarKort; uniform float uGraa; uniform vec3 uFarve; uniform vec3 uSol; uniform vec3 uLuft;
 varying vec3 vN; varying vec3 vP; varying vec2 vUv;
 void main() {
   vec3 c = uFarve;
@@ -82,8 +90,13 @@ void main() {
     vec4 t = texture2D(uKort, vUv);
     c = uGraa > 0.5 ? vec3(t.r) * uFarve * 2.2 : t.rgb;
   }
-  float lys = max(dot(normalize(vN), normalize(uSol - vP)), 0.0);
-  gl_FragColor = vec4(c * (0.03 + 1.1 * lys), 1.0);
+  vec3 n = normalize(vN);
+  float sol = dot(n, normalize(uSol - vP));
+  float lys = max(sol, 0.0);
+  // Jordens luft: et blåt skær over dagsiden, stærkest ved kanten (derfor ser Jorden blå ud langt væk)
+  float kant = 1.0 - max(dot(n, normalize(-vP)), 0.0);
+  vec3 luft = uLuft * (0.35 + 1.2 * kant * kant) * smoothstep(-0.25, 0.4, sol);
+  gl_FragColor = vec4(c * (0.03 + 1.1 * lys) + luft, 1.0);
 }`;
 const RING_V = /* glsl */ `
 varying float vR; varying vec3 vP;
@@ -193,15 +206,19 @@ export default {
     let dato = husk.dato ?? Date.now();
     let t = husk.t; // skalaen 0-1
     let tMål = t;
+    let glidTid = 1.2; // sekunder, skalaen glider fra den ene ende til den anden (forløbets trin 3: ca. 3 s)
     let tempo = husk.tempo; // -3 til 3 (⏪ og ⏩)
     let spolet = husk.dato != null;
     let flyvning = null; // { slags: 'ind' | 'sted' | 'ud', ... }
     let fokus = null; // kloden, kameraet følger (Merkur eller Pluto), eller null (Solen i midten)
     let stedNu = 'overblik';
     let fokusR = 0; // klodens radius sidste billede (fokus)
-    let banerSvag = 1;
     const lærred = verden.renderer.domElement;
     const vindue = document.getElementById('solsystemVindue');
+    // Det, forløbet slår til og fra (js/solsystem/overblik-forloeb.js): forløb skjuler navnene, ringene, Pluto, bælterne
+    // og tidsknapperne. ringKun: kun den klodes ring vises. fremhæv: den klodes ring og navn blinker. besøg: vejen
+    // "Besøg en planet" efter forløbet (navnene er tændt, Pluto skjult og Merkur mat).
+    const vis = { forløb: false, ringKun: null, fremhæv: null, besøg: false };
 
     // ---------- Solen ----------
     const sol = stjerne(1, 0xfff1c4, 0xff8a1c, 0xffb347, 2.6, { styrke: 1.3 });
@@ -210,12 +227,14 @@ export default {
     gruppe.add(solLys);
 
     // ---------- Kloderne ----------
-    const kugleGeo = new THREE.SphereGeometry(1, TEST_HURTIG ? 24 : 48, TEST_HURTIG ? 12 : 24);
+    // (64 × 32: Jorden fylder billedet efter dykket i forløbets trin 4)
+    const kugleGeo = new THREE.SphereGeometry(1, TEST_HURTIG ? 24 : 64, TEST_HURTIG ? 12 : 32);
     const kloder = PLANETER.map((p) => {
       const mat = new THREE.ShaderMaterial({
         uniforms: {
           uKort: { value: null }, uHarKort: { value: 0 }, uGraa: { value: p.gråt ? 1 : 0 },
           uFarve: { value: new THREE.Color(p.gråt ? '#7c7976' : p.farve) }, uSol: { value: new THREE.Vector3() },
+          uLuft: { value: new THREE.Vector3(...(p.id === 'jorden' ? LUFT_JORDEN : [0, 0, 0])) },
         },
         vertexShader: KUGLE_V, fragmentShader: KUGLE_F,
       });
@@ -305,7 +324,7 @@ export default {
     for (const k of kloder) k.mærke = mærke(k.p.navn);
     const solMærke = mærke('Solen');
     const indersteMærke = mærke('De fire inderste');
-    let navne = navneTil();
+    let navneTil = navneTilFra(); // kontakten "Navne"
 
     // ---------- Tidsskyderen og datoen (nederst i 3D-billedet) ----------
     const tidLag = document.createElement('div');
@@ -319,11 +338,26 @@ export default {
     const datoLinje = tidLag.querySelector('.ob-dato');
     const skyder = tidLag.querySelector('.ob-skyder');
     let trækFra = null; // datoen, da trækket startede
+    // Forløbets trin 2: Skyderen går fra 0 til ét år frem fra årFra (årLængde ms), uden at falde tilbage, når man slipper
+    let årFra = null, årLængde = ÅR;
     skyder.addEventListener('input', () => {
+      lys.stop();
+      if (årFra != null) { sætDato(årFra + Number(skyder.value) * årLængde); return; }
       if (trækFra == null) trækFra = dato;
       sætDato(trækFra + Number(skyder.value) * ÅR);
     });
-    const slip = () => { trækFra = null; skyder.value = 0; };
+    const slip = () => {
+      if (årFra != null) return;
+      trækFra = null;
+      skyder.value = 0;
+    };
+    function skyderÅr(fra, længde = ÅR) {
+      årFra = fra;
+      årLængde = længde;
+      trækFra = null;
+      skyder.min = fra == null ? -1 : 0;
+      skyder.value = 0;
+    }
     skyder.addEventListener('change', slip);
     skyder.addEventListener('pointerup', slip);
     for (const b of tidLag.querySelectorAll('.ob-spol')) {
@@ -349,6 +383,7 @@ export default {
       sætOverblikDato(dato);
     }
     function sætTempo(ny) {
+      if (ny) lys.stop();
       tempo = ny;
       if (ny) spolet = true;
       visDato();
@@ -385,6 +420,11 @@ export default {
         k.drej.scale.setScalar(vis);
       }
       ringMat.uniforms.uR.value = saturn.drej.scale.x;
+      // I forløbet er Pluto (og dens bane) og bælterne skjult (drejebogen, afsnit 2). På vejen "Besøg en planet" også Pluto.
+      const pluto = klode('pluto');
+      pluto.holder.visible = !vis.forløb && !vis.besøg;
+      baner[kloder.indexOf(pluto)].linje.visible = pluto.holder.visible;
+      asteroider.visible = kuiper.visible = !vis.forløb;
       // Solen: kuglen i "Pustet op", lyset i den rigtige skala
       const sr = radiusVed(null, t);
       sol.scale.setScalar(Math.max(sr, 0.6 * pxPr(kamera.position.length())));
@@ -416,8 +456,10 @@ export default {
       for (const k of kloder) skærmPunkt(k.pos, k.skærm);
       skærmPunkt(hjælp.set(0, 0, 0), solSkærm);
       const ma = klode('mars').skærm;
-      const samlet = Math.hypot(ma.x - solSkærm.x, ma.y - solSkærm.y) < 26 && !fokus;
-      const ringe = t > 0.5;
+      const iFl = vis.forløb;
+      const samlet = Math.hypot(ma.x - solSkærm.x, ma.y - solSkærm.y) < 26 && !fokus && !iFl;
+      const ringe = t > 0.5 && !iFl;
+      const navne = (navneTil || vis.besøg) && !iFl;
       const pladser = []; // navnene, der allerede står (så de ikke ligger oven i hinanden)
       const ledig = (p, tekst) => {
         const b = tekst.length * 7 + 22, x = p.x, y = p.y;
@@ -438,9 +480,13 @@ export default {
       for (const id of NAVNE_ORDEN.slice(1)) {
         const k = klode(id);
         const inderst = ['merkur', 'venus', 'jorden', 'mars'].includes(id);
-        const vis = k.skærm.synlig && !(samlet && inderst) && (navne || ringe) && !flyvning?.skjulNavne && k !== fokus;
-        sæt(k.mærke, k.skærm, vis, ringe);
-        k.mærke.classList.toggle('uden-tekst', !navne || !vis || !ledig(k.skærm, k.p.navn));
+        const fremhæv = vis.fremhæv === id, ringKun = vis.ringKun === id;
+        const synlig = k.skærm.synlig && k.holder.visible && !(samlet && inderst) && (navne || ringe || fremhæv || ringKun) && !flyvning?.skjulNavne && k !== fokus
+          && !(iFl && id === 'pluto');
+        sæt(k.mærke, k.skærm, synlig, ringe || fremhæv || ringKun);
+        k.mærke.classList.toggle('uden-tekst', !(navne || fremhæv) || !synlig || !ledig(k.skærm, k.p.navn));
+        k.mærke.classList.toggle('puls', fremhæv);
+        k.mærke.classList.toggle('mat', vis.besøg && !k.p.fænomen);
       }
       sæt(indersteMærke, solSkærm, solSkærm.synlig && samlet && (navne || ringe) && !flyvning?.skjulNavne, ringe);
       indersteMærke.classList.toggle('uden-tekst', !navne);
@@ -455,7 +501,7 @@ export default {
         const d = Math.hypot(p.x - x, p.y - y);
         if (d < TRYK_PX && (!bedst || d < bedst.d)) bedst = { id, d };
       };
-      for (const k of kloder) prøv(k.p.id, k.skærm);
+      for (const k of kloder) if (k.holder.visible) prøv(k.p.id, k.skærm);
       prøv('solen', solSkærm);
       return bedst?.id ?? null;
     }
@@ -464,6 +510,8 @@ export default {
     const vedOp = (h) => {
       if (!ned || flyvning || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
       ned = null;
+      // Forløbet tager trykket (det flyver ikke ind til planeten)
+      if (forløb.kører()) { forløb.tryk(nærmest(h.clientX, h.clientY), h.clientX, h.clientY); return; }
       // I den rigtige skala ligger de fire inderste oven i Solen: Et tryk dér zoomer ind til dem
       const ma = klode('mars').skærm;
       if (t > 0.5 && Math.hypot(ma.x - solSkærm.x, ma.y - solSkærm.y) < 26 && Math.hypot(h.clientX - solSkærm.x, h.clientY - solSkærm.y) < TRYK_PX) {
@@ -471,6 +519,7 @@ export default {
         return;
       }
       const id = nærmest(h.clientX, h.clientY);
+      if (id && vis.besøg && forløb.besøgTryk(id)) return; // Merkur er mat på vejen "Besøg en planet"
       if (id) besøg(id);
     };
     lærred.addEventListener('pointerdown', vedNed);
@@ -525,6 +574,7 @@ export default {
     // Besøg en klode: Merkur og Pluto er steder i overblikket, de andre (og Solen) har deres egen visning
     function besøg(id, hop = false) {
       if (flyvning?.slags === 'ind') return;
+      lys.stop();
       flyvning = null; // en anden flyvning (fx hjem fra Pluto) afbrydes
       const k = klode(id);
       if (k && !k.p.fænomen) { gåTil(id); return; }
@@ -581,7 +631,7 @@ export default {
 
     // Merkur og Pluto (og tilbage til hele overblikket)
     function gåTil(id) {
-      if (flyvning?.slags === 'ind') return;
+      if (flyvning?.slags === 'ind' || forløb.kører()) return;
       if (id === 'overblik') {
         fokus = null;
         stedNu = 'overblik';
@@ -590,6 +640,7 @@ export default {
       }
       const k = klode(id);
       if (!k) return;
+      lys.stop();
       stedNu = id;
       fokus = k;
       flyvTil({ mål: () => k.pos, afstand: k.r * 6, retning: indRetning(k), slags: 'sted', skjulNavne: true });
@@ -606,10 +657,10 @@ export default {
     const skala = {
       skyder: true, navn: 'Skala', min: 0, max: 100, trin: 1, værdi: Math.round(t * 100),
       vis: (x) => (x < 50 ? 'Pustet op og rykket sammen' : 'Rigtig størrelse og afstand'),
-      ændring: (x) => { t = tMål = x / 100; tegnBaner(); },
-      slip: (x) => { tMål = x < 50 ? 0 : 1; },
+      ændring: (x) => { lys.stop(); t = tMål = x / 100; tegnBaner(); },
+      slip: (x) => { tMål = x < 50 ? 0 : 1; glidTid = 1.2; },
     };
-    const styring = [skala, navneKnap((til) => { navne = til; })];
+    const styring = [skala, navneKnap((til) => { navneTil = til; }), { tekst: '💡 Rejs med lyset', handling: () => { forløb.visBesøg(false); lys.start(); } }];
     void opdaterKnapper;
 
     // ---------- Start: hjemme, eller ud fra den klode, man kom fra ----------
@@ -644,7 +695,7 @@ export default {
       }
       // Skalaen glider selv i mål, når man har sluppet skyderen
       if (t !== tMål) {
-        t = ROLIG ? tMål : t + Math.sign(tMål - t) * Math.min(Math.abs(tMål - t), dt / 1.2);
+        t = ROLIG ? tMål : t + Math.sign(tMål - t) * Math.min(Math.abs(tMål - t), dt / glidTid);
         skala.sæt?.(Math.round(t * 100));
         tegnBaner();
       }
@@ -666,19 +717,71 @@ export default {
       // Styringen holder altid afstanden mellem minDistance og maxDistance (også under en flyvning). Ved Merkur og Pluto
       // må man ikke zoome ind i kuglen, og i den rigtige skala er de meget små.
       orbit.minDistance = flyvning ? 1e-7 : fokus ? fokus.r * 1.3 : 0.05;
-      const svag = fokus && !flyvning ? 0.3 : 1; // banelinjerne tones ned tæt på en klode
-      if (svag !== banerSvag) {
-        banerSvag = svag;
-        for (const b of baner) b.linje.material.opacity = b.opacitet * svag;
-      }
+      // Banelinjerne tones ned tæt på en klode (Merkur og Pluto). I den rigtige skala ligger en banelinje (256 punkter)
+      // op til ca. to jordradier ved siden af planeten mellem to punkter, så den tones helt ud tæt på planeten (ca. 20-80
+      // radier, dykket i forløbets trin 4)
+      const svag = fokus && !flyvning ? 0.3 : 1;
+      kloder.forEach((k, i) => {
+        const nær = t > 0.5 ? THREE.MathUtils.clamp((kamera.position.distanceTo(k.pos) / k.r - 20) / 60, 0, 1) : 1;
+        baner[i].linje.material.opacity = baner[i].opacitet * svag * nær;
+      });
       kamera.updateProjectionMatrix();
       orbit.zoomSpeed = 1;
       placer();
       tegnNavne();
+      forløb.hvertBillede(dt);
+      lys.hvertBillede(dt);
       visDato();
     }
     verden.opdateringer.add(hvertBillede);
     visDato();
+
+    // ---------- Forløbet "Rundt om Solen" (js/solsystem/overblik-forloeb.js) ----------
+    // Afstanden, hvor en kugle med radius r (enheder, om Solen) passer i hullet mellem panelerne (som hjemAfstand)
+    const afstandFor = (r) => {
+      const { hul } = verden;
+      return Math.min(140, (r * 1.18) / (Math.tan(20 * GRAD) * (Math.min(hul.width, hul.height) / innerHeight)));
+    };
+    // Afstanden, hvor en kasse (halv bredde og halv højde i enheder, set skråt oppefra) passer i hullet (som passerTilBoks)
+    const afstandForBoks = (hb, hh) => {
+      const { hul } = verden;
+      const t20 = Math.tan(20 * GRAD);
+      return Math.min(140, Math.max(hb / (t20 * hul.width / innerHeight), hh / (t20 * hul.height / innerHeight)) * 1.06);
+    };
+    const punkt = (p, ms, ud) => {
+      const x = plads(p, new Date(ms));
+      const r = Math.hypot(...x);
+      const sk = afstandVed(r, t) / r;
+      const [px, py, pz] = tilProgram(x);
+      return ud.set(px * sk, py * sk, pz * sk);
+    };
+    // Banerne regnes om, så én omgang ligger omkring ms (et af de 256 punkter står præcis på planeten, så Jordens bane
+    // går gennem Jorden under dykket i forløbets trin 4)
+    function banerOm(ms) {
+      kloder.forEach((k, i) => {
+        if (k.p.id === 'pluto') return;
+        const fra = ms - (k.p.omløb * 864e5) / 2;
+        baner[i].au = baner[i].au.map((_, j) => plads(k.p, new Date(fra + (j / N_BANE) * k.p.omløb * 864e5)));
+      });
+      tegnBaner();
+    }
+    const lys = lavLysRejse({
+      kamera, orbit, vindue, gruppe, kloder, HJEM, tidLag, radiusVed, afstandFor, flyvTil,
+      dato: () => dato, t: () => t, flyver: () => Boolean(flyvning), stopTempo: () => sætTempo(0),
+      sætSkala: (x, glid, sek) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
+      stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
+    });
+    const forløb = lavOverblikForløb({
+      verden, kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder, solSkærm,
+      dato: () => dato, sætDato: (ms) => { sætDato(ms); visDato(); }, iDag, skyderÅr,
+      t: () => t,
+      // glid: skalaen glider på sek sekunder (ellers springer den)
+      sætSkala: (x, glid, sek = 1.2) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
+      punkt, afstandFor, afstandForBoks, afstandVed, radiusVed, flyvTil, flyver: () => flyvning, besøg, vælgFænomen,
+      vælgKamera: () => { første = false; verden.målAfstand = null; },
+      banerOm, indRetning, pxPr, overlag: overlag(), lys, sætFokus: (k) => { fokus = k; fokusR = 0; },
+      stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
+    });
 
     return {
       styring,
@@ -686,12 +789,15 @@ export default {
       besøg,
       sted: () => stedNu,
       opdater(dt) {
-        if (flyvning?.slags === 'ind') return;
+        lys.opdater(dt);
+        if (flyvning?.slags === 'ind' || forløb.kører()) return;
         if (trækFra != null) return; // man trækker selv i skyderen
         if (tempo) sætDato(dato + Math.sign(tempo) * TEMPI[Math.abs(tempo) - 1] * dt);
         else dato = Math.min(SIDSTE, dato + dt * 1000);
       },
       stop() {
+        forløb.stop();
+        lys.fjern();
         gem();
         aktiv = false;
         verden.opdateringer.delete(hvertBillede);
@@ -738,6 +844,15 @@ export default {
         flyver: () => Boolean(flyvning),
         hop: () => { if (flyvning) { flyvning.tid = flyvning.T; flyv(0); } },
         navne: () => kloder.filter((k) => !k.mærke.hidden).map((k) => k.p.id),
+        forløb: () => forløb.test,
+        lys: () => lys.test,
+        lysStart: () => lys.start(),
+        // Kuglens kort, og hvor meget af den belyste side kameraet ser (1 fuld, 0 halv, -1 nat)
+        kugleInfo: (id) => {
+          const k = klode(id), u = k.mat.uniforms;
+          const tilSol = k.pos.clone().negate().normalize(), tilKamera = kamera.position.clone().sub(k.pos).normalize();
+          return { harKort: u.uHarKort.value, bredde: u.uKort.value?.image?.width ?? null, dagside: tilSol.dot(tilKamera), skala: k.drej.scale.x, x: k.skærm.x, y: k.skærm.y };
+        },
       },
     };
   },
