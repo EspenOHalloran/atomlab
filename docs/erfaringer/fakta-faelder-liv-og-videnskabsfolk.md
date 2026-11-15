@@ -93,3 +93,4 @@
 - En Paris-fod (32,5 cm) er ikke en engelsk fod (30,5 cm). Newtons 15 1/12 fod er 4,90 m.
 - Knellers portræt af Newton fra 1702 (National Portrait Gallery): Commons skriver ved filen, at andre har rejst krav om ophavsret. Brug det fra 1689 (privat eje, filen kommer fra Cambridge University Library).
 - Et domæne kan være åbent uden "www." og lukket med (newtonproject.ox.ac.uk), eller omvendt (kb.dk). Prøv begge, før der bedes om adgang.
+- "Galileis kikkert i Firenze er den, han fandt Jupiters måner med." Museo Galileo har to kikkerter (14 og 21 gange) og for sig selv den revnede linse fra den kikkert, han gjorde opdagelsen med (inv. 2429). Skriv "en af hans kikkerter", og at linsen findes endnu.

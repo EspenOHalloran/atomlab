@@ -21,7 +21,7 @@ A følger delens kernesætning. C er den, historiebøgerne vælger, men den kræ
 - **Bogen:** *Sidereus Nuncius* (Venedig, Tommaso Baglioni, 1610), Smithsonian Libraries' eksemplar, archive.org-id **`Sidereusnuncius00Gali`** (68 billeder). Læst som billeder (`archive.org/download/<id>/page/n<nr>_w1400.jpg`, ca. 2.100 × 2.900 px). OCR-teksten kan ikke bruges (langt s bliver til f).
 - **JPL Horizons** (`ssd.jpl.nasa.gov/api/horizons.api`): månerne 501-504 set fra Jorden, størrelsen "X_(sat-prim)".
 - **Wikipedia (engelsk)** som wikitekst (artiklerne står ved påstandene).
-- **Kunne ikke åbnes:** Galileo-museets katalog (`catalogue.museogalileo.it`). `museogalileo.it` er åbent, men har ikke tallene.
+- **Museo Galileos katalog** (`catalogue.museogalileo.it/object/GalileosTelescope.html`, `…_n01.html` og `GalileosObjectiveLens.html`), åbnet senere samme dag.
 
 ## 3. Liv, kikkerten og bogen
 | Påstand | Kilde | Sikkerhed |
@@ -33,7 +33,8 @@ A følger delens kernesætning. C er den, historiebøgerne vælger, men den kræ
 | **"Tusind gange" er fladen**, ikke bredden (30 × 30 = 900). Som vi regner forstørrelse i dag: ca. 30 gange. Wikipedia siger 20 gange om kikkerten til bogen | Bogen mod Wikipedia "Sidereus Nuncius" | **Skriv "20-30 gange"** |
 | Han advarer læseren: Uden en kikkert, der gør tingene mindst 20 gange nærmere, ser man intet af det, han beskriver | Blad 6 bagside ("ad minus secundum quatercentuplam rationem multiplicet; tunc enim illa bisdecuplo viciniora commonstrabit") | Sikker |
 | Samme side, en prøve, man selv kan lave: Sæt to papirstykker på en væg, det ene 20 gange så bredt som det andet. Se på det lille gennem kikkerten og det store med det andet øje. Ser de lige store ud, forstørrer den 20 gange | Blad 6 bagside ("circulos binos, aut quadrata bina cartacea …") | Sikker |
-| To kikkerter fra ham er bevaret i Museo Galileo i Firenze. De forstørrer **14 og ca. 20 gange**, og synsfeltet er kun ca. 15 bueminutter (en halv fuldmåne) | Efter hukommelsen (museets katalog) | Usikker: slå op, før tallene bruges |
+| To kikkerter fra ham er bevaret i Museo Galileo i Firenze. Den ene (ca. 1610, træ og papir, 127 cm lang) forstørrer **14 gange**, den anden (sidst i 1609 eller først i 1610, træ og læder, 93 cm) **21 gange**. Synsfeltet er kun **15 bueminutter** (en halv fuldmåne) i begge. Den andens okular er fra 1800-tallet, det oprindelige er væk | Museets katalog, inv. 2427 og 2428 ("magnification is 14 … field of view 15'"; "magnification is 21") | Sikker |
+| **Linsen fra den kikkert, han fandt månerne med, findes endnu.** Han gav den til storhertug Cosimo 2. Den er senere revnet og sidder siden 1677 i en ramme af elfenben og ibenholt. Den er 38 mm bred | Museets katalog, inv. 2429 ("Galileo donated the lens of the telescope with which he made the discovery to Grand Duke Cosimo II") | Sikker (at museet siger det) |
 | Titelbladet siger alligevel "perspicilli nuper a se reperti" (kikkerten, han for nylig selv har fundet på) | Katalogens afskrift (archive.org) | Sikker. Derfra myten |
 | Bogen: tilegnelsen til storhertug Cosimo 2. de' Medici er dateret Padova **12. marts 1610** ("4. Idus Martii"). Trykketilladelsen er fra 1. marts, og den sidste iagttagelse er fra **2. marts** | Blad 4 (`n10`, `n11`) og blad 27 bagside (`n61`, "Die 2.") | Sikker |
 | Udkom 13. marts 1610, altså 11 dage efter den sidste iagttagelse. 550 eksemplarer | Wikipedia (datoen). Oplaget efter hukommelsen | Ret sikker (dato), Usikker (oplag) |
@@ -58,7 +59,7 @@ Galilei skriver "Ori." (øst) til venstre og "Occ." (vest) til højre. O er Jupi
 
 **Hvad tallene forklarer (Ret sikker):**
 - **7. januar:** Io og Europa stod kun ca. 6 buesekunder fra hinanden. Han så dem som én stjerne. Derfor tre og ikke fire.
-- **8. januar:** Callisto stod 10 bueminutter mod øst, efter alt at dømme uden for kikkertens smalle synsfelt (det sidste efter hukommelsen: Meeus 1964).
+- **8. januar:** Callisto stod 10 bueminutter mod øst. Synsfeltet var 15 bueminutter (afsnit 3), altså 7,5 til hver side med Jupiter i midten, så den lå efter alt at dømme uden for.
 - **10. januar:** Io stod lige foran Jupiters kant, og Europa og Ganymedes stod tæt sammen. Derfor kun to.
 - **11. januar:** Både Io og Europa stod lige ved Jupiters kant. Den yderste (Ganymedes) er også i virkeligheden den klareste.
 - **13. januar:** Den første nat, hvor alle fire stod frit. Hans egne afstande (2 minutter mod øst, ca. 1 minut mellem de andre) passer nogenlunde.
@@ -114,7 +115,7 @@ Bogen skriver æ, det lange s (ſ) og u for v ("obseruata"). Uddragene står her
 Flere fælder: "1.000 gange" er fladen (afsnit 3). Marius' "29. december 1609" er den gamle kalender. Navnene på månerne er Marius', ikke Galileis. Og det kendte håndskrevne ark med Jupiter og månerne (University of Michigan), som ligger mange steder på nettet, blev i **2022** afsløret som en **forfalskning fra 1900-tallet** (efter hukommelsen, Ret sikker): Brug kun bogens trykte tegninger.
 
 ## 9. Det, jeg er mindst sikker på
-1. **De bevarede kikkerter** (14 og ca. 20 gange, synsfelt ca. 15 bueminutter) og **oplaget** (550): efter hukommelsen.
+1. **Oplaget** (550): efter hukommelsen. Og de bevarede kikkerter (14 og 21 gange) er ikke nødvendigvis dem, han brugte i januar 1610: Han skriver selv "mere end tredive gange".
 2. **Hvorfor han ikke så Callisto 8. januar:** passer med tallene, men han skriver det ikke selv.
 3. **12. januar:** Io og Callisto stod begge tæt ved Jupiter mod øst. Jeg kan ikke afgøre, hvilken af dem han så i tredje time.
 4. **Oversættelsen** er min egen og ikke tjekket af andre. "Belga" er oversat "nederlænder" (ordet dækkede hele Nederlandene).
