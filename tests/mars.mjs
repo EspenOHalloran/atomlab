@@ -60,7 +60,7 @@ const vedÅbning = await s.evaluate(async () => {
   return k && { tekst: k.textContent.trim(), grå: k.disabled };
 });
 tjek('lige efter åbning: "Start flyby" er grå med "henter kort"', vedÅbning?.grå && /henter kort/.test(vedÅbning.tekst), JSON.stringify(vedÅbning));
-await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder?.().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
 const billeder = await s.evaluate(() => atomlabTest.solsystem.fænomen().billeder());
 tjek('billederne er hentet (2k i tests)', billeder.kort === '2k' && billeder.højde === '2k', JSON.stringify(billeder));
 const styr = await s.evaluate(() => atomlabTest.solsystem.styr());
@@ -646,7 +646,7 @@ await s.context().close();
   await s2.goto(`${ADRESSE}/?test#solsystem`);
   await s2.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)'));
   await s2.click('#solsystem .kosmos-valg[data-id="mars"]');
-  await s2.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
+  await s2.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder?.().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 30000 });
   const t0 = Date.now();
   const aktiv = await s2.waitForFunction(() => atomlabTest.solsystem.knapper().includes('▶ Start flyby'), null, { timeout: 20000, polling: 200 }).then(() => true, () => false);
   const ventede = (Date.now() - t0) / 1000;
