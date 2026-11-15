@@ -16,7 +16,7 @@
 // Elementerne i index.html har skærmens navn foran (fx kosmosListe og solsystemListe), så CSS og tests kan finde dem.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, ROLIG, piletaster, visTåger, tågerVist, visRumstøv, rumstøvVist } from './scene3d.js';
+import { verden, sætVindue, passerTil, ROLIG, TEST_HURTIG, piletaster, visTåger, tågerVist, visRumstøv, rumstøvVist } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
@@ -339,9 +339,11 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     }
     if (!g.f && åbenGruppe() === g) return; // en åben gruppe uden klode (Kosmos): bliv ved det valgte punkt
     lyd.klik();
-    // Til forsiden (overblikket) uden rejseskilt: Overblikket flyver selv ud fra den klode, man kom fra
+    // Til forsiden (overblikket) uden rejseskilt: Overblikket flyver selv ud fra den klode, man kom fra.
+    // Fra forsiden flyver overblikket selv ind til kloden. I testbrowseren (TEST_HURTIG, få billeder i sekundet) bruges
+    // rejseskiltet som før, så de andre skærmes tests kan vente på det. Flyvningen testes i tests/overblik.mjs.
     if (g.f && g.f.id === forside) vælg(forside);
-    else if (valgt?.id === forside && kørende?.besøg) kørende.besøg(g.f?.id ?? g.under[0].id); // overblikket flyver ind
+    else if (valgt?.id === forside && kørende?.besøg && !TEST_HURTIG) kørende.besøg(g.f?.id ?? g.under[0].id);
     else rejsTil(g, () => vælg((g.f ?? g.under[0]).id));
   }
   // Til en anden klode: rejseskiltet ("Kurs mod Mars") vises, mens den bygges (kun i Solsystemet)

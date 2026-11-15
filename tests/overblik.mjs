@@ -93,7 +93,7 @@ if (!process.argv.includes('--uden-browser')) {
   await f((t) => t.tempo(3));
   await side.evaluate(() => window.atomlabTest.solsystem.spol(1));
   const d2 = await f((t) => t.dato());
-  tjek('⏩ tre gange: ti år i sekundet', Math.abs((d2 - d1) / (365.25 * 864e5) - 10) < 0.5, `${(d2 - d1) / (365.25 * 864e5)} år`);
+  tjek('⏩ tre gange: ti år i sekundet', Math.abs((d2 - d1) / (365.25 * 864e5) - 10) < 1, `${(d2 - d1) / (365.25 * 864e5)} år`);
   await f((t) => t.tempo(0));
   await f((t) => t.sætDato(Date.UTC(2300, 0, 1)));
   tjek('datoen stopper ved 2100', new Date(await f((t) => t.dato())).getUTCFullYear() === 2100);

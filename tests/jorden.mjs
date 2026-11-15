@@ -74,7 +74,8 @@ const f = (s, kode, arg) => s.evaluate(([k, a]) => new Function('f', 'a', `retur
 
 const s = await side({ width: 1280, height: 800 });
 // ---------- Solen ----------
-tjek('Solsystemet åbner første gang på Solen', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'solen');
+tjek('Solsystemet åbner på overblikket (forsiden, 15. november 2026)', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'overblik');
+await s.evaluate(() => atomlabTest.solsystem.vælg('solen'));
 tjek('Solen: sort himmel', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
 const solTekst = await s.textContent('#solsystemTekst');
 tjek('Solen: tekst om fusion og 109 Jorder', /fusion/.test(solTekst) && /109 Jorder/.test(solTekst));
