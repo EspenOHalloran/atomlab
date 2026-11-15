@@ -11,7 +11,7 @@
 - **Jeres svar 15. november 2026** står i planen: portrættets stil ja, IM Fell English til overskrifter (programmets skrift til brødteksten), og alle ti bøger på hylden (de kommende som grå ryg).
 
 ## Næste
-1. **Fable tjekker drejebogen** senest 16. november 2026 (ny session med Fable 5.2, effort high): "Læs `docs/prompt-fable-huygens.md`, og gør det, der står under 'Prompten'."
+1. **Fables tjek af drejebogen til Huygens er skrevet, se `docs/fable/E12-huygens.md`** (15. november 2026). Ret især trin 3 (armene var væk i januar 1656), trin 4 (17 bunker), datoen 5. marts 1656 og kernesætningen.
 2. **Fables noter og H1** (Opus, høj, ny session, når 1 er færdig):
    > Spor: Videnskabsfolkene. Navngiv chatten "Videnskabsfolkene · Fables noter og H1". Læs `docs/lige-nu/videnskabsfolkene.md`, `docs/fable/E12-huygens.md`, `docs/plan-videnskabsfolk.md` og `docs/drejebog-huygens.md`. Skriv Opus' noter i `docs/fable/E12-huygens-noter.md` (hvad er nyt, og hvor er du uenig, som i `docs/fable/E9-overblik-noter.md`), ret drejebogen, og stil mig spørgsmålene som en dialog med din anbefaling først (også kernesætningen og Gør det selv fra drejebogens afsnit 12). Byg derefter H1 efter planen, når jeg har givet go. Bed om domænet til skriften med en anmodning til miljøet, før du henter den. Brug tjeklisterne D og E, `/faktatjek` på nye tekster, og afslut med `/faerdig`.
 3. H2, H3 og H4, ét go pr. trin (planen afsnit 8). Så prøven med jeres søn.
