@@ -156,5 +156,12 @@ Som i CLAUDE.md: test, faktatjek og et sidste kig, før delen kaldes færdig.
   5. **Drejebogen til Liv L3-L6** (Fable, `high`, jeres go 14. november 2026): [prompt-fable-liv-l3-l6.md](prompt-fable-liv-l3-l6.md), svaret i `docs/fable/E10-liv-drejebog.md`.
   6. **Drejebøgerne til Strøm og magneter og Lys og farver** (Fable, `high`, jeres go 14. november 2026): [prompt-fable-strom-lys.md](prompt-fable-strom-lys.md), svaret i `docs/fable/E11-strom-lys-drejebog.md`.
   7. **Drejebogen til Huygens** (Fable, `high`, jeres svar 14. november 2026): Opus' udkast er skrevet 15. november 2026 ([drejebog-huygens.md](drejebog-huygens.md)), og Fable tjekker det: [prompt-fable-huygens.md](prompt-fable-huygens.md), svaret i `docs/fable/E12-huygens.md`.
+  8. **Ekstra opgaver 15. november 2026** (Fable er gratis den dag, jeres valg A-F i [prompt-naeste-fem.md](prompt-naeste-fem.md)), alle `high` og kun dokumenter, og de kan køre samtidig:
+     - A: Faktatjek af det, der står i programmet: [prompt-fable-faktatjek.md](prompt-fable-faktatjek.md), svaret i `docs/fable/E13-faktatjek.md`.
+     - B: Eftersyn af forløbene, før sønnen prøver dem: [prompt-fable-forloeb-eftersyn.md](prompt-fable-forloeb-eftersyn.md), svaret i `docs/fable/E14-forloeb-eftersyn.md`.
+     - C: Faktagrundlaget til Galilei og Newton: [prompt-fable-galilei-newton.md](prompt-fable-galilei-newton.md), svaret i `docs/fakta-videnskabsfolk/galilei.md` og `newton.md`.
+     - D: Faktagrundlag og drejebog til Merkur og Pluto: [prompt-fable-merkur-pluto.md](prompt-fable-merkur-pluto.md), svaret i `docs/fakta-solsystemet/del8-merkur-og-pluto.md` og `docs/drejebog-merkur-pluto.md`.
+     - E: Faktagrundlag og drejebog til Ild: [prompt-fable-ild.md](prompt-fable-ild.md), svaret i `docs/fakta-ild.md` og `docs/drejebog-ild.md`.
+     - F: Tjek af Venus V3-V5: [prompt-fable-venus.md](prompt-fable-venus.md), svaret i `docs/fable/E18-venus.md`.
   - **Laves af Opus i stedet** (efter 16. november 2026): eftersynet af Serie 1, når sønnen har prøvet forløbene (høj effort), og faktagrundlaget til Tjernobyl (`xhigh`), hvis den tages op igen.
   - **Tjernobyl er parkeret** (13. november 2026). Den står i køreplanen, men planlægges ikke, før I tager den op igen. Kvantefysik er stadig en del af planen.
