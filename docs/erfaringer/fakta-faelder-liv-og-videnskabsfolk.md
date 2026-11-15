@@ -76,3 +76,20 @@
 - "Huygens' kikkert var næsten 4 meter lang." Han skriver "ikke over 12 fod" (s. 3), og den bevarede linse fra 1655 har 332 cm brændvidde (Oeuvres complètes XV). Skriv "over 3 meter". Derfra kommer også de 43 gange (332 cm og et okular på knap 3 tommer).
 - "Ingen ved, om ringen stod på kant i 1656." Det står i bogen: Huygens så Saturn uden arme fra 16. januar til 17. juni 1656, og de var tilbage 13. oktober (s. 16-17).
 - Sidetallene i skanningen `CristianiHugeni00HuygA` følger ikke ét tal: n = sidetal + 17 før tavlen ved s. 35 og + 19 efter (s. 2 er `n19`, s. 16 er `n33`, s. 46 er `n65`).
+*Galilei og Newton (Fable, 15. november 2026). Kilderne står i [fakta-videnskabsfolk/galilei.md](../fakta-videnskabsfolk/galilei.md) og [newton.md](../fakta-videnskabsfolk/newton.md).*
+- "Galilei opfandt kikkerten." Han skriver selv i *Sidereus Nuncius* (blad 6), at han hørte et rygte om en nederlænders kikkert og så byggede sin egen. Lipperhey søgte patent 2. oktober 1608. Skriv "byggede sin egen og gjorde den meget bedre".
+- "Galileis kikkert forstørrede 1.000 gange." Det er fladen ("millies fere maiores"). Samme sætning siger "mere end tredive gange nærmere", og Wikipedia siger 20. Skriv "20-30 gange".
+- "Galilei opdagede Jupiters måner 7. januar 1610." Den 7. så han tre "stjerner" og troede, de var fiksstjerner. Han forstod det den 11. og så alle fire den 13. (blad 17-18). Den 9. og 14. var der skyer.
+- "Og dog bevæger den sig." Ingen kilde fra Galileis egen tid. På tryk første gang i 1757 (Baretti), og maleriet "fra 1643" er næsten magen til et fra 1837. Skriv, at det er en historie fra senere.
+- "Jupiters måner beviste, at Jorden går rundt om Solen." De viste, at ikke alt går rundt om Jorden. Galilei bruger det selv som et argument, ikke et bevis (blad 28).
+- "Galilei kaldte dem Io, Europa, Ganymedes og Callisto." Han kaldte dem de mediceiske stjerner. Navnene er Simon Marius' (1614). Marius' dato "29. december 1609" er den gamle kalender, altså 8. januar 1610.
+- "Sustermans' portræt af Galilei fra 1636." Det kendte i Uffizi er fra 1635. Commons-filen med "1636" i navnet er et andet maleri (Greenwich, 1636-1640, med kikkert). Tjek museet bag filen, ikke filnavnet.
+- Det håndskrevne ark med Galileis Jupiter-måner (University of Michigan), som ligger mange steder på nettet, blev i 2022 afsløret som en forfalskning fra 1900-tallet (efter hukommelsen). Brug bogens trykte tegninger.
+- "Newton blev født samme år, som Galilei døde." Kun med blandede kalendere: Galilei døde 8. januar 1642 (ny kalender), Newton blev født 25. december 1642 efter den gamle, som er 4. januar 1643. Skriv altid, hvilken kalender en engelsk dato før 1752 står i.
+- "F = G · m · M / r² står i Principia." Der er ingen formel og intet G: Newton skriver i forhold og ord. G blev først målt af Cavendish i 1797-1798.
+- "Hypotheses non fingo" og "Regulae philosophandi" står ikke i førsteudgaven (1687). Dér hedder reglerne "Hypotheses" (s. 402). Alle engelske oversættelser bygger på 3. udgave (1726) med andre tal i månetesten, så oversæt selv fra den side, der vises.
+- "Æblet faldt ned i hovedet på Newton." Stukeley (håndskrift 1752, blad 15) skriver kun, at Newton fortalte, at tanken kom "occasion'd by the fall of an apple". Det blev fortalt 60 år efter, så skriv "han fortalte selv".
+- "Newton lagde månetesten væk i 20 år, fordi tallet ikke passede." Det fortæller andre (Pemberton 1728). Hans egne ord er, at det passede "pretty nearly" (efter hukommelsen). Skriv det ikke som sikkert.
+- En Paris-fod (32,5 cm) er ikke en engelsk fod (30,5 cm). Newtons 15 1/12 fod er 4,90 m.
+- Knellers portræt af Newton fra 1702 (National Portrait Gallery): Commons skriver ved filen, at andre har rejst krav om ophavsret. Brug det fra 1689 (privat eje, filen kommer fra Cambridge University Library).
+- Et domæne kan være åbent uden "www." og lukket med (newtonproject.ox.ac.uk), eller omvendt (kb.dk). Prøv begge, før der bedes om adgang.
