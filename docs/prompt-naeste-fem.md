@@ -21,7 +21,7 @@ I aften kun Opus-opgaver. 1-4 kan starte nu, samtidig, fordi de hører til hvert
 > Spor: Solsystemet og Kosmos. Navngiv chatten "Solsystemet · Overblikket". Tjek først i `origin/main`, at G1 trin 3 del 3 er merget, og at overblikket ikke er i gang. Læs `docs/drejebog-overblik.md` (med vores svar 14. november 2026), `docs/fable/E9-overblik-noter.md`, `docs/retning.md` og `docs/kode/solsystem.md`, og byg overblikket som Solsystemets forside. Merkur og Pluto står som en lille kugle med et kort panel, til de bygges. Lav først en kort plan med trin, og få et go pr. trin. Brug tjeklisterne D og E, `/faktatjek` på nye tekster, og afslut med `/faerdig`.
 
 ## I morgen (15. november): Huygens og Fable
-### 6. Videnskabsfolkene · Plan og drejebog til Huygens (Opus, høj, først i morgen)
+### 6. ✓ Videnskabsfolkene · Plan og drejebog til Huygens (Opus, høj, først i morgen) (lavet 15. november 2026)
 > Læs `docs/prompt-videnskabsfolk.md`, og gør det, der står under "Prompten". To ting mere (vores svar 14. november 2026, står i `docs/koereplan.md`): (1) Huygens bygges også nu, ved siden af Gåderne 3D, så planens trin H1 skal kunne startes lige efter Fables tjek. (2) Fable skal tjekke drejebogen senest 16. november: Skriv til sidst `docs/prompt-fable-huygens.md` (Fable 5.2, effort high, svaret i `docs/fable/E12-huygens.md`) efter mønstret i `docs/prompt-fable-overblik.md`, og merge den med det samme, så Fable-sessionen kan starte samme dag.
 
 ### 7. Fable · Tjek af drejebogen til Huygens (Fable 5.2, high, efter 6, senest 16. november)

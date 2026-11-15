@@ -25,5 +25,6 @@
 | [kode/venus.md](kode/venus.md) | Venus (`js/kosmos/venus.js`): Magellans radarkort og højder (`lav_venus.py`), aksen og drejningen efter datoen (`js/data/venus.js`), skyerne fra Akatsuki og vindene (`lav_venus_skyer.py`, `js/data/vinde-venus.js`) og siden (`js/data/sider/venus.js`). |
 | [kode/mars.md](kode/mars.md) | Mars (`js/kosmos/mars.js`), Phobos og Deimos, flybyen ved månerne og billederne til Mars. |
 | [kode/staa-paa-mars.md](kode/staa-paa-mars.md) | Stå på Mars (`landskab.js`, `panorama.js`) og billederne i `billeder/solsystem/landskab/`. |
+| [kode/opdagelser.md](kode/opdagelser.md) | Opdagelserne i Biblioteket (Videnskabsfolkene): bøgerne (kommer i H1-H4) og portrætternes kobberstik-filter (`billeder/biblioteket/lav_portraet.py`). |
 | [kode/gemte-data.md](kode/gemte-data.md) | Alt, der gemmes i localStorage. Nye gemte data skrives her. |
 | [kode/testadgang.md](kode/testadgang.md) | `window.atomlabTest` (`?test`): listen over, hvad testene kan spole, fryse og læse. |
