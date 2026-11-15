@@ -54,4 +54,4 @@
 Resten (Rejsen trin 3, aldrene stort, Liv 2, laboratoriets mærkater, Antistof, myonpanelet, ikonerne og byggeklodserne) venter på prøven.
 
 ## Jeres svar
-*(skrives her, når I har valgt)*
+**15. november 2026:** Alle seks punkter i "Ret før prøven" rettes nu, hver i sit spor. Resten venter på prøven. Prompterne til de fire sessioner står i [prompt-e14-rettelser.md](../prompt-e14-rettelser.md).
