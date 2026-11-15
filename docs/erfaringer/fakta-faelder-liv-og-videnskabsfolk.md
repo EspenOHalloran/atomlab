@@ -72,3 +72,7 @@
 - "Huygens' kikkert forstørrede 43 gange" eller "50 gange". Kilderne er uenige, og bogen giver kun længden (12 fod) og okularet (knap 3 tommer). Skriv "ca. 50 gange".
 - "Huygens fandt ud af, at ringen består af is og sten." Han troede, den var fast ("solidum ac permanentem", s. 48). Det var Maxwell (1859) og Keeler (1895).
 - "Huygens begyndte at slibe linser i 1655." Wikipedia siger 1655 i én artikel og "around 1650" i en anden. Skriv "midt i 1650'erne".
+- "Anagrammet udkom 25. marts 1656, præcis ét år efter Titan." *Systema Saturnium* siger 25. marts på s. 47, men 5. marts på s. 2, og skriftet selv er dateret "5. marts 1656" (Oeuvres complètes XV). Skriv "marts 1656". En forfatter kan huske forkert i sin egen bog, så tjek en dato to steder (Fable, E12).
+- "Huygens' kikkert var næsten 4 meter lang." Han skriver "ikke over 12 fod" (s. 3), og den bevarede linse fra 1655 har 332 cm brændvidde (Oeuvres complètes XV). Skriv "over 3 meter". Derfra kommer også de 43 gange (332 cm og et okular på knap 3 tommer).
+- "Ingen ved, om ringen stod på kant i 1656." Det står i bogen: Huygens så Saturn uden arme fra 16. januar til 17. juni 1656, og de var tilbage 13. oktober (s. 16-17).
+- Sidetallene i skanningen `CristianiHugeni00HuygA` følger ikke ét tal: n = sidetal + 17 før tavlen ved s. 35 og + 19 efter (s. 2 er `n19`, s. 16 er `n33`, s. 46 er `n65`).
