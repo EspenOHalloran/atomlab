@@ -29,7 +29,7 @@ Jeres ønske: Få mest muligt ud af Fable i dag. Seks sessioner mere med Fable 5
 - **E. Faktagrundlag og drejebog til Ild:** `docs/prompt-fable-ild.md`
 - **F. Tjek af Venus V3-V5:** `docs/prompt-fable-venus.md`
 
-**Domæner:** `cudl.lib.cam.ac.uk` og `www.e-rara.ch` er åbnet. `messenger.jhuapl.edu`, `pluto.jhuapl.edu`, `bibdig.museogalileo.it` og `www.loc.gov` blev afvist af miljøtjenesten og skal tilføjes under miljøets indstillinger (Network access → Allowed domains), hvis Fable har brug for dem.
+**Domæner:** `cudl.lib.cam.ac.uk`, `www.e-rara.ch`, `messenger.jhuapl.edu`, `pluto.jhuapl.edu`, `bibdig.museogalileo.it` og `www.loc.gov` er åbne (de fire sidste tilføjet af jer i miljøets indstillinger 15. november 2026, tjekket med curl).
 
 ## Bagefter
 Solsystemet: Venus V3 → V4 → V5 ("Læs docs/prompt-venus.md og kør V3", Opus, høj), så Merkur og Pluto i en lille udgave. Så er Solsystemet færdigt, og nye spor kan starte (Lys og farver først). Molekyler: Liv L3 "Kopien" ("Læs docs/prompt-liv-l3.md", Opus, høj) efter Venus, uden at vente på prøven (jeres svar). Videnskabsfolkene: H2, H3 og H4, ét go pr. trin. **Uden for sessionerne:** prøven med jeres søn ([guide-proeven.md](guide-proeven.md)). Der ligger nu 9 ting med status "prøve" (Dit første atom, Liv 1-2, Molekyler, Tid 1-2, Kosmos i grupper, Antistof og skinnen, Overblikket). De to gamle grene (`claude/relaxed-cori-h0yxvd` og `ccr-8c5ddb9a-ts9r17`) slettes stadig under Branches på GitHub.
