@@ -12,7 +12,7 @@ export default lavIsgigant({
   kort: 'uranus',
   kantFarve: [0.85, 0.95, 1.0],
   // UN2: skyderen "År" (1986, da Voyager 2 kom, til 2070, jeres svar 6), de mørke ringe og kappen over polerne
-  år: { fra: 1986, til: 2070 },
+  år: { fra: 1986, til: 2100 }, // til 2100 som overblikket (JPL's tabel 1 er mindre præcis efter 2050)
   ringe: 'uranus',
   kapper: true,
   // UN4: de fem store måner og fire små (js/data/maaner-uranus.js)

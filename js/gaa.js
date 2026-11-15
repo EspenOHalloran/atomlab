@@ -7,12 +7,15 @@ import { hentetSkærm } from './skaerme.js';
 
 // Et sted i træet, som skærmen skal gå til, når den starter (fx Olympus Mons fra Ordbogen): { skærm, sted }
 let ventSted = null;
+// Skærmen, et link har valgt et fænomen på (så Solsystemet ikke starter på sin forside, overblikket)
+let ventFænomen = null;
 
 // Åbner et fænomen på en anden skærm. sted er et sted i fænomenets træ (fx 'olympus'), som kameraet flyver hen til.
 export function åbnFænomen(skærm, id, sted) {
   if (id) {
     try { localStorage.setItem(NØGLER[skærm].valgt, id); } catch { /* ingen lagring */ }
   }
+  ventFænomen = id ? skærm : null;
   ventSted = sted ? { skærm, sted } : null;
   location.hash = `#${skærm}`;
 }
@@ -49,6 +52,13 @@ export function tagVentMolekyler() {
   const id = ventMolekyler;
   ventMolekyler = null;
   return id;
+}
+
+// Har et link valgt et fænomen på skærmen (åbnFænomen med id)? Glemmes, når det er hentet.
+export function tagVentFænomen(skærm) {
+  const ja = ventFænomen === skærm;
+  ventFænomen = null;
+  return ja;
 }
 
 // Det sted, skærmen skal gå til, når den starter (eller null). Glemmes, når det er hentet.

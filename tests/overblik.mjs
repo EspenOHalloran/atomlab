@@ -74,8 +74,8 @@ if (!process.argv.includes('--uden-browser')) {
   void sol;
   tjek('Solsystemet åbner på overblikket, og "Solsystemet" er den første klode', await side.evaluate(() => document.querySelector('#solsystemListe .sol-klode')?.dataset.id === 'overblik'));
   tjek('alle otte planeter og Solen er tegnet, og Pluto er med', await f((t) => t.kugler().length === 10 && t.kugler().includes('pluto')));
-  await f((t) => t.sætDato(Date.UTC(2026, 10, 14)));
-  tjek('datolinjen viser dagens dato', (await f((t) => t.datoTekst())).includes('14. november 2026'));
+  await f((t) => t.sætDato(Date.UTC(2026, 10, 14, 12)));
+  tjek('datolinjen viser datoen', (await f((t) => t.datoTekst())).includes('14. november 2026'));
   // Skalaen
   const før = await f((t) => t.radius('jorden'));
   await f((t) => t.sætSkala(1));
@@ -116,21 +116,21 @@ if (!process.argv.includes('--uden-browser')) {
   const sideP = await side.evaluate(() => window.atomlabTest.solsystem.side());
   tjek('Pluto: kameraet flyver ind, og panelet har to tal og en tekst om New Horizons', sideP.nøgle === 'overblik:pluto' && sideP.tal.length === 2 && /New Horizons/.test(sideP.tekst), JSON.stringify(sideP.tal));
   await side.evaluate(() => window.atomlabTest.solsystem.gåTil('overblik'));
-  await side.screenshot({ path: `${UD}overblik-pc.png` });
+  await side.screenshot({ path: `${UD}/overblik-pc.png` });
   // Ind til Jorden med datoen
   await f((t) => t.sætDato(Date.UTC(2030, 5, 21, 12)));
   await f((t) => t.besøg('jorden', true));
   await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'jorden', null, { timeout: 20000 });
   const tidJ = await side.evaluate(() => window.atomlabTest.solsystem.fænomen().tid());
   tjek('Jorden får overblikkets dato (21. juni 2030)', Math.abs(tidJ - Date.UTC(2030, 5, 21, 12)) < 3 * 864e5, new Date(tidJ).toISOString());
-  tjek('vejen viser Solsystemet som en knap tilbage', await side.evaluate(() => [...document.querySelectorAll('#solsystemVej button')].some((b) => b.textContent === 'Solsystemet')));
-  await side.evaluate(() => [...document.querySelectorAll('#solsystemVej button')].find((b) => b.textContent === 'Solsystemet').click());
+  tjek('titlen "Solsystemet" i toplinjen er en knap tilbage, og vejen viser Jorden', await side.evaluate(() => document.querySelector('#solsystem .topbjælke h2 button.sol-hjem')?.textContent === 'Solsystemet' && document.getElementById('solsystemVej').textContent.includes('Jorden')));
+  await side.evaluate(() => document.querySelector('#solsystem .topbjælke h2 button.sol-hjem').click());
   await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'overblik', null, { timeout: 20000 });
   tjek('tilbage i overblikket står datoen, som man forlod den', new Date(await f((t) => t.dato())).getUTCFullYear() === 2030);
   // Telefon
   await side.setViewportSize({ width: 390, height: 844 });
   await side.waitForTimeout(500);
-  await side.screenshot({ path: `${UD}overblik-telefon.png` });
+  await side.screenshot({ path: `${UD}/overblik-telefon.png` });
   tjek('ingen fejl i konsollen', konsol.length === 0, konsol.join(' | '));
   await browser.close();
 }

@@ -37,6 +37,7 @@ import { vindVed } from '../data/vinde-isgiganter.js';
 import * as RINGE_URANUS from '../data/ringe-uranus.js';
 import * as RINGE_NEPTUN from '../data/ringe-neptun.js';
 import { BÅND, PLETTER, VOYAGER, SKY_HØJDE, pletFart, pileBredder } from '../data/vejr-neptun.js';
+import { startDato } from './dato.js';
 
 const S = 10000; // km pr. enhed i systemet
 export const SEK_PR_SEK = 450; // sekunder i virkeligheden pr. sekund i programmet (som Jupiter, ca. 447)
@@ -156,7 +157,7 @@ export function lavIsgigant(cfg) {
       kamera.updateProjectionMatrix();
       let modlys = false;
       let hurtig = false;
-      const nu = new Date();
+      const nu = new Date(startDato()); // overblikkets dato (js/solsystem/dato.js)
       const årNu = datoTilÅr(nu);
       let år = årNu; // skyderen "År" (kun Uranus): Solens retning for dette år
       const sol = new THREE.Vector3(...solRetning(cfg.id, nu)); // Solens retning i systemets retninger
