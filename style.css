@@ -1591,6 +1591,10 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .ob-besøg { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--tekst, #e8eeff); }
 .ob-besøg[hidden] { display: none; }
 .ob-navn.mat { opacity: 0.4; }
+/* "Rejs med lyset" (js/solsystem/overblik-lys.js): uret over datoen og tiderne ved planeterne */
+.ob-lysur { font-size: 15px; font-weight: 600; color: #ffe7a0; font-variant-numeric: tabular-nums; text-align: center; }
+.ob-lysur[hidden] { display: none; }
+.ob-lystid { color: #ffe7a0; border-color: rgba(255, 231, 160, 0.5); }
 #solsystem .topbjælke h2 .sol-hjem { font: inherit; color: inherit; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 4px; }
 @media (max-width: 560px) {
   .ob-skyder { width: 32vw; }

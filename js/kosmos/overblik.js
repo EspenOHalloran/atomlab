@@ -17,6 +17,7 @@
 // - Tilbage: Overblikket husker dato, skala og kamera (husk), og flyver ud fra den klode, man kom fra.
 // - Forløbet "Rundt om Solen" (drejebogens afsnit 2) står i js/solsystem/overblik-forloeb.js. Det styrer scenen gennem
 //   api'et nedenfor og flaget vis (navnene, ringene, Pluto, bælterne og tidsknapperne er skjult imens).
+// - "Rejs med lyset" (handlingen i bjælken) står i js/solsystem/overblik-lys.js.
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, ROLIG } from '../scene3d.js';
@@ -30,6 +31,7 @@ import { PLANETER, SOLEN, plads, tilProgram, kugleRetning, AU, FØRSTE, SIDSTE }
 import { ringProfil, RING_IND, RING_UD } from '../data/ringe.js';
 import { SIDE, SIDER, TAL } from '../data/sider/overblik.js';
 import { lavOverblikForløb } from '../solsystem/overblik-forloeb.js';
+import { lavLysRejse } from '../solsystem/overblik-lys.js';
 
 const NEPTUN_A = 30.07; // AU
 export const NEPTUN_U = 20; // enheder: Neptuns afstand i begge skalaer
@@ -339,6 +341,7 @@ export default {
     // Forløbets trin 2: Skyderen går fra 0 til ét år frem fra årFra (årLængde ms), uden at falde tilbage, når man slipper
     let årFra = null, årLængde = ÅR;
     skyder.addEventListener('input', () => {
+      lys.stop();
       if (årFra != null) { sætDato(årFra + Number(skyder.value) * årLængde); return; }
       if (trækFra == null) trækFra = dato;
       sætDato(trækFra + Number(skyder.value) * ÅR);
@@ -380,6 +383,7 @@ export default {
       sætOverblikDato(dato);
     }
     function sætTempo(ny) {
+      if (ny) lys.stop();
       tempo = ny;
       if (ny) spolet = true;
       visDato();
@@ -570,6 +574,7 @@ export default {
     // Besøg en klode: Merkur og Pluto er steder i overblikket, de andre (og Solen) har deres egen visning
     function besøg(id, hop = false) {
       if (flyvning?.slags === 'ind') return;
+      lys.stop();
       flyvning = null; // en anden flyvning (fx hjem fra Pluto) afbrydes
       const k = klode(id);
       if (k && !k.p.fænomen) { gåTil(id); return; }
@@ -635,6 +640,7 @@ export default {
       }
       const k = klode(id);
       if (!k) return;
+      lys.stop();
       stedNu = id;
       fokus = k;
       flyvTil({ mål: () => k.pos, afstand: k.r * 6, retning: indRetning(k), slags: 'sted', skjulNavne: true });
@@ -651,10 +657,10 @@ export default {
     const skala = {
       skyder: true, navn: 'Skala', min: 0, max: 100, trin: 1, værdi: Math.round(t * 100),
       vis: (x) => (x < 50 ? 'Pustet op og rykket sammen' : 'Rigtig størrelse og afstand'),
-      ændring: (x) => { t = tMål = x / 100; tegnBaner(); },
+      ændring: (x) => { lys.stop(); t = tMål = x / 100; tegnBaner(); },
       slip: (x) => { tMål = x < 50 ? 0 : 1; glidTid = 1.2; },
     };
-    const styring = [skala, navneKnap((til) => { navneTil = til; })];
+    const styring = [skala, navneKnap((til) => { navneTil = til; }), { tekst: '💡 Rejs med lyset', handling: () => lys.start() }];
     void opdaterKnapper;
 
     // ---------- Start: hjemme, eller ud fra den klode, man kom fra ----------
@@ -724,6 +730,7 @@ export default {
       placer();
       tegnNavne();
       forløb.hvertBillede(dt);
+      lys.hvertBillede(dt);
       visDato();
     }
     verden.opdateringer.add(hvertBillede);
@@ -758,6 +765,12 @@ export default {
       });
       tegnBaner();
     }
+    const lys = lavLysRejse({
+      kamera, orbit, vindue, gruppe, kloder, HJEM, tidLag, radiusVed, afstandFor, flyvTil,
+      dato: () => dato, t: () => t, flyver: () => Boolean(flyvning), stopTempo: () => sætTempo(0),
+      sætSkala: (x, glid, sek) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
+      stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
+    });
     const forløb = lavOverblikForløb({
       verden, kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder, solSkærm,
       dato: () => dato, sætDato: (ms) => { sætDato(ms); visDato(); }, iDag, skyderÅr,
@@ -766,7 +779,7 @@ export default {
       sætSkala: (x, glid, sek = 1.2) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
       punkt, afstandFor, afstandForBoks, afstandVed, radiusVed, flyvTil, flyver: () => flyvning, besøg, vælgFænomen,
       vælgKamera: () => { første = false; verden.målAfstand = null; },
-      banerOm, indRetning, pxPr, overlag: overlag(), sætFokus: (k) => { fokus = k; fokusR = 0; },
+      banerOm, indRetning, pxPr, overlag: overlag(), lys, sætFokus: (k) => { fokus = k; fokusR = 0; },
       stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
     });
 
@@ -776,6 +789,7 @@ export default {
       besøg,
       sted: () => stedNu,
       opdater(dt) {
+        lys.opdater(dt);
         if (flyvning?.slags === 'ind' || forløb.kører()) return;
         if (trækFra != null) return; // man trækker selv i skyderen
         if (tempo) sætDato(dato + Math.sign(tempo) * TEMPI[Math.abs(tempo) - 1] * dt);
@@ -783,6 +797,7 @@ export default {
       },
       stop() {
         forløb.stop();
+        lys.fjern();
         gem();
         aktiv = false;
         verden.opdateringer.delete(hvertBillede);
@@ -830,6 +845,8 @@ export default {
         hop: () => { if (flyvning) { flyvning.tid = flyvning.T; flyv(0); } },
         navne: () => kloder.filter((k) => !k.mærke.hidden).map((k) => k.p.id),
         forløb: () => forløb.test,
+        lys: () => lys.test,
+        lysStart: () => lys.start(),
         // Kuglens kort, og hvor meget af den belyste side kameraet ser (1 fuld, 0 halv, -1 nat)
         kugleInfo: (id) => {
           const k = klode(id), u = k.mat.uniforms;

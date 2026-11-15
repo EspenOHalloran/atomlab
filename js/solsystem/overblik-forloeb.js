@@ -13,7 +13,8 @@
 //   flyver fra hele Solsystemet ned til Jorden, til den fylder billedet, med en tæller for afstanden. Ringen følger Jorden,
 //   til den er stor nok at se. Jordens bane går gennem Jorden (banerOm) og tones ud tæt på den (overblik.js).
 // "Det så du" (drejebogens trin 5): kernesætningen, mens kameraet trækker sig ud, og skalaen glider tilbage til
-//   "Pustet op". Vejene: "Besøg en planet" (navnene tændt, Merkur mat) og "Leg frit" (laboratoriet).
+//   "Pustet op". Vejene: "Besøg en planet" (navnene tændt, Merkur mat), "Leg frit" (laboratoriet) og "Rejs med lyset"
+//   (js/solsystem/overblik-lys.js).
 // Hvert trins start stiller scenen forfra (dato i dag, skalaen "Pustet op", i trin 4 den rigtige), så "‹" kan gå tilbage.
 
 import * as THREE from 'three';
@@ -326,6 +327,7 @@ export function lavOverblikForløb(api) {
     veje: [
       { tekst: 'Besøg en planet', primær: true, gør: () => efterVej(true) },
       { tekst: 'Leg frit', gør: () => efterVej(false) },
+      { tekst: 'Rejs med lyset', gør: () => efterVej(false, true) },
     ],
     layout: () => {
       // Panelerne er væk (eller kommet igen): Kameraet zoomer, så trinets billede passer i det nye hul
@@ -358,16 +360,20 @@ export function lavOverblikForløb(api) {
   };
   // En vej videre (klodsen afslutter forløbet uden at lægge siden om, når vejen har gør): panelerne kommer tilbage,
   // kameraet flyver hjem, og på vejen "Besøg en planet" tændes navnene
-  function efterVej(besøgVej) {
+  function efterVej(besøgVej, lys = false) {
     visBesøg(besøgVej);
+    if (lys) tilHjem = false; // (rejsen stiller selv kameraet og skalaen)
     requestAnimationFrame(() => {
       centrerVindue();
-      FL_DEL.layout();
+      if (lys) api.lys.start();
+      else FL_DEL.layout();
     });
   }
 
   function start() {
-    if (!stoppet) startForløb(OVERBLIK, FL_DEL);
+    if (stoppet) return;
+    api.lys.stop();
+    startForløb(OVERBLIK, FL_DEL);
   }
   // Første gang man åbner Solsystemet, fra "Din fremgang", linket ?forloeb=overblik#solsystem eller hjælpen.
   // Startes, når overblikket er bygget færdigt (skallen viser siden og Styr-boksen lige efter lav()).
