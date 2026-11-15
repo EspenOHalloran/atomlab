@@ -2,31 +2,19 @@
 // handling i bjælken, og kameraet følger skallen). Skalaen glider til "Rigtig størrelse og afstand", og en lysende skal
 // vokser ud fra Solen med lysets fart. Uret viser, hvor længe lyset har rejst (den rigtige tid), og når skallen når en
 // planet, står tiden ved den (dagens afstand, lysTid i planeter.js). Rejsen er spolet frem, og det står ved uret:
-// Den går hurtigere og hurtigere (tiden er A · w^P efter w sekunder), så lyset når Jorden efter ca. 8 s og Neptun efter
-// ca. 30 s. Kameraet står over Solen og trækker sig ud, så skallen fylder ca. to tredjedele af billedet.
+// Den går hurtigere og hurtigere (lysRejseTid i planeter.js), så lyset når Jorden efter ca. 8 s og Neptun efter ca. 30 s.
+// Kameraet står over Solen og trækker sig ud, så skallen fylder ca. to tredjedele af billedet.
 // Alt bevæger sig med dt fra opdater (står stille i pause).
 
 import * as THREE from 'three';
 import { ROLIG } from '../scene3d.js';
-import { lysTid, LYS } from '../data/planeter.js';
+import { lysTid, lysTekst, lysRejseTid, LYS } from '../data/planeter.js';
 
-// T(w) = A · w^P sekunder: Jorden (494 s i middel) efter 8 s og Neptun (ca. 14.900 s) efter 30 s
-const P = Math.log(14900 / 494) / Math.log(30 / 8);
-const A = 494 / 8 ** P;
 const START_R = 0.55; // enheder, kameraet viser først (Venus' bane, 0,48 enheder i den rigtige skala)
 const MAKS_R = 24; // enheder, kameraet viser højst (Pluto i dag ca. 23 enheder ude)
 const EFTER_S = 10; // sekunder, uret og tiderne står, efter skallen er nået forbi den yderste
 const UD_S = 2; // sekunder, skallen tones ud
 const NUL = new THREE.Vector3();
-
-// Lysets tid som tekst ("45 s", "8 min 14 s", "4 t 8 min")
-export function lysTekst(sek) {
-  const s = Math.floor(sek);
-  if (s < 60) return `${s} s`;
-  if (s < 3600) return `${Math.floor(s / 60)} min ${s % 60} s`;
-  return `${Math.floor(s / 3600)} t ${Math.floor((s % 3600) / 60)} min`;
-}
-export const LYS_TID = { P, A, tid: (w) => A * w ** P };
 
 const SKAL_V = /* glsl */ `
 varying vec3 vN; varying vec3 vP;
@@ -110,7 +98,7 @@ export function lavLysRejse(api) {
   }
 
   function visUr() {
-    const T = A * rejse.w ** P;
+    const T = lysRejseTid(rejse.w);
     const tekst = `Lyset har rejst i ${lysTekst(T)} · spolet frem`;
     if (tekst !== urVist) ur.textContent = urVist = tekst;
   }
@@ -127,7 +115,7 @@ export function lavLysRejse(api) {
     }
     rejse.w += dt;
     if (rejse.fase === 'efter' && (rejse.efter += dt) > EFTER_S) { stop(); return; }
-    const T = A * rejse.w ** P;
+    const T = lysRejseTid(rejse.w);
     rejse.R = T * LYS * KM;
     // Skallen når en planet: tiden står ved den
     const nu = new Date(api.dato());
@@ -202,7 +190,6 @@ export function lavLysRejse(api) {
       tider: () => Object.fromEntries([...mærker].map(([id, m]) => [id, m.e.textContent])),
       spol: (s) => { if (rejse) opdater(s); },
       kamera: () => kamera.position.distanceTo(orbit.target),
-      ønsket: () => api.afstandFor(START_R),
     },
   };
 }

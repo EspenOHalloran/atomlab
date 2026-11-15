@@ -660,7 +660,7 @@ export default {
       ændring: (x) => { lys.stop(); t = tMål = x / 100; tegnBaner(); },
       slip: (x) => { tMål = x < 50 ? 0 : 1; glidTid = 1.2; },
     };
-    const styring = [skala, navneKnap((til) => { navneTil = til; }), { tekst: '💡 Rejs med lyset', handling: () => lys.start() }];
+    const styring = [skala, navneKnap((til) => { navneTil = til; }), { tekst: '💡 Rejs med lyset', handling: () => { forløb.visBesøg(false); lys.start(); } }];
     void opdaterKnapper;
 
     // ---------- Start: hjemme, eller ud fra den klode, man kom fra ----------

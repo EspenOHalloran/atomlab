@@ -22,6 +22,7 @@ import { ROLIG, centrerVindue } from '../scene3d.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVink, forløbTest } from '../forloeb.js';
 import { tagVentForløb } from '../gaa.js';
 import { OVERBLIK } from '../data/forloeb/overblik.js';
+import { kmTekst } from '../data/planeter.js';
 
 // Det, kameraet skal have i billedet (halv bredde og halv højde i enheder, set skråt oppefra som overblikkets hjem):
 // trin 1 Mars' bane (aphel ca. 4,7 enheder ude i "Pustet op"), ellers Neptuns bane (20 enheder) med plads til
@@ -39,15 +40,6 @@ const RING_PX = 7; // Jordens ring slukkes, når Jorden er så mange pixel i rad
 const AFSTAND_S = 3; // sekunder, tælleren for afstanden står, efter kameraet er nede ved Jorden
 const NUL = new THREE.Vector3();
 
-// Afstanden i km som tekst ("16,3 milliarder km", "148 millioner km", "19.400 km")
-const komma = (x, d) => x.toFixed(d).replace('.', ',');
-export function kmTekst(km) {
-  if (km >= 1e9) return `${komma(km / 1e9, 1)} milliarder km`;
-  if (km >= 1e7) return `${Math.round(km / 1e6)} millioner km`;
-  if (km >= 1e6) return `${komma(km / 1e6, 1)} millioner km`;
-  const n = km >= 1e5 ? Math.round(km / 1e3) * 1e3 : km >= 1e4 ? Math.round(km / 100) * 100 : Math.round(km / 10) * 10;
-  return `${n.toLocaleString('da-DK')} km`;
-}
 
 export function lavOverblikForløb(api) {
   const { kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder } = api;
@@ -406,6 +398,7 @@ export function lavOverblikForløb(api) {
         if (fase === 'slut' && !udTrukket) trækUd();
       }
     },
+    visBesøg, // (lukkes, når "Rejs med lyset" starter)
     // Et tryk på vejen "Besøg en planet": Merkur er ikke bygget endnu (true: trykket er taget)
     besøgTryk(id) {
       if (id !== 'merkur') return false;
