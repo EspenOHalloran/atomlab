@@ -16,7 +16,7 @@
 // Elementerne i index.html har skærmens navn foran (fx kosmosListe og solsystemListe), så CSS og tests kan finde dem.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, ROLIG, piletaster, visTåger, tågerVist, visRumstøv, rumstøvVist } from './scene3d.js';
+import { verden, sætVindue, passerTil, ROLIG, TEST_HURTIG, piletaster, visTåger, tågerVist, visRumstøv, rumstøvVist } from './scene3d.js';
 import { Effekter } from './effekter.js';
 import { lyd } from './lyd.js';
 import { citatHTML } from './data/citater.js';
@@ -27,7 +27,7 @@ import { ryd, stjerneUr } from './kosmos/faelles.js';
 import { lavTidsknap } from './pause.js';
 import { lavRejseskilt } from './rejseskilt.js';
 import { NØGLER } from './data/faenomener.js';
-import { tagVentSted, ventendeForløb, sætVentForløb } from './gaa.js';
+import { tagVentSted, tagVentFænomen, ventendeForløb, sætVentForløb } from './gaa.js';
 import { forløbMed } from './data/forloeb/liste.js';
 import { sætBilledEjer, frigivBilleder } from './hentning.js';
 
@@ -42,7 +42,9 @@ export { åbnFænomen } from './gaa.js';
 // skærm: navnet (fx 'kosmos'). liste: fænomenerne i rækkefølge, eller grupper { navn, ikon, f, under: [fænomener] },
 // hvor f er gruppens eget fænomen (uden f åbner gruppen sit første underpunkt). Grupper uden f (Kosmos' fire grupper)
 // har ingen overskrift "Forsøg" over punkterne og intet rejseskilt.
-export function lavFænomenSkærm({ skærm, liste }) {
+// forside: id'et på skærmens forside (Solsystemets overblik). Skærmen starter dér, medmindre et link eller et forløb
+// har valgt et fænomen, og titlen i toplinjen bliver en knap tilbage til den. Forsiden selv står ikke i vejen.
+export function lavFænomenSkærm({ skærm, liste, forside = null }) {
   const $ = (navn) => document.getElementById(skærm + navn);
   const sektion = document.getElementById(skærm);
   const nøgler = NØGLER[skærm];
@@ -177,6 +179,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
     }
     // Et forløb, der venter (fra "Din fremgang" i menuen eller ?forloeb=…), vælger sit fænomen. Fænomenet starter det selv.
     const fl = forløbMed(ventendeForløb());
+    const link = tagVentFænomen(skærm);
+    if (forside && !link) id = forside;
     if (fl?.del === skærm && fl.fænomen) id = fl.fænomen;
     vælg(id);
     const sted = tagVentSted(skærm);
@@ -263,6 +267,7 @@ export function lavFænomenSkærm({ skærm, liste }) {
       toplag: () => $('Toplag'),
       // Fænomenet vælger et andet fænomen på samme skærm (fx en vej videre fra et forløb)
       vælgFænomen: (id) => { if (valgt?.id !== id) vælg(id); },
+      forrige: før?.id ?? null, // det fænomen, man kom fra (overblikket flyver ud fra det)
     });
     // Det forrige fænomens billeder frigives først nu, så de billeder, det nye også bruger (fx Jorden), bliver liggende
     if (før !== f) frigivBilleder(før);
@@ -334,7 +339,12 @@ export function lavFænomenSkærm({ skærm, liste }) {
     }
     if (!g.f && åbenGruppe() === g) return; // en åben gruppe uden klode (Kosmos): bliv ved det valgte punkt
     lyd.klik();
-    rejsTil(g, () => vælg((g.f ?? g.under[0]).id));
+    // Til forsiden (overblikket) uden rejseskilt: Overblikket flyver selv ud fra den klode, man kom fra.
+    // Fra forsiden flyver overblikket selv ind til kloden. I testbrowseren (TEST_HURTIG, få billeder i sekundet) bruges
+    // rejseskiltet som før, så de andre skærmes tests kan vente på det. Flyvningen testes i tests/overblik.mjs.
+    if (g.f && g.f.id === forside) vælg(forside);
+    else if (valgt?.id === forside && kørende?.besøg && !TEST_HURTIG) kørende.besøg(g.f?.id ?? g.under[0].id);
+    else rejsTil(g, () => vælg((g.f ?? g.under[0]).id));
   }
   // Til en anden klode: rejseskiltet ("Kurs mod Mars") vises, mens den bygges (kun i Solsystemet)
   let rejseskilt = null;
@@ -463,10 +473,26 @@ export function lavFænomenSkærm({ skærm, liste }) {
       const g = åbenGruppe();
       const klode = g.f ?? valgt;
       const herunder = fundet ? (fundet.p.titel ?? fundet.p.navn) : valgt !== klode ? valgt.navn : null;
-      vej.replaceChildren('› ');
-      if (herunder) {
+      vej.replaceChildren(klode.id === forside && !herunder ? '' : '› ');
+      if (klode.id === forside) {
+        if (herunder) vej.append(herunder); // ved forsiden er titlen knappen tilbage
+      } else if (herunder) {
         vej.append(Object.assign(document.createElement('button'), { className: 'link-knap', textContent: klode.navn }), ` › ${herunder}`);
       } else vej.append(klode.navn);
+    }
+    // Titlen i toplinjen (fx "Solsystemet") er en knap tilbage til forsiden, når man ikke står på den
+    if (forside) {
+      const h2 = sektion.querySelector('.topbjælke h2');
+      const hjemme = valgt.id === forside && (!fundet);
+      if (h2.dataset.hjemme !== String(hjemme)) {
+        h2.dataset.hjemme = String(hjemme);
+        const navn = FÆNOMENER.find((x) => x.id === forside).navn;
+        if (hjemme) h2.textContent = navn;
+        else {
+          h2.replaceChildren(Object.assign(document.createElement('button'), { className: 'link-knap sol-hjem', textContent: navn, title: `Tilbage til ${navn.toLowerCase()}s overblik` }));
+          h2.firstChild.addEventListener('click', () => gåTilKlode(grupper.find((x) => x.f?.id === forside)));
+        }
+      }
     }
   }
 
@@ -687,6 +713,8 @@ export function lavFænomenSkærm({ skærm, liste }) {
           s.ændring(s.værdi);
           foldUd(s.navn); // et emne om skyderen (kontakt: navnet) folder sig ud, som ved en kontakt
         });
+        // slip(værdi): kaldes, når man slipper skyderen (fx glider skalaen i overblikket selv i mål)
+        if (s.slip) input.addEventListener('change', () => s.slip(Number(input.value)));
         // Fænomenet kan selv flytte skyderen (fx når Jorden kører rundt i Årstidernes første trin)
         s.sæt = (v) => {
           s.værdi = v;

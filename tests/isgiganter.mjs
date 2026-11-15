@@ -123,7 +123,7 @@ async function uranusUN2() {
     tjek(`kappen over polerne ${Math.floor(år)}: nord ${kappe[0]}, syd ${kappe[1]}`, Math.abs(k[0] - kappe[0]) < 0.02 && Math.abs(k[1] - kappe[1]) < 0.02, JSON.stringify(k));
   }
   const ui = await fm(() => { const s = [...document.querySelectorAll('#solsystem .skyder-boks')].find((b) => b.textContent.includes('År')); const i = s?.querySelector('input'); return i ? { min: i.min, max: i.max, vis: s.querySelector('strong').textContent } : null; });
-  tjek('skyderen "År" går fra 1986 til 2070 og viser årstallet', ui && ui.min === '1986' && ui.max === '2070' && ui.vis === '2026', JSON.stringify(ui));
+  tjek('skyderen "År" går fra 1986 til 2100 (som overblikket) og viser årstallet', ui && ui.min === '1986' && ui.max === '2100' && ui.vis === '2026', JSON.stringify(ui));
   const r = await F('ringe');
   tjek(`ringene: ${r?.punkter} punkter i tests, fra 38.000 til 52.000 km, med albedoen som lysstyrke`, r && r.punkter === 2048 && r.ind === 38000 && r.ud === 52000 && Math.abs(r.lys - 0.015) < 1e-9, JSON.stringify(r));
   // "Infrarødt": ringene 40 gange lysere og planeten mørkere (metan opsuger infrarødt lys), væk igen bagefter.

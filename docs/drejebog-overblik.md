@@ -1,6 +1,6 @@
 # Drejebog: Solsystemets overblik
 
-*Skrevet 13. november 2026 i sporet [Solsystemet og Kosmos](lige-nu/solsystemet.md) efter [prompt-overblik.md](prompt-overblik.md) og skemaet i [skabelonen](fable/E3-forloeb.md). **Rettet 14. november 2026** efter Fables tjek ([fable/E9-overblik.md](fable/E9-overblik.md)) og Opus' noter ([fable/E9-overblik-noter.md](fable/E9-overblik-noter.md)). Jeres svar på de fire spørgsmål efter Fables tjek står i bunden (alle anbefalingerne). Bygges efter G1 trin 3, når I har givet go. Intet er bygget endnu.*
+*Skrevet 13. november 2026 i sporet [Solsystemet og Kosmos](lige-nu/solsystemet.md) efter [prompt-overblik.md](prompt-overblik.md) og skemaet i [skabelonen](fable/E3-forloeb.md). **Rettet 14. november 2026** efter Fables tjek ([fable/E9-overblik.md](fable/E9-overblik.md)) og Opus' noter ([fable/E9-overblik-noter.md](fable/E9-overblik-noter.md)). Jeres svar på de fire spørgsmål efter Fables tjek står i bunden (alle anbefalingerne). Bygges efter G1 trin 3, når I har givet go. **Trin 1-3 af byggeriet (data og kort, laboratoriet, ind og ud) er bygget 15. november 2026** ([kode/overblik.md](kode/overblik.md)). Forløbet (afsnit 2) mangler.*
 
 **Hvad det er:** Solen, de otte planeter og Pluto i deres rigtige baner, som de står i dag, som Solsystemets forside. Et tryk på en planet flyver ind til den (filmisk overgang, besluttet 5. november 2026). Første gang et forløb på fem trin, bagefter laboratoriet.
 

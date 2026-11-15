@@ -1559,6 +1559,29 @@ button.sol-gruppe-navn::after { content: " ›"; }
 @media (orientation: portrait) {
   :is(#kosmos, #solsystem) .jord-ur { position: absolute; left: 0; bottom: 0; width: max-content; max-width: calc(100% - 116px); }
 }
+/* Solsystemets overblik (js/kosmos/overblik.js): navnene og ringene oven på 3D-billedet, datoen med tidsskyderen nederst
+   og toningen gennem mørke, når man flyver ind til en planet. Titlen i toplinjen er en knap tilbage til overblikket. */
+.ob-navne { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.ob-navn { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 4px; white-space: nowrap; font-size: 13px; color: rgba(225, 233, 255, 0.85); text-shadow: 0 1px 3px #000; will-change: transform; }
+.ob-navn[hidden] { display: none; }
+.ob-tekst { transform: translate(8px, -1px); }
+.ob-navn.uden-tekst .ob-tekst { display: none; }
+.ob-ring { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid rgba(160, 200, 255, 0.75); display: none; }
+.ob-navn.med-ring .ob-ring { display: block; }
+.ob-navn.med-ring .ob-tekst { transform: translate(14px, -1px); }
+.ob-tid { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 12px; background: rgba(8, 12, 28, 0.78); border: 1px solid var(--panel-kant); pointer-events: auto; max-width: 100%; }
+.ob-dato { font-size: 15px; font-weight: 600; color: var(--tekst, #e8eeff); text-align: center; }
+.ob-tid-række { display: flex; align-items: center; gap: 6px; }
+.ob-tid .knap.lille { min-width: 44px; min-height: 44px; }
+.ob-spol.til { background: rgba(111, 182, 255, 0.35); border-color: rgba(111, 182, 255, 0.8); }
+.ob-skyder { width: min(260px, 40vw); min-height: 44px; }
+.ob-mørke { position: absolute; inset: 0; z-index: 3; background: #000; opacity: 0; pointer-events: none; }
+#solsystem .topbjælke h2 .sol-hjem { font: inherit; color: inherit; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 4px; }
+@media (max-width: 560px) {
+  .ob-skyder { width: 32vw; }
+  .ob-tid { padding: 4px 6px; }
+  .ob-dato { font-size: 14px; }
+}
 /* Rejsen i tid (js/kosmos/tid.js): "Dit ur" og "Jordens ur" med urskiven, og lysuret (et lærred) */
 .tid-ure { display: flex; gap: 8px; align-items: stretch; max-width: 100%; }
 .tid-ur { display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 150px; padding: 6px 12px; border-radius: 12px; background: rgba(8, 12, 28, 0.8); border: 1px solid var(--panel-kant); line-height: 1.2; }

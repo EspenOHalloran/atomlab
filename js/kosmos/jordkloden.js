@@ -14,6 +14,7 @@ import { lavJorden, lavMånen, overflade } from './jorden.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { SIDE, SIDER } from '../data/sider/jorden.js';
 import { dageSidenJ2000, hældningVed, solen, månen, stjernetid, månefase, faseNavn, solHøjde } from '../data/himmel.js';
+import { startDato } from '../solsystem/dato.js';
 
 const S = 1000; // km pr. enhed
 const JORD_R = 6371; // km (NSSDC: middelradius 6.371,0 km)
@@ -62,7 +63,7 @@ export default {
     kamera.far = 20000;
     kamera.updateProjectionMatrix();
 
-    let nu = Date.now(); // tidspunktet, der vises (går ca. 820 gange hurtigere, når Jorden drejer)
+    let nu = startDato(); // tidspunktet, der vises (overblikkets dato, går ca. 820 gange hurtigere, når Jorden drejer)
     let d = dageSidenJ2000(new Date(nu));
 
     // ---------- Jorden, Månen og Månens bane ----------

@@ -2,6 +2,7 @@
 // Skallen (listen, panelet, knapperne, pausen og underteksterne) er fælles med Kosmos (faenomenskaerm.js).
 
 import { lavFænomenSkærm } from './faenomenskaerm.js';
+import overblik from './kosmos/overblik.js';
 import solen from './kosmos/solen.js';
 import jordkloden from './kosmos/jordkloden.js';
 import aarstider from './kosmos/aarstider.js';
@@ -16,9 +17,13 @@ import uranus from './kosmos/uranus.js';
 import neptun from './kosmos/neptun.js';
 
 // Efter afstanden til Solen. Solen og Jorden har deres egne visninger (M4b), og under dem står de fænomener, der hører til.
+// Overblikket (docs/drejebog-overblik.md) er den første klode og forsiden: Solsystemet starter dér, medmindre et link
+// eller et forløb har valgt en planet.
 const skærm = lavFænomenSkærm({
   skærm: 'solsystem',
+  forside: 'overblik',
   liste: [
+    overblik,
     { navn: 'Solen', ikon: '☀️', f: solen, under: [solstorm, solensfremtid] },
     venus,
     { navn: 'Jorden', ikon: '🌍', f: jordkloden, under: [aarstider, formoerkelser] },

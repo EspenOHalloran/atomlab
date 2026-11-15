@@ -26,6 +26,7 @@ import { lavGasplanet } from '../solsystem/planet.js';
 import { lavLuft } from '../solsystem/atmosfaere.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { hent, glem, iLager } from '../solsystem/hent.js';
+import { startDato } from '../solsystem/dato.js';
 import { lavHentebjælke, tonInd } from '../hentning.js';
 import { VENUS, pol, knude, solRetning, meridian, underSolen } from '../data/venus.js';
 import { SIDE, SIDER } from '../data/sider/venus.js';
@@ -97,7 +98,7 @@ export default {
     let under = 0; // skyderen "Under skyerne" (0-100 %)
 
     // ---------- Datoen og Solen ----------
-    const nu = new Date();
+    const nu = new Date(startDato()); // overblikkets dato (js/solsystem/dato.js)
     let dato = nu.getTime(); // programmets dato (ms), går, når tiden går
     const sol = new THREE.Vector3(...solRetning(nu)); // Solens retning i systemet (ekliptikkens retninger)
 

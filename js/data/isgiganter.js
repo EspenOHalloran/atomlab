@@ -10,6 +10,8 @@
 // - Retningerne i programmet er ekliptikkens (som Jorden i jordkloden.js): y mod ekliptikkens nordpol, z mod
 //   forårspunktet og x mod ekliptisk længde 90°.
 
+import { kepler, århundreder } from './planeter.js';
+
 const RAD = Math.PI / 180;
 const ε = 23.4392911 * RAD; // ekliptikkens hældning (J2000)
 
@@ -35,10 +37,8 @@ export const PLANETER = {
 // navn: 'uranus' eller 'neptun', eller tallene for en anden planet i samme form (Venus, js/data/venus.js)
 const tal = (navn) => (typeof navn === 'string' ? PLANETER[navn] : navn);
 
-// Julianske århundreder siden J2000 (1. januar 2000 kl. 12 TT, regnet som UT: forskellen er under et minut)
-export function århundreder(dato) {
-  return (dato.getTime() - Date.UTC(2000, 0, 1, 12)) / 864e5 / 36525;
-}
+// Julianske århundreder siden J2000 og Kepler-regningen står nu i js/data/planeter.js (overblikket, 15. november 2026)
+export { århundreder };
 
 // Fra ekliptikkens retninger (X mod forårspunktet, Z mod nordpolen) til programmets (x, y, z) = (Y, Z, X)
 const tilProgram = ([X, Y, Z]) => [Y, Z, X];
@@ -46,19 +46,7 @@ const tilProgram = ([X, Y, Z]) => [Y, Z, X];
 // Planetens plads om Solen (AU) i ekliptikkens retninger (X, Y, Z)
 export function plads(navn, dato) {
   const p = tal(navn);
-  const T = århundreder(dato);
-  const [a, e, I, L, ϖ, Ω] = p.bane.map((v, i) => v + p.rate[i] * T);
-  const ω = (ϖ - Ω) * RAD;
-  let M = ((L - ϖ) % 360) * RAD;
-  let E = M + e * Math.sin(M);
-  for (let i = 0; i < 8; i++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-  const x = a * (Math.cos(E) - e), y = a * Math.sqrt(1 - e * e) * Math.sin(E);
-  const cO = Math.cos(Ω * RAD), sO = Math.sin(Ω * RAD), cw = Math.cos(ω), sw = Math.sin(ω), cI = Math.cos(I * RAD), sI = Math.sin(I * RAD);
-  return [
-    (cw * cO - sw * sO * cI) * x + (-sw * cO - cw * sO * cI) * y,
-    (cw * sO + sw * cO * cI) * x + (-sw * sO + cw * cO * cI) * y,
-    sw * sI * x + cw * sI * y,
-  ];
+  return kepler(p.bane, p.rate, dato);
 }
 
 // En retning givet ved rektascension og deklination (grader) i ekliptikkens retninger

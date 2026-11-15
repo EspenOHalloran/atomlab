@@ -200,7 +200,8 @@ const side = async (adresse) => {
   tjek('"Navne" er stadig slået fra efter flybyen', (await navne()).length === 0);
   // Valget huskes efter genindlæsning, og navnene kommer igen, når knappen slås til
   await s.reload();
-  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)') && atomlabTest.solsystem.valgt() === 'saturn');
+  await s.waitForFunction(() => window.atomlabTest && document.querySelector('#solsystem:not(.skjult)') && atomlabTest.solsystem.valgt() === 'overblik');
+  await s.evaluate(() => atomlabTest.solsystem.vælg('saturn')); // Solsystemet åbner på overblikket (forsiden)
   await s.click('#solsystemTræ button[data-sted="maaner"]');
   await hop();
   tjek('efter genindlæsning: "Navne" er stadig slået fra', !(await s.$eval(navneKnap, (k) => k.classList.contains('til'))) && (await navne()).length === 0);
