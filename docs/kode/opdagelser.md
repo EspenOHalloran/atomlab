@@ -1,0 +1,5 @@
+# Koden: Opdagelserne i Biblioteket (Videnskabsfolkene)
+
+*Delen er planlagt, ikke bygget ([plan-videnskabsfolk.md](../plan-videnskabsfolk.md), afsnit 6, med filerne, der kommer i H1-H4). Denne fil beskriver det, der findes, og vokser med trinene.*
+
+- `billeder/biblioteket/lav_portraet.py` (H0, 15. november 2026): laver et portræt om til et ens "kobberstik" (600 × 750, WebP). Kun PIL og numpy. Pr. person i `PERSONER`: kilden (Commons-thumbnail i en standardbredde, ellers svarer Wikimedia 429), `udsnit` (4:5 i kilden), `gamma` (< 1 gør lyst), `baggrund` (hvor meget den store tone trykkes sammen og løftes) og `detalje` (lokal kontrast). Linjerne: tre retninger (18°, -48° og 75°) med perioden 7-8 px i dobbelt størrelse, tykkere hvor billedet er mørkt, forskudt efter den slørede tone, så de buer langs formerne, plus korte streger langs kanterne og en oval ramme. Papir `PAPIR` og blæk `BLÆK` er fælles for alle ti. Kildebilledet lægges i `billeder/biblioteket/kilder/` (i `.gitignore`). Kør: `python lav_portraet.py huygens [kildemappe] [ud-mappe]`. Licensen skrives i `billeder/biblioteket/KILDER.md`.

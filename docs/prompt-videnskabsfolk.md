@@ -1,5 +1,7 @@
 # Prompt: Videnskabsfolkene i Biblioteket, planen og drejebogen til Huygens
 
+**Lavet 15. november 2026** (H0): [plan-videnskabsfolk.md](plan-videnskabsfolk.md), [drejebog-huygens.md](drejebog-huygens.md), [fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md) og [prompt-fable-huygens.md](prompt-fable-huygens.md). Status i [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md).
+
 *Skrevet 14. november 2026 efter jeres svar (se "Jeres svar" nederst). Kun dokumenter i denne session, ingen kode i programmet. Model: Opus, effort høj. Fable tjekker drejebogen bagefter.*
 
 ## Prompten (kopiér til en ny session)
