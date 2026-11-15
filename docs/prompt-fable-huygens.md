@@ -1,6 +1,6 @@
 # Prompt: Fable tjekker drejebogen til Huygens
 
-*Skrevet 15. november 2026 efter jeres svar 14. november 2026 ([koereplan.md](koereplan.md), nr. 3 under "Nyt indhold", og nr. 6-8 i [prompt-naeste-fem.md](prompt-naeste-fem.md)). **Fable kan kun bruges til og med 16. november 2026** ([plan-fable.md](plan-fable.md), "Næste gang Fable bruges"). Hører til sporet Videnskabsfolkene ([lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md)). Opus har skrevet planen ([plan-videnskabsfolk.md](plan-videnskabsfolk.md)), drejebogen ([drejebog-huygens.md](drejebog-huygens.md)) og faktagrundlaget ([fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md)). Fable tjekker drejebogen kritisk, før I giver go, og før H1 bygges. Kun dokumenter.*
+*Skrevet 15. november 2026 efter jeres svar 14. november 2026 ([koereplan.md](koereplan.md), nr. 3 under "Nyt indhold", og nr. 6-8 i [runde 5](arkiv/prompt-naeste-fem-runde5.md)). **Fable kan kun bruges til og med 16. november 2026** ([plan-fable.md](plan-fable.md), "Næste gang Fable bruges"). Hører til sporet Videnskabsfolkene ([lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md)). Opus har skrevet planen ([plan-videnskabsfolk.md](plan-videnskabsfolk.md)), drejebogen ([drejebog-huygens.md](drejebog-huygens.md)) og faktagrundlaget ([fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md)). Fable tjekker drejebogen kritisk, før I giver go, og før H1 bygges. Kun dokumenter.*
 
 ## Sådan startes den
 - **Egen session med Fable 5.2** i miljøet **"Default"**.
