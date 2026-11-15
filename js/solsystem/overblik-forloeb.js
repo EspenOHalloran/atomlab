@@ -7,10 +7,17 @@
 //   på en anden klode giver en linje ("Det er Venus …"), og Jordens ring blinker.
 // Trin 2 "rundt": tidsskyderen nederst går fra 0 til ét år frem (Jordens omløbstid) og falder ikke tilbage. Hver planet
 //   trækker en hale efter sig, og en tæller ved Merkur og Jorden viser omgangene.
-// Hvert trins start stiller scenen forfra (dato i dag, skalaen "Pustet op"), så "‹" kan gå tilbage.
+// Trin 3 "skala": knappen "Rigtig størrelse og afstand" i linjen. Skalaen glider langsomt (SKALA_S), og planeterne
+//   skrumper til prikker. Solen bliver en lysprik.
+// Trin 4 "dyk": den rigtige skala, kun Jordens ring vises. Et tryk inden for 44 px af Jorden starter dykket (DYK_S): Kameraet
+//   flyver fra hele Solsystemet ned til Jorden, til den fylder billedet, med en tæller for afstanden. Ringen følger Jorden,
+//   til den er stor nok at se. Jordens bane går gennem Jorden (banerOm) og tones ud tæt på den (overblik.js).
+// "Det så du" (drejebogens trin 5): kernesætningen, mens kameraet trækker sig ud, og skalaen glider tilbage til
+//   "Pustet op". Vejene: "Besøg en planet" (navnene tændt, Merkur mat) og "Leg frit" (laboratoriet).
+// Hvert trins start stiller scenen forfra (dato i dag, skalaen "Pustet op", i trin 4 den rigtige), så "‹" kan gå tilbage.
 
 import * as THREE from 'three';
-import { ROLIG } from '../scene3d.js';
+import { ROLIG, centrerVindue } from '../scene3d.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVink, forløbTest } from '../forloeb.js';
 import { tagVentForløb } from '../gaa.js';
 import { OVERBLIK } from '../data/forloeb/overblik.js';
@@ -23,11 +30,28 @@ const HELE = [20.6, 12.4];
 const HALE_N = 160; // punkter i hver hale (Merkur når over fire omgange på et år)
 const FREMHÆV_S = 3; // sekunder, Jordens ring blinker efter et forkert tryk
 const VIS_MIG_S = 4; // "Vis mig" i trin 2 spoler året på ca. 4 sekunder
+const SKALA_S = 3; // sekunder, skalaen glider i trin 3 og tilbage til sidst
+const DYK_S = 8; // sekunder, dykket ned til Jorden i trin 4 (wow-øjeblikket)
+const UD_S = 4.5; // sekunder, kameraet trækker sig ud fra Jorden ved "Det så du"
+const TRYK_PX = 44;
+const RING_PX = 7; // Jordens ring slukkes, når Jorden er så mange pixel i radius (så kan man se den selv)
+const AFSTAND_S = 3; // sekunder, tælleren for afstanden står, efter kameraet er nede ved Jorden
 const NUL = new THREE.Vector3();
+
+// Afstanden i km som tekst ("16,3 milliarder km", "148 millioner km", "19.400 km")
+const komma = (x, d) => x.toFixed(d).replace('.', ',');
+export function kmTekst(km) {
+  if (km >= 1e9) return `${komma(km / 1e9, 1)} milliarder km`;
+  if (km >= 1e7) return `${Math.round(km / 1e6)} millioner km`;
+  if (km >= 1e6) return `${komma(km / 1e6, 1)} millioner km`;
+  const n = km >= 1e5 ? Math.round(km / 1e3) * 1e3 : km >= 1e4 ? Math.round(km / 100) * 100 : Math.round(km / 10) * 10;
+  return `${n.toLocaleString('da-DK')} km`;
+}
 
 export function lavOverblikForløb(api) {
   const { kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder } = api;
   const jorden = klode('jorden');
+  const KM = jorden.p.radius / api.radiusVed(jorden.p, 1); // km pr. enhed i den rigtige skala
   const ÅR_J = jorden.p.omløb * 864e5; // ét år: Jorden én gang rundt
   let stoppet = false;
   let trin = null; // trinets id, mens forløbet kører
@@ -38,6 +62,11 @@ export function lavOverblikForløb(api) {
   let rundt = false; // trin 2: Jorden er nået rundt
   let autoSpol = false; // trin 2: "Vis mig" spoler selv
   let haleDato = null; // datoen, halerne sidst blev tegnet til
+  let skalaTrykket = false; // trin 3: knappen er trykket
+  let dyk = null; // trin 4: null, 'flyver' eller 'nede'
+  let udTrukket = false; // "Det så du": kameraet er sendt ud
+  let nedeTid = 0; // sekunder, kameraet har været nede ved Jorden
+  let tilHjem = false; // forløbet er slut: kameraet skal hjem til laboratoriet, når panelerne er tilbage
 
   const kører = () => kørerForløb() === OVERBLIK.id;
 
@@ -93,6 +122,35 @@ export function lavOverblikForløb(api) {
     }
   }
 
+  // ---------- Tælleren for afstanden under dykket (trin 4) ----------
+  const afstandLag = document.createElement('div');
+  afstandLag.className = 'ob-afstand';
+  afstandLag.hidden = true;
+  afstandLag.setAttribute('aria-live', 'off');
+  api.overlag.append(afstandLag);
+  let afstandVist = '';
+  function visAfstand() {
+    const km = Math.max(0, kamera.position.distanceTo(jorden.pos) - jorden.r) * KM;
+    const tekst = `Til Jorden: ${kmTekst(km)}`;
+    if (tekst !== afstandVist) afstandLag.textContent = afstandVist = tekst;
+  }
+
+  // ---------- Vejen "Besøg en planet" (efter forløbet) ----------
+  // En linje over datoen nederst. Navnene er tændt, Pluto skjult og Merkur mat (overblik.js, vis.besøg), til man flyver
+  // ind til en planet eller lukker linjen.
+  const besøgLinje = document.createElement('div');
+  besøgLinje.className = 'ob-besøg';
+  besøgLinje.hidden = true;
+  besøgLinje.innerHTML = '<span></span><button class="knap lille" aria-label="Luk">✕</button>';
+  tidLag.prepend(besøgLinje);
+  const besøgTekst = besøgLinje.firstChild;
+  besøgLinje.lastChild.addEventListener('click', () => visBesøg(false));
+  function visBesøg(til) {
+    vis.besøg = til;
+    besøgLinje.hidden = !til;
+    besøgTekst.textContent = OVERBLIK.besøgTekst;
+  }
+
   // ---------- Kameraet ----------
   // Kameraet skråt oppefra (som overblikkets hjem), så boksen [halv bredde, halv højde] om Solen fylder billedet.
   // bagJorden: kameraet står på den anden side af Solen end Jorden, så man ser Jordens dagside (står kameraet på Jordens
@@ -120,25 +178,99 @@ export function lavOverblikForløb(api) {
 
   // ---------- Fælles for trinene ----------
   // Stiller scenen forfra: i dag, "Pustet op", intet fremhævet, halerne og skyderens år væk
-  function forfra(id) {
+  function forfra(id, skala = 0) {
     trin = id;
     vis.forløb = true;
     vis.fremhæv = vis.ringKun = null;
     fremhævTid = 0;
     autoSpol = false;
+    dyk = null;
+    udTrukket = false;
+    afstandLag.hidden = true;
+    api.sætFokus(null);
+    // Var kameraet helt nede ved Jorden ("‹" fra trin 4 eller "Det så du"), står det med den nye skala måske inde i en
+    // kugle. Så springer det ud, før det flyver på plads.
+    const nede = kamera.position.distanceTo(orbit.target) < 0.01;
+    if (nede) api.stopFlyvning();
     api.iDag();
-    api.sætSkala(0, false);
+    api.sætSkala(skala, false);
     api.skyderÅr(null);
     visHaler(false);
+    if (nede) {
+      orbit.target.set(0, 0, 0);
+      kamera.position.set(...HJEM.retning).normalize().multiplyScalar(api.afstandForBoks(...HELE));
+    }
+  }
+  // ROLIG: skalaskiftet og dykket som en toning gennem mørke (i stedet for bevægelsen)
+  function ton(skift) {
+    const mørke = document.createElement('div');
+    mørke.className = 'ob-mørke';
+    mørke.style.opacity = '1';
+    vindue.append(mørke);
+    skift();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      mørke.style.transition = 'opacity 0.6s';
+      mørke.style.opacity = '0';
+      setTimeout(() => mørke.remove(), 700);
+    }));
+  }
+  function rigtigSkala() {
+    if (skalaTrykket) return;
+    skalaTrykket = true;
+    if (ROLIG) ton(() => api.sætSkala(1, false));
+    else api.sætSkala(1, true, SKALA_S);
+  }
+  // Dykket: fra hele Solsystemet ned til Jorden, til den fylder billedet (Jorden fra den belyste side)
+  function dykNed() {
+    if (dyk) return;
+    dyk = 'flyver';
+    kameraBoks = null;
+    afstandLag.hidden = false;
+    const mål = { mål: () => jorden.pos, afstand: api.afstandFor(jorden.r), retning: api.indRetning(jorden), slags: 'dyk' };
+    const nede = () => { dyk = 'nede'; nedeTid = 0; api.sætFokus(jorden); visAfstand(); };
+    if (ROLIG) ton(() => { api.flyvTil({ ...mål, færdig: nede }); });
+    else api.flyvTil({ ...mål, varighed: DYK_S, færdig: nede });
+  }
+  // "Det så du": kameraet trækker sig ud fra Jorden, og bagefter glider skalaen tilbage til "Pustet op"
+  function trækUd() {
+    udTrukket = true;
+    vis.ringKun = null;
+    afstandLag.hidden = true;
+    api.sætFokus(null);
+    const tilbage = () => {
+      kameraBoks = HELE;
+      if (ROLIG) ton(() => api.sætSkala(0, false));
+      else api.sætSkala(0, true, SKALA_S);
+    };
+    if (ROLIG) ton(() => { passer(HELE); tilbage(); });
+    else api.flyvTil({ mål: () => NUL, afstand: api.afstandForBoks(...HELE), retning: new THREE.Vector3(...HJEM.retning), slags: 'forløb', varighed: UD_S, færdig: tilbage });
+  }
+  // Efter forløbet: hjem til laboratoriets kamera (panelerne er tilbage) og skalaen "Pustet op"
+  function hjem() {
+    const skala = () => { if (api.t() > 0) api.sætSkala(0, !ROLIG, 1.2); };
+    if (ROLIG) {
+      orbit.target.set(0, 0, 0);
+      kamera.position.set(...HJEM.retning).normalize().multiplyScalar(api.afstandFor(HJEM.radius));
+      skala();
+      return;
+    }
+    api.flyvTil({ mål: () => NUL, afstand: api.afstandFor(HJEM.radius), retning: new THREE.Vector3(...HJEM.retning), slags: 'hjem', varighed: 2.2, færdig: skala });
   }
   function fremhævJorden() {
     vis.fremhæv = 'jorden';
     fremhævTid = FREMHÆV_S;
   }
 
-  // Et tryk i scenen (id: den nærmeste klode inden for 44 px eller null)
-  function tryk(id) {
+  // Et tryk i scenen (id: den nærmeste klode inden for 44 px eller null, x og y: hvor på skærmen)
+  function tryk(id, x, y) {
     if (!kører() || forløbFase() !== 'gør') return;
+    if (trin === 'dyk') {
+      // Jordens ring ligger tæt ved Solen (17 px på pc): Et tryk tæt på Jorden tæller, selv om Solen er nærmere
+      const j = jorden.skærm;
+      if (x == null || Math.hypot(x - j.x, y - j.y) < TRYK_PX) dykNed();
+      else forløbVink(OVERBLIK.forkert.dyk);
+      return;
+    }
     if (trin === 'jorden') {
       if (!id) return;
       if (id === 'jorden') {
@@ -174,7 +306,27 @@ export function lavOverblikForløb(api) {
         færdig: () => rundt,
         visMig: () => { autoSpol = true; },
       },
+      skala: {
+        start: () => { forfra('skala'); skalaTrykket = false; passer(HELE); },
+        knapper: [{ id: 'rigtig', tekst: 'Rigtig størrelse og afstand', gør: rigtigSkala, aktiv: () => !skalaTrykket }],
+        færdig: () => api.t() >= 0.999,
+        visMig: rigtigSkala,
+      },
+      dyk: {
+        start: () => {
+          forfra('dyk', 1);
+          api.banerOm(api.dato()); // Jordens bane går gennem Jorden i dag
+          vis.ringKun = 'jorden';
+          passer(HELE);
+        },
+        færdig: () => dyk === 'nede',
+        visMig: () => tryk('jorden'),
+      },
     },
+    veje: [
+      { tekst: 'Besøg en planet', primær: true, gør: () => efterVej(true) },
+      { tekst: 'Leg frit', gør: () => efterVej(false) },
+    ],
     layout: () => {
       // Panelerne er væk (eller kommet igen): Kameraet zoomer, så trinets billede passer i det nye hul
       if (kører() && kameraBoks) passer(kameraBoks, api.flyver() ? 1.6 : 0.8, kameraBagJorden);
@@ -185,12 +337,34 @@ export function lavOverblikForløb(api) {
       vis.forløb = false;
       vis.fremhæv = vis.ringKun = null;
       autoSpol = false;
+      dyk = null;
+      afstandLag.hidden = true;
+      api.sætFokus(null);
       api.skyderÅr(null);
       visHaler(false);
       tegnTællere(false);
       tidLag.classList.remove('fl-skjult', 'ob-kun-skyder');
+      tilHjem = true; // (layout kalder hjem, når panelerne er tilbage)
     },
   };
+  const layout = FL_DEL.layout;
+  FL_DEL.layout = () => {
+    if (!kører() && tilHjem && !stoppet) {
+      tilHjem = false;
+      hjem();
+      return;
+    }
+    layout();
+  };
+  // En vej videre (klodsen afslutter forløbet uden at lægge siden om, når vejen har gør): panelerne kommer tilbage,
+  // kameraet flyver hjem, og på vejen "Besøg en planet" tændes navnene
+  function efterVej(besøgVej) {
+    visBesøg(besøgVej);
+    requestAnimationFrame(() => {
+      centrerVindue();
+      FL_DEL.layout();
+    });
+  }
 
   function start() {
     if (!stoppet) startForløb(OVERBLIK, FL_DEL);
@@ -218,11 +392,25 @@ export function lavOverblikForløb(api) {
         tegnHaler();
       }
       tegnTællere(trin === 'rundt' && fase !== 'gæt');
+      if (trin === 'dyk') {
+        if (dyk) visAfstand();
+        if (dyk === 'nede' && (nedeTid += dt) > AFSTAND_S) afstandLag.hidden = true; // (den dækker Jordens underkant)
+        // Ringen følger Jorden, til Jorden selv er stor nok at se
+        if (dyk && !udTrukket) vis.ringKun = jorden.r / api.pxPr(kamera.position.distanceTo(jorden.pos)) > RING_PX ? null : 'jorden';
+        if (fase === 'slut' && !udTrukket) trækUd();
+      }
+    },
+    // Et tryk på vejen "Besøg en planet": Merkur er ikke bygget endnu (true: trykket er taget)
+    besøgTryk(id) {
+      if (id !== 'merkur') return false;
+      besøgTekst.textContent = OVERBLIK.merkurSenere;
+      return true;
     },
     stop() {
       stoppet = true;
       if (kører()) stopForløb();
       for (const t of tællere) t.e.remove();
+      afstandLag.remove();
       for (const h of haler) { h.geo.dispose(); h.linje.material.dispose(); }
     },
     test: {
@@ -233,7 +421,12 @@ export function lavOverblikForløb(api) {
       omgange: (id) => omgange(klode(id)),
       tidVist: () => !tidLag.classList.contains('fl-skjult'),
       fremhævet: () => vis.fremhæv,
-      tryk: (id) => tryk(id),
+      tryk: (id, x, y) => tryk(id, x, y),
+      dyk: () => dyk,
+      ringKun: () => vis.ringKun,
+      afstand: () => (afstandLag.hidden ? null : afstandLag.textContent),
+      besøg: () => (vis.besøg ? besøgTekst.textContent : null),
+      udTrukket: () => udTrukket,
     },
   };
 }

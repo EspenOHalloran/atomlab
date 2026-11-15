@@ -204,18 +204,19 @@ export default {
     let dato = husk.dato ?? Date.now();
     let t = husk.t; // skalaen 0-1
     let tMål = t;
+    let glidTid = 1.2; // sekunder, skalaen glider fra den ene ende til den anden (forløbets trin 3: ca. 3 s)
     let tempo = husk.tempo; // -3 til 3 (⏪ og ⏩)
     let spolet = husk.dato != null;
     let flyvning = null; // { slags: 'ind' | 'sted' | 'ud', ... }
     let fokus = null; // kloden, kameraet følger (Merkur eller Pluto), eller null (Solen i midten)
     let stedNu = 'overblik';
     let fokusR = 0; // klodens radius sidste billede (fokus)
-    let banerSvag = 1;
     const lærred = verden.renderer.domElement;
     const vindue = document.getElementById('solsystemVindue');
     // Det, forløbet slår til og fra (js/solsystem/overblik-forloeb.js): forløb skjuler navnene, ringene, Pluto, bælterne
-    // og tidsknapperne. ringKun: kun den klodes ring vises. fremhæv: den klodes ring og navn blinker.
-    const vis = { forløb: false, ringKun: null, fremhæv: null };
+    // og tidsknapperne. ringKun: kun den klodes ring vises. fremhæv: den klodes ring og navn blinker. besøg: vejen
+    // "Besøg en planet" efter forløbet (navnene er tændt, Pluto skjult og Merkur mat).
+    const vis = { forløb: false, ringKun: null, fremhæv: null, besøg: false };
 
     // ---------- Solen ----------
     const sol = stjerne(1, 0xfff1c4, 0xff8a1c, 0xffb347, 2.6, { styrke: 1.3 });
@@ -224,7 +225,8 @@ export default {
     gruppe.add(solLys);
 
     // ---------- Kloderne ----------
-    const kugleGeo = new THREE.SphereGeometry(1, TEST_HURTIG ? 24 : 48, TEST_HURTIG ? 12 : 24);
+    // (64 × 32: Jorden fylder billedet efter dykket i forløbets trin 4)
+    const kugleGeo = new THREE.SphereGeometry(1, TEST_HURTIG ? 24 : 64, TEST_HURTIG ? 12 : 32);
     const kloder = PLANETER.map((p) => {
       const mat = new THREE.ShaderMaterial({
         uniforms: {
@@ -414,10 +416,10 @@ export default {
         k.drej.scale.setScalar(vis);
       }
       ringMat.uniforms.uR.value = saturn.drej.scale.x;
-      // I forløbet er Pluto (og dens bane) og bælterne skjult (drejebogen, afsnit 2)
+      // I forløbet er Pluto (og dens bane) og bælterne skjult (drejebogen, afsnit 2). På vejen "Besøg en planet" også Pluto.
       const pluto = klode('pluto');
-      pluto.holder.visible = !vis.forløb;
-      baner[kloder.indexOf(pluto)].linje.visible = !vis.forløb;
+      pluto.holder.visible = !vis.forløb && !vis.besøg;
+      baner[kloder.indexOf(pluto)].linje.visible = pluto.holder.visible;
       asteroider.visible = kuiper.visible = !vis.forløb;
       // Solen: kuglen i "Pustet op", lyset i den rigtige skala
       const sr = radiusVed(null, t);
@@ -453,7 +455,7 @@ export default {
       const iFl = vis.forløb;
       const samlet = Math.hypot(ma.x - solSkærm.x, ma.y - solSkærm.y) < 26 && !fokus && !iFl;
       const ringe = t > 0.5 && !iFl;
-      const navne = navneTil && !iFl;
+      const navne = (navneTil || vis.besøg) && !iFl;
       const pladser = []; // navnene, der allerede står (så de ikke ligger oven i hinanden)
       const ledig = (p, tekst) => {
         const b = tekst.length * 7 + 22, x = p.x, y = p.y;
@@ -475,11 +477,12 @@ export default {
         const k = klode(id);
         const inderst = ['merkur', 'venus', 'jorden', 'mars'].includes(id);
         const fremhæv = vis.fremhæv === id, ringKun = vis.ringKun === id;
-        const synlig = k.skærm.synlig && !(samlet && inderst) && (navne || ringe || fremhæv || ringKun) && !flyvning?.skjulNavne && k !== fokus
+        const synlig = k.skærm.synlig && k.holder.visible && !(samlet && inderst) && (navne || ringe || fremhæv || ringKun) && !flyvning?.skjulNavne && k !== fokus
           && !(iFl && id === 'pluto');
         sæt(k.mærke, k.skærm, synlig, ringe || fremhæv || ringKun);
         k.mærke.classList.toggle('uden-tekst', !(navne || fremhæv) || !synlig || !ledig(k.skærm, k.p.navn));
         k.mærke.classList.toggle('puls', fremhæv);
+        k.mærke.classList.toggle('mat', vis.besøg && !k.p.fænomen);
       }
       sæt(indersteMærke, solSkærm, solSkærm.synlig && samlet && (navne || ringe) && !flyvning?.skjulNavne, ringe);
       indersteMærke.classList.toggle('uden-tekst', !navne);
@@ -512,6 +515,7 @@ export default {
         return;
       }
       const id = nærmest(h.clientX, h.clientY);
+      if (id && vis.besøg && forløb.besøgTryk(id)) return; // Merkur er mat på vejen "Besøg en planet"
       if (id) besøg(id);
     };
     lærred.addEventListener('pointerdown', vedNed);
@@ -648,7 +652,7 @@ export default {
       skyder: true, navn: 'Skala', min: 0, max: 100, trin: 1, værdi: Math.round(t * 100),
       vis: (x) => (x < 50 ? 'Pustet op og rykket sammen' : 'Rigtig størrelse og afstand'),
       ændring: (x) => { t = tMål = x / 100; tegnBaner(); },
-      slip: (x) => { tMål = x < 50 ? 0 : 1; },
+      slip: (x) => { tMål = x < 50 ? 0 : 1; glidTid = 1.2; },
     };
     const styring = [skala, navneKnap((til) => { navneTil = til; })];
     void opdaterKnapper;
@@ -685,7 +689,7 @@ export default {
       }
       // Skalaen glider selv i mål, når man har sluppet skyderen
       if (t !== tMål) {
-        t = ROLIG ? tMål : t + Math.sign(tMål - t) * Math.min(Math.abs(tMål - t), dt / 1.2);
+        t = ROLIG ? tMål : t + Math.sign(tMål - t) * Math.min(Math.abs(tMål - t), dt / glidTid);
         skala.sæt?.(Math.round(t * 100));
         tegnBaner();
       }
@@ -707,11 +711,14 @@ export default {
       // Styringen holder altid afstanden mellem minDistance og maxDistance (også under en flyvning). Ved Merkur og Pluto
       // må man ikke zoome ind i kuglen, og i den rigtige skala er de meget små.
       orbit.minDistance = flyvning ? 1e-7 : fokus ? fokus.r * 1.3 : 0.05;
-      const svag = fokus && !flyvning ? 0.3 : 1; // banelinjerne tones ned tæt på en klode
-      if (svag !== banerSvag) {
-        banerSvag = svag;
-        for (const b of baner) b.linje.material.opacity = b.opacitet * svag;
-      }
+      // Banelinjerne tones ned tæt på en klode (Merkur og Pluto). I den rigtige skala ligger en banelinje (256 punkter)
+      // op til ca. to jordradier ved siden af planeten mellem to punkter, så den tones helt ud tæt på planeten (ca. 20-80
+      // radier, dykket i forløbets trin 4)
+      const svag = fokus && !flyvning ? 0.3 : 1;
+      kloder.forEach((k, i) => {
+        const nær = t > 0.5 ? THREE.MathUtils.clamp((kamera.position.distanceTo(k.pos) / k.r - 20) / 60, 0, 1) : 1;
+        baner[i].linje.material.opacity = baner[i].opacitet * svag * nær;
+      });
       kamera.updateProjectionMatrix();
       orbit.zoomSpeed = 1;
       placer();
@@ -741,12 +748,26 @@ export default {
       const [px, py, pz] = tilProgram(x);
       return ud.set(px * sk, py * sk, pz * sk);
     };
+    // Banerne regnes om, så én omgang ligger omkring ms (et af de 256 punkter står præcis på planeten, så Jordens bane
+    // går gennem Jorden under dykket i forløbets trin 4)
+    function banerOm(ms) {
+      kloder.forEach((k, i) => {
+        if (k.p.id === 'pluto') return;
+        const fra = ms - (k.p.omløb * 864e5) / 2;
+        baner[i].au = baner[i].au.map((_, j) => plads(k.p, new Date(fra + (j / N_BANE) * k.p.omløb * 864e5)));
+      });
+      tegnBaner();
+    }
     const forløb = lavOverblikForløb({
       verden, kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder, solSkærm,
       dato: () => dato, sætDato: (ms) => { sætDato(ms); visDato(); }, iDag, skyderÅr,
-      t: () => t, sætSkala: (x, glid) => { tMål = x; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
+      t: () => t,
+      // glid: skalaen glider på sek sekunder (ellers springer den)
+      sætSkala: (x, glid, sek = 1.2) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
       punkt, afstandFor, afstandForBoks, afstandVed, radiusVed, flyvTil, flyver: () => flyvning, besøg, vælgFænomen,
       vælgKamera: () => { første = false; verden.målAfstand = null; },
+      banerOm, indRetning, pxPr, overlag: overlag(), sætFokus: (k) => { fokus = k; fokusR = 0; },
+      stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
     });
 
     return {

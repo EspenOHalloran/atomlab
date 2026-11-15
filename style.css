@@ -1586,6 +1586,11 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .ob-navn.puls .ob-tekst { color: var(--gul); transform: translate(14px, -1px); }
 @keyframes obPuls { to { transform: scale(1.6); opacity: 0.5; } }
 @media (prefers-reduced-motion: reduce) { .ob-navn.puls .ob-ring { animation: none; } }
+.ob-afstand { padding: 6px 14px; border-radius: 12px; background: rgba(8, 12, 28, 0.78); border: 1px solid var(--panel-kant); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; color: #fff; white-space: nowrap; }
+.ob-afstand[hidden] { display: none; }
+.ob-besøg { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--tekst, #e8eeff); }
+.ob-besøg[hidden] { display: none; }
+.ob-navn.mat { opacity: 0.4; }
 #solsystem .topbjælke h2 .sol-hjem { font: inherit; color: inherit; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 4px; }
 @media (max-width: 560px) {
   .ob-skyder { width: 32vw; }
