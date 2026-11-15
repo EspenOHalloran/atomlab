@@ -135,3 +135,7 @@ Budgettet i [retning.md](retning.md): en skærm uden kloder ca. 1 MB, en klode c
 
 ## Jeres svar (14. november 2026)
 Alle fire anbefalinger fra afsnit 6: **1800-2100** med tabel 1, **Merkur mat i trin 5** med beskeden (den lille kugle med panelet i laboratoriet), **samme faktor for alle planeter** med en mindste størrelse og **spole-skyderen** med ⏪ og ⏩ i tre tempi og "I dag". Drejebogen er klar til at blive bygget, når I giver go.
+
+## Jeres svar (15. november 2026, under byggeriet)
+- Trin 2 bruger tidsskyderen under scenen (0 til ét år, stopper, når Jorden er rundt). Trin 3 er en knap "Rigtig størrelse og afstand" i forløbets linje, og skiftet glider ca. 3 s. Prøven bygges ikke endnu.
+- **"Rejs med lyset"** er en handling i bjælken under scenen (ikke i Styr-boksen som i afsnit 3, for reglen i plan-ux siger, at handlinger står i bjælken), og kameraet følger skallen ud. Den går hurtigere og hurtigere (Jorden efter ca. 8 s, Neptun efter ca. 30 s), uret viser den rigtige tid, og der står "spolet frem".

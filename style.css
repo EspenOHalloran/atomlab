@@ -1576,6 +1576,25 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .ob-spol.til { background: rgba(111, 182, 255, 0.35); border-color: rgba(111, 182, 255, 0.8); }
 .ob-skyder { width: min(260px, 40vw); min-height: 44px; }
 .ob-mørke { position: absolute; inset: 0; z-index: 3; background: #000; opacity: 0; pointer-events: none; }
+/* Forløbet "Rundt om Solen" (js/solsystem/overblik-forloeb.js): kun skyderen i trin 2, tællerne og Jordens blink */
+.ob-tid.fl-skjult { display: none; }
+.ob-tid.ob-kun-skyder :is(.ob-spol, .ob-idag) { display: none; }
+.ob-tæller { position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none; padding: 2px 7px; border-radius: 8px; font-size: 13px; white-space: nowrap;
+  color: #fff; background: rgba(8, 12, 28, 0.75); border: 1px solid var(--panel-kant); will-change: transform; }
+.ob-tæller[hidden] { display: none; }
+.ob-navn.puls .ob-ring { display: block; border-color: var(--gul); border-width: 2px; animation: obPuls 0.8s ease-in-out infinite alternate; }
+.ob-navn.puls .ob-tekst { color: var(--gul); transform: translate(14px, -1px); }
+@keyframes obPuls { to { transform: scale(1.6); opacity: 0.5; } }
+@media (prefers-reduced-motion: reduce) { .ob-navn.puls .ob-ring { animation: none; } }
+.ob-afstand { padding: 6px 14px; border-radius: 12px; background: rgba(8, 12, 28, 0.78); border: 1px solid var(--panel-kant); font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; color: #fff; white-space: nowrap; }
+.ob-afstand[hidden] { display: none; }
+.ob-besøg { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--tekst, #e8eeff); }
+.ob-besøg[hidden] { display: none; }
+.ob-navn.mat { opacity: 0.4; }
+/* "Rejs med lyset" (js/solsystem/overblik-lys.js): uret over datoen og tiderne ved planeterne */
+.ob-lysur { font-size: 15px; font-weight: 600; color: #ffe7a0; font-variant-numeric: tabular-nums; text-align: center; }
+.ob-lysur[hidden] { display: none; }
+.ob-lystid { color: #ffe7a0; border-color: rgba(255, 231, 160, 0.5); }
 #solsystem .topbjælke h2 .sol-hjem { font: inherit; color: inherit; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.35); text-underline-offset: 4px; }
 @media (max-width: 560px) {
   .ob-skyder { width: 32vw; }
@@ -2024,7 +2043,7 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   .fl-hånd { animation: none; transform: translate(calc(var(--fra-x) - 10px), calc(var(--fra-y) - 4px)); }
 }
 /* Kosmos (forløbet "Rejsen i tid"): Styr-boksen og underteksten er skjult, for forløbets linje fortæller, hvad der sker */
-#kosmos.i-forløb .vindue :is(.styr, .undertekst.fase) { display: none !important; }
+#kosmos.i-forløb .vindue :is(.styr, .undertekst.fase), #solsystem.i-forløb .vindue :is(.styr, .undertekst.fase) { display: none !important; }
 #minitabel .felt.forløb-mål { color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent); animation: forløbPuls 1.6s ease-in-out infinite; }
 @keyframes forløbPuls { 50% { box-shadow: 0 0 22px var(--accent); } }
 
