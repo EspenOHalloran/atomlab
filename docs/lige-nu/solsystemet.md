@@ -2,11 +2,10 @@
 
 *Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 14. november 2026 (aften).*
 
-**Senest lavet (14. november 2026): G1 trin 3, del 3, forslag A og F, en glidende landing i Stå på Mars og skyggerne i strimler.** Jeres go: del 3 og (for skyggerne) "1: Strimler".
-- **A og F:** Mars' store kort, landskabets lag, roverens foto og Saturns og Jupiters måner pakkes ud uden for hovedtråden (`vendt`). Udseendet er det samme.
-- **Den glidende landing:** Kortene, shaderne og de første skygger lægges nu i grafikkortet, mens kameraet står stille over stedet, før toningen. Før skete det i billedet lige efter toningen (2,0-2,3 s i testbrowseren, 1,2 s på tabletten ved Jezero). Prisen: Kameraet står lidt længere stille over stedet.
-- **Skyggerne i strimler:** Mens Solen flytter sig, regnes hvert skyggelag over flere billeder i et kort ved siden af, der skiftes ind, når det er færdigt. I testbrowseren er det dyreste billede faldet fra 410 til 66 ms (skøn på tabletten: ca. 35-50 billeder i sekundet i stedet for 11-20). Detaljer og tal under "Status" i [plan-grafik.md](../plan-grafik.md). Værktøj: `tests/vaerktoejer/maal-landing.mjs`.
-- **Spørgsmål til jer:** Mål med `?maal` på A11 og A56 (se [ikke-afproevet.md](../ikke-afproevet.md)): Er hakket ved "Stå på Mars" væk, og hvor mange billeder i sekundet er der med ▶ og "🌅 Solnedgang"?
+**I gang (15. november 2026, natkørsel kl. 03.45): Overblikket, trin 1-3** efter [drejebog-overblik.md](../drejebog-overblik.md) og jeres go (punkt 00 nedenfor). Planen:
+1. **Data og kort:** `js/data/planeter.js` (de otte planeter med JPL's tabel 1, Kepler-regningen flyttet hertil fra `isgiganter.js`, radier, omløb og poler) og `js/data/pluto-bane.js` (Plutos plads hvert år 1800-2100 fra Horizons, for JPL har fjernet Pluto fra tabellen). Testen `tests/planeter.mjs` sammenligner med Horizons. 1k-kort: Merkur (MESSENGER) og Pluto (New Horizons) fra Commons og Jorden, Mars og Saturn gjort mindre (`billeder/solsystem/lav_overblik.py`).
+2. **Laboratoriet:** fænomenet `overblik` (`js/kosmos/overblik.js`) som den første klode, "Solsystemet", og forsiden, når Solsystemet åbnes uden et link til en planet. Solen, banerne, kuglerne, Saturns ringe, bælterne, skalaen med to stillinger, spole-skyderen med ⏪ ⏩ og "I dag", Navne og højre panel.
+3. **Ind og ud:** tryk på en klode (den nærmeste midte inden for 44 px), kameraet flyver ind, og billedet toner gennem mørke over i planetens visning. Datoen følger med til Venus, Jorden, Uranus og Neptun. Merkur og Pluto er steder i overblikket med et kort panel. "Solsystemet" i gitteret og vejen fører tilbage.
 
 **Før det:** Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
 

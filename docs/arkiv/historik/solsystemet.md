@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (14. november 2026): G1 trin 3, del 3, forslag A og F, en glidende landing i Stå på Mars og skyggerne i strimler.** Jeres go: del 3 og (for skyggerne) "1: Strimler".
+- **A og F:** Mars' store kort, landskabets lag, roverens foto og Saturns og Jupiters måner pakkes ud uden for hovedtråden (`vendt`). Udseendet er det samme.
+- **Den glidende landing:** Kortene, shaderne og de første skygger lægges nu i grafikkortet, mens kameraet står stille over stedet, før toningen. Før skete det i billedet lige efter toningen (2,0-2,3 s i testbrowseren, 1,2 s på tabletten ved Jezero). Prisen: Kameraet står lidt længere stille over stedet.
+- **Skyggerne i strimler:** Mens Solen flytter sig, regnes hvert skyggelag over flere billeder i et kort ved siden af, der skiftes ind, når det er færdigt. I testbrowseren er det dyreste billede faldet fra 410 til 66 ms (skøn på tabletten: ca. 35-50 billeder i sekundet i stedet for 11-20). Detaljer og tal under "Status" i [plan-grafik.md](../plan-grafik.md). Værktøj: `tests/vaerktoejer/maal-landing.mjs`.
+- **Spørgsmål til jer:** Mål med `?maal` på A11 og A56 (se [ikke-afproevet.md](../ikke-afproevet.md)): Er hakket ved "Stå på Mars" væk, og hvor mange billeder i sekundet er der med ▶ og "🌅 Solnedgang"?
+
 **Senest lavet (14. november 2026): G1 trin 3, del 2, forslag H (Stå på Mars lettere på tablet).** Jeres go: a + b, så en ny måling på tabletten, før c (dynamisk opløsning) overvejes.
 - **(a)** Landskabets net er delt i 16 lagkagestykker, og kun dem i de retninger, billedet viser, tegnes (lodret ned tegnes alle). Udseendet er det samme. **(b)** På tablet regnes skyggerne i halv opløsning, mens Solen flytter sig (▶, skyderen eller "Solnedgang"), og skarpt igen, når den står stille. Pc'en er uændret.
 - **Målt i testbrowseren (tablet-udgaven, kun til sammenligning):** et billede vandret −39 %, op mod himlen −55 %, ned −36 %, lodret ned −23 %. Skyggerne, mens Solen flytter sig, koster ca. en femtedel. Detaljer under "Status" i [plan-grafik.md](../plan-grafik.md). Tests: `tests/landskab-tablet.mjs` (ny) og `tests/landskab.mjs`. Værktøj: `tests/vaerktoejer/staa-tid.mjs`.
