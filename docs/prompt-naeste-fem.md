@@ -20,6 +20,17 @@
 ### 5. Videnskabsfolkene · Fables noter og H1 (Opus, høj, når 1 er færdig)
 > Spor: Videnskabsfolkene. Navngiv chatten "Videnskabsfolkene · Fables noter og H1". Tjek først i origin/main, at `docs/fable/E12-huygens.md` findes, og at `docs/fable/E12-huygens-noter.md` ikke gør. Læs `docs/lige-nu/videnskabsfolkene.md`, `docs/fable/E12-huygens.md`, `docs/plan-videnskabsfolk.md` og `docs/drejebog-huygens.md`. Skriv Opus' noter i `docs/fable/E12-huygens-noter.md` (hvad er nyt, og hvor er du uenig, som i `docs/fable/E9-overblik-noter.md`), ret drejebogen, og stil mig spørgsmålene som en dialog med din anbefaling først (også kernesætningen og Gør det selv fra drejebogens afsnit 12). Byg derefter H1 efter planen, når jeg har givet go. Bed om domænet til skriften med en anmodning til miljøet, før du henter den. Brug tjeklisterne D og E, `/faktatjek` på nye tekster, og afslut med `/faerdig`.
 
+## Ekstra: Fable i dag (15. november, gratis)
+Jeres ønske: Få mest muligt ud af Fable i dag. Seks sessioner mere med Fable 5.2, effort `high`, kun dokumenter. De kan alle køre samtidig og samtidig med nr. 1-4 (hver skriver i sine egne filer). Første besked er altid: "Læs `docs/prompt-fable-<navn>.md`, og gør det, der står under 'Prompten'."
+- **A. Faktatjek af det, der står i programmet** (grundstofkortene, Molekyler, Saturns flyby, Jupiter): `docs/prompt-fable-faktatjek.md`
+- **B. Eftersyn af forløbene, før sønnen prøver dem:** `docs/prompt-fable-forloeb-eftersyn.md`
+- **C. Faktagrundlaget til Galilei og Newton:** `docs/prompt-fable-galilei-newton.md`
+- **D. Faktagrundlag og drejebog til Merkur og Pluto:** `docs/prompt-fable-merkur-pluto.md`
+- **E. Faktagrundlag og drejebog til Ild:** `docs/prompt-fable-ild.md`
+- **F. Tjek af Venus V3-V5:** `docs/prompt-fable-venus.md`
+
+**Domæner:** `cudl.lib.cam.ac.uk` og `www.e-rara.ch` er åbnet. `messenger.jhuapl.edu`, `pluto.jhuapl.edu`, `bibdig.museogalileo.it` og `www.loc.gov` blev afvist af miljøtjenesten og skal tilføjes under miljøets indstillinger (Network access → Allowed domains), hvis Fable har brug for dem.
+
 ## Bagefter
 Solsystemet: Venus V3 → V4 → V5 ("Læs docs/prompt-venus.md og kør V3", Opus, høj), så Merkur og Pluto i en lille udgave. Så er Solsystemet færdigt, og nye spor kan starte (Lys og farver først). Molekyler: Liv L3 "Kopien" ("Læs docs/prompt-liv-l3.md", Opus, høj) efter Venus, uden at vente på prøven (jeres svar). Videnskabsfolkene: H2, H3 og H4, ét go pr. trin. **Uden for sessionerne:** prøven med jeres søn ([guide-proeven.md](guide-proeven.md)). Der ligger nu 9 ting med status "prøve" (Dit første atom, Liv 1-2, Molekyler, Tid 1-2, Kosmos i grupper, Antistof og skinnen, Overblikket). De to gamle grene (`claude/relaxed-cori-h0yxvd` og `ccr-8c5ddb9a-ts9r17`) slettes stadig under Branches på GitHub.
 
@@ -27,6 +38,7 @@ Solsystemet: Venus V3 → V4 → V5 ("Læs docs/prompt-venus.md og kør V3", Opu
 - **De fem:** som foreslået.
 - **Overblikket:** Alle fem valg fra trin 1-3 er godkendt, som de er.
 - **Billedet, der lukkes for tidligt** (`roeg`, drawImage detached): Åbne punkter tager det nu og retter kun de linjer, det drejer sig om.
+- **Ekstra Fable 15. november:** A-F (alle seks), prompterne står ovenfor.
 - **Prøven med sønnen:** Der bygges videre imens. Liv L3 kommer efter Venus V3-V5 uden at vente på prøven (står i køreplanen).
 
 ## Prompten til næste runde (står også nederst i artefaktet)
