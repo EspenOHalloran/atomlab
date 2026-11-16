@@ -5,6 +5,10 @@
 // samlet under verdenerne, og at det gamle gitter, de gule piller, tallene, citatet og "Næste eventyr" er væk (K3).
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('karrusel');
+// Grænsen for at vente på ringen og baggrunden (ms). Fjederen og toningen kører i spiltid (højst 0,05 s pr. billede):
+// ringen falder til ro efter ca. 20 billeder og baggrunden efter 26-38. Det tager 1,4-6 s alene og op til 12,6 s med
+// 3 tests og 3 CPU-løkker (målt 16. november 2026). 10 s gav vægten 0,24-0,97 under hele samlingen.
+const RINGEN = 60000;
 const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -23,7 +27,7 @@ for (const [navn, opts] of størrelser) {
   p.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
   const midt = () => p.evaluate(() => document.getElementById('menu').dataset.midt);
   const venMidt = async (id) => {
-    try { await p.waitForFunction((i) => document.getElementById('menu').dataset.midt === i, id, { timeout: 6000 }); } catch { /* tjekket nedenfor */ }
+    try { await p.waitForFunction((i) => document.getElementById('menu').dataset.midt === i, id, { timeout: RINGEN }); } catch { /* tjekket nedenfor */ }
     return midt();
   };
 
@@ -91,7 +95,7 @@ for (const [navn, opts] of størrelser) {
   if (ring.højkant) tjek(`${navn}: på højkant går banen op under titlen (under 100 px luft, før ca. 210 px)`, ring.luft < 100, ring.luft);
   // Baggrunden (K2, K4): motivet for verdenen forrest toner ind, og de andre er skjult (Atomer: elektronskyerne)
   const vægte = () => p.evaluate(() => window.atomlabTest.karrusel.baggrund());
-  await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.vaerksted > 0.999, null, { timeout: 10000 }).catch(() => {});
+  await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.vaerksted > 0.999, null, { timeout: RINGEN }).catch(() => {});
   let bg = await vægte();
   const andre = (v, id) => Object.entries(v).filter(([k]) => k !== id).reduce((s, [, x]) => s + x, 0);
   tjek(`${navn}: baggrunden har ét motiv pr. verden og viser elektronskyerne og kun dem`, bg.synlig && bg.vægte.vaerksted > 0.999 && andre(bg.vægte, 'vaerksted') === 0 && Object.keys(bg.vægte).sort().join() === 'batteri,fusion,liv,ordbog,solsystem,vaerksted', JSON.stringify(bg));
@@ -109,7 +113,7 @@ for (const [navn, opts] of størrelser) {
     await p.waitForTimeout(250);
     await p.mouse.up();
   };
-  const ro = () => p.waitForFunction(() => window.atomlabTest.karrusel.stille(), null, { timeout: 8000 }).catch(() => {});
+  const ro = () => p.waitForFunction(() => window.atomlabTest.karrusel.stille(), null, { timeout: RINGEN }).catch(() => {});
   await træk(1);
   tjek(`${navn}: et roligt træk mod venstre drejer Liv frem`, (await venMidt('liv')) === 'liv', await midt());
   tjek(`${navn}: … og åbner ingenting`, (await p.evaluate(() => location.hash)) === '');
@@ -155,7 +159,7 @@ for (const [navn, opts] of størrelser) {
   tjek(`${navn}: tilbage i menuen står Kernerne forrest`, (await venMidt('kerner')) === 'kerner', await midt());
   tjek(`${navn}: den sidste del er gemt`, (await p.evaluate(() => localStorage.getItem('atomlabSidsteDel'))) === 'reaktor');
   tjek(`${navn}: Reaktorens knap er fremhævet (glød og prik) og kun den`, await p.evaluate(() => [...document.querySelectorAll('#menu .verden-knap.sidst')].map((a) => a.getAttribute('href')).join() === '#reaktor'));
-  await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.fusion > 0.999, null, { timeout: 10000 }).catch(() => {});
+  await p.waitForFunction(() => window.atomlabTest.karrusel.baggrund().vægte.fusion > 0.999, null, { timeout: RINGEN }).catch(() => {});
   bg = await vægte();
   tjek(`${navn}: tilbage i menuen viser baggrunden Kernernes motiv (stjernen)`, bg.synlig && bg.vægte.fusion > 0.999 && andre(bg.vægte, 'fusion') === 0, JSON.stringify(bg));
 

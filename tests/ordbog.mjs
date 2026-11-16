@@ -71,7 +71,7 @@ const T = (f, a) => page.evaluate(f, a);
 const menu = await T(() => ({ dele: atomlabTest.karrusel.verdener().find((v) => v.id === 'biblioteket')?.dele, navn: document.querySelector('.verden[data-verden="biblioteket"] .verden-knap strong')?.textContent }));
 tjek(`pc: Biblioteket i menuen har Ordbogen og Gåderne ("${menu.navn}")`, menu.dele?.join() === 'ordbog,gaader' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
 await page.click('.menu-ikon[data-verden="biblioteket"]');
-await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 6000 });
+await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 60000 }); // (fjederen tager ca. 20 billeder: under belastning over 6 s, se karrusel.mjs)
 await page.click('.menukort a[href="#ordbog"]', { force: true });
 await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
 const start = await T(() => ({ ord: document.querySelectorAll('#ordbogListe li').length, fokus: document.activeElement?.id, første: document.querySelector('#ordbogListe h3')?.textContent }));
