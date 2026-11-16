@@ -13,7 +13,8 @@ export const OVERBLIK = {
   trin: [
     {
       id: 'jorden',
-      spørg: 'Her er Solen og de fire inderste planeter, som de står i dag. Hvilken er vores?',
+      spørg: 'Solen og de fire inderste planeter, som de står i dag. Hvilken er vores? Tryk på den.',
+      // (gør vises ikke af klodsen, og trinet har ingen knapper: opfordringen står derfor i spørg, feedback 16. nov. 2026)
       gør: 'Tryk på Jorden.',
       så: 'Jorden er nummer tre af otte planeter. De går alle rundt om Solen, hver i sin bane.',
       ord: ['planet', 'bane'],
@@ -49,7 +50,7 @@ export const OVERBLIK = {
     {
       // Wow-øjeblikket: dykket fra hele Solsystemet ned til Jorden i den rigtige skala (ca. 8 sekunder)
       id: 'dyk',
-      spørg: 'Jorden er derinde, tæt ved Solen. Find den.',
+      spørg: 'Jorden er derinde, tæt ved Solen. Find den, og tryk på ringen.',
       gør: 'Tryk på Jordens ring.',
       // Så kommer før "Det så du" (kernesætningen), fordi det sidste trin har en Så-tekst (js/forloeb.js)
       så: 'Der er Jorden. Hele vejen herind var der ingenting. Mellem planeterne er der næsten kun tomt rum.',

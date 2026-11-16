@@ -2,6 +2,19 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (16. november 2026): Opus' noter til Fables drejebog til Merkur og Pluto (E16) og jeres svar.** Kun dokumenter. Intet er bygget.
+- **Noterne:** [fable/E16-merkur-pluto-noter.md](../fable/E16-merkur-pluto-noter.md). Drejebogen er [drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md).
+- **De tre tjek:** (1) Polen: Dataene er skarpe. Det slørede kommer af kuglens kort i bredde og længde (anisotropi 8 er for lidt så tæt på polen). Måles i MP1, og trænger det, kommer et lille polkort i kuglens shader (kan også hjælpe Mars' nordpol). (2) BDR vinder over LOI, men stregerne i BDR fjernes. (3) Evig skygge: Kraterbundene er allerede sorte i kortet. Ingen ny skyggekode.
+- **Fund:** Merkurs højdekort og Plutos kort har 180° i midten, Merkurs billedkort 0°. Pluto beholder 180° i midten, så hjertet ikke ligger på kortets kant.
+- **Jeres svar (alle som anbefalet):** Kernesætning A for begge, kun flybyen (6 og 5 stop), tegningen af Solen, der vender om, og de lyse huller som Merkurs tredje sted.
+
+**Senest lavet (16. november 2026): Rettelserne fra Fables eftersyn E14 i "Rundt om Solen"** (prompten i [prompt-e14-rettelser.md](../prompt-e14-rettelser.md), noterne i [fable/E14-noter.md](../fable/E14-noter.md)).
+- **Trin 1:** De fire inderste er mindst ca. 14 px brede og har en ring (uden navn, så gættet ikke er givet), og de ydre planeter og Saturns ringe er dæmpet (`vis.inderst` i `js/kosmos/overblik.js`). Når Jorden er fundet, er alt som før.
+- **Trin 2:** Teksten efter gættet er "Prøv det: Træk skyderen ét år frem." for alle tre svar (`js/data/forloeb/overblik.js`).
+- **Laboratoriets tre mærkater (billede 15):** "Solsystemet" har to felter i gitteret, "Skala" har luft til "Pustet op og rykket sammen" (gælder alle skydere i Styr), og et navn ved vinduets højre kant står til venstre for kloden (Uranus bag panelet).
+- Testen `overblik-forloeb` har to nye tjek (trin 1). Trin 4's Spørg (Fables forslag) er ikke rettet, den var ikke med i prompten.
+- **Kig efter på tabletten:** se [ikke-afproevet.md](../ikke-afproevet.md) (de fire inderste i trin 1).
+
 **Senest lavet (15. november 2026): Overblikket trin 4, forløbet "Rundt om Solen" og "Rejs med lyset"** efter [drejebog-overblik.md](../drejebog-overblik.md) og jeres go pr. del (A-E). Status "prøve". Koden står i [kode/overblik.md](../kode/overblik.md).
 - **A og B:** teksterne (`js/data/forloeb/overblik.js`), listen, knappen i hjælpen, fem ord i Ordbogen, trin 1 (find Jorden) og trin 2 (et år rundt med haler og tællere). Jorden har fået blå luft i overblikket.
 - **C:** trin 3 (knappen "Rigtig størrelse og afstand", glider 3 s), trin 4 (kun Jordens ring, dykket på 8 s fra 11 milliarder km ned til Jorden med en tæller, Jorden fra den belyste side) og "Det så du" (kameraet trækker sig ud, skalaen tilbage) med tre veje: "Besøg en planet" (navnene tændt, Merkur mat), "Leg frit" og "Rejs med lyset". ✓ i "Din fremgang".

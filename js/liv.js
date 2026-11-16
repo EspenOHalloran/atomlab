@@ -408,6 +408,11 @@ function opdaterPanel(kunTal = false) {
     $('livTekst').textContent = n.tekst;
     $('livTal').innerHTML = tal();
     $('livEkstra').textContent = n.ekstra ?? '';
+    // Det, der ikke er plads til fremme (budgettet: højst to tal og tre sætninger), står øverst i "For nørder"
+    const nørd = $('livNørdTrin');
+    nørd.hidden = !n.nørd;
+    nørd.querySelector('dl').innerHTML = (n.nørd?.tal ?? []).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+    nørd.querySelector('p').textContent = n.nørd?.tekst ?? '';
     $('livHvorfor').hidden = !n.hvorfor;
     if (n.hvorfor) {
       $('livHvorfor').dataset.hvorfor = n.hvorfor;

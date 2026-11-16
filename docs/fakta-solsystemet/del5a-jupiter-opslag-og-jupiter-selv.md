@@ -86,7 +86,7 @@ Omregninger, jeg selv har lavet, er markeret med "(omregnet)".
 | Masse, før deuterium smelter (brun dværg) | ca. 13 Jupitermasser (13,0 ± 0,8). Spændet er ca. 11-16 alt efter sammensætning | Spiegel, Burrows & Milsom 2011, ApJ 727, 57, doi:10.1088/0004-637X/727/1/57, arXiv 1008.5150 | S | Åbnet (abstract) |
 | Brune dværge | "lacking the mass needed to begin the hydrogen fusion" | NASA Universe Glossary, https://science.nasa.gov/universe/glossary-3/a-g/ | S | Åbnet |
 | Jupiter "har samme ingredienser som en stjerne, men voksede ikke nok til at tænde" | NASA's formulering | NASA Jupiter Facts | S | Åbnet |
-| Varme indefra | 7,485 ± 0,160 W/m² (før: 5,444). Bond-albedo 0,503 (før: 0,343). Målt med Cassini | Li m.fl. 2018, Nature Communications 9, 3709, doi:10.1038/s41467-018-06107-2 | RS | Søgeresultat (nature.com kunne ikke åbnes) |
+| Varme indefra | 7,485 ± 0,160 W/m² (før: 5,444). Bond-albedo 0,503 (før: 0,343). Målt med Cassini | Li m.fl. 2018, Nature Communications 9, 3709, doi:10.1038/s41467-018-06107-2 | S | Åbnet af Fable via PMC (E13): sender 2,132 ± 0,051 gange så meget energi ud, som den optager fra Solen |
 | Stråler mere ud, end den får | Med de gamle tal: ca. 1,7 gange (det klassiske tal). Med Li 2018: ca. 2,2 gange (omregnet: Solen giver 1361/5,204² W/m², delt med 4 og ganget med (1 − albedo)) | afledt | RS | – |
 | Hvor varmen kommer fra | Varme fra dannelsen, der langsomt slipper ud, mens planeten trækker sig sammen og køler. Ikke fusion | (gængs forklaring, ikke slået op her) | RS | – |
 
@@ -223,7 +223,7 @@ Omregninger, jeg selv har lavet, er markeret med "(omregnet)".
 3. Junos status i november 2026: Den var aktiv i maj 2026, men der er ingen officiel afgørelse.
 4. Farven på nordlyset i synligt lys og om et øje kunne se det: ikke bekræftet.
 5. Størrelsen på cyklonerne ved nordpolen (kilderne er uenige), og at den sjette cyklon ved sydpolen forsvandt (udledt af PIA24967, ikke sagt direkte).
-6. Hvor mange gange mere energi Jupiter sender ud: 1,7 er gammelt, ca. 2,2 er min egen omregning af Li 2018.
+6. **Afklaret (E13):** Li 2018 giver selv 2,132 ± 0,051 (før 1,668 ± 0,085). Programmets "ca. dobbelt" og "nærmere 2" passer.
 7. Bind og sider for Horner & Jones II-IV og tidsskriftet for Chabrier 2023 er ikke fundet (DOI'erne er sikre).
 8. At Ios partikler mest er svovl og ilt (ikke slået op).
 
