@@ -31,7 +31,7 @@ proton, (atom)kerne, elektron, grundstof, neutron. Fem ord. **Ingen af dem står
 ## 5. Prøven (tre spørgsmål bagefter)
 1. Hvad er der i midten af et atom, og hvad er udenom?
 2. Hvad gør hydrogen til hydrogen og helium til helium?
-3. Hvorfor holdt kernen ikke med to protoner, og hvad hjalp?
+3. "Du lagde to neutroner i. Blev det et andet grundstof? Hvorfor ikke?" (E14, 16. november 2026. Før: "Hvorfor holdt kernen ikke med to protoner, og hvad hjalp?", men svaret "plus skubber plus" er kun den halve grund, og kernen holdt på skærmen.)
 
 ## 6. Fakta, der skal tjekkes
 - Hydrogen er det mest almindelige grundstof i universet.

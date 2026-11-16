@@ -69,13 +69,17 @@ tjek('hvert trin: handling → Så, gættet kommer før handlingen, "‹" sætte
 // Trin 4 med "Vis mig": Værkstedet bygger selv helium
 await page.click('.fl-næste');
 const knapper = await T(() => [...document.querySelectorAll('.fl-handling')].map((k) => k.textContent.trim()).join(' | '));
+// To neutroner før elektronen: vinket siger, hvorfor elektronen skal med
+await page.click('.fl-handling >> nth=0');
+await page.click('.fl-handling >> nth=0');
+const vink = await T(() => document.querySelector('.fl-vink')?.textContent ?? '');
 await T(() => atomlabTest.vaerksted.forløb.visMigNu());
 await page.click('.fl-vismig');
 await fase('så');
 f = await F();
 const opdaget = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang')).opdaget.sort().join(','));
-tjek('trin 3 er helium uden neutroner ("to protoner" løst), og efter trin 4 ("Vis mig") er hydrogen og helium opdaget',
-  toProtoner && f.p === 2 && f.n === 2 && f.e === 2 && opdaget === '1,2' && /Neutron 0\/2/.test(knapper), JSON.stringify({ toProtoner, f, opdaget, knapper }));
+tjek('trin 3 er helium uden neutroner ("to protoner" løst), trin 4 giver et vink efter to neutroner, og efter trin 4 ("Vis mig") er hydrogen og helium opdaget',
+  toProtoner && f.p === 2 && f.n === 2 && f.e === 2 && opdaget === '1,2' && /Neutron 0\/2/.test(knapper) && /elektron mere/.test(vink), JSON.stringify({ toProtoner, f, opdaget, knapper, vink }));
 
 // Trin 5: det lille periodiske system med H og He, og til sidst kernesætningen
 await page.click('.fl-næste');
