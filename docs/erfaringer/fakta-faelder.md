@@ -216,3 +216,13 @@
 - "Regn forbrændingen ud med tabellen over bindinger." OpenStax' gennemsnit for C=O (741 kJ/mol) giver 682 kJ for methan, 15 % for lidt, fordi C=O i CO₂ er stærkere (ca. 799). Brug NIST's forbrændingsvarme (890,7 kJ/mol med flydende vand, 802,6 med damp).
 - "I vægtløshed bliver flammen en kugle." En brændende dråbe gør. Et stearinlys giver en halvkugle (NASA: "hemispherical"), fordi lyset er i vejen. Og de første sekunder er flammen gul.
 - "Stearinlys er lavet af stearin." Stearin er en blanding af stearinsyre og palmitinsyre (lex.dk), men mange lys er af paraffin. Wikipedia på dansk kalder stearin for tristearin, som er noget tredje.
+
+*Venus V3-V5 (Fable E18, 16. november 2026). Kilderne står i [E18-venus.md](../fable/E18-venus.md).*
+- "Parker Solar Probe så Venus' natside i infrarødt." Kameraet (WISPR) ser 0,48-0,80 µm, altså synligt lys og en smule nær-infrarødt. NASA kalder det "in visible light". Og de kendte infrarøde billeder af natsiden (1,74 og 2,3 µm, Akatsuki og Venus Express) viser skyerne som silhuetter, ikke jorden. Jorden ses ved ca. 1 µm.
+- "Venus' natside gløder." Jorden gløder lige meget dag og nat (464 °C). På dagsiden drukner gløden i sollyset fra skyerne. Og 464 °C er under de ca. 525 °C, hvor ting gløder synligt for øjet.
+- "50 km oppe på Venus er der 1 bar og stuetemperatur." Ikke samme sted: 50 km har 1,07 bar og 75 °C, 55 km har 27 °C og 0,53 bar (VIRA).
+- "Pandekagekuplerne ligger i Alpha Regio." De syv kendte (Seoritsu Farra, 30,0° S, 11,0° Ø) ligger ved østkanten, ca. 1.100 km fra Alpha Regios midte i USGS' navneliste (25,5° S, 0,3° Ø). Slå altså selve stedet op, ikke området.
+- "Ovda Regio er opkaldt før reglen om kvindenavne." Nej, Ovda er en titaness hos marierne (USGS). Undtagelserne er Maxwell Montes, Alpha Regio og Beta Regio.
+- "Magellan kortlagde Venus 1990-1994." Radarkortet blev lavet 1990-1992 (98 %). Sonden blev ved til 1994. Og krateret, der voksede i 1991, er en åbning på Maat Mons' side, ikke toppen.
+- "Venus er varm, fordi den får meget sollys." Skyerne kaster så meget tilbage, at Venus optager mindre solvarme end Jorden (NSSDC: 226,6 K mod 254,0 K uden drivhuseffekt). Hele varmen skyldes luften.
+- "Linsedækslet lå under Venera 13's målearm." Det var Venera 14 (fra hukommelsen, slås op før brug).
