@@ -12,6 +12,7 @@ import { LANDKORT } from '../data/landkort.js';
 import { dagIDag } from '../data/solbane.js';
 import { verden, LAV_KVALITET, TEST_HURTIG } from '../scene3d.js';
 import { hentBillede, lavHentebjælke, tonInd, billedEjer, vedFrigiv } from '../hentning.js';
+import { iGrafikkort } from '../solsystem/kortkoe.js';
 
 const RAD = Math.PI / 180;
 
@@ -56,13 +57,17 @@ function hentFil(fil, farve, kanaler) {
         const t = new THREE.Texture(billede);
         h.tekstur = t;
         t.needsUpdate = true;
-        færdige.add(fil);
         t.colorSpace = farve ? THREE.SRGBColorSpace : THREE.NoColorSpace;
         if (kanaler === 1) t.format = THREE.RedFormat;
         if (kanaler === 2) t.format = THREE.RGFormat;
         t.wrapS = THREE.RepeatWrapping; // kortet går hele vejen rundt
         t.anisotropy = verden.renderer ? Math.min(8, verden.renderer.capabilities.getMaxAnisotropy()) : 1;
-        klar(t);
+        // Ét kort pr. billede i grafikkortet (kortkøen), fx de fire månedskort, der kommer samtidig
+        iGrafikkort(t, () => {
+          if (h.glemt) { klar(null); return; }
+          færdige.add(fil);
+          klar(t);
+        }, { glemt: () => h.glemt });
       }, () => klar(null));
     });
   }

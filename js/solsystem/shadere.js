@@ -46,3 +46,23 @@ export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true
   };
   requestAnimationFrame(trin);
 }
+
+// Skjul gruppen, til dens shadere er oversat (højst maks sekunder), og kald så klar(). Three.js venter ellers på en
+// shader, første gang den tegnes (getUniforms), og det gav ryk på 150-700 ms ved skift (feedback nr. 5, 16. november
+// 2026). Oversættelsen starter, mens gruppen er synlig (renderer.compile tager kun det synlige med), og gruppen skjules
+// bagefter. Kun den nyeste gruppe vises igen (et nyt skift undervejs vinder). Bruges under rejseskiltet og i
+// overblikkets toning gennem mørke.
+let skjulNr = 0;
+export function skjulTilKlar(gruppe, klar = () => {}, maks = 1.5) {
+  const mit = ++skjulNr;
+  let færdig = false;
+  const vis = () => {
+    if (færdig) return;
+    færdig = true;
+    if (mit === skjulNr) gruppe.visible = true;
+    klar();
+  };
+  lavShadereFørst(gruppe, () => mit === skjulNr, { færdig: vis });
+  if (!færdig) gruppe.visible = false;
+  setTimeout(vis, maks * 1000);
+}
