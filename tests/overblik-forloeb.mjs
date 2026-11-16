@@ -22,6 +22,7 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
   const jordenMm = (220 * PLANETER.find((p) => p.id === 'jorden').radius) / SOLEN.radius;
   const meter = (0.22 * AU) / (2 * SOLEN.radius);
   tjek('fodbolden: Jorden er et knappenålshoved (ca. 2 mm) 24 meter væk', Math.abs(jordenMm - 2.0) < 0.1 && Math.round(meter) === 24 && /knappenålshoved, 24 meter/.test(OVERBLIK.trin[2].så), `${jordenMm.toFixed(2)} mm, ${meter.toFixed(1)} m`);
+  tjek('trin 1 og 4 siger, hvad man skal trykke på (de har ingen knapper, og klodsen viser ikke gør)', /Tryk på den\.$/.test(OVERBLIK.trin[0].spørg) && /tryk på ringen\.$/.test(OVERBLIK.trin[3].spørg));
   tjek('afstanden som tekst', kmTekst(1.14e10) === '11,4 milliarder km' && kmTekst(1.84e8) === '184 millioner km' && kmTekst(2.29e4) === '22.900 km' && kmTekst(3.2e6) === '3,2 millioner km');
   tjek('lysets tid som tekst, og rejsen når Jorden efter 8 s og Neptun efter 30 s', lysTekst(45.7) === '45 s' && lysTekst(494) === '8 min 14 s' && lysTekst(14880) === '4 t 8 min'
     && Math.abs(lysRejseTid(8) - 494) < 1 && Math.abs(lysRejseTid(30) - 14900) < 5);
@@ -113,8 +114,28 @@ if (!process.argv.includes('--uden-browser')) {
   await f((fl, t, l) => l.spol(27));
   tjek('"Rejs med lyset": til sidst siger uret, hvornår lyset nåede den yderste, og Neptun har sin tid', /^Lyset nåede Pluto efter \d+ t \d+ min · spolet frem$/.test(await f((fl, t, l) => l.ur())) && (await f((fl, t, l) => l.tider().neptun)) === `Neptun: ${lysTekst(lysTid('neptun', dato))}`);
   await side.screenshot({ path: `${UD}/lyset.png` });
+  const bjælke = () => side.evaluate(() => window.atomlabTest.solsystem.bjælke().map((b) => b.tekst));
+  tjek('"Rejs med lyset": knappen hedder "✕ Stop lyset", mens rejsen kører', (await bjælke()).includes('✕ Stop lyset'));
   await f((fl, t, l) => l.spol(11));
   tjek('"Rejs med lyset" rydder op bagefter', (await f((fl, t, l) => l.fase())) === null && (await side.$$('#solsystem .ob-lystid')).length === 0);
+  // Bagefter flyver kameraet selv hjem, og skalaen går til "Pustet op" (feedback 16. november 2026)
+  await vent((fl, t) => !t.flyver() && t.skala() === 0);
+  const hjem1 = await f((fl, t) => t.kameraMål());
+  tjek('"Rejs med lyset": bagefter er kameraet hjemme i "Pustet op", og knappen hedder "Rejs med lyset" igen', hjem1.mål < 1e-3 && Math.abs(hjem1.afstand - hjem1.hjem) < 0.05 * hjem1.hjem
+    && (await bjælke()).includes('💡 Rejs med lyset'), JSON.stringify(hjem1));
+  // Esc (og "✕ Stop lyset") stopper rejsen undervejs og flyver hjem
+  await side.click('#solsystem .bjælke-handling:has-text("Rejs med lyset")');
+  await vent((fl, t, l) => l.fase() === 'lys');
+  await f((fl, t, l) => l.spol(5));
+  await side.keyboard.press('Escape');
+  await vent((fl, t) => !t.flyver() && t.skala() === 0);
+  const hjem2 = await f((fl, t) => t.kameraMål());
+  tjek('"Rejs med lyset": Esc stopper rejsen, og kameraet flyver hjem til "Pustet op"', (await f((fl, t, l) => l.fase())) === null && hjem2.mål < 1e-3 && Math.abs(hjem2.afstand - hjem2.hjem) < 0.05 * hjem2.hjem, JSON.stringify(hjem2));
+  await side.click('#solsystem .bjælke-handling:has-text("Rejs med lyset")');
+  await vent((fl, t, l) => l.fase() === 'lys');
+  await side.click('#solsystem .bjælke-handling:has-text("Stop lyset")');
+  await vent((fl, t) => !t.flyver() && t.skala() === 0);
+  tjek('"Rejs med lyset": "✕ Stop lyset" stopper rejsen og flyver hjem', (await f((fl, t, l) => l.fase())) === null && (await f((fl, t) => t.kameraMål())).mål < 1e-3);
   tjek('ingen fejl i konsollen', konsol.length === 0, konsol.join(' | '));
   await browser.close();
 }
