@@ -65,7 +65,7 @@ function vælgÆndrede(givne) {
       importører.get(mål)?.push(f);
     }
   }
-  const SKÆRME = { 'js/vaerksted.js': 'vaerksted', 'js/molekyler-skaerm.js': 'molekyler', 'js/system.js': 'system', 'js/fusion.js': 'fusion', 'js/reaktor.js': 'reaktor', 'js/batteri.js': 'batteri', 'js/liv.js': 'liv', 'js/kosmos.js': 'kosmos', 'js/solsystem.js': 'solsystem' };
+  const SKÆRME = { 'js/vaerksted.js': 'vaerksted', 'js/molekyler-skaerm.js': 'molekyler', 'js/system.js': 'system', 'js/fusion.js': 'fusion', 'js/reaktor.js': 'reaktor', 'js/batteri.js': 'batteri', 'js/liv.js': 'liv', 'js/kosmos.js': 'kosmos', 'js/solsystem.js': 'solsystem', 'js/opdagelser.js': 'opdagelser' };
   const EGEN_TEST = {
     'js/skaerme.js': ['skaermliste', 'karrusel', 'henter'], 'js/forloeb.js': ['forloeb', 'liv-forloeb', 'tid-forloeb', 'tid-forloeb2', 'molekyler-forloeb', 'overblik-forloeb'], 'js/data/forloeb/molekyler.js': ['molekyler-forloeb'], 'js/data/forloeb/tid.js': ['tid-forloeb', 'tid-forloeb2'], 'js/kosmos/tidfigur.js': ['tid', 'tid-forloeb'], 'js/data/forloeb/opskriften.js': ['liv-forloeb'], 'js/fremgang.js': ['forloeb', 'karrusel'], 'js/gaa.js': ['skaermliste', 'ordbog', 'gaader', 'tid-forloeb'], 'js/gaader.js': ['gaader'], 'js/data/gaader.js': ['gaader', 'ordbog'], 'js/opdagelser.js': ['opdagelser'], 'js/bog.js': ['opdagelser'], 'js/data/opdagelser.js': ['opdagelser'], 'js/data/opdagelser/huygens.js': ['opdagelser'], 'js/data/faenomener.js': ['skaermliste', 'karrusel'], 'js/data/opgaver.js': ['karrusel'],
     'js/beskeder.js': ['beskeder', 'beskeder-2'], 'js/guide.js': ['guide'], 'js/pause.js': ['pause'], 'js/fuldskaerm.js': ['fuldskaerm'],
