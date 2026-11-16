@@ -119,7 +119,8 @@ export const HVORDAN_KAN_DET_SKE = {
     },
     {
       id: 'myoner',
-      spørg: 'Er det bare en tanke? Myoner fra rummet lever så kort, at de burde gå i stykker højt oppe. Hvor mange når ned?',
+      // "Bliver til ca. 15 km oppe": arXiv:1906.03934 ("most atmospheric muons are produced at a height of around 15 km"), docs/fakta-tid.md
+      spørg: 'Myoner bliver til ca. 15 km oppe og lever så kort, at de burde gå i stykker deroppe. Hvor mange når ned?',
       gæt: {
         valg: [
           { tekst: 'Næsten ingen', efter: 'Se først "Uden Einstein", og skift så til "Med Einstein".' },
