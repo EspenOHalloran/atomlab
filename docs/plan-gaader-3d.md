@@ -92,6 +92,7 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Nye påstande 
 
 ## Fable
 - **Lavet 13. november 2026:** [E8-gaader-3d.md](fable/E8-gaader-3d.md) (konceptet og gåderne 6-10). Opus' noter: [E8-gaader-3d-noter.md](fable/E8-gaader-3d-noter.md).
+- **Lavet 16. november 2026:** [E19-tyngdekraft.md](fable/E19-tyngdekraft.md) (tyngdekraften som gåde: "Hvordan virker tyngdekraften i det allermindste?", faktagrundlag, plads midt på skinnen og forslaget om "Før Big Bang" som reserve). **Ikke besluttet:** Tabellen over gåderne er ikke ændret, før I har svaret (afsnit 8 i filen).
 - **Ikke til at bygge G4a-G4e:** Det er grafik og kode, og stoffet er tjekket.
 
 ## Spørgsmål til jer (14. november 2026, før G4a)
