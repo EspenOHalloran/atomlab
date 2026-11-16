@@ -17,7 +17,7 @@ import { OPGAVER } from './data/opgaver.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js'; // kun til "Prøv Molekyler" i pillen, når atom-opgaverne er klaret
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
 import { FØRSTE_ATOM } from './data/forloeb/foerste-atom.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, forløbVink } from './forloeb.js';
 import { tagVentForløb } from './gaa.js';
 import { hentetSkærm } from './skaerme.js';
 
@@ -201,7 +201,15 @@ const FØRSTE_ATOM_DEL = {
     neutroner: {
       start: trinStart(2, 0, 1),
       knapper: [
-        { ...plus('n', 'Neutron', 'neutron', 2), tæller: () => `${tilstand.n}/2` },
+        {
+          ...plus('n', 'Neutron', 'neutron', 2),
+          tæller: () => `${tilstand.n}/2`,
+          // Vinket siger, hvorfor elektronen skal med, hvis neutronerne er lagt i først (E14)
+          gør: () => {
+            ændr('n', 1);
+            if (tilstand.n === 2 && tilstand.e < 2) forløbVink('Kernen har to plus. Giv atomet en elektron mere, så der er lige mange plus og minus.');
+          },
+        },
         { ...plus('e', 'Elektron', 'elektron', 2), tæller: () => `${tilstand.e}/2` },
       ],
       færdig: () => tilstand.n === 2 && tilstand.e === 2,

@@ -27,7 +27,7 @@ export const FØRSTE_ATOM = {
         ],
       },
       gør: 'Giv atomet en elektron.',
-      så: 'Plus trækker i minus, så elektronen bliver ved kernen. Nu har du hydrogen, det mest almindelige grundstof i universet.',
+      så: 'Elektronen er minus, og plus trækker i minus, så den bliver ved kernen. Nu har du hydrogen, universets mest almindelige grundstof.',
       ord: ['elektron', 'grundstof'],
     },
     {
@@ -41,8 +41,9 @@ export const FØRSTE_ATOM = {
       },
       gør: 'Læg en proton mere i kernen.',
       // Ikke "plus skubber plus væk, SÅ den falder fra hinanden": To neutroner kan heller ikke holde sammen, så frastødningen
-      // er kun en del af grunden (docs/erfaringer/fakta-faelder.md). Scenen holder på kernen (den ryster), så man kan redde den.
-      så: 'Begge dele! To protoner er helium. Men plus skubber plus væk, og to protoner alene kan ikke holde sammen.',
+      // er kun en del af grunden (docs/erfaringer/fakta-faelder.md), så de to ting står ved siden af hinanden.
+      // Scenen holder på kernen (den ryster), så man kan redde den. Derfor "i virkeligheden" (E14).
+      så: 'Begge dele! To protoner er helium. Men kernen ryster: Plus skubber plus væk, og i virkeligheden holder to protoner alene ikke sammen.',
       ord: [],
     },
     {
@@ -54,7 +55,8 @@ export const FØRSTE_ATOM = {
     },
     {
       id: 'tabel',
-      spørg: 'Hydrogen og helium lyser nu i det periodiske system. Tryk på et af dem.',
+      // Siger kernesætningens anden halvdel (protonerne bestemmer grundstoffet) før "Det så du" (E14).
+      spørg: 'Grundstof nr. 1 og 2 lyser: én proton og to protoner. Tryk på et af dem.',
       gør: 'Tryk på H eller He.',
       så: null, // det sidste trin slutter med "Det så du" og kernesætningen
       ord: [],
