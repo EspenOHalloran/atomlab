@@ -25,9 +25,17 @@ function streg(punkter, farve, { bredde = 3, lys = null, stiplet = false, streg:
   });
   geo.setColors(farver);
   const mat = new LineMaterial({
-    color: 0xffffff, vertexColors: true, linewidth: bredde, transparent: true, depthWrite: false,
+    color: 0xffffff, vertexColors: true, linewidth: bredde * 1.3, transparent: true, depthWrite: false,
     blending: THREE.AdditiveBlending, dashed: stiplet, dashSize: s, gapSize: mellem,
   });
+  // Blød kant: Renderen har ingen kantudglatning, så en tynd streg får trappetrin. Tværs over stregen (vUv.x, -1 til 1)
+  // toner den ud mod kanten, og den er gjort 30 % bredere, så den ikke ser tyndere ud.
+  mat.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      'gl_FragColor = vec4( diffuseColor.rgb, alpha );',
+      'alpha *= 1.0 - smoothstep( 0.3, 1.0, abs( vUv.x ) );\n\t\t\tgl_FragColor = vec4( diffuseColor.rgb, alpha );',
+    );
+  };
   const linje = new Line2(geo, mat);
   if (stiplet) linje.computeLineDistances();
   return linje;
