@@ -27,7 +27,7 @@ Hvert trin er et opslag i bogen: billedet (scenen) og fortællerens linje med ha
 |---|---|---|---|---|---|
 | 1 *Haag, 1655* | Sådan så Galilei Saturn i 1610. Hvad tror du, de to små kugler er? | *To måner* / *To håndtag* / *Kikkerten snyder* | Slib linsen: gnid rundt på glasset, til billedet bliver skarpt | Med en bedre linse bliver kuglerne til to tynde arme. Huygens' kikkert var over 3 meter lang. | linse |
 | 2 *Den lille prik* | En svag prik ved Saturn flytter sig fra nat til nat. Hvad er den? | *En stjerne* / *En måne* / *En komet* | Træk nætterne frem, til prikken er tilbage, hvor den startede | Efter 16 nætter er den tilbage: en måne, den første ved Saturn. I dag hedder den Titan. | – |
-| 3 *Januar 1656* | Christiaan kommer hjem fra en lang rejse. Saturns arme er væk! Hvor er de blevet af? | *De er faldet af* / *De gemmer sig bag Saturn* / *Vi ser dem fra kanten* | Træk, så du ser Saturn fra en anden vinkel, til armene er helt væk | Armene er en tynd, flad ring. Fra kanten bliver den til en streg, som kikkerten ikke kan se. | – |
+| 3 *Januar 1656* | Christiaan kommer hjem fra en rejse. Saturns arme er væk! Hvor er de blevet af? | *De er faldet af* / *De gemmer sig bag Saturn* / *Vi ser dem fra kanten* | Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk (rettet i H2) | Armene er en tynd, flad ring. Fra kanten bliver den til en streg, som kikkerten ikke kan se. | – |
 | 4 *Hemmeligheden* | Saturn er stadig rund. Hvordan viser han, at han kender svaret, uden at røbe det? | *Han holder det hemmeligt* / *Han blander bogstaverne* / *Han fortæller det til alle* | Find ordet ANNULO ("med en ring") i bunkerne af bogstaver | Et anagram: beviset på, at han vidste det først. I oktober 1656 kom armene igen, som han havde sagt. | anagram |
 | 5 **Det så du** | Kernesætningen og sætningen fra 1659: "Den er omgivet af en tynd, flad ring, der ingen steder hænger fast, og som hælder mod ekliptika." | – | Vælg en vej | – | – |
 
@@ -138,3 +138,4 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/huygens
 5. **"Lav dit eget anagram":** i H3.
 6. **Skriften:** IM Fell English som woff2 med kun de tegn, vi bruger (fonttools og brotli installeres i sessionen). Domænet var allerede åbent.
 7. **Go til H1** 16. november 2026.
+8. **Go til H2** 16. november 2026. Fortællingens opslag efter forløbet: ringen fra trin 3, man selv kan dreje, og "Fortæl det igen ›" (anbefalingen). Gør-teksten i trin 3 er rettet, fordi scenen starter med armene væk: "Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk." Ét go pr. trin (A rammen, B linsen, C nætterne, D ringen, E tests).
