@@ -19,7 +19,7 @@ const sætSkyder = (v) => T((v) => { const i = document.querySelector('#kosmosSt
 
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForTimeout(1500);
-tjek('Big Bang er det første fænomen i listen', (await T(() => atomlabTest.kosmos.fænomener[0])) === 'bigbang');
+tjek('forsiden og så Big Bang er de første i listen', (await T(() => atomlabTest.kosmos.fænomener.slice(0, 2).join())) === 'oversigt,bigbang');
 
 // ---------- Big Bang ----------
 await T(() => atomlabTest.kosmos.vælg('bigbang'));
