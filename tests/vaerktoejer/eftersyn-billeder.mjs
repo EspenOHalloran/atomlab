@@ -2,7 +2,7 @@
 // af fænomenerne, forløb i træk og lagene ("Hvorfor?" og "For nørder"). Afløser fable-billeder.mjs (F0), hvis billeder
 // bliver liggende i docs/fable/billeder/.
 // Brug: node tests/vaerktoejer/eftersyn-billeder.mjs [mappe]   (standard: docs/fable/eftersyn/billeder/, ca. 25 minutter)
-//       KUN=menu,dele,faenomener,forloeb,lag vælger afsnit. VENT=5000 er ventetiden, før et billede tages (ms).
+//       KUN=menu,dele,faenomener,forloeb,lag,nye vælger afsnit, og STR=pc,tablangs,tabhoej,tlf størrelserne ("nye" er Gåderne og Opdagelserne indefra, E20). VENT=5000 er ventetiden, før et billede tages (ms).
 // Billederne gemmes som JPG med en liste (LISTE.md), der siger, hvad hvert billede viser. Mappen tømmes først.
 import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -18,6 +18,8 @@ const NAVN = { pc: 'pc 1440 × 900', tablangs: 'tablet på langs 1280 × 800', t
 const VENT = Number(process.env.VENT ?? 5000);
 const KUN = process.env.KUN?.split(',');
 const med = (afsnit) => !KUN || KUN.includes(afsnit);
+const STR = process.env.STR?.split(','); // STR=tablangs,tlf vælger størrelserne (standard: alle)
+const kun = (liste) => liste.filter((s) => !STR || STR.includes(s));
 const liste = [];
 const fejl = [];
 const mangler = [];
@@ -70,7 +72,7 @@ async function vælg(page, id) {
 
 // ---------- 1. Menuen: hver verden forrest ----------
 if (med('menu')) {
-  for (const størrelse of ['pc', 'tabhoej', 'tablangs', 'tlf']) {
+  for (const størrelse of kun(['pc', 'tabhoej', 'tablangs', 'tlf'])) {
     const page = await nySide(størrelse);
     await page.waitForTimeout(VENT);
     const verdener = await page.evaluate(() => atomlabTest.karrusel.verdener().map((v) => v.id));
@@ -100,6 +102,8 @@ const DELE = [
   ['solsystem', '#solsystem', 'Solsystemet, som man møder det'],
   ['kosmos', '#kosmos', 'Kosmos, som man møder det'],
   ['ordbog', '#ordbog', 'Ordbogen (Biblioteket)'],
+  ['gaader', '#gaader', 'Gåderne første gang: skinnen, hvor kun Antistof lyser'],
+  ['opdagelser', '#opdagelser', 'Opdagelserne: hylden med de ti bøger'],
 ];
 async function byg(page, p, n, e) {
   await page.click('#knapRyd');
@@ -112,11 +116,11 @@ async function forbered(page, navn) {
   if (navn === 'batteri') await page.evaluate(() => { atomlabTest.batteri.tilstand('oplad'); atomlabTest.batteri.kør(7); });
 }
 if (med('dele')) {
-  for (const størrelse of ['pc', 'tabhoej', 'tablangs', 'tlf']) {
+  for (const størrelse of kun(['pc', 'tabhoej', 'tablangs', 'tlf'])) {
     const page = await nySide(størrelse);
     for (const [navn, hash, tekst] of DELE) {
       // Alle dele på pc og tablet på højkant, de vigtigste også på tablet på langs og telefon
-      if (['tablangs', 'tlf'].includes(størrelse) && !['vaerksted', 'molekyle', 'fusion', 'liv', 'solsystem', 'kosmos'].includes(navn)) continue;
+      if (['tablangs', 'tlf'].includes(størrelse) && !['vaerksted', 'molekyle', 'fusion', 'liv', 'solsystem', 'kosmos', 'gaader', 'opdagelser'].includes(navn)) continue;
       await prøv(`${navn} (${størrelse})`, async () => {
         await gåTil(page, hash);
         await forbered(page, navn);
@@ -273,7 +277,7 @@ if (med('forloeb')) {
 
 // ---------- 5. Lagene: et åbent "Hvorfor?"-kort og "For nørder" ----------
 if (med('lag')) {
-  for (const størrelse of ['pc', 'tabhoej']) {
+  for (const størrelse of kun(['pc', 'tabhoej'])) {
     const page = await nySide(størrelse);
     await prøv(`"Hvorfor?"-kort (${størrelse})`, async () => {
       await vælg(page, 'solstorm');
@@ -303,8 +307,47 @@ if (med('lag')) {
   }
 }
 
+// ---------- 6. De nye dele indefra: Gåderne og Opdagelserne (E20, 16. november 2026) ----------
+if (med('nye')) {
+  for (const størrelse of kun(['tablangs', 'tabhoej', 'tlf'])) {
+    const page = await nySide(størrelse);
+    await prøv(`Gåderne: Antistof-kortet (${størrelse})`, async () => {
+      await gåTil(page, '#gaader');
+      await page.waitForTimeout(VENT);
+      await page.evaluate(() => atomlabTest.gaader.visGåde('antistof'));
+      await page.waitForFunction(() => atomlabTest.gaader.scene()?.klar(), null, { timeout: 20000 });
+      await page.waitForTimeout(VENT);
+      await skud(page, 'gaade-antistof-1', 'Gåderne: kortet Antistof, første trin');
+      await page.evaluate(() => { const s = atomlabTest.gaader.scene(); for (const [x, y] of [[-2, 1], [1.5, -0.5], [0, 2]]) { s.tryk(x, y); s.spol(0.6); } });
+      await page.waitForTimeout(2500);
+      await skud(page, 'gaade-antistof-2', 'Gåderne: kortet Antistof efter tre tryk i mørket');
+    });
+    await prøv(`Gåderne efter Antistof (${størrelse})`, async () => {
+      await page.evaluate(() => { localStorage.setItem('atomlabGaader', JSON.stringify({ antistof: Date.now() })); localStorage.setItem('atomlabGaaderSkinne', '1'); });
+      await page.reload();
+      await page.waitForFunction(() => window.atomlabTest);
+      await gåTil(page, '#gaader');
+      await page.waitForTimeout(VENT + 2000);
+      await skud(page, 'gaade-skinne-efter', 'Gåderne: skinnen, når Antistof er klaret (alle lys tændt)');
+    });
+    await prøv(`Opdagelserne: bogen om Huygens (${størrelse})`, async () => {
+      await gåTil(page, '#opdagelser');
+      await page.waitForTimeout(VENT);
+      await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
+      await page.waitForTimeout(VENT);
+      await skud(page, 'bog-huygens-forside', 'Opdagelserne: bogen om Huygens åbnet (forsiden)');
+      await page.evaluate(() => atomlabTest.opdagelser.bladr(1));
+      await page.waitForTimeout(2500);
+      await page.evaluate(() => atomlabTest.opdagelser.fortælling?.());
+      await page.waitForTimeout(VENT);
+      await skud(page, 'bog-huygens-fortaelling', 'Opdagelserne: fortællingen "Saturns ører" i bogen om Huygens, første trin');
+    });
+    await page.context().close();
+  }
+}
+
 await b.close();
-writeFileSync(UD + 'LISTE.md', `# Skærmbilleder til eftersynet (E0)
+writeFileSync(UD + 'LISTE.md', `# Skærmbilleder til eftersynet (${KUN ? 'E20' : 'E0'})
 
 Taget ${new Date().toISOString().slice(0, 10)} med \`tests/vaerktoejer/eftersyn-billeder.mjs\` i testbrowseren, der ikke har et grafikkort (den tegner med CPU'en). Gløden og farverne kan derfor se lidt anderledes ud end på en rigtig skærm, og animationerne er spolet frem (de kører ikke i realtid). Guiderne er sprunget over, undtagen på billederne "første gang". Touch-størrelserne kører med \`LAV_KVALITET\` som en rigtig tablet. Farens billeder fra en rigtig tablet ligger i [../tablet/](../tablet/LISTE.md).
 
