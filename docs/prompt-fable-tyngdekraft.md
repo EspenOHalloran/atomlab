@@ -1,5 +1,7 @@
 # Prompt: Fable og tyngdekraften som gåde
 
+*Lavet 16. november 2026: Svaret står i [fable/E19-tyngdekraft.md](fable/E19-tyngdekraft.md).*
+
 *Skrevet 16. november 2026 efter jeres spørgsmål under prøven af Gåderne: "Bør tyngdekraft ikke være en gåde? Den er velbeskrevet i form af, hvor meget den trækker, men ingen ved vel *hvorfor* den trækker?" **Jeres svar:** Ideen skal arbejdes mere, og Fable skal gøre det. Det må gerne prioriteres. Hører til sporet Småting. **Fable kan kun bruges til og med 16. november 2026** ([plan-fable.md](plan-fable.md), "Status"), så tag den først i køen, hvis den skal nå det. Kun dokumenter, ingen kode.*
 
 ## Sådan startes den
@@ -31,3 +33,6 @@ Afgør, om og hvordan **tyngdekraften** kan blive en gåde i Gåderne ([plan-gaa
 
 ## Hvad der ikke skal ske
 Ingen kode og ingen ændringer i `js/`. Ingen nye kort i programmet. Opus bygger bagefter, når I har sagt go.
+
+## Bagefter: Opus' noter (ny session, Opus, høj effort)
+> Spor: Småting. Navngiv chatten "Småting · E19-noter: tyngdekraften". Læs `docs/lige-nu/smaating.md`, `docs/fable/E19-tyngdekraft.md` og tabellen over gåderne i `docs/plan-gaader-3d.md`. Skriv korte noter i `docs/fable/E19-tyngdekraft-noter.md`: Tjek forslagene mod `js/data/gaader.js`, `js/gaader.js` (første gang) og `js/kosmos/rumtid.js`, og slå det op, der er mærket H. Skriv jeres svar på afsnit 8 og det besluttede ind i planen. Er der go til "Hvorfor?"-spørgsmålet i Rumtid, så byg det (tjekliste D, `/faktatjek`, `/faerdig`). Ingen ny gåde bygges uden et go.
