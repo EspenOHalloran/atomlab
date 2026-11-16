@@ -113,7 +113,12 @@ Prøven af Antistof peger samme vej: Dér er scenen levende, mens man gætter, o
 ## Det, jeg ikke kunne se
 Hvordan det føles med fingre, lyden, overgangene i bevægelse, farten på den rigtige tablet og tablettens tilbage-knap. Fund 3 (tilbage-knappen), 4 (om 2-3 sekunder er rigtigt) og 10 (kantudglatning) skal derfor prøves på tabletten, før de bygges færdigt. Alle skærmbilleder er fra testbrowseren uden grafikkort.
 
+## Jeres svar (16. november 2026)
+- **Stilguiden:** Ja, den gælder som faste regler for alt nyt fra i dag (A, B og C).
+- **Forløbet:** Reglerne i B bygges ind i den fælles Forløb-klods, så alle otte forløb får dem. "Saturns ører" rettes i samme session.
+- **Først:** Forløbet som sti (fund 2 og tillægget).
+
 ## Næste skridt
-1. I siger go eller nej til principperne i [stilguide.md](../stilguide.md) og til rækkefølgen nedenfor.
+1. Principperne i [stilguide.md](../stilguide.md) er godkendt (se ovenfor). Resten af rækkefølgen nedenfor er min anbefaling.
 2. Opus skriver noter (`E20-ux-nyt-noter.md`): tjekker fundene mod koden og lægger dem i køreplanen.
 3. Min anbefalede rækkefølge: fund 2 (forløbet, også for Huygens) → fund 6 og 9 og de små forslag (en samlet session med småting) → fund 4 og grebet "Grundstoffet flyver hjem" → fund 3 → fund 1, 5 og 7 sammen med byggeklodserne i Serie 2 nr. 5.

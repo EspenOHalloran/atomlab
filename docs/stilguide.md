@@ -1,6 +1,6 @@
 # Stilguiden: sådan ser AtomLab ud, og sådan fører det én
 
-*Læses sammen med [Retningen](retning.md), før en ny del, skærm, knap eller et forløb planlægges eller bygges. Skrevet af Fable 16. november 2026 ud fra eftersynet [E20](fable/E20-ux-nyt.md), fordi I ønskede, at fundene bliver til blivende designprincipper. Gælder alt nyt fra den dag. De gamle dele rettes én ad gangen (listen står nederst). Ændres kun med jeres go. Højst ca. 8 KB.*
+*Læses sammen med [Retningen](retning.md), før en ny del, skærm, knap eller et forløb planlægges eller bygges. Skrevet af Fable 16. november 2026 ud fra eftersynet [E20](fable/E20-ux-nyt.md), fordi I ønskede, at fundene bliver til blivende designprincipper. **Godkendt af jer 16. november 2026:** A, B og C gælder som faste regler for alt nyt fra den dag, og B bygges ind i den fælles Forløb-klods, så alle forløb får det. De gamle dele rettes én ad gangen (listen står nederst). Ændres kun med jeres go. Højst ca. 8 KB.*
 
 **Målet (jeres fem ord):** logisk, intuitivt, elegant, flot, og fuldt af glæde og undring. Er to regler i strid, vinder den, der gør det nemmest at finde rundt.
 
