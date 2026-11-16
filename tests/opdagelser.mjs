@@ -25,7 +25,7 @@ for (const b of byggede()) {
   if (!existsSync(PROJEKT + b.portræt)) fejlListe.push(`${b.id}: portrættet findes ikke`);
   const t = await b.tekster();
   if (t.OPSLAG[0]?.slags !== 'forside' || !t.FORSIDE?.spørgsmål || !t.FORSIDE?.portrætAlt) fejlListe.push(`${b.id}: forsiden`);
-  if (!t.OPSLAG.every((o) => ['forside', 'tom'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
+  if (!t.OPSLAG.every((o) => ['forside', 'scene', 'tom'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
 }
 tjek('listen: ti bøger i årets rækkefølge med navn, år og linje, og en bygget bog har titel, stil, portræt og forside', !fejlListe.length, fejlListe.join('; '));
 tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåderne med status prøve',

@@ -138,3 +138,4 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/huygens
 5. **"Lav dit eget anagram":** i H3.
 6. **Skriften:** IM Fell English som woff2 med kun de tegn, vi bruger (fonttools og brotli installeres i sessionen). Domænet var allerede åbent.
 7. **Go til H1** 16. november 2026.
+8. **Go til H2** 16. november 2026. Fortællingens opslag efter forløbet: ringen fra trin 3, man selv kan dreje, og "Fortæl det igen ›" (anbefalingen). Gør-teksten i trin 3 er rettet, fordi scenen starter med armene væk: "Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk." Ét go pr. trin (A rammen, B linsen, C nætterne, D ringen, E tests).

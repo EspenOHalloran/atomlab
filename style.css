@@ -1251,6 +1251,18 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .bog-pil { min-width: 56px; min-height: 44px; border-radius: 22px; border: 1px solid var(--panel-kant); background: var(--panel); color: var(--tekst); font-size: 26px; line-height: 1; cursor: pointer; }
 #opdagelser .bog-pil:disabled { opacity: 0.3; cursor: default; }
 #opdagelser .bog-sidetal { min-width: 4em; text-align: center; color: var(--svag); font-size: 15px; font-variant-numeric: tabular-nums; }
+#opdagelser .bog-scene-opslag { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 6px; height: 100%; min-height: 0; } /* Fortællingen (H2): kapitlets titel og tegningen fra js/bog/<id>.js */
+#opdagelser .bog-kapitel { margin: 0; text-align: center; font-family: var(--bog-skrift); font-weight: 400; font-size: clamp(22px, 3vw, 32px); line-height: 1.1; }
+#opdagelser .bog-scene { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 8px; }
+#opdagelser .hs-lærred { position: relative; min-height: 120px; }
+#opdagelser .hs-lærred canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+#opdagelser .hs-under { display: grid; justify-items: center; gap: 8px; }
+#opdagelser .hs-under:empty { display: none; }
+#opdagelser .hs-linje { margin: 0; font-size: 16px; line-height: 1.4; text-align: center; }
+#opdagelser .hs-igen { min-height: 44px; padding: 0 22px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
+#opdagelser.i-forløb > .opd-rum { display: grid !important; grid-area: vindue !important; } /* Forløbet i bogen: bogen er scenen, og bladringen er væk imens */
+#opdagelser.i-forløb .bog-bund { display: none; }
+#opdagelser.i-forløb .forløb-linje { margin-bottom: 8px; }
 @media (max-width: 820px) and (orientation: portrait) { #opdagelser .bog-forside { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 14px; } #opdagelser .bog-forside::before { display: none; } #opdagelser .bog-portræt img { max-height: 34vh; } #opdagelser .bog-forside-tekst { justify-items: center; text-align: center; gap: 12px; } #opdagelser .bog-galilei { width: min(240px, 100%); } } /* Højkant: portrættet øverst og teksten under */
 @media (max-height: 500px) and (orientation: landscape) { #opdagelser .bog-ramme { padding: 10px 16px; } #opdagelser .bog-portræt img { max-height: calc(100vh - 170px); } #opdagelser .bog-portræt figcaption { display: none; } #opdagelser .bog-titel { font-size: 26px; } #opdagelser .bog-forside-tekst { gap: 8px; } #opdagelser .bog-galilei { width: 170px; } #opdagelser .bog-galilei figcaption { margin-top: 2px; } #opdagelser .bog-navn { font-size: 17px; } #opdagelser .bog-begynd { min-height: 44px; font-size: 16px; } #opdagelser .opd-ryg { height: 120px; } #opdagelser .opd-plads:nth-child(n) .opd-ryg { height: 120px; } #opdagelser .opd-omslag { width: 100px; height: 150px; } #opdagelser .opd-omslag-titel { font-size: 16px; } #opdagelser .opd-hylde-side { gap: 26px; } }
 @media (max-width: 560px) { #opdagelser .opd-ryg, #opdagelser .opd-plads:nth-child(n) .opd-ryg { width: 44px; height: 128px; font-size: 14px; } #opdagelser .opd-omslag { width: 112px; height: 168px; margin: 0 4px; } #opdagelser .opd-omslag-titel { font-size: 17px; } #opdagelser .opd-hylde { row-gap: 34px; } #opdagelser .opd-hylde-side { gap: 30px; } #opdagelser .bog-titel { font-size: 28px; } #opdagelser .bog-portræt img { max-height: 26vh; } #opdagelser .bog-galilei { width: min(200px, 100%); } #opdagelser .bog-ramme { padding: 12px; } #opdagelser .bog-bund { gap: 8px; } }
