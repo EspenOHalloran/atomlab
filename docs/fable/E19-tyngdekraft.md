@@ -143,3 +143,25 @@ Listen bliver: Kvanteverdenen, Antistof, Det periodiske system, Livets begyndels
 2. **Pladsen på skinnen:** A (mit råd): i midten ved 2 mm. B: i den mindste ende, og så skal første gang låses til Antistof i koden.
 3. **Listen:** A (mit råd): 10 gåder, og "Før Big Bang" bliver reserve. B: 11 gåder.
 4. **"Hvorfor?"-spørgsmålet i Rumtid nu?** A (mit råd): ja, det er lille og svarer på jeres spørgsmål dér, hvor det opstår. B: vent, til kortet bygges.
+
+## 9. Tillæg: jeres svar og min vurdering (16. november 2026)
+**Jeres svar på afsnit 8:**
+- *Gåden:* "Måske skal vi vente. Måske skal det være ingen gåde. Men jeg tænkte bare, at det stadig er en gåde, 'hvorfor' store mængder stof trækker i andet stof. Jeg er med på rumtid og stoffet ligesom dugen, der trækkes ned, når der ligger noget tungt. Men hvis svaret bare er, at det følger af relativitetsteorien, så er der jo ikke mere i det. Men jeg forstår det stadig ikke. Hvis det bedre passer til en uddybning af Rumtid eller et andet sted, så lad os kigge på det."
+- *Spørgsmålet i Rumtid ("Men hvorfor krummer masse rumtiden?"):* "Det er præcis det, jeg har ment skulle være gåden hele tiden. Men om den ligger bedre et andet sted end som en gåde, må du vurdere."
+- *Pladsen og listen:* venter, til det er afklaret, om det skal være en gåde.
+
+**Min vurdering:**
+1. **I har ikke overset noget.** Svaret er *ikke*, at det følger af relativitetsteorien. Teorien siger, *at* stof krummer rumtiden, og præcis hvor meget, og det er målt. Den siger ikke hvorfor. Einsteins ligning er en påstand, naturen har bestået prøven på, ikke en forklaring på sig selv. Ingen forstår det i den forstand, I mener.
+2. **Dugen er en del af grunden til, at det føles uforklaret.** På dugen trykker kuglen ned, fordi den er tung, altså på grund af tyngdekraft. Billedet bruger det, det skal forklare (Rumtid siger det i "Ærligt talt"). Spørgsmålet opstår derfor i Rumtid, og dér skal det først besvares.
+3. **Der findes ét skridt mere, som er målt,** og som programmet kun har som en halv sætning: Tæt på noget tungt går tiden en lille smule langsommere (ure løftet 33 cm, fakta-tid.md), og ting falder den vej, tiden går langsomst (lærebogsviden, **H**, skal faktatjekkes). Det er det, "krum rumtid" mest betyder for et æble. Men hvorfor stof får tiden til at gå langsommere, er det samme spørgsmål igen.
+4. **Som kort i Gåderne står jeres spørgsmål svagere alene.** (a) Titlen kræver, at han kender krum rumtid i forvejen. (b) Kernesætningens sidste halvdel ("hvordan forskerne prøver at løse den") er et skridt væk: Ingen kan måle et "hvorfor" direkte. (c) Et dybere lag vil nok igen svare på "hvordan" og skubbe "hvorfor" et trin ned, sådan som Einstein gjorde med Newton.
+5. **Men det er hjertet i kortet fra afsnit 2-4.** Dem, der leder efter et hvorfor, leder efter det næste lag: at tyngdekraften følger af noget dybere. Der er bud. Einsteins ligning kan udledes som en slags varmelære for rumtiden ("the Einstein equation is an equation of state", Jacobson 1995, arXiv:gr-qc/9504004, **K**), og tyngdekraften er foreslået som en kraft, der opstår af noget andet ("space is emergent", Verlinde 2010, arXiv:1001.0785, **K**). I strengteorien giver en bestemt partikel af sig selv en kraft, der ikke kan skelnes fra tyngdekraften (Wikipedia "Graviton", **K**). Ingen af dem er prøvet. Det første, der *kan* måles, er, om tyngdekraften følger kvantereglerne, og det er forsøgene på bordet. Bygges kortet, står jeres spørgsmål øverst i "Hvad ved vi ikke?", og titlen fra afsnit 2 bliver, fordi den kan siges uden forkundskaber.
+
+**Mit råd nu:**
+- **Først Rumtid (lille, Opus):** spørgsmålet "Men hvorfor krummer stof rumtiden?" med et svar, der er tydeligere end udkastet i afsnit 5:
+  > Det ved ingen. Einsteins teori siger, *at* stof krummer rumtiden, og præcis hvor meget, og det er målt mange gange. Men den siger ikke hvorfor. Newton skrev det samme om sin lov i 1713: Han kendte ikke grunden.
+
+  Og i "For nørder": skridtet med tiden (punkt 3) og de tre bud (punkt 5), mærket som bud.
+- **Gåden venter**, som I selv hælder til, til Kvantefysik forløb 1 findes. Trin 3 skal alligevel bruge dets ord. Så afgøres det, om kortet bygges, og pladsen og listen venter med.
+- **En mulig uddybning af Rumtid senere:** "Urenes stige" (idé 2 i [plan-tid.md](../plan-tid.md)), hvor man selv sætter ure i forskellig højde og ser, at ting falder mod den langsomme tid. Det er det, der ville give mest ny forståelse af jeres spørgsmål, og det er målt fysik. Kun noteret, ikke besluttet.
+
