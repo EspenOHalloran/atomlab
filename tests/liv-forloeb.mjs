@@ -83,6 +83,10 @@ tjek('trin 2: gættet først, og et tryk på en tråd går direkte til stigen (u
 await page.click('#liv .fl-næste');
 await page.click('#liv .fl-gæt >> nth=0');
 await stille();
+// Fable E14: basernes farver stort i linjen
+const nøgle = await T(() => [...document.querySelectorAll('#liv .fl-nøgle .fl-mærke')].map((m) => ({ t: m.textContent, h: m.getBoundingClientRect().height, f: getComputedStyle(m).backgroundColor })));
+tjek('trin 3: nøglen A, T, G og C står i linjen, mindst 44 px høj og i fire farver',
+  nøgle.map((m) => m.t).join('') === 'ATGC' && nøgle.every((m) => m.h >= 44) && new Set(nøgle.map((m) => m.f)).size === 4, JSON.stringify(nøgle));
 const sekvens = (await T(() => atomlabTest.liv.sekvens()));
 // Et G–C-trin nær midten (dem i enderne kan være uden for billedet, når stigen står tæt på)
 const midt = (sekvens.length - 1) / 2;
@@ -106,7 +110,12 @@ const PARTNER = { A: 'T', T: 'A', G: 'C', C: 'G' };
 const forkert = { A: 'G', T: 'C', G: 'A', C: 'T' }[l.byg.streng[5]];
 await page.click(`#liv .fl-handling.base-${forkert}`);
 const efterForkert = (await L()).byg.bygget;
-for (let i = 5; i < 8; i++) await page.click(`#liv .fl-handling.base-${PARTNER[l.byg.streng[i]]}`);
+const forkertVink = { vink: await T(() => document.querySelector('#liv .fl-vink')?.textContent ?? ''), advarsel: await T(() => [...document.querySelectorAll('.undertekst')].some((u) => /⚠/.test(u.textContent) && u.offsetParent !== null)) };
+await page.click(`#liv .fl-handling.base-${PARTNER[l.byg.streng[5]]}`);
+const vinkVæk = !(await T(() => document.querySelector('#liv .fl-vink')));
+tjek('trin 4: et forkert bogstav giver et vink i linjen ("passer ikke til", "A hører sammen med T"), ikke ⚠-boksen, og vinket går væk ved det rigtige',
+  new RegExp(`^${l.byg.streng[5]} passer ikke til ${forkert}\\. A hører sammen med T, og G med C\\.$`).test(forkertVink.vink) && !forkertVink.advarsel && vinkVæk, JSON.stringify({ forkertVink, vinkVæk }));
+for (let i = 6; i < 8; i++) await page.click(`#liv .fl-handling.base-${PARTNER[l.byg.streng[i]]}`);
 await fase('slut');
 const slut = await T(() => ({ tekst: document.querySelector('#liv .fl-tekst').textContent, lille: document.querySelector('#liv .fl-lille')?.textContent, veje: document.querySelectorAll('#liv .fl-vej').length }));
 const ikkeByg = await T(() => !JSON.parse(localStorage.getItem('atomlabFremgang')).opgaver['liv-byg']);

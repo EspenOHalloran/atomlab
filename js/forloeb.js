@@ -266,6 +266,8 @@ function tegn() {
         + `${b.kugle ? `<span class="kugle ${b.kugle}"></span>` : ''}${esc(b.tekst)}${tæller}</button>`;
     }).join('');
     if (k.visMig && d.visMig) række += '<button class="fl-vismig" data-nav="vismig">Vis mig</button>';
+    // En nøgle (fx basernes farver i Liv): mærker, der ikke kan trykkes på. [{ tekst, klasse }]
+    if (d.nøgle) række = `<span class="fl-nøgle" aria-label="Nøgle">${d.nøgle.map((m) => `<span class="fl-mærke ${m.klasse ?? ''}">${esc(m.tekst)}</span>`).join('')}</span>` + række;
   } else if (k.fase === 'så') {
     html += `<p class="fl-tekst fl-så" data-ord-kun="${ord}">${esc(t.så)}</p>`;
   } else {
