@@ -5,21 +5,50 @@
 // lavFortælling(felt, { rolig, tekster, påIgen }) fylder opslagets felt (.bog-scene fra js/bog.js) og giver
 //   forløbDel(data)  det, Forløb-klodsen (js/forloeb.js) skal bruge pr. trin-id (start, knapper, færdig, visMig)
 //   fri()            laboratoriet efter forløbet: ringen, man selv kan dreje, og "Fortæl det igen" (påIgen)
-//   fjern()          stopper tegningen og lytterne
+//   fjern()          stopper tegningen, timerne og lytterne
 //   test             til testadgangen (tilstanden og handlingerne)
 //
+// Trinene (H2, 16. november 2026):
+//   linse    Galileis tre kugler (tavlens nr. I) er slørede. Man gnider på glasset (eller trykker "Slib linsen"), og
+//            billedet bliver skarpt: kuglerne vokser sammen til Huygens' tynde arme fra 1655 (s. 18 og 46)
+//   naetter  Saturn og en svag prik (Titan) i den rigtige afstand (20,3 gange Saturns radius). Én skyder for nætterne fra
+//            25. marts 1655. Efter 16 nætter er prikken tilbage ved sit mærke (i dag 15,945 døgn). Rækken "* O" som s. 16-17
+//   kanten   Saturn står med ringen på kant (januar 1656, s. 16). Man trækker op og ned (vinklen B), og tavlens tegninger
+//            lyser op, når ringen ligner dem. Tilbage ved kanten forsvinder armene, og billedet løfter sig: Kikkertens
+//            uskarphed og synsfelt forsvinder, og man ser den samme ring skråt fra
+//
 // Saturn tegnes som en kugle med en flad ring (indre kant 1,53 og ydre 2,27 gange Saturns radius: B-ringens inderkant og
-// A-ringens yderkant). B er vinklen, vi ser ringen fra (0 = fra kanten). Kikkertens uskarphed laves ved at tegne i lav
-// opløsning og forstørre (virker også, hvor lærredets filter ikke findes).
+// A-ringens yderkant). B er vinklen, vi ser ringen fra (0 = fra kanten, højst ca. 27° fra Jorden). Snyd, der siges i
+// nørd-teksten: Kikkertens uskarphed er gjort ens i alle retninger, og Saturn i trin 1 og 3 er tegnet meget større end
+// i en rigtig kikkert. Kikkertens uskarphed laves ved at tegne i lav opløsning og forstørre (virker også på ældre iPads,
+// hvor lærredets filter ikke findes).
+
+import { forløbFase } from '../forloeb.js';
 
 const FIGUR = '#f3ead7'; // tavlens hvide figurer
 const BUND = '#1d1a17'; // tavlens mørke bund
 const BLÆK = '#2b1f17';
 const RING_IND = 1.53, RING_UD = 2.27;
+const TITAN_AFSTAND = 20.3; // Titans bane i Saturn-radier (1.221.870 km / 60.268 km)
+const TITAN_DØGN = 15.945;
+const NAT_MÅL = 16; // Huygens' eget tal: ca. 16 dage (s. 26-27)
+const NAT_MAKS = 20;
+const B_MAKS = 27; // ringens største vinkel set fra Jorden (ca. 27°)
+const B_ÅBEN = 12; // så langt skal ringen åbnes i trin 3, før kanten tæller
+const B_1655 = 5; // armene i 1655: en smal ring (tegnet efter s. 18)
 const GRAD = Math.PI / 180;
+const MÅNEDER = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+
+// Tavlens tegninger (ved s. 35), som lyser op i trin 3, når ringen ligner dem. fra-til er |B| i grader.
+const TAVLE = [
+  { id: 'hevelius', nr: 'VI', navn: 'Hevelius', fra: 5, til: 11.5 },
+  { id: 'divini', nr: 'X', navn: 'Divini, 1646-1648', fra: 11.5, til: 18.5 },
+  { id: 'riccioli', nr: 'IX', navn: 'Riccioli, 1648-1650', fra: 18.5, til: 28 },
+];
 
 const glat = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
 const mod = (a, b, t) => a + (b - a) * t;
+const klem = (x, a, b) => Math.max(a, Math.min(b, x));
 
 // Den prikkede bund (som tavlens fine kobberstik): én flise, der gentages
 function lavPrikker() {
@@ -41,13 +70,15 @@ function lavPrikker() {
 
 // Saturn: kuglen og ringen set fra vinklen B (grader, + ovenfra, - nedefra). R er radius i px. Ringens bageste halvdel
 // tegnes først, så kuglen, så den forreste halvdel. Striben over kuglen (s. 16-18) flytter sig med B: midt på, når ringen
-// står på kant, over armene i 1655 og under dem i oktober 1656.
+// står på kant, over armene i 1655 og under dem i oktober 1656. Står ringen helt på kant, er den næsten usynlig.
 export function tegnSaturn(g, x, y, R, B, alfa = 1) {
   const sinB = Math.sin(B * GRAD);
-  const aUd = RING_UD * R, bUd = Math.max(0.6, Math.abs(sinB) * aUd);
+  const aUd = RING_UD * R, bUd = Math.max(0.35, Math.abs(sinB) * aUd);
   const aInd = RING_IND * R, bInd = Math.abs(sinB) * aInd;
+  const ringAlfa = alfa * mod(0.25, 1, glat(0, 1.5, Math.abs(B)));
   const ring = (halv) => {
     g.save();
+    g.globalAlpha = ringAlfa;
     g.beginPath();
     // Bageste halvdel ligger over midten set ovenfra (B > 0) og under set nedefra
     const op = (halv === 'bag') === (B >= 0);
@@ -60,14 +91,14 @@ export function tegnSaturn(g, x, y, R, B, alfa = 1) {
     g.restore();
   };
   g.save();
-  g.globalAlpha = alfa;
   g.fillStyle = FIGUR;
   ring('bag');
   // Kuglen (lidt fladtrykt som den rigtige: 54.364 / 60.268 km)
+  g.globalAlpha = alfa;
   g.beginPath();
   g.ellipse(x, y, R, R * 0.92, 0, 0, 2 * Math.PI);
   g.fill();
-  // Striben: en mørk, skraveret bånd over kuglen
+  // Striben: et mørkt bånd over kuglen
   g.save();
   g.beginPath();
   g.ellipse(x, y, R, R * 0.92, 0, 0, 2 * Math.PI);
@@ -77,12 +108,14 @@ export function tegnSaturn(g, x, y, R, B, alfa = 1) {
   g.fillRect(x - R, sy - R * 0.06, 2 * R, R * 0.12);
   g.restore();
   ring('for');
-  // Ringens forreste kant over kuglen får en fin, mørk streg, så den kan ses mod den hvide kugle
+  // Ringens forreste kanter får en fin, mørk streg, så ringen kan ses foran den hvide kugle
   if (bInd > 1) {
-    g.strokeStyle = 'rgba(40, 32, 26, 0.5)';
+    g.globalAlpha = alfa;
+    g.strokeStyle = 'rgba(40, 32, 26, 0.55)';
     g.lineWidth = Math.max(0.6, R * 0.025);
+    const [a0, a1] = B >= 0 ? [0, Math.PI] : [Math.PI, 2 * Math.PI];
     g.beginPath();
-    g.ellipse(x, y, aInd, bInd, 0, B >= 0 ? 0 : Math.PI, B >= 0 ? Math.PI : 2 * Math.PI);
+    g.ellipse(x, y, aInd, bInd, 0, a0, a1);
     g.stroke();
   }
   g.restore();
@@ -101,6 +134,34 @@ export function tegnGalilei(g, x, y, R, alfa = 1) {
   g.restore();
 }
 
+// En lille tegning fra tavlen som SVG (samme stil som Galileis tegning på forsiden i js/bog.js)
+function tavleSVG(id) {
+  const bund = '<rect width="90" height="50" rx="3" fill="#1d1a17"/>';
+  const f = FIGUR, m = BUND;
+  let figur = '';
+  if (id === 'hevelius') {
+    // Kuglen med to "ører" (halvmåner) og et mørkt mellemrum (nr. VI)
+    figur = `<ellipse cx="25" cy="25" rx="11" ry="12" fill="${f}"/><ellipse cx="65" cy="25" rx="11" ry="12" fill="${f}"/>`
+      + `<circle cx="45" cy="25" r="17" fill="${m}"/><circle cx="45" cy="25" r="14" fill="${f}"/>`;
+  } else if (id === 'divini') {
+    // En ring om kuglen, der går foran den forneden (nr. X)
+    figur = `<ellipse cx="45" cy="25" rx="38" ry="15" fill="${f}"/><ellipse cx="45" cy="25" rx="30" ry="10" fill="${m}"/>`
+      + `<circle cx="45" cy="25" r="13" fill="${f}"/>`
+      + `<path d="M7 25a38 15 0 0 0 76 0h-8a30 10 0 0 1-60 0z" fill="${f}" stroke="${m}" stroke-width="0.8"/>`;
+  } else {
+    // En bred ellipse med to mørke halvmåner ved kuglen (nr. IX)
+    figur = `<ellipse cx="45" cy="25" rx="38" ry="20" fill="${f}"/><ellipse cx="45" cy="25" rx="28" ry="14" fill="${m}"/>`
+      + `<ellipse cx="45" cy="25" rx="15" ry="19" fill="${f}"/>`;
+  }
+  return `<svg viewBox="0 0 90 50" aria-hidden="true">${bund}${figur}</svg>`;
+}
+
+// Datoen n nætter efter Huygens' første iagttagelse af Titan, 25. marts 1655 (Holland brugte den gregorianske kalender)
+function nattensDato(n) {
+  const d = new Date(1655, 2, 25 + n);
+  return `${d.getDate()}. ${MÅNEDER[d.getMonth()]} ${d.getFullYear()}`;
+}
+
 export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = null } = {}) {
   felt.innerHTML = '<div class="hs-lærred"><canvas role="img"></canvas></div><div class="hs-under"></div>';
   const lærred = felt.querySelector('canvas');
@@ -111,17 +172,34 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   const prikker = g.createPattern(lavPrikker(), 'repeat');
   const sløret = document.createElement('canvas'); // til kikkertens uskarphed
   const sg = sløret.getContext('2d');
+  const skrift = getComputedStyle(felt).getPropertyValue('--bog-skrift').trim() || 'Georgia, serif';
 
-  // Tilstanden. trin: 'linse', 'naetter', 'kanten' eller 'fri'
-  const s = { trin: 'fri', B: 0, gjort: false };
+  // Tilstanden. trin: 'linse', 'naetter', 'kanten' eller 'fri'. vis… er det, der tegnes (glider mod målet).
+  const s = {
+    trin: 'fri',
+    skarp: 0, visSkarp: 0, gnidet: false, // trin 1
+    nat: 0, visNat: 0, natRørt: false, navn: false, // trin 2
+    B: 0, visB: 0, maksB: 0, løft: 0, visLøft: 0, løftTegn: 1, // trin 3 og laboratoriet
+  };
   let W = 0, H = 0, dpr = 1;
   let aktiv = true;
   let ramme = 0;
-  let skal = true; // tegn igen i næste billede
+  let sidst = 0; // tiden for sidste billede (til glidningen)
+  let ur = 0; // sekunder, til fingeren, der gnider
+  let timere = [];
+  let træk = null; // { id, x, y }
+  let skyder = null, dato = null, skitser = null, tavle = null;
+
+  const vent = (ms, f) => timere.push(setTimeout(() => { if (aktiv) f(); }, ms));
+  const rydTimere = () => { timere.forEach(clearTimeout); timere = []; };
+  // Handlingerne tæller kun, når trinet venter på dem (ikke mens man gætter, og ikke under Så)
+  const måGøre = () => s.trin === 'fri' || forløbFase() === 'gør';
 
   const tegnIgen = () => {
-    skal = true;
-    if (!ramme && aktiv) ramme = requestAnimationFrame(billede);
+    if (!ramme && aktiv) {
+      sidst = 0;
+      ramme = requestAnimationFrame(billede);
+    }
   };
 
   function tilpas() {
@@ -131,31 +209,37 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     H = Math.max(1, r.height);
     lærred.width = Math.round(W * dpr);
     lærred.height = Math.round(H * dpr);
-    tegnIgen();
+    // En ny størrelse tømmer lærredet: Tegn med det samme, så det ikke blinker
+    cancelAnimationFrame(ramme);
+    ramme = 0;
+    sidst = 0;
+    billede(performance.now());
   }
   const ro = new ResizeObserver(tilpas);
   ro.observe(lærred);
 
-  // Kikkertens runde synsfelt: midten og radius i px (efterlader plads under feltet til en linje)
-  const felt0 = () => {
+  // Kikkertens runde synsfelt: midten og radius i px (med plads under feltet til en linje)
+  const synsfelt = () => {
     const r = Math.max(20, Math.min(W * 0.47, (H - 34) * 0.5));
     return { x: W / 2, y: Math.max(r + 2, (H - 34) / 2), r };
   };
 
-  // Tegner figuren (en funktion af g, x, y) i synsfeltet med uskarpheden u (0 = skarp, 1 = meget uskarp)
-  function iFeltet(f, u, tegn) {
+  // Tegner figuren (tegn(g, x, y)) i synsfeltet med uskarpheden u (0 = skarp, 1 = meget uskarp). åben (0-1) lader
+  // synsfeltet vokse ud over hele lærredet og kanten forsvinde (billedet "løfter sig" i trin 3).
+  function iFeltet(f, u, tegn, åben = 0) {
+    const r = mod(f.r, Math.hypot(W, H), glat(0, 1, åben));
     g.save();
     g.beginPath();
-    g.arc(f.x, f.y, f.r, 0, 2 * Math.PI);
+    g.arc(f.x, f.y, r, 0, 2 * Math.PI);
     g.clip();
     g.fillStyle = prikker;
-    g.fillRect(f.x - f.r, f.y - f.r, 2 * f.r, 2 * f.r);
+    g.fillRect(0, 0, W, H);
     if (u < 0.02) tegn(g, f.x, f.y);
     else {
-      // Tegn i lav opløsning og forstør (to trin, så det bliver blødt og ikke firkantet)
+      // Tegn i lav opløsning og forstør (blødt, ikke firkantet)
       const skala = mod(1, 0.07, u);
       const sw = Math.max(4, Math.round(2 * f.r * dpr * skala));
-      sløret.width = sløret.height = sw;
+      if (sløret.width !== sw) sløret.width = sløret.height = sw;
       sg.setTransform(sw / (2 * f.r), 0, 0, sw / (2 * f.r), 0, 0);
       sg.clearRect(0, 0, 2 * f.r, 2 * f.r);
       tegn(sg, f.r, f.r);
@@ -164,51 +248,253 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       g.drawImage(sløret, f.x - f.r, f.y - f.r, 2 * f.r, 2 * f.r);
     }
     // Kanten af synsfeltet bliver mørkere (som i et rør)
-    const v = g.createRadialGradient(f.x, f.y, f.r * 0.72, f.x, f.y, f.r);
-    v.addColorStop(0, 'rgba(0,0,0,0)');
-    v.addColorStop(1, 'rgba(0,0,0,0.55)');
-    g.fillStyle = v;
-    g.fillRect(f.x - f.r, f.y - f.r, 2 * f.r, 2 * f.r);
+    if (åben < 1) {
+      const v = g.createRadialGradient(f.x, f.y, f.r * 0.72, f.x, f.y, f.r);
+      v.addColorStop(0, 'rgba(0,0,0,0)');
+      v.addColorStop(1, `rgba(0,0,0,${0.55 * (1 - åben)})`);
+      g.fillStyle = v;
+      g.fillRect(0, 0, W, H); // hele lærredet, så der ikke kommer en firkant, når feltet vokser
+    }
     g.restore();
-    g.strokeStyle = BLÆK;
-    g.lineWidth = 2;
-    g.beginPath();
-    g.arc(f.x, f.y, f.r + 1, 0, 2 * Math.PI);
-    g.stroke();
-  }
-
-  // Linjen under synsfeltet (med bogens skrift)
-  function linjeUnder(f, tekst) {
-    if (!tekst) return;
-    g.fillStyle = BLÆK;
-    g.font = `${Math.round(Math.min(20, Math.max(14, f.r * 0.1)))}px ${getComputedStyle(felt).getPropertyValue('--bog-skrift') || 'Georgia, serif'}`;
-    g.textAlign = 'center';
-    g.textBaseline = 'top';
-    g.fillText(tekst, f.x, f.y + f.r + 8);
-  }
-
-  function billede() {
-    ramme = 0;
-    if (!aktiv) return;
-    if (!skal) return;
-    skal = false;
-    g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    g.clearRect(0, 0, W, H);
-    const f = felt0();
-    if (s.trin === 'linse') {
-      iFeltet(f, 0.6, (c, x, y) => tegnGalilei(c, x, y, f.r * 0.2));
-      linjeUnder(f, 'Galileis kikkert, 1610');
-    } else if (s.trin === 'naetter') {
-      iFeltet(f, 0, (c, x, y) => tegnSaturn(c, x, y, f.r / 24, 5));
-    } else {
-      iFeltet(f, 0.25, (c, x, y) => tegnSaturn(c, x, y, f.r * 0.27, s.B));
+    if (åben < 0.5) {
+      g.strokeStyle = BLÆK;
+      g.globalAlpha = 1 - 2 * åben;
+      g.lineWidth = 2;
+      g.beginPath();
+      g.arc(f.x, f.y, r + 1, 0, 2 * Math.PI);
+      g.stroke();
+      g.globalAlpha = 1;
     }
   }
 
+  // Linjen under synsfeltet (med bogens skrift). lys: på den mørke bund (efter løftet)
+  function linjeUnder(f, tekst, lys = false) {
+    if (!tekst) return;
+    g.fillStyle = lys ? FIGUR : BLÆK;
+    g.font = `${Math.round(klem(f.r * 0.1, 14, 20))}px ${skrift}`;
+    g.textAlign = 'center';
+    g.textBaseline = 'top';
+    g.fillText(tekst, f.x, Math.min(H - 24, f.y + f.r + 8));
+  }
+
+  // Glider vis… mod målet (øjeblikkeligt med ROLIG). Giver true, så længe noget bevæger sig.
+  function glid(dt) {
+    const k = rolig ? 1 : 1 - Math.exp(-dt * 7);
+    let bevæger = false;
+    for (const [vis, mål, tæt] of [['visSkarp', 'skarp', 0.002], ['visNat', 'nat', 0.002], ['visB', 'B', 0.02]]) {
+      s[vis] += (s[mål] - s[vis]) * k;
+      if (Math.abs(s[mål] - s[vis]) < tæt) s[vis] = s[mål];
+      else bevæger = true;
+    }
+    // Løftet tager ca. 1,6 s (lige meget, hvor langt der er)
+    if (s.visLøft !== s.løft) {
+      s.visLøft = rolig ? s.løft : klem(s.visLøft + Math.sign(s.løft - s.visLøft) * dt / 1.6, 0, 1);
+      bevæger = true;
+    }
+    return bevæger;
+  }
+
+  function billede(nu) {
+    ramme = 0;
+    if (!aktiv) return;
+    const dt = sidst ? Math.min(0.1, (nu - sidst) / 1000) : 0;
+    sidst = nu;
+    ur += dt;
+    let mere = glid(dt);
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    const f = synsfelt();
+    if (s.trin === 'linse') mere = tegnLinse(f) || mere;
+    else if (s.trin === 'naetter') tegnNætter(f);
+    else tegnKanten(f);
+    if (mere) {
+      ramme = requestAnimationFrame(billede);
+    } else sidst = 0;
+  }
+
+  // ---------- Trin 1: linsen ----------
+  function tegnLinse(f) {
+    const sk = s.visSkarp;
+    const m = glat(0.35, 0.85, sk); // fra Galileis kugler til Huygens' arme
+    const R = f.r * 0.2;
+    iFeltet(f, mod(0.75, 0, glat(0, 1, sk)), (c, x, y) => {
+      if (m < 1) tegnGalilei(c, x, y, R, 1 - m);
+      if (m > 0) tegnSaturn(c, x, y, R, B_1655, m);
+    });
+    linjeUnder(f, m < 0.5 ? 'Galileis kikkert, 1610' : 'Huygens\' kikkert, 1655');
+    // En finger, der gnider rundt, til man selv har gnidet (står stille med ROLIG)
+    if (!s.gnidet && sk === 0) {
+      const v = rolig ? 0.6 : ur * 3.6;
+      const hx = f.x + Math.cos(v) * f.r * 0.32, hy = f.y + f.r * 0.42 + Math.sin(v) * f.r * 0.12;
+      g.save();
+      g.font = `${Math.round(klem(f.r * 0.2, 28, 46))}px sans-serif`;
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      g.shadowColor = 'rgba(0,0,0,0.7)';
+      g.shadowBlur = 8;
+      g.fillText('👆', hx, hy);
+      g.restore();
+      return !rolig;
+    }
+    return false;
+  }
+
+  function slib(mængde) {
+    if (s.trin !== 'linse' || !måGøre()) return;
+    s.skarp = klem(s.skarp + mængde, 0, 1);
+    tegnIgen();
+  }
+
+  // ---------- Trin 2: nætterne ----------
+  const titanVinkel = (n) => 0.45 + (2 * Math.PI * n) / TITAN_DØGN;
+
+  function tegnNætter(f) {
+    const R = f.r / 25; // Saturns radius, så Titans bane (20,3 R) passer i synsfeltet
+    const a = TITAN_AFSTAND * R, b = a * 0.1;
+    const pos = (n) => { const v = titanVinkel(n); return [f.x + a * Math.cos(v), f.y + b * Math.sin(v)]; };
+    const hjemme = s.nat === NAT_MÅL && s.visNat === NAT_MÅL;
+    iFeltet(f, 0, (c, x, y) => {
+      tegnSaturn(c, x, y, R, B_1655);
+      // Mærket, hvor prikken startede
+      const [sx, sy] = pos(0);
+      c.strokeStyle = hjemme ? 'rgba(255, 214, 120, 0.95)' : 'rgba(243, 234, 215, 0.6)';
+      c.lineWidth = hjemme ? 2 : 1;
+      c.beginPath();
+      c.arc(sx, sy, Math.max(5, f.r * 0.035), 0, 2 * Math.PI);
+      c.stroke();
+      // Titan: en svag prik
+      const [tx, ty] = pos(s.visNat);
+      c.fillStyle = 'rgba(243, 234, 215, 0.9)';
+      c.shadowColor = 'rgba(243, 234, 215, 0.8)';
+      c.shadowBlur = 4;
+      c.beginPath();
+      c.arc(tx, ty, Math.max(2.2, f.r * 0.014), 0, 2 * Math.PI);
+      c.fill();
+      c.shadowBlur = 0;
+      if (s.navn) {
+        c.fillStyle = FIGUR;
+        c.font = `${Math.round(klem(f.r * 0.09, 14, 20))}px ${skrift}`;
+        c.textAlign = 'center';
+        c.textBaseline = 'bottom';
+        c.fillText('Titan', tx, ty - Math.max(8, f.r * 0.05));
+      }
+    });
+  }
+
+  function opdaterSkitser() {
+    if (!skyder) return;
+    skyder.value = String(s.nat);
+    dato.textContent = s.nat === 0 ? nattensDato(0) : `${nattensDato(s.nat)} · ${s.nat} ${s.nat === 1 ? 'nat' : 'nætter'} senere`;
+    // Rækken "* O" (som s. 16-17): de sidste seks nætter, hvor prikken står til venstre eller højre for Saturn
+    const fra = Math.max(0, s.nat - 5);
+    let html = '';
+    for (let n = fra; n <= s.nat; n++) {
+      const x = Math.cos(titanVinkel(n)) * 24;
+      html += `<span class="hs-skitse${n === s.nat ? ' nu' : ''}"><i style="left:calc(50% + ${x.toFixed(1)}px)">*</i>O</span>`;
+    }
+    skitser.innerHTML = html;
+  }
+
+  function sætNat(n) {
+    if (s.trin !== 'naetter' || !måGøre()) return;
+    s.nat = klem(Math.round(n), 0, NAT_MAKS);
+    s.natRørt = true;
+    opdaterSkitser();
+    tegnIgen();
+  }
+
+  // ---------- Trin 3: ringen fra kanten ----------
+  function tegnKanten(f) {
+    const L = glat(0, 1, s.visLøft);
+    const B = mod(s.visB, 24 * s.løftTegn, L);
+    const R = f.r * mod(0.27, 0.24, L);
+    iFeltet(f, mod(0.25, 0, L), (c, x, y) => tegnSaturn(c, x, y, R, B), L);
+    let tekst = '';
+    if (L > 0.5) tekst = 'Den samme ring, set lidt ovenfra';
+    else if (Math.abs(s.visB) < 0.8) tekst = 'Set fra kanten';
+    linjeUnder(f, tekst, L > 0.5);
+    // Tavlens tegning, der ligner, lyser op
+    if (tavle) {
+      const nu = L > 0 ? null : TAVLE.find((t) => Math.abs(s.visB) >= t.fra && Math.abs(s.visB) < t.til)?.id;
+      for (const el of tavle.children) el.classList.toggle('lyser', el.dataset.tavle === nu);
+    }
+  }
+
+  function drej(B) {
+    if (!(s.trin === 'kanten' || s.trin === 'fri') || s.løft || s.løftVenter || !måGøre()) return;
+    const før = s.B;
+    s.B = klem(B, -B_MAKS, B_MAKS);
+    // Et hurtigt træk kan springe over kanten (fra +2° til -3°): Det tæller som kanten
+    if (s.trin === 'kanten' && s.maksB >= B_ÅBEN && før * s.B < 0) s.B = 0;
+    s.maksB = Math.max(s.maksB, Math.abs(s.B));
+    // Tilbage ved kanten efter at have åbnet ringen: Billedet løfter sig (kun i forløbet)
+    if (s.trin === 'kanten' && !s.løftVenter && s.maksB >= B_ÅBEN && Math.abs(s.B) < 0.8) {
+      s.B = 0;
+      s.løftVenter = true;
+      s.løftTegn = s.visB >= 0 ? 1 : -1;
+      vent(rolig ? 0 : 350, () => { s.løft = 1; tegnIgen(); });
+    }
+    tegnIgen();
+  }
+
+  // ---------- Det under lærredet ----------
+  function underNætter() {
+    under.innerHTML = '<label class="hs-nat"><span class="hs-nat-tekst"></span>'
+      + `<input type="range" min="0" max="${NAT_MAKS}" step="1" value="0" aria-label="Nætter efter 25. marts 1655"></label>`
+      + '<div class="hs-skitser" aria-hidden="true"></div>';
+    skyder = under.querySelector('input');
+    dato = under.querySelector('.hs-nat-tekst');
+    skitser = under.querySelector('.hs-skitser');
+    skyder.addEventListener('input', () => {
+      if (!måGøre()) { skyder.value = String(s.nat); return; }
+      sætNat(Number(skyder.value));
+    });
+    opdaterSkitser();
+  }
+
+  function underTavle() {
+    const div = document.createElement('div');
+    div.className = 'hs-tavle';
+    div.setAttribute('aria-label', 'Tegninger fra tavlen i Huygens\' bog');
+    div.innerHTML = TAVLE.map((t) => `<figure data-tavle="${t.id}">${tavleSVG(t.id)}<figcaption>${t.navn}</figcaption></figure>`).join('');
+    under.append(div);
+    tavle = div;
+  }
+
+  // ---------- Fingeren og musen på lærredet ----------
+  const ned = (h) => {
+    if (!h.isPrimary) return;
+    træk = { id: h.pointerId, x: h.clientX, y: h.clientY };
+    lærred.setPointerCapture?.(h.pointerId);
+    if (s.trin === 'linse' && måGøre()) s.gnidet = true;
+  };
+  const flyt = (h) => {
+    if (!træk || h.pointerId !== træk.id) return;
+    const dx = h.clientX - træk.x, dy = h.clientY - træk.y;
+    træk.x = h.clientX;
+    træk.y = h.clientY;
+    const f = synsfelt();
+    if (s.trin === 'linse') slib(Math.hypot(dx, dy) / (f.r * 8)); // et par runder med fingeren
+    else if (s.trin === 'kanten' || s.trin === 'fri') drej(s.B + (dy / f.r) * 30);
+  };
+  const op = (h) => { if (træk && h.pointerId === træk.id) træk = null; };
+  lærred.addEventListener('pointerdown', ned);
+  lærred.addEventListener('pointermove', flyt);
+  lærred.addEventListener('pointerup', op);
+  lærred.addEventListener('pointercancel', op);
+
   function sætTrin(trin) {
+    rydTimere();
     s.trin = trin;
-    s.gjort = false;
+    skyder = dato = skitser = tavle = null;
     under.replaceChildren();
+    const etiket = {
+      linse: 'Saturn i en kikkert: først slørede kugler, der bliver til to tynde arme, når linsen er slebet',
+      naetter: 'Saturn med en svag prik, der går rundt om den i en smal ellipse',
+      kanten: 'Saturn med ringen set fra forskellige vinkler',
+      fri: 'Saturn med ringen, som du selv kan dreje',
+    }[trin];
+    lærred.setAttribute('aria-label', etiket);
     tegnIgen();
   }
 
@@ -216,16 +502,51 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     if (kapitel) kapitel.textContent = t ?? titel;
   }
 
-  // Midlertidigt i trin A: hvert trin har én knap, til tegningerne kommer i trin B-D
-  const midlertidig = (id) => ({
-    start: () => sætTrin(id),
-    knapper: [{ id: 'gjort', tekst: 'Videre', gør: () => { s.gjort = true; } }],
-    færdig: () => s.gjort,
-    visMig: () => { s.gjort = true; },
-  });
-
   function forløbDel(data) {
-    const trin = { linse: midlertidig('linse'), naetter: midlertidig('naetter'), kanten: midlertidig('kanten') };
+    const trin = {
+      linse: {
+        start() {
+          sætTrin('linse');
+          Object.assign(s, { skarp: 0, visSkarp: 0, gnidet: false });
+          ur = 0;
+        },
+        knapper: [{ id: 'slib', tekst: 'Slib linsen', gør: () => { s.gnidet = true; slib(0.25); } }],
+        færdig: () => s.skarp >= 1 && s.visSkarp > 0.97,
+        visMig: () => { s.gnidet = true; slib(1); },
+      },
+      naetter: {
+        start() {
+          sætTrin('naetter');
+          Object.assign(s, { nat: 0, visNat: 0, natRørt: false, navn: false });
+          underNætter();
+        },
+        færdig() {
+          const ja = s.natRørt && s.nat === NAT_MÅL && Math.abs(s.visNat - NAT_MÅL) < 0.05;
+          // Navnet Titan kommer frem sammen med Så (forløbet viser Så 0,7 s efter)
+          if (ja && !s.navn) vent(700, () => { s.navn = true; tegnIgen(); });
+          return ja;
+        },
+        visMig: () => sætNat(NAT_MÅL),
+      },
+      kanten: {
+        start() {
+          sætTrin('kanten');
+          Object.assign(s, { B: 0, visB: 0, maksB: 0, løft: 0, visLøft: 0, løftVenter: false });
+          underTavle();
+        },
+        get knapper() {
+          return [
+            { id: 'aaben', tekst: 'Åbn armene', gør: () => drej((s.B < 0 ? -1 : 1) * Math.min(B_MAKS, Math.abs(s.B) + 7)), aktiv: () => !s.løft && Math.abs(s.B) < B_MAKS },
+            { id: 'kant', tekst: 'Mod kanten', gør: () => drej(Math.sign(s.B) * Math.max(0, Math.abs(s.B) - 7)), aktiv: () => !s.løft && s.B !== 0 },
+          ];
+        },
+        færdig: () => s.visLøft >= 1,
+        visMig() {
+          drej(18);
+          vent(rolig ? 300 : 1300, () => drej(0));
+        },
+      },
+    };
     // Kapitlets titel følger trinet (fx "Haag, 1655")
     for (const t of data.trin) {
       const d = trin[t.id];
@@ -239,12 +560,16 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   function fri() {
     sætKapitel(titel);
     sætTrin('fri');
-    s.B = 14;
-    under.innerHTML = `<p class="hs-linje"></p><button class="knap hs-igen"></button>`;
-    under.querySelector('.hs-linje').textContent = tekster.linje ?? '';
-    const igen = under.querySelector('.hs-igen');
+    Object.assign(s, { B: 14, visB: 14, løft: 0, visLøft: 0 });
+    underTavle();
+    const p = document.createElement('p');
+    p.className = 'hs-linje';
+    p.textContent = tekster.linje ?? '';
+    const igen = document.createElement('button');
+    igen.className = 'knap hs-igen';
     igen.textContent = `${tekster.igen ?? 'Fortæl det igen'} ›`;
     igen.addEventListener('click', () => påIgen?.());
+    under.append(p, igen);
     tegnIgen();
   }
 
@@ -253,13 +578,21 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     fri,
     fjern() {
       aktiv = false;
+      rydTimere();
       cancelAnimationFrame(ramme);
       ramme = 0;
       ro.disconnect();
+      lærred.removeEventListener('pointerdown', ned);
+      lærred.removeEventListener('pointermove', flyt);
+      lærred.removeEventListener('pointerup', op);
+      lærred.removeEventListener('pointercancel', op);
       felt.replaceChildren();
     },
     test: {
-      tilstand: () => ({ trin: s.trin, B: s.B, gjort: s.gjort }),
+      tilstand: () => ({ trin: s.trin, skarp: s.skarp, nat: s.nat, B: s.B, maksB: s.maksB, løft: s.visLøft, navn: s.navn, lyser: tavle?.querySelector('.lyser')?.dataset.tavle ?? null }),
+      slib,
+      nat: sætNat,
+      drej,
     },
   };
 }

@@ -47,8 +47,9 @@ export const SATURNS_ØRER = {
     {
       id: 'kanten',
       kapitel: 'Januar 1656',
-      // "kommer hjem fra en lang rejse": "cum ad hoc usque tempus peregre abfuissem" (s. 16, 16. januar 1656)
-      spørg: 'Christiaan kommer hjem fra en lang rejse. Saturns arme er væk! Hvor er de blevet af?',
+      // "kommer hjem fra en rejse": "cum ad hoc usque tempus peregre abfuissem" (s. 16, 16. januar 1656). Ikke "lang": Rejsen
+      // til Frankrig i 1655 varede efter en af kilderne kun fra juli til september (faktatjekket 16. november 2026)
+      spørg: 'Christiaan kommer hjem fra en rejse. Saturns arme er væk! Hvor er de blevet af?',
       gæt: {
         valg: [
           { tekst: 'De er faldet af', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.' },
