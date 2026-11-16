@@ -301,7 +301,7 @@ export function lavLivProtein({ tegning, vindue, vis, forlad, stoppet, løs, pan
   // ---------- Panelet ----------
   const bogstaver = (ord) => [...tilRNA(ord)].map((b) => `<b class="liv-bogstav" style="--farve:${b === 'U' ? U_FARVE : BASE_FARVE[b]}">${b}</b>`).join('');
 
-  // Teksterne til panelet i liv.js: { titel, tekst, tal, ekstra, hvorfor }
+  // Teksterne til panelet i liv.js: { titel, tekst, tal, nørd, hvorfor, gåde }
   function tekster() {
     const t = TRIN_PROTEIN[trinNu()];
     let n = '';

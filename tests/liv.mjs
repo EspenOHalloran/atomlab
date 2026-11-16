@@ -6,10 +6,10 @@
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { lavStige, målStige, passer } from '../js/data/liv/stige.js';
 import { DNA_PAR } from '../js/data/liv/dna-atomer.js';
-import { parGrund, NIVEAU_IDER, HBB_START, BYG_TRIN } from '../js/data/liv/opskriften.js';
+import { parGrund, NIVEAU_IDER, NIVEAUER, HBB_START, BYG_TRIN } from '../js/data/liv/opskriften.js';
 import { KODE, oversæt, aminosyre } from '../js/data/liv/kode.js';
 import { HBB } from '../js/data/liv/gener.js';
-import { vurderSkift, LÆS_START } from '../js/data/liv/protein.js';
+import { vurderSkift, LÆS_START, TRIN_PROTEIN } from '../js/data/liv/protein.js';
 
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -35,6 +35,14 @@ tjek('grundene: to store er for brede, to små for smalle, A–C og G–T har pl
   ['AA', 'AG', 'GA', 'GG'].every((p) => grunde[p] === 'bred') && ['TT', 'TC', 'CT', 'CC'].every((p) => grunde[p] === 'smal')
   && ['AC', 'CA', 'GT', 'TG'].every((p) => grunde[p] === 'ladning'), JSON.stringify(grunde));
 tjek('stigen er begyndelsen af HBB (ATG GTG CAT …)', HBB_START.length === 30 && HBB_START.startsWith('ATGGTGCAT'));
+
+// Budgettet for højre panel (docs/retning.md): højst to tal og tre sætninger fremme, resten i "For nørder"
+const sætninger = (t) => (t ?? '').split(/(?<=[.!?])\s+(?=[A-ZÆØÅ"])/).filter(Boolean).length;
+const forMeget = [...NIVEAUER, ...Object.values(TRIN_PROTEIN)]
+  .filter((n) => n.tal.length > 2 || sætninger(n.tekst) + sætninger(n.ekstra) > 3).map((n) => n.titel);
+tjek('højre panel: højst to tal og tre sætninger fremme i hvert trin', forMeget.length === 0, forMeget.join(', '));
+tjek('"enzym" og "RNA-polymerase" står i "For nørder", ikke i filmens første tekst',
+  !/enzym|polymerase/i.test(TRIN_PROTEIN.aflæs.tekst) && /RNA-polymerase/.test(TRIN_PROTEIN.aflæs.nørd.tekst));
 
 // L2: koden og genet
 const kv = Object.values(KODE);
@@ -123,6 +131,8 @@ await page.click('#livProtein > summary');
 tjek('"Fra opskrift til protein" er foldet sammen første gang og kan foldes ud', foldet && await page.isVisible('[data-liv-protein="genet"]'));
 await page.click('[data-liv-protein="genet"]');
 tjek('"Se genet blive læst": aflæsningen, panelet og tidsknappen', (await Pr()).tegning === 'aflæs' && (await page.textContent('#livTitel')) === 'Aflæsningen' && await page.isVisible('#livTid') && !(await page.isVisible('#livByg')));
+tjek('aflæsningen: to tal fremme, og RNA-polymerase står øverst i "For nørder"', (await page.$$('#livTal > div')).length === 2
+  && (await page.textContent('#livNørdTrin')).includes('RNA-polymerase') && !(await page.evaluate(() => document.getElementById('livNørdTrin').hidden)));
 await L('proteinSpol', 200);
 await page.waitForFunction(() => window.atomlabTest.liv.protein().tegning === 'færdig', null, { timeout: 20000 }).catch(() => {});
 const p1 = await Pr();
