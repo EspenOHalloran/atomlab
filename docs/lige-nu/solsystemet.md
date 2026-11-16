@@ -1,15 +1,15 @@
 # Lige nu: Solsystemet og Kosmos
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 15. november 2026.*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 16. november 2026.*
 
-**Senest lavet (15. november 2026): Overblikket trin 4, forløbet "Rundt om Solen" og "Rejs med lyset"** efter [drejebog-overblik.md](../drejebog-overblik.md) og jeres go pr. del (A-E). Status "prøve". Koden står i [kode/overblik.md](../kode/overblik.md).
-- **A og B:** teksterne (`js/data/forloeb/overblik.js`), listen, knappen i hjælpen, fem ord i Ordbogen, trin 1 (find Jorden) og trin 2 (et år rundt med haler og tællere). Jorden har fået blå luft i overblikket.
-- **C:** trin 3 (knappen "Rigtig størrelse og afstand", glider 3 s), trin 4 (kun Jordens ring, dykket på 8 s fra 11 milliarder km ned til Jorden med en tæller, Jorden fra den belyste side) og "Det så du" (kameraet trækker sig ud, skalaen tilbage) med tre veje: "Besøg en planet" (navnene tændt, Merkur mat), "Leg frit" og "Rejs med lyset". ✓ i "Din fremgang".
-- **D:** "💡 Rejs med lyset" i bjælken (jeres svar: bjælken, kameraet følger skallen). En lysende skal vokser fra Solen i den rigtige skala, uret viser lysets tid ("spolet frem"), og tiden står ved hver planet (i dag Jorden 8 min 13 s, Neptun 4 t 8 min).
-- **E:** testen `overblik-forloeb` (17 tjek), `overblik` og den nye med i hele samlingen, hjælpen ("fire korte trin" og Rejs med lyset) og dokumenterne. Faktatjek: Alle tal regnes af data, der er tjekket i drejebogens afsnit 4 og testen mod Horizons.
-- **Kig efter på tabletten:** se [ikke-afproevet.md](../ikke-afproevet.md) (Jordens ring i trin 4, dykkets fart, Jorden til sidst og rejsens fart).
+**Senest lavet (16. november 2026): Rettelserne fra Fables eftersyn E14 i "Rundt om Solen"** (prompten i [prompt-e14-rettelser.md](../prompt-e14-rettelser.md), noterne i [fable/E14-noter.md](../fable/E14-noter.md)).
+- **Trin 1:** De fire inderste er mindst ca. 14 px brede og har en ring (uden navn, så gættet ikke er givet), og de ydre planeter og Saturns ringe er dæmpet (`vis.inderst` i `js/kosmos/overblik.js`). Når Jorden er fundet, er alt som før.
+- **Trin 2:** Teksten efter gættet er "Prøv det: Træk skyderen ét år frem." for alle tre svar (`js/data/forloeb/overblik.js`).
+- **Laboratoriets tre mærkater (billede 15):** "Solsystemet" har to felter i gitteret, "Skala" har luft til "Pustet op og rykket sammen" (gælder alle skydere i Styr), og et navn ved vinduets højre kant står til venstre for kloden (Uranus bag panelet).
+- Testen `overblik-forloeb` har to nye tjek (trin 1). Trin 4's Spørg (Fables forslag) er ikke rettet, den var ikke med i prompten.
+- **Kig efter på tabletten:** se [ikke-afproevet.md](../ikke-afproevet.md) (de fire inderste i trin 1).
 
-**Før det:** Overblikket trin 1-3, Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
+**Før det:** Overblikket trin 4 (forløbet og "Rejs med lyset"), overblikket trin 1-3, Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
 
 **Næste (venter på jeres go):**
 0. **Hakkene på Mars, trin 3 (G1):** Del 1-3 (G, H, A, F, den glidende landing og skyggerne i strimler) er lavet. Tilbage er jeres måling på Tab A11, telefonen A56 og pc'erne (ikke den gamle A7, jeres svar 14. november 2026). Kortene lægges i grafikkortet, mens kameraet står stille over stedet efter flyvningen ned, ikke under selve flyvningen. Viser den stadig ryk, er de næste muligheder B (store kort i strimler) og en kortere stråle for skyggerne (forslag 2). Ellers er G1 trin 3 færdig, og (4) et eftersyn af grafikken med Fable kan komme bagefter. Målingerne står i [maalinger/mars-g1.md](../maalinger/mars-g1.md).

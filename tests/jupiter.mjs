@@ -63,8 +63,9 @@ const fm = (f, a) => s.evaluate(f, a);
 const ids = await fm(() => atomlabTest.solsystem.fænomener);
 tjek('Jupiter står i listen mellem Mars og Saturn', ids.indexOf('jupiter') === ids.indexOf('mars') + 1 && ids.indexOf('saturn') === ids.indexOf('jupiter') + 1, JSON.stringify(ids));
 const kloder = await fm(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => { const r = k.getBoundingClientRect(); return { id: k.dataset.id ?? k.textContent.trim(), y: Math.round(r.top), synlig: r.width > 0 }; }));
-// Otte kloder (Uranus og Neptun kom med i UN1, Venus 9. november 2026): fem på første række og resten på næste
-tjek('kloderne: Solsystemet, Sol, Venus, Jord og Mars på første række, og Jupiter starter den næste', kloder.length === 9 && new Set(kloder.slice(0, 5).map((k) => k.y)).size === 1 && kloder[5].id === 'jupiter' && kloder[5].y > kloder[4].y && kloder.every((k) => k.synlig), JSON.stringify(kloder));
+// Otte kloder (Uranus og Neptun kom med i UN1, Venus 9. november 2026). "Solsystemet" har to felter (E14, 16. november
+// 2026), så første række er Solsystemet, Sol, Venus og Jord, og Mars starter den næste med de fem andre
+tjek('kloderne: Solsystemet, Sol, Venus og Jord på første række, og Mars starter den næste', kloder.length === 9 && new Set(kloder.slice(0, 4).map((k) => k.y)).size === 1 && kloder[4].id === 'mars' && kloder[4].y > kloder[3].y && new Set(kloder.slice(4).map((k) => k.y)).size === 1 && kloder.every((k) => k.synlig), JSON.stringify(kloder));
 await s.click('#solsystem .sol-klode[data-id="jupiter"]');
 await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'jupiter' && atomlabTest.solsystem.fænomen()?.hentet(), null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('Jupiter åbner, og kortet er hentet (1k i tests, i farver)', (await fm(() => atomlabTest.solsystem.fænomen().hentet())) && (await fm(() => atomlabTest.solsystem.fænomen().billeder()))['jupiter-1k.jpg'] === 'farver', JSON.stringify(await fm(() => atomlabTest.solsystem.fænomen().billeder())));

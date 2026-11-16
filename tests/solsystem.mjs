@@ -140,10 +140,11 @@ for (const [navn, vp] of STØRRELSER) {
   await s.evaluate(() => atomlabTest.solsystem.vælg('formoerkelser'));
   await s.waitForTimeout(400);
   const hoveder = await s.evaluate(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => { const r = k.getBoundingClientRect(); return { y: Math.round(r.top), x: Math.round(r.left), synlig: r.width > 0 }; }));
-  // Otte kloder (Venus kom med 9. november 2026) i et gitter (fem pr. række på pc, tre ved smalle paneler): alle rækker er fulde undtagen den sidste
-  const iRække1 = hoveder.filter((h) => h.y === hoveder[0].y).length;
-  const klodeRækker = Math.ceil(hoveder.length / iRække1);
-  tjek(`${navn}: de ${hoveder.length} kloder står i ${klodeRækker} rækker med ${iRække1} i hver`, hoveder.length === 9 && iRække1 >= 3 && new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
+  // Otte kloder (Venus kom med 9. november 2026) i et gitter (fem pr. række på pc, tre ved smalle paneler): alle rækker er fulde undtagen den sidste.
+  // "Solsystemet" (den første) har to felter (E14, 16. november 2026), så der er 10 felter i alt.
+  const iRække1 = hoveder.filter((h) => h.y === hoveder[0].y).length + 1; // felter i første række
+  const klodeRækker = Math.ceil((hoveder.length + 1) / iRække1);
+  tjek(`${navn}: de ${hoveder.length} kloder står i ${klodeRækker} rækker med ${iRække1} felter i hver`, hoveder.length === 9 && iRække1 >= 3 && new Set(hoveder.map((h) => h.y)).size === klodeRækker && hoveder.every((h) => h.synlig), JSON.stringify(hoveder));
   tjek(`${navn}: kun Jordens forsøg står i træet`, (await s.isVisible('#solsystemTræ button[data-id="aarstider"]')) && !(await s.$('#solsystemTræ button[data-id="solstorm"]')));
   const vindue = await s.evaluate(() => document.getElementById('solsystemVindue').getBoundingClientRect().height);
   tjek(`${navn}: 3D-billedet har plads`, vindue > 150, vindue);
