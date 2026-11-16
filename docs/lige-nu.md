@@ -11,7 +11,7 @@
 | Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 og T5 er lavet. Næste: Tid som ét punkt med rejsen først (Serie 1). T4 er en mulig udvidelse |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | **Lukket 14. november 2026** (ringen efter størrelse er lavet). Små rettelser i Småting, en ny verden med den del, der skal bo i den |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | **Lukket 14. november 2026.** Nye ord tages i det spor, der bruger dem, og små rettelser i Småting |
-| Videnskabsfolkene | [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md) | Opdagelserne i Biblioteket: ti bøger om videnskabsfolk ([plan-videnskabsfolk.md](plan-videnskabsfolk.md), startet 15. november 2026). Huygens først som prøve ([drejebog-huygens.md](drejebog-huygens.md)), Fable tjekker drejebogen senest 16. november |
+| Videnskabsfolkene | [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md) | Opdagelserne i Biblioteket: ti bøger om videnskabsfolk ([plan-videnskabsfolk.md](plan-videnskabsfolk.md), startet 15. november 2026). Huygens først som prøve ([drejebog-huygens.md](drejebog-huygens.md)): H1 (delen og forsiden) er lavet 16. november, næste er H2 (fortællingen) |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
 | Åbne punkter | [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md) | Fejl og tests, der ikke er undersøgt, grene, domæner og faktatjek, der mangler |
 
