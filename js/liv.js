@@ -23,7 +23,7 @@ import { DnaStige, S } from './liv/stige.js';
 import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVink, forløbTest } from './forloeb.js';
 import { OPSKRIFTEN } from './data/forloeb/opskriften.js';
 import { ORDENE } from './data/forloeb/ordene.js';
 import { lavOrdeneDel } from './liv-ordene.js';
@@ -358,6 +358,7 @@ function vælgBase(b) {
     lyd.proton();
     byg.bygget++;
     stige.sætBygget(byg.bygget);
+    if (byg.forløb) forløbVink(''); // et vink om det forkerte bogstav gælder ikke længere
     if (byg.bygget >= BYG_TRIN && !byg.forløb) { // udfordringen "Byg en stige med 8 trin" er ikke en del af forløbet
       løs('liv-byg');
       visBesked({ titel: 'Stigen er færdig', tekst: 'Zoom ind, og se atomerne og de gule hydrogenbindinger mellem baserne.', varighed: 7000 });
@@ -365,7 +366,9 @@ function vælgBase(b) {
   } else {
     lyd.nej();
     stige.visForkert(b);
-    visBesked({ titel, tekst, type: 'advarsel', varighed: 9000 });
+    // I forløbet et kort vink i linjen, ikke laboratoriets ⚠-boks med δ+ og δ− (Fable E14, mønster A)
+    if (byg.forløb) forløbVink(`${a} passer ikke til ${b}. A hører sammen med T, og G med C.`);
+    else visBesked({ titel, tekst, type: 'advarsel', varighed: 9000 });
     løs('liv-forkert');
   }
   opdaterByg();
@@ -517,6 +520,8 @@ const OPSKRIFT_DEL = {
         flStart('par', 'stige', null);
         flFundetA = false;
       },
+      // Basernes farver stort i linjen (Fable E14: nøglen til venstre var 12 px, og bogstaverne står kun på det trin, der lyser)
+      nøgle: ['A', 'T', 'G', 'C'].map((b) => ({ tekst: b, klasse: `base-${b}` })),
       færdig: () => flFundetA,
       visMig: () => flVælgTrin(flTrinMedA()),
     },

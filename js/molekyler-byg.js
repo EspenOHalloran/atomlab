@@ -7,7 +7,7 @@
 // M3: knappen "Knaldgas" viser boksen med 4 H₂ og 2 O₂ i stedet for byggeriet (js/knaldgas.js). Det byggede bliver.
 
 import * as THREE from 'three';
-import { verden, sætVindue, passerTil, stopKamera, begrænsDrejning, ROLIG } from './scene3d.js';
+import { verden, sætVindue, passerTil, passerTilBoks, stopKamera, begrænsDrejning, ROLIG } from './scene3d.js';
 import { MolekyleTegning, KERNE_R } from './molekyle3d.js';
 import * as D from './data/molekyler-byg.js';
 import { lyd } from './lyd.js';
@@ -19,6 +19,11 @@ import * as fremgang from './fremgang.js';
 import { lavKnaldgas, startKnaldgas, stopKnaldgas, knaldgasAktiv, testAdgang as knaldTest } from './knaldgas.js';
 
 const S = 3; // enheder i 3D pr. ångstrøm (Å). Bindingslængderne er i det rigtige forhold.
+// Forløbet "Når atomer mødes": ubundne atomer skubbes kun ud til 2 Å (ellers 3,2), og kameraet har kun en lille kant om
+// atomerne (enheder), så de står store (zoomForløb). Startpladserne i js/molekyler-skaerm.js står mindst FORLØB_AFSTAND fra hinanden.
+const FORLØB_AFSTAND = 2;
+const FORLØB_KANT = 1;
+const FORLØB_MINDST = 3.5; // halv bredde og højde (enheder), så H₂ ikke fylder hele skærmen
 const SKRIDT_PR_SEKUND = 1800; // så mange skridt af formen pr. sekund (formen falder på plads på ca. 1 sekund)
 const MAX_SKRIDT_PR_BILLEDE = 40;
 const FANG_FINGER = 60; // px: slipper man så tæt på et atom, springer bindingen (finger)
@@ -592,11 +597,27 @@ function zoomEfterBehov() {
   const c = tyngdepunkt();
   let r = 0;
   for (const q of form.pos) r = Math.max(r, Math.hypot(q[0] - c[0], q[1] - c[1], q[2] - c[2]));
-  r = Math.max(r, 1.6);
+  r = Math.max(r, form.andreAfstand ? 0.8 : 1.6);
   // Kun når molekylet er blevet tydeligt større eller mindre (ellers ville det slås med ens egen zoom)
   if (Math.abs(r - sidsteRadius) < Math.max(0.5, sidsteRadius * 0.25)) return;
   sidsteRadius = r;
-  passerTil((r + 1.4) * S);
+  if (form.andreAfstand) zoomForløb(c);
+  else passerTil((r + 1.4) * S);
+}
+
+// I forløbet tættere på (Fable E14: et atom skal være mindst 60-80 px, så elektronerne kan tælles og trækkes med en finger).
+// En kasse om atomerne, som de står på skærmen, i stedet for en cirkel, så brede skærme bliver udnyttet.
+function zoomForløb(c) {
+  const højre = hjælpV.setFromMatrixColumn(verden.kamera.matrixWorld, 0).normalize();
+  const op = hjælpV2.setFromMatrixColumn(verden.kamera.matrixWorld, 1).normalize();
+  let hx = 0;
+  let hy = 0;
+  for (const q of form.pos) {
+    const d = [q[0] - c[0], q[1] - c[1], q[2] - c[2]];
+    hx = Math.max(hx, Math.abs(d[0] * højre.x + d[1] * højre.y + d[2] * højre.z));
+    hy = Math.max(hy, Math.abs(d[0] * op.x + d[1] * op.y + d[2] * op.z));
+  }
+  passerTilBoks(Math.max(hx * S + FORLØB_KANT, FORLØB_MINDST), Math.max(hy * S + FORLØB_KANT, FORLØB_MINDST));
 }
 
 // ---------- Hvert billede ----------
@@ -688,7 +709,8 @@ function tegn() {
     mål = { atom: træk.mål.atom, ok: træk.mål.ok };
     linje = { fra: liste[træk.i].p, til: liste[træk.mål.atom].p, ok: træk.mål.ok };
   }
-  tegning.tegn({ atomer: liste, bånd: tegneBånd, retninger: tegneRet, mål, linje, navne: tegneNavne, pile, kamera: verden.kamera, tid });
+  tegning.tegn({ atomer: liste, bånd: tegneBånd, retninger: tegneRet, mål, linje, navne: tegneNavne, pile, kamera: verden.kamera, tid,
+    ladninger: !form.andreAfstand }); // ingen δ i forløbet
 }
 
 // Pilene (kontakten "Pile"): en gul pil ved siden af hver polær binding, mod det atom, der trækker hårdest, og så lang som
@@ -980,6 +1002,7 @@ export const forløbByg = {
   // Atomerne til et trin, uden bindinger: [{ symbol, x, y }] i Å (x til højre og y op på skærmen). regel: { kunTil, vink }
   sæt(liste, regel = null) {
     forløbRegel = regel;
+    form.andreAfstand = FORLØB_AFSTAND;
     drej = null;
     ryd();
     for (const a of liste) nytAtom(a.symbol, [a.x, a.y, 0]);
@@ -1026,6 +1049,8 @@ export const forløbByg = {
   },
   slut() {
     forløbRegel = null;
+    delete form.andreAfstand;
+    sidsteRadius = -10;
     if (drej) slutDrej();
   },
 };
@@ -1051,6 +1076,9 @@ export function testAdgang() {
     ryd: () => ryd(),
     vinkel: (a, c, b) => D.vinkel(form, a, c, b),
     atomPå: (i) => skærmPos(pos3D(i, new THREE.Vector3())),
+    // Forløbet (Fable E14): atom i's bredde på skærmen i px (kuglen), og hvor mange δ-mærker der står fremme
+    atomPx: (i) => 2 * skærmRadius(i),
+    deltaer: () => tegning.deltaer.filter((d) => d.visible).length,
     paletPå: (symbol) => {
       const r = document.querySelector(`.palet-atom[data-symbol="${symbol}"]`).getBoundingClientRect();
       return { x: r.left + r.width / 2, y: r.top + r.height / 2 };

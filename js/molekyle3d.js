@@ -382,7 +382,8 @@ export class MolekyleTegning {
   // bånd: [{ a, b, orden, strakt, skæv (0-1 mod b, minus mod a: parret ligger tættest på det atom, der trækker hårdest) }].
   // retninger: [{ atom, v: [x, y, z], slags: 'frit' | 'enlig' }]. mål: { atom, ok } eller null. linje: { fra, til, ok } eller null.
   // navne: [{ tekst, p }]. pile: [{ fra, til (Vector3), tyk, sum }]. kamera: til prikkernes side og symbolerne. tid: til blinket.
-  tegn({ atomer, bånd, retninger, mål = null, linje = null, navne = [], pile = [], kamera, tid = 0 }) {
+  // ladninger: false skjuler δ+ og δ− (forløbet "Når atomer mødes": drejebogen lægger dem i laboratoriet).
+  tegn({ atomer, bånd, retninger, mål = null, linje = null, navne = [], pile = [], kamera, tid = 0, ladninger = true }) {
     // Kernerne og symbolerne
     const n = Math.min(atomer.length, MAX_KERNER);
     for (let i = 0; i < MAX_KERNER; i++) this.symboler[i].visible = i < n;
@@ -414,7 +415,7 @@ export class MolekyleTegning {
     for (let i = 0; i < MAX_KERNER; i++) {
       const a = atomer[i];
       const d = this.deltaer[i];
-      const q = i < n ? a.q ?? 0 : 0;
+      const q = i < n && ladninger ? a.q ?? 0 : 0;
       d.visible = q !== 0;
       if (!q) continue;
       const styrke = 0.75 + 0.6 * Math.min(1, Math.abs(q) / 2.5);
