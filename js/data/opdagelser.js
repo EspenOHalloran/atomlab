@@ -6,6 +6,8 @@
 //   portræt  stien til portrættet (billeder/biblioteket/, lavet af lav_portraet.py, kilden i KILDER.md)
 //   stil     tidens udseende indeni den fælles ramme (js/bog.js): papir, blæk, ryggens farve og skriften til overskrifter
 //   tekster  () => import(...) af bogens tekster i js/data/opdagelser/<id>.js (hentes først, når bogen åbnes)
+//   forløb   id'et på fortællingens forløb (js/data/forloeb/), som starter efter "Begynd" første gang
+//   scene    () => import(...) af bogens tegninger i js/bog/<id>.js (lavFortælling til opslaget af slags 'scene')
 //
 // Skrifterne er OFL og ligger i fonts/ (se fonts/KILDER.md). 1600-tallets bøger bruger 'AtomLab Fell' (IM Fell English).
 
@@ -19,6 +21,9 @@ export const BØGER = [
     portræt: 'billeder/biblioteket/huygens.webp',
     stil: { papir: '#efe4cc', papirMørk: '#dccaa4', blæk: '#2b1f17', ryg: '#5b2a1e', rygKant: '#c9a24a', skrift: SKRIFT_1600 },
     tekster: () => import('./opdagelser/huygens.js'),
+    // Fortællingen: forløbet i js/data/forloeb/huygens.js og tegningerne i js/bog/huygens.js (hentes, når bogen åbnes)
+    forløb: 'saturns-oerer',
+    scene: () => import('../bog/huygens.js'),
   },
   { id: 'roemer', navn: 'Ole Rømer', kort: 'Rømer', år: 1676, ejefald: 'Ole Rømers', om: 'lyset, der bruger tid' },
   { id: 'newton', navn: 'Isaac Newton', kort: 'Newton', år: 1687, ejefald: 'Isaac Newtons', om: 'tyngdeloven' },

@@ -6,11 +6,16 @@
 // udseende kommer fra bogens stil (js/data/opdagelser.js) som CSS-variabler: --bog-papir, --bog-papir-mork, --bog-blaek og
 // --bog-skrift.
 //
-// lavBog(rod, bog, tekster, { rolig, påBladr }) bygger bogen i rod og giver { vis(nr), bladr(retning), nr(), antal(),
-// opslag(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE, OPSLAG og TOM_LINJE. Opslagets slags:
+// lavBog(rod, bog, tekster, { rolig, påBladr, påBegynd, lavScene }) bygger bogen i rod og giver { vis(nr), bladr(retning),
+// nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE, OPSLAG
+// og TOM_LINJE. Opslagets slags:
 //   'forside'  portrættet, spørgsmålet, Galileis lille tegning (eller bogens egen), navnet og "Begynd"
+//   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
+//              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
+//              kaldes, når man bladrer væk
 //   'tom'      et kapitel, der kommer i et senere trin: titlen og én linje
-// Nye slags (fortællingen, gåden, Gør det selv, bogen selv og "Om …") kommer i H2-H4.
+// påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
+// stryget og bladr()), mens et forløb kører i bogen. Nye slags (gåden, Gør det selv, bogen selv og "Om …") kommer i H3-H4.
 
 const STRYG = 50; // px vandret, før et stryg bladrer
 
@@ -39,14 +44,21 @@ function forsideHTML(bog, f) {
     + `</div></div>`;
 }
 
+function sceneHTML(o) {
+  return `<div class="bog-opslag bog-scene-opslag"><h3 class="bog-kapitel">${esc(o.titel)}</h3>`
+    + '<div class="bog-scene" data-ingen-stryg></div></div>';
+}
+
 function tomHTML(o, tekster) {
   return `<div class="bog-opslag bog-tom"><h3 class="bog-titel">${esc(o.titel)}</h3>`
     + `<p class="bog-tekst">${esc(o.tekst)}</p><p class="bog-småt">${esc(tekster.TOM_LINJE)}</p></div>`;
 }
 
-export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null } = {}) {
+export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påBegynd = null, lavScene = null } = {}) {
   const opslag = tekster.OPSLAG;
   let nr = 0;
+  let låst = false;
+  let scene = null; // tegningen i et opslag af slags 'scene' (fra lavScene)
   const s = bog.stil ?? {};
   rod.style.setProperty('--bog-papir', s.papir ?? '#efe4cc');
   rod.style.setProperty('--bog-papir-mork', s.papirMørk ?? '#dccaa4');
@@ -66,8 +78,12 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null } = {
   function vis(ny, retning = 0) {
     nr = Math.max(0, Math.min(ny, opslag.length - 1));
     const o = opslag[nr];
-    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE) : tomHTML(o, tekster);
+    scene?.fjern();
+    scene = null;
+    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE) : o.slags === 'scene' ? sceneHTML(o) : tomHTML(o, tekster);
     ramme.dataset.opslag = o.id;
+    ramme.scrollTop = 0;
+    if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));
     // Portrættet toner ind, når det er hentet (ingen tom ramme, der blinker)
     const img = ramme.querySelector('.bog-portræt img');
     if (img && !img.complete) {
@@ -79,11 +95,16 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null } = {
       ramme.animate([{ transform: `translateX(${retning > 0 ? 28 : -28}px)`, opacity: 0.55 }, { transform: 'none', opacity: 1 }], { duration: 180, easing: 'ease-out' });
     }
     sidetal.textContent = `${nr + 1} / ${opslag.length}`;
-    forrige.disabled = nr === 0;
-    næste.disabled = nr === opslag.length - 1;
+    pile();
+  }
+
+  function pile() {
+    forrige.disabled = låst || nr === 0;
+    næste.disabled = låst || nr === opslag.length - 1;
   }
 
   function bladr(retning) {
+    if (låst) return false;
     const ny = nr + Math.sign(retning);
     if (ny < 0 || ny >= opslag.length) return false;
     vis(ny, retning);
@@ -95,13 +116,13 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null } = {
     const b = h.target.closest('button');
     if (!b || b.disabled) return;
     if (b.dataset.bladr) bladr(Number(b.dataset.bladr));
-    else if (b.hasAttribute('data-begynd')) bladr(1);
+    else if (b.hasAttribute('data-begynd') && !påBegynd?.()) bladr(1);
   };
   rod.addEventListener('click', klik);
 
   // Et vandret stryg bladrer (lodret ruller siden som normalt: touch-action: pan-y i CSS)
   let start = null;
-  const ned = (h) => { if (h.isPrimary && !h.target.closest('button')) start = { x: h.clientX, y: h.clientY, id: h.pointerId }; };
+  const ned = (h) => { if (h.isPrimary && !låst && !h.target.closest('button, input, [data-ingen-stryg]')) start = { x: h.clientX, y: h.clientY, id: h.pointerId }; };
   const op = (h) => {
     if (!start || h.pointerId !== start.id) return;
     const dx = h.clientX - start.x, dy = h.clientY - start.y;
@@ -121,7 +142,16 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null } = {
     nr: () => nr,
     antal: () => opslag.length,
     opslag: () => opslag[nr].id,
+    find: (id) => opslag.findIndex((o) => o.id === id),
+    scene: () => scene,
+    lås(ja) {
+      låst = Boolean(ja);
+      rod.classList.toggle('bog-låst', låst);
+      pile();
+    },
     fjern() {
+      scene?.fjern();
+      scene = null;
       rod.removeEventListener('click', klik);
       ramme.removeEventListener('pointerdown', ned);
       ramme.removeEventListener('pointerup', op);

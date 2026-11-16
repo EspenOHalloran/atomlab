@@ -793,4 +793,11 @@ export const ORDBOG = [
     former: ['kuiperbælte', 'kuiperbæltet'],
     tekst: 'Et bælte af iskolde småkloder uden for Neptuns bane, ca. 30 til 50 gange så langt fra Solen som Jorden. Pluto er en af de største. Nogle kometer kommer derfra.',
   },
+  // Opdagelserne, forløbet "Saturns ører" (H2, 16. november 2026, docs/drejebog-huygens.md afsnit 9). Kun i forløbets linje
+  // indtil videre. "anagram" kommer i H3.
+  {
+    id: 'linse', ord: 'Linse', kunI: '.fl-tekst',
+    former: ['linse', 'linsen', 'linser', 'linserne'],
+    tekst: 'Et stykke slebet glas med krumme sider, der bøjer lyset. I en kikkert samler en stor linse forrest lyset til et billede, og en lille linse ved øjet forstørrer det. Jo bedre linserne er slebet, jo skarpere bliver billedet.',
+  },
 ];

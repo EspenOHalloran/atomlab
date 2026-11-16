@@ -2,13 +2,18 @@
 // på en hylde, der også er en tidslinje. En bygget bog står med omslaget frem og åbnes med et tryk. De kommende er en grå
 // ryg med navnet og året, og et tryk viser kun én linje. Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes
 // med import(), først når den åbnes.
-// H1 (16. november 2026): hylden, forsiden og bladringen med tomme opslag. Fortællingen, gåden, Gør det selv og bogen
-// selv kommer i H2-H4.
+// H1 (16. november 2026): hylden, forsiden og bladringen med tomme opslag. H2: fortællingen som et forløb (Forløb-klodsen
+// i js/forloeb.js) i bogens opslag af slags 'scene' med tegningerne fra js/bog/<id>.js. Første gang starter forløbet efter
+// "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
+// Gåden, Gør det selv og bogen selv kommer i H3-H4.
 
-import { BØGER, bogMed, kommerSenere, HYLDE_LINJE } from './data/opdagelser.js';
+import { BØGER, bogMed, byggede, kommerSenere, HYLDE_LINJE } from './data/opdagelser.js';
+import { forløbMed } from './data/forloeb/liste.js';
 import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavBog } from './bog.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest } from './forloeb.js';
+import { tagVentForløb } from './gaa.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -17,6 +22,7 @@ let lavet = false;
 let aktiv = false;
 let bog = null; // den åbne bog fra lavBog (eller null på hylden)
 let åbnerNr = 0; // så en langsom hentning af teksterne ikke åbner en bog, man allerede har forladt
+let åben = null; // { b, tekster, scenemodul } for den åbne bog
 let tilbageKnap = null; // "‹ Hylden", som flyttes ind i bogens række med "‹" og "›" (så bogen får hele højden)
 
 function rygHTML(b) {
@@ -37,26 +43,68 @@ function lavHylde() {
 
 function visHylde() {
   åbnerNr++;
+  if (kørerForløb()) stopForløb();
   bog?.fjern();
   bog = null;
+  åben = null;
   $('opdBogSide').hidden = true;
   $('opdHyldeSide').hidden = false;
   $('opdagelser').classList.remove('bog-åben');
 }
 
-async function åbnBog(id) {
+// Fortællingens forløb i den åbne bog: bladrer til opslaget med tegningen, låser bladringen og starter forløbet. Når det
+// slutter (taget, sprunget over eller stoppet), bliver opslaget et laboratorium (fri).
+function startFortælling() {
+  const fl = forløbMed(åben?.b.forløb);
+  if (!bog || !fl) return false;
+  const nr = bog.find('fortaelling');
+  if (nr < 0) return false;
+  if (bog.nr() !== nr) bog.vis(nr);
+  const scene = bog.scene();
+  if (!scene) return false;
+  bog.lås(true);
+  const del = scene.forløbDel(fl);
+  del.igen = 'ved at bladre til fortællingen i bogen';
+  del.veje = [{ tekst: 'Videre i bogen ›', primær: true, gør: () => bog?.bladr(1) }];
+  del.slut = () => {
+    bog?.lås(false);
+    if (bog?.scene() === scene) scene.fri();
+  };
+  startForløb(fl, del);
+  return true;
+}
+
+async function åbnBog(id, { fortælling = false } = {}) {
   const b = bogMed(id);
   if (!b?.bygget) return false;
   const nr = ++åbnerNr;
-  const tekster = await b.tekster();
+  const [tekster, scenemodul] = await Promise.all([b.tekster(), b.scene?.() ?? null]);
   if (nr !== åbnerNr || !aktiv) return false;
   bog?.fjern();
-  bog = lavBog($('opdBog'), b, tekster, { rolig: ROLIG, påBladr: () => lyd.klik() });
+  åben = { b, tekster, scenemodul };
+  const fl = forløbMed(b.forløb);
+  bog = lavBog($('opdBog'), b, tekster, {
+    rolig: ROLIG,
+    påBladr: () => lyd.klik(),
+    // Første gang: "Begynd" starter fortællingen som et forløb. Ellers bladrer den bare til fortællingen.
+    påBegynd: () => {
+      if (fl && starterSelv(fl)) { lyd.klik(); return startFortælling(); }
+      return false;
+    },
+    lavScene: (o, felt) => {
+      if (!scenemodul) return null;
+      const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, påIgen: () => { lyd.klik(); startFortælling(); } });
+      // Uden for forløbet er opslaget et laboratorium
+      queueMicrotask(() => { if (!kørerForløb() && bog?.scene() === scene) scene.fri(); });
+      return scene;
+    },
+  });
   $('opdBog').querySelector('.bog-bund').prepend(tilbageKnap);
   $('opdHyldeSide').hidden = true;
   $('opdBogSide').hidden = false;
   $('opdagelser').classList.add('bog-åben');
   $('opdBog').querySelector('.bog-begynd')?.focus({ preventScroll: true });
+  if (fortælling) startFortælling();
   return true;
 }
 
@@ -88,6 +136,7 @@ export function lavOpdagelser() {
   // main.js lukker den.
   addEventListener('keydown', (h) => {
     if (!aktiv || !bog || document.querySelector('.overlag:not(.skjult)')) return;
+    if (kørerForløb() && h.key !== 'Escape') return; // under forløbet bladrer piletasterne ikke
     if (h.key === 'Escape') {
       h.preventDefault();
       h.stopPropagation();
@@ -105,6 +154,10 @@ export function startOpdagelser() {
   verden.styring.autoRotate = !ROLIG; // stjernehimlen drejer langsomt bag hylden
   $('opdLinje').textContent = HYLDE_LINJE;
   visHylde();
+  // Et forløb fra "Din fremgang" (åbnForløb i gaa.js): åbn bogen, og start fortællingen
+  const vent = tagVentForløb(byggede().map((b) => b.forløb).filter(Boolean));
+  const b = vent && byggede().find((x) => x.forløb === vent);
+  if (b) åbnBog(b.id, { fortælling: true });
 }
 
 export function stopOpdagelser() {
@@ -120,6 +173,10 @@ export function testAdgang() {
     hylden: visHylde,
     bladr: (r) => bog?.bladr(r) ?? false,
     hylde: () => [...document.querySelectorAll('#opdHylde [data-bog]')].map((k) => ({ id: k.dataset.bog, bygget: k.classList.contains('opd-omslag') })),
+    fortælling: () => startFortælling(),
+    scene: () => bog?.scene()?.test ?? null,
+    låst: () => $('opdBog').classList.contains('bog-låst'),
+    forløb: forløbTest(),
   };
 }
 
