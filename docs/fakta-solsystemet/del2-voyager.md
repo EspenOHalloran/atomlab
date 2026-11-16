@@ -2,7 +2,7 @@
 
 # Del 2: Voyager, Den store tur og slyngfysikken (til Rumrejsen)
 
-**Status: IKKE tjekket på nettet.** Grænsen for websøgninger var brugt op, da denne del blev lavet (23. oktober 2026), så alt herunder er fra hjælpeagentens hukommelse. URL'erne er der, hvor tallene skal slås op. Sikkerheden gælder hukommelsen, ikke en tjekket kilde. Hele afsnittet skal tjekkes med `/faktatjek`, før Rumrejsen bygges (trin 5-6). Prototypen (trin 1b) bruger det ikke.
+**Status:** Lavet fra hjælpeagentens hukommelse 23. oktober 2026. "Mindst sikre" nr. 1, 3 og 6 er tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](../fable/E13-faktatjek.md) afsnit 2d og 3. Resten er ikke tjekket. URL'erne er der, hvor tallene skal slås op. Sikkerheden gælder hukommelsen, ikke en tjekket kilde. Hele afsnittet skal tjekkes med `/faktatjek`, før Rumrejsen bygges (trin 5-6). Prototypen (trin 1b) bruger det ikke.
 
 ## 1. Voyager 1 og 2
 
@@ -17,7 +17,7 @@
 | Sonde | Mål | Dato | Nærmeste afstand | Sikkerhed |
 |---|---|---|---|---|
 | V1 | Jupiter | 5. marts 1979 | ca. 349.000 km fra centrum | ret sikker |
-| V2 | Jupiter | 9. juli 1979 | ca. 570.000 km (NASA, "over skyerne") eller ca. 720.000 km fra centrum, kilderne er uenige | usikker |
+| V2 | Jupiter | 9. juli 1979 | ca. 570.000 km over skytoppene, ca. 645.000 km fra centrum (NASA) | sikker |
 | V1 | Titan | 12. nov. 1980 | ca. 6.490 km fra centrum, ca. 3.900-4.000 km over overfladen | ret sikker |
 | V1 | Saturn | 12. nov. 1980 | ca. 124.000 km over skyerne (ca. 184.000 km fra centrum) | ret sikker |
 | V2 | Saturn | 26. aug. 1981 | ca. 101.000 km over skyerne (ca. 161.000 km fra centrum) | ret sikker |
@@ -128,12 +128,12 @@ Kilder: https://science.nasa.gov/mission/voyager/voyager-1/ og https://science.n
 
 ## Mindst sikre påstande (tjek dem først)
 
-1. Datoen 18. november 2026 for 1 lysdøgn, og NASA's udmelding om den. Jeg har kun mit eget overslag, som rammer midt i november.
+1. **Bekræftet (E13):** NASA skriver, at Voyager 1 onsdag 18. november 2026 er ét lysdøgn (25,9 mia. km) fra Jorden.
 2. Voyager 2's fart ved Jupiter før og efter (ca. 10 → ca. 20 km/s). Det er et overslag, som skal aflæses på grafen.
-3. Voyager 2's nærmeste afstand til Jupiter (570.000 km eller ca. 720.000 km).
+3. **Afklaret (E13):** ca. 570.000 km over skytoppene og ca. 645.000 km fra centrum (NASA). "720.000 km" var forkert.
 4. Fejltabellen for Standish' elementer.
 5. Sidetallet for Sagans tekst (kapitel 1 "You Are Here" er ret sikkert).
-6. BepiColombos ankomst i november 2026.
+6. **Bekræftet (E13, kun Wikipedia):** BepiColombo ankommer 21. november 2026.
 7. Hvornår RTG'erne ikke kan holde noget instrument i gang (kun "2030'erne").
 
 Når der er netadgang igen, kan opgaven sendes igen, og så kan disse punkter tjekkes mod kilderne.

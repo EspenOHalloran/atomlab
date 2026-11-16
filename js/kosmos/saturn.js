@@ -120,7 +120,7 @@ export default {
     ['Saturns bredde', 'ca. 120.500 km'],
     ['Tæthed', 'lettere end vand (i snit)'],
     ['Ringenes tykkelse', 'mange steder ca. 10 m'],
-    ['Kendte måner', 'over 280 (2026)'],
+    ['Kendte måner', 'over 290 (2026)'],
   ],
   side: SIDE, // teksten i højre panel (js/data/sider/saturn.js)
   sider: SIDER,
