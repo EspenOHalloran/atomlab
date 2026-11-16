@@ -129,9 +129,11 @@ for (const [navn, opts] of størrelser) {
     const r = k.getBoundingClientRect();
     const x = r.left + r.width / 2, y = r.top + r.height / 2;
     const send = (type, cx) => k.dispatchEvent(new PointerEvent(type, { pointerId: 7, isPrimary: true, button: 0, clientX: cx, clientY: y, bubbles: true }));
-    const vent = () => new Promise((ok) => setTimeout(ok, 12));
+    // 12 ms mellem bevægelserne, holdt i en løkke: setTimeout kom under belastning så sent, at kastet blev langsomt
+    // og kun drejede ét kort (16. november 2026)
+    const vent = () => { const t = performance.now(); while (performance.now() - t < 12); };
     send('pointerdown', x);
-    for (let i = 1; i <= 4; i++) { await vent(); send('pointermove', x - (i / 4) * 0.6 * rx * 0.75); }
+    for (let i = 1; i <= 4; i++) { vent(); send('pointermove', x - (i / 4) * 0.6 * rx * 0.75); }
     send('pointerup', x - 0.6 * rx * 0.75);
   });
   await ro();
