@@ -3,7 +3,7 @@
 *Opus' plan 15. november 2026 efter [prompt-videnskabsfolk.md](prompt-videnskabsfolk.md) og jeres svar 14. november 2026 (står i prompten og i [koereplan.md](koereplan.md), nr. 3 under "Nyt indhold"). Sporet er **Videnskabsfolkene** ([lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md)). Drejebogen til den første bog er [drejebog-huygens.md](drejebog-huygens.md), og Fable tjekker den senest 16. november ([prompt-fable-huygens.md](prompt-fable-huygens.md)). Intet er bygget. Et go pr. trin (H1, H2 …).*
 
 ## 1. Hvad og hvorfor
-**Kernesætningen for hele delen** (fra [fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)): *"Efter fem minutter kan brugeren sige: De fandt det ved at se efter og måle, ikke ved at gætte, og jeg kan selv se det samme her i AtomLab."*
+**Kernesætningen for hele delen** (fra [fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)): *"Efter fem minutter kan brugeren sige: De gættede ikke bare. De så efter og målte, og jeg kan selv se det samme her i AtomLab."* (Fables forslag i [E12](fable/E12-huygens.md), jeres valg 16. november 2026. Den gamle sagde "ikke ved at gætte", men Huygens kaldte selv ringen en hypotese, og forløbene beder barnet gætte.)
 
 Ti bøger, én pr. person. Hver person har **én** opdagelse og **ét** sted i programmet, hvor man selv kan se den (Retningens punkt 9). Man læser ikke om personen først: Man gør noget i hvert opslag, løser en gåde fra personens egen bog, springer ud i programmet og ser det selv, og til sidst kan nørderne bladre i den rigtige bog fra dengang.
 
@@ -98,7 +98,7 @@ Hver skrift og hvert nyt domæne (fx `raw.githubusercontent.com` for Google Font
 ## 8. Trinene (et go pr. trin)
 *Model: Opus, høj effort. Hvert trin er én session med prompten i [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md).*
 - [x] **H0: Plan, drejebog, faktagrundlag og filteret** (15. november 2026, kun dokumenter og værktøjet). Fable tjekker drejebogen senest 16. november.
-- [ ] **H1: Delen og forsiden** (mellem). Opus' noter til Fables svar (`docs/fable/E12-huygens-noter.md`) og rettelserne i drejebogen først. Så: `opdagelser` i skærmlisten og menuen, hylden, `js/bog.js` med forsiden og bladringen (tomme opslag), stilen for Huygens med IM Fell English (spørg om domænet), portrættet og `KILDER.md`. Test 1, 3 og 8.
+- [x] **H1: Delen og forsiden** (mellem, lavet 16. november 2026, se [kode/opdagelser.md](kode/opdagelser.md)). Opus' noter til Fables svar (`docs/fable/E12-huygens-noter.md`) og rettelserne i drejebogen først. Så: `opdagelser` i skærmlisten og menuen, hylden, `js/bog.js` med forsiden og bladringen (tomme opslag), stilen for Huygens med IM Fell English (spørg om domænet), portrættet og `KILDER.md`. Test 1, 3 og 8.
 - [ ] **H2: Fortællingen** (mellem til stor). Trin 1-3 i 2D (linsen, nætterne med Titan og ringen, der drejes, med de små tegninger fra tavlen) som forløb. Test 4 og 5.
 - [ ] **H3: Gåden og Gør det selv** (mellem). Trin 4 (ANNULO), "Det så du", hele anagrammet som udfordring, knappen til Saturns ringe, "Hvordan ved vi det?"-kortet ved Saturn og knappen ved citatet. Ordene `linse` og `anagram` i Ordbogen. Test 2 og 6.
 - [ ] **H4: Bogen selv** (mellem). `lav_bogsider.py`, s. 46-48 og tavlen med de glødende steder, latin og dansk, "Hvorfor?", "For nørder" og "Ærligt talt". Test 7. `/faktatjek` på alle teksterne og `/faerdig`. Så har Huygens status "prøve" og venter på **prøven med jeres søn** ([guide-proeven.md](guide-proeven.md)).

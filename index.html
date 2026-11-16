@@ -139,6 +139,13 @@
           <small>Det, ingen ved endnu, og hvordan forskerne prøver at finde ud af det</small>
         </span>
       </a>
+      <a href="#opdagelser">
+        <span class="kort-ikon ikon-opdagelser" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 9c-3-2-7-2.5-11-2v17c4-.5 8 0 11 2 3-2 7-2.5 11-2V7c-4-.5-8 0-11 2z"/><path d="M16 9v17"/></svg></span>
+        <span class="kort-tekst">
+          <strong>Opdagelserne</strong>
+          <small>Bladr i bøger om store opdagelser, og se dem selv i AtomLab</small>
+        </span>
+      </a>
     </nav>
   </section>
 
@@ -1102,6 +1109,28 @@
     </div>
     <div class="panel gaader-panel" id="gaaderPanel">
       <article class="gaade-kort" id="gaadeKort" hidden></article>
+    </div>
+  </section>
+  <section id="opdagelser" class="skærm skjult" aria-label="Opdagelserne">
+    <!-- Opdagelserne (js/opdagelser.js, listen i js/data/opdagelser.js, docs/plan-videnskabsfolk.md): hylden med de ti
+         bøger (en tidslinje) og én åben bog ad gangen (klodsen i js/bog.js, teksterne i js/data/opdagelser/). -->
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Opdagelserne</h2>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <div class="opd-rum">
+      <div class="opd-hylde-side" id="opdHyldeSide">
+        <div class="opd-hylde" id="opdHylde" role="list" aria-label="Bøgerne efter årstal"></div>
+        <p class="opd-linje" id="opdLinje" aria-live="polite"></p>
+      </div>
+      <div class="opd-bog-side" id="opdBogSide" hidden>
+        <button class="knap lille opd-tilbage" id="opdTilHylden">‹ Hylden</button>
+        <div class="bog" id="opdBog" role="region"></div>
+      </div>
     </div>
   </section>
 

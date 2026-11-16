@@ -1203,6 +1203,57 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaader-ind small { color: var(--svag); font-size: 14px; line-height: 1.35; }
 #gaader .gaader-ind-knap { margin-top: 6px; padding: 6px 18px; border-radius: 20px; background: var(--accent); color: #031018; font-weight: 700; font-size: 15px; }
 @media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaader-pil span { display: none; } #gaader .gaader-pil { min-width: 44px; padding: 0 8px; } #gaader .gaader-ind strong { font-size: 17px; } }
+.ikon-opdagelser { /* Opdagelserne i menuen: en åben bog */ display: grid; place-items: center; background: radial-gradient(circle, rgba(214, 170, 82, 0.3), rgba(214, 170, 82, 0.06) 70%); border: 2px solid rgba(214, 170, 82, 0.6); }
+.ikon-opdagelser svg { width: 30px; height: 30px; fill: rgba(255, 238, 200, 0.16); stroke: #f6e3b0; stroke-width: 1.8; stroke-linejoin: round; filter: drop-shadow(0 0 4px rgba(214, 170, 82, 0.8)); }
+#opdagelser { /* Opdagelserne (js/opdagelser.js): hylden med de ti bøger og én åben bog (js/bog.js). Skriften hentes med FontFace i JS */ grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top" "rum"; }
+#opdagelser .opd-rum { grid-area: rum; min-height: 0; display: grid; }
+#opdagelser .opd-hylde-side { align-self: center; justify-self: center; width: min(1000px, 100%); display: grid; gap: 34px; justify-items: center; }
+#opdagelser .opd-hylde-side[hidden], #opdagelser .opd-bog-side[hidden] { display: none; }
+#opdagelser .opd-hylde { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; row-gap: 40px; }
+#opdagelser .opd-plads { position: relative; display: flex; align-items: flex-end; padding: 0 3px; border-bottom: 18px solid #5a3b22; box-shadow: 0 12px 14px -10px rgba(0, 0, 0, 0.8); }
+#opdagelser .opd-år { position: absolute; left: 0; right: 0; bottom: -18px; text-align: center; font: 13px/18px Georgia, serif; color: #f2dcb4; pointer-events: none; }
+#opdagelser .opd-ryg { width: 46px; height: 170px; padding: 10px 0; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 3px 3px 0 0; background: linear-gradient(90deg, #353a4c, #545a70 45%, #353a4c); color: #c7cde0; font: 15px/1 Georgia, serif; writing-mode: vertical-rl; transform: rotate(180deg); cursor: pointer; opacity: 0.85; }
+#opdagelser .opd-plads:nth-child(3n) .opd-ryg { height: 186px; }
+#opdagelser .opd-plads:nth-child(4n+1) .opd-ryg { height: 158px; width: 50px; }
+#opdagelser .opd-ryg:hover, #opdagelser .opd-ryg:focus-visible { opacity: 1; color: #fff; }
+#opdagelser .opd-omslag { width: 140px; height: 206px; margin: 0 6px; padding: 8px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 2px solid var(--ryg-kant); border-radius: 3px 7px 7px 3px; background: var(--ryg); color: #f4e2b3; font-family: var(--bog-skrift); cursor: pointer; box-shadow: inset 7px 0 8px -5px rgba(0, 0, 0, 0.7), 0 0 22px rgba(214, 170, 82, 0.35); transition: transform 0.2s; }
+#opdagelser .opd-omslag:hover, #opdagelser .opd-omslag:focus-visible { transform: translateY(-5px); }
+#opdagelser .opd-omslag img { width: 100%; height: auto; border: 1px solid var(--ryg-kant); }
+#opdagelser .opd-omslag-titel { font-size: 20px; line-height: 1.1; }
+#opdagelser .opd-omslag-navn { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+#opdagelser .opd-linje { margin: 0; padding: 9px 16px; max-width: 40em; border-radius: 18px; background: var(--panel); border: 1px solid var(--panel-kant); text-align: center; font-size: 16px; line-height: 1.4; }
+#opdagelser .opd-bog-side { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr); justify-items: center; }
+#opdagelser .opd-tilbage { grid-column: 1; justify-self: start; min-height: 44px; white-space: nowrap; }
+#opdagelser .bog { width: min(1040px, 100%); min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 8px; }
+#opdagelser .bog-ramme { position: relative; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: clamp(14px, 3vw, 34px); border-radius: 6px; background: radial-gradient(ellipse at 50% 42%, var(--bog-papir) 55%, var(--bog-papir-mork)); color: var(--bog-blaek); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 0 50px rgba(120, 80, 30, 0.25); touch-action: pan-y; }
+#opdagelser .bog-ramme::-webkit-scrollbar { display: none; }
+#opdagelser .bog-forside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(18px, 4vw, 60px); align-items: center; align-content: safe center; min-height: 100%; }
+#opdagelser .bog-forside::before { content: ""; position: absolute; top: 4%; bottom: 4%; left: 50%; width: 1px; background: linear-gradient(transparent, rgba(80, 50, 20, 0.35), transparent); box-shadow: 0 0 14px 4px rgba(80, 50, 20, 0.12); pointer-events: none; }
+#opdagelser .bog-portræt { margin: 0; justify-self: center; text-align: center; }
+#opdagelser .bog-portræt img { display: block; margin: 0 auto; width: auto; height: auto; max-width: 100%; max-height: min(60vh, 520px); -webkit-mask-image: radial-gradient(ellipse 47.6% 48.4% at 50% 49%, #000 97%, transparent 100%); mask-image: radial-gradient(ellipse 47.6% 48.4% at 50% 49%, #000 97%, transparent 100%); transition: opacity 0.4s; }
+#opdagelser .bog-portræt img.henter { opacity: 0; }
+#opdagelser :is(.bog-portræt, .bog-galilei) figcaption, #opdagelser .bog-småt { margin: 6px 0 0; font-size: 13px; line-height: 1.35; opacity: 0.75; }
+#opdagelser .bog-forside-tekst { display: grid; gap: 16px; justify-items: start; }
+#opdagelser .bog-titel { margin: 0; font-family: var(--bog-skrift); font-weight: 400; font-size: clamp(30px, 4.4vw, 52px); line-height: 1.08; }
+#opdagelser .bog-galilei { margin: 0; width: min(300px, 100%); }
+#opdagelser .bog-galilei svg { display: block; width: 100%; height: auto; border-radius: 3px; }
+#opdagelser .bog-tavle { fill: #1d1a17; }
+#opdagelser .bog-tavle-prik { fill: rgba(255, 255, 255, 0.55); }
+#opdagelser .bog-tavle-figur { fill: #f3ead7; }
+#opdagelser .bog-navn { margin: 0; font-family: var(--bog-skrift); font-size: 20px; }
+#opdagelser .bog-begynd { min-height: 48px; padding: 0 26px; font-size: 18px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
+#opdagelser .bog-tom { display: grid; align-content: center; justify-items: center; gap: 10px; min-height: 100%; text-align: center; }
+#opdagelser .bog-tekst { margin: 0; max-width: 34em; font-size: 17px; line-height: 1.5; }
+#opdagelser .bog-bund { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto minmax(0, 1fr); align-items: center; gap: 14px; }
+#opdagelser .bog-pil[data-bladr="-1"] { grid-column: 2; }
+#opdagelser .bog-sidetal { grid-column: 3; }
+#opdagelser .bog-pil[data-bladr="1"] { grid-column: 4; }
+#opdagelser .bog-pil { min-width: 56px; min-height: 44px; border-radius: 22px; border: 1px solid var(--panel-kant); background: var(--panel); color: var(--tekst); font-size: 26px; line-height: 1; cursor: pointer; }
+#opdagelser .bog-pil:disabled { opacity: 0.3; cursor: default; }
+#opdagelser .bog-sidetal { min-width: 4em; text-align: center; color: var(--svag); font-size: 15px; font-variant-numeric: tabular-nums; }
+@media (max-width: 820px) and (orientation: portrait) { #opdagelser .bog-forside { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 14px; } #opdagelser .bog-forside::before { display: none; } #opdagelser .bog-portræt img { max-height: 34vh; } #opdagelser .bog-forside-tekst { justify-items: center; text-align: center; gap: 12px; } #opdagelser .bog-galilei { width: min(240px, 100%); } } /* Højkant: portrættet øverst og teksten under */
+@media (max-height: 500px) and (orientation: landscape) { #opdagelser .bog-ramme { padding: 10px 16px; } #opdagelser .bog-portræt img { max-height: calc(100vh - 170px); } #opdagelser .bog-portræt figcaption { display: none; } #opdagelser .bog-titel { font-size: 26px; } #opdagelser .bog-forside-tekst { gap: 8px; } #opdagelser .bog-galilei { width: 170px; } #opdagelser .bog-galilei figcaption { margin-top: 2px; } #opdagelser .bog-navn { font-size: 17px; } #opdagelser .bog-begynd { min-height: 44px; font-size: 16px; } #opdagelser .opd-ryg { height: 120px; } #opdagelser .opd-plads:nth-child(n) .opd-ryg { height: 120px; } #opdagelser .opd-omslag { width: 100px; height: 150px; } #opdagelser .opd-omslag-titel { font-size: 16px; } #opdagelser .opd-hylde-side { gap: 26px; } }
+@media (max-width: 560px) { #opdagelser .opd-ryg, #opdagelser .opd-plads:nth-child(n) .opd-ryg { width: 44px; height: 128px; font-size: 14px; } #opdagelser .opd-omslag { width: 112px; height: 168px; margin: 0 4px; } #opdagelser .opd-omslag-titel { font-size: 17px; } #opdagelser .opd-hylde { row-gap: 34px; } #opdagelser .opd-hylde-side { gap: 30px; } #opdagelser .bog-titel { font-size: 28px; } #opdagelser .bog-portræt img { max-height: 26vh; } #opdagelser .bog-galilei { width: min(200px, 100%); } #opdagelser .bog-ramme { padding: 12px; } #opdagelser .bog-bund { gap: 8px; } }
 
 /* ---------- Kosmos ---------- */
 .ikon-kosmos { background: radial-gradient(circle, #000 0 9px, #fff3c4 10px, #ffb347 12px, rgba(255, 120, 60, 0.45) 16px, transparent 24px); }
