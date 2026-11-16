@@ -3,7 +3,7 @@
 *Opus' plan 15. november 2026 efter [prompt-videnskabsfolk.md](prompt-videnskabsfolk.md) og jeres svar 14. november 2026 (står i prompten og i [koereplan.md](koereplan.md), nr. 3 under "Nyt indhold"). Sporet er **Videnskabsfolkene** ([lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md)). Drejebogen til den første bog er [drejebog-huygens.md](drejebog-huygens.md), og Fable tjekker den senest 16. november ([prompt-fable-huygens.md](prompt-fable-huygens.md)). Intet er bygget. Et go pr. trin (H1, H2 …).*
 
 ## 1. Hvad og hvorfor
-**Kernesætningen for hele delen** (fra [fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)): *"Efter fem minutter kan brugeren sige: De fandt det ved at se efter og måle, ikke ved at gætte, og jeg kan selv se det samme her i AtomLab."*
+**Kernesætningen for hele delen** (fra [fakta-videnskabsfolk.md](fakta-videnskabsfolk.md)): *"Efter fem minutter kan brugeren sige: De gættede ikke bare. De så efter og målte, og jeg kan selv se det samme her i AtomLab."* (Fables forslag i [E12](fable/E12-huygens.md), jeres valg 16. november 2026. Den gamle sagde "ikke ved at gætte", men Huygens kaldte selv ringen en hypotese, og forløbene beder barnet gætte.)
 
 Ti bøger, én pr. person. Hver person har **én** opdagelse og **ét** sted i programmet, hvor man selv kan se den (Retningens punkt 9). Man læser ikke om personen først: Man gør noget i hvert opslag, løser en gåde fra personens egen bog, springer ud i programmet og ser det selv, og til sidst kan nørderne bladre i den rigtige bog fra dengang.
 

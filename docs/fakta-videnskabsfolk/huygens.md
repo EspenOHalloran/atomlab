@@ -39,8 +39,8 @@
 | **Galilei** så i 1610 Saturn som tre kloder, der næsten rørte hinanden. I 1612 forsvandt "ørerne" (ringen stod på kant) | Wikipedia "Rings of Saturn" (brevet til hertugen af Toscana; "In 1612 the Earth passed through the plane of the rings and they became invisible"). Det første også i citatet `huygensSaturn` (faktatjekket 29. oktober 2026) | Sikker (1610), Ret sikker (1612) |
 | I 1655 så Huygens med 12-fods-kikkerten "armene" stikke ud i én lige linje, "som om en akse gik gennem planeten", og det samme dag efter dag. Derfor måtte Saturn være omgivet af en ring, der går rundt om den | s. 46 ("secundum eandem rectam lineam protendebantur, velut si axe quodam medius planeta trajiceretur … intellexi … nisi ut globus Saturni a corpore alio aequaliter undique cinctus poneretur, atque ita annulus quidam medium eum ambiret") | Sikker |
 | Han målte, at armene hældte **mere end 20°** i forhold til ekliptika (Jordens baneplan). Derfor ser ringen skiftevis ud som en bred ellipse, en smal ellipse og til sidst som en ret linje | s. 46 ("intersecare eam angulo 20 partibus majore … nunc ellipsin satis latam, nunc eandem strictiorem, nonnunquam denique & rectam lineam") | Sikker |
-| I dag: Saturns akse hælder **26,7°** i forhold til dens bane, og banen hælder ca. 2,5° i forhold til Jordens. Ringen hælder derfor ca. 27-28° i forhold til ekliptika | NSSDC (Saturn fact sheet: obliquity 26,73°, inclination 2,49°), efter hukommelsen | Ret sikker. Skriv "ca. 27°" i "For nørder" |
-| **Anagrammet:** udgivet **25. marts 1656** "med blandede bogstaver sammen med iagttagelsen af Saturns måne" | s. 47 ("quam anno 1656 die 25 Martij permixtis literis una cum observatione Saturniae Lunae edidimus"), læst på billedet | Sikker |
+| I dag: Saturns akse hælder **26,7°** i forhold til dens bane, og banen hælder ca. 2,5° i forhold til Jordens. Ringen hælder derfor ca. 27-28° i forhold til ekliptika | NSSDC (Saturn fact sheet: obliquity 26,73°, inclination 2,49°), efter hukommelsen | Ret sikker. **Rettet 16. november 2026:** Regnet med IAU's pol (RA 40,589°, Dec 83,537°) mod ekliptikas pol giver **28,05°**. Skriv "ca. 28° mod ekliptika" (26,7° er mod Saturns egen bane). Huygens satte senere ringens plan parallelt med Jordens ækvator, altså 23½° (OCR: "planum annuli plano aequatoris nostri parallelum") |
+| **Anagrammet:** udgivet i **marts 1656** "med blandede bogstaver sammen med iagttagelsen af Saturns måne". Skriftet er dateret **5. marts 1656** (s. 2: "Itaque anno 1656 die 5 Martij, de Saturni Luna … observationem emisi"). s. 47 siger 25. marts, men det er Huygens' egen fejl (Fable E12, tjekket i OCR 16. november 2026) | s. 2 og s. 47 | Sikker (5. marts) |
 | **Bogstaverne:** a×7, c×5, d, e×5, g, h, i×7, l×4, m×2, n×9, o×4, p×2, q, r×2, s, t×5, u×5. **62 bogstaver** i alt | s. 47, læst på billedet. Talt efter i sætningen (et lille script) | Sikker |
 | **Sætningen:** "Annulo cingitur, tenui, plano, nusquam cohaerente, ad eclipticam inclinato" (bogen skriver "cohærente" med æ) | s. 47 (kursiv); citatet `huygensSaturn` | Sikker |
 | Bogen *Systema Saturnium* udkom i Haag i **1659**, tilegnet prins Leopold af Toscana (Leopoldo de' Medici) | Titelbladet ("Hagae-Comitis … M.DCLIX") og tilegnelsen ("Serenissimo Principi Leopoldo ab Hetruria", OCR'en er utydelig) | Sikker (år og by), Ret sikker (Leopold) |
@@ -70,7 +70,9 @@
 | Huygens beskrev det i *Traité de la lumière* (1690), hvor lyset er bølger | Wikipedia "Treatise on Light" | Ret sikker |
 
 ## 6. Nye fælder (også skrevet i fakta-faelder-liv-og-videnskabsfolk.md)
-- "Skriftet om Titan kom i 1655" (Wikipedia "Titan (moon)"). Huygens skriver selv, at det udkom 25. marts 1656 sammen med anagrammet.
+- "Skriftet om Titan kom i 1655" (Wikipedia "Titan (moon)"). Huygens skriver selv, at det udkom i marts 1656 sammen med anagrammet (dateret 5. marts, s. 2).
+- "Anagrammet kom præcis ét år efter Titan" (s. 47 siger 25. marts 1656, men s. 2 siger 5. marts). Huygens husker selv forkert.
+- "Saturn vipper, så ringen forsvinder." Ringen peger samme vej i rummet. Det er Saturn og Jorden, der flytter sig om Solen, så vi ser den fra en ny vinkel.
 - "Huygens var 26, da han fandt Titan." Han var 25 (født april 1629, Titan marts 1655).
 - "Huygens' kikkert forstørrede 43 gange" eller "50 gange". Kilderne er uenige, og bogen giver kun længden og okularet. Skriv "ca. 50 gange" eller "omkring 40-50 gange".
 - "Huygens fandt ud af, at ringen består af is og sten." Han troede, den var fast (s. 48). Det var Maxwell (1859) og Keeler (1895).
@@ -78,5 +80,5 @@
 
 ## 7. Det, Fable bør se på
 - Oversættelsen af s. 46-48 i [drejebog-huygens.md](../drejebog-huygens.md), afsnit 6 (Opus' latin, ikke tjekket af andre).
-- Om Saturns ring stod næsten på kant omkring 1656 (regnet: ca. hvert 14,7. år tilbage fra 2025 giver ca. 1657 og 1612). **Usikker**, så det står ikke i fortællingen.
+- Om Saturns ring stod næsten på kant omkring 1656. **Nu Sikker** (s. 16-17, OCR tjekket 16. november 2026): Andre så Saturn rund fra sidst i november 1655, Huygens så den uden arme 16. januar 1656 ("brachiis suis spoliatum penitus") og til 17. juni, og armene var tilbage 13. oktober 1656, "senere end jeg havde forudsagt" ("serius quidem quam … praedixeram").
 - Tallet for forstørrelsen (43 eller ca. 50).
