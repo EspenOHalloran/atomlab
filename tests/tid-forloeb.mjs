@@ -66,6 +66,16 @@ await page.screenshot({ path: `${UD}/a1-saa.png` });
 // A2: flyv igen og se "Dit ur" undervejs: rejsen holder pause imens
 await page.click('#kosmos .forløb-linje [data-nav="næste"]');
 await page.click('#kosmos .forløb-linje .fl-gæt >> nth=1');
+// Først en tur uden "Dit ur": ved landingen kommer et vink (Fable E14), og ⏩ hedder "Spol frem"
+await knap('flyv');
+const spolTekst = await page.textContent('#kosmos .forløb-linje [data-knap="hurtig"]');
+await spol(32);
+await page.waitForFunction(() => atomlabTest.kosmos.fænomen().tilstand() === 'færdig', null, { timeout: 20000, polling: 100 });
+const vinkUden = (await page.textContent('#kosmos .forløb-linje .fl-vink').catch(() => '')) ?? '';
+f = await F();
+tjek('A2 uden "Dit ur": landet, stadig i gør, vinket siger "Flyv igen, og tryk på "Dit ur"", og ⏩ hedder "Spol frem"',
+  f.fase === 'gør' && /Flyv igen, og tryk på "Dit ur"/.test(vinkUden) && /Spol frem/.test(spolTekst) && !/Hurtigere/.test(spolTekst), JSON.stringify({ vinkUden, spolTekst, f }));
+await page.screenshot({ path: `${UD}/a2-vink.png` });
 await knap('flyv');
 await spol(3);
 await knap('mitur');
