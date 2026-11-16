@@ -38,7 +38,7 @@ Kan barnet ikke sige kernesætningen, er det forløbet, der skal rettes, ikke ba
 - **Rejsen i tid:** De tre spørgsmål i [E4, afsnit 6](fable/E4-tid.md) ("Hvem var ældst …", "Hvordan kan det ske? …" og "Hvad var det mærkelige ved lyset?") er gode. **E4's otte ting at se efter passer ikke længere** (skyderen, "Vis lysuret" og scene 5 er ikke i forløbene). Se i stedet efter:
   1. Når han "Dit ur" i trin 2, mens skibet flyver?
   2. Læser han urene i scenen eller linjen nederst?
-  3. Hvad tror han, "Hurtigere" (eller "Spol frem") gør?
+  3. Hvad tror han, "Spol frem" gør (hed "Hurtigere" i E14)? Ser han vinket ved landingen, hvis han ikke nåede uret?
   4. Hvad siger han ved hjemkomsten, og tror han, at tvillingen er yngre, fordi turen var kortere? (Det er fælden i trin 3, tilføjet fra [E14-noterne](fable/E14-noter.md).)
 - **Rundt om Solen (Overblikket):** Gode. *Læg til:* "Hvor var Jorden, da alt var i rigtig størrelse?"
 
