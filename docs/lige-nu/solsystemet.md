@@ -2,12 +2,13 @@
 
 *Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 16. november 2026.*
 
-**Senest lavet (16. november 2026): Feedback nr. 5, ryk ved skift** (prompten i [prompt-solsystem-feedback.md](../prompt-solsystem-feedback.md)).
-- **Shaderne:** Kloden er skjult under rejseskiltet og i overblikkets mørke, til dens shadere er oversat (højst 1,5 s, `skjulTilKlar`). Three.js ventede ellers første gang, en shader blev tegnet, også bag skiltet. "Ring-shaderen" blev ikke bygget igen: Hver gasplanet har sin egen udgave.
-- **Kortene:** Kortkøen (`js/solsystem/kortkoe.js`) lægger ét kort pr. billede i grafikkortet (fx Jordens fire månedskort), og månerne på forhånd venter, til kameraet ikke flyver.
-- **Kig efter:** mål igen på pc og Tab A11, se [ikke-afproevet.md](../ikke-afproevet.md).
+**Senest lavet (16. november 2026): Feedback om at åbne Kosmos og Solsystemet.**
+- **Kosmos' forside** (`js/kosmos/oversigt.js`): Fra menuen starter Kosmos altid på forsiden "Kosmos" med fire kort (ét pr. gruppe, en knap pr. fænomen). Det sidst valgte fænomen (`atomlabKosmos`) åbnes ikke længere af sig selv. Før landede man midt i fx forløbet "Rejsen i tid" uden listen.
+- **Overblikket i Solsystemet:** Trin 1 i "Rundt om Solen" viser først hele Solsystemet i 2,5 s (`HEL_S`) og glider så ind til de fire inderste.
+- **Ud af et forløb:** "Spring over" er nu knappen "✕ Ud af forløbet" i alle forløb (`js/forloeb.js`, `.fl-spring`).
+- **Forberedt:** "For nørder" bliver "Vil du vide mere?" ([prompt-vil-du-vide-mere.md](../prompt-vil-du-vide-mere.md), sporet Småting).
 
-**Før det:** Feedback nr. 1, 2 og 4, Opus' noter til Fables drejebog til Merkur og Pluto (E16), rettelserne fra E14 i "Rundt om Solen", overblikket trin 4 (forløbet og "Rejs med lyset"), overblikket trin 1-3, Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
+**Før det:** Feedback nr. 5 (ryk ved skift), Feedback nr. 1, 2 og 4, Opus' noter til Fables drejebog til Merkur og Pluto (E16), rettelserne fra E14 i "Rundt om Solen", overblikket trin 4 (forløbet og "Rejs med lyset"), overblikket trin 1-3, Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
 
 **Næste (venter på jeres go):**
 00. **Feedback fra prøven 16. november 2026:** Nr. 1, 2, 4 og 5 er lavet. Tilbage er jeres måling af nr. 5. **Nr. 3, Solen (jeres valg 16. november 2026: en bedre tegning, ikke et foto):** En egen shader i `js/kosmos/solen.js` (Kosmos og Stjerneovnen røres ikke): den rigtige mørke rand (kanten ca. 40 % af midten), fine granuler med mørke render, få solpletter, der drejer hurtigst ved ækvator, billigere med `LAV_KVALITET`. Ret "Ærligt talt" (der står "ingen solpletter"). Foto fra SDO blev fravalgt (kun forsiden, bagsiden tom, 2-4 MB). Prompt til en ny session: "Læs docs/prompt-solen.md og kør den." (Opus, høj effort).

@@ -3,7 +3,7 @@
 // Kun dem i listen: "Hvordan kan det ske?" (tidhvorfor) hører til "Tid" og tælles ikke med (14. november 2026).
 
 export const FÆNOMEN_IDER = {
-  kosmos: ['bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
+  kosmos: ['oversigt', 'bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
   solsystem: ['overblik', 'solen', 'solstorm', 'solensfremtid', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun'],
 };
 
@@ -40,7 +40,7 @@ export function flytGemt() {
     const sidst = localStorage.getItem(k.valgt);
     if (ider.has(sidst)) {
       if (!localStorage.getItem(s.valgt)) localStorage.setItem(s.valgt, sidst);
-      localStorage.removeItem(k.valgt); // Kosmos starter så på Big Bang
+      localStorage.removeItem(k.valgt); // Kosmos starter så på oversigten
     }
   } catch {
     // ingen lagring

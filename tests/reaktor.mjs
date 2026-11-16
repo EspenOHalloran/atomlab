@@ -93,6 +93,8 @@ tjek('Vis mig: dør ikke ud, og reaktoren kører som regel videre bagefter (100 
 // En CSS-klasse på flere skærme (fx .del-knap) må ikke ændre Reaktoren: Et tryk i Kosmos' panel lader Reaktoren være
 await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
+await page.evaluate(() => window.atomlabTest.kosmos.vælg("bigbang")); // forsiden har ingen boks
+await page.waitForTimeout(400);
 await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary');
 await page.evaluate(() => { location.hash = '#reaktor'; });
 await page.waitForTimeout(1500);

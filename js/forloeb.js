@@ -251,7 +251,7 @@ function tegn() {
   const prikker = data.trin.map((_, i) => `<i class="${i < k.nr || (i === k.nr && (k.fase === 'så' || slut)) ? 'ja' : ''}${i === k.nr && !slut ? ' nu' : ''}"></i>`).join('');
   let html = `<div class="fl-hoved"><b class="fl-titel">${esc(data.titel)}</b><span class="fl-prikker" aria-hidden="true">${prikker}</span>`
     + `<span class="fl-nr">${slut ? 'Det så du' : `Trin ${k.nr + 1} af ${antal}`}</span>`
-    + (slut ? '' : '<button class="fl-spring" data-nav="spring">Spring over</button>') + '</div>';
+    + (slut ? '' : '<button class="fl-spring" data-nav="spring" title="Ud af forløbet og tilbage til hele skærmen">✕ Ud af forløbet</button>') + '</div>';
   const ord = (t.ord ?? []).join(' ');
   let række = '';
   if (k.fase === 'gæt') {

@@ -33,6 +33,7 @@ const HELE = [20.6, 12.4];
 const HALE_N = 160; // punkter i hver hale (Merkur når over fire omgange på et år)
 const FREMHÆV_S = 3; // sekunder, Jordens ring blinker efter et forkert tryk
 const VIS_MIG_S = 4; // "Vis mig" i trin 2 spoler året på ca. 4 sekunder
+const HEL_S = 2.5; // sekunder, trin 1 viser hele Solsystemet, før kameraet glider ind til de fire inderste
 const SKALA_S = 3; // sekunder, skalaen glider i trin 3 og tilbage til sidst
 const DYK_S = 8; // sekunder, dykket ned til Jorden i trin 4 (wow-øjeblikket)
 const UD_S = 4.5; // sekunder, kameraet trækker sig ud fra Jorden ved "Det så du"
@@ -52,6 +53,7 @@ export function lavOverblikForløb(api) {
   let kameraBoks = null; // det, trinets kamera skal have i billedet (layout zoomer igen)
   let fremhævTid = 0;
   let fundet = false; // trin 1: Jorden er fundet
+  let indOm = 0; // trin 1: sekunder, til kameraet glider ind til de fire inderste
   let årStart = 0; // trin 2: datoen, året starter
   let rundt = false; // trin 2: Jorden er nået rundt
   let autoSpol = false; // trin 2: "Vis mig" spoler selv
@@ -174,6 +176,7 @@ export function lavOverblikForløb(api) {
   // Stiller scenen forfra: i dag, "Pustet op", intet fremhævet, halerne og skyderens år væk
   function forfra(id, skala = 0) {
     trin = id;
+    indOm = 0;
     vis.forløb = true;
     vis.fremhæv = vis.ringKun = null;
     vis.inderst = false;
@@ -270,6 +273,7 @@ export function lavOverblikForløb(api) {
       if (!id) return;
       if (id === 'jorden') {
         if (fundet) return;
+        indOm = 0;
         fundet = true;
         vis.fremhæv = null;
         vis.inderst = false;
@@ -286,7 +290,12 @@ export function lavOverblikForløb(api) {
     igen: 'fra hjælpen (?) i Solsystemet eller fra "Din fremgang" i menuen',
     trin: {
       jorden: {
-        start: () => { forfra('jorden'); fundet = false; vis.inderst = true; passer(INDERST, 2.2, true); },
+        // Først hele Solsystemet (HEL_S sekunder), så kameraet ind til de fire inderste (brugerens feedback 16. november
+        // 2026: man skal se hele Solsystemet, når man åbner det). ROLIG: direkte til de inderste.
+        start: () => {
+          forfra('jorden'); fundet = false; vis.inderst = true;
+          if (ROLIG) { indOm = 0; passer(INDERST, 2.2, true); } else { indOm = HEL_S; passer(HELE, 1.6, true); }
+        },
         færdig: () => fundet,
         visMig: () => tryk('jorden'),
       },
@@ -381,6 +390,7 @@ export function lavOverblikForløb(api) {
     hvertBillede(dt) {
       if (!kører()) return;
       if (fremhævTid > 0 && (fremhævTid -= dt) <= 0) vis.fremhæv = null;
+      if (indOm > 0 && (indOm -= dt) <= 0 && trin === 'jorden' && !fundet) passer(INDERST, 2.2, true);
       // Tidsskyderen er kun fremme i trin 2 (uden ⏪, ⏩ og "I dag"), når man har gættet
       const fase = forløbFase();
       tidLag.classList.add('ob-kun-skyder');

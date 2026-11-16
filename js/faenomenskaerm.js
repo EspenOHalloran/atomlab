@@ -115,7 +115,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
       // Kloderne på én række (fx Jorden), og under dem et træ med den valgte klodes steder, måner og forsøg
       const kloder = document.createElement('div');
       kloder.className = 'sol-kloder';
-      if (grupper.some((g) => g.f)) rejseskilt = lavRejseskilt($('Vindue')); // kun til kloder (Solsystemet)
+      if (grupper.some((g) => g.f && g.f.id !== forside)) rejseskilt = lavRejseskilt($('Vindue')); // kun til kloder (Solsystemet)
       for (const [i, g] of grupper.entries()) {
         const b = document.createElement('button');
         b.className = 'kosmos-valg sol-klode';
