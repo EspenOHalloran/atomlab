@@ -23,9 +23,9 @@ export const OVERBLIK = {
       spørg: 'Planeterne bevæger sig hele tiden. Hvem kommer hurtigst rundt?',
       gæt: {
         valg: [
-          { tekst: 'De inderste', efter: 'Prøv det!' },
-          { tekst: 'De yderste', efter: 'Store baner, så det lyder rimeligt. Prøv det!' },
-          { tekst: 'Alle lige hurtigt', efter: 'Prøv det!' },
+          { tekst: 'De inderste', efter: 'Prøv det: Træk skyderen ét år frem.' },
+          { tekst: 'De yderste', efter: 'Prøv det: Træk skyderen ét år frem.' },
+          { tekst: 'Alle lige hurtigt', efter: 'Prøv det: Træk skyderen ét år frem.' },
         ],
       },
       gør: 'Træk tidsskyderen nederst ét år frem.',

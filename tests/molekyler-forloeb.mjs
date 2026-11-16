@@ -58,6 +58,8 @@ tjek('starter første gang i "Del elektroner" med kun scenen og linjen, og linke
 // ---------- Trin 1: hånden, og træk det ene H hen til det andet ----------
 await gæt(1);
 await stille();
+// Fable E14: atomerne i trin 1-2 skal være store nok til at tælle elektronerne og trække med en finger (før ca. 20 px)
+const størrelse1 = [await G('atomPx', 0), await G('atomPx', 1)].map(Math.round);
 const hånd = await page.waitForFunction(() => atomlabTest.molekyler.hånd(), null, { timeout: 14000, polling: 250 }).then(() => true, () => false);
 await træk(await G('atomPå', 1), await G('atomPå', 0));
 await fase('så');
@@ -79,6 +81,9 @@ await fase('så');
 await page.waitForFunction(() => !atomlabTest.molekyler.byg.vandForfra || atomlabTest.molekyler.byg.vandForfra() > 0.97 && !atomlabTest.molekyler.byg.drejer?.(), null, { timeout: 10000, polling: 100 }).catch(() => {});
 await page.waitForTimeout(600);
 const forfra = await G('vandForfra');
+const størrelse2 = { O: Math.round(await G('atomPx', await T(() => atomlabTest.molekyler.byg.atomer().indexOf('O')))), deltaer: await G('deltaer'), ladninger: (await G('ladninger')).filter((q) => q).length };
+tjek('trin 1-2 (pc): H er mindst 60 px i trin 1, O mindst 70 px i vandet, og ingen δ+ og δ− i forløbet (ladningerne er der stadig)',
+  størrelse1.every((x) => x >= 60) && størrelse2.O >= 70 && størrelse2.deltaer === 0 && størrelse2.ladninger > 0, JSON.stringify({ størrelse1, størrelse2 }));
 await page.screenshot({ path: `${UD}/trin2-pc.png` });
 await stille();
 const fri = (await G('grupper')).find((g) => g.atomer.length === 1).atomer[0];
