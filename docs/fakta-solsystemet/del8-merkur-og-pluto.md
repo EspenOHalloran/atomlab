@@ -167,7 +167,7 @@ Alle USGS-filer: `planetarymaps.usgs.gov/mosaic/<navn>`. Bredden er regnet ud fr
 2. **BepiColombo** ankommer seks dage efter, at dette er skrevet. Alt efter 6. oktober 2026 er plan, ikke fakta.
 3. **Bjergenes højde på Pluto** (6,2 km) kender jeg kun fra Wikipedia. Schenk m.fl. 2018 er ikke læst. Det samme gælder højdekortets nøjagtighed (jeg husker 100-1.500 m og ca. 42 % af kloden, *U*).
 4. **Farverne:** Om Plutos farvekort er "som øjet ville se det" eller forstærket, står ikke i beskrivelsen. Merkurs rigtige farve er mørkt gråbrun (NASA). *U for Pluto.*
-5. **Kortenes længde 0°:** hvor USGS' filer har midten (0° eller 180°), og om Merkurs tæller mod øst. Læs etiketten, før kortet laves. *U.*
+5. **Kortenes længde 0°:** hvor USGS' filer har midten (0° eller 180°), og om Merkurs tæller mod øst. Læs etiketten, før kortet laves. *U.* **Tjekket af Opus 16. november 2026 (projektionen i filerne):** Merkurs billedkort (BDR, LOI) og Charons har 0° i midten, Merkurs højdekort og Plutos kort (gråtoner og højder) 180°. Alle tæller mod øst. Se [E16-noterne](../fable/E16-merkur-pluto-noter.md).
 6. **Disens farve og lag** (hvorfor blå, hvor mange lag, hvor højt) er fra hukommelsen og Wikipedia. *RS.*
 7. **Alderen** på Caloris og på Sputnik Planitias overflade. *RS.*
 8. **Sterns artikel fra 2026 om Plutos gletsjere** (Planetary Science Journal, nævnt i Wikipedia juli 2026) er ikke læst.
