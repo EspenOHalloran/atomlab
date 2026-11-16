@@ -60,8 +60,9 @@ const side = async (opsætning, hash = '') => {
   const page = await (await b.newContext(opsætning)).newPage();
   page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
-  await page.goto(`${ADRESSE}/?test${hash}`);
-  await page.waitForFunction(() => window.atomlabTest, null, { timeout: 20000 });
+  // Venter på testadgangen, ikke på load-hændelsen (page.goto gav op efter 30 s under belastning, 16. november 2026)
+  await page.goto(`${ADRESSE}/?test${hash}`, { waitUntil: 'commit' });
+  await page.waitForFunction(() => window.atomlabTest?.klar?.() ?? false, null, { timeout: 60000, polling: 100 });
   return page;
 };
 const page = await side({ viewport: { width: 1280, height: 800 } });
@@ -140,7 +141,9 @@ await page.click('#hjælp a[href="#ordbog"]');
 await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 }).catch(() => {});
 tjek('hjælpen: linket åbner Ordbogen og lukker hjælpen', (await T(() => location.hash)) === '#ordbog' && (await T(() => document.getElementById('hjælp').classList.contains('skjult'))));
 
-// Layout: listen kan ses og rulles, og siden ruller ikke til siden
+// Layout: listen kan ses og rulles, og siden ruller ikke til siden. Pc-siden lukkes først: Den tegnede menuens 3D videre,
+// mens hver ny side blev åbnet (tjekliste F).
+await page.context().close();
 const størrelser = [
   ['tablet-langs', { viewport: { width: 1180, height: 820 }, hasTouch: true }],
   ['tablet-højkant', { viewport: { width: 820, height: 1180 }, hasTouch: true }],
