@@ -45,7 +45,7 @@ export const OPSKRIFTEN = {
         ],
       },
       gør: 'Drej stigen, og tryk på et trin med A.',
-      // "altid": G og T kan holde lidt sammen, når de rykker sig skævt (en kopifejl). Det står i "Ærligt talt".
+      // "altid": G og T kan godt holde lidt sammen (en af de fejl, der kan ske ved kopien). Det står i "Ærligt talt".
       så: 'A står altid over for T, og G står altid over for C. Der er kun de fire bogstaver i DNA.',
       ord: [],
     },
