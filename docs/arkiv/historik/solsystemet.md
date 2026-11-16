@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (16. november 2026): Feedback fra prøven, nr. 1, 2 og 4** (prompten i [prompt-solsystem-feedback.md](../prompt-solsystem-feedback.md)).
+- **Nr. 1:** Trin 1 og 4 i "Rundt om Solen" siger nu, hvad man skal ("… Hvilken er vores? Tryk på den.", "Find den, og tryk på ringen."). Kun de to trin i alle forløbene havde fejlen (ingen knapper, og klodsen viser ikke `gør`).
+- **Nr. 2:** "💡 Rejs med lyset" hedder "✕ Stop lyset", mens rejsen kører. Et tryk, Esc og rejsens slutning (10 s efter Pluto, jeres valg) stiller skalaen på "Pustet op" og flyver kameraet hjem.
+- **Nr. 4:** Årsagen var `stop()`, der gemte kameraet, efter det var fløjet ind til planeten. Nu går man fra en planet altid tilbage til hjemblikket i "Pustet op" (datoen huskes stadig).
+- Testene `overblik` og `overblik-forloeb` har fem nye tjek. **Kig efter på tabletten:** [ikke-afproevet.md](../ikke-afproevet.md).
+
 **Senest lavet (16. november 2026): Opus' noter til Fables drejebog til Merkur og Pluto (E16) og jeres svar.** Kun dokumenter. Intet er bygget.
 - **Noterne:** [fable/E16-merkur-pluto-noter.md](../fable/E16-merkur-pluto-noter.md). Drejebogen er [drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md).
 - **De tre tjek:** (1) Polen: Dataene er skarpe. Det slørede kommer af kuglens kort i bredde og længde (anisotropi 8 er for lidt så tæt på polen). Måles i MP1, og trænger det, kommer et lille polkort i kuglens shader (kan også hjælpe Mars' nordpol). (2) BDR vinder over LOI, men stregerne i BDR fjernes. (3) Evig skygge: Kraterbundene er allerede sorte i kortet. Ingen ny skyggekode.
