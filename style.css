@@ -941,6 +941,11 @@ button { font: inherit; color: inherit; }
 #liv .fl-handling.base-G { --farve: var(--base-G); }
 #liv .fl-handling.base-C { --farve: var(--base-C); }
 #liv .fl-handling:has(.liv-base-kugle) { min-width: 64px; font-size: 18px; }
+/* Nøglen med basernes farver i forløbets linje (trin 3, js/liv.js). Kan ikke trykkes på */
+#liv .fl-mærke.base-A { --farve: var(--base-A); }
+#liv .fl-mærke.base-T { --farve: var(--base-T); }
+#liv .fl-mærke.base-G { --farve: var(--base-G); }
+#liv .fl-mærke.base-C { --farve: var(--base-C); }
 .liv-byg { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
 .liv-byg-i-gang { display: flex; flex-direction: column; gap: 8px; }
 .liv-byg-i-gang[hidden], #livBygStart[hidden], #livVisH[hidden], #livHvorfor[hidden], #livGaade[hidden] { display: none; }
@@ -1049,7 +1054,8 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .højre-panel { grid-area: højre; }
 .panel-overskrift { margin: 4px 0 0; font-size: 15px; color: var(--accent); }
 .skyder-boks { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
-.skyder-top { display: flex; justify-content: space-between; font-weight: 700; }
+.skyder-top { display: flex; justify-content: space-between; gap: 10px; font-weight: 700; }
+.skyder-top strong { text-align: right; }
 .skyder-top strong { color: #ffb36b; }
 .skyder-boks input[type="range"] { width: 100%; accent-color: #ff8a2b; }
 .skyder-boks small { color: var(--svag); font-size: 12.5px; line-height: 1.4; }
@@ -1278,6 +1284,8 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .sol-liste { display: flex; flex-direction: column; gap: 8px; }
 .sol-kloder { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
 .sol-klode { flex-direction: column; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
+/* Overblikket "Solsystemet" er for langt til ét felt og får to (fem felter pr. række giver stadig to hele rækker) */
+.sol-klode[data-id="overblik"] { grid-column: span 2; }
 /* Kosmos: de fire grupper to og to med ikonet ved siden af navnet, på telefon på én række (Serie 1 nr. 4) */
 #kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #kosmos .kosmos-grupper .sol-klode { flex-direction: row; justify-content: flex-start; gap: 6px; padding: 7px 14px 7px 8px; text-align: left; font-size: 13px; }
@@ -1642,6 +1650,10 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .ob-besøg { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--tekst, #e8eeff); }
 .ob-besøg[hidden] { display: none; }
 .ob-navn.mat { opacity: 0.4; }
+/* Navnet til venstre for kloden ved vinduets højre kant, og den større ring om de fire inderste i forløbets trin 1 */
+.ob-navn.venstre .ob-tekst { transform: translate(calc(-100% - 8px), -1px); }
+.ob-navn.venstre:is(.med-ring, .puls) .ob-tekst { transform: translate(calc(-100% - 14px), -1px); }
+.ob-navn.stor-ring .ob-ring { left: -13px; top: -13px; width: 26px; height: 26px; }
 /* "Rejs med lyset" (js/solsystem/overblik-lys.js): uret over datoen og tiderne ved planeterne */
 .ob-lysur { font-size: 15px; font-weight: 600; color: #ffe7a0; font-variant-numeric: tabular-nums; text-align: center; }
 .ob-lysur[hidden] { display: none; }
@@ -2127,6 +2139,8 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-så { color: #dff7ff; }
 .fl-lille { margin: -2px 0 0; font-size: 13px; color: var(--svag); }
 .fl-række { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fl-nøgle { display: inline-flex; gap: 8px; }
+.fl-mærke { --farve: var(--accent); display: inline-grid; place-items: center; min-width: 44px; height: 44px; border-radius: 10px; background: var(--farve); color: #0b0f1e; font-size: 22px; font-weight: 800; box-shadow: 0 0 12px color-mix(in srgb, var(--farve) 50%, transparent); }
 .fl-række button { min-height: 44px; font: inherit; font-size: 15px; font-weight: 700; color: var(--tekst); cursor: pointer; }
 .fl-gæt { padding: 0 16px; border-radius: 22px; border: 1px solid rgba(95, 227, 255, 0.5); background: rgba(95, 227, 255, 0.08); }
 .fl-gæt:hover { background: rgba(95, 227, 255, 0.18); }

@@ -183,24 +183,26 @@ function efterForløb(fn) {
 const MØDES_DEL = {
   trin: {
     h2: {
-      // To H et stykke fra hinanden (4,4 Å, bindingen er 0,74 Å). Deres enlige elektron blinker (tegningen).
+      // To H et stykke fra hinanden (2,2 Å, bindingen er 0,74 Å), tæt nok til, at de står store. Deres enlige elektron blinker.
       start: () => skiftTil('byg', () => {
-        forløbByg.sæt([{ symbol: 'H', x: -2.2, y: 0 }, { symbol: 'H', x: 2.2, y: 0 }], { vink });
+        forløbByg.sæt([{ symbol: 'H', x: -1.1, y: 0 }, { symbol: 'H', x: 1.1, y: 0 }], { vink });
         visHånd(0, 1);
       }),
       færdig: () => måde === 'byg' && forløbByg.færdig('h2'),
       visMig: () => forløbByg.visMig('h2'),
     },
     vand: {
-      // O i midten med tre H rundt om. H kan kun binde til O, og det tredje H bliver stående, så man kan prøve det.
+      // O øverst med tre H rundt om og mindst 2 Å mellem to atomer (FORLØB_AFSTAND i js/molekyler-byg.js): bredere end højt,
+      // når skærmen er på tværs, og en firkant på højkant. H kan kun binde til O, og det tredje H bliver stående, så man kan prøve det.
       start: () => skiftTil('byg', () => {
         skjulHånd();
         vandDrejet = false;
+        const tværs = innerWidth > innerHeight;
         forløbByg.sæt([
-          { symbol: 'O', x: 0, y: 0.6 },
-          { symbol: 'H', x: -3.4, y: -0.8 },
-          { symbol: 'H', x: 3.4, y: -0.8 },
-          { symbol: 'H', x: 0, y: -3.6 },
+          { symbol: 'O', x: 0, y: tværs ? 0.9 : 1.5 },
+          { symbol: 'H', x: tværs ? -2 : -1.5, y: tværs ? -0.2 : 0 },
+          { symbol: 'H', x: tværs ? 2 : 1.5, y: tværs ? -0.2 : 0 },
+          { symbol: 'H', x: 0, y: tværs ? -1.2 : -1.5 },
         ], { kunTil: 'O', vink });
       }),
       færdig: () => {

@@ -3,7 +3,8 @@
 // giver et api med kameraet, kloderne, datoen, skalaen og flaget vis (navnene, ringene, Pluto, bælterne og
 // tidsknapperne er skjult imens forløbet kører).
 //
-// Trin 1 "jorden": kameraet tæt på de fire inderste. Et tryk på Jorden trækker kameraet ud, til alle otte ses. Et tryk
+// Trin 1 "jorden": kameraet tæt på de fire inderste. De er mindst ca. 14 px og har en ring, de ydre er dæmpet
+//   (vis.inderst). Et tryk på Jorden trækker kameraet ud, til alle otte ses. Et tryk
 //   på en anden klode giver en linje ("Det er Venus …"), og Jordens ring blinker.
 // Trin 2 "rundt": tidsskyderen nederst går fra 0 til ét år frem (Jordens omløbstid) og falder ikke tilbage. Hver planet
 //   trækker en hale efter sig, og en tæller ved Merkur og Jorden viser omgangene.
@@ -175,6 +176,7 @@ export function lavOverblikForløb(api) {
     trin = id;
     vis.forløb = true;
     vis.fremhæv = vis.ringKun = null;
+    vis.inderst = false;
     fremhævTid = 0;
     autoSpol = false;
     dyk = null;
@@ -270,6 +272,7 @@ export function lavOverblikForløb(api) {
         if (fundet) return;
         fundet = true;
         vis.fremhæv = null;
+        vis.inderst = false;
         passer(HELE, 3); // kameraet trækker sig ud, til alle otte ses
         return;
       }
@@ -283,7 +286,7 @@ export function lavOverblikForløb(api) {
     igen: 'fra hjælpen (?) i Solsystemet eller fra "Din fremgang" i menuen',
     trin: {
       jorden: {
-        start: () => { forfra('jorden'); fundet = false; passer(INDERST, 2.2, true); },
+        start: () => { forfra('jorden'); fundet = false; vis.inderst = true; passer(INDERST, 2.2, true); },
         færdig: () => fundet,
         visMig: () => tryk('jorden'),
       },
@@ -330,6 +333,7 @@ export function lavOverblikForløb(api) {
       kameraBoks = null;
       vis.forløb = false;
       vis.fremhæv = vis.ringKun = null;
+      vis.inderst = false;
       autoSpol = false;
       dyk = null;
       afstandLag.hidden = true;
@@ -420,6 +424,7 @@ export function lavOverblikForløb(api) {
       omgange: (id) => omgange(klode(id)),
       tidVist: () => !tidLag.classList.contains('fl-skjult'),
       fremhævet: () => vis.fremhæv,
+      inderst: () => vis.inderst,
       tryk: (id, x, y) => tryk(id, x, y),
       dyk: () => dyk,
       ringKun: () => vis.ringKun,
