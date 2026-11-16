@@ -31,6 +31,7 @@
 5. **Ikoner er tegnede** (SVG eller CSS), ikke emoji.
 6. **Intet dækker scenen,** man ikke selv har åbnet. Intet ligger oven i andet i nogen størrelse: pc, tablet på langs og på højkant og telefon.
 7. **Links begge veje:** Hver del peger mindst ét sted hen, og mindst ét sted peger på den.
+8. **Stilguiden gælder:** Udseende, navigation, forløbets regler ("det foreslår, det spærrer ikke") og glæde og undring står i [stilguide.md](stilguide.md) (16. november 2026, efter eftersynet E20).
 
 ## En ny del er færdig, når
 - kernesætningen er skrevet, og forløbet findes
