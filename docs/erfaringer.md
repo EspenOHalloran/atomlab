@@ -33,6 +33,7 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 | [Faldgruber: kamera og layout](erfaringer/kamera-og-layout.md) | Kamera, layout, links i teksterne, dansk sortering, citater, testtal. |
 | [Faldgruber: tid, timere og tilstand](erfaringer/tid-timere-tilstand.md) | Pause, `dt`, timere, tilstand ved skærmskift. |
 | [Faldgruber: tests og værktøjer](erfaringer/tests-og-vaerktoejer.md) | Playwright, `koer-alle.mjs`, ventetider, processer. Også "Testsamlingen". |
+| [Faldgruber: tests under belastning](erfaringer/tests-under-belastning.md) | Tests, der kun fejler, når maskinen er travl: hvordan de genskabes, og hvad der var galt (spiltid mod rigtig tid, `polling`, sider, der ikke lukkes). |
 | [Planeter og måner](erfaringer/planeter-og-maaner.md) | Billeder, højdekort, net, luft, skyer, Phobos og Deimos. |
 | [Jupiter](erfaringer/jupiter.md) | Kortet (OPAL og Cassini), vindene, pletten, månerne og skyggerne. |
 | [Venus](erfaringer/venus.md) | Magellans kort: huller med mørke kanter, sømme, springet ved 180°, tifffile i stedet for rasterio og drejningen efter datoen mod Horizons. Akatsukis skyer (DARTS i PDS4), FITS uden astropy, vindene målt med krydskorrelation og et kort af skyer, der flytter sig. |

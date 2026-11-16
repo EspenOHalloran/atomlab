@@ -5,6 +5,9 @@ import { ORDBOG } from '../js/data/ordbog.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { ORDNE, LINKS, søgOrd, sorterOrd } from '../js/data/ordbogliste.js';
 const UD = billedmappe('ordbog');
+// Ventetiden på en skærm eller en rulning (ms). Der tjekkes hvert 0,1 s: Med Playwrights standard (ét tjek pr. tegnet
+// billede) kom der under belastning intet tjek i over 5 s, selv om Ordbogen var vist (16. november 2026).
+const VENT = 30000;
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
@@ -60,8 +63,9 @@ const side = async (opsætning, hash = '') => {
   const page = await (await b.newContext(opsætning)).newPage();
   page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
-  await page.goto(`${ADRESSE}/?test${hash}`);
-  await page.waitForFunction(() => window.atomlabTest, null, { timeout: 20000 });
+  // Venter på testadgangen, ikke på load-hændelsen (page.goto gav op efter 30 s under belastning, 16. november 2026)
+  await page.goto(`${ADRESSE}/?test${hash}`, { waitUntil: 'commit' });
+  await page.waitForFunction(() => window.atomlabTest?.klar?.() ?? false, null, { timeout: 60000, polling: 100 });
   return page;
 };
 const page = await side({ viewport: { width: 1280, height: 800 } });
@@ -71,9 +75,9 @@ const T = (f, a) => page.evaluate(f, a);
 const menu = await T(() => ({ dele: atomlabTest.karrusel.verdener().find((v) => v.id === 'biblioteket')?.dele, navn: document.querySelector('.verden[data-verden="biblioteket"] .verden-knap strong')?.textContent }));
 tjek(`pc: Biblioteket i menuen har Ordbogen, Gåderne og Opdagelserne ("${menu.navn}")`, menu.dele?.join() === 'ordbog,gaader,opdagelser' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
 await page.click('.menu-ikon[data-verden="biblioteket"]');
-await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 6000 });
+await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 60000, polling: 100 }); // (fjederen tager ca. 20 billeder: under belastning over 6 s, se karrusel.mjs)
 await page.click('.menukort a[href="#ordbog"]', { force: true });
-await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
+await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: VENT, polling: 100 });
 const start = await T(() => ({ ord: document.querySelectorAll('#ordbogListe li').length, fokus: document.activeElement?.id, første: document.querySelector('#ordbogListe h3')?.textContent }));
 tjek('kortet åbner Ordbogen med alle ordene, og søgefeltet har fokus (pc)', start.ord === ORDBOG.length && start.fokus === 'ordbogSøg' && start.første === ORDNE[0].ord, JSON.stringify(start));
 tjek('rækkefølgen på siden er den samme som i listen', JSON.stringify(await T(() => [...document.querySelectorAll('#ordbogListe h3')].map((h) => h.textContent))) === JSON.stringify(navne(ORDNE)));
@@ -99,7 +103,7 @@ await page.waitForFunction(() => {
   const li = document.querySelector('#ordbogListe li[data-bogstav="K"]');
   const liste = document.getElementById('ordbogListe');
   return Math.abs(li.getBoundingClientRect().top - liste.getBoundingClientRect().top) < 12;
-}, null, { timeout: 10000 }).then(() => tjek('bogstavet K ruller til "Kerneskygge"', true), () => tjek('bogstavet K ruller til "Kerneskygge"', false));
+}, null, { timeout: VENT, polling: 100 }).then(() => tjek('bogstavet K ruller til "Kerneskygge"', true), () => tjek('bogstavet K ruller til "Kerneskygge"', false));
 
 // Links: "Hvorfor?"-kort, en skærm og et fænomen
 await page.click('#ord-tunneleffekt button.hvorfor');
@@ -107,15 +111,15 @@ tjek('tunneleffekt: "Hvorfor?"-kortet åbner', (await T(() => atomlabTest.hvorfo
 await page.keyboard.press('Escape');
 tjek('Esc lukker kortet, og man er stadig i Ordbogen', (await T(() => atomlabTest.hvorfor.vist())) === null && (await T(() => location.hash)) === '#ordbog');
 await page.click('#ord-elektrolyt a[href="#batteri"]');
-await page.waitForFunction(() => location.hash === '#batteri' && document.querySelector('#batteri:not(.skjult)'), null, { timeout: 8000 }).then(() => true, () => false).then((v) => tjek('elektrolyt: linket åbner Batteriet', v));
+await page.waitForFunction(() => location.hash === '#batteri' && document.querySelector('#batteri:not(.skjult)'), null, { timeout: VENT, polling: 100 }).then(() => true, () => false).then((v) => tjek('elektrolyt: linket åbner Batteriet', v));
 await T(() => { location.hash = '#ordbog'; });
-await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
+await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: VENT, polling: 100 });
 await page.click('#ord-hviddvaerg [data-gaa]');
-await page.waitForFunction(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'hviddvaerg', null, { timeout: 8000 }).then(() => true, () => false).then((v) => tjek('hvid dværg: linket åbner fænomenet i Kosmos', v));
+await page.waitForFunction(() => location.hash === '#kosmos' && atomlabTest.kosmos.valgt() === 'hviddvaerg', null, { timeout: VENT, polling: 100 }).then(() => true, () => false).then((v) => tjek('hvid dværg: linket åbner fænomenet i Kosmos', v));
 
 // Boblen: kun den korte tekst, og "Mere i Ordbogen ›" ved ord med mere, som åbner Ordbogen på ordet
 await T(() => { location.hash = '#vaerksted'; });
-await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: 8000 });
+await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: VENT, polling: 100 });
 await page.click('#knapHjælp');
 const medMereId = await T((ider) => [...document.querySelectorAll('#hjælp .fagord')].find((k) => ider.includes(k.dataset.ord))?.dataset.ord, medMere.map((o) => o.id));
 const udenMereId = await T((ider) => [...document.querySelectorAll('#hjælp .fagord')].find((k) => !ider.includes(k.dataset.ord))?.dataset.ord, medMere.map((o) => o.id));
@@ -128,19 +132,21 @@ const boble = await T(() => document.getElementById('ordforklaring').textContent
 const o = ORDBOG.find((x) => x.id === medMereId);
 tjek(`boblen for "${medMereId}" viser kun den korte tekst og linket, ikke "Hvorfor?"`, boble === o.ord + o.tekst + 'Mere i Ordbogen ›' && (await T(() => atomlabTest.ord.link())), boble);
 await page.click('#ordforklaring .ordforklaring-mere');
-await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 }).catch(() => {});
+await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: VENT, polling: 100 }).catch(() => {});
 const åbnet = await T((id) => { const li = document.getElementById(`ord-${id}`); const liste = document.getElementById('ordbogListe').getBoundingClientRect(); return { hash: location.hash, fremhævet: li.classList.contains('fremhævet'), top: Math.round(li.getBoundingClientRect().top - liste.top), hjælp: document.getElementById('hjælp').classList.contains('skjult') }; }, medMereId);
 tjek(`"Mere i Ordbogen ›" åbner Ordbogen på "${medMereId}"`, åbnet.hash === '#ordbog' && åbnet.fremhævet && Math.abs(åbnet.top) < 12 && åbnet.hjælp, JSON.stringify(åbnet));
 
 // Hjælpen i værkstedet har et link, og hjælpen lukker, når Ordbogen åbner
 await T(() => { location.hash = '#vaerksted'; });
-await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: 8000 });
+await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'), null, { timeout: VENT, polling: 100 });
 await page.click('#knapHjælp');
 await page.click('#hjælp a[href="#ordbog"]');
-await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 }).catch(() => {});
+await page.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: VENT, polling: 100 }).catch(() => {});
 tjek('hjælpen: linket åbner Ordbogen og lukker hjælpen', (await T(() => location.hash)) === '#ordbog' && (await T(() => document.getElementById('hjælp').classList.contains('skjult'))));
 
-// Layout: listen kan ses og rulles, og siden ruller ikke til siden
+// Layout: listen kan ses og rulles, og siden ruller ikke til siden. Pc-siden lukkes først: Den tegnede menuens 3D videre,
+// mens hver ny side blev åbnet (tjekliste F).
+await page.context().close();
 const størrelser = [
   ['tablet-langs', { viewport: { width: 1180, height: 820 }, hasTouch: true }],
   ['tablet-højkant', { viewport: { width: 820, height: 1180 }, hasTouch: true }],
@@ -152,7 +158,7 @@ for (const [navn, opsætning] of størrelser) {
   const m = await p.evaluate(() => { const menu = document.getElementById('menu'); return { verdener: menu.querySelectorAll('.verden').length, rul: menu.scrollHeight - menu.clientHeight }; });
   tjek(`${navn}: menuen er en ring med 6 verdener og skal ikke rulles`, m.verdener === 6 && m.rul <= 1, JSON.stringify(m));
   await p.evaluate(() => { location.hash = '#ordbog'; });
-  await p.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: 5000 });
+  await p.waitForFunction(() => document.querySelector('#ordbog:not(.skjult)'), null, { timeout: VENT, polling: 100 });
   const l = await p.evaluate(() => {
     const liste = document.getElementById('ordbogListe').getBoundingClientRect();
     return { højde: Math.round(liste.height), bund: Math.round(liste.bottom), vindue: innerHeight, bredde: document.documentElement.scrollWidth, ind: innerWidth, fokus: document.activeElement?.id ?? null };

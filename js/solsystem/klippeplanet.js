@@ -311,6 +311,9 @@ function lavTabel(billede, hMin, hSpan, størrelse, færdig) {
   const g = c.getContext('2d', { willReadFrequently: true });
   let y0 = 0;
   const strimmel = () => {
+    // Billedet er frigivet imens (man har skiftet planet, smid i hent.js): et lukket ImageBitmap har bredden 0 og må
+    // ikke tegnes ("The image source is detached"). Tabellen bliver aldrig færdig, men ingen bruger den mere.
+    if (!billede.width) return;
     const h = Math.min(STRIMMEL, billede.height - y0);
     g.clearRect(0, 0, c.width, c.height);
     g.drawImage(billede, 0, -y0);
