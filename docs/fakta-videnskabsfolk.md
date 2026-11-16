@@ -12,7 +12,7 @@
 - **Afviser automatiske opslag (403):** gallica.bnf.fr og babel.hathitrust.org. **Stadig lukket** (ikke nødvendige): web.archive.org, zenodo.org, lex.dk, gutenberg.org, einsteinpapers.press.princeton.edu og articles.adsabs.harvard.edu.
 
 ## Forslag til kernesætning
-**"Efter fem minutter kan brugeren sige: De fandt det ved at se efter og måle, ikke ved at gætte, og jeg kan selv se det samme her i AtomLab."**
+**"Efter fem minutter kan brugeren sige: De gættede ikke bare. De så efter og målte, og jeg kan selv se det samme her i AtomLab."** (ændret 16. november 2026, se [plan-videnskabsfolk.md](plan-videnskabsfolk.md), afsnit 1)
 
 Hver person har *én* opdagelse og *ét* sted i programmet (Retningens punkt 9). Først gør man det, så ser man bogsiden.
 
