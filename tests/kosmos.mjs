@@ -17,7 +17,7 @@ await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('12 fænomener i listen ("Hvordan kan det ske?" hører til "Tid")', ids.length === 12, ids);
+tjek('13 fænomener i listen (forsiden "Kosmos" først, "Hvordan kan det ske?" hører til "Tid")', ids.length === 13 && ids[0] === 'oversigt', ids);
 tjek('vores eget solsystem er flyttet', !ids.some((id) => ['aarstider', 'formoerkelser', 'solstorm', 'solensfremtid', 'mars', 'saturn'].includes(id)), ids);
 // De fire grupper (Serie 1 nr. 4): et tryk på en gruppe åbner dens første punkt, og under rækken står gruppens punkter
 const grupper = await page.$$eval('#kosmosListe .sol-klode', (b) => b.map((x) => x.textContent.trim()));

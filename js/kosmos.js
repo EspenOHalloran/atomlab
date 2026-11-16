@@ -15,18 +15,23 @@ import tyngdebolger from './kosmos/tyngdebolger.js';
 import sorthul from './kosmos/sorthul.js';
 import kvasar from './kosmos/kvasar.js';
 import ormehul from './kosmos/ormehul.js';
+import { lavOversigt } from './kosmos/oversigt.js';
 
 // Fire grupper (Serie 1 nr. 4, plan-verdener.md), som Solsystemets grupper, men uden en klode for hver. Rækkefølgen
 // fortæller stadig en historie: Big Bang, stjerner, der fødes og dør, rumtiden og til sidst sorte huller og ormehuller.
 // Universet får senere Mørkt stof og Andromeda. Vores eget solsystem ligger i Solsystemet (solsystem.js).
+const GRUPPER = [
+  { navn: 'Universet', ikon: '🌌', tekst: 'Hvordan det hele begyndte, og hvor de første atomer kom fra.', under: [bigbang] },
+  { navn: 'Stjernernes liv', ikon: '✴️', tekst: 'Stjerner, der fødes, brænder ud og eksploderer.', under: [stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova] },
+  { navn: 'Tid og rum', ikon: '🕰️', tekst: 'Rummet kan bøje, og tiden kan gå langsommere.', under: [rumtid, tid, tidhvorfor, tyngdebolger] },
+  { navn: 'Sorte huller', ikon: '🕳️', tekst: 'Steder, hvor tyngden er så stærk, at intet slipper væk.', under: [sorthul, kvasar, ormehul] },
+];
+// Oversigten er forsiden (som Solsystemets overblik): Kosmos starter dér, medmindre et link eller et forløb har valgt et fænomen
+const oversigt = lavOversigt(GRUPPER);
 const skærm = lavFænomenSkærm({
   skærm: 'kosmos',
-  liste: [
-    { navn: 'Universet', ikon: '🌌', under: [bigbang] },
-    { navn: 'Stjernernes liv', ikon: '✴️', under: [stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova] },
-    { navn: 'Tid og rum', ikon: '🕰️', under: [rumtid, tid, tidhvorfor, tyngdebolger] },
-    { navn: 'Sorte huller', ikon: '🕳️', under: [sorthul, kvasar, ormehul] },
-  ],
+  forside: 'oversigt',
+  liste: [oversigt, ...GRUPPER.map(({ tekst: _tekst, ...g }) => g)],
 });
 
 export const FÆNOMENER = skærm.FÆNOMENER;

@@ -1344,6 +1344,16 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .kosmos-forklaring:empty { display: none; }
 .kosmos-overlag { width: 100%; display: flex; justify-content: center; pointer-events: none; }
 .kosmos-overlag:empty { display: none; }
+/* Kosmos' forside (js/kosmos/oversigt.js): fire kort, ét for hver gruppe, med en knap for hvert fænomen */
+.kosmos-overlag:has(.kosmos-forside) { min-height: 0; flex: 0 1 auto; overflow-y: auto; pointer-events: auto; }
+.kosmos-forside { pointer-events: auto; width: min(760px, 100%); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.kf-kort { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 12px; background: rgba(8, 12, 28, 0.78); }
+.kf-titel { font-size: 15px; }
+.kf-tekst { font-size: 13px; color: var(--svag); }
+.kf-knapper { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.kf-knap { min-height: 32px; padding: 0 10px; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 8px; background: rgba(255, 255, 255, 0.06); color: var(--tekst); font-size: 13px; cursor: pointer; }
+.kf-knap:hover { background: rgba(255, 255, 255, 0.14); }
+@media (max-width: 560px) { .kosmos-forside { grid-template-columns: minmax(0, 1fr); gap: 6px; } .kf-tekst { display: none; } }
 .kosmos-graf { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 12px; background: rgba(8, 12, 28, 0.72); border: 1px solid var(--panel-kant); font-size: 12px; color: var(--svag); }
 .kosmos-graf canvas { width: min(420px, 100%); height: 70px; display: block; }
 .kosmos-forklaring { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); font-size: 13.5px; line-height: 1.45; }
@@ -2163,8 +2173,8 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-prikker i.ja { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 .fl-prikker i.nu { width: 10px; height: 10px; background: rgba(95, 227, 255, 0.45); }
 .fl-nr { white-space: nowrap; }
-.fl-spring { margin-left: auto; min-height: 32px; padding: 0 4px; border: 0; background: none; color: var(--svag); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.fl-spring:hover { color: var(--tekst); }
+.fl-spring { margin-left: auto; min-height: 32px; padding: 0 10px; border: 1px solid var(--kant, rgba(255, 255, 255, 0.2)); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--tekst); font-size: 13px; cursor: pointer; }
+.fl-spring:hover { background: rgba(255, 255, 255, 0.12); }
 .fl-tekst { margin: 0; }
 .fl-svag { color: var(--svag); }
 .fl-så { color: #dff7ff; }

@@ -10,7 +10,7 @@
 - `atomlabLag`: `{ id: true/false }` for de foldebokse, man selv har åbnet eller lukket (i Kosmos og Solsystemet `side-nørd`, `side-billeder` og `side-ærligt`, ét valg for alle sider)
 - `atomlabVisning`: `'ringe'` eller `'sky'`, elektronerne i Værkstedet og på grundstofkortet i Det periodiske system
 - `atomlabUdgave`: den valgte udgave af atomet (`nu`, `prikker` eller `former`). Bruges kun, når `?udgaver` står i adressen (ellers er det `former`).
-- `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`)
+- `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`). Siden 16. november 2026 åbner Kosmos altid på forsiden (`oversigt`), så den bruges kun af links og forløb
 - `atomlabKosmosSet`: liste med id på de fænomener i Kosmos, man har kigget på (de andre har en lille prik)
 - `atomlabNavne`: `'til'` eller `'fra'`, knappen "Navne" ved planeterne i Solsystemet (navnene på Mars og Saturns måner). Til fra start.
 - `atomlabSolsystem` og `atomlabSolsystemSet`: det samme for Solsystemet. De flyttede fænomener flyttes fra Kosmos' nøgler første gang (`flytGemt` i `js/data/faenomener.js`, ved start).

@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (16. november 2026): Feedback nr. 5, ryk ved skift** (prompten i [prompt-solsystem-feedback.md](../prompt-solsystem-feedback.md)).
+- **Shaderne:** Kloden er skjult under rejseskiltet og i overblikkets mørke, til dens shadere er oversat (højst 1,5 s, `skjulTilKlar`). Three.js ventede ellers første gang, en shader blev tegnet, også bag skiltet. "Ring-shaderen" blev ikke bygget igen: Hver gasplanet har sin egen udgave.
+- **Kortene:** Kortkøen (`js/solsystem/kortkoe.js`) lægger ét kort pr. billede i grafikkortet (fx Jordens fire månedskort), og månerne på forhånd venter, til kameraet ikke flyver.
+- **Kig efter:** mål igen på pc og Tab A11, se [ikke-afproevet.md](../ikke-afproevet.md).
+
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
 **Senest lavet (16. november 2026): Feedback fra prøven, nr. 1, 2 og 4** (prompten i [prompt-solsystem-feedback.md](../prompt-solsystem-feedback.md)).
