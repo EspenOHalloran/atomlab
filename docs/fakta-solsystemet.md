@@ -2,7 +2,7 @@
 
 *Trin 0 i [planen for Solsystemet](plan-solsystemet.md). Lavet 23. oktober 2026 af hjælpeagenter (Opus, høj effort). Fable venter på version 5.5, så det er ikke tjekket af Fable. Gennemgangen af planen står i afsnittet "Gennemgang af planen" nederst.*
 
-**Status:** Tallene er tjekket mod søgeresultater og deres uddrag. Ingen kildesider kunne åbnes i miljøet (kun NASA SVS, NASA Earth Observatory og billederne på upload.wikimedia.org kan hentes). Før en tekst kommer med i programmet, skal tallet bag den slås op i kilden med `/faktatjek`, især de punkter, der er mærket RS, U eller "egen viden".
+**Status:** Del 1 (Saturn), del 2 (Voyager) og del 5 (Jupiter) er tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 2b-2d og 3. De andre dele har deres egen status øverst. Nye tekster skal stadig gennem `/faktatjek`, især punkter mærket RS, U eller "egen viden".
 
 
 | Del | Emne | Fil | Størrelse |

@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (16. november 2026): Opus' noter til Fables drejebog til Merkur og Pluto (E16) og jeres svar.** Kun dokumenter. Intet er bygget.
+- **Noterne:** [fable/E16-merkur-pluto-noter.md](../fable/E16-merkur-pluto-noter.md). Drejebogen er [drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md).
+- **De tre tjek:** (1) Polen: Dataene er skarpe. Det slørede kommer af kuglens kort i bredde og længde (anisotropi 8 er for lidt så tæt på polen). Måles i MP1, og trænger det, kommer et lille polkort i kuglens shader (kan også hjælpe Mars' nordpol). (2) BDR vinder over LOI, men stregerne i BDR fjernes. (3) Evig skygge: Kraterbundene er allerede sorte i kortet. Ingen ny skyggekode.
+- **Fund:** Merkurs højdekort og Plutos kort har 180° i midten, Merkurs billedkort 0°. Pluto beholder 180° i midten, så hjertet ikke ligger på kortets kant.
+- **Jeres svar (alle som anbefalet):** Kernesætning A for begge, kun flybyen (6 og 5 stop), tegningen af Solen, der vender om, og de lyse huller som Merkurs tredje sted.
+
 **Senest lavet (16. november 2026): Rettelserne fra Fables eftersyn E14 i "Rundt om Solen"** (prompten i [prompt-e14-rettelser.md](../prompt-e14-rettelser.md), noterne i [fable/E14-noter.md](../fable/E14-noter.md)).
 - **Trin 1:** De fire inderste er mindst ca. 14 px brede og har en ring (uden navn, så gættet ikke er givet), og de ydre planeter og Saturns ringe er dæmpet (`vis.inderst` i `js/kosmos/overblik.js`). Når Jorden er fundet, er alt som før.
 - **Trin 2:** Teksten efter gættet er "Prøv det: Træk skyderen ét år frem." for alle tre svar (`js/data/forloeb/overblik.js`).

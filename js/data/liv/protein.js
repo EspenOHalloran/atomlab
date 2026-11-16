@@ -7,44 +7,49 @@ import { HBB, LÆS_KODONER, SEGL_KODON } from './gener.js';
 
 export const ANTAL_AA = HBB.protein.length; // 147
 
-// Trinene, når genet bliver læst. tal: [navn, værdi]. Værdier med {n} og {ord} skrives af js/liv-protein.js.
+// Trinene, når genet bliver læst. tal: [navn, værdi], højst to (budgettet i docs/retning.md). nørd: { tal, tekst }
+// øverst i "For nørder". Værdier med {n} og {ord} skrives af js/liv-protein.js.
 export const TRIN_PROTEIN = {
   aflæs: {
     titel: 'Aflæsningen',
-    tekst: 'Et enzym (RNA-polymerase) åbner et lille stykke af stigen og læser den ene streng. Samtidig bygger det en kopi af genet: RNA. Det er en enkelt streng, og U står i stedet for T.',
-    tal: [['Genet', 'HBB (hæmoglobin)'], ['Bogstaver i opskriften', '444'], ['Kopien', 'RNA (A, U, G og C)'], ['Bygget', '{n}']],
-    ekstra: 'Baserne i RNA\'et passer til den streng, der bliver læst. Derfor har kopien de samme bogstaver som den anden streng, bare med U i stedet for T.',
+    tekst: 'Cellen åbner et lille stykke af stigen og læser den ene streng. Samtidig bygger den en kopi af genet: RNA. RNA har kun én streng, og U står i stedet for T.',
+    tal: [['Genet', 'HBB (hæmoglobin)'], ['Bygget', '{n}']],
+    nørd: {
+      tal: [['Bogstaver i opskriften', '444'], ['Kopien', 'RNA (A, U, G og C)']],
+      tekst: 'Det, der læser og bygger, er et enzym, der hedder RNA-polymerase. Et enzym får en bestemt kemisk reaktion til at ske, og næsten alle enzymer er proteiner. Baserne i RNA\'et passer til den streng, der bliver læst, så kopien har de samme bogstaver som den anden streng, bare med U i stedet for T.',
+    },
   },
   ud: {
     titel: 'Ud af cellekernen',
     tekst: 'RNA-kopien bliver klippet til og sendt ud af cellekernen. Derude venter ribosomerne, der skal læse den. DNA\'et bliver i cellekernen.',
     tal: [['RNA\'et', '444 bogstaver i opskriften'], ['Ord på tre bogstaver', '148']],
-    ekstra: 'Et enzym får en bestemt kemisk reaktion til at ske. Næsten alle enzymer er proteiner, og RNA-polymerasen er et af dem.',
   },
   oversæt: {
     titel: 'Ribosomet',
     tekst: 'Ribosomet læser RNA\'et tre bogstaver ad gangen. Hvert ord hedder et kodon. Små budbringere (tRNA) kommer med den aminosyre, der passer til ordet, og kæden vokser.',
-    tal: [['Ordet nu', '{ord}'], ['Aminosyrer i kæden', '{n}'], ['I celler som dine', 'ca. 5-6 i sekundet']],
-    ekstra: 'Bunden af hver budbringer har tre baser, der passer til ordet: A til U og G til C, ligesom i stigen.',
+    tal: [['Ordet nu', '{ord}'], ['Aminosyrer i kæden', '{n}']],
+    nørd: {
+      tal: [['I celler som dine', 'ca. 5-6 i sekundet']],
+      tekst: 'Bunden af hver budbringer har tre baser, der passer til ordet: A til U og G til C, ligesom i stigen.',
+    },
     gåde: ['gaader:begyndelsen', 'Gåden: Hvordan begyndte livet?'], // Gåderne G2: kernen i ribosomet er RNA
   },
   fold: {
     titel: 'Proteinet',
-    tekst: 'Ved ordet "stop" slipper ribosomet kæden, og den folder sig til en bestemt form. De aminosyrer, der skyr vand (gule), gemmer sig inde i midten.',
+    tekst: 'Ved ordet "stop" slipper ribosomet kæden, og den folder sig til en bestemt form. De aminosyrer, der skyr vand (gule), gemmer sig inde i midten. Fire kæder sammen bliver til ét hæmoglobin, der bærer ilt i dit blod.',
     tal: [['Aminosyrer', '147'], ['Proteinet', 'β-kæden i hæmoglobin']],
-    ekstra: 'Den første aminosyre klippes af bagefter, så kæden i blodet har 146. To β-kæder og to α-kæder bliver til ét hæmoglobin, der kan bære fire iltmolekyler (O₂).',
+    nørd: { tekst: 'Den første aminosyre klippes af bagefter, så kæden i blodet har 146. Hæmoglobin har to β-kæder og to α-kæder, og det kan bære fire iltmolekyler (O₂).' },
   },
   læs: {
     titel: 'Læs selv',
     tekst: 'Nu er du ribosomet. Find ordet i kodehjulet: det første bogstav i midten, det andet i næste ring og det tredje yderst. Vælg så den aminosyre, der passer.',
     tal: [['Ordet nu', '{ord}'], ['Læst', '{n} af 9']],
-    ekstra: 'De fleste aminosyrer har flere ord. Leucin (L) har fx seks.',
+    nørd: { tekst: 'De fleste aminosyrer har flere ord. Leucin (L) har fx seks.' },
   },
   ret: {
     titel: 'Skift et bogstav',
     tekst: 'Et skift af ét bogstav i DNA\'et er en mutation. Skift et bogstav i genet, og se, hvad der sker med proteinet.',
     tal: [['Kodonet', '{ord}'], ['Proteinet', '{n}']],
-    ekstra: '',
     hvorfor: 'livSegl',
   },
 };

@@ -1,6 +1,6 @@
 # Drejebog: Merkur og Pluto i en lille udgave (E16)
 
-*Skrevet 15.-16. november 2026 af Fable (høj effort) efter [prompt-fable-merkur-pluto.md](prompt-fable-merkur-pluto.md) og skemaet i [skabelonen](fable/E3-forloeb.md). Hører til sporet [Solsystemet og Kosmos](lige-nu/solsystemet.md), nr. 13 i [køreplanen](koereplan.md). Fakta og kilder står i [fakta-solsystemet/del8-merkur-og-pluto.md](fakta-solsystemet/del8-merkur-og-pluto.md). Det er et udkast: Opus skriver noterne (`docs/fable/E16-merkur-pluto-noter.md`), og I svarer på spørgsmålene i afsnit 5. Intet er bygget.*
+*Skrevet 15.-16. november 2026 af Fable (høj effort) efter [prompt-fable-merkur-pluto.md](prompt-fable-merkur-pluto.md) og skemaet i [skabelonen](fable/E3-forloeb.md). Hører til sporet [Solsystemet og Kosmos](lige-nu/solsystemet.md), nr. 13 i [køreplanen](koereplan.md). Fakta og kilder står i [fakta-solsystemet/del8-merkur-og-pluto.md](fakta-solsystemet/del8-merkur-og-pluto.md). Opus' noter står i [fable/E16-merkur-pluto-noter.md](fable/E16-merkur-pluto-noter.md), og jeres svar (16. november 2026) står i afsnit 5. Intet er bygget.*
 
 ## Kort fortalt
 - **Merkur handler om sol og skygge.** Der er ingen luft til at flytte varmen, så der er over 400 °C i solen og is i kraterne ved polerne. Rundturen slutter ved isen.
@@ -177,7 +177,10 @@ Merkur → Venus (varmest), Solen og Månen (kratere uden luft). Pluto → overb
 4. **Solen, der vender om:** **En lille tegning af horisonten og Solen i overlaget** (anbefalet: Det er det, man husker, og det kan ikke ses fra rummet). Eller kun tekst og et "Hvorfor?"-kort, så har Merkur 5 stop.
 5. **Merkurs tredje sted:** **De lyse huller med MESSENGERs foto i panelet** (anbefalet: De passer til kernesætningen). Eller klinten Discovery Rupes i 3D i stedet (kan ses på kloden med "Bjergene 10 gange højere", men hører til kernesætning C). Eller begge, altså fire steder.
 
+**Jeres svar 16. november 2026:** Alle fem som anbefalet: (1) Merkurs kernesætning A, sol og skygge med isen til sidst. (2) Plutos kernesætning A, is som sten og is som gletsjer. (3) Kun flybyen, 6 og 5 stop, intet forløb. (4) Tegningen af Solen, der vender om, i overlaget. (5) De lyse huller (Raditladi) med MESSENGERs foto som Merkurs tredje sted. Opus' noter og de tre tjek står i [fable/E16-merkur-pluto-noter.md](fable/E16-merkur-pluto-noter.md).
+
 ## 6. Til Opus
+- **Efter Opus' noter (16. november 2026), læs dem før MP1:** Merkurs højdekort og Plutos kort har 180° i midten, Merkurs billedkort og Charons 0° (`lav_merkur.py` ruller højdekortet). Pluto beholder 180° i midten, så hjertet ikke ligger på kortets kant, og `lavKlippeplanet`/`lokalt` får en parameter med kortets midte. BDR med jævn lysstyrke (stregerne fjernes med LOI), ikke LOI. Polen måles i MP1 (anisotropi 8 og 16), og trænger den, laves et lille polkort i kuglens shader. Ingen ny skyggekode til evig skygge. Fire rettelser i underteksterne og panelet (noterne, "Hvor jeg er uenig").
 - **Rækkefølge (forslag, et go pr. del):** MP1 Merkur: kort, højder og skelet. MP2 Merkur: stederne, tegningen af Solen, flybyen og siderne. MP3 Pluto og Charon: kort, højder, dansen og disen. MP4 Pluto: de lokale net, flybyen og siderne, og overblikkets "Kort besøg" rettes. Alle mellem. Bygges efter Venus V3-V5.
 - **Tjek igen, når teksterne skrives:** BepiColombo (21. november og 9.-10. december 2026), mængden af is, bjergenes højde, Plutos farver og kortenes længde 0° (del 8, afsnit 9).
 - **Tests (5-8 pr. klode):** tallene i Node (soldøgnet 175,94 døgn ud fra drejning og år, Solen baglæns i ca. 8 døgn, tyngdepunktet uden for Pluto, Charon over samme længde efter en omgang), stederne på den rigtige bredde og længde, flybyen igennem, underteksterne under 160 tegn, står stille i pause og ingen konsolfejl.
