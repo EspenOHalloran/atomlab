@@ -1,6 +1,6 @@
 // Solsystemets overblik, forløbet "Rundt om Solen" (docs/drejebog-overblik.md, afsnit 2) og "Rejs med lyset" (afsnit 3):
 // teksternes grænser og ord, fodboldens tal, tallene for afstanden og lysets tid, starter første gang med panelerne skjult,
-// trin 1 (et forkert tryk giver en linje, og Jorden blinker), trin 2 (Merkur over fire omgange), trin 3 (skalaen glider),
+// trin 1 (de fire inderste store med en ring og de ydre dæmpet, et forkert tryk giver en linje, og Jorden blinker), trin 2 (Merkur over fire omgange), trin 3 (skalaen glider),
 // trin 4 (kun Jordens ring, et tryk ved siden af giver en linje, dykket med tælleren ned til Jorden fra den belyste side),
 // "Det så du" med ✓ i "Din fremgang" og skalaen tilbage, vejen "Besøg en planet" (Merkur mat, Pluto skjult), "Rejs med
 // lyset" (tiderne ved planeterne passer med lysTid, uret siger "spolet frem") og konsollen uden fejl.
@@ -44,10 +44,16 @@ if (!process.argv.includes('--uden-browser')) {
 
   tjek('forløbet starter første gang, panelerne er skjult, og trin 1 er "Find Jorden"', await side.evaluate(() => document.getElementById('solsystem').classList.contains('i-forløb')) && (await f((fl) => fl.trin())) === 'jorden');
   // Trin 1
+  const inderst = await f((fl, t) => ['merkur', 'venus', 'jorden', 'mars', 'jupiter', 'saturn'].map((id) => ({ id, ...t.kugleInfo(id) })));
+  const navne1 = (await f((fl, t) => t.navne())).join();
+  tjek('trin 1: de fire inderste er mindst 14 px brede med en ring, og de ydre er dæmpet', (await f((fl) => fl.inderst()))
+    && inderst.slice(0, 4).every((k) => k.px >= 6.9 && k.lys === 1) && inderst.slice(4).every((k) => k.lys < 1) && navne1 === 'merkur,venus,jorden,mars',
+    `${inderst.map((k) => `${k.id} ${k.px.toFixed(1)} px, lys ${k.lys}`).join('; ')} · ringe: ${navne1}`);
   await f((fl) => fl.tryk('venus'));
   tjek('trin 1: et tryk på Venus giver en linje, og Jordens ring blinker', /Det er Venus/.test(await side.textContent('#solsystem .fl-vink')) && (await f((fl) => fl.fremhævet())) === 'jorden');
   await f((fl) => fl.tryk('jorden'));
   await vent((fl) => fl.fase() === 'så');
+  tjek('trin 1: når Jorden er fundet, er alle planeterne som før', !(await f((fl) => fl.inderst())) && (await f((fl, t) => t.kugleInfo('saturn').lys)) === 1);
   await klik('.fl-næste');
   // Trin 2
   await klik('.fl-gæt');
