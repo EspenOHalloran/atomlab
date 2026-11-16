@@ -2,7 +2,7 @@
 
 *Punkt 7, 23. oktober 2026. Teksterne i `js/data/grundstoflag.js` er skrevet af tre hjælpeagenter (Opus, høj effort) og gennemgået af Opus. Ikke tjekket af Fable.*
 
-**Hvordan det er tjekket:** Agenterne kunne kun bruge websøgning. Ingen kildesider kunne åbnes i miljøet, så tallene er tjekket mod søgeresultater og deres uddrag. Det, de kun havde fra deres egen viden, er mærket "(H)" eller "egen viden" herunder.
+**Hvordan det er tjekket:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 2a og 3. Det dér rettede er rettet i programmet. Mærkerne "(H)" og "egen viden" herunder er fra før.
 
 **Det, Opus har rettet eller fjernet ved gennemgangen** (tjekliste B: hellere for forsigtigt end forkert):
 - Fjernet, fordi kilden manglede: berylliumkobber, der ikke slår gnister, Epsom-salt, vibrationsmotorer af wolfram, scandium i stadionlamper, brændselspillen, der svarer til 1 ton kul, og "Pt er næsten lige så sjældent som guld".
@@ -25,7 +25,7 @@
 
 Jeg har skrevet kortene til alle 14 grundstoffer. Alle tekster holder sig inden for længderne (tjekket med et lille script), og de modsiger ikke `fakta.js` eller `fusion.js`. Jeg har ikke ændret nogen filer.
 
-**Om kilderne:** Jeg kunne kun bruge websøgning. Netværket afviste næsten alle sider (rsc.org, wikipedia, ohio-state.edu, science.org, phys.org og PDF-kopierne af Johnsons artikel). Alle kildesider nedenfor kender jeg derfor kun fra søgeresultater. Den eneste fil, jeg selv har kunnet åbne og regne på, er Wikimedia-tegningen af Johnsons tabel. Andelene er regnet ud af dens skraveringsdata, så de er groft aflæste. Den bygger på Johnsons webudgave (ca. 2017) og ikke på figuren i Science 2019, som jeg ikke kunne åbne. Andelene i "univers" bør derfor tjekkes mod Science-figuren.
+**Om kilderne:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 3: "I universet" er tjekket mod Wikimedia-tegningen af Johnsons skema, Kobayashi m.fl. 2020 og Prantzos m.fl. 2020. Ti, Co, Cu, Zn og Pb følger de to nyere artikler. Science-figuren fra 2019 kunne stadig ikke åbnes.
 
 ### 1. Kortene
 
@@ -104,7 +104,7 @@ Før: "… fordi bakterier, lyn og gødning har bundet det for planterne." "Bund
 
 ### Grundstofkort for P-Zn (nr. 15-30)
 
-Vigtigt om kilderne: Jeg kunne ikke åbne en eneste kilde. WebFetch gav DNS-fejl på alle adresser, også rsc.org, wikipedia.org, commons.wikimedia.org og drkohn.org. Alt nedenfor er derfor tjekket mod søgeresultater og deres uddrag, og ikke mod selve kildesiderne.
+Om kilderne: Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 2a og 3 (zinks enzymer rettet til "flere hundrede").
 
 Jeg har ikke ændret nogen filer. Teksterne modsiger ikke `fakta.js`, og de gentager ikke dets navne- og opdagelsestekster. Jeg har brugt stavemåden fra `grundstoffer.js` (chlor, chrom, cobalt) og ordbrugen fra `kosmos/hviddvaerg.js` ("hvide dværge, der eksploderer").
 

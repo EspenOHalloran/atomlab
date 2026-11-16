@@ -208,7 +208,7 @@ export const SIDER = {
     emner: [
       {
         titel: 'Hvad er de mørke og lyse egne?',
-        tekst: '<p>De mørke egne er gammelt land med mange kratere. De lyse egne er yngre og fulde af riller og rygge. Omkring en tredjedel af overfladen er mørk.</p>',
+        tekst: '<p>De mørke egne er gammelt land med mange kratere. De lyse egne er yngre og fulde af riller og rygge. Ca. 40 % af overfladen er mørk.</p>',
       },
       {
         titel: 'Har den også et hav?',

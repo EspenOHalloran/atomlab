@@ -48,7 +48,9 @@ const side = async (adresse) => {
   tjek('Saturn står i listen efter Jupiter', ids.indexOf('saturn') === ids.indexOf('jupiter') + 1 && Boolean(await s.$('#solsystem .kosmos-valg[data-id="saturn"]')), JSON.stringify(ids));
   // Citatet af Huygens (med den latinske ordlyd, når musen holdes over)
   await s.click('#solsystem .kosmos-valg[data-id="saturn"]');
-  const citat = await s.evaluate(() => { const c = document.getElementById('solsystemCitat'); return { vist: c && !c.hidden, tekst: c?.textContent ?? '', latin: c?.querySelector('.citat-tekst')?.title ?? '' }; });
+  // (rejseskiltet bygger Saturn først, når det er tegnet, så citatet kommer lidt efter trykket: vent på det)
+  await s.waitForFunction(() => { const c = document.getElementById('solsystemCitat'); return c && !c.hidden && c.textContent.includes('Huygens'); }, null, { timeout: 15000 }).catch(() => {});
+  const citat =await s.evaluate(() => { const c = document.getElementById('solsystemCitat'); return { vist: c && !c.hidden, tekst: c?.textContent ?? '', latin: c?.querySelector('.citat-tekst')?.title ?? '' }; });
   tjek('Saturn viser citatet af Huygens med den latinske ordlyd', citat.vist && citat.tekst.includes('Christiaan Huygens') && citat.latin.startsWith('Annulo cingitur'), JSON.stringify(citat));
   // Tågeskyerne: væk i vores solsystem (fx Årstiderne), med i fx Big Bang og igen uden for Kosmos
   await s.click('#solsystem .sol-klode[data-id="jorden"]');

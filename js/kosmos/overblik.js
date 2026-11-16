@@ -14,7 +14,8 @@
 // - Tryk: den klode, hvis midte er nærmest (inden for TRYK_PX), vælges. Kameraet flyver ind (van Wijk og Nuijs vej,
 //   glatVej i rejse.js), til kuglen fylder ca. en tredjedel af billedet, og billedet toner gennem mørke over i planetens
 //   egen visning. Merkur og Pluto er ikke bygget: De er steder i overblikket med et kort panel.
-// - Tilbage: Overblikket husker dato, skala og kamera (husk), og flyver ud fra den klode, man kom fra.
+// - Tilbage: Overblikket husker dato og tempo (husk) og flyver ud fra den klode, man kom fra, til hjemblikket i "Pustet
+//   op" (feedback 16. november 2026: før huskede det kameraet tæt ved planeten, så man stod i tomt rum).
 // - Forløbet "Rundt om Solen" (drejebogens afsnit 2) står i js/solsystem/overblik-forloeb.js. Det styrer scenen gennem
 //   api'et nedenfor og flaget vis (navnene, ringene, Pluto, bælterne og tidsknapperne er skjult imens).
 // - "Rejs med lyset" (handlingen i bjælken) står i js/solsystem/overblik-lys.js.
@@ -25,7 +26,7 @@ import { glød, stjerne } from './faelles.js';
 import { glatVej } from '../solsystem/rejse.js';
 import { hent } from '../solsystem/hent.js';
 import { navneKnap, navneTil as navneTilFra } from '../solsystem/navne.js';
-import { lavShadereFørst } from '../solsystem/shadere.js';
+import { skjulTilKlar } from '../solsystem/shadere.js';
 import { sætOverblikDato } from '../solsystem/dato.js';
 import { PLANETER, SOLEN, plads, tilProgram, kugleRetning, AU, FØRSTE, SIDSTE } from '../data/planeter.js';
 import { ringProfil, RING_IND, RING_UD } from '../data/ringe.js';
@@ -40,6 +41,11 @@ const SOL_R = 1.0; // Solens radius i "Pustet op" (større end Jupiter, under Me
 const F = JUPITER_R / 69911; // enheder pr. km for planeterne i "Pustet op"
 const RIGTIG = NEPTUN_U / NEPTUN_A / AU; // enheder pr. km i den rigtige skala
 const MIN_PX = 1.6; // mindste radius i pixel i "Pustet op"
+// Forløbets trin 1 (vis.inderst): de fire inderste er mindst så mange pixel i radius (ca. 14 px brede) og har en ring,
+// og de ydre er dæmpet til YDRE_LYS (Fables eftersyn E14: de inderste var prikker på 3-10 px)
+const INDERST_PX = 7;
+const YDRE_LYS = 0.15;
+const INDERSTE = new Set(['merkur', 'venus', 'jorden', 'mars']);
 // Jordens luft i overblikket (lineære farver): Uden den er Jorden en mørk, brunlig prik langt væk, for kortets hav er
 // mørkt. Set fra rummet er Jorden blålig af luften og skyerne ("Pale Blue Dot")
 const LUFT_JORDEN = [0.05, 0.1, 0.28];
@@ -51,8 +57,9 @@ const HJEM = { retning: [0, 0.62, 1], radius: 15.5 }; // kameraet skråt oppefra
 // Prioriteten for navnene: Ligger to oven i hinanden, vises det første (de andre beholder prikken og ringen)
 const NAVNE_ORDEN = ['solen', 'jorden', 'jupiter', 'saturn', 'mars', 'venus', 'uranus', 'neptun', 'merkur', 'pluto'];
 
-// Det, overblikket husker, når man er inde ved en planet (står, som man forlod det)
-const husk = { dato: null, t: 0, kamera: null, tempo: 0 };
+// Det, overblikket husker, når man er inde ved en planet (datoen og tempoet står, som man forlod dem). Skalaen og
+// kameraet huskes ikke: Man kommer altid tilbage til hjemblikket i "Pustet op".
+const husk = { dato: null, tempo: 0 };
 
 const afstandVed = (rAU, t) => {
   const p = NEPTUN_U * Math.sqrt(rAU / NEPTUN_A), r = NEPTUN_U * rAU / NEPTUN_A;
@@ -83,6 +90,7 @@ void main() {
 }`;
 const KUGLE_F = /* glsl */ `
 uniform sampler2D uKort; uniform float uHarKort; uniform float uGraa; uniform vec3 uFarve; uniform vec3 uSol; uniform vec3 uLuft;
+uniform float uLys; // 1, eller mindre, når kloden er dæmpet (de ydre i forløbets trin 1)
 varying vec3 vN; varying vec3 vP; varying vec2 vUv;
 void main() {
   vec3 c = uFarve;
@@ -96,7 +104,7 @@ void main() {
   // Jordens luft: et blåt skær over dagsiden, stærkest ved kanten (derfor ser Jorden blå ud langt væk)
   float kant = 1.0 - max(dot(n, normalize(-vP)), 0.0);
   vec3 luft = uLuft * (0.35 + 1.2 * kant * kant) * smoothstep(-0.25, 0.4, sol);
-  gl_FragColor = vec4(c * (0.03 + 1.1 * lys) + luft, 1.0);
+  gl_FragColor = vec4((c * (0.03 + 1.1 * lys) + luft) * uLys, 1.0);
 }`;
 const RING_V = /* glsl */ `
 varying float vR; varying vec3 vP;
@@ -107,7 +115,7 @@ void main() {
   gl_Position = projectionMatrix * mv;
 }`;
 const RING_F = /* glsl */ `
-uniform sampler2D uTau; uniform float uInd; uniform float uUd; uniform vec3 uSol; uniform vec3 uMidt; uniform float uR;
+uniform sampler2D uTau; uniform float uInd; uniform float uUd; uniform vec3 uSol; uniform vec3 uMidt; uniform float uR; uniform float uLys;
 varying float vR; varying vec3 vP;
 void main() {
   float x = (vR - uInd) / (uUd - uInd);
@@ -120,7 +128,7 @@ void main() {
   float bag = dot(d, s);
   float vinkelret = length(d - bag * s);
   float skygge = (bag < 0.0 && vinkelret < uR) ? 0.15 : 1.0;
-  gl_FragColor = vec4(p.rgb * 0.75 * skygge, a * 0.9);
+  gl_FragColor = vec4(p.rgb * 0.75 * skygge * uLys, a * 0.9);
 }`;
 const BÆLTE_V = /* glsl */ `
 attribute vec4 el1; attribute vec4 el2;
@@ -204,7 +212,7 @@ export default {
     kamera.far = 4000;
     let aktiv = true;
     let dato = husk.dato ?? Date.now();
-    let t = husk.t; // skalaen 0-1
+    let t = 0; // skalaen 0-1
     let tMål = t;
     let glidTid = 1.2; // sekunder, skalaen glider fra den ene ende til den anden (forløbets trin 3: ca. 3 s)
     let tempo = husk.tempo; // -3 til 3 (⏪ og ⏩)
@@ -217,8 +225,9 @@ export default {
     const vindue = document.getElementById('solsystemVindue');
     // Det, forløbet slår til og fra (js/solsystem/overblik-forloeb.js): forløb skjuler navnene, ringene, Pluto, bælterne
     // og tidsknapperne. ringKun: kun den klodes ring vises. fremhæv: den klodes ring og navn blinker. besøg: vejen
-    // "Besøg en planet" efter forløbet (navnene er tændt, Pluto skjult og Merkur mat).
-    const vis = { forløb: false, ringKun: null, fremhæv: null, besøg: false };
+    // "Besøg en planet" efter forløbet (navnene er tændt, Pluto skjult og Merkur mat). inderst: de fire inderste er store
+    // nok at ramme og har en ring, og de ydre er dæmpet (forløbets trin 1).
+    const vis = { forløb: false, ringKun: null, fremhæv: null, besøg: false, inderst: false };
 
     // ---------- Solen ----------
     const sol = stjerne(1, 0xfff1c4, 0xff8a1c, 0xffb347, 2.6, { styrke: 1.3 });
@@ -234,7 +243,7 @@ export default {
         uniforms: {
           uKort: { value: null }, uHarKort: { value: 0 }, uGraa: { value: p.gråt ? 1 : 0 },
           uFarve: { value: new THREE.Color(p.gråt ? '#7c7976' : p.farve) }, uSol: { value: new THREE.Vector3() },
-          uLuft: { value: new THREE.Vector3(...(p.id === 'jorden' ? LUFT_JORDEN : [0, 0, 0])) },
+          uLuft: { value: new THREE.Vector3(...(p.id === 'jorden' ? LUFT_JORDEN : [0, 0, 0])) }, uLys: { value: 1 },
         },
         vertexShader: KUGLE_V, fragmentShader: KUGLE_F,
       });
@@ -264,7 +273,7 @@ export default {
     tauTekstur.needsUpdate = true;
     const R_SAT = saturn.p.radius;
     const ringMat = new THREE.ShaderMaterial({
-      uniforms: { uTau: { value: tauTekstur }, uInd: { value: RING_IND / R_SAT }, uUd: { value: RING_UD / R_SAT }, uSol: { value: new THREE.Vector3() }, uMidt: { value: new THREE.Vector3() }, uR: { value: 1 } },
+      uniforms: { uTau: { value: tauTekstur }, uInd: { value: RING_IND / R_SAT }, uUd: { value: RING_UD / R_SAT }, uSol: { value: new THREE.Vector3() }, uMidt: { value: new THREE.Vector3() }, uR: { value: 1 }, uLys: { value: 1 } },
       vertexShader: RING_V, fragmentShader: RING_F, transparent: true, depthWrite: false, side: THREE.DoubleSide,
     });
     const ring = new THREE.Mesh(new THREE.RingGeometry(RING_IND / R_SAT, RING_UD / R_SAT, 96, 1), ringMat);
@@ -416,10 +425,13 @@ export default {
         k.pos.set(px * s, py * s, pz * s);
         k.holder.position.copy(k.pos);
         k.r = radiusVed(k.p, t);
-        const vis = Math.max(k.r, minPx * pxPr(kamera.position.distanceTo(k.pos)));
-        k.drej.scale.setScalar(vis);
+        const inderst = vis.inderst && INDERSTE.has(k.p.id);
+        const vist = Math.max(k.r, (inderst ? Math.max(minPx, INDERST_PX) : minPx) * pxPr(kamera.position.distanceTo(k.pos)));
+        k.drej.scale.setScalar(vist);
+        k.mat.uniforms.uLys.value = vis.inderst && !inderst ? YDRE_LYS : 1;
       }
       ringMat.uniforms.uR.value = saturn.drej.scale.x;
+      ringMat.uniforms.uLys.value = saturn.mat.uniforms.uLys.value;
       // I forløbet er Pluto (og dens bane) og bælterne skjult (drejebogen, afsnit 2). På vejen "Besøg en planet" også Pluto.
       const pluto = klode('pluto');
       pluto.holder.visible = !vis.forløb && !vis.besøg;
@@ -480,11 +492,15 @@ export default {
       for (const id of NAVNE_ORDEN.slice(1)) {
         const k = klode(id);
         const inderst = ['merkur', 'venus', 'jorden', 'mars'].includes(id);
-        const fremhæv = vis.fremhæv === id, ringKun = vis.ringKun === id;
-        const synlig = k.skærm.synlig && k.holder.visible && !(samlet && inderst) && (navne || ringe || fremhæv || ringKun) && !flyvning?.skjulNavne && k !== fokus
+        const fremhæv = vis.fremhæv === id, ringKun = vis.ringKun === id, ringInderst = vis.inderst && inderst;
+        const synlig = k.skærm.synlig && k.holder.visible && !(samlet && inderst) && (navne || ringe || fremhæv || ringKun || ringInderst) && !flyvning?.skjulNavne && k !== fokus
           && !(iFl && id === 'pluto');
-        sæt(k.mærke, k.skærm, synlig, ringe || fremhæv || ringKun);
-        k.mærke.classList.toggle('uden-tekst', !(navne || fremhæv) || !synlig || !ledig(k.skærm, k.p.navn));
+        sæt(k.mærke, k.skærm, synlig, ringe || fremhæv || ringKun || ringInderst);
+        k.mærke.classList.toggle('stor-ring', ringInderst);
+        const medTekst = (navne || fremhæv) && synlig && ledig(k.skærm, k.p.navn);
+        k.mærke.classList.toggle('uden-tekst', !medTekst);
+        // Navnet står til venstre for kloden, når det ellers går ud over vinduets højre kant (fx Uranus bag panelet)
+        if (medTekst) k.mærke.classList.toggle('venstre', k.skærm.x - r.left + k.p.navn.length * 7 + 22 > r.width);
         k.mærke.classList.toggle('puls', fremhæv);
         k.mærke.classList.toggle('mat', vis.besøg && !k.p.fænomen);
       }
@@ -592,7 +608,7 @@ export default {
     }
 
     // Toningen gennem mørke: kameraet glider langsomt videre ind (aldrig et stillestående billede), billedet bliver
-    // sort, planetens visning bygges, dens shadere laves, og så toner billedet frem igen.
+    // sort, planetens visning bygges, dens shadere laves (den er skjult imens, skjulTilKlar), og så toner billedet frem.
     function tonOver(skift, hop) {
       const mørke = document.createElement('div');
       mørke.className = 'ob-mørke';
@@ -612,7 +628,7 @@ export default {
         verden.opdateringer.delete(glid);
         skift();
         let klar = false;
-        lavShadereFørst(gruppe, () => true, { færdig: () => { klar = true; } });
+        skjulTilKlar(gruppe, () => { klar = true; }); // (planeten er skjult, til dens shadere er oversat)
         let ud = 0;
         const frem = (dt2) => {
           ud += dt2;
@@ -648,10 +664,24 @@ export default {
 
     function gem() {
       husk.dato = spolet ? dato : null;
-      husk.t = t;
       husk.tempo = tempo;
-      if (!flyvning) husk.kamera = { mål: orbit.target.clone(), retning: kamera.position.clone().sub(orbit.target).normalize(), afstand: kamera.position.distanceTo(orbit.target) };
     }
+
+    // Hjem til hele overblikket i "Pustet op" (efter "Rejs med lyset": "✕ Stop lyset", Esc, eller når rejsen er slut)
+    function tilHjem() {
+      lys.stop();
+      fokus = null;
+      stedNu = 'overblik';
+      tMål = 0;
+      glidTid = 1.2;
+      flyvTil({ mål: () => hjælp.set(0, 0, 0), afstand: hjemAfstand(), retning: new THREE.Vector3(...HJEM.retning), slags: 'hjem' });
+    }
+    // Esc stopper rejsen (ikke når en dialog eller et kort er åbent: så lukker Esc det)
+    const vedTast = (h) => {
+      if (h.key !== 'Escape' || !aktiv || !lys.kører() || document.querySelector('.overlag:not(.skjult)')) return;
+      tilHjem();
+    };
+    addEventListener('keydown', vedTast, true);
 
     // ---------- Styr-boksen ----------
     const skala = {
@@ -660,7 +690,16 @@ export default {
       ændring: (x) => { lys.stop(); t = tMål = x / 100; tegnBaner(); },
       slip: (x) => { tMål = x < 50 ? 0 : 1; glidTid = 1.2; },
     };
-    const styring = [skala, navneKnap((til) => { navneTil = til; }), { tekst: '💡 Rejs med lyset', handling: () => { forløb.visBesøg(false); lys.start(); } }];
+    // "Rejs med lyset" bliver til "✕ Stop lyset", mens rejsen kører (bjælken tegnes om, når teksten skifter)
+    const lysKnap = {
+      get tekst() { return lys.kører() ? '✕ Stop lyset' : '💡 Rejs med lyset'; },
+      handling: () => {
+        if (lys.kører()) { tilHjem(); return; }
+        forløb.visBesøg(false);
+        lys.start();
+      },
+    };
+    const styring = [skala, navneKnap((til) => { navneTil = til; }), lysKnap];
     void opdaterKnapper;
 
     // ---------- Start: hjemme, eller ud fra den klode, man kom fra ----------
@@ -669,7 +708,7 @@ export default {
     let første = true;
     function startKamera() {
       const k = forrige ? (forrige === 'solen' ? null : kloder.find((x) => x.p.fænomen === forrige)) : undefined;
-      const hjemme = husk.kamera ?? { mål: new THREE.Vector3(), retning: new THREE.Vector3(...HJEM.retning).normalize(), afstand: hjemAfstand() };
+      const hjemme = { mål: new THREE.Vector3(), retning: new THREE.Vector3(...HJEM.retning).normalize(), afstand: hjemAfstand() };
       verden.målAfstand = null; // skallens passerTil skal ikke trække i kameraet
       if (k === undefined) {
         // Første gang (eller fra en anden skærm): skråt oppefra, lidt længere væk, og glider ind
@@ -770,6 +809,7 @@ export default {
       dato: () => dato, t: () => t, flyver: () => Boolean(flyvning), stopTempo: () => sætTempo(0),
       sætSkala: (x, glid, sek) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
       stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
+      slut: () => tilHjem(), // rejsen er slut af sig selv
     });
     const forløb = lavOverblikForløb({
       verden, kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder, solSkærm,
@@ -798,6 +838,7 @@ export default {
       stop() {
         forløb.stop();
         lys.fjern();
+        removeEventListener('keydown', vedTast, true);
         gem();
         aktiv = false;
         verden.opdateringer.delete(hvertBillede);
@@ -842,16 +883,19 @@ export default {
         trykNær: (id, px) => { placer(); tegnNavne(); const p = id === 'solen' ? solSkærm : klode(id).skærm; return nærmest(p.x + px, p.y); },
         besøg: (id, hop) => besøg(id, hop),
         flyver: () => Boolean(flyvning),
+        // Kameraets mål (afstand fra Solen) og afstanden fra målet, og hjemblikkets afstand
+        kameraMål: () => ({ mål: orbit.target.length(), afstand: kamera.position.distanceTo(orbit.target), hjem: hjemAfstand() }),
         hop: () => { if (flyvning) { flyvning.tid = flyvning.T; flyv(0); } },
         navne: () => kloder.filter((k) => !k.mærke.hidden).map((k) => k.p.id),
         forløb: () => forløb.test,
         lys: () => lys.test,
         lysStart: () => lys.start(),
-        // Kuglens kort, og hvor meget af den belyste side kameraet ser (1 fuld, 0 halv, -1 nat)
+        // Kuglens kort, hvor meget af den belyste side kameraet ser (1 fuld, 0 halv, -1 nat), radius i pixel og lyset (dæmpet)
         kugleInfo: (id) => {
           const k = klode(id), u = k.mat.uniforms;
           const tilSol = k.pos.clone().negate().normalize(), tilKamera = kamera.position.clone().sub(k.pos).normalize();
-          return { harKort: u.uHarKort.value, bredde: u.uKort.value?.image?.width ?? null, dagside: tilSol.dot(tilKamera), skala: k.drej.scale.x, x: k.skærm.x, y: k.skærm.y };
+          return { harKort: u.uHarKort.value, bredde: u.uKort.value?.image?.width ?? null, dagside: tilSol.dot(tilKamera), skala: k.drej.scale.x, x: k.skærm.x, y: k.skærm.y,
+            px: k.drej.scale.x / pxPr(kamera.position.distanceTo(k.pos)), lys: u.uLys.value };
         },
       },
     };

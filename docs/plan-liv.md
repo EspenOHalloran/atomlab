@@ -123,7 +123,7 @@ Man kan blande ingredienserne (energi: gnist, UV-lys eller varme, ler, tørring 
 | L0 | ✅ Plan og faktagrundlag (denne fil og [fakta-liv.md](fakta-liv.md), 9. november 2026) | lavet |
 | L1 | ✅ (9. november 2026) Skærmen, verdenen "Ild og liv" i menuen og **stigen i 3D**: zoom-rejsen, atomerne tæt på, tallene og "Byg stigen" med de første opgaver | stor |
 | L2 | ✅ (10. november 2026) **Fra opskrift til protein:** aflæsningen, ribosomet, kodehjulet og "Læs selv" med HBB og mutationerne (se "Bygget i L2" nedenfor) | stor |
-| L3 | **Forløbet "Kopien"**, "Leg frit: Kopien" med to tal og ★-opgaven "Find en mutation, der blev", kort 1-3 og rettelsen af G–T i "Ærligt talt" ([drejebog-liv.md](drejebog-liv.md), afsnit 2). Prompten: [prompt-liv-l3.md](prompt-liv-l3.md) | mellem |
+| L3 | **Forløbet "Kopien"**, "Leg frit: Kopien" med to tal og ★-opgaven "Find en mutation, der blev", kort 1-3 (rettelsen af G–T i "Ærligt talt" er lavet 16. november 2026) ([drejebog-liv.md](drejebog-liv.md), afsnit 2). Prompten: [prompt-liv-l3.md](prompt-liv-l3.md) | mellem |
 | L4 | **Forløbet "Fejlen, der hjalp"** (naturligt udvalg på pladen fra Baym 2016), kort 4 og 5 og to nye ord (afsnit 3) | mellem |
 | L5 | **Delen "Begyndelsen"**: forløbet med Millers kolbe, hinden, RNA'et og trappen, og fire kort (afsnit 4) | stor |
 | L6 | **Kortet "Hvor sikkert er et spor?"** ved Cheyava Falls på Mars og links fra Gåden og Begyndelsen (afsnit 6). Bygges i sporet Molekyler lige efter L5 | lille |

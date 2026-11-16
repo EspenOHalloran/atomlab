@@ -2,7 +2,7 @@
 
 # Del 1: Saturn, Enceladus og Titan (prototypen), Europa, Ganymedes, Mars og billederne
 
-**Hvordan det blev tjekket:** Jeg kunne ikke åbne en eneste kildeside. WebFetch fik DNS-fejl på alle værter (nasa.gov, esa.int, wikipedia, nature.com, usgs.gov), og curl blev afvist af proxyen (403) på alle undtagen svs/eoimages.gsfc.nasa.gov. Alt nedenfor bygger derfor på **søgeresultater** (uddrag og resuméer) plus egen viden. Hvor kun egen viden ligger bag, står der **(egen viden)**. Søgegrænsen for turen (200 søgninger, delt mellem alle agenter) blev nået til sidst, så nogle punkter kunne ikke krydstjekkes. Det gælder JUICE' jordpassage i sept. 2026, Saturns 134 K og hældning og Huygens' 1467 hPa. Før teksterne bruges, bør nogen åbne NSSDC-arkene direkte.
+**Hvordan det blev tjekket:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](../fable/E13-faktatjek.md) afsnit 2b og 3: Saturns og månernes tal passer med JPL SSD, NSSDC og USGS Gazetteer, og "Mindst sikre" nr. 3 og 4 er bekræftet (JUICE kun på Wikipedia). Huygens' 1467 hPa er ikke tjekket igen. Mærket **(egen viden)** er fra før.
 
 Sikkerhed: **S** = sikker, **RS** = ret sikker, **U** = usikker.
 
@@ -27,7 +27,7 @@ Sikkerhed: **S** = sikker, **RS** = ret sikker, **U** = usikker.
 
 **Døgnet er svært at måle:** Saturn har ingen fast overflade, og magnetfeltet ligger næsten præcis langs aksen, så radiosignalet (SKR) giver ingen sikker rytme. Cassini målte endda, at radioperioden skiftede (ca. 10 t 45-47 min). Det bedste tal kommer nu fra bølger i ringene, som planetens indre sætter i gang (ringseismologi): ca. 10 t 33-35 min. **Forslag:** "ca. 10½ time".
 
-**Månerne:** NASA's side viser måske stadig 274 (marts 2025). Wikipedia siger 293 (juni 2026), men jeg fandt ingen MPC-kilde til det. **Forslag:** "over 280 kendte måner (marts 2026)".
+**Månerne:** 293 bekræftede måner i august 2026 (NASA, se E13). I programmet: "over 290 kendte måner (august 2026)".
 
 **Sekskanten:** Den sidder ved ca. 77-78° N, er "bredere end to Jordkloder" og er en jetstrøm, der bugter sig (ca. 100 m/s). Voyager opdagede den i 1980-81, og Cassini så den i lys fra 2009. Kilde: NASA/JPL 2009 og Universe Today. Sikkerhed RS. Sidelængden er ca. 13.800-14.500 km (U). Skriv "bredere end to Jordkloder" og ikke et præcist tal.
 
@@ -174,7 +174,7 @@ Teksterne til flybyen i `js/kosmos/saturn.js` er tjekket af en hjælpeagent (Opu
 | Diones hav: en model ud fra tyngdemålinger, ca. 100 km under overfladen | OK med "måske" | Beuthe m.fl. 2016 (GRL) | "måske et hav ca. 100 km under isen, men det er ikke sikkert" |
 | Rhea: næststørst, 1.527 km, 527.100 km, måske ca. ¾ is | OK med "måske" | JPL, NASA | ja |
 | Titan: større end Merkur, men kun ca. 40 % af massen. Søerne ligger mest ved nordpolen | OK | IMCCE, ESA/NASA | ja |
-| Antal måner: 285 i marts 2026. 293 i juni 2026 ifølge søgeresultater (APOD, Wikipedia) | usikkert tal | MPC/IAU | "over 280 (2026)" |
+| Antal måner: 293 i august 2026 (NASA, bekræftet i E13) | tallet vokser | NASA | "over 290 (2026)" |
 | Geometrisk albedo (Verbiscer m.fl. 2007): Mimas 0,96, Enceladus 1,38, Tethys 1,23, Dione 1,0, Rhea 0,95, Titan 0,22. NSSDC har ældre, lavere tal | kun til lysstyrken i tegningen | Science 315:815 | `lys` i `MÅNER` (forholdet mellem månerne) |
 
 **Hvor turen kigger hen** (østlig længde, som på kortene): Herschel ved ca. −112° (248° Ø), Odysseus ved ca. −129° og 33° N, Diones isklipper omkring 60-110° Ø.

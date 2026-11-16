@@ -2,6 +2,32 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/solsystemet.md](../../lige-nu/solsystemet.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
+**Senest lavet (16. november 2026): Feedback fra prøven, nr. 1, 2 og 4** (prompten i [prompt-solsystem-feedback.md](../prompt-solsystem-feedback.md)).
+- **Nr. 1:** Trin 1 og 4 i "Rundt om Solen" siger nu, hvad man skal ("… Hvilken er vores? Tryk på den.", "Find den, og tryk på ringen."). Kun de to trin i alle forløbene havde fejlen (ingen knapper, og klodsen viser ikke `gør`).
+- **Nr. 2:** "💡 Rejs med lyset" hedder "✕ Stop lyset", mens rejsen kører. Et tryk, Esc og rejsens slutning (10 s efter Pluto, jeres valg) stiller skalaen på "Pustet op" og flyver kameraet hjem.
+- **Nr. 4:** Årsagen var `stop()`, der gemte kameraet, efter det var fløjet ind til planeten. Nu går man fra en planet altid tilbage til hjemblikket i "Pustet op" (datoen huskes stadig).
+- Testene `overblik` og `overblik-forloeb` har fem nye tjek. **Kig efter på tabletten:** [ikke-afproevet.md](../ikke-afproevet.md).
+
+**Senest lavet (16. november 2026): Opus' noter til Fables drejebog til Merkur og Pluto (E16) og jeres svar.** Kun dokumenter. Intet er bygget.
+- **Noterne:** [fable/E16-merkur-pluto-noter.md](../fable/E16-merkur-pluto-noter.md). Drejebogen er [drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md).
+- **De tre tjek:** (1) Polen: Dataene er skarpe. Det slørede kommer af kuglens kort i bredde og længde (anisotropi 8 er for lidt så tæt på polen). Måles i MP1, og trænger det, kommer et lille polkort i kuglens shader (kan også hjælpe Mars' nordpol). (2) BDR vinder over LOI, men stregerne i BDR fjernes. (3) Evig skygge: Kraterbundene er allerede sorte i kortet. Ingen ny skyggekode.
+- **Fund:** Merkurs højdekort og Plutos kort har 180° i midten, Merkurs billedkort 0°. Pluto beholder 180° i midten, så hjertet ikke ligger på kortets kant.
+- **Jeres svar (alle som anbefalet):** Kernesætning A for begge, kun flybyen (6 og 5 stop), tegningen af Solen, der vender om, og de lyse huller som Merkurs tredje sted.
+
+**Senest lavet (16. november 2026): Rettelserne fra Fables eftersyn E14 i "Rundt om Solen"** (prompten i [prompt-e14-rettelser.md](../prompt-e14-rettelser.md), noterne i [fable/E14-noter.md](../fable/E14-noter.md)).
+- **Trin 1:** De fire inderste er mindst ca. 14 px brede og har en ring (uden navn, så gættet ikke er givet), og de ydre planeter og Saturns ringe er dæmpet (`vis.inderst` i `js/kosmos/overblik.js`). Når Jorden er fundet, er alt som før.
+- **Trin 2:** Teksten efter gættet er "Prøv det: Træk skyderen ét år frem." for alle tre svar (`js/data/forloeb/overblik.js`).
+- **Laboratoriets tre mærkater (billede 15):** "Solsystemet" har to felter i gitteret, "Skala" har luft til "Pustet op og rykket sammen" (gælder alle skydere i Styr), og et navn ved vinduets højre kant står til venstre for kloden (Uranus bag panelet).
+- Testen `overblik-forloeb` har to nye tjek (trin 1). Trin 4's Spørg (Fables forslag) er ikke rettet, den var ikke med i prompten.
+- **Kig efter på tabletten:** se [ikke-afproevet.md](../ikke-afproevet.md) (de fire inderste i trin 1).
+
+**Senest lavet (15. november 2026): Overblikket trin 4, forløbet "Rundt om Solen" og "Rejs med lyset"** efter [drejebog-overblik.md](../drejebog-overblik.md) og jeres go pr. del (A-E). Status "prøve". Koden står i [kode/overblik.md](../kode/overblik.md).
+- **A og B:** teksterne (`js/data/forloeb/overblik.js`), listen, knappen i hjælpen, fem ord i Ordbogen, trin 1 (find Jorden) og trin 2 (et år rundt med haler og tællere). Jorden har fået blå luft i overblikket.
+- **C:** trin 3 (knappen "Rigtig størrelse og afstand", glider 3 s), trin 4 (kun Jordens ring, dykket på 8 s fra 11 milliarder km ned til Jorden med en tæller, Jorden fra den belyste side) og "Det så du" (kameraet trækker sig ud, skalaen tilbage) med tre veje: "Besøg en planet" (navnene tændt, Merkur mat), "Leg frit" og "Rejs med lyset". ✓ i "Din fremgang".
+- **D:** "💡 Rejs med lyset" i bjælken (jeres svar: bjælken, kameraet følger skallen). En lysende skal vokser fra Solen i den rigtige skala, uret viser lysets tid ("spolet frem"), og tiden står ved hver planet (i dag Jorden 8 min 13 s, Neptun 4 t 8 min).
+- **E:** testen `overblik-forloeb` (17 tjek), `overblik` og den nye med i hele samlingen, hjælpen ("fire korte trin" og Rejs med lyset) og dokumenterne. Faktatjek: Alle tal regnes af data, der er tjekket i drejebogens afsnit 4 og testen mod Horizons.
+- **Kig efter på tabletten:** se [ikke-afproevet.md](../ikke-afproevet.md) (Jordens ring i trin 4, dykkets fart, Jorden til sidst og rejsens fart).
+
 **Senest lavet (15. november 2026, natkørsel): Overblikket, trin 1-3** efter [drejebog-overblik.md](../drejebog-overblik.md) og jeres go (status "prøve", forløbet mangler). Koden står i [kode/overblik.md](../kode/overblik.md).
 - **Trin 1, data og kort:** `js/data/planeter.js` (JPL's tabel 1 for de otte planeter, Kepler-regningen flyttet hertil fra `isgiganter.js`) og Plutos plads hvert år fra Horizons (`pluto-bane.js`). Testen `overblik` sammenligner med Horizons i 1850, 1979, 2026 og 2100 (højst 0,23° i 2100) og tjekker Pluto inden for Neptun 1979-1999. Nye 1k-kort: Merkur (MESSENGER) og Pluto (New Horizons) fra Commons, Jorden med skyer, Mars og Saturn (`lav_overblik.py`, `KILDER.md`).
 - **Trin 2, laboratoriet:** "Solsystemet" er den første klode og forsiden. Solen, banerne, kuglerne med kort, Saturns ringe, bælterne som prikker, skalaen med to stillinger (glider selv i mål), spole-skyderen (et træk er et år) med ⏪ ⏩ i tre tempi og "I dag", 1800-2100, Navne (de inderste samles i den rigtige skala) og højre panel med fire spørgsmål, For nørder og Ærligt talt (faktatjekket).

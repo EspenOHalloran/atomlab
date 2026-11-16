@@ -40,4 +40,4 @@ Merkur og Pluto er de sidste kloder i Solsystemet. I dag er de kun "Kort besøg"
 - Commit, push, PR til `main`, og merge den med det samme (CLAUDE.md).
 
 ## Efter Fables svar
-Opus skriver noterne (`docs/fable/E16-merkur-pluto-noter.md`, hvad er nyt, og hvor Opus er uenig), og I svarer på spørgsmålene. Det bygges efter Venus V3-V5.
+Opus skriver noterne (`docs/fable/E16-merkur-pluto-noter.md`, hvad er nyt, og hvor Opus er uenig), og I svarer på spørgsmålene. Det bygges efter Venus V3-V5. **Lavet 16. november 2026:** [noterne](fable/E16-merkur-pluto-noter.md), og jeres svar står i drejebogens afsnit 5.

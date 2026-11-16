@@ -17,6 +17,7 @@ export const SKÆRME = [
   { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
   { id: 'ordbog', verden: 'biblioteket', titel: 'Ordbogen', modul: './ordbog.js', status: 'færdig' },
   { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve' },
+  { id: 'opdagelser', verden: 'biblioteket', titel: 'Opdagelserne', modul: './opdagelser.js', status: 'prøve' },
 ];
 
 // Verdenerne i ringens rækkefølge (menuen, js/karrusel.js): fra det mindste til det største, Kernerne først og

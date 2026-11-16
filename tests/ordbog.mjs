@@ -73,7 +73,7 @@ const T = (f, a) => page.evaluate(f, a);
 
 // Menuen: Ordbogen er den første del i Biblioteket (Gåderne er den anden). Docken drejer Biblioteket frem, og et tryk på kortet åbner Ordbogen.
 const menu = await T(() => ({ dele: atomlabTest.karrusel.verdener().find((v) => v.id === 'biblioteket')?.dele, navn: document.querySelector('.verden[data-verden="biblioteket"] .verden-knap strong')?.textContent }));
-tjek(`pc: Biblioteket i menuen har Ordbogen og Gåderne ("${menu.navn}")`, menu.dele?.join() === 'ordbog,gaader' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
+tjek(`pc: Biblioteket i menuen har Ordbogen, Gåderne og Opdagelserne ("${menu.navn}")`, menu.dele?.join() === 'ordbog,gaader,opdagelser' && menu.navn?.startsWith('Ordbogen'), JSON.stringify(menu));
 await page.click('.menu-ikon[data-verden="biblioteket"]');
 await page.waitForFunction(() => document.getElementById('menu').dataset.midt === 'biblioteket' && atomlabTest.karrusel.stille(), null, { timeout: 60000, polling: 100 }); // (fjederen tager ca. 20 billeder: under belastning over 6 s, se karrusel.mjs)
 await page.click('.menukort a[href="#ordbog"]', { force: true });

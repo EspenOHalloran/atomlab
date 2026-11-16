@@ -67,10 +67,14 @@
 - "Under 1 fejl pr. milliard bogstaver" og "ca. 70 nye mutationer pr. barn" i samme forløb ser ud til at modsige hinanden (6,1 milliarder × 10⁻⁹ ≈ 6 pr. kopi). De ca. 70 er samlet op gennem mange delinger i cellerne, der bliver til sæd og æg (flere jo ældre faren er, Jónsson m.fl. 2017), og nogle er skader, ikke kopifejl. Sig det, når begge tal står samme sted.
 - "Med den rigtige unge luft (CO₂ og nitrogen) giver Millers forsøg færre aminosyrer." For skarpt: Med en buffer i vandet blev der mange flere (Cleaves m.fl. 2008), og "significant yields … can still be synthesized" (Parker m.fl. 2011). Skriv, at det stadig virker, men afhænger af, hvad der er i vandet.
 *Huygens (15. november 2026). Kilderne står i [fakta-videnskabsfolk/huygens.md](../fakta-videnskabsfolk/huygens.md).*
-- "Skriftet om Titan kom i 1655" (Wikipedia "Titan (moon)"). Huygens skriver selv i *Systema Saturnium* s. 47, at det udkom 25. marts 1656 sammen med anagrammet.
+- "Skriftet om Titan kom i 1655" (Wikipedia "Titan (moon)"). Huygens skriver selv i *Systema Saturnium*, at det udkom i marts 1656 sammen med anagrammet (s. 2: 5. marts. s. 47 siger 25. marts, men det er hans egen fejl, se næste punkt).
 - "Huygens var 26, da han fandt Titan." Han var 25 (født 14. april 1629, Titan 25. marts 1655). Regn alderen ud fra begge datoer.
 - "Huygens' kikkert forstørrede 43 gange" eller "50 gange". Kilderne er uenige, og bogen giver kun længden (12 fod) og okularet (knap 3 tommer). Skriv "ca. 50 gange".
 - "Huygens fandt ud af, at ringen består af is og sten." Han troede, den var fast ("solidum ac permanentem", s. 48). Det var Maxwell (1859) og Keeler (1895).
+- "Anagrammet kom præcis ét år efter Titan" (s. 47: 25. marts 1656). Skriftet er dateret 5. marts 1656 (s. 2). En forfatter kan huske sin egen dato forkert: Læs titelbladet eller indledningen også (Fable E12).
+- "Saturn vipper, så ringen forsvinder." Ringen peger samme vej i rummet. Saturn og Jorden flytter sig om Solen (Saturn på 29½ år), så vi ser den fra en ny vinkel.
+- "Ringen hælder 27° mod ekliptika." 26,7° er mod Saturns egen bane. Mod ekliptika er det ca. 28° (regnet med IAU's pol).
+- "Huygens så ringen i 1656." Armene var væk fra 16. januar til efter 17. juni 1656 (ringen stod på kant) og kom igen 13. oktober (s. 16-17). Anagrammet blev udgivet, mens de var væk.
 - "Huygens begyndte at slibe linser i 1655." Wikipedia siger 1655 i én artikel og "around 1650" i en anden. Skriv "midt i 1650'erne".
 - "Anagrammet udkom 25. marts 1656, præcis ét år efter Titan." *Systema Saturnium* siger 25. marts på s. 47, men 5. marts på s. 2, og skriftet selv er dateret "5. marts 1656" (Oeuvres complètes XV). Skriv "marts 1656". En forfatter kan huske forkert i sin egen bog, så tjek en dato to steder (Fable, E12).
 - "Huygens' kikkert var næsten 4 meter lang." Han skriver "ikke over 12 fod" (s. 3), og den bevarede linse fra 1655 har 332 cm brændvidde (Oeuvres complètes XV). Skriv "over 3 meter". Derfra kommer også de 43 gange (332 cm og et okular på knap 3 tommer).

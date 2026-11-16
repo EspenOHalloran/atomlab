@@ -139,6 +139,13 @@
           <small>Det, ingen ved endnu, og hvordan forskerne prøver at finde ud af det</small>
         </span>
       </a>
+      <a href="#opdagelser">
+        <span class="kort-ikon ikon-opdagelser" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 9c-3-2-7-2.5-11-2v17c4-.5 8 0 11 2 3-2 7-2.5 11-2V7c-4-.5-8 0-11 2z"/><path d="M16 9v17"/></svg></span>
+        <span class="kort-tekst">
+          <strong>Opdagelserne</strong>
+          <small>Bladr i bøger om store opdagelser, og se dem selv i AtomLab</small>
+        </span>
+      </a>
     </nav>
   </section>
 
@@ -807,7 +814,8 @@
       <button class="hvorfor" id="livHvorfor" data-hvorfor="livSammen" hidden>Hvorfor? Hvad holder stigen sammen?</button>
       <p class="liv-gaade" id="livGaade" hidden><button class="side-knap" data-gaa=""></button></p>
       <details class="forklaring-boks lag-boks" data-lag="liv-nørd" name="liv-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Atomernes pladser, RNA'et og koden</span></summary>
+        <summary><strong>For nørder</strong><span class="lag-kort">Flere tal, krystallen, genet og koden</span></summary>
+        <div class="liv-nørd-trin" id="livNørdTrin" hidden><dl class="liv-tal"></dl><p></p></div>
         <p>Atomernes pladser er målt med røntgen i en rigtig DNA-krystal (1BNA, Drew, Dickerson og kolleger 1981, fra Protein Data Bank). Røntgen kan ikke se H-atomerne, så dem har vi regnet ud. Krystallens stige er bøjet og har 9,8 trin pr. omgang. I vand er det ca. 10,5, og det bruger stigen her.</p>
         <p>To sæt kromosomer er ca. 6,1 milliarder basepar hos en pige og lidt færre hos en dreng, fordi Y-kromosomet er meget mindre end X.</p>
         <p><strong>Genet:</strong> Bogstaverne er de rigtige fra genet HBB (NCBI, NM_000518.5). I genet er opskriften delt i tre stykker. Før RNA'et forlader cellekernen, bliver stykkerne imellem klippet væk, og resten bliver sat sammen. RNA'et har også et stykke før det første AUG og efter stop, som ikke bliver til protein.</p>
@@ -817,7 +825,7 @@
       <details class="forklaring-boks lag-boks" data-lag="liv-ærligt" name="liv-lag">
         <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
         <p>Atomerne er kugler og bindingerne pinde, men rigtige atomer er skyer af elektroner. I cellen er fosfatet minusladet, og der er plusioner (fx natrium og magnesium) omkring stigen. Dem har vi ikke tegnet.</p>
-        <p>Når du bygger stigen, holder kun A–T og G–C. I virkeligheden kan G og T godt holde lidt sammen, hvis de rykker sig skævt. Så buler stigen, og cellen finder som regel fejlen. Det er en af de almindeligste fejl, når DNA bliver kopieret.</p>
+        <p>Når du bygger stigen, holder kun A–T og G–C. I virkeligheden kan G og T godt holde lidt sammen. Det er en af de fejl, der kan ske, når DNA bliver kopieret, og cellen retter de fleste.</p>
         <p>Cellen og cellekernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i cellekernen. Lidt af dit DNA ligger også uden for cellekernen, i mitokondrierne (de orange pølser).</p>
         <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i cellekernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
         <p>I forløbet "Hvad står der i opskriften?" ligger stigen lige ud, og der er små mellemrum mellem ordene, så de er lette at se. I virkeligheden er stigen snoet, og der er ingen mellemrum: Cellen ved, hvor ordene står, fordi den begynder ved ATG og tæller tre ad gangen. Byggestenene har alle samme farve, og den orange er en, der er blevet skiftet ud.</p>
@@ -1101,6 +1109,28 @@
     </div>
     <div class="panel gaader-panel" id="gaaderPanel">
       <article class="gaade-kort" id="gaadeKort" hidden></article>
+    </div>
+  </section>
+  <section id="opdagelser" class="skærm skjult" aria-label="Opdagelserne">
+    <!-- Opdagelserne (js/opdagelser.js, listen i js/data/opdagelser.js, docs/plan-videnskabsfolk.md): hylden med de ti
+         bøger (en tidslinje) og én åben bog ad gangen (klodsen i js/bog.js, teksterne i js/data/opdagelser/). -->
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Opdagelserne</h2>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <div class="opd-rum">
+      <div class="opd-hylde-side" id="opdHyldeSide">
+        <div class="opd-hylde" id="opdHylde" role="list" aria-label="Bøgerne efter årstal"></div>
+        <p class="opd-linje" id="opdLinje" aria-live="polite"></p>
+      </div>
+      <div class="opd-bog-side" id="opdBogSide" hidden>
+        <button class="knap lille opd-tilbage" id="opdTilHylden">‹ Hylden</button>
+        <div class="bog" id="opdBog" role="region"></div>
+      </div>
     </div>
   </section>
 

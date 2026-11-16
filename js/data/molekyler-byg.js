@@ -367,6 +367,7 @@ const FJEDER = 60; // hvor stift bindingerne holder længden
 const VINKEL = 3; // hvor hårdt retningerne skubber
 const FJERN = 0.15000000000000002; // svag frastødning mellem atomer med mindst to atomer imellem (gør ethan forskudt)
 const ANDRE = 3; // frastødning mellem atomer, der ikke hænger sammen (så de ikke ligger oven i hinanden)
+const ANDRE_AFSTAND = 3.2; // Å: så langt rækker frastødningen (forløbet bruger en kortere, form.andreAfstand, så atomerne står tæt og kan ses store)
 const VRID_OO = 1.7999999999999998; // H₂O₂: X–O–O–X drejes til ca. 112° (fælde 3)
 const VRID_FLAD = 0.36; // dobbeltbindinger holder X–A=B–Y fladt (svagt, ellers kan formen gå i hak)
 const VRID_FORSKUDT = 0.27; // enkeltbindinger mellem to tetraedre (fx ethan) står forskudt (bunden ved 60°, 180° og 300°)
@@ -527,6 +528,7 @@ export function skridt(form, h = MAX_SKRIDT) {
   }
 
   // 3. Atomer, der ikke er naboer: svag frastødning med mindst to atomer imellem, og atomer i hver sin gruppe holdes fra hinanden
+  const rækkevidde = form.andreAfstand ?? ANDRE_AFSTAND;
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
       const samme = gruppe[i] === gruppe[j];
@@ -537,8 +539,8 @@ export function skridt(form, h = MAX_SKRIDT) {
       let f;
       if (samme) f = FJERN / (r * r * r);
       else {
-        if (r > 3.2) continue;
-        f = ANDRE * (3.2 - r) / r;
+        if (r > rækkevidde) continue;
+        f = ANDRE * (rækkevidde - r) / r;
       }
       add(i, d, -f);
       add(j, d, f);

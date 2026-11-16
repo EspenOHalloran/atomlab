@@ -12,7 +12,7 @@ import { lysTid, lysTekst, lysRejseTid, LYS } from '../data/planeter.js';
 
 const START_R = 0.55; // enheder, kameraet viser først (Venus' bane, 0,48 enheder i den rigtige skala)
 const MAKS_R = 24; // enheder, kameraet viser højst (Pluto i dag ca. 23 enheder ude)
-const EFTER_S = 10; // sekunder, uret og tiderne står, efter skallen er nået forbi den yderste
+const EFTER_S = 10; // sekunder, uret og tiderne står, efter skallen er nået forbi den yderste (så flyver kameraet hjem)
 const UD_S = 2; // sekunder, skallen tones ud
 const NUL = new THREE.Vector3();
 
@@ -114,7 +114,7 @@ export function lavLysRejse(api) {
       return;
     }
     rejse.w += dt;
-    if (rejse.fase === 'efter' && (rejse.efter += dt) > EFTER_S) { stop(); return; }
+    if (rejse.fase === 'efter' && (rejse.efter += dt) > EFTER_S) { stop(); api.slut?.(); return; } // (overblikket flyver hjem)
     const T = lysRejseTid(rejse.w);
     rejse.R = T * LYS * KM;
     // Skallen når en planet: tiden står ved den

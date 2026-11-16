@@ -2,6 +2,7 @@
 // ("I din hverdag", "I din krop" og "I universet"), og under "Mere" eksempler, et "Vidste du?" og links.
 // Kun de ca. 40 grundstoffer, en 13-årig oftest møder. Kilder og forbehold: docs/fakta-grundstofkort.md.
 // "I universet" bygger på Jennifer Johnsons periodiske system over grundstoffernes oprindelse (2017-2019).
+// Ti, Co, Cu, Zn og Pb følger Kobayashi m.fl. 2020 (arXiv 2008.04660) og Prantzos m.fl. 2020 (arXiv 1911.02545), se docs/fable/E13-faktatjek.md.
 // se: 'fusion', 'reaktor', 'batteri' eller 'kosmos:<id>' (et fænomen i Kosmos)
 
 export const LAG = {
@@ -25,7 +26,7 @@ export const LAG = {
     hverdag: 'Genopladelige batterier i mobiler, tablets og elbiler.',
     krop: 'Kroppen har ikke brug for det, så vidt man ved. Ca. 7 mg i en voksen. Bruges i medicin.',
     univers: 'Ca. 1/4 fra Big Bang og lidt fra kosmisk stråling. Resten fra stjerner, men hvilke er usikkert.',
-    mere: ['Lithium er det letteste metal. Det kan flyde på vand (men reagerer med det).', 'Det er så blødt, at man kan skære det med en kniv.', 'Meget lithium kommer fra saltsøer i Chile, Argentina og Bolivia.', 'Lithium farver en flamme dybrød.'],
+    mere: ['Lithium er det letteste metal. Det kan flyde på vand (men reagerer med det).', 'Det er så blødt, at man kan skære det med en kniv.', 'Meget lithium kommer fra miner i Australien og saltsøer i Chile.', 'Lithium farver en flamme dybrød.'],
     vidste: 'En klump lithium vejer kun ca. halvt så meget som den samme mængde vand.',
     se: ['batteri', 'kosmos:bigbang'],
   },
@@ -202,7 +203,7 @@ export const LAG = {
     krop: 'Hjælper enzymer (kroppens små kemiske maskiner) og knoglerne. En voksen har ca. 12 mg.',
     univers: 'Mest fra hvide dværge, der eksploderer. Resten fra kæmpestjerner, der eksploderer.',
     mere: ['Ca. 90 % af alt mangan bruges til at lave stål.', 'Alkaline-batterier har mangandioxid og zink indeni.', 'På havbunden ligger der knolde med meget mangan.'],
-    vidste: 'I hulen Lascaux i Frankrig malede stenalderfolk dyr for ca. 17.000 år siden. Noget af den sorte farve er manganoxid.',
+    vidste: 'I hulen Lascaux i Frankrig malede stenalderfolk dyr for mindst 17.000 år siden. Noget af den sorte farve er manganoxid.',
     se: ['kosmos:hviddvaerg', 'batteri'],
   },
   Fe: {
@@ -239,7 +240,7 @@ export const LAG = {
   },
   Zn: {
     hverdag: 'Forzinkede hegn og lygtepæle, messing, batterier og solcreme.',
-    krop: 'Ca. 100 enzymer bruger zink, også til smag, lugt og immunforsvar. En voksen har ca. 2-3 g.',
+    krop: 'Flere hundrede enzymer bruger zink, også til smag, lugt og immunforsvar. En voksen har ca. 2-3 g.',
     univers: 'Mest fra kæmpestjerner, der eksploderer (supernovaer).',
     mere: ['Et lag zink på jern (forzinkning) beskytter jernet mod rust.', 'Messing er kobber og zink. Trompeter og dørhåndtag er ofte af messing.', 'Alkaline-batterier har zink indeni.', 'Zinkoxid i solcreme og zinksalve beskytter huden.'],
     vidste: 'Amerikanske 1-cent-mønter fra 1982 og frem er ca. 97,5 % zink. Kun et tyndt lag udenpå er kobber.',
@@ -289,7 +290,7 @@ export const LAG = {
     hverdag: 'Smykker, medaljer og stik og kredsløb i elektronik.',
     krop: 'Kroppen bruger ikke guld. Rent guld er ikke giftigt. Bladguld på kager må spises.',
     univers: 'Fra r-processen. Meget fra neutronstjerner, der støder sammen. Hvor meget, er usikkert.',
-    mere: ['Guld ruster ikke. Derfor er der et tyndt lag guld i stik i mobiler og computere.', 'Bladguld kan være ca. 0,1 mikrometer tykt: ca. 1000 gange tyndere end et hår.', 'Alt guld, der er gravet op, ville fylde en terning på ca. 22 meter.', 'Måske kom noget guld fra sjældne eksploderende kæmpestjerner.'],
+    mere: ['Guld ruster ikke. Derfor er der et tyndt lag guld i stik i mobiler og computere.', 'Bladguld kan være ca. 0,1 mikrometer tykt: ca. 1000 gange tyndere end et hår.', 'Alt guld, der er gravet op indtil 2026, ville fylde en terning på knap 23 meter.', 'Måske kom noget guld fra sjældne eksploderende kæmpestjerner.'],
     vidste: 'I 2017 så man for første gang to neutronstjerner støde sammen. Skyen, de slyngede ud, lavede nok flere gange Jordens vægt i guld og platin.',
     se: ['kosmos:kilonova'],
   },
@@ -314,7 +315,7 @@ export const LAG = {
     krop: 'Kroppen bruger ikke radon. Det er radioaktivt og øger risikoen for lungekræft.',
     univers: 'Laves på Jorden, når uran og thorium i jorden henfalder. Halveringstiden er ca. 4 dage.',
     mere: ['Radon kan ikke ses, lugtes eller smages. Man måler det med en lille måler.', 'Man måler typisk i 2-3 måneder om vinteren. Udluftning og tætning hjælper.', 'Der er tit meget radon på Bornholm, fordi der er granit i undergrunden.'],
-    vidste: 'Radonet i en kælder kommer fra uran, der har ligget i jorden siden før Jorden blev dannet. Det uran blev lavet ude i rummet.',
+    vidste: 'Radonet i en kælder kommer fra uran, som er ældre end Jorden. Det uran blev lavet ude i rummet.',
     se: ['reaktor'],
   },
   U: {

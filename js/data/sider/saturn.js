@@ -61,7 +61,7 @@ export const SIDER = {
     ærligt: '<p>Tætheden er målt langs én linje hen over ringene, og programmet tegner den ens hele vejen rundt. I virkeligheden bølger nogle kanter frem og tilbage. F-ringen er skæv og klumpet, så den står i sin gennemsnitlige afstand. D-ringen er for tynd til målingen, så den er tegnet. Ringenes farver er lagt på de rigtige grænser. Kameraet glider langsomt udad hen over ringene, fra B-ringen til uden for A-ringen.</p>',
   },
   maaner: {
-    tal: [['Kendte måner', 'over 280 (2026)'], ['Nærmest af de store (Mimas)', 'ca. 185.500 km'], ['Længst ude (Titan)', 'ca. 1,22 mio. km']],
+    tal: [['Kendte måner', 'over 290 (2026)'], ['Nærmest af de store (Mimas)', 'ca. 185.500 km'], ['Længst ude (Titan)', 'ca. 1,22 mio. km']],
     kort: 'Her står seks af Saturns største måner i den rigtige afstand. Tryk på en måne for at besøge den.',
     emner: [
       {
@@ -70,7 +70,7 @@ export const SIDER = {
       },
       {
         titel: 'Hvor mange måner har Saturn?',
-        tekst: '<p>Over 280 kendte måner (marts 2026), og der bliver stadig fundet nye. Titan er den største, større end planeten Merkur.</p>',
+        tekst: '<p>Over 290 kendte måner (august 2026), og der bliver stadig fundet nye. Titan er den største, større end planeten Merkur.</p>',
       },
     ],
     videre: [sted('mimas', 'Mimas'), sted('titan', 'Titan')],

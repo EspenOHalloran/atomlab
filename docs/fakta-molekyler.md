@@ -2,7 +2,7 @@
 
 *Lavet 23. oktober 2026 af en hjælpeagent (Opus, høj effort) til [planen](plan-molekyler.md). Ikke tjekket af Fable.*
 
-**Status:** Tallene er tjekket mod søgeresultater og deres uddrag, men ingen kildesider kunne åbnes i miljøet. Før en tekst kommer med i programmet, skal tallet bag den slås op i kilden (NIST WebBook, CRC eller artiklen) med `/faktatjek`. Det gælder især dem, der er mærket "ret sikker", "usikker" eller "fra min viden".
+**Status:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 3: Tallene i afsnit 1-4 og 7 passer med NIST og tabellerne. De fleratomige længder i CCCBDB er åbnet af Opus 7. november. Nye tekster skal stadig gennem `/faktatjek`.
 
 **Vigtigt om kilderne:** Jeg kunne ikke åbne en eneste side. WebFetch gav DNS-fejl for alle domæner (nist.gov, wikipedia, libretexts), og curl blev afvist af proxyen (403). Alle kilder nedenfor har jeg kun set som søgeresultater med uddrag. Hvor uddragene bekræfter et tal, skriver jeg det. Hvor tallet er standardlærebogsviden, som uddragene ikke dækkede, står det som "fra min viden". Inden teksterne kommer med, bør de vigtigste tal slås op i NIST WebBook eller CRC i en browser.
 
@@ -90,7 +90,7 @@ Kilderne giver 799-805 for C=O. Gennemsnitsværdier varierer lidt fra tabel til 
   - **Men:** Mandt m.fl. (Science Advances, nov. 2024) regnede over 4.000 målinger igennem igen. Støv med deuteriumrig is havde trukket tallet op, og langt fra kernen er D/H "close to terrestrial". https://astrobiology.com/2024/12/09/nasa-led-team-links-comet-water-to-earths-oceans/. **Ret sikker** på resultatet. Spørgsmålet om kometerne er altså åbent igen.
 - **Kulholdige meteoritter:** Vandet i dem, især i CI-typen, har D/H tæt på havets. De peger på asteroider som hovedkilden (Alexander m.fl., Science 2012, 85-86 meteoritter). https://www.chemistryworld.com/research/where-did-earths-water-come-from/5216.article. **Ret sikker.** Jeg fandt ikke et præcist tal.
 - **Ryugu (Hayabusa2):**
-  - Prøven landede i Australien 6. december 2020 og vejede ca. 5,4 g. **Sikker.**
+  - Prøven landede i Australien i december 2020 og vejede ca. 5,4 g. **Sikker.**
   - Materialet ligner CI-meteoritter. Vandet sidder i lermineraler (vandholdige mineraler), ikke som is. Det blev omdannet af vand ved ca. 37 °C, ca. 5 millioner år efter Solsystemets begyndelse (Yokoyama m.fl., Science 379, 2023, online 2022). https://eprints.lib.hokudai.ac.jp/dspace/handle/2115/90313. **Sikker.**
   - D/H i de vandholdige mineraler er (165 ± 19) × 10⁻⁶, tæt på havets 156 (Piani m.fl., ApJL 2023). https://profiles.wustl.edu/en/publications/hydrogen-isotopic-composition-of-hydrous-minerals-in-asteroid-ryu/. **Ret sikker.**
 - **Bennu (OSIRIS-REx):**
