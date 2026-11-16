@@ -165,3 +165,4 @@ Listen bliver: Kvanteverdenen, Antistof, Det periodiske system, Livets begyndels
 - **Gåden venter**, som I selv hælder til, til Kvantefysik forløb 1 findes. Trin 3 skal alligevel bruge dets ord. Så afgøres det, om kortet bygges, og pladsen og listen venter med.
 - **En mulig uddybning af Rumtid senere:** "Urenes stige" (idé 2 i [plan-tid.md](../plan-tid.md)), hvor man selv sætter ure i forskellig højde og ser, at ting falder mod den langsomme tid. Det er det, der ville give mest ny forståelse af jeres spørgsmål, og det er målt fysik. Kun noteret, ikke besluttet.
 
+**Jeres svar på rådet (16. november 2026):** Ja, spørgsmålet i Rumtid bygges nu. Gåden venter.
