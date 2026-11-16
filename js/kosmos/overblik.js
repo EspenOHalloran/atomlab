@@ -14,7 +14,8 @@
 // - Tryk: den klode, hvis midte er nærmest (inden for TRYK_PX), vælges. Kameraet flyver ind (van Wijk og Nuijs vej,
 //   glatVej i rejse.js), til kuglen fylder ca. en tredjedel af billedet, og billedet toner gennem mørke over i planetens
 //   egen visning. Merkur og Pluto er ikke bygget: De er steder i overblikket med et kort panel.
-// - Tilbage: Overblikket husker dato, skala og kamera (husk), og flyver ud fra den klode, man kom fra.
+// - Tilbage: Overblikket husker dato og tempo (husk) og flyver ud fra den klode, man kom fra, til hjemblikket i "Pustet
+//   op" (feedback 16. november 2026: før huskede det kameraet tæt ved planeten, så man stod i tomt rum).
 // - Forløbet "Rundt om Solen" (drejebogens afsnit 2) står i js/solsystem/overblik-forloeb.js. Det styrer scenen gennem
 //   api'et nedenfor og flaget vis (navnene, ringene, Pluto, bælterne og tidsknapperne er skjult imens).
 // - "Rejs med lyset" (handlingen i bjælken) står i js/solsystem/overblik-lys.js.
@@ -56,8 +57,9 @@ const HJEM = { retning: [0, 0.62, 1], radius: 15.5 }; // kameraet skråt oppefra
 // Prioriteten for navnene: Ligger to oven i hinanden, vises det første (de andre beholder prikken og ringen)
 const NAVNE_ORDEN = ['solen', 'jorden', 'jupiter', 'saturn', 'mars', 'venus', 'uranus', 'neptun', 'merkur', 'pluto'];
 
-// Det, overblikket husker, når man er inde ved en planet (står, som man forlod det)
-const husk = { dato: null, t: 0, kamera: null, tempo: 0 };
+// Det, overblikket husker, når man er inde ved en planet (datoen og tempoet står, som man forlod dem). Skalaen og
+// kameraet huskes ikke: Man kommer altid tilbage til hjemblikket i "Pustet op".
+const husk = { dato: null, tempo: 0 };
 
 const afstandVed = (rAU, t) => {
   const p = NEPTUN_U * Math.sqrt(rAU / NEPTUN_A), r = NEPTUN_U * rAU / NEPTUN_A;
@@ -210,7 +212,7 @@ export default {
     kamera.far = 4000;
     let aktiv = true;
     let dato = husk.dato ?? Date.now();
-    let t = husk.t; // skalaen 0-1
+    let t = 0; // skalaen 0-1
     let tMål = t;
     let glidTid = 1.2; // sekunder, skalaen glider fra den ene ende til den anden (forløbets trin 3: ca. 3 s)
     let tempo = husk.tempo; // -3 til 3 (⏪ og ⏩)
@@ -662,10 +664,24 @@ export default {
 
     function gem() {
       husk.dato = spolet ? dato : null;
-      husk.t = t;
       husk.tempo = tempo;
-      if (!flyvning) husk.kamera = { mål: orbit.target.clone(), retning: kamera.position.clone().sub(orbit.target).normalize(), afstand: kamera.position.distanceTo(orbit.target) };
     }
+
+    // Hjem til hele overblikket i "Pustet op" (efter "Rejs med lyset": "✕ Stop lyset", Esc, eller når rejsen er slut)
+    function tilHjem() {
+      lys.stop();
+      fokus = null;
+      stedNu = 'overblik';
+      tMål = 0;
+      glidTid = 1.2;
+      flyvTil({ mål: () => hjælp.set(0, 0, 0), afstand: hjemAfstand(), retning: new THREE.Vector3(...HJEM.retning), slags: 'hjem' });
+    }
+    // Esc stopper rejsen (ikke når en dialog eller et kort er åbent: så lukker Esc det)
+    const vedTast = (h) => {
+      if (h.key !== 'Escape' || !aktiv || !lys.kører() || document.querySelector('.overlag:not(.skjult)')) return;
+      tilHjem();
+    };
+    addEventListener('keydown', vedTast, true);
 
     // ---------- Styr-boksen ----------
     const skala = {
@@ -674,7 +690,16 @@ export default {
       ændring: (x) => { lys.stop(); t = tMål = x / 100; tegnBaner(); },
       slip: (x) => { tMål = x < 50 ? 0 : 1; glidTid = 1.2; },
     };
-    const styring = [skala, navneKnap((til) => { navneTil = til; }), { tekst: '💡 Rejs med lyset', handling: () => { forløb.visBesøg(false); lys.start(); } }];
+    // "Rejs med lyset" bliver til "✕ Stop lyset", mens rejsen kører (bjælken tegnes om, når teksten skifter)
+    const lysKnap = {
+      get tekst() { return lys.kører() ? '✕ Stop lyset' : '💡 Rejs med lyset'; },
+      handling: () => {
+        if (lys.kører()) { tilHjem(); return; }
+        forløb.visBesøg(false);
+        lys.start();
+      },
+    };
+    const styring = [skala, navneKnap((til) => { navneTil = til; }), lysKnap];
     void opdaterKnapper;
 
     // ---------- Start: hjemme, eller ud fra den klode, man kom fra ----------
@@ -683,7 +708,7 @@ export default {
     let første = true;
     function startKamera() {
       const k = forrige ? (forrige === 'solen' ? null : kloder.find((x) => x.p.fænomen === forrige)) : undefined;
-      const hjemme = husk.kamera ?? { mål: new THREE.Vector3(), retning: new THREE.Vector3(...HJEM.retning).normalize(), afstand: hjemAfstand() };
+      const hjemme = { mål: new THREE.Vector3(), retning: new THREE.Vector3(...HJEM.retning).normalize(), afstand: hjemAfstand() };
       verden.målAfstand = null; // skallens passerTil skal ikke trække i kameraet
       if (k === undefined) {
         // Første gang (eller fra en anden skærm): skråt oppefra, lidt længere væk, og glider ind
@@ -784,6 +809,7 @@ export default {
       dato: () => dato, t: () => t, flyver: () => Boolean(flyvning), stopTempo: () => sætTempo(0),
       sætSkala: (x, glid, sek) => { tMål = x; glidTid = sek; if (!glid) { t = x; skala.sæt?.(Math.round(x * 100)); tegnBaner(); } },
       stopFlyvning: () => { flyvning = null; orbit.enabled = true; },
+      slut: () => tilHjem(), // rejsen er slut af sig selv
     });
     const forløb = lavOverblikForløb({
       verden, kamera, orbit, vindue, gruppe, kloder, klode, vis, HJEM, tidLag, skyder, solSkærm,
@@ -812,6 +838,7 @@ export default {
       stop() {
         forløb.stop();
         lys.fjern();
+        removeEventListener('keydown', vedTast, true);
         gem();
         aktiv = false;
         verden.opdateringer.delete(hvertBillede);
@@ -856,6 +883,8 @@ export default {
         trykNær: (id, px) => { placer(); tegnNavne(); const p = id === 'solen' ? solSkærm : klode(id).skærm; return nærmest(p.x + px, p.y); },
         besøg: (id, hop) => besøg(id, hop),
         flyver: () => Boolean(flyvning),
+        // Kameraets mål (afstand fra Solen) og afstanden fra målet, og hjemblikkets afstand
+        kameraMål: () => ({ mål: orbit.target.length(), afstand: kamera.position.distanceTo(orbit.target), hjem: hjemAfstand() }),
         hop: () => { if (flyvning) { flyvning.tid = flyvning.T; flyv(0); } },
         navne: () => kloder.filter((k) => !k.mærke.hidden).map((k) => k.p.id),
         forløb: () => forløb.test,

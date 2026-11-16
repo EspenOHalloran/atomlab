@@ -119,6 +119,7 @@ if (!process.argv.includes('--uden-browser')) {
   await side.screenshot({ path: `${UD}/overblik-pc.png` });
   // Ind til Jorden med datoen
   await f((t) => t.sætDato(Date.UTC(2030, 5, 21, 12)));
+  await f((t) => t.sætSkala(1)); // (i den rigtige skala, som efter "Rejs med lyset")
   await f((t) => t.besøg('jorden', true));
   await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'jorden', null, { timeout: 20000 });
   const tidJ = await side.evaluate(() => window.atomlabTest.solsystem.fænomen().tid());
@@ -127,6 +128,10 @@ if (!process.argv.includes('--uden-browser')) {
   await side.evaluate(() => document.querySelector('#solsystem .topbjælke h2 button.sol-hjem').click());
   await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'overblik', null, { timeout: 20000 });
   tjek('tilbage i overblikket står datoen, som man forlod den', new Date(await f((t) => t.dato())).getUTCFullYear() === 2030);
+  // Kameraet flyver ud fra Jorden til hjemblikket i "Pustet op", ikke tilbage til Jorden (feedback 16. november 2026)
+  await side.waitForFunction(() => !window.atomlabTest.solsystem.fænomen().flyver(), null, { timeout: 20000, polling: 200 });
+  const hjem = await f((t) => ({ ...t.kameraMål(), skala: t.skala() }));
+  tjek('tilbage fra Jorden: hjemblikket i "Pustet op" (Solen i midten)', hjem.skala === 0 && hjem.mål < 1e-3 && Math.abs(hjem.afstand - hjem.hjem) < 0.05 * hjem.hjem, JSON.stringify(hjem));
   // Telefon
   await side.setViewportSize({ width: 390, height: 844 });
   await side.waitForTimeout(500);
