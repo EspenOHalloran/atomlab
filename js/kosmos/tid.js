@@ -19,7 +19,7 @@ import { lavJorden } from './jorden.js';
 import { ROLIG, passerTil, passerTilBoks } from '../scene3d.js';
 import * as T from '../data/tid.js';
 import { figurSVG } from './tidfigur.js'; // de tegnede figurer ved hjemkomsten (E4, trin A1)
-import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbTest } from '../forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbVink, forløbTest } from '../forloeb.js';
 import { tagVentForløb, sætVentForløb } from '../gaa.js';
 // Forløbet "Rejsen i tid" (E4, forløb A), og forløb B, som vejen "Hvordan kan det ske?" starter
 import { REJSEN_I_TID, HVORDAN_KAN_DET_SKE } from '../data/forloeb/tid.js';
@@ -501,6 +501,8 @@ export default {
         lyd.klaret?.();
         hjemMed.add(enG ? 'g' : ni);
         if (kørerForløb()) hurtig = false; // ⏩ i forløbets linje gælder én tur (ellers styrer tidsknappen det)
+        // Trin A2: landet uden at have set "Dit ur" (knappen virker kun undervejs). Ellers sker der intet før "Vis mig" (Fable E14)
+        if (vinkUdenUr && kørerForløb() && !harSetMitUr) forløbVink('Du nåede ikke at se dit ur. Flyv igen, og tryk på "Dit ur", mens du flyver.');
         visUre();
         tegnForløb();
         visFase();
@@ -627,6 +629,7 @@ export default {
       }
     }
     let harSetMitUr = false;
+    let vinkUdenUr = false; // trin A2 kører: vink ved landingen, hvis "Dit ur" ikke blev set
 
     // Stiller målet og farten (som kontakterne og skyderen i Styr), slår 1 g, "Set fra skibet" fra og starter forfra
     function stilTil(målId, n) {
@@ -645,6 +648,7 @@ export default {
       fartSkyder.værdi = n;
       hurtig = false;
       visMitUr(false);
+      vinkUdenUr = false;
       hjemMed.clear();
       byg();
       opdaterKnapper();
@@ -658,8 +662,9 @@ export default {
       }
       flyv();
     };
-    // ⏩ under en tur (tidsknappen er skjult i forløbet)
-    const hurtigKnap = { id: 'hurtig', tekst: '⏩ Hurtigere', gør: () => { hurtig = !hurtig; }, aktiv: () => flyver() && !mitUrVist, valgt: () => hurtig };
+    // ⏩ under en tur (tidsknappen er skjult i forløbet). "Spol frem", ikke "Hurtigere": i et forløb om fart ville man
+    // tro, at skibet flyver hurtigere (Fable E14)
+    const hurtigKnap = { id: 'hurtig', tekst: '⏩ Spol frem', gør: () => { hurtig = !hurtig; }, aktiv: () => flyver() && !mitUrVist, valgt: () => hurtig };
     const flyvIgen = (tekst) => ({ id: 'flyv', tekst, gør: flyv, aktiv: () => !flyver() });
     const visMigFlyv = (gør) => () => {
       if (!flyver()) gør();
@@ -678,7 +683,7 @@ export default {
         },
         // A2: samme tur igen, og "Dit ur" undervejs
         maerke: {
-          start: () => { stilTil('trappist', 4); harSetMitUr = false; },
+          start: () => { stilTil('trappist', 4); harSetMitUr = false; vinkUdenUr = true; },
           get knapper() {
             return [
               flyvIgen('🚀 Flyv igen'),
@@ -726,6 +731,7 @@ export default {
       // Efter forløbet: laboratoriet som før (TRAPPIST-1 ved 99,99 %)
       slut: () => {
         visMitUr(false);
+        vinkUdenUr = false;
         hurtig = false;
         tiden('spil'); // tidsknappen kommer frem igen og skal passe med rejsen
       },

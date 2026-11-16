@@ -941,6 +941,11 @@ button { font: inherit; color: inherit; }
 #liv .fl-handling.base-G { --farve: var(--base-G); }
 #liv .fl-handling.base-C { --farve: var(--base-C); }
 #liv .fl-handling:has(.liv-base-kugle) { min-width: 64px; font-size: 18px; }
+/* Nøglen med basernes farver i forløbets linje (trin 3, js/liv.js). Kan ikke trykkes på */
+#liv .fl-mærke.base-A { --farve: var(--base-A); }
+#liv .fl-mærke.base-T { --farve: var(--base-T); }
+#liv .fl-mærke.base-G { --farve: var(--base-G); }
+#liv .fl-mærke.base-C { --farve: var(--base-C); }
 .liv-byg { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
 .liv-byg-i-gang { display: flex; flex-direction: column; gap: 8px; }
 .liv-byg-i-gang[hidden], #livBygStart[hidden], #livVisH[hidden], #livHvorfor[hidden], #livGaade[hidden] { display: none; }
@@ -2083,6 +2088,8 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-så { color: #dff7ff; }
 .fl-lille { margin: -2px 0 0; font-size: 13px; color: var(--svag); }
 .fl-række { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fl-nøgle { display: inline-flex; gap: 8px; }
+.fl-mærke { --farve: var(--accent); display: inline-grid; place-items: center; min-width: 44px; height: 44px; border-radius: 10px; background: var(--farve); color: #0b0f1e; font-size: 22px; font-weight: 800; box-shadow: 0 0 12px color-mix(in srgb, var(--farve) 50%, transparent); }
 .fl-række button { min-height: 44px; font: inherit; font-size: 15px; font-weight: 700; color: var(--tekst); cursor: pointer; }
 .fl-gæt { padding: 0 16px; border-radius: 22px; border: 1px solid rgba(95, 227, 255, 0.5); background: rgba(95, 227, 255, 0.08); }
 .fl-gæt:hover { background: rgba(95, 227, 255, 0.18); }
