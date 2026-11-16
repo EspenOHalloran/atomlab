@@ -28,7 +28,9 @@ export function lavRejseskilt(vindue) {
   let linje = Math.floor(Math.random() * LINJER.length);
   const efterTegning = (f) => requestAnimationFrame(() => setTimeout(f, 0)); // når browseren har tegnet billedet
 
-  // Vis skiltet, og gør arbejdet (gør), når det er tegnet. Skiltet toner ud, når det første billede efter er tegnet.
+  // Vis skiltet, og gør arbejdet (gør), når det er tegnet. gør(klar) kalder klar(), når den nye klode er klar (fx når
+  // dens shadere er oversat, skjulTilKlar i js/solsystem/shadere.js). Skiltet toner ud, når det første billede efter
+  // er tegnet.
   function rejs(navn, ikon, gør) {
     const mit = ++nr;
     mål.textContent = ikon ?? '';
@@ -39,11 +41,18 @@ export function lavRejseskilt(vindue) {
     boks.classList.add('vist');
     efterTegning(() => {
       if (mit !== nr) return;
-      try {
-        gør();
-      } finally {
-        // To billeder: det første oversætter shaderne og lægger kortene i grafikkortet
+      let klar = false;
+      // To billeder efter klar: det første tegner den nye klode
+      const væk = () => {
+        if (klar) return;
+        klar = true;
         requestAnimationFrame(() => requestAnimationFrame(() => { if (mit === nr) boks.classList.remove('vist'); }));
+      };
+      try {
+        gør(væk);
+      } catch (e) {
+        væk();
+        throw e;
       }
     });
   }

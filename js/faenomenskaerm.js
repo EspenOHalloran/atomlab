@@ -30,6 +30,7 @@ import { NØGLER } from './data/faenomener.js';
 import { tagVentSted, tagVentFænomen, ventendeForløb, sætVentForløb } from './gaa.js';
 import { forløbMed } from './data/forloeb/liste.js';
 import { sætBilledEjer, frigivBilleder } from './hentning.js';
+import { skjulTilKlar } from './solsystem/shadere.js';
 
 // Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
 const SMAL = matchMedia('(max-width: 820px), (max-height: 500px)');
@@ -237,6 +238,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     $('Forklaring').innerHTML = '';
     forklaringVist = '';
     sætBilledEjer(f); // de billeder, fænomenet henter, hører til det (js/hentning.js)
+    gruppe.visible = true; // (skjulTilKlar skjuler den igen under rejseskiltet)
     kørende = f.lav(gruppe, {
       effekter,
       lyd,
@@ -346,11 +348,18 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     else if (valgt?.id === forside && kørende?.besøg && !TEST_HURTIG) kørende.besøg(g.f?.id ?? g.under[0].id);
     else rejsTil(g, () => vælg((g.f ?? g.under[0]).id));
   }
-  // Til en anden klode: rejseskiltet ("Kurs mod Mars") vises, mens den bygges (kun i Solsystemet)
+  // Til en anden klode: rejseskiltet ("Kurs mod Mars") vises, mens den bygges (kun i Solsystemet). Kloden er skjult,
+  // til dens shadere er oversat (højst 1,5 s, skjulTilKlar), så det første billede ikke venter på dem.
   let rejseskilt = null;
   function rejsTil(g, gør) {
     if (!rejseskilt || !aktiv || !g.f) gør();
-    else rejseskilt.rejs(g.f?.navn ?? g.navn, g.f?.ikon ?? g.ikon, () => { if (aktiv) gør(); });
+    else {
+      rejseskilt.rejs(g.f?.navn ?? g.navn, g.f?.ikon ?? g.ikon, (klar) => {
+        if (!aktiv) { klar(); return; }
+        gør();
+        skjulTilKlar(gruppe, klar);
+      });
+    }
   }
 
   // Gå til et sted i træet. Er et forsøg valgt, vælges kloden først.

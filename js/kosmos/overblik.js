@@ -26,7 +26,7 @@ import { glød, stjerne } from './faelles.js';
 import { glatVej } from '../solsystem/rejse.js';
 import { hent } from '../solsystem/hent.js';
 import { navneKnap, navneTil as navneTilFra } from '../solsystem/navne.js';
-import { lavShadereFørst } from '../solsystem/shadere.js';
+import { skjulTilKlar } from '../solsystem/shadere.js';
 import { sætOverblikDato } from '../solsystem/dato.js';
 import { PLANETER, SOLEN, plads, tilProgram, kugleRetning, AU, FØRSTE, SIDSTE } from '../data/planeter.js';
 import { ringProfil, RING_IND, RING_UD } from '../data/ringe.js';
@@ -608,7 +608,7 @@ export default {
     }
 
     // Toningen gennem mørke: kameraet glider langsomt videre ind (aldrig et stillestående billede), billedet bliver
-    // sort, planetens visning bygges, dens shadere laves, og så toner billedet frem igen.
+    // sort, planetens visning bygges, dens shadere laves (den er skjult imens, skjulTilKlar), og så toner billedet frem.
     function tonOver(skift, hop) {
       const mørke = document.createElement('div');
       mørke.className = 'ob-mørke';
@@ -628,7 +628,7 @@ export default {
         verden.opdateringer.delete(glid);
         skift();
         let klar = false;
-        lavShadereFørst(gruppe, () => true, { færdig: () => { klar = true; } });
+        skjulTilKlar(gruppe, () => { klar = true; }); // (planeten er skjult, til dens shadere er oversat)
         let ud = 0;
         const frem = (dt2) => {
           ud += dt2;

@@ -6,6 +6,7 @@
 
 import * as THREE from 'three';
 import { hentBillede, billedEjer, vedFrigiv } from '../hentning.js';
+import { iGrafikkort } from './kortkoe.js';
 
 export const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
 export const lager = new Map(); // filnavn → { tekstur, fejlet, venter, fejlVenter, ejere, glemt }
@@ -16,8 +17,10 @@ export const lager = new Map(); // filnavn → { tekstur, fejlet, venter, fejlVe
 // fejl kaldes, hvis billedet ikke kan hentes (så bruges det tegnede). vendt: billedet pakkes ud som et ImageBitmap, der
 // er vendt (hentBillede), så det går hurtigere at lægge det i grafikkortet. Kun til billeder, der ikke læses som et
 // <img> bagefter (lavTabel i klippeplanet.js kender billede.vendt). ejer: hvem billedet hører til (standard: det valgte
-// fænomen, billedEjer()). Stå på Mars har sin egen, så landskabet kan frigives, når man letter.
-export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl, vendt = false, ejer = billedEjer() } = {}) {
+// fænomen, billedEjer()). Stå på Mars har sin egen, så landskabet kan frigives, når man letter. Kortet lægges i
+// grafikkortet gennem kortkøen (ét pr. billede, js/solsystem/kortkoe.js), før færdig kaldes. forhånd: kortet skal
+// først bruges senere (fx månerne til flybyen), så det venter, til kameraet står stille.
+export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1, rundt = true, fejl, vendt = false, ejer = billedEjer(), forhånd = false } = {}) {
   let b = lager.get(navn);
   if (!b) {
     b = { tekstur: null, fejlet: false, venter: [], fejlVenter: [], ejere: new Set(), glemt: false };
@@ -32,9 +35,12 @@ export function hent(navn, færdig, { farve = true, kanaler = 4, anisotropi = 1,
       if (kanaler === 1) t.format = THREE.RedFormat;
       if (rundt) t.wrapS = THREE.RepeatWrapping;
       t.anisotropy = anisotropi;
-      b.tekstur = t;
-      for (const f of b.venter) f(t);
-      b.venter.length = 0;
+      iGrafikkort(t, () => {
+        if (b.glemt) return;
+        b.tekstur = t;
+        for (const f of b.venter) f(t);
+        b.venter.length = 0;
+      }, { rolig: forhånd, glemt: () => b.glemt });
     }, () => {
       if (b.glemt) return;
       b.fejlet = true;

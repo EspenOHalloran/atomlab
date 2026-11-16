@@ -182,17 +182,16 @@ export default {
     for (const m of måner) sætVinkel(m, m.vinkel / GRAD);
     const kan8k = verden.renderer.capabilities.maxTextureSize >= 8192;
     const måneStørrelse = (id) => (!LAV_KVALITET && !TEST_HURTIG && kan8k && MÅNER_8K.has(id) ? '8k' : STØRRELSE);
-    // klar kaldes, når kortet er sat på månen (eller ikke kunne hentes). forhånd: kortet lægges i grafikkortet med det
-    // samme, så det ikke sker midt i en flyvning.
+    // klar kaldes, når kortet er sat på månen (eller ikke kunne hentes). forhånd: kortkøen lægger det i grafikkortet,
+    // når kameraet står stille, så det ikke sker midt i en flyvning.
     function hentKort(m, { forhånd = false, klar } = {}) {
       const navn = `${m.id}-${måneStørrelse(m.id)}.jpg`;
       if (m.hentet && !klar) return;
       m.hentet = true;
       hent(navn, (t) => {
         m.klode.sætKort(t);
-        if (forhånd && aktiv) verden.renderer.initTexture(t);
         klar?.();
-      }, { farve: false, kanaler: 1, rundt: false, fejl: klar, vendt: true }); // (vendt: hurtigere i grafikkortet, G1 trin 3)
+      }, { farve: false, kanaler: 1, rundt: false, fejl: klar, vendt: true, forhånd }); // (vendt: hurtigere i grafikkortet, G1 trin 3)
     }
 
     // Solen: en lille, skarp prik langt væk i den retning, lyset kommer fra (fra Saturn ser den ca. 9½ gange mindre ud end fra Jorden)
