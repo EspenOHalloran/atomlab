@@ -163,3 +163,12 @@ Til jer: Fandt han selv ud af at føre tændstikken ind i røgen? Sagde han "væ
 - **Faktatjek, før teksterne skrives:** det, der er mærket RS og U i faktagrundlaget, især temperaturerne, pustet og tallet for ioner. Læs fælderne først (afsnit 12 og de nye linjer i [fakta-faelder.md](erfaringer/fakta-faelder.md)).
 - **NASA's billede** af de to flammer er frit at bruge (NASA), men skal ind i `KILDER.md` med kilde, når det hentes.
 - Tests: 5-8 tjek pr. forløb som `molekyler-forloeb`. Opus, høj effort.
+
+## Jeres svar (16. november 2026)
+*Skrevet ind af Opus sammen med [noterne](fable/E17-ild-noter.md). Rettelserne i noterne gælder, når delen bygges.*
+1. **Kernesætning A**, med "bytter partnere" i stedet for "bytter atomer": "Ild er ikke en ting, men en kemisk reaktion: Brændstof og oxygen bytter partnere og bliver til CO₂ og vand. Varmen derfra holder reaktionen i gang."
+2. **Fire korte forløb**, bygget ét ad gangen. Først forløb 1 med laboratoriet og prøven med sønnen, så 2, 3 og 4, hver med sit eget go.
+3. **Et rigtigt lys (a):** "Prøv det med et rigtigt stearinlys sammen med en voksen" om røgen og skeen, intet andet. Skeen holdes med en grydelap, og lyset står på et underlag, der ikke kan brænde.
+4. **Gryden (a):** Vis roligt, hvad vand gør, uden belønning, og lad brugeren lægge låget på bagefter.
+5. **Verdenen hedder "Kemi".**
+6. **Nyt spørgsmål fra Opus:** Forløb 3, trin 3 drypper ikke vand på lyset (lysproducenterne fraråder det: Den varme stearin sprøjter). I stedet slukkes den brændende tændstik i et glas vand: "Vandet tog varmen fra træet, så det holdt op med at lave gas." Laboratoriets "Sluk med" bliver Pust, Glas, Lysslukker og CO₂. Vand på lyset giver kun linjen: "Vand kan få den varme stearin til at sprøjte. Brug en lysslukker."
