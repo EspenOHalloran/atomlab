@@ -203,3 +203,16 @@
 - "Cthulhu", "Mordor" og "Sputnik Planum" er uofficielle eller gamle navne. IAU's navne er Belton Regio (2023), Neverland Regio (Charons nordpol, 2. februar 2026, min tolkning af navnelisten) og Sputnik Planitia (2017). "Serenity Chasma" og "Vulcan Planitia" er ikke godkendt (E16).
 - "Hjertet på Pluto er en gletsjer." Kun den venstre halvdel (Sputnik Planitia) er en slette af kvælstof-is. Størrelsen opgives som 1.000 km (NASA), 1.400 × 1.200 km (Wikipedia) og 1.492 km (navnelisten): skriv "ca. 1.000 km bred" (E16).
 - "Charon kredser om Pluto." Begge kredser om et punkt ca. 940 km over Plutos overflade (2.126 km fra centrum, regnet fra NSSDC). "Plutos luft fryser væk langt fra Solen" (NASA): Nyere målinger siger tyndere, ikke væk. Skriv forsigtigt (E16).
+
+*Ild (Fable E17, 16. november 2026). Kilderne står i [fakta-ild.md](../fakta-ild.md), afsnit 12.*
+- "Ild er plasma." I en flamme af gas og luft er ca. ét molekyle ud af en milliard en ion (ca. 10¹⁰ ioner mod 4 · 10¹⁸ molekyler pr. cm³), og ionerne kommer fra kemien, ikke fra varmen. En stearinlysflamme er varm gas, der reagerer. Skriv heller ikke "der er ingen ioner": De kan måles.
+- "Det er vægen, der brænder" og "stearinen brænder op og er væk." Det er dampen, der brænder, og atomerne ender som CO₂ og vand, der tilsammen vejer ca. fire gange så meget som lyset, fordi oxygenet fra luften er kommet med.
+- "Den gule del af flammen er varmest" og "flammen er blå, fordi den er varm". Den gule del lyser mest (glødende sod), men er ikke varmest. Den blå flamme er varmere, men det blå er lys fra molekyler (CH og C₂), ikke varmelys.
+- "Lyset under glasset går ud, fordi al ilten er brugt, og derfor stiger vandet en femtedel." Flammen går ud med en god del oxygen tilbage, og vandet stiger mest, fordi luften først blev varm og siden kold. Tallet for, hvor meget der er tilbage, er ikke fundet i en kilde.
+- "Man puster ilten væk fra lyset." Man blæser flammen væk fra vægen og køler den. Pust på gløder gør dem varmere.
+- "Vand slukker alt" og det modsatte, "aldrig vand på batterier". Vand på brændende olie, fedt eller stearin giver en ildkugle (1 liter vand bliver til ca. 1.700 liter damp), og brændende metal og el tåler det heller ikke. Men batterier med lithium-ioner er ikke lithium-metal: slås op, før det står i en tekst.
+- "Kvæl ilden i gryden med et brandtæppe." Bolius og Beredskabsstyrelsen nævner brandtæppet, men en hollandsk prøve (2013-14) fik 16 af 22 tæpper til selv at brænde. Skriv "læg et låg på", som alle er enige om.
+- "Ildtrekanten forklarer al slukning." Pulver og halon fjerner ingen af de tre ting. De fanger radikalerne og stopper kæden (ildtetraederet).
+- "Regn forbrændingen ud med tabellen over bindinger." OpenStax' gennemsnit for C=O (741 kJ/mol) giver 682 kJ for methan, 15 % for lidt, fordi C=O i CO₂ er stærkere (ca. 799). Brug NIST's forbrændingsvarme (890,7 kJ/mol med flydende vand, 802,6 med damp).
+- "I vægtløshed bliver flammen en kugle." En brændende dråbe gør. Et stearinlys giver en halvkugle (NASA: "hemispherical"), fordi lyset er i vejen. Og de første sekunder er flammen gul.
+- "Stearinlys er lavet af stearin." Stearin er en blanding af stearinsyre og palmitinsyre (lex.dk), men mange lys er af paraffin. Wikipedia på dansk kalder stearin for tristearin, som er noget tredje.
