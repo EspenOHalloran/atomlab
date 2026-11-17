@@ -315,16 +315,36 @@ export default {
       return { skibÅr: r.skibÅr, jordÅr: r.jordÅr, gamma: r.gamma };
     }
 
+    // Urene må kun blive bredere, ikke smallere, mens tiden går. Ellers hopper boksene frem og tilbage,
+    // hver gang teksten bliver lidt kortere (fx "1 år og 9 dage" efter "1 år og 54 dage").
+    // nulstil() og en ny størrelse på vinduet starter forfra.
+    const urBokse = ure.querySelectorAll('.tid-ur');
+    let breddeVindue = 0; // vinduets bredde og højde, da bredderne blev målt
+    function holdBredde() {
+      if (ure.hidden) return;
+      const vindue = innerWidth * 10000 + innerHeight;
+      if (vindue !== breddeVindue) { slipBredde(); breddeVindue = vindue; }
+      for (const b of urBokse) {
+        const bredde = Math.ceil(b.getBoundingClientRect().width);
+        if (bredde > (parseFloat(b.style.minWidth) || 0)) b.style.minWidth = `${bredde}px`;
+      }
+    }
+    function slipBredde() {
+      for (const b of urBokse) b.style.minWidth = '';
+    }
+
     function visUre() {
       const t1 = T.ditUr(skibÅr, turKort);
       const t2 = `år ${T.årstalTekst(T.jordÅrstal(START_ÅR, jordÅr))}`;
       const a1 = T.forGammel(skibÅr) ? 'Du: over 100 år' : `Du: ${T.alderTekst(T.START_ALDER + skibÅr)}`;
       const tvilling = T.tvillingAlder(jordÅr);
       const a2 = tvilling !== null ? `Tvillingen: ${tvilling} år` : 'Tvillingen levede et langt liv';
-      if (skibTal.textContent !== t1) skibTal.textContent = t1;
-      if (jordTal.textContent !== t2) jordTal.textContent = t2;
-      if (skibAlder.textContent !== a1) skibAlder.textContent = a1;
-      if (jordAlder.textContent !== a2) jordAlder.textContent = a2;
+      let ændret = false;
+      if (skibTal.textContent !== t1) { skibTal.textContent = t1; ændret = true; }
+      if (jordTal.textContent !== t2) { jordTal.textContent = t2; ændret = true; }
+      if (skibAlder.textContent !== a1) { skibAlder.textContent = a1; ændret = true; }
+      if (jordAlder.textContent !== a2) { jordAlder.textContent = a2; ændret = true; }
+      if (ændret) holdBredde();
       // Viseren går én gang rundt pr. år på Jorden. Går den så hurtigt, at man ikke kan følge den, bliver den en skive.
       const løbsk = flyver() && jordFart > LØBSK;
       if (jordUr.classList.contains('løbsk') !== løbsk) jordUr.classList.toggle('løbsk', løbsk);
@@ -462,6 +482,7 @@ export default {
       visMål();
       stilScene();
       skibHale.nulstil(skib.position);
+      slipBredde();
       visUre();
       visFase();
       visLigeNu();
