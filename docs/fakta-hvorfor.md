@@ -171,3 +171,11 @@ Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brin
 | Energien er titusinder af år om at nå overfladen | OK, samme formulering og kilder som afsnittet om stjernerne ovenfor (ca. 10.000 til ca. 170.000 år, Mitalas og Sills 1992). Der står intet præcist tal. | Wikipedia: Radiative zone (170.000 år, Mitalas og Sills 1992) |
 
 Forenkling: I Solens yderste ca. 30 % bæres energien op af strømmende gas (konvektion), ikke af lyset. Det er ikke nævnt i den korte tekst.
+
+## Batteriet i kulde (17. november 2026, brugerens spørgsmål)
+**Hvor:** Batteriet, foldeboksen `batteri-kulde` i højre panel (i `index.html`, ikke et "Hvorfor?"-kort).
+
+**Svar:** Kemien går langsommere i kulde (Arrhenius), elektrolytten bliver mere sej, ionerne bevæger sig langsommere, og den indre modstand vokser. Spændingen falder under belastning, og enheden slukker ved sin afbrydespænding, selvom der er energi tilbage. Det meste kommer tilbage, når batteriet bliver varmt. Opladning i frost kan give lithium-plating (lithium som metal på grafitten).
+
+**Faktatjek:** Almindeligt lærebogsstof om lithium-ion (indre modstand og lithium-plating ved lav temperatur). Ingen tal er skrevet i teksten med vilje. Ikke slået op i en enkelt kilde i denne session: tjek gerne med Fable ved næste faktatjek.
+
