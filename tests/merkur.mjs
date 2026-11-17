@@ -2,10 +2,13 @@
 // 175,94 døgn, 3:2, Solens retning og punktet under Solen passer med JPL Horizons), og i browseren: Merkur står i
 // Solsystemet mellem Solen og Venus, kortene og polkortene hentes, aksen peger mod IAU's nordpol, punktet under Solen
 // i 3D-billedet passer med datoen, alt står stille i pause, Merkur drejer 6,14° pr. døgn, højderne (Rachmaninoff) og
-// "Bjergene 10 gange højere", og ingen fejl i konsollen.
+// "Bjergene 10 gange højere", og ingen fejl i konsollen. MP2: Solen, der vender om (baglæns i ca. 8 døgn og 1,1°, og
+// den dobbelte solopgang), timevinklen, teksterne (fire spørgsmål, seks stop under 160 tegn), stederne på den rigtige
+// bredde og længde med Solen fra den rigtige side, isen, tegningen af Solen og flybyen til isen.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { MERKUR, soldøgn, solRetning, underSolen, solAfstand } from '../js/data/merkur.js';
-import { SIDE } from '../js/data/sider/merkur.js';
+import { SIDE, SIDER, TUR } from '../js/data/sider/merkur.js';
+import { dobbeltSolopgang, solHøjde, solSkive, timevinkel, datoMedTimevinkel } from '../js/data/merkur-sol.js';
 const UD = billedmappe('merkur');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -34,8 +37,22 @@ const HORIZONS = [
     tjek(`Solens retning ${d.slice(0, 10)} passer med Horizons (under 0,05°), og afstanden`, v < 0.05 && Math.abs(solAfstand(dato) - l) < 1e-4, v);
     tjek(`punktet under Solen ${d.slice(0, 10)}: ${(360 - vest).toFixed(1)}° Ø, ${lat.toFixed(2)}° (Horizons, under 0,05°)`, forskel(u.længde, 360 - vest) < 0.05 && Math.abs(u.bredde - lat) < 0.05, JSON.stringify(u));
   }
-  tjek('siden ved Merkur har en kort tekst, to emner, Billederne og "Ærligt talt"', SIDE.kort.length > 50 && SIDE.emner.length === 2 && SIDE.billeder && SIDE.ærligt);
-  tjek('siden siger, hvilket døgn der er hvilket (fælde 3: 59 og 176 jorddøgn)', /59 jorddøgn/.test(SIDE.emner[0].tekst) && /176 jorddøgn/.test(SIDE.emner[0].tekst));
+  tjek('siden ved Merkur har en kort tekst, fire spørgsmål, Billederne og "Ærligt talt"', SIDE.kort.length > 50 && SIDE.emner.length === 4 && SIDE.billeder && SIDE.ærligt);
+  tjek('siden siger, hvilket døgn der er hvilket (fælde 3: 59 og 176 jorddøgn)', SIDE.emner.some((e) => /59 jorddøgn/.test(e.tekst) && /176 jorddøgn/.test(e.tekst)));
+  // MP2: Solen, der vender om (del 8, afsnit 2: baglæns i ca. 8,1 døgn og 1,1°, skiven 1,73° ved perihel)
+  const D = 864e5;
+  const d = dobbeltSolopgang(Date.parse('2026-11-17T12:00:00Z'));
+  tjek('Solen går baglæns i ca. 8 døgn og ca. 1,1° ved perihel', d.døgn > 7.8 && d.døgn < 8.4 && d.baglæns > 1.05 && d.baglæns < 1.2, JSON.stringify([d.døgn, d.baglæns]));
+  tjek('Solens skive er ca. 1,73° bred ved perihel (3,25 gange så bred som fra Jorden)', Math.abs(solSkive(new Date(d.perihel)) - 1.73) < 0.01);
+  // Solens øverste kant ved stedet: op, ned under horisonten igen og op for alvor
+  const ø = (t) => solHøjde(new Date(t), d.længde) + solSkive(new Date(t)) / 2;
+  const skift = [];
+  for (let t = d.start, før = ø(t) > 0; t <= d.slut; t += D / 24) { const op = ø(t) > 0; if (op !== før) skift.push(op ? 'op' : 'ned'); før = op; }
+  tjek('den dobbelte solopgang: Solen kommer et stykke op, går ned igen og står op for alvor (højst to tredjedele af skiven)', skift.join() === 'op,ned,op' && ø(d.stille1) < (2 / 3) * solSkive(new Date(d.stille1)) && Math.abs(Math.abs(((d.længde - 0) % 180)) - 90) < 2, skift.join() + ' ' + d.længde);
+  const t9 = datoMedTimevinkel(Date.parse('2026-11-17T12:00:00Z'), 161.98, -72);
+  tjek('datoMedTimevinkel finder formiddag ved Caloris (timevinkel −72°) under et halvt soldøgn væk', Math.abs(timevinkel(new Date(t9), 161.98) + 72) < 0.01 && Math.abs(t9 - Date.parse('2026-11-17T12:00:00Z')) < 88.5 * D);
+  tjek('flybyen har 6 stop, og underteksterne er under 160 tegn', TUR.length === 6 && TUR.every((t) => t.tekst.length < 160), TUR.map((t) => t.tekst.length).join());
+  tjek('stederne har egne sider (Caloris, de lyse huller med MESSENGERs foto, isen og Solen, der vender om)', ['caloris', 'huller', 'is', 'solen'].every((id) => SIDER[id]?.kort) && SIDER.huller.foto?.src);
 }
 
 // ---------- I browseren ----------
@@ -90,6 +107,47 @@ await s.waitForFunction(() => atomlabTest.solsystem.fænomen().overdriv() > 9.9,
 tjek('bjergene bliver 10 gange højere', (await F('overdriv')) > 9.9, await F('overdriv'));
 await fm(() => atomlabTest.solsystem.trykPå('Bjergene 10 gange'));
 await s.screenshot({ path: `${UD}/merkur.png` });
+
+// ---------- MP2: stederne, isen, tegningen af Solen og flybyen ----------
+const træ = await fm(() => atomlabTest.solsystem.træ().map((p) => p.id));
+tjek('træet: flybyen, Merkur, de tre steder og Solen, der vender om', træ.join() === 'tur,merkur,caloris,huller,is,solen', træ.join());
+const flyvFærdig = () => s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 120000, polling: 200 });
+const STEDER = { caloris: [31.65, 161.98], huller: [27.15, 119.06], is: [85.77, 62.92] };
+const kl = {};
+for (const [id, [b0, l0]] of Object.entries(STEDER)) {
+  await fm((id) => atomlabTest.solsystem.gåTil(id), id);
+  await flyvFærdig();
+  await s.waitForTimeout(300);
+  const m = await F('midte');
+  kl[id] = await F('klokken', id);
+  tjek(`${id}: kameraet kigger på stedet (${b0}° N, ${l0}° Ø), og panelet viser stedets side`, Math.abs(m.bredde - b0) < 0.3 && forskel(m.længde, l0) < (id === 'is' ? 3 : 0.3) && (await fm(() => atomlabTest.solsystem.side().nøgle)) === `merkur:${id}`, JSON.stringify(m));
+}
+tjek('Solen står fra samme side som i fotoene: lavt i øst ved Caloris og i vest i Raditladi, og 3D-billedet passer med tallene', kl.caloris.sol.øst > 0.8 && kl.caloris.sol.højde > 5 && kl.caloris.sol.højde < 25 && kl.huller.sol.øst < -0.8 && Math.abs(kl.caloris.sol.højde - kl.caloris.data) < 0.05, JSON.stringify([kl.caloris, kl.huller]));
+tjek('ved Prokofiev står Solen kun ca. 4° oppe (middag)', kl.is.sol.højde > 3.5 && kl.is.sol.højde < 4.6, JSON.stringify(kl.is));
+tjek('ved et sted står tiden stille', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
+await fm(() => atomlabTest.solsystem.trykPå('Isen (set med radar)'));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().is().styrke > 0.99, null, { timeout: 15000, polling: 100 }).catch(() => {});
+const is = await F('is');
+tjek('"Isen (set med radar)": radarens kort er hentet og toner ind i shaderen', is.til && is.hentet && is.shader > 0.85, JSON.stringify(is));
+await fm(() => atomlabTest.solsystem.trykPå('Isen (set med radar)'));
+await s.screenshot({ path: `${UD}/merkur-is.png` });
+
+// Flybyen: stop 4 (Solen, der vender om) viser tegningen, og Solen står stille ved det første vendepunkt
+await F('flybyTil', 3);
+await flyvFærdig();
+await s.waitForTimeout(600);
+let st = await F('solTegning');
+tjek('stop 4: tegningen af Solen er fremme, datoen er ca. 10 døgn før perihel, og tiden går (▶)', st.vist && Math.abs((await F('dato')) - st.solopgang.start) < 2 * 864e5 && /Solen/.test(st.status) && (await fm(() => atomlabTest.solsystem.tidsknap())) === 'spil', JSON.stringify(st.status));
+await fm(() => atomlabTest.solsystem.sætTid('pause'));
+await F('sætDato', st.solopgang.stille1);
+await s.waitForTimeout(600);
+st = await F('solTegning');
+tjek('ved det første vendepunkt står Solen stille med en del af skiven over horisonten', /står stille/.test(st.status) && st.y < 104, JSON.stringify(st));
+await s.screenshot({ path: `${UD}/merkur-solen.png` });
+await F('flybyTil', 5);
+await flyvFærdig();
+await s.waitForTimeout(600);
+tjek('flybyens sidste stop er isen ved Nordpolen, og isen slås til', (await F('visning')) === 'is' && (await F('is')).til && !(await F('solTegning')).vist);
 
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join('\n'));
 await b.close();

@@ -5,6 +5,8 @@
 // ca. 500 km med anisotropi 8 og 16 og Solen 30° oppe: målingen af polen i MP1), polen og polenuden (lige over
 // Nordpolen med Solen 30° oppe, med polkortet og uden), sydpol
 // (fra 76° S mod Sydpolen, så overgangen til polkortet ved 72-75° ses) og hurtig (efter 10 sekunder med ⏩).
+// MP2: stop1-stop6 (flybyens stop, kameraet springer frem), stop4b (Solen, der vender om, efter 6 døgn: Solen står
+// stille) og stop4c (efter 15 døgn: Solen står op igen), navne (hele Merkur med navnene) og is (stop 6 uden isen).
 // Uden størrelse: pc og tablet. Uden steder: hel. Mål én browser ad gangen (tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('merkur-fuld');
@@ -50,6 +52,24 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
       // (Solen står 30° oppe, så skarpheden kan ses. Ved polen står den i virkeligheden altid ved horisonten.)
       await F('solOver', 85.8, 62.9, 30, 200);
       await F('kigPå', 85.8, 62.9, 500, 30, 180);
+    }
+    const stop = sted.match(/^stop(\d)([bc]?)$/);
+    if (stop || sted === 'is') {
+      await F('flybyTil', stop ? Number(stop[1]) - 1 : 5);
+      await s.waitForTimeout(300);
+      await F('hop');
+      await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 60000, polling: 200 });
+      if (sted === 'is') await f(() => atomlabTest.solsystem.trykPå('Isen (set med radar)'));
+      if (stop?.[2]) {
+        await f(() => atomlabTest.solsystem.sætTid('pause'));
+        await s.waitForTimeout(1500); // (et billede mere, så datoen fra flyvningen er sat)
+        const sol = (await F('solTegning')).solopgang;
+        await F('sætDato', stop[2] === 'b' ? sol.stille1 : sol.start + 16 * 864e5);
+      }
+    }
+    if (sted === 'navne') {
+      await f(() => atomlabTest.solsystem.sætTid('pause'));
+      await F('sætDato', Date.UTC(2026, 11, 20));
     }
     if (sted === 'hurtig') {
       await f(() => atomlabTest.solsystem.sætTid('hurtig'));

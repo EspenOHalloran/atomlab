@@ -64,7 +64,7 @@ function plutoPlads(dato) {
 // J2000). w: IAU's W = w[0] + w[1] · døgn siden J2000 (grader, hvor kortets længde 0° står).
 export const PLANETER = [
   {
-    id: 'merkur', navn: 'Merkur', fænomen: null, radius: 2439.7, omløb: 87.969, farve: '#8f8a85', kort: 'merkur-1k.jpg', gråt: true,
+    id: 'merkur', navn: 'Merkur', fænomen: 'merkur', radius: 2439.7, omløb: 87.969, farve: '#8f8a85', kort: 'merkur-1k.jpg', gråt: true,
     bane: [0.38709927, 0.20563593, 7.00497902, 252.25032350, 77.45779628, 48.33076593],
     rate: [0.00000037, 0.00001906, -0.00594749, 149472.67411175, 0.16047689, -0.12534081],
     pol: { ra: 281.0103, dec: 61.4155 }, w: [329.5988, 6.1385108],
