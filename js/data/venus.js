@@ -56,3 +56,44 @@ export function underSolen(dato) {
   const vinkel = Math.atan2(prik(s, e2), prik(s, q)) / RAD; // fra knuden mod øst
   return { bredde, længde: (((vinkel - meridian(dato)) % 360) + 360) % 360 };
 }
+
+// Klokken på et sted (timer, 12 = Solen står højest), regnet som på Jorden med Venus' soldøgn delt i 24 "timer".
+// Venus drejer baglæns, så punktet under Solen flytter sig mod øst: Et sted øst for det får Solen senere, så dér er det
+// formiddag, og Solen står mod vest (den står op i vest).
+export function lokalTid(dato, længde) {
+  const forskel = ((((længde - underSolen(dato).længde) % 360) + 540) % 360) - 180; // −180 til 180
+  return (((12 - forskel / 15) % 24) + 24) % 24;
+}
+
+// Den dato tættest på dato (frem eller tilbage, højst et halvt soldøgn), hvor klokken er timer ved længden. Bruges, når
+// kameraet flyver til et sted under skyerne: Datoen glider derhen, så Solen står, som stedet skal ses (fx om
+// formiddagen med lange skygger).
+export function datoMedTid(dato, længde, timer) {
+  let ms = dato instanceof Date ? dato.getTime() : dato;
+  const døgnMs = soldøgn() * 86400000;
+  for (let i = 0; i < 4; i++) {
+    const t = lokalTid(new Date(ms), længde);
+    const mangler = ((((timer - t) % 24) + 36) % 24) - 12; // −12 til 12 timer
+    ms += (mangler / 24) * døgnMs;
+  }
+  return ms;
+}
+
+// Gløden fra jorden (V3, docs/fable/E18-venus.md). Jorden stråler efter Plancks lov. Ved 1,0 µm (et af "vinduerne",
+// hvor luften slipper lidt lys ud) er lysstyrken i forhold til middelhøjden (L = 1) stærkt afhængig af temperaturen.
+// Temperaturen falder 7,7 °C pr. km opad (VIRA: 737 K ved middelradius 6.051,8 km). Højden h er over kortets kugle
+// (6.051,0 km) og følger ikke "Bjergene 10 gange højere". Samme tal i billeder/solsystem/lav_venus_steder.py (det
+// slørede kort, som ses gennem skyerne) og i shaderen i js/solsystem/klippeplanet.js (glød).
+export const GLØD = {
+  T0: 737, // K ved middelradius (VIRA: 464 °C)
+  fald: 7.7, // K pr. km
+  nul: 0.8, // km: middelradius over kortets kugle
+  bølge: 1.0, // µm
+  c2: 14387.77, // µm · K (h · c / k)
+  maks: 4, // det slørede kort gemmer sqrt(L / maks)
+};
+export const temperaturVed = (hKm) => GLØD.T0 - GLØD.fald * (hKm - GLØD.nul); // K
+export function glødVed(hKm) {
+  const x = GLØD.c2 / GLØD.bølge;
+  return (Math.exp(x / GLØD.T0) - 1) / (Math.exp(x / temperaturVed(hKm)) - 1);
+}

@@ -2,7 +2,9 @@
 // Kør: node tests/vaerktoejer/venus.mjs [pc|tablet|tablet-hoejkant|tlf-hoejkant|tlf-langs] [sted ...]
 // (billederne lægges i tests/billeder/venus-fuld/). Stederne: hel (hele planeten fra start, synligt lys), uv
 // (kontakten "Ultraviolet (som Akatsuki)"), under50 og under100 (skyderen "Under skyerne"), modlys (kontakten "Modlys"),
-// tæt (lavt over skyerne ved grænsen mellem dag og nat) og hurtig (efter 10 sekunder med ⏩).
+// tæt (lavt over skyerne ved grænsen mellem dag og nat) og hurtig (efter 10 sekunder med ⏩). V3: nat (natsiden),
+// gloed og gloed100 (natsiden med "Gløden på natsiden", med skyerne og uden), navne (hele Venus med navnene) og
+// stederne maxwell, maat, kupler og venera13 (flyver derhen fra træet).
 // Uden størrelse: pc og tablet. Uden steder: hel. Mål én browser ad gangen (tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('venus-fuld');
@@ -24,13 +26,21 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
   const måling = () => f(() => new Promise((r) => { let n = 0; const t0 = performance.now(); const g = () => { n++; if (performance.now() - t0 < 4000) requestAnimationFrame(g); else r(n / ((performance.now() - t0) / 1000)); }; requestAnimationFrame(g); }));
   const kontakt = (tekst) => f((t) => atomlabTest.solsystem.trykPå(t), tekst);
   await f(() => atomlabTest.solsystem.vælg('venus'));
-  await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'venus' && atomlabTest.solsystem.fænomen()?.billeder?.().hentet.skyer && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 60000, polling: 200 });
+  await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'venus' && atomlabTest.solsystem.fænomen()?.billeder?.().hentet.skyer && atomlabTest.solsystem.fænomen().billeder().hentet.kort, null, { timeout: 240000, polling: 200 });
   for (const sted of steder.length ? steder : ['hel']) {
     if (sted === 'uv') await kontakt('Ultraviolet');
     if (sted === 'under50') await F('sætUnder', 50);
     if (sted === 'under100') await F('sætUnder', 100);
     if (sted === 'modlys') await kontakt('Modlys');
     if (sted === 'tæt') await F('tætPå');
+    if (['nat', 'gloed', 'gloed100'].includes(sted)) await F('natside');
+    if (sted.startsWith('gloed')) await kontakt('Gløden');
+    if (sted === 'gloed100') await F('sætUnder', 100);
+    if (['maxwell', 'maat', 'kupler', 'venera13'].includes(sted)) {
+      await f((id) => atomlabTest.solsystem.gåTil(id), sted);
+      await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 240000, polling: 200 });
+      await s.waitForFunction(() => Object.values(atomlabTest.solsystem.fænomen().lokalt()).every((l) => !l.aktiv || (l.kort && l.højde)), null, { timeout: 240000, polling: 200 });
+    }
     if (sted === 'hurtig') {
       await s.click('#solsystemTid button[data-tid="hurtig"]');
       await s.waitForTimeout(10000);
@@ -41,7 +51,12 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
     await s.screenshot({ path: `${UD}/${navn}-venus-${sted}.png` });
     console.log(`${navn} venus ${sted}: ${bps.toFixed(1)} billeder i sekundet`);
     if (sted === 'uv') await kontakt('Ultraviolet');
-    if (sted.startsWith('under')) await F('sætUnder', 0);
+    if (sted.startsWith('gloed')) await kontakt('Gløden');
+    if (sted.startsWith('under') || sted === 'gloed100') await F('sætUnder', 0);
+    if (['maxwell', 'maat', 'kupler', 'venera13'].includes(sted)) {
+      await f(() => atomlabTest.solsystem.gåTil('venus'));
+      await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 240000, polling: 200 });
+    }
     if (sted === 'modlys') await kontakt('Modlys');
   }
   if (fejl.length) console.log('Konsol:', fejl.join('\n'));

@@ -42,7 +42,7 @@ import { RING_GLSL } from './ringe.js';
 
 // skala: km pr. scene-enhed. radius og polRadius i km. ringTekstur: fra ringe.js (til ringenes skygge). Uden
 // ringTekstur kastes ingen ringskygge (Jupiters ringe er for tynde til en skygge, man kan se).
-export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null, højeSkyer = null, pletter = 0, voyager = false, toner = false, gennemsigtig = false }) {
+export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, ringInd = 0, ringUd = 0, kort = null, segmenter = 128, vind = null, hvirvel = null, detaljer = false, pile = 0, måner = 0, cykloner = null, kantFarve = [1.0, 0.85, 0.6], kapper = null, højeSkyer = null, pletter = 0, voyager = false, toner = false, gennemsigtig = false, glød = false }) {
   const R = radius / skala;
   const flad = polRadius / radius;
   const medRing = Boolean(ringTekstur);
@@ -62,6 +62,7 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
   if (voyager) defines.VOYAGER = '';
   if (toner) defines.TONER = '';
   if (gennemsigtig) defines.GENNEMSIGTIG = '';
+  if (glød) defines.GLOED = '';
   const mat = new THREE.ShaderMaterial({
     defines,
     transparent: gennemsigtig,
@@ -69,6 +70,11 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       uTone: { value: new THREE.Vector3(1, 1, 1) },
       uKontrast: { value: 1 },
       uAlfa: { value: 1 },
+      tGloed: { value: null },
+      uGloed: { value: 0 },
+      uGloedFarve: { value: new THREE.Vector3(1, 0.25, 0.06) },
+      uGloedMaks: { value: 4 },
+      uGrund: { value: new THREE.Matrix3() },
       tVind: { value: vind?.tekstur ?? null },
       uVindSkala: { value: vind?.skala ?? 1 },
       uFase: { value: vind?.fase ?? 40 },
@@ -382,6 +388,14 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
       #ifdef GENNEMSIGTIG
       uniform float uAlfa;
       #endif
+      #ifdef GLOED
+      // Gløden fra jorden under skyerne (Venus, V3): et sløret kort i jordens retninger (uGrund: fra verden til jordens
+      // egne retninger), gemt som sqrt(L / uGloedMaks)
+      uniform sampler2D tGloed;
+      uniform float uGloed, uGloedMaks;
+      uniform vec3 uGloedFarve;
+      uniform mat3 uGrund;
+      #endif
       // Skybånd uden billede: lyse zoner og mørkere bælter, der følger breddegraden
       vec3 baand(vec2 uv) {
         float b = uv.y * 2.0 - 1.0; // -1 (sydpol) til 1 (nordpol)
@@ -497,6 +511,15 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
           ud = mix(ud, p.rgb * (0.5 + 0.5 * dag), p.a * uPile * 0.9 * dag);
         }
         #endif
+        #ifdef GLOED
+        if (uGloed > 0.001) {
+          vec3 g = normalize(uGrund * normalize(vVerden - uMidt));
+          vec2 guv = vec2(atan(-g.z, g.x) / 6.2831853 + 0.5, asin(clamp(g.y, -1.0, 1.0)) / 3.1415927 + 0.5);
+          float gv = textureLod(tGloed, guv, 0.0).r; // (uden niveauer: atan springer ved 180°)
+          float nat = 1.0 - smoothstep(-0.12, 0.08, dot(N, uSol)); // om dagen drukner gløden i sollyset
+          ud += uGloedFarve * (uGloedMaks * gv * gv) * uGloed * nat;
+        }
+        #endif
         #ifdef GENNEMSIGTIG
         gl_FragColor = vec4(ud, uAlfa);
         #else
@@ -543,6 +566,14 @@ export function lavGasplanet({ skala, radius, polRadius, ringTekstur = null, rin
     // Venus (toner): farven og kontrasten i gråtonekortet, og hvor dækkende skylaget er (gennemsigtig)
     sætToner(tone, kontrast) { mat.uniforms.uTone.value.set(...tone); mat.uniforms.uKontrast.value = kontrast; },
     sætAlfa(a) { mat.uniforms.uAlfa.value = a; },
+    // Venus (glød): det slørede kort over gløden, styrken (0-1), farven og drejningen fra verden til jordens retninger
+    sætGlød({ kort, styrke, farve, grund }) {
+      const u = mat.uniforms;
+      if (kort !== undefined) u.tGloed.value = kort;
+      if (styrke !== undefined) u.uGloed.value = u.tGloed.value ? styrke : 0;
+      if (farve) u.uGloedFarve.value.set(...farve);
+      if (grund) u.uGrund.value.copy(grund);
+    },
     sætVoyager(styrke, gain, midt, kontrast) {
       mat.uniforms.uVoy.value = styrke;
       if (gain) mat.uniforms.uVoyGain.value.set(...gain);

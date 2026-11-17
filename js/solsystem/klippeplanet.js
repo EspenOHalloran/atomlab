@@ -153,6 +153,23 @@ const KORT_GLSL = /* glsl */ `
   vec3 kortFarve(sampler2D t, vec2 uv) { return texture2D(t, uv).rgb; }
   #endif`;
 
+// Gløden fra jorden (Venus, V3): Plancks lov ved én bølgelængde i forhold til middelhøjden (Wiens tilnærmelse, som
+// afviger under en milliontedel, når exp(c2 / λT) er så stor). Temperaturen falder med højden (gloedT: T0, fald pr. km,
+// nul i km og c2 / λ). Højden er den rigtige (uden overdriv). Ses kun på natsiden (om dagen drukner den i sollyset).
+const GLOED_GLSL = /* glsl */ `
+  #ifdef GLOED
+  uniform float gloedStyrke;
+  uniform vec3 gloedFarve;
+  uniform vec4 gloedT;
+  uniform float radiusKm;
+  vec3 gloed(float h, vec3 n0) {
+    float T = gloedT.x - gloedT.y * (h * radiusKm - gloedT.z);
+    float L = exp(gloedT.w * (1.0 / gloedT.x - 1.0 / T));
+    float nat = 1.0 - smoothstep(-0.12, 0.08, dot(normalize(rot * n0), uSol));
+    return gloedFarve * min(L, 4.0) * gloedStyrke * nat;
+  }
+  #endif`;
+
 // Lyset, luften, isen og skyernes skygge (fælles for kuglen og de lokale net). n0 er retningen fra midten, nr
 // retningen vinkelret på bjergsiden (begge i kuglens egne retninger), og c farven.
 const LYS_GLSL = /* glsl */ `
@@ -235,6 +252,7 @@ const FRAGMENT = /* glsl */ `
   ${HOEJDE_GLSL}
   ${LYS_GLSL}
   ${KORT_GLSL}
+  ${GLOED_GLSL}
   varying vec2 vUv;
   varying vec3 vObjN;
   void main() {
@@ -250,6 +268,9 @@ const FRAGMENT = /* glsl */ `
     vec2 g = harHoejde > 0.5 ? haeldning(hoejde, vUv, texel, vec2(OMGANG, OMGANG * 0.5), cosB) : vec2(0.0);
     vec3 c = mix(farve, kortFarve(kort, vUv), harKort);
     gl_FragColor = vec4(belys(n0, normalize(n0 - g.x * oest - g.y * nord), c), 1.0);
+    #ifdef GLOED
+    if (gloedStyrke > 0.001) gl_FragColor.rgb += gloed(harHoejde > 0.5 ? hMin + hSpan * hoejdeAf(hoejde, vUv) : gloedT.z / radiusKm, n0);
+    #endif
   }`;
 
 const FRAGMENT_LOKAL = /* glsl */ `
@@ -271,6 +292,7 @@ const FRAGMENT_LOKAL = /* glsl */ `
   ${HOEJDE_GLSL}
   ${LYS_GLSL}
   ${KORT_GLSL}
+  ${GLOED_GLSL}
   varying vec2 vUv;
   varying vec2 vLok;
   varying float vVaegt;
@@ -296,6 +318,13 @@ const FRAGMENT_LOKAL = /* glsl */ `
       c = mix(cK, c, vVaegt);
     }
     gl_FragColor = vec4(belys(n0, normalize(n0 - g.x * oest - g.y * nord), c), 1.0);
+    #ifdef GLOED
+    if (gloedStyrke > 0.001) {
+      float hG = hoejdeAf(lokalHoejde, vLok);
+      if (vVaegt < 0.999) hG = mix(harHoejde > 0.5 ? hoejdeAf(hoejde, vUv) : hG, hG, vVaegt);
+      gl_FragColor.rgb += gloed(hMin + hSpan * hG, n0);
+    }
+    #endif
   }`;
 
 // Højdetabellen: højst størrelse[0] × størrelse[1] felter, hvert med den højeste højde (i radier) fra højdekortet i
@@ -383,9 +412,10 @@ const glidende = (x) => { const t = THREE.MathUtils.clamp(x, 0, 1); return t * t
 // luft: { tusmørke (grader ind i natten), farve, slør, skalahøjde (km) } giver tusmørke og støv i luften. is: polkapperne gøres hvidere.
 // skyer: skyerne fra js/solsystem/skyer.js, som kaster skygge på jorden.
 // tone: [r, g, b] (Venus): kortene er gråtoner med én kanal (RedFormat), og gråtonen ganges med denne farve.
-export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null }) {
+// glød: { T0, fald, nul, bølge, c2 } (Venus, V3): jorden gløder på natsiden efter højden (sætGlød(styrke, farve)).
+export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null, glød = null }) {
   const R = radius / skala;
-  const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }) };
+  const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }), ...(glød && { GLOED: '' }) };
   const medSkyer = (glsl) => glsl.replace('SKY_GLSL_HER', skyer ? SKY_GLSL : '');
   const mat = new THREE.ShaderMaterial({
     uniforms: {
@@ -410,6 +440,12 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       skala: { value: 1 },
       ...(skyer ? skyer.uniforms : {}),
       ...(tone && { uTone: { value: new THREE.Vector3(...tone) } }),
+      ...(glød && {
+        gloedStyrke: { value: 0 },
+        gloedFarve: { value: new THREE.Vector3(1, 0.25, 0.06) },
+        gloedT: { value: new THREE.Vector4(glød.T0, glød.fald, glød.nul, glød.c2 / glød.bølge) },
+        radiusKm: { value: radius },
+      }),
     },
     defines: { ...defines, HULLER: 0 },
     vertexShader: VERTEX,
@@ -522,6 +558,12 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
     // Toner kortet ind fra farven (v fra 0 til 1), og farven, der ses, indtil kortet er hentet
     toneKort(v) { u.harKort.value = v; },
     sætFarve(f) { u.farve.value.set(...f); },
+    // Gløden (kun med glød): styrke 0-1 og farven (den, L = 1 giver)
+    sætGlød(styrke, f) {
+      if (!u.gloedStyrke) return;
+      u.gloedStyrke.value = styrke;
+      if (f) u.gloedFarve.value.set(...f);
+    },
     sætHøjde(t) {
       u.hoejde.value = t;
       u.harHoejde.value = t ? 1 : 0;
