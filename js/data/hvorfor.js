@@ -107,6 +107,24 @@ export const HVORFOR = {
     spørgsmål: 'Hvorfor kan man ikke stå på Neptun?',
     svar: 'Neptun har ingen fast overflade. Yderst er der luft af brint og helium. Jo dybere man kommer, jo tættere og varmere bliver den, og den går langsomt over i en varm, tæt væske af vand, ammoniak og metan. Der er intet sted at lande, og længe før ville trykket knuse et rumskib.',
   },
+  // Venus (V5, 17. november 2026). Kilder: docs/fakta-solsystemet/del7-venus.md, afsnit 12, og Fables tjek E18 (afsnit
+  // 5 og 6). Merkur: NASA (op til 430 °C om dagen, ca. −180 °C om natten, del 8). Drejningen: Wikipedia "Venus" (Solens
+  // tidevand og varmen i den tykke luft, døgnet svinger op til 20 minutter). Livet: Hallsworth m.fl. 2021 (dråberne er
+  // ca. 100 gange for tørre), fosfinen Greaves m.fl. 2020 mod Cordiner m.fl. 2022 (ikke afgjort, E18)
+  venusMerkur: {
+    spørgsmål: 'Hvorfor er Venus varmere end Merkur?',
+    svar: 'Merkur har næsten ingen luft. Solsiden bliver op til ca. 430 °C, men varmen stråler lige ud i rummet igen, så natsiden falder til ca. −180 °C. Venus har en tyk luft af kuldioxid, der holder på varmen og fører den rundt om hele planeten. Derfor er der ca. 464 °C overalt, både dag og nat.',
+  },
+  venusBaglaens: {
+    spørgsmål: 'Hvorfor drejer Venus baglæns?',
+    svar: 'Det ved man ikke sikkert. Måske fik Venus et stort stød, da den var ung. Mange forskere tror, at Solens tyngde og Solens varme i den tykke luft har bremset og ændret drejningen gennem milliarder af år, til den blev, som den er nu.',
+    nørd: 'Luften skubber stadig: Et døgn på Venus kan blive op til ca. 20 minutter længere eller kortere.',
+  },
+  venusLiv: {
+    spørgsmål: 'Kan der være liv i skyerne?',
+    svar: 'Ca. 50-60 km oppe er temperaturen og trykket ikke langt fra Jordens. Derfor har nogle forskere spurgt, om mikrober kunne leve i skydråberne. Men dråberne er stærk svovlsyre og ca. hundrede gange for tørre til alt liv, vi kender. I 2020 mente et hold at have fundet gassen fosfin, som på Jorden mest laves af liv. Andre fandt den ikke i de samme målinger, og striden er ikke slut.',
+    nørd: 'Fosfin findes også i Jupiters og Saturns luft, hvor den laves uden liv dybt nede i den varme luft. Et fund af en gas er derfor ikke et bevis for liv.',
+  },
   // Rejsen i tid (T3). Kilder: docs/fakta-tid.md, afsnit 1, 2 og 8 (ét ton: 5,5·10²⁰ J ved 99 % og 6,3·10²¹ J ved 99,99 %,
   // verdens energiforbrug 592 EJ om året)
   lysfart: {
