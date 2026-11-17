@@ -14,7 +14,7 @@ import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavBog } from './bog.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, lavTurKnap } from './forloeb.js';
-import { tagVentForløb, åbnFænomen } from './gaa.js';
+import { tagVentForløb, åbnFænomen, tagVentBog } from './gaa.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -192,6 +192,13 @@ export function startOpdagelser() {
   const vent = tagVentForløb(byggede().map((b) => b.forløb).filter(Boolean));
   const b = vent && byggede().find((x) => x.forløb === vent);
   if (b) åbnBog(b.id, { fortælling: true });
+  // En bog fra en knap et andet sted (data-gaa="opdagelser:huygens", fx citatet ved Saturn)
+  else visBog(tagVentBog());
+}
+
+// Åbner en bygget bog fra en knap (js/gaa.js). Første gang starter fortællingen efter "Begynd" som normalt
+export function visBog(id) {
+  if (id && bogMed(id)?.bygget) åbnBog(id);
 }
 
 export function stopOpdagelser() {

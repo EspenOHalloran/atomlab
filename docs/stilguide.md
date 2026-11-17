@@ -48,5 +48,5 @@ Forløbet kommer stadig først (Retningen). Men det er en sti med et gelænder, 
 | A5 Lagene | Spørgsmål ser ud på fire måder: gul pille, blågrøn boks (Stjerneovnen, Reaktoren, Batteriet), mørk linje (Solsystemet, Kosmos) og orange overskrift. "Ærligt talt" har tre farver |
 | A6 Billedet først | Solsystemet og Kosmos (panelerne står der fra start, og Big Bang-panelet fortæller svaret før "Start universet"), Stjerneovnens rejse ind i Solen (panelerne er fremme imens) |
 | A7 Emoji | Solsystemets og Kosmos' lister, scenens knapper, tidsskyderen, fingeren i Opdagelserne |
-| A9 Kun det, der findes | Opdagelserne (ni grå rygge og fire tomme opslag) |
+| A9 Kun det, der findes | **Rettet 17. november 2026 (H3, E20 fund 6)** i Opdagelserne: kun de byggede opslag og to grå rygge, der stiller deres spørgsmål |
 | B1-B7 | **Rettet 17. november 2026 (E20)** i klodsen (`js/forloeb.js`) og i "Saturns ører". B8 er en blød toning i to skridt. At folde Værkstedets højre panel ind venter til Serie 2 nr. 5 |

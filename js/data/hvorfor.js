@@ -249,6 +249,16 @@ export const HVORFOR = {
     svar: 'I 1958 gav Matthew Meselson og Franklin Stahl bakterier tungt nitrogen, så deres DNA blev tungt. Så fik de almindeligt nitrogen. Efter én deling var alt DNA midt imellem: én tung side og én let. Efter to delinger var halvdelen midt imellem og halvdelen let.\n\nSådan må det blive, når hver kopi får én gammel side og én ny.',
     nørd: 'Tungt nitrogen har en ekstra neutron i kernen (¹⁵N i stedet for ¹⁴N). DNA\'et blev slynget rundt i en centrifuge i en tung saltopløsning (cæsiumklorid), så det lagde sig i et bånd efter, hvor tungt det var. Var den gamle stige blevet hel og den nye helt ny, ville der efter én deling have været et tungt og et let bånd, men ingen midt imellem.',
   },
+  // Hvordan ved vi det? Ved Saturns ringe (Opdagelserne H3, 17. november 2026). Kilder: docs/fakta-videnskabsfolk/huygens.md
+  // afsnit 3 (s. 46: armene i én lige linje, s. 47: alle Saturns mærkelige former), Wikipedia "Rings of Saturn" (Maxwell
+  // 1859, Keeler og Belopolsky 1895, Pioneer 11 september 1979, Voyager 1 november 1980, Voyager 2 august 1981, Cassini i
+  // kredsløb juli 2004) og "James Edward Keeler" (Dopplerforskydningen efter banernes fart). Cassinis styrt 15. september
+  // 2017 (fakta-solsystemet). Ikke "Huygens så, at ringen er is og sten": Han troede, den var fast (s. 48)
+  saturnRing: {
+    spørgsmål: 'Hvordan ved vi, at det er en ring?',
+    svar: 'I 1655 så Christiaan Huygens, at Saturns "arme" nat efter nat stak ud i én lige linje. Han regnede ud, at en tynd, flad ring rundt om Saturn kunne forklare alle de mærkelige tegninger, også når armene forsvandt, fordi vi så ringen fra kanten. Han skrev det i 1659.\n\nHuygens troede, ringen var fast, men i 1859 viste James Clerk Maxwell, at den må bestå af utallige små stykker, der hver kredser for sig. Det blev målt i 1895, og siden 1979 har rumsonder fløjet helt tæt på.',
+    nørd: 'I 1895 målte James Keeler, hvor meget lyset fra ringen var forskudt i farve (Dopplereffekten). Lyset fra den inderste del var forskudt mest, så den inderste del kom hurtigst rundt, ligesom små måner. En fast ring drejer som et hjul, og så går den yderste del hurtigst. Pioneer 11 fløj forbi i 1979, Voyager 1 og 2 i 1980 og 1981, og Cassini kredsede om Saturn fra 2004 til 2017.',
+  },
   // Hvornår er noget opdaget? (Gåderne G3, fælles for kortene). Kilder: docs/fakta-gaader.md, "Fælles for alle kortene".
   // 5σ ensidet: p = ½·erfc(5/√2) = 2,87 · 10⁻⁷, altså 1 ud af 3,49 millioner. log₂(3,49 · 10⁶) = 21,7, så ca. 22 gange
   // plat i træk (2²² = 4,19 millioner). 3σ: 1 ud af 741 (ca. 10 gange plat). LIGO: "greater than 5.1σ" (arXiv:1602.03837).

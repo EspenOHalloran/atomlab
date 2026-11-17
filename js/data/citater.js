@@ -160,6 +160,7 @@ export const CITATER = {
     person: 'Christiaan Huygens',
     kilde: 'Systema Saturnium, 1659',
     original: 'Annulo cingitur, tenui, plano, nusquam cohaerente, ad eclipticam inclinato.',
+    bog: { id: 'huygens', tekst: 'Læs Huygens\' bog' }, // knappen til bogen i Opdagelserne (H3)
     kommentar: 'Huygens offentliggjorde først sætningen i 1656 som et anagram, hvor alle bogstaverne var blandet (aaaaaaa ccccc d eeeee …). Sådan kunne forskere dengang gøre krav på en opdagelse, før de var klar til at udgive den. I 1659 afslørede han, hvad der stod. Galilei havde set ringen i 1610, men hans kikkert var for svag: Han troede, at Saturn bestod af tre kloder.',
   },
   bellBurnell: {
@@ -207,5 +208,7 @@ export function citatHTML(nøgle) {
   const original = ((c.oversat ? `Engelsk oversættelse (originalen er på ${c.oversat}): ` : '') + c.original).replace(/"/g, '&quot;');
   return `<p class="citat-tekst" title="${original}">“${c.tekst}”</p>`
     + `<footer>– ${c.person}, <span>${c.kilde}</span></footer>`
-    + (c.kommentar ? `<p class="citat-kommentar">${c.kommentar}</p>` : '');
+    + (c.kommentar ? `<p class="citat-kommentar">${c.kommentar}</p>` : '')
+    // En bog i Opdagelserne om personen (js/gaa.js åbner den)
+    + (c.bog ? `<p class="citat-bog"><button class="link-knap" data-gaa="opdagelser:${c.bog.id}">${c.bog.tekst} ›</button></p>` : '');
 }

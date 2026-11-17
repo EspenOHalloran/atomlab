@@ -514,6 +514,8 @@ button { font: inherit; color: inherit; }
 .citat footer { margin-top: 4px; font-size: 13px; font-weight: 600; color: #c5b6ff; }
 .citat footer span { font-weight: 400; color: var(--svag); }
 .citat-kommentar { margin: 6px 0 0 !important; font-size: 13px; color: var(--svag); line-height: 1.45; }
+.citat-bog { margin: 6px 0 0 !important; } /* Knappen til personens bog i Opdagelserne (fx huygensSaturn) */
+.citat-bog .link-knap { min-height: 44px; }
 .citat.lille .citat-tekst { font-size: 13.5px; }
 .hjælp-indhold ul { margin: 6px 0; padding-left: 22px; line-height: 1.55; }
 .hjælp-indhold .citat { margin: 12px 0; }

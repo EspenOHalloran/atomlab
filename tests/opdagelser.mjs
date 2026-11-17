@@ -296,6 +296,33 @@ for (const [navn, opsætning] of [
   await ctx.close();
 }
 
+// Gør det selv (test 6, H3 trin D): "Se ringen forsvinde ved Saturn" fra "Det så du" åbner Solsystemet ved Saturn fra
+// kanten med linjen og ringenes side (med "Hvordan ved vi det?"), og citatets knap "Læs Huygens' bog" fører tilbage
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '&forloebstart#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('huygens'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await page.click('#opdBog .bog-begynd');
+  await vent(page, () => atomlabTest.opdagelser.forløb.kører() === 'saturns-oerer');
+  for (let i = 0; i < 4; i++) {
+    await O(() => atomlabTest.opdagelser.forløb.visMigNu());
+    await vent(page, () => atomlabTest.opdagelser.forløb.fase() === 'så', null, 10000);
+    await page.click('.forløb-linje .fl-næste');
+  }
+  await vent(page, () => atomlabTest.opdagelser.forløb.fase() === 'slut');
+  await page.click('.forløb-linje .fl-vej >> text=Se ringen forsvinde ved Saturn');
+  const fremme = await vent(page, () => location.hash === '#solsystem' && atomlabTest.solsystem?.sted?.() === 'kanten' && atomlabTest.solsystem.fase()?.titel, null, 40000);
+  const ved = await O(() => ({ sted: atomlabTest.solsystem.sted(), fase: atomlabTest.solsystem.fase(), emner: atomlabTest.solsystem.side()?.emner.map((e) => e.titel), hvorfor: [...document.querySelectorAll('#solsystem button.hvorfor')].map((b) => b.dataset.hvorfor), bog: !!document.querySelector('#solsystem [data-gaa="opdagelser:huygens"]') }));
+  tjek('Gør det selv: "Se ringen forsvinde ved Saturn" åbner Saturn fra kanten med linjen, ringenes side og "Hvordan ved vi, at det er en ring?"',
+    fremme && ved.sted === 'kanten' && /kanten/.test(ved.fase?.tekst ?? '') && ved.emner?.includes('Hvor tynde er ringene?') && ved.hvorfor.includes('saturnRing') && ved.bog, JSON.stringify(ved));
+  await page.click('#solsystem [data-gaa="opdagelser:huygens"]');
+  const tilbage = await vent(page, () => location.hash === '#opdagelser' && atomlabTest.opdagelser?.vist()?.bog === 'huygens', null, 15000);
+  tjek('citatets knap "Læs Huygens\' bog" åbner bogen i Opdagelserne', tilbage);
+  await ctx.close();
+}
+
 // Telefon og tablet på højkant som første skærm: forsiden kan ses uden at rulle (også "Begynd"), et stryg bladrer, og
 // intet ligger uden for skærmen
 for (const [navn, opsætning] of [

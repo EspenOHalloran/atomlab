@@ -822,6 +822,6 @@ export const ORDBOG = [
   {
     id: 'anagram', ord: 'Anagram', kunI: '.fl-tekst',
     former: ['anagram', 'anagrammet', 'anagrammer', 'anagrammerne'],
-    tekst: 'Et ord eller en sætning, hvor bogstaverne er byttet rundt, fx "toner" og "noter". Før i tiden kunne en forsker gemme en opdagelse i et anagram og afsløre sætningen senere. Så kunne han bevise, at han vidste det først. Det gjorde Huygens i 1656.',
+    tekst: 'Et ord eller en sætning, hvor bogstaverne er byttet rundt, fx "toner" og "noter". Før i tiden kunne en forsker gemme en opdagelse i et anagram og afsløre sætningen senere. Så kunne forskeren bevise at have vidst det først. Det gjorde Huygens i 1656.',
   },
 ];
