@@ -128,6 +128,22 @@ await page.click('#kosmos .forløb-linje [data-nav="spring"]');
 await page.waitForTimeout(300);
 tjek('sprunget over: linjen er væk, og Styr og panelerne er tilbage', !(await synlig('#kosmos .forløb-linje')) && (await synlig('#kosmosStyr')) && (await synlig('#kosmos .højre-panel')) && !(await E(() => atomlabTest.kosmos.fænomen().kørerForløb())));
 
+// Turene i listen til venstre og prikken på "↻ Tur" (jeres valg 17. november 2026): Tur 1 er taget (✓), tur 2 er
+// sprunget over og stadig ny. Et tryk på tur 2 i listen starter den.
+await page.waitForTimeout(400); // træet tegnes igen fire gange i sekundet
+const listeTure = (await E(() => atomlabTest.kosmos.træ())).filter((p) => p.id.startsWith('tur:'));
+const turKnap = await E(() => { const k = document.querySelector('#kosmos .tur-knap'); return { ny: k.classList.contains('ny'), titel: k.title }; });
+await page.click('#kosmos .tur-knap');
+const turListe = await E(() => [...document.querySelectorAll('#kosmos .tur-liste button')].map((b) => b.textContent));
+await page.keyboard.press('Escape');
+tjek('listen: "Tur: Rejsen i tid" med ✓ og "Tur: Hvordan kan det ske?" med prikken under Tid, og "↻ Tur" har prikken og "Ny" ved tur 2',
+  listeTure.map((p) => p.id).join() === 'tur:rejsen-i-tid,tur:hvordan-kan-det-ske' && listeTure[0].niveau === 2 && /✓/.test(listeTure[0].navn) && !listeTure[0].ny && listeTure[1].ny
+  && turKnap.ny && /1 ny/.test(turKnap.titel) && turListe[0].startsWith('✓') && turListe[1].endsWith('Ny'), JSON.stringify({ listeTure, turKnap, turListe }));
+await page.click('#kosmosTræ [data-forloeb="hvordan-kan-det-ske"]');
+await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.kørerForløb?.() === 'hvordan-kan-det-ske', null, { timeout: 10000 });
+tjek('et tryk på "Tur: Hvordan kan det ske?" i listen starter tur 2 fra første trin', (await E(() => atomlabTest.kosmos.fænomen().forløb.trin())) === 'kast');
+await page.click('#kosmos .forløb-linje [data-nav="spring"]');
+
 // Fra hjælpen
 await E(() => atomlabTest.kosmos.vælg('bigbang'));
 await page.click('#kosmosHjælp');
