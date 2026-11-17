@@ -36,3 +36,11 @@ Opdatér "AtomLab Overblik", når en opgave er færdig, eller mindst hver tredje
 - Push, merge og regelændringer gør arbejdssessionerne efter deres egne prompter. Du må ikke selv rette kode.
 - Hold din egen samtale kort: Læs kun det, du skal bruge ved hvert tjek. Bliver samtalen lang (over ca. 20 tjek), så skriv status i `docs/lige-nu/smaating.md` under "Orkestratoren" og start en ny orkestrator-session med denne prompt, og arkivér dig selv bagefter.
 - Stop helt, og skriv til brugeren, hvis noget går galt to gange i træk på tværs af spor (fx main er rød efter en merge).
+
+## 7. Input fra brugeren
+Brugeren skriver idéer, fund og ønsker direkte i denne chat (ikke som kommentarer i artefaktet, de når ikke frem). Sorter hver besked med det samme:
+- **Løs idé** ("det kunne være sjovt, hvis …"): skriv den i `docs/ideer.md` under den rigtige verden (lille PR, merge straks), og sig kort, hvor den står. Den bygges ikke, før den er planlagt.
+- **Fejl eller fund fra prøven/tabletten:** Hører det til et spor, der kører, så send det til den session. Ellers skriv det under "Åbne punkter" (`docs/lige-nu/aabne-punkter.md`) eller i sporets fil, og læg en opgave i køen.
+- **Ønske eller beslutning, der ændrer planen** (rækkefølge, et nyt trin, noget, der skal laves om): skriv det i sporets fil og i `docs/koereplan.md` med datoen og "jeres ønske", og ret køen og artefaktet. Er det et retningsvalg, eller er det uklart, så spørg brugeren kort med din anbefaling først.
+- **Svar på noget fra "Venter på dig"** (fx prøven med tilbage-knappen): send det til den session, der venter, eller start den.
+Svar altid kort, hvad du har gjort med beskeden.
