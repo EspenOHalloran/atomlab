@@ -90,12 +90,12 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     gruppe = new THREE.Group();
     rod.add(gruppe);
     effekter = new Effekter(rod);
-    // Styr-boksen øverst til højre i 3D-billedet. Foldet sammen til "Styr" på tablet på højkant og telefon.
+    // Styr-boksen øverst til højre i 3D-billedet. Foldet sammen til "Indstillinger" på tablet på højkant og telefon.
     const styr = document.createElement('details');
     styr.className = 'styr';
     styr.id = `${skærm}Styr`;
     styr.open = !SMAL.matches;
-    styr.innerHTML = '<summary>Styr</summary><div class="styr-indhold"></div>';
+    styr.innerHTML = '<summary>Indstillinger</summary><div class="styr-indhold"></div>';
     styr.addEventListener('toggle', () => lyd.klik());
     bundIVindue($('Vindue')); // laver laget med toppen og bunden, hvis det mangler
     $('Vindue').querySelector('.vindue-top').prepend(styr);

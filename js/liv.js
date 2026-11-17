@@ -547,7 +547,7 @@ const OPSKRIFT_DEL = {
   },
   slutTekst: () => 'Du kendte kun den ene side, og så kendte du den anden. Sådan kopierer cellen sit DNA, hver gang den deler sig.',
   veje: [
-    { tekst: 'Næste forløb: Hvad står der i opskriften? ›', primær: true, gør: () => requestAnimationFrame(startOrdene) },
+    { tekst: 'Næste tur: Hvad står der i opskriften? ›', primær: true, gør: () => requestAnimationFrame(startOrdene) },
     { tekst: 'Leg frit' },
     { tekst: 'Zoom helt ind til atomerne', gør: () => requestAnimationFrame(() => { centrerVindue(); gåTil('atomer', 'ind'); }) },
   ],
@@ -610,7 +610,7 @@ function lavForløbListe() {
     const b = $(id);
     b.classList.toggle('løst', taget);
     b.querySelector('.flueben').textContent = taget ? '✓' : '▶';
-    b.title = taget ? 'Taget. Tryk for at tage det igen.' : om;
+    b.title = taget ? 'Taget. Tryk for at tage den igen.' : om;
   }
 }
 
