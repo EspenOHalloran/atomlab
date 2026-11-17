@@ -183,8 +183,7 @@ await T(() => atomlabTest.liv.startKopien());
 const vist = [];
 for (let i = 0; i < 4; i++) {
   if (await T(() => atomlabTest.liv.forløb.fase() === 'gæt')) await page.click('#liv .fl-gæt >> nth=0');
-  await T(() => atomlabTest.liv.forløb.visMigNu());
-  await page.click('#liv .fl-vismig');
+  await T(() => atomlabTest.liv.forløb.visMigNu()); // som "Næste ›" før handlingen (E20)
   await spol(6);
   await page.waitForFunction(() => atomlabTest.liv.forløb.fase() === 'så', null, { timeout: 10000, polling: 100 }).catch(() => {});
   vist.push(await T(() => atomlabTest.liv.forløb.fase()));

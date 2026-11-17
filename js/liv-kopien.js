@@ -335,11 +335,10 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
     layout: () => kamera(),
     slutTekst: () => 'De fleste af dine ca. 70 gør ingenting.',
     veje: [
-      { tekst: 'Leg frit: Kopien', primær: true, gør: () => requestAnimationFrame(() => startLab()) },
+      { tekst: 'Leg frit: Kopien', primær: true, her: true, gør: () => requestAnimationFrame(() => startLab()) },
       { tekst: 'Hvordan ved vi det?', hvorfor: 'livKopi' },
       { tekst: 'Hvorfor ligner jeg mine forældre?', hvorfor: 'livForaeldre' },
     ],
-    igen: 'fra listen til venstre eller fra hjælpen (?)',
     slut: () => {
       trin = null;
       if (træk) slipTræk();

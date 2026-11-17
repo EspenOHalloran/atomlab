@@ -8,11 +8,11 @@
 // Gåden, Gør det selv og bogen selv kommer i H3-H4.
 
 import { BØGER, bogMed, byggede, kommerSenere, HYLDE_LINJE } from './data/opdagelser.js';
-import { forløbMed } from './data/forloeb/liste.js';
+import { forløbMed, forløbI } from './data/forloeb/liste.js';
 import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavBog } from './bog.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, lavTurKnap } from './forloeb.js';
 import { tagVentForløb } from './gaa.js';
 
 const $ = (id) => document.getElementById(id);
@@ -64,7 +64,6 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  del.igen = 'ved at bladre til fortællingen i bogen';
   del.veje = [{ tekst: 'Videre i bogen ›', primær: true, gør: () => bog?.bladr(1) }];
   del.slut = () => {
     bog?.lås(false);
@@ -122,6 +121,11 @@ export function lavOpdagelser() {
   lavet = true;
   hentSkrift();
   lavHylde();
+  // "↻ Tur" i toplinjen (E20): åbner bogen og starter fortællingen
+  lavTurKnap($('opdagelser'), forløbI('opdagelser'), (fl) => {
+    const b = byggede().find((x) => x.forløb === fl.id);
+    if (b) åbnBog(b.id, { fortælling: true });
+  });
   $('opdHylde').addEventListener('click', (h) => {
     const k = h.target.closest('button[data-bog]');
     if (!k) return;

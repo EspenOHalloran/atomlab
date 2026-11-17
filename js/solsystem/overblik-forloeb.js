@@ -20,7 +20,7 @@
 
 import * as THREE from 'three';
 import { ROLIG, centrerVindue } from '../scene3d.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVink, forløbTest } from '../forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVenter, forløbRørt, forløbVink, forløbTest } from '../forloeb.js';
 import { tagVentForløb } from '../gaa.js';
 import { OVERBLIK } from '../data/forloeb/overblik.js';
 import { kmTekst } from '../data/planeter.js';
@@ -261,7 +261,8 @@ export function lavOverblikForløb(api) {
 
   // Et tryk i scenen (id: den nærmeste klode inden for 44 px eller null, x og y: hvor på skærmen)
   function tryk(id, x, y) {
-    if (!kører() || forløbFase() !== 'gør') return;
+    if (!kører() || !forløbVenter()) return; // også mens man gætter (stilguiden B4)
+    forløbRørt();
     if (trin === 'dyk') {
       // Jordens ring ligger tæt ved Solen (17 px på pc): Et tryk tæt på Jorden tæller, selv om Solen er nærmere
       const j = jorden.skærm;
@@ -287,7 +288,6 @@ export function lavOverblikForløb(api) {
   }
 
   const FL_DEL = {
-    igen: 'fra hjælpen (?) i Solsystemet eller fra "Din fremgang" i menuen',
     trin: {
       jorden: {
         // Først hele Solsystemet (HEL_S sekunder), så kameraet ind til de fire inderste (brugerens feedback 16. november
@@ -330,7 +330,7 @@ export function lavOverblikForløb(api) {
     },
     veje: [
       { tekst: 'Besøg en planet', primær: true, gør: () => efterVej(true) },
-      { tekst: 'Leg frit', gør: () => efterVej(false) },
+      { tekst: 'Leg frit', her: true, gør: () => efterVej(false) },
       { tekst: 'Rejs med lyset', gør: () => efterVej(false, true) },
     ],
     layout: () => {
@@ -391,10 +391,10 @@ export function lavOverblikForløb(api) {
       if (!kører()) return;
       if (fremhævTid > 0 && (fremhævTid -= dt) <= 0) vis.fremhæv = null;
       if (indOm > 0 && (indOm -= dt) <= 0 && trin === 'jorden' && !fundet) passer(INDERST, 2.2, true);
-      // Tidsskyderen er kun fremme i trin 2 (uden ⏪, ⏩ og "I dag"), når man har gættet
+      // Tidsskyderen er kun fremme i trin 2 (uden ⏪, ⏩ og "I dag"), også mens man gætter (stilguiden B4)
       const fase = forløbFase();
       tidLag.classList.add('ob-kun-skyder');
-      tidLag.classList.toggle('fl-skjult', !(trin === 'rundt' && (fase === 'gør' || fase === 'så')));
+      tidLag.classList.toggle('fl-skjult', !(trin === 'rundt' && (fase === 'gæt' || fase === 'gør' || fase === 'så')));
       if (trin === 'rundt') {
         if (autoSpol && fase === 'gør') {
           skyder.value = Math.min(1, Number(skyder.value) + dt / VIS_MIG_S);

@@ -23,7 +23,7 @@ import { DnaStige, S } from './liv/stige.js';
 import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVink, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbVenter, forløbRørt, forløbVink, forløbTest, lavTurKnap } from './forloeb.js';
 import { OPSKRIFTEN } from './data/forloeb/opskriften.js';
 import { ORDENE } from './data/forloeb/ordene.js';
 import { lavOrdeneDel } from './liv-ordene.js';
@@ -95,6 +95,8 @@ function blandGrænser() {
 const tegningFor = (id) => (id === 'stige' || id === 'atomer' ? stige : tegninger[id]);
 
 export function lavLiv() {
+  // "↻ Tur" i toplinjen (E20): en lille liste med de tre ture
+  lavTurKnap($('liv'), [OPSKRIFTEN, ORDENE, KOPIEN], (fl) => (fl.id === ORDENE.id ? startOrdene() : fl.id === KOPIEN.id ? startKopien() : startOpskriften()));
   stige = new DnaStige();
   stige.sætSekvens(HBB_START);
   protein = new ProteinTegning();
@@ -311,7 +313,8 @@ function tjekZoom() {
   if (kørerForløb()) {
     // I forløbet kan man kun zoome ind til det trin, forløbet venter på (og fra cellekernen direkte til stigen)
     const d = verden.kamera.position.distanceTo(verden.styring.target);
-    if (flZoom && vist !== stige && forløbFase() === 'gør' && d < afstand(niveau) * IND) gåTil(flZoom, 'ind');
+    // Også mens man gætter (stilguiden B4): Så toner gættet væk
+    if (flZoom && vist !== stige && forløbVenter() && d < afstand(niveau) * IND) { forløbRørt(); gåTil(flZoom, 'ind'); }
     return;
   }
   const d = verden.kamera.position.distanceTo(verden.styring.target);
@@ -598,7 +601,6 @@ const OPSKRIFT_DEL = {
     { tekst: 'Leg frit' },
     { tekst: 'Zoom helt ind til atomerne', gør: () => requestAnimationFrame(() => { centrerVindue(); gåTil('atomer', 'ind'); }) },
   ],
-  igen: 'fra listen til venstre eller fra hjælpen (?)',
   slut: () => {
     flTrin = null;
     flZoom = null;
@@ -645,13 +647,15 @@ function lavTryk() {
 function tryk(x, y) {
   if (!aktiv || overgang) return;
   const iLab = o3.lab() && !kørerForløb();
-  if (!iLab && ((!flTrin && !o2.kører() && !o3.kører()) || forløbFase() !== 'gør')) return;
+  // Også mens man gætter (stilguiden B4): Så toner gættet væk
+  if (!iLab && ((!flTrin && !o2.kører() && !o3.kører()) || !forløbVenter())) return;
   const r = verden.renderer.domElement.getBoundingClientRect();
   stråle.setFromCamera({ x: ((x - r.left) / r.width) * 2 - 1, y: -((y - r.top) / r.height) * 2 + 1 }, verden.kamera);
   const rammer = (t) => {
     t.mål.getWorldPosition(tV);
     return stråle.ray.distanceToPoint(tV) < t.målRadius * t.gruppe.scale.x;
   };
+  if (!iLab) forløbRørt(); // et tryk i scenen, mens man gætter, lader gættet tone væk
   if (o2.kører()) o2.tryk(stråle.ray);
   else if (o3.kører() || iLab) o3.tryk(stråle.ray);
   else if (flTrin === 'celle' && niveau === 'celle' && rammer(tegninger.celle)) gåTil('kerne', 'ind');

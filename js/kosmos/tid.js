@@ -672,7 +672,6 @@ export default {
     };
 
     const FL_DEL = {
-      igen: 'fra hjælpen (?) i Kosmos eller fra "Din fremgang" i menuen',
       trin: {
         // A1: til TRAPPIST-1 (40,66 lysår) ved 99,99 % og hjem: du er 14, tvillingen 94
         flyv: {
@@ -718,7 +717,7 @@ export default {
       slutTekst: () => 'Vælg "Leg frit" for at prøve andre mål, farter og "1 g hele vejen".',
       veje: [
         // Starter forløb 2 "Hvordan kan det ske?" (jeres valg 13. november 2026), også hvis det er taget før
-        { tekst: '🔦 Hvordan kan det ske?', primær: true, gør: () => { sætVentForløb(HVORDAN_KAN_DET_SKE.id); vælgFænomen('tidhvorfor'); } },
+        { tekst: 'Næste tur: Hvordan kan det ske?', primær: true, gør: () => { sætVentForløb(HVORDAN_KAN_DET_SKE.id); vælgFænomen('tidhvorfor'); } },
         { tekst: 'Leg frit' },
         { tekst: 'Er det målt?', hvorfor: 'tidMaalt' },
       ],

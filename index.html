@@ -54,7 +54,10 @@
 
   <!-- ===== Menu ===== -->
   <section id="menu" class="skærm">
-    <button class="knap lille ikon knap-fuldskaerm menu-hjørne" title="Fuld skærm"></button>
+    <div class="menu-hjørne">
+      <button class="knap lille ikon" id="menuHjælpKnap" title="Hjælp" aria-label="Hjælp">?</button>
+      <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+    </div>
     <header class="menu-top">
       <h1 class="logo">Atom<span>Lab</span></h1>
       <p class="undertitel">Byg atomer og molekyler, lav kernereaktioner, se livets opskrift, og udforsk rummet</p>
@@ -148,6 +151,19 @@
       </a>
     </nav>
   </section>
+
+  <!-- Menuens hjælp (?) med "Din fremgang" og "Om AtomLab" (E20, js/karrusel.js) -->
+  <div class="overlag skjult" id="menuHjælp" role="dialog" aria-label="Hjælp">
+    <div class="dialog">
+      <header><h3>Hjælp</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <p><strong>Find rundt:</strong> Drej ringen med fingeren eller piletasterne. Tryk på en del i verdenen forrest for at åbne den. "‹ Menu" øverst fører dig tilbage hertil.</p>
+      <p><strong>Ture:</strong> I mange dele viser en kort tur dig rundt første gang. Med <strong>↻</strong> øverst i delen kan du tage turen igen, og med "Udforsk selv ›" går du ud af den.</p>
+      <p><strong>★ Din fremgang:</strong> Se, hvor langt du er nået i hver del, tag en tur igen, eller nulstil det hele. <button class="knap lille" id="menuHjælpFremgang">Din fremgang ›</button></p>
+      <h4 id="hjælpOm">Om AtomLab</h4>
+      <p>© 2026 Espen O'Halloran. Alle rettigheder forbeholdes. Du må gerne bruge AtomLab i undervisningen og dele linket.</p>
+      <p><strong>Kilder og licenser:</strong> 3D-grafikken er lavet med Three.js (MIT-licens). Billederne af Jorden og Månen er fra NASA (Blue Marble, Black Marble og Lunar Reconnaissance Orbiter). Billederne af Mars er fra NASA's Viking-sonder og højdemåleren MOLA (via USGS). Højderne ved Olympus Mons, Valles Marineris, Gale og Jezero er også fra kameraet HRSC på ESA's Mars Express (ESA/DLR/FU Berlin, lagt sammen med MOLA af USGS, CC BY-SA 3.0 IGO). Landskabet, når du står på Mars ved Gale, er bygget af USGS' kort til roveren Curiosity (Fred Calef og Timothy Parker, NASA/JPL-Caltech), og ved Jezero af USGS' kort til Perseverances landing (Robin Fergason m.fl., USGS) og et højdekort fra CTX (Fred Calef, NASA PDS), med billeder fra kameraerne HiRISE (NASA/JPL-Caltech/University of Arizona) og CTX (NASA/JPL-Caltech/MSSS). Højderne deles under CC BY-SA 3.0 IGO. Rovernes egne fotos er fra Curiositys Mastcam (NASA/JPL-Caltech/MSSS, PIA20332) og Perseverances Mastcam-Z (NASA/JPL-Caltech/MSSS/ASU, PIA24264). Phobos' form og overflade er fra Mars Express (ESA/DLR/FU Berlin, via USGS, CC BY-SA 3.0 IGO), og Deimos' form er målt af Peter Thomas på Viking-billeder (NASA PDS), med et kort fra Viking (Phil Stooke og USGS). Jupiters kort er fra Hubble-teleskopets OPAL-program (NASA, ESA, A. Simon (GSFC), CC BY 4.0, doi:10.17909/T9G593) med farver og poler fra Cassini (NASA/JPL/Space Science Institute). Billederne af Saturns måner er fra NASA's rumsonde Cassini (via USGS, Mimas lavet af DLR), og Saturns kort og ringenes farver er fra Solar System Scope (CC BY 4.0). Kortet over land og hav er lavet med global-land-mask (MIT-licens) ud fra data fra NOAA. Ved hvert citat står, hvor det kommer fra.</p>
+    </div>
+  </div>
 
   <!-- "Din fremgang" i menuen (js/karrusel.js) -->
   <div class="overlag skjult" id="dinFremgang" role="dialog" aria-label="Din fremgang">
@@ -1200,9 +1216,7 @@
         <p><strong>Ringe eller sky?</strong> Ringene er en forenklet tegning (Bohrs atommodel), der gør det let at tælle elektronerne. I virkeligheden kan man kun sige, hvor elektronerne <em>sandsynligvis</em> er. Prøv knappen "Elektronsky": Den viser orbitalerne, hvor de yderste elektroner sandsynligvis er, som kugler (s), dobbeltdråber (p) og firkløvere (d). Formerne har ingen skarp kant, og de er regnet som for hydrogen, så de passer kun omtrent for større atomer.</p>
         <blockquote class="citat" data-citat="bohr"></blockquote>
         <p><strong>Styring:</strong> Træk for at dreje atomet. Rul eller knib for at zoome. Klik på et grundstof i det lille periodiske system for at hoppe til det, men først når du har bygget det selv én gang.</p>
-        <h4 id="hjælpOm">Om AtomLab</h4>
-        <p>© 2026 Espen O'Halloran. Alle rettigheder forbeholdes. Du må gerne bruge AtomLab i undervisningen og dele linket.</p>
-        <p><strong>Kilder og licenser:</strong> 3D-grafikken er lavet med Three.js (MIT-licens). Billederne af Jorden og Månen er fra NASA (Blue Marble, Black Marble og Lunar Reconnaissance Orbiter). Billederne af Mars er fra NASA's Viking-sonder og højdemåleren MOLA (via USGS). Højderne ved Olympus Mons, Valles Marineris, Gale og Jezero er også fra kameraet HRSC på ESA's Mars Express (ESA/DLR/FU Berlin, lagt sammen med MOLA af USGS, CC BY-SA 3.0 IGO). Landskabet, når du står på Mars ved Gale, er bygget af USGS' kort til roveren Curiosity (Fred Calef og Timothy Parker, NASA/JPL-Caltech), og ved Jezero af USGS' kort til Perseverances landing (Robin Fergason m.fl., USGS) og et højdekort fra CTX (Fred Calef, NASA PDS), med billeder fra kameraerne HiRISE (NASA/JPL-Caltech/University of Arizona) og CTX (NASA/JPL-Caltech/MSSS). Højderne deles under CC BY-SA 3.0 IGO. Rovernes egne fotos er fra Curiositys Mastcam (NASA/JPL-Caltech/MSSS, PIA20332) og Perseverances Mastcam-Z (NASA/JPL-Caltech/MSSS/ASU, PIA24264). Phobos' form og overflade er fra Mars Express (ESA/DLR/FU Berlin, via USGS, CC BY-SA 3.0 IGO), og Deimos' form er målt af Peter Thomas på Viking-billeder (NASA PDS), med et kort fra Viking (Phil Stooke og USGS). Jupiters kort er fra Hubble-teleskopets OPAL-program (NASA, ESA, A. Simon (GSFC), CC BY 4.0, doi:10.17909/T9G593) med farver og poler fra Cassini (NASA/JPL/Space Science Institute). Billederne af Saturns måner er fra NASA's rumsonde Cassini (via USGS, Mimas lavet af DLR), og Saturns kort og ringenes farver er fra Solar System Scope (CC BY 4.0). Kortet over land og hav er lavet med global-land-mask (MIT-licens) ud fra data fra NOAA. Ved hvert citat står, hvor det kommer fra.</p>
+        <p class="hjælp-om-link"><strong>Om AtomLab</strong> (ophavsret, kilder og licenser) står i menuens hjælp (?).</p>
         <p class="nulstil-linje"><button class="knap lille svag" id="knapNulstil">Nulstil al fremgang</button></p>
       </div>
     </div>

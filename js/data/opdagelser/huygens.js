@@ -28,8 +28,14 @@ export const OPSLAG = [
 
 export const TOM_LINJE = 'Dette opslag er ikke færdigt endnu.';
 
-// Fortællingens laboratorium (opslaget, når forløbet er taget eller sprunget over)
+// Fortællingens laboratorium (opslaget, når forløbet er taget eller sprunget over): de tre kapitler som tre valg
+// (E20, stilguiden B7). Ringen er standard.
 export const FRI = {
   linje: 'Træk op og ned, og se Saturn fra andre vinkler.',
   igen: 'Fortæl det igen',
+  kapitler: [
+    { id: 'linse', tekst: 'Linsen', linje: 'Gnid på glasset, og se kuglerne blive til arme.' },
+    { id: 'naetter', tekst: 'Den lille prik', linje: 'Træk nætterne frem, og følg prikken rundt om Saturn.' },
+    { id: 'ringen', tekst: 'Ringen', linje: 'Træk op og ned, og se Saturn fra andre vinkler.' },
+  ],
 };

@@ -6,6 +6,7 @@
 // Under ringen står en dok med verdenerne, så man kan hoppe direkte, og knappen "Din fremgang".
 // ✓ på delene og verdenerne og "Start her" for en ny bruger sættes også her (startKarrusel).
 
+import { lyd } from './lyd.js';
 import { ROLIG, LAV_KVALITET, centrerVindue, passerTil } from './scene3d.js';
 import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } from './menubaggrund.js';
 import { VERDENER } from './skaerme.js';
@@ -224,6 +225,16 @@ export function lavKarrusel({ fremgang, radius }) {
     if (!confirm('Vil du slette al din fremgang? Løste opgaver, opdagede grundstoffer og de ture, du har taget, starter forfra.')) return;
     nulstilFremgang();
     location.reload();
+  });
+  // Menuens hjælp (?) med "Din fremgang" og "Om AtomLab" (E20, svar 2: de tre ting, menuen ikke kunne finde)
+  const hjælp = document.getElementById('menuHjælp');
+  document.getElementById('menuHjælpKnap').addEventListener('click', () => { lyd.klik(); hjælp.classList.remove('skjult'); });
+  hjælp.addEventListener('click', (h) => {
+    if (h.target === hjælp || h.target.closest('[data-luk]')) hjælp.classList.add('skjult');
+  });
+  document.getElementById('menuHjælpFremgang').addEventListener('click', () => {
+    hjælp.classList.add('skjult');
+    visDinFremgang();
   });
 }
 
