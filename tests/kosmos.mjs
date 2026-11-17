@@ -47,6 +47,10 @@ for (const id of ids.filter((x) => x !== 'oversigt')) { // forsiden har ingen em
   tjek(`${id}: "Ærligt talt" står sidst i sin egen boks, og der er "For nørder"`, side.sidst === 'Ærligt talt' && side.bokse.includes('For nørder'), JSON.stringify(side.bokse));
   tjek(`${id}: emnerne er foldet sammen fra start`, side.emner.every((e) => !e.åben), JSON.stringify(side.emner));
   tjek(`${id}: der står ikke "Tryk" eller "i listen" i teksten`, !/\bTryk "|i listen/.test(side.tekst), side.tekst.match(/.{30}(Tryk "|i listen).{30}/)?.[0]);
+  if (id === 'rumtid') { // E19: det fjerde spørgsmål, og "For nørder" siger, at tiden er et hvordan, og at buddene er bud
+    tjek('rumtid: fire spørgsmål (budgettet), "Men hvorfor krummer stof rumtiden?" sidst', side.emner.length === 4 && side.emner[3].titel === 'Men hvorfor krummer stof rumtiden?', JSON.stringify(side.emner.map((e) => e.titel)));
+    tjek('rumtid: "For nørder" har skridtet om tiden (hvordan, ikke hvorfor) og buddene', /falder den vej, tiden går langsomst/.test(side.tekst) && /hvordan[\s\S]{0,40}hvorfor/.test(side.tekst) && /Det er bud/.test(side.tekst));
+  }
   tjek(`${id}: alle knapper i teksten virker`, side.knapper.length > 0 && side.knapper.every((k) => k.findes), JSON.stringify(side.knapper.filter((k) => !k.findes)));
   const knapper = await page.evaluate(() => window.atomlabTest.kosmos.knapper());
   const styr = await page.evaluate(() => window.atomlabTest.kosmos.styr());
