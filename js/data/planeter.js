@@ -112,7 +112,7 @@ export const PLANETER = [
     pol: { ra: 299.36, dec: 43.46 }, w: [249.978, 541.1397757],
   },
   {
-    id: 'pluto', navn: 'Pluto', fænomen: null, radius: 1188.3, omløb: 90560, farve: '#c9b29a', kort: 'pluto-1k.jpg', dværg: true,
+    id: 'pluto', navn: 'Pluto', fænomen: 'pluto', radius: 1188.3, omløb: 90560, farve: '#c9b29a', kort: 'pluto-1k.jpg', dværg: true,
     pol: { ra: 132.993, dec: -6.163 }, w: [302.695, 56.3625225],
   },
 ];

@@ -7,15 +7,14 @@
 // --bog-skrift.
 //
 // lavBog(rod, bog, tekster, { rolig, påBladr, påBegynd, lavScene }) bygger bogen i rod og giver { vis(nr), bladr(retning),
-// nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE, OPSLAG
-// og TOM_LINJE. Opslagets slags:
+// nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE og
+// OPSLAG. Bogen har kun de opslag, der er bygget (E20 fund 6, stilguiden A9). Opslagets slags:
 //   'forside'  portrættet, spørgsmålet, Galileis lille tegning (eller bogens egen), navnet og "Begynd"
 //   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
 //              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
 //              kaldes, når man bladrer væk
-//   'tom'      et kapitel, der kommer i et senere trin: titlen og én linje
 // påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
-// stryget og bladr()), mens et forløb kører i bogen. Nye slags (gåden, Gør det selv, bogen selv og "Om …") kommer i H3-H4.
+// stryget og bladr()), mens et forløb kører i bogen. Bogen selv og "Om …" kommer i H4.
 
 const STRYG = 50; // px vandret, før et stryg bladrer
 
@@ -49,11 +48,6 @@ function sceneHTML(o) {
     + '<div class="bog-scene" data-ingen-stryg></div></div>';
 }
 
-function tomHTML(o, tekster) {
-  return `<div class="bog-opslag bog-tom"><h3 class="bog-titel">${esc(o.titel)}</h3>`
-    + `<p class="bog-tekst">${esc(o.tekst)}</p><p class="bog-småt">${esc(tekster.TOM_LINJE)}</p></div>`;
-}
-
 export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påBegynd = null, lavScene = null } = {}) {
   const opslag = tekster.OPSLAG;
   let nr = 0;
@@ -80,7 +74,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
     const o = opslag[nr];
     scene?.fjern();
     scene = null;
-    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE) : o.slags === 'scene' ? sceneHTML(o) : tomHTML(o, tekster);
+    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE) : sceneHTML(o);
     ramme.dataset.opslag = o.id;
     ramme.scrollTop = 0;
     if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));

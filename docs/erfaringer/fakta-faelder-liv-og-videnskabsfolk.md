@@ -81,6 +81,8 @@
 - "Ingen ved, om ringen stod på kant i 1656." Det står i bogen: Huygens så Saturn uden arme fra 16. januar til 17. juni 1656, og de var tilbage 13. oktober (s. 16-17).
 - "Christiaan kom hjem fra en lang rejse i januar 1656." Han skriver kun, at han havde været ude at rejse ("peregre abfuissem", s. 16), og rejsen til Frankrig i 1655 varede efter en af kilderne fra juli til september. Skriv "en rejse" uden "lang" (H2, 16. november 2026).
 - "Med en bedre kikkert så Huygens ringen i 1655." Han så armene i én lige linje og sluttede sig til ringen (s. 46). Det var ræsonnementet, ikke billedet, der viste ringen. Fortællingen siger derfor kun, at kuglerne blev til "to tynde arme".
+- "I oktober 1656 kom armene igen, som han havde sagt" (Fables udkast til trin 4). De kom 13. oktober 1656, "senere end jeg havde forudsagt" ("serius quidem quam … praedixeram", s. 17). Han ventede dem sidst i april (OC XV). Skriv bare, at de kom igen (H3, 17. november 2026).
+- "Kun en ring kunne forklare tegningerne." Huygens viste, at ringen *kunne* forklare alle Saturns mærkelige former (s. 47), ikke at intet andet kunne. Skriv "kunne forklare" (kortet `saturnRing`, H3).
 - Sidetallene i skanningen `CristianiHugeni00HuygA` følger ikke ét tal: n = sidetal + 17 før tavlen ved s. 35 og + 19 efter (s. 2 er `n19`, s. 16 er `n33`, s. 46 er `n65`).
 *Galilei og Newton (Fable, 15. november 2026). Kilderne står i [fakta-videnskabsfolk/galilei.md](../fakta-videnskabsfolk/galilei.md) og [newton.md](../fakta-videnskabsfolk/newton.md).*
 - "Galilei opfandt kikkerten." Han skriver selv i *Sidereus Nuncius* (blad 6), at han hørte et rygte om en nederlænders kikkert og så byggede sin egen. Lipperhey søgte patent 2. oktober 1608. Skriv "byggede sin egen og gjorde den meget bedre".
