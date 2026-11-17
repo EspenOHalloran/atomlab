@@ -16,11 +16,13 @@
 //   'sider'    bogen selv (H4): de rigtige sider fra personens bog (tekster.BOGEN) med faner, glødende steder, der viser
 //              latinen og vores oversættelse, og "Linje for linje". Siderne hentes med hentBillede (js/hentning.js),
 //              første gang opslaget åbnes, og toner ind
+//   'om'       bogens sidste opslag "Om …" (H4, tekster.OM): navnet, højst to tal, højst tre sætninger, højst fire
+//              "Hvorfor?"-kort (visHvorfor fra js/lag.js) og "For nørder" og "Ærligt talt" som lukkede foldebokse
 // påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
 // stryget og bladr()), mens et forløb kører i bogen.
 
 import { hentBillede } from './hentning.js';
-import { lavLagBokse } from './lag.js';
+import { lavLagBokse, visHvorfor, lukHvorfor, vistHvorfor } from './lag.js';
 
 const STRYG = 50; // px vandret, før et stryg bladrer
 const sideBilleder = new Map(); // fil → Promise med et hentet <img> (siderne hentes kun én gang)
@@ -152,6 +154,37 @@ function lavSider(felt, bogId, b, rolig) {
   };
 }
 
+// "Om …" (H4): budgettet fra planen (titel, to tal, tre sætninger, fire spørgsmål, så de lukkede lag)
+function omHTML(o, om, bogId) {
+  const boks = (lag, slags) => `<details class="lag-boks bo-lag${slags === 'ærligt' ? ' ærligt' : ''}" data-lag="bog-${slags}-${bogId}"><summary><strong>${esc(lag.titel)}</strong> <span class="lag-kort">${esc(lag.linje)}</span></summary>`
+    + `<ul>${lag.punkter.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></details>`;
+  return `<div class="bog-opslag bog-om-opslag"><h3 class="bog-kapitel">${esc(o.titel)}</h3><div class="bo-krop">`
+    + `<p class="bo-navn">${esc(om.navn)}</p>`
+    + `<div class="bo-tal">${om.tal.slice(0, 2).map((x) => `<p><b>${esc(x.tal)}</b> <span>${esc(x.tekst)}</span></p>`).join('')}</div>`
+    + `<p class="bo-tekst">${esc(om.sætninger)}</p>`
+    + `<div class="bo-hvorfor">${om.hvorfor.slice(0, 4).map((h, i) => `<button class="hvorfor" data-bo-hvorfor="${i}" aria-expanded="false">${esc(h.spørgsmål)}</button>`).join('')}</div>`
+    + boks(om.nørd, 'nørd') + boks(om.ærligt, 'ærligt')
+    + '</div></div>';
+}
+
+function lavOm(felt, om) {
+  lavLagBokse(felt);
+  const klik = (h) => {
+    const k = h.target.closest('button[data-bo-hvorfor]');
+    if (!k) return;
+    if (k.getAttribute('aria-expanded') === 'true' && vistHvorfor()) lukHvorfor();
+    else visHvorfor(om.hvorfor[Number(k.dataset.boHvorfor)], k);
+  };
+  felt.addEventListener('click', klik);
+  return {
+    fjern() { felt.removeEventListener('click', klik); lukHvorfor(); },
+    test: {
+      hvorfor: (i) => felt.querySelectorAll('[data-bo-hvorfor]')[i]?.click(),
+      lag: () => [...felt.querySelectorAll('details.bo-lag')].map((d) => ({ titel: d.querySelector('strong').textContent, åben: d.open })),
+    },
+  };
+}
+
 function hentSide(s) {
   if (!sideBilleder.has(s.fil)) {
     const p = hentBillede(s.fil);
@@ -188,11 +221,13 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
     scene?.fjern();
     scene = null;
     ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE)
-      : o.slags === 'sider' ? siderHTML(o, tekster.BOGEN) : sceneHTML(o);
+      : o.slags === 'sider' ? siderHTML(o, tekster.BOGEN)
+        : o.slags === 'om' ? omHTML(o, tekster.OM, bog.id) : sceneHTML(o);
     ramme.dataset.opslag = o.id;
     ramme.scrollTop = 0;
     if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));
     else if (o.slags === 'sider') scene = lavSider(ramme.querySelector('.bog-sider-opslag'), bog.id, tekster.BOGEN, rolig);
+    else if (o.slags === 'om') scene = lavOm(ramme.querySelector('.bog-om-opslag'), tekster.OM);
     // Portrættet toner ind, når det er hentet (ingen tom ramme, der blinker)
     const img = ramme.querySelector('.bog-portræt img');
     if (img && !img.complete) {

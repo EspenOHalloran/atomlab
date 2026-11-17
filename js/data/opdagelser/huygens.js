@@ -3,7 +3,7 @@
 //
 // opslag er bogens opslag i rækkefølge. slags 'forside' har sin egen opbygning i js/bog.js. slags 'scene' er et kapitel
 // med en tegning, man gør noget i (js/bog/huygens.js). Kun de opslag, der er bygget, står her (E20 fund 6, stilguiden A9):
-// "Om Huygens" kommer i H4 trin D (docs/plan-videnskabsfolk.md).
+// Det sidste opslag er "Om Huygens" (H4).
 
 export const FORSIDE = {
   spørgsmål: 'Hvorfor havde Saturn ører?',
@@ -24,6 +24,8 @@ export const OPSLAG = [
   { id: 'gaaden', slags: 'scene', titel: 'Hemmeligheden' },
   // Bogen selv (H4): de fire sider fra 1659 med de glødende steder (BOGEN nedenfor, js/bog.js)
   { id: 'bogen', slags: 'sider', titel: 'Bogen fra 1659' },
+  // Bogens sidste opslag (H4): navnet, to tal, tre sætninger, fire "Hvorfor?" og de lukkede lag (OM nedenfor)
+  { id: 'om', slags: 'om', titel: 'Om Huygens' },
 ];
 
 // Vejene fra "Det så du" efter fortællingen (drejebogen afsnit 3, trin 5, og afsnit 5). sætning står foran den danske

@@ -31,7 +31,12 @@ for (const b of byggede()) {
   if (!existsSync(PROJEKT + b.portræt)) fejlListe.push(`${b.id}: portrættet findes ikke`);
   const t = await b.tekster();
   if (t.OPSLAG[0]?.slags !== 'forside' || !t.FORSIDE?.spørgsmål || !t.FORSIDE?.portrætAlt) fejlListe.push(`${b.id}: forsiden`);
-  if (!t.OPSLAG.every((o) => ['forside', 'scene', 'sider'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
+  if (!t.OPSLAG.every((o) => ['forside', 'scene', 'sider', 'om'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
+  // "Om …" (H4): budgettet fra planen (højst to tal og fire spørgsmål, "For nørder" og "Ærligt talt")
+  if (t.OPSLAG.some((o) => o.slags === 'om') && (!t.OM?.navn || !t.OM.tal?.length || t.OM.tal.length > 2 || !t.OM.hvorfor?.length || t.OM.hvorfor.length > 4
+    || t.OM.hvorfor.some((h) => !h.spørgsmål || !h.svar) || !t.OM.nørd?.punkter?.length || !t.OM.ærligt?.punkter?.length
+    || (t.OM.sætninger.match(/[.!?](\s|$)/g) ?? []).length > 3)) fejlListe.push(`${b.id}: "Om" holder ikke budgettet`);
+  if (t.OPSLAG.some((o) => o.slags === 'om') && t.OPSLAG.at(-1)?.slags !== 'om') fejlListe.push(`${b.id}: "Om" er ikke det sidste opslag`);
   // Bogen selv (H4): højst fire sider, der findes, og højst seks glødende steder, der ligger inden for siden
   if (t.OPSLAG.some((o) => o.slags === 'sider')) {
     const sider = t.BOGEN?.sider ?? [];
