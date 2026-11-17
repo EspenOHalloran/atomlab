@@ -66,8 +66,6 @@ export function lavPlade({ kol = 100, rækker = 100, lag = 'normal', frø = 1, t
   const takt = TAKT / skala;
   const pVæg = P_VÆG * skala * skala;
   const r = new Int8Array(n).fill(-1); // bakteriens niveau (-1: tomt)
-  const født = new Float32Array(n); // hvornår den kom (sekunder)
-  const fra = new Int32Array(n).fill(-1); // forælderen
   let kant = []; // bakterier, der måske kan dele sig
   const nye = []; // nye bakterier siden sidst, tegningen tager dem
   const iFelt = niveauer.filter((x) => x === 0).length * (kol / OMRÅDER) * rækker; // felter uden medicin
@@ -79,12 +77,12 @@ export function lavPlade({ kol = 100, rækker = 100, lag = 'normal', frø = 1, t
   let rest = 0;
 
   const m = {
-    kol, rækker, n, lag, niveauer, r, født, fra, område, niveau, nye,
+    kol, rækker, n, lag, niveauer, r, område, niveau, nye,
     tid: 0,
     maks: 0, // højeste bånd, bakterierne må komme ind i (turen åbner dem et ad gangen)
     åbnet: Array(MAKS + 1).fill(0), // hvornår hvert bånd blev åbnet
     vent: Array(MAKS + 1).fill(null), // hvor længe de har ventet ved kanten til hvert bånd, og hvornår den første gren kommer
-    grene: [], // [{ område, niveau, i, tid, fundet }]: hvor en slægt brød ind i et nyt bånd
+    grene: [], // [{ område, niveau, i, k, j, tid }]: hvor en slægt brød ind i et nyt bånd
     frø: null, // hvor den første bakterie blev sat
     antal: () => antal,
     andelFelt: () => fyldtFelt / iFelt,
@@ -154,14 +152,6 @@ export function lavPlade({ kol = 100, rækker = 100, lag = 'normal', frø = 1, t
       for (let i = 0; i < n; i++) if (niveau[i] === 0 && r[i] > 0) a++;
       return a;
     },
-    // Er der bakterier i område o?
-    iOmråde(o) {
-      for (let j = 0; j < rækker; j++) {
-        const start = j * kol;
-        for (let k = Math.floor((o * kol) / OMRÅDER); k < Math.floor(((o + 1) * kol) / OMRÅDER); k++) if (r[start + k] >= 0) return true;
-      }
-      return false;
-    },
     // Det højeste område, bakterierne er nået ind i
     længst() {
       let o = 0;
@@ -176,8 +166,6 @@ export function lavPlade({ kol = 100, rækker = 100, lag = 'normal', frø = 1, t
 
   function fød(i, niv, forælder) {
     r[i] = niv;
-    født[i] = m.tid;
-    fra[i] = forælder;
     kant.push(i);
     nye.push(i);
     antal++;
@@ -189,7 +177,7 @@ export function lavPlade({ kol = 100, rækker = 100, lag = 'normal', frø = 1, t
       const k = i % kol;
       const j = (i - k) / kol;
       const tæt = m.grene.some((g) => g.område === område[i] && (g.k - k) ** 2 + (g.j - j) ** 2 < (GREN_AFSTAND * kol) ** 2);
-      if (!tæt) m.grene.push({ område: område[i], niveau: niveau[i], i, k, j, tid: m.tid, fundet: false });
+      if (!tæt) m.grene.push({ område: område[i], niveau: niveau[i], i, k, j, tid: m.tid });
     }
   }
 
