@@ -1,4 +1,4 @@
-// Solsystemet: Solen, Merkur, Venus, Jorden, Mars, Jupiter, Saturn, Uranus og Neptun i den rigtige størrelse (trin 1 i docs/plan-solsystemet.md og Mars M4).
+// Solsystemet: Solen, Merkur, Venus, Jorden, Mars, Jupiter, Saturn, Uranus, Neptun og Pluto i den rigtige størrelse (trin 1 i docs/plan-solsystemet.md og Mars M4).
 // Skallen (listen, panelet, knapperne, pausen og underteksterne) er fælles med Kosmos (faenomenskaerm.js).
 
 import { lavFænomenSkærm } from './faenomenskaerm.js';
@@ -16,6 +16,7 @@ import jupiter from './kosmos/jupiter.js';
 import saturn from './kosmos/saturn.js';
 import uranus from './kosmos/uranus.js';
 import neptun from './kosmos/neptun.js';
+import pluto from './kosmos/pluto.js';
 
 // Efter afstanden til Solen. Solen og Jorden har deres egne visninger (M4b), og under dem står de fænomener, der hører til.
 // Overblikket (docs/drejebog-overblik.md) er den første klode og forsiden: Solsystemet starter dér, medmindre et link
@@ -34,6 +35,7 @@ const skærm = lavFænomenSkærm({
     saturn,
     uranus,
     neptun,
+    pluto,
   ],
 });
 

@@ -1,0 +1,14 @@
+# Pluto og Charon
+
+## Kortene, Charon, dansen og disen (MP3, 17. november 2026)
+- **USGS' Pluto-filer er små nok til at hente helt:** gråtonerne (310 MB), højderne (620 MB) og Charon (81 MB) kom på ca. to minutter fra `asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/`. Læs `Samples`, `Lines` og `StartByte` (tæller fra 1) i etiketten, som ved Merkur.
+- **Hold kortets midte, hvor kilden har den:** Plutos kort har 180° i midten, og hjertet ligger ved ca. 180° Ø. I stedet for at rulle kortet fik `lavKlippeplanet` en valgfri `midte`: Kuglen drejes, og kun `højde()` og `lokalt` skal regne længden om. `sted`, `punkt` og `overflade` tager den rigtige længde, så resten af koden ikke mærker noget.
+- **Farver på et skarpt kort:** Farvekortet fra Commons kunne ikke hentes (svaret 429), men overblikkets `pluto-1k.jpg` er det samme kort. Farven delt med sin egen lysstyrke og ganget på gråtonerne (300 m) gav et skarpt kort i farver. Tjek, at de to ligger oven i hinanden: Lysstyrken korrelerede 0,976 uden forskydning.
+- **Kanten mod det, ingen har set:** Ud over dataene glider kortet over i en mørk farve på ca. 2°, og højderne over i en udjævning af de nærmeste højder, der går mod 0. Så er der ingen trappe ved kanten, og bagsiden er glat.
+- **Toppene bliver lavere i små kort:** Tenzing Montes når ca. 3,9 km over kuglen i kilden, men kun få hundrede meter i 2k (3,6 km pr. pixel). Test højderne med det højeste i et lille område og med forskellen til sletten, ikke med kildens tal.
+- **Systemets midte er Plutos midte, ikke tyngdepunktet:** Så virker `bund`, kameraets bue og stederne som ved de andre planeter. Dansen ses ved at lade kameraet kigge på tyngdepunktet langt ude (glidende fra 3 til 8 radier). Tæt på kigger det på Plutos midte, ellers ville Pluto glide ud af billedet med ⏩.
+- **Charon skal ses ved siden af, ikke bagved:** Med kameraet lige ude bag Charon dækkede Charon Pluto helt. Ca. 16° fra linjen mellem dem står Pluto som en skive ved siden af Charon.
+- **Navne med `depthTest: false` skal skjules bag planeten:** Charons navn og tyngdepunktet stod oven på Pluto, når de var bag den. En lille test (rammer linjen fra kameraet Plutos kugle?) løste det.
+- **Disen set tæt på:** Hen over kanten kigger man gennem ca. 12 gange så meget dis som lige op (√(2πR/H)). Uden at regne det med blev himlen lys over bjergene. Forfra er disen næsten usynlig, i modlys er den en blå ring.
+- **`side()` i testadgangen går ned uden emner:** `sidst` læser `summary` i det sidste element. En side med kun en kort tekst (Charon) gav en fejl i testen. Charons side fik et emne, og det var også bedre for siden.
+- **Testbrowseren tegner få billeder:** Efter `hop()` er fokus regnet med den gamle afstand i ét billede. Vent med `waitForFunction`, til fokus er på plads, i stedet for en fast pause.

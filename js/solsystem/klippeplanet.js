@@ -479,7 +479,10 @@ const glidende = (x) => { const t = THREE.MathUtils.clamp(x, 0, 1); return t * t
 // (grader). Kortene sættes med sætPolKort og sætPolHøjde. pol.is (Merkur, MP2): et kort over radarens is ved nordpolen
 // i polkortets projektion (sætPolIs(t) og sætPolIsStyrke(v, farve)), som lyser af sig selv oven på kloden fra pol.fra.
 // glød: { T0, fald, nul, bølge, c2 } (Venus, V3): jorden gløder på natsiden efter højden (sætGlød(styrke, farve)).
-export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null, glød = null, pol = null }) {
+// midte (Pluto, MP3): den længde (grader øst), kortene har i midten. Pluto har 180° i midten som kilden, så hjertet ikke
+// ligger på kortets kant. Kuglen drejes så midte grader om sin akse, og sted, punkt, overflade og lokalt tager stadig
+// den rigtige længde (længde 0° mod +x i kuglens forælder). Uden midte (0) er alt som før.
+export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null, glød = null, pol = null, midte = 0 }) {
   const R = radius / skala;
   const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }), ...(glød && { GLOED: '' }), ...(pol && { POL: '' }), ...(pol?.is && { POLIS: '' }) };
   const medSkyer = (glsl) => glsl.replace('SKY_GLSL_HER', skyer ? SKY_GLSL : '');
@@ -533,6 +536,8 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
   const alle = mesh.geometry.index.array.slice(); // kuglens trekanter
   mesh.geometry.addGroup(0, alle.length, 0);
   mesh.scale.setScalar(R);
+  mesh.rotation.y = THREE.MathUtils.degToRad(midte); // kortets midte (længde midte) mod den rigtige længde
+  const cosM = Math.cos(THREE.MathUtils.degToRad(midte)), sinM = Math.sin(THREE.MathUtils.degToRad(midte));
   // Bjergene kan rage ud over kuglen (også når de er gjort højere), så den må ikke skæres fra for tidligt
   mesh.geometry.computeBoundingSphere();
   mesh.geometry.boundingSphere.radius = 1.1;
@@ -601,7 +606,8 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
   // ellers glat. Inden for et lokalt net bruges dets tabel, og ved kanten glider den over i kuglens.
   function højde(retning, maks) {
     if (!tabel) return 0;
-    const længde = Math.atan2(-retning.z, retning.x); // længdegrad 0° i midten, øst til højre
+    // Længden i kortet (længdegrad 0° i midten, øst til højre): den rigtige længde minus kortets midte
+    const længde = Math.atan2(-(retning.z * cosM + retning.x * sinM), retning.x * cosM - retning.z * sinM);
     const bredde = Math.asin(THREE.MathUtils.clamp(retning.y, -1, 1));
     const x = ((længde / (2 * Math.PI) + 0.5) * tabel.B) % tabel.B;
     const y = (0.5 - bredde / Math.PI) * tabel.H; // nord øverst
@@ -675,6 +681,9 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
     // som glider over i stedets kort på kant km.
     lokalt({ nord, syd, vest, øst, net: lokalNet = [512, 512], kant = 40, detalje = null }) {
       const rad = THREE.MathUtils.degToRad;
+      // Nettet ligger i kuglens egne retninger, hvor kortets midte er længde 0° (midte: Pluto)
+      vest -= midte; øst -= midte;
+      if (detalje) detalje = { ...detalje, vest: detalje.vest - midte, øst: detalje.øst - midte };
       const midt = rad((nord + syd) / 2);
       const l = {
         nord: rad(nord), syd: rad(syd), vest: rad(vest), øst: rad(øst),

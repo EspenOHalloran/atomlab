@@ -680,7 +680,7 @@ export const ORDBOG = [
   {
     id: 'bundet-rotation', ord: 'Bundet rotation',
     former: ['bundet rotation', 'bundne rotation'],
-    tekst: 'Når en måne drejer én gang om sig selv, mens den runder sin planet én gang. Så vender den altid samme side mod planeten. Vores Måne, Phobos og Deimos har bundet rotation. Tidevandskraften har bremset deres drejning.',
+    tekst: 'Når en måne drejer én gang om sig selv, mens den runder sin planet én gang. Så vender den altid samme side mod planeten. Vores Måne, Phobos og Deimos gør det, og Pluto og Charon er bundet begge veje. Tidevandskraften har bremset deres drejning.',
   },
   {
     id: 'regolit', ord: 'Regolit',
@@ -836,5 +836,12 @@ export const ORDBOG = [
     id: 'sublimation', ord: 'Sublimation',
     former: ['sublimation', 'sublimationen', 'sublimerer', 'sublimere'],
     tekst: 'Når et fast stof bliver direkte til luftart uden at smelte først. Tøris gør det ved stuetemperatur. På Merkur forsvinder noget i klippen måske sådan i solheden, og så synker jorden og giver lyse huller.',
+  },
+  // Pluto MP3 (17. november 2026, docs/drejebog-merkur-pluto.md afsnit 4). Tyngdepunktet: 2.126 km fra Plutos midte,
+  // regnet fra NSSDC's masser og afstand (del 8, afsnit 2 og 12). Jorden og Månen: ca. 4.700 km fra Jordens midte.
+  {
+    id: 'faelles-tyngdepunkt', ord: 'Fælles tyngdepunkt',
+    former: ['fælles tyngdepunkt', 'fælles tyngdepunkter'],
+    tekst: 'Det punkt, to himmellegemer kredser om sammen. Det ligger nærmest det tungeste. Jordens og Månens ligger inde i Jorden. Pluto og Charons ligger ude i rummet, ca. 940 km over Plutos overflade, fordi Charon er så stor i forhold til Pluto.',
   },
 ];
