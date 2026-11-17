@@ -17,4 +17,6 @@
 3. **Månen (jeres spørgsmål 7. november 2026):** Man kan dreje rundt om Månen, men lyset følger fasen, så bagsiden kan være mørk. Forslag: en kontakt "Lys på hele Månen" eller "Se bagsiden" (lille). Højdekortet er kun 1k (LOLA findes i højere opløsning, mellem). **Saturn S3** (højder på månerne, [plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md)) og **Jorden og Månen flottere** (se [ideer.md](../ideer.md)).
 4. **Tabletrunden** (6. november 2026): Fund 2-4 hører til G1 i [plan-grafik.md](../plan-grafik.md), M8c del 3 og L2 i [plan-mars.md](../plan-mars.md).
 
+5. **Jeres ønsker 17. november 2026 (ikke planlagt endnu):** Rumrejsen (tyngdekraftsspillet, den oprindelige idé), Planet X/9, et stop ved asteroidebæltet og landing og udforskning på månerne med betingelser for liv. Står i [ideer.md](../ideer.md). Venter på rækkefølge og go.
+
 **Kosmos:** Det seneste (Betelgeuse set fra Jorden, 13. november 2026) står nu i [historikken](../arkiv/historik/solsystemet.md).
