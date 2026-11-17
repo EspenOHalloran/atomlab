@@ -73,7 +73,7 @@ export function startForløb(data, del) {
   const linje = document.createElement('div');
   linje.className = 'forløb-linje';
   linje.setAttribute('role', 'region');
-  linje.setAttribute('aria-label', `Forløb: ${data.titel}`);
+  linje.setAttribute('aria-label', `Tur: ${data.titel}`);
   linje.addEventListener('click', klik);
   skærm.append(linje);
   k = { data, del, skærm, linje, nr: 0, fase: 'gør', gæt: null, visMig: false, vist: [], vink: '' };
@@ -113,7 +113,7 @@ function afslut({ sprunget = false, stille = false } = {}) {
     });
   }
   if (sprunget && !stille) {
-    visBesked({ titel: 'Forløbet er sprunget over', tekst: `Du kan tage "${data.titel}" igen ${del.igen ?? 'fra listen med opgaver (★) eller fra hjælpen (?)'}.`, varighed: 7000 });
+    visBesked({ titel: 'Du er ude af turen', tekst: `Du kan tage "${data.titel}" igen ${del.igen ?? 'fra listen med opgaver (★) eller fra hjælpen (?)'}.`, varighed: 7000 });
   }
 }
 
@@ -251,7 +251,7 @@ function tegn() {
   const prikker = data.trin.map((_, i) => `<i class="${i < k.nr || (i === k.nr && (k.fase === 'så' || slut)) ? 'ja' : ''}${i === k.nr && !slut ? ' nu' : ''}"></i>`).join('');
   let html = `<div class="fl-hoved"><b class="fl-titel">${esc(data.titel)}</b><span class="fl-prikker" aria-hidden="true">${prikker}</span>`
     + `<span class="fl-nr">${slut ? 'Det så du' : `Trin ${k.nr + 1} af ${antal}`}</span>`
-    + (slut ? '' : '<button class="fl-spring" data-nav="spring" title="Ud af forløbet og tilbage til hele skærmen">✕ Ud af forløbet</button>') + '</div>';
+    + (slut ? '' : '<button class="fl-spring" data-nav="spring" title="Ud af turen og tilbage til hele skærmen">✕ Ud af turen</button>') + '</div>';
   const ord = (t.ord ?? []).join(' ');
   let række = '';
   if (k.fase === 'gæt') {

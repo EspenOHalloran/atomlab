@@ -143,7 +143,7 @@
         <span class="kort-ikon ikon-opdagelser" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 9c-3-2-7-2.5-11-2v17c4-.5 8 0 11 2 3-2 7-2.5 11-2V7c-4-.5-8 0-11 2z"/><path d="M16 9v17"/></svg></span>
         <span class="kort-tekst">
           <strong>Opdagelserne</strong>
-          <small>Bladr i bøger om store opdagelser, og se dem selv i AtomLab</small>
+          <small>Videnskabsfolk og deres store opdagelser: Bladr i bøgerne, og prøv det selv</small>
         </span>
       </a>
     </nav>
@@ -156,6 +156,7 @@
       <p class="fremgang-intro">Her kan du se, hvor langt du er nået i hver del.</p>
       <ul class="fremgang-liste" id="fremgangListe"></ul>
       <p class="fremgang-ialt" id="fremgangIalt"></p>
+      <p class="nulstil-linje"><button class="knap lille svag" id="fremgangNulstil">Nulstil al fremgang</button></p>
     </div>
   </div>
 
@@ -424,7 +425,7 @@
     <div class="dialog">
       <header><h3>Molekyler: når atomer mødes</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
-        <p><button class="knap lille" id="hjælpMolekylerForløb">Tag forløbet "Når atomer mødes" ›</button></p>
+        <p><button class="knap lille" id="hjælpMolekylerForløb">Tag turen "Når atomer mødes" ›</button></p>
         <p>Atomer kan hænge sammen på to måder. Du vælger øverst i panelet til venstre.</p>
         <p><strong>Del elektroner:</strong> Træk atomer fra paletten ind i billedet, og slip et atom tæt på et andet. Har begge en elektron uden partner, deler de et elektronpar, og det holder dem sammen. Knappen <em>Knaldgas</em> viser hydrogen og oxygen blive til vand.</p>
         <p><strong>Giv elektroner:</strong> Træk den lysende elektron fra metallet over til det andet atom. Så bliver de til ioner, og plus og minus trækker i hinanden. Til sidst kan du bygge en krystal.</p>
@@ -754,8 +755,8 @@
     </header>
     <aside class="panel side-panel venstre-panel">
       <div class="liv-forløb-liste">
-        <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Forløb 1:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
-        <button class="liv-forløb" id="livForløbOrdene"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Forløb 2:</span> <span class="liv-forløb-navn">Hvad står der i opskriften?</span></span></button>
+        <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 1:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
+        <button class="liv-forløb" id="livForløbOrdene"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 2:</span> <span class="liv-forløb-navn">Hvad står der i opskriften?</span></span></button>
       </div>
       <h4 class="panel-overskrift">Leg frit</h4>
       <div class="liv-niveauer" id="livNiveauer"></div>
@@ -828,7 +829,7 @@
         <p>Når du bygger stigen, holder kun A–T og G–C. I virkeligheden kan G og T godt holde lidt sammen. Det er en af de fejl, der kan ske, når DNA bliver kopieret, og cellen retter de fleste.</p>
         <p>Cellen og cellekernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i cellekernen. Lidt af dit DNA ligger også uden for cellekernen, i mitokondrierne (de orange pølser).</p>
         <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i cellekernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
-        <p>I forløbet "Hvad står der i opskriften?" ligger stigen lige ud, og der er små mellemrum mellem ordene, så de er lette at se. I virkeligheden er stigen snoet, og der er ingen mellemrum: Cellen ved, hvor ordene står, fordi den begynder ved ATG og tæller tre ad gangen. Byggestenene har alle samme farve, og den orange er en, der er blevet skiftet ud.</p>
+        <p>På turen "Hvad står der i opskriften?" ligger stigen lige ud, og der er små mellemrum mellem ordene, så de er lette at se. I virkeligheden er stigen snoet, og der er ingen mellemrum: Cellen ved, hvor ordene står, fordi den begynder ved ATG og tæller tre ad gangen. Byggestenene har alle samme farve, og den orange er en, der er blevet skiftet ud.</p>
       </details>
     </aside>
   </section>
@@ -837,8 +838,8 @@
     <div class="dialog">
       <header><h3>Liv: opskriften</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
-        <p><strong>Forløbet "Opskriften i dig"</strong> viser i fire korte trin, hvad DNA er. Det starter første gang, du åbner Liv. <button class="knap lille" id="livHjælpForløb">Tag forløbet ›</button></p>
-        <p><strong>Forløbet "Hvad står der i opskriften?"</strong> viser i fem korte trin, hvordan cellen læser bogstaverne og bygger et protein, og hvad der sker, når ét bogstav er forkert. <button class="knap lille" id="livHjælpOrdene">Tag forløbet ›</button></p>
+        <p><strong>Turen "Opskriften i dig"</strong> viser i fire korte trin, hvad DNA er. Det starter første gang, du åbner Liv. <button class="knap lille" id="livHjælpForløb">Tag turen ›</button></p>
+        <p><strong>Turen "Hvad står der i opskriften?"</strong> viser i fem korte trin, hvordan cellen læser bogstaverne og bygger et protein, og hvad der sker, når ét bogstav er forkert. <button class="knap lille" id="livHjælpOrdene">Tag turen ›</button></p>
         <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Cellekernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
         <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
         <p><strong>De gule streger</strong> helt tæt på er hydrogenbindinger. De holder A og T sammen med to og G og C med tre.</p>
@@ -989,7 +990,7 @@
       <header><h3>Kosmos</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
         <p>Her kan du se nogle af de vildeste ting, der findes i universet. Vælg en af de fire grupper, og så et fænomen under den. Nederst i billedet står knapperne til det, der kan ske (fx "💥 Lad stjernen eksplodere" eller "Næste"), og under <strong>Styr</strong> øverst til højre i billedet står kontakterne og skyderne. En kontakt er tændt, når den er fyldt og har ✓. Til højre står, hvad du ser: først det vigtigste, og under overskrifterne med ▸ kan du folde mere ud. <strong>Ærligt talt</strong> står altid nederst og fortæller, hvad billedet snyder med.</p>
-        <p><strong>To forløb om tid</strong> (under "Tid" i gruppen Tid og rum): "Rejsen i tid" viser i tre korte trin, hvad der sker med tiden, når man flyver næsten med lysets fart. "Hvordan kan det ske?" viser i fem trin hvorfor, fra en bold i et tog til myonerne fra rummet. <button class="knap lille" data-forloeb="rejsen-i-tid">Rejsen i tid ›</button> <button class="knap lille" data-forloeb="hvordan-kan-det-ske">Hvordan kan det ske? ›</button></p>
+        <p><strong>To ture om tid</strong> (under "Tid" i gruppen Tid og rum): "Rejsen i tid" viser i tre korte trin, hvad der sker med tiden, når man flyver næsten med lysets fart. "Hvordan kan det ske?" viser i fem trin hvorfor, fra en bold i et tog til myonerne fra rummet. <button class="knap lille" data-forloeb="rejsen-i-tid">Rejsen i tid ›</button> <button class="knap lille" data-forloeb="hvordan-kan-det-ske">Hvordan kan det ske? ›</button></p>
         <p><strong>Hvorfor er rummet med i AtomLab?</strong> Fordi atomerne er lavet derude. Hydrogen og helium kom fra Big Bang. Carbon, oxygen og jern blev lavet i stjerner og i deres eksplosioner og spredt ud i rummet, da stjernerne døde. Meget af guldet og uranet blev lavet, da neutronstjerner stødte sammen. Og en neutronstjerne er næsten som én kæmpe atomkerne på størrelse med en by.</p>
         <blockquote class="citat" data-citat="saganKosmos"></blockquote>
         <p><strong>Ærligt talt:</strong> Intet her er i den rigtige størrelse eller det rigtige tempo. Afstandene i rummet er så enorme, at man ikke ville kunne se noget, hvis det var målfast. Og noget tager millioner af år, mens andet sker på et millisekund. Farverne er valgt, så man kan se forskel på tingene. Men det, der <em>sker</em>, er tæt på det, forskerne ved i dag.</p>
@@ -1042,7 +1043,7 @@
       <header><h3>Solsystemet</h3><button class="knap lille luk" data-luk>Luk</button></header>
       <div class="hjælp-indhold">
         <p>Her kan du besøge vores eget solsystem. Vælg en klode til venstre, og under den et sted, en måne eller et forsøg. Nederst i billedet står knapperne til det, der kan ske (fx "▶ Start flyby" og "Næste"), og under <strong>Styr</strong> øverst til højre i billedet står kontakterne og skyderne. En kontakt er tændt, når den er fyldt og har ✓. Til højre står, hvad du ser: først det vigtigste, og under overskrifterne med ▸ kan du folde mere ud. <strong>Ærligt talt</strong> står altid nederst og fortæller, hvad billedet snyder med.</p>
-        <p><strong>Overblikket:</strong> Solsystemet starter med Solen og planeterne, som de står i dag. Tryk på en planet (eller på den i listen), så flyver du derind. Træk i tidsskyderen nederst for at spole tiden: Et helt træk er et år, ⏪ og ⏩ spoler hurtigere (tryk flere gange), og <strong>I dag</strong> går tilbage til i dag. Under <strong>Styr</strong> skifter du skala, og titlen <strong>Solsystemet</strong> øverst fører dig tilbage til overblikket. <strong>💡 Rejs med lyset</strong> sender lyset ud fra Solen i den rigtige skala, og et ur viser, hvor længe det er om at nå hver planet i dag. Forløbet <strong>Rundt om Solen</strong> viser i fire korte trin, hvordan planeterne går rundt, og hvor tomt der er imellem dem. <button class="knap lille" data-forloeb="overblik">Rundt om Solen ›</button></p>
+        <p><strong>Overblikket:</strong> Solsystemet starter med Solen og planeterne, som de står i dag. Tryk på en planet (eller på den i listen), så flyver du derind. Træk i tidsskyderen nederst for at spole tiden: Et helt træk er et år, ⏪ og ⏩ spoler hurtigere (tryk flere gange), og <strong>I dag</strong> går tilbage til i dag. Under <strong>Styr</strong> skifter du skala, og titlen <strong>Solsystemet</strong> øverst fører dig tilbage til overblikket. <strong>💡 Rejs med lyset</strong> sender lyset ud fra Solen i den rigtige skala, og et ur viser, hvor længe det er om at nå hver planet i dag. Turen <strong>Rundt om Solen</strong> viser i fire korte trin, hvordan planeterne går rundt, og hvor tomt der er imellem dem. <button class="knap lille" data-forloeb="overblik">Rundt om Solen ›</button></p>
         <p><strong>Listen</strong> starter med overblikket og går så fra Solen og udad: Solen, Jorden, Mars, Jupiter og Saturn. Flere planeter kommer senere, og Jupiter bliver bygget lige nu. Under kloden står dens <strong>steder</strong> og <strong>måner</strong>, som kameraet flyver hen til, og dens <strong>forsøg</strong> (fx årstiderne og formørkelser), hvor du ser en model, der ikke er i den rigtige størrelse. Øverst står vejen derhen (fx Mars › Olympus Mons). Tryk på kloden for at komme tilbage.</p>
         <p><strong>Flyby:</strong> Ved Mars og Saturn kan du trykke "▶ Flyby" øverst i listen eller "▶ Start flyby" nederst i billedet. Kameraet flyver fra stop til stop, og du trykker "Næste" nederst i billedet, når du er klar. "‹" går et stop tilbage, og et tryk på en af prikkerne springer derhen. Ved Mars flyver du ned til vulkanen Olympus Mons og videre til Tharsis-vulkanerne, kløfterne i Valles Marineris, krateret Hellas, kraterne Gale og Jezero, hvor roverne landede, og nordpolen. Ved hvert stop kigger du skråt mod horisonten og kan selv dreje rundt. Når du ser hele Mars, kan du også trykke på et navn på kloden. Ved Gale kan du trykke "🧍 Stå på Mars" (eller et af stederne med 🧍 under Gale og Jezero i listen) og stå på jorden, hvor Curiosity og Perseverance har kørt: Drej hovedet med fingeren eller musen, zoom som med en kikkert, og skub klokken frem til solnedgang. Ved Naukluft og landingsstedet kan du slå "📷 Roverens foto" til under Styr og se roverens eget foto fra samme sted.</p>
         <p><strong>Jorden lige nu:</strong> Ved Jorden passer lyset med datoen og klokken. Den lyse side har dag, og Månen står, hvor den er i dag, med den rigtige månefase. Uret nederst i billedet viser tiden i Danmark. Tryk ⏩ nederst til højre, så går tiden ca. 800 gange hurtigere.</p>
@@ -1117,6 +1118,7 @@
     <header class="topbjælke">
       <a class="knap lille" href="#">‹ Menu</a>
       <h2>Opdagelserne</h2>
+      <span class="system-status">Videnskabsfolk og deres store opdagelser</span>
       <div class="topknapper">
         <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
         <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
@@ -1142,7 +1144,7 @@
         <p><span class="kugle neutron lille"></span> <strong>Neutroner</strong> har ingen ladning. De er en slags lim, der holder kernen sammen, for protonerne frastøder hinanden. Atomer af samme grundstof med forskelligt antal neutroner kaldes <strong>isotoper</strong>.</p>
         <p><span class="kugle elektron lille"></span> <strong>Elektroner</strong> er minusladede og meget lettere. De befinder sig i skaller rundt om kernen. Har atomet for mange eller for få elektroner, kaldes det en <strong>ion</strong>.</p>
         <p><strong>Massetal</strong> = protoner + neutroner. Carbon-14 har 6 protoner og 8 neutroner.</p>
-        <p><button class="knap lille" id="hjælpForløb">Tag forløbet "Dit første atom" ›</button></p>
+        <p><button class="knap lille" id="hjælpForløb">Tag turen "Dit første atom" ›</button></p>
         <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Det virker i hele AtomLab. Alle fagordene står også i <a href="#ordbog">Ordbogen</a>.</p>
         <h4 id="hjælpRadioaktivitet">Hvad er radioaktivitet, og hvorfor er det farligt?</h4>
         <p>Et stof er <strong>radioaktivt</strong>, når dets atomkerner er ustabile: De har for mange eller for få neutroner, eller de er simpelthen for store. Før eller siden henfalder kernen og skyder noget ud. Det er <strong>strålingen</strong>:</p>

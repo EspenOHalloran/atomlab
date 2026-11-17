@@ -114,4 +114,41 @@ Flere fælder: "Hypotheses non fingo" og "Regulae philosophandi" kom først i 2.
 5. S. 401, 405 og 411 er kun læst i OCR-teksten.
 
 ## Opus' noter
-*(skrives, når bogen skal bygges)*
+*Skrevet 17. november 2026 af Opus (effort høj) efter Fables fil. Regnet efter: månetesten med Newtons egne tal (15,01 fod, som Fable skriver), med tal fra i dag (1,36 mm pr. sekund, 4,90 m pr. minut, ca. 1 % fra 4,9 m / 3.600 · 60²), Picards omkreds (40.036 km) og afstand³ / tid² for Jupiters måner (23,96 millioner for både Io og Callisto). Det passer alt sammen. Programmets tekster er læst (`overblik` i `js/data/sider/overblik.js` og månerne i `js/data/sider/jupiter.js`). Jeres svar står under noterne.*
+
+**Det, der er nyt (planen vidste det ikke):**
+- **Månetesten er en halv side, og den kan en 13-årig følge.** Den er bogens gåde, ikke kun dens historie.
+- **Tallet 60 står der to gange**, og det er derfor, Newtons sætning er så smuk: Månen er 60 jordradier væk, så tyngden er 60 × 60 gange svagere. Og et fald vokser med tiden ganget med sig selv, så på 60 sekunder falder man 60 × 60 gange længere end på ét. Derfor falder Månen på ét minut lige så langt, som stenen falder på ét sekund.
+- **Reolen hænger sammen på siderne:** s. 402-403 bruger Galileis fire måner, og s. 407 bruger Huygens' tal ("Hugenius"). Når et glødende sted nævner en bog på hylden, kan der stå en lille knap til den bog (et forslag til drejebogen, ikke spurgt endnu).
+- **Titelbladet** har Samuel Pepys' tilladelse ("IMPRIMATUR S. PEPYS"). Ham kender nogle fra dagbogen. En linje til "For nørder".
+- **Oversættelserne passer ikke til siderne** (de bygger på 3. udgave). Vi oversætter selv fra førsteudgaven.
+
+**Hvor jeg er uenig eller vil rette:**
+1. **Kernesætning A** siger "jeg kan selv se, at planeterne tættest på Solen går hurtigst". Det vidste Kepler i 1619, så barnet kan tro, at Newton fandt det. Mit forslag: *"Det, der får en sten til at falde, er det samme, som holder Månen i dens bane. Newton regnede efter, og tallene passede, og jeg kan selv se den samme kraft styre planeterne om Solen."* B bliver wow-øjeblikket i forløbet, som Fable skriver.
+2. **Forløbet** bliver for langt med et gæt, kanonkuglen og så fire regnetrin (seks trin og mange tal). Mit forslag er fire trin (højst fem minutter, gæt i to af dem). De rigtige tal kommer i gåden bagefter:
+   1. **Gæt:** "Hvorfor falder Månen ikke ned?" (*Den er for langt væk* / *Den falder hele tiden* / *Noget holder den oppe*.)
+   2. **Kanonkuglen fra bjerget:** Barnet skruer op for farten, til kuglen går hele vejen rundt. Wow: Den falder hele tiden, den rammer bare aldrig.
+   3. **Gæt:** "Månen er 60 gange så langt fra Jordens midte som vi. Hvor meget svagere er tyngden dér?" (*60 gange* / *600 gange* / *3.600 gange*.)
+   4. **Månetesten som ét billede:** to ure. Stenen falder 4,9 m på ét sekund, og Månen falder 4,9 m væk fra den lige linje på ét minut. Så kernesætningen.
+3. **Kanonkuglen:** Fable skriver (efter hukommelsen), at tegningen er fra *A Treatise of the System of the World* (1728). Efter min hukommelse er den bog netop den "folkelige" udgave af bog III, som Newton selv nævner på s. 401, at han skrev først og lagde væk. Den blev trykt året efter hans død. Passer det, kan "Ærligt talt" sige: "Tegningen af kuglen er fra den lette udgave, han skrev først. Den kom først på tryk efter hans død." **Ret sikker, efter hukommelsen.** Slås op i drejebogen, og findes der en fri skanning, kan figuren være et ekstra opslag i "Bogen selv".
+4. **Tegningernes stil** mangler. Mit forslag: bogens egne træsnit, altså tynde sorte linjer, buer og store bogstaver ved punkterne (A, B, C) på lyst papir. Drejebogen udpeger en figur i skanningen at gå efter.
+5. **Gør det selv:** Jeg er enig i overblikket. Linjen skal give Kepler hans del: *"Træk i tiden. Merkur når fire omgange, mens Jorden går én. Det vidste Kepler. Newton fandt grunden: Tættest på Solen trækker tyngden hårdest, så dér skal man hurtigst rundt for ikke at falde ind."* (365,26 / 87,97 = 4,15.)
+6. **De ½ % og Westfall (afsnit 9, punkt 1):** De kommer ikke med i bogen, heller ikke under "For nørder". Det er for fint til en 13-årig, og vi har ikke selv læst Westfall.
+7. **Udfordringen med tabellen s. 403** (afstand³ / tid²) er god, men tunge tal for en 13-årig, og bogen har allerede en gåde. Jeg vil sætte den under "For nørder" ved opslag A og bruge programmets afstande (421.800, 671.100 km, 1,07 og 1,88 mio. km), ikke Fables, så tallene passer med det, barnet ser ved Jupiter.
+8. **Halley og bogen om fisk (afsnit 9, punkt 2):** Efter min hukommelse også rigtigt (Royal Society havde brugt pengene på Willughbys *Historia Piscium*, 1686). Men det står kun i hukommelsen, og en sjov historie skal slås op, før den kommer med.
+
+**Siderne til bogens fem lag** (billedet `nX` i archive.org-id `philosophiaenat00newt`):
+| Lag | Hvad | Sider |
+|---|---|---|
+| 1. Forsiden | Knellers portræt fra 1689 med filteret, "1643-1727" (ny kalender), titel fx "Månen falder" | (titelbladet `n6` kan være forsidens baggrund) |
+| 2. Fortællingen | Vores egne tegninger i stil med bogens figurer: bjerget og kuglen, Jorden og Månen, de to ure | |
+| 3. Gåden | Månetesten med Newtons egne tal (60 jordradier, 27 døgn 7 timer 43 minutter, 15 1/12 Paris-fod) og så regnestykket med tal fra i dag (afsnit 6): de 1,4 mm | S. 406-407 (`n403`, `n404`) ved siden af |
+| 4. Gør det selv | Solsystemets overblik med tidsskyderen. Mulighed B (Jupiter → Månerne) er Galileis sted, så den bruges ikke to gange | |
+| 5. Bogen selv | Opslag A: s. 402-403 (`n399`, `n400`, hypotese II og V og tabellen over Jupiters måner, med en knap til Galileis bog). B: s. 406-407 (`n403`, `n404`, månetesten, de fire glødende steder, med en knap til Huygens' bog). Ekstra: titelbladet (`n6`) og s. 401 (`n398`, "på en folkelig måde"), som først skal læses som billede | `n6`, `n398`-`n400`, `n403`, `n404` |
+
+**Det, der skal laves i drejebogen:** slå kanonkuglen op (punkt 3), vælg en figur til stilen (punkt 4), og læs s. 401 og titelbladet som billeder.
+
+## Jeres svar (17. november 2026)
+1. **Kernesætningen:** Opus' udgave af A: "Det, der får en sten til at falde, er det samme, som holder Månen i dens bane. Newton regnede efter, og tallene passede, og jeg kan selv se den samme kraft styre planeterne om Solen." B ("Månen falder hele tiden …") er wow-øjeblikket i forløbet.
+2. **Månetesten:** Forløbet har fire trin (to gæt, kanonkuglen og månetesten som ét billede med to ure). Hele regnestykket med Newtons egne tal er bogens gåde bagefter, og tabellen over Jupiters måner står under "For nørder".
+3. Gør det selv, tegningernes stil og siderne til de fem lag tages som i Opus' noter, til drejebogen viser andet.

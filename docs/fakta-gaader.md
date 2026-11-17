@@ -20,7 +20,7 @@
 | Planet 9 ("Planet X") | Intet, før Solsystemets overblik findes | **Nr. 7, sammen med overblikket.** En gåde, der måske bliver løst, mens brugeren går i skole (Rubin-teleskopet) |
 | Hubble-spændingen | Intet | **Ikke et kort.** Kræver, at man forstår to måder at måle Universets udvidelse på. Et afsnit "For nørder" på kortet om mørk energi |
 | Neutrinoens masse | Supernova, betahenfald | **Ikke et kort.** Svært at gøre spændende for en 13-årig. En linje på kortet om stof og antistof |
-| Kvantetyngdekraft | Intet | **Ikke et kort.** Den er svaret på "Hvordan finder vi ud af det?" på kortet om det sorte hul |
+| Kvantetyngdekraft | Intet | **Ikke et kort.** Den er svaret på "Hvordan finder vi ud af det?" på kortet om det sorte hul. **Ændret 17. november 2026:** Kortet "Hvordan virker tyngdekraften i det allermindste?" kommer senere med faktagrundlaget i [fable/E19-tyngdekraft.md](fable/E19-tyngdekraft.md) |
 
 **Ærligt om de fem:** To af dem handler om liv. De skal skilles tydeligt: "Er vi alene?" (hvor) og "Hvordan begyndte livet?" (hvordan). Og tre af de fem (sort hul, antistof og mørkt stof) har svar, som ingen ved, om man nogensinde får. Det skal siges, og det er en del af pointen.
 

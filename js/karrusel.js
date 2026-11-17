@@ -9,7 +9,7 @@
 import { ROLIG, LAV_KVALITET, centrerVindue, passerTil } from './scene3d.js';
 import { lavMenuBaggrund, startMenuBaggrund, stopMenuBaggrund, baggrundTest } from './menubaggrund.js';
 import { VERDENER } from './skaerme.js';
-import { forløbTaget } from './fremgang.js';
+import { forløbTaget, nulstilFremgang } from './fremgang.js';
 import { forløbI } from './data/forloeb/liste.js';
 import { åbnForløb } from './gaa.js';
 
@@ -217,6 +217,13 @@ export function lavKarrusel({ fremgang, radius }) {
   const dialog = document.getElementById('dinFremgang');
   dialog.addEventListener('click', (h) => {
     if (h.target === dialog || h.target.closest('[data-luk]')) dialog.classList.add('skjult');
+  });
+  // "Nulstil al fremgang" (jeres ønske 17. november 2026, før kun i Værkstedets hjælp). Siden hentes igen,
+  // så alle skærme, der allerede er hentet, starter forfra med den tomme fremgang.
+  document.getElementById('fremgangNulstil').addEventListener('click', () => {
+    if (!confirm('Vil du slette al din fremgang? Løste opgaver, opdagede grundstoffer og de ture, du har taget, starter forfra.')) return;
+    nulstilFremgang();
+    location.reload();
   });
 }
 
@@ -523,7 +530,7 @@ function visDinFremgang() {
         const knap = document.createElement('button');
         knap.innerHTML = '<span class="ff-mærke"></span><span class="ff-navn"></span><span class="ff-tal"></span>';
         knap.querySelector('.ff-mærke').textContent = taget ? '✓' : '▶';
-        knap.querySelector('.ff-navn').textContent = `Forløb: ${f.titel}`;
+        knap.querySelector('.ff-navn').textContent = `Tur: ${f.titel}`;
         knap.querySelector('.ff-tal').textContent = taget ? 'taget' : 'ikke taget endnu';
         knap.addEventListener('click', () => {
           document.getElementById('dinFremgang').classList.add('skjult');
