@@ -137,6 +137,11 @@
 
 **Faktatjek:** Omløbstiden 84 år og aksen, der peger samme vej i rummet, Jordens akse ca. 23°, ingen fast overflade og en kappe af vand, ammoniak og metan. Kilderne står i [fakta-solsystemet/del6-uranus-og-neptun.md](fakta-solsystemet/del6-uranus-og-neptun.md), "Faktatjek UN5".
 
+## Venus: "Hvorfor er Venus varmere end Merkur?", "Hvorfor drejer Venus baglæns?" og "Kan der være liv i skyerne?" ✅ (17. november 2026, Venus V5)
+**Hvor:** Emnerne "Hvilken planet er varmest?", "Et døgn, der er længere end et år?" og "Skyer, der løber om kap" i Solsystemet (`venusMerkur`, `venusBaglaens` og `venusLiv` i `js/data/hvorfor.js`).
+
+**Faktatjek:** Kilderne står i [fakta-solsystemet/del7-venus.md](fakta-solsystemet/del7-venus.md), afsnit 12 (Merkur: NASA via del 8, drejningen: Wikipedia "Venus", fosfin og de tørre dråber: Fables tjek E18, afsnit 5).
+
 ## 17-19. Oxygens elektroner: "Hvorfor har oxygen to elektroner uden partner?", "Har oxygen altid 6 elektroner yderst?" og "Hvad sker der med elektronerne i O₂?" ✅ (8. november 2026, Molekyler)
 **Hvor:** "Del elektroner" i Atomværkstedet (`bygUdenPartner`, `bygOxygenAndre`, `bygO2` i `js/data/hvorfor.js`). Knappen står i panelet, når der er ét atom alene (`bygUdenPartner`), og når O₂ er færdigt (`bygO2`). Brugerens spørgsmål: "Hvorfor har oxygenet to elektroner uden partner? Kan den have kun 6 elektroner? Hvornår forekommer det? Og når den bliver til O₂, deler de så de to elektroner?"
 

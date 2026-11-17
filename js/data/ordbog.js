@@ -766,6 +766,18 @@ export const ORDBOG = [
     tekst: 'Når luften om en planet drejer rundt meget hurtigere end planeten selv. På Venus suser toppen af skyerne rundt på ca. 4 jorddøgn, mens Venus selv er 243 jorddøgn om at dreje én gang.',
   },
   {
+    id: 'radar', ord: 'Radar',
+    former: ['radar', 'radaren', 'radarens'],
+    // Venus V5. Magellan kortlagde 98 % af Venus med radar fra 1990 til 1992 (NASA, Fables tjek E18)
+    tekst: 'En måde at "se" med radiobølger. Man sender bølgerne ud og måler, hvad der kommer tilbage, og hvor lang tid det tager. Radiobølger går gennem skyer, så rumsonden Magellan kunne kortlægge jorden på Venus gennem de tykke skyer.',
+  },
+  {
+    id: 'drivhuseffekt', ord: 'Drivhuseffekt',
+    former: ['drivhuseffekt', 'drivhuseffekten'],
+    // Venus V5. NSSDC: Jorden ca. 288 K mod 254-255 K uden drivhuseffekt (ca. 33 °C), Venus 737 K mod 226,6 K (510 °C)
+    tekst: 'Når luften lukker sollyset ind, men holder på varmen, som jorden stråler ud igen. Kuldioxid og vanddamp gør det. På Jorden gør drivhuseffekten det ca. 33 °C varmere. På Venus gør den tykke luft af kuldioxid jorden over 500 °C varmere.',
+  },
+  {
     id: 'solplet', ord: 'Solplet',
     former: ['solplet', 'solpletten', 'solpletter', 'solpletterne'],
     // Solen (feedback nr. 3, 16. november 2026): kernen ca. 3.800-4.000 K mod overfladens 5.772 K
