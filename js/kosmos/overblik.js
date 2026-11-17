@@ -192,7 +192,6 @@ export default {
     grupper: [{
       navn: 'Kort besøg',
       punkter: [
-        { id: 'merkur', navn: 'Merkur', ikon: '⚫', undertitel: 'Den inderste planet' },
         { id: 'pluto', navn: 'Pluto', ikon: '⚪', undertitel: 'En dværgplanet' },
       ],
     }],
@@ -535,7 +534,6 @@ export default {
         return;
       }
       const id = nærmest(h.clientX, h.clientY);
-      if (id && vis.besøg && forløb.besøgTryk(id)) return; // Merkur er mat på vejen "Besøg en planet"
       if (id) besøg(id);
     };
     lærred.addEventListener('pointerdown', vedNed);
@@ -587,7 +585,7 @@ export default {
       return solRet.multiplyScalar(Math.cos(50 * GRAD)).addScaledVector(side, Math.sin(50 * GRAD)).addScaledVector(op, k.p.id === 'saturn' ? -0.35 : 0.3).normalize();
     }
 
-    // Besøg en klode: Merkur og Pluto er steder i overblikket, de andre (og Solen) har deres egen visning
+    // Besøg en klode: Pluto er et sted i overblikket, de andre (og Solen) har deres egen visning (Merkur fra MP2)
     function besøg(id, hop = false) {
       if (flyvning?.slags === 'ind') return;
       lys.stop();

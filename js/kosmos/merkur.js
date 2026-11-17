@@ -1,8 +1,9 @@
 // Merkur (docs/drejebog-merkur-pluto.md). MP1: kortet, højderne og skelettet. Kloden er MESSENGERs kort over hele
-// Merkur med højderne (klippeplanet.js som Mars og Venus), i gråtoner med et svagt brunt skær. MP2 bringer stederne
-// (Caloris, de lyse huller og isen ved Nordpolen), tegningen af Solen, der vender om, flybyen og siderne. Står i
-// Solsystemet før Venus (efter afstanden til Solen). Tallene står i docs/fakta-solsystemet/del8-merkur-og-pluto.md og
-// js/data/merkur.js.
+// Merkur med højderne (klippeplanet.js som Mars og Venus), i gråtoner med et svagt brunt skær. MP2: stederne (Caloris,
+// de lyse huller i Raditladi og isen ved Nordpolen) med navne på kloden, kontakten "Isen (set med radar)", tegningen af
+// Solen, der vender om (js/kosmos/merkur-sol.js), og flybyen med 6 stop (teksterne i js/data/sider/merkur.js). Står i
+// Solsystemet før Venus (efter afstanden til Solen). Tallene står i docs/fakta-solsystemet/del8-merkur-og-pluto.md,
+// js/data/merkur.js og js/data/merkur-sol.js.
 //
 // - 1 enhed = 1.000 km. Kuglen har radius 2.439,4 km som MESSENGERs kort (højderne er målt fra den).
 // - Systemet ligger i ekliptikkens retninger (som Venus). Aksen peger mod IAU's nordpol, og kortets længde 0° står W
@@ -13,18 +14,27 @@
 // - Kortet er fotos med skygger fra en lav sol (lav_merkur.py). Ved polerne er bunden af kraterne sort, for den får
 //   aldrig sol (evig skygge). Klippeplaneten kaster ingen skygger selv, så kortet bærer dem. Over 72° bruges polkortene
 //   (set lige ovenfra), for i det almindelige kort bliver polerne slørede med stråler (målt i MP1).
-// - Indstillinger: "Bjergene 10 gange højere".
+// - Stederne: Datoen glider med flyvningen hen til det tidspunkt, hvor Solen står fra samme side som i MESSENGERs
+//   fotos ved stedet (så skyggerne i kortet og vores lys ikke går imod hinanden), og tiden står stille, når man er der
+//   (▶ lader lyset gå rundt). Ved polen står Solen altid kun et par grader oppe.
+// - Isen (MP2): Arecibos radarbillede af nordpolen (lav_merkur_is.py) lagt på kloden som en gul farve, der lyser af sig
+//   selv (isen ligger i evig skygge). Det er radarens pletter, ikke et foto af isen.
+// - Indstillinger: "Isen (set med radar)", "Bjergene 10 gange højere" og "Navne".
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, ROLIG, passerTil } from '../scene3d.js';
-import { glød } from './faelles.js';
+import { glød, skilt } from './faelles.js';
 import { lavKlippeplanet } from '../solsystem/klippeplanet.js';
 import { lavRejse } from '../solsystem/rejse.js';
+import { navneTil, navneKnap } from '../solsystem/navne.js';
+import { lavFlyby } from '../solsystem/flyby.js';
+import { lavSolTegning } from './merkur-sol.js';
 import { hent, glem, iLager } from '../solsystem/hent.js';
 import { startDato } from '../solsystem/dato.js';
 import { lavHentebjælke, tonInd } from '../hentning.js';
 import { MERKUR, pol, knude, solRetning, meridian, underSolen } from '../data/merkur.js';
-import { SIDE, SIDER } from '../data/sider/merkur.js';
+import { datoMedTimevinkel, timevinkel, dobbeltSolopgang, solHøjde } from '../data/merkur-sol.js';
+import { SIDE, SIDER, TUR, TUR_SLUT } from '../data/sider/merkur.js';
 
 const S = 1000; // km pr. enhed
 const R_KM = MERKUR.radius; // 2.439,4 km (kortenes kugle)
@@ -47,7 +57,32 @@ const GRÅ = [0.17, 0.15, 0.13]; // farven, hvis kortet ikke kan hentes (fx uden
 const ANISOTROPI = 16;
 // Polkortene (lav_merkur.py): Merkur set lige ovenfra fra hver pol ned til 70° (stereografisk). Kuglens shader bruger
 // dem fra 72° og helt over fra 75° (klippeplanet.js, POL_GLSL), for over polen giver kortet stråler (målt i MP1).
-const POL = { rmax: Math.tan((10 * Math.PI) / 180), fra: 72, til: 75 };
+const POL = { rmax: Math.tan((10 * Math.PI) / 180), fra: 72, til: 75, is: true };
+// Radarens is: farven (gul som på NASA's billeder), og hvor meget den dækker kortet
+const IS_FARVE = [0.95, 0.68, 0.04];
+const IS_STYRKE = 0.9;
+
+// Stederne (MP2, jeres svar på E16: Caloris, de lyse huller og isen ved Nordpolen). Bredde og østlig længde fra USGS'
+// navneliste (planetarynames.wr.usgs.gov, som skriver længden mod vest: Ø = 360° − V). timevinkel: hvor Solen står,
+// når man er der (grader, 0 = middag, negativ = formiddag med Solen mod øst). Den er valgt efter skyggerne i MESSENGERs
+// fotos ved stedet: Ved Caloris kom lyset fra øst og i Raditladi fra vest (set i kortet). kompas: hvorfra kameraet
+// kigger (180 = fra syd), vinkel: over horisonten, størrelse: radius af det, der skal være i billedet (1 = 1.000 km).
+// skilt: navnet på kloden (stedets rigtige navn). Rachmaninoff og Hokusai er kun navne på kloden (ikke i træet).
+export const STEDER = [
+  { id: 'caloris', navn: 'Caloris', skilt: 'Caloris', bredde: 31.65, længde: 161.98, timevinkel: -72, kompas: 200, vinkel: 52, størrelse: 0.62 },
+  { id: 'huller', navn: 'De lyse huller', skilt: 'Raditladi', bredde: 27.15, længde: 119.06, timevinkel: 66, kompas: 180, vinkel: 55, størrelse: 0.17 },
+  { id: 'is', navn: 'Is ved Nordpolen', skilt: 'Prokofiev', bredde: 85.77, længde: 62.92, timevinkel: 0, kompas: 330, vinkel: 32, størrelse: 0.2 },
+  { id: 'rachmaninoff', navn: 'Rachmaninoff', skilt: 'Rachmaninoff', bredde: 27.66, længde: 57.37, timevinkel: -60, kompas: 180, vinkel: 50, størrelse: 0.22, kunNavn: true },
+  { id: 'hokusai', navn: 'Hokusai', skilt: 'Hokusai', bredde: 57.84, længde: 16.65, timevinkel: -40, kompas: 180, vinkel: 55, størrelse: 0.6, kunNavn: true },
+];
+// Træet i listen til venstre: de tre steder og tegningen af Solen, der vender om (flybyen står øverst)
+const TRÆ = {
+  rod: 'merkur',
+  grupper: [
+    { navn: 'Steder', punkter: STEDER.filter((st) => !st.kunNavn).map((st) => ({ id: st.id, navn: st.navn, undertitel: 'Et sted på Merkur' })) },
+    { navn: 'Himlen', punkter: [{ id: 'solen', navn: 'Solen vender om', undertitel: 'Solen set fra Merkurs ækvator' }] },
+  ],
+};
 
 export default {
   id: 'merkur',
@@ -55,18 +90,18 @@ export default {
   ikon: '🌑',
   tåger: false, // vores eget solsystem: sort himmel med stjerner
   undertitel: 'Planeten nærmest Solen',
-  træ: { rod: 'merkur', grupper: [] }, // stederne kommer i MP2
+  træ: TRÆ,
   kamera: { retning: [0.2, 0.15, 1], radius: R_KM / S },
   tal: [
     ['Merkurs bredde', 'ca. 4.900 km'],
     ['Én omgang om sig selv', 'ca. 59 jorddøgn'],
-    ['Fra solopgang til solopgang', 'ca. 176 jorddøgn'],
+    ['Fra solopgang til solopgang', '176 jorddøgn'],
     ['Et år', 'ca. 88 jorddøgn'],
   ],
   side: SIDE, // teksten i højre panel (js/data/sider/merkur.js)
   sider: SIDER,
 
-  lav(gruppe, { opdaterKnapper, verden }) {
+  lav(gruppe, { opdaterKnapper, verden, fase, forklaring, overlag, tiden }) {
     const { kamera } = verden;
     const orbit = verden.styring;
     const gammelt = { min: orbit.minDistance, max: orbit.maxDistance, nær: kamera.near, zoom: orbit.zoomSpeed, drej: orbit.rotateSpeed };
@@ -78,6 +113,9 @@ export default {
     let anisotropi = Math.min(ANISOTROPI, verden.renderer.capabilities.getMaxAnisotropy());
     let hurtig = false;
     let høj = false;
+    let isTil = false; // "Isen (set med radar)"
+    let fIs = 0; // glider mod 0 eller 1
+    let turHurtig = false; // flybyen slog ⏩ til
     let aktiv = true;
 
     // ---------- Datoen og Solen ----------
@@ -141,6 +179,8 @@ export default {
       hent(`merkur-pol-${navn}-2k.jpg`, (t) => { merkur.sætPolKort(nord, t); hentet.pol[navn + 'Kort'] = true; }, { farve: false, kanaler: 1, anisotropi: 4, rundt: false });
       hent(`merkur-pol-${navn}-hoejde-1k.png`, (t) => { merkur.sætPolHøjde(nord, t); hentet.pol[navn + 'Højde'] = true; }, { farve: false, kanaler: 2, rundt: false });
     }
+    // Radarens is ved nordpolen (1k, ca. 6 KB, i polkortets projektion)
+    hent('merkur-is-nord-1k.png', (t) => { merkur.sætPolIs(t); hentet.is = true; }, { farve: false, kanaler: 1, rundt: false });
 
     // Solen: en lille, skarp prik langt væk i lysets retning (fra Merkur ser den ca. 2,6 gange så stor ud som fra Jorden)
     const solKerne = glød(new THREE.Color(3, 2.85, 2.5), LAV_KVALITET ? 0.05 : 0.04);
@@ -175,27 +215,208 @@ export default {
     // Startbilledet: set fra Solens side, lidt fra siden og oven over ekliptikken, så grænsen mellem dag og nat ses
     const Y = new THREE.Vector3(0, 1, 0);
     const START = sol.clone().applyAxisAngle(Y, 60 * GRAD).addScaledVector(Y, 0.2).normalize();
-    const helPlanet = (retning) => rejse.flyv({ fokus: () => nulPunkt, afstand: passer(R), retning, min: minOverblik(), max: R * 15 });
+    const helPlanet = (retning, færdig, afstand = R) => rejse.flyv({ fokus: () => nulPunkt, afstand: passer(afstand), retning, min: minOverblik(), max: R * 15, færdig });
     const kamPos = new THREE.Vector3();
     function kameraRetning() {
       rejse.kameraPunkt(kamPos);
       return kamPos.lengthSq() < 1e-9 ? START.clone() : kamPos.normalize();
     }
-    let visning = 'merkur'; // 'merkur' (hele kloden) eller 'test' (kigPå)
-    // Træet: "Merkur" flyver tilbage til hele kloden (stederne kommer i MP2)
-    function gåTil() {
-      visning = 'merkur';
-      helPlanet(kameraRetning());
+    // 'merkur' (hele kloden), et steds id, 'solen' (flybyens stop med tegningen af Solen) eller 'test' (kigPå)
+    let visning = 'merkur';
+
+    // ---------- Stederne (MP2) ----------
+    const steder = STEDER.map((st) => ({ ...st, ramme: merkur.sted(st.bredde, st.længde) }));
+    const stedMed = (id) => steder.find((st) => st.id === id);
+    const stedPunkt = new THREE.Vector3();
+    const stedOp = new THREE.Vector3();
+    const fokusVed = (st) => () => merkur.punkt(st.ramme.retning, stedPunkt).multiplyScalar(R).applyQuaternion(planetDrejning());
+    const opVed = (st) => () => stedOp.copy(st.ramme.op).applyQuaternion(planetDrejning());
+    // Retningen fra stedet mod kameraet (i systemets retninger), når Merkur står, som den gør på datoen ms
+    function fraSted(st, ms) {
+      const { op, nord, øst } = st.ramme;
+      const a = st.kompas * GRAD, v = st.vinkel * GRAD;
+      const q = new THREE.Quaternion().setFromAxisAngle(Y, (meridian(new Date(ms)) % 360) * GRAD).premultiply(hæld.quaternion);
+      return new THREE.Vector3()
+        .addScaledVector(nord, Math.cos(v) * Math.cos(a))
+        .addScaledVector(øst, Math.cos(v) * Math.sin(a))
+        .addScaledVector(op, Math.sin(v))
+        .applyQuaternion(q);
+    }
+    let datoTur = null; // datoen glider hen til tidspunktet ved stedet, mens kameraet flyver
+    // Flyv hen til et sted. Datoen glider til timevinklen ved stedet, og tiden står stille, når man er der.
+    function besøg(st, færdig) {
+      tiden?.('pause');
+      const til = datoMedTimevinkel(dato, st.længde, st.timevinkel);
+      datoTur = { fra: dato, til };
+      visning = st.id;
+      // Man kan selv zoome ud til 3.000 km, og mindst en fjerdedel længere ud end stedet
+      const afstand = passer(st.størrelse);
+      rejse.flyv({ fokus: fokusVed(st), op: opVed(st), afstand, retning: fraSted(st, til), min: 0.002, max: Math.max(3, afstand * 1.25), færdig });
+    }
+
+    // ---------- Solen, der vender om (flybyens stop 4, js/kosmos/merkur-sol.js) ----------
+    // Stedet på ækvator, hvor Solen står op ved det perihel, der er nærmest datoen (det skifter mellem ca. 90° V og
+    // 90° Ø fra gang til gang). Datoen glider til ca. 10 døgn før perihel, og tiden går et døgn i sekundet (▶).
+    let solopgang = null; // js/data/merkur-sol.js: dobbeltSolopgang
+    const solTegning = lavSolTegning({ overlag: overlag(), igen: () => { if (!solopgang) return; sætDato(solopgang.start); tiden?.('spil'); } });
+    function tilSolen() {
+      tiden?.('pause');
+      solopgang = dobbeltSolopgang(dato);
+      const st = { id: 'solen', ramme: merkur.sted(0, solopgang.længde), kompas: 180, vinkel: 35 };
+      datoTur = { fra: dato, til: solopgang.start };
+      visning = 'solen';
+      const afstand = passer(0.7);
+      rejse.flyv({
+        fokus: fokusVed(st), op: opVed(st), afstand, retning: fraSted(st, solopgang.start), min: 0.002, max: Math.max(3, afstand * 1.25),
+        færdig: () => { if (visning === 'solen') tiden?.('spil'); },
+      });
+    }
+
+    // Træet: "Merkur" flyver tilbage til hele kloden, og et sted flyver derhen
+    function gåTil(id) {
+      if (id === visning) return;
+      flyby.afslut();
+      tilbageTilSpil();
+      vis(id);
+      fase(null);
+      forklaring('');
+    }
+    // Flyv hen til et sted i træet (også fra flybyen og navnene)
+    function vis(id, færdig) {
+      if (id === 'merkur') {
+        visning = 'merkur';
+        datoTur = null;
+        tiden?.('spil'); // hele Merkur drejer igen
+        helPlanet(kameraRetning(), færdig);
+      } else if (id === 'solen') tilSolen();
+      else {
+        const st = stedMed(id);
+        if (st) besøg(st, færdig);
+      }
+      opdaterNavne();
+    }
+    // Slår ⏩ fra igen, hvis flybyen slog det til
+    function tilbageTilSpil() {
+      if (!turHurtig) return;
+      turHurtig = false;
+      if (hurtig) tiden?.('spil');
+    }
+    function sætDato(ms) {
+      dato = ms;
+      drejTil(dato);
+      sol.set(...solRetning(new Date(dato)));
     }
 
     // ---------- Styr-boksen ----------
     const styring = [];
     function lavKnapper() {
       styring.splice(0, styring.length,
+        { tekst: 'Isen (set med radar)', til: isTil, skift: (til) => { isTil = til; } },
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; } },
+        navneKnap(() => opdaterNavne()),
       );
       opdaterKnapper();
     }
+
+    // ---------- Navnene på kloden (som Venus og Mars) ----------
+    // Når man ser hele Merkur, står stederne med navn på kloden, og et tryk på et navn flyver derhen. Navnene skjules
+    // på bagsiden, tæt på, under flyvninger og med knappen "Navne" slået fra.
+    const navne = steder.map((st) => {
+      const r = merkur.sted(st.bredde, st.længde).retning;
+      const tekst = skilt(st.skilt, st.kunNavn ? '#d8d3ca' : '#fff0d6', 1);
+      tekst.center.set(0.5, -0.3); // teksten står lige over stedet
+      const prik = glød(0xffe6c0, 1, 0.9);
+      for (const o of [tekst, prik]) {
+        o.material.depthTest = false;
+        o.renderOrder = 5;
+        o.position.copy(r).multiplyScalar(R * 1.003);
+        o.visible = false;
+        omdrejning.add(o);
+      }
+      return { st, tekst, prik, forhold: tekst.scale.x / tekst.scale.y, str: 0 };
+    });
+    let navneVist = false;
+    const navnPos = new THREE.Vector3();
+    const navnNormal = new THREE.Vector3();
+    const tilKamera = new THREE.Vector3();
+    const navnOp = new THREE.Vector3();
+    function opdaterNavne() {
+      navneVist = navneTil() && visning === 'merkur' && !rejse.flyver;
+      const langtVæk = THREE.MathUtils.smoothstep(rejse.afstand / R, 1.25, 1.6); // tæt på fylder navnene for meget
+      for (const n of navne) {
+        n.prik.getWorldPosition(navnPos);
+        navnNormal.copy(navnPos).sub(system.position).normalize();
+        const afstand = tilKamera.copy(kamera.position).sub(navnPos).length();
+        const forside = THREE.MathUtils.smoothstep(navnNormal.dot(tilKamera.divideScalar(afstand)), 0.05, 0.25);
+        const a = navneVist ? forside * langtVæk : 0;
+        n.tekst.visible = n.prik.visible = a > 0.01;
+        n.tekst.material.opacity = a;
+        n.prik.material.opacity = 0.9 * a;
+        n.str = afstand * (n.st.kunNavn ? 0.019 : 0.022); // samme størrelse på skærmen uanset afstanden
+        const k = rejse.skala;
+        n.tekst.scale.set((n.forhold * n.str) / k, n.str / k, 1);
+        n.prik.scale.setScalar((afstand * 0.012) / k);
+      }
+    }
+    const lærred = verden.renderer.domElement;
+    // Hvor et navn står på skærmen (pixels): stedet (x, y), tekstens højde h og bredde b
+    function påSkærm(n) {
+      const r = lærred.getBoundingClientRect();
+      n.prik.getWorldPosition(navnPos);
+      navnOp.set(0, 1, 0).applyQuaternion(kamera.quaternion).multiplyScalar(n.str).add(navnPos);
+      navnPos.project(kamera);
+      navnOp.project(kamera);
+      const x = r.left + ((navnPos.x + 1) / 2) * r.width, y = r.top + ((1 - navnPos.y) / 2) * r.height;
+      const h = (Math.abs(navnOp.y - navnPos.y) / 2) * r.height;
+      return { x, y, h, b: h * n.forhold };
+    }
+    // Navnet, et tryk ved (x, y) rammer: teksten (lige over stedet) eller prikken, med lidt luft til fingre
+    function navnVed(x, y) {
+      let bedst = null;
+      for (const n of navne) {
+        if (!n.tekst.visible || n.tekst.material.opacity < 0.5) continue;
+        const p = påSkærm(n);
+        const dx = Math.abs(x - p.x) - p.b / 2, dy = Math.abs(y - (p.y - 0.8 * p.h)) - 0.8 * p.h;
+        const afstand = Math.hypot(Math.max(dx, 0), Math.max(dy, 0));
+        if (afstand < 12 && (!bedst || afstand < bedst.afstand)) bedst = { n, afstand };
+      }
+      return bedst?.n ?? null;
+    }
+    let ned = null;
+    const vedNed = (h) => { ned = { x: h.clientX, y: h.clientY }; };
+    const vedOp = (h) => {
+      if (!ned || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
+      ned = null;
+      if (rejse.flyver || !navneVist) return;
+      const n = navnVed(h.clientX, h.clientY);
+      if (n) gåTil(n.st.id);
+    };
+    lærred.addEventListener('pointerdown', vedNed);
+    lærred.addEventListener('pointerup', vedOp);
+
+    // ---------- Flybyen (MP2, js/solsystem/flyby.js): 6 stop, teksterne i js/data/sider/merkur.js ----------
+    function flyvTilStop(stop, nr) {
+      if (stop.id !== 'dagen') tilbageTilSpil();
+      høj = false;
+      isTil = false;
+      if (stop.id === 'merkur') {
+        visning = 'merkur';
+        datoTur = null;
+        tiden?.('spil');
+        helPlanet(START);
+      } else if (stop.id === 'dagen') {
+        // Hele Merkur set skråt over grænsen mellem dag og nat, og dagen går med ⏩
+        visning = 'merkur';
+        datoTur = null;
+        tiden?.('spil');
+        helPlanet(sol.clone().applyAxisAngle(Y, 80 * GRAD).addScaledVector(Y, 0.25).normalize(), null, R * 0.8);
+        if (!hurtig) { turHurtig = true; tiden?.('hurtig'); }
+      } else if (stop.id === 'is') vis('is', () => { if (visning === 'is') { isTil = true; lavKnapper(); } });
+      else vis(stop.id); // Caloris, Solen, der vender om, og de lyse huller
+      lavKnapper();
+      forklaring(stop.nu + (nr === TUR.length - 1 ? TUR_SLUT : ''));
+    }
+    const flyby = lavFlyby({ stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(), slut: TUR_SLUT });
     lavKnapper();
 
     // ---------- Hvert billede ----------
@@ -208,6 +429,17 @@ export default {
         helPlanet(START);
         rejse.hop();
       }
+      // Datoen glider hen til tidspunktet ved stedet i takt med flyvningen
+      if (datoTur) {
+        const slut = !rejse.flyver;
+        sætDato(slut ? datoTur.til : THREE.MathUtils.lerp(datoTur.fra, datoTur.til, rejse.fremdrift));
+        if (slut) datoTur = null;
+      }
+      // Isen toner ind og ud (med "reducer bevægelse" med det samme)
+      const isMål = isTil ? 1 : 0;
+      fIs = ROLIG ? isMål : isMål + (fIs - isMål) * Math.exp(-dt * 4);
+      if (Math.abs(fIs - isMål) < 0.002) fIs = isMål;
+      merkur.sætPolIsStyrke(fIs * IS_STYRKE, IS_FARVE);
       // Bjergene vokser og krymper blødt (med "reducer bevægelse" med det samme)
       const mål = høj ? OVERDRIV : 1;
       overdriv = ROLIG ? mål : mål + (overdriv - mål) * Math.exp(-dt * 3);
@@ -218,6 +450,10 @@ export default {
         rejse.grænser(minNu, R * 15);
       }
       rejse.opdater(dt);
+      opdaterNavne();
+      // Tegningen af Solen ved horisonten (kun ved stoppet "Solen vender om", når kameraet er fremme)
+      if (visning === 'solen' && solopgang && !datoTur) solTegning.vis(dato, solopgang);
+      else solTegning.skjul();
       solNu.copy(sol).applyQuaternion(rejse.drejning);
       for (const s of [solKerne, solGlød]) s.position.copy(kamera.position).addScaledVector(solNu, 600);
       merkur.sæt(solNu);
@@ -246,13 +482,11 @@ export default {
         nord: solLokal.dot(st.nord),
       };
     }
-    const stedPunkt = new THREE.Vector3();
-    const stedOp = new THREE.Vector3();
 
     return {
       styring,
       gåTil,
-      sted: () => 'merkur',
+      sted: () => visning,
       hurtig: 'seks døgn i sekundet',
       tempo: (t) => { hurtig = t === 'hurtig'; },
       // Kaldes kun, når tiden går (tidsknappen): datoen går frem, Merkur drejer, og Solen følger banen
@@ -261,10 +495,18 @@ export default {
         drejTil(dato);
         sol.set(...solRetning(new Date(dato)));
       },
+      // Flybyen: øverst i træet og i bjælken i 3D-billedet
+      tur: { navn: 'Flyby', stop: TUR.length, klar: () => true, kører: () => flyby.kører, start: () => flyby.start() },
+      trin: () => flyby.bjælke(),
       stop() {
         aktiv = false;
+        flyby.afslut();
+        solTegning.stop();
         bjælke.fjern();
         verden.opdateringer.delete(hvertBillede);
+        lærred.removeEventListener('pointerdown', vedNed);
+        lærred.removeEventListener('pointerup', vedOp);
+        for (const n of navne) { n.tekst.material.map?.dispose(); n.tekst.material.dispose(); n.prik.material.dispose(); }
         for (const s of [solKerne, solGlød]) s.material.dispose();
         rejse.stop();
         merkur.stop();
@@ -307,9 +549,31 @@ export default {
           if (t) { t.anisotropy = anisotropi; t.needsUpdate = true; }
           return anisotropi;
         },
-        tur: () => ({ flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
         hop: () => rejse.hop(),
-        sætDato(ms) { dato = ms; drejTil(dato); sol.set(...solRetning(new Date(dato))); },
+        sætDato,
+        // MP2: stederne, navnene, isen, flybyen og Solen, der vender om
+        visning: () => visning,
+        steder: () => STEDER.map((st) => ({ id: st.id, bredde: st.bredde, længde: st.længde, kunNavn: !!st.kunNavn })),
+        // Bredde og længde (grader øst, −180 til 180) af et punkt i verden (i kuglens egne retninger)
+        bl(p) {
+          merkur.mesh.worldToLocal(lokal.copy(p)).normalize();
+          return { bredde: Math.asin(THREE.MathUtils.clamp(lokal.y, -1, 1)) / GRAD, længde: Math.atan2(-lokal.z, lokal.x) / GRAD };
+        },
+        // Det punkt, kameraet kigger på (midten af 3D-billedet)
+        midte() { return this.bl(orbit.target); },
+        // Timevinklen og Solens højde ved et sted (id), som 3D-billedet og js/data/merkur-sol.js regner dem
+        klokken(id) {
+          const st = stedMed(id);
+          return { timevinkel: timevinkel(new Date(dato), st.længde), sol: solVed(st.bredde, st.længde), data: solHøjde(new Date(dato), st.længde, st.bredde) };
+        },
+        navne: () => navne.filter((n) => n.tekst.visible).map((n) => n.st.id),
+        navnPlads: (id) => påSkærm(navne.find((x) => x.st.id === id)),
+        is: () => ({ til: isTil, styrke: fIs, hentet: !!hentet.is, shader: merkur.mesh.material[0].uniforms.polIsStyrke.value }),
+        solTegning: () => ({ ...solTegning.test(), solopgang }),
+        flybyStop: () => TUR.map((t) => ({ id: t.id, titel: t.titel, tekst: t.tekst, egenSide: !!SIDER[t.id] })),
+        flybyTil(nr) { if (!flyby.kører) flyby.start(); flyby.gå(nr); },
+        tilstand: () => ({ is: isTil, høj, hurtig, turHurtig }),
         // Kameraet over et sted (bredde, længde i grader øst) i afstand km, med det samme. vinkel: over horisonten
         // (90 = lige ned), kompas: hvorfra kameraet kigger (180 = fra syd). Kun til tests og billeder.
         kigPå(bredde, længde, km, vinkel = 90, kompas = 180) {

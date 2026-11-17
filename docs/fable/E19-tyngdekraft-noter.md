@@ -35,4 +35,4 @@ Jeg er enig med Fable i det store: "Ingen ved, hvorfor tyngdekraften trækker" e
 ## 6. Jeres svar (17. november 2026)
 - **Gåden: Ja, på listen nu** (Opus' og Fables anbefaling): "Hvordan virker tyngdekraften i det allermindste?" står i tabellen i [plan-gaader-3d.md](../plan-gaader-3d.md) med status "Senere, efter Kvantefysik forløb 1". E19 og disse noter er faktagrundlaget. Intet bygges nu. Pladsen (−3 eller andet) og ordet under navnet afgøres, når kortet bygges.
 - **Listen: 11 gåder** (ikke anbefalingen): "Hvad var der før Big Bang?" bliver på listen. Skinnen skal derfor kunne bære 11, og ringen lukkes først ved 8-11 gåder. Kommer Før Big Bang, skal den handle om det, der kan måles (den første brøkdel af et sekund), ikke om "før" (E19, afsnit 6).
-- **Spørgsmålet i Rumtid** har jeres go fra 16. november 2026 og bygges som før, med afsnit 4.3 ovenfor.
+- **Spørgsmålet i Rumtid** har jeres go fra 16. november 2026 og bygges som før, med afsnit 4.3 ovenfor. **Bygget 17. november 2026** (se [lige-nu/smaating.md](../lige-nu/smaating.md)).

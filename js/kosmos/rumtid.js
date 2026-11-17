@@ -33,10 +33,17 @@ export default {
         titel: 'Bøjer lys også?',
         tekst: `<p>Ja. Ved en solformørkelse i 1919 målte man, at stjernelys bøjer om Solen, omtrent som Einstein havde regnet ud og dobbelt så meget, som Newtons tyngdelov gav. Senere målinger har bekræftet det meget præcist. Det gjorde ham verdensberømt. I dag bruger astronomerne det til at veje det, man ikke kan se. ${handling('lysstråle', '💡 Send en lysstråle forbi')} ${gå('gaader:moerktstof', 'Gåden: Hvad er mørkt stof?')}</p>`,
       },
+      {
+        // E19 afsnit 9 og noterne afsnit 4.3. Newton: General Scholium i 2. udgave af Principia (1713)
+        titel: 'Men hvorfor krummer stof rumtiden?',
+        tekst: '<p>Det ved ingen. Einsteins teori siger, <i>at</i> stof krummer rumtiden, og præcis hvor meget, og det er målt mange gange. Men den siger ikke hvorfor. Newton havde det på samme måde med sin tyngdelov: I 1713 skrev han, at han ikke kendte grunden. Einstein kom et lag dybere, men det næste lag mangler stadig.</p>',
+      },
     ],
     videre: [gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:tyngdebolger', 'Tyngdebølger')],
     nørd: `
       <p><b>Tid går langsommere tæt på tunge ting.</b> Højt oppe, længere væk fra Jorden, går urene i GPS-satellitterne ca. 45 milliontedele sekund hurtigere pr. døgn. Men fordi satellitterne farer af sted, går de også ca. 7 milliontedele sekund langsommere (det forudsagde Einstein allerede i 1905). Samlet går de ca. 38 milliontedele sekund for hurtigt pr. døgn. Rettede man ikke for det, ville GPS tage fejl med omkring 10 km om dagen.</p>
+      <p><b>Ting falder mod den langsomme tid.</b> For ting, der bevæger sig langsomt i forhold til lyset, som et æble eller Månen, kommer næsten hele tyngdekraften af, at tiden går en lille smule langsommere tæt på noget tungt. Ting falder den vej, tiden går langsomst. Men det fortæller, <i>hvordan</i> tyngdekraften virker, ikke <i>hvorfor</i>: Hvorfor stof får tiden til at gå langsommere, er det samme spørgsmål igen.</p>
+      <p><b>Bud på et dybere svar.</b> Nogle forskere tror, at tyngdekraften kommer af noget endnu dybere, sådan som varme kommer af atomer, der bevæger sig. Det er bud, og ingen måling har vist, at et af dem er rigtigt.</p>
       <p><b>Merkur</b> drejer sin bane en lille smule mere, end Newtons tyngdelov kan forklare. Einsteins teori passer præcist.</p>`,
     ærligt: '<p>Gummidugen er kun en model. Den snyder lidt, for den bruger jo selv tyngdekraft til at trække kuglerne ned i fordybningen! I virkeligheden er det <i>rumtiden</i>, der krummer, og for ting, der bevæger sig langsomt, er det mest tidens krumning, der får dem til at falde. Dugen viser også kun to af rummets tre retninger.</p>',
   },

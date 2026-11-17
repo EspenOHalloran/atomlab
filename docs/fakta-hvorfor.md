@@ -171,3 +171,10 @@ Nyt fagord "foton" i `js/data/ordbog.js`, én sætning i Stjerneovnens "Fra brin
 | Energien er titusinder af år om at nå overfladen | OK, samme formulering og kilder som afsnittet om stjernerne ovenfor (ca. 10.000 til ca. 170.000 år, Mitalas og Sills 1992). Der står intet præcist tal. | Wikipedia: Radiative zone (170.000 år, Mitalas og Sills 1992) |
 
 Forenkling: I Solens yderste ca. 30 % bæres energien op af strømmende gas (konvektion), ikke af lyset. Det er ikke nævnt i den korte tekst.
+
+## Batteriet i kulde (17. november 2026, brugerens spørgsmål)
+**Hvor:** Batteriet, foldeboksen `batteri-kulde` i højre panel (i `index.html`, ikke et "Hvorfor?"-kort).
+
+**Svar:** Kemien går langsommere i kulde (Arrhenius), elektrolytten bliver mere sej, ionerne bevæger sig langsommere, og den indre modstand vokser. Spændingen falder under belastning, og enheden slukker ved sin afbrydespænding, selvom der er energi tilbage. Det meste kommer tilbage, når batteriet bliver varmt. Opladning i frost kan give lithium-plating (lithium som metal på grafitten).
+
+**Faktatjek (17. november 2026):** Lithium-plating bliver værre ved lav temperatur og hurtig opladning, og selvafladningen stiger med temperaturen (så et koldt batteri på hylden taber *langsommere*): en.wikipedia.org/wiki/Lithium-ion_battery (afsnittene om nedbrydning og selvafladning, med henvisning til Vermeer m.fl. 2022, IEEE Trans. Transp. Electrif. 8(2)). Større indre modstand i kulde, fordi elektrolytten leder ioner dårligere, er almindeligt lærebogsstof. Ingen tal i teksten, med vilje.
