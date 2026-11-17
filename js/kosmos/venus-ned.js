@@ -104,9 +104,10 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     // Himlen: under skyerne helt dækkende (ingen Sol og stjerner), i skyerne lys dis
     u.uHimmel.value.copy(farve.copy(himmelBund).lerp(himmelTop, f)).lerp(tågeFarve, iSky);
     u.uDis.value.copy(farve.copy(disBund).lerp(disTop, f)).lerp(tågeFarve, iSky);
-    u.uHimmelA.value = Math.max(iSky * 0.97, under);
-    u.uHorisontA.value = Math.max(iSky * 0.95, under * 0.92);
-    u.uDisA.value = Math.max(iSky * 0.9, under * THREE.MathUtils.lerp(0.28, 0.62, f));
+    // (iSky + under er højst 1 og glider fra den ene til den anden ved skyernes bund, så summen giver intet hul)
+    u.uHimmelA.value = iSky * 0.97 + under;
+    u.uHorisontA.value = iSky * 0.95 + under * 0.92;
+    u.uDisA.value = iSky * 0.9 + under * THREE.MathUtils.lerp(0.28, 0.62, f);
   }
 
   // ---------- Måleren og fotoet (oven på 3D-billedet) ----------
