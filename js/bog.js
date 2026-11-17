@@ -179,7 +179,6 @@ function lavOm(felt, om) {
   return {
     fjern() { felt.removeEventListener('click', klik); lukHvorfor(); },
     test: {
-      hvorfor: (i) => felt.querySelectorAll('[data-bo-hvorfor]')[i]?.click(),
       lag: () => [...felt.querySelectorAll('details.bo-lag')].map((d) => ({ titel: d.querySelector('strong').textContent, åben: d.open })),
     },
   };
