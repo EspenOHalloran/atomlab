@@ -1,5 +1,11 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (16. november 2026): Feedback om at åbne Kosmos og Solsystemet.**
+- **Kosmos' forside** (`js/kosmos/oversigt.js`): Fra menuen starter Kosmos altid på forsiden "Kosmos" med fire kort (ét pr. gruppe, en knap pr. fænomen). Det sidst valgte fænomen (`atomlabKosmos`) åbnes ikke længere af sig selv. Før landede man midt i fx forløbet "Rejsen i tid" uden listen.
+- **Overblikket i Solsystemet:** Trin 1 i "Rundt om Solen" viser først hele Solsystemet i 2,5 s (`HEL_S`) og glider så ind til de fire inderste.
+- **Ud af et forløb:** "Spring over" er nu knappen "✕ Ud af forløbet" i alle forløb (`js/forloeb.js`, `.fl-spring`).
+- **Forberedt:** "For nørder" bliver "Vil du vide mere?" ([prompt-vil-du-vide-mere.md](../prompt-vil-du-vide-mere.md), sporet Småting).
+
 **Lavet (16. november 2026): Feedback nr. 5, ryk ved skift** (prompten i [prompt-solsystem-feedback.md](../prompt-solsystem-feedback.md)).
 - **Shaderne:** Kloden er skjult under rejseskiltet og i overblikkets mørke, til dens shadere er oversat (højst 1,5 s, `skjulTilKlar`). Three.js ventede ellers første gang, en shader blev tegnet, også bag skiltet. "Ring-shaderen" blev ikke bygget igen: Hver gasplanet har sin egen udgave.
 - **Kortene:** Kortkøen (`js/solsystem/kortkoe.js`) lægger ét kort pr. billede i grafikkortet (fx Jordens fire månedskort), og månerne på forhånd venter, til kameraet ikke flyver.
