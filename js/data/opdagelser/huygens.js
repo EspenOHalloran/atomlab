@@ -20,6 +20,8 @@ export const OPSLAG = [
   // Fortællingen (H2): forløbet "Saturns ører" kører i dette opslag med tegningerne fra js/bog/huygens.js. Bagefter er
   // opslaget et lille laboratorium: ringen, man selv kan dreje, og "Fortæl det igen" (jeres svar 16. november 2026).
   { id: 'fortaelling', slags: 'scene', titel: 'Saturns ører' },
+  // Gåden fra bogen (H3): hele anagrammet som udfordring og "Lav dit eget anagram" (js/bog/huygens-gaade.js)
+  { id: 'gaaden', slags: 'scene', titel: 'Hemmeligheden' },
 ];
 
 // Vejene fra "Det så du" efter fortællingen (drejebogen afsnit 3, trin 5, og afsnit 5). sætning står foran den danske
@@ -29,6 +31,21 @@ export const VEJE = {
   saturn: 'Se ringen forsvinde ved Saturn',
   anagram: 'Løs hele anagrammet',
   selv: 'Prøv ringen selv',
+};
+
+// Opslaget "Hemmeligheden" (drejebogen afsnit 4): udfordringen med de otte brikker og "Lav dit eget anagram"
+export const GÅDE = {
+  linje: 'Huygens\' hele hemmelighed: Læg de latinske ord på deres danske betydning. For hvert ord tæller bunkerne ned.',
+  tilbage: 'bogstaver tilbage',
+  løst: 'Alle 62 er brugt. Det passer.',
+  løstFør: 'du har løst den før ✓',
+  igen: 'Prøv igen',
+  eget: 'Lav dit eget anagram',
+  egetLinje: 'Skriv en hemmelighed. Så sorteres bogstaverne, som Huygens gjorde.',
+  egetFelt: 'Din hemmelighed',
+  egetTom: 'Her kommer dine bogstaver.',
+  egetIntet: 'Intet bliver gemt.',
+  tilbageTilGåden: 'Tilbage til Huygens\' gåde',
 };
 
 // Fortællingens laboratorium (opslaget, når forløbet er taget eller sprunget over): de tre kapitler som tre valg

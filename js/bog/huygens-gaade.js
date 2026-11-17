@@ -1,6 +1,7 @@
 // Huygens' anagram i bogen (Opdagelserne, docs/drejebog-huygens.md, afsnit 3-4): de 17 bunker af bogstaver, som rækken
 // blev trykt i 1656, og sætningen, der kommer frem. Bruges af fortællingens trin 4 (js/bog/huygens.js) og af opslaget
-// "Hemmeligheden" (udfordringen med de otte brikker, H3 trin C). Teksterne står i js/data/opdagelser/huygens.js (ANAGRAM).
+// "Hemmeligheden" (udfordringen med de otte brikker, H3 trin C). Teksterne står i js/data/opdagelser/huygens.js (ANAGRAM
+// og GÅDE).
 //
 // lavAnagram(rod, anagram, { rolig, påRørt }) fylder rod og giver { tryk(bogstav), visMig(), færdig(), tilstand(), fjern() }.
 //   Man finder nøgleordet (ANNULO) ved at trykke på bunkerne i rækkefølge. Et rigtigt bogstav flyver fra bunken til sin
@@ -8,6 +9,12 @@
 //   på plads ord for ord med den danske betydning under, og bunkerne tæller ned til 0.
 //   påRørt kaldes ved hvert tryk (Forløb-klodsen: et tryk, mens man gætter, lader gættet tone væk).
 // Bunkerne er knapper på mindst 44 px (tre rækker på en telefon). Med ROLIG flyver og ryster intet.
+//
+// lavUdfordring(felt, anagram, { rolig, tekster, løst, påLøst }) er opslaget "Hemmeligheden" (drejebogen afsnit 4): de otte
+//   latinske brikker lægges på deres danske betydning (tryk på brikken og så på betydningen, eller omvendt). En forkert
+//   brik ryster og hopper tilbage. For hver brik tæller bunkerne ned, og til sidst står alle på 0: "Alle 62 er brugt."
+//   Man kan ikke fejle og kan stoppe når som helst. Bagefter (eller hvis gåden er løst før) kommer "Lav dit eget anagram":
+//   Man skriver en hemmelighed, og bogstaverne sorteres som Huygens'. Intet gemmes. Giver { fjern(), test }.
 
 import { bunker, bogstaver } from '../data/opdagelser/huygens.js';
 
@@ -16,9 +23,22 @@ const ORD_EFTER = 380; // ms mellem ordene, når resten af sætningen flyver på
 const BOGSTAV_EFTER = 220; // ms mellem bogstaverne, når "Næste ›" viser ordet
 
 // Bunkerne som HTML (fælles for trin 4 og udfordringen)
-export function bunkerHTML(række) {
-  return bunker(række).map(([b, n]) => `<button class="ag-bunke" data-b="${b}" aria-label="${b}, ${n} tilbage">`
-    + `<span class="ag-b">${b}</span><span class="ag-tal">${n}</span></button>`).join('');
+// knap: falsk giver bunker, man ikke kan trykke på (i udfordringen tæller de bare ned)
+export function bunkerHTML(række, knap = true) {
+  const t = knap ? 'button' : 'span';
+  return bunker(række).map(([b, n]) => `<${t} class="ag-bunke" data-b="${b}" aria-label="${b}, ${n} tilbage">`
+    + `<span class="ag-b">${b}</span><span class="ag-tal">${n}</span></${t}>`).join('');
+}
+
+// Bogstaverne i en tekst sorteret og samlet i bunker som Huygens' række (fx "aaa c d ee"). Også æ, ø og å (efter z)
+export function sorterSomHuygens(tekst) {
+  const alle = [...tekst.toLowerCase()].filter((c) => /[a-zæøå]/.test(c)).sort((a, b) => a.localeCompare(b, 'da'));
+  const bunker = [];
+  for (const c of alle) {
+    if (bunker.length && bunker[bunker.length - 1][0] === c) bunker[bunker.length - 1] += c;
+    else bunker.push(c);
+  }
+  return { række: bunker.join(' '), antal: alle.length };
 }
 
 // Tæller bunkerne. tal: { a: 7, … }. Opdaterer knappernes tal og aria-label.
@@ -150,3 +170,154 @@ export function lavAnagram(rod, anagram, { rolig = false, påRørt = null } = {}
     },
   };
 }
+
+// Brikkernes faste blanding (ikke tilfældig, så testene og skærmbillederne er ens hver gang)
+const BLANDING = [5, 2, 7, 0, 3, 6, 1, 4];
+
+export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løst = false, påLøst = null } = {}) {
+  const T = tekster;
+  const ord = anagram.ord;
+  felt.classList.add('ag-felt');
+  felt.innerHTML = '<div class="ag ag-udfordring">'
+    + `<p class="hs-linje ag-intro">${esc(T.linje ?? '')}</p>`
+    + `<p class="ag-række" title="Rækken, som Huygens trykte den i 1656">${esc(anagram.række)}</p>`
+    + `<div class="ag-bunker stille" aria-hidden="true">${bunkerHTML(anagram.række, false)}</div>`
+    + `<div class="ag-brikker" role="group" aria-label="De latinske ord">${BLANDING.filter((i) => i < ord.length).map((i) => `<button class="ag-brik" data-i="${i}" aria-pressed="false">${esc(ord[i].latin)}</button>`).join('')}</div>`
+    + `<div class="ag-betydninger" role="group" aria-label="Den danske betydning">${ord.map((o, i) => `<button class="ag-betydning" data-i="${i}" aria-pressed="false"><span class="ag-latin"></span><span class="ag-dansk">${esc(o.dansk)}</span></button>`).join('')}</div>`
+    + '<p class="ag-status" aria-live="polite"></p>'
+    + '<div class="ag-efter"></div>'
+    + '</div>';
+  const ag = felt.querySelector('.ag');
+  const status = felt.querySelector('.ag-status');
+  const efter = felt.querySelector('.ag-efter');
+  const tæller = lavTæller(felt, anagram.række);
+  let valgtBrik = null, valgtBetydning = null;
+  let lagt = 0;
+  let erLøst = løst;
+
+  const visStatus = () => {
+    const rest = tæller.sum();
+    if (rest === 0) status.textContent = T.løst ?? '';
+    else status.textContent = `${rest} ${T.tilbage ?? 'bogstaver tilbage'}${erLøst ? ` · ${T.løstFør ?? ''}` : ''}`;
+    status.classList.toggle('løst', rest === 0);
+  };
+
+  const vælg = (el, ja) => { el?.setAttribute('aria-pressed', String(ja)); };
+
+  function prøv() {
+    if (!valgtBrik || !valgtBetydning) return;
+    const brik = valgtBrik, plads = valgtBetydning;
+    valgtBrik = valgtBetydning = null;
+    vælg(brik, false);
+    vælg(plads, false);
+    if (brik.dataset.i !== plads.dataset.i) {
+      // Forkert: brikken ryster og hopper tilbage
+      ryst(brik, rolig);
+      ryst(plads, rolig);
+      return;
+    }
+    const o = ord[Number(brik.dataset.i)];
+    plads.querySelector('.ag-latin').textContent = o.latin;
+    plads.classList.add('lagt');
+    plads.disabled = true;
+    flyvFra(plads.querySelector('.ag-latin'), brik, rolig);
+    brik.remove();
+    for (const b of bogstaver(o.latin)) tæller.tag(b);
+    lagt++;
+    visStatus();
+    if (lagt === ord.length) {
+      ag.classList.add('hel');
+      if (!erLøst) påLøst?.();
+      erLøst = true;
+      visEfter();
+    }
+  }
+
+  felt.querySelector('.ag-brikker').addEventListener('click', (h) => {
+    const b = h.target.closest('.ag-brik');
+    if (!b) return;
+    if (valgtBrik === b) { vælg(b, false); valgtBrik = null; return; }
+    vælg(valgtBrik, false);
+    valgtBrik = b;
+    vælg(b, true);
+    prøv();
+  });
+  felt.querySelector('.ag-betydninger').addEventListener('click', (h) => {
+    const b = h.target.closest('.ag-betydning');
+    if (!b || b.disabled) return;
+    if (valgtBetydning === b) { vælg(b, false); valgtBetydning = null; return; }
+    vælg(valgtBetydning, false);
+    valgtBetydning = b;
+    vælg(b, true);
+    prøv();
+  });
+
+  // Efter gåden: "Prøv igen" (når den er løst nu) og "Lav dit eget anagram"
+  function visEfter() {
+    efter.innerHTML = (ag.classList.contains('hel') ? `<button class="knap ag-igen">${esc(T.igen ?? 'Prøv igen')}</button>` : '')
+      + `<button class="knap ag-eget-knap">${esc(T.eget ?? 'Lav dit eget anagram')} ›</button>`;
+  }
+  efter.addEventListener('click', (h) => {
+    if (h.target.closest('.ag-igen')) {
+      fjernLyttere();
+      felt.classList.remove('ag-felt');
+      Object.assign(api, lavUdfordring(felt, anagram, { rolig, tekster, løst: true, påLøst }));
+    } else if (h.target.closest('.ag-eget-knap')) visEget();
+  });
+
+  // "Lav dit eget anagram": et felt og bogstaverne sorteret som Huygens'. Intet gemmes.
+  function visEget() {
+    ag.classList.add('eget');
+    let boks = felt.querySelector('.ag-eget');
+    if (!boks) {
+      boks = document.createElement('div');
+      boks.className = 'ag-eget';
+      boks.innerHTML = `<p class="hs-linje">${esc(T.egetLinje ?? '')}</p>`
+        + `<input class="ag-eget-felt" type="text" maxlength="80" autocomplete="off" spellcheck="false" aria-label="${esc(T.egetFelt ?? '')}" placeholder="${esc(T.egetFelt ?? '')}">`
+        + `<p class="ag-række ag-eget-række" aria-live="polite">${esc(T.egetTom ?? '')}</p>`
+        + `<p class="ag-eget-småt">${esc(T.egetIntet ?? '')}</p>`
+        + `<button class="knap ag-eget-tilbage">‹ ${esc(T.tilbageTilGåden ?? '')}</button>`;
+      ag.after(boks);
+      const inp = boks.querySelector('input');
+      const ud = boks.querySelector('.ag-eget-række');
+      inp.addEventListener('input', () => {
+        const { række, antal } = sorterSomHuygens(inp.value);
+        ud.textContent = antal ? `${række} (${antal})` : (T.egetTom ?? '');
+      });
+      boks.querySelector('.ag-eget-tilbage').addEventListener('click', () => {
+        boks.hidden = true;
+        ag.classList.remove('eget');
+      });
+    }
+    boks.hidden = false;
+    boks.querySelector('input').focus({ preventScroll: true });
+  }
+
+  function fjernLyttere() {
+    felt.replaceChildren();
+  }
+
+  visStatus();
+  if (erLøst) visEfter();
+
+  const api = {
+    fjern: fjernLyttere,
+    test: {
+      tilstand: () => ({ lagt, tal: tæller.sum(), hel: ag.classList.contains('hel'), løst: erLøst, eget: Boolean(felt.querySelector('.ag-eget:not([hidden])')) }),
+      // Læg brikken med ordet latin på betydningen nr. i (forkert, hvis i ikke er ordets)
+      læg(latin, i) {
+        felt.querySelector(`.ag-brik[data-i="${ord.findIndex((o) => o.latin === latin)}"]`)?.click();
+        felt.querySelector(`.ag-betydning[data-i="${i}"]`)?.click();
+      },
+      eget: (tekst) => {
+        visEget();
+        const inp = felt.querySelector('.ag-eget-felt');
+        inp.value = tekst;
+        inp.dispatchEvent(new Event('input'));
+        return felt.querySelector('.ag-eget-række').textContent;
+      },
+    },
+  };
+  return api;
+}
+

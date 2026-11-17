@@ -32,6 +32,8 @@
 
 import { forløbRørt, forløbVenter, forløbVink } from '../forloeb.js';
 import { lavAnagram } from './huygens-gaade.js';
+// Opslaget "Hemmeligheden" (H3): bogens anden tegning, lavet af opdagelser.js med lavScene
+export { lavUdfordring as lavGåde } from './huygens-gaade.js';
 
 const FIGUR = '#f3ead7'; // tavlens hvide figurer
 const BUND = '#1d1a17'; // tavlens mørke bund

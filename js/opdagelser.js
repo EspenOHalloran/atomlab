@@ -17,6 +17,15 @@ import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, lav
 import { tagVentForløb, åbnFænomen } from './gaa.js';
 
 const $ = (id) => document.getElementById(id);
+
+// Gåderne, man har løst i bøgerne (et lille ✓, jeres svar 17. november 2026): { bog: tidspunkt } i localStorage
+const LØSTE = 'atomlabOpdagelserGaader';
+function løste() {
+  try { return JSON.parse(localStorage.getItem(LØSTE)) ?? {}; } catch { return {}; }
+}
+function gemLøst(id) {
+  try { localStorage.setItem(LØSTE, JSON.stringify({ ...løste(), [id]: Date.now() })); } catch { /* ingen lagring */ }
+}
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 let lavet = false;
@@ -110,6 +119,9 @@ async function åbnBog(id, { fortælling = false } = {}) {
     },
     lavScene: (o, felt) => {
       if (!scenemodul) return null;
+      if (o.id === 'gaaden') {
+        return scenemodul.lavGåde(felt, tekster.ANAGRAM, { rolig: ROLIG, tekster: tekster.GÅDE, løst: Boolean(løste()[b.id]), påLøst: () => { lyd.klaret(); gemLøst(b.id); } });
+      }
       const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, anagram: tekster.ANAGRAM, påIgen: () => { lyd.klik(); startFortælling(); } });
       // Uden for forløbet er opslaget et laboratorium
       queueMicrotask(() => { if (!kørerForløb() && bog?.scene() === scene) scene.fri(); });

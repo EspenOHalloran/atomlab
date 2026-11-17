@@ -265,6 +265,37 @@ for (const [navn, opsætning] of [
   await ctx.close();
 }
 
+// "Hemmeligheden" (H3 trin C): Hele anagrammet som otte brikker. En forkert brik tæller ikke, de rigtige tæller bunkerne
+// ned til 0, løsningen huskes (✓), og "Lav dit eget anagram" sorterer bogstaverne som Huygens
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  await vent(page, påHylden, null, 15000);
+  const åbnGåden = async () => {
+    await O(() => atomlabTest.opdagelser.åbn('huygens'));
+    await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+    await O(() => { atomlabTest.opdagelser.bladr(1); atomlabTest.opdagelser.bladr(1); });
+    return vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'gaaden' && atomlabTest.opdagelser.scene()?.tilstand);
+  };
+  await åbnGåden();
+  const t = await bogMed('huygens').tekster();
+  const start = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), brikker: document.querySelectorAll('#opdBog .ag-brik').length, bunker: document.querySelectorAll('#opdBog .ag-bunke').length, knapper: document.querySelectorAll('#opdBog button.ag-bunke').length }));
+  await O(() => atomlabTest.opdagelser.scene().læg('tenui', 0));
+  const forkert = await O(() => atomlabTest.opdagelser.scene().tilstand());
+  for (const [i, o] of t.ANAGRAM.ord.entries()) await O(([l, n]) => atomlabTest.opdagelser.scene().læg(l, n), [o.latin, i]);
+  const slut = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), status: document.querySelector('#opdBog .ag-status')?.textContent, gemt: localStorage.getItem('atomlabOpdagelserGaader'), eget: !!document.querySelector('#opdBog .ag-eget-knap') }));
+  const eget = await O(() => atomlabTest.opdagelser.scene().eget('Saturn har en ring!'));
+  await O(() => atomlabTest.opdagelser.hylden());
+  await åbnGåden();
+  const igen = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), status: document.querySelector('#opdBog .ag-status')?.textContent, eget: !!document.querySelector('#opdBog .ag-eget-knap') }));
+  tjek('"Hemmeligheden": otte brikker og 17 bunker, der ikke er knapper, en forkert brik tæller ikke, og alle otte giver "Alle 62 er brugt"',
+    start.brikker === 8 && start.bunker === 17 && start.knapper === 0 && start.tal === 62 && forkert.lagt === 0 && forkert.tal === 62
+    && slut.lagt === 8 && slut.tal === 0 && slut.hel && slut.status === 'Alle 62 er brugt. Det passer.', JSON.stringify({ start, forkert, slut }));
+  tjek('løsningen huskes (✓ næste gang), og "Lav dit eget anagram" sorterer bogstaverne som Huygens uden at gemme noget',
+    /huygens/.test(slut.gemt ?? '') && slut.eget && eget === 'aa e g h i nnn rrr s t u (15)' && /✓/.test(igen.status) && igen.eget && igen.lagt === 0, JSON.stringify({ gemt: slut.gemt, eget, igen }));
+  await ctx.close();
+}
+
 // Telefon og tablet på højkant som første skærm: forsiden kan ses uden at rulle (også "Begynd"), et stryg bladrer, og
 // intet ligger uden for skærmen
 for (const [navn, opsætning] of [
