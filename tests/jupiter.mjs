@@ -63,11 +63,11 @@ const fm = (f, a) => s.evaluate(f, a);
 const ids = await fm(() => atomlabTest.solsystem.fænomener);
 tjek('Jupiter står i listen mellem Mars og Saturn', ids.indexOf('jupiter') === ids.indexOf('mars') + 1 && ids.indexOf('saturn') === ids.indexOf('jupiter') + 1, JSON.stringify(ids));
 const kloder = await fm(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => { const r = k.getBoundingClientRect(); return { id: k.dataset.id ?? k.textContent.trim(), y: Math.round(r.top), synlig: r.width > 0 }; }));
-// Ni kloder (Uranus og Neptun kom med i UN1, Venus 9. november 2026, Merkur 17. november 2026). "Solsystemet" har to
+// Ti kloder (Uranus og Neptun kom med i UN1, Venus 9. november 2026, Merkur og Pluto 17. november 2026). "Solsystemet" har to
 // felter (E14, 16. november 2026), så første række er Solsystemet, Sol, Merkur og Venus, Jorden starter den næste med
-// Mars, Jupiter, Saturn og Uranus, og Neptun står alene i den sidste
+// Mars, Jupiter, Saturn og Uranus, og Neptun og Pluto står i den sidste
 const række = (fra, til) => new Set(kloder.slice(fra, til).map((k) => k.y)).size === 1;
-tjek('kloderne: Solsystemet, Sol, Merkur og Venus på første række, Jorden starter den næste, og Jupiter står i den', kloder.length === 10 && række(0, 4) && kloder[4].id === 'jorden' && kloder[4].y > kloder[3].y && række(4, 9) && kloder[6].id === 'jupiter' && kloder[9].y > kloder[8].y && kloder.every((k) => k.synlig), JSON.stringify(kloder));
+tjek('kloderne: Solsystemet, Sol, Merkur og Venus på første række, Jorden starter den næste, og Jupiter står i den', kloder.length === 11 && række(0, 4) && kloder[4].id === 'jorden' && kloder[4].y > kloder[3].y && række(4, 9) && kloder[6].id === 'jupiter' && kloder[9].y > kloder[8].y && række(9, 11) && kloder.every((k) => k.synlig), JSON.stringify(kloder));
 await s.click('#solsystem .sol-klode[data-id="jupiter"]');
 await s.waitForFunction(() => atomlabTest.solsystem.valgt() === 'jupiter' && atomlabTest.solsystem.fænomen()?.hentet(), null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('Jupiter åbner, og kortet er hentet (1k i tests, i farver)', (await fm(() => atomlabTest.solsystem.fænomen().hentet())) && (await fm(() => atomlabTest.solsystem.fænomen().billeder()))['jupiter-1k.jpg'] === 'farver', JSON.stringify(await fm(() => atomlabTest.solsystem.fænomen().billeder())));
