@@ -1,7 +1,7 @@
 // Liv L3: turen "Kopien" (drejebogen i docs/drejebog-liv.md, afsnit 2) og "Leg frit: Kopien". Teksterne holder
 // skabelonens grænser og lagenes budget, turen starter fra listen, lynlåsen trækkes med en finger, ét bogstav på hver
 // halvdel (et forkert tæller ikke), de to nye stiger passer A–T og G–C, en fejl findes og rettes, fejlen bliver siddende
-// tredje gang, "Det så du" har kernesætningen, ★-opgaven kan klares i Leg frit, et skærmskift rydder op, og panelet får
+// tredje gang, "Det så du" har kernesætningen, "Vis mig" gør hvert trin helt, ★-opgaven kan klares i Leg frit, et skærmskift rydder op, og panelet får
 // ingen rullebjælke ved 1150, 820 og 560 px.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { KOPIEN } from '../js/data/forloeb/kopien.js';
@@ -177,8 +177,25 @@ for (const [w, h] of [[1150, 800], [820, 1180], [560, 900]]) {
 }
 tjek('ingen rullebjælke i Livs paneler (uden klassen "mere") ved 1150, 820 og 560 px', rul.every((x) => x.r.every((p) => p.mere || !p.rul)), JSON.stringify(rul));
 
-// ---------- Et skærmskift midt i turen rydder op ----------
+// ---------- "Vis mig" gør hele trinet (så stilguidens "Næste ›" kan bruge den) ----------
 await page.setViewportSize({ width: 1024, height: 768 });
+await T(() => atomlabTest.liv.startKopien());
+const vist = [];
+for (let i = 0; i < 4; i++) {
+  if (await T(() => atomlabTest.liv.forløb.fase() === 'gæt')) await page.click('#liv .fl-gæt >> nth=0');
+  await T(() => atomlabTest.liv.forløb.visMigNu());
+  await page.click('#liv .fl-vismig');
+  await spol(6);
+  await page.waitForFunction(() => atomlabTest.liv.forløb.fase() === 'så', null, { timeout: 10000, polling: 100 }).catch(() => {});
+  vist.push(await T(() => atomlabTest.liv.forløb.fase()));
+  if (i < 3) await page.click('#liv .fl-næste');
+}
+k = await K();
+tjek('"Vis mig" fører hvert af de fire trin helt til Så (også begge bogstaver i trin 2 og fejlen, der bliver, i trin 4)',
+  vist.every((f) => f === 'så') && Boolean(k.mutation), JSON.stringify({ vist, k }));
+await page.click('#liv .fl-spring');
+
+// ---------- Et skærmskift midt i turen rydder op ----------
 await page.click('#livForløbKopien');
 await page.waitForFunction(() => atomlabTest.liv.forløb.kører() === 'kopien', null, { timeout: 20000 });
 await T(() => { location.hash = '#'; });

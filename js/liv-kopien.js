@@ -90,7 +90,7 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
         if (!side[k]) {
           const f = s.liste.find((x) => x.h === h && x.k === k);
           side[k] = { base: f ? f.forkert : nyBase(s.dna, h, k), v: 0, forkert: Boolean(f) };
-          if (f && f.auto) s.vent.push({ h, k, t: 0, bliver: f.bliver });
+          if (f && (f.auto || s.visMig)) s.vent.push({ h, k, t: 0, bliver: f.bliver });
         }
         s.næste[h] = k + 1;
       }
@@ -102,7 +102,10 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
       if (v.t < RET_VENT) continue;
       s.vent.splice(s.vent.indexOf(v), 1);
       if (v.bliver) s.mutation = { h: v.h, k: v.k };
-      else klip(v.h, v.k);
+      else {
+        if (s.visMig) s.fejl = { h: v.h, k: v.k };
+        klip(v.h, v.k);
+      }
     }
     // Klip det forkerte bogstav af, og sæt det rigtige på
     if (s.ret) {
@@ -295,7 +298,7 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
           aktiv: () => Boolean(s?.hul),
         })),
         færdig: () => fuldt(),
-        visMig: () => s.hul && sæt(PARTNER[gammelBase(s.dna, s.hul.h, s.hul.k)]),
+        visMig: () => { while (s.hul) sæt(PARTNER[gammelBase(s.dna, s.hul.h, s.hul.k)]); },
       },
       fejl: {
         start: () => {
@@ -305,10 +308,11 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
         færdig: () => s.rettet > 0 && !s.ret,
         visMig: () => {
           const { h, k } = FEJL_FIND;
-          if (s.ny[h][k]?.forkert && !s.ret) {
+          s.mål = KOPI_LUK;
+          if (s.ny[h][k]?.forkert && s.ny[h][k].v >= 1 && !s.ret) {
             s.fejl = { h, k };
             klip(h, k);
-          }
+          } else if (!s.rettet) s.visMig = true; // fejlen er ikke kommet på endnu: cellen retter den, så snart den er der
         },
       },
       bliver: {
@@ -321,7 +325,11 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
           }];
         },
         færdig: () => Boolean(s.mutation) && s.færdig,
-        visMig: () => { if (s.kopier === 0 || s.færdig) kopiérITur(); },
+        visMig: () => {
+          if (s.mutation || (s.kopier > 0 && !s.færdig)) return;
+          s.kopier = FEJL_KOPIER.length - 1; // direkte til den kopi, hvor fejlen bliver siddende
+          kopiér([{ ...FEJL_KOPIER.at(-1), auto: true }]);
+        },
       },
     },
     layout: () => kamera(),
