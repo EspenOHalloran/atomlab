@@ -1,13 +1,13 @@
 // Opdagelserne (#opdagelser, del nr. 3 i Biblioteket, status prøve, docs/plan-videnskabsfolk.md): ti bøger om videnskabsfolk
-// på en hylde, der også er en tidslinje. En bygget bog står med omslaget frem og åbnes med et tryk. De kommende er en grå
-// ryg med navnet og året, og et tryk viser kun én linje. Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes
+// på en hylde, der også er en tidslinje. En bygget bog står med omslaget frem og åbnes med et tryk. Kun de næste to, der
+// skal bygges, står som en grå ryg med navnet og året, og et tryk stiller bogens spørgsmål (E20 fund 6, stilguiden A9). Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes
 // med import(), først når den åbnes.
 // H1 (16. november 2026): hylden, forsiden og bladringen med tomme opslag. H2: fortællingen som et forløb (Forløb-klodsen
 // i js/forloeb.js) i bogens opslag af slags 'scene' med tegningerne fra js/bog/<id>.js. Første gang starter forløbet efter
 // "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
 // Gåden, Gør det selv og bogen selv kommer i H3-H4.
 
-import { BØGER, bogMed, byggede, kommerSenere, HYLDE_LINJE } from './data/opdagelser.js';
+import { bogMed, byggede, påHylden, rygLinje, HYLDE_LINJE } from './data/opdagelser.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
 import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
@@ -31,12 +31,12 @@ function rygHTML(b) {
       + `<img src="${esc(b.portræt)}" alt="" width="600" height="750" decoding="async">`
       + `<span class="opd-omslag-titel">${esc(b.titel)}</span><span class="opd-omslag-navn">${esc(b.kort)}</span></button>`;
   }
-  return `<button class="opd-ryg" data-bog="${b.id}" aria-label="${esc(b.navn)}, ${b.år}. Kommer senere">`
+  return `<button class="opd-ryg" data-bog="${b.id}" aria-label="${esc(rygLinje(b))}">`
     + `<span class="opd-ryg-navn">${esc(b.kort)}</span></button>`;
 }
 
 function lavHylde() {
-  $('opdHylde').innerHTML = [...BØGER].sort((a, b) => a.år - b.år)
+  $('opdHylde').innerHTML = påHylden()
     .map((b) => `<div class="opd-plads${b.bygget ? ' bygget' : ''}" role="listitem">${rygHTML(b)}<span class="opd-år">${b.år}</span></div>`).join('');
   $('opdLinje').textContent = HYLDE_LINJE;
 }
@@ -64,7 +64,7 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  del.veje = [{ tekst: 'Videre i bogen ›', primær: true, gør: () => bog?.bladr(1) }];
+  del.veje = [{ tekst: 'Prøv ringen selv', primær: true, her: true }];
   del.slut = () => {
     bog?.lås(false);
     if (bog?.scene() === scene) scene.fri();
@@ -132,7 +132,7 @@ export function lavOpdagelser() {
     lyd.klik();
     const b = bogMed(k.dataset.bog);
     if (b.bygget) åbnBog(b.id);
-    else $('opdLinje').textContent = kommerSenere(b);
+    else $('opdLinje').textContent = rygLinje(b);
   });
   tilbageKnap = $('opdTilHylden');
   tilbageKnap.addEventListener('click', () => { lyd.klik(); visHylde(); });

@@ -13,5 +13,8 @@
 2. H4 (bogen selv). Så prøven med jeres søn.
 3. Galilei og Newton får drejebøger, når de skal bygges (efter de syv andre). Det, der skal slås op, står sidst i Opus' noter.
 
+## H3 i gang (17. november 2026)
+Planen: A kun det byggede (E20 fund 6), B trin 4 (ANNULO) og "Det så du", C opslaget "Hemmeligheden" med "Lav dit eget anagram", D links til og fra Saturn (stedet `kanten`, "Hvordan ved vi det?", citatets knap) og `anagram` i Ordbogen, E tests 2 og 6, faktatjek og `/faerdig`. **Jeres svar 17. november 2026:** Go til A. Den tredje vej i "Det så du" er "Prøv ringen selv", til "Bladr i bogen fra 1659" kommer i H4. Et løst anagram huskes med et lille ✓. Hylden viser Tycho og Rømer som grå rygge (de næste, der bygges). **A er lavet.**
+
 ## Spørgsmål til jer
 - Ingen lige nu. Jeres svar til drejebogen står i dens afsnit "Jeres svar (16. november 2026)".

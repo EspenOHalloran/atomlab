@@ -2,8 +2,8 @@
 // Kilderne står i docs/fakta-videnskabsfolk/huygens.md. Uden DOM, så testene i Node kan læse dem.
 //
 // opslag er bogens opslag i rækkefølge. slags 'forside' har sin egen opbygning i js/bog.js. slags 'scene' er et kapitel
-// med en tegning, man gør noget i (js/bog/huygens.js). slags 'tom' er et opslag, der kommer i et senere trin (H3-H4 i
-// docs/plan-videnskabsfolk.md): kun kapitlets titel og én linje.
+// med en tegning, man gør noget i (js/bog/huygens.js). Kun de opslag, der er bygget, står her (E20 fund 6, stilguiden A9):
+// Gør det selv og "Om Huygens" kommer i H3-H4 (docs/plan-videnskabsfolk.md).
 
 export const FORSIDE = {
   spørgsmål: 'Hvorfor havde Saturn ører?',
@@ -20,13 +20,7 @@ export const OPSLAG = [
   // Fortællingen (H2): forløbet "Saturns ører" kører i dette opslag med tegningerne fra js/bog/huygens.js. Bagefter er
   // opslaget et lille laboratorium: ringen, man selv kan dreje, og "Fortæl det igen" (jeres svar 16. november 2026).
   { id: 'fortaelling', slags: 'scene', titel: 'Saturns ører' },
-  { id: 'gaaden', slags: 'tom', titel: 'Hemmeligheden', tekst: 'Her kommer gåden fra bogen: et anagram på 62 bogstaver.' },
-  { id: 'selv', slags: 'tom', titel: 'Se det selv', tekst: 'Her kommer vejen til Saturns ringe i Solsystemet.' },
-  { id: 'bogen', slags: 'tom', titel: 'Bogen fra 1659', tekst: 'Her kommer siderne fra Huygens\' egen bog, Systema Saturnium.' },
-  { id: 'om', slags: 'tom', titel: 'Om Huygens', tekst: 'Her kommer "Hvorfor?", "For nørder" og "Ærligt talt".' },
 ];
-
-export const TOM_LINJE = 'Dette opslag er ikke færdigt endnu.';
 
 // Fortællingens laboratorium (opslaget, når forløbet er taget eller sprunget over): de tre kapitler som tre valg
 // (E20, stilguiden B7). Ringen er standard.

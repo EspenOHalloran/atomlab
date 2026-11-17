@@ -1,9 +1,9 @@
 // Opdagelserne (#opdagelser, docs/plan-videnskabsfolk.md, afsnit 7): listen over bøgerne i Node (test 1), og i browseren,
-// at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med alle ti (en grå ryg giver kun én linje),
+// at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med Huygens og to grå rygge (et tryk stiller bogens spørgsmål),
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
-import { BØGER, bogMed, byggede, kommerSenere } from '../js/data/opdagelser.js';
+import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
 import { SKÆRME } from '../js/skaerme.js';
 import { existsSync } from 'node:fs';
 import { forløbMed, forløbI } from '../js/data/forloeb/liste.js';
@@ -20,16 +20,19 @@ if (år.some((a, i) => i && a < år[i - 1])) fejlListe.push('ikke i årets rækk
 if (new Set(BØGER.map((b) => b.id)).size !== 10) fejlListe.push('to bøger med samme id');
 for (const b of BØGER) {
   if (!b.navn || !b.kort || !b.ejefald || !b.om || !(b.år > 1500 && b.år < 2000)) fejlListe.push(`${b.id}: felterne`);
-  if (!kommerSenere(b).endsWith('kommer senere.')) fejlListe.push(`${b.id}: linjen`);
 }
+// Hylden (E20 fund 6): de byggede og højst to grå rygge, der hver stiller deres spørgsmål
+const hylden = hyldensBøger();
+if (hylden.filter((b) => !b.bygget).length > KOMMENDE_PÅ_HYLDEN || KOMMENDE_PÅ_HYLDEN > 2) fejlListe.push('for mange grå rygge');
+for (const b of hylden.filter((x) => !x.bygget)) if (!b.spørgsmål?.endsWith('?') || /senere/i.test(rygLinje(b))) fejlListe.push(`${b.id}: spørgsmålet`);
 for (const b of byggede()) {
   if (!b.titel || !b.stil?.papir || !b.stil?.blæk || !b.stil?.skrift || !b.stil?.ryg) fejlListe.push(`${b.id}: stilen`);
   if (!existsSync(PROJEKT + b.portræt)) fejlListe.push(`${b.id}: portrættet findes ikke`);
   const t = await b.tekster();
   if (t.OPSLAG[0]?.slags !== 'forside' || !t.FORSIDE?.spørgsmål || !t.FORSIDE?.portrætAlt) fejlListe.push(`${b.id}: forsiden`);
-  if (!t.OPSLAG.every((o) => ['forside', 'scene', 'tom'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
+  if (!t.OPSLAG.every((o) => ['forside', 'scene'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
 }
-tjek('listen: ti bøger i årets rækkefølge med navn, år og linje, og en bygget bog har titel, stil, portræt og forside', !fejlListe.length, fejlListe.join('; '));
+tjek('listen: ti bøger i årets rækkefølge med navn og år, hylden har højst to grå rygge med et spørgsmål, og en bygget bog har titel, stil, portræt, forside og kun byggede opslag', !fejlListe.length, fejlListe.join('; '));
 tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåderne med status prøve',
   byggede().map((b) => b.id).join() === 'huygens' && bogMed('huygens').år === 1656
   && SKÆRME.findIndex((s) => s.id === 'opdagelser') === SKÆRME.findIndex((s) => s.id === 'gaader') + 1
@@ -76,12 +79,12 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await page.evaluate(() => { location.hash = '#opdagelser'; });
   const hylde = await vent(page, påHylden, null, 15000);
   const ryg = await page.evaluate(() => atomlabTest.opdagelser.hylde());
-  tjek('fra menuen: hentes først, når delen åbnes, og hylden har ti bøger i årets rækkefølge (Huygens med omslaget frem)',
-    !førHentet && hylde && ryg.length === 10 && ryg.filter((r) => r.bygget).map((r) => r.id).join() === 'huygens' && ryg[0].id === 'tycho' && ryg[9].id === 'lehmann', JSON.stringify(ryg));
-  // En grå ryg åbner ingen bog, men viser én linje
+  tjek('fra menuen: hentes først, når delen åbnes, og hylden har Huygens med omslaget frem og kun to grå rygge (Tycho og Rømer)',
+    !førHentet && hylde && ryg.map((r) => r.id).join() === 'tycho,huygens,roemer' && ryg.filter((r) => r.bygget).map((r) => r.id).join() === 'huygens', JSON.stringify(ryg));
+  // En grå ryg åbner ingen bog, men stiller bogens spørgsmål
   await page.click('#opdHylde [data-bog="roemer"]');
   const linje = await page.textContent('#opdLinje');
-  tjek('en grå ryg viser kun linjen og åbner ingen bog', linje === kommerSenere(bogMed('roemer')) && (await page.evaluate(() => atomlabTest.opdagelser.vist())) === null, linje);
+  tjek('en grå ryg stiller sit spørgsmål og åbner ingen bog', linje === rygLinje(bogMed('roemer')) && linje.endsWith('?') && (await page.evaluate(() => atomlabTest.opdagelser.vist())) === null, linje);
   // Huygens' omslag åbner forsiden
   await page.click('#opdHylde [data-bog="huygens"]');
   const åben = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
@@ -96,10 +99,10 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   // Bladringen: "Begynd", "›", "‹", piletasterne, grænserne og Esc
   await page.click('#opdBog .bog-begynd');
   const n1 = await page.evaluate(() => atomlabTest.opdagelser.vist().nr);
+  await page.keyboard.press('ArrowLeft');
+  const n0 = await page.evaluate(() => atomlabTest.opdagelser.vist().nr);
   await page.click('#opdBog .bog-pil[data-bladr="1"]');
   await page.keyboard.press('ArrowRight');
-  const n3 = await page.evaluate(() => atomlabTest.opdagelser.vist().nr);
-  await page.keyboard.press('ArrowLeft');
   const n2 = await page.evaluate(() => atomlabTest.opdagelser.vist().nr);
   const antal = await page.evaluate(() => atomlabTest.opdagelser.vist().antal);
   for (let i = 0; i < antal + 2; i++) await page.evaluate(() => atomlabTest.opdagelser.bladr(1));
@@ -107,7 +110,7 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await page.keyboard.press('Escape');
   const tilbage = await vent(page, påHylden);
   tjek('bladring: "Begynd", "›" og piletasterne går frem og tilbage, den sidste side stopper (› grå), og Esc går til hylden',
-    n1 === 1 && n3 === 3 && n2 === 2 && sidst.nr === antal - 1 && sidst.næste && sidst.tal === `${antal} / ${antal}` && tilbage, JSON.stringify({ n1, n2, n3, sidst, tilbage }));
+    n1 === 1 && n0 === 0 && n2 === Math.min(2, antal - 1) && sidst.nr === antal - 1 && sidst.næste && sidst.tal === `${antal} / ${antal}` && tilbage, JSON.stringify({ n0, n1, n2, sidst, tilbage }));
   await ctx.close();
 }
 
@@ -191,9 +194,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, vej: document.querySelector('.forløb-linje .fl-vej')?.textContent }));
   await page.click('.forløb-linje .fl-vej');
   await page.waitForTimeout(300);
-  const videre = await O(() => ({ opslag: atomlabTest.opdagelser.vist().opslag, låst: atomlabTest.opdagelser.låst(), kører: atomlabTest.opdagelser.forløb.kører() }));
+  const videre = await O(() => ({ opslag: atomlabTest.opdagelser.vist().opslag, låst: atomlabTest.opdagelser.låst(), kører: atomlabTest.opdagelser.forløb.kører(), lab: atomlabTest.opdagelser.scene()?.tilstand().lab }));
   // Laboratoriet har de tre kapitler: "Den lille prik" giver nætterne, og nat 16 viser navnet Titan
-  await O(() => atomlabTest.opdagelser.bladr(-1));
   const kapitler = await O(() => [...document.querySelectorAll('#opdBog .hs-kapitel')].map((k) => k.textContent));
   await page.click('#opdBog .hs-kapitel >> text=Den lille prik');
   await S(() => atomlabTest.opdagelser.scene().nat(16));
@@ -202,8 +204,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
     kapitler.join('|') === 'Linsen|Den lille prik|Ringen' && lab.trin === 'naetter' && lab.lab === 'naetter' && lab.navn, JSON.stringify({ kapitler, lab }));
   tjek('trinene: linsen bliver skarp, Titan er tilbage efter 16 nætter (10. april 1655), og ringen løfter sig ved kanten efter tavlens tegninger',
     linse && nætter && kanten, JSON.stringify({ linse, halv, nætter, ikkeEndnu, kanten, lyser }));
-  tjek('"Det så du" viser kernesætningen, og "Videre i bogen" bladrer videre med bladringen låst op',
-    slut.tekst?.includes('tynd, flad ring') && slut.vej?.startsWith('Videre i bogen') && videre.opslag === 'gaaden' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
+  tjek('"Det så du" viser kernesætningen, og "Prøv ringen selv" bliver i opslaget med ringen og bladringen låst op',
+    slut.tekst?.includes('tynd, flad ring') && slut.vej?.startsWith('Prøv ringen selv') && videre.opslag === 'fortaelling' && videre.lab === 'ringen' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
   // Esc midt i forløbet går til hylden og stopper det
   await page.click('#opdBog .hs-igen');
   await vent(page, () => atomlabTest.opdagelser.forløb.kører());
