@@ -67,7 +67,7 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   tjek('kloderne: Solsystemet (overblikket), Solen, Merkur, Venus, Jorden, Mars, Jupiter, Saturn, Uranus, Neptun og Pluto (efter afstanden til Solen)', kloder.join() === '🪐Solsystemet,☀️Solen,🌑Merkur,🟡Venus,🌍Jorden,🔴Mars,🟠Jupiter,🪐Saturn,🩵Uranus,🔵Neptun,🤍Pluto', JSON.stringify(kloder));
   tjek('Solsystemet åbner på overblikket (forsiden, 15. november 2026)', (await s.evaluate(() => atomlabTest.solsystem.valgt())) === 'overblik');
   const træ = () => s.evaluate(() => atomlabTest.solsystem.træ());
-  tjek('overblikkets træ: kun Solsystemet (Merkur og Pluto har deres egen visning fra MP1 og MP3)', (await træ()).map((p) => p.id).join() === 'overblik');
+  tjek('overblikkets træ: turen "Rundt om Solen" øverst og Solsystemet (Merkur og Pluto har deres egen visning fra MP1 og MP3)', (await træ()).map((p) => p.id).join() === 'tur:overblik,overblik', JSON.stringify(await træ()));
   await s.evaluate(() => atomlabTest.solsystem.vælg('solen'));
   let t = await træ();
   tjek('træet ved Solen: Solen og forsøgene Solstorm og Solens fremtid', t.map((p) => p.id).join() === 'solen,solstorm,solensfremtid' && t[0].valgt, JSON.stringify(t));
