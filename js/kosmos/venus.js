@@ -374,6 +374,9 @@ export default {
       flyby.afslut();
       tilbageTilSpil();
       vis(id);
+      // Turen ned fra træet får flybyens undertekst og "Lige nu". Andre steder rydder flybyens tekster væk.
+      const ned = TUR.at(-1);
+      if (id === 'ned') { fase(ned.titel, ned.tekst); forklaring(ned.nu); } else { fase(null); forklaring(''); }
     }
     // Flyv hen til et sted i træet (også fra flybyen)
     function vis(id) {
@@ -809,6 +812,7 @@ export default {
         flybyStop: () => TUR.map((t) => ({ id: t.id, titel: t.titel, tekst: t.tekst, egenSide: !!SIDER[t.id] })),
         // V5: turen ned (fasen, højden, måleren, fotoet og kuplen), og hvad der er slået til
         ned: () => nedtur.test(),
+        udenKuppel: (til) => nedtur.udenKuppel(til),
         // Flybyens stop nr (fra 0) med det samme (kun til billeder)
         flybyTil(nr) { if (!flyby.kører) flyby.start(); flyby.gå(nr); },
         tilstand: () => ({ uv, glød: glødTil, høj, under, hurtig, turHurtig }),

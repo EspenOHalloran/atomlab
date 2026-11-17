@@ -302,6 +302,8 @@ await s.screenshot({ path: `${UD}/venus.png` });
       await flyver();
     }
     await s.waitForTimeout(400); // panelet opdateres fire gange i sekundet
+    // (skyderen "Under skyerne" glider: vent, til den er fremme)
+    if (TUR[i].id !== 'ned') await s.waitForFunction(() => atomlabTest.solsystem.fænomen().ned().fase !== null || [0, 100].includes(Math.round(atomlabTest.solsystem.fænomen().skyer().under)), null, { timeout: 30000, polling: 200 }).catch(() => {});
     set.push(await fm(() => {
       const v = atomlabTest.solsystem.fænomen();
       return {
@@ -320,16 +322,18 @@ await s.screenshot({ path: `${UD}/venus.png` });
   tjek('stop 5: "Gløden på natsiden" er slået til, skyerne er der, og det er midnat over Ovda Regio', set[4].tilstand.glød && set[4].tilstand.under < 1 && Math.min(set[4].klokken, 24 - set[4].klokken) < 0.3, JSON.stringify([set[4].tilstand, set[4].klokken]));
   // Turen ned: måleren følger højden (først under 100 km), skyerne går væk under deres top, og disen er der
   const prøver = [];
-  for (let n = 0; n < 400; n++) {
-    const p = await F('ned');
-    const sky = await F('skyer');
-    prøver.push({ ...p, under: sky.under });
+  // (turen tager ca. 30 s spiltid. Testbrowseren tegner få billeder i sekundet under belastning, så vent op til 5 min.)
+  const t0 = Date.now();
+  while (Date.now() - t0 < 300000) {
+    const p = await fm(() => ({ ...atomlabTest.solsystem.fænomen().ned(), under: atomlabTest.solsystem.fænomen().skyer().under }));
+    prøver.push(p);
     if (p.fase === 'landet') break;
-    await s.waitForTimeout(150);
+    await s.waitForTimeout(100);
   }
   const ned = prøver.filter((p) => p.fase === 'ned');
   const over = ned.filter((p) => p.hMiddel > 75), inde = ned.filter((p) => p.hMiddel < 68);
-  tjek('på vej ned: over skyerne er de der og måleren skjult over 100 km, under ca. 70 km er skyerne væk, og disen er der', over.length && inde.length && over.every((p) => p.under === 0 && (p.hMiddel < 100 || !p.måler) && !p.kuppel) && inde.every((p) => p.under === 100 && p.måler && p.kuppel?.himmel > 0.9), JSON.stringify(prøver.map((p) => [Math.round(p.hMiddel), p.under, p.måler, p.kuppel?.himmel?.toFixed(2)])));
+  const forkert = [...over.filter((p) => !(p.under === 0 && (p.hMiddel < 100 || !p.måler) && !p.kuppel)), ...inde.filter((p) => !(p.under === 100 && p.måler && p.kuppel?.himmel > 0.9))];
+  tjek('på vej ned: over skyerne er de der og måleren skjult over 100 km, under ca. 70 km er skyerne væk, og disen er der', over.length && inde.length && !forkert.length, JSON.stringify([over.length, inde.length, forkert.slice(0, 4).map((p) => [p.hMiddel.toFixed(1), p.under, p.måler, p.kuppel])]));
   const temp = ned.filter((p) => p.måler).map((p) => parseInt(p.tekst.temperatur.replace('−', '-')));
   tjek('måleren bliver varmere hele vejen ned', temp.length >= 3 && temp.every((t, i) => i === 0 || t >= temp[i - 1]), temp.join());
   const slut = prøver.at(-1);

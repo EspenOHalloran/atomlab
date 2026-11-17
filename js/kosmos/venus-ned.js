@@ -68,6 +68,7 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
   let landT = 0;
   let fotoTil = true;
   let hVist = START_KM; // den højde, måleren viser (km over jorden)
+  let kuppelFra = false; // kun til tests
 
   // ---------- Kuplen ----------
   const kuppelMat = new THREE.ShaderMaterial({
@@ -85,11 +86,11 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
   kuppel.visible = false;
   gruppe.add(kuppel);
   const farve = new THREE.Color();
-  const tågeFarve = new THREE.Color(0.6, 0.55, 0.45); // inde i skyerne: gullig dis (mørk nok til, at panelerne kan læses)
-  const himmelTop = new THREE.Color(0.64, 0.48, 0.29); // lige under skyerne
-  const himmelBund = new THREE.Color(0.6, 0.35, 0.14); // nede ved jorden (orange som på Veneras fotos)
-  const disTop = new THREE.Color(0.5, 0.34, 0.19);
-  const disBund = new THREE.Color(0.42, 0.24, 0.1);
+  const tågeFarve = new THREE.Color(0.36, 0.33, 0.27); // inde i skyerne: gullig dis (mørk nok til, at panelerne kan læses med fuld grafik)
+  const himmelTop = new THREE.Color(0.4, 0.29, 0.17); // lige under skyerne
+  const himmelBund = new THREE.Color(0.38, 0.21, 0.08); // nede ved jorden (orange som på Veneras fotos)
+  const disTop = new THREE.Color(0.32, 0.21, 0.11);
+  const disBund = new THREE.Color(0.27, 0.15, 0.06);
   // Kuplen efter højden h (km over middelradius)
   function sætKuppel(h) {
     const u = kuppelMat.uniforms;
@@ -212,6 +213,7 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     // Måleren viser luften, hvor "sonden" er (under landingen længere nede end kameraet)
     visMåler(hVist, jord + hVist);
     sætKuppel(fase === 'lander' || fase === 'landet' ? Math.min(hMiddelNu, jord + hVist + 0.5) : hMiddelNu);
+    if (kuppelFra) kuppel.visible = false;
     kuppel.position.copy(kamera.position);
     kuppel.scale.setScalar(kamera.near * 20);
     visFoto();
@@ -233,6 +235,8 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
       kuppelMat.dispose();
       boks.remove();
     },
+    // Kun til tests: skjul kuplen (for at se jorden bag den)
+    udenKuppel(til) { kuppelFra = til; },
     test: () => ({
       fase, hVist, hMiddel: hMiddelNu, jord: jordMiddel(), måler: !måler.hidden, foto: !foto.hidden,
       tekst: { ...vist }, kuppel: kuppel.visible ? { himmel: kuppelMat.uniforms.uHimmelA.value, dis: kuppelMat.uniforms.uDisA.value } : null,
