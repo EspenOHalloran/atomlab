@@ -768,7 +768,7 @@ export const ORDBOG = [
   {
     id: 'radar', ord: 'Radar',
     former: ['radar', 'radaren', 'radarens'],
-    // Venus V5. Magellan (1990-1994) kortlagde 98 % af Venus med radar (NASA, Fables tjek E18)
+    // Venus V5. Magellan kortlagde 98 % af Venus med radar fra 1990 til 1992 (NASA, Fables tjek E18)
     tekst: 'En måde at "se" med radiobølger. Man sender bølgerne ud og måler, hvad der kommer tilbage, og hvor lang tid det tager. Radiobølger går gennem skyer, så rumsonden Magellan kunne kortlægge jorden på Venus gennem de tykke skyer.',
   },
   {
