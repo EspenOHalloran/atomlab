@@ -32,7 +32,7 @@
     // Bjælken fyldes efter, hvor mange JavaScript-filer der er hentet. Det er et skøn: Forsiden henter ca. FORVENTET filer
     // (tests/henter.mjs tjekker, at tallet stadig passer). Den står højst på 95 %, indtil main.js er færdig.
     (() => {
-      const FORVENTET = 48;
+      const FORVENTET = 56;
       const fyld = document.getElementById('henterFyld');
       const tekst = document.getElementById('henterTekst');
       let hentet = 0;
@@ -773,6 +773,7 @@
       <div class="liv-forløb-liste">
         <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 1:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
         <button class="liv-forløb" id="livForløbOrdene"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 2:</span> <span class="liv-forløb-navn">Hvad står der i opskriften?</span></span></button>
+        <button class="liv-forløb" id="livForløbKopien"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 3:</span> <span class="liv-forløb-navn">Kopien</span></span></button>
       </div>
       <h4 class="panel-overskrift">Leg frit</h4>
       <div class="liv-niveauer" id="livNiveauer"></div>
@@ -815,6 +816,20 @@
           </div>
         </div>
       </details>
+      <details class="liv-protein lag-boks" id="livKopi" data-lag="liv-kopi">
+        <summary><strong>Kopien</strong></summary>
+        <div class="liv-protein-valg" id="livKopiValg">
+          <button class="knap" id="livKopiStart">Kopiér stigen</button>
+        </div>
+        <div class="liv-protein-i-gang" id="livKopiIGang" hidden>
+          <p class="liv-byg-tekst" id="livKopiTekst"></p>
+          <div class="valg-række">
+            <button class="knap lille svag" id="livKopiLyn">Lyn op</button>
+            <button class="knap lille svag" id="livKopiIgen">↻ Kopiér igen</button>
+            <button class="knap lille svag" id="livKopiStop">Stop</button>
+          </div>
+        </div>
+      </details>
       <details class="lag-boks opgave-boks" data-lag="liv-opgaver">
         <summary><strong>Opgaver</strong> <span class="opgave-tal" id="livOpgaveTal"></span></summary>
         <ol class="opgaver kompakt" id="livOpgaver"></ol>
@@ -828,7 +843,7 @@
       <p class="liv-tekst" id="livTekst"></p>
       <dl class="liv-tal" id="livTal"></dl>
       <p class="liv-ekstra" id="livEkstra"></p>
-      <button class="hvorfor" id="livHvorfor" data-hvorfor="livSammen" hidden>Hvorfor? Hvad holder stigen sammen?</button>
+      <div class="liv-hvorfor" id="livHvorfor" hidden></div>
       <p class="liv-gaade" id="livGaade" hidden><button class="side-knap" data-gaa=""></button></p>
       <details class="forklaring-boks lag-boks" data-lag="liv-nørd" name="liv-lag">
         <summary><strong>For nørder</strong><span class="lag-kort">Flere tal, krystallen, genet og koden</span></summary>
@@ -846,6 +861,7 @@
         <p>Cellen og cellekernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i cellekernen. Lidt af dit DNA ligger også uden for cellekernen, i mitokondrierne (de orange pølser).</p>
         <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i cellekernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
         <p>På turen "Hvad står der i opskriften?" ligger stigen lige ud, og der er små mellemrum mellem ordene, så de er lette at se. I virkeligheden er stigen snoet, og der er ingen mellemrum: Cellen ved, hvor ordene står, fordi den begynder ved ATG og tæller tre ad gangen. Byggestenene har alle samme farve, og den orange er en, der er blevet skiftet ud.</p>
+        <p>I kopien kommer fejlene meget oftere end i virkeligheden (skiltet siger det), og stigen ligger lige ud, selvom den er snoet. Den ene nye side bliver i virkeligheden bygget i små stykker, men her er de to tegnet ens. Et forkert bogstav, der bliver siddende, er først et par, der ikke passer. Når stigen bliver kopieret igen, får den ene kopi et rigtigt par med det nye bogstav, og så er mutationen der for alvor.</p>
       </details>
     </aside>
   </section>
@@ -856,6 +872,8 @@
       <div class="hjælp-indhold">
         <p><strong>Turen "Opskriften i dig"</strong> viser i fire korte trin, hvad DNA er. Det starter første gang, du åbner Liv. <button class="knap lille" id="livHjælpForløb">Tag turen ›</button></p>
         <p><strong>Turen "Hvad står der i opskriften?"</strong> viser i fem korte trin, hvordan cellen læser bogstaverne og bygger et protein, og hvad der sker, når ét bogstav er forkert. <button class="knap lille" id="livHjælpOrdene">Tag turen ›</button></p>
+        <p><strong>Turen "Kopien"</strong> viser i fire korte trin, hvordan cellen kopierer sit DNA, før den deler sig, og hvad der sker med fejlene. <button class="knap lille" id="livHjælpKopien">Tag turen ›</button></p>
+        <p><strong>Kopien:</strong> Træk lynlåsen hen ad stigen (eller tryk "Lyn op"), så bygger cellen en ny side på hver halvdel. Nogle gange kommer et forkert bogstav på. Cellen retter de fleste, men en gang imellem bliver et siddende. Find det, og tryk på det.</p>
         <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Cellekernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
         <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
         <p><strong>De gule streger</strong> helt tæt på er hydrogenbindinger. De holder A og T sammen med to og G og C med tre.</p>
