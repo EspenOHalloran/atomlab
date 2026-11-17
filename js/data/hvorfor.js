@@ -207,6 +207,30 @@ export const HVORFOR = {
     svar: 'Rækkefølgen af aminosyrerne bestemmer, hvordan kæden folder sig, og formen bestemmer, hvad proteinet kan. Ved seglcelleanæmi er kun ét bogstav i genet HBB skiftet: GAG er blevet til GTG. Så sidder der valin, der skyr vand, i stedet for glutaminsyre, der er minusladet.\n\nHar man ændringen fra både sin mor og sin far, klumper hæmoglobinet sammen i lange tråde, når det har afleveret ilten. De røde blodlegemer bliver krumme som en segl og kan sætte sig fast i de små blodårer.',
     nørd: 'Har man det ændrede gen kun fra den ene forælder, er man bærer og bliver normalt ikke syg (genome.gov). Bærere får sjældnere den farlige form af malaria (Hedrick 2011), men de kan godt få malaria. Derfor er genet almindeligt, hvor der er meget malaria.',
   },
+  // Liv L3, kort 1-3 (docs/drejebog-liv.md, afsnit 5). Kilder: docs/fakta-liv/dna-opskriften.md, afsnit 4 og 5.
+  // Kort 1: Nature 171 (25. april 1953), Foto 51 (Gosling under Franklin, 2. maj 1952), Wilkins viste det til Watson uden
+  // hendes viden, Cobb og Comfort 2023 ("an equal player", seks ugers modelbygning og MRC-rapporten), nobelprize.org (1962,
+  // og reglen om døde fra 1974, før det to gange), Franklin død 16. april 1958, 37 år. Fælde 7 og 14.
+  livStigen: {
+    spørgsmål: 'Hvem fandt stigen?',
+    svar: 'I 1953 byggede James Watson og Francis Crick modellen af stigen. De brugte Rosalind Franklins målinger uden at spørge hende. Hun var en ligeværdig del af arbejdet.\n\nWatson, Crick og Maurice Wilkins fik Nobelprisen i 1962. Franklin døde i 1958, kun 37 år.',
+    nørd: 'I 1952 tog Franklins studerende Raymond Gosling et røntgenbillede af DNA, »Foto 51«. Wilkins viste det til Watson uden Franklins viden. Men billedet viste mest, at DNA er en spiral. Svaret kom af seks ugers modelbygning og især af en rapport med hendes målinger (Cobb og Comfort 2023). Hendes egen artikel stod i samme nummer af tidsskriftet Nature som Watsons og Cricks. Nobelprisen gives ikke til en, der er død. Reglen blev først skrevet ind i 1974, men før det var det kun sket to gange.',
+  },
+  // Kort 2: 46 kromosomer, 23 fra hver. Ca. 70 nye: Jónsson m.fl. 2017 (108.778 / 1.548 = 70,3, 1,51 flere pr. år fra
+  // faren og 0,37 fra moren). Under 1 pr. 10⁹: 6,1 · 10⁹ · 10⁻⁹ ≈ 6 pr. kopi (fælden i E10). Antallet af delinger står kun
+  // på Wikipedia ("Paternal age effect": ca. 23 om året efter puberteten, Malaspina m.fl. 2015, ikke åbnet), så uden tal.
+  livForaeldre: {
+    spørgsmål: 'Hvorfor ligner jeg mine forældre, men ikke helt?',
+    svar: 'Af de 46 tråde (kromosomerne) i dine celler kom 23 fra din mor og 23 fra din far, så du har opskrifter fra dem begge. Hver af dem har selv to sæt og gav dig en ny blanding af dem. Derfor ligner søskende hinanden, men ikke helt.\n\nOg du har ca. 70 nye bogstaver, som ingen af dine forældre har.',
+    nørd: 'Hvordan kan det blive til 70? Når cellen kopierer, bliver under 1 bogstav pr. milliard forkert, så én kopi af alle 6,1 milliarder giver kun nogle få. Men cellerne, der blev til sæd og æg, har delt sig mange gange, før du blev til, og jo ældre faren er, jo flere. Og nogle er skader, ikke kopifejl. For hvert år, faren er ældre, får barnet ca. 1,5 flere nye fra ham og ca. 0,4 fra moren (en undersøgelse af 1.548 islændinge og deres forældre, Jónsson og kolleger 2017).',
+  },
+  // Kort 3: Meselson og Stahl 1958, PNAS 44(7):671-682 (OpenStax 14-3: "one parental or old strand and one new strand").
+  // ¹⁵N har 8 neutroner, ¹⁴N 7. Båndene i cæsiumklorid i en centrifuge.
+  livKopi: {
+    spørgsmål: 'Hvordan ved vi, at hver kopi har en gammel og en ny side?',
+    svar: 'I 1958 gav Matthew Meselson og Franklin Stahl bakterier tungt nitrogen, så deres DNA blev tungt. Så fik de almindeligt nitrogen. Efter én deling var alt DNA midt imellem: én tung side og én let. Efter to delinger var halvdelen midt imellem og halvdelen let.\n\nSådan må det blive, når hver kopi får én gammel side og én ny.',
+    nørd: 'Tungt nitrogen har en ekstra neutron i kernen (¹⁵N i stedet for ¹⁴N). DNA\'et blev slynget rundt i en centrifuge i en tung saltopløsning (cæsiumklorid), så det lagde sig i et bånd efter, hvor tungt det var. Var den gamle stige blevet hel og den nye helt ny, ville der efter én deling have været et tungt og et let bånd, men ingen midt imellem.',
+  },
   // Hvornår er noget opdaget? (Gåderne G3, fælles for kortene). Kilder: docs/fakta-gaader.md, "Fælles for alle kortene".
   // 5σ ensidet: p = ½·erfc(5/√2) = 2,87 · 10⁻⁷, altså 1 ud af 3,49 millioner. log₂(3,49 · 10⁶) = 21,7, så ca. 22 gange
   // plat i træk (2²² = 4,19 millioner). 3σ: 1 ud af 741 (ca. 10 gange plat). LIGO: "greater than 5.1σ" (arXiv:1602.03837).

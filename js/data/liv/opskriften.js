@@ -4,6 +4,7 @@
 import { PARTNER, STOR } from './stige.js';
 import { HBB } from './gener.js';
 import { OPGAVER_PROTEIN } from './protein.js';
+import { OPGAVER_KOPI } from './kopien.js';
 
 // Begyndelsen af genet HBB (β-kæden i hæmoglobin), de første ti kodoner (NCBI RefSeq NM_000518.5, docs/fakta-liv.md).
 // Det er streng I, læst fra 5' mod 3' (opad i stigen).
@@ -11,6 +12,7 @@ export const HBB_START = HBB.dna.slice(0, 30);
 
 // Trinene på rejsen, udefra og ind. tal: [navn, værdi], højst to (budgettet i docs/retning.md: højst to tal og tre
 // sætninger fremme). nørd: { tal, tekst }, det, der står øverst i "For nørder" ved trinet. ekstra: en linje under tallene.
+// hvorfor: et eller flere "Hvorfor?"-kort (id'er i js/data/hvorfor.js), højst fire spørgsmål i panelet.
 export const NIVEAUER = [
   {
     id: 'celle', knap: 'Cellen', titel: 'En af dine celler',
@@ -26,6 +28,7 @@ export const NIVEAUER = [
       tal: [['Basepar i alt', 'ca. 6,1 milliarder']],
       tekst: 'Var cellekernen en kugle på 10 cm, ville tråden være ca. 33 km lang og tyndere end et hår fra dit hoved.',
     },
+    hvorfor: ['livForaeldre'], // L3, kort 2
   },
   {
     id: 'kromosom', knap: 'Kromosomet', titel: 'Kromosomet',
@@ -44,7 +47,7 @@ export const NIVEAUER = [
       tal: [['Afstand mellem trin', 'ca. 0,34 nm']],
       tekst: 'A og G er store baser (to ringe), T og C små (én ring). Et trin er altid en stor og en lille, så stigen er lige bred hele vejen.',
     },
-    hvorfor: 'livSammen',
+    hvorfor: ['livSammen', 'livStigen'], // L3, kort 1: Hvem fandt stigen?
   },
   {
     id: 'atomer', knap: 'Atomerne', titel: 'Atomerne',
@@ -73,6 +76,7 @@ export const OPGAVER_LIV = [
     fakta: 'Fordi A altid passer til T og G til C, bestemmer den ene halvdel af stigen den anden. Det bruger cellen, når den kopierer sit DNA.',
   },
   ...OPGAVER_PROTEIN, // L2: fra opskrift til protein (js/data/liv/protein.js)
+  ...OPGAVER_KOPI, // L3: "Leg frit: Kopien" (js/data/liv/kopien.js)
 ];
 
 export const BYG_TRIN = 8;
