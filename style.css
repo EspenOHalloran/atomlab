@@ -1317,8 +1317,10 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .sol-klode { flex-direction: column; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
 /* Overblikket "Solsystemet" er for langt til ét felt og får to (fem felter pr. række giver stadig to hele rækker) */
 .sol-klode[data-id="overblik"] { grid-column: span 2; }
-/* Kosmos: de fire grupper to og to med ikonet ved siden af navnet, på telefon på én række (Serie 1 nr. 4) */
-#kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Kosmos: forsiden øverst i hele bredden og de fire grupper to og to med ikonet ved siden af navnet, på telefon
+   alle fem på én række (Serie 1 nr. 4). Rækkerne er lige høje, også når et navn brydes (jeres ønske 17. november 2026) */
+#kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+#kosmos .kosmos-grupper .sol-klode[data-id="oversigt"] { grid-column: span 2; justify-content: center; }
 #kosmos .kosmos-grupper .sol-klode { flex-direction: row; justify-content: flex-start; gap: 6px; padding: 7px 14px 7px 8px; text-align: left; font-size: 13px; }
 /* Træet: en liste (ikke knapper) med "du er her" som en lys streg i siden */
 .sol-træ { display: flex; flex-direction: column; gap: 1px; }
@@ -1514,7 +1516,8 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .kosmos-liste::-webkit-scrollbar { display: none; }
   .kosmos-valg { flex: 0 0 auto; }
   .kosmos-videre { display: none; }
-  #kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #kosmos .kosmos-grupper .sol-kloder { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  #kosmos .kosmos-grupper .sol-klode[data-id="oversigt"] { grid-column: auto; }
   #kosmos .kosmos-grupper .sol-klode { flex-direction: column; justify-content: center; gap: 2px; padding: 6px 2px; text-align: center; font-size: 12px; }
   /* Træet som rækker af små punkter, der brydes (ellers skubber det "Prøv selv" langt ned) */
   .sol-træ { flex-direction: row; flex-wrap: wrap; gap: 4px; }

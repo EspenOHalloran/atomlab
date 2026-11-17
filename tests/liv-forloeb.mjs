@@ -124,7 +124,7 @@ tjek('trin 4: 5 af 8 trin er bygget, et forkert bogstav bygger ikke, tre rigtige
   start4.bygget === 5 && start4.knapper === 'ATGC' && efterForkert === 5 && ikkeByg, JSON.stringify({ start4, efterForkert, ikkeByg }));
 const førsteVej = await T(() => document.querySelector('#liv .fl-vej.primær').textContent);
 tjek('"Det så du": kernesætningen, kopien i en linje og tre veje videre (den første er forløb 2)',
-  slut.tekst === OPSKRIFTEN.kernesætning && /kopierer cellen sit DNA/.test(slut.lille) && slut.veje === 3 && /^Næste forløb: Hvad står der i opskriften/.test(førsteVej), JSON.stringify({ slut, førsteVej }));
+  slut.tekst === OPSKRIFTEN.kernesætning && /kopierer cellen sit DNA/.test(slut.lille) && slut.veje === 3 && /^Næste tur: Hvad står der i opskriften/.test(førsteVej), JSON.stringify({ slut, førsteVej }));
 
 // ---------- Forløb 2: "Hvad står der i opskriften?" ----------
 await page.click('#liv .fl-vej.primær');

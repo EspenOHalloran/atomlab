@@ -12,7 +12,7 @@
 5. **Lagene ser ens ud overalt.** Et spørgsmål er en gul pille med "?", og den åbner et kort. "For nørder" og "Ærligt talt" er to lukkede bokse nederst, i den rækkefølge og med samme farve i alle dele.
 6. **Billedet først.** Når man kommer til et nyt sted, er scenen alene i et par sekunder (eller til man rører den). Så kommer panelerne. Intet på skærmen fortæller svaret, før man selv har gjort det, der viser det.
 7. **Farverne betyder det samme overalt.** Lyseblå: det, du kan gøre eller har valgt. Gul: spørgsmål og stjerner. Rød og orange bruges kun om fare og varme. Ikoner er tegnede, ikke emoji (Retningen).
-8. **Det samme hedder det samme.** "Forfra" nulstiller scenen. "Næste ›" går et skridt frem. "Vis mig" gør handlingen for én. "Udforsk selv" forlader et forløb. Pile uden ord ("‹" og "›") bladrer mellem ting af samme slags.
+8. **Det samme hedder det samme.** "Forfra" nulstiller scenen. "Næste ›" går et skridt frem. "Vis mig" gør handlingen for én. "Udforsk selv" forlader et forløb. Ud mod brugeren hedder et forløb en **tur** ("Tag turen igen", jeres valg 17. november 2026), og boksen med kontakter og skydere hedder "Indstillinger". Pile uden ord ("‹" og "›") bladrer mellem ting af samme slags.
 9. **Vis kun det, der findes.** Ingen grå pladser, tomme sider eller "kommer senere" i den udgave, I bruger. Én ting må anes som det næste, hvis den stiller et spørgsmål.
 10. **Skift er en bevægelse.** Fra ét sted til et andet zoomer, glider eller toner billedet (0,2-0,4 sekund). Det klipper ikke. Med "reducer bevægelse" slået til skifter det med det samme.
 

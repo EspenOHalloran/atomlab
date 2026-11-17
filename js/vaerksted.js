@@ -733,13 +733,13 @@ function lavOpgaveliste() {
   // Forløbet øverst: et tryk tager det (igen)
   const fGruppe = document.createElement('li');
   fGruppe.className = 'opgave-gruppe';
-  fGruppe.textContent = 'Forløb';
+  fGruppe.textContent = 'Tur';
   const fLi = document.createElement('li');
   const taget = fremgang.forløbTaget(FØRSTE_ATOM.id);
   fLi.className = 'forløb-punkt' + (taget ? ' løst' : '');
   fLi.innerHTML = `<span class="flueben">${taget ? '✓' : '▶'}</span><span class="opgave-titel"></span><small></small>`;
   fLi.querySelector('.opgave-titel').textContent = FØRSTE_ATOM.titel;
-  fLi.querySelector('small').textContent = taget ? 'Taget. Tryk for at tage det igen.' : 'Fem korte trin: Hvad er et atom bygget af?';
+  fLi.querySelector('small').textContent = taget ? 'Taget. Tryk for at tage den igen.' : 'Fem korte trin: Hvad er et atom bygget af?';
   fLi.addEventListener('click', () => {
     lyd.klik();
     $('opgaveliste').classList.add('skjult');
