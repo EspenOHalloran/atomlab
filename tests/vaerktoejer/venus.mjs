@@ -4,7 +4,8 @@
 // (kontakten "Ultraviolet (som Akatsuki)"), under50 og under100 (skyderen "Under skyerne"), modlys (kontakten "Modlys"),
 // tæt (lavt over skyerne ved grænsen mellem dag og nat) og hurtig (efter 10 sekunder med ⏩). V3: nat (natsiden),
 // gloed og gloed100 (natsiden med "Gløden på natsiden", med skyerne og uden), navne (hele Venus med navnene) og
-// stederne maxwell, maat, kupler og venera13 (flyver derhen fra træet).
+// stederne maxwell, maat, kupler og venera13 (flyver derhen fra træet). V5: stop1 til stop6 (flybyens stop) og ned (turen
+// ned til Venera 13: billeder ved 66, 55, 35 og 12 km og efter landingen).
 // Uden størrelse: pc og tablet. Uden steder: hel. Mål én browser ad gangen (tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('venus-fuld');
@@ -40,6 +41,21 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
       await f((id) => atomlabTest.solsystem.gåTil(id), sted);
       await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 240000, polling: 200 });
       await s.waitForFunction(() => Object.values(atomlabTest.solsystem.fænomen().lokalt()).every((l) => !l.aktiv || (l.kort && l.højde)), null, { timeout: 240000, polling: 200 });
+    }
+    if (/^stop\d$/.test(sted)) {
+      await F('flybyTil', Number(sted.slice(4)) - 1);
+      if (sted !== 'stop6') {
+        await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 240000, polling: 200 });
+        await s.waitForFunction(() => Object.values(atomlabTest.solsystem.fænomen().lokalt()).every((l) => !l.aktiv || (l.kort && l.højde)), null, { timeout: 240000, polling: 200 });
+      }
+    }
+    if (sted === 'ned' || sted === 'stop6') {
+      if (sted === 'ned') await f(() => atomlabTest.solsystem.gåTil('ned'));
+      for (const km of [66, 55, 35, 12]) {
+        await s.waitForFunction((km) => atomlabTest.solsystem.fænomen().ned().hMiddel < km, km, { timeout: 400000, polling: 100 });
+        await s.screenshot({ path: `${UD}/${navn}-venus-${sted}-${km}km.png` });
+      }
+      await s.waitForFunction(() => atomlabTest.solsystem.fænomen().ned().fase === 'landet', null, { timeout: 400000, polling: 200 });
     }
     if (sted === 'hurtig') {
       await s.click('#solsystemTid button[data-tid="hurtig"]');

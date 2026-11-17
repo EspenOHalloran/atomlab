@@ -1718,6 +1718,27 @@ button.sol-gruppe-navn::after { content: " ›"; }
   .ob-tid { padding: 4px 6px; }
   .ob-dato { font-size: 14px; }
 }
+/* Venus (js/kosmos/venus-ned.js): måleren på turen ned til Venera 13 og Veneras foto oven på 3D-billedet, og fotoet
+   på stedets side (side.foto i js/faenomenskaerm.js) */
+.venus-ned { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; pointer-events: none; }
+.venus-maaler { display: flex; gap: 6px; padding: 6px 8px; border-radius: 12px; background: rgba(8, 12, 30, 0.78); border: 1px solid var(--panel-kant); font-variant-numeric: tabular-nums; }
+.venus-maaler[hidden], .venus-foto[hidden] { display: none; }
+.venus-maaler div { display: flex; flex-direction: column; min-width: 92px; padding: 0 6px; }
+.venus-maaler div + div { border-left: 1px solid var(--panel-kant); }
+.venus-maaler span { font-size: 13px; color: var(--svag); white-space: nowrap; }
+.venus-maaler strong { font-size: 20px; line-height: 1.2; white-space: nowrap; }
+.venus-foto { margin: 0; width: min(760px, 100%); display: flex; flex-direction: column; gap: 3px; }
+.venus-foto img, .side-foto img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 220, 170, 0.25); }
+.venus-foto figcaption { align-self: center; padding: 3px 8px; border-radius: 8px; background: rgba(8, 12, 30, 0.72); font-size: 13px; color: var(--svag); text-align: center; }
+.side-foto { margin: 0 0 8px; }
+.side-foto figcaption { margin-top: 4px; font-size: 13px; color: var(--svag); line-height: 1.35; }
+@media (max-width: 560px) {
+  .venus-maaler { gap: 2px; padding: 4px 4px; }
+  .venus-maaler div { min-width: 0; padding: 0 5px; }
+  .venus-maaler span { font-size: 13px; white-space: normal; }
+  .venus-maaler strong { font-size: 16px; }
+  .venus-foto figcaption { display: none; }
+}
 /* Rejsen i tid (js/kosmos/tid.js): "Dit ur" og "Jordens ur" med urskiven, og lysuret (et lærred) */
 .tid-ure { display: flex; gap: 8px; align-items: stretch; max-width: 100%; }
 .tid-ur { display: flex; flex-direction: column; justify-content: center; gap: 1px; min-width: 150px; padding: 6px 12px; border-radius: 12px; background: rgba(8, 12, 28, 0.8); border: 1px solid var(--panel-kant); line-height: 1.2; }

@@ -545,6 +545,8 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
       : '');
     const boks = (titel, indhold, lag, klasse = '') => `<details class="lag-boks side-boks side-del ${klasse}"${lag ? ` data-lag="${lag}"` : ''}><summary><strong>${titel}</strong></summary>${indhold}</details>`;
     let html = side.kort ? `<div class="side-del side-kort"><p>${side.kort}</p></div>` : '';
+    // foto: { src, alt, tekst } et foto under den korte tekst (fx Venera 13's foto fra jorden på Venus)
+    if (side.foto) html += `<figure class="side-del side-foto"><img src="${side.foto.src}" alt="${side.foto.alt}" loading="lazy" draggable="false"><figcaption>${side.foto.tekst}</figcaption></figure>`;
     for (const e of side.emner ?? []) {
       // gemt: emnet står først, når dets kontakt eller skyder bruges (foldUd), så panelet starter med få spørgsmål
       html += boks(e.titel, e.tekst + hvorfor(e.hvorfor), null, 'side-emne').replace('<details ', `<details ${e.kontakt ? `data-kontakt="${e.kontakt}" ` : ''}${e.gemt ? 'hidden ' : ''}`);

@@ -58,7 +58,7 @@ Kilde: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html
 - **Skyerne er dråber af svovlsyre.** Regnen fordamper i varmen, før den når jorden (virga). *S (Wikipedia, BBC).*
 - **Farven:** I synligt lys er skyerne næsten uden mønster, lyst gullig hvide. I ultraviolet lys (UV) ses mørke striber og et stort "Y", fordi et ukendt stof ("den ukendte UV-absorber") opsuger UV. Ved 365 nm og 283 nm (Akatsuki UVI) ses også SO₂. *S (Commons, Akatsukis beskrivelse) og RS (det ukendte stof).*
 - **Polhvirvlerne:** Over hver pol er der en hvirvel med et dobbelt øje, der skifter form (Venus Express' VIRTIS i infrarødt). *S (Wikipedia).*
-- **Det mest jordlignende sted i Solsystemet:** Ca. 50-65 km oppe er tryk og temperatur næsten som ved Jordens overflade (ca. 1 bar og 0-50 °C). *S (Wikipedia), tallene tjekkes i VIRA i V4.*
+- **Det mest jordlignende sted i Solsystemet:** Ca. 50-65 km oppe er tryk og temperatur ikke langt fra Jordens. **Rettet i V5 (E18):** Ikke i samme højde: 50 km har 1,07 bar og 75 °C, 55 km 0,53 bar og 27 °C (VIRA, afsnit 12). *S.*
 - **Tryk og temperatur for hver højde:** Venus International Reference Atmosphere (VIRA, Seiff m.fl. 1985). Temperaturen falder ca. 8 °C pr. km nær jorden. *U, slås op i V4.*
 - **Lyset ved jorden:** dæmpet og orange, fordi luften og skyerne tager det blå. Hvor lyst der er (fx "som en overskyet dag"), er ikke slået op. *U.*
 - **Lyn på Venus:** omstridt. Ikke med. *RS.*
@@ -84,8 +84,8 @@ Kilde: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html
 - **Mariner 2** (1962): den første sonde, der fløj forbi en anden planet. *RS.*
 - **Venera 7** (1970): den første landing, der sendte data fra jorden på en anden planet. **Venera 9** (1975): de første fotos fra jorden. *RS.*
 - **Venera 13** (NSSDC og Wikipedia): landede **1. marts 1982** ved **7,5° S og 303° Ø**, øst for Phoebe Regio. Holdt i mindst **127 minutter** (bygget til 32), i **457 °C** og **89 atmosfærers tryk** (9,0 MPa). Tog 14 billeder. Farvepanoramaet (VG00261/262) dækker 170° og er lavet med mørkeblåt, grønt og rødt filter. Kameraet: 252 × 1.000 punkter, 9 bit. NSSDC: "The true color is difficult to judge because the Venerian atmosphere filters out blue light." Jorden ligner basalt. *S.*
-- **Venera 14** (marts 1982): landede ca. 900 km fra Venera 13. *RS.*
-- **Magellan** (1990-1994), **Venus Express** (ESA, 2006-2014), **Akatsuki** (JAXA, i bane fra december 2015, kontakten mistet i april 2024). *S for Akatsuki (Wikipedia), RS for resten.*
+- **Venera 14** (marts 1982): landede ca. 950 km fra Venera 13 (rettet efter E18). *S.*
+- **Magellan** (1990-1994), **Venus Express** (ESA, 2006-2014), **Akatsuki** (JAXA, i bane fra december 2015, kontakten mistet i april 2024, missionen afsluttet 18. september 2025, E18). *S for Akatsuki (Wikipedia), RS for resten.*
 - **Parker Solar Probe** (WISPR, 2020 og 2021): billeder af natsiden i synligt og nær-infrarødt lys, hvor den varme jord gløder svagt gennem skyerne, og Aphrodite Terra ses som en stor mørk plet (højlandet er køligere). *S (Wikipedia, Wood m.fl. 2022, og Commons: NASA/Johns Hopkins APL/NRL, public domain).*
 - **Kommende sonder** (Wikipedia, med henvisning til Ars Technica 10. september og 14. oktober 2026): **DAVINCI** (NASA, sonde, der daler ned gennem luften, opsendelse december 2030), **VERITAS** (NASA, radar i bane, november 2032) og **EnVision** (ESA, 2032. NASA trak sin radar, så den bygges nu i Europa). Begge NASA-missioner var truet af nedskæringer, men er "back on track" (oktober 2026). *S for datoerne i Wikipedia, RS (tallene ændrer sig), skrives med dato.*
 
@@ -142,3 +142,21 @@ Kilde: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html
 - **Gløden (regnet):** T = 737 K − 7,7 K/km · (h − 0,8 km). Ved 1 µm er L = 0,66 / 0,43 / 0,17 / 0,08 ved 2 / 4 / 8 / 11 km over middelradius, som Fables tabel. Toppen af Maat Mons ca. 6 gange svagere og Maxwell Montes ca. 12 gange svagere end middelhøjden. Wiens lov: mest stråling ved 2.898 / 737 = 3,9 µm. *R.*
 - **Gløden (Fable, K):** Parker Solar Probe (WISPR) så natsiden i juli 2020 og februar 2021 i 0,48-0,80 µm, altså det dybeste røde lys. Venus Express (VIRTIS) og Akatsuki så den i infrarødt. Steder, der lyser mere end højden kan forklare, er tolket som ung lava (Idunn Mons). Ved 1 µm er natsiden ca. 3.000 gange svagere end dagsiden. *S.*
 - **Ikke skrevet** (for usikkert eller ikke slået op): højden, hvor radarlyse toppe begynder, Veneras isolering og titanium, "den første lyd" og om øjet kunne se gløden (det kan det ikke, se E18).
+
+## 12. Faktatjek V5 (17. november 2026, Opus, flybyen, turen ned og de nye tekster)
+*Teksterne i `js/data/sider/venus.js` (TUR, SIDE og SIDER.ned), `js/data/hvorfor.js` (`venusMerkur`, `venusBaglaens`, `venusLiv`) og Ordbogen (radar, drivhuseffekt). Fables rettelser fra [E18](../fable/E18-venus.md), afsnit 3, 5 og 6, er med. Åbnet i dag: Wikipedias wikitekst for "Atmosphere of Venus" og "Venus", NSSDC's billedkatalog (Venera 13, VG00261/262) og Commons (samme fil, PD-RU-exempt).*
+- **Luften i hver højde (VIRA, Seiff m.fl. 1985, tabellen på Wikipedia "Atmosphere of Venus"):** 0 km 462 °C og 92,10 bar, 10 km 385 °C og 47,39, 20 km 306 °C og 22,52, 30 km 222 °C og 9,851, 40 km 143 °C og 3,501, 50 km 75 °C og 1,066, 55 km 27 °C og 0,5314, 60 km −10 °C og 0,2357, 70 km −43 °C og 0,0369, 100 km −112 °C. Wikipedia skriver enheden som atm, men VIRA og NSSDC (92 bar ved jorden) bruger bar. Står i `js/data/luft-venus.js`. *S.* Trykket halveres ca. hver 10 km nær jorden og ca. hver 5 km ved skyerne (regnet: 92,1 → 47,4 på 10 km, 1,07 → 0,53 på 5 km). *R.*
+- **Ved Venera 13:** Jorden ved stedet ligger ca. 0,67 km over middelradius i Magellans højder, og VIRA giver dér ca. 457 °C og 88 bar. Venera 13 målte 457 °C og 89 atmosfærer (NSSDC). *R og S.*
+- **"92 gange Jordens tryk er som ca. 900 m under havet"** og **"bly smelter ved 327 °C"** (Wikipedia "Atmosphere of Venus"). *S.*
+- **Uden drivhuseffekt ca. −47 °C** (NSSDC: sort legeme 226,6 K), og Venus optager mindre solvarme end Jorden (E18: ca. 600 mod 960 W/m², regnet fra NSSDC). Jorden: ca. 33 °C drivhuseffekt (288 K mod ca. 255 K). *S og R.*
+- **Skyerne:** dråber af svovlsyre, regnen fordamper, før den når jorden (afsnit 3, skrevet som "dråber, der falder, fordamper"). Skyerne ligger ca. 48-70 km oppe på dagsiden (Wikipedia: dækket er ca. 20 km tykt og når op til ca. 65-70 km). *S.* Måleren og disen bruger 48-70 km.
+- **Superrotationen:** "ca. 60 gange hurtigere" (243 / 4, E18 punkt 8). Rettet fra 55 på siden. *R.*
+- **Magellan:** kortlagde 98 % fra 1990 til 1992, sonden blev ved til 1994 (E18, NASA). *S.*
+- **Maat Mons:** "en åbning i dens side blev dobbelt så stor på otte måneder i 1991" (Herrick og Hensley 2023 via E18). *S.*
+- **Gløden:** "Jorden på Venus er 464 °C, så den gløder. Om natten kan kameraer se det gennem skyerne." Ikke "natsiden er varmere", og ikke øjet (E18, afsnit 2). Aphrodite Terra som mørk plet (Parker, NASA). Ovda Regio er den vestlige del af Aphrodite Terra (USGS: 2,8° S, 85,6° Ø). *S.*
+- **Hvorfor baglæns (Wikipedia "Venus"):** "a result of competing forces of solar tidal locking and differential heating of Venus's massive atmosphere", og døgnet svinger op til ca. 20 minutter. Et tidligt sammenstød er den anden kendte idé. Skrevet som "det ved man ikke sikkert". *S og RS.*
+- **Liv i skyerne (E18, punkt 3 og 4):** Dråberne er ca. 100 gange for tørre (Hallsworth m.fl. 2021). Fosfinen fra 2020 er ikke afgjort (Greaves m.fl. 2020 og 2023 mod Cordiner m.fl. 2022). Fosfin findes også på Jupiter og Saturn uden liv. *S og RS.*
+- **Lyset dernede:** Venera 9 målte ca. 14.000 lux, som en overskyet dag (E18 efter Science News 1976). *S.*
+- **Venera 13's foto (NSSDC):** 170°, mørkeblåt, grønt og rødt filter, "Part of the spacecraft is at the bottom of the image", "On the ground in foreground is a camera lens cover", "The true color is difficult to judge". Licens: Commons PD-RU-exempt-autocam, NSSDC "USSR/NASA". *S.*
+- **Zoozve** (kvasimåne, kredser om Solen) og **de næste sonder** skrevet som "i 2030'erne" (E18, punkt 9). *S.*
+- **Ikke skrevet:** hvor lang tid Venera 13 brugte på vejen ned (ikke slået op, skrevet "meget længere"), hvor langt man kan se under skyerne, og "det mest jordlignende sted i Solsystemet".
