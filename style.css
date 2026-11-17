@@ -1878,6 +1878,9 @@ button.sol-gruppe-navn::after { content: " ›"; }
 /* Turen øverst i træet (▶ Flyby · 13 stop) */
 .sol-tur { margin-bottom: 3px; color: var(--accent); }
 .sol-tur:disabled { opacity: 0.6; cursor: default; }
+/* Turene (forløbene) i listen (▶ Tur: Rejsen i tid ✓, jeres valg 17. november 2026): lyseblå, ✓ til højre, prikken (ny) som et nyt fænomen */
+.sol-sted.fl-tur { color: var(--accent); }
+.sol-sted.fl-tur .tur-mærke { margin-left: auto; padding-left: 6px; color: var(--accent); font-weight: 700; }
 
 /* ---------- Dybde i lag (js/lag.js) ---------- */
 /* Foldebokse: overskriften og én linje står fremme, resten folder sig ud */
@@ -2272,12 +2275,17 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 @keyframes fl-skift { from { opacity: 0; } }
 /* "↻ Tur" i toplinjen (lavTurKnap i js/forloeb.js, E20): Tag en tur igen inde fra delen. Skjult under turen. På telefon kun ↻ */
 .topknapper:has(.tur-knap) { position: relative; }
-.tur-knap { min-height: 44px; white-space: nowrap; }
+.tur-knap { position: relative; min-height: 44px; white-space: nowrap; }
+/* Prikken: en af delens ture er ikke taget (lavTurKnap). Den pulserer tre gange, når skærmen vises */
+.tur-knap.ny::after { content: ""; position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+@media (prefers-reduced-motion: no-preference) { .tur-knap.ny::after { animation: tur-puls 1.6s ease-in-out 3; } }
+@keyframes tur-puls { 50% { box-shadow: 0 0 2px 6px rgba(95, 227, 255, 0.35); } }
 .skærm.i-forløb .tur-knap { display: none !important; }
 .tur-liste { position: absolute; top: calc(100% + 6px); right: 0; z-index: 40; display: grid; gap: 2px; min-width: 230px; padding: 6px; border-radius: 14px; border: 1px solid var(--panel-kant); background: rgba(8, 12, 30, 0.96); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
-.tur-liste button { display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 8px; border: 0; border-radius: 10px; background: none; color: var(--tekst); font: inherit; font-size: 15px; text-align: left; cursor: pointer; }
+.tur-liste button { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px 0 8px; border: 0; border-radius: 10px; background: none; color: var(--tekst); font: inherit; font-size: 15px; text-align: left; cursor: pointer; }
 .tur-liste button:hover, .tur-liste button:focus-visible { background: rgba(95, 227, 255, 0.12); }
 .tur-mærke { justify-self: center; color: var(--accent); font-weight: 700; }
+.tur-ny { padding-left: 10px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 @media (max-width: 560px) { .tur-tekst { display: none; } .tur-knap { min-width: 44px; padding: 0 10px; } }
 /* Efter turen toner laboratoriet ind i to skridt: scenen og det, man styrer med, først, og det, man læser, lidt efter
    (stilguiden B8, klassen fra-forløb i ca. 1 s fra js/forloeb.js) */

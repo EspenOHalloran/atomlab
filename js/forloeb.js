@@ -227,6 +227,7 @@ function næsteFørHandling() {
 function tilSlut() {
   k.fase = 'slut';
   fremgang.markérForløb(k.data.id, 'taget');
+  for (const opdater of turKnapper) opdater(); // prikken på "↻ Tur" (lavTurKnap)
   lyd.klaret();
   tegn();
 }
@@ -367,14 +368,24 @@ function tegn() {
 // "↻ Tur" i toplinjen (E20, jeres valg 17. november 2026): Turen tages igen inde fra delen, ét fast sted i alle dele.
 // ture: delens forløbsdata (forløbI(del) fra js/data/forloeb/liste.js). start(data) starter turen i delen. Har delen flere
 // ture, åbner knappen en lille liste med ✓ ved dem, der er taget. Knappen er skjult, mens en tur kører (style.css).
+// Prikken (klassen ny, jeres valg 17. november 2026): Så længe en af delens ture ikke er taget, har knappen en lyseblå
+// prik, og listen skriver "Ny" ved den. Knapperne opdateres, når en tur bliver taget (turKnapper, tilSlut).
+const turKnapper = new Set();
 export function lavTurKnap(skærm, ture, start) {
   const top = skærm?.querySelector('.topbjælke .topknapper');
   if (!top || !ture.length || top.querySelector('.tur-knap')) return null;
   const knap = document.createElement('button');
   knap.className = 'knap lille tur-knap';
-  knap.title = ture.length > 1 ? 'Tag en tur igen' : `Tag turen "${ture[0].titel}" igen`;
-  knap.setAttribute('aria-label', knap.title);
   knap.innerHTML = '<span aria-hidden="true">↻</span><span class="tur-tekst"> Tur</span>';
+  const opdater = () => {
+    const nye = ture.filter((t) => !fremgang.forløbTaget(t.id)).length;
+    knap.classList.toggle('ny', nye > 0);
+    if (ture.length > 1) knap.title = nye ? `Tag en tur (${nye} ${nye > 1 ? 'nye' : 'ny'})` : 'Tag en tur igen';
+    else knap.title = `Tag turen "${ture[0].titel}"${nye ? '' : ' igen'}`;
+    knap.setAttribute('aria-label', knap.title);
+  };
+  opdater();
+  turKnapper.add(opdater);
   top.insertBefore(knap, top.querySelector('[title="Hjælp"]') ?? top.querySelector('.knap-fuldskaerm'));
   let liste = null;
   const udenfor = (h) => { if (liste && !liste.contains(h.target) && !knap.contains(h.target)) luk(); };
@@ -397,7 +408,7 @@ export function lavTurKnap(skærm, ture, start) {
       const b = document.createElement('button');
       b.setAttribute('role', 'menuitem');
       const taget = fremgang.forløbTaget(t.id);
-      b.innerHTML = `<span class="tur-mærke">${taget ? '✓' : ''}</span><span>${esc(t.titel)}</span>`;
+      b.innerHTML = `<span class="tur-mærke">${taget ? '✓' : ''}</span><span>${esc(t.titel)}</span>${taget ? '' : '<span class="tur-ny">Ny</span>'}`;
       b.title = taget ? 'Taget. Tryk for at tage den igen.' : 'Ikke taget endnu';
       b.addEventListener('click', () => { lyd.klik(); luk(); start(t); });
       liste.append(b);

@@ -13,4 +13,6 @@
 
 **Næste:** Runden med jeres søn (begge forløb og grupperne er bygget). Serie 1 nr. 4 er hermed bygget færdig. Fødselsdagshilsnerne (den lette forklaring af "Hvorfor ikke omvendt?") kommer senere.
 
+**Næste fra 17. november 2026 (jeres valg):** Lysuret uddybes med "Uden og med Einstein" (lyset får skibets fart lagt oven i som bolden, og urene går ens) og Jordens ur ved siden af skibets (begge set fra Jorden, så det ikke er det samme ur med to tal). Prompten er [prompt-tid-lysur.md](../prompt-tid-lysur.md) (Opus, høj). Den rører forløb 2, som venter på prøven.
+
 **Spørgsmål til jer:** Ingen lige nu.
