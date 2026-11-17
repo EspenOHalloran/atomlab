@@ -5,7 +5,8 @@
 // H1 (16. november 2026): hylden, forsiden og bladringen med tomme opslag. H2: fortællingen som et forløb (Forløb-klodsen
 // i js/forloeb.js) i bogens opslag af slags 'scene' med tegningerne fra js/bog/<id>.js. Første gang starter forløbet efter
 // "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
-// Gåden, Gør det selv og bogen selv kommer i H3-H4.
+// H3 (17. november 2026): trin 4 (ANNULO) og vejene fra "Det så du": Saturns ringe fra kanten i Solsystemet, hele
+// anagrammet (opslaget "Hemmeligheden") og ringen, man selv drejer. Bogen selv kommer i H4.
 
 import { bogMed, byggede, påHylden, rygLinje, HYLDE_LINJE } from './data/opdagelser.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
@@ -13,7 +14,7 @@ import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavBog } from './bog.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, lavTurKnap } from './forloeb.js';
-import { tagVentForløb } from './gaa.js';
+import { tagVentForløb, åbnFænomen } from './gaa.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -64,13 +65,30 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  del.veje = [{ tekst: 'Prøv ringen selv', primær: true, her: true }];
+  // "Det så du": sætningen fra 1659 og tre veje (drejebogen afsnit 3, trin 5). Den tredje bliver "Bladr i bogen fra
+  // 1659" i H4 (jeres svar 17. november 2026)
+  const v = åben.tekster.VEJE;
+  del.slutTekst = () => `${v.sætning} "${åben.tekster.ANAGRAM.dansk}"`;
+  del.veje = [
+    { tekst: v.saturn, primær: true, gør: () => åbnFænomen('solsystem', 'saturn', 'kanten') },
+    { tekst: v.anagram, gør: () => visOpslag('gaaden') },
+    { tekst: v.selv, her: true },
+  ];
   del.slut = () => {
     bog?.lås(false);
     if (bog?.scene() === scene) scene.fri();
   };
   startForløb(fl, del);
   return true;
+}
+
+// Bladrer til et opslag i den åbne bog (fx "Hemmeligheden" fra "Det så du")
+function visOpslag(id) {
+  const nr = bog?.find(id) ?? -1;
+  if (nr >= 0 && bog.nr() !== nr) {
+    bog.vis(nr);
+    lyd.klik();
+  }
 }
 
 async function åbnBog(id, { fortælling = false } = {}) {
@@ -92,7 +110,7 @@ async function åbnBog(id, { fortælling = false } = {}) {
     },
     lavScene: (o, felt) => {
       if (!scenemodul) return null;
-      const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, påIgen: () => { lyd.klik(); startFortælling(); } });
+      const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, anagram: tekster.ANAGRAM, påIgen: () => { lyd.klik(); startFortælling(); } });
       // Uden for forløbet er opslaget et laboratorium
       queueMicrotask(() => { if (!kørerForløb() && bog?.scene() === scene) scene.fri(); });
       return scene;

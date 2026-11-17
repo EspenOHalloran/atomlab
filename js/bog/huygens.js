@@ -2,7 +2,7 @@
 // lærred i 2D. Stilen er tavlen i Systema Saturnium (ved s. 35) og figurerne på s. 16-18: hvide figurer på en mørk,
 // prikket bund, her i kikkertens runde synsfelt på bogens papir.
 //
-// lavFortælling(felt, { rolig, tekster, påIgen }) fylder opslagets felt (.bog-scene fra js/bog.js) og giver
+// lavFortælling(felt, { rolig, tekster, anagram, påIgen }) fylder opslagets felt (.bog-scene fra js/bog.js) og giver
 //   forløbDel(data)  det, Forløb-klodsen (js/forloeb.js) skal bruge pr. trin-id (start, knapper, færdig, visMig)
 //   fri(kapitel)     laboratoriet efter forløbet: de tre kapitler som tre valg (linse, naetter og ringen, standard
 //                    ringen, man selv kan dreje) og "Fortæl det igen" (påIgen)
@@ -21,6 +21,8 @@
 //   kanten   Saturn står med ringen på kant (januar 1656, s. 16). Man trækker op og ned (vinklen B), og tavlens tegninger
 //            lyser op, når ringen ligner dem. Tilbage ved kanten forsvinder armene, og billedet løfter sig: Kikkertens
 //            uskarphed og synsfelt forsvinder, og man ser den samme ring skråt fra
+//   annulo   (H3, 17. november 2026) Lærredet er væk, og de 17 bunker af bogstaver står i stedet (js/bog/huygens-gaade.js).
+//            Man finder ANNULO, og resten af sætningen flyver på plads med dansk under
 //
 // Saturn tegnes som en kugle med en flad ring (indre kant 1,53 og ydre 2,27 gange Saturns radius: B-ringens inderkant og
 // A-ringens yderkant). B er vinklen, vi ser ringen fra (0 = fra kanten, højst ca. 27° fra Jorden). Snyd, der siges i
@@ -29,6 +31,7 @@
 // hvor lærredets filter ikke findes).
 
 import { forløbRørt, forløbVenter, forløbVink } from '../forloeb.js';
+import { lavAnagram } from './huygens-gaade.js';
 
 const FIGUR = '#f3ead7'; // tavlens hvide figurer
 const BUND = '#1d1a17'; // tavlens mørke bund
@@ -169,8 +172,9 @@ function nattensDato(n) {
   return `${d.getDate()}. ${MÅNEDER[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = null } = {}) {
+export function lavFortælling(felt, { rolig = false, tekster = {}, anagram = null, påIgen = null } = {}) {
   let fl = null; // forløbets data (vinkene), når forløbet kører
+  let ag = null; // bunkerne i trin 4 (lavAnagram)
   felt.innerHTML = '<div class="hs-lærred"><canvas role="img"></canvas></div><div class="hs-under"></div>';
   const lærred = felt.querySelector('canvas');
   const under = felt.querySelector('.hs-under');
@@ -310,7 +314,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
 
   function billede(nu) {
     ramme = 0;
-    if (!aktiv) return;
+    if (!aktiv || s.trin === 'annulo') return; // i trin 4 er lærredet skjult
     const dt = sidst ? Math.min(0.1, (nu - sidst) / 1000) : 0;
     sidst = nu;
     ur += dt;
@@ -517,12 +521,16 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     s.trin = trin;
     s.lab = null;
     skyder = dato = skitser = tavle = null;
+    ag?.fjern();
+    ag = null;
     under.replaceChildren();
+    felt.classList.toggle('hs-ord', trin === 'annulo');
     const etiket = {
       linse: 'Saturn i en kikkert: først slørede kugler, der bliver til to tynde arme, når linsen er slebet',
       naetter: 'Saturn med en svag prik, der går rundt om den i en smal ellipse',
       kanten: 'Saturn med ringen set fra forskellige vinkler',
       fri: 'Saturn med ringen, som du selv kan dreje',
+      annulo: 'Saturn er rund',
     }[trin];
     lærred.setAttribute('aria-label', etiket);
     tegnIgen();
@@ -576,6 +584,14 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
           drej(18);
           vent(rolig ? 300 : 1300, () => drej(0));
         },
+      },
+      annulo: {
+        start() {
+          sætTrin('annulo');
+          if (anagram) ag = lavAnagram(under, anagram, { rolig, påRørt: forløbRørt });
+        },
+        færdig: () => ag?.færdig() ?? true,
+        visMig: () => ag?.visMig(),
       },
     };
     // Kapitlets titel følger trinet (fx "Haag, 1655")
@@ -638,6 +654,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       aktiv = false;
       rydTimere();
       clearTimeout(fang);
+      ag?.fjern();
       cancelAnimationFrame(ramme);
       ramme = 0;
       ro.disconnect();
@@ -648,7 +665,8 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       felt.replaceChildren();
     },
     test: {
-      tilstand: () => ({ trin: s.trin, skarp: s.skarp, nat: s.nat, B: s.B, maksB: s.maksB, løft: s.visLøft, løftet: s.løftet, navn: s.navn, lab: s.lab, lyser: tavle?.querySelector('.lyser')?.dataset.tavle ?? null }),
+      tilstand: () => ({ trin: s.trin, skarp: s.skarp, nat: s.nat, B: s.B, maksB: s.maksB, løft: s.visLøft, løftet: s.løftet, navn: s.navn, lab: s.lab, lyser: tavle?.querySelector('.lyser')?.dataset.tavle ?? null, anagram: ag?.tilstand() ?? null }),
+      bogstav: (b) => ag?.tryk(b) ?? false,
       lab: (kap) => fri(kap),
       slib,
       nat: sætNat,

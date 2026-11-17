@@ -8,6 +8,7 @@ import { SKÆRME } from '../js/skaerme.js';
 import { existsSync } from 'node:fs';
 import { forløbMed, forløbI } from '../js/data/forloeb/liste.js';
 import { ORDBOG } from '../js/data/ordbog.js';
+import { CITATER } from '../js/data/citater.js';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const PROJEKT = new URL('../', import.meta.url).pathname;
@@ -44,7 +45,7 @@ tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåd
   const fejlFl = [];
   if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 1) fejlFl.push('forløbet findes ikke i listen');
   else {
-    if (fl.trin.map((t) => t.id).join() !== 'linse,naetter,kanten') fejlFl.push('trinene');
+    if (fl.trin.map((t) => t.id).join() !== 'linse,naetter,kanten,annulo') fejlFl.push('trinene');
     for (const t of fl.trin) {
       if (!t.kapitel || ord(t.spørg) > 16 || ord(t.så) > 22 || (t.gæt?.valg.length ?? 0) < 2) fejlFl.push(`${t.id}: teksterne`);
       for (const o of t.ord ?? []) if (!ORDBOG.some((x) => x.id === o)) fejlFl.push(`${t.id}: ordet ${o} mangler i Ordbogen`);
@@ -53,7 +54,15 @@ tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåd
   }
   const t = await bogMed('huygens').tekster();
   if (t.OPSLAG.find((o) => o.id === 'fortaelling')?.slags !== 'scene' || !t.FRI?.igen) fejlFl.push('opslaget');
-  tjek('fortællingen: forløbet "Saturns ører" har tre trin med kapitel, gæt og korte tekster, og "linse" står i Ordbogen', !fejlFl.length, fejlFl.join('; '));
+  tjek('fortællingen: forløbet "Saturns ører" har fire trin med kapitel, gæt og korte tekster, og "linse" og "anagram" står i Ordbogen', !fejlFl.length, fejlFl.join('; '));
+  // Test 2 (planen afsnit 7): Anagrammets 62 bogstaver passer præcist med sætningen, i 17 bunker, og ordene giver sætningen
+  const A = t.ANAGRAM;
+  const sorter = (x) => [...x].sort().join('');
+  const iBunker = t.bunker(A.række);
+  tjek('anagrammet: de 62 bogstaver i 17 bunker passer præcist med sætningen, og de otte ord giver sætningen (og den danske er den samme som citatet ved Saturn)',
+    sorter(t.bogstaver(A.række)) === sorter(t.bogstaver(A.sætning)) && t.bogstaver(A.række).length === 62 && iBunker.length === 17
+    && iBunker.reduce((n, [, k]) => n + k, 0) === 62 && A.ord.length === 8 && t.bogstaver(A.ord.map((o) => o.latin).join('')).join('') === t.bogstaver(A.sætning).join('')
+    && A.ord.every((o) => o.dansk) && A.ord[0].latin === A.nøgle && A.dansk === CITATER.huygensSaturn.tekst, JSON.stringify(iBunker));
 }
 tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab-fell.woff2') && existsSync(PROJEKT + 'fonts/OFL.txt'));
 
@@ -190,9 +199,21 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   tjek('stien i fortællingen: scenen virker, mens man gætter, og under Så, forbi målet giver et vink, tæt på tæller, og gættet får sit eget svar',
     linse && halv.fase === 'gør' && /følge med Saturn/.test(svar) && legVidere && drejet, JSON.stringify({ halv, svar, legVidere, drejet, forbi, helt }));
   await page.click('.forløb-linje .fl-næste');
+  // Trin 4 (H3): bunkerne virker, mens man gætter. Et forkert bogstav tæller ikke, ANNULO lægges på plads, og resten af
+  // sætningen flyver på plads, til alle 62 bogstaver er brugt
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'annulo');
+  const forkert = await S(() => atomlabTest.opdagelser.scene().bogstav('c'));
+  const efterForkert = await S(() => ({ fase: atomlabTest.opdagelser.forløb.fase(), ag: atomlabTest.opdagelser.scene().tilstand().anagram, kapitel: document.querySelector('#opdBog .bog-kapitel')?.textContent, bunker: document.querySelectorAll('#opdBog .ag-bunke').length, lærred: getComputedStyle(document.querySelector('#opdBog .hs-lærred')).display }));
+  for (const b of 'annulo') await S((b) => atomlabTest.opdagelser.scene().bogstav(b), b);
+  const annulo = await fase('så');
+  const ag = await S(() => ({ ...atomlabTest.opdagelser.scene().tilstand().anagram, ord: [...document.querySelectorAll('#opdBog .ag-ord')].map((o) => o.querySelector('.ag-latin').textContent).join(' '), så: document.querySelector('.forløb-linje .fl-så')?.textContent }));
+  tjek('trin 4: 17 bunker i stedet for lærredet, et forkert bogstav ryster bare, og efter ANNULO flyver resten på plads, til alle 62 er brugt',
+    !forkert && efterForkert.fase === 'gør' && efterForkert.ag.tal === 62 && efterForkert.bunker === 17 && efterForkert.lærred === 'none' && efterForkert.kapitel === 'Hemmeligheden'
+    && annulo && ag.hel && ag.tal === 0 && ag.fundet === 6 && ag.ord.startsWith('Annulo cingitur') && /anagram/i.test(ag.så), JSON.stringify({ forkert, efterForkert, ag }));
+  await page.click('.forløb-linje .fl-næste');
   await fase('slut');
-  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, vej: document.querySelector('.forløb-linje .fl-vej')?.textContent }));
-  await page.click('.forløb-linje .fl-vej');
+  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, lille: document.querySelector('.forløb-linje .fl-lille')?.textContent, veje: [...document.querySelectorAll('.forløb-linje .fl-vej')].map((v) => v.textContent), vej: document.querySelector('.forløb-linje .fl-vej:last-child')?.textContent }));
+  await page.click('.forløb-linje .fl-vej:last-child');
   await page.waitForTimeout(300);
   const videre = await O(() => ({ opslag: atomlabTest.opdagelser.vist().opslag, låst: atomlabTest.opdagelser.låst(), kører: atomlabTest.opdagelser.forløb.kører(), lab: atomlabTest.opdagelser.scene()?.tilstand().lab }));
   // Laboratoriet har de tre kapitler: "Den lille prik" giver nætterne, og nat 16 viser navnet Titan
@@ -204,8 +225,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
     kapitler.join('|') === 'Linsen|Den lille prik|Ringen' && lab.trin === 'naetter' && lab.lab === 'naetter' && lab.navn, JSON.stringify({ kapitler, lab }));
   tjek('trinene: linsen bliver skarp, Titan er tilbage efter 16 nætter (10. april 1655), og ringen løfter sig ved kanten efter tavlens tegninger',
     linse && nætter && kanten, JSON.stringify({ linse, halv, nætter, ikkeEndnu, kanten, lyser }));
-  tjek('"Det så du" viser kernesætningen, og "Prøv ringen selv" bliver i opslaget med ringen og bladringen låst op',
-    slut.tekst?.includes('tynd, flad ring') && slut.vej?.startsWith('Prøv ringen selv') && videre.opslag === 'fortaelling' && videre.lab === 'ringen' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
+  tjek('"Det så du" viser kernesætningen, sætningen fra 1659 og tre veje, og "Prøv ringen selv" bliver i opslaget med ringen og bladringen låst op',
+    slut.tekst?.includes('tynd, flad ring') && slut.lille?.startsWith('I 1659') && slut.veje.length === 3 && slut.veje[0].startsWith('Se ringen forsvinde ved Saturn') && slut.vej?.startsWith('Prøv ringen selv') && videre.opslag === 'fortaelling' && videre.lab === 'ringen' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
   // Esc midt i forløbet går til hylden og stopper det
   await page.click('#opdBog .hs-igen');
   await vent(page, () => atomlabTest.opdagelser.forløb.kører());

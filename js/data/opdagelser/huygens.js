@@ -22,6 +22,15 @@ export const OPSLAG = [
   { id: 'fortaelling', slags: 'scene', titel: 'Saturns ører' },
 ];
 
+// Vejene fra "Det så du" efter fortællingen (drejebogen afsnit 3, trin 5, og afsnit 5). sætning står foran den danske
+// sætning fra 1659 under kernesætningen.
+export const VEJE = {
+  sætning: 'I 1659 afslørede han, hvad der stod:',
+  saturn: 'Se ringen forsvinde ved Saturn',
+  anagram: 'Løs hele anagrammet',
+  selv: 'Prøv ringen selv',
+};
+
 // Fortællingens laboratorium (opslaget, når forløbet er taget eller sprunget over): de tre kapitler som tre valg
 // (E20, stilguiden B7). Ringen er standard.
 export const FRI = {
@@ -33,3 +42,31 @@ export const FRI = {
     { id: 'ringen', tekst: 'Ringen', linje: 'Træk op og ned, og se Saturn fra andre vinkler.' },
   ],
 };
+
+// Anagrammet (drejebogen afsnit 3-4, faktagrundlaget afsnit 3): rækken, som den er trykt i 1656 og på s. 47 i Systema
+// Saturnium (17 bunker, 62 bogstaver), og sætningen, Huygens afslørede i 1659. Ordene står med deres danske betydning
+// (brikkerne i udfordringen). "cohaerente" med ae (bogen skriver æ). dansk er oversættelsen fra citatet huygensSaturn
+// (js/data/citater.js), så den står ens begge steder. Testen i Node tjekker, at bogstaverne passer præcist.
+export const ANAGRAM = {
+  række: 'aaaaaaa ccccc d eeeee g h iiiiiii llll mm nnnnnnnnn oooo pp q rr s ttttt uuuuu',
+  sætning: 'Annulo cingitur, tenui, plano, nusquam cohaerente, ad eclipticam inclinato.',
+  dansk: 'Den er omgivet af en tynd, flad ring, der ingen steder hænger fast i den og hælder i forhold til Jordens baneplan.',
+  // Ordet, man finder i forløbets trin 4 (det første ord i sætningen)
+  nøgle: 'Annulo',
+  ord: [
+    { latin: 'Annulo', dansk: 'med en ring' },
+    { latin: 'cingitur', dansk: 'er omgivet' },
+    { latin: 'tenui', dansk: 'tynd' },
+    { latin: 'plano', dansk: 'flad' },
+    { latin: 'nusquam', dansk: 'ingen steder' },
+    { latin: 'cohaerente', dansk: 'hængende fast' },
+    { latin: 'ad eclipticam', dansk: 'mod Jordens baneplan' },
+    { latin: 'inclinato', dansk: 'hældende' },
+  ],
+};
+
+// De 17 bunker: [bogstav, antal] i rækkens orden
+export const bunker = (række = ANAGRAM.række) => række.split(' ').map((b) => [b[0], b.length]);
+// Bogstaverne i et ord eller en sætning (kun a-z, små), fx til at tælle bunkerne ned
+export const bogstaver = (tekst) => [...tekst.toLowerCase().replace(/æ/g, 'ae').replace(/[^a-z]/g, '')];
+
