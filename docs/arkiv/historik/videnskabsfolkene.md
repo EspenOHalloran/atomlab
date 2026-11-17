@@ -2,6 +2,11 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (17. november 2026): E15, Opus' noter til Galilei og Newton.**
+- **Noterne** står nederst i [galilei.md](../fakta-videnskabsfolk/galilei.md) og [newton.md](../fakta-videnskabsfolk/newton.md): hvad der er nyt, hvor Opus er uenig med Fable, og hvilke sider fra bøgerne der passer til de fem lag. Tallene er regnet efter (månetesten, Picards omkreds, Keplers 3. lov for Jupiters måner).
+- **Uenig med Fable:** Synsfeltet forklarer ikke, at Galilei ikke så Callisto 8. januar (han så den 7. januar 9,1 bueminutter ude). Begge forløb er kortet ned til fire trin med to gæt. Newtons kernesætning giver Kepler hans del. Kanonkuglen er nok fra den "folkelige" udgave af bog III (trykt 1728) og skal slås op.
+- **Jeres svar 17. november 2026** (står i begge filer): Uffizi-portrættet fra 1635, Galileis kernesætning A, Opus' udgave af Newtons A, og månetestens regnestykke som gåden bagefter. Planens afsnit 2 er rettet: Galilei og Newton har nu faktagrundlag.
+
 **Senest lavet (16. november 2026): H2, fortællingen "Saturns ører".**
 - **Go til H2** 16. november 2026 (jeres svar står i drejebogen, punkt 8: laboratoriet med ringen og "Fortæl det igen", og Gør-teksten i trin 3 er rettet). Bygget i trinene A-E med et go til A og så B-D samlet.
 - **Forløbet** `js/data/forloeb/huygens.js` (trin 1-3 og kernesætning D) kører med Forløb-klodsen i bogens opslag `fortaelling` (slags `scene` i `js/bog.js`). Første gang starter det efter "Begynd". Imens er bladringen låst, og Esc går til hylden. Bagefter er opslaget et laboratorium. Det kan også startes fra "Din fremgang".

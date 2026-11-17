@@ -42,7 +42,7 @@ export const SIDER = {
     kort: 'Hver klump i ringene kredser om Saturn for sig, som en lille måne. Fra kant til kant er ringene ca. 270.000 km.',
     emner: [
       {
-        titel: 'Hvor tynde er ringene?',
+        titel: 'Hvor tynde er ringene?', hvorfor: ['saturnRing'],
         tekst: '<p>Hovedringene er ca. 70.000 km brede, men mange steder kun ca. 10 m tykke. I forhold til bredden er de tyndere end et ark papir.</p>',
       },
       {
@@ -165,3 +165,6 @@ export const SIDER = {
     ærligt: '<p>"Under disen" viser Titan, som et kamera med infrarødt lys ser den. Med øjnene ser man kun den orange dis.</p>' + MÅNE_ÆRLIGT,
   },
 };
+
+// Fra kanten (Gør det selv fra bogen om Huygens, js/kosmos/saturn.js): samme side som ringene
+SIDER.kanten = SIDER.ringe;

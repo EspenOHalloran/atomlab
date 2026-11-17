@@ -2,8 +2,8 @@
 // Kilderne står i docs/fakta-videnskabsfolk/huygens.md. Uden DOM, så testene i Node kan læse dem.
 //
 // opslag er bogens opslag i rækkefølge. slags 'forside' har sin egen opbygning i js/bog.js. slags 'scene' er et kapitel
-// med en tegning, man gør noget i (js/bog/huygens.js). slags 'tom' er et opslag, der kommer i et senere trin (H3-H4 i
-// docs/plan-videnskabsfolk.md): kun kapitlets titel og én linje.
+// med en tegning, man gør noget i (js/bog/huygens.js). Kun de opslag, der er bygget, står her (E20 fund 6, stilguiden A9):
+// Gør det selv og "Om Huygens" kommer i H3-H4 (docs/plan-videnskabsfolk.md).
 
 export const FORSIDE = {
   spørgsmål: 'Hvorfor havde Saturn ører?',
@@ -20,13 +20,33 @@ export const OPSLAG = [
   // Fortællingen (H2): forløbet "Saturns ører" kører i dette opslag med tegningerne fra js/bog/huygens.js. Bagefter er
   // opslaget et lille laboratorium: ringen, man selv kan dreje, og "Fortæl det igen" (jeres svar 16. november 2026).
   { id: 'fortaelling', slags: 'scene', titel: 'Saturns ører' },
-  { id: 'gaaden', slags: 'tom', titel: 'Hemmeligheden', tekst: 'Her kommer gåden fra bogen: et anagram på 62 bogstaver.' },
-  { id: 'selv', slags: 'tom', titel: 'Se det selv', tekst: 'Her kommer vejen til Saturns ringe i Solsystemet.' },
-  { id: 'bogen', slags: 'tom', titel: 'Bogen fra 1659', tekst: 'Her kommer siderne fra Huygens\' egen bog, Systema Saturnium.' },
-  { id: 'om', slags: 'tom', titel: 'Om Huygens', tekst: 'Her kommer "Hvorfor?", "For nørder" og "Ærligt talt".' },
+  // Gåden fra bogen (H3): hele anagrammet som udfordring og "Lav dit eget anagram" (js/bog/huygens-gaade.js)
+  { id: 'gaaden', slags: 'scene', titel: 'Hemmeligheden' },
 ];
 
-export const TOM_LINJE = 'Dette opslag er ikke færdigt endnu.';
+// Vejene fra "Det så du" efter fortællingen (drejebogen afsnit 3, trin 5, og afsnit 5). sætning står foran den danske
+// sætning fra 1659 under kernesætningen.
+export const VEJE = {
+  sætning: 'I 1659 afslørede han, hvad der stod:',
+  saturn: 'Se ringen forsvinde ved Saturn',
+  anagram: 'Løs hele anagrammet',
+  selv: 'Prøv ringen selv',
+};
+
+// Opslaget "Hemmeligheden" (drejebogen afsnit 4): udfordringen med de otte brikker og "Lav dit eget anagram"
+export const GÅDE = {
+  linje: 'Huygens\' hele hemmelighed: Læg de latinske ord på deres danske betydning. For hvert ord tæller bunkerne ned.',
+  tilbage: 'bogstaver tilbage',
+  løst: 'Alle 62 er brugt. Det passer.',
+  løstFør: 'du har løst den før ✓',
+  igen: 'Prøv igen',
+  eget: 'Lav dit eget anagram',
+  egetLinje: 'Skriv en hemmelighed. Så sorteres bogstaverne, som Huygens gjorde.',
+  egetFelt: 'Din hemmelighed',
+  egetTom: 'Her kommer dine bogstaver.',
+  egetIntet: 'Intet bliver gemt.',
+  tilbageTilGåden: 'Tilbage til Huygens\' gåde',
+};
 
 // Fortællingens laboratorium (opslaget, når forløbet er taget eller sprunget over): de tre kapitler som tre valg
 // (E20, stilguiden B7). Ringen er standard.
@@ -39,3 +59,31 @@ export const FRI = {
     { id: 'ringen', tekst: 'Ringen', linje: 'Træk op og ned, og se Saturn fra andre vinkler.' },
   ],
 };
+
+// Anagrammet (drejebogen afsnit 3-4, faktagrundlaget afsnit 3): rækken, som den er trykt i 1656 og på s. 47 i Systema
+// Saturnium (17 bunker, 62 bogstaver), og sætningen, Huygens afslørede i 1659. Ordene står med deres danske betydning
+// (brikkerne i udfordringen). "cohaerente" med ae (bogen skriver æ). dansk er oversættelsen fra citatet huygensSaturn
+// (js/data/citater.js), så den står ens begge steder. Testen i Node tjekker, at bogstaverne passer præcist.
+export const ANAGRAM = {
+  række: 'aaaaaaa ccccc d eeeee g h iiiiiii llll mm nnnnnnnnn oooo pp q rr s ttttt uuuuu',
+  sætning: 'Annulo cingitur, tenui, plano, nusquam cohaerente, ad eclipticam inclinato.',
+  dansk: 'Den er omgivet af en tynd, flad ring, der ingen steder hænger fast i den og hælder i forhold til Jordens baneplan.',
+  // Ordet, man finder i forløbets trin 4 (det første ord i sætningen)
+  nøgle: 'Annulo',
+  ord: [
+    { latin: 'Annulo', dansk: 'med en ring' },
+    { latin: 'cingitur', dansk: 'er omgivet' },
+    { latin: 'tenui', dansk: 'tynd' },
+    { latin: 'plano', dansk: 'flad' },
+    { latin: 'nusquam', dansk: 'ingen steder' },
+    { latin: 'cohaerente', dansk: 'hængende fast' },
+    { latin: 'ad eclipticam', dansk: 'mod Jordens baneplan' },
+    { latin: 'inclinato', dansk: 'hældende' },
+  ],
+};
+
+// De 17 bunker: [bogstav, antal] i rækkens orden
+export const bunker = (række = ANAGRAM.række) => række.split(' ').map((b) => [b[0], b.length]);
+// Bogstaverne i et ord eller en sætning (kun a-z, små), fx til at tælle bunkerne ned
+export const bogstaver = (tekst) => [...tekst.toLowerCase().replace(/æ/g, 'ae').replace(/[^a-z]/g, '')];
+
