@@ -112,7 +112,7 @@ await page.screenshot({ path: `${UD}/a3-saa.png` });
 // "Det så du": kernesætningen, de tre veje, ✓ i fremgangen, "Er det målt?" og "Leg frit"
 await page.click('#kosmos .forløb-linje [data-nav="næste"]');
 await fase('slut');
-const veje = await E(() => [...document.querySelectorAll('#kosmos .fl-vej')].map((x) => x.textContent));
+const veje = await E(() => [...document.querySelectorAll('#kosmos .fl-vej')].map((x) => x.textContent.replace(/ ›$/, ''))); // "›" sættes på af klodsen
 const taget = await E(() => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').forløb?.['rejsen-i-tid']?.taget));
 tjek('"Det så du": kernesætningen, vejene "Hvordan kan det ske?", "Leg frit" og "Er det målt?", og forløbet er taget',
   (await tekst()).startsWith('Flyver man næsten med lysets fart') && veje.join('|') === '🔦 Hvordan kan det ske?|Leg frit|Er det målt?' && taget, JSON.stringify({ veje, taget }));

@@ -101,8 +101,8 @@ await page.click('.fl-næste');
 const tabel = await synlig('#minitabelPanel') && await T(() => document.querySelectorAll('#minitabel .forløb-mål').length === 2);
 await page.click('#minitabel .felt[data-nr="1"]');
 await fase('slut');
-const slut = await T(() => ({ tekst: document.querySelector('.fl-tekst').textContent, veje: document.querySelectorAll('.fl-vej, .fl-vej-spm').length,
-  spm: document.querySelector('.fl-vej-spm.hvorfor')?.textContent ?? '', pil: [...document.querySelectorAll('.fl-vej')].filter((v) => v.textContent.includes('›')).length }));
+const slut = await T(() => ({ tekst: document.querySelector('.fl-tekst').textContent, veje: document.querySelectorAll('.fl-vej').length,
+  spm: document.querySelector('.fl-vej.hvorfor')?.textContent ?? '', pil: [...document.querySelectorAll('.fl-vej')].filter((v) => v.textContent.includes('›')).length }));
 await page.screenshot({ path: `${UD}/slut.png` });
 tjek('trin 5 viser det periodiske system med H og He lyst op, og "Det så du" har kernesætningen og tre veje videre (spørgsmålet er en gul pille, vejen til Solen har "›")',
   tabel && slut.tekst === FØRSTE_ATOM.kernesætning && slut.veje === 3 && /kernen/.test(slut.spm) && slut.pil === 1, JSON.stringify({ tabel, slut }));

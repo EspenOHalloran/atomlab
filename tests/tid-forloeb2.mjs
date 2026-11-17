@@ -117,7 +117,7 @@ await page.screenshot({ path: `${UD}/b5-saa.png` });
 // "Det så du": kernesætningen, vejene og ✓ i fremgangen
 await næste();
 await fase('slut');
-const veje = await E(() => [...document.querySelectorAll('#kosmos .fl-vej')].map((x) => x.textContent));
+const veje = await E(() => [...document.querySelectorAll('#kosmos .fl-vej')].map((x) => x.textContent.replace(/ ›$/, ''))); // "›" sættes på af klodsen
 const taget = await E(() => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').forløb?.['hvordan-kan-det-ske']?.taget));
 tjek('"Det så du": kernesætningen, de tre veje, og forløbet er taget',
   (await tekst()).startsWith('Lyset har den samme fart for alle') && veje.join('|') === '⏳ Prøv rejsen igen|Hvorfor ikke omvendt?|Set fra myonen' && taget, JSON.stringify({ veje, taget }));

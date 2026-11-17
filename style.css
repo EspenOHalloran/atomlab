@@ -2216,7 +2216,8 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-prik { display: inline-grid; place-items: center; width: 26px; height: 44px; margin: -12px 0; padding: 0; border: 0; background: none; cursor: pointer; }
 .fl-prik:hover i:not(.ja) { background: rgba(95, 227, 255, 0.6); }
 .fl-prik:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; border-radius: 8px; }
-.forløb-linje .fl-vej-spm { margin: 0; padding: 0 16px; border-radius: 22px; }
+.forløb-linje .fl-vej.hvorfor { display: inline-block; margin: 0; padding: 0 16px; border-radius: 22px; border-color: rgba(255, 212, 59, 0.55); background: rgba(255, 212, 59, 0.1); color: #ffe08a; }
+.forløb-linje .fl-vej.hvorfor:hover { background: rgba(255, 212, 59, 0.25); color: var(--tekst); }
 .forløb-linje.fl-skift > :not(.fl-hoved) { animation: fl-skift 0.28s ease-out both; }
 @keyframes fl-skift { from { opacity: 0; } }
 /* Efter turen toner laboratoriet ind i to skridt: scenen og det, man styrer med, først, og det, man læser, lidt efter

@@ -213,7 +213,7 @@ for (const [navn, opsætning] of [
       const ting = [...document.querySelectorAll('#opdBog .hs-nat input, #opdBog .hs-tavle figure, .forløb-linje button')].map((e) => e.getBoundingClientRect());
       return { lærred: Math.round(Math.min(c.width, c.height)), inde: inde(c) && ting.every(inde), bred: document.documentElement.scrollWidth > innerWidth + 1 };
     }));
-    if (trin !== 'kanten') { await O(() => atomlabTest.opdagelser.forløb.visMigNu()); await page.click('.forløb-linje .fl-vismig'); await page.waitForSelector('.forløb-linje .fl-næste', { timeout: 6000 }); await page.click('.forløb-linje .fl-næste'); }
+    if (trin !== 'kanten') { await O(() => atomlabTest.opdagelser.forløb.visMigNu()); await page.waitForSelector('.forløb-linje .fl-næste', { timeout: 6000 }); await page.click('.forløb-linje .fl-næste'); }
   }
   tjek(`${navn}: i fortællingen har lærredet plads (mindst 140 px), og lærredet, skyderen, tavlens tegninger og knapperne er inden for skærmen`,
     mål.length === 3 && mål.every((m) => m.lærred >= 140 && m.inde && !m.bred), JSON.stringify(mål));

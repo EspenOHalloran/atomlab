@@ -304,7 +304,8 @@ function tegn() {
     + `<span class="fl-nr">${slut ? 'Det så du' : `Trin ${k.nr + 1} af ${antal}`}</span>`
     + (slut ? '' : '<button class="fl-spring" data-nav="spring" title="Ud af turen: Prøv det hele selv">Udforsk selv ›</button>') + '</div>';
   const ord = (t.ord ?? []).join(' ');
-  const knapper = () => (d.knapper ?? []).map((b) => {
+  // Under Så kun de knapper, der stadig kan bruges (ingen døde knapper, når legetøjet er brugt op)
+  const knapper = () => (d.knapper ?? []).filter((b) => k.fase !== 'så' || !b.aktiv || b.aktiv()).map((b) => {
     const tæller = b.tæller ? ` <small>${esc(b.tæller())}</small>` : '';
     return `<button class="fl-handling ${b.kugle ?? ''}${b.valgt?.() ? ' valgt' : ''}" data-knap="${b.id}"${b.aktiv && !b.aktiv() ? ' disabled' : ''}>`
       + `${b.kugle ? `<span class="kugle ${b.kugle}"></span>` : ''}${esc(b.tekst)}${tæller}</button>`;
@@ -336,7 +337,7 @@ function tegn() {
     if (del.slutTekst) html += `<p class="fl-lille">${esc(del.slutTekst())}</p>`;
     // Et spørgsmål er en gul pille med "?", der åbner et kort. En vej et andet sted hen har "›" (stilguiden A5 og A8)
     række = (del.veje ?? []).map((v, i) => {
-      if (v.hvorfor) return `<button class="hvorfor fl-vej-spm" data-vej="${i}">${esc(v.tekst)}</button>`;
+      if (v.hvorfor) return `<button class="fl-vej hvorfor" data-vej="${i}">${esc(v.tekst)}</button>`;
       const pil = v.gør && !v.tekst.includes('›') ? ' ›' : '';
       return `<button class="fl-vej${v.primær ? ' primær' : ''}" data-vej="${i}">${esc(v.tekst)}${pil}</button>`;
     }).join('');
