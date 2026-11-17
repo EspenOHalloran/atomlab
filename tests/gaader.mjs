@@ -3,7 +3,7 @@
 // gåde ›" og ROLIG), et kort fra start til slut, ✓, "Se det selv", linket fra Sort hul og Ordbogen, og at telefonen
 // ikke får en vandret rullebjælke.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
-import { GÅDER, bygget, STREG_FORKLARING, påSkinnen } from '../js/data/gaader.js';
+import { GÅDER, bygget, STREG_FORKLARING, påSkinnen, skalaOrd, førsteLinje, FØRSTE_GÅDE } from '../js/data/gaader.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
@@ -77,6 +77,15 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
 tjek('G4b: skinnen har de byggede gåder fra det mindste til det største, hver med et kort navn',
   påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
 
+// E20: ord for skalaen, linjen første gang og den første gåde
+{
+  const ordene = påSkinnen().map((g) => skalaOrd(g.størrelse));
+  tjek('E20: hver gåde på skinnen har et ord for skalaen (Antistof "mindre end et atom", Mørkt stof "galakser")',
+    ordene.every(Boolean) && ordene[0] === 'mindre end et atom' && ordene.at(-1) === 'galakser' && skalaOrd(-8) === 'molekyler' && skalaOrd(7) === 'planeter', JSON.stringify(ordene));
+  tjek('E20: linjen første gang tæller gåderne på skinnen ("den første af fem gåder"), og man starter ved Antistof',
+    førsteLinje(påSkinnen().length) === 'Videnskaben er ikke færdig. Det her er den første af fem gåder.' && FØRSTE_GÅDE === 'antistof' && påSkinnen().some((g) => g.id === FØRSTE_GÅDE));
+}
+
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
 const fejl = [];
@@ -100,11 +109,14 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     const s = atomlabTest.gaader.skinne();
     const l = document.getElementById('gaaderFørste');
     return { fokus: s.fokus(), første: s.første(), tændte: s.tændte().length, ringe: s.ringe(), flyver: s.flyver(), zoom: s.zoom(), linje: l.hidden ? '' : l.textContent,
-      pile: !document.querySelector('[data-skinne="1"]').hidden, spm: document.getElementById('gaaderFokusSpm').textContent, kort: atomlabTest.gaader.vist()?.id ?? null };
+      pile: !document.querySelector('[data-skinne="1"]').hidden, skala: document.getElementById('gaaderFokusSkala').textContent,
+      pileTekst: [...document.querySelectorAll('[data-skinne]')].map((p) => `${p.textContent}|${p.getAttribute('aria-label')}`).join(), spm: document.getElementById('gaaderFokusSpm').textContent, kort: atomlabTest.gaader.vist()?.id ?? null };
   });
   const først = await K();
   tjek('G4b første gang: kun Antistof er tændt, tæt foran, med linjen "Videnskaben er ikke færdig" og uden pilene',
-    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.startsWith('Videnskaben er ikke færdig') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
+    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.endsWith('den første af fem gåder.') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
+  tjek('E20: pilene er rene pile med et navn til skærmlæseren, og knappen viser skalaen ("mindre end et atom")',
+    først.pileTekst === '‹|Mindre gåde,›|Større gåde' && først.skala === 'mindre end et atom', JSON.stringify(først));
   await page.click('#gaaderInd');
   const flyver = await K();
   const ind = await vent(page, () => atomlabTest.gaader.vist()?.id === 'antistof');

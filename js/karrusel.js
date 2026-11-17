@@ -17,7 +17,7 @@ import { åbnForløb } from './gaa.js';
 // Verdenerne i ringens rækkefølge og deres dele står i skærmlisten (js/skaerme.js, 10a, og docs/plan-verdener.md).
 // Biblioteket er et opslagsværk og står sidst.
 export { VERDENER };
-const OPSLAG = new Set(['biblioteket']); // står uden for skalaen "mindre … større"
+const OPSLAG = new Set(['biblioteket']); // står uden for skalaen "atomkernen … universet"
 const START = 'vaerksted';
 const NØGLE = 'atomlabSidsteDel';
 const SYNLIG = 1.6; // kort længere end dette (i kort) fra forreste plads er skjult (de to bagerste står bag atomet)
@@ -141,12 +141,13 @@ export function lavKarrusel({ fremgang, radius }) {
   gulv.className = 'karrusel-gulv';
   ramme.append(svg, gulv, bane);
 
-  // Docken: "mindre … større" over delene efter størrelse, og Ordbogen for sig
+  // Docken: "atomkernen … universet" over delene efter størrelse (E20: ord i enderne, ikke pile, der læses som knapper),
+  // og Ordbogen for sig
   const under = document.createElement('div');
   under.className = 'menu-under';
   const dok = document.createElement('div');
   dok.className = 'menu-dok';
-  dok.innerHTML = '<div class="skala-tekst"><span>‹ mindre</span><span>større ›</span></div><div class="menu-ikoner"></div>';
+  dok.innerHTML = '<div class="skala-tekst"><span>atomkernen</span><span>universet</span></div><div class="menu-ikoner"></div>';
   const række = dok.querySelector('.menu-ikoner');
   const skille = document.createElement('span');
   skille.className = 'dok-skille';
