@@ -19,7 +19,8 @@
 //   visMig()      gør handlingen for brugeren (når man trykker "Næste ›", før handlingen er gjort)
 //   vis           CSS-vælgere for det, der skal være fremme i trinet ud over scenen (fx det lille periodiske system)
 // og for hele forløbet: slutTekst() (en linje under kernesætningen), veje [{ tekst, primær, gør }] (højst tre veje videre,
-// eller { tekst, hvorfor: id } for et "Hvorfor?"-kort, som en gul pille med "?"; en vej med gør får "›"), layout() (scenen har fået ny størrelse), slut() (kaldes, når
+// eller { tekst, hvorfor: id } for et "Hvorfor?"-kort, som en gul pille med "?"; en vej med gør får "›", undtagen med
+// her: true, når man bliver i laboratoriet, fx "Leg frit"), layout() (scenen har fået ny størrelse), slut() (kaldes, når
 // forløbet slutter, springes over eller stoppes). En tur tages igen med "↻ Tur" i toplinjen (lavTurKnap).
 // Et gæt kan have svar (et kort svar, der står under Så, når man har gættet det). Forløbet kan have før: { id, del, tekst } (et andet forløb, der bør tages først): Er det ikke taget, står et link til det
 // i første trin. forløbVink(tekst) skriver en kort linje i linjen (fx hvorfor et træk ikke lykkedes), til trinet skifter.
@@ -338,7 +339,7 @@ function tegn() {
     // Et spørgsmål er en gul pille med "?", der åbner et kort. En vej et andet sted hen har "›" (stilguiden A5 og A8)
     række = (del.veje ?? []).map((v, i) => {
       if (v.hvorfor) return `<button class="fl-vej hvorfor" data-vej="${i}">${esc(v.tekst)}</button>`;
-      const pil = v.gør && !v.tekst.includes('›') ? ' ›' : '';
+      const pil = v.gør && !v.her && !v.tekst.includes('›') ? ' ›' : '';
       return `<button class="fl-vej${v.primær ? ' primær' : ''}" data-vej="${i}">${esc(v.tekst)}${pil}</button>`;
     }).join('');
   }

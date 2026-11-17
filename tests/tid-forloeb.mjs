@@ -115,7 +115,7 @@ await fase('slut');
 const veje = await E(() => [...document.querySelectorAll('#kosmos .fl-vej')].map((x) => x.textContent.replace(/ ›$/, ''))); // "›" sættes på af klodsen
 const taget = await E(() => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').forløb?.['rejsen-i-tid']?.taget));
 tjek('"Det så du": kernesætningen, vejene "Hvordan kan det ske?", "Leg frit" og "Er det målt?", og forløbet er taget',
-  (await tekst()).startsWith('Flyver man næsten med lysets fart') && veje.join('|') === '🔦 Hvordan kan det ske?|Leg frit|Er det målt?' && taget, JSON.stringify({ veje, taget }));
+  (await tekst()).startsWith('Flyver man næsten med lysets fart') && veje.join('|') === 'Næste tur: Hvordan kan det ske?|Leg frit|Er det målt?' && taget, JSON.stringify({ veje, taget }));
 await page.screenshot({ path: `${UD}/slut.png` });
 await page.click('#kosmos .fl-vej >> nth=2');
 tjek('"Er det målt?" viser kortet', (await E(() => atomlabTest.hvorfor.vist())) === HVORFOR.tidMaalt.spørgsmål);

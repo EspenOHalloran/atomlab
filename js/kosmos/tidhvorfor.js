@@ -1179,8 +1179,8 @@ export default {
       },
       slutTekst: () => 'Vil du se mere, så gå gennem alle fem scener i bjælken forneden.',
       veje: [
-        { tekst: '⏳ Prøv rejsen igen', primær: true, gør: () => vælgFænomen('tid') },
-        { tekst: 'Hvorfor ikke omvendt?', gør: () => { efterForløb(); gåTilSted('rumtid'); } },
+        { tekst: 'Prøv rejsen igen', primær: true, gør: () => vælgFænomen('tid') },
+        { tekst: 'Prøv selv: Hvorfor ikke omvendt?', gør: () => { efterForløb(); gåTilSted('rumtid'); } },
         { tekst: 'Set fra myonen', gør: () => { efterForløb(); gåTilSted('myonen'); } },
       ],
       layout: () => størrelse(),

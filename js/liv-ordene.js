@@ -149,9 +149,9 @@ export function lavOrdeneDel({ tegning, vis, kamera, smal, film, menu, slut }) {
     },
     slutTekst: () => 'Vi sprang et led over: Cellen læser ikke DNA\'et direkte. Den laver først en kopi, og det er kopien, der bliver læst. Se filmen.',
     veje: [
-      { tekst: '▶ Se, hvordan cellen gør det (film)', primær: true, gør: () => requestAnimationFrame(film) },
+      { tekst: 'Se, hvordan cellen gør det (film)', primær: true, gør: () => requestAnimationFrame(film) },
       { tekst: 'Leg frit' },
-      { tekst: 'Tilbage til menuen', gør: menu },
+      { tekst: 'Til menuen', gør: menu },
     ],
     slut: () => {
       trin = null;

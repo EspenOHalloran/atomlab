@@ -717,7 +717,7 @@ export default {
       slutTekst: () => 'Vælg "Leg frit" for at prøve andre mål, farter og "1 g hele vejen".',
       veje: [
         // Starter forløb 2 "Hvordan kan det ske?" (jeres valg 13. november 2026), også hvis det er taget før
-        { tekst: '🔦 Hvordan kan det ske?', primær: true, gør: () => { sætVentForløb(HVORDAN_KAN_DET_SKE.id); vælgFænomen('tidhvorfor'); } },
+        { tekst: 'Næste tur: Hvordan kan det ske?', primær: true, gør: () => { sætVentForløb(HVORDAN_KAN_DET_SKE.id); vælgFænomen('tidhvorfor'); } },
         { tekst: 'Leg frit' },
         { tekst: 'Er det målt?', hvorfor: 'tidMaalt' },
       ],

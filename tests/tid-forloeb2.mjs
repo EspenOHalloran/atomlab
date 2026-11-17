@@ -120,7 +120,7 @@ await fase('slut');
 const veje = await E(() => [...document.querySelectorAll('#kosmos .fl-vej')].map((x) => x.textContent.replace(/ ›$/, ''))); // "›" sættes på af klodsen
 const taget = await E(() => Boolean(JSON.parse(localStorage.getItem('atomlabFremgang') || '{}').forløb?.['hvordan-kan-det-ske']?.taget));
 tjek('"Det så du": kernesætningen, de tre veje, og forløbet er taget',
-  (await tekst()).startsWith('Lyset har den samme fart for alle') && veje.join('|') === '⏳ Prøv rejsen igen|Hvorfor ikke omvendt?|Set fra myonen' && taget, JSON.stringify({ veje, taget }));
+  (await tekst()).startsWith('Lyset har den samme fart for alle') && veje.join('|') === 'Prøv rejsen igen|Prøv selv: Hvorfor ikke omvendt?|Set fra myonen' && taget, JSON.stringify({ veje, taget }));
 await page.click('#kosmos .fl-vej >> nth=2');
 await page.waitForTimeout(300);
 const myonen = await E(() => atomlabTest.kosmos.fænomen().scene3().tilstand);

@@ -236,11 +236,12 @@ const MØDES_DEL = {
   layout: () => (måde === 'byg' ? forløbByg : forløbGiv).zoom(),
   veje: [
     // Laboratoriet: paletten og panelerne åbner (det byggede vand står der stadig)
-    { tekst: 'Byg selv', primær: true, gør: () => efterForløb(() => sætMåde('byg')) },
+    { tekst: 'Byg selv', primær: true, her: true, gør: () => efterForløb(() => sætMåde('byg')) },
     { tekst: 'Se vand blive til af en gnist', gør: () => efterForløb(() => { sætMåde('byg'); åbnKnaldgas(); }) },
     // Laboratoriets omvendte rækkefølge bliver forsøget, der svarer: Flyt elektronen langt ude, og se, at det koster
     {
-      tekst: 'Hvorfor hopper elektronen først, når de er tæt på?',
+      // "Prøv selv:": Et spørgsmål uden et kort er et forsøg (stilguiden A5, E20)
+      tekst: 'Prøv selv: Hvorfor hopper elektronen først tæt på?',
       gør: () => efterForløb(() => {
         sætMåde('bytte');
         vælgPar('nacl');

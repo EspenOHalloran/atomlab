@@ -330,7 +330,7 @@ export function lavOverblikForløb(api) {
     },
     veje: [
       { tekst: 'Besøg en planet', primær: true, gør: () => efterVej(true) },
-      { tekst: 'Leg frit', gør: () => efterVej(false) },
+      { tekst: 'Leg frit', her: true, gør: () => efterVej(false) },
       { tekst: 'Rejs med lyset', gør: () => efterVej(false, true) },
     ],
     layout: () => {
