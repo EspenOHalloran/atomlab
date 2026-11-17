@@ -8,7 +8,7 @@ AtomLab skal lære en 13-årig om protoner, neutroner og elektroner, om grundsto
 Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til jeres runde på tabletten), [Køreplanen](docs/koereplan.md) (det besluttede i rækkefølge), [Idéer til senere](docs/ideer.md) (det løse) og [Før vi deler AtomLab med andre](docs/foer-vi-deler.md).
 
 ## Sådan arbejder vi (jeres svar)
-- Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden.
+- Få et "go", før et større stykke arbejde går i gang, og spørg, når noget er uklart. I vil have ærlige svar, ikke at blive talt efter munden. **Orkestratoren (fra 17. november 2026, jeres ønske):** Kører en orkestrator-session ([prompt-orkestrator.md](docs/prompt-orkestrator.md)), må den give go og vælge på jeres vegne efter anbefalingen. Valget skrives ind som "valgt af orkestratoren, kan ændres af jer". Prøven, tabletten, smag og retningsvalg er stadig jeres.
 - Én PR for hvert færdigt punkt. Opus merger den selv til `main`, når testene er grønne (se nedenfor), så det kommer på GitHub Pages med det samme (https://espenohalloran.github.io/atomlab/). Bagefter startes arbejdsgrenen forfra fra `main`.
 - Beslutninger og jeres svar skrives ind her med det samme, ikke kun i chatten.
 - **Når et punkt er færdigt (jeres ønske 7. november 2026):** Skriv altid, hvordan næste punkt bedst startes: ny session eller samme, hvilken prompt (en fil i `docs/prompt-*.md` eller en tekst til at kopiere), og hvilken model og effort. Standard er en ny session til hver delopgave (se "Tokens" i CLAUDE.md).

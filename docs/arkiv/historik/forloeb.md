@@ -2,6 +2,11 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/forloeb.md](../../lige-nu/forloeb.md), det nyeste øverst.*
 
+**Senest lavet (16. november 2026, E14-rettelserne før prøven, prompten i [prompt-e14-rettelser.md](../../prompt-e14-rettelser.md)):**
+- **"Dit første atom"** med Fables tekster ([E14](../../fable/E14-forloeb-eftersyn.md), [noterne](../../fable/E14-noter.md)): Trin 2 siger nu, at elektronen er minus. Trin 3 siger, at kernen ryster, og "i virkeligheden" holder to protoner ikke sammen (de to ting står ved siden af hinanden, fælden holdt). Trin 5's Spørg siger kernesætningens anden halvdel: "Grundstof nr. 1 og 2 lyser: én proton og to protoner." (Fables tekst uden "nu", så den holder 16 ord.) Trin 2's Så er forkortet til "universets mest almindelige grundstof" (Fables var 23 ord).
+- **Vinket i trin 4:** Lægger han begge neutroner i før elektronen, siger linjen "Kernen har to plus. Giv atomet en elektron mere, så der er lige mange plus og minus." Tællerne viste allerede, at elektronen mangler, men ikke hvorfor. Testen `forloeb` tjekker vinket.
+- **Prøven:** [guide-proeven.md](../../guide-proeven.md) har rækkefølgen, de nye spørgsmål pr. forløb, spørgsmålet næste dag og listen, der afløser E4's otte ting at se efter. Drejebogens spørgsmål 3 er skiftet ud.
+
 **Senest lavet (12. november 2026, Serie 1 nr. 1, prompten i [arkiv/prompt-forloeb.md](../arkiv/prompt-forloeb.md)):**
 - **Forløb-klodsen** `js/forloeb.js` med teksterne som data i `js/data/forloeb/` (koden: [kode/forloeb.md](../kode/forloeb.md)). Linjen står under scenen: prikker, Spørg eller Så, gættet, trinets knap, "Vis mig" efter 20 sekunder, "‹", "Næste ›" og "Spring over". Panelerne, opgaverne og kontakterne er skjult (klassen `i-forløb`, virker også i Liv). Til sidst "Det så du" med kernesætningen og tre veje. Huskes i `atomlabFremgang.forløb`, ✓ i "Din fremgang" (et tryk starter det), eget link `?forloeb=foerste-atom#vaerksted`.
 - **"Dit første atom"** i Værkstedet efter [drejebogen](../drejebog-foerste-atom.md) (fem trin, faktatjekket: trin 3 sagde for meget om frastødningen, rettet). Starter af sig selv første gang, tages igen fra opgavelisten (★) og hjælpen (?). Hydrogen og helium tæller som opdaget, og trin 3 er helium uden neutroner (opgaven "to protoner" bliver løst).

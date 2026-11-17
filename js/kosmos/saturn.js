@@ -105,6 +105,13 @@ const VISNINGER = {
   maaner: {
     navn: 'Månerne', afstand: 380, retning: 20, højde: -38,
   },
+  // Fra kanten (Opdagelserne, H3 17. november 2026): Gør det selv fra bogen om Huygens (knappen "Se ringen forsvinde ved
+  // Saturn", data-gaa="solsystem:saturn:kanten"). Kameraet lander 1,5° under ringenes plan, så de er en tynd streg med
+  // det samme. Står ikke i træet. Panelet viser ringenes side (SIDER.kanten i js/data/sider/saturn.js)
+  kanten: {
+    navn: 'Saturn fra kanten', afstandFra: 15, retning: 35, højde: -1.5, titel: 'Ringene fra kanten',
+    tekst: 'Træk op eller ned, så du ser ringene helt fra kanten. Så forsvinder de næsten, præcis som Huygens forklarede.',
+  },
 };
 
 export default {
@@ -282,6 +289,7 @@ export default {
       visning = v;
       baner = false;
       flyvTilSaturn(VISNINGER[v], () => { baner = true; });
+      if (VISNINGER[v].titel) fase(VISNINGER[v].titel, VISNINGER[v].tekst);
       forklaring('');
       lavKnapper();
     }

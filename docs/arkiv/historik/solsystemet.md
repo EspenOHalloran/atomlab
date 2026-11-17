@@ -1,5 +1,12 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Pluto MP3, kortet, højderne, Charon, dansen og disen** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), [E16](../fable/E16-merkur-pluto-noter.md), [kode/pluto.md](../kode/pluto.md)).
+- **Pluto sidst i Solsystemet** (`js/kosmos/pluto.js`): New Horizons' kort i farver (gråtonerne på 300 m med farven fra det grove farvekort, 8k på pc, 4k på tablet) og højderne. Det sydligste, ingen har set, er mørkt, og bagsiden er glat. Aksen og drejningen efter datoen passer med Horizons (0,04°). Kortet beholder 180° i midten (`midte` i `klippeplanet.js`, valgfrit).
+- **Charon** i den rigtige størrelse og afstand, bundet begge veje, med en rødbrun nordpol (tegnet). Træet: Måner → Charon (Pluto står ved siden af).
+- **Dansen:** Langt ude kigger kameraet på det fælles tyngdepunkt (ca. 940 km over overfladen), så ⏩ viser Pluto og Charon danse om det. "Navne" viser krydset og banerne.
+- **Disen** (`js/kosmos/pluto-dis.js`) lyser blåt i lag, og "Modlys" flyver kameraet om bag Pluto.
+- **Overblikket:** Pluto har `fænomen: 'pluto'` og er ude af "Kort besøg" (som Merkur-fejlen, erfaringen sagde MP3). Siden med to emner og Charon, "Fælles tyngdepunkt" i Ordbogen. Faktatjek i [del 8, afsnit 12](../fakta-solsystemet/del8-merkur-og-pluto.md). `tests/pluto.mjs` har 23 tjek.
+
 **Lavet (17. november 2026): Merkur MP2, stederne, isen, Solen, der vender om, og flybyen. Merkur er færdig** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), [E16](../fable/E16-merkur-pluto-noter.md)).
 - **Stederne** Caloris (morgensol fra øst, "Edderkoppen" i midten), de lyse huller i Raditladi (MESSENGERs nærbillede i panelet) og isen ved Nordpolen (Prokofiev, Solen ca. 4° oppe). Datoen glider, så Solen står fra samme side som i fotoene, og tiden står stille ved et sted. Fem navne på kloden.
 - **"Isen (set med radar)":** Arecibos radarbillede (NASA PIA15530) lagt præcist på polkortet (`lav_merkur_is.py`, `pol.is` i `klippeplanet.js`). Gult, der lyser i den evige skygge.

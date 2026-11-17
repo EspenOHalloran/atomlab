@@ -1,7 +1,7 @@
 // Forløbet "Saturns ører" i bogen om Huygens (Opdagelserne, docs/drejebog-huygens.md, afsnit 3). Ren data uden DOM, så
-// det kan testes i Node. H2 (16. november 2026) har drejebogens trin 1-3. Trin 4 (anagrammet ANNULO) og vejene fra
-// "Det så du" kommer i H3. Det, der rører scenen (lærredet i bogen, knapperne, hvornår trinet er gjort og "Vis mig"),
-// står i js/bog/huygens.js under samme trin-id.
+// det kan testes i Node. H2 (16. november 2026) har drejebogens trin 1-3, H3 (17. november 2026) trin 4 (anagrammet
+// ANNULO). Vejene fra "Det så du" står i js/opdagelser.js. Det, der rører scenen (lærredet i bogen, bunkerne, knapperne,
+// hvornår trinet er gjort og "Vis mig"), står i js/bog/huygens.js under samme trin-id.
 // Fakta: docs/fakta-videnskabsfolk/huygens.md (12-fods-kikkerten er over 3 m, Titan 25. marts 1655 og ca. 16 døgn,
 // armene væk 16. januar 1656 efter hans rejse, s. 16).
 
@@ -71,6 +71,25 @@ export const SATURNS_ØRER = {
       // Ikke "Saturn vipper": Ringen peger samme vej i rummet, og vi ser den fra en ny vinkel (fælden i fakta-faelder)
       så: 'Armene er en tynd, flad ring. Fra kanten bliver den til en streg, som kikkerten ikke kan se.',
       ord: [],
+    },
+    {
+      id: 'annulo',
+      kapitel: 'Hemmeligheden',
+      // Skriftet med anagrammet er dateret 5. marts 1656 (s. 2), mens armene var væk (16. januar-17. juni 1656, s. 16-17)
+      spørg: 'Saturn er stadig rund. Hvordan viser han, at han kender svaret, uden at røbe det?',
+      gæt: {
+        valg: [
+          { tekst: 'Han holder det hemmeligt', efter: 'Find ordet ANNULO ("med en ring") i bunkerne af bogstaver.', svar: 'Men hvordan skulle han så bagefter bevise, at han vidste det først?' },
+          { tekst: 'Han blander bogstaverne', efter: 'Find ordet ANNULO ("med en ring") i bunkerne af bogstaver.', svar: 'Rigtigt gættet!' },
+          // Sætningen stod først i Systema Saturnium (1659, s. 47)
+          { tekst: 'Han fortæller det til alle', efter: 'Find ordet ANNULO ("med en ring") i bunkerne af bogstaver.', svar: 'Det gjorde han først i 1659, i sin bog.' },
+        ],
+      },
+      gør: 'Find ordet ANNULO ("med en ring") i bunkerne af bogstaver.',
+      // Ikke "som han havde sagt": Armene kom 13. oktober 1656, "senere end jeg havde forudsagt" (s. 17, faktatjekket
+      // 17. november 2026). Det står allerede i svaret til trin 3
+      så: 'Et anagram: beviset på, at han vidste det først. I oktober 1656 kom armene igen.',
+      ord: ['anagram'],
     },
   ],
 };

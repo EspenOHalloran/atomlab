@@ -29,7 +29,8 @@ import { lavRejseskilt } from './rejseskilt.js';
 import { NØGLER } from './data/faenomener.js';
 import { tagVentSted, tagVentFænomen, ventendeForløb, sætVentForløb } from './gaa.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
-import { lavTurKnap } from './forloeb.js';
+import { lavTurKnap, kørerForløb } from './forloeb.js';
+import { forløbTaget } from './fremgang.js';
 import { sætBilledEjer, frigivBilleder } from './hentning.js';
 import { skjulTilKlar } from './solsystem/shadere.js';
 
@@ -56,6 +57,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
   // set". Det åbnes med knapper (gå('kosmos:tidhvorfor')), og imens er knappen for det, det hører til, valgt.
   const LISTET = FÆNOMENER.filter((f) => !f.hørerTil);
   const grupperet = grupper.some((g) => g.under.length);
+  const TURE = forløbI(skærm); // skærmens ture (forløb), i listen under deres fænomen og bag "↻ Tur"
 
   let set = new Set();
   let rod = null;
@@ -136,7 +138,8 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
         const b = h.target.closest('button');
         if (!b) return;
         const g = åbenGruppe();
-        if (b.dataset.tur) {
+        if (b.dataset.forloeb) startForløbFraListe(forløbMed(b.dataset.forloeb));
+        else if (b.dataset.tur) {
           if (!kørende?.tur?.kører()) startTur();
         } else if (b.dataset.sted) gå(g, b.dataset.sted);
         else if (b.dataset.id && valgt?.id !== b.dataset.id) {
@@ -153,7 +156,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     const hjælp = document.getElementById(`hjælp${skærm[0].toUpperCase()}${skærm.slice(1)}`);
     $('Hjælp').addEventListener('click', () => { lyd.klik(); hjælp.classList.remove('skjult'); });
     // "↻ Tur" i toplinjen (E20): Turens fænomen vælges forfra og starter turen selv (som knapperne i hjælpen)
-    lavTurKnap(sektion, forløbI(skærm), (fl) => {
+    lavTurKnap(sektion, TURE, (fl) => {
       sætVentForløb(fl.id);
       vælg(fl.fænomen);
     });
@@ -395,6 +398,29 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     return b;
   }
 
+  // Turene (forløbene) i listen (jeres valg 17. november 2026): Under deres fænomen i Kosmos (▶ Tur: Rejsen i tid) og
+  // øverst ved kloden i Solsystemet, med ✓, når turen er taget, og prikken (ny), når den ikke er. En tur i et fænomen
+  // med hørerTil (fx "Hvordan kan det ske?") står under det, fænomenet hører til. Et tryk starter turen som "↻ Tur".
+  const turePå = (f) => TURE.filter((fl) => fl.fænomen === f.id || FÆNOMENER.find((x) => x.id === fl.fænomen)?.hørerTil === f.id);
+  function turRække(fl, niveau) {
+    const taget = forløbTaget(fl.id);
+    const k = stedKnap('', `Tur: ${fl.titel}`, niveau, '▶');
+    delete k.dataset.sted;
+    k.dataset.forloeb = fl.id;
+    k.classList.add('fl-tur');
+    k.classList.toggle('ny', !taget);
+    k.classList.toggle('valgt', kørerForløb() === fl.id);
+    k.title = taget ? 'Taget. Tryk for at tage turen igen.' : 'En tur, du ikke har taget endnu';
+    if (taget) k.insertAdjacentHTML('beforeend', '<span class="tur-mærke" aria-label="taget">✓</span>');
+    return k;
+  }
+  function startForløbFraListe(fl) {
+    if (!fl?.fænomen || kørerForløb() === fl.id) return;
+    lyd.klik();
+    sætVentForløb(fl.id);
+    vælg(fl.fænomen);
+  }
+
   // Tegner træet for den åbne klode. Det tredje niveau (fx Calderaen) står kun under det sted, man er ved.
   function tegnTræ(sted) {
     const boks = $('Træ');
@@ -413,6 +439,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
       t.disabled = !tur.klar() || Boolean(tur.skjul?.());
       boks.append(t);
     }
+    if (g.f) for (const fl of turePå(g.f)) boks.append(turRække(fl, 0));
     if (g.f) {
       const rod = træ ? stedKnap(træ.rod, g.f.navn, 0, g.f.ikon) : Object.assign(document.createElement('button'), { className: 'sol-sted niveau-0' });
       if (!træ) {
@@ -453,6 +480,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
         k.classList.toggle('valgt', valgt === f || valgt?.hørerTil === f.id);
         k.classList.toggle('ny', !set.has(f.id));
         boks.append(k);
+        for (const fl of turePå(f)) boks.append(turRække(fl, 2));
       }
     }
   }
@@ -463,7 +491,9 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     if (!grupperet || !valgt) return;
     const sted = stedNu();
     const tur = kørende?.tur;
-    const nøgle = `${sted}|${tur?.kører()}|${tur?.klar()}|${tur?.skjul?.()}`; // træet tegnes også igen, når turen starter eller er klar
+    // Træet tegnes også igen, når flybyen starter eller er klar, og når et forløb starter, slutter eller bliver taget
+    const ture = TURE.map((fl) => (forløbTaget(fl.id) ? 1 : 0)).join('');
+    const nøgle = `${sted}|${tur?.kører()}|${tur?.klar()}|${tur?.skjul?.()}|${kørerForløb()}|${ture}`;
     if (nøgle === stedVist) return;
     stedVist = nøgle;
     tegnTræ(sted);
@@ -949,7 +979,8 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
       fase: () => (faseNu ? { titel: faseNu.titel, tekst: faseNu.tekst } : null), // underteksten (bjælkens linje)
       // Træet (Solsystemet): punkterne, der vises ({ id, navn, valgt, niveau }), det sted, man er ved, og gå til et sted
       træ: () => [...sektion.querySelectorAll('.sol-træ button')].map((b) => ({
-        id: b.dataset.tur ? 'tur' : b.dataset.sted ?? b.dataset.id ?? b.dataset.klode, navn: b.textContent, valgt: b.classList.contains('valgt'),
+        id: b.dataset.forloeb ? `tur:${b.dataset.forloeb}` : b.dataset.tur ? 'tur' : b.dataset.sted ?? b.dataset.id ?? b.dataset.klode,
+        navn: b.textContent, valgt: b.classList.contains('valgt'), ny: b.classList.contains('ny'),
         niveau: b.classList.contains('niveau-2') ? 2 : b.classList.contains('niveau-0') ? 0 : 1,
       })),
       sted: () => stedNu(),

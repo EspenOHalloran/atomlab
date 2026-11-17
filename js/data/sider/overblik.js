@@ -1,8 +1,8 @@
 // Teksterne i højre panel ved Solsystemets overblik (docs/drejebog-overblik.md, afsnit 3): titlen, to tal, højst tre
-// sætninger og fire spørgsmål, så "For nørder" og "Ærligt talt". Pluto er ikke bygget endnu og har kun et kort
-// panel (jeres ønske 13. november 2026). Merkur har sit eget besøg (MP2, 17. november 2026). Tallene står i drejebogens afsnit 4. Uden Three.js.
+// sætninger og fire spørgsmål, så "For nørder" og "Ærligt talt". Merkur og Pluto har deres eget besøg (MP1 og MP3,
+// 17. november 2026), så de korte paneler er væk. Tallene står i drejebogens afsnit 4. Uden Three.js.
 
-import { sted } from '../../sideknap.js';
+import { gå } from '../../sideknap.js';
 
 export const TAL = [
   ['Solens del af al massen', 'over 99,8 %'],
@@ -20,7 +20,7 @@ export const SIDE = {
     {
       titel: 'Hvorfor er Pluto ikke en planet længere?',
       tekst: '<p>I 2006 blev astronomerne enige om, hvad en planet er: Den går rundt om Solen, den er så tung, at den er blevet rund, og den har ryddet sin bane for andre kloder. Pluto er rund og går rundt om Solen, men den deler sin bane med tusindvis af isklumper i Kuiperbæltet (et bælte af is og sten uden for Neptun).</p>'
-        + '<p>Derfor kaldes Pluto nu en <b>dværgplanet</b>: en rund klode, der ikke har ryddet sin bane. Pluto blev ikke mindre. Det var ordet "planet", der blev skarpere. ' + sted('pluto', 'Se Pluto') + '</p>',
+        + '<p>Derfor kaldes Pluto nu en <b>dværgplanet</b>: en rund klode, der ikke har ryddet sin bane. Pluto blev ikke mindre. Det var ordet "planet", der blev skarpere. ' + gå('solsystem:pluto', 'Besøg Pluto') + '</p>',
     },
     {
       titel: 'Hvordan ved vi, hvor planeterne er lige nu?',
@@ -42,11 +42,5 @@ export const SIDE = {
     + '<p><b>Bælterne</b> ser tætte ud, men er næsten tomme. Rumsonder er fløjet gennem asteroidebæltet mange gange uden at ramme noget. Solens glød er også større end Solen.</p>',
 };
 
-// Pluto (jeres ønske 13. november 2026): en lille kugle med et kort panel, til den får sit eget besøg (MP3-MP4)
-export const SIDER = {
-  pluto: {
-    tal: [['Bredde', 'ca. 2.380 km'], ['Et år', '248 jordår']],
-    kort: 'Pluto er en dværgplanet langt ude i Kuiperbæltet, et bælte af is og sten uden for Neptun. Den er mindre end vores egen måne. Rumsonden New Horizons fløj forbi i juli 2015, men så kun den ene halvkugle skarpt, og det sydligste lå i mørke.',
-    ærligt: '<p>Den mørke del forneden på kuglen er ikke set: Der er kortet fyldt ud med en mørk farve. Kortet er New Horizons\' billeder (NASA). Pluto får sit eget besøg senere.</p>',
-  },
-};
+// Merkur og Pluto havde et kort panel her (jeres ønske 13. november 2026), til de fik deres eget besøg (MP1 og MP3)
+export const SIDER = {};

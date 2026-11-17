@@ -680,7 +680,7 @@ export const ORDBOG = [
   {
     id: 'bundet-rotation', ord: 'Bundet rotation',
     former: ['bundet rotation', 'bundne rotation'],
-    tekst: 'Når en måne drejer én gang om sig selv, mens den runder sin planet én gang. Så vender den altid samme side mod planeten. Vores Måne, Phobos og Deimos har bundet rotation. Tidevandskraften har bremset deres drejning.',
+    tekst: 'Når en måne drejer én gang om sig selv, mens den runder sin planet én gang. Så vender den altid samme side mod planeten. Vores Måne, Phobos og Deimos gør det, og Pluto og Charon er bundet begge veje. Tidevandskraften har bremset deres drejning.',
   },
   {
     id: 'regolit', ord: 'Regolit',
@@ -812,11 +812,17 @@ export const ORDBOG = [
     tekst: 'Et bælte af iskolde småkloder uden for Neptuns bane, ca. 30 til 50 gange så langt fra Solen som Jorden. Pluto er en af de største. Nogle kometer kommer derfra.',
   },
   // Opdagelserne, forløbet "Saturns ører" (H2, 16. november 2026, docs/drejebog-huygens.md afsnit 9). Kun i forløbets linje
-  // indtil videre. "anagram" kommer i H3.
+  // indtil videre. "anagram" kom i H3 (17. november 2026, trin 4 "Hemmeligheden").
   {
     id: 'linse', ord: 'Linse', kunI: '.fl-tekst',
     former: ['linse', 'linsen', 'linser', 'linserne'],
     tekst: 'Et stykke slebet glas med krumme sider, der bøjer lyset. I en kikkert samler en stor linse forrest lyset til et billede, og en lille linse ved øjet forstørrer det. Jo bedre linserne er slebet, jo skarpere bliver billedet.',
+  },
+  // Huygens' anagram: skriftet dateret 5. marts 1656, sætningen afsløret i Systema Saturnium 1659 (fakta-videnskabsfolk/huygens.md)
+  {
+    id: 'anagram', ord: 'Anagram', kunI: '.fl-tekst',
+    former: ['anagram', 'anagrammet', 'anagrammer', 'anagrammerne'],
+    tekst: 'Et ord eller en sætning, hvor bogstaverne er byttet rundt, fx "toner" og "noter". Før i tiden kunne en forsker gemme en opdagelse i et anagram og afsløre sætningen senere. Så kunne forskeren bevise at have vidst det først. Det gjorde Huygens i 1656.',
   },
   // Merkur MP2 (17. november 2026, docs/drejebog-merkur-pluto.md afsnit 4). Soldøgn: NSSDC (Merkur 4.222,6 timer =
   // 175,94 døgn, Jorden 24 timer, stjernedøgnet 23,93 timer). Sublimation: tøris (CO₂) ved almindeligt tryk, og hullerne
@@ -830,5 +836,12 @@ export const ORDBOG = [
     id: 'sublimation', ord: 'Sublimation',
     former: ['sublimation', 'sublimationen', 'sublimerer', 'sublimere'],
     tekst: 'Når et fast stof bliver direkte til luftart uden at smelte først. Tøris gør det ved stuetemperatur. På Merkur forsvinder noget i klippen måske sådan i solheden, og så synker jorden og giver lyse huller.',
+  },
+  // Pluto MP3 (17. november 2026, docs/drejebog-merkur-pluto.md afsnit 4). Tyngdepunktet: 2.126 km fra Plutos midte,
+  // regnet fra NSSDC's masser og afstand (del 8, afsnit 2 og 12). Jorden og Månen: ca. 4.700 km fra Jordens midte.
+  {
+    id: 'faelles-tyngdepunkt', ord: 'Fælles tyngdepunkt',
+    former: ['fælles tyngdepunkt', 'fælles tyngdepunkter'],
+    tekst: 'Det punkt, to himmellegemer kredser om sammen. Det ligger nærmest det tungeste. Jordens og Månens ligger inde i Jorden. Pluto og Charons ligger ude i rummet, ca. 940 km over Plutos overflade, fordi Charon er så stor i forhold til Pluto.',
   },
 ];

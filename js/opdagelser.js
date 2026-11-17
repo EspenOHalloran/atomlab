@@ -1,21 +1,31 @@
 // Opdagelserne (#opdagelser, del nr. 3 i Biblioteket, status prøve, docs/plan-videnskabsfolk.md): ti bøger om videnskabsfolk
-// på en hylde, der også er en tidslinje. En bygget bog står med omslaget frem og åbnes med et tryk. De kommende er en grå
-// ryg med navnet og året, og et tryk viser kun én linje. Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes
-// med import(), først når den åbnes.
+// på en hylde, der også er en tidslinje. En bygget bog står med omslaget frem og åbnes med et tryk. Kun de næste to, der
+// skal bygges, står som en grå ryg med navnet og året, og et tryk stiller bogens spørgsmål (E20 fund 6, stilguiden A9).
+// Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes med import(), først når den åbnes.
 // H1 (16. november 2026): hylden, forsiden og bladringen med tomme opslag. H2: fortællingen som et forløb (Forløb-klodsen
 // i js/forloeb.js) i bogens opslag af slags 'scene' med tegningerne fra js/bog/<id>.js. Første gang starter forløbet efter
 // "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
-// Gåden, Gør det selv og bogen selv kommer i H3-H4.
+// H3 (17. november 2026): trin 4 (ANNULO) og vejene fra "Det så du": Saturns ringe fra kanten i Solsystemet, hele
+// anagrammet (opslaget "Hemmeligheden") og ringen, man selv drejer. Bogen selv kommer i H4.
 
-import { BØGER, bogMed, byggede, kommerSenere, HYLDE_LINJE } from './data/opdagelser.js';
+import { bogMed, byggede, påHylden, rygLinje, HYLDE_LINJE } from './data/opdagelser.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
 import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavBog } from './bog.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, lavTurKnap } from './forloeb.js';
-import { tagVentForløb } from './gaa.js';
+import { tagVentForløb, åbnFænomen, tagVentBog } from './gaa.js';
 
 const $ = (id) => document.getElementById(id);
+
+// Gåderne, man har løst i bøgerne (et lille ✓, jeres svar 17. november 2026): { bog: tidspunkt } i localStorage
+const LØSTE = 'atomlabOpdagelserGaader';
+function løste() {
+  try { return JSON.parse(localStorage.getItem(LØSTE)) ?? {}; } catch { return {}; }
+}
+function gemLøst(id) {
+  try { localStorage.setItem(LØSTE, JSON.stringify({ ...løste(), [id]: Date.now() })); } catch { /* ingen lagring */ }
+}
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 let lavet = false;
@@ -31,12 +41,12 @@ function rygHTML(b) {
       + `<img src="${esc(b.portræt)}" alt="" width="600" height="750" decoding="async">`
       + `<span class="opd-omslag-titel">${esc(b.titel)}</span><span class="opd-omslag-navn">${esc(b.kort)}</span></button>`;
   }
-  return `<button class="opd-ryg" data-bog="${b.id}" aria-label="${esc(b.navn)}, ${b.år}. Kommer senere">`
+  return `<button class="opd-ryg" data-bog="${b.id}" aria-label="${esc(rygLinje(b))}">`
     + `<span class="opd-ryg-navn">${esc(b.kort)}</span></button>`;
 }
 
 function lavHylde() {
-  $('opdHylde').innerHTML = [...BØGER].sort((a, b) => a.år - b.år)
+  $('opdHylde').innerHTML = påHylden()
     .map((b) => `<div class="opd-plads${b.bygget ? ' bygget' : ''}" role="listitem">${rygHTML(b)}<span class="opd-år">${b.år}</span></div>`).join('');
   $('opdLinje').textContent = HYLDE_LINJE;
 }
@@ -64,13 +74,30 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  del.veje = [{ tekst: 'Videre i bogen ›', primær: true, gør: () => bog?.bladr(1) }];
+  // "Det så du": sætningen fra 1659 og tre veje (drejebogen afsnit 3, trin 5). Den tredje bliver "Bladr i bogen fra
+  // 1659" i H4 (jeres svar 17. november 2026)
+  const v = åben.tekster.VEJE;
+  del.slutTekst = () => `${v.sætning} "${åben.tekster.ANAGRAM.dansk}"`;
+  del.veje = [
+    { tekst: v.saturn, primær: true, gør: () => åbnFænomen('solsystem', 'saturn', 'kanten') },
+    { tekst: v.anagram, gør: () => visOpslag('gaaden') },
+    { tekst: v.selv, her: true },
+  ];
   del.slut = () => {
     bog?.lås(false);
     if (bog?.scene() === scene) scene.fri();
   };
   startForløb(fl, del);
   return true;
+}
+
+// Bladrer til et opslag i den åbne bog (fx "Hemmeligheden" fra "Det så du")
+function visOpslag(id) {
+  const nr = bog?.find(id) ?? -1;
+  if (nr >= 0 && bog.nr() !== nr) {
+    bog.vis(nr);
+    lyd.klik();
+  }
 }
 
 async function åbnBog(id, { fortælling = false } = {}) {
@@ -92,7 +119,10 @@ async function åbnBog(id, { fortælling = false } = {}) {
     },
     lavScene: (o, felt) => {
       if (!scenemodul) return null;
-      const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, påIgen: () => { lyd.klik(); startFortælling(); } });
+      if (o.id === 'gaaden') {
+        return scenemodul.lavGåde(felt, tekster.ANAGRAM, { rolig: ROLIG, tekster: tekster.GÅDE, løst: Boolean(løste()[b.id]), påLøst: () => { lyd.klaret(); gemLøst(b.id); } });
+      }
+      const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, anagram: tekster.ANAGRAM, påIgen: () => { lyd.klik(); startFortælling(); } });
       // Uden for forløbet er opslaget et laboratorium
       queueMicrotask(() => { if (!kørerForløb() && bog?.scene() === scene) scene.fri(); });
       return scene;
@@ -132,7 +162,7 @@ export function lavOpdagelser() {
     lyd.klik();
     const b = bogMed(k.dataset.bog);
     if (b.bygget) åbnBog(b.id);
-    else $('opdLinje').textContent = kommerSenere(b);
+    else $('opdLinje').textContent = rygLinje(b);
   });
   tilbageKnap = $('opdTilHylden');
   tilbageKnap.addEventListener('click', () => { lyd.klik(); visHylde(); });
@@ -162,6 +192,13 @@ export function startOpdagelser() {
   const vent = tagVentForløb(byggede().map((b) => b.forløb).filter(Boolean));
   const b = vent && byggede().find((x) => x.forløb === vent);
   if (b) åbnBog(b.id, { fortælling: true });
+  // En bog fra en knap et andet sted (data-gaa="opdagelser:huygens", fx citatet ved Saturn)
+  else visBog(tagVentBog());
+}
+
+// Åbner en bygget bog fra en knap (js/gaa.js). Første gang starter fortællingen efter "Begynd" som normalt
+export function visBog(id) {
+  if (id && bogMed(id)?.bygget) åbnBog(id);
 }
 
 export function stopOpdagelser() {

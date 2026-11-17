@@ -1,16 +1,19 @@
 # Lige nu: Videnskabsfolkene
 
-*Spor i [oversigten](../lige-nu.md) (startet 15. november 2026): Opdagelserne i Biblioteket, ti bøger om videnskabsfolk. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/videnskabsfolkene.md`. Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (E15, noterne).*
+*Spor i [oversigten](../lige-nu.md) (startet 15. november 2026): Opdagelserne i Biblioteket, ti bøger om videnskabsfolk. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/videnskabsfolkene.md`. Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (H3).*
 
-**Senest lavet (17. november 2026): E15, Opus' noter til Galilei og Newton.**
-- **Noterne** står nederst i [galilei.md](../fakta-videnskabsfolk/galilei.md) og [newton.md](../fakta-videnskabsfolk/newton.md): hvad der er nyt, hvor Opus er uenig med Fable, og hvilke sider fra bøgerne der passer til de fem lag. Tallene er regnet efter (månetesten, Picards omkreds, Keplers 3. lov for Jupiters måner).
-- **Uenig med Fable:** Synsfeltet forklarer ikke, at Galilei ikke så Callisto 8. januar (han så den 7. januar 9,1 bueminutter ude). Begge forløb er kortet ned til fire trin med to gæt. Newtons kernesætning giver Kepler hans del. Kanonkuglen er nok fra den "folkelige" udgave af bog III (trykt 1728) og skal slås op.
-- **Jeres svar 17. november 2026** (står i begge filer): Uffizi-portrættet fra 1635, Galileis kernesætning A, Opus' udgave af Newtons A, og månetestens regnestykke som gåden bagefter. Planens afsnit 2 er rettet: Galilei og Newton har nu faktagrundlag.
+**Senest lavet (17. november 2026): H3, gåden og Gør det selv, og E20 fund 6.**
+- **Jeres svar:** Go til A, B og C hver for sig og til D og E i træk. Den tredje vej er "Prøv ringen selv" til H4. Et løst anagram huskes (✓). Hylden har Tycho og Rømer som grå rygge.
+- **Kun det byggede (A):** Bogen har kun de byggede opslag, og hylden viser Huygens og de næste to bøger, der stiller deres spørgsmål.
+- **Trin 4 (B):** ANNULO i de 17 bunker, så flyver resten af sætningen på plads med dansk under. "Det så du" har sætningen fra 1659 og tre veje. Ordet `anagram` er i Ordbogen.
+- **"Hemmeligheden" (C):** De otte brikker lægges på deres betydning, til "Alle 62 er brugt. Det passer." Bagefter kommer "Lav dit eget anagram".
+- **Links (D):** "Se ringen forsvinde ved Saturn" lander ved Saturn fra kanten (stedet `kanten` i `js/kosmos/saturn.js`). Kortet "Hvordan ved vi, at det er en ring?" står ved ringene, og citatet har "Læs Huygens' bog ›".
+- **Faktatjek:** "som han havde sagt" er fjernet (armene kom senere end forudsagt), og der står "kunne forklare", ikke "kun en ring". Der er to nye fælder. `opdagelser` har 26 tjek.
 
 ## Næste
-1. **H3: Gåden og Gør det selv** (Opus, høj, ny session):
-   > Spor: Videnskabsfolkene. Navngiv chatten "Videnskabsfolkene · H3: Gåden". Tjek først i origin/main, at H3 ikke er lavet. Læs `docs/lige-nu/videnskabsfolkene.md`, afsnit 3-5 og 12 i `docs/drejebog-huygens.md` (trin 4 og 5, gåden, Gør det selv og "Lav dit eget anagram"), afsnit 6-8 i `docs/plan-videnskabsfolk.md`, `docs/kode/opdagelser.md` og `docs/kode/forloeb.md`. Byg H3: trin 4 (ANNULO i de 17 bunker) og "Det så du" med de tre veje i forløbet `js/data/forloeb/huygens.js` og tegningerne i `js/bog/huygens.js`, opslaget "Hemmeligheden" med hele anagrammet som udfordring og "Lav dit eget anagram", knappen til Saturns ringe, "Hvordan ved vi det?"-kortet ved Saturn og knappen ved citatet `huygensSaturn`. Ordet `anagram` i Ordbogen. Test 2 og 6. **Tag også E20 fund 6 med** (jeres svar 17. november 2026, rettelse C i `docs/prompt-e20-rettelser.md`): Bogen viser kun de opslag, der er bygget, og hylden højst to grå rygge, der stiller deres spørgsmål i stedet for "Kommer senere". Start først, når Småtings session "forløbet som sti" er merget (den rører også `js/bog/huygens.js` og `js/opdagelser.js`). Lav først en kort plan med trin, og få et go pr. trin. Brug tjeklisterne D og E, `/faktatjek` på nye tekster, og afslut med `/faerdig`.
-2. H4 (bogen selv). Så prøven med jeres søn.
+1. **H4: Bogen selv** (Opus, høj, ny session):
+   > Spor: Videnskabsfolkene. Navngiv chatten "Videnskabsfolkene · H4: Bogen selv". Tjek først i origin/main, at H4 ikke er lavet. Læs `docs/lige-nu/videnskabsfolkene.md`, afsnit 6, 7 og 11 i `docs/drejebog-huygens.md` (Bogen selv, "Om Huygens" og fakta), afsnit 4-8 i `docs/plan-videnskabsfolk.md`, `docs/kode/opdagelser.md` og afsnit 3-5 i `docs/fakta-videnskabsfolk/huygens.md`. Byg H4: `billeder/biblioteket/lav_bogsider.py` (s. 46-48 og tavlen fra archive.org, WebP, ca. 150-200 KB hver, kilden i `KILDER.md`), opslaget "Bogen fra 1659" med de glødende steder (latin og dansk), det sidste opslag "Om Huygens" med "Hvorfor?", "For nørder" og "Ærligt talt" (fra `js/lag.js`), og den tredje vej i "Det så du": "Prøv ringen selv" bliver til "Bladr i bogen fra 1659". Billederne hentes med `js/hentning.js`, når opslaget åbnes. Test 7. Lav først en kort plan med trin, og få et go pr. trin. Tjeklisterne D og E, `/faktatjek` på alle teksterne (oversættelsen af s. 48 linje 5-10, "1847" og OC XV-tallene mangler), og afslut med `/faerdig`. Så har Huygens status "prøve" og venter på prøven med jeres søn.
+2. Så prøven med jeres søn ([guide-proeven.md](../guide-proeven.md), spørgsmålene i drejebogens afsnit 10).
 3. Galilei og Newton får drejebøger, når de skal bygges (efter de syv andre). Det, der skal slås op, står sidst i Opus' noter.
 
 ## Spørgsmål til jer
