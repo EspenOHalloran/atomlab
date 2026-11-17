@@ -22,7 +22,7 @@
 //   (billeder/solsystem/lav_venus_steder.py, skyerne spreder lyset), og uden skyer regner shaderen gløden skarpt ud fra
 //   højderne (klippeplanet.js). Farven er valgt, og lyset er skruet meget op. Om dagen drukner gløden i sollyset.
 // - Stederne (V3): Et sted i træet ("Under skyerne") flyver derhen og tager skyerne væk (skyderen glider til 100 %), og
-//   datoen glider derhen, hvor klokken på stedet er tid (fx formiddag med lave skygger). Tilbage ved hele Venus kommer
+//   datoen glider derhen, hvor klokken på stedet er tid (fx formiddag med lange skygger). Tilbage ved hele Venus kommer
 //   skyerne igen, som de var.
 // - Styr-boksen: skyderen "Under skyerne", "Ultraviolet (som Akatsuki)", "Gløden på natsiden", "Bjergene 10 gange
 //   højere", "Modlys" og "Navne".

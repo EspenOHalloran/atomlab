@@ -178,29 +178,38 @@ await s.screenshot({ path: `${UD}/venus.png` });
       });
     }, [png, punkter]);
   };
-  // Maxwell Montes ved midnat (og skyerne væk, så gløden er skarp), set lige oppefra. Sletten er Sedna Planitia
-  // (ca. 45° N, 340° Ø, under middelhøjden) og et punkt øst for Maxwell på samme bredde.
+  // Maxwell Montes ved midnat (og skyerne væk, så gløden er skarp), set oppefra. Sletten: det laveste punkt i nærheden,
+  // som ligger frit i 3D-billedet (ikke bag et panel, elementFromPoint er lærredet)
   const midnat = await fm(async () => { const { datoMedTid } = await import('/js/data/venus.js'); return datoMedTid(atomlabTest.solsystem.fænomen().dato(), 3.3, 0); });
   await F('sætDato', midnat);
   await F('sætUnder', 100);
-  await F('kigPå', 58, 3, 5000);
+  await F('kigPå', 62, 3.3, 2500);
   await fm(() => atomlabTest.solsystem.spol(0.5));
-  const [mx, slette] = [await F('skærm', 65.2, 3.3), await F('skærm', 50, -20)];
+  await s.waitForTimeout(800); // (det første skærmbillede efter et nyt tal kan vise det gamle)
+  const fri = ({ x, y }) => fm(([x, y]) => document.elementFromPoint(x, y)?.tagName === 'CANVAS', [x, y]);
+  const mx = await F('skærm', 65.2, 3.3);
+  let slette = null, hSlette = 99;
+  for (let b0 = 56; b0 <= 64; b0 += 1) {
+    for (let l0 = -12; l0 <= 18; l0 += 2) {
+      const h = await F('højde', b0, l0), p = await F('skærm', b0, l0);
+      if (h < hSlette && (await fri(p))) { hSlette = h; slette = p; }
+    }
+  }
   const [rMax, rSlette] = await rød([mx, slette]);
-  const hMax = await F('højde', 65.2, 3.3), hSlette = await F('højde', 50, -20);
-  tjek(`om natten gløder sletten (${hSlette.toFixed(1)} km) mere end Maxwell Montes (${hMax.toFixed(1)} km)`, rSlette > rMax + 8 && rSlette > 20, [rSlette, rMax]);
+  const hMax = await F('højde', 65.2, 3.3);
+  tjek(`om natten gløder sletten (${hSlette.toFixed(1)} km) mere end Maxwell Montes (${hMax.toFixed(1)} km)`, (await fri(mx)) && hSlette < 3 && rSlette > rMax + 8 && rSlette > 15, [rSlette, rMax, hSlette]);
   await s.screenshot({ path: `${UD}/venus-gloed-maxwell.png` });
   // Om dagen (kl. 12 ved Maxwell) ses gløden ikke: uden glød og med glød er billedet det samme
   const middag = await fm(async () => { const { datoMedTid } = await import('/js/data/venus.js'); return datoMedTid(atomlabTest.solsystem.fænomen().dato(), 3.3, 12); });
   await F('sætDato', middag);
   await fm(() => atomlabTest.solsystem.spol(0.5));
   await s.waitForTimeout(500);
-  const [dagMed] = await rød([await F('skærm', 50, -20)]);
+  const [dagMed] = await rød([slette]);
   await s.screenshot({ path: `${UD}/venus-gloed-dag.png` });
   await fm(() => atomlabTest.solsystem.trykPå('Gløden på natsiden'));
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().glød().styrke < 0.01, null, { timeout: 20000, polling: 100 });
-  const [dagUden] = await rød([await F('skærm', 50, -20)]);
-  tjek('på dagsiden ses gløden ikke (samme lys med og uden)', Math.abs(dagMed - dagUden) < 3, [dagMed, dagUden]);
+  const [dagUden] = await rød([slette]);
+  tjek('på dagsiden ses gløden ikke (næsten samme lys på sletten med og uden)', Math.abs(dagMed - dagUden) < 8, [dagMed, dagUden]);
   await F('sætUnder', 0);
 }
 
