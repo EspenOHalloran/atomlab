@@ -1,4 +1,4 @@
-// Opdagelserne (#opdagelser, docs/plan-videnskabsfolk.md, afsnit 7): listen over bøgerne i Node (test 1), og i browseren,
+// Opdagelserne (#opdagelser, docs/plan-videnskabsfolk.md, afsnit 7): listen over bøgerne i Node (test 1, også siderne og "Om" fra H4), og i browseren,
 // at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med Huygens og to grå rygge (et tryk stiller bogens spørgsmål),
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag.
@@ -340,6 +340,58 @@ for (const [navn, opsætning] of [
   await ctx.close();
 }
 
+// Bogen selv (test 7, H4): siderne hentes først, når opslaget "Bogen fra 1659" åbnes, et glødende sted på s. 47 viser
+// latin og dansk, og "Om Huygens" er det sidste opslag med fire "Hvorfor?" og "For nørder" og "Ærligt talt" lukkede
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  const sider = [];
+  page.on('request', (r) => { const m = r.url().match(/huygens-(tavle|s\d+)\.webp/); if (m) sider.push(m[1]); });
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('huygens'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  for (let i = 0; i < 2; i++) await page.click('#opdBog .bog-pil[data-bladr="1"]');
+  const førBogen = { opslag: await O(() => atomlabTest.opdagelser.vist().opslag), sider: sider.length };
+  await page.click('#opdBog .bog-pil[data-bladr="1"]');
+  const hentet = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'bogen' && atomlabTest.opdagelser.scene()?.hentet(), null, 15000);
+  const faner = await O(() => [...document.querySelectorAll('#opdBog .bs-fane')].map((f) => f.textContent));
+  await page.click('#opdBog .bs-fane >> text=s. 47');
+  await vent(page, () => atomlabTest.opdagelser.scene()?.side() === 's47' && atomlabTest.opdagelser.scene().hentet(), null, 15000);
+  const glød = await O(() => [...document.querySelectorAll('#opdBog .bs-glød')].map((g) => g.dataset.sted));
+  await page.click('#opdBog .bs-glød[data-sted="saetningen"] >> nth=1');
+  const forklaring = await O(() => ({
+    sted: atomlabTest.opdagelser.scene().sted(),
+    latin: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.textContent,
+    dansk: document.querySelector('#opdBog .bs-forklaring .bs-dansk')?.textContent,
+    lyser: [...document.querySelectorAll('#opdBog [data-sted="saetningen"]')].every((k) => k.getAttribute('aria-pressed') === 'true'),
+    linjer: document.querySelectorAll('#opdBog .bs-linjer .bs-række').length,
+    linjerÅben: document.querySelector('#opdBog .bs-linjer')?.open,
+    knapper: [...document.querySelectorAll('#opdBog .bs-sted-knap')].every((k) => k.getBoundingClientRect().height >= 44),
+  }));
+  tjek('bogen selv: siderne hentes først ved opslaget "Bogen fra 1659" (fire faner), og et glødende sted på s. 47 viser latin og dansk med "Linje for linje" lukket',
+    førBogen.opslag === 'gaaden' && førBogen.sider === 0 && hentet && faner.join('|') === 'Tavlen|s. 16|s. 47|s. 48' && glød.filter((g, i, a) => a.indexOf(g) === i).join() === 'dato,raekken,saetningen'
+    && forklaring.sted === 'saetningen' && forklaring.latin?.includes('Annulo cingitur') && forklaring.dansk?.includes('tynd, flad ring') && forklaring.lyser
+    && forklaring.linjer === 8 && forklaring.linjerÅben === false && forklaring.knapper, JSON.stringify({ førBogen, sider, faner, glød, forklaring }));
+  // Bladrer man væk og tilbage, står s. 47 og stedet der stadig, og siden hentes ikke igen
+  const antal = sider.length;
+  await page.click('#opdBog .bog-pil[data-bladr="1"]');
+  const om = await O(() => ({
+    opslag: atomlabTest.opdagelser.vist().opslag, nr: atomlabTest.opdagelser.vist().nr, ialt: atomlabTest.opdagelser.vist().antal,
+    næste: document.querySelector('#opdBog .bog-pil[data-bladr="1"]').disabled,
+    tal: document.querySelectorAll('#opdBog .bo-tal b').length, hvorfor: document.querySelectorAll('#opdBog [data-bo-hvorfor]').length,
+    lag: atomlabTest.opdagelser.scene().lag(),
+  }));
+  await page.click('#opdBog [data-bo-hvorfor="1"]');
+  const kort = await O(() => document.querySelector('.hvorfor-kort:not(.skjult) .hk-titel')?.textContent);
+  await page.click('#opdBog .bog-pil[data-bladr="-1"]');
+  const tilbage = await O(() => ({ side: atomlabTest.opdagelser.scene()?.side(), sted: atomlabTest.opdagelser.scene()?.sted(), kort: !!document.querySelector('.hvorfor-kort:not(.skjult)') }));
+  await page.waitForTimeout(300);
+  tjek('"Om Huygens" er det sidste opslag: to tal, fire "Hvorfor?" (et kort åbner og lukker ved bladring), "For nørder" og "Ærligt talt" lukkede, og bogen husker s. 47',
+    om.opslag === 'om' && om.nr === om.ialt - 1 && om.næste && om.tal === 2 && om.hvorfor === 4 && om.lag.map((l) => l.titel).join() === 'For nørder,Ærligt talt' && om.lag.every((l) => !l.åben)
+    && kort === 'Hvorfor et anagram?' && tilbage.side === 's47' && tilbage.sted === 'saetningen' && !tilbage.kort && sider.length === antal, JSON.stringify({ om, kort, tilbage, antal, sider: sider.length }));
+  await ctx.close();
+}
+
 // Telefon og tablet på højkant som første skærm: forsiden kan ses uden at rulle (også "Begynd"), et stryg bladrer, og
 // intet ligger uden for skærmen
 for (const [navn, opsætning] of [
@@ -379,6 +431,15 @@ for (const [navn, opsætning] of [
   const strøget = await vent(page, () => atomlabTest.opdagelser.vist()?.nr === 1, null, 3000);
   tjek(`${navn}: hylden og bogens knapper er inden for skærmen (mindst 44 px), "Begynd" ses uden at rulle, og et stryg bladrer`,
     hylde && bog.begyndSes && bog.knapper && !bog.overlap && !bog.bred && strøget, JSON.stringify({ hylde, ...bog, strøget }));
+  // "Bogen fra 1659": fanerne og stederne er knapper på mindst 44 px inden for skærmen, og intet går ud til siden
+  await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'bogen' && v.bladr(1)); atomlabTest.opdagelser.scene().visSide(2); });
+  await vent(page, () => atomlabTest.opdagelser.scene()?.hentet(), null, 15000);
+  const sider = await page.evaluate(() => {
+    const k = [...document.querySelectorAll('#opdBog :is(.bs-fane, .bs-sted-knap)')].map((e) => e.getBoundingClientRect());
+    const b = document.querySelector('#opdBog .bs-billede').getBoundingClientRect();
+    return { knapper: k.length === 7 && k.every((x) => x.height >= 44 && x.left >= 0 && x.right <= innerWidth + 0.5), billede: b.width >= 120 && b.right <= innerWidth + 0.5, bred: document.documentElement.scrollWidth > innerWidth + 1 };
+  });
+  tjek(`${navn}: i "Bogen fra 1659" er fanerne og stederne mindst 44 px og inden for skærmen, og siden går ikke ud til siden`, sider.knapper && sider.billede && !sider.bred, JSON.stringify(sider));
   await ctx.close();
 }
 
