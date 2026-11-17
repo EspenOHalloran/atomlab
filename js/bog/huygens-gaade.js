@@ -55,16 +55,11 @@ export function lavTæller(rod, række) {
   return {
     tal,
     knap,
-    har: (b) => (tal[b] ?? 0) > 0,
     tag(b) {
       if (!(tal[b] > 0)) return false;
       tal[b]--;
       vis(b);
       return true;
-    },
-    læg(b) {
-      tal[b]++;
-      vis(b);
     },
     sum: () => Object.values(tal).reduce((a, n) => a + n, 0),
   };

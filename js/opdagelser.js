@@ -1,7 +1,7 @@
 // Opdagelserne (#opdagelser, del nr. 3 i Biblioteket, status prøve, docs/plan-videnskabsfolk.md): ti bøger om videnskabsfolk
 // på en hylde, der også er en tidslinje. En bygget bog står med omslaget frem og åbnes med et tryk. Kun de næste to, der
-// skal bygges, står som en grå ryg med navnet og året, og et tryk stiller bogens spørgsmål (E20 fund 6, stilguiden A9). Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes
-// med import(), først når den åbnes.
+// skal bygges, står som en grå ryg med navnet og året, og et tryk stiller bogens spørgsmål (E20 fund 6, stilguiden A9).
+// Den åbne bog er klodsen i js/bog.js, og bogens tekster hentes med import(), først når den åbnes.
 // H1 (16. november 2026): hylden, forsiden og bladringen med tomme opslag. H2: fortællingen som et forløb (Forløb-klodsen
 // i js/forloeb.js) i bogens opslag af slags 'scene' med tegningerne fra js/bog/<id>.js. Første gang starter forløbet efter
 // "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
