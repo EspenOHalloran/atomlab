@@ -2,11 +2,27 @@
 // og visningerne i browseren (lyset efter tidspunktet, Jordens drejning, Månens plads, knapperne og Solen).
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { dageSidenJ2000, solen, månen, solUnder, solHøjde, månefase, faseNavn } from '../js/data/himmel.js';
+import { RAND_U, randLys, drejetid, GRUPPER, ANTAL_PLETTER } from '../js/data/solen.js';
+import { readFileSync } from 'node:fs';
 const UD = billedmappe('jorden');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const dag = (iso) => dageSidenJ2000(new Date(iso));
 const vinkelForskel = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+
+// ---------- Uden browser: Solens tegning (feedback nr. 3, 16. november 2026) ----------
+{
+  const kant = randLys(0, RAND_U[1]);
+  tjek(`Solen: kanten er ${Math.round(kant * 100)} % af midten i grønt lys (ca. 40 %), og rød er lysere end blå`, Math.abs(kant - 0.4) < 0.05 && randLys(0, RAND_U[0]) > randLys(0, RAND_U[2]));
+  tjek(`Solen: ${drejetid(0).toFixed(1)} døgn ved ækvator og ${drejetid(90).toFixed(1)} ved polerne (25 og 36, som siden)`, Math.abs(drejetid(0) - 25) < 0.01 && Math.abs(drejetid(90) - 36) < 0.01);
+  tjek('Solen: en plet ved 30° er længere om en omgang end ved ækvator', drejetid(30) > drejetid(0) + 1);
+  const bredder = GRUPPER.flatMap((g) => g.pletter.map(([, db]) => Math.abs(g.bredde + db)));
+  tjek(`Solen: alle ${ANTAL_PLETTER} pletter ligger ved 5-35° bredde`, bredder.every((b) => b >= 5 && b <= 35), bredder.join());
+  // stjerne() bruges stadig af Kosmos, Solstorm og Stjerneovnen, men ikke af Solen
+  const kilde = (f) => readFileSync(new URL(`../js/${f}`, import.meta.url), 'utf8');
+  tjek('Solen har sin egen shader, og Solstorm, overblikket og Stjerneovnen bruger stadig stjerne()',
+    !/stjerne\(/.test(kilde('kosmos/solen.js').replace(/\/\/.*$/gm, '')) && ['kosmos/solstorm.js', 'kosmos/overblik.js', 'fusion.js'].every((f) => /stjerne\(/.test(kilde(f))));
+}
 
 // ---------- Uden browser: Månen ----------
 // Meeus, "Astronomical Algorithms", eksempel 47.a: 12. april 1992 kl. 0 (TD): λ = 133,163°, β = −3,229°, afstand 368.410 km
@@ -80,6 +96,8 @@ tjek('Solen: sort himmel', !(await s.evaluate(() => atomlabTest.solsystem.tåger
 const solTekst = await s.textContent('#solsystemTekst');
 tjek('Solen: tekst om fusion og 109 Jorder', /fusion/.test(solTekst) && /109 Jorder/.test(solTekst));
 tjek('Solen: link til Stjerneovnen', (await s.getAttribute('#solsystemTekst a:has-text("Stjerneovnen")', 'href')) === '#fusion');
+tjek('Solen: Solens egen shader bruges', (await f(s, 'f.shader()')) === 'solen');
+tjek('Solen: der er solpletter at se', (await f(s, 'f.pletter()')).length >= 3);
 const radier = await f(s, 'f.radier()');
 tjek(`Solen: Jorden er ${(radier.sol / radier.jorden).toFixed(1)} gange mindre (109,2)`, Math.abs(radier.sol / radier.jorden - 109.2) < 0.1);
 await s.click('#solsystemStyr .kontakt:has-text("Jorden ved siden af")');
