@@ -15,6 +15,7 @@
 import * as THREE from 'three';
 import { verden, ROLIG, stopKamera } from '../scene3d.js';
 import { glød, skilt, ryd } from '../kosmos/faelles.js';
+import { skalaOrd } from '../data/gaader.js';
 import { fuld } from './streg.js';
 import { lavLys } from './lys.js';
 
@@ -36,7 +37,7 @@ const TÆND_HVER = 0.4; // første gang: et nyt lys tændes så ofte
 const TÆND_VARER = 0.6;
 
 let gruppe = null;
-let lys = []; // { id, holder, indre, lys, navn, ring }
+let lys = []; // { id, holder, indre, lys, navn, skalaSkilt, ring }
 let ekstra = []; // stien og lysene i enderne (tones ind, når skinnen tændes første gang)
 const navne = []; // skiltene, som bliver større, når kameraet står langt væk
 let række = []; // id'erne i rækkefølge
@@ -120,6 +121,12 @@ function byg(gåder) {
     navn.position.y = STI_Y - 0.75;
     holder.add(navn);
     navne.push(navn);
+    // Under navnet står skalaen med småt ("mindre end et atom", "galakser"), så rækkefølgen forklarer sig selv
+    const skalaSkilt = skilt(skalaOrd(g.størrelse), '#8fa6cc', 0.42);
+    skalaSkilt.userData.dy = 1.2;
+    skalaSkilt.position.y = STI_Y - skalaSkilt.userData.dy;
+    holder.add(skalaSkilt);
+    navne.push(skalaSkilt);
     // En færdig gåde (✓) har en rolig ring om lyset
     const ring = new THREE.Mesh(new THREE.RingGeometry(3.3, 3.42, 72), new THREE.MeshBasicMaterial({
       color: new THREE.Color(0.37, 0.89, 1), transparent: true, opacity: 0.55, depthWrite: false,
@@ -127,7 +134,7 @@ function byg(gåder) {
     ring.visible = false;
     indre.add(ring);
     gruppe.add(holder);
-    return { id: g.id, holder, indre, lys: l, navn, ring };
+    return { id: g.id, holder, indre, lys: l, navn, skalaSkilt, ring };
   });
 
   // I begge ender svage lys uden navn og linjen "Flere gåder er på vej"
@@ -194,7 +201,7 @@ function stilKamera() {
     navneSkala = ns;
     for (const n of navne) {
       n.scale.copy(n.userData.skala).multiplyScalar(ns);
-      n.position.y = STI_Y - 0.75 * ns; // under stien, også når skiltet bliver større
+      n.position.y = STI_Y - (n.userData.dy ?? 0.75) * ns; // under stien, også når skiltet bliver større
     }
   }
   const d = afstandVed(zoom, dSkinne);
@@ -292,6 +299,7 @@ function opdater(dt, tid) {
     // Navnet på gåden i fokus står i teksten nederst, så det toner ud i 3D
     const afst = Math.min(Math.abs(i - pos), lukket ? lys.length - Math.abs(i - pos) : Infinity);
     l.navn.material.opacity = Math.min(1, afst * 1.6) * 0.9 * (ROLIG ? synlig : 1);
+    l.skalaSkilt.material.opacity = l.navn.material.opacity * 0.8;
     // Gåden i fokus står lidt større end naboerne (kun lyset, ikke stenen og navnet)
     l.indre.scale.setScalar(skala * (1 + FOKUS * Math.max(0, 1 - afst)));
     if (l.ring.visible) l.ring.lookAt(verden.kamera.position);

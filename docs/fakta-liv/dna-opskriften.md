@@ -84,6 +84,7 @@
 - **Bananen:** kun søgeresultater, ingen primær kilde (den blev aldrig udgivet).
 - **"650 dalton pr. basepar":** ingen kilde fundet. Udregningen giver 618 (syreform) og 662 (natriumsalt).
 - **Faderens andel af de nye mutationer** (ofte sagt ca. 80 %): ikke set, kun at hans tal stiger 4 gange så hurtigt med alderen.
+- **Antallet af delinger bag de ca. 70** (L3, 17. november 2026): Kun via Wikipedia ("Paternal age effect": sædcellernes forstadier deler sig ca. 23 gange om året efter puberteten, ca. 200 gange ved 20 år og ca. 660 ved 40, med henvisning til Malaspina m.fl. 2015, Fertility and Sterility 103(6):1392-6, PMC4457665). PMC gav reCAPTCHA, og eutils og Europe PMC var lukket. Derfor står det i appen uden tal ("har delt sig mange gange").
 - **Wilkins m.fl. og Franklin og Gosling 1953:** titler, sider og dato bekræftet, indholdet ikke læst (betalingsmur).
 - **Ikke åbnet, kun som henvisning:** Anderson 1981 (mtDNA), Bianconi 2013, Doolittle 2013, Dawkins 1986, Ross og Orlowski 1982, wwPDB's licensside.
 - **1BNA-filen:** Om den har H-atomer, er ikke tjekket (røntgen ved 1,9 Å viser normalt ikke H). Licensen for PDB-101's tekster og billeder er ikke fundet.

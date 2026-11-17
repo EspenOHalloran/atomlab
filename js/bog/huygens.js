@@ -4,9 +4,14 @@
 //
 // lavFortælling(felt, { rolig, tekster, påIgen }) fylder opslagets felt (.bog-scene fra js/bog.js) og giver
 //   forløbDel(data)  det, Forløb-klodsen (js/forloeb.js) skal bruge pr. trin-id (start, knapper, færdig, visMig)
-//   fri()            laboratoriet efter forløbet: ringen, man selv kan dreje, og "Fortæl det igen" (påIgen)
+//   fri(kapitel)     laboratoriet efter forløbet: de tre kapitler som tre valg (linse, naetter og ringen, standard
+//                    ringen, man selv kan dreje) og "Fortæl det igen" (påIgen)
 //   fjern()          stopper tegningen, timerne og lytterne
 //   test             til testadgangen (tilstanden og handlingerne)
+//
+// Forløbet er en sti (E20, 17. november 2026, stilguiden B): Glasset, skyderen og ringen virker i alle faser (også mens man
+// gætter, hvor et tryk lader gættet tone væk, og under Så). Målene er runde: Nat 15 og 17 falder selv på 16, kanten tæller
+// fra 3°, og går man forbi, kommer et vink med det samme (teksterne i js/data/forloeb/huygens.js).
 //
 // Trinene (H2, 16. november 2026):
 //   linse    Galileis tre kugler (tavlens nr. I) er slørede. Man gnider på glasset (eller trykker "Slib linsen"), og
@@ -23,7 +28,7 @@
 // i en rigtig kikkert. Kikkertens uskarphed laves ved at tegne i lav opløsning og forstørre (virker også på ældre iPads,
 // hvor lærredets filter ikke findes).
 
-import { forløbFase } from '../forloeb.js';
+import { forløbRørt, forløbVenter, forløbVink } from '../forloeb.js';
 
 const FIGUR = '#f3ead7'; // tavlens hvide figurer
 const BUND = '#1d1a17'; // tavlens mørke bund
@@ -35,6 +40,8 @@ const NAT_MÅL = 16; // Huygens' eget tal: ca. 16 dage (s. 26-27)
 const NAT_MAKS = 20;
 const B_MAKS = 27; // ringens største vinkel set fra Jorden (ca. 27°)
 const B_ÅBEN = 12; // så langt skal ringen åbnes i trin 3, før kanten tæller
+const KANT_TÆT = 3; // så tæt på kanten (grader) er "tæt nok": Ringen falder selv det sidste stykke (runde mål, B5)
+const FANG_EFTER = 450; // ms uden at røre skyderen, før nat 15 eller 17 selv falder på 16
 const B_1655 = 5; // armene i 1655: en smal ring (tegnet efter s. 18)
 const GRAD = Math.PI / 180;
 const MÅNEDER = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
@@ -163,6 +170,7 @@ function nattensDato(n) {
 }
 
 export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = null } = {}) {
+  let fl = null; // forløbets data (vinkene), når forløbet kører
   felt.innerHTML = '<div class="hs-lærred"><canvas role="img"></canvas></div><div class="hs-under"></div>';
   const lærred = felt.querySelector('canvas');
   const under = felt.querySelector('.hs-under');
@@ -179,7 +187,8 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     trin: 'fri',
     skarp: 0, visSkarp: 0, gnidet: false, // trin 1
     nat: 0, visNat: 0, natRørt: false, navn: false, // trin 2
-    B: 0, visB: 0, maksB: 0, løft: 0, visLøft: 0, løftTegn: 1, // trin 3 og laboratoriet
+    B: 0, visB: 0, maksB: 0, løft: 0, visLøft: 0, løftTegn: 1, løftet: false, // trin 3 og laboratoriet
+    lab: null, // laboratoriets kapitel ('linse', 'naetter' eller 'ringen'), null i forløbet
   };
   let W = 0, H = 0, dpr = 1;
   let aktiv = true;
@@ -188,12 +197,13 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   let ur = 0; // sekunder, til fingeren, der gnider
   let timere = [];
   let træk = null; // { id, x, y }
+  let fang = null; // timeren, der lader nat 15 eller 17 falde på 16
   let skyder = null, dato = null, skitser = null, tavle = null;
 
   const vent = (ms, f) => timere.push(setTimeout(() => { if (aktiv) f(); }, ms));
   const rydTimere = () => { timere.forEach(clearTimeout); timere = []; };
-  // Handlingerne tæller kun, når trinet venter på dem (ikke mens man gætter, og ikke under Så)
-  const måGøre = () => s.trin === 'fri' || forløbFase() === 'gør';
+  // Et kort vink i forløbets linje, kun mens trinet venter på handlingen (ikke i laboratoriet og ikke under Så)
+  const vink = (tekst) => { if (fl && !s.lab && forløbVenter()) forløbVink(tekst); };
 
   const tegnIgen = () => {
     if (!ramme && aktiv) {
@@ -290,6 +300,10 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     if (s.visLøft !== s.løft) {
       s.visLøft = rolig ? s.løft : klem(s.visLøft + Math.sign(s.løft - s.visLøft) * dt / 1.6, 0, 1);
       bevæger = true;
+    } else if (s.visLøft >= 1 && !s.løftet) {
+      // Billedet har løftet sig: Nu kan man selv dreje den skarpe ring (også under Så, B1)
+      s.løftet = true;
+      s.B = s.visB = 24 * s.løftTegn;
     }
     return bevæger;
   }
@@ -340,7 +354,8 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   }
 
   function slib(mængde) {
-    if (s.trin !== 'linse' || !måGøre()) return;
+    if (s.trin !== 'linse') return;
+    forløbRørt(); // gnider man uden at gætte, toner gættet væk
     s.skarp = klem(s.skarp + mængde, 0, 1);
     tegnIgen();
   }
@@ -396,9 +411,19 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   }
 
   function sætNat(n) {
-    if (s.trin !== 'naetter' || !måGøre()) return;
+    if (s.trin !== 'naetter') return;
+    forløbRørt();
     s.nat = klem(Math.round(n), 0, NAT_MAKS);
     s.natRørt = true;
+    clearTimeout(fang);
+    if (s.lab) {
+      if (s.nat === NAT_MÅL) s.navn = true;
+    } else if (Math.abs(s.nat - NAT_MÅL) === 1) {
+      // Tæt på tæller: Prikken falder selv på plads det sidste stykke
+      fang = setTimeout(() => { if (aktiv && s.trin === 'naetter' && Math.abs(s.nat - NAT_MÅL) === 1) sætNat(NAT_MÅL); }, rolig ? 0 : FANG_EFTER);
+      vink('');
+    } else if (s.nat > NAT_MÅL + 1) vink(fl?.vink?.forbi ?? '');
+    else vink('');
     opdaterSkitser();
     tegnIgen();
   }
@@ -406,11 +431,11 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   // ---------- Trin 3: ringen fra kanten ----------
   function tegnKanten(f) {
     const L = glat(0, 1, s.visLøft);
-    const B = mod(s.visB, 24 * s.løftTegn, L);
+    const B = s.løftet ? s.visB : mod(s.visB, 24 * s.løftTegn, L);
     const R = f.r * mod(0.27, 0.24, L);
     iFeltet(f, mod(0.25, 0, L), (c, x, y) => tegnSaturn(c, x, y, R, B), L);
     let tekst = '';
-    if (L > 0.5) tekst = 'Den samme ring, set lidt ovenfra';
+    if (L > 0.5) tekst = Math.abs(B) < 0.8 ? 'Set fra kanten' : `Den samme ring, set ${B > 0 ? 'ovenfra' : 'nedefra'}`;
     else if (Math.abs(s.visB) < 0.8) tekst = 'Set fra kanten';
     linjeUnder(f, tekst, L > 0.5);
     // Tavlens tegning, der ligner, lyser op
@@ -421,18 +446,24 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   }
 
   function drej(B) {
-    if (!(s.trin === 'kanten' || s.trin === 'fri') || s.løft || s.løftVenter || !måGøre()) return;
+    if (!(s.trin === 'kanten' || s.trin === 'fri')) return;
+    if (s.løftVenter && !s.løftet) return; // mens billedet løfter sig
+    forløbRørt();
     const før = s.B;
     s.B = klem(B, -B_MAKS, B_MAKS);
-    // Et hurtigt træk kan springe over kanten (fra +2° til -3°): Det tæller som kanten
-    if (s.trin === 'kanten' && s.maksB >= B_ÅBEN && før * s.B < 0) s.B = 0;
-    s.maksB = Math.max(s.maksB, Math.abs(s.B));
-    // Tilbage ved kanten efter at have åbnet ringen: Billedet løfter sig (kun i forløbet)
-    if (s.trin === 'kanten' && !s.løftVenter && s.maksB >= B_ÅBEN && Math.abs(s.B) < 0.8) {
-      s.B = 0;
-      s.løftVenter = true;
-      s.løftTegn = s.visB >= 0 ? 1 : -1;
-      vent(rolig ? 0 : 350, () => { s.løft = 1; tegnIgen(); });
+    if (s.trin === 'kanten' && !s.løftVenter) {
+      // Et hurtigt træk kan springe over kanten (fra +2° til -3°): Det tæller som kanten
+      if (s.maksB >= B_ÅBEN && før * s.B < 0) s.B = 0;
+      s.maksB = Math.max(s.maksB, Math.abs(s.B));
+      // Tæt på kanten efter at have åbnet ringen: Den falder selv på plads, og billedet løfter sig
+      if (s.maksB >= B_ÅBEN && Math.abs(s.B) < KANT_TÆT) {
+        s.B = 0;
+        s.løftVenter = true;
+        s.løftTegn = s.visB >= 0 ? 1 : -1;
+        vink('');
+        vent(rolig ? 0 : 350, () => { s.løft = 1; tegnIgen(); });
+      } else if (Math.abs(s.B) >= B_MAKS) vink(fl?.vink?.helt ?? '');
+      else if (s.maksB >= B_ÅBEN) vink('');
     }
     tegnIgen();
   }
@@ -445,10 +476,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     skyder = under.querySelector('input');
     dato = under.querySelector('.hs-nat-tekst');
     skitser = under.querySelector('.hs-skitser');
-    skyder.addEventListener('input', () => {
-      if (!måGøre()) { skyder.value = String(s.nat); return; }
-      sætNat(Number(skyder.value));
-    });
+    skyder.addEventListener('input', () => sætNat(Number(skyder.value)));
     opdaterSkitser();
   }
 
@@ -466,7 +494,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     if (!h.isPrimary) return;
     træk = { id: h.pointerId, x: h.clientX, y: h.clientY };
     lærred.setPointerCapture?.(h.pointerId);
-    if (s.trin === 'linse' && måGøre()) s.gnidet = true;
+    if (s.trin === 'linse') s.gnidet = true;
   };
   const flyt = (h) => {
     if (!træk || h.pointerId !== træk.id) return;
@@ -485,7 +513,9 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
 
   function sætTrin(trin) {
     rydTimere();
+    clearTimeout(fang);
     s.trin = trin;
+    s.lab = null;
     skyder = dato = skitser = tavle = null;
     under.replaceChildren();
     const etiket = {
@@ -503,6 +533,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   }
 
   function forløbDel(data) {
+    fl = data;
     const trin = {
       linse: {
         start() {
@@ -531,7 +562,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       kanten: {
         start() {
           sætTrin('kanten');
-          Object.assign(s, { B: 0, visB: 0, maksB: 0, løft: 0, visLøft: 0, løftVenter: false });
+          Object.assign(s, { B: 0, visB: 0, maksB: 0, løft: 0, visLøft: 0, løftVenter: false, løftet: false });
           underTavle();
         },
         get knapper() {
@@ -557,18 +588,45 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     return { trin };
   }
 
-  function fri() {
+  // Laboratoriet: de tre kapitler som tre valg (stilguiden B7). Et tryk på det valgte starter det forfra.
+  function fri(kap = 'ringen') {
     sætKapitel(titel);
-    sætTrin('fri');
-    Object.assign(s, { B: 14, visB: 14, løft: 0, visLøft: 0 });
-    underTavle();
+    if (kap === 'linse') {
+      sætTrin('linse');
+      Object.assign(s, { skarp: 0, visSkarp: 0, gnidet: false });
+      ur = 0;
+    } else if (kap === 'naetter') {
+      sætTrin('naetter');
+      Object.assign(s, { nat: 0, visNat: 0, natRørt: false, navn: false });
+      underNætter();
+    } else {
+      kap = 'ringen';
+      sætTrin('fri');
+      Object.assign(s, { B: 14, visB: 14, løft: 0, visLøft: 0, løftet: false });
+      underTavle();
+    }
+    s.lab = kap;
+    const kapitler = tekster.kapitler ?? [];
+    const valg = document.createElement('div');
+    valg.className = 'hs-kapitler';
+    valg.setAttribute('role', 'group');
+    valg.setAttribute('aria-label', 'Prøv et kapitel');
+    for (const k of kapitler) {
+      const b = document.createElement('button');
+      b.className = 'hs-kapitel';
+      b.textContent = k.tekst;
+      b.setAttribute('aria-pressed', String(k.id === kap));
+      b.addEventListener('click', () => fri(k.id));
+      valg.append(b);
+    }
     const p = document.createElement('p');
     p.className = 'hs-linje';
-    p.textContent = tekster.linje ?? '';
+    p.textContent = kapitler.find((k) => k.id === kap)?.linje ?? tekster.linje ?? '';
     const igen = document.createElement('button');
     igen.className = 'knap hs-igen';
     igen.textContent = `${tekster.igen ?? 'Fortæl det igen'} ›`;
     igen.addEventListener('click', () => påIgen?.());
+    under.prepend(valg);
     under.append(p, igen);
     tegnIgen();
   }
@@ -579,6 +637,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     fjern() {
       aktiv = false;
       rydTimere();
+      clearTimeout(fang);
       cancelAnimationFrame(ramme);
       ramme = 0;
       ro.disconnect();
@@ -589,7 +648,8 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       felt.replaceChildren();
     },
     test: {
-      tilstand: () => ({ trin: s.trin, skarp: s.skarp, nat: s.nat, B: s.B, maksB: s.maksB, løft: s.visLøft, navn: s.navn, lyser: tavle?.querySelector('.lyser')?.dataset.tavle ?? null }),
+      tilstand: () => ({ trin: s.trin, skarp: s.skarp, nat: s.nat, B: s.B, maksB: s.maksB, løft: s.visLøft, løftet: s.løftet, navn: s.navn, lab: s.lab, lyser: tavle?.querySelector('.lyser')?.dataset.tavle ?? null }),
+      lab: (kap) => fri(kap),
       slib,
       nat: sætNat,
       drej,

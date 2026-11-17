@@ -42,11 +42,11 @@ Forløbet kommer stadig først (Retningen). Men det er en sti med et gelænder, 
 | Regel | Bryder den i dag |
 |---|---|
 | A1 Én stemme | Værkstedet (opgavebjælke og pille), Molekyler ("Næste skridt" og panelet siger det samme), Stjerneovnen, Reaktoren og Batteriet (guide-kort og "Næste skridt"-boks), Gåderne og Det periodiske system (egen linje) |
-| A2 Stien | Det periodiske system ("‹ Tilbage" i kortet), Gåderne ("‹ Alle gåder" i kortet), Opdagelserne ("‹ Hylden" nederst, væk under forløbet). Kun Solsystemet følger den |
+| A2 Stien | Det periodiske system ("‹ Tilbage" i kortet), Gåderne ("‹ Alle gåder" i kortet), Opdagelserne ("‹ Hylden" nederst, og under turen i bogens hjørne). Kun Solsystemet følger den |
 | A3 Én vigtig knap | De gamle paneler: "Skyd neutron", "+ 10 protoner", "Knaldgas" og "Byg stigen" ligner hinanden og alt andet |
 | A4 Kant og 44 px | Værkstedet, Stjerneovnen, Reaktoren og Batteriet (piller på 24-33 px, og status-piller, der ligner knapper) |
 | A5 Lagene | Spørgsmål ser ud på fire måder: gul pille, blågrøn boks (Stjerneovnen, Reaktoren, Batteriet), mørk linje (Solsystemet, Kosmos) og orange overskrift. "Ærligt talt" har tre farver |
 | A6 Billedet først | Solsystemet og Kosmos (panelerne står der fra start, og Big Bang-panelet fortæller svaret før "Start universet"), Stjerneovnens rejse ind i Solen (panelerne er fremme imens) |
 | A7 Emoji | Solsystemets og Kosmos' lister, scenens knapper, tidsskyderen, fingeren i Opdagelserne |
 | A9 Kun det, der findes | Opdagelserne (ni grå rygge og fire tomme opslag) |
-| B1-B7 | Alle otte forløb følger samme klods (`js/forloeb.js`), så de rettes dér. Værst i "Saturns ører" |
+| B1-B7 | **Rettet 17. november 2026 (E20)** i klodsen (`js/forloeb.js`) og i "Saturns ører". B8 er en blød toning i to skridt. At folde Værkstedets højre panel ind venter til Serie 2 nr. 5 |

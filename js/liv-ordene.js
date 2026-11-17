@@ -3,7 +3,7 @@
 // Scenen er tegningen fra L2 (js/liv/protein.js) i tilstanden 'ord': DNA'et lige ud med bogstaverne og kæden over det.
 // Fem trin: tryk på et ord, slå tre ord op i den lille ordbog, "Læs resten" (kæden vokser og folder sig), skift A'et i
 // ord 7 til T (seglcellen), og ét skift, man selv vælger (tryk på et ord, vælg et bogstav og et nyt).
-// liv.js giver tegningen, kameraet (vis, kamera), filmen og menuen og sender tryk i 3D hertil (tryk).
+// liv.js giver tegningen, kameraet (vis, kamera), filmen og næste tur (Kopien) og sender tryk i 3D hertil (tryk).
 
 import { lyd } from './lyd.js';
 import { visBesked, rydBeskeder } from './beskeder.js';
@@ -24,7 +24,7 @@ function skift(dna, i, plads, base) {
 
 // tegning: ProteinTegning. vis(): flyver kameraet til tegningen. kamera(): zoomer til tegningens størrelse nu.
 // smal(): er 3D-vinduet så smalt (tablet på højkant), at ordene skal stå på to rækker?
-export function lavOrdeneDel({ tegning, vis, kamera, smal, film, menu, slut }) {
+export function lavOrdeneDel({ tegning, vis, kamera, smal, film, næste, slut }) {
   let trin = null; // trinets id, mens forløbet kører
   let s = null; // { dna, læst, lys, plads, navn, fundet, opslag, skift }
   let sidstTilstand = '';
@@ -149,11 +149,10 @@ export function lavOrdeneDel({ tegning, vis, kamera, smal, film, menu, slut }) {
     },
     slutTekst: () => 'Vi sprang et led over: Cellen læser ikke DNA\'et direkte. Den laver først en kopi, og det er kopien, der bliver læst. Se filmen.',
     veje: [
-      { tekst: '▶ Se, hvordan cellen gør det (film)', primær: true, gør: () => requestAnimationFrame(film) },
+      { tekst: 'Se, hvordan cellen gør det (film)', primær: true, gør: () => requestAnimationFrame(film) },
       { tekst: 'Leg frit' },
-      { tekst: 'Tilbage til menuen', gør: menu },
+      { tekst: 'Næste tur: Kopien ›', gør: () => requestAnimationFrame(næste) },
     ],
-    igen: 'fra listen til venstre eller fra hjælpen (?)',
     slut: () => {
       trin = null;
       s = null;

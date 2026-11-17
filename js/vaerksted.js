@@ -17,7 +17,7 @@ import { OPGAVER } from './data/opgaver.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js'; // kun til "Prøv Molekyler" i pillen, når atom-opgaverne er klaret
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
 import { FØRSTE_ATOM } from './data/forloeb/foerste-atom.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, forløbVink } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, forløbVink, lavTurKnap } from './forloeb.js';
 import { tagVentForløb } from './gaa.js';
 import { hentetSkærm } from './skaerme.js';
 
@@ -106,6 +106,7 @@ function $(id) {
 }
 
 export function lavVærksted() {
+  lavTurKnap($('vaerksted'), [FØRSTE_ATOM], () => startFørsteAtom()); // "↻ Tur" i toplinjen (E20)
   atom = new Atom();
   atom.gruppe.visible = false;
   verden.scene.add(atom.gruppe);

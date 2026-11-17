@@ -75,8 +75,7 @@ await stille();
 await træk(await G('atomPå', 1), await G('atomPå', 2)); // H på H
 await page.waitForTimeout(500);
 const hh = { bånd: (await G('bånd')).length, linje: await linje() };
-await T(() => atomlabTest.molekyler.forløb.visMigNu());
-await page.click('#molekyler .fl-vismig');
+await T(() => atomlabTest.molekyler.forløb.visMigNu()); // "Næste ›" før handlingen: viser den
 await fase('så');
 await page.waitForFunction(() => !atomlabTest.molekyler.byg.vandForfra || atomlabTest.molekyler.byg.vandForfra() > 0.97 && !atomlabTest.molekyler.byg.drejer?.(), null, { timeout: 10000, polling: 100 }).catch(() => {});
 await page.waitForTimeout(600);
@@ -166,7 +165,7 @@ await ctx.close();
   const { ctx: c2, page: p, fejl: f2 } = await side({ width: 820, height: 1180 }, { hasTouch: true });
   const næste = async () => { await p.click('#molekyler .fl-næste'); };
   const svar = async (i) => { await p.click(`#molekyler .fl-gæt[data-gaet="${i}"]`); await fase('gør', p); };
-  const visMig = async () => { await p.evaluate(() => atomlabTest.molekyler.forløb.visMigNu()); await p.click('#molekyler .fl-vismig'); await fase('så', p); };
+  const visMig = async () => { await p.evaluate(() => atomlabTest.molekyler.forløb.visMigNu()); await fase('så', p); };
   await svar(1);
   await visMig();
   await næste();

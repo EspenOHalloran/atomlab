@@ -58,8 +58,7 @@ if (!process.argv.includes('--uden-browser')) {
   await klik('.fl-næste');
   // Trin 2
   await klik('.fl-gæt');
-  await f((fl) => fl.visMigNu());
-  await klik('.fl-vismig');
+  await f((fl) => fl.visMigNu()); // "Næste ›" før handlingen: viser den
   await vent((fl) => fl.fase() === 'så');
   tjek('trin 2: et år frem, Merkur over fire omgange og Jorden én, og alle otte har en hale', (await f((fl) => fl.omgange('merkur'))) === 4 && (await f((fl) => fl.omgange('jorden'))) === 1 && (await f((fl) => fl.haler())) === 8);
   await klik('.fl-næste');

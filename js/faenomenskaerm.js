@@ -28,7 +28,8 @@ import { lavTidsknap } from './pause.js';
 import { lavRejseskilt } from './rejseskilt.js';
 import { NØGLER } from './data/faenomener.js';
 import { tagVentSted, tagVentFænomen, ventendeForløb, sætVentForløb } from './gaa.js';
-import { forløbMed } from './data/forloeb/liste.js';
+import { forløbMed, forløbI } from './data/forloeb/liste.js';
+import { lavTurKnap } from './forloeb.js';
 import { sætBilledEjer, frigivBilleder } from './hentning.js';
 import { skjulTilKlar } from './solsystem/shadere.js';
 
@@ -151,6 +152,11 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     sektion.querySelector('.højre-panel').addEventListener('click', brugSideKnap);
     const hjælp = document.getElementById(`hjælp${skærm[0].toUpperCase()}${skærm.slice(1)}`);
     $('Hjælp').addEventListener('click', () => { lyd.klik(); hjælp.classList.remove('skjult'); });
+    // "↻ Tur" i toplinjen (E20): Turens fænomen vælges forfra og starter turen selv (som knapperne i hjælpen)
+    lavTurKnap(sektion, forløbI(skærm), (fl) => {
+      sætVentForløb(fl.id);
+      vælg(fl.fænomen);
+    });
     // Knapper med data-forloeb i hjælpen starter et forløb (js/forloeb.js): Fænomenet vælges forfra og starter det selv
     hjælp.addEventListener('click', (h) => {
       const fl = forløbMed(h.target.closest('[data-forloeb]')?.dataset.forloeb);
