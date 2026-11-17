@@ -42,7 +42,8 @@ let f = await F();
 const trin1 = f.p === 1 && f.e === 0;
 // "Næste ›" står der hele tiden: stille, før handlingen er gjort, og lyseblå under Så
 const næsteStille = await T(() => document.querySelector('.fl-næste')?.classList.contains('stille') === false);
-const knapUnderSå = await synlig('.fl-handling');
+// Under Så står kun knapper, der stadig kan bruges (protonen er brugt: ingen døde knapper)
+const knapUnderSå = await T(() => !document.querySelector('.fl-handling:disabled'));
 await page.click('.fl-næste');
 f = await F();
 // Gættet er en invitation: Trinets knap står der også, og "Næste ›" er stille
@@ -53,7 +54,7 @@ await page.click('.fl-gæt >> nth=1');
 const hvidt = await T(() => ({ spurgt: Boolean(document.querySelector('.fl-spurgt')), gør: document.querySelector('.fl-gør')?.textContent ?? '' }));
 await page.click('.fl-handling'); // trin 2: + Elektron
 await fase('så');
-tjek('"Næste ›" står der i alle faser (stille før handlingen), knapperne bliver under Så, gæt og knap står samtidig, og efter gættet står instruksen hvidt',
+tjek('"Næste ›" står der i alle faser (stille før handlingen), under Så ingen døde knapper, gæt og knap står samtidig, og efter gættet står instruksen hvidt',
   næsteStille && knapUnderSå && gætFørst && hvidt.spurgt && /elektron/i.test(hvidt.gør), JSON.stringify({ næsteStille, knapUnderSå, gætFørst, hvidt }));
 const fagord = await T(() => [...document.querySelectorAll('.fl-tekst .fagord')].map((k) => k.dataset.ord).join(' '));
 f = await F();
