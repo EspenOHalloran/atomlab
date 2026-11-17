@@ -96,11 +96,9 @@ if (!process.argv.includes('--uden-browser')) {
   await klik('.fl-vej.primær');
   await vent((fl, t) => t.flyver()); // (kameraet flyver hjem, når panelerne er tilbage)
   await vent((fl, t) => !t.flyver());
-  const m = await f((fl, t) => (fl.kører(), t.kugleInfo('merkur')));
-  await side.mouse.click(m.x, m.y);
-  await side.waitForTimeout(300);
-  tjek('"Besøg en planet": panelerne er tilbage, navnene tændt, Pluto skjult, og Merkur siger "senere" uden at flyve', !(await side.evaluate(() => document.getElementById('solsystem').classList.contains('i-forløb')))
-    && (await f((fl) => fl.besøg())) === OVERBLIK.merkurSenere && !(await f((fl, t) => t.flyver())) && !(await f((fl, t) => t.navne())).includes('pluto') && (await f((fl, t) => t.navne())).includes('jupiter'));
+  tjek('"Besøg en planet": panelerne er tilbage, navnene tændt, Pluto skjult, og Merkur er ikke længere mat (egen visning)', !(await side.evaluate(() => document.getElementById('solsystem').classList.contains('i-forløb')))
+    && (await f((fl) => fl.besøg())) === OVERBLIK.besøgTekst && !(await f((fl, t) => t.navne())).includes('pluto') && (await f((fl, t) => t.navne())).includes('jupiter')
+    && !(await side.evaluate(() => [...document.querySelectorAll('#solsystem .mat')].some((e) => e.textContent.includes('Merkur')))));
   await side.screenshot({ path: `${UD}/besoeg.png` });
   // Rejs med lyset (handlingen i bjælken)
   await side.click('#solsystem .bjælke-handling:has-text("Rejs med lyset")');

@@ -111,12 +111,19 @@ if (!process.argv.includes('--uden-browser')) {
   tjek('planeterne kredser mod uret set fra ekliptikkens nordpol', await f((t) => t.modUret()));
   // Tryk: den nærmeste midte inden for 44 px
   tjek('et tryk lige ved Jupiter vælger Jupiter, og et tryk langt fra alt vælger intet', await f((t) => t.trykNær('jupiter', 10) === 'jupiter' && t.trykNær('jupiter', 200) === null));
-  // Merkur og Pluto er steder med et panel
+  // Pluto er et sted med et panel
   await side.evaluate(() => window.atomlabTest.solsystem.gåTil('pluto'));
   const sideP = await side.evaluate(() => window.atomlabTest.solsystem.side());
   tjek('Pluto: kameraet flyver ind, og panelet har to tal og en tekst om New Horizons', sideP.nøgle === 'overblik:pluto' && sideP.tal.length === 2 && /New Horizons/.test(sideP.tekst), JSON.stringify(sideP.tal));
   await side.evaluate(() => window.atomlabTest.solsystem.gåTil('overblik'));
   await side.screenshot({ path: `${UD}/overblik-pc.png` });
+  // Merkur har sin egen visning (MP1): Et besøg flyver ind og skifter visning, og tidsskyderen forsvinder (fejl 17. november 2026)
+  await f((t) => t.besøg('merkur', true));
+  await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'merkur', null, { timeout: 20000 });
+  tjek('Merkur fra overblikket: Merkurs egen visning, uden overblikkets tidsskyder', await side.evaluate(() => !document.querySelector('#solsystem .ob-tid')));
+  await side.evaluate(() => document.querySelector('#solsystem .sol-klode[data-id="overblik"]').click());
+  await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'overblik', null, { timeout: 20000 });
+  await side.waitForFunction(() => !window.atomlabTest.solsystem.fænomen().flyver(), null, { timeout: 20000, polling: 200 });
   // Ind til Jorden med datoen
   await f((t) => t.sætDato(Date.UTC(2030, 5, 21, 12)));
   await f((t) => t.sætSkala(1)); // (i den rigtige skala, som efter "Rejs med lyset")
