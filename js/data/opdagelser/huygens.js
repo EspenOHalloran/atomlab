@@ -3,7 +3,7 @@
 //
 // opslag er bogens opslag i rækkefølge. slags 'forside' har sin egen opbygning i js/bog.js. slags 'scene' er et kapitel
 // med en tegning, man gør noget i (js/bog/huygens.js). Kun de opslag, der er bygget, står her (E20 fund 6, stilguiden A9):
-// Gør det selv og "Om Huygens" kommer i H3-H4 (docs/plan-videnskabsfolk.md).
+// "Om Huygens" kommer i H4 trin D (docs/plan-videnskabsfolk.md).
 
 export const FORSIDE = {
   spørgsmål: 'Hvorfor havde Saturn ører?',
@@ -22,6 +22,8 @@ export const OPSLAG = [
   { id: 'fortaelling', slags: 'scene', titel: 'Saturns ører' },
   // Gåden fra bogen (H3): hele anagrammet som udfordring og "Lav dit eget anagram" (js/bog/huygens-gaade.js)
   { id: 'gaaden', slags: 'scene', titel: 'Hemmeligheden' },
+  // Bogen selv (H4): de fire sider fra 1659 med de glødende steder (BOGEN nedenfor, js/bog.js)
+  { id: 'bogen', slags: 'sider', titel: 'Bogen fra 1659' },
 ];
 
 // Vejene fra "Det så du" efter fortællingen (drejebogen afsnit 3, trin 5, og afsnit 5). sætning står foran den danske
@@ -30,7 +32,7 @@ export const VEJE = {
   sætning: 'I 1659 afslørede han, hvad der stod:',
   saturn: 'Se ringen forsvinde ved Saturn',
   anagram: 'Løs hele anagrammet',
-  selv: 'Prøv ringen selv',
+  bog: 'Bladr i bogen fra 1659',
 };
 
 // Opslaget "Hemmeligheden" (drejebogen afsnit 4): udfordringen med de otte brikker og "Lav dit eget anagram"

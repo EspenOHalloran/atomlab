@@ -13,10 +13,18 @@
 //   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
 //              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
 //              kaldes, når man bladrer væk
+//   'sider'    bogen selv (H4): de rigtige sider fra personens bog (tekster.BOGEN) med faner, glødende steder, der viser
+//              latinen og vores oversættelse, og "Linje for linje". Siderne hentes med hentBillede (js/hentning.js),
+//              første gang opslaget åbnes, og toner ind
 // påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
-// stryget og bladr()), mens et forløb kører i bogen. Bogen selv og "Om …" kommer i H4.
+// stryget og bladr()), mens et forløb kører i bogen.
+
+import { hentBillede } from './hentning.js';
+import { lavLagBokse } from './lag.js';
 
 const STRYG = 50; // px vandret, før et stryg bladrer
+const sideBilleder = new Map(); // fil → Promise med et hentet <img> (siderne hentes kun én gang)
+const valgtSide = new Map(); // bog → { side, sted }, så opslaget husker siden, når man bladrer frem og tilbage
 
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -48,6 +56,111 @@ function sceneHTML(o) {
     + '<div class="bog-scene" data-ingen-stryg></div></div>';
 }
 
+// Bogen selv (H4): faner til siderne, siden med de glødende steder (knapper, så de kan bruges med tastatur) og ved
+// siden af stederne som knapper på mindst 44 px, forklaringen og "Linje for linje".
+function siderHTML(o, b) {
+  return `<div class="bog-opslag bog-sider-opslag"><h3 class="bog-kapitel">${esc(o.titel)}</h3>`
+    + `<div class="bs-faner" role="group" aria-label="Siderne">${b.sider.map((s, i) => `<button class="bs-fane" data-side="${i}" aria-pressed="false">${esc(s.fane)}</button>`).join('')}</div>`
+    + '<div class="bs-krop"><div class="bs-billede"><p class="bs-henter">Henter siden …</p></div>'
+    + '<div class="bs-tekst"><p class="bs-om"></p><div class="bs-steder"></div><div class="bs-forklaring" aria-live="polite"></div></div></div></div>';
+}
+
+function linjerHTML(b, side) {
+  const l = b.linjer;
+  const rækker = l?.rækker.filter((r) => r.side === side.id) ?? [];
+  if (!rækker.length) return '';
+  return `<details class="lag-boks bs-linjer" data-lag="bog-linjer"><summary><strong>${esc(l.titel)}</strong> <span class="lag-kort">${esc(l.linje)}</span></summary>`
+    + rækker.map((r) => `<div class="bs-række"><p class="bs-hvor">${esc(r.linjer)}</p><p class="bs-latin" lang="la">${esc(r.latin)}</p><p class="bs-dansk">${esc(r.dansk)}</p></div>`).join('')
+    + `<p class="bs-note">${esc(l.note)}</p></details>`;
+}
+
+// Styrer et opslag af slags 'sider' og giver { fjern(), test }
+function lavSider(felt, bogId, b, rolig) {
+  const husk = valgtSide.get(bogId) ?? { side: 0, sted: null };
+  let levende = true;
+  const billede = felt.querySelector('.bs-billede');
+  const steder = felt.querySelector('.bs-steder');
+  const forklaring = felt.querySelector('.bs-forklaring');
+
+  function forklar() {
+    const s = b.sider[husk.side];
+    const sted = s.steder.find((x) => x.id === husk.sted);
+    for (const k of felt.querySelectorAll('[data-sted]')) k.setAttribute('aria-pressed', String(k.dataset.sted === husk.sted));
+    forklaring.innerHTML = sted
+      ? `<p class="bs-navn">${esc(sted.navn)}</p><p class="bs-latin" lang="la"><span class="bs-mærke">${esc(b.stedLatin)}</span> ${esc(sted.latin)}</p>`
+        + `<p class="bs-dansk"><span class="bs-mærke">${esc(b.stedDansk)}</span> ${esc(sted.dansk)}</p>`
+      : `<p class="bs-vælg">${esc(b.vælg)}</p>`;
+  }
+
+  function visSide(nr) {
+    husk.side = nr;
+    husk.sted = null;
+    const s = b.sider[nr];
+    for (const k of felt.querySelectorAll('.bs-fane')) k.setAttribute('aria-pressed', String(Number(k.dataset.side) === nr));
+    felt.querySelector('.bs-om').textContent = s.om;
+    steder.innerHTML = s.steder.map((x) => `<button class="bs-sted-knap" data-sted="${x.id}" aria-pressed="false">${esc(x.navn)}</button>`).join('');
+    felt.querySelector('.bs-linjer')?.remove();
+    forklaring.insertAdjacentHTML('afterend', linjerHTML(b, s));
+    lavLagBokse(felt);
+    billede.style.setProperty('--forhold', `${s.b} / ${s.h}`);
+    billede.dataset.side = s.id;
+    billede.querySelectorAll('img, .bs-glød').forEach((e) => e.remove());
+    billede.classList.add('henter');
+    forklar();
+    hentSide(s).then((img) => {
+      if (!levende || b.sider[husk.side] !== s) return;
+      // Det hentede <img> sættes selv ind (blob-adressen er lukket, så en kopi ville være tom). Et opslag ad gangen,
+      // så det samme billede kan flyttes ind igen, når man kommer tilbage.
+      img.alt = s.alt;
+      img.className = 'bs-side';
+      billede.prepend(img);
+      billede.insertAdjacentHTML('beforeend', s.steder.flatMap((x) => x.felter.map(([v, o, br, h]) =>
+        `<button class="bs-glød" data-sted="${x.id}" aria-pressed="${x.id === husk.sted}" aria-label="${esc(x.navn)}" style="left:${v}%;top:${o}%;width:${br}%;height:${h}%"></button>`)).join(''));
+      billede.classList.remove('henter');
+      // De andre sider hentes bagefter, så fanerne skifter med det samme
+      for (const a of b.sider) hentSide(a).catch(() => {});
+    }).catch(() => {
+      if (levende) billede.querySelector('.bs-henter').textContent = 'Siden kunne ikke hentes.';
+    });
+  }
+
+  const klik = (h) => {
+    const k = h.target.closest('button');
+    if (!k) return;
+    if (k.dataset.side) visSide(Number(k.dataset.side));
+    else if (k.dataset.sted) {
+      husk.sted = husk.sted === k.dataset.sted && k.classList.contains('bs-glød') ? null : k.dataset.sted;
+      forklar();
+      // Et tryk på siden: forklaringen står over siden på højkant, så den rulles frem, hvis den ikke kan ses
+      if (husk.sted && k.classList.contains('bs-glød')) forklaring.scrollIntoView({ block: 'nearest', behavior: rolig ? 'auto' : 'smooth' });
+    }
+  };
+  felt.addEventListener('click', klik);
+  valgtSide.set(bogId, husk);
+  const valgt = husk.sted; // visSide glemmer stedet, så det sættes igen
+  visSide(husk.side);
+  if (valgt) { husk.sted = valgt; forklar(); }
+  return {
+    fjern() { levende = false; felt.removeEventListener('click', klik); },
+    test: {
+      side: () => b.sider[husk.side].id,
+      sted: () => husk.sted,
+      hentet: () => !billede.classList.contains('henter'),
+      visSide,
+      vælg(id) { husk.sted = id; forklar(); },
+    },
+  };
+}
+
+function hentSide(s) {
+  if (!sideBilleder.has(s.fil)) {
+    const p = hentBillede(s.fil);
+    p.catch(() => sideBilleder.delete(s.fil)); // prøv igen næste gang
+    sideBilleder.set(s.fil, p);
+  }
+  return sideBilleder.get(s.fil);
+}
+
 export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påBegynd = null, lavScene = null } = {}) {
   const opslag = tekster.OPSLAG;
   let nr = 0;
@@ -74,10 +187,12 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
     const o = opslag[nr];
     scene?.fjern();
     scene = null;
-    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE) : sceneHTML(o);
+    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE)
+      : o.slags === 'sider' ? siderHTML(o, tekster.BOGEN) : sceneHTML(o);
     ramme.dataset.opslag = o.id;
     ramme.scrollTop = 0;
     if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));
+    else if (o.slags === 'sider') scene = lavSider(ramme.querySelector('.bog-sider-opslag'), bog.id, tekster.BOGEN, rolig);
     // Portrættet toner ind, når det er hentet (ingen tom ramme, der blinker)
     const img = ramme.querySelector('.bog-portræt img');
     if (img && !img.complete) {
