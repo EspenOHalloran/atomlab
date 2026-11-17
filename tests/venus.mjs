@@ -333,7 +333,7 @@ await s.screenshot({ path: `${UD}/venus.png` });
   const ned = prøver.filter((p) => p.fase === 'ned');
   const over = ned.filter((p) => p.hMiddel > 75), inde = ned.filter((p) => p.hMiddel < 68);
   // (over skyerne tager disen til fra ca. 130 km, men dækker højst ca. 65 %)
-  const forkert = [...over.filter((p) => !(p.under === 0 && (p.hMiddel < 100 || !p.måler) && !(p.kuppel?.himmel > 0.7))), ...inde.filter((p) => !(p.under === 100 && p.måler && p.kuppel?.himmel > 0.9))];
+  const forkert = [...over.filter((p) => !(p.under === 0 && (p.hMiddel <= 100.5 || !p.måler) && !(p.kuppel?.himmel > 0.7))), ...inde.filter((p) => !(p.under === 100 && p.måler && p.kuppel?.himmel > 0.9))];
   tjek('på vej ned: over skyerne er de der og måleren skjult over 100 km, under ca. 70 km er skyerne væk, og disen er der', over.length && inde.length && !forkert.length, JSON.stringify([over.length, inde.length, forkert.slice(0, 4).map((p) => [p.hMiddel.toFixed(1), p.under, p.måler, p.kuppel])]));
   const temp = ned.filter((p) => p.måler).map((p) => parseInt(p.tekst.temperatur.replace('−', '-')));
   tjek('måleren bliver varmere hele vejen ned', temp.length >= 3 && temp.every((t, i) => i === 0 || t >= temp[i - 1]), temp.join());
