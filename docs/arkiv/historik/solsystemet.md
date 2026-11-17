@@ -1,5 +1,11 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Merkur MP1, kortet, højderne og skelettet** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), Opus' noter [E16](../fable/E16-merkur-pluto-noter.md)).
+- **Merkur i Solsystemet** mellem Solen og Venus (`js/kosmos/merkur.js`): MESSENGERs kort (8k på pc, 4k på tablet) og højderne, gråbrun, aksen og drejningen efter datoen (passer med Horizons under 0,01°), ▶ et døgn i sekundet og ⏩ seks (fra solopgang til solopgang på ca. 29 s), "Bjergene 10 gange højere" og en kort side. Stederne, tegningen af Solen og flybyen kommer i MP2.
+- **Kortet** (`lav_merkur.py`): BDR med de brede striber gjort jævne med LOI (udjævning 80 km), højdekortet rullet en halv omgang. Ca. 21 MB på pc og 9,5 MB på tablet.
+- **Polen målt:** Prokofiev var skarp med anisotropi 8 og 16 (16 bruges). Men helt oppe ved polen gav kortet stråler og firkantede pletter. Derfor et polkort for hver pol (set lige ovenfra, 70-90°) i `klippeplanet.js` (`pol`, valgfrit). Mars' nordpol (M7b-pol) kan bruge det.
+- `tests/merkur.mjs` (24 tjek), og `solsystem`, `jupiter` og `saturn` tæller nu 10 kloder.
+
 **Lavet (17. november 2026): Venus V5, flybyen og turen ned til Venera 13. Venus er færdig** ([plan-venus.md](../plan-venus.md), Fables rettelser fra [E18](../fable/E18-venus.md)).
 - **Flybyen med 6 stop:** Venus, skyerne i ultraviolet med ⏩, under skyerne ved Maxwell Montes, Maat Mons, gløden ved midnat over Aphrodite Terra og turen ned.
 - **Turen ned** (`js/kosmos/venus-ned.js`, også "Ned gennem skyerne" under Venera 13 i træet): fra 320 km til jorden på 26 s med en måler (højde, temperatur og tryk fra VIRA), dis i skyerne, orange himmel under dem og Venera 13's foto til sidst (kontakten "Venera 13's foto"). Måleren ender ved 457 °C og 88 bar, som landeren målte.
