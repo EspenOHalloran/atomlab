@@ -1,6 +1,7 @@
 // Forløb-klodsen (js/forloeb.js) med "Dit første atom" i Værkstedet: starter første gang og ikke anden gang, panelerne er
 // skjult imens, hvert trins handling, helium med to protoner uden neutroner, H og He opdaget, kernesætningen til sidst,
-// "Spring over", "‹", "Vis mig", ✓ i "Din fremgang" og forløbets eget link.
+// "Udforsk selv ›", "‹", "Næste ›" før handlingen (viser den), ✓ i "Din fremgang", forløbets eget link, og stien
+// (stilguiden B, E20): handling uden gæt, prikkerne, når turen er taget, knapperne under Så og toningen bagefter.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { FØRSTE_ATOM } from '../js/data/forloeb/foerste-atom.js';
 const UD = billedmappe('forloeb');
@@ -39,12 +40,21 @@ await page.click('.fl-handling'); // trin 1: + Proton
 await fase('så');
 let f = await F();
 const trin1 = f.p === 1 && f.e === 0;
+// "Næste ›" står der hele tiden: stille, før handlingen er gjort, og lyseblå under Så
+const næsteStille = await T(() => document.querySelector('.fl-næste')?.classList.contains('stille') === false);
+const knapUnderSå = await synlig('.fl-handling');
 await page.click('.fl-næste');
 f = await F();
-const gætFørst = f.trin === 'elektron' && f.fase === 'gæt' && !(await synlig('.fl-handling'));
+// Gættet er en invitation: Trinets knap står der også, og "Næste ›" er stille
+const gætFørst = f.trin === 'elektron' && f.fase === 'gæt' && await synlig('.fl-gæt') && await synlig('.fl-handling')
+  && await T(() => document.querySelector('.fl-næste')?.classList.contains('stille'));
 await page.click('.fl-gæt >> nth=1');
+// Efter gættet: Instruksen står hvidt, og spørgsmålet er tonet ned
+const hvidt = await T(() => ({ spurgt: Boolean(document.querySelector('.fl-spurgt')), gør: document.querySelector('.fl-gør')?.textContent ?? '' }));
 await page.click('.fl-handling'); // trin 2: + Elektron
 await fase('så');
+tjek('"Næste ›" står der i alle faser (stille før handlingen), knapperne bliver under Så, gæt og knap står samtidig, og efter gættet står instruksen hvidt',
+  næsteStille && knapUnderSå && gætFørst && hvidt.spurgt && /elektron/i.test(hvidt.gør), JSON.stringify({ næsteStille, knapUnderSå, gætFørst, hvidt }));
 const fagord = await T(() => [...document.querySelectorAll('.fl-tekst .fagord')].map((k) => k.dataset.ord).join(' '));
 f = await F();
 const hydrogen = f.p === 1 && f.e === 1;
@@ -57,14 +67,15 @@ await page.click('.fl-gæt >> nth=1');
 await page.click('.fl-handling');
 await fase('så');
 await page.click('.fl-næste');
-await page.click('.fl-gæt >> nth=0');
+// Trin 3 uden at gætte: Et tryk på handlingen lader gættet tone væk (fasen gør), og Så kommer som før
 await page.click('.fl-handling'); // trin 3: + Proton
+const udenGæt = { fase: (await F()).fase, gæt: await synlig('.fl-gæt') };
 await fase('så');
 f = await F();
 const toProtoner = f.p === 2 && f.n === 0 && await T(() => JSON.parse(localStorage.getItem('atomlabFremgang')).opgaver['uden-lim'] > 0);
 await page.screenshot({ path: `${UD}/trin3.png` });
-tjek('hvert trin: handling → Så, gættet kommer før handlingen, "‹" sætter atomet tilbage, og trinets fagord har prikker',
-  trin1 && gætFørst && hydrogen && tilbage && fagord === 'elektron grundstof', JSON.stringify({ trin1, gætFørst, hydrogen, tilbage, fagord }));
+tjek('hvert trin: handling → Så, man kan handle uden at gætte, "‹" sætter atomet tilbage, og trinets fagord har prikker',
+  trin1 && hydrogen && tilbage && fagord === 'elektron grundstof' && (udenGæt.fase === 'gør' || udenGæt.fase === 'så') && !udenGæt.gæt, JSON.stringify({ trin1, hydrogen, tilbage, fagord, udenGæt }));
 
 // Trin 4 med "Vis mig": Værkstedet bygger selv helium
 await page.click('.fl-næste');
@@ -73,24 +84,30 @@ const knapper = await T(() => [...document.querySelectorAll('.fl-handling')].map
 await page.click('.fl-handling >> nth=0');
 await page.click('.fl-handling >> nth=0');
 const vink = await T(() => document.querySelector('.fl-vink')?.textContent ?? '');
-await T(() => atomlabTest.vaerksted.forløb.visMigNu());
-await page.click('.fl-vismig');
+// "Næste ›" før handlingen er gjort: Værkstedet bygger selv helium, og Så kommer, før man går videre (trinet skifter ikke)
+await page.click('.fl-næste');
+const viser = { trin: (await F()).trin, viser: await T(() => atomlabTest.vaerksted.forløb.viser()) };
+await page.click('.fl-næste'); // et tryk mere, mens den viser: ingenting
 await fase('så');
+viser.efter = (await F()).trin;
 f = await F();
 const opdaget = await T(() => JSON.parse(localStorage.getItem('atomlabFremgang')).opdaget.sort().join(','));
-tjek('trin 3 er helium uden neutroner ("to protoner" løst), trin 4 giver et vink efter to neutroner, og efter trin 4 ("Vis mig") er hydrogen og helium opdaget',
-  toProtoner && f.p === 2 && f.n === 2 && f.e === 2 && opdaget === '1,2' && /Neutron 0\/2/.test(knapper) && /elektron mere/.test(vink), JSON.stringify({ toProtoner, f, opdaget, knapper, vink }));
+tjek('trin 3 er helium uden neutroner ("to protoner" løst), trin 4 giver et vink efter to neutroner, og "Næste ›" før handlingen viser den og bliver på trinet til Så (hydrogen og helium er opdaget)',
+  toProtoner && f.p === 2 && f.n === 2 && f.e === 2 && opdaget === '1,2' && /Neutron 0\/2/.test(knapper) && /elektron mere/.test(vink)
+  && viser.trin === 'neutroner' && viser.viser && viser.efter === 'neutroner', JSON.stringify({ toProtoner, f, opdaget, knapper, vink, viser }));
 
 // Trin 5: det lille periodiske system med H og He, og til sidst kernesætningen
 await page.click('.fl-næste');
 const tabel = await synlig('#minitabelPanel') && await T(() => document.querySelectorAll('#minitabel .forløb-mål').length === 2);
 await page.click('#minitabel .felt[data-nr="1"]');
 await fase('slut');
-const slut = await T(() => ({ tekst: document.querySelector('.fl-tekst').textContent, veje: document.querySelectorAll('.fl-vej').length }));
+const slut = await T(() => ({ tekst: document.querySelector('.fl-tekst').textContent, veje: document.querySelectorAll('.fl-vej, .fl-vej-spm').length,
+  spm: document.querySelector('.fl-vej-spm.hvorfor')?.textContent ?? '', pil: [...document.querySelectorAll('.fl-vej')].filter((v) => v.textContent.includes('›')).length }));
 await page.screenshot({ path: `${UD}/slut.png` });
-tjek('trin 5 viser det periodiske system med H og He lyst op, og "Det så du" har kernesætningen og tre veje videre',
-  tabel && slut.tekst === FØRSTE_ATOM.kernesætning && slut.veje === 3, JSON.stringify({ tabel, slut }));
+tjek('trin 5 viser det periodiske system med H og He lyst op, og "Det så du" har kernesætningen og tre veje videre (spørgsmålet er en gul pille, vejen til Solen har "›")',
+  tabel && slut.tekst === FØRSTE_ATOM.kernesætning && slut.veje === 3 && /kernen/.test(slut.spm) && slut.pil === 1, JSON.stringify({ tabel, slut }));
 await page.click('.fl-vej.primær');
+const toning = await T(() => document.getElementById('vaerksted').classList.contains('fra-forløb'));
 const efter = { kører: (await F()).kører, bygge: await synlig('#byggepanel'), info: await synlig('#infopanel'), opgave: await T(() => document.getElementById('opgaveTekst').textContent) };
 
 // ---------- Anden gang: starter ikke af sig selv. ✓ i "Din fremgang" ----------
@@ -102,25 +119,32 @@ await T(() => { location.hash = '#'; });
 await page.waitForFunction(() => atomlabTest.aktiv() === 'menu', null, { timeout: 20000 });
 await page.click('.menu-fremgang-knap');
 const flueben = await T(() => document.querySelector('.fremgang-forløb[data-forloeb="foerste-atom"]')?.classList.contains('færdig') ?? null);
-tjek('efter forløbet: panelerne er tilbage, næste opgave er carbon (isotoperne kommer senere), det starter ikke igen, og ✓ i "Din fremgang"',
-  efter.kører === null && efter.bygge && efter.info && /carbon/i.test(efter.opgave) && anden === null && flueben === true, JSON.stringify({ efter, anden, flueben }));
+tjek('efter forløbet: panelerne toner ind og er tilbage, næste opgave er carbon (isotoperne kommer senere), det starter ikke igen, og ✓ i "Din fremgang"',
+  toning && efter.kører === null && efter.bygge && efter.info && /carbon/i.test(efter.opgave) && anden === null && flueben === true, JSON.stringify({ toning, efter, anden, flueben }));
 
 // ---------- Linket starter forløbet, også når det er taget, og forsvinder fra adressen ----------
 await page.goto(`${ADRESSE}/?test&forloeb=foerste-atom#vaerksted`);
 await page.waitForFunction(() => atomlabTest.vaerksted?.forløb.kører() === 'foerste-atom', null, { timeout: 20000 }).catch(() => {});
 const link = { kører: (await F()).kører, adresse: await T(() => location.search) };
+// Turen er taget før: Prikkerne kan trykkes, og et tryk på den tredje går direkte til trin 3 (stilguiden B7)
+link.prikker = await T(() => document.querySelectorAll('.fl-prik').length);
+await page.click('.fl-prik >> nth=2');
+link.trin = (await F()).trin;
 // "Spring over": panelerne er tilbage, og forløbet starter ikke af sig selv igen (her med ?forloebstart og ikke taget)
 await T(() => localStorage.clear());
 await page.goto(`${ADRESSE}/?test&forloebstart#vaerksted`);
 await page.waitForFunction(() => atomlabTest.vaerksted?.forløb.kører() === 'foerste-atom', null, { timeout: 20000 });
+const ingenPrikker = await T(() => document.querySelectorAll('.fl-prik').length === 0); // ikke taget: prikkerne er pynt
+const udforsk = await T(() => document.querySelector('.fl-spring')?.textContent ?? '');
 await page.click('.fl-spring');
-const sprunget = { kører: (await F()).kører, bygge: await synlig('#byggepanel') };
+const sprunget = { kører: (await F()).kører, bygge: await synlig('#byggepanel'), ingenPrikker, udforsk };
 await page.reload();
 await page.waitForFunction(() => atomlabTest.vaerksted, null, { timeout: 20000 });
 await page.waitForTimeout(500);
 sprunget.igen = (await F()).kører;
-tjek('linket starter forløbet og fjernes fra adressen; "Spring over" viser panelerne, og forløbet starter ikke igen',
-  link.kører === 'foerste-atom' && !/forloeb/.test(link.adresse) && sprunget.kører === null && sprunget.bygge && sprunget.igen === null, JSON.stringify({ link, sprunget }));
+tjek('linket starter forløbet og fjernes fra adressen, og prikkerne vælger trin, når turen er taget; "Udforsk selv ›" viser panelerne, og forløbet starter ikke igen',
+  link.kører === 'foerste-atom' && !/forloeb/.test(link.adresse) && link.prikker === FØRSTE_ATOM.trin.length && link.trin === FØRSTE_ATOM.trin[2].id
+  && sprunget.ingenPrikker && /Udforsk selv/.test(sprunget.udforsk) && sprunget.kører === null && sprunget.bygge && sprunget.igen === null, JSON.stringify({ link, sprunget }));
 
 tjek('ingen fejl i konsollen', !fejl.length, fejl.join(' | '));
 await b.close();

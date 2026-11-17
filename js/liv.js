@@ -23,7 +23,7 @@ import { DnaStige, S } from './liv/stige.js';
 import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbFase, forløbVink, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbVenter, forløbRørt, forløbVink, forløbTest } from './forloeb.js';
 import { OPSKRIFTEN } from './data/forloeb/opskriften.js';
 import { ORDENE } from './data/forloeb/ordene.js';
 import { lavOrdeneDel } from './liv-ordene.js';
@@ -271,7 +271,8 @@ function tjekZoom() {
   if (kørerForløb()) {
     // I forløbet kan man kun zoome ind til det trin, forløbet venter på (og fra cellekernen direkte til stigen)
     const d = verden.kamera.position.distanceTo(verden.styring.target);
-    if (flZoom && vist !== stige && forløbFase() === 'gør' && d < afstand(niveau) * IND) gåTil(flZoom, 'ind');
+    // Også mens man gætter (stilguiden B4): Så toner gættet væk
+    if (flZoom && vist !== stige && forløbVenter() && d < afstand(niveau) * IND) { forløbRørt(); gåTil(flZoom, 'ind'); }
     return;
   }
   const d = verden.kamera.position.distanceTo(verden.styring.target);
@@ -590,7 +591,7 @@ function lavTryk() {
 }
 
 function tryk(x, y) {
-  if (!aktiv || (!flTrin && !o2.kører()) || forløbFase() !== 'gør' || overgang) return;
+  if (!aktiv || (!flTrin && !o2.kører()) || !forløbVenter() || overgang) return; // også mens man gætter (B4)
   const r = verden.renderer.domElement.getBoundingClientRect();
   stråle.setFromCamera({ x: ((x - r.left) / r.width) * 2 - 1, y: -((y - r.top) / r.height) * 2 + 1 }, verden.kamera);
   const rammer = (t) => {
@@ -598,9 +599,9 @@ function tryk(x, y) {
     return stråle.ray.distanceToPoint(tV) < t.målRadius * t.gruppe.scale.x;
   };
   if (o2.kører()) o2.tryk(stråle.ray);
-  else if (flTrin === 'celle' && niveau === 'celle' && rammer(tegninger.celle)) gåTil('kerne', 'ind');
-  else if (flTrin === 'traade' && niveau === 'kerne' && rammer(tegninger.kerne)) gåTil('stige', 'ind');
-  else if (flTrin === 'par' && vist === stige) flVælgTrin(stige.trinVed(stråle.ray));
+  else if (flTrin === 'celle' && niveau === 'celle' && rammer(tegninger.celle)) { forløbRørt(); gåTil('kerne', 'ind'); }
+  else if (flTrin === 'traade' && niveau === 'kerne' && rammer(tegninger.kerne)) { forløbRørt(); gåTil('stige', 'ind'); }
+  else if (flTrin === 'par' && vist === stige) { forløbRørt(); flVælgTrin(stige.trinVed(stråle.ray)); }
 }
 
 // De to forløb øverst i venstre panel (✓, når det er taget): et tryk tager det (igen)

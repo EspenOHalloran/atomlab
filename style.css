@@ -2176,7 +2176,7 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-prikker i.ja { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 .fl-prikker i.nu { width: 10px; height: 10px; background: rgba(95, 227, 255, 0.45); }
 .fl-nr { white-space: nowrap; }
-.fl-spring { margin-left: auto; min-height: 32px; padding: 0 10px; border: 1px solid var(--kant, rgba(255, 255, 255, 0.2)); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: var(--tekst); font-size: 13px; cursor: pointer; }
+.fl-spring { margin-left: auto; min-height: 44px; padding: 0 12px; border: 1px solid var(--kant, rgba(255, 255, 255, 0.2)); border-radius: 10px; background: rgba(255, 255, 255, 0.05); color: var(--tekst); font: inherit; font-size: 13px; white-space: nowrap; cursor: pointer; }
 .fl-spring:hover { background: rgba(255, 255, 255, 0.12); }
 .fl-tekst { margin: 0; }
 .fl-svag { color: var(--svag); }
@@ -2203,6 +2203,33 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-nav:empty { display: none; }
 .fl-tilbage { min-width: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.06); color: var(--svag) !important; }
 .fl-næste { padding: 0 16px; border-radius: 12px; }
+/* Stien (stilguiden B, E20): "Næste ›" står der altid, stille, til handlingen er gjort. Det, man skal gøre, står hvidt,
+   og spørgsmålet, der er besvaret, toner ned. Prikkerne kan trykkes, når turen er taget før. */
+.fl-næste.stille { background: rgba(255, 255, 255, 0.06); border-color: var(--panel-kant); color: var(--svag) !important; font-weight: 600; }
+.fl-næste.stille:hover { border-color: var(--accent); color: var(--tekst) !important; }
+.fl-næste[aria-busy="true"] { opacity: 0.55; cursor: progress; }
+.fl-spurgt { color: var(--svag); font-size: 14px; }
+.fl-gør { color: #fff; font-weight: 600; }
+.fl-svar { color: #dff7ff; }
+.fl-gætter { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+.fl-prikker:has(.fl-prik) { gap: 0; }
+.fl-prik { display: inline-grid; place-items: center; width: 26px; height: 44px; margin: -12px 0; padding: 0; border: 0; background: none; cursor: pointer; }
+.fl-prik:hover i:not(.ja) { background: rgba(95, 227, 255, 0.6); }
+.fl-prik:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; border-radius: 8px; }
+.forløb-linje .fl-vej-spm { margin: 0; padding: 0 16px; border-radius: 22px; }
+.forløb-linje.fl-skift > :not(.fl-hoved) { animation: fl-skift 0.28s ease-out both; }
+@keyframes fl-skift { from { opacity: 0; } }
+/* Efter turen toner laboratoriet ind i to skridt: scenen og det, man styrer med, først, og det, man læser, lidt efter
+   (stilguiden B8, klassen fra-forløb i ca. 1 s fra js/forloeb.js) */
+.skærm.fra-forløb > :not(.topbjælke, .vindue, .overlag),
+.skærm.fra-forløb .topbjælke > :not(a.knap, h2, .topknapper),
+.skærm.fra-forløb .topknapper > :is(.kontakt, .knap-kungrafik, .udgave-vælger),
+.skærm.fra-forløb .vindue :is(.panel-fane, .logknap, .næste-skridt, .bjælke-række) { animation: fra-forløb 0.4s ease-out both; }
+.skærm.fra-forløb :is(.panel.info, .højre-panel) { animation-delay: 0.45s; }
+@keyframes fra-forløb { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .forløb-linje.fl-skift > *, .skærm.fra-forløb * { animation: none !important; }
+}
 @media (max-width: 560px) and (orientation: portrait), (max-height: 500px) and (orientation: landscape) {
   .forløb-linje { padding: 10px 10px 10px 12px; font-size: 15px; gap: 6px; }
   .fl-række button { font-size: 14px; }
