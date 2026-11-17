@@ -120,6 +120,26 @@ await T(() => { location.hash = '#'; });
 await page.waitForFunction(() => atomlabTest.aktiv() === 'menu', null, { timeout: 20000 });
 await page.click('.menu-fremgang-knap');
 const flueben = await T(() => document.querySelector('.fremgang-forløb[data-forloeb="foerste-atom"]')?.classList.contains('færdig') ?? null);
+// Menuens "?" (E20): hjælpen med "Om AtomLab", og "Din fremgang ›" åbner fremgangen
+await T(() => document.getElementById('dinFremgang').classList.add('skjult'));
+await page.click('#menuHjælpKnap');
+const menuHjælp = { vist: await synlig('#menuHjælp .dialog'), om: /Three\.js/.test(await page.textContent('#menuHjælp')) };
+await page.click('#menuHjælpFremgang');
+menuHjælp.fremgang = await synlig('#dinFremgang .dialog') && !(await synlig('#menuHjælp .dialog'));
+await T(() => document.getElementById('dinFremgang').classList.add('skjult'));
+tjek('menuens "?" viser hjælpen med "Om AtomLab", og "Din fremgang ›" åbner fremgangen', menuHjælp.vist && menuHjælp.om && menuHjælp.fremgang, JSON.stringify(menuHjælp));
+// "↻ Tur" i toplinjen: fremme i delen, skjult under turen, og et tryk starter turen igen
+await T(() => { location.hash = '#vaerksted'; });
+await page.waitForFunction(() => atomlabTest.aktiv() === 'vaerksted', null, { timeout: 20000, polling: 100 });
+const tur = { før: await synlig('#vaerksted .tur-knap') };
+await page.click('#vaerksted .tur-knap');
+await page.waitForFunction(() => atomlabTest.vaerksted.forløb.kører() === 'foerste-atom', null, { timeout: 10000, polling: 100 });
+tur.under = await synlig('#vaerksted .tur-knap');
+tur.prikker = await T(() => document.querySelectorAll('.fl-prik').length);
+await page.click('.fl-spring');
+tur.besked = await T(() => [...document.querySelectorAll('.pille, .undertekst')].map((e) => e.textContent).join(' '));
+tjek('"↻ Tur" står i Værkstedets toplinje, starter turen igen (prikkerne kan trykkes) og er skjult imens',
+  tur.før && !tur.under && tur.prikker === FØRSTE_ATOM.trin.length, JSON.stringify(tur));
 tjek('efter forløbet: panelerne toner ind og er tilbage, næste opgave er carbon (isotoperne kommer senere), det starter ikke igen, og ✓ i "Din fremgang"',
   toning && efter.kører === null && efter.bygge && efter.info && /carbon/i.test(efter.opgave) && anden === null && flueben === true, JSON.stringify({ toning, efter, anden, flueben }));
 

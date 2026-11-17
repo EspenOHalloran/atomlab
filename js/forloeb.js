@@ -20,7 +20,7 @@
 //   vis           CSS-vælgere for det, der skal være fremme i trinet ud over scenen (fx det lille periodiske system)
 // og for hele forløbet: slutTekst() (en linje under kernesætningen), veje [{ tekst, primær, gør }] (højst tre veje videre,
 // eller { tekst, hvorfor: id } for et "Hvorfor?"-kort, som en gul pille med "?"; en vej med gør får "›"), layout() (scenen har fået ny størrelse), slut() (kaldes, når
-// forløbet slutter, springes over eller stoppes) og igen (hvor man kan tage forløbet igen, til beskeden ved "Spring over").
+// forløbet slutter, springes over eller stoppes). En tur tages igen med "↻ Tur" i toplinjen (lavTurKnap).
 // Et gæt kan have svar (et kort svar, der står under Så, når man har gættet det). Forløbet kan have før: { id, del, tekst } (et andet forløb, der bør tages først): Er det ikke taget, står et link til det
 // i første trin. forløbVink(tekst) skriver en kort linje i linjen (fx hvorfor et træk ikke lykkedes), til trinet skifter.
 // Klodsen husker i fremgang.js, om forløbet er taget (✓ i "Din fremgang") eller sprunget over. Uden noget af det starter
@@ -144,7 +144,7 @@ function afslut({ sprunget = false, stille = false, toning = !stille } = {}) {
     });
   }
   if (sprunget && !stille) {
-    visBesked({ titel: 'Du er ude af turen', tekst: `Du kan tage "${data.titel}" igen ${del.igen ?? 'fra listen med opgaver (★) eller fra hjælpen (?)'}.`, varighed: 7000 });
+    visBesked({ titel: 'Udforsk selv', tekst: `Du kan tage turen "${data.titel}" igen med ↻ øverst.`, varighed: 7000 });
   }
 }
 
@@ -361,6 +361,53 @@ function tegn() {
     void linje.offsetWidth;
     linje.classList.add('fl-skift');
   }
+}
+
+// "↻ Tur" i toplinjen (E20, jeres valg 17. november 2026): Turen tages igen inde fra delen, ét fast sted i alle dele.
+// ture: delens forløbsdata (forløbI(del) fra js/data/forloeb/liste.js). start(data) starter turen i delen. Har delen flere
+// ture, åbner knappen en lille liste med ✓ ved dem, der er taget. Knappen er skjult, mens en tur kører (style.css).
+export function lavTurKnap(skærm, ture, start) {
+  const top = skærm?.querySelector('.topbjælke .topknapper');
+  if (!top || !ture.length || top.querySelector('.tur-knap')) return null;
+  const knap = document.createElement('button');
+  knap.className = 'knap lille tur-knap';
+  knap.title = ture.length > 1 ? 'Tag en tur igen' : `Tag turen "${ture[0].titel}" igen`;
+  knap.setAttribute('aria-label', knap.title);
+  knap.innerHTML = '<span aria-hidden="true">↻</span><span class="tur-tekst"> Tur</span>';
+  top.insertBefore(knap, top.querySelector('[title="Hjælp"]') ?? top.querySelector('.knap-fuldskaerm'));
+  let liste = null;
+  const udenfor = (h) => { if (liste && !liste.contains(h.target) && !knap.contains(h.target)) luk(); };
+  const påEsc = (h) => { if (h.key === 'Escape') { h.stopPropagation(); luk(); knap.focus(); } };
+  function luk() {
+    liste?.remove();
+    liste = null;
+    knap.setAttribute('aria-expanded', 'false');
+    removeEventListener('pointerdown', udenfor, true);
+    removeEventListener('keydown', påEsc, true);
+  }
+  knap.addEventListener('click', () => {
+    lyd.klik();
+    if (ture.length === 1) return start(ture[0]);
+    if (liste) return luk();
+    liste = document.createElement('div');
+    liste.className = 'tur-liste';
+    liste.setAttribute('role', 'menu');
+    for (const t of ture) {
+      const b = document.createElement('button');
+      b.setAttribute('role', 'menuitem');
+      const taget = fremgang.forløbTaget(t.id);
+      b.innerHTML = `<span class="tur-mærke">${taget ? '✓' : ''}</span><span>${esc(t.titel)}</span>`;
+      b.title = taget ? 'Taget. Tryk for at tage den igen.' : 'Ikke taget endnu';
+      b.addEventListener('click', () => { lyd.klik(); luk(); start(t); });
+      liste.append(b);
+    }
+    top.append(liste);
+    knap.setAttribute('aria-expanded', 'true');
+    addEventListener('pointerdown', udenfor, true);
+    addEventListener('keydown', påEsc, true);
+    liste.querySelector('button')?.focus({ preventScroll: true });
+  });
+  return knap;
 }
 
 // Kun til automatiske tests (via delens testAdgang)

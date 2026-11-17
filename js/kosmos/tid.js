@@ -672,7 +672,6 @@ export default {
     };
 
     const FL_DEL = {
-      igen: 'fra hjælpen (?) i Kosmos eller fra "Din fremgang" i menuen',
       trin: {
         // A1: til TRAPPIST-1 (40,66 lysår) ved 99,99 % og hjem: du er 14, tvillingen 94
         flyv: {

@@ -228,6 +228,15 @@ tjek('det starter ikke igen af sig selv, ✓ i "Din fremgang", og et tryk dér s
 // ---------- "Spring over" og oprydning ved skærmskift ----------
 await page.click('#liv .fl-spring');
 const sprunget = { kører: (await L()).kører, venstre: await synlig('#liv .venstre-panel') };
+// "↻ Tur" i toplinjen (E20): en lille liste med de to ture, og et tryk på den anden starter den
+await page.click('#liv .tur-knap');
+const turListe = await T(() => [...document.querySelectorAll('#liv .tur-liste button')].map((b) => b.textContent));
+await page.click('#liv .tur-liste button >> nth=1');
+await page.waitForFunction(() => atomlabTest.liv.forløb.kører() === 'ordene', null, { timeout: 10000, polling: 100 });
+const turListeLukket = await T(() => !document.querySelector('.tur-liste'));
+await page.click('#liv .fl-spring');
+tjek('"↻ Tur" i Liv viser de to ture (✓ ved den, der er taget), og et tryk starter den valgte',
+  turListe.length === 2 && turListe[0].startsWith('✓') && turListeLukket, JSON.stringify({ turListe, turListeLukket }));
 await page.click('#livForløbOpskriften');
 await page.click('#liv .fl-handling'); // "Zoom ind ›"
 await T(() => { location.hash = '#'; });

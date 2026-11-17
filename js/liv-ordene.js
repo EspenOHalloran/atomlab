@@ -153,7 +153,6 @@ export function lavOrdeneDel({ tegning, vis, kamera, smal, film, menu, slut }) {
       { tekst: 'Leg frit' },
       { tekst: 'Tilbage til menuen', gør: menu },
     ],
-    igen: 'fra listen til venstre eller fra hjælpen (?)',
     slut: () => {
       trin = null;
       s = null;

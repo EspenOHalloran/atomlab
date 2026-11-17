@@ -1125,7 +1125,6 @@ export default {
       }
     }
     const FL_DEL = {
-      igen: 'fra hjælpen (?) i Kosmos eller fra "Din fremgang" i menuen',
       trin: {
         // B1: bolden ved 100 km/t (150 km/t set fra perronen)
         kast: {

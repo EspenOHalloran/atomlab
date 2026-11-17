@@ -17,7 +17,7 @@ import { hentetSkærm } from './skaerme.js';
 import { tagVentMolekyler, tagVentForløb } from './gaa.js';
 import { centrerVindue, ROLIG } from './scene3d.js';
 import { MØDES } from './data/forloeb/molekyler.js';
-import { startForløb, stopForløb, starterSelv, forløbVink, forløbFase, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, forløbVink, forløbFase, forløbTest, lavTurKnap } from './forloeb.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -34,6 +34,7 @@ let toningTimer = null;
 let trinNr = 0; // så en forsinket opsætning (efter toningen) ikke rører et nyt trin
 
 export function lav() {
+  lavTurKnap($('molekyler'), [MØDES], () => startMødes()); // "↻ Tur" i toplinjen (E20)
   // "Giv elektroner" kender det atom, man har bygget i Atomværkstedet (står der et neutralt natrium, nævnes det)
   lavByttebørs({ værkstedAtom: () => hentetSkærm('vaerksted')?.værkstedTilstand() ?? null });
   lavBygMolekyler();
@@ -247,7 +248,6 @@ const MØDES_DEL = {
       }),
     },
   ],
-  igen: 'fra hjælpen (?)',
   slut: () => {
     trinNr++;
     clearTimeout(toningTimer);

@@ -288,7 +288,6 @@ export function lavOverblikForløb(api) {
   }
 
   const FL_DEL = {
-    igen: 'fra hjælpen (?) i Solsystemet eller fra "Din fremgang" i menuen',
     trin: {
       jorden: {
         // Først hele Solsystemet (HEL_S sekunder), så kameraet ind til de fire inderste (brugerens feedback 16. november

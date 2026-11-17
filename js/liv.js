@@ -23,7 +23,7 @@ import { DnaStige, S } from './liv/stige.js';
 import { lavCelle, lavKerne, lavKromosom } from './liv/celle.js';
 import { ProteinTegning } from './liv/protein.js';
 import { lavLivProtein } from './liv-protein.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, forløbVenter, forløbRørt, forløbVink, forløbTest } from './forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, forløbVenter, forløbRørt, forløbVink, forløbTest, lavTurKnap } from './forloeb.js';
 import { OPSKRIFTEN } from './data/forloeb/opskriften.js';
 import { ORDENE } from './data/forloeb/ordene.js';
 import { lavOrdeneDel } from './liv-ordene.js';
@@ -92,6 +92,8 @@ function blandGrænser() {
 const tegningFor = (id) => (id === 'stige' || id === 'atomer' ? stige : tegninger[id]);
 
 export function lavLiv() {
+  // "↻ Tur" i toplinjen (E20): en lille liste med de to ture
+  lavTurKnap($('liv'), [OPSKRIFTEN, ORDENE], (fl) => (fl.id === ORDENE.id ? startOrdene() : startOpskriften()));
   stige = new DnaStige();
   stige.sætSekvens(HBB_START);
   protein = new ProteinTegning();
@@ -552,7 +554,6 @@ const OPSKRIFT_DEL = {
     { tekst: 'Leg frit' },
     { tekst: 'Zoom helt ind til atomerne', gør: () => requestAnimationFrame(() => { centrerVindue(); gåTil('atomer', 'ind'); }) },
   ],
-  igen: 'fra listen til venstre eller fra hjælpen (?)',
   slut: () => {
     flTrin = null;
     flZoom = null;
