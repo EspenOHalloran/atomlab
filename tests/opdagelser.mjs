@@ -125,7 +125,7 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await page.keyboard.press('ArrowRight');
   const første = await O(() => ({
     kører: atomlabTest.opdagelser.forløb.kører(), trin: atomlabTest.opdagelser.forløb.trin(), opslag: atomlabTest.opdagelser.vist().opslag,
-    låst: atomlabTest.opdagelser.låst(), bund: getComputedStyle(document.querySelector('#opdBog .bog-bund')).display,
+    låst: atomlabTest.opdagelser.låst(), bund: [getComputedStyle(document.getElementById('opdTilHylden')).display, getComputedStyle(document.querySelector('#opdBog .bog-pil')).display].join(),
     kapitel: document.querySelector('#opdBog .bog-kapitel')?.textContent, scene: atomlabTest.opdagelser.scene()?.tilstand().trin,
   }));
   // "Spring over": opslaget bliver et laboratorium, og bladringen virker igen
@@ -139,8 +139,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await page.click('#opdBog .bog-begynd');
   await page.waitForTimeout(300);
   const anden = await O(() => ({ kører: atomlabTest.opdagelser.forløb.kører(), opslag: atomlabTest.opdagelser.vist().opslag, scene: atomlabTest.opdagelser.scene()?.tilstand().trin }));
-  tjek('fortællingen starter efter "Begynd" første gang (låst bladring, kapitlet "Haag, 1655"), "Spring over" giver laboratoriet, og anden gang starter den ikke',
-    første.kører === 'saturns-oerer' && første.trin === 'linse' && første.opslag === 'fortaelling' && første.låst && første.bund === 'none' && første.kapitel === 'Haag, 1655' && første.scene === 'linse'
+  tjek('fortællingen starter efter "Begynd" første gang (låst bladring, "‹ Hylden" fremme, kapitlet "Haag, 1655"), "Udforsk selv" giver laboratoriet, og anden gang starter den ikke',
+    første.kører === 'saturns-oerer' && første.trin === 'linse' && første.opslag === 'fortaelling' && første.låst && /^(?!none).*,none$/.test(første.bund) && første.kapitel === 'Haag, 1655' && første.scene === 'linse'
     && !sprunget.låst && sprunget.scene === 'fri' && sprunget.igen && sprunget.kapitel === 'Saturns ører'
     && anden.kører === null && anden.opslag === 'fortaelling' && anden.scene === 'fri', JSON.stringify({ første, sprunget, anden }));
 
@@ -150,39 +150,61 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   const fase = (f) => vent(page, (f) => atomlabTest.opdagelser.forløb.fase() === f, f, 6000);
   const gæt = async () => { await page.click('.forløb-linje .fl-gæt >> nth=0'); return fase('gør'); };
   const S = (f, a) => O(f, a);
-  await gæt();
+  // Trin 1: Glasset virker, mens man gætter (stilguiden B1 og B4): At gnide lader gættet tone væk
   await S(() => atomlabTest.opdagelser.scene().slib(0.5));
-  const halv = await S(() => atomlabTest.opdagelser.scene().tilstand().skarp);
+  const halv = await S(() => ({ skarp: atomlabTest.opdagelser.scene().tilstand().skarp, fase: atomlabTest.opdagelser.forløb.fase() }));
   await S(() => atomlabTest.opdagelser.scene().slib(1));
-  const linse = (await fase('så')) && halv === 0.5;
+  const linse = (await fase('så')) && halv.skarp === 0.5 && halv.fase === 'gør';
   await page.click('.forløb-linje .fl-næste');
+  // Trin 2: Hvert gæt får sit eget svar under Så. Forbi målet giver et vink med det samme, og nat 15 falder selv på 16
   await gæt();
+  await S(() => atomlabTest.opdagelser.scene().nat(19));
+  const forbi = await O(() => document.querySelector('.forløb-linje .fl-vink')?.textContent ?? '');
+  await S(() => atomlabTest.opdagelser.scene().nat(14));
+  await page.waitForTimeout(600);
+  const ikkeEndnu = await S(() => ({ fase: atomlabTest.opdagelser.forløb.fase(), vink: Boolean(document.querySelector('.forløb-linje .fl-vink')) }));
   await S(() => atomlabTest.opdagelser.scene().nat(15));
-  await page.waitForTimeout(500);
-  const ikkeEndnu = await S(() => atomlabTest.opdagelser.forløb.fase());
-  await S(() => atomlabTest.opdagelser.scene().nat(16));
-  const nætter = (await fase('så')) && ikkeEndnu === 'gør' && (await vent(page, () => atomlabTest.opdagelser.scene().tilstand().navn))
+  const nætter = (await fase('så')) && ikkeEndnu.fase === 'gør' && !ikkeEndnu.vink && /16 nætter/.test(forbi)
+    && (await S(() => atomlabTest.opdagelser.scene().tilstand().nat)) === 16 && (await vent(page, () => atomlabTest.opdagelser.scene().tilstand().navn))
     && (await O(() => document.querySelector('#opdBog .hs-nat-tekst')?.textContent.startsWith('10. april 1655')));
+  const svar = await O(() => document.querySelector('.forløb-linje .fl-svar')?.textContent ?? '');
+  // Under Så virker skyderen stadig (B1)
+  await S(() => atomlabTest.opdagelser.scene().nat(5));
+  const legVidere = (await S(() => atomlabTest.opdagelser.scene().tilstand().nat)) === 5;
   await page.click('.forløb-linje .fl-næste');
+  // Trin 3: helt åben giver et vink, og tæt på kanten (2,5°) tæller. Bagefter kan den skarpe ring drejes under Så
   await gæt();
   await S(() => atomlabTest.opdagelser.scene().drej(8));
   await page.waitForTimeout(400);
   const lyser = await S(() => atomlabTest.opdagelser.scene().tilstand().lyser);
-  await S(() => atomlabTest.opdagelser.scene().drej(20));
-  await S(() => atomlabTest.opdagelser.scene().drej(-2)); // et hurtigt træk over kanten tæller som kanten
-  const kanten = (await fase('så')) && lyser === 'hevelius' && (await S(() => atomlabTest.opdagelser.scene().tilstand().løft)) === 1;
+  await S(() => atomlabTest.opdagelser.scene().drej(40));
+  const helt = await O(() => document.querySelector('.forløb-linje .fl-vink')?.textContent ?? '');
+  await S(() => atomlabTest.opdagelser.scene().drej(2.5));
+  const kanten = (await fase('så')) && lyser === 'hevelius' && /Mere åben/.test(helt) && (await S(() => atomlabTest.opdagelser.scene().tilstand().løft)) === 1;
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().løftet);
+  await S(() => atomlabTest.opdagelser.scene().drej(-10));
+  const drejet = (await S(() => atomlabTest.opdagelser.scene().tilstand().B)) === -10;
+  tjek('stien i fortællingen: scenen virker, mens man gætter, og under Så, forbi målet giver et vink, tæt på tæller, og gættet får sit eget svar',
+    linse && halv.fase === 'gør' && /følge med Saturn/.test(svar) && legVidere && drejet, JSON.stringify({ halv, svar, legVidere, drejet, forbi, helt }));
   await page.click('.forløb-linje .fl-næste');
   await fase('slut');
   const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, vej: document.querySelector('.forløb-linje .fl-vej')?.textContent }));
   await page.click('.forløb-linje .fl-vej');
   await page.waitForTimeout(300);
   const videre = await O(() => ({ opslag: atomlabTest.opdagelser.vist().opslag, låst: atomlabTest.opdagelser.låst(), kører: atomlabTest.opdagelser.forløb.kører() }));
+  // Laboratoriet har de tre kapitler: "Den lille prik" giver nætterne, og nat 16 viser navnet Titan
+  await O(() => atomlabTest.opdagelser.bladr(-1));
+  const kapitler = await O(() => [...document.querySelectorAll('#opdBog .hs-kapitel')].map((k) => k.textContent));
+  await page.click('#opdBog .hs-kapitel >> text=Den lille prik');
+  await S(() => atomlabTest.opdagelser.scene().nat(16));
+  const lab = await S(() => atomlabTest.opdagelser.scene().tilstand());
+  tjek('laboratoriet: tre kapitler (Linsen, Den lille prik og Ringen), og "Den lille prik" giver nætterne med Titan',
+    kapitler.join('|') === 'Linsen|Den lille prik|Ringen' && lab.trin === 'naetter' && lab.lab === 'naetter' && lab.navn, JSON.stringify({ kapitler, lab }));
   tjek('trinene: linsen bliver skarp, Titan er tilbage efter 16 nætter (10. april 1655), og ringen løfter sig ved kanten efter tavlens tegninger',
     linse && nætter && kanten, JSON.stringify({ linse, halv, nætter, ikkeEndnu, kanten, lyser }));
   tjek('"Det så du" viser kernesætningen, og "Videre i bogen" bladrer videre med bladringen låst op',
     slut.tekst?.includes('tynd, flad ring') && slut.vej?.startsWith('Videre i bogen') && videre.opslag === 'gaaden' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
   // Esc midt i forløbet går til hylden og stopper det
-  await O(() => atomlabTest.opdagelser.bladr(-1));
   await page.click('#opdBog .hs-igen');
   await vent(page, () => atomlabTest.opdagelser.forløb.kører());
   await page.keyboard.press('Escape');

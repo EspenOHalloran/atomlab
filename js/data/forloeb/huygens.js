@@ -11,6 +11,11 @@ export const SATURNS_ØRER = {
   titel: 'Saturns ører',
   // Kernesætning D (jeres valg 16. november 2026, drejebogen afsnit 1)
   kernesætning: 'Saturns "ører" er en tynd, flad ring, som vi ser fra skiftende vinkler. Fra kanten forsvinder den næsten. Det så Huygens, og det kan jeg også se.',
+  // Vinkene, når man går forbi målet (stilguiden B5, js/bog/huygens.js). Ca. 27° er ringens største vinkel set fra Jorden
+  vink: {
+    forbi: 'Prikken var tilbage ved sit mærke efter 16 nætter. Træk lidt tilbage.',
+    helt: 'Mere åben kan vi ikke se ringen fra Jorden. Træk nu tilbage mod kanten.',
+  },
   trin: [
     {
       id: 'linse',
@@ -18,9 +23,11 @@ export const SATURNS_ØRER = {
       spørg: 'Sådan så Galilei Saturn i 1610. Hvad tror du, de to små kugler er?',
       gæt: {
         valg: [
-          { tekst: 'To måner', efter: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.' },
-          { tekst: 'To håndtag', efter: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.' },
-          { tekst: 'Kikkerten snyder', efter: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.' },
+          // Svarene (E20, 17. november 2026): Galilei så tre kloder, der næsten rørte hinanden (fakta afsnit 3), og de
+          // gamle tegninger var "dårlige kikkerters skyld" (s. 36). Ører og buer: tavlen ved s. 35 (nr. VI og IX)
+          { tekst: 'To måner', efter: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.', svar: 'Galilei troede, det var tre kloder, der næsten rørte hinanden. Men det var ikke måner.' },
+          { tekst: 'To håndtag', efter: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.', svar: 'Tæt på. Andre astronomer tegnede dem senere som ører og buer. Men hvad var de?' },
+          { tekst: 'Kikkerten snyder', efter: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.', svar: 'Ja, på en måde. Huygens skrev senere, at mange af de mærkelige tegninger var dårlige kikkerters skyld.' },
         ],
       },
       gør: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.',
@@ -34,9 +41,9 @@ export const SATURNS_ØRER = {
       spørg: 'En svag prik ved Saturn flytter sig fra nat til nat. Hvad er den?',
       gæt: {
         valg: [
-          { tekst: 'En stjerne', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.' },
-          { tekst: 'En måne', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.' },
-          { tekst: 'En komet', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.' },
+          { tekst: 'En stjerne', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.', svar: 'En stjerne ville ikke følge med Saturn. Prikken gik rundt om den.' },
+          { tekst: 'En måne', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.', svar: 'Rigtigt gættet!' },
+          { tekst: 'En komet', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.', svar: 'En komet går rundt om Solen. Prikken gik rundt om Saturn.' },
         ],
       },
       gør: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.',
@@ -52,9 +59,11 @@ export const SATURNS_ØRER = {
       spørg: 'Christiaan kommer hjem fra en rejse. Saturns arme er væk! Hvor er de blevet af?',
       gæt: {
         valg: [
-          { tekst: 'De er faldet af', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.' },
-          { tekst: 'De gemmer sig bag Saturn', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.' },
-          { tekst: 'Vi ser dem fra kanten', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.' },
+          // Armene var tilbage 13. oktober 1656, "senere end jeg havde forudsagt" (s. 16-17, faktatjekket 17. november 2026). Ringen er 9 til 4 i forhold
+          // til Saturn (s. 47), altså over dobbelt så bred
+          { tekst: 'De er faldet af', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.', svar: 'Nej. 13. oktober 1656 så Huygens armene igen, senere end han havde regnet med.' },
+          { tekst: 'De gemmer sig bag Saturn', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.', svar: 'Armene er over dobbelt så brede som Saturn. De kan ikke gemme sig bag den.' },
+          { tekst: 'Vi ser dem fra kanten', efter: 'Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk.', svar: 'Rigtigt gættet!' },
         ],
       },
       // Rettet 16. november 2026 (jeres svar): Scenen starter med armene væk, så man åbner dem først og finder kanten bagefter

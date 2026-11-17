@@ -1259,6 +1259,10 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .hs-under { min-width: 0; display: grid; justify-items: center; gap: 8px; }
 #opdagelser .hs-under:empty { display: none; }
 #opdagelser .hs-linje { margin: 0; font-size: 16px; line-height: 1.4; text-align: center; }
+#opdagelser .hs-kapitler { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; } /* Laboratoriets tre kapitler (E20) */
+#opdagelser .hs-kapitel { min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid color-mix(in srgb, var(--bog-blaek) 45%, transparent); background: transparent; color: var(--bog-blaek); font: inherit; font-size: 15px; cursor: pointer; }
+#opdagelser .hs-kapitel:hover { border-color: var(--bog-blaek); }
+#opdagelser .hs-kapitel[aria-pressed="true"] { background: var(--bog-blaek); color: var(--bog-papir); border-color: var(--bog-blaek); }
 #opdagelser .hs-igen { min-height: 44px; padding: 0 22px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
 #opdagelser .hs-nat { display: grid; justify-items: center; gap: 2px; width: min(460px, 100%); font-size: 15px; font-variant-numeric: tabular-nums; } /* Trin 2: nætterne */
 #opdagelser .hs-nat input { width: 100%; height: 44px; accent-color: var(--bog-blaek); cursor: pointer; }
@@ -1274,7 +1278,12 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .hs-tavle figcaption { margin-top: 3px; font-size: 13px; line-height: 1.25; }
 @media (prefers-reduced-motion: reduce) { #opdagelser .hs-tavle figure { transition: none; } }
 #opdagelser.i-forløb > .opd-rum { display: grid !important; grid-area: vindue !important; } /* Forløbet i bogen: bogen er scenen, og bladringen er væk imens */
-#opdagelser.i-forløb .bog-bund { display: none; }
+/* Under turen: "‹ Hylden" er fremme (stilguiden B3) i bogens øverste hjørne, så tegningen beholder sin plads, og
+   bladringen er væk */
+#opdagelser.i-forløb .bog { position: relative; }
+#opdagelser.i-forløb .bog-bund { position: absolute; top: 6px; left: 6px; z-index: 2; display: block; }
+#opdagelser.i-forløb .bog-bund :is(.bog-pil, .bog-sidetal) { display: none; }
+#opdagelser.i-forløb .opd-tilbage { background: color-mix(in srgb, var(--bog-blaek) 88%, transparent); color: var(--bog-papir); border-color: transparent; }
 #opdagelser.i-forløb .forløb-linje { margin-bottom: 8px; }
 @media (max-width: 560px) { #opdagelser .hs-skitse { flex-basis: 54px; } #opdagelser .hs-skitse:nth-last-child(n+6) { display: none; } #opdagelser .hs-tavle figure { width: 30%; } } /* Telefon på højkant: fem skitser og tre smalle tegninger */
 @media (max-height: 500px) and (orientation: landscape) { #opdagelser.i-forløb { grid-template-columns: minmax(0, 1fr) minmax(0, 330px) !important; grid-template-rows: auto minmax(0, 1fr) !important; grid-template-areas: "top top" "vindue forløb" !important; } #opdagelser.i-forløb .forløb-linje { align-self: start; max-height: 100%; overflow-y: auto; margin: 0 6px 6px 0; font-size: 15px; } #opdagelser .bog-scene-opslag { gap: 2px; } #opdagelser .bog-kapitel { font-size: 18px; } #opdagelser .bog-scene { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr); } #opdagelser .hs-lærred { min-height: 0; } #opdagelser .hs-under { width: min(230px, 34vw); align-content: center; } #opdagelser .hs-tavle { flex-direction: column; gap: 4px; } #opdagelser .hs-tavle figure { width: 74px; } #opdagelser .hs-tavle figcaption { font-size: 11px; } #opdagelser .hs-skitse:nth-last-child(n+4) { display: none; } #opdagelser .hs-skitse { flex-basis: 52px; } } /* Lav skærm på langs: forløbets linje ved siden af bogen, og skyderen eller tegningerne ved siden af lærredet */
@@ -2235,4 +2244,5 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   .forløb-linje { padding: 10px 10px 10px 12px; font-size: 15px; gap: 6px; }
   .fl-række button { font-size: 14px; }
   .fl-nr { display: none; }
+  .fl-spurgt, .forløb-linje .fl-lille { font-size: 13px; line-height: 1.3; } /* det besvarede spørgsmål og de små linjer fylder mindre */
 }
