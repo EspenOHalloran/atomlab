@@ -66,7 +66,5 @@ export const OVERBLIK = {
     ude: (navn) => `Det er ${navn}, langt ude. Jorden er den blå, nummer tre fra Solen.`,
     dyk: 'Jorden er i den lille ring tæt ved Solen. Prøv igen.',
   },
-  // Vejen "Besøg en planet": Merkur er ikke bygget endnu (drejebogen, jeres svar 14. november 2026)
-  merkurSenere: 'Merkur får sit besøg senere. Vælg en af de andre.',
   besøgTekst: 'Tryk på en planet for at flyve derind.',
 };

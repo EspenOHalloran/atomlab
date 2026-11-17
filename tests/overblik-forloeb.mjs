@@ -2,7 +2,7 @@
 // teksternes grænser og ord, fodboldens tal, tallene for afstanden og lysets tid, starter første gang med panelerne skjult,
 // trin 1 (de fire inderste store med en ring og de ydre dæmpet, et forkert tryk giver en linje, og Jorden blinker), trin 2 (Merkur over fire omgange), trin 3 (skalaen glider),
 // trin 4 (kun Jordens ring, et tryk ved siden af giver en linje, dykket med tælleren ned til Jorden fra den belyste side),
-// "Det så du" med ✓ i "Din fremgang" og skalaen tilbage, vejen "Besøg en planet" (Merkur mat, Pluto skjult), "Rejs med
+// "Det så du" med ✓ i "Din fremgang" og skalaen tilbage, vejen "Besøg en planet" (Pluto skjult, Merkur er ikke mat længere fra MP2), "Rejs med
 // lyset" (tiderne ved planeterne passer med lysTid, uret siger "spolet frem") og konsollen uden fejl.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { OVERBLIK } from '../js/data/forloeb/overblik.js';
@@ -96,11 +96,10 @@ if (!process.argv.includes('--uden-browser')) {
   await klik('.fl-vej.primær');
   await vent((fl, t) => t.flyver()); // (kameraet flyver hjem, når panelerne er tilbage)
   await vent((fl, t) => !t.flyver());
-  const m = await f((fl, t) => (fl.kører(), t.kugleInfo('merkur')));
-  await side.mouse.click(m.x, m.y);
-  await side.waitForTimeout(300);
-  tjek('"Besøg en planet": panelerne er tilbage, navnene tændt, Pluto skjult, og Merkur siger "senere" uden at flyve', !(await side.evaluate(() => document.getElementById('solsystem').classList.contains('i-forløb')))
-    && (await f((fl) => fl.besøg())) === OVERBLIK.merkurSenere && !(await f((fl, t) => t.flyver())) && !(await f((fl, t) => t.navne())).includes('pluto') && (await f((fl, t) => t.navne())).includes('jupiter'));
+  // (Merkur har sit eget besøg fra MP2, så den er ikke mat og siger ikke "senere" længere)
+  tjek('"Besøg en planet": panelerne er tilbage, navnene tændt, Pluto skjult, og teksten beder om et tryk på en planet', !(await side.evaluate(() => document.getElementById('solsystem').classList.contains('i-forløb')))
+    && (await f((fl) => fl.besøg())) === OVERBLIK.besøgTekst && !(await f((fl, t) => t.navne())).includes('pluto') && (await f((fl, t) => t.navne())).includes('jupiter')
+    && !(await side.evaluate(() => [...document.querySelectorAll('#solsystem .mat')].some((e) => /Merkur/.test(e.textContent)))));
   await side.screenshot({ path: `${UD}/besoeg.png` });
   // Rejs med lyset (handlingen i bjælken)
   await side.click('#solsystem .bjælke-handling:has-text("Rejs med lyset")');

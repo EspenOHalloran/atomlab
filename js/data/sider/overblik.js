@@ -1,6 +1,6 @@
 // Teksterne i højre panel ved Solsystemets overblik (docs/drejebog-overblik.md, afsnit 3): titlen, to tal, højst tre
-// sætninger og fire spørgsmål, så "For nørder" og "Ærligt talt". Merkur og Pluto er ikke bygget endnu og har kun et
-// kort panel (jeres ønske 13. november 2026). Tallene står i drejebogens afsnit 4. Uden Three.js.
+// sætninger og fire spørgsmål, så "For nørder" og "Ærligt talt". Pluto er ikke bygget endnu og har kun et kort
+// panel (jeres ønske 13. november 2026). Merkur har sit eget besøg (MP2, 17. november 2026). Tallene står i drejebogens afsnit 4. Uden Three.js.
 
 import { sted } from '../../sideknap.js';
 
@@ -42,13 +42,8 @@ export const SIDE = {
     + '<p><b>Bælterne</b> ser tætte ud, men er næsten tomme. Rumsonder er fløjet gennem asteroidebæltet mange gange uden at ramme noget. Solens glød er også større end Solen.</p>',
 };
 
-// Merkur og Pluto (jeres ønske 13. november 2026): en lille kugle med et kort panel, til de får deres eget besøg
+// Pluto (jeres ønske 13. november 2026): en lille kugle med et kort panel, til den får sit eget besøg (MP3-MP4)
 export const SIDER = {
-  merkur: {
-    tal: [['Bredde', 'ca. 4.900 km'], ['Et år', '88 jorddøgn']],
-    kort: 'Merkur er den mindste planet og den, der er tættest på Solen. Den har næsten ingen luft, så dagsiden bliver over 400 °C varm, og natsiden falder til ca. −180 °C. Merkur får sit eget besøg senere, så her ser du den kun udefra.',
-    ærligt: '<p>Kortet på kuglen er rumsonden MESSENGERs billeder af hele Merkur (NASA), sat sammen til ét kort.</p>',
-  },
   pluto: {
     tal: [['Bredde', 'ca. 2.380 km'], ['Et år', '248 jordår']],
     kort: 'Pluto er en dværgplanet langt ude i Kuiperbæltet, et bælte af is og sten uden for Neptun. Den er mindre end vores egen måne. Rumsonden New Horizons fløj forbi i juli 2015, men så kun den ene halvkugle skarpt, og det sydligste lå i mørke.',

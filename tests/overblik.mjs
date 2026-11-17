@@ -111,7 +111,7 @@ if (!process.argv.includes('--uden-browser')) {
   tjek('planeterne kredser mod uret set fra ekliptikkens nordpol', await f((t) => t.modUret()));
   // Tryk: den nærmeste midte inden for 44 px
   tjek('et tryk lige ved Jupiter vælger Jupiter, og et tryk langt fra alt vælger intet', await f((t) => t.trykNær('jupiter', 10) === 'jupiter' && t.trykNær('jupiter', 200) === null));
-  // Merkur og Pluto er steder med et panel
+  // Pluto er et sted med et panel (Merkur har sit eget besøg fra MP2)
   await side.evaluate(() => window.atomlabTest.solsystem.gåTil('pluto'));
   const sideP = await side.evaluate(() => window.atomlabTest.solsystem.side());
   tjek('Pluto: kameraet flyver ind, og panelet har to tal og en tekst om New Horizons', sideP.nøgle === 'overblik:pluto' && sideP.tal.length === 2 && /New Horizons/.test(sideP.tekst), JSON.stringify(sideP.tal));

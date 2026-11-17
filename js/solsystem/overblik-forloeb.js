@@ -413,12 +413,6 @@ export function lavOverblikForløb(api) {
       }
     },
     visBesøg, // (lukkes, når "Rejs med lyset" starter)
-    // Et tryk på vejen "Besøg en planet": Merkur er ikke bygget endnu (true: trykket er taget)
-    besøgTryk(id) {
-      if (id !== 'merkur') return false;
-      besøgTekst.textContent = OVERBLIK.merkurSenere;
-      return true;
-    },
     stop() {
       stoppet = true;
       if (kører()) stopForløb();
