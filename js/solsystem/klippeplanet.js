@@ -170,6 +170,49 @@ const GLOED_GLSL = /* glsl */ `
   }
   #endif`;
 
+// Polkortene (Merkur, MP1): Ved polerne ligger kortets pixler meget tættere mod øst end mod nord, så grafikkortet slører
+// dem, og der kommer stråler ud fra polen. Over ca. 72° bruges i stedet et kort for hver pol set lige ovenfra
+// (stereografisk: P = (x, −z) / (1 + |y|) i kuglens retninger, kortets kant ved polGr.x), og højderne dér giver
+// bjergenes skrå sider. Det glider over i det almindelige kort mellem sin(bredde) = polGr.y og polGr.z.
+const POL_GLSL = /* glsl */ `
+  #ifdef POL
+  uniform sampler2D polKortN;
+  uniform sampler2D polKortS;
+  uniform sampler2D polHoejdeN;
+  uniform sampler2D polHoejdeS;
+  uniform vec4 harPol;    // kortet mod nord, mod syd, højderne mod nord, mod syd (0 eller 1)
+  uniform vec3 polGr;     // kortets kant i planet (RMAX), og hvor polkortet starter og er helt over (sinus til bredden)
+  uniform float polTexel; // en pixel i polhøjderne (i planet)
+  vec2 polGrad(sampler2D t, vec2 uv) {
+    float d = polTexel / (2.0 * polGr.x);
+    return vec2(hoejdeAf(t, uv + vec2(d, 0.0)) - hoejdeAf(t, uv - vec2(d, 0.0)),
+                hoejdeAf(t, uv + vec2(0.0, d)) - hoejdeAf(t, uv - vec2(0.0, d)));
+  }
+  // g: bjergenes skrå sider mod øst og nord, c: farven (begge glider over i polkortets)
+  void polBland(vec3 n0, inout vec2 g, inout vec3 c) {
+    float y = abs(n0.y);
+    float w = smoothstep(polGr.y, polGr.z, y);
+    if (w <= 0.0) return;
+    bool nord = n0.y > 0.0;
+    vec2 P = vec2(n0.x, -n0.z) / (1.0 + y);
+    vec2 uv = P / (2.0 * polGr.x) + 0.5;
+    if (nord ? harPol.x > 0.5 : harPol.y > 0.5) {
+      vec3 cp = nord ? kortFarve(polKortN, uv) : kortFarve(polKortS, uv);
+      c = mix(c, mix(farve, cp, harKort), w);
+    }
+    if (nord ? harPol.z > 0.5 : harPol.w > 0.5) {
+      vec2 d = nord ? polGrad(polHoejdeN, uv) : polGrad(polHoejdeS, uv);
+      // Fra kortets pixler til radier på kuglen: stereografisk er dP = (1 + r²) / 2 · ds
+      float r2 = dot(P, P);
+      vec2 grad = d * hSpan * overdriv / (2.0 * polTexel) * (1.0 + r2) * 0.5;
+      float r = max(sqrt(r2), 1e-6);
+      vec2 l = P / r; // (cos, sin) til længden
+      vec2 gp = vec2(dot(grad, vec2(-l.y, l.x)), (nord ? -1.0 : 1.0) * dot(grad, l));
+      g = mix(g, gp, w);
+    }
+  }
+  #endif`;
+
 // Lyset, luften, isen og skyernes skygge (fælles for kuglen og de lokale net). n0 er retningen fra midten, nr
 // retningen vinkelret på bjergsiden (begge i kuglens egne retninger), og c farven.
 const LYS_GLSL = /* glsl */ `
@@ -253,6 +296,7 @@ const FRAGMENT = /* glsl */ `
   ${LYS_GLSL}
   ${KORT_GLSL}
   ${GLOED_GLSL}
+  ${POL_GLSL}
   varying vec2 vUv;
   varying vec3 vObjN;
   void main() {
@@ -267,6 +311,9 @@ const FRAGMENT = /* glsl */ `
     float cosB = oestNord(n0, oest, nord);
     vec2 g = harHoejde > 0.5 ? haeldning(hoejde, vUv, texel, vec2(OMGANG, OMGANG * 0.5), cosB) : vec2(0.0);
     vec3 c = mix(farve, kortFarve(kort, vUv), harKort);
+    #ifdef POL
+    polBland(n0, g, c);
+    #endif
     gl_FragColor = vec4(belys(n0, normalize(n0 - g.x * oest - g.y * nord), c), 1.0);
     #ifdef GLOED
     if (gloedStyrke > 0.001) gl_FragColor.rgb += gloed(harHoejde > 0.5 ? hMin + hSpan * hoejdeAf(hoejde, vUv) : gloedT.z / radiusKm, n0);
@@ -412,10 +459,12 @@ const glidende = (x) => { const t = THREE.MathUtils.clamp(x, 0, 1); return t * t
 // luft: { tusmørke (grader ind i natten), farve, slør, skalahøjde (km) } giver tusmørke og støv i luften. is: polkapperne gøres hvidere.
 // skyer: skyerne fra js/solsystem/skyer.js, som kaster skygge på jorden.
 // tone: [r, g, b] (Venus): kortene er gråtoner med én kanal (RedFormat), og gråtonen ganges med denne farve.
+// pol: { rmax, fra, til } (Merkur): polkortene (POL_GLSL) med kanten rmax i planet, og de bruges fra bredden fra til til
+// (grader). Kortene sættes med sætPolKort og sætPolHøjde.
 // glød: { T0, fald, nul, bølge, c2 } (Venus, V3): jorden gløder på natsiden efter højden (sætGlød(styrke, farve)).
-export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null, glød = null }) {
+export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null, glød = null, pol = null }) {
   const R = radius / skala;
-  const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }), ...(glød && { GLOED: '' }) };
+  const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }), ...(glød && { GLOED: '' }), ...(pol && { POL: '' }) };
   const medSkyer = (glsl) => glsl.replace('SKY_GLSL_HER', skyer ? SKY_GLSL : '');
   const mat = new THREE.ShaderMaterial({
     uniforms: {
@@ -445,6 +494,12 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         gloedFarve: { value: new THREE.Vector3(1, 0.25, 0.06) },
         gloedT: { value: new THREE.Vector4(glød.T0, glød.fald, glød.nul, glød.c2 / glød.bølge) },
         radiusKm: { value: radius },
+      }),
+      ...(pol && {
+        polKortN: { value: null }, polKortS: { value: null }, polHoejdeN: { value: null }, polHoejdeS: { value: null },
+        harPol: { value: new THREE.Vector4() },
+        polGr: { value: new THREE.Vector3(pol.rmax, Math.sin(pol.fra * Math.PI / 180), Math.sin(pol.til * Math.PI / 180)) },
+        polTexel: { value: 1 },
       }),
     },
     defines: { ...defines, HULLER: 0 },
@@ -563,6 +618,18 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       if (!u.gloedStyrke) return;
       u.gloedStyrke.value = styrke;
       if (f) u.gloedFarve.value.set(...f);
+    },
+    // Polkortene (kun med pol): nord = true eller false, t er kortet (gråtoner som kortet) eller højderne (16 bit)
+    sætPolKort(nord, t) {
+      if (!u.harPol) return;
+      u[nord ? 'polKortN' : 'polKortS'].value = t;
+      u.harPol.value[nord ? 'x' : 'y'] = t ? 1 : 0;
+    },
+    sætPolHøjde(nord, t) {
+      if (!u.harPol) return;
+      u[nord ? 'polHoejdeN' : 'polHoejdeS'].value = t;
+      u.harPol.value[nord ? 'z' : 'w'] = t ? 1 : 0;
+      if (t) u.polTexel.value = (2 * u.polGr.value.x) / t.image.width;
     },
     sætHøjde(t) {
       u.hoejde.value = t;

@@ -99,7 +99,7 @@ const F = (navn, ...a) => fm(([navn, a]) => atomlabTest.solsystem.fænomen()[nav
 const ids = await fm(() => atomlabTest.solsystem.fænomener);
 tjek('Venus står i listen mellem Solen og Jorden', ids.indexOf('venus') > ids.indexOf('solen') && ids.indexOf('venus') < ids.indexOf('jorden'), JSON.stringify(ids));
 const kloder = await fm(() => [...document.querySelectorAll('#solsystem .sol-klode')].map((k) => k.dataset.id));
-tjek('kloden Venus står efter Solen i rækken af kloder', kloder[kloder.indexOf('solen') + 1] === 'venus', kloder.join());
+tjek('kloden Venus står efter Merkur (og Solen) i rækken af kloder', kloder[kloder.indexOf('merkur') + 1] === 'venus' && kloder.indexOf('solen') < kloder.indexOf('venus'), kloder.join());
 
 await s.click('#solsystem .sol-klode[data-id="venus"]');
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen()?.billeder?.().hentet.kort && atomlabTest.solsystem.fænomen().billeder().hentet.højde && atomlabTest.solsystem.fænomen().billeder().hentet.skyer, null, { timeout: 30000, polling: 200 });

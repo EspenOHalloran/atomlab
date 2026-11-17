@@ -4,7 +4,7 @@
 
 export const FÆNOMEN_IDER = {
   kosmos: ['oversigt', 'bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
-  solsystem: ['overblik', 'solen', 'solstorm', 'solensfremtid', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun'],
+  solsystem: ['overblik', 'solen', 'solstorm', 'solensfremtid', 'merkur', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun'],
 };
 
 // Hvor hver skærm gemmer det valgte fænomen og dem, man har set (docs/kode/gemte-data.md)

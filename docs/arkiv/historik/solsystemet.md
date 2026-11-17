@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Venus V5, flybyen og turen ned til Venera 13. Venus er færdig** ([plan-venus.md](../plan-venus.md), Fables rettelser fra [E18](../fable/E18-venus.md)).
+- **Flybyen med 6 stop:** Venus, skyerne i ultraviolet med ⏩, under skyerne ved Maxwell Montes, Maat Mons, gløden ved midnat over Aphrodite Terra og turen ned.
+- **Turen ned** (`js/kosmos/venus-ned.js`, også "Ned gennem skyerne" under Venera 13 i træet): fra 320 km til jorden på 26 s med en måler (højde, temperatur og tryk fra VIRA), dis i skyerne, orange himmel under dem og Venera 13's foto til sidst (kontakten "Venera 13's foto"). Måleren ender ved 457 °C og 88 bar, som landeren målte.
+- **Siden:** kernesætningen, "Hvilken planet er varmest?", tre "Hvorfor?"-kort, Zoozve og de næste sonder, Ordbogens radar og drivhuseffekt. Faktatjekket i [del 7, afsnit 12](../fakta-solsystemet/del7-venus.md). `tests/venus.mjs` har 17 nye tjek.
+
 **Lavet (17. november 2026): Venus V3, gløden på natsiden og stederne under skyerne** ([plan-venus.md](../plan-venus.md), jeres svar på Fables tjek [E18](../fable/E18-venus.md): fire steder, kontakten "Gløden på natsiden" og Venus lukkes med ét V5).
 - **Gløden:** Jorden gløder efter Plancks lov ud fra højderne (bjergene er køligere og mørkere), skarpt uden skyer og sløret gennem skyerne, kun på natsiden. Mørkerød og skruet meget op (sagt under "Ærligt talt").
 - **Stederne:** Maxwell Montes, Maat Mons, Pandekagekuplerne og Venera 13 i træet under "Under skyerne", med navne på kloden og en side hver. Skyerne går væk ved et sted og kommer igen ved "Venus", og datoen glider til formiddag (Solen i vest). Skarpe radarkort (225 m) ved Maat Mons og kuplerne (`lav_venus_steder.py`).
