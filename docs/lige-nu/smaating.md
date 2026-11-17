@@ -2,6 +2,8 @@
 
 *Spor i [oversigten](../lige-nu.md) til små rettelser på tværs, tests, dokumenterne og arbejdsgangen. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/smaating.md](../arkiv/historik/smaating.md). Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (E20, forløbet som sti).*
 
+**Tilføjet 17. november 2026 (Batteriet):** Foldeboksen "Hvorfor er et koldt batteri hurtigt tomt?" (`data-lag="batteri-kulde"` i `index.html`, efter "Hvor meget energi?"). Brugerens spørgsmål, teksten står i `docs/fakta-hvorfor.md` og mangler en egentlig kildeopslag (se dér).
+
 **Senest lavet (17. november 2026): E20 A, små greb i Gåderne** (fund 9 og svar 7.2-7.3). Skinnens pile er rene pile ("‹" og "›" med `aria-label`), og under hvert navn står skalaen med småt ("mindre end et atom", "molekyler", "planeter", "stjerner", "galakser", fra `skalaOrd(størrelse)` i `js/data/gaader.js`). Gåden i fokus har ordet øverst på knappen "Flyv ind". Linjen første gang er "Videnskaben er ikke færdig. Det her er den første af fem gåder." (tallet fra `påSkinnen()`), og første gang står man foran Antistof efter navnet (`FØRSTE_GÅDE`). Menuens dok har "atomkernen" og "universet" i enderne (ringen er ikke rørt). `--ændret` kører nu også `karrusel`, når `js/karrusel.js` eller `js/menubaggrund.js` er ændret (manglede).
 
 **Næste efter E20:** Rettelserne i [prompt-e20-rettelser.md](../prompt-e20-rettelser.md): A (Gåderne) er lavet. B (tilbage-knappen) venter på jeres prøve på tabletten (se prompten) her i Småting. C (Opdagelserne) tages med H3 i Videnskabsfolkene, og D (grundstoffet flyver hjem) i Forløb. Begge kan starte nu, for forløbet som sti er merget.
