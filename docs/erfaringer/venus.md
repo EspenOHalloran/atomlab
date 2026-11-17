@@ -40,3 +40,8 @@
 - **Skyerne skiftes bag disen:** Skylaget tegnes kun udefra (FrontSide). Skiftet til "Under skyerne" sker under skyernes top, hvor disen allerede dækker næsten helt, så man ikke ser rummet et øjeblik.
 - **Måleren ved Venera 13 passer af sig selv:** Jorden ved stedet ligger 0,67 km over middelradius i Magellans højder, og VIRA giver dér 457 °C og 88 bar, næsten som landerens 457 °C og 89 atmosfærer. Regn luften fra den rigtige højde over middelradius, ikke over kortets kugle.
 - **NSSDC svarede curl, men ikke Python:** `urllib` fik "Connection reset" gennem proxyen, mens curl hentede TIFF-filen. `lav_venera.py` tager derfor også en hentet fil som parameter.
+
+## Turen ned efter jeres feedback (17. november 2026)
+- **En tur i en ensfarvet dis siger ikke noget af sig selv:** Fra ca. 100 km var billedet én flade (lysegrå, brun, orange), og kun måleren skiftede. Brugeren forstod ikke, hvad der skete. Se en ny tur i billeder hele vejen igennem (fx hver 20 km), før den kaldes færdig. Det hjalp med undertekster, der skifter ved hvert trin, og en søjle, der viser, hvor man er.
+- **Rejsens tid er blød:** `rejse.flyv` giver `bane` en blød `e` (`glat(t / T)`). Skal noget ske efter tiden (fx et langsomt stykke ved 55 km), så vend `glat` om (`tidVed`, halvering 22 gange) og læg knækkene efter tiden.
+- **Et overlag i 3D-billedet på telefonen på langs** er kun ca. 330 px bredt mellem panelerne, og pilene ‹ › ligger ovenpå. Se det i `tlf-langs`, ikke kun på pc.

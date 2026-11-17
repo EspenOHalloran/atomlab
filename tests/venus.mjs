@@ -16,7 +16,7 @@
 // landingen med fotoet og kontakten) og tilbage til hele Venus.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { VENUS, soldøgn, solRetning, underSolen, solAfstand, glødVed, temperaturVed, lokalTid, datoMedTid } from '../js/data/venus.js';
-import { SIDE, SIDER, TUR, TUR_SLUT } from '../js/data/sider/venus.js';
+import { SIDE, SIDER, TUR, TUR_SLUT, NED_TRIN } from '../js/data/sider/venus.js';
 import { luftVed, målerTekst } from '../js/data/luft-venus.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -325,17 +325,26 @@ await s.screenshot({ path: `${UD}/venus.png` });
   // (turen tager ca. 30 s spiltid. Testbrowseren tegner få billeder i sekundet under belastning, så vent op til 5 min.)
   const t0 = Date.now();
   while (Date.now() - t0 < 300000) {
-    const p = await fm(() => ({ ...atomlabTest.solsystem.fænomen().ned(), under: atomlabTest.solsystem.fænomen().skyer().under }));
+    const p = await fm(() => ({ ...atomlabTest.solsystem.fænomen().ned(), under: atomlabTest.solsystem.fænomen().skyer().under, ut: document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', prik: parseFloat(document.querySelector('.vm-prik')?.style.top), skyder: atomlabTest.solsystem.styr().some((k) => k.navn === 'Under skyerne') }));
     prøver.push(p);
     if (p.fase === 'landet') break;
     await s.waitForTimeout(100);
   }
   const ned = prøver.filter((p) => p.fase === 'ned');
   const over = ned.filter((p) => p.hMiddel > 75), inde = ned.filter((p) => p.hMiddel < 68);
-  const forkert = [...over.filter((p) => !(p.under === 0 && (p.hMiddel < 100 || !p.måler) && !p.kuppel)), ...inde.filter((p) => !(p.under === 100 && p.måler && p.kuppel?.himmel > 0.9))];
+  // (over skyerne tager disen til fra ca. 130 km, men dækker højst ca. 65 %)
+  const forkert = [...over.filter((p) => !(p.under === 0 && (p.hMiddel < 100 || !p.måler) && !(p.kuppel?.himmel > 0.7))), ...inde.filter((p) => !(p.under === 100 && p.måler && p.kuppel?.himmel > 0.9))];
   tjek('på vej ned: over skyerne er de der og måleren skjult over 100 km, under ca. 70 km er skyerne væk, og disen er der', over.length && inde.length && !forkert.length, JSON.stringify([over.length, inde.length, forkert.slice(0, 4).map((p) => [p.hMiddel.toFixed(1), p.under, p.måler, p.kuppel])]));
   const temp = ned.filter((p) => p.måler).map((p) => parseInt(p.tekst.temperatur.replace('−', '-')));
   tjek('måleren bliver varmere hele vejen ned', temp.length >= 3 && temp.every((t, i) => i === 0 || t >= temp[i - 1]), temp.join());
+  // Trinene (jeres feedback 17. november 2026): underteksten skifter i rækkefølge, og prikken i søjlen følger højden
+  const trin = [...new Set(prøver.map((p) => p.trin).filter(Boolean))];
+  const titler = NED_TRIN.map((t) => t.titel);
+  const sete = [...new Set(prøver.map((p) => titler.find((t) => p.ut.includes(t))).filter(Boolean))];
+  tjek('turen ned går gennem alle seks trin i rækkefølge, og underteksten skifter med (med flybyens prikker)', trin.join() === NED_TRIN.map((t) => t.id).join() && sete.join() === titler.join() && prøver.filter((p) => p.trin).every((p) => p.ut.includes(NED_TRIN.find((t) => t.id === p.trin).titel) || p.ut.includes(titler[NED_TRIN.findIndex((t) => t.id === p.trin) - 1])), JSON.stringify([trin, sete]));
+  const søjle = ned.filter((p) => p.måler && Number.isFinite(p.prik));
+  tjek('prikken i søjlen går nedad og står i skylaget inde i skyerne', søjle.length >= 3 && søjle.every((p, i) => i === 0 || p.prik >= søjle[i - 1].prik - 0.2) && søjle.filter((p) => p.hMiddel < 68 && p.hMiddel > 50).every((p) => p.prik > 30 && p.prik < 52), JSON.stringify(søjle.map((p) => [Math.round(p.hMiddel), p.prik])));
+  tjek('skyderen "Under skyerne" er skjult under turen ned', prøver.every((p) => !p.skyder));
   const slut = prøver.at(-1);
   tjek('landet ved Venera 13: måleren viser 0 km, ca. 457 °C og ca. 89 bar, og fotoet er fremme', slut.fase === 'landet' && slut.tekst.højde === '0 km' && Math.abs(parseInt(slut.tekst.temperatur) - 457) <= 4 && Math.abs(parseInt(slut.tekst.tryk) - 89) <= 4 && slut.foto, JSON.stringify(slut));
   const m = await F('midte');
