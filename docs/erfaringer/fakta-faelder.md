@@ -216,6 +216,8 @@
 - "Regn forbrændingen ud med tabellen over bindinger." OpenStax' gennemsnit for C=O (741 kJ/mol) giver 682 kJ for methan, 15 % for lidt, fordi C=O i CO₂ er stærkere (ca. 799). Brug NIST's forbrændingsvarme (890,7 kJ/mol med flydende vand, 802,6 med damp).
 - "I vægtløshed bliver flammen en kugle." En brændende dråbe gør. Et stearinlys giver en halvkugle (NASA: "hemispherical"), fordi lyset er i vejen. Og de første sekunder er flammen gul.
 - "Stearinlys er lavet af stearin." Stearin er en blanding af stearinsyre og palmitinsyre (lex.dk), men mange lys er af paraffin. Wikipedia på dansk kalder stearin for tristearin, som er noget tredje.
+- "Den gule del af flammen er koldere end resten." Lærebøgernes zoner siger ca. 1.200 °C i den gule del og 1.400 °C i kanten, men en måling med hyperspektralt kamera (Zheng m.fl., *Optik* 2019, citeret i Wikipedias "Flame") giver over 1.500 °C inde i den gule del. Skriv "Det gule lyser, fordi der er sod i det, ikke fordi det er varmest" (Opus, E17-noterne, 16. november 2026).
+- "Sluk stearinlyset med lidt vand." Lysproducenterne fraråder det: Den varme stearin kan sprøjte, og glas kan revne. Vis køling med vand på træ (en tændstik), ikke på et lys. Og "ca. ét ud af en milliard er en ion" er et loft fra den mest ladede flamme: Skriv "færre end ét ud af hundrede millioner" (Opus, E17-noterne).
 
 *Venus V3-V5 (Fable E18, 16. november 2026). Kilderne står i [E18-venus.md](../fable/E18-venus.md).*
 - "Parker Solar Probe så Venus' natside i infrarødt." Kameraet (WISPR) ser 0,48-0,80 µm, altså synligt lys og en smule nær-infrarødt. NASA kalder det "in visible light". Og de kendte infrarøde billeder af natsiden (1,74 og 2,3 µm, Akatsuki og Venus Express) viser skyerne som silhuetter, ikke jorden. Jorden ses ved ca. 1 µm.
