@@ -5,7 +5,7 @@
 ## Jeres ønske (13. november 2026)
 - "Gåderne skal inspirere og skabe en **sense of wonder** over de fantastiske hemmeligheder, der gemmer sig derude. Så det der med, at det skal holdes let, har nok ikke været min oprindelige intention. Jeg hælder egentlig til fuld 3D med wow-effekt."
 - **Ét univers:** Oversigten er et rum, hvor gåderne svæver, og et tryk flyver kameraet ind.
-- **Der skal kunne være 10 gåder i alt.**
+- **Der skal kunne være 10 gåder i alt** (11 fra 17. november 2026, se "Jeres svar om tyngdekraften").
 
 **Det ændrer den første plan:** "En side uden 3D" og "Billeder og 3D på kortene: ingen i den tynde udgave" ([plan-gaader.md](plan-gaader.md)) gælder ikke længere. Kortenes tekster, de tre trin, "Målt eller gæt?", "Det så du", "Se det selv", ✓ i `atomlabGaader` og testene bliver. Det er scenen og layoutet, der er nyt.
 
@@ -27,7 +27,7 @@
 - **En skinne, ikke et frit rum.** Gåderne står langs en svag, glødende sti **fra det mindste til det største** (AtomLabs røde tråd). Man trækker eller trykker "‹ mindre · større ›" (som i menuen, piletasterne på tastaturet), og kameraet glider til næste gåde. **Gåden i fokus** har sit spørgsmål på én knap, "Flyv ind" (HTML, mindst 44 px). De andre er lys længere ude med korte navne. Ingen fri drejning her, kun inde i en scene. *(Jeres svar 14. november 2026: skinne, ikke Fables ring. Koden laves, så stien kan lukkes til en ring, når der er 8-10 gåder.)*
 - **Kun de byggede gåder står på skinnen**, sorteret efter størrelse. En ny gåde rykker ind på sin plads. I begge ender står svage lys uden navn og linjen "Flere gåder er på vej". Koden bruger ingen pladsnumre.
 - **Objekterne** er enkle lys med en form, man kan kende, ikke små animationer. Livets begyndelse er ikke havbunden, og mørkt stof er ikke en glorie. En færdig gåde (✓) har en rolig ring.
-- **Første gang** flyver man ikke ind fra oversigten. Man står foran det første kort, stort, med én linje ("Videnskaben er ikke færdig. Det her er en af gåderne.") og én knap. Når man flyver ud igen, trækker kameraet sig tilbage, og lysene langs stien tændes ét efter ét: "Der er flere." Teksten `gaader-intro` flytter herned (træk fra).
+- **Første gang** flyver man ikke ind fra oversigten. Man står foran det første kort, stort, med én linje ("Videnskaben er ikke færdig. Det her er en af gåderne.") og én knap. Når man flyver ud igen, trækker kameraet sig tilbage, og lysene langs stien tændes ét efter ét: "Der er flere." Teksten `gaader-intro` flytter herned (træk fra). **Første gang står man foran Antistof (med navn), ikke foran den mindste** (Opus 17. november 2026): Ellers bliver Kvanteverdenen eller en anden ny, lille gåde den første, en ny bruger ser, og det er Antistof, der er prøvet. Laves i E20-rettelse A ([prompt-e20-rettelser.md](prompt-e20-rettelser.md)).
 - **Flyvningen** tager ca. 1,5 s (med `ROLIG` en hurtig toning), og et tryk springer den over. Tilbage-knappen og Esc går fra kort til sti. "Næste gåde ›" fører videre. Efter "Se det selv" lander man ved samme gåde.
 - **Ærligt talt:** Gåderne står side om side her, men i virkeligheden er de spredt fra det mindste til det største. Objekterne er symboler, ikke i skala.
 
@@ -38,6 +38,7 @@
 | Hvor blev antistoffet af? (`antistof`) | Bygget | Et par, der bliver til et glimt |
 | Gåde 6: Hvor stopper det periodiske system? (119 som krog, jeres svar) | Senere, efter prøven | En lille kerne af kugler |
 | Hvordan begyndte livet? (`begyndelsen`) | Bygget. **Ingen egen scene** (jeres svar på E10, 14. november 2026): Kolben bygges én gang, i Liv (L5), og kortet får en knap dertil | En kolbe med et lyn |
+| Hvordan virker tyngdekraften i det allermindste? (jeres idé 16. november 2026) | Senere, efter Kvantefysik forløb 1 (jeres svar 17. november 2026). Faktagrundlag: [E19](fable/E19-tyngdekraft.md) og [Opus' noter](fable/E19-tyngdekraft-noter.md). Pladsen (Fable: `størrelse: -3`, hvor målingerne stopper) afgøres, når kortet bygges | Et æble |
 | Er der liv andre steder? (`liv`) | Bygget | Et blåt lys blandt mange hvide |
 | Er der en planet mere i Solsystemet? (Planet 9) | Senere, med Solsystemets overblik | En stiplet klode og aflange baner |
 | Hvad er der inde i et sort hul? (`sorthul`) | Bygget | En sort skive med en glødende ring |
@@ -102,6 +103,8 @@ Teksterne i `js/data/gaader.js` ændres ikke for scenernes skyld. Nye påstande 
 4. Gåde 6: "Hvor stopper det periodiske system?" med 119 som krog (anbefalet) eller "Findes der et grundstof nr. 119?"?
 
 **Jeres svar (14. november 2026): alle fire anbefalinger.** Antistof først, en skinne, scenerne til de andre kort venter på prøven efter G4b, og gåde 6 hedder "Hvor stopper det periodiske system?".
+
+**Jeres svar om tyngdekraften (17. november 2026, E19):** Tyngdekraften kommer på listen som "Hvordan virker tyngdekraften i det allermindste?" (bygges efter Kvantefysik forløb 1), og "Hvad var der før Big Bang?" bliver også. Listen har derfor **11 gåder**, ikke 10, og stien lukkes til en ring ved 8-11. Spørgsmålet "Hvorfor krummer stof rumtiden?" bor i Rumtid i Kosmos.
 
 **Jeres svar om skinnen (14. november 2026, G4b):** Go til skinnen, som den så ud på billederne (pc og tablet på højkant). Lyset for Sort hul får en fladere ring, så det ikke ligner Saturn. "Næste gåde ›" flyver ud, glider et skridt op ad stien og ind igen (ca. 3 s, et tryk springer over).
 
