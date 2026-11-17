@@ -422,6 +422,8 @@ function opdaterByg() {
   $('livByg').hidden = Boolean(lp.tilstand) || o3.lab(); // mens L2 eller kopien kører, står kun deres knapper fremme
   $('livProtein').hidden = Boolean(byg) || o3.lab();
   $('livKopi').hidden = Boolean(byg) || Boolean(lp.tilstand);
+  // Turene står ikke fremme, mens L2 eller kopien kører (ellers får venstre panel en rullebjælke ved 1150 px). "Stop" viser dem igen.
+  document.querySelector('#liv .liv-forløb-liste').hidden = Boolean(lp.tilstand) || o3.lab();
   if (!byg) return;
   const færdig = byg.bygget >= BYG_TRIN;
   $('livBygTekst').innerHTML = færdig
