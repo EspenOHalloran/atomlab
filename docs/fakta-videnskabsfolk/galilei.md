@@ -122,4 +122,43 @@ Flere fælder: "1.000 gange" er fladen (afsnit 3). Marius' "29. december 1609" e
 5. **Michigan-forfalskningen** og **Meeus 1964** står kun i min hukommelse.
 
 ## Opus' noter
-*(skrives, når bogen skal bygges)*
+*Skrevet 17. november 2026 af Opus (effort høj) efter Fables fil. Tallene i afsnit 4 er sammenholdt nat for nat, og programmets tekster er læst (`maaner` i `js/data/sider/jupiter.js` og citatet `galileiJupiter` i `js/data/citater.js`). Intet er slået op på nettet igen. Jeres svar står under noterne.*
+
+**Det, der er nyt (planen vidste det ikke):**
+- **Gåden kan bygges på rigtige tal.** Tegningerne passer med JPL, så "Hvem er hvem?" har et facit, og det er ikke noget, vi har fundet på.
+- **Galilei tog selv fejl den 8. januar.** Han troede, det var Jupiter, der havde flyttet sig. Det er et ægte gæt til forløbet, som han selv gættede forkert på. Det passer med delens kernesætning: Han gættede, men han så efter igen næste nat.
+- **Han kalder dem aldrig måner,** kun "stjerner" og "planeter". Fortælleren må sige "måner", men et citat fra ham skal sige "stjerner".
+- **Papirstrimlen "MEDICEA"** over "Cosmica" sidder i netop det eksemplar, vi viser (blad 5). **Linsen** fra opdagelsen findes endnu (revnet, i Firenze). To gode ting til "For nørder".
+- **Papirprøven på blad 6 bagside** (to papirstykker på væggen, det ene 20 gange så bredt) kan barnet selv lave med en kikkert derhjemme. Den hører til "For nørder" som "Prøv det derhjemme".
+- **Newtons bog bygger på de samme fire måner** (Principia s. 402-403, se [newton.md](newton.md)). Bog 9 og 10 hænger sammen.
+- **Portrættet er fra 1635**, ikke 1636 (to malerier).
+
+**Hvor jeg er uenig eller vil rette:**
+1. **Callisto den 8. januar (afsnit 4).** Synsfeltet kan ikke forklare det alene. Den 7. januar var Io og Europa én prik mod øst (+2,2 og +2,3) og Ganymedes den ene mod vest. Den anden prik mod øst kan så kun være Callisto, 9,1 bueminutter ude. Han så altså længere ud end 7,5 bueminutter, og den 8. stod Callisto 10,0 ude. Det er næsten det samme. **Skriv ikke en grund.** Skriv "Callisto var der også, men den kom ikke med på hans tegning" og i "For nørder", at den stod helt ude ved kanten af det, han kunne se.
+2. **Facit til "Hvem er hvem?" skal skrives helt ud.** Afsnit 4 siger det kun halvt. Efter tallene: 7. jan. øst: Io og Europa (én prik) og Callisto, vest: Ganymedes. 10. jan.: Io foran Jupiter, øst: Europa og Ganymedes (én prik, 0,4 bueminutter fra hinanden) og Callisto. 12. jan.: Io og Callisto stod begge ved +1,2 til +1,3 og kan være én prik. Udfordringen skal godtage "to måner i én prik" og spørge om rækkefølgen, ikke afstandene (tegningerne er ikke målfaste).
+3. **Bladene til "Bogen selv":** Fables forslag har tre opslag, men det glødende sted på blad 28 er med i tabellen. Det får sit eget opslag (se nedenfor), for det er hans egen slutning.
+4. **"Galilei var 71" på portrættet:** Han havde fødselsdag 15. februar, og vi kender kun årstallet 1635. Skriv "omkring 70".
+5. **Oversættelsen af den første nat:** Programmet har allerede en dansk udgave i citatet `galileiJupiter`. Bogens glødende sted skal bruge den samme (eller citatet rettes til), så barnet ikke ser to forskellige oversættelser af samme sætning.
+6. **Forløbet** bliver for langt med alle syv tegninger hver for sig. Mit forslag er fire trin (højst fem minutter, gæt i to af dem):
+   1. *7. januar:* tre prikker på en linje. **Gæt:** stjerner langt bagved, eller noget, der hører til Jupiter? (Han troede selv det første.)
+   2. *8. januar:* alle tre på den anden side. **Gæt:** Har Jupiter flyttet sig, eller har prikkerne? (Han gættede selv på Jupiter.)
+   3. *9.-11. januar:* skyer, og så kun to. **Handling:** bladre gennem nætterne. Fortælleren læser hans sætning "ligesom Venus og Merkur om Solen".
+   4. *13. januar:* fire. **Handling:** lægge nætterne oven på hinanden, så prikkerne pendler frem og tilbage (wow). Så kernesætningen.
+7. **Gør det selv:** Jeg er enig i Jupiter → Månerne (mulighed A). Oversigten viser i dag banerne "lidt fra oven", så det skal prøves, om man kan dreje helt ned til kanten. Mulighed B ("Som Galilei så dem", kikkertens synsfelt og en dato) passer bedre sammen med idéen "Set fra Jorden" ved Saturn i [ideer.md](../ideer.md) end som et nyt sted nu.
+8. **Kikkerten:** "ca. 20-30 gange", som Fable skriver. Til barnet: "ca. 20 gange", og "han skrev selv over 30" i "For nørder".
+
+**Siderne til bogens fem lag** (billedet `nX` i archive.org-id `Sidereusnuncius00Gali`):
+| Lag | Hvad | Sider |
+|---|---|---|
+| 1. Forsiden | Uffizi-portrættet med filteret, "1564-1642", titel fx "Prikkerne ved Jupiter" | (titelbladet `n4` kan være forsidens baggrund) |
+| 2. Fortællingen | Vores egne tegninger i bogens stil: en ring, små stjernetegn, "Ori." og "Occ.". De kan flytte sig, det kan en skanning ikke | Efter blad 17-18 |
+| 3. Gåden | "Hvem er hvem?": Sæt de fire måner på hans syv tegninger. Hvorfor kun tre den 7.? | Blad 17-18 (`n40`-`n43`) ved siden af |
+| 4. Gør det selv | Jupiter → Månerne (`maaner`), og knappen ved citatet `galileiJupiter` | |
+| 5. Bogen selv | Opslag A: blad 17 forside (`n40`, den første nat). B: blad 17 bagside og 18 forside (`n41`, `n42`, skyerne, og han forstår det). C: blad 18 bagside (`n43`, fire). D: blad 28 (`n62`, `n63`, Kopernikus-argumentet). Ekstra til "For nørder": blad 5 forside (`n12`, papirstrimlen) og blad 6 (`n14` og `n15`, rygtet, kikkerten og papirprøven) | `n12`, `n14`, `n15`, `n40`-`n43`, `n62`, `n63` |
+
+**Det, der skal laves i drejebogen:** facit nat for nat (punkt 2), den samme oversættelse som citatet (punkt 5) og at tjekke billederne `n15`, `n62` og `n63` (Fable har kun regnet sig frem til numrene).
+
+## Jeres svar (17. november 2026)
+1. **Portrættet:** Uffizi 1635 ("Malet af Justus Sustermans i 1635. Galilei var omkring 70."). Rettet i planens tabel.
+2. **Kernesætningen:** A: "Jupiter har fire måner. Galilei fandt dem ved at tegne de samme lysprikker nat efter nat og se, at de flyttede sig, og jeg kan selv se dem gå rundt om Jupiter."
+3. Forløbet i fire trin, Gør det selv og siderne til de fem lag tages som i Opus' noter, til drejebogen viser andet.
