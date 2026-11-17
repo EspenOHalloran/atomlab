@@ -3,7 +3,7 @@
 // end Neptun 1979-1999, og Uranus' og Neptuns data er de samme som før (Kepler-regningen er flyttet til planeter.js).
 // I browseren: overblikket er Solsystemets forside og den første klode, skalaen med to stillinger, spole-skyderen
 // (et fuldt træk er et år, ⏪ ⏩ og "I dag"), datoen 1800-2100, et tryk vælger den nærmeste planet, flyvningen ind
-// til en planet og tilbage, datoen følger med til Jorden, Merkur og Pluto som steder med et panel, og konsollen er
+// til en planet og tilbage, datoen følger med til Jorden, Merkur og Pluto med deres egen visning, og konsollen er
 // uden fejl.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { PLANETER, plads, solAfstand, lysTid, FØRSTE, SIDSTE } from '../js/data/planeter.js';
@@ -111,17 +111,19 @@ if (!process.argv.includes('--uden-browser')) {
   tjek('planeterne kredser mod uret set fra ekliptikkens nordpol', await f((t) => t.modUret()));
   // Tryk: den nærmeste midte inden for 44 px
   tjek('et tryk lige ved Jupiter vælger Jupiter, og et tryk langt fra alt vælger intet', await f((t) => t.trykNær('jupiter', 10) === 'jupiter' && t.trykNær('jupiter', 200) === null));
-  // Pluto er et sted med et panel (Merkur har sit eget besøg fra MP2)
-  await side.evaluate(() => window.atomlabTest.solsystem.gåTil('pluto'));
-  const sideP = await side.evaluate(() => window.atomlabTest.solsystem.side());
-  tjek('Pluto: kameraet flyver ind, og panelet har to tal og en tekst om New Horizons', sideP.nøgle === 'overblik:pluto' && sideP.tal.length === 2 && /New Horizons/.test(sideP.tekst), JSON.stringify(sideP.tal));
-  await side.evaluate(() => window.atomlabTest.solsystem.gåTil('overblik'));
   await side.screenshot({ path: `${UD}/overblik-pc.png` });
   // Merkur har sin egen visning: Et besøg flyver ind og skifter visning, og tidsskyderen forsvinder (fejl 17. november 2026,
   // klodegitteret går i testbrowseren gennem rejseskiltet, så det rigtige besøg testes her)
   await f((t) => t.besøg('merkur', true));
   await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'merkur', null, { timeout: 20000 });
   tjek('Merkur fra overblikket: Merkurs egen visning, uden overblikkets tidsskyder', await side.evaluate(() => !document.querySelector('#solsystem .ob-tid')));
+  await side.evaluate(() => document.querySelector('#solsystem .sol-klode[data-id="overblik"]').click());
+  await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'overblik', null, { timeout: 20000 });
+  await side.waitForFunction(() => !window.atomlabTest.solsystem.fænomen().flyver(), null, { timeout: 20000, polling: 200 });
+  // Pluto har også sin egen visning (MP3): samme tjek
+  await f((t) => t.besøg('pluto', true));
+  await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'pluto', null, { timeout: 20000 });
+  tjek('Pluto fra overblikket: Plutos egen visning, uden overblikkets tidsskyder', await side.evaluate(() => !document.querySelector('#solsystem .ob-tid')));
   await side.evaluate(() => document.querySelector('#solsystem .sol-klode[data-id="overblik"]').click());
   await side.waitForFunction(() => window.atomlabTest.solsystem.valgt() === 'overblik', null, { timeout: 20000 });
   await side.waitForFunction(() => !window.atomlabTest.solsystem.fænomen().flyver(), null, { timeout: 20000, polling: 200 });

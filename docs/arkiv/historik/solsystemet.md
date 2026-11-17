@@ -1,5 +1,12 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Merkur MP2, stederne, isen, Solen, der vender om, og flybyen. Merkur er færdig** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), [E16](../fable/E16-merkur-pluto-noter.md)).
+- **Stederne** Caloris (morgensol fra øst, "Edderkoppen" i midten), de lyse huller i Raditladi (MESSENGERs nærbillede i panelet) og isen ved Nordpolen (Prokofiev, Solen ca. 4° oppe). Datoen glider, så Solen står fra samme side som i fotoene, og tiden står stille ved et sted. Fem navne på kloden.
+- **"Isen (set med radar)":** Arecibos radarbillede (NASA PIA15530) lagt præcist på polkortet (`lav_merkur_is.py`, `pol.is` i `klippeplanet.js`). Gult, der lyser i den evige skygge.
+- **Solen, der vender om:** en tegning af horisonten i overlaget, regnet med klodens egen bane (baglæns i 8,1 døgn og 1,1°). I træet under "Himlen" og flybyens stop 4, med "↻ Se det igen".
+- **Flybyen med 6 stop**, siden med kernesætningen og fire spørgsmål, "Soldøgn" og "Sublimation" i Ordbogen. Faktatjekket står i [del 8, afsnit 11](../fakta-solsystemet/del8-merkur-og-pluto.md).
+- **Overblikket:** Merkur er væk fra "Kort besøg" og flyver ind til sit eget besøg (`merkurSenere` er fjernet). `tests/merkur.mjs` har 41 tjek.
+
 **Lavet (17. november 2026): Merkur MP1, kortet, højderne og skelettet** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), Opus' noter [E16](../fable/E16-merkur-pluto-noter.md)).
 - **Merkur i Solsystemet** mellem Solen og Venus (`js/kosmos/merkur.js`): MESSENGERs kort (8k på pc, 4k på tablet) og højderne, gråbrun, aksen og drejningen efter datoen (passer med Horizons under 0,01°), ▶ et døgn i sekundet og ⏩ seks (fra solopgang til solopgang på ca. 29 s), "Bjergene 10 gange højere" og en kort side. Stederne, tegningen af Solen og flybyen kommer i MP2.
 - **Kortet** (`lav_merkur.py`): BDR med de brede striber gjort jævne med LOI (udjævning 80 km), højdekortet rullet en halv omgang. Ca. 21 MB på pc og 9,5 MB på tablet.

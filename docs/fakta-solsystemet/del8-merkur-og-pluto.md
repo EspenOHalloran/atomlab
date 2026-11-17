@@ -202,3 +202,24 @@ Teksterne i `js/data/sider/merkur.js` og Ordbogens "Soldøgn" og "Sublimation". 
 | BepiColombo "skal efter planen" i bane 21. november 2026 og dele sig 9.-10. december | OK som plan, **tjekkes igen efter 21. november** | ESA's side "Latest updates" (søgeresultat 17. november 2026) |
 | Merkur kaster ca. en tiendedel af lyset tilbage | OK (Bond 0,068, geometrisk 0,142) | Afsnit 1 |
 | Hokusai: ungt krater med lyse stråler | OK som RS, uden tal | Afsnit 3 |
+
+## 12. Faktatjek MP3 (Plutos og Charons tekster, 17. november 2026, Opus)
+Teksterne i `js/data/sider/pluto.js` og tallene i `js/kosmos/pluto.js` og `js/data/pluto.js`. Kilderne er afsnit 1-4 ovenfor, JPL Horizons og én websøgning.
+
+| Påstand | Vurdering | Kilde |
+|---|---|---|
+| Pluto er mindre end vores måne, ca. 2.380 km bred | OK (2.376 km mod 3.475 km) | NSSDC, afsnit 1 |
+| Ca. −230 °C | OK (fælde 15) | NSSDC, NASA |
+| Vandis er hård som sten og danner bjerge, kvælstof ligger som en gletsjer, der bevæger sig | OK | NASA, afsnit 4 |
+| Charon er halvt så bred og ca. otte Pluto-bredder væk | OK (1.212 km, 19.596 / 2.376 = 8,2) | NSSDC |
+| Bundet begge veje, en omgang på 6,4 jorddøgn | OK (6,387 døgn) | NSSDC |
+| Tyngdepunktet ca. 940 km over overfladen, 2.126 km fra midten, Charon ca. 12 % af Plutos masse | OK, regnet (1,586 / 13,03 = 12,2 %) | NSSDC |
+| Charon ca. 3,8° bred på Plutos himmel, ca. syv gange så bred som vores måne | OK, regnet (Månen ca. 0,52°) | Afsnit 2 |
+| Luften mest kvælstof, ca. 100.000 gange tyndere end Jordens | OK (ca. 10 mikrobar, 99 % N₂) | NSSDC |
+| Dis i mange tynde lag, blå ring set bagfra efter forbiflyvningen | OK | Photojournal PIA19948, Wikipedia (afsnit 4) |
+| Aksen hælder ca. 120°, drejer baglæns | OK | NSSDC, IAU |
+| Punktet under Solen passer med Horizons inden for ca. 0,1° | OK (målt 0,04° på fire datoer, `tests/pluto.mjs`) | JPL Horizons (PLU060), 17. november 2026 |
+| Længde 0° vender mod Charon | OK (Horizons: punktet under Charon ved ca. 1,5° Ø) | USGS' navneliste, Horizons |
+| Charons røde nordpol: gas fra Pluto fryser fast **i polarnatten**, og **ultraviolet lys** laver den om til et rødbrunt stof | **Rettet** (stod "i sollyset") | Grundy m.fl. 2016 (Nature), kun læst i omtaler (Washington University, Scientific American). Senere arbejde (SwRI) mener, at årstidernes luft og solvinden også spiller ind, så teksten siger "nok" |
+| Området ved nordpolen fik i 2026 navnet Neverland Regio | OK (skrevet uden "Mordor") | USGS' navneliste, 2. februar 2026 |
+| Charon er lidt mørkere end Pluto (kun i en kommentar) | Skøn, ikke i teksten | NSSDC (Pluto 0,52) |
