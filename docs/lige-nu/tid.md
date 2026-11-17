@@ -5,6 +5,7 @@
 **Senest lavet (16. november 2026): E14-rettelserne før prøven (Fables punkt 1 og 4, jeres go 15. november 2026).**
 - **Myonerne** (forløb 2, trin 5, `js/data/forloeb/tid.js`): Spørg siger nu "Myoner bliver til ca. 15 km oppe og lever så kort, at de burde gå i stykker deroppe. Hvor mange når ned?" i stedet for "Myoner fra rummet" (faktatjekket: arXiv:1906.03934, `docs/fakta-tid.md`).
 - **Rejsen trin 2** (`js/kosmos/tid.js`): Lander skibet, uden at "Dit ur" er set, skriver `forløbVink` "Du nåede ikke at se dit ur. Flyv igen, og tryk på "Dit ur", mens du flyver." ⏩ i forløbets linje hedder "⏩ Spol frem" i stedet for "⏩ Hurtigere". Testen `tid-forloeb` har et nyt tjek af begge dele.
+- **Rettet 17. november 2026:** Urenes bokse ("Dit ur" og "Jordens ur") blinkede, fordi de blev smallere og bredere med teksten. Nu bliver de kun bredere under en rejse og får deres egen bredde igen ved "Forfra" eller en ny vinduesstørrelse (`holdBredde` i `js/kosmos/tid.js`, nyt tjek i `tests/tid.mjs`).
 - **Venter på prøven** (Fables liste i [E14-noter.md](../fable/E14-noter.md)): aldrene stort ved hjemkomsten, trin 3's tekst, myonpanelet uden µs og γ, bygen 11-13, mærkaten i B2 og målebåndet.
 
 **T4 venter (besluttet 8. november 2026):** Udsigten fra cockpittet (stjernerne samler sig foran, blå foran og røde bagude, en shader i familie med `js/kosmos/linse.js`), er ikke lavet, men ligger som en mulig udvidelse i fremtiden. Prompten er [prompt-tid-t4.md](../prompt-tid-t4.md), og den kan bruges uændret, hvis I en dag giver go.

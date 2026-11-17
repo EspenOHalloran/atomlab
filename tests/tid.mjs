@@ -170,7 +170,26 @@ await sætFart(0);
 tjek('skyderen viser "50 %", og underteksten siger "kun lidt hurtigere"', (await vist('Fast fart')) === '50 %' && (await E(() => { atomlabTest.kosmos.trykPå('Flyv til Alpha Centauri'); atomlabTest.kosmos.spol(1); return atomlabTest.kosmos.fase()?.tekst; }))?.includes('kun lidt hurtigere'));
 const halv = await E(() => { atomlabTest.kosmos.spol(55); return atomlabTest.kosmos.fænomen().ure(); });
 tjek('50 % hjem fra Alpha Centauri: du er 28, tvillingen 30', halv.skibAlder.startsWith('Du: 28 år') && halv.jordAlder === 'Tvillingen: 30 år', JSON.stringify(halv));
+// Urenes bokse må ikke blive smallere undervejs (de blinkede, når teksten blev kortere, 17. november 2026)
+const bredder = () => E(() => [...document.querySelectorAll('.tid-ur')].map((b) => b.getBoundingClientRect().width));
+const skrumpede = await E(async () => {
+  atomlabTest.kosmos.trykPå('Forfra');
+  atomlabTest.kosmos.trykPå('Flyv til Alpha Centauri');
+  const mål = () => [...document.querySelectorAll('.tid-ur')].map((b) => b.getBoundingClientRect().width);
+  let før = mål(), fejl = 0;
+  for (let i = 0; i < 80; i++) {
+    atomlabTest.kosmos.spol(0.4);
+    const nu = mål();
+    if (nu.some((w, j) => w < før[j] - 0.5)) fejl++;
+    før = nu;
+  }
+  return fejl;
+});
+tjek('urenes bokse bliver aldrig smallere under en rejse', skrumpede === 0, skrumpede);
+const breddeRejse = await bredder();
 await E(() => atomlabTest.kosmos.trykPå('Forfra'));
+const breddeForfra = await bredder();
+tjek('"Forfra" giver boksene deres egen bredde igen', breddeForfra[0] < breddeRejse[0], `${breddeRejse} → ${breddeForfra}`);
 await sætFart(4);
 tjek('⏩ findes (tidsknappen)', await page.isVisible('#kosmosTid [data-tid="hurtig"]'));
 let u = await ure();
