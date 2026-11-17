@@ -10,6 +10,9 @@
 //   oven på alt), ikke regnet lys. Farverne er valgt efter Veneras fotos og målingen af lyset dernede.
 // - venus.js tager skyerne væk (skyderen "Under skyerne" på 100 %), når kameraet er under skyernes top, og sætter dem
 //   tilbage, når man zoomer op over dem igen (iSkyerne()).
+// - Undervejs skifter underteksten ved hvert trin (over skyerne, i skyerne, stuetemperatur, under skyerne, varmere end
+//   en ovn og landet, NED_TRIN i js/data/sider/venus.js), og en søjle ved måleren viser, hvor man er i forhold til
+//   skyerne (jeres feedback 17. november 2026: "jeg forstår ikke rigtig, hvad det gør").
 
 import * as THREE from 'three';
 import { ROLIG } from '../scene3d.js';
@@ -19,21 +22,39 @@ import { VIRA, SKYER, luftVed, målerTekst } from '../data/luft-venus.js';
 const MIDDEL_KM = 6051.8; // VIRA's højder er over middelradius (NSSDC)
 const START_KM = 320; // så højt over stedet starter turen ned
 const SLUT_KM = 3; // så højt over jorden stopper kameraet (MARGEN i venus.js er 2 km)
-const NED_TID = 26; // sekunder fra 320 km til 3 km
+const NED_TID = 34; // sekunder fra 320 km til 3 km
 const LAND_TID = 2.5; // sekunder: måleren tager det sidste stykke ned
 const VINKEL = [55, 12]; // grader under vandret, kameraet kigger ned øverst og nederst
-// Højden over jorden (km) gennem turen: knæk, så kameraet er nogle sekunder inde i skyerne (e er 0 til 1, blødt)
-const KNÆK = [[0, START_KM], [0.25, 74], [0.5, 44], [0.8, 10], [1, SLUT_KM]];
+// Højden over jorden (km) gennem turen efter tiden (u er 0 til 1): Hvert trin får ca. 4-8 sekunder, så underteksten kan
+// læses, og det går langsomt forbi stuetemperaturen ved ca. 55 km
+const KNÆK = [[0, START_KM], [0.12, 100], [0.26, 70], [0.38, 58], [0.56, 52], [0.74, 22], [1, SLUT_KM]];
+// Trinene og den højde over middelradius (km), de starter under (underteksterne står i NED_TRIN i js/data/sider/venus.js).
+// 'over' starter, når kameraet begynder at dale, og 'landet', når måleren har taget det sidste stykke.
+export const TRIN = [['over', Infinity], ['skyer', SKYER.top], ['stue', 58.5], ['under', SKYER.bund], ['ovn', 20], ['landet', -Infinity]];
+const glat = (t) => t * t * t * (t * (t * 6 - 15) + 10); // som kameraets rejse (js/solsystem/rejse.js)
+// Tiden (0 til 1) ved e: rejsen giver e = glat(tiden), så den vendes om (glat vokser hele vejen)
+function tidVed(e) {
+  let a = 0, b = 1;
+  for (let i = 0; i < 22; i++) {
+    const m = (a + b) / 2;
+    if (glat(m) < e) a = m; else b = m;
+  }
+  return (a + b) / 2;
+}
 const FOTO = new URL('venera13-foto.jpg', MAPPE).href;
 
-// Højden over jorden ved e (0 til 1) og vinklen ned mod jorden
+// Højden over jorden ved e (0 til 1, rejsens bløde fremdrift) og vinklen ned mod jorden
 export function nedHøjde(e) {
+  e = tidVed(e);
   let i = 0;
   while (i < KNÆK.length - 2 && e > KNÆK[i + 1][0]) i++;
   const [e0, h0] = KNÆK[i], [e1, h1] = KNÆK[i + 1];
   return h0 + (h1 - h0) * THREE.MathUtils.clamp((e - e0) / (e1 - e0), 0, 1);
 }
-const nedVinkel = (e) => THREE.MathUtils.lerp(VINKEL[0], VINKEL[1], e) * (Math.PI / 180);
+const nedVinkel = (e) => THREE.MathUtils.lerp(VINKEL[0], VINKEL[1], tidVed(e)) * (Math.PI / 180);
+// Søjlen ved måleren går fra jorden til 100 km over middelradius (procent fra toppen)
+const SØJLE_KM = 100;
+const iSøjle = (h) => `${(100 * (1 - THREE.MathUtils.clamp(h / SØJLE_KM, 0, 1))).toFixed(1)}%`;
 
 // Kuplen om kameraet: dis i skyerne, orange himmel og dis over jorden under dem
 const KUPPEL_GLSL = {
@@ -62,13 +83,15 @@ const KUPPEL_GLSL = {
 
 // gruppe: fænomenets gruppe (ikke skaleret). sted(): { grund, op, nord } i systemets retninger (grund: punktet på jorden
 // ved stedet, med højden). jordKm(): jordens højde over kortets kugle ved stedet. kortKm: kortets radius (6.051,0 km).
-// overlag: elementet oven på 3D-billedet. ændret(): Indstillinger skal bygges om (fotoets kontakt).
-export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, overlag, ændret }) {
+// overlag: elementet oven på 3D-billedet. ændret(): Indstillinger skal bygges om (fotoets kontakt). nytTrin(id): turen er
+// nået til et nyt trin (TRIN), så venus.js skifter underteksten.
+export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, overlag, ændret, nytTrin }) {
   let fase = null; // null, 'hen' (flyver hen over stedet), 'ned', 'lander' eller 'landet'
   let landT = 0;
   let fotoTil = true;
   let hVist = START_KM; // den højde, måleren viser (km over jorden)
   let kuppelFra = false; // kun til tests
+  let trinNr = -1; // det trin i TRIN, turen er nået til (det går kun fremad)
 
   // ---------- Kuplen ----------
   const kuppelMat = new THREE.ShaderMaterial({
@@ -95,9 +118,12 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
   // Kuplen efter højden h (km over middelradius)
   function sætKuppel(h) {
     const u = kuppelMat.uniforms;
-    // (helt tæt ved skyernes top, så skylaget kan skjules bag disen, når kameraet kommer ind i det: iSkyerne)
-    const iSky = THREE.MathUtils.smoothstep(h, SKYER.bund - 3, SKYER.bund) * (1 - THREE.MathUtils.smoothstep(h, SKYER.top, SKYER.top + 2.5));
     const under = 1 - THREE.MathUtils.smoothstep(h, SKYER.bund - 3, SKYER.bund);
+    // (helt tæt ved skyernes top, så skylaget kan skjules bag disen, når kameraet kommer ind i det: iSkyerne)
+    let iSky = THREE.MathUtils.smoothstep(h, SKYER.bund - 3, SKYER.bund) * (1 - THREE.MathUtils.smoothstep(h, SKYER.top, SKYER.top + 2.5));
+    // Over skyerne tager disen til fra ca. 130 km, så skyernes lyse top ikke fylder hele billedet (toplinjen og
+    // panelerne skal kunne læses), og man kan se, at man nærmer sig dem
+    iSky = Math.max(iSky, 0.65 * (1 - THREE.MathUtils.smoothstep(h, SKYER.top, 130)) * (1 - under));
     kuppel.visible = iSky + under > 0.002;
     if (!kuppel.visible) return;
     const f = THREE.MathUtils.clamp(h / SKYER.bund, 0, 1); // 1 lige under skyerne, 0 ved jorden
@@ -117,13 +143,17 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     <figure class="venus-foto" hidden><img src="${FOTO}" alt="Venera 13's farvefoto af jorden på Venus: flade, lyse sten og mørk jord, og forneden en del af landeren med tænder" draggable="false">
       <figcaption>Venera 13's foto fra jorden på Venus, 1. marts 1982 (USSR/NASA). Forneden ses en del af landeren.</figcaption></figure>
     <div class="venus-maaler" hidden role="group" aria-label="Måleren">
-      <div><span>Højde over jorden</span><strong class="vm-hoejde"></strong></div>
-      <div><span>Temperatur</span><strong class="vm-temp"></strong></div>
-      <div><span>Lufttryk (Jorden: 1 bar)</span><strong class="vm-tryk"></strong></div>
+      <div class="vm-soejle" aria-hidden="true"><i class="vm-bar"><i class="vm-skyer" style="top: ${iSøjle(SKYER.top)}; bottom: ${(100 - parseFloat(iSøjle(SKYER.bund))).toFixed(1)}%"></i><i class="vm-prik"></i></i>
+        <small style="top: 0">${SØJLE_KM} km</small><small class="vm-skytekst" style="top: ${iSøjle((SKYER.top + SKYER.bund) / 2)}">skyer</small><small style="bottom: 0">jorden</small></div>
+      <div class="vm-tal"><span>Højde over jorden</span><strong class="vm-hoejde"></strong></div>
+      <div class="vm-tal"><span>Temperatur</span><strong class="vm-temp"></strong></div>
+      <div class="vm-tal"><span>Lufttryk (Jorden: 1 bar)</span><strong class="vm-tryk"></strong></div>
     </div>`;
   const foto = boks.querySelector('.venus-foto');
   const måler = boks.querySelector('.venus-maaler');
   const felter = { højde: boks.querySelector('.vm-hoejde'), temperatur: boks.querySelector('.vm-temp'), tryk: boks.querySelector('.vm-tryk') };
+  const prik = boks.querySelector('.vm-prik');
+  let prikVist = '';
   overlag.append(boks);
   const vist = { højde: '', temperatur: '', tryk: '' };
   const kold = new THREE.Color(0.75, 0.86, 1), varm = new THREE.Color(1, 0.55, 0.25);
@@ -139,6 +169,19 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     const f = THREE.MathUtils.clamp((luft.temperatur + 40) / 500, 0, 1);
     const c = `#${farve.copy(kold).lerp(varm, f).getHexString()}`;
     if (c !== tempFarve) felter.temperatur.style.color = tempFarve = c;
+    // Prikken i søjlen (højden over middelradius, som skyerne i søjlen)
+    const top = iSøjle(hMiddel);
+    if (top !== prikVist) prik.style.top = prikVist = top;
+  }
+  // Det trin, turen er nået til (kun fremad: zoomer man selv op efter landingen, bliver det ved "landet")
+  function tjekTrin(hMiddel) {
+    if (fase === 'hen' || fase === null) return;
+    let nr = TRIN.length - 2;
+    if (fase === 'landet') nr = TRIN.length - 1;
+    else while (nr > 0 && !(hMiddel < TRIN[nr][1])) nr--;
+    if (nr <= trinNr) return;
+    trinNr = nr;
+    nytTrin?.(TRIN[nr][0]);
   }
   function visFoto() {
     const til = fase === 'landet' && fotoTil;
@@ -160,6 +203,7 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     fase = 'hen';
     landT = 0;
     fotoTil = true;
+    trinNr = -1;
     vej(0, kam, mål);
     rejse.flyv({
       fokus: () => { vej(0, kam, mål); return mål; }, op: () => sted().op,
@@ -214,6 +258,7 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     } else hVist = Math.max(0, hMiddelNu - jord);
     // Måleren viser luften, hvor "sonden" er (under landingen længere nede end kameraet)
     visMåler(hVist, jord + hVist);
+    tjekTrin(jord + hVist);
     sætKuppel(fase === 'lander' || fase === 'landet' ? Math.min(hMiddelNu, jord + hVist + 0.5) : hMiddelNu);
     if (kuppelFra) kuppel.visible = false;
     kuppel.position.copy(kamera.position);
@@ -240,7 +285,7 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     // Kun til tests: skjul kuplen (for at se jorden bag den)
     udenKuppel(til) { kuppelFra = til; },
     test: () => ({
-      fase, hVist, hMiddel: hMiddelNu, jord: jordMiddel(), måler: !måler.hidden, foto: !foto.hidden,
+      fase, trin: TRIN[trinNr]?.[0] ?? null, hVist, hMiddel: hMiddelNu, jord: jordMiddel(), måler: !måler.hidden, foto: !foto.hidden,
       tekst: { ...vist }, kuppel: kuppel.visible ? { himmel: kuppelMat.uniforms.uHimmelA.value, dis: kuppelMat.uniforms.uDisA.value } : null,
       vira: VIRA.length,
     }),

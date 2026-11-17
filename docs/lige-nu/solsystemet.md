@@ -1,15 +1,15 @@
 # Lige nu: Solsystemet og Kosmos
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (Pluto MP3).*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (turen ned på Venus).*
 
-**Senest lavet (17. november 2026): Pluto MP3, kortet, højderne, Charon, dansen og disen** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), [E16](../fable/E16-merkur-pluto-noter.md), [kode/pluto.md](../kode/pluto.md)).
-- **Pluto sidst i Solsystemet** (`js/kosmos/pluto.js`): New Horizons' kort i farver (gråtonerne på 300 m med farven fra det grove farvekort, 8k på pc, 4k på tablet) og højderne. Det sydligste, ingen har set, er mørkt, og bagsiden er glat. Aksen og drejningen efter datoen passer med Horizons (0,04°). Kortet beholder 180° i midten (`midte` i `klippeplanet.js`, valgfrit).
-- **Charon** i den rigtige størrelse og afstand, bundet begge veje, med en rødbrun nordpol (tegnet). Træet: Måner → Charon (Pluto står ved siden af).
-- **Dansen:** Langt ude kigger kameraet på det fælles tyngdepunkt (ca. 940 km over overfladen), så ⏩ viser Pluto og Charon danse om det. "Navne" viser krydset og banerne.
-- **Disen** (`js/kosmos/pluto-dis.js`) lyser blåt i lag, og "Modlys" flyver kameraet om bag Pluto.
-- **Overblikket:** Pluto har `fænomen: 'pluto'` og er ude af "Kort besøg" (som Merkur-fejlen, erfaringen sagde MP3). Siden med to emner og Charon, "Fælles tyngdepunkt" i Ordbogen. Faktatjek i [del 8, afsnit 12](../fakta-solsystemet/del8-merkur-og-pluto.md). `tests/pluto.mjs` har 23 tjek.
+**Senest lavet (17. november 2026): Turen ned til Venera 13 efter jeres feedback** ("jeg forstår ikke rigtig, hvad det gør").
+- **Problemet:** Fra ca. 100 km var billedet én ensfarvet flade, og kun måleren skiftede. Underteksten stod uændret hele vejen.
+- **A. Seks undertekster** skifter undervejs: over skyerne, inde i skyerne, stuetemperatur (ca. 55 km), under skyerne, varmere end en ovn og landet (`NED_TRIN`, faktatjekket i [del 7, afsnit 13](../fakta-solsystemet/del7-venus.md)). Turen tager nu 34 s og går langsomt forbi 55 km. "Lige nu" peger på søjlen i stedet for at gentage tallene.
+- **B. En søjle ved måleren** (jorden til 100 km) med skylaget og en prik, der glider ned.
+- **D.** Skyderen "Under skyerne" er skjult under turen (den sprang selv), og disen tager til fra 130 km, så skyernes lyse top ikke fylder billedet. Telefonen på langs har en smal måler.
+- `tests/venus.mjs` har 3 nye tjek (trinene, prikken og skyderen). **C** (skystriber, der suser forbi) venter, til I har prøvet turen.
 
-**Før det:** Merkur MP2 (Merkur er færdig), Merkur MP1, Venus V5 (Venus er færdig), Venus V3, Feedback nr. 3 (Solen som en bedre tegning), feedback om at åbne Kosmos og Solsystemet, Feedback nr. 5 (ryk ved skift), Feedback nr. 1, 2 og 4, Opus' noter til Fables drejebog til Merkur og Pluto (E16), rettelserne fra E14 i "Rundt om Solen", overblikket trin 4 (forløbet og "Rejs med lyset"), overblikket trin 1-3, Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
+**Før det:** Pluto MP3, Merkur MP2 (Merkur er færdig), Merkur MP1, Venus V5 (Venus er færdig), Venus V3, Feedback nr. 3 (Solen som en bedre tegning), feedback om at åbne Kosmos og Solsystemet, Feedback nr. 5 (ryk ved skift), Feedback nr. 1, 2 og 4, Opus' noter til Fables drejebog til Merkur og Pluto (E16), rettelserne fra E14 i "Rundt om Solen", overblikket trin 4 (forløbet og "Rejs med lyset"), overblikket trin 1-3, Stå på Mars lettere på tablet (G1 trin 3, del 2, H), billederne frigives (G1 trin 3, del 1, G), måleren og hakkene på Mars (G1 trin 1 og 2), Venus V2, Venus V1, planen for Venus, Uranus lukket for nu, Uranus og Neptun UN5, UN4, UN3, UN2 og UN1, planen, tre ønsker fra jer og Jupiter J1-J5. Se [historikken](../arkiv/historik/solsystemet.md).
 
 **Næste (venter på jeres go):**
 00. **Feedback fra prøven 16. november 2026:** Alle fem er lavet (nr. 3, Solen, 17. november 2026). Tilbage er jeres målinger af nr. 5 og af Solen med `?maal` på Tab A11. Et foto fra SDO blev fravalgt (kun forsiden, bagsiden tom, 2-4 MB).
