@@ -1303,6 +1303,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .ag-plads + .ag-plads { margin-left: 2px; }
 #opdagelser .ag-plads.lagt { color: var(--bog-blaek); border-bottom-color: transparent; }
 #opdagelser .ag-ord.nøgle.fundet .ag-latin { text-shadow: 0 0 10px rgba(201, 162, 74, 0.9); }
+#opdagelser .ag-ord.nøgle.fundet .ag-plads { min-width: 0; margin: 0; border-bottom: 0; }
 #opdagelser.i-forløb > .opd-rum { display: grid !important; grid-area: vindue !important; } /* Forløbet i bogen: bogen er scenen, og bladringen er væk imens */
 /* Under turen: "‹ Hylden" er fremme (stilguiden B3) i bogens øverste hjørne, så tegningen beholder sin plads, og
    bladringen er væk */

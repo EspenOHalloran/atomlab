@@ -212,8 +212,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
     && annulo && ag.hel && ag.tal === 0 && ag.fundet === 6 && ag.ord.startsWith('Annulo cingitur') && /anagram/i.test(ag.så), JSON.stringify({ forkert, efterForkert, ag }));
   await page.click('.forløb-linje .fl-næste');
   await fase('slut');
-  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, lille: document.querySelector('.forløb-linje .fl-lille')?.textContent, veje: [...document.querySelectorAll('.forløb-linje .fl-vej')].map((v) => v.textContent), vej: document.querySelector('.forløb-linje .fl-vej:last-child')?.textContent }));
-  await page.click('.forløb-linje .fl-vej:last-child');
+  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, lille: document.querySelector('.forløb-linje .fl-lille')?.textContent, veje: [...document.querySelectorAll('.forløb-linje .fl-vej')].map((v) => v.textContent), vej: [...document.querySelectorAll('.forløb-linje .fl-vej')].pop()?.textContent }));
+  await page.click('.forløb-linje .fl-vej >> text=Prøv ringen selv');
   await page.waitForTimeout(300);
   const videre = await O(() => ({ opslag: atomlabTest.opdagelser.vist().opslag, låst: atomlabTest.opdagelser.låst(), kører: atomlabTest.opdagelser.forløb.kører(), lab: atomlabTest.opdagelser.scene()?.tilstand().lab }));
   // Laboratoriet har de tre kapitler: "Den lille prik" giver nætterne, og nat 16 viser navnet Titan
