@@ -7,7 +7,7 @@
 // "For nørder" og "Ærligt talt" er de fælles foldebokse (js/lag.js), "Se det selv" er en data-gaa-knap (js/gaa.js), og et trin
 // med hvorfor får det fælles "Hvorfor?"-kort under Så (fx "Hvornår er noget opdaget?", Gåderne G3).
 
-import { gådeMed, bygget, påSkinnen, SKINNE_ÆRLIGT } from './data/gaader.js';
+import { gådeMed, bygget, påSkinnen, SKINNE_ÆRLIGT, skalaOrd, førsteLinje, FØRSTE_GÅDE } from './data/gaader.js';
 import { HVORFOR } from './data/hvorfor.js';
 import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
@@ -104,13 +104,14 @@ function visOversigt(valg = {}) {
     førsteGangForbi();
     første = false;
   }
-  if (første) fokusId = række[0]?.id ?? null; // første gang står man foran det mindste
+  // Første gang står man foran Antistof (efter navnet, så en ny, mindre gåde ikke bliver den første)
+  if (første) fokusId = (række.find((g) => g.id === FØRSTE_GÅDE) ?? række[0])?.id ?? null;
   else if (!række.some((g) => g.id === fokusId)) {
     // En ukendt gåde: den første, man ikke har gjort færdig
     const færdige = hentFærdige();
     fokusId = (række.find((g) => !færdige[g.id]) ?? række[0])?.id ?? null;
   }
-  linjeTekst = første ? 'Videnskaben er ikke færdig. Det her er en af gåderne.' : tænd ? 'Der er flere.' : '';
+  linjeTekst = første ? førsteLinje(række.length) : tænd ? 'Der er flere.' : '';
   const id = fokusId;
   const vis = () => skinne.vis(påSkinnen(), fokusId, hentFærdige(), { fokus: visFokus, vælg: flyvInd, første, ud: Boolean(valg.ud), tænd, videre: valg.videre ?? 0 });
   if (skinne) vis();
@@ -124,6 +125,7 @@ function visFokus(id) {
   const g = gådeMed(id);
   if (!g) return;
   $('gaaderFokusSpm').textContent = g.spørgsmål;
+  $('gaaderFokusSkala').textContent = skalaOrd(g.størrelse);
   $('gaaderFokusLinje').textContent = hentFærdige()[id] ? `✓ ${g.linje}` : g.linje;
   $('gaaderInd').dataset.gaade = id;
   const l = $('gaaderFørste');
@@ -252,7 +254,7 @@ export function lavGåder() {
   panel.addEventListener('scroll', tjekRulning, { passive: true });
   new ResizeObserver(tjekSnart).observe(panel);
   panel.addEventListener('toggle', tjekSnart, true); // en foldeboks, der foldes ud
-  // Skinnen: "‹ mindre · større ›" og gåden i fokus
+  // Skinnen: pilene "‹" og "›" (mindre og større) og gåden i fokus
   $('gaaderFokus').addEventListener('click', (h) => {
     const b = h.target.closest('button');
     if (!b || b.disabled || !skinne) return;

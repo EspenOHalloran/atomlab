@@ -421,3 +421,25 @@ export const gådeMed = (id) => GÅDER.find((g) => g.id === id) ?? null;
 export const bygget = (g) => Array.isArray(g?.trin) && g.trin.length > 0;
 // Gåderne på skinnen (G4b): de byggede, fra det mindste til det største
 export const påSkinnen = () => GÅDER.filter(bygget).sort((a, b) => a.størrelse - b.størrelse);
+
+// Ord for skalaen (E20, svar 7.2): står med småt under navnet på skinnen, så rækkefølgen forklarer sig selv.
+// Grænserne er størrelsesordener i meter (som størrelse). Et atom er ca. 10⁻¹⁰ m, en celle ca. 10⁻⁵ m, en planet
+// 10⁷ m, en stjerne ca. 10⁹ m (Solen 1,4 · 10⁹ m) og en galakse ca. 10²¹ m.
+const SKALA = [
+  [-10, 'mindre end et atom'],
+  [-6, 'molekyler'],
+  [-3, 'celler'],
+  [4, 'på vores størrelse'],
+  [9, 'planeter'],
+  [17, 'stjerner'],
+  [24, 'galakser'],
+  [Infinity, 'hele universet'],
+];
+export const skalaOrd = (størrelse) => SKALA.find(([grænse]) => størrelse < grænse)?.[1] ?? '';
+
+// Linjen første gang på skinnen (E20, svar 7.3): tallet tages fra skinnen, så det passer, når der kommer flere gåder
+const TAL = ['nul', 'en', 'to', 'tre', 'fire', 'fem', 'seks', 'syv', 'otte', 'ni', 'ti', 'elleve', 'tolv'];
+export const førsteLinje = (antal) => `Videnskaben er ikke færdig. Det her er den første af ${TAL[antal] ?? antal} gåder.`;
+
+// Første gang står man foran Antistof (navnet, ikke den mindste), så en ny, mindre gåde ikke bliver den første
+export const FØRSTE_GÅDE = 'antistof';

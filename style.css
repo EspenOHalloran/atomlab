@@ -1197,15 +1197,17 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaader-fokus { pointer-events: none; width: 100%; max-width: 720px; display: flex; align-items: center; justify-content: center; gap: 8px; } /* Skinnen (G4b): gåden i fokus og "‹ mindre · større ›" nederst i billedet */
 #gaader .gaader-fokus[hidden], #gaader .gaader-pil[hidden] { display: none; }
 #gaader .gaader-toning { position: absolute; inset: 0; z-index: 1; background: #03040c; opacity: 0; pointer-events: none; } /* Toningen, når man flyver ind i en gåde og ud igen (js/gaader/skinne.js) */
-#gaader .gaader-pil { pointer-events: auto; flex: 0 0 auto; min-width: 72px; min-height: 48px; padding: 0 12px; border-radius: 14px; border: 1px solid rgba(95, 227, 255, 0.45); background: rgba(14, 24, 56, 0.82); color: var(--tekst); font-size: 15px; cursor: pointer; }
+#gaader .gaader-pil { pointer-events: auto; flex: 0 0 auto; min-width: 56px; min-height: 48px; padding: 0 12px; border-radius: 14px; border: 1px solid rgba(95, 227, 255, 0.45); background: rgba(14, 24, 56, 0.82); color: var(--tekst); font-size: 26px; line-height: 1; cursor: pointer; }
 #gaader .gaader-pil:hover:not(:disabled) { border-color: var(--accent); }
 #gaader .gaader-pil:disabled { opacity: 0.3; cursor: default; }
 #gaader .gaader-ind { pointer-events: auto; flex: 0 1 460px; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 16px 12px; border-radius: 16px; border: 1px solid rgba(95, 227, 255, 0.7); background: rgba(8, 14, 36, 0.86); color: var(--tekst); text-align: center; cursor: pointer; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45); }
 #gaader .gaader-ind:hover { border-color: var(--accent); background: rgba(14, 26, 60, 0.92); }
 #gaader .gaader-ind strong { font-size: 19px; line-height: 1.25; }
+#gaader .gaader-skala { color: var(--svag); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+#gaader .gaader-skala:empty { display: none; }
 #gaader .gaader-ind small { color: var(--svag); font-size: 14px; line-height: 1.35; }
 #gaader .gaader-ind-knap { margin-top: 6px; padding: 6px 18px; border-radius: 20px; background: var(--accent); color: #031018; font-weight: 700; font-size: 15px; }
-@media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaader-pil span { display: none; } #gaader .gaader-pil { min-width: 44px; padding: 0 8px; } #gaader .gaader-ind strong { font-size: 17px; } }
+@media (max-width: 560px) { #gaader .gaader-panel { padding: 12px; } #gaader .gaade-spørgsmål { font-size: 19px; } #gaader .gaader-pil { min-width: 44px; padding: 0 8px; } #gaader .gaader-ind strong { font-size: 17px; } }
 .ikon-opdagelser { /* Opdagelserne i menuen: en åben bog */ display: grid; place-items: center; background: radial-gradient(circle, rgba(214, 170, 82, 0.3), rgba(214, 170, 82, 0.06) 70%); border: 2px solid rgba(214, 170, 82, 0.6); }
 .ikon-opdagelser svg { width: 30px; height: 30px; fill: rgba(255, 238, 200, 0.16); stroke: #f6e3b0; stroke-width: 1.8; stroke-linejoin: round; filter: drop-shadow(0 0 4px rgba(214, 170, 82, 0.8)); }
 #opdagelser { /* Opdagelserne (js/opdagelser.js): hylden med de ti bøger og én åben bog (js/bog.js). Skriften hentes med FontFace i JS */ grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top" "rum"; }
