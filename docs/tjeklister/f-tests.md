@@ -34,3 +34,4 @@
 - [ ] Efter et klik på et fænomen ventes der på `valgt() === id`, og fænomenets testadgang kaldes med `fænomen()?.x?.()`. Lige efter klikket kører det forrige fænomen stadig bag rejseskiltet (`mars`).
 - [ ] En bevægelse, der skal gå hurtigt i rigtig tid (fx et kast), sendes inde i siden, og pauserne holdes i en løkke (`performance.now()`), ikke med `setTimeout`, der kommer for sent under belastning (`karrusel`).
 - [ ] En test, der tager over ca. 300 s alene eller over 900 s under belastning, deles i flere filer, der hver åbner deres egen side (`mars`, `mars-steder` og `mars-2`). Ny fil: også i `ALLE` og listerne i `koer-alle.mjs` og i tabellen i `tests/README.md`.
+- [ ] Har koden en særlig vej for testbrowseren (`TEST_HURTIG`, fx rejseskiltet i stedet for overblikkets flyvning)? Så test også den vej, brugeren går (Merkur 17. november 2026, se [rodårsagerne](../erfaringer/rodaarsager.md)).
