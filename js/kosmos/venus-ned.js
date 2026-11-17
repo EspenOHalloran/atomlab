@@ -86,11 +86,12 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
   kuppel.visible = false;
   gruppe.add(kuppel);
   const farve = new THREE.Color();
-  const tågeFarve = new THREE.Color(0.36, 0.33, 0.27); // inde i skyerne: gullig dis (mørk nok til, at panelerne kan læses med fuld grafik)
-  const himmelTop = new THREE.Color(0.4, 0.29, 0.17); // lige under skyerne
-  const himmelBund = new THREE.Color(0.38, 0.21, 0.08); // nede ved jorden (orange som på Veneras fotos)
-  const disTop = new THREE.Color(0.32, 0.21, 0.11);
-  const disBund = new THREE.Color(0.27, 0.15, 0.06);
+  const tågeFarve = new THREE.Color(0.12, 0.11, 0.085); // inde i skyerne: gullig dis. Lineære farver: Med fuld grafik bliver de lysere
+  // (tonekurven og sRGB), og de skal være mørke nok til, at toplinjen og panelerne kan læses (de ligger oven på lærredet)
+  const himmelTop = new THREE.Color(0.13, 0.09, 0.05); // lige under skyerne
+  const himmelBund = new THREE.Color(0.12, 0.062, 0.022); // nede ved jorden (orange som på Veneras fotos)
+  const disTop = new THREE.Color(0.1, 0.064, 0.032);
+  const disBund = new THREE.Color(0.085, 0.045, 0.017);
   // Kuplen efter højden h (km over middelradius)
   function sætKuppel(h) {
     const u = kuppelMat.uniforms;
