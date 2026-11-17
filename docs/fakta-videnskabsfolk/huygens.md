@@ -62,6 +62,15 @@
 | Andre muligheder: Bernard Vaillant 1686 (`Christiaan-huygens4.jpg`, også PD) og Gerard Edelincks kobberstik efter Netscher (1684-1687, ikke fundet på Commons ved en hurtig søgning) | Commons; Wikipedia ("Portraits") | Ret sikker |
 | **Siderne:** Smithsonians skanning er frigivet ("no longer under copyright protection"), så s. 46-48 og tavlen ved s. 35 kan vises. Et nyt foto af en *tekstside* ville ellers have sin egen ret (§ 70) | archive.org-metadata; fakta-bogsider-rettigheder.md | Sikker |
 
+**Tjekket i H4 (17. november 2026, `/faktatjek`, Opus):**
+| Påstand | Kilde | Sikkerhed |
+|---|---|---|
+| Oversættelsen af **s. 48, linje 5-10** ("Hos autem reputare … me percipere"): Latinen er læst på billedet (`n67`) og passer ord for ord med drejebogen. "ikke bare har fundet på … efter mit eget hoved, sådan som astronomerne har fundet på deres epicykler … Jeg ser også denne ring ret tydeligt med øjnene" holder (*mera inventione atque arbitrio meo* = "blot af egen opfindelse og eget skøn", *fingere* = "finde på") | s. 48 | Sikker |
+| **Titan fik sit navn i 1847** af John Herschel (*Results of Astronomical Observations … at the Cape of Good Hope*, London 1847), sammen med de andre syv kendte Saturn-måner. Huygens kaldte den "Saturns måne" (*De Saturni Luna Observatio Nova*) | Wikipedia "Titan (moon)" og "John Herschel" (begge med henvisning til bogen fra 1847 og Lassell, MNRAS, 12. november 1847) | Ret sikker |
+| **OC XV:** I skriftet fra 1656 ventede Huygens armene tilbage **"sub finem Aprilis, si non ante"** (sidst i april, hvis ikke før). Saturn forsvandt i Solens lys i juni 1656 uden arme, og han så dem først igen 13. oktober (s. 17). Han sendte skriftet til Hevelius 8. marts 1656. Linsen fra hans 12-fods-kikkert, der findes endnu, har en brændvidde på **332 cm** (målt 1898) | *Oeuvres complètes* XV (archive.org `oeuvrescomplte15huyguoft`, OCR), s. 14 og indledningen til *Observatio nova* | Sikker (april og 13. oktober), Ret sikker (332 cm) |
+| **Divini (nr. X på tavlen):** "credibile est omnium emendatissimè nativam Saturni faciem nobis descripsisse, nisi quod umbras illas … de suo, ut opinor, adjecit" (det er troligt, at han har tegnet Saturns rigtige udseende mest nøjagtigt af alle, bortset fra skyggerne, som han vist selv lagde til). Divini så den 1646, 1647 og 1648 | s. 37 (`n56`, læst på billedet) | Sikker |
+| **"Bogstavgåde":** Huygens kalder anagrammet "literarium gryphum" | *Systema Saturnium* (OCR) og OC XV ("sequenti grypho consignare visum est") | Sikker |
+
 ## 5. Lysets fart (til "For nørder")
 | Påstand | Kilde | Sikkerhed |
 |---|---|---|
