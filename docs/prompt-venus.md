@@ -16,6 +16,8 @@ Byg Venus efter planen i `docs/plan-venus.md`. Du hører til sporet **Solsysteme
 
 Er du i tvivl om noget, så spørg, før du bygger det.
 
+**Efter Fables tjek E18 (jeres svar 17. november 2026, står i planen under "Jeres svar på Fables tjek E18"):** V1-V3 er lavet. **V4 udgår:** Den næste og sidste delopgave er **V5**, som også har den lille tur ned til Venera 13 med måleren som flybyens sidste stop (og en knap ved Venera 13 i træet). "Stå ved Venera 13" udgår (Veneras foto vises fladt), og V6 er flyttet til idéerne. Fire steder (Maxwell Montes, Maat Mons, Pandekagekuplerne, Venera 13), og Aphrodite Terra er flybyens stop om gløden. Læs [fable/E18-venus.md](fable/E18-venus.md) afsnit 3-6 før V5 (rettelser til flybyens tekster og fakta). Svarene nedenfor om V4 gælder nu for nedturen i V5.
+
 **Jeres svar (kort):**
 1. **Skyernes kort:** Brugeren åbner `darts.isas.jaxa.jp` før V2, så Akatsukis kort over skyerne i UV kan bruges. Tjek det, når V2 starter, og spørg, hvis det stadig er lukket.
 2. **Først ser man Venus, som den ser ud** (lyst gullig hvid og næsten glat). "Ultraviolet (som Akatsuki)" og "Under skyerne" er kontakter.

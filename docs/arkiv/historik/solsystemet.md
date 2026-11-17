@@ -1,5 +1,11 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Feedback nr. 3, Solen som en bedre tegning** (prompten i [arkiv/prompt-solen.md](../arkiv/prompt-solen.md)).
+- **Egen shader i `js/kosmos/solen.js`** (`stjerne()` er ikke rørt): den mørke rand (orange og kraftigere mod kanten), granuler som cellestøj med mørke render, der kun ses, når man zoomer ind, 9 solpletter i 4 grupper med mørk kerne og lysere kant, der halter efter ved højere bredde (25 døgn ved ækvator, 36 ved polerne), og fakler nær randen (jeres valg). Grupperne vokser, svinder og kommer igen et nyt sted. Skiven ligger under grænsen for gløden, så den ikke brænder ud. Tallene i `js/data/solen.js`.
+- **Tabletten:** 1 lag støj i stedet for 3 og ingen striber i pletternes kant (`LAV_KVALITET`). Granulerne regnes slet ikke, når hele Solen ses.
+- **Teksten:** "Ærligt talt" (granulerne er for brede og for langsomme, pletterne er pynt, 11-årscyklus og maksimum omkring 2024-2025), to afsnit i "For nørder" (solpletter og den mørke rand, der er gjort kraftigere i tegningen), en sætning i "Drejer Solen?" og ordet "Solplet" i ordbogen. Faktatjekket.
+- **Tilbage:** jeres måling med `?maal` på Tab A11 ([ikke-afproevet.md](../ikke-afproevet.md)). Solstorm bruger stadig den gamle `stjerne()` og kan få den nye Sol bagefter, hvis I vil (lille opgave).
+
 **Lavet (16. november 2026): Feedback om at åbne Kosmos og Solsystemet.**
 - **Kosmos' forside** (`js/kosmos/oversigt.js`): Fra menuen starter Kosmos altid på forsiden "Kosmos" med fire kort (ét pr. gruppe, en knap pr. fænomen). Det sidst valgte fænomen (`atomlabKosmos`) åbnes ikke længere af sig selv. Før landede man midt i fx forløbet "Rejsen i tid" uden listen.
 - **Overblikket i Solsystemet:** Trin 1 i "Rundt om Solen" viser først hele Solsystemet i 2,5 s (`HEL_S`) og glider så ind til de fire inderste.
