@@ -765,6 +765,12 @@ export const ORDBOG = [
     // Venus V2. Kilder: fakta-solsystemet/del7, afsnit 3, og vindene målt i Akatsukis billeder (js/data/vinde-venus.js)
     tekst: 'Når luften om en planet drejer rundt meget hurtigere end planeten selv. På Venus suser toppen af skyerne rundt på ca. 4 jorddøgn, mens Venus selv er 243 jorddøgn om at dreje én gang.',
   },
+  {
+    id: 'solplet', ord: 'Solplet',
+    former: ['solplet', 'solpletten', 'solpletter', 'solpletterne'],
+    // Solen (feedback nr. 3, 16. november 2026): kernen ca. 3.800-4.000 K mod overfladens 5.772 K
+    tekst: 'Et mørkt område på Solens overflade. Det er ca. 2.000 °C køligere end resten, fordi stærke magnetfelter bremser den varme gas nedefra. En solplet kan være større end Jorden og lever typisk fra dage til uger.',
+  },
   // Solsystemets overblik, forløbet "Rundt om Solen" (15. november 2026). Kilder: NASA "Asteroids: Facts" (under Månens
   // masse, 1,1-1,9 mio. over 1 km), "Kuiper Belt: Facts" (30 til ca. 50 AU, en kilde til kometer, Pluto blandt de største)
   // og "Dwarf Planets" (IAU 2006, fem dværgplaneter). Planet og bane er så almindelige, at de kun får prikker i forløbets linje.

@@ -100,3 +100,4 @@
 - Knellers portræt af Newton fra 1702 (National Portrait Gallery): Commons skriver ved filen, at andre har rejst krav om ophavsret. Brug det fra 1689 (privat eje, filen kommer fra Cambridge University Library).
 - Et domæne kan være åbent uden "www." og lukket med (newtonproject.ox.ac.uk), eller omvendt (kb.dk). Prøv begge, før der bedes om adgang.
 - "Galileis kikkert i Firenze er den, han fandt Jupiters måner med." Museo Galileo har to kikkerter (14 og 21 gange) og for sig selv den revnede linse fra den kikkert, han gjorde opdagelsen med (inv. 2429). Skriv "en af hans kikkerter", og at linsen findes endnu.
+- "Galilei så ikke Callisto 8. januar, fordi den stod uden for synsfeltet (15 bueminutter)." Den 7. januar så han den 9,1 bueminutter ude, og den 8. stod den 10,0 ude. Skriv ikke en grund. Og "kanonkuglen fra bjerget står i Principia": Den er fra bogen, der blev trykt i 1728 (efter hukommelsen), og skal slås op.

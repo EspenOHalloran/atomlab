@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (16. november 2026): H2, fortællingen "Saturns ører".**
+- **Go til H2** 16. november 2026 (jeres svar står i drejebogen, punkt 8: laboratoriet med ringen og "Fortæl det igen", og Gør-teksten i trin 3 er rettet). Bygget i trinene A-E med et go til A og så B-D samlet.
+- **Forløbet** `js/data/forloeb/huygens.js` (trin 1-3 og kernesætning D) kører med Forløb-klodsen i bogens opslag `fortaelling` (slags `scene` i `js/bog.js`). Første gang starter det efter "Begynd". Imens er bladringen låst, og Esc går til hylden. Bagefter er opslaget et laboratorium. Det kan også startes fra "Din fremgang".
+- **Tegningerne** `js/bog/huygens.js` i tavlens stil (s. 16-18 og tavlen ved s. 35 er set i skanningen): linsen, der bliver skarp, når man gnider, Titan i den rigtige afstand med skyderen og rækken "* O", og ringen, der drejes, med tavlens Hevelius, Divini og Riccioli, der lyser op, og løftet ved kanten.
+- **Faktatjek:** "en lang rejse" blev til "en rejse" (to nye fælder). Ordet `linse` er i Ordbogen (kom med her, fordi trin 1 bruger det). `tests/opdagelser.mjs` har 18 tjek.
+
 **Senest lavet (16. november 2026): Fables noter og H1 (delen og forsiden).**
 - **Noterne** [fable/E12-huygens-noter.md](../fable/E12-huygens-noter.md): Fables fund er tjekket i bogens OCR (5. marts 1656, armene væk 16. januar 1656 og tilbage 13. oktober, ringen parallel med ækvator, 28° mod ekliptika og Galileis eget anagram). Uenig tre steder: Saturn "vipper" ikke (vi ser den fra en ny vinkel), udfordringen har 8 brikker, og portrættet bliver på forsiden.
 - **Drejebogen** [drejebog-huygens.md](../drejebog-huygens.md) er rettet: trin 3 om januar 1656, trin 4 med 17 bunker, seks glødende steder på fire sider (tavlen, s. 16, 47 og 48), oversættelsen og "Om Huygens" som bogens sidste opslag. Faktafilen og fælderne er rettet.

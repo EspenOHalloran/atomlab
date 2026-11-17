@@ -2,14 +2,14 @@
 
 **Model: Opus, høj effort.** Kode, der kommer med i programmet (en shader), og et par fakta i teksten. Fable er ikke nødvendig.
 
-Spor: **Solsystemet og Kosmos** ([lige-nu/solsystemet.md](lige-nu/solsystemet.md), "Næste" nr. 00). Kun denne session skriver i sporets fil.
+Spor: **Solsystemet og Kosmos** ([lige-nu/solsystemet.md](../lige-nu/solsystemet.md), "Næste" nr. 00). Kun denne session skriver i sporets fil.
 
 ## Jeres beslutning (16. november 2026)
 Solen i Solsystemet skal være en bedre *tegning*, ikke et foto. Et foto fra NASA SDO/HMI blev fravalgt: Det viser kun den side, der vender mod os, i ét øjeblik (bagsiden er tom, når man drejer), og det koster 2-4 MB og ca. 70 MB i grafikkortet.
 
 ## Læs først
-1. [lige-nu.md](lige-nu.md), [lige-nu/solsystemet.md](lige-nu/solsystemet.md) og [DESIGN.md](../DESIGN.md).
-2. [kode/solsystem.md](kode/solsystem.md) (afsnittet om Solen) og [kode/kosmos.md](kode/kosmos.md) om `stjerne()` i `js/kosmos/faelles.js`. Tjekliste **E** (shader, ydelse) og **B** (fakta), [erfaringer/shadere.md](erfaringer/shadere.md) og [de kendte fælder](erfaringer/fakta-faelder.md).
+1. [lige-nu.md](../lige-nu.md), [lige-nu/solsystemet.md](../lige-nu/solsystemet.md) og [DESIGN.md](../../DESIGN.md).
+2. [kode/solsystem.md](../kode/solsystem.md) (afsnittet om Solen) og [kode/kosmos.md](../kode/kosmos.md) om `stjerne()` i `js/kosmos/faelles.js`. Tjekliste **E** (shader, ydelse) og **B** (fakta), [erfaringer/shadere.md](../erfaringer/shadere.md) og [de kendte fælder](../erfaringer/fakta-faelder.md).
 3. Koden: `js/kosmos/solen.js` og `stjerne()` med `STJERNE_FRAGMENT` i `js/kosmos/faelles.js`.
 4. Før du bygger: `git fetch origin`, og se i `origin/main` og åbne PR'er, om det allerede er lavet.
 
@@ -26,6 +26,6 @@ Lav først et skærmbillede af Solen i dag (fuld grafik, pc og tablet), og en ko
 
 ## Rammer
 - Tests: `node tests/koer-alle.mjs --ændret` (i baggrunden). Højst 5-10 nye tjek (fx at Solens shader bruges, og at Kosmos' stjerner er uændrede).
-- Skærmbilleder kun af Solen, pc og tablet. Ydelsen måles af jer med `?maal` på Tab A11 og skrives i [ikke-afproevet.md](ikke-afproevet.md).
+- Skærmbilleder kun af Solen, pc og tablet. Ydelsen måles af jer med `?maal` på Tab A11 og skrives i [ikke-afproevet.md](../ikke-afproevet.md).
 - Dokumenterne til sidst (`/faerdig`). PR'en merges med det samme.
 - Navngiv chatten "Solsystemet · Solen bedre tegnet" med `set_session_title`.
