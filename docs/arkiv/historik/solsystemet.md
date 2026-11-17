@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Venus V3, gløden på natsiden og stederne under skyerne** ([plan-venus.md](../plan-venus.md), jeres svar på Fables tjek [E18](../fable/E18-venus.md): fire steder, kontakten "Gløden på natsiden" og Venus lukkes med ét V5).
+- **Gløden:** Jorden gløder efter Plancks lov ud fra højderne (bjergene er køligere og mørkere), skarpt uden skyer og sløret gennem skyerne, kun på natsiden. Mørkerød og skruet meget op (sagt under "Ærligt talt").
+- **Stederne:** Maxwell Montes, Maat Mons, Pandekagekuplerne og Venera 13 i træet under "Under skyerne", med navne på kloden og en side hver. Skyerne går væk ved et sted og kommer igen ved "Venus", og datoen glider til formiddag (Solen i vest). Skarpe radarkort (225 m) ved Maat Mons og kuplerne (`lav_venus_steder.py`).
+- **Tests:** `tests/venus.mjs` har 17 nye tjek (gløden i et skærmbillede, stederne mod USGS, klokken, nettene og skyerne). Faktatjekket i [del 7, afsnit 11](../fakta-solsystemet/del7-venus.md).
+
 **Lavet (17. november 2026): Feedback nr. 3, Solen som en bedre tegning** (prompten i [arkiv/prompt-solen.md](../arkiv/prompt-solen.md)).
 - **Egen shader i `js/kosmos/solen.js`** (`stjerne()` er ikke rørt): den mørke rand (orange og kraftigere mod kanten), granuler som cellestøj med mørke render, der kun ses, når man zoomer ind, 9 solpletter i 4 grupper med mørk kerne og lysere kant, der halter efter ved højere bredde (25 døgn ved ækvator, 36 ved polerne), og fakler nær randen (jeres valg). Grupperne vokser, svinder og kommer igen et nyt sted. Skiven ligger under grænsen for gløden, så den ikke brænder ud. Tallene i `js/data/solen.js`.
 - **Tabletten:** 1 lag støj i stedet for 3 og ingen striber i pletternes kant (`LAV_KVALITET`). Granulerne regnes slet ikke, når hele Solen ses.

@@ -10,9 +10,16 @@
 // på natsiden og er mørkere på Maxwell Montes end på sletterne (målt i et skærmbillede), stederne under skyerne ligger
 // de rigtige steder (USGS' navneliste), datoen glider til formiddag med Solen i vest, skyerne går væk og kommer igen,
 // de lokale net hentes og tegnes kun ved deres sted, navnene står på kloden, og hvert sted har sin egen side.
+// V5: luften fra VIRA (tryk og temperatur i fire højder), flybyens 6 stop (teksterne under 160 tegn og Fables rettelser
+// fra E18), "Hvorfor?"-kortene og Ordbogen, og i browseren: flybyen gennem alle stop (ultraviolet og ⏩ ved skyerne, gløden
+// ved midnat over Ovda Regio), turen ned til Venera 13 (måleren følger højden, skyerne er væk under deres top, disen,
+// landingen med fotoet og kontakten) og tilbage til hele Venus.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { VENUS, soldøgn, solRetning, underSolen, solAfstand, glødVed, temperaturVed, lokalTid, datoMedTid } from '../js/data/venus.js';
-import { SIDE, SIDER } from '../js/data/sider/venus.js';
+import { SIDE, SIDER, TUR, TUR_SLUT } from '../js/data/sider/venus.js';
+import { luftVed, målerTekst } from '../js/data/luft-venus.js';
+import { HVORFOR } from '../js/data/hvorfor.js';
+import { ORDBOG } from '../js/data/ordbog.js';
 import { vindVed, omgang } from '../js/data/vinde-venus.js';
 const UD = billedmappe('venus');
 const fejl = []; let ok = 0, dårlig = 0;
@@ -56,6 +63,27 @@ const HORIZONS = [
   const ms9 = datoMedTid(d0, -165.4, 9);
   tjek('datoen til formiddag (kl. 9) ved Maat Mons er højst et halvt soldøgn væk', Math.abs(lokalTid(new Date(ms9), -165.4) - 9) < 0.01 && Math.abs(ms9 - d0) <= soldøgn() * 86400000 / 2 + 1, (ms9 - d0) / 864e5);
   tjek('hvert sted har en side med tal, en kort tekst og "Ærligt talt"', ['maxwell', 'maat', 'kupler', 'venera13'].every((id) => SIDER[id]?.tal?.length >= 2 && SIDER[id].kort.length > 50 && SIDER[id].ærligt), Object.keys(SIDER).join());
+}
+
+// ---------- V5 uden browser: luften, flybyen og teksterne ----------
+{
+  // VIRA (Seiff m.fl. 1985) som på Wikipedia: 0 km 462 °C og 92,1 bar, 50 km 75 °C og 1,07 bar, 55 km 27 °C og 0,53 bar,
+  // 70 km −43 °C og 0,037 bar (Fables tjek E18, afsnit 5)
+  const nær = (h, t, p) => { const l = luftVed(h); return Math.abs(l.temperatur - t) < 0.5 && Math.abs(l.tryk / p - 1) < 0.01; };
+  tjek('luften passer med VIRA ved 0, 50, 55 og 70 km', nær(0, 462, 92.1) && nær(50, 75, 1.066) && nær(55, 27, 0.5314) && nær(70, -43, 0.0369), JSON.stringify([0, 50, 55, 70].map(luftVed)));
+  const højder = Array.from({ length: 100 }, (_, i) => i);
+  tjek('temperaturen og trykket falder hele vejen op til 100 km (trykket blødt mellem punkterne)', højder.every((h) => luftVed(h + 1).tryk < luftVed(h).tryk && luftVed(h + 1).temperatur < luftVed(h).temperatur) && Math.abs(luftVed(52.5).tryk - Math.sqrt(1.066 * 0.5314)) < 0.01);
+  const m = målerTekst(0, luftVed(0.7));
+  tjek('måleren skriver tallene på dansk (0 km, ca. 457 °C, 88 bar ved Venera 13 og 0,037 bar ved 70 km)', m.højde === '0 km' && m.temperatur === '457 °C' && m.tryk === '88 bar' && målerTekst(70, luftVed(70)).tryk === '0,037 bar' && målerTekst(70, luftVed(70)).temperatur === '−43 °C', JSON.stringify(m));
+  tjek('flybyen har 6 stop, og underteksterne er under 160 tegn og slutter med et punktum', TUR.length === 6 && TUR.every((t) => t.tekst.length < 160 && t.tekst.endsWith('.') && t.nu.startsWith('<p><b>Lige nu:</b>')) && TUR_SLUT.includes('Turen er slut'), JSON.stringify(TUR.map((t) => t.tekst.length)));
+  tjek('flybyens stop: Venus, skyerne, Maxwell Montes, Maat Mons, gløden og turen ned som det sidste', TUR.map((t) => t.id).join() === 'venus,skyer,maxwell,maat,gloed,ned');
+  const alt = JSON.stringify([SIDE, SIDER, TUR]);
+  tjek('Fables rettelser (E18): "overfladen" i stop 1, Magellan 1990-1992, "åbning i dens side", ca. 60 gange (ikke 55) og ingen "1 bar og stuetemperatur"', TUR[0].tekst.includes('overfladen') && TUR[2].tekst.includes('1990 til 1992') && TUR[3].tekst.includes('åbning i dens side') && alt.includes('60 gange hurtigere') && !alt.includes('55 gange') && !/1 bar og stuetemperatur/.test(alt));
+  const hv = [SIDE, ...Object.values(SIDER)].flatMap((sd) => sd.emner ?? []).flatMap((e) => e.hvorfor ?? []);
+  tjek('"Hvorfor?"-kortene ved Venus findes (varmere end Merkur, baglæns og liv i skyerne)', hv.length >= 3 && hv.every((id) => HVORFOR[id]?.svar) && ['venusMerkur', 'venusBaglaens', 'venusLiv'].every((id) => hv.includes(id)), hv.join());
+  const ord = ['radar', 'drivhuseffekt'].map((id) => ORDBOG.find((o) => o.id === id));
+  tjek('Ordbogen har radar og drivhuseffekt (højst 260 tegn)', ord.every((o) => o && o.tekst.length <= 260));
+  tjek('højst fire spørgsmål fremme på Venus\' side (gløden står først, når kontakten bruges), og turen ned har sin egen side', SIDE.emner.filter((e) => !e.gemt).length <= 4 && SIDER.ned?.tal?.length === 2 && SIDER.ned.kort && SIDER.venera13.foto?.src);
 }
 
 // ---------- I browseren ----------
@@ -258,6 +286,67 @@ await s.screenshot({ path: `${UD}/venus.png` });
   await fm(() => atomlabTest.solsystem.spol(0.5));
   await s.waitForTimeout(300);
   tjek('navnene står på kloden ved hele Venus', (await F('navne')).length >= 1, JSON.stringify(await F('navne')));
+}
+
+// ---------- V5: flybyen og turen ned til Venera 13 ----------
+{
+  const flyver = () => s.waitForFunction(() => !atomlabTest.solsystem.fænomen().tur().flyver, null, { timeout: 60000, polling: 200 });
+  await fm(() => atomlabTest.solsystem.sætTid('spil'));
+  const træ = await fm(() => atomlabTest.solsystem.træ());
+  tjek('træet har "▶ Flyby · 6 stop" øverst', træ[0].id === 'tur' && træ[0].navn.includes('Flyby · 6 stop'), JSON.stringify(træ.map((p) => p.navn)));
+  await s.click('#solsystemBjælke button:has-text("Start flyby")');
+  const set = [];
+  for (let i = 0; i < TUR.length; i++) {
+    if (TUR[i].id !== 'ned') {
+      await F('hop');
+      await flyver();
+    }
+    await s.waitForTimeout(400); // panelet opdateres fire gange i sekundet
+    set.push(await fm(() => {
+      const v = atomlabTest.solsystem.fænomen();
+      return {
+        fase: document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', prikker: document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin button').length,
+        trin: v.tur().trin, visning: v.visning(), side: atomlabTest.solsystem.side().nøgle, lige: document.getElementById('solsystemForklaring')?.textContent ?? '',
+        tilstand: v.tilstand(), dato: v.dato(),
+      };
+    }));
+    if (TUR[i].id === 'gloed') set.at(-1).klokken = await fm(async () => { const { lokalTid } = await import('/js/data/venus.js'); return lokalTid(new Date(atomlabTest.solsystem.fænomen().dato()), 85.6); });
+    if (i < TUR.length - 1) await s.click('#solsystemBjælke button:has-text("Næste")');
+  }
+  const VISNING = ['venus', 'venus', 'maxwell', 'maat', 'gloed', 'ned'];
+  const SIDE_NØGLE = ['venus', 'venus', 'venus:maxwell', 'venus:maat', 'venus', 'venus:ned'];
+  tjek('flybyen går gennem alle 6 stop med 6 prikker, og panelet viser stedets side', set.every((x, i) => x.fase.includes(TUR[i].titel) && x.prikker === 6 && x.visning === VISNING[i] && x.side === SIDE_NØGLE[i]) && set.slice(0, -1).every((x, i) => x.trin === i) && set.at(-1).trin === null && /Turen er slut/.test(set.at(-1).lige), JSON.stringify(set.map((x) => [x.fase.slice(0, 18), x.prikker, x.visning, x.side, x.trin])));
+  tjek('stop 2 slår "Ultraviolet" og ⏩ til, og stop 3 slår ⏩ fra igen', set[1].tilstand.uv && set[1].tilstand.hurtig && !set[2].tilstand.hurtig && !set[2].tilstand.uv, JSON.stringify(set.map((x) => x.tilstand)));
+  tjek('stop 5: "Gløden på natsiden" er slået til, skyerne er der, og det er midnat over Ovda Regio', set[4].tilstand.glød && set[4].tilstand.under < 1 && Math.min(set[4].klokken, 24 - set[4].klokken) < 0.3, JSON.stringify([set[4].tilstand, set[4].klokken]));
+  // Turen ned: måleren følger højden (først under 100 km), skyerne går væk under deres top, og disen er der
+  const prøver = [];
+  for (let n = 0; n < 400; n++) {
+    const p = await F('ned');
+    const sky = await F('skyer');
+    prøver.push({ ...p, under: sky.under });
+    if (p.fase === 'landet') break;
+    await s.waitForTimeout(150);
+  }
+  const ned = prøver.filter((p) => p.fase === 'ned');
+  const over = ned.filter((p) => p.hMiddel > 75), inde = ned.filter((p) => p.hMiddel < 68);
+  tjek('på vej ned: over skyerne er de der og måleren skjult over 100 km, under ca. 70 km er skyerne væk, og disen er der', over.length && inde.length && over.every((p) => p.under === 0 && (p.hMiddel < 100 || !p.måler) && !p.kuppel) && inde.every((p) => p.under === 100 && p.måler && p.kuppel?.himmel > 0.9), JSON.stringify(prøver.map((p) => [Math.round(p.hMiddel), p.under, p.måler, p.kuppel?.himmel?.toFixed(2)])));
+  const temp = ned.filter((p) => p.måler).map((p) => parseInt(p.tekst.temperatur.replace('−', '-')));
+  tjek('måleren bliver varmere hele vejen ned', temp.length >= 3 && temp.every((t, i) => i === 0 || t >= temp[i - 1]), temp.join());
+  const slut = prøver.at(-1);
+  tjek('landet ved Venera 13: måleren viser 0 km, ca. 457 °C og ca. 89 bar, og fotoet er fremme', slut.fase === 'landet' && slut.tekst.højde === '0 km' && Math.abs(parseInt(slut.tekst.temperatur) - 457) <= 4 && Math.abs(parseInt(slut.tekst.tryk) - 89) <= 4 && slut.foto, JSON.stringify(slut));
+  const m = await F('midte');
+  tjek('kameraet står ca. 3 km over jorden ved Venera 13 (7,5° S, 303° Ø) og kigger mod horisonten', Math.abs(m.højde - 3) < 0.6 && forskel(m.længde, -57) < 0.3 && Math.abs(m.bredde + 7.5) < 0.5, JSON.stringify(m));
+  await s.waitForTimeout(400);
+  tjek('træet har "Ned gennem skyerne" under Venera 13, og Indstillinger har kontakten "Venera 13\'s foto"', (await fm(() => atomlabTest.solsystem.træ())).some((p) => p.id === 'ned') && (await fm(() => atomlabTest.solsystem.styr())).some((p) => p.navn === 'Venera 13\'s foto'));
+  await s.screenshot({ path: `${UD}/venus-landet.png` });
+  await fm(() => atomlabTest.solsystem.trykPå('Venera 13\'s foto'));
+  tjek('kontakten "Venera 13\'s foto" skjuler fotoet', !(await F('ned')).foto && (await fm(() => document.querySelector('.venus-foto')?.hidden)) === true);
+  // Tilbage til hele Venus: måleren, fotoet og disen er væk, og skyerne er der igen
+  await fm(() => atomlabTest.solsystem.gåTil('venus'));
+  await flyver();
+  await s.waitForTimeout(300);
+  const efter = await F('ned');
+  tjek('tilbage ved hele Venus er måleren, fotoet og disen væk, og skyerne dækker igen', efter.fase === null && !efter.måler && !efter.foto && !efter.kuppel && (await fm(() => document.querySelector('.venus-maaler')?.hidden)) === true && (await F('skyer')).under < 1, JSON.stringify([efter, (await F('skyer')).under]));
 }
 
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join('\n'));

@@ -1,8 +1,9 @@
 // Venus (docs/plan-venus.md). V1: jorden og skelettet. Kloden er Magellans radarkort med højderne (klippeplanet.js
 // som Mars), tonet orange, for radaren ser ikke farver. V2: skyerne udenpå (planet.js som Jupiter), der glider med
 // vindene. V3: gløden på natsiden og fire steder under skyerne (træet, navnene på kloden og lokale net af Magellans
-// 225 m-kort ved Maat Mons og pandekagekuplerne). Flybyen og en lille tur ned til Venera 13 kommer i V5 (jeres svar på
-// E18). Står i Solsystemet mellem Solen og Jorden (efter afstanden til Solen).
+// 225 m-kort ved Maat Mons og pandekagekuplerne). V5: flybyen med 6 stop (teksterne i js/data/sider/venus.js) og turen
+// ned gennem skyerne til Venera 13 med en måler (js/kosmos/venus-ned.js), som er flybyens sidste stop og en knap ved
+// Venera 13 i træet (jeres svar på E18). Står i Solsystemet mellem Solen og Jorden (efter afstanden til Solen).
 // Tallene står i docs/fakta-solsystemet/del7-venus.md og js/data/venus.js.
 //
 // - 1 enhed = 1.000 km. Kuglen har radius 6.051,0 km som Magellans kort (højderne er målt fra den, fælde 13).
@@ -24,7 +25,9 @@
 // - Stederne (V3): Et sted i træet ("Under skyerne") flyver derhen og tager skyerne væk (skyderen glider til 100 %), og
 //   datoen glider derhen, hvor klokken på stedet er tid (fx formiddag med lange skygger). Tilbage ved hele Venus kommer
 //   skyerne igen, som de var.
-// - Styr-boksen: skyderen "Under skyerne", "Ultraviolet (som Akatsuki)", "Gløden på natsiden", "Bjergene 10 gange
+// - Flybyen (V5): Venus, skyerne i ultraviolet med ⏩, under skyerne ved Maxwell Montes, Maat Mons, gløden over Aphrodite
+//   Terra (kameraet peger på Ovda Regio ved midnat) og turen ned til Venera 13.
+// - Indstillinger: skyderen "Under skyerne", "Ultraviolet (som Akatsuki)", "Gløden på natsiden", "Bjergene 10 gange
 //   højere", "Modlys" og "Navne".
 
 import * as THREE from 'three';
@@ -35,11 +38,13 @@ import { lavGasplanet } from '../solsystem/planet.js';
 import { lavLuft } from '../solsystem/atmosfaere.js';
 import { lavRejse } from '../solsystem/rejse.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
+import { lavFlyby } from '../solsystem/flyby.js';
+import { lavNedtur } from './venus-ned.js';
 import { hent, glem, iLager } from '../solsystem/hent.js';
 import { startDato } from '../solsystem/dato.js';
 import { lavHentebjælke, tonInd } from '../hentning.js';
 import { VENUS, pol, knude, solRetning, meridian, underSolen, datoMedTid, lokalTid, GLØD } from '../data/venus.js';
-import { SIDE, SIDER } from '../data/sider/venus.js';
+import { SIDE, SIDER, TUR, TUR_SLUT } from '../data/sider/venus.js';
 import { vindVed, SKY_HØJDE } from '../data/vinde-venus.js';
 
 const S = 1000; // km pr. enhed
@@ -94,10 +99,20 @@ const LOKALE = [
   { id: 'maat', nord: 4.865, syd: -3.865, vest: -169.77, øst: -161.03, radar: ['4k', '2k', '1k'] }, // ca. 920 × 920 km
   { id: 'kupler', nord: -27.82, syd: -32.18, vest: 8.48, øst: 13.52, radar: ['2k', '1k', '1k'] }, // ca. 460 × 460 km
 ];
-// Træet i listen til venstre: stederne under skyerne (undertitlen står i toplinjen)
+// Flybyens stop om gløden (V5, jeres svar på E18): Aphrodite Terra er den store mørke plet. Kameraet peger på Ovda
+// Regio (USGS: 2,8° S, 85,6° Ø) ved midnat.
+const GLØD_STOP = { bredde: -2.8, længde: 85.6, tid: 0 };
+// Træet i listen til venstre: stederne under skyerne (undertitlen står i toplinjen). Ved Venera 13 står turen ned
+// gennem skyerne (V5).
 const TRÆ = {
   rod: 'venus',
-  grupper: [{ navn: 'Under skyerne', punkter: STEDER.map((st) => ({ id: st.id, navn: st.navn, undertitel: 'Under skyerne på Venus' })) }],
+  grupper: [{
+    navn: 'Under skyerne',
+    punkter: STEDER.map((st) => ({
+      id: st.id, navn: st.navn, undertitel: 'Under skyerne på Venus',
+      ...(st.id === 'venera13' && { under: [{ id: 'ned', navn: 'Ned gennem skyerne', titel: 'Ned til Venera 13', undertitel: 'Under skyerne på Venus' }] }),
+    })),
+  }],
 };
 
 export default {
@@ -117,7 +132,7 @@ export default {
   side: SIDE, // teksten i højre panel (js/data/sider/venus.js)
   sider: SIDER,
 
-  lav(gruppe, { opdaterKnapper, verden }) {
+  lav(gruppe, { opdaterKnapper, verden, fase, forklaring, overlag, tiden }) {
     const { kamera } = verden;
     const orbit = verden.styring;
     const gammelt = { min: orbit.minDistance, max: orbit.maxDistance, nær: kamera.near, zoom: orbit.zoomSpeed, drej: orbit.rotateSpeed };
@@ -137,7 +152,8 @@ export default {
     let underFør = 0; // skyderen, før man fløj til et sted
     let glødTil = false; // "Gløden på natsiden"
     let fGlød = 0; // glider mod 0 eller 1
-    let visning = 'venus'; // 'venus' (hele kloden) eller et sted
+    let visning = 'venus'; // 'venus' (hele kloden), et sted, 'gloed' (flybyens stop om gløden) eller 'ned' (turen ned)
+    let turHurtig = false; // flybyen har slået ⏩ til (stop 2) og slår det fra igen ved næste stop
 
     // ---------- Datoen og Solen ----------
     const nu = new Date(startDato()); // overblikkets dato (js/solsystem/dato.js)
@@ -355,17 +371,57 @@ export default {
     // Træet: "Venus" flyver tilbage til hele kloden (og skyerne kommer igen, som de var), og et sted flyver derhen
     function gåTil(id) {
       if (id === visning) return;
+      flyby.afslut();
+      tilbageTilSpil();
+      vis(id);
+    }
+    // Flyv hen til et sted i træet (også fra flybyen)
+    function vis(id) {
+      if (id !== 'ned') nedtur.afbryd();
       if (id === 'venus') {
         aktivér([nuværendeNet()]);
         visning = 'venus';
         datoTur = null;
         underTil(underFør);
         helPlanet(kameraRetning(), () => aktivér([]));
-        return;
+      } else if (id === 'ned') tilNed();
+      else {
+        const st = stedMed(id);
+        if (st) besøg(st);
       }
-      const st = stedMed(id);
-      if (st) besøg(st);
       opdaterNavne();
+    }
+    // Turen ned gennem skyerne til Venera 13 (js/kosmos/venus-ned.js). Datoen glider til formiddag ved stedet, mens
+    // kameraet flyver hen over det, og skyerne er der, til kameraet kommer ind i dem.
+    function tilNed() {
+      const st = stedMed('venera13');
+      if (visning === 'venus') underFør = underMål ?? under;
+      aktivér([nuværendeNet()]);
+      visning = 'ned';
+      høj = false;
+      underMål = null;
+      sætUnder(0);
+      underSkyder.sæt?.(0);
+      datoTur = { fra: dato, til: datoMedTid(dato, st.længde, st.tid), ned: true };
+      nedtur.start();
+    }
+    // Hele Venus fra retning (fra flybyen). under: skyderen "Under skyerne". tid: [længde, klokken], hvis datoen skal
+    // glide (fx midnat over Ovda Regio). retning(ms): retningen mod kameraet på den nye dato.
+    function helVenus({ retning, under: u = 0, tid = null, id = 'venus', afstand = R }) {
+      aktivér([nuværendeNet()]);
+      visning = id;
+      underTil(u);
+      underFør = u;
+      if (tid) datoTur = { fra: dato, til: datoMedTid(dato, tid[0], tid[1]) };
+      else datoTur = null;
+      const r = typeof retning === 'function' ? retning(datoTur?.til ?? dato) : retning;
+      rejse.flyv({ fokus: () => nulPunkt, afstand: passer(afstand), retning: r, min: minOverblik(), max: R * 15, færdig: () => aktivér([]) });
+    }
+    // Slår ⏩ fra igen, hvis flybyen slog det til
+    function tilbageTilSpil() {
+      if (!turHurtig) return;
+      turHurtig = false;
+      if (hurtig) tiden?.('spil');
     }
     // Skyderen "Under skyerne" glider selv (med "reducer bevægelse" med det samme)
     function underTil(v) {
@@ -389,10 +445,10 @@ export default {
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; } },
         { tekst: 'Modlys', til: modlys, skift: (til) => { modlys = til; } },
         navneKnap(() => opdaterNavne()),
+        ...nedtur.kontakt(),
       );
       opdaterKnapper();
     }
-    lavKnapper();
 
     // ---------- Navnene på kloden (V3, som Mars) ----------
     // Når man ser hele Venus, står stederne med navn på kloden (også oven på skyerne), og et tryk på et navn flyver
@@ -470,6 +526,49 @@ export default {
     lærred.addEventListener('pointerdown', vedNed);
     lærred.addEventListener('pointerup', vedOp);
 
+    // ---------- Turen ned til Venera 13 (V5, js/kosmos/venus-ned.js) ----------
+    const v13 = stedMed('venera13');
+    const v13Nord = new THREE.Vector3();
+    const nedSted = { grund: new THREE.Vector3(), op: new THREE.Vector3(), nord: v13Nord };
+    const nedtur = lavNedtur({
+      gruppe, kamera, rejse, S, kortKm: R_KM, overlag: overlag(),
+      sted: () => {
+        fokusVed(v13)();
+        nedSted.grund.copy(stedPunkt);
+        nedSted.op.copy(opVed(v13)());
+        v13Nord.copy(v13.ramme.nord).applyQuaternion(qPlanet);
+        return nedSted;
+      },
+      jordKm: () => (venus.punkt(v13.ramme.retning, lokal).length() - 1) * R_KM,
+      ændret: () => lavKnapper(),
+    });
+
+    // ---------- Flybyen (V5, js/solsystem/flyby.js): 6 stop, teksterne i js/data/sider/venus.js ----------
+    // Skyerne: lavt over skyerne ved grænsen mellem dag og nat, i ultraviolet og med ⏩
+    const SKY_RETNING = sol.clone().applyAxisAngle(Y, 70 * GRAD).addScaledVector(Y, 0.18).normalize();
+    const glødSted = { ramme: venus.sted(GLØD_STOP.bredde, GLØD_STOP.længde), kompas: 180, vinkel: 80 };
+    function flyvTilStop(stop, nr) {
+      if (stop.id !== 'skyer') tilbageTilSpil();
+      if (stop.id !== 'ned') nedtur.afbryd();
+      uv = stop.id === 'skyer';
+      glødTil = stop.id === 'gloed';
+      høj = false;
+      if (stop.id === 'venus') helVenus({ retning: START });
+      else if (stop.id === 'skyer') {
+        helVenus({ retning: SKY_RETNING, afstand: R * 0.62 });
+        if (!hurtig) { turHurtig = true; tiden?.('hurtig'); }
+      } else if (stop.id === 'gloed') helVenus({ retning: (ms) => fraSted(glødSted, ms), tid: [GLØD_STOP.længde, GLØD_STOP.tid], id: 'gloed' });
+      else vis(stop.id); // Maxwell Montes, Maat Mons og turen ned
+      lavKnapper();
+      forklaring(stop.nu + (nr === TUR.length - 1 ? TUR_SLUT : ''));
+    }
+    const flyby = lavFlyby({ stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(), slut: TUR_SLUT });
+    function startTur() {
+      hentLokalt('maat'); // stop 4 (hentes, mens man ser de første stop)
+      flyby.start();
+    }
+    lavKnapper();
+
     // ---------- Hvert billede ----------
     let første = true; // i første billede står kameraet der med det samme (når panelerne har fået deres plads)
     const solNu = new THREE.Vector3(); // i verden
@@ -486,11 +585,13 @@ export default {
       }
       // Datoen glider hen til klokken ved stedet i takt med flyvningen
       if (datoTur) {
-        dato = THREE.MathUtils.lerp(datoTur.fra, datoTur.til, rejse.fremdrift);
+        // (turen ned er to flyvninger: datoen glider kun under den første)
+        const slut = !rejse.flyver || (datoTur.ned && nedtur.fase !== 'hen');
+        dato = slut ? datoTur.til : THREE.MathUtils.lerp(datoTur.fra, datoTur.til, rejse.fremdrift);
         drejTil(dato);
         drejSkyer();
         sol.set(...solRetning(new Date(dato)));
-        if (!rejse.flyver) datoTur = null;
+        if (slut) datoTur = null;
       }
       // Skyderen "Under skyerne" glider selv (ved et sted og tilbage)
       if (underMål !== null) {
@@ -530,6 +631,12 @@ export default {
         rejse.grænser(minNu, R * 15);
       }
       rejse.opdater(dt);
+      // Turen ned: skyerne er væk, når kameraet er under deres top, og kommer igen, hvis man zoomer op over dem
+      nedtur.opdater(dt);
+      if (visning === 'ned') {
+        const u = nedtur.iSkyerne() ? 100 : 0;
+        if (u !== under) { sætUnder(u); underSkyder.sæt?.(u); }
+      }
       opdaterNavne();
       const k = rejse.skala;
       // I modlys står Solen lige bag den øverste kant af Venus, set fra kameraet (som ved Mars)
@@ -590,8 +697,13 @@ export default {
         drejSkyer();
         sol.set(...solRetning(new Date(dato)));
       },
+      // Flybyen: øverst i træet og i bjælken i 3D-billedet
+      tur: { navn: 'Flyby', stop: TUR.length, klar: () => true, kører: () => flyby.kører, start: startTur },
+      trin: () => flyby.bjælke(),
       stop() {
         aktiv = false;
+        flyby.afslut();
+        nedtur.stop();
         bjælke.fjern();
         verden.opdateringer.delete(hvertBillede);
         lærred.removeEventListener('pointerdown', vedNed);
@@ -693,7 +805,13 @@ export default {
           return { x: r.left + ((stedPunkt.x + 1) / 2) * r.width, y: r.top + ((1 - stedPunkt.y) / 2) * r.height };
         },
         billeder: () => ({ kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: venus.harTabel, tone: kortTone, skyer: skyStr, bjælke: { venter: bjælke.venter, vist: bjælke.vist } }),
-        tur: () => ({ flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        flybyStop: () => TUR.map((t) => ({ id: t.id, titel: t.titel, tekst: t.tekst, egenSide: !!SIDER[t.id] })),
+        // V5: turen ned (fasen, højden, måleren, fotoet og kuplen), og hvad der er slået til
+        ned: () => nedtur.test(),
+        // Flybyens stop nr (fra 0) med det samme (kun til billeder)
+        flybyTil(nr) { if (!flyby.kører) flyby.start(); flyby.gå(nr); },
+        tilstand: () => ({ uv, glød: glødTil, høj, under, hurtig, turHurtig }),
         hop: () => rejse.hop(),
         // Højden over kuglen (km, glat) et sted (bredde, længde i grader øst)
         højde(bredde, længde) {

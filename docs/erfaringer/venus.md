@@ -32,3 +32,11 @@
 - **Datoen kan vælge lyset ved et sted:** I stedet for at dreje Venus (som Mars) glider datoen til den dato, hvor klokken er 9-10 ved stedet (`datoMedTid`, højst et halvt soldøgn). Drejningen og Solens retning følger så hinanden af sig selv, og testen kan tjekke, at Solen står mod vest om formiddagen.
 - **Flyvninger i tests:** `spol` får ikke kameraets rejse til at flyve. Vent med `waitForFunction` på `tur().flyver`. Med fuld grafik (ca. 2 billeder i sekundet i miljøet) tager en flyvning over et minut, så værktøjet venter op til 4 minutter.
 - **Et skærmbillede lige efter et nyt tal kan vise det gamle:** Efter `sætDato` gav det første skærmbillede et sort punkt. Vent ca. et halvt sekund. `getImageData` flere gange på et lærred giver en advarsel i konsollen (tæller som fejl i testene): brug `getContext('2d', { willReadFrequently: true })`.
+
+## Flybyen og turen ned (V5, 17. november 2026)
+- **En kuppel om kameraet farver også panelerne:** Lærredet ligger bag de gennemsigtige paneler, så en lys himmel under skyerne (beige i skyerne) gjorde toplinjen og panelerne svære at læse. Farverne blev skruet ned til ca. 0,6. Se en ny himmel med panelerne fremme, ikke kun selve 3D-billedet.
+- **En tur i to flyvninger:** `rejse.fremdrift` starter forfra ved den næste flyvning. Datoen, der glider med flyvningen (`datoTur`), skal derfor stoppe efter den første, ellers hopper Solen tilbage.
+- **Lodret ned med `bane`:** `rejse.flyv({ bane, op, tid })` gav en jævn tur lodret ned over stedet. Banen bestemmer kameraet og det punkt, det kigger på, og ved e = 1 skal punktet være `fokus()`. Højden følger knæk (ikke en eksponentiel), så kameraet bliver nogle sekunder inde i skyerne.
+- **Skyerne skiftes bag disen:** Skylaget tegnes kun udefra (FrontSide). Skiftet til "Under skyerne" sker under skyernes top, hvor disen allerede dækker næsten helt, så man ikke ser rummet et øjeblik.
+- **Måleren ved Venera 13 passer af sig selv:** Jorden ved stedet ligger 0,67 km over middelradius i Magellans højder, og VIRA giver dér 457 °C og 88 bar, næsten som landerens 457 °C og 89 atmosfærer. Regn luften fra den rigtige højde over middelradius, ikke over kortets kugle.
+- **NSSDC svarede curl, men ikke Python:** `urllib` fik "Connection reset" gennem proxyen, mens curl hentede TIFF-filen. `lav_venera.py` tager derfor også en hentet fil som parameter.
