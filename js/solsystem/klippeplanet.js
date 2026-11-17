@@ -183,6 +183,19 @@ const POL_GLSL = /* glsl */ `
   uniform vec4 harPol;    // kortet mod nord, mod syd, højderne mod nord, mod syd (0 eller 1)
   uniform vec3 polGr;     // kortets kant i planet (RMAX), og hvor polkortet starter og er helt over (sinus til bredden)
   uniform float polTexel; // en pixel i polhøjderne (i planet)
+  #ifdef POLIS
+  // Radarens is ved nordpolen (Merkur, MP2): et kort i samme projektion som polkortet, der lægges oven på lyset som
+  // en farve, der lyser af sig selv (isen ligger i evig skygge, så den ville ellers være sort, som på NASA's billeder).
+  uniform sampler2D polIs;
+  uniform float polIsStyrke;
+  uniform vec3 polIsFarve;
+  vec3 polIsen(vec3 n0, vec3 ud) {
+    if (polIsStyrke < 0.001 || n0.y < 0.9) return ud; // kortet går ned til 70° (sin = 0,94)
+    vec2 uv = vec2(n0.x, -n0.z) / (1.0 + n0.y) / (2.0 * polGr.x) + 0.5;
+    float m = texture2D(polIs, uv).r * polIsStyrke;
+    return mix(ud, polIsFarve, m);
+  }
+  #endif
   vec2 polGrad(sampler2D t, vec2 uv) {
     float d = polTexel / (2.0 * polGr.x);
     return vec2(hoejdeAf(t, uv + vec2(d, 0.0)) - hoejdeAf(t, uv - vec2(d, 0.0)),
@@ -315,6 +328,9 @@ const FRAGMENT = /* glsl */ `
     polBland(n0, g, c);
     #endif
     gl_FragColor = vec4(belys(n0, normalize(n0 - g.x * oest - g.y * nord), c), 1.0);
+    #ifdef POLIS
+    gl_FragColor.rgb = polIsen(n0, gl_FragColor.rgb);
+    #endif
     #ifdef GLOED
     if (gloedStyrke > 0.001) gl_FragColor.rgb += gloed(harHoejde > 0.5 ? hMin + hSpan * hoejdeAf(hoejde, vUv) : gloedT.z / radiusKm, n0);
     #endif
@@ -460,11 +476,12 @@ const glidende = (x) => { const t = THREE.MathUtils.clamp(x, 0, 1); return t * t
 // skyer: skyerne fra js/solsystem/skyer.js, som kaster skygge på jorden.
 // tone: [r, g, b] (Venus): kortene er gråtoner med én kanal (RedFormat), og gråtonen ganges med denne farve.
 // pol: { rmax, fra, til } (Merkur): polkortene (POL_GLSL) med kanten rmax i planet, og de bruges fra bredden fra til til
-// (grader). Kortene sættes med sætPolKort og sætPolHøjde.
+// (grader). Kortene sættes med sætPolKort og sætPolHøjde. pol.is (Merkur, MP2): et kort over radarens is ved nordpolen
+// i polkortets projektion (sætPolIs(t) og sætPolIsStyrke(v, farve)), som lyser af sig selv oven på kloden fra pol.fra.
 // glød: { T0, fald, nul, bølge, c2 } (Venus, V3): jorden gløder på natsiden efter højden (sætGlød(styrke, farve)).
 export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, højdeMax, net = [1024, 512], farve = [0.6, 0.35, 0.2], luft = null, is = false, skyer = null, tone = null, glød = null, pol = null }) {
   const R = radius / skala;
-  const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }), ...(glød && { GLOED: '' }), ...(pol && { POL: '' }) };
+  const defines = { ...(luft && { LUFT: '' }), ...(is && { IS: '' }), ...(skyer && { SKYER: '' }), ...(tone && { TONE: '' }), ...(glød && { GLOED: '' }), ...(pol && { POL: '' }), ...(pol?.is && { POLIS: '' }) };
   const medSkyer = (glsl) => glsl.replace('SKY_GLSL_HER', skyer ? SKY_GLSL : '');
   const mat = new THREE.ShaderMaterial({
     uniforms: {
@@ -500,6 +517,7 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         harPol: { value: new THREE.Vector4() },
         polGr: { value: new THREE.Vector3(pol.rmax, Math.sin(pol.fra * Math.PI / 180), Math.sin(pol.til * Math.PI / 180)) },
         polTexel: { value: 1 },
+        ...(pol.is && { polIs: { value: null }, polIsStyrke: { value: 0 }, polIsFarve: { value: new THREE.Vector3(1, 0.85, 0.1) } }),
       }),
     },
     defines: { ...defines, HULLER: 0 },
@@ -630,6 +648,17 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       u[nord ? 'polHoejdeN' : 'polHoejdeS'].value = t;
       u.harPol.value[nord ? 'z' : 'w'] = t ? 1 : 0;
       if (t) u.polTexel.value = (2 * u.polGr.value.x) / t.image.width;
+    },
+    // Radarens is ved nordpolen (kun med pol.is): kortet (én kanal) og styrken 0-1 (og farven)
+    sætPolIs(t) {
+      if (!u.polIs) return;
+      u.polIs.value = t;
+      if (!t) u.polIsStyrke.value = 0;
+    },
+    sætPolIsStyrke(v, f) {
+      if (!u.polIs) return;
+      u.polIsStyrke.value = u.polIs.value ? v : 0;
+      if (f) u.polIsFarve.value.set(...f);
     },
     sætHøjde(t) {
       u.hoejde.value = t;

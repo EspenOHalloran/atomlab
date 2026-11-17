@@ -13,8 +13,7 @@
 //   intet at spole. De tones næsten væk i den rigtige skala.
 // - Tryk: den klode, hvis midte er nærmest (inden for TRYK_PX), vælges. Kameraet flyver ind (van Wijk og Nuijs vej,
 //   glatVej i rejse.js), til kuglen fylder ca. en tredjedel af billedet, og billedet toner gennem mørke over i planetens
-//   egen visning. Pluto er ikke bygget: Den er et sted i overblikket med et kort panel (Merkur fik sin egen
-//   visning i MP1, 17. november 2026).
+//   egen visning. Merkur og Pluto er ikke bygget: De er steder i overblikket med et kort panel.
 // - Tilbage: Overblikket husker dato og tempo (husk) og flyver ud fra den klode, man kom fra, til hjemblikket i "Pustet
 //   op" (feedback 16. november 2026: før huskede det kameraet tæt ved planeten, så man stod i tomt rum).
 // - Forløbet "Rundt om Solen" (drejebogens afsnit 2) står i js/solsystem/overblik-forloeb.js. Det styrer scenen gennem
@@ -586,7 +585,7 @@ export default {
       return solRet.multiplyScalar(Math.cos(50 * GRAD)).addScaledVector(side, Math.sin(50 * GRAD)).addScaledVector(op, k.p.id === 'saturn' ? -0.35 : 0.3).normalize();
     }
 
-    // Besøg en klode: Pluto er et sted i overblikket, de andre (og Solen) har deres egen visning
+    // Besøg en klode: Pluto er et sted i overblikket, de andre (og Solen) har deres egen visning (Merkur fra MP2)
     function besøg(id, hop = false) {
       if (flyvning?.slags === 'ind') return;
       lys.stop();

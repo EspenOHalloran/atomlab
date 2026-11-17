@@ -818,4 +818,17 @@ export const ORDBOG = [
     former: ['linse', 'linsen', 'linser', 'linserne'],
     tekst: 'Et stykke slebet glas med krumme sider, der bøjer lyset. I en kikkert samler en stor linse forrest lyset til et billede, og en lille linse ved øjet forstørrer det. Jo bedre linserne er slebet, jo skarpere bliver billedet.',
   },
+  // Merkur MP2 (17. november 2026, docs/drejebog-merkur-pluto.md afsnit 4). Soldøgn: NSSDC (Merkur 4.222,6 timer =
+  // 175,94 døgn, Jorden 24 timer, stjernedøgnet 23,93 timer). Sublimation: tøris (CO₂) ved almindeligt tryk, og hullerne
+  // på Merkur (NASA, "Hollows on Mercury": måske tab af flygtige stoffer). Pluto bruger det i MP3-MP4.
+  {
+    id: 'soldoegn', ord: 'Soldøgn',
+    former: ['soldøgn', 'soldøgnet', 'soldøgnets'],
+    tekst: 'Tiden fra én solopgang til den næste. På Jorden er det 24 timer, lidt mere end én omgang om sig selv, for Jorden går samtidig et stykke rundt om Solen. På Merkur er et soldøgn 176 jorddøgn, mens en omgang om sig selv kun tager 59.',
+  },
+  {
+    id: 'sublimation', ord: 'Sublimation',
+    former: ['sublimation', 'sublimationen', 'sublimerer', 'sublimere'],
+    tekst: 'Når et fast stof bliver direkte til luftart uden at smelte først. Tøris gør det ved stuetemperatur. På Merkur forsvinder noget i klippen måske sådan i solheden, og så synker jorden og giver lyse huller.',
+  },
 ];

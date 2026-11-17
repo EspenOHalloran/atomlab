@@ -177,5 +177,4 @@ Forenkling: I Solens yderste ca. 30 % bæres energien op af strømmende gas (kon
 
 **Svar:** Kemien går langsommere i kulde (Arrhenius), elektrolytten bliver mere sej, ionerne bevæger sig langsommere, og den indre modstand vokser. Spændingen falder under belastning, og enheden slukker ved sin afbrydespænding, selvom der er energi tilbage. Det meste kommer tilbage, når batteriet bliver varmt. Opladning i frost kan give lithium-plating (lithium som metal på grafitten).
 
-**Faktatjek:** Almindeligt lærebogsstof om lithium-ion (indre modstand og lithium-plating ved lav temperatur). Ingen tal er skrevet i teksten med vilje. Ikke slået op i en enkelt kilde i denne session: tjek gerne med Fable ved næste faktatjek.
-
+**Faktatjek (17. november 2026):** Lithium-plating bliver værre ved lav temperatur og hurtig opladning, og selvafladningen stiger med temperaturen (så et koldt batteri på hylden taber *langsommere*): en.wikipedia.org/wiki/Lithium-ion_battery (afsnittene om nedbrydning og selvafladning, med henvisning til Vermeer m.fl. 2022, IEEE Trans. Transp. Electrif. 8(2)). Større indre modstand i kulde, fordi elektrolytten leder ioner dårligere, er almindeligt lærebogsstof. Ingen tal i teksten, med vilje.
