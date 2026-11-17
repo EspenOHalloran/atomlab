@@ -12,7 +12,7 @@ Ti bøger, én pr. person. Hver person har **én** opdagelse og **ét** sted i p
 ## 2. De ti og rækkefølgen
 **Huygens først som prøve**, så de syv andre fra faktagrundlaget (i tidens rækkefølge), så **Galilei** og til sidst **Newton** (jeres svar 14. november 2026).
 
-| Nr. | Person | Opdagelsen | Gør det selv (stedet i AtomLab) | Bogsiden | Tiden (stil) | Portræt (kandidat efter hukommelsen, licens ikke tjekket undtagen Huygens) |
+| Nr. | Person | Opdagelsen | Gør det selv (stedet i AtomLab) | Bogsiden | Tiden (stil) | Portræt (kandidat efter hukommelsen, licens tjekket for Huygens, Galilei og Newton) |
 |---|---|---|---|---|---|---|
 | 1 | **Christiaan Huygens** | Saturns ring (1656/1659) og Titan (1655) | Saturns ringe fra kanten | *Systema Saturnium* s. 46-48 og tavlen (Smithsonian, frigivet) | Haag, 1650'erne | Caspar Netscher 1671 (**PD, tjekket**) |
 | 2 | Tycho Brahe | Den nye stjerne 1572 | Kosmos, hvid dværg og supernova | *De nova stella* (faksimilen fra 1901) | Danmark, 1570'erne | Kobberstik af Jacob de Gheyn 1586 |
@@ -22,12 +22,13 @@ Ti bøger, én pr. person. Hver person har **én** opdagelse og **ét** sted i p
 | 6 | Albert Einstein | E = mc² og tiden (1905) | Stjerneovnen og Tid | *Annalen der Physik* 1905 (fri fra 2026) | Bern, 1905 | Foto af Ferdinand Schmutzer 1921 |
 | 7 | Niels Bohr | Elektronerne i skaller (1913) | Atomværkstedet | Vores tegning og et kort citat (beskyttet til 2032) | København, 1913 | Foto fra 1922 (fotografens rettigheder, se afsnit 6) |
 | 8 | Inge Lehmann | Jorden har en indre kerne (1936) | Kortet ved Jordens magnetfelt | Vores tegning og et kort citat (beskyttet til 2063) | København, 1936 | Usikkert. Måske vores egen tegning |
-| 9 | Galileo Galilei | Jupiters fire store måner (1610) | Jupiter → Månerne | *Sidereus Nuncius* 1610 med hans egne tegninger | Padova og Venedig, 1610 | Justus Sustermans 1636 |
-| 10 | Isaac Newton | Tyngdeloven og banerne (*Principia* 1687) | Solsystemets overblik (banerne) | *Principia* 1687 | Cambridge og London, 1680'erne | Godfrey Kneller 1689 |
+| 9 | Galileo Galilei | Jupiters fire store måner (1610) | Jupiter → Månerne | *Sidereus Nuncius* 1610, blad 17-18 med hans egne tegninger (Smithsonian, CC0) | Padova og Venedig, 1610 | Justus Sustermans 1635, Uffizi (**PD, tjekket**) |
+| 10 | Isaac Newton | Tyngdeloven og banerne (*Principia* 1687) | Solsystemets overblik (banerne) | *Principia* 1687, s. 402-407 (Smithsonian, CC0) | Cambridge og London, 1680'erne | Godfrey Kneller 1689 (**PD, tjekket**) |
 
-**Galilei og Newton har intet faktagrundlag endnu.** Det laves i en senere session (Opus, høj) i en ny fil i `docs/fakta-videnskabsfolk/`. Det skal slås op:
-- **Galilei:** De fire store måner fundet 7.-13. januar 1610 og trykt i *Sidereus Nuncius* (Venedig, marts 1610) med hans egne tegninger af Jupiter og "stjernerne" nat for nat. Hvilken skanning der er frigivet (bibliotek og licens, side for side). At han kaldte dem "de mediceiske stjerner". Hans kikkert (forstørrelse, hvad han selv skriver). Myterne: tårnet i Pisa (står allerede i "Myterne" i fakta-videnskabsfolk.md), "Og dog bevæger den sig", og at han opfandt kikkerten. Gør det selv: **Jupiter → Månerne** i Solsystemet findes. En gåde fra bogen kunne være at finde månerne i hans tegninger nat for nat.
-- **Newton:** Tyngdeloven og banerne i *Principia* (London 1687), især bog III og "månetesten" (Månen falder mod Jorden lige så meget, som tyngden siger). Keplers love, som han forklarede. Hvilken skanning af førsteudgaven der er frigivet. Myten om æblet (står i "Myterne"). Gør det selv: **Solsystemets overblik** (banerne om Solen), som er bygget (trin 1-3, 15. november 2026), så Newton får sit sted dér.
+**Galilei og Newton har faktagrundlag** (Fable 15. november 2026, E15, Opus' noter og jeres svar 17. november 2026): [fakta-videnskabsfolk/galilei.md](fakta-videnskabsfolk/galilei.md) og [newton.md](fakta-videnskabsfolk/newton.md). Kort:
+- **Galilei:** De syv tegninger fra 7.-15. januar 1610 (blad 17-18) passer med JPL, så gåden "Hvem er hvem?" har et rigtigt facit. Forløbet i fire trin (to gæt: "Hvad er prikkerne?" og "Hvem har flyttet sig?", som han selv gættede forkert på). Gør det selv: **Jupiter → Månerne**. Portrættet: Sustermans 1635 (Uffizi). Kernesætning A (jeres valg).
+- **Newton:** Månetesten (bog III, s. 406-407) er gåden: På ét minut falder Månen lige så langt, som en sten falder på ét sekund. Forløbet i fire trin (to gæt, kanonkuglen og månetesten som ét billede). Gør det selv: **Solsystemets overblik**. Siderne nævner Galileis måner (s. 402-403) og Huygens (s. 407). Kernesætningen er Opus' udgave af A (jeres valg).
+- Drejebøgerne laves, når de to bøger skal bygges (efter de syv andre). Det, de skal slå op, står sidst i Opus' noter.
 - **da Vinci** bliver i [idéerne](ideer.md) (jeres svar 14. november 2026).
 
 ## 3. Formen: en bog i 2D i fem lag
