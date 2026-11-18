@@ -1,8 +1,9 @@
 // Pluto og Charon (docs/drejebog-merkur-pluto.md). MP3: kortet, højderne, Charon, dansen om det fælles tyngdepunkt og
 // disen. Kloden er New Horizons' kort over Pluto med farverne og højderne (klippeplanet.js som Mars, Venus og Merkur).
 // Charon er en måne med et kort i gråtoner (maane.js) og en rødbrun nordpol. Står i Solsystemet efter Neptun (efter
-// afstanden til Solen). Tallene står i docs/fakta-solsystemet/del8-merkur-og-pluto.md og js/data/pluto.js. Stederne
-// (hjertet og bjergene), flybyen og resten af siden kommer i MP4.
+// afstanden til Solen). Tallene står i docs/fakta-solsystemet/del8-merkur-og-pluto.md og js/data/pluto.js. MP4:
+// stederne (hjertet og bjergene af vandis) med et lokalt net af 300 m-kortet over begge, navne på kloden og flybyen
+// med 5 stop (teksterne i js/data/sider/pluto.js).
 //
 // - 1 enhed = 1.000 km. Pluto, Charon og afstanden imellem dem er i samme skala: Her behøver vi ikke snyde.
 // - Systemet ligger i ekliptikkens retninger. Aksen peger mod IAU's positive pol, og kortets længde 0° står W grader
@@ -15,7 +16,9 @@
 // - Det sydligste (syd for ca. 30-40° S) lå i mørke, da New Horizons fløj forbi i 2015. Det er mørkt i kortet, og
 //   højderne findes kun på den side, sonden så. Bagsiden er glat, fordi vi ikke ved bedre.
 // - Disen (js/kosmos/pluto-dis.js) lyser blåt i modlys. "Modlys" flyver kameraet om bag Pluto.
-// - Indstillinger: "Modlys" og "Navne" (Charon, tyngdepunktet og banerne).
+// - Stederne (MP4): Datoen glider med flyvningen hen til det tidspunkt, hvor Solen står mod nordvest som i New Horizons'
+//   fotos (så skyggerne i kortet og vores lys ikke går imod hinanden), og tiden står stille, når man er der.
+// - Indstillinger: "Modlys" og "Navne" (stederne, Charon, tyngdepunktet og banerne).
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, passerTil } from '../scene3d.js';
@@ -23,13 +26,14 @@ import { glød, skilt } from './faelles.js';
 import { lavKlippeplanet } from '../solsystem/klippeplanet.js';
 import { lavIsmåne } from '../solsystem/maane.js';
 import { lavRejse } from '../solsystem/rejse.js';
+import { lavFlyby } from '../solsystem/flyby.js';
 import { navneTil, navneKnap } from '../solsystem/navne.js';
 import { hent, glem, iLager } from '../solsystem/hent.js';
 import { startDato } from '../solsystem/dato.js';
 import { lavHentebjælke, tonInd } from '../hentning.js';
 import { lavDis } from './pluto-dis.js';
-import { PLUTO, CHARON, TYNGDEPUNKT, pol, knude, solRetning, meridian, underSolen } from '../data/pluto.js';
-import { SIDE, SIDER } from '../data/sider/pluto.js';
+import { PLUTO, CHARON, TYNGDEPUNKT, pol, knude, solRetning, meridian, underSolen, datoMedSolOver } from '../data/pluto.js';
+import { SIDE, SIDER, TUR, TUR_SLUT } from '../data/sider/pluto.js';
 
 const S = 1000; // km pr. enhed
 const R_KM = PLUTO.radius; // 1.188,3 km (kortenes kugle)
@@ -51,10 +55,29 @@ const CHARON_FARVE = [0.95, 0.94, 0.93];
 const CHARON_LYS = 0.85;
 const TONE_SKALA = 1.4; // charon-tone.jpg er gemt delt med 1,4 (lav_pluto.py)
 
-// Træet i listen til venstre: Charon (stederne og flybyen kommer i MP4)
+// Stederne (MP4, drejebogen: hjertet og bjergene af vandis). Bredde og østlig længde fra USGS' navneliste
+// (planetocentrisk, +øst). sol: den længde, Solen står over, når man er der (grader øst). Ved hjertet og bjergene står
+// Solen så mod nordvest som på New Horizons' fotos (i 2015 stod den over ca. 128° Ø, se skyggerne i kortet), lidt mod øst,
+// så bjergene får mere lys (Solen står længere mod nord i dag end i 2015). kompas: hvorfra kameraet kigger (180 = fra
+// syd), vinkel: over horisonten, størrelse: radius af det, der skal være i billedet (1 = 1.000 km). skilt: navnet på
+// kloden. kunNavn: kun et navn på kloden (ikke i træet). lokalt: stedet ligger i det lokale net (LOKALT).
+export const STEDER = [
+  { id: 'hjertet', navn: 'Hjertet', skilt: 'Sputnik Planitia', bredde: 19.51, længde: 178.69, fokus: [14, 176], sol: 145, kompas: 180, vinkel: 48, størrelse: 0.42, lokalt: true },
+  { id: 'bjerge', navn: 'Bjergene af vandis', skilt: 'Tenzing Montes', bredde: -15.61, længde: 177.38, sol: 145, kompas: 185, vinkel: 26, størrelse: 0.065, lokalt: true },
+  { id: 'wright', navn: 'Wright Mons', skilt: 'Wright Mons', bredde: -21.36, længde: 173.24, sol: 145, kompas: 200, vinkel: 40, størrelse: 0.13, lokalt: true, kunNavn: true },
+  { id: 'burney', navn: 'Burney', skilt: 'Burney', bredde: 45.68, længde: 133.79, sol: 140, kompas: 180, vinkel: 55, størrelse: 0.24, kunNavn: true },
+  { id: 'belton', navn: 'Belton Regio', skilt: 'Belton Regio', bredde: -9.21, længde: 91.42, sol: 100, kompas: 180, vinkel: 60, størrelse: 0.8, kunNavn: true },
+  { id: 'tartarus', navn: 'Tartarus Dorsa', skilt: 'Tartarus Dorsa', bredde: 8.5, længde: 233.09, sol: 205, kompas: 200, vinkel: 50, størrelse: 0.35, kunNavn: true },
+];
+// Det lokale net over hjertet og bjergene: New Horizons' kort med 300 m pr. pixel, gjort til ca. 400 m (pc), 810 m
+// (tablet) og 1,6 km (tests), og højderne med ca. 1,6 km (billeder/solsystem/lav_pluto_steder.py: grænserne skal være
+// de samme som GRÆNSER dér). Ca. 1.190 × 1.660 km.
+const LOKALT = { id: 'hjertet', nord: 50, syd: -30, vest: 148, øst: 206, kort: ['4k', '2k', '1k'] };
+// Træet i listen til venstre: stederne og Charon (flybyen står øverst)
 const TRÆ = {
   rod: 'pluto',
   grupper: [
+    { navn: 'Steder', punkter: STEDER.filter((st) => !st.kunNavn).map((st) => ({ id: st.id, navn: st.navn, undertitel: 'Et sted på Pluto' })) },
     { navn: 'Måner', punkter: [{ id: 'charon', navn: 'Charon', undertitel: 'Plutos store måne' }] },
   ],
 };
@@ -123,6 +146,23 @@ export default {
     charon.gruppe.rotation.y = Math.PI;
     omdrejning.add(charon.gruppe);
     const B = TYNGDEPUNKT / S; // tyngdepunktet ligger B ude mod Charon
+
+    // ---------- Det lokale net over hjertet og bjergene (MP4) ----------
+    // Kortene hentes først, når man skal derhen (eller flybyen starter). Nettet tegnes kun ved stederne.
+    const lokalNet = TEST_HURTIG ? [96, 128] : LAV_KVALITET ? [288, 384] : [448, 600];
+    const lok = {
+      net: pluto.lokalt({ ...LOKALT, net: lokalNet }),
+      kort: LOKALT.kort[TEST_HURTIG ? 2 : LAV_KVALITET ? 1 : 0],
+      henter: false, hentet: { kort: false, højde: false },
+    };
+    function hentLokalt() {
+      if (lok.henter) return;
+      lok.henter = true;
+      hent(`pluto-hjertet-kort-${lok.kort}.jpg`, (t) => { lok.net.sætKort(t); lok.hentet.kort = true; }, { anisotropi, rundt: false });
+      hent('pluto-hjertet-hoejde-1k.png', (t) => { lok.net.sætHøjde(t); lok.hentet.højde = true; }, { farve: false, kanaler: 2, rundt: false });
+    }
+    const aktivér = (til) => { lok.net.aktiv = til; };
+    aktivér(false); // ved hele Pluto tegnes nettet ikke
 
     // ---------- Disen ----------
     const dis = lavDis({ radius: R_KM, km: S });
@@ -215,14 +255,16 @@ export default {
       rejse.kameraPunkt(kamPos);
       return kamPos.lengthSq() < 1e-9 ? startRetning() : kamPos.normalize();
     }
-    // 'pluto' (hele kloden), 'charon' eller 'test' (kigPå)
+    // 'pluto' (hele kloden), 'charon', et steds id eller 'test' (kigPå)
     let visning = 'pluto';
+    let datoTur = null; // datoen glider hen til tidspunktet ved stedet, mens kameraet flyver
 
     // Charon tæt på: kameraet ude bag Charon (set fra Pluto) og mod nord, så den røde nordpol ses og Pluto står bagved
     function tilCharon(færdig) {
       tiden?.('pause');
       visning = 'charon';
       modlys = false;
+      datoTur = null;
       // Kameraet ca. 16° fra linjen gennem Pluto og Charon, så Pluto står lige ved siden af Charon
       const ud = charonPunkt(new THREE.Vector3()).normalize();
       const nord = akse.clone();
@@ -230,33 +272,94 @@ export default {
       const skråt = nord.multiplyScalar(0.55).addScaledVector(side, 0.85).normalize();
       const retning = ud.multiplyScalar(Math.cos(16 * GRAD)).addScaledVector(skråt, Math.sin(16 * GRAD)).normalize();
       const afstand = passer(RC * 1.7);
-      rejse.flyv({ fokus: () => charonPunkt(fokusPunkt), afstand, retning, min: RC * 1.02, max: Math.max(R * 40, afstand * 1.25), færdig });
+      rejse.flyv({ fokus: () => charonPunkt(fokusPunkt), afstand, retning, min: RC * 1.02, max: Math.max(R * 40, afstand * 1.25), færdig: () => { if (visning === 'charon') aktivér(false); færdig?.(); } });
     }
     // Modlys: kameraet bag Pluto, så Solen står lige bag kanten, og disen lyser som en ring
     function tilModlys() {
       visning = 'pluto';
+      datoTur = null;
       const bag = sol.clone().negate();
       const side = new THREE.Vector3().crossVectors(bag, Y).normalize();
       const afstand = R * 4;
       // Lidt til siden: Solen står lige inden for kanten (Pluto ser ca. 14,5° bred ud på 4 radier)
       const retning = bag.addScaledVector(side, Math.tan(5 * GRAD)).normalize();
-      rejse.flyv({ fokus: fokusHel, afstand, retning, min: minOverblik(), max: R * 60 });
+      rejse.flyv({ fokus: fokusHel, afstand, retning, min: minOverblik(), max: R * 60, færdig: () => { if (visning === 'pluto') aktivér(false); } });
     }
 
-    // Træet: "Pluto" flyver tilbage til hele kloden, og Charon flyver ud til Charon
+    // ---------- Stederne (MP4) ----------
+    const steder = STEDER.map((st) => ({ ...st, ramme: pluto.sted(...(st.fokus ?? [st.bredde, st.længde])) }));
+    const stedMed = (id) => steder.find((st) => st.id === id);
+    const stedPunkt = new THREE.Vector3();
+    const stedOp = new THREE.Vector3();
+    const fokusVed = (st) => () => pluto.punkt(st.ramme.retning, stedPunkt).multiplyScalar(R).applyQuaternion(planetDrejning());
+    const opVed = (st) => () => stedOp.copy(st.ramme.op).applyQuaternion(planetDrejning());
+    // Plutos drejning (kuglens forælder → systemet), når Pluto står, som den gør på datoen ms
+    const drejningVed = (ms) => new THREE.Quaternion().setFromAxisAngle(Y, (meridian(new Date(ms)) % 360) * GRAD).premultiply(hæld.quaternion);
+    // Retningen fra stedet mod kameraet (i systemets retninger), når Pluto står, som den gør på datoen ms
+    function fraSted(st, ms) {
+      const { op, nord, øst } = st.ramme;
+      const a = st.kompas * GRAD, v = st.vinkel * GRAD;
+      return new THREE.Vector3()
+        .addScaledVector(nord, Math.cos(v) * Math.cos(a))
+        .addScaledVector(øst, Math.cos(v) * Math.sin(a))
+        .addScaledVector(op, Math.sin(v))
+        .applyQuaternion(drejningVed(ms));
+    }
+    // Flyv hen til et sted. Datoen glider til tidspunktet, hvor Solen står over st.sol, og tiden står stille dér.
+    function besøg(st, færdig) {
+      tiden?.('pause');
+      modlys = false;
+      if (st.lokalt) { hentLokalt(); aktivér(true); }
+      const til = datoMedSolOver(dato, st.sol);
+      datoTur = { fra: dato, til };
+      visning = st.id;
+      // Man kan selv zoome ud til 1.500 km, og mindst en fjerdedel længere ud end stedet
+      const afstand = passer(st.størrelse);
+      rejse.flyv({
+        fokus: fokusVed(st), op: opVed(st), afstand, retning: fraSted(st, til), min: 0.003, max: Math.max(1.5, afstand * 1.25),
+        færdig: () => { if (visning === st.id && !st.lokalt) aktivér(false); færdig?.(); },
+      });
+    }
+    // Flybyens første stop: Pluto og Charon i rigtig skala, set fra hjertets side og lidt fra siden, så Charon står ved
+    // siden af Pluto (hjertet vender næsten præcis væk fra Charon). Datoen glider, så Solen står som ved stederne.
+    const midtPunkt = new THREE.Vector3();
+    function tilBegge() {
+      tiden?.('pause');
+      modlys = false;
+      visning = 'pluto';
+      hentLokalt(); // til de næste stop
+      const til = datoMedSolOver(dato, stedMed('hjertet').sol);
+      datoTur = { fra: dato, til };
+      const q = drejningVed(til);
+      const c = new THREE.Vector3(1, 0, 0).applyQuaternion(q); // mod Charon
+      const s = new THREE.Vector3(...solRetning(new Date(til)));
+      const side = s.addScaledVector(c, -s.dot(c)).normalize(); // vinkelret på linjen, mod Solens side
+      const retning = c.clone().multiplyScalar(-Math.cos(55 * GRAD)).addScaledVector(side, Math.sin(55 * GRAD)).normalize();
+      rejse.flyv({
+        fokus: () => charonPunkt(midtPunkt).multiplyScalar(0.5), afstand: passer(R * 7.8), retning, min: minOverblik(), max: R * 60,
+        færdig: () => { if (visning === 'pluto') aktivér(false); },
+      });
+    }
+
+    // Træet: "Pluto" flyver tilbage til hele kloden, Charon ud til Charon, og et sted flyver derhen
     function gåTil(id) {
       if (id === visning) return;
+      flyby.afslut();
       vis(id);
       fase(null);
       forklaring('');
     }
     function vis(id, færdig) {
       if (id === 'charon') tilCharon(færdig);
-      else {
+      else if (id === 'pluto') {
         visning = 'pluto';
+        datoTur = null;
         tiden?.('spil');
         if (modlys) tilModlys();
-        else helPlanet(kameraRetning(), færdig);
+        else helPlanet(kameraRetning(), () => { if (visning === 'pluto') aktivér(false); færdig?.(); });
+      } else {
+        const st = stedMed(id);
+        if (st) besøg(st, færdig);
       }
       lavKnapper();
     }
@@ -281,6 +384,84 @@ export default {
       );
       opdaterKnapper();
     }
+
+    // ---------- Navnene på kloden (MP4, som Merkur) ----------
+    // Når man ser hele Pluto, står stederne med navn på kloden, og et tryk på et navn flyver derhen. Navnene skjules
+    // på bagsiden, tæt på, langt ude, i modlys, under flyvninger og med knappen "Navne" slået fra.
+    const navne = steder.map((st) => {
+      const r = pluto.sted(st.bredde, st.længde).retning;
+      const tekst = skilt(st.skilt, st.kunNavn ? '#d8d3ca' : '#fff0d6', 1);
+      tekst.center.set(0.5, -0.3); // teksten står lige over stedet
+      const prik = glød(0xffe6c0, 1, 0.9);
+      for (const o of [tekst, prik]) {
+        o.material.depthTest = false;
+        o.renderOrder = 5;
+        o.position.copy(r).multiplyScalar(R * 1.004);
+        o.visible = false;
+        omdrejning.add(o);
+      }
+      return { st, tekst, prik, forhold: tekst.scale.x / tekst.scale.y, str: 0 };
+    });
+    let stedNavneVist = false;
+    const navnPos = new THREE.Vector3();
+    const navnNormal = new THREE.Vector3();
+    const tilKamera = new THREE.Vector3();
+    const navnOp = new THREE.Vector3();
+    function opdaterStedNavne() {
+      stedNavneVist = navneTil() && visning === 'pluto' && !modlys && !rejse.flyver;
+      // Tæt på fylder navnene for meget, og langt ude (ved dansen) er Pluto for lille
+      const afstandR = rejse.afstand / R;
+      const passende = THREE.MathUtils.smoothstep(afstandR, 1.25, 1.6) * (1 - THREE.MathUtils.smoothstep(afstandR, 4.5, 6));
+      for (const n of navne) {
+        n.prik.getWorldPosition(navnPos);
+        navnNormal.copy(navnPos).sub(system.position).normalize();
+        const afstand = tilKamera.copy(kamera.position).sub(navnPos).length();
+        const forside = THREE.MathUtils.smoothstep(navnNormal.dot(tilKamera.divideScalar(afstand)), 0.05, 0.25);
+        const a = stedNavneVist ? forside * passende : 0;
+        n.tekst.visible = n.prik.visible = a > 0.01;
+        n.tekst.material.opacity = a;
+        n.prik.material.opacity = 0.9 * a;
+        n.str = afstand * (n.st.kunNavn ? 0.019 : 0.022); // samme størrelse på skærmen uanset afstanden
+        const k = rejse.skala;
+        n.tekst.scale.set((n.forhold * n.str) / k, n.str / k, 1);
+        n.prik.scale.setScalar((afstand * 0.012) / k);
+      }
+    }
+    const lærred = verden.renderer.domElement;
+    // Hvor et navn står på skærmen (pixels): stedet (x, y), tekstens højde h og bredde b
+    function påSkærm(n) {
+      const r = lærred.getBoundingClientRect();
+      n.prik.getWorldPosition(navnPos);
+      navnOp.set(0, 1, 0).applyQuaternion(kamera.quaternion).multiplyScalar(n.str).add(navnPos);
+      navnPos.project(kamera);
+      navnOp.project(kamera);
+      const x = r.left + ((navnPos.x + 1) / 2) * r.width, y = r.top + ((1 - navnPos.y) / 2) * r.height;
+      const h = (Math.abs(navnOp.y - navnPos.y) / 2) * r.height;
+      return { x, y, h, b: h * n.forhold };
+    }
+    // Navnet, et tryk ved (x, y) rammer: teksten (lige over stedet) eller prikken, med lidt luft til fingre
+    function navnVed(x, y) {
+      let bedst = null;
+      for (const n of navne) {
+        if (!n.tekst.visible || n.tekst.material.opacity < 0.5) continue;
+        const p = påSkærm(n);
+        const dx = Math.abs(x - p.x) - p.b / 2, dy = Math.abs(y - (p.y - 0.8 * p.h)) - 0.8 * p.h;
+        const afstand = Math.hypot(Math.max(dx, 0), Math.max(dy, 0));
+        if (afstand < 12 && (!bedst || afstand < bedst.afstand)) bedst = { n, afstand };
+      }
+      return bedst?.n ?? null;
+    }
+    let ned = null;
+    const vedNed = (h) => { ned = { x: h.clientX, y: h.clientY }; };
+    const vedOp = (h) => {
+      if (!ned || Math.hypot(h.clientX - ned.x, h.clientY - ned.y) > 8) return;
+      ned = null;
+      if (rejse.flyver || !stedNavneVist) return;
+      const n = navnVed(h.clientX, h.clientY);
+      if (n) gåTil(n.st.id);
+    };
+    lærred.addEventListener('pointerdown', vedNed);
+    lærred.addEventListener('pointerup', vedOp);
 
     // ---------- Navnene: Charon, tyngdepunktet og banerne ----------
     const charonNavn = skilt('Charon', '#e6e2dc', 1);
@@ -319,6 +500,7 @@ export default {
     }
     const hjælp3 = new THREE.Vector3();
     function opdaterNavne() {
+      opdaterStedNavne();
       navneVist = navneTil() && !rejse.flyver;
       const k = rejse.skala;
       // Banerne og tyngdepunktet ses, når kameraet er et stykke ude (ved hele Pluto), Charons navn, når den er lille
@@ -352,6 +534,19 @@ export default {
       charonNavn.material.opacity = aC;
       charonNavn.visible = aC > 0.01;
     }
+
+    // ---------- Flybyen (MP4, js/solsystem/flyby.js): 5 stop, teksterne i js/data/sider/pluto.js ----------
+    // Rækkefølgen følger New Horizons 14. juli 2015: ind mod hjertet, forbi bjergene, forbi Charon og et blik tilbage.
+    function flyvTilStop(stop, nr) {
+      if (stop.id === 'pluto') tilBegge();
+      else if (stop.id === 'modlys') {
+        modlys = true;
+        tilModlys();
+      } else vis(stop.id); // hjertet, bjergene og Charon
+      lavKnapper();
+      forklaring(stop.nu + (nr === TUR.length - 1 ? TUR_SLUT : ''));
+    }
+    const flyby = lavFlyby({ stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(), slut: TUR_SLUT });
     lavKnapper();
 
     // ---------- Hvert billede ----------
@@ -363,6 +558,12 @@ export default {
         første = false;
         helPlanet(startRetning());
         rejse.hop();
+      }
+      // Datoen glider hen til tidspunktet ved stedet i takt med flyvningen
+      if (datoTur) {
+        const slut = !rejse.flyver;
+        sætDato(slut ? datoTur.til : THREE.MathUtils.lerp(datoTur.fra, datoTur.til, rejse.fremdrift));
+        if (slut) datoTur = null;
       }
       rejse.opdater(dt);
       solNu.copy(sol).applyQuaternion(rejse.drejning);
@@ -397,6 +598,9 @@ export default {
       sted: () => visning,
       hurtig: 'et døgn i sekundet',
       tempo: (t) => { hurtig = t === 'hurtig'; },
+      // Flybyen: øverst i træet og i bjælken i 3D-billedet
+      tur: { navn: 'Flyby', stop: TUR.length, klar: () => true, kører: () => flyby.kører, start: () => flyby.start() },
+      trin: () => flyby.bjælke(),
       // Kaldes kun, når tiden går (tidsknappen): datoen går frem, Pluto og Charon drejer, og Solen følger banen
       opdater(dt) {
         dato += dt * (hurtig ? HURTIG : 1) * SEK_PR_SEK * 1000;
@@ -405,8 +609,12 @@ export default {
       },
       stop() {
         aktiv = false;
+        flyby.afslut();
         bjælke.fjern();
         verden.opdateringer.delete(hvertBillede);
+        lærred.removeEventListener('pointerdown', vedNed);
+        lærred.removeEventListener('pointerup', vedOp);
+        for (const n of navne) { n.tekst.material.map?.dispose(); n.tekst.material.dispose(); n.prik.material.dispose(); }
         for (const s of [charonNavn, tyngdeNavn]) { s.material.map?.dispose(); s.material.dispose(); }
         for (const o of [kryds, charonBane, plutoBane]) { o.geometry.dispose(); o.material.dispose(); }
         for (const s of [solKerne, solGlød]) s.material.dispose();
@@ -463,9 +671,26 @@ export default {
         },
         navne: () => ({ charon: charonNavn.visible, tyngdepunkt: tyngdeNavn.visible, kryds: kryds.visible, baner: charonBane.visible }),
         billeder: () => ({ kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: pluto.harTabel, tone: kortTone, anisotropi, bjælke: { venter: bjælke.venter, vist: bjælke.vist } }),
-        tur: () => ({ flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
+        tur: () => ({ trin: flyby.trin, flyver: rejse.flyver, skala: rejse.skala, afstand: rejse.afstand }),
         hop: () => rejse.hop(),
         visning: () => visning,
+        // MP4: stederne, det lokale net, navnene og flybyen
+        steder: () => STEDER.map((st) => ({ id: st.id, bredde: st.bredde, længde: st.længde, kunNavn: !!st.kunNavn })),
+        lokalt: () => ({ aktiv: lok.net.aktiv, klar: lok.net.klar, tabel: lok.net.harTabel, kort: lok.kort, ...lok.hentet }),
+        // Bredde og længde (grader øst, −180 til 180) af et punkt i verden, og af det punkt, kameraet kigger på
+        blVerden(p) { return bl(omdrejning.worldToLocal(lokal.copy(p)).normalize()); },
+        midte() { return this.blVerden(orbit.target); },
+        // Solens højde over horisonten (grader), og om den står mod nord og vest, ved et sted (id)
+        solVed(id) {
+          const st = stedMed(id);
+          const r = pluto.sted(st.bredde, st.længde);
+          const sl = sol.clone().applyQuaternion(planetDrejning().invert());
+          return { højde: Math.asin(THREE.MathUtils.clamp(sl.dot(r.op), -1, 1)) / GRAD, nord: sl.dot(r.nord), vest: -sl.dot(r.øst), underSolen: underSolen(new Date(dato)).længde };
+        },
+        navne: () => navne.filter((n) => n.tekst.visible).map((n) => n.st.id),
+        navnPlads: (id) => påSkærm(navne.find((x) => x.st.id === id)),
+        flybyStop: () => TUR.map((t) => ({ id: t.id, titel: t.titel, tekst: t.tekst, egenSide: !!SIDER[t.id] })),
+        flybyTil(nr) { if (!flyby.kører) flyby.start(); flyby.gå(nr); },
         // Højden over kuglen (km, glat) et sted (bredde, længde i grader øst)
         højde(bredde, længde) {
           const r = pluto.sted(bredde, længde).retning;

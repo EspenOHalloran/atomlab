@@ -4,7 +4,8 @@
 // dansen om tyngdepunktet), dans (som ude efter 3 sekunder med ⏩), modlys (kameraet bag Pluto: den blå ring),
 // charon (Charon tæt på med Pluto bagved), hjertet (skråt over Sputnik Planitia fra 1.500 km), bjerge (lavt over
 // Tenzing Montes), nord (skråt over Nordpolen), syd (hele Pluto set fra syd: det, ingen har set) og forside (hele
-// Pluto med hjertet i midten, Solen fra siden).
+// Pluto med hjertet i midten, Solen fra siden). MP4: tur1-tur5 (flybyens stop), træ:<navn> (et sted i træet, fx
+// "træ:Hjertet") og navne (navnene på kloden).
 // Uden størrelse: pc og tablet. Uden steder: hel. Mål én browser ad gangen (tjekliste F).
 import { chromium, ADRESSE, ARGS, billedmappe } from '../hjaelp.mjs';
 const UD = billedmappe('pluto-fuld');
@@ -41,6 +42,10 @@ for (const navn of navne.length ? navne : ['pc', 'tablet']) {
     }
     if (sted === 'modlys') { await f(() => atomlabTest.solsystem.trykPå('Modlys')); await efterFlyvning(); }
     if (sted === 'charon') { await s.locator('#solsystemTræ button', { hasText: 'Charon' }).click(); await efterFlyvning(); }
+    // MP4: flybyens stop (tur1-tur5) og stederne fra træet (træ:Hjertet, træ:Bjergene af vandis)
+    if (/^tur\d$/.test(sted)) { await F('flybyTil', +sted.slice(3) - 1); await efterFlyvning(); }
+    if (sted.startsWith('træ:')) { await s.locator('#solsystemTræ button', { hasText: sted.slice(4) }).click(); await efterFlyvning(); }
+    if (sted === 'navne') { await f(() => { if (!atomlabTest.solsystem.fænomen().navne().length) atomlabTest.solsystem.trykPå('Navne'); }); await F('helFra', 15, 175, 2.2); }
     if (sted === 'hjertet') await F('kigPå', 19.5, 178.7, 1500, 40, 180);
     if (sted === 'bjerge') await F('kigPå', -15.6, 177.4, 400, 20, 0);
     if (sted === 'nord') await F('kigPå', 85, 180, 1600, 40, 180);

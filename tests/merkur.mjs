@@ -89,9 +89,8 @@ await fm(() => atomlabTest.solsystem.spol(5));
 tjek('i pause står Merkur og datoen stille', (await F('drejning')) === d0 && (await F('dato')) === t0);
 
 // ⏩: seks døgn i sekundet, Merkur drejer 6,14° pr. døgn (forlæns), og Solen følger med
-await fm(() => atomlabTest.solsystem.sætTid('hurtig'));
-await fm(() => atomlabTest.solsystem.spol(5)); // 5 programsekunder med ⏩ = 30 døgn
-await fm(() => atomlabTest.solsystem.sætTid('pause'));
+// ⏩, spoling og pause i ét kald, så testbrowserens egne billeder ikke lægger tid til imellem (Åbne punkter 18. november 2026)
+await fm((n) => { const t = atomlabTest.solsystem; t.sætTid('hurtig'); t.spol(n); t.sætTid('pause'); }, 5); // 5 programsekunder med ⏩ = 30 døgn
 const dag = ((await F('dato')) - t0) / 864e5;
 tjek('5 sekunder med ⏩ er ca. 30 døgn', Math.abs(dag - 30) < 0.5, dag);
 const dW = ((((await F('drejning')) - d0) * GRAD % 360) + 360) % 360;
