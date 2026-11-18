@@ -159,7 +159,7 @@ export default {
   ],
   // Siden bygges én gang og skifter ikke med scenen. Efter forløbet "Hvordan kan det ske?" (scene 1-3) er emnerne lag 2
   // ("Vil du vide mere?", E4 afsnit 4): to forklaringer med myonerne og "Hvorfor ikke omvendt?". Scene 4, "nu"-linjerne,
-  // Michelson og Morley, Einstein som 16-årig og Pythagoras står under For nørder. Teksterne er fra drejebogen
+  // Michelson og Morley, Einstein som 16-årig og Pythagoras står under "Vil du vide mere?". Teksterne er fra drejebogen
   // (faktatjekket i T5 Trin 0, afsnit 15 i docs/fakta-tid/hvorfor-langsommere.md).
   side: {
     kort: 'Hvordan kan tiden gå forskelligt for to tvillinger? Det kommer af lysets mærkelige regel: Lyset har den samme fart for alle. Fem små scener i bjælken viser det, fra bolden i toget til tvillingen, der kommer yngst hjem.',
@@ -933,7 +933,7 @@ export default {
       if (aktiv === 0) {
         if (!sc1.bold) return LYS_TEKST;
         if (sc1.fart === 0) return BOLD_TEKST;
-        return `Ved så store farter lægges farterne ikke helt sammen: Bolden flyver ${boldProcent(sc1.fart)} % af lysets fart, ikke ${fmt((0.5 + FARTER1[sc1.fart].b) * 100)} %. Se For nørder.`;
+        return `Ved så store farter lægges farterne ikke helt sammen: Bolden flyver ${boldProcent(sc1.fart)} % af lysets fart, ikke ${fmt((0.5 + FARTER1[sc1.fart].b) * 100)} %. Se "Vil du vide mere?".`;
       }
       if (aktiv === 1) {
         const v = T.LYSUR_FARTER[sc2.fart], gam = T.lysurGamma(v);
@@ -1004,7 +1004,7 @@ export default {
       },
     }));
     const blinkIgen = { tekst: '💡 Blink igen', handling: () => { sc4.t = 0; } };
-    // Scene 5: "▶ Spil rejsen" (og "■ Stop") og "↺ Vendepunkt 4 lysår ude" i bjælken, og for nørder kontakten med "nu"
+    // Scene 5: "▶ Spil rejsen" (og "■ Stop") og "↺ Vendepunkt 4 lysår ude" i bjælken, og til de nysgerrige kontakten med "nu"
     const spilRejsen = {
       get tekst() { return sc5.spil ? '■ Stop' : '▶ Spil rejsen'; },
       handling: () => { sc5.spil = !sc5.spil; sc5.T = 0; opdaterKnapper(); },

@@ -1,5 +1,5 @@
 // Billeder til det store eftersyn (E0 i docs/plan-fable-eftersyn.md): menuen med hver verden forrest, alle dele, et udvalg
-// af fænomenerne, forløb i træk og lagene ("Hvorfor?" og "For nørder"). Afløser fable-billeder.mjs (F0), hvis billeder
+// af fænomenerne, forløb i træk og lagene ("Hvorfor?" og "Vil du vide mere?"). Afløser fable-billeder.mjs (F0), hvis billeder
 // bliver liggende i docs/fable/billeder/.
 // Brug: node tests/vaerktoejer/eftersyn-billeder.mjs [mappe]   (standard: docs/fable/eftersyn/billeder/, ca. 25 minutter)
 //       KUN=menu,dele,faenomener,forloeb,lag,nye vælger afsnit, og STR=pc,tablangs,tabhoej,tlf størrelserne ("nye" er Gåderne og Opdagelserne indefra, E20). VENT=5000 er ventetiden, før et billede tages (ms).
@@ -275,7 +275,7 @@ if (med('forloeb')) {
   await page.context().close();
 }
 
-// ---------- 5. Lagene: et åbent "Hvorfor?"-kort og "For nørder" ----------
+// ---------- 5. Lagene: et åbent "Hvorfor?"-kort og "Vil du vide mere?" ----------
 if (med('lag')) {
   for (const størrelse of kun(['pc', 'tabhoej'])) {
     const page = await nySide(størrelse);
@@ -292,7 +292,7 @@ if (med('lag')) {
       await skud(page, 'lag-hvorfor', `Lag 2: et åbent "Hvorfor?"-kort (${await page.evaluate(() => atomlabTest.hvorfor.vist()?.slice(0, 40) ?? '')}) i Solstorm`);
       await page.keyboard.press('Escape');
     });
-    await prøv(`"For nørder" (${størrelse})`, async () => {
+    await prøv(`"Vil du vide mere?" (${størrelse})`, async () => {
       await vælg(page, 'sorthul');
       await page.waitForTimeout(VENT);
       await page.evaluate(() => {
@@ -301,7 +301,7 @@ if (med('lag')) {
         d.scrollIntoView({ block: 'start' });
       });
       await page.waitForTimeout(1500);
-      await skud(page, 'lag-noerd', 'Lag 3: "For nørder" foldet ud ved Sort hul');
+      await skud(page, 'lag-noerd', 'Lag 3: "Vil du vide mere?" foldet ud ved Sort hul');
     });
     await page.context().close();
   }

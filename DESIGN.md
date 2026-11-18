@@ -44,7 +44,7 @@ Resten af planen i andre filer: [Ikke afprøvet](docs/ikke-afproevet.md) (til je
 - **Retningen** ([docs/retning.md](docs/retning.md)) læses, før en ny del planlægges: én kernesætning, forløbet først, budgettet for lagene, én udgave af hver klods og grænserne for ydelsen.
 - **Stilguiden** ([docs/stilguide.md](docs/stilguide.md), 16. november 2026): logisk, intuitivt, elegant, flot, og fuldt af glæde og undring. Én stemme, én sti i toplinjen, og forløb, der foreslår i stedet for at spærre. Læses før alt nyt, der kan ses eller trykkes på.
 - Tæt på den rigtige fysik. Forenklinger siges ærligt.
-- **Dybde i lag** (jeres princip, 23. oktober 2026): Brugeroplevelsen skal være i top, med flot UI og gode informationer de rigtige steder. Man skal ikke bombarderes med informationer, men de skal være lette at nå for den nysgerrige, fx med et klik. AtomLab skal have stor dybde og tyngde, men føles let, og man bestemmer selv, hvor dybt man vil bore. F1 foreslår, hvordan det kan gøres: Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" og "For nørder").
+- **Dybde i lag** (jeres princip, 23. oktober 2026): Brugeroplevelsen skal være i top, med flot UI og gode informationer de rigtige steder. Man skal ikke bombarderes med informationer, men de skal være lette at nå for den nysgerrige, fx med et klik. AtomLab skal have stor dybde og tyngde, men føles let, og man bestemmer selv, hvor dybt man vil bore. F1 foreslår, hvordan det kan gøres: Hver oplysning står ét sted ad gangen, og der er tre lag (altid fremme, "Hvorfor?" og "Vil du vide mere?").
 - Virker på pc (mus og tastatur) og tablet (fingre).
 - Man åbner det via et link (GitHub Pages).
 

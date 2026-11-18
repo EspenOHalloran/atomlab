@@ -86,7 +86,7 @@ const synlig = (page, sel) => page.evaluate((s) => { const e = document.querySel
   tjek('pc: "Og hvorfor det?" går et lag dybere', (await page.evaluate(() => atomlabTest.hvorfor.vist())) === 'Hvad gør strålingen ved DNA\'et?');
   await page.click('.hvorfor-kort .hk-næste');
   tjek('pc: og et lag mere', (await page.evaluate(() => atomlabTest.hvorfor.vist())) === 'Hvor meget skal der til?');
-  tjek('pc: det dybeste lag har "For nørder"', await synlig(page, '.hvorfor-kort .hk-nørd'));
+  tjek('pc: det dybeste lag har "Vil du vide mere?"', await synlig(page, '.hvorfor-kort .hk-nørd'));
   await page.click('.hvorfor-kort .hk-tilbage');
   tjek('pc: "‹ Tilbage" går tilbage', (await page.evaluate(() => atomlabTest.hvorfor.vist())) === 'Hvad gør strålingen ved DNA\'et?');
   await page.mouse.click(640, 400);
@@ -98,7 +98,7 @@ const synlig = (page, sel) => page.evaluate((s) => { const e = document.querySel
   await page.reload();
   await vent(page);
   tjek('pc: en foldeboks, man selv åbner, huskes', await page.evaluate(() => document.querySelector('[data-lag="reaktor-200"]').open));
-  // Siden i lag i Kosmos (U3): "For nørder" huskes for alle sider, men emnerne starter altid foldet sammen
+  // Siden i lag i Kosmos (U3): "Vil du vide mere?" huskes for alle sider, men emnerne starter altid foldet sammen
   await page.evaluate(() => { location.hash = '#kosmos'; });
   await page.waitForFunction(() => document.querySelector('#kosmos:not(.skjult)'));
   await page.evaluate(() => atomlabTest.kosmos.vælg('bigbang'));
@@ -107,7 +107,7 @@ const synlig = (page, sel) => page.evaluate((s) => { const e = document.querySel
   await page.waitForTimeout(300);
   await page.evaluate(() => atomlabTest.kosmos.vælg('pulsar'));
   const kos = await page.evaluate(() => ({ nørd: document.querySelector('#kosmosTekst details[data-lag="side-nørd"]').open, emner: atomlabTest.kosmos.side().emner.some((e) => e.åben) }));
-  tjek('pc: Kosmos husker "For nørder" på det næste fænomen, og emnerne er foldet sammen', kos.nørd && !kos.emner, JSON.stringify(kos));
+  tjek('pc: Kosmos husker "Vil du vide mere?" på det næste fænomen, og emnerne er foldet sammen', kos.nørd && !kos.emner, JSON.stringify(kos));
   await page.context().close();
 }
 

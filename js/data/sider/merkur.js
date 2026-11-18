@@ -1,5 +1,5 @@
 // Teksterne i højre panel ved Merkur (siden i lag, U3 i docs/plan-ux.md). MP1 i docs/drejebog-merkur-pluto.md: den
-// korte tekst, "For nørder", billederne og "Ærligt talt". MP2: kernesætning A (sol og skygge med isen til sidst), de
+// korte tekst, "Vil du vide mere?", billederne og "Ærligt talt". MP2: kernesætning A (sol og skygge med isen til sidst), de
 // fire spørgsmål, stederne (SIDER: Caloris, de lyse huller, isen ved Nordpolen, Solen, der vender om, og to navne på
 // kloden) og flybyen (TUR). Tallene er fra docs/fakta-solsystemet/del8-merkur-og-pluto.md (NSSDC, NASA, USGS' navneliste
 // og JPL Horizons) med Opus' rettelser i docs/fable/E16-merkur-pluto-noter.md. Faktatjekket MP2 står i del 8, afsnit 11.

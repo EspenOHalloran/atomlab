@@ -147,7 +147,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   // Et kort fra start til slut: gæt, svar, Næste
   await T(() => atomlabTest.gaader.visGåde('sorthul'));
   const før = await T(() => ({ spm: document.querySelector('.gaade-spørgsmål')?.textContent, gæt: document.querySelectorAll('#gaadeTrin .fl-gæt').length, næste: !!document.querySelector('#gaadeTrin .fl-næste'), nørd: !!document.querySelector('.gaade-lag details[data-lag="gaade-nørd"]') }));
-  tjek('kortet åbner på trin 1 med to gæt, uden "Næste" før man har gættet, og med "For nørder"', før.spm === 'Hvad er der inde i et sort hul?' && før.gæt === 2 && !før.næste && før.nørd, JSON.stringify(før));
+  tjek('kortet åbner på trin 1 med to gæt, uden "Næste" før man har gættet, og med "Vil du vide mere?"', før.spm === 'Hvad er der inde i et sort hul?' && før.gæt === 2 && !før.næste && før.nørd, JSON.stringify(før));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
   const svar = await T(() => ({ efter: document.querySelector('.gaade-efter')?.textContent, så: document.querySelector('#gaadeTrin .fl-så')?.textContent, låst: [...document.querySelectorAll('#gaadeTrin .fl-gæt')].every((k) => k.disabled) }));
   tjek('et gæt viser sit svar og det, der er målt, og knapperne låses', svar.efter === GÅDER[0].trin[0].gæt.valg[1].efter && svar.så === GÅDER[0].trin[0].så && svar.låst, JSON.stringify(svar));

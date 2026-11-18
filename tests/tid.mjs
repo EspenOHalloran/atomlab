@@ -196,7 +196,7 @@ let u = await ure();
 tjek('før afgang: "0 dage 0 timer", år nu, begge er 13', u.vist && u.skib === '0 dage 0 timer' && u.jord === `år ${await E(() => atomlabTest.kosmos.fænomen().startÅr)}` && u.skibAlder === 'Du: 13 år' && u.jordAlder === 'Tvillingen: 13 år', JSON.stringify(u));
 // Fire spørgsmål fremme (jeres valg 13. november 2026), tre gemte, til deres skyder eller kontakt bruges
 const FREMME = ['Hurtigere end lyset? Nej!', 'Hvorfor ikke omvendt?', 'Er det målt?', 'Kunne man?'];
-tjek('siden: Kort, fire spørgsmål fremme, For nørder og Ærligt talt sidst', side.kort.length > 40 && side.emner.filter((e) => !e.gemt).map((e) => e.titel).join('|') === FREMME.join('|') && side.bokse.includes('For nørder') && side.sidst === 'Ærligt talt', JSON.stringify(side.emner.map((e) => e.titel)));
+tjek('siden: Kort, fire spørgsmål fremme, "Vil du vide mere?" og Ærligt talt sidst', side.kort.length > 40 && side.emner.filter((e) => !e.gemt).map((e) => e.titel).join('|') === FREMME.join('|') && side.bokse.includes('Vil du vide mere?') && side.sidst === 'Ærligt talt', JSON.stringify(side.emner.map((e) => e.titel)));
 tjek('siden: emnerne starter foldet sammen, og de tre gemte hører til skyderen og kontakterne', side.emner.every((e) => !e.åben) && side.emner.filter((e) => e.gemt).map((e) => `${e.titel}:${e.kontakt}`).join('|') === 'Hvad gør farten?:Fast fart|Fast fart eller 1 g?:1 g hele vejen|Set fra skibet:Set fra skibet', JSON.stringify(side.emner));
 tjek('siden: knappen til rumtidskortet og "Hvordan kan det ske?" findes', side.knapper.some((k) => k.tekst.includes('rumtidskortet') && k.findes) && side.knapper.some((k) => k.tekst.includes('Hvordan kan det ske?') && k.findes), JSON.stringify(side.knapper));
 tjek('"Lige nu" siger 45 dage og 8,7 år ved 99,99 %', /45 dage.*8,7 år/.test(await page.textContent('#kosmosForklaring')), await page.textContent('#kosmosForklaring'));
@@ -323,10 +323,10 @@ for (const [navn, bid] of [
   ['Hafele og Keating: mod vest vandt urene ca. 273', 'urene mod vest vandt ca. 273'],
   ['Kononenko: 1.111 døgn og ca. 27 tusindedele sekund', 'ca. 27 tusindedele sekund yngre'],
   ['energien: over 50.000 års energi for hele verden', 'over 50.000 år'],
-  ['For nørder: rumtidens minus', 'τ² = t² − (x/c)²'],
-  ['For nørder: reglen om √10', 'ca. √10 ≈ 3,16 gange større'],
-  ['For nørder: samtidighed', '"nu" er ikke det samme for alle'],
-  ['For nørder: sekundet er 9.192.631.770 svingninger', '9.192.631.770 svingninger'],
+  ['Vil du vide mere: rumtidens minus', 'τ² = t² − (x/c)²'],
+  ['Vil du vide mere: reglen om √10', 'ca. √10 ≈ 3,16 gange større'],
+  ['Vil du vide mere: samtidighed', '"nu" er ikke det samme for alle'],
+  ['Vil du vide mere: sekundet er 9.192.631.770 svingninger', '9.192.631.770 svingninger'],
   ['Ærligt talt: lyset har ikke sit eget ur', 'lyset har ikke sit eget ur'],
   ['Ærligt talt: Interstellar', 'interstellar'],
 ]) tjek(`teksten: ${navn}`, tekst3.includes(bid.toLowerCase()));
@@ -336,7 +336,7 @@ tjek('teksten: brændstoffet og 11.500 g står kun ét sted', (tekst3.match(/780
 const k3 = (fn) => s3.knapper.find(fn);
 tjek('knap: "Set fra skibet" i teksten er en kontakt, der findes', k3((k) => k.slags === 'kontakt' && k.mål === 'Set fra skibet')?.findes === true, JSON.stringify(s3.knapper));
 tjek('knap: "1 g hele vejen" i teksten', k3((k) => k.slags === 'kontakt' && k.mål === '1 g hele vejen')?.findes === true);
-tjek('knap: Rumtid i "Er det målt?" og cæsium i For nørder', Boolean(k3((k) => k.slags === 'gaa' && k.mål === 'kosmos:rumtid')) && k3((k) => k.slags === 'gaa' && k.mål === 'system:55')?.findes === true, JSON.stringify(s3.knapper.filter((k) => k.slags === 'gaa')));
+tjek('knap: Rumtid i "Er det målt?" og cæsium i "Vil du vide mere?"', Boolean(k3((k) => k.slags === 'gaa' && k.mål === 'kosmos:rumtid')) && k3((k) => k.slags === 'gaa' && k.mål === 'system:55')?.findes === true, JSON.stringify(s3.knapper.filter((k) => k.slags === 'gaa')));
 tjek('ordene: tidsforlængelse, længdeforkortelse og myon kan trykkes på', await E(() => ['tidsforlaengelse', 'laengdeforkortelse', 'myon'].every((id) => document.querySelector(`#kosmosTekst .fagord[data-ord="${id}"]`))));
 // Emnet "Set fra skibet" folder sig ud, når kontakten slås til (også fra knappen i teksten)
 await E(() => atomlabTest.kosmos.trykPå('Set fra skibet'));
@@ -362,7 +362,7 @@ await E(() => atomlabTest.kosmos.vælg('tid'));
 tjek('ét sæt ure, når man kommer tilbage', (await page.$$('#kosmosOverlag .tid-ure')).length === 1);
 
 // Knappen til cæsium åbner cæsiums kort i Det periodiske system (sidst, for den forlader Kosmos)
-tjek('knappen "Cæsium" i For nørder kan trykkes på', await E(() => atomlabTest.kosmos.trykISide('Cæsium')));
+tjek('knappen "Cæsium" i "Vil du vide mere?" kan trykkes på', await E(() => atomlabTest.kosmos.trykISide('Cæsium')));
 await page.waitForFunction(() => document.querySelector('#system:not(.skjult)') && atomlabTest.system.valgt() === 55, null, { timeout: 15000 }).catch(() => {});
 tjek('knappen "Cæsium" åbner grundstof nr. 55 i Det periodiske system', (await E(() => atomlabTest.system.valgt())) === 55 && /cæsium/i.test(await page.textContent('#system')));
 await page.screenshot({ path: `${UD}/caesium.png` });

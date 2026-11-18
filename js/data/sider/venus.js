@@ -1,5 +1,5 @@
 // Teksterne i højre panel ved Venus (siden i lag, U3 i docs/plan-ux.md). V1 og V2 i docs/plan-venus.md: den korte
-// tekst, emnerne, "For nørder", billederne og "Ærligt talt". V3: gløden på natsiden og de fire steder under skyerne
+// tekst, emnerne, "Vil du vide mere?", billederne og "Ærligt talt". V3: gløden på natsiden og de fire steder under skyerne
 // (SIDER). V5: flybyen (TUR), turen ned til Venera 13 (SIDER.ned), "Hvilken planet er varmest?" og de nye "Hvorfor?"-kort
 // (js/data/hvorfor.js). Tallene er fra docs/fakta-solsystemet/del7-venus.md (NSSDC og JPL Horizons),
 // docs/fable/E18-venus.md (gløden, stederne og VIRA) og vindene fra Akatsukis billeder (js/data/vinde-venus.js).

@@ -32,7 +32,7 @@ const HORIZONS = [
   tjek('tyngdepunktet ligger ca. 2.126 km fra Plutos midte, ca. 940 km over overfladen', Math.abs(TYNGDEPUNKT - 2126) < 2 && Math.abs(TYNGDEPUNKT - PLUTO.radius - 938) < 3, TYNGDEPUNKT);
   tjek('Charon er ca. 3,8° bred på Plutos himmel', Math.abs(charonPåHimlen() - 3.8) < 0.05, charonPåHimlen());
   tjek('sollyset er ca. 5 timer om at nå Pluto i 2026', Math.abs(lysTimer(new Date('2026-11-17')) - 4.94) < 0.05, lysTimer(new Date('2026-11-17')));
-  tjek('siden ved Pluto har en kort tekst, fire spørgsmål, "For nørder", Billederne og "Ærligt talt", og Charon, hjertet og bjergene har egne sider', SIDE.kort.length > 50 && SIDE.emner.length === 4 && SIDE.nørd && SIDE.billeder && SIDE.ærligt && ['charon', 'hjertet', 'bjerge'].every((id) => SIDER[id]?.kort && SIDER[id].emner?.length));
+  tjek('siden ved Pluto har en kort tekst, fire spørgsmål, "Vil du vide mere?", Billederne og "Ærligt talt", og Charon, hjertet og bjergene har egne sider', SIDE.kort.length > 50 && SIDE.emner.length === 4 && SIDE.nørd && SIDE.billeder && SIDE.ærligt && ['charon', 'hjertet', 'bjerge'].every((id) => SIDER[id]?.kort && SIDER[id].emner?.length));
   tjek('flybyen har 5 stop (Pluto og Charon, hjertet, bjergene, Charon, modlys), og underteksterne er under 160 tegn', TUR.map((t) => t.id).join() === 'pluto,hjertet,bjerge,charon,modlys' && TUR.every((t) => t.tekst.length < 160 && t.nu), TUR.map((t) => t.tekst.length).join());
   const ms = Date.parse('2026-11-18T00:00:00Z');
   const ds = [145, 0, 300].map((l) => [l, datoMedSolOver(ms, l)]);

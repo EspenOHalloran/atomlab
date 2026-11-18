@@ -1594,7 +1594,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .kosmos-tekst p { margin: 0 0 9px; }
 .kosmos-tekst b { color: #bfe9ff; }
 .kosmos-tekst a { color: var(--accent); }
-/* Siden i lag (U3): Kort står fremme, emnerne og For nørder, Billederne og Ærligt talt er foldebokse */
+/* Siden i lag (U3): Kort står fremme, emnerne og "Vil du vide mere?", Billederne og Ærligt talt er foldebokse */
 .kosmos-tekst .side-kort p { margin: 0 0 8px; }
 .side-boks { margin: 0 0 6px; padding: 7px 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
 .side-boks > summary { padding: 1px 0; }
@@ -1675,7 +1675,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
     overflow-y: auto;
   }
   #kosmos:has(.tidh) { grid-template-rows: auto minmax(76vh, 1fr) auto; /* Hvorfor går tiden langsommere?: søjlen i scene 3 fylder højden */ }
-  /* Reaktorens del-knapper får deres egen linje i toplinjen (ikke Kosmos' "Kort fortalt / For nørder" i panelet) */
+  /* Reaktorens del-knapper får deres egen linje i toplinjen (ikke Kosmos' "Kort fortalt / Vil du vide mere?" i panelet) */
   #reaktor .del-vælger { order: 3; margin: 0; }
   .side-panel { max-height: none; }
   #system.detalje { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(160px, 1fr) auto; grid-template-areas: "top" "vindue" "kort"; }
@@ -2082,7 +2082,7 @@ details.lag-boks[open] > summary strong::after { content: ' ▾'; }
 details.lag-boks > summary .lag-kort { display: block; margin-top: 2px; color: var(--svag); font-size: 12.5px; font-weight: 400; line-height: 1.4; }
 details.lag-boks[open] > summary .lag-kort { display: none; }
 details.lag-boks > :not(summary) { margin-top: 6px; }
-/* "For nørder" inde i en boks eller et kort */
+/* "Vil du vide mere?" inde i en boks eller et kort */
 .lag-nørd > summary, .hk-nørd > summary { cursor: pointer; color: var(--accent); font-size: 12.5px; font-weight: 700; list-style: none; }
 .lag-nørd > summary::-webkit-details-marker, .hk-nørd > summary::-webkit-details-marker { display: none; }
 .lag-nørd > summary::after, .hk-nørd > summary::after { content: ' ▸'; }

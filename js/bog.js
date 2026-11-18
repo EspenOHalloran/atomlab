@@ -17,7 +17,7 @@
 //              latinen og vores oversættelse, og "Linje for linje". Siderne hentes med hentBillede (js/hentning.js),
 //              første gang opslaget åbnes, og toner ind
 //   'om'       bogens sidste opslag "Om …" (H4, tekster.OM): navnet, højst to tal, højst tre sætninger, højst fire
-//              "Hvorfor?"-kort (visHvorfor fra js/lag.js) og "For nørder" og "Ærligt talt" som lukkede foldebokse
+//              "Hvorfor?"-kort (visHvorfor fra js/lag.js) og "Vil du vide mere?" og "Ærligt talt" som lukkede foldebokse
 // påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
 // stryget og bladr()), mens et forløb kører i bogen.
 

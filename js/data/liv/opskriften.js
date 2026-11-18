@@ -11,7 +11,7 @@ import { OPGAVER_KOPI } from './kopien.js';
 export const HBB_START = HBB.dna.slice(0, 30);
 
 // Trinene på rejsen, udefra og ind. tal: [navn, værdi], højst to (budgettet i docs/retning.md: højst to tal og tre
-// sætninger fremme). nørd: { tal, tekst }, det, der står øverst i "For nørder" ved trinet. ekstra: en linje under tallene.
+// sætninger fremme). nørd: { tal, tekst }, det, der står øverst i "Vil du vide mere?" ved trinet. ekstra: en linje under tallene.
 // hvorfor: et eller flere "Hvorfor?"-kort (id'er i js/data/hvorfor.js), højst fire spørgsmål i panelet.
 export const NIVEAUER = [
   {
