@@ -381,7 +381,7 @@ Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "V
 4. **Skygger:** Stenene kaster ingen skygge. På fotoet (Solen 34° oppe) har hver sten og hver kant en skarp skygge, og det er dem, der giver jorden dybde.
 5. **Ingen klynger:** Tætheden er den samme overalt. På fotoet skifter jorden mellem næsten bart sand og felter fulde af sten.
 
-**Landingsstedet (PIA24264):** se tilføjelsen nedenfor.
+**Landingsstedet (PIA24264):** Samme fejl: ens rødbrune klatter på 5-30 cm jævnt fordelt ud til ca. 8 m og glat jord bagved. På fotoet er sletten fuld af flade, lyse klippeflader i niveau med jorden (ca. 0,3-2 m, kantede som fliser), spredte mørkegrå, kantede sten (mest 5-50 cm, enkelte omkring 1 m), som ses helt ud til deltaets front, og mørkere pletter af sand imellem.
 
 **Forslaget (trin 1, 3 og 2 i den rækkefølge, et go imellem):**
 - **Trin 1, variation helt tæt på (det malede lag, ≤ ca. 8 m):** Størrelser efter en potenslov (mange små, få store, op til ca. 0,6 m), former pr. sted (`stenart`: plader og kantede stykker ved Naukluft og Curiosity, spredte mørke sten og flade, lyse klippeflader i jorden ved landingsstedet og randen), farve pr. sten (mørkere og mere grå end sandet, nogle lysere), klynger styret af en grov støj og af lysstyrken i fotoet fra kredsløb (sten, hvor der er klippe), og en kort skygge fra hver sten væk fra Solen i stedet for den mørke ring. Ingen nye opslag i kort, kun regning.
