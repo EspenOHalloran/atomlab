@@ -25,8 +25,8 @@ const TONING = 260; // ms for hver halvdel af toningen mellem to scener (stilgui
 const VIS_LYN = ROLIG ? 120 : 380; // ms mellem lynene, når "Næste ›" viser handlingen
 // Nøglen nederst i scenen: hvad prikkerne og kuglerne er
 const NØGLE = {
-  miller: 'Metan (CH₄) · ammoniak (NH₃) · hydrogen (H₂) · vanddamp',
-  co2: 'Kuldioxid (CO₂) · nitrogen (N₂) · vanddamp',
+  miller: 'Metan (CH₄) · ammoniak (NH₃) · hydrogen (H₂) · og damp fra vandet',
+  co2: 'Kuldioxid (CO₂) · nitrogen (N₂) · og damp fra vandet',
   hinde: 'Blå hoveder kan lide vand · gule haler skyr det',
   rna: 'Øverst RNA\'et · nederst kopien · orange ring: en fejl',
   trappe: '✓ nået · ½ halvvejs · ? ingen har nået det',
