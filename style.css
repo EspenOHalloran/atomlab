@@ -1277,6 +1277,12 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaader-fokus { pointer-events: none; width: 100%; max-width: 720px; display: flex; align-items: center; justify-content: center; gap: 8px; } /* Skinnen (G4b): gåden i fokus og "‹ mindre · større ›" nederst i billedet */
 #gaader .gaader-fokus[hidden], #gaader .gaader-pil[hidden] { display: none; }
 #gaader .gaader-toning { position: absolute; inset: 0; z-index: 1; background: #03040c; opacity: 0; pointer-events: none; } /* Toningen, når man flyver ind i en gåde og ud igen (js/gaader/skinne.js) */
+#gaader .gaader-navne { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; } /* Navnene på skinnen som HTML-tekst (skarpe på alle skærme), flyttet af js/gaader/skinne.js */
+#gaader .gaader-navne[hidden] { display: none; }
+#gaader .gaader-navn { position: absolute; left: 0; top: clamp(12px, calc(0.7vw + 0.7vh), 18px); display: flex; flex-direction: column; align-items: center; gap: 2px; white-space: nowrap; text-align: center; visibility: hidden; text-shadow: 0 0 3px #03040c, 0 1px 6px rgba(0, 0, 0, 0.9); will-change: transform, opacity; }
+#gaader .gaader-navn b { color: #d8ecff; font-weight: 800; font-size: clamp(14px, calc(0.9vw + 0.9vh), 20px); letter-spacing: 0.01em; }
+#gaader .gaader-navn span { color: #8fa6cc; font-weight: 600; font-size: clamp(11px, calc(0.55vw + 0.55vh), 13.5px); letter-spacing: 0.06em; text-transform: uppercase; }
+#gaader .gaader-navn.ende b { color: #9fb4d8; font-weight: 700; }
 #gaader .gaader-pil { pointer-events: auto; flex: 0 0 auto; min-width: 56px; min-height: 48px; padding: 0 12px; border-radius: 14px; border: 1px solid rgba(95, 227, 255, 0.45); background: rgba(14, 24, 56, 0.82); color: var(--tekst); font-size: 26px; line-height: 1; cursor: pointer; }
 #gaader .gaader-pil:hover:not(:disabled) { border-color: var(--accent); }
 #gaader .gaader-pil:disabled { opacity: 0.3; cursor: default; }

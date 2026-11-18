@@ -133,6 +133,12 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   tjek('G4b: piletasten og "større ›" flytter til den næste større gåde, og linjen "Der er flere." går væk', flyttet.fokus === 'liv' && flyttet.spm === 'Er der liv andre steder?' && flyttet.linje === '', JSON.stringify(flyttet));
   // Et tryk på lyset ved siden af glider derhen, og et træk mod venstre går mod de større
   await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 2) < 0.02);
+  // Navnene er HTML-tekst (skarp), naboernes navne kan ses, og navnet på gåden i fokus er tonet ud (det står på knappen)
+  const nv = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
+  const navn = (t) => nv.find((n) => n.tekst.startsWith(t));
+  tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har intet navn i 3D',
+    nv.length === 7 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Sorte huller')?.synlig
+    && !navn('Liv andre steder')?.synlig, JSON.stringify(nv));
   const nabo = await T(() => atomlabTest.gaader.skinne().skærm('sorthul'));
   await page.mouse.click(nabo.x, nabo.y);
   const trykket = (await K()).fokus;
@@ -340,6 +346,8 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await vent(page, påSkinne, null, 15000);
   const bred = () => page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.getElementById('gaaderPanel').scrollWidth) > window.innerWidth + 1);
   const o = await bred();
+  const nvT = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
+  tjek('telefon: navnene på skinnen er mindst 13 px', nvT.length > 0 && nvT.every((n) => n.px >= 13), JSON.stringify(nvT.map((n) => n.px)));
   await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   tjek('telefon: ingen vandret rullebjælke på skinnen og på kortet', !o && !(await bred()));

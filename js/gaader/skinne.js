@@ -14,7 +14,7 @@
 
 import * as THREE from 'three';
 import { verden, ROLIG, stopKamera } from '../scene3d.js';
-import { glød, skilt, ryd } from '../kosmos/faelles.js';
+import { glød, ryd } from '../kosmos/faelles.js';
 import { skalaOrd } from '../data/gaader.js';
 import { fuld } from './streg.js';
 import { lavLys } from './lys.js';
@@ -37,9 +37,12 @@ const TÆND_HVER = 0.4; // første gang: et nyt lys tændes så ofte
 const TÆND_VARER = 0.6;
 
 let gruppe = null;
-let lys = []; // { id, holder, indre, lys, navn, skalaSkilt, ring }
+let lys = []; // { id, holder, indre, lys, navn, ring }
 let ekstra = []; // stien og lysene i enderne (tones ind, når skinnen tændes første gang)
-const navne = []; // skiltene, som bliver større, når kameraet står langt væk
+// Navnene er HTML-tekst oven på 3D-billedet (18. november 2026: på et lærred var de bløde og fik glød). Hvert navn
+// følger et punkt på stien: { el, i (pladsen på stien), opacitet, synlig, x, y }
+let navne = [];
+let navneLag = null;
 let række = []; // id'erne i rækkefølge
 let lukket = false;
 let skridt = SKRIDT;
@@ -52,7 +55,6 @@ let turTid = 0;
 let første = false; // kun det første lys er tændt
 let tændTid = -1; // første gang: tiden, siden lysene begyndte at tænde (-1 = alle tændt)
 let skala = SKALA;
-let navneSkala = 1;
 let aktiv = false;
 let lyttere = false;
 let påFokus = null; // kaldes med id'et, når en ny gåde kommer i fokus
@@ -74,10 +76,10 @@ function punkt(i, ud, y = 0) {
 // ---------- Opbygningen ----------
 function byg(gåder) {
   gruppe = new THREE.Group();
-  navne.length = 0;
+  navne = [];
   ekstra = [];
   skala = SKALA;
-  navneSkala = 1;
+  lavNavneLag();
   verden.scene.add(gruppe);
   række = gåder.map((g) => g.id);
   const n = række.length;
@@ -117,16 +119,8 @@ function byg(gåder) {
     const sten = glød(new THREE.Color(0.45, 0.7, 1.2), 0.6, 0.5);
     sten.position.y = STI_Y;
     holder.add(sten);
-    const navn = skilt(g.navn ?? g.id, '#d8ecff', 0.62);
-    navn.position.y = STI_Y - 0.75;
-    holder.add(navn);
-    navne.push(navn);
-    // Under navnet står skalaen med småt ("mindre end et atom", "galakser"), så rækkefølgen forklarer sig selv
-    const skalaSkilt = skilt(skalaOrd(g.størrelse), '#8fa6cc', 0.42);
-    skalaSkilt.userData.dy = 1.2;
-    skalaSkilt.position.y = STI_Y - skalaSkilt.userData.dy;
-    holder.add(skalaSkilt);
-    navne.push(skalaSkilt);
+    // Navnet og under det skalaen med småt ("mindre end et atom", "galakser"), så rækkefølgen forklarer sig selv
+    const navn = lavNavn(i, g.navn ?? g.id, skalaOrd(g.størrelse));
     // En færdig gåde (✓) har en rolig ring om lyset
     const ring = new THREE.Mesh(new THREE.RingGeometry(3.3, 3.42, 72), new THREE.MeshBasicMaterial({
       color: new THREE.Color(0.37, 0.89, 1), transparent: true, opacity: 0.55, depthWrite: false,
@@ -134,7 +128,7 @@ function byg(gåder) {
     ring.visible = false;
     indre.add(ring);
     gruppe.add(holder);
-    return { id: g.id, holder, indre, lys: l, navn, skalaSkilt, ring };
+    return { id: g.id, holder, indre, lys: l, navn, ring };
   });
 
   // I begge ender svage lys uden navn og linjen "Flere gåder er på vej"
@@ -146,16 +140,61 @@ function byg(gåder) {
         gruppe.add(g);
         ekstra.push(g);
       }
-      const tekst = skilt('Flere gåder er på vej', '#9fb4d8', 0.6);
-      punkt(i, tekst.position, STI_Y - 0.75);
-      tekst.material.opacity = 0.8;
-      gruppe.add(tekst);
-      navne.push(tekst);
-      ekstra.push(tekst);
+      lavNavn(i, 'Flere gåder er på vej', null, true);
     }
   }
-  for (const n of navne) n.userData.skala = n.scale.clone();
   for (const e of ekstra) e.userData.opacitet = e.material.opacity;
+}
+
+// ---------- Navnene (HTML) ----------
+function lavNavneLag() {
+  navneLag?.remove();
+  navneLag = document.createElement('div');
+  navneLag.className = 'gaader-navne';
+  navneLag.setAttribute('aria-hidden', 'true'); // spørgsmålet står på knappen nederst
+  $('gaaderVindue')?.prepend(navneLag); // under toningen, så de bliver mørke med resten, når man flyver ind
+}
+
+function lavNavn(i, tekst, skalaTekst, ende = false) {
+  const el = document.createElement('div');
+  el.className = ende ? 'gaader-navn ende' : 'gaader-navn';
+  const b = document.createElement('b');
+  b.textContent = tekst;
+  el.append(b);
+  if (skalaTekst) {
+    const s = document.createElement('span');
+    s.textContent = skalaTekst;
+    el.append(s);
+  }
+  navneLag.append(el);
+  const n = { el, i, ende, opacitet: ende ? 0.8 : 0.9, synlig: false, styrke: 1, x: 0, y: 0, vist: '' };
+  navne.push(n);
+  return n;
+}
+
+// Hvert billede: navnene følger stien (lige under stenen) og toner som før
+function stilNavne(tændt) {
+  const r = verden.renderer.domElement.getBoundingClientRect();
+  const v0 = navneLag.getBoundingClientRect();
+  for (const n of navne) {
+    let o = n.opacitet;
+    if (n.ende) o *= første ? 0 : tændt;
+    else o *= n.synlig ? n.styrke : 0;
+    punkt(n.i, v, STI_Y);
+    v.project(verden.kamera);
+    const vis = o > 0.01 && v.z < 1 && Math.abs(v.x) < 1.3;
+    const x = Math.round(r.left - v0.left + ((v.x + 1) / 2) * r.width);
+    const y = Math.round(r.top - v0.top + ((1 - v.y) / 2) * r.height);
+    n.x = x;
+    n.y = y;
+    const stil = vis ? `${x},${y},${o.toFixed(2)}` : 'skjult';
+    if (stil === n.vist) continue;
+    n.vist = stil;
+    n.el.style.visibility = vis ? 'visible' : 'hidden';
+    if (!vis) continue;
+    n.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, 0)`;
+    n.el.style.opacity = o.toFixed(2);
+  }
 }
 
 // ---------- Kameraet ----------
@@ -195,15 +234,6 @@ function stilKamera() {
   const { kamera, styring, hul } = verden;
   const dSkinne = skinneAfstand();
   skala = lysSkala(dSkinne); // lysene får størrelsen i opdater
-  // Navnene har nogenlunde samme størrelse på skærmen, også når kameraet står langt væk (højkant)
-  const ns = THREE.MathUtils.clamp(dSkinne / 22, 1, 2.5);
-  if (Math.abs(ns - navneSkala) > 0.001) {
-    navneSkala = ns;
-    for (const n of navne) {
-      n.scale.copy(n.userData.skala).multiplyScalar(ns);
-      n.position.y = STI_Y - (n.userData.dy ?? 0.75) * ns; // under stien, også når skiltet bliver større
-    }
-  }
   const d = afstandVed(zoom, dSkinne);
   const a = vinkel(pos);
   // Spørgsmålet og knapperne nederst: lyset står midt i den frie del over dem
@@ -293,17 +323,18 @@ function opdater(dt, tid) {
     if (første) synlig = fra === 0 ? 1 : 0;
     else if (tændTid >= 0 && fra > 0) synlig = Math.min(1, Math.max(0, (tændTid - TÆND_HVER * (fra - 1)) / TÆND_VARER));
     l.holder.visible = synlig > 0;
+    l.navn.synlig = l.holder.visible;
     if (!l.holder.visible) continue;
     l.holder.scale.setScalar(ROLIG ? 1 : blød(synlig));
     l.lys?.opdater(dt, tid);
     // Navnet på gåden i fokus står i teksten nederst, så det toner ud i 3D
     const afst = Math.min(Math.abs(i - pos), lukket ? lys.length - Math.abs(i - pos) : Infinity);
-    l.navn.material.opacity = Math.min(1, afst * 1.6) * 0.9 * (ROLIG ? synlig : 1);
-    l.skalaSkilt.material.opacity = l.navn.material.opacity * 0.8;
+    l.navn.styrke = Math.min(1, afst * 1.6) * (ROLIG ? synlig : 1);
     // Gåden i fokus står lidt større end naboerne (kun lyset, ikke stenen og navnet)
     l.indre.scale.setScalar(skala * (1 + FOKUS * Math.max(0, 1 - afst)));
     if (l.ring.visible) l.ring.lookAt(verden.kamera.position);
   }
+  stilNavne(tændt);
   if (tændTid >= 0 && tændt >= 1) tændTid = -1;
 }
 
@@ -447,6 +478,7 @@ export function vis(gåder, id, færdige, { fokus, vælg, første: kunFørste = 
   if (!gruppe) byg(gåder);
   for (const l of lys) l.ring.visible = Boolean(færdige[l.id]);
   gruppe.visible = true;
+  navneLag.hidden = false;
   lavLyttere();
   aktiv = true;
   træk = null;
@@ -514,6 +546,7 @@ export function skjul() {
   tændTid = -1;
   første = false;
   if (gruppe) gruppe.visible = false;
+  if (navneLag) navneLag.hidden = true;
   verden.opdateringer.delete(opdater);
   verden.styring.enabled = true;
   sætToning(0, true);
@@ -528,6 +561,9 @@ export function fjern() {
     verden.scene.remove(gruppe);
   }
   gruppe = null;
+  navneLag?.remove();
+  navneLag = null;
+  navne = [];
   lys = [];
   ekstra = [];
   række = [];
@@ -548,6 +584,11 @@ export function testAdgang() {
     tændte: () => lys.filter((l) => l.holder.visible).map((l) => l.id),
     lukket: () => lukket,
     ringe: () => lys.filter((l) => l.ring.visible).map((l) => l.id),
+    // Navnene (HTML): teksten, pladsen i vinduet, skriftstørrelsen og om det kan ses
+    navne: () => navne.map((n) => ({
+      tekst: n.el.textContent, x: n.x, y: n.y, px: parseFloat(getComputedStyle(n.el.firstChild).fontSize),
+      synlig: n.el.style.visibility === 'visible' && Number(n.el.style.opacity) > 0.05, html: n.el instanceof HTMLElement,
+    })),
     spring,
     // Lysets plads på skærmen (til tryk i testene)
     skærm: (id) => {
