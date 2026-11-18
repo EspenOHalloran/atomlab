@@ -567,6 +567,47 @@ button { font: inherit; color: inherit; }
 .felt.valgt { background: var(--farve); color: #10131f; box-shadow: 0 0 12px var(--farve); transform: scale(1.25); position: relative; z-index: 1; }
 .felt:hover { filter: brightness(1.4); }
 .felt.pladsholder { cursor: default; background: transparent; color: var(--svag); }
+/* "Grundstoffet flyver hjem" (js/vaerksted-hjem.js, E20): lyset fra atomet, feltet og tælleren, der tændes, og mærket i scenen,
+   når tabellen ikke er fremme (fx under turen). Hverken lyset eller mærket kan trykkes på, og de flytter ikke andet. */
+.hjem-lys {
+  --farve: #8ce99a;
+  position: fixed; left: 0; top: 0; z-index: 30; width: 14px; height: 14px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, #fff 0 30%, var(--farve) 60%, transparent 72%);
+  box-shadow: 0 0 14px 4px color-mix(in srgb, var(--farve) 70%, transparent), 0 0 34px 10px color-mix(in srgb, var(--farve) 30%, transparent);
+  will-change: transform, opacity;
+}
+.felt.tændt-nu { animation: feltTændes 1.4s ease-out; position: relative; z-index: 2; }
+@keyframes feltTændes {
+  0% { background: #fff; color: #10131f; box-shadow: 0 0 18px 6px var(--farve); transform: scale(1.7); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.opdaget-tæller.tæller-puls { animation: tællerPuls 1.4s ease-out; }
+@keyframes tællerPuls { 0%, 30% { color: #fff; text-shadow: 0 0 10px var(--grøn); } }
+.hjem-mærke {
+  --farve: #8ce99a;
+  display: flex; align-items: center; gap: 8px; min-width: 0; padding: 5px 11px 5px 6px; border-radius: 14px;
+  background: rgba(14, 20, 44, 0.9); border: 1px solid color-mix(in srgb, var(--farve) 55%, transparent);
+  font-size: 13px; line-height: 1.25; color: var(--tekst); pointer-events: none;
+  animation: mærkeInd 0.3s ease-out; transition: opacity 0.4s;
+}
+.hjem-mærke.væk { opacity: 0; }
+.hjem-felt {
+  flex: none; display: grid; place-items: center; width: 34px; height: 28px; border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.3); font-weight: 700; font-size: 15px;
+  transition: background 0.3s, color 0.3s;
+}
+.hjem-mærke.tændt .hjem-felt { background: color-mix(in srgb, var(--farve) 45%, transparent); color: #fff; }
+.hjem-felt.tændt-nu { animation: feltTændes 1.4s ease-out; }
+.hjem-tekst { display: grid; min-width: 0; }
+.hjem-tekst b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hjem-tekst small { color: var(--svag); font-size: 12px; }
+.hjem-mærke.tændt small { color: #dfe6ff; }
+@keyframes mærkeInd { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) {
+  .felt.tændt-nu, .hjem-felt.tændt-nu { animation-name: feltTændesRoligt; }
+  .hjem-mærke { animation: none; }
+}
+@keyframes feltTændesRoligt { 0% { background: #fff; color: #10131f; box-shadow: 0 0 18px 6px var(--farve); } }
 
 /* ---------- Dialoger ---------- */
 .overlag {

@@ -30,7 +30,15 @@ tjek('værksted vises', await page.isVisible('#vaerksted'));
 const info = () => page.textContent('#infopanel');
 const tryk = async (sel) => { await page.dispatchEvent(sel, 'pointerdown', { pointerId: 1 }); await page.dispatchEvent(sel, 'pointerup', { pointerId: 1 }); };
 for (const t of ['p', 'p', 'n', 'n', 'e', 'e']) await tryk(`.rund.plus[data-type="${t}"]`);
+// "Grundstoffet flyver hjem" (E20): Helium er nyt, så et lys flyver til feltet, og feltet og tælleren venter på det
+const hjemFør = await page.evaluate(() => ({ h: atomlabTest.vaerksted.hjem.sidste(), luft: atomlabTest.vaerksted.hjem.iLuften(), lys: atomlabTest.vaerksted.hjem.lys(),
+  tæller: document.getElementById('opdagetTæller').textContent, felt: document.querySelector('#minitabel .felt[data-nr="2"]').classList.contains('opdaget') }));
 await page.waitForTimeout(1500);
+const hjemEfter = await page.evaluate(() => ({ h: atomlabTest.vaerksted.hjem.sidste(), lys: atomlabTest.vaerksted.hjem.lys(),
+  tæller: document.getElementById('opdagetTæller').textContent, felt: document.querySelector('#minitabel .felt[data-nr="2"]').classList.contains('opdaget') }));
+tjek('grundstoffet flyver hjem: et lys flyver fra atomet til He i det lille periodiske system, og feltet og tælleren (0 → 1 af 118) tændes, når det lander',
+  hjemFør.h?.nr === 2 && hjemFør.h.mål === 'felt' && hjemFør.h.flyver && hjemFør.luft.includes(2) && hjemFør.lys === 1 && /0 af 118/.test(hjemFør.tæller) && !hjemFør.felt
+  && hjemEfter.h.landet && hjemEfter.lys === 0 && /1 af 118/.test(hjemEfter.tæller) && hjemEfter.felt, JSON.stringify({ hjemFør, hjemEfter }));
 let tekst = await info();
 tjek('Helium-4', tekst.includes('Helium-4'), tekst);
 tjek('stabil', tekst.includes('Stabil kerne'));
@@ -170,6 +178,20 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
   tjek('udgaver: uden ?udgaver bruges B (formerne)', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'former');
   await u.ctx.close();
+}
+
+// "Reducer bevægelse" (ROLIG): feltet tændes med det samme, uden lyset, der flyver
+{
+  const r = await side({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  await r.page.goto(URL + '#vaerksted');
+  await r.page.waitForFunction(() => window.atomlabTest?.vaerksted && document.querySelector('#vaerksted:not(.skjult)'));
+  await r.page.keyboard.press('p');
+  await r.page.keyboard.press('e');
+  await r.page.waitForFunction(() => atomlabTest.vaerksted.hjem.sidste(), null, { timeout: 5000 });
+  const rolig = await r.page.evaluate(() => ({ h: atomlabTest.vaerksted.hjem.sidste(), lys: atomlabTest.vaerksted.hjem.lys(),
+    felt: document.querySelector('#minitabel .felt[data-nr="1"]').classList.contains('opdaget'), tæller: document.getElementById('opdagetTæller').textContent }));
+  tjek('grundstoffet flyver hjem med "reducer bevægelse": H tændes med det samme uden lys', rolig.h.nr === 1 && !rolig.h.flyver && rolig.h.landet && rolig.lys === 0 && rolig.felt && /1 af 118/.test(rolig.tæller), JSON.stringify(rolig));
+  await r.ctx.close();
 }
 
 await browser.close();

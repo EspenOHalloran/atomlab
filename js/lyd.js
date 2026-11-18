@@ -106,6 +106,11 @@ export const lyd = {
   opdaget: () => {
     [660, 880, 1320].forEach((f, i) => tone({ fra: f, varighed: 0.18, type: 'triangle', styrke: 0.09, forsinkelse: i * 0.08 }));
   },
+  // Et felt i det lille periodiske system tændes (lyset fra et nyt grundstof er landet): et lille, lyst "ting"
+  tændes: () => {
+    tone({ fra: 1760, varighed: 0.22, type: 'triangle', styrke: 0.07 });
+    tone({ fra: 2637, varighed: 0.35, styrke: 0.03, forsinkelse: 0.03 });
+  },
   klaret: () => {
     [523, 659, 784, 1047].forEach((f, i) => tone({ fra: f, varighed: 0.28, type: 'triangle', styrke: 0.1, forsinkelse: i * 0.1 }));
     tone({ fra: 1568, til: 2093, varighed: 0.5, styrke: 0.05, forsinkelse: 0.4 });
