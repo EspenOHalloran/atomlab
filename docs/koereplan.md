@@ -6,6 +6,7 @@
 - **Forståelig før mere.** Serie 1 gør det, der findes, forståeligt med forløb. Liv L3 og Venus V3 holder pause, til Serie 1 er lavet og prøvet. **Ændret 15. november 2026 (jeres svar, runde 6):** Der bygges videre, mens prøven med sønnen venter. Liv L3 kommer efter Venus V3-V5 uden at vente på prøven.
 - **Nyt indhold må bygges imens på tre betingelser:** (1) Forløb-klodsen findes først. (2) Hver ny del fødes med én kernesætning og sit forløb. (3) Den har status "prøve", til et barn har prøvet den ([guide-proeven.md](guide-proeven.md), en fast aften om ugen).
 - **Højst én ny stor del i gang ad gangen** ud over Solsystemet. **Undtagelse (jeres svar 14. november 2026):** Videnskabsfolkene (Huygens) bygges samtidig med Gåderne 3D. Solsystemet prioriteres også, og **andre nye spor (fx Lys og farver) starter først, når Solsystemet er færdigt** (Mars del 3 og overblikket først, så Venus V3-V5 og Merkur og Pluto). De næste fem sessioner står i [prompt-naeste-fem.md](prompt-naeste-fem.md).
+- **Højst to tunge sessioner (Opus) ad gangen** (jeres beslutning 18. november 2026): grænsen på 5 timer deles af alle sessioner.
 - **Faktagrundlag må laves på forhånd og parallelt** (kun dokumenter).
 - **Frigivet** er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp, og fundene er rettet (slutningen af Serie 3).
 
