@@ -19,3 +19,15 @@ Desuden i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes ti
 - **Måling af Mars (G1 trin 3) på Tab A11 (jeres svar 17. november 2026, `?maal#solsystemet`, 216 s):** Gennemsnit 56 billeder/s, median 16 ms, 95 % under 35 ms, 99 % under 62 ms, 258 ryk over 50 ms. Teksturer i grafikkortet: højst 529 MB, nu 44 MB (frigivelsen virker). Ryk: (1) "skyggerne regnes" hvert 1-2 s, mens dagen går i Stå på Mars (52-87 ms, 15 gange); (2) nye shadere ved første besøg (Mars 377 ms, planetskift 100-250 ms); (3) kort lagt i grafikkortet (4096×4096: 30-60 ms, 8192: 127 ms, Månen 4k 162 ms, Merkur 4k 140 ms); (4) ca. 40 ryk på 50-70 ms uden kendt årsag i Jezero ved 21.16.11-25 (tegn kun 1-3 ms).
 
 - **Mars på Tab A11, oplevelsen (jeres svar 17. november 2026):** Ingen huller i kanten, når man drejer hurtigt. Skyggernes blødhed var ikke noget, I bemærkede. **Det føltes langsomt at åbne Mars/Stå på Mars anden gang: "som om den stoppede, inden den hentede kortet."** Passer med målingen: lange opgaver (80-160 ms) og kort i grafikkortet lige efter hinanden ved åbning.
+
+## Gåderne skarpere (egen session, 18. november 2026, [prompt-gaader-grafik.md](../prompt-gaader-grafik.md))
+*Skrevet af sessionen "Småting · Gåderne skarpere og det sorte hul". Prøverundens linjer ovenfor er ikke rørt.*
+
+**Fundet i skærmbillederne med fuld grafik** (pc 1280×800 og 1440×900 ×2, tablet 1280×800 ×1,5 på langs og højkant, telefon 390×844 ×3): (1) Navnene på skinnen er bløde: Teksturen er kun 64 px høj, og mipmaps blander to niveauer, når den vises i næsten samme størrelse. (2) Ingen kantudglatning nogen steder (`antialias: false`, komponisten uden `samples`), så skiven, ringen, kolben og kuglerne har trappekanter. (3) Det sorte hul er en sort skive med en flad, orange ring ("Saturn"). (4) Linjen efter "næsten intet" (Antistof): Linje 1 (13 ord) står kun 1,6 s, linje 3 (16 ord) kun 2,6 s.
+
+**Planen (ét go pr. trin):**
+1. **Navnene som HTML-tekst ovenpå** (samme skrift som kortet, skarp ved alle `devicePixelRatio`, ingen glød på bogstaverne). Følger lyset hvert billede og toner ud ved gåden i fokus som nu. Mindst ca. 13 px på telefonen.
+2. **Det sorte hul med linsen fra Kosmos:** `lavLinse` tegner i et lille lag for sig (størrelsen følger lampen på skærmen, højst 512 px på pc og 320 px på tablet), kun når lampen kan ses, og højst 30 gange i sekundet på tablet. Himlen bag hullet bliver gennemsigtig (dybden 400 = himmel), så skinnens egen himmel ses. Samme lampe stort bag kortet. Bliver billedet for langsomt, fryses det til et stillbillede. Kræver én linje i `linse.js` (laget gives med ud som `tekstur`, intet andet ændres).
+3. **Kantudglatning kun i Gåderne** (MSAA 4× på komponistens første lag, slået fra igen i `stop`; tabletten er en Mali, hvor MSAA er billig) og **stemplet** MÅLT/GÆT tegnet efter `devicePixelRatio`. Prikkerne i Liv og galaksen tjekkes på billederne.
+4. **Antistof: tiden efter "næsten intet"** efter læsetid (ca. 3 ord i sekundet plus 1 s): ca. 15 s i alt i stedet for 9,5 s.
+5. **Mål, tests og dokumenter:** `?maal` før og efter, 5-8 nye tjek, "Ikke afprøvet" og `/faerdig`.
