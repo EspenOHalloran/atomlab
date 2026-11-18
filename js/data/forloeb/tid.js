@@ -101,8 +101,8 @@ export const HVORDAN_KAN_DET_SKE = {
       spørg: 'Et ur, hvor lys hopper op og ned mellem to spejle, flyver forbi dig. Hvilken vej går lyset set fra dig?',
       gæt: {
         valg: [
-          { tekst: 'Lige op og ned', efter: 'Tryk på "Send uret forbi", og se det nederste billede.' },
-          { tekst: 'På skrå', efter: 'Tryk på "Send uret forbi", og se det nederste billede.' },
+          { tekst: 'Lige op og ned', efter: 'Tryk på "Send uret forbi", og se skibets ur.' },
+          { tekst: 'På skrå', efter: 'Tryk på "Send uret forbi", og se skibets ur.' },
         ],
       },
       gør: 'Send uret forbi.',
@@ -113,8 +113,10 @@ export const HVORDAN_KAN_DET_SKE = {
       // Intet gæt (drejebogen): Her skal man selv måle
       id: 'maal',
       spørg: 'Hvor meget længere er den skrå vej end den lige?',
-      gør: 'Tryk på "Mål", og se målebåndet lægge sig langs den skrå vej.',
-      så: 'Dobbelt så lang. Lyset kan ikke skynde sig, så hvert tik tager dobbelt så lang tid set fra dig.',
+      gør: 'Tryk på "Mål", og se målebåndet lægge sig langs den skrå vej. Prøv så "Uden Einstein".',
+      // Efter målebåndet spørger linjen "Hvad, hvis lyset kunne skynde sig som bolden?", og man prøver "Uden Einstein"
+      // (urene går ens). Valgt af orkestratoren 18. november 2026, kan ændres af jer (docs/lige-nu/tid.md).
+      så: 'Dobbelt så lang. Lyset kan ikke skynde sig som bolden, så hvert tik tager dobbelt så lang tid set fra dig.',
       ord: [],
     },
     {

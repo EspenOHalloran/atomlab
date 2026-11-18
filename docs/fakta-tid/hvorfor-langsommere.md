@@ -31,6 +31,10 @@
 - Afsnit 3 i fakta-tid.md. Nyt: Ved 86,6 % (√3/2, i AtomLab "87 %") er γ = 2,000. Et halvt tik giver en retvinklet trekant med siderne 1 (den lige vej, højden L), √3 ≈ 1,73 (det stykke, spejlene flytter sig) og 2 (den skrå vej). Pythagoras: 1 + 3 = 4 (regn.py).
 - Generelt: (c·t/2)² = L² + (v·t/2)² giver t = γ · 2L/c med γ = 1/√(1 − v²/c²). γ ved 50, 87, 95 og 99 %: 1,155, 2,0 (ved 86,6 %), 3,203 og 7,089.
 - **Fælde:** "87 %" giver γ = 2,03 regnet med præcis 0,87. AtomLab bruger √3/2 = 86,6 % og skriver "87 %". Skriv γ = 2 og "ca. 87 %".
+- **"Uden Einstein" (17. november 2026, jeres valg):** Hvis lyset fik skibets fart lagt oven i som en bold (Newtons måde at lægge farter sammen), var dets fart set fra Jorden (v, c), altså √(c² + v²). Den lodrette fart er stadig c, så lyset når det øverste spejl efter L/c som i et ur, der står stille, og de to ure går ens. Spejlene flytter sig v·L/c, og den skrå vej er √(1 + v²/c²)·L. Ved 87 % (√3/2): siderne 1, 0,87 og 1,32, og lyset skulle fare 1,32 gange lysets fart (ikke γ = 2). Ved 50 %, 95 % og 99 %: 1,12, 1,38 og 1,41 (regn.py).
+- **Det er målt, at lys ikke gør det:** Alväger, Farley, Kjellman og Wallin, "Test of the second postulate of special relativity in the GeV region", Physics Letters 12 (1964), s. 260-262. Pioner uden ladning (π⁰), der fløj med over 99,9 % af lysets fart, gik i stykker og sendte gammastråler (lys) ud. Lyset havde lysets fart, ikke pionernes fart lagt til: Hvis en andel k af kildens fart blev lagt til, fandt de k = (−3 ± 13) · 10⁻⁵. Kilde: Wikipedia "Emission theory (relativity)" og "Tests of special relativity" (læst 18. november 2026). Artiklen selv er ikke læst.
+- **CERN:** Wikipedia-artiklerne om forsøget nævner ikke stedet. Francis Farley var ved CERN fra 1957 og lavede "other accurate tests of special relativity at CERN" (Wikipedia "Francis Farley"), og forsøget er lavet ved CERNs protonsynkrotron. Det sidste er kun fra min egen viden (Opus), ikke fra en læst kilde. Derfor står der kun "I 1964 målte man …" i AtomLab. Findes en kilde, kan CERN skrives på.
+- **Ærligt:** "Uden Einstein" er et tankeeksperiment (en tanke, ikke virkeligheden), ligesom lysuret selv. Teorien, at lyset får kildens fart lagt til ("emissionsteorien"), blev også modbevist på andre måder, men det nævnes ikke i AtomLab.
 
 ## 15.6 Myonernes kapløb
 - Myoner dannes, når den kosmiske stråling rammer luften, "most atmospheric muons are produced at a height of around 15 km" (arXiv:1906.03934, Bonechi m.fl., "Atmospheric muons as an imaging tool", s. 3). Middellevetiden er 2,197 µs (afsnit 10).
@@ -57,6 +61,17 @@
 - **Skitsens tal** (hjemme 10 år, vendepunktet halvvejs): Vendepunkt 3 lysår ude giver 2·√(5² − 3²) = 8 år (60 % af lysets fart), 4 lysår giver 2·√(5² − 4²) = 6 år (80 %). Tæt på lysets linje (4,9 lysår) bliver det ca. 2 år (98 %) (regn.py).
 - **"Nu"-linjerne (For nørder):** Den rejsendes "nu" er en skrå linje med hældningen v/c. Ved 80 % ældes hjemmet ca. 1,8 år, mens den rejsende ældes 3 år på vejen ud (3/γ, med γ = 5/3). Ved vendingen springer "nu derhjemme" fra 1,8 år til 8,2 år. Det er dér, de "manglende" år derhjemme ligger (afsnit 9, regn.py).
 - **Fælder** (står i fakta-faelder.md): Lyset har ikke sit eget ur (egentiden findes ikke for lys, Wikipedia "Proper time"). Accelerationen er ikke årsagen, det er vejens længde. Billedet "man bevæger sig altid gennem rumtiden med lysets fart" bruges kun med forbehold, fordi rumtidens "Pythagoras" har et minus.
+
+## Faktatjek af "Uden og med Einstein" i lysuret (18. november 2026)
+*Opus (høj effort) tjekkede selv de fem påstande (under grænsen for en hjælpeagent). Teksterne står i scene 2 i `js/kosmos/tidhvorfor.js` (underteksten, "Lige nu", For nørder og Ærligt talt).*
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Uden Einstein når lyset op lige så hurtigt som i Jordens ur, og urene går ens | OK (den lodrette fart er c) | regning, regn.py |
+| Ved 87 %: siderne 1, 0,87 og 1,32, og lyset farer 1,32 gange lysets fart | OK (√1,75 = 1,3229) | regn.py |
+| I 1964 målte man lys fra pioner, der fløj med over 99,9 % af lysets fart | OK (Alväger m.fl., Physics Letters 12, 260) | Wikipedia "Emission theory (relativity)" |
+| Lyset fik ikke deres fart lagt oven i | OK (k = (−3 ± 13) · 10⁻⁵) | samme |
+| Forsøget var på CERN | **Sandsynligt**, ikke set i en læst kilde (Farley var ved CERN fra 1957). Skrives ikke | Wikipedia "Francis Farley" |
 
 ## Faktatjek af T5 Trin 0 (8. november 2026)
 *Drejebogens tekster i [plan-tid-t5.md](../plan-tid-t5.md) og skitsen `docs/skitser/tid-t5.html`. Alle tal er regnet efter i regn.py (afsnit 15). Opus tjekkede selv påstandene mod kilderne (ca. 15).*

@@ -1,7 +1,8 @@
 // Kosmos: forløbet "Hvordan kan det ske?" (Serie 1 nr. 4, forløb B, drejebogen i docs/fable/E4-tid.md, afsnit 4) og
 // oprydningen (jeres valg 13. november 2026): "Tid" er ét punkt i listen, og "Hvordan kan det ske?" (tidhvorfor) står ikke
 // i den. Forløbet starter første gang med kun scenen og linjen, scene 1 venter på "Kast", lysuret på "Send uret
-// forbi", målebåndet viser "dobbelt så lang", ca. halvdelen af myonerne når ned med Einstein, og vejene virker.
+// forbi", målebåndet viser "dobbelt så lang", "Uden Einstein" får urene til at gå ens (B4), ca. halvdelen af myonerne
+// når ned med Einstein, og vejene virker.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { HVORDAN_KAN_DET_SKE } from '../js/data/forloeb/tid.js';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -50,7 +51,7 @@ const liste = await E(() => [...document.querySelectorAll('#kosmosTræ button[da
 const valgt = await E(() => [...document.querySelectorAll('#kosmosTræ button[data-id].valgt')].map((x) => x.dataset.id));
 tjek('listen: "Tid" står der, "Hvordan kan det ske?" ikke, og "Tid" er valgt, mens det er åbent, og tælles ikke med',
   liste.includes('tid') && !liste.includes('tidhvorfor') && valgt.join() === 'tid' && (await page.textContent('#kosmosNavn')) === 'Hvordan kan det ske?'
-  && /af 12 set/.test(await page.textContent('#kosmosSet')), JSON.stringify({ liste, valgt }));
+  && /af 13 set/.test(await page.textContent('#kosmosSet')), JSON.stringify({ liste, valgt }));
 
 // B1: kun scenen og linjen, scene 1 venter på "Kast"
 let f = await F();
@@ -93,11 +94,33 @@ await næste();
 f = await F();
 tjek('B4: intet gæt, knappen "Mål"', f.trin === 'maal' && f.fase === 'gør' && !f.s.måler);
 await knap('maal');
-await spol(4);
+await spol(6); // uret når toppen (højst 1,4 s), og båndet lægges (3,8 s)
 await page.screenshot({ path: `${UD}/b4-maal.png` });
+f = await F();
+const vink4 = await page.textContent('#kosmos .forløb-linje').catch(() => '');
+const knapper4 = await E(() => [...document.querySelectorAll('#kosmos .forløb-linje [data-knap]')].map((x) => x.dataset.knap));
+tjek('B4: målebåndet er lagt (målT ≥ 3,8), linjen spørger "Hvad, hvis lyset kunne skynde sig som bolden?", og "Uden/Med Einstein" kommer frem',
+  f.fase === 'gør' && f.s2.stille && f.s.måler && f.s.målT >= 3.8 && f.s.målt && /kunne skynde sig som bolden/.test(vink4) && knapper4.join() === 'uden,med', JSON.stringify({ s: f.s, knapper4 }));
+await knap('uden');
+await spol(2);
 await fase('så');
 f = await F();
-tjek('B4: uret står på toppen, målebåndet er lagt (målT ≥ 3,8), og Så siger "Dobbelt så lang"', f.s2.stille && f.s.måler && f.s.målT >= 3.8 && /Dobbelt så lang/.test(await tekst()), JSON.stringify(f.s));
+tjek('B4: med "Uden Einstein" går urene ens, og Så siger "Dobbelt så lang" og "skynde sig som bolden"',
+  f.s.uden && f.s.udenT >= 1.5 && f.s2.skib > 1 && Math.abs(f.s2.skib - f.s2.jord) < 1e-9 && /Dobbelt så lang.*skynde sig som bolden/.test(await tekst()), JSON.stringify(f));
+await page.screenshot({ path: `${UD}/b4-uden.png` });
+// "Næste ›" uden at prøve noget: B4 viser målebåndet og "Uden Einstein" og når Så (tilbage til B3 og frem igen)
+await page.click('#kosmos .forløb-linje [data-nav="tilbage"]');
+await E(() => atomlabTest.kosmos.fænomen().forløb.visMigNu());
+await spol(5);
+await fase('så');
+await næste();
+f = await F();
+tjek('B4 igen: starter med Einstein og "📏 Mål"', f.trin === 'maal' && !f.s.uden && !f.s.målt && f.fase === 'gør', JSON.stringify(f));
+await E(() => atomlabTest.kosmos.fænomen().forløb.visMigNu());
+await spol(9);
+await fase('så');
+f = await F();
+tjek('B4: "Næste ›" uden at prøve noget lægger målebåndet, slår "Uden Einstein" til og når Så', f.s.målt && f.s.uden && f.s.udenT >= 1.5, JSON.stringify(f.s));
 
 // B5: myonerne, først uden og så med Einstein
 await næste();
