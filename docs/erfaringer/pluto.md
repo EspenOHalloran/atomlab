@@ -12,3 +12,12 @@
 - **Disen set tæt på:** Hen over kanten kigger man gennem ca. 12 gange så meget dis som lige op (√(2πR/H)). Uden at regne det med blev himlen lys over bjergene. Forfra er disen næsten usynlig, i modlys er den en blå ring.
 - **`side()` i testadgangen går ned uden emner:** `sidst` læser `summary` i det sidste element. En side med kun en kort tekst (Charon) gav en fejl i testen. Charons side fik et emne, og det var også bedre for siden.
 - **Testbrowseren tegner få billeder:** Efter `hop()` er fokus regnet med den gamle afstand i ét billede. Vent med `waitForFunction`, til fokus er på plads, i stedet for en fast pause.
+
+## MP4: det lokale net, stederne og flybyen (18. november 2026)
+- **Kun de rækker, der skal bruges, hentes:** USGS' filer er rå rækker efter et hoved, så ét `Range`-kald pr. fil henter et bælte (ca. 51° N til 42° S, 160 + 320 MB på under 10 s). `lav_pluto_steder.py` gør det selv.
+- **`Image.fromarray(a, 'F')` kræver float32.** Et float64-array blev læst som noget helt andet (støj og NaN), uden fejl. Kortet så næsten rigtigt ud, men JPEG-filen blev 6,7 MB i stedet for 3,2. Gør altid `.astype(np.float32)`, før et array bliver til et `'F'`-billede, og tjek filstørrelsen.
+- **`lokalt` med `midte` virker** (grænserne gives i rigtige længder, og klippeplaneten trækker kortets midte fra). Ét net over både hjertet og bjergene er nemmere end to: Flyvningen mellem stop 2 og 3 skifter ikke net, og der er ingen kant imellem.
+- **Nettets farve:** Gråtonerne (300 m) ganget med klodens farve delt med gråtonerne i samme størrelse giver præcis klodens lysstyrke (forholdet 1,00), så kanten mellem nettet og kloden ikke ses.
+- **Lyset ved stederne:** Skyggerne i mosaikken kommer fra nordvest (New Horizons' fotos med Solen over ca. 128° Ø). Solen står længere mod nord i 2026, så med 128° står den kun ca. 5° over Tenzing Montes. 145° giver ca. 10°, stadig fra nordvest. Kameraet ved bjergene kigger fra syd, ca. 26° ned, så sletten ligger bagved. Lavere (14-18°) blev det for mørkt og rodet.
+- **Testen af højderne:** Den højeste top i nettet ligger ved ca. 16,6° S, 175,7° Ø, ikke ved navnelistens midte (15,6° S, 177,4° Ø). Søg efter toppen i et lidt større område.
+- **Stop 1 med både Pluto og Charon:** Hjertet vender næsten præcis væk fra Charon, så set fra hjertets side står Charon bag Pluto. Kameraet står 55° fra linjen gennem dem og kigger midt imellem.

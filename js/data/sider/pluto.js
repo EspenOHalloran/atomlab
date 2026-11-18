@@ -2,7 +2,7 @@
 // tekst med kernesætning A, Charons side, "For nørder", billederne og "Ærligt talt". MP4: de fire spørgsmål, stederne
 // (SIDER: hjertet, bjergene af vandis og fire navne på kloden) og flybyen (TUR). Tallene er fra
 // docs/fakta-solsystemet/del8-merkur-og-pluto.md (NSSDC, NASA, USGS' navneliste og JPL Horizons) med Opus' rettelser i
-// docs/fable/E16-merkur-pluto-noter.md. Faktatjekket MP3 står i del 8, afsnit 12, og MP4 i afsnit 13. Uden Three.js.
+// docs/fable/E16-merkur-pluto-noter.md. Faktatjekket MP3 og MP4 står i del 8b, afsnit 12 og 13. Uden Three.js.
 
 import { kontakt, tid, sted, gå } from '../../sideknap.js';
 
@@ -123,7 +123,7 @@ export const SIDER = {
   wright: {
     // Navnelisten: 21,36° S, 173,24° Ø. Wikipedia: ca. 150 km, 4,7 ± 1 km, opkaldt efter brødrene Wright
     tal: [['Bredde', 'ca. 150 km'], ['Højde', 'ca. 4-5 km']],
-    kort: 'Wright Mons er en bred, lav kuppel med et dybt hul i midten. Måske er den en isvulkan. Den er opkaldt efter brødrene Wright, der byggede det første fly.',
+    kort: 'Wright Mons er en bred, lav kuppel med et dybt hul i midten. Måske er den en isvulkan. Den er opkaldt efter brødrene Wright, der byggede og fløj det første motorfly.',
     videre: [sted('pluto', 'Hele Pluto'), sted('bjerge', 'Bjergene af vandis')],
     ærligt: LYSET,
   },
