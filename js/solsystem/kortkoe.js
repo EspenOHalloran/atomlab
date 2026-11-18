@@ -86,7 +86,7 @@ function trin(nu) {
     console.warn('Kortet kunne ikke lægges ind i strimler:', e);
     x.strimler.nr = x.strimler.antal + 1;
     x.t.needsUpdate = true;
-    verden.renderer.initTexture(x.t);
+    try { verden.renderer.initTexture(x.t); } catch { /* (så tegnes det, første gang kortet bruges) */ }
   }
   if (x.strimler.nr <= x.strimler.antal) return;
   kø.splice(kø.indexOf(x), 1); // (hele kortet er lagt ind)
