@@ -443,3 +443,16 @@ export const førsteLinje = (antal) => `Videnskaben er ikke færdig. Det her er 
 
 // Første gang står man foran Antistof (navnet, ikke den mindste), så en ny, mindre gåde ikke bliver den første
 export const FØRSTE_GÅDE = 'antistof';
+
+// Tiderne i Antistofs store udslettelse (sekunder efter gættet), regnet ud fra linjerne i scene.bang, så man når at
+// læse dem (fund 18. november 2026: "næsten intet" gik for hurtigt). Læsetid: 1 s plus ca. 3 ord i sekundet.
+// mødes: parrene begynder at mødes (linje 2), korn: den ene partikel er tilbage (linje 3), ud: kameraet trækker ud
+// (linje 4), færdig: resten står stille og drejer. Mellem mødes og korn skal lyset nå at fylde skærmen (mindst 2,6 s).
+export const læsetid = (tekst) => 1 + tekst.split(/\s+/).filter(Boolean).length / 3;
+export function bangTider(linjer) {
+  const [l0, l1, l2, l3] = linjer.map(læsetid);
+  const mødes = Math.max(1.6, l0 - 0.8); // linje 1 står også, mens de første par mødes
+  const korn = mødes + Math.max(2.6, l1);
+  const ud = korn + l2;
+  return { mødes, korn, ud, færdig: ud + Math.max(2.7, l3) };
+}

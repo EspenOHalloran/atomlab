@@ -3,7 +3,7 @@
 // gåde ›" og ROLIG), et kort fra start til slut, ✓, "Se det selv", linket fra Sort hul og Ordbogen, og at telefonen
 // ikke får en vandret rullebjælke.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
-import { GÅDER, bygget, STREG_FORKLARING, påSkinnen, skalaOrd, førsteLinje, FØRSTE_GÅDE } from '../js/data/gaader.js';
+import { GÅDER, bygget, STREG_FORKLARING, påSkinnen, skalaOrd, førsteLinje, FØRSTE_GÅDE, bangTider, læsetid } from '../js/data/gaader.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
@@ -74,6 +74,13 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
 }
 
 // G4b: skinnen
+{
+  const bang = GÅDER.find((g) => g.id === 'antistof').scene.bang;
+  const t = bangTider(bang);
+  const ord = bang.map((l) => læsetid(l));
+  tjek(`Antistof: linjerne i udslettelsen står længe nok til at blive læst (1 s + 3 ord/s), i alt højst 20 s (${t.færdig.toFixed(1)} s)`,
+    t.mødes >= ord[0] - 0.8 && t.korn - t.mødes >= ord[1] && t.ud - t.korn >= ord[2] && t.færdig - t.ud >= ord[3] && t.færdig <= 20, JSON.stringify(t));
+}
 tjek('G4b: skinnen har de byggede gåder fra det mindste til det største, hver med et kort navn',
   påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
 
@@ -283,7 +290,12 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     JSON.stringify({ par, lys, kun }));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
   const bang = await S();
-  await T(() => atomlabTest.gaader.scene().spol(10));
+  // Et tryk under udslettelsen springer til næste linje (den kommer først efter ca. 4 s)
+  await T(() => atomlabTest.gaader.scene().tryk(0, 0));
+  await T(() => atomlabTest.gaader.scene().spol(0.1));
+  const sprang = await S();
+  tjek('Antistof: et tryk under udslettelsen springer frem til næste linje', sprang.tilstand === 'bang' && sprang.t > 3.5, JSON.stringify({ t: sprang.t }));
+  await T(() => atomlabTest.gaader.scene().spol(18));
   const rest = await S();
   tjek('G4a: gættet starter den store udslettelse, og den ender i resten med "Se det igen"', bang.tilstand === 'bang' && rest.tilstand === 'rest'
     && await T(() => !!document.querySelector('#gaadeSceneKnapper [data-id="igen"]')), JSON.stringify({ bang: bang.tilstand, rest: rest.tilstand }));
