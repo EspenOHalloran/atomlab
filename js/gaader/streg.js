@@ -66,10 +66,13 @@ export function tonUd(x, y0, y1, z = 0, { dele = 24, fra = 0.55 } = {}) {
 // Stemplet: et ord i en ramme, som lander med et bump (stor, så lidt for lille, så rigtig)
 const stempelFarve = { MÅLT: '#5fe3ff', GÆT: '#ffffff' };
 export function stempel(ord, størrelse = 1.6) {
+  // Lærredet tegnes 2-3 gange større end 256 × 112 efter skærmens tæthed (18. november 2026: det så grynet ud)
+  const k = Math.min(3, Math.max(2, Math.ceil((globalThis.devicePixelRatio ?? 1) * 1.5)));
   const cv = document.createElement('canvas');
-  cv.width = 256;
-  cv.height = 112;
+  cv.width = 256 * k;
+  cv.height = 112 * k;
   const g = cv.getContext('2d');
+  g.scale(k, k);
   const farve = stempelFarve[ord] ?? '#ffffff';
   g.strokeStyle = farve;
   g.fillStyle = farve;
@@ -82,6 +85,7 @@ export function stempel(ord, størrelse = 1.6) {
   g.fillText(ord, 128, 60);
   const t = new THREE.CanvasTexture(cv);
   t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false, depthTest: false, opacity: 0 }));
   sprite.renderOrder = 10;
   const B = størrelse * (256 / 112);
@@ -90,6 +94,7 @@ export function stempel(ord, størrelse = 1.6) {
   let rolig = false;
   return {
     sprite,
+    opløsning: cv.width, // til tests
     slå(udenBevægelse = false) {
       tid = 0;
       rolig = udenBevægelse;

@@ -122,7 +122,7 @@ const LYS = {
 // Linsen fra Kosmos tegner hullet, skiven og fotonringen i et lille lag (højst 512 px på pc og 320 px på tablet, efter
 // lampens størrelse på skærmen) set fra den retning, kameraet ser lampen fra. Billedet ligger på en flade, der altid
 // vender mod kameraet, så hullet ser rigtigt ud, når kameraet drejer om det bag kortet. Himlen i linsens billede er
-// gennemsigtig (dybden 400 = himmel), så skinnens egen himmel ses bag hullet. Laget tegnes kun, når lampen kan ses,
+// gennemsigtig (dybden 400 = himmel), så skinnens egen himmel ses bag hullet, undtagen fotonringen og lyse stjerner. Laget tegnes kun, når lampen kan ses,
 // og højst 30 gange i sekundet på tablet. Er billederne for langsomme (under 40 i sekundet på tablet), står billedet
 // stille og tegnes kun igen, når kameraet har flyttet sig. Snyd: Lampen er et symbol, ikke i skala, og den bøjede
 // stjernehimmel om hullet er skåret væk.
@@ -145,6 +145,11 @@ void main() {
   // Dybden er afstanden til skiven eller hullet, og 400 hvor der kun er himmel. Langs kanten blandes de to af den
   // lineære filtrering, så alpha bliver en blød kant.
   float a = clamp((INGEN_DYBDE - l.a) / (INGEN_DYBDE - uNaer), 0.0, 1.0);
+  // Fotonringen og de bøjede stjerner er lys, der slap væk til himlen. De bliver stående, når de er lyse nok, og toner
+  // ud mod lampens kant, så den mørke himmel og tågerne stadig er gennemsigtige.
+  float lys = dot(l.rgb, vec3(0.2126, 0.7152, 0.0722));
+  float kant = 1.0 - smoothstep(0.55, 0.95, length(vUv - 0.5) * 2.0);
+  a = max(a, smoothstep(0.03, 0.2, lys) * kant);
   gl_FragColor = vec4(l.rgb, a * uOpacitet);
 }`;
 

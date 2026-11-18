@@ -357,6 +357,21 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await ctx.close();
 }
 
+// Fuld grafik (med komponisten): kantudglatning kun i Gåderne, slået fra igen, når man går
+{
+  const fb = await chromium.launch({ args: ARGS, fuldGrafik: true });
+  const page = await (await fb.newContext({ viewport: { width: 1024, height: 700 } })).newPage();
+  page.on('pageerror', (e) => fejl.push('fuld grafik: ' + e.message));
+  await page.goto(`${ADRESSE}/?test#gaader`);
+  await page.waitForFunction(() => window.atomlabTest?.gaader?.skinne?.()?.vist?.(), null, { timeout: 60000 });
+  const inde = await page.evaluate(() => atomlabTest.gaader.prøver());
+  await page.evaluate(() => { location.hash = '#'; });
+  await page.waitForFunction(() => document.querySelector('#gaader.skjult'), null, { timeout: 20000 });
+  const ude = await page.evaluate(() => atomlabTest.gaader.prøver());
+  tjek('skarpere: kantudglatning (4 prøver på pc) kun i Gåderne, væk igen i menuen', inde === 4 && ude === 0, JSON.stringify({ inde, ude }));
+  await fb.close();
+}
+
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join('\n'));
 await b.close();
 console.log(`\n${ok} OK, ${dårlig} fejl`);
