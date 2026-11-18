@@ -148,7 +148,7 @@ Brugerens fund: tavlen i "Bogen fra 1659" virkede ikke på en ultrabred pc-skær
 ## Jeres ønske (18. november 2026): en rød tråd
 Ordret: "Vi er nødt til at give Huygens' bog en tur mere. Introduktionen til Huygens skal komme først. Der skal være en rød tråd. Der er 5 sider, få det til at hænge sammen og forklar det, så en 12-årig forstår det og bliver engageret i det. Der er ikke forklaring nok, som det er i dag. Jeg tror, alt indholdet kan bruges, men det skal pakkes bedre ind i introduktion og forklaring og rød tråd. Jeg synes, det er uforløst, som det er nu."
 
-## 13. Planen for den røde tråd (Opus 18. november 2026, venter på go)
+## 13. Planen for den røde tråd (Opus 18. november 2026, lavet samme dag)
 *Gået igennem som en 12-årig, der aldrig har hørt om Huygens (tablet 1180×820, 20 skærmbilleder).*
 
 **Det, der er uforløst i dag:**
@@ -180,3 +180,5 @@ Ordret: "Vi er nødt til at give Huygens' bog en tur mere. Introduktionen til Hu
 **4. Faktatjek og pris:** Ca. 10-12 påstande (Galilei 1610 og tre kugler, "ører og håndtag" efter tavlen, 45 år, alder 25 i 1655, linser selv, sorteret efter alfabetet, "ringen står på kant" i marts 1656, Systema Saturnium = "Saturns system", sonden 2005, fælderne om "fortalte det til ingen" og "Galilei opfandt kikkerten"). Hovedsessionen tjekker selv mod faktafilen og fælderne. Tid: ca. 4-5 timer i alt i fire trin: R1 forsiden, R2 turen og "Det så du", R3 Hemmeligheden, R4 bogen og slutningen, og så tests (`--ændret` + 4-5 nye tjek i `tests/opdagelser.mjs`), skærmbilleder (telefon, tablet, pc), "Ikke afprøvet", `/faerdig`, PR og merge. `js/forloeb.js` røres ikke.
 
 **Go (18. november 2026):** hele planen, R1-R4 i ét stræk med én PR. Alderen holdes konsekvent (25 i 1655, 26 i marts 1656, eller kun ét sted), og den faste ring skrives forsigtigt ("Han troede, ringen var fast som en plade. I dag ved vi, at den er tusindvis af stykker is og sten."). *Valgt af orkestratoren 2026-11-18, kan ændres af jer.*
+
+**Lavet (18. november 2026):** som planen, med to rettelser undervejs: "i 45 år fandt ingen den rigtige forklaring" (ikke "kunne ingen forklare det", fælden), og knappen efter gåden er kortere ("Se den i bogen fra 1659 ›"). Sætningen fra 1659 står ikke længere i "Det så du", for den er svaret i "Hemmeligheden". Faktatjekket står i faktafilens afsnit 8.

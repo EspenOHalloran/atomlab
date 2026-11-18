@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (18. november 2026): rettelser efter prøven (Huygens).**
+- **Tavlen:** På en ultrabred pc-skærm fik panelet ved tavlen 0 px (siden var kun begrænset af 52vw, men bogen er højst 1040 px bred). Nu får siden højst 58 % af bogens bredde (container og `cqw`), og panelet har mindst ca. 370 px på alle fire sider. Tjekket på 3440×1440, 2560×1080, 1920×1080 og 1280×720.
+- **Introduktionen:** "Hemmeligheden" starter med en side bogtekst ("Haag, marts 1656", fem korte sætninger med stort forbogstav: hvem han var, hvad han så, og hvorfor han lavede et anagram) og "Prøv gåden ›". Trin 4 i turen siger "Ringen ses ikke lige nu." Faktatjekket (alder 26, 5. marts 1656, 62 bogstaver, grunden er skrevet forsigtigt, løsningen i bogen 1659 og brevet til Chapelain i 1658 som fælde).
+- **Bogen:** Siden vendes om ryggen (0,45 s, på tabletten 0,3 s og uden skær, intet med reduceret bevægelse). Papiret har korn, pletter, skygge ved ryggen og sidekanter.
+- **Valgt af orkestratoren:** introduktion A (ikke et nyt opslag) og ikke omslaget, der åbner sig (drejebogens "Jeres svar (18. november 2026)"). `opdagelser` har 39 tjek.
+
 **Senest lavet (17. november 2026): H4, Bogen selv og "Om Huygens". Huygens har status prøve.**
 - **Siderne:** `lav_bogsider.py` henter tavlen, s. 16, s. 47 og s. 48 fra archive.org (WebP, 182-192 KB). Bogen er ca. 990 KB i alt.
 - **"Bogen fra 1659":** ét opslag med fire faner, seks glødende steder (latin og dansk) og "Linje for linje". Siderne hentes først, når opslaget åbnes. Den tredje vej i "Det så du" er "Bladr i bogen fra 1659 ›".

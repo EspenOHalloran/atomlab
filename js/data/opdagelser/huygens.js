@@ -19,7 +19,7 @@ export const FORSIDE = {
   // sleb selv linser med sin bror (afsnit 1). Ikke "Galilei opfandt kikkerten". Alderen står kun her (26 i marts 1656).
   intro: {
     sted: 'Haag, 1655',
-    tekst: 'I dag ved alle, at Saturn har en ring. Men da den italienske astronom Galilei så Saturn i sin kikkert i 1610, lignede den tre kugler. Senere tegnede andre den med ører og håndtag, og i 45 år kunne ingen forklare det. Nu vil Christiaan Huygens, en ung hollænder på 25, der sliber sine egne linser, finde svaret.',
+    tekst: 'I dag ved alle, at Saturn har en ring. Men da den italienske astronom Galilei så Saturn i sin kikkert i 1610, lignede den tre kugler. Senere tegnede andre den med ører og håndtag, og i 45 år fandt ingen den rigtige forklaring. Nu vil Christiaan Huygens, en ung hollænder på 25, der sliber sine egne linser, finde svaret.',
   },
 };
 
