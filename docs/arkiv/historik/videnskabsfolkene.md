@@ -2,6 +2,14 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (17. november 2026): H3, gåden og Gør det selv, og E20 fund 6.**
+- **Jeres svar:** Go til A, B og C hver for sig og til D og E i træk. Den tredje vej er "Prøv ringen selv" til H4. Et løst anagram huskes (✓). Hylden har Tycho og Rømer som grå rygge.
+- **Kun det byggede (A):** Bogen har kun de byggede opslag, og hylden viser Huygens og de næste to bøger, der stiller deres spørgsmål.
+- **Trin 4 (B):** ANNULO i de 17 bunker, så flyver resten af sætningen på plads med dansk under. "Det så du" har sætningen fra 1659 og tre veje. Ordet `anagram` er i Ordbogen.
+- **"Hemmeligheden" (C):** De otte brikker lægges på deres betydning, til "Alle 62 er brugt. Det passer." Bagefter kommer "Lav dit eget anagram".
+- **Links (D):** "Se ringen forsvinde ved Saturn" lander ved Saturn fra kanten (stedet `kanten` i `js/kosmos/saturn.js`). Kortet "Hvordan ved vi, at det er en ring?" står ved ringene, og citatet har "Læs Huygens' bog ›".
+- **Faktatjek:** "som han havde sagt" er fjernet (armene kom senere end forudsagt), og der står "kunne forklare", ikke "kun en ring". Der er to nye fælder. `opdagelser` har 26 tjek.
+
 **Senest lavet (17. november 2026): E15, Opus' noter til Galilei og Newton.**
 - **Noterne** står nederst i [galilei.md](../fakta-videnskabsfolk/galilei.md) og [newton.md](../fakta-videnskabsfolk/newton.md): hvad der er nyt, hvor Opus er uenig med Fable, og hvilke sider fra bøgerne der passer til de fem lag. Tallene er regnet efter (månetesten, Picards omkreds, Keplers 3. lov for Jupiters måner).
 - **Uenig med Fable:** Synsfeltet forklarer ikke, at Galilei ikke så Callisto 8. januar (han så den 7. januar 9,1 bueminutter ude). Begge forløb er kortet ned til fire trin med to gæt. Newtons kernesætning giver Kepler hans del. Kanonkuglen er nok fra den "folkelige" udgave af bog III (trykt 1728) og skal slås op.

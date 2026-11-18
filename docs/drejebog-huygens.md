@@ -77,7 +77,7 @@ Smithsonians skanning (frigivet, se faktafilen afsnit 4): **tavlen ved s. 35, s.
 | Margen | *Occurritur iis quæ de annulo objici possent.* | Svar på det, man kunne indvende mod ringen. |
 | 18-23 | Cæterum obiter hic iis respondendum censeo, quibus / novum nimis ac fortasse absonum videbitur, quod non tan- / tum alicui cælestium corporum figuram ejusmodi tribuam, / cui similis in nullo hactenus eorum deprehensa est, cum / contra pro certo creditum fuerit, ac veluti naturali ratione / constitutum, solam iis sphæricam convenire, sed & quod | I øvrigt må jeg her i forbifarten svare dem, der vil synes, at det er for nyt og måske urimeligt, at jeg ikke alene giver et himmellegeme en form, som man indtil nu ikke har fundet hos nogen af dem (for man har tværtimod troet for sikkert, som om naturen selv havde bestemt det, at kun kugleformen passer til dem), men også at jeg lægger … |
 | (s. 48, linje 1-5) | annulum hunc solidum ac permanentem (talem enim ar- / bitror) Saturno ita circumponam, ut nullis compagibus / retinaculisve ei cohæreat, ac nihilominus æqualem ab om- / ni parte distantiam servet, unàque cum Saturno motu ve- / locissimo transferatur. | … denne ring, massiv og varig (for det tror jeg, den er), sådan om Saturn, at den ikke hænger fast i den med nogen samlinger eller bånd, men alligevel holder samme afstand hele vejen rundt og føres af sted sammen med Saturn i meget hurtig fart. |
-| (s. 48, linje 5-10) | Hos autem reputare illud oportet, / non ex mera inventione atque arbitrio meo hanc me fin- / gere hypothesin, sicut Astronomi suos epicyclos, nusquam / in cælo apparentes; sed oculorum sensu, quo nempe reli- / quarum rerum omnium figuras dignoscimus, hunc quo- / que annulum satis evidenter me percipere. | Men de bør tænke på, at jeg ikke har fundet på denne hypotese efter mit eget hoved, sådan som astronomerne deres epicykler, der ingen steder ses på himlen. Jeg ser også denne ring ret tydeligt med øjnene, som vi jo kender formen på alle andre ting med. (Epicykler: små cirkler, som astronomerne lagde oven i planeternes baner for at få regnestykket til at passe. *Ikke tjekket af Fable.*) |
+| (s. 48, linje 5-10) | Hos autem reputare illud oportet, / non ex mera inventione atque arbitrio meo hanc me fin- / gere hypothesin, sicut Astronomi suos epicyclos, nusquam / in cælo apparentes; sed oculorum sensu, quo nempe reli- / quarum rerum omnium figuras dignoscimus, hunc quo- / que annulum satis evidenter me percipere. | Men de bør tænke på, at jeg ikke har fundet på denne hypotese efter mit eget hoved, sådan som astronomerne deres epicykler, der ingen steder ses på himlen. Jeg ser også denne ring ret tydeligt med øjnene, som vi jo kender formen på alle andre ting med. (Epicykler: små cirkler, som astronomerne lagde oven i planeternes baner for at få regnestykket til at passe. *Ikke tjekket af Fable, tjekket af Opus i H4.*) |
 
 ## 7. "Om Huygens" (bogens sidste opslag): spørgsmålene, "Ærligt talt" og "For nørder"
 *Budgettet: titel, højst to tal, højst tre sætninger, højst fire spørgsmål. Derefter "For nørder" og "Ærligt talt", lukkede.*
@@ -100,7 +100,7 @@ Smithsonians skanning (frigivet, se faktafilen afsnit 4): **tavlen ved s. 35, s.
 - Portrættet er et maleri i farver. Vi har lavet det om til et kobberstik, så alle personerne i bogreolen ligner hinanden.
 
 **For nørder:**
-- Kikkerten: 12 fod (lidt under 4 m) med to linser og ca. 50 ganges forstørrelse efter hans egne tal (andre siger ca. 43). Senere 23 fod og næsten 100 gange. Galileis forstørrede højst ca. 30 gange (Huygens' tal).
+- Kikkerten: 12 fod (over 3 m, rettet efter fælden i H4) med to linser og ca. 50 ganges forstørrelse efter hans egne tal (andre siger ca. 43). Senere 23 fod og næsten 100 gange. Galileis forstørrede højst ca. 30 gange (Huygens' tal).
 - Titan går rundt på ca. 16 døgn (Huygens), 15,95 døgn (i dag). ESA's sonde Huygens landede på Titan 14. januar 2005.
 - Ringen og Saturn: 9 mod 4 (Huygens), 2,27 gange (A-ringens yderkant i dag). Hældningen: over 20° (han målte armenes linje mod ekliptika). Senere satte han ringen parallelt med Jordens ækvator, altså 23½°. I dag: ca. 28° mod ekliptika og 27° mod Saturns egen bane.
 - Han regnede med, at himmelstoffet om Saturn drejede med (en idé fra hans tid, som er forkert). Men Saturn drejer faktisk rundt på under 11 timer.
@@ -120,7 +120,7 @@ Efter ti minutter uden hjælp: *Hvad gjorde du først? Hvor gik du i stå? Hvad 
 3. Hvorfor skrev Huygens sin opdagelse med blandede bogstaver? (Så han kunne vise, at han vidste det først.)
 
 ## 11. Fakta
-Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md) (rettet 16. november 2026 efter Fable og bogens OCR). Mangler `/faktatjek`: oversættelsen af s. 48, linje 5-10, "1847" og OC XV-tallene (tages i H3-H4).
+Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md) (rettet 16. november 2026 efter Fable og bogens OCR). Oversættelsen af s. 48, linje 5-10, "1847" og OC XV-tallene er tjekket i H4 (17. november 2026, faktafilen afsnit 4).
 
 ## 12. Spørgsmål til jer (anbefalingen først)
 *Stilles i chatten som en dialog. Jeres svar skrives her.*
