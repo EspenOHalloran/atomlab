@@ -53,6 +53,14 @@ Da M7b blev planlagt, fandtes Stå på Mars ikke. Det meste af det, M7b skulle g
   - **Faktatjek:** kappens tal (tykkelse, bredde), spiralkløfterne og Chasma Boreale.
 - **Resten, der kommer med i M8b:** Mellemlaget fra Stå på Mars (16 m over ca. 32 km) bruges som detaljekort (`detalje` i `LOKALE`) ved Gale- og Jezero-stoppene, når Jezeros mellemlag findes. **Ikke tjekket:** Mellemlaget regnes i meter fra kraterets nulpunkt og `detalje` i bredde og længde. Om det kan bruges direkte, eller om billedværktøjet skal lave et kort mere, tjekkes, før det loves.
 
+#### M7b-pol: data og plan (18. november 2026, venter på go)
+*Tjekket med curl af sessionen "Solsystemet · Mars ekstra 1: Nordpolen tæt på". Prøvebillederne lå i sessionens kladdemappe.*
+- **Højder:** MOLA MEGDR, polarstereografisk (PDS Geosciences, `pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/polar/`, åben, `Range` virker). `megt_n_512_1` (115 m pr. pixel, til ca. 78° N midt på kanterne), `megt_n_256_1` (230 m, til ca. 67° N) og `megt_n_128_1` (460 m). 16 bit, meter = værdi · 0,25 − 8000 over areoiden. Projektionen: kugle med radius 3.376,2 km, R = 360/π · tan(colat/2) i grader, længde 0° lige ned fra midten og 90° Ø til højre. 256 rækker 2900-8620 er hentet på 6 sekunder (132 MB). Spiralkløfterne og Chasma Boreale ses tydeligt.
+- **Farver:** Vikings 925 m-mosaik (samme som kloden og de andre steder) viser spiralerne tydeligt (lys is, mørke sider i kløfterne) og ligger samme sted som MOLA (inden for ca. 1-2 km, set i et overlag). MDIM 2.1 i 232 m har tydelige sømme og dis ved polen og fravælges. Ingen skarpere farvekort med fri licens fundet hos USGS (CTX-mosaikken findes kun ved sydpolen og er i gråtoner).
+- **Målt i højdekortet (kontrol af faktatjekket fra M5b):** toppen ca. −2.560 m, sletten omkring −4.400 til −5.200 m (2-2,6 km over sletten, "op til ca. 3 km tyk" med den begravede del). Kappen når 330-650 km fra polen (ca. 1.000-1.200 km bred). Chasma Boreale op til ca. 2,0 km dyb.
+- **Plan:** (1) `lav_pol.py`: højder fra MOLA 256 og farver fra Viking, stereografisk fra 78° N (ca. 1.420 km bred, 0,69 km pr. pixel i 2k). (2) `lokalt({ pol })` i `klippeplanet.js`: et net af ringe (færre punkter ind mod polen), der glider over i kuglen ved kanten, hul i kuglen over 78° N og højdetabellen i samme projektion. (3) `mars.js`: Nordpolen får nettet og en lavere flyvning ned over spiralerne og Chasma Boreale. Siden får "Billederne" og "Ærligt talt" rettet. (4) 5-10 tjek, billeder pc og tablet, `?maal`.
+- **Pris (skøn):** ca. 3 MB ved stedet (højder 2k ca. 2-2,5 MB, farver ca. 0,3 MB), intet ved start. Grafikkortet ca. 25-30 MB, mens man er ved Mars (frigives, når man forlader Mars). Nettet ca. 260.000 punkter og 520.000 trekanter på pc og ca. 150.000 og 300.000 på tablet (som de andre lokale net), kun tegnet ved stedet.
+
 ### 2. Rækkefølgen
 | Nr. | Del | Hvorfor her |
 |---|---|---|
