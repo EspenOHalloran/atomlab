@@ -34,7 +34,7 @@ Opdatér "AtomLab Overblik", når en opgave er færdig, eller mindst hver tredje
 
 ## 6. Grænser
 - Push, merge og regelændringer gør arbejdssessionerne efter deres egne prompter. Du må ikke selv rette kode.
-- Hold din egen samtale kort: Læs kun det, du skal bruge ved hvert tjek. Bliver samtalen lang (over ca. 20 tjek), så skriv status i `docs/lige-nu/smaating.md` under "Orkestratoren" og start en ny orkestrator-session med denne prompt, og arkivér dig selv bagefter.
+- Hold din egen samtale kort: Læs kun det, du skal bruge ved hvert tjek. Sessionerne melder selv tilbage, så `list_events` bruges kun til en session, der har været stille i over en time, og så med `limit` 10-20 (hændelserne fylder meget). **Skift til en ny orkestrator** (jeres ønske 17. november 2026), når samtalen er over ca. 400.000 tokens (`get_session` uden id, `context_usage`) eller har kørt ca. 6 timer, alt efter hvad der kommer først, og ikke først ved den automatiske sammenpakning (den taber detaljer, og hver tur bliver dyrere). Sådan: skriv status i `docs/lige-nu/smaating.md` under "Orkestratoren" (det, der kører, valg, der venter, køen og brugerens seneste input), merge det, start en ny orkestrator-session med denne prompt (Opus, medium) og bed den overtage skemaet: slet dit eget skema med `delete_trigger`, og lad den nye lave sit. Send de kørende sessioner den nye orkestrators id, skriv til brugeren med et link til den nye chat, og arkivér dig selv bagefter.
 - Stop helt, og skriv til brugeren, hvis noget går galt to gange i træk på tværs af spor (fx main er rød efter en merge).
 
 ## 7. Input fra brugeren
