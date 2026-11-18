@@ -144,3 +144,37 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/huygens
 Brugerens fund: tavlen i "Bogen fra 1659" virkede ikke på en ultrabred pc-skærm (panelet til højre kunne ikke ses), hemmeligheden var "lidt lige på og hårdt" ("Jeg aner ikke, hvad hans hemmelighed er … Det er jo en bog. Der må gerne stå noget"), og bogen må animeres mere, så den ligner en gammel, flot bog.
 1. **Introduktionen:** A, en side bogtekst først i opslaget "Hemmeligheden" ("Haag, marts 1656", fem korte sætninger med stort forbogstav og "Prøv gåden ›"), og én ny sætning i turens trin 4 ("Ringen ses ikke lige nu."). Ikke B (et nyt opslag "Forord"). *Valgt af orkestratoren 2026-11-18, kan ændres af jer.*
 2. **Bogen:** Siden vendes om ryggen (0,45 s, kortere og uden skær på tabletten, intet med reduceret bevægelse), og papiret har korn, pletter, skygge ved ryggen og sidekanter. Ikke C (omslaget, der åbner sig). *Valgt af orkestratoren 2026-11-18, kan ændres af jer.*
+
+## Jeres ønske (18. november 2026): en rød tråd
+Ordret: "Vi er nødt til at give Huygens' bog en tur mere. Introduktionen til Huygens skal komme først. Der skal være en rød tråd. Der er 5 sider, få det til at hænge sammen og forklar det, så en 12-årig forstår det og bliver engageret i det. Der er ikke forklaring nok, som det er i dag. Jeg tror, alt indholdet kan bruges, men det skal pakkes bedre ind i introduktion og forklaring og rød tråd. Jeg synes, det er uforløst, som det er nu."
+
+## 13. Planen for den røde tråd (Opus 18. november 2026, venter på go)
+*Gået igennem som en 12-årig, der aldrig har hørt om Huygens (tablet 1180×820, 20 skærmbilleder).*
+
+**Det, der er uforløst i dag:**
+- Forsiden stiller spørgsmålet, men "Begynd" springer lige ind i "Haag, 1655" med Galileis tegning. Man ved ikke, hvem Christiaan er, hvem Galilei var, eller hvorfor Saturn var et mysterium.
+- Introduktionen til Huygens ("en ung mand på 26, der selv sliber linser") står først i opslag 3, *efter* at turen har vist anagrammet. Rækkefølgen er bagvendt.
+- Månen (trin 2) hænger ikke sammen med ringen. Sporet ("månen går rundt på 16 dage, men armene ser ens ud hver nat, så det må være en ring") står kun i et "Hvorfor?"-kort på side 5.
+- Ingen side slutter med noget, der leder videre. "Det så du" sender en ud af bogen (Saturn er den vigtige knap), før man har set resten.
+- "Bogen fra 1659" siger ikke, hvorfor man skal kigge, eller hvad man skal finde. "Om Huygens" er en opsummering, ikke en slutning (sonden Huygens på Titan i 2005 er gemt under "Vil du vide mere?").
+- Lille: Under trin 3's gæt står "Set fra kanten" under billedet, og det er svaret (stilguiden A6).
+
+**1. Kernesætningen** bliver D (jeres valg). Fortællingen, barnet kan genfortælle: "I 45 år forstod ingen, hvorfor Saturn så ud til at have ører. Huygens fandt ud af, at det er en tynd, flad ring, som vi ser fra skiftende vinkler, og han gemte svaret i et anagram, så han kunne bevise, at han var først."
+
+**2. Den røde tråd** (spørgsmålet "Hvorfor havde Saturn ører?" driver alle fem):
+| Opslag | Delen af historien | Slutter med |
+|---|---|---|
+| 1 Forsiden | **Mysteriet og manden:** I dag ved alle, at Saturn har en ring, men i 1655 vidste ingen det. Hvem Christiaan var, og hvorfor han kiggede | "Kan han løse gåden? Begynd ›" |
+| 2 Saturns ører | **Sporene:** linsen, månen, armene, der forsvinder, og hemmeligheden (turen) | "Men ANNULO var kun det første ord. Hele hemmeligheden ›" (den vigtige knap) |
+| 3 Hemmeligheden | **Beviset:** hvorfor et anagram, og hvorfor sorteret efter alfabetet (så alle kan tælle efter bagefter). Hele sætningen | "Alle 62 er brugt. Det passer." + "I 1659 trykte han den i sin bog. Se den selv ›" |
+| 4 Bogen fra 1659 | **Bogen selv:** de fire sider som en sti: forvirringen (tavlen), dagen uden arme (s. 16), afsløringen (s. 47), "jeg har set den med mine øjne" (s. 48) | "Men havde han ret? ›" |
+| 5 Om Huygens | **Havde han ret?** Ja om formen, nej om den faste ring. Sonden Huygens landede på hans måne i 2005. Og du kan selv se ringen forsvinde | "Se ringen forsvinde ved Saturn ›" (Gør det selv, flyttet hertil fra "Det så du") |
+
+**3. Side for side** (indholdet bruges, det pakkes ind):
+- **Forsiden:** I dag: portræt, spørgsmålet, Galileis tegning, navn og "Begynd". **Ny:** en bogtekst på 3-4 sætninger med stort forbogstav under spørgsmålet (udkast: "Haag, 1655. I dag ved alle, at Saturn har en ring. Men da Galilei så den i sin kikkert i 1610, lignede den tre kugler, og andre tegnede den med ører og håndtag. I 45 år kunne ingen forklare det. Nu vil Christiaan Huygens, en ung hollænder på 25, der sliber sine egne linser, finde svaret."). Galileis tegning bliver. Telefonen: mindre portræt, så "Begynd" stadig ses uden at rulle.
+- **Saturns ører (turen):** Trinene, scenerne og gættene bliver. Teksterne strammes, så hvert trin leder videre: trin 1 gør-teksten får "Huygens' kikkert er over 3 meter lang", og "Så" slutter med "Men hvad er armene?". Trin 2 spørger "Christiaan kigger nat efter nat …", og "Så" får sporet "Den går rundt om Saturn på 16 nætter." Trin 3 og 4 som i dag (trin 4 bygger allerede bro). "Det så du": linjen under kernesætningen bliver "Men ANNULO var kun det første ord …", og den vigtige knap bliver "Hele hemmeligheden ›" (de tre veje i ny rækkefølge). "Set fra kanten" vises først, når trinet er klaret. Fagord: linse og anagram (som i dag).
+- **Hemmeligheden:** Introduktionen "Haag, marts 1656" bliver en bro i stedet for at præsentere ham igen (han er præsenteret på forsiden): Han tror, armene er en ring, men den står på kant, og andre kigger også. Derfor trykker han idéen som 62 bogstaver **sorteret efter alfabetet**, så ingen kan læse den, men alle kan tælle efter, når han viser den. Gåden som i dag. Når den er løst: "I 1659 trykte han sætningen i sin bog. Se den selv ›" (bladrer).
+- **Bogen fra 1659:** Linjen øverst siger, hvad bogen er (*Systema Saturnium*, "Saturns system", 1659), og at man går fra tavlen til hemmeligheden. Hver sides `om` bliver et stykke af historien (2 sætninger), og under forklaringen står "Næste side ›" (en stille knap, fælles for alle bøger i `js/bog.js`). På s. 48 er den "Havde han ret? ›" og bladrer.
+- **Om Huygens:** Budgettet holdes. De tre sætninger bliver slutningen: "Huygens havde ret: Saturn har en tynd, flad ring. Men han troede, den var ét fast stykke, og det er den ikke. I 2005 landede en rumsonde, der hedder Huygens, på den måne, han fandt." De to tal og de fire "Hvorfor?" bliver. "Se ringen forsvinde ved Saturn ›" er sidens vigtige knap. Lagene som i dag.
+
+**4. Faktatjek og pris:** Ca. 10-12 påstande (Galilei 1610 og tre kugler, "ører og håndtag" efter tavlen, 45 år, alder 25 i 1655, linser selv, sorteret efter alfabetet, "ringen står på kant" i marts 1656, Systema Saturnium = "Saturns system", sonden 2005, fælderne om "fortalte det til ingen" og "Galilei opfandt kikkerten"). Hovedsessionen tjekker selv mod faktafilen og fælderne. Tid: ca. 4-5 timer i alt i fire trin: R1 forsiden, R2 turen og "Det så du", R3 Hemmeligheden, R4 bogen og slutningen, og så tests (`--ændret` + 4-5 nye tjek i `tests/opdagelser.mjs`), skærmbilleder (telefon, tablet, pc), "Ikke afprøvet", `/faerdig`, PR og merge. `js/forloeb.js` røres ikke.
