@@ -120,7 +120,8 @@ tjek('ved Jezero: aksen står som ved forårsjævndøgn (vinklen mellem nordpole
 const r10 = await stopTil('Nordpolen', 'nordpol', 'Nordpolen');
 const polSol = await fm(() => atomlabTest.solsystem.fænomen().polSol());
 tjek('ved Nordpolen: nordligt sommersolhverv (nordpolen står 90° − 25,19° fra Solen)', Math.abs(polSol - (90 - 25.19)) < 0.1, polSol);
-tjek('ved Nordpolen: midnatssol, Solen står 22-28° over horisonten, og intet lokalt net tegnes', r10.v.solHøjde > 22 && r10.v.solHøjde < 28 && r10.v.fokus < 1 && (await fm(() => Object.values(atomlabTest.solsystem.fænomen().billeder().lokalt).every((l) => !l.klar))), JSON.stringify(r10.v));
+// M7b-pol: Nordpolen har sit eget polarnet (tjekket i mars-pol.mjs). Her tegnes ikke andre lokale net
+tjek('ved Nordpolen: midnatssol, Solen står 22-28° over horisonten, og kun polarnettet kan tegnes', r10.v.solHøjde > 22 && r10.v.solHøjde < 28 && r10.v.fokus < 1 && (await fm(() => Object.entries(atomlabTest.solsystem.fænomen().billeder().lokalt).every(([id, l]) => id === 'nordpol' || !l.klar))), JSON.stringify(r10.v));
 // ▶ (før "Drej Mars"): Solen går rundt, men går ikke ned
 await s.click('#solsystemTid button[data-tid="spil"]');
 const solHøjder = [];

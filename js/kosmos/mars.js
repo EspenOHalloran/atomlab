@@ -92,13 +92,16 @@ const LOKALE = [
   // (HRSC+MOLA, ca. 1.470 × 950 km, form: højden i forhold til bredden) med et detaljekort over Melas, Candor og Ophir.
   { id: 'tharsis', nord: 16, syd: -15, vest: -124, øst: -97 },
   { id: 'valles', nord: 0, syd: -16, vest: -80, øst: -55, form: 0.5, detalje: { nord: -3, syd: -12.5, vest: -77, øst: -67 } },
-  // M5b: Gale og Jezero (HRSC+MOLA, ca. 356 × 356 km og ca. 0,17 km pr. pixel, lige så skarpt som kilden). Nordpolen
-  // har intet net (et net i bredde og længde virker ikke ved polen).
+  // M5b: Gale og Jezero (HRSC+MOLA, ca. 356 × 356 km og ca. 0,17 km pr. pixel, lige så skarpt som kilden).
   // M8b: Detaljekortet er mellemlaget fra Stå på Mars (lag 2, 64 × 64 km, her ca. 32 m pr. pixel, 16 i landskabet),
   // gemt igen af billeder/solsystem/lav_landskab.py med klodens højder. Grænserne skriver værktøjet ud. Ved Jezero
   // dækker det hele krateret og deltaet (HiRISE og CTX), ved Gale landingsstedet, Curiositys vej og Mount Sharps fod.
   { id: 'gale', nord: -2.4, syd: -8.4, vest: 134.8, øst: 140.8, detalje: { nord: -4.198684, syd: -5.304316, vest: 136.818778, øst: 137.928222, kant: 6 } },
   { id: 'jezero', nord: 21.4, syd: 15.4, vest: 74.5, øst: 80.9, detalje: { nord: 18.992816, syd: 17.887184, vest: 76.967264, øst: 78.132736, kant: 6 } },
+  // M7b-pol: Nordpolen. Et net i bredde og længde virker ikke ved polen (alle længdegrader mødes), så det er et
+  // polarnet (ringe om polen) fra 78° N med kort set lige ovenfra (POLKANT i billeder/solsystem/lav_pol.py: MOLA 256
+  // og Viking, ca. 1.420 km bredt og 0,69 km pr. pixel i 2k). Højderne er tabsfri WebP.
+  { id: 'nordpol', pol: 78, højde: 'webp' },
 ];
 
 // Steder, flybyen besøger. tid: klokken på stedet (lokal soltid), når man er der. kompas: hvorfra kameraet kigger
@@ -126,7 +129,7 @@ const STEDER = [
   // så det er nordligt sommersolhverv (midnatssol), mens man er ved stedet.
   { id: 'gale', navn: 'Gale', bredde: -5.367, længde: 137.811, tid: 9, kompas: 0, vinkel: 16, størrelse: 0.085, lokalt: 'gale', detalje: true },
   { id: 'jezero', navn: 'Jezero', bredde: 18.408, længde: 77.687, tid: 7.5, kompas: 180, vinkel: 32, størrelse: 0.03, lokalt: 'jezero', detalje: true },
-  { id: 'nordpol', navn: 'Nordpolen', bredde: 87.32, længde: 54.96, tid: 12, kompas: 90, vinkel: 55, størrelse: 0.6, sommer: true },
+  { id: 'nordpol', navn: 'Nordpolen', bredde: 87.32, længde: 54.96, tid: 12, kompas: 100, vinkel: 32, størrelse: 0.35, sommer: true, lokalt: 'nordpol' },
 ];
 // Flybyen (M5 giver flere steder)
 const TUR = [
@@ -312,7 +315,10 @@ export default {
     // De lokale net. Kortene hentes først, når flybyen eller et besøg skal derhen (lokaltStr: højdekortet).
     const lokalNet = TEST_HURTIG ? [128, 128] : LAV_KVALITET ? [384, 384] : [512, 512];
     const lokaltStr = TEST_HURTIG ? '1k' : '2k';
-    const lokale = new Map(LOKALE.map((l) => [l.id, { net: mars.lokalt({ ...l, net: [lokalNet[0], Math.round(lokalNet[1] * (l.form ?? 1))] }), henter: false, hentet: { kort: false, højde: false }, klar: false, vedKlar: [], detalje: l.detalje ? { henter: false, hentet: false } : null }]));
+    const polFarveStr = TEST_HURTIG || LAV_KVALITET ? '1k' : '2k'; // Nordpolens farvekort (kilden har 925 m)
+    // Polarnettet: ringe fra 78° N til polen (ca. 2 km imellem på pc og 2,8 km på tablet, ca. 255.000 og 137.000 punkter)
+    const polRinge = TEST_HURTIG ? 64 : LAV_KVALITET ? 256 : 350;
+    const lokale = new Map(LOKALE.map((l) => [l.id, { net: mars.lokalt({ ...l, net: l.pol ? [polRinge] : [lokalNet[0], Math.round(lokalNet[1] * (l.form ?? 1))] }), henter: false, hentet: { kort: false, højde: false }, klar: false, vedKlar: [], detalje: l.detalje ? { henter: false, hentet: false } : null }]));
     // Kortene til stedet st (og detaljekortet, hvis st skal helt tæt på)
     // forhånd: kortene lægges i grafikkortet med det samme (ellers sker det, første gang nettet tegnes, og det hakker),
     // og klar() kaldes, når begge kort er klar eller ikke kunne hentes.
@@ -335,8 +341,9 @@ export default {
           l.vedKlar.length = 0;
         };
         // (vendt: pakkes ud uden for hovedtråden, så de går 4-6 gange hurtigere at lægge i grafikkortet, G1)
-        hent(`mars-${id}-farve.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; ét(t); }, { anisotropi, rundt: false, fejl: ét, vendt: true });
-        hent(`mars-${id}-hoejde-${lokaltStr}.png`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; ét(t); }, { farve: false, kanaler: 2, rundt: false, fejl: ét, vendt: true });
+        const lok = LOKALE.find((x) => x.id === id);
+        hent(`mars-${id}-farve${lok.pol ? `-${polFarveStr}` : ''}.jpg`, (t) => { l.net.sætKort(t); l.hentet.kort = true; ét(t); }, { anisotropi, rundt: false, fejl: ét, vendt: true });
+        hent(`mars-${id}-hoejde-${lokaltStr}.${lok.højde ?? 'png'}`, (t) => { l.net.sætHøjde(t); l.hentet.højde = true; ét(t); }, { farve: false, kanaler: 2, rundt: false, fejl: ét, vendt: true });
       }
       if (st.detalje && l.detalje && !l.detalje.henter) {
         l.detalje.henter = true;
@@ -1660,6 +1667,15 @@ export default {
           const k = rejse.kameraPunkt();
           const op = k.clone().sub(måneFokus(m)()).normalize();
           return 90 - THREE.MathUtils.radToDeg(op.angleTo(k.clone().negate()));
+        },
+        // Kameraet over et sted (bredde, længde i grader øst) i afstand km, med det samme (M7b-pol). vinkel: over
+        // horisonten (90 = lige ned), kompas: hvorfra kameraet kigger (180 = fra syd). Mars' drejning, årstiden og de
+        // lokale net bliver, som de er. Kun til billeder.
+        kigPå(bredde, længde, km, vinkel = 90, kompas = 180) {
+          const st = { ramme: mars.sted(bredde, længde) };
+          const retning = fraSted(st, omdrejning.rotation.y, kompas, vinkel, hæld.quaternion);
+          rejse.flyv({ fokus: fokusVed(st), op: opVed(st), afstand: km / S, retning, min: 0.002, max: R * 15 });
+          rejse.hop();
         },
         // Årstiden: vinklen mellem nordpolen og Solen (grader). 90 ved jævndøgn, ca. 65 om sommeren i nord.
         polSol() {

@@ -89,6 +89,12 @@ const VERTEX_LOKAL = /* glsl */ `
   #ifdef DETALJE
   uniform float detaljeLod;
   #endif
+  #ifdef POLNET
+  // Polarnettet (Mars M7b-pol): kortet er set lige ovenfra polen (stereografisk, P = (x, −z) / (1 + y)), og kanten
+  // er en cirkel med radius polR i planet. polKant: overgangen til kuglen (i planet)
+  uniform float polR;
+  uniform float polKant;
+  #endif
   attribute float skoert;
   attribute vec3 kugle;      // punktet på kuglens trekant her uden bjerge (regnet i JS: sin og cos i shaderen er for unøjagtige)
   ${HOEJDE_GLSL}
@@ -105,11 +111,17 @@ const VERTEX_LOKAL = /* glsl */ `
   }
   void main() {
     vUv = uv;
+    vec3 n = normalize(position);
+    #ifdef POLNET
+    vec2 P = vec2(n.x, -n.z) / (1.0 + n.y);
+    vLok = P / (2.0 * polR) + 0.5;
+    float w = smoothstep(0.0, 1.0, clamp((polR - length(P)) / polKant, 0.0, 1.0));
+    #else
     vLok = (uv - boks.xy) / (boks.zw - boks.xy);
     vec2 e = min(vLok, 1.0 - vLok) / kant;
     float w = smoothstep(0.0, 1.0, clamp(min(e.x, e.y), 0.0, 1.0));
+    #endif
     vVaegt = w;
-    vec3 n = normalize(position);
     vObjN = n;
     #ifdef DETALJE
     // Inde i detaljekortet læses kun det (det sparer tid), og i overgangen begge
@@ -356,6 +368,20 @@ const FRAGMENT_LOKAL = /* glsl */ `
   ${LYS_GLSL}
   ${KORT_GLSL}
   ${GLOED_GLSL}
+  #ifdef POLNET
+  // Bjergenes skrå sider mod øst og nord i polarnettet (som polBland i POL_GLSL). tx: en pixel i kortets uv
+  uniform float polR;
+  vec2 polHaeldning(sampler2D t, vec2 uv, float tx) {
+    float dX = hoejdeAf(t, uv + vec2(tx, 0.0)) - hoejdeAf(t, uv - vec2(tx, 0.0));
+    float dZ = hoejdeAf(t, uv + vec2(0.0, tx)) - hoejdeAf(t, uv - vec2(0.0, tx));
+    vec2 P = (uv - 0.5) * 2.0 * polR;
+    float r2 = dot(P, P);
+    // Fra kortets pixler til radier på kuglen: En pixel er 2 · polR · tx i planet, og stereografisk er dP = (1 + r²) / 2 · ds
+    vec2 grad = vec2(dX, dZ) * hSpan * overdriv / (4.0 * polR * tx) * (1.0 + r2) * 0.5;
+    vec2 l = P / max(sqrt(r2), 1e-6); // (cos, sin) til længden
+    return vec2(dot(grad, vec2(-l.y, l.x)), -dot(grad, l));
+  }
+  #endif
   varying vec2 vUv;
   varying vec2 vLok;
   varying float vVaegt;
@@ -365,7 +391,9 @@ const FRAGMENT_LOKAL = /* glsl */ `
     vec3 oest, nord;
     float cosB = oestNord(n0, oest, nord);
     // Ved kanten glider hældningen og farven over i kuglens
-    #ifdef DETALJE
+    #if defined(POLNET)
+    vec2 g = polHaeldning(lokalHoejde, vLok, lokalTexel.x);
+    #elif defined(DETALJE)
     vec2 d;
     float wd = detaljeVaegt(vLok, d);
     vec2 g = wd < 1.0 ? haeldning(lokalHoejde, vLok, lokalTexel, lokalSpaend, cosB) : vec2(0.0);
@@ -614,6 +642,15 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
     let h = slåOp(tabel, x, y, maks, true);
     for (const l of lokale) {
       if (!l.tabel) continue;
+      if (l.pol) {
+        // Polarnettet: punktet i planet set lige ovenfra polen (kortets række 0 er øverst, mod 90° Ø)
+        if (retning.y <= 0) continue;
+        const px = retning.x / (1 + retning.y), pz = -retning.z / (1 + retning.y), r = Math.hypot(px, pz);
+        if (r >= l.pol.r) continue;
+        const w = glidende((l.pol.r - r) / l.pol.kant);
+        h += (slåOp(l.tabel, (px / (2 * l.pol.r) + 0.5) * l.tabel.B, (0.5 - pz / (2 * l.pol.r)) * l.tabel.H, maks, false) - h) * w;
+        continue;
+      }
       const lx = (længde - l.vest) / (l.øst - l.vest), ly = (l.nord - bredde) / (l.nord - l.syd);
       if (lx <= 0 || lx >= 1 || ly <= 0 || ly >= 1) continue;
       const w = glidende(Math.min(lx / l.kant[0], (1 - lx) / l.kant[0], ly / l.kant[1], (1 - ly) / l.kant[1]));
@@ -679,8 +716,15 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
     // i km. Kuglen tegnes ikke inden for grænserne, når det lokale højdekort er hentet.
     // detalje: { nord, syd, vest, øst, kant } et mindre område inden for stedet med et skarpere højdekort (sætDetalje),
     // som glider over i stedets kort på kant km.
-    lokalt({ nord, syd, vest, øst, net: lokalNet = [512, 512], kant = 40, detalje = null }) {
+    // pol (Mars M7b-pol): bredden (grader nord), hvor et polarnet over nordpolen slutter. Nettet er ringe om polen
+    // (net[0] ringe, færre punkter ind mod polen), og kortene er set lige ovenfra (stereografisk som Merkurs polkort:
+    // længde 0° til højre og 90° Ø opad, kanten ved pol). Grænserne gives så ikke. Kræver midte = 0.
+    lokalt({ nord, syd, vest, øst, net: lokalNet = [512, 512], kant = 40, detalje = null, pol = null }) {
       const rad = THREE.MathUtils.degToRad;
+      if (pol !== null) {
+        if (midte !== 0) throw new Error('polarnettet kræver midte = 0');
+        nord = 90; syd = pol; vest = -180; øst = 180; detalje = null;
+      }
       // Nettet ligger i kuglens egne retninger, hvor kortets midte er længde 0° (midte: Pluto)
       vest -= midte; øst -= midte;
       if (detalje) detalje = { ...detalje, vest: detalje.vest - midte, øst: detalje.øst - midte };
@@ -704,13 +748,14 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
       // på kuglens trekanter helt ude ved kanten). Ellers kan der komme en revne på en pixel, når man kigger hen over kanten.
       const kU = 1.5 / (2 * Math.PI * radius * Math.cos(midt)), kV = 1.5 / (Math.PI * radius);
       l.hul = new THREE.Vector4(l.boks.x + kU, l.boks.y + kV, l.boks.z - kU, l.boks.w - kV);
-      // Gitteret og skørtet langs kanten (de sidste 4 · (M − 1) punkter)
+      if (pol !== null) {
+        // Hele kalotten over pol (hele vejen rundt), og kanten i planet: r og overgangen (stereografisk er
+        // dP = (1 + r²) / 2 · ds, ds i radianer)
+        const r = Math.tan(rad(90 - pol) / 2);
+        l.pol = { r, kant: (kant / radius) * (1 + r * r) / 2 };
+        l.hul.set(-1, l.boks.y + kV, 2, 2);
+      }
       const [M, N] = lokalNet;
-      const kantPunkter = [];
-      for (let j = 0; j < N; j++) for (let i = 0; i < M; i++) if (i === 0 || j === 0 || i === M - 1 || j === N - 1) kantPunkter.push([i, j]);
-      const antal = M * N + kantPunkter.length;
-      const pos = new Float32Array(antal * 3), uv = new Float32Array(antal * 2), skørt = new Float32Array(antal);
-      const kugle = new Float32Array(antal * 3);
       // Et punkt i kuglens net uden bjerge (som i THREE.SphereGeometry, trykket flad)
       const [W, H] = net;
       // (skrevet uden nye lister pr. punkt: nettene har ca. 260.000 punkter hver, og det tog før sekunder at lave dem)
@@ -721,16 +766,16 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         hj[o + 1] = trig.cosTh[iy] * flad;
         hj[o + 2] = trig.sinPhi[ix] * st;
       };
-      const sæt = (k, i, j, s) => {
-        const b = rad(nord + ((syd - nord) * j) / (N - 1)), lg = rad(vest + ((øst - vest) * i) / (M - 1)), cb = Math.cos(b);
+      // Punktet k med bredden b og længden lg (radianer) i listerne: retningen, uv i kuglens kort og punktet på kuglens
+      // trekant her (som i shaderen)
+      const sætPunkt = (pos, uv, kugle, k, b, lg) => {
+        const cb = Math.cos(b);
         pos[k * 3] = cb * Math.cos(lg);
         pos[k * 3 + 1] = Math.sin(b);
         pos[k * 3 + 2] = -cb * Math.sin(lg);
         const u = (lg / Math.PI + 1) / 2, v = b / Math.PI + 0.5;
         uv[k * 2] = u;
         uv[k * 2 + 1] = v;
-        skørt[k] = s;
-        // Trekanten i kuglens net (som i shaderen)
         const gx = u * W, gy = (1 - v) * H, i0 = Math.floor(gx), j0 = Math.floor(gy), fx = gx - i0, fy = gy - j0;
         kp(i0, j0, 0);
         kp(i0 + 1, j0 + 1, 3);
@@ -739,35 +784,107 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
         const wb = fx >= fy ? 1 - fx : 1 - fy, wc = fx >= fy ? fx - fy : fy - fx, wd = fx >= fy ? fy : fx;
         for (let a = 0; a < 3; a++) kugle[k * 3 + a] = hj[a] * wb + hj[6 + a] * wc + hj[3 + a] * wd;
       };
-      for (let j = 0; j < N; j++) for (let i = 0; i < M; i++) sæt(j * M + i, i, j, 0);
-      const skørtNr = new Map();
-      kantPunkter.forEach(([i, j], k) => { sæt(M * N + k, i, j, 1); skørtNr.set(j * M + i, M * N + k); });
-      // Skørtet: fra kanten og ned
-      const kantRundt = [];
-      for (let i = 0; i < M - 1; i++) kantRundt.push(i);
-      for (let j = 0; j < N - 1; j++) kantRundt.push(j * M + M - 1);
-      for (let i = M - 1; i > 0; i--) kantRundt.push((N - 1) * M + i);
-      for (let j = N - 1; j > 0; j--) kantRundt.push(j * M);
-      const index = new Uint32Array((M - 1) * (N - 1) * 6 + kantRundt.length * 12);
-      let ni = 0;
-      const læg = (...a) => { for (const x of a) index[ni++] = x; };
-      for (let j = 0; j < N - 1; j++) {
-        for (let i = 0; i < M - 1; i++) {
-          const a = j * M + i, b = a + 1, c = a + M, d = c + 1;
-          index[ni++] = a; index[ni++] = c; index[ni++] = b;
-          index[ni++] = b; index[ni++] = c; index[ni++] = d;
+      const lavGeo = (pos, uv, skørt, kugle, index) => {
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+        geo.setAttribute('skoert', new THREE.BufferAttribute(skørt, 1));
+        geo.setAttribute('kugle', new THREE.BufferAttribute(kugle, 3));
+        geo.setIndex(new THREE.BufferAttribute(index, 1));
+        return geo;
+      };
+      // Gitteret i bredde og længde og skørtet langs kanten (de sidste 4 · (M − 1) punkter)
+      function gitter() {
+        const kantPunkter = [];
+        for (let j = 0; j < N; j++) for (let i = 0; i < M; i++) if (i === 0 || j === 0 || i === M - 1 || j === N - 1) kantPunkter.push([i, j]);
+        const antal = M * N + kantPunkter.length;
+        const pos = new Float32Array(antal * 3), uv = new Float32Array(antal * 2), skørt = new Float32Array(antal);
+        const kugle = new Float32Array(antal * 3);
+        const sæt = (k, i, j, s) => {
+          sætPunkt(pos, uv, kugle, k, rad(nord + ((syd - nord) * j) / (N - 1)), rad(vest + ((øst - vest) * i) / (M - 1)));
+          skørt[k] = s;
+        };
+        for (let j = 0; j < N; j++) for (let i = 0; i < M; i++) sæt(j * M + i, i, j, 0);
+        const skørtNr = new Map();
+        kantPunkter.forEach(([i, j], k) => { sæt(M * N + k, i, j, 1); skørtNr.set(j * M + i, M * N + k); });
+        // Skørtet: fra kanten og ned
+        const kantRundt = [];
+        for (let i = 0; i < M - 1; i++) kantRundt.push(i);
+        for (let j = 0; j < N - 1; j++) kantRundt.push(j * M + M - 1);
+        for (let i = M - 1; i > 0; i--) kantRundt.push((N - 1) * M + i);
+        for (let j = N - 1; j > 0; j--) kantRundt.push(j * M);
+        const index = new Uint32Array((M - 1) * (N - 1) * 6 + kantRundt.length * 12);
+        let ni = 0;
+        const læg = (...a) => { for (const x of a) index[ni++] = x; };
+        for (let j = 0; j < N - 1; j++) {
+          for (let i = 0; i < M - 1; i++) {
+            const a = j * M + i, b = a + 1, c = a + M, d = c + 1;
+            index[ni++] = a; index[ni++] = c; index[ni++] = b;
+            index[ni++] = b; index[ni++] = c; index[ni++] = d;
+          }
         }
+        kantRundt.forEach((a, k) => {
+          const b = kantRundt[(k + 1) % kantRundt.length], sa = skørtNr.get(a), sb = skørtNr.get(b);
+          læg(a, b, sa, b, sb, sa, a, sa, b, b, sa, sb); // begge veje, så skørtet ses fra begge sider
+        });
+        return lavGeo(pos, uv, skørt, kugle, index);
       }
-      kantRundt.forEach((a, k) => {
-        const b = kantRundt[(k + 1) % kantRundt.length], sa = skørtNr.get(a), sb = skørtNr.get(b);
-        læg(a, b, sa, b, sb, sa, a, sa, b, b, sa, sb); // begge veje, så skørtet ses fra begge sider
-      });
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
-      geo.setAttribute('skoert', new THREE.BufferAttribute(skørt, 1));
-      geo.setAttribute('kugle', new THREE.BufferAttribute(kugle, 3));
-      geo.setIndex(new THREE.BufferAttribute(index, 1));
+      // Polarnettet: NR ringe fra kanten (r i planet) ind mod polen, lige langt imellem. Hver ring har S punkter rundt
+      // (fra −180° til 180°, så det første og det sidste ligger samme sted, og ingen trekant går hen over kortets kant ved
+      // 180°). Ind mod polen halveres S, når punkterne kommer tættere end ca. 0,7 gange afstanden mellem ringene, og
+      // ringene syes sammen med tre trekanter pr. felt. Inderst en vifte om polen. Skørtet hænger ned fra den yderste ring.
+      function polGitter(NR, r) {
+        let S0 = 8;
+        while (S0 < 2 * Math.PI * NR) S0 *= 2;
+        const radius_ = (j) => r * (1 - j / NR); // ringens radius i planet (j = NR er polen)
+        const S = new Int32Array(NR);
+        S[0] = S0;
+        for (let j = 1; j < NR; j++) {
+          S[j] = S[j - 1];
+          if (S[j] > 8 && (2 * Math.PI * radius_(j)) / S[j] < 0.7 * (r / NR)) S[j] /= 2;
+        }
+        const start = new Int32Array(NR + 1);
+        for (let j = 0; j < NR; j++) start[j + 1] = start[j] + S[j] + 1;
+        const midt_ = start[NR]; // polen
+        const skørtStart = midt_ + 1;
+        const antal = skørtStart + S0 + 1;
+        const pos = new Float32Array(antal * 3), uv = new Float32Array(antal * 2), skørt = new Float32Array(antal);
+        const kugle = new Float32Array(antal * 3);
+        const sæt = (k, rr, i, s, n) => {
+          sætPunkt(pos, uv, kugle, k, Math.PI / 2 - 2 * Math.atan(rr), -Math.PI + (2 * Math.PI * i) / n);
+          skørt[k] = s;
+        };
+        for (let j = 0; j < NR; j++) for (let i = 0; i <= S[j]; i++) sæt(start[j] + i, radius_(j), i, 0, S[j]);
+        sæt(midt_, 0, 0, 0, 1);
+        for (let i = 0; i <= S0; i++) sæt(skørtStart + i, r, i, 1, S0);
+        // Trekanterne (mod uret set udefra: længden vokser mod øst, og ind mod polen)
+        let tæl = 0;
+        for (let j = 0; j < NR - 1; j++) tæl += S[j + 1] === S[j] ? S[j] * 2 : S[j + 1] * 3;
+        tæl += S[NR - 1] + S0 * 4;
+        const index = new Uint32Array(tæl * 3);
+        let ni = 0;
+        const læg = (a, b, c) => { index[ni++] = a; index[ni++] = b; index[ni++] = c; };
+        for (let j = 0; j < NR - 1; j++) {
+          const a = start[j], b = start[j + 1];
+          if (S[j + 1] === S[j]) {
+            for (let i = 0; i < S[j]; i++) { læg(a + i, a + i + 1, b + i); læg(a + i + 1, b + i + 1, b + i); }
+          } else {
+            for (let i = 0; i < S[j + 1]; i++) {
+              const y = a + 2 * i;
+              læg(y, y + 1, b + i); læg(y + 1, y + 2, b + i + 1); læg(y + 1, b + i + 1, b + i);
+            }
+          }
+        }
+        const sidste = start[NR - 1];
+        for (let i = 0; i < S[NR - 1]; i++) læg(sidste + i, sidste + i + 1, midt_);
+        // Skørtet: begge veje, så det ses fra begge sider
+        for (let i = 0; i < S0; i++) {
+          const a = i, b = i + 1, sa = skørtStart + i, sb = sa + 1;
+          læg(a, b, sa); læg(b, sb, sa); læg(a, sa, b); læg(b, sa, sb);
+        }
+        return lavGeo(pos, uv, skørt, kugle, index);
+      }
+      const geo = pol !== null ? polGitter(lokalNet[0], l.pol.r) : gitter();
       geo.computeBoundingSphere();
       geo.boundingSphere.radius += 0.07; // bjergene, også 10 gange højere
       const lm = new THREE.ShaderMaterial({
@@ -794,8 +911,9 @@ export function lavKlippeplanet({ skala, radius, polRadius = radius, højdeMin, 
             detaljeSpaend: { value: new THREE.Vector2(rad(detalje.øst - detalje.vest), rad(detalje.nord - detalje.syd)) },
             detaljeLod: { value: 0 },
           }),
+          ...(pol !== null && { polR: { value: l.pol.r }, polKant: { value: l.pol.kant } }),
         },
-        defines: { ...defines, ...(detalje && { DETALJE: '' }) },
+        defines: { ...defines, ...(detalje && { DETALJE: '' }), ...(pol !== null && { POLNET: '' }) },
         vertexShader: VERTEX_LOKAL,
         fragmentShader: medSkyer(FRAGMENT_LOKAL),
       });
