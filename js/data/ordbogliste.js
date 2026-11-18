@@ -22,7 +22,6 @@ export const LINKS = {
   kromosom: { skærm: ['liv', 'Liv'] },
   basepar: { skærm: ['liv', 'Liv'] },
   hydrogenbinding: { skærm: ['liv', 'Liv'] },
-  antibiotika: { hvorfor: 'livMenneske' },
   'naturligt-udvalg': { hvorfor: 'livMenneske' },
   dendrit: { skærm: ['batteri', 'Batteriet'] },
   horisont: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
