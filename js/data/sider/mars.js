@@ -212,7 +212,7 @@ export const SIDER = {
         tekst: '<p>For mere end 3½ mia. år siden var Jezero en sø. En flod løb ind gennem et hul i vestkanten og lagde sand og mudder i en vifte, et delta.</p>',
       },
       {
-        titel: 'Har Perseverance fundet liv?',
+        titel: 'Har Perseverance fundet liv?', hvorfor: ['livSpor'], // Liv L6
         tekst: `<p>Indtil nu har Perseverance fyldt 30 rør med prøver: 27 stykker af sten, 2 med løs jord og 1 med luft fra Mars. I juli 2024 fandt den en sten (Cheyava Falls) med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv. Det har forskerne endnu ikke kunnet afgøre. ${GÅDE_LIV}</p>`,
       },
       {
@@ -251,8 +251,10 @@ export const SIDER = {
       },
     ],
     videre: [sted('jezero', 'Jezero'), sted('måner', 'Månerne')],
-    billeder: '<p>Nordpolen ses fra højt oppe og klarer sig med Mars\' almindelige net. Et net i bredde og længde virker heller ikke ved polen, hvor alle længdegrader mødes.</p>',
-    ærligt: '<p>Her spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Polkappen er vist, som den ser ud om sommeren.</p>',
+    // M7b-pol, faktatjekket 18. november 2026 (docs/fakta-solsystemet/del3b-mars-stederne-og-faelder.md, "Faktatjek
+    // M7b-pol"). Nettets tal er programmets egne (billeder/solsystem/lav_pol.py): 78° N, ca. 1.420 km, 0,69 km pr. pixel.
+    billeder: '<p>Over polen ligger et net af ringe med sit eget højdekort og farvekort, set lige ovenfra. Det er ca. 1.400 km bredt, med ca. 0,7 km mellem højderne og ca. 1 km mellem farverne (på en tablet ca. 1,4 km). Ved kanten (78° N) glider det over i Mars\' almindelige net. Et net i bredde og længde virker ikke ved polen, for dér mødes alle længdegrader.</p>',
+    ærligt: '<p>Her spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Polkappen er vist, som den ser ud om sommeren.</p><p>Højderne er målt med en laser fra rumsonden Mars Global Surveyor. Farverne er fotos fra Viking-sonderne (1976-1980). Kløfternes sider er mørke, fordi lagene af is og støv ses dér. Lyset og skyggerne regner programmet selv ud fra højderne, og isen er gjort lidt hvidere end på fotoene. Kløfterne er lave i forhold til, hvor brede de er, så herfra ses de mest på farven.</p>',
   },
   måner: {
     tal: [['Phobos rundt', '7 t 39 min'], ['Deimos rundt', 'ca. 30 timer'], ['Opdaget', '1877']],
@@ -424,7 +426,7 @@ SIDER['stå-randen'] = {
       tekst: '<p>Randen blev rejst, da et stort nedslag lavede krateret. Meget af stenen her blev slået op dybt nedefra, ved dette nedslag og måske også ved ældre nedslag. Perseverance var her i oktober 2024 på vej op. Turen op tog ca. 3½ måned og gik ca. 500 m opad, og i december 2024 nåede den toppen. På den anden side fandt den nogle af de ældste sten, den har set: sandsynligvis mindst 3,9 mia. år gamle.</p>',
     },
     {
-      titel: 'Hvor fandt Perseverance Cheyava Falls?',
+      titel: 'Hvor fandt Perseverance Cheyava Falls?', hvorfor: ['livSpor'], // Liv L6
       tekst: '<p>Knap 2 km mod nord ligger en gammel floddal, Neretva Vallis, hvor vandet løb ind i krateret. Dér fandt Perseverance i juli 2024 stenen Cheyava Falls med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv.</p>',
     },
     SOLNEDGANG,
