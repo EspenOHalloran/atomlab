@@ -37,7 +37,7 @@ const tP = new THREE.Vector3();
 
 // stråleVed(x, y): en THREE.Ray fra kameraet gennem et punkt på skærmen. løs(id): en opgave er klaret.
 // lab: { start, stop }: kaldes, når laboratoriet åbner og lukker (liv.js viser knapperne og panelet).
-export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mission, stoppet, slut }) {
+export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mission, stoppet, næste, slut }) {
   let trin = null; // trinets id, mens turen kører
   let lab = false; // "Leg frit: Kopien"
   let s = null; // scenen: se ny()
@@ -334,10 +334,11 @@ export function lavKopienDel({ tegning, vis, kamera, stråleVed, løs, panel, mi
     },
     layout: () => kamera(),
     slutTekst: () => 'De fleste af dine ca. 70 gør ingenting.',
+    // Kortet "Hvorfor ligner jeg mine forældre?" står ved Cellekernen (L4: højst tre veje, og tur 4 kom først)
     veje: [
-      { tekst: 'Leg frit: Kopien', primær: true, her: true, gør: () => requestAnimationFrame(() => startLab()) },
+      { tekst: 'Næste tur: Fejlen, der hjalp ›', primær: true, gør: () => requestAnimationFrame(næste) },
+      { tekst: 'Leg frit: Kopien', her: true, gør: () => requestAnimationFrame(() => startLab()) },
       { tekst: 'Hvordan ved vi det?', hvorfor: 'livKopi' },
-      { tekst: 'Hvorfor ligner jeg mine forældre?', hvorfor: 'livForaeldre' },
     ],
     slut: () => {
       trin = null;

@@ -223,7 +223,24 @@ export const HVORFOR = {
   livSegl: {
     spørgsmål: 'Hvorfor kan ét forkert bogstav give en sygdom?',
     svar: 'Rækkefølgen af aminosyrerne bestemmer, hvordan kæden folder sig, og formen bestemmer, hvad proteinet kan. Ved seglcelleanæmi er kun ét bogstav i genet HBB skiftet: GAG er blevet til GTG. Så sidder der valin, der skyr vand, i stedet for glutaminsyre, der er minusladet.\n\nHar man ændringen fra både sin mor og sin far, klumper hæmoglobinet sammen i lange tråde, når det har afleveret ilten. De røde blodlegemer bliver krumme som en segl og kan sætte sig fast i de små blodårer.',
-    nørd: 'Har man det ændrede gen kun fra den ene forælder, er man bærer og bliver normalt ikke syg (genome.gov). Bærere får sjældnere den farlige form af malaria (Hedrick 2011), men de kan godt få malaria. Derfor er genet almindeligt, hvor der er meget malaria.',
+    nørd: 'Har man det ændrede gen kun fra den ene forælder, er man bærer og bliver normalt ikke syg (genome.gov). Bærere får sjældnere den farlige form af malaria (Hedrick 2011), men de kan godt få malaria.',
+    næste: 'livMenneske', // L4: "Derfor er genet almindeligt, hvor der er meget malaria" står nu i kort 4
+  },
+  // Liv L4, kort 4 og 5 (docs/drejebog-liv.md, afsnit 5). Kort 4: Hedrick 2011, Heredity 107:283-304, PMC3182497
+  // ("provides resistance to malaria in AS heterozygotes", "the classic example of heterozygote advantage"), Wikipedia
+  // "Sickle cell disease" (bærere "less likely to suffer from severe symptoms"). Fælde 11: ikke "får ikke malaria".
+  livMenneske: {
+    spørgsmål: 'Sker det også hos mennesker?',
+    svar: 'Ja. Ét skiftet bogstav i genet HBB (ord 7) giver seglcelleanæmi, hvis man har det fra begge forældre. Har man det kun fra den ene, bliver man sjældnere alvorligt syg af malaria.\n\nHvor der er meget malaria, har bærerne derfor fået flere børn, der overlevede, og ændringen er blevet almindelig dér. Det er naturligt udvalg.',
+    nørd: 'Det er det kendteste eksempel på, at det er en fordel at have en ændring fra kun den ene forælder (Hedrick 2011). Derfor bliver den hverken væk eller almindelig hos alle: Fordelen hos bærerne og sygdommen hos dem, der har den dobbelt, holder hinanden i balance.',
+  },
+  // Kort 5: Juhl m.fl. 2018, Nutrients 10:1041, PMC6115808 (20.416 voksne danskere, LCT-13910 i MCM6, 6 % kan ikke tåle
+  // mælk som voksne). Itan m.fl. 2009 og Evershed m.fl. 2022, PMC7615474 (den ældste kendte bærer ca. 4.700-4.600 f.Kr.,
+  // almindelig ca. 2.000 f.Kr., "only weakly associated with milk consumption"). Fælde 10: ikke "for 7.500-10.000 år siden".
+  livMaelk: {
+    spørgsmål: 'Hvorfor kan de fleste danskere tåle mælk?',
+    svar: 'Næsten alle små børn kan fordøje sukkeret i mælk. Hos mange mennesker slukker genet for det, når de bliver større. Ca. 94 af 100 voksne danskere har en ændring i en "kontakt" ved genet, så det bliver ved med at være tændt.\n\nDen ældste kendte person med ændringen levede for ca. 6.700 år siden, og den blev almindelig i Europa for ca. 4.000 år siden. Forskerne er uenige om, hvorfor den hjalp så meget.',
+    nørd: 'Genet hedder LCT og laver enzymet laktase, der klipper mælkesukker over. Kontakten sidder 13.910 bogstaver før genet, inde i nabogenet MCM6 (Juhl og kolleger 2018, 20.416 voksne danskere). At folk drak mælk, forklarer ikke alene, hvorfor ændringen bredte sig: I en stor undersøgelse fra Storbritannien hang den kun svagt sammen med, hvor meget mælk folk drikker (Evershed og kolleger 2022).',
   },
   // Liv L3, kort 1-3 (docs/drejebog-liv.md, afsnit 5). Kilder: docs/fakta-liv/dna-opskriften.md, afsnit 4 og 5.
   // Kort 1: Nature 171 (25. april 1953), Foto 51 (Gosling under Franklin, 2. maj 1952), Wilkins viste det til Watson uden

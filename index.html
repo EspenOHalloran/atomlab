@@ -774,6 +774,7 @@
         <button class="liv-forløb" id="livForløbOpskriften"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 1:</span> <span class="liv-forløb-navn">Opskriften i dig</span></span></button>
         <button class="liv-forløb" id="livForløbOrdene"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 2:</span> <span class="liv-forløb-navn">Hvad står der i opskriften?</span></span></button>
         <button class="liv-forløb" id="livForløbKopien"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 3:</span> <span class="liv-forløb-navn">Kopien</span></span></button>
+        <button class="liv-forløb" id="livForløbFejlen"><span class="flueben">▶</span><span><span class="liv-forløb-mærke">Tur 4:</span> <span class="liv-forløb-navn">Fejlen, der hjalp</span></span></button>
       </div>
       <h4 class="panel-overskrift">Leg frit</h4>
       <div class="liv-niveauer" id="livNiveauer"></div>
@@ -830,6 +831,20 @@
           </div>
         </div>
       </details>
+      <details class="liv-protein lag-boks" id="livPlade" data-lag="liv-plade">
+        <summary><strong>Pladen</strong></summary>
+        <div class="liv-protein-valg" id="livPladeValg">
+          <button class="knap" id="livPladeStart">Sæt bakterier på pladen</button>
+        </div>
+        <div class="liv-protein-i-gang" id="livPladeIGang" hidden>
+          <p class="liv-byg-tekst" id="livPladeTekst"></p>
+          <button class="kontakt løs" id="livPladeSpring">Uden mellemtrin</button>
+          <div class="valg-række">
+            <button class="knap lille svag" id="livPladeIgen">↻ Ny plade</button>
+            <button class="knap lille svag" id="livPladeStop">Stop</button>
+          </div>
+        </div>
+      </details>
       <details class="lag-boks opgave-boks" data-lag="liv-opgaver">
         <summary><strong>Opgaver</strong> <span class="opgave-tal" id="livOpgaveTal"></span></summary>
         <ol class="opgaver kompakt" id="livOpgaver"></ol>
@@ -861,6 +876,7 @@
         <p>Cellen og cellekernen er tegnet meget tommere, end de er: En rigtig celle er proppet med proteiner og vand. Perlerne i kromosomet er tegnet mere ordnet, end de ligger i cellekernen. Lidt af dit DNA ligger også uden for cellekernen, i mitokondrierne (de orange pølser).</p>
         <p>Ribosomet er tegnet som to skyer, men det er bygget af RNA og mange proteiner og er meget mere indviklet. Budbringerne (tRNA) er tegnet som pinde, og mange ribosomer læser det samme RNA på én gang. RNA'et bliver klippet til i cellekernen, men det viser vi ikke. Foldningen er vist meget forenklet: Den rigtige form er meget mere ordnet.</p>
         <p>På turen "Hvad står der i opskriften?" ligger stigen lige ud, og der er små mellemrum mellem ordene, så de er lette at se. I virkeligheden er stigen snoet, og der er ingen mellemrum: Cellen ved, hvor ordene står, fordi den begynder ved ATG og tæller tre ad gangen. Byggestenene har alle samme farve, og den orange er en, der er blevet skiftet ud.</p>
+        <p>På pladen står hver prik for mange bakterier, og fejlene kommer meget oftere end i virkeligheden. Den rigtige plade var 120 × 60 cm med milliarder af bakterier, et felt uden medicin i hver ende og det stærkeste bånd i midten. Her ser du den ene halvdel. Bakterierne med en fejl i feltet uden medicin kunne man ikke se på den rigtige plade: Her har de en farve, så du kan finde dem. Og her giver hver fejl adgang til præcis ét bånd mere. I virkeligheden er det ikke altid så enkelt.</p>
         <p>I kopien kommer fejlene meget oftere end i virkeligheden (skiltet siger det), og stigen ligger lige ud, selvom den er snoet. Den ene nye side bliver i virkeligheden bygget i små stykker, men her er de to tegnet ens. Et forkert bogstav, der bliver siddende, er først et par, der ikke passer. Når stigen bliver kopieret igen, får den ene kopi et rigtigt par med det nye bogstav, og så er mutationen der for alvor.</p>
       </details>
     </aside>
@@ -873,6 +889,8 @@
         <p><strong>Turen "Opskriften i dig"</strong> viser i fire korte trin, hvad DNA er. Det starter første gang, du åbner Liv. <button class="knap lille" id="livHjælpForløb">Tag turen ›</button></p>
         <p><strong>Turen "Hvad står der i opskriften?"</strong> viser i fem korte trin, hvordan cellen læser bogstaverne og bygger et protein, og hvad der sker, når ét bogstav er forkert. <button class="knap lille" id="livHjælpOrdene">Tag turen ›</button></p>
         <p><strong>Turen "Kopien"</strong> viser i fire korte trin, hvordan cellen kopierer sit DNA, før den deler sig, og hvad der sker med fejlene. <button class="knap lille" id="livHjælpKopien">Tag turen ›</button></p>
+        <p><strong>Turen "Fejlen, der hjalp"</strong> viser i fire korte trin, hvordan bakterier kommer igennem medicin, der burde stoppe dem, og hvorfor. <button class="knap lille" id="livHjælpFejlen">Tag turen ›</button></p>
+        <p><strong>Pladen:</strong> Tryk i det lyse felt til venstre, og sæt en bakterie. Den deler sig og fylder feltet. Hold øje med kanten af hvert bånd, og tryk på en prik for at se, hvor mange fejl den har. Med "Uden mellemtrin" er der kun det stærkeste bånd.</p>
         <p><strong>Kopien:</strong> Træk lynlåsen hen ad stigen (eller tryk "Lyn op"), så bygger cellen en ny side på hver halvdel. Nogle gange kommer et forkert bogstav på. Cellen retter de fleste, men en gang imellem bliver et siddende. Find det, og tryk på det.</p>
         <p>Her rejser du fra en af dine celler helt ind til atomerne i dit DNA. <strong>Zoom ind</strong> med musens hjul eller to fingre, eller tryk på knapperne Cellen, Cellekernen, Kromosomet, Stigen og Atomerne. Zoomer du langt nok ind, kommer du til næste trin, og zoomer du ud, kommer du tilbage.</p>
         <p><strong>Byg stigen:</strong> Den ene halvdel af stigen er givet. Vælg den base, der passer til hver base i den: A passer til T, og G passer til C. Prøv også et forkert par, og se, hvorfor det ikke passer.</p>
