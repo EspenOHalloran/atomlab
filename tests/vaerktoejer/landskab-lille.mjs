@@ -23,6 +23,11 @@ await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().står, nul
 await f(() => atomlabTest.solsystem.fænomen().hop());
 // Vent, til landingen er færdig (ellers overskriver den blikket i det første billede)
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { timeout: 300000 });
+// Roverens foto er standard (7. november 2026): Sluk det, så billederne viser det tegnede landskab
+if (await f(() => atomlabTest.solsystem.fænomen().stå().foto.vist !== null)) {
+  await f(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.vist === null, null, { timeout: 300000 });
+}
 for (const x of blik) {
   const [k, v, t] = x.split(',').map(Number);
   const medFoto = x.endsWith(',foto');
