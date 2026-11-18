@@ -53,6 +53,7 @@
 - "Hubble har set vanddamp fra fontæner på Europa." Forskeren bag (Roth) trak det tilbage i maj 2026: Ingen af billederne viser vanddamp (arXiv:2604.20324). Tilbage er to indirekte spor. Havet er der stadig gode beviser for.
 - "Huygens landede 12:43 UTC i rumsondens tid" (Wikipedia). 12:43 er, da signalet nåede Jorden. Ved Titan var klokken ca. 11:38 UTC (ESA). Tjek altid, om en tid er ved rumsonden eller på Jorden.
 - "En rover kan højst nå trin 3 på CoLD-skalaen." Artiklen (Green m.fl. 2021) giver et eksempel med Perseverance, ikke en regel for alle rovere.
+- "Resten af CoLD-trinene kan nås med prøven på Jorden." Green m.fl. 2021: Prøver på Jorden kan nå "Level 6 or higher", men trin 7 "may require investigations elsewhere on Mars". Og om ALH84001 skriver de "could be argued to have identified" trin 1-3, ikke at det nåede dem (Liv L6).
 - "Miller-forsøget gav 22 (eller 23) aminosyrer." Det er to forsøg: 22 i vulkan-udgaven (analyseret 2008) og 23 i forsøget med H₂S fra 1958 (analyseret 2011). Bland dem ikke.
 - "Cassini fandt ikke liv på Enceladus." Den kunne ikke have set det. Skriv "ingen har endnu kunnet se efter liv".
 - "Mutationer gør, at livet udvikler sig." Kun sammen med naturligt udvalg. Og evolution er en kendsgerning: skriv den ikke med "måske".
