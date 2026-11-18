@@ -321,6 +321,25 @@ export const HVORFOR = {
     svar: 'I 1655 så Christiaan Huygens, at Saturns "arme" nat efter nat stak ud i én lige linje. Han regnede ud, at en tynd, flad ring rundt om Saturn kunne forklare alle de mærkelige tegninger, også når armene forsvandt, fordi vi så ringen fra kanten. Han skrev det i 1659.\n\nHuygens troede, ringen var fast, men i 1859 viste James Clerk Maxwell, at den må bestå af utallige små stykker, der hver kredser for sig. Det blev målt i 1895, og siden 1979 har rumsonder fløjet helt tæt på.',
     nørd: 'I 1895 målte James Keeler, hvor meget lyset fra ringen var forskudt i farve (Dopplereffekten). Lyset fra den inderste del var forskudt mest, så den inderste del kom hurtigst rundt, ligesom små måner. En fast ring drejer som et hjul, og så går den yderste del hurtigst. Pioneer 11 fløj forbi i 1979, Voyager 1 og 2 i 1980 og 1981, og Cassini kredsede om Saturn fra 2004 til 2017.',
   },
+  // Ild, laboratoriet "Bordet" (docs/drejebog-ild.md, afsnit 5). Kilder: docs/fakta-ild.md afsnit 3, 4 og 8 og
+  // docs/fakta-ild/faktatjek-bordet.md. Ionerne: ca. 10¹⁰ pr. cm³ i en flamme af kulbrinter og luft (op til ca. 10¹²
+  // de tætteste steder) mod ca. 4 · 10¹⁸ molekyler pr. cm³ ved 1.700 K. Solen: 26,7 MeV pr. helium mod ca. 8 eV pr. metan.
+  // Stearinlyset 77 W (Hamins m.fl., NIST 2005), et menneske i ro ca. 100 W (2.000 kcal i døgnet er 97 W).
+  ildPlasma: {
+    spørgsmål: 'Er ild plasma?',
+    svar: 'Nej, ikke flammen fra et stearinlys. Den er varm gas, der reagerer. Nogle få molekyler bliver til ioner i reaktionen, så en flamme kan lede en lillebitte smule strøm. Men typisk er kun ca. ét molekyle ud af en milliard en ion, og det er alt for få til at kalde det plasma.',
+    nørd: 'Ionerne kommer fra kemien, ikke fra varmen: Når to stykker mødes i flammen, kan de smide en elektron (CH + O → CHO⁺ + e⁻). 1.400 °C er alt for koldt til, at varmen selv kan slå elektroner løs. Det kræver mange tusind grader, som i et lyn. Et stærkt elektrisk felt kan bøje en flamme, netop fordi den har nogle ioner.',
+  },
+  ildSolen: {
+    spørgsmål: 'Brænder Solen?',
+    svar: 'Ikke som ild. I ild bytter atomerne partnere, men det er de samme atomer bagefter. I Solen smelter atomkerner sammen og bliver til et nyt grundstof: Hydrogen bliver til helium. Det hedder fusion, og hver gang giver det millioner af gange mere energi, end når et molekyle brænder. Man kan prøve det i Stjerneovnen.',
+    nørd: 'Når fire hydrogenkerner bliver til én heliumkerne i Solen, kommer der i alt ca. 27 MeV ud. Når ét molekyle metan brænder, kommer der ca. 8 eV ud. Det er over tre millioner gange mindre. Astronomer siger tit, at stjerner "brænder" hydrogen, men de mener fusion.',
+  },
+  ildVarmer: {
+    spørgsmål: 'Varmer du som et lys?',
+    svar: 'Lidt mere. Et stearinlys giver ca. 80 watt varme, og en person, der sidder stille, giver ca. 100 watt. Regnskabet er det samme: Brændstof og oxygen bliver til CO₂ og vand. Men i kroppen sker det i mange små trin ved 37 °C og uden flamme.',
+    nørd: 'Maden i et døgn (ca. 2.000 kilokalorier) svarer til ca. 97 watt hele døgnet. Et stearinlys bruger ca. 0,1 gram stearin i minuttet. Det giver kun ca. 13 lumen lys, næsten hundrede gange mindre lys pr. watt end en gammel glødepære. Det meste er varme.',
+  },
   // Hvornår er noget opdaget? (Gåderne G3, fælles for kortene). Kilder: docs/fakta-gaader.md, "Fælles for alle kortene".
   // 5σ ensidet: p = ½·erfc(5/√2) = 2,87 · 10⁻⁷, altså 1 ud af 3,49 millioner. log₂(3,49 · 10⁶) = 21,7, så ca. 22 gange
   // plat i træk (2²² = 4,19 millioner). 3σ: 1 ud af 741 (ca. 10 gange plat). LIGO: "greater than 5.1σ" (arXiv:1602.03837).

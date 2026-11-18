@@ -7,8 +7,9 @@
 // html og css er til 10b, når en skærm får sine egne filer (tomme indtil da).
 export const SKÆRME = [
   { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig' },
-  { id: 'molekyler', verden: 'atomer', titel: 'Molekyler', modul: './molekyler-skaerm.js', status: 'færdig' },
+  { id: 'molekyler', verden: 'kemi', titel: 'Molekyler', modul: './molekyler-skaerm.js', status: 'færdig' },
   { id: 'system', verden: 'atomer', titel: 'Det periodiske system', modul: './system.js', status: 'færdig' },
+  { id: 'ild', verden: 'kemi', titel: 'Ild', modul: './ild.js', status: 'prøve' },
   { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig' },
   { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig' },
   { id: 'liv', verden: 'liv', titel: 'Liv', modul: './liv.js', status: 'prøve' },
@@ -26,7 +27,8 @@ export const SKÆRME = [
 // motiv er baggrunden bag ringen (js/menubaggrund.js).
 export const VERDENER = [
   { id: 'kerner', navn: 'Kernerne', tekst: 'Atomkerner, der smelter sammen i stjernerne eller flækker i en reaktor', motiv: 'fusion' },
-  { id: 'atomer', navn: 'Atomer', tekst: 'Byg atomer og molekyler, og mød alle 118 grundstoffer', motiv: 'vaerksted' },
+  { id: 'atomer', navn: 'Atomer', tekst: 'Byg atomer af protoner, neutroner og elektroner, og mød alle 118 grundstoffer', motiv: 'vaerksted' },
+  { id: 'kemi', navn: 'Kemi', tekst: 'Atomer, der sætter sig sammen og bytter partnere: molekyler og ild', motiv: 'ild' },
   { id: 'liv', navn: 'Liv', tekst: 'Livets opskrift i dine celler, og hvordan livet måske begyndte', motiv: 'liv' },
   { id: 'elektricitet', navn: 'Elektricitet', motiv: 'batteri' },
   { id: 'rummet', navn: 'Rummet', tekst: 'Rejs til planeterne, og se sorte huller og supernovaer', motiv: 'solsystem' },
