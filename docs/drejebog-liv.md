@@ -43,6 +43,7 @@
 - **Bakterier, ikke seglcellen:** Man kan se det ske, ingen mennesker dør i scenen, og trin 4 rammer den almindeligste misforståelse ("de vænner sig til det"). Seglcellen står i kort 4.
 - **Ærligt talt:** Den rigtige plade var 120 × 60 cm med milliarder af bakterier. Her er der få, og fejlene kommer oftere. Bakterierne med fejlen i feltet uden medicin kunne man ikke se på den rigtige plade: Her har de en farve, så man kan finde dem. Evolution er ikke kun udvalg: Tilfældigheder spiller også ind ("For nørder").
 - **Nye ord i Ordbogen:** antibiotika og naturligt udvalg.
+- **Bygget 17. november 2026 (L4)** med to ændringer: Pladen er den ene halvdel af den rigtige (feltet uden medicin til venstre, det stærkeste bånd til højre, "Ærligt talt" siger det), så trin 3 siger "til de når det sidste bånd". Trin 2's Så siger "Kun de få med en fejl …" i stedet for "Én havde en fejl", fordi pladen (og forsøget) ofte har flere grene. "Leg frit: pladen" har kontakten "Uden mellemtrin" (artiklens fig. 2) og ★-opgaven "Spring båndene over".
 
 ## 4. Forløb 5: "Begyndelsen" (L5, ca. 5 minutter, egen del i verdenen Liv)
 **Kernesætning:** *"Livets byggesten laver sig selv af gas og energi, og de findes også i rummet. Men ingen har lavet liv af dem, og ingen ved, hvordan det skete første gang."*

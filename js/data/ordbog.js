@@ -218,6 +218,18 @@ export const ORDBOG = [
     former: ['mutation', 'mutationen', 'mutationer', 'mutationerne'],
     tekst: 'En ændring i DNA\'et, fx et bogstav, der er skiftet ud. Mange mutationer gør ingenting, nogle skader, og nogle få hjælper. Du har ca. 70 nye mutationer, som ingen af dine forældre har.',
   },
+  // Liv L4, turen "Fejlen, der hjalp" (17. november 2026). Wikipedia "Antibiotic": "either kill or inhibit the growth of
+  // bacteria", "not effective against viruses". Wikipedia "On the Origin of Species": udkom 24. november 1859.
+  {
+    id: 'antibiotika', ord: 'Antibiotika',
+    former: ['antibiotika', 'antibiotikaen', 'antibiotikum', 'antibiotikummet'],
+    tekst: 'Medicin mod bakterier. Den dræber bakterierne eller stopper dem i at vokse. Den virker ikke mod virus, fx forkølelse. Bliver bakterierne modstandsdygtige, virker medicinen ikke længere.',
+  },
+  {
+    id: 'naturligt-udvalg', ord: 'Naturligt udvalg',
+    former: ['naturligt udvalg', 'naturlige udvalg', 'naturligt udvalgt'],
+    tekst: 'Når de, der klarer sig bedst der, hvor de lever, får flest efterkommere. Fejlene i DNA\'et kommer tilfældigt, og udvalget afgør, hvilke der bliver almindelige. Charles Darwin beskrev det i bogen "Arternes oprindelse" i 1859.',
+  },
   {
     id: 'enzym', ord: 'Enzym',
     former: ['enzym', 'enzymet', 'enzymer', 'enzymerne'],

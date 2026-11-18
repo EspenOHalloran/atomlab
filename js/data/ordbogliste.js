@@ -22,6 +22,7 @@ export const LINKS = {
   kromosom: { skærm: ['liv', 'Liv'] },
   basepar: { skærm: ['liv', 'Liv'] },
   hydrogenbinding: { skærm: ['liv', 'Liv'] },
+  'naturligt-udvalg': { hvorfor: 'livMenneske' },
   dendrit: { skærm: ['batteri', 'Batteriet'] },
   horisont: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
   singularitet: { gaa: ['gaader:sorthul', 'Gåden: Hvad er der inde i et sort hul?'] },
