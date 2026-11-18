@@ -6,7 +6,8 @@
 // i js/forloeb.js) i bogens opslag af slags 'scene' med tegningerne fra js/bog/<id>.js. Første gang starter forløbet efter
 // "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
 // H3 (17. november 2026): trin 4 (ANNULO) og vejene fra "Det så du": Saturns ringe fra kanten i Solsystemet, hele
-// anagrammet (opslaget "Hemmeligheden") og ringen, man selv drejer. Bogen selv kommer i H4.
+// anagrammet (opslaget "Hemmeligheden") og ringen, man selv drejer. H4: Bogen selv (opslaget "Bogen fra 1659" i js/bog.js),
+// og den tredje vej bladrer dertil.
 
 import { bogMed, byggede, påHylden, rygLinje, HYLDE_LINJE } from './data/opdagelser.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
@@ -74,14 +75,14 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  // "Det så du": sætningen fra 1659 og tre veje (drejebogen afsnit 3, trin 5). Den tredje bliver "Bladr i bogen fra
-  // 1659" i H4 (jeres svar 17. november 2026)
+  // "Det så du": sætningen fra 1659 og tre veje (drejebogen afsnit 3, trin 5). Den tredje er "Bladr i bogen fra 1659"
+  // (H4, jeres svar 17. november 2026). Laboratoriet med ringen står stadig i opslaget, når man bladrer tilbage.
   const v = åben.tekster.VEJE;
   del.slutTekst = () => `${v.sætning} "${åben.tekster.ANAGRAM.dansk}"`;
   del.veje = [
     { tekst: v.saturn, primær: true, gør: () => åbnFænomen('solsystem', 'saturn', 'kanten') },
     { tekst: v.anagram, gør: () => visOpslag('gaaden') },
-    { tekst: v.selv, her: true },
+    { tekst: v.bog, gør: () => visOpslag('bogen') },
   ];
   del.slut = () => {
     bog?.lås(false);
