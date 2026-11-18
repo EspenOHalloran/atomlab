@@ -122,8 +122,8 @@ const LYS = {
 // Linsen fra Kosmos tegner hullet, skiven og fotonringen i et lille lag (højst 512 px på pc og 320 px på tablet, efter
 // lampens størrelse på skærmen) set fra den retning, kameraet ser lampen fra. Billedet ligger på en flade, der altid
 // vender mod kameraet, så hullet ser rigtigt ud, når kameraet drejer om det bag kortet. Himlen i linsens billede er
-// gennemsigtig (dybden 400 = himmel), så skinnens egen himmel ses bag hullet, undtagen fotonringen og lyse stjerner. Laget tegnes kun, når lampen kan ses,
-// og højst 30 gange i sekundet på tablet. Er billederne for langsomme (under 40 i sekundet på tablet), står billedet
+// gennemsigtig (dybden 400 = himmel), så skinnens egen himmel ses bag hullet, undtagen fotonringen og lyse stjerner.
+// Laget tegnes kun, når lampen kan ses, og højst 30 gange i sekundet på tablet. Er billederne for langsomme (under 40 i sekundet på tablet), står billedet
 // stille og tegnes kun igen, når kameraet har flyttet sig. Snyd: Lampen er et symbol, ikke i skala, og den bøjede
 // stjernehimmel om hullet er skåret væk.
 const LINSE_AFSTAND = 45; // kameraet i linsens rum (M = 0,75, skiven går ud til 15)
@@ -138,7 +138,6 @@ const LAMPE_VERTEX = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = pr
 const LAMPE_FRAGMENT = /* glsl */ `
 uniform sampler2D tLinse;
 uniform float uNaer;
-uniform float uOpacitet;
 varying vec2 vUv;
 void main() {
   vec4 l = texture2D(tLinse, vUv);
@@ -150,7 +149,7 @@ void main() {
   float lys = dot(l.rgb, vec3(0.2126, 0.7152, 0.0722));
   float kant = 1.0 - smoothstep(0.55, 0.95, length(vUv - 0.5) * 2.0);
   a = max(a, smoothstep(0.03, 0.2, lys) * kant);
-  gl_FragColor = vec4(l.rgb, a * uOpacitet);
+  gl_FragColor = vec4(l.rgb, a);
 }`;
 
 function lavSortHul() {
@@ -164,7 +163,7 @@ function lavSortHul() {
   const mål = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: true });
   const mat = new THREE.ShaderMaterial({
     defines: { INGEN_DYBDE: INGEN_DYBDE.toFixed(1) },
-    uniforms: { tLinse: { value: linse.tekstur }, uNaer: { value: LINSE_AFSTAND - 15 }, uOpacitet: { value: 1 } },
+    uniforms: { tLinse: { value: linse.tekstur }, uNaer: { value: LINSE_AFSTAND - 15 } },
     vertexShader: LAMPE_VERTEX,
     fragmentShader: LAMPE_FRAGMENT,
     transparent: true,
