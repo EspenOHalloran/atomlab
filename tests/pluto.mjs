@@ -4,10 +4,11 @@
 // punktet under Solen i 3D-billedet passer med datoen, Charon står over længde 0° og vender længde 0° mod Pluto (også
 // efter en omgang), tyngdepunktet, alt står stille i pause, højderne (Sputnik Planitia lavt, Tenzing Montes højt, og
 // bagsiden glat), langt ude kigger kameraet på tyngdepunktet (dansen), "Modlys" sætter Solen bag Pluto, Charon i træet,
-// og ingen fejl i konsollen.
+// og ingen fejl i konsollen. MP4: teksterne (fire spørgsmål, fem stop under 160 tegn), datoen med Solen over en længde,
+// stederne fra træet med det lokale net og Solen mod nordvest, navnene på kloden (et tryk flyver derhen) og flybyen.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
-import { PLUTO, TYNGDEPUNKT, underSolen, charonPåHimlen, lysTimer } from '../js/data/pluto.js';
-import { SIDE, SIDER } from '../js/data/sider/pluto.js';
+import { PLUTO, TYNGDEPUNKT, underSolen, charonPåHimlen, lysTimer, datoMedSolOver } from '../js/data/pluto.js';
+import { SIDE, SIDER, TUR } from '../js/data/sider/pluto.js';
 const UD = billedmappe('pluto');
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -31,7 +32,11 @@ const HORIZONS = [
   tjek('tyngdepunktet ligger ca. 2.126 km fra Plutos midte, ca. 940 km over overfladen', Math.abs(TYNGDEPUNKT - 2126) < 2 && Math.abs(TYNGDEPUNKT - PLUTO.radius - 938) < 3, TYNGDEPUNKT);
   tjek('Charon er ca. 3,8° bred på Plutos himmel', Math.abs(charonPåHimlen() - 3.8) < 0.05, charonPåHimlen());
   tjek('sollyset er ca. 5 timer om at nå Pluto i 2026', Math.abs(lysTimer(new Date('2026-11-17')) - 4.94) < 0.05, lysTimer(new Date('2026-11-17')));
-  tjek('siden ved Pluto har en kort tekst, to emner, "For nørder", Billederne og "Ærligt talt", og Charon har sin egen side', SIDE.kort.length > 50 && SIDE.emner.length === 2 && SIDE.nørd && SIDE.billeder && SIDE.ærligt && SIDER.charon?.kort && SIDER.charon.emner.length === 1);
+  tjek('siden ved Pluto har en kort tekst, fire spørgsmål, "For nørder", Billederne og "Ærligt talt", og Charon, hjertet og bjergene har egne sider', SIDE.kort.length > 50 && SIDE.emner.length === 4 && SIDE.nørd && SIDE.billeder && SIDE.ærligt && ['charon', 'hjertet', 'bjerge'].every((id) => SIDER[id]?.kort && SIDER[id].emner?.length));
+  tjek('flybyen har 5 stop (Pluto og Charon, hjertet, bjergene, Charon, modlys), og underteksterne er under 160 tegn', TUR.map((t) => t.id).join() === 'pluto,hjertet,bjerge,charon,modlys' && TUR.every((t) => t.tekst.length < 160 && t.nu), TUR.map((t) => t.tekst.length).join());
+  const ms = Date.parse('2026-11-18T00:00:00Z');
+  const ds = [145, 0, 300].map((l) => [l, datoMedSolOver(ms, l)]);
+  tjek('datoMedSolOver: Solen står over længden (under 0,01°), højst en halv omgang (3,2 døgn) fra datoen', ds.every(([l, t]) => forskel(underSolen(new Date(t)).længde, l) < 0.01 && Math.abs(t - ms) < 3.2 * 864e5), JSON.stringify(ds.map(([l, t]) => [l, (t - ms) / 864e5])));
 }
 
 // ---------- I browseren ----------
@@ -104,7 +109,7 @@ await fm(() => atomlabTest.solsystem.trykPå('Modlys'));
 
 // Charon i træet: kameraet flyver ud til Charon, tiden står stille, og panelet viser Charons side
 const træ = await fm(() => atomlabTest.solsystem.træ().map((p) => p.id));
-tjek('træet: Pluto og Charon', træ.join() === 'pluto,charon', træ.join());
+tjek('træet: flybyen, Pluto, hjertet, bjergene af vandis og Charon', træ.join() === 'tur,pluto,hjertet,bjerge,charon', træ.join());
 await fm(() => atomlabTest.solsystem.gåTil('charon'));
 await F('hop');
 await flyvFærdig();
@@ -112,6 +117,55 @@ await s.waitForTimeout(300);
 const fC = await F('fokus'), cc = await F('charon');
 tjek('ved Charon kigger kameraet på Charon, tiden står stille, og panelet viser Charons side', Math.abs(fC.fraMidte - cc.afstand) < 1 && (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause' && (await fm(() => atomlabTest.solsystem.side().nøgle)) === 'pluto:charon', JSON.stringify([fC.fraMidte, cc.afstand]));
 await s.screenshot({ path: `${UD}/pluto-charon.png` });
+
+// ---------- MP4: stederne, det lokale net, navnene og flybyen ----------
+const STEDER = { hjertet: [14, 176], bjerge: [-15.61, 177.38] };
+const sol = {};
+for (const [id, [b0, l0]] of Object.entries(STEDER)) {
+  await fm((id) => atomlabTest.solsystem.gåTil(id), id);
+  await F('hop');
+  await flyvFærdig();
+  await s.waitForTimeout(300);
+  const m = await F('midte');
+  sol[id] = await F('solVed', id);
+  tjek(`${id}: kameraet kigger på stedet (${b0}°, ${l0}° Ø), og panelet viser stedets side`, Math.abs(m.bredde - b0) < 0.3 && forskel(m.længde, l0) < 0.3 && (await fm(() => atomlabTest.solsystem.side().nøgle)) === `pluto:${id}`, JSON.stringify(m));
+}
+tjek('ved stederne står Solen mod nordvest (som på New Horizons\' fotos) og over horisonten, og tiden står stille', ['hjertet', 'bjerge'].every((id) => sol[id].nord > 0.3 && sol[id].vest > 0.1 && sol[id].højde > 3) && (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause', JSON.stringify(sol));
+await s.waitForFunction(() => { const l = atomlabTest.solsystem.fænomen().lokalt(); return l.klar && l.tabel; }, null, { timeout: 30000, polling: 200 }).catch(() => {});
+const lk = await F('lokalt');
+// (den højeste top i nettets højder ligger ved ca. 16,6° S, 175,7° Ø og er ca. 5 km høj)
+const tenzingLok = await højst(-16.4, 175.9), sputnikLok = await F('højde', 19.5, 178.7);
+tjek('det lokale net over hjertet og bjergene er hentet og tegnes, og med dets højder rager Tenzing Montes over 3 km over sletten', lk.aktiv && lk.klar && lk.tabel && lk.kort && lk.højde && tenzingLok > sputnikLok + 3, JSON.stringify([lk, tenzingLok, sputnikLok]));
+await s.screenshot({ path: `${UD}/pluto-bjerge.png` });
+
+// Hele Pluto: nettet tegnes ikke, navnene står på kloden, og et tryk på et navn flyver derhen
+await fm(() => atomlabTest.solsystem.gåTil('pluto'));
+await F('hop');
+await flyvFærdig();
+await F('helFra', 10, 178, 2.4);
+await s.waitForTimeout(500);
+const nv = await F('navne');
+tjek('ved hele Pluto tegnes det lokale net ikke, og navnene på forsiden står på kloden (hjertet, bjergene og Wright Mons)', !(await F('lokalt')).aktiv && ['hjertet', 'bjerge', 'wright'].every((id) => nv.includes(id)) && !nv.includes('belton'), nv.join());
+const np = await F('navnPlads', 'wright');
+await s.mouse.click(np.x, np.y - np.h * 0.6);
+await s.waitForTimeout(300);
+await F('hop');
+await flyvFærdig();
+tjek('et tryk på navnet Wright Mons flyver derhen', (await F('visning')) === 'wright', await F('visning'));
+
+// Flybyen: stop 1 ser Pluto og Charon, og det sidste stop er modlys
+await F('flybyTil', 0);
+await F('hop');
+await flyvFærdig();
+await s.waitForTimeout(300);
+const f1 = await F('fokus'), c1 = await F('charon');
+tjek('flybyens første stop kigger midt mellem Pluto og Charon', Math.abs(f1.fraMidte - c1.afstand / 2) < 5, JSON.stringify([f1.fraMidte, c1.afstand]));
+await F('flybyTil', 4);
+await F('hop');
+await flyvFærdig();
+await s.waitForTimeout(300);
+const sb5 = await F('solBag');
+tjek('flybyens sidste stop er modlys med Solen bag Pluto, og turen er slut', (await F('modlys')) && sb5.vinkel < sb5.plutoRadius && (await F('tur')).trin === null, JSON.stringify(sb5));
 
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join('\n'));
 await b.close();
