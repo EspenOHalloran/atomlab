@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (18. november 2026): Mars åbner ikke mere med et stop anden gang (store kort i strimler)** ([prompt-mars-anden-gang.md](../../prompt-mars-anden-gang.md)).
+- **Årsagen:** Anden gang lægges de samme kort ind i grafikkortet igen (de frigives, når man forlader Mars, forslag G). Shaderne og afkodningen koster ikke noget anden gang. Det er selve overførslen: mars-8k.jpg 308-364 ms i ét billede i testbrowseren og 127 ms på Tab A11.
+- **Rettelsen:** Kortkøen (`js/solsystem/kortkoe.js`) lægger store kort ind i strimler, én pr. billede, på ca. 8 ms hver (forslag B fra G1). Det gælder også Stå på Mars og månerne. Kortet gives først videre, når det hele er lagt ind, så et halvt kort ses aldrig, og et kort, der glemmes midt i, slettes. Ingen ekstra hukommelse. **Valgt af orkestratoren 2026-11-18, kan ændres af jer:** strimler (A) i stedet for at beholde Mars' kort (B), som ville bryde budgettet på 350 MB på tablet.
+- **Målt i testbrowseren:** det største kort i ét billede 364 → 37 ms (strimlerne højst 13 ms). Ventetiden er længere i testbrowseren, fordi den tegner få billeder i sekundet. Tilbage: mipmaps af 8k-kortet i ét billede (formentlig billigt på et rigtigt grafikkort, ikke målt). Tallene står i [maalinger/mars-g1.md](../../maalinger/mars-g1.md). Ny test `tests/strimler.mjs` (8 tjek) og måleværktøjet `tests/vaerktoejer/maal-anden-gang.mjs`.
+
 **Lavet (18. november 2026): Pluto MP4, hjertet, bjergene og flybyen. Merkur og Pluto er færdige** ([drejebog-merkur-pluto.md](../../drejebog-merkur-pluto.md), [kode/pluto.md](../../kode/pluto.md)).
 - **Stederne** Hjertet (Sputnik Planitia med mangekanterne) og Bjergene af vandis (Tenzing Montes med sletten bagved) i træet. Datoen glider, så Solen står mod nordvest som på New Horizons' fotos. Wright Mons, Burney, Belton Regio og Tartarus Dorsa er navne på kloden med en kort side.
 - **Et lokalt net** over hjertet og bjergene af New Horizons' kort med 300 m pr. pixel (`lav_pluto_steder.py`: ca. 400 m pr. pixel på pc og 810 m på tablet). Det hentes først ved stederne eller flybyen.
