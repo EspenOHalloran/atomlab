@@ -39,7 +39,14 @@ const LYS_TEKST = 'Med lyset sker der noget mærkeligt: Det har lysets fart set 
 const boldProcent = (fart) => fmt(læggesSammen(0.5, FARTER1[fart].b) * 100, fart === 2 ? 1 : 0);
 
 // ---------- Scene 2: lysuret med trekanten ----------
-const LIGE_TEKST = 'Set fra Jorden går lyset i uret en længere, skrå vej. Lyset kan ikke køre hurtigere, så hvert tik tager længere tid. Uret går langsommere.';
+// Begge billeder er set fra Jorden (jeres valg 17. november 2026): Jordens ur står stille, og skibets ur farer forbi.
+// "Uden Einstein" (UDEN_TEKST) får lyset skibets fart lagt oven i som bolden, så urene går ens.
+const LIGE_TEKST = 'Begge ure er set fra Jorden. I skibets ur går lyset en længere, skrå vej, og lyset kan ikke skynde sig. Så hvert tik tager længere tid: Skibets ur går langsommere. Om bord ser det helt normalt ud.';
+const UDEN_TEKST = 'Uden Einstein får lyset skibets fart lagt oven i, som bolden i toget. Så når det op lige så hurtigt som i Jordens ur, og de to ure går ens.';
+// "Lige nu" siger forskellen i én sætning
+const UDEN_NU = 'Sådan ville det være, hvis lys opførte sig som en bold. Det er målt, at det ikke gør.';
+const MED_NU = 'Med Einstein har lyset den samme fart på den skrå vej som på den lige. Derfor kommer det bagud, og skibets ur går langsommere.';
+const TILSTANDE2 = ['Uden Einstein', 'Med Einstein'];
 const erTo = (gam) => Math.abs(gam - 2) < 1e-9;
 const gangeTekst = (gam) => fmt(gam, erTo(gam) ? 0 : 1);
 
@@ -181,6 +188,7 @@ export default {
       <p>Einstein fortalte selv mange år senere, at han som 16-årig forestillede sig at løbe efter en lysstråle med lysets fart. Så burde lyset se ud, som om det stod stille. Men sådan noget lys findes ikke. I 1905 byggede han relativitetsteorien på to regler: Fysikkens love er de samme for alle, der bevæger sig jævnt, og lysets fart er den samme, uanset hvor hurtigt lampen bevæger sig.</p>
       <p>Farter lægges i virkeligheden sammen med w = (u + v)/(1 + u·v/c²). Bolden flyver derfor ikke præcis 150 km/t. Den mangler ca. 6 · 10⁻¹³ km/t, under en milliontedel millimeter i timen. Ved store farter kan man se det: Kører toget 50 % af lysets fart og kaster bolden 50 % fremad, flyver bolden 80 %, ikke 100 %. Og med lyset (u = c) giver formlen altid c.</p>
       <p><b>Lysuret:</b> Tegn et halvt tik som en trekant (kontakten "△ Vis trekanten" i scene 2): den lige vej op (1), det stykke, spejlene flytter sig, mens lyset er undervejs (1,73), og den skrå vej, lyset går (2). Pythagoras siger 1² + 1,73² = 2², altså 1 + 3 = 4. Den skrå vej er 2 gange så lang, og lyset har den samme fart, så det tager 2 gange så lang tid.</p>
+      <p>Med "Uden Einstein" får lyset skibets fart lagt oven i, som bolden. Så når det op på samme tid som i Jordens ur, og spejlene flytter sig kun 0,87, mens lyset er undervejs: 1² + 0,87² = 1,32². Den skrå vej er 1,32 gange så lang, og lyset skulle fare 1,32 gange lysets fart.</p>
       <p>Kald tiden for et tik set fra Jorden for t. På et halvt tik går lyset c·t/2 på skrå, mens spejlene flytter sig v·t/2. Højden er L. Pythagoras: (c·t/2)² = L² + (v·t/2)². Løs for t: t = (2L/c) · 1/√(1 − v²/c²). Det sidste stykke er γ (gamma), tidsforlængelsen. Ved 50 % er γ = 1,15, ved 87 % 2, ved 95 % 3,2 og ved 99 % 7,1.</p>
       <p>Hvorfor skal alt følge med? Hvis dit hjerte fulgte lysuret, men dit armbåndsur ikke gjorde, kunne du se på urene, at skibet bevæger sig. Men fysikken er den samme for alle, der bevæger sig jævnt (den første af Einsteins to regler). Så alt følger med.</p>
       <p><b>Myonernes kapløb:</b> Rossi og Hall målte i 1940 myonerne højt oppe på et bjerg i Colorado og længere nede i Denver. Myonerne fór over 99 % af lysets fart, og der kom flere ned, end der burde uden tidsforlængelse. Frisch og Smith gjorde det mere præcist i 1962 og filmede det: På toppen af Mount Washington (1.917 m) talte de ca. 563 myoner i timen. Uden tidsforlængelse skulle der kun være kommet ca. 27 i timen ned til havet, men de talte ca. 412. Det tydeligste forsøg er fra CERN i 1977: Myoner, der kørte rundt i en ring med γ = 29,3, levede 64,4 milliontedele sekund i stedet for 2,2, altså ca. 29 gange længere.</p>
@@ -193,7 +201,8 @@ export default {
       <p>Det er ikke accelerationen, der gør det: Man kan tænke sig en rejse, hvor begge ure speeder op og bremser lige meget og alligevel kommer forskelligt hjem. Og i CERN's ring fulgte myonernes ure kun farten, selv om de blev slynget rundt med ca. en milliard milliarder g. Det er vejens længde, der tæller.</p>
       <p>Formlen for et lige stykke er <span class="formel">τ² = t² − (x/c)²</span>. Tiden på ens eget ur kaldes egentiden, og den lige streg giver mest. Tæt på lysets streger bliver der næsten ingen tid, men lyset selv har ikke noget ur.</p>`,
     ærligt: `<p><b>Den mærkelige regel:</b> Et tog kan ikke køre med en mærkbar del af lysets fart, og lyset er tegnet meget langsommere, end det er. Men det har den samme fart i begge billeder. Billederne viser, hvad man ville måle, ikke hvad øjet ser (lyset skal også nå frem til øjet).</p>
-      <p><b>Lysuret:</b> Lysuret er et tankeeksperiment, som står i de fleste lærebøger. Man kan ikke se lysglimtet undervejs. Animationen viser, hvad man ville regne sig frem til. "87 %" er 86,6 %, hvor γ er præcis 2. Målebåndet er tegnet ved siden af vejen, så man kan se begge.</p>
+      <p><b>Lysuret:</b> Lysuret er et tankeeksperiment, som står i de fleste lærebøger. Man kan ikke se lysglimtet undervejs. Animationen viser, hvad man ville regne sig frem til. "87 %" er 86,6 %, hvor γ er præcis 2. Målebåndet er tegnet ved siden af vejen, så man kan se begge. Begge billeder er set fra Jorden: Jordens ur står stille, og skibets ur farer forbi.</p>
+      <p>"Uden Einstein" er også et tankeeksperiment, og det passer ikke med virkeligheden. Det viser, hvad der ville ske, hvis lys fik skibets fart lagt oven i som en bold. I 1964 målte man lys fra små partikler (pioner), der fløj med over 99,9 % af lysets fart. Lyset fik ikke deres fart lagt oven i.</p>
       <p><b>Myonernes kapløb:</b> Myonerne taber fart på vejen ned, luften er tyndere foroven, og ikke alle laves præcis 15 km oppe. Tallene i animationen er en enkel udregning. Levetiden er et gennemsnit: Nogle myoner går i stykker før, andre efter, helt tilfældigt (som atomkerner, der henfalder). Man kan ikke se myonerne. Man måler dem med en detektor. Animationen er sat meget ned i fart, og "Set fra myonen" endnu mere (urene viser de rigtige tider).</p>
       <p><b>"Nu" er ikke det samme for alle:</b> "Set fra perronen" er ikke det, øjet ser: Lyset skal også nå frem til den, der kigger. Det er det, man får, når man har trukket lysets rejsetid fra (eller har ure i takt langs hele perronen). Et tog kan heller ikke køre 60 % af lysets fart.</p>
       <p><b>Rumtidskortet:</b> Springet fra 1,8 til 8,2 år sker ikke derhjemme. Det er den rejsendes måde at regne "nu" på, der skifter, når skibet vender. Med en kikkert ville den rejsende se Jordens ur vise 1 år ved vendingen og derefter gå 3 gange så hurtigt. Vendingen er tegnet som et knæk. I virkeligheden tager det tid at vende, og det koster masser af energi. Rejsen går lige ud og hjem med fast fart.</p>`,
@@ -218,7 +227,9 @@ export default {
     const sc1 = { bold: true, fart: 0, t: 0, vent: false, kast: 0 };
     // Scene 2 (sidst: trekanten). I forløbet venter uret på "Send uret forbi" (vent), og "Mål" (måler) stopper uret
     // på toppen og lægger målebåndet langs den skrå vej (målT: sekunder i animationen).
-    const sc2 = { fart: T.LYSUR_START, trekant: false, ur: Lys.nytUr(), sidst: null, vent: false, måler: false, målT: 0 };
+    // uden: "Uden Einstein" (lyset får skibets fart lagt oven i, og urene går ens). udenT: sekunder med "Uden Einstein",
+    // siden den blev slået til (forløbets trin B4).
+    const sc2 = { fart: T.LYSUR_START, trekant: false, ur: Lys.nytUr(), sidst: null, vent: false, måler: false, målT: 0, uden: false, udenT: 0 };
     // Scene 3: kontakten (0-2), farten, bygens levetider (µs på myonens eget ur) og pladser, tiden i turen (µs på
     // Jorden, i "Set fra myonen" på myonens ur), fasen ('klem', 'zoom' eller 'løb'), og om den fælles sætning står
     // (medSet: en hel byge er nede "Med Einstein", forløbets trin B5)
@@ -346,36 +357,61 @@ export default {
     }
 
     // ---------- Scene 2: lysuret (ved siden af hinanden på brede skærme, over hinanden under 560 px) ----------
-    const hoejde2 = () => (W >= BRED2 ? Math.max(250, Math.min(330, W * 0.4)) : 2 * (Math.min(130, W * 0.32) + 62) + 10);
+    // Øverst står "Begge ure set fra Jorden" (hd), og under det Jordens ur (står stille) og skibets ur (farer forbi).
+    const hd2 = () => skrift() + 12;
+    const hoejde2 = () => hd2() + (W >= BRED2 ? Math.max(250, Math.min(330, W * 0.4)) : 2 * (Math.min(130, W * 0.32) + 62) + 10);
     function geo2() {
-      const bred = W >= BRED2, sk = skrift(), top = sk + 22;
+      const bred = W >= BRED2, sk = skrift(), top = sk + 22, hd = hd2();
       const sw = Math.min(40, (bred ? (W - 10) * 0.32 : W) * 0.18);
       if (bred) {
-        const ws = (W - 10) * 0.32, we = W - 10 - ws;
-        const L = Math.max(40, Math.min(H - top - sk - 22, we * 0.42));
-        return { bred, ws, we, hs: H, hE: H, L, top, sw, xE: ws + 10, yE: 0, xs0: sw / 2 + 14, c: (2 * L) / Lys.LYS_TIK };
+        const ws = (W - 10) * 0.32, we = W - 10 - ws, hs = H - hd;
+        const L = Math.max(40, Math.min(hs - top - sk - 22, we * 0.42));
+        return { bred, hd, ws, we, hs, hE: hs, L, top, sw, yS: hd, xE: ws + 10, yE: hd, xs0: sw / 2 + 14, c: (2 * L) / Lys.LYS_TIK };
       }
-      const L = Math.max(40, Math.min(130, W * 0.32, (H - 10) / 2 - 62));
-      const hs = (H - 10) / 2;
-      return { bred, ws: W, we: W, hs, hE: hs, L, top: top + Math.max(0, (hs - L - 62) / 2), sw, xE: 0, yE: hs + 10, xs0: sw / 2 + 14, c: (2 * L) / Lys.LYS_TIK };
+      const hs = (H - hd - 10) / 2;
+      const L = Math.max(40, Math.min(130, W * 0.32, hs - 62));
+      return { bred, hd, ws: W, we: W, hs, hE: hs, L, top: top + Math.max(0, (hs - L - 62) / 2), sw, yS: hd, xE: 0, yE: hd + hs + 10, xs0: sw / 2 + 14, c: (2 * L) / Lys.LYS_TIK };
+    }
+    // Den første tekst, der er plads til (fx titlen i et smalt billede)
+    const første = (liste, str, bredde, vægt = 600) => {
+      g.font = `${vægt} ${str}px system-ui, -apple-system, "Segoe UI", sans-serif`;
+      return liste.find((t) => g.measureText(t).width <= bredde) ?? liste[liste.length - 1];
+    };
+    // En lille mærkat med lysets fart ved lysglimtet: midt mellem spejlene og ved siden af den lodrette linje gennem
+    // spejlene (til venstre, hvis der er plads, ellers til højre)
+    function fartMærkat(s, x, y, sw, w, farve) {
+      const sk = skrift() - 1;
+      g.font = `700 ${sk}px system-ui, -apple-system, "Segoe UI", sans-serif`;
+      const tw = g.measureText(s).width, pad = 5;
+      const venstre = x - sw / 2 - 10 - tw - 2 * pad > 6;
+      const x0 = venstre ? x - sw / 2 - 10 - tw - 2 * pad : Math.min(w - tw - 2 * pad - 6, x + sw / 2 + 10);
+      g.fillStyle = 'rgba(8,12,28,0.88)';
+      g.beginPath();
+      g.roundRect(x0, y - sk - 1, tw + 2 * pad, sk + 9, 6);
+      g.fill();
+      tekst(s, x0 + pad, y + 3, { side: 'left', farve, str: sk });
     }
     function tegn2() {
-      const G = geo2(), v = T.LYSUR_FARTER[sc2.fart], gam = T.lysurGamma(v), ur = sc2.ur;
+      const G = geo2(), v = T.LYSUR_FARTER[sc2.fart], V = T.lysurVej(v, sc2.uden), ur = sc2.ur, sk = skrift();
       const tri = ur.stille && v > 0;
-      const tikTekst = (n) => `Tik: ${T.tal(Math.floor(n + 1e-9))}`;
-      // I skibet
+      const tik = (n) => T.tal(Math.floor(n + 1e-9));
+      tekst('Begge ure set fra Jorden', W / 2, sk + 2, { farve: FARVE.tekst, vægt: 700 });
+      // Jordens ur: står stille, og lyset går lige op og ned (fasen ur.skib: Jordens tid er skærmens tid)
       g.save();
-      panel(0, 0, G.ws, G.hs, lille() ? 'I skibet' : 'Set i skibet');
+      g.translate(0, G.yS);
+      panel(0, 0, G.ws, G.hs, første(['Jordens ur · står stille', 'Jordens ur'], sk, G.ws - 24));
       g.beginPath();
       g.roundRect(0, 0, G.ws, G.hs, 12);
       g.clip();
       Lys.tegnSkibUr(g, ur, { x: G.ws / 2, top: G.top, L: G.L, sw: G.sw, lige: tri });
-      tekst(tri ? 'lige vej: 1' : tikTekst(ur.skib), G.ws / 2, G.hs - 10, { farve: tri ? FARVE.lige : FARVE.tik, vægt: 700 });
+      if (!tri) fartMærkat('lysets fart', G.ws / 2, G.top + G.L / 2, G.sw, G.ws, FARVE.lige);
+      const tikJ = første([`Jordens ur: tik ${tik(ur.skib)}`, `Tik ${tik(ur.skib)}`], sk, G.ws - 16, 700);
+      tekst(tri ? 'lige vej: 1' : tikJ, G.ws / 2, G.hs - 10, { farve: tri ? FARVE.lige : FARVE.tik, vægt: 700 });
       g.restore();
-      // Set fra Jorden
+      // Skibets ur farer forbi
       g.save();
       g.translate(G.xE, G.yE);
-      panel(0, 0, G.we, G.hE, v > 0 ? 'Set fra Jorden: skibet farer forbi →' : 'Set fra Jorden: skibet står stille');
+      panel(0, 0, G.we, G.hE, v > 0 ? 'Skibets ur · farer forbi →' : 'Skibets ur · står også stille');
       g.beginPath();
       g.roundRect(0, 0, G.we, G.hE, 12);
       g.clip();
@@ -383,12 +419,16 @@ export default {
         sc2.sidst = null;
         tegnMålebånd(G, v);
       } else if (tri) {
-        sc2.sidst = Lys.tegnTrekant(g, { v, top: G.top, L: G.L, sw: G.sw, we: G.we, hE: G.hE, skrift: skrift() });
+        sc2.sidst = Lys.tegnTrekant(g, { v, top: G.top, L: G.L, sw: G.sw, we: G.we, hE: G.hE, skrift: sk, uden: sc2.uden });
       } else {
         sc2.sidst = null;
-        Lys.tegnJordUr(g, ur, { v, top: G.top, L: G.L, sw: G.sw, xs0: G.xs0, we: G.we, kant: 10 });
-        tekst(tikTekst(ur.jord), G.we / 2, G.hE - 10, { farve: FARVE.tik, vægt: 700 });
-        if (v > 0) tekst(`γ = ${fmt(gam, erTo(gam) ? 0 : 2)}`, G.we - 10, G.hE - 10, { side: 'right', farve: FARVE.svag, vægt: 500 });
+        Lys.tegnJordUr(g, ur, { v, top: G.top, L: G.L, sw: G.sw, xs0: G.xs0, we: G.we, kant: 10, uden: sc2.uden });
+        // Lysets fart ved glimtet: Med Einstein den samme som i Jordens ur, uden Einstein mere (1,3 × ved 87 %)
+        const hurtigere = V.fart > 1 + 1e-9;
+        const mx = G.xs0 + ur.x - Lys.jordForskud(ur, { xs0: G.xs0, we: G.we, sw: G.sw, kant: 10 });
+        fartMærkat(hurtigere ? `${fmt(V.fart, 1)} × lysets fart?!` : 'lysets fart', mx, G.top + G.L / 2, G.sw, G.we, hurtigere ? FARVE.skrå : FARVE.lige);
+        tekst(`Skibets ur: tik ${tik(ur.jord)}`, G.we / 2, G.hE - 10, { farve: FARVE.tik, vægt: 700 });
+        if (v > 0 && !sc2.uden) tekst(`γ = ${fmt(V.tid, erTo(V.tid) ? 0 : 2)}`, G.we - 10, G.hE - 10, { side: 'right', farve: FARVE.svag, vægt: 500 });
       }
       g.restore();
     }
@@ -396,8 +436,9 @@ export default {
     // Målebåndet (forløbets trin B4, jeres valg 14. november 2026): Et halvt tik set fra Jorden som i trekanten (samme
     // pladser som Lys.tegnTrekant). Et bånd, der er lige så langt som den lige vej, lægger sig først langs den lige vej,
     // flytter sig så ned langs den skrå og lægges en gang til efter sig selv. Ved 87 % (γ = 2) når det præcis op.
+    // Uden Einstein er den skrå vej kun 1,32 gange så lang, så det andet bånd er kun et stykke (det når ikke op).
     function tegnMålebånd(G, v) {
-      const gam = T.lysurGamma(v), vand = v * gam, sk = skrift();
+      const V = T.lysurVej(v, sc2.uden), gam = V.skrå, vand = V.vand, sk = skrift();
       const s = Math.min(1, (G.we - 2 * (G.sw + 18)) / (vand * G.L + 1));
       const Ls = G.L * s, Ax = 22 + G.sw / 2, Bx = Ax + vand * G.L * s;
       const y0 = G.top + (G.L - Ls) / 2 + Ls, y1 = y0 - Ls;
@@ -424,11 +465,15 @@ export default {
       Lys.spejl(g, Bx, y1, G.sw);
       Lys.glimt(g, Bx, y1);
       // Båndet: et stykke på længden Ls fra (x, y) i vinklen a, lidt ved siden af stregen, med streger for hver tiendedel
-      const bånd = (x, y, a, nr, alfa = 1) => {
+      const bånd = (x, y, a, nr, alfa = 1, del = 1) => {
         g.save();
         g.globalAlpha = alfa;
         g.translate(x, y);
         g.rotate(a);
+        g.save();
+        g.beginPath();
+        g.rect(-2, -30, Ls * del + 2, 40); // et bånd, der er længere end resten af vejen, klippes af
+        g.clip();
         g.fillStyle = 'rgba(127,224,255,0.82)';
         g.fillRect(0, -15, Ls, 9);
         g.strokeStyle = 'rgba(10,30,60,0.8)';
@@ -441,7 +486,8 @@ export default {
           g.lineTo((i * Ls) / 10, ende ? -6 : i % 5 ? -11 : -8);
           g.stroke();
         }
-        g.translate(Ls / 2, -21);
+        g.restore();
+        g.translate((Ls * del) / 2, -21);
         if (Math.cos(a) < -0.01) g.rotate(Math.PI); // teksten står aldrig på hovedet
         Lys.tekst(g, nr, 0, 0, { farve: FARVE.lige, str: sk, vægt: 700 });
         g.restore();
@@ -455,7 +501,7 @@ export default {
       } else {
         bånd(Ax, y0, skrå, '1');
         const k = blød((u - 2.4) / 1.1);
-        if (u > 2.4) bånd(Ax + (Mx - Ax) * k, y0 + (My - y0) * k, skrå, '2', Math.min(1, (u - 2.4) / 0.3));
+        if (u > 2.4) bånd(Ax + (Mx - Ax) * k, y0 + (My - y0) * k, skrå, '2', Math.min(1, (u - 2.4) / 0.3), Math.min(1, gam - k));
       }
       if (u >= 3.6) tekst(`Den skrå vej = ${gangeTekst(gam)} × den lige vej`, G.we / 2, G.hE - 10, { farve: FARVE.tik, vægt: 700 });
       else tekst('Målebåndet er lige så langt som den lige vej', G.we / 2, G.hE - 10, { farve: FARVE.svag, vægt: 500 });
@@ -936,10 +982,11 @@ export default {
         return `Ved så store farter lægges farterne ikke helt sammen: Bolden flyver ${boldProcent(sc1.fart)} % af lysets fart, ikke ${fmt((0.5 + FARTER1[sc1.fart].b) * 100)} %. Se For nørder.`;
       }
       if (aktiv === 1) {
-        const v = T.LYSUR_FARTER[sc2.fart], gam = T.lysurGamma(v);
-        if (sc2.ur.stille && v > 0) return `Ved ${T.lysurFartTekst(v)} er den skrå vej ${gangeTekst(gam)} gange så lang som den lige. Derfor tager hvert tik ${gangeTekst(gam)} gange så lang tid set fra Jorden.`;
-        if (sc2.ur.stille) return 'Står skibet stille, er der ingen skrå vej. Lyset går lige op og ned i begge billeder.';
-        return LIGE_TEKST;
+        const v = T.LYSUR_FARTER[sc2.fart], V = T.lysurVej(v, sc2.uden);
+        if (sc2.ur.stille && v > 0 && sc2.uden) return `Uden Einstein er den skrå vej kun ${gangeTekst(V.skrå)} gange så lang som den lige, og lyset farer ${gangeTekst(V.fart)} gange så hurtigt. Så tager hvert tik lige lang tid i begge ure.`;
+        if (sc2.ur.stille && v > 0) return `Ved ${T.lysurFartTekst(v)} er den skrå vej ${gangeTekst(V.skrå)} gange så lang som den lige. Derfor tager hvert tik ${gangeTekst(V.tid)} gange så lang tid set fra Jorden.`;
+        if (sc2.ur.stille) return 'Står skibet stille, er der ingen skrå vej. Lyset går lige op og ned i begge ure.';
+        return sc2.uden ? UDEN_TEKST : LIGE_TEKST;
       }
       if (aktiv === 2) return sc3.fælles ? FÆLLES3 : linje3(sc3.tilstand, FARTER3[sc3.fart].b);
       if (aktiv === 3) return FARTER4[sc4.fart].b === 0 ? STILLE4 : sc4.efter ? EFTER4 : FØR4;
@@ -949,7 +996,8 @@ export default {
       const s = SCENER[aktiv];
       fase(s.titel, fremme(), [aktiv + 1, SCENER.length]);
       lærred.setAttribute('aria-label', `Scene ${aktiv + 1}: ${s.titel}. ${fremme()}`);
-      forklaring(`<p><b>Scene ${aktiv + 1} af ${SCENER.length}:</b> ${s.spm}</p>${s.overgang ? `<p>${s.overgang}</p>` : ''}`);
+      const ekstra = aktiv === 1 ? `<p>${sc2.uden ? UDEN_NU : MED_NU}</p>` : '';
+      forklaring(`<p><b>Scene ${aktiv + 1} af ${SCENER.length}:</b> ${s.spm}</p>${ekstra}${s.overgang ? `<p>${s.overgang}</p>` : ''}`);
     }
 
     // ---------- Styringen (skifter med scenen) ----------
@@ -975,6 +1023,8 @@ export default {
       skyder: true, navn: 'Fart', min: 0, max: T.LYSUR_FARTER.length - 1, værdi: sc2.fart, vis: (i) => T.lysurFartTekst(T.LYSUR_FARTER[i]),
       ændring: (i) => { sc2.fart = i; Lys.nulstilUr(sc2.ur); visTekst(); },
     };
+    // "Uden Einstein" og "Med Einstein" (præcis én tændt, som i scene 3). Et skift starter urene forfra, så de følges ad.
+    const einsteinKontakter = TILSTANDE2.map((tekst, i) => ({ tekst, til: sc2.uden === (i === 0), skift: () => sætUden2(i === 0) }));
     const trekantKontakt = {
       tekst: '△ Vis trekanten', til: false,
       // Tændt: uret stopper, næste gang lyset set fra Jorden er oppe, og trekanten tegnes. Slukket: uret går videre.
@@ -1020,7 +1070,7 @@ export default {
     function byg() {
       const liste = [
         [...boldKontakter, fart1],
-        [fart2, trekantKontakt],
+        [fart2, ...einsteinKontakter, trekantKontakt],
         [...myonKontakter, fart3, nyByge],
         [...togKontakter, blinkIgen],
         [spilRejsen, vendTilbage, nuKontakt],
@@ -1041,6 +1091,7 @@ export default {
       sc2.vent = false;
       sc2.måler = false;
       sc2.målT = 0;
+      sc2.udenT = 0;
       sc3.fælles = true; // den fælles sætning står, når man kommer til scene 3
       forfra3();
       sc4.t = 0;
@@ -1074,6 +1125,15 @@ export default {
       gåTil(nr, true);
       if (sted === 'myonen') sætTilstand3(2);
       if (sted === 'rumtid' && sc5.nu) { sc5.nu = false; nuKontakt.til = false; sætKontakt(nuKontakt.tekst, false); }
+    }
+    // Kontakterne i scene 2 (præcis én tændt), også fra forløbet
+    function sætUden2(uden) {
+      for (const k of einsteinKontakter) { k.til = (k.tekst === TILSTANDE2[0]) === uden; sætKontakt(k.tekst, k.til); }
+      if (sc2.uden === uden) return;
+      sc2.uden = uden;
+      sc2.udenT = 0;
+      Lys.nulstilUr(sc2.ur);
+      visTekst();
     }
     // Kontakterne i scene 3 (præcis én tændt), også fra forløbet
     function sætTilstand3(i) {
@@ -1109,6 +1169,7 @@ export default {
       sc2.trekant = false;
       trekantKontakt.til = false;
       sætKontakt(trekantKontakt.tekst, false);
+      sætUden2(false);
       visTekst();
     }
     const kast = () => { sc1.vent = false; sc1.t = 0; sc1.kast++; };
@@ -1207,8 +1268,9 @@ export default {
         } else if (aktiv === 1) {
           if (sc2.vent) return;
           if (sc2.måler && sc2.ur.stille) sc2.målT += dt;
+          if (sc2.uden) sc2.udenT += dt;
           const G = geo2();
-          const stoppet = Lys.skridtUr(sc2.ur, dt, { v: T.LYSUR_FARTER[sc2.fart], c: G.c, bredde: G.we, stopOppe: sc2.trekant || sc2.måler });
+          const stoppet = Lys.skridtUr(sc2.ur, dt, { v: T.LYSUR_FARTER[sc2.fart], c: G.c, bredde: G.we, stopOppe: sc2.trekant || sc2.måler, uden: sc2.uden });
           if (stoppet) visTekst();
         } else if (aktiv === 2) {
           if (skridt3(dt)) visTekst();
@@ -1242,7 +1304,11 @@ export default {
           return { bredde: W, højde: H, top: r.top, bund: r.bottom, venstre: r.left, højre: r.right };
         },
         scene1: () => ({ bold: sc1.bold, fart: FARTER1[sc1.fart].b, boldFart: sc1.fart === 0 ? 150 : læggesSammen(0.5, FARTER1[sc1.fart].b), t: sc1.t }),
-        scene2: () => ({ fart: T.LYSUR_FARTER[sc2.fart], trekant: sc2.trekant, stille: sc2.ur.stille, skib: sc2.ur.skib, jord: sc2.ur.jord, tegnet: sc2.sidst }),
+        // skib: Jordens ur (og skibets ur set i skibet), jord: skibets ur set fra Jorden. lysfart: lysets fart på den skrå vej
+        scene2: () => ({
+          fart: T.LYSUR_FARTER[sc2.fart], trekant: sc2.trekant, stille: sc2.ur.stille, skib: sc2.ur.skib, jord: sc2.ur.jord, tegnet: sc2.sidst,
+          uden: sc2.uden, udenT: sc2.udenT, over: W < BRED2, lysfart: T.lysurVej(T.LYSUR_FARTER[sc2.fart], sc2.uden).fart,
+        }),
         scene3: () => ({
           tilstand: TILSTANDE3[sc3.tilstand], fart: FARTER3[sc3.fart].b, gamma: tur3().gam, fase: sc3.fase, færdig: færdig3(),
           jordUr: sc3.tilstand === 2 ? null : sc3.t, myonUr: myonUr3(), luft: (HØJDE3 * 1000) / klemZoom3().klem, fælles: sc3.fælles,

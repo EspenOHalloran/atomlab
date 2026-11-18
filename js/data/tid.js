@@ -266,6 +266,17 @@ export const LYSUR_FARTER = [0, 0.5, Math.sqrt(3) / 2, 0.95, 0.99];
 export const LYSUR_START = 2; // 87 %
 export const lysurGamma = (v) => 1 / Math.sqrt(1 - v * v);
 export const lysurFartTekst = (v) => `${tal(Math.round(v * 100))} %`;
+// Et halvt tik i skibets lysur set fra Jorden, i lysurets højder (den lige vej er 1). uden: "Uden Einstein" (jeres valg
+// 17. november 2026): Lyset får skibets fart lagt oven i som bolden (Newton). Det når op lige så hurtigt som i Jordens
+// ur, så tid = 1, og farten på den skrå vej er √(1 + v²) (1,32 ved 87 %). Med Einstein har lyset den samme fart på den
+// skrå vej, så tid = γ, og den skrå vej er γ (2 ved 87 %). Giver tid (gange så lang tid som i Jordens ur), vand
+// (spejlenes vej), skrå (den skrå vej) og fart (lysets fart på den skrå vej i andele af lysets fart).
+export function lysurVej(v, uden = false) {
+  const tid = uden ? 1 : lysurGamma(v);
+  const vand = v * tid;
+  const skrå = Math.sqrt(1 + vand * vand);
+  return { tid, vand, skrå, fart: skrå / tid };
+}
 // Farter lægges sammen (Einstein, "Hvorfor går tiden langsommere?", scene 1): w = (u + v)/(1 + u·v/c²) i andele af
 // lysets fart. 50 % + 50 % giver 80 %, og med lyset (u = 1) giver det altid 1.
 export const læggesSammen = (u, v) => (u + v) / (1 + u * v);

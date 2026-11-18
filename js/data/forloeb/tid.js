@@ -101,8 +101,8 @@ export const HVORDAN_KAN_DET_SKE = {
       spørg: 'Et ur, hvor lys hopper op og ned mellem to spejle, flyver forbi dig. Hvilken vej går lyset set fra dig?',
       gæt: {
         valg: [
-          { tekst: 'Lige op og ned', efter: 'Tryk på "Send uret forbi", og se det nederste billede.' },
-          { tekst: 'På skrå', efter: 'Tryk på "Send uret forbi", og se det nederste billede.' },
+          { tekst: 'Lige op og ned', efter: 'Tryk på "Send uret forbi", og se skibets ur.' },
+          { tekst: 'På skrå', efter: 'Tryk på "Send uret forbi", og se skibets ur.' },
         ],
       },
       gør: 'Send uret forbi.',

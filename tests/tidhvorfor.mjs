@@ -81,11 +81,13 @@ await page.waitForFunction(() => atomlabTest.kosmos.fænomen()?.scene);
 await E(() => atomlabTest.kosmos.trykPå('Næste: Lysuret'));
 t = await E(() => atomlabTest.kosmos.trin());
 styr = await E(() => atomlabTest.kosmos.styr());
-tjek('"Næste" går fra scene 1 til 2: skyderen "Fart" (87 %) og kontakten "△ Vis trekanten"', t?.nr === 1 && styr.map((s) => `${s.slags}:${s.navn}`).join('|') === 'skyder:Fart|kontakt:△ Vis trekanten' && (await page.textContent('#kosmosStyr .skyder-boks strong')) === '87 %', JSON.stringify([t, styr]));
-tjek('scene 2: underteksten om den skrå vej', /længere, skrå vej/.test((await fase())?.tekst));
+tjek('"Næste" går fra scene 1 til 2: skyderen "Fart" (87 %), "Uden Einstein" og "Med Einstein" (tændt) og "△ Vis trekanten"',
+  t?.nr === 1 && styr.map((s) => `${s.slags}:${s.navn}${s.til ? '*' : ''}`).join('|') === 'skyder:Fart|kontakt:Uden Einstein|kontakt:Med Einstein*|kontakt:△ Vis trekanten'
+  && (await page.textContent('#kosmosStyr .skyder-boks strong')) === '87 %', JSON.stringify([t, styr]));
+tjek('scene 2: underteksten siger, at begge ure er set fra Jorden, og om den skrå vej', /Begge ure er set fra Jorden.*længere, skrå vej/.test((await fase())?.tekst));
 await E(() => atomlabTest.kosmos.spol(3));
 let s2 = await E(() => atomlabTest.kosmos.fænomen().scene2());
-tjek('scene 2: uret i skibet tikker 2 gange så tit som set fra Jorden (87 %)', nær(s2.skib / s2.jord, 2, 1e-6) && s2.skib > 1, JSON.stringify(s2));
+tjek('scene 2: Jordens ur tikker 2 gange så tit som skibets ur, begge set fra Jorden (87 %)', nær(s2.skib / s2.jord, 2, 1e-6) && s2.skib > 1, JSON.stringify(s2));
 await E(() => atomlabTest.kosmos.trykPå('△ Vis trekanten'));
 await E(() => atomlabTest.kosmos.spol(5));
 s2 = await E(() => atomlabTest.kosmos.fænomen().scene2());
@@ -100,14 +102,37 @@ await E(() => atomlabTest.kosmos.trykPå('△ Vis trekanten'));
 await E(() => atomlabTest.kosmos.spol(1));
 tjek('slukket: uret går videre', (await E(() => atomlabTest.kosmos.fænomen().scene2())).jord > før);
 
+// "Uden og med Einstein" (jeres valg 17. november 2026): Uden Einstein får lyset skibets fart lagt oven i, og urene går ens
+await E(() => atomlabTest.kosmos.trykPå('Uden Einstein'));
+await E(() => atomlabTest.kosmos.spol(3));
+s2 = await E(() => atomlabTest.kosmos.fænomen().scene2());
+f = await fase();
+styr = await E(() => atomlabTest.kosmos.styr());
+tjek('Uden Einstein: Med Einstein slukker, urene starter forfra og går ens, og lyset farer 1,32 gange lysets fart (√(1 + 0,75))',
+  s2.uden && styr.filter((s) => s.til).map((s) => s.navn).join() === 'Uden Einstein' && s2.skib > 1 && nær(s2.skib, s2.jord, 1e-9) && nær(s2.lysfart, Math.sqrt(1.75), 1e-9)
+  && /Uden Einstein får lyset skibets fart lagt oven i/.test(f?.tekst) && /opførte sig som en bold/.test(await page.textContent('#kosmosForklaring')), JSON.stringify([s2, f]));
+await E(() => atomlabTest.kosmos.trykPå('△ Vis trekanten'));
+await E(() => atomlabTest.kosmos.spol(3));
+s2 = await E(() => atomlabTest.kosmos.fænomen().scene2());
+f = await fase();
+tjek('Uden Einstein med trekanten: et halvt tik i begge ure, siderne 1, 0,87 og 1,32', s2.stille && nær(s2.jord % 1, 0.5, 1e-9) && nær(s2.skib, s2.jord, 1e-9)
+  && nær(s2.tegnet?.vand, Math.sqrt(3) / 2, 1e-9) && nær(s2.tegnet?.skrå, Math.sqrt(1.75), 1e-9) && /kun 1,3 gange så lang/.test(f?.tekst), JSON.stringify([s2, f]));
+await page.screenshot({ path: `${UD}/scene2-uden-trekant-pc.png` });
+await E(() => atomlabTest.kosmos.trykPå('△ Vis trekanten'));
+await E(() => atomlabTest.kosmos.trykPå('Med Einstein'));
+await E(() => atomlabTest.kosmos.spol(3));
+s2 = await E(() => atomlabTest.kosmos.fænomen().scene2());
+tjek('Med Einstein igen: Jordens ur tikker 2 gange så tit som skibets (γ = 2), og lyset har lysets fart', !s2.uden && nær(s2.skib / s2.jord, 2, 1e-6) && nær(s2.lysfart, 1, 1e-9), JSON.stringify(s2));
+
 // Tablet og telefon på højkant: lærredet dækker ikke Styr-boksen, underteksten eller bjælken, og scene 2 står over
-// hinanden på telefonen (lærredet er højere end bredt)
+// hinanden på telefonen (og lærredet er mindst 300 px højt)
 for (const [navn, w, h] of [['tablet', 820, 1180], ['telefon', 390, 844]]) {
   await page.setViewportSize({ width: w, height: h });
   await page.waitForTimeout(400);
   await E(() => atomlabTest.kosmos.spol(0.5));
   const l = await E(() => atomlabTest.kosmos.fænomen().lærred());
-  tjek(`${navn}: lærredet dækker intet, og scene 2 ${navn === 'telefon' ? 'står over hinanden' : 'står ved siden af hinanden'}`, (await dækker()).length === 0 && (navn === 'telefon' ? l.højde > l.bredde : l.højde < l.bredde), JSON.stringify([l, await dækker()]));
+  const over = await E(() => atomlabTest.kosmos.fænomen().scene2().over);
+  tjek(`${navn}: lærredet dækker intet, og scene 2 ${navn === 'telefon' ? 'står over hinanden' : 'står ved siden af hinanden'}`, (await dækker()).length === 0 && over === (navn === 'telefon') && l.højde >= 300, JSON.stringify([l, over, await dækker()]));
   await page.screenshot({ path: `${UD}/scene2-${navn}.png` });
 }
 await page.setViewportSize({ width: 1280, height: 800 });

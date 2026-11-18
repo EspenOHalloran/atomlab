@@ -50,7 +50,7 @@ const liste = await E(() => [...document.querySelectorAll('#kosmosTræ button[da
 const valgt = await E(() => [...document.querySelectorAll('#kosmosTræ button[data-id].valgt')].map((x) => x.dataset.id));
 tjek('listen: "Tid" står der, "Hvordan kan det ske?" ikke, og "Tid" er valgt, mens det er åbent, og tælles ikke med',
   liste.includes('tid') && !liste.includes('tidhvorfor') && valgt.join() === 'tid' && (await page.textContent('#kosmosNavn')) === 'Hvordan kan det ske?'
-  && /af 12 set/.test(await page.textContent('#kosmosSet')), JSON.stringify({ liste, valgt }));
+  && /af 13 set/.test(await page.textContent('#kosmosSet')), JSON.stringify({ liste, valgt }));
 
 // B1: kun scenen og linjen, scene 1 venter på "Kast"
 let f = await F();
