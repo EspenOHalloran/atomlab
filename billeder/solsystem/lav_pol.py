@@ -17,7 +17,7 @@
 # x = cos(b) · cos(l) / (1 + sin(b)) og z = cos(b) · sin(l) / (1 + sin(b)). Pixlen i billedets række i og søjle j:
 # u = (j + 0,5) / N og v = 1 − (i + 0,5) / N, x = (u − 0,5) · 2 · RMAX og z = (v − 0,5) · 2 · RMAX. Længde 0° er altså
 # til højre og 90° Ø opad. Hjørnerne (under POLKANT) er med i billedet, men nettet bruger dem ikke.
-# Højderne gemmes som kloden (16 bit i rød og grøn, fra HØJDE_MIN til HØJDE_MAX).
+# Højderne gemmes som kloden (16 bit i rød og grøn, fra HØJDE_MIN til HØJDE_MAX), men som tabsfri WebP.
 import sys
 import os
 import math
@@ -115,7 +115,8 @@ def gem_højder(h, navn):
         rg[:, :, 0] = n >> 8
         rg[:, :, 1] = n & 255
         f = navn(B)
-        Image.fromarray(rg, 'RGB').save(os.path.join(ud, f), optimize=True)
+        # Tabsfri WebP (præcis de samme pixel som en PNG, men ca. en tredjedel mindre: 1,3 MB mod 2,0 MB i 2k)
+        Image.fromarray(rg, 'RGB').save(os.path.join(ud, f), lossless=True, quality=100, method=6)
         print(f, os.path.getsize(os.path.join(ud, f)) // 1024, 'KB')
 
 
@@ -137,7 +138,7 @@ ring = np.abs(b - 78) < 0.5
 gr = bilineær(g, (b[ring] - gt[2]) / gt[3], (((l[ring] + 180) % 360) - 180 - gt[0]) / gt[1], rundt=True)
 d = molaVed(b[ring], l[ring]) - gr
 print('polarkort − klodens kort ved 78° N: middel', round(float(d.mean()), 1), 'm, spredning', round(float(d.std()), 1), 'm')
-gem_højder(h, lambda B: f'mars-nordpol-hoejde-{"2k" if B == 2048 else "1k"}.png')
+gem_højder(h, lambda B: f'mars-nordpol-hoejde-{"2k" if B == 2048 else "1k"}.webp')
 
 # ---------- Farverne (Viking, samme rettelse som i lav_steder.py) ----------
 with rasterio.Env(GDAL_DISABLE_READDIR_ON_OPEN='EMPTY_DIR', CPL_VSIL_CURL_CHUNK_SIZE=4194304):
