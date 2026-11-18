@@ -80,3 +80,15 @@ export function underSolen(dato) {
 // Charons størrelse på Plutos himmel (grader) set fra punktet under Charon, og Plutos set fra Charon
 export const charonPåHimlen = () => (2 * Math.atan(CHARON.radius / (CHARON.afstand - PLUTO.radius))) / RAD;
 export const plutoPåHimlen = () => (2 * Math.atan(PLUTO.radius / (CHARON.afstand - CHARON.radius))) / RAD;
+
+// Den dato (ms) nærmest ms, hvor Solen står lige over længden (grader øst). Pluto drejer baglæns, så punktet under Solen
+// flytter sig ca. 56,4° mod vest pr. døgn. Højst en halv omgang (ca. 3,2 døgn) frem eller tilbage (MP4: stederne).
+export function datoMedSolOver(ms, længde) {
+  const prDøgn = 360 / PLUTO.stjernedøgn; // (omtrent: Solen flytter sig næsten ikke på et døgn)
+  let t = ms;
+  for (let i = 0; i < 3; i++) {
+    const f = ((underSolen(new Date(t)).længde - længde + 540) % 360) - 180; // så langt øst for målet (grader)
+    t += (f / prDøgn) * 86400000;
+  }
+  return t;
+}

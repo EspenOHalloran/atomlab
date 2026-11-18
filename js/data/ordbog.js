@@ -856,4 +856,10 @@ export const ORDBOG = [
     former: ['fælles tyngdepunkt', 'fælles tyngdepunkter'],
     tekst: 'Det punkt, to himmellegemer kredser om sammen. Det ligger nærmest det tungeste. Jordens og Månens ligger inde i Jorden. Pluto og Charons ligger ude i rummet, ca. 940 km over Plutos overflade, fordi Charon er så stor i forhold til Pluto.',
   },
+  // Pluto MP4 (17. november 2026): Wright Mons, sandsynligvis en isvulkan (Wikipedia "Wright Mons", Singer m.fl. 2022)
+  {
+    id: 'isvulkan', ord: 'Isvulkan',
+    former: ['isvulkan', 'isvulkanen', 'isvulkaner'],
+    tekst: 'En vulkan på en iskold klode, hvor der kommer vand, blød is eller andre kolde stoffer op nedefra i stedet for smeltet sten. Man tror, at Wright Mons på Pluto er en isvulkan.',
+  },
 ];

@@ -201,6 +201,7 @@
 - "Sollyset på Pluto er 1/900 af Jordens, 300 fuldmåner" (NASA). Det gælder nær perihel. I 2026 (35,6 AU) er det ca. 1/1.270, i middel 1/1.560. Skriv "over tusind gange svagere" og "flere hundrede fuldmåner" (E16).
 - Plutos afstande: NSSDC's tabel har 39,24 AU i middel og 48,8 AU længst ude, NSSDC's baneelementer og Wikipedia 39,48 og 49,3 AU. Skriv "ca. 30 til 49 AU". NSSDC's "−247 til −233 °C" for 24-38 K er 2 grader forkert: skriv "ca. −230 °C" (E16).
 - "Cthulhu", "Mordor" og "Sputnik Planum" er uofficielle eller gamle navne. IAU's navne er Belton Regio (2023), Neverland Regio (Charons nordpol, 2. februar 2026, min tolkning af navnelisten) og Sputnik Planitia (2017). "Serenity Chasma" og "Vulcan Planitia" er ikke godkendt (E16).
+- "Wright Mons er ca. 4 km høj" (del 8) og "Pluto-bjergene drives af varme indefra": Wikipedia har 4,7 ± 1 km og ca. 150 km (navnelisten 165 km), så skriv "4-5 km". At varme indefra driver cellerne i Sputnik Planitia, er den første forklaring, men andre foreslår sublimation ved overfladen: skriv "man tror" (Pluto MP4, 18. november 2026).
 - "Hjertet på Pluto er en gletsjer." Kun den venstre halvdel (Sputnik Planitia) er en slette af kvælstof-is. Størrelsen opgives som 1.000 km (NASA), 1.400 × 1.200 km (Wikipedia) og 1.492 km (navnelisten): skriv "ca. 1.000 km bred" (E16).
 - "Charon kredser om Pluto." Begge kredser om et punkt ca. 940 km over Plutos overflade (2.126 km fra centrum, regnet fra NSSDC). "Plutos luft fryser væk langt fra Solen" (NASA): Nyere målinger siger tyndere, ikke væk. Skriv forsigtigt (E16).
 
