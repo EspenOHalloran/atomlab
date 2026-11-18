@@ -251,8 +251,10 @@ export const SIDER = {
       },
     ],
     videre: [sted('jezero', 'Jezero'), sted('måner', 'Månerne')],
-    billeder: '<p>Nordpolen ses fra højt oppe og klarer sig med Mars\' almindelige net. Et net i bredde og længde virker heller ikke ved polen, hvor alle længdegrader mødes.</p>',
-    ærligt: '<p>Her spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Polkappen er vist, som den ser ud om sommeren.</p>',
+    // M7b-pol, faktatjekket 18. november 2026 (docs/fakta-solsystemet/del3b-mars-stederne-og-faelder.md, "Faktatjek
+    // M7b-pol"). Nettets tal er programmets egne (billeder/solsystem/lav_pol.py): 78° N, ca. 1.420 km, 0,69 km pr. pixel.
+    billeder: '<p>Over polen ligger et net af ringe med sit eget højdekort og farvekort, set lige ovenfra. Det er ca. 1.400 km bredt, med ca. 0,7 km mellem højderne og ca. 1 km mellem farverne (på en tablet ca. 1,4 km). Ved kanten (78° N) glider det over i Mars\' almindelige net. Et net i bredde og længde virker ikke ved polen, for dér mødes alle længdegrader.</p>',
+    ærligt: '<p>Her spoler programmet frem til midt på sommeren i nord, så du kan se midnatssolen, og tilbage til foråret, når du flyver videre. Polkappen er vist, som den ser ud om sommeren.</p><p>Højderne er målt med en laser fra rumsonden Mars Global Surveyor. Farverne er fotos fra Viking-sonderne (1976-1980). Kløfternes sider er mørke, fordi lagene af is og støv ses dér. Lyset og skyggerne regner programmet selv ud fra højderne, og isen er gjort lidt hvidere end på fotoene. Kløfterne er lave i forhold til, hvor brede de er, så herfra ses de mest på farven.</p>',
   },
   måner: {
     tal: [['Phobos rundt', '7 t 39 min'], ['Deimos rundt', 'ca. 30 timer'], ['Opdaget', '1877']],

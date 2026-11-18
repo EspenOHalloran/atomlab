@@ -155,3 +155,17 @@ To hjælpeagenter (Opus, høj effort) tjekkede udkastet. "Læst" = siden er hent
 
 **Mindst sikre:** antallet af prøver efter september 2026 (ingen ny er nævnt), deltaets højde (40 m langs roverens vej), Gales alder (3,6-3,8 kun fra et søgeuddrag) og Holt m.fl.s sidetal.
 
+
+### Faktatjek M7b-pol: Nordpolen tæt på (18. november 2026)
+Tjekket af hovedsessionen (Opus, høj effort) med websøgning (kun søgeuddrag) og målinger i programmets eget højdekort (`billeder/solsystem/lav_pol.py`, MOLA MEGDR 256 ppd). Tallene på siden (bredde, tykkelse, Chasma Boreale, Solens højde) er fra "Faktatjek M5b" ovenfor og er ikke ændret.
+
+| Påstand | Resultat | Kilde |
+|---|---|---|
+| Kappen ca. 1.000 km bred og op til ca. 3 km tyk (kontrol) | OK. Målt: toppen ca. −2.560 m, sletten omkring −4.400 til −5.200 m (2-2,6 km over sletten, resten ligger under sletten). Kappen når 330-650 km fra polen | MOLA MEGDR (PDS, læst og målt) |
+| Chasma Boreale op til ca. 2 km dyb (kontrol) | OK. Målt op til ca. 2,0 km under randen | MOLA MEGDR (målt) |
+| Højderne er målt med en laser fra rumsonden Mars Global Surveyor | OK (MOLA = Mars Orbiter Laser Altimeter på MGS) | PDS Geosciences, datasættet MGS-M-MOLA-5-MEGDR-L3-V1.0 (etiketten, læst) |
+| Farverne er fotos fra Viking-sonderne (1976-1980) | OK. Nordpolen blev fotograferet af Viking Orbiter 2 i oktober 1976 (ca. 700 billeder) | Cutts m.fl., Science 1976 (USGS pubs.usgs.gov/publication/70209872, kun søgeuddrag); Mars_Viking_ClrMosaic_global_925m (USGS) |
+| Kløfternes sider er mørke, fordi lagene af is og støv ses dér | OK. Kløfterne og Chasma Boreale viser lagene i siderne, og sollyset får isen på skrænterne mod ækvator til at fordampe | ESA "Swirling spirals at the north pole of Mars"; astronomy.com (MRO SHARAD 2010); studiet fra 2021 (pmc 33767212) (alle kun søgeuddrag) |
+| Isen er gjort lidt hvidere end på fotoene, og lyset regnes ud fra højderne | OK (programmets egen snyd: `IS` i `klippeplanet.js`) | Koden |
+
+**Ingen nye fælder.** Bemærk: "Kløfterne er op til X m dybe" er ikke tjekket og står ikke i teksten.
