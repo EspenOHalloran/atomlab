@@ -191,6 +191,7 @@ function shaderNavn(k) {
 // Bredde og højde i et kald, der lægger et billede i grafikkortet
 function størrelse(kald, a) {
   const kilde = a.find((x) => x && typeof x === 'object' && 'width' in x && !ArrayBuffer.isView(x));
+  if (kilde && /Sub/.test(kald) && a.length >= 9) return [a[4], a[5], kilde]; // en strimmel af billedet (kortkoe.js)
   if (kilde) return [kilde.width, kilde.height, kilde];
   if (/Sub/.test(kald)) return [a[4], a[5]]; // texSubImage2D(mål, niveau, x, y, bredde, højde, …)
   return [a[3], a[4]]; // texImage2D(mål, niveau, format, bredde, højde, …)

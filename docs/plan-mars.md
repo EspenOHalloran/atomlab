@@ -115,6 +115,7 @@ Fable venter på Fable 5.5 (`plan-fable.md`). Ingen af delene kræver xhigh. Hj�
 2. L2: Vil I installere Claude Code på pc'en (`irm https://claude.ai/install.ps1 | iex` i PowerShell) eller bruge Claude Code i Claude-appen? Spørges, når vi når dertil.
 
 ### Prompter til de næste skridt
+**18. november 2026:** Prompterne til Mars ekstra (M7b-pol, M8c del 3, M8c del 2 og L2, i den rækkefølge, jeres beslutning) står nu i [prompt-mars-ekstra.md](prompt-mars-ekstra.md) og afløser dem nedenfor og under "M8c del 3".
 *De brugte prompter (L1, S2 og M8b) står i [arkiv/plan-mars-faerdigt.md](arkiv/plan-mars-faerdigt.md).*
 
 **M8c del 1 (skrevet 31. oktober 2026 efter M8b, brugt: se "Status efter M8c del 1" nedenfor):**
