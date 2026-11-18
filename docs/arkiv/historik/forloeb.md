@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/forloeb.md](../../lige-nu/forloeb.md), det nyeste øverst.*
 
+**Senest lavet (17. november 2026): Turene er lettere at finde** (jeres ønske: "Jeg tror mange vil overse dem" i "↻ Tur"). Af fire forslag valgte I to:
+- **Prikken på "↻ Tur"** (`lavTurKnap` i `js/forloeb.js`, alle dele med en tur): En lyseblå prik, der pulserer tre gange, så længe en af delens ture ikke er taget (også efter "Udforsk selv"). Listen skriver "Ny" ved den, og knappen opdateres, når turen bliver taget.
+- **Turene i listen til venstre** (`js/faenomenskaerm.js`, Kosmos og Solsystemet): "▶ Tur: Rejsen i tid ✓" og "▶ Tur: Hvordan kan det ske?" under "Tid" (med prikken, som et fænomen, man ikke har set), og "▶ Tur: Rundt om Solen" øverst i overblikket, som Flybyen ved planeterne. Et tryk starter turen. Liv havde allerede sine ture i venstre panel.
+- **Ikke valgt nu** (i [ideer.md](../ideer.md), "På tværs af verdenerne"): et vink i linjen under scenen og turene i menuen ved hver verden.
+- Tests: `tid-forloeb` (listen, prikken, "Ny" og et tryk i listen) og `solsystem` (overblikkets træ). Det forrige "Senest lavet" står i [arkiv/historik/forloeb.md](../arkiv/historik/forloeb.md).
+
 **Senest lavet (16. november 2026, E14-rettelserne før prøven, prompten i [prompt-e14-rettelser.md](../../prompt-e14-rettelser.md)):**
 - **"Dit første atom"** med Fables tekster ([E14](../../fable/E14-forloeb-eftersyn.md), [noterne](../../fable/E14-noter.md)): Trin 2 siger nu, at elektronen er minus. Trin 3 siger, at kernen ryster, og "i virkeligheden" holder to protoner ikke sammen (de to ting står ved siden af hinanden, fælden holdt). Trin 5's Spørg siger kernesætningens anden halvdel: "Grundstof nr. 1 og 2 lyser: én proton og to protoner." (Fables tekst uden "nu", så den holder 16 ord.) Trin 2's Så er forkortet til "universets mest almindelige grundstof" (Fables var 23 ord).
 - **Vinket i trin 4:** Lægger han begge neutroner i før elektronen, siger linjen "Kernen har to plus. Giv atomet en elektron mere, så der er lige mange plus og minus." Tællerne viste allerede, at elektronen mangler, men ikke hvorfor. Testen `forloeb` tjekker vinket.
