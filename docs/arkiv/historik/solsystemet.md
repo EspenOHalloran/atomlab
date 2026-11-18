@@ -1,5 +1,12 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (17. november 2026): Turen ned til Venera 13 efter jeres feedback** ("jeg forstår ikke rigtig, hvad det gør").
+- **Problemet:** Fra ca. 100 km var billedet én ensfarvet flade, og kun måleren skiftede. Underteksten stod uændret hele vejen.
+- **A. Seks undertekster** skifter undervejs: over skyerne, inde i skyerne, stuetemperatur (ca. 55 km), under skyerne, varmere end en ovn og landet (`NED_TRIN`, faktatjekket i [del 7, afsnit 13](../fakta-solsystemet/del7-venus.md)). Turen tager nu 34 s og går langsomt forbi 55 km. "Lige nu" peger på søjlen i stedet for at gentage tallene.
+- **B. En søjle ved måleren** (jorden til 100 km) med skylaget og en prik, der glider ned.
+- **D.** Skyderen "Under skyerne" er skjult under turen (den sprang selv), og disen tager til fra 130 km, så skyernes lyse top ikke fylder billedet. Telefonen på langs har en smal måler.
+- `tests/venus.mjs` har 3 nye tjek (trinene, prikken og skyderen). **C** (skystriber, der suser forbi) venter, til I har prøvet turen.
+
 **Lavet (17. november 2026): Pluto MP3, kortet, højderne, Charon, dansen og disen** ([drejebog-merkur-pluto.md](../drejebog-merkur-pluto.md), [E16](../fable/E16-merkur-pluto-noter.md), [kode/pluto.md](../kode/pluto.md)).
 - **Pluto sidst i Solsystemet** (`js/kosmos/pluto.js`): New Horizons' kort i farver (gråtonerne på 300 m med farven fra det grove farvekort, 8k på pc, 4k på tablet) og højderne. Det sydligste, ingen har set, er mørkt, og bagsiden er glat. Aksen og drejningen efter datoen passer med Horizons (0,04°). Kortet beholder 180° i midten (`midte` i `klippeplanet.js`, valgfrit).
 - **Charon** i den rigtige størrelse og afstand, bundet begge veje, med en rødbrun nordpol (tegnet). Træet: Måner → Charon (Pluto står ved siden af).

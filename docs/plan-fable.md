@@ -2,6 +2,11 @@
 
 *Lavet 21. oktober 2026 sammen med jer. Hvert trin får et go, før det starter. Skønnene over prisen er usikre og rettes, når vi har målt, hvad F1 kostede.*
 
+**Fra 18. november 2026 er Fable ikke til rådighed (jeres beslutning).** Fables opgaver laves af Opus med effort xhigh. Det, der er lavet sådan, skrives på listen nedenfor, så Fable kan tjekke det, hvis vi får adgang igen.
+
+## Kan tjekkes af Fable senere
+*(Én linje pr. opgave: dato, hvad, filen, og hvad Fable skulle have kigget efter.)*
+
 ## Hvad det går ud på
 I synes, at AtomLab er godt, men I vil have Fables øjne på, hvor det kan blive bedre, så det kommer op på et professionelt niveau. Fable skal:
 1. lave et eftersyn af teknikken, UI, grafikken og indholdet,
