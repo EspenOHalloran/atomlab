@@ -370,3 +370,23 @@ Jeres svar: "Ja, tag 1 og 2 med" (M8c del 1, testens tidsgrænse og nitrogens "V
 > **Tekster:** Opdater "Ærligt talt" ved stederne, så den siger, at stenene er tegnet af programmet efter fotoerne og ikke er hver enkelt sten fra Mars. Faktatjek tal om stenene med `/faktatjek`.
 >
 > **Til sidst:** `/faerdig` (tests med `--ændret`, PR og merge). Skriv det, der ikke er afprøvet, i `docs/ikke-afproevet.md` (er stenene nu forskellige nok, flimrer noget langt væk, kører det glat på tabletten). Model: Opus. Effort: høj (I sætter den selv).
+
+## M8c del 3: sammenligningen med fotoerne og forslaget (Mars ekstra 2, 18. november 2026)
+*Lavet af sessionen "Solsystemet · Mars ekstra 2: Stenene i Stå på Mars". Billederne: `tests/vaerktoejer/landskab-lille.mjs` (fuld grafik i testbrowseren), samme retning og klokkeslæt som rovernes fotos (Naukluft 135° og 250°, kl. 15:42, landingsstedet 270° og 200°, kl. 14:45).*
+
+**Hvad der er forkert (Naukluft, set mod fotoet PIA20332):**
+1. **Helt tæt på (1-8 m):** Alle sten ligner hinanden: runde eller bløde kantede klatter på 5-30 cm, jævnt spredt over det hele, og alle har samme rødbrune farve som sandet. Den mørke ring om stenene får dem til at ligne huller. På fotoet er jorden flade plader og kantede stykker af sandsten i lag, fra få cm til over 1 m, samlet ved kanterne af klippeflader. Imellem ligger sand med riller og næsten ingen sten.
+2. **10-100 m væk:** Der er ingen sten overhovedet, kun glat jord med skyggerne fra bakkerne. Stenene i shaderen holder op ved ca. 8 m (`naer`), og fotoet fra kredsløb (25 cm pr. pixel) viser ingen enkeltsten. På fotoet er der brudte klippekanter, plader og stumper helt ud til horisonten. **Årsagen er ikke kun, at laget mangler:** En sten, der er malet på jorden, bliver trykket flad, når man ser den på skrå. En sten på 1 m set 50 m væk fylder ca. 17 × 8 skærmpixel, fordi den rager op, men malet på jorden kun ca. 17 × 1 pixel. Et mellemlag, der kun er malet, ville derfor næsten ikke kunne ses.
+3. **Farven:** Stenene på fotoet er mørkere og mere grå end sandet (fotoet er hvidbalanceret, så kun forskellen bruges, ikke farven). Hos os har sten og sand samme farve.
+4. **Skygger:** Stenene kaster ingen skygge. På fotoet (Solen 34° oppe) har hver sten og hver kant en skarp skygge, og det er dem, der giver jorden dybde.
+5. **Ingen klynger:** Tætheden er den samme overalt. På fotoet skifter jorden mellem næsten bart sand og felter fulde af sten.
+
+**Landingsstedet (PIA24264):** se tilføjelsen nedenfor.
+
+**Forslaget (trin 1, 3 og 2 i den rækkefølge, et go imellem):**
+- **Trin 1, variation helt tæt på (det malede lag, ≤ ca. 8 m):** Størrelser efter en potenslov (mange små, få store, op til ca. 0,6 m), former pr. sted (`stenart`: plader og kantede stykker ved Naukluft og Curiosity, spredte mørke sten og flade, lyse klippeflader i jorden ved landingsstedet og randen), farve pr. sten (mørkere og mere grå end sandet, nogle lysere), klynger styret af en grov støj og af lysstyrken i fotoet fra kredsløb (sten, hvor der er klippe), og en kort skygge fra hver sten væk fra Solen i stedet for den mørke ring. Ingen nye opslag i kort, kun regning.
+- **Trin 3, mellemlaget (ca. 0,3-3 m store sten, 2-150 m væk), min anbefaling: "3D-sten i shaderen" uden geometri.** For hver pixel på jorden følges synslinjen tilbage mod kameraet gennem et gitter af celler (en sten pr. celle, to størrelser af celler). Hver sten er en kantet klump (en ellipsoide skåret af 4-6 flader), som strålen rammes af præcist (regnes, ikke slået op). Så rager stenene op, dækker jorden bag sig og får lys og skygge fra Solen. Strålen følges kun så langt, som en sten kan række op (højden gange afstanden delt med øjenhøjden), og højst ca. 10 trin (færre med `LAV_KVALITET`). Ingen nye opslag i kort. Tætheden og klyngerne følger det samme som i trin 1, så lagene passer sammen. Alternativet (et malet mellemlag) er billigere, men løser ikke punkt 2.
+- **Trin 2, ambient occlusion (mørkere i sprækker og lavninger):** Et kort pr. lag, regnet én gang pr. sted i strimler som skyggekortene (horisonten i 8 retninger ud fra højderne), ét opslag mere pr. pixel. Stenene i trin 1 og 3 får deres egen mørke fod uden opslag.
+- **Prisen måles** med `tests/vaerktoejer/staa-tid.mjs tablet` før og efter hvert trin (tid pr. billede med og uden stenene). Grænse: højst ca. +15 % pr. trin i tablet-udgaven, ellers skrues ned med `LAV_KVALITET`.
+- **Trin 4 (3D-sten som instanser)** laves ikke, medmindre I siger det efter billederne.
+- **Tekster:** "Ærligt talt" ved stederne: stenene er tegnet af programmet efter rovernes fotos og er ikke hver enkelt sten på Mars. Faktatjek af det, der siges om stenene (fx at jorden ved Naukluft er sandsten i lag).
