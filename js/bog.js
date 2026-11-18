@@ -1,12 +1,13 @@
 // Bogen (docs/plan-videnskabsfolk.md, afsnit 3 og 4): klodsen, som alle ti bøger i Opdagelserne bruger. Én ting ad
 // gangen: ét opslag fremme, bladring med "‹" og "›" (mindst 44 px), et vandret stryg med fingeren og piletasterne.
-// Bladringen er et hurtigt skub (ikke en animeret side) og slet ingen bevægelse med ROLIG.
+// Bladringen vender siden om ryggen (et blad med det gamle opslag drejer væk, 0,45 s, kortere og uden skær med lav, slet
+// ingen bevægelse med ROLIG). Ændret 18. november 2026 efter brugerens ønske: "Bogen må animeres mere". Før var det et skub.
 //
 // Den fælles ramme (størrelsen, knapperne, sidetallet og papirets kant) står i style.css under #opdagelser. Tidens
 // udseende kommer fra bogens stil (js/data/opdagelser.js) som CSS-variabler: --bog-papir, --bog-papir-mork, --bog-blaek og
 // --bog-skrift.
 //
-// lavBog(rod, bog, tekster, { rolig, påBladr, påBegynd, lavScene }) bygger bogen i rod og giver { vis(nr), bladr(retning),
+// lavBog(rod, bog, tekster, { rolig, lav, påBladr, påBegynd, lavScene }) bygger bogen i rod og giver { vis(nr), bladr(retning),
 // nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE og
 // OPSLAG. Bogen har kun de opslag, der er bygget (E20 fund 6, stilguiden A9). Opslagets slags:
 //   'forside'  portrættet, spørgsmålet, Galileis lille tegning (eller bogens egen), navnet og "Begynd"
@@ -105,6 +106,7 @@ function lavSider(felt, bogId, b, rolig) {
     forklaring.insertAdjacentHTML('afterend', linjerHTML(b, s));
     lavLagBokse(felt);
     billede.style.setProperty('--forhold', `${s.b} / ${s.h}`);
+    billede.style.setProperty('--r', String(s.b / s.h)); // til sidens højde i CSS (højst 58 % af bogens bredde)
     billede.dataset.side = s.id;
     billede.querySelectorAll('img, .bs-glød').forEach((e) => e.remove());
     billede.classList.add('henter');
@@ -194,7 +196,28 @@ function hentSide(s) {
   return sideBilleder.get(s.fil);
 }
 
-export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påBegynd = null, lavScene = null } = {}) {
+// Bladet, der vendes (18. november 2026): en kopi af det gamle opslag ligger over det nye og drejer om ryggen (venstre
+// kant frem, højre kant tilbage), mens skyggen på bladet bliver mørkere, og et lyst skær glider hen over det. Kun transform
+// og opacity, så det kører glat på tabletten. Lærreder kopieres med drawImage, og de hentede sider (blob, lukket adresse)
+// flyttes selv over i kopien. Giver bladet, så vis() kan lægge det over det nye opslag.
+const VEND_TID = 450, VEND_TID_LAV = 300;
+function lavBlad(ramme) {
+  const blad = document.createElement('div');
+  blad.className = 'bog-ramme bog-blad';
+  blad.setAttribute('aria-hidden', 'true');
+  blad.inert = true;
+  // De hentede sider tages ud før kopien (en kopi ville prøve at hente den lukkede blob-adresse) og sættes ind i bladet
+  const sider = [...ramme.querySelectorAll('img.bs-side')];
+  sider.forEach((img) => img.replaceWith(document.createElement('i')));
+  for (const barn of ramme.children) blad.append(barn.cloneNode(true));
+  const gamle = ramme.querySelectorAll('canvas'), nye = blad.querySelectorAll('canvas');
+  gamle.forEach((c, i) => { try { if (c.width && c.height) nye[i].getContext('2d')?.drawImage(c, 0, 0); } catch { /* et lærred i 3D kan ikke kopieres */ } });
+  const pladser = blad.querySelectorAll('.bs-billede > i');
+  sider.forEach((img, i) => pladser[i]?.replaceWith(img));
+  return blad;
+}
+
+export function lavBog(rod, bog, tekster, { rolig = false, lav = false, påBladr = null, påBegynd = null, lavScene = null } = {}) {
   const opslag = tekster.OPSLAG;
   let nr = 0;
   let låst = false;
@@ -218,6 +241,10 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
   function vis(ny, retning = 0) {
     nr = Math.max(0, Math.min(ny, opslag.length - 1));
     const o = opslag[nr];
+    // Det gamle opslag bliver et blad, der vendes væk (før scenen fjernes, så tegningen er med)
+    rod.querySelector('.bog-blad')?.remove();
+    const blad = retning && !rolig && ramme.animate && ramme.childElementCount ? lavBlad(ramme) : null;
+    const gammelTop = ramme.scrollTop;
     scene?.fjern();
     scene = null;
     ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE)
@@ -235,11 +262,27 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
       img.addEventListener('load', () => img.classList.remove('henter'), { once: true });
       img.addEventListener('error', () => img.classList.remove('henter'), { once: true });
     }
-    if (retning && !rolig && ramme.animate) {
-      ramme.animate([{ transform: `translateX(${retning > 0 ? 28 : -28}px)`, opacity: 0.55 }, { transform: 'none', opacity: 1 }], { duration: 180, easing: 'ease-out' });
-    }
+    if (blad) vend(blad, retning, gammelTop);
     sidetal.textContent = `${nr + 1} / ${opslag.length}`;
     pile();
+  }
+
+  function vend(blad, retning, top) {
+    const tid = lav ? VEND_TID_LAV : VEND_TID;
+    const frem = retning > 0;
+    blad.insertAdjacentHTML('beforeend', `<div class="bog-blad-skygge"></div>${lav ? '' : '<div class="bog-blad-skær"></div>'}`);
+    rod.append(blad);
+    // Lige over rammen, uanset hvilket element bladet måles fra
+    const r = ramme.getBoundingClientRect(), f = blad.offsetParent ?? document.body, p = f.getBoundingClientRect();
+    Object.assign(blad.style, { top: `${r.top - p.top - f.clientTop + f.scrollTop}px`, left: `${r.left - p.left - f.clientLeft + f.scrollLeft}px`, width: `${r.width}px`, height: `${r.height}px`, transformOrigin: frem ? 'left center' : 'right center' });
+    blad.scrollTop = top;
+    const slut = frem ? -90 : 90;
+    const a = blad.animate([{ transform: 'perspective(4200px) rotateY(0deg)' }, { transform: `perspective(4200px) rotateY(${slut}deg)` }], { duration: tid, easing: 'cubic-bezier(0.45, 0, 0.75, 0.6)' });
+    blad.querySelector('.bog-blad-skygge').animate([{ opacity: 0 }, { opacity: 0.75 }], { duration: tid, easing: 'ease-in', fill: 'forwards' });
+    blad.querySelector('.bog-blad-skær')?.animate([{ transform: `translateX(${frem ? 120 : -120}%)` }, { transform: `translateX(${frem ? -120 : 120}%)` }], { duration: tid, easing: 'ease-in-out', fill: 'forwards' });
+    // Det nye opslag ligger i skygge ved ryggen og lyser op, mens bladet drejer væk
+    if (!lav) ramme.animate([{ filter: 'brightness(0.82)' }, { filter: 'none' }], { duration: tid, easing: 'ease-out' });
+    a.onfinish = a.oncancel = () => blad.remove();
   }
 
   function pile() {
@@ -281,7 +324,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
   vis(0);
 
   return {
-    vis: (n) => vis(n),
+    vis: (n) => vis(n, Math.sign(n - nr)),
     bladr,
     nr: () => nr,
     antal: () => opslag.length,
@@ -294,6 +337,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, påBladr = null, påB
       pile();
     },
     fjern() {
+      rod.querySelector('.bog-blad')?.remove();
       scene?.fjern();
       scene = null;
       rod.removeEventListener('click', klik);

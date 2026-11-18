@@ -165,6 +165,11 @@ G = 1 / math.sqrt(1 - b * b)
 print(f"  Lysuret: v = {b:.4f} c, γ = {G:.4f}; siderne 1 : {b*G:.4f} : {G:.4f}  (1 + 3 = 4)")
 for p in (0.5, 0.87, 0.95, 0.99):
     print(f"    v = {p:.0%}: γ = {1/math.sqrt(1-p*p):.3f}")
+# "Uden Einstein" (17. november 2026): lyset får skibets fart lagt oven i (Newton). Et halvt tik tager L/c som i
+# Jordens ur, spejlene flytter sig v·L/c, den skrå vej er √(1 + v²)·L, og lysets fart på den er √(1 + v²)·c
+print(f"  Uden Einstein ved 87 %: siderne 1 : {b:.4f} : {math.sqrt(1+b*b):.4f}, lysets fart {math.sqrt(1+b*b):.4f} c, urene går ens")
+for p in (0.5, 0.95, 0.99):
+    print(f"    v = {p:.0%}: den skrå vej og lysets fart {math.sqrt(1+p*p):.3f}")
 # Scene 3: myonerne fra 15 km
 tau_mu, m_mu, h = 2.1969811e-6, 105.6583755, 15_000.0
 print(f"  c·τ = {c*tau_mu:.1f} m. Uden tidsforlængelse når e^(−15 km/{c*tau_mu:.0f} m) = {math.exp(-h/(c*tau_mu)):.2e} ned (1 ud af {1/math.exp(-h/(c*tau_mu)):.2g})")

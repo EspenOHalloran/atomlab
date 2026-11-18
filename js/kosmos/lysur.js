@@ -1,12 +1,14 @@
-// Lysuret: et tænkt ur, hvor et lysglimt hopper op og ned mellem to spejle. Delt mellem Rejsen i tid (tid.js) og
-// "Hvordan kan det ske?" (tidhvorfor.js, før "Hvorfor går tiden langsommere?"), så de to ikke glider fra hinanden (T5a, 9. november 2026).
+// Lysuret: et tænkt ur, hvor et lysglimt hopper op og ned mellem to spejle. Lavet til både Rejsen i tid og "Hvordan kan
+// det ske?" (T5a, 9. november 2026). Fra 14. november 2026 bruges det kun af tidhvorfor.js (scene 2).
 // Kun regning og tegning på et 2D-lærred, ingen Three.js. Hvert fænomen har sine egne billeder (bokse og tekster) og
 // bruger herfra: uret (nytUr, nulstilUr, skridtUr), spejlene og lyset (tegnSkibUr, tegnJordUr) og trekanten.
 //
 // Uret: skib og jord er fasen i tik (0 = nede, ½ = oppe, 1 = nede igen) i skibet og set fra Jorden. x er spejlenes vej
 // set fra Jorden i pixel. spor er zigzaggens knæk set fra Jorden som [x, fase] (sat præcist, så spidserne ikke bliver
 // skåret af, når et billede springer over dem). stille: uret er stoppet, fordi lyset set fra Jorden er nået op.
-import { lysurGamma } from '../data/tid.js';
+// Et ur, der står stille på Jorden, tikker som skibets ur i skibet, så skib er også fasen i Jordens eget ur (scene 2).
+// uden: "Uden Einstein" (lyset får skibets fart lagt oven i, så urene går ens, lysurVej i js/data/tid.js).
+import { lysurGamma, lysurVej } from '../data/tid.js';
 
 // Et tik (op og ned) tager LYS_TIK sekunder på skærmen i skibet og γ gange så lang tid set fra Jorden
 export const LYS_TIK = 1.4;
@@ -47,9 +49,9 @@ const næsteTop = (f) => (Math.floor(f) + 0.5 > f + 1e-9 ? Math.floor(f) + 0.5 :
 // Et skridt på dt sekunder. v er farten (andel af lysets fart), c lysets fart på skærmen (pixel pr. sekund) og bredde
 // billedet fra Jorden (gamle punkter mere end 3 bredder ude til venstre smides væk). stopOppe: uret stopper, når lyset
 // set fra Jorden er nået op til det øverste spejl. Giver true, når uret lige er stoppet.
-export function skridtUr(ur, dt, { v, c, bredde, stopOppe = false }) {
+export function skridtUr(ur, dt, { v, c, bredde, stopOppe = false, uden = false }) {
   if (ur.stille) return false;
-  const gam = lysurGamma(v);
+  const gam = lysurVej(v, uden).tid;
   let d = dt;
   const top = stopOppe ? næsteTop(ur.jord) : Infinity;
   if (stopOppe) d = Math.min(dt, (top - ur.jord) * LYS_TIK * gam);
@@ -150,7 +152,7 @@ export const jordForskud = (ur, { xs0, we, sw, kant = 6 }) => Math.max(0, xs0 + 
 // Det samme ur set fra Jorden (i et billede, der starter i x = 0 og er we bredt): spejlene farer forbi, og lyset går
 // skråt (zigzag). Når spejlene er ved at nå kanten, følger billedet med dem, og de lodrette streger (som står stille i
 // forhold til Jorden) glider mod venstre i stedet. skrå: sporet tykt og gult med den lige vej ved siden af (v er farten).
-export function tegnJordUr(g, ur, { v, top, L, sw, xs0, we, kant = 6, skrå = false, r = 6 }) {
+export function tegnJordUr(g, ur, { v, top, L, sw, xs0, we, kant = 6, skrå = false, r = 6, uden = false }) {
   const bund = top + L;
   const forskud = jordForskud(ur, { xs0, we, sw, kant });
   const sx = (wx) => xs0 + wx - forskud;
@@ -169,7 +171,7 @@ export function tegnJordUr(g, ur, { v, top, L, sw, xs0, we, kant = 6, skrå = fa
   g.lineTo(sx(ur.x), bund - højde(ur.jord, L));
   g.stroke();
   // Den lige vej ved siden af den skrå, så man kan se, at den skrå er længere
-  if (skrå) lodret(g, sx(ur.x - v * lysurGamma(v) * L), bund, top, FARVE.lige, 3, true);
+  if (skrå) lodret(g, sx(ur.x - lysurVej(v, uden).vand * L), bund, top, FARVE.lige, 3, true);
   spejl(g, sx(ur.x), top, sw);
   spejl(g, sx(ur.x), bund, sw);
   glimt(g, sx(ur.x), bund - højde(ur.jord, L), r);
@@ -182,9 +184,11 @@ const erTo = (gam) => Math.abs(gam - 2) < 1e-9;
 // Trekanten for et halvt tik set fra Jorden (fra skitsen, T5 Trin 0): den lige vej op (1), det stykke, spejlene har
 // flyttet sig (v·γ i lysurets højder), og den skrå vej (γ), med tallene og Pythagoras. Ved høje farter tegnes den
 // mindre, så den kan være der (vinklerne er de rigtige). Tegnes i et billede, der starter i x = 0 og er we × hE.
-export function tegnTrekant(g, { v, top, L, sw, we, hE, skrift = 13 }) {
-  const gam = lysurGamma(v);
-  const vand = v * gam; // spejlenes vej på et halvt tik i højder (1,73 ved 87 %)
+// uden: "Uden Einstein" (siderne 1, v og √(1 + v²), fx 1, 0,87 og 1,32 ved 87 %).
+export function tegnTrekant(g, { v, top, L, sw, we, hE, skrift = 13, uden = false }) {
+  const V = lysurVej(v, uden);
+  const skråV = V.skrå; // den skrå vej (γ med Einstein)
+  const vand = V.vand; // spejlenes vej på et halvt tik i højder (1,73 ved 87 %, uden Einstein 0,87)
   const s = Math.min(1, (we - 2 * (sw + 18)) / (vand * L + 1));
   const Ls = L * s;
   const Ax = 22 + sw / 2;
@@ -218,10 +222,10 @@ export function tegnTrekant(g, { v, top, L, sw, we, hE, skrift = 13 }) {
   g.save();
   g.translate((Ax + Bx) / 2, (y0 + y1) / 2);
   g.rotate(-Math.atan2(Ls, vand * L * s));
-  tekst(g, fmt(gam, erTo(gam) ? 0 : 2), 0, -8, { farve: FARVE.skrå, vægt: 700, str: skrift });
+  tekst(g, fmt(skråV, erTo(skråV) ? 0 : 2), 0, -8, { farve: FARVE.skrå, vægt: 700, str: skrift });
   g.restore();
-  const ligning = erTo(gam) ? '1² + 1,73² = 2²  (1 + 3 = 4)' : `1² + ${fmt(vand, 2)}² = ${fmt(gam, 2)}²`;
+  const ligning = erTo(skråV) ? '1² + 1,73² = 2²  (1 + 3 = 4)' : `1² + ${fmt(vand, 2)}² = ${fmt(skråV, 2)}²`;
   tekst(g, ligning, we / 2, hE - 10, { farve: FARVE.tik, vægt: 700, str: skrift });
   if (s < 0.999) tekst(g, `(tegnet ${fmt(1 / s, 1)} gange mindre)`, we - 10, top - 4, { side: 'right', farve: FARVE.svag, str: skrift - 2, vægt: 500 });
-  return { gamma: gam, vand, skala: s };
+  return { gamma: lysurGamma(v), skrå: skråV, tid: V.tid, vand, skala: s };
 }

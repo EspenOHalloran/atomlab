@@ -67,6 +67,15 @@ tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåd
   }
   const t = await bogMed('huygens').tekster();
   if (t.OPSLAG.find((o) => o.id === 'fortaelling')?.slags !== 'scene' || !t.FRI?.igen) fejlFl.push('opslaget');
+  // Introduktionen før gåden (fund 18. november 2026): højst fem sætninger, årstallet, de 62 bogstaver og ordet anagram,
+  // og turens trin 4 siger, hvorfor han ikke bare fortalte det
+  {
+    const f = t.GÅDE.forord;
+    const sætninger = (f?.tekst.match(/[.!?](\s|$)/g) ?? []).length;
+    const trin4 = fl?.trin.find((x) => x.id === 'annulo');
+    tjek('introduktionen til hemmeligheden: 1656, 62 bogstaver, anagram, højst fem sætninger og ingen alder på 25, og trin 4 siger, at ringen ikke ses lige nu',
+      f && /1656/.test(f.sted) && /62/.test(f.tekst) && /anagram/.test(f.tekst) && sætninger <= 5 && !/\b25\b/.test(f.tekst) && /1659/.test(f.lille) && /ses ikke/.test(trin4?.spørg), JSON.stringify({ sætninger, spørg: trin4?.spørg }));
+  }
   tjek('fortællingen: forløbet "Saturns ører" har fire trin med kapitel, gæt og korte tekster, og "linse" og "anagram" står i Ordbogen', !fejlFl.length, fejlFl.join('; '));
   // Test 2 (planen afsnit 7): Anagrammets 62 bogstaver passer præcist med sætningen, i 17 bunker, og ordene giver sætningen
   const A = t.ANAGRAM;
@@ -296,6 +305,10 @@ for (const [navn, opsætning] of [
   };
   await åbnGåden();
   const t = await bogMed('huygens').tekster();
+  // Introduktionen før gåden (fund 18. november 2026): først bogteksten med "Prøv gåden ›", så gåden
+  const forord = await O(() => ({ forord: atomlabTest.opdagelser.scene().tilstand().forord, skjult: document.querySelector('#opdBog .ag-udfordring').hidden, tekst: document.querySelector('#opdBog .ag-forord-tekst')?.textContent ?? '' }));
+  await page.click('#opdBog .ag-forord-knap');
+  const efterForord = await O(() => ({ forord: atomlabTest.opdagelser.scene().tilstand().forord, ses: getComputedStyle(document.querySelector('#opdBog .ag-udfordring')).display !== 'none' }));
   const start = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), brikker: document.querySelectorAll('#opdBog .ag-brik').length, bunker: document.querySelectorAll('#opdBog .ag-bunke').length, knapper: document.querySelectorAll('#opdBog button.ag-bunke').length }));
   await O(() => atomlabTest.opdagelser.scene().læg('tenui', 0));
   const forkert = await O(() => atomlabTest.opdagelser.scene().tilstand());
@@ -308,6 +321,8 @@ for (const [navn, opsætning] of [
   tjek('"Hemmeligheden": otte brikker og 17 bunker, der ikke er knapper, en forkert brik tæller ikke, og alle otte giver "Alle 62 er brugt"',
     start.brikker === 8 && start.bunker === 17 && start.knapper === 0 && start.tal === 62 && forkert.lagt === 0 && forkert.tal === 62
     && slut.lagt === 8 && slut.tal === 0 && slut.hel && slut.status === 'Alle 62 er brugt. Det passer.', JSON.stringify({ start, forkert, slut }));
+  tjek('"Hemmeligheden" starter med introduktionen (Haag 1656, anagrammet og grunden), og "Prøv gåden" viser gåden',
+    forord.forord && forord.skjult && /anagram/.test(forord.tekst) && /først/.test(forord.tekst) && !efterForord.forord && efterForord.ses, JSON.stringify({ forord, efterForord }));
   tjek('løsningen huskes (✓ næste gang), og "Lav dit eget anagram" sorterer bogstaverne som Huygens uden at gemme noget',
     /huygens/.test(slut.gemt ?? '') && slut.eget && eget === 'aa e g h i nnn rrr s t u (15)' && /✓/.test(igen.status) && igen.eget && igen.lagt === 0, JSON.stringify({ gemt: slut.gemt, eget, igen }));
   await ctx.close();
@@ -440,6 +455,49 @@ for (const [navn, opsætning] of [
     return { knapper: k.length === 7 && k.every((x) => x.height >= 44 && x.left >= 0 && x.right <= innerWidth + 0.5), billede: b.width >= 120 && b.right <= innerWidth + 0.5, bred: document.documentElement.scrollWidth > innerWidth + 1 };
   });
   tjek(`${navn}: i "Bogen fra 1659" er fanerne og stederne mindst 44 px og inden for skærmen, og siden går ikke ud til siden`, sider.knapper && sider.billede && !sider.bred, JSON.stringify(sider));
+  await ctx.close();
+}
+
+// Brede og høje pc-skærme (fund 18. november 2026, ultrabred skærm): På tavlen fik panelet til højre 0 px, fordi siden
+// fyldte bogens højde og kun var begrænset af skærmens bredde. Nu har panelet plads på alle fire sider, og intet går ud
+// over bogens kant
+for (const [w, h] of [[3440, 1440], [2560, 1080], [1920, 1080], [1280, 720]]) {
+  const { page, ctx } = await nySide({ viewport: { width: w, height: h } }, '#opdagelser');
+  await vent(page, påHylden, null, 15000);
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'bogen' && v.bladr(1)); });
+  const mål = [];
+  for (let i = 0; i < 4; i++) {
+    await page.evaluate((i) => atomlabTest.opdagelser.scene().visSide(i), i);
+    await vent(page, () => atomlabTest.opdagelser.scene()?.hentet(), null, 15000);
+    mål.push(await page.evaluate(() => {
+      const r = (q) => document.querySelector(`#opdBog ${q}`).getBoundingClientRect();
+      const ramme = r('.bog-ramme'), billede = r('.bs-billede'), tekst = r('.bs-tekst');
+      return { side: atomlabTest.opdagelser.scene().side(), tekst: Math.round(tekst.width), inde: billede.right <= ramme.right && tekst.right <= ramme.right + 0.5 && billede.left >= ramme.left, forhold: +(billede.width / billede.height).toFixed(2) };
+    }));
+  }
+  tjek(`${w}×${h}: i "Bogen fra 1659" har panelet ved siden af siden mindst 260 px på alle fire sider (også tavlen), og siden går ikke ud over bogen`,
+    mål.every((m) => m.tekst >= 260 && m.inde) && Math.abs(mål[0].forhold - 1000 / 1069) < 0.02, JSON.stringify(mål));
+  await ctx.close();
+}
+
+// Siden vendes om ryggen (18. november 2026): Et blad med det gamle opslag drejer væk og forsvinder igen, det nye opslag
+// er der med det samme, og med reduceret bevægelse kommer der intet blad
+for (const [navn, opsætning] of [['bladet', { viewport: { width: 1280, height: 800 } }], ['bladet med reduceret bevægelse', { viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' }]]) {
+  const { page, ctx } = await nySide(opsætning, '#opdagelser');
+  await vent(page, påHylden, null, 15000);
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  const under = await page.evaluate(() => {
+    document.querySelector('#opdBog .bog-pil[data-bladr="1"]').click();
+    const blad = document.querySelector('#opdBog .bog-blad');
+    return { blad: Boolean(blad), portræt: Boolean(blad?.querySelector('.bog-portræt')), nyt: atomlabTest.opdagelser.vist().opslag, skjult: blad?.getAttribute('aria-hidden') === 'true' && blad.inert };
+  });
+  const væk = await vent(page, () => !document.querySelector('#opdBog .bog-blad'), null, 3000);
+  const rolig = navn.includes('reduceret');
+  tjek(`${navn}: ${rolig ? 'ingen side vendes, og det nye opslag står der med det samme' : 'et blad med forsiden vendes væk og forsvinder, og det nye opslag står der med det samme'}`,
+    under.nyt === 'fortaelling' && væk && (rolig ? !under.blad : under.blad && under.portræt && under.skjult), JSON.stringify(under));
   await ctx.close();
 }
 

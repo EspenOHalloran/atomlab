@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/tid.md](../../lige-nu/tid.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026).*
 
+**Senest lavet (16. november 2026): E14-rettelserne før prøven (Fables punkt 1 og 4, jeres go 15. november 2026).**
+- **Myonerne** (forløb 2, trin 5, `js/data/forloeb/tid.js`): Spørg siger nu "Myoner bliver til ca. 15 km oppe og lever så kort, at de burde gå i stykker deroppe. Hvor mange når ned?" i stedet for "Myoner fra rummet" (faktatjekket: arXiv:1906.03934, `docs/fakta-tid.md`).
+- **Rejsen trin 2** (`js/kosmos/tid.js`): Lander skibet, uden at "Dit ur" er set, skriver `forløbVink` "Du nåede ikke at se dit ur. Flyv igen, og tryk på "Dit ur", mens du flyver." ⏩ i forløbets linje hedder "⏩ Spol frem" i stedet for "⏩ Hurtigere". Testen `tid-forloeb` har et nyt tjek af begge dele.
+- **Rettet 17. november 2026:** Urenes bokse ("Dit ur" og "Jordens ur") blinkede, fordi de blev smallere og bredere med teksten. Nu bliver de kun bredere under en rejse og får deres egen bredde igen ved "Forfra" eller en ny vinduesstørrelse (`holdBredde` i `js/kosmos/tid.js`, nyt tjek i `tests/tid.mjs`).
+- **Venter på prøven** (Fables liste i [E14-noter.md](../fable/E14-noter.md)): aldrene stort ved hjemkomsten, trin 3's tekst, myonpanelet uden µs og γ, bygen 11-13, mærkaten i B2 og målebåndet.
+
 **Senest lavet (14. november 2026): Kosmos i fire grupper (Serie 1 nr. 4, det sidste stykke).**
 - **Grupperne** (`js/kosmos.js`, jeres go 14. november 2026): 🌌 **Universet** (Big Bang, plads til Mørkt stof og Andromeda), ✴️ **Stjernernes liv** (Ny stjerne, Hvid dværg, Supernova, Pulsar, Kilonova), 🕰️ **Tid og rum** (Rumtid, Tid, Tyngdebølger) og 🕳️ **Sorte huller** (Sort hul, Kvasar, Ormehul). Rækkefølgen af fænomenerne er den samme som før, så `FÆNOMEN_IDER`, det gemte og "x af 12 set" er uændret. ✴️ i stedet for ⭐, fordi Ny stjerne har ⭐.
 - **Genbrugt fra Solsystemet:** grupper uden et eget fænomen (`{ navn, ikon, under }`). Et tryk på en gruppe åbner dens første punkt, et tryk på den åbne gruppe gør ingenting. Den fælles skal: ingen overskrift "Forsøg", intet rejseskilt, `hørerTil` står ikke i træet (Tid er valgt under "Hvordan kan det ske?"), og gruppen har prikken, så længe et punkt ikke er set. `gå()` virker også i en gruppe uden klode (stedet i det valgte fænomen, fx rumtidskortet). Grupperne står to og to med ikonet ved siden af navnet, på telefon på højkant fire på én række (`#kosmos .kosmos-grupper` i style.css).

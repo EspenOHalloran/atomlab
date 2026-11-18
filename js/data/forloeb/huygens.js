@@ -76,7 +76,9 @@ export const SATURNS_ØRER = {
       id: 'annulo',
       kapitel: 'Hemmeligheden',
       // Skriftet med anagrammet er dateret 5. marts 1656 (s. 2), mens armene var væk (16. januar-17. juni 1656, s. 16-17)
-      spørg: 'Saturn er stadig rund. Hvordan viser han, at han kender svaret, uden at røbe det?',
+      // Første sætning ændret 18. november 2026 (fundet "lige på og hårdt"): hvorfor han ikke bare fortæller det. Armene er
+      // væk fra 16. januar til efter juni 1656, så ringen kan ikke ses (s. 16-17). Højst 16 ord
+      spørg: 'Ringen ses ikke lige nu. Hvordan viser han, at han kender svaret, uden at røbe det?',
       gæt: {
         valg: [
           { tekst: 'Han holder det hemmeligt', efter: 'Find ordet ANNULO ("med en ring") i bunkerne af bogstaver.', svar: 'Men hvordan skulle han så bagefter bevise, at han vidste det først?' },
