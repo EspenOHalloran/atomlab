@@ -30,7 +30,8 @@ const lysScene = (m, id, c) => {
       verden.styring.autoRotateSpeed = 0.4;
     },
     opdater: (dt, tid) => lys?.opdater(dt, tid),
-    test: () => ({ lys: Boolean(lys) }),
+    test: () => ({ lys: Boolean(lys), lampe: lys?.test?.() ?? null }),
+    fjern: () => lys?.fjern?.(),
   };
 };
 const lavLysScene = () => import('./lys.js').then((m) => ({ lavNær: (c) => lysScene(m, id, c) }));

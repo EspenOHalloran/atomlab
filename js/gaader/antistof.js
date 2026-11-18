@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import { verden, LAV_KVALITET } from '../scene3d.js';
 import { glød, skilt, prikTekstur } from '../kosmos/faelles.js';
 import { lyd } from '../lyd.js';
-import { gådeMed, STREG_FORKLARING } from '../data/gaader.js';
+import { gådeMed, STREG_FORKLARING, bangTider } from '../data/gaader.js';
 import { fuld, stiplet, tonUd, stempel } from './streg.js';
 
 const HB = 9; // den halve bredde og højde af det, kameraet skal se (planet z = 0)
@@ -20,15 +20,14 @@ const R = 0.42;
 const PAR = 1000; // par i den store udslettelse (i virkeligheden ca. en milliard pr. partikel, der blev tilovers)
 const STJERNER = LAV_KVALITET ? 1200 : 2000;
 const FARVE = { stof: new THREE.Color(1.0, 0.7, 0.25), anti: new THREE.Color(0.32, 0.85, 1.0) };
-// Tiderne i den store udslettelse (sekunder)
-const T_MØDES = 1.6;
-const T_KORN = 4.2;
-const T_UD = 6.8;
-const T_FÆRDIG = 9.5;
+// Tiderne i den store udslettelse (sekunder) regnes ud fra linjernes læsetid (bangTider i js/data/gaader.js), ca. 16 s.
+// Et tryk springer frem til næste linje.
+let T_MØDES, T_KORN, T_UD, T_FÆRDIG;
 
 export function lavNær(ctx) {
   const { gruppe, linje, knapper, passer, ROLIG } = ctx;
   const T = gådeMed('antistof').scene;
+  ({ mødes: T_MØDES, korn: T_KORN, ud: T_UD, færdig: T_FÆRDIG } = bangTider(T.bang));
 
   // ---------- Partiklerne, man selv laver ----------
   const kugleGeo = new THREE.SphereGeometry(R, 24, 16);
@@ -151,6 +150,11 @@ export function lavNær(ctx) {
     op: () => { holdt = null; },
     tryk: (p) => {
       if (tilstand === 'leg') sendLys(p, false);
+      // Under den store udslettelse springer et tryk frem til næste linje (for den, der læser hurtigt)
+      else if (tilstand === 'bang') {
+        const næste = [T_MØDES, T_KORN, T_UD, T_FÆRDIG].find((x) => x > t + 0.05);
+        if (næste != null) t = næste - 0.001;
+      }
     },
     spol: (s) => { for (let i = 0; i < s * 30; i++) opdater(1 / 30, tid0 + i / 30); },
     test: () => ({

@@ -415,6 +415,7 @@ export function lavLinse({ lysstyrke = 0.2 } = {}) {
 
   return {
     flade,
+    tekstur: lag.texture, // billedet (rgb) og dybden (a), til Gådernes lampe (js/gaader/lys.js)
     // tid: fænomenets ur (står stille under pause). lysere: skiven lyser op, når den får mad.
     opdater(tid, lysere) {
       linseMat.uniforms.uTid.value = tid * TIDSSKALA;
