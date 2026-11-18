@@ -2356,8 +2356,10 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   .verden-navn { font-size: 16px; }
   .verden-tekst small { display: none; }
   .verden.én-del .verden-tekst small { display: block; font-size: 12px; }
-  .verden-dele { grid-column: 1 / -1; flex-direction: row; gap: 6px; margin-top: 2px; }
+  /* Tre dele (Atomer og Biblioteket) er for brede til én række i et kort på 300 px, så den sidste går på næste linje (18. november 2026) */
+  .verden-dele { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
   .verden-knap { flex: 1 1 0; min-height: 40px; padding: 4px 8px 4px 2px; gap: 4px; }
+  .verden-dele:has(> .verden-knap:nth-child(3)) > .verden-knap { flex: 1 1 auto; }
   .verden-knap .kort-ikon { transform: scale(0.5); margin: -12px -14px; }
   .verden-knap .kort-tekst strong { font-size: 13px; }
   .verden-pil { display: none; }
