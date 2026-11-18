@@ -12,6 +12,7 @@ import { ORDBOG } from '../js/data/ordbog.js';
 import { FORLØB } from '../js/data/forloeb/liste.js';
 import { GÅDER } from '../js/data/gaader.js';
 import { SKÆRME } from '../js/skaerme.js';
+import { SIDER as MARS } from '../js/data/sider/mars.js';
 const UD = billedmappe('begyndelsen');
 const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
@@ -32,6 +33,15 @@ tjek('teksterne: fem trin inden for skabelonens grænser, mindst to gæt med sva
   && FORLØB.includes(BEGYNDELSEN) && SKÆRME.some((s) => s.id === 'begyndelsen' && s.verden === 'liv')
   && GÅDER.find((g) => g.id === 'begyndelsen').seDet[0] === 'begyndelsen' && /Næste: Begyndelsen/.test(fejlenVeje) && (fejlenVeje.match(/tekst:/g) ?? []).length <= 3,
   JSON.stringify({ lange: lange.map((t) => t.id), uden, forLange: forLange.map((p) => p.titel ?? p.navn) }));
+// Liv L6: kortet "Hvor sikkert er et spor?" står kun ved Cheyava Falls på Mars, og gåden og Begyndelsen linker dertil
+const medSpor = [];
+const find = (x) => { if (Array.isArray(x)) x.forEach(find); else if (x && typeof x === 'object') { if (x.hvorfor?.includes?.('livSpor')) medSpor.push(x); Object.values(x).forEach(find); } };
+find(MARS);
+tjek('L6: kortet "Hvor sikkert er et spor?" har højst fem sætninger og en nørd-tekst med ALH84001, knapperne på Mars står kun ved Cheyava Falls, og gåden om liv og "Kom livet fra rummet?" linker dertil',
+  HVORFOR.livSpor?.spørgsmål === 'Hvor sikkert er et spor?' && sætninger(HVORFOR.livSpor.svar) <= 5 && /ALH84001/.test(HVORFOR.livSpor.nørd)
+  && medSpor.length === 2 && medSpor.every((e) => /Cheyava Falls/.test(e.tekst)) && HVORFOR.begRummet.næste === 'livSpor'
+  && GÅDER.find((g) => g.id === 'liv').trin.some((t) => t.hvorfor === 'livSpor'),
+  JSON.stringify({ sætninger: sætninger(HVORFOR.livSpor?.svar ?? ''), mars: medSpor.map((e) => e.titel) }));
 const kopi = lavRnaKopi(undefined, { fejl: 7 });
 tjek('modellen: uden kalk giver den nye luft kun svag farve, med kalk fuld, og turens kopi har præcis én fejl (bogstav 8)',
   kolbeFarve('co2', false, 3) < 0.3 && kolbeFarve('co2', true, 3) === 1 && kolbeFarve('miller', false, 3) === 1 && kopi.filter((k) => k.fejl).length === 1 && kopi[7].fejl);
