@@ -11,7 +11,7 @@
 
 import { bogMed, byggede, påHylden, rygLinje, HYLDE_LINJE } from './data/opdagelser.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
-import { sætVindue, verden, ROLIG } from './scene3d.js';
+import { sætVindue, verden, ROLIG, LAV_KVALITET } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavBog } from './bog.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, lavTurKnap } from './forloeb.js';
@@ -112,6 +112,7 @@ async function åbnBog(id, { fortælling = false } = {}) {
   const fl = forløbMed(b.forløb);
   bog = lavBog($('opdBog'), b, tekster, {
     rolig: ROLIG,
+    lav: LAV_KVALITET,
     påBladr: () => lyd.klik(),
     // Første gang: "Begynd" starter fortællingen som et forløb. Ellers bladrer den bare til fortællingen.
     påBegynd: () => {

@@ -2,6 +2,17 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (17. november 2026): H4, Bogen selv og "Om Huygens". Huygens har status prøve.**
+- **Siderne:** `lav_bogsider.py` henter tavlen, s. 16, s. 47 og s. 48 fra archive.org (WebP, 182-192 KB). Bogen er ca. 990 KB i alt.
+- **"Bogen fra 1659":** ét opslag med fire faner, seks glødende steder (latin og dansk) og "Linje for linje". Siderne hentes først, når opslaget åbnes. Den tredje vej i "Det så du" er "Bladr i bogen fra 1659 ›".
+- **"Om Huygens":** to tal, tre sætninger, fire "Hvorfor?" og "For nørder" og "Ærligt talt" lukkede.
+- **Faktatjek:** s. 48 linje 5-10, "1847" og OC XV-tallene er tjekket. "For nørder" siger "12 fod (over 3 m)".
+- **Valgt af orkestratoren:** et opslag med faner, og stederne på siden må være lavere end 44 px, fordi knapperne ved siden af er 44 px. `opdagelser` har 31 tjek.
+
+## Valg i H4
+- **Siderne:** drejebogens fire (tavlen, s. 16, s. 47 og s. 48), ikke s. 46. Den sidste linje fra s. 46 står kun som tekst i "Linje for linje". *Valgt af orkestratoren 2026-11-17, kan ændres af jer.*
+- **"Bogen fra 1659" er ét opslag med fire sidefaner** (én ting ad gangen), ikke fire opslag. *Valgt af orkestratoren 2026-11-17, kan ændres af jer.*
+
 **Senest lavet (17. november 2026): H3, gåden og Gør det selv, og E20 fund 6.**
 - **Jeres svar:** Go til A, B og C hver for sig og til D og E i træk. Den tredje vej er "Prøv ringen selv" til H4. Et løst anagram huskes (✓). Hylden har Tycho og Rømer som grå rygge.
 - **Kun det byggede (A):** Bogen har kun de byggede opslag, og hylden viser Huygens og de næste to bøger, der stiller deres spørgsmål.

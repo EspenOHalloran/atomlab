@@ -13,7 +13,7 @@
 Anagrammet er ikke med i sætningen. Det er krogen. Delens kernesætning står i [plan-videnskabsfolk.md](plan-videnskabsfolk.md), afsnit 1 (Fables forslag: "De gættede ikke bare. De så efter og målte …", jeres valg i afsnit 12).
 
 ## 2. Bogen og stilen
-Bogen er en 2D-bog, man bladrer i (formen i [plan-videnskabsfolk.md](plan-videnskabsfolk.md), afsnit 3). **Én ting på skærmen ad gangen:** Billedet fylder mindst to tredjedele af et opslag, bladringen er et hurtigt skub (ikke en animeret side), og den faste side ("Om Huygens" med "Hvorfor?", "For nørder" og "Ærligt talt") er bogens sidste opslag. Huygens' bog ligner en bog fra **Haag i 1650'erne**:
+Bogen er en 2D-bog, man bladrer i (formen i [plan-videnskabsfolk.md](plan-videnskabsfolk.md), afsnit 3). **Én ting på skærmen ad gangen:** Billedet fylder mindst to tredjedele af et opslag, bladringen vender siden om ryggen (**ændret 18. november 2026 efter brugerens ønske** "Bogen må animeres mere", før et hurtigt skub, se "Jeres svar (18. november 2026)"), og den faste side ("Om Huygens" med "Hvorfor?", "For nørder" og "Ærligt talt") er bogens sidste opslag. Huygens' bog ligner en bog fra **Haag i 1650'erne**:
 - **Papiret** er varmt og let plettet, og **blækket** er sort-brunt. Overskrifter og det store forbogstav står med **IM Fell English** (en fri skrift lavet efter typer fra 1670'erne, se planen afsnit 4). Brødteksten står med programmets skrift (mindst 15 px).
 - **Tegningerne** i fortællingen har samme stil som tavlen i *Systema Saturnium* (ved s. 35): hvide figurer på en mørk, prikket baggrund, tegnet i et lærred (canvas) i 2D.
 - **Fortælleren** taler i nutid og tredje person ("Haag, marts 1655. Christiaan er 25 år …"). Ingen opdigtede citater: Det, Huygens selv skrev, står kun i "Bogen selv" (afsnit 6) med hans latin og vores oversættelse.
@@ -139,3 +139,8 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/huygens
 6. **Skriften:** IM Fell English som woff2 med kun de tegn, vi bruger (fonttools og brotli installeres i sessionen). Domænet var allerede åbent.
 7. **Go til H1** 16. november 2026.
 8. **Go til H2** 16. november 2026. Fortællingens opslag efter forløbet: ringen fra trin 3, man selv kan dreje, og "Fortæl det igen ›" (anbefalingen). Gør-teksten i trin 3 er rettet, fordi scenen starter med armene væk: "Træk op eller ned for at se Saturn fra en anden vinkel. Træk så tilbage, til armene er helt væk." Ét go pr. trin (A rammen, B linsen, C nætterne, D ringen, E tests).
+
+## Jeres svar (18. november 2026, efter prøven)
+Brugerens fund: tavlen i "Bogen fra 1659" virkede ikke på en ultrabred pc-skærm (panelet til højre kunne ikke ses), hemmeligheden var "lidt lige på og hårdt" ("Jeg aner ikke, hvad hans hemmelighed er … Det er jo en bog. Der må gerne stå noget"), og bogen må animeres mere, så den ligner en gammel, flot bog.
+1. **Introduktionen:** A, en side bogtekst først i opslaget "Hemmeligheden" ("Haag, marts 1656", fem korte sætninger med stort forbogstav og "Prøv gåden ›"), og én ny sætning i turens trin 4 ("Ringen ses ikke lige nu."). Ikke B (et nyt opslag "Forord"). *Valgt af orkestratoren 2026-11-18, kan ændres af jer.*
+2. **Bogen:** Siden vendes om ryggen (0,45 s, kortere og uden skær på tabletten, intet med reduceret bevægelse), og papiret har korn, pletter, skygge ved ryggen og sidekanter. Ikke C (omslaget, der åbner sig). *Valgt af orkestratoren 2026-11-18, kan ændres af jer.*

@@ -169,7 +169,7 @@ export function lavAnagram(rod, anagram, { rolig = false, påRørt = null } = {}
 // Brikkernes faste blanding (ikke tilfældig, så testene og skærmbillederne er ens hver gang)
 const BLANDING = [5, 2, 7, 0, 3, 6, 1, 4];
 
-export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løst = false, påLøst = null } = {}) {
+export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løst = false, påLøst = null, medForord = true } = {}) {
   const T = tekster;
   const ord = anagram.ord;
   felt.classList.add('ag-felt');
@@ -183,6 +183,26 @@ export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løs
     + '<div class="ag-efter"></div>'
     + '</div>';
   const ag = felt.querySelector('.ag');
+  // Introduktionen før gåden (18. november 2026): en side bogtekst med det store forbogstav og "Prøv gåden ›". Ikke
+  // igen efter "Prøv igen"
+  const F = T.forord;
+  if (F && medForord) {
+    ag.hidden = true;
+    ag.insertAdjacentHTML('beforebegin', '<div class="ag-forord">'
+      + `<p class="ag-sted">${esc(F.sted)}</p>`
+      + `<p class="ag-forord-tekst">${esc(F.tekst)}</p>`
+      + `<p class="ag-forord-lille">${esc(F.lille)}</p>`
+      + `<button class="knap ag-forord-knap">${esc(F.knap)} ›</button></div>`);
+    felt.querySelector('.ag-forord-knap').addEventListener('click', visGåden);
+  }
+  function visGåden() {
+    const forord = felt.querySelector('.ag-forord');
+    if (!forord) return;
+    forord.remove();
+    ag.hidden = false;
+    felt.scrollTop = 0;
+    if (!rolig && ag.animate) ag.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'ease-out' });
+  }
   const status = felt.querySelector('.ag-status');
   const efter = felt.querySelector('.ag-efter');
   const tæller = lavTæller(felt, anagram.række);
@@ -256,7 +276,7 @@ export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løs
     if (h.target.closest('.ag-igen')) {
       fjernLyttere();
       felt.classList.remove('ag-felt');
-      Object.assign(api, lavUdfordring(felt, anagram, { rolig, tekster, løst: true, påLøst }));
+      Object.assign(api, lavUdfordring(felt, anagram, { rolig, tekster, løst: true, påLøst, medForord: false }));
     } else if (h.target.closest('.ag-eget-knap')) visEget();
   });
 
@@ -298,7 +318,8 @@ export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løs
   const api = {
     fjern: fjernLyttere,
     test: {
-      tilstand: () => ({ lagt, tal: tæller.sum(), hel: ag.classList.contains('hel'), løst: erLøst, eget: Boolean(felt.querySelector('.ag-eget:not([hidden])')) }),
+      tilstand: () => ({ lagt, tal: tæller.sum(), hel: ag.classList.contains('hel'), løst: erLøst, eget: Boolean(felt.querySelector('.ag-eget:not([hidden])')), forord: Boolean(felt.querySelector('.ag-forord')) }),
+      visGåden,
       // Læg brikken med ordet latin på betydningen nr. i (forkert, hvis i ikke er ordets)
       læg(latin, i) {
         felt.querySelector(`.ag-brik[data-i="${ord.findIndex((o) => o.latin === latin)}"]`)?.click();

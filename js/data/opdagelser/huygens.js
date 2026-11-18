@@ -39,6 +39,17 @@ export const VEJE = {
 
 // Opslaget "Hemmeligheden" (drejebogen afsnit 4): udfordringen med de otte brikker og "Lav dit eget anagram"
 export const GÅDE = {
+  // Introduktionen før gåden (fund 18. november 2026: "Jeg aner ikke, hvad hans hemmelighed er … Det er jo en bog").
+  // Faktatjekket 18. november 2026: 26 år i marts 1656 (født 14. april 1629), armene væk 16. januar-17. juni 1656 og
+  // skriftet dateret 5. marts 1656 (s. 2 og s. 16-17), 62 bogstaver (s. 47), armene i én lige linje (s. 46). Grunden til
+  // anagrammet: han var ikke helt sikker endnu og kunne vise løsningen senere (KNAW, Digitaal Wetenschapshistorisch
+  // Centrum), og anagrammer var dengang en måde at gøre krav på at være først (JSTOR Daily). Løsningen i 1659 (s. 47).
+  forord: {
+    sted: 'Haag, marts 1656',
+    tekst: 'Christiaan Huygens er en ung mand på 26, der selv sliber linser til sine kikkerter. Med den lange kikkert har han set Saturns arme stikke ud i én lige linje, og han tror, de er en tynd, flad ring rundt om planeten. Men lige nu er armene væk, så han kan ikke vise det, og andre kigger også på Saturn. Derfor trykker han sin idé som 62 blandede bogstaver, et anagram. Sådan gjorde forskere dengang, så de bagefter kunne bevise, hvem der var først.',
+    lille: 'I 1659 viste han løsningen i sin bog. Kan du finde den?',
+    knap: 'Prøv gåden',
+  },
   linje: 'Huygens\' hele hemmelighed: Læg de latinske ord på deres danske betydning. For hvert ord tæller bunkerne ned.',
   tilbage: 'bogstaver tilbage',
   løst: 'Alle 62 er brugt. Det passer.',
