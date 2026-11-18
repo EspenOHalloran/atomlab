@@ -72,9 +72,8 @@ const d0 = await F('drejning'), t0 = await F('dato');
 await fm(() => atomlabTest.solsystem.spol(5));
 tjek('i pause står Pluto og datoen stille', (await F('drejning')) === d0 && (await F('dato')) === t0);
 // ⏩: et døgn i sekundet. Efter ca. en hel omgang står Charon stadig over længde 0°
-await fm(() => atomlabTest.solsystem.sætTid('hurtig'));
-await fm(() => atomlabTest.solsystem.spol(6.4));
-await fm(() => atomlabTest.solsystem.sætTid('pause'));
+// ⏩, spoling og pause i ét kald, så testbrowserens egne billeder ikke lægger tid til imellem (Åbne punkter 18. november 2026)
+await fm((n) => { const t = atomlabTest.solsystem; t.sætTid('hurtig'); t.spol(n); t.sætTid('pause'); }, 6.4);
 const dag = ((await F('dato')) - t0) / 864e5;
 const dW = ((((await F('drejning')) - d0) * GRAD % 360) + 360) % 360;
 const c2 = await F('charon');
