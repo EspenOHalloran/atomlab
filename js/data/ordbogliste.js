@@ -23,6 +23,7 @@ export const LINKS = {
   basepar: { skærm: ['liv', 'Liv'] },
   hydrogenbinding: { skærm: ['liv', 'Liv'] },
   'naturligt-udvalg': { hvorfor: 'livMenneske' },
+  hinde: { skærm: ['begyndelsen', 'Begyndelsen'] },
   dendrit: { skærm: ['batteri', 'Batteriet'] },
   horisont: { gaa: ['kosmos:sorthul', 'Kosmos: Sort hul'] },
   singularitet: { gaa: ['gaader:sorthul', 'Gåden: Hvad er der inde i et sort hul?'] },

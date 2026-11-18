@@ -1054,6 +1054,43 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .liv-hjul .hjul-midte { fill: #141a36; stroke: var(--panel-kant); stroke-width: 0.6; }
 .liv-hjul-tekst { margin: 4px 0 0; font-size: 12.5px; text-align: center; color: var(--svag); }
 @media (max-width: 560px) { .liv-hjul { max-width: 76%; top: 6px; right: 6px; } /* på telefonen skal hjulet kunne læses */ }
+/* ---------- Begyndelsen (Liv L5, js/begyndelsen.js): samme opbygning som Liv, i sin egen blok ---------- */
+#begyndelsen { grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
+#begyndelsen .vindue { grid-area: vindue; }
+.beg-scener { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.beg-scener .knap, .beg-luft .knap { min-height: 44px; }
+:is(.beg-scener, .beg-luft) .knap.valgt { background: rgba(95, 227, 255, 0.18); border-color: var(--accent); color: var(--tekst); }
+.beg-styr { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
+.beg-styr[hidden], #begyndelsen [hidden] { display: none; }
+.beg-luft { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.beg-luft .knap { font-size: 13px; padding: 6px 8px; }
+#begyndelsen .knap.primær { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent); border-color: var(--accent); color: #031018; font-weight: 700; }
+#begyndelsen .knap.primær:disabled { background: rgba(255, 255, 255, 0.06); border-color: var(--panel-kant); color: var(--svag); }
+/* Lynet er tegnet (ikke emoji): i knappen til venstre og i turens linje */
+.kugle.beg-lyn { display: inline-block; width: 14px; height: 20px; flex: 0 0 auto; background: linear-gradient(160deg, #fff3bf, #ffd43b 45%, #fab005); clip-path: polygon(58% 4%, 22% 56%, 46% 56%, 38% 96%, 78% 40%, 54% 40%); }
+#begyndelsen .knap.primær .kugle.beg-lyn { background: #031018; }
+#begyndelsen .fl-handling .kugle.beg-lyn { width: 16px; height: 22px; border-radius: 0; box-shadow: none; }
+.beg-nøgle { position: absolute; left: 10px; bottom: 10px; z-index: 1; max-width: 70%; margin: 0; padding: 5px 9px; border-radius: 10px; background: rgba(8, 12, 28, 0.6); font-size: 13px; color: var(--svag); pointer-events: none; }
+.beg-nøgle:empty { display: none; }
+#begyndelsenVindue:has(.undertekst) .beg-nøgle { display: none; }
+/* Ikonet i menuen: en rund kolbe med rødt vand og et lyn */
+.ikon-begyndelsen { background:
+  linear-gradient(160deg, #fff3bf, #ffd43b) 30px 12px / 9px 13px no-repeat,
+  radial-gradient(circle at 50% 66%, #c2334a 0 9px, transparent 9.5px),
+  radial-gradient(circle at 50% 62%, rgba(169, 203, 255, 0.35) 0 14px, #a9cbff 14px 15.5px, transparent 16px),
+  linear-gradient(90deg, transparent 21px, #a9cbff 21px 22.5px, transparent 22.5px 29.5px, #a9cbff 29.5px 31px, transparent 31px) 0 6px / 100% 14px no-repeat; }
+.ikon-begyndelsen::before { content: ""; position: absolute; left: 31px; top: 9px; width: 10px; height: 15px; background: linear-gradient(160deg, #fff3bf, #ffd43b 45%, #fab005); clip-path: polygon(58% 4%, 22% 56%, 46% 56%, 38% 96%, 78% 40%, 54% 40%); }
+@media (max-width: 1150px) { #begyndelsen { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 290px); } }
+@media (max-width: 820px) and (orientation: portrait), (max-width: 820px) and (min-height: 501px) {
+  #begyndelsen { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(46vh, 1fr) auto; grid-template-areas: "top top" "vindue vindue" "venstre højre"; overflow-y: auto; }
+}
+@media (max-width: 560px) and (orientation: portrait) {
+  #begyndelsen { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(44vh, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; }
+  #begyndelsen .side-panel { overflow: visible; min-height: auto; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #begyndelsen { grid-template-columns: minmax(180px, 28%) minmax(0, 1fr) minmax(200px, 31%); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
+}
 .batteri-tal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
 .batteri-tal span { font-size: 12.5px; color: var(--svag); }

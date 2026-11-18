@@ -327,7 +327,7 @@ export const GÅDER = [
       },
     ],
     slut: 'Livets byggesten opstår let. Hvordan de blev til noget levende, ved ingen endnu.',
-    seDet: ['liv:protein', 'Se det selv: Liv, Fra opskrift til protein'],
+    seDet: ['begyndelsen', 'Prøv det selv: Begyndelsen i Liv'],
     // Jorden 4,54 mia. år (USGS). Dresser-formationen ca. 3,48 mia. år, "most scientists accept" (Wikipedia). Isua:
     // Nutman 2016 og Allwood 2018. 4,54 − 3,48 = 1,06. Miller: 5 aminosyrer (Lazcano og Bada 2003), DNA-modellen
     // 25. april 1953. Luften: Parker 2011. RNA-verdenen: Gilbert 1986, idéen fra 1960'erne (Fable E5). Nobel 1989 (Cech

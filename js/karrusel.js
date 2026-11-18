@@ -484,7 +484,7 @@ export function testAdgang() {
 }
 
 // "Din fremgang": tallene for hver del, som man selv åbner (i stedet for gule piller på alle kort)
-const ENHED = { opgaver: 'opgaver', opdaget: 'opdaget', set: 'besøgt' };
+const ENHED = { opgaver: 'opgaver', opdaget: 'opdaget', set: 'besøgt', ture: 'ture taget' };
 
 function visDinFremgang() {
   const data = hentFremgang();
