@@ -4,11 +4,11 @@
 
 ## Jeres beslutninger 18. november 2026
 - Højst **to tunge sessioner** (Opus) ad gangen, fordi grænsen på 5 timer deles. Store opgaver får en ny session pr. delopgave. Orkestratoren skifter ved ca. 250.000 tokens.
-- **Natten til 19. november (jeres ønske):** "Sørg for, at arbejdet fortsætter i nat. Jeg sover, så du må selv træffe beslutninger og vende det med mig i morgen. Det vigtigste er, at udviklingen ikke går i stå." Orkestratoren vælger selv (det forsigtige ved fakta) og skriver hvert valg som "valgt af orkestratoren 2026-11-18/19, kan ændres af jer". Retningsvalg og nye spor (Lys og farver, Strøm og magneter, Kvantefysik) startes stadig ikke.
+- **Natten til 19. november (jeres ønske):** "Sørg for, at arbejdet fortsætter i nat. Jeg sover, så du må selv træffe beslutninger og vende det med mig i morgen. Det vigtigste er, at udviklingen ikke går i stå." Orkestratoren vælger selv (det forsigtige ved fakta) og skriver hvert valg som "valgt af orkestratoren 2026-11-18/19, kan ændres af jer". Retningsvalg og nye spor (Lys og farver, Strøm og magneter, Kvantefysik) startes stadig ikke. **Jeres tilføjelse samme aften:** "Hvis du mangler noget at lave i nat, så gå videre med Gåder eller Opdagelser." Efter køen: Gåderne G4c/G4d (plan-gaader-3d.md) og Opdagelserne (de næste videnskabsfolk fra faktagrundlaget efter Huygens, plan og drejebog først).
 - Sessionerne må sende beskeder til orkestratoren (`.claude/settings.json`, PR #331).
 - Gåderne må køre i sporet Småting ved siden af prøverunden (jeres go 18. november), fordi prøverunden kun venter på jer.
 
-## Kører
+## Kører (kl. 20:40 UTC begge stoppet af grænsen og har fået "Fortsæt")
 - **Småting · Gåderne skarpere og det sorte hul** (session_01YQoBWHs53M6hHFF46P98gY, Opus høj): go til fem trin (navnene som HTML-tekst, linsen fra Kosmos med én linje i `linse.js`, MSAA kun i Gåderne, Antistof efter læsetid med "Næste" til at springe frem, måling).
 - **Molekyler · Liv L6** (session_01YQoBWMhds52GXAfGxVBmXQ, Opus høj): bygget og pushet til `claude/liv-l6-spor`, tests kører, så PR og merge. Den har skrevet `docs/prompt-ild-1.md` på sin gren.
 - **Småting · Prøverunden med jer** (session_01YQoBWLXCmupFKqMe2vhn6b, Sonnet): venter på jer (E20 B, tilbage-knappen).
