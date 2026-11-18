@@ -20,6 +20,7 @@ import { FØRSTE_ATOM } from './data/forloeb/foerste-atom.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbTest, forløbVink, lavTurKnap } from './forloeb.js';
 import { tagVentForløb } from './gaa.js';
 import { hentetSkærm } from './skaerme.js';
+import { flyvHjem, stopHjem, erILuften, antalILuften, hjemTest } from './vaerksted-hjem.js';
 
 const MAX_P = 118;
 const MAX_N = 180;
@@ -255,6 +256,7 @@ function startFørsteAtom() {
 function stopAtomDel() {
   // Et henfald, der venter, bliver færdigt nu. Ellers er værkstedet låst, når man kommer tilbage (fx fra Det periodiske system).
   atom.afslutHenfald();
+  stopHjem(); // et lys på vej til sit felt lander med det samme
   if (neutralTimer) {
     clearTimeout(neutralTimer);
     neutralTimer = null;
@@ -337,6 +339,7 @@ export function testAdgang() {
     tilstand: () => ({ ...tilstand }),
     forløb: forløbTest(),
     startForløb: () => startFørsteAtom(),
+    hjem: hjemTest(), // "Grundstoffet flyver hjem": iLuften(), sidste(), mærke() og lys()
     udgave: () => hentUdgave(),
     orbitaler: () => atom.orbitalListe(),
     // Spol atomet frem i små skridt, som på en skærm med 60 billeder i sekundet (testbrowseren tegner kun få)
@@ -597,6 +600,7 @@ function lavKnapper() {
   });
   $('knapNulstil').addEventListener('click', () => {
     if (!confirm('Vil du slette alle løste opgaver og opdagede grundstoffer?')) return;
+    stopHjem();
     fremgang.nulstilFremgang();
     hentetSkærm('molekyler')?.opdaterFremgang();
     lavMinitabel();
@@ -691,13 +695,13 @@ function lavMinitabel() {
 function opdaterMinitabel() {
   for (const felt of document.querySelectorAll('#minitabel .felt[data-nr]')) {
     const nr = Number(felt.dataset.nr);
-    const opdaget = fremgang.erOpdaget(nr);
+    const opdaget = fremgang.erOpdaget(nr) && !erILuften(nr); // feltet tændes først, når lyset er landet
     felt.classList.toggle('opdaget', opdaget);
     felt.classList.toggle('valgt', nr === tilstand.p);
     const g = grundstof(nr);
     felt.title = opdaget ? `${g.nr}. ${g.navn}` : `Nr. ${nr}: ikke opdaget endnu`;
   }
-  elementer.opdagetTæller.textContent = `Opdaget: ${fremgang.antalOpdaget()} af 118`;
+  elementer.opdagetTæller.textContent = `Opdaget: ${fremgang.antalOpdaget() - antalILuften()} af 118`;
 }
 
 function vælgFraTabel(nr) {
@@ -831,7 +835,11 @@ function tjekFremskridt() {
     lyd.opdaget();
     visBesked({ titel: `Nyt grundstof opdaget: ${g.navn} (${g.symbol})`, kort: `Nyt grundstof: ${g.navn}`, tekst: `Grundstof nr. ${p}. Nu kan du hoppe direkte til det i det periodiske system.`, type: 'opdaget' });
     atom.fejr(0x8ce99a);
-    opdaterMinitabel();
+    // Et lys flyver fra atomet til feltet i det lille periodiske system (også under turen, js/vaerksted-hjem.js)
+    flyvHjem({
+      nr: p, symbol: g.symbol, navn: g.navn, farve: KATEGORIER[g.kategori].farve, atom: atom.gruppe, vindue: $('vaerkstedVindue'),
+      opdater: opdaterMinitabel, antal: () => fremgang.antalOpdaget(),
+    });
   }
   for (const o of OPGAVER) {
     if (passer(o, tilstand) && fremgang.løs(o.id)) fejrOpgave(o);

@@ -1,6 +1,6 @@
 // Forløb-klodsen (js/forloeb.js) med "Dit første atom" i Værkstedet: starter første gang og ikke anden gang, panelerne er
 // skjult imens, hvert trins handling, helium med to protoner uden neutroner, H og He opdaget, kernesætningen til sidst,
-// "Udforsk selv ›", "‹", "Næste ›" før handlingen (viser den), ✓ i "Din fremgang", forløbets eget link, og stien
+// "Udforsk selv ›", "‹", "Næste ›" før handlingen (viser den), ✓ i "Din fremgang", forløbets eget link, hydrogen, der flyver hjem, og stien
 // (stilguiden B, E20): handling uden gæt, prikkerne, når turen er taget, knapperne under Så og toningen bagefter.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { FØRSTE_ATOM } from '../js/data/forloeb/foerste-atom.js';
@@ -53,7 +53,18 @@ await page.click('.fl-gæt >> nth=1');
 // Efter gættet: Instruksen står hvidt, og spørgsmålet er tonet ned
 const hvidt = await T(() => ({ spurgt: Boolean(document.querySelector('.fl-spurgt')), gør: document.querySelector('.fl-gør')?.textContent ?? '' }));
 await page.click('.fl-handling'); // trin 2: + Elektron
+// "Grundstoffet flyver hjem" (E20): Under turen er tabellen skjult, så lyset flyver til et mærke øverst i scenen. Mærket ligger i scenens lag,
+// så Forløb-linjen ikke flytter sig, og det tager ikke fokus
+const hjemFør = await T(() => ({ h: atomlabTest.vaerksted.hjem.sidste(), m: atomlabTest.vaerksted.hjem.mærke() }));
+await page.waitForFunction(() => atomlabTest.vaerksted.hjem.sidste()?.landet, null, { timeout: 5000, polling: 100 });
 await fase('så');
+const hjem = await T(() => { const m = document.querySelector('.hjem-mærke'); return { m: atomlabTest.vaerksted.hjem.mærke(), iScenen: Boolean(m?.closest('#vaerkstedVindue .vindue-lag')),
+  iMærket: Boolean(m?.contains(document.activeElement)), knapper: m?.querySelectorAll('button, a, [tabindex]').length ?? -1,
+  linje: (() => { const l = () => JSON.stringify(document.querySelector('.forløb-linje').getBoundingClientRect()); const med = l(); m.style.display = 'none'; const uden = l(); m.style.display = ''; return med === uden; })() }; });
+await page.screenshot({ path: `${UD}/trin2-mærke.png` });
+tjek('under turen flyver hydrogen hjem til et mærke i scenen ("Nyt grundstof: Hydrogen", 0 → 1 af 118), linjen står stille, og fokus bliver',
+  hjemFør.h?.nr === 1 && hjemFør.h.mål === 'mærke' && /0 af 118/.test(hjemFør.m?.tekst) && /Hydrogen/.test(hjem.m?.tekst) && /1 af 118/.test(hjem.m?.tekst)
+  && hjem.iScenen && !hjem.iMærket && hjem.knapper === 0 && hjem.linje, JSON.stringify({ hjemFør, hjem }));
 tjek('"Næste ›" står der i alle faser (stille før handlingen), under Så ingen døde knapper, gæt og knap står samtidig, og efter gættet står instruksen hvidt',
   næsteStille && knapUnderSå && gætFørst && hvidt.spurgt && /elektron/i.test(hvidt.gør), JSON.stringify({ næsteStille, knapUnderSå, gætFørst, hvidt }));
 const fagord = await T(() => [...document.querySelectorAll('.fl-tekst .fagord')].map((k) => k.dataset.ord).join(' '));
