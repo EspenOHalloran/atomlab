@@ -1,5 +1,11 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (18. november 2026): Pluto MP4, hjertet, bjergene og flybyen. Merkur og Pluto er færdige** ([drejebog-merkur-pluto.md](../../drejebog-merkur-pluto.md), [kode/pluto.md](../../kode/pluto.md)).
+- **Stederne** Hjertet (Sputnik Planitia med mangekanterne) og Bjergene af vandis (Tenzing Montes med sletten bagved) i træet. Datoen glider, så Solen står mod nordvest som på New Horizons' fotos. Wright Mons, Burney, Belton Regio og Tartarus Dorsa er navne på kloden med en kort side.
+- **Et lokalt net** over hjertet og bjergene af New Horizons' kort med 300 m pr. pixel (`lav_pluto_steder.py`: ca. 400 m pr. pixel på pc og 810 m på tablet). Det hentes først ved stederne eller flybyen.
+- **Flybyen med 5 stop** i New Horizons' rækkefølge: Pluto og Charon i rigtig skala, hjertet, bjergene, Charon og modlys.
+- **Siden:** de fire spørgsmål (ingen kratere i hjertet, is som bjerg, Charon stille på himlen, hvordan ved vi det), "Gå videre" til overblikket, Neptun og kvælstof, og "Isvulkan" i Ordbogen. Faktatjek i [del 8b, afsnit 13](../../fakta-solsystemet/del8b-faktatjek-merkur-og-pluto.md) (faktatjekkene MP2-MP4 er flyttet ud af del 8, som var over 30 KB). `tests/pluto.mjs` har 33 tjek (10 nye).
+
 **Lavet (17. november 2026): Turen ned til Venera 13 efter jeres feedback** ("jeg forstår ikke rigtig, hvad det gør").
 - **Problemet:** Fra ca. 100 km var billedet én ensfarvet flade, og kun måleren skiftede. Underteksten stod uændret hele vejen.
 - **A. Seks undertekster** skifter undervejs: over skyerne, inde i skyerne, stuetemperatur (ca. 55 km), under skyerne, varmere end en ovn og landet (`NED_TRIN`, faktatjekket i [del 7, afsnit 13](../fakta-solsystemet/del7-venus.md)). Turen tager nu 34 s og går langsomt forbi 55 km. "Lige nu" peger på søjlen i stedet for at gentage tallene.

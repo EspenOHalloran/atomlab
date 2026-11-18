@@ -26,6 +26,29 @@
 - **Fanen døde ved Jezero (1. kørsel):** Jeres svar: "Jeg tror, det skyldtes, at pc'en var optaget af andre ting. Den kom igen, da jeg vendte tilbage til skærmen." Den frøs altså og kom tilbage, den gik ikke ned. Tidligere tekst: Et gæt: hukommelsen. Landskabets kort bliver i grafikkortet, så efter Gale og Jezero er der mange store kort (skøn: flere hundrede MB) på et grafikkort, der deler hukommelse med en pc, der i forvejen var presset. Det skal måles (måleren viser ikke hukommelsen endnu).
 - **Mangler:** tabletten, og en gentagelse på Iris Xe.
 
+## Mars anden gang: store kort i strimler (18. november 2026)
+*Målt med `node tests/vaerktoejer/maal-anden-gang.mjs tablet stå` (fuld grafik, tablet-udgaven, uden grafikkort): Mars første gang, efter Jupiter og efter menuen, og Stå på Mars ved Naukluft to gange. Testbrowseren tegner hvert billede på 80-300 ms med fuld grafik, så billeder i sekundet siger intet. Tiden for hvert kort i grafikkortet kan sammenlignes.*
+
+**Hvad koster anden gang (før):** De samme kort som første gang, nu fra browserens cache, fordi de frigives, når man forlader Mars (forslag G). Shaderne koster ikke noget anden gang ("10 nye shadere 0,0 ms", browseren husker dem), og billederne pakkes allerede ud uden for hovedtråden (`vendt`). Det, der giver de lange billeder, er overførslen til grafikkortet: mars-8k.jpg 308-364 ms i ét billede, mars-hoejde-4k.png 53-62 ms og i Stå på Mars de seks 4k-kort 52-100 ms hver lige efter hinanden. På Tab A11 var det 127 ms for 8k og 30-360 ms for 4k (jeres måling 17. november 2026).
+
+**Rettelsen:** Kortkøen lægger et stort kort ind i strimler, én pr. billede, og strimlerne tilpasser sig, så hver tager ca. 8 ms (`js/solsystem/kortkoe.js`). Et forsøg først: 8k-kortet på én gang 208 ms, i 8 strimler ca. 20 ms hver.
+
+| | Før | Efter |
+|---|---|---|
+| Det største kort i ét billede (hele turen) | 364 ms (mars-8k.jpg) | 37 ms (jupiter-2k.jpg). Den største strimmel 13 ms |
+| mars-8k.jpg ved anden åbning | 323 ms i ét billede | 12-16 strimler på 5-12 ms |
+| mars-hoejde-4k.png | 53-62 ms | 4 strimler på 11-13 ms |
+| Stå på Mars, landskabets 4k-kort | 52-100 ms hver | 8 strimler på 4-13 ms hver |
+| Til Mars' kort er klar, anden gang (testbrowseren) | 4,5 s | 8,2 s |
+| Fra flyvningen er slut, til landskabet vises, anden gang (testbrowseren) | 18,1 s | 40,5 s |
+| Teksturer i grafikkortet til sidst | 508 MB | 508 MB |
+
+**Opus' læsning:**
+- **Overførslen er delt op:** Intet billede lægger mere end ca. 13 ms kort ind i testbrowseren. På Tab A11 skulle 8k-kortet blive ca. 16 strimler på ca. 8 ms i stedet for ét billede på 127 ms. Hukommelsen er den samme.
+- **Ventetiden er længere i testbrowseren,** fordi hver strimmel venter på et billede, og testbrowseren kun tegner 3-10 billeder i sekundet. På tabletten (60 billeder i sekundet) er det ca. 0,3 s for 8k-kortet og ca. 0,2 s for hvert 4k-kort. Mars ses imens med 2k-kortet, og landingen toner først over, når kortene er klar, som før.
+- **Tilbage i testbrowseren:** ét billede på ca. 2 s, når den sidste strimmel er lagt ind (mipmaps af 8k-kortet, `generateMipmap`). Før lå det i det samme billede som hele kortet. I testbrowseren regner processoren mipmaps. På en tablet gør grafikkortet det, så det koster formentlig kun lidt dér, men det er ikke målt. Viser jeres måling stadig et langt billede lige efter "strimmel 16 af 16", er næste mulighed at lave de mindre niveauer selv uden for hovedtråden (`createImageBitmap` med `resizeWidth`) og lægge dem ind som strimler.
+- **Mangler:** jeres måling på Tab A11 (står i "Ikke afprøvet").
+
 ## Testbrowseren før og efter del 3 (A, F og den glidende landing, 14. november 2026)
 *Målt med `node tests/vaerktoejer/maal-landing.mjs tablet` (fuld grafik, tablet-udgaven, uden grafikkort). Kun til at sammenligne: Testbrowserens tider svinger meget, fordi kortene skal vente på det, der stadig tegnes.*
 - **Før:** Billedet lige efter toningen var 2.294 ms ved Naukluft (3 shadere 644 ms og kortene 1.621 ms: gale-h2.png 344 ms, gale-naukluft-h1.png 297 ms, gale-naukluft-f0.jpg 247 ms …) og 2.051 ms ved Randen (kortene 2.020 ms). Mars åbnes: mars-8k.jpg 988 ms og mars-hoejde-4k.png 1.105 ms, hver i sit billede.
