@@ -44,7 +44,7 @@ import { hent, glem, iLager } from '../solsystem/hent.js';
 import { startDato } from '../solsystem/dato.js';
 import { lavHentebjælke, tonInd } from '../hentning.js';
 import { VENUS, pol, knude, solRetning, meridian, underSolen, datoMedTid, lokalTid, GLØD } from '../data/venus.js';
-import { SIDE, SIDER, TUR, TUR_SLUT } from '../data/sider/venus.js';
+import { SIDE, SIDER, TUR, TUR_SLUT, NED_TRIN } from '../data/sider/venus.js';
 import { vindVed, SKY_HØJDE } from '../data/vinde-venus.js';
 
 const S = 1000; // km pr. enhed
@@ -376,6 +376,7 @@ export default {
       vis(id);
       // Turen ned fra træet får flybyens undertekst og "Lige nu". Andre steder rydder flybyens tekster væk.
       const ned = TUR.at(-1);
+      nedPrikker = null;
       if (id === 'ned') { fase(ned.titel, ned.tekst); forklaring(ned.nu); } else { fase(null); forklaring(''); }
     }
     // Flyv hen til et sted i træet (også fra flybyen)
@@ -441,8 +442,9 @@ export default {
     const underSkyder = { skyder: true, navn: 'Under skyerne', min: 0, max: 100, trin: 1, værdi: under, vis: (v) => (v ? `${v} % væk` : 'skyerne er der'), ændring: (v) => { underMål = null; sætUnder(v); } };
     function lavKnapper() {
       underSkyder.værdi = Math.round(under);
+      // (på turen ned styrer turen selv skyerne, så skyderen er skjult)
       styring.splice(0, styring.length,
-        underSkyder,
+        ...(nedtur.aktiv ? [] : [underSkyder]),
         { tekst: 'Ultraviolet (som Akatsuki)', til: uv, skift: (til) => { uv = til; } },
         { tekst: 'Gløden på natsiden', til: glødTil, skift: (til) => { glødTil = til; } },
         { tekst: 'Bjergene 10 gange højere', til: høj, skift: (til) => { høj = til; } },
@@ -544,7 +546,13 @@ export default {
       },
       jordKm: () => (venus.punkt(v13.ramme.retning, lokal).length() - 1) * R_KM,
       ændret: () => lavKnapper(),
+      // Underteksten skifter ved hvert trin på vejen ned (NED_TRIN i js/data/sider/venus.js)
+      nytTrin: (id) => {
+        const t = NED_TRIN.find((x) => x.id === id);
+        if (t && visning === 'ned') fase(t.titel, t.tekst, nedPrikker);
+      },
     });
+    let nedPrikker = null; // [nr, ialt], når turen ned er flybyens sidste stop
 
     // ---------- Flybyen (V5, js/solsystem/flyby.js): 6 stop, teksterne i js/data/sider/venus.js ----------
     // Skyerne: lavt over skyerne ved grænsen mellem dag og nat, i ultraviolet og med ⏩
@@ -564,6 +572,8 @@ export default {
       else vis(stop.id); // Maxwell Montes, Maat Mons og turen ned
       lavKnapper();
       forklaring(stop.nu + (nr === TUR.length - 1 ? TUR_SLUT : ''));
+      // (underteksterne på turen ned beholder flybyens prikker)
+      nedPrikker = stop.id === 'ned' ? [nr + 1, TUR.length] : null;
     }
     const flyby = lavFlyby({ stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(), slut: TUR_SLUT });
     function startTur() {

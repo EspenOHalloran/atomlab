@@ -160,3 +160,13 @@ Kilde: https://nssdc.gsfc.nasa.gov/planetary/factsheet/venusfact.html
 - **Venera 13's foto (NSSDC):** 170°, mørkeblåt, grønt og rødt filter, "Part of the spacecraft is at the bottom of the image", "On the ground in foreground is a camera lens cover", "The true color is difficult to judge". Licens: Commons PD-RU-exempt-autocam, NSSDC "USSR/NASA". *S.*
 - **Zoozve** (kvasimåne, kredser om Solen) og **de næste sonder** skrevet som "i 2030'erne" (E18, punkt 9). *S.*
 - **Ikke skrevet:** hvor lang tid Venera 13 brugte på vejen ned (ikke slået op, skrevet "meget længere"), hvor langt man kan se under skyerne, og "det mest jordlignende sted i Solsystemet".
+
+## 13. Faktatjek: underteksterne på turen ned (17. november 2026, Opus, efter jeres feedback)
+Seks undertekster (`NED_TRIN` i `js/data/sider/venus.js`). Alle tal står allerede i afsnit 12 eller i VIRA (`js/data/luft-venus.js`):
+- **Over skyerne:** "under −40 °C" (VIRA: −43 °C ved 70 km og koldere over). "Et lag på ca. 20 km" (afsnit 12, Wikipedia). *S.*
+- **Inde i skyerne:** dråber af svovlsyre (afsnit 12). "Herinde kan man ikke se jorden" (skyerne skjuler jorden for synligt lys). *S.*
+- **Stuetemperatur:** 27 °C og 0,53 bar ved 55 km (VIRA, E18). "Halvt så højt lufttryk som ved havet". Luften er kuldioxid (afsnit 3). *S.*
+- **Under skyerne:** Lyset er orange, fordi skyerne og luften tager det meste af det blå (afsnit 3 og Venera 13's side). *S.*
+- **Varmere end en ovn:** "over 300 °C" ved 20 km (VIRA: 306 °C). "Langt varmere end i en ovn, når man bager" (man bager ved ca. 150-250 °C, almen viden). Bly smelter ved 327 °C (afsnit 12). Den gamle "ovn på fuld styrke" er fjernet, for ovne med pyrolyse bliver ca. 500 °C. *R.*
+- **Landet:** 457 °C og 89 gange Jordens lufttryk og 127 minutter (NSSDC). "Ca. 900 m under havet" (afsnit 12: 92 bar er ca. 900 m, 89 bar ca. 880 m). *S.*
+- **Ærligt talt:** "Turen tager ca. et halvt minut" (34 s og 2,5 s), stadig "meget længere" i virkeligheden (ikke slået op).

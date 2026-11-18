@@ -1828,10 +1828,17 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .venus-ned { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; pointer-events: none; }
 .venus-maaler { display: flex; gap: 6px; padding: 6px 8px; border-radius: 12px; background: rgba(8, 12, 30, 0.78); border: 1px solid var(--panel-kant); font-variant-numeric: tabular-nums; }
 .venus-maaler[hidden], .venus-foto[hidden] { display: none; }
-.venus-maaler div { display: flex; flex-direction: column; min-width: 92px; padding: 0 6px; }
-.venus-maaler div + div { border-left: 1px solid var(--panel-kant); }
+.venus-maaler .vm-tal { display: flex; flex-direction: column; justify-content: center; min-width: 92px; padding: 0 6px; }
+.venus-maaler .vm-tal + .vm-tal { border-left: 1px solid var(--panel-kant); }
 .venus-maaler span { font-size: 13px; color: var(--svag); white-space: nowrap; }
 .venus-maaler strong { font-size: 20px; line-height: 1.2; white-space: nowrap; }
+.vm-soejle { position: relative; width: 62px; height: 96px; margin-right: 4px; flex: none; } /* Søjlen: hvor man er i forhold til skyerne (fra jorden til 100 km), med en prik, der glider ned */
+.vm-bar { position: absolute; left: 4px; top: 6px; bottom: 6px; width: 10px; border-radius: 5px; background: linear-gradient(#0b1030, #6a3a18 70%, #c0702c); }
+.vm-skyer { position: absolute; left: -2px; right: -2px; border-radius: 3px; background: rgba(235, 225, 195, 0.75); }
+.vm-prik { position: absolute; left: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; border: 2px solid var(--accent, #6cf); box-shadow: 0 0 6px rgba(255, 255, 255, 0.7); }
+.vm-soejle small { position: absolute; left: 20px; font-size: 11px; line-height: 12px; color: var(--svag); white-space: nowrap; }
+.vm-soejle small:first-of-type { top: 0; }
+.vm-soejle .vm-skytekst { color: #efe6cc; transform: translateY(-50%); margin-top: 6px; }
 .venus-foto { margin: 0; width: min(760px, 100%); display: flex; flex-direction: column; gap: 3px; }
 .venus-foto img, .side-foto img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 220, 170, 0.25); }
 .venus-foto figcaption { align-self: center; padding: 3px 8px; border-radius: 8px; background: rgba(8, 12, 30, 0.72); font-size: 13px; color: var(--svag); text-align: center; }
@@ -1839,11 +1846,15 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .side-foto figcaption { margin-top: 4px; font-size: 13px; color: var(--svag); line-height: 1.35; }
 @media (max-width: 560px) {
   .venus-maaler { gap: 2px; padding: 4px 4px; }
-  .venus-maaler div { min-width: 0; padding: 0 5px; }
+  .venus-maaler .vm-tal { min-width: 0; padding: 0 5px; }
+  .vm-soejle { width: 50px; margin-right: 0; }
+  .vm-soejle small { font-size: 10px; left: 18px; }
   .venus-maaler span { font-size: 13px; white-space: normal; }
   .venus-maaler strong { font-size: 16px; }
   .venus-foto figcaption { display: none; }
 }
+@media (max-height: 500px) { .venus-maaler { gap: 2px; padding: 4px; } .venus-maaler .vm-tal { min-width: 0; padding: 0 5px; } .venus-maaler span { font-size: 12px; white-space: normal; } .venus-maaler strong { font-size: 16px; } } /* Lav skærm på langs (telefonen): måleren skal passe mellem panelerne */
+@media (max-height: 500px) { .vm-soejle { width: 18px; height: 56px; margin-right: 0; } .vm-soejle small { display: none; } .venus-ned { padding: 0 26px; box-sizing: border-box; } } /* (søjlen uden tekst, og pilene ‹ › ved panelerne må ikke dække den) */
 /* Merkur (js/kosmos/merkur-sol.js): tegningen af Solen, der vender om, ved horisonten oven på 3D-billedet */
 .merkur-sol { margin: 0; width: min(340px, 100%); display: flex; flex-direction: column; gap: 4px; padding: 6px; border-radius: 12px; background: rgba(8, 12, 30, 0.78); border: 1px solid var(--panel-kant); pointer-events: auto; }
 .merkur-sol[hidden] { display: none; }
