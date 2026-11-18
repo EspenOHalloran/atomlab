@@ -1,5 +1,7 @@
 # Lige nu: Småting
 
+**Orkestratoren:** status, køen og natten til 19. november står i [orkestrator-status.md](../orkestrator-status.md).
+
 *Spor i [oversigten](../lige-nu.md) til små rettelser på tværs, tests, dokumenterne og arbejdsgangen. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/smaating.md](../arkiv/historik/smaating.md). Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (Rumtid, det fjerde spørgsmål).*
 
 **Senest lavet (18. november 2026): Opdagelserne i menuen på en telefon på langs** (jeres fund via orkestratoren). Under 500 px højde er kortene i ringen 300 px brede, og delene står i én række. Med tre dele (Atomer og Biblioteket) stak "Opdagelserne" og "Det periodiske system" ud over kanten. Nu går den sidste del på en ny linje, når der ikke er plads (`flex-wrap` og `:has(> :nth-child(3))` i `style.css`). Kort med to dele (Kernerne, Rummet og Liv) er de samme. Tjekket på 1000×460, 915×412, 844×390, 740×360 og 390×844.
