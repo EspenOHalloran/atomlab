@@ -75,14 +75,16 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  // "Det så du": sætningen fra 1659 og tre veje (drejebogen afsnit 3, trin 5). Den tredje er "Bladr i bogen fra 1659"
-  // (H4, jeres svar 17. november 2026). Laboratoriet med ringen står stadig i opslaget, når man bladrer tilbage.
+  // "Det så du": en linje og tre veje (drejebogen afsnit 3, trin 5). Laboratoriet med ringen står stadig i opslaget, når
+  // man bladrer tilbage.
+  // Den røde tråd (18. november 2026): Den vigtige vej er hemmeligheden på næste opslag, og sætningen fra 1659 står ikke
+  // her, for den er svaret dér. Saturn står også som den vigtige knap i "Om Huygens".
   const v = åben.tekster.VEJE;
-  del.slutTekst = () => `${v.sætning} "${åben.tekster.ANAGRAM.dansk}"`;
+  del.slutTekst = () => v.sætning;
   del.veje = [
-    { tekst: v.saturn, primær: true, gør: () => åbnFænomen('solsystem', 'saturn', 'kanten') },
-    { tekst: v.anagram, gør: () => visOpslag('gaaden') },
+    { tekst: v.anagram, primær: true, gør: () => visOpslag('gaaden') },
     { tekst: v.bog, gør: () => visOpslag('bogen') },
+    { tekst: v.saturn, gør: () => åbnFænomen('solsystem', 'saturn', 'kanten') },
   ];
   del.slut = () => {
     bog?.lås(false);
@@ -122,7 +124,7 @@ async function åbnBog(id, { fortælling = false } = {}) {
     lavScene: (o, felt) => {
       if (!scenemodul) return null;
       if (o.id === 'gaaden') {
-        return scenemodul.lavGåde(felt, tekster.ANAGRAM, { rolig: ROLIG, tekster: tekster.GÅDE, løst: Boolean(løste()[b.id]), påLøst: () => { lyd.klaret(); gemLøst(b.id); } });
+        return scenemodul.lavGåde(felt, tekster.ANAGRAM, { rolig: ROLIG, tekster: tekster.GÅDE, løst: Boolean(løste()[b.id]), påLøst: () => { lyd.klaret(); gemLøst(b.id); }, påVidere: () => visOpslag('bogen') });
       }
       const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, anagram: tekster.ANAGRAM, påIgen: () => { lyd.klik(); startFortælling(); } });
       // Uden for forløbet er opslaget et laboratorium

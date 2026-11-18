@@ -32,13 +32,14 @@ export const SATURNS_ØRER = {
       },
       gør: 'Slib linsen: Gnid rundt på glasset, til billedet bliver skarpt.',
       // "over 3 meter": Han skriver "ikke over 12 fod" (s. 3), og linsen fra 1655 har 332 cm brændvidde (fælden "næsten 4 meter")
-      så: 'Med en bedre linse bliver kuglerne til to tynde arme. Huygens\' kikkert var over 3 meter lang.',
+      // Den røde tråd (18. november 2026): slutter med et spørgsmål, der leder videre til nætterne. Højst 22 ord
+      så: 'Med Huygens\' bedre linse i en kikkert på over 3 meter bliver kuglerne til to tynde arme. Men hvad er de?',
       ord: ['linse'],
     },
     {
       id: 'naetter',
       kapitel: 'Den lille prik',
-      spørg: 'En svag prik ved Saturn flytter sig fra nat til nat. Hvad er den?',
+      spørg: 'Christiaan kigger nat efter nat. En svag prik ved Saturn flytter sig. Hvad er den?',
       gæt: {
         valg: [
           { tekst: 'En stjerne', efter: 'Træk nætterne frem, til prikken er tilbage, hvor den startede.', svar: 'En stjerne ville ikke følge med Saturn. Prikken gik rundt om den.' },

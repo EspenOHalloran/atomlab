@@ -13,6 +13,14 @@ export const FORSIDE = {
   portrætTekst: 'Malet af Caspar Netscher i 1671. Huygens var ca. 42.',
   portrætAlt: 'Christiaan Huygens med langt, krøllet hår, tegnet som et gammelt kobberstik efter et maleri fra 1671.',
   begynd: 'Begynd',
+  // Introduktionen (den røde tråd, jeres ønske 18. november 2026: "Introduktionen til Huygens skal komme først"): hvem han
+  // var, og hvorfor han kiggede. Faktatjekket 18. november 2026: Galilei så tre kugler i 1610 (fakta afsnit 3), ører og
+  // håndtag er tavlens nr. II-IX (s. 35), 1610-1655 er 45 år, 25 år i 1655 indtil 14. april (Titan 25. marts 1655), og han
+  // sleb selv linser med sin bror (afsnit 1). Ikke "Galilei opfandt kikkerten". Alderen står kun her (26 i marts 1656).
+  intro: {
+    sted: 'Haag, 1655',
+    tekst: 'I dag ved alle, at Saturn har en ring. Men da den italienske astronom Galilei så Saturn i sin kikkert i 1610, lignede den tre kugler. Senere tegnede andre den med ører og håndtag, og i 45 år kunne ingen forklare det. Nu vil Christiaan Huygens, en ung hollænder på 25, der sliber sine egne linser, finde svaret.',
+  },
 };
 
 export const OPSLAG = [
@@ -30,11 +38,13 @@ export const OPSLAG = [
 
 // Vejene fra "Det så du" efter fortællingen (drejebogen afsnit 3, trin 5, og afsnit 5). sætning står foran den danske
 // sætning fra 1659 under kernesætningen.
+// Den røde tråd (18. november 2026): Sætningen fra 1659 står ikke her længere, for den er svaret på næste opslag. Den
+// vigtige vej er hemmeligheden, og Saturn står også sidst i bogen ("Om Huygens").
 export const VEJE = {
-  sætning: 'I 1659 afslørede han, hvad der stod:',
-  saturn: 'Se ringen forsvinde ved Saturn',
-  anagram: 'Løs hele anagrammet',
+  sætning: 'Men ANNULO var kun det første ord. Hvad stod der med resten af de 62 bogstaver?',
+  anagram: 'Hele hemmeligheden',
   bog: 'Bladr i bogen fra 1659',
+  saturn: 'Se ringen forsvinde ved Saturn',
 };
 
 // Opslaget "Hemmeligheden" (drejebogen afsnit 4): udfordringen med de otte brikker og "Lav dit eget anagram"
@@ -44,15 +54,19 @@ export const GÅDE = {
   // skriftet dateret 5. marts 1656 (s. 2 og s. 16-17), 62 bogstaver (s. 47), armene i én lige linje (s. 46). Grunden til
   // anagrammet: han var ikke helt sikker endnu og kunne vise løsningen senere (KNAW, Digitaal Wetenschapshistorisch
   // Centrum), og anagrammer var dengang en måde at gøre krav på at være først (JSTOR Daily). Løsningen i 1659 (s. 47).
+  // Den røde tråd (18. november 2026): Han er præsenteret på forsiden, så forordet er nu broen fra turen til gåden: hvorfor
+  // bogstaverne er sorteret efter alfabetet (rækken s. 47: a c d e … u), så ingen kan læse dem, men alle kan tælle efter.
   forord: {
     sted: 'Haag, marts 1656',
-    tekst: 'Christiaan Huygens er en ung mand på 26, der selv sliber linser til sine kikkerter. Med den lange kikkert har han set Saturns arme stikke ud i én lige linje, og han tror, de er en tynd, flad ring rundt om planeten. Men lige nu er armene væk, så han kan ikke vise det, og andre kigger også på Saturn. Derfor trykker han sin idé som 62 blandede bogstaver, et anagram. Sådan gjorde forskere dengang, så de bagefter kunne bevise, hvem der var først.',
-    lille: 'I 1659 viste han løsningen i sin bog. Kan du finde den?',
+    tekst: 'Christiaan tror nu, at armene er en tynd, flad ring rundt om Saturn. Men lige nu er armene væk, så han kan ikke vise det, og andre astronomer kigger også på Saturn. Derfor trykker han sin idé som 62 bogstaver, sorteret efter alfabetet: et anagram. Ingen kan læse sætningen, men når han viser den, kan alle tælle efter, at bogstaverne passer. Sådan kunne en forsker dengang bevise, at han var først.',
+    lille: 'I 1659 viste han løsningen i sin bog. Kan du finde den først?',
     knap: 'Prøv gåden',
   },
   linje: 'Huygens\' hele hemmelighed: Læg de latinske ord på deres danske betydning. For hvert ord tæller bunkerne ned.',
   tilbage: 'bogstaver tilbage',
   løst: 'Alle 62 er brugt. Det passer.',
+  // Efter gåden: videre til bogen (den røde tråd)
+  videre: 'Se den i bogen fra 1659',
   løstFør: 'du har løst den før ✓',
   igen: 'Prøv igen',
   eget: 'Lav dit eget anagram',
@@ -110,7 +124,10 @@ export const bogstaver = (tekst) => [...tekst.toLowerCase().replace(/æ/g, 'ae')
 // Oeuvres complètes XV, se docs/fakta-videnskabsfolk/huygens.md).
 export const BOGEN = {
   titel: 'Bogen fra 1659',
-  linje: 'Systema Saturnium, trykt i Haag i 1659. Tryk på et sted, der lyser.',
+  // Den røde tråd (18. november 2026): hvad bogen er, og en sti gennem de fire sider (om pr. side, næste og sidst)
+  intro: 'I 1659 trykte Christiaan sin bog om Saturn: Systema Saturnium (Saturns system). Her er fire af de rigtige sider.',
+  næste: 'Næste side',
+  sidst: 'Havde han ret?',
   vælg: 'Tryk på et sted, der lyser. Så kommer latinen og vores oversættelse.',
   stedLatin: 'Latin',
   stedDansk: 'På dansk',
@@ -118,7 +135,7 @@ export const BOGEN = {
     {
       id: 'tavle', fane: 'Tavlen', fil: 'billeder/biblioteket/huygens-tavle.webp', b: 1000, h: 1069,
       alt: 'En sort tavle med 13 hvide tegninger af Saturn, nummereret I til XIII: kugler, ører og ringe.',
-      om: 'Tavlen ved s. 35: 13 tegninger af Saturn fra andre astronomer, samlet af Huygens.',
+      om: 'Først forvirringen: 13 tegninger af Saturn fra andre astronomer, som Huygens samlede ved s. 35. Kugler, ører og buer, og ingen vidste, hvorfor den skiftede form.',
       steder: [{
         id: 'nr1', navn: 'Nr. I', felter: [[11, 9.5, 25, 12]],
         latin: 'credibile est omnium emendatissimè nativam Saturni faciem nobis descripsisse (s. 37, om nr. X)',
@@ -128,7 +145,7 @@ export const BOGEN = {
     {
       id: 's16', fane: 's. 16', fil: 'billeder/biblioteket/huygens-s16.webp', b: 1000, h: 1411,
       alt: 'Side 16 med latinsk tekst og en tegning af Saturn som en rund kugle med en mørk stribe, uden arme.',
-      om: 's. 16: Saturn uden arme i januar 1656.',
+      om: 'Så dagen uden arme: På s. 16 skriver han om 16. januar 1656, da han kom hjem fra en rejse og så Saturn helt uden arme.',
       steder: [{
         id: 'jan16', navn: '16. januar 1656', felter: [[18, 12.6, 29, 2.8], [70.7, 15.3, 25.2, 2.6], [18, 17.9, 36.3, 2.6]],
         latin: 'Anno 1656. Jan. 16, hora 12 … Inveni autem brachiis suis spoliatum penitus',
@@ -138,7 +155,7 @@ export const BOGEN = {
     {
       id: 's47', fane: 's. 47', fil: 'billeder/biblioteket/huygens-s47.webp', b: 1000, h: 1414,
       alt: 'Side 47 med latinsk tekst, en lang række sorterede bogstaver og en tegning af Saturn med en flad ring.',
-      om: 's. 47: Her afslører Huygens anagrammet fra 1656.',
+      om: 'Så hemmeligheden: På s. 47 viser han de 62 bogstaver, du lige har talt, og hvad de betyder. Kan du finde dem?',
       steder: [
         {
           id: 'dato', navn: '25. marts 1656', felter: [[52, 15, 31.8, 2.6], [5.5, 17.6, 3.5, 2.2]],
@@ -160,7 +177,7 @@ export const BOGEN = {
     {
       id: 's48', fane: 's. 48', fil: 'billeder/biblioteket/huygens-s48.webp', b: 1000, h: 1411,
       alt: 'Side 48 med tæt latinsk tekst.',
-      om: 's. 48: Huygens svarer dem, der ikke tror på ringen.',
+      om: 'Til sidst svarer han dem, der ikke tror på ringen: Han har ikke fundet på den. Han har set den med sine egne øjne.',
       steder: [{
         id: 'fast', navn: 'Fast og varig', felter: [[35.5, 10.4, 34.8, 2.3], [43.5, 28.4, 28.5, 2.6]],
         latin: 'annulum hunc solidum ac permanentem (talem enim arbitror) … sed oculorum sensu … hunc quoque annulum satis evidenter me percipere',
@@ -199,7 +216,11 @@ export const OM = {
     { tal: '25 år', tekst: 'da han fandt Saturns måne Titan' },
     { tal: '62 bogstaver', tekst: 'i hans anagram' },
   ],
-  sætninger: 'Huygens og hans storebror sleb deres egne linser. Med en bedre kikkert fandt han ud af, at Saturns "ører" er en tynd, flad ring. Han gemte svaret i et anagram i 1656, og i 1659 stod løsningen i hans bog.',
+  // Den røde tråd (18. november 2026): Siden svarer på "Havde han ret?" fra s. 48. Ringen: "fast som en plade" er
+  // orkestratorens forslag. Ringene er over 95 % vandis med lidt sten og støv (NASA, Saturns ringe). Sonden: afsnit 1
+  sætninger: 'Huygens havde ret: Saturns "ører" er en tynd, flad ring. Men han troede, den var fast som en plade, og i dag ved vi, at den er utallige stykker is og lidt sten. I 2005 landede en rumsonde, der hedder Huygens, på Titan, den måne han fandt.',
+  // Gør det selv (drejebogen afsnit 5) som sidens vigtige knap, data-gaa="skærm:id:sted" (js/gaa.js)
+  knap: { tekst: 'Se ringen forsvinde ved Saturn', gaa: 'solsystem:saturn:kanten' },
   hvorfor: [
     {
       spørgsmål: 'Hvorfor så Galilei tre kugler?',
