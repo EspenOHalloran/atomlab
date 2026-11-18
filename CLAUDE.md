@@ -76,7 +76,7 @@ Der kører ofte flere sessioner samtidig. Næsten alle merge-konflikter var i de
 - **Nyt fænomen:** lav en fil i `js/kosmos/`, og sæt den ind i listen i `js/kosmos.js` eller `js/solsystem.js` og dens id i `js/data/faenomener.js`. Hold tallene korrekte, og skriv i nørd-teksten, hvad animationen snyder med.
 
 ## Regler, der gælder på tværs
-- Infopanelet i Værkstedet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Nørd) og være kort, eller ind i hjælpen.
+- Infopanelet i Værkstedet må ikke få en scrollbar. Nyt indhold skal ind i en af fanerne (Atom, Kerne, Fakta, Mere) og være kort, eller ind i hjælpen.
 - Et grundstof bliver "opdaget", når man har bygget et neutralt atom af det, og kernen kan hænge sammen. Først derefter kan man hoppe direkte til det i det lille periodiske system.
 - Test altid i telefon- og tabletstørrelse, når layoutet ændres. Paneler, der kan rulles, får klassen `mere`.
 - Fænomenerne bruger `dt` og `tid` fra `opdater(dt, tid)`, ikke `performance.now()`, så de står stille under pause.

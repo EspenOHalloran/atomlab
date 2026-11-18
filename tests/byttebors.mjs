@@ -106,13 +106,13 @@ tjek('panelet siger "ionbinding"', (await page.textContent('#bytteTrinTekst')).i
 tjek('nu kan man se harpunen', !(await page.isDisabled('#bytteHarpun')));
 await page.screenshot({ path: UD + '/3-par.png' });
 
-// Panelet har ingen rullebjælke (heller ikke med "For nørder" åben)
+// Panelet har ingen rullebjælke (heller ikke med "Vil du vide mere?" åben)
 const ingenRul = () => page.evaluate(() => { const p = document.getElementById('bytteInfo'); return p.scrollHeight <= p.clientHeight + 1; });
 tjek('højre panel uden rullebjælke', await ingenRul());
 await page.click('[data-lag="bytte-nørd"] summary');
-tjek('højre panel uden rullebjælke med "For nørder" åben', await ingenRul(), await page.evaluate(() => { const p = document.getElementById('bytteInfo'); return `${p.scrollHeight}/${p.clientHeight}`; }));
+tjek('højre panel uden rullebjælke med "Vil du vide mere?" åben', await ingenRul(), await page.evaluate(() => { const p = document.getElementById('bytteInfo'); return `${p.scrollHeight}/${p.clientHeight}`; }));
 await page.click('[data-lag="bytte-ærligt"] summary');
-tjek('"Ærligt talt" lukker "For nørder" (én ad gangen)', await page.evaluate(() => !document.querySelector('[data-lag="bytte-nørd"]').open && document.querySelector('[data-lag="bytte-ærligt"]').open));
+tjek('"Ærligt talt" lukker "Vil du vide mere?" (én ad gangen)', await page.evaluate(() => !document.querySelector('[data-lag="bytte-nørd"]').open && document.querySelector('[data-lag="bytte-ærligt"]').open));
 tjek('højre panel uden rullebjælke med "Ærligt talt" åben', await ingenRul(), await page.evaluate(() => { const p = document.getElementById('bytteInfo'); return `${p.scrollHeight}/${p.clientHeight}`; }));
 await page.click('[data-lag="bytte-ærligt"] summary');
 

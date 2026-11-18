@@ -190,7 +190,7 @@ export const BOGEN = {
 };
 
 // Bogens sidste opslag "Om Huygens" (H4, drejebogen afsnit 7). Budgettet: titel, højst to tal, højst tre sætninger,
-// højst fire spørgsmål. Derefter "For nørder" og "Ærligt talt", lukkede (foldebokse fra js/lag.js). Kilderne står i
+// højst fire spørgsmål. Derefter "Vil du vide mere?" og "Ærligt talt", lukkede (foldebokse fra js/lag.js). Kilderne står i
 // docs/fakta-videnskabsfolk/huygens.md (OC XV = Oeuvres complètes, bind 15, slået op 17. november 2026).
 export const OM = {
   titel: 'Om Huygens',
@@ -219,7 +219,7 @@ export const OM = {
     },
   ],
   nørd: {
-    titel: 'For nørder',
+    titel: 'Vil du vide mere?',
     linje: 'Kikkerten, Titan, ringens mål og lysets fart.',
     punkter: [
       'Kikkerten var 12 fod (over 3 m) med to linser og forstørrede ca. 50 gange efter hans egne tal (andre siger ca. 43). Senere byggede han kikkerter på 23 fod, der forstørrede næsten 100 gange. Galileis forstørrede højst ca. 30 gange (Huygens\' tal).',

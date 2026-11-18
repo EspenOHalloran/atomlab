@@ -33,7 +33,7 @@ export const ORDENE = {
     },
     {
       id: 'ordbog',
-      // ATG er start-ordet og giver methionin, den første byggesten (den klippes af senere, det står under "For nørder")
+      // ATG er start-ordet og giver methionin, den første byggesten (den klippes af senere, det står under "Vil du vide mere?")
       spørg: 'Nu er du cellen. ATG betyder start og den første byggesten. Slå de næste ord op.',
       gør: 'Find ordet, der lyser, i ordbogen.',
       så: 'Ord for ord bliver bogstaverne til en kæde af byggesten.',

@@ -32,7 +32,7 @@ for (const b of byggede()) {
   const t = await b.tekster();
   if (t.OPSLAG[0]?.slags !== 'forside' || !t.FORSIDE?.spørgsmål || !t.FORSIDE?.portrætAlt) fejlListe.push(`${b.id}: forsiden`);
   if (!t.OPSLAG.every((o) => ['forside', 'scene', 'sider', 'om'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
-  // "Om …" (H4): budgettet fra planen (højst to tal og fire spørgsmål, "For nørder" og "Ærligt talt")
+  // "Om …" (H4): budgettet fra planen (højst to tal og fire spørgsmål, "Vil du vide mere?" og "Ærligt talt")
   if (t.OPSLAG.some((o) => o.slags === 'om') && (!t.OM?.navn || !t.OM.tal?.length || t.OM.tal.length > 2 || !t.OM.hvorfor?.length || t.OM.hvorfor.length > 4
     || t.OM.hvorfor.some((h) => !h.spørgsmål || !h.svar) || !t.OM.nørd?.punkter?.length || !t.OM.ærligt?.punkter?.length
     || (t.OM.sætninger.match(/[.!?](\s|$)/g) ?? []).length > 3)) fejlListe.push(`${b.id}: "Om" holder ikke budgettet`);
@@ -356,7 +356,7 @@ for (const [navn, opsætning] of [
 }
 
 // Bogen selv (test 7, H4): siderne hentes først, når opslaget "Bogen fra 1659" åbnes, et glødende sted på s. 47 viser
-// latin og dansk, og "Om Huygens" er det sidste opslag med fire "Hvorfor?" og "For nørder" og "Ærligt talt" lukkede
+// latin og dansk, og "Om Huygens" er det sidste opslag med fire "Hvorfor?" og "Vil du vide mere?" og "Ærligt talt" lukkede
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
   const O = (f, a) => page.evaluate(f, a);
@@ -401,8 +401,8 @@ for (const [navn, opsætning] of [
   await page.click('#opdBog .bog-pil[data-bladr="-1"]');
   const tilbage = await O(() => ({ side: atomlabTest.opdagelser.scene()?.side(), sted: atomlabTest.opdagelser.scene()?.sted(), kort: !!document.querySelector('.hvorfor-kort:not(.skjult)') }));
   await page.waitForTimeout(300);
-  tjek('"Om Huygens" er det sidste opslag: to tal, fire "Hvorfor?" (et kort åbner og lukker ved bladring), "For nørder" og "Ærligt talt" lukkede, og bogen husker s. 47',
-    om.opslag === 'om' && om.nr === om.ialt - 1 && om.næste && om.tal === 2 && om.hvorfor === 4 && om.lag.map((l) => l.titel).join() === 'For nørder,Ærligt talt' && om.lag.every((l) => !l.åben)
+  tjek('"Om Huygens" er det sidste opslag: to tal, fire "Hvorfor?" (et kort åbner og lukker ved bladring), "Vil du vide mere?" og "Ærligt talt" lukkede, og bogen husker s. 47',
+    om.opslag === 'om' && om.nr === om.ialt - 1 && om.næste && om.tal === 2 && om.hvorfor === 4 && om.lag.map((l) => l.titel).join() === 'Vil du vide mere?,Ærligt talt' && om.lag.every((l) => !l.åben)
     && kort === 'Hvorfor et anagram?' && tilbage.side === 's47' && tilbage.sted === 'saetningen' && !tilbage.kort && sider.length === antal, JSON.stringify({ om, kort, tilbage, antal, sider: sider.length }));
   await ctx.close();
 }

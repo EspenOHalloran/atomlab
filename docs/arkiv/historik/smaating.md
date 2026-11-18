@@ -1,5 +1,7 @@
 # Historik: Småting
 
+**Senest lavet (17. november 2026): "Men hvorfor krummer stof rumtiden?" i Rumtid** (E19 afsnit 9 og noterne afsnit 4.3, jeres go 16. november). Det fjerde spørgsmål i `js/kosmos/rumtid.js`: "Det ved ingen." Teorien siger *at* og *hvor meget*, ikke hvorfor, og Newton skrev det samme i 1713 (General Scholium). "For nørder" har fået skridtet om tiden (ting falder den vej, tiden går langsomst, for langsomme ting), med ordene om, at det er et *hvordan*, ikke et *hvorfor*, og én sætning om bud uden navne på teorier ("ingen måling har vist, at et af dem er rigtigt"). Højre panel holder budgettet (fire spørgsmål) i alle fem størrelser uden vandret rullebjælke. To nye fælder i fakta-faelder.md. Linket til gåden sættes på, når kortet findes (efter Kvantefysik forløb 1). Rumtid har stadig fire tal øverst, hvor Retningen siger højst to (ikke rørt her).
+
 *Det forrige "Senest lavet" fra [lige-nu/smaating.md](../../lige-nu/smaating.md) flyttes hertil ordret, nyeste øverst (fra 7. november 2026). Det, der er ældre, står i den lukkede [historik.md](../historik.md).*
 
 **Senest lavet (17. november 2026): Batteriet i kulde** (jeres spørgsmål). Foldeboksen "Hvorfor er et koldt batteri hurtigt tomt?" (`data-lag="batteri-kulde"` i `index.html`, efter "Hvor meget energi?"), med en sætning om, at et koldt batteri på hylden aflader langsommere. Faktatjekket står i `docs/fakta-hvorfor.md`.

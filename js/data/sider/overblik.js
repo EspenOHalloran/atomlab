@@ -1,5 +1,5 @@
 // Teksterne i højre panel ved Solsystemets overblik (docs/drejebog-overblik.md, afsnit 3): titlen, to tal, højst tre
-// sætninger og fire spørgsmål, så "For nørder" og "Ærligt talt". Merkur og Pluto har deres eget besøg (MP1 og MP3,
+// sætninger og fire spørgsmål, så "Vil du vide mere?" og "Ærligt talt". Merkur og Pluto har deres eget besøg (MP1 og MP3,
 // 17. november 2026), så de korte paneler er væk. Tallene står i drejebogens afsnit 4. Uden Three.js.
 
 import { gå } from '../../sideknap.js';

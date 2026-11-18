@@ -89,7 +89,7 @@ export default {
         tekst: '<p>Ja. Vi kan stadig se lyset fra dengang, da de første atomer blev dannet. Universet er udvidet så meget siden, at lyset er strakt ud til mikrobølger. Det blev opdaget ved et tilfælde i 1964 af Arno Penzias og Robert Wilson. De mistænkte blandt andet duerne, der boede i antennen, og deres klatter for at give støjen. De fjernede duerne og gjorde rent, men støjen blev ved.</p>',
       },
       {
-        // Gåderne G3. "Hvem fandt på navnet?" er flyttet ned i "For nørder", så der stadig er fire spørgsmål.
+        // Gåderne G3. "Hvem fandt på navnet?" er flyttet ned i "Vil du vide mere?", så der stadig er fire spørgsmål.
         titel: 'Hvor blev antistoffet af?',
         tekst: `<p>Big Bang burde have lavet lige meget stof og antistof, og når de mødes, bliver begge til stråling. Alligevel er næsten alt i universet stof. Hvorfor der blev noget tilovers, ved ingen. ${gå('gaader:antistof', 'Gåden: Hvor blev antistoffet af?')}</p>`,
       },

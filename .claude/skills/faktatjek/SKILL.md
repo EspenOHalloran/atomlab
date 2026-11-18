@@ -11,6 +11,6 @@ description: Faktatjek nye eller ændrede tekster i AtomLab med tal, datoer, for
    - Citater skal have den præcise ordlyd og den oprindelige kilde. Står citatet oversat, skal det siges. Kan ordlyden ikke bekræftes, droppes citatet.
    - Kan en kilde ikke læses direkte (kun et søgeresultat), så sig det.
 4. **Saml resultatet** i en tabel: påstand, OK, ret eller fjern, kilde og forslag til ny tekst.
-5. **Ret teksterne.** Er du i tvivl, så skriv mere forsigtigt eller fjern det. Forenklinger skal siges ærligt (fx i "Ærligt talt" eller under "For nørder").
+5. **Ret teksterne.** Er du i tvivl, så skriv mere forsigtigt eller fjern det. Forenklinger skal siges ærligt (fx i "Ærligt talt" eller under "Vil du vide mere?").
 6. **Sproget:** Teksten skal stadig være let at læse for en 13-årig, med korte sætninger. Nye fagord skal i `js/data/ordbog.js`.
 7. **Skriv nye fælder** ind i `docs/erfaringer/fakta-faelder.md`, så de ikke sker igen.

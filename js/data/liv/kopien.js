@@ -67,7 +67,7 @@ export function nyKopistige(tilfældig = Math.random) {
   }
 }
 
-// Panelet i "Leg frit: Kopien" (budgettet i docs/retning.md: højst to tal og tre sætninger fremme, resten i "For nørder").
+// Panelet i "Leg frit: Kopien" (budgettet i docs/retning.md: højst to tal og tre sætninger fremme, resten i "Vil du vide mere?").
 // Kilder (docs/fakta-liv/dna-opskriften.md, afsnit 4): 1,46 kb/min = 24 bogstaver i sekundet pr. kopigaffel (Conti m.fl.
 // 2007). Én gaffel alene: 6,1 · 10⁹ / 24 = 2,5 · 10⁸ s ≈ 8 år. 30.000-50.000 startsteder (Hutchins m.fl. 2015) med to
 // gafler hver giver titusindvis af gafler. Bakterier ca. 1.000 i sekundet (OpenStax 14-4). "Nogle timer": 8 timer er ikke

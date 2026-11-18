@@ -1166,7 +1166,7 @@ function opdaterAlt() {
   opdaterMåler();
 }
 
-// Overskriften, vejledningen, "For nørder" og "Ærligt talt" for parret (skrives kun, når man skifter par)
+// Overskriften, vejledningen, "Vil du vide mere?" og "Ærligt talt" for parret (skrives kun, når man skifter par)
 function skrivParTekster() {
   $('bytteParTitel').textContent = par.bytter === false ? 'Natrium + natrium'
     : `${metal.navn} + ${par.tagere === 2 ? '2 ' : ''}${lille(par.ikkemetal)}${par.hverdag ? ` (${par.hverdag})` : ''}`;

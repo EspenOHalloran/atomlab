@@ -87,7 +87,7 @@ function lavKort() {
   kort.setAttribute('role', 'dialog');
   kort.innerHTML = `<div class="hk-top"><strong class="hk-titel"></strong><button class="hk-luk" title="Luk (Esc)" aria-label="Luk">×</button></div>
     <div class="hk-tekst"></div>
-    <details class="hk-nørd"><summary>For nørder</summary><p></p></details>
+    <details class="hk-nørd"><summary>Vil du vide mere?</summary><p></p></details>
     <div class="hk-knapper"><button class="knap lille svag hk-tilbage">‹ Tilbage</button><button class="knap lille hk-næste"></button><button class="knap lille hk-link"></button></div>`;
   document.body.append(kort);
   kort.querySelector('.hk-luk').addEventListener('click', () => {

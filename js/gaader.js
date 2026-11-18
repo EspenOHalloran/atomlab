@@ -4,7 +4,7 @@
 // Et kort har en scene i 3D bag sig (G4a): js/gaader/scene.js hentes med import() første gang og får trinet med
 // scene.vis(id, trin, valgt). Panelet står til højre eller forneden (klassen paa-kort på #gaader).
 // Teksterne står i js/data/gaader.js. Gættets knapper og prikkerne har samme udseende som forløbene (js/forloeb.js),
-// "For nørder" og "Ærligt talt" er de fælles foldebokse (js/lag.js), "Se det selv" er en data-gaa-knap (js/gaa.js), og et trin
+// "Vil du vide mere?" og "Ærligt talt" er de fælles foldebokse (js/lag.js), "Se det selv" er en data-gaa-knap (js/gaa.js), og et trin
 // med hvorfor får det fælles "Hvorfor?"-kort under Så (fx "Hvornår er noget opdaget?", Gåderne G3).
 
 import { gådeMed, bygget, påSkinnen, SKINNE_ÆRLIGT, skalaOrd, førsteLinje, FØRSTE_GÅDE } from './data/gaader.js';
@@ -172,7 +172,7 @@ export function visGåde(id) {
     ${g.nyt ? `<p class="gaade-nyt"><b>Nyt siden sidst (${tegn(g.nyt.dato)}):</b> ${tegn(g.nyt.tekst)}</p>` : ''}
     <div class="gaade-trin" id="gaadeTrin" aria-live="polite"></div>
     <div class="gaade-lag">
-      ${g.nørd ? `<details class="lag-boks" data-lag="gaade-nørd"><summary><strong>For nørder</strong><span class="lag-kort">Tal, navne og flere detaljer</span></summary>${g.nørd}</details>` : ''}
+      ${g.nørd ? `<details class="lag-boks lag-mere" data-lag="gaade-nørd"><summary><strong>Vil du vide mere?</strong></summary>${g.nørd}</details>` : ''}
       ${g.ærligt ? `<details class="lag-boks ærligt" data-lag="gaade-ærligt"><summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad kortet forenkler</span></summary>${g.ærligt}${g.scene?.ærligt ?? ''}<p>${tegn(SKINNE_ÆRLIGT)}</p></details>` : ''}
     </div>`;
   lavLagBokse(kort);
