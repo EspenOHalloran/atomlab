@@ -163,6 +163,7 @@ const FRAGMENT = /* glsl */ `
   uniform vec4 bFarve;
   uniform float uSkygger;                  // 0, før skyggekortene er regnet
   uniform float uKamH;                     // kameraets højde (m)
+  uniform float uStenArt;                  // stenene: 0 plader af sandsten (Gale), 1 kantede sten og klippeflader (Jezero)
   varying vec2 vEN;
   varying vec3 vRel;
   varying vec3 vN;
@@ -173,6 +174,25 @@ const FRAGMENT = /* glsl */ `
     vec2 i = floor(p), f = fract(p);
     vec2 u = f * f * (3.0 - 2.0 * f);
     return mix(mix(hash(i), hash(i + vec2(1, 0)), u.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), u.x), u.y);
+  }
+  vec4 hash4(vec2 p) {
+    return fract(sin(vec4(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)), dot(p, vec2(419.2, 371.9)), dot(p, vec2(97.3, 53.1)))) * 43758.5453);
+  }
+  // En stens omrids: et uregelmæssigt ottekantet felt (fire akser med hver sin bredde). Giver afstanden (1 ved kanten
+  // for r = 1) og retningen ud gennem den flade, der danner kanten (til hældningen, så stenen får facetter).
+  vec3 kant(vec2 v, vec4 b) {
+    float w = 0.8 + 0.4 * b.z;
+    vec3 m = vec3(abs(v.x) * w, sign(v.x) * w, 0.0);
+    w = 1.0 + 0.8 * b.w;
+    float s = abs(v.y) * w;
+    if (s > m.x) m = vec3(s, 0.0, sign(v.y) * w);
+    w = 0.9 + 0.5 * fract(b.z * 7.0);
+    float e = dot(v, vec2(0.7071, 0.7071));
+    if (abs(e) * w > m.x) m = vec3(abs(e) * w, sign(e) * w * vec2(0.7071, 0.7071));
+    w = 0.9 + 0.5 * fract(b.w * 7.0);
+    e = dot(v, vec2(0.7071, -0.7071));
+    if (abs(e) * w > m.x) m = vec3(abs(e) * w, sign(e) * w * vec2(0.7071, -0.7071));
+    return m;
   }
   void main() {
     vec2 en = vEN;
@@ -193,37 +213,79 @@ const FRAGMENT = /* glsl */ `
       if (w0 > 0.0) f = mix(f, texture2D(tF0, u0).r, w0);
     }
     float rel = 2.0 * f;
-    // Detaljer helt tæt på (under fotoets skarphed): små sten og grus, tegnet af programmet (fotoet har 25 cm pr. pixel)
-    float naer = 1.0 - smoothstep(0.012, 0.09, fod);
-    if (naer > 0.0) {
-      float stenH = 0.0, stenF = 0.5, fod2 = 1.0;
-      vec2 stenN = vec2(0.0);
-      for (int lag = 0; lag < 2; lag++) {
-        float str = lag == 0 ? 0.32 : 0.11;           // cellernes størrelse (m)
+    // Detaljer helt tæt på (under fotoets skarphed, M8c del 3 trin 1): sten og grus, tegnet af programmet efter rovernes
+    // fotos (fotoet fra kredsløb har 25 cm pr. pixel). Tre lag af celler med højst én sten hver: store (0,6 m) og små
+    // (0,2 m) sten og ved Jezero flade, lyse klippeflader i niveau med jorden (1,4 m). Størrelsen følger en potenslov
+    // (mange små, få store), og stenene ligger i klynger efter en grov støj og fotoets lysstyrke (klippe er lysere end
+    // mørkt sand). Hvert lag tegnes, så længe dets celler er store nok på skærmen, så de store sten ses længst væk.
+    float stenAlb = 1.0, stenGraa = 0.0, stenSk = 1.0;
+    vec2 stenN = vec2(0.0);
+    float naer = 1.0 - smoothstep(0.012, 0.09, fod); // (til gruset)
+    float jez = step(0.5, uStenArt);
+    if (fod < 0.25 + 0.2 * jez) {
+      float klynge = smoothstep(0.3, 0.8, stoej(en * 0.19) * 0.6 + stoej(en * 0.7 + 3.1) * 0.4 + (f - 0.5) * 1.2);
+      vec2 solV = vec2(uSol.x, -uSol.z);
+      float cotSol = length(solV) / max(uSol.y, 0.06);
+      vec2 væk = -solV / max(length(solV), 1e-4); // skyggens retning (øst, nord)
+      float stenH = 0.0;
+      for (int lag = 0; lag < 3; lag++) {
+        if (lag == 2 && jez < 0.5) break;
+        float str = lag == 0 ? 0.6 : lag == 1 ? 0.2 : 1.4;     // cellernes størrelse (m)
+        float vis = 1.0 - smoothstep(0.06, 0.16, fod / str);    // til ca. 6-16 pixel pr. celle
+        if (vis <= 0.0) continue;
         vec2 q = en / str + float(lag) * 17.3;
         vec2 ci = floor(q);
         for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
           vec2 c = ci + vec2(i, j);
-          vec2 p = c + vec2(hash(c), hash(c + 3.7)) ;
-          float r = 0.12 + 0.3 * hash(c + 9.1) * hash(c + 1.3);
+          vec4 a = hash4(c), b = hash4(c + 7.31);
+          float tæt = lag == 2 ? 0.35 + 0.3 * klynge : mix(0.04, lag == 0 ? 0.5 : 0.7, klynge);
+          if (a.z > tæt) continue;
+          vec2 p = c + 0.2 + 0.6 * a.xy;
+          // potenslov: de fleste er små, enkelte fylder næsten cellen
+          float r = lag == 2 ? 0.22 + 0.25 * b.x : (lag == 0 ? 0.1 : 0.16) + (lag == 0 ? 0.36 : 0.26) * b.x * b.x * b.x;
+          float vc = cos(b.y * 6.283), vs = sin(b.y * 6.283);
+          mat2 R = mat2(vc, -vs, vs, vc);
           vec2 d = q - p;
-          // kantede sten: en drejet firkant blandet med en cirkel, fladere i den ene retning
-          float a = hash(c + 2.9) * 6.283;
-          vec2 rd = mat2(cos(a), -sin(a), sin(a), cos(a)) * d * vec2(1.0, 1.0 + hash(c + 4.1));
-          float af = mix(length(rd), max(abs(rd.x), abs(rd.y)) * 1.15, 0.65);
-          float t = 1.0 - af * af / (r * r);
-          bool er = hash(c + 5.5) < (lag == 0 ? 0.22 : 0.3);
-          if (er && t > -0.6 && t <= 0.0) fod2 = min(fod2, 1.0 + t * 0.6); // lidt skygge og støv lige omkring stenen
-          if (t > 0.0 && er) {
-            float k = pow(t, 0.35); // flad top og skarpere kant
-            if (k > stenH) { stenH = k; stenN = d / (r * max(k, 0.15)); stenF = hash(c + 7.7); }
+          vec3 m = kant(R * d, b);
+          float t = 1.0 - m.x / r; // 1 i midten, 0 ved kanten
+          // Gale: flade plader af sandsten (lave, flad top, skarp kant, lidt skrå). Jezero: højere, kantede sten.
+          // Klippefladerne ved Jezero er flade og ligger i niveau med jorden.
+          float hM = lag == 2 ? 0.0 : r * str * (jez > 0.5 ? 0.55 + 0.4 * a.w : 0.18 + 0.25 * a.w); // højden (m)
+          if (t > 0.0) {
+            float k = jez > 0.5 ? sqrt(t) : smoothstep(0.0, 0.18, t);
+            if (lag == 2) {
+              if (stenH > 0.0) continue;
+              stenAlb = mix(stenAlb, 1.35 + 0.35 * a.w, vis * smoothstep(0.0, 0.08, t));
+              stenGraa = mix(stenGraa, 0.25, vis);
+            } else if (k * hM > stenH) {
+              stenH = k * hM;
+              // hældningen: fladen, der danner kanten (så stenene får facetter), og en skrå top på pladerne
+              float dk = jez > 0.5 ? 0.5 / sqrt(max(t, 0.04)) : (1.0 - smoothstep(0.0, 0.18, t)) * 6.0;
+              vec2 g = (m.yz * R) * dk * hM / (r * str);
+              if (jez < 0.5) g += (b.zw - 0.5) * 0.5 * smoothstep(0.1, 0.3, t);
+              stenN = clamp(g, -3.0, 3.0) * vis;
+              // farven: mørkere og mere grå end sandet (som på fotoerne), nogle lysere
+              stenAlb = mix(1.0, jez > 0.5 ? 0.5 + 0.35 * a.w : 0.72 + 0.4 * a.w, vis);
+              stenGraa = vis * (jez > 0.5 ? 0.7 : 0.45);
+              stenSk = 1.0;
+            }
+          } else if (hM > 0.0) {
+            // skyggen på jorden væk fra Solen (stenens form trukket ud), og lidt mørkere lige ved foden
+            float L = min(hM * cotSol / str, 1.3);
+            float sa = clamp(dot(d, væk) / max(L, 1e-4), 0.0, 1.0);
+            float ts = 1.0 - kant(R * (d - væk * L * sa), b).x / (r * (1.0 - 0.35 * sa));
+            if (stenH <= 0.0) {
+              stenSk = min(stenSk, 1.0 - 0.92 * vis * smoothstep(-0.05, 0.08, ts) * smoothstep(0.0, 0.08, uSol.y));
+              stenAlb = min(stenAlb, mix(1.0, 0.86, vis * smoothstep(-0.3, 0.0, t)));
+            }
           }
         }
       }
-      float korn = stoej(en * 40.0) * 0.6 + stoej(en * 113.0) * 0.4;
-      rel *= mix(1.0, (0.8 + 0.4 * korn) * mix(fod2, 0.45 + 0.6 * stenF, step(0.01, stenH)), naer);
-      n = normalize(n + naer * (vec3(stenN.x, 0.0, -stenN.y) * 0.9 + 0.12 * vec3(korn - 0.5, 0.0, stoej(en * 40.0 + 5.0) - 0.5)));
+      n = normalize(n + vec3(stenN.x, 0.0, -stenN.y));
     }
+    float korn = stoej(en * 40.0) * 0.6 + stoej(en * 113.0) * 0.4;
+    rel *= mix(1.0, 0.8 + 0.4 * korn, naer) * stenAlb;
+    n = normalize(n + naer * 0.12 * vec3(korn - 0.5, 0.0, stoej(en * 40.0 + 5.0) - 0.5));
     // Farven: mørkt sand er gråbrunt, lys sten og støv rødbrune (lysstyrken fra fotoet), og Viking-kortet giver en
     // svag tone fra egn til egn (ca. 10 km)
     vec3 viking = textureLod(tFarve, lagUV(bFarve, en), 4.0).rgb;
@@ -231,6 +293,7 @@ const FRAGMENT = /* glsl */ `
     vec3 c = mix(vec3(0.07, 0.06, 0.055), vec3(0.18, 0.118, 0.078), smoothstep(0.35, 1.0, rel));
     c = mix(c, vec3(0.30, 0.20, 0.13), smoothstep(1.0, 1.7, rel));
     c *= mix(vec3(1.0), clamp(tone, 0.6, 1.6), 0.5);
+    c = mix(c, vec3(dot(c, vec3(0.3, 0.59, 0.11))) * vec3(1.08, 1.0, 0.94), stenGraa); // stenene er mere grå end sandet
     // Skygger fra bjerge og bakker
     float sk;
     if (w0 >= 0.999) sk = texture2D(tS0, u0).r;
@@ -243,7 +306,7 @@ const FRAGMENT = /* glsl */ `
       }
       if (w0 > 0.0) sk = mix(sk, texture2D(tS0, u0).r, w0);
     }
-    sk = mix(1.0, sk, uSkygger);
+    sk = mix(1.0, sk, uSkygger) * stenSk;
     float i = max(dot(n, uSol), 0.0);
     vec3 V = normalize(-vRel);
     float ev = max(dot(n, V), 0.0);
@@ -395,6 +458,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     uSted: { value: new THREE.Vector2() }, uH0: { value: 0 }, uSkridt: { value: (Math.PI * 2) / retninger },
     pxH: { value: new THREE.Vector4(1, 4, 16, 174) }, uKamH: { value: 0 },
     uSol: { value: new THREE.Vector3(0, 1, 0) }, uTau: { value: TAU }, uSkygger: { value: 0 },
+    uStenArt: { value: krater === 'jezero' ? 1 : 0 },
     tFarve: { value: tom }, bFarve: { value: new THREE.Vector4(0, 0, 1, 1) }, bF3: { value: new THREE.Vector4(0, 0, 1, 1) },
   };
   for (let k = 0; k < 4; k++) {
