@@ -8,7 +8,7 @@
 - `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen
 - `atomlabPaneler`: `{ skærm: { venstre, højre, kunGrafik } }`, hvilke paneler der er vist på hver skærm
-- `atomlabLag`: `{ id: true/false }` for de foldebokse, man selv har åbnet eller lukket (i Kosmos og Solsystemet `side-nørd`, `side-billeder` og `side-ærligt`, ét valg for alle sider)
+- `atomlabLag`: `{ id: true/false }` for de foldebokse, man selv har åbnet eller lukket (i Kosmos og Solsystemet `side-nørd`, `side-billeder` og `side-ærligt`, ét valg for alle sider. I Opdagelserne `bog-linjer` for "Linje for linje" i alle bøger og `bog-nørd-<bog>` og `bog-ærligt-<bog>` i "Om …", H4 17. november 2026)
 - `atomlabVisning`: `'ringe'` eller `'sky'`, elektronerne i Værkstedet og på grundstofkortet i Det periodiske system
 - `atomlabUdgave`: den valgte udgave af atomet (`nu`, `prikker` eller `former`). Bruges kun, når `?udgaver` står i adressen (ellers er det `former`).
 - `atomlabKosmos`: id på det sidst valgte fænomen i Kosmos (fx `'sorthul'`). Siden 16. november 2026 åbner Kosmos altid på forsiden (`oversigt`), så den bruges kun af links og forløb

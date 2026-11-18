@@ -27,7 +27,7 @@
 |---|---|---|
 | Den første kikkert, han brugte, var **12 fod lang** med to konvekse linser. Med den fandt han "den nye planet" (Titan) og så Saturn i nogle måneder | *Systema Saturnium* s. 3 ("Primus quem adhibuimus duodenos pedes non excedebat, duobus convexis vitris instructus … Eo planetam novum & deteximus primum") og s. 46 ("tubo illo 12 pedum quo tunc utebar") | Sikker |
 | Okularet samlede lyset på knap 3 tommer, så forstørrelsen var **ca. 50 gange** (12 rhinlandske fod ≈ 144 tommer, 144 / 3 ≈ 48) | Regnet ud fra s. 3. Wikipedia siger **43 gange** (med Louwman 2004 som kilde) | **Ret sikker** (ca. 40-50). Skriv "ca. 50 gange" kun med "ca." |
-| 12 rhinlandske fod er ca. **3,8 m** (1 rhinlandsk fod ≈ 31,4 cm) | Foden efter hukommelsen | Ret sikker. Skriv "næsten 4 meter" |
+| 12 rhinlandske fod er ca. **3,8 m** (1 rhinlandsk fod ≈ 31,4 cm) | Foden efter hukommelsen | Ret sikker. **Rettet i H4:** Skriv "over 3 meter" (se afsnit 4, linsen er 332 cm) |
 | Siden byggede han kikkerter på **23 fod** (ca. 7 m) med rør af jernplade, der forstørrede **næsten 100 gange**. **Galileis forstørrede højst ca. 30 gange** | *Systema Saturnium* s. 4 ("Centuplam itaque fere rationem hanc in perspicillis nostris esse constat, cum Galileana non ultra trigecuplam processerint") | Sikker |
 | Med en kort kikkert (5-6 fod) så han selv Saturn med **to små kugler** i stedet for arme, som de andre havde tegnet | s. 35 ("quoties breviori perspicillo, quinum puta aut senum pedum, Saturnum aspicimus, binos globulos dictorum loco brachiorum apparere") | Sikker |
 | Mange "huller" i de gamle tegninger skyldtes **dårlige kikkerter**, ikke snyd: "observatørerne gav dem i god tro" | s. 36 ("telescopiorum culpa phasin hanc vitiatam esse, licet observatores bona fide eam tradiderint") | Sikker |
@@ -61,6 +61,16 @@
 | Et foto af et maleri, hvis beskyttelse er udløbet, har **ingen egen ret** i Danmark (ophavsretslovens § 70 stk. 4, billedkunst) | [fakta-bogsider-rettigheder.md](../fakta-bogsider-rettigheder.md) | Sikker (loven), Ret sikker (at et portræt er billedkunst, det er ret klart) |
 | Andre muligheder: Bernard Vaillant 1686 (`Christiaan-huygens4.jpg`, også PD) og Gerard Edelincks kobberstik efter Netscher (1684-1687, ikke fundet på Commons ved en hurtig søgning) | Commons; Wikipedia ("Portraits") | Ret sikker |
 | **Siderne:** Smithsonians skanning er frigivet ("no longer under copyright protection"), så s. 46-48 og tavlen ved s. 35 kan vises. Et nyt foto af en *tekstside* ville ellers have sin egen ret (§ 70) | archive.org-metadata; fakta-bogsider-rettigheder.md | Sikker |
+
+**Tjekket i H4 (17. november 2026, `/faktatjek`, Opus):**
+| Påstand | Kilde | Sikkerhed |
+|---|---|---|
+| Oversættelsen af **s. 48, linje 5-10** ("Hos autem reputare … me percipere"): Latinen er læst på billedet (`n67`) og passer ord for ord med drejebogen. "ikke bare har fundet på … efter mit eget hoved, sådan som astronomerne har fundet på deres epicykler … Jeg ser også denne ring ret tydeligt med øjnene" holder (*mera inventione atque arbitrio meo* = "blot af egen opfindelse og eget skøn", *fingere* = "finde på") | s. 48 | Sikker |
+| **Titan fik sit navn i 1847** af John Herschel (*Results of Astronomical Observations … at the Cape of Good Hope*, London 1847), sammen med de andre syv kendte Saturn-måner. Huygens kaldte den "Saturns måne" (*De Saturni Luna Observatio Nova*) | Wikipedia "Titan (moon)" og "John Herschel" (begge med henvisning til bogen fra 1847 og Lassell, MNRAS, 12. november 1847) | Ret sikker |
+| **OC XV:** I skriftet fra 1656 ventede Huygens armene tilbage **"sub finem Aprilis, si non ante"** (sidst i april, hvis ikke før). Saturn forsvandt i Solens lys i juni 1656 uden arme, og han så dem først igen 13. oktober (s. 17). Han sendte skriftet til Hevelius 8. marts 1656. Linsen fra hans 12-fods-kikkert, der findes endnu, har en brændvidde på **332 cm** (målt 1898) | *Oeuvres complètes* XV (archive.org `oeuvrescomplte15huyguoft`, OCR), s. 14 og indledningen til *Observatio nova* | Sikker (april og 13. oktober), Ret sikker (332 cm) |
+| **Divini (nr. X på tavlen):** "credibile est omnium emendatissimè nativam Saturni faciem nobis descripsisse, nisi quod umbras illas … de suo, ut opinor, adjecit" (det er troligt, at han har tegnet Saturns rigtige udseende mest nøjagtigt af alle, bortset fra skyggerne, som han vist selv lagde til). Divini så den 1646, 1647 og 1648 | s. 37 (`n56`, læst på billedet) | Sikker |
+| **Kikkertens længde, hvilket tal står hvor:** Bogen siger "ikke over 12 fod" (s. 3). 12 rhinlandske fod er ca. 3,8 m (foden efter hukommelsen), og linsen, der findes endnu, har en brændvidde på 332 cm (OC XV). Programmet skriver "12 fod (over 3 m)" under "For nørder" i "Om Huygens", fordi det er sandt med begge tal. Skriv ikke "næsten 4 m" eller "lidt under 4 m" | s. 3; OC XV, s. 14 | Sikker ("over 3 m") |
+| **"Bogstavgåde":** Huygens kalder anagrammet "literarium gryphum" | *Systema Saturnium* (OCR) og OC XV ("sequenti grypho consignare visum est") | Sikker |
 
 ## 5. Lysets fart (til "For nørder")
 | Påstand | Kilde | Sikkerhed |
