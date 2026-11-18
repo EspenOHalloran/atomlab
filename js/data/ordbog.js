@@ -207,7 +207,7 @@ export const ORDBOG = [
     id: 'rna', ord: 'RNA',
     former: ['rna', "rna'et", "rna'ets", 'rna-kopien', 'rna-kopi'],
     // L5: RNA kan også arbejde som et værktøj (ribozymer, Nobelprisen i kemi 1989), og RNA-verdenen er en hypotese
-    tekst: 'DNA\'ets nære slægtning: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne. RNA kan også selv arbejde som et værktøj, og derfor tror mange forskere, at det første liv brugte RNA.',
+    tekst: 'DNA\'ets nære slægtning: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, og ribosomerne læser kopien. RNA kan også selv arbejde som et værktøj, og derfor tror mange forskere, at det første liv brugte RNA.',
   },
   {
     id: 'ribosom', ord: 'Ribosom',
