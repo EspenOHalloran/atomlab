@@ -131,6 +131,12 @@ document.addEventListener('click', (h) => {
     }
     return;
   }
+  // Begyndelsen i Liv (data-gaa="begyndelsen", fx fra gåden "Hvordan begyndte livet?")
+  if (skærm === 'begyndelsen') {
+    lyd.klik();
+    location.hash = '#begyndelsen';
+    return;
+  }
   if (!NØGLER[skærm]) return;
   lyd.klik();
   åbnFænomen(skærm, id, sted);

@@ -107,6 +107,13 @@
           <small>DNA: opskriften på liv, fra cellen helt ind til atomerne</small>
         </span>
       </a>
+      <a href="#begyndelsen">
+        <span class="kort-ikon ikon-begyndelsen"></span>
+        <span class="kort-tekst">
+          <strong>Begyndelsen</strong>
+          <small>Lyn i en kolbe: Hvordan kan livet være begyndt?</small>
+        </span>
+      </a>
       <a href="#batteri">
         <span class="kort-ikon ikon-batteri"></span>
         <span class="kort-tekst">
@@ -898,6 +905,86 @@
         <p><strong>Farverne:</strong> Atomerne har kemikernes farver: C grå, H lysegrå, N blå, O rød og P orange. Baserne har hver sin farve: A grøn, T rød, G gul og C blå. U i RNA er lyserød.</p>
         <p><strong>Fra opskrift til protein:</strong> "Se genet blive læst" viser, hvordan cellen laver en RNA-kopi af genet, og hvordan ribosomet læser kopien tre bogstaver ad gangen og bygger en kæde af aminosyrer. ⏩ går hurtigere, og mellemrum stopper tiden. I "Læs selv" er du ribosomet: Find ordet i kodehjulet, og vælg aminosyren. I "Skift et bogstav" kan du lave mutationer og se, hvad der sker med proteinet.</p>
         <p><strong>Kodehjulet:</strong> Det første bogstav står i midten, det andet i næste ring og det tredje yderst. Helt yderst står aminosyren. Tryk på et ord for at se, hvad det betyder. Aminosyrernes farver viser, om de skyr vand (gule), kan lide vand (grønne), er plus (blå) eller minus (røde).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Begyndelsen (Liv L5, js/begyndelsen.js) ===== -->
+  <section id="begyndelsen" class="skærm skjult" aria-label="Begyndelsen">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Begyndelsen</h2>
+      <span class="system-status">Liv: Hvordan kan livet være begyndt?</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="begyndelsenHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <h4 class="panel-overskrift">Leg frit</h4>
+      <div class="beg-scener" role="group" aria-label="Scenen">
+        <button class="knap lille svag" data-beg-scene="kolbe">Kolben</button>
+        <button class="knap lille svag" data-beg-scene="hinde">Boblerne</button>
+        <button class="knap lille svag" data-beg-scene="rna">RNA'et</button>
+        <button class="knap lille svag" data-beg-scene="trappe">Trappen</button>
+      </div>
+      <div class="beg-styr" id="beg-kolbe">
+        <button class="knap primær" id="begLyn"><span class="kugle beg-lyn" aria-hidden="true"></span>Lyn</button>
+        <div class="beg-luft" role="group" aria-label="Luften">
+          <button class="knap lille svag" data-beg-luft="miller">Millers luft</button>
+          <button class="knap lille svag" data-beg-luft="co2">Kuldioxid og nitrogen</button>
+        </div>
+        <button id="begKalk">Kalk i vandet</button>
+        <button class="knap lille svag" id="begKolbeForfra">↻ Ny kolbe</button>
+      </div>
+      <div class="beg-styr" id="beg-hinde" hidden>
+        <button class="knap primær" id="begDryp">Dryp fedtstof</button>
+        <button class="knap lille svag" id="begHindeForfra" hidden>↻ Forfra</button>
+      </div>
+      <div class="beg-styr" id="beg-rna" hidden>
+        <p class="liv-byg-tekst" id="begRnaTekst"></p>
+        <button class="knap primær" id="begKopier">Kopiér</button>
+        <button class="knap lille svag" id="begRnaForfra" hidden>↻ Forfra</button>
+      </div>
+      <div class="beg-styr" id="beg-trappe" hidden>
+        <p class="liv-byg-tekst">Tryk på et trin, og se forsøget bag. Det øverste kan du prøve at nå.</p>
+      </div>
+    </aside>
+    <div class="vindue" id="begyndelsenVindue" data-log>
+      <p class="beg-nøgle" id="begNøgle"></p>
+    </div>
+    <aside class="panel side-panel højre-panel">
+      <h3 class="liv-titel" id="begTitel"></h3>
+      <p class="liv-tekst" id="begTekst"></p>
+      <dl class="liv-tal" id="begTal"></dl>
+      <div class="liv-hvorfor" id="begHvorfor"></div>
+      <details class="forklaring-boks lag-boks" data-lag="beg-nørd" name="beg-lag">
+        <summary><strong>For nørder</strong><span class="lag-kort">Forsøgene, tallene og kilderne</span></summary>
+        <p><strong>Millers kolbe</strong> (Science, 15. maj 1953) var på 5 liter med gasserne og en lille kolbe med vand, der kogte. Gnisterne kørte i en uge. Miller fandt selv fem aminosyrer. Da hans gamle prøver blev målt igen med nye instrumenter, var der ca. 14, og i en udgave med damp som ved en vulkan 22.</p>
+        <p><strong>Den nye luft:</strong> I 2008 viste Jim Cleaves og kolleger, at gnisterne i kuldioxid og nitrogen også laver stoffer, der ødelægger aminosyrerne. Med kalk, der holder vandet fra at blive surt, og lidt C-vitamin blev der mange flere.</p>
+        <p><strong>QT45</strong> (Science, februar 2026) er et RNA på 45 bogstaver. Det byggede først den modsatte streng og så en kopi af sig selv, i is ved −7 °C. Kun ca. 0,2 % af RNA'et blev til kopier på 72 dage, og 94,1 % af bogstaverne var rigtige.</p>
+        <p><strong>Kæder på ler</strong> (James Ferris, Leslie Orgel og kolleger 1996): I vand blev kæderne højst ca. 10 led lange. På leret montmorillonit blev de op til 55, når forskerne fodrede med nye byggesten igen og igen.</p>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="beg-ærligt" name="beg-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
+        <p>Hvert lyn er her som et døgn eller to i forsøget, så en uge er blevet til sekunder. Kemien fra gas til aminosyrer har mange mellemtrin, som ikke er tegnet, og aminosyrerne er tegnet som prikker. Vandets farve i den nye luft er kun tegnet anderledes: Forsøget beskriver ikke en farve.</p>
+        <p>Boblerne er tegnet langt større og med færre fedtstoffer, end de har. Enkle bobler som disse går let i stykker i saltvand.</p>
+        <p>RNA'et her har 12 bogstaver, som vi har valgt, ikke QT45's 45. Det var 72 dage om at lave kopierne, forskerne gav det byggestykker af tre bogstaver, og de to skridt (den modsatte streng og kopien) blev lavet i hvert sit forsøg.</p>
+        <p>Trappen er en forenkling: Ingen ved, om livet begyndte i den rækkefølge, eller om nogle af trinene skete samtidig.</p>
+      </details>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpBegyndelsen" role="dialog" aria-label="Hjælp til Begyndelsen">
+    <div class="dialog">
+      <header><h3>Begyndelsen</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p><strong>Turen "Begyndelsen"</strong> viser i fem korte trin, hvordan livets byggesten kan blive til af sig selv, og hvor langt forskerne er nået mod noget levende. <button class="knap lille" id="begHjælpTur">Tag turen ›</button></p>
+        <p><strong>Kolben:</strong> Tryk <em>Lyn</em> (eller på kolben), og se vandet skifte farve. Skift luften, og prøv med og uden kalk i vandet.</p>
+        <p><strong>Boblerne:</strong> Tryk <em>Dryp fedtstof</em>, og se fedtstofferne samle sig til små bobler med en hinde om.</p>
+        <p><strong>RNA'et:</strong> Tryk <em>Kopiér</em>. Fejlene kommer tilfældigt, lige så tit som ved det rigtige RNA, så nogle kopier har ingen.</p>
+        <p><strong>Trappen:</strong> Tryk på et trin for at se forsøget bag det. Træk for at dreje lidt, og rul eller knib for at zoome.</p>
       </div>
     </div>
   </div>

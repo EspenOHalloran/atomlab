@@ -173,7 +173,7 @@ async function visSkærm() {
 // Paneler, der kan rulles, toner ud forneden, så man kan se, at der er mere (rullebjælkerne er skjult).
 // følgRulning(rod) holder øje med panelerne i rod. Kaldes ved start og ved hvert skærmskift (en skærm, der er hentet
 // senere, har lavet nye paneler, 10a). Paneler, den allerede kender, springes over.
-const RULLEPANELER = '.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #liv, #solsystem, #kosmos';
+const RULLEPANELER = '.side-panel, .byg, .fane, .system-kort, .dialog, .ordbog-liste, #menu, #fusion, #reaktor, #batteri, #liv, #begyndelsen, #solsystem, #kosmos';
 const rullepaneler = new Set();
 const tjekRulning = (el) => el.classList.toggle('mere', el.scrollHeight - el.scrollTop - el.clientHeight > 8);
 let rulleVenter = false;
@@ -226,6 +226,8 @@ function fremgangPrDel() {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };
+  // Begyndelsen har ingen opgaver endnu, kun turen (L5)
+  ud.begyndelsen = { løst: fremgang.forløbTaget('begyndelsen') ? 1 : 0, ialt: 1, slags: 'ture' };
   for (const id of ['solsystem', 'kosmos']) {
     const set = setFænomener(id);
     const liste = FÆNOMEN_IDER[id];

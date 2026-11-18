@@ -242,6 +242,38 @@ export const HVORFOR = {
     svar: 'Næsten alle små børn kan fordøje sukkeret i mælk. Hos mange mennesker slukker genet for det, når de bliver større. Ca. 94 af 100 voksne danskere har en ændring i en "kontakt" ved genet, så det bliver ved med at være tændt.\n\nDen ældste kendte person med ændringen levede for ca. 6.700 år siden, og den blev almindelig i Europa for ca. 4.000 år siden. Forskerne er uenige om, hvorfor den hjalp så meget.',
     nørd: 'Genet hedder LCT og laver enzymet laktase, der klipper mælkesukker over. Kontakten sidder 13.910 bogstaver før genet, inde i nabogenet MCM6 (Juhl og kolleger 2018, 20.416 voksne danskere). At folk drak mælk, forklarer ikke alene, hvorfor ændringen bredte sig: I en stor undersøgelse fra Storbritannien hang den kun svagt sammen med, hvor meget mælk folk drikker (Evershed og kolleger 2022).',
   },
+  // Liv L5, de fire kort i delen Begyndelsen (docs/drejebog-liv.md, afsnit 4). Kilder: docs/fakta-liv/begyndelsen.md.
+  // Kort 1: Gibson m.fl., Science 329:52-56 (2010), "an existing cell" (Wikipedia "Mycoplasma laboratorium", læst 18.
+  // november 2026). Skriv "en bakterie, der levede i forvejen", ikke "en tømt celle" (Fable E5). JCVI-syn3.0: Hutchison m.fl.
+  // 2016, 473 gener, 149 ukendte. Pasteur "omkring 1860". Fælde 1: ikke "kunstigt liv".
+  begLavet: {
+    spørgsmål: 'Har nogen lavet liv?',
+    svar: 'Nej. Ingen har lavet noget levende af stoffer uden liv.\n\nI 2010 byggede forskere hele DNA\'et til en bakterie, en kopi af en rigtig bakteries DNA, og satte det ind i en bakterie, der levede i forvejen. Den levede videre og delte sig med det byggede DNA. Det var en stor bedrift, men opskriften var kopieret, og cellen fandtes allerede.',
+    nørd: 'Forskerne var Daniel Gibson, Craig Venter og kolleger. I 2016 lavede de en bakterie med kun 473 gener, og om 149 af dem vidste ingen, hvad de gjorde. Omkring 1860 viste Louis Pasteur, at der ikke opstår liv af sig selv i en kolbe med kogt suppe. Han viste ikke, at det aldrig er sket.',
+  },
+  // Kort 2: NASA 29. januar 2025 ("14 of the 20", "all five nucleobases", "do not show evidence for life itself") og 2.
+  // december 2025 (ribose). Murchison ca. 70 aminosyrer (Schmitt-Kopplin 2010), Deamer 1985. 67P: ESA 2016 (glycin). Fælde 9.
+  begRummet: {
+    spørgsmål: 'Kom livet fra rummet?',
+    svar: 'Måske nogle af byggestenene. I prøverne fra asteroiden Bennu, som en rumsonde hentede til Jorden, har forskerne fundet 14 af de 20 aminosyrer, livet bruger, og alle fem baser fra DNA og RNA.\n\nMen der er ingen tegn på liv i prøverne. Og kom selve livet fra rummet, flytter spørgsmålet bare: Hvordan begyndte det så dér?',
+    nørd: 'Meteoritten Murchison, der faldt i Australien i 1969, har ca. 70 slags aminosyrer, og fedtagtige stoffer fra den laver bobler i vand (Deamer 1985). Bennu har også sukkeret ribose, som RNA er bygget af. Rumsonden Rosetta fandt glycin, den enkleste aminosyre, ved kometen 67P (2016). NASA: Det viser, at livets byggesten fandtes mange steder i det unge solsystem. Hvor meget de betød for livet, ved ingen.',
+  },
+  // Kort 3: Herschy m.fl. 2014 (PMC4247476, "Chemiosmotic coupling is universal", vældet pH 10-11, havet pH 5-7), Russell 1997
+  // og Martin og Russell 2003 (via Wikipedia). Patel m.fl. 2015 ("driven by ultraviolet light"), tørring og
+  // vædning (Wikipedia "Abiogenesis"), fortynding i havet ("strong dilution by seawater"). Darwin 1871. Alvin 1977.
+  begHvor: {
+    spørgsmål: 'Skete det i en dam eller på havbunden?',
+    svar: 'Det ved ingen. Nogle forskere tror på varme kilder på havbunden: Her møder varmt vand fra undergrunden havvandet, og forskellen i surhed mellem dem ligner den, alle celler bruger til at få energi.\n\nAndre tror på damme på land, der tørrer ud og bliver våde igen. Her kan sollys drive den kemi, der laver RNA\'s byggesten, og stofferne bliver ikke fortyndet i et helt hav.',
+    nørd: 'Charles Darwin skrev i et brev i 1871 om en "lille varm dam". Varme kilder på havbunden blev først set i 1977 fra ubåden Alvin. Idéen om kilderne er bl.a. Michael Russells og William Martins (fra 1997), og forsøget med sollys er fra John Sutherlands gruppe (Patel og kolleger 2015).',
+  },
+  // Kort 4, døgnuret: Jorden 4,54 mia. år (USGS). De ældste spor, de fleste godtager: Dresser-formationen, ca. 3,48 mia. år
+  // (Wikipedia "Earliest known life forms"). (4,54 − 3,48) / 4,54 × 24 t = 5,60 t = kl. 5.36. Mennesket: 315.000 år
+  // (Richter m.fl. 2017) / 4,54 mia. × 86.400 s = 6,0 s. Isua omstridt (Allwood 2018), LUCA 3,94-4,52 (Moody 2024).
+  begHvornaar: {
+    spørgsmål: 'Hvornår skete det?',
+    svar: 'Forestil dig, at Jordens historie er ét døgn, og at Jorden bliver dannet ved midnat. Senest kl. 5.36 om morgenen er der liv: Så gamle er de ældste spor, de fleste forskere godtager, ca. 3,5 milliarder år.\n\nMennesket kommer ca. 6 sekunder før midnat. Måske begyndte livet meget før kl. 5.36, men der er næsten ingen sten tilbage fra den første tid.',
+    nørd: 'Jorden er ca. 4,54 milliarder år. Sporene er lag, som mikrober har bygget (stromatolitter), i ca. 3,48 milliarder år gamle sten i Australien. Ældre spor fra Grønland (ca. 3,7 milliarder år) er omstridte. Den fælles forfader til alt liv i dag levede måske for ca. 4,2 milliarder år siden, men skønnene spænder fra ca. 3,9 til 4,5, og den var allerede en rigtig celle. De ældste kendte mennesker af vores art er ca. 315.000 år gamle.',
+  },
   // Liv L3, kort 1-3 (docs/drejebog-liv.md, afsnit 5). Kilder: docs/fakta-liv/dna-opskriften.md, afsnit 4 og 5.
   // Kort 1: Nature 171 (25. april 1953), Foto 51 (Gosling under Franklin, 2. maj 1952), Wilkins viste det til Watson uden
   // hendes viden, Cobb og Comfort 2023 ("an equal player", seks ugers modelbygning og MRC-rapporten), nobelprize.org (1962,

@@ -10,6 +10,7 @@ import { ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { visBesked, rydBeskeder } from './beskeder.js';
 import { forløbVink } from './forloeb.js';
+import { åbnForløb } from './gaa.js';
 import { visLag } from './lag.js';
 import { lavKontakt } from './kontakt.js';
 import { PRIK_FARVE } from './liv/plade.js';
@@ -270,10 +271,11 @@ export function lavFejlenDel({ tegning, vis, kamera, løs, panel, mission, stopp
     },
     layout: () => kamera(),
     slutTekst: () => 'Det samme sker hos mennesker og alt andet liv, bare meget langsommere.',
+    // L5: "Næste: Begyndelsen" først. Kortet om mælken gik ud af vejene (det står stadig i panelet ved pladen)
     veje: [
-      { tekst: 'Leg frit: pladen', primær: true, her: true, gør: () => requestAnimationFrame(() => startLab()) },
+      { tekst: 'Næste: Begyndelsen', primær: true, gør: () => åbnForløb('begyndelsen', 'begyndelsen') },
+      { tekst: 'Leg frit: pladen', her: true, gør: () => requestAnimationFrame(() => startLab()) },
       { tekst: 'Sker det også hos mennesker?', hvorfor: 'livMenneske' },
-      { tekst: 'Hvorfor kan de fleste danskere tåle mælk?', hvorfor: 'livMaelk' },
     ],
     slut: () => {
       trin = null;

@@ -13,7 +13,7 @@ const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const VERDENER = ['kerner', 'atomer', 'liv', 'elektricitet', 'rummet', 'biblioteket'];
-const DELE = { kerner: ['fusion', 'reaktor'], atomer: ['vaerksted', 'molekyler', 'system'], liv: ['liv'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog', 'gaader', 'opdagelser'] };
+const DELE = { kerner: ['fusion', 'reaktor'], atomer: ['vaerksted', 'molekyler', 'system'], liv: ['liv', 'begyndelsen'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog', 'gaader', 'opdagelser'] };
 const størrelser = [
   ['pc', { viewport: { width: 1280, height: 800 } }],
   ['tablet', { viewport: { width: 820, height: 1180 }, hasTouch: true, isMobile: true }],
@@ -229,7 +229,7 @@ for (const [navn, opts] of størrelser) {
     };
   });
   tjek(`${navn}: "Din fremgang" åbner`, dialog.vist);
-  tjek(`${navn}: … med alle dele undtagen Ordbogen i verdenernes rækkefølge`, dialog.linjer.join() === Object.values(DELE).flat().slice(0, 9).join(), dialog.linjer.join());
+  tjek(`${navn}: … med alle dele undtagen Ordbogen i verdenernes rækkefølge`, dialog.linjer.join() === Object.values(DELE).flat().slice(0, 10).join(), dialog.linjer.join());
   tjek(`${navn}: … samlet under verdenerne (uden Biblioteket), og Elektricitet er færdig`, dialog.grupper.join() === 'kerner,atomer,liv,elektricitet✓,rummet' && dialog.først === 'kerner', dialog.grupper.join());
   tjek(`${navn}: … Batteriet er færdigt`, dialog.batteriFærdig && /✓ (\d+) af \1 opgaver/.test(dialog.batteri), dialog.batteri);
   tjek(`${navn}: … grundstofferne og Kosmos`, dialog.system.includes('2 af 118 opdaget') && /0 af \d+ besøgt/.test(dialog.kosmos), `${dialog.system} | ${dialog.kosmos}`);

@@ -206,7 +206,8 @@ export const ORDBOG = [
   {
     id: 'rna', ord: 'RNA',
     former: ['rna', "rna'et", "rna'ets", 'rna-kopien', 'rna-kopi'],
-    tekst: 'DNA\'ets nære slægtning: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne.',
+    // L5: RNA kan også arbejde som et værktøj (ribozymer, Nobelprisen i kemi 1989), og RNA-verdenen er en hypotese
+    tekst: 'DNA\'ets nære slægtning: en enkelt streng, hvor U står i stedet for T. Cellen laver en RNA-kopi af et gen, når genet skal bruges, og kopien bliver læst af ribosomerne. RNA kan også selv arbejde som et værktøj, og derfor tror mange forskere, at det første liv brugte RNA.',
   },
   {
     id: 'ribosom', ord: 'Ribosom',
@@ -229,6 +230,13 @@ export const ORDBOG = [
     id: 'naturligt-udvalg', ord: 'Naturligt udvalg',
     former: ['naturligt udvalg', 'naturlige udvalg', 'naturligt udvalgt'],
     tekst: 'Når de, der klarer sig bedst der, hvor de lever, får flest efterkommere. Fejlene i DNA\'et kommer tilfældigt, og udvalget afgør, hvilke der bliver almindelige. Charles Darwin beskrev det i bogen "Arternes oprindelse" i 1859.',
+  },
+  // Liv L5, delen Begyndelsen (18. november 2026). OpenStax Biology 5.1: fosfolipider "spontaneously form small spheres"
+  // i vand. Deamer 1985: også fedtagtige stoffer fra Murchison-meteoritten.
+  {
+    id: 'hinde', ord: 'Hinde',
+    former: ['hinde', 'hinden', 'hinder', 'hinderne'],
+    tekst: 'Et tyndt lag af fedtstof om en celle. Det holder det indre samlet og styrer, hvad der kommer ind og ud. Nogle fedtstoffer laver helt af sig selv små bobler med sådan et lag om, når de kommer i vand.',
   },
   {
     id: 'enzym', ord: 'Enzym',

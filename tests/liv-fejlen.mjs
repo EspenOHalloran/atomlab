@@ -138,7 +138,7 @@ tjek('trin 4: feltet uden medicin har bakterier med en fejl, en prik uden fejl g
 await page.click('#liv .fl-næste');
 await fase('slut');
 const slut = await T(() => ({ tekst: document.querySelector('.forløb-linje').textContent, veje: [...document.querySelectorAll('#liv .fl-vej')].map((x) => x.textContent) }));
-await page.click('#liv .fl-vej >> nth=0');
+await page.click('#liv .fl-vej >> nth=1');
 await page.waitForFunction(() => atomlabTest.liv.fejlen()?.lab, null, { timeout: 10000 });
 await stille();
 const synlig = (sel) => T((s) => { const e = document.querySelector(s); return Boolean(e && e.offsetParent !== null && getComputedStyle(e).display !== 'none'); }, sel);
@@ -147,8 +147,8 @@ const panel = await T(() => ({
   hvorfor: [...document.querySelectorAll('#livHvorfor button')].map((x) => x.dataset.hvorfor).join(), ture: document.querySelector('#livForløbFejlen .flueben').textContent,
 }));
 const venstre = { plade: await synlig('#livPladeIGang'), byg: await synlig('#livByg') };
-tjek('"Det så du" har kernesætningen og tre veje (Leg frit og kort 4 og 5), og "Leg frit: pladen" åbner med panelet (to tal, kort 4 og 5) og knapperne til venstre',
-  slut.tekst.includes(FEJLEN.kernesætning) && slut.veje.length === 3 && /Leg frit: pladen/.test(slut.veje[0]) && panel.titel === 'Pladen' && panel.tal === 2
+tjek('"Det så du" har kernesætningen og tre veje ("Næste: Begyndelsen", Leg frit og kort 4), og "Leg frit: pladen" åbner med panelet (to tal, kort 4 og 5) og knapperne til venstre',
+  slut.tekst.includes(FEJLEN.kernesætning) && slut.veje.length === 3 && /Næste: Begyndelsen/.test(slut.veje[0]) && /Leg frit: pladen/.test(slut.veje[1]) && panel.titel === 'Pladen' && panel.tal === 2
   && panel.hvorfor === 'livMenneske,livMaelk' && panel.ture === '✓' && venstre.plade && !venstre.byg, JSON.stringify({ slut, panel, venstre }));
 
 // ★-opgaven: uden mellemtrin kommer ingen igennem
