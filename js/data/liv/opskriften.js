@@ -77,6 +77,12 @@ export const OPGAVER_LIV = [
   },
   ...OPGAVER_PROTEIN, // L2: fra opskrift til protein (js/data/liv/protein.js)
   ...OPGAVER_KOPI, // L3: "Leg frit: Kopien" (js/data/liv/kopien.js)
+  // L4: "Leg frit: pladen" (js/liv-fejlen.js). Står her og ikke i js/data/liv/plade.js, så menuen ikke henter modellen.
+  // Baym m.fl. 2016, fig. 2: "unable to adapt directly from zero to the highest concentration" (3.000 gange).
+  {
+    id: 'liv-spring', titel: 'Spring båndene over', tip: 'Slå "Uden mellemtrin" til i Leg frit: pladen, og se, om bakterierne kommer igennem.',
+    fakta: 'I det rigtige forsøg kom bakterierne aldrig direkte fra ingen medicin til 3.000 gange så meget. De skulle bruge båndene imellem, én fejl ad gangen.',
+  },
 ];
 
 export const BYG_TRIN = 8;

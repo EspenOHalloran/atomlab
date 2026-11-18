@@ -132,11 +132,11 @@ tjek('trin 4: de to første fejl bliver rettet, den tredje bliver siddende (en m
 await page.click('#liv .fl-næste');
 await fase('slut');
 const slut = await T(() => ({ tekst: document.querySelector('#liv .fl-tekst').textContent, lille: document.querySelector('#liv .fl-lille')?.textContent, veje: [...document.querySelectorAll('#liv .fl-vej')].map((v) => v.textContent) }));
-tjek('"Det så du": kernesætningen, de 70, og vejene Leg frit og to "Hvorfor?"-kort',
-  slut.tekst === KOPIEN.kernesætning && /70 gør ingenting/.test(slut.lille) && slut.veje.length === 3 && slut.veje[0] === 'Leg frit: Kopien', JSON.stringify(slut));
+tjek('"Det så du": kernesætningen, de 70, og vejene "Næste tur: Fejlen, der hjalp", Leg frit og "Hvordan ved vi det?" (L4)',
+  slut.tekst === KOPIEN.kernesætning && /70 gør ingenting/.test(slut.lille) && slut.veje.length === 3 && /Næste tur: Fejlen, der hjalp/.test(slut.veje[0]) && slut.veje[1] === 'Leg frit: Kopien', JSON.stringify(slut));
 
 // ---------- Leg frit: Kopien, og ★-opgaven ----------
-await page.click('#liv .fl-vej.primær');
+await page.click('#liv .fl-vej >> nth=1'); // Leg frit (den første vej er næste tur)
 await page.waitForFunction(() => atomlabTest.liv.kopien()?.lab, null, { timeout: 10000, polling: 100 });
 await stille();
 const panel = { titel: await T(() => document.getElementById('livTitel').textContent), tal: await T(() => document.querySelectorAll('#livTal > div').length), hvorfor: await T(() => [...document.querySelectorAll('#livHvorfor button')].map((x) => x.dataset.hvorfor).join()), venstre: await synlig('#livKopiIGang'), byg: await synlig('#livByg'), ture: await T(() => document.getElementById('livForløbKopien').textContent) };
