@@ -127,6 +127,7 @@ export const GÅDER = [
         // Hurowitz m.fl., Nature 645:332-340 (2025): "potential biosignatures", og først en undersøgelse på Jorden "will
         // enable the measurements required to determine the origin". NASA 2025: abiotiske forklaringer "we cannot rule
         // them out". Stenen blev fundet i juli 2024 (NASA 2024).
+        hvorfor: 'livSpor', // Liv L6: kortet "Hvor sikkert er et spor?"
         så: 'I 2024 fandt roveren Perseverance stenen Cheyava Falls med små pletter, der måske er et biospor (et spor efter liv). Kemi uden liv kan også have lavet dem, og det kan kun afgøres, hvis en prøve af stenen kommer til et laboratorium på Jorden.',
       },
       {

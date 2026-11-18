@@ -257,6 +257,7 @@ export const HVORFOR = {
     spørgsmål: 'Kom livet fra rummet?',
     svar: 'Måske nogle af byggestenene. I prøverne fra asteroiden Bennu, som en rumsonde hentede til Jorden, har forskerne fundet 14 af de 20 aminosyrer, livet bruger, og alle fem baser fra DNA og RNA.\n\nMen der er ingen tegn på liv i prøverne. Og kom selve livet fra rummet, flytter spørgsmålet bare: Hvordan begyndte det så dér?',
     nørd: 'Meteoritten Murchison, der faldt i Australien i 1969, har ca. 70 slags aminosyrer, og fedtagtige stoffer fra den laver bobler i vand (Deamer 1985). Bennu har også sukkeret ribose, som RNA er bygget af. Rumsonden Rosetta fandt glycin, den enkleste aminosyre, ved kometen 67P (2016). NASA: Det viser, at livets byggesten fandtes mange steder i det unge solsystem. Hvor meget de betød for livet, ved ingen.',
+    næste: 'livSpor', // L6: kortet ved Cheyava Falls på Mars
   },
   // Kort 3: Herschy m.fl. 2014 (PMC4247476, "Chemiosmotic coupling is universal", vældet pH 10-11, havet pH 5-7), Russell 1997
   // og Martin og Russell 2003 (via Wikipedia). Patel m.fl. 2015 ("driven by ultraviolet light"), tørring og
@@ -273,6 +274,18 @@ export const HVORFOR = {
     spørgsmål: 'Hvornår skete det?',
     svar: 'Forestil dig, at Jordens historie er ét døgn, og at Jorden bliver dannet ved midnat. Senest kl. 5.36 om morgenen er der liv: Så gamle er de ældste spor, de fleste forskere godtager, ca. 3,5 milliarder år.\n\nMennesket kommer ca. 6 sekunder før midnat. Måske begyndte livet meget før kl. 5.36, men der er næsten ingen sten tilbage fra den første tid.',
     nørd: 'Jorden er ca. 4,54 milliarder år. Sporene er lag, som mikrober har bygget (stromatolitter), i ca. 3,48 milliarder år gamle sten i Australien. Ældre spor fra Grønland (ca. 3,7 milliarder år) er omstridte. Den fælles forfader til alt liv i dag levede måske for ca. 4,2 milliarder år siden, men skønnene spænder fra ca. 3,9 til 4,5, og den var allerede en rigtig celle. De ældste kendte mennesker af vores art er ca. 315.000 år gamle.',
+  },
+  // Liv L6, kortet ved Cheyava Falls på Mars (docs/drejebog-liv.md, afsnit 6). Kilder: docs/fakta-liv/rummet.md, afsnit 1 og 2.
+  // CoLD: Green m.fl., Nature 598:575-579 (2021), arXiv:2107.10975 (figur 1, trinene; Perseverance "could gather evidence
+  // that reaches CoLD Level 3", prøver på Jorden "Level 6 or higher"; ALH84001 "could be argued to have identified" "Level 1 ... Level 2 ... Level 3", "the
+  // present consensus is that the features ... are probably not indicative of life"). Trin 1: NASA's billedtekst 25. juli
+  // 2024. Trin 3: Hurowitz til Planetary Society 1. okt. 2025. ALH84001: McKay m.fl., Science 273:924-930, annonceret 6.
+  // aug. 1996 af et hold ledet af forskere fra NASA, Clintons tale, og Steele m.fl. 2022 ("serpentinization and carbonation",
+  // Wikipedia "Allan Hills 84001", læst 18. november 2026). Fælderne: "muligt biospor", ikke "bevist" eller "modbevist".
+  livSpor: {
+    spørgsmål: 'Hvor sikkert er et spor?',
+    svar: 'Forskerne har en skala med syv trin. På trin 1 har man målt noget, som liv kan lave. Højere oppe er forurening fra Jorden og de kendte veje uden liv udelukket, og øverst har nye målinger bekræftet det.\n\nNASA kaldte stenen Cheyava Falls på Mars trin 1 i 2024, og hovedforfatteren af artiklen om den mener selv, at den er på trin 3. Pletterne er et muligt biospor (et spor efter liv), ikke et bevis.',
+    nørd: 'Skalaen hedder CoLD (Green og kolleger 2021). Trinene: 1 et signal, som liv kan give. 2 Det er ikke forurening. 3 Liv kunne lave signalet netop dér. 4 Ingen kendt vej uden liv passer dér. 5 Et andet spor, der ikke afhænger af det første. 6 Nye forklaringer, som andre kommer med bagefter, er også udelukket. 7 Nye målinger viser det, man forudsagde, at livet ville gøre. Skalaens forfattere regnede med, at Perseverance kan nå trin 3, og at en prøve på Jorden kan nå trin 6 eller højere. Et højt trin er ikke det samme som liv: I 1996 mente et hold med forskere fra NASA, at meteoritten ALH84001 fra Mars havde spor af liv, og USA\'s præsident holdt en tale om det. I dag mener de fleste, at sporene nok ikke er liv, og i 2022 kom en undersøgelse frem til, at det organiske stof i den blev lavet af vand og sten. Alligevel mener skalaens forfattere, at man kan sige, at ALH84001 nåede trin 1-3.',
   },
   // Liv L3, kort 1-3 (docs/drejebog-liv.md, afsnit 5). Kilder: docs/fakta-liv/dna-opskriften.md, afsnit 4 og 5.
   // Kort 1: Nature 171 (25. april 1953), Foto 51 (Gosling under Franklin, 2. maj 1952), Wilkins viste det til Watson uden

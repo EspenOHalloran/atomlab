@@ -212,7 +212,7 @@ export const SIDER = {
         tekst: '<p>For mere end 3½ mia. år siden var Jezero en sø. En flod løb ind gennem et hul i vestkanten og lagde sand og mudder i en vifte, et delta.</p>',
       },
       {
-        titel: 'Har Perseverance fundet liv?',
+        titel: 'Har Perseverance fundet liv?', hvorfor: ['livSpor'], // Liv L6
         tekst: `<p>Indtil nu har Perseverance fyldt 30 rør med prøver: 27 stykker af sten, 2 med løs jord og 1 med luft fra Mars. I juli 2024 fandt den en sten (Cheyava Falls) med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv. Det har forskerne endnu ikke kunnet afgøre. ${GÅDE_LIV}</p>`,
       },
       {
@@ -426,7 +426,7 @@ SIDER['stå-randen'] = {
       tekst: '<p>Randen blev rejst, da et stort nedslag lavede krateret. Meget af stenen her blev slået op dybt nedefra, ved dette nedslag og måske også ved ældre nedslag. Perseverance var her i oktober 2024 på vej op. Turen op tog ca. 3½ måned og gik ca. 500 m opad, og i december 2024 nåede den toppen. På den anden side fandt den nogle af de ældste sten, den har set: sandsynligvis mindst 3,9 mia. år gamle.</p>',
     },
     {
-      titel: 'Hvor fandt Perseverance Cheyava Falls?',
+      titel: 'Hvor fandt Perseverance Cheyava Falls?', hvorfor: ['livSpor'], // Liv L6
       tekst: '<p>Knap 2 km mod nord ligger en gammel floddal, Neretva Vallis, hvor vandet løb ind i krateret. Dér fandt Perseverance i juli 2024 stenen Cheyava Falls med små pletter, der ligner en leopards. Pletterne er måske et biospor (et spor efter liv), men de kan også være lavet af kemi uden liv.</p>',
     },
     SOLNEDGANG,
