@@ -172,7 +172,7 @@ export function visGåde(id) {
     ${g.nyt ? `<p class="gaade-nyt"><b>Nyt siden sidst (${tegn(g.nyt.dato)}):</b> ${tegn(g.nyt.tekst)}</p>` : ''}
     <div class="gaade-trin" id="gaadeTrin" aria-live="polite"></div>
     <div class="gaade-lag">
-      ${g.nørd ? `<details class="lag-boks" data-lag="gaade-nørd"><summary><strong>Vil du vide mere?</strong><span class="lag-kort">Tal, navne og flere detaljer</span></summary>${g.nørd}</details>` : ''}
+      ${g.nørd ? `<details class="lag-boks lag-mere" data-lag="gaade-nørd"><summary><strong>Vil du vide mere?</strong></summary>${g.nørd}</details>` : ''}
       ${g.ærligt ? `<details class="lag-boks ærligt" data-lag="gaade-ærligt"><summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad kortet forenkler</span></summary>${g.ærligt}${g.scene?.ærligt ?? ''}<p>${tegn(SKINNE_ÆRLIGT)}</p></details>` : ''}
     </div>`;
   lavLagBokse(kort);

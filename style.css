@@ -2082,6 +2082,21 @@ details.lag-boks[open] > summary strong::after { content: ' ▾'; }
 details.lag-boks > summary .lag-kort { display: block; margin-top: 2px; color: var(--svag); font-size: 12.5px; font-weight: 400; line-height: 1.4; }
 details.lag-boks[open] > summary .lag-kort { display: none; }
 details.lag-boks > :not(summary) { margin-top: 6px; }
+/* "Vil du vide mere?" (18. november 2026): en lille, lys linje nederst lige over "Ærligt talt", ikke endnu et emne.
+   Stregen foroven er kanten, der viser "tryk her", og linjen er 44 px høj (Stilguiden regel 4). Id'erne vinder over Gåderne og bogen */
+details.lag-boks.lag-mere, :is(#gaader, #opdagelser) details.lag-boks.lag-mere {
+  margin-top: 14px; padding: 0 2px; background: none; border: 0; border-top: 1px solid rgba(191, 233, 255, 0.28); border-radius: 0; }
+details.lag-boks.lag-mere[open] { background: none; padding-bottom: 6px; }
+details.lag-boks.lag-mere > summary { display: flex; align-items: center; min-height: 44px; padding: 0; }
+:is(#gaader, #kosmos, #solsystem) details.lag-boks.lag-mere > summary strong, details.lag-boks.lag-mere > summary strong {
+  color: #cfeeff; font-family: inherit; font-size: 13.5px; font-weight: 600; margin: 0; }
+details.lag-boks.lag-mere > summary strong::after { content: ' ›'; color: inherit; opacity: 0.8; }
+details.lag-boks.lag-mere[open] > summary strong::after { content: ' ▾'; }
+details.lag-boks.lag-mere > summary:hover strong { color: #fff; }
+details.lag-boks.lag-mere + details.lag-boks { margin-top: 4px; }
+/* I bogen (Opdagelserne) er linjen i bogens blæk og skrift */
+#opdagelser details.lag-boks.lag-mere { border-top-color: color-mix(in srgb, var(--bog-blaek) 35%, transparent); }
+#opdagelser details.lag-boks.lag-mere > summary strong { color: inherit; font-family: var(--bog-skrift); font-weight: 400; font-size: 17px; }
 /* "Vil du vide mere?" inde i en boks eller et kort */
 .lag-nørd > summary, .hk-nørd > summary { cursor: pointer; color: var(--accent); font-size: 12.5px; font-weight: 700; list-style: none; }
 .lag-nørd > summary::-webkit-details-marker, .hk-nørd > summary::-webkit-details-marker { display: none; }

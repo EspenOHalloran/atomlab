@@ -543,7 +543,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
 
   // ---------- Siden i højre panel (U3 i docs/plan-ux.md) ----------
   // Fra let øverst til dybt nederst: tallene, "Lige nu" (fænomenets forklaring()), Kort (står fremme), emnerne
-  // (foldebokse, "Hvorfor?"-kortene står ved deres emne), "Gå videre", "Vil du vide mere?", Billederne og Ærligt talt (altid
+  // (foldebokse, "Hvorfor?"-kortene står ved deres emne), "Gå videre", Billederne, "Vil du vide mere?" og Ærligt talt (altid
   // sidst) og citatet. Ved et sted i træet viser panelet stedets egen side (sider[id]), ellers fænomenets (side).
   // Emnerne starter foldet sammen. "Vil du vide mere?", Billederne og Ærligt talt husker, om man har foldet dem ud (atomlabLag),
   // så de står åbne på alle sider.
@@ -582,8 +582,9 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
       html += boks(e.titel, e.tekst + hvorfor(e.hvorfor), null, 'side-emne').replace('<details ', `<details ${e.kontakt ? `data-kontakt="${e.kontakt}" ` : ''}${e.gemt ? 'hidden ' : ''}`);
     }
     if (side.videre?.length) html += `<p class="side-videre"><span>Gå videre</span>${side.videre.join('')}</p>`;
-    if (side.nørd) html += boks('Vil du vide mere?', side.nørd, 'side-nørd');
     if (side.billeder) html += boks('Billederne', side.billeder, 'side-billeder');
+    // "Vil du vide mere?" er en lille, lys linje lige over "Ærligt talt" (18. november 2026), ikke endnu et emne
+    if (side.nørd) html += boks('Vil du vide mere?', side.nørd, 'side-nørd', 'lag-mere');
     if (side.ærligt) html += boks('Ærligt talt', side.ærligt, 'side-ærligt', 'side-ærligt');
     return html;
   }

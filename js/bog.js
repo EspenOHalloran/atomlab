@@ -156,7 +156,8 @@ function lavSider(felt, bogId, b, rolig) {
 
 // "Om …" (H4): budgettet fra planen (titel, to tal, tre sætninger, fire spørgsmål, så de lukkede lag)
 function omHTML(o, om, bogId) {
-  const boks = (lag, slags) => `<details class="lag-boks bo-lag${slags === 'ærligt' ? ' ærligt' : ''}" data-lag="bog-${slags}-${bogId}"><summary><strong>${esc(lag.titel)}</strong> <span class="lag-kort">${esc(lag.linje)}</span></summary>`
+  // "Vil du vide mere?" (nørd) er en lille, lys linje uden den korte tekst (18. november 2026)
+  const boks = (lag, slags) => `<details class="lag-boks bo-lag${slags === 'ærligt' ? ' ærligt' : ' lag-mere'}" data-lag="bog-${slags}-${bogId}"><summary><strong>${esc(lag.titel)}</strong>${slags === 'ærligt' ? ` <span class="lag-kort">${esc(lag.linje)}</span>` : ''}</summary>`
     + `<ul>${lag.punkter.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></details>`;
   return `<div class="bog-opslag bog-om-opslag"><h3 class="bog-kapitel">${esc(o.titel)}</h3><div class="bo-krop">`
     + `<p class="bo-navn">${esc(om.navn)}</p>`
