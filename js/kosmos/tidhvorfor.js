@@ -13,7 +13,7 @@ import { gå } from '../sideknap.js';
 import { ROLIG, centrerVindue } from '../scene3d.js';
 import * as T from '../data/tid.js';
 import * as Lys from './lysur.js';
-import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbTest } from '../forloeb.js';
+import { startForløb, stopForløb, starterSelv, kørerForløb, tegnForløb, forløbTest, forløbVink } from '../forloeb.js';
 import { tagVentForløb } from '../gaa.js';
 import { HVORDAN_KAN_DET_SKE } from '../data/forloeb/tid.js'; // forløbet "Hvordan kan det ske?" (E4, forløb B)
 
@@ -228,8 +228,9 @@ export default {
     // Scene 2 (sidst: trekanten). I forløbet venter uret på "Send uret forbi" (vent), og "Mål" (måler) stopper uret
     // på toppen og lægger målebåndet langs den skrå vej (målT: sekunder i animationen).
     // uden: "Uden Einstein" (lyset får skibets fart lagt oven i, og urene går ens). udenT: sekunder med "Uden Einstein",
-    // siden den blev slået til (forløbets trin B4).
-    const sc2 = { fart: T.LYSUR_START, trekant: false, ur: Lys.nytUr(), sidst: null, vent: false, måler: false, målT: 0, uden: false, udenT: 0 };
+    // siden den blev slået til. Forløbets trin B4: trin4 (trinet kører), målt (målebåndet er lagt, så kommer kontakterne)
+    // og visUden ("Næste ›" før handlingen: "Uden Einstein" slås til, når båndet er lagt).
+    const sc2 = { fart: T.LYSUR_START, trekant: false, ur: Lys.nytUr(), sidst: null, vent: false, måler: false, målT: 0, uden: false, udenT: 0, trin4: false, målt: false, visUden: false };
     // Scene 3: kontakten (0-2), farten, bygens levetider (µs på myonens eget ur) og pladser, tiden i turen (µs på
     // Jorden, i "Set fra myonen" på myonens ur), fasen ('klem', 'zoom' eller 'løb'), og om den fælles sætning står
     // (medSet: en hel byge er nede "Med Einstein", forløbets trin B5)
@@ -1092,6 +1093,9 @@ export default {
       sc2.måler = false;
       sc2.målT = 0;
       sc2.udenT = 0;
+      sc2.trin4 = false;
+      sc2.målt = false;
+      sc2.visUden = false;
       sc3.fælles = true; // den fælles sætning står, når man kommer til scene 3
       forfra3();
       sc4.t = 0;
@@ -1176,6 +1180,20 @@ export default {
     const sendUret = () => { Lys.nulstilUr(sc2.ur); sc2.vent = false; };
     const mål = () => { sc2.måler = true; sc2.målT = 0; };
     const målFærdig = () => sc2.måler && sc2.ur.stille && (ROLIG || sc2.målT >= 3.8);
+    // B4 efter målebåndet: "Uden Einstein" og "Med Einstein" sætter urene i gang igen (uden målebåndet)
+    function einsteinTrin4(uden) {
+      sc2.måler = false;
+      sc2.ur.stille = false;
+      sætUden2(uden);
+    }
+    const UDEN_SET = 1.5; // sekunder med "Uden Einstein" (lidt over ét tik, hvor begge ure viser "tik 1"), før Så kommer
+    // Kaldes fra opdater, når målebåndet er lagt i B4: Linjen spørger, og kontakterne kommer frem
+    function målLagt() {
+      sc2.målt = true;
+      forløbVink('Hvad, hvis lyset kunne skynde sig som bolden? Tryk på "Uden Einstein".');
+      if (sc2.visUden) einsteinTrin4(true);
+      tegnForløb();
+    }
     // B5: En byge, hvor ca. halvdelen når ned med Einstein (11-15 af 24, middel 55 %), så Så-teksten passer hver gang
     function forløbsByge() {
       const egen = myonTur(FARTER3[FARTER3.length - 1].b).egen;
@@ -1208,12 +1226,20 @@ export default {
           færdig: () => !sc2.vent && sc2.ur.jord >= 1.5,
           visMig: sendUret,
         },
-        // B4: målebåndet langs den skrå vej (dobbelt så lang ved 87 %)
+        // B4: målebåndet langs den skrå vej (dobbelt så lang ved 87 %), og så "Uden Einstein" (lyset får skibets fart
+        // lagt oven i, og urene går ens). Jeres valg 17. november 2026, i turen valgt af orkestratoren 18. november 2026.
         maal: {
-          start: () => stilTrin2(),
-          get knapper() { return [{ id: 'maal', tekst: '📏 Mål', gør: mål, aktiv: () => !sc2.måler }]; },
-          færdig: målFærdig,
-          visMig: mål,
+          start: () => { stilTrin2(); sc2.trin4 = true; },
+          get knapper() {
+            if (!sc2.målt) return [{ id: 'maal', tekst: '📏 Mål', gør: mål, aktiv: () => !sc2.måler }];
+            return [
+              { id: 'uden', tekst: 'Uden Einstein', gør: () => einsteinTrin4(true), valgt: () => sc2.uden },
+              { id: 'med', tekst: 'Med Einstein', gør: () => einsteinTrin4(false), valgt: () => !sc2.uden },
+            ];
+          },
+          færdig: () => sc2.målt && sc2.uden && sc2.udenT >= UDEN_SET,
+          // "Næste ›" før handlingen: målebåndet og så "Uden Einstein" (eller kun "Uden Einstein", når båndet er lagt)
+          visMig: () => { if (sc2.målt) einsteinTrin4(true); else { sc2.visUden = true; if (!sc2.måler) mål(); } },
         },
         // B5: myonerne, først uden og så med Einstein (ved 99,97 %, γ ≈ 38)
         myoner: {
@@ -1272,6 +1298,7 @@ export default {
           const G = geo2();
           const stoppet = Lys.skridtUr(sc2.ur, dt, { v: T.LYSUR_FARTER[sc2.fart], c: G.c, bredde: G.we, stopOppe: sc2.trekant || sc2.måler, uden: sc2.uden });
           if (stoppet) visTekst();
+          if (sc2.trin4 && !sc2.målt && målFærdig()) målLagt();
         } else if (aktiv === 2) {
           if (skridt3(dt)) visTekst();
         } else if (aktiv === 3) {
@@ -1296,7 +1323,7 @@ export default {
         forløb: forløbTest(),
         startForløb: () => startForløbet(),
         kørerForløb: () => kørerForløb(),
-        forløbsscene: () => ({ vent1: sc1.vent, kast: sc1.kast, t1: sc1.t, vent2: sc2.vent, måler: sc2.måler, målT: sc2.målT, medSet: sc3.medSet }),
+        forløbsscene: () => ({ vent1: sc1.vent, kast: sc1.kast, t1: sc1.t, vent2: sc2.vent, måler: sc2.måler, målT: sc2.målT, målt: sc2.målt, uden: sc2.uden, udenT: sc2.udenT, medSet: sc3.medSet }),
         scene: () => aktiv,
         højesteSet: () => højesteSet,
         lærred: () => {
