@@ -139,6 +139,9 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har intet navn i 3D',
     nv.length === 7 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Sorte huller')?.synlig
     && !navn('Liv andre steder')?.synlig, JSON.stringify(nv));
+  // Det sorte hul ved siden af tegnes af linsen fra Kosmos (lysbøjningen), i et lille lag efter lampens størrelse
+  const hul = await vent(page, () => (atomlabTest.gaader.skinne().lampe('sorthul')?.tegnet ?? 0) > 0, null, 10000) && await page.evaluate(() => atomlabTest.gaader.skinne().lampe('sorthul'));
+  tjek('skarpere: lampen for det sorte hul bruger linsen fra Kosmos og et lag på højst 512 px', hul?.linse && hul.tegnet > 0 && hul.størrelse >= 96 && hul.størrelse <= 512, JSON.stringify(hul));
   const nabo = await T(() => atomlabTest.gaader.skinne().skærm('sorthul'));
   await page.mouse.click(nabo.x, nabo.y);
   const trykket = (await K()).fokus;

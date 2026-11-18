@@ -556,6 +556,7 @@ export function skjul() {
 export function fjern() {
   skjul();
   sætToning(0);
+  for (const l of lys) l.lys?.fjern?.(); // fx linsen bag det sorte hul (lag uden for gruppen)
   if (gruppe) {
     ryd(gruppe);
     verden.scene.remove(gruppe);
@@ -584,6 +585,7 @@ export function testAdgang() {
     tændte: () => lys.filter((l) => l.holder.visible).map((l) => l.id),
     lukket: () => lukket,
     ringe: () => lys.filter((l) => l.ring.visible).map((l) => l.id),
+    lampe: (id) => lys.find((l) => l.id === id)?.lys?.test?.() ?? null, // fx det sorte hul: { linse, størrelse, tegnet, frys }
     // Navnene (HTML): teksten, pladsen i vinduet, skriftstørrelsen og om det kan ses
     navne: () => navne.map((n) => ({
       tekst: n.el.textContent, x: n.x, y: n.y, px: parseFloat(getComputedStyle(n.el.firstChild).fontSize),
