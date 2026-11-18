@@ -128,3 +128,12 @@
 - Hanczyc, Fujikawa og Szostak 2003: forfatterne, titlen og "RNA indeni" er ikke set i en kilde, og heller ikke status for protoceller, der vokser og deler sig. Gebicki og Hicks 1973 og Hargreaves og Deamer 1978 er ikke slået op.
 - Oba 2023: mængderne af uracil (ca. 6-32 ppb) kun i et søgeresultat. Et søgeresultat nævnte alle fem baser i Ryugu (Nature Astronomy, marts 2026): ikke bekræftet.
 - Ikke slået op: Lost Citys pH og Kelley m.fl. 2001, "ler først" (Cairns-Smith) og "proteiner først", og at Pasteurs kolber stadig skulle være sterile (brug det ikke).
+
+## 12. Slået op til L5 (18. november 2026, Opus, turen og delen "Begyndelsen")
+- **Cleaves m.fl. 2008** (Wikipedia "Miller–Urey experiment", læst i dag): Millers studerende mente, at "the production of nitrites, which destroy amino acids" forklarer de små udbytter med CO₂ og N₂. "when they added calcium carbonate to buffer the aqueous solution and ascorbic acid to inhibit oxidation, yields of amino acids greatly increased", og "seawater would likely still be buffered and ferrous iron could inhibit oxidation". **Ret sikker** (Wikipedia, ikke artiklen). Teksten siger "kalk og lidt C-vitamin" (ascorbinsyre er C-vitamin). At kalken "holder vandet fra at blive surt", står ikke i kilden: Den mekanisme er ikke brugt.
+- **Vandets farve:** "After a day, the solution … was pink, and after a week … deep red and turbid" (samme side). **Ret sikker.**
+- **Gibson m.fl. 2010** (Wikipedia "Mycoplasma laboratorium", læst i dag): genomet "transplanted into an existing cell of *Mycoplasma capricolum* that had its DNA removed". Fable (E5) mener efter hukommelsen, at cellen ikke blev tømt først. Teksten siger kun "en bakterie, der levede i forvejen" og ikke noget om det gamle DNA.
+- **QT45** (forfatternes manuskript, PMC7618777, læst i dag, Science 12. februar 2026): "a 45-nucleotide polymerase ribozyme … using trinucleotide triphosphate (triplet) substrates in mildly alkaline eutectic ice", "complementary strand … at 94.1% per-nucleotide fidelity, and a copy of itself using defined substrates, both with yields of ~0.2% in 72 days", forsøgene ved "-7 °C frozen". **Sikker.**
+- **Lane og Martin 2012:** PubMed og cell.com kunne ikke læses (robotkontrol). Teksten bruger i stedet Russell 1997, Martin og Russell 2003 og Herschy m.fl. 2014 (afsnit 8 og Fables tabel).
+- **Døgnuret:** (4,54 − 3,48) / 4,54 × 24 t = 5,60 t = kl. 5.36. 315.000 / 4,54 mia. × 86.400 s = 6,0 s.
+- **QT45 uden fejl:** 0,941⁴⁵ = 0,065, ca. hver femtende kopi.

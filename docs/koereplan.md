@@ -6,6 +6,7 @@
 - **Forståelig før mere.** Serie 1 gør det, der findes, forståeligt med forløb. Liv L3 og Venus V3 holder pause, til Serie 1 er lavet og prøvet. **Ændret 15. november 2026 (jeres svar, runde 6):** Der bygges videre, mens prøven med sønnen venter. Liv L3 kommer efter Venus V3-V5 uden at vente på prøven.
 - **Nyt indhold må bygges imens på tre betingelser:** (1) Forløb-klodsen findes først. (2) Hver ny del fødes med én kernesætning og sit forløb. (3) Den har status "prøve", til et barn har prøvet den ([guide-proeven.md](guide-proeven.md), en fast aften om ugen).
 - **Højst én ny stor del i gang ad gangen** ud over Solsystemet. **Undtagelse (jeres svar 14. november 2026):** Videnskabsfolkene (Huygens) bygges samtidig med Gåderne 3D. Solsystemet prioriteres også, og **andre nye spor (fx Lys og farver) starter først, når Solsystemet er færdigt** (Mars del 3 og overblikket først, så Venus V3-V5 og Merkur og Pluto). De næste fem sessioner står i [prompt-naeste-fem.md](prompt-naeste-fem.md).
+- **Højst to tunge sessioner (Opus) ad gangen** (jeres beslutning 18. november 2026): grænsen på 5 timer deles af alle sessioner.
 - **Faktagrundlag må laves på forhånd og parallelt** (kun dokumenter).
 - **Frigivet** er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp, og fundene er rettet (slutningen af Serie 3).
 
@@ -62,7 +63,7 @@ En prøve med sønnen efter hvert punkt.
 | [Forløb](lige-nu/forloeb.md) | Klodsen og "Dit første atom" er lavet (12. november 2026) og venter på prøven. Derefter Serie 2 nr. 5 (plan først). |
 | [Molekyler](lige-nu/molekyler.md) | Liv som tre ture og Molekyler som egen del (alle lavet, status "prøve"). Næste: Liv L5 delen "Begyndelsen" ([drejebog-liv.md](drejebog-liv.md), "Læs docs/prompt-liv-l5.md"). |
 | [Tid og rum](lige-nu/tid.md) | Runden med sønnen (begge forløb om tid og Kosmos i fire grupper er bygget, Serie 1 nr. 4). |
-| [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Overblikket er bygget med forløbet og "Rejs med lyset" (15. november 2026, status "prøve"). Venus (V1-V5) og Merkur og Pluto (MP1-MP4) er færdige 17.-18. november 2026. Næste: jeres valg mellem Mars ekstra, Månen og jeres ønsker fra 17. november (se sporets fil). |
+| [Solsystemet og Kosmos](lige-nu/solsystemet.md) | Overblikket er bygget med forløbet og "Rejs med lyset" (15. november 2026, status "prøve"). Venus (V1-V5) og Merkur og Pluto (MP1-MP4) er færdige 17.-18. november 2026. **Jeres beslutning 18. november 2026 (jeres ønske via orkestratoren):** Mars gøres færdig nu, før Månen og ønskerne fra 17. november. "Mars åbner langsomt anden gang" er rettet (store kort i strimler). Næste er Mars ekstra med et go pr. del: Nordpolen tæt på (M7b-pol), sten og terræn i Stå på Mars (M8c del 3), Curiosity som 3D-model (M8c del 2) og lyset (L2, på jeres pc), [prompt-mars-ekstra.md](prompt-mars-ekstra.md). |
 | [Videnskabsfolkene](lige-nu/videnskabsfolkene.md) | Planen og drejebogen til Huygens er skrevet (15. november 2026). Næste: Fables tjek senest 16. november ([prompt-fable-huygens.md](prompt-fable-huygens.md)), så Opus' noter og H1. |
 | [Menuen](lige-nu/menuen.md) | **Lukket 14. november 2026** (Ringen er lavet). Det, der skal rettes i menuen, tages i Småting eller i den del, der giver menuen en ny verden. |
 

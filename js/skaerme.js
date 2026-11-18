@@ -12,6 +12,7 @@ export const SKÆRME = [
   { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig' },
   { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig' },
   { id: 'liv', verden: 'liv', titel: 'Liv', modul: './liv.js', status: 'prøve' },
+  { id: 'begyndelsen', verden: 'liv', titel: 'Begyndelsen', modul: './begyndelsen.js', status: 'prøve' },
   { id: 'batteri', verden: 'elektricitet', titel: 'Batteriet', modul: './batteri.js', status: 'færdig' },
   { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig' },
   { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
@@ -26,7 +27,7 @@ export const SKÆRME = [
 export const VERDENER = [
   { id: 'kerner', navn: 'Kernerne', tekst: 'Atomkerner, der smelter sammen i stjernerne eller flækker i en reaktor', motiv: 'fusion' },
   { id: 'atomer', navn: 'Atomer', tekst: 'Byg atomer og molekyler, og mød alle 118 grundstoffer', motiv: 'vaerksted' },
-  { id: 'liv', navn: 'Liv', motiv: 'liv' },
+  { id: 'liv', navn: 'Liv', tekst: 'Livets opskrift i dine celler, og hvordan livet måske begyndte', motiv: 'liv' },
   { id: 'elektricitet', navn: 'Elektricitet', motiv: 'batteri' },
   { id: 'rummet', navn: 'Rummet', tekst: 'Rejs til planeterne, og se sorte huller og supernovaer', motiv: 'solsystem' },
   { id: 'biblioteket', navn: 'Biblioteket', motiv: 'ordbog' },

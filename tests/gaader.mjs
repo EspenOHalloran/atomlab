@@ -191,15 +191,18 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await ctx.close();
 }
 
-// Livets begyndelse: "Se det selv" åbner Liv og starter "Se genet blive læst", og knappen ved Ribosomet går tilbage
+// Livets begyndelse: "Prøv det selv" åbner Begyndelsen i Liv (L5), og knappen ved Ribosomet i Liv går tilbage til gåden
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
   const T = (f, a) => page.evaluate(f, a);
   await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
   for (let i = 0; i < 3; i++) { await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); await page.click('#gaadeTrin .fl-næste'); }
-  await page.click('#gaadeTrin [data-gaa="liv:protein"]');
-  tjek('"Se det selv" åbner Liv og starter "Se genet blive læst"', await vent(page, () => location.hash === '#liv' && atomlabTest.liv?.protein().tilstand === 'genet', null, 20000));
+  await page.click('#gaadeTrin [data-gaa="begyndelsen"]');
+  tjek('"Prøv det selv" åbner Begyndelsen', await vent(page, () => location.hash === '#begyndelsen' && atomlabTest.aktiv() === 'begyndelsen', null, 20000));
+  // Liv med "Se genet blive læst" (som fra en knap data-gaa="liv:protein")
+  await T(() => { const k = document.createElement('button'); k.dataset.gaa = 'liv:protein'; document.body.append(k); k.click(); k.remove(); });
+  await vent(page, () => location.hash === '#liv' && atomlabTest.liv?.protein().tilstand === 'genet', null, 20000);
   let trin = '';
   for (let i = 0; i < 40 && trin !== 'oversæt'; i++) trin = await T(() => { atomlabTest.liv.proteinSpol(2); return atomlabTest.liv.protein().trin; });
   await vent(page, () => !document.getElementById('livGaade').hidden);
