@@ -32,7 +32,7 @@ for (const b of byggede()) {
   const t = await b.tekster();
   if (t.OPSLAG[0]?.slags !== 'forside' || !t.FORSIDE?.spørgsmål || !t.FORSIDE?.portrætAlt) fejlListe.push(`${b.id}: forsiden`);
   if (!t.OPSLAG.every((o) => ['forside', 'scene', 'sider', 'om'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
-  // "Om …" (H4): budgettet fra planen (højst to tal og fire spørgsmål, "For nørder" og "Ærligt talt")
+  // "Om …" (H4): budgettet fra planen (højst to tal og fire spørgsmål, "Vil du vide mere?" og "Ærligt talt")
   if (t.OPSLAG.some((o) => o.slags === 'om') && (!t.OM?.navn || !t.OM.tal?.length || t.OM.tal.length > 2 || !t.OM.hvorfor?.length || t.OM.hvorfor.length > 4
     || t.OM.hvorfor.some((h) => !h.spørgsmål || !h.svar) || !t.OM.nørd?.punkter?.length || !t.OM.ærligt?.punkter?.length
     || (t.OM.sætninger.match(/[.!?](\s|$)/g) ?? []).length > 3)) fejlListe.push(`${b.id}: "Om" holder ikke budgettet`);
@@ -75,6 +75,18 @@ tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåd
     const trin4 = fl?.trin.find((x) => x.id === 'annulo');
     tjek('introduktionen til hemmeligheden: 1656, 62 bogstaver, anagram, højst fem sætninger og ingen alder på 25, og trin 4 siger, at ringen ikke ses lige nu',
       f && /1656/.test(f.sted) && /62/.test(f.tekst) && /anagram/.test(f.tekst) && sætninger <= 5 && !/\b25\b/.test(f.tekst) && /1659/.test(f.lille) && /ses ikke/.test(trin4?.spørg), JSON.stringify({ sætninger, spørg: trin4?.spørg }));
+  }
+  // Den røde tråd (jeres ønske 18. november 2026): forsiden introducerer ham og mysteriet (alderen står kun dér), og
+  // hvert opslag peger videre: "Det så du" til hemmeligheden, gåden til bogen, siderne som en sti og "Om" til Saturn
+  {
+    const i = t.FORSIDE.intro;
+    const sætninger = (i?.tekst.match(/[.!?](\s|$)/g) ?? []).length;
+    tjek('den røde tråd: forsiden har introduktionen (Haag 1655, Galilei 1610, 45 år, Huygens på 25, højst fire sætninger), og alderen står kun dér',
+      i && /1655/.test(i.sted) && /Galilei/.test(i.tekst) && /1610/.test(i.tekst) && /45 år/.test(i.tekst) && /Huygens/.test(i.tekst) && /\b25\b/.test(i.tekst) && sætninger <= 4
+      && !/\b2[56]\b/.test(t.GÅDE.forord.tekst), JSON.stringify({ sætninger }));
+    tjek('den røde tråd: hver side peger videre (hemmeligheden, bogen, "Næste side" og "Havde han ret?", og "Om" har Saturn fra kanten som sin knap)',
+      /ANNULO/.test(t.VEJE.sætning) && !/1659/.test(t.VEJE.sætning) && t.GÅDE.videre && t.BOGEN.intro && t.BOGEN.næste && t.BOGEN.sidst?.endsWith('?')
+      && t.BOGEN.sider.every((s) => s.om) && t.OM.knap?.gaa === 'solsystem:saturn:kanten' && /Huygens havde ret/.test(t.OM.sætninger));
   }
   tjek('fortællingen: forløbet "Saturns ører" har fire trin med kapitel, gæt og korte tekster, og "linse" og "anagram" står i Ordbogen', !fejlFl.length, fejlFl.join('; '));
   // Test 2 (planen afsnit 7): Anagrammets 62 bogstaver passer præcist med sætningen, i 17 bunker, og ordene giver sætningen
@@ -251,8 +263,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
     kapitler.join('|') === 'Linsen|Den lille prik|Ringen' && lab.trin === 'naetter' && lab.lab === 'naetter' && lab.navn, JSON.stringify({ kapitler, lab }));
   tjek('trinene: linsen bliver skarp, Titan er tilbage efter 16 nætter (10. april 1655), og ringen løfter sig ved kanten efter tavlens tegninger',
     linse && nætter && kanten, JSON.stringify({ linse, halv, nætter, ikkeEndnu, kanten, lyser }));
-  tjek('"Det så du" viser kernesætningen, sætningen fra 1659 og tre veje, og "Bladr i bogen fra 1659" åbner bogen selv med bladringen låst op (tilbage i fortællingen står ringen)',
-    slut.tekst?.includes('tynd, flad ring') && slut.lille?.startsWith('I 1659') && slut.veje.length === 3 && slut.veje[0].startsWith('Se ringen forsvinde ved Saturn') && slut.vej?.startsWith('Bladr i bogen fra 1659') && videre.opslag === 'bogen' && videre.lab === 'ringen' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
+  tjek('"Det så du" viser kernesætningen, linjen om ANNULO og tre veje (hemmeligheden først), og "Bladr i bogen fra 1659" åbner bogen selv med bladringen låst op (tilbage i fortællingen står ringen)',
+    slut.tekst?.includes('tynd, flad ring') && slut.lille?.startsWith('Men ANNULO') && slut.veje.length === 3 && slut.veje[0].startsWith('Hele hemmeligheden') && slut.vej?.startsWith('Se ringen forsvinde ved Saturn') && videre.opslag === 'bogen' && videre.lab === 'ringen' && !videre.låst && videre.kører === null, JSON.stringify({ slut, videre }));
   // Esc midt i forløbet går til hylden og stopper det
   await page.click('#opdBog .hs-igen');
   await vent(page, () => atomlabTest.opdagelser.forløb.kører());
@@ -318,6 +330,12 @@ for (const [navn, opsætning] of [
   await O(() => atomlabTest.opdagelser.hylden());
   await åbnGåden();
   const igen = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), status: document.querySelector('#opdBog .ag-status')?.textContent, eget: !!document.querySelector('#opdBog .ag-eget-knap') }));
+  // Den røde tråd: "Se den i bogen fra 1659 ›" bladrer videre til bogen
+  if (await O(() => !!document.querySelector('#opdBog .ag-forord-knap'))) await page.click('#opdBog .ag-forord-knap');
+  const tilBogen = await O(() => !!document.querySelector('#opdBog .ag-videre'));
+  await page.click('#opdBog .ag-videre');
+  const iBogen = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'bogen');
+  tjek('en løst gåde har også næste gang "Se den i bogen fra 1659 ›", som bladrer til bogen', tilBogen && iBogen);
   tjek('"Hemmeligheden": otte brikker og 17 bunker, der ikke er knapper, en forkert brik tæller ikke, og alle otte giver "Alle 62 er brugt"',
     start.brikker === 8 && start.bunker === 17 && start.knapper === 0 && start.tal === 62 && forkert.lagt === 0 && forkert.tal === 62
     && slut.lagt === 8 && slut.tal === 0 && slut.hel && slut.status === 'Alle 62 er brugt. Det passer.', JSON.stringify({ start, forkert, slut }));
@@ -356,7 +374,7 @@ for (const [navn, opsætning] of [
 }
 
 // Bogen selv (test 7, H4): siderne hentes først, når opslaget "Bogen fra 1659" åbnes, et glødende sted på s. 47 viser
-// latin og dansk, og "Om Huygens" er det sidste opslag med fire "Hvorfor?" og "For nørder" og "Ærligt talt" lukkede
+// latin og dansk, og "Om Huygens" er det sidste opslag med fire "Hvorfor?" og "Vil du vide mere?" og "Ærligt talt" lukkede
 {
   const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
   const O = (f, a) => page.evaluate(f, a);
@@ -401,9 +419,19 @@ for (const [navn, opsætning] of [
   await page.click('#opdBog .bog-pil[data-bladr="-1"]');
   const tilbage = await O(() => ({ side: atomlabTest.opdagelser.scene()?.side(), sted: atomlabTest.opdagelser.scene()?.sted(), kort: !!document.querySelector('.hvorfor-kort:not(.skjult)') }));
   await page.waitForTimeout(300);
-  tjek('"Om Huygens" er det sidste opslag: to tal, fire "Hvorfor?" (et kort åbner og lukker ved bladring), "For nørder" og "Ærligt talt" lukkede, og bogen husker s. 47',
-    om.opslag === 'om' && om.nr === om.ialt - 1 && om.næste && om.tal === 2 && om.hvorfor === 4 && om.lag.map((l) => l.titel).join() === 'For nørder,Ærligt talt' && om.lag.every((l) => !l.åben)
+  tjek('"Om Huygens" er det sidste opslag: to tal, fire "Hvorfor?" (et kort åbner og lukker ved bladring), "Vil du vide mere?" og "Ærligt talt" lukkede, og bogen husker s. 47',
+    om.opslag === 'om' && om.nr === om.ialt - 1 && om.næste && om.tal === 2 && om.hvorfor === 4 && om.lag.map((l) => l.titel).join() === 'Vil du vide mere?,Ærligt talt' && om.lag.every((l) => !l.åben)
     && kort === 'Hvorfor et anagram?' && tilbage.side === 's47' && tilbage.sted === 'saetningen' && !tilbage.kort && sider.length === antal, JSON.stringify({ om, kort, tilbage, antal, sider: sider.length }));
+  // Den røde tråd: "Næste side ›" går fra tavlen til s. 48, og "Havde han ret? ›" bladrer til "Om Huygens" med Saturn som knap
+  await page.click('#opdBog .bs-fane >> text=Tavlen');
+  const sti = [];
+  for (let i = 0; i < 4; i++) {
+    sti.push(await O(() => `${atomlabTest.opdagelser.scene()?.side?.()}:${document.querySelector('#opdBog .bs-videre')?.textContent}`));
+    await page.click('#opdBog .bs-videre');
+  }
+  const slutOm = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'om' && document.querySelector('#opdBog .bo-knap[data-gaa="solsystem:saturn:kanten"]'));
+  tjek('"Næste side ›" går gennem de fire sider, og "Havde han ret? ›" bladrer til "Om Huygens" med "Se ringen forsvinde ved Saturn ›"',
+    sti.join() === 'tavle:Næste side ›,s16:Næste side ›,s47:Næste side ›,s48:Havde han ret? ›' && slutOm, JSON.stringify(sti));
   await ctx.close();
 }
 

@@ -268,7 +268,7 @@
         <button class="fane-knap" data-fane="atom" role="tab">Atom</button>
         <button class="fane-knap" data-fane="kerne" role="tab">Kerne<span class="fane-prik"></span></button>
         <button class="fane-knap" data-fane="fakta" role="tab">Fakta</button>
-        <button class="fane-knap" data-fane="nørd" role="tab" title="Flere detaljer til de nysgerrige">Nørd</button>
+        <button class="fane-knap" data-fane="nørd" role="tab" title="Vil du vide mere?">Mere</button>
       </nav>
       <div class="fane" data-fane="atom">
         <dl class="tal" id="infoTal"></dl>
@@ -355,8 +355,8 @@
       </div>
       <dl class="tal lille byg-tal" id="bygTal"></dl>
       <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="bygBinder">Hvorfor holder de sammen?</button> <button class="hvorfor" data-hvorfor="bygForm">Hvorfor er vand bøjet?</button> <button class="hvorfor" id="bygHvorforEkstra" hidden></button> <button class="hvorfor" data-hvorfor="bygPolær">Hvorfor plus og minus?</button></p>
-      <details class="forklaring-boks lag-boks" data-lag="byg-nørd" name="byg-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Modellen bag prikkerne og formen.</span></summary>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="byg-nørd" name="byg-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
         <p>Prikkerne og stregerne er en model, som kemikere kalder Lewis-strukturer. Spillet regner selv dobbelt- og tripelbindingerne ud, så så mange elektroner som muligt får en partner.</p>
         <p>Formen kommer fra VSEPR-modellen: Elektronparrene skubber hinanden væk. Bindingerne er fjedre, og de frie par skubber 1,245 gange så hårdt som en binding. Tallet er valgt, så vand får 104,5°. Så får ammoniak 106,7° af sig selv, ligesom det målte. Det er en enkel model, ikke en kvanteudregning.</p>
       </details>
@@ -392,8 +392,8 @@
       </div>
       <dl class="tal lille byg-tal" id="knaldTal"></dl>
       <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="knaldBakke">Hvorfor sker der ingenting?</button> <button class="hvorfor" data-hvorfor="bygJordensVand" id="knaldJordensVand" hidden>Hvor kom Jordens vand fra?</button> <button class="hvorfor" data-hvorfor="knaldKæde">Hvorfor en kæde?</button> <button class="hvorfor" data-hvorfor="knaldVarme">Hvor kommer varmen fra?</button></p>
-      <details class="forklaring-boks lag-boks" data-lag="knald-nørd" name="knald-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Tallene bag måleren.</span></summary>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="knald-nørd" name="knald-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
         <p>Bindingerne (fra NIST): H–H 4,52 eV, O=O 5,17 eV, O–H i OH 4,44 eV, og når OH bliver til vand, 5,17 eV. Kemikere skriver det som 436, 498, 428 og 499 kJ pr. mol. De to O–H-bindinger i vand er altså ikke lige stærke. Tabeller bruger gennemsnittet, ca. 464 kJ pr. mol.</p>
         <p>Kæden kan gå forskellige veje, så "brudt" og "dannet" kan blive større, men forskellen ender altid på 10,0 eV for 4 H₂O (Hess' lov).</p>
       </details>
@@ -431,8 +431,8 @@
       </div>
       <dl class="tal lille bytte-regnskab" id="bytteTal"></dl>
       <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="bytteKoster">Hvorfor koster det?</button> <button class="hvorfor" data-hvorfor="bytteIon">Hvad er en ion?</button></p>
-      <details class="forklaring-boks lag-boks" data-lag="bytte-nørd" name="bytte-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Tallene og modellen bag måleren.</span></summary>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="bytte-nørd" name="bytte-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
         <div id="bytteNørd"></div>
       </details>
       <details class="forklaring-boks lag-boks ærligt" data-lag="bytte-ærligt" name="bytte-lag">
@@ -867,8 +867,8 @@
       <p class="liv-ekstra" id="livEkstra"></p>
       <div class="liv-hvorfor" id="livHvorfor" hidden></div>
       <p class="liv-gaade" id="livGaade" hidden><button class="side-knap" data-gaa=""></button></p>
-      <details class="forklaring-boks lag-boks" data-lag="liv-nørd" name="liv-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Flere tal, krystallen, genet og koden</span></summary>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="liv-nørd" name="liv-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
         <div class="liv-nørd-trin" id="livNørdTrin" hidden><dl class="liv-tal"></dl><p></p></div>
         <p>Atomernes pladser er målt med røntgen i en rigtig DNA-krystal (1BNA, Drew, Dickerson og kolleger 1981, fra Protein Data Bank). Røntgen kan ikke se H-atomerne, så dem har vi regnet ud. Krystallens stige er bøjet og har 9,8 trin pr. omgang. I vand er det ca. 10,5, og det bruger stigen her.</p>
         <p>To sæt kromosomer er ca. 6,1 milliarder basepar hos en pige og lidt færre hos en dreng, fordi Y-kromosomet er meget mindre end X.</p>
@@ -959,8 +959,8 @@
       <p class="liv-tekst" id="begTekst"></p>
       <dl class="liv-tal" id="begTal"></dl>
       <div class="liv-hvorfor" id="begHvorfor"></div>
-      <details class="forklaring-boks lag-boks" data-lag="beg-nørd" name="beg-lag">
-        <summary><strong>For nørder</strong><span class="lag-kort">Forsøgene, tallene og kilderne</span></summary>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="beg-nørd" name="beg-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
         <p><strong>Millers kolbe</strong> (Science, 15. maj 1953) var på 5 liter med gasserne og en lille kolbe med vand, der kogte. Gnisterne kørte i en uge. Miller fandt selv fem aminosyrer. Da hans gamle prøver blev målt igen med nye instrumenter, var der ca. 14, og i en udgave med damp som ved en vulkan 22.</p>
         <p><strong>Den nye luft:</strong> I 2008 viste Jim Cleaves og kolleger, at gnisterne i kuldioxid og nitrogen også laver stoffer, der ødelægger aminosyrerne. Med kalk og lidt C-vitamin i vandet blev der mange flere.</p>
         <p><strong>QT45</strong> (Science, februar 2026) er et RNA på 45 bogstaver. Det byggede først den modsatte streng og så en kopi af sig selv, i is ved −7 °C. Kun ca. 0,2 % af RNA'et blev til kopier på 72 dage, og 94,1 % af bogstaverne var rigtige.</p>

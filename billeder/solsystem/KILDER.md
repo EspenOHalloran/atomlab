@@ -2,7 +2,7 @@
 
 Billederne bruges af Jorden og Månen i Kosmos (`js/kosmos/jorden.js`) og senere af Solsystemet.
 Hvert billede står her med, hvor det kommer fra, og hvilken licens det har.
-NASA's billeder er offentligt ejede (public domain), men NASA skal nævnes som kilde. Det sker i hjælpen til Kosmos og under "For nørder".
+NASA's billeder er offentligt ejede (public domain), men NASA skal nævnes som kilde. Det sker i hjælpen til Kosmos og under "Vil du vide mere?".
 
 `lav_billeder.py` laver filerne ud fra originalerne (adresserne står øverst i filen). `-4k` er 4096 × 2048 (pc), `-2k` er 2048 × 1024 (tablet og telefon).
 

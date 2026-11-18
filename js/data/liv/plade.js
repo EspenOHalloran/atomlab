@@ -262,7 +262,7 @@ export function lavPlade({ kol = 100, rækker = 100, lag = 'normal', frø = 1, t
   return m;
 }
 
-// Panelet i "Leg frit: pladen" (budgettet: højst to tal og tre sætninger fremme, resten i "For nørder").
+// Panelet i "Leg frit: pladen" (budgettet: højst to tal og tre sætninger fremme, resten i "Vil du vide mere?").
 // Kilder: Baym m.fl. 2016 (se øverst), Luria og Delbrück 1943 (Wikipedia "Luria–Delbrück experiment": "arise in the
 // absence of selective pressure rather than being a response to it", antallet "varied drastically", Nobelprisen 1969
 // "in part for this work"). "Highly resistant mutants may be trapped behind more sensitive lineages" (Baym, resuméet).

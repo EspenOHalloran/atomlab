@@ -48,7 +48,7 @@ const rulFrem = async (p, vælger) => {
 await page.goto(`${ADRESSE}/?test#kosmos`);
 await page.waitForTimeout(1500);
 await T(() => atomlabTest.kosmos.vælg('supernova'));
-await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary'); // folder "For nørder" ud
+await page.click('#kosmosTekst details[data-lag="side-nørd"] > summary'); // folder "Vil du vide mere?" ud
 // Hold øje med ordet i stedet for at vente en fast tid (testbrowseren tegner langsomt)
 const markeret = await page.waitForSelector('#kosmosTekst .fagord[data-ord="neutrino"]', { timeout: 3000 }).then(() => true, () => false);
 tjek('supernova: "neutrino" er markeret', markeret);
@@ -82,7 +82,7 @@ await page.waitForTimeout(200);
 tjek('Enter på ordet viser forklaringen', (await vist()) === 'Neutrino');
 await page.keyboard.press('Escape');
 
-// Hver foldeboks på siden er sin egen tekst: "neutronstjerne" er markeret både i et emne og i "For nørder"
+// Hver foldeboks på siden er sin egen tekst: "neutronstjerne" er markeret både i et emne og i "Vil du vide mere?"
 tjek('supernova: fagord er markeret i hver boks for sig', await T(() => [...document.querySelectorAll('#kosmosTekst .side-del')].filter((d) => d.querySelector('.fagord[data-ord="neutronstjerne"]')).length >= 2));
 
 // Ord bliver kun markeret én gang pr. tekst og aldrig i knapper, overskrifter og citater

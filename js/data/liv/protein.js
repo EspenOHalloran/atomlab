@@ -8,7 +8,7 @@ import { HBB, LÆS_KODONER, SEGL_KODON } from './gener.js';
 export const ANTAL_AA = HBB.protein.length; // 147
 
 // Trinene, når genet bliver læst. tal: [navn, værdi], højst to (budgettet i docs/retning.md). nørd: { tal, tekst }
-// øverst i "For nørder". Værdier med {n} og {ord} skrives af js/liv-protein.js.
+// øverst i "Vil du vide mere?". Værdier med {n} og {ord} skrives af js/liv-protein.js.
 export const TRIN_PROTEIN = {
   aflæs: {
     titel: 'Aflæsningen',

@@ -1,7 +1,7 @@
 // Turen "Kopien" i Liv (forløb 3, L3). Ren data uden Three.js, så det kan testes i Node. Drejebogen står i
 // docs/drejebog-liv.md, afsnit 2 (med Opus' noter i docs/fable/E10-liv-noter.md, afsnit 3) og skabelonen i
 // docs/fable/E3-forloeb.md. Det, der rører scenen, står i js/liv-kopien.js under samme trin-id. Drejebogens trin 5 er
-// "Det så du". "Det er cellen, der gør det": helikase, DNA-polymerase og kopigaffel står kun i "For nørder".
+// "Det så du". "Det er cellen, der gør det": helikase, DNA-polymerase og kopigaffel står kun i "Vil du vide mere?".
 // Fakta: docs/fakta-liv/dna-opskriften.md, afsnit 4 (semikonservativ, korrektur, under 1 pr. milliard, ca. 70).
 
 export const KOPIEN = {

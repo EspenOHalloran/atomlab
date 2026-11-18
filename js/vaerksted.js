@@ -956,7 +956,7 @@ function opdaterInfo() {
   el.om.innerHTML = om.map(([dt, dd]) => `<div><dt>${dt}</dt><dd>${dd}</dd></div>`).join('');
 }
 
-// Fanen "Nørd": flere detaljer til de nysgerrige
+// Fanen "Mere" (Vil du vide mere?): flere detaljer til de nysgerrige
 function opdaterNørd() {
   const { p, n } = tilstand;
   const dl = document.getElementById('infoNørd');

@@ -56,7 +56,7 @@ export default {
     ],
     videre: [gå('kosmos:pulsar', 'Pulsar'), gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:hviddvaerg', 'Hvid dværg')],
     nørd: `
-      <p><b>Hvorfor stopper det ved jern?</b> Jern og nikkel har den højeste bindingsenergi pr. nukleon. Fusion af lette kerner giver energi, men at lave noget tungere end jern <i>koster</i> energi. Se Nørd-fanen i Atomværkstedet, når du har bygget jern-56.</p>
+      <p><b>Hvorfor stopper det ved jern?</b> Jern og nikkel har den højeste bindingsenergi pr. nukleon. Fusion af lette kerner giver energi, men at lave noget tungere end jern <i>koster</i> energi. Se fanen "Mere" i Atomværkstedet, når du har bygget jern-56.</p>
       <p><b>Sammenfaldet:</b> Jernkernen i midten af stjernen vejer ca. 1,4 gange så meget som hele vores Sol, men den er kun på størrelse med Jorden. På under et sekund falder den sammen til en kugle på ca. 20 km. Elektronerne bliver presset ind i protonerne og bliver til neutroner og <b>neutrinoer</b>. En neutrino er en bittelille partikel uden ladning, der næsten ikke vejer noget. Den reagerer næsten aldrig med noget og flyver lige gennem stjerner, planeter og hele Jorden. Det er betahenfald baglæns (se Atomværkstedet). 99 % af energien forsvinder som neutrinoer.</p>
       <p><b>Supernova 1987A:</b> Da en stjerne eksploderede i en nabogalakse i 1987, fangede detektorer på Jorden ca. 25 neutrinoer, et par timer før man kunne se lyset. Det var første gang, man fangede neutrinoer fra en anden stjerne end Solen.</p>
       <p><b>Krabbetågen</b> er resterne af en supernova, som kinesiske astronomer så i år 1054. Den kunne ses om dagen i 23 dage. I midten snurrer en neutronstjerne 30 gange i sekundet.</p>

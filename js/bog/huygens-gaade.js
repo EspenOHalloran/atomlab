@@ -10,7 +10,7 @@
 //   påRørt kaldes ved hvert tryk (Forløb-klodsen: et tryk, mens man gætter, lader gættet tone væk).
 // Bunkerne er knapper på mindst 44 px (tre rækker på en telefon). Med ROLIG flyver og ryster intet.
 //
-// lavUdfordring(felt, anagram, { rolig, tekster, løst, påLøst }) er opslaget "Hemmeligheden" (drejebogen afsnit 4): de otte
+// lavUdfordring(felt, anagram, { rolig, tekster, løst, påLøst, påVidere }) er opslaget "Hemmeligheden" (drejebogen afsnit 4): de otte
 //   latinske brikker lægges på deres danske betydning (tryk på brikken og så på betydningen, eller omvendt). En forkert
 //   brik ryster og hopper tilbage. For hver brik tæller bunkerne ned, og til sidst står alle på 0: "Alle 62 er brugt."
 //   Man kan ikke fejle og kan stoppe når som helst. Bagefter (eller hvis gåden er løst før) kommer "Lav dit eget anagram":
@@ -169,7 +169,7 @@ export function lavAnagram(rod, anagram, { rolig = false, påRørt = null } = {}
 // Brikkernes faste blanding (ikke tilfældig, så testene og skærmbillederne er ens hver gang)
 const BLANDING = [5, 2, 7, 0, 3, 6, 1, 4];
 
-export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løst = false, påLøst = null, medForord = true } = {}) {
+export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løst = false, påLøst = null, påVidere = null, medForord = true } = {}) {
   const T = tekster;
   const ord = anagram.ord;
   felt.classList.add('ag-felt');
@@ -269,15 +269,18 @@ export function lavUdfordring(felt, anagram, { rolig = false, tekster = {}, løs
 
   // Efter gåden: "Prøv igen" (når den er løst nu) og "Lav dit eget anagram"
   function visEfter() {
-    efter.innerHTML = (ag.classList.contains('hel') ? `<button class="knap ag-igen">${esc(T.igen ?? 'Prøv igen')}</button>` : '')
+    // Videre til bogen fra 1659, når gåden er løst (den røde tråd, 18. november 2026)
+    efter.innerHTML = (påVidere && T.videre && (ag.classList.contains('hel') || erLøst) ? `<button class="knap ag-videre">${esc(T.videre)} ›</button>` : '')
+      + (ag.classList.contains('hel') ? `<button class="knap ag-igen">${esc(T.igen ?? 'Prøv igen')}</button>` : '')
       + `<button class="knap ag-eget-knap">${esc(T.eget ?? 'Lav dit eget anagram')} ›</button>`;
   }
   efter.addEventListener('click', (h) => {
     if (h.target.closest('.ag-igen')) {
       fjernLyttere();
       felt.classList.remove('ag-felt');
-      Object.assign(api, lavUdfordring(felt, anagram, { rolig, tekster, løst: true, påLøst, medForord: false }));
-    } else if (h.target.closest('.ag-eget-knap')) visEget();
+      Object.assign(api, lavUdfordring(felt, anagram, { rolig, tekster, løst: true, påLøst, påVidere, medForord: false }));
+    } else if (h.target.closest('.ag-videre')) påVidere?.();
+    else if (h.target.closest('.ag-eget-knap')) visEget();
   });
 
   // "Lav dit eget anagram": et felt og bogstaverne sorteret som Huygens'. Intet gemmes.

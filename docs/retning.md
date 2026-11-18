@@ -13,7 +13,7 @@
 2. **Spørgsmålet før svaret.** Vis noget, der undrer, og lad brugeren gætte. Forklar bagefter.
 3. **Gør før læs.** Hvert trin har en handling. Ingen tekst over tre sætninger uden noget at røre ved.
 4. **Højst to nye fagord pr. trin** i det, der altid er fremme. Hvert fagord forklares og står i Ordbogen.
-5. **Tal kun, når de siger noget,** og helst sammenlignet med noget kendt. Enheder som eV og MeV hører til i "For nørder".
+5. **Tal kun, når de siger noget,** og helst sammenlignet med noget kendt. Enheder som eV og MeV hører til i "Vil du vide mere?".
 6. **Rigtige data er krydderi.** Rigtige gener, krystaller og målinger må gerne ligge bag, men de må ikke gøre det første møde sværere.
 7. **Ærligt:** Forenklinger siges ("Ærligt talt"), og fakta har en kilde i `docs/`. Hvor det passer, siges også, *hvordan vi ved det*: et "Hvorfor?"-kort med overskriften "Hvordan ved vi det?" (hvem målte det, hvornår og hvordan), ikke en ny slags klods.
 8. **Hver oplysning bor ét sted.** Forklaringer i kortene og Ordbogen. Hjælpen siger kun, hvordan man styrer.
@@ -24,9 +24,9 @@
 2. **Lagene har et budget:**
    - *Altid fremme:* scenen, én linje om det, der sker nu, og én ting at gøre.
    - *Venstre panel:* højst fem valg synlige. Resten foldes ind.
-   - *Højre panel:* titel, højst to tal, højst tre sætninger og højst fire spørgsmål. Derefter "For nørder" og "Ærligt talt", lukkede.
+   - *Højre panel:* titel, højst to tal, højst tre sætninger og højst fire spørgsmål. Derefter "Vil du vide mere?" og "Ærligt talt", lukkede.
    - Lægger en opgave noget til, flytter den også noget ned eller ud.
-3. **Én udgave af hver klods:** forløb, spørgsmål ("Hvorfor?"), "For nørder", "Ærligt talt", fakta-felt og knaprække. Brug de fælles. Byg ikke en ny variant til én skærm.
+3. **Én udgave af hver klods:** forløb, spørgsmål ("Hvorfor?"), "Vil du vide mere?", "Ærligt talt", fakta-felt og knaprække. Brug de fælles. Byg ikke en ny variant til én skærm.
 4. **Læsbart:** brødtekst mindst 15 px, småt mindst 13 px. Alt, der kan trykkes, er mindst 44 px. Gælder alt nyt. De gamle skærme rettes én ad gangen sammen med budgettet for panelerne, fordi infopanelet i Værkstedet ikke må få en rullebjælke.
 5. **Ikoner er tegnede** (SVG eller CSS), ikke emoji.
 6. **Intet dækker scenen,** man ikke selv har åbnet. Intet ligger oven i andet i nogen størrelse: pc, tablet på langs og på højkant og telefon.

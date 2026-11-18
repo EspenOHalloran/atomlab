@@ -1,5 +1,5 @@
 // Teksterne i højre panel ved Pluto (siden i lag, U3 i docs/plan-ux.md). MP3 i docs/drejebog-merkur-pluto.md: den korte
-// tekst med kernesætning A, Charons side, "For nørder", billederne og "Ærligt talt". MP4: de fire spørgsmål, stederne
+// tekst med kernesætning A, Charons side, "Vil du vide mere?", billederne og "Ærligt talt". MP4: de fire spørgsmål, stederne
 // (SIDER: hjertet, bjergene af vandis og fire navne på kloden) og flybyen (TUR). Tallene er fra
 // docs/fakta-solsystemet/del8-merkur-og-pluto.md (NSSDC, NASA, USGS' navneliste og JPL Horizons) med Opus' rettelser i
 // docs/fable/E16-merkur-pluto-noter.md. Faktatjekket MP3 og MP4 står i del 8b, afsnit 12 og 13. Uden Three.js.

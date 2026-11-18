@@ -442,7 +442,8 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, anagram = nu
     iFeltet(f, mod(0.25, 0, L), (c, x, y) => tegnSaturn(c, x, y, R, B), L);
     let tekst = '';
     if (L > 0.5) tekst = Math.abs(B) < 0.8 ? 'Set fra kanten' : `Den samme ring, set ${B > 0 ? 'ovenfra' : 'nedefra'}`;
-    else if (Math.abs(s.visB) < 0.8) tekst = 'Set fra kanten';
+    // Først når armene har været åbne (eller i laboratoriet): før det røber linjen svaret på gættet (stilguiden A6)
+    else if (Math.abs(s.visB) < 0.8 && (s.trin === 'fri' || s.maksB >= B_ÅBEN)) tekst = 'Set fra kanten';
     linjeUnder(f, tekst, L > 0.5);
     // Tavlens tegning, der ligner, lyser op
     if (tavle) {

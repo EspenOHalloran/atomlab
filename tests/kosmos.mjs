@@ -1,6 +1,6 @@
 // Kosmos: alle fænomener kan vælges, alle knapper kan trykkes, og der kommer ingen fejl. Styringen står i 3D-billedet
 // (U2 i docs/plan-ux.md): Styr-boksen har kun kontakter og skydere, og bjælken står der også med "Kun grafik".
-// Siden i lag (U3): Kort, emner, For nørder og Ærligt talt (altid sidst), knapperne i teksten virker, bjælkens linje
+// Siden i lag (U3): Kort, emner, "Vil du vide mere?" og Ærligt talt (altid sidst), knapperne i teksten virker, bjælkens linje
 // står ikke på siden, og en kontakt folder sit emne ud.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('kosmos');
@@ -44,12 +44,12 @@ for (const id of ids.filter((x) => x !== 'oversigt')) { // forsiden har ingen em
   const navn = await page.textContent('#kosmosNavn');
   const side = await page.evaluate(() => window.atomlabTest.kosmos.side());
   tjek(`${id}: navn, Kort og emner`, navn.length > 2 && side.kort.length > 40 && side.emner.length >= 2, `${navn} ${side.kort} ${side.emner.length}`);
-  tjek(`${id}: "Ærligt talt" står sidst i sin egen boks, og der er "For nørder"`, side.sidst === 'Ærligt talt' && side.bokse.includes('For nørder'), JSON.stringify(side.bokse));
+  tjek(`${id}: "Ærligt talt" står sidst i sin egen boks, og der er "Vil du vide mere?"`, side.sidst === 'Ærligt talt' && side.bokse.includes('Vil du vide mere?'), JSON.stringify(side.bokse));
   tjek(`${id}: emnerne er foldet sammen fra start`, side.emner.every((e) => !e.åben), JSON.stringify(side.emner));
   tjek(`${id}: der står ikke "Tryk" eller "i listen" i teksten`, !/\bTryk "|i listen/.test(side.tekst), side.tekst.match(/.{30}(Tryk "|i listen).{30}/)?.[0]);
-  if (id === 'rumtid') { // E19: det fjerde spørgsmål, og "For nørder" siger, at tiden er et hvordan, og at buddene er bud
+  if (id === 'rumtid') { // E19: det fjerde spørgsmål, og "Vil du vide mere?" siger, at tiden er et hvordan, og at buddene er bud
     tjek('rumtid: fire spørgsmål (budgettet), "Men hvorfor krummer stof rumtiden?" sidst', side.emner.length === 4 && side.emner[3].titel === 'Men hvorfor krummer stof rumtiden?', JSON.stringify(side.emner.map((e) => e.titel)));
-    tjek('rumtid: "For nørder" har skridtet om tiden (hvordan, ikke hvorfor) og buddene', /falder den vej, tiden går langsomst/.test(side.tekst) && /hvordan[\s\S]{0,40}hvorfor/.test(side.tekst) && /Det er bud/.test(side.tekst));
+    tjek('rumtid: "Vil du vide mere?" har skridtet om tiden (hvordan, ikke hvorfor) og buddene', /falder den vej, tiden går langsomst/.test(side.tekst) && /hvordan[\s\S]{0,40}hvorfor/.test(side.tekst) && /Det er bud/.test(side.tekst));
   }
   tjek(`${id}: alle knapper i teksten virker`, side.knapper.length > 0 && side.knapper.every((k) => k.findes), JSON.stringify(side.knapper.filter((k) => !k.findes)));
   const knapper = await page.evaluate(() => window.atomlabTest.kosmos.knapper());
@@ -125,7 +125,7 @@ await page.evaluate(() => window.atomlabTest.kosmos.vælg('supernova'));
 await page.evaluate(() => { for (const d of document.querySelectorAll('#kosmosTekst details')) d.open = true; });
 await page.click('#kosmosTekst [data-gaa="kosmos:pulsar"]');
 tjek('et link i teksten åbner Pulsar', (await page.evaluate(() => window.atomlabTest.kosmos.valgt())) === 'pulsar');
-// Et nyt fænomen starter med emnerne foldet sammen (For nørder og Ærligt talt huskes)
+// Et nyt fænomen starter med emnerne foldet sammen ("Vil du vide mere?" og Ærligt talt huskes)
 tjek('nyt fænomen: emnerne er foldet sammen', (await page.evaluate(() => window.atomlabTest.kosmos.side().emner)).every((e) => !e.åben));
 // Skift frem og tilbage: antallet af objekter må ikke vokse (ingen rester)
 await page.evaluate(() => { const k = window.atomlabTest.kosmos; k.vælg('pulsar'); k.vælg('supernova'); k.vælg('pulsar'); });

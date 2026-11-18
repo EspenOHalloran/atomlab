@@ -10,15 +10,18 @@
 // lavBog(rod, bog, tekster, { rolig, lav, påBladr, påBegynd, lavScene }) bygger bogen i rod og giver { vis(nr), bladr(retning),
 // nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE og
 // OPSLAG. Bogen har kun de opslag, der er bygget (E20 fund 6, stilguiden A9). Opslagets slags:
-//   'forside'  portrættet, spørgsmålet, Galileis lille tegning (eller bogens egen), navnet og "Begynd"
+//   'forside'  portrættet, spørgsmålet, introduktionen (FORSIDE.intro: sted og en bogtekst med stort forbogstav, den røde
+//              tråd 18. november 2026), Galileis lille tegning (eller bogens egen), navnet og "Begynd"
 //   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
 //              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
 //              kaldes, når man bladrer væk
 //   'sider'    bogen selv (H4): de rigtige sider fra personens bog (tekster.BOGEN) med faner, glødende steder, der viser
-//              latinen og vores oversættelse, og "Linje for linje". Siderne hentes med hentBillede (js/hentning.js),
+//              latinen og vores oversættelse, og "Linje for linje". BOGEN.intro står øverst ved siden af siden, og
+//              BOGEN.næste/sidst er en sti: "Næste side ›", og på den sidste side bladrer den videre (18. november 2026). Siderne hentes med hentBillede (js/hentning.js),
 //              første gang opslaget åbnes, og toner ind
-//   'om'       bogens sidste opslag "Om …" (H4, tekster.OM): navnet, højst to tal, højst tre sætninger, højst fire
-//              "Hvorfor?"-kort (visHvorfor fra js/lag.js) og "For nørder" og "Ærligt talt" som lukkede foldebokse
+//   'om'       bogens sidste opslag "Om …" (H4, tekster.OM): navnet, højst to tal, højst tre sætninger, sidens vigtige
+//              knap (OM.knap med data-gaa, fx Saturn fra kanten, den røde tråd 18. november 2026), højst fire
+//              "Hvorfor?"-kort (visHvorfor fra js/lag.js) og "Vil du vide mere?" og "Ærligt talt" som lukkede foldebokse
 // påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
 // stryget og bladr()), mens et forløb kører i bogen.
 
@@ -48,6 +51,7 @@ function forsideHTML(bog, f) {
     + `<figure class="bog-portræt"><img src="${esc(bog.portræt)}" alt="${esc(f.portrætAlt)}" width="600" height="750" decoding="async"><figcaption>${esc(f.portrætTekst)}</figcaption></figure>`
     + `<div class="bog-forside-tekst">`
     + `<h3 class="bog-titel">${esc(f.spørgsmål)}</h3>`
+    + (f.intro ? `<div class="bog-intro"><p class="bog-intro-sted">${esc(f.intro.sted)}</p><p class="bog-intro-tekst">${esc(f.intro.tekst)}</p></div>` : '')
     + `<figure class="bog-galilei">${galileiTegning()}<figcaption>${esc(f.galilei)}</figcaption></figure>`
     + `<p class="bog-navn">${esc(f.navn)} · ${esc(f.liv)}</p>`
     + `<button class="knap bog-begynd" data-begynd>${esc(f.begynd)} ›</button>`
@@ -65,7 +69,8 @@ function siderHTML(o, b) {
   return `<div class="bog-opslag bog-sider-opslag"><h3 class="bog-kapitel">${esc(o.titel)}</h3>`
     + `<div class="bs-faner" role="group" aria-label="Siderne">${b.sider.map((s, i) => `<button class="bs-fane" data-side="${i}" aria-pressed="false">${esc(s.fane)}</button>`).join('')}</div>`
     + '<div class="bs-krop"><div class="bs-billede"><p class="bs-henter">Henter siden …</p></div>'
-    + '<div class="bs-tekst"><p class="bs-om"></p><div class="bs-steder"></div><div class="bs-forklaring" aria-live="polite"></div></div></div></div>';
+    + `<div class="bs-tekst">${b.intro ? `<p class="bs-intro">${esc(b.intro)}</p>` : ''}<p class="bs-om"></p><div class="bs-steder"></div><div class="bs-forklaring" aria-live="polite"></div>`
+    + `${b.næste ? '<button class="knap bs-videre"></button>' : ''}</div></div></div>`;
 }
 
 function linjerHTML(b, side) {
@@ -78,7 +83,7 @@ function linjerHTML(b, side) {
 }
 
 // Styrer et opslag af slags 'sider' og giver { fjern(), test }
-function lavSider(felt, bogId, b, rolig) {
+function lavSider(felt, bogId, b, rolig, bladrVidere) {
   const husk = valgtSide.get(bogId) ?? { side: 0, sted: null };
   let levende = true;
   const billede = felt.querySelector('.bs-billede');
@@ -101,6 +106,9 @@ function lavSider(felt, bogId, b, rolig) {
     const s = b.sider[nr];
     for (const k of felt.querySelectorAll('.bs-fane')) k.setAttribute('aria-pressed', String(Number(k.dataset.side) === nr));
     felt.querySelector('.bs-om').textContent = s.om;
+    // Stien gennem siderne (den røde tråd, 18. november 2026): "Næste side ›", og på den sidste side bladrer den videre
+    const videre = felt.querySelector('.bs-videre');
+    if (videre) videre.textContent = `${nr < b.sider.length - 1 ? b.næste : (b.sidst ?? b.næste)} ›`;
     steder.innerHTML = s.steder.map((x) => `<button class="bs-sted-knap" data-sted="${x.id}" aria-pressed="false">${esc(x.navn)}</button>`).join('');
     felt.querySelector('.bs-linjer')?.remove();
     forklaring.insertAdjacentHTML('afterend', linjerHTML(b, s));
@@ -132,6 +140,10 @@ function lavSider(felt, bogId, b, rolig) {
     const k = h.target.closest('button');
     if (!k) return;
     if (k.dataset.side) visSide(Number(k.dataset.side));
+    else if (k.classList.contains('bs-videre')) {
+      if (husk.side < b.sider.length - 1) visSide(husk.side + 1);
+      else bladrVidere?.();
+    }
     else if (k.dataset.sted) {
       husk.sted = husk.sted === k.dataset.sted && k.classList.contains('bs-glød') ? null : k.dataset.sted;
       forklar();
@@ -158,12 +170,14 @@ function lavSider(felt, bogId, b, rolig) {
 
 // "Om …" (H4): budgettet fra planen (titel, to tal, tre sætninger, fire spørgsmål, så de lukkede lag)
 function omHTML(o, om, bogId) {
-  const boks = (lag, slags) => `<details class="lag-boks bo-lag${slags === 'ærligt' ? ' ærligt' : ''}" data-lag="bog-${slags}-${bogId}"><summary><strong>${esc(lag.titel)}</strong> <span class="lag-kort">${esc(lag.linje)}</span></summary>`
+  // "Vil du vide mere?" (nørd) er en lille, lys linje uden den korte tekst (18. november 2026)
+  const boks = (lag, slags) => `<details class="lag-boks bo-lag${slags === 'ærligt' ? ' ærligt' : ' lag-mere'}" data-lag="bog-${slags}-${bogId}"><summary><strong>${esc(lag.titel)}</strong>${slags === 'ærligt' ? ` <span class="lag-kort">${esc(lag.linje)}</span>` : ''}</summary>`
     + `<ul>${lag.punkter.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></details>`;
   return `<div class="bog-opslag bog-om-opslag"><h3 class="bog-kapitel">${esc(o.titel)}</h3><div class="bo-krop">`
     + `<p class="bo-navn">${esc(om.navn)}</p>`
     + `<div class="bo-tal">${om.tal.slice(0, 2).map((x) => `<p><b>${esc(x.tal)}</b> <span>${esc(x.tekst)}</span></p>`).join('')}</div>`
     + `<p class="bo-tekst">${esc(om.sætninger)}</p>`
+    + (om.knap ? `<button class="knap bo-knap" data-gaa="${esc(om.knap.gaa)}">${esc(om.knap.tekst)} ›</button>` : '')
     + `<div class="bo-hvorfor">${om.hvorfor.slice(0, 4).map((h, i) => `<button class="hvorfor" data-bo-hvorfor="${i}" aria-expanded="false">${esc(h.spørgsmål)}</button>`).join('')}</div>`
     + boks(om.nørd, 'nørd') + boks(om.ærligt, 'ærligt')
     + '</div></div>';
@@ -252,7 +266,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, lav = false, påBladr
     ramme.dataset.opslag = o.id;
     ramme.scrollTop = 0;
     if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));
-    else if (o.slags === 'sider') scene = lavSider(ramme.querySelector('.bog-sider-opslag'), bog.id, tekster.BOGEN, rolig);
+    else if (o.slags === 'sider') scene = lavSider(ramme.querySelector('.bog-sider-opslag'), bog.id, tekster.BOGEN, rolig, () => bladr(1));
     else if (o.slags === 'om') scene = lavOm(ramme.querySelector('.bog-om-opslag'), tekster.OM);
     // Portrættet toner ind, når det er hentet (ingen tom ramme, der blinker)
     const img = ramme.querySelector('.bog-portræt img');

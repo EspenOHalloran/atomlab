@@ -53,7 +53,7 @@ export default {
       <p><b>Eksotisk stof:</b> I 1988 regnede Kip Thorne og Michael Morris ud, at man kunne rejse gennem et ormehul, hvis det blev holdt åbent af stof med <i>negativ energi</i>. Små mængder negativ energi findes faktisk i kvantefysikken (Casimir-effekten), men ingen ved, om der kan blive nok.</p>
       <p><b>En kugle, ikke en tragt:</b> Tragten her er en tegning i to dimensioner. Et rigtigt ormehul i vores tredimensionelle rum ville have en åbning, der ligner en kugle. Kigger man ind i den, ser man stjernerne på den anden side. Sådan blev det vist i filmen <i>Interstellar</i>, hvor Kip Thorne var rådgiver.</p>
       <p><b>Tidsrejser?</b> Hvis den ene ende af et ormehul blev fløjet rundt med næsten lysets fart, ville tiden gå langsommere der. Så kunne ormehullet i teorien blive en tidsmaskine. Stephen Hawking mente, at naturen må forhindre det.</p>`,
-    ærligt: '<p>Rumtiden behøver ikke noget "udenfor" for at kunne krumme. Foldningen er bare en måde at tegne det på. Tragten er en tegning i to dimensioner (se For nørder).</p>',
+    ærligt: '<p>Rumtiden behøver ikke noget "udenfor" for at kunne krumme. Foldningen er bare en måde at tegne det på. Tragten er en tegning i to dimensioner (se "Vil du vide mere?").</p>',
   },
 
   lav(gruppe, { effekter, lyd, fase, kamera }) {

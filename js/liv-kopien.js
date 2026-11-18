@@ -4,7 +4,7 @@
 // lige ud, lynlåsen og de to halvdele, der hver får en ny side.
 // Fire trin: træk lynlåsen, sæt det første bogstav på hver halvdel (cellen bygger resten), find et forkert bogstav (cellen
 // retter det), og kopiér igen, til en fejl bliver siddende (altid tredje gang, så testen er stabil).
-// "Det er cellen, der gør det": Ordene helikase, DNA-polymerase og kopigaffel står kun i "For nørder".
+// "Det er cellen, der gør det": Ordene helikase, DNA-polymerase og kopigaffel står kun i "Vil du vide mere?".
 // liv.js giver tegningen, kameraet (vis, kamera) og panelet og sender tryk i 3D hertil (tryk). Træk i lynlåsen fanges her.
 
 import * as THREE from 'three';

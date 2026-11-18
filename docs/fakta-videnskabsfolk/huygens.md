@@ -93,3 +93,21 @@
 - Oversættelsen af s. 46-48 i [drejebog-huygens.md](../drejebog-huygens.md), afsnit 6 (Opus' latin, ikke tjekket af andre).
 - Om Saturns ring stod næsten på kant omkring 1656. **Nu Sikker** (s. 16-17, OCR tjekket 16. november 2026): Andre så Saturn rund fra sidst i november 1655, Huygens så den uden arme 16. januar 1656 ("brachiis suis spoliatum penitus") og til 17. juni, og armene var tilbage 13. oktober 1656, "senere end jeg havde forudsagt" ("serius quidem quam … praedixeram").
 - Tallet for forstørrelsen (43 eller ca. 50).
+
+## 8. Den røde tråd (faktatjekket 18. november 2026, Opus effort høj)
+De nye tekster (forsiden, forordet til "Hemmeligheden", stien i "Bogen fra 1659" og slutningen i "Om Huygens") bruger kun påstande, der allerede står ovenfor. Tjekket mod tabellerne og fælderne:
+| Påstand | Kilde | Resultat |
+|---|---|---|
+| Den italienske astronom Galilei så Saturn som tre kugler i sin kikkert i 1610 | Afsnit 3 | OK. Ikke "den første kikkert" eller "opfandt kikkerten" |
+| Senere tegnede andre den med ører og håndtag | Tavlen ved s. 35 (nr. II-IX, 1614-1650) | OK |
+| I 45 år fandt ingen den rigtige forklaring | 1610-1655, ringen først i anagrammet 1656 | OK. Ikke "ingen kunne forklare det": Der var gæt, der var forkerte (fx Galileis tre kloder) |
+| En ung hollænder på 25, der sliber sine egne linser (Haag, 1655) | Afsnit 1 (født 14. april 1629, Titan 25. marts 1655, linserne med broren) | OK. Alderen står kun på forsiden (26 i marts 1656) |
+| Marts 1656: han tror, armene er en ring, men de er væk, og andre kigger også | s. 2 og 16-17, grunden til anagrammet (afsnit 3) | OK |
+| 62 bogstaver sorteret efter alfabetet, så alle kan tælle efter | Rækken s. 47 (a c d e g h i l m n o p q r s t u) | OK |
+| Systema Saturnium (Saturns system), trykt 1659 | Bogen | OK |
+| Tavlen: 13 tegninger fra andre astronomer, kugler, ører og buer | Afsnit 3 | OK |
+| s. 16: kom hjem fra en rejse 16. januar 1656 og så Saturn helt uden arme | s. 16 | OK |
+| s. 48: han har ikke fundet på ringen, han har set den med sine egne øjne | s. 48 ("oculorum sensu"), uden anførselstegn | OK |
+| Han troede, ringen var fast som en plade. Den er utallige stykker is og lidt sten | s. 48 ("solidum"), NASA (ringene er mest vandis med lidt sten og støv) | OK |
+| I 2005 landede sonden Huygens på Titan, den måne han fandt | Afsnit 1 | OK |
+*Kan tjekkes af Fable senere sammen med resten af bogen.*
