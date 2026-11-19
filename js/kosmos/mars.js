@@ -180,10 +180,12 @@ const LANDSKAB = {
     { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 7.5,
       titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.',
       foto: { rover: 'Curiosity', tid: 15.7, tekst: 'Curiositys foto herfra, 4. april 2016. Klokken er stillet til midt på eftermiddagen, da det blev taget.' } },
-    // Hos Curiosity (M8c del 2): Man står 8 m fra roveren (mod syd-sydvest, op ad bakken) og kigger forbi den mod nord ud
-    // over kraterbunden. Man lander om eftermiddagen, så Solen står bag én og lyser på roverens forside. rover: roverens stop på sol 5073 (ca. 13. november 2026) i NASA's kortdata med retningen (yaw),
+    // Hos Curiosity (M8c del 2): Man står 9 m fra roveren mod sydvest (på tværs af skråningen, næsten i samme højde) og
+    // ser den skråt forfra med kraterbunden mod nordøst bag den. vinkel: kameraets vinkel over vandret, når landingen er
+    // færdig (standard −3°), her lidt ned, så roveren også ses over panelerne på højkant. Man lander om eftermiddagen,
+    // så Solen står bag én og lyser på roverens forside. rover: roverens stop på sol 5073 (ca. 13. november 2026) i NASA's kortdata med retningen (yaw),
     // hældningen (pitch, næsen op) og krængningen (roll, højre side ned) i grader, og modellen (js/solsystem/rover.js).
-    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82614019, længde: 137.38881828, blik: 20, tid: 15,
+    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.8261104, længde: 137.38876119, blik: 55, vinkel: -7, tid: 15,
       titel: 'Hos Curiosity, november 2026', tekst: 'Her står Curiosity, som den stod i midten af november 2026, ca. 1 km højere oppe end der, hvor den landede.',
       rover: { navn: 'Curiosity', fil: 'landskab/curiosity.glb', sol: 5073, bredde: -4.82602331, længde: 137.388886, retning: 188.4, hældning: 11.81, krængning: 3.96 } },
   ],
@@ -1105,7 +1107,7 @@ export default {
           kamRet.copy(orbit.target).sub(kamera.position).normalize();
           const kompas = THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z));
           sætBlik(landing.fra + (LANDING_HØJDE - landing.fra) * e * e, kompas, THREE.MathUtils.radToDeg(Math.asin(kamRet.y)) * (1 - e) - 32 * e);
-        } else sætBlik(ØJE / 1000 + (LANDING_HØJDE - ØJE / 1000) * Math.pow(1 - g, 2), landing.sd.blik, -32 + 29 * g);
+        } else sætBlik(ØJE / 1000 + (LANDING_HØJDE - ØJE / 1000) * Math.pow(1 - g, 2), landing.sd.blik, -32 + (32 + (landing.sd.vinkel ?? -3)) * g);
         if (landing.t >= landing.T) {
           const f = landing.færdig;
           landing = null;

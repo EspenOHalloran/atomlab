@@ -160,11 +160,11 @@ await s.waitForFunction(() => atomlabTest.solsystem.sted() === 'stå-curiosity',
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
 t = await stå();
-tjek('hos Curiosity (valgt i træet): højden passer med NASA (roveren −3.472 m ved sol 5073, man står 8 m op ad bakken), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3471) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
+tjek('hos Curiosity (valgt i træet): højden passer med NASA (roveren −3.472 m ved sol 5073, man står 9 m fra den), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3472) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
 tjek('teksten om Curiosity (har kørt ca. 38,6 km, på størrelse med en lille bil)', /38,6 km/.test(await s.textContent('#solsystemTekst')) && /lille bil/.test(await s.textContent('#solsystemTekst')));
 // Curiosity som 3D-model (M8c del 2): hentet ved hoppet fra Naukluft, med NASA's retning og hældning (sol 5073)
 const rv = t.rover ?? {};
-tjek('roveren står hos Curiosity: hentet og vist, 8 m fra stedet', rv.hentet && rv.vist && Math.abs(rv.afstand - 8) < 0.5, JSON.stringify(rv));
+tjek('roveren står hos Curiosity: hentet og vist, 9 m fra stedet', rv.hentet && rv.vist && Math.abs(rv.afstand - 9) < 0.5, JSON.stringify(rv));
 tjek('roveren vender og hælder som i NASA\'s kortdata (188,4° og næsen 11,8° op)', Math.abs(rv.kompas - 188.4) < 0.5 && Math.abs(rv.hældning - 11.81) < 0.5, JSON.stringify(rv));
 tjek('roverens hjul står på jorden (højst 15 cm fra højdekortet)', rv.hjul < 0.15, JSON.stringify(rv));
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().rover?.skygger > 0, null, { timeout: 10000, polling: 200 }).catch(() => {});
