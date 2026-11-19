@@ -161,6 +161,7 @@ const FRAGMENT = /* glsl */ `
   uniform sampler2D tS0, tS1, tS2, tS3;   // skyggekort (1 = i sol)
   uniform sampler2D tA0, tA1, tA2, tA3;   // hvor meget af himlen der ses (ambient occlusion, M8c del 3 trin 2)
   uniform float uAO;                       // 0, før kortene er regnet
+  uniform float uNaer;                     // 1: stenene helt tæt på tegnes (0 kun til målinger)
   uniform sampler2D tFarve;                // Viking-farverne (stedets kort fra M5b)
   uniform vec4 bFarve;
   uniform float uSkygger;                  // 0, før skyggekortene er regnet
@@ -327,7 +328,7 @@ const FRAGMENT = /* glsl */ `
     vec2 stenN = vec2(0.0);
     float naer = 1.0 - smoothstep(0.012, 0.09, fod); // (til gruset)
     float jez = step(0.5, uStenArt);
-    if (stenU < 0.0 && fod < 0.25 + 0.2 * jez) {
+    if (uNaer > 0.5 && stenU < 0.0 && fod < 0.25 + 0.2 * jez) {
       float klynge = smoothstep(0.3, 0.8, stoej(en * 0.19) * 0.6 + stoej(en * 0.7 + 3.1) * 0.4 + (f - 0.5) * 1.2);
       vec2 solV = vec2(uSol.x, -uSol.z);
       float cotSol = length(solV) / max(uSol.y, 0.06);
@@ -415,8 +416,9 @@ const FRAGMENT = /* glsl */ `
       if (w0 > 0.0) sk = mix(sk, texture2D(tS0, u0).r, w0);
     }
     // Himlen, der ses fra punktet (mørkere i sprækker og lavninger): samme lag som skyggerne
-    float ao;
-    if (w0 >= 0.999) ao = texture2D(tA0, u0).r;
+    float ao = 1.0;
+    if (uAO <= 0.0) {}
+    else if (w0 >= 0.999) ao = texture2D(tA0, u0).r;
     else {
       if (w1 >= 0.999) ao = texture2D(tA1, u1).r;
       else {
@@ -619,7 +621,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     pxH: { value: new THREE.Vector4(1, 4, 16, 174) }, uKamH: { value: 0 },
     uSol: { value: new THREE.Vector3(0, 1, 0) }, uTau: { value: TAU }, uSkygger: { value: 0 },
     uStenArt: { value: krater === 'jezero' ? 1 : 0 },
-    uAO: { value: 0 }, uMellem: { value: 1 }, uKam: { value: new THREE.Vector3() }, uKamOp: { value: ØJE },
+    uAO: { value: 0 }, uNaer: { value: 1 }, uMellem: { value: 1 }, uKam: { value: new THREE.Vector3() }, uKamOp: { value: ØJE },
     tFarve: { value: tom }, bFarve: { value: new THREE.Vector4(0, 0, 1, 1) }, bF3: { value: new THREE.Vector4(0, 0, 1, 1) },
   };
   for (let k = 0; k < 4; k++) {
@@ -956,8 +958,8 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     // Højden under stedet (m over nulpunktet)
     get højde() { return u.uH0.value; },
     // Kun til tests
-    stenLag(v) { u.uMellem.value = v ? 1 : 0; },
-    aoLag(v) { u.uAO.value = v && !aoKø.length ? 1 : 0; },
+    // (til målinger: hver del af stenene og ambient occlusion til og fra)
+    stenTest({ naer = true, mellem = true, ao = true } = {}) { u.uNaer.value = naer ? 1 : 0; u.uMellem.value = mellem ? 1 : 0; u.uAO.value = ao && !aoKø.length ? 1 : 0; },
     test: () => ({ sted: stedId, tid: timer, højde: u.uH0.value, net: [retninger, ringe], stykker: [tegnet, STYKKER], skygger: u.uSkygger.value, ao: u.uAO.value, groveSkygger: grov, strimler: sidstStrimler, regner: regner(), solHøjde: THREE.MathUtils.radToDeg(Math.asin(u.uSol.value.y)), måner: hu.uMaane.value.map((m) => ({ højde: THREE.MathUtils.radToDeg(Math.asin(m.y)), kompas: (THREE.MathUtils.radToDeg(Math.atan2(m.x, -m.z)) + 360) % 360, bredde: THREE.MathUtils.radToDeg(2 * m.w) })) }),
     // Billederne bruges ikke mere (man er lettet, G1 trin 3): slip dem, så de kan slettes fra grafikkortet. Nettet og
     // shaderne bliver, og gåTil henter billederne igen næste gang.
