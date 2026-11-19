@@ -136,7 +136,14 @@ const VERTEX = /* glsl */ `
   varying vec2 vEN;
   varying vec3 vRel;       // fra stedet (m): øst, op, syd
   varying vec3 vN;         // normalen (øst, op, syd)
+  varying float vKlynge;   // stenenes klynger (grov støj, regnet her i punkterne, for den skifter kun over meter)
   ${LAG_GLSL}
+  float hashV(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  float stoejV(vec2 p) {
+    vec2 i = floor(p), f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hashV(i), hashV(i + vec2(1, 0)), u.x), mix(hashV(i + vec2(0, 1)), hashV(i + vec2(1, 1)), u.x), u.y);
+  }
   void main() {
     vec2 d = vec2(sin(polar.x), cos(polar.x)) * polar.y;
     vec2 en = uSted + d;
@@ -152,6 +159,7 @@ const VERTEX = /* glsl */ `
     vec3 p = vec3(d.x, h - uH0 - krum, -d.y);
     vEN = en;
     vRel = p;
+    vKlynge = polar.y < 60.0 ? stoejV(en * 0.19) * 0.6 + stoejV(en * 0.7 + 3.1) * 0.4 : 0.5;
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(p * 0.001, 1.0);
   }`;
 
@@ -170,6 +178,7 @@ const FRAGMENT = /* glsl */ `
   varying vec2 vEN;
   varying vec3 vRel;
   varying vec3 vN;
+  varying float vKlynge;
   ${LAG_GLSL}
   ${HIMMEL_GLSL}
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -299,8 +308,9 @@ const FRAGMENT = /* glsl */ `
       if (w0 > 0.0) f = mix(f, texture2D(tF0, u0).r, w0);
     }
     float rel = 2.0 * f;
-    // Mellemlaget (se ramLag): to lag af celler. A: 3 m, sten 0,25-0,7 m i radius. B: 9 m, 0,6-1,6 m, færre.
-    // Et lag tegnes, så længe en sten på ca. 0,5 m (A) eller 1,2 m (B) er mindst ca. 1½ pixel høj på skærmen.
+    // Mellemlaget (se ramLag): to lag af celler. A: 3 m, sten 0,15-0,7 m i radius. B: 9 m, 0,6-1,6 m, færre.
+    // Et lag tegnes ud til 70 m (A) og 250 m (B), og så længe en sten på ca. 0,5 m (A) eller 1,2 m (B) er mindst ca. 3 pixel
+    // høj på skærmen (længere væk er de næsten usynlige og koster mest, for strålen skal gennem flest celler).
     vec3 stenNrm = vec3(0.0, 1.0, 0.0);
     vec4 stenB = vec4(0.5);
     float stenU = -1.0;
@@ -308,13 +318,13 @@ const FRAGMENT = /* glsl */ `
     float dH = length(tilOje);
     float pa = length(fwidth(normalize(vRel - uKam))); // radianer pr. pixel
     float kOje = uKamOp / max(dH, 0.01);
-    bool mellem = uMellem > 0.5 && dH > 1.0 && uKamOp < 50.0;
-    if (mellem && 0.5 > 1.5 * dH * pa) {
+    bool mellem = uMellem > 0.5 && dH > 1.0 && dH < 250.0 && uKamOp < 50.0;
+    if (mellem && dH < 70.0 && 0.5 > 3.0 * dH * pa) {
       vec2 w = tilOje / dH;
       vec3 nr; vec4 bb;
       float u = ramLag(en, w, kOje, min(0.9 / kOje + 0.8, dH - 0.5), 3.0, 0.75, 0.15, 0.7, ${LAV_KVALITET ? 5 : 8}, nr, bb);
       if (u >= 0.0) { stenU = u; stenNrm = nr; stenB = bb; }
-      if (1.2 > 1.5 * dH * pa) {
+      if (dH < 250.0 && 1.2 > 3.0 * dH * pa) {
         float uB = ramLag(en, w, kOje, min(2.2 / kOje + 1.8, dH - 0.5), 9.0, 0.18, 0.6, 1.6, ${LAV_KVALITET ? 4 : 6}, nr, bb);
         if (uB > stenU) { stenU = uB; stenNrm = nr; stenB = bb; }
       }
@@ -331,7 +341,7 @@ const FRAGMENT = /* glsl */ `
     float naer = 1.0 - smoothstep(0.012, 0.09, fod); // (til gruset)
     float jez = step(0.5, uStenArt);
     if (uNaer > 0.5 && stenU < 0.0 && fod < 0.16 + 0.3 * jez) {
-      float klynge = smoothstep(0.3, 0.8, stoej(en * 0.19) * 0.6 + stoej(en * 0.7 + 3.1) * 0.4 + (f - 0.5) * 1.2);
+      float klynge = smoothstep(0.3, 0.8, vKlynge + (f - 0.5) * 1.2);
       vec2 solV = vec2(uSol.x, -uSol.z);
       float cotSol = length(solV) / max(uSol.y, 0.06);
       vec2 vaek = -solV / max(length(solV), 1e-4); // skyggens retning (øst, nord)
@@ -445,7 +455,7 @@ const FRAGMENT = /* glsl */ `
       float ks = uSol.y / lv;
       vec3 nr; vec4 bb;
       float ssk = 1.0;
-      if (ramLag(en, sw, ks, min(0.9 / ks + 0.8, 24.0), 3.0, 0.75, 0.15, 0.7, ${LAV_KVALITET ? 3 : 5}, nr, bb) >= 0.0) ssk = 0.08;
+      if (dH < 50.0 && ramLag(en, sw, ks, min(0.9 / ks + 0.8, 24.0), 3.0, 0.75, 0.15, 0.7, ${LAV_KVALITET ? 3 : 5}, nr, bb) >= 0.0) ssk = 0.08;
       else if (ramLag(en, sw, ks, min(2.2 / ks + 1.8, 45.0), 9.0, 0.18, 0.6, 1.6, ${LAV_KVALITET ? 3 : 4}, nr, bb) >= 0.0) ssk = 0.08;
       sk *= mix(1.0, ssk, smoothstep(0.03, 0.08, uSol.y));
     }
