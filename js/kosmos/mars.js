@@ -1567,6 +1567,7 @@ export default {
         sætTid: (t) => { stående.land.tid = t; tidsSkyder?.sæt?.(stående.land.tid); },
         kig: (kompas, vinkel) => sætBlik(ØJE / 1000, kompas, vinkel),
         nær: (km) => { kamera.near = km; kamera.updateProjectionMatrix(); }, // til at måle flimmer
+        stenTest: (valg) => stående?.land.stenTest(valg), // stenene og ambient occlusion til og fra (til målinger)
         overdriv: () => overdriv,
         billeder: () => ({
           kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: mars.harTabel, tone, bjælke: { venter: bjælke.venter, vist: bjælke.vist },

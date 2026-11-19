@@ -61,6 +61,9 @@ tjek('højden under stedet passer med NASA (−4.429 m ved sol 1301)', Math.abs(
 tjek('near er 0,3 m', Math.abs(t.nær - 0.0003) < 1e-9);
 await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 30000, polling: 200 }).catch(() => {});
 tjek('skyggekortene er regnet', (await stå()).skygger === 1);
+// M8c del 3: stenene (tæt på, mellemlaget og ambient occlusion)
+t = await stå();
+tjek('stenene: ambient occlusion er regnet, og Gale har plader af sandsten (stenArt 0)', t.ao === 1 && t.stenArt === 0, JSON.stringify({ ao: t.ao, stenArt: t.stenArt }));
 const kn = await knapper();
 tjek('knapperne: op i kredsløb og solnedgang i bjælken, klokken og roverens foto i Styr-boksen (Curiosity står i træet)', JSON.stringify(kn) === JSON.stringify(['↑ Op i kredsløb', '🌅 Solnedgang', 'Klokken på Mars', '📷 Roverens foto']) && (await fm(() => atomlabTest.solsystem.styr()[0].slags)) === 'skyder', JSON.stringify(kn));
 tjek('efter landingen står tiden stille (⏸, som ved et sted)', (await fm(() => atomlabTest.solsystem.tidsknap())) === 'pause');
@@ -198,6 +201,16 @@ await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, n
 t = await stå();
 tjek('ved randen af Jezero: højden passer med NASA (−2.056 m ved sol 1301), kigger mod øst', t.sted === 'randen' && Math.abs(t.højde + 2056) < 10 && Math.abs(t.kompas - 95) < 1 && !t.kloden, JSON.stringify(t));
 tjek('ved randen: panelet og teksten om deltaet', (await s.textContent('#solsystemNavn')) === 'Ved randen af Jezero' && /deltaet/.test(await s.textContent('#solsystemTekst')));
+tjek('ved randen: Jezero har kantede sten og klippeflader (stenArt 1), og ambient occlusion er regnet', t.stenArt === 1 && t.ao === 1, JSON.stringify({ stenArt: t.stenArt, ao: t.ao }));
+await fm(() => atomlabTest.solsystem.fænomen().kig(250, -25));
+await s.waitForTimeout(800);
+const medSten = await s.screenshot({ clip: { x: 0, y: 200, width: 600, height: 200 } });
+await fm(() => atomlabTest.solsystem.fænomen().stenTest({ naer: false, mellem: false, ao: false }));
+await s.waitForTimeout(800);
+const udenSten = await s.screenshot({ clip: { x: 0, y: 200, width: 600, height: 200 } });
+await fm(() => atomlabTest.solsystem.fænomen().stenTest({}));
+tjek('stenene tegnes (billedet er anderledes uden dem)', Buffer.compare(medSten, udenSten) !== 0);
+await fm(() => atomlabTest.solsystem.fænomen().kig(95, -3));
 await trykTræ('stå-landing');
 await s.waitForFunction(() => atomlabTest.solsystem.sted() === 'stå-landing', null, { timeout: 60000, polling: 200 }).catch(() => {});
 await fm(() => atomlabTest.solsystem.fænomen().hop());

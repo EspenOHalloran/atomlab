@@ -58,6 +58,17 @@ console.log(await mål('  pixelRatio 0,1 (næsten kun nettet)', 0, -8, 0.1));
 console.log(await mål('Ned mod jorden (−40°)', 120, -40));
 console.log(await mål('Lodret ned (−85°)', 120, -85));
 console.log(await mål('Op mod himlen (+10°)', 250, 10));
+// Stenene (M8c del 3): hver del til og fra (trin 1 helt tæt på, trin 3 mellemlaget, trin 2 ambient occlusion)
+if (await fm(() => typeof atomlabTest.solsystem.fænomen().stenTest === 'function')) {
+  for (const [navn, valg] of [['Uden sten og AO', { naer: false, mellem: false, ao: false }], ['Kun trin 1 (tæt på)', { mellem: false, ao: false }],
+    ['Trin 1 og 2 (AO)', { mellem: false }], ['Trin 1, 2 og 3 (alt)', {}]]) {
+    await fm((v) => atomlabTest.solsystem.fænomen().stenTest(v), valg);
+    console.log(navn);
+    console.log(await mål('  vandret (−8°)', 0, -8));
+    console.log(await mål('  ned (−40°)', 120, -40));
+    console.log(await mål('  op mod himlen (+10°)', 250, 10));
+  }
+}
 
 // Skyggekortene: fire lag, når Solen har stået stille, og igen lige efter (mens Solen flytter sig)
 console.log(await fm(async () => {

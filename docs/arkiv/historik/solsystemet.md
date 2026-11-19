@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (18. november 2026): Mars ekstra 1, Nordpolen tæt på (M7b-pol)** ([prompt-mars-ekstra.md](../prompt-mars-ekstra.md), [plan-mars.md](../plan-mars.md) "M7b-pol: data og plan").
+- **Kortene:** MOLA's polarkort (256 pixel pr. grad, PDS) og Vikings farver, set lige ovenfra fra 78° N (ca. 1.420 km, 0,69 km pr. pixel i 2k), lavet med `billeder/solsystem/lav_pol.py`. Højderne er tabsfri WebP. Vikings søm ved 180° er glattet ud.
+- **Polarnettet:** `lokalt({ pol: 78 })` i `klippeplanet.js`: ringe om polen, der glider over i kuglen ved kanten, et hul i kuglen og højdetabellen i samme projektion. Stoppet "Nordpolen" flyver lavere ned (ca. 970 km over isen, 32°) over spiralerne med Chasma Boreale bag polen. Kortene hentes først ved stedet og frigives, når man forlader Mars.
+- **Målt (tablet):** Mars 16,0 MB ved åbning + 1,56 MB ved polen = 17,6 MB (under 20 MB), +16 MB i grafikkortet. Pc: 1,85 MB og +34 MB. Siden: "Billederne" og "Ærligt talt" rettet og faktatjekket. Test `tests/mars-pol.mjs` (10 tjek). **Valgt af orkestratoren 2026-11-18, kan ændres af jer:** 78° N, farvekort 2048 på pc og 1024 på tablet, ét stop.
+
 **Lavet (18. november 2026): Mars åbner ikke mere med et stop anden gang (store kort i strimler)** ([prompt-mars-anden-gang.md](../../prompt-mars-anden-gang.md)).
 - **Årsagen:** Anden gang lægges de samme kort ind i grafikkortet igen (de frigives, når man forlader Mars, forslag G). Shaderne og afkodningen koster ikke noget anden gang. Det er selve overførslen: mars-8k.jpg 308-364 ms i ét billede i testbrowseren og 127 ms på Tab A11.
 - **Rettelsen:** Kortkøen (`js/solsystem/kortkoe.js`) lægger store kort ind i strimler, én pr. billede, på ca. 8 ms hver (forslag B fra G1). Det gælder også Stå på Mars og månerne. Kortet gives først videre, når det hele er lagt ind, så et halvt kort ses aldrig, og et kort, der glemmes midt i, slettes. Ingen ekstra hukommelse. **Valgt af orkestratoren 2026-11-18, kan ændres af jer:** strimler (A) i stedet for at beholde Mars' kort (B), som ville bryde budgettet på 350 MB på tablet.
