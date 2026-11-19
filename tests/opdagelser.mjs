@@ -56,7 +56,7 @@ tjek('Tycho og Huygens er de byggede bøger, og delen står i Biblioteket efter 
   const fl = forløbMed(bogMed('huygens').forløb);
   const ord = (t) => (t ?? '').split(/\s+/).filter(Boolean).length;
   const fejlFl = [];
-  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 1) fejlFl.push('forløbet findes ikke i listen');
+  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 2) fejlFl.push('forløbet findes ikke i listen');
   else {
     if (fl.trin.map((t) => t.id).join() !== 'linse,naetter,kanten,annulo') fejlFl.push('trinene');
     for (const t of fl.trin) {
@@ -113,6 +113,29 @@ tjek('Tycho og Huygens er de byggede bøger, og delen står i Biblioteket efter 
     && t.FORSIDE.spørgsmål === bogMed('tycho').spørgsmål && t.OPSLAG[0].slags === 'forside' && erW && Math.abs(st.kaph.y - st.segin.y) < 0.3
     && w.every((x) => st.ny.y > x.y + 2) && t.FORSIDE.kort.stjerner.length === 6 && t.FORSIDE.kort.alt,
     JSON.stringify({ sætninger, w: w.map((x) => x && [x.x.toFixed(1), x.y.toFixed(1)]), ny: st.ny && [st.ny.x.toFixed(1), st.ny.y.toFixed(1)] }));
+}
+// Tychos tur (T2, drejebogen afsnit 5, test 4): fire trin med kapitel og gæt i de tre sidste, højst to sætninger i hver
+// Så, ordene i Ordbogen, og himlen over Herrevad: højst ca. 82° og lavest ca. 30°, og spøgelset (lige så tæt på som
+// Månen) er næsten en grad anderledes fra højt til lavt (Tycho: 58½′ med 52 jordradier)
+{
+  const fl = forløbMed(bogMed('tycho').forløb);
+  const t = await bogMed('tycho').tekster();
+  const sætn = (x) => (x?.match(/[.!?](\s|$)/g) ?? []).length;
+  const fejlT = [];
+  if (!fl || fl.del !== 'opdagelser' || fl.trin.map((x) => x.id).join() !== 'stjernen,parallakse,hoejt,falmer') fejlT.push('trinene');
+  for (const x of fl?.trin ?? []) {
+    if (!x.kapitel || !x.gør || sætn(x.så) > 2 || sætn(x.spørg) > 3) fejlT.push(`${x.id}: teksterne`);
+    if (x.id !== 'stjernen' && !(x.gæt?.valg.length === 3 && x.gæt.valg.every((v) => v.svar))) fejlT.push(`${x.id}: gættet`);
+    for (const o of x.ord ?? []) if (!ORDBOG.some((y) => y.id === o && y.kunI)) fejlT.push(`${x.id}: ordet ${o}`);
+  }
+  if (!/langt bag Månen/.test(fl?.kernesætning) || !/7° 55′/.test(fl?.trin[2].så) || /samme nat/.test(JSON.stringify(fl))) fejlT.push('kernesætningen eller 7° 55′');
+  if (t.OPSLAG.find((o) => o.id === 'fortaelling')?.slags !== 'scene' || t.FRI.kapitler.length !== 4 || !t.VEJE.veje.find((v) => v.igen)) fejlT.push('opslaget');
+  const op = t.måling(t.højestVed(t.NY_STJERNE)), ned = t.måling(t.højestVed(t.NY_STJERNE) + 180);
+  const forskel = (op.spøgelse - ned.spøgelse) * 60;
+  if (Math.abs(op.højde - 82) > 1 || Math.abs(ned.højde - 30.2) > 1 || t.grader(op.afstand) !== '7° 55′' || forskel < 45 || forskel > 65) fejlT.push(`himlen ${op.højde} ${ned.højde} ${forskel}`);
+  if (t.MÅNEDER[0].navn !== 'november 1572' || !/1574/.test(t.MÅNEDER[t.MÅNED_MÅL].navn) || t.MÅNEDER.some((m, i) => i && m.mag < t.MÅNEDER[i - 1].mag)) fejlT.push('månederne');
+  tjek('Tychos tur: fire trin (stjernen, parallaksen, højt og lavt, stjernen falmer) med korte tekster og ordene i Ordbogen, og himlen over Herrevad giver 7° 55′ hele vejen og et spøgelse, der er næsten en grad anderledes',
+    !fejlT.length, fejlT.join('; '));
 }
 tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab-fell.woff2') && existsSync(PROJEKT + 'fonts/OFL.txt'));
 
@@ -310,6 +333,77 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await ctx.close();
 }
 
+// Tychos tur (T2, test 5): starter efter "Begynd", og handlingerne i de fire trin gennem testadgangen. Et tryk ved siden af
+// stjernen giver et vink, højt alene giver et vink om lavt, og "Det så du" har kun de veje, der er bygget
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '&forloebstart#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  const S = (f, a) => O(f, a);
+  const fase = (f) => vent(page, (f) => atomlabTest.opdagelser.forløb.fase() === f, f, 12000);
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('tycho'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await page.click('#opdBog .bog-begynd');
+  const startet = await vent(page, () => atomlabTest.opdagelser.forløb.kører() === 'den-nye-stjerne' && atomlabTest.opdagelser.scene()?.tilstand().trin === 'stjernen');
+  const kapitel = await O(() => document.querySelector('#opdBog .bog-kapitel')?.textContent);
+  // Trin 1: stjernen lyser op af sig selv, et tryk ved siden af giver et vink, et tryk på den tæller
+  const lyser = await vent(page, () => atomlabTest.opdagelser.scene().tilstand().lys > 0.3, null, 8000);
+  await S(() => atomlabTest.opdagelser.scene().tryk(false));
+  const forkert = await O(() => ({ fundet: atomlabTest.opdagelser.scene().tilstand().fundet, vink: document.querySelector('.forløb-linje .fl-vink')?.textContent ?? '' }));
+  await S(() => atomlabTest.opdagelser.scene().tryk(true));
+  const trin1 = (await fase('så')) && !forkert.fundet && /tegning i hjørnet/.test(forkert.vink);
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 2: øjet alene er ikke nok, begge skift er
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'parallakse');
+  await S(() => atomlabTest.opdagelser.scene().øje());
+  await page.waitForTimeout(900);
+  const kunØje = await O(() => atomlabTest.opdagelser.forløb.fase());
+  await S(() => atomlabTest.opdagelser.scene().sted());
+  const trin2 = (await fase('så')) && kunØje !== 'så' && (await O(() => /1°/.test(document.querySelector('#opdBog .ts-par-måne')?.textContent)));
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 3: højt giver et vink om lavt, og lavt giver Så. Afstanden er 7° 55′ begge steder, spøgelset er ikke
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'hoejt');
+  await page.click('.forløb-linje .fl-gæt >> nth=1');
+  await S(() => atomlabTest.opdagelser.scene().drejTil(0));
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().højt);
+  await page.waitForTimeout(300);
+  const høj = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), vink: document.querySelector('.forløb-linje .fl-vink')?.textContent ?? '', fase: atomlabTest.opdagelser.forløb.fase() }));
+  await S(() => atomlabTest.opdagelser.scene().drejTil(180));
+  const trin3 = await fase('så');
+  const lav = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), tal: document.querySelector('#opdBog .ts-spøgelse')?.textContent, svar: document.querySelector('.forløb-linje .fl-svar')?.textContent }));
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 4: midt i 1573 er det ikke nok, begyndelsen af 1574 er, og prikkerne lyser ved det, Tycho sammenlignede med
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'falmer');
+  await S(() => atomlabTest.opdagelser.scene().måned(6));
+  await page.waitForTimeout(900);
+  const maj = await O(() => ({ ...atomlabTest.opdagelser.scene().tilstand(), fase: atomlabTest.opdagelser.forløb.fase() }));
+  await S(() => atomlabTest.opdagelser.scene().måned(14));
+  const trin4 = (await fase('så')) && maj.fase !== 'så' && maj.månedNavn === 'maj 1573' && maj.lyser.join() === 'anden,saturn';
+  await page.click('.forløb-linje .fl-næste');
+  await fase('slut');
+  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, lille: document.querySelector('.forløb-linje .fl-lille')?.textContent, veje: [...document.querySelectorAll('.forløb-linje .fl-vej')].map((v) => v.textContent) }));
+  tjek('Tychos tur starter efter "Begynd" med kapitlet "Herrevad, 11. november 1572", og den nye stjerne lyser op af sig selv og tæller kun, når man rammer den (ellers et vink)',
+    startet && kapitel === 'Herrevad, 11. november 1572' && lyser && trin1, JSON.stringify({ kapitel, forkert }));
+  tjek('Tychos tur: tommelfingeren og Månen skal begge skiftes, højt alene giver et vink om lavt, og højt og lavt er begge 7° 55′, mens spøgelset bliver 7° 07′',
+    trin2 && trin3 && høj.højde > 80 && høj.fase !== 'så' && /ned, så den står lavt/.test(høj.vink) && høj.afstand === '7° 55′' && lav.højde < 31 && lav.afstand === '7° 55′' && lav.spøgelse === '7° 07′' && /7°\s07′/.test(lav.tal) && lav.svar === 'Rigtigt gættet!',
+    JSON.stringify({ trin2, høj, lav }));
+  tjek('Tychos tur: stjernen falmer til begyndelsen af 1574 (maj lyser ved anden størrelse og Saturn), og "Det så du" har kernesætningen, linjen om de tre stjerner og kun "Tag turen igen", indtil gåden er bygget',
+    trin4 && /langt bag Månen/.test(slut.tekst) && /tre stjerner/.test(slut.lille) && slut.veje.join('|') === 'Tag turen igen ›', JSON.stringify({ maj, slut }));
+  // "Tag turen igen" starter forfra, og "Udforsk selv" giver laboratoriet med de fire kapitler (standard "Højt og lavt")
+  await page.click('.forløb-linje .fl-vej');
+  const igen = await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'stjernen');
+  await page.click('.forløb-linje .fl-spring');
+  await vent(page, () => !atomlabTest.opdagelser.forløb.kører());
+  const lab = await O(() => ({ kapitler: [...document.querySelectorAll('#opdBog .hs-kapitel')].map((k) => k.textContent), t: atomlabTest.opdagelser.scene().tilstand(), låst: atomlabTest.opdagelser.låst() }));
+  await page.click('#opdBog .hs-kapitel >> text=Stjernen falmer');
+  await S(() => atomlabTest.opdagelser.scene().måned(0));
+  const labFalmer = await O(() => atomlabTest.opdagelser.scene().tilstand());
+  tjek('Tychos tur: "Tag turen igen" starter forfra, og laboratoriet har fire kapitler med "Højt og lavt" som standard og "Stjernen falmer" med Venus og Jupiter i november 1572',
+    igen && lab.kapitler.join('|') === 'Den nye stjerne|Tommelfingeren|Højt og lavt|Stjernen falmer' && lab.t.lab === 'hoejt' && !lab.låst && labFalmer.lab === 'falmer' && labFalmer.lyser.join() === 'venus,jupiter',
+    JSON.stringify({ lab, labFalmer }));
+  await ctx.close();
+}
+
 // Telefon på højkant og på langs i fortællingen: lærredet har plads, skyderen og tavlens tegninger er inden for skærmen,
 // og siden bliver ikke bredere end skærmen
 for (const [navn, opsætning] of [
@@ -337,6 +431,31 @@ for (const [navn, opsætning] of [
   }
   tjek(`${navn}: i fortællingen har lærredet plads (mindst 140 px), og lærredet, skyderen, tavlens tegninger og knapperne er inden for skærmen`,
     mål.length === 3 && mål.every((m) => m.lærred >= 140 && m.inde && !m.bred), JSON.stringify(mål));
+  // Tychos tur (T2): i alle fire trin har lærredet plads, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel
+  await O(() => atomlabTest.opdagelser.hylden());
+  await O(() => atomlabTest.opdagelser.åbn('tycho'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await page.click('#opdBog .bog-begynd');
+  const målT = [];
+  for (const trin of ['stjernen', 'parallakse', 'hoejt', 'falmer']) {
+    await vent(page, (t) => atomlabTest.opdagelser.forløb.trin() === t, trin);
+    if (trin !== 'stjernen') await page.click('.forløb-linje .fl-gæt >> nth=0');
+    await page.waitForTimeout(250);
+    målT.push(await O(() => {
+      const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5 && x.top >= -0.5 && x.bottom <= innerHeight + 0.5;
+      const c = document.querySelector('#opdBog canvas').getBoundingClientRect();
+      const ting = [...document.querySelectorAll('#opdBog .hs-nat input, #opdBog .ts-sammen, #opdBog .ts-maal, .forløb-linje button')].map((e) => e.getBoundingClientRect());
+      const kap = document.querySelector('#opdBog .bog-kapitel'), hylde = document.getElementById('opdTilHylden').getBoundingClientRect();
+      const r = document.createRange();
+      r.selectNodeContents(kap);
+      const tk = r.getBoundingClientRect();
+      const dækker = tk.left < hylde.right && tk.right > hylde.left && tk.top < hylde.bottom && tk.bottom > hylde.top;
+      return { trin: atomlabTest.opdagelser.forløb.trin(), lærred: Math.round(Math.min(c.width, c.height)), inde: inde(c) && ting.every(inde), bred: document.documentElement.scrollWidth > innerWidth + 1, dækker };
+    }));
+    if (trin !== 'falmer') { await O(() => atomlabTest.opdagelser.forløb.visMigNu()); await vent(page, () => atomlabTest.opdagelser.forløb.fase() === 'så', null, 12000); await page.click('.forløb-linje .fl-næste'); }
+  }
+  tjek(`${navn}: i Tychos tur har lærredet plads (mindst 140 px) i alle fire trin, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel`,
+    målT.length === 4 && målT.every((m) => m.lærred >= 140 && m.inde && !m.bred && !m.dækker), JSON.stringify(målT));
   await ctx.close();
 }
 

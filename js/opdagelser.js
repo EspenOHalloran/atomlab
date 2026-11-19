@@ -7,7 +7,7 @@
 // "Begynd". Imens er bladringen låst, og Esc går til hylden (og stopper forløbet, så det starter igen næste gang).
 // H3 (17. november 2026): trin 4 (ANNULO) og vejene fra "Det så du": Saturns ringe fra kanten i Solsystemet, hele
 // anagrammet (opslaget "Hemmeligheden") og ringen, man selv drejer. H4: Bogen selv (opslaget "Bogen fra 1659" i js/bog.js),
-// og den tredje vej bladrer dertil.
+// og den tredje vej bladrer dertil. T2 (19. november 2026): Tychos tur, og vejene står som en liste i bogens VEJE.
 
 import { bogMed, byggede, påHylden, rygLinje, HYLDE_LINJE } from './data/opdagelser.js';
 import { forløbMed, forløbI } from './data/forloeb/liste.js';
@@ -75,17 +75,22 @@ function startFortælling() {
   if (!scene) return false;
   bog.lås(true);
   const del = scene.forløbDel(fl);
-  // "Det så du": en linje og tre veje (drejebogen afsnit 3, trin 5). Laboratoriet med ringen står stadig i opslaget, når
-  // man bladrer tilbage.
-  // Den røde tråd (18. november 2026): Den vigtige vej er hemmeligheden på næste opslag, og sætningen fra 1659 står ikke
-  // her, for den er svaret dér. Saturn står også som den vigtige knap i "Om Huygens".
+  // "Det så du": en linje og højst tre veje fra bogens VEJE (drejebogen, trin 5). Laboratoriet står stadig i opslaget, når
+  // man bladrer tilbage. En vej til et opslag står kun, når opslaget er bygget (stilguiden A9, Tycho i T2), og er den
+  // vigtige vej væk, bliver den første af de andre vigtig.
+  // Den røde tråd (18. november 2026): Hos Huygens er den vigtige vej hemmeligheden på næste opslag, og sætningen fra
+  // 1659 står ikke her, for den er svaret dér. Saturn står også som den vigtige knap i "Om Huygens".
   const v = åben.tekster.VEJE;
   del.slutTekst = () => v.sætning;
-  del.veje = [
-    { tekst: v.anagram, primær: true, gør: () => visOpslag('gaaden') },
-    { tekst: v.bog, gør: () => visOpslag('bogen') },
-    { tekst: v.saturn, gør: () => åbnFænomen('solsystem', 'saturn', 'kanten') },
-  ];
+  const veje = (v.veje ?? []).filter((x) => !x.opslag || bog.find(x.opslag) >= 0);
+  const primær = veje.some((x) => x.primær);
+  del.veje = veje.map((x, i) => ({
+    tekst: x.tekst,
+    primær: primær ? Boolean(x.primær) : i === 0,
+    gør: x.opslag ? () => visOpslag(x.opslag)
+      : x.fænomen ? () => åbnFænomen(...x.fænomen)
+        : () => startFortælling(),
+  }));
   del.slut = () => {
     bog?.lås(false);
     if (bog?.scene() === scene) scene.fri();
