@@ -67,7 +67,10 @@ KRATERE = {
         'ref': (-4.7515, 137.3735),
         'steder': {
             'naukluft': (-4.67837549, 137.3593593),   # stoppet ved sol 1301, hvor panoramaet PIA20332 er taget (4. april 2016, sol 1302)
-            'curiosity': (-4.82466475, 137.3876138),  # sol 5045 (ca. 15. oktober 2026)
+            # 8 m fra Curiositys stop på sol 5073 (ca. 13. november 2026) mod syd-sydvest, så roveren ses (M8c del 2). Lag 0
+            # og 1 i gale.json er lavet om stoppet på sol 5045 (-4.82466475, 137.3876138), ca. 120 m herfra. Køres
+            # værktøjet igen, lægges de om det nye sted.
+            'curiosity': (-4.82614019, 137.38881828),
         },
         'fjern': (-2.4, -8.4, 134.8, 140.8),
         'fjern_fil': 'mars-gale-hoejde-{}.png',
