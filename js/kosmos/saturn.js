@@ -36,7 +36,7 @@ const MÅNER = [
     tur: { længde: -112, side: 45, højde: -8 }, // Herschel ligger ved 112° vest
   },
   {
-    id: 'enceladus', navn: 'Enceladus', afstand: 238037, r: 252, døgn: 1.37, farve: [1, 1, 1],
+    id: 'enceladus', navn: 'Enceladus', afstand: 238037, r: 252, døgn: 1.37, farve: [1, 1, 1], form: true,
     kort: 'Fra fire sprækker ved sydpolen sprøjter fontæner af vanddamp og iskorn ud i rummet. Under isen er der et hav.',
     tur: { bane: -15, retning: 0, højde: -22 },
     forskyd: -0.55, // kameraet kigger lidt under midten, så fontænerne er med
@@ -71,6 +71,8 @@ const MÅNER = [
 // Månernes kort er målinger i gråtoner og ligger med kun én kanal i grafikkortet (fylder en fjerdedel).
 const STØRRELSE = TEST_HURTIG ? '2k' : '4k';
 const MÅNER_8K = new Set(['enceladus', 'tethys', 'dione', 'rhea']);
+// Månerne med en rigtig form (S3): et kort over radius (`<id>-form.png`, lav_saturn_former.py) og så mange felter i nettet
+const FORM_NET = TEST_HURTIG ? [128, 64] : LAV_KVALITET ? [256, 128] : [512, 256];
 const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på månernes kort
 
 // Flybyen: et stop ved hvert sted. fokus 'saturn', 'ringe' eller en måne.
@@ -195,6 +197,7 @@ export default {
       const navn = `${m.id}-${måneStørrelse(m.id)}.jpg`;
       if (m.hentet && !klar) return;
       m.hentet = true;
+      if (m.form && !m.klode.harForm) hent(`${m.id}-form.png`, (t) => { if (aktiv && !m.klode.harForm) m.klode.sætForm(t.image, FORM_NET); }, { farve: false, rundt: false, forhånd });
       hent(navn, (t) => {
         m.klode.sætKort(t);
         klar?.();
@@ -472,6 +475,13 @@ export default {
         hop: () => rejse.hop(), // gør den igangværende flyvning færdig
         // de hentede billeder, og om de ligger med én kanal i grafikkortet
         billeder: () => hentedeBilleder(['saturn', ...MÅNER.map((m) => m.id)]),
+        // S3: månens form (radius i km ved polerne og ækvator mod, på tværs af og væk fra Saturn) og fontænernes start
+        form(id) {
+          const k = måneMed(id).klode;
+          if (!k.harForm) return null;
+          const r = (b, l) => k.radiusVed(b, l);
+          return { mod: r(0, 0), tværs: r(0, 90), væk: r(0, 180), nord: r(90, 0), syd: r(-90, 0), kilder: k.kilder?.() };
+        },
       },
     };
   },

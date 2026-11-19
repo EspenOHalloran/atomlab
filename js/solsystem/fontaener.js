@@ -4,6 +4,7 @@
 
 import * as THREE from 'three';
 import { LAV_KVALITET } from '../scene3d.js';
+import { læsForm, formNet, formRadius, formBreddeLængde } from './maane-form.js';
 
 const STRIBER = 4;
 const STRIBE_LÆNGDE = 130; // km
@@ -175,10 +176,39 @@ export function lavEnceladus(radius) {
 
   const midt = new THREE.Vector3();
   const skala = new THREE.Vector3();
+  let radier = null;
   return {
     gruppe,
     måne,
     fontæner,
+    get harForm() { return !!radier; },
+    // Kortet over radius (S3, se lav_saturn_former.py, nul 252 km). Kuglen får den rigtige form, og fontænerne
+    // flyttes ned på overfladen (sydpolen ligger ca. 4 km under kuglen).
+    sætForm(billede, net) {
+      radier = læsForm(billede, RADIUS_KM);
+      const ny = formNet(radier, net, RADIUS_KM / radius);
+      måne.geometry.dispose();
+      måne.geometry = ny.geometri;
+      const p = new THREE.Vector3();
+      for (let i = 0; i < N; i++) {
+        p.set(kilde[i * 3], kilde[i * 3 + 1], kilde[i * 3 + 2]).normalize();
+        const [b, l] = formBreddeLængde(p);
+        p.multiplyScalar(formRadius(radier, b, l) / RADIUS_KM);
+        kilde.set([p.x, p.y, p.z], i * 3);
+      }
+      geo.attributes.aKilde.needsUpdate = true;
+    },
+    // Til tests: radius (km) i (bredde, længde) og hvor langt fontænerne starter fra midten (km, mindst og højst)
+    radiusVed: (bredde, længde) => (radier ? formRadius(radier, bredde, længde) : RADIUS_KM),
+    kilder() {
+      let lav = Infinity, høj = 0;
+      for (let i = 0; i < N; i++) {
+        const r = Math.hypot(kilde[i * 3], kilde[i * 3 + 1], kilde[i * 3 + 2]) * RADIUS_KM;
+        lav = Math.min(lav, r);
+        høj = Math.max(høj, r);
+      }
+      return { lav, høj };
+    },
     sætKort(t) { overflade.uniforms.tKort.value = t; overflade.uniforms.uHarKort.value = t ? 1 : 0; },
     sæt(solRetning, tid) {
       overflade.uniforms.uSol.value.copy(solRetning);
