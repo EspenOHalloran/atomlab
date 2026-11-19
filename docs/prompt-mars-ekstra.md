@@ -7,7 +7,7 @@
 | Del | Hvad | Størrelse | Model og effort | Før der bygges |
 |---|---|---|---|---|
 | 1. M7b-pol | Nordpolen tæt på: et polarnet over kappen | mellem til stor | Opus, høj | Data tjekkes med curl (MOLA's polarkort og farverne), faktatjek af kappen |
-| 2. M8c del 3 | Stenene og terrænet i Stå på Mars | mellem | Opus, høj | Billeder fra panoramaernes retning som facit |
+| 2. M8c del 3 | Stenene og terrænet i Stå på Mars (**lavet 19. november 2026**) | mellem | Opus, høj | Billeder fra panoramaernes retning som facit |
 | 3. M8c del 2 | Curiosity som 3D-model ved "Hos Curiosity nu" | mellem | Opus, høj | Jeres ja til `gltf-transform` (værktøj, der køres én gang) |
 | 4. L2 | Lyset, den dyre del (ambient occlusion først) | mellem | Opus, høj | En session på jeres pc (Claude Code, Node.js og Playwright) |
 
