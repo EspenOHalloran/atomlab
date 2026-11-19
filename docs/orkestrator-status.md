@@ -5,7 +5,7 @@
 ## Det første, den nye orkestrator gør
 1. **Slet den gamle orkestrators skemaer** med `delete_trigger`: `trig_01QbBJpjnC4M1PQJMBj3XpRB` (hver time) og `trig_01BGVquKMiEVfK3P5Rqa6h4C` (vækningen kl. 03:32 dansk tid). Tjek med `list_triggers`.
 2. **Opret dit eget skema:** cron `0 * * * *`, beskeden "Orkestrator: tjek nu", og en vækning (`send_later`) 20. november 2026 kl. 03:32 `[Europe/Copenhagen]`: "Grænsen for de 5 timer er nulstillet. Tjek alle sessioner, og send 'Fortsæt, hvor du slap.' til dem, der er stoppet ved grænsen. Start den næste i køen, hvis der er plads." (jeres ønske: vækninger efter 22:30 og 5 timer senere).
-3. **Send dit id** til de to kørende sessioner (herunder), så de melder til dig.
+3. **Send dit id** til de kørende sessioner (herunder), så de melder til dig.
 4. Skriv kort til brugeren, at du har overtaget.
 
 ## Jeres beslutninger (gælder stadig)
@@ -17,15 +17,15 @@
 - **De tre forslag til optimering** (røgtest på GitHub Actions, `/proeveliste`, `/ny-session`): Orkestratoren anbefalede at lade dem ligge, fordi gevinsten er lille. I har ikke sagt go. Byg dem ikke.
 
 ## Kører
-- **Videnskabsfolkene · T2: turen "Den nye stjerne"** (session_01YQoBWL57eHPavhyeiB9TmT, Opus høj). Grenen `claude/t2-tycho-turen` er pushet. Stoppede ved grænsen, fik "Fortsæt" kl. 21:31 UTC. Den skal også rette Tychos navn på hylden (står oven i 1572 på telefonen). Bagefter T3 (prompten i `docs/lige-nu/videnskabsfolkene.md`).
+- **Småting · Gåderne: jeres fund fra telefonen** (session_01YQoBWLduMBWBGtkyjfbde1, Opus høj, startet 21:39 UTC): de fire punkter under Åbne punkter.
+- **T2 er færdig** (PR #358, merget, arkiveret). Det er ikke bekræftet, at Tychos navn på hylden (står oven i 1572 på telefonen) blev rettet: Tjek det i T3.
 - **Solsystemet · Saturn S3: højder på månerne** (session_01YQoBWL2njdQoQB6hh17JPR, Opus høj). Valgt af orkestratoren: A, som `maane-form.js`. Bygger Enceladus. Har bedt miljøet om domænet til Gaskells formmodeller (sandsynligvis `sbn.psi.edu`), som venter på jeres godkendelse. Er det ikke godkendt, merges Enceladus alene, og de fire andre måner bliver S3b. Stoppede ved grænsen, fik "Fortsæt" kl. 21:31 UTC.
 
 ## Merget 19. november (efter skift 6)
 Undertitlen i Gåderne (#352), Tychos forside T1 (#353), paneler, der kan swipes ned på telefonen (#354), jeres fund fra telefonen under Åbne punkter (#355), jeres ønsker i køreplanen (#356). Overblikket er ikke opdateret siden version 67.
 
 ## Køen
-1. **Småting · jeres fund fra telefonen i Gåderne** (4 punkter under "Åbne punkter", `docs/lige-nu/aabne-punkter.md`: introduktion til Cheyava Falls, zoom og fuld opløsning på fotoet, "blev opdaget" i stedet for "kom", og "galaksen her er tegnet med ca. 2.000 prikker"). Opus høj, `/faktatjek`. Startes, når T2 eller S3 er færdig.
-2. **Tycho T3** efter T2.
+1. **Tycho T3** (prompten i `docs/lige-nu/videnskabsfolkene.md`, Opus høj), når S3 eller Småting er færdig. Bed den tjekke Tychos navn på hylden i telefonstørrelse.
 3. **Overblikket opdateres** (Småting) med den lange plan (jeres ønske, se `docs/koereplan.md`), når en af de næste er færdig.
 4. **Grafikken genbesøges** (jeres ønske, `docs/plan-grafik.md`): Vis jer først, hvad der er lavet, og hvad der er tilbage. Byg ikke uden jeres valg.
 5. **Gåderne G4c: Sort hul**, når I har målt `?maal#gaader` på Tab A11.
