@@ -1,6 +1,6 @@
 # Drejebog: Tycho Brahe og den nye stjerne
 
-*Opus' udkast 19. november 2026 (V1 i [plan-videnskabsfolk.md](plan-videnskabsfolk.md), afsnit 8). Bog nr. 2 på hylden, bygget med `js/bog.js` som [Huygens' bog](drejebog-huygens.md), og med **den røde tråd fra begyndelsen** (erfaringen fra Huygens' afsnit 13). Faktagrundlaget er [fakta-videnskabsfolk/tycho.md](fakta-videnskabsfolk/tycho.md): **faktatjekket af Opus i stedet for Fable** (Fable er ikke til rådighed, linjen står i [plan-fable.md](plan-fable.md)). Intet er bygget. Byggeriet (T1-T3) starter først, når I har givet go til drejebogen.*
+*Opus' udkast 19. november 2026 (V1 i [plan-videnskabsfolk.md](plan-videnskabsfolk.md), afsnit 8). Bog nr. 2 på hylden, bygget med `js/bog.js` som [Huygens' bog](drejebog-huygens.md), og med **den røde tråd fra begyndelsen** (erfaringen fra Huygens' afsnit 13). Faktagrundlaget er [fakta-videnskabsfolk/tycho.md](fakta-videnskabsfolk/tycho.md): **faktatjekket af Opus i stedet for Fable** (Fable er ikke til rådighed, linjen står i [plan-fable.md](plan-fable.md)). Jeres go kom 19. november 2026 (svarene i afsnit 16). T1 (forsiden) er lavet samme dag, T2 og T3 venter.*
 
 ## 1. Kernesætningen
 *Efter fem minutter kan brugeren sige:*
@@ -166,9 +166,9 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/tycho.m
 
 ## 15. Byggeriet (T1-T3, efter jeres go)
 *Model: Opus, høj effort. Én session pr. trin, prompten står i [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md). `js/bog.js` findes, så det er lille til mellem pr. trin.*
-- **T1: Forsiden og bogen** (lille). `tycho` bygget i `js/data/opdagelser.js` (stil, portræt, tekster, forløb), `js/data/opdagelser/tycho.js` (FORSIDE med intro, OPSLAG), portrættet med `lav_portraet.py tycho` og `KILDER.md`, og tegningen af W'et på forsiden. Rømer og Ørsted bliver de to grå rygge (`KOMMENDE_PÅ_HYLDEN`). Test 1, 3 og 8 for Tycho.
-- **T2: Turen** (mellem). `js/data/forloeb/tycho.js` (fire trin og "Det så du") og `js/bog/tycho.js` (nattehimlen, tommelfingeren og Månen, himlen, der drejer, og stjernen, der falmer). Ordene `parallakse` og `supernova` i Ordbogen. Test 4 og 5.
-- **T3: Gåden, bogen og "Om Tycho"** (mellem). Cirklerne på kortet (test i Node: mødestedet inden for 10′), `lav_bogsider.py` med de fire sider og de glødende steder (felterne måles med scriptet), "Om Tycho", Gør det selv og links begge veje (Hvid dværg og citatet `tycho`, sig det til sporet Solsystemet og Kosmos). Test 6 og 7, `/faktatjek` på de færdige tekster og `/faerdig`. Så har Tycho status "prøve".
+- [x] **T1: Forsiden og bogen** (lille, lavet 19. november 2026, se [kode/opdagelser.md](kode/opdagelser.md)). `tycho` bygget i `js/data/opdagelser.js` (stil, portræt, tekster, forløb), `js/data/opdagelser/tycho.js` (FORSIDE med intro, OPSLAG), portrættet med `lav_portraet.py tycho` og `KILDER.md`, og tegningen af W'et på forsiden. Rømer og Ørsted bliver de to grå rygge (`KOMMENDE_PÅ_HYLDEN`). Test 1, 3 og 8 for Tycho.
+- [ ] **T2: Turen** (mellem). `js/data/forloeb/tycho.js` (fire trin og "Det så du") og `js/bog/tycho.js` (nattehimlen, tommelfingeren og Månen, himlen, der drejer, og stjernen, der falmer). Ordene `parallakse` og `supernova` i Ordbogen. Test 4 og 5.
+- [ ] **T3: Gåden, bogen og "Om Tycho"** (mellem). Cirklerne på kortet (test i Node: mødestedet inden for 10′), `lav_bogsider.py` med de fire sider og de glødende steder (felterne måles med scriptet), "Om Tycho", Gør det selv og links begge veje (Hvid dværg og citatet `tycho`, sig det til sporet Solsystemet og Kosmos). Test 6 og 7, `/faktatjek` på de færdige tekster og `/faerdig`. Så har Tycho status "prøve".
 
 ## 16. Spørgsmål til jer (anbefalingen først)
 *Stilles som en dialog med valgmuligheder. Jeres svar skrives nedenfor.*
@@ -177,3 +177,5 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/tycho.m
 3. **De fire sider:** A, kortet, brevet med "O crassa ingenia" og farven D2 (anbefalet: opdagelsen, målingen, beviset med Tychos egne ord og stjernen, der falmer). Eller figuren C2b i stedet for brevet (flottere tegning, men beviset står på næste side).
 4. **Skanningen:** Toronto-skanningen af faksimilen fra 1901 med kilden i `KILDER.md` og "Ærligt talt" (anbefalet: teksten og fotoene fra 1901 er frie, og risikoen ved en ren skanning fra 2009 er lille for et gratis program). Eller vent og spørg Det Kongelige Bibliotek (kb@kb.dk) om deres eksemplar fra 1573.
 5. **Citatet `tycho`:** flyttes fra Supernova til Hvid dværg, hvor Tychos stjerne hører til (anbefalet, en lille ændring i sporet Solsystemet og Kosmos i T3), eller bliver ved Supernova og får kun knappen "Læs Tychos bog ›".
+
+**Jeres svar 19. november 2026:** "Gå med dine anbefalinger. 4: spørg ikke KB." Det betyder: 1) kernesætning A, 2) de Gheyns stik fra 1586 med kobberstik-filteret (stikket selv, tonet, hvis filteret giver striber. Det gav ingen striber, så filteret er brugt, T1), 3) de fire sider A, B1b, brevet "O crassa ingenia" og D2, 4) Toronto-skanningen fra 2009 bruges, og Det Kongelige Bibliotek spørges ikke, 5) citatet `tycho` flyttes fra Supernova til Hvid dværg (i T3).
