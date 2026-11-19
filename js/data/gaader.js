@@ -359,7 +359,7 @@ export const GÅDER = [
     // G4e (19. november 2026): ingen egen scene (jeres svar på E10). Lyset står bag kortet, og efter gættet i hvert trin står
     // linjen nederst i billedet med knappen til seDet (js/gaader/scene.js). Linjerne siger kun, hvad delen Begyndelsen viser
     // (kolben, RNA'ets kopi og trappen i js/liv/begyndelsen.js), ikke "RNA'et kopierer sig selv" og ikke "bogstav for
-    // bogstav" (QT45 fik byggestykker af tre bogstaver, fakta-faelder-liv-og-videnskabsfolk.md).
+    // bogstav" (QT45 fik byggestykker af tre bogstaver, fakta-faelder-liv.md).
     scene: {
       prøv: [
         'I Begyndelsen kan du selv sende lyn ind i Millers kolbe og se vandet skifte farve.',

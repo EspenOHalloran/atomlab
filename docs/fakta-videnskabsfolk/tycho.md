@@ -1,6 +1,6 @@
 # Faktagrundlag: Tycho Brahe og den nye stjerne (til drejebogen)
 
-*Lavet 19. november 2026 af Opus (effort høj) til [drejebog-tycho.md](../drejebog-tycho.md) og [plan-videnskabsfolk.md](../plan-videnskabsfolk.md) (V1). Bygger videre på afsnit 1 i [fakta-videnskabsfolk.md](../fakta-videnskabsfolk.md). Fælderne i [fakta-faelder-liv-og-videnskabsfolk.md](../erfaringer/fakta-faelder-liv-og-videnskabsfolk.md) og [fakta-faelder.md](../erfaringer/fakta-faelder.md) er læst først. **Faktatjekket af Opus i stedet for Fable** (Fable er ikke til rådighed fra 18. november 2026, se [plan-fable.md](../plan-fable.md)).*
+*Lavet 19. november 2026 af Opus (effort høj) til [drejebog-tycho.md](../drejebog-tycho.md) og [plan-videnskabsfolk.md](../plan-videnskabsfolk.md) (V1). Bygger videre på afsnit 1 i [fakta-videnskabsfolk.md](../fakta-videnskabsfolk.md). Fælderne i [fakta-faelder-videnskabsfolk.md](../erfaringer/fakta-faelder-videnskabsfolk.md) og [fakta-faelder.md](../erfaringer/fakta-faelder.md) er læst først. **Faktatjekket af Opus i stedet for Fable** (Fable er ikke til rådighed fra 18. november 2026, se [plan-fable.md](../plan-fable.md)).*
 
 **Sikkerhed** (som i fakta-videnskabsfolk.md): **Sikker** = læst i bogen selv (sidebilledet) eller i to uafhængige kilder. **Ret sikker** = én pålidelig kilde, eller regnet ud fra sikre tal. **Usikker** = kilderne er uenige, eller det kunne ikke læses direkte.
 

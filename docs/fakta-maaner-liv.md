@@ -161,7 +161,7 @@ Forslag 1 har to nye fagord (*hav under isen* er ikke et fagord, men *fontæne* 
 ---
 
 ## 7. Fælder (det, der ofte siges forkert)
-*De nye står også i [fakta-faelder-liv-og-videnskabsfolk.md](erfaringer/fakta-faelder-liv-og-videnskabsfolk.md). De gamle om de tre måner står i del1, del5b og fakta-liv/rummet.md.*
+*De nye står også i [fakta-faelder-liv.md](erfaringer/fakta-faelder-liv.md). De gamle om de tre måner står i del1, del5b og fakta-liv/rummet.md.*
 - **"Europa har alle seks byggesten for liv."** NASA skriver "believe". Målt er vand, salt og CO₂ (og svovlforbindelser på overfladen). Nitrogen og fosfor er ikke målt på Europa.
 - **"Kuldioxiden på Europa kommer fra havet."** Det er det mest sandsynlige, men forfatterne skriver selv "we cannot rule out formation on the surface".
 - **"Europa har varme kilder på havbunden som Enceladus."** Det er ikke målt på Europa, og en model fra 2026 tyder på, at havbunden er stille i dag.

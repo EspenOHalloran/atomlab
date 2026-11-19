@@ -11,7 +11,7 @@ Spor: Molekyler. Navngiv chatten "Molekyler · Liv L4: turen Fejlen, der hjalp".
 - `docs/drejebog-liv.md`: afsnit 1, 3, 5 (kort 4 og 5) og 8. Noterne `docs/fable/E10-liv-noter.md`, afsnit 3, punkt 6-9 og 13.
 - `docs/retning.md` (budgettet for lagene), `docs/stilguide.md` (B) og skabelonen `docs/fable/E3-forloeb.md`.
 - `docs/kode/liv.md` (især turene 2 og 3, "Kopien") og `docs/kode/forloeb.md` (Forløb-klodsen, også det, sessionen med forløbet som sti har lagt til).
-- Faktagrundlaget: `docs/fakta-liv/dna-opskriften.md`, afsnit 4 og 6 (fælde 10 og 11), og Fables tabel i `docs/fable/E10-liv-drejebog.md`, afsnit 4. **Før L4 skal slås op:** Baym m.fl. 2016 (pladen, 3.000 gange og ca. 10 dage) og Luria og Delbrück 1943 (kun via Wikipedia). Fælderne i `docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md` (linjerne fra E10).
+- Faktagrundlaget: `docs/fakta-liv/dna-opskriften.md`, afsnit 4 og 6 (fælde 10 og 11), og Fables tabel i `docs/fable/E10-liv-drejebog.md`, afsnit 4. **Før L4 skal slås op:** Baym m.fl. 2016 (pladen, 3.000 gange og ca. 10 dage) og Luria og Delbrück 1943 (kun via Wikipedia). Fælderne i `docs/erfaringer/fakta-faelder-liv.md` (linjerne fra E10).
 - Tjekliste B, C, D, E og F.
 - I koden: `js/liv-kopien.js` og `js/data/forloeb/kopien.js` (sådan er tur 3 bygget: delen, trinene, tryk og træk i 3D, "Vis mig", der gør hele trinet, og laboratoriet med panelet), og i `js/liv.js` kun `o3`, `startKopien`, `visForfra`, `efterTur`, `opdaterPanel` og turlisten.
 

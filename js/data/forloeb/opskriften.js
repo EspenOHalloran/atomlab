@@ -31,7 +31,7 @@ export const OPSKRIFTEN = {
       },
       gør: 'Tryk på en tråd for at komme helt tæt på.',
       // Ikke "i næsten hver celle": De fleste celler målt i antal er røde blodlegemer uden cellekerne (Fable E5, fælden i
-      // docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md). 6,1 mia. basepar × 0,34 nm = 2,07 m.
+      // docs/erfaringer/fakta-faelder-liv.md). 6,1 mia. basepar × 0,34 nm = 2,07 m.
       så: 'Ca. 2 meter, i hver celle med en cellekerne! Trådene hedder kromosomer. De er lange stykker DNA.',
       ord: ['kromosom', 'dna'],
     },

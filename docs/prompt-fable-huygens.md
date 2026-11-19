@@ -24,7 +24,7 @@ Bogen skal være flot og engagerende for en 12-13-årig og indholdsrig nok til n
 3. Faktagrundlaget: [docs/fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md) (hele) og afsnit 3 (Huygens) og "Forslag til kernesætning" i [docs/fakta-videnskabsfolk.md](fakta-videnskabsfolk.md).
 4. **Bogen selv:** *Systema Saturnium* (1659) på archive.org, id `CristianiHugeni00HuygA`. Siderne som billeder: `https://archive.org/download/CristianiHugeni00HuygA/page/n65_w1200.jpg` (s. 46), `n66` (s. 47), `n67` (s. 48) og tavlen `n51` (ved s. 35). OCR-teksten er `CristianiHugeni00HuygA_djvu.txt` (`grep`). Læs s. 46-48 på billederne, ikke kun i OCR'en (den mister bogstavrækken).
 5. Det, der findes ved Saturn: citatet `huygensSaturn` i `js/data/citater.js` og kortet "Hvor tynde er ringene?" i `js/data/sider/saturn.js` (`grep -n "huygens\|tynde" ...`).
-6. Fælderne: [docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md](erfaringer/fakta-faelder-liv-og-videnskabsfolk.md) (afsnittet om videnskabsfolkene og linjerne om Huygens).
+6. Fælderne: [docs/erfaringer/fakta-faelder-videnskabsfolk.md](erfaringer/fakta-faelder-videnskabsfolk.md) (afsnittet om videnskabsfolkene og linjerne om Huygens).
 
 ### Hvad du skal levere
 Én fil: **`docs/fable/E12-huygens.md`**, højst ca. 10 KB. I denne rækkefølge:
