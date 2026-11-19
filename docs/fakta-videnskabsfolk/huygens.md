@@ -1,6 +1,6 @@
 # Faktagrundlag: Christiaan Huygens (til drejebogen)
 
-*Lavet 15. november 2026 af Opus (effort høj) til [drejebog-huygens.md](../drejebog-huygens.md) og [plan-videnskabsfolk.md](../plan-videnskabsfolk.md). Bygger videre på afsnit 3 i [fakta-videnskabsfolk.md](../fakta-videnskabsfolk.md), som er fuld (ca. 30 KB). Fælderne i [fakta-faelder-liv-og-videnskabsfolk.md](../erfaringer/fakta-faelder-liv-og-videnskabsfolk.md) er læst først. Ikke tjekket af Fable endnu (det sker i [prompt-fable-huygens.md](../prompt-fable-huygens.md)).*
+*Lavet 15. november 2026 af Opus (effort høj) til [drejebog-huygens.md](../drejebog-huygens.md) og [plan-videnskabsfolk.md](../plan-videnskabsfolk.md). Bygger videre på afsnit 3 i [fakta-videnskabsfolk.md](../fakta-videnskabsfolk.md), som er fuld (ca. 30 KB). Fælderne i [fakta-faelder-videnskabsfolk.md](../erfaringer/fakta-faelder-videnskabsfolk.md) er læst først. Ikke tjekket af Fable endnu (det sker i [prompt-fable-huygens.md](../prompt-fable-huygens.md)).*
 
 **Sikkerhed** (som i fakta-videnskabsfolk.md): **Sikker** = læst i bogen selv (skanningen) eller i to uafhængige kilder. **Ret sikker** = én pålidelig kilde, eller regnet ud fra sikre tal. **Usikker** = kilderne er uenige, eller det kunne ikke læses direkte.
 
@@ -80,7 +80,7 @@
 | Huygens regnede ud fra Rømers tal: ca. **110 millioner toiser i sekundet**, ca. **214.000 km/s** (1 toise ≈ 1,95 m). I dag: 299.792 km/s. Det var et overslag over størrelsen, ikke en præcis måling | Wikipedia "Rømer's determination …" ("Huygens's estimate was a value of 110,000,000 toises per second … an illustration at an order of magnitude level") og "Treatise on Light" (214.000 km/s) | Ret sikker |
 | Huygens beskrev det i *Traité de la lumière* (1690), hvor lyset er bølger | Wikipedia "Treatise on Light" | Ret sikker |
 
-## 6. Nye fælder (også skrevet i fakta-faelder-liv-og-videnskabsfolk.md)
+## 6. Nye fælder (også skrevet i fakta-faelder-videnskabsfolk.md)
 - "Skriftet om Titan kom i 1655" (Wikipedia "Titan (moon)"). Huygens skriver selv, at det udkom i marts 1656 sammen med anagrammet (dateret 5. marts, s. 2).
 - "Anagrammet kom præcis ét år efter Titan" (s. 47 siger 25. marts 1656, men s. 2 siger 5. marts). Huygens husker selv forkert.
 - "Saturn vipper, så ringen forsvinder." Ringen peger samme vej i rummet. Det er Saturn og Jorden, der flytter sig om Solen, så vi ser den fra en ny vinkel.

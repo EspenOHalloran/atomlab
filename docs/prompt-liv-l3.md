@@ -11,7 +11,7 @@ Spor: Molekyler. Navngiv chatten "Molekyler · Liv L3: forløbet Kopien". Byg fo
 - `docs/drejebog-liv.md`: afsnit 1, 2 og 5 (kort 1-3) og 8. Noterne `docs/fable/E10-liv-noter.md`, afsnit 3, punkt 1-5.
 - `docs/retning.md` (budgettet for lagene) og skabelonen `docs/fable/E3-forloeb.md`.
 - `docs/kode/liv.md` (hele, især de to forløb og tegningerne) og `docs/kode/forloeb.md` (Forløb-klodsen).
-- I `docs/fakta-liv/dna-opskriften.md`: afsnit 4 (kopien), 5 (historien, til kort 1) og 6 (fælderne). Fælderne i `docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md` (de sidste linjer er fra E10).
+- I `docs/fakta-liv/dna-opskriften.md`: afsnit 4 (kopien), 5 (historien, til kort 1) og 6 (fælderne). Fælderne i `docs/erfaringer/fakta-faelder-liv.md` (de sidste linjer er fra E10).
 - Tjekliste B, C, D, E og F.
 - I koden: `js/liv-ordene.js` og `js/data/forloeb/ordene.js` (sådan er forløb 2 bygget: delen, trinene, tryk i 3D og `vis`), `js/liv/protein.js` (tilstanden `'ord'`: stigen lige ud med `dnaKugler` og `dnaPinde`) og i `js/liv.js` kun `o2`, `startOrdene` og forløbslisten.
 

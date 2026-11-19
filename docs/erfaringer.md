@@ -24,7 +24,8 @@ Når noget går galt eller virker særlig godt, skrives det ind med det samme: k
 ## 2. Rodårsager og fælder
 - [Rodårsager](erfaringer/rodaarsager.md): tabellen over, hvorfor fejlene opstod, og hvilken tjekliste der fanger dem.
 - [Kendte fælder i fakta](erfaringer/fakta-faelder.md): populære påstande, der er forkerte eller for skarpe. Læses ved alle tekster med fakta.
-- [Kendte fælder i fakta: Liv og videnskabsfolkene](erfaringer/fakta-faelder-liv-og-videnskabsfolk.md): DNA, livets begyndelse, videnskabsfolk, bogsider og rettigheder. Læses sammen med den forrige.
+- [Kendte fælder i fakta: Liv](erfaringer/fakta-faelder-liv.md): DNA, livets begyndelse og månerne med mulige betingelser for liv. Læses sammen med den forrige.
+- [Kendte fælder i fakta: Videnskabsfolkene](erfaringer/fakta-faelder-videnskabsfolk.md): videnskabsfolk, bogsider og rettigheder. Læses sammen med den forrige.
 
 ## 3. Konkrete erfaringer ([docs/erfaringer/](erfaringer/))
 | Emne | Indhold |

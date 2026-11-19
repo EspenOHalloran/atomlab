@@ -20,7 +20,7 @@ Opdagelserne i Biblioteket er ti bøger om videnskabsfolk. Huygens er prøven og
 2. Huygens' faktagrundlag som **mønster** (form, længde og hvor præcist siderne fra bogen er beskrevet): [docs/fakta-videnskabsfolk/huygens.md](fakta-videnskabsfolk/huygens.md), og drejebogens form i [docs/drejebog-huygens.md](drejebog-huygens.md) (kun afsnittene om forløbet og bogen selv).
 3. "Myterne" i [docs/fakta-videnskabsfolk.md](fakta-videnskabsfolk.md) og rettighederne i [docs/fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.md).
 4. Det, de skal kobles til i programmet: Jupiters måner (`js/data/sider/jupiter.js`) og Solsystemets overblik (`js/data/sider/overblik.js`, `js/data/planeter.js`).
-5. Fælderne: [docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md](erfaringer/fakta-faelder-liv-og-videnskabsfolk.md).
+5. Fælderne: [docs/erfaringer/fakta-faelder-videnskabsfolk.md](erfaringer/fakta-faelder-videnskabsfolk.md).
 
 ### Hvad du skal levere
 To filer i samme form som Huygens' (højst ca. 15 KB hver): **`docs/fakta-videnskabsfolk/galilei.md`** og **`docs/fakta-videnskabsfolk/newton.md`**. Hver med:

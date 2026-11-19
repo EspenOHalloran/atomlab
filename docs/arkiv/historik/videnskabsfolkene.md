@@ -2,6 +2,14 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (18. november 2026): en rød tråd i Huygens' bog** (jeres ønske ovenfor, planen i drejebogens afsnit 13, go fra orkestratoren).
+- **Forsiden** introducerer mysteriet og manden først ("Haag, 1655": I dag ved alle, at Saturn har en ring. Galilei så tre kugler i 1610, andre tegnede ører og håndtag, og i 45 år fandt ingen den rigtige forklaring. Christiaan på 25 vil finde svaret).
+- **Turen** leder videre fra trin til trin ("Men hvad er de?", "Christiaan kigger nat efter nat"), og "Set fra kanten" røber ikke svaret under gættet. "Det så du": "Men ANNULO var kun det første ord …", og den vigtige vej er "Hele hemmeligheden ›".
+- **Hemmeligheden:** forordet er broen (hvorfor 62 bogstaver sorteret efter alfabetet), og den løste gåde har "Se den i bogen fra 1659 ›".
+- **Bogen fra 1659:** hvad bogen er, hver side som et stykke af historien og "Næste side ›", til sidst "Havde han ret? ›".
+- **Om Huygens** er slutningen: Han havde ret om formen, men troede, ringen var fast som en plade, og sonden Huygens landede på Titan i 2005. "Se ringen forsvinde ved Saturn ›" er sidens vigtige knap.
+- Faktatjekket (faktafilen afsnit 8). `opdagelser` har 43 tjek.
+
 **Senest lavet (18. november 2026): rettelser efter prøven (Huygens).**
 - **Tavlen:** På en ultrabred pc-skærm fik panelet ved tavlen 0 px (siden var kun begrænset af 52vw, men bogen er højst 1040 px bred). Nu får siden højst 58 % af bogens bredde (container og `cqw`), og panelet har mindst ca. 370 px på alle fire sider. Tjekket på 3440×1440, 2560×1080, 1920×1080 og 1280×720.
 - **Introduktionen:** "Hemmeligheden" starter med en side bogtekst ("Haag, marts 1656", fem korte sætninger med stort forbogstav: hvem han var, hvad han så, og hvorfor han lavede et anagram) og "Prøv gåden ›". Trin 4 i turen siger "Ringen ses ikke lige nu." Faktatjekket (alder 26, 5. marts 1656, 62 bogstaver, grunden er skrevet forsigtigt, løsningen i bogen 1659 og brevet til Chapelain i 1658 som fælde).
