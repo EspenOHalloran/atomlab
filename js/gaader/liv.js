@@ -19,10 +19,15 @@ const HB = 9; // den halve bredde og højde af det, kameraet skal se (planet z =
 const HH = 6;
 const PR_ÅR = 0.36; // sekunder pr. år, mens lysene tændes (1992-2026: ca. 12,6 s)
 const BILLEDER = new URL('../../billeder/', import.meta.url);
+// Billederne hentes én gang pr. scene og deles mellem trinene (Jorden og Mars bruges to gange). ryd frigiver dem.
+let hentede = new Map();
 const tekstur = (sti) => {
-  const t = new THREE.TextureLoader().load(new URL(sti, BILLEDER).href);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
+  if (!hentede.has(sti)) {
+    const t = new THREE.TextureLoader().load(new URL(sti, BILLEDER).href);
+    t.colorSpace = THREE.SRGBColorSpace;
+    hentede.set(sti, t);
+  }
+  return hentede.get(sti);
 };
 // Afstanden i lysår til en radius i scenen: Logaritmisk, så både Proxima b (4 lysår) og planeterne mange tusind lysår
 // væk kan være med
@@ -31,6 +36,7 @@ const radius = (ly) => 1.6 + 1.85 * Math.log10(Math.max(4, ly) / 4);
 export function lavNær(ctx) {
   const { gruppe, linje, knapper, passer, ROLIG } = ctx;
   const T = gådeMed('liv').scene;
+  hentede = new Map();
   const lys = lavLys(gruppe, ROLIG);
   const skala = lavSkala(gruppe, T);
   let sten = null;
