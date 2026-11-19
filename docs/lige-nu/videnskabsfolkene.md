@@ -1,20 +1,19 @@
 # Lige nu: Videnskabsfolkene
 
-*Spor i [oversigten](../lige-nu.md) (startet 15. november 2026): Opdagelserne i Biblioteket, ti bøger om videnskabsfolk. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/videnskabsfolkene.md`. Højst ca. 5 KB. Sidst opdateret: 19. november 2026 (Tychos drejebog).*
+*Spor i [oversigten](../lige-nu.md) (startet 15. november 2026): Opdagelserne i Biblioteket, ti bøger om videnskabsfolk. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i `docs/arkiv/historik/videnskabsfolkene.md`. Højst ca. 5 KB. Sidst opdateret: 19. november 2026 (T1, Tychos forside).*
 
 **Jeres ønske 18. november 2026 (ordret, lavet samme dag):** "Vi er nødt til at give Huygens' bog en tur mere. Introduktionen til Huygens skal komme først. Der skal være en rød tråd. Der er 5 sider, få det til at hænge sammen og forklar det, så en 12-årig forstår det og bliver engageret i det. Der er ikke forklaring nok, som det er i dag. Jeg tror, alt indholdet kan bruges, men det skal pakkes bedre ind i introduktion og forklaring og rød tråd. Jeg synes, det er uforløst, som det er nu." Planen står i drejebogen, afsnit 13.
 
-**Senest lavet (19. november 2026): drejebogen til Tycho Brahe (V1), kun dokumenter.**
-- [drejebog-tycho.md](../drejebog-tycho.md): kernesætningen, den røde tråd i fem opslag (forsiden, turen "Den nye stjerne" i fire trin med tommelfingeren og Månen, gåden "Find stjernen med Tychos tal" med tre cirkler, "Bogen fra 1573" med fire sider og "Om Tycho": havde han ret?), Gør det selv ved Hvid dværg, billederne med licens og prøvens spørgsmål.
-- [fakta-videnskabsfolk/tycho.md](../fakta-videnskabsfolk/tycho.md): faktagrundlaget, det latinske læst på siderne i faksimilen fra 1901 (Tychos tal 7° 55′, 5° 21′ og 5° 1′, brevet med "O crassa ingenia" og 3⅓-4¼ grad). **Faktatjekket af Opus i stedet for Fable** (linjen i [plan-fable.md](../plan-fable.md)). Seks nye fælder.
-- Portrættet: de Gheyns stik (1586) er PD-Art. Skanningen af faksimilen er fra 2009 uden licens (spørgsmål 4).
+**Jeres svar 19. november 2026 til Tychos drejebog (afsnit 16):** "Gå med dine anbefalinger. 4: spørg ikke KB." Altså kernesætning A, de Gheyns stik med filteret, de fire sider (A, B1b, brevet, D2), Toronto-skanningen bruges (Det Kongelige Bibliotek spørges ikke), og citatet `tycho` flyttes til Hvid dværg i T3.
+
+**Senest lavet (19. november 2026): T1, Tychos forside.** Tycho står på hylden med omslaget "Den nye stjerne" (nattehimmelblå ryg med guld), og de to grå rygge er nu Rømer og Ørsted ("Hvorfor drejede kompasnålen?"). Forsiden har spørgsmålet, introduktionen fra Herrevad i november 1572, de Gheyns portræt (filteret gav ingen striber) og W'et som træsnitsstjerner efter de rigtige pladser med den nye stjerne øverst. Bogen har kun forsiden, så "Begynd" er der ikke endnu (A9). Omslagets portræt giver nu plads, når titlen fylder to linjer. `opdagelser` har 49 tjek.
 
 ## Næste
-1. **Jeres go til Tychos drejebog** (spørgsmålene nedenfor). Så **T1-T3** med prompten her.
+1. **T2: turen "Den nye stjerne"** med prompten her. Så **T3** (samme prompt med trin T3 og afsnit 6-9 og 14). Først efter T3 har Tycho status "prøve".
 2. **Prøven med jeres søn** af Huygens ([guide-proeven.md](../guide-proeven.md), spørgsmålene i drejebogens afsnit 10).
 3. Galilei og Newton får drejebøger, når de skal bygges (efter de syv andre).
 
-**Prompt til T1 (ny session, Opus, høj effort, kopiér):** "Spor Videnskabsfolkene, trin T1 i docs/drejebog-tycho.md (afsnit 15): Tychos forside og bog. Læs først docs/lige-nu/videnskabsfolkene.md, drejebogens afsnit 1-4, 11, 15 og 16 med jeres svar, docs/kode/opdagelser.md og tjekliste D. Tjek i origin/main, at T1 ikke er lavet. Byg som Huygens' H1 med js/bog.js. Rør ikke andre spors filer. /faerdig, PR og merge." T2 og T3 får samme prompt med deres trin og afsnit (T2: afsnit 5 og 12, T3: afsnit 6-9 og 14).
+**Prompt til T2 (ny session, Opus, høj effort, kopiér):** "Spor Videnskabsfolkene, trin T2 i docs/drejebog-tycho.md (afsnit 15): turen 'Den nye stjerne'. Læs først docs/lige-nu/videnskabsfolkene.md, drejebogens afsnit 1-3, 5, 12, 15 og 16 med jeres svar, docs/kode/opdagelser.md og tjekliste D og E. Tjek i origin/main, at T2 ikke er lavet. Byg som Huygens' H2 (js/bog/huygens.js og js/data/forloeb/huygens.js), og brug CASSIOPEIA, NY_STJERNE og projicer fra js/data/opdagelser/tycho.js til nattehimlen. Giv bogen forløb og scene i js/data/opdagelser.js, så 'Begynd' kommer frem. Rør ikke andre spors filer. /faerdig, PR og merge."
 
 ## Spørgsmål til jer
-Tychos drejebog, afsnit 16 (anbefalingen først): 1. kernesætning A, 2. portrættet med filteret (stikket selv, hvis det giver striber), 3. de fire sider (A, kortet, brevet, farven), 4. Toronto-skanningen, 5. citatet `tycho` flyttes til Hvid dværg.
+Ingen lige nu.

@@ -39,6 +39,19 @@ PERSONER = {
         'baggrund': 0.45,                # hvor meget den store tone trykkes sammen og løftes (0 = intet)
         'detalje': 1.9,                  # hvor meget detaljerne forstærkes
     },
+    'tycho': {
+        # Jacob de Gheyn II, kobberstik, "ætatis suæ anno 40, anno Dni 1586" (Museum of Fine Arts, Houston, via Google
+        # Art Project). Commons: PD-Art, PD-old-100-expired. Et foto af et stik fra 1586 har ingen egen ret i Danmark
+        # (§ 70 stk. 4). Udsnittet er hovedet og kraven inde i buen, uden våbenskjoldene (drejebog-tycho.md afsnit 11).
+        'fil': 'tycho.jpg',
+        'url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/'
+               'Jacques_de_Gheyn_Ii_-_Portrait_of_Tycho_Brahe%2C_astronomer_%28without_a_hat%29_-_Google_Art_Project.jpg/'
+               '960px-Jacques_de_Gheyn_Ii_-_Portrait_of_Tycho_Brahe%2C_astronomer_%28without_a_hat%29_-_Google_Art_Project.jpg',
+        'udsnit': (236, 160, 724, 770),  # i kilden (960 x 1335), 4:5
+        'gamma': 0.75,
+        'baggrund': 0.3,
+        'detalje': 1.4,
+    },
 }
 
 
