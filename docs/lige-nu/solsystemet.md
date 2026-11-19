@@ -4,7 +4,14 @@
 
 **Senest lavet (19. november 2026): Saturn S3, Enceladus' rigtige form** ([plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md), "Status efter S3"). Teknikken (som Phobos og Deimos i `maane-form.js`, ikke `klippeplanet.js`) og rækkefølgen (Enceladus først) er valgt af orkestratoren 2026-11-19 efter min anbefaling, kan ændres af jer.
 - Enceladus har nu sin form fra Cassinis fotos (Bland m.fl. 2019, 2,2 km): lidt aflang mod Saturn (ca. 513 × 503 × 497 km), og bakker og dale ses ved skyggegrænsen. Fontænerne starter på overfladen. "Ærligt talt" ved Enceladus nævner formen.
-- **S3b venter** (Mimas, Tethys, Dione og Rhea): Formmodellerne ligger hos PSI bag Cloudflares robottjek og kan ikke hentes automatisk, selv om domænerne er åbne. Se "Tilbage: S3b" i planen.
+- **S3b venter** (Mimas, Tethys, Dione og Rhea): Formmodellerne ligger hos PSI bag Cloudflares robottjek og kan ikke hentes automatisk, selv om domænerne er åbne. **Jeres svar (19. november 2026, via orkestratoren):** I henter filerne i en browser 20. november 2026. Hent hele `data/`-mappen i hver af de fire (mappernes navne er tjekket i NSSDCA's katalog, filnavnene inde i dem ikke):
+  - Mimas: `https://sbnarchive.psi.edu/pds4/non_mission/gaskell.mimas.shape-model/data/`
+  - Tethys: `https://sbnarchive.psi.edu/pds4/non_mission/gaskell.tethys.shape-model/data/`
+  - Dione: `https://sbnarchive.psi.edu/pds4/non_mission/gaskell.dione.shape-model/data/`
+  - Rhea: `https://sbnarchive.psi.edu/pds4/cassini/satellite-rhea.cassini.shape-models-maps/data/` (kun den globale model, ikke de lokale kort)
+  - Er der flere udgaver, så er den med højest opløsning (størst "q" i ICQ, eller den største fil) den rigtige, og `.xml`/`.lbl` ved siden af skal med. Findes de nyere modeller (Weirich m.fl., Mimas 0,6 km), er de bedre.
+  - **Hvor:** Læg dem i `billeder/solsystem/kilder/s3b/<måne>/` på grenen `claude/saturn-s3b` (GitHub på nettet: "Add file › Upload files"). GitHub tager højst 25 MB pr. fil på nettet, så pak en stor fil som `.zip`. Mappen `kilder/` kommer i `.gitignore`, når kortene er lavet.
+  - Prompt til S3b: "Spor Solsystemet, trin Saturn S3b: formen på Mimas, Tethys, Dione og Rhea. Læs docs/lige-nu/solsystemet.md og plan-saturn-kvalitet.md, afsnit S3 (Status efter S3 og Tilbage: S3b). Filerne ligger i billeder/solsystem/kilder/s3b/ på grenen claude/saturn-s3b." Opus, effort høj.
 
 **Jeres beslutning (18. november 2026, jeres ønske via orkestratoren):** Mars gøres færdig nu, før Månen og ønskerne fra 17. november. Først rettelsen ovenfor, så "Mars ekstra" med et go pr. del: 1) Nordpolen tæt på (M7b-pol), 2) sten og terræn i Stå på Mars (M8c del 3), 3) Curiosity som 3D-model (M8c del 2) og 4) lyset (L2, kræver en session på jeres pc). Planen og en prompt pr. del står i [prompt-mars-ekstra.md](../prompt-mars-ekstra.md).
 
