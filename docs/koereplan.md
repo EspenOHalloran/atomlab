@@ -8,6 +8,8 @@
 - **Højst én ny stor del i gang ad gangen** ud over Solsystemet. **Undtagelse (jeres svar 14. november 2026):** Videnskabsfolkene (Huygens) bygges samtidig med Gåderne 3D. Solsystemet prioriteres også, og **andre nye spor (fx Lys og farver) starter først, når Solsystemet er færdigt** (Mars del 3 og overblikket først, så Venus V3-V5 og Merkur og Pluto). De næste fem sessioner står i [prompt-naeste-fem.md](prompt-naeste-fem.md).
 - **Højst to tunge sessioner (Opus) ad gangen** (jeres beslutning 18. november 2026): grænsen på 5 timer deles af alle sessioner.
 - **Faktagrundlag må laves på forhånd og parallelt** (kun dokumenter).
+- **Overblikket viser også den lange plan** (jeres ønske 19. november 2026): Næste gang artefaktet "AtomLab Overblik" opdateres, får det et afsnit med den langsigtede plan, altså de spor og dele, der ligger længere ude (fx Kvantefysik, Lys og farver, Strøm og magneter, Antistof, Land på måner og DNA), med hvor de står i rækkefølgen.
+- **Grafikken genbesøges** (jeres ønske 19. november 2026): Planen for mere grafik i hele AtomLab ([plan-grafik.md](plan-grafik.md), 3. november 2026) skal tages op igen. Orkestratoren viser jer først, hvad der er lavet af den, og hvad der er tilbage, og I vælger, hvad der kommer først.
 - **Frigivet** er AtomLab, når 3-5 børn og en lærer har brugt det uden hjælp, og fundene er rettet (slutningen af Serie 3).
 
 ## Først og alene
