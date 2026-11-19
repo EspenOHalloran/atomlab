@@ -1903,9 +1903,9 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .skærm.skjul-højre > .højre-panel, #vaerksted.skjul-højre > #infopanel,
 .skærm.kun-grafik > .side-panel, #vaerksted.kun-grafik > .panel { display: none; }
 /* :is() med id'erne, så reglerne vinder over fx "#fusion .vindue { grid-area: vindue }" */
-:is(#vaerksted, #fusion, #reaktor, #batteri, #liv, #kosmos, #solsystem).skjul-venstre > .vindue { grid-column-start: 1; }
-:is(#vaerksted, #fusion, #reaktor, #batteri, #liv, #kosmos, #solsystem).skjul-højre > .vindue { grid-column-end: -1; }
-:is(#vaerksted, #fusion, #reaktor, #batteri, #liv, #kosmos, #solsystem).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).skjul-venstre > .vindue { grid-column-start: 1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).skjul-højre > .vindue { grid-column-end: -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
 .panel-fane {
   position: absolute; top: 50%; z-index: 3; width: 22px; height: 60px; margin-top: -30px; padding: 0;
   border: 1px solid var(--panel-kant); background: var(--panel); color: var(--svag);
@@ -1918,6 +1918,27 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .panel-fane[hidden] { display: none; }
 .knap-kungrafik svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .knap-kungrafik.valgt { background: rgba(95, 227, 255, 0.22); border-color: var(--accent); }
+/* Greb-stregen (js/paneler.js): kun på telefonen på højkant med fingre. En stribe mellem 3D-billedet og panelerne, og
+   nederst på skærmen, når panelerne er swipet ned ("Kun grafik"). Den skal kunne ses, så man ved, at panelet kan trækkes. */
+.panel-greb { display: none; }
+@media (max-width: 560px) and (orientation: portrait) and (pointer: coarse) {
+  :is(#fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem) { grid-template-rows: auto minmax(44vh, 1fr) auto auto auto; grid-template-areas: "top" "vindue" "greb" "venstre" "højre"; }
+  #vaerksted { grid-template-rows: auto auto minmax(140px, 1fr) auto auto auto; grid-template-areas: "top" "info" "vindue" "greb" "byg" "tabel"; }
+  .skærm > .panel-greb {
+    display: flex; grid-area: greb; align-items: center; justify-content: center; height: 44px; margin: -8px 0; padding: 0;
+    border: 0; background: none; cursor: pointer; touch-action: none; position: relative; z-index: 2;
+  }
+  .panel-greb span { width: 44px; height: 5px; border-radius: 3px; background: var(--svag); opacity: 0.75; }
+  /* Panelerne er væk: 3D-billedet fylder skærmen, og stregen står på en lille kant forneden */
+  :is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).kun-grafik { grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "vindue" "greb"; overflow: hidden; }
+  :is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).kun-grafik > .vindue { grid-area: vindue; }
+  .skærm.kun-grafik > .panel-greb { height: 36px; margin: 0 0 -8px; padding-bottom: env(safe-area-inset-bottom); background: var(--panel); border: 1px solid var(--panel-kant); border-bottom: 0; border-radius: 14px 14px 0 0; }
+  /* Panelerne glider ned (0,25 s) og op igen (0,3 s) */
+  #vaerksted.paneler-ud > #infopanel { opacity: 0; transition: opacity 0.25s ease-in; }
+  .skærm.paneler-ud > :is(.side-panel, .panel):not(#infopanel) { transform: translateY(50vh); opacity: 0; transition: transform 0.25s ease-in, opacity 0.25s ease-in; }
+  .skærm.paneler-ind > :is(.side-panel, .panel) { animation: paneler-ind 0.3s ease-out both; }
+}
+@keyframes paneler-ind { from { transform: translateY(40vh); opacity: 0; } }
 /* ---------- Styringen i 3D-billedet (Kosmos og Solsystemet, U2 i docs/plan-ux.md) ---------- */
 /* Grafen og uret (overlag) står over underteksten, og bjælken med tidsknappen står nederst */
 :is(#kosmos, #solsystem) .kosmos-overlag { order: -1; }
