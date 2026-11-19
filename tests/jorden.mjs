@@ -192,9 +192,19 @@ const kam = await s.evaluate(async () => { const { verden } = await import('/js/
 tjek(`kameraet er tæt på Månen (${kam.toFixed(1)} enheder fra midten, Månens radius 1,74)`, kam > 1.74 && kam < 20);
 await s.waitForTimeout(1500);
 await s.screenshot({ path: `${UD}/pc-maanen.png` });
+// "Lys på hele Månen" (kun ved Månen): lyset kommer fra kameraets side og glider over
+tjek(`Månens højdekort er hentet (${(await f(s, 'f.ditLys()')).højde} punkter bredt)`, (await f(s, 'f.ditLys()')).højde >= 1024);
+const lysKontakt = '#solsystemStyr .kontakt:has-text("Lys på hele Månen")';
+tjek('ved Månen: kontakten "Lys på hele Månen" er slået fra', (await s.$$(lysKontakt)).length === 1 && !(await f(s, 'f.ditLys()')).til);
+await s.click(lysKontakt);
+const lysGled = await s.waitForFunction(() => atomlabTest.solsystem.fænomen().ditLys().styrke === 1, null, { timeout: 5000, polling: 50 }).then(() => true, () => false);
+tjek('kontakten slår lyset til, og det glider helt over', lysGled && (await f(s, 'f.ditLys()')).til);
+tjek('"Lige nu" siger, at lyset kommer fra dig', /Lyset kommer fra dig/.test(await s.textContent('#solsystemForklaring')));
+await s.screenshot({ path: `${UD}/pc-maanen-lys.png` });
 await s.click('#solsystemTræ button[data-sted="jorden"]');
 await f(s, 'f.hop()');
 tjek('"Jorden" i træet: tilbage ved Jorden', (await f(s, 'f.ved()')) === 'jorden');
+tjek('ved Jorden: kontakten er væk, og lyset er slået fra', (await s.$$(lysKontakt)).length === 0 && !(await f(s, 'f.ditLys()')).til);
 // Skift væk: Jordens ur forsvinder
 await s.click('#solsystem .kosmos-valg[data-id="mars"]');
 await s.waitForFunction(() => !document.querySelector('#solsystemVindue .rejseskilt')?.classList.contains('vist'), null, { timeout: 20000, polling: 50 }); // rejseskiltet

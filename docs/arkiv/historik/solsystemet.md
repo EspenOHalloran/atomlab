@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (19. november 2026): Mars ekstra 3, Curiosity som 3D-model (M8c del 2)** ([prompt-mars-ekstra.md](../prompt-mars-ekstra.md), [plan-mars.md](../plan-mars.md) "Status efter M8c del 2").
+- **Roveren** står ved "🧍 Hos Curiosity" på sit stop fra **sol 5073** (ca. 13. november 2026, NASA's kortdata) med den rigtige retning (188,4°), hældning (næsen 11,8° op) og krængning, og hjulene står inden for 6 cm af højdekortet. Curiosity var kørt ca. 120 m siden sol 5045, så stedet er flyttet: Man står 9 m fra roveren, ser den skråt forfra og lander kl. 15 med Solen i ryggen.
+- **Filen:** NASA's model (11,9 MB) er gjort mindre til 2,9 MB med `billeder/solsystem/lav_curiosity.py` (WebP med JPEG/PNG-reserve, 16 bit-punkter). `npx gltf-transform` blev afvist af miljøet, så det blev Python i stedet, helt uden npm (valgt af orkestratoren 2026-11-19, kan ændres af jer). `GLTFLoader` er kopieret fra three@0.186.1.
+- **Lyset og skyggen** følger landskabets Sol og himmel. Roveren kaster skygge på jorden og på sig selv (et dybdekort fra Solen, regnet igen, når Solen flytter sig). Siden har "Hvor stor er Curiosity?" og et nyt "Ærligt talt" om modellen (faktatjekket). Skiltene ved Naukluft og landingsstedet er ikke lavet.
+
 **Lavet (19. november 2026): Mars ekstra 2, stenene i Stå på Mars (M8c del 3)** ([prompt-mars-ekstra.md](../prompt-mars-ekstra.md), [plan-mars.md](../plan-mars.md) sidst: sammenligningen med rovernes fotos og forslaget).
 - **Trin 1, tæt på:** Stenene varierer i størrelse (en potenslov), form (uregelmæssige omrids med facetter), farve (mørkere og mere grå end sandet) og ligger i klynger. Gale har flade plader af sandsten, Jezero mørke, kantede sten og lyse, flade klippeflader (`uStenArt`). Hver sten kaster en kort skygge væk fra Solen.
 - **Trin 3, mellemlaget (pc):** Sten på ca. 0,3-3 m, der rager op 2-250 m væk. Synslinjen følges gennem et gitter af celler, og stenen rammes præcist i shaderen (ingen geometri, ingen nye opslag i kort). De kaster skygge.

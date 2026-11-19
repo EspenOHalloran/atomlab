@@ -40,9 +40,13 @@ export const SIDER = {
         titel: 'Er Månen altid lige langt væk?',
         tekst: '<p>Nej. Månens bane er ikke helt rund, men en ellipse (en lidt aflang cirkel). Afstanden svinger mellem ca. 356.000 og 407.000 km. Banen hælder ca. 5,1° i forhold til Jordens bane om Solen, og derfor er der ikke formørkelse ved hver nymåne og fuldmåne. Linjen viser Månens vej i en måned omkring det tidspunkt, du ser.</p>',
       },
+      {
+        titel: 'Er bagsiden mørk?',
+        tekst: '<p>Nej. Bagsiden er den side, vi aldrig ser fra Jorden, men den får lige så meget sollys som forsiden. Ved nymåne, når vi ikke kan se Månen, har næsten hele bagsiden dag. Den kaldes nogle gange "den mørke side", men det passer ikke. Ingen havde set den, før rumsonden Luna 3 fra Sovjetunionen fotograferede den i 1959. Slå "Lys på hele Månen" til under Indstillinger, så kan du se den, også når den har nat.</p>',
+      },
     ],
     videre: [sted('jorden', 'Tilbage til Jorden')],
-    billeder: '<p>Månens kort er lavet af billeder fra rumsonden Lunar Reconnaissance Orbiter (NASA).</p>',
-    ærligt: '<p>Månen står, hvor den er lige nu, med den rigtige fase. Dens plads passer inden for ca. 0,3°. Månen og Jorden har den rigtige størrelse og afstand.</p>',
+    billeder: '<p>Månens kort er lavet af billeder fra rumsonden Lunar Reconnaissance Orbiter (NASA). Bjergene og kratrene kommer fra den samme rumsonde, som har målt højderne med en laser (LOLA).</p>',
+    ærligt: '<p>Månen står, hvor den er lige nu, med den rigtige fase. Dens plads passer inden for ca. 0,3°. Månen og Jorden har den rigtige størrelse og afstand. Bjergene og kratrene er gjort ca. 3 gange højere end i virkeligheden, så deres skygger kan ses. Med "Lys på hele Månen" kommer lyset fra dig og ikke fra Solen.</p>',
   },
 };

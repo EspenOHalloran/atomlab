@@ -127,6 +127,7 @@ Andre adresser end `http://localhost:8765` kan vælges med `ADRESSE=...`.
 - `vaerktoejer/venus.mjs [størrelse] [hel uv under50 under100 modlys tæt hurtig nat gloed gloed100 navne maxwell maat kupler venera13 stop1-stop6 ned]` tager billeder af Venus med fuld grafik og måler billeder i sekundet (V2, V3 og V5).
 - `vaerktoejer/merkur.mjs [størrelse] [hel hoej caloris pol8 pol16 polen polenuden sydpol hurtig]` tager billeder af Merkur med fuld grafik og måler billeder i sekundet (MP1: målingen af polen med anisotropi 8 og 16 og med og uden polkortet).
 - `vaerktoejer/pluto.mjs [størrelse] [hel ude dans modlys charon hjertet bjerge nord syd forside tur1-tur5 træ:<navn> navne]` tager billeder af Pluto og Charon med fuld grafik og måler billeder i sekundet (MP3, flybyens stop og træet fra MP4). Billederne lægges i `tests/billeder/pluto-fuld/`.
+- `vaerktoejer/maanen-lys.mjs` tager billeder af Månen i Solsystemet med fuld grafik: skyggegrænsen med 4k-højderne, natsiden og "Lys på hele Månen" (19. november 2026).
 - `vaerktoejer/kloder.mjs` tager billeder af Jorden og Månen tæt på i forskelligt lys (dag, glimt i havet, tusmørke, nat, modlys, kanten, fuldmåne og halvmåne). Siden `vaerktoejer/kloder.html` viser dem alene, og man kan selv dreje og zoome.
 
 ## Gode råd
