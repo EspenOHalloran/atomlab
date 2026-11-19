@@ -12,8 +12,11 @@ import { rydBeskeder, bundIVindue } from './beskeder.js';
 import { lukHvorfor } from './lag.js';
 import { lavKontakt } from './kontakt.js';
 import { lavTidsknap } from './pause.js';
+import { tagVentForløb } from './gaa.js';
+import { startForløb, stopForløb, starterSelv, forløbVenter, forløbRørt, forløbVink, forløbTest, lavTurKnap } from './forloeb.js';
+import { ILD_1 } from './data/forloeb/ild.js';
 import { HVORFOR } from './data/hvorfor.js';
-import { PANEL, ZONER, ILD_KORT, ATOM_GØR, skeZone, skeSkridt } from './data/ild.js';
+import { PANEL, ZONER, ILD_KORT, ATOM_GØR, TÆLLER, skeZone, skeSkridt } from './data/ild.js';
 import { lavBord, VÆGE, FOD, LYS_FLAMME, BRÆNDER_TOP, BRÆNDER_FLAMME, HVILE } from './ild/bord.js';
 import { lavAtomScene, ATOM_KASSE } from './ild/atomer.js';
 import { lavFlamme } from './flamme.js';
@@ -24,6 +27,8 @@ const BORD_KASSE = [5.4, 4.9];
 const BORD_MIDT = new THREE.Vector3(0, 0.9, 0);
 const LØB_TID = ROLIG ? 0.3 : 0.55; // sekunder om at løbe ned gennem røgen
 const FINGER_OP = 70; // px: med en finger står værktøjets spids så meget over fingeren, så den kan ses
+const PUST_EFTER = 1800; // ms: i turens trin 1 brænder lyset så længe, før det bliver pustet ud
+const VIS_O2 = ROLIG ? 300 : 800; // ms mellem O₂, når "Næste ›" viser trin 3
 
 let bord = null;
 let atomScene = null;
@@ -48,6 +53,11 @@ let styringTegnet = '';
 let toningTimer = null;
 let skiftNr = 0;
 let træk = null; // { id, finger }
+let trin = null; // turens trin, mens den kører
+let timere = [];
+let genTimer = false; // trin 1: lyset tændes og pustes ud igen, når røgen er væk
+let sodVinket = false;
+let tællerTegnet = '';
 const ske = { varme: 0, dug: 0, sod: 0, zone: 'ingen' };
 const værktøjMål = new THREE.Vector3();
 const stråle = new THREE.Raycaster();
@@ -56,6 +66,12 @@ const atomPlan = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 const tV = new THREE.Vector3();
 const tV2 = new THREE.Vector3();
 
+const vent = (ms, f) => timere.push(setTimeout(() => { if (aktiv) f(); }, ms));
+function rydTimere() {
+  for (const t of timere) clearTimeout(t);
+  timere = [];
+  genTimer = false;
+}
 const lysBrænder = () => bord.lysFlamme.brænder();
 const brænderBrænder = () => bord.brænderFlamme.brænder();
 
@@ -69,7 +85,13 @@ export function lav() {
   atomScene.gruppe.visible = false;
   verden.scene.add(atomScene.gruppe);
 
+  lavTurKnap($('ild'), [ILD_1], () => startTur());
   const vindue = $('ildVindue');
+  const tæller = document.createElement('p');
+  tæller.className = 'ild-tæller';
+  tæller.id = 'ildTæller';
+  tæller.hidden = true;
+  vindue.append(tæller);
   const toning = document.createElement('div');
   toning.className = 'fl-toning';
   toning.id = 'ildToning';
@@ -92,6 +114,11 @@ export function lav() {
   $('ildTilbage').addEventListener('click', () => { lyd.klik(); vælgScene('bord'); });
   $('ildAtomIgen').addEventListener('click', () => { lyd.klik(); atomScene.nulstil(); visStyring(); });
   $('ildHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpIld').classList.remove('skjult'); });
+  $('ildHjælpTur').addEventListener('click', () => {
+    lyd.klik();
+    $('hjælpIld').classList.add('skjult');
+    startTur();
+  });
   $('ildHvorfor').innerHTML = ILD_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">Hvorfor? ${HVORFOR[id].spørgsmål}</button>`).join('');
   lavTræk();
 }
@@ -105,10 +132,14 @@ export function start() {
   nulstilBord();
   vælgScene('bord', { straks: true });
   pause.sæt('spil');
+  // Turen starter af sig selv første gang, og når man kommer fra dens link eller "Din fremgang"
+  if (tagVentForløb([ILD_1.id]) || starterSelv(ILD_1)) startTur();
 }
 
 export function stop() {
+  stopForløb(); // kalder DEL.slut
   aktiv = false;
+  rydTimere();
   slipTræk();
   clearTimeout(toningTimer);
   $('ildToning').classList.remove('mørk');
@@ -167,9 +198,40 @@ function opdater(dt, tid) {
       slukningen(d);
     }
   }
+  if (trin === 'roeg' && d > 0) røgIgen();
+  tegnTæller();
   const s = styringNøgle();
   if (s !== styringTegnet) visStyring();
   panel();
+}
+
+// Tælleren i luppen: atomerne før, og efter reaktionen de samme igen
+function tegnTæller() {
+  const el = $('ildTæller');
+  const f = scene === 'atomer' ? atomScene.fase() : '';
+  if (f === tællerTegnet) return;
+  tællerTegnet = f;
+  el.hidden = scene !== 'atomer';
+  if (el.hidden) return;
+  const t = TÆLLER(atomScene.tal());
+  el.innerHTML = `<span>Før: ${t}</span>${f === 'færdig' ? `<span>Efter: ${t}</span>` : ''}`;
+}
+
+// Trin 1: Er røgen væk, før tændstikken nåede den, tændes lyset og pustes ud igen
+function røgIgen() {
+  if (genTimer || lysBrænder() || løber || slukning || bord.t.røgKilde > 0 || bord.røg.levende() > 2) return;
+  genTimer = true;
+  vent(600, () => {
+    if (trin !== 'roeg' || lysBrænder()) { genTimer = false; return; }
+    bord.lysFlamme.sæt({ lys: 1 }, { lys: 3 });
+    vent(PUST_EFTER * 0.8, () => { genTimer = false; if (trin === 'roeg') blæsUd(); });
+  });
+}
+
+// Lyset bliver pustet ud (med lyd og et vindstød)
+function blæsUd() {
+  if (!lysBrænder()) return;
+  sluk('pust');
 }
 
 // Tændstikken tænder lyset ved vægen eller gennem røgen, og den tændes igen i en flamme
@@ -219,6 +281,12 @@ function tænd(hvorfor) {
   slukning = null;
   hændelse = hvorfor;
   lyd.tændes();
+  // Trin 1: Tændstikken rørte vægen. Lyset pustes ud igen, så man kan prøve røgen.
+  if (trin === 'roeg' && hvorfor === 'tændstik') {
+    forløbVink('Prøv igen, uden at røre vægen.');
+    vent(1400, () => { if (trin === 'roeg') blæsUd(); });
+  }
+  if (trin === 'roeg' && hvorfor === 'gennemRøgen') forløbVink('');
 }
 
 // Skeens skål i forhold til flammen: dug over flammen, sod i den gule del
@@ -238,7 +306,12 @@ function skeen(d) {
     zone = skeZone(B.x / BRÆNDER_FLAMME.bredde, (B.y - BRÆNDER_TOP) / h, { sod: f.sod, tyngde: 1, højdeForhold: h / BRÆNDER_FLAMME.bredde });
   }
   ske.zone = zone;
-  skeSkridt(ske, zone, d, sodNu);
+  // I turen køler skeen hurtigt igen, så dugget kan komme, selv om man først har holdt den i flammen
+  skeSkridt(ske, zone, d, sodNu, trin === 'ske' ? 0.35 : 0.1);
+  if (trin === 'ske' && ske.sod > 0.3 && !sodVinket) {
+    sodVinket = true;
+    forløbVink('Det er sod. Det vender vi tilbage til. Hold skeen over flammen.');
+  }
   bord.t.dug = ske.dug;
   bord.t.sod = ske.sod;
 }
@@ -454,6 +527,18 @@ function lavTræk() {
   };
   lærred.addEventListener('pointerup', slip);
   lærred.addEventListener('pointercancel', slip);
+  // Trin 4: et kort tryk i scenen puster også til flammen
+  let ned = null;
+  lærred.addEventListener('pointerdown', (h) => { ned = aktiv && trin === 'pust' ? { id: h.pointerId, x: h.clientX, y: h.clientY, t: performance.now() } : null; });
+  lærred.addEventListener('pointerup', (h) => {
+    if (!ned || h.pointerId !== ned.id) return;
+    const kort = performance.now() - ned.t < 600 && Math.hypot(h.clientX - ned.x, h.clientY - ned.y) < 12;
+    ned = null;
+    if (kort && trin === 'pust' && forløbVenter() && lysBrænder()) {
+      forløbRørt();
+      sluk('pust');
+    }
+  });
 }
 
 function flytTil(x, y) {
@@ -544,9 +629,124 @@ function panel() {
   dl.hidden = !tal.length;
 }
 
+// ---------- Turen "Hvad brænder egentlig?" ----------
+function startTur() {
+  if (!aktiv) return;
+  lukHvorfor();
+  startForløb(ILD_1, DEL);
+}
+
+// Et trin starter: rydder vink og timere fra det forrige og stiller bordet op med et stearinlys, der brænder
+function trinStart(id, opsæt) {
+  rydTimere();
+  rydBeskeder();
+  trin = id;
+  sodVinket = false;
+  const gør = () => {
+    if (flamme !== 'lys') vælgFlamme('lys');
+    if (tyngde < 0.5) sætTyngde(1);
+    bord.t.glasMål = bord.t.slukkerMål = 0;
+    bord.t.kredsløb = false;
+    slukning = null;
+    løber = null;
+    løberFlamme.straks({ lys: 0 });
+    hændelse = null;
+    if (!lysBrænder()) bord.lysFlamme.straks({ lys: 1, bøj: 0 });
+    opsæt();
+  };
+  if (scene !== 'bord' && id !== 'atomer') {
+    vælgScene('bord');
+    vent(ROLIG ? 0 : TONING + 20, gør);
+  } else gør();
+}
+
+// Værktøjet til trinet (eller intet), frisk fra højre
+function tagVærktøj(id) {
+  if (værktøj === id) værktøj = null;
+  if (id) vælgVærktøj(id);
+  else if (værktøj) vælgVærktøj(værktøj);
+}
+
+const DEL = {
+  trin: {
+    roeg: {
+      // Lyset brænder i to sekunder og bliver pustet ud. Tændstikken ligger klar.
+      start: () => trinStart('roeg', () => {
+        tagVærktøj('tændstik');
+        vent(PUST_EFTER, () => blæsUd());
+      }),
+      færdig: () => hændelse === 'gennemRøgen' && lysBrænder(),
+      visMig: () => {
+        autoTænd = false;
+        const ind = () => værktøjMål.copy(VÆGE).add(tV.set(0, 1.5, 0.4 - VÆGE.z));
+        if (værktøj !== 'tændstik') tagVærktøj('tændstik');
+        if (lysBrænder()) { blæsUd(); vent(500, ind); } else ind();
+      },
+    },
+    ske: {
+      start: () => trinStart('ske', () => tagVærktøj('ske')),
+      færdig: () => ske.dug > 0.6,
+      // En ny, kold ske over flammen
+      visMig: () => {
+        tagVærktøj('ske');
+        værktøjMål.set(0, FOD + LYS_FLAMME.højde * 1.35, 0.4);
+      },
+    },
+    atomer: {
+      start: () => trinStart('atomer', () => {
+        tagVærktøj(null);
+        if (scene === 'atomer') atomScene.nulstil();
+        else vælgScene('atomer');
+      }),
+      færdig: () => scene === 'atomer' && atomScene.fase() === 'færdig',
+      visMig: () => {
+        for (let i = 0; i < 3; i++) vent(i * VIS_O2, () => { if (atomScene.lægNæste()) lyd.proton(); });
+      },
+    },
+    pust: {
+      // Prikkerne viser kredsløbet, mens man gætter: varmen ned, stearinen op i vægen og dampen ind i flammen
+      start: () => trinStart('pust', () => {
+        tagVærktøj(null);
+        bord.t.kredsløb = true;
+      }),
+      get knapper() {
+        return [{ id: 'pust', tekst: 'Pust', gør: () => sluk('pust'), aktiv: () => lysBrænder() && !slukning }];
+      },
+      færdig: () => {
+        const ok = hændelse === 'pust' && !lysBrænder();
+        if (ok) bord.t.kredsløb = false;
+        return ok;
+      },
+      visMig: () => sluk('pust'),
+    },
+  },
+  layout: () => kamera(),
+  // Stearinsyre: 100 g giver ca. 280 g CO₂ og 115 g vand, paraffin ca. 310 g og 135 g (docs/fakta-ild.md, afsnit 3)
+  slutTekst: () => 'Et lys på 100 gram bliver til ca. 300 gram CO₂ og over 100 gram vand. Resten af vægten kom fra oxygenet i luften.',
+  veje: [
+    { tekst: 'Leg med flammen', primær: true, her: true, gør: () => requestAnimationFrame(() => kamera()) },
+    { tekst: 'Hvorfor er flammen gul?', hvorfor: 'ildGul' },
+    // Til forløb 4 og knaldgassen er i Ild (PR 3): kortet fra knaldgassen
+    { tekst: 'Se, hvor varmen kommer fra', hvorfor: 'knaldVarme' },
+  ],
+  slut: () => {
+    trin = null;
+    rydTimere();
+    bord.t.kredsløb = false;
+    visStyring();
+    panelTegnet = '';
+    panel();
+  },
+};
+
 // ---------- Til tests (?test) ----------
 export function testAdgang() {
   return {
+    forløb: forløbTest(),
+    startTur: () => startTur(),
+    trin: () => trin,
+    kredsløb: () => bord.t.kredsløb,
+    tæller: () => ($('ildTæller').hidden ? '' : $('ildTæller').textContent),
     tilstand: () => ({
       scene, flamme, værktøj, tyngde, luft, gas, tændstikTændt, hændelse,
       lysBrænder: lysBrænder(), brænderBrænder: brænderBrænder(), løber: Boolean(løber), glas: bord.t.glasMål,

@@ -13,8 +13,8 @@ const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const VERDENER = ['kerner', 'atomer', 'kemi', 'liv', 'elektricitet', 'rummet', 'biblioteket'];
-// Dele, der ikke står i "Din fremgang": Biblioteket og Ild (får sin linje med turen, PR 2)
-const UDEN_FREMGANG = ['ordbog', 'gaader', 'opdagelser', 'ild'];
+// Dele, der ikke står i "Din fremgang": Biblioteket
+const UDEN_FREMGANG = ['ordbog', 'gaader', 'opdagelser'];
 const DELE = { kerner: ['fusion', 'reaktor'], atomer: ['vaerksted', 'system'], kemi: ['molekyler', 'ild'], liv: ['liv', 'begyndelsen'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog', 'gaader', 'opdagelser'] };
 const størrelser = [
   ['pc', { viewport: { width: 1280, height: 800 } }],

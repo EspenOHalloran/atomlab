@@ -335,6 +335,12 @@ export const HVORFOR = {
     svar: 'Ikke som ild. I ild bytter atomerne partnere, men det er de samme atomer bagefter. I Solen smelter atomkerner sammen og bliver til et nyt grundstof: Hydrogen bliver til helium. Det hedder fusion, og hver gang giver det millioner af gange mere energi, end når et molekyle brænder. Man kan prøve det i Stjerneovnen.',
     nørd: 'Når fire hydrogenkerner bliver til én heliumkerne i Solen, kommer der i alt ca. 27 MeV ud. Når ét molekyle metan brænder, kommer der ca. 8 eV ud. Det er over tre millioner gange mindre. Astronomer siger tit, at stjerner "brænder" hydrogen, men de mener fusion.',
   },
+  // Vej 2 efter turen "Hvad brænder egentlig?" (til forløb 2 findes). Kilder: W "Candle", W "Flame", Faraday 1861.
+  ildGul: {
+    spørgsmål: 'Hvorfor er flammen gul?',
+    svar: 'Det gule lys er glødende sod: bittesmå korn af kulstof inde i flammen, hvor der er for lidt oxygen til, at alt kan brænde helt. Kornene bliver så varme, at de lyser, som tråden i en gammel glødepære. Ude i kanten møder de oxygen og brænder til CO₂. Det blå lys forneden kommer fra selve reaktionen.',
+    nørd: 'Prøv skeen i den gule del på bordet: Den bliver sort af sod. Og gasbrænderen brænder blåt med luft nok, fordi der slet ikke bliver dannet sod.',
+  },
   ildVarmer: {
     spørgsmål: 'Varmer du som et lys?',
     svar: 'Lidt mere. Et stearinlys giver ca. 80 watt varme, og en person, der sidder stille, giver ca. 100 watt. Regnskabet er det samme: Brændstof og oxygen bliver til CO₂ og vand. Men i kroppen sker det i mange små trin ved 37 °C og uden flamme.',

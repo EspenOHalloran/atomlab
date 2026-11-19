@@ -1071,6 +1071,9 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .ild-skyder-ender { display: flex; justify-content: space-between; font-size: 13px; color: var(--svag); margin-top: -8px; }
 #ild .knap.primær { min-height: 44px; background: var(--accent); border-color: var(--accent); color: #031018; font-weight: 700; }
 #ild .liv-tal[hidden] { display: none; }
+/* Tælleren i luppen: atomerne før og efter */
+.ild-tæller { position: absolute; left: 10px; top: 10px; z-index: 1; margin: 0; padding: 6px 10px; border-radius: 10px; background: rgba(8, 12, 28, 0.66); font-size: 14px; display: flex; flex-direction: column; gap: 2px; pointer-events: none; }
+.ild-tæller span:last-child:not(:first-child) { color: var(--accent); }
 /* Ikonet i menuen: en flamme med en gul kerne */
 .ikon-ild::before, .ikon-ild::after { content: ""; position: absolute; left: 50%; border-radius: 50% 0 50% 50%; transform: translateX(-50%) rotate(-45deg); }
 .ikon-ild::before { top: 13px; width: 24px; height: 24px; margin-left: 0; background: radial-gradient(circle at 60% 40%, #ffd43b 0 30%, #ff922b 60%, #e8590c 100%); box-shadow: 0 0 12px rgba(255, 146, 43, 0.6); }
