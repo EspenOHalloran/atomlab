@@ -11,7 +11,8 @@
 // nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE og
 // OPSLAG. Bogen har kun de opslag, der er bygget (E20 fund 6, stilguiden A9). Opslagets slags:
 //   'forside'  portrættet, spørgsmålet, introduktionen (FORSIDE.intro: sted og en bogtekst med stort forbogstav, den røde
-//              tråd 18. november 2026), Galileis lille tegning (eller bogens egen), navnet og "Begynd"
+//              tråd 18. november 2026), Galileis lille tegning (eller bogens egen: FORSIDE.kort, stjerner som træsnit),
+//              navnet og "Begynd" (kun, når bogen har flere opslag)
 //   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
 //              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
 //              kaldes, når man bladrer væk
@@ -46,15 +47,48 @@ function galileiTegning() {
     + '</svg>';
 }
 
-function forsideHTML(bog, f) {
+// Bogens egen tegning på forsiden (Tycho, T1): stjernerne som træsnit i en dobbelt ramme, som på Tychos kort fra 1573
+// (s. B1b). kort.stjerner har x og y i grader (projicer i js/data/opdagelser/tycho.js) og lysstyrken mag. Den største er
+// den nye stjerne.
+function træsnitStjerne(x, y, r, takker) {
+  const p = [];
+  for (let i = 0; i < takker * 2; i++) {
+    const v = (i / (takker * 2)) * Math.PI * 2 - Math.PI / 2;
+    const rr = i % 2 ? r * 0.42 : r * (i % 4 ? 0.82 : 1);
+    p.push(`${(x + Math.cos(v) * rr).toFixed(1)},${(y + Math.sin(v) * rr).toFixed(1)}`);
+  }
+  return `<polygon points="${p.join(' ')}"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r * 0.22).toFixed(1)}" class="bog-træsnit-hul"/>`;
+}
+
+function kortTegning(k) {
+  const B = 180, H = 100, KANT = 10;
+  const xs = k.stjerner.map((s) => s.x), ys = k.stjerner.map((s) => s.y);
+  const skala = Math.min((B - 2 * KANT - 20) / (Math.max(...xs) - Math.min(...xs)), (H - 2 * KANT - 22) / (Math.max(...ys) - Math.min(...ys)));
+  const mx = (Math.max(...xs) + Math.min(...xs)) / 2, my = (Math.max(...ys) + Math.min(...ys)) / 2;
+  const stjerner = k.stjerner.map((s) => {
+    const ny = s.mag < 0;
+    const r = ny ? 13 : Math.max(5, 11 - 1.8 * s.mag);
+    return træsnitStjerne(B / 2 + (s.x - mx) * skala, H / 2 - (s.y - my) * skala, r, ny ? 12 : 8);
+  }).join('');
+  // W'et som en svag, prikket linje (ikke på Tychos kort, men så man kan se bogstavet)
+  const w = k.stjerner.filter((s) => s.mag >= 0).sort((a, b) => a.x - b.x)
+    .map((s) => `${(B / 2 + (s.x - mx) * skala).toFixed(1)},${(H / 2 - (s.y - my) * skala).toFixed(1)}`).join(' ');
+  return `<svg viewBox="0 0 ${B} ${H}" role="img" aria-label="${esc(k.alt)}">`
+    + `<rect x="2" y="2" width="${B - 4}" height="${H - 4}" class="bog-træsnit-ramme"/><rect x="6" y="6" width="${B - 12}" height="${H - 12}" class="bog-træsnit-ramme tynd"/>`
+    + `<polyline points="${w}" class="bog-træsnit-w"/><g class="bog-træsnit">${stjerner}</g></svg>`;
+}
+
+function forsideHTML(bog, f, harNæste = true) {
   return `<div class="bog-opslag bog-forside">`
     + `<figure class="bog-portræt"><img src="${esc(bog.portræt)}" alt="${esc(f.portrætAlt)}" width="600" height="750" decoding="async"><figcaption>${esc(f.portrætTekst)}</figcaption></figure>`
     + `<div class="bog-forside-tekst">`
     + `<h3 class="bog-titel">${esc(f.spørgsmål)}</h3>`
     + (f.intro ? `<div class="bog-intro"><p class="bog-intro-sted">${esc(f.intro.sted)}</p><p class="bog-intro-tekst">${esc(f.intro.tekst)}</p></div>` : '')
-    + `<figure class="bog-galilei">${galileiTegning()}<figcaption>${esc(f.galilei)}</figcaption></figure>`
+    + (f.kort ? `<figure class="bog-galilei bog-kort">${kortTegning(f.kort)}<figcaption>${esc(f.kort.tekst)}</figcaption></figure>`
+      : `<figure class="bog-galilei">${galileiTegning()}<figcaption>${esc(f.galilei)}</figcaption></figure>`)
     + `<p class="bog-navn">${esc(f.navn)} · ${esc(f.liv)}</p>`
-    + `<button class="knap bog-begynd" data-begynd>${esc(f.begynd)} ›</button>`
+    // "Begynd" kun, når der er noget at begynde på (stilguiden A9: kun det, der findes)
+    + (harNæste ? `<button class="knap bog-begynd" data-begynd>${esc(f.begynd)} ›</button>` : '')
     + `</div></div>`;
 }
 
@@ -260,7 +294,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, lav = false, påBladr
     const gammelTop = ramme.scrollTop;
     scene?.fjern();
     scene = null;
-    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE)
+    ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE, opslag.length > 1)
       : o.slags === 'sider' ? siderHTML(o, tekster.BOGEN)
         : o.slags === 'om' ? omHTML(o, tekster.OM, bog.id) : sceneHTML(o);
     ramme.dataset.opslag = o.id;

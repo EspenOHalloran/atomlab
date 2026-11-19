@@ -1345,8 +1345,8 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .opd-ryg:hover, #opdagelser .opd-ryg:focus-visible { opacity: 1; color: #fff; }
 #opdagelser .opd-omslag { width: 140px; height: 206px; margin: 0 6px; padding: 8px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 2px solid var(--ryg-kant); border-radius: 3px 7px 7px 3px; background: var(--ryg); color: #f4e2b3; font-family: var(--bog-skrift); cursor: pointer; box-shadow: inset 7px 0 8px -5px rgba(0, 0, 0, 0.7), 0 0 22px rgba(214, 170, 82, 0.35); transition: transform 0.2s; }
 #opdagelser .opd-omslag:hover, #opdagelser .opd-omslag:focus-visible { transform: translateY(-5px); }
-#opdagelser .opd-omslag img { width: 100%; height: auto; border: 1px solid var(--ryg-kant); }
-#opdagelser .opd-omslag-titel { font-size: 20px; line-height: 1.1; }
+#opdagelser .opd-omslag img { width: 100%; flex: 1 1 0; min-height: 0; object-fit: contain; background: #f1e8d3; border: 1px solid var(--ryg-kant); } /* Portrættet giver plads, når titlen fylder to linjer (Tychos "Den nye stjerne", T1) */
+#opdagelser .opd-omslag-titel { font-size: 20px; line-height: 1.1; text-align: center; text-wrap: balance; }
 #opdagelser .opd-omslag-navn { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
 #opdagelser .opd-linje { margin: 0; padding: 9px 16px; max-width: 40em; border-radius: 18px; background: var(--panel); border: 1px solid var(--panel-kant); text-align: center; font-size: 16px; line-height: 1.4; }
 #opdagelser .opd-bog-side { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr); justify-items: center; }
@@ -1372,6 +1372,12 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .bog-tavle { fill: #1d1a17; }
 #opdagelser .bog-tavle-prik { fill: rgba(255, 255, 255, 0.55); }
 #opdagelser .bog-tavle-figur { fill: #f3ead7; }
+#opdagelser .bog-træsnit { fill: var(--bog-blaek); } /* Tychos forside (T1): stjernerne som træsnit i en dobbelt ramme, som hans kort fra 1573 */
+#opdagelser .bog-træsnit-hul { fill: var(--bog-papir); }
+#opdagelser .bog-træsnit-w { fill: none; stroke: var(--bog-blaek); stroke-width: 0.8; stroke-dasharray: 1.5 2.5; opacity: 0.45; }
+#opdagelser .bog-træsnit-ramme { fill: none; stroke: var(--bog-blaek); stroke-width: 1.6; }
+#opdagelser .bog-træsnit-ramme.tynd { stroke-width: 0.7; }
+#opdagelser .bog-kort { width: min(260px, 100%); }
 #opdagelser .bog-navn { margin: 0; font-family: var(--bog-skrift); font-size: 20px; }
 #opdagelser .bog-begynd { min-height: 48px; padding: 0 26px; font-size: 18px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
 #opdagelser .bog-intro { display: grid; gap: 6px; max-width: 30em; } /* Introduktionen på forsiden (den røde tråd, 18. november 2026): hvem han var, og hvorfor han kiggede */

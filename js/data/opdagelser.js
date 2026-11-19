@@ -11,12 +11,20 @@
 //   forløb   id'et på fortællingens forløb (js/data/forloeb/), som starter efter "Begynd" første gang
 //   scene    () => import(...) af bogens tegninger i js/bog/<id>.js (lavFortælling til opslaget af slags 'scene')
 //
-// Skrifterne er OFL og ligger i fonts/ (se fonts/KILDER.md). 1600-tallets bøger bruger 'AtomLab Fell' (IM Fell English).
+// Skrifterne er OFL og ligger i fonts/ (se fonts/KILDER.md). Bøgerne fra 1500- og 1600-tallet bruger 'AtomLab Fell' (IM Fell English).
 
 const SKRIFT_1600 = "'AtomLab Fell', Georgia, 'Times New Roman', serif";
 
 export const BØGER = [
-  { id: 'tycho', navn: 'Tycho Brahe', kort: 'Tycho Brahe', år: 1572, ejefald: 'Tycho Brahes', om: 'den nye stjerne', spørgsmål: 'Hvor kom den nye stjerne fra?' },
+  {
+    id: 'tycho', navn: 'Tycho Brahe', kort: 'Tycho Brahe', år: 1572, ejefald: 'Tycho Brahes', om: 'den nye stjerne', spørgsmål: 'Hvor kom den nye stjerne fra?',
+    titel: 'Den nye stjerne', bygget: true,
+    portræt: 'billeder/biblioteket/tycho.webp',
+    // København 1573 (docs/drejebog-tycho.md afsnit 3): lyst, varmt papir, sort blæk og en nattehimmelblå ryg med guld
+    stil: { papir: '#f2e8d2', papirMørk: '#dfd0ae', blæk: '#1e1a16', ryg: '#1c2a44', rygKant: '#c9a24a', skrift: SKRIFT_1600 },
+    tekster: () => import('./opdagelser/tycho.js'),
+    // T2 giver bogen forløbet 'den-nye-stjerne' og scene: () => import('../bog/tycho.js')
+  },
   { id: 'galilei', navn: 'Galileo Galilei', kort: 'Galilei', år: 1610, ejefald: 'Galileis', om: 'Jupiters måner' },
   {
     id: 'huygens', navn: 'Christiaan Huygens', kort: 'Huygens', år: 1656, ejefald: 'Huygens\'', om: 'Saturns ring', titel: 'Saturns ører', bygget: true,
@@ -29,7 +37,7 @@ export const BØGER = [
   },
   { id: 'roemer', navn: 'Ole Rømer', kort: 'Rømer', år: 1676, ejefald: 'Ole Rømers', om: 'lyset, der bruger tid', spørgsmål: 'Hvorfor kom Io for sent?' },
   { id: 'newton', navn: 'Isaac Newton', kort: 'Newton', år: 1687, ejefald: 'Isaac Newtons', om: 'tyngdeloven' },
-  { id: 'oersted', navn: 'H.C. Ørsted', kort: 'Ørsted', år: 1820, ejefald: 'H.C. Ørsteds', om: 'strøm og magneter' },
+  { id: 'oersted', navn: 'H.C. Ørsted', kort: 'Ørsted', år: 1820, ejefald: 'H.C. Ørsteds', om: 'strøm og magneter', spørgsmål: 'Hvorfor drejede kompasnålen?' },
   { id: 'curie', navn: 'Marie Curie', kort: 'Curie', år: 1898, ejefald: 'Marie Curies', om: 'stoffer, der stråler' },
   { id: 'einstein', navn: 'Albert Einstein', kort: 'Einstein', år: 1905, ejefald: 'Albert Einsteins', om: 'energi og masse' },
   { id: 'bohr', navn: 'Niels Bohr', kort: 'Bohr', år: 1913, ejefald: 'Niels Bohrs', om: 'elektronernes skaller' },
