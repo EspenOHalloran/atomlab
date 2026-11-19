@@ -58,6 +58,13 @@ console.log(await mål('  pixelRatio 0,1 (næsten kun nettet)', 0, -8, 0.1));
 console.log(await mål('Ned mod jorden (−40°)', 120, -40));
 console.log(await mål('Lodret ned (−85°)', 120, -85));
 console.log(await mål('Op mod himlen (+10°)', 250, 10));
+// Stenenes mellemlag (M8c del 3, trin 3) slået fra et øjeblik
+if (await fm(() => typeof atomlabTest.solsystem.fænomen().stenLag === 'function')) {
+  await fm(() => atomlabTest.solsystem.fænomen().stenLag(false));
+  console.log(await mål('Uden mellemlaget: vandret (−8°)', 0, -8));
+  console.log(await mål('Uden mellemlaget: ned (−40°)', 120, -40));
+  await fm(() => atomlabTest.solsystem.fænomen().stenLag(true));
+}
 
 // Skyggekortene: fire lag, når Solen har stået stille, og igen lige efter (mens Solen flytter sig)
 console.log(await fm(async () => {

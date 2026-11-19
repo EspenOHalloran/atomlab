@@ -178,21 +178,102 @@ const FRAGMENT = /* glsl */ `
   vec4 hash4(vec2 p) {
     return fract(sin(vec4(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)), dot(p, vec2(419.2, 371.9)), dot(p, vec2(97.3, 53.1)))) * 43758.5453);
   }
-  // En stens omrids: et uregelmæssigt ottekantet felt (fire akser med hver sin bredde). Giver afstanden (1 ved kanten
-  // for r = 1) og retningen ud gennem den flade, der danner kanten (til hældningen, så stenen får facetter).
+  // En stens omrids: et uregelmæssigt ottekantet felt (fire akser, og hver af de otte sider har sin egen afstand, så
+  // stenen ikke er symmetrisk). Giver afstanden (1 ved kanten for r = 1) og retningen ud gennem den side, der danner
+  // kanten (til hældningen, så stenen får facetter).
   vec3 kant(vec2 v, vec4 b) {
-    float w = 0.8 + 0.4 * b.z;
+    vec4 wp = 0.75 + 0.6 * fract(b * 7.31 + b.yzwx * 3.7);   // siderne mod +
+    vec4 wm = 0.75 + 0.6 * fract(b * 5.17 + b.wxyz * 2.3);   // og mod -
+    float w = v.x > 0.0 ? wp.x : wm.x;
     vec3 m = vec3(abs(v.x) * w, sign(v.x) * w, 0.0);
-    w = 1.0 + 0.8 * b.w;
+    w = v.y > 0.0 ? wp.y : wm.y;
     float s = abs(v.y) * w;
     if (s > m.x) m = vec3(s, 0.0, sign(v.y) * w);
-    w = 0.9 + 0.5 * fract(b.z * 7.0);
     float e = dot(v, vec2(0.7071, 0.7071));
+    w = e > 0.0 ? wp.z : wm.z;
     if (abs(e) * w > m.x) m = vec3(abs(e) * w, sign(e) * w * vec2(0.7071, 0.7071));
-    w = 0.9 + 0.5 * fract(b.w * 7.0);
     e = dot(v, vec2(0.7071, -0.7071));
+    w = e > 0.0 ? wp.w : wm.w;
     if (abs(e) * w > m.x) m = vec3(abs(e) * w, sign(e) * w * vec2(0.7071, -0.7071));
     return m;
+  }
+  // ---------- Mellemlaget (M8c del 3 trin 3): sten på ca. 0,5-3 m, der rager op ----------
+  // En sten malet på jorden bliver trykket flad, når man ser den på skrå (en sten på 1 m 50 m væk fylder ca. 17 × 8
+  // skærmpixel, men malet på jorden kun ca. 17 × 1). Derfor følges synslinjen fra punktet på jorden tilbage mod øjet
+  // gennem et gitter af celler med højst én sten hver. Stenen er en ellipsoide (delvis begravet) skåret af fem flader,
+  // så den bliver kantet, og strålen rammer den præcist (regnet, ingen opslag i kort). Stenene ligger helt inde i deres
+  // celle, så den første sten, strålen rammer fra øjets side, er den nærmeste.
+  // Jorden mellem øjet og punktet regnes som en ret linje, så strålens højde over jorden er uKamOp · u / afstanden.
+  uniform float uMellem;   // 1: mellemlaget tegnes (0 kun til målinger)
+  uniform vec2 uSted;      // stedet i kraterets retninger (m)
+  uniform vec3 uKam;       // kameraet (m, som vRel: øst, op, syd)
+  uniform float uKamOp;    // kameraets højde over jorden lige under det (m)
+  // Facetterne (normalen i den skalerede kugle, hvor stenen er en enhedskugle)
+  const vec3 F0 = vec3(0.77, 0.26, 0.58), F1 = vec3(-0.62, 0.55, 0.56), F2 = vec3(-0.25, -0.85, 0.46), F3 = vec3(0.47, -0.62, 0.63);
+  // Stenen i cellen c (lag med cellestørrelsen str): midten (øst, nord i m), radierne (m: langs, på tværs, op), retningen
+  // og de tilfældige tal. Giver false, hvis cellen er tom.
+  bool stor(vec2 c, float str, float taet0, float rMin, float rMaks, out vec2 p, out vec3 rad, out vec2 rv, out vec4 b) {
+    vec4 a = hash4(c + str * 3.17);
+    b = hash4(c + str * 5.31 + 11.0);
+    float kl = stoej(c * str * 0.05 + 7.0);                      // klynger (ca. 20 m)
+    if (a.z > taet0 * (0.25 + 1.5 * kl * kl)) return false;
+    p = (c + 0.25 + 0.5 * a.xy) * str;
+    float r = mix(rMin, rMaks, b.x * b.x);                        // potenslov: få store
+    if (length(p - uSted) < r + 1.2) return false;               // ingen sten, hvor man står
+    float op = uStenArt > 0.5 ? 0.8 + 0.5 * a.w : 0.5 + 0.4 * a.w; // Gale: flade plader, Jezero: højere sten
+    rad = vec3(r, r * (0.55 + 0.45 * b.y), r * op);
+    rv = normalize(b.zw - 0.5 + 1e-3);
+    return true;
+  }
+  // Strålen (o + u·w, k·u) fra punktet på jorden mod øjet. Giver u, hvor den rammer stenen fra øjets side (-1: ingen), og
+  // normalen (øst, op, syd).
+  float ram(vec2 o, vec2 w, float k, vec2 p, vec3 rad, vec2 rv, vec4 b, out vec3 nrm) {
+    vec2 tv = vec2(-rv.y, rv.x);
+    vec2 q = o - p;
+    vec3 O = vec3(dot(q, rv), dot(q, tv), 0.3 * rad.z) / rad;   // (midten ligger 30 % under jorden)
+    vec3 D = vec3(dot(w, rv), dot(w, tv), k) / rad;
+    float A = dot(D, D), B = dot(O, D), C = dot(O, O) - 1.0;
+    float disk = B * B - A * C;
+    if (disk <= 0.0) return -1.0;
+    float sq = sqrt(disk);
+    float lo = (-B - sq) / A, hi = (-B + sq) / A;
+    vec3 ns = O + hi * D;                                          // (normalen i kuglen)
+    vec4 dk = 0.55 + 0.3 * vec4(b.x, fract(b.y * 7.0), fract(b.z * 5.0), fract(b.w * 3.0));
+    for (int i = 0; i < 5; i++) {
+      vec3 f = i == 0 ? F0 : i == 1 ? F1 : i == 2 ? F2 : i == 3 ? F3 : vec3(0.0, 0.0, 1.0);
+      float d = i == 0 ? dk.x : i == 1 ? dk.y : i == 2 ? dk.z : i == 3 ? dk.w : 0.6 + 0.25 * b.y;
+      float fd = dot(f, D), fo = dot(f, O) - d;
+      if (abs(fd) < 1e-5) { if (fo > 0.0) return -1.0; continue; }
+      float uf = -fo / fd;
+      if (fd > 0.0) { if (uf < hi) { hi = uf; ns = f; } }
+      else lo = max(lo, uf);
+    }
+    if (hi < lo || hi < 0.0) return -1.0;
+    vec3 nl = ns / rad;
+    vec2 ne = nl.x * rv + nl.y * tv;
+    nrm = normalize(vec3(ne.x, nl.z, -ne.y));
+    return hi;
+  }
+  // Følg strålen gennem lagets celler fra øjets side (højst N celler). Giver u for den nærmeste sten (-1: ingen).
+  float ramLag(vec2 G, vec2 w, float k, float umaks, float str, float taet0, float rMin, float rMaks, int N, out vec3 nrm, out vec4 bh) {
+    vec2 S = (G + w * umaks) / str;
+    vec2 dir = -w;
+    vec2 cel = floor(S);
+    vec2 st = vec2(dir.x >= 0.0 ? 1.0 : -1.0, dir.y >= 0.0 ? 1.0 : -1.0);
+    vec2 tD = 1.0 / max(abs(dir), vec2(1e-5));
+    vec2 tM = vec2(dir.x >= 0.0 ? cel.x + 1.0 - S.x : S.x - cel.x, dir.y >= 0.0 ? cel.y + 1.0 - S.y : S.y - cel.y) * tD;
+    float tEnd = umaks / str;
+    for (int i = 0; i < 12; i++) {
+      if (i >= N) break;
+      vec2 p; vec3 rad; vec2 rv; vec4 b;
+      if (stor(cel, str, taet0, rMin, rMaks, p, rad, rv, b)) {
+        float u = ram(G, w, k, p, rad, rv, b, nrm);
+        if (u >= 0.0) { bh = b; return u; }
+      }
+      if (min(tM.x, tM.y) > tEnd) break;
+      if (tM.x < tM.y) { tM.x += tD.x; cel.x += st.x; } else { tM.y += tD.y; cel.y += st.y; }
+    }
+    return -1.0;
   }
   void main() {
     vec2 en = vEN;
@@ -213,6 +294,26 @@ const FRAGMENT = /* glsl */ `
       if (w0 > 0.0) f = mix(f, texture2D(tF0, u0).r, w0);
     }
     float rel = 2.0 * f;
+    // Mellemlaget (se ramLag): to lag af celler. A: 3 m, sten 0,25-0,7 m i radius. B: 9 m, 0,6-1,6 m, færre.
+    // Et lag tegnes, så længe en sten på ca. 0,5 m (A) eller 1,2 m (B) er mindst ca. 1½ pixel høj på skærmen.
+    vec3 stenNrm = vec3(0.0, 1.0, 0.0);
+    vec4 stenB = vec4(0.5);
+    float stenU = -1.0;
+    vec2 tilOje = uSted + vec2(uKam.x, -uKam.z) - en;
+    float dH = length(tilOje);
+    float pa = length(fwidth(normalize(vRel - uKam))); // radianer pr. pixel
+    float kOje = uKamOp / max(dH, 0.01);
+    bool mellem = uMellem > 0.5 && dH > 1.0 && uKamOp < 50.0;
+    if (mellem && 0.5 > 1.5 * dH * pa) {
+      vec2 w = tilOje / dH;
+      vec3 nr; vec4 bb;
+      float u = ramLag(en, w, kOje, min(0.9 / kOje + 0.8, dH - 0.5), 3.0, 0.45, 0.25, 0.7, ${LAV_KVALITET ? 5 : 8}, nr, bb);
+      if (u >= 0.0) { stenU = u; stenNrm = nr; stenB = bb; }
+      if (1.2 > 1.5 * dH * pa) {
+        float uB = ramLag(en, w, kOje, min(2.2 / kOje + 1.8, dH - 0.5), 9.0, 0.18, 0.6, 1.6, ${LAV_KVALITET ? 4 : 6}, nr, bb);
+        if (uB > stenU) { stenU = uB; stenNrm = nr; stenB = bb; }
+      }
+    }
     // Detaljer helt tæt på (under fotoets skarphed, M8c del 3 trin 1): sten og grus, tegnet af programmet efter rovernes
     // fotos (fotoet fra kredsløb har 25 cm pr. pixel). Tre lag af celler med højst én sten hver: store (0,6 m) og små
     // (0,2 m) sten og ved Jezero flade, lyse klippeflader i niveau med jorden (1,4 m). Størrelsen følger en potenslov
@@ -222,7 +323,7 @@ const FRAGMENT = /* glsl */ `
     vec2 stenN = vec2(0.0);
     float naer = 1.0 - smoothstep(0.012, 0.09, fod); // (til gruset)
     float jez = step(0.5, uStenArt);
-    if (fod < 0.25 + 0.2 * jez) {
+    if (stenU < 0.0 && fod < 0.25 + 0.2 * jez) {
       float klynge = smoothstep(0.3, 0.8, stoej(en * 0.19) * 0.6 + stoej(en * 0.7 + 3.1) * 0.4 + (f - 0.5) * 1.2);
       vec2 solV = vec2(uSol.x, -uSol.z);
       float cotSol = length(solV) / max(uSol.y, 0.06);
@@ -283,6 +384,7 @@ const FRAGMENT = /* glsl */ `
       }
       n = normalize(n + vec3(stenN.x, 0.0, -stenN.y));
     }
+    if (stenU >= 0.0) { naer = 0.0; n = stenNrm; }
     float korn = stoej(en * 40.0) * 0.6 + stoej(en * 113.0) * 0.4;
     rel *= mix(1.0, 0.8 + 0.4 * korn, naer) * stenAlb;
     n = normalize(n + naer * 0.12 * vec3(korn - 0.5, 0.0, stoej(en * 40.0 + 5.0) - 0.5));
@@ -294,6 +396,7 @@ const FRAGMENT = /* glsl */ `
     c = mix(c, vec3(0.30, 0.20, 0.13), smoothstep(1.0, 1.7, rel));
     c *= mix(vec3(1.0), clamp(tone, 0.6, 1.6), 0.5);
     c = mix(c, vec3(dot(c, vec3(0.3, 0.59, 0.11))) * vec3(1.08, 1.0, 0.94), stenGraa); // stenene er mere grå end sandet
+    if (stenU >= 0.0) c = mix(c, vec3(dot(c, vec3(0.3, 0.59, 0.11))) * vec3(1.08, 1.0, 0.94), 0.5) * (jez > 0.5 ? 0.55 + 0.35 * stenB.w : 0.7 + 0.4 * stenB.w);
     // Skygger fra bjerge og bakker
     float sk;
     if (w0 >= 0.999) sk = texture2D(tS0, u0).r;
@@ -307,6 +410,17 @@ const FRAGMENT = /* glsl */ `
       if (w0 > 0.0) sk = mix(sk, texture2D(tS0, u0).r, w0);
     }
     sk = mix(1.0, sk, uSkygger) * stenSk;
+    if (mellem && stenU < 0.0 && sk > 0.02 && uSol.y > 0.03 && dH < 150.0) {
+      vec2 solV2 = vec2(uSol.x, -uSol.z);
+      float lv = max(length(solV2), 1e-4);
+      vec2 sw = solV2 / lv;
+      float ks = uSol.y / lv;
+      vec3 nr; vec4 bb;
+      float ssk = 1.0;
+      if (ramLag(en, sw, ks, min(0.9 / ks + 0.8, 24.0), 3.0, 0.45, 0.25, 0.7, ${LAV_KVALITET ? 3 : 5}, nr, bb) >= 0.0) ssk = 0.08;
+      else if (ramLag(en, sw, ks, min(2.2 / ks + 1.8, 45.0), 9.0, 0.18, 0.6, 1.6, ${LAV_KVALITET ? 3 : 4}, nr, bb) >= 0.0) ssk = 0.08;
+      sk *= mix(1.0, ssk, smoothstep(0.03, 0.08, uSol.y));
+    }
     float i = max(dot(n, uSol), 0.0);
     vec3 V = normalize(-vRel);
     float ev = max(dot(n, V), 0.0);
@@ -459,6 +573,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     pxH: { value: new THREE.Vector4(1, 4, 16, 174) }, uKamH: { value: 0 },
     uSol: { value: new THREE.Vector3(0, 1, 0) }, uTau: { value: TAU }, uSkygger: { value: 0 },
     uStenArt: { value: krater === 'jezero' ? 1 : 0 },
+    uMellem: { value: 1 }, uKam: { value: new THREE.Vector3() }, uKamOp: { value: ØJE },
     tFarve: { value: tom }, bFarve: { value: new THREE.Vector4(0, 0, 1, 1) }, bF3: { value: new THREE.Vector4(0, 0, 1, 1) },
   };
   for (let k = 0; k < 4; k++) {
@@ -751,6 +866,8 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
       himmel.position.copy(kamera.position);
       tegnet = 0;
       u.uKamH.value = u.uH0.value + kamera.position.y * 1000;
+      u.uKam.value.copy(kamera.position).multiplyScalar(1000);
+      u.uKamOp.value = kamera.position.y * 1000;
       billederSiden++;
       if (grov && !regner() && billederSiden > SKARP_EFTER) nyeSkygger(false); // Solen står stille igen
       if (regner()) regnTrin(heleLag);
@@ -763,6 +880,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     // Højden under stedet (m over nulpunktet)
     get højde() { return u.uH0.value; },
     // Kun til tests
+    stenLag(v) { u.uMellem.value = v ? 1 : 0; },
     test: () => ({ sted: stedId, tid: timer, højde: u.uH0.value, net: [retninger, ringe], stykker: [tegnet, STYKKER], skygger: u.uSkygger.value, groveSkygger: grov, strimler: sidstStrimler, regner: regner(), solHøjde: THREE.MathUtils.radToDeg(Math.asin(u.uSol.value.y)), måner: hu.uMaane.value.map((m) => ({ højde: THREE.MathUtils.radToDeg(Math.asin(m.y)), kompas: (THREE.MathUtils.radToDeg(Math.atan2(m.x, -m.z)) + 360) % 360, bredde: THREE.MathUtils.radToDeg(2 * m.w) })) }),
     // Billederne bruges ikke mere (man er lettet, G1 trin 3): slip dem, så de kan slettes fra grafikkortet. Nettet og
     // shaderne bliver, og gåTil henter billederne igen næste gang.
