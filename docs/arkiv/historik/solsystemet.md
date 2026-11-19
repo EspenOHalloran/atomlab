@@ -1,5 +1,9 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (19. november 2026): Månen, "Lys på hele Månen" og skarpere højder fra LOLA** ("Næste" nr. 3, jeres spørgsmål 7. november 2026). Valgt af orkestratoren 2026-11-19 efter min anbefaling, kan ændres af jer.
+- **Kontakten** "Lys på hele Månen" står i Indstillinger, kun ved Månen. Lyset kommer fra kameraets side, ca. 27° skråt oppefra, så kratrene stadig har skygger. Det glider over på 0,4 s (straks med "reducer bevægelse") og slås fra, når man forlader Månen. "Lige nu" siger, at lyset kommer fra dig. Månens side har fået "Er bagsiden mørk?" (faktatjekket).
+- **Højderne:** LOLA (CGI Moon Kit, `ldem_16_uint`) som WebP uden tab: pc 4k (6,6 MB, hentes først ved Månen og lægges i grafikkortet, når kameraet er roligt), tablet og telefon 2k (1,9 MB), tests 1k som før (`lav_maanen.py`). Jordens side på pc er stadig ca. 20 MB.
+
 **Lavet (19. november 2026): Mars ekstra 3, Curiosity som 3D-model (M8c del 2)** ([prompt-mars-ekstra.md](../prompt-mars-ekstra.md), [plan-mars.md](../plan-mars.md) "Status efter M8c del 2").
 - **Roveren** står ved "🧍 Hos Curiosity" på sit stop fra **sol 5073** (ca. 13. november 2026, NASA's kortdata) med den rigtige retning (188,4°), hældning (næsen 11,8° op) og krængning, og hjulene står inden for 6 cm af højdekortet. Curiosity var kørt ca. 120 m siden sol 5045, så stedet er flyttet: Man står 9 m fra roveren, ser den skråt forfra og lander kl. 15 med Solen i ryggen.
 - **Filen:** NASA's model (11,9 MB) er gjort mindre til 2,9 MB med `billeder/solsystem/lav_curiosity.py` (WebP med JPEG/PNG-reserve, 16 bit-punkter). `npx gltf-transform` blev afvist af miljøet, så det blev Python i stedet, helt uden npm (valgt af orkestratoren 2026-11-19, kan ændres af jer). `GLTFLoader` er kopieret fra three@0.186.1.

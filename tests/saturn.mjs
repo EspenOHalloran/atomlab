@@ -127,6 +127,11 @@ const side = async (adresse) => {
   // Tæt på Enceladus er hele systemet gjort større (rejsen), og kameraet er få måneradier væk (252 km = 0,0252 enheder)
   const tæt = await s.evaluate(() => atomlabTest.solsystem.fænomen().tur());
   tjek('ved Enceladus: systemet er skaleret, og kameraet er tæt på', tæt.skala > 5 && tæt.afstand > 0.0252 && tæt.afstand < 0.0252 * 12, JSON.stringify(tæt));
+  // S3: Enceladus' rigtige form (Bland m.fl. 2019, ellipsoiden ca. 256,6 × 251,4 × 248,3 km), og fontænerne starter på overfladen
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().form('enceladus'), null, { timeout: 15000 }).catch(() => {});
+  const form = await s.evaluate(() => atomlabTest.solsystem.fænomen().form('enceladus'));
+  tjek('Enceladus har sin form: længst mod og væk fra Saturn, kortest mellem polerne', form && form.mod > 254 && form.væk > 254 && form.tværs > 249 && form.tværs < 254 && form.nord < 250.5 && form.syd < 250.5, JSON.stringify(form));
+  tjek('Enceladus: fontænerne starter på overfladen ved sydpolen (247-251 km fra midten)', form?.kilder && form.kilder.lav > 247 && form.kilder.høj < 251, JSON.stringify(form?.kilder));
   await s.screenshot({ path: UD + '/3-enceladus.png' });
   await s.click('#solsystemTræ button[data-sted="saturn"]');
   await hop();
