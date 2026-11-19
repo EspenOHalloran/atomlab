@@ -15,6 +15,7 @@
 - "Halveringstiden er den tid, det tager for en kerne at henfalde." Det er den tid, hvor halvdelen af mange kerner er henfaldet.
 - "Beta-plus = en positron skydes ud." Ofte fanger kernen i stedet en elektron.
 - "Første gang set …" Tjek, om det var "første gang set tydeligt" eller "første direkte måling".
+- "1992 kom de første planeter om en anden stjerne." De har været der hele tiden: skriv "blev opdaget" eller "blev fundet", når noget, der fandtes i forvejen, først ses (Gåderne, jeres fund fra telefonen 19. november 2026). Og et tal fra animationen ("galaksen har ca. 2.000 stjerner") skal siges som animationens: "Galaksen i animationen er tegnet med ca. 2.000 prikker".
 - Citater, der citeres i mange udgaver (Sagan, Einstein), har ofte en ændret ordlyd.
 - "En asteroide lavede krateret" (Jezero, M8b). Det vides ikke, hvad der ramte: skriv "nedslag". Og randen er ikke kun sten fra ét nedslag.
 - "Roveren så farerne i sine billeder" (Perseverances landing). Billederne gav kun pladsen. Farerne stod på et kort, der var tegnet på forhånd.
