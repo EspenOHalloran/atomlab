@@ -105,6 +105,15 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     JSON.stringify({ antal, første: år[0], sidste: år.at(-1), år1992 }));
 }
 
+// G4e: Livets begyndelse har ingen egen scene, men en linje pr. trin med knappen til Begyndelsen i Liv
+{
+  const g = GÅDER.find((x) => x.id === 'begyndelsen');
+  const prøv = g.scene?.prøv ?? [];
+  tjek('G4e: Livets begyndelse har én linje pr. trin (højst 28 ord, om delen Begyndelsen, ikke "kopierer sig selv"), og knappen går til delen',
+    prøv.length === g.trin.length && prøv.every((x) => x.startsWith('I Begyndelsen') && ord(x) <= 28 && sætninger(x) === 1 && !/sig selv/.test(x))
+    && g.seDet[0] === 'begyndelsen' && SKÆRME.some((d) => d.id === 'begyndelsen'), JSON.stringify(prøv));
+}
+
 // G4b: skinnen
 {
   const bang = GÅDER.find((g) => g.id === 'antistof').scene.bang;
@@ -245,7 +254,22 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const T = (f, a) => page.evaluate(f, a);
   await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
-  for (let i = 0; i < 3; i++) { await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); await page.click('#gaadeTrin .fl-næste'); }
+  // G4e: linjen og knappen nederst i billedet kommer først efter gættet, og ikke i "Det så du" (der står "Prøv det selv" i panelet)
+  const bund = () => T(() => ({ linje: document.getElementById('gaadeLinje').hidden ? '' : document.getElementById('gaadeLinje').textContent,
+    knap: document.querySelector('#gaadeSceneKnapper [data-gaa]')?.dataset.gaa ?? null, prøv: atomlabTest.gaader.scene().scene()?.prøv ?? null }));
+  await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
+  const trinene = [];
+  for (let i = 0; i < 3; i++) {
+    const før = await bund();
+    await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+    trinene.push([før, await bund()]);
+    await page.click('#gaadeTrin .fl-næste');
+  }
+  const slut = await bund();
+  const prøv = GÅDER.find((x) => x.id === 'begyndelsen').scene.prøv;
+  tjek('G4e: før gættet ingen linje og ingen knap i billedet, efter gættet trinets linje og knappen til Begyndelsen',
+    trinene.every(([før, efter], i) => !før.linje && !før.knap && efter.linje === prøv[i] && efter.prøv === prøv[i] && efter.knap === 'begyndelsen'), JSON.stringify(trinene));
+  tjek('G4e: i "Det så du" står knappen kun i panelet ("Prøv det selv"), ikke også i billedet', !slut.linje && !slut.knap, JSON.stringify(slut));
   await page.click('#gaadeTrin [data-gaa="begyndelsen"]');
   tjek('"Prøv det selv" åbner Begyndelsen', await vent(page, () => location.hash === '#begyndelsen' && atomlabTest.aktiv() === 'begyndelsen', null, 20000));
   // Liv med "Se genet blive læst" (som fra en knap data-gaa="liv:protein")
@@ -256,6 +280,11 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await vent(page, () => !document.getElementById('livGaade').hidden);
   await T(() => document.querySelector('#livGaade [data-gaa]').click());
   tjek(`knappen ved Ribosomet åbner gåden om livets begyndelse (trin ${trin})`, await vent(page, () => location.hash === '#gaader' && atomlabTest.gaader.vist()?.id === 'begyndelsen'));
+  // G4e: knappen i billedet åbner også Begyndelsen
+  await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  await page.click('#gaadeSceneKnapper [data-gaa="begyndelsen"]');
+  tjek('G4e: knappen i billedet åbner Begyndelsen i Liv', await vent(page, () => location.hash === '#begyndelsen' && atomlabTest.aktiv() === 'begyndelsen', null, 20000));
   await ctx.close();
 }
 

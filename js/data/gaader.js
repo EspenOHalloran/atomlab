@@ -354,6 +354,17 @@ export const GÅDER = [
     ],
     slut: 'Livets byggesten opstår let. Hvordan de blev til noget levende, ved ingen endnu.',
     seDet: ['begyndelsen', 'Prøv det selv: Begyndelsen i Liv'],
+    // G4e (19. november 2026): ingen egen scene (jeres svar på E10). Lyset står bag kortet, og efter gættet i hvert trin står
+    // linjen nederst i billedet med knappen til seDet (js/gaader/scene.js). Linjerne siger kun, hvad delen Begyndelsen viser
+    // (kolben, RNA'ets kopi og trappen i js/liv/begyndelsen.js), ikke "RNA'et kopierer sig selv" og ikke "bogstav for
+    // bogstav" (QT45 fik byggestykker af tre bogstaver, fakta-faelder-liv-og-videnskabsfolk.md).
+    scene: {
+      prøv: [
+        'I Begyndelsen kan du selv sende lyn ind i Millers kolbe og se vandet skifte farve.',
+        'I Begyndelsen kan du se et RNA bygge en kopi, og hvor tit det laver fejl.',
+        'I Begyndelsen kan du gå op ad trappen fra byggesten til celle og se, hvor langt forskerne er nået.',
+      ],
+    },
     // Jorden 4,54 mia. år (USGS). Dresser-formationen ca. 3,48 mia. år, "most scientists accept" (Wikipedia). Isua:
     // Nutman 2016 og Allwood 2018. 4,54 − 3,48 = 1,06. Miller: 5 aminosyrer (Lazcano og Bada 2003), DNA-modellen
     // 25. april 1953. Luften: Parker 2011. RNA-verdenen: Gilbert 1986, idéen fra 1960'erne (Fable E5). Nobel 1989 (Cech
