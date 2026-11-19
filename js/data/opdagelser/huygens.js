@@ -40,11 +40,15 @@ export const OPSLAG = [
 // sætning fra 1659 under kernesætningen.
 // Den røde tråd (18. november 2026): Sætningen fra 1659 står ikke her længere, for den er svaret på næste opslag. Den
 // vigtige vej er hemmeligheden, og Saturn står også sidst i bogen ("Om Huygens").
+// Hver vej: tekst og opslag (bladrer i bogen), fænomen ([skærm, fænomen, sted] i Kosmos eller Solsystemet) eller igen
+// (turen igen). primær er den vigtige vej (js/opdagelser.js, T2).
 export const VEJE = {
   sætning: 'Men ANNULO var kun det første ord. Hvad stod der med resten af de 62 bogstaver?',
-  anagram: 'Hele hemmeligheden',
-  bog: 'Bladr i bogen fra 1659',
-  saturn: 'Se ringen forsvinde ved Saturn',
+  veje: [
+    { tekst: 'Hele hemmeligheden', opslag: 'gaaden', primær: true },
+    { tekst: 'Bladr i bogen fra 1659', opslag: 'bogen' },
+    { tekst: 'Se ringen forsvinde ved Saturn', fænomen: ['solsystem', 'saturn', 'kanten'] },
+  ],
 };
 
 // Opslaget "Hemmeligheden" (drejebogen afsnit 4): udfordringen med de otte brikker og "Lav dit eget anagram"
