@@ -29,7 +29,10 @@ const BILLEDER = {
   højde: { navn: 'jorden-hoejde-2k.png', kanaler: 2 }, // 16 bit i rød og grøn (se lav_billeder.py)
   hav: { navn: 'jorden-hav.png', kanaler: 1 }, // hvidt = hav (til Solens glimt)
   måne: { navn: 'maanen', størrelse: true, farve: true, stor: true }, // LRO (CGI Moon Kit). stor: også 8k (se strFor)
-  måneHøjde: { navn: 'maanen-hoejde-1k.png', kanaler: 2 },
+  // Månens højder fra LOLA (lav_maanen.py): 2k på tablet og telefon og først på pc, 1k i tests. 4k kun på pc og først,
+  // når man er ved Månen (skarp() i lavMånen), så Jordens side ikke henter 6,6 MB, man måske ikke ser.
+  måneHøjde: { navn: TEST_HURTIG ? 'maanen-hoejde-1k.png' : 'maanen-hoejde-2k.webp', kanaler: 2 },
+  måneHøjdeSkarp: { navn: 'maanen-hoejde-4k.webp', kanaler: 2, rolig: true }, // i grafikkortet, når kameraet er roligt
 };
 // Størrelsen for et billede: 4k på pc og 2k på tablet og i tests. Med stor (Månen, jeres ønske 7. november 2026):
 // 8k på pc, hvis grafikkortet kan (maxTextureSize ≥ 8192, ellers 4k), og 4k på tablet og telefon.
@@ -45,7 +48,7 @@ const BILLEDDAGE = [15, 105, 196, 288];
 // Formørkelser), bliver det liggende, for det nye fænomen henter det, før det forrige frigives (G1 trin 3).
 const hentede = new Map();
 const færdige = new Set(); // filnavne, der er hentet
-function hentFil(fil, farve, kanaler) {
+function hentFil(fil, farve, kanaler, rolig = false) {
   let h = hentede.get(fil);
   if (!h) {
     h = { ejere: new Set(), glemt: false, tekstur: null };
@@ -67,7 +70,7 @@ function hentFil(fil, farve, kanaler) {
           if (h.glemt) { klar(null); return; }
           færdige.add(fil);
           klar(t);
-        }, { glemt: () => h.glemt });
+        }, { glemt: () => h.glemt, rolig });
       }, () => klar(null));
     });
   }
@@ -93,7 +96,7 @@ const iForvejen = (nøgle) => filerFor(BILLEDER[nøgle], strFor(BILLEDER[nøgle]
 // grafikkortet. Er 4k hentet før, kommer det med det samme.
 function hent(nøgle, sæt) {
   const b = BILLEDER[nøgle];
-  const samlet = (str) => Promise.all(filerFor(b, str).map((f) => hentFil(f, b.farve, b.kanaler)))
+  const samlet = (str) => Promise.all(filerFor(b, str).map((f) => hentFil(f, b.farve, b.kanaler, b.rolig)))
     .then((l) => (l.every(Boolean) ? (Array.isArray(b.navn) ? l : l[0]) : null));
   const str = strFor(b);
   if (!b.størrelse || str === '2k' || iForvejen(nøgle)) return samlet(str).then(sæt);
@@ -390,11 +393,20 @@ const MÅNE_FRAGMENT = `
   uniform mat3 rot;
   uniform vec3 jordPos;
   uniform float jordR;
+  uniform vec3 digPos;    // "Lys på hele Månen": et lys fra kameraets side
+  uniform float dig;      // 0 = Solens lys, 1 = lyset fra kameraets side (glider imellem)
   varying vec2 vUv;
   varying vec3 vObjN;
   varying vec3 vPos;
   ${SKYGGE_GLSL}
   ${RELIEF_GLSL}
+  // Lyset fra én retning S (N uden og Nr med bjergene, e: hvor skråt man ser overfladen)
+  vec3 belys(vec3 c, vec3 S, vec3 N, vec3 Nr, float e, float kant) {
+    float i = max(dot(Nr, S), 0.0);
+    float ls = 2.0 * i / (i + e + 0.05);
+    float dag = smoothstep(-kant, 2.0 * kant, dot(N, S));
+    return c * (0.08 + mix(ls, i, 0.35)) * dag;
+  }
   void main() {
     vec2 uv = vec2(vUv.x + forskydU, vUv.y);
     vec3 c = texture2D(kort, uv).rgb;
@@ -406,15 +418,15 @@ const MÅNE_FRAGMENT = `
     vec3 Nr = harHoejde > 0.5 ? normalize(rot * relief(hoejde, uv, hoejdeTexel, reliefStyrke, n0, oest, nord, cosB)) : N;
     vec3 S = normalize(solPos - vPos);
     vec3 V = normalize(cameraPosition - vPos);
-    float i = max(dot(Nr, S), 0.0);
     float e = max(dot(N, V), 0.0);
-    float ls = 2.0 * i / (i + e + 0.05);
-    float l = dot(N, S);
     float skygge = daekket(vPos, jordPos, jordR);
-    float dag = smoothstep(-0.03, 0.06, l);
-    vec3 lys = c * (0.08 + mix(ls, i, 0.35)) * dag * (1.0 - skygge);
+    float dag = smoothstep(-0.03, 0.06, dot(N, S));
+    vec3 lys = belys(c, S, N, Nr, e, 0.03) * (1.0 - skygge);
     vec3 roed = vec3(0.42, 0.11, 0.04) * dot(c, vec3(0.33)) * smoothstep(0.8, 1.0, skygge) * (0.3 + 0.7 * dag);
-    gl_FragColor = vec4((lys + roed + c * 0.015) * synlig, 1.0);
+    vec3 farve = lys + roed;
+    // Lyset fra kameraets side har en blødere skyggegrænse og ingen skygge fra Jorden
+    if (dig > 0.0) farve = mix(farve, belys(c, normalize(digPos - vPos), N, Nr, e, 0.12), dig);
+    gl_FragColor = vec4((farve + c * 0.015) * synlig, 1.0);
   }`;
 
 // Sætter kuglens drejning (rot) og retningen mod Solen i kuglens egne retninger (solObj), lige før den tegnes
@@ -555,6 +567,8 @@ export function lavMånen(radius) {
       solR: { value: 1 },
       jordPos: { value: new THREE.Vector3() },
       jordR: { value: 1 },
+      digPos: { value: new THREE.Vector3() },
+      dig: { value: 0 },
     },
     vertexShader: VERTEX,
     fragmentShader: MÅNE_FRAGMENT,
@@ -567,7 +581,16 @@ export function lavMånen(radius) {
   husk(sidste.måne, u);
   const kortKlar = tonVedKort(kugle, u, 'måne');
   hent('måne', (t) => { if (t) { u.kort.value = t; u.forskydU.value = 0.25; } kortKlar(Boolean(t)); });
-  hent('måneHøjde', (t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } });
+  let skarpt = false; // er 4k-højderne sat ind?
+  const sætHøjde = (t) => { if (t) { u.hoejde.value = t; u.hoejdeTexel.value.copy(texel(t)); u.harHoejde.value = 1; } };
+  hent('måneHøjde', (t) => { if (!skarpt) sætHøjde(t); });
+  // Skarpere højder (4k, kun pc), når man er ved Månen. Kaldes igen uden at hente igen.
+  let skarpBedt = false;
+  function skarp() {
+    if (skarpBedt || LAV_KVALITET || TEST_HURTIG) return;
+    skarpBedt = true;
+    hent('måneHøjdeSkarp', (t) => { if (t) { skarpt = true; sætHøjde(t); } });
+  }
 
   function sætLys(solPos, solR, jordPos, jordR) {
     u.solPos.value.copy(solPos);
@@ -579,7 +602,12 @@ export function lavMånen(radius) {
   function vend(jordPos) {
     gruppe.lookAt(jordPos);
   }
-  return { måne: gruppe, materiale, sætLys, vend };
+  // "Lys på hele Månen": pos er lysets plads i verden, og styrke (0-1) glider mellem Solens lys og dette lys
+  function sætDitLys(pos, styrke) {
+    u.digPos.value.copy(pos);
+    u.dig.value = styrke;
+  }
+  return { måne: gruppe, materiale, sætLys, vend, skarp, sætDitLys, højdeBredde: () => u.hoejde.value?.image?.width ?? 0 };
 }
 
 // Et punkt på Jordens overflade (samme retninger som kortet på kuglen: længde 0 peger mod +x, 90° øst mod -z)

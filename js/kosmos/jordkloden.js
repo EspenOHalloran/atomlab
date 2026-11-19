@@ -8,7 +8,7 @@
 // Hele systemet er én gruppe, som kameraets rejse (js/solsystem/rejse.js) flytter, så Månen kan stå i midten.
 
 import * as THREE from 'three';
-import { LAV_KVALITET, passerTil } from '../scene3d.js';
+import { LAV_KVALITET, ROLIG, passerTil } from '../scene3d.js';
 import { glød, skilt } from './faelles.js';
 import { lavJorden, lavMånen, overflade } from './jorden.js';
 import { lavRejse } from '../solsystem/rejse.js';
@@ -144,6 +144,9 @@ export default {
     let ved = 'jorden';
     function flyv(til) {
       ved = til;
+      if (til !== 'månen') ditLys = false; // "Lys på hele Månen" slås fra, når man forlader Månen
+      else måneKlode.skarp(); // skarpere højder (4k på pc), nu man skal se Månen tæt på
+      lavKnapper();
       if (til === 'månen') {
         const tilJorden = månePos.clone().normalize().negate();
         const retning = solRetning.clone().add(tilJorden).add(new THREE.Vector3(0, 0.35, 0)).normalize();
@@ -158,10 +161,20 @@ export default {
     // ---------- Knapperne og teksten ----------
     let drejer = false; // ⏩ på tidsknappen: tiden går ca. 820 gange hurtigere
     const styring = [];
+    // "Lys på hele Månen" (kun ved Månen): lyset kommer fra kameraets side, så man kan se den side, man kigger på,
+    // også bagsiden, når den er i mørke. Det glider over på ca. 0,4 s (dit: 0-1).
+    let ditLys = false, dit = 0;
+    function lavKnapper() {
+      styring.length = 0;
+      if (ved === 'månen') styring.push({ tekst: 'Lys på hele Månen', til: ditLys, skift: (til) => { ditLys = til; vis(); } });
+      opdaterKnapper();
+    }
     // "Lige nu" i panelet: hvor hurtigt tiden går (ved Månen står Månens egen side)
     function vis() {
       if (ved === 'månen') {
-        forklaring('');
+        forklaring(ditLys
+          ? '<p><b>Lige nu:</b> Lyset kommer fra dig, så du kan se hele Månen. I virkeligheden er den halvdel, der vender væk fra Solen, altid i mørke.</p>'
+          : '');
         return;
       }
       forklaring(drejer
@@ -169,7 +182,7 @@ export default {
         : '<p><b>Lige nu:</b> Den lyse side har dag, og den mørke side har nat. Om natten kan du se lyset fra byerne. Uret nederst viser tiden i Danmark.</p>');
     }
     vis();
-    opdaterKnapper();
+    lavKnapper();
 
     // Uret nederst i 3D-billedet (skrives kun om, når teksten ændrer sig)
     const ur = document.createElement('div');
@@ -195,7 +208,8 @@ export default {
     const solPos = new THREE.Vector3();
     const månePosV = new THREE.Vector3();
     const jordPosV = new THREE.Vector3();
-    function hvertBillede() {
+    const kamOp = new THREE.Vector3(), kamHøjre = new THREE.Vector3(), ditPos = new THREE.Vector3();
+    function hvertBillede(dt) {
       for (const s of [solKerne, solGlød]) s.position.copy(kamera.position).addScaledVector(solRetning, 600);
       // Solen står i den rigtige afstand (ca. 150 mio. km), så skyggerne har den rigtige størrelse
       solPos.copy(solRetning).multiplyScalar(solen(d).afstand / S);
@@ -205,6 +219,15 @@ export default {
       jorden.sætLys(solPos, SOL_R / S, månePosV, mR);
       måneKlode.sætLys(solPos, SOL_R / S, jordPosV, jR);
       måneKlode.vend(jordPosV);
+      // "Lys på hele Månen": lyset kommer fra kameraet, ca. 27° skråt oppefra til venstre, så kratrene stadig har skygger
+      dit = ROLIG ? Number(ditLys) : THREE.MathUtils.clamp(dit + (ditLys ? 1 : -1) * dt / 0.4, 0, 1);
+      if (dit > 0) {
+        kamHøjre.setFromMatrixColumn(kamera.matrixWorld, 0);
+        kamOp.setFromMatrixColumn(kamera.matrixWorld, 1);
+        ditPos.copy(kamera.position).sub(månePosV).normalize().addScaledVector(kamOp, 0.45).addScaledVector(kamHøjre, -0.25)
+          .normalize().multiplyScalar(1e4).add(månePosV);
+      }
+      måneKlode.sætDitLys(ditPos, THREE.MathUtils.smoothstep(dit, 0, 1));
       // Navnet ses kun, når Månen er lille på skærmen. Banen forsvinder tæt på Månen (den skærer gennem den).
       const afstand = månePosV.distanceTo(kamera.position);
       måneNavn.visible = mR / afstand < 0.03;
@@ -215,7 +238,7 @@ export default {
     }
     function hvertBilledeMedRejse(dt) {
       rejse.opdater(dt);
-      hvertBillede();
+      hvertBillede(dt);
     }
     verden.opdateringer.add(hvertBilledeMedRejse);
 
@@ -250,6 +273,7 @@ export default {
         tid: () => nu,
         sætTid(ms) { nu = ms; stil(); skrivUr(); },
         ved: () => ved,
+        ditLys: () => ({ til: ditLys, styrke: dit, højde: måneKlode.højdeBredde() }),
         flyver: () => rejse.flyver,
         hop: () => rejse.hop(),
         ur: () => [linje1.textContent, linje2.textContent],
