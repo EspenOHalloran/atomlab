@@ -4,8 +4,7 @@
 // "Næste skridt", foldeboksene uden rullebjælke, ingen konsolfejl, og tablet og telefon begge veje.
 // M2b: ladningerne (δ+ og δ−), "Polært", kortet, kontakten "Pile", de seks opgaver med ★, Molekylers kort i menuen
 // og "Opgaver forfra" i Molekylers hjælp.
-// M3: knaldgassen (knappen, ingenting uden gnist, gnisten, kæden, måleren, energien, tidsknappen, opgaverne, "Tilbage til
-// byggeriet" og panelerne uden rullebjælke på pc og tablet).
+// M3: knaldgassen er flyttet til Ild (19. november 2026): her kun, at knappen er et link (resten i ild-knaldgas).
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 const UD = billedmappe('byg-molekyler');
 const URL = `${ADRESSE}/index.html?test#molekyler`;
@@ -305,7 +304,7 @@ await page.waitForTimeout(800);
 await page.click('.menu-fremgang-knap');
 const kortM = await page.textContent('#fremgangListe [data-del="molekyler"] .fremgang-tal');
 const løstM = Number(tællerM.split('/')[0]);
-tjek(`"Din fremgang" i menuen tæller "Del elektroner" med i Molekyler (${kortM.trim()} / ${tællerM})`, løstM >= 5 && kortM.includes(`${løstM} af 13 opgaver`));
+tjek(`"Din fremgang" i menuen tæller "Del elektroner" med i Molekyler (${kortM.trim()} / ${tællerM})`, løstM >= 5 && kortM.includes(`${løstM} af 11 opgaver`));
 await page.keyboard.press('Escape');
 await page.evaluate(() => { location.hash = '#molekyler'; });
 await page.waitForTimeout(600);
@@ -333,60 +332,8 @@ await page.evaluate(() => { location.hash = '#molekyler'; });
 await page.waitForTimeout(500);
 tjek('tilbage i Molekyler: stadig "Del elektroner" med atomet', await måde() === 'byg' && (await G(page, 'atomer')).length === 1);
 
-// ---------- M3: knaldgas ----------
-const KG = (f, ...a) => page.evaluate(([f, a]) => window.atomlabTest.molekyler.byg.knaldgas[f](...a), [f, a]);
-const synlig = (...sel) => Promise.all(sel.map((x) => page.isVisible(x))).then((l) => l.every(Boolean));
-await page.click('#bygKnaldgas');
-await page.waitForTimeout(300);
-tjek('"Knaldgas" viser boksen, måleren og knaldgassens paneler i stedet for byggeriet', await KG('aktiv') && await synlig('#knaldPanel', '#knaldInfo', '#knaldMåler', '#knaldTid', '#knaldMission')
-  && !(await page.isVisible('#bygPalet')) && !(await page.isVisible('#bygInfo')) && !(await page.isVisible('#bygMission')));
-await KG('forfra', 11);
-let k = await KG('boks');
-tjek('boksen: 4 H₂ og 2 O₂ (8 H og 4 O), måleren står på 0', k.tæl.H2 === 4 && k.tæl.O2 === 2 && k.atomer.H === 8 && k.atomer.O === 4 && k.brudt === 0 && (await page.textContent('#knaldForskel')) === '0,0 eV');
-await KG('spol', 12);
-k = await KG('boks');
-tjek(`uden gnist: ${k.stød} stød, ingen reaktioner, stadig 4 H₂ og 2 O₂, energien bevaret`, k.stød >= 20 && k.reaktioner === 0 && k.tæl.H2 === 4 && k.tæl.O2 === 2 && Math.abs(k.energi - k.forventet) < 1e-9);
-tjek('opgaven "Intet sker uden gnist" er klaret (★), og panelet siger det', await løst('byg-uden-gnist') && (await stjerne('byg-uden-gnist')) === '★'
-  && (await page.textContent('#knaldTitel')).includes('ingenting') && await page.isVisible('#knaldMission .mission-vis'));
-await page.click('[data-hvorfor="knaldBakke"]');
-tjek('"Hvorfor sker der ingenting?" åbner et kort om bakken', ((await page.evaluate(() => atomlabTest.hvorfor.vist())) ?? '').includes('gnist'));
-await page.keyboard.press('Escape');
-await page.click('#knaldTid [data-tid="pause"]'); // (ellers når H-atomerne at reagere, før testen ser dem)
-await page.click('#knaldMission .mission-vis'); // "Vis mig" giver gnisten
-k = await KG('boks');
-tjek('"Vis mig" giver en gnist: to frie H, og knappen "Gnist" er slået fra', k.tændt && k.tæl.H === 2 && k.tæl.H2 === 3 && await page.isDisabled('#knaldGnist'));
-const tPause = await KG('tid');
-const rPause = (await KG('boks')).reaktioner;
-await KG('spol', 1);
-tjek('tidsknappen: under pause står kæden stille', (await KG('tid')) === tPause && (await KG('boks')).reaktioner === rPause);
-await page.click('#knaldTid [data-tid="spil"]');
-await KG('spol', 40);
-await page.waitForTimeout(400);
-k = await KG('boks');
-tjek(`kæden ender med 4 H₂O og intet tilbage (${k.reaktioner} reaktioner)`, k.færdig && k.tæl.H2O === 4 && k.tæl.H2 + k.tæl.O2 + k.tæl.H + k.tæl.O + k.tæl.OH === 0 && k.radikaler === 0);
-tjek(`måleren: brudt ${k.brudt.toFixed(1)}, dannet ${k.dannet.toFixed(1)}, forskel +10,0 eV`, nær(k.forskel, 10.024, 1e-3) && (await page.textContent('#knaldForskel')) === '+10,0 eV'
-  && (await page.textContent('#knaldBrudt')) === k.brudt.toFixed(1).replace('.', ','));
-tjek(`energien er bevaret (fart + bindinger + gnist, afvigelse ${Math.abs(k.energi - k.forventet).toExponential(1)} eV)`, Math.abs(k.energi - k.forventet) < 1e-9);
-tjek(`varmen: molekylerne har ${Math.round(k.varme)} gange så meget fart-energi som ved stuetemperatur`, k.varme > 50);
-tjek('opgaven "Tænd knaldgassen" er klaret, tælleren viser 2/2', await løst('byg-knaldgas') && (await page.textContent('#knaldOpgaveTæller')) === '2/2');
-// M4: "Hvor kom Jordens vand fra?" kommer i stedet for "Hvorfor sker der ingenting?", når alt er vand
-tjek('M4: knappen "Hvor kom Jordens vand fra?" vises, når alt er vand', await page.isVisible('#knaldJordensVand') && !(await page.isVisible('#knaldInfo [data-hvorfor="knaldBakke"]')));
-await page.click('#knaldJordensVand');
-tjek('M4: kortet om Jordens vand har et link til Kosmos', ((await page.evaluate(() => atomlabTest.hvorfor.vist())) ?? '').includes('Jordens vand')
-  && (await page.textContent('#hvorforKort .hk-link')).includes('Kosmos') && await page.isVisible('#hvorforKort .hk-link'));
-await page.keyboard.press('Escape');
-await ingenRul(page, 'pc, knaldgassen', ['knaldInfo', 'knaldPanel'], ['knald-nørd', 'knald-ærligt']);
-await page.screenshot({ path: UD + '/4-knaldgas.png' });
-await page.click('#knaldTilbage');
-await page.waitForTimeout(300);
-tjek('"Tilbage til byggeriet" viser paletten igen med det, man havde bygget', !(await KG('aktiv')) && await page.isVisible('#bygPalet') && !(await page.isVisible('#knaldPanel')) && (await G(page, 'atomer')).length === 1);
-// M4: linket i kortet åbner "Ny stjerne" i Kosmos
-await G(page, 'åbnKnaldgas');
-await page.waitForTimeout(300);
-await page.click('#knaldJordensVand');
-await page.click('#hvorforKort .hk-link');
-await page.waitForFunction(() => location.hash === '#kosmos' && window.atomlabTest?.kosmos?.valgt() === 'stjernefoedsel', null, { timeout: 15000 }).catch(() => {});
-tjek('M4: linket åbner "Ny stjerne" i Kosmos, og knaldgassen er stoppet', await page.evaluate(() => location.hash === '#kosmos' && atomlabTest.kosmos?.valgt() === 'stjernefoedsel') && !(await KG('aktiv')));
+// ---------- M3: knaldgassen er flyttet til Ild (19. november 2026, testen ild-knaldgas) ----------
+tjek('"Knaldgas i Ild ›" er et link til Ild (knaldgassen er flyttet dertil)', (await page.getAttribute('#bygKnaldgas', 'data-gaa')) === 'ild:knaldgas' && !(await page.$('#molekyler #knaldPanel')));
 await ctx.close();
 
 // Tablet og telefon: fanerne, 3D-billedet øverst, paletten lige under, et træk med fingeren og ingen rullebjælke
@@ -422,15 +369,6 @@ for (const [navn, vp] of [['tablet-højkant', { width: 820, height: 1180 }], ['t
   await p.waitForFunction(() => atomlabTest.molekyler.byg.kameraStille(), null, { timeout: 15000 }).catch(() => {});
   await p.waitForTimeout(600);
   await p.screenshot({ path: `${UD}/3-${navn}.png` });
-  // Knaldgassen: måleren og knapperne kan ses, og panelerne har ingen rullebjælke på tablet på langs
-  await G(p, 'åbnKnaldgas');
-  await p.evaluate(() => { const k = atomlabTest.molekyler.byg.knaldgas; k.forfra(4); k.gnist(); k.spol(30); });
-  await p.waitForTimeout(500);
-  const mR = await p.evaluate(() => document.getElementById('knaldMåler').getBoundingClientRect().toJSON());
-  tjek(`${navn}: knaldgassen er færdig, og måleren er inde på skærmen`, await p.evaluate(() => atomlabTest.molekyler.byg.knaldgas.boks().færdig) && mR.width > 150 && mR.right <= vp.width + 1 && await p.isVisible('#knaldGnist'));
-  if (vp.width > vp.height && vp.height > 500) await ingenRul(p, `${navn}, knaldgassen`, ['knaldInfo', 'knaldPanel'], ['knald-nørd', 'knald-ærligt']);
-  await p.screenshot({ path: `${UD}/4-knald-${navn}.png` });
-  await G(p, 'tilbage');
   await c2.close();
 }
 

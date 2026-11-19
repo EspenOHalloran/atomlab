@@ -4,19 +4,18 @@
 // js/data/molekyler-byg.js (uden Three.js). Tegningen er MolekyleTegning i js/molekyle3d.js.
 // M2b: ladningerne (parret ligger tættest på det atom, der trækker hårdest, og enderne får δ+ og δ−), pilene (kontakten
 // "Pile"), kortet om hvert kendt molekyle og de seks opgaver med ★ (tæller på Molekylers kort i menuen).
-// M3: knappen "Knaldgas" viser boksen med 4 H₂ og 2 O₂ i stedet for byggeriet (js/knaldgas.js). Det byggede bliver.
+// M3: knaldgassen (js/knaldgas.js) er flyttet til Ild (19. november 2026). Knappen "Knaldgas i Ild ›" er et link (data-gaa).
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTil, passerTilBoks, stopKamera, begrænsDrejning, ROLIG } from './scene3d.js';
 import { MolekyleTegning, KERNE_R } from './molekyle3d.js';
 import * as D from './data/molekyler-byg.js';
 import { lyd } from './lyd.js';
-import { visBesked, bundIVindue, rydBeskeder } from './beskeder.js';
+import { visBesked, bundIVindue } from './beskeder.js';
 import { lavTidsknap } from './pause.js';
-import { lavNæsteSkridt, lavNæsteSkridtKort, lukHvorfor } from './lag.js';
+import { lavNæsteSkridt, lavNæsteSkridtKort } from './lag.js';
 import { lavKontakt } from './kontakt.js';
 import * as fremgang from './fremgang.js';
-import { lavKnaldgas, startKnaldgas, stopKnaldgas, knaldgasAktiv, testAdgang as knaldTest } from './knaldgas.js';
 
 const S = 3; // enheder i 3D pr. ångstrøm (Å). Bindingslængderne er i det rigtige forhold.
 // Forløbet "Når atomer mødes": ubundne atomer skubbes kun ud til 2 Å (ellers 3,2), og kameraet har kun en lille kant om
@@ -101,24 +100,6 @@ export function lavBygMolekyler() {
   lavPanel();
   lavTræk();
   ryd();
-  lavKnaldgas({ tilbage: () => slutKnaldgas(), stjerner: () => opdaterStjerner() });
-}
-
-// Knaldgas (M3): byggeriet står stille imens, og "Tilbage til byggeriet" viser det igen, som det var (også forløbets vej 2)
-export function åbnKnaldgas() {
-  if (!aktiv) return;
-  stopBygMolekyler();
-  rydBeskeder();
-  lukHvorfor();
-  startKnaldgas();
-}
-
-function slutKnaldgas() {
-  if (!knaldgasAktiv()) return;
-  stopKnaldgas();
-  rydBeskeder();
-  lukHvorfor();
-  startBygMolekyler();
 }
 
 function lavPanel() {
@@ -164,10 +145,6 @@ function lavPanel() {
     lyd.klik();
     ryd();
   });
-  $('bygKnaldgas').addEventListener('click', () => {
-    lyd.klik();
-    åbnKnaldgas();
-  });
   // Pilene: hvilken vej hver binding trækker i elektronerne, og summen for hele molekylet
   pileKontakt = lavKontakt($('bygPile'));
   pileKontakt.knap.addEventListener('click', () => {
@@ -195,7 +172,7 @@ function lavPanel() {
 }
 
 // ---------- Opgaverne ----------
-// (også knaldgassens to i dens eget panel, js/knaldgas.js). Hvert panel tæller sine egne.
+// (knaldgassens to står i Ild, js/knaldgas.js tæller dem)
 function opdaterStjerner() {
   for (const b of document.querySelectorAll('.byg-opgave')) {
     const o = D.OPGAVER_BYG.find((x) => x.id === b.dataset.bygOpgave);
@@ -206,14 +183,12 @@ function opdaterStjerner() {
   }
   const tæl = (liste) => `${liste.filter((o) => fremgang.erLøst(o.id)).length}/${liste.length}`;
   $('bygOpgaveTæller').textContent = tæl(D.OPGAVER_BYG.filter((o) => !o.knaldgas));
-  $('knaldOpgaveTæller').textContent = tæl(D.OPGAVER_BYG.filter((o) => o.knaldgas));
 }
 
 // Viser opgaven og dens tip (fra knapperne her)
 export function visOpgave(id) {
   const o = D.OPGAVER_BYG.find((x) => x.id === id);
   if (!o) return;
-  if (o.knaldgas && !knaldgasAktiv()) åbnKnaldgas();
   const løst = fremgang.erLøst(o.id);
   visBesked({ titel: `${løst ? '★ ' : ''}${o.titel.replace('Del elektroner: ', '')}`, tekst: løst ? o.fakta : `Tip: ${o.tip}`, type: 'info', varighed: 9000 });
 }
@@ -854,7 +829,7 @@ function næsteForKendt(k) {
   if (k.id === 'metan' && !fremgang.erLøst('byg-metan')) return 'Drej metan med fingeren eller musen (træk et tomt sted), til du kan se tetraederen.';
   if (k.id === 'vand' && !pileKontakt.til) return 'Færdigt! Drej vand, så du kan se, at det er bøjet. Slå "Pile" til for at se, hvilken vej bindingerne trækker.';
   // M3 og M4: vand fører videre til knaldgassen (og kortet om Jordens vand, når alt er blevet til vand dér)
-  if (k.id === 'vand' && !fremgang.erLøst('byg-knaldgas')) return 'Færdigt! Vil du se vand blive til af hydrogen og oxygen? Tryk "Knaldgas".';
+  if (k.id === 'vand' && !fremgang.erLøst('byg-knaldgas')) return 'Færdigt! Vil du se vand blive til af hydrogen og oxygen? Tryk "Knaldgas i Ild".';
   const mangler = D.OPGAVER_BYG.find((o) => !fremgang.erLøst(o.id));
   return mangler ? `Færdigt! Næste opgave: ${mangler.kort}. ${mangler.tip}` : 'Færdigt! Drej molekylet med fingeren eller musen, så du kan se formen. Prøv så et nyt.';
 }
@@ -926,7 +901,6 @@ export function startBygMolekyler() {
 }
 
 export function stopBygMolekyler() {
-  stopKnaldgas();
   if (drej) slutDrej();
   aktiv = false;
   rod.visible = false;
@@ -1112,10 +1086,6 @@ export function testAdgang() {
     },
     // Spol frem i små skridt (som på en skærm med 60 billeder i sekundet)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) opdater(1 / 60); },
-    // M3: knaldgassen (atomlabTest.molekyler.byg.knaldgas)
-    åbnKnaldgas: () => åbnKnaldgas(),
-    tilbage: () => slutKnaldgas(),
-    knaldgas: knaldTest(),
     drejer: () => Boolean(drej),
     // Forløbet: vandets plan i forhold til skærmen (|cos| mellem planets normal og retningen mod kameraet, 1 = forfra)
     vandForfra: () => {

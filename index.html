@@ -344,7 +344,7 @@
       <div class="knap-række">
         <button class="knap svag" id="bygForfra">Forfra</button>
         <button id="bygPile" title="Pile viser, hvilken vej bindingerne trækker i elektronerne">Pile</button>
-        <button class="knap" id="bygKnaldgas" title="Se vand blive til: 4 H₂ og 2 O₂ i en lukket boks">Knaldgas</button>
+        <button class="knap svag" id="bygKnaldgas" data-gaa="ild:knaldgas" title="Knaldgassen bor nu i Ild: 4 H₂ og 2 O₂ i en lukket boks">Knaldgas i Ild ›</button>
       </div>
       <h4 class="panel-overskrift">Opgaver <span class="byg-opgavetæller" id="bygOpgaveTæller"></span></h4>
       <div class="byg-opgaver" id="bygOpgaver" role="group" aria-label="Opgaver (★ = klaret)"></div>
@@ -375,43 +375,6 @@
       </details>
     </aside>
 
-    <!-- Del elektroner → Knaldgas (Molekyler M3, js/knaldgas.js). Vises i stedet for paletten og panelet til højre. -->
-    <aside class="panel side-panel venstre-panel knald-panel" id="knaldPanel">
-      <div class="del-vælger måde-vælger" role="group" aria-label="Hvordan atomerne binder">
-        <button class="del-knap" data-molekyle-maade="byg">Del elektroner</button>
-        <button class="del-knap" data-molekyle-maade="bytte">Giv elektroner</button>
-      </div>
-      <h4 class="panel-overskrift">Knaldgas</h4>
-      <p class="klik-tip">4 H₂ og 2 O₂ i en lukket boks. Se dem støde ind i hinanden, og tænd så blandingen med en gnist. Træk i billedet for at dreje.</p>
-      <div class="knap-række">
-        <button class="knap" id="knaldGnist">⚡ Gnist</button>
-        <button class="knap svag" id="knaldForfra">Forfra</button>
-      </div>
-      <button class="knap svag" id="knaldTilbage">‹ Tilbage til byggeriet</button>
-      <h4 class="panel-overskrift">Opgaver <span class="byg-opgavetæller" id="knaldOpgaveTæller"></span></h4>
-      <div class="byg-opgaver" id="knaldOpgaver" role="group" aria-label="Opgaver (★ = klaret)"></div>
-      <p class="klik-tip byg-forklaring"><span class="bf-prik"></span>En prik, der blinker, er en elektron uden partner. Atomer og molekyler med sådan en hedder radikaler. Hvert lysglimt er en reaktion.</p>
-    </aside>
-    <aside class="panel side-panel højre-panel knald-panel" id="knaldInfo">
-      <div class="forklaring-boks byg-trin">
-        <strong id="knaldTitel"></strong>
-        <p id="knaldTekst"></p>
-      </div>
-      <dl class="tal lille byg-tal" id="knaldTal"></dl>
-      <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="knaldBakke">Hvorfor sker der ingenting?</button> <button class="hvorfor" data-hvorfor="bygJordensVand" id="knaldJordensVand" hidden>Hvor kom Jordens vand fra?</button> <button class="hvorfor" data-hvorfor="knaldKæde">Hvorfor en kæde?</button> <button class="hvorfor" data-hvorfor="knaldVarme">Hvor kommer varmen fra?</button></p>
-      <details class="forklaring-boks lag-boks lag-mere" data-lag="knald-nørd" name="knald-lag">
-        <summary><strong>Vil du vide mere?</strong></summary>
-        <p>Bindingerne (fra NIST): H–H 4,52 eV, O=O 5,17 eV, O–H i OH 4,44 eV, og når OH bliver til vand, 5,17 eV. Kemikere skriver det som 436, 498, 428 og 499 kJ pr. mol. De to O–H-bindinger i vand er altså ikke lige stærke. Tabeller bruger gennemsnittet, ca. 464 kJ pr. mol.</p>
-        <p>Kæden kan gå forskellige veje, så "brudt" og "dannet" kan blive større, men forskellen ender altid på 10,0 eV for 4 H₂O (Hess' lov).</p>
-      </details>
-      <details class="forklaring-boks lag-boks ærligt" data-lag="knald-ærligt" name="knald-lag">
-        <summary><strong>Ærligt talt</strong><span class="lag-kort">Det, boksen snyder med.</span></summary>
-        <p>Den rigtige reaktion går gennem ca. 20 mellemtrin. Spillet viser en forenklet kæde.</p>
-        <p>Al varmen bliver til fart. I virkeligheden går meget af den til, at molekylerne drejer og vibrerer, og til beholderen.</p>
-        <p>Når to bliver til én (H + OH → H₂O), skal et tredje molekyle tage energien. Her ryster det nye molekyle i stedet, til det støder ind i noget.</p>
-        <p>Med kun 6 molekyler fylder gnisten meget. I en rigtig beholder er der milliarder af milliarder, så gnisten er bitte lille i forhold til det, der kommer ud. Og her går kæden aldrig i stå, før alt er vand.</p>
-      </details>
-    </aside>
 
     <!-- "Giv elektroner" (det, der hed Byttebørsen, Molekyler M1, js/molekyler.js) -->
     <aside class="panel side-panel venstre-panel bytte-panel" id="byttePanel">
@@ -457,7 +420,7 @@
       <div class="hjælp-indhold">
         <p><button class="knap lille" id="hjælpMolekylerForløb">Tag turen "Når atomer mødes" ›</button></p>
         <p>Atomer kan hænge sammen på to måder. Du vælger øverst i panelet til venstre.</p>
-        <p><strong>Del elektroner:</strong> Træk atomer fra paletten ind i billedet, og slip et atom tæt på et andet. Har begge en elektron uden partner, deler de et elektronpar, og det holder dem sammen. Knappen <em>Knaldgas</em> viser hydrogen og oxygen blive til vand.</p>
+        <p><strong>Del elektroner:</strong> Træk atomer fra paletten ind i billedet, og slip et atom tæt på et andet. Har begge en elektron uden partner, deler de et elektronpar, og det holder dem sammen. Knappen <em>Knaldgas i Ild</em> åbner knaldgassen i Ild, hvor hydrogen og oxygen bliver til vand.</p>
         <p><strong>Giv elektroner:</strong> Træk den lysende elektron fra metallet over til det andet atom. Så bliver de til ioner, og plus og minus trækker i hinanden. Til sidst kan du bygge en krystal.</p>
         <p><strong>Ordforklaringer:</strong> Fagord med prikker under kan du trykke på (eller holde musen over) for at få en kort forklaring. Alle fagordene står også i <a href="#ordbog">Ordbogen</a>.</p>
         <p><strong>Styring:</strong> Træk et tomt sted for at dreje billedet. Rul eller knib for at zoome.</p>
@@ -928,7 +891,7 @@
         <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
       </div>
     </header>
-    <aside class="panel side-panel venstre-panel">
+    <aside class="panel side-panel venstre-panel ild-panel">
       <div class="ild-styr" id="ild-bord">
         <div class="ild-gruppe">
           <h4 class="panel-overskrift">Flamme</h4>
@@ -973,11 +936,12 @@
         <h4 class="panel-overskrift">Se atomerne</h4>
         <p class="liv-byg-tekst" id="ildAtomTekst"></p>
         <button class="knap primær" id="ildAtomIgen" hidden>Igen</button>
+        <button class="knap lille svag" id="ildKnaldgas">Hydrogen: knaldgassen ›</button>
         <button class="knap lille svag" id="ildTilbage">‹ Tilbage til bordet</button>
       </div>
     </aside>
     <div class="vindue" id="ildVindue" data-log></div>
-    <aside class="panel side-panel højre-panel">
+    <aside class="panel side-panel højre-panel ild-panel">
       <h3 class="liv-titel" id="ildTitel"></h3>
       <p class="liv-tekst" id="ildTekst"></p>
       <dl class="liv-tal" id="ildTal"></dl>
@@ -997,6 +961,39 @@
         <p>CO₂ kan ikke ses: Skyen er tegnet, så man kan se, hvor gassen er. Hvor længe lyset brænder under glasset, afhænger af, hvor stort glasset er. Rumstationen var Mir, og flammen er en halvkugle, fordi lyset selv er i vejen.</p>
       </details>
     </aside>
+    <!-- Knaldgassen (Molekyler M3, flyttet til Ild 19. november 2026, js/knaldgas.js). Vises i stedet for bordets paneler. -->
+    <aside class="panel side-panel venstre-panel knald-panel" id="knaldPanel">
+      <h4 class="panel-overskrift">Knaldgas</h4>
+      <p class="klik-tip">4 H₂ og 2 O₂ i en lukket boks. Se dem støde ind i hinanden, og tænd så blandingen med en gnist. Træk i billedet for at dreje.</p>
+      <div class="knap-række">
+        <button class="knap" id="knaldGnist">⚡ Gnist</button>
+        <button class="knap svag" id="knaldForfra">Forfra</button>
+      </div>
+      <button class="knap svag" id="knaldTilbage">‹ Tilbage til bordet</button>
+      <h4 class="panel-overskrift">Opgaver <span class="byg-opgavetæller" id="knaldOpgaveTæller"></span></h4>
+      <div class="byg-opgaver" id="knaldOpgaver" role="group" aria-label="Opgaver (★ = klaret)"></div>
+      <p class="klik-tip byg-forklaring"><span class="bf-prik"></span>En prik, der blinker, er en elektron uden partner. Atomer og molekyler med sådan en hedder radikaler. Hvert lysglimt er en reaktion.</p>
+    </aside>
+    <aside class="panel side-panel højre-panel knald-panel" id="knaldInfo">
+      <div class="forklaring-boks byg-trin">
+        <strong id="knaldTitel"></strong>
+        <p id="knaldTekst"></p>
+      </div>
+      <dl class="tal lille byg-tal" id="knaldTal"></dl>
+      <p class="hvorfor-række"><button class="hvorfor" data-hvorfor="knaldBakke">Hvorfor sker der ingenting?</button> <button class="hvorfor" data-hvorfor="bygJordensVand" id="knaldJordensVand" hidden>Hvor kom Jordens vand fra?</button> <button class="hvorfor" data-hvorfor="knaldKæde">Hvorfor en kæde?</button> <button class="hvorfor" data-hvorfor="knaldVarme">Hvor kommer varmen fra?</button></p>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="knald-nørd" name="knald-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
+        <p>Bindingerne (fra NIST): H–H 4,52 eV, O=O 5,17 eV, O–H i OH 4,44 eV, og når OH bliver til vand, 5,17 eV. Kemikere skriver det som 436, 498, 428 og 499 kJ pr. mol. De to O–H-bindinger i vand er altså ikke lige stærke. Tabeller bruger gennemsnittet, ca. 464 kJ pr. mol.</p>
+        <p>Kæden kan gå forskellige veje, så "brudt" og "dannet" kan blive større, men forskellen ender altid på 10,0 eV for 4 H₂O (Hess' lov).</p>
+      </details>
+      <details class="forklaring-boks lag-boks ærligt" data-lag="knald-ærligt" name="knald-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Det, boksen snyder med.</span></summary>
+        <p>Den rigtige reaktion går gennem ca. 20 mellemtrin. Spillet viser en forenklet kæde.</p>
+        <p>Al varmen bliver til fart. I virkeligheden går meget af den til, at molekylerne drejer og vibrerer, og til beholderen.</p>
+        <p>Når to bliver til én (H + OH → H₂O), skal et tredje molekyle tage energien. Her ryster det nye molekyle i stedet, til det støder ind i noget.</p>
+        <p>Med kun 6 molekyler fylder gnisten meget. I en rigtig beholder er der milliarder af milliarder, så gnisten er bitte lille i forhold til det, der kommer ud. Og her går kæden aldrig i stå, før alt er vand.</p>
+      </details>
+    </aside>
   </section>
 
   <div class="overlag skjult" id="hjælpIld" role="dialog" aria-label="Hjælp til Ild">
@@ -1006,6 +1003,7 @@
         <p><strong>Ilden her er tegnet. Rigtig ild er kun noget, du prøver sammen med en voksen.</strong></p>
         <p><strong>Turen "Hvad brænder egentlig?"</strong> viser i fire korte trin, hvad det er, der brænder i et stearinlys. <button class="knap lille" id="ildHjælpTur">Tag turen ›</button></p>
         <p><strong>Værktøjet:</strong> Tryk <em>Tændstik</em> eller <em>Ske</em>, og træk den rundt i billedet med fingeren eller musen. Et tryk på knappen igen lægger den væk. <em>Lup</em> viser atomerne i flammens kant: Træk oxygenmolekylerne hen til stykket af stearinen.</p>
+        <p><strong>Knaldgassen:</strong> Tryk <em>Lup</em> og så <em>Hydrogen: knaldgassen</em>. Giv blandingen en gnist, og se kæden. <em>‹ Tilbage til bordet</em> fører dig tilbage.</p>
         <p><strong>Sluk med:</strong> Pust, sæt et glas over, brug en lysslukker eller CO₂. <em>Tænd lyset</em> tænder det igen med en tændstik. Med gasbrænderen styrer du luften i gassen og slukker med kontakten <em>Gas</em>.</p>
         <p><strong>Tiden:</strong> ⏸ stopper flammen, så du kan se den stå stille (mellemrum gør det samme). Træk uden værktøj for at dreje lidt, og rul eller knib for at zoome.</p>
         <p><strong>Med et rigtigt stearinlys</strong> kan du prøve røgen og skeen sammen med en voksen. Stil lyset på et underlag, der ikke kan brænde, og hold skeen med en grydelap, for den bliver varm.</p>

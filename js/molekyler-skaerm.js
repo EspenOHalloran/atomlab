@@ -5,7 +5,7 @@
 // docs/drejebog-molekyler.md): trin 1-2 i "Del elektroner" og trin 3-4 i "Giv elektroner".
 
 import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, forløbGiv, opdaterFremgang as opdaterGiv, testAdgang as bytteTest } from './molekyler.js';
-import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, forløbByg, åbnKnaldgas, opdaterFremgang as opdaterDel, testAdgang as bygTest } from './molekyler-byg.js';
+import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, forløbByg, opdaterFremgang as opdaterDel, testAdgang as bygTest } from './molekyler-byg.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js';
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
 import * as fremgang from './fremgang.js';
@@ -50,7 +50,7 @@ export function lav() {
   });
   // Starter kun Molekylers opgaver forfra (Værkstedet og de andre dele har deres egen knap)
   toTrinsKnap($('molekylerOpgaverForfra'), () => {
-    fremgang.nulstilDel([...OPGAVER_BYG, ...OPGAVER_BYTTE].map((o) => o.id));
+    fremgang.nulstilDel([...OPGAVER_BYG.filter((o) => !o.knaldgas), ...OPGAVER_BYTTE].map((o) => o.id)); // knaldgassens to bor i Ild
     opdaterFremgang();
     $('hjælpMolekyler').classList.add('skjult');
     visBesked({ titel: 'Molekyler starter forfra', tekst: 'Stjernerne her er nulstillet. God fornøjelse!' });
@@ -237,7 +237,8 @@ const MØDES_DEL = {
   veje: [
     // Laboratoriet: paletten og panelerne åbner (det byggede vand står der stadig)
     { tekst: 'Byg selv', primær: true, her: true, gør: () => efterForløb(() => sætMåde('byg')) },
-    { tekst: 'Se vand blive til af en gnist', gør: () => efterForløb(() => { sætMåde('byg'); åbnKnaldgas(); }) },
+    // Knaldgassen bor i Ild fra 19. november 2026 (js/gaa.js åbner data-gaa="ild:knaldgas")
+    { tekst: 'Se vand blive til af en gnist', gør: () => gåTil('ild:knaldgas') },
     // Laboratoriets omvendte rækkefølge bliver forsøget, der svarer: Flyt elektronen langt ude, og se, at det koster
     {
       // "Prøv selv:": Et spørgsmål uden et kort er et forsøg (stilguiden A5, E20)
@@ -261,6 +262,16 @@ const MØDES_DEL = {
   },
 };
 let vandDrejet = false;
+
+// Åbner en knap med data-gaa et andet sted (js/gaa.js lytter på klik i hele dokumentet)
+function gåTil(gaa) {
+  const b = document.createElement('button');
+  b.dataset.gaa = gaa;
+  b.hidden = true;
+  document.body.append(b);
+  b.click();
+  b.remove();
+}
 
 // Stjernerne igen (fx efter "Nulstil al fremgang" i Værkstedets hjælp)
 export function opdaterFremgang() {

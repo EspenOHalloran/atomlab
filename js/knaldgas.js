@@ -1,4 +1,5 @@
-// Molekyler → "Del elektroner" → Knaldgas (Molekyler M3, docs/plan-molekyler.md afsnit 4).
+// Knaldgassen (Molekyler M3, docs/plan-molekyler.md afsnit 4). Fra 19. november 2026 i Ild (js/ild.js er værten, før
+// "Del elektroner" i Molekyler). Værtens skærm og 3D-vindue gives til lavKnaldgas.
 // En lukket boks med 4 H₂ og 2 O₂, der flyver rundt. Uden gnist sker der ingenting (stødene er alt for svage).
 // "Gnist" river et H₂ over, og en kæde af radikaler (H, O og OH) laver 4 H₂O. Måleren viser, hvad det har kostet at
 // bryde bindingerne, og hvad man har fået for de nye. Forskellen bliver til fart (varme), og boksen gløder.
@@ -36,7 +37,8 @@ let panelTekst = '';
 let målerTekst = '';
 let frø = null; // kun i testene: samme tilfældighed hver gang
 let tilbage = () => {};
-let stjerner = () => {};
+let vært = 'ild'; // skærmens id (klassen knaldgas sættes på den)
+let vinduesId = 'ildVindue';
 const glimt = [];
 const tegneAtomer = [];
 const tegneBånd = [];
@@ -52,10 +54,11 @@ const FLADE_VARM = new THREE.Color(0.42, 0.15, 0.04);
 
 const $ = (id) => document.getElementById(id);
 
-// tilbage: "Tilbage til byggeriet". stjerner: opdaterer ★ i begge paneler (fra js/molekyler-byg.js).
-export function lavKnaldgas({ tilbage: t, stjerner: s }) {
+// tilbage: "Tilbage til bordet". vært og vindue: skærmens id og 3D-vinduets id.
+export function lavKnaldgas({ tilbage: t, vært: v = 'ild', vindue: vi = 'ildVindue' }) {
   tilbage = t;
-  stjerner = s;
+  vært = v;
+  vinduesId = vi;
   rod = new THREE.Group();
   rod.visible = false;
   verden.scene.add(rod);
@@ -80,11 +83,11 @@ export function lavKnaldgas({ tilbage: t, stjerner: s }) {
   }
   lavPanel();
   nyBoks();
-  stjerner();
+  opdaterStjerner();
 }
 
 function lavPanel() {
-  const vindue = $('molekylerVindue');
+  const vindue = $(vinduesId);
   const kort = lavNæsteSkridtKort(vindue, 'knaldMission');
   kort.classList.add('knald-kun');
   næste = lavNæsteSkridt(kort, { visMig: () => tænd() });
@@ -111,7 +114,7 @@ function lavPanel() {
     lyd.klik();
     tilbage();
   });
-  // Opgaverne (de samme ★ som i "Del elektroner", js/molekyler-byg.js opdaterer dem)
+  // Opgaverne (★, data i OPGAVER_BYG med knaldgas, gemt under de samme id'er som før flytningen)
   const liste = $('knaldOpgaver');
   for (const o of OPGAVER_BYG.filter((x) => x.knaldgas)) {
     const b = document.createElement('button');
@@ -167,7 +170,7 @@ function tjekOpgaver() {
       besked = true;
     }
   }
-  if (besked) stjerner();
+  if (besked) opdaterStjerner();
 }
 
 // ---------- Hvert billede ----------
@@ -331,14 +334,28 @@ function opdaterPanel() {
   $('knaldMåler').classList.toggle('varm', r.varme > 0.05);
 }
 
-// ---------- Start og stop (fra js/molekyler-byg.js) ----------
+// ★ og tælleren for knaldgassens to opgaver
+export function opdaterStjerner() {
+  const liste = OPGAVER_BYG.filter((o) => o.knaldgas);
+  for (const b of document.querySelectorAll('#knaldOpgaver .byg-opgave')) {
+    const o = liste.find((x) => x.id === b.dataset.bygOpgave);
+    const løst = fremgang.erLøst(o.id);
+    b.querySelector('.bo-stjerne').textContent = løst ? '★' : '☆';
+    b.classList.toggle('klaret', løst);
+    b.title = løst ? `${o.fakta} (klaret ★)` : o.tip;
+  }
+  $('knaldOpgaveTæller').textContent = `${liste.filter((o) => fremgang.erLøst(o.id)).length}/${liste.length}`;
+}
+
+// ---------- Start og stop (fra js/ild.js) ----------
 export function startKnaldgas() {
   aktiv = true;
   rod.visible = true;
   verden.opdateringer.add(opdater);
-  $('molekyler').classList.add('knaldgas');
+  $(vært).classList.add('knaldgas');
+  opdaterStjerner();
   stopKamera();
-  sætVindue($('molekylerVindue'));
+  sætVindue($(vinduesId));
   verden.styring.autoRotate = false;
   begrænsDrejning(null);
   verden.styring.target.set(0, 0, 0);
@@ -355,7 +372,7 @@ export function stopKnaldgas() {
   aktiv = false;
   rod.visible = false;
   verden.opdateringer.delete(opdater);
-  $('molekyler').classList.remove('knaldgas');
+  $(vært).classList.remove('knaldgas');
   pause.sæt('spil');
 }
 
