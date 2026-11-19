@@ -13,6 +13,7 @@ import { SIDER as SATURN } from '../js/data/sider/saturn.js';
 import { TRIN_PROTEIN } from '../js/data/liv/protein.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { readFileSync } from 'node:fs';
+import { PLANETER_PR_ÅR, EXOPLANETER_I_ALT, afstandeFor } from '../js/data/exoplaneter.js';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
@@ -83,6 +84,25 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     !lange.length && sætninger(m.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && sc.navne?.sigma === '2,6 sigma' && /2027/.test(sc.navne?.euclid ?? ''), JSON.stringify(lange));
   // Kontakten må ikke give svaret, før man har gættet (stilguiden A6): Den siger ikke "mørkt stof"
   tjek('G4d: kontakten hedder "Kun det synlige trækker" og nævner ikke mørkt stof', sc.kontakt === 'Kun det synlige trækker' && !/mørk/i.test(sc.kontakt + sc.start + sc.kunSynligt + sc.igen));
+}
+
+// G4d: Liv andre steders scene og planeterne
+{
+  const l = GÅDER.find((g) => g.id === 'liv');
+  const sc = l.scene ?? {};
+  const linjer = [sc.start, sc.første, sc.alle, sc.efter, sc.sten, sc.stenSvar, sc.sonder];
+  const lange = linjer.filter((x) => !x || ord(x) > 28);
+  tjek('G4d: Liv andre steders scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
+    !lange.length && sætninger(l.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && !/liv\?/.test(Object.values(sc.navne ?? {}).join('|')), JSON.stringify(lange));
+  // Før gættet må linjerne ikke give svaret (at liv kun er fundet på Jorden)
+  tjek('G4d: linjerne før gættet siger ikke, at liv kun er fundet på Jorden', ![sc.start, sc.første, sc.alle].some((x) => /kun|eneste/.test(x)));
+  const år = PLANETER_PR_ÅR.map((r) => r[0]);
+  const antal = PLANETER_PR_ÅR.reduce((s, r) => s + afstandeFor(r).length, 0);
+  const år1992 = afstandeFor(PLANETER_PR_ÅR[0]);
+  tjek('G4d: planeterne: 6.464 i alt (NASA, november 2026), ét år ad gangen fra 1992 til 2026, de to første om pulsaren (ca. 2.300 lysår)',
+    antal === EXOPLANETER_I_ALT && EXOPLANETER_I_ALT === 6464 && år[0] === 1992 && år.at(-1) === 2026 && år.every((a, i) => i === 0 || a === år[i - 1] + 1)
+    && år1992.length === 2 && år1992.every((d) => d > 1500 && d < 3500) && PLANETER_PR_ÅR.every((r) => afstandeFor(r).every((d) => Number.isInteger(d) && d >= 0)),
+    JSON.stringify({ antal, første: år[0], sidste: år.at(-1), år1992 }));
 }
 
 // G4b: skinnen
@@ -429,6 +449,42 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     kort?.kort && kort.euclid && kort.buer > 40 && kort.ringe === 9 && ven.startsWith('Sig det til en ven: Der er ca. fem gange'), JSON.stringify({ kort, ven }));
   await page.click('#gaadeTrin [data-alle]');
   tjek('G4d: "Alle gåder" rydder scenen', await vent(page, () => atomlabTest.gaader.scene().id() === null && atomlabTest.gaader.skinne()?.vist()));
+  await ctx.close();
+}
+
+// G4d: Liv andre steder i 3D: lysene år for år, Jorden, Mars og Enceladus i skala, Cheyava Falls og sonderne
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('liv'));
+  const klar = await vent(page, () => atomlabTest.gaader.scene()?.scene()?.tilstand === 'lys', null, 15000);
+  const S = () => T(() => atomlabTest.gaader.scene().scene());
+  const undervejs = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(5); return s.scene().lys; });
+  const sprang = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(0, 0); s.spol(0.2); return { lys: s.scene().lys, linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('G4d: lysene tændes år for år, og et tryk springer til 2026 med alle 6.464',
+    klar && undervejs.tændt > 0 && undervejs.tændt < undervejs.i_alt && undervejs.år > 1992 && undervejs.år < 2026
+    && sprang.lys.tændt === 6464 && sprang.lys.år === 2026 && /Er der liv på nogen af dem\?/.test(sprang.linje), JSON.stringify({ undervejs, sprang }));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  const skala = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(1); return s.scene(); });
+  tjek('G4d: efter gættet dæmpes lysene, og Jorden, Mars og Enceladus står i samme skala (6.779 og 504 af 12.742 km)',
+    skala.tilstand === 'skala' && skala.lys.dæmpet && skala.skala.vist && Math.abs(skala.skala.forhold[0] - 6779 / 12742) < 1e-6 && Math.abs(skala.skala.forhold[1] - 504 / 12742) < 1e-6,
+    JSON.stringify(skala));
+  await page.click('#gaadeTrin .fl-næste');
+  const stenFør = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(1); return s.scene().sten; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
+  const sten = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().sten; });
+  tjek('G4d trin 2: Cheyava Falls uden forklaringer før gættet, og bagefter GÆT og de to stiplede forklaringer',
+    stenFør && !stenFør.forklaringer && !stenFør.stempel && sten.stempel && sten.forklaringer && sten.kasser === 2, JSON.stringify({ stenFør, sten }));
+  await page.click('#gaadeTrin .fl-næste');
+  const sonder = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().sonder; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4d trin 3: sonderne med stiplede baner, og til sidst "Sig det til en ven"', sonder?.baner === 4 && ven.startsWith('Sig det til en ven: Forskerne kender'), JSON.stringify({ sonder, ven }));
+  // Fotoet af stenen er hentet uden fejl (det står i KILDER.md)
+  const foto = await T(async () => (await fetch('billeder/gaader/cheyava-falls.jpg')).ok);
+  tjek('G4d: fotoet af Cheyava Falls findes og står i billeder/gaader/KILDER.md', foto && readFileSync(new URL('../billeder/gaader/KILDER.md', import.meta.url), 'utf8').includes('cheyava-falls.jpg') && readFileSync(new URL('../billeder/gaader/KILDER.md', import.meta.url), 'utf8').includes('PIA26368'));
   await ctx.close();
 }
 
