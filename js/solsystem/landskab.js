@@ -320,72 +320,80 @@ const FRAGMENT = /* glsl */ `
       }
     }
     // Detaljer helt tæt på (under fotoets skarphed, M8c del 3 trin 1): sten og grus, tegnet af programmet efter rovernes
-    // fotos (fotoet fra kredsløb har 25 cm pr. pixel). Tre lag af celler med højst én sten hver: store (0,6 m) og små
-    // (0,2 m) sten og ved Jezero flade, lyse klippeflader i niveau med jorden (1,4 m). Størrelsen følger en potenslov
+    // fotos (fotoet fra kredsløb har 25 cm pr. pixel). Tre lag af celler med højst én sten hver: store (0,9 m) og små
+    // (0,28 m) sten og ved Jezero flade, lyse klippeflader i niveau med jorden (1,8 m). Størrelsen følger en potenslov
     // (mange små, få store), og stenene ligger i klynger efter en grov støj og fotoets lysstyrke (klippe er lysere end
     // mørkt sand). Hvert lag tegnes, så længe dets celler er store nok på skærmen, så de store sten ses længst væk.
+    // Hver sten ligger helt inde i sin celle, så kun cellen selv kan have en sten i punktet, og skyggen kan kun komme
+    // fra cellen og de tre naboer mod Solen (4 celler pr. lag i stedet for 9: det første forsøg var ca. 5 gange dyrere).
     float stenAlb = 1.0, stenGraa = 0.0, stenSk = 1.0, stenH0 = 0.0;
     vec2 stenN = vec2(0.0);
     float naer = 1.0 - smoothstep(0.012, 0.09, fod); // (til gruset)
     float jez = step(0.5, uStenArt);
-    if (uNaer > 0.5 && stenU < 0.0 && fod < 0.25 + 0.2 * jez) {
+    if (uNaer > 0.5 && stenU < 0.0 && fod < 0.16 + 0.3 * jez) {
       float klynge = smoothstep(0.3, 0.8, stoej(en * 0.19) * 0.6 + stoej(en * 0.7 + 3.1) * 0.4 + (f - 0.5) * 1.2);
       vec2 solV = vec2(uSol.x, -uSol.z);
       float cotSol = length(solV) / max(uSol.y, 0.06);
       vec2 vaek = -solV / max(length(solV), 1e-4); // skyggens retning (øst, nord)
-      float stenH = 0.0;
+      vec2 mot = vec2(solV.x >= 0.0 ? 1.0 : -1.0, solV.y >= 0.0 ? 1.0 : -1.0); // nabocellerne mod Solen
+      float stenH = 0.0, skygge = 0.0, fodM = 0.0;
       for (int lag = 0; lag < 3; lag++) {
         if (lag == 2 && jez < 0.5) break;
-        float str = lag == 0 ? 0.6 : lag == 1 ? 0.2 : 1.4;     // cellernes størrelse (m)
+        float str = lag == 0 ? 0.9 : lag == 1 ? 0.28 : 1.8;     // cellernes størrelse (m)
         float vis = 1.0 - smoothstep(0.06, 0.16, fod / str);    // til ca. 6-16 pixel pr. celle
         if (vis <= 0.0) continue;
         vec2 q = en / str + float(lag) * 17.3;
         vec2 ci = floor(q);
-        for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
-          vec2 c = ci + vec2(i, j);
-          vec4 a = hash4(c), b = hash4(c + 7.31);
-          float taet = lag == 2 ? 0.35 + 0.3 * klynge : mix(0.04, lag == 0 ? 0.5 : 0.7, klynge);
+        for (int k = 0; k < 4; k++) {
+          if (lag == 2 && k > 0) break; // (klippefladerne er flade og kaster ingen skygge)
+          vec2 c = ci + (k == 1 ? vec2(mot.x, 0.0) : k == 2 ? vec2(0.0, mot.y) : k == 3 ? mot : vec2(0.0));
+          vec4 a = hash4(c);
+          float taet = lag == 2 ? 0.35 + 0.3 * klynge : mix(0.04, lag == 0 ? 0.55 : 0.75, klynge);
           if (a.z > taet) continue;
-          vec2 p = c + 0.2 + 0.6 * a.xy;
-          // potenslov: de fleste er små, enkelte fylder næsten cellen
-          float r = lag == 2 ? 0.22 + 0.25 * b.x : (lag == 0 ? 0.1 : 0.16) + (lag == 0 ? 0.36 : 0.26) * b.x * b.x * b.x;
-          float vc = cos(b.y * 6.283), vs = sin(b.y * 6.283);
-          mat2 R = mat2(vc, -vs, vs, vc);
+          vec4 b = fract(a.wxyz * 7.31 + a.yzwx * 3.17);
+          vec2 p = c + 0.3 + 0.4 * a.xy;
+          // potenslov: de fleste er små, enkelte fylder næsten cellen (radius højst 0,3 celle)
+          float r = lag == 2 ? 0.17 + 0.13 * b.x : 0.07 + 0.23 * b.x * b.x * b.x;
           vec2 d = q - p;
-          vec3 m = kant(R * d, b);
-          float t = 1.0 - m.x / r; // 1 i midten, 0 ved kanten
           // Gale: flade plader af sandsten (lave, flad top, skarp kant, lidt skrå). Jezero: højere, kantede sten.
-          // Klippefladerne ved Jezero er flade og ligger i niveau med jorden.
-          float hM = lag == 2 ? 0.0 : r * str * (jez > 0.5 ? 0.55 + 0.4 * a.w : 0.18 + 0.25 * a.w); // højden (m)
-          if (t > 0.0) {
-            float k = jez > 0.5 ? sqrt(t) : smoothstep(0.0, 0.18, t);
-            if (lag == 2) {
-              if (stenH > 0.0) continue;
-              stenAlb = mix(stenAlb, 1.35 + 0.35 * a.w, vis * smoothstep(0.0, 0.08, t));
-              stenGraa = mix(stenGraa, 0.25, vis);
-            } else if (k * hM > stenH) {
-              stenH = k * hM;
-              // hældningen: fladen, der danner kanten (så stenene får facetter), og en skrå top på pladerne
-              float dk = jez > 0.5 ? 0.5 / sqrt(max(t, 0.04)) : (1.0 - smoothstep(0.0, 0.18, t)) * 6.0;
-              vec2 g = (m.yz * R) * dk * hM / (r * str);
-              if (jez < 0.5) g += (b.zw - 0.5) * 0.5 * smoothstep(0.1, 0.3, t);
-              stenN = clamp(g, -3.0, 3.0) * vis;
-              // farven: mørkere og mere grå end sandet (som på fotoerne), nogle lysere
-              stenAlb = mix(1.0, jez > 0.5 ? 0.5 + 0.35 * a.w : 0.72 + 0.4 * a.w, vis);
-              stenGraa = vis * (jez > 0.5 ? 0.7 : 0.45);
-              stenSk = 1.0;
-            }
-          } else if (hM > 0.0) {
-            // skyggen på jorden væk fra Solen (stenens form trukket ud), og lidt mørkere lige ved foden
-            float L = min(hM * cotSol / str, 1.3);
+          float hM = lag == 2 ? 0.0 : r * str * (jez > 0.5 ? 0.55 + 0.4 * a.w : 0.2 + 0.3 * a.w); // højden (m)
+          if (k == 0) {
+            vec2 rv = normalize(b.zw - 0.5 + 1e-3);
+            mat2 R = mat2(rv.x, -rv.y, rv.y, rv.x);
+            vec3 m = kant(R * d, b);
+            float t = 1.0 - m.x / r; // 1 i midten, 0 ved kanten
+            if (t > 0.0) {
+              if (lag == 2) {
+                if (stenH <= 0.0) {
+                  stenAlb = mix(stenAlb, 1.35 + 0.35 * a.w, vis * smoothstep(0.0, 0.08, t));
+                  stenGraa = mix(stenGraa, 0.25, vis);
+                }
+              } else if (t * hM > stenH) {
+                float k2 = jez > 0.5 ? sqrt(t) : smoothstep(0.0, 0.18, t);
+                stenH = max(k2 * hM, 1e-4);
+                // hældningen: fladen, der danner kanten (så stenene får facetter), og en skrå top på pladerne
+                float dk = jez > 0.5 ? 0.5 / sqrt(max(t, 0.04)) : (1.0 - k2) * 6.0;
+                vec2 g = (m.yz * R) * dk * hM / (r * str);
+                if (jez < 0.5) g += (b.zw - 0.5) * 0.5 * smoothstep(0.1, 0.3, t);
+                stenN = clamp(g, -3.0, 3.0) * vis;
+                // farven: mørkere og mere grå end sandet (som på fotoerne), nogle lysere
+                stenAlb = mix(1.0, jez > 0.5 ? 0.5 + 0.35 * a.w : 0.72 + 0.4 * a.w, vis);
+                stenGraa = vis * (jez > 0.5 ? 0.7 : 0.45);
+              }
+            } else if (hM > 0.0) fodM = max(fodM, vis * (1.0 - smoothstep(0.0, 0.3, -t))); // lidt mørkere ved foden
+          }
+          if (hM > 0.0) {
+            // skyggen på jorden væk fra Solen: stenen trukket ud som en kapsel (højst én celle lang)
+            float L = min(hM * cotSol / str, 1.0);
             float sa = clamp(dot(d, vaek) / max(L, 1e-4), 0.0, 1.0);
-            float ts = 1.0 - kant(R * (d - vaek * L * sa), b).x / (r * (1.0 - 0.35 * sa));
-            if (stenH <= 0.0) {
-              stenSk = min(stenSk, 1.0 - 0.92 * vis * smoothstep(-0.05, 0.08, ts) * smoothstep(0.0, 0.08, uSol.y));
-              stenAlb = min(stenAlb, mix(1.0, 0.86, vis * smoothstep(-0.3, 0.0, t)));
-            }
+            float ds = length(d - vaek * L * sa) / (r * (0.95 - 0.35 * sa));
+            skygge = max(skygge, vis * (1.0 - smoothstep(0.85, 1.05, ds)));
           }
         }
+      }
+      if (stenH <= 0.0) {
+        stenSk = 1.0 - 0.92 * skygge * smoothstep(0.0, 0.08, uSol.y);
+        stenAlb *= 1.0 - 0.14 * fodM;
       }
       n = normalize(n + vec3(stenN.x, 0.0, -stenN.y));
       stenH0 = stenH;
