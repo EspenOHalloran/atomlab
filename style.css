@@ -1347,7 +1347,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .opd-omslag:hover, #opdagelser .opd-omslag:focus-visible { transform: translateY(-5px); }
 #opdagelser .opd-omslag img { width: 100%; flex: 1 1 0; min-height: 0; object-fit: contain; background: #f1e8d3; border: 1px solid var(--ryg-kant); } /* Portrættet giver plads, når titlen fylder to linjer (Tychos "Den nye stjerne", T1) */
 #opdagelser .opd-omslag-titel { font-size: 20px; line-height: 1.1; text-align: center; text-wrap: balance; }
-#opdagelser .opd-omslag-navn { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+#opdagelser .opd-omslag-navn { max-width: 100%; overflow: hidden; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; opacity: 0.85; } /* Én linje, så navnet aldrig skubbes ned over årstallet (Tycho, T3) */
 #opdagelser .opd-linje { margin: 0; padding: 9px 16px; max-width: 40em; border-radius: 18px; background: var(--panel); border: 1px solid var(--panel-kant); text-align: center; font-size: 16px; line-height: 1.4; }
 #opdagelser .opd-bog-side { min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr); justify-items: center; }
 #opdagelser .opd-tilbage { grid-column: 1; justify-self: start; min-height: 44px; white-space: nowrap; }
@@ -1440,6 +1440,50 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce) { #opdagelser .ts-ting { transition: none; } }
 @media (max-width: 560px) and (max-height: 760px) and (orientation: portrait) { #opdagelser .ts-småt { display: none; } #opdagelser .ts-maal { gap: 0; font-size: 14px; line-height: 1.3; } #opdagelser .ts-par-måne { min-height: 0; font-size: 14px; } #opdagelser .ts-par { font-size: 14px; } #opdagelser .ts-sammen-tekst { min-height: 0; font-size: 15px; } #opdagelser .ts-sammen { gap: 2px 8px; } #opdagelser .ts-ting { font-size: 12px; gap: 4px; } #opdagelser .ts-ting i { flex-basis: 18px; height: 18px; } } /* Lille telefon på højkant: tallene under Tychos himmel fylder mindre, så lærredet har plads */
 @media (max-width: 560px) { #opdagelser.i-forløb .bog-kapitel { padding-left: 84px; text-align: left; font-size: 20px; } } /* Telefon i turen: kapitlets titel står til højre for "‹ Hylden" (Tychos "Herrevad, 11. november 1572" er lang) */
+#opdagelser .bog-scene.tg-felt { display: block; overflow-y: auto; scrollbar-width: none; container-type: size; padding-top: clamp(0px, 2vh, 24px); } /* Tychos gåde "Tychos tal" (T3): kortet med cirklerne og tallene ved siden af (js/bog/tycho-gaade.js) */
+#opdagelser .tg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 300px); grid-template-rows: minmax(0, 1fr); gap: 12px 20px; align-items: center; height: calc(100cqh - clamp(0px, 2vh, 24px)); }
+#opdagelser .tg[hidden] { display: none; }
+#opdagelser .tg-kort { position: relative; justify-self: center; width: min(100%, calc((100cqh - 32px) * 176 / 114)); aspect-ratio: 176 / 114; }
+#opdagelser .tg-kort svg { display: block; width: 100%; height: 100%; }
+#opdagelser .tg-side { display: grid; gap: 10px; align-content: safe center; max-height: 100%; overflow-y: auto; scrollbar-width: none; } /* Ved siden af kortet ruller tallene for sig selv, så kortet står stille */
+#opdagelser .tg-tal { display: grid; gap: 6px; }
+#opdagelser .tg.fundet .tg-tal { display: none; }
+#opdagelser .tg-tal-knap { min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--bog-blaek); background: var(--bog-blaek); color: var(--bog-papir); font: 17px/1 var(--bog-skrift); text-align: left; cursor: pointer; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.35); }
+#opdagelser .tg-tal-knap b { font-size: 20px; font-weight: normal; }
+#opdagelser .tg-tal-knap i { margin-left: auto; font-style: normal; font-variant-numeric: tabular-nums; }
+#opdagelser .tg-tal-knap[aria-pressed="true"] { background: transparent; color: var(--bog-blaek); box-shadow: none; cursor: default; }
+#opdagelser .tg-linje.løst { font: 22px/1.2 var(--bog-skrift); text-shadow: 0 0 10px rgba(201, 162, 74, 0.8); }
+#opdagelser .tg-knapper { position: absolute; inset: 0; pointer-events: none; }
+#opdagelser .tg-punkt { position: absolute; width: 44px; height: 44px; padding: 0; transform: translate(-50%, -50%); border: 0; border-radius: 50%; background: transparent; cursor: pointer; pointer-events: auto; }
+#opdagelser .tg-punkt:focus-visible { outline: 3px solid #c9a24a; }
+#opdagelser .tg-punkt.ryster { outline: 2px solid #a33; }
+#opdagelser .tg-stjerne-knap[aria-pressed="true"] { pointer-events: none; }
+#opdagelser .tg-cirkel { fill: none; stroke: var(--bog-blaek); stroke-width: 0.9; stroke-dasharray: 1; }
+#opdagelser .tg-bogstav { font: italic 6.5px var(--bog-skrift); fill: var(--bog-blaek); }
+#opdagelser .tg-ny-bogstav { font-size: 8px; }
+#opdagelser .tg-tal-på { font: 5.5px var(--bog-skrift); fill: var(--bog-blaek); }
+#opdagelser .tg-møde { fill: none; stroke: var(--bog-blaek); stroke-width: 0.7; stroke-dasharray: 1.2 1.2; }
+#opdagelser .tg-møde.glød { stroke: #b8860b; stroke-width: 1.3; stroke-dasharray: none; animation: tg-glød 1.4s ease-in-out infinite; }
+@keyframes tg-glød { 50% { stroke-opacity: 0.3; } }
+#opdagelser .tg-passer-arm { stroke: var(--bog-blaek); stroke-width: 0.7; }
+#opdagelser .tg-passer-hængsel { fill: var(--bog-blaek); }
+#opdagelser .tg-ny-stjerne { transform-box: fill-box; transform-origin: center; }
+#opdagelser .tg-efter { display: grid; gap: 10px; }
+#opdagelser .tg-efter[hidden] { display: none; }
+#opdagelser .tg-idag { padding: 10px 12px; border: 1px solid color-mix(in srgb, var(--bog-blaek) 35%, transparent); border-radius: 6px; background: color-mix(in srgb, var(--bog-papir-mork) 45%, transparent); font-size: 15px; line-height: 1.4; }
+#opdagelser .tg-idag p { margin: 0; }
+#opdagelser .tg-idag .tg-idag-titel { margin-bottom: 4px; font: 19px/1.2 var(--bog-skrift); }
+#opdagelser .tg-idag table { margin: 2px 0 6px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+#opdagelser .tg-idag th { padding-right: 10px; text-align: left; font-weight: 600; }
+#opdagelser .tg-idag td { padding-right: 10px; white-space: nowrap; }
+#opdagelser .tg-idag .tg-småt { font-size: 13px; opacity: 0.75; }
+#opdagelser .tg-videre-række { display: flex; flex-wrap: wrap; gap: 8px; }
+#opdagelser .tg-videre-række .knap { min-height: 44px; padding: 0 16px; background: transparent; color: var(--bog-blaek); border-color: rgba(60, 40, 20, 0.45); }
+#opdagelser .tg-videre-række .tg-videre { background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; } /* Én vigtig knap: videre til bogen fra 1573 */
+#opdagelser .bo-knap-linje { margin: -6px 0 0; font-size: 14px; line-height: 1.4; text-align: center; opacity: 0.8; } /* Linjen under Gør det selv (Tycho: hvad man trykker på ved Hvid dværg) */
+@media (prefers-reduced-motion: reduce) { #opdagelser .tg-møde.glød { animation: none; } }
+@media (max-height: 500px) and (orientation: landscape) { #opdagelser .tg { gap: 8px 12px; } #opdagelser .tg-side { gap: 6px; } #opdagelser .tg-linje { font-size: 14px; } #opdagelser .tg-linje.løst { font-size: 18px; } #opdagelser .tg-idag { padding: 6px 10px; font-size: 13px; line-height: 1.3; } #opdagelser .tg-idag .tg-idag-titel { font-size: 16px; margin-bottom: 2px; } #opdagelser .tg-idag .tg-småt { display: none; } #opdagelser .tg-idag table { margin: 0 0 4px; } #opdagelser .tg-videre-række .knap { padding: 0 12px; font-size: 14px; } } /* Lav skærm på langs: "Og i dag?" og knapperne kan ses uden at rulle */
+@container (max-width: 600px) or (max-aspect-ratio: 11 / 10) { #opdagelser .tg { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; height: auto; min-height: calc(100cqh - clamp(0px, 2vh, 24px)); align-content: center; align-items: start; } #opdagelser .tg-side { max-height: none; overflow: visible; } #opdagelser .tg-kort { width: min(100%, calc(62cqh * 176 / 114)); } } /* Smalt felt (telefon og tablet på højkant): kortet øverst og tallene under */
 #opdagelser .bog-scene.hs-ord { grid-template-rows: minmax(0, 1fr); } /* Trin 4 og "Hemmeligheden" (H3): bunkerne af bogstaver i stedet for lærredet (js/bog/huygens-gaade.js) */
 #opdagelser .bog-scene.hs-ord .hs-lærred { display: none; }
 #opdagelser .bog-scene.hs-ord .hs-under { align-content: center; }

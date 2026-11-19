@@ -2,6 +2,8 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (19. november 2026): T2, Tychos tur "Den nye stjerne".** "Begynd" står nu på Tychos forside og starter turen i fire trin: Den nye stjerne lyser op over Cassiopeias W og klostertaget (tryk på den, "Før" i hjørnet hjælper), tommelfingeren og Månen, der hopper, når Tycho flytter sig på Jorden (ordet *parallakse*), "Højt og lavt" med en himmelskive, man drejer, og "Tychos instrument" med passeren: 7° 55′ hele vejen rundt, mens spøgelset (lige så tæt på som Månen) bliver 7° 07′ lavt nede, og stjernen, der falmer måned for måned til begyndelsen af 1574 (ordet *supernova*). "Det så du" har kun "Tag turen igen", til gåden og bogen kommer i T3. Afvigelserne fra drejebogen står i dens afsnit 15. `opdagelser` har 56 tjek.
+
 **Senest lavet (19. november 2026): T1, Tychos forside.** Tycho står på hylden med omslaget "Den nye stjerne" (nattehimmelblå ryg med guld), og de to grå rygge er nu Rømer og Ørsted ("Hvorfor drejede kompasnålen?"). Forsiden har spørgsmålet, introduktionen fra Herrevad i november 1572, de Gheyns portræt (filteret gav ingen striber) og W'et som træsnitsstjerner efter de rigtige pladser med den nye stjerne øverst. Bogen har kun forsiden, så "Begynd" er der ikke endnu (A9). Omslagets portræt giver nu plads, når titlen fylder to linjer. `opdagelser` har 49 tjek.
 
 **Senest lavet (19. november 2026): drejebogen til Tycho Brahe (V1), kun dokumenter.**

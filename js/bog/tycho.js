@@ -33,6 +33,8 @@ import {
   CASSIOPEIA, NY_STJERNE, projicer, BAGGRUND, NORDSTJERNEN, iPolkort, måling, grader, højde, højestVed, HERREVAD,
   MÅNEDER, MÅNED_MÅL, SAMMENLIGN,
 } from '../data/opdagelser/tycho.js';
+// Gåden "Tychos tal" (T3) står i sin egen fil. js/opdagelser.js laver den for opslaget 'gaaden' med lavGåde
+export { lavGåde } from './tycho-gaade.js';
 
 const NAT_TOP = '#0a1220', NAT_BUND = '#1c2a44'; // nattehimlen (bunden er bogens ryg)
 const STJERNE = [246, 241, 226];

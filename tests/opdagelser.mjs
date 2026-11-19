@@ -137,6 +137,34 @@ tjek('Tycho og Huygens er de byggede bøger, og delen står i Biblioteket efter 
   tjek('Tychos tur: fire trin (stjernen, parallaksen, højt og lavt, stjernen falmer) med korte tekster og ordene i Ordbogen, og himlen over Herrevad giver 7° 55′ hele vejen og et spøgelse, der er næsten en grad anderledes',
     !fejlT.length, fejlT.join('; '));
 }
+// Tychos gåde, bogen og "Om Tycho" (T3, drejebogen afsnit 6-8, test 6): De tre cirkler med Tychos tal mødes inden for
+// 10′ af resten af supernovaen, G og D mødes to steder på kortet, og kun det ene ligger på B's cirkel (det, man selv
+// finder). Nutidens tal passer med udregningen, og vejene, siderne og "Om" hænger sammen (den røde tråd)
+{
+  const t = await bogMed('tycho').tekster();
+  const st = (id) => t.CASSIOPEIA.find((x) => x.id === id);
+  const c = Object.fromEntries(t.TYCHOS_TAL.map((x) => [x.tycho, [st(x.id), t.talGrader(x)]]));
+  const møde = (a, b) => t.mødes(c[a][0], c[a][1], c[b][0], c[b][1]);
+  const nær = (p) => t.afstand(p, t.NY_STJERNE) * 60;
+  const ved = [['B', 'G'], ['B', 'D'], ['G', 'D']].map(([a, b]) => Math.min(...møde(a, b).map(nær)));
+  const gd = møde('G', 'D');
+  const påB = gd.map((p) => Math.abs(t.afstand(p, c.B[0]) - c.B[1]) * 60);
+  const minutter = (txt) => { const [g, m] = txt.match(/\d+/g).map(Number); return g * 60 + m; };
+  const iDag = t.TYCHOS_TAL.map((x) => Math.abs(t.afstand(st(x.id), t.NY_STJERNE) * 60 - minutter(x.iDag)));
+  const rund = t.cirkel(st('gamma'), 5, 12).every((p) => Math.abs(t.afstand(p, st('gamma')) - 5) < 1e-6);
+  const opslag = t.OPSLAG.map((o) => o.id).join();
+  const ærligt = t.OM.ærligt.punkter.join(' ');
+  tjek('Tychos gåde: de tre cirkler mødes inden for 10′ af supernovaens rest, G og D mødes to steder, og kun det ene ligger på Schedirs cirkel, og nutidens tal passer med udregningen',
+    ved.every((m) => m < 10) && gd.length === 2 && påB.filter((m) => m < 10).length === 1 && påB.some((m) => m > 60) && iDag.every((m) => m <= 1) && rund
+    && /Knudstrup/.test(t.GÅDE.forord.sted) && /komet/.test(t.GÅDE.forord.tekst),
+    JSON.stringify({ ved, påB, iDag }));
+  tjek('Tychos bog: forside, tur, gåde, bogen fra 1573 og "Om Tycho" i den rækkefølge, gåden er den vigtige vej, fire sider (aftenen, kortet, brevet og farven) og Gør det selv ved Hvid dværg, og Ærligt talt har turens snyd',
+    opslag === 'forside,fortaelling,gaaden,bogen,om' && t.VEJE.veje.find((v) => v.primær)?.opslag === 'gaaden' && t.BOGEN.sider.map((x) => x.id).join() === 'a,b1b,brevet,d2'
+    && t.BOGEN.linjer.rækker.every((x) => t.BOGEN.sider.some((y) => y.id === x.side)) && t.OM.knap.gaa === 'kosmos:hviddvaerg' && t.OM.knap.linje
+    && /passer/.test(ærligt) && /Klostertaget/.test(ærligt) && /60 jordradier/.test(ærligt) && /21\. november/.test(ærligt) && /tredje tal/.test(ærligt)
+    && CITATER.tycho?.bog?.id === 'tycho',
+    opslag);
+}
 tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab-fell.woff2') && existsSync(PROJEKT + 'fonts/OFL.txt'));
 
 // ---------- I browseren ----------
@@ -387,10 +415,10 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   tjek('Tychos tur: tommelfingeren og Månen skal begge skiftes, højt alene giver et vink om lavt, og højt og lavt er begge 7° 55′, mens spøgelset bliver 7° 07′',
     trin2 && trin3 && høj.højde > 80 && høj.fase !== 'så' && /ned, så den står lavt/.test(høj.vink) && høj.afstand === '7° 55′' && lav.højde < 31 && lav.afstand === '7° 55′' && lav.spøgelse === '7° 07′' && /7°\s07′/.test(lav.tal) && lav.svar === 'Rigtigt gættet!',
     JSON.stringify({ trin2, høj, lav }));
-  tjek('Tychos tur: stjernen falmer til begyndelsen af 1574 (maj lyser ved anden størrelse og Saturn), og "Det så du" har kernesætningen, linjen om de tre stjerner og kun "Tag turen igen", indtil gåden er bygget',
-    trin4 && /langt bag Månen/.test(slut.tekst) && /tre stjerner/.test(slut.lille) && slut.veje.join('|') === 'Tag turen igen ›', JSON.stringify({ maj, slut }));
+  tjek('Tychos tur: stjernen falmer til begyndelsen af 1574 (maj lyser ved anden størrelse og Saturn), og "Det så du" har kernesætningen, linjen om de tre stjerner og tre veje med gåden først (T3)',
+    trin4 && /langt bag Månen/.test(slut.tekst) && /tre stjerner/.test(slut.lille) && slut.veje.join('|') === 'Find stjernen med Tychos tal ›|Bladr i bogen fra 1573 ›|Tag turen igen ›', JSON.stringify({ maj, slut }));
   // "Tag turen igen" starter forfra, og "Udforsk selv" giver laboratoriet med de fire kapitler (standard "Højt og lavt")
-  await page.click('.forløb-linje .fl-vej');
+  await page.click('.forløb-linje .fl-vej >> text=Tag turen igen');
   const igen = await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'stjernen');
   await page.click('.forløb-linje .fl-spring');
   await vent(page, () => !atomlabTest.opdagelser.forløb.kører());
@@ -591,6 +619,70 @@ for (const [navn, opsætning] of [
   await ctx.close();
 }
 
+// Tychos gåde, bogen fra 1573 og "Om Tycho" (T3, test 7): forordet, cirklerne (to mødes to steder, et tryk dér siger
+// "begge", det tredje tal giver ét rigtigt sted, et forkert sted ryster), løsningen gemmes, "Og i dag?" og videre til
+// bogen, et glødende sted i brevet, stien til "Om Tycho", og Gør det selv åbner Hvid dværg, hvor citatet og "Hvem har
+// set en?" fører tilbage til bogen
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('tycho'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await O(() => { while (atomlabTest.opdagelser.vist().opslag !== 'gaaden' && atomlabTest.opdagelser.bladr(1)); });
+  await vent(page, () => atomlabTest.opdagelser.scene()?.tilstand);
+  const g = () => O(() => atomlabTest.opdagelser.scene().tilstand());
+  const forord = { ...(await g()), tekst: await O(() => document.querySelector('#opdBog .ag-forord-tekst')?.textContent ?? '') };
+  await page.click('#opdBog .ag-forord-knap');
+  const start = await g();
+  await page.click('#opdBog .tg-tal-knap[data-tycho="G"]');
+  const én = await g();
+  await page.click('#opdBog .tg-stjerne-knap[data-tycho="D"]');
+  const to = await g();
+  await page.click('#opdBog .tg-møde-knap >> nth=0');
+  const begge = await g();
+  await page.click('#opdBog .tg-tal-knap[data-tycho="B"]');
+  const tre = await g();
+  await page.click('#opdBog .tg-møde-knap[data-rigtig="nej"] >> nth=0');
+  const forkert = await g();
+  await page.click('#opdBog .tg-møde-knap[data-rigtig="ja"]');
+  const løst = { ...(await g()), gemt: await O(() => localStorage.getItem('atomlabOpdagelserGaader')), idag: await O(() => document.querySelector('#opdBog .tg-idag')?.textContent ?? ''), ny: await O(() => document.querySelectorAll('#opdBog .tg-ny polygon').length) };
+  tjek('Tychos gåde: forordet (Knudstrup 1573, kometen) og så tre tal, to cirkler mødes to steder ("begge"), det tredje giver ét rigtigt sted, et forkert sted ryster bare, og "Alle tre passer" med "Og i dag?" og et ✓',
+    forord.forord && /komet/.test(forord.tekst) && !start.forord && start.tegnet.length === 0 && én.tegnet.join() === 'G' && /Tag et tal mere/.test(én.linje)
+    && to.møder.length === 2 && to.møder.every((x) => !x) && /To steder passer/.test(to.linje) && /begge steder/.test(begge.linje) && !begge.fundet
+    && tre.møder.filter(Boolean).length === 1 && /alle tre cirkler/.test(tre.linje) && !forkert.fundet && /kun to/.test(forkert.linje)
+    && løst.fundet && løst.linje === 'Alle tre passer.' && /tycho/.test(løst.gemt ?? '') && /7° 50′/.test(løst.idag) && løst.ny === 1,
+    JSON.stringify({ forord, start, én, to, begge, tre, forkert, løst }));
+  // "Se tallene i bogen fra 1573 ›" bladrer til bogen, og brevet har "O crassa ingenia"
+  await page.click('#opdBog .tg-videre');
+  const hentet = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'bogen' && atomlabTest.opdagelser.scene()?.hentet(), null, 15000);
+  const faner = await O(() => [...document.querySelectorAll('#opdBog .bs-fane')].map((f) => f.textContent));
+  await page.click('#opdBog .bs-fane >> text=Brevet');
+  await vent(page, () => atomlabTest.opdagelser.scene()?.side() === 'brevet' && atomlabTest.opdagelser.scene().hentet(), null, 15000);
+  await page.click('#opdBog .bs-glød[data-sted="tykhoveder"] >> nth=0');
+  const brev = await O(() => ({ sted: atomlabTest.opdagelser.scene().sted(), latin: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.textContent ?? '', dansk: document.querySelector('#opdBog .bs-forklaring .bs-dansk')?.textContent ?? '' }));
+  await page.click('#opdBog .bs-fane >> text=Aftenen');
+  const sti = [];
+  for (let i = 0; i < 4; i++) {
+    sti.push(await O(() => `${atomlabTest.opdagelser.scene()?.side?.()}:${document.querySelector('#opdBog .bs-videre')?.textContent}`));
+    await page.click('#opdBog .bs-videre');
+  }
+  const om = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'om' && document.querySelector('#opdBog .bo-knap[data-gaa="kosmos:hviddvaerg"]') && document.querySelector('#opdBog .bo-knap-linje'));
+  tjek('Tychos bog fra 1573: fire faner, brevet viser "O crassa ingenia" med dansk, og "Næste side ›" går til "Havde han ret? ›" og "Om Tycho" med "Se en stjerne eksplodere ›"',
+    hentet && faner.join('|') === 'Aftenen|Kortet|Brevet|Farven' && brev.sted === 'tykhoveder' && /O crassa ingenia/.test(brev.latin) && /tykke hoveder/.test(brev.dansk)
+    && sti.join() === 'a:Næste side ›,b1b:Næste side ›,brevet:Næste side ›,d2:Havde han ret? ›' && om, JSON.stringify({ faner, brev, sti }));
+  // Gør det selv: Hvid dværg i Kosmos med Tychos citat og "Læs Tychos bog ›" (begge veje)
+  await page.click('#opdBog .bo-knap');
+  const iKosmos = await vent(page, () => location.hash === '#kosmos' && atomlabTest.kosmos?.valgt?.() === 'hviddvaerg', null, 30000);
+  // Citatets knap og knappen i emnet "Hvem har set en?" (det emne er lukket, til man åbner det)
+  const knapper = await O(() => document.querySelectorAll('#kosmos [data-gaa="opdagelser:tycho"]').length);
+  await O(() => document.querySelector('#kosmos #kosmosCitat [data-gaa="opdagelser:tycho"], #kosmos [data-gaa="opdagelser:tycho"]').click());
+  const tilbage = await vent(page, () => location.hash === '#opdagelser' && atomlabTest.opdagelser?.vist()?.bog === 'tycho', null, 15000);
+  tjek('Gør det selv: "Se en stjerne eksplodere" åbner Hvid dværg i Kosmos, og "Læs Tychos bog" (citatet og "Hvem har set en?") åbner bogen igen',
+    iKosmos && knapper >= 2 && tilbage, JSON.stringify({ iKosmos, knapper }));
+  await ctx.close();
+}
+
 // Telefon og tablet på højkant som første skærm: forsiden kan ses uden at rulle (også "Begynd"), et stryg bladrer, og
 // intet ligger uden for skærmen
 for (const [navn, opsætning] of [
@@ -602,7 +694,12 @@ for (const [navn, opsætning] of [
   await vent(page, påHylden, null, 15000);
   const hylde = await page.evaluate(() => {
     const r = [...document.querySelectorAll('#opdHylde [data-bog], #opdLinje')].map((e) => e.getBoundingClientRect());
-    return r.every((x) => x.left >= 0 && x.right <= innerWidth + 0.5 && x.top >= 0 && x.bottom <= innerHeight + 0.5)
+    // Navnet på omslaget står over årstallet (fundet på en telefon med "TYCHO BRAHE" på to linjer, T3)
+    const navneOverÅret = [...document.querySelectorAll('#opdHylde .opd-plads')].every((p) => {
+      const n = p.querySelector('.opd-omslag-navn, .opd-ryg-navn')?.getBoundingClientRect(), å = p.querySelector('.opd-år').getBoundingClientRect();
+      return !n || n.bottom <= å.top + 0.5;
+    });
+    return navneOverÅret && r.every((x) => x.left >= 0 && x.right <= innerWidth + 0.5 && x.top >= 0 && x.bottom <= innerHeight + 0.5)
       && [...document.querySelectorAll('#opdHylde [data-bog]')].every((e) => e.getBoundingClientRect().width >= 44);
   });
   await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
@@ -642,6 +739,19 @@ for (const [navn, opsætning] of [
     return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), kort: !kort?.offsetWidth || kort.getBoundingClientRect().right <= innerWidth + 0.5, bred: document.documentElement.scrollWidth > innerWidth + 1 };
   });
   tjek(`${navn}: Tychos forside har portrættet og spørgsmålet fremme, W'et er inden for skærmen, og intet går ud til siden`, tf.portræt && tf.titel && tf.kort && !tf.bred, JSON.stringify(tf));
+  // Tychos gåde (T3): kortet og de tre tal ses uden at rulle, knapperne er mindst 44 px, og intet går ud til siden
+  await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'gaaden' && v.bladr(1)); });
+  await vent(page, () => atomlabTest.opdagelser.scene()?.visGåden);
+  await page.evaluate(() => atomlabTest.opdagelser.scene().visGåden());
+  await page.waitForTimeout(400);
+  const gåde = await page.evaluate(() => {
+    const ramme = document.querySelector('#opdBog .bog-ramme').getBoundingClientRect();
+    const inde = (x) => x.left >= ramme.left - 0.5 && x.right <= ramme.right + 0.5 && x.top >= ramme.top - 0.5 && x.bottom <= ramme.bottom + 0.5;
+    const kort = document.querySelector('#opdBog .tg-kort').getBoundingClientRect();
+    const tal = [...document.querySelectorAll('#opdBog :is(.tg-tal-knap, .tg-punkt)')].map((e) => e.getBoundingClientRect());
+    return { kort: inde(kort) && kort.width >= 240, tal: tal.length === 6 && tal.every((x) => inde(x) && x.height >= 44), bred: document.documentElement.scrollWidth > innerWidth + 1 };
+  });
+  tjek(`${navn}: i Tychos gåde ses kortet (mindst 240 px) og de tre tal uden at rulle, knapperne er mindst 44 px, og intet går ud til siden`, gåde.kort && gåde.tal && !gåde.bred, JSON.stringify(gåde));
   await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
   await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'huygens');
   // "Bogen fra 1659": fanerne og stederne er knapper på mindst 44 px inden for skærmen, og intet går ud til siden

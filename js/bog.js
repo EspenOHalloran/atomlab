@@ -50,7 +50,7 @@ function galileiTegning() {
 // Bogens egen tegning på forsiden (Tycho, T1): stjernerne som træsnit i en dobbelt ramme, som på Tychos kort fra 1573
 // (s. B1b). kort.stjerner har x og y i grader (projicer i js/data/opdagelser/tycho.js) og lysstyrken mag. Den største er
 // den nye stjerne.
-function træsnitStjerne(x, y, r, takker) {
+export function træsnitStjerne(x, y, r, takker) {
   const p = [];
   for (let i = 0; i < takker * 2; i++) {
     const v = (i / (takker * 2)) * Math.PI * 2 - Math.PI / 2;
@@ -212,6 +212,8 @@ function omHTML(o, om, bogId) {
     + `<div class="bo-tal">${om.tal.slice(0, 2).map((x) => `<p><b>${esc(x.tal)}</b> <span>${esc(x.tekst)}</span></p>`).join('')}</div>`
     + `<p class="bo-tekst">${esc(om.sætninger)}</p>`
     + (om.knap ? `<button class="knap bo-knap" data-gaa="${esc(om.knap.gaa)}">${esc(om.knap.tekst)} ›</button>` : '')
+    // En linje om, hvad man skal gøre, når knappen har åbnet et andet sted (Tycho: "Tryk på ›Lad den suge gas‹", T3)
+    + (om.knap?.linje ? `<p class="bo-knap-linje">${esc(om.knap.linje)}</p>` : '')
     + `<div class="bo-hvorfor">${om.hvorfor.slice(0, 4).map((h, i) => `<button class="hvorfor" data-bo-hvorfor="${i}" aria-expanded="false">${esc(h.spørgsmål)}</button>`).join('')}</div>`
     + boks(om.nørd, 'nørd') + boks(om.ærligt, 'ærligt')
     + '</div></div>';

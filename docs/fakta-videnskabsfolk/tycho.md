@@ -100,3 +100,14 @@
 - "Kobberstik fra 1586, Tycho var 40" → "Tycho var omkring 40" (indskriften siger "i sit 40. år").
 - "Han opfandt ordet nova" → "bogens titel gav navnet".
 - "Han var den første, der så den" (myten) → "mange så den, men han målte den".
+
+### Faktatjekket af T3 (19. november 2026, Opus i stedet for Fable)
+*Teksterne til gåden, "Bogen fra 1573" og "Om Tycho" (`GÅDE`, `BOGEN` og `OM` i `js/data/opdagelser/tycho.js`). Ca. 25 påstande, tjekket af hovedsessionen mod tabellerne ovenfor og siderne selv:*
+- **Forordets sted:** Brevet til Pratensis slutter "Datæ Knusdorp die 5. Maj, Anno 1573" (n35). Så "Knudstrup, foråret 1573" holder. De tyske skrifter er "chartis illis è Germania ad vos allatis" (n33).
+- **Nutidens afstande** (vores udregning med stjernernes pladser og midten af resten, J2000): Schedir 7° 50,0′, Kaph 5° 20,7′, γ Cas 4° 59,4′. Skrevet som 7° 50′, 5° 21′ og 5° 0′ (midten af resten er ikke præcis stjernens sted).
+- **Gåden:** Cirklerne med Tychos tal om stjernernes rigtige pladser mødes 1,6′ (G og D), 6,7′ (B og D) og 7,8′ (B og G) fra resten. Det andet mødested for G og D ligger tæt ved Schedir, langt fra B's cirkel.
+- **Kortets andre stjerner:** A hovedet = ζ Cas (0h 36m 58s, +53° 54′), C bæltet = η Cas (0h 49m 06s, +57° 49′) og H stolens midte = κ Cas (0h 33m 00s, +62° 56′), pladserne fra Wikipedia (Gaia DR3 og Hipparcos). Hvilke stjerner A, C og H er, er vores bud efter kortet og Ptolemæus' navne (ret sikkert).
+- **Siderne:** de glødende ord er læst på billederne (n36, n45, n32, n62). "perfectè" er oversat med "helt nøjagtigt" (drejebogen havde "godt").
+- **"Hvad var stjernen egentlig?":** "Den sugede gas, til den eksploderede" → "Den fik nok gas fra en nabostjerne, til den blev for tung (forskerne er ikke helt enige)", for det er omstridt (afsnit 6, og Hvid dværgs nørd-tekst).
+- **Betelgeuse** "bliver selv en supernova en dag": som Supernova i Kosmos ("måske først om 100.000 år").
+

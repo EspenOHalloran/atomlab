@@ -25,7 +25,7 @@ export default {
   navn: 'Supernova',
   ikon: '💥',
   undertitel: 'En kæmpestjerne eksploderer',
-  citat: 'tycho',
+  citat: 'feynmanVæv', // Tychos citat står ved Hvid dværg, hvor hans stjerne hører til (Videnskabsfolkene T3, 19. november 2026)
   kamera: { retning: [0.35, 0.3, 1], radius: 8.5 },
   tal: [
     ['Betelgeuse er', 'ca. 550 lysår væk'],

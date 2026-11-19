@@ -7,6 +7,7 @@
 ## Kan tjekkes af Fable senere
 *(Én linje pr. opgave: dato, hvad, filen, og hvad Fable skulle have kigget efter.)*
 - 19. november 2026: Tychos drejebog og faktagrundlag (V1), [drejebog-tycho.md](drejebog-tycho.md) og [fakta-videnskabsfolk/tycho.md](fakta-videnskabsfolk/tycho.md), faktatjekket af Opus (høj) i stedet for Fable. Fable skulle have kigget efter: oversættelsen af de fire sider fra latin (A, B1b, brevet n32 og D2), om gåden med cirklerne er ærlig nok (Tycho brugte to tal og kugletrekanter), og rettighederne til Toronto-skanningen fra 2009.
+- 19. november 2026: Tychos bog T3 (gåden, "Bogen fra 1573" og "Om Tycho"), teksterne i `js/data/opdagelser/tycho.js` (`GÅDE`, `BOGEN`, `OM`), faktatjekket af Opus (høj) i stedet for Fable. Fable kunne kigge efter: oversættelsen af de fire sider linje for linje, at stederne på siderne er de rigtige ord, og om "Hvad var stjernen egentlig?" siger usikkerheden om nabostjernen godt nok.
 
 ## Hvad det går ud på
 I synes, at AtomLab er godt, men I vil have Fables øjne på, hvor det kan blive bedre, så det kommer op på et professionelt niveau. Fable skal:
