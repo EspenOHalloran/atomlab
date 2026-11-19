@@ -161,14 +161,16 @@ export const GÅDER = [
       <p><b>Pletterne</b> er 0,2-1 mm, lyse i midten med en mørk kant. Kanten er sandsynligvis jernfosfat (vivianit) og midten jernsulfid (greigit). Mikrober på Jorden laver de to stoffer, når de "spiser" organisk stof. Uden liv går det meget langsomt under ca. 150-200 °C, men én vej uden liv er ikke udelukket (Hurowitz m.fl., Nature 2025). Det er måske det stærkeste spor af liv, der er fundet på Mars.</p>
       <p><b>Enceladus:</b> Rumsonden Cassini fandt brint (2017), store organiske molekyler (2018) og fosfat (2023) i fontænerne. Af de seks grundstoffer, livets store molekyler er bygget af (C, H, N, O, P og S), er de fem fundet, og svovl måske. Ingen har endnu kunnet se efter liv dér.</p>
       <p><b>Fund, der ikke holdt:</b> Vikings forsøg på Mars (1976) og meteoritten ALH84001 fra Mars (1996) lignede spor af liv, men de fleste forskere mener i dag, at kemi uden liv forklarer dem. Gassen fosfin på Venus (2020) er omstridt, og gassen DMS på planeten K2-18b (2025) er ikke bekræftet. Carl Sagan skrev i 1979 tanken sådan (frit oversat): Usædvanlige påstande kræver usædvanlige beviser.</p>
+      <p><b>Lysene:</b> Den tætte klump er det felt i stjernebillederne Svanen og Lyren, rumteleskopet Kepler kiggede på. Kepler fandt ca. 2.800 af planeterne. De fjerneste, over 10.000 lysår væk, ligger mod Mælkevejens midte og er næsten alle fundet med mikrolinser: En stjerne foran en anden bøjer lyset fra den bagved, så den lyser op et øjeblik, og en planet giver et lille ekstra blink.</p>
       <p><b>Planerne:</b> ESA's rover Rosalind Franklin skal efter planen sendes op i 2028 og kan bore op til 2 m ned i Mars. ESA's JUICE når Jupiter i 2031. Teleskopet ELT i Chile skal efter planen se sit første lys i 2029, og NASA's Habitable Worlds Observatory skal efter planen op i 2040'erne og lede efter spor af liv på planeter som Jorden.</p>`,
     ærligt: '<p>"Målt eller gæt?" er forenklet. At pletterne er lavet af liv, er ikke et vildt gæt: Mikrober på Jorden laver de samme stoffer. Men kemi uden liv er ikke udelukket, og flere fund, der lignede liv, holdt ikke.</p><p>Vi kender kun ét eksempel på liv, vores eget. Derfor ved ingen, om liv opstår let, når der er vand og de rigtige stoffer.</p>',
-    // Scenen i 3D (G4d, js/gaader/liv.js). Planeterne: js/data/exoplaneter.js (6.464 i NASA Exoplanet Archive 5. november
-    // 2026, årene fra Wikipedias lister). 1992: Wolszczan og Frail, to planeter om pulsaren PSR B1257+12. 1995: Mayor og
+    // Scenen i 3D (G4d, js/gaader/liv.js). Planeterne: js/data/exoplaneter.js (6.470 i NASA Exoplanet Archive, tabellen
+    // pscomppars, hentet 19. november 2026, med fundår, retning og afstand). 1992: Wolszczan og Frail, to planeter om pulsaren PSR B1257+12. 1995: Mayor og
     // Queloz, 51 Pegasi b (Wikipedia). Diametre: Jorden 2 × 6.371 km, Mars 2 × 3.389,5 km, Enceladus 2 × 252,04 km
     // (Wikipedia, Park m.fl. 2024). Cheyava Falls: ca. 1 × 0,6 m, foto 18. juli 2024 (NASA PIA26368). Sonderne: årstallene
-    // fra kortets trin 3. Kepler kiggede det meste af tiden på ét lille felt på himlen og fandt
-    // 2.778 bekræftede planeter (juni 2023, Wikipedia "Kepler space telescope").
+    // fra kortets trin 3. Kepler kiggede det meste af tiden på ét lille felt på himlen i Svanen og Lyren (NASA) og fandt
+    // 2.787 planeter i arkivet (disc_facility Kepler). Over 10.000 lysår væk: 263 planeter, 259 fundet med mikrolinser og
+    // næsten alle mod Mælkevejens midte (arkivet 19. november 2026).
     scene: {
       start: 'Hvert lys er en planet om en anden stjerne, fundet fra 1992 til nu. Det blå lys er Jorden.',
       første: '1992 kom de første planeter om en anden stjerne. 1995 den første om en stjerne som Solen.',
@@ -182,7 +184,7 @@ export const GÅDER = [
         foto: 'Foto: NASA/JPL-Caltech/MSSS', tianwen: 'Tianwen-3: prøver hjem 2031', clipper: 'Europa Clipper: Jupiter 2030',
         dragonfly: 'Dragonfly: Titan 2034', jupiter: 'Jupiter', saturn: 'Saturn', jordenKort: 'Jorden', marsKort: 'Mars',
       },
-      ærligt: `<p>Der er ét lys for hver af de 6.464 bekræftede planeter i NASA's liste (5. november 2026). Hvor mange der blev fundet hvert år, er talt i Wikipedias lister over fund, og de ca. 370, listerne mangler, er lagt til de samme år. Afstanden fra Jorden er rigtig, men trykket sammen, så de fjerne kan være med. Retningen er tilfældig: I virkeligheden ligger mange af dem i ét lille felt på himlen, hvor rumteleskopet Kepler kiggede. De to første fra 1992 kredser om en pulsar (en udbrændt stjerne).</p>
+      ærligt: `<p>Der er ét lys for hver af de 6.470 bekræftede planeter i NASA's arkiv over exoplaneter (19. november 2026), tændt i det år, de blev fundet. Retningen på himlen er rigtig. Afstanden fra Jorden er også rigtig, men trykket sammen, så de fjerne kan være med, og 28 planeter uden kendt afstand har fået en afstand fra samme år. Planeter om samme stjerne står i samme lys. De to første fra 1992 kredser om en pulsar (en udbrændt stjerne).</p>
         <p>Jorden, Mars og Enceladus står i rigtig skala i forhold til hinanden. Fotoet af Cheyava Falls er fra NASA/JPL-Caltech/MSSS. Planeterne og banerne til sidst er ikke i skala. ${STREG_FORKLARING}</p>`,
     },
   },
