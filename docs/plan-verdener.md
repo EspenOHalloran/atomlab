@@ -12,13 +12,13 @@
 |---|---|---|---|---|
 | 1 | ☢️ **Kernerne** | Kerner, der smelter sammen, spaltes og henfalder | Stjerneovnen, Reaktoren | **Tjernobyl** som tredje fane i Reaktoren (parkeret 14. november 2026, står i [ideer.md](ideer.md)). **Antistof** som en lille del (positronen og PET-scanning) |
 | 2 | ⚛️ **Atomer** (hed "Atomer og molekyler" til 14. november 2026) | Hvad et atom er, og de 118 slags | Atomværkstedet, Det periodiske system. **Molekyler** bliver en egen del her (Serie 1) | **Kvantefysik** som egen del (orbitalerne i store atomer hører til her, kvantecomputeren er dens sidste kapitel, hvis den kommer). **Fotos af grundstofferne** på væggen. Molekyler flytter til Stof og kemi, når den kommer |
-| 3 | 🧪 **Kemi** (arbejdsnavn "Stof og kemi", navnet valgt 16. november 2026) *(kommer, når Ild findes)* | Atomer, der sætter sig sammen og bytter plads | – | **Molekyler** (flytter fra Atomer, med knaldgassen) og **Ild** (knaldgassen som det første bål). Rumfærgens blanding |
+| 3 | 🧪 **Kemi** (arbejdsnavn "Stof og kemi", navnet valgt 16. november 2026, i ringen fra 18. november 2026) | Atomer, der sætter sig sammen og bytter partnere | Molekyler (flyttet fra Atomer), **Ild** (18. november 2026, status prøve) | Ilds fire ture og knaldgassen, der flytter fra Molekyler til Ild. Rumfærgens blanding |
 | 4 | 🧬 **Liv** (hed "Ild og liv" til 14. november 2026) | Molekyler, der kan kopiere sig selv | Liv, **Begyndelsen** (L5, forløb 5, bygget 18. november 2026, status prøve) | Liv i rummet bliver ét kort på Mars (L6, ændret 14. november 2026 efter E10). "Skriv dit navn" |
 | 5 | ⚡ **Elektricitet** (senere måske "Lys og strøm") | Ladninger i bevægelse, det man kan holde i hånden | Batteriet | **Strøm og magneter**, **Lys** (farver, spektret og radiobølger), lyn. Nerver som et "Hvorfor?"-kort med link til Liv |
 | 6 | 🔭 **Rummet** | Planeterne, stjernerne, og rum og tid | Solsystemet, Kosmos | Solsystemet: **overblikket** som forside, **månerne** med mulige betingelser for liv, Venus kort, Merkur og Pluto i lille udgave, Mars ekstra. **Rumrejsen** som egen del, når overblikket findes. Kosmos i fire grupper: *Universet* (Big Bang, **Mørkt stof**, Andromeda), *Stjernernes liv*, *Sorte huller* og *Tid og rum* (med "Tid" som ét punkt) |
 | – | 📚 **Biblioteket** | Videnskaben selv: ordene, menneskene og det, vi ikke ved | Ordbogen | **Gåderne** (med Planet X og gåden om antistof). **Opdagelserne:** tidslinjen, videnskabsfolkene og siderne fra de gamle bøger, hver person knyttet til en opdagelse, man kan gøre efter i programmet |
 
-Indtil Ild findes, er der seks verdener. Batteriet bliver i Elektricitet. Får Elektricitet ikke en del mere inden for et halvt år, tages det op igen (Fables mulighed B: Batteriet til Stof og kemi).
+Fra 18. november 2026 er der syv verdener (højst syv, se reglerne). Batteriet bliver i Elektricitet. Får Elektricitet ikke en del mere inden for et halvt år, tages det op igen (Fables mulighed B: Batteriet til Stof og kemi).
 
 **Uden for ringen:** "Test dig selv" bliver "gæt først" i forløbene. "Zoom ind fra hverdagen" bliver indledningen til et forløb. Grundstoffernes rejse (F1) *er* Rejsen. Hjernen og AI og en chat kommer ikke med.
 
@@ -35,7 +35,7 @@ Indtil Ild findes, er der seks verdener. Batteriet bliver i Elektricitet. Får E
 | ✅ **Ringen:** Kernerne først, "Atomer og molekyler" bliver "Atomer", "Ild og liv" bliver "Liv" (navn, ikon og tekst) | **Lavet 14. november 2026** (Serie 2 nr. 6 i køreplanen) | lille | `VERDENER` i `js/karrusel.js`, `js/menubaggrund.js` (motivet) og testen `karrusel` |
 | **Molekyler som egen del i Atomer** med sit forløb (eftersynets nr. 5 og 10b) | Serie 1, efter skærmlisten (10a) og Forløb-klodsen | mellem (1-2 sessioner) | En ny skærm i skærmlisten med egen HTML og CSS. `js/molekyler.js`, `js/molekyler-byg.js` og `js/knaldgas.js` er allerede adskilt. Opgaverne får deres egen linje i "Din fremgang" (i dag under Værkstedet, `js/main.js:17-18`), og de gemte stjerner flytter med. Testene `byg-molekyler`, `byttebors`, `molekyler`, `vaerksted` og `karrusel` |
 | **Kosmos i fire grupper,** og de to punkter om tid bliver ét (**lavet 14. november 2026**) | Serie 1 (sammen med Tid, nr. 6) | lille til mellem | `js/kosmos.js` og fænomenerne `tid` og `tidhvorfor` |
-| **Kemi** ind i ringen, og Molekyler flytter dertil | Når Ild bygges | lille (selve flytningen) | `VERDENER`, et nyt motiv og et nyt ikon (`ikon-v-<id>`) |
+| ✅ **Kemi** ind i ringen, og Molekyler flytter dertil (**lavet 18. november 2026**, Ild 1 PR 1) | Når Ild bygges | lille (selve flytningen) | `VERDENER`, et nyt motiv og et nyt ikon (`ikon-v-<id>`) |
 
 **En ny del i en verden, der findes:** en ny linje i `dele` under verdenen i `VERDENER` (og i skærmlisten fra nr. 10a). Detaljerne om knapperne, ✓ og "Din fremgang" står i [arkiv/plan-verdener-k4.md](arkiv/plan-verdener-k4.md).
 

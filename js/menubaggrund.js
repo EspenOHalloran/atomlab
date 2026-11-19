@@ -541,7 +541,32 @@ function ordbog() {
   };
 }
 
-const BYGGERE = { fusion: stjerne, reaktor, vaerksted: værksted, system, liv, batteri, solsystem, kosmos, ordbog };
+// ---------- Kemi (Ild): gnister, der stiger op fra et varmt skær forneden ----------
+function ild() {
+  const liste = [];
+  const toner = [farve(0xffb347), farve(0xff7a2f), farve(0xffd98a)];
+  for (let i = 0; i < Math.round(150 * Math.max(L, 0.6)); i++) {
+    liste.push({ p: [tilfældig(-0.75, 0.75), 0, tilfældig(-0.3, 0.3)], str: tilfældig(2.5, 6), farve: toner[i % 3], data: [Math.random(), tilfældig(0.035, 0.08), tilfældig(0.6, 2.2), tilfældig(0.45, 1)] });
+  }
+  const mat = prikMateriale(/* glsl */ `
+    // aData: start (0-1), fart, svaj, lys. Gnisterne stiger og toner ud foroven.
+    float f = fract(aData.x + uTid * aData.y);
+    p.x *= min(uAspekt, 1.8) * (0.55 + 0.45 * f);
+    p.y = -0.55 + f * 1.05;
+    p.x += 0.03 * sin(uTid * aData.z + aData.x * 30.0);
+    lys = aData.w * smoothstep(0.0, 0.12, f) * (1.0 - smoothstep(0.55, 1.0, f));`);
+  const flade = lavFlade(/* glsl */ `
+    void main() {
+      float g = exp(-length((vP - vec2(0.0, -0.55)) * vec2(1.1, 1.6)) * 2.6);
+      g *= 0.85 + 0.15 * stoej(vec2(vP.x * 4.0, uTid * 0.8));
+      gl_FragColor = vec4(vec3(1.0, 0.42, 0.1) * g * 0.32, uVaegt);
+    }`);
+  const g = new THREE.Group();
+  g.add(flade, lavPrikker(liste, mat));
+  return { gruppe: g, uniforms: [flade.material.uniforms, mat.uniforms] };
+}
+
+const BYGGERE = { fusion: stjerne, reaktor, vaerksted: værksted, system, ild, liv, batteri, solsystem, kosmos, ordbog };
 
 // Laves én gang (fra lavKarrusel). dele: delene i ringens rækkefølge, pos: ringens drejning (i kort)
 export function lavMenuBaggrund(delListe, pos) {

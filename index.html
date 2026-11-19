@@ -79,6 +79,13 @@
           <small>Sæt atomer sammen: de deler eller giver elektroner</small>
         </span>
       </a>
+      <a href="#ild">
+        <span class="kort-ikon ikon-ild"></span>
+        <span class="kort-tekst">
+          <strong>Ild</strong>
+          <small>Hvad brænder egentlig? Et stearinlys, en gasbrænder og atomerne i flammen</small>
+        </span>
+      </a>
       <a href="#system">
         <span class="kort-ikon ikon-tabel"></span>
         <span class="kort-tekst">
@@ -905,6 +912,102 @@
         <p><strong>Farverne:</strong> Atomerne har kemikernes farver: C grå, H lysegrå, N blå, O rød og P orange. Baserne har hver sin farve: A grøn, T rød, G gul og C blå. U i RNA er lyserød.</p>
         <p><strong>Fra opskrift til protein:</strong> "Se genet blive læst" viser, hvordan cellen laver en RNA-kopi af genet, og hvordan ribosomet læser kopien tre bogstaver ad gangen og bygger en kæde af aminosyrer. ⏩ går hurtigere, og mellemrum stopper tiden. I "Læs selv" er du ribosomet: Find ordet i kodehjulet, og vælg aminosyren. I "Skift et bogstav" kan du lave mutationer og se, hvad der sker med proteinet.</p>
         <p><strong>Kodehjulet:</strong> Det første bogstav står i midten, det andet i næste ring og det tredje yderst. Helt yderst står aminosyren. Tryk på et ord for at se, hvad det betyder. Aminosyrernes farver viser, om de skyr vand (gule), kan lide vand (grønne), er plus (blå) eller minus (røde).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Ild (Kemi, js/ild.js) ===== -->
+  <section id="ild" class="skærm skjult" aria-label="Ild">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Ild</h2>
+      <span class="system-status">Kemi: Hvad brænder egentlig?</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="ildHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <div class="ild-styr" id="ild-bord">
+        <div class="ild-gruppe">
+          <h4 class="panel-overskrift">Flamme</h4>
+          <div class="ild-valg" role="group" aria-label="Flamme">
+            <button class="knap lille svag" data-ild-flamme="lys">Stearinlys</button>
+            <button class="knap lille svag" data-ild-flamme="brænder">Gasbrænder</button>
+          </div>
+        </div>
+        <div class="ild-gruppe" id="ildRumGruppe">
+          <button id="ildRum">Rumstation</button>
+        </div>
+        <div class="ild-gruppe" id="ildLuftGruppe" hidden>
+          <label class="ild-skyder"><span>Luft i gassen</span>
+            <input type="range" id="ildLuft" min="0" max="100" step="1" value="0" aria-label="Luft i gassen">
+            <span class="ild-skyder-ender" aria-hidden="true"><span>lidt</span><span>meget</span></span>
+          </label>
+        </div>
+        <div class="ild-gruppe">
+          <h4 class="panel-overskrift">Værktøj</h4>
+          <div class="ild-valg tre" role="group" aria-label="Værktøj">
+            <button class="knap lille svag" data-ild-vaerktoej="tændstik">Tændstik</button>
+            <button class="knap lille svag" data-ild-vaerktoej="ske">Ske</button>
+            <button class="knap lille svag" data-ild-vaerktoej="lup">Lup</button>
+          </div>
+        </div>
+        <div class="ild-gruppe" id="ildSlukLys">
+          <h4 class="panel-overskrift">Sluk med</h4>
+          <div class="ild-valg" role="group" aria-label="Sluk med">
+            <button class="knap lille svag" data-ild-sluk="pust">Pust</button>
+            <button class="knap lille svag" data-ild-sluk="glas"><span id="ildGlasTekst">Glas</span></button>
+            <button class="knap lille svag" data-ild-sluk="slukker">Lysslukker</button>
+            <button class="knap lille svag" data-ild-sluk="co2">CO₂</button>
+            <button class="knap lille svag" data-ild-sluk="vand">Vand</button>
+          </div>
+          <button class="knap primær" id="ildTænd" hidden>Tænd lyset</button>
+        </div>
+        <div class="ild-gruppe" id="ildSlukBrænder" hidden>
+          <button id="ildGas">Gas</button>
+        </div>
+      </div>
+      <div class="ild-styr" id="ild-atomer" hidden>
+        <h4 class="panel-overskrift">Se atomerne</h4>
+        <p class="liv-byg-tekst" id="ildAtomTekst"></p>
+        <button class="knap primær" id="ildAtomIgen" hidden>Igen</button>
+        <button class="knap lille svag" id="ildTilbage">‹ Tilbage til bordet</button>
+      </div>
+    </aside>
+    <div class="vindue" id="ildVindue" data-log></div>
+    <aside class="panel side-panel højre-panel">
+      <h3 class="liv-titel" id="ildTitel"></h3>
+      <p class="liv-tekst" id="ildTekst"></p>
+      <dl class="liv-tal" id="ildTal"></dl>
+      <div class="liv-hvorfor" id="ildHvorfor"></div>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="ild-nørd" name="ild-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
+        <p><strong>Energien:</strong> Når ét molekyle metan (naturgas) brænder, kommer der ca. 8 eV ud. Én spaltning af uran i Reaktoren giver ca. 200 MeV, over 20 millioner gange så meget.</p>
+        <p><strong>Det blå lys</strong> kommer fra CH og C₂: molekyler, der lige er dannet i reaktionen og har energi til overs. De sender det meste af lyset ud som blåt og grønt.</p>
+        <p><strong>Varmen:</strong> Glødende sod sender mest usynlig varmestråling (infrarødt) ud og kun lidt synligt lys. Derfor er et stearinlys en dårlig lampe.</p>
+        <p><strong>Kolde flammer:</strong> I 2012 så forskere på Den Internationale Rumstation, at dråber af brændstof blev ved med at brænde, efter at den synlige flamme var gået ud (forsøget FLEX).</p>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="ild-ærligt" name="ild-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
+        <p>Flammen er tegnet. En rigtig flamme flakker mere, og temperaturen skifter flere hundrede grader over få millimeter. Vægens spids brænder også langsomt væk, men det meste, der brænder, er dampen.</p>
+        <p>Lys i butikkerne er af stearin, paraffin eller en blanding. Regnskabet er det samme: CO₂ og vand.</p>
+        <p>I luppen bytter atomerne partnere i ét hug. I virkeligheden sker det i hundredvis af små trin, og stykket med to kulstof er ét af mange stykker, kæderne går i stykker til.</p>
+        <p>CO₂ kan ikke ses: Skyen er tegnet, så man kan se, hvor gassen er. Hvor længe lyset brænder under glasset, afhænger af, hvor stort glasset er. Rumstationen var Mir, og flammen er en halvkugle, fordi lyset selv er i vejen.</p>
+      </details>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpIld" role="dialog" aria-label="Hjælp til Ild">
+    <div class="dialog">
+      <header><h3>Ild</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p><strong>Ilden her er tegnet. Rigtig ild er kun noget, du prøver sammen med en voksen.</strong></p>
+        <p><strong>Værktøjet:</strong> Tryk <em>Tændstik</em> eller <em>Ske</em>, og træk den rundt i billedet med fingeren eller musen. Et tryk på knappen igen lægger den væk. <em>Lup</em> viser atomerne i flammens kant: Træk oxygenmolekylerne hen til stykket af stearinen.</p>
+        <p><strong>Sluk med:</strong> Pust, sæt et glas over, brug en lysslukker eller CO₂. <em>Tænd lyset</em> tænder det igen med en tændstik. Med gasbrænderen styrer du luften i gassen og slukker med kontakten <em>Gas</em>.</p>
+        <p><strong>Tiden:</strong> ⏸ stopper flammen, så du kan se den stå stille (mellemrum gør det samme). Træk uden værktøj for at dreje lidt, og rul eller knib for at zoome.</p>
+        <p><strong>Med et rigtigt stearinlys</strong> kan du prøve røgen og skeen sammen med en voksen. Stil lyset på et underlag, der ikke kan brænde, og hold skeen med en grydelap, for den bliver varm.</p>
       </div>
     </div>
   </div>

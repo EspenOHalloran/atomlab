@@ -13,6 +13,7 @@ import { sætVindue, verden, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavLagBokse } from './lag.js';
 import { tagVentGåde } from './gaa.js';
+import { udglat, prøver } from './gaader/kanter.js';
 
 const NØGLE = 'atomlabGaader'; // { id: tidspunkt } for de kort, man har gjort færdige
 const NØGLE_SKINNE = 'atomlabGaaderSkinne'; // '1', når man har set lysene på skinnen tænde (første gang er forbi)
@@ -285,6 +286,7 @@ export function lavGåder() {
 
 export function startGåder() {
   aktiv = true;
+  udglat(true);
   const id = tagVentGåde();
   if (id) visGåde(id);
   else visOversigt();
@@ -292,6 +294,7 @@ export function startGåder() {
 
 export function stopGåder() {
   aktiv = false;
+  udglat(false);
   scene?.stop();
   skinne?.fjern();
   verden.styring.autoRotate = false;
@@ -308,6 +311,7 @@ export function testAdgang() {
     færdige: () => Object.keys(hentFærdige()),
     scene: () => scene?.testAdgang() ?? null,
     skinne: () => skinne?.testAdgang() ?? null,
+    prøver, // kantudglatningen: prøver pr. pixel i komponistens lag (0 uden for Gåderne og i testene med hurtig tegning)
     alle: tilSkinnen,
   };
 }

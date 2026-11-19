@@ -3,7 +3,7 @@
 // gåde ›" og ROLIG), et kort fra start til slut, ✓, "Se det selv", linket fra Sort hul og Ordbogen, og at telefonen
 // ikke får en vandret rullebjælke.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
-import { GÅDER, bygget, STREG_FORKLARING, påSkinnen, skalaOrd, førsteLinje, FØRSTE_GÅDE } from '../js/data/gaader.js';
+import { GÅDER, bygget, STREG_FORKLARING, påSkinnen, skalaOrd, førsteLinje, FØRSTE_GÅDE, bangTider, læsetid } from '../js/data/gaader.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
@@ -74,6 +74,13 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
 }
 
 // G4b: skinnen
+{
+  const bang = GÅDER.find((g) => g.id === 'antistof').scene.bang;
+  const t = bangTider(bang);
+  const ord = bang.map((l) => læsetid(l));
+  tjek(`Antistof: linjerne i udslettelsen står længe nok til at blive læst (1 s + 3 ord/s), i alt højst 20 s (${t.færdig.toFixed(1)} s)`,
+    t.mødes >= ord[0] - 0.8 && t.korn - t.mødes >= ord[1] && t.ud - t.korn >= ord[2] && t.færdig - t.ud >= ord[3] && t.færdig <= 20, JSON.stringify(t));
+}
 tjek('G4b: skinnen har de byggede gåder fra det mindste til det største, hver med et kort navn',
   påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
 
@@ -133,6 +140,15 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   tjek('G4b: piletasten og "større ›" flytter til den næste større gåde, og linjen "Der er flere." går væk', flyttet.fokus === 'liv' && flyttet.spm === 'Er der liv andre steder?' && flyttet.linje === '', JSON.stringify(flyttet));
   // Et tryk på lyset ved siden af glider derhen, og et træk mod venstre går mod de større
   await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 2) < 0.02);
+  // Navnene er HTML-tekst (skarp), naboernes navne kan ses, og navnet på gåden i fokus er tonet ud (det står på knappen)
+  const nv = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
+  const navn = (t) => nv.find((n) => n.tekst.startsWith(t));
+  tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har intet navn i 3D',
+    nv.length === 7 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Sorte huller')?.synlig
+    && !navn('Liv andre steder')?.synlig, JSON.stringify(nv));
+  // Det sorte hul ved siden af tegnes af linsen fra Kosmos (lysbøjningen), i et lille lag efter lampens størrelse
+  const hul = await vent(page, () => (atomlabTest.gaader.skinne().lampe('sorthul')?.tegnet ?? 0) > 0, null, 10000) && await page.evaluate(() => atomlabTest.gaader.skinne().lampe('sorthul'));
+  tjek('skarpere: lampen for det sorte hul bruger linsen fra Kosmos og et lag på højst 512 px', hul?.linse && hul.tegnet > 0 && hul.størrelse >= 96 && hul.størrelse <= 512, JSON.stringify(hul));
   const nabo = await T(() => atomlabTest.gaader.skinne().skærm('sorthul'));
   await page.mouse.click(nabo.x, nabo.y);
   const trykket = (await K()).fokus;
@@ -274,7 +290,12 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     JSON.stringify({ par, lys, kun }));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
   const bang = await S();
-  await T(() => atomlabTest.gaader.scene().spol(10));
+  // Et tryk under udslettelsen springer til næste linje (den kommer først efter ca. 4 s)
+  await T(() => atomlabTest.gaader.scene().tryk(0, 0));
+  await T(() => atomlabTest.gaader.scene().spol(0.1));
+  const sprang = await S();
+  tjek('Antistof: et tryk under udslettelsen springer frem til næste linje', sprang.tilstand === 'bang' && sprang.t > 3.5, JSON.stringify({ t: sprang.t }));
+  await T(() => atomlabTest.gaader.scene().spol(18));
   const rest = await S();
   tjek('G4a: gættet starter den store udslettelse, og den ender i resten med "Se det igen"', bang.tilstand === 'bang' && rest.tilstand === 'rest'
     && await T(() => !!document.querySelector('#gaadeSceneKnapper [data-id="igen"]')), JSON.stringify({ bang: bang.tilstand, rest: rest.tilstand }));
@@ -340,10 +361,27 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await vent(page, påSkinne, null, 15000);
   const bred = () => page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.getElementById('gaaderPanel').scrollWidth) > window.innerWidth + 1);
   const o = await bred();
+  const nvT = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
+  tjek('telefon: navnene på skinnen er mindst 13 px', nvT.length > 0 && nvT.every((n) => n.px >= 13), JSON.stringify(nvT.map((n) => n.px)));
   await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   tjek('telefon: ingen vandret rullebjælke på skinnen og på kortet', !o && !(await bred()));
   await ctx.close();
+}
+
+// Fuld grafik (med komponisten): kantudglatning kun i Gåderne, slået fra igen, når man går
+{
+  const fb = await chromium.launch({ args: ARGS, fuldGrafik: true });
+  const page = await (await fb.newContext({ viewport: { width: 1024, height: 700 } })).newPage();
+  page.on('pageerror', (e) => fejl.push('fuld grafik: ' + e.message));
+  await page.goto(`${ADRESSE}/?test#gaader`);
+  await page.waitForFunction(() => window.atomlabTest?.gaader?.skinne?.()?.vist?.(), null, { timeout: 60000 });
+  const inde = await page.evaluate(() => atomlabTest.gaader.prøver());
+  await page.evaluate(() => { location.hash = '#'; });
+  await page.waitForFunction(() => document.querySelector('#gaader.skjult'), null, { timeout: 20000 });
+  const ude = await page.evaluate(() => atomlabTest.gaader.prøver());
+  tjek('skarpere: kantudglatning (4 prøver på pc) kun i Gåderne, væk igen i menuen', inde === 4 && ude === 0, JSON.stringify({ inde, ude }));
+  await fb.close();
 }
 
 tjek('ingen fejl i konsollen', fejl.length === 0, fejl.join('\n'));

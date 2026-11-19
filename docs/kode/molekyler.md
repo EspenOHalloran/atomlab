@@ -1,4 +1,4 @@
-# Koden: Molekyler (egen del i verdenen Atomer)
+# Koden: Molekyler (egen del i verdenen Kemi, til 18. november 2026 i Atomer)
 
 *Flyttet fra [skaerme.md](skaerme.md) 8. november 2026 (Molekyler M3), da den blev over 20 KB. Værkstedet selv (`js/vaerksted.js`) står stadig i skaerme.md, og dataene (`js/data/molekyler*.js`, `js/data/knaldgas.js`) i [data.md](data.md).*
 
