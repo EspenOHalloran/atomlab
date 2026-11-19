@@ -20,7 +20,7 @@ De andre påstande står allerede med mærker i faktagrundlaget eller i Fables t
 6. **Kolben bygges én gang, i Liv,** og Gåden "Hvordan begyndte livet?" får en knap dertil.
 7. **"Cellen" gør det,** ingen helikase, polymerase eller kopigaffel i forløbet. De ord står i "For nørder".
 8. **De fem kort** og at "Er det meste af DNA'et skrald?" går til "For nørder".
-9. **Fables nye fælder** (G–T, mennesket på døgnuret, pladen, de to nye sider) står allerede i [fakta-faelder-liv-og-videnskabsfolk.md](../erfaringer/fakta-faelder-liv-og-videnskabsfolk.md).
+9. **Fables nye fælder** (G–T, mennesket på døgnuret, pladen, de to nye sider) står allerede i [fakta-faelder-liv.md](../erfaringer/fakta-faelder-liv.md).
 
 ## 3. Hvor jeg er uenig eller vil lægge noget til
 **Kopien:**

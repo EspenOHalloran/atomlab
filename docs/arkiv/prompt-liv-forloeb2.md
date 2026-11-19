@@ -11,7 +11,7 @@ Byg forløb 2 i Liv, **"Hvad står der i opskriften?"**, efter drejebogen. Forl�
 - `docs/fable/E3-liv-drejebog.md`: "Forløb 2", "Det, der er valgt fra", "Laboratoriet bagefter", "Tre ting" (punkt 3) og "Fakta".
 - `docs/fable/E5-liv.md`, afsnit 6 (Fables rettelser til forløb 2: "61 af ordene betyder en byggesten, og 3 betyder stop", "en af de fire kæder i hæmoglobin", "hvis man har ændringen fra både sin mor og sin far" og "er en mutation").
 - `docs/kode/liv.md` (afsnittene "L2" og "Forløbet 'Opskriften i dig'") og `docs/kode/forloeb.md`.
-- Tjekliste C, D, E og F og `docs/erfaringer/fakta-faelder-liv-og-videnskabsfolk.md`.
+- Tjekliste C, D, E og F og `docs/erfaringer/fakta-faelder-liv.md`.
 - I koden: `js/liv.js` (`OPSKRIFT_DEL` er skabelonen for et forløb i Liv), `js/data/forloeb/opskriften.js`, `js/liv-protein.js` (tilstanden `'ret'`, "Skift et bogstav") og i `js/liv/protein.js` kun `visRet` og tilstanden `'ret'` (med `grep`).
 
 **Det, der skal tages stilling til (stil spørgsmålene med valgmuligheder før bygningen):**
