@@ -1309,11 +1309,11 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaade-scene-knapper .kontakt { pointer-events: auto; min-height: 44px; background: rgba(14, 24, 56, 0.88); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); } /* en kontakt i scenen (Mørkt stof) */
 #gaader .gaade-storfoto { position: fixed; inset: 0; z-index: 60; background: #02030a; touch-action: none; overscroll-behavior: contain; } /* Fotoet i fuld størrelse (js/gaader/storfoto.js): knib, rul og træk */
 #gaader .gaade-storfoto-flade { position: absolute; inset: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
-#gaader .gaade-storfoto.zoomet .gaade-storfoto-flade { cursor: grab; }
+#gaader .gaade-storfoto.gaade-zoomet .gaade-storfoto-flade { cursor: grab; }
 #gaader .gaade-storfoto-flade img { width: 100%; height: 100%; object-fit: contain; transform-origin: center; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; pointer-events: none; will-change: transform; }
 #gaader .gaade-storfoto-top { position: absolute; top: max(10px, env(safe-area-inset-top)); left: 12px; right: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; pointer-events: none; }
-#gaader .gaade-storfoto-hjælp, #gaader .gaade-storfoto-tekst, #gaader .gaade-storfoto-henter { margin: 0; padding: 6px 12px; border-radius: 10px; background: rgba(8, 12, 30, 0.82); border: 1px solid var(--panel-kant); color: var(--tekst); font-size: 14px; line-height: 1.4; }
-#gaader .gaade-storfoto-hjælp { color: var(--svag); }
+#gaader .gaade-storfoto-hjaelp, #gaader .gaade-storfoto-tekst, #gaader .gaade-storfoto-henter { margin: 0; padding: 6px 12px; border-radius: 10px; background: rgba(8, 12, 30, 0.82); border: 1px solid var(--panel-kant); color: var(--tekst); font-size: 14px; line-height: 1.4; }
+#gaader .gaade-storfoto-hjaelp { color: var(--svag); }
 #gaader .gaade-storfoto-luk { pointer-events: auto; flex: 0 0 auto; min-height: 44px; min-width: 44px; background: rgba(14, 24, 56, 0.92); border-color: rgba(95, 227, 255, 0.6); }
 #gaader .gaade-storfoto-tekst { position: absolute; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: max-content; max-width: min(640px, calc(100% - 24px)); text-align: center; pointer-events: none; }
 #gaader .gaade-storfoto-henter { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; }

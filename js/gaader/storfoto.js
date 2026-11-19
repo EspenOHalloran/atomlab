@@ -30,13 +30,13 @@ export function visStorFoto({ lille, stor, tekst = '', hjælp = '', henter = '',
   boks.setAttribute('aria-modal', 'true');
   boks.setAttribute('aria-label', tekst || 'Foto');
   boks.innerHTML = `<div class="gaade-storfoto-flade"><img alt="" draggable="false"></div>
-    <div class="gaade-storfoto-top"><p class="gaade-storfoto-hjælp"></p><button class="knap lille gaade-storfoto-luk" type="button"></button></div>
+    <div class="gaade-storfoto-top"><p class="gaade-storfoto-hjaelp"></p><button class="knap lille gaade-storfoto-luk" type="button"></button></div>
     <p class="gaade-storfoto-tekst"></p><p class="gaade-storfoto-henter" hidden></p>`;
   const flade = boks.querySelector('.gaade-storfoto-flade');
   let img = boks.querySelector('img');
   img.src = lille;
   img.alt = tekst;
-  boks.querySelector('.gaade-storfoto-hjælp').textContent = hjælp;
+  boks.querySelector('.gaade-storfoto-hjaelp').textContent = hjælp;
   boks.querySelector('.gaade-storfoto-tekst').textContent = tekst;
   const lukKnap = boks.querySelector('.gaade-storfoto-luk');
   lukKnap.textContent = `✕ ${luk}`;
@@ -59,7 +59,7 @@ export function visStorFoto({ lille, stor, tekst = '', hjælp = '', henter = '',
     x = Math.min(fx, Math.max(-fx, x));
     y = Math.min(fy, Math.max(-fy, y));
     img.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
-    boks.classList.toggle('zoomet', s > 1.01);
+    boks.classList.toggle('gaade-zoomet', s > 1.01);
   };
   // Zoom med faktoren f om punktet (px, py) på skærmen, så det samme sted på fotoet bliver under fingeren
   const zoom = (f, px, py) => {
