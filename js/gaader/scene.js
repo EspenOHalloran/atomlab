@@ -1,27 +1,40 @@
 // Scenen bag et kort i Gåderne (G4a, docs/plan-gaader-3d.md). js/gaader.js henter denne fil med import(), første gang
 // et kort åbnes, og kalder vis(id, trin, valgt) hver gang kortet skifter trin. Hver gåde har sin egen fil med lavNær(ctx)
-// (her kun antistof.js indtil videre). Kun én scene ad gangen: Den gamle ryddes (ryd), når man skifter kort eller går ud.
+// (antistof.js, moerktstof.js og liv.js indtil videre). Kun én scene ad gangen: Den gamle ryddes (ryd), når man skifter kort
+// eller går ud.
 //
 // ctx, som scenen får: gruppe (en THREE.Group i verden.scene), linje(tekst) (én linje nederst i billedet), knapper([{ tekst,
-// gør, id, aktiv }]) (højst to knapper under linjen), passer(halvBredde, halvHøjde) (kameraet ser lige ind på planet z = 0, så
-// kassen passer i hullet, over linjen nederst) og ROLIG.
+// gør, id, aktiv, kontakt, gaa }]) (højst to knapper under linjen. Med kontakt (true/false) er knappen en kontakt fra
+// kontakt.js), passer(halvBredde, halvHøjde) (kameraet ser lige ind på planet z = 0, så kassen passer i hullet, over
+// linjen nederst) og ROLIG.
 // Scenen kan have ned(p) (true = den tager trækket), træk(p), op(p) og tryk(p) med p på planet z = 0, opdater(dt, tid),
 // drejer (må kameraet drejes), egetKamera (scenen styrer selv afstanden), test() og fjern().
 
 import * as THREE from 'three';
 import { verden, passerTilBoks, centrerVindue, ROLIG } from '../scene3d.js';
 import { ryd } from '../kosmos/faelles.js';
+import { lavKontakt } from '../kontakt.js';
+import { gådeMed } from '../data/gaader.js';
 
 const SCENER = {
   antistof: () => import('./antistof.js'),
+  moerktstof: () => import('./moerktstof.js'),
+  liv: () => import('./liv.js'),
 };
-// Gåder uden egen scene endnu: deres lys (js/gaader/lys.js) står stort bag kortet, og kameraet drejer roligt om det
+// Gåder uden egen scene: deres lys (js/gaader/lys.js) står stort bag kortet, og kameraet drejer roligt om det. Har kortet
+// scene.prøv (Livets begyndelse, G4e: ingen egen scene, for delen Begyndelsen i Liv viser det), står trinets linje og en
+// knap til seDet nederst i billedet efter gættet (samme knap som "Se det selv", data-gaa i js/gaa.js)
 const lysScene = (m, id, c) => {
   const lys = m.lavLys(id);
   if (lys) c.gruppe.add(lys.gruppe);
+  const g = gådeMed(id);
+  let prøv = null; // linjen, der står nu
   return {
     drejer: true,
-    trin() {
+    trin(t, valgt) {
+      prøv = valgt != null ? g?.scene?.prøv?.[t] ?? null : null;
+      c.linje(prøv ?? '');
+      c.knapper(prøv && g.seDet ? [{ tekst: `${g.seDet[1]} ›`, gaa: g.seDet[0] }] : []);
       if (this.stillet) return;
       this.stillet = true;
       c.passer(3.4, 2.8);
@@ -30,7 +43,7 @@ const lysScene = (m, id, c) => {
       verden.styring.autoRotateSpeed = 0.4;
     },
     opdater: (dt, tid) => lys?.opdater(dt, tid),
-    test: () => ({ lys: Boolean(lys), lampe: lys?.test?.() ?? null }),
+    test: () => ({ lys: Boolean(lys), lampe: lys?.test?.() ?? null, prøv }),
     fjern: () => lys?.fjern?.(),
   };
 };
@@ -70,12 +83,16 @@ function linje(tekst) {
 }
 let knapGør = [];
 function knapper(liste = []) {
-  const nøgle = liste.map((k) => `${k.tekst}${k.aktiv ? '*' : ''}`).join('|');
+  const nøgle = liste.map((k) => `${k.tekst}${k.aktiv ? '*' : ''}${'kontakt' in k ? `:${Boolean(k.kontakt)}` : ''}`).join('|');
   knapGør = liste.map((k) => k.gør);
   if (nøgle === sidsteKnapper) return;
   sidsteKnapper = nøgle;
-  // En knap med aktiv (true/false) er et valg mellem flere (fx DUNE eller Hyper-K) og viser, hvilket der er valgt
-  $('gaadeSceneKnapper').innerHTML = liste.map((k, i) => `<button class="knap lille" data-scene-knap="${i}"${k.id ? ` data-id="${k.id}"` : ''}${'aktiv' in k ? ` aria-pressed="${k.aktiv}"` : ''}>${k.tekst}</button>`).join('');
+  // En knap med aktiv (true/false) er et valg mellem flere (fx DUNE eller Hyper-K) og viser, hvilket der er valgt.
+  // En knap med kontakt (true/false) er en kontakt til/fra med et fast navn (lavKontakt).
+  const boks = $('gaadeSceneKnapper');
+  // En knap med gaa er en vej til et andet sted (data-gaa, klaret af js/gaa.js), ikke en knap i scenen.
+  boks.innerHTML = liste.map((k, i) => `<button class="${'kontakt' in k ? '' : 'knap lille'}" ${k.gaa ? `data-gaa="${k.gaa}"` : `data-scene-knap="${i}"`}${k.id ? ` data-id="${k.id}"` : ''}${'aktiv' in k ? ` aria-pressed="${k.aktiv}"` : ''}>${k.tekst}</button>`).join('');
+  liste.forEach((k, i) => { if ('kontakt' in k) lavKontakt(boks.children[i], k.tekst).sæt(k.kontakt); });
 }
 
 // Linjen og knapperne nederst i billedet må ikke ligge oven i scenen. Kassen stilles derfor over dem: Kameraet ser en

@@ -148,6 +148,9 @@ export const GÅDER = [
       },
     ],
     slut: 'Liv er kun fundet på Jorden. Et muligt spor på Mars og havene under isen venter på at blive undersøgt.',
+    ven: 'Forskerne kender over 6.000 planeter om andre stjerner, men liv er kun fundet ét sted: her på Jorden.',
+    nyt: null,
+    løst: null,
     seDet: ['solsystem:mars:jezero', 'Se det selv: Mars, Jezero'],
     // CoLD: Green m.fl. 2021 (arXiv:2107.10975). Trin 1: NASA's billedtekst 25. juli 2024. Trin 3: Hurowitz 1. okt. 2025.
     // Pletterne: Hurowitz 2025 ("about 200 μm to 1 mm", "likely vivianite and greigite", "<150–200 °C"). "Måske det
@@ -158,8 +161,32 @@ export const GÅDER = [
       <p><b>Pletterne</b> er 0,2-1 mm, lyse i midten med en mørk kant. Kanten er sandsynligvis jernfosfat (vivianit) og midten jernsulfid (greigit). Mikrober på Jorden laver de to stoffer, når de "spiser" organisk stof. Uden liv går det meget langsomt under ca. 150-200 °C, men én vej uden liv er ikke udelukket (Hurowitz m.fl., Nature 2025). Det er måske det stærkeste spor af liv, der er fundet på Mars.</p>
       <p><b>Enceladus:</b> Rumsonden Cassini fandt brint (2017), store organiske molekyler (2018) og fosfat (2023) i fontænerne. Af de seks grundstoffer, livets store molekyler er bygget af (C, H, N, O, P og S), er de fem fundet, og svovl måske. Ingen har endnu kunnet se efter liv dér.</p>
       <p><b>Fund, der ikke holdt:</b> Vikings forsøg på Mars (1976) og meteoritten ALH84001 fra Mars (1996) lignede spor af liv, men de fleste forskere mener i dag, at kemi uden liv forklarer dem. Gassen fosfin på Venus (2020) er omstridt, og gassen DMS på planeten K2-18b (2025) er ikke bekræftet. Carl Sagan skrev i 1979 tanken sådan (frit oversat): Usædvanlige påstande kræver usædvanlige beviser.</p>
+      <p><b>Lysene:</b> Den tætte klump er det felt i stjernebillederne Svanen og Lyren, rumteleskopet Kepler kiggede på. Kepler fandt ca. 2.800 af planeterne. De fjerneste, over 10.000 lysår væk, ligger mod Mælkevejens midte og er næsten alle fundet med mikrolinser: En stjerne foran en anden bøjer lyset fra den bagved, så den lyser op et øjeblik, og en planet giver et lille ekstra blink.</p>
       <p><b>Planerne:</b> ESA's rover Rosalind Franklin skal efter planen sendes op i 2028 og kan bore op til 2 m ned i Mars. ESA's JUICE når Jupiter i 2031. Teleskopet ELT i Chile skal efter planen se sit første lys i 2029, og NASA's Habitable Worlds Observatory skal efter planen op i 2040'erne og lede efter spor af liv på planeter som Jorden.</p>`,
     ærligt: '<p>"Målt eller gæt?" er forenklet. At pletterne er lavet af liv, er ikke et vildt gæt: Mikrober på Jorden laver de samme stoffer. Men kemi uden liv er ikke udelukket, og flere fund, der lignede liv, holdt ikke.</p><p>Vi kender kun ét eksempel på liv, vores eget. Derfor ved ingen, om liv opstår let, når der er vand og de rigtige stoffer.</p>',
+    // Scenen i 3D (G4d, js/gaader/liv.js). Planeterne: js/data/exoplaneter.js (6.470 i NASA Exoplanet Archive, tabellen
+    // pscomppars, hentet 19. november 2026, med fundår, retning og afstand). 1992: Wolszczan og Frail, to planeter om pulsaren PSR B1257+12. 1995: Mayor og
+    // Queloz, 51 Pegasi b (Wikipedia). Diametre: Jorden 2 × 6.371 km, Mars 2 × 3.389,5 km, Enceladus 2 × 252,04 km
+    // (Wikipedia, Park m.fl. 2024). Cheyava Falls: ca. 1 × 0,6 m, foto 18. juli 2024 (NASA PIA26368). Sonderne: årstallene
+    // fra kortets trin 3. Kepler kiggede det meste af tiden på ét lille felt på himlen i Svanen og Lyren (NASA) og fandt
+    // 2.787 planeter i arkivet (disc_facility Kepler). Over 10.000 lysår væk: 263 planeter, 259 fundet med mikrolinser og
+    // næsten alle mod Mælkevejens midte (arkivet 19. november 2026).
+    scene: {
+      start: 'Hvert lys er en planet om en anden stjerne, fundet fra 1992 til nu. Det blå lys er Jorden.',
+      første: '1992 kom de første planeter om en anden stjerne. 1995 den første om en stjerne som Solen.',
+      alle: 'Over 6.400 planeter. Er der liv på nogen af dem?',
+      efter: 'Liv er kun fundet på Jorden. Her er to steder i Solsystemet, hvor det måske kunne være, i samme skala.',
+      sten: 'Stenen Cheyava Falls på Mars er ca. 1 m lang. Se de små lyse pletter med en mørk kant.',
+      stenSvar: 'Pletterne er målt. Men hvad lavede dem? Der er to forklaringer, og ingen ved, hvilken der er rigtig.',
+      sonder: 'De stiplede baner er planer: Tianwen-3 skal hente prøver hjem fra Mars, Europa Clipper flyve forbi Europa, og Dragonfly lande på Titan.',
+      navne: {
+        jorden: 'Jorden: 12.742 km', mars: 'Mars: 6.779 km', enceladus: 'Enceladus: 504 km', kemi: 'kemi uden liv', liv: 'liv',
+        foto: 'Foto: NASA/JPL-Caltech/MSSS', tianwen: 'Tianwen-3: prøver hjem 2031', clipper: 'Europa Clipper: Jupiter 2030',
+        dragonfly: 'Dragonfly: Titan 2034', jupiter: 'Jupiter', saturn: 'Saturn', jordenKort: 'Jorden', marsKort: 'Mars',
+      },
+      ærligt: `<p>Der er ét lys for hver af de 6.470 bekræftede planeter i NASA's arkiv over exoplaneter (19. november 2026), tændt i det år, de blev fundet. Retningen på himlen er rigtig. Afstanden fra Jorden er også rigtig, men trykket sammen, så de fjerne kan være med, og 28 planeter uden kendt afstand har fået en afstand fra samme år. Planeter om samme stjerne står i samme lys. De to første fra 1992 kredser om en pulsar (en udbrændt stjerne).</p>
+        <p>Jorden, Mars og Enceladus står i rigtig skala i forhold til hinanden. Fotoet af Cheyava Falls er fra NASA/JPL-Caltech/MSSS. Planeterne og banerne til sidst er ikke i skala. ${STREG_FORKLARING}</p>`,
+    },
   },
   // Kortene om liv står ikke ved siden af hinanden, så "hvor" og "hvordan" ikke flyder sammen (jeres valg 13. november 2026)
   // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 3.
@@ -329,6 +356,17 @@ export const GÅDER = [
     ],
     slut: 'Livets byggesten opstår let. Hvordan de blev til noget levende, ved ingen endnu.',
     seDet: ['begyndelsen', 'Prøv det selv: Begyndelsen i Liv'],
+    // G4e (19. november 2026): ingen egen scene (jeres svar på E10). Lyset står bag kortet, og efter gættet i hvert trin står
+    // linjen nederst i billedet med knappen til seDet (js/gaader/scene.js). Linjerne siger kun, hvad delen Begyndelsen viser
+    // (kolben, RNA'ets kopi og trappen i js/liv/begyndelsen.js), ikke "RNA'et kopierer sig selv" og ikke "bogstav for
+    // bogstav" (QT45 fik byggestykker af tre bogstaver, fakta-faelder-liv-og-videnskabsfolk.md).
+    scene: {
+      prøv: [
+        'I Begyndelsen kan du selv sende lyn ind i Millers kolbe og se vandet skifte farve.',
+        'I Begyndelsen kan du se et RNA bygge en kopi, og hvor tit det laver fejl.',
+        'I Begyndelsen kan du gå op ad trappen fra byggesten til celle og se, hvor langt forskerne er nået.',
+      ],
+    },
     // Jorden 4,54 mia. år (USGS). Dresser-formationen ca. 3,48 mia. år, "most scientists accept" (Wikipedia). Isua:
     // Nutman 2016 og Allwood 2018. 4,54 − 3,48 = 1,06. Miller: 5 aminosyrer (Lazcano og Bada 2003), DNA-modellen
     // 25. april 1953. Luften: Parker 2011. RNA-verdenen: Gilbert 1986, idéen fra 1960'erne (Fable E5). Nobel 1989 (Cech
@@ -401,6 +439,9 @@ export const GÅDER = [
       },
     ],
     slut: 'Mørkt stof trækker i galakserne, men ingen ved, hvad det er.',
+    ven: 'Der er ca. fem gange så meget usynligt stof som almindeligt stof, og ingen ved, hvad det er.',
+    nyt: null,
+    løst: null,
     seDet: ['kosmos:rumtid', 'Se det selv: Kosmos, Rumtid'],
     // Zwicky 1933 og Rubin og Ford 1970 (Wikipedia "Dark matter"). Clowe m.fl. 2006 (arXiv:astro-ph/0608407): "An 8-sigma
     // significance spatial offset". Planck 2013: 4,9, 26,8 og 68,3 %. 0,120 / (0,120 + 0,0224) = 84 %. LZ: 7 tons xenon
@@ -415,6 +456,40 @@ export const GÅDER = [
       <p><b>LZ</b> er 7 tons flydende xenon ca. 1,5 km nede i en gammel guldmine i South Dakota. Den er så følsom, at den har målt neutrinoer fra Solen. Hændelsen fra 2026 havde 248 keV og er 2,6 sigma (se "Hvornår er noget opdaget?"). Mange teoriartikler har allerede foreslået, hvad den kan være.</p>
       <p><b>Euclid</b> blev sendt op 1. juli 2023 og skal kortlægge ca. en tredjedel af himlen. Det første store datasæt dækker ca. 14 % af det og har ca. 15.000 mulige steder, hvor en galakse bøjer lyset fra en anden bagved, så den ses som buer eller en ring. Det er flere end alle tidligere fundet tilsammen.</p>`,
     ærligt: '<p>"Mørkt" er et dårligt navn: Det er ikke sort, men usynligt. Det sender intet lys ud og kaster ingen skygge. Og at der er ekstra tyngdekraft, er målt mange gange, men at den kommer fra en slags partikler, er et gæt, som næsten alle forskere deler. Et lille mindretal mener, at det er tyngdeloven, der skal ændres.</p>',
+    // Scenen i 3D (G4d, js/gaader/moerktstof.js). Galaksen: flad rotationskurve (Rubin og Ford 1970). Uden ekstra masse
+    // er de yderste stjerner hurtigere end flugthastigheden fra det synlige stof (Mælkevejens stjerner: 4,6-6,4 · 10¹⁰
+    // solmasser, Wikipedia "Milky Way". Med ca. 6 · 10¹⁰ er flugtfarten √(2GM/r) ca. 160 km/s 20 kpc ude, mens stjernerne
+    // kredser med ca. 230 km/s). Mælkevejen har
+    // 100-400 milliarder stjerner og drejer én gang på ca. 225 millioner år (Wikipedia "Milky Way", "Galactic year").
+    // Buerne: linseligningen for en punktmasse, β = θ − θE²/θ (Wikipedia "Gravitational lens"). LZ: ca. 1.500 m under
+    // SURF i den gamle Homestake-guldmine, 7 tons flydende xenon (Wikipedia "LZ experiment" og "Sanford Underground Research
+    // Facility"). Første måling fra december 2021, derfor "i flere år". Én hændelse, 248 ± 23 ± 23 keV, global 2,6σ
+    // (arXiv:2609.02823, 2. september 2026). 5σ er grænsen for et fund i partikelfysik. Euclid: kortet i 2027 (kortets
+    // trin 3, ESA). Kontakten hedder "Kun det synlige trækker", ikke "Uden mørkt stof", så scenen ikke giver svaret,
+    // før man har gættet (stilguiden A6), og så de to bud i gættet begge står åbne.
+    scene: {
+      start: 'Galaksen drejer. Stjernerne yderst kredser lige så hurtigt som dem tættere på midten.',
+      kunSynligt: 'Nu trækker kun det stof, man kan se. Så er de yderste stjerner for hurtige, og de flyver væk.',
+      igen: 'Men rigtige galakser holder sammen. Hvad holder på stjernerne?',
+      kontakt: 'Kun det synlige trækker',
+      bøj: 'Træk i mørket. Noget usynligt bøjer lyset fra galakserne bagved.',
+      bøjet: 'Du kan ikke se det. Du kan se, hvad det gør.',
+      knapGalakse: 'Galaksen',
+      knapBuer: 'Lysbøjningen',
+      lz: 'LZ venter ca. 1,5 km nede i en gammel guldmine, hvor den er skærmet mod stråling fra rummet.',
+      lzVent: 'Den har ventet i flere år på, at en partikel af mørkt stof rammer den.',
+      glimt: 'I 2026 meldte LZ om ét glimt, hvor man næsten ikke ventede nogen. Kom det fra mørkt stof? Ingen ved det.',
+      sigma: 'Glimtet er 2,6 sigma. Et fund kræver 5 sigma. Det er ikke nok.',
+      euclid: 'Ud fra buerne kan man regne ud, hvor det mørke stof er. Euclid skal efter planen give det store kort i 2027.',
+      kort: 'Det stiplede er et bud på, hvor det mørke stof er. Hvor intet er tegnet, ved ingen det endnu.',
+      navne: {
+        dybde: 'ca. 1,5 km', tank: '7 tons flydende xenon', overflade: 'overfladen', ur: 'venter', glimt: 'ét glimt (2026)',
+        partikel: 'en ukendt partikel? (et bud)', sigma: '2,6 sigma', fem: '5 sigma: et fund', euclid: 'Euclid: kortet efter planen i 2027',
+      },
+      ærligt: `<p>Galaksen har ca. 2.000 stjerner. Mælkevejen har 100-400 milliarder, og Solen kredser én gang om midten på ca. 225 millioner år, ikke på under et minut. Med kontakten beholder stjernerne farten, men kun det synlige stof trækker. Sådan kunne en galakse ikke være blevet dannet, men regnestykket viser, hvorfor forskerne mangler noget.</p>
+        <p>Buerne er regnet med Einsteins formel for lys, der bøjer om én klump. Klumpen bøjer meget mere, end en rigtig klump på den størrelse ville gøre. Rigtige buer og ringe laves af tunge galakser eller hele hobe af galakser, og de fleste galakser bliver kun en lille smule skæve. Euclids kort over det mørke stof bygger mest på de små skævheder i hundreder af millioner af galakser.</p>
+        <p>Skakten og tanken er ikke tegnet i samme skala, og uret går meget hurtigere end i virkeligheden. Partiklen er stiplet, fordi ingen ved, om den findes. Kortet til sidst er et eksempel, ikke Euclids rigtige kort. ${STREG_FORKLARING}</p>`,
+    },
   },
 ];
 

@@ -13,6 +13,7 @@ import { SIDER as SATURN } from '../js/data/sider/saturn.js';
 import { TRIN_PROTEIN } from '../js/data/liv/protein.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { readFileSync } from 'node:fs';
+import { PLANETER_PR_ÅR, EXOPLANETER_I_ALT, EXOPLANETER_DATO, afstandeFor, planeterFor } from '../js/data/exoplaneter.js';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
@@ -71,6 +72,53 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     !lange.length && sc.bang?.length === 4 && sætninger(a.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING), JSON.stringify(lange));
   tjek('G4a: alle byggede kort har en størrelsesorden til skinnen, og nyt og løst har den rigtige form',
     kort.every((g) => Number.isFinite(g.størrelse)) && kort.every((g) => (g.nyt == null || (g.nyt.tekst && g.nyt.dato)) && (g.løst == null || typeof g.løst === 'string')));
+}
+
+// G4d: Mørkt stofs scene
+{
+  const m = GÅDER.find((g) => g.id === 'moerktstof');
+  const sc = m.scene ?? {};
+  const linjer = [sc.start, sc.kunSynligt, sc.igen, sc.bøj, sc.bøjet, sc.lz, sc.lzVent, sc.glimt, sc.sigma, sc.euclid, sc.kort];
+  const lange = linjer.filter((l) => !l || ord(l) > 28);
+  tjek('G4d: Mørkt stofs scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
+    !lange.length && sætninger(m.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && sc.navne?.sigma === '2,6 sigma' && /2027/.test(sc.navne?.euclid ?? ''), JSON.stringify(lange));
+  // Kontakten må ikke give svaret, før man har gættet (stilguiden A6): Den siger ikke "mørkt stof"
+  tjek('G4d: kontakten hedder "Kun det synlige trækker" og nævner ikke mørkt stof', sc.kontakt === 'Kun det synlige trækker' && !/mørk/i.test(sc.kontakt + sc.start + sc.kunSynligt + sc.igen));
+}
+
+// G4d: Liv andre steders scene og planeterne
+{
+  const l = GÅDER.find((g) => g.id === 'liv');
+  const sc = l.scene ?? {};
+  const linjer = [sc.start, sc.første, sc.alle, sc.efter, sc.sten, sc.stenSvar, sc.sonder];
+  const lange = linjer.filter((x) => !x || ord(x) > 28);
+  tjek('G4d: Liv andre steders scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
+    !lange.length && sætninger(l.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && !/liv\?/.test(Object.values(sc.navne ?? {}).join('|')), JSON.stringify(lange));
+  // Før gættet må linjerne ikke give svaret (at liv kun er fundet på Jorden)
+  tjek('G4d: linjerne før gættet siger ikke, at liv kun er fundet på Jorden', ![sc.start, sc.første, sc.alle].some((x) => /kun|eneste/.test(x)));
+  const år = PLANETER_PR_ÅR.map((r) => r[0]);
+  const antal = PLANETER_PR_ÅR.reduce((s, r) => s + afstandeFor(r).length, 0);
+  const år1992 = afstandeFor(PLANETER_PR_ÅR[0]);
+  tjek('G4d: planeterne: 6.470 i alt (arkivet hos NASA 19. november 2026), ét år ad gangen fra 1992 til 2026, de to første om pulsaren (ca. 2.000 lysår)',
+    antal === EXOPLANETER_I_ALT && EXOPLANETER_I_ALT === 6470 && år[0] === 1992 && år.at(-1) === 2026 && år.every((a, i) => i === 0 || a === år[i - 1] + 1)
+    && år1992.length === 2 && år1992.every((d) => d > 1500 && d < 3500) && PLANETER_PR_ÅR.every((r) => afstandeFor(r).every((d) => Number.isInteger(d) && d >= 0)),
+    JSON.stringify({ antal, første: år[0], sidste: år.at(-1), år1992 }));
+  // De rigtige pladser fra NASA's arkiv: ra og dec i grader, og Keplers felt (Svanen og Lyren) er en tæt klump
+  const alle = PLANETER_PR_ÅR.flatMap((r) => planeterFor(r));
+  const kepler = alle.filter(([ra, dec]) => ra > 280 && ra < 302 && dec > 36 && dec < 53).length;
+  const uden = alle.filter((p) => p[2] === 0).length;
+  tjek('G4d: pladserne fra arkivet hos NASA (ra 0-359°, dec ±90°), over 2.000 i Keplers felt, under 50 uden afstand, og "Ærligt talt" siger, at retningen er rigtig',
+    alle.every(([ra, dec]) => ra >= 0 && ra < 360 && dec >= -90 && dec <= 90) && kepler > 2000 && uden < 50 && EXOPLANETER_DATO === '19. november 2026'
+    && /6\.470/.test(l.scene.ærligt) && /Retningen på himlen er rigtig/.test(l.scene.ærligt) && !/tilfældig|Wikipedia/.test(l.scene.ærligt), JSON.stringify({ kepler, uden }));
+}
+
+// G4e: Livets begyndelse har ingen egen scene, men en linje pr. trin med knappen til Begyndelsen i Liv
+{
+  const g = GÅDER.find((x) => x.id === 'begyndelsen');
+  const prøv = g.scene?.prøv ?? [];
+  tjek('G4e: Livets begyndelse har én linje pr. trin (højst 28 ord, om delen Begyndelsen, ikke "kopierer sig selv"), og knappen går til delen',
+    prøv.length === g.trin.length && prøv.every((x) => x.startsWith('I Begyndelsen') && ord(x) <= 28 && sætninger(x) === 1 && !/sig selv/.test(x))
+    && g.seDet[0] === 'begyndelsen' && SKÆRME.some((d) => d.id === 'begyndelsen'), JSON.stringify(prøv));
 }
 
 // G4b: skinnen
@@ -213,7 +261,22 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const T = (f, a) => page.evaluate(f, a);
   await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
-  for (let i = 0; i < 3; i++) { await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); await page.click('#gaadeTrin .fl-næste'); }
+  // G4e: linjen og knappen nederst i billedet kommer først efter gættet, og ikke i "Det så du" (der står "Prøv det selv" i panelet)
+  const bund = () => T(() => ({ linje: document.getElementById('gaadeLinje').hidden ? '' : document.getElementById('gaadeLinje').textContent,
+    knap: document.querySelector('#gaadeSceneKnapper [data-gaa]')?.dataset.gaa ?? null, prøv: atomlabTest.gaader.scene().scene()?.prøv ?? null }));
+  await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
+  const trinene = [];
+  for (let i = 0; i < 3; i++) {
+    const før = await bund();
+    await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+    trinene.push([før, await bund()]);
+    await page.click('#gaadeTrin .fl-næste');
+  }
+  const slut = await bund();
+  const prøv = GÅDER.find((x) => x.id === 'begyndelsen').scene.prøv;
+  tjek('G4e: før gættet ingen linje og ingen knap i billedet, efter gættet trinets linje og knappen til Begyndelsen',
+    trinene.every(([før, efter], i) => !før.linje && !før.knap && efter.linje === prøv[i] && efter.prøv === prøv[i] && efter.knap === 'begyndelsen'), JSON.stringify(trinene));
+  tjek('G4e: i "Det så du" står knappen kun i panelet ("Prøv det selv"), ikke også i billedet', !slut.linje && !slut.knap, JSON.stringify(slut));
   await page.click('#gaadeTrin [data-gaa="begyndelsen"]');
   tjek('"Prøv det selv" åbner Begyndelsen', await vent(page, () => location.hash === '#begyndelsen' && atomlabTest.aktiv() === 'begyndelsen', null, 20000));
   // Liv med "Se genet blive læst" (som fra en knap data-gaa="liv:protein")
@@ -224,6 +287,11 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await vent(page, () => !document.getElementById('livGaade').hidden);
   await T(() => document.querySelector('#livGaade [data-gaa]').click());
   tjek(`knappen ved Ribosomet åbner gåden om livets begyndelse (trin ${trin})`, await vent(page, () => location.hash === '#gaader' && atomlabTest.gaader.vist()?.id === 'begyndelsen'));
+  // G4e: knappen i billedet åbner også Begyndelsen
+  await vent(page, () => atomlabTest.gaader.scene()?.klar(), null, 15000);
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  await page.click('#gaadeSceneKnapper [data-gaa="begyndelsen"]');
+  tjek('G4e: knappen i billedet åbner Begyndelsen i Liv', await vent(page, () => location.hash === '#begyndelsen' && atomlabTest.aktiv() === 'begyndelsen', null, 20000));
   await ctx.close();
 }
 
@@ -315,8 +383,8 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.click('#gaadeTrin [data-alle]');
   const ud = await T(() => ({ scene: atomlabTest.gaader.scene().id(), påKort: document.getElementById('gaader').classList.contains('paa-kort'), skinne: atomlabTest.gaader.skinne()?.vist(), panel: getComputedStyle(document.getElementById('gaaderPanel')).display }));
   // De andre kort viser deres lys som scene
-  await T(() => atomlabTest.gaader.visGåde('moerktstof'));
-  const lysKort = await vent(page, () => atomlabTest.gaader.scene()?.id() === 'moerktstof' && atomlabTest.gaader.scene().scene()?.lys);
+  await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
+  const lysKort = await vent(page, () => atomlabTest.gaader.scene()?.id() === 'begyndelsen' && atomlabTest.gaader.scene().scene()?.lys);
   tjek('G4a: "Alle gåder" rydder scenen og viser skinnen uden panel, og de andre kort har deres lys som scene', ud.scene === null && !ud.påKort && ud.skinne && ud.panel === 'none' && lysKort, JSON.stringify(ud));
   await ctx.close();
 }
@@ -366,6 +434,95 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   tjek('telefon: ingen vandret rullebjælke på skinnen og på kortet', !o && !(await bred()));
+  await ctx.close();
+}
+
+// G4d: Mørkt stof i 3D: galaksen med kontakten, lysbøjningen, LZ og kortet
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('moerktstof'));
+  const klar = await vent(page, () => atomlabTest.gaader.scene()?.scene()?.tilstand === 'galakse', null, 15000);
+  const S = () => T(() => atomlabTest.gaader.scene().scene());
+  const før = await S();
+  // Den flade rotationskurve: de yderste har samme fart som dem halvvejs ude, og den er over flugtfarten fra det synlige
+  const g0 = før?.galakse ?? {};
+  tjek('G4d: Mørkt stof har sin egen scene: galaksen drejer med samme fart inde og ude, og den fart er over flugtfarten fra det synlige stof',
+    klar && Math.abs(g0.fartUde - g0.fartInde) < 0.08 && g0.flugtUde < g0.fartUde && g0.ude === 0 && !før.lys, JSON.stringify(før));
+  await page.click('#gaadeSceneKnapper [data-id="kunSynligt"]');
+  const til = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(14); return { sc: s.scene(), tændt: document.querySelector('#gaadeSceneKnapper [data-id="kunSynligt"]').getAttribute('aria-checked'), linje: document.getElementById('gaadeLinje').textContent }; });
+  await page.click('#gaadeSceneKnapper [data-id="kunSynligt"]');
+  const fra = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(3); return { sc: s.scene(), linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('G4d: kontakten "Kun det synlige trækker" får de yderste stjerner til at flyve væk, og slået fra kommer de tilbage',
+    til.tændt === 'true' && til.sc.galakse.ude > 30 && /flyver væk/.test(til.linje) && fra.sc.galakse.ude === 0 && fra.sc.galakse.tilstand === 'kreds' && /holder sammen/.test(fra.linje),
+    JSON.stringify({ til: til.sc.galakse, fra: fra.sc.galakse }));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await vent(page, () => atomlabTest.gaader.scene().scene()?.tilstand === 'buer');
+  // En klump lige foran den galakse, der står bag midten, giver en ring: mange prikker forstærket over 1,5 gange
+  const bøjet = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(0.25, 0.15); return { sc: s.scene(), linje: document.getElementById('gaadeLinje').textContent }; });
+  const væk = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(-8.8, 5.8); return s.scene(); });
+  tjek('G4d: efter gættet bøjer den usynlige klump lyset fra galakserne bagved til en ring, hvor man trykker',
+    bøjet.sc.trukket && bøjet.sc.buer.buer > 40 && bøjet.sc.buer.største > 5 && bøjet.linje === 'Du kan ikke se det. Du kan se, hvad det gør.' && væk.linse[0] < -8,
+    JSON.stringify({ buer: bøjet.sc.buer, linse: væk.linse }));
+  await page.click('#gaadeSceneKnapper [data-id="galakse"]');
+  const tilbage = await S();
+  await page.click('#gaadeSceneKnapper [data-id="buer"]');
+  tjek('G4d: efter gættet kan man skifte mellem galaksen og lysbøjningen', tilbage.tilstand === 'galakse' && (await S()).tilstand === 'buer');
+  await page.click('#gaadeTrin .fl-næste');
+  const lzFør = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().lz; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
+  const lz = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(8); return { lz: s.scene().lz, linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('G4d trin 2: LZ venter uden glimt, og efter gættet lander GÆT, ét glimt kommer, og måleren står på 2,6 af 5 sigma',
+    lzFør && !lzFør.gættet && !lzFør.glimt && !lzFør.måler && lz.lz.stempel && lz.lz.glimt && lz.lz.måler && Math.abs(lz.lz.fyld - 2.6) < 0.01 && /ikke nok/.test(lz.linje),
+    JSON.stringify({ lzFør, lz }));
+  await page.click('#gaadeTrin .fl-næste');
+  const kort = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(3); return s.scene().kort; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4d trin 3: buerne og kortet over det mørke stof (stiplet) med Euclid, og til sidst "Sig det til en ven"',
+    kort?.kort && kort.euclid && kort.buer > 40 && kort.ringe === 9 && ven.startsWith('Sig det til en ven: Der er ca. fem gange'), JSON.stringify({ kort, ven }));
+  await page.click('#gaadeTrin [data-alle]');
+  tjek('G4d: "Alle gåder" rydder scenen', await vent(page, () => atomlabTest.gaader.scene().id() === null && atomlabTest.gaader.skinne()?.vist()));
+  await ctx.close();
+}
+
+// G4d: Liv andre steder i 3D: lysene år for år, Jorden, Mars og Enceladus i skala, Cheyava Falls og sonderne
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('liv'));
+  const klar = await vent(page, () => atomlabTest.gaader.scene()?.scene()?.tilstand === 'lys', null, 15000);
+  const S = () => T(() => atomlabTest.gaader.scene().scene());
+  const undervejs = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(5); return s.scene().lys; });
+  const sprang = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(0, 0); s.spol(0.2); return { lys: s.scene().lys, linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('G4d: lysene tændes år for år, og et tryk springer til 2026 med alle 6.470',
+    klar && undervejs.tændt > 0 && undervejs.tændt < undervejs.i_alt && undervejs.år > 1992 && undervejs.år < 2026
+    && sprang.lys.tændt === 6470 && sprang.lys.år === 2026 && /Er der liv på nogen af dem\?/.test(sprang.linje), JSON.stringify({ undervejs, sprang }));
+  tjek('G4d: lysene står i deres rigtige retning: Keplers felt er en klump (over 30 % af lysene inden for 10°, tilfældigt ville give under 1 %)',
+    sprang.lys.klump / sprang.lys.i_alt > 0.3, JSON.stringify({ klump: sprang.lys.klump, i_alt: sprang.lys.i_alt }));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  const skala = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(1); return s.scene(); });
+  tjek('G4d: efter gættet dæmpes lysene, og Jorden, Mars og Enceladus står i samme skala (6.779 og 504 af 12.742 km)',
+    skala.tilstand === 'skala' && skala.lys.dæmpet && skala.skala.vist && Math.abs(skala.skala.forhold[0] - 6779 / 12742) < 1e-6 && Math.abs(skala.skala.forhold[1] - 504 / 12742) < 1e-6,
+    JSON.stringify(skala));
+  await page.click('#gaadeTrin .fl-næste');
+  const stenFør = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(1); return s.scene().sten; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
+  const sten = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().sten; });
+  tjek('G4d trin 2: Cheyava Falls uden forklaringer før gættet, og bagefter GÆT og de to stiplede forklaringer',
+    stenFør && !stenFør.forklaringer && !stenFør.stempel && sten.stempel && sten.forklaringer && sten.kasser === 2, JSON.stringify({ stenFør, sten }));
+  await page.click('#gaadeTrin .fl-næste');
+  const sonder = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().sonder; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4d trin 3: sonderne med stiplede baner, og til sidst "Sig det til en ven"', sonder?.baner === 4 && ven.startsWith('Sig det til en ven: Forskerne kender'), JSON.stringify({ sonder, ven }));
+  // Fotoet af stenen er hentet uden fejl (det står i KILDER.md)
+  const foto = await T(async () => (await fetch('billeder/gaader/cheyava-falls.jpg')).ok);
+  tjek('G4d: fotoet af Cheyava Falls findes og står i billeder/gaader/KILDER.md', foto && readFileSync(new URL('../billeder/gaader/KILDER.md', import.meta.url), 'utf8').includes('cheyava-falls.jpg') && readFileSync(new URL('../billeder/gaader/KILDER.md', import.meta.url), 'utf8').includes('PIA26368'));
   await ctx.close();
 }
 
