@@ -15,7 +15,7 @@ Ti bøger, én pr. person. Hver person har **én** opdagelse og **ét** sted i p
 | Nr. | Person | Opdagelsen | Gør det selv (stedet i AtomLab) | Bogsiden | Tiden (stil) | Portræt (kandidat efter hukommelsen, licens tjekket for Huygens, Galilei og Newton) |
 |---|---|---|---|---|---|---|
 | 1 | **Christiaan Huygens** | Saturns ring (1656/1659) og Titan (1655) | Saturns ringe fra kanten | *Systema Saturnium* tavlen, s. 16, 47 og 48 (Smithsonian, frigivet) | Haag, 1650'erne | Caspar Netscher 1671 (**PD, tjekket**) |
-| 2 | Tycho Brahe | Den nye stjerne 1572 | Kosmos, hvid dværg og supernova | *De nova stella* (faksimilen fra 1901) | Danmark, 1570'erne | Kobberstik af Jacob de Gheyn 1586 |
+| 2 | Tycho Brahe | Den nye stjerne 1572 | Kosmos, hvid dværg og supernova | *De nova stella* (faksimilen fra 1901) | Danmark, 1570'erne | Kobberstik af Jacob de Gheyn 1586 (**PD-Art, tjekket** 19. november 2026) |
 | 3 | Ole Rømer | Lyset bruger tid (1676) | Jupiter → Io i skyggen | *Phil. Trans.* 1677 (Royal Society, PDM) | Paris, 1670'erne | Maleri af Jacob Coning (ca. 1700) |
 | 4 | H.C. Ørsted | Strøm laver magnetisme (1820) | Strøm og magneter (når den findes, ellers Batteriet) | Den latinske meddelelse 1820 | København, 1820 | Maleri af C.W. Eckersberg (1820'erne) |
 | 5 | Marie Curie | Stoffer, der stråler (1898) | Henfaldet (Reaktoren eller Værkstedet) | *Comptes rendus* 1898 | Paris, 1890'erne | Foto fra ca. 1903-1920 (fotografens rettigheder, se afsnit 6) |
@@ -106,6 +106,7 @@ Hver skrift og hvert nyt domæne (fx `raw.githubusercontent.com` for Google Font
 - [x] **H3: Gåden og Gør det selv** (mellem, lavet 17. november 2026, se [kode/opdagelser.md](kode/opdagelser.md)). Trin 4 (ANNULO), "Det så du", hele anagrammet som udfordring med "Lav dit eget anagram", knappen til Saturns ringe fra kanten, "Hvordan ved vi det?"-kortet ved Saturn og knappen ved citatet. Ordet `anagram` i Ordbogen. Test 2 og 6. Med E20 fund 6: kun de byggede opslag og to grå rygge med spørgsmål.
 - [x] **H4: Bogen selv** (mellem, lavet 17. november 2026, se [kode/opdagelser.md](kode/opdagelser.md)). `lav_bogsider.py`, tavlen, s. 16, 47 og 48 med de glødende steder, latin og dansk, "Hvorfor?", "For nørder" og "Ærligt talt". Test 7. `/faktatjek` på alle teksterne og `/faerdig`. Så har Huygens status "prøve" og venter på **prøven med jeres søn** ([guide-proeven.md](guide-proeven.md)).
 - [ ] **De syv andre** (V1-V7), én bog pr. session: Opus skriver drejebogen, I giver go, og bogen bygges med `js/bog.js` (lille til mellem, når klodsen findes). Fable kan ikke bruges efter 16. november, så Opus tjekker selv faktagrundlaget med `/faktatjek` (høj effort).
+  - **V1 Tycho Brahe:** drejebogen [drejebog-tycho.md](drejebog-tycho.md) og faktagrundlaget [fakta-videnskabsfolk/tycho.md](fakta-videnskabsfolk/tycho.md) er skrevet (19. november 2026). Venter på jeres go (spørgsmålene i drejebogens afsnit 16), så T1-T3.
 - [ ] **Galilei:** faktagrundlaget (en session, Opus høj), så drejebogen og bogen.
 - [ ] **Newton:** faktagrundlaget, så drejebogen og bogen ved Solsystemets overblik.
 

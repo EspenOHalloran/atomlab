@@ -110,3 +110,10 @@
 - "Ingen fik Huygens' løsning at vide før bogen i 1659." Han sendte den i et brev til Chapelain i marts 1658. Skriv "viste løsningen i sin bog i 1659". Alderen: født 14. april 1629, så 25 ved Titan (marts 1655) og 26 i marts 1656 (introduktionen til "Hemmeligheden", 18. november 2026).
 - "I 45 år kunne ingen forklare Saturns ører." Der var gæt (fx Galileis tre kloder, der næsten rørte hinanden), de var bare forkerte. Skriv "fandt ingen den rigtige forklaring" (den røde tråd i Huygens, 18. november 2026).
 - "RNA'et bygger kopien bogstav for bogstav" (G4e, 19. november 2026). Animationen i Begyndelsen sætter ét bogstav ad gangen, men QT45 fik byggestykker af tre bogstaver. Beskriv ikke animationens måde som det, forskerne så.
+*Tycho Brahe (V1, drejebogen 19. november 2026). Kilderne står i [fakta-videnskabsfolk/tycho.md](../fakta-videnskabsfolk/tycho.md).*
+- "Tycho spurgte sine tjenere og nogle bønder, om de kunne se stjernen." Det står ikke i *De nova stella*: Han skriver kun, at "andre" kunne se den, når han viste dem stedet. Skriv "andre".
+- "Han målte stjernen højt og lavt samme nat." I november stod Cassiopeia lavest om formiddagen, når det var lyst. Han målte over flere måneder.
+- "Stjernen forsvandt i marts 1574" efter bogen. "Martio … 1574" i bogen handler om måneformørkelsens virkninger. Bogen udkom i maj 1573. Skriv "i begyndelsen af 1574" (Wikipedia).
+- "O crassa ingenia står i forordet" (Wikipedia). Det står i Tychos brev til Pratensis foran i bogen (faksimilen 1901, billede n32). Læs citatet på siden, ikke i OCR'en, der er ubrugelig til kursiv med langt s.
+- "Faksimilen fra 1901 er fri, så skanningen er fri." Teksten og fotoene fra 1901 er frie, men Toronto-skanningen er fra 2009 og har ingen licens. Tjek altid skanningens dato og licens, ikke kun bogens år.
+- "Kobberstik fra 1586, Tycho var 40." Indskriften siger "ætatis suæ anno 40", altså "i sit 40. år". Skriv "omkring 40".

@@ -32,6 +32,8 @@ Står for sig selv i [fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.
 | Det var en **type Ia-supernova** (en hvid dværg, der eksploderede). Bekræftet i 2008 af et "lysekko" | Wikipedia "SN 1572" (Krause m.fl. 2008) | Ret sikker |
 | Afstanden er usikker: Wikipedia giver både 7.500 lysår, 3,8 kpc (ca. 12.000 lysår) og 2,5-3 kpc (8.000-10.000 lysår) | Wikipedia "SN 1572" og "Tycho Brahe" | Usikker: Skriv "ca. 10.000 lysår væk" eller lad tallet være |
 
+**Faktagrundlaget til bogen (19. november 2026):** [fakta-videnskabsfolk/tycho.md](fakta-videnskabsfolk/tycho.md) med Tychos egne tal læst på siderne i faksimilen.
+
 **Gør det i AtomLab:** Kosmos, **"Hvid dværg"** (`js/kosmos/hviddvaerg.js`): Fænomenet fortæller allerede om Tycho og 1572, og man ser den hvide dværg eksplodere. Citatet `tycho` står ved Supernova. *Idé til senere:* et lille "Hvordan ved vi det?"-kort, hvor man ser Månen flytte sig mod stjernerne (parallakse) og den nye stjerne stå stille.
 
 **Bogsiden:** *De nova stella* (1573), første side af hovedteksten (datoen og "iuxta capitis verticem") og stjernekortet over Cassiopeia, hvor den nye stjerne er mærket **I**.
