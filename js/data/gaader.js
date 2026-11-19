@@ -152,13 +152,18 @@ export const GÅDER = [
     nyt: null,
     løst: null,
     seDet: ['solsystem:mars:jezero', 'Se det selv: Mars, Jezero'],
+    // Fundet (19. november 2026, fund fra telefonen): NASA 25. juli 2024 og billedteksten til PIA26368 (Neretva Vallis,
+    // 1 × 0,6 m, vandfaldet i Grand Canyon, rødlig af hæmatit, pletterne, der bleges af kemi, som mikrober kan få energi
+    // fra, organiske stoffer fundet med SHERLOC, prøven boret 21. juli), Hurowitz 2025 ("mudstones deposited from
+    // suspension", Nature 10. sept. 2025). Se docs/fakta-liv/rummet.md afsnit 1.
     // CoLD: Green m.fl. 2021 (arXiv:2107.10975). Trin 1: NASA's billedtekst 25. juli 2024. Trin 3: Hurowitz 1. okt. 2025.
     // Pletterne: Hurowitz 2025 ("about 200 μm to 1 mm", "likely vivianite and greigite", "<150–200 °C"). "Måske det
     // stærkeste": Jim Bell, "perhaps the best evidence yet" (Fable E5). Sagan: Broca's Brain (1979) s. 62 (Wikipedia).
     // Rosalind Franklin borer op til 2 m (Wikipedia). HWO: "search for signs of life on Earth-like exoplanets" (Wikipedia).
     nørd: `
+      <p><b>Fundet:</b> I juli 2024 fandt roveren Perseverance en rødlig sten ved kanten af en gammel, udtørret floddal i krateret Jezero på Mars. Stenen er ca. 1 × 0,6 m, og forskerne kaldte den Cheyava Falls efter et vandfald i Grand Canyon. Den er mudsten: mudder, der engang sank til bunds i vand og blev til sten. På den sidder mange små lyse pletter med en mørk kant, som på en leopard, og roveren fandt også organiske stoffer (stoffer med kulstof, som liv er bygget af, men som også kan dannes uden liv). Det spændende er, at den slags pletter på Jorden kan dannes, når kemi bleger den røde sten, og at mikrober (bittesmå levende væsner) kan få energi fra netop den kemi. Roveren borede en prøve ud af stenen 21. juli 2024 og gemte den i et rør. I september 2025 skrev forskerne om fundet i tidsskriftet Nature.</p>
+      <p><b>Pletterne</b> er 0,2-1 mm store. Den mørke kant er sandsynligvis jernfosfat (vivianit) og midten jernsulfid (greigit). Mikrober på Jorden laver de to stoffer, når de "spiser" organisk stof. Uden liv går det meget langsomt under ca. 150-200 °C, men én vej uden liv er ikke udelukket (Hurowitz m.fl., Nature 2025). Det er måske det stærkeste spor af liv, der er fundet på Mars.</p>
       <p><b>Hvor sikkert er sporet?</b> Forskerne har en skala med syv trin fra "et muligt signal" til "sikkert liv" (CoLD, Green m.fl. 2021). NASA kaldte Cheyava Falls trin 1 i 2024. Hovedforfatteren af artiklen om stenen, Joel Hurowitz, mener selv, det er trin 3. Skalaens forfattere regnede med, at Perseverance kan nå trin 3, og at resten kræver, at prøven kommer til Jorden.</p>
-      <p><b>Pletterne</b> er 0,2-1 mm, lyse i midten med en mørk kant. Kanten er sandsynligvis jernfosfat (vivianit) og midten jernsulfid (greigit). Mikrober på Jorden laver de to stoffer, når de "spiser" organisk stof. Uden liv går det meget langsomt under ca. 150-200 °C, men én vej uden liv er ikke udelukket (Hurowitz m.fl., Nature 2025). Det er måske det stærkeste spor af liv, der er fundet på Mars.</p>
       <p><b>Enceladus:</b> Rumsonden Cassini fandt brint (2017), store organiske molekyler (2018) og fosfat (2023) i fontænerne. Af de seks grundstoffer, livets store molekyler er bygget af (C, H, N, O, P og S), er de fem fundet, og svovl måske. Ingen har endnu kunnet se efter liv dér.</p>
       <p><b>Fund, der ikke holdt:</b> Vikings forsøg på Mars (1976) og meteoritten ALH84001 fra Mars (1996) lignede spor af liv, men de fleste forskere mener i dag, at kemi uden liv forklarer dem. Gassen fosfin på Venus (2020) er omstridt, og gassen DMS på planeten K2-18b (2025) er ikke bekræftet. Carl Sagan skrev i 1979 tanken sådan (frit oversat): Usædvanlige påstande kræver usædvanlige beviser.</p>
       <p><b>Lysene:</b> Den tætte klump er det felt i stjernebillederne Svanen og Lyren, rumteleskopet Kepler kiggede på. Kepler fandt ca. 2.800 af planeterne. De fjerneste, over 10.000 lysår væk, ligger mod Mælkevejens midte og er næsten alle fundet med mikrolinser: En stjerne foran en anden bøjer lyset fra den bagved, så den lyser op et øjeblik, og en planet giver et lille ekstra blink.</p>
@@ -173,15 +178,17 @@ export const GÅDER = [
     // næsten alle mod Mælkevejens midte (arkivet 19. november 2026).
     scene: {
       start: 'Hvert lys er en planet om en anden stjerne, fundet fra 1992 til nu. Det blå lys er Jorden.',
-      første: '1992 kom de første planeter om en anden stjerne. 1995 den første om en stjerne som Solen.',
+      første: '1992 blev de første planeter om en anden stjerne opdaget. 1995 den første om en stjerne som Solen.',
       alle: 'Over 6.400 planeter. Er der liv på nogen af dem?',
       efter: 'Liv er kun fundet på Jorden. Her er to steder i Solsystemet, hvor det måske kunne være, i samme skala.',
-      sten: 'Stenen Cheyava Falls på Mars er ca. 1 m lang. Se de små lyse pletter med en mørk kant.',
+      sten: 'Roveren Perseverance fandt stenen Cheyava Falls (ca. 1 m lang) på Mars i 2024. Se de små lyse pletter med en mørk kant.',
       stenSvar: 'Pletterne er målt. Men hvad lavede dem? Der er to forklaringer, og ingen ved, hvilken der er rigtig.',
       sonder: 'De stiplede baner er planer: Tianwen-3 skal hente prøver hjem fra Mars, Europa Clipper flyve forbi Europa, og Dragonfly lande på Titan.',
       navne: {
         jorden: 'Jorden: 12.742 km', mars: 'Mars: 6.779 km', enceladus: 'Enceladus: 504 km', kemi: 'kemi uden liv', liv: 'liv',
-        foto: 'Foto: NASA/JPL-Caltech/MSSS', tianwen: 'Tianwen-3: prøver hjem 2031', clipper: 'Europa Clipper: Jupiter 2030',
+        foto: 'Foto: NASA/JPL-Caltech/MSSS', stort: '🔍 Se fotoet stort',
+        storTekst: 'Cheyava Falls tæt på, taget af kameraet på Perseverances robotarm 18. juli 2024. Pletterne er 0,2-1 mm store. Foto: NASA/JPL-Caltech/MSSS.',
+        storHjælp: 'Knib eller rul for at zoome. Træk for at flytte. Dobbelttryk for at zoome ind og ud.', storHenter: 'Henter fotoet i fuld størrelse …', luk: 'Luk', tianwen: 'Tianwen-3: prøver hjem 2031', clipper: 'Europa Clipper: Jupiter 2030',
         dragonfly: 'Dragonfly: Titan 2034', jupiter: 'Jupiter', saturn: 'Saturn', jordenKort: 'Jorden', marsKort: 'Mars',
       },
       ærligt: `<p>Der er ét lys for hver af de 6.470 bekræftede planeter i NASA's arkiv over exoplaneter (19. november 2026), tændt i det år, de blev fundet. Retningen på himlen er rigtig. Afstanden fra Jorden er også rigtig, men trykket sammen, så de fjerne kan være med, og 28 planeter uden kendt afstand har fået en afstand fra samme år. Planeter om samme stjerne står i samme lys. De to første fra 1992 kredser om en pulsar (en udbrændt stjerne).</p>
@@ -486,7 +493,7 @@ export const GÅDER = [
         dybde: 'ca. 1,5 km', tank: '7 tons flydende xenon', overflade: 'overfladen', ur: 'venter', glimt: 'ét glimt (2026)',
         partikel: 'en ukendt partikel? (et bud)', sigma: '2,6 sigma', fem: '5 sigma: et fund', euclid: 'Euclid: kortet efter planen i 2027',
       },
-      ærligt: `<p>Galaksen har ca. 2.000 stjerner. Mælkevejen har 100-400 milliarder, og Solen kredser én gang om midten på ca. 225 millioner år, ikke på under et minut. Med kontakten beholder stjernerne farten, men kun det synlige stof trækker. Sådan kunne en galakse ikke være blevet dannet, men regnestykket viser, hvorfor forskerne mangler noget.</p>
+      ærligt: `<p>Galaksen i animationen er tegnet med ca. 2.000 prikker (1.100 på tablet og telefon). En rigtig galakse som Mælkevejen har 100-400 milliarder stjerner, og Solen kredser én gang om midten på ca. 225 millioner år, ikke på under et minut. Med kontakten beholder stjernerne farten, men kun det synlige stof trækker. Sådan kunne en galakse ikke være blevet dannet, men regnestykket viser, hvorfor forskerne mangler noget.</p>
         <p>Buerne er regnet med Einsteins formel for lys, der bøjer om én klump. Klumpen bøjer meget mere, end en rigtig klump på den størrelse ville gøre. Rigtige buer og ringe laves af tunge galakser eller hele hobe af galakser, og de fleste galakser bliver kun en lille smule skæve. Euclids kort over det mørke stof bygger mest på de små skævheder i hundreder af millioner af galakser.</p>
         <p>Skakten og tanken er ikke tegnet i samme skala, og uret går meget hurtigere end i virkeligheden. Partiklen er stiplet, fordi ingen ved, om den findes. Kortet til sidst er et eksempel, ikke Euclids rigtige kort. ${STREG_FORKLARING}</p>`,
     },

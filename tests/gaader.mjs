@@ -90,6 +90,13 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
 {
   const l = GÅDER.find((g) => g.id === 'liv');
   const sc = l.scene ?? {};
+  // Fund fra telefonen (19. november 2026): Fundet introduceres før skalaen, planeterne blev opdaget (de "kom" ikke), og
+  // galaksen med 2.000 stjerner er den i animationen
+  const nørd = l.nørd ?? '';
+  const md = GÅDER.find((g) => g.id === 'moerktstof')?.scene?.ærligt ?? '';
+  tjek('Fund: "Vil du vide mere?" fortæller om fundet af Cheyava Falls før CoLD-skalaen, 1992 "opdaget", og galaksens 2.000 er prikker i animationen',
+    nørd.indexOf('<b>Fundet:</b>') > -1 && nørd.indexOf('<b>Fundet:</b>') < nørd.indexOf('CoLD') && /Perseverance/.test(nørd.slice(0, nørd.indexOf('CoLD')))
+    && /opdaget/.test(sc.første) && !/\bkom\b/.test(sc.første) && /i animationen[^.]*2\.000 prikker/.test(md) && !/Galaksen har ca\. 2\.000 stjerner/.test(md));
   const linjer = [sc.start, sc.første, sc.alle, sc.efter, sc.sten, sc.stenSvar, sc.sonder];
   const lange = linjer.filter((x) => !x || ord(x) > 28);
   tjek('G4d: Liv andre steders scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
@@ -514,6 +521,20 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const sten = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().sten; });
   tjek('G4d trin 2: Cheyava Falls uden forklaringer før gættet, og bagefter GÆT og de to stiplede forklaringer',
     stenFør && !stenFør.forklaringer && !stenFør.stempel && sten.stempel && sten.forklaringer && sten.kasser === 2, JSON.stringify({ stenFør, sten }));
+  // Fund fra telefonen (19. november 2026): fotoet åbnes stort med knappen, hentes i fuld størrelse og kan zoomes. Esc
+  // lukker kun fotoet, ikke kortet, og et tryk på fotoet i scenen åbner det igen
+  await page.click('#gaadeSceneKnapper [data-id="storfoto"]');
+  const stort = await vent(page, () => atomlabTest.gaader.scene().scene().storFoto?.stor, null, 10000) && await T(() => atomlabTest.gaader.scene().scene().storFoto);
+  const boks = await page.locator('#gaader .gaade-storfoto-flade').boundingBox();
+  await page.mouse.move(boks.x + boks.width / 2, boks.y + boks.height / 2);
+  await page.mouse.wheel(0, -400);
+  const zoomet = await T(() => atomlabTest.gaader.scene().scene().storFoto?.skala ?? 0);
+  await page.keyboard.press('Escape');
+  const lukket = await T(() => ({ foto: atomlabTest.gaader.scene().scene().storFoto, kort: atomlabTest.gaader.vist()?.id, boks: Boolean(document.querySelector('#gaader .gaade-storfoto')) }));
+  const igen = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(-3.2, 0.6); return Boolean(s.scene().storFoto); });
+  await T(() => document.querySelector('#gaader .gaade-storfoto-luk').click());
+  tjek('Fund: fotoet af Cheyava Falls åbnes stort (1608 punkter bredt), kan zoomes med hjulet, Esc lukker kun fotoet, og et tryk på fotoet åbner det',
+    stort && stort.bredde === 1608 && zoomet > 1.2 && !lukket.foto && !lukket.boks && lukket.kort === 'liv' && igen, JSON.stringify({ stort, zoomet, lukket, igen }));
   await page.click('#gaadeTrin .fl-næste');
   const sonder = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().sonder; });
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
