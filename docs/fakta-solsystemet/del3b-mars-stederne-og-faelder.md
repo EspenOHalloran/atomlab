@@ -169,3 +169,21 @@ Tjekket af hovedsessionen (Opus, høj effort) med websøgning (kun søgeuddrag) 
 | Isen er gjort lidt hvidere end på fotoene, og lyset regnes ud fra højderne | OK (programmets egen snyd: `IS` i `klippeplanet.js`) | Koden |
 
 **Ingen nye fælder.** Bemærk: "Kløfterne er op til X m dybe" er ikke tjekket og står ikke i teksten.
+
+### Faktatjek M8c del 2: Curiosity som 3D-model (19. november 2026)
+*Tjekket af Opus i hovedsessionen (under 15 påstande). Kilderne er læst direkte 19. november 2026.*
+
+| Påstand i teksten | Kilde | Vurdering |
+|---|---|---|
+| På størrelse med en lille bil, ca. 3 m lang, 2,7 m bred og 2,1 m høj (uden armen) | NASA "Mars Science Laboratory: Curiosity Rover" https://science.nasa.gov/mission/msl-curiosity/: "About the size of a small SUV — 10 feet long, 9 feet wide and 7 feet tall), not including the arm" (3,05 / 2,74 / 2,13 m). NASA kalder den også "car-size" | S |
+| 899 kg på Jorden, lidt over en tredjedel på Mars | Samme side: "1,982 lbs (899 kg) in Earth gravity", "743 lbs (337 kg) in Mars gravity" (37,5 %) | S |
+| Seks hjul, strøm fra et atombatteri med plutonium | Rocker-bogie med seks hjul (samme side). MMRTG med plutonium-238-dioxid (kendt fra NASA's missionsbeskrivelse, ikke læst igen i dag) | S |
+| Kører også om vinteren og i støvstorme | Se "Den globale støvstorm i 2018" i del3a: Opportunity (solceller) gik i stå, Curiosity arbejdede videre | S |
+| Landede 6. august 2012 | Se afsnit 7 ovenfor (05:17:57 UTC, 07:17 dansk tid) | S |
+| Sol 5073 er midt i november 2026 | Regnet: landingen + 5073 soler à 88.775,244 s med landingen kl. ca. 15 lokal tid: sol 5073 er ca. 13. november 2026 | S (regnet) |
+| Har kørt ca. 38,6 km | NASA's kortdata `mars.nasa.gov/mmgis-maps/MSL/Layers/json/MSL_waypoints.json`, sidste stop (sol 5073): `dist_total_m` 38.638 | S |
+| Ca. 1 km højere end landingen | Samme data: −3.472 m (sol 5073) mod −4.501 m (sol 3) | S |
+| Jorden hælder ca. 12°, næsen op ad bakken | Samme data: `tilt` 12,45°, `pitch` +11,81° (næsen op), `yaw` −171,6° (188,4°). Højdekortet (lag 0) stiger 11,3° langs roveren | S |
+| NASA's 3D-model må bruges | NASA "Images and Media Usage Guidelines" https://www.nasa.gov/nasa-brand-center/images-and-media/: materiale til 3D-modeller "generally are not subject to copyright", må bruges til undervisning og på netsider, når det ikke antyder, at NASA anbefaler noget, og NASA nævnes som kilde. Modellens side: kredit "NASA/JPL-Caltech" | S |
+
+**Fælde:** NASA's side siger "small SUV" (en lille SUV). "En lille bil" er en forenkling til en 13-årig, og den svarer til NASA's egen "car-size".
