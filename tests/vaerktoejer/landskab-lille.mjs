@@ -36,7 +36,7 @@ for (const x of blik) {
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().skygger === 1, null, { timeout: 300000 });
   await s.waitForTimeout(2000);
   await s.screenshot({ path: `${UD}/lille-${sted}-${k}-${v}-${t}.png`, timeout: 300000 });
-  console.log(x, JSON.stringify(await f(() => { const t = atomlabTest.solsystem.fænomen().stå(); return { sol: t.solHøjde?.toFixed(1), måner: t.måner }; })));
+  console.log(x, JSON.stringify(await f(() => { const t = atomlabTest.solsystem.fænomen().stå(); return { sol: t.solHøjde?.toFixed(1), måner: t.måner, ...(t.rover?.vist && { rover: t.rover }) }; })));
   if (medFoto) {
     await f(() => atomlabTest.solsystem.trykPå('📷 Roverens foto'));
     await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().foto.synlig === 1, null, { timeout: 300000 });

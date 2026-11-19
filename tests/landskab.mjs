@@ -160,8 +160,15 @@ await s.waitForFunction(() => atomlabTest.solsystem.sted() === 'stå-curiosity',
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().lander, null, { polling: 100 });
 t = await stå();
-tjek('hos Curiosity (valgt i træet): højden passer med NASA (−3.488 m ved sol 5045), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3488) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
-tjek('teksten om Curiosity (har kørt ca. 38 km)', /38 km/.test(await s.textContent('#solsystemTekst')));
+tjek('hos Curiosity (valgt i træet): højden passer med NASA (roveren −3.472 m ved sol 5073, man står 9 m fra den), og stedet er markeret i træet', t.sted === 'curiosity' && Math.abs(t.højde + 3472) < 10 && (await træ()).find((p) => p.id === 'stå-curiosity')?.valgt, JSON.stringify(t));
+tjek('teksten om Curiosity (har kørt ca. 38,6 km, på størrelse med en lille bil)', /38,6 km/.test(await s.textContent('#solsystemTekst')) && /lille bil/.test(await s.textContent('#solsystemTekst')));
+// Curiosity som 3D-model (M8c del 2): hentet ved hoppet fra Naukluft, med NASA's retning og hældning (sol 5073)
+const rv = t.rover ?? {};
+tjek('roveren står hos Curiosity: hentet og vist, 9 m fra stedet', rv.hentet && rv.vist && Math.abs(rv.afstand - 9) < 0.5, JSON.stringify(rv));
+tjek('roveren vender og hælder som i NASA\'s kortdata (188,4° og næsen 11,8° op)', Math.abs(rv.kompas - 188.4) < 0.5 && Math.abs(rv.hældning - 11.81) < 0.5, JSON.stringify(rv));
+tjek('roverens hjul står på jorden (højst 15 cm fra højdekortet)', rv.hjul < 0.15, JSON.stringify(rv));
+await s.waitForFunction(() => atomlabTest.solsystem.fænomen().stå().rover?.skygger > 0, null, { timeout: 10000, polling: 200 }).catch(() => {});
+tjek('roverens skygge er regnet (skyggekortet fra Solen)', (await stå()).rover?.skygger > 0, JSON.stringify((await stå()).rover));
 tjek('hos Curiosity: intet foto (Naukluft-fotoet er skjult, og kontakten findes ikke)', (await stå()).foto.vist === null && !(await knapper()).includes('📷 Roverens foto') && !(await s.$('#solsystemForklaring button.side-kontakt')), JSON.stringify(await stå()));
 
 // Tilbage i kredsløb: et tryk på Gale i træet
@@ -170,6 +177,7 @@ await fm(() => atomlabTest.solsystem.fænomen().hop());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 200 }).catch(() => {});
 t = await stå();
 tjek('tilbage i kredsløb: Mars-kloden ses, near er 5 km igen, zoom 1', !t.står && t.kloden && Math.abs(t.nær - 0.005) < 1e-9 && t.zoom === 1, JSON.stringify(t));
+tjek('tilbage i kredsløb: roveren er frigivet (hentes igen næste gang)', t.rover && !t.rover.hentet && !t.rover.vist, JSON.stringify(t.rover));
 tjek('tilbage i kredsløb: gløden og eksponeringen er som før (1,05)', t.glød === true && Math.abs(t.eksponering - 1.05) < 1e-9, JSON.stringify({ glød: t.glød, eksponering: t.eksponering }));
 await hop();
 tjek('og kameraet er ved Gale igen', (await fm(() => atomlabTest.solsystem.fænomen().ved())) === 'gale');

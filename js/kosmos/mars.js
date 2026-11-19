@@ -24,6 +24,7 @@ import { SIDE, SIDER } from '../data/sider/mars.js';
 import { lavFormmåne } from '../solsystem/maane-form.js';
 import { lavLandskab, ØJE, eksponering } from '../solsystem/landskab.js';
 import { lavPanorama } from '../solsystem/panorama.js';
+import { lavRover } from '../solsystem/rover.js';
 import { hent, MAPPE, glem, iLager } from '../solsystem/hent.js';
 import { lavShadereFørst } from '../solsystem/shadere.js';
 import { kontakt } from '../sideknap.js';
@@ -179,8 +180,14 @@ const LANDSKAB = {
     { id: 'naukluft', navn: 'Naukluft', knap: 'Gå til Naukluft', bredde: -4.67837549, længde: 137.3593593, blik: 135, tid: 7.5,
       titel: 'Naukluft i Gale-krateret', tekst: 'Du står, hvor Curiosity kørte i april 2016. Mod sydøst rejser Mount Sharp sig. Drej hovedet med fingeren eller musen.',
       foto: { rover: 'Curiosity', tid: 15.7, tekst: 'Curiositys foto herfra, 4. april 2016. Klokken er stillet til midt på eftermiddagen, da det blev taget.' } },
-    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.82466475, længde: 137.3876138, blik: 10, tid: 7.5,
-      titel: 'Hos Curiosity, oktober 2026', tekst: 'Her stod Curiosity i midten af oktober 2026, ca. 1 km højere oppe end der, hvor den landede.' },
+    // Hos Curiosity (M8c del 2): Man står 9 m fra roveren mod sydvest (på tværs af skråningen, næsten i samme højde) og
+    // ser den skråt forfra med kraterbunden mod nordøst bag den. vinkel: kameraets vinkel over vandret, når landingen er
+    // færdig (standard −3°), her lidt ned, så roveren også ses over panelerne på højkant. Man lander om eftermiddagen,
+    // så Solen står bag én og lyser på roverens forside. rover: roverens stop på sol 5073 (ca. 13. november 2026) i NASA's kortdata med retningen (yaw),
+    // hældningen (pitch, næsen op) og krængningen (roll, højre side ned) i grader, og modellen (js/solsystem/rover.js).
+    { id: 'curiosity', navn: 'Hos Curiosity', knap: 'Gå til Curiosity nu', bredde: -4.8261104, længde: 137.38876119, blik: 55, vinkel: -7, tid: 15,
+      titel: 'Hos Curiosity, november 2026', tekst: 'Her står Curiosity, som den stod i midten af november 2026, ca. 1 km højere oppe end der, hvor den landede.',
+      rover: { navn: 'Curiosity', fil: 'landskab/curiosity.glb', sol: 5073, bredde: -4.82602331, længde: 137.388886, retning: 188.4, hældning: 11.81, krængning: 3.96 } },
   ],
   // M8b: Perseverances stop fra mars.nasa.gov/mmgis-maps/M20/Layers/json/M20_waypoints.json (randen: sol 1301,
   // landingsstedet: Octavia E. Butler Landing). Ved randen kigger man mod øst, så man lander om eftermiddagen med Solen i
@@ -832,8 +839,12 @@ export default {
       lægKø = null; // (billederne lukkes nu, så de kan ikke lægges i grafikkortet)
       for (const [, x] of landskaber) x.land?.frigiv();
       panorama.frigiv();
+      rover?.frigiv();
       frigivBilleder(STÅ);
     }
+    // Curiosity som 3D-model (M8c del 2): laves første gang, man går til et sted med en rover (kun Gale)
+    let rover = null;
+    const roverTil = (l, sd) => (rover ??= lavRover({ renderer: verden.renderer, land: l.land, fil: sd.rover.fil }));
     // Roverens foto (M8c del 1): en kugle om kameraet, der toner ind over landskabet
     const panorama = lavPanorama({ renderer: verden.renderer, hent: hentStå, mappe: MAPPE });
     gruppe.add(panorama.kugle);
@@ -926,6 +937,11 @@ export default {
           vent.hentet = true;
           if (vent === ståVent) bjælke.færdig();
         }, læg);
+        // Roveren (ca. 2,9 MB) hentes samtidig, og dens teksturer lægges i grafikkortet før landingen (forbered)
+        if (sd.rover) {
+          vent.rover = 'henter';
+          roverTil(l, sd).hent((t) => { if (vent === ståVent) { vent.foto.push(...t); vent.rover = 'klar'; } });
+        }
       });
     }
     // Klokken, man lander på: med roverens foto den tid, fotoet blev taget
@@ -936,6 +952,7 @@ export default {
     function forbered(vent) {
       const l = landskaber.get(vent.krater)?.land;
       if (!l) return;
+      if (vent.rover === 'henter') return; // (roverens materialer skal være lavet, før shaderne laves)
       if (vent.foto.length) { verden.renderer.initTexture(vent.foto.shift()); return; }
       if (!vent.shadere) {
         vent.shadere = 'i gang';
@@ -973,6 +990,8 @@ export default {
         if (verden.glød) verden.glød.enabled = false;
       }
       stående = { krater, sd, land: l.land };
+      if (sd.rover && rover?.hentet) rover.stil(sd.rover, l.data);
+      else rover?.skjul();
       panorama.skjul(true); // et nyt sted: fotoet er fra det gamle
       for (const [, x] of landskaber) if (x.land) x.land.gruppe.visible = x === l;
       system.visible = false;
@@ -1015,6 +1034,7 @@ export default {
       stående.land.gruppe.visible = false;
       stående = null;
       landing = null;
+      rover?.skjul();
       panorama.skjul(true);
       system.visible = true;
       solKerne.visible = solGlød.visible = true;
@@ -1038,10 +1058,17 @@ export default {
       const nr = gåNr; // vælges noget andet, mens lagene hentes eller billedet toner, lander man ikke her alligevel
       bjælke.vent('Henter stedet …');
       if (sd.foto && fotoØnske) panorama.forhånd(sd.id);
+      const l = landskaber.get(krater);
       stående.land.gåTil(sd.id, () => {
         if (gåNr !== nr) return;
-        bjælke.færdig();
-        ton(() => { if (gåNr === nr) visLandskab(krater, sd); });
+        const videre = () => {
+          if (gåNr !== nr) return;
+          bjælke.færdig();
+          ton(() => { if (gåNr === nr) visLandskab(krater, sd); });
+        };
+        // Til roveren: hent den, og læg dens teksturer i grafikkortet først (dens shadere laves, første gang den tegnes)
+        if (sd.rover) roverTil(l, sd).hent((t) => { if (gåNr === nr) læg(t, videre); });
+        else videre();
       }, læg);
     }
     // Klokken som tekst (lokal soltid)
@@ -1080,7 +1107,7 @@ export default {
           kamRet.copy(orbit.target).sub(kamera.position).normalize();
           const kompas = THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z));
           sætBlik(landing.fra + (LANDING_HØJDE - landing.fra) * e * e, kompas, THREE.MathUtils.radToDeg(Math.asin(kamRet.y)) * (1 - e) - 32 * e);
-        } else sætBlik(ØJE / 1000 + (LANDING_HØJDE - ØJE / 1000) * Math.pow(1 - g, 2), landing.sd.blik, -32 + 29 * g);
+        } else sætBlik(ØJE / 1000 + (LANDING_HØJDE - ØJE / 1000) * Math.pow(1 - g, 2), landing.sd.blik, -32 + (32 + (landing.sd.vinkel ?? -3)) * g);
         if (landing.t >= landing.T) {
           const f = landing.færdig;
           landing = null;
@@ -1095,6 +1122,7 @@ export default {
       }
       if (!stående) return;
       land.opdater(kamera);
+      rover?.opdater(kamera);
       panorama.opdater(kamera, dt, ROLIG);
       verden.renderer.toneMappingExposure = eksponering(land.sol.y); // tilpasser sig lyset (L1)
       // Stjernerne: himlens nordpol står over den nordlige horisont i en vinkel lig med bredden, og himlen drejer om den
@@ -1506,6 +1534,8 @@ export default {
         forladLandskab();
         ståVent = null;
         for (const [, l] of landskaber) if (l.land) { gruppe.remove(l.land.gruppe); l.land.stop(); }
+        rover?.stop();
+        rover = null;
         gruppe.remove(panorama.kugle);
         panorama.stop();
         frigivBilleder(STÅ);
@@ -1556,6 +1586,7 @@ export default {
             kompas: (THREE.MathUtils.radToDeg(Math.atan2(kamRet.x, -kamRet.z)) + 360) % 360, vinkel: THREE.MathUtils.radToDeg(Math.asin(kamRet.y)),
             øjne: kamera.position.y * 1000, kloden: system.visible, nær: kamera.near, eksponering: verden.renderer.toneMappingExposure, glød: verden.glød?.enabled ?? null, ...(stående ? stående.land.test() : {}),
             foto: panorama.test(),
+            rover: rover?.test() ?? null,
           };
         },
         ståPå: (id) => { const x = landskabMed(`stå-${id}`); ståPå(x.krater, x.sd); },
