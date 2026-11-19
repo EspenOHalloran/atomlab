@@ -151,6 +151,59 @@ for (const [navn, vp] of [['tablet', { width: 800, height: 1280 }], ['telefon', 
   await page.context().close();
 }
 
+// ---------- telefon på højkant: panelerne kan swipes ned, og greb-stregen henter dem (jeres ønske 19. november 2026) ----------
+{
+  const page = await side({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const cdp = await page.context().newCDPSession(page);
+  // Et rigtigt træk med fingeren (touchstart, flere touchmove og touchend), så browseren også selv ruller
+  const swipe = async (x, y, dx, dy) => {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+    for (let i = 1; i <= 8; i++) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x + dx * i / 8, y: y + dy * i / 8 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await page.waitForTimeout(500);
+  };
+  const midt = (sel) => page.evaluate((s) => { const r = document.querySelector(s).getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + Math.min(r.height / 2, 60), bund: r.bottom }; }, sel);
+  const nede = () => page.evaluate(() => atomlabTest.paneler.valg('solsystem').kunGrafik);
+  await page.goto(`${ADRESSE}/?test#solsystem`);
+  await vent(page, 800);
+  tjek('telefon: greb-stregen står mellem scenen og panelerne', await synlig(page, '#solsystem .panel-greb') && await page.evaluate(() => atomlabTest.paneler.telefon()));
+  let m = await midt('#solsystem .venstre-panel');
+  await swipe(m.x, m.y, 0, 160);
+  tjek('telefon: swipe ned på panelet skjuler panelerne', await nede() && !(await synlig(page, '#solsystem .venstre-panel')));
+  const h = await page.evaluate(() => document.getElementById('solsystemVindue').getBoundingClientRect().height);
+  tjek('telefon: og scenen fylder skærmen', h > 844 * 0.8, `${h}`);
+  m = await midt('#solsystem .panel-greb');
+  tjek('telefon: stregen står nederst på skærmen', m.bund > 844 - 20, `${m.bund}`);
+  await swipe(m.x, m.y, 0, -150);
+  tjek('telefon: swipe op på stregen henter panelerne', !(await nede()) && await synlig(page, '#solsystem .venstre-panel'));
+  await page.tap('#solsystem .panel-greb');
+  await page.waitForTimeout(500);
+  tjek('telefon: et tryk på stregen skjuler dem', await nede());
+  await page.tap('#solsystem .panel-greb');
+  await page.waitForTimeout(500);
+  tjek('telefon: og et tryk mere henter dem', !(await nede()));
+  m = await midt('#solsystemVindue');
+  await swipe(m.x, m.y + 40, 0, 160);
+  tjek('telefon: et træk ned i scenen (drej) skjuler ikke panelerne', !(await nede()));
+  m = await midt('#solsystem .venstre-panel');
+  await swipe(m.x - 120, m.y, 260, 70);
+  tjek('telefon: et vandret træk på panelet skjuler dem ikke', !(await nede()));
+  await page.evaluate(() => { document.getElementById('solsystem').scrollTop = 300; });
+  m = await midt('#solsystem .højre-panel');
+  await swipe(m.x, Math.max(m.y, 200), 0, 160);
+  const top = await page.evaluate(() => document.getElementById('solsystem').scrollTop);
+  tjek('telefon: rullet ned ruller et swipe ned bare op (panelerne bliver)', !(await nede()) && top < 300, `scrollTop ${top}`);
+  await page.screenshot({ path: `${UD}/telefon-greb.png` });
+  await page.context().close();
+}
+{
+  const page = await side({ viewport: { width: 800, height: 1280 }, hasTouch: true, isMobile: true });
+  await page.goto(`${ADRESSE}/?test#solsystem`);
+  await vent(page);
+  tjek('tablet: ingen greb-streg (kun på telefonen)', !(await synlig(page, '#solsystem .panel-greb')));
+  await page.context().close();
+}
+
 await b.close();
 console.log(fejl.length ? 'Konsol: ' + fejl.join(' | ') : 'Konsol: ingen fejl');
 console.log(`\n${ok} OK, ${dårlig} FEJL`);
