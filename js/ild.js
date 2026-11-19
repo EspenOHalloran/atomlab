@@ -12,7 +12,8 @@ import { rydBeskeder, bundIVindue } from './beskeder.js';
 import { lukHvorfor } from './lag.js';
 import { lavKontakt } from './kontakt.js';
 import { lavTidsknap } from './pause.js';
-import { tagVentForløb } from './gaa.js';
+import { tagVentForløb, tagVentIld } from './gaa.js';
+import { lavKnaldgas, startKnaldgas, stopKnaldgas, testAdgang as knaldTest } from './knaldgas.js';
 import { startForløb, stopForløb, starterSelv, forløbVenter, forløbRørt, forløbVink, forløbTest, lavTurKnap } from './forloeb.js';
 import { ILD_1 } from './data/forloeb/ild.js';
 import { HVORFOR } from './data/hvorfor.js';
@@ -34,7 +35,7 @@ let bord = null;
 let atomScene = null;
 let løberFlamme = null;
 let aktiv = false;
-let scene = 'bord'; // 'bord' eller 'atomer'
+let scene = 'bord'; // 'bord', 'atomer' eller 'knaldgas' (boksen med 4 H₂ og 2 O₂, js/knaldgas.js)
 let flamme = 'lys'; // 'lys' eller 'brænder'
 let værktøj = null; // null, 'tændstik' eller 'ske'
 let tyngde = 1; // 1 Jorden, 0 rumstationen
@@ -97,9 +98,9 @@ export function lav() {
   toning.id = 'ildToning';
   vindue.append(toning);
   const række = document.createElement('div');
-  række.className = 'bjælke-række';
+  række.className = 'bjælke-række ild-kun';
   bundIVindue(vindue).append(række);
-  pause = lavTidsknap({ holder: række, aktiv: () => aktiv });
+  pause = lavTidsknap({ holder: række, aktiv: () => aktiv && scene !== 'knaldgas' });
   række.querySelector('.tidsknap').id = 'ildTid';
 
   for (const b of document.querySelectorAll('[data-ild-flamme]')) b.addEventListener('click', () => { lyd.klik(); vælgFlamme(b.dataset.ildFlamme); });
@@ -112,6 +113,9 @@ export function lav() {
   gasKontakt.knap.addEventListener('click', () => { lyd.klik(); sætGas(!gas); });
   $('ildTænd').addEventListener('click', () => { lyd.klik(); tændSelv(); });
   $('ildTilbage').addEventListener('click', () => { lyd.klik(); vælgScene('bord'); });
+  $('ildKnaldgas').addEventListener('click', () => { lyd.klik(); vælgScene('knaldgas'); });
+  // Knaldgassen (flyttet fra Molekyler): "‹ Tilbage til bordet" i dens panel
+  lavKnaldgas({ tilbage: () => vælgScene('bord'), vært: 'ild', vindue: 'ildVindue' });
   $('ildAtomIgen').addEventListener('click', () => { lyd.klik(); atomScene.nulstil(); visStyring(); });
   $('ildHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpIld').classList.remove('skjult'); });
   $('ildHjælpTur').addEventListener('click', () => {
@@ -132,12 +136,17 @@ export function start() {
   nulstilBord();
   vælgScene('bord', { straks: true });
   pause.sæt('spil');
-  // Turen starter af sig selv første gang, og når man kommer fra dens link eller "Din fremgang"
-  if (tagVentForløb([ILD_1.id]) || starterSelv(ILD_1)) startTur();
+  // Fra "Knaldgas i Ild ›" i Molekyler åbner knaldgassen. Ellers starter turen af sig selv første gang, og når man kommer
+  // fra dens link eller "Din fremgang".
+  if (tagVentIld() === 'knaldgas') vis('knaldgas');
+  else if (tagVentForløb([ILD_1.id]) || starterSelv(ILD_1)) startTur();
 }
 
 export function stop() {
   stopForløb(); // kalder DEL.slut
+  stopKnaldgas();
+  scene = 'bord';
+  $('ild').classList.remove('knaldgas');
   aktiv = false;
   rydTimere();
   slipTræk();
@@ -148,6 +157,15 @@ export function stop() {
   atomScene.gruppe.visible = false;
   begrænsDrejning(null);
   $('hjælpIld').classList.add('skjult');
+}
+
+// Et link fra en anden skærm (js/gaa.js): 'knaldgas' åbner boksen med 4 H₂ og 2 O₂
+export function vis(id) {
+  if (!aktiv) return;
+  if (id === 'knaldgas') {
+    stopForløb();
+    vælgScene('knaldgas', { straks: true });
+  }
 }
 
 // Bordet som det står, når man kommer: et stearinlys, der brænder, og ingen værktøjer
@@ -186,6 +204,7 @@ function opdater(dt, tid) {
   const v = værktøj === 'tændstik' ? bord.tændstik : værktøj === 'ske' ? bord.ske : null;
   if (v) v.position.lerp(værktøjMål, 1 - Math.exp(-dt * (ROLIG ? 40 : 16)));
   const d = pause.til ? 0 : dt;
+  if (scene === 'knaldgas') return; // knaldgassen har sin egen opdatering og sine egne paneler
   if (scene === 'atomer') {
     atomScene.opdater(d, verden.kamera);
   } else {
@@ -464,13 +483,22 @@ function vælgScene(id, { straks = false } = {}) {
   const toning = $('ildToning');
   slipTræk();
   const gør = () => {
+    const fra = scene;
     scene = id;
     bord.gruppe.visible = id === 'bord';
     atomScene.gruppe.visible = id === 'atomer';
     if (id === 'atomer') atomScene.nulstil();
     rydBeskeder();
     lukHvorfor();
-    kamera();
+    if (id === 'knaldgas') startKnaldgas(); // sætter selv kameraet og klassen knaldgas
+    else {
+      if (fra === 'knaldgas') {
+        stopKnaldgas();
+        begrænsDrejning({ vandret: 0.6, lodret: 0.28 });
+        verden.styring.autoRotate = false;
+      }
+      kamera();
+    }
     visStyring();
     toning.classList.remove('mørk');
   };
@@ -509,7 +537,7 @@ function lavTræk() {
     if (scene === 'atomer') {
       if (!punktI(h.clientX, h.clientY, atomPlan, tV)) return;
       if (!atomScene.tagFat(h.clientX, h.clientY, verden.kamera, lærred.getBoundingClientRect(), finger, tV)) return;
-    } else if (!værktøj) return;
+    } else if (scene !== 'bord' || !værktøj) return;
     træk = { id: h.pointerId, finger };
     verden.styring.enabled = false;
     lærred.setPointerCapture?.(h.pointerId);
@@ -726,8 +754,8 @@ const DEL = {
   veje: [
     { tekst: 'Leg med flammen', primær: true, her: true, gør: () => requestAnimationFrame(() => kamera()) },
     { tekst: 'Hvorfor er flammen gul?', hvorfor: 'ildGul' },
-    // Til forløb 4 og knaldgassen er i Ild (PR 3): kortet fra knaldgassen
-    { tekst: 'Se, hvor varmen kommer fra', hvorfor: 'knaldVarme' },
+    // Til forløb 4 findes: knaldgassen med måleren (brudt og dannet)
+    { tekst: 'Se, hvor varmen kommer fra', gør: () => vælgScene('knaldgas') },
   ],
   slut: () => {
     trin = null;
@@ -744,6 +772,9 @@ export function testAdgang() {
   return {
     forløb: forløbTest(),
     startTur: () => startTur(),
+    knaldgas: knaldTest(),
+    vis: (id) => vis(id),
+    scene: () => scene,
     trin: () => trin,
     kredsløb: () => bord.t.kredsløb,
     tæller: () => ($('ildTæller').hidden ? '' : $('ildTæller').textContent),

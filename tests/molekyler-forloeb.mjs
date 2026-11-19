@@ -135,10 +135,11 @@ const slut = { linje: await linje(), veje: await T(() => document.querySelectorA
 tjek('trin 4 og "Det så du": krystallen er bygget, Så siger "seks naboer", kernesætningen og tre veje, H₂, vand og salt er løst uden piller, og forløbet er taget',
   slut.krystal?.synlig && /seks naboer/.test(t4linje) && slut.linje.includes(MØDES.kernesætning) && slut.veje === 3 && slut.piller === 0 && løst.every(Boolean), JSON.stringify(slut));
 
-// ---------- Vej 2 (knaldgassen), ✓ i "Din fremgang" og knappen i hjælpen ----------
+// ---------- Vej 2 (knaldgassen i Ild), ✓ i "Din fremgang" og knappen i hjælpen ----------
 await page.click('#molekyler .fl-vej[data-vej="1"]');
-await page.waitForTimeout(500);
-const vej = { kører: (await F()).kører, knald: await T(() => atomlabTest.molekyler.byg.knaldgas.aktiv()), panel: await synlig('#knaldPanel') };
+// Knaldgassen bor i Ild fra 19. november 2026: vejen åbner den dér
+await page.waitForFunction(() => location.hash === '#ild' && window.atomlabTest?.ild?.knaldgas?.aktiv(), null, { timeout: 20000 }).catch(() => {});
+const vej = { kører: (await F()).kører, knald: await T(() => Boolean(atomlabTest.ild?.knaldgas?.aktiv())), panel: await synlig('#knaldPanel') };
 await T(() => { location.hash = '#'; });
 await page.waitForFunction(() => atomlabTest.aktiv() === 'menu', null, { timeout: 20000 });
 await page.click('.menu-fremgang-knap');
@@ -154,7 +155,7 @@ const hjælp = { ...(await F()), måde: await T(() => atomlabTest.molekyler.måd
 await page.click('#molekyler .fl-spring');
 await page.waitForTimeout(400);
 const sprunget = { kører: (await F()).kører, panel: await synlig('#bygPanel') };
-tjek('vej 2 åbner knaldgassen, ✓ i "Din fremgang", forløbet starter ikke selv igen, hjælpen starter det, og "Spring over" viser panelerne',
+tjek('vej 2 åbner knaldgassen i Ild, ✓ i "Din fremgang", forløbet starter ikke selv igen, hjælpen starter det, og "Spring over" viser panelerne',
   vej.kører === null && vej.knald && vej.panel && flueben === true && igenSelv === null && hjælp.kører === 'molekyler' && hjælp.måde === 'byg' && hjælp.før && sprunget.kører === null && sprunget.panel,
   JSON.stringify({ vej, flueben, igenSelv, hjælp, sprunget }));
 tjek('ingen fejl i konsollen (pc)', !fejl.length, fejl.join(' | '));

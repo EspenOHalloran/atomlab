@@ -222,14 +222,12 @@ function startMenu() {
 // Tallene kommer fra js/data/, så skærmene ikke skal hentes for at tælle (10a).
 function fremgangPrDel() {
   const ud = {};
-  for (const [id, liste] of [['vaerksted', OPGAVER], ['molekyler', [...OPGAVER_BYG, ...OPGAVER_BYTTE]], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
+  for (const [id, liste] of [['vaerksted', OPGAVER], ['molekyler', [...OPGAVER_BYG.filter((o) => !o.knaldgas), ...OPGAVER_BYTTE]], ['ild', OPGAVER_BYG.filter((o) => o.knaldgas)], ['fusion', OPGAVER_FUSION], ['reaktor', OPGAVER_REAKTOR], ['liv', OPGAVER_LIV], ['batteri', OPGAVER_BATTERI]]) {
     ud[id] = { løst: fremgang.antalLøste(liste.map((o) => o.id)), ialt: liste.length, slags: 'opgaver' };
   }
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };
   // Begyndelsen har ingen opgaver endnu, kun turen (L5)
   ud.begyndelsen = { løst: fremgang.forløbTaget('begyndelsen') ? 1 : 0, ialt: 1, slags: 'ture' };
-  // Ild har ingen opgaver endnu, kun turen "Hvad brænder egentlig?"
-  ud.ild = { løst: fremgang.forløbTaget('ild') ? 1 : 0, ialt: 1, slags: 'ture' };
   for (const id of ['solsystem', 'kosmos']) {
     const set = setFænomener(id);
     const liste = FÆNOMEN_IDER[id];
