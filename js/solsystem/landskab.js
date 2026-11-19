@@ -51,6 +51,11 @@ const MÅNER = [
   { id: 'deimos', afstand: 23460, radius: 6.2, periode: 131, fase: -0.4 * Math.PI },
 ];
 const MAKS = 150000; // m: så langt ud går nettet
+// Stenene (M8c del 3): På tablet (LAV_KVALITET) bygges shaderen uden mellemlaget (trin 3) og uden de små sten tæt på,
+// så den bliver mindre (valgt af orkestratoren 2026-11-19, kan ændres af jer: I testbrowseren var den ca. +30-60 %
+// langsommere med alt, og det kan ikke måles på tabletten i skyen). Holder Tab A11 60 billeder i sekundet med ?maal,
+// kan de slås til på tablet ved at sætte STEN_FULD til true.
+const STEN_FULD = !LAV_KVALITET;
 
 // ---------- GLSL: lagene ----------
 const LAG_GLSL = /* glsl */ `
@@ -209,6 +214,7 @@ const FRAGMENT = /* glsl */ `
     if (abs(e) * w > m.x) m = vec3(abs(e) * w, sign(e) * w * vec2(0.7071, -0.7071));
     return m;
   }
+#ifdef STEN_FULD
   // ---------- Mellemlaget (M8c del 3 trin 3): sten på ca. 0,5-3 m, der rager op ----------
   // En sten malet på jorden bliver trykket flad, når man ser den på skrå (en sten på 1 m 50 m væk fylder ca. 17 × 8
   // skærmpixel, men malet på jorden kun ca. 17 × 1). Derfor følges synslinjen fra punktet på jorden tilbage mod øjet
@@ -289,6 +295,7 @@ const FRAGMENT = /* glsl */ `
     }
     return -1.0;
   }
+#endif
   void main() {
     vec2 en = vEN;
     float fod = max(length(fwidth(en)), 0.02); // m pr. skærmpixel
@@ -314,6 +321,7 @@ const FRAGMENT = /* glsl */ `
     vec3 stenNrm = vec3(0.0, 1.0, 0.0);
     vec4 stenB = vec4(0.5);
     float stenU = -1.0;
+#ifdef STEN_FULD
     vec2 tilOje = uSted + vec2(uKam.x, -uKam.z) - en;
     float dH = length(tilOje);
     float pa = length(fwidth(normalize(vRel - uKam))); // radianer pr. pixel
@@ -329,6 +337,7 @@ const FRAGMENT = /* glsl */ `
         if (uB > stenU) { stenU = uB; stenNrm = nr; stenB = bb; }
       }
     }
+#endif
     // Detaljer helt tæt på (under fotoets skarphed, M8c del 3 trin 1): sten og grus, tegnet af programmet efter rovernes
     // fotos (fotoet fra kredsløb har 25 cm pr. pixel). Tre lag af celler med højst én sten hver: store (0,9 m) og små
     // (0,28 m) sten og ved Jezero flade, lyse klippeflader i niveau med jorden (1,8 m). Størrelsen følger en potenslov
@@ -347,7 +356,12 @@ const FRAGMENT = /* glsl */ `
       vec2 vaek = -solV / max(length(solV), 1e-4); // skyggens retning (øst, nord)
       vec2 mot = vec2(solV.x >= 0.0 ? 1.0 : -1.0, solV.y >= 0.0 ? 1.0 : -1.0); // nabocellerne mod Solen
       float stenH = 0.0, skygge = 0.0, fodM = 0.0;
+#ifdef STEN_FULD
       for (int lag = 0; lag < 3; lag++) {
+#else
+      for (int li = 0; li < 2; li++) { // (tablet: uden de små sten)
+        int lag = li * 2;
+#endif
         if (lag == 2 && jez < 0.5) break;
         float str = lag == 0 ? 0.9 : lag == 1 ? 0.28 : 1.8;     // cellernes størrelse (m)
         float vis = 1.0 - smoothstep(0.06, 0.16, fod / str);    // til ca. 6-16 pixel pr. celle
@@ -448,6 +462,7 @@ const FRAGMENT = /* glsl */ `
     }
     ao = mix(1.0, ao * ao, uAO);
     sk = mix(1.0, sk, uSkygger) * stenSk;
+#ifdef STEN_FULD
     if (mellem && stenU < 0.0 && sk > 0.02 && uSol.y > 0.03 && dH < 150.0) {
       vec2 solV2 = vec2(uSol.x, -uSol.z);
       float lv = max(length(solV2), 1e-4);
@@ -459,6 +474,7 @@ const FRAGMENT = /* glsl */ `
       else if (ramLag(en, sw, ks, min(2.2 / ks + 1.8, 45.0), 9.0, 0.18, 0.6, 1.6, ${LAV_KVALITET ? 3 : 4}, nr, bb) >= 0.0) ssk = 0.08;
       sk *= mix(1.0, ssk, smoothstep(0.03, 0.08, uSol.y));
     }
+#endif
     float i = max(dot(n, uSol), 0.0);
     vec3 V = normalize(-vRel);
     float ev = max(dot(n, V), 0.0);
@@ -650,7 +666,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     u[`bH${k}`] = { value: new THREE.Vector4(-1e9, -1e9, 1e-12, 1e-12) };
     u[`rH${k}`] = { value: new THREE.Vector2(0, 0) };
   }
-  const mat = new THREE.ShaderMaterial({ uniforms: u, vertexShader: VERTEX, fragmentShader: FRAGMENT });
+  const mat = new THREE.ShaderMaterial({ uniforms: u, vertexShader: VERTEX, fragmentShader: FRAGMENT, defines: STEN_FULD ? { STEN_FULD: '' } : {} });
   mat.extensions = { derivatives: true };
   // Jorden: ét net pr. stykke med samme materiale. Lige før et stykke tegnes, tjekkes det, om stykkets retninger (set
   // ovenfra) ligger uden for de retninger, billedet dækker. Så tegnes det ikke (drawRange). Kameraet står lige over
