@@ -1,30 +1,33 @@
 # Orkestratoren: status ved skiftet
 
-*Skrevet af orkestratoren 19. november 2026 kl. ca. 01:40 UTC (skift 4, orkestratoren session_01YQoBWMxa3emPhNTfbKN1b1 havde ca. 306.000 tokens). Den nye orkestrator læser denne fil og [prompt-orkestrator.md](prompt-orkestrator.md). Den forrige status ligger i [arkiv/historik/smaating.md](arkiv/historik/smaating.md).*
+*Skrevet af orkestratoren 19. november 2026 kl. ca. 12:00 UTC (skift 5, orkestratoren session_01YQoBWLt5Q4SCaavE8JUW4J havde ca. 523.000 tokens). Den nye orkestrator læser denne fil og [prompt-orkestrator.md](prompt-orkestrator.md).*
 
 ## Jeres beslutninger (gælder stadig)
-- Højst **to tunge sessioner** (Opus) ad gangen, fordi grænsen på 5 timer deles. Orkestratoren skifter ved ca. 250.000 tokens.
-- **Natten til 19. november:** Arbejdet skal fortsætte. Orkestratoren vælger selv (det forsigtige ved fakta) og skriver valgene som "valgt af orkestratoren 2026-11-18/19, kan ændres af jer". Nye spor (Lys og farver, Strøm og magneter, Kvantefysik) startes ikke. Mangler der arbejde: Gåderne G4c/G4d (plan-gaader-3d.md) eller Opdagelserne (den næste videnskabsmand efter Huygens, plan og drejebog først).
-- Når en session stopper ved grænsen for de 5 timer, får den "Fortsæt, hvor du slap." ved næste tjek efter nulstillingen.
+- Højst **to tunge sessioner** (Opus) ad gangen, fordi grænsen på 5 timer deles. Orkestratoren skifter ved ca. 250.000 tokens (tjek `get_session` uden id, `context_usage`, ved hvert tjek).
+- Når en session stopper ved grænsen for de 5 timer eller ugegrænsen, får den "Fortsæt, hvor du slap." ved næste tjek efter nulstillingen (se tidspunktet i sessionens sidste `result`).
+- Nye spor (Lys og farver, Strøm og magneter, Kvantefysik) startes ikke uden jer.
+- **Start altid sessioner med `source_url: https://github.com/EspenOHalloran/atomlab`**, ellers kan de ikke pushe (fejl i nat).
 
-## Kører (begge stoppede ved grænsen 21:52-22:18 UTC og fik "Fortsæt" kl. 01:37 UTC)
-- **Molekyler · Ild 1: Hvad brænder egentlig?** (session_01YQoBWLj6Pp4rgKvdD1Mjg3, Opus høj). PR 1 (verdenen Kemi, delen Ild, `js/flamme.js`, hele laboratoriet) er pushet på `claude/ild-1`, hele testsamlingen kørte. Derefter PR 2 (forløbet) og PR 3 (knaldgassen flytter fra Del elektroner til Ild). **Valgt af orkestratoren 2026-11-18:** 3 PR'er, hele laboratoriet nu, ingen ★ før prøven, NASA's rumflamme først i forløb 2, og go til PR 2 og 3 uden nyt go, når den forrige er merget og grøn.
-- **Solsystemet · Mars ekstra 2: Stenene i Stå på Mars** (session_01YQoBWN3icHBhfboB6xwKTe, Opus høj, gren `claude/mars-sten`). **Valgt af orkestratoren 2026-11-18:** trin 1 (variation, farve, klynger, skygger) → trin 3 som "3D-sten i shaderen" (strålen gennem celler, ingen geometri) → trin 2 (AO pr. lag), højst ca. +15 % pr. trin i staa-tid på tablet, go på forhånd til næste trin, når det forrige holder.
-- **Småting · Prøverunden med jer** (session_01YQoBWLXCmupFKqMe2vhn6b, Sonnet): E20 B er klaret (#334). Venter på jer: Venus "Ned gennem skyerne", prikken på "↻ Tur", målinger på pc og A56, prøven med sønnen.
+## Kører
+- **Solsystemet · Mars ekstra 3: Curiosity** (session_01YQoBWMQPYBgGdZnk6zF2N7, Opus høj). **Valgt af orkestratoren 2026-11-19:** Python-værktøjet `lav_curiosity.py` i stedet for `gltf-transform` (npx blev afvist), WebP med reserve, stedet "Hos Curiosity nu" flyttet til sol 5073.
+- **Videnskabsfolkene · V1 Tycho Brahe: drejebogen** (session_01YQoBWLzTcgzTynZycoDr5J, Opus høj, startet 11:50). Kun drejebog og faktatjek, ingen kode. Sender spørgsmål til jer via orkestratoren. **Byggeriet venter på jeres go.**
+- Småting · Prøverunden (session_01YQoBWLXCmupFKqMe2vhn6b, Sonnet) venter på jer.
 
-## Merget i aften
-Liv L6 (#333), E20 B tilbage-knappen virker (#334), Gåderne skarpere og det sorte hul (#335).
+## Merget 19. november
+Ild 1 (#337-#339), Mars ekstra 2 stenene (#340, tablet uden mellemlag og små sten: konstanten `STEN_FULD`), Gåderne G4d Mørkt stof (#341) og Liv andre steder (#343), G4e (#344), exoplaneternes rigtige pladser fra NASA's arkiv (#345).
 
-## Køen (højst to tunge)
-1. **Solsystemet · Mars ekstra 3: Curiosity i 3D** (prompt-mars-ekstra.md afsnit 3, Opus høj), når Mars ekstra 2 er merget. **Valgt af orkestratoren 2026-11-18:** ja til `gltf-transform` med `npx`, kørt én gang (ingen `package.json`, intet byggetrin).
-2. **Solsystemet · Månen: "Se bagsiden" og LOLA-højder** (solsystemet.md, Næste nr. 3), efter Mars ekstra 3.
-3. Bliver en plads fri, før Mars-køen kan bruge den (Ild er færdig): Gåderne G4d/G4e/G4c eller Opdagelserne (næste videnskabsmand, plan og drejebog først).
-- Ikke i nat: Mars ekstra 4 (kræver jeres pc), BepiColombo (efter 21. november), jeres ønsker fra 17. november.
+## Køen
+1. **Solsystemet · Månen: "Se bagsiden" og LOLA-højder** (solsystemet.md, Næste nr. 3), når Mars ekstra 3 er merget.
+2. **Gåderne G4c: Sort hul**, når I har målt `?maal#gaader` på Tab A11.
+3. **Tycho Brahe T1-T3** (byggeriet), når I har givet go til drejebogen.
+- Ikke uden jer: Mars ekstra 4 (kræver jeres pc), Ild 2 (efter prøven med sønnen), BepiColombo (efter 21. november).
 
-## Venter på jer (i morgen)
-Se Gåderne på tabletten (skarphed, det sorte hul, `?maal#gaader`), prøverundens resterende punkter, mål Nordpolen og Mars på Tab A11, Huygens' tavle på den ultrabrede skærm, prøven med sønnen (Huygens' bog, Liv tur 4-5, Tid), en session på pc'en til Lyset (L2), og et ja eller nej til orkestratorens valg herover.
+## Venter på jer
+- Mål på Tab A11: `?maal#gaader` (hele G4) og stenene i Stå på Mars ved Naukluft (holder den 60, kan `STEN_FULD` slås til på tablet).
+- Prøven med sønnen: Ild 1, Huygens' bog, Liv tur 4-5, Tid.
+- Et ja eller nej til orkestratorens valg i nat (står i sporenes filer).
+- Arkivér de færdige sessioner (orkestratoren må ikke): de gamle orkestratorer (session_01YQoBWMxa3emPhNTfbKN1b1 og denne), den første G4d (session_01YQoBWJmtmbSD8GbHBRLD8B), G4d, G4e, Ild 1 og Mars ekstra 2.
 
 ## Andet
-- Artefaktet "AtomLab Overblik" er opdateret kl. 21:40 UTC (runde 11, nøgler r11a-r11d).
-- Grænsen for 7 dage har givet en advarsel (nulstilles 20. november kl. ca. 05:00 UTC). Stopper arbejdet ved den, så skriv det til brugeren.
-- Kendte røde tests: `venus` (gløden om natten, også alene), `batteri` og `frigiv` (kun under belastning).
+- Kendte røde tests: `venus` (også alene), `batteri`, `frigiv` og `overblik` (kun under belastning).
+- Artefaktet "AtomLab Overblik" er ikke opdateret siden 18. november kl. 21:40 UTC. Opdatér det (Gåderne G4d-G4e og Ild 1 er færdige serier).
