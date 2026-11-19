@@ -2,7 +2,8 @@
 // testbrowseren ved Naukluft og måler tiden (med gl.readPixels, så grafikken er færdig) for nogle blik, opløsninger og
 // skyggerne. Testbrowseren tegner uden grafikkort, så tallene er kun til at sammenligne før og efter og dele imellem,
 // ikke billeder i sekundet på en rigtig tablet.
-// Brug: node tests/vaerktoejer/staa-tid.mjs [tablet|pc]   (serveren startes ikke her, se tests/README.md)
+// Brug: node tests/vaerktoejer/staa-tid.mjs [tablet|pc] [sted]   (serveren startes ikke her, se tests/README.md)
+// sted: naukluft (standard) eller fx curiosity (M8c del 2: så måles også blikket mod roveren)
 import { chromium, ADRESSE, ARGS } from '../hjaelp.mjs';
 
 const ENHEDER = {
@@ -19,7 +20,8 @@ const vent = (f) => p.waitForFunction(f, null, { timeout: 300000, polling: 250 }
 const fm = (f, a) => p.evaluate(f, a);
 await vent(() => atomlabTest.solsystem.valgt() === 'mars' && atomlabTest.solsystem.fænomen()?.billeder?.().hentet.kort);
 await fm(() => atomlabTest.paneler.skiftKunGrafik('solsystem', true));
-await fm(() => atomlabTest.solsystem.fænomen().ståPå('naukluft'));
+const sted = process.argv[3] ?? 'naukluft';
+await fm((id) => atomlabTest.solsystem.fænomen().ståPå(id), sted);
 await p.waitForTimeout(500);
 await fm(() => atomlabTest.solsystem.fænomen().hop());
 await vent(() => atomlabTest.solsystem.fænomen().stå().står);
@@ -58,6 +60,7 @@ console.log(await mål('  pixelRatio 0,1 (næsten kun nettet)', 0, -8, 0.1));
 console.log(await mål('Ned mod jorden (−40°)', 120, -40));
 console.log(await mål('Lodret ned (−85°)', 120, -85));
 console.log(await mål('Op mod himlen (+10°)', 250, 10));
+if (sted === 'curiosity') console.log(await mål('Mod roveren (30°, −12°)', 30, -12));
 // Stenene (M8c del 3): hver del til og fra (trin 1 helt tæt på, trin 3 mellemlaget, trin 2 ambient occlusion)
 if (await fm(() => typeof atomlabTest.solsystem.fænomen().stenTest === 'function')) {
   for (const [navn, valg] of [['Uden sten og AO', { naer: false, mellem: false, ao: false }], ['Kun trin 1 (tæt på)', { mellem: false, ao: false }],

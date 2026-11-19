@@ -93,7 +93,7 @@ const LAG_GLSL = /* glsl */ `
   }`;
 
 // ---------- Himlen (fælles for himlen, disen i landskabet og månerne) ----------
-const HIMMEL_GLSL = /* glsl */ `
+export const HIMMEL_GLSL = /* glsl */ `
   uniform vec3 uSol;       // retningen mod Solen (verden: x øst, y op, z syd)
   uniform float uTau;      // støvets optiske dybde lodret
   // Himlens lys i retningen v (lineære farver). Gulbrun af støvet om dagen, lysest mod horisonten, blålig omkring
@@ -180,6 +180,12 @@ const FRAGMENT = /* glsl */ `
   uniform float uSkygger;                  // 0, før skyggekortene er regnet
   uniform float uKamH;                     // kameraets højde (m)
   uniform float uStenArt;                  // stenene: 0 plader af sandsten (Gale), 1 kantede sten og klippeflader (Jezero)
+  // Roveren (M8c del 2, js/solsystem/rover.js): midten (øst, nord i m), radius uden store sten (m), og w = 1, når den står
+  // her. tRover er dybden set fra Solen, og uRoverM går fra vRel (m) til skyggekortet.
+  uniform vec4 uRover;
+  uniform sampler2D tRover;
+  uniform mat4 uRoverM;
+  uniform float uRoverPx;                  // 1 / skyggekortets bredde (pixel)
   varying vec2 vEN;
   varying vec3 vRel;
   varying vec3 vN;
@@ -238,6 +244,7 @@ const FRAGMENT = /* glsl */ `
     p = (c + 0.25 + 0.5 * a.xy) * str;
     float r = mix(rMin, rMaks, b.x * b.x);                        // potenslov: få store
     if (length(p - uSted) < r + 1.2) return false;               // ingen sten, hvor man står
+    if (uRover.w > 0.0 && length(p - uRover.xy) < r + uRover.z) return false; // og ikke under roveren
     float op = uStenArt > 0.5 ? 0.8 + 0.5 * a.w : 0.5 + 0.4 * a.w; // Gale: flade plader, Jezero: højere sten
     rad = vec3(r, r * (0.55 + 0.45 * b.y), r * op);
     rv = normalize(b.zw - 0.5 + 1e-3);
@@ -462,6 +469,20 @@ const FRAGMENT = /* glsl */ `
     }
     ao = mix(1.0, ao * ao, uAO);
     sk = mix(1.0, sk, uSkygger) * stenSk;
+    // Roverens skygge (4 opslag i dens skyggekort fra Solen) og mindre lys fra himlen lige under den
+    if (uRover.w > 0.0) {
+      vec4 lp = uRoverM * vec4(vRel, 1.0);
+      vec3 l = lp.xyz * 0.5 + 0.5;
+      if (all(greaterThan(l.xy, vec2(0.0))) && all(lessThan(l.xy, vec2(1.0))) && l.z < 1.0) {
+        float o = 0.5 * uRoverPx, lys = 0.0;
+        lys += step(l.z - 0.0004, texture2D(tRover, l.xy + vec2(-o, -o)).r);
+        lys += step(l.z - 0.0004, texture2D(tRover, l.xy + vec2(o, -o)).r);
+        lys += step(l.z - 0.0004, texture2D(tRover, l.xy + vec2(-o, o)).r);
+        lys += step(l.z - 0.0004, texture2D(tRover, l.xy + vec2(o, o)).r);
+        sk *= lys * 0.25;
+      }
+      ao *= mix(0.45, 1.0, smoothstep(0.9, 2.3, length(en - uRover.xy)));
+    }
 #ifdef STEN_FULD
     if (mellem && stenU < 0.0 && sk > 0.02 && uSol.y > 0.03 && dH < 150.0) {
       vec2 solV2 = vec2(uSol.x, -uSol.z);
@@ -657,6 +678,7 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     uStenArt: { value: krater === 'jezero' ? 1 : 0 },
     uAO: { value: 0 }, uNaer: { value: 1 }, uMellem: { value: 1 }, uKam: { value: new THREE.Vector3() }, uKamOp: { value: ØJE },
     tFarve: { value: tom }, bFarve: { value: new THREE.Vector4(0, 0, 1, 1) }, bF3: { value: new THREE.Vector4(0, 0, 1, 1) },
+    uRover: { value: new THREE.Vector4() }, tRover: { value: hvid }, uRoverM: { value: new THREE.Matrix4() }, uRoverPx: { value: 1 / 1024 },
   };
   for (let k = 0; k < 4; k++) {
     u[`tH${k}`] = { value: tom };
@@ -807,12 +829,14 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
   // Højden under kameraet (m), læst i lag 0's billede (midten er stedet). Billedet er et vendt ImageBitmap (hent(…,
   // { vendt })), hvor syd står øverst, eller et <img> med nord øverst, hvis browseren ikke kan vende.
   const lærred = document.createElement('canvas');
-  function højdeVedSted() {
+  const højdeVedSted = () => højdeVed(u.uSted.value.x, u.uSted.value.y);
+  // Højden (m) i punktet (øst, nord i kraterets retninger, m), lineært mellem pixel som i shaderen (også til roveren)
+  function højdeVed(øst, nordM) {
     const img = hentet.h0;
     if (!img) return 0;
     const L = lagData[0];
-    const fx = (u.uSted.value.x - L.øst[0]) / (L.øst[1] - L.øst[0]);
-    const nord = (u.uSted.value.y - L.nord[0]) / (L.nord[1] - L.nord[0]);
+    const fx = (øst - L.øst[0]) / (L.øst[1] - L.øst[0]);
+    const nord = (nordM - L.nord[0]) / (L.nord[1] - L.nord[0]);
     const fy = img.vendt ? nord : 1 - nord;
     lærred.width = 2;
     lærred.height = 2;
@@ -991,6 +1015,12 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     },
     // Højden under stedet (m over nulpunktet)
     get højde() { return u.uH0.value; },
+    højdeVed,
+    get stedEN() { return u.uSted.value; },
+    // Til roveren (js/solsystem/rover.js): de uniforms, den deler med jorden (Solen, skyggerne i lag 0) og dens egne
+    fælles: { uSol: u.uSol, uTau: u.uTau, tS0: u.tS0, bH0: u.bH0, uSkygger: u.uSkygger, uSted: u.uSted },
+    roverU: { uRover: u.uRover, tRover: u.tRover, uRoverM: u.uRoverM, uRoverPx: u.uRoverPx },
+    tom: hvid,
     // Kun til tests
     // (til målinger: hver del af stenene og ambient occlusion til og fra)
     stenTest({ naer = true, mellem = true, ao = true } = {}) { u.uNaer.value = naer ? 1 : 0; u.uMellem.value = mellem ? 1 : 0; u.uAO.value = ao && !aoKø.length ? 1 : 0; },
@@ -1000,6 +1030,8 @@ export function lavLandskab({ renderer, data, hent, krater, deklination = 0 }) {
     frigiv() {
       hentId++;
       stedId = null;
+      u.uRover.value.w = 0;
+      u.tRover.value = hvid;
       skyggeKø = [];
       aoKø = [];
       igang = null;

@@ -395,19 +395,27 @@ SIDER['stå-naukluft'] = {
   billeder: LANDSKAB_BILLEDER + '<p>Roverens foto: NASA/JPL-Caltech/MSSS (PIA20332).</p>',
   ærligt: LANDSKAB_ÆRLIGT + FOTO_ÆRLIGT,
 };
+// Curiosity som 3D-model (M8c del 2, js/solsystem/rover.js). Faktatjekket 19. november 2026 (docs/fakta-solsystemet/
+// del3b-mars-stederne-og-faelder.md, "Faktatjek M8c del 2"): NASA's side om Curiosity (størrelse uden armen, 899 kg),
+// NASA's kortdata over roverens stop (sol 5073: 38.638 m i alt, hældning 12,5°, −3.472 m mod −4.501 m ved landingen).
+const ROVER_ÆRLIGT = '<p>Roveren er NASA\'s 3D-model af Curiosity. Programmet har gjort filen ca. 4 gange mindre, men formen er den samme. Den står, vender og hælder, som roveren gjorde på sol 5073 (midt i november 2026) ifølge NASA\'s kort over roverens stop. Armen og masten står, som de gør i modellen, ikke som de stod den dag, og støvet på roveren og hjulsporene er ikke med. Hjulene står på højdekortet, der har 1 m mellem højderne, så et hjul kan svæve eller synke et par centimeter. Curiosity kører videre, så i dag står den et andet sted.</p>';
 SIDER['stå-curiosity'] = {
-  tal: [['Curiosity har kørt', 'ca. 38 km'], ['Højere end landingen', 'ca. 1 km'], ['På Mars siden', 'august 2012']],
-  kort: 'Bakkerne omkring skjuler toppen af Mount Sharp. Mod nord er der et hul i bakkerne med udsigt ud over kraterbunden til randen langt væk.',
+  tal: [['Curiosity er', 'på størrelse med en lille bil'], ['Har kørt', 'ca. 38,6 km (nov. 2026)'], ['Højere end landingen', 'ca. 1 km']],
+  kort: 'Curiosity står på skråningen af Mount Sharp med næsen op ad bakken. Bakkerne omkring skjuler toppen af bjerget. Mod nord er der et hul i bakkerne med udsigt ud over kraterbunden til randen langt væk.',
   emner: [
     {
+      titel: 'Hvor stor er Curiosity?',
+      tekst: '<p>Curiosity er på størrelse med en lille bil: ca. 3 m lang, 2,7 m bred og 2,1 m høj (uden armen). På Jorden ville den veje 899 kg, men på Mars vejer den kun lidt over en tredjedel så meget, for tyngdekraften er svagere. Den kører på seks hjul og får strøm fra et atombatteri: Plutonium, der henfalder, giver varme, og varmen laves om til strøm. Derfor kører den også om vinteren og i støvstorme, hvor solceller giver for lidt strøm.</p>',
+    },
+    {
       titel: 'Hvor langt er Curiosity kommet?',
-      tekst: '<p>Roveren landede i 2012 nordvest for bjerget. Siden har den kørt ca. 38 km og er nu på Mount Sharps skråninger, ca. 1 km højere oppe end der, hvor den landede.</p>',
+      tekst: '<p>Roveren landede 6. august 2012 nordvest for bjerget. Midt i november 2026, på sol 5073 (en sol er et døgn på Mars, og roverne tæller dem fra landingen), havde den kørt ca. 38,6 km. Den var nået op på Mount Sharps skråninger, ca. 1 km højere oppe end der, hvor den landede. Her hælder jorden ca. 12°, og roveren holder med næsen op ad bakken.</p>',
     },
     SOLNEDGANG,
   ],
   videre: [sted('stå-naukluft', '🧍 Naukluft'), sted('gale', 'Op i kredsløb over Gale')],
-  billeder: LANDSKAB_BILLEDER,
-  ærligt: LANDSKAB_ÆRLIGT,
+  billeder: LANDSKAB_BILLEDER + '<p>Roverens 3D-model: NASA/JPL-Caltech (NASA\'s 3D-model af Curiosity).</p>',
+  ærligt: LANDSKAB_ÆRLIGT.replace(' Roveren er ikke med.', '') + ROVER_ÆRLIGT,
 };
 
 // Stå på Mars ved Jezero (M8b). Tallene er målt i kortene og Perseverances kortdata
