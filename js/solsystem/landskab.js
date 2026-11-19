@@ -226,7 +226,7 @@ const FRAGMENT = /* glsl */ `
       float klynge = smoothstep(0.3, 0.8, stoej(en * 0.19) * 0.6 + stoej(en * 0.7 + 3.1) * 0.4 + (f - 0.5) * 1.2);
       vec2 solV = vec2(uSol.x, -uSol.z);
       float cotSol = length(solV) / max(uSol.y, 0.06);
-      vec2 væk = -solV / max(length(solV), 1e-4); // skyggens retning (øst, nord)
+      vec2 vaek = -solV / max(length(solV), 1e-4); // skyggens retning (øst, nord)
       float stenH = 0.0;
       for (int lag = 0; lag < 3; lag++) {
         if (lag == 2 && jez < 0.5) break;
@@ -238,8 +238,8 @@ const FRAGMENT = /* glsl */ `
         for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
           vec2 c = ci + vec2(i, j);
           vec4 a = hash4(c), b = hash4(c + 7.31);
-          float tæt = lag == 2 ? 0.35 + 0.3 * klynge : mix(0.04, lag == 0 ? 0.5 : 0.7, klynge);
-          if (a.z > tæt) continue;
+          float taet = lag == 2 ? 0.35 + 0.3 * klynge : mix(0.04, lag == 0 ? 0.5 : 0.7, klynge);
+          if (a.z > taet) continue;
           vec2 p = c + 0.2 + 0.6 * a.xy;
           // potenslov: de fleste er små, enkelte fylder næsten cellen
           float r = lag == 2 ? 0.22 + 0.25 * b.x : (lag == 0 ? 0.1 : 0.16) + (lag == 0 ? 0.36 : 0.26) * b.x * b.x * b.x;
@@ -272,8 +272,8 @@ const FRAGMENT = /* glsl */ `
           } else if (hM > 0.0) {
             // skyggen på jorden væk fra Solen (stenens form trukket ud), og lidt mørkere lige ved foden
             float L = min(hM * cotSol / str, 1.3);
-            float sa = clamp(dot(d, væk) / max(L, 1e-4), 0.0, 1.0);
-            float ts = 1.0 - kant(R * (d - væk * L * sa), b).x / (r * (1.0 - 0.35 * sa));
+            float sa = clamp(dot(d, vaek) / max(L, 1e-4), 0.0, 1.0);
+            float ts = 1.0 - kant(R * (d - vaek * L * sa), b).x / (r * (1.0 - 0.35 * sa));
             if (stenH <= 0.0) {
               stenSk = min(stenSk, 1.0 - 0.92 * vis * smoothstep(-0.05, 0.08, ts) * smoothstep(0.0, 0.08, uSol.y));
               stenAlb = min(stenAlb, mix(1.0, 0.86, vis * smoothstep(-0.3, 0.0, t)));
