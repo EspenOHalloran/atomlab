@@ -7,7 +7,7 @@
 |---|---|---|
 | Solsystemet og Kosmos | [lige-nu/solsystemet.md](lige-nu/solsystemet.md) | Planeterne, månerne, Mars ekstra og Kosmos |
 | Forløb | [lige-nu/forloeb.md](lige-nu/forloeb.md) | Forløb-klodsen, "Dit første atom", byggeklodserne og Rejsen (Serie 1 og 2 i [koereplan.md](koereplan.md), startet 11. november 2026) |
-| Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0-L2 er lavet). Liv tur 1-4 og Molekyler som egen del er lavet (status "prøve"). Næste: Liv L5 delen "Begyndelsen" og L6 kortet på Mars ([drejebog-liv.md](drejebog-liv.md)). Senere Ild |
+| Molekyler | [lige-nu/molekyler.md](lige-nu/molekyler.md) | Molekyler M1-M4 og Liv ([plan-liv.md](plan-liv.md), L0-L2 er lavet). Liv tur 1-4 og Molekyler som egen del er lavet (status "prøve"). Liv L5 og L6 er lavet. Nu: Ild 1 i verdenen Kemi (PR 1 af 3 lavet 18. november 2026, [prompt-ild-1.md](prompt-ild-1.md)) |
 | Tid og rum | [lige-nu/tid.md](lige-nu/tid.md) | Relativitet: "Rejsen i tid" med tvillingen ([plan-tid.md](plan-tid.md)). T1-T3 og T5 er lavet. Næste: Tid som ét punkt med rejsen først (Serie 1). T4 er en mulig udvidelse |
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | **Lukket 14. november 2026** (ringen efter størrelse er lavet). Små rettelser i Småting, en ny verden med den del, der skal bo i den |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | **Lukket 14. november 2026.** Nye ord tages i det spor, der bruger dem, og små rettelser i Småting |

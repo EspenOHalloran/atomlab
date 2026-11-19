@@ -136,8 +136,8 @@ button { font: inherit; color: inherit; }
 
 /* Ikoner tegnet med CSS */
 .kort-ikon { flex: 0 0 52px; height: 52px; position: relative; border-radius: 50%; }
-.ikon-atom { background: radial-gradient(circle, #ff6b6b 0 5px, transparent 6px); }
-.ikon-atom::before, .ikon-atom::after {
+.ikon-atom, .ikon-v-atomer { background: radial-gradient(circle, #ff6b6b 0 5px, transparent 6px); }
+.ikon-atom::before, .ikon-atom::after, .ikon-v-atomer::before, .ikon-v-atomer::after {
   content: "";
   position: absolute;
   inset: 14px 0;
@@ -146,7 +146,7 @@ button { font: inherit; color: inherit; }
   box-shadow: 0 0 8px var(--elektron);
   transform: rotate(60deg);
 }
-.ikon-atom::after { transform: rotate(-60deg); }
+.ikon-atom::after, .ikon-v-atomer::after { transform: rotate(-60deg); }
 .ikon-tabel {
   border-radius: 8px;
   background:
@@ -1054,6 +1054,38 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .liv-hjul .hjul-midte { fill: #141a36; stroke: var(--panel-kant); stroke-width: 0.6; }
 .liv-hjul-tekst { margin: 4px 0 0; font-size: 12.5px; text-align: center; color: var(--svag); }
 @media (max-width: 560px) { .liv-hjul { max-width: 76%; top: 6px; right: 6px; } /* på telefonen skal hjulet kunne læses */ }
+/* ---------- Ild (Kemi, js/ild.js): samme opbygning som Begyndelsen, i sin egen blok ---------- */
+#ild { grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
+#ild .vindue { grid-area: vindue; }
+#ild [hidden] { display: none; }
+.ild-styr { display: flex; flex-direction: column; gap: 10px; }
+.ild-gruppe { display: flex; flex-direction: column; gap: 6px; }
+.ild-gruppe .panel-overskrift { margin: 0; }
+.ild-valg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.ild-valg.tre { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ild-valg .knap { min-height: 44px; padding: 6px 6px; }
+.ild-valg .knap.valgt { background: rgba(95, 227, 255, 0.18); border-color: var(--accent); color: var(--tekst); }
+.ild-valg .knap:disabled { opacity: 0.45; }
+.ild-skyder { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.ild-skyder input { width: 100%; min-height: 44px; accent-color: var(--accent); }
+.ild-skyder-ender { display: flex; justify-content: space-between; font-size: 13px; color: var(--svag); margin-top: -8px; }
+#ild .knap.primær { min-height: 44px; background: var(--accent); border-color: var(--accent); color: #031018; font-weight: 700; }
+#ild .liv-tal[hidden] { display: none; }
+/* Ikonet i menuen: en flamme med en gul kerne */
+.ikon-ild::before, .ikon-ild::after { content: ""; position: absolute; left: 50%; border-radius: 50% 0 50% 50%; transform: translateX(-50%) rotate(-45deg); }
+.ikon-ild::before { top: 13px; width: 24px; height: 24px; margin-left: 0; background: radial-gradient(circle at 60% 40%, #ffd43b 0 30%, #ff922b 60%, #e8590c 100%); box-shadow: 0 0 12px rgba(255, 146, 43, 0.6); }
+.ikon-ild::after { top: 25px; width: 11px; height: 11px; background: radial-gradient(circle at 60% 40%, #fffbe6 0 35%, #ffe066 100%); }
+@media (max-width: 1150px) { #ild { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 290px); } }
+@media (max-width: 820px) and (orientation: portrait), (max-width: 820px) and (min-height: 501px) {
+  #ild { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(46vh, 1fr) auto; grid-template-areas: "top top" "vindue vindue" "venstre højre"; overflow-y: auto; }
+}
+@media (max-width: 560px) and (orientation: portrait) {
+  #ild { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(44vh, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; }
+  #ild .side-panel { overflow: visible; min-height: auto; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #ild { grid-template-columns: minmax(180px, 28%) minmax(0, 1fr) minmax(200px, 31%); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
+}
 /* ---------- Begyndelsen (Liv L5, js/begyndelsen.js): samme opbygning som Liv, i sin egen blok ---------- */
 #begyndelsen { grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
 #begyndelsen .vindue { grid-area: vindue; }
@@ -2280,13 +2312,13 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .verden-del { margin-top: 4px; font-size: 14.5px; font-weight: 600; color: rgba(160, 240, 255, 0.85); }
 .verden.midt.én-del:hover .verden-del { color: #c4f9ff; }
 /* Ikoner for verdenerne (tegnet med CSS som de andre) */
-.ikon-v-atomer, .ikon-molekyle { background:
+.ikon-v-kemi, .ikon-molekyle { background:
   radial-gradient(circle at 50% 56%, #ff6b6b 0 8px, #c92a2a 10px, transparent 11px),
   radial-gradient(circle at 22% 34%, #e7f5ff 0 5px, #74c0fc 7px, transparent 8px),
   radial-gradient(circle at 80% 34%, #e7f5ff 0 5px, #74c0fc 7px, transparent 8px); }
-.ikon-v-atomer::before, .ikon-v-atomer::after, .ikon-molekyle::before, .ikon-molekyle::after { content: ""; position: absolute; top: 21px; width: 13px; height: 3px; border-radius: 2px; background: rgba(230, 240, 255, 0.7); }
-.ikon-v-atomer::before, .ikon-molekyle::before { left: 13px; transform: rotate(33deg); }
-.ikon-v-atomer::after, .ikon-molekyle::after { right: 13px; transform: rotate(-33deg); }
+.ikon-v-kemi::before, .ikon-v-kemi::after, .ikon-molekyle::before, .ikon-molekyle::after { content: ""; position: absolute; top: 21px; width: 13px; height: 3px; border-radius: 2px; background: rgba(230, 240, 255, 0.7); }
+.ikon-v-kemi::before, .ikon-molekyle::before { left: 13px; transform: rotate(33deg); }
+.ikon-v-kemi::after, .ikon-molekyle::after { right: 13px; transform: rotate(-33deg); }
 .ikon-v-kerner { background:
   radial-gradient(circle at 40% 38%, #ff8787 0 5px, #e03131 7px, transparent 7.5px),
   radial-gradient(circle at 60% 40%, #a5d8ff 0 5px, #4c6ef5 7px, transparent 7.5px),

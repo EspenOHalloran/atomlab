@@ -1,4 +1,4 @@
-// Molekyler (#molekyler): en egen del i verdenen Atomer. Indtil 14. november 2026 var det fanen "Byg et molekyle" i
+// Molekyler (#molekyler): en egen del i verdenen Kemi (til 18. november 2026 i Atomer). Indtil 14. november 2026 var det fanen "Byg et molekyle" i
 // Atomværkstedet. To måder, valgt øverst i venstre panel: "Del elektroner" (js/molekyler-byg.js, med knaldgassen i
 // js/knaldgas.js) og "Giv elektroner" (js/molekyler.js, det der hed Byttebørsen). Her står kun skiftet mellem dem,
 // hjælpen, "Opgaver forfra" og forløbet "Når atomer mødes" (teksterne i js/data/forloeb/molekyler.js, drejebogen i
