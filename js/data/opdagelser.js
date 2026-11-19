@@ -23,7 +23,9 @@ export const BØGER = [
     // København 1573 (docs/drejebog-tycho.md afsnit 3): lyst, varmt papir, sort blæk og en nattehimmelblå ryg med guld
     stil: { papir: '#f2e8d2', papirMørk: '#dfd0ae', blæk: '#1e1a16', ryg: '#1c2a44', rygKant: '#c9a24a', skrift: SKRIFT_1600 },
     tekster: () => import('./opdagelser/tycho.js'),
-    // T2 giver bogen forløbet 'den-nye-stjerne' og scene: () => import('../bog/tycho.js')
+    // Turen (T2): forløbet i js/data/forloeb/tycho.js og tegningerne i js/bog/tycho.js (hentes, når bogen åbnes)
+    forløb: 'den-nye-stjerne',
+    scene: () => import('../bog/tycho.js'),
   },
   { id: 'galilei', navn: 'Galileo Galilei', kort: 'Galilei', år: 1610, ejefald: 'Galileis', om: 'Jupiters måner' },
   {

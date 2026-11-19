@@ -2,6 +2,8 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/videnskabsfolkene.md](../../lige-nu/videnskabsfolkene.md) flyttes hertil ordret, nyeste øverst (fra 16. november 2026).*
 
+**Senest lavet (19. november 2026): T1, Tychos forside.** Tycho står på hylden med omslaget "Den nye stjerne" (nattehimmelblå ryg med guld), og de to grå rygge er nu Rømer og Ørsted ("Hvorfor drejede kompasnålen?"). Forsiden har spørgsmålet, introduktionen fra Herrevad i november 1572, de Gheyns portræt (filteret gav ingen striber) og W'et som træsnitsstjerner efter de rigtige pladser med den nye stjerne øverst. Bogen har kun forsiden, så "Begynd" er der ikke endnu (A9). Omslagets portræt giver nu plads, når titlen fylder to linjer. `opdagelser` har 49 tjek.
+
 **Senest lavet (19. november 2026): drejebogen til Tycho Brahe (V1), kun dokumenter.**
 - [drejebog-tycho.md](../drejebog-tycho.md): kernesætningen, den røde tråd i fem opslag (forsiden, turen "Den nye stjerne" i fire trin med tommelfingeren og Månen, gåden "Find stjernen med Tychos tal" med tre cirkler, "Bogen fra 1573" med fire sider og "Om Tycho": havde han ret?), Gør det selv ved Hvid dværg, billederne med licens og prøvens spørgsmål.
 - [fakta-videnskabsfolk/tycho.md](../fakta-videnskabsfolk/tycho.md): faktagrundlaget, det latinske læst på siderne i faksimilen fra 1901 (Tychos tal 7° 55′, 5° 21′ og 5° 1′, brevet med "O crassa ingenia" og 3⅓-4¼ grad). **Faktatjekket af Opus i stedet for Fable** (linjen i [plan-fable.md](../plan-fable.md)). Seks nye fælder.

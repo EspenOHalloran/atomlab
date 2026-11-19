@@ -855,6 +855,20 @@ export const ORDBOG = [
     former: ['anagram', 'anagrammet', 'anagrammer', 'anagrammerne'],
     tekst: 'Et ord eller en sætning, hvor bogstaverne er byttet rundt, fx "toner" og "noter". Før i tiden kunne en forsker gemme en opdagelse i et anagram og afsløre sætningen senere. Så kunne forskeren bevise at have vidst det først. Det gjorde Huygens i 1656.',
   },
+  // Tychos bog, forløbet "Den nye stjerne" (T2, 19. november 2026, docs/drejebog-tycho.md afsnit 12, faktatjekket). Kun i
+  // forløbets linje, så Kosmos' tekster om supernovaer ikke får prikker. Supernova: lysstærkere end 100 millioner sole
+  // (vores udregning: type Ia topper ved absolut størrelse ca. -19,3, ca. 4 milliarder sole, og en kæmpestjerne, der falder
+  // sammen, ved ca. -16 til -18, ca. 200 millioner til 1 milliard sole. Solen er +4,8)
+  {
+    id: 'parallakse', ord: 'Parallakse', kunI: '.fl-tekst',
+    former: ['parallakse', 'parallaksen', 'parallakser'],
+    tekst: 'Når noget ser ud til at flytte sig mod baggrunden, fordi man ser det fra et andet sted. Jo tættere på, jo mere flytter det sig. Prøv med tommelfingeren og ét øje ad gangen. Astronomer måler afstande sådan.',
+  },
+  {
+    id: 'supernova', ord: 'Supernova', kunI: '.fl-tekst',
+    former: ['supernova', 'supernovaen', 'supernovaer', 'supernovaerne'],
+    tekst: 'En stjerne, der eksploderer. I nogle uger lyser den stærkere end hundrede millioner sole. Det sker, når en hvid dværg bliver for tung, eller når kernen i en kæmpestjerne falder sammen.',
+  },
   // Merkur MP2 (17. november 2026, docs/drejebog-merkur-pluto.md afsnit 4). Soldøgn: NSSDC (Merkur 4.222,6 timer =
   // 175,94 døgn, Jorden 24 timer, stjernedøgnet 23,93 timer). Sublimation: tøris (CO₂) ved almindeligt tryk, og hullerne
   // på Merkur (NASA, "Hollows on Mercury": måske tab af flygtige stoffer). Pluto bruger det i MP3-MP4.
