@@ -641,7 +641,8 @@ for (const [navn, opsætning] of [
   const to = await g();
   await page.click('#opdBog .tg-møde-knap >> nth=0');
   const begge = await g();
-  await page.click('#opdBog .tg-tal-knap[data-tycho="B"]');
+  // Schedir på kortet kan trykkes, selv om det andet mødested for G og D ligger lige ved den
+  await page.click('#opdBog .tg-stjerne-knap[data-tycho="B"]', { timeout: 3000 });
   const tre = await g();
   await page.click('#opdBog .tg-møde-knap[data-rigtig="nej"] >> nth=0');
   const forkert = await g();

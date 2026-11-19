@@ -1468,6 +1468,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .tg-punkt { position: absolute; width: 44px; height: 44px; padding: 0; transform: translate(-50%, -50%); border: 0; border-radius: 50%; background: transparent; cursor: pointer; pointer-events: auto; }
 #opdagelser .tg-punkt:focus-visible { outline: 3px solid #c9a24a; }
 #opdagelser .tg-punkt.ryster { outline: 2px solid #a33; }
+#opdagelser .tg-stjerne-knap { z-index: 1; } /* Over et mødested tæt ved (det andet sted for G og D ligger ved Schedir), til cirklen er slået */
 #opdagelser .tg-stjerne-knap[aria-pressed="true"] { pointer-events: none; }
 #opdagelser .tg-cirkel { fill: none; stroke: var(--bog-blaek); stroke-width: 0.9; stroke-dasharray: 1; }
 #opdagelser .tg-bogstav { font: italic 6.5px var(--bog-skrift); fill: var(--bog-blaek); }
