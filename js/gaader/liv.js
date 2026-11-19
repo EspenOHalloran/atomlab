@@ -5,7 +5,8 @@
 // men trykket sammen.
 // Trin 1, efter gættet: De andre lys dæmpes, og Jorden, Mars og Enceladus står ved siden af hinanden i rigtig skala.
 // Trin 2: stenen Cheyava Falls som foto (målt, i farve). Efter gættet stemplet GÆT og to lige store stiplede forklaringer:
-// "kemi uden liv" og "liv". Ingen etiket "liv?".
+// "kemi uden liv" og "liv". Ingen etiket "liv?". Et tryk på fotoet eller knappen "🔍 Se fotoet stort" åbner det i fuld
+// størrelse (js/gaader/storfoto.js), så man kan zoome ind på pletterne.
 // Trin 3 og det sidste billede: Tianwen-3, Europa Clipper og Dragonfly med stiplede baner (planer) og årstal fra kortet.
 
 import * as THREE from 'three';
@@ -15,6 +16,7 @@ import { lyd } from '../lyd.js';
 import { gådeMed } from '../data/gaader.js';
 import { PLANETER_PR_ÅR, planeterFor } from '../data/exoplaneter.js';
 import { fuld, stiplet, stempel } from './streg.js';
+import { visStorFoto, lukStorFoto, storFotoTest } from './storfoto.js';
 
 const HB = 9; // den halve bredde og højde af det, kameraet skal se (planet z = 0)
 const HH = 6;
@@ -52,7 +54,15 @@ export function lavNær(ctx) {
     passer(HB, HH);
   }
 
+  // Fotoet af Cheyava Falls i fuld størrelse (1608 × 1196, NASA PIA26368). Det lille foto vises, mens det store hentes.
+  const åbnFoto = () => visStorFoto({
+    lille: new URL('gaader/cheyava-falls.jpg', BILLEDER).href,
+    stor: new URL('gaader/cheyava-falls-stor.jpg', BILLEDER).href,
+    tekst: T.navne.storTekst, hjælp: T.navne.storHjælp, henter: T.navne.storHenter, luk: T.navne.luk,
+  });
+
   function trin(n, valgt) {
+    if (n !== 1) lukStorFoto();
     if (n === 0) {
       sten?.skjul();
       sonder?.skjul();
@@ -76,7 +86,7 @@ export function lavNær(ctx) {
       if (tilstand !== 'sten') { tilstand = 'sten'; stilKamera(); }
       sten ??= lavSten(gruppe, T, ROLIG);
       sten.vis(valgt, linje);
-      knapper([]);
+      knapper([{ tekst: T.navne.stort, gør: åbnFoto, id: 'storfoto' }]);
       return;
     }
     sten?.skjul();
@@ -99,10 +109,16 @@ export function lavNær(ctx) {
     trin,
     opdater,
     // Et tryk, mens lysene tændes, springer til 2026 (for den, der ikke vil vente)
-    tryk: () => { if (tilstand === 'lys') lys.spring(linje, T); },
+    // Et tryk på fotoet af stenen åbner det stort
+    tryk: (p) => {
+      if (tilstand === 'lys') lys.spring(linje, T);
+      else if (tilstand === 'sten' && sten.påFoto(p)) åbnFoto();
+    },
+    åbnFoto,
     spol: (s) => { for (let i = 0; i < s * 30; i++) opdater(1 / 30, tid0 + i / 30); },
-    test: () => ({ tilstand, lys: lys.test(), skala: skala.test(), sten: sten?.test() ?? null, sonder: sonder?.test() ?? null }),
+    test: () => ({ tilstand, lys: lys.test(), skala: skala.test(), sten: sten?.test() ?? null, sonder: sonder?.test() ?? null, storFoto: storFotoTest() }),
     fjern: () => {
+      lukStorFoto();
       verden.styring.enabled = true;
       verden.styring.autoRotate = false;
     },
@@ -329,6 +345,8 @@ function lavSten(gruppe, T, ROLIG) {
       if (t < 0) { t = 0; st.slå(ROLIG); linje(T.stenSvar); }
     },
     skjul() { g.visible = false; },
+    // Er punktet p (på planet z = 0) på fotoet?
+    påFoto: (p) => g.visible && Math.abs(p.x - foto.position.x) <= B / 2 && Math.abs(p.y - foto.position.y) <= H / 2,
     opdater(dt) {
       if (!g.visible || t < 0) return;
       t += dt;
