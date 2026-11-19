@@ -148,6 +148,9 @@ export const GÅDER = [
       },
     ],
     slut: 'Liv er kun fundet på Jorden. Et muligt spor på Mars og havene under isen venter på at blive undersøgt.',
+    ven: 'Forskerne kender over 6.000 planeter om andre stjerner, men liv er kun fundet ét sted: her på Jorden.',
+    nyt: null,
+    løst: null,
     seDet: ['solsystem:mars:jezero', 'Se det selv: Mars, Jezero'],
     // CoLD: Green m.fl. 2021 (arXiv:2107.10975). Trin 1: NASA's billedtekst 25. juli 2024. Trin 3: Hurowitz 1. okt. 2025.
     // Pletterne: Hurowitz 2025 ("about 200 μm to 1 mm", "likely vivianite and greigite", "<150–200 °C"). "Måske det
@@ -160,6 +163,28 @@ export const GÅDER = [
       <p><b>Fund, der ikke holdt:</b> Vikings forsøg på Mars (1976) og meteoritten ALH84001 fra Mars (1996) lignede spor af liv, men de fleste forskere mener i dag, at kemi uden liv forklarer dem. Gassen fosfin på Venus (2020) er omstridt, og gassen DMS på planeten K2-18b (2025) er ikke bekræftet. Carl Sagan skrev i 1979 tanken sådan (frit oversat): Usædvanlige påstande kræver usædvanlige beviser.</p>
       <p><b>Planerne:</b> ESA's rover Rosalind Franklin skal efter planen sendes op i 2028 og kan bore op til 2 m ned i Mars. ESA's JUICE når Jupiter i 2031. Teleskopet ELT i Chile skal efter planen se sit første lys i 2029, og NASA's Habitable Worlds Observatory skal efter planen op i 2040'erne og lede efter spor af liv på planeter som Jorden.</p>`,
     ærligt: '<p>"Målt eller gæt?" er forenklet. At pletterne er lavet af liv, er ikke et vildt gæt: Mikrober på Jorden laver de samme stoffer. Men kemi uden liv er ikke udelukket, og flere fund, der lignede liv, holdt ikke.</p><p>Vi kender kun ét eksempel på liv, vores eget. Derfor ved ingen, om liv opstår let, når der er vand og de rigtige stoffer.</p>',
+    // Scenen i 3D (G4d, js/gaader/liv.js). Planeterne: js/data/exoplaneter.js (6.464 i NASA Exoplanet Archive 5. november
+    // 2026, årene fra Wikipedias lister). 1992: Wolszczan og Frail, to planeter om pulsaren PSR B1257+12. 1995: Mayor og
+    // Queloz, 51 Pegasi b (Wikipedia). Diametre: Jorden 2 × 6.371 km, Mars 2 × 3.389,5 km, Enceladus 2 × 252,04 km
+    // (Wikipedia, Park m.fl. 2024). Cheyava Falls: ca. 1 × 0,6 m, foto 18. juli 2024 (NASA PIA26368). Sonderne: årstallene
+    // fra kortets trin 3. Kepler kiggede det meste af tiden på ét lille felt på himlen og fandt
+    // 2.778 bekræftede planeter (juni 2023, Wikipedia "Kepler space telescope").
+    scene: {
+      start: 'Hvert lys er en planet om en anden stjerne, fundet fra 1992 til nu. Det blå lys er Jorden.',
+      første: '1992 kom de første planeter om en anden stjerne. 1995 den første om en stjerne som Solen.',
+      alle: 'Over 6.400 planeter. Er der liv på nogen af dem?',
+      efter: 'Liv er kun fundet på Jorden. Her er to steder i Solsystemet, hvor det måske kunne være, i samme skala.',
+      sten: 'Stenen Cheyava Falls på Mars er ca. 1 m lang. Se de små lyse pletter med en mørk kant.',
+      stenSvar: 'Pletterne er målt. Men hvad lavede dem? Der er to forklaringer, og ingen ved, hvilken der er rigtig.',
+      sonder: 'De stiplede baner er planer: Tianwen-3 skal hente prøver hjem fra Mars, Europa Clipper flyve forbi Europa, og Dragonfly lande på Titan.',
+      navne: {
+        jorden: 'Jorden: 12.742 km', mars: 'Mars: 6.779 km', enceladus: 'Enceladus: 504 km', kemi: 'kemi uden liv', liv: 'liv',
+        foto: 'Foto: NASA/JPL-Caltech/MSSS', tianwen: 'Tianwen-3: prøver hjem 2031', clipper: 'Europa Clipper: Jupiter 2030',
+        dragonfly: 'Dragonfly: Titan 2034', jupiter: 'Jupiter', saturn: 'Saturn', jordenKort: 'Jorden', marsKort: 'Mars',
+      },
+      ærligt: `<p>Der er ét lys for hver af de 6.464 bekræftede planeter i NASA's liste (5. november 2026). Hvor mange der blev fundet hvert år, er talt i Wikipedias lister over fund, og de ca. 370, listerne mangler, er lagt til de samme år. Afstanden fra Jorden er rigtig, men trykket sammen, så de fjerne kan være med. Retningen er tilfældig: I virkeligheden ligger mange af dem i ét lille felt på himlen, hvor rumteleskopet Kepler kiggede. De to første fra 1992 kredser om en pulsar (en udbrændt stjerne).</p>
+        <p>Jorden, Mars og Enceladus står i rigtig skala i forhold til hinanden. Fotoet af Cheyava Falls er fra NASA/JPL-Caltech/MSSS. Planeterne og banerne til sidst er ikke i skala. ${STREG_FORKLARING}</p>`,
+    },
   },
   // Kortene om liv står ikke ved siden af hinanden, så "hvor" og "hvordan" ikke flyder sammen (jeres valg 13. november 2026)
   // G3 (13. november 2026). Kilderne står i docs/fakta-gaader.md afsnit 3.
