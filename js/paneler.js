@@ -3,27 +3,40 @@
 // - "Kun grafik" (knappen i toplinjen eller tasten G) folder begge paneler væk. Esc eller knappen igen henter dem.
 // - Valget huskes for hver skærm (atomlabPaneler), men første gang er panelerne fremme.
 // - På højkant står panelerne under 3D-billedet. Der bruges fanerne ikke, og "Kun grafik" viser 3D-billedet på hele skærmen.
+// - Telefon på højkant med fingre (jeres ønske 19. november 2026): Et swipe ned på panelerne, når de er rullet helt op, er det
+//   samme som "Kun grafik". En greb-streg mellem scenen og panelerne (nederst, når de er væk) henter dem igen med et tryk eller
+//   et swipe op. Lytterne sidder kun på panelerne og stregen, så det at dreje scenen er urørt.
 // Tilbage i 3D-billedet er underteksten, tidsknappen, "Næste skridt" og det, delen selv har lagt i billedet.
 
-import { centrerVindue } from './scene3d.js';
+import { centrerVindue, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 
 const NØGLE = 'atomlabPaneler';
-// De skærme, der har et panel til venstre, 3D-billedet i midten og et panel til højre
+// De skærme, der har et panel til venstre, 3D-billedet i midten og et panel til højre.
+// nede: de paneler, der står under 3D-billedet på telefonen og kan swipes ned.
+const SIDER = { venstre: '.venstre-panel', højre: '.højre-panel', nede: '.side-panel' };
 const SKÆRME = {
-  vaerksted: { venstre: '#byggepanel', højre: '#infopanel' },
-  fusion: { venstre: '.venstre-panel', højre: '.højre-panel' },
-  reaktor: { venstre: '.venstre-panel', højre: '.højre-panel' },
-  batteri: { venstre: '.venstre-panel', højre: '.højre-panel' },
-  solsystem: { venstre: '.venstre-panel', højre: '.højre-panel' },
-  kosmos: { venstre: '.venstre-panel', højre: '.højre-panel' },
+  vaerksted: { venstre: '#byggepanel', højre: '#infopanel', nede: '#byggepanel, #minitabelPanel' },
+  fusion: SIDER,
+  reaktor: SIDER,
+  batteri: SIDER,
+  ild: SIDER,
+  liv: SIDER,
+  begyndelsen: SIDER,
+  solsystem: SIDER,
+  kosmos: SIDER,
 };
 // Samme grænse som i style.css: her står panelerne under 3D-billedet
 const STABLET = matchMedia('(max-width: 820px) and (orientation: portrait), (max-width: 820px) and (min-height: 501px)');
+// Samme grænse som telefonen i style.css (.panel-greb): her kan panelerne swipes ned
+const TELEFON = matchMedia('(max-width: 560px) and (orientation: portrait) and (pointer: coarse)');
+const SWIPE = 60; // px lodret, før et swipe tæller
+const GLID = 250; // ms, panelerne glider ned
 const IKON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 5v14M16 5v14"/></svg>';
 
 let tilstand = hent();
 let aktiv = null; // den skærm, der vises lige nu
+let sidstSwipe = 0; // så trykket efter et swipe på stregen ikke slår tilbage igen
 
 function hent() {
   try {
@@ -62,6 +75,11 @@ function vis(id) {
     fane.setAttribute('aria-label', tekst);
     fane.setAttribute('aria-expanded', String(!skjult));
   }
+  const greb = skærm.querySelector('.panel-greb');
+  const grebTekst = v.kunGrafik ? 'Vis panelerne' : 'Skjul panelerne';
+  greb.title = grebTekst;
+  greb.setAttribute('aria-label', grebTekst);
+  greb.setAttribute('aria-expanded', String(!v.kunGrafik));
   const knap = skærm.querySelector('.knap-kungrafik');
   knap.classList.toggle('valgt', v.kunGrafik);
   knap.setAttribute('aria-pressed', String(v.kunGrafik));
@@ -87,6 +105,60 @@ export function skiftPanel(id, side) {
   vis(id);
 }
 
+// Panelerne glider ned (0,25 s) og forsvinder, eller de kommer op igen. Med "reducer bevægelse" sker det med det samme.
+function glid(id, ned) {
+  const skærm = document.getElementById(id);
+  if (valg(id).kunGrafik === ned) return;
+  if (ROLIG) return skiftKunGrafik(id, ned);
+  if (!ned) {
+    skiftKunGrafik(id, false);
+    skærm.classList.add('paneler-ind');
+    setTimeout(() => skærm.classList.remove('paneler-ind'), GLID + 50);
+    return;
+  }
+  skærm.classList.add('paneler-ud');
+  setTimeout(() => {
+    skærm.classList.remove('paneler-ud');
+    skiftKunGrafik(id, true);
+  }, GLID);
+}
+
+// Er noget mellem fingeren og skærmen rullet ned, så ruller et swipe ned bare op igen som før
+function rulletNed(el, skærm) {
+  for (let e = el; e && e !== skærm.parentElement; e = e.parentElement) if (e.scrollTop > 0) return true;
+  return false;
+}
+
+// Swipe ned på panelerne (eller stregen) skjuler dem, swipe op på stregen henter dem. Passive lyttere, så rulning er urørt.
+function lavSwipe(id, skærm, greb) {
+  let start = null;
+  skærm.addEventListener('touchstart', (h) => {
+    start = null;
+    if (!TELEFON.matches || h.touches.length !== 1 || skærm.classList.contains('i-forløb')) return;
+    const mål = h.target;
+    const påGreb = greb.contains(mål);
+    if (!påGreb && (valg(id).kunGrafik || !mål.closest?.(SKÆRME[id].nede))) return;
+    if (mål.closest?.('input, select, textarea, [data-ingen-stryg]')) return;
+    if (!påGreb && rulletNed(mål, skærm)) return;
+    start = { x: h.touches[0].clientX, y: h.touches[0].clientY, påGreb };
+  }, { passive: true });
+  skærm.addEventListener('touchend', (h) => {
+    const s = start;
+    start = null;
+    if (!s || !h.changedTouches.length) return;
+    const dx = h.changedTouches[0].clientX - s.x;
+    const dy = h.changedTouches[0].clientY - s.y;
+    if (Math.abs(dy) < SWIPE || Math.abs(dy) < 2 * Math.abs(dx)) return;
+    const ned = dy > 0;
+    // Op på et panel er almindelig rulning
+    if ((!ned && !s.påGreb) || valg(id).kunGrafik === ned) return;
+    sidstSwipe = performance.now();
+    lyd.klik();
+    glid(id, ned);
+  }, { passive: true });
+  skærm.addEventListener('touchcancel', () => { start = null; }, { passive: true });
+}
+
 export function lavPaneler() {
   for (const id of Object.keys(SKÆRME)) {
     const skærm = document.getElementById(id);
@@ -100,6 +172,17 @@ export function lavPaneler() {
       });
       vindue.append(fane);
     }
+    // Greb-stregen: en stribe mellem 3D-billedet og panelerne (kun på telefonen, se style.css)
+    const greb = document.createElement('button');
+    greb.className = 'panel-greb';
+    greb.innerHTML = '<span aria-hidden="true"></span>';
+    greb.addEventListener('click', () => {
+      if (performance.now() - sidstSwipe < 500) return;
+      lyd.klik();
+      glid(id, !valg(id).kunGrafik);
+    });
+    vindue.after(greb);
+    lavSwipe(id, skærm, greb);
     const knap = document.createElement('button');
     knap.className = 'knap lille ikon knap-kungrafik';
     knap.innerHTML = IKON;
@@ -132,5 +215,6 @@ export function testAdgang() {
     valg: (id) => ({ ...valg(id) }),
     skiftKunGrafik: (id, til) => skiftKunGrafik(id, til),
     skiftPanel: (id, side) => skiftPanel(id, side),
+    telefon: () => TELEFON.matches,
   };
 }
