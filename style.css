@@ -207,8 +207,8 @@ button { font: inherit; color: inherit; }
 #molekyler .del-vælger { flex: none; margin: 0; }
 #molekyler:not(.bytte) .bytte-panel, #molekyler:not(.bytte) .bytte-kun { display: none; }
 #molekyler:not(.del-elektroner) .byg-panel, #molekyler:not(.del-elektroner) .byg-kun { display: none; }
-/* Knaldgas (Molekyler M3, js/knaldgas.js): vises i stedet for paletten og panelet til højre */
-#molekyler:not(.knaldgas) .knald-panel, #molekyler:not(.knaldgas) .knald-kun, #molekyler.knaldgas .byg-panel, #molekyler.knaldgas .byg-kun { display: none; }
+/* Knaldgas (Molekyler M3, js/knaldgas.js, i Ild fra 19. november 2026): vises i stedet for bordets paneler og tidsknap */
+#ild:not(.knaldgas) .knald-panel, #ild:not(.knaldgas) .knald-kun, #ild.knaldgas .ild-panel, #ild.knaldgas .ild-kun { display: none; }
 :is(.bytte-panel, .byg-panel) .knap-række { display: flex; flex-wrap: wrap; gap: 8px; }
 /* "Del elektroner | Giv elektroner" øverst i alle tre venstre paneler */
 #molekyler .måde-vælger { margin: 0; align-self: stretch; }

@@ -53,6 +53,14 @@ export function tagVentBog() {
   return id;
 }
 
+// Det, Ild skal åbne, når den starter (fra en knap data-gaa="ild:knaldgas", fx "Knaldgas i Ild ›" i Molekyler)
+let ventIld = null;
+export function tagVentIld() {
+  const id = ventIld;
+  ventIld = null;
+  return id;
+}
+
 // Den måde, Molekyler skal åbne med, når den starter (fra en knap data-gaa="molekyler:bytte", fx i Værkstedets hjælp):
 // 'byg' ("Del elektroner") eller 'bytte' ("Giv elektroner")
 let ventMolekyler = null;
@@ -128,6 +136,16 @@ document.addEventListener('click', (h) => {
     else {
       ventMolekyler = id ?? null;
       location.hash = '#molekyler';
+    }
+    return;
+  }
+  // Ild i Kemi (data-gaa="ild" eller "ild:knaldgas", knaldgassen fra Molekyler)
+  if (skærm === 'ild') {
+    lyd.klik();
+    if (location.hash === '#ild' && hentetSkærm('ild')) hentetSkærm('ild').vis(id);
+    else {
+      ventIld = id ?? null;
+      location.hash = '#ild';
     }
     return;
   }

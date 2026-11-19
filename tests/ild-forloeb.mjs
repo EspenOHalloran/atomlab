@@ -98,8 +98,8 @@ await fase('slut');
 const slut = await T(() => ({ tekst: document.querySelector('#ild .forløb-linje').textContent, veje: document.querySelectorAll('#ild .fl-vej').length }));
 await T(() => { location.hash = '#'; });
 await page.waitForFunction(() => atomlabTest.aktiv() === 'menu', null, { timeout: 20000 });
-const fremgang = await T(() => document.querySelector('#menu a[href="#ild"]')?.classList.contains('klaret'));
-tjek('"Det så du" har kernesætningen, regnskabet og tre veje, og Ild får ✓ i menuen bagefter',
+const fremgang = await T(async () => (await import('./js/fremgang.js')).forløbTaget('ild'));
+tjek('"Det så du" har kernesætningen, regnskabet og tre veje, og turen er husket som taget (✓ i "Din fremgang")',
   slut.tekst.includes('bytter partnere') && /300 gram CO₂/.test(slut.tekst) && slut.veje === 3 && fremgang, JSON.stringify({ slut, fremgang }));
 
 // "Næste ›" før handlingen fører hvert trin til Så

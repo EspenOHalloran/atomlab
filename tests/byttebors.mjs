@@ -304,8 +304,9 @@ await page.waitForTimeout(800);
 await page.click('.menu-fremgang-knap');
 const kortM = await page.textContent('#fremgangListe [data-del="molekyler"] .fremgang-tal');
 const kortV = await page.textContent('#fremgangListe [data-del="vaerksted"] .fremgang-tal');
-tjek(`"Din fremgang": Molekyler har sine 13 opgaver (${kortM.trim()}), Værkstedet sine ${antalAtom} (${kortV.trim()})`,
-  /\b([5-9]|1[0-3]) af 13 opgaver/.test(kortM) && kortV.includes(`af ${antalAtom} opgaver`));
+// Knaldgassens to opgaver bor i Ild fra 19. november 2026, så Molekyler har 11
+tjek(`"Din fremgang": Molekyler har sine 11 opgaver (${kortM.trim()}), Værkstedet sine ${antalAtom} (${kortV.trim()})`,
+  /\b([5-9]|1[01]) af 11 opgaver/.test(kortM) && kortV.includes(`af ${antalAtom} opgaver`));
 await page.keyboard.press('Escape');
 await page.evaluate(() => { location.hash = '#vaerksted'; });
 await page.waitForFunction(() => document.querySelector('#vaerksted:not(.skjult)'));
