@@ -1,7 +1,8 @@
 // Gåden "Er der liv andre steder?" i 3D (G4d, docs/plan-gaader-3d.md). Teksterne står i js/data/gaader.js (scene), og
 // planeterne i js/data/exoplaneter.js.
 // Trin 1, før man har gættet: Lysene tændes år for år fra 1992 til 2026 (et tal tæller op), ét for hver kendt planet om
-// en anden stjerne (6.464), og ét blåt i midten: Jorden. Afstanden er rigtig (trykket sammen), retningen tilfældig.
+// en anden stjerne (6.470 i NASA's arkiv), og ét blåt i midten: Jorden. Retningen på himlen er rigtig, afstanden også,
+// men trykket sammen.
 // Trin 1, efter gættet: De andre lys dæmpes, og Jorden, Mars og Enceladus står ved siden af hinanden i rigtig skala.
 // Trin 2: stenen Cheyava Falls som foto (målt, i farve). Efter gættet stemplet GÆT og to lige store stiplede forklaringer:
 // "kemi uden liv" og "liv". Ingen etiket "liv?".
@@ -12,7 +13,7 @@ import { verden, LAV_KVALITET } from '../scene3d.js';
 import { glød, skilt, prikTekstur } from '../kosmos/faelles.js';
 import { lyd } from '../lyd.js';
 import { gådeMed } from '../data/gaader.js';
-import { PLANETER_PR_ÅR, afstandeFor } from '../data/exoplaneter.js';
+import { PLANETER_PR_ÅR, planeterFor } from '../data/exoplaneter.js';
 import { fuld, stiplet, stempel } from './streg.js';
 
 const HB = 9; // den halve bredde og højde af det, kameraet skal se (planet z = 0)
@@ -32,6 +33,7 @@ const tekstur = (sti) => {
 // Afstanden i lysår til en radius i scenen: Logaritmisk, så både Proxima b (4 lysår) og planeterne mange tusind lysår
 // væk kan være med
 const radius = (ly) => 1.6 + 1.85 * Math.log10(Math.max(4, ly) / 4);
+const GRAD = Math.PI / 180;
 
 export function lavNær(ctx) {
   const { gruppe, linje, knapper, passer, ROLIG } = ctx;
@@ -118,14 +120,14 @@ function lavLys(gruppe, ROLIG) {
   g.add(sky);
   const år = [];
   const fra = []; // det første punkt for hvert år
-  const liste = [];
+  const liste = []; // [ra, dec, lysår]
   for (const række of PLANETER_PR_ÅR) {
-    const a = afstandeFor(række);
-    const kendte = a.filter((x) => x > 0);
+    const a = planeterFor(række);
+    const kendte = a.filter((x) => x[2] > 0);
     fra.push(liste.length);
     år.push(række[0]);
-    // Ukendt afstand (0): en afstand fra samme år, ellers 300 lysår
-    for (const d of a) liste.push(d > 0 ? d : kendte.length ? kendte[Math.floor(Math.random() * kendte.length)] : 300);
+    // Ukendt afstand (0, 28 planeter): en afstand fra samme år, ellers 300 lysår
+    for (const [ra, dec, d] of a) liste.push([ra, dec, d > 0 ? d : kendte.length ? kendte[Math.floor(Math.random() * kendte.length)][2] : 300]);
   }
   const N = liste.length;
   const pos = new Float32Array(N * 3);
@@ -135,7 +137,12 @@ function lavLys(gruppe, ROLIG) {
   const v = new THREE.Vector3();
   const c = new THREE.Color();
   for (let i = 0; i < N; i++) {
-    v.randomDirection().multiplyScalar(radius(liste[i]));
+    // Retningen fra ra og dec (himlens nordpol opad): Keplers felt i Svanen og Lyren bliver en tæt klump. Dataene er rundet
+    // til hele grader, så punkterne spredes inden for graden (ellers står de i striber)
+    const [ra, dec, d] = liste[i];
+    const a = (ra + Math.random() - 0.5) * GRAD;
+    const b = Math.max(-90, Math.min(90, dec + Math.random() - 0.5)) * GRAD;
+    v.set(Math.cos(b) * Math.cos(a), Math.sin(b), -Math.cos(b) * Math.sin(a)).multiplyScalar(radius(d));
     pos.set([v.x, v.y, v.z], i * 3);
     c.setHSL(0.1 + Math.random() * 0.5, 0.25, 0.75 + Math.random() * 0.2);
     basis.set([c.r, c.g, c.b], i * 3);
@@ -227,7 +234,13 @@ function lavLys(gruppe, ROLIG) {
       tæller.material.opacity = 1 - dæmpet;
       jordGlød.material.opacity = 0.7 * (1 - dæmpet);
     },
-    test: () => ({ tændt, i_alt: N, år: år[Math.max(0, årNr)], færdig, dæmpet: mål === 1 }),
+    // klump: lys inden for 10° af midten af Keplers felt (ra 291°, dec 44,5°), regnet ud fra pladserne i scenen
+    test: () => {
+      const k = new THREE.Vector3(Math.cos(44.5 * GRAD) * Math.cos(291 * GRAD), Math.sin(44.5 * GRAD), -Math.cos(44.5 * GRAD) * Math.sin(291 * GRAD));
+      let klump = 0;
+      for (let i = 0; i < N; i++) if (v.fromArray(pos, i * 3).normalize().dot(k) > Math.cos(10 * GRAD)) klump++;
+      return { tændt, i_alt: N, år: år[Math.max(0, årNr)], færdig, dæmpet: mål === 1, klump };
+    },
   };
 }
 

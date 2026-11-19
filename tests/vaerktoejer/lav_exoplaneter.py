@@ -1,77 +1,56 @@
-# Laver js/data/exoplaneter.js (Gåderne G4d, "Er der liv andre steder?") ud fra Wikipedias lister over exoplaneter.
-# Hent først siderne som rå wikitekst i en mappe (19. november 2026 kunne NASA Exoplanet Archive ikke nås fra miljøet):
-#   curl -s "https://en.wikipedia.org/w/index.php?title=List_of_exoplanets_discovered_before_2000&action=raw" -o y1990s.txt
-#   curl -s "https://en.wikipedia.org/w/index.php?title=List_of_exoplanets_discovered_between_2000%E2%80%932009&action=raw" -o y2000s.txt
-#   for y in $(seq 2010 2026); do curl -s "https://en.wikipedia.org/w/index.php?title=List_of_exoplanets_discovered_in_$y&action=raw" -o y$y.txt; done
-# Kør så: python3 -I tests/vaerktoejer/lav_exoplaneter.py <mappen> js/data/exoplaneter.js <NASA's antal> '<dato>'
-# NASA's antal står i Wikipedias skabelon "Extrasolar planet counts/numbers/NEA". De planeter, listerne mangler, lægges
-# til årene efter deres andel med afstanden 0 (ukendt).
-import collections, os, re, sys
+# Laver js/data/exoplaneter.js (Gåderne G4d, "Er der liv andre steder?") ud fra NASA Exoplanet Archive.
+# Hent først tabellen pscomppars (én række pr. bekræftet planet) som CSV i en tom mappe:
+#   curl -s "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,ra,dec,sy_dist,disc_year+from+pscomppars&format=csv" -o pscomppars.csv
+# Kør så: python3 -I tests/vaerktoejer/lav_exoplaneter.py <mappen>/pscomppars.csv js/data/exoplaneter.js '<dato>'
+# Retningen (ra og dec) rundes til hele grader og afstanden (sy_dist i parsec) til lysår med to betydende cifre, så filen
+# bliver ca. 60 KB. Planeter om samme stjerne fundet samme år står én gang med antallet bagefter. (Før 19. november 2026
+# kom tallene fra Wikipedias lister, fordi arkivet ikke kunne nås. Den udgave står i git-historikken.)
+import collections, csv, math, sys
 
-mappe, ud, TOTAL, DATO = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
-filer = ['y1990s.txt', 'y2000s.txt'] + [f'y{y}.txt' for y in range(2010, 2027)]
+kilde, ud, DATO = sys.argv[1], sys.argv[2], sys.argv[3]
+rækker = list(csv.DictReader(open(kilde, encoding='utf8')))
 
-def ren(c):
-    c = re.sub(r'<ref[^>]*/>', '', c)
-    c = re.sub(r'<ref.*?</ref>', '', c, flags=re.S)
-    c = re.sub(r'<ref.*', '', c, flags=re.S)
-    c = re.sub(r'^\s*style="[^"]*"\s*\|', '', c)
-    return c.strip()
+def lysår(pc):
+    if not pc:
+        return 0  # ukendt
+    x = float(pc) * 3.26156
+    if x < 100:
+        return max(1, round(x))
+    p = 10 ** (math.floor(math.log10(x)) - 1)
+    return int(round(x / p) * p)
 
-def tal(c):
-    m = re.search(r'-?\d+(?:\.\d+)?', c.replace(',', ''))
-    return float(m.group(0)) if m else None
+pr = collections.defaultdict(collections.Counter)
+for r in rækker:
+    pr[int(r['disc_year'])][(round(float(r['ra'])) % 360, round(float(r['dec'])), lysår(r['sy_dist']))] += 1
+år = range(min(pr), max(pr) + 1)  # også år uden fund, så tælleren går ét år ad gangen
+uden = sum(1 for r in rækker if not r['sy_dist'])
 
-pr = collections.defaultdict(list)
-for f in filer:
-    t = open(os.path.join(mappe, f), encoding='utf8').read()
-    start = t.find('{|')
-    tab = t[start:t.find('\n|}', start)]  # kun den første tabel (listen), ikke "Former candidates"
-    for s in re.split(r'\n\|-[^\n]*', tab)[1:]:
-        celler = []
-        for linje in s.split('\n'):
-            if not linje.startswith('|') or linje.startswith('|}') or linje.startswith('|+'):
-                if celler and not linje.startswith('!'):
-                    celler[-1] += ' ' + linje
-                continue
-            celler += linje[1:].split('||')
-        celler = [ren(c) for c in celler]
-        m = re.match(r'y(\d{4})\.txt', f)
-        if m:  # listerne for ét år har ingen kolonne med året: navn, masse, radius, periode, afstand til stjernen, temp., metode, afstand (ly)
-            if len(celler) < 9:
-                continue
-            år, afst = int(m.group(1)), tal(celler[7])
-        else:  # de ældre lister har året i kolonne 8 og afstanden i kolonne 9
-            if len(celler) < 10:
-                continue
-            år, afst = tal(celler[7]), tal(celler[8])
-        if år is None or not 1988 <= år <= 2026:
-            continue
-        pr[int(år)].append(0 if afst is None or afst <= 0 else max(1, round(afst)))
+def række(a):
+    punkter = sorted(pr[a].items(), key=lambda t: (t[0][2], t[0]))
+    return ';'.join(f'{ra},{dec},{ly}' + (f',{n}' if n > 1 else '') for (ra, dec, ly), n in punkter)
 
-år = sorted(pr)
-n = sum(len(pr[a]) for a in år)
-mangler = TOTAL - n
-andele = [(len(pr[a]) * mangler / n, a) for a in år]
-hel = {a: int(x) for x, a in andele}
-for x, a in sorted(andele, key=lambda t: -(t[0] - int(t[0])))[:mangler - sum(hel.values())]:
-    hel[a] += 1
-uden = sum(1 for a in år for d in pr[a] if d == 0)
-linjer = '\n'.join(f"  [{a}, '{','.join(str(x) for x in sorted(pr[a]) + [0] * hel[a])}']," for a in år)
-open(ud, 'w').write(f"""// De kendte planeter om andre stjerner (exoplaneter), til gåden "Er der liv andre steder?" (G4d, js/gaader/liv.js).
+linjer = '\n'.join(f"  [{a}, '{række(a)}']," for a in år)
+open(ud, 'w', encoding='utf8').write(f"""// De kendte planeter om andre stjerner (exoplaneter), til gåden "Er der liv andre steder?" (G4d, js/gaader/liv.js).
 // Uden Three.js, så det kan testes i Node. Lavet med tests/vaerktoejer/lav_exoplaneter.py.
-// Kilde: Wikipedias lister "List of exoplanets discovered before 2000", "… between 2000–2009" og "… in 2010" til
-// "… in 2026" (hentet 19. november 2026): fundåret og afstanden i lysår for {n} planeter. NASA Exoplanet Archive har
-// {TOTAL} bekræftede ({DATO}, via Wikipedias skabelon "Extrasolar planet counts"), så de {mangler}, listerne mangler,
-// er lagt til årene efter deres andel (afstanden 0 = ukendt, tegnes som en afstand fra samme år). {uden} planeter i
-// listerne har ingen afstand og står også som 0. Retningen på himlen findes ikke i listerne (NASA's arkiv kunne ikke nås).
-// PLANETER_PR_ÅR: [år, 'afstand i lysår, afstand, …'] (heltal, sorteret).
-export const EXOPLANETER_I_ALT = {TOTAL};
+// Kilde: NASA Exoplanet Archive, tabellen pscomppars (hentet {DATO}): {len(rækker)} bekræftede planeter med fundår
+// (disc_year), retning på himlen (ra og dec i grader) og afstand (sy_dist). {uden} har ingen afstand (0 = ukendt).
+// PLANETER_PR_ÅR: [år, 'ra,dec,lysår;ra,dec,lysår,antal;…'] (ra og dec i hele grader, lysår med to betydende cifre,
+// antal kun når flere planeter om samme stjerne blev fundet samme år). År uden fund har en tom tekst.
+export const EXOPLANETER_I_ALT = {len(rækker)};
 export const EXOPLANETER_DATO = '{DATO}';
 export const PLANETER_PR_ÅR = [
 {linjer}
 ];
-// Afstandene for ét år som tal
-export const afstandeFor = (række) => række[1].split(',').map(Number);
+// Planeterne for ét år som [ra, dec, lysår] (én pr. planet)
+export function planeterFor(række) {{
+  const ud = [];
+  for (const p of række[1] ? række[1].split(';') : []) {{
+    const [ra, dec, ly, n = 1] = p.split(',').map(Number);
+    for (let i = 0; i < n; i++) ud.push([ra, dec, ly]);
+  }}
+  return ud;
+}}
+// Afstandene for ét år i lysår
+export const afstandeFor = (række) => planeterFor(række).map((p) => p[2]);
 """)
-print(n, 'fra listerne,', mangler, 'lagt til,', uden, 'uden afstand')
+print(len(rækker), 'planeter,', uden, 'uden afstand')

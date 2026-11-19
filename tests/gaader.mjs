@@ -13,7 +13,7 @@ import { SIDER as SATURN } from '../js/data/sider/saturn.js';
 import { TRIN_PROTEIN } from '../js/data/liv/protein.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { readFileSync } from 'node:fs';
-import { PLANETER_PR_ÅR, EXOPLANETER_I_ALT, afstandeFor } from '../js/data/exoplaneter.js';
+import { PLANETER_PR_ÅR, EXOPLANETER_I_ALT, EXOPLANETER_DATO, afstandeFor, planeterFor } from '../js/data/exoplaneter.js';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
@@ -99,10 +99,17 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
   const år = PLANETER_PR_ÅR.map((r) => r[0]);
   const antal = PLANETER_PR_ÅR.reduce((s, r) => s + afstandeFor(r).length, 0);
   const år1992 = afstandeFor(PLANETER_PR_ÅR[0]);
-  tjek('G4d: planeterne: 6.464 i alt (NASA, november 2026), ét år ad gangen fra 1992 til 2026, de to første om pulsaren (ca. 2.300 lysår)',
-    antal === EXOPLANETER_I_ALT && EXOPLANETER_I_ALT === 6464 && år[0] === 1992 && år.at(-1) === 2026 && år.every((a, i) => i === 0 || a === år[i - 1] + 1)
+  tjek('G4d: planeterne: 6.470 i alt (arkivet hos NASA 19. november 2026), ét år ad gangen fra 1992 til 2026, de to første om pulsaren (ca. 2.000 lysår)',
+    antal === EXOPLANETER_I_ALT && EXOPLANETER_I_ALT === 6470 && år[0] === 1992 && år.at(-1) === 2026 && år.every((a, i) => i === 0 || a === år[i - 1] + 1)
     && år1992.length === 2 && år1992.every((d) => d > 1500 && d < 3500) && PLANETER_PR_ÅR.every((r) => afstandeFor(r).every((d) => Number.isInteger(d) && d >= 0)),
     JSON.stringify({ antal, første: år[0], sidste: år.at(-1), år1992 }));
+  // De rigtige pladser fra NASA's arkiv: ra og dec i grader, og Keplers felt (Svanen og Lyren) er en tæt klump
+  const alle = PLANETER_PR_ÅR.flatMap((r) => planeterFor(r));
+  const kepler = alle.filter(([ra, dec]) => ra > 280 && ra < 302 && dec > 36 && dec < 53).length;
+  const uden = alle.filter((p) => p[2] === 0).length;
+  tjek('G4d: pladserne fra arkivet hos NASA (ra 0-359°, dec ±90°), over 2.000 i Keplers felt, under 50 uden afstand, og "Ærligt talt" siger, at retningen er rigtig',
+    alle.every(([ra, dec]) => ra >= 0 && ra < 360 && dec >= -90 && dec <= 90) && kepler > 2000 && uden < 50 && EXOPLANETER_DATO === '19. november 2026'
+    && /6\.470/.test(l.scene.ærligt) && /Retningen på himlen er rigtig/.test(l.scene.ærligt) && !/tilfældig|Wikipedia/.test(l.scene.ærligt), JSON.stringify({ kepler, uden }));
 }
 
 // G4e: Livets begyndelse har ingen egen scene, men en linje pr. trin med knappen til Begyndelsen i Liv
@@ -491,9 +498,11 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const S = () => T(() => atomlabTest.gaader.scene().scene());
   const undervejs = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(5); return s.scene().lys; });
   const sprang = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(0, 0); s.spol(0.2); return { lys: s.scene().lys, linje: document.getElementById('gaadeLinje').textContent }; });
-  tjek('G4d: lysene tændes år for år, og et tryk springer til 2026 med alle 6.464',
+  tjek('G4d: lysene tændes år for år, og et tryk springer til 2026 med alle 6.470',
     klar && undervejs.tændt > 0 && undervejs.tændt < undervejs.i_alt && undervejs.år > 1992 && undervejs.år < 2026
-    && sprang.lys.tændt === 6464 && sprang.lys.år === 2026 && /Er der liv på nogen af dem\?/.test(sprang.linje), JSON.stringify({ undervejs, sprang }));
+    && sprang.lys.tændt === 6470 && sprang.lys.år === 2026 && /Er der liv på nogen af dem\?/.test(sprang.linje), JSON.stringify({ undervejs, sprang }));
+  tjek('G4d: lysene står i deres rigtige retning: Keplers felt er en klump (over 30 % af lysene inden for 10°, tilfældigt ville give under 1 %)',
+    sprang.lys.klump / sprang.lys.i_alt > 0.3, JSON.stringify({ klump: sprang.lys.klump, i_alt: sprang.lys.i_alt }));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   const skala = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(1); return s.scene(); });
   tjek('G4d: efter gættet dæmpes lysene, og Jorden, Mars og Enceladus står i samme skala (6.779 og 504 af 12.742 km)',
