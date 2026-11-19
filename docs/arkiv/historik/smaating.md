@@ -1,5 +1,7 @@
 # Historik: Småting
 
+**Senest lavet (18. november 2026): Opdagelserne i menuen på en telefon på langs** (jeres fund via orkestratoren). Under 500 px højde er kortene i ringen 300 px brede, og delene står i én række. Med tre dele (Atomer og Biblioteket) stak "Opdagelserne" og "Det periodiske system" ud over kanten. Nu går den sidste del på en ny linje, når der ikke er plads (`flex-wrap` og `:has(> :nth-child(3))` i `style.css`). Kort med to dele (Kernerne, Rummet og Liv) er de samme. Tjekket på 1000×460, 915×412, 844×390, 740×360 og 390×844.
+
 **Senest lavet (18. november 2026): "Vil du vide mere?" i stedet for "For nørder"** ([prompt-vil-du-vide-mere.md](../prompt-vil-du-vide-mere.md), jeres go 18. november via orkestratoren). Navnet er skiftet overalt, og Værkstedets fane "Nørd" hedder "Mere". Id'er og `data-lag` er de samme, så gemte data og tests virker. Boksen er nu en lille, lys linje "Vil du vide mere? ›" (klassen `lag-mere`, 44 px, med en streg over og uden `lag-kort`) og står lige over "Ærligt talt" i alle dele. I Kosmos og Solsystemet er den flyttet ned efter "Billederne". **Valgt af orkestratoren 2026-11-18, kan ændres af jer.** Stilguidens regel 5 er rettet. Mangler jeres øjne på tabletten: Ses linjen som noget, man kan trykke på?
 
 **Orkestratoren (status ved skiftet 18. november 2026 kl. 10:45 UTC):**

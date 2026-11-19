@@ -4,7 +4,7 @@
 
 *Spor i [oversigten](../lige-nu.md) til små rettelser på tværs, tests, dokumenterne og arbejdsgangen. Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/smaating.md](../arkiv/historik/smaating.md). Højst ca. 5 KB. Sidst opdateret: 17. november 2026 (Rumtid, det fjerde spørgsmål).*
 
-**Senest lavet (18. november 2026): Opdagelserne i menuen på en telefon på langs** (jeres fund via orkestratoren). Under 500 px højde er kortene i ringen 300 px brede, og delene står i én række. Med tre dele (Atomer og Biblioteket) stak "Opdagelserne" og "Det periodiske system" ud over kanten. Nu går den sidste del på en ny linje, når der ikke er plads (`flex-wrap` og `:has(> :nth-child(3))` i `style.css`). Kort med to dele (Kernerne, Rummet og Liv) er de samme. Tjekket på 1000×460, 915×412, 844×390, 740×360 og 390×844.
+**Senest lavet (19. november 2026): G4d PR 1, Mørkt stof i 3D** (go fra orkestratoren 2026-11-19, [plan-gaader-3d.md](../plan-gaader-3d.md)). Kortet "Hvad er mørkt stof?" har fået sin egen scene (`js/gaader/moerktstof.js`): en galakse, der drejer med en flad rotationskurve, og kontakten "Kun det synlige trækker", der får de yderste stjerner til at flyve væk. Efter gættet en usynlig klump, man trækker rundt foran små galakser, som bøjes i buer og ringe. Trin 2 er LZ dybt nede med stemplet GÆT, ét glimt (2026) og måleren 2,6 af 5 sigma. Trin 3 er buerne og et stiplet kort over det mørke stof med Euclid (2027). Afvigelser og faktatjek står i planen. **Næste: G4d PR 2, Liv andre steder** (go er givet). exoplanetarchive.ipac.caltech.edu kan ikke nås fra miljøet, så exoplaneterne får tilfældige pladser (valgt af orkestratoren).
 
 **Næste efter E20:** Rettelserne i [prompt-e20-rettelser.md](../prompt-e20-rettelser.md): A (Gåderne) er lavet. B (tilbage-knappen) venter på jeres prøve på tabletten (se prompten) her i Småting. C (Opdagelserne) tages med H3 i Videnskabsfolkene, og D (grundstoffet flyver hjem) i Forløb. Begge kan starte nu, for forløbet som sti er merget.
 
@@ -29,4 +29,4 @@ Desuden i Småting: "Ikke afprøvet" ned under ca. 10 punkter (resten flyttes ti
 
 **Målt med `?maal` i testbrowseren** (uden grafikkort, kun til sammenligning, det sorte hul i fokus): pc 1280×800 skinnen 7,6 → 3,2 billeder/s, kortet 8,0 → 2,0. Tablet 1920×1200 skinnen 6,1 → 1,8, kortet 5,7 → 1,6. Uden kantudglatning: pc 5,6 og 3,2, tablet 4,5 og 3,8. Testbrowseren regner MSAA og linsen på processoren, så det koster meget mere end på et grafikkort. Trekanter 4.070 → 1.327 (den gamle torus og skive er væk). **De rigtige tal skal måles på tabletten** (se "Ikke afprøvet").
 
-**Næste i Gåderne:** Jeres øjne på tabletten (skarphed, det sorte hul og `?maal#gaader`). Scenerne G4d, G4e og G4c venter som før.
+**Næste i Gåderne:** Jeres øjne på tabletten (skarphed, det sorte hul og `?maal#gaader`). G4d PR 1 (Mørkt stof) er lavet 19. november 2026, så PR 2 (Liv andre steder). G4e og G4c venter som før.
