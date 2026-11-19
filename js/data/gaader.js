@@ -401,6 +401,9 @@ export const GÅDER = [
       },
     ],
     slut: 'Mørkt stof trækker i galakserne, men ingen ved, hvad det er.',
+    ven: 'Der er ca. fem gange så meget usynligt stof som almindeligt stof, og ingen ved, hvad det er.',
+    nyt: null,
+    løst: null,
     seDet: ['kosmos:rumtid', 'Se det selv: Kosmos, Rumtid'],
     // Zwicky 1933 og Rubin og Ford 1970 (Wikipedia "Dark matter"). Clowe m.fl. 2006 (arXiv:astro-ph/0608407): "An 8-sigma
     // significance spatial offset". Planck 2013: 4,9, 26,8 og 68,3 %. 0,120 / (0,120 + 0,0224) = 84 %. LZ: 7 tons xenon
@@ -415,6 +418,40 @@ export const GÅDER = [
       <p><b>LZ</b> er 7 tons flydende xenon ca. 1,5 km nede i en gammel guldmine i South Dakota. Den er så følsom, at den har målt neutrinoer fra Solen. Hændelsen fra 2026 havde 248 keV og er 2,6 sigma (se "Hvornår er noget opdaget?"). Mange teoriartikler har allerede foreslået, hvad den kan være.</p>
       <p><b>Euclid</b> blev sendt op 1. juli 2023 og skal kortlægge ca. en tredjedel af himlen. Det første store datasæt dækker ca. 14 % af det og har ca. 15.000 mulige steder, hvor en galakse bøjer lyset fra en anden bagved, så den ses som buer eller en ring. Det er flere end alle tidligere fundet tilsammen.</p>`,
     ærligt: '<p>"Mørkt" er et dårligt navn: Det er ikke sort, men usynligt. Det sender intet lys ud og kaster ingen skygge. Og at der er ekstra tyngdekraft, er målt mange gange, men at den kommer fra en slags partikler, er et gæt, som næsten alle forskere deler. Et lille mindretal mener, at det er tyngdeloven, der skal ændres.</p>',
+    // Scenen i 3D (G4d, js/gaader/moerktstof.js). Galaksen: flad rotationskurve (Rubin og Ford 1970). Uden ekstra masse
+    // er de yderste stjerner hurtigere end flugthastigheden fra det synlige stof (Mælkevejens stjerner: 4,6-6,4 · 10¹⁰
+    // solmasser, Wikipedia "Milky Way". Med ca. 6 · 10¹⁰ er flugtfarten √(2GM/r) ca. 160 km/s 20 kpc ude, mens stjernerne
+    // kredser med ca. 230 km/s). Mælkevejen har
+    // 100-400 milliarder stjerner og drejer én gang på ca. 225 millioner år (Wikipedia "Milky Way", "Galactic year").
+    // Buerne: linseligningen for en punktmasse, β = θ − θE²/θ (Wikipedia "Gravitational lens"). LZ: ca. 1.500 m under
+    // SURF i den gamle Homestake-guldmine, 7 tons flydende xenon (Wikipedia "LZ experiment" og "Sanford Underground Research
+    // Facility"). Første måling fra december 2021, derfor "i flere år". Én hændelse, 248 ± 23 ± 23 keV, global 2,6σ
+    // (arXiv:2609.02823, 2. september 2026). 5σ er grænsen for et fund i partikelfysik. Euclid: kortet i 2027 (kortets
+    // trin 3, ESA). Kontakten hedder "Kun det synlige trækker", ikke "Uden mørkt stof", så scenen ikke giver svaret,
+    // før man har gættet (stilguiden A6), og så de to bud i gættet begge står åbne.
+    scene: {
+      start: 'Galaksen drejer. Stjernerne yderst kredser lige så hurtigt som dem tættere på midten.',
+      kunSynligt: 'Nu trækker kun det stof, man kan se. Så er de yderste stjerner for hurtige, og de flyver væk.',
+      igen: 'Men rigtige galakser holder sammen. Hvad holder på stjernerne?',
+      kontakt: 'Kun det synlige trækker',
+      bøj: 'Træk i mørket. Noget usynligt bøjer lyset fra galakserne bagved.',
+      bøjet: 'Du kan ikke se det. Du kan se, hvad det gør.',
+      knapGalakse: 'Galaksen',
+      knapBuer: 'Lysbøjningen',
+      lz: 'LZ venter ca. 1,5 km nede i en gammel guldmine, hvor den er skærmet mod stråling fra rummet.',
+      lzVent: 'Den har ventet i flere år på, at en partikel af mørkt stof rammer den.',
+      glimt: 'I 2026 meldte LZ om ét glimt, hvor man næsten ikke ventede nogen. Kom det fra mørkt stof? Ingen ved det.',
+      sigma: 'Glimtet er 2,6 sigma. Et fund kræver 5 sigma. Det er ikke nok.',
+      euclid: 'Ud fra buerne kan man regne ud, hvor det mørke stof er. Euclid skal efter planen give det store kort i 2027.',
+      kort: 'Det stiplede er et bud på, hvor det mørke stof er. Hvor intet er tegnet, ved ingen det endnu.',
+      navne: {
+        dybde: 'ca. 1,5 km', tank: '7 tons flydende xenon', overflade: 'overfladen', ur: 'venter', glimt: 'ét glimt (2026)',
+        partikel: 'en ukendt partikel? (et bud)', sigma: '2,6 sigma', fem: '5 sigma: et fund', euclid: 'Euclid: kortet efter planen i 2027',
+      },
+      ærligt: `<p>Galaksen har ca. 2.000 stjerner. Mælkevejen har 100-400 milliarder, og Solen kredser én gang om midten på ca. 225 millioner år, ikke på under et minut. Med kontakten beholder stjernerne farten, men kun det synlige stof trækker. Sådan kunne en galakse ikke være blevet dannet, men regnestykket viser, hvorfor forskerne mangler noget.</p>
+        <p>Buerne er regnet med Einsteins formel for lys, der bøjer om én klump. Klumpen bøjer meget mere, end en rigtig klump på den størrelse ville gøre. Rigtige buer og ringe laves af tunge galakser eller hele hobe af galakser, og de fleste galakser bliver kun en lille smule skæve. Euclids kort over det mørke stof bygger mest på de små skævheder i hundreder af millioner af galakser.</p>
+        <p>Skakten og tanken er ikke tegnet i samme skala, og uret går meget hurtigere end i virkeligheden. Partiklen er stiplet, fordi ingen ved, om den findes. Kortet til sidst er et eksempel, ikke Euclids rigtige kort. ${STREG_FORKLARING}</p>`,
+    },
   },
 ];
 
