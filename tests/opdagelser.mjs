@@ -47,8 +47,8 @@ for (const b of byggede()) {
   }
 }
 tjek('listen: ti bøger i årets rækkefølge med navn og år, hylden har højst to grå rygge med et spørgsmål, og en bygget bog har titel, stil, portræt, forside og kun byggede opslag', !fejlListe.length, fejlListe.join('; '));
-tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåderne med status prøve',
-  byggede().map((b) => b.id).join() === 'huygens' && bogMed('huygens').år === 1656
+tjek('Tycho og Huygens er de byggede bøger, og delen står i Biblioteket efter Gåderne med status prøve',
+  byggede().map((b) => b.id).join() === 'tycho,huygens' && bogMed('huygens').år === 1656 && bogMed('tycho').år === 1572
   && SKÆRME.findIndex((s) => s.id === 'opdagelser') === SKÆRME.findIndex((s) => s.id === 'gaader') + 1
   && SKÆRME.find((s) => s.id === 'opdagelser')?.status === 'prøve' && SKÆRME.find((s) => s.id === 'opdagelser')?.verden === 'biblioteket');
 // Fortællingens forløb (H2, test 4 i planen): tre trin med kapitel, gæt og korte tekster, og fagordene findes i Ordbogen
@@ -98,6 +98,22 @@ tjek('Huygens er den eneste byggede bog, og delen står i Biblioteket efter Gåd
     && iBunker.reduce((n, [, k]) => n + k, 0) === 62 && A.ord.length === 8 && t.bogstaver(A.ord.map((o) => o.latin).join('')).join('') === t.bogstaver(A.sætning).join('')
     && A.ord.every((o) => o.dansk) && A.ord[0].latin === A.nøgle && A.dansk === CITATER.huygensSaturn.tekst, JSON.stringify(iBunker));
 }
+// Tychos forside (T1, docs/drejebog-tycho.md afsnit 4): introduktionen (Herrevad, november 1572, 25 år, højst fem
+// sætninger og et spørgsmål til sidst) og W'et efter de rigtige pladser: Kaph og Segin lige højt, og den nye stjerne over
+// hele W'et (ikke en tegning med øjet)
+{
+  const t = await bogMed('tycho').tekster();
+  const i = t.FORSIDE.intro;
+  const sætninger = (i?.tekst.match(/[.!?](\s|$)/g) ?? []).length;
+  const st = Object.fromEntries(t.FORSIDE.kort.stjerner.map((x) => [x.id, x]));
+  const w = ['segin', 'ruchbah', 'gamma', 'schedar', 'kaph'].map((id) => st[id]);
+  const erW = w.every(Boolean) && w.every((x, k) => !k || x.x > w[k - 1].x) && w[1].y < w[0].y && w[1].y < w[2].y && w[3].y < w[2].y && w[3].y < w[4].y;
+  tjek('Tychos forside: introduktionen (Herrevad 1572, 25 år, højst fem sætninger, slutter med et spørgsmål), og tegningen er et W efter de rigtige pladser med den nye stjerne øverst',
+    /Herrevad/.test(i?.sted) && /1572/.test(i?.sted) && /\b25\b/.test(i?.tekst) && /Tycho Brahe/.test(i?.tekst) && sætninger <= 5 && i.tekst.endsWith('?')
+    && t.FORSIDE.spørgsmål === bogMed('tycho').spørgsmål && t.OPSLAG[0].slags === 'forside' && erW && Math.abs(st.kaph.y - st.segin.y) < 0.3
+    && w.every((x) => st.ny.y > x.y + 2) && t.FORSIDE.kort.stjerner.length === 6 && t.FORSIDE.kort.alt,
+    JSON.stringify({ sætninger, w: w.map((x) => x && [x.x.toFixed(1), x.y.toFixed(1)]), ny: st.ny && [st.ny.x.toFixed(1), st.ny.y.toFixed(1)] }));
+}
 tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab-fell.woff2') && existsSync(PROJEKT + 'fonts/OFL.txt'));
 
 // ---------- I browseren ----------
@@ -122,8 +138,29 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await page.evaluate(() => { location.hash = '#opdagelser'; });
   const hylde = await vent(page, påHylden, null, 15000);
   const ryg = await page.evaluate(() => atomlabTest.opdagelser.hylde());
-  tjek('fra menuen: hentes først, når delen åbnes, og hylden har Huygens med omslaget frem og kun to grå rygge (Tycho og Rømer)',
-    !førHentet && hylde && ryg.map((r) => r.id).join() === 'tycho,huygens,roemer' && ryg.filter((r) => r.bygget).map((r) => r.id).join() === 'huygens', JSON.stringify(ryg));
+  tjek('fra menuen: hentes først, når delen åbnes, og hylden har Tycho og Huygens med omslaget frem og kun to grå rygge (Rømer og Ørsted)',
+    !førHentet && hylde && ryg.map((r) => r.id).join() === 'tycho,huygens,roemer,oersted' && ryg.filter((r) => r.bygget).map((r) => r.id).join() === 'tycho,huygens', JSON.stringify(ryg));
+  // Omslagene: titlen og navnet står inden for omslaget (Tychos titel fylder to linjer, T1)
+  const omslag = await page.evaluate(() => [...document.querySelectorAll('#opdHylde .opd-omslag')].every((o) => {
+    const r = o.getBoundingClientRect();
+    return [...o.querySelectorAll('.opd-omslag-titel, .opd-omslag-navn, img')].every((e) => { const x = e.getBoundingClientRect(); return x.top >= r.top - 0.5 && x.bottom <= r.bottom + 0.5 && x.height > 0; });
+  }));
+  tjek('omslagene: titel, navn og portræt står inden for omslaget', omslag);
+  // Tychos omslag åbner forsiden med portrættet, spørgsmålet og W'et. Bogen har kun forsiden, så "Begynd" er der ikke (A9)
+  await page.click('#opdHylde [data-bog="tycho"]');
+  const tychoÅben = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'tycho');
+  const tycho = await page.evaluate(() => ({
+    titel: document.querySelector('#opdBog .bog-titel')?.textContent,
+    portræt: document.querySelector('#opdBog .bog-portræt img')?.getAttribute('src'),
+    stjerner: document.querySelectorAll('#opdBog .bog-kort .bog-træsnit polygon').length,
+    begynd: !!document.querySelector('#opdBog .bog-begynd'),
+    antal: atomlabTest.opdagelser.vist().antal,
+    ryg: document.querySelector('#opdHylde [data-bog="tycho"]')?.style.getPropertyValue('--ryg'),
+  }));
+  tjek('Tychos omslag åbner forsiden med spørgsmålet, de Gheyns portræt og W\'et med seks stjerner, og uden "Begynd", når der kun er forsiden',
+    tychoÅben && tycho.titel === 'Hvor kom den nye stjerne fra?' && tycho.portræt?.endsWith('tycho.webp') && tycho.stjerner === 6 && tycho.begynd === (tycho.antal > 1) && tycho.ryg === '#1c2a44', JSON.stringify(tycho));
+  await page.keyboard.press('Escape');
+  await vent(page, påHylden);
   // En grå ryg åbner ingen bog, men stiller bogens spørgsmål
   await page.click('#opdHylde [data-bog="roemer"]');
   const linje = await page.textContent('#opdLinje');
@@ -474,6 +511,20 @@ for (const [navn, opsætning] of [
   const strøget = await vent(page, () => atomlabTest.opdagelser.vist()?.nr === 1, null, 3000);
   tjek(`${navn}: hylden og bogens knapper er inden for skærmen (mindst 44 px), "Begynd" ses uden at rulle, og et stryg bladrer`,
     hylde && bog.begyndSes && bog.knapper && !bog.overlap && !bog.bred && strøget, JSON.stringify({ hylde, ...bog, strøget }));
+  // Tychos forside (T1): portrættet og spørgsmålet ses uden at rulle, og intet går ud til siden
+  await page.keyboard.press('Escape');
+  await vent(page, påHylden);
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('tycho'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'tycho');
+  const tf = await page.evaluate(() => {
+    const ramme = document.querySelector('#opdBog .bog-ramme').getBoundingClientRect();
+    const ses = (s) => { const x = document.querySelector(s)?.getBoundingClientRect(); return !!x && x.top >= ramme.top - 0.5 && x.top < ramme.bottom && x.left >= 0 && x.right <= innerWidth + 0.5; };
+    const kort = document.querySelector('#opdBog .bog-kort');
+    return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), kort: !kort?.offsetWidth || kort.getBoundingClientRect().right <= innerWidth + 0.5, bred: document.documentElement.scrollWidth > innerWidth + 1 };
+  });
+  tjek(`${navn}: Tychos forside har portrættet og spørgsmålet fremme, W'et er inden for skærmen, og intet går ud til siden`, tf.portræt && tf.titel && tf.kort && !tf.bred, JSON.stringify(tf));
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'huygens');
   // "Bogen fra 1659": fanerne og stederne er knapper på mindst 44 px inden for skærmen, og intet går ud til siden
   await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'bogen' && v.bladr(1)); atomlabTest.opdagelser.scene().visSide(2); });
   await vent(page, () => atomlabTest.opdagelser.scene()?.hentet(), null, 15000);
