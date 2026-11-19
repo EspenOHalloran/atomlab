@@ -1,5 +1,12 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (19. november 2026): Mars ekstra 2, stenene i Stå på Mars (M8c del 3)** ([prompt-mars-ekstra.md](../prompt-mars-ekstra.md), [plan-mars.md](../plan-mars.md) sidst: sammenligningen med rovernes fotos og forslaget).
+- **Trin 1, tæt på:** Stenene varierer i størrelse (en potenslov), form (uregelmæssige omrids med facetter), farve (mørkere og mere grå end sandet) og ligger i klynger. Gale har flade plader af sandsten, Jezero mørke, kantede sten og lyse, flade klippeflader (`uStenArt`). Hver sten kaster en kort skygge væk fra Solen.
+- **Trin 3, mellemlaget (pc):** Sten på ca. 0,3-3 m, der rager op 2-250 m væk. Synslinjen følges gennem et gitter af celler, og stenen rammes præcist i shaderen (ingen geometri, ingen nye opslag i kort). De kaster skygge.
+- **Trin 2, ambient occlusion:** Et kort pr. lag (512²), regnet én gang pr. sted, før landingen. Gør himlens lys svagere i lavninger.
+- **Pris (`staa-tid.mjs tablet`, main → gren, samme maskine):** Med alle tre trin var tablet-udgaven +22-60 % langsommere i testbrowseren, også med trinene slået fra (SwiftShader udfører alle grene). **Valgt af orkestratoren 2026-11-19, kan ændres af jer:** På tablet bygges shaderen uden mellemlaget og de små sten (`STEN_FULD` i `landskab.js`). Så er den −4 % vandret, −18 % ned og +9 % mod himlen. Pc har alle tre trin.
+- "Ærligt talt" ved stederne siger, at stenene er tegnet af programmet efter rovernes fotos. Tjek i `tests/landskab.mjs`.
+
 **Lavet (18. november 2026): Mars ekstra 1, Nordpolen tæt på (M7b-pol)** ([prompt-mars-ekstra.md](../prompt-mars-ekstra.md), [plan-mars.md](../plan-mars.md) "M7b-pol: data og plan").
 - **Kortene:** MOLA's polarkort (256 pixel pr. grad, PDS) og Vikings farver, set lige ovenfra fra 78° N (ca. 1.420 km, 0,69 km pr. pixel i 2k), lavet med `billeder/solsystem/lav_pol.py`. Højderne er tabsfri WebP. Vikings søm ved 180° er glattet ud.
 - **Polarnettet:** `lokalt({ pol: 78 })` i `klippeplanet.js`: ringe om polen, der glider over i kuglen ved kanten, et hul i kuglen og højdetabellen i samme projektion. Stoppet "Nordpolen" flyver lavere ned (ca. 970 km over isen, 32°) over spiralerne med Chasma Boreale bag polen. Kortene hentes først ved stedet og frigives, når man forlader Mars.
