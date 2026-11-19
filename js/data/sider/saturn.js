@@ -108,7 +108,7 @@ export const SIDER = {
     ],
     videre: [sted('mimas', 'Mimas'), sted('tethys', 'Tethys')],
     billeder: CASSINI,
-    ærligt: '<p>Fontænernes partikler er tegnet meget større end de rigtige iskorn. "Modlys" flytter Solen om bag månen.</p>' + MÅNE_ÆRLIGT,
+    ærligt: '<p>Fontænernes partikler er tegnet meget større end de rigtige iskorn. "Modlys" flytter Solen om bag månen. Formen er målt ud fra Cassinis fotos: Enceladus er lidt aflang, ca. 513 km på den lange led (mod Saturn) og ca. 497 km mellem polerne. Det, der er mindre end ca. 5 km, kommer kun fra fotoet.</p>' + MÅNE_ÆRLIGT,
   },
   tethys: {
     tal: [['Bredde', '1.062 km'], ['Odysseus', '445 km'], ['Ithaca Chasma', 'over 1.000 km lang'], ['Tæthed', 'næsten som vand']],
