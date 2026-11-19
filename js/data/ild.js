@@ -35,9 +35,9 @@ export function skeZone(px, py, { sod = 1, tyngde = 1, højdeForhold = 5.2 } = {
 
 // Skeen: varme (0-1), dug (0-1) og sod (0-1) ét skridt frem. Dugget kommer på den kolde ske over flammen og fordamper
 // igen, når skeen bliver varm (efter et par sekunder, som i virkeligheden). Sod kommer kun i den gule del.
-export function skeSkridt(ske, zone, dt, sod = 1) {
+export function skeSkridt(ske, zone, dt, sod = 1, køl = 0.1) {
   const iFlammen = zone === 'gul' || zone === 'kerne' || zone === 'kant' || zone === 'blå' || zone === 'kuppel';
-  const opvarm = iFlammen ? 0.45 : zone === 'over' ? 0.16 : -0.1;
+  const opvarm = iFlammen ? 0.45 : zone === 'over' ? 0.16 : -køl;
   ske.varme = Math.min(1, Math.max(0, ske.varme + opvarm * dt));
   if (zone === 'over' && ske.varme < 0.5) ske.dug = Math.min(1, ske.dug + 1.4 * dt);
   else if (ske.varme > 0.5 || iFlammen) ske.dug = Math.max(0, ske.dug - 0.9 * dt);
@@ -159,12 +159,12 @@ export const PANEL = {
   atomer: {
     titel: 'Se atomerne',
     tekst: 'Her i flammens kant er et lille stykke af stearinen: to kulstof og fire hydrogen. Rundt om svæver oxygen fra luften, to og to.',
-    tal: [['Kulstof · hydrogen · oxygen', '2 · 4 · 6']],
+    tal: [],
   },
   atomerFærdig: {
     titel: 'Nye partnere',
     tekst: 'Atomerne har byttet partnere og er blevet til to CO₂ og to H₂O. Ingen atomer er forsvundet, og de nye bindinger gav varme. Det er en kemisk reaktion, og den hedder forbrænding.',
-    tal: [['Før', '2 C · 4 H · 6 O'], ['Efter', '2 C · 4 H · 6 O']],
+    tal: [],
   },
 };
 
@@ -172,6 +172,9 @@ export const PANEL = {
 export const ILD_KORT = ['ildPlasma', 'ildSolen', 'ildVarmer'];
 
 // Instruksen til venstre i luppen (laboratoriet har ingen linje under scenen)
+// Tælleren i scenen i luppen (atomerne talt før og efter)
+export const TÆLLER = (t) => `${t.C} kulstof · ${t.H} hydrogen · ${t.O} oxygen`;
+
 export const ATOM_GØR = {
   klar: 'Træk de tre oxygenmolekyler hen til stykket af stearinen, ét ad gangen.',
   færdig: 'Færdig. Tryk "Igen" for at se det en gang til.',

@@ -105,6 +105,17 @@ export const ORDBOG = [
     former: ['molekyle', 'molekylet', 'molekyler', 'molekylerne', 'molekylets'],
     tekst: 'To eller flere atomer, der holder sammen, fordi de deler elektroner. Vand (H₂O) er et molekyle af ét oxygenatom og to hydrogenatomer.',
   },
+  // Ild, turen "Hvad brænder egentlig?" (trin 3). Kilder: docs/fakta-ild.md afsnit 1 og 3.
+  {
+    id: 'kemisk-reaktion', ord: 'Kemisk reaktion',
+    former: ['kemisk reaktion', 'kemiske reaktion', 'kemiske reaktioner', 'kemiske reaktionen'],
+    tekst: 'Når atomer bytter partnere, så stofferne bliver til nye stoffer. Atomerne er de samme bagefter, de sidder bare sammen på en ny måde. Når et stearinlys brænder, bliver stearin og oxygen til CO₂ og vand.',
+  },
+  {
+    id: 'forbraending', ord: 'Forbrænding',
+    former: ['forbrænding', 'forbrændingen'],
+    tekst: 'En kemisk reaktion, hvor et stof reagerer med oxygen (ilt) og giver varme, fx når et stearinlys eller et bål brænder. Det meste bliver til CO₂ og vand. Det er også det, folk mener med ild.',
+  },
   {
     id: 'kovalent-binding', ord: 'Kovalent binding',
     former: ['kovalent binding', 'kovalente bindinger', 'kovalent'],

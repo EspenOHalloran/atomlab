@@ -4,7 +4,7 @@
 // Flammerne er den fælles flamme fra js/flamme.js. Alt bevæger sig med dt, så det står stille under pause.
 
 import * as THREE from 'three';
-import { LAV_KVALITET, ROLIG, verden } from '../scene3d.js';
+import { LAV_KVALITET, ROLIG, verden, lavPrikTekstur } from '../scene3d.js';
 import { lavFlamme } from '../flamme.js';
 
 export const BORD_Y = -3.4; // bordpladen
@@ -244,6 +244,49 @@ export function lavBord() {
   const co2 = lavPartikler(CO2_MAX, 0xdfe9ff);
   gruppe.add(røg.punkter, co2.punkter);
 
+  // Kredsløbet i flammen (turens trin 4): varme ned fra flammen (orange), stearinen smelter og kravler op i vægen (lys),
+  // og øverst fordamper den ind i flammen (blå). Prikker, der løber rundt på begge sider af vægen.
+  const KREDS = [
+    [0.32, FOD + 1.0, 'v'], [0.62, LYS_TOP + 0.35, 'v'], [0.42, LYS_TOP + 0.03, 's'], [0.06, LYS_TOP + 0.03, 's'],
+    [0.05, VÆGE.y - 0.04, 'd'], [0.12, FOD + 0.55, 'd'],
+  ];
+  const KREDS_FARVE = { v: new THREE.Color(2.2, 0.9, 0.25), s: new THREE.Color(1.5, 1.4, 1.1), d: new THREE.Color(0.5, 0.9, 2.2) };
+  const kredsLængder = KREDS.map((p, i) => { const q = KREDS[(i + 1) % KREDS.length]; return Math.hypot(q[0] - p[0], q[1] - p[1]); });
+  const kredsIalt = kredsLængder.reduce((a, b) => a + b, 0);
+  const KREDS_N = 14; // prikker pr. side
+  const kredsGeo = new THREE.BufferGeometry();
+  kredsGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(KREDS_N * 2 * 3), 3));
+  kredsGeo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(KREDS_N * 2 * 3), 3));
+  const kredsMat = new THREE.PointsMaterial({ size: 0.16, map: lavPrikTekstur(true), vertexColors: true, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending });
+  const kreds = new THREE.Points(kredsGeo, kredsMat);
+  kreds.frustumCulled = false;
+  kreds.renderOrder = 8;
+  kreds.visible = false;
+  geoer.push(kredsGeo);
+  mater.push(kredsMat);
+  lys.add(kreds);
+  let kredsTid = 0;
+  function tegnKreds(dt) {
+    kredsTid += dt * (ROLIG ? 0.08 : 0.18);
+    const pos = kredsGeo.attributes.position;
+    const farve = kredsGeo.attributes.color;
+    for (let i = 0; i < KREDS_N; i++) {
+      let s = (((i / KREDS_N + kredsTid) % 1) + 1) % 1 * kredsIalt;
+      let k = 0;
+      while (s > kredsLængder[k]) { s -= kredsLængder[k]; k = (k + 1) % KREDS.length; }
+      const a = KREDS[k], b = KREDS[(k + 1) % KREDS.length];
+      const u = s / kredsLængder[k];
+      const x = a[0] + (b[0] - a[0]) * u, y = a[1] + (b[1] - a[1]) * u;
+      const f = KREDS_FARVE[a[2]];
+      for (const [j, side] of [[i, 1], [i + KREDS_N, -1]]) {
+        pos.setXYZ(j, x * side, y, 0.05);
+        farve.setXYZ(j, f.r, f.g, f.b);
+      }
+    }
+    pos.needsUpdate = true;
+    farve.needsUpdate = true;
+  }
+
   // ---------- Tilstanden for tegningen (sættes af js/ild.js) ----------
   const t = {
     flamme: 'lys', // 'lys' eller 'brænder'
@@ -255,6 +298,7 @@ export function lavBord() {
     røgKilde: 0, // sekunder, røgen stadig stiger fra vægen
     co2Kilde: 0,
     dug: 0, sod: 0, // skeens skål
+    kredsløb: false, // prikkerne, der viser kredsløbet (turens trin 4)
   };
   const tV = new THREE.Vector3();
   const tV2 = new THREE.Vector3();
@@ -269,6 +313,8 @@ export function lavBord() {
   visFlamme('lys');
 
   function opdater(dt, kamera) {
+    kreds.visible = t.kredsløb && t.flamme === 'lys';
+    if (kreds.visible) tegnKreds(dt);
     // Flammerne
     lysFlamme.opdater(dt, kamera);
     brænderFlamme.opdater(dt, kamera);
@@ -368,7 +414,7 @@ export function lavBord() {
     nulstil() {
       røg.ryd();
       co2.ryd();
-      Object.assign(t, { gløder: 0, glas: 0, glasMål: 0, slukker: 0, slukkerMål: 0, røgKilde: 0, co2Kilde: 0, dug: 0, sod: 0 });
+      Object.assign(t, { gløder: 0, glas: 0, glasMål: 0, slukker: 0, slukkerMål: 0, røgKilde: 0, co2Kilde: 0, dug: 0, sod: 0, kredsløb: false });
       glas.visible = false;
       slukker.visible = false;
     },
