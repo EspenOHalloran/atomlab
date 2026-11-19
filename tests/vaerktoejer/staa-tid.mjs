@@ -65,6 +65,12 @@ if (await fm(() => typeof atomlabTest.solsystem.fænomen().stenLag === 'function
   console.log(await mål('Uden mellemlaget: ned (−40°)', 120, -40));
   await fm(() => atomlabTest.solsystem.fænomen().stenLag(true));
 }
+if (await fm(() => typeof atomlabTest.solsystem.fænomen().aoLag === 'function')) {
+  await fm(() => atomlabTest.solsystem.fænomen().aoLag(false));
+  console.log(await mål('Uden ambient occlusion: vandret (−8°)', 0, -8));
+  console.log(await mål('Uden ambient occlusion: ned (−40°)', 120, -40));
+  await fm(() => atomlabTest.solsystem.fænomen().aoLag(true));
+}
 
 // Skyggekortene: fire lag, når Solen har stået stille, og igen lige efter (mens Solen flytter sig)
 console.log(await fm(async () => {

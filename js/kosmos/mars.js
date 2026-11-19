@@ -1568,6 +1568,7 @@ export default {
         kig: (kompas, vinkel) => sætBlik(ØJE / 1000, kompas, vinkel),
         nær: (km) => { kamera.near = km; kamera.updateProjectionMatrix(); }, // til at måle flimmer
         stenLag: (v) => stående?.land.stenLag(v), // mellemlaget af sten til og fra (til målinger)
+        aoLag: (v) => stående?.land.aoLag(v), // ambient occlusion til og fra (til målinger)
         overdriv: () => overdriv,
         billeder: () => ({
           kort: kortStr, højde: højdeStr, net, hentet: { ...hentet }, tabel: mars.harTabel, tone, bjælke: { venter: bjælke.venter, vist: bjælke.vist },
