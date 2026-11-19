@@ -263,9 +263,10 @@ export function lavGåder() {
     else if (b.hasAttribute('data-ind')) flyvInd(b.dataset.gaade);
   });
   // Esc går fra et kort til skinnen. Lytter i capture-fasen, så en åben dialog ses, før main.js lukker den
-  // ("Hvorfor?"-kortet og ordforklaringerne stopper selv Esc, når de lukkes).
+  // ("Hvorfor?"-kortet og ordforklaringerne stopper selv Esc, når de lukkes). Er fotoet åbent i stor størrelse
+  // (js/gaader/storfoto.js), lukker Esc kun det.
   addEventListener('keydown', (h) => {
-    if (h.key !== 'Escape' || !aktiv || !gåde || document.querySelector('.overlag:not(.skjult)')) return;
+    if (h.key !== 'Escape' || !aktiv || !gåde || document.querySelector('.overlag:not(.skjult), #gaader .gaade-storfoto')) return;
     h.preventDefault();
     h.stopPropagation(); // ellers springer skinnen straks flyvningen ud over (Esc springer en flyvning over)
     lyd.klik();

@@ -96,7 +96,7 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
   const md = GÅDER.find((g) => g.id === 'moerktstof')?.scene?.ærligt ?? '';
   tjek('Fund: "Vil du vide mere?" fortæller om fundet af Cheyava Falls før CoLD-skalaen, 1992 "opdaget", og galaksens 2.000 er prikker i animationen',
     nørd.indexOf('<b>Fundet:</b>') > -1 && nørd.indexOf('<b>Fundet:</b>') < nørd.indexOf('CoLD') && /Perseverance/.test(nørd.slice(0, nørd.indexOf('CoLD')))
-    && /opdaget/.test(sc.første) && !/\bkom\b/.test(sc.første) && /i animationen[^.]*2\.000 prikker/.test(md) && !/Galaksen har ca\. 2\.000 stjerner/.test(md));
+    && /opdaget/.test(sc.første) && !/\bkom\b/.test(sc.første) && /i animationen er tegnet med ca\. 2\.000 prikker/.test(md) && !/Galaksen har ca\. 2\.000 stjerner/.test(md));
   const linjer = [sc.start, sc.første, sc.alle, sc.efter, sc.sten, sc.stenSvar, sc.sonder];
   const lange = linjer.filter((x) => !x || ord(x) > 28);
   tjek('G4d: Liv andre steders scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
