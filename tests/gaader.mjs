@@ -73,6 +73,18 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     kort.every((g) => Number.isFinite(g.størrelse)) && kort.every((g) => (g.nyt == null || (g.nyt.tekst && g.nyt.dato)) && (g.løst == null || typeof g.løst === 'string')));
 }
 
+// G4d: Mørkt stofs scene
+{
+  const m = GÅDER.find((g) => g.id === 'moerktstof');
+  const sc = m.scene ?? {};
+  const linjer = [sc.start, sc.kunSynligt, sc.igen, sc.bøj, sc.bøjet, sc.lz, sc.lzVent, sc.glimt, sc.sigma, sc.euclid, sc.kort];
+  const lange = linjer.filter((l) => !l || ord(l) > 28);
+  tjek('G4d: Mørkt stofs scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
+    !lange.length && sætninger(m.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && sc.navne?.sigma === '2,6 sigma' && /2027/.test(sc.navne?.euclid ?? ''), JSON.stringify(lange));
+  // Kontakten må ikke give svaret, før man har gættet (stilguiden A6): Den siger ikke "mørkt stof"
+  tjek('G4d: kontakten hedder "Kun det synlige trækker" og nævner ikke mørkt stof', sc.kontakt === 'Kun det synlige trækker' && !/mørk/i.test(sc.kontakt + sc.start + sc.kunSynligt + sc.igen));
+}
+
 // G4b: skinnen
 {
   const bang = GÅDER.find((g) => g.id === 'antistof').scene.bang;
@@ -315,8 +327,8 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.click('#gaadeTrin [data-alle]');
   const ud = await T(() => ({ scene: atomlabTest.gaader.scene().id(), påKort: document.getElementById('gaader').classList.contains('paa-kort'), skinne: atomlabTest.gaader.skinne()?.vist(), panel: getComputedStyle(document.getElementById('gaaderPanel')).display }));
   // De andre kort viser deres lys som scene
-  await T(() => atomlabTest.gaader.visGåde('moerktstof'));
-  const lysKort = await vent(page, () => atomlabTest.gaader.scene()?.id() === 'moerktstof' && atomlabTest.gaader.scene().scene()?.lys);
+  await T(() => atomlabTest.gaader.visGåde('begyndelsen'));
+  const lysKort = await vent(page, () => atomlabTest.gaader.scene()?.id() === 'begyndelsen' && atomlabTest.gaader.scene().scene()?.lys);
   tjek('G4a: "Alle gåder" rydder scenen og viser skinnen uden panel, og de andre kort har deres lys som scene', ud.scene === null && !ud.påKort && ud.skinne && ud.panel === 'none' && lysKort, JSON.stringify(ud));
   await ctx.close();
 }
@@ -366,6 +378,57 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   tjek('telefon: ingen vandret rullebjælke på skinnen og på kortet', !o && !(await bred()));
+  await ctx.close();
+}
+
+// G4d: Mørkt stof i 3D: galaksen med kontakten, lysbøjningen, LZ og kortet
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('moerktstof'));
+  const klar = await vent(page, () => atomlabTest.gaader.scene()?.scene()?.tilstand === 'galakse', null, 15000);
+  const S = () => T(() => atomlabTest.gaader.scene().scene());
+  const før = await S();
+  // Den flade rotationskurve: de yderste har samme fart som dem halvvejs ude, og den er over flugtfarten fra det synlige
+  const g0 = før?.galakse ?? {};
+  tjek('G4d: Mørkt stof har sin egen scene: galaksen drejer med samme fart inde og ude, og den fart er over flugtfarten fra det synlige stof',
+    klar && Math.abs(g0.fartUde - g0.fartInde) < 0.08 && g0.flugtUde < g0.fartUde && g0.ude === 0 && !før.lys, JSON.stringify(før));
+  await page.click('#gaadeSceneKnapper [data-id="kunSynligt"]');
+  const til = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(14); return { sc: s.scene(), tændt: document.querySelector('#gaadeSceneKnapper [data-id="kunSynligt"]').getAttribute('aria-checked'), linje: document.getElementById('gaadeLinje').textContent }; });
+  await page.click('#gaadeSceneKnapper [data-id="kunSynligt"]');
+  const fra = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(3); return { sc: s.scene(), linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('G4d: kontakten "Kun det synlige trækker" får de yderste stjerner til at flyve væk, og slået fra kommer de tilbage',
+    til.tændt === 'true' && til.sc.galakse.ude > 30 && /flyver væk/.test(til.linje) && fra.sc.galakse.ude === 0 && fra.sc.galakse.tilstand === 'kreds' && /holder sammen/.test(fra.linje),
+    JSON.stringify({ til: til.sc.galakse, fra: fra.sc.galakse }));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await vent(page, () => atomlabTest.gaader.scene().scene()?.tilstand === 'buer');
+  // En klump lige foran den galakse, der står bag midten, giver en ring: mange prikker forstærket over 1,5 gange
+  const bøjet = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(0.25, 0.15); return { sc: s.scene(), linje: document.getElementById('gaadeLinje').textContent }; });
+  const væk = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(-8.8, 5.8); return s.scene(); });
+  tjek('G4d: efter gættet bøjer den usynlige klump lyset fra galakserne bagved til en ring, hvor man trykker',
+    bøjet.sc.trukket && bøjet.sc.buer.buer > 40 && bøjet.sc.buer.største > 5 && bøjet.linje === 'Du kan ikke se det. Du kan se, hvad det gør.' && væk.linse[0] < -8,
+    JSON.stringify({ buer: bøjet.sc.buer, linse: væk.linse }));
+  await page.click('#gaadeSceneKnapper [data-id="galakse"]');
+  const tilbage = await S();
+  await page.click('#gaadeSceneKnapper [data-id="buer"]');
+  tjek('G4d: efter gættet kan man skifte mellem galaksen og lysbøjningen', tilbage.tilstand === 'galakse' && (await S()).tilstand === 'buer');
+  await page.click('#gaadeTrin .fl-næste');
+  const lzFør = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(2); return s.scene().lz; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
+  const lz = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(8); return { lz: s.scene().lz, linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('G4d trin 2: LZ venter uden glimt, og efter gættet lander GÆT, ét glimt kommer, og måleren står på 2,6 af 5 sigma',
+    lzFør && !lzFør.gættet && !lzFør.glimt && !lzFør.måler && lz.lz.stempel && lz.lz.glimt && lz.lz.måler && Math.abs(lz.lz.fyld - 2.6) < 0.01 && /ikke nok/.test(lz.linje),
+    JSON.stringify({ lzFør, lz }));
+  await page.click('#gaadeTrin .fl-næste');
+  const kort = await T(() => { const s = atomlabTest.gaader.scene(); s.spol(3); return s.scene().kort; });
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4d trin 3: buerne og kortet over det mørke stof (stiplet) med Euclid, og til sidst "Sig det til en ven"',
+    kort?.kort && kort.euclid && kort.buer > 40 && kort.ringe === 9 && ven.startsWith('Sig det til en ven: Der er ca. fem gange'), JSON.stringify({ kort, ven }));
+  await page.click('#gaadeTrin [data-alle]');
+  tjek('G4d: "Alle gåder" rydder scenen', await vent(page, () => atomlabTest.gaader.scene().id() === null && atomlabTest.gaader.skinne()?.vist()));
   await ctx.close();
 }
 
