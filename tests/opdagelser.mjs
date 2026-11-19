@@ -651,7 +651,7 @@ for (const [navn, opsætning] of [
     forord.forord && /komet/.test(forord.tekst) && !start.forord && start.tegnet.length === 0 && én.tegnet.join() === 'G' && /Tag et tal mere/.test(én.linje)
     && to.møder.length === 2 && to.møder.every((x) => !x) && /To steder passer/.test(to.linje) && /begge steder/.test(begge.linje) && !begge.fundet
     && tre.møder.filter(Boolean).length === 1 && /alle tre cirkler/.test(tre.linje) && !forkert.fundet && /kun to/.test(forkert.linje)
-    && løst.fundet && løst.linje === 'Alle tre passer.' && /tycho/.test(løst.gemt ?? '') && /7° 50′/.test(løst.idag) && løst.ny === 1,
+    && løst.fundet && løst.linje === 'Alle tre passer.' && /tycho/.test(løst.gemt ?? '') && /7°\s50′/.test(løst.idag) && løst.ny === 1,
     JSON.stringify({ forord, start, én, to, begge, tre, forkert, løst }));
   // "Se tallene i bogen fra 1573 ›" bladrer til bogen, og brevet har "O crassa ingenia"
   await page.click('#opdBog .tg-videre');
@@ -743,13 +743,13 @@ for (const [navn, opsætning] of [
   await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'gaaden' && v.bladr(1)); });
   await vent(page, () => atomlabTest.opdagelser.scene()?.visGåden);
   await page.evaluate(() => atomlabTest.opdagelser.scene().visGåden());
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(900); // bladet (0,3-0,45 s) og gådens toning skal være færdige
   const gåde = await page.evaluate(() => {
     const ramme = document.querySelector('#opdBog .bog-ramme').getBoundingClientRect();
     const inde = (x) => x.left >= ramme.left - 0.5 && x.right <= ramme.right + 0.5 && x.top >= ramme.top - 0.5 && x.bottom <= ramme.bottom + 0.5;
     const kort = document.querySelector('#opdBog .tg-kort').getBoundingClientRect();
     const tal = [...document.querySelectorAll('#opdBog :is(.tg-tal-knap, .tg-punkt)')].map((e) => e.getBoundingClientRect());
-    return { kort: inde(kort) && kort.width >= 240, tal: tal.length === 6 && tal.every((x) => inde(x) && x.height >= 44), bred: document.documentElement.scrollWidth > innerWidth + 1 };
+    return { kort: inde(kort) && kort.width >= 240, tal: tal.length === 6 && tal.every((x) => inde(x) && x.height >= 44), bred: document.documentElement.scrollWidth > innerWidth + 1, ramme: [ramme.top, ramme.bottom].map(Math.round), ud: tal.filter((x) => !inde(x) || x.height < 44).map((x) => [x.top, x.bottom, x.left, x.right, x.height].map(Math.round)) };
   });
   tjek(`${navn}: i Tychos gåde ses kortet (mindst 240 px) og de tre tal uden at rulle, knapperne er mindst 44 px, og intet går ud til siden`, gåde.kort && gåde.tal && !gåde.bred, JSON.stringify(gåde));
   await page.evaluate(() => atomlabTest.opdagelser.åbn('huygens'));
