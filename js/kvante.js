@@ -8,12 +8,10 @@
 import * as THREE from 'three';
 import { verden, sætVindue, passerTilBoks, begrænsDrejning, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
-import { rydBeskeder } from './beskeder.js';
-import { lukHvorfor } from './lag.js';
 import { lavKontakt } from './kontakt.js';
 import { HVORFOR } from './data/hvorfor.js';
 import {
-  STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, NAVN, PRIKKER, SKYDER, KVANTE_KORT,
+  STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, PRIKKER, SKYDER, KVANTE_KORT,
   bølgelængde, nanometer, lysFarve, åbneSprækker, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, panelNøgle, talTekst,
 } from './data/kvante.js';
 import { lavBænk, KILDE_Y } from './kvante/baenk.js';
@@ -40,6 +38,7 @@ let bølgeKontakt = null;
 let panelTegnet = '';
 let panelTid = 0;
 let størrelse = '';
+let lysNu = [1, 1, 1]; // fotonernes farve (regnes, når farven ændres)
 const stråle = new THREE.Raycaster();
 
 export function lav() {
@@ -142,6 +141,7 @@ function ændret({ straks = false } = {}) {
   påVej = [];
   bænk.ryd();
   bænk.prikStørrelse(v.slags === 'kugler' ? 0.13 : 0.05);
+  lysNu = lysFarve(nanometer(v.farve)).map((c) => c * 1.35);
   rng = tilfældig(1);
   bænk.sæt({ d: v.d, a: bredde(), sprækker: v.sprækker, λ: λ(), måler: v.måler, straks });
   // Vandet (eller bølgens skær for elektroner og lys) starter forfra med de nye sprækker
@@ -216,8 +216,7 @@ function skud(instant = false) {
 
 function land({ z, y, lampe }) {
   if (lampe >= 0) bænk.lampe(lampe);
-  const farve = v.slags === 'lys' ? lysFarve(nanometer(v.farve)).map((c) => c * 1.35) : FARVE.elektroner;
-  bænk.prik(z, y, farve);
+  bænk.prik(z, y, v.slags === 'lys' ? lysNu : FARVE.elektroner);
 }
 
 // En kugle sigter mest mod en åben sprække, ellers et sted på væggen. Den flyver lige: gennem en åben sprække lander

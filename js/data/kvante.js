@@ -178,8 +178,7 @@ export function panelNøgle({ slags, sprækker, måler }) {
   return sprækker === 'begge' ? slags : `${slags}-en`;
 }
 
-// Navnene i venstre panel og på det, der lander
-export const NAVN = { kugler: 'Kugler', boelger: 'Bølger', elektroner: 'Elektroner', lys: 'Lys' };
+// Navnet på det, der lander (tælleren og panelets tal)
 export const PRIKKER = { kugler: 'Kugler', elektroner: 'Elektroner', lys: 'Fotoner' };
 
 // Skyderen under "Afstand": fart for elektroner, farve for lys, bølgelængde for vandet. Kuglerne har ingen.
