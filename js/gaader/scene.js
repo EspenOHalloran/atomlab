@@ -1,6 +1,6 @@
 // Scenen bag et kort i Gåderne (G4a, docs/plan-gaader-3d.md). js/gaader.js henter denne fil med import(), første gang
 // et kort åbnes, og kalder vis(id, trin, valgt) hver gang kortet skifter trin. Hver gåde har sin egen fil med lavNær(ctx)
-// (antistof.js, moerktstof.js og liv.js indtil videre). Kun én scene ad gangen: Den gamle ryddes (ryd), når man skifter kort
+// (antistof.js, moerktstof.js, liv.js og planet9.js indtil videre). Kun én scene ad gangen: Den gamle ryddes (ryd), når man skifter kort
 // eller går ud.
 //
 // ctx, som scenen får: gruppe (en THREE.Group i verden.scene), linje(tekst) (én linje nederst i billedet), knapper([{ tekst,
@@ -20,6 +20,7 @@ const SCENER = {
   antistof: () => import('./antistof.js'),
   moerktstof: () => import('./moerktstof.js'),
   liv: () => import('./liv.js'),
+  planet9: () => import('./planet9.js'),
 };
 // Gåder uden egen scene: deres lys (js/gaader/lys.js) står stort bag kortet, og kameraet drejer roligt om det. Har kortet
 // scene.prøv (Livets begyndelse, G4e: ingen egen scene, for delen Begyndelsen i Liv viser det), står trinets linje og en

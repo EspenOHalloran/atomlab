@@ -30,7 +30,9 @@ export const SIDE = {
     {
       titel: 'Hvor tomt er her egentlig?',
       tekst: '<p>Hvis Solen var en fodbold, ville Jorden være et knappenålshoved 24 meter væk, og Neptun en ært ca. 700 meter væk. Den nærmeste stjerne ville ligge ca. 6.300 km væk, omtrent som fra København til New York.</p>'
-        + '<p>Da Voyager 1 i 1990 tog et billede af Jorden fra ca. 6 milliarder km, var Jorden kun en lille lysende prik. Prøv selv skalaen "Rigtig størrelse og afstand" i Styr.</p>',
+        + '<p>Da Voyager 1 i 1990 tog et billede af Jorden fra ca. 6 milliarder km, var Jorden kun en lille lysende prik. Prøv selv skalaen "Rigtig størrelse og afstand" i Styr.</p>'
+        // Planet 9 (gåden, 20. november 2026): tegnes ikke i overblikket, for ingen har set den (drejebog-overblik.md)
+        + '<p><b>Er der en planet mere derude?</b> Nogle forskere tror, at en planet, ingen har set, trækker i de fjerneste småkloder, langt uden for Neptun. Andre tvivler. ' + gå('gaader:planet9', 'Gåden: Er der en planet mere?') + '</p>',
     },
   ],
   nørd: '<p><b>Astronomisk enhed (AU):</b> Jordens middelafstand fra Solen, 149.597.870,7 km. Neptun er ca. 30 AU ude, og lyset er lige nu ca. 4 timer om at nå derud.</p>'
