@@ -5,7 +5,7 @@
 // eksporterer lav, start og stop (og testAdgang til ?test). modul er stien fra denne fil.
 // status: 'færdig' eller 'prøve' (prøvet af et barn eller ej, se docs/retning.md). Det vises ikke anderledes endnu (nr. 13).
 // høj: true = skærmen må få kvalitetstrinnet Høj på touch (js/scene3d.js, docs/plan-kvalitetstrin.md). Solsystemet,
-// Kosmos, Begyndelsen og Gåderne er ikke målt endnu og bliver i Basis.
+// Kosmos og Begyndelsen er ikke målt endnu og bliver i Basis. Gåderne (91 billeder/s på Tab A11) har det fra 20. november 2026.
 // html og css er til 10b, når en skærm får sine egne filer (tomme indtil da).
 export const SKÆRME = [
   { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig', høj: true },
@@ -21,7 +21,7 @@ export const SKÆRME = [
   { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig' },
   { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
   { id: 'ordbog', verden: 'biblioteket', titel: 'Ordbogen', modul: './ordbog.js', status: 'færdig', høj: true },
-  { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve' },
+  { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve', høj: true },
   { id: 'opdagelser', verden: 'biblioteket', titel: 'Opdagelserne', modul: './opdagelser.js', status: 'prøve', høj: true },
 ];
 

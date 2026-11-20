@@ -17,7 +17,7 @@ import { verden, ROLIG, stopKamera } from '../scene3d.js';
 import { glød, ryd } from '../kosmos/faelles.js';
 import { skalaOrd } from '../data/gaader.js';
 import { fuld } from './streg.js';
-import { lavLys } from './lys.js';
+import { lavLys, lampeFarve } from './lys.js';
 
 const R = 30; // stiens radius: en svag bue, så naboerne glider lidt bagud, og de fjerne er uden for billedet
 const SKRIDT = 0.27; // vinklen mellem to gåder på stien (radianer), ca. 8 enheder
@@ -119,6 +119,19 @@ function byg(gåder) {
     const sten = glød(new THREE.Color(0.45, 0.7, 1.2), 0.6, 0.5);
     sten.position.y = STI_Y;
     holder.add(sten);
+    // Lamperne som én familie (20. november 2026): et svagt skær bag hver lampe og en lille lyspøl på stien under den,
+    // begge i lampens egen farve, så de forskellige motiver står ens på skinnen
+    const farve = lampeFarve(g.id);
+    const skær = glød(farve.clone().multiplyScalar(0.8), LYS_R * SKALA * 2.6, 0.16);
+    skær.position.z = -0.6;
+    holder.add(skær);
+    const pøl = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.6), new THREE.MeshBasicMaterial({
+      color: farve, map: pølTekstur(), transparent: true, opacity: 0.3, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    }));
+    pøl.rotation.x = -Math.PI / 2;
+    pøl.scale.set(1, 0.6, 1); // fladere på tværs af stien
+    pøl.position.y = STI_Y + 0.01;
+    holder.add(pøl);
     // Navnet og under det skalaen med småt ("mindre end et atom", "galakser"), så rækkefølgen forklarer sig selv
     const navn = lavNavn(i, g.navn ?? g.id, skalaOrd(g.størrelse));
     // En færdig gåde (✓) har en rolig ring om lyset
@@ -146,6 +159,24 @@ function byg(gåder) {
   for (const e of ekstra) e.userData.opacitet = e.material.opacity;
 }
 
+// Lyspølen under en lampe: en blød ring (lysest lidt uden for midten, hvor stenen sidder), fælles for alle lamper
+let pølKort = null; // ryd() frigiver det, når skinnen fjernes, og det lægges i grafikkortet igen næste gang
+function pølTekstur() {
+  if (pølKort) return pølKort;
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, 'rgba(255,255,255,0.15)');
+  grad.addColorStop(0.45, 'rgba(255,255,255,0.7)');
+  grad.addColorStop(0.7, 'rgba(255,255,255,0.25)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  pølKort = new THREE.CanvasTexture(c);
+  return pølKort;
+}
+
 // ---------- Navnene (HTML) ----------
 function lavNavneLag() {
   navneLag?.remove();
@@ -167,33 +198,45 @@ function lavNavn(i, tekst, skalaTekst, ende = false) {
     el.append(s);
   }
   navneLag.append(el);
-  const n = { el, i, ende, opacitet: ende ? 0.8 : 0.9, synlig: false, styrke: 1, x: 0, y: 0, vist: '' };
+  const n = { el, i, ende, opacitet: ende ? 0.8 : 0.9, synlig: false, styrke: 1, fokus: false, x: 0, y: 0, vist: '' };
   navne.push(n);
   return n;
 }
 
-// Hvert billede: navnene følger stien (lige under stenen) og toner som før
+// Navne længere end så mange pladser fra fokus toner ud (ellers kunne et fjernt navn på buen stå oven i en nabos lys)
+const NAVN_LANGT = 2.4;
+// Navnene toner ud, før de rammer skærmens kant (så mange punkter), så de ikke bliver skåret over
+const KANT_PLADS = 28;
+const ramp = (a, b, x) => Math.min(1, Math.max(0, (x - a) / (b - a)));
+
+// Hvert billede: navnene følger stien (lige under stenen) og toner ud mod kanten og langt fra fokus
 function stilNavne(tændt) {
   const r = verden.renderer.domElement.getBoundingClientRect();
   const v0 = navneLag.getBoundingClientRect();
+  for (const n of navne) n.bredde = n.el.offsetWidth * (n.fokus ? 1.18 : 1); // læses samlet før skrivningen
   for (const n of navne) {
     let o = n.opacitet;
     if (n.ende) o *= første ? 0 : tændt;
     else o *= n.synlig ? n.styrke : 0;
+    const afst = Math.min(Math.abs(n.i - pos), lukket ? række.length - Math.abs(n.i - pos) : Infinity);
+    o *= 1 - ramp(NAVN_LANGT - 0.6, NAVN_LANGT, afst);
     punkt(n.i, v, STI_Y);
     v.project(verden.kamera);
-    const vis = o > 0.01 && v.z < 1 && Math.abs(v.x) < 1.3;
     const x = Math.round(r.left - v0.left + ((v.x + 1) / 2) * r.width);
     const y = Math.round(r.top - v0.top + ((1 - v.y) / 2) * r.height);
+    const luft = Math.min(x - n.bredde / 2, v0.width - x - n.bredde / 2); // afstanden fra navnets kant til skærmens
+    o *= ramp(0, KANT_PLADS, luft);
+    const vis = o > 0.01 && v.z < 1;
     n.x = x;
     n.y = y;
-    const stil = vis ? `${x},${y},${o.toFixed(2)}` : 'skjult';
+    const stil = vis ? `${x},${y},${o.toFixed(2)},${n.fokus ? 1 : 0}` : 'skjult';
     if (stil === n.vist) continue;
     n.vist = stil;
     n.el.style.visibility = vis ? 'visible' : 'hidden';
     if (!vis) continue;
     n.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, 0)`;
     n.el.style.opacity = o.toFixed(2);
+    n.el.classList.toggle('fokus', !!n.fokus);
   }
 }
 
@@ -327,9 +370,11 @@ function opdater(dt, tid) {
     if (!l.holder.visible) continue;
     l.holder.scale.setScalar(ROLIG ? 1 : blød(synlig));
     l.lys?.opdater(dt, tid);
-    // Navnet på gåden i fokus står i teksten nederst, så det toner ud i 3D
+    // Navnet på gåden i fokus bliver stående, større og lysere (20. november 2026: før tonede det ud, fordi spørgsmålet står
+    // nederst, men så vidste man ikke, hvor man stod). Skalaen under det står på kortet nederst, så den toner ud.
     const afst = Math.min(Math.abs(i - pos), lukket ? lys.length - Math.abs(i - pos) : Infinity);
-    l.navn.styrke = Math.min(1, afst * 1.6) * (ROLIG ? synlig : 1);
+    l.navn.styrke = ROLIG ? synlig : 1;
+    l.navn.fokus = afst < 0.5;
     // Gåden i fokus står lidt større end naboerne (kun lyset, ikke stenen og navnet)
     l.indre.scale.setScalar(skala * (1 + FOKUS * Math.max(0, 1 - afst)));
     if (l.ring.visible) l.ring.lookAt(verden.kamera.position);
@@ -589,7 +634,7 @@ export function testAdgang() {
     // Navnene (HTML): teksten, pladsen i vinduet, skriftstørrelsen og om det kan ses
     navne: () => navne.map((n) => ({
       tekst: n.el.textContent, x: n.x, y: n.y, px: parseFloat(getComputedStyle(n.el.firstChild).fontSize),
-      synlig: n.el.style.visibility === 'visible' && Number(n.el.style.opacity) > 0.05, html: n.el instanceof HTMLElement,
+      synlig: n.el.style.visibility === 'visible' && Number(n.el.style.opacity) > 0.05, html: n.el instanceof HTMLElement, fokus: !!n.fokus,
     })),
     spring,
     // Lysets plads på skærmen (til tryk i testene)

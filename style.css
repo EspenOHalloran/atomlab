@@ -1373,6 +1373,9 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #gaader .gaader-navn b { color: #d8ecff; font-weight: 800; font-size: clamp(14px, calc(0.9vw + 0.9vh), 20px); letter-spacing: 0.01em; }
 #gaader .gaader-navn span { color: #8fa6cc; font-weight: 600; font-size: clamp(11px, calc(0.55vw + 0.55vh), 13.5px); letter-spacing: 0.06em; text-transform: uppercase; }
 #gaader .gaader-navn.ende b { color: #9fb4d8; font-weight: 700; }
+#gaader .gaader-navn b, #gaader .gaader-navn span { transition: transform 0.35s ease, color 0.35s ease, opacity 0.35s ease; }
+#gaader .gaader-navn.fokus b { color: #ffffff; transform: scale(1.18); text-shadow: 0 0 3px #03040c, 0 0 14px rgba(95, 227, 255, 0.55); } /* gåden i fokus: navnet bliver stående og lyser lidt */
+#gaader .gaader-navn.fokus span { opacity: 0; } /* skalaen står på kortet nederst */
 #gaader .gaader-pil { pointer-events: auto; flex: 0 0 auto; min-width: 56px; min-height: 48px; padding: 0 12px; border-radius: 14px; border: 1px solid rgba(95, 227, 255, 0.45); background: rgba(14, 24, 56, 0.82); color: var(--tekst); font-size: 26px; line-height: 1; cursor: pointer; }
 #gaader .gaader-pil:hover:not(:disabled) { border-color: var(--accent); }
 #gaader .gaader-pil:disabled { opacity: 0.3; cursor: default; }
