@@ -170,7 +170,7 @@ for (const [navn, vp] of STØRRELSER) {
     }, klode);
     tjek(`${klode}: alle steder i træet har en side med 2-4 tal og "Ærligt talt"`, mangler.length === 0, JSON.stringify(mangler));
     const forsøg = await S(() => atomlabTest.solsystem.fænomener);
-    const ider = (await S(() => atomlabTest.solsystem.træ())).filter((p) => p.niveau > 0 && p.id && !p.id.startsWith('stå-') && p.id !== 'tur' && !forsøg.includes(p.id)).map((p) => p.id);
+    const ider = (await S(() => atomlabTest.solsystem.træ())).filter((p) => p.niveau > 0 && p.id && !p.id.startsWith('stå-') && p.id !== 'tur' && !p.id.startsWith('tur:') && !forsøg.includes(p.id)).map((p) => p.id);
     const ider2 = klode === 'mars' ? [...ider, 'caldera', 'skraent', 'phobos-mars'] : ider; // det tredje niveau
     for (const id of ider2) {
       await S((i) => atomlabTest.solsystem.gåTil(i), id);
