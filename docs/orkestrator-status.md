@@ -18,7 +18,8 @@ Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurderin
 2. **Venus "Ned gennem skyerne"** (længere tid, ca. 3 s ekstra pr. tekst efter ordtal, og bladring ‹ ›): prompt i `docs/lige-nu/aabne-punkter.md` (punktet om Venus).
 3. **G4c Sort hul** (Gåderne): go givet, målingen er fin (74 billeder/s på Tab A11, 57 på pc). Prompt i `docs/lige-nu/smaating.md` ("Næste i Gåderne").
 4. **Grafik G2** (kantudglatning og bedre glød): go givet, efter 1-3 eller når der er plads. Prompt i `docs/plan-grafik.md` (jeres svar 20. november). Så G3 med Værkstedet, og så Mars ekstra 4 (L2, en session på jeres pc).
-5. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
+5. **Måner · drejebogen** (nyt spor, kun dokumenter, Opus høj): go givet 20. november. Prompt i `docs/lige-nu/maaner.md` ("Næste"). Billig, kan køre sammen med en tung session.
+6. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
 - **Kører nu:** Solsystemet · Saturn S3b (session_01YQoBWMbsrBkrK8sRNBbCY2). **S3b-filerne er hentet** (flade i `billeder/solsystem/kilder/s3b/` på grenen `claude/saturn-s3b`).
 
 ## Venter på jer
