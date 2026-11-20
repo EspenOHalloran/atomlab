@@ -1,6 +1,12 @@
 # Orkestratoren: status
 
-*Opdateret 20. november 2026 kl. ca. 10 dansk tid af sessionen "Småting · Gennemgang af det, der venter" efter gennemgangen med jer. **Ny orkestrator fra samme tid:** se "Skift af orkestrator" nederst. Hold denne fil under ca. 5 KB.*
+*Opdateret 20. november 2026 kl. ca. 22 dansk tid af orkestratoren for natten (session_01VDmQuADE7YByetGZE3Sd2Q, "Orkestrator · AtomLab (natten 20.-21. nov)"). Skemaet er trig_012gpYEzMFKG9WussGFBe8xh (hver time ved :55, fyrer ind i den session). Hold denne fil under ca. 5 KB.*
+
+## Natten 20.-21. november (jeres svar kl. ca. 21:55)
+- **Forbruget:** "Der er masser af forbrug tilbage. Ignorer den gamle status." Spærringen til 25. november gælder ikke længere.
+- **Køen:** Orkestratoren vælger, "gerne noget med land på månerne". Plan: Måner M3, så M4 (flyveturen), så M5a og M5b ("Land med Huygens"), én ad gangen. Den anden plads efter G1 del 2: Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter).
+- Orkestratoren svarer på go og spørgsmål for jer i M3 og G1 del 2 (jeres "ja"), og den kører fra denne session.
+- **Kører:** Måner · M3 (session_01VDmQu8bj9uCkZo8q7qc4eA), Grafik G1 del 2, automatisk kvalitetstrin på touch (session_01VDmQu7BCVpMX7q12HJKTnw).
 
 ## Jeres beslutninger (gælder stadig)
 - Højst **to tunge sessioner** (Opus) ad gangen. Skift orkestrator ved ca. 250.000 tokens (`get_session` uden id, `context_usage`).
@@ -18,9 +24,9 @@ Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurderin
 2. ~~Venus "Ned gennem skyerne"~~ (færdig, #374): (længere tid, ca. 3 s ekstra pr. tekst efter ordtal, og bladring ‹ ›): prompt i `docs/lige-nu/aabne-punkter.md` (punktet om Venus).
 3. ~~G4c Sort hul~~ (færdig, #380): go givet, målingen er fin (74 billeder/s på Tab A11, 57 på pc). Prompt i `docs/lige-nu/smaating.md` ("Næste i Gåderne").
 4. ~~Grafik G2~~ (#387) og ~~G3 Værkstedet~~ (#392), begge status prøve (mål med `?maal` på Tab A11 og pc). Stjerneovnen venter på go efter prøven. Så Mars ekstra 4 (L2, en session på jeres pc).
-5. ~~Måner · drejebogen~~ (færdig, #383, jeres svar i #384). ~~M2 "Under isen" del 1~~ (færdig, #395, status prøve). M3 venter på jeres go (prompt i `docs/lige-nu/maaner.md`), prompt i `docs/lige-nu/maaner.md` ("Næste").
+5. ~~Måner · drejebogen~~ (færdig, #383, jeres svar i #384). ~~M2 "Under isen" del 1~~ (færdig, #395, status prøve). M3 kører (jeres go 20. november om aftenen), så M4, M5a og M5b (se "Natten" øverst).
 6. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
-- **Kører nu (20. november kl. ca. 21):** ingen. Færdige i aften, alle status prøve: G3 Værkstedet (#392), Tycho trin 2 og Betelgeuse (#394), Måner M2 (#395). Intet nyt startes før nulstillingen 25. november kl. 01:00 uden jeres go (ugens forbrug over 95 %). Orkestrator skift 9 er session_01YQoBWJVex4Y286oe7MnLii.
+- **Færdige 20. november om aftenen, alle status prøve:** G3 Værkstedet (#392), Tycho trin 2 og Betelgeuse (#394), Måner M2 (#395).
 - **Færdig 20. november:** Saturn S3b (PR #370), Kvantefysik forløb 1 PR 1-3 (PR #372, #376, #378), Venus "Ned gennem skyerne" (PR #374) og G4c Sort hul (PR #380), alle merget, status prøve og arkiveret. Mulig senere forbedring: Rhea i ca. 2,2 km (større fil hos PSI, I henter den i en browser).
 
 ## Venter på jer
@@ -32,7 +38,6 @@ Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurderin
 ## Andet
 - **Tycho trin 2 og Betelgeuse (jeres go 20. november, "ret"):** Betelgeuse er ikke en indstilling (jeres ord), men en tur for sig, som Tychos bog linker til.
 - Kendte røde tests: `venus` (også alene), `batteri` (også alene på main), `frigiv` og `overblik` (kun under belastning).
-- Ugegrænsen er tæt på (advarsel). Den nulstilles 25. november kl. 01:00 dansk tid.
 
 ## Skift af orkestrator (20. november 2026)
 Den gamle orkestrator (session_01YQoBWJHjboVRT37tHFPvrZ) stod på 573.000 tokens, så **jeres ønske er: kontekst holdes kort.** Regler for orkestratoren:
