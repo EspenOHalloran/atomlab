@@ -376,7 +376,6 @@ export default {
       vis(id);
       // Turen ned fra træet får flybyens undertekst og "Lige nu". Andre steder rydder flybyens tekster væk.
       const ned = TUR.at(-1);
-      nedPrikker = null;
       if (id === 'ned') { fase(ned.titel, ned.tekst); forklaring(ned.nu); } else { fase(null); forklaring(''); }
     }
     // Flyv hen til et sted i træet (også fra flybyen)
@@ -546,13 +545,13 @@ export default {
       },
       jordKm: () => (venus.punkt(v13.ramme.retning, lokal).length() - 1) * R_KM,
       ændret: () => lavKnapper(),
-      // Underteksten skifter ved hvert trin på vejen ned (NED_TRIN i js/data/sider/venus.js)
-      nytTrin: (id) => {
+      // Underteksten skifter ved hvert trin på vejen ned (NED_TRIN i js/data/sider/venus.js). Prikkerne er turens egne
+      // seks trin (de kan trykkes på, som ‹ og › i bjælken), og første gang på turen kommer teksten i loggen 🔔
+      nytTrin: (id, nr, ny) => {
         const t = NED_TRIN.find((x) => x.id === id);
-        if (t && visning === 'ned') fase(t.titel, t.tekst, nedPrikker);
+        if (t && visning === 'ned') fase(t.titel, t.tekst, [nr + 1, NED_TRIN.length], { log: ny });
       },
     });
-    let nedPrikker = null; // [nr, ialt], når turen ned er flybyens sidste stop
 
     // ---------- Flybyen (V5, js/solsystem/flyby.js): 6 stop, teksterne i js/data/sider/venus.js ----------
     // Skyerne: lavt over skyerne ved grænsen mellem dag og nat, i ultraviolet og med ⏩
@@ -572,8 +571,6 @@ export default {
       else vis(stop.id); // Maxwell Montes, Maat Mons og turen ned
       lavKnapper();
       forklaring(stop.nu + (nr === TUR.length - 1 ? TUR_SLUT : ''));
-      // (underteksterne på turen ned beholder flybyens prikker)
-      nedPrikker = stop.id === 'ned' ? [nr + 1, TUR.length] : null;
     }
     const flyby = lavFlyby({ stop: TUR, fase, forklaring, flyvTil: flyvTilStop, skift: () => lavKnapper(), slut: TUR_SLUT });
     function startTur() {
@@ -712,7 +709,9 @@ export default {
       },
       // Flybyen: øverst i træet og i bjælken i 3D-billedet
       tur: { navn: 'Flyby', stop: TUR.length, klar: () => true, kører: () => flyby.kører, start: startTur },
-      trin: () => flyby.bjælke(),
+      // (på turen ned bladrer bjælken og piletasterne i turens trin, når kameraet er begyndt at dale)
+      trin: () => (visning === 'ned' && nedtur.bjælke()) || flyby.bjælke(),
+      piletrin: () => visning === 'ned' && Boolean(nedtur.bjælke()),
       stop() {
         aktiv = false;
         flyby.afslut();
