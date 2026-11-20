@@ -219,11 +219,12 @@ export const TUR = [
     // 27 °C ved 55 km. Wikipedia: 92 bar er som ca. 900 m under havet
     id: 'ned', titel: 'Ned til Venera 13', knap: 'ned til Venera 13',
     tekst: 'I 1982 landede Venera 13 her og tog farvebilleder. Den holdt i 127 minutter i 457 °C og 89 gange Jordens lufttryk.',
-    nu: '<p><b>Lige nu:</b> Kameraet daler ned gennem luften på Venus. Søjlen ved måleren viser, hvor du er: over, inde i eller under skyerne. Underteksten fortæller, hvad du kommer forbi.</p>',
+    nu: '<p><b>Lige nu:</b> Kameraet daler ned gennem luften på Venus. Søjlen ved måleren viser, hvor du er: over, inde i eller under skyerne. Underteksten fortæller, hvad du kommer forbi. Med ‹ og › kan du gå et trin tilbage og frem igen.</p>',
   },
 ];
 
-// Underteksterne på turen ned (js/kosmos/venus-ned.js, TRIN): de skifter, når kameraet kommer forbi hvert sted.
+// Underteksterne på turen ned (js/kosmos/venus-ned.js, TRIN): de skifter, når kameraet kommer forbi hvert sted. Hvert
+// trin får ekstra tid efter antallet af ord i teksten. knap er et kortere navn på bjælkens "Næste: … ›".
 // Tallene er VIRA (js/data/luft-venus.js) og faktatjekket i del7-venus.md, afsnit 12 og 13: skyerne ca. 48-70 km og ca.
 // 20 km tykke, −43 °C ved 70 km, 27 °C og 0,53 bar ved 55 km, 306 °C ved 20 km, bly smelter ved 327 °C, 92 bar er som
 // ca. 900 m under havet, og Venera 13 holdt i 127 minutter (NSSDC).
@@ -233,6 +234,6 @@ export const NED_TRIN = [
   { id: 'stue', titel: 'Stuetemperatur', tekst: 'Ca. 55 km oppe er der ca. 27 °C og halvt så højt lufttryk som ved havet på Jorden. Men luften er kuldioxid.' },
   { id: 'under', titel: 'Under skyerne', tekst: 'Lyset er orange, for skyerne og luften tager det meste af det blå. Herfra bliver luften tykkere og varmere hele vejen ned.' },
   { id: 'ovn', titel: 'Varmere end en ovn', tekst: 'Nu er der over 300 °C, langt varmere end i en ovn, når man bager. Nede ved jorden er der varmt nok til at smelte bly.' },
-  { id: 'landet', titel: 'Landet ved Venera 13', tekst: '457 °C og 89 gange Jordens lufttryk, som ca. 900 m under havet. Her holdt Venera 13 i 127 minutter.' },
+  { id: 'landet', titel: 'Landet ved Venera 13', knap: 'Landet', tekst: '457 °C og 89 gange Jordens lufttryk, som ca. 900 m under havet. Her holdt Venera 13 i 127 minutter.' },
 ];
 export const TUR_SLUT = '<p><b>Turen er slut.</b> Venus er lige så stor som Jorden, men den tykke luft holder så godt på varmen, at jorden er ca. 464 °C, dag og nat. Drej selv rundt, eller vælg et sted i listen.</p>';

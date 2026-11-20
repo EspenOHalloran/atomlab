@@ -172,6 +172,18 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     tidsknap = lavTidsknap({ holder: række, aktiv: () => aktiv, ændret: (t) => kørende?.tempo?.(t) });
     tidsknap.knap = række.querySelector('.tidsknap');
     tidsknap.knap.id = `${skærm}Tid`;
+    // ← og → bladrer i fænomenets trin, når det beder om det (piletrin(), fx turen ned på Venus). Ellers drejer de
+    // kameraet (piletaster i scene3d.js), så tasten må ikke nå dertil.
+    addEventListener('keydown', (h) => {
+      if (!aktiv || (h.key !== 'ArrowLeft' && h.key !== 'ArrowRight') || h.altKey || h.ctrlKey || h.metaKey || !kørende?.piletrin?.()) return;
+      if (h.target.closest?.('input, textarea, select, [contenteditable]') || document.querySelector('.overlag:not(.skjult)')) return;
+      const t = kørende.trin?.();
+      if (!t) return;
+      h.preventDefault();
+      h.stopImmediatePropagation();
+      const nr = t.nr + (h.key === 'ArrowLeft' ? -1 : 1);
+      if (!h.repeat && nr >= 0 && nr < t.ialt) brugTrin((x) => x.gå(nr));
+    }, true);
   }
 
   function start() {
@@ -672,7 +684,8 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
   // Den bliver stående, til den næste fase kommer. trin = [nr, ialt] viser prikker. titel = null fjerner den.
   // Har fænomenet trin i bjælken (trin()), kan man trykke på prikkerne og gå til et trin.
   let faseNu = null; // { titel, tekst, trin, klikbar } den fase, der står nu
-  function visFase(titel, tekst = '', trin = null) {
+  // log: true gemmer underteksten i loggen 🔔 (ellers gemmes faser ikke, fx på turen ned på Venus)
+  function visFase(titel, tekst = '', trin = null, { log = false } = {}) {
     if (!titel) {
       faseNu = null;
       skjulUndertekst('fase');
@@ -682,7 +695,7 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
     const klikbar = Boolean(t && trin && trin[1] === t.ialt);
     faseNu = { titel, tekst, trin, klikbar };
     const vedTrin = klikbar ? (nr) => brugTrin((x) => x.gå(nr - 1)) : null;
-    visBesked({ titel, tekst, type: 'fase', varighed: 0, trin, vedTrin, log: false });
+    visBesked({ titel, tekst, type: 'fase', varighed: 0, trin, vedTrin, log });
   }
 
   // Kameraet: retning (hvorfra vi kigger), radius (hvor stort det, vi skal se, er) og mål (midten).

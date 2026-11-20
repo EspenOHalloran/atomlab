@@ -27,7 +27,7 @@
   - Typerne `info`, `reaktion`, `henfald`, `advarsel` og `fase` bliver en **undertekst** nederst i 3D-billedet (én ad gangen, højst tre linjer og to på telefoner, med "Mere"). Tiden regnes ud fra tekstens længde. `varighed: 0` betyder, at den bliver stående, til noget nyt kommer.
   - `klaret` og `opdaget` bliver en lille **pille** øverst til højre i 3D-billedet (højst to ad gangen, resten venter). Tryk for at læse mere.
   - `fast: true` (fx nødstop og kortslutning) bliver stående, til man lukker den, og almindelige beskeder venter imens. `forsinkelse` venter lidt, så man når at se det, der sker.
-  - Alt undtagen faser gemmes i loggen, som åbnes med 🔔 i 3D-billedet. Klokken findes kun i vinduer med `data-log`.
+  - Alt undtagen faser gemmes i loggen, som åbnes med 🔔 i 3D-billedet (en fase i Kosmos og Solsystemet kan selv bede om det: `fase(titel, tekst, trin, { log: true })`, fx turen ned på Venus). Klokken findes kun i vinduer med `data-log`.
   - Pillerne står 4,5 sekunder (`PILLE_TID`) og en åben pille 30 sekunder (`ÅBEN_TID`). I tests kan deres tid fryses (`testAdgang`).
   - `rydBeskeder()` kaldes ved skærmskift. Kan 3D-billedet ikke ses (fx rullet væk på en telefon), står beskeden nederst på skærmen (`#beskeder`).
   - `bundIVindue(v)` giver et fast sted nederst i et 3D-vindue, lige over underteksterne (fx Stjerneovnens pausemærke).

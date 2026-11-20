@@ -13,24 +13,35 @@
 // - Undervejs skifter underteksten ved hvert trin (over skyerne, i skyerne, stuetemperatur, under skyerne, varmere end
 //   en ovn og landet, NED_TRIN i js/data/sider/venus.js), og en søjle ved måleren viser, hvor man er i forhold til
 //   skyerne (jeres feedback 17. november 2026: "jeg forstår ikke rigtig, hvad det gør").
+// - Hvert trin får sin tid fra kurven (KNÆK) plus ca. 3 sekunder ekstra i snit, fordelt efter antallet af ord i
+//   underteksten (jeres svar 20. november 2026). ‹ og › i bjælken, prikkerne i underteksten og piletasterne bladrer:
+//   kameraet glider hen til starten af trinet og fortsætter derfra (spring). Underteksterne står i loggen 🔔.
 
 import * as THREE from 'three';
 import { ROLIG } from '../scene3d.js';
 import { MAPPE } from '../solsystem/hent.js';
 import { VIRA, SKYER, luftVed, målerTekst } from '../data/luft-venus.js';
+import { NED_TRIN } from '../data/sider/venus.js';
 
 const MIDDEL_KM = 6051.8; // VIRA's højder er over middelradius (NSSDC)
 const START_KM = 320; // så højt over stedet starter turen ned
 const SLUT_KM = 3; // så højt over jorden stopper kameraet (MARGEN i venus.js er 2 km)
-const NED_TID = 34; // sekunder fra 320 km til 3 km
 const LAND_TID = 2.5; // sekunder: måleren tager det sidste stykke ned
 const VINKEL = [55, 12]; // grader under vandret, kameraet kigger ned øverst og nederst
-// Højden over jorden (km) gennem turen efter tiden (u er 0 til 1): Hvert trin får ca. 4-8 sekunder, så underteksten kan
-// læses, og det går langsomt forbi stuetemperaturen ved ca. 55 km
+// Højden over jorden (km) på kurven (u er 0 til 1): Den blev lavet til en tur på KURVE_TID sekunder, hvor hvert trin
+// fik ca. 4-8 sekunder, og det går langsomt forbi stuetemperaturen ved ca. 55 km
 const KNÆK = [[0, START_KM], [0.12, 100], [0.26, 70], [0.38, 58], [0.56, 52], [0.74, 22], [1, SLUT_KM]];
+const KURVE_TID = 34;
 // Trinene og den højde over middelradius (km), de starter under (underteksterne står i NED_TRIN i js/data/sider/venus.js).
 // 'over' starter, når kameraet begynder at dale, og 'landet', når måleren har taget det sidste stykke.
 export const TRIN = [['over', Infinity], ['skyer', SKYER.top], ['stue', 58.5], ['under', SKYER.bund], ['ovn', 20], ['landet', -Infinity]];
+// Ekstra tid til hvert trin (undtagen 'landet', som bliver stående): EKSTRA sekunder i snit, delt efter antallet af ord
+// i underteksten, så lange tekster får lidt mere og korte lidt mindre (jeres svar 20. november 2026)
+const EKSTRA = 3;
+const ORD = TRIN.slice(0, -1).map(([id]) => NED_TRIN.find((t) => t.id === id).tekst.split(/\s+/).length);
+const EKSTRA_TID = ORD.map((n) => (EKSTRA * n * ORD.length) / ORD.reduce((a, b) => a + b, 0));
+export const NED_TID = KURVE_TID + EKSTRA * ORD.length; // sekunder fra 320 km til 3 km (ca. 49)
+const SPRING_TID = 1.2; // sekunder: så længe glider kameraet hen til starten af et trin, når man bladrer
 const glat = (t) => t * t * t * (t * (t * 6 - 15) + 10); // som kameraets rejse (js/solsystem/rejse.js)
 // Tiden (0 til 1) ved e: rejsen giver e = glat(tiden), så den vendes om (glat vokser hele vejen)
 function tidVed(e) {
@@ -43,15 +54,42 @@ function tidVed(e) {
 }
 const FOTO = new URL('venera13-foto.jpg', MAPPE).href;
 
-// Højden over jorden ved e (0 til 1, rejsens bløde fremdrift) og vinklen ned mod jorden
-export function nedHøjde(e) {
-  e = tidVed(e);
+// Højden over jorden (km) ved u på kurven (0 til 1)
+function kurveHøjde(u) {
   let i = 0;
-  while (i < KNÆK.length - 2 && e > KNÆK[i + 1][0]) i++;
-  const [e0, h0] = KNÆK[i], [e1, h1] = KNÆK[i + 1];
-  return h0 + (h1 - h0) * THREE.MathUtils.clamp((e - e0) / (e1 - e0), 0, 1);
+  while (i < KNÆK.length - 2 && u > KNÆK[i + 1][0]) i++;
+  const [u0, h0] = KNÆK[i], [u1, h1] = KNÆK[i + 1];
+  return h0 + (h1 - h0) * THREE.MathUtils.clamp((u - u0) / (u1 - u0), 0, 1);
 }
-const nedVinkel = (e) => THREE.MathUtils.lerp(VINKEL[0], VINKEL[1], tidVed(e)) * (Math.PI / 180);
+// Hvor på kurven er højden h (km over jorden)? (kurven falder hele vejen)
+function kurveVed(h) {
+  let a = 0, b = 1;
+  for (let i = 0; i < 30; i++) {
+    const m = (a + b) / 2;
+    if (kurveHøjde(m) > h) a = m; else b = m;
+  }
+  return (a + b) / 2;
+}
+// Tidsplanen for turen ned: u[i] er, hvor på kurven trin i starter, og s[i] det sekund, det starter (s[5] er NED_TID,
+// når kameraet er nede). Trinene starter i en højde over middelradius, så planen afhænger af jorden ved stedet (jord, km).
+export function lavPlan(jord) {
+  const u = [0];
+  for (let i = 1; i < TRIN.length - 1; i++) u.push(kurveVed(TRIN[i][1] - jord));
+  u.push(1);
+  const s = [0];
+  for (let i = 0; i < u.length - 1; i++) s.push(s[i] + (u[i + 1] - u[i]) * KURVE_TID + EKSTRA_TID[i]);
+  return { u, s };
+}
+// Højden over jorden (km) sekund sek inde i turen ned: Inden for hvert trin går kurven lige så meget langsommere, som
+// trinet har fået ekstra tid
+export function nedHøjde(sek, plan) {
+  const { u, s } = plan;
+  let i = 0;
+  while (i < s.length - 2 && sek > s[i + 1]) i++;
+  const f = THREE.MathUtils.clamp((sek - s[i]) / (s[i + 1] - s[i]), 0, 1);
+  return kurveHøjde(u[i] + f * (u[i + 1] - u[i]));
+}
+const nedVinkel = (sek) => THREE.MathUtils.lerp(VINKEL[0], VINKEL[1], THREE.MathUtils.clamp(sek / NED_TID, 0, 1)) * (Math.PI / 180);
 // Søjlen ved måleren går fra jorden til 100 km over middelradius (procent fra toppen)
 const SØJLE_KM = 100;
 const iSøjle = (h) => `${(100 * (1 - THREE.MathUtils.clamp(h / SØJLE_KM, 0, 1))).toFixed(1)}%`;
@@ -83,15 +121,20 @@ const KUPPEL_GLSL = {
 
 // gruppe: fænomenets gruppe (ikke skaleret). sted(): { grund, op, nord } i systemets retninger (grund: punktet på jorden
 // ved stedet, med højden). jordKm(): jordens højde over kortets kugle ved stedet. kortKm: kortets radius (6.051,0 km).
-// overlag: elementet oven på 3D-billedet. ændret(): Indstillinger skal bygges om (fotoets kontakt). nytTrin(id): turen er
-// nået til et nyt trin (TRIN), så venus.js skifter underteksten.
+// overlag: elementet oven på 3D-billedet. ændret(): Indstillinger skal bygges om (fotoets kontakt). nytTrin(id, nr, ny):
+// turen er nået til et nyt trin (TRIN, nr fra 0), så venus.js skifter underteksten. ny er true første gang på turen
+// (så kommer den i loggen).
 export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, overlag, ændret, nytTrin }) {
   let fase = null; // null, 'hen' (flyver hen over stedet), 'ned', 'lander' eller 'landet'
   let landT = 0;
   let fotoTil = true;
   let hVist = START_KM; // den højde, måleren viser (km over jorden)
   let kuppelFra = false; // kun til tests
-  let trinNr = -1; // det trin i TRIN, turen er nået til (det går kun fremad)
+  let trinNr = -1; // det trin i TRIN, turen er ved (af sig selv går det kun fremad, men man kan bladre)
+  let sete = new Set(); // de trin, turen har vist (så står hver undertekst kun én gang i loggen)
+  let springer = false; // kameraet glider hen til starten af et trin (man har bladret)
+  let plan = lavPlan(0);
+  let færdigNed = null;
 
   // ---------- Kuplen ----------
   const kuppelMat = new THREE.ShaderMaterial({
@@ -175,13 +218,18 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
   }
   // Det trin, turen er nået til (kun fremad: zoomer man selv op efter landingen, bliver det ved "landet")
   function tjekTrin(hMiddel) {
-    if (fase === 'hen' || fase === null) return;
+    if (fase === 'hen' || fase === null || springer) return;
     let nr = TRIN.length - 2;
     if (fase === 'landet') nr = TRIN.length - 1;
     else while (nr > 0 && !(hMiddel < TRIN[nr][1])) nr--;
     if (nr <= trinNr) return;
+    sætTrin(nr);
+  }
+  function sætTrin(nr) {
     trinNr = nr;
-    nytTrin?.(TRIN[nr][0]);
+    const ny = !sete.has(nr);
+    sete.add(nr);
+    nytTrin?.(TRIN[nr][0], nr, ny);
   }
   function visFoto() {
     const til = fase === 'landet' && fotoTil;
@@ -190,12 +238,12 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
 
   // ---------- Vejen ned ----------
   const kam = new THREE.Vector3(), mål = new THREE.Vector3();
-  // Kameraets plads og det punkt, det kigger på, ved e (systemets retninger, 1 = 1.000 km)
-  function vej(e, k, m) {
+  // Kameraets plads og det punkt, det kigger på, sekund sek inde i turen ned (systemets retninger, 1 = 1.000 km)
+  function vej(sek, k, m) {
     const { grund, op, nord } = sted();
-    const h = nedHøjde(e);
+    const h = nedHøjde(sek, plan);
     k.copy(grund).addScaledVector(op, h / S);
-    m.copy(grund).addScaledVector(nord, h / Math.tan(nedVinkel(e)) / S);
+    m.copy(grund).addScaledVector(nord, h / Math.tan(nedVinkel(sek)) / S);
   }
   const jordMiddel = () => kortKm + jordKm() - MIDDEL_KM; // jorden ved stedet over middelradius (km)
 
@@ -204,28 +252,67 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     landT = 0;
     fotoTil = true;
     trinNr = -1;
+    sete = new Set();
+    springer = false;
+    færdigNed = færdig;
+    plan = lavPlan(jordMiddel());
     vej(0, kam, mål);
     rejse.flyv({
       fokus: () => { vej(0, kam, mål); return mål; }, op: () => sted().op,
       afstand: kam.distanceTo(mål), retning: kam.clone().sub(mål).normalize(), min: 0.003, max: 3,
       færdig: () => {
-        if (fase !== 'hen') return;
-        fase = 'ned';
-        vej(1, kam, mål);
-        const slut = kam.distanceTo(mål);
-        rejse.flyv({
-          fokus: () => { vej(1, kam, mål); return mål; }, op: () => sted().op, afstand: slut, retning: kam.clone().sub(mål).normalize(),
-          min: 0.003, max: 3, tid: NED_TID, bane: vej,
-          færdig: () => {
-            if (fase !== 'ned') return;
-            fase = 'lander';
-            landT = 0;
-            færdig?.();
-          },
-        });
+        if (fase === 'hen') flyvNed(0, false);
       },
     });
     ændret();
+  }
+
+  // Flyv ned fra sekund s0 på turen. glid: kameraet glider først hen dertil fra, hvor det er (man har bladret), og
+  // imens står turens ur stille
+  const fraKam = new THREE.Vector3(), fraMål = new THREE.Vector3();
+  function flyvNed(s0, glid) {
+    fase = 'ned';
+    const g = glid ? SPRING_TID : 0;
+    const T = g + (NED_TID - s0);
+    springer = glid;
+    if (glid) {
+      rejse.kameraPunkt(fraKam);
+      fraMål.copy(rejse.fokus);
+    }
+    vej(NED_TID, kam, mål);
+    rejse.flyv({
+      fokus: () => { vej(NED_TID, kam, mål); return mål; }, op: () => sted().op, afstand: kam.distanceTo(mål), retning: kam.clone().sub(mål).normalize(),
+      min: 0.003, max: 3, tid: T,
+      // (rejsen giver e = glat(tiden), så den vendes om: turen ned går med jævn fart i tiden)
+      bane: (e, k, m) => {
+        const t = tidVed(e) * T;
+        vej(s0 + Math.max(0, t - g), k, m);
+        springer = t < g;
+        if (springer) {
+          const w = 1 - glat(t / g);
+          k.lerp(fraKam, w);
+          m.lerp(fraMål, w);
+        }
+      },
+      færdig: () => {
+        if (fase !== 'ned') return;
+        springer = false;
+        fase = 'lander';
+        landT = s0 >= NED_TID ? 1 : 0; // (bladrer man til "landet", lander man med det samme)
+        færdigNed?.();
+      },
+    });
+  }
+
+  // Bladr til trin nr (‹ ›, prikkerne og piletasterne): underteksten skifter med det samme, og kameraet glider hen til
+  // starten af trinet og fortsætter derfra. "landet" er nede ved jorden.
+  function spring(nr) {
+    if (fase === null || fase === 'hen' || nr < 0 || nr >= TRIN.length || nr === trinNr) return;
+    const varLandet = fase === 'landet';
+    sætTrin(nr);
+    flyvNed(plan.s[nr], true);
+    visFoto();
+    if (varLandet) ændret(); // fotoets kontakt forsvinder
   }
 
   function afbryd() {
@@ -273,6 +360,12 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     get aktiv() { return fase !== null; },
     get fase() { return fase; },
     get landet() { return fase === 'landet'; },
+    // Trinene til bjælken i fænomenskærmen (‹, "Næste: … ›" og "↺ Forfra"), null før kameraet begynder at dale
+    bjælke() {
+      if (fase === null || fase === 'hen' || trinNr < 0) return null;
+      const n = NED_TRIN.find((t) => t.id === TRIN[trinNr + 1]?.[0]);
+      return { nr: trinNr, ialt: TRIN.length, næste: n ? (n.knap ?? n.titel) : '', gå: spring, forfra: () => spring(0) };
+    },
     // Er kameraet under skyernes top? (så tager venus.js skyerne væk)
     iSkyerne: () => fase !== null && hMiddelNu < SKYER.top,
     // Kontakten "Venera 13's foto" i Indstillinger (kun når man er landet)
@@ -285,7 +378,7 @@ export function lavNedtur({ gruppe, kamera, rejse, S, kortKm, sted, jordKm, over
     // Kun til tests: skjul kuplen (for at se jorden bag den)
     udenKuppel(til) { kuppelFra = til; },
     test: () => ({
-      fase, trin: TRIN[trinNr]?.[0] ?? null, hVist, hMiddel: hMiddelNu, jord: jordMiddel(), måler: !måler.hidden, foto: !foto.hidden,
+      fase, trin: TRIN[trinNr]?.[0] ?? null, springer, plan: plan.s.map((x) => +x.toFixed(2)), nedTid: NED_TID, hVist, hMiddel: hMiddelNu, jord: jordMiddel(), måler: !måler.hidden, foto: !foto.hidden,
       tekst: { ...vist }, kuppel: kuppel.visible ? { himmel: kuppelMat.uniforms.uHimmelA.value, dis: kuppelMat.uniforms.uDisA.value } : null,
       vira: VIRA.length,
     }),
