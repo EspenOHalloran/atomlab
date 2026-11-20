@@ -72,6 +72,8 @@ Alternativ (mere om metoden): "… Jeg kender forskel på det, vi har målt, og 
 - **Lyt til horisonten:** Et nyt sort hul "ringer" som en klokke, og tonerne afslører, om det er præcis, som Einstein siger (GW250114: tonerne passer inden for ± 30 %, arXiv:2509.08054). Tydeligere signaler kan vise afvigelser. ESA's LISA (tre sonder i rummet) er vedtaget i januar 2024 og skal efter planen sendes op i 2035 (Wikipedia). **Ret sikker.**
 - **En ny teori:** Der mangler en teori, der forener tyngdekraften med kvantefysikken (kvantetyngdekraft). Der er forslag (strengteori, loop-kvantetyngdekraft), men ingen er afprøvet med et forsøg. **Ret sikker.**
 
+**Scenen i 3D (G4c, 20. november 2026):** Tonen fra 2015, de to kanter og LISA er faktatjekket i [fakta-gaader-sorthul.md](fakta-gaader-sorthul.md).
+
 **Gør i programmet:** Kosmos → Sort hul → "Send en astronaut ind". Kortet tager over ved horisonten: "For astronauten går der højst ca. et minut. Hvad der sker til sidst, ved ingen."
 
 ## 3. Hvorfor er der stof og næsten intet antistof?

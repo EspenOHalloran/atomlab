@@ -22,7 +22,7 @@
 - `js/fremgang.js`: løste opgaver, opdagede grundstoffer og forløb (`nulstilDel(ider)` nulstiller én dels opgaver, `forløbTaget(id)`, `forløbSprunget(id)` og `markérForløb(id, 'taget' | 'sprunget')`)
 - `js/karrusel.js` og `js/menubaggrund.js` (menuen som en ring og baggrunden bag den): se [menu.md](menu.md).
 - `js/forfra.js`: "Start forfra" nederst i listen med opgaver i Stjerneovnen, Reaktoren og Batteriet (`forfraKnap`) og i Værkstedets opgaveliste (`toTrinsKnap`). Første tryk spørger ("Sikker? Tryk igen"), og andet tryk nulstiller kun den dels opgaver. Stjerneovnen og Batteriet starter også selve forsøget forfra.
-- `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler). Der er stille, indtil man har trykket eller klikket på siden (browserne tillader ikke lyd før).
+- `js/lyd.js`: små lyde lavet med Web Audio (ingen lydfiler). Der er stille, indtil man har trykket eller klikket på siden (browserne tillader ikke lyd før). `lyd.tyngdebølge(frekvenser, styrker, varighed)` (20. november 2026) spiller en tone efter to lister (bruges af Gådernes Sort hul).
 - `js/beskeder.js`: beskeder med faste pladser, så de ikke dækker animationerne. `visBesked({ titel, tekst, type, varighed, forsinkelse, fast, trin, log })`:
   - Typerne `info`, `reaktion`, `henfald`, `advarsel` og `fase` bliver en **undertekst** nederst i 3D-billedet (én ad gangen, højst tre linjer og to på telefoner, med "Mere"). Tiden regnes ud fra tekstens længde. `varighed: 0` betyder, at den bliver stående, til noget nyt kommer.
   - `klaret` og `opdaget` bliver en lille **pille** øverst til højre i 3D-billedet (højst to ad gangen, resten venter). Tryk for at læse mere.

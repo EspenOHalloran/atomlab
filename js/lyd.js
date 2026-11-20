@@ -204,4 +204,19 @@ export const lyd = {
     osc.start(start);
     osc.stop(start + varighed + 0.3);
   },
+  // Tyngdebølgen fra 2015 som tone (Gåderne, Sort hul, js/gaader/sorthul.js): frekvenserne (Hz) og styrkerne (0-1) er
+  // jævnt fordelt over varigheden og regnes ud i scenen
+  tyngdebølge: (frekvenser, styrker, varighed) => {
+    const c = lydkort();
+    if (!c) return;
+    const start = c.currentTime + 0.02;
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueCurveAtTime(Float32Array.from(frekvenser), start, varighed);
+    g.gain.setValueCurveAtTime(Float32Array.from(styrker, (s) => 0.0001 + s * 0.32), start, varighed);
+    osc.connect(g).connect(udgang);
+    osc.start(start);
+    osc.stop(start + varighed + 0.02);
+  },
 };
