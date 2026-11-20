@@ -35,6 +35,9 @@ const ryst = new THREE.Vector3();
 
 const HALE_LÆNGDE = LAV_KVALITET ? 9 : 16; // så mange punkter er der i en elektrons hale
 const MAX_LIM = 2400; // højst så mange lyspunkter for kernekraften
+const GLIMT_PC = 1600; // så mange glimt er der i elektronskyen (G3), fordelt på orbitalerne efter antal elektroner
+const GLIMT_TABLET = 600;
+const hjælpV2 = new THREE.Vector2();
 
 // Udgaver af atomet, som man kan prøve med ?udgaver i adressen (se vaerksted.js):
 // 'nu' (som før), 'prikker' (orbitalerne som en sky af prikker, der viser, hvor elektronen sandsynligvis er)
@@ -85,32 +88,70 @@ function pulje(n, l, mi) {
   return puljer.get(nøgle);
 }
 
+// Hovedlysets retning i verden (samme som hovedlys.position i scene3d.js). Bruges til det bløde lys i nukleonerne.
+const HOVEDLYS = new THREE.Vector3(6, 10, 12).normalize();
+
 // Giver kuglerne et lysende kantlys og lader dem pulsere svagt (hver kugle i sin egen takt).
 // Det gøres ved at tilføje lidt kode til Three.js' almindelige materiale.
 // skygge = { styrke, radius } (uniforms) gør kuglerne mørkere dybt inde i kernen, så revnerne mellem dem får skygge.
-export function tilføjKantlys(materiale, kantFarve, pulsFarve, tid, skygge = null) {
+// blød = { spredning, glans, styrke } (G3, 20. november 2026) gør kuglerne bløde i stedet for blanke: Lyset spreder sig
+// lidt ind under overfladen ved grænsen mellem lys og skygge (spredning, som i hud og gummi), kanten får et bredt, blødt
+// skær (glans), og hver kugle er en anelse lysere eller mørkere end sin nabo. styrke (uniform, 0-1) skruer op og ned for
+// det hele, så de gamle udgaver ('nu') er uændrede. På pc får overfladen også et fint, blødt relief.
+export function tilføjKantlys(materiale, kantFarve, pulsFarve, tid, skygge = null, blød = null) {
   // Uden sin egen nøgle ville Three.js genbruge det samme program til kugler med og uden skygge
-  materiale.customProgramCacheKey = () => (skygge ? 'kantlys-skygge' : 'kantlys');
+  materiale.customProgramCacheKey = () => (skygge ? 'kantlys-skygge' : 'kantlys') + (blød ? '-blød' : '');
+  // Reliefet tændes med en define, før shaderen laves (Three.js læser defines, før onBeforeCompile kaldes)
+  if (blød && !LAV_KVALITET) materiale.defines = { ...materiale.defines, BLOED_RELIEF: '' };
   materiale.onBeforeCompile = (shader) => {
     shader.uniforms.uKant = { value: kantFarve };
     shader.uniforms.uPuls = { value: pulsFarve };
     shader.uniforms.uTid = tid;
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nuniform float uTid;\nvarying float vPuls;\nvarying float vDybde;')
+      .replace('#include <common>', '#include <common>\nuniform float uTid;\nvarying float vPuls;\nvarying float vDybde;\nvarying vec3 vLokal;\nvarying float vFroe;')
       .replace('#include <begin_vertex>', `#include <begin_vertex>
         vec4 dybdePos = vec4(transformed, 1.0);
+        vLokal = transformed;
         #ifdef USE_INSTANCING
           vPuls = 0.5 + 0.5 * sin(uTid * 2.2 + float(gl_InstanceID) * 2.39);
+          vFroe = fract(sin(float(gl_InstanceID) * 12.9898) * 43758.5453);
           dybdePos = instanceMatrix * dybdePos;
         #else
           vPuls = 0.5;
+          vFroe = 0.5;
         #endif
         vDybde = length(dybdePos.xyz);`);
     let fragment = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform vec3 uKant;\nuniform vec3 uPuls;\nvarying float vPuls;\nvarying float vDybde;')
+      .replace('#include <common>', '#include <common>\nuniform vec3 uKant;\nuniform vec3 uPuls;\nvarying float vPuls;\nvarying float vDybde;\nvarying vec3 vLokal;\nvarying float vFroe;')
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         float kant = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 2.5);
         totalEmissiveRadiance += uKant * kant + uPuls * vPuls;`);
+    if (blød) {
+      shader.uniforms.uSpredning = { value: blød.spredning };
+      shader.uniforms.uGlans = { value: blød.glans };
+      shader.uniforms.uBloed = blød.styrke;
+      shader.uniforms.uLys = { value: HOVEDLYS };
+      fragment = fragment
+        .replace('#include <common>', '#include <common>\nuniform vec3 uSpredning;\nuniform vec3 uGlans;\nuniform float uBloed;\nuniform vec3 uLys;')
+        // Hver kugle sin egen nuance (±5 %), så kernen ikke ligner ens plastikkugler
+        .replace('#include <color_fragment>', `#include <color_fragment>
+          diffuseColor.rgb *= 1.0 + uBloed * (vFroe - 0.5) * 0.1;`)
+        // Relief (kun pc): en blød bule-overflade af tre sinusser i kuglens egne retninger (kuglerne drejer ikke)
+        .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+          #ifdef BLOED_RELIEF
+            vec3 rp = vLokal * 22.0 + vFroe * 17.0;
+            vec3 rs = sin(rp), rc = cos(rp);
+            vec3 rg = vec3(rc.x * rs.y * rs.z, rs.x * rc.y * rs.z, rs.x * rs.y * rc.z);
+            normal = normalize(normal + uBloed * 0.06 * (mat3(viewMatrix) * rg));
+          #endif`)
+        .replace('totalEmissiveRadiance += uKant * kant + uPuls * vPuls;', `totalEmissiveRadiance += uKant * kant + uPuls * vPuls;
+          vec3 lysV = normalize((viewMatrix * vec4(uLys, 0.0)).xyz);
+          float nl = dot(normal, lysV);
+          // Spredningen: et bånd omkring grænsen mellem lys og skygge (lyset kryber lidt ind på skyggesiden)
+          float spred = smoothstep(-0.6, 0.1, nl) * (1.0 - smoothstep(0.1, 0.85, nl));
+          float bred = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 1.4);
+          totalEmissiveRadiance += uBloed * (uSpredning * spred + uGlans * bred * (0.35 + 0.65 * max(nl, 0.0)))${skygge ? ' * skyg' : ''};`);
+    }
     if (skygge) {
       shader.uniforms.uSkygge = skygge.styrke;
       shader.uniforms.uKerneR = skygge.radius;
@@ -151,7 +192,7 @@ export class Atom {
     this.gruppe = new THREE.Group();
     alleAtomer.add(this);
 
-    const [b, h] = LAV_KVALITET ? [14, 10] : [26, 18];
+    const [b, h] = LAV_KVALITET ? [18, 12] : [26, 18]; // tablet: 18 × 12, så kanten ikke er kantet tæt på (G3)
     const kugle = new THREE.SphereGeometry(R, b, h);
     this.tidUniform = { value: 0 };
     this.protonMat = new THREE.MeshStandardMaterial({
@@ -161,8 +202,12 @@ export class Atom {
       color: 0x98a8c8, roughness: 0.42, metalness: 0.05, emissive: 0x0c1424,
     });
     this.skygge = { styrke: { value: 0 }, radius: { value: 1 } };
-    tilføjKantlys(this.protonMat, new THREE.Color(1.1, 0.12, 0.08), new THREE.Color(0.28, 0.02, 0.01), this.tidUniform, this.skygge);
-    tilføjKantlys(this.neutronMat, new THREE.Color(0.16, 0.3, 0.85), new THREE.Color(0.0, 0.0, 0.0), this.tidUniform, this.skygge);
+    // Det bløde lys (G3): en spredning (varm i protonerne) og et lyst, bredt skær i kanten. 0 i udgaven 'nu', 1 i de nye.
+    this.blødStyrke = { value: 0 };
+    tilføjKantlys(this.protonMat, new THREE.Color(1.1, 0.12, 0.08), new THREE.Color(0.28, 0.02, 0.01), this.tidUniform, this.skygge,
+      { spredning: new THREE.Color(0.24, 0.035, 0.012), glans: new THREE.Color(0.09, 0.018, 0.012), styrke: this.blødStyrke });
+    tilføjKantlys(this.neutronMat, new THREE.Color(0.16, 0.3, 0.85), new THREE.Color(0.0, 0.0, 0.0), this.tidUniform, this.skygge,
+      { spredning: new THREE.Color(0.05, 0.075, 0.15), glans: new THREE.Color(0.035, 0.06, 0.13), styrke: this.blødStyrke });
     this.pMesh = new THREE.InstancedMesh(kugle, this.protonMat, PLADS_P);
     this.nMesh = new THREE.InstancedMesh(kugle, this.neutronMat, PLADS_N);
 
@@ -304,6 +349,7 @@ export class Atom {
       if (sky.form) sky.punkter.material.uniforms.uStyrke.value = sky.styrke * o;
       else sky.punkter.material.opacity = sky.styrke * o;
     }
+    if (this.skyGlimt) this.skyGlimt.material.uniforms.uStyrke.value = o;
   }
 
   // Skifter mellem udgaverne (se sætUdgave)
@@ -313,8 +359,10 @@ export class Atom {
     this.eMat.opacity = 1;
     this.eMat.needsUpdate = true;
     this.haler.material.opacity = 1;
-    this.protonMat.roughness = ny ? 0.28 : 0.38;
-    this.neutronMat.roughness = ny ? 0.32 : 0.42;
+    // De nye udgaver har bløde kugler (G3): mere ru, så glansen er bred og blød i stedet for et skarpt lyspunkt
+    this.protonMat.roughness = ny ? 0.44 : 0.38;
+    this.neutronMat.roughness = ny ? 0.48 : 0.42;
+    this.blødStyrke.value = ny ? 1 : 0;
     this.beregnSkaller();
     this.overgang = this.visning === 'sky' ? 1 : 0;
     this.visOvergang();
@@ -393,6 +441,7 @@ export class Atom {
       this.skyGruppe.remove(barn);
     }
     this.skyer = [];
+    this.skyGlimt = null;
     if (udgave !== 'nu') {
       this.byggOrbitaler(a);
       return;
@@ -431,17 +480,77 @@ export class Atom {
     const yderst = (o) => o.n === maxN || fyldt[`${o.n}${o.l}`] < 2 * (2 * o.l + 1);
     const antal = Math.max(70, Math.min(500, Math.round((LAV_KVALITET ? 2400 : 5200) / liste.length)));
     const former = udgave === 'former';
+    if (former) this.byggGlimt(liste, a, yderst);
+    // G3: Mange former oven i hinanden (fx jern med 4s og fem 3d) blev næsten hvide. Over fire former dæmpes de lidt
+    // (jern 0,82, så farverne kan ses), op til fire er de som før.
+    const dæmp = former ? Math.min(1, Math.sqrt(4 / liste.filter(yderst).length)) : 1;
     for (const o of liste) {
       // Formerne: kun de yderste, for de inderste sidder inden i og ville gøre det hele hvidt
       if (former && !yderst(o)) continue;
       // Halvfyldte orbitaler (1 elektron) er svagere end fyldte (2 elektroner), og de inderste er dæmpet
       const styrke = (o.elektroner === 2 ? 1 : 0.65) * (yderst(o) ? 1 : 0.15);
-      const sky = former ? this.orbitalForm(o, a, styrke) : this.orbitalPrikker(o, a, styrke, antal);
+      const sky = former ? this.orbitalForm(o, a, styrke * dæmp) : this.orbitalPrikker(o, a, styrke, antal);
       sky.orbital = o;
       sky.nr = o.n;
       this.skyGruppe.add(sky.punkter);
       this.skyer.push(sky);
     }
+  }
+
+  // Glimt i elektronskyen (G3, 20. november 2026): steder trukket med den samme sandsynlighed (|ψ|²) som orbitalerne,
+  // også de inderste orbitaler, som formerne springer over. Hvert glimt lyser kort op i sin egen takt (3-4 s), som et
+  // sted, man kunne finde elektronen, hvis man målte. Ét kald for hele atomet, og glimtene regnes i shaderen (intet pr.
+  // billede i JS). Med "reducer bevægelse" blinker de ikke, men lyser svagt hele tiden.
+  byggGlimt(liste, a, yderst) {
+    const iAlt = LAV_KVALITET ? GLIMT_TABLET : GLIMT_PC;
+    const vægt = (o) => o.elektroner * (yderst(o) ? 1 : 0.4);
+    const sum = liste.reduce((s, o) => s + vægt(o), 0);
+    const antal = liste.map((o) => Math.max(8, Math.round((iAlt * vægt(o)) / sum)));
+    const n = antal.reduce((s, x) => s + x, 0);
+    const pos = new Float32Array(n * 3), farve = new Float32Array(n * 3), fase = new Float32Array(n);
+    let i = 0;
+    liste.forEach((o, k) => {
+      const kilde = pulje(o.n, o.l, o.mi);
+      const skala = skalRadius(a, o.n) / kvantilRadius(o.n, o.l, 0.85);
+      const f = orbitalFarve(o).multiplyScalar(yderst(o) ? 2.4 : 1.3);
+      for (let j = 0; j < antal[k]; j++, i++) {
+        const q = Math.floor(Math.random() * PULJE) * 3;
+        pos[i * 3] = kilde[q] * skala; pos[i * 3 + 1] = kilde[q + 1] * skala; pos[i * 3 + 2] = kilde[q + 2] * skala;
+        farve[i * 3] = f.r; farve[i * 3 + 1] = f.g; farve[i * 3 + 2] = f.b;
+        fase[i] = Math.random();
+      }
+    });
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('aFarve', new THREE.BufferAttribute(farve, 3));
+    geo.setAttribute('aFase', new THREE.BufferAttribute(fase, 1));
+    const mat = new THREE.ShaderMaterial({
+      uniforms: {
+        uTid: this.tidUniform, uSkala: { value: 400 }, uStr: { value: 0.42 }, uRolig: { value: ROLIG ? 1 : 0 },
+        uStyrke: { value: this.overgang }, uPrik: { value: this.prik },
+      },
+      // Et glimt, der er slukket, flyttes uden for billedet, så det ikke koster noget at tegne
+      vertexShader: `uniform float uTid; uniform float uSkala; uniform float uStr; uniform float uRolig;
+        attribute float aFase; attribute vec3 aFarve; varying vec3 vFarve; varying float vA;
+        void main() {
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          float c = fract(uTid * (0.22 + 0.18 * fract(aFase * 7.31)) + aFase);
+          float a = mix(smoothstep(0.0, 0.06, c) * (1.0 - smoothstep(0.06, 0.3, c)), 0.3, uRolig);
+          vA = a; vFarve = aFarve;
+          gl_PointSize = uStr * (0.4 + 0.6 * a) * uSkala / -mv.z;
+          gl_Position = a < 0.01 ? vec4(2.0, 2.0, 2.0, 1.0) : projectionMatrix * mv;
+        }`,
+      fragmentShader: `uniform sampler2D uPrik; uniform float uStyrke; varying vec3 vFarve; varying float vA;
+        void main() { gl_FragColor = vec4(vFarve * texture2D(uPrik, gl_PointCoord).a * vA * uStyrke, 1.0); }`,
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    });
+    const glimt = new THREE.Points(geo, mat);
+    glimt.frustumCulled = false;
+    // Punkternes størrelse følger lærredets højde i pixel (som PointsMaterial med sizeAttenuation)
+    glimt.onBeforeRender = (renderer) => { mat.uniforms.uSkala.value = renderer.getDrawingBufferSize(hjælpV2).y / 2; };
+    this.skyGruppe.add(glimt);
+    this.skyGlimt = glimt;
+    this.glimtOrbitaler = liste.length;
   }
 
   // Prikker, der viser, hvor elektronen sandsynligvis er
@@ -473,13 +582,33 @@ export class Atom {
     }
     geo.computeVertexNormals();
     const sky = { styrke: (o.l === 0 ? 0.25 : 0.5) * styrke };
+    // G3 (20. november 2026): Formen har dybde (den nærmeste side er lidt lysere end den bageste), og et svagt lys glider
+    // langsomt hen over den (tre sinusser i formens egne retninger, på pc to lag). Kanten er stadig lysest.
+    // Det glidende lys er kun pynt: Formen selv (sandsynligheden) ændrer sig ikke med tiden.
     const materiale = new THREE.ShaderMaterial({
-      uniforms: { uFarve: { value: orbitalFarve(o) }, uStyrke: { value: sky.styrke * this.overgang } },
+      uniforms: { uFarve: { value: orbitalFarve(o) }, uStyrke: { value: sky.styrke * this.overgang }, uTid: this.tidUniform, uFlyd: { value: ROLIG ? 0.15 : 0.35 } },
+      defines: LAV_KVALITET ? {} : { FLYD_TO: '' },
       // Formen toner ud tæt på kernen (vR er afstanden fra midten), ellers bliver midten helt hvid, hvor alle formerne mødes
-      vertexShader: `varying vec3 vNormal; varying vec3 vVis; varying float vR;
-        void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vNormal = normalize(normalMatrix * normal); vVis = normalize(-mv.xyz); vR = length(position); gl_Position = projectionMatrix * mv; }`,
-      fragmentShader: `uniform vec3 uFarve; uniform float uStyrke; varying vec3 vNormal; varying vec3 vVis; varying float vR;
-        void main() { float kant = pow(1.0 - abs(dot(normalize(vNormal), vVis)), 2.0); gl_FragColor = vec4(uFarve * (0.12 + 0.88 * kant) * uStyrke * smoothstep(0.1, 0.45, vR), 1.0); }`,
+      vertexShader: `varying vec3 vNormal; varying vec3 vVis; varying float vR; varying vec3 vPos; varying float vForan;
+        void main() {
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vec4 midt = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+          vNormal = normalize(normalMatrix * normal); vVis = normalize(-mv.xyz); vR = length(position); vPos = position;
+          vForan = clamp((mv.z - midt.z) / length(modelMatrix[0].xyz), -1.0, 1.0);
+          gl_Position = projectionMatrix * mv;
+        }`,
+      fragmentShader: `uniform vec3 uFarve; uniform float uStyrke; uniform float uTid; uniform float uFlyd;
+        varying vec3 vNormal; varying vec3 vVis; varying float vR; varying vec3 vPos; varying float vForan;
+        void main() {
+          float kant = pow(1.0 - abs(dot(normalize(vNormal), vVis)), 2.2);
+          float t = uTid * 0.4;
+          float flyd = sin(vPos.x * 4.0 + t) * sin(vPos.y * 3.3 - t * 0.8) * sin(vPos.z * 3.7 + t * 0.6);
+          #ifdef FLYD_TO
+            flyd = 0.65 * flyd + 0.35 * sin(vPos.x * 9.0 - t * 1.3) * sin(vPos.y * 8.0 + t) * sin(vPos.z * 8.6 - t * 1.1);
+          #endif
+          float lys = (0.1 + 0.9 * kant) * (1.0 + uFlyd * flyd) * (0.85 + 0.25 * vForan);
+          gl_FragColor = vec4(uFarve * lys * uStyrke * smoothstep(0.1, 0.45, vR), 1.0);
+        }`,
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
     });
     sky.punkter = new THREE.Mesh(geo, materiale);
@@ -493,6 +622,18 @@ export class Atom {
     sky.pos[j * 3] = sky.kilde[k] * sky.skala;
     sky.pos[j * 3 + 1] = sky.kilde[k + 1] * sky.skala;
     sky.pos[j * 3 + 2] = sky.kilde[k + 2] * sky.skala;
+  }
+
+  // Kun til tests: det bløde lys i kernen og glimtene i skyen (G3). yderst er det fjerneste glimt delt med atomets størrelse.
+  grafik() {
+    const g = this.skyGlimt;
+    let størst = 0;
+    const p = g?.geometry.attributes.position;
+    for (let i = 0; p && i < p.count; i++) størst = Math.max(størst, Math.hypot(p.getX(i), p.getY(i), p.getZ(i)));
+    return {
+      blød: this.blødStyrke.value, glimt: p?.count ?? 0, maks: LAV_KVALITET ? GLIMT_TABLET : GLIMT_PC, orbitaler: this.glimtOrbitaler ?? 0,
+      yderst: størst / this.størrelse(), rolig: g ? g.material.uniforms.uRolig.value === 1 : null, styrke: g?.material.uniforms.uStyrke.value ?? null,
+    };
   }
 
   // Orbitalerne i atomet lige nu (til tests): navn og antal elektroner
