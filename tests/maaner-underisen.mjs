@@ -15,7 +15,7 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
 // ---------- Uden browser ----------
 {
   const ids = FÆNOMEN_IDER.solsystem;
-  tjek('underisen står lige efter Saturn, og forløbet findes i listen', ids[ids.indexOf('saturn') + 1] === 'underisen' && forløbMed('under-isen') === UNDER_ISEN);
+  tjek('underisen står lige efter Saturn i FÆNOMEN_IDER, og forløbet findes i listen', ids[ids.indexOf('saturn') + 1] === 'underisen' && forløbMed('under-isen') === UNDER_ISEN);
   tjek('lagene: is øverst, så hav, sten og jern i midten', lagVed(EUROPA.r - 10) === 'is' && lagVed(EUROPA.r - 60) === 'hav' && lagVed(1000) === 'sten' && lagVed(100) === 'jern' && lagGrænser().every((g, i, a) => g > 0 && g < 1 && (i === 0 || g < a[i - 1])));
   const B = [0, 0];
   feltVed(0.3, 0.2, 0.4, true, B);

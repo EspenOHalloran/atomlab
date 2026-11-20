@@ -104,7 +104,7 @@ const fm = (f, a) => s.evaluate(f, a);
 const F = (navn, ...a) => fm(([navn, a]) => atomlabTest.solsystem.fænomen()[navn](...a), [navn, a]);
 
 const ids = await fm(() => atomlabTest.solsystem.fænomener);
-tjek('Uranus og Neptun står i listen efter Saturn', ids.indexOf('uranus') === ids.indexOf('saturn') + 1 && ids.indexOf('neptun') === ids.indexOf('uranus') + 1, JSON.stringify(ids));
+tjek('Uranus og Neptun står i listen efter Saturn', ids.indexOf('uranus') === ids.indexOf('saturn') + 1 + (ids.includes('underisen') ? 1 : 0) && ids.indexOf('neptun') === ids.indexOf('uranus') + 1, JSON.stringify(ids));
 
 // ---------- UN2: skyderen "År", kappen og ringene (Uranus) ----------
 const årTilDato = (år) => new Date(Date.UTC(2000, 0, 1, 12) + (år - 2000) * 365.25 * 864e5);

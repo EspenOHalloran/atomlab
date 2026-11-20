@@ -6,7 +6,7 @@ const b = await chromium.launch({ args: ARGS });
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const FLYTTET = ['solstorm', 'solensfremtid', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
-const ALLE = ['overblik', 'solen', 'solstorm', 'solensfremtid', 'merkur', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun', 'pluto'];
+const ALLE = ['overblik', 'solen', 'solstorm', 'solensfremtid', 'merkur', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'underisen', 'uranus', 'neptun', 'pluto']; // (underisen står under Saturn, spor Måner)
 
 async function side(vp, gemt, opt = {}) {
   const s = await (await b.newContext({ viewport: vp, ...opt })).newPage();
@@ -29,11 +29,11 @@ const vis = (s, skærm) => s.evaluate((sk) => { location.hash = `#${sk}`; }, sk�
   await s.click('.menu-fremgang-knap');
   const tal = await s.evaluate(() => ['solsystem', 'kosmos'].map((id) => document.querySelector(`#fremgangListe [data-del="${id}"] .fremgang-tal`)?.textContent));
   // (Kosmos har en forside, oversigt, siden 16. november 2026, og den tælles med som overblikket i Solsystemet)
-  tjek('"Din fremgang": 2 af 15 besøgt i Solsystemet (med overblikket) og 1 af 13 i Kosmos (med forsiden)', tal[0] === '2 af 15 besøgt' && tal[1] === '1 af 13 besøgt', JSON.stringify(tal));
+  tjek('"Din fremgang": 2 af 16 besøgt i Solsystemet (med overblikket) og 1 af 13 i Kosmos (med forsiden)', tal[0] === '2 af 16 besøgt' && tal[1] === '1 af 13 besøgt', JSON.stringify(tal));
   await s.keyboard.press('Escape');
   await vis(s, 'solsystem');
   const sol = await s.evaluate(() => ({ valgt: atomlabTest.solsystem.valgt(), set: document.getElementById('solsystemSet').textContent, ider: atomlabTest.solsystem.fænomener }));
-  tjek('Solsystemet åbner på forsiden (overblikket) og tæller den som set: 3 af 15 set', sol.valgt === 'overblik' && sol.set === '3 af 15 set', JSON.stringify(sol));
+  tjek('Solsystemet åbner på forsiden (overblikket) og tæller den som set: 3 af 16 set', sol.valgt === 'overblik' && sol.set === '3 af 16 set', JSON.stringify(sol));
   tjek('Solsystemet har Solen, Jorden, Jupiter, Uranus, Neptun og de seks flyttede fænomener i rækkefølge', sol.ider.join() === ALLE.join(), JSON.stringify(sol.ider));
   const prikker = await s.evaluate(() => [...document.querySelectorAll('#solsystem .kosmos-valg.ny')].map((k) => k.dataset.id));
   tjek('de sete kloder (Mars og Saturn) har ingen prik, de andre har', prikker.join() === 'solen,merkur,venus,jorden,jupiter,uranus,neptun,pluto', JSON.stringify(prikker));
