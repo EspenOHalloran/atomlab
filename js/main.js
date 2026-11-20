@@ -228,6 +228,8 @@ function fremgangPrDel() {
   ud.system = { løst: fremgang.antalOpdaget(), ialt: 118, slags: 'opdaget' };
   // Begyndelsen har ingen opgaver endnu, kun turen (L5)
   ud.begyndelsen = { løst: fremgang.forløbTaget('begyndelsen') ? 1 : 0, ialt: 1, slags: 'ture' };
+  // Kvantefysik har ingen opgaver endnu, kun turen "Prikker bliver til striber"
+  ud.kvante = { løst: fremgang.forløbTaget('striber') ? 1 : 0, ialt: 1, slags: 'ture' };
   for (const id of ['solsystem', 'kosmos']) {
     const set = setFænomener(id);
     const liste = FÆNOMEN_IDER[id];
