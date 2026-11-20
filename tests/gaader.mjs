@@ -249,12 +249,14 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   tjek('G4b: piletasten og "større ›" flytter til den næste større gåde, og linjen "Der er flere." går væk', flyttet.fokus === 'liv' && flyttet.spm === 'Er der liv andre steder?' && flyttet.linje === '', JSON.stringify(flyttet));
   // Et tryk på lyset ved siden af glider derhen, og et træk mod venstre går mod de større
   await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 3) < 0.02);
-  // Navnene er HTML-tekst (skarp), naboernes navne kan ses, og navnet på gåden i fokus er tonet ud (det står på knappen)
+  // Navnene er HTML-tekst (skarp), naboernes navne kan ses, og navnet på gåden i fokus bliver stående (20. november 2026),
+  // og kun det er markeret som fokus. Fjerne navne (mere end ca. 2 pladser væk) er tonet ud.
   const nv = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
   const navn = (t) => nv.find((n) => n.tekst.startsWith(t));
-  tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har intet navn i 3D',
+  tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har sit navn stående',
     nv.length === 9 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Planet 9')?.synlig
-    && !navn('Liv andre steder')?.synlig, JSON.stringify(nv));
+    && navn('Liv andre steder')?.synlig && navn('Liv andre steder')?.fokus && nv.filter((n) => n.fokus).length === 1, JSON.stringify(nv));
+  tjek('navnene: kun navne tæt på fokus ses (ingen fjerne navne oven i naboernes lys)', nv.filter((n) => n.synlig).length <= 5, JSON.stringify(nv.filter((n) => n.synlig).map((n) => n.tekst)));
   // Et tryk på naboen (Planet 9) glider derhen. Så står Sort hul ved siden af, og dens lampe tegnes af linsen fra Kosmos
   // (lysbøjningen), i et lille lag efter lampens størrelse
   const nabo = await T(() => atomlabTest.gaader.skinne().skærm('planet9'));
