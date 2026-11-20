@@ -197,7 +197,7 @@ export function lavSnitMåne(radius, { grænser, lys = 1, farve = [1, 0.98, 0.94
 
 // ---------- Lupen ----------
 const LUPE_PX = 150; // lupens bredde i CSS-pixel (på pc og tablet)
-const VINDUE_KM = 230; // så mange km er der fra top til bund i lupen
+const VINDUE_KM = 200; // så mange km er der fra top til bund i lupen
 
 // vindue: elementet over 3D-billedet, lupen ligger i (position: relative). måne: lavSnitMåne. data: { r, is, hav,
 // havSpænd, kerne, dybeste } i km.
@@ -304,8 +304,8 @@ export function lavLupe(vindue, måne, data) {
       ring(W);
       return;
     }
-    // Lodret: dybden i km. Toppen af lupen er dybde − VINDUE_KM/2, men aldrig mere end 25 km over overfladen.
-    const top = Math.max(-25, dybde - VINDUE_KM / 2);
+    // Lodret: dybden i km. Toppen af lupen er dybde − VINDUE_KM/2, men aldrig mere end 15 km over overfladen.
+    const top = Math.max(-15, dybde - VINDUE_KM / 2);
     const y = (km) => ((km - top) / VINDUE_KM) * W;
     const isBund = data.is, havBund = data.is + data.hav;
     const [lav, høj] = data.havSpænd;
@@ -321,36 +321,32 @@ export function lavLupe(vindue, måne, data) {
     bånd(y(isBund + høj), y(data.r - data.kerne), '#8a6a4c');
     bånd(y(data.r - data.kerne), y(data.r), '#9aa0a8');
     // Jordens dybeste sted (ca. 11 km) som en søjle fra havets top, til højre
-    const sx = W * 0.66, sb = 14;
+    const sx = W * 0.2, sb = 12;
     g.fillStyle = '#0b2f66';
     g.fillRect(sx, y(isBund), sb, y(isBund + data.dybeste) - y(isBund));
     g.strokeStyle = '#ffd36b';
     g.lineWidth = 1.5;
     g.strokeRect(sx, y(isBund), sb, y(isBund + data.dybeste) - y(isBund));
-    // Mærkerne
+    // Mærkerne: isen (mørk tekst på det hvide), havet til venstre og Jordens dybeste sted til højre for søjlen
     g.font = '600 12px system-ui, sans-serif';
     g.textAlign = 'left';
-    const mærke = (tekst, km, farve = '#ffffff') => {
+    const mærke = (tekst, km, x, farve = '#ffffff', boks = true) => {
       const yy = y(km);
       if (yy < 12 || yy > W - 6) return;
-      if (farve === '#ffffff') {
+      if (boks) {
         g.fillStyle = 'rgba(0, 0, 0, 0.55)';
-        g.fillRect(14, yy - 11, g.measureText(tekst).width + 8, 15);
+        g.fillRect(x - 4, yy - 11, g.measureText(tekst).width + 8, 15);
       }
       g.fillStyle = farve;
-      g.fillText(tekst, 18, yy);
+      g.fillText(tekst, x, yy);
     };
-    mærke('Is', isBund / 2 + 4, '#1b2440');
-    mærke(`Hav ${lav}-${høj} km`, isBund + lav / 2 + 4);
-    mærke('Sten', isBund + høj + 22);
-    g.fillStyle = '#ffd36b';
+    mærke('Is', isBund / 2 + 5, W * 0.45, '#1b2440', false);
+    mærke(`Hav ${lav}-${høj} km`, isBund + lav * 0.9, W * 0.2);
+    mærke('Sten', isBund + høj + 24, W * 0.35);
     g.font = '600 11px system-ui, sans-serif';
-    g.textAlign = 'right';
-    const jy = y(isBund + data.dybeste) + 13;
-    if (jy > 12 && jy < W - 4) {
-      g.fillText('Jordens', W - 8, jy);
-      g.fillText('dybeste: 11 km', W - 8, jy + 12);
-    }
+    const jx = sx + sb + 5;
+    mærke('Jordens dybeste', isBund + data.dybeste - 1, jx, '#ffd36b', false);
+    mærke(`sted: ${data.dybeste} km`, isBund + data.dybeste - 1 + (12 * VINDUE_KM) / W, jx, '#ffd36b', false);
     g.restore();
     ring(W);
   }
@@ -384,6 +380,12 @@ export function lavLupe(vindue, måne, data) {
       if (boks.hidden) return;
       find();
       tegn();
+    },
+    // Kameraet har flyttet sig: Har brugeren ikke selv flyttet lupen, sættes den ved snittets kant igen næste gang
+    genplacer() {
+      if (trukket) return;
+      sat = false;
+      if (!boks.hidden) { boks.hidden = true; this.vis(true); }
     },
     flytTil: (x, y) => { flyt(x, y); trukket = true; }, // til tests
     plads: () => ({ ...plads }),

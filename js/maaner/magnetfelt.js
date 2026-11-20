@@ -29,7 +29,7 @@ export function lavMagnetfelt(radius, overlag) {
   const pos = new Float32Array(LINJER * MAKS * 6);
   const geo = new LineSegmentsGeometry();
   geo.setPositions(pos);
-  const mat = new LineMaterial({ color: 0x7cc4ff, linewidth: 2.2, transparent: true, opacity: 0.8, depthTest: false, depthWrite: false });
+  const mat = new LineMaterial({ color: 0x7cc4ff, linewidth: 1.8, transparent: true, opacity: 0.6, depthTest: false, depthWrite: false });
   const linjer = new LineSegments2(geo, mat);
   linjer.frustumCulled = false;
   linjer.renderOrder = 5;

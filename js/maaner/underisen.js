@@ -67,8 +67,8 @@ export default {
     gruppe.add(enceladus.gruppe);
 
     const navne = [
-      { s: skilt('Europa', '#cfe0ff', 0.9), y: -RE - 0.9, x: EUROPA_X },
-      { s: skilt('Enceladus', '#cfe0ff', 0.9), y: -RN - 0.9, x: ENCELADUS_X },
+      { s: skilt('Europa', '#cfe0ff', 0.9), y: RE + 0.8, x: EUROPA_X }, // (over månerne: forklaringen af lagene står nederst)
+      { s: skilt('Enceladus', '#cfe0ff', 0.9), y: RN + 0.8, x: ENCELADUS_X },
     ];
     for (const n of navne) { n.s.position.set(n.x, n.y, 0); gruppe.add(n.s); }
 
@@ -140,6 +140,7 @@ export default {
         s.target.set(b.x, 0, 0);
         k.position.copy(s.target).addScaledVector(RETNING, d);
         verden.målAfstand = null;
+        lupe.genplacer();
         return;
       }
       flyvning = {
@@ -285,7 +286,7 @@ export default {
       s.target.copy(mål);
       retning.copy(f.fraRetning).lerp(RETNING, e).normalize();
       verden.kamera.position.copy(mål).addScaledVector(retning, f.fraAfstand + (f.tilAfstand - f.fraAfstand) * e);
-      if (f.t >= 1) flyvning = null;
+      if (f.t >= 1) { flyvning = null; lupe.genplacer(); }
     }
 
     let sidsteForklaring = '';
