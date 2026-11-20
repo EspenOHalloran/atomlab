@@ -138,14 +138,14 @@ const skala = (x, [lav, høj]) => lav + ((høj - lav) * Number(x)) / 100;
 const tilSkyder = (x, [lav, høj]) => Math.round(((x - lav) / (høj - lav)) * 100);
 const bredde = () => Math.min(v.a, 0.6 * v.d);
 const λ = () => bølgelængde(v.slags, v);
-const skyderSlags = () => kvanteSlags(v.slags); // måler og bølgens skær (striber)
+const kvanteNu = () => kvanteSlags(v.slags); // striber, måler og bølgens skær
 
 // ---------- Valgene ----------
 function vælgSlags(slags) {
   if (!SLAGS.includes(slags) || slags === v.slags) return;
   v.slags = slags;
   if (STØRRE.includes(slags)) størst = slags;
-  if (!skyderSlags()) { v.måler = false; v.bølgen = false; }
+  if (!kvanteNu()) { v.måler = false; v.bølgen = false; }
   forfra();
   kamera();
 }
@@ -157,7 +157,7 @@ function sætSprækker(s) {
 }
 
 function sætMåler(til) {
-  if (!skyderSlags()) return;
+  if (!kvanteNu()) return;
   v.måler = Boolean(til);
   if (v.måler) v.bølgen = false;
   ændret();
@@ -184,7 +184,7 @@ function ændret({ straks = false } = {}) {
   const kører = bænk.vandTændt();
   bænk.vand(false);
   if (v.slags === 'boelger' && kører) startBølger();
-  else if (v.bølgen && skyderSlags()) bænk.vand(true, 0.38, BØLGE_SKÆR);
+  else if (v.bølgen && kvanteNu()) bænk.vand(true, 0.38, BØLGE_SKÆR);
   visStyring();
   panel(true);
 }
@@ -433,9 +433,9 @@ function visStyring() {
     $('kvFart').value = String(Math.round((v.slags === 'lys' ? v.farve : v.fart) * 100));
   }
   målerKontakt.sæt(v.måler);
-  målerKontakt.knap.disabled = !skyderSlags();
+  målerKontakt.knap.disabled = !kvanteNu();
   bølgeKontakt.sæt(v.bølgen);
-  bølgeKontakt.knap.disabled = !skyderSlags() || v.måler;
+  bølgeKontakt.knap.disabled = !kvanteNu() || v.måler;
   $('kvSkyd').textContent = v.slags === 'boelger' ? 'Start bølgerne' : 'Skyd';
   $('kvSkyd').title = v.slags === 'boelger' ? '' : 'Hold knappen nede';
 }

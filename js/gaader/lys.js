@@ -173,7 +173,7 @@ const LYS = {
     }
     const kant = new THREE.Color(0.25, 0.35, 0.6);
     g.add(p, fuld([[-2.7, -1.75, 0], [2.7, -1.75, 0], [2.7, 1.75, 0], [-2.7, 1.75, 0], [-2.7, -1.75, 0]], kant, { bredde: 2 }));
-    g.add(glød(new THREE.Color(0.4, 0.8, 1.2), 1.6, 0.25));
+    g.add(glød(new THREE.Color(0.4, 0.8, 1.2), 1.6, 0.12));
     let vist = N;
     return {
       gruppe: g,
