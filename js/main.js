@@ -1,7 +1,7 @@
 // Start: laver 3D-verdenen og skifter mellem menuen og de forskellige dele.
 // Hvilken del der vises, står efter # i adressen (fx index.html#vaerksted).
 
-import { lavVerden, verden, sætVindue, flyInd, stopKamera, centrerVindue, nulstilStyring } from './scene3d.js';
+import { lavVerden, verden, sætVindue, flyInd, stopKamera, centrerVindue, nulstilStyring, vælgKvalitet } from './scene3d.js';
 import { Atom } from './atom.js';
 import { lyd, lydErTændt, skiftLyd } from './lyd.js';
 import * as fremgang from './fremgang.js';
@@ -175,6 +175,7 @@ async function visSkærm() {
   nulstilStyring();
   opdaterLydknapper();
   startPaneler(ny);
+  vælgKvalitet(ny === 'menu' || !!skærmMed(ny)?.høj); // kvalitetstrinnet Høj på touch (js/scene3d.js)
   modul.start();
 }
 
