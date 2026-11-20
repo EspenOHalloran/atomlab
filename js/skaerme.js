@@ -9,6 +9,7 @@ export const SKÆRME = [
   { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig' },
   { id: 'molekyler', verden: 'kemi', titel: 'Molekyler', modul: './molekyler-skaerm.js', status: 'færdig' },
   { id: 'system', verden: 'atomer', titel: 'Det periodiske system', modul: './system.js', status: 'færdig' },
+  { id: 'kvante', verden: 'atomer', titel: 'Kvantefysik', modul: './kvante.js', status: 'prøve' },
   { id: 'ild', verden: 'kemi', titel: 'Ild', modul: './ild.js', status: 'prøve' },
   { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig' },
   { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig' },

@@ -357,4 +357,23 @@ export const HVORFOR = {
     svar: 'Målinger svinger altid lidt tilfældigt, og et tilfældigt udsving kan ligne et fund. Derfor regner forskerne ud, hvor tit tilfældet alene ville give et signal, der er så stort. Det måles i sigma. Ved 3 sigma siger fysikerne kun »tegn på«, og først ved 5 sigma siger de »opdaget«. 5 sigma er lige så sjældent som at slå plat ca. 22 gange i træk med en ærlig mønt.\n\nLige nu er der flere spændende signaler under grænsen, fx den ene hændelse i LZ (2,6 sigma). De fleste små signaler forsvinder igen, når der bliver målt mere.',
     nørd: '5 sigma betyder, at tilfældet alene kun giver et så stort signal ca. 1 gang ud af 3,5 millioner. Det betyder ikke, at fundet er helt sikkert: En fejl i udstyret tæller ikke med. I 2011 målte forsøget OPERA neutrinoer, der så ud til at være hurtigere end lyset, med 6 sigma, men en forbindelse til forsøgets ur sad løst. Andre signaler under grænsen lige nu: gassen DMS på planeten K2-18b (3 sigma, ikke bekræftet) og mørk energi, der måske ændrer sig (2,8-4,2 sigma). Tyngdebølgerne i 2015 var over 5,1 sigma.',
   },
+  // Kvantefysik, bænken med dobbeltspalten (20. november 2026). Kilder: docs/fakta-kvantefysik.md, afsnit 1 (Young,
+  // de Broglie, Davisson-Germer og Thomson 1927, Jönsson 1961, Merli, Missiroli og Pozzi 1974, Tonomura m.fl. 1989, Bach
+  // m.fl. 2013, Hackermüller m.fl. 2004 med C₇₀), afsnit 6 (dekohærens, SEP) og afsnit 7 (fælderne om bevidstheden og
+  // usikkerhedsrelationen). C₇₀ er aflangt som en rugbybold (C₆₀ er fodbolden).
+  kvanteKigger: {
+    spørgsmål: 'Ved elektronen, at vi kigger?',
+    svar: 'Nej. At måle betyder, at noget (lys, luft eller en måler) mærker, hvilken vej elektronen tog, også selvom intet menneske ser efter. Så er de mørke striber væk.\n\nI 2004 sendte forskere i Wien varme molekyler af 70 kulstofatomer gennem gitre med mange sprækker. Jo varmere molekylerne var, jo mere varmestråling sendte de ud, som røbede vejen, og jo svagere blev striberne.',
+    nørd: 'Fysikerne kalder det dekohærens: Omgivelserne får hele tiden "besked" om, hvor store ting er, fra luften og lyset, der rammer dem. Derfor ser vi aldrig striber med en bold. Det forklarer, hvorfor hverdagen ser almindelig ud, men ikke helt, hvad der sker ved en måling. Det er der stadig flere bud på.',
+  },
+  kvanteHvordan: {
+    spørgsmål: 'Hvordan ved vi det?',
+    svar: 'I begyndelsen af 1800-tallet sendte Thomas Young lys gennem to sprækker og så striber. I 1924 foreslog Louis de Broglie, at også elektroner har en bølgelængde, og i 1927 blev det vist i forsøg.\n\nI 1974 sendte tre forskere i Bologna elektroner gennem en slags dobbeltspalte én ad gangen. I 1989 filmede Akira Tonomura og hans kolleger hos firmaet Hitachi, hvordan prikkerne blev til striber på ca. 20 minutter. Og i 2013 lukkede forskere i USA sprækkerne én ad gangen, ligesom du kan her.',
+    nørd: 'Claus Jönsson i Tübingen sendte i 1961 elektroner gennem rigtige sprækker, mange ad gangen. I 1989 var "de to sprækker" en tråd, der var tyndere end en tusindedel af en millimeter: Elektronerne kunne gå på hver sin side af den. I 2013 var sprækkerne ca. 60 nanometer brede, ca. 1.000 gange smallere end et hår.',
+  },
+  kvanteUsikker: {
+    spørgsmål: 'Hvorfor bliver bunken bredere, når sprækkerne er smallere?',
+    svar: 'En bølge, der skal gennem en smal sprække, bliver klemt sammen på tværs. Så breder den sig mere bagefter. Jo mere præcist man ved, hvor elektronen gik igennem, jo mindre ved man om, hvilken retning den flyver. Det hedder usikkerhedsrelationen, og det skyldes ikke, at vi måler for groft: Ingen bølge kan både være samlet på ét sted og have én skarp retning.\n\nPrøv det: Gør sprækkerne smallere under "Flere indstillinger".',
+    nørd: 'Werner Heisenberg skrev det i 1927: Usikkerheden på stedet gange usikkerheden på bevægelsesmængden er mindst ħ/2 (Δx · Δp ≥ ħ/2). Hans første forklaring var, at målingen skubber til partiklen. I dag ses det som en egenskab ved selve bølgen.',
+  },
 };

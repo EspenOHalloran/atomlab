@@ -12,6 +12,7 @@
 | [kode/forloeb.md](kode/forloeb.md) | Forløb-klodsen (`js/forloeb.js`): linjen under scenen, faserne, hvad delen leverer, og hvornår et forløb starter af sig selv. |
 | [kode/menu.md](kode/menu.md) | Menuen som en ring af verdenerne (`karrusel.js`, "Din fremgang" med forløbenes ✓) og baggrunden bag den (`menubaggrund.js`). |
 | [kode/ild.md](kode/ild.md) | Ild og verdenen Kemi (`ild.js`, den fælles flamme `flamme.js`, bordet `js/ild/bord.js`, luppens atomer `js/ild/atomer.js` og teksterne `js/data/ild.js`). |
+| [kode/kvante.md](kode/kvante.md) | Kvantefysik i verdenen Atomer (`kvante.js`, bænken `js/kvante/baenk.js` og modellen og teksterne `js/data/kvante.js`). |
 | [kode/molekyler.md](kode/molekyler.md) | Molekyler ("Byg et molekyle": "Giv elektroner" i `molekyler.js`, "Del elektroner" i `molekyler-byg.js`, knaldgassen i `knaldgas.js`, tegningen i `molekyle3d.js`). |
 | [kode/liv.md](kode/liv.md) | Liv i verdenen "Liv" (`liv.js`, `liv-protein.js`, `js/liv/stige.js`, `js/liv/celle.js`, `js/liv/protein.js` og `js/liv/kodehjul.js`, data i `js/data/liv/` med atompladserne fra 1BNA, værktøjet `lav-dna-atomer.mjs`, koden, genet HBB og teksterne til L2). |
 | [kode/begyndelsen.md](kode/begyndelsen.md) | Begyndelsen, del nr. 2 i verdenen Liv (L5: `begyndelsen.js`, tegningerne i `js/liv/begyndelsen.js`, data i `js/data/liv/begyndelsen.js` og turen i `js/data/forloeb/begyndelsen.js`). |

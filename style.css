@@ -1126,6 +1126,47 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 @media (max-height: 500px) and (orientation: landscape) {
   #begyndelsen { grid-template-columns: minmax(180px, 28%) minmax(0, 1fr) minmax(200px, 31%); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
 }
+/* ---------- Kvantefysik (del nr. 3 i Atomer, js/kvante.js): bænken med dobbeltspalten, samme opbygning som Ild ---------- */
+#kvante { grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
+#kvante .vindue { grid-area: vindue; }
+#kvante [hidden] { display: none; }
+.kv-styr { display: flex; flex-direction: column; gap: 10px; }
+.kv-gruppe { display: flex; flex-direction: column; gap: 6px; }
+.kv-gruppe .panel-overskrift { margin: 0; }
+.kv-valg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.kv-valg.tre { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.kv-valg .knap { min-height: 44px; padding: 6px 6px; }
+.kv-valg .knap.valgt { background: rgba(95, 227, 255, 0.18); border-color: var(--accent); color: var(--tekst); }
+.kv-skyder { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.kv-skyder input { width: 100%; min-height: 44px; accent-color: var(--accent); }
+.kv-skyder-ender { display: flex; justify-content: space-between; font-size: 13px; color: var(--svag); margin-top: -8px; }
+.kv-knapper { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 6px; }
+#kvante .knap.primær { min-height: 44px; background: var(--accent); border-color: var(--accent); color: #031018; font-weight: 700; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+#kvante .kv-knapper .knap { min-height: 44px; }
+.kv-mere { display: flex; flex-direction: column; gap: 8px; }
+.kv-mere > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: 14px; color: var(--svag); }
+.kv-mere[open] > summary { margin-bottom: 4px; }
+.kv-mere > :not(summary) + :not(summary) { margin-top: 8px; }
+#kvante .liv-tal[hidden] { display: none; }
+/* Tælleren øverst i billedet: hvor mange der er landet */
+.kv-tæller { position: absolute; left: 10px; top: 10px; z-index: 1; margin: 0; padding: 6px 10px; border-radius: 10px; background: rgba(8, 12, 28, 0.66); font-size: 14px; font-variant-numeric: tabular-nums; pointer-events: none; }
+/* Ikonet i menuen: prikker, der ligger i lodrette striber */
+.ikon-kvante { background:
+  radial-gradient(circle, #9fe8ff 0 1.6px, transparent 2.2px) 0 0 / 7px 7px,
+  #0b1630; border: 1.5px solid #4f6aa8;
+  -webkit-mask: linear-gradient(90deg, transparent 4px, #000 7px 13px, transparent 16px 19px, #000 22px 30px, transparent 33px 36px, #000 39px 45px, transparent 48px);
+  mask: linear-gradient(90deg, transparent 4px, #000 7px 13px, transparent 16px 19px, #000 22px 30px, transparent 33px 36px, #000 39px 45px, transparent 48px); }
+@media (max-width: 1150px) { #kvante { grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(240px, 290px); } }
+@media (max-width: 820px) and (orientation: portrait), (max-width: 820px) and (min-height: 501px) {
+  #kvante { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto minmax(46vh, 1fr) auto; grid-template-areas: "top top" "vindue vindue" "venstre højre"; overflow-y: auto; }
+}
+@media (max-width: 560px) and (orientation: portrait) {
+  #kvante { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(44vh, 1fr) auto auto; grid-template-areas: "top" "vindue" "venstre" "højre"; }
+  #kvante .side-panel { overflow: visible; min-height: auto; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #kvante { grid-template-columns: minmax(180px, 28%) minmax(0, 1fr) minmax(200px, 31%); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
+}
 .batteri-tal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .batteri-tal div { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); }
 .batteri-tal span { font-size: 12.5px; color: var(--svag); }
@@ -1979,9 +2020,9 @@ button.sol-gruppe-navn::after { content: " ›"; }
 .skærm.skjul-højre > .højre-panel, #vaerksted.skjul-højre > #infopanel,
 .skærm.kun-grafik > .side-panel, #vaerksted.kun-grafik > .panel { display: none; }
 /* :is() med id'erne, så reglerne vinder over fx "#fusion .vindue { grid-area: vindue }" */
-:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).skjul-venstre > .vindue { grid-column-start: 1; }
-:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).skjul-højre > .vindue { grid-column-end: -1; }
-:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kvante, #kosmos, #solsystem).skjul-venstre > .vindue { grid-column-start: 1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kvante, #kosmos, #solsystem).skjul-højre > .vindue { grid-column-end: -1; }
+:is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kvante, #kosmos, #solsystem).kun-grafik > .vindue { grid-column: 1 / -1; grid-row: 2 / -1; }
 .panel-fane {
   position: absolute; top: 50%; z-index: 3; width: 22px; height: 60px; margin-top: -30px; padding: 0;
   border: 1px solid var(--panel-kant); background: var(--panel); color: var(--svag);
@@ -1998,7 +2039,7 @@ button.sol-gruppe-navn::after { content: " ›"; }
    nederst på skærmen, når panelerne er swipet ned ("Kun grafik"). Den skal kunne ses, så man ved, at panelet kan trækkes. */
 .panel-greb { display: none; }
 @media (max-width: 560px) and (orientation: portrait) and (pointer: coarse) {
-  :is(#fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem) { grid-template-rows: auto minmax(44vh, 1fr) auto auto auto; grid-template-areas: "top" "vindue" "greb" "venstre" "højre"; }
+  :is(#fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kvante, #kosmos, #solsystem) { grid-template-rows: auto minmax(44vh, 1fr) auto auto auto; grid-template-areas: "top" "vindue" "greb" "venstre" "højre"; }
   #vaerksted { grid-template-rows: auto auto minmax(140px, 1fr) auto auto auto; grid-template-areas: "top" "info" "vindue" "greb" "byg" "tabel"; }
   .skærm > .panel-greb {
     display: flex; grid-area: greb; align-items: center; justify-content: center; height: 44px; margin: -8px 0; padding: 0;
@@ -2006,8 +2047,8 @@ button.sol-gruppe-navn::after { content: " ›"; }
   }
   .panel-greb span { width: 44px; height: 5px; border-radius: 3px; background: var(--svag); opacity: 0.75; }
   /* Panelerne er væk: 3D-billedet fylder skærmen, og stregen står på en lille kant forneden */
-  :is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).kun-grafik { grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "vindue" "greb"; overflow: hidden; }
-  :is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kosmos, #solsystem).kun-grafik > .vindue { grid-area: vindue; }
+  :is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kvante, #kosmos, #solsystem).kun-grafik { grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "vindue" "greb"; overflow: hidden; }
+  :is(#vaerksted, #fusion, #reaktor, #batteri, #ild, #liv, #begyndelsen, #kvante, #kosmos, #solsystem).kun-grafik > .vindue { grid-area: vindue; }
   .skærm.kun-grafik > .panel-greb { height: 36px; margin: 0 0 -8px; padding-bottom: env(safe-area-inset-bottom); background: var(--panel); border: 1px solid var(--panel-kant); border-bottom: 0; border-radius: 14px 14px 0 0; }
   /* Panelerne glider ned (0,25 s) og op igen (0,3 s) */
   #vaerksted.paneler-ud > #infopanel { opacity: 0; transition: opacity 0.25s ease-in; }
