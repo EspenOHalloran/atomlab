@@ -261,6 +261,29 @@ export function lavBænk() {
   // Kuglerne i luften
   const kugleMat = new THREE.MeshStandardMaterial({ color: 0xd8dde8, roughness: 0.35, metalness: 0.7 });
   const kugleMesh = new THREE.InstancedMesh(new THREE.SphereGeometry(0.07, 14, 10), kugleMat, KUGLER_HØJST);
+  // Fodbolden ("Større …"): hvid med 12 sorte femkanter, tegnet som pletter i hjørnerne af et ikosaeder
+  let boldMat = null;
+  function lavBoldMat() {
+    const c = document.createElement('canvas');
+    c.width = 128;
+    c.height = 64;
+    const g = c.getContext('2d');
+    g.fillStyle = '#f4f4f0';
+    g.fillRect(0, 0, 128, 64);
+    g.fillStyle = '#16181d';
+    const pletter = [[0, 90], [0, -90]];
+    for (let i = 0; i < 5; i++) pletter.push([i * 72, 26.57], [i * 72 + 36, -26.57]);
+    for (const [lon, lat] of pletter) {
+      for (const dx of [-128, 0, 128]) {
+        g.beginPath();
+        g.ellipse(((lon + 180) / 360) * 128 + dx, ((90 - lat) / 180) * 64, 9 / Math.max(0.35, Math.cos((lat * Math.PI) / 180)), 7, 0, 0, Math.PI * 2);
+        g.fill();
+      }
+    }
+    const tekstur = new THREE.CanvasTexture(c);
+    tekstur.colorSpace = THREE.SRGBColorSpace;
+    return new THREE.MeshStandardMaterial({ map: tekstur, roughness: 0.75, metalness: 0 });
+  }
   kugleMesh.count = 0;
   kugleMesh.frustumCulled = false;
   gruppe.add(kugleMesh);
@@ -407,6 +430,12 @@ export function lavBænk() {
     ryd,
     kast,
     iLuften,
+    // Kuglerne i luften ligner fodbolde (true) eller metalkugler (false)
+    bold(ja) {
+      if (ja) boldMat ??= lavBoldMat();
+      kugleMesh.material = ja ? boldMat : kugleMat;
+    },
+    boldVist: () => kugleMesh.material === boldMat && boldMat != null,
     antal: () => antal,
     // Prikkernes størrelse (kuglernes mærker er større end elektronernes prikker)
     prikStørrelse: (x) => { prikMat.size = x; },

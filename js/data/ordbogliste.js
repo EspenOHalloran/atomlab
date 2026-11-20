@@ -10,6 +10,7 @@ export const LINKS = {
   tunneleffekt: { hvorfor: 'tunnel' },
   interferens: { skærm: ['kvante', 'Kvantefysik'] },
   kvantefysik: { skærm: ['kvante', 'Kvantefysik'] },
+  foton: { gaa: ['kvante:lys', 'Kvantefysik: Skyd med lys'] },
   kernekraft: { hvorfor: 'kernen' },
   bindingsenergi: { hvorfor: 'binding' },
   'kovalent-binding': { hvorfor: 'bygBinder' },

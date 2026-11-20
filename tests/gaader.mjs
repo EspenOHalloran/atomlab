@@ -21,8 +21,8 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
 
 // ---------- Uden browser: teksterne ----------
 const kort = GÅDER.filter(bygget);
-tjek(`seks gåder i oversigten, de to om liv skilt ad, og alle seks er bygget (${kort.map((g) => g.id).join()})`,
-  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof,planet9' && kort.length === 6);
+tjek(`syv gåder i oversigten, de to om liv skilt ad, og alle syv er bygget (${kort.map((g) => g.id).join()})`,
+  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof,planet9,kvante' && kort.length === 7);
 const ord = (t) => t.split(/\s+/).filter(Boolean).length;
 // "ca." og datoer som "12. november" slutter ikke en sætning
 const sætninger = (t) => t.replace(/\bca\./g, 'ca').replace(/\b\d+\. (?=[a-zæøå])/g, '1 ').split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
@@ -40,7 +40,7 @@ for (const g of kort) {
   const [skærm, id] = g.seDet[0].split(':');
   const [, , sted] = g.seDet[0].split(':');
   if (sted && !(skærm === 'solsystem' && id === 'mars' && MARS[sted])) fejlTekst.push(`${g.id}: stedet ${sted} findes ikke`);
-  if (!(FÆNOMEN_IDER[skærm]?.includes(id) || g.seDet[0] === 'liv:protein' || (!id && SKÆRME.some((s) => s.id === skærm)))) fejlTekst.push(`${g.id}: "Se det selv" peger på ${g.seDet[0]}`);
+  if (!(FÆNOMEN_IDER[skærm]?.includes(id) || g.seDet[0] === 'liv:protein' || g.seDet[0] === 'kvante:stor' || (!id && SKÆRME.some((s) => s.id === skærm)))) fejlTekst.push(`${g.id}: "Se det selv" peger på ${g.seDet[0]}`);
   if (g.ord.length > 2 || !g.ord.every((o) => ORDBOG.some((x) => x.id === o))) fejlTekst.push(`${g.id}: fagordene ${g.ord.join()}`);
   for (const t of g.trin) if (t.hvorfor && !HVORFOR[t.hvorfor]) fejlTekst.push(`${g.id}: "Hvorfor?" ${t.hvorfor} findes ikke`);
 }
@@ -130,6 +130,19 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     && g.seDet[0] === 'begyndelsen' && SKÆRME.some((d) => d.id === 'begyndelsen'), JSON.stringify(prøv));
 }
 
+// Kvantefysik PR 3: "Hvor stopper kvanteverdenen?" har ingen egen scene, men en linje pr. trin med knappen til bænken
+// ("Større …"). Fortolkningerne står kun under "For nørder" (drejebog-kvantefysik.md, jeres svar 4), og rekorden er januar 2026.
+{
+  const g = GÅDER.find((x) => x.id === 'kvante');
+  const prøv = g?.scene?.prøv ?? [];
+  const lag1 = g ? [g.linje, g.slut, g.ven, ...g.trin.flatMap((t) => [t.spørg, t.så, ...t.gæt.valg.flatMap((v) => [v.tekst, v.efter])])].join(' ') : '';
+  tjek('Kvantefysik: kortet "Hvor stopper kvanteverdenen?" går til "Større …" på bænken, har én linje pr. trin, fortolkningerne kun i "For nørder" og rekorden fra januar 2026',
+    g?.spørgsmål === 'Hvor stopper kvanteverdenen?' && g.seDet[0] === 'kvante:stor' && SKÆRME.some((d) => d.id === 'kvante')
+    && prøv.length === g.trin.length && prøv.every((x) => ord(x) <= 28 && sætninger(x) === 1)
+    && ['København', 'Mange verdener', 'Pilotbølgen'].every((f) => g.nørd.includes(f) && !lag1.includes(f))
+    && /januar 2026/.test(g.trin[0].så) && /7\.000 atomer/.test(g.trin[0].så) && !/to steder på én gang|ved, at vi kigger/.test(lag1 + g.nørd), JSON.stringify(prøv));
+}
+
 // G4b: skinnen
 {
   const bang = GÅDER.find((g) => g.id === 'antistof').scene.bang;
@@ -165,15 +178,15 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     /Er der en planet mere derude\?/.test(tomt) && tomt.includes('gaader:planet9') && g.seDet[0] === 'solsystem:overblik');
 }
 tjek('G4b: skinnen har de byggede gåder fra det mindste til det største, hver med et kort navn',
-  påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,planet9,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
+  påSkinnen().map((g) => g.id).join() === 'antistof,kvante,begyndelsen,liv,planet9,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
 
 // E20: ord for skalaen, linjen første gang og den første gåde
 {
   const ordene = påSkinnen().map((g) => skalaOrd(g.størrelse));
   tjek('E20: hver gåde på skinnen har et ord for skalaen (Antistof "mindre end et atom", Mørkt stof "galakser")',
     ordene.every(Boolean) && ordene[0] === 'mindre end et atom' && ordene.at(-1) === 'galakser' && skalaOrd(-8) === 'molekyler' && skalaOrd(7) === 'planeter', JSON.stringify(ordene));
-  tjek('E20: linjen første gang tæller gåderne på skinnen ("den første af seks gåder"), og man starter ved Antistof',
-    førsteLinje(påSkinnen().length) === 'Videnskaben er ikke færdig. Det her er den første af seks gåder.' && FØRSTE_GÅDE === 'antistof' && påSkinnen().some((g) => g.id === FØRSTE_GÅDE));
+  tjek('E20: linjen første gang tæller gåderne på skinnen ("den første af syv gåder"), og man starter ved Antistof',
+    førsteLinje(påSkinnen().length) === 'Videnskaben er ikke færdig. Det her er den første af syv gåder.' && FØRSTE_GÅDE === 'antistof' && påSkinnen().some((g) => g.id === FØRSTE_GÅDE));
 }
 
 // ---------- I browseren ----------
@@ -204,7 +217,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   });
   const først = await K();
   tjek('G4b første gang: kun Antistof er tændt, tæt foran, med linjen "Videnskaben er ikke færdig" og uden pilene',
-    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.endsWith('den første af seks gåder.') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
+    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.endsWith('den første af syv gåder.') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
   tjek('E20: pilene er rene pile med et navn til skærmlæseren, og knappen viser skalaen ("mindre end et atom")',
     først.pileTekst === '‹|Mindre gåde,›|Større gåde' && først.skala === 'mindre end et atom', JSON.stringify(først));
   await page.click('#gaaderInd');
@@ -213,28 +226,29 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   tjek('G4b: "Flyv ind" flyver ind i lyset og åbner kortet bagefter', flyver.flyver && !flyver.kort && ind, JSON.stringify(flyver));
   await page.keyboard.press('Escape');
   const ud = await K();
-  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 6 && !atomlabTest.gaader.skinne().flyver());
+  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 7 && !atomlabTest.gaader.skinne().flyver());
   tjek('G4b: Esc går fra kortet til skinnen, kameraet trækker sig ud, og lysene tændes ("Der er flere.")',
     !ud.kort && ud.flyver && ud.tændte === 1 && ud.linje === 'Der er flere.' && tændt && await T(() => localStorage.getItem('atomlabGaaderSkinne') === '1'), JSON.stringify(ud));
   // Piletasten og knappen "større ›" flytter fokus op ad stien
   await page.keyboard.press('ArrowRight');
   await page.click('[data-skinne="1"]');
+  await page.keyboard.press('ArrowRight'); // tre skridt: Kvanteverdenen og Livets begyndelse står før Liv andre steder
   const flyttet = await K();
   tjek('G4b: piletasten og "større ›" flytter til den næste større gåde, og linjen "Der er flere." går væk', flyttet.fokus === 'liv' && flyttet.spm === 'Er der liv andre steder?' && flyttet.linje === '', JSON.stringify(flyttet));
   // Et tryk på lyset ved siden af glider derhen, og et træk mod venstre går mod de større
-  await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 2) < 0.02);
+  await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 3) < 0.02);
   // Navnene er HTML-tekst (skarp), naboernes navne kan ses, og navnet på gåden i fokus er tonet ud (det står på knappen)
   const nv = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
   const navn = (t) => nv.find((n) => n.tekst.startsWith(t));
   tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har intet navn i 3D',
-    nv.length === 8 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Planet 9')?.synlig
+    nv.length === 9 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Planet 9')?.synlig
     && !navn('Liv andre steder')?.synlig, JSON.stringify(nv));
   // Et tryk på naboen (Planet 9) glider derhen. Så står Sort hul ved siden af, og dens lampe tegnes af linsen fra Kosmos
   // (lysbøjningen), i et lille lag efter lampens størrelse
   const nabo = await T(() => atomlabTest.gaader.skinne().skærm('planet9'));
   await page.mouse.click(nabo.x, nabo.y);
   const trykket = (await K()).fokus;
-  await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 3) < 0.02);
+  await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 4) < 0.02);
   const hul = await vent(page, () => (atomlabTest.gaader.skinne().lampe('sorthul')?.tegnet ?? 0) > 0, null, 10000) && await page.evaluate(() => atomlabTest.gaader.skinne().lampe('sorthul'));
   tjek('skarpere: lampen for det sorte hul bruger linsen fra Kosmos og et lag på højst 512 px', hul?.linse && hul.tegnet > 0 && hul.størrelse >= 96 && hul.størrelse <= 512, JSON.stringify(hul));
   await page.mouse.move(700, 300);
@@ -267,7 +281,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.reload();
   await vent(page, påSkinne, null, 15000);
   const igen = await K();
-  tjek('✓ huskes, når siden genindlæses, og første gang er forbi', igen.ringe.includes('sorthul') && !igen.første && igen.tændte === 6, JSON.stringify(igen));
+  tjek('✓ huskes, når siden genindlæses, og første gang er forbi', igen.ringe.includes('sorthul') && !igen.første && igen.tændte === 7, JSON.stringify(igen));
 
   // "Næste gåde ›" flyver ud, glider et skridt og ind i den næste større gåde
   await T(() => { const g = atomlabTest.gaader; g.visGåde('sorthul'); for (let i = 0; i < 3; i++) { g.gæt(0); g.næste(); } });
@@ -454,7 +468,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const z = await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(() => ok(atomlabTest.gaader.skinne().zoom())))));
   const kort = await vent(page, () => atomlabTest.gaader.vist()?.id === 'antistof');
   await page.keyboard.press('Escape');
-  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 6);
+  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 7);
   tjek('G4b ROLIG: kameraet hopper (ingen flyvning), kortet åbner efter toningen, og lysene står tændt med det samme', z === 2 && kort && tændt, JSON.stringify({ z, kort, tændt }));
   await ctx.close();
 }

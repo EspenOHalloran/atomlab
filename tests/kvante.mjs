@@ -4,7 +4,8 @@
 // en sprække lukker den, måleren blinker ved én sprække, kuglerne lander i to bunker, vandets bølger løber,
 // panelerne har ingen rullebjælke, og et skærmskift rydder op.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
-import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD } from '../js/data/kvante.js';
+import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER } from '../js/data/kvante.js';
+import { LINKS } from '../js/data/ordbogliste.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { SKÆRME } from '../js/skaerme.js';
@@ -41,6 +42,22 @@ const zk = (STANDARD.d / 2) * kugleForstørrelse();
 const kugler = mønster({ slags: 'kugler' });
 tjek('modellen: kuglerne lander i to bunker bag sprækkerne og ingen i midten',
   kugler.z.filter((x) => Math.abs(x) < 0.3).length === 0 && kugler.z.filter((x) => Math.abs(x - zk) < 0.4).length > 1500 && kugler.z.filter((x) => Math.abs(x + zk) < 0.4).length > 1500);
+
+// "Større …" (PR 3): molekylet og klumpen giver striber, der ligger tættere end elektronernes, fodbolden to bunker som
+// kuglerne, og hver kombination af slags, sprækker og måler har en tekst i panelet
+const molekyle = mønster({ slags: 'molekyle' });
+const klump = mønster({ slags: 'klump' });
+const fodbold = mønster({ slags: 'fodbold' });
+const nøgler = SLAGS.flatMap((slags) => SPRÆKKER.flatMap((sprækker) => [false, true].map((m) => panelNøgle({ slags, sprækker, måler: m }))));
+tjek('Større …: molekylet og klumpen giver striber (klumpens tættest), fodbolden lander i to bunker uden striber, og alle valg har en tekst og et navn',
+  molekyle.toppe >= 5 && molekyle.mørke > 0 && klump.toppe >= 5 && klump.mørke > 0
+  && bølgelængde('klump') < bølgelængde('molekyle') && bølgelængde('molekyle') < bølgelængde('elektroner')
+  && fodbold.z.filter((x) => Math.abs(x) < 0.3).length === 0 && fodbold.z.filter((x) => Math.abs(x - zk) < 0.4).length > 1500 && fodbold.mørke === 0
+  && nøgler.every((n) => PANEL[n]?.titel && PANEL[n]?.tekst) && SLAGS.filter((x) => x !== 'boelger').every((x) => PRIKKER[x])
+  && /januar 2026/.test(PANEL.klump.tekst) && /7\.000/.test(PANEL.klump.tekst) && /2\.000/.test(PANEL.molekyle.tekst) && /to bunker/.test(PANEL.fodbold.tekst),
+  JSON.stringify({ molekyle: [molekyle.toppe, molekyle.mørke], klump: [klump.toppe, klump.mørke], fodbold: fodbold.toppe, mangler: nøgler.filter((n) => !PANEL[n]) }));
+tjek('links: "Er elektronerne virkelig små kugler?" har "Se det selv", og fotonen i Ordbogen går til bænken med lys',
+  /Se det selv/.test(HVORFOR.orbitaler.link?.tekst ?? '') && typeof HVORFOR.orbitaler.link?.handling === 'function' && LINKS.foton?.gaa?.[0] === 'kvante:lys');
 
 // ---------- I browseren ----------
 const ctx = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
@@ -142,12 +159,66 @@ await page.screenshot({ path: `${UD}/3-vand.png` });
 tjek('kuglerne flyver og lander i to bunker (ingen i midten), og "Start bølgerne" sender vandets bølger ud fra kilden',
   kug.midt === 0 && kug.højre > 100 && kug.venstre > 100 && kug.panel === 'Kugler' && flyver >= 1 && vand.tændt && vand.front > 4, JSON.stringify({ kug, flyver, vand }));
 
+// "Større …": knappen viser de tre valg, klumpen giver striber, fodbolden to bunker, og knappen husker det sidste valg
+await T(() => atomlabTest.kvante.slags('elektroner'));
+await page.click('#kvStørre');
+const stor1 = await T(() => ({ ...atomlabTest.kvante.større(), slags: atomlabTest.kvante.valg().slags, titel: atomlabTest.kvante.panel().titel }));
+await page.click('#kvStørreValg [data-kv-slags="klump"]');
+const klumpen = await T(() => {
+  const k = atomlabTest.kvante;
+  k.skyd(3000);
+  const m = k.mønster(60);
+  k.måler(true);
+  k.skyd(3000);
+  const mm = k.mønster(60);
+  return { toppe: m.toppe, mørke: m.mørke, målerMørke: mm.mørke, tæller: k.tæller(), titel: k.panel().titel };
+});
+await page.click('#kvStørreValg [data-kv-slags="fodbold"]');
+const bolden = await T((zk) => {
+  const k = atomlabTest.kvante;
+  k.skyd(400);
+  return { midt: k.tæl(0, 0.3), højre: k.tæl(zk, 0.4), venstre: k.tæl(-zk, 0.4), titel: k.panel().titel, bold: k.større().bold, måler: document.querySelector('#kvMåler').disabled };
+}, zk);
+await page.click('#kvStørreValg [data-kv-slags="fodbold"]');
+await page.waitForTimeout(300);
+await page.screenshot({ path: `${UD}/5-fodbold.png` });
+await page.click('[data-kv-slags="elektroner"]');
+const væk = await T(() => atomlabTest.kvante.større());
+await page.click('#kvStørre');
+const husket = await T(() => atomlabTest.kvante.valg().slags);
+tjek('Større …: knappen viser Molekyle, Klump og Fodbold (molekylet først), klumpen giver striber, og måleren fjerner dem',
+  stor1.knap && stor1.valg && stor1.slags === 'molekyle' && stor1.titel === 'Molekyler med 2.000 atomer'
+  && klumpen.toppe >= 5 && klumpen.mørke > 0 && klumpen.målerMørke === 0 && /^Klumper: /.test(klumpen.tæller), JSON.stringify({ stor1, klumpen }));
+tjek('Større …: fodbolden lander i to bunker som kuglerne (ingen i midten) og ligner en fodbold, uden måler, og knappen husker det sidste valg',
+  bolden.midt === 0 && bolden.højre > 100 && bolden.venstre > 100 && bolden.titel === 'En fodbold' && bolden.bold && bolden.måler
+  && !væk.knap && !væk.valg && !væk.bold && husket === 'fodbold', JSON.stringify({ bolden, væk, husket }));
+
+// Links til bænken: data-gaa="kvante:stor" (gåden "Hvor stopper kvanteverdenen?"), fotonen i Ordbogen og "Se det selv"
+// under "Er elektronerne virkelig små kugler?" (starter turen)
+const tilKvante = () => page.waitForFunction(() => atomlabTest.aktiv() === 'kvante' && atomlabTest.kvante?.synlig(), null, { timeout: 20000, polling: 100 });
+await T(() => { location.hash = '#ordbog'; });
+await page.waitForFunction(() => atomlabTest.aktiv() === 'ordbog' && document.querySelector('#ord-foton [data-gaa]'), null, { timeout: 20000, polling: 100 });
+await T(() => document.querySelector('#ord-foton [data-gaa]').click());
+await tilKvante();
+const fraOrdbog = await T(() => ({ slags: atomlabTest.kvante.valg().slags, tur: atomlabTest.kvante.tur().kører }));
+await T(() => { const k = document.createElement('button'); k.dataset.gaa = 'kvante:stor'; k.id = 'prøveLink'; document.body.append(k); k.click(); k.remove(); });
+const herStor = await T(() => atomlabTest.kvante.valg().slags);
+await T(() => { location.hash = '#'; });
+await page.waitForFunction(() => atomlabTest.aktiv() === 'menu', null, { timeout: 20000, polling: 100 });
+await T(() => import('/js/data/hvorfor.js').then((m) => m.HVORFOR.orbitaler.link.handling()));
+await tilKvante();
+const turStart = await page.waitForFunction(() => atomlabTest.kvante.tur().kører === 'striber', null, { timeout: 10000, polling: 100 }).then(() => true, () => false);
+await T(() => { const k = document.createElement('button'); k.dataset.gaa = 'kvante:stor'; document.body.append(k); k.click(); k.remove(); });
+const fraTur = await T(() => ({ slags: atomlabTest.kvante.valg().slags, tur: atomlabTest.kvante.tur().kører }));
+tjek('links: fotonen i Ordbogen åbner bænken med lys (uden turen), "kvante:stor" vælger "Større …", og "Se det selv" i Værkstedets kort starter turen',
+  fraOrdbog.slags === 'lys' && !fraOrdbog.tur && herStor === 'fodbold' && turStart && fraTur.slags === 'fodbold' && !fraTur.tur, JSON.stringify({ fraOrdbog, herStor, turStart, fraTur }));
+
 // Ingen rullebjælke i panelerne
 const rul = [];
 for (const [w, h] of [[1150, 800], [820, 1180], [560, 900]]) {
   await page.setViewportSize({ width: w, height: h });
-  for (const s of ['elektroner', 'boelger']) {
-    await T((x) => atomlabTest.kvante.slags(x), s);
+  for (const s of ['elektroner', 'boelger', 'molekyle']) {
+    await T((x) => { atomlabTest.kvante.slags(x); for (const e of document.querySelectorAll('#kvante .side-panel')) e.scrollTop = 0; }, s);
     await page.waitForTimeout(500);
     const p = await T(() => [...document.querySelectorAll('#kvante .side-panel')].map((e) => ({ mere: e.classList.contains('mere'), rul: e.scrollHeight > e.clientHeight + 2 && getComputedStyle(e).overflowY !== 'visible' })));
     rul.push({ w, s, p });
