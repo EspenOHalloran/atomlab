@@ -53,18 +53,20 @@ const FLADE_VERTEX = /* glsl */ `
 // Lagene efter afstanden fra midten (r i brøkdel af radius). uGraenser: isens bund, havets bund, kernens kant.
 const FLADE_FRAGMENT = /* glsl */ `
   uniform vec3 uSol, uGraenser;
-  uniform float uR, uSnitY, uKlip, uSynlig, uTid;
+  uniform float uR, uSnitY, uKlip, uSynlig, uTid, uSydIs;
   varying vec3 vLokal; varying vec3 vNormal;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
     if (uKlip > 0.5 && vLokal.y < uSnitY) discard;
     float r = length(vLokal) / uR;
+    // Isens bund: tyndere ved sydpolen, hvis uSydIs er større end uGraenser.x (Enceladus: under 5 km dér)
+    float isBund = mix(uGraenser.x, uSydIs, 1.0 - smoothstep(-0.92, -0.6, vLokal.y / max(length(vLokal), 1e-4)));
     vec3 farve;
     float glod = 0.0;
-    if (r > uGraenser.x) farve = vec3(0.93, 0.96, 1.0);
+    if (r > isBund) farve = vec3(0.93, 0.96, 1.0);
     else if (r > uGraenser.y) {
       // Havet: blåt og lidt lysende, lysest øverst under isen
-      float t = (r - uGraenser.y) / max(uGraenser.x - uGraenser.y, 1e-4);
+      float t = (r - uGraenser.y) / max(isBund - uGraenser.y, 1e-4);
       farve = mix(vec3(0.10, 0.36, 0.78), vec3(0.22, 0.58, 0.98), t);
       glod = 0.55 + 0.08 * sin(uTid * 1.3 + r * 40.0);
     } else if (r > uGraenser.z) {
@@ -72,7 +74,7 @@ const FLADE_FRAGMENT = /* glsl */ `
       farve = mix(vec3(0.42, 0.31, 0.22), vec3(0.56, 0.42, 0.30), r) * (0.92 + 0.12 * s);
     } else farve = vec3(0.56, 0.58, 0.62) * (0.9 + 0.2 * r / uGraenser.z);
     // En tynd, mørk streg mellem lagene, så de kan skelnes
-    float kant = min(min(abs(r - uGraenser.y), abs(r - uGraenser.z)), abs(r - uGraenser.x) * 3.0);
+    float kant = min(min(abs(r - uGraenser.y), uGraenser.z > 0.0 ? abs(r - uGraenser.z) : 1.0), abs(r - isBund) * 3.0);
     farve *= mix(0.72, 1.0, smoothstep(0.0, 0.004, kant));
     vec3 N = normalize(vNormal) * (gl_FrontFacing ? 1.0 : -1.0);
     float lys = 0.62 + 0.38 * max(dot(N, uSol), 0.0);
@@ -82,8 +84,9 @@ const FLADE_FRAGMENT = /* glsl */ `
 const KVART = Math.PI / 4;
 
 // radius i scene-enheder. grænser: [isens bund, havets bund, kernens kant] i brøkdel af radius.
-// lys: hvor lyst kortet tegnes. segmenter: felter rundt om kuglen.
-export function lavSnitMåne(radius, { grænser, lys = 1, farve = [1, 0.98, 0.94], segmenter = 96 } = {}) {
+// lys: hvor lyst kortet tegnes. segmenter: felter rundt om kuglen. sydIs: isens bund ved sydpolen (brøkdel af radius,
+// Enceladus M3), ellers den samme som grænser[0]. Uden jernkerne er grænser[2] 0.
+export function lavSnitMåne(radius, { grænser, lys = 1, farve = [1, 0.98, 0.94], segmenter = 96, sydIs = grænser[0] } = {}) {
   const gruppe = new THREE.Group();
   const overflade = new THREE.ShaderMaterial({
     uniforms: {
@@ -105,6 +108,7 @@ export function lavSnitMåne(radius, { grænser, lys = 1, farve = [1, 0.98, 0.94
   const fladeUniforms = () => ({
     uSol: { value: overflade.uniforms.uSol.value }, // (samme vektor som overfladen)
     uGraenser: { value: new THREE.Vector3(...grænser) },
+    uSydIs: { value: sydIs },
     uR: { value: radius },
     uSnitY: { value: radius * 2 },
     uKlip: { value: 1 },
