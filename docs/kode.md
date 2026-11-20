@@ -8,7 +8,8 @@
 
 | Fil | Beskriver |
 |---|---|
-| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `atom.js` (og udgaverne af atomet), `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `maaler.js` (måleren, `?maal`), `js/data/hvorfor.js`. |
+| [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `maaler.js` (måleren, `?maal`), `js/data/hvorfor.js`. |
+| [kode/atom.md](kode/atom.md) | Atomet (`atom.js`): kernen, elektronskallerne, elektronskyen, udgaverne af atomet og G3's bløde kugler og glimt (bruges af Værkstedet, Det periodiske system og Reaktoren). |
 | [kode/forloeb.md](kode/forloeb.md) | Forløb-klodsen (`js/forloeb.js`): linjen under scenen, faserne, hvad delen leverer, og hvornår et forløb starter af sig selv. |
 | [kode/menu.md](kode/menu.md) | Menuen som en ring af verdenerne (`karrusel.js`, "Din fremgang" med forløbenes ✓) og baggrunden bag den (`menubaggrund.js`). |
 | [kode/ild.md](kode/ild.md) | Ild og verdenen Kemi (`ild.js`, den fælles flamme `flamme.js`, bordet `js/ild/bord.js`, luppens atomer `js/ild/atomer.js` og teksterne `js/data/ild.js`). |
