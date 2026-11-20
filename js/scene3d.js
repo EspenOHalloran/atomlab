@@ -7,6 +7,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { FXAAPass } from 'three/addons/postprocessing/FXAAPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 // Tablets og telefoner (fingre i stedet for mus) får lidt færre effekter, så det kører glat
@@ -26,6 +28,7 @@ export const verden = {
   styring: null,
   komponist: null,
   glød: null,
+  kanter: null, // kantudglatningen efter gløden (SMAA på pc, FXAA på touch)
   vindue: null, // det HTML-element, som 3D-billedet skal centreres i
   hul: { left: 0, top: 0, width: 1, height: 1 },
   målAfstand: null,
@@ -83,15 +86,20 @@ export function lavVerden(lærred) {
   styring.addEventListener('start', () => { verden.målAfstand = null; });
 
   // Glød: alt, der er lysere end en grænse, får en glorie
-  // Kantudglatning kunne slås til her med new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 })
-  // som andet argument til EffectComposer. Den er slået fra, fordi den kostede ca. 40 % af billederne i testbrowseren.
+  // MSAA (samples: 4 i komponistens lag) kostede ca. 40 % af billederne i testbrowseren, så kun Gåderne bruger den
+  // (js/gaader/kanter.js). Alle andre steder udglattes kanterne bagefter (G2, se nedenfor).
   const komponist = new EffectComposer(renderer);
   komponist.addPass(new RenderPass(scene, kamera));
   const glød = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.9, 0.55, 0.82);
+  blødGlød(glød);
   komponist.addPass(glød);
   komponist.addPass(new OutputPass());
+  // Kantudglatning (G2, 20. november 2026): efter tonemappingen, for begge virker på det færdige billede. Pc'en får SMAA
+  // (tre trin, finder kanterne og blander langs dem, pænest), touch FXAA (ét trin, billigst, lidt blødere billede).
+  const kanter = LAV_KVALITET ? new FXAAPass() : lavSMAA();
+  komponist.addPass(kanter);
 
-  Object.assign(verden, { renderer, scene, kamera, styring, komponist, glød });
+  Object.assign(verden, { renderer, scene, kamera, styring, komponist, glød, kanter });
 
   addEventListener('resize', tilpasStørrelse);
   // Mobiler ændrer størrelse lidt efter, at skærmen drejes
@@ -109,10 +117,69 @@ export function lavVerden(lærred) {
     if (ROLIG) styring.autoRotate = false;
     styring.update(dt);
     if (TEST_HURTIG) renderer.render(scene, kamera);
-    else komponist.render(dt);
+    else { komponist.render(dt); vogtKanter(nu); }
   });
   return true;
 }
+
+// En blødere glød (G2): Three.js' glød lægger fem slørede udgaver af det lyse oven i billedet, fra den skarpeste (tæt om
+// det lysende) til den bredeste (langt ud). Før vejede de næsten lige meget (0,56-0,64 med radius 0,55), og grænsen var
+// hård (lysstyrke 0,82 til 0,83), så gløden sprang til og fra, når noget blev lidt lysere. Nu vejer den skarpeste mere
+// (en lysere kerne), de mellemste lidt mindre og de brede lidt mere (længere, blødere haler), og grænsen går blødt fra
+// 0,74 til 0,90 (halv glød ved 0,82 som før). Summen er næsten den samme (3,0 → 3,05), så de skærme, der er stillet
+// efter gløden, ser ud som før, bare blødere.
+export const GLØD_VÆGTE = [0.8, 0.55, 0.5, 0.55, 0.65];
+const GLØD_GRÆNSE = 0.74;
+const GLØD_BLØD = 0.16;
+function blødGlød(glød) {
+  glød.radius = 0; // vægtene herover bruges, som de står (radius blander dem ellers med deres spejlbillede)
+  glød.threshold = GLØD_GRÆNSE;
+  glød.compositeMaterial.uniforms.bloomFactors.value = GLØD_VÆGTE;
+  glød.highPassUniforms.smoothWidth.value = GLØD_BLØD;
+}
+
+// SMAA's to mellemlag (kanterne og vægtene) er tal mellem 0 og 1, så 8 bit er nok (som i den oprindelige SMAA).
+// Three.js laver dem i 16 bit, så de fyldte det dobbelte (16 MB mere ved 1280 × 800, 64 MB ved 2560 × 1600).
+function lavSMAA() {
+  const smaa = new SMAAPass();
+  for (const lag of [smaa._edgesRT, smaa._weightsRT]) lag.texture.type = THREE.UnsignedByteType; // før første tegning
+  return smaa;
+}
+
+// Værn på pc (som i js/gaader/kanter.js): Er der under 40 billeder i sekundet i 4 sekunder med SMAA, skiftes der til
+// den billigere FXAA resten af besøget. Ikke med ?test, hvor testbrowseren altid er langsom.
+const KANT_VÆRN = !LAV_KVALITET && !new URLSearchParams(location.search).has('test');
+const kantMåling = { tid: 0, billeder: 0, sidst: 0 };
+function vogtKanter(nu) {
+  if (!KANT_VÆRN || !(verden.kanter instanceof SMAAPass) || !verden.kanter.enabled) return;
+  const dt = (nu - kantMåling.sidst) / 1000;
+  kantMåling.sidst = nu;
+  if (dt > 0.5) { kantMåling.tid = kantMåling.billeder = 0; return; } // et ryk eller en skjult fane tæller ikke
+  kantMåling.tid += dt;
+  kantMåling.billeder++;
+  if (kantMåling.tid < 4) return;
+  const fps = kantMåling.billeder / kantMåling.tid;
+  kantMåling.tid = kantMåling.billeder = 0;
+  if (fps < 40) {
+    skiftKanter('FXAA');
+    globalThis.atomlabMåler?.(`Kantudglatning: SMAA → FXAA (${fps.toFixed(0)} billeder/s)`);
+  }
+}
+
+// Skifter kantudglatningen ('SMAA', 'FXAA' eller null = ingen). Bruges af værnet og testene.
+export function skiftKanter(slags) {
+  const { komponist, kanter } = verden;
+  if (!komponist || kanterSlags() === slags) return;
+  const ny = slags === 'SMAA' ? lavSMAA() : slags === 'FXAA' ? new FXAAPass() : null;
+  const i = komponist.passes.indexOf(kanter);
+  if (kanter) { komponist.removePass(kanter); kanter.dispose(); }
+  if (ny) {
+    ny.enabled = kanter?.enabled ?? true; // holder Gåderne pause (MSAA), gør den nye det også
+    komponist.insertPass(ny, i < 0 ? komponist.passes.length : i);
+  }
+  verden.kanter = ny;
+}
+export const kanterSlags = () => verden.kanter instanceof SMAAPass ? 'SMAA' : verden.kanter instanceof FXAAPass ? 'FXAA' : null;
 
 // De farvede tågeskyer er pynt. I vores eget solsystem (fx ved Saturn) er himlen sort med stjerner, så der slås de fra.
 const tågeSkyer = [];

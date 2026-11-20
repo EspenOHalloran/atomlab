@@ -16,6 +16,26 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await page.goto(`${ADRESSE}/?test#kosmos`);
   await page.waitForFunction(() => window.atomlabTest && document.querySelector('#kosmos:not(.skjult)'), null, { timeout: 20000 });
   tjek(`${navn}: hurtig tegning er slået fra`, await page.evaluate(() => !globalThis.atomlabTestHurtig));
+  // Kantudglatning og den bløde glød (G2): SMAA på pc, FXAA på touch, sidst i efterbehandlingen (efter tonemappingen)
+  const kant = await page.evaluate(async () => {
+    const s = await import('/js/scene3d.js');
+    const k = s.verden.komponist;
+    const r = { slags: s.kanterSlags(), sidst: k.passes.at(-1) === s.verden.kanter, vægte: s.verden.glød.compositeMaterial.uniforms.bloomFactors.value.join(), radius: s.verden.glød.radius };
+    r.otteBit = s.verden.kanter._edgesRT ? s.verden.kanter._edgesRT.texture.type === 1009 : null; // UnsignedByteType
+    // Gåderne (MSAA) holder pause i den fælles udglatning og slår den til igen bagefter
+    const g = await import('/js/gaader/kanter.js');
+    g.udglat(true); r.pauseIGåderne = !s.verden.kanter.enabled; g.udglat(false); r.igenEfter = s.verden.kanter.enabled;
+    // Skiftet (værnet) til FXAA og tilbage: samme antal trin og stadig sidst
+    const n = k.passes.length, før = s.kanterSlags();
+    s.skiftKanter('FXAA'); r.fxaa = s.kanterSlags() === 'FXAA' && k.passes.length === n && k.passes.at(-1) === s.verden.kanter;
+    s.skiftKanter(før); r.tilbage = s.kanterSlags() === før && k.passes.length === n;
+    return r;
+  });
+  tjek(`${navn}: kantudglatningen er ${navn === 'pc' ? 'SMAA' : 'FXAA'}, sidst i efterbehandlingen`, kant.slags === (navn === 'pc' ? 'SMAA' : 'FXAA') && kant.sidst, JSON.stringify(kant));
+  if (navn === 'pc') tjek('pc: SMAA-lagene er i 8 bit', kant.otteBit === true);
+  tjek(`${navn}: gløden har de bløde vægte (radius 0)`, kant.vægte === '0.8,0.55,0.5,0.55,0.65' && kant.radius === 0, kant.vægte);
+  tjek(`${navn}: Gådernes MSAA holder pause i udglatningen og slår den til igen`, kant.pauseIGåderne && kant.igenEfter);
+  tjek(`${navn}: skiftet til FXAA og tilbage beholder trinnene`, kant.fxaa && kant.tilbage);
   // Supernovaen lyser meget, så gløden har noget at arbejde med
   await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('supernova'); k.trykPå('eksplodere'); k.spol(3); k.kameraFrem(); });
   await page.waitForTimeout(1500);
