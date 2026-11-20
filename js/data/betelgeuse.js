@@ -1,4 +1,4 @@
-// Betelgeuse set fra Jorden (Supernova, kontakten "🌃 Betelgeuse set fra Jorden"): stjernerne omkring Orion,
+// Betelgeuse eksploderer, set fra Jorden (fænomenet js/kosmos/betelgeuse.js, før en kontakt i Supernova): stjernerne omkring Orion,
 // omregningen til himlen over Danmark og et skøn over, hvor klar supernovaen bliver med tiden (lyskurven).
 // Uden Three.js, så det kan testes i Node.
 // Koordinaterne er rektascension (timer) og deklination (grader) for år 2000. Afrundet til ca. 0,1°, det er nok her.

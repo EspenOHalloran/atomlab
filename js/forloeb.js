@@ -316,9 +316,12 @@ function tegn() {
   const nøgle = () => (d.nøgle ? `<span class="fl-nøgle" aria-label="Nøgle">${d.nøgle.map((m) => `<span class="fl-mærke ${m.klasse ?? ''}">${esc(m.tekst)}</span>`).join('')}</span>` : '');
   let række = '';
   if (k.fase === 'gæt') {
+    // gæt.alene: Svarene står alene i rækken, og trinets knapper kommer først efter gættet, så svar og handlinger ikke
+    // blandes (Tychos trin "Jorden og Månen", fund 20. november 2026). Scenen virker stadig (forløbRørt, B1)
+    const alene = Boolean(t.gæt.alene);
     html += `<p class="fl-tekst" data-ord-kun="${ord}">${esc(t.spørg)}</p>`
-      + `<p class="fl-lille">Gæt, eller prøv selv. ${esc(t.gør ?? '')}</p>`;
-    række = `<span class="fl-gætter">${t.gæt.valg.map((v, i) => `<button class="fl-gæt" data-gaet="${i}">${esc(v.tekst)}</button>`).join('')}</span>` + nøgle() + knapper();
+      + `<p class="fl-lille">${alene ? 'Gæt først. Så prøver du det bagefter.' : `Gæt, eller prøv selv. ${esc(t.gør ?? '')}`}</p>`;
+    række = `<span class="fl-gætter">${t.gæt.valg.map((v, i) => `<button class="fl-gæt" data-gaet="${i}">${esc(v.tekst)}</button>`).join('')}</span>` + (alene ? '' : nøgle() + knapper());
   } else if (k.fase === 'gør') {
     // Instruksen: gættets "efter" (fx "Prøv det!") og trinets gør, uden at sige det samme to gange
     const efter = k.gæt != null ? t.gæt.valg[k.gæt].efter : '';

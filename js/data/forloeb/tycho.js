@@ -1,5 +1,6 @@
 // Forløbet "Den nye stjerne" i bogen om Tycho Brahe (Opdagelserne, docs/drejebog-tycho.md, afsnit 5). Ren data uden DOM,
-// så det kan testes i Node. T2 (19. november 2026) har drejebogens fire trin. Vejene fra "Det så du" står i
+// så det kan testes i Node. T2 (19. november 2026) har drejebogens fire trin, og trin 2 er delt i to
+// ("Tæt på eller langt væk?" og "Jorden og Månen", 20. november 2026), så der er fem. Vejene fra "Det så du" står i
 // js/data/opdagelser/tycho.js (VEJE). Det, der rører scenen (himlen, tommelfingeren, Månen og skyderen), står i
 // js/bog/tycho.js under samme trin-id.
 // Fakta: docs/fakta-videnskabsfolk/tycho.md. Han tvivlede på sine øjne, til andre kunne se den, når han viste dem stedet
@@ -30,25 +31,38 @@ export const DEN_NYE_STJERNE = {
       ord: [],
     },
     {
-      id: 'parallakse',
+      // Trin 2 og 3 var ét trin til 20. november 2026 (fund: "Jeg fatter ikke en skid af, hvad der er meningen her").
+      // Nu først tommelfingeren alene, så Jorden og Månen, og spørgsmålet først, når man har set tommelfingeren hoppe
+      id: 'tommel',
       kapitel: 'Tæt på eller langt væk?',
-      spørg: 'Man havde lært, at himlen aldrig forandrer sig. Er stjernen noget i luften, tæt på Jorden? Hvordan kan Tycho se det?',
+      spørg: 'Man havde lært, at himlen aldrig forandrer sig. Er stjernen så noget i luften, tæt på Jorden? Først et lille forsøg med din egen tommelfinger.',
+      gør: 'Tryk på "Skift øje" et par gange. Kig efter: Tommelfingeren hopper frem og tilbage foran klosteret, men klosteret langt væk står stille.',
+      så: 'Det, der er tæt på, hopper mest, når man ser det fra et nyt sted. Det hedder parallakse (forskydning), og du kan selv prøve det med strakt arm.',
+      ord: ['parallakse'],
+    },
+    {
+      id: 'parallakse',
+      kapitel: 'Jorden og Månen',
+      spørg: 'Hvordan kan Tycho så se, om den nye stjerne er tæt på?',
       gæt: {
+        // Svarene står alene i rækken. "Flyt Tycho" kommer først efter gættet (js/forloeb.js)
+        alene: true,
         valg: [
           { tekst: 'Han måler lyset', svar: 'Det siger ikke nok: Et lille lys tæt på kan være lige så klart som et stort lys langt væk.' },
-          { tekst: 'Det kan man ikke', svar: 'Jo, det kan man. Det virker også med din egen tommelfinger.' },
-          { tekst: 'Han ser, om den flytter sig', svar: 'Rigtigt gættet!' },
+          { tekst: 'Det kan man ikke', svar: 'Jo, det kan man. Det virker ligesom med tommelfingeren.' },
+          { tekst: 'Han ser, om den hopper', svar: 'Rigtigt gættet!' },
         ],
       },
-      gør: 'Skift øje, og se tommelfingeren hoppe. Flyt så Tycho fra toppen til siden af Jorden.',
-      // 58½′ under Månen (n56-n57) og "næsten en grad" er det samme. Månens bredde er ca. ½°
-      så: 'Det, der er tæt på, hopper mest. Det hedder parallakse, og var stjernen lige så tæt på som Månen, ville den hoppe næsten en grad, to gange Månens bredde.',
-      ord: ['parallakse'],
+      gør: 'Tryk på "Flyt Tycho" fra toppen til siden af Jorden. Kig efter: Månen hopper mod stjernerne bag den, men den nye stjerne hopper ikke.',
+      // Månens parallakse er ca. 57′ (58½′ lige under Månen, n56-n57), og Månen er ca. ½° bred
+      så: 'Månen er tæt på, så den hopper næsten en grad, omtrent to gange sin egen bredde. Den nye stjerne hopper ikke, så den må være langt væk, ude mellem stjernerne.',
+      ord: [],
     },
     {
       id: 'hoejt',
       kapitel: 'Højt og lavt',
-      spørg: 'Om natten drejer Cassiopeia rundt om Nordstjernen. Hvad måler Tycho, når den nye stjerne står lavt?',
+      // Broen fra "Flyt Tycho": Når stjernen står lavt, ser han den lidt fra siden af Jorden (jo lavere, jo mere)
+      spørg: 'Men Tycho kan ikke rejse om på siden af Jorden. Når den nye stjerne står lavt på himlen, ser han den dog lidt fra siden. Hvad måler han så?',
       gæt: {
         valg: [
           { tekst: 'En anden afstand', svar: 'Det ville den, hvis stjernen var tæt på. Men Tycho målte det samme hver gang.' },
@@ -56,7 +70,7 @@ export const DEN_NYE_STJERNE = {
           { tekst: 'Stjernen er væk', svar: 'Nej. Cassiopeia går aldrig ned under horisonten i Danmark.' },
         ],
       },
-      gør: 'Træk Cassiopeia rundt, og mål afstanden til Schedir, når den nye stjerne står højt og lavt.',
+      gør: 'Træk Cassiopeia rundt om Nordstjernen, og mål afstanden til Schedir, når den nye stjerne står højt og lavt.',
       // "i flere måneder": Han målte ikke højt og lavt samme nat (fakta afsnit 3)
       så: 'Højt og lavt, i flere måneder: altid 7° 55′. Den flytter sig ikke, så den er langt bag Månen, og himlen kan altså forandre sig.',
       ord: [],
