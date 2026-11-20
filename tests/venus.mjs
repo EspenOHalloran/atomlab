@@ -389,7 +389,7 @@ await s.screenshot({ path: `${UD}/venus.png` });
   tjek('‹ i bjælken: et trin mere tilbage til "Under skyerne" (ca. 48 km), og prikken i søjlen følger højden', s2[0].trin === 'under' && s2[0].ut.includes(ned1.titel) && top2 > 44.5 && top2 < 48.8 && Math.abs(sidst2.prik - 100 * (1 - sidst2.hMiddel / 100)) < 1.5 && !sidst2.springer, JSON.stringify([s2[0].trin, top2, sidst2.hMiddel, sidst2.prik]));
   await s.keyboard.press('ArrowRight');
   const s3 = await følg();
-  tjek('→ frem igen til "Varmere end en ovn", og turen fortsætter ned', s3[0].trin === 'ovn' && s3.at(-1).fase === 'ned' && Math.max(...s3.map((p) => p.hMiddel)) < 20.8, JSON.stringify([s3[0].trin, s3.at(-1).fase]));
+  tjek('→ frem igen til "Varmere end en ovn", og turen fortsætter ned', s3[0].trin === 'ovn' && s3.at(-1).fase === 'ned' && !s3.at(-1).springer && s3.at(-1).hMiddel < 20.8, JSON.stringify([s3[0].trin, s3.at(-1).fase, s3.at(-1).hMiddel]));
   await s.click('#solsystemBjælke .bjælke-næste');
   await s.waitForFunction(() => atomlabTest.solsystem.fænomen().ned().fase === 'landet', null, { timeout: 30000, polling: 100 });
   await s.waitForTimeout(300);
