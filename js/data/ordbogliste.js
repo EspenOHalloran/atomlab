@@ -8,6 +8,8 @@ import { ORDBOG } from './ordbog.js';
 // med data-gaa, også gaader:id til et kort i Gåderne).
 export const LINKS = {
   tunneleffekt: { hvorfor: 'tunnel' },
+  interferens: { skærm: ['kvante', 'Kvantefysik'] },
+  kvantefysik: { skærm: ['kvante', 'Kvantefysik'] },
   kernekraft: { hvorfor: 'kernen' },
   bindingsenergi: { hvorfor: 'binding' },
   'kovalent-binding': { hvorfor: 'bygBinder' },
