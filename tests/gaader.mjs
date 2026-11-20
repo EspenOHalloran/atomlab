@@ -76,6 +76,18 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
     kort.every((g) => Number.isFinite(g.størrelse)) && kort.every((g) => (g.nyt == null || (g.nyt.tekst && g.nyt.dato)) && (g.løst == null || typeof g.løst === 'string')));
 }
 
+// G4c: Sort huls scene (linsen fra Kosmos, tonen, de to kanter og LISA)
+{
+  const g = GÅDER.find((x) => x.id === 'sorthul');
+  const sc = g.scene ?? {};
+  const linjer = [sc.start, sc.efter, sc.ind, sc.inde, sc.svar, sc.lisa];
+  const lange = linjer.filter((l) => !l || ord(l) > 28);
+  tjek('G4c: Sort huls scene har alle linjer (højst 28 ord), "Sig det til en ven" er én sætning, og stregerne forklares i "Ærligt talt"',
+    !lange.length && sætninger(g.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && /to oktaver/.test(sc.ærligt) && /ikke lyd/.test(sc.ærligt), JSON.stringify(lange));
+  // Før gættet i trin 2 må linjerne ikke give svaret (at ingen kan måle derinde), og der står ikke "alt er sort"
+  tjek('G4c: linjerne før gættet giver ikke svaret, og LISA har årstallet 2035', ![sc.ind, sc.inde].some((x) => /måle|gæt|teori/i.test(x)) && /2035/.test(sc.navne?.lisa) && /67 sekunder/.test(sc.navne?.tid67) && !/sort derinde|alt er sort/i.test(Object.values(sc).join('|')));
+}
+
 // G4d: Mørkt stofs scene
 {
   const m = GÅDER.find((g) => g.id === 'moerktstof');
@@ -622,6 +634,46 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const ven = await T(() => document.getElementById('gaadeLinje').textContent);
   tjek('Planet 9 trin 3: Rubin fotograferer himlen felt for felt, og til sidst "Sig det til en ven"',
     r1?.felter > 30 && r2.fotograferet > r1.fotograferet && ven.startsWith('Sig det til en ven: Måske er der en planet mere'), JSON.stringify({ r1, r2, ven }));
+  await ctx.close();
+}
+
+// Sort hul i 3D (G4c): linsen fra Kosmos, tonen og kurven efter gættet, flyvningen hen til horisonten, de to kanter og LISA
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('sorthul'));
+  const klar = await vent(page, () => (atomlabTest.gaader.scene()?.scene()?.lampe?.tegnet ?? 0) > 0, null, 15000);
+  const S = (sek) => T((s) => { const sc = atomlabTest.gaader.scene(); sc.spol(s); return sc.scene(); }, sek);
+  const før = await S(0.2);
+  tjek('G4c trin 1: hullet er linsen fra Kosmos, man kan flyve rundt om det, og kurven er skjult før gættet',
+    klar && før.tilstand === 'hul' && før.drejer && før.lampe.linse && !før.bølge.ses, JSON.stringify(før));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  const undervejs = (await S(0.3)).bølge;
+  const tone = await S(1.2);
+  const knap = await T(() => document.querySelector('#gaadeSceneKnapper button')?.textContent ?? '');
+  tjek('G4c trin 1: efter gættet tegnes tyngdebølgen, mens tonen spiller (35 → 150 → 250 Hz), og der er en knap til at høre den igen',
+    undervejs.ses && undervejs.tegnet < 1 && tone.bølge.tegnet === 1 && tone.bølge.fra === 35 && tone.bølge.top === 150 && tone.bølge.ring === 250
+    && tone.bølge.svingninger >= 7 && tone.bølge.svingninger <= 12 && /Hør/.test(knap), JSON.stringify({ undervejs, tone: tone.bølge, knap }));
+  await page.click('#gaadeTrin .fl-næste');
+  const ind = await S(0.5);
+  const inde = await S(3);
+  const linjeInde = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4c trin 2: man flyver hen mod horisonten (ingen drejning), skærmen tones sort, og ringen står uden teorien før gættet',
+    ind.tilstand === 'ind' && !ind.drejer && ind.sort < 1 && inde.tilstand === 'inde' && inde.sort === 1 && !inde.hulSes && inde.kanter.horisont
+    && !inde.kanter.teori && !inde.kanter.stempel && /horisonten/.test(linjeInde), JSON.stringify({ ind, inde }));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
+  const svar = (await S(2)).kanter;
+  tjek('G4c trin 2: efter gættet GÆT og teorien som stiplet tekst (67 sekunder og "uendelig"), og stregen toner ud før midten (intet punkt)',
+    svar.stempel && svar.teori && svar.tekster.length === 2 && svar.slut > 0.3 && svar.sidsteLys < 0.01, JSON.stringify(svar));
+  await page.click('#gaadeTrin .fl-næste');
+  const l1 = (await S(0.3)).lisa;
+  const l2 = (await S(1)).lisa;
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('G4c trin 3: LISA er tre satellitter ca. 20° bag Jorden, armene bliver længere og kortere, og til sidst "Sig det til en ven"',
+    l1?.ses && l1.sonder === 3 && l1.bag === 20 && l2.bølget > 0.02 && ven.startsWith('Sig det til en ven: Sorte huller er målt'), JSON.stringify({ l1, l2, ven }));
   await ctx.close();
 }
 

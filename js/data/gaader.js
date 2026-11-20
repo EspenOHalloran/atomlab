@@ -86,6 +86,34 @@ export const GÅDER = [
       <p><b>Hawking-stråling:</b> Hawking regnede i 1974 ud, at sorte huller stråler svagt og til sidst fordamper. Et hul på én solmasse er kun ca. 0,00000006 grader over det absolutte nulpunkt, ca. 44 millioner gange koldere end baggrundsstrålingen. Strålingen er aldrig målt. De fleste fysikere tror i dag, at oplysningerne om det, der faldt ind, ikke går tabt, men ingen ved hvordan.</p>
       <p><b>Nobelprisen:</b> Roger Penrose viste i 1965, at Einsteins teori giver en singularitet, når et sort hul dannes, og fik Nobelprisen i fysik i 2020 for det.</p>`,
     ærligt: '<p>"Målt eller gæt?" er forenklet. At der er en singularitet, er ikke et vildt gæt: Det er det, Einsteins teori forudsiger, og teorien passer med alle målinger uden for horisonten. Men en forudsigelse er ikke en måling, og her siger teorien selv, at den ikke holder.</p>',
+    ven: 'Sorte huller er målt, men hvad der er inde i midten, ved ingen, for derindefra slipper intet ud.',
+    nyt: null,
+    løst: null,
+    // Scenen i 3D (G4c, js/gaader/sorthul.js). Hullet er linsen fra Kosmos (js/kosmos/linse.js, Schwarzschild).
+    // Tyngdebølgen GW150914 (arXiv:1602.03837): 14. september 2015, "sweeps upwards in frequency from 35 to 250 Hz", og
+    // "Over 0.2 s, the signal increases in frequency and amplitude in about 8 cycles from 35 to 150 Hz". Tonen er lagt to
+    // oktaver op (× 4) og spillet 4 gange så langsomt (ca. 0,9 s). 67 s: τ = πGM/c³ for 4,30 mio. sole (se nørd).
+    // LISA (Wikipedia "Laser Interferometer Space Antenna", 20. november 2026): tre satellitter i en ligesidet trekant med
+    // 2,5 millioner km mellem dem, 20° bag Jorden, vedtaget januar 2024, opsendelse efter planen 2035, kraftige kilder er
+    // kæmpestore sorte huller, der smelter sammen. "20 picometres — less than the diameter of a helium atom".
+    scene: {
+      start: 'Lyset fra den glødende skive bøjes rundt om hullet. Træk for at flyve rundt om det.',
+      efter: 'I 2015 målte LIGO en tyngdebølge fra to sorte huller, der smeltede sammen. Sådan lyder den, lavet om til en tone.',
+      ind: 'Vi flyver hen mod horisonten, kanten af det sorte hul.',
+      inde: 'Her er horisonten. Hvad tror du, der er inde i midten?',
+      svar: 'Derindefra slipper intet lys ud, så ingen kan måle her. Det stiplede er Einsteins teori, og i midten holder den op med at virke.',
+      lisa: 'LISA er tre satellitter med 2,5 millioner km imellem. Efter planen sendes de op i 2035 og skal lytte efter kæmpestore sorte huller, der smelter sammen.',
+      navne: {
+        igen: '▶ Hør tyngdebølgen', ligo: 'Tyngdebølgen, målt 14. september 2015', tid: '0,2 sekunder',
+        horisont: 'horisonten', stopper: 'her stopper målingerne', tid67: 'højst ca. 67 sekunder til midten',
+        mælkevej: '(i Mælkevejens sorte hul)', uendelig: 'uendelig: her virker teorien ikke',
+        solen: 'Solen', jorden: 'Jorden', lisa: 'LISA (efter planen 2035)', arm: '2,5 millioner km',
+      },
+      ærligt: `<p>Hullet er det samme som i Kosmos: regnet med Einsteins teori for et sort hul, der ikke drejer. Uden for horisonten passer teorien med alle målinger, og derfor står det i farve.</p>
+        <p>Tyngdebølger er ikke lyd. Det er rummet selv, der bliver strakt og trykket en lille smule. Forskerne har lavet målingen om til en tone. Den rigtige steg på ca. 0,2 sekunder fra 35 til 250 svingninger i sekundet. Her er den lagt to oktaver op (fire gange så høj) og spillet fire gange så langsomt, så en tablet kan spille den, og man kan nå at høre den. Kurven er tegnet efter en enkel formel for to sorte huller, der kredser om hinanden, ikke efter de rigtige måledata.</p>
+        <p>Kameraet flyver ikke gennem horisonten, for billedet af hullet er regnet for et kamera uden for den. At der er sort bag horisonten, betyder ikke, at der er mørkt derinde (lys udefra falder stadig ind), men at ingen kan måle noget derfra, så vi tegner ikke noget. De 67 sekunder er den længste tid, der kan gå for den, der falder ind i Mælkevejens sorte hul, regnet for et hul, der ikke drejer.</p>
+        <p>LISA-trekanten er tegnet mange gange større end i virkeligheden. Den skal følge efter Jorden på dens vej om Solen. Armene bliver ikke så meget længere og kortere som her: LISA skal kunne måle ændringer, der er mindre end et atom. ${STREG_FORKLARING}</p>`,
+    },
   },
   // G2 (13. november 2026). Kilderne står i docs/fakta-liv/rummet.md (Fable E5) og fakta-gaader.md afsnit 1.
   {
