@@ -55,5 +55,5 @@
 - `js/data/luft-venus.js` (uden Three.js): `VIRA` (højde, °C, bar), `SKYER` (48-70 km), `luftVed(h)` (temperaturen lineært, trykket lineært i logaritmen) og `målerTekst`.
 - `js/data/sider/venus.js`: emnet "Hvilken planet er varmest?" (kernesætningen), tre "Hvorfor?"-kort (`venusMerkur`, `venusBaglaens`, `venusLiv` i `js/data/hvorfor.js`), "Gløden" er `gemt` (højst fire spørgsmål), Zoozve og de næste sonder under "Vil du vide mere?", `SIDER.ned` og fotoet på Venera 13's side (`foto`, vist af `sideHTML` i `js/faenomenskaerm.js`).
 - `billeder/solsystem/lav_venera.py`: Venera 13's foto fra NSSDC (kan også tage en hentet TIFF-fil).
-- **Testadgang** (V5): `tur().trin`, `flybyStop()`, `ned()` (fase, højden, måleren, fotoet, kuplen), `tilstand()` (uv, glød, høj, under, hurtig) og `flybyTil(nr)` (kun billeder).
+- **Testadgang** (V5): `tur().trin`, `flybyStop()`, `ned()` (fase, trin, højden, måleren, fotoet, kuplen, `springer`, tidsplanen `plan` og `nedTid`), `tilstand()` (uv, glød, høj, under, hurtig) og `flybyTil(nr)` (kun billeder).
 - Billeder: `node tests/vaerktoejer/venus.mjs pc stop1 stop2 stop3 stop4 stop5 ned` (`ned` og `stop6` tager billeder ved 66, 55, 35 og 12 km og efter landingen).

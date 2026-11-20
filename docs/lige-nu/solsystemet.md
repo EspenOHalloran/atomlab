@@ -1,14 +1,15 @@
 # Lige nu: Solsystemet og Kosmos
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 20. november 2026 (Saturn S3b).*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 20. november 2026 (Venus: turen ned, tid og bladring).*
 
-**Senest lavet (20. november 2026): Saturn S3b, formen på Mimas, Tethys, Dione og Rhea** ([plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md), "Status efter S3b"). Filerne hentede I i en browser fra PSI.
-- Alle Saturns måner undtagen Titan har nu deres form fra Cassinis fotos: Mimas er tydeligt aflang (ca. 415 × 380 km) med Herschel som en fordybning, Tethys med Odysseus, og Dione og Rhea er næsten runde. Skyggegrænsen er ujævn med kratere. "Ærligt talt" ved hver måne nævner formen.
-- Originalerne ligger på grenen `kilder-saturn-s3b` (ca. 70 MB, ikke i `main`). Rhea er kun hentet i den grove udgave (ca. 8,6 km). En skarpere (ca. 2,2 km) ligger måske i samme mappe hos PSI.
+**Senest lavet (20. november 2026): Venus, "Ned gennem skyerne" med længere tid og bladring** (jeres svar 20. november 2026 i [aabne-punkter.md](aabne-punkter.md)). Status: **venter på jeres prøve** (se "Ikke afprøvet").
+- Hvert trin får ca. 3 sekunder ekstra, fordelt efter antallet af ord i underteksten (turen ned tager nu ca. 49 s i stedet for 34, trinene ca. 7-13 s).
+- Bladring: ‹ og "Næste: … ›" i bjælken, prikkerne i underteksten og piletasterne ← → på pc. Kameraet glider hen til starten af trinet og fortsætter derfra. Måleren, prikken i søjlen og fotoet følger med, og når man er landet, er der "↺ Forfra".
+- Underteksterne står nu i loggen 🔔 (hver én gang pr. tur), og Solsystemet har fået klokken.
 
 **Jeres beslutning (18. november 2026, jeres ønske via orkestratoren):** Mars gøres færdig nu, før Månen og ønskerne fra 17. november. Først rettelsen ovenfor, så "Mars ekstra" med et go pr. del: 1) Nordpolen tæt på (M7b-pol), 2) sten og terræn i Stå på Mars (M8c del 3), 3) Curiosity som 3D-model (M8c del 2) og 4) lyset (L2, kræver en session på jeres pc). Planen og en prompt pr. del står i [prompt-mars-ekstra.md](../prompt-mars-ekstra.md).
 
-**Før det:** Saturn S3 (Enceladus' form), Mars ekstra 2 (stenene), Mars ekstra 1 (Nordpolen), Pluto MP4 (Merkur og Pluto er færdige), turen ned til Venera 13, Merkur MP1-MP2, Pluto MP3, Venus V1-V5, feedbacken fra prøven 16. november, overblikket trin 1-4, G1 trin 1-3 (måleren, frigivelsen og Stå på Mars lettere på tablet), Uranus og Neptun og Jupiter. Se [historikken](../arkiv/historik/solsystemet.md).
+**Før det:** Saturn S3b (formen på Mimas, Tethys, Dione og Rhea), Saturn S3 (Enceladus' form), Mars ekstra 2 (stenene), Mars ekstra 1 (Nordpolen), Pluto MP4 (Merkur og Pluto er færdige), turen ned til Venera 13, Merkur MP1-MP2, Pluto MP3, Venus V1-V5, feedbacken fra prøven 16. november, overblikket trin 1-4, G1 trin 1-3 (måleren, frigivelsen og Stå på Mars lettere på tablet), Uranus og Neptun og Jupiter. Se [historikken](../arkiv/historik/solsystemet.md).
 
 **Næste (venter på jeres go):**
 00. **Feedback fra prøven 16. november 2026:** Alle fem er lavet (nr. 3, Solen, 17. november 2026). Tilbage er jeres målinger af nr. 5 og af Solen med `?maal` på Tab A11. Et foto fra SDO blev fravalgt (kun forsiden, bagsiden tom, 2-4 MB).

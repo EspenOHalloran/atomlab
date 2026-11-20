@@ -1,5 +1,9 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (20. november 2026): Saturn S3b, formen på Mimas, Tethys, Dione og Rhea** ([plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md), "Status efter S3b"). Filerne hentede I i en browser fra PSI.
+- Alle Saturns måner undtagen Titan har nu deres form fra Cassinis fotos: Mimas er tydeligt aflang (ca. 415 × 380 km) med Herschel som en fordybning, Tethys med Odysseus, og Dione og Rhea er næsten runde. Skyggegrænsen er ujævn med kratere. "Ærligt talt" ved hver måne nævner formen.
+- Originalerne ligger på grenen `kilder-saturn-s3b` (ca. 70 MB, ikke i `main`). Rhea er kun hentet i den grove udgave (ca. 8,6 km). En skarpere (ca. 2,2 km) ligger måske i samme mappe hos PSI.
+
 **Lavet (19. november 2026): Saturn S3, Enceladus' rigtige form** ([plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md), "Status efter S3"). Teknikken (som Phobos og Deimos i `maane-form.js`, ikke `klippeplanet.js`) og rækkefølgen (Enceladus først) er valgt af orkestratoren 2026-11-19 efter min anbefaling, kan ændres af jer.
 - Enceladus har nu sin form fra Cassinis fotos (Bland m.fl. 2019, 2,2 km): lidt aflang mod Saturn (ca. 513 × 503 × 497 km), og bakker og dale ses ved skyggegrænsen. Fontænerne starter på overfladen. "Ærligt talt" ved Enceladus nævner formen.
 - **S3b venter** (Mimas, Tethys, Dione og Rhea): Formmodellerne ligger hos PSI bag Cloudflares robottjek og kan ikke hentes automatisk, selv om domænerne er åbne. **Jeres svar (19. november 2026, via orkestratoren):** I henter filerne i en browser 20. november 2026. Hent hele `data/`-mappen i hver af de fire (mappernes navne er tjekket i NSSDCA's katalog, filnavnene inde i dem ikke):
