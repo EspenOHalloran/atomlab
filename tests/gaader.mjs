@@ -14,13 +14,15 @@ import { TRIN_PROTEIN } from '../js/data/liv/protein.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { readFileSync } from 'node:fs';
 import { PLANETER_PR_ÅR, EXOPLANETER_I_ALT, EXOPLANETER_DATO, afstandeFor, planeterFor } from '../js/data/exoplaneter.js';
+import { SMÅKLODER, periheliumRetning } from '../js/data/planet9.js';
+import { SIDE as OVERBLIK } from '../js/data/sider/overblik.js';
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 
 // ---------- Uden browser: teksterne ----------
 const kort = GÅDER.filter(bygget);
-tjek(`fem gåder i oversigten, de to om liv skilt ad, og alle fem er bygget (${kort.map((g) => g.id).join()})`,
-  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof' && kort.length === 5);
+tjek(`seks gåder i oversigten, de to om liv skilt ad, og alle seks er bygget (${kort.map((g) => g.id).join()})`,
+  GÅDER.map((g) => g.id).join() === 'sorthul,liv,antistof,begyndelsen,moerktstof,planet9' && kort.length === 6);
 const ord = (t) => t.split(/\s+/).filter(Boolean).length;
 // "ca." og datoer som "12. november" slutter ikke en sætning
 const sætninger = (t) => t.replace(/\bca\./g, 'ca').replace(/\b\d+\. (?=[a-zæøå])/g, '1 ').split(/[.!?](?:\s|$)/).filter((s) => s.trim()).length;
@@ -136,16 +138,42 @@ tjek('"Hvornår er noget opdaget?" står på kortene om mørkt stof og liv',
   tjek(`Antistof: linjerne i udslettelsen står længe nok til at blive læst (1 s + 3 ord/s), i alt højst 20 s (${t.færdig.toFixed(1)} s)`,
     t.mødes >= ord[0] - 0.8 && t.korn - t.mødes >= ord[1] && t.ud - t.korn >= ord[2] && t.færdig - t.ud >= ord[3] && t.færdig <= 20, JSON.stringify(t));
 }
+// Planet 9 (20. november 2026): teksterne, banerne fra JPL og spørgsmålet i Solsystemets overblik
+{
+  const g = GÅDER.find((x) => x.id === 'planet9');
+  const sc = g?.scene ?? {};
+  const linjer = [sc.start, sc.samme, sc.efter, sc.flere, sc.flereSvar, sc.rubin];
+  const lange = linjer.filter((x) => !x || ord(x) > 28);
+  tjek('Planet 9: scenens linjer (højst 28 ord), "Sig det til en ven" er én sætning, stregerne forklares, og planeten har intet "?" (et bud)',
+    !lange.length && sætninger(g.ven ?? '') === 1 && sc.ærligt?.includes(STREG_FORKLARING) && !/\?/.test(Object.values(sc.navne ?? {}).join('|')) && /et bud/.test(sc.navne?.planet), JSON.stringify(lange));
+  const alt = JSON.stringify(g);
+  tjek('Planet 9: begge sider er med (Batygin og Brown 2016, skønnet fra 2025, hvor man har ledt, 2017 OF201, Rubin 2026), navnet forklares, og Pluto er en dværgplanet',
+    ['Batygin', '2016', '290', '4-5', 'ledt', '2017 OF201', 'Rubin', '30. juni 2026', 'Planet X', 'OSSOS'].every((x) => alt.includes(x))
+    && /dværgplanet/.test(g.trin[0].gæt.valg[0].efter) && g.trin[0].gæt.rigtigt === 2 && g.trin[1].gæt.rigtigt === 1);
+  tjek('Planet 9: linjerne før gættet siger ikke, at ingen har set planeten', ![sc.start, sc.samme].some((x) => /ingen|set den/i.test(x)));
+  const seks = SMÅKLODER.filter((x) => x[7]);
+  const v = (x) => periheliumRetning(x) * Math.PI / 180;
+  const mx = Math.atan2(seks.reduce((s, x) => s + Math.sin(v(x)), 0), seks.reduce((s, x) => s + Math.cos(v(x)), 0));
+  const afvig = (x) => Math.abs(((v(x) - mx + 3 * Math.PI) % (2 * Math.PI)) - Math.PI) * 180 / Math.PI;
+  const of = SMÅKLODER.find((x) => x[0] === '2017 OF201');
+  tjek('Planet 9: banerne fra JPL (a > 250 AU, q > 30 AU), de seks fra 2016 er med og peger samme vej (inden for 70°), og 2017 OF201 peger en anden vej (over 90°)',
+    SMÅKLODER.length >= 20 && SMÅKLODER.every((x) => x[1] > 250 && x[1] * (1 - x[2]) > 30) && seks.length === 6
+    && ['Sedna', 'Alicanto', '2012 VP113', '2010 GB174', '2007 TG422', '2013 RF98'].every((n) => seks.some((x) => x[0] === n))
+    && seks.every((x) => afvig(x) < 70) && of && afvig(of) > 90, JSON.stringify({ antal: SMÅKLODER.length, seks: seks.map(afvig).map(Math.round), of: of && Math.round(afvig(of)) }));
+  const tomt = OVERBLIK.emner.find((e) => e.titel === 'Hvor tomt er her egentlig?')?.tekst ?? '';
+  tjek('Planet 9: spørgsmålet "Er der en planet mere derude?" står i overblikket ("Hvor tomt er her egentlig?") med en knap til gåden',
+    /Er der en planet mere derude\?/.test(tomt) && tomt.includes('gaader:planet9') && g.seDet[0] === 'solsystem:overblik');
+}
 tjek('G4b: skinnen har de byggede gåder fra det mindste til det største, hver med et kort navn',
-  påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
+  påSkinnen().map((g) => g.id).join() === 'antistof,begyndelsen,liv,planet9,sorthul,moerktstof' && påSkinnen().every((g) => g.navn && g.navn.length <= 20));
 
 // E20: ord for skalaen, linjen første gang og den første gåde
 {
   const ordene = påSkinnen().map((g) => skalaOrd(g.størrelse));
   tjek('E20: hver gåde på skinnen har et ord for skalaen (Antistof "mindre end et atom", Mørkt stof "galakser")',
     ordene.every(Boolean) && ordene[0] === 'mindre end et atom' && ordene.at(-1) === 'galakser' && skalaOrd(-8) === 'molekyler' && skalaOrd(7) === 'planeter', JSON.stringify(ordene));
-  tjek('E20: linjen første gang tæller gåderne på skinnen ("den første af fem gåder"), og man starter ved Antistof',
-    førsteLinje(påSkinnen().length) === 'Videnskaben er ikke færdig. Det her er den første af fem gåder.' && FØRSTE_GÅDE === 'antistof' && påSkinnen().some((g) => g.id === FØRSTE_GÅDE));
+  tjek('E20: linjen første gang tæller gåderne på skinnen ("den første af seks gåder"), og man starter ved Antistof',
+    førsteLinje(påSkinnen().length) === 'Videnskaben er ikke færdig. Det her er den første af seks gåder.' && FØRSTE_GÅDE === 'antistof' && påSkinnen().some((g) => g.id === FØRSTE_GÅDE));
 }
 
 // ---------- I browseren ----------
@@ -176,7 +204,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   });
   const først = await K();
   tjek('G4b første gang: kun Antistof er tændt, tæt foran, med linjen "Videnskaben er ikke færdig" og uden pilene',
-    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.endsWith('den første af fem gåder.') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
+    først.første && først.tændte === 1 && først.fokus === 'antistof' && først.zoom === 1 && først.linje.endsWith('den første af seks gåder.') && !først.pile && først.spm === 'Hvor blev antistoffet af?', JSON.stringify(først));
   tjek('E20: pilene er rene pile med et navn til skærmlæseren, og knappen viser skalaen ("mindre end et atom")',
     først.pileTekst === '‹|Mindre gåde,›|Større gåde' && først.skala === 'mindre end et atom', JSON.stringify(først));
   await page.click('#gaaderInd');
@@ -185,7 +213,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   tjek('G4b: "Flyv ind" flyver ind i lyset og åbner kortet bagefter', flyver.flyver && !flyver.kort && ind, JSON.stringify(flyver));
   await page.keyboard.press('Escape');
   const ud = await K();
-  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 5 && !atomlabTest.gaader.skinne().flyver());
+  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 6 && !atomlabTest.gaader.skinne().flyver());
   tjek('G4b: Esc går fra kortet til skinnen, kameraet trækker sig ud, og lysene tændes ("Der er flere.")',
     !ud.kort && ud.flyver && ud.tændte === 1 && ud.linje === 'Der er flere.' && tændt && await T(() => localStorage.getItem('atomlabGaaderSkinne') === '1'), JSON.stringify(ud));
   // Piletasten og knappen "større ›" flytter fokus op ad stien
@@ -199,21 +227,22 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const nv = await page.evaluate(() => atomlabTest.gaader.skinne().navne());
   const navn = (t) => nv.find((n) => n.tekst.startsWith(t));
   tjek('skarpere: navnene på skinnen er HTML-tekst på mindst 14 px, naboernes navne ses, og gåden i fokus har intet navn i 3D',
-    nv.length === 7 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Sorte huller')?.synlig
+    nv.length === 8 && nv.every((n) => n.html && n.px >= 14) && navn('Livets begyndelse')?.synlig && navn('Planet 9')?.synlig
     && !navn('Liv andre steder')?.synlig, JSON.stringify(nv));
-  // Det sorte hul ved siden af tegnes af linsen fra Kosmos (lysbøjningen), i et lille lag efter lampens størrelse
-  const hul = await vent(page, () => (atomlabTest.gaader.skinne().lampe('sorthul')?.tegnet ?? 0) > 0, null, 10000) && await page.evaluate(() => atomlabTest.gaader.skinne().lampe('sorthul'));
-  tjek('skarpere: lampen for det sorte hul bruger linsen fra Kosmos og et lag på højst 512 px', hul?.linse && hul.tegnet > 0 && hul.størrelse >= 96 && hul.størrelse <= 512, JSON.stringify(hul));
-  const nabo = await T(() => atomlabTest.gaader.skinne().skærm('sorthul'));
+  // Et tryk på naboen (Planet 9) glider derhen. Så står Sort hul ved siden af, og dens lampe tegnes af linsen fra Kosmos
+  // (lysbøjningen), i et lille lag efter lampens størrelse
+  const nabo = await T(() => atomlabTest.gaader.skinne().skærm('planet9'));
   await page.mouse.click(nabo.x, nabo.y);
   const trykket = (await K()).fokus;
   await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 3) < 0.02);
+  const hul = await vent(page, () => (atomlabTest.gaader.skinne().lampe('sorthul')?.tegnet ?? 0) > 0, null, 10000) && await page.evaluate(() => atomlabTest.gaader.skinne().lampe('sorthul'));
+  tjek('skarpere: lampen for det sorte hul bruger linsen fra Kosmos og et lag på højst 512 px', hul?.linse && hul.tegnet > 0 && hul.størrelse >= 96 && hul.størrelse <= 512, JSON.stringify(hul));
   await page.mouse.move(700, 300);
   await page.mouse.down();
   for (let i = 1; i <= 8; i++) await page.mouse.move(700 - i * 50, 300);
   await page.mouse.up();
   const trukket = (await K()).fokus;
-  tjek('G4b: et tryk på en nabo glider derhen, og et træk mod venstre går til en større gåde', trykket === 'sorthul' && trukket === 'moerktstof', JSON.stringify({ trykket, trukket }));
+  tjek('G4b: et tryk på en nabo glider derhen, og et træk mod venstre går til en større gåde', trykket === 'planet9' && ['sorthul', 'moerktstof'].includes(trukket), JSON.stringify({ trykket, trukket }));
 
   // Et kort fra start til slut: gæt, svar, Næste
   await T(() => atomlabTest.gaader.visGåde('sorthul'));
@@ -238,7 +267,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.reload();
   await vent(page, påSkinne, null, 15000);
   const igen = await K();
-  tjek('✓ huskes, når siden genindlæses, og første gang er forbi', igen.ringe.includes('sorthul') && !igen.første && igen.tændte === 5, JSON.stringify(igen));
+  tjek('✓ huskes, når siden genindlæses, og første gang er forbi', igen.ringe.includes('sorthul') && !igen.første && igen.tændte === 6, JSON.stringify(igen));
 
   // "Næste gåde ›" flyver ud, glider et skridt og ind i den næste større gåde
   await T(() => { const g = atomlabTest.gaader; g.visGåde('sorthul'); for (let i = 0; i < 3; i++) { g.gæt(0); g.næste(); } });
@@ -425,7 +454,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const z = await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(() => ok(atomlabTest.gaader.skinne().zoom())))));
   const kort = await vent(page, () => atomlabTest.gaader.vist()?.id === 'antistof');
   await page.keyboard.press('Escape');
-  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 5);
+  const tændt = await vent(page, () => atomlabTest.gaader.skinne().tændte().length === 6);
   tjek('G4b ROLIG: kameraet hopper (ingen flyvning), kortet åbner efter toningen, og lysene står tændt med det samme', z === 2 && kort && tændt, JSON.stringify({ z, kort, tændt }));
   await ctx.close();
 }
@@ -544,6 +573,41 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   // Fotoet af stenen er hentet uden fejl (det står i KILDER.md)
   const foto = await T(async () => (await fetch('billeder/gaader/cheyava-falls.jpg')).ok);
   tjek('G4d: fotoet af Cheyava Falls findes og står i billeder/gaader/KILDER.md', foto && readFileSync(new URL('../billeder/gaader/KILDER.md', import.meta.url), 'utf8').includes('cheyava-falls.jpg') && readFileSync(new URL('../billeder/gaader/KILDER.md', import.meta.url), 'utf8').includes('PIA26368'));
+  await ctx.close();
+}
+
+// Planet 9 i 3D: de seks baner tegnes, Planet 9 som stiplet bud, alle de godt målte baner og 2017 OF201, og Rubin
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#gaader');
+  const T = (f, a) => page.evaluate(f, a);
+  await vent(page, påSkinne, null, 15000);
+  await T(() => atomlabTest.gaader.visGåde('planet9'));
+  const klar = await vent(page, () => atomlabTest.gaader.scene()?.scene()?.tilstand === 'seks', null, 15000);
+  const S = (sek) => T((s) => { const sc = atomlabTest.gaader.scene(); sc.spol(s); return sc.scene(); }, sek);
+  const undervejs = (await S(1)).kort;
+  const sprang = await T(() => { const s = atomlabTest.gaader.scene(); s.tryk(0, 0); s.spol(0.5); return { kort: s.scene().kort, linje: document.getElementById('gaadeLinje').textContent }; });
+  tjek('Planet 9: de seks baner tegnes én ad gangen, et tryk tegner dem færdige, og linjen siger "samme side"',
+    klar && undervejs.seks < 6 && !undervejs.planet && sprang.kort.seks === 6 && sprang.kort.tegnet && /samme side/.test(sprang.linje), JSON.stringify({ undervejs, sprang }));
+  tjek('Planet 9: småkloderne går mod uret set oppefra (som planeterne), og de seks kommer tættest på Solen til højre på kortet (inden for 70°)',
+    sprang.kort.mod === 6 && sprang.kort.med === 0 && sprang.kort.år > 0 && sprang.kort.retning.every((r) => Math.abs(r) < 70), JSON.stringify(sprang.kort));
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Ja, Pluto"
+  const bud = await T(() => ({ kort: atomlabTest.gaader.scene().scene().kort, linje: document.getElementById('gaadeLinje').textContent, efter: document.querySelector('.gaade-efter')?.textContent }));
+  tjek('Planet 9: efter gættet står Planet 9 som stiplet bud (ca. 374 AU ude på det fjerneste), og "Ja, Pluto" får at vide, at Pluto er en dværgplanet',
+    bud.kort.planet && bud.kort.fjernest[0] === 374 && bud.kort.fjernest[1] && /stiplede klode/.test(bud.linje) && /dværgplanet/.test(bud.efter), JSON.stringify(bud));
+  await page.click('#gaadeTrin .fl-næste');
+  const flere = (await S(1)).kort;
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
+  const svar = (await S(2)).kort;
+  tjek('Planet 9 trin 2: alle de godt målte baner og 2017 OF201 før gættet, og bagefter GÆT og de to stiplede forklaringer',
+    flere.andre >= 14 && flere.of201 && !flere.stempel && !flere.forklaringer && svar.stempel && svar.forklaringer && svar.kasser === 2 && svar.mod === svar.andre + 6, JSON.stringify({ flere, svar }));
+  await page.click('#gaadeTrin .fl-næste');
+  const r1 = (await S(0.2)).rubin;
+  const r2 = (await S(3)).rubin;
+  await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
+  await page.click('#gaadeTrin .fl-næste');
+  const ven = await T(() => document.getElementById('gaadeLinje').textContent);
+  tjek('Planet 9 trin 3: Rubin fotograferer himlen felt for felt, og til sidst "Sig det til en ven"',
+    r1?.felter > 30 && r2.fotograferet > r1.fotograferet && ven.startsWith('Sig det til en ven: Måske er der en planet mere'), JSON.stringify({ r1, r2, ven }));
   await ctx.close();
 }
 

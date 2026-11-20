@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { LAV_KVALITET, ROLIG, verden } from '../scene3d.js';
 import { glød, prikTekstur } from '../kosmos/faelles.js';
-import { fuld } from './streg.js';
+import { fuld, stiplet } from './streg.js';
 import { lavLinse, LINSE_KVALITET } from '../kosmos/linse.js';
 
 const prikker = (antal, størrelse) => {
@@ -97,6 +97,41 @@ const LYS = {
   sorthul: () => lavSortHul(),
 
   // En spiralgalakse (uden glorie: Det mørke stof kan ikke ses)
+  // En stiplet klode og aflange baner (Planet 9): fire lange baner i guld, der alle kommer tættest på Solen i samme side,
+  // og et bud på planeten (stiplet klode og bane) den modsatte vej. Det hele drejer langsomt.
+  planet9() {
+    const g = new THREE.Group();
+    const drej = new THREE.Group();
+    g.add(drej);
+    const sol = new THREE.Vector3(0.7, 0, 0);
+    const guld = new THREE.Color(1.0, 0.76, 0.36);
+    const ellipse = (a, e, vinkel, n = 72) => {
+      const p = [];
+      const b = a * Math.sqrt(1 - e * e);
+      for (let k = 0; k <= n; k++) {
+        const t = (k / n) * Math.PI * 2;
+        const x = a * (Math.cos(t) - e), y = b * Math.sin(t);
+        p.push([sol.x + x * Math.cos(vinkel) - y * Math.sin(vinkel), sol.y + x * Math.sin(vinkel) + y * Math.cos(vinkel), 0]);
+      }
+      return p;
+    };
+    // De små kloders baner: perihelium til højre (vinkel 0 ± lidt), resten af banen langt ude til venstre
+    for (const [a, e, v] of [[1.55, 0.86, 0.25], [1.4, 0.82, -0.2], [1.75, 0.88, 0.05], [1.3, 0.8, 0.5]]) {
+      drej.add(fuld(ellipse(a, e, Math.PI + v), guld, { bredde: 2 }));
+    }
+    // Planet 9's bud: perihelium mod venstre, så det fjerneste punkt står til højre
+    drej.add(stiplet(ellipse(0.95, 0.29, Math.PI), { bredde: 1.8, streg: 0.18, mellem: 0.12 }));
+    const klode = [];
+    const kx = sol.x + 0.95 * 1.29;
+    for (let k = 0; k <= 32; k++) { const t = (k / 32) * Math.PI * 2; klode.push([kx + Math.cos(t) * 0.32, Math.sin(t) * 0.32, 0]); }
+    drej.add(stiplet(klode, { bredde: 2.2, streg: 0.1, mellem: 0.08 }));
+    const s = glød(new THREE.Color(1.5, 1.2, 0.7), 0.7, 0.9);
+    s.position.copy(sol);
+    drej.add(s);
+    drej.position.x = -0.6;
+    return { gruppe: g, opdater(dt) { if (!ROLIG) drej.rotation.z += dt * 0.08; } };
+  },
+
   moerktstof() {
     const g = new THREE.Group();
     const N = LAV_KVALITET ? 900 : 1600;

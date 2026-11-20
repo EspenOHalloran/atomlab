@@ -498,6 +498,93 @@ export const GÅDER = [
         <p>Skakten og tanken er ikke tegnet i samme skala, og uret går meget hurtigere end i virkeligheden. Partiklen er stiplet, fordi ingen ved, om den findes. Kortet til sidst er et eksempel, ikke Euclids rigtige kort. ${STREG_FORKLARING}</p>`,
     },
   },
+  // Planet 9 (20. november 2026, efter Solsystemets overblik, docs/plan-gaader-3d.md). Kilderne står i
+  // docs/fakta-gaader.md ("Planet 9"): Batygin og Brown 2016 (AJ 151:22, arXiv:1601.05438: seks baner, 0,007 %, "mass
+  // greater than ~10 Earth masses", perihelium 180° modsat), Brown og Batygin 2021 (AJ 162:219, arXiv:2108.09868: 6,2
+  // jordmasser, 380 AU, 99,6 %), Siraj, Chyba og Tremaine 2025 (ApJ 978:139, arXiv:2410.18170: ca. 3 sigma, 4,4 ± 1,1
+  // jordmasser, 290 ± 30 AU, perihelium 200 ± 50 AU), OSSOS og DES 2020 ("no evidence for clustering", Wikipedia),
+  // 2017 OF201 (Cheng m.fl. maj 2025, arXiv:2505.15806), 2023 KQ14 (2025, Wikipedia) og Rubins LSST (begyndte 30. juni
+  // 2026, Wikipedia og nyheder 1. juli 2026). Banerne: js/data/planet9.js (JPL 20. november 2026).
+  {
+    id: 'planet9',
+    navn: 'Planet 9', // det korte navn under lyset på skinnen
+    størrelse: 7.5, // en planet: et bud er 2-4 gange Jordens bredde, ca. 3-5 · 10⁷ m (Liv andre steder er 7)
+    spørgsmål: 'Er der en planet mere i Solsystemet?',
+    linje: 'Noget trækker måske i de fjerneste småkloder',
+    dato: 'Sådan stod det i november 2026',
+    ord: ['dvaergplanet', 'kuiperbaelte'],
+    trin: [
+      {
+        overskrift: 'Hvad ved vi?',
+        spørg: 'Har nogen set en niende planet i Solsystemet?',
+        gæt: {
+          valg: [
+            { tekst: 'Ja, Pluto', efter: 'Pluto var nummer ni indtil 2006, men nu er den en dværgplanet. Planet 9 er en helt anden.' },
+            { tekst: 'Ja, langt ude', efter: 'Nej, ikke endnu. Men nogle forskere tror, at den er derude.' },
+            { tekst: 'Nej, ingen har set den', efter: 'Rigtigt. Ingen har set den, men nogle forskere tror, at den er derude.' },
+          ],
+          rigtigt: 2,
+        },
+        så: 'Ingen har set en niende planet. Men i 2016 viste Konstantin Batygin og Mike Brown, at banerne for seks fjerne småkloder peger samme vej, og at en ukendt planet kunne holde dem sådan.',
+      },
+      {
+        overskrift: 'Hvad ved vi ikke?',
+        spørg: 'Målt eller gæt? »Banerne peger samme vej, fordi en planet trækker i dem.«',
+        gæt: {
+          valg: [
+            { tekst: 'Målt', efter: 'Nej. Banerne er målt, men ikke hvad der lægger dem sådan.' },
+            { tekst: 'Gæt', efter: 'Rigtigt. Det er et bud, og ikke alle forskere tror på det.' },
+          ],
+          rigtigt: 1,
+        },
+        hvorfor: 'opdaget', // Siraj m.fl. 2025: mønstret er ca. 3 sigma, altså »tegn på«
+        så: 'Banerne er målt, men om mønstret er ægte, er forskerne uenige om. Nogle mener, at det kun ser sådan ud, fordi man har ledt mest i nogle dele af himlen, og småkloden 2017 OF201 (meldt i 2025) peger en helt anden vej.',
+      },
+      {
+        overskrift: 'Hvordan finder vi ud af det?',
+        spørg: 'Hvordan kan forskerne finde ud af, om planeten er der?',
+        gæt: {
+          valg: [
+            { tekst: 'Lede efter den med et stort teleskop', efter: 'Godt tænkt. Den er så langt fra Solen, at den er meget svag, så det kræver et kæmpe teleskop.' },
+            { tekst: 'Finde mange flere fjerne småkloder', efter: 'Godt tænkt. Jo flere baner man kender, jo bedre kan man se, om mønstret er ægte.' },
+            // Voyager 1: ca. 25,9 milliarder km 18. november 2026 (drejebog-overblik.md nr. 18) = ca. 173 AU, opsendt 1977
+            { tekst: 'Sende en rumsonde derud', efter: 'Det ville tage alt for lang tid. Voyager 1 har fløjet i 49 år og er kun ca. 170 gange så langt ude som Jorden.' },
+          ],
+        },
+        hvorfor: 'opdaget',
+        så: 'Rubin-observatoriet i Chile begyndte 30. juni 2026 at fotografere himlen igen og igen i ti år. Det kan finde planeten, hvis den er der, eller så mange nye småkloder, at man kan se, om mønstret er ægte.',
+      },
+    ],
+    slut: 'Ingen har set Planet 9. Banerne for de fjerneste småkloder er målt, men om en planet trækker i dem, er stadig et gæt.',
+    ven: 'Måske er der en planet mere langt ude bag Neptun, men ingen har set den, og et nyt teleskop i Chile kan måske afgøre det.',
+    nyt: null,
+    løst: null,
+    seDet: ['solsystem:overblik', 'Se det selv: Solsystemet'],
+    nørd: `
+      <p><b>Navnet:</b> Batygin og Brown kaldte den Planet Nine (Planet 9) i 2016, for siden Pluto blev en dværgplanet, er der otte planeter, og den nye ville blive nummer ni. Nogle forskere vil hellere sige Planet X, og hvis den bliver fundet, får den et rigtigt navn. "Planet X" bruges også om andet: Percival Lowell ledte fra 1906 efter en Planet X bag Neptun, og i 1930 fandt Clyde Tombaugh Pluto i stedet, som var alt for lille. På nettet bruges navnet også om en opdigtet planet, der skulle ramme Jorden. Planet 9 er ikke den: Hvis den findes, kommer den aldrig nærmere Solen end ca. 200 gange Jordens afstand.</p>
+      <p><b>"Peger samme vej":</b> Hver småklode går i en lang ellipse og kommer tættest på Solen i én retning. For de seks fra 2016 lå den retning i samme side af Solen, og banerne hældte omtrent samme vej. Batygin og Brown regnede ud, at det kun ville ske ved et tilfælde i 0,007 % af tilfældene, og at en planet på over ca. 10 gange Jordens masse kunne holde banerne sådan, med sin egen bane drejet den modsatte vej.</p>
+      <p><b>Buddene har ændret sig:</b> I 2021 regnede Brown og Batygin med flere småkloder og fik ca. 6 jordmasser og ca. 380 gange Jordens afstand fra Solen. I 2025 fandt et andet hold (Amir Siraj, Christopher Chyba og Scott Tremaine) mønstret med ca. 3 sigma (»tegn på«, ikke »opdaget«) og fik en mindre og nærmere planet: ca. 4-5 jordmasser og ca. 290 gange Jordens afstand. De to bud er ikke den samme planet.</p>
+      <p><b>De, der tvivler:</b> Man kan kun se de fjerne småkloder, når de er tæt på Solen, og nogle dele af himlen er der ledt meget mere i end andre. To store undersøgelser, OSSOS og Dark Energy Survey, regnede med, hvor de selv havde ledt, og fandt i 2020 ingen tegn på, at banerne peger samme vej. Småkloden 2017 OF201 (ca. 700 km, meldt i maj 2025) og 2023 KQ14 (meldt i 2025) peger en anden vej end de andre.</p>
+      <p><b>Rubin:</b> Observatoriets teleskop er 8,4 m bredt, og det har verdens største digitale kamera til astronomi. Det fotograferer hele den himmel, det kan se, med få nætters mellemrum. Siraj og hans kolleger regnede ud, at deres planet sandsynligvis står i en del af himlen, Rubin måler, og at den er lys nok til at blive set.</p>`,
+    ærligt: '<p>Mønstret i de seks baner er målt. At det skyldes en planet, er et bud, og mange forskere tvivler. Måske finder Rubin planeten, og måske viser de nye småkloder, at der ikke var noget mønster.</p><p>Planet 9 er ikke "den niende efter Pluto". Pluto er en dværgplanet, og Planet 9 er en mulig planet, som ingen har set.</p>',
+    // Scenen i 3D (js/gaader/planet9.js). Banerne: js/data/planet9.js (JPL's Small-Body Database 20. november 2026, a >
+    // 250 AU, q > 30 AU, målt over mindst et år). Neptun: 30 AU. Planet 9's stiplede bane: a = 290 AU, e = 0,29 (Siraj
+    // m.fl. 2025), perihelium drejet 180° fra de seks (Batygin og Brown 2016). Rubin: 10 år fra 30. juni 2026.
+    scene: {
+      start: 'Den lille ring i midten er Neptuns bane. Langt længere ude går seks fjerne småkloder rundt om Solen.',
+      samme: 'Se, hvor de kommer tættest på Solen: Alle seks gør det i samme side.',
+      efter: 'Den stiplede klode er et bud på en planet, ingen har set: ca. 4-5 gange Jordens masse og ca. 290 gange så langt fra Solen (skøn fra 2025).',
+      flere: 'Siden 2016 er der fundet mange flere. Her er alle dem med en godt målt bane. Peger de stadig samme vej?',
+      flereSvar: 'Banerne er målt. At en planet trækker i dem, er et bud. Andre mener, at mønstret skyldes, hvor man har ledt.',
+      rubin: 'Rubin-observatoriet i Chile fotograferer himlen igen og igen i ti år. Hver ny fjern småklode giver en bane mere at regne med.',
+      navne: {
+        solen: 'Solen', neptun: 'Neptuns bane', seks: 'de seks fra 2016', planet: 'Planet 9 (et bud)', of201: '2017 OF201',
+        trækker: 'en planet trækker', ledt: 'det er der, man har ledt', rubin: 'Rubin-observatoriet i Chile: 2026-2036',
+      },
+      ærligt: `<p>Banerne er de rigtige fra JPL (20. november 2026), set lige oppefra, så man ikke ser, hvor meget de hælder. Med en godt målt bane menes her en, der er målt over mindst et år. Tiden er spolet frem: Ét sekund er ca. 200 år, og prikkerne starter, hvor småkloderne er nu. Næsten alle er tæt på Solen, for det er kun dér, man kan se dem.</p>
+        <p>Planet 9's bane er et bud: størrelsen fra skønnet i 2025 og drejet modsat de seks, som Batygin og Brown foreslog i 2016. Hvor på banen den skulle være, ved ingen, så kloden er tegnet ved det fjerneste punkt, hvor en planet går langsomst og er længst tid. Kloden er tegnet alt for stor. Felterne på himlen til sidst er en tegning af, hvordan Rubin tager billeder, ikke de rigtige felter. ${STREG_FORKLARING}</p>`,
+    },
+  },
 ];
 
 export const gådeMed = (id) => GÅDER.find((g) => g.id === id) ?? null;
