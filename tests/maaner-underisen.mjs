@@ -95,7 +95,9 @@ if (!process.argv.includes('--uden-browser')) {
   const krum = (p) => Math.abs((p[1][0] - p[0][0]) * (p[2][1] - p[0][1]) - (p[1][1] - p[0][1]) * (p[2][0] - p[0][0]));
   await spol(2.5);
   await klik('.fl-handling[data-knap="hav"]');
-  await spol(0.2);
+  // (feltet bøjer kun, mens Jupiters felt vipper ud til siden: vent, til vippen er tydelig)
+  for (let i = 0; i < 40 && Math.abs((await f((t) => t.felt())).jupiter) < 0.6; i++) await spol(0.25);
+  await spol(0.1);
   const bøjet = await f((t) => [t.linjePunkt(7, 0), t.linjePunkt(7, 90), t.linjePunkt(7, 180)]);
   tjek('trin 2: midterlinjen er ret uden hav og bøjet med hav', krum(ret) < 1e-3 && krum(bøjet) > 0.01, `${krum(ret)} ${krum(bøjet)}`);
   await spol(2.5);
