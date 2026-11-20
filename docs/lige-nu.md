@@ -12,6 +12,7 @@
 | Menuen | [lige-nu/menuen.md](lige-nu/menuen.md) | **Lukket 14. november 2026** (ringen efter størrelse er lavet). Små rettelser i Småting, en ny verden med den del, der skal bo i den |
 | Ordbogen og Det periodiske system | [lige-nu/ordbog-og-system.md](lige-nu/ordbog-og-system.md) | **Lukket 14. november 2026.** Nye ord tages i det spor, der bruger dem, og små rettelser i Småting |
 | Videnskabsfolkene | [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md) | Opdagelserne i Biblioteket: ti bøger om videnskabsfolk ([plan-videnskabsfolk.md](plan-videnskabsfolk.md), startet 15. november 2026). Huygens først som prøve ([drejebog-huygens.md](drejebog-huygens.md)): H1-H4 er lavet (16.-17. november, H4: bogen selv og "Om Huygens"), næste er prøven med jeres søn. Tycho ([drejebog-tycho.md](drejebog-tycho.md)): T1-T3 er lavet 19. november (forsiden, turen, gåden, bogen fra 1573 og "Om Tycho"), status prøve. Næste er prøven med jeres søn og så Rømers drejebog (V2) |
+| Måner | [lige-nu/maaner.md](lige-nu/maaner.md) | Land på måner og månerne med mulige betingelser for liv (startet 20. november 2026). Først drejebogen (Under isen og Land med Huygens), kun dokumenter ([fakta-maaner-liv.md](fakta-maaner-liv.md)) |
 | Småting | [lige-nu/smaating.md](lige-nu/smaating.md) | Små rettelser på tværs, tests, dokumenter og arbejdsgangen |
 | Åbne punkter | [lige-nu/aabne-punkter.md](lige-nu/aabne-punkter.md) | Fejl og tests, der ikke er undersøgt, grene, domæner og faktatjek, der mangler |
 
