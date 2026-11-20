@@ -9,9 +9,9 @@ import { OPGAVER, OPGAVER_FUSION, OPGAVER_REAKTOR, OPGAVER_BATTERI } from './dat
 import { OPGAVER_LIV } from './data/liv/opskriften.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js'; // Molekylers opgaver ("Del elektroner" og "Giv elektroner")
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
-import { FÆNOMEN_IDER, setFænomener, flytGemt } from './data/faenomener.js';
+import { FÆNOMEN_IDER, NØGLER, setFænomener, flytGemt } from './data/faenomener.js';
 import { SKÆRME, skærmMed, hentSkærm, hentetSkærm } from './skaerme.js';
-import './gaa.js'; // knapperne med data-gaa virker, før Kosmos og Solsystemet er hentet
+import { åbnFænomen } from './gaa.js'; // knapperne med data-gaa virker, før Kosmos og Solsystemet er hentet
 import { lavFuldSkærmKnapper } from './fuldskaerm.js';
 import { lavBeskeder, rydBeskeder, visBesked, testAdgang as beskederTest } from './beskeder.js';
 import { stopGuide } from './guide.js';
@@ -123,10 +123,18 @@ let bjælke = null; // "Henter …", mens en skærm hentes
 let bjælkeNr = 0; // det skærmskift, bjælken venter for
 
 async function visSkærm() {
+  // En adresse direkte til et fænomen (fx #kosmos:betelgeuse eller #solsystem:mars:olympus, 20. november 2026) virker
+  // som en knap med data-gaa: Fænomenet vælges, og adressen bliver #kosmos. Er skærmen allerede åben, startes den igen
+  const [delNavn, fænomen, sted] = location.hash.slice(1).split(':');
+  const tilFænomen = Boolean(fænomen && NØGLER[delNavn]);
+  if (tilFænomen) {
+    history.replaceState(null, '', `#${delNavn}`);
+    åbnFænomen(delNavn, fænomen, sted);
+  }
   const navn = location.hash.slice(1);
   const ny = skærmMed(navn) ? navn : 'menu';
   const nr = ++skift;
-  if (ny === aktivSkærm) return;
+  if (ny === aktivSkærm && !tilFænomen) return;
   let modul = ny === 'menu' ? MENU : hentetSkærm(ny);
   if (!modul) {
     // Den gamle skærm står, mens den nye hentes. "Henter …" ses først efter 1 sekund (js/hentning.js).

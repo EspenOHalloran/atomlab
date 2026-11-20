@@ -21,7 +21,8 @@
 //              BOGEN.næste/sidst er en sti: "Næste side ›", og på den sidste side bladrer den videre (18. november 2026). Siderne hentes med hentBillede (js/hentning.js),
 //              første gang opslaget åbnes, og toner ind
 //   'om'       bogens sidste opslag "Om …" (H4, tekster.OM): navnet, højst to tal, højst tre sætninger, sidens vigtige
-//              knap (OM.knap med data-gaa, fx Saturn fra kanten, den røde tråd 18. november 2026), højst fire
+//              knap (OM.knap med data-gaa, fx Saturn fra kanten, den røde tråd 18. november 2026), evt. et stille link
+//              (OM.ekstra med data-gaa og linje, fx Betelgeuse hos Tycho), højst fire
 //              "Hvorfor?"-kort (visHvorfor fra js/lag.js) og "Vil du vide mere?" og "Ærligt talt" som lukkede foldebokse
 // påBegynd() kaldes ved "Begynd" (giver den true, bladrer bogen ikke selv). lås(true) slår bladringen fra (knapperne,
 // stryget og bladr()), mens et forløb kører i bogen.
@@ -214,6 +215,9 @@ function omHTML(o, om, bogId) {
     + (om.knap ? `<button class="knap bo-knap" data-gaa="${esc(om.knap.gaa)}">${esc(om.knap.tekst)} ›</button>` : '')
     // En linje om, hvad man skal gøre, når knappen har åbnet et andet sted (Tycho: "Tryk på ›Lad den suge gas‹", T3)
     + (om.knap?.linje ? `<p class="bo-knap-linje">${esc(om.knap.linje)}</p>` : '')
+    // Et ekstra, stille link (ikke endnu en vigtig knap, stilguiden A3) med sin egen linje (Tycho: Betelgeuse, 20. november 2026)
+    + (om.ekstra ? `<button class="knap bo-ekstra" data-gaa="${esc(om.ekstra.gaa)}">${esc(om.ekstra.tekst)} ›</button>` : '')
+    + (om.ekstra?.linje ? `<p class="bo-knap-linje">${esc(om.ekstra.linje)}</p>` : '')
     + `<div class="bo-hvorfor">${om.hvorfor.slice(0, 4).map((h, i) => `<button class="hvorfor" data-bo-hvorfor="${i}" aria-expanded="false">${esc(h.spørgsmål)}</button>`).join('')}</div>`
     + boks(om.nørd, 'nørd') + boks(om.ærligt, 'ærligt')
     + '</div></div>';

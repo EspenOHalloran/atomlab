@@ -1,4 +1,6 @@
-// Betelgeuse set fra Jorden (kontakten "🌃 Betelgeuse set fra Jorden" i Supernova): Man står på en mark i Danmark
+// Betelgeuse eksploderer, set fra Jorden: et fænomen for sig i Kosmos (#kosmos:betelgeuse, fra 20. november 2026, før
+// kontakten "🌃 Betelgeuse set fra Jorden" i Supernova, jeres ord: "Synes du, det er en indstilling at se Betelgeuse
+// eksplodere?"). Man står på en mark i Danmark
 // en vinternat og kigger mod Orion. Når Betelgeuse eksploderer, blusser den op til omtrent en halvmåne, lyser
 // landskabet op og kaster skarpe skygger, og så falmer den over nogle år, til Orion har mistet sin skulder.
 // Stjernerne står, hvor de rigtigt står (js/data/betelgeuse.js), men tiden er skruet sammen, og lyskurven er et skøn.
@@ -7,6 +9,7 @@
 import * as THREE from 'three';
 import { ROLIG, LAV_KVALITET, visTåger, visRumstøv, centrerVindue } from '../scene3d.js';
 import { glød, skilt } from './faelles.js';
+import { gå, handling } from '../sideknap.js';
 import {
   STJERNER, STREGER, SOLEN_I_MARTS, GALAKSENS_POL, retning, højdeOgKompas, størrelsesklasse, farve,
   dageFraSkyder, tidTekst, sammenlign, SKYDER, DAG_GRÆNSE, ØJE_GRÆNSE,
@@ -250,7 +253,7 @@ function lavTag(b, d, h) {
   return geo;
 }
 
-export function lavBetelgeuse(forælder, { verden, kamera, fase, forklaring, opdaterKnapper }, himmelKontakt) {
+export function lavBetelgeuse(forælder, { verden, kamera, fase, forklaring, opdaterKnapper }) {
   const gruppe = new THREE.Group();
   gruppe.visible = false;
   forælder.add(gruppe);
@@ -587,7 +590,6 @@ export function lavBetelgeuse(forælder, { verden, kamera, fase, forklaring, opd
   };
 
   const styring = [
-    himmelKontakt,
     { tekst: '☀️ Om dagen', til: false, skift: (til) => { dagMål = til ? 1 : 0; if (ROLIG) dag = dagMål; opdaterTilstand(true); } },
     { tekst: '✨ Navne og streger', til: true, skift: (til) => { visNavne = til; } },
     skyder,
@@ -683,3 +685,60 @@ export function lavBetelgeuse(forælder, { verden, kamera, fase, forklaring, opd
     },
   };
 }
+
+// Fænomenet i Kosmos (listen "Stjernernes liv", efter Supernova). Teksterne, der før stod i Supernova om Betelgeuse set
+// fra Jorden, er flyttet hertil (faktatjekket 13. november 2026 og igen 20. november 2026, docs/erfaringer/fakta-faelder.md)
+export default {
+  id: 'betelgeuse',
+  navn: 'Betelgeuse eksploderer',
+  ikon: '🌃',
+  undertitel: 'Set fra en mark i Danmark',
+  tåger: false, // himlen er sin egen kugle uden tågeskyer og rumstøv (vis)
+  // Skallen stiller kameraet efter lav. vis() kaldes derfor først i altid, så kameraet står på jorden bagefter
+  kamera: { retning: [0, 0, 1], radius: 1, mål: [0, ØJE, 0], drej: false },
+  tal: [
+    ['Lyset er om at nå hertil', 'ca. 550 år'],
+    ['På sit klareste lyser den', 'omtrent som en halvmåne'],
+    ['Uden kikkert kan den ses i', 'flere år'],
+  ],
+  side: {
+    kort: 'En dag eksploderer Betelgeuse, den røde stjerne i Orions skulder, som en supernova. Her kan du se, hvordan det vil se ud fra Jorden, fra de første neutrinoer, til stjernen er væk.',
+    emner: [
+      {
+        titel: 'Hvordan vil det se ud?',
+        tekst: `<p>Først sker der ingenting på himlen. Ca. et døgn senere blusser Betelgeuse op og bliver omtrent lige så lysende som en halvmåne. Om natten kaster den skygger, og man kan se den om dagen i flere måneder, måske et år. ${handling('💥 Lad Betelgeuse eksplodere')}</p><p>Den er alt for langt væk til at være farlig for os.</p>`,
+      },
+      {
+        titel: 'Hvorfor kommer neutrinoerne før lyset?',
+        tekst: '<p>Når kernen falder sammen, farer en storm af neutrinoer (bittesmå partikler uden ladning, der flyver gennem næsten alt) lige ud gennem stjernen. Lyset må vente på chokbølgen, og den skal hele vejen ud gennem den kæmpestore stjerne. Det tager ca. et døgn.</p>',
+      },
+      {
+        titel: 'Kan den allerede være eksploderet?',
+        tekst: '<p>Lyset er ca. 550 år om at nå hertil. Vi ser altså stjernen, som den så ud for 550 år siden. Den kan i princippet allerede være eksploderet, men det er meget usandsynligt.</p>',
+      },
+      {
+        // Joyce m.fl. 2020: ca. 100.000 år (heliumbrænding). Saio m.fl. 2023: kulstofbrænding, under et par hundrede år (Joyce m.fl. 2023 svarer, at radien var forkert). Omstridt, så forsigtigt
+        titel: 'Hvornår eksploderer den?',
+        tekst: '<p>Det ved ingen. Mange forskere regner med, at der går omkring 100.000 år, men nogle mener, at det kan ske om få hundrede år.</p><p>Det bliver en anden slags supernova end Tychos nye stjerne i 1572. Den var en hvid dværg, der eksploderede. Betelgeuse er en kæmpestjerne, hvis kerne falder sammen.</p>',
+      },
+    ],
+    videre: [gå('kosmos:supernova', 'Supernova: inde i stjernen'), gå('opdagelser:tycho', 'Tychos nye stjerne i 1572'), gå('kosmos:pulsar', 'Pulsar')],
+    nørd: `
+      <p><b>Lyskurven</b> i animationen er et skøn. Forskerne regner med, at supernovaen bliver mellem en kvart og en fuld måne lysende i ca. tre måneder, og at man kan se den uden kikkert i flere år. Lyset kommer først ca. et døgn efter neutrinoerne, fordi chokbølgen skal hele vejen ud gennem den kæmpestore stjerne.</p>
+      <p><b>En advarsel i forvejen:</b> I de sidste timer før sammenfaldet smelter stjernen silicium sammen og sender så mange neutrinoer ud, at detektoren Super-Kamiokande i Japan kan give en advarsel op til ca. 9 timer før.</p>
+      <p><b>Den store formørkelse:</b> I vinteren 2019-20 mistede Betelgeuse over to tredjedele af sit lys, og mange spurgte, om den var ved at eksplodere. Den havde pustet en kæmpe boble af gas ud, og da gassen blev kølet af, blev den til støv, der skyggede for stjernen.</p>
+      <p><b>En lille makker:</b> I 2025 fandt man tegn på en lille stjerne, der kredser tæt om Betelgeuse på ca. seks år. Den har fået navnet Siwarha ("hendes armbånd"). Den er så svær at se ved siden af kæmpen, at fundet endnu ikke er helt sikkert.</p>`,
+    ærligt: '<p>Stjernerne står, hvor de rigtigt står, set fra Danmark. Men årene er skruet sammen til et halvt minut, lyskurven er et skøn, og landskabet er lysere, end øjet ville se det. Om dagen er det en eftermiddag i marts, hvor Orion står samme sted på himlen, og Solen står lavt i vest.</p>',
+  },
+
+  lav(gruppe, ctx) {
+    const jord = lavBetelgeuse(gruppe, ctx);
+    return {
+      styring: jord.styring,
+      altid: () => jord.vis(), // gør kun noget første gang (vis tjekker selv, om den er vist)
+      opdater: jord.opdater,
+      stop: jord.skjul,
+      test: { ...jord.test, set: () => jord.aktiv() },
+    };
+  },
+};

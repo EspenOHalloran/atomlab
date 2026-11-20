@@ -409,6 +409,13 @@ export const OM = {
     tekst: 'Se en stjerne eksplodere', gaa: 'kosmos:hviddvaerg',
     linje: 'Tryk på "Lad den suge gas". Når den hvide dværg eksploderer, viser grafen, hvordan lyset falder bagefter, ligesom Tychos stjerne blev svagere måned for måned.',
   },
+  // Et stille link under Gør det selv (jeres idé og go 20. november 2026): Betelgeuse som sit eget fænomen i Kosmos.
+  // 1572 var type Ia (lysekkoet 2008, fakta afsnit 6). Betelgeuse er en rød kæmpe og ender med et kernekollaps
+  // (type II). Hvornår, ved ingen (Supernova i Kosmos: "måske først om 100.000 år")
+  ekstra: {
+    tekst: 'Sådan ville en ny stjerne se ud i dag: Betelgeuse', gaa: 'kosmos:betelgeuse',
+    linje: 'Tychos stjerne var en hvid dværg, der eksploderede (type Ia), mens Betelgeuse bliver en anden slags supernova: en kæmpestjerne, hvis kerne falder sammen, og ingen ved, hvornår det sker.',
+  },
   hvorfor: [
     {
       // Fakta afsnit 2 (Aristoteles og himlen bag Månen)

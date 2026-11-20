@@ -3,7 +3,7 @@
 // Kun dem i listen: "Hvordan kan det ske?" (tidhvorfor) hører til "Tid" og tælles ikke med (14. november 2026).
 
 export const FÆNOMEN_IDER = {
-  kosmos: ['oversigt', 'bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
+  kosmos: ['oversigt', 'bigbang', 'stjernefoedsel', 'hviddvaerg', 'supernova', 'betelgeuse', 'pulsar', 'kilonova', 'rumtid', 'tid', 'tyngdebolger', 'sorthul', 'kvasar', 'ormehul'],
   solsystem: ['overblik', 'solen', 'solstorm', 'solensfremtid', 'merkur', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun', 'pluto'],
 };
 

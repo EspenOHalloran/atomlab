@@ -1650,6 +1650,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .bo-hvorfor button.hvorfor { margin: 0; min-height: 44px; padding: 0 16px; border-color: #b08a2a; background: rgba(201, 162, 74, 0.16); color: var(--bog-blaek); font-weight: 600; }
 #opdagelser .bo-hvorfor button.hvorfor:hover, #opdagelser .bo-hvorfor button.hvorfor[aria-expanded="true"] { background: rgba(201, 162, 74, 0.38); color: var(--bog-blaek); }
 #opdagelser .bo-knap { justify-self: center; min-height: 48px; padding: 0 24px; font-size: 17px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; } /* Gør det selv som sidens vigtige knap (18. november 2026) */
+#opdagelser .bo-ekstra { justify-self: center; min-height: 44px; padding: 0 18px; font-size: 15px; background: transparent; color: var(--bog-blaek); border-color: color-mix(in srgb, var(--bog-blaek) 45%, transparent); } /* Et stille link under Gør det selv (Tycho: Betelgeuse, 20. november 2026) */
 #opdagelser .bo-lag { padding: 10px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--bog-blaek) 30%, transparent); font-size: 15px; line-height: 1.45; }
 #opdagelser .bo-lag summary { min-height: 24px; }
 #opdagelser .bo-lag summary strong { font-family: var(--bog-skrift); font-weight: 400; font-size: 18px; }
