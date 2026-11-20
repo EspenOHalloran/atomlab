@@ -31,3 +31,11 @@ Slet eller slå mine skemaer fra, opret dine egne (cron `0 * * * *` "Orkestrator
 ## Andet
 - Kendte røde tests: `venus` (også alene), `batteri` (også alene på main), `frigiv` og `overblik` (kun under belastning).
 - Ugegrænsen er tæt på (advarsel). Den nulstilles 25. november kl. 01:00 dansk tid.
+
+## Venter på jer (opdateret 20. november 2026, gennemgangen i Småting)
+- **Prøven med sønnen** (jeres plan: weekenden 22.-23. november, se [guide-proeven.md](guide-proeven.md)). Blokerer Ild 2 og Kvantefysik forløb 2-3.
+- **Prøver på enhederne:** Pc og mobil i Gåderne (navne, swipe, knib og zoom), Enceladus' skyggegrænse, stenene ved Naukluft, Curiosity og Planet 9 på tabletten, 4k-højdekortet på pc'en. Hvilken gåde gav lange stop (180-610 ms) på pc?
+- **Rettighedslinjen** for Smithsonians skanning fra 1915 (Einsteins bog): læses i en browser (biodiversitylibrary.org har robottjek).
+- **Ikke startet endnu (go givet, venter på plads):** Venus "Ned gennem skyerne" (længere tid og bladring, prompt i Åbne punkter), G4c Sort hul (prompt i smaating.md) og G2 grafik (prompt i plan-grafik.md). **Kører:** S3b (startet 20. november).
+- **Mars ekstra 4 (L2)** venter på G2. **Grafik G3** starter med Værkstedet efter G2.
+- **Orkestreringen** er på pause. Det gamle timeskema (trig_01QbBJpjnC4M1PQJMBj3XpRB) er slået fra, men ikke slettet (tilladelsessystemet afviste det). Spørgsmålet om, hvordan det kører videre, er ikke taget i gennemgangen.

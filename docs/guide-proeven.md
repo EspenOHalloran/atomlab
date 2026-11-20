@@ -44,3 +44,5 @@ Kan barnet ikke sige kernesætningen, er det forløbet, der skal rettes, ikke ba
 
 ## Skriv det ned
 Skriv svarene og billederne i en ny session med Opus: *"Her er prøven fra i aften: …"*. Opus skriver dem ind i sporets fil, retter status fra "prøve" til "prøvet" og foreslår rettelser. Det, der er prøvet, fjernes fra [ikke-afproevet.md](ikke-afproevet.md).
+
+- **Jeres svar 20. november 2026 (gennemgangen i Småting):** I prøver at nå prøven med sønnen i weekenden (22.-23. november). Anbefalet rækkefølge: Ild 1 og Tycho først (de nyeste, flest åbne spørgsmål), så Huygens, Liv tur 4-5 og Tid. Korte noter ("forstod ikke X") er nok.
