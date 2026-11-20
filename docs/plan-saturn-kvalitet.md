@@ -77,6 +77,13 @@ I dag bygges ringene af grænserne og en omtrentlig tæthed (τ) i `js/data/ring
 - Billeder (fuld grafik): Forfra er Enceladus næsten som før. Ved skyggegrænsen og i lav sol er grænsen nu ujævn med bakker og dale, og der er ingen korn eller sømme. Tigerstriberne (ca. 0,5 km dybe) er for små til modellen.
 - **Tilbage: S3b** (Mimas, Tethys, Dione og Rhea): sbn.psi.edu og sbnarchive.psi.edu er åbne i miljøet, men PSI ligger bag Cloudflares robottjek ("Just a moment …", 403), så filerne kan ikke hentes automatisk. Mulige veje: I henter filerne i en browser og lægger dem i repoet (fx under `billeder/solsystem/original/`, eller sender dem), Spejlene er tjekket af orkestratoren (19. november 2026): SBN's afdeling på University of Maryland (`pds-smallbodies.astro.umd.edu`) linker tilbage til PSI, og NAIF (`naif.jpl.nasa.gov`) har kun Phobos og Enceladus. Den eneste vej er altså, at I henter filerne fra sbn.psi.edu i en browser. **Idé:** NAIFs Enceladus-model (`cas_enceladus_ssd_spc_*.bds` i Cassinis SPICE-arkiv, en SPC-model i SPICE' DSK-format) kan være skarpere end Blands 2,2 km. Ikke undersøgt. `lavIsmåne` skal så have `sætForm` som `lavEnceladus`, og `lav_saturn_former.py` skal kunne læse ICQ (et gitter af punkter på en terning).
 
+**Status efter S3b (Mimas, Tethys, Dione og Rhea, 20. november 2026):**
+- I hentede filerne i en browser (de ligger nu på grenen `kilder-saturn-s3b`, og `billeder/solsystem/kilder/` er i `.gitignore`). Mimas: Gaskells ICQ med q = 256 (ca. 1,2 km). Tethys og Dione: Gaskells trekanter fra q = 128 (ca. 6,5-7 km). Rhea: Weirich m.fl. 2025 (SPC), men kun udgaven med q = 128 (ca. 8,6 km). Den skarpere udgave (ca. 2,2 km) blev ikke hentet.
+- `lav_saturn_former.py` laver `mimas-`, `tethys-`, `dione-` og `rhea-form.png` (720 × 360, nul = radius i saturn.js): en stråle fra midten pr. pixel (2 × 2) rammer trekanterne i det konvekse hylster om punkternes retninger. Ellipsoiderne passer med IAU (Mimas 207,8 × 196,3 × 191,5 km mod 207,8 × 196,7 × 190,6). Retningen er tjekket: Herschel er den laveste egn ved ca. 111° V, Odysseus ved ca. 35-39° N, 123-129° V.
+- `lavIsmåne` har fået `km` og `sætForm(billede, net)` (som Enceladus). Testen tjekker formen for alle fire og kratrene for Mimas og Tethys.
+- Billeder (fuld grafik): Skyggegrænsen er ujævn med kratere på alle fire, mest på Mimas. Ingen sømme eller spidser ved polerne.
+- **Kan blive bedre:** Rhea i ca. 2,2 km (en større fil i samme mappe hos PSI) og de nyere modeller af Weirich m.fl. (Mimas 0,6 km), hvis de kommer i PDS.
+
 ## Rækkefølgen (forslag)
 **31. oktober 2026:** S2 kommer lige efter L1 (lyset i Stå på Mars), mens U3 kører. S3 og Saturn i 8k venter. Se "Plan for resten af Mars" i [plan-mars.md](plan-mars.md), afsnit 2.
 

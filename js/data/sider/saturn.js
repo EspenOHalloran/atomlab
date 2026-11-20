@@ -91,7 +91,7 @@ export const SIDER = {
     ],
     videre: [sted('enceladus', 'Enceladus'), sted('maaner', 'Alle månerne')],
     billeder: '<p>Mimas-kortet er lavet af DLR ud fra billeder fra rumsonden Cassini.</p>',
-    ærligt: MÅNE_ÆRLIGT,
+    ærligt: '<p>Formen er målt ud fra fotos fra Cassini og Voyager 1: Mimas er aflang, ca. 415 km på den lange led (mod Saturn) og ca. 380 km mellem polerne. Herschel ses som en stor fordybning. Det, der er mindre end ca. 5 km, kommer kun fra fotoet.</p>' + MÅNE_ÆRLIGT,
   },
   enceladus: {
     tal: [['Bredde', '504 km'], ['Kaster lyset tilbage', 'ca. 80 %'], ['Tigerstriberne', '4, hver ca. 130 km lang'], ['Fra Saturn', 'ca. 238.000 km']],
@@ -121,7 +121,7 @@ export const SIDER = {
     ],
     videre: [sted('dione', 'Dione'), sted('maaner', 'Alle månerne')],
     billeder: CASSINI,
-    ærligt: MÅNE_ÆRLIGT,
+    ærligt: '<p>Formen er målt ud fra Cassinis fotos: Tethys er lidt aflang, ca. 1.075 km på den lange led (mod Saturn) og ca. 1.050 km mellem polerne. Odysseus ses som en stor fordybning. Det, der er mindre end ca. 10 km, kommer kun fra fotoet.</p>' + MÅNE_ÆRLIGT,
   },
   dione: {
     tal: [['Bredde', '1.123 km'], ['Isklipperne', 'flere hundrede m høje'], ['En omgang', 'ca. 2¾ døgn'], ['Fra Saturn', 'ca. 377.400 km']],
@@ -134,14 +134,14 @@ export const SIDER = {
     ],
     videre: [sted('rhea', 'Rhea'), sted('maaner', 'Alle månerne')],
     billeder: '<p>Kortet er lavet af billeder fra rumsonden Cassini (NASA/JPL/Space Science Institute) via USGS, med lidt fra Voyager.</p>',
-    ærligt: MÅNE_ÆRLIGT,
+    ærligt: '<p>Formen er målt ud fra Cassinis fotos. Dione er næsten rund: Den er kun ca. 8 km længere mod Saturn end mellem polerne. Det, der er mindre end ca. 10 km, kommer kun fra fotoet.</p>' + MÅNE_ÆRLIGT,
   },
   rhea: {
     tal: [['Bredde', 'ca. 1.530 km'], ['Is', 'måske ca. ¾'], ['En omgang', 'ca. 4½ døgn'], ['Fra Saturn', 'ca. 527.000 km']],
     kort: 'Rhea er måske ca. tre fjerdedele is og resten sten.',
     videre: [sted('titan', 'Titan'), sted('maaner', 'Alle månerne')],
     billeder: '<p>Kortet er lavet af billeder fra rumsonden Cassini (NASA/JPL/Space Science Institute) via USGS, med lidt fra Voyager.</p>',
-    ærligt: MÅNE_ÆRLIGT,
+    ærligt: '<p>Formen er målt ud fra Cassinis fotos. Rhea er næsten rund: Den er under 1 % længere mod Saturn end mellem polerne. Det, der er mindre end ca. 15 km, kommer kun fra fotoet.</p>' + MÅNE_ÆRLIGT,
   },
   titan: {
     tal: [['Bredde', 'ca. 5.150 km'], ['Lufttryk', 'ca. 1,5 × Jordens'], ['Ved jorden', 'ca. −179 °C'], ['En omgang', 'ca. 16 døgn']],
