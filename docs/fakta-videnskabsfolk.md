@@ -56,6 +56,8 @@ Står for sig selv i [fakta-bogsider-rettigheder.md](fakta-bogsider-rettigheder.
 | Meddelelsen kom i *Journal des sçavans* 7. december 1676 og på engelsk i *Philosophical Transactions* bd. 12, nr. 136, s. 893-894 (1677) | Wikipedia; skanningen af Phil. Trans. | Sikker |
 | De fleste af Rømers papirer brændte ved Københavns brand i 1728 | Wikipedia | Ret sikker |
 
+**Faktagrundlaget til bogen (20. november 2026):** [fakta-videnskabsfolk/roemer.md](fakta-videnskabsfolk/roemer.md) med teksten læst på siderne i *Phil. Trans.*, Rømers egen liste og afstandene fra JPL Horizons.
+
 **Gør det i AtomLab:** Solsystemet, **Jupiter → Månerne** og **Io**: Io går rundt på ca. 4¼ Jupiter-døgn (`døgn: 1.769138` i `js/kosmos/jupiter.js` = 42,46 timer, rigtigt), og dens skygge ses på skyerne. Spol frem med ⏩. **Ærligt:** I dag flytter programmet månen *ud af* skyggen, når man besøger den (`udAfSkygge`), og lysets rejsetid er ikke med. *Idé til senere:* "Rømers ur": et stopur for, hvornår Io kommer ud af skyggen, med Jorden tæt på og langt fra Jupiter. Forskellen er op til ca. 16½ minut.
 
 **Bogsiden:** *Philosophical Transactions* bd. 12 (1677), s. 893-894, "A Demonstration concerning the Motion of Light, communicated from Paris, in the Journal des Sçavans, and here made English", med figuren (Fig. 11: Solen A, Jupiter B, Io C og Jorden i E-L).
