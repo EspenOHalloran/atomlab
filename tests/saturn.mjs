@@ -86,7 +86,8 @@ const side = async (adresse) => {
   const knapperNu = await knapper();
   tjek('bjælken: "▶ Start flyby", og Styr-boksen: kontakterne Modlys og Navne (stederne står i træet)', JSON.stringify(knapperNu) === JSON.stringify(['▶ Start flyby', 'Modlys', 'Navne']) && JSON.stringify(await s.evaluate(() => atomlabTest.solsystem.styr().map((x) => x.slags))) === '["kontakt","kontakt"]', JSON.stringify(knapperNu));
   const træ = await s.evaluate(() => atomlabTest.solsystem.træ());
-  tjek('træet: "▶ Flyby · 9 stop" øverst, så Saturn, Ringene, Måner og alle seks måner', træ.map((p) => p.id).join() === 'tur,saturn,ringe,maaner,mimas,enceladus,tethys,dione,rhea,titan' && træ[0].navn.includes('Flyby · 9 stop') && træ[1].valgt, JSON.stringify(træ.map((p) => p.id)));
+  // (Under Saturns steder står forsøget "Under isen" og dens tur, spor Måner M2-M3)
+  tjek('træet: "▶ Flyby · 9 stop" øverst, så Saturn, Ringene, Måner og alle seks måner', træ.map((p) => p.id).slice(0, 10).join() === 'tur,saturn,ringe,maaner,mimas,enceladus,tethys,dione,rhea,titan' && træ[0].navn.includes('Flyby · 9 stop') && træ[1].valgt, JSON.stringify(træ.map((p) => p.id)));
   tjek('Saturn: teksten om skyggerne', /skygge/.test(await s.textContent('#solsystemTekst')));
   tjek('Saturn: sort himmel (ingen tågeskyer)', !(await s.evaluate(() => atomlabTest.solsystem.tåger())));
   const satSide = await s.evaluate(() => atomlabTest.solsystem.side());

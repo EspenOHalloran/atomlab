@@ -918,4 +918,10 @@ export const ORDBOG = [
     former: ['magnetfelt', 'magnetfeltet', 'magnetfelter', 'magnetfelterne', 'magnetfelts', 'magnetfeltets'],
     tekst: 'Det område rundt om en magnet eller en elektrisk strøm, hvor en kompasnål bliver drejet. Jorden og Jupiter har store magnetfelter. Når et magnetfelt ændrer sig, kan det sætte strøm i gang i noget, der leder strøm, fx salt vand.',
   },
+  // Spor Måner, "Under isen" trin 3 (docs/drejebog-maaner.md afsnit 14). Over 100: Porco m.fl. 2014 (101 gejsere).
+  {
+    id: 'fontaene', ord: 'Fontæne',
+    former: ['fontæne', 'fontænen', 'fontæner', 'fontænerne', 'fontænernes'],
+    tekst: 'Vand og is, der sprøjter ud i rummet gennem revner i isen på en måne. Vandet kommer fra et hav under isen. Enceladus har over 100 fontæner ved sydpolen.',
+  },
 ];

@@ -106,7 +106,7 @@ export const SIDER = {
         tekst: `<p>Rumsonden Cassini fløj gennem fontænerne og fandt salt, brint og organiske stoffer. I iskorn fra fontænerne er der også fosfat. Det tyder på, at havet under isen har meget af det, liv har brug for. Cassini kunne ikke se, om der er liv, og det har ingen endnu kunnet se efter. ${gå('gaader:liv', 'Gåden: Er der liv andre steder?')}</p>`,
       },
     ],
-    videre: [sted('mimas', 'Mimas'), sted('tethys', 'Tethys')],
+    videre: [sted('mimas', 'Mimas'), sted('tethys', 'Tethys'), gå('solsystem:underisen', 'Se under isen')], // (spor Måner, M3)
     billeder: CASSINI,
     ærligt: '<p>Fontænernes partikler er tegnet meget større end de rigtige iskorn. "Modlys" flytter Solen om bag månen. Formen er målt ud fra Cassinis fotos: Enceladus er lidt aflang, ca. 513 km på den lange led (mod Saturn) og ca. 497 km mellem polerne. Det, der er mindre end ca. 5 km, kommer kun fra fotoet.</p>' + MÅNE_ÆRLIGT,
   },
