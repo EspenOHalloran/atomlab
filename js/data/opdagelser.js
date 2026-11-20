@@ -17,7 +17,8 @@ const SKRIFT_1600 = "'AtomLab Fell', Georgia, 'Times New Roman', serif";
 
 export const BØGER = [
   {
-    id: 'tycho', navn: 'Tycho Brahe', kort: 'Tycho Brahe', år: 1572, ejefald: 'Tycho Brahes', om: 'den nye stjerne', spørgsmål: 'Hvor kom den nye stjerne fra?',
+    id: 'tycho', navn: 'Tycho Brahe', kort: 'Tycho', år: 1572, ejefald: 'Tycho Brahes', om: 'den nye stjerne', spørgsmål: 'Hvor kom den nye stjerne fra?',
+    // kort er 'Tycho' (én linje på omslaget): "TYCHO BRAHE" på to linjer stod oven i årstallet på en telefon (T3)
     titel: 'Den nye stjerne', bygget: true,
     portræt: 'billeder/biblioteket/tycho.webp',
     // København 1573 (docs/drejebog-tycho.md afsnit 3): lyst, varmt papir, sort blæk og en nattehimmelblå ryg med guld
