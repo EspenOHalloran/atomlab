@@ -1,0 +1,5 @@
+# Historik: Måner
+
+*Det forrige "Senest lavet" fra [lige-nu/maaner.md](../../lige-nu/maaner.md) flyttes hertil ordret, nyeste øverst (fra 20. november 2026).*
+
+**20. november 2026: Drejebogen** ([drejebog-maaner.md](../drejebog-maaner.md), kun dokumenter, Opus høj). To forløb: "Under isen" (fem trin: snittet gennem Europa med lupen, magnetfeltet med kontakten "Hav", fontænerne i modlys, Cassini og tavlen med de tre ting, "Er der liv?") og "Land med Huygens" (fire trin: slip Huygens, gennem disen med Huygens' kamera, landingen med stenene, halvdelen gik tabt). Den røde tråd, "Hvordan ved vi det?", Gør det selv, links begge veje, tre ord (magnetfelt, fontæne, metan), prøven, billedernes licens i KILDER-stil, hvilke af Solsystemets filer sporet læser og ændrer (afsnit 17) og byggetrinnene M2-M5b. De nye påstande er faktatjekket af Opus (høj) i stedet for Fable (afsnit 16, linjen i [plan-fable.md](../plan-fable.md)). En ny fælde om disen på Titan står i [fakta-faelder-liv.md](../erfaringer/fakta-faelder-liv.md).

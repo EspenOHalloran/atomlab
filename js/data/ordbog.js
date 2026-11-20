@@ -912,4 +912,10 @@ export const ORDBOG = [
     former: ['isvulkan', 'isvulkanen', 'isvulkaner'],
     tekst: 'En vulkan på en iskold klode, hvor der kommer vand, blød is eller andre kolde stoffer op nedefra i stedet for smeltet sten. Man tror, at Wright Mons på Pluto er en isvulkan.',
   },
+  // Spor Måner, "Under isen" trin 2 (docs/drejebog-maaner.md afsnit 14). Skrevet her først, Strøm og magneter bruger det.
+  {
+    id: 'magnetfelt', ord: 'Magnetfelt',
+    former: ['magnetfelt', 'magnetfeltet', 'magnetfelter', 'magnetfelterne', 'magnetfelts', 'magnetfeltets'],
+    tekst: 'Det område rundt om en magnet eller en elektrisk strøm, hvor en kompasnål bliver drejet. Jorden og Jupiter har store magnetfelter. Når et magnetfelt ændrer sig, kan det sætte strøm i gang i noget, der leder strøm, fx salt vand.',
+  },
 ];

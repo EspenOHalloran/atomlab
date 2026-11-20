@@ -14,6 +14,7 @@ import venus from './kosmos/venus.js';
 import mars from './kosmos/mars.js';
 import jupiter from './kosmos/jupiter.js';
 import saturn from './kosmos/saturn.js';
+import underisen from './maaner/underisen.js'; // spor Måner (docs/drejebog-maaner.md): under Saturn
 import uranus from './kosmos/uranus.js';
 import neptun from './kosmos/neptun.js';
 import pluto from './kosmos/pluto.js';
@@ -32,7 +33,7 @@ const skærm = lavFænomenSkærm({
     { navn: 'Jorden', ikon: '🌍', f: jordkloden, under: [aarstider, formoerkelser] },
     mars,
     jupiter,
-    saturn,
+    { navn: saturn.navn, ikon: saturn.ikon, f: saturn, under: [underisen] }, // "Under isen" står under Saturn ("Forsøg"), så kloderne er de samme
     uranus,
     neptun,
     pluto,

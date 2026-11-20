@@ -12,8 +12,9 @@ import { ORDENE } from './ordene.js';
 import { OVERBLIK } from './overblik.js';
 import { REJSEN_I_TID, HVORDAN_KAN_DET_SKE } from './tid.js';
 import { DEN_NYE_STJERNE } from './tycho.js';
+import { UNDER_ISEN } from './under-isen.js';
 
-export const FORLØB = [FØRSTE_ATOM, STRIBER, MØDES, ILD_1, OPSKRIFTEN, ORDENE, KOPIEN, FEJLEN, BEGYNDELSEN, REJSEN_I_TID, HVORDAN_KAN_DET_SKE, OVERBLIK, SATURNS_ØRER, DEN_NYE_STJERNE];
+export const FORLØB = [FØRSTE_ATOM, STRIBER, MØDES, ILD_1, OPSKRIFTEN, ORDENE, KOPIEN, FEJLEN, BEGYNDELSEN, REJSEN_I_TID, HVORDAN_KAN_DET_SKE, OVERBLIK, SATURNS_ØRER, DEN_NYE_STJERNE, UNDER_ISEN];
 
 export const forløbMed = (id) => FORLØB.find((f) => f.id === id) ?? null;
 export const forløbI = (del) => FORLØB.filter((f) => f.del === del);
