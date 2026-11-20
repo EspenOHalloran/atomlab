@@ -73,3 +73,4 @@
 - **Set under Solsystemet · Saturn S3 (19. november 2026, `--ændret` kørte 27 tests):** `venus` (gløden om natten, kendt, også alene og på `main`) og `frigiv` (kun sammen med andre, bestod alene). Resten bestod.
 - **Fund fra jeres telefon i Opdagelserne (19. november 2026):** På hylden står "TYCHO BRAHE" oven i årstallet 1572 og rækker ud under hylden. Sendt til T2-sessionen.
 - **Set under Videnskabsfolkene · T2 Tycho (19. november 2026, `--ændret` kørte alle tests i to omgange):** `venus` (gløden om natten, kendt, fejler også alene og på `main`). Alt andet bestod.
+- **Set under Videnskabsfolkene · T3 Tycho (20. november 2026, `--ændret` kørte 48 tests i to omgange, den første blev afbrudt af en genstart):** `venus` (gløden om natten, kendt) og `frigiv` ("op fra Stå på Mars: færre MB", 55,3 mod 56,2 MB, kun sammen med andre). I den afbrudte kørsel af alle tests fejlede `stjerneovn-mus` ("kernerne står stille i pause") én gang, men bestod alene. Alt andet bestod.

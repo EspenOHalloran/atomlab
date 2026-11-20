@@ -28,7 +28,7 @@ export default {
   navn: 'Hvid dværg',
   ikon: '💫',
   undertitel: 'En hvid dværg i et stjernepar eksploderer',
-  citat: 'feynmanVæv',
+  citat: 'tycho', // Tychos stjerne fra 1572 var en hvid dværg, der eksploderede (flyttet fra Supernova, Videnskabsfolkene T3)
   kamera: { retning: [0.1, 0.6, 1], radius: 8 },
   tal: [
     ['En hvid dværg kan højst veje', 'ca. 1,4 gange Solen'],
@@ -50,7 +50,7 @@ export default {
       },
       {
         titel: 'Hvem har set en?',
-        tekst: '<p>I november 1572 så den danske astronom Tycho Brahe en ny, klar stjerne i stjernebilledet Cassiopeia. Den kunne ses med det blotte øje i over et år. Han viste, at den lå langt bag Månen, og at stjernehimlen altså kan forandre sig. I dag ved vi, at det var en hvid dværg, der eksploderede.</p>',
+        tekst: '<p>I november 1572 så den danske astronom Tycho Brahe en ny, klar stjerne i stjernebilledet Cassiopeia. Den kunne ses med det blotte øje i over et år. Han viste, at den lå langt bag Månen, og at stjernehimlen altså kan forandre sig. I dag ved vi, at det var en hvid dværg, der eksploderede.</p><p><button class="link-knap" data-gaa="opdagelser:tycho">Læs Tychos bog ›</button></p>',
       },
     ],
     videre: [gå('solsystem:solensfremtid', 'Solens fremtid'), gå('kosmos:supernova', 'Supernova')],

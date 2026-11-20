@@ -30,6 +30,14 @@ BØGER = {
         'arkiv': 'CristianiHugeni00HuygA',
         'sider': {'tavle': 51, 's16': 33, 's47': 66, 's48': 67},
     },
+    'tycho': {
+        # De nova stella (København 1573) i Videnskabernes Selskabs faksimile fra 1901 ("Fototypi. Pacht & Crone"),
+        # Toronto-eksemplaret (skannet 2009). archive.org-metadata: "NOT_IN_COPYRIGHT" uden en licens (se KILDER.md og
+        # docs/drejebog-tycho.md, spørgsmål 4: jeres svar 19. november 2026 er at bruge den). Siden A er n36, kortet
+        # B1b n45, brevet til Pratensis med "O crassa ingenia" n32 og farven D2 n62.
+        'arkiv': 'operumprimitiasd00brahuoft',
+        'sider': {'a': 36, 'b1b': 45, 'brevet': 32, 'd2': 62},
+    },
 }
 
 

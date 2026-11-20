@@ -141,6 +141,7 @@ export const CITATER = {
     person: 'Tycho Brahe',
     kilde: 'De nova stella, 1573 (forkortet)',
     original: 'Miraculum sanè inter omnia, quæ à mundi exordio, in tota rerum natura extiterunt, aut maximum, aut illi certè æquiparandum, quod in Solaris cursus retentione, Iosuæ precibus impetrata …',
+    bog: { id: 'tycho', tekst: 'Læs Tychos bog' }, // knappen til bogen i Opdagelserne (Videnskabsfolkene T3)
     kommentar: 'Tycho Brahe så en ny stjerne i stjernebilledet Cassiopeia i november 1572. Josva er en person i Bibelen, og ifølge fortællingen stod Solen stille, da han bad om det. Tycho målte, at stjernen var meget længere væk end Månen, så himlen var ikke uforanderlig, som man troede. I dag ved vi, at det var en supernova.',
   },
   // Kilden er læst i bogen selv (Systema Saturnium, 1659, McGill-eksemplaret på archive.org). Anagrammet har 7 a'er,
