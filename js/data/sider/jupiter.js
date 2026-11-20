@@ -4,7 +4,7 @@
 // og på flybyen står i MÅNER, POL_STOP, RINGE_STOP og TUR i js/kosmos/jupiter.js.
 // Tallene er fra docs/fakta-solsystemet.md, "Del 5: Jupiter" (NSSDC). Uden Three.js, så teksterne kan testes i Node.
 
-import { kontakt, sted, tid } from '../../sideknap.js';
+import { kontakt, sted, tid, gå } from '../../sideknap.js';
 
 const USGS = '<p>Kortet er lavet af USGS (NASA/JPL/USGS) af billeder fra rumsonderne Galileo og Voyager.</p>';
 
@@ -197,7 +197,7 @@ export const SIDER = {
         tekst: '<p>Det ved ingen endnu. Der er ikke fundet liv, men NASA kalder Europa et af de mest lovende steder at lede. Rumsonden Europa Clipper skal efter planen nå frem til Jupiter i april 2030 og flyve forbi Europa ca. 50 gange.</p>',
       },
     ],
-    videre: [sted('io', 'Io'), sted('ganymedes', 'Ganymedes')],
+    videre: [sted('io', 'Io'), sted('ganymedes', 'Ganymedes'), gå('solsystem:underisen', 'Se under isen')], // (spor Måner, M3)
     nørd: '<p>Det bedste bevis for havet kom fra Galileo: Jupiters magnetfelt skaber et svagt magnetfelt i Europa, og det forklares bedst med et lag, der leder strøm, som saltvand. Junos ca. 30 km gælder det kolde, stive yderlag af isen. Med et varmere lag under kan skorpen være tykkere.</p>',
     billeder: USGS,
     ærligt: '<p>Galileo og Voyager så ikke det hele skarpt, så nogle egne er slørede. Syd for ca. 77° S mangler der billeder. Hullet er fyldt med det spejlede billede af egnen lige nord for. Månen står stille, mens du besøger den, og vender samme side mod Jupiter.</p>',

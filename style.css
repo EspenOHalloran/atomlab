@@ -2750,3 +2750,64 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   #solsystem .ui-lupe, #solsystem .ui-lupe canvas { width: 120px; height: 120px; }
   #solsystem .ui-lag { font-size: 12px; gap: 2px 8px; }
 }
+/* Tavlen med de tre ting (M3, js/maaner/tavle.js): i turen (trin 4-5) under scenen og på brede skærme til højre for den
+   (et barn af skærmen med fl-vis), i laboratoriet øverst til venstre i 3D-vinduet, hvor den kan foldes ind. */
+#solsystem .ui-tavle { box-sizing: border-box; display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; border-radius: 12px; background: rgba(8, 12, 28, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); font-size: 13px; color: var(--tekst); }
+#solsystem .ui-tavle[hidden] { display: none !important; }
+#solsystem .vindue > .ui-tavle { position: absolute; left: 8px; top: 8px; z-index: 3; width: min(360px, calc(100% - 16px)); max-height: calc(100% - 70px); overflow-y: auto; }
+#solsystem .vindue > .ui-tavle.foldet { width: auto; padding: 2px 6px; }
+#solsystem .ui-tavle.foldet :is(.tv-krop, .tv-nøgle, .tv-forfra) { display: none; }
+#solsystem.i-forløb > .ui-tavle { margin: 0 8px 6px; }
+#solsystem.i-forløb .ui-tavle :is(.tv-pil, .tv-forfra) { display: none; }
+#solsystem.i-forløb .ui-tavle .tv-fold { pointer-events: none; }
+#solsystem .tv-hoved { display: flex; align-items: center; gap: 4px 10px; flex-wrap: wrap; }
+#solsystem .tv-fold { background: none; border: 0; color: var(--tekst); font: inherit; font-weight: 600; font-size: 14px; min-height: 36px; padding: 0 4px; cursor: pointer; }
+#solsystem .tv-pil { display: inline-block; margin-right: 2px; }
+#solsystem .ui-tavle.foldet .tv-pil { transform: rotate(-90deg); }
+#solsystem .tv-nøgle { display: flex; gap: 2px 10px; flex-wrap: wrap; color: var(--svag); font-size: 12px; }
+#solsystem .tv-nøgle i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+#solsystem .tv-forfra { margin-left: auto; min-width: 36px; min-height: 36px; border-radius: 8px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); color: var(--tekst); cursor: pointer; }
+#solsystem .tv-bunke { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+#solsystem .tv-bunke[hidden] { display: none; }
+#solsystem .tv-løs { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 44px; padding: 3px 10px; border-radius: 10px; background: #1b2848; border: 1px solid #4fc27a; color: var(--tekst); font: inherit; cursor: grab; touch-action: none; text-align: left; }
+#solsystem .tv-løs small { color: var(--svag); font-size: 11px; }
+#solsystem .tv-løs.valgt { outline: 2px solid var(--accent); outline-offset: 1px; }
+#solsystem .tv-løs.trækkes { position: relative; z-index: 5; cursor: grabbing; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6); }
+#solsystem .tv-løs.falder { animation: tv-falder 0.5s ease-out; }
+@keyframes tv-falder { from { transform: translateY(-16px); opacity: 0; } }
+#solsystem .tv-gitter { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr); gap: 4px; }
+#solsystem .tv-måne { text-align: center; font-weight: 600; color: var(--svag); font-size: 12px; }
+#solsystem .tv-række { min-height: 40px; display: flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--tekst); font: inherit; cursor: pointer; text-align: left; }
+#solsystem .tv-række.over { border-color: var(--accent); background: rgba(95, 227, 255, 0.16); }
+#solsystem .tv-felt { min-height: 40px; display: flex; flex-wrap: wrap; gap: 3px; align-content: center; padding: 3px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(107, 115, 131, 0.2); }
+#solsystem .tv-felt[data-farve="målt"] { background: rgba(79, 194, 122, 0.22); border-color: rgba(79, 194, 122, 0.6); }
+#solsystem .tv-felt[data-farve="regnet"] { background: rgba(232, 195, 74, 0.18); border-color: rgba(232, 195, 74, 0.55); }
+#solsystem .tv-felt[data-raekke="liv"] { justify-content: center; color: var(--svag); font-size: 12px; cursor: pointer; }
+#solsystem .tv-kort { font: inherit; font-size: 11.5px; line-height: 1.15; padding: 3px 6px; min-height: 32px; border-radius: 6px; border: 0; background: rgba(0, 0, 0, 0.38); color: var(--tekst); cursor: pointer; text-align: left; }
+#solsystem .tv-kort[data-farve="målt"] { box-shadow: inset 3px 0 0 #4fc27a; }
+#solsystem .tv-kort[data-farve="regnet"] { box-shadow: inset 3px 0 0 #e8c34a; }
+#solsystem .tv-kort.ny { animation: tv-ny 0.6s ease-out; }
+@keyframes tv-ny { from { transform: scale(1.2); background: rgba(255, 255, 255, 0.3); } }
+#solsystem .tv-linje { margin: 0; text-align: center; }
+#solsystem .tv-linje[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) { #solsystem :is(.tv-løs.falder, .tv-kort.ny) { animation: none; } }
+@media (max-width: 560px) {
+  #solsystem .ui-tavle { gap: 4px; padding: 6px 8px; }
+  #solsystem :is(.tv-række, .tv-felt) { min-height: 36px; }
+  #solsystem .tv-række { padding: 0 6px; font-size: 12.5px; }
+  #solsystem .tv-kort { min-height: 28px; font-size: 11px; padding: 2px 5px; }
+  #solsystem .tv-løs { min-height: 40px; padding: 2px 8px; }
+}
+/* Brede skærme og lave skærme på langs: tavlen står til højre for scenen i turen */
+@media (min-width: 821px) and (orientation: landscape), (max-height: 500px) and (orientation: landscape) {
+  #solsystem.i-forløb:has(> .ui-tavle.fl-vis) { grid-template-columns: minmax(0, 1fr) minmax(280px, 380px) !important; grid-template-rows: auto minmax(0, 1fr) auto !important; grid-template-areas: "top top" "vindue fl-vis" "forløb fl-vis" !important; }
+  #solsystem.i-forløb > .ui-tavle.fl-vis { align-self: center; width: auto; margin: 0 8px 0 0; max-height: 100%; overflow-y: auto; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  #solsystem.i-forløb:has(> .ui-tavle.fl-vis) { grid-template-columns: minmax(0, 1fr) minmax(260px, 320px) !important; }
+  #solsystem .ui-tavle { gap: 3px; padding: 4px 8px; }
+  #solsystem :is(.tv-række, .tv-felt) { min-height: 32px; }
+  #solsystem .tv-nøgle, #solsystem .tv-løs small { display: none; }
+  #solsystem .tv-løs { min-height: 36px; }
+  #solsystem .tv-kort { min-height: 26px; font-size: 11px; padding: 2px 5px; }
+}
