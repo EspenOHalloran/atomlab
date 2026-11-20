@@ -168,12 +168,19 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   o = await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler());
   tjek('udgaver: B viser de yderste orbitaler (2s og to 2p)', o.length === 3, JSON.stringify(o));
   await u.page.evaluate(() => window.atomlabTest.vaerksted.spol(2));
+  // G3: bløde kugler og glimt i skyen, trukket fra alle fire orbitaler (også 1s), og ingen uden for atomet
+  let g = await u.page.evaluate(() => window.atomlabTest.vaerksted.grafik());
+  tjek('G3: kernen har det bløde lys i B (formerne)', g.blød === 1, JSON.stringify(g));
+  tjek('G3: skyen har glimt fra alle fire orbitaler, inden for budgettet', g.orbitaler === 4 && g.glimt >= 100 && g.glimt <= g.maks + 8 * g.orbitaler, JSON.stringify(g));
+  tjek('G3: glimtene er fremme i skyen og ligger inden for atomet', g.styrke === 1 && g.yderst > 0.3 && g.yderst < 1.6, JSON.stringify(g));
   await u.page.screenshot({ path: UD + '/12-udgave-former.png' });
   await u.page.reload();
   await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
   tjek('udgaver: valget huskes', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'former');
   await u.page.click('[data-udgave="nu"]');
   tjek('udgaver: "Nu" har ingen orbitaler', (await u.page.evaluate(() => window.atomlabTest.vaerksted.orbitaler())).length === 0);
+  g = await u.page.evaluate(() => window.atomlabTest.vaerksted.grafik());
+  tjek('G3: "Nu" er som før (intet blødt lys og ingen glimt)', g.blød === 0 && g.glimt === 0, JSON.stringify(g));
   await u.page.goto(URL + '#vaerksted');
   await u.page.waitForFunction(() => window.atomlabTest && document.querySelector('#vaerksted:not(.skjult)'));
   tjek('udgaver: uden ?udgaver bruges B (formerne)', await u.page.evaluate(() => window.atomlabTest.vaerksted.udgave()) === 'former');
@@ -191,6 +198,8 @@ for (const [navn, w, h] of [['10-tablet-langs', 1024, 768], ['11-tablet-højkant
   const rolig = await r.page.evaluate(() => ({ h: atomlabTest.vaerksted.hjem.sidste(), lys: atomlabTest.vaerksted.hjem.lys(),
     felt: document.querySelector('#minitabel .felt[data-nr="1"]').classList.contains('opdaget'), tæller: document.getElementById('opdagetTæller').textContent }));
   tjek('grundstoffet flyver hjem med "reducer bevægelse": H tændes med det samme uden lys', rolig.h.nr === 1 && !rolig.h.flyver && rolig.h.landet && rolig.lys === 0 && rolig.felt && /1 af 118/.test(rolig.tæller), JSON.stringify(rolig));
+  const gr = await r.page.evaluate(() => atomlabTest.vaerksted.grafik());
+  tjek('G3: med "reducer bevægelse" blinker glimtene i skyen ikke', gr.rolig === true, JSON.stringify(gr));
   await r.ctx.close();
 }
 

@@ -342,6 +342,7 @@ export function testAdgang() {
     hjem: hjemTest(), // "Grundstoffet flyver hjem": iLuften(), sidste(), mærke() og lys()
     udgave: () => hentUdgave(),
     orbitaler: () => atom.orbitalListe(),
+    grafik: () => atom.grafik(), // G3: { blød, glimt, maks, orbitaler, yderst, rolig, styrke }
     // Spol atomet frem i små skridt, som på en skærm med 60 billeder i sekundet (testbrowseren tegner kun få)
     spol: (sek) => { for (let t = 0; t < sek; t += 1 / 60) atom.opdater(1 / 60); },
     // Hvor mange kugler der tegnes, og hvor mange der er plads til
