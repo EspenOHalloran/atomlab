@@ -13,9 +13,11 @@
 //   stjernen    Cassiopeias W over klostertaget. Efter 2 s (eller når man rører himlen) lyser den nye stjerne op, til den
 //               er den klareste. Et tryk tæt på den (mindst 28 px eller 1,8°) tæller. Navnet står først bagefter (A6).
 //               Den lille tegning "Før" i hjørnet viser W'et uden den nye stjerne
-//   parallakse  To tegninger: tommelfingeren foran klosteret langt væk (skift øje, og den hopper) og Jorden med Månen og
-//               stjernehimlen (flyt Tycho fra toppen til siden af Jorden, og Månen ses et andet sted mellem stjernerne).
-//               Færdig, når begge er skiftet. Den nye stjerne er ikke med her, for det er svaret i trin 3 (A6)
+//   tommel      Tommelfingeren foran klosteret langt væk (skift øje, og den hopper). Færdig efter ét skift
+//   parallakse  Jorden med Månen og stjernehimlen (flyt Tycho fra toppen til siden af Jorden: Månen ses et andet sted
+//               mellem stjernerne, og den nye stjerne står, hvor den stod). Færdig efter ét skift. De to var ét trin med
+//               begge tegninger og begge knapper til 20. november 2026 (fundet: uforståeligt). Laboratoriets kapitel
+//               "Tommelfingeren" viser stadig begge tegninger side om side
 //   hoejt       Himlen drejer om Nordstjernen (himmelskiven), og "Tychos instrument" viser den nye stjerne og Schedir tæt på
 //               med passeren: 7° 55′ hele vejen rundt. Spøgelset viser, hvor den ville stå, hvis den var lige så tæt på
 //               som Månen (måling() i dataene: op til ca. 1° anderledes, når den står lavt). Færdig efter højt (over 70°)
@@ -157,7 +159,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   const titel = kapitel?.textContent ?? '';
   const skrift = getComputedStyle(felt).getPropertyValue('--bog-skrift').trim() || 'Georgia, serif';
 
-  // Tilstanden. trin: 'stjernen', 'parallakse', 'hoejt', 'falmer'. vis… glider mod målet.
+  // Tilstanden. trin: 'stjernen', 'tommel', 'parallakse', 'hoejt', 'falmer'. vis… glider mod målet.
   const s = {
     trin: 'hoejt',
     lys: 0, fundet: false, forkert: 0, // trin 1
@@ -246,7 +248,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, W, H);
     if (s.trin === 'stjernen') tegnStjernen();
-    else if (s.trin === 'parallakse') tegnParallakse();
+    else if (s.trin === 'tommel' || s.trin === 'parallakse') tegnParallakse();
     else if (s.trin === 'hoejt') tegnHøjtLavt();
     else tegnFalmer();
     if (s.trin === 'hoejt') opdaterMåling();
@@ -367,9 +369,16 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     tegnIgen();
   }
 
-  // ---------- Trin 2: tommelfingeren og Månen ----------
+  // ---------- Trin 2 og 3: tommelfingeren og Månen ----------
+  // Hvilke tegninger: i turen én ad gangen, i laboratoriet begge side om side
+  const visTommel = () => s.trin === 'tommel' || Boolean(s.lab);
+  const visMåne = () => s.trin === 'parallakse';
   function paneler() {
     const gap = 10;
+    if (!visTommel() || !visMåne()) {
+      const hel = { x: 0, y: 0, w: W, h: H };
+      return visTommel() ? [hel, null] : [null, hel];
+    }
     if (W >= H * 1.25) {
       const b = (W - gap) / 2;
       return [{ x: 0, y: 0, w: b, h: H }, { x: b + gap, y: 0, w: b, h: H }];
@@ -507,6 +516,16 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       }
       g.fill();
     }
+    // Den nye stjerne ude blandt stjernerne (til højre for Månens to pladser, så de ikke dækker hinanden)
+    const nv = -Math.PI / 2 + 0.5;
+    const nx = x0 + Math.cos(nv) * (rS - 7), ny = y0 + Math.sin(nv) * (rS - 7);
+    g.fillStyle = 'rgba(150, 40, 20, 0.95)';
+    g.beginPath();
+    for (let t = 0; t < 16; t++) {
+      const rr = t % 2 ? 2.4 : 7, a = (t * Math.PI) / 8;
+      g[t ? 'lineTo' : 'moveTo'](nx + Math.cos(a) * rr, ny + Math.sin(a) * rr);
+    }
+    g.fill();
     // Månens bane og Månen
     g.setLineDash([3, 4]);
     g.lineWidth = 1;
@@ -543,6 +562,14 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       g.stroke();
       g.setLineDash([]);
     }
+    // Sigtelinjen til den nye stjerne (svag): den ender samme sted, uanset hvor Tycho står
+    g.strokeStyle = 'rgba(30, 26, 22, 0.4)';
+    g.lineWidth = 1;
+    g.setLineDash([2, 4]);
+    g.beginPath();
+    g.moveTo(ox, oy);
+    g.lineTo(nx, ny);
+    g.stroke();
     g.strokeStyle = 'rgba(150, 40, 20, 0.85)';
     g.lineWidth = 1.4;
     g.setLineDash([6, 4]);
@@ -567,6 +594,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     g.restore();
     tekst('Jorden', x0 - rE - 6, y0, { str: 13, farve: BLÆK, align: 'right' });
     tekst('Månen', mx - mr - 6, my, { str: 13, farve: BLÆK, align: 'right' });
+    tekst('Den nye stjerne', x0 + Math.cos(nv) * (rS + 13), y0 + Math.sin(nv) * (rS + 13), { str: 13, farve: 'rgba(150, 40, 20, 0.95)', inden: [p.x, p.x + p.w] });
     return [(px - x0) / rS, (py - y0) / rS];
   }
 
@@ -574,24 +602,29 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   let par = null; // teksterne under lærredet i trin 2
   function tegnParallakse() {
     const [a, b] = paneler();
-    tegnTommel(a);
-    sidsteP = tegnMånen(b);
+    if (a) tegnTommel(a);
+    if (b) sidsteP = tegnMånen(b);
     if (par) {
-      sæt(par.øje, s.øje === 1 ? 'Med venstre øje' : 'Med højre øje');
-      sæt(par.sted, s.sted ? 'Tycho på siden af Jorden' : 'Tycho på toppen af Jorden');
-      sæt(par.måne, s.stedSkift ? 'Månen ses ca. 1° et andet sted mellem stjernerne.' : '');
+      if (par.øje) sæt(par.øje, s.øje === 1 ? 'Med venstre øje' : 'Med højre øje');
+      if (par.sted) sæt(par.sted, s.sted ? 'Tycho på siden af Jorden' : 'Tycho på toppen af Jorden');
+      if (par.måne) sæt(par.måne, s.stedSkift ? 'Månen ses ca. 1° et andet sted mellem stjernerne. Den nye stjerne står, hvor den stod.' : '');
     }
-    lærred.setAttribute('aria-label', 'Til venstre en tommelfinger foran et kloster langt væk. Til højre Jorden, Månen og stjernehimlen, hvor Månen ses et andet sted, når Tycho flytter sig');
+    const tTommel = 'en tommelfinger foran et kloster langt væk, der hopper, når man skifter øje';
+    const tMåne = 'Jorden, Månen og stjernehimlen. Når Tycho flytter sig, ses Månen et andet sted, men den nye stjerne står stille';
+    lærred.setAttribute('aria-label', a && b ? `Til venstre ${tTommel}. Til højre ${tMåne}` : a ? `En tegning af ${tTommel}` : `En tegning af ${tMåne}`);
   }
 
   function underParallakse() {
-    under.innerHTML = '<p class="ts-par"><span class="ts-par-øje"></span> · <span class="ts-par-sted"></span></p>'
-      + '<p class="ts-par-måne"></p><p class="ts-småt">Tegningen er ikke i rigtig størrelse.</p>';
+    const dele = [];
+    if (visTommel()) dele.push('<span class="ts-par-øje"></span>');
+    if (visMåne()) dele.push('<span class="ts-par-sted"></span>');
+    under.innerHTML = `<p class="ts-par">${dele.join(' · ')}</p>`
+      + (visMåne() ? '<p class="ts-par-måne"></p>' : '') + '<p class="ts-småt">Tegningen er ikke i rigtig størrelse.</p>';
     par = { øje: under.querySelector('.ts-par-øje'), sted: under.querySelector('.ts-par-sted'), måne: under.querySelector('.ts-par-måne') };
   }
 
   function skiftØje() {
-    if (s.trin !== 'parallakse') return;
+    if (!visTommel() || (s.trin !== 'tommel' && s.trin !== 'parallakse')) return;
     forløbRørt();
     tommelFør = s.øje;
     s.øje = -s.øje;
@@ -599,7 +632,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     tegnIgen();
   }
   function skiftSted() {
-    if (s.trin !== 'parallakse') return;
+    if (!visMåne()) return;
     forløbRørt();
     forrigeP = sidsteP;
     s.sted = s.sted ? 0 : 1;
@@ -949,9 +982,9 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     træk = null;
     if (!t.flyttet) {
       if (s.trin === 'stjernen') trykStjernen(t.sx, t.sy);
-      else if (s.trin === 'parallakse') {
+      else if (s.trin === 'tommel' || s.trin === 'parallakse') {
         const [a] = paneler();
-        const iA = t.sx >= a.x && t.sx <= a.x + a.w && t.sy >= a.y && t.sy <= a.y + a.h;
+        const iA = a && t.sx >= a.x && t.sx <= a.x + a.w && t.sy >= a.y && t.sy <= a.y + a.h;
         if (iA) skiftØje(); else skiftSted();
       }
     }
@@ -980,8 +1013,16 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       lysStart = lab ? ur - LYS_TID : null;
       if (!lab) vent(rolig ? 1200 : LYS_EFTER, tænd);
     },
-    parallakse() {
+    tommel() {
+      sætTrin('tommel');
+      Object.assign(s, { øje: 1, visØje: 1, øjeSkift: 0 });
+      tommelFør = null;
+      underParallakse();
+    },
+    // lab: begge tegninger side om side (laboratoriets kapitel "Tommelfingeren")
+    parallakse(lab = false) {
       sætTrin('parallakse');
+      s.lab = lab ? 'parallakse' : null;
       Object.assign(s, { øje: 1, visØje: 1, sted: 0, visSted: 0, øjeSkift: 0, stedSkift: 0 });
       forrigeP = tommelFør = null;
       underParallakse();
@@ -1012,17 +1053,18 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
         færdig: () => s.fundet,
         visMig: () => { tænd(); vent(rolig ? 0 : 900, find); },
       },
+      tommel: {
+        start: () => start.tommel(),
+        knapper: [{ id: 'oeje', tekst: 'Skift øje', gør: skiftØje }],
+        færdig: () => s.øjeSkift > 0 && Math.abs(s.visØje - s.øje) < 0.02,
+        visMig: () => { if (!s.øjeSkift) skiftØje(); },
+      },
+      // Gættet står alene (gæt.alene i dataene), så "Flyt Tycho" kommer først efter gættet
       parallakse: {
         start: () => start.parallakse(),
-        knapper: [
-          { id: 'oeje', tekst: 'Skift øje', gør: skiftØje },
-          { id: 'sted', tekst: 'Flyt Tycho', gør: skiftSted },
-        ],
-        færdig: () => s.øjeSkift > 0 && s.stedSkift > 0 && Math.abs(s.visSted - s.sted) < 0.02,
-        visMig() {
-          if (!s.øjeSkift) skiftØje();
-          vent(rolig ? 0 : 900, () => { if (!s.stedSkift) skiftSted(); });
-        },
+        knapper: [{ id: 'sted', tekst: 'Flyt Tycho', gør: skiftSted }],
+        færdig: () => s.stedSkift > 0 && Math.abs(s.visSted - s.sted) < 0.02,
+        visMig: () => { if (!s.stedSkift) skiftSted(); },
       },
       hoejt: {
         start: () => start.hoejt(),
@@ -1058,7 +1100,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   function fri(kap = 'hoejt') {
     sætKapitel(titel);
     if (kap === 'stjernen') start.stjernen(true);
-    else if (kap === 'parallakse') start.parallakse();
+    else if (kap === 'parallakse') start.parallakse(true);
     else if (kap === 'falmer') start.falmer();
     else { kap = 'hoejt'; start.hoejt(true); }
     s.lab = kap;

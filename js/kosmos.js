@@ -6,6 +6,7 @@ import bigbang from './kosmos/bigbang.js';
 import stjernefoedsel from './kosmos/stjernefoedsel.js';
 import hviddvaerg from './kosmos/hviddvaerg.js';
 import supernova from './kosmos/supernova.js';
+import betelgeuse from './kosmos/betelgeuse.js';
 import pulsar from './kosmos/pulsar.js';
 import kilonova from './kosmos/kilonova.js';
 import rumtid from './kosmos/rumtid.js';
@@ -22,7 +23,7 @@ import { lavOversigt } from './kosmos/oversigt.js';
 // Universet får senere Mørkt stof og Andromeda. Vores eget solsystem ligger i Solsystemet (solsystem.js).
 const GRUPPER = [
   { navn: 'Universet', ikon: '🌌', tekst: 'Hvordan det hele begyndte, og hvor de første atomer kom fra.', under: [bigbang] },
-  { navn: 'Stjernernes liv', ikon: '✴️', tekst: 'Stjerner, der fødes, brænder ud og eksploderer.', under: [stjernefoedsel, hviddvaerg, supernova, pulsar, kilonova] },
+  { navn: 'Stjernernes liv', ikon: '✴️', tekst: 'Stjerner, der fødes, brænder ud og eksploderer.', under: [stjernefoedsel, hviddvaerg, supernova, betelgeuse, pulsar, kilonova] },
   { navn: 'Tid og rum', ikon: '🕰️', tekst: 'Rummet kan bøje, og tiden kan gå langsommere.', under: [rumtid, tid, tidhvorfor, tyngdebolger] },
   { navn: 'Sorte huller', ikon: '🕳️', tekst: 'Steder, hvor tyngden er så stærk, at intet slipper væk.', under: [sorthul, kvasar, ormehul] },
 ];

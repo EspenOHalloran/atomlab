@@ -17,7 +17,7 @@ await page.evaluate(() => { location.hash = '#kosmos'; });
 await page.waitForTimeout(1500);
 tjek('kosmos vises', await page.isVisible('#kosmos'));
 const ids = await page.evaluate(() => window.atomlabTest.kosmos.fænomener);
-tjek('13 fænomener i listen (forsiden "Kosmos" først, "Hvordan kan det ske?" hører til "Tid")', ids.length === 13 && ids[0] === 'oversigt', ids);
+tjek('14 fænomener i listen (forsiden "Kosmos" først, "Hvordan kan det ske?" hører til "Tid")', ids.length === 14 && ids[0] === 'oversigt', ids);
 tjek('vores eget solsystem er flyttet', !ids.some((id) => ['aarstider', 'formoerkelser', 'solstorm', 'solensfremtid', 'mars', 'saturn'].includes(id)), ids);
 // De fire grupper (Serie 1 nr. 4): et tryk på en gruppe åbner dens første punkt, og under rækken står gruppens punkter
 const grupper = await page.$$eval('#kosmosListe .sol-klode', (b) => b.map((x) => x.textContent.trim()));
@@ -79,24 +79,27 @@ tjek('"Kun grafik": bjælken og tidsknappen ses', await page.isVisible('#kosmosB
 await page.click('#kosmosBjælke button:has-text("eksplodere")');
 tjek('"Kun grafik": et tryk i bjælken virker', (await page.evaluate(() => window.atomlabTest.kosmos.bjælke())).some((x) => x.tekst.includes('Ny stjerne')));
 await page.click('#kosmos .knap-kungrafik');
-// Betelgeuse set fra Jorden (Supernova): stjernens plads på himlen, lyskurven og kameraet tilbage bagefter
-await page.evaluate(() => window.atomlabTest.kosmos.vælg('supernova'));
-await page.click('#kosmosStyr .kontakt:has-text("Betelgeuse set fra Jorden")');
-const J = (f) => page.evaluate(`(() => { const j = window.atomlabTest.kosmos.fænomen().jord(); return (${f})(j); })()`);
-tjek('Betelgeuse: himlen fra Jorden vises', await page.evaluate(() => window.atomlabTest.kosmos.fænomen().set()));
+// Betelgeuse eksploderer (et fænomen for sig fra 20. november 2026, før en kontakt i Supernova): adressen åbner det,
+// stjernens plads på himlen, lyskurven, Supernova har ingen kontakt men et link, og kameraet er tilbage bagefter
+await page.evaluate(() => { location.hash = '#kosmos:betelgeuse'; });
+await page.waitForFunction(() => window.atomlabTest.kosmos.valgt() === 'betelgeuse' && window.atomlabTest.kosmos.fænomen()?.set?.(), null, { timeout: 10000 }).catch(() => {});
+const J = (f) => page.evaluate(`(() => { const j = window.atomlabTest.kosmos.fænomen(); return (${f})(j); })()`);
+tjek('Betelgeuse: adressen #kosmos:betelgeuse åbner fænomenet, og himlen fra Jorden vises', await page.evaluate(() => window.atomlabTest.kosmos.valgt() === 'betelgeuse' && window.atomlabTest.kosmos.fænomen().set()));
 const bgSted = await J('(j) => j.betelgeuse()');
-tjek('Betelgeuse står 30-45° over horisonten mod sydøst (Danmark, Orion lidt øst for syd)', bgSted.højde > 30 && bgSted.højde < 45 && bgSted.kompas > 135 && bgSted.kompas < 170, JSON.stringify(bgSted));
+const bgBlik = await J('(j) => j.blik()');
+tjek('Betelgeuse står 30-45° over horisonten mod sydøst (Danmark, Orion lidt øst for syd), og man kigger mod syd fra jorden', bgSted.højde > 30 && bgSted.højde < 45 && bgSted.kompas > 135 && bgSted.kompas < 170 && Math.abs(bgBlik[0] - 166) < 3, JSON.stringify({ bgSted, bgBlik }));
 const bgBjælke = (await page.evaluate(() => window.atomlabTest.kosmos.bjælke())).map((x) => x.tekst).join(' | ');
-tjek('Betelgeuse: bjælken har "Lad Betelgeuse eksplodere" og "Vend dig om"', bgBjælke.includes('Lad Betelgeuse eksplodere') && bgBjælke.includes('Vend dig om'), bgBjælke);
+const bgStyr = (await page.evaluate(() => window.atomlabTest.kosmos.styr())).map((x) => x.navn).join(' | ');
+tjek('Betelgeuse: bjælken har "Lad Betelgeuse eksplodere" og "Vend dig om", og Indstillinger har ingen kontakt tilbage til Supernova', bgBjælke.includes('Lad Betelgeuse eksplodere') && bgBjælke.includes('Vend dig om') && !bgStyr.includes('set fra Jorden') && bgStyr.includes('Om dagen'), JSON.stringify({ bgBjælke, bgStyr }));
 await page.evaluate(() => { const k = window.atomlabTest.kosmos; k.trykPå('Lad Betelgeuse eksplodere'); k.spol(4); });
 const bgSpillet = await J('(j) => ({ dage: j.dage(), spiller: j.afspiller() })');
 tjek('Betelgeuse: eksplosionen spiller (neutrinoerne er kommet, lyset er på vej)', bgSpillet.dage > 0 && bgSpillet.spiller, JSON.stringify(bgSpillet));
 const bgLys = await J('(j) => { j.sæt(30); const før = j.størrelse(); j.sæt(330); const top = j.størrelse(); j.sæt(1000); return { før, top, slut: j.størrelse() }; }');
 tjek('Betelgeuse: lyskurven (før ca. 0,5, toppen som en halvmåne, til sidst usynlig)', bgLys.før > 0 && bgLys.top < -10 && bgLys.slut > 6, JSON.stringify(bgLys));
-await page.click('#kosmosStyr .kontakt:has-text("Betelgeuse set fra Jorden")');
+await page.evaluate(() => window.atomlabTest.kosmos.vælg('supernova'));
 await page.evaluate(() => window.atomlabTest.kosmos.kameraFrem());
-const bgTilbage = await page.evaluate(() => ({ afstand: Math.hypot(...window.atomlabTest.kosmos.kamera()), bjælke: window.atomlabTest.kosmos.bjælke().map((x) => x.tekst).join(' | ') }));
-tjek('Betelgeuse: slået fra står stjernen og kameraet som før', bgTilbage.afstand > 5 && bgTilbage.bjælke.includes('Lad stjernen eksplodere'), JSON.stringify(bgTilbage));
+const bgTilbage = await page.evaluate(() => ({ afstand: Math.hypot(...window.atomlabTest.kosmos.kamera()), bjælke: window.atomlabTest.kosmos.bjælke().map((x) => x.tekst).join(' | '), styr: window.atomlabTest.kosmos.styr().map((x) => x.navn).join(' | '), link: !!document.querySelector('#kosmosTekst [data-gaa="kosmos:betelgeuse"]') }));
+tjek('Betelgeuse: i Supernova står stjernen og kameraet som før, uden kontakten, men med et link til Betelgeuse', bgTilbage.afstand > 5 && bgTilbage.bjælke.includes('Lad stjernen eksplodere') && !bgTilbage.styr.includes('Betelgeuse') && bgTilbage.link, JSON.stringify(bgTilbage));
 // Styr-boksen: åben på pc, og en kontakt er fyldt med ✓, når den er tændt
 await page.evaluate(() => window.atomlabTest.kosmos.vælg('kvasar'));
 tjek('Styr-boksen er åben på pc', await page.evaluate(() => window.atomlabTest.kosmos.styrÅben()));
