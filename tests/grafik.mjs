@@ -142,7 +142,7 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   // Den automatiske måling: Testbrowseren er langsom (under 45 billeder/s), så Høj falder tilbage til Basis og bliver der
   await page.evaluate(() => { location.hash = '#vaerksted'; });
   await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
-  await page.evaluate(async () => { const s = await import('/js/scene3d.js'); s.sætTrin('høj'); s.autoTrin(true); });
+  await page.evaluate(async () => { const s = await import('/js/scene3d.js'); s.TRIN_GRÆNSER.ryk = 30; s.TRIN_GRÆNSER.ro = 0; s.sætTrin('høj'); s.autoTrin(true); });
   await page.waitForFunction(async () => (await import('/js/scene3d.js')).kvalitetstrin() === 'basis', null, { timeout: 60000, polling: 500 }).catch(() => {});
   await page.waitForTimeout(5000); // låst: går ikke op igen, selvom målingen fortsætter
   const auto = await tilstand();

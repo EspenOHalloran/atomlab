@@ -185,7 +185,8 @@ export function skiftKanter(slags) {
 // menuen). Er der mindst 58 billeder i sekundet i 3 sekunder, skiftes der til Høj. Falder det under 45 i 2 sekunder,
 // skiftes der tilbage, og så bliver skærmen i Basis resten af besøget (ingen vippen frem og tilbage, og det dækker også en
 // tablet, der bliver varm). Partikler, kuglernes felter og teksturer følger stadig LAV_KVALITET, for de bygges ved start.
-export const TRIN_GRÆNSER = { opFps: 58, opTid: 3, nedFps: 45, nedTid: 2, ro: 1.5 };
+// ryk: billeder over så mange sekunder (en skjult fane, et ryk) tæller ikke. Testene sætter den højere (testbrowseren er langsom).
+export const TRIN_GRÆNSER = { opFps: 58, opTid: 3, nedFps: 45, nedTid: 2, ro: 1.5, ryk: 0.5 };
 let trinAuto = LAV_KVALITET && !new URLSearchParams(location.search).has('test'); // ikke i testene, medmindre de slår det til
 const trin = { navn: 'basis', tilladt: false, låst: false, tid: 0, billeder: 0, sidst: 0, fra: 0 };
 export const kvalitetstrin = () => trin.navn;
@@ -231,7 +232,7 @@ function vogtTrin(nu) {
   if (!trinAuto || !trin.tilladt || trin.låst) return;
   const dt = (nu - trin.sidst) / 1000;
   trin.sidst = nu;
-  if (nu < trin.fra || dt > 0.5) { trin.tid = trin.billeder = 0; return; } // et ryk eller en skjult fane tæller ikke
+  if (nu < trin.fra || dt > TRIN_GRÆNSER.ryk) { trin.tid = trin.billeder = 0; return; } // et ryk eller en skjult fane tæller ikke
   trin.tid += dt;
   trin.billeder++;
   const høj = trin.navn === 'høj';
