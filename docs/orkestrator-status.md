@@ -20,8 +20,8 @@ Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurderin
 4. **Grafik G2** (kantudglatning og bedre glød): go givet, efter 1-3 eller når der er plads. Prompt i `docs/plan-grafik.md` (jeres svar 20. november). Så G3 med Værkstedet, og så Mars ekstra 4 (L2, en session på jeres pc).
 5. **Måner · drejebogen** (nyt spor, kun dokumenter, Opus høj): go givet 20. november. Prompt i `docs/lige-nu/maaner.md` ("Næste"). Billig, kan køre sammen med en tung session.
 6. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
-- **Kører nu (kl. ca. 14:20):** Kvantefysik PR 2 (session_01YQoBWLW55AZM9MV5JC93wb, fortsætter efter 5-timersgrænsen) og G4c Sort hul (session_01YQoBWLnzJ7BnHrSqregYwB). PR 3 startes, når PR 2 er merget. Orkestrator: session_01YQoBWLf2L2yAsBv2AKh8yk (skift 8).
-- **Færdig 20. november:** Saturn S3b (PR #370), Kvantefysik PR 1 (PR #372) og Venus "Ned gennem skyerne" (PR #374), alle merget og arkiveret. Mulig senere forbedring: Rhea i ca. 2,2 km (større fil hos PSI, I henter den i en browser).
+- **Kører nu (kl. ca. 14:25):** G4c Sort hul (session_01YQoBWLnzJ7BnHrSqregYwB) og Kvantefysik PR 3 (session_01YQoBWMwLsMoW5qJE9rRKrT). Begge skriver i js/data/gaader.js (hver i sin blok). Næste: G2. Orkestrator: session_01YQoBWLf2L2yAsBv2AKh8yk (skift 8).
+- **Færdig 20. november:** Saturn S3b (PR #370), Kvantefysik PR 1 (PR #372) og PR 2 (PR #376) og Venus "Ned gennem skyerne" (PR #374), alle merget og arkiveret. Mulig senere forbedring: Rhea i ca. 2,2 km (større fil hos PSI, I henter den i en browser).
 
 ## Venter på jer
 - **Prøven med sønnen** i weekenden 22.-23. november ([guide-proeven.md](guide-proeven.md)). Blokerer Ild 2 og Kvantefysik forløb 2-3.
