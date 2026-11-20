@@ -18,9 +18,9 @@ Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurderin
 2. ~~Venus "Ned gennem skyerne"~~ (færdig, #374): (længere tid, ca. 3 s ekstra pr. tekst efter ordtal, og bladring ‹ ›): prompt i `docs/lige-nu/aabne-punkter.md` (punktet om Venus).
 3. ~~G4c Sort hul~~ (færdig, #380): go givet, målingen er fin (74 billeder/s på Tab A11, 57 på pc). Prompt i `docs/lige-nu/smaating.md` ("Næste i Gåderne").
 4. ~~Grafik G2~~ (#387) og ~~G3 Værkstedet~~ (#392), begge status prøve (mål med `?maal` på Tab A11 og pc). Stjerneovnen venter på go efter prøven. Så Mars ekstra 4 (L2, en session på jeres pc).
-5. ~~Måner · drejebogen~~ (færdig, #383, jeres svar i #384). **M2 "Under isen" del 1 kører** (session_01YQoBWK87w3wCaCgibbt4US, jeres go, committer WIP ofte pga. ugens forbrug over 95 %), prompt i `docs/lige-nu/maaner.md` ("Næste").
+5. ~~Måner · drejebogen~~ (færdig, #383, jeres svar i #384). ~~M2 "Under isen" del 1~~ (færdig, #395, status prøve). M3 venter på jeres go (prompt i `docs/lige-nu/maaner.md`), prompt i `docs/lige-nu/maaner.md` ("Næste").
 6. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
-- **Kører nu (20. november kl. ca. 20:05):** Videnskabsfolkene · Tycho trin 2 og Betelgeuse (session_01YQoBWHfMLiKJKxPTtRpHJ7) og Måner M2 (session_01YQoBWK87w3wCaCgibbt4US), begge Opus høj. G3 Værkstedet færdig (#392, status prøve). Orkestrator skift 9 er session_01YQoBWJVex4Y286oe7MnLii.
+- **Kører nu (20. november kl. ca. 21):** ingen. Færdige i aften, alle status prøve: G3 Værkstedet (#392), Tycho trin 2 og Betelgeuse (#394), Måner M2 (#395). Intet nyt startes før nulstillingen 25. november kl. 01:00 uden jeres go (ugens forbrug over 95 %). Orkestrator skift 9 er session_01YQoBWJVex4Y286oe7MnLii.
 - **Færdig 20. november:** Saturn S3b (PR #370), Kvantefysik forløb 1 PR 1-3 (PR #372, #376, #378), Venus "Ned gennem skyerne" (PR #374) og G4c Sort hul (PR #380), alle merget, status prøve og arkiveret. Mulig senere forbedring: Rhea i ca. 2,2 km (større fil hos PSI, I henter den i en browser).
 
 ## Venter på jer
