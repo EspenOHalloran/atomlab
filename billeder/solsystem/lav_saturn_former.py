@@ -6,6 +6,22 @@
 #       Bland m.fl. 2019 (ISPRS 2020), via USGS:
 #       https://asc-pds-services.s3.us-west-2.amazonaws.com/mosaic/Enceladus/enceladus_cassini_iss_shapemodel_bland_2019/
 #
+#   S3b: Mimas, Tethys, Dione og Rhea (formmodeller i PDS Small Bodies Node, hentet i en browser 20. november 2026,
+#   for sbnarchive.psi.edu ligger bag Cloudflares robottjek). Punkter (x, y, z) i km i månens egne retninger: x mod
+#   0° (Saturn), z mod nord, y mod 90° Ø. Formatet står i .xml-filen ved siden af. Originalerne (og .xml-filerne)
+#   ligger på grenen kilder-saturn-s3b under billeder/solsystem/kilder/s3b/.
+#   mimas_quad256q.tab    Gaskell 2013, ICQ med q = 256 (6 × 257² punkter, ca. 1,2 km mellem dem): første linje er q,
+#       så x, y, z. https://sbnarchive.psi.edu/pds4/non_mission/gaskell.mimas.shape-model/data/
+#   tethys_ver128q.tab, dione_ver128q.tab    Gaskell 2013, trekanter lavet af ICQ med q = 128 (ca. 6,5 og 7 km):
+#       første linje er antallet af punkter, så nummer, x, y, z (trekanterne bagefter bruges ikke).
+#       https://sbnarchive.psi.edu/pds4/non_mission/gaskell.tethys.shape-model/data/ (og gaskell.dione...)
+#   rhea_128_i.tab        SPC-model af Rhea, ICQ med q = 128 (ca. 8,6 km): første linje er q, så x, y, z og albedo.
+#       https://sbnarchive.psi.edu/pds4/cassini/satellite-rhea.cassini.shape-models-maps/data/
+#   Punkterne laves om til et kort: En stråle fra midten i hver pixels retning rammer en trekant mellem tre punkter
+#   (trekanterne findes som det konvekse hylster om punkternes retninger, så formatet med eller uden trekanter er
+#   ligegyldigt), og radius er der, hvor strålen rammer. Der regnes med 2 × 2 stråler pr. pixel. Kræver scipy.
+#   Retningen er tjekket: Herschel (Mimas) er den laveste egn ved ca. 111° V, Odysseus (Tethys) ved ca. 35° N, 125° V.
+#
 # Formen gemmes som et kort over radius med 16 bit i rød og grøn (rød = de høje 8 bit) som Phobos og Deimos
 # (lav_maaner.py), men regnet fra en "nul" i km, for radius i meter kan ikke være i 16 bit: værdi = radius − nul + 32,768 km
 # i meter. Nul står også i js/kosmos/saturn.js (MÅNER, form.nul). Kortet har −180° til venstre, 0° (siden, der vender
@@ -68,6 +84,65 @@ def gem_form(r_m, nul_km, navn):
     Image.fromarray(rgb, 'RGB').save(os.path.join(ud, navn), optimize=True)
     print(navn, v.shape[::-1], f'radius {r_m.min() / 1000:.2f}-{r_m.max() / 1000:.2f} km')
 
+
+def stråler(P, B, H):
+    # Radius (km) i et gitter B × H (bredde 90° til −90°, længde −180° til 180° øst): en stråle fra midten gennem pixlens
+    # midte rammer trekanten mellem tre punkter. d = α·P0 + β·P1 + γ·P2 med α, β, γ ≥ 0, og radius er 1 / (α + β + γ).
+    from scipy.spatial import ConvexHull, cKDTree
+    P = np.unique(np.round(P, 4), axis=0)  # ICQ har punkterne langs terningens kanter to gange
+    u = P / np.linalg.norm(P, axis=1)[:, None]
+    tri = ConvexHull(u).simplices
+    ved = [[] for _ in range(len(P))]  # trekanterne ved hvert punkt
+    for t, hjørner in enumerate(tri):
+        for v in hjørner:
+            ved[v].append(t)
+    lat = np.radians(90 - (np.arange(H) + 0.5) * 180 / H)[:, None]
+    lon = np.radians(-180 + (np.arange(B) + 0.5) * 360 / B)[None, :]
+    D = np.stack([np.cos(lat) * np.cos(lon), np.cos(lat) * np.sin(lon), np.sin(lat) + 0 * lon], -1).reshape(-1, 3)
+    træ = cKDTree(u)
+    r = np.full(len(D), np.nan)
+    for k in (1, 3, 8):  # trekanterne ved det nærmeste punkt, ellers ved de 3 eller 8 nærmeste
+        idx = np.where(np.isnan(r))[0]
+        if not len(idx):
+            break
+        nær = træ.query(D[idx], k=k)[1].reshape(len(idx), -1)
+        for j in range(nær.shape[1]):
+            for s in range(max(len(x) for x in ved)):
+                tt = np.array([ved[v][s] if s < len(ved[v]) else -1 for v in nær[:, j]])
+                ok = (tt >= 0) & np.isnan(r[idx])
+                if not ok.any():
+                    continue
+                M = np.transpose(P[tri[tt[ok]]], (0, 2, 1))
+                al = np.linalg.solve(M, D[idx[ok]][..., None])[..., 0]
+                træf = (al >= -1e-9).all(1)
+                r[idx[ok][træf]] = 1 / al[træf].sum(1)
+    assert not np.isnan(r).any(), 'stråler, der ikke ramte'
+    return r.reshape(H, B)
+
+
+def læs_punkter(navn, nummer=False):
+    # x, y, z (km) efter den første linje. nummer: der står et nummer før x (og trekanterne kommer efter punkterne)
+    with open(os.path.join(ind, navn)) as f:
+        n = int(f.readline().split()[0])
+        if nummer:
+            return np.array([f.readline().split()[1:4] for _ in range(n)], np.float64)
+        return np.loadtxt(f, usecols=(0, 1, 2))
+
+
+# Mimas, Tethys, Dione og Rhea (S3b). nul = radius i js/kosmos/saturn.js
+for navn, fil, nummer, nul in [('mimas', 'mimas_quad256q.tab', False, 198), ('tethys', 'tethys_ver128q.tab', True, 531),
+                               ('dione', 'dione_ver128q.tab', True, 561), ('rhea', 'rhea_128_i.tab', False, 764)]:
+    if not os.path.exists(os.path.join(ind, fil)):
+        continue
+    H, B = 360, 720
+    r_m = stråler(læs_punkter(fil, nummer), 2 * B, 2 * H).reshape(H, 2, B, 2).mean((1, 3)) * 1000
+    lat = np.radians(90 - (np.arange(H) + 0.5) * 180 / H)[:, None]
+    lon = np.radians(-180 + (np.arange(B) + 0.5) * 360 / B)[None, :]
+    alle = np.ones_like(r_m, bool)
+    ell, akser = ellipsoide(r_m, alle, lat, lon)
+    print(navn.capitalize() + ': ellipsoide', ', '.join(f'{x / 1000:.1f}' for x in akser), 'km')
+    # Trekanternes kanter glattes lidt (som punktstøjen på Enceladus)
+    gem_form(ell + glat(r_m - ell), nul, f'{navn}-form.png')
 
 # Enceladus
 if os.path.exists(os.path.join(ind, 'enceladus_2019pm_radius.tif')):

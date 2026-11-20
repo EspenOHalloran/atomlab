@@ -8,8 +8,12 @@
 //
 // Valgfrit (Uranus, UN4): klump: { frø, styrke } giver en lille måne uden kort en klumpet form (tegnet): Kuglen skubbes
 // ud og ind af nogle få bølger, der afhænger af retningen (samme frø giver samme form), og normalerne regnes igen.
+//
+// Valgfrit (Saturn, S3b): km (radius i km) giver sætForm(billede, net): et kort over radius (lav_saturn_former.py,
+// regnet fra km) skubber kuglen ud til den rigtige form, som Enceladus og Phobos (maane-form.js).
 
 import * as THREE from 'three';
+import { læsForm, formNet, formRadius } from './maane-form.js';
 
 const FRAGMENT = /* glsl */ `
   uniform vec3 uSol, uFarve, uPlanet, uAkse;
@@ -53,8 +57,8 @@ const VERTEX = /* glsl */ `
   }`;
 
 // radius i scene-enheder. farve: et svagt skær (rgb). lys: ganges på kortet, så månerne får den rigtige lysstyrke i forhold til hinanden.
-// segmenter: felter rundt om kuglen. klump: { frø, styrke } (se øverst).
-export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96, klump = null } = {}) {
+// segmenter: felter rundt om kuglen. klump: { frø, styrke } (se øverst). km: radius i km (til formen, se øverst).
+export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96, klump = null, km = null } = {}) {
   const mat = new THREE.ShaderMaterial({
     uniforms: {
       uSol: { value: new THREE.Vector3(1, 0, 0) },
@@ -77,9 +81,21 @@ export function lavIsmåne(radius, { farve = [1, 1, 1], lys = 1, segmenter = 96,
   const gruppe = new THREE.Group();
   const geo = new THREE.SphereGeometry(radius, segmenter, Math.round(segmenter * 2 / 3));
   if (klump) klumpet(geo, radius, klump);
-  gruppe.add(new THREE.Mesh(geo, mat));
+  const mesh = new THREE.Mesh(geo, mat);
+  gruppe.add(mesh);
+  let radier = null;
   return {
     gruppe,
+    get harForm() { return !!radier; },
+    // Kortet over radius (et hentet billede, kun med km). net: [felter rundt, felter fra pol til pol].
+    sætForm(billede, net) {
+      radier = læsForm(billede, km);
+      const ny = formNet(radier, net, km / radius);
+      mesh.geometry.dispose();
+      mesh.geometry = ny.geometri;
+    },
+    // Til tests: radius (km) i (bredde, længde)
+    radiusVed: (bredde, længde) => (radier ? formRadius(radier, bredde, længde) : km),
     sætKort(t) { mat.uniforms.tKort.value = t; mat.uniforms.uHarKort.value = t ? 1 : 0; },
     // Et lille farvekort, der ganges på (gemt delt med skala, så det ikke klippes)
     sætTone(t, skala = 1) { mat.uniforms.tTone.value = t; mat.uniforms.uHarTone.value = t ? 1 : 0; mat.uniforms.uToneSkala.value = skala; },

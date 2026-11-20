@@ -1,5 +1,16 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (19. november 2026): Saturn S3, Enceladus' rigtige form** ([plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md), "Status efter S3"). Teknikken (som Phobos og Deimos i `maane-form.js`, ikke `klippeplanet.js`) og rækkefølgen (Enceladus først) er valgt af orkestratoren 2026-11-19 efter min anbefaling, kan ændres af jer.
+- Enceladus har nu sin form fra Cassinis fotos (Bland m.fl. 2019, 2,2 km): lidt aflang mod Saturn (ca. 513 × 503 × 497 km), og bakker og dale ses ved skyggegrænsen. Fontænerne starter på overfladen. "Ærligt talt" ved Enceladus nævner formen.
+- **S3b venter** (Mimas, Tethys, Dione og Rhea): Formmodellerne ligger hos PSI bag Cloudflares robottjek og kan ikke hentes automatisk, selv om domænerne er åbne. **Jeres svar (19. november 2026, via orkestratoren):** I henter filerne i en browser 20. november 2026. Hent hele `data/`-mappen i hver af de fire (mappernes navne er tjekket i NSSDCA's katalog, filnavnene inde i dem ikke):
+  - Mimas: `https://sbnarchive.psi.edu/pds4/non_mission/gaskell.mimas.shape-model/data/`
+  - Tethys: `https://sbnarchive.psi.edu/pds4/non_mission/gaskell.tethys.shape-model/data/`
+  - Dione: `https://sbnarchive.psi.edu/pds4/non_mission/gaskell.dione.shape-model/data/`
+  - Rhea: `https://sbnarchive.psi.edu/pds4/cassini/satellite-rhea.cassini.shape-models-maps/data/` (kun den globale model, ikke de lokale kort)
+  - Er der flere udgaver, så er den med højest opløsning (størst "q" i ICQ, eller den største fil) den rigtige, og `.xml`/`.lbl` ved siden af skal med. Findes de nyere modeller (Weirich m.fl., Mimas 0,6 km), er de bedre.
+  - **Hvor:** Læg dem i `billeder/solsystem/kilder/s3b/<måne>/` på grenen `claude/saturn-s3b` (GitHub på nettet: "Add file › Upload files"). GitHub tager højst 25 MB pr. fil på nettet, så pak en stor fil som `.zip`. Mappen `kilder/` kommer i `.gitignore`, når kortene er lavet.
+  - Prompt til S3b: "Spor Solsystemet, trin Saturn S3b: formen på Mimas, Tethys, Dione og Rhea. Læs docs/lige-nu/solsystemet.md og plan-saturn-kvalitet.md, afsnit S3 (Status efter S3 og Tilbage: S3b). Filerne ligger i billeder/solsystem/kilder/s3b/ på grenen claude/saturn-s3b." Opus, effort høj.
+
 **Lavet (19. november 2026): Månen, "Lys på hele Månen" og skarpere højder fra LOLA** ("Næste" nr. 3, jeres spørgsmål 7. november 2026). Valgt af orkestratoren 2026-11-19 efter min anbefaling, kan ændres af jer.
 - **Kontakten** "Lys på hele Månen" står i Indstillinger, kun ved Månen. Lyset kommer fra kameraets side, ca. 27° skråt oppefra, så kratrene stadig har skygger. Det glider over på 0,4 s (straks med "reducer bevægelse") og slås fra, når man forlader Månen. "Lige nu" siger, at lyset kommer fra dig. Månens side har fået "Er bagsiden mørk?" (faktatjekket).
 - **Højderne:** LOLA (CGI Moon Kit, `ldem_16_uint`) som WebP uden tab: pc 4k (6,6 MB, hentes først ved Månen og lægges i grafikkortet, når kameraet er roligt), tablet og telefon 2k (1,9 MB), tests 1k som før (`lav_maanen.py`). Jordens side på pc er stadig ca. 20 MB.

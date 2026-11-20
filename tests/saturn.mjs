@@ -133,6 +133,18 @@ const side = async (adresse) => {
   tjek('Enceladus har sin form: længst mod og væk fra Saturn, kortest mellem polerne', form && form.mod > 254 && form.væk > 254 && form.tværs > 249 && form.tværs < 254 && form.nord < 250.5 && form.syd < 250.5, JSON.stringify(form));
   tjek('Enceladus: fontænerne starter på overfladen ved sydpolen (247-251 km fra midten)', form?.kilder && form.kilder.lav > 247 && form.kilder.høj < 251, JSON.stringify(form?.kilder));
   await s.screenshot({ path: UD + '/3-enceladus.png' });
+  // S3b: Mimas, Tethys, Dione og Rhea har deres form (Gaskell 2013 og SPC-modellen af Rhea): længst mod Saturn, kortest
+  // mellem polerne. Retningen: Herschel (Mimas, 1,6° S, 112° V) og Odysseus (Tethys, 33° N, 129° V) er lavere end
+  // stedet spejlet over til østsiden.
+  const krater = { mimas: [[-1.6, -112.4], [-1.6, 112.4]], tethys: [[32.8, -128.9], [32.8, 128.9]], dione: [], rhea: [] };
+  for (const id of Object.keys(krater)) {
+    await s.click(`#solsystemTræ button[data-sted="${id}"]`);
+    await hop();
+    await s.waitForFunction((id) => atomlabTest.solsystem.fænomen().form(id), id, { timeout: 15000 }).catch(() => {});
+    const f = await s.evaluate(([id, p]) => atomlabTest.solsystem.fænomen().form(id, p), [id, krater[id]]);
+    tjek(`${id} har sin form: længst mod Saturn, kortest mellem polerne`, f && f.mod > f.tværs + 2 && f.væk > f.tværs && f.nord < f.mod - 2 && f.syd < f.mod - 2, JSON.stringify(f));
+    if (krater[id].length) tjek(`${id}: det store krater ligger mod vest (lavere end stedet spejlet mod øst)`, f && f.punkter[0] < f.punkter[1] - 2, JSON.stringify(f?.punkter));
+  }
   await s.click('#solsystemTræ button[data-sted="saturn"]');
   await hop();
   const ude = await s.evaluate(() => atomlabTest.solsystem.fænomen().tur());
