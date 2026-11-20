@@ -38,6 +38,8 @@ export const HVORFOR = {
   orbitaler: {
     spørgsmål: 'Er elektronerne virkelig små kugler?',
     svar: 'Nej. En elektron opfører sig som en bølge omkring kernen, og man kan kun sige, hvor den sandsynligvis er. De områder hedder orbitaler. Nogle er runde (s), andre ligner dobbeltdråber (p) eller firkløvere (d). Skallerne og ringene i spillet er en forenklet tegning af det.',
+    // Drejebogen for Kvantefysik afsnit 8: turen "Prikker bliver til striber" (forløb 1)
+    link: { tekst: 'Se det selv: Kvantefysik ›', handling: () => import('../gaa.js').then((m) => m.åbnForløb('kvante', 'striber')) },
   },
   varmt: {
     spørgsmål: 'Hvorfor skal det være så varmt?',

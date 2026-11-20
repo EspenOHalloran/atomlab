@@ -1130,13 +1130,14 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #kvante { grid-template-columns: minmax(240px, 290px) minmax(0, 1fr) minmax(270px, 330px); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top top" "venstre vindue højre"; }
 #kvante .vindue { grid-area: vindue; }
 #kvante [hidden] { display: none; }
-.kv-styr { display: flex; flex-direction: column; gap: 10px; }
+.kv-styr { display: flex; flex-direction: column; gap: 8px; }
 .kv-gruppe { display: flex; flex-direction: column; gap: 6px; }
 .kv-gruppe .panel-overskrift { margin: 0; }
 .kv-valg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .kv-valg.tre { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .kv-valg .knap { min-height: 44px; padding: 6px 6px; }
 .kv-valg .knap.valgt { background: rgba(95, 227, 255, 0.18); border-color: var(--accent); color: var(--tekst); }
+#kvante .kv-større { grid-column: 1 / -1; } #kvante .kv-valg[hidden] { display: none; } /* "Større …" fylder hele rækken, og de tre valg står under den */
 .kv-skyder { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
 .kv-skyder input { width: 100%; min-height: 44px; accent-color: var(--accent); }
 .kv-skyder-ender { display: flex; justify-content: space-between; font-size: 13px; color: var(--svag); margin-top: -8px; }

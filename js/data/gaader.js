@@ -584,6 +584,86 @@ export const GÅDER = [
       ærligt: `<p>Banerne er de rigtige fra JPL (20. november 2026), set lige oppefra, så man ikke ser, hvor meget de hælder. Med en godt målt bane menes her en, der er målt over mindst et år. Tiden er spolet frem: Ét sekund er ca. 200 år, og prikkerne starter, hvor småkloderne er nu. Næsten alle er tæt på Solen, for det er kun dér, man kan se dem.</p>
         <p>Planet 9's bane er et bud: størrelsen fra skønnet i 2025 og drejet modsat de seks, som Batygin og Brown foreslog i 2016. Hvor på banen den skulle være, ved ingen, så kloden er tegnet ved det fjerneste punkt, hvor en planet går langsomst og er længst tid. Kloden er tegnet alt for stor. Felterne på himlen til sidst er en tegning af, hvordan Rubin tager billeder, ikke de rigtige felter. ${STREG_FORKLARING}</p>`,
     },
+  },  // Kvantefysik PR 3 (20. november 2026, drejebog-kvantefysik.md afsnit 5 og jeres svar 4): ingen egen scene. Lyset står
+  // bag kortet, og efter gættet står linjen og knappen til bænken ("Større …") nederst i billedet, som Livets begyndelse.
+  // Kilderne står i docs/fakta-kvantefysik.md afsnit 1 og 6 og docs/fakta-kvantefysik/faktatjek-stoerre.md.
+  {
+    id: 'kvante',
+    navn: 'Kvanteverdenen', // det korte navn under lyset på skinnen
+    størrelse: -8.5, // grænsen i dag: klumperne er ca. 8 nm (10⁻⁸ m). Står før Livets begyndelse (-8)
+    spørgsmål: 'Hvor stopper kvanteverdenen?',
+    linje: 'Elektroner giver striber. Hvad med større ting?',
+    // Rekorden er slået op 20. november 2026: Pedalino m.fl., Nature 649, 866-870, online 21. januar 2026 (PubMed),
+    // arXiv:2507.21211 ("more than 7'000 atoms at masses greater than 170'000 dalton", ca. 8 nm, ca. 160 m/s)
+    dato: 'Sådan stod det i november 2026',
+    ord: ['interferens', 'kvantefysik'],
+    trin: [
+      {
+        overskrift: 'Hvad ved vi?',
+        spørg: 'Kan noget så stort som et molekyle også give striber?',
+        gæt: {
+          valg: [
+            { tekst: 'Ja', efter: 'Rigtigt. Selv klumper med over 7.000 atomer gør det.' },
+            { tekst: 'Nej', efter: 'Jo. Selv klumper med over 7.000 atomer gør det.' },
+          ],
+          rigtigt: 0,
+        },
+        så: 'Elektroner, atomer og molekyler giver striber. I januar 2026 satte forskere i Wien rekorden med klumper af natrium med over 7.000 atomer, ca. 8 nanometer store.',
+      },
+      {
+        overskrift: 'Hvad ved vi ikke?',
+        spørg: 'Målt eller gæt? »Store ting som en fodbold kan aldrig give striber.«',
+        gæt: {
+          valg: [
+            { tekst: 'Målt', efter: 'Nej. Ingen har målt en grænse. Det er et åbent spørgsmål.' },
+            { tekst: 'Gæt', efter: 'Rigtigt. Ingen ved, om der er en grænse.' },
+          ],
+          rigtigt: 1,
+        },
+        // λ = h/(m·v) for 0,43 kg og 30 m/s: 5 · 10⁻³⁵ m (fakta afsnit 1). Luft og lys "måler" vejen (dekohærens, afsnit 6).
+        så: 'En fodbolds bølge er alt for lille til at give striber, man kan se, og luft og lys røber hele tiden dens vej. Men ingen ved, om kvantefysikken holder op et sted, eller om den i princippet gælder for alt.',
+        hvorfor: 'kvanteKigger',
+      },
+      {
+        overskrift: 'Hvordan finder vi ud af det?',
+        spørg: 'Hvordan kan man finde ud af, om der er en grænse?',
+        gæt: {
+          valg: [
+            { tekst: 'Prøv med større og større ting', efter: 'Godt tænkt. Det gør forskerne, og hver ny rekord flytter grænsen.' },
+            // Kvantefysikken fik sin form i 1925-26, så fysikerne har været uenige i ca. 100 år (fakta afsnit 6)
+            { tekst: 'Tænk sig frem til det', efter: 'Fysikerne har tænkt over det i ca. 100 år og er stadig uenige. Det må afgøres med forsøg.' },
+            { tekst: 'Test teorier om en grænse', efter: 'Godt tænkt. Nogle teorier siger, at bølgen falder sammen af sig selv i store ting, og dem kan man teste.' },
+          ],
+        },
+        // Pedalino m.fl. 2026: "the most stringent exclusion limit for generic macrorealistic modifications of the
+        // Schrödinger equation to date". Donadi m.fl., Nature Physics 2020 (bind 17, 2021): Penroses enkleste udgave udelukket.
+        så: 'Forskerne prøver med tungere og tungere ting og tester teorierne, der siger, at der er en grænse. Indtil videre har kvantefysikken passet hver gang.',
+      },
+    ],
+    slut: 'Alt, der er prøvet, op til klumper med over 7.000 atomer, følger kvantefysikken. Om den stopper et sted, ved ingen endnu.',
+    seDet: ['kvante:stor', 'Se det selv: Større … på bænken'],
+    ven: 'Selv klumper med over 7.000 atomer opfører sig som bølger, og ingen ved, hvor det stopper.',
+    // Ingen egen scene (som Livets begyndelse, G4e): én linje pr. trin efter gættet og knappen til seDet
+    scene: {
+      prøv: [
+        'På bænken i Kvantefysik kan du skyde med et molekyle med 2.000 atomer og en klump med over 7.000.',
+        'På bænken i Kvantefysik kan du skyde med en fodbold og se, hvad der sker.',
+        'På bænken i Kvantefysik kan du tænde måleren og se striberne forsvinde.',
+      ],
+    },
+    // Fein m.fl., Nature Physics 15, 1242 (2019): op til 2.000 atomer, over 25.000 Da, et 2 m langt Talbot-Lau-
+    // interferometer i Wien. Klumperne: 10-22 fm, 8 nm / 22 fm = 3,6 · 10⁵. Fortolkningerne: SEP og Wikipedia (fakta
+    // afsnit 6), "giver de samme tal" er lærebogsviden. Schrödinger 1935: "quite ridiculous case".
+    nørd: `
+      <p><b>Rekorderne:</b> Molekyler med ca. 2.000 atomer i 2019 og klumper af natrium med over 7.000 atomer i januar 2026, begge i Wien. De store forsøg bruger gitre, der virker som mange sprækker side om side (for klumperne gitre af laserlys), ikke to sprækker.</p>
+      <p><b>Klumpernes bølge</b> var kun 10-22 femtometer, på størrelse med en atomkerne, mens selve klumpen er ca. 8 nanometer. Den er altså flere hundredtusinde gange større end sin egen bølge.</p>
+      <p><b>Hvad er bølgen egentlig?</b> Her er fysikerne uenige. De tre kendteste bud giver præcis de samme tal i alle forsøg, der er lavet, så et forsøg kan ikke vælge mellem dem:</p>
+      <p><b>København</b> (Bohr og Heisenberg): Bølgen er vores bedste viden om, hvad en måling vil give.</p>
+      <p><b>Mange verdener</b> (Everett, 1957): Bølgen er virkelig, og alle udfald sker, hvert i sin gren.</p>
+      <p><b>Pilotbølgen</b> (de Broglie og Bohm): Partiklen går gennem én sprække, og bølgen går gennem begge og styrer den.</p>
+      <p><b>Kollaps-teorierne</b> er noget andet: De siger, at bølgen falder sammen af sig selv, når tingene bliver store nok, og det kan testes. Den enkleste udgave af Roger Penroses idé blev udelukket i 2020 af et forsøg dybt under et bjerg i Italien.</p>
+      <p><b>Schrödingers kat</b>, der skulle være både levende og død, fandt Erwin Schrödinger på i 1935 som en indvending. Han kaldte det selv et latterligt tilfælde og ville vise, at noget var galt.</p>`,
+    ærligt: '<p>"Målt eller gæt?" er forenklet. At ingen kan se striber med en fodbold, er næsten sikkert: Bølgen er alt for lille, og luft og lys røber vejen. Det åbne spørgsmål er, om kvantefysikken i princippet gælder for alt.</p>',
   },
 ];
 

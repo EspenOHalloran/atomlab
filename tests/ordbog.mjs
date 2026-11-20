@@ -39,6 +39,7 @@ for (const [id, l] of Object.entries(LINKS)) {
     const navn = l.gaa[0].split(':')[1];
     let tekst = '';
     const stier = l.gaa[0].startsWith('gaader:') ? ['../js/data/gaader.js']
+      : l.gaa[0].startsWith('kvante:') ? ['../js/data/kvante.js'] // bænken i Kvantefysik (fx kvante:lys)
       : [`../js/kosmos/${navn}.js`, `../js/data/sider/${navn === 'jordkloden' ? 'jorden' : navn}.js`];
     for (const sti of stier) {
       try { tekst += readFileSync(new URL(sti, import.meta.url), 'utf8'); } catch { /* mangler */ }

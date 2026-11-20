@@ -11,7 +11,7 @@ import { verden, sætVindue, passerTilBoks, begrænsDrejning, ROLIG } from './sc
 import { lyd } from './lyd.js';
 import { lavKontakt } from './kontakt.js';
 import { HVORFOR } from './data/hvorfor.js';
-import { tagVentForløb } from './gaa.js';
+import { tagVentForløb, tagVentKvante } from './gaa.js';
 import { startForløb, stopForløb, starterSelv, forløbVenter, forløbRørt, forløbTest, lavTurKnap, kørerForløb } from './forloeb.js';
 import { sætOrdTilOrdbog } from './ordforklaring.js';
 import { lukHvorfor } from './lag.js';
@@ -19,12 +19,12 @@ import { STRIBER } from './data/forloeb/kvante.js';
 import {
   STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, PRIKKER, SKYDER, KVANTE_KORT,
   bølgelængde, nanometer, lysFarve, åbneSprækker, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, panelNøgle, talTekst,
-  mørktSted, RING_HALV,
+  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags,
 } from './data/kvante.js';
 import { lavBænk, KILDE_Y } from './kvante/baenk.js';
 
 const $ = (id) => document.getElementById(id);
-const FARVE = { elektroner: [0.45, 0.9, 1.4], kugler: [1.1, 1.1, 1.15] };
+const FARVE = { elektroner: [0.45, 0.9, 1.4], kugler: [1.1, 1.1, 1.15], molekyle: [1.4, 0.75, 0.3], klump: [1.45, 1.2, 0.35], fodbold: [1.15, 1.15, 1.15] };
 const BØLGE_SKÆR = [0.3, 0.75, 1.0]; // "Vis bølgen" for elektroner og lys: et svagt skær
 const HØJST_PR_SEK = 450; // elektroner pr. sekund, når knappen har været holdt nede længe
 const FLYVETID = 0.12; // s fra kilden blinker, til prikken tændes (elektronen tegnes ikke på vej)
@@ -48,6 +48,7 @@ let panelTegnet = '';
 let panelTid = 0;
 let størrelse = '';
 let lysNu = [1, 1, 1]; // fotonernes farve (regnes, når farven ændres)
+let størst = 'molekyle'; // den sidste valgte under "Større …" (knappen vælger den igen)
 const stråle = new THREE.Raycaster();
 
 export function lav() {
@@ -66,6 +67,7 @@ export function lav() {
   $('kvanteVindue').append(her);
 
   for (const b of document.querySelectorAll('[data-kv-slags]')) b.addEventListener('click', () => { lyd.klik(); vælgSlags(b.dataset.kvSlags); });
+  $('kvStørre').addEventListener('click', () => { lyd.klik(); vælgSlags(størst); });
   for (const b of document.querySelectorAll('[data-kv-spraekker]')) b.addEventListener('click', () => { lyd.klik(); sætSprækker(b.dataset.kvSpraekker); });
   $('kvAfstand').addEventListener('input', (h) => sæt({ d: skala(h.target.value, GRÆNSER.d) }));
   $('kvBredde').addEventListener('input', (h) => sæt({ a: skala(h.target.value, GRÆNSER.a) }));
@@ -102,8 +104,18 @@ export function start() {
   Object.assign(v, { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false });
   forfra({ straks: true });
   kamera({ straks: true });
-  // Turen starter af sig selv første gang, og når man kommer fra "Din fremgang" eller turens link
-  if (tagVentForløb([STRIBER.id]) || starterSelv(STRIBER)) startTur();
+  // Et link med en slags (fx "Se det selv" i Gåderne eller fotonen i Ordbogen) åbner bænken med den, uden turen.
+  // Ellers starter turen af sig selv første gang, og når man kommer fra "Din fremgang" eller turens link.
+  const slags = tagVentKvante();
+  if (tagVentForløb([STRIBER.id]) || (!slags && starterSelv(STRIBER))) startTur();
+  else if (slags) vis(slags);
+}
+
+// Bænken med en slags fra et link (data-gaa="kvante:lys" eller "kvante:stor", js/gaa.js): 'stor' er "Større …"
+export function vis(slags) {
+  if (!aktiv) return;
+  if (kørerForløb()) stopForløb();
+  vælgSlags(slags === 'stor' ? størst : slags);
 }
 
 export function stop() {
@@ -126,13 +138,14 @@ const skala = (x, [lav, høj]) => lav + ((høj - lav) * Number(x)) / 100;
 const tilSkyder = (x, [lav, høj]) => Math.round(((x - lav) / (høj - lav)) * 100);
 const bredde = () => Math.min(v.a, 0.6 * v.d);
 const λ = () => bølgelængde(v.slags, v);
-const skyderSlags = () => v.slags === 'elektroner' || v.slags === 'lys';
+const kvanteNu = () => kvanteSlags(v.slags); // striber, måler og bølgens skær
 
 // ---------- Valgene ----------
 function vælgSlags(slags) {
   if (!SLAGS.includes(slags) || slags === v.slags) return;
   v.slags = slags;
-  if (!skyderSlags()) { v.måler = false; v.bølgen = false; }
+  if (STØRRE.includes(slags)) størst = slags;
+  if (!kvanteNu()) { v.måler = false; v.bølgen = false; }
   forfra();
   kamera();
 }
@@ -144,7 +157,7 @@ function sætSprækker(s) {
 }
 
 function sætMåler(til) {
-  if (!skyderSlags()) return;
+  if (!kvanteNu()) return;
   v.måler = Boolean(til);
   if (v.måler) v.bølgen = false;
   ændret();
@@ -161,7 +174,8 @@ function ændret({ straks = false } = {}) {
   fordeling = null;
   påVej = [];
   bænk.ryd();
-  bænk.prikStørrelse(v.slags === 'kugler' ? 0.13 : 0.05);
+  bænk.prikStørrelse(kugleSlags(v.slags) ? 0.13 : 0.05);
+  bænk.bold(v.slags === 'fodbold');
   lysNu = lysFarve(nanometer(v.farve)).map((c) => c * 1.35);
   rng = tilfældig(1);
   ringTal = 0;
@@ -170,7 +184,7 @@ function ændret({ straks = false } = {}) {
   const kører = bænk.vandTændt();
   bænk.vand(false);
   if (v.slags === 'boelger' && kører) startBølger();
-  else if (v.bølgen && skyderSlags()) bænk.vand(true, 0.38, BØLGE_SKÆR);
+  else if (v.bølgen && kvanteNu()) bænk.vand(true, 0.38, BØLGE_SKÆR);
   visStyring();
   panel(true);
 }
@@ -225,7 +239,7 @@ function startBølger() {
 // Ét skud. instant: prikken lander straks (testene og "Vis mig"), ellers flyver kuglen, og elektronen lander om lidt.
 function skud(instant = false) {
   if (v.slags === 'boelger') return;
-  if (v.slags === 'kugler') return kugle(instant);
+  if (kugleSlags(v.slags)) return kugle(instant);
   fordeling ??= lavFordeling({ slags: v.slags, sprækker: v.sprækker, måler: v.måler, d: v.d, a: bredde(), λ: λ() });
   const z = fordeling.træk(rng());
   const y = STRIBE_Y[0] + rng() * (STRIBE_Y[1] - STRIBE_Y[0]);
@@ -240,7 +254,7 @@ function skud(instant = false) {
 function land({ z, y, lampe }) {
   if (ringZ != null && Math.abs(z - ringZ) < RING_HALV) ringTal++;
   if (lampe >= 0) bænk.lampe(lampe);
-  bænk.prik(z, y, v.slags === 'lys' ? lysNu : FARVE.elektroner);
+  bænk.prik(z, y, v.slags === 'lys' ? lysNu : FARVE[v.slags] ?? FARVE.elektroner);
 }
 
 // En kugle sigter mest mod en åben sprække, ellers et sted på væggen. Den flyver lige: gennem en åben sprække lander
@@ -261,11 +275,12 @@ function kugle(instant) {
   const mål = { z: z * f, y: KILDE_Y + (y - KILDE_Y) * f };
   if (gennem && (mål.y < 0.05 || mål.y > 1.75)) return; // går over eller under bagvæggens kant
   if (instant) {
-    if (gennem) bænk.prik(mål.z, mål.y, FARVE.kugler);
+    if (gennem) bænk.prik(mål.z, mål.y, FARVE[v.slags]);
     return;
   }
   lyd.klik();
-  bænk.kast({ z, y, gennem, land: mål }, (m) => { if (aktiv) bænk.prik(m.z, m.y, FARVE.kugler); });
+  const farve = FARVE[v.slags];
+  bænk.kast({ z, y, gennem, land: mål }, (m) => { if (aktiv) bænk.prik(m.z, m.y, farve); });
 }
 
 // ---------- Hvert billede ----------
@@ -273,7 +288,7 @@ function opdater(dt, tid) {
   // Holdes knappen nede, går det hurtigere og hurtigere (kuglerne flyver, så de går langsommere)
   if (holder && v.slags !== 'boelger') {
     holdTid += dt;
-    const pr = v.slags === 'kugler' ? Math.min(14, 4 + holdTid * 2.5) : Math.min(HØJST_PR_SEK, 3 * 2 ** (holdTid / 0.75));
+    const pr = kugleSlags(v.slags) ? Math.min(14, 4 + holdTid * 2.5) : Math.min(HØJST_PR_SEK, 3 * 2 ** (holdTid / 0.75));
     rest += pr * dt;
   }
   // Programmet holder selv knappen nede, til målet er nået
@@ -288,7 +303,7 @@ function opdater(dt, tid) {
   }
   let n = Math.floor(rest);
   rest -= n;
-  if (v.slags === 'kugler') n = Math.min(n, 4);
+  if (kugleSlags(v.slags)) n = Math.min(n, 4);
   while (n-- > 0) skud();
   for (const p of påVej) p.tid -= dt;
   while (påVej.length && påVej[0].tid <= 0) land(påVej.shift());
@@ -398,6 +413,11 @@ function visStyring() {
     b.classList.toggle('valgt', b.dataset.kvSlags === v.slags);
     b.setAttribute('aria-pressed', String(b.dataset.kvSlags === v.slags));
   }
+  // "Større …" er valgt, når et af de tre er, og så står de tre under "Skyd med"
+  const stor = STØRRE.includes(v.slags);
+  $('kvStørre').classList.toggle('valgt', stor);
+  $('kvStørre').setAttribute('aria-pressed', String(stor));
+  $('kvStørreValg').hidden = !stor;
   for (const b of document.querySelectorAll('[data-kv-spraekker]')) {
     b.classList.toggle('valgt', b.dataset.kvSpraekker === v.sprækker);
     b.setAttribute('aria-pressed', String(b.dataset.kvSpraekker === v.sprækker));
@@ -413,9 +433,9 @@ function visStyring() {
     $('kvFart').value = String(Math.round((v.slags === 'lys' ? v.farve : v.fart) * 100));
   }
   målerKontakt.sæt(v.måler);
-  målerKontakt.knap.disabled = !skyderSlags();
+  målerKontakt.knap.disabled = !kvanteNu();
   bølgeKontakt.sæt(v.bølgen);
-  bølgeKontakt.knap.disabled = !skyderSlags() || v.måler;
+  bølgeKontakt.knap.disabled = !kvanteNu() || v.måler;
   $('kvSkyd').textContent = v.slags === 'boelger' ? 'Start bølgerne' : 'Skyd';
   $('kvSkyd').title = v.slags === 'boelger' ? '' : 'Hold knappen nede';
 }
@@ -642,6 +662,8 @@ export function testAdgang() {
     opdateres: () => verden.opdateringer.has(opdater),
     valg: () => ({ ...v, a: bredde(), λ: λ() }),
     slags: (s) => vælgSlags(s),
+    vis: (s) => vis(s), // som et link (data-gaa="kvante:stor")
+    større: () => ({ knap: $('kvStørre').classList.contains('valgt'), valg: !$('kvStørreValg').hidden, størst, bold: bænk.boldVist() }),
     sprækker: (s) => sætSprækker(s),
     måler: (til) => sætMåler(til),
     sæt: (nyt) => sæt(nyt),
