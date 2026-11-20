@@ -37,6 +37,11 @@ export function tagOrdTilOrdbog() {
   ordTilOrdbog = null;
   return ord;
 }
+
+// Et ord, Ordbogen skal vise, når den starter næste gang (fx en vej videre efter en tur)
+export function sætOrdTilOrdbog(id) {
+  ordTilOrdbog = id;
+}
 let fastholdt = false; // vist med et klik (ellers med musen over ordet)
 let musTimer = null;
 
