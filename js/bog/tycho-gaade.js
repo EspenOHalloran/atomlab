@@ -203,7 +203,7 @@ export function lavGåde(felt, _anagram, { rolig = false, tekster = {}, løst = 
     g.innerHTML = '';
     const steder = tegnet.length >= 2 ? mødesteder() : [];
     steder.forEach((p, i) => {
-      g.insertAdjacentHTML('beforeend', `<circle cx="${sx(p.x).toFixed(1)}" cy="${sy(p.y).toFixed(1)}" r="3.2" class="tg-møde${p.rigtig ? ' glød' : ''}"/>`);
+      g.insertAdjacentHTML('beforeend', `<circle cx="${sx(p.x).toFixed(1)}" cy="${sy(p.y).toFixed(1)}" r="3.2" class="tg-møde${p.rigtig ? ' glød' : ''}">${p.rigtig && !rolig ? '<animate attributeName="stroke-opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>' : ''}</circle>`);
       const b = knap('tg-møde-knap', p, `Mødested ${i + 1}`, { rigtig: p.rigtig ? 'ja' : 'nej' });
       b.addEventListener('click', () => vælgSted(b, p));
     });

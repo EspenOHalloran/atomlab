@@ -1475,8 +1475,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .tg-ny-bogstav { font-size: 8px; }
 #opdagelser .tg-tal-på { font: 5.5px var(--bog-skrift); fill: var(--bog-blaek); }
 #opdagelser .tg-møde { fill: none; stroke: var(--bog-blaek); stroke-width: 0.7; stroke-dasharray: 1.2 1.2; }
-#opdagelser .tg-møde.glød { stroke: #b8860b; stroke-width: 1.3; stroke-dasharray: none; animation: tg-glød 1.4s ease-in-out infinite; }
-@keyframes tg-glød { 50% { stroke-opacity: 0.3; } }
+#opdagelser .tg-møde.glød { stroke: #b8860b; stroke-width: 1.3; stroke-dasharray: none; } /* Pulsen er en <animate> i SVG'et (ikke med ROLIG) */
 #opdagelser .tg-passer-arm { stroke: var(--bog-blaek); stroke-width: 0.7; }
 #opdagelser .tg-passer-hængsel { fill: var(--bog-blaek); }
 #opdagelser .tg-ny-stjerne { transform-box: fill-box; transform-origin: center; }
@@ -1493,7 +1492,6 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .tg-videre-række .knap { min-height: 44px; padding: 0 16px; background: transparent; color: var(--bog-blaek); border-color: rgba(60, 40, 20, 0.45); }
 #opdagelser .tg-videre-række .tg-videre { background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; } /* Én vigtig knap: videre til bogen fra 1573 */
 #opdagelser .bo-knap-linje { margin: -6px 0 0; font-size: 14px; line-height: 1.4; text-align: center; opacity: 0.8; } /* Linjen under Gør det selv (Tycho: hvad man trykker på ved Hvid dværg) */
-@media (prefers-reduced-motion: reduce) { #opdagelser .tg-møde.glød { animation: none; } }
 @media (max-height: 500px) and (orientation: landscape) { #opdagelser .tg { gap: 8px 12px; } #opdagelser .tg-side { gap: 6px; } #opdagelser .tg-linje { font-size: 14px; } #opdagelser .tg-linje.løst { font-size: 18px; } #opdagelser .tg-idag { padding: 6px 10px; font-size: 13px; line-height: 1.3; } #opdagelser .tg-idag .tg-idag-titel { font-size: 16px; margin-bottom: 2px; } #opdagelser .tg-idag .tg-småt { display: none; } #opdagelser .tg-idag table { margin: 0 0 4px; } #opdagelser .tg-videre-række .knap { padding: 0 12px; font-size: 14px; } } /* Lav skærm på langs: "Og i dag?" og knapperne kan ses uden at rulle */
 @container (max-width: 600px) or (max-aspect-ratio: 11 / 10) { #opdagelser .tg { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; height: auto; min-height: calc(100cqh - clamp(0px, 2vh, 24px)); align-content: center; align-items: start; } #opdagelser .tg-side { max-height: none; overflow: visible; } #opdagelser .tg-kort { width: min(100%, calc(62cqh * 176 / 114)); } } /* Smalt felt (telefon og tablet på højkant): kortet øverst og tallene under */
 #opdagelser .bog-scene.hs-ord { grid-template-rows: minmax(0, 1fr); } /* Trin 4 og "Hemmeligheden" (H3): bunkerne af bogstaver i stedet for lærredet (js/bog/huygens-gaade.js) */
