@@ -58,3 +58,9 @@
 - "O crassa ingenia står i forordet" (Wikipedia). Det står i Tychos brev til Pratensis foran i bogen (faksimilen 1901, billede n32). Læs citatet på siden, ikke i OCR'en, der er ubrugelig til kursiv med langt s.
 - "Faksimilen fra 1901 er fri, så skanningen er fri." Teksten og fotoene fra 1901 er frie, men Toronto-skanningen er fra 2009 og har ingen licens. Tjek altid skanningens dato og licens, ikke kun bogens år.
 - "Kobberstik fra 1586, Tycho var 40." Indskriften siger "ætatis suæ anno 40", altså "i sit 40. år". Skriv "omkring 40".
+*Einstein (faktagrundlaget til bogen, 20. november 2026, Opus xhigh). Kilderne står i [fakta-einstein-bog.md](../fakta-einstein-bog.md).*
+- "Le Verrier fandt Merkurs 43″." Han fandt 38″ pr. århundrede (1859). De 43″ er Newcombs tal (1882), selv om Einstein skriver "(Leverrier)" ved dem (*Annalen* 49, s. 822).
+- "Einsteins feltligning fra 1915 er den, man ser i dag." Hans G_im (s. 845) er det, der i dag hedder Ricci-tensoren, ½-leddet står på højre side, og Λ kom først i 1917. Skriv, at det er den samme ligning skrevet på en anden måde.
+- "τ = t · (1 − ½(v/V)²) er Einsteins formel for urene." Det er hans tilnærmelse for små farter. Formlen er τ = t√(1 − (v/V)²) (s. 904). Ved 87 % af lysets fart giver tilnærmelsen 0,38 sekund bagud pr. sekund, den rigtige 0,51.
+- "Einstein forklarede tidsforlængelsen med et lysur i 1905." Artiklen har intet lysur (det er Lewis og Tolmans fra 1909) og nævner ikke Michelson og Morley ved navn. Og hans ur ved ækvator (s. 905) var forkert: Ure ved havets overflade går lige hurtigt.
+- archive.org's sideliste (`_page_numbers.json`) kan være forskudt: I Smithsonians *Sitzungsberichte* 1915 siger den s. 845 for `n921`, men billedet er s. 846. Se på billedet, før et `n` skrives. En skanning er heller ikke fri, fordi Wikipedia linker til den: Tjek licenslinjen.
