@@ -5,7 +5,7 @@
 // Hentes kun med ?maal (main.js), så starten ikke bliver større. Hænger sig på verden (scene3d.js) udefra: et punkt
 // forrest i verden.opdateringer, en indpakning af komponist.render og renderer.render og af nogle få kald på
 // WebGL-konteksten (teksturer og shadere). Den virker også under pause, for billederne tegnes stadig.
-import { verden, LAV_KVALITET, tilpasStørrelse } from './scene3d.js';
+import { verden, LAV_KVALITET, tilpasStørrelse, kvalitetstrin } from './scene3d.js';
 
 const RYK = 50; // ms: et billede, der tager længere, er et ryk
 const VINDUE = 5000; // ms: "det værste billede" ses over de sidste 5 sekunder
@@ -451,7 +451,7 @@ export function tekst() {
     `Browser: ${navigator.userAgent}`,
     `Grafikkort: ${grafikkort()}`,
     `Skærm ${screen.width}×${screen.height}, vindue ${innerWidth}×${innerHeight}, devicePixelRatio ${devicePixelRatio}, touch (LAV_KVALITET): ${LAV_KVALITET ? 'ja' : 'nej'}`,
-    `Lærred ${t.bredde}×${t.højde} (pixelRatio ${t.pixelRatio})`,
+    `Lærred ${t.bredde}×${t.højde} (pixelRatio ${t.pixelRatio})${LAV_KVALITET ? `, kvalitetstrin ${kvalitetstrin() === 'høj' ? 'Høj' : 'Basis'}` : ''}`,
     '',
     `Nu: ${ms(t.fps)} billeder/s, ${ms(t.prBillede)} ms pr. billede, værst (5 s) ${ms(t.værst)} ms${t.gpu != null ? `, grafikkortet ${ms(t.gpu)} ms pr. billede` : ''}`,
     `Kald ${t.kald}, trekanter ${tal(t.trekanter)} (hele billedet), geometrier ${t.geometrier}, teksturer ${t.teksturer}, shaderprogrammer ${t.programmer}`,
@@ -544,7 +544,7 @@ function lavFelt() {
       `Kald ${t.kald} · trekanter ${tal(t.trekanter)}<br>` +
       `Geometrier ${t.geometrier} · teksturer ${t.teksturer} · shadere ${t.programmer}<br>` +
       `Teksturer i grafikkortet ca. ${tal(t.teksturMB)} MB (højst ${tal(t.teksturMBHøjst)})<br>` +
-      `Lærred ${t.bredde}×${t.højde} · pixelRatio ${t.pixelRatio}`;
+      `Lærred ${t.bredde}×${t.højde} · pixelRatio ${t.pixelRatio}${LAV_KVALITET ? ` · ${kvalitetstrin() === 'høj' ? 'Høj' : 'Basis'}` : ''}`;
     const kasse = $('.maaler-ryk');
     kasse.textContent = '';
     for (const r of ryk.slice(-8).reverse()) {

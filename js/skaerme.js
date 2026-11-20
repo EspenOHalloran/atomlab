@@ -4,23 +4,25 @@
 // En ny del: en linje i SKÆRME, en sektion med samme id i index.html (og et link i .menukort) og et modul, der
 // eksporterer lav, start og stop (og testAdgang til ?test). modul er stien fra denne fil.
 // status: 'færdig' eller 'prøve' (prøvet af et barn eller ej, se docs/retning.md). Det vises ikke anderledes endnu (nr. 13).
+// høj: true = skærmen må få kvalitetstrinnet Høj på touch (js/scene3d.js, docs/plan-kvalitetstrin.md). Solsystemet,
+// Kosmos, Begyndelsen og Gåderne er ikke målt endnu og bliver i Basis.
 // html og css er til 10b, når en skærm får sine egne filer (tomme indtil da).
 export const SKÆRME = [
-  { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig' },
-  { id: 'molekyler', verden: 'kemi', titel: 'Molekyler', modul: './molekyler-skaerm.js', status: 'færdig' },
-  { id: 'system', verden: 'atomer', titel: 'Det periodiske system', modul: './system.js', status: 'færdig' },
-  { id: 'kvante', verden: 'atomer', titel: 'Kvantefysik', modul: './kvante.js', status: 'prøve' },
-  { id: 'ild', verden: 'kemi', titel: 'Ild', modul: './ild.js', status: 'prøve' },
-  { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig' },
-  { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig' },
-  { id: 'liv', verden: 'liv', titel: 'Liv', modul: './liv.js', status: 'prøve' },
+  { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig', høj: true },
+  { id: 'molekyler', verden: 'kemi', titel: 'Molekyler', modul: './molekyler-skaerm.js', status: 'færdig', høj: true },
+  { id: 'system', verden: 'atomer', titel: 'Det periodiske system', modul: './system.js', status: 'færdig', høj: true },
+  { id: 'kvante', verden: 'atomer', titel: 'Kvantefysik', modul: './kvante.js', status: 'prøve', høj: true },
+  { id: 'ild', verden: 'kemi', titel: 'Ild', modul: './ild.js', status: 'prøve', høj: true },
+  { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig', høj: true },
+  { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig', høj: true },
+  { id: 'liv', verden: 'liv', titel: 'Liv', modul: './liv.js', status: 'prøve', høj: true },
   { id: 'begyndelsen', verden: 'liv', titel: 'Begyndelsen', modul: './begyndelsen.js', status: 'prøve' },
-  { id: 'batteri', verden: 'elektricitet', titel: 'Batteriet', modul: './batteri.js', status: 'færdig' },
+  { id: 'batteri', verden: 'elektricitet', titel: 'Batteriet', modul: './batteri.js', status: 'færdig', høj: true },
   { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig' },
   { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
-  { id: 'ordbog', verden: 'biblioteket', titel: 'Ordbogen', modul: './ordbog.js', status: 'færdig' },
+  { id: 'ordbog', verden: 'biblioteket', titel: 'Ordbogen', modul: './ordbog.js', status: 'færdig', høj: true },
   { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve' },
-  { id: 'opdagelser', verden: 'biblioteket', titel: 'Opdagelserne', modul: './opdagelser.js', status: 'prøve' },
+  { id: 'opdagelser', verden: 'biblioteket', titel: 'Opdagelserne', modul: './opdagelser.js', status: 'prøve', høj: true },
 ];
 
 // Verdenerne i ringens rækkefølge (menuen, js/karrusel.js): fra det mindste til det største, Kernerne først og
