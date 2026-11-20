@@ -1,5 +1,5 @@
 // "Under isen" (docs/drejebog-maaner.md, afsnit 4-6): tallene for Europa og Enceladus, lagene i snittet og den enkle
-// model af magnetfeltet ved Europa. Ren data uden Three.js, så det kan testes i Node (tests/maaner-data.mjs).
+// model af magnetfeltet ved Europa. Ren data uden Three.js, så det kan testes i Node (tests/maaner-underisen.mjs).
 // Kilderne står i docs/fakta-maaner-liv.md (afsnit 1-2) og drejebogens afsnit 16.
 
 import { gå, kontakt } from '../../sideknap.js';

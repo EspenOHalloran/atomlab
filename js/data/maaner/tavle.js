@@ -1,5 +1,5 @@
 // Tavlen med de tre ting ("Under isen", trin 4-5, docs/drejebog-maaner.md afsnit 6). Ren data uden Three.js, så den kan
-// testes i Node (tests/maaner-data.mjs). Selve tavlen (træk, tryk og farverne) står i js/maaner/tavle.js.
+// testes i Node (tests/maaner-underisen.mjs). Selve tavlen (træk, tryk og farverne) står i js/maaner/tavle.js.
 // Rækkerne er Vand, Energi, Stoffer og Liv, søjlerne Europa og Enceladus. Et felt får farven fra det bedste kort i det:
 // grøn = målt, gul = regnet eller gættet, grå = ukendt. Liv er altid grå.
 // Kilderne står i docs/fakta-maaner-liv.md (afsnit 1-2) og drejebogens afsnit 16. Faktatjekket 20. november 2026 (M3):
