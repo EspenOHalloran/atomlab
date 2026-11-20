@@ -66,7 +66,7 @@ for (const [navn, opts] of størrelser) {
   tjek(`${navn}: ringen har de 7 verdener i rækkefølge`, start.orden.join() === VERDENER.join(), start.orden.join());
   tjek(`${navn}: hver verden har sine dele som knapper, og ingen kort står løst`, JSON.stringify(start.dele) === JSON.stringify(DELE) && start.løse === 0, JSON.stringify(start.dele));
   tjek(`${navn}: en ny bruger starter på Atomer (ikke Kernerne, der står først) med "Start her" på Atomværkstedet og ingen sidste del`, (await midt()) === 'atomer' && start.startHer && start.sidst === 0);
-  tjek(`${navn}: knapperne i verdenen forrest er store nok til en finger og kan nås med tabulatortasten`, start.knapper.length === 2 && start.knapper.every((k) => !k.hel && k.h >= 40 && k.tab === 0), JSON.stringify(start.knapper));
+  tjek(`${navn}: knapperne i verdenen forrest er store nok til en finger og kan nås med tabulatortasten`, start.knapper.length === 3 && start.knapper.every((k) => !k.hel && k.h >= 40 && k.tab === 0), JSON.stringify(start.knapper));
   tjek(`${navn}: knapperne i en verden til siden kan ikke nås med tabulatortasten`, start.bagved.length === 2 && start.bagved.every((t) => t === -1), JSON.stringify(start.bagved));
   tjek(`${navn}: i Elektricitet (én del) dækker Batteriets link hele kortet`, start.hel);
   tjek(`${navn}: alle verdenerne er lige høje`, new Set(start.højder).size === 1, start.højder.join());
