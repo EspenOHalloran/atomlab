@@ -70,6 +70,15 @@ export function tagVentMolekyler() {
   return id;
 }
 
+// Det, Kvantefysik skal skyde med, når den starter (fra en knap data-gaa="kvante:lys" eller "kvante:stor", fx fotonen i
+// Ordbogen eller "Se det selv" i gåden "Hvor stopper kvanteverdenen?"): en slags eller 'stor' ("Større …")
+let ventKvante = null;
+export function tagVentKvante() {
+  const id = ventKvante;
+  ventKvante = null;
+  return id;
+}
+
 // Har et link valgt et fænomen på skærmen (åbnFænomen med id)? Glemmes, når det er hentet.
 export function tagVentFænomen(skærm) {
   const ja = ventFænomen === skærm;
@@ -146,6 +155,16 @@ document.addEventListener('click', (h) => {
     else {
       ventIld = id ?? null;
       location.hash = '#ild';
+    }
+    return;
+  }
+  // Kvantefysik i Atomer (data-gaa="kvante:lys" eller "kvante:stor")
+  if (skærm === 'kvante') {
+    lyd.klik();
+    if (location.hash === '#kvante' && hentetSkærm('kvante')) hentetSkærm('kvante').vis(id);
+    else {
+      ventKvante = id ?? null;
+      location.hash = '#kvante';
     }
     return;
   }

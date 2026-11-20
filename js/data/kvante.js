@@ -22,16 +22,27 @@ export const SPRÆKKE_HØJDE = 1.4; // sprækkerne går fra 0,2 til 1,6
 // Standard: 7 lyse striber inden for den brede bunke (d = 4·a), ca. 0,6 mellem dem midt på bagvæggen
 export const STANDARD = { d: 1.0, a: 0.25, fart: 0.6, farve: 0.45 };
 export const GRÆNSER = { d: [0.6, 1.6], a: [0.1, 0.45] };
-export const SLAGS = ['kugler', 'boelger', 'elektroner', 'lys'];
+export const SLAGS = ['kugler', 'boelger', 'elektroner', 'lys', 'molekyle', 'klump', 'fodbold'];
+// "Større …" (PR 3): et molekyle med ca. 2.000 atomer (Fein m.fl., Nature Physics 15, 1242, 2019), en klump natrium med
+// over 7.000 atomer (Pedalino m.fl., Nature 649, 866, januar 2026, arXiv:2507.21211) og en fodbold. Kilderne står i
+// docs/fakta-kvantefysik/faktatjek-stoerre.md.
+export const STØRRE = ['molekyle', 'klump', 'fodbold'];
+// Kugler og fodbolde flyver lige som kugler. Elektroner, lys, molekyler og klumper giver striber (og har måler og bølge).
+export const kugleSlags = (s) => s === 'kugler' || s === 'fodbold';
+export const kvanteSlags = (s) => s === 'elektroner' || s === 'lys' || s === 'molekyle' || s === 'klump';
 export const SPRÆKKER = ['begge', 'venstre', 'højre']; // venstre er z < 0, højre z > 0 (set fra kameraet)
 
 // Spillets bølgelængde. Elektroner: hurtigere giver kortere bølge (λ = h/(m·v)). Lys: blåt (450 nm) til rødt (680 nm),
 // skaleret, så grønt (530 nm) giver de samme striber som elektronerne med standardfarten.
 const λ_ELEKTRON = [0.27, 0.11]; // fra langsom (0) til hurtig (1)
-const λ_VAND = [0.3, 0.15]; // vandets bølger: fra lange (0) til korte (1), ikke kortere, så de kan ses på en telefon
+const λ_VAND = [0.3, 0.15];
+// Molekylet og klumpen er tungere, så bølgen er kortere og striberne tættere. I virkeligheden er forskellen langt større:
+// klumpernes bølge er ca. 10-22 fm (arXiv:2507.21211), elektronernes i bænkens rigtige forsøg ca. 50 pm.
+const λ_STØRRE = { molekyle: 0.12, klump: 0.085 }; // vandets bølger: fra lange (0) til korte (1), ikke kortere, så de kan ses på en telefon
 export function bølgelængde(slags, { fart = STANDARD.fart, farve = STANDARD.farve } = {}) {
   if (slags === 'lys') return elektronλ(STANDARD.fart) * nanometer(farve) / 530;
   if (slags === 'boelger') return λ_VAND[0] + (λ_VAND[1] - λ_VAND[0]) * fart;
+  if (λ_STØRRE[slags]) return λ_STØRRE[slags];
   return elektronλ(fart);
 }
 const elektronλ = (fart) => λ_ELEKTRON[0] + (λ_ELEKTRON[1] - λ_ELEKTRON[0]) * fart;
@@ -67,8 +78,8 @@ const trin = (x, s) => {
 
 // Chancen (ikke normeret) for at lande ved z på bagvæggen
 export function intensitet(z, { slags = 'elektroner', sprækker = 'begge', måler = false, d = STANDARD.d, a = STANDARD.a, λ = bølgelængde(slags) } = {}) {
-  if (slags === 'kugler') {
-    // Kuglerne flyver lige fra rørets munding: sprækken projiceres ud på bagvæggen
+  if (kugleSlags(slags)) {
+    // Kuglerne (og fodbolden) flyver lige fra rørets munding: sprækken projiceres ud på bagvæggen
     const f = kugleForstørrelse();
     const h = (a * f) / 2;
     let sum = 0;
@@ -174,15 +185,24 @@ export const PANEL = {
   lys: { titel: 'Lys', tekst: 'Lys gør det samme som elektronerne: Hver foton lander som én prik, og mange prikker danner striber. Fotonen er hverken en bølge eller en kugle fra hverdagen.' },
   'lys-en': { titel: 'Én sprække åben', tekst: 'Med kun én vej er der ingen anden bølge at mødes med. De mørke striber er væk, og fotonerne lander i én bred bunke.' },
   'lys-måler': { titel: 'Måleren er tændt', tekst: 'Måleren finder altid en hel foton ved én af sprækkerne. Men nu er de mørke striber væk.' },
+  // "Større …" (faktatjek i docs/fakta-kvantefysik/faktatjek-stoerre.md)
+  molekyle: { titel: 'Molekyler med 2.000 atomer', tekst: 'I 2019 sendte forskere i Wien molekyler med ca. 2.000 atomer gennem gitre, der virker som mange sprækker side om side, og de gav striber. Molekylerne er meget tungere end elektroner, så bølgen er kortere, og striberne ligger tættere.' },
+  'molekyle-en': { titel: 'Én sprække åben', tekst: 'Med kun én vej er der ingen anden bølge at mødes med. De mørke striber er væk, og molekylerne lander i én bred bunke.' },
+  'molekyle-måler': { titel: 'Måleren er tændt', tekst: 'Måleren finder altid et helt molekyle ved én af sprækkerne. Men nu er de mørke striber væk.' },
+  klump: { titel: 'Klumper med over 7.000 atomer', tekst: 'Rekorden er fra januar 2026: klumper af natrium med over 7.000 atomer, ca. 8 nanometer store, gav også striber. Ingen ved endnu, om der er en grænse for, hvor stort noget kan være.' },
+  'klump-en': { titel: 'Én sprække åben', tekst: 'Med kun én vej er der ingen anden bølge at mødes med. De mørke striber er væk, og klumperne lander i én bred bunke.' },
+  'klump-måler': { titel: 'Måleren er tændt', tekst: 'Måleren finder altid en hel klump ved én af sprækkerne. Men nu er de mørke striber væk.' },
+  // λ = h/(m·v) = 6,626 · 10⁻³⁴ / (0,43 · 30) = 5,1 · 10⁻³⁵ m, ca. 10¹⁹ gange mindre end en proton (8,4 · 10⁻¹⁶ m)
+  fodbold: { titel: 'En fodbold', tekst: 'En fodbold har også en bølge, men den er ca. 10¹⁹ gange mindre end en atomkerne, så striberne ville ligge alt for tæt til at ses. Og luften og lyset, der rammer bolden, røber hele tiden dens vej, så den lander i to bunker som kuglerne.' },
 };
 export function panelNøgle({ slags, sprækker, måler }) {
-  if (slags === 'kugler' || slags === 'boelger') return slags;
+  if (kugleSlags(slags) || slags === 'boelger') return slags;
   if (måler) return `${slags}-måler`;
   return sprækker === 'begge' ? slags : `${slags}-en`;
 }
 
 // Navnet på det, der lander (tælleren og panelets tal)
-export const PRIKKER = { kugler: 'Kugler', elektroner: 'Elektroner', lys: 'Fotoner' };
+export const PRIKKER = { kugler: 'Kugler', elektroner: 'Elektroner', lys: 'Fotoner', molekyle: 'Molekyler', klump: 'Klumper', fodbold: 'Fodbolde' };
 
 // Skyderen under "Afstand": fart for elektroner, farve for lys, bølgelængde for vandet. Kuglerne har ingen.
 export const SKYDER = {

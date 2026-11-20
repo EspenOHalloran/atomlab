@@ -151,6 +151,39 @@ const LYS = {
     g.add(vippet, glød(new THREE.Color(1, 0.85, 0.6), 1.4, 0.5));
     return { gruppe: g, opdater(dt) { p.rotation.y += dt * 0.12; } };
   },
+
+  // Hvor stopper kvanteverdenen? (Kvantefysik PR 3): en bagvæg, hvor prikker lander én ad gangen og bliver til striber,
+  // som på bænken i Kvantefysik. Prikkerne trækkes efter cos²·sinc² (samme form som js/data/kvante.js) med et fast frø.
+  // Hvert 12. sekund starter det forfra. Med "Reducer bevægelse" står alle prikkerne fremme.
+  kvante() {
+    const g = new THREE.Group();
+    const N = LAV_KVALITET ? 700 : 1200;
+    const { p, pos, farve } = prikker(N, 0.1);
+    let frø = 7;
+    const tal = () => (frø = (frø * 16807) % 2147483647) / 2147483647;
+    const sinc2 = (b) => (Math.abs(b) < 1e-6 ? 1 : (Math.sin(b) / b) ** 2);
+    for (let i = 0; i < N; i++) {
+      let x = 0;
+      for (let forsøg = 0; forsøg < 200; forsøg++) {
+        x = (tal() * 2 - 1) * 2.4;
+        if (tal() < Math.cos((Math.PI * x) / 0.7) ** 2 * sinc2((Math.PI * x) / 2.1)) break;
+      }
+      pos.set([x, (tal() - 0.5) * 3, 0], i * 3);
+      farve.set([0.45, 0.9, 1.4], i * 3);
+    }
+    const kant = new THREE.Color(0.25, 0.35, 0.6);
+    g.add(p, fuld([[-2.7, -1.75, 0], [2.7, -1.75, 0], [2.7, 1.75, 0], [-2.7, 1.75, 0], [-2.7, -1.75, 0]], kant, { bredde: 2 }));
+    g.add(glød(new THREE.Color(0.4, 0.8, 1.2), 1.6, 0.12));
+    let vist = N;
+    return {
+      gruppe: g,
+      opdater(dt, tid) {
+        vist = ROLIG ? N : Math.floor(N * Math.min(1, (tid % 12) / 9));
+        p.geometry.setDrawRange(0, vist);
+      },
+      test: () => ({ prikker: N, vist }),
+    };
+  },
 };
 
 // ---------- Det sorte hul med linsen ----------
