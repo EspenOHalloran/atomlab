@@ -322,10 +322,17 @@ await s.screenshot({ path: `${UD}/venus.png` });
   tjek('stop 5: "Gløden på natsiden" er slået til, skyerne er der, og det er midnat over Ovda Regio', set[4].tilstand.glød && set[4].tilstand.under < 1 && Math.min(set[4].klokken, 24 - set[4].klokken) < 0.3, JSON.stringify([set[4].tilstand, set[4].klokken]));
   // Turen ned: måleren følger højden (først under 100 km), skyerne går væk under deres top, og disen er der
   const prøver = [];
-  // (turen tager ca. 30 s spiltid. Testbrowseren tegner få billeder i sekundet under belastning, så vent op til 5 min.)
+  // (turen tager ca. 50 s spiltid. Testbrowseren tegner få billeder i sekundet under belastning, så vent op til 6 min.)
   const t0 = Date.now();
-  while (Date.now() - t0 < 300000) {
-    const p = await fm(() => ({ ...atomlabTest.solsystem.fænomen().ned(), under: atomlabTest.solsystem.fænomen().skyer().under, ut: document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '', prik: parseFloat(document.querySelector('.vm-prik')?.style.top), skyder: atomlabTest.solsystem.styr().some((k) => k.navn === 'Under skyerne') }));
+  const iLog = () => fm(() => JSON.parse(localStorage.getItem('atomlabLog') || '{"beskeder":[]}').beskeder.filter((b) => b.type === 'fase').map((b) => b.titel));
+  const logFør = await iLog();
+  const prøve = () => fm(() => ({
+    ...atomlabTest.solsystem.fænomen().ned(), under: atomlabTest.solsystem.fænomen().skyer().under, ut: document.querySelector('#solsystemVindue .undertekst.fase')?.textContent ?? '',
+    prikker: document.querySelectorAll('#solsystemVindue .undertekst.fase .ut-trin button').length, prik: parseFloat(document.querySelector('.vm-prik')?.style.top),
+    skyder: atomlabTest.solsystem.styr().some((k) => k.navn === 'Under skyerne'), bjælke: [...document.querySelectorAll('#solsystemBjælke button')].map((b) => b.textContent + (b.disabled ? ' (grå)' : '')),
+  }));
+  while (Date.now() - t0 < 360000) {
+    const p = await prøve();
     prøver.push(p);
     if (p.fase === 'landet') break;
     await s.waitForTimeout(100);
@@ -341,7 +348,7 @@ await s.screenshot({ path: `${UD}/venus.png` });
   const trin = [...new Set(prøver.map((p) => p.trin).filter(Boolean))];
   const titler = NED_TRIN.map((t) => t.titel);
   const sete = [...new Set(prøver.map((p) => titler.find((t) => p.ut.includes(t))).filter(Boolean))];
-  tjek('turen ned går gennem alle seks trin i rækkefølge, og underteksten skifter med (med flybyens prikker)', trin.join() === NED_TRIN.map((t) => t.id).join() && sete.join() === titler.join() && prøver.filter((p) => p.trin).every((p) => p.ut.includes(NED_TRIN.find((t) => t.id === p.trin).titel) || p.ut.includes(titler[NED_TRIN.findIndex((t) => t.id === p.trin) - 1])), JSON.stringify([trin, sete]));
+  tjek('turen ned går gennem alle seks trin i rækkefølge, og underteksten skifter med (med turens seks prikker)', prøver.filter((p) => p.trin).every((p) => p.prikker === 6) && trin.join() === NED_TRIN.map((t) => t.id).join() && sete.join() === titler.join() && prøver.filter((p) => p.trin).every((p) => p.ut.includes(NED_TRIN.find((t) => t.id === p.trin).titel) || p.ut.includes(titler[NED_TRIN.findIndex((t) => t.id === p.trin) - 1])), JSON.stringify([trin, sete]));
   const søjle = ned.filter((p) => p.måler && Number.isFinite(p.prik));
   tjek('prikken i søjlen går nedad og står i skylaget inde i skyerne', søjle.length >= 3 && søjle.every((p, i) => i === 0 || p.prik >= søjle[i - 1].prik - 0.2) && søjle.filter((p) => p.hMiddel < 68 && p.hMiddel > 50).every((p) => p.prik > 30 && p.prik < 52), JSON.stringify(søjle.map((p) => [Math.round(p.hMiddel), p.prik])));
   tjek('skyderen "Under skyerne" er skjult under turen ned', prøver.every((p) => !p.skyder));
@@ -352,6 +359,44 @@ await s.screenshot({ path: `${UD}/venus.png` });
   await s.waitForTimeout(400);
   tjek('træet har "Ned gennem skyerne" under Venera 13, og Indstillinger har kontakten "Venera 13\'s foto"', (await fm(() => atomlabTest.solsystem.træ())).some((p) => p.id === 'ned') && (await fm(() => atomlabTest.solsystem.styr())).some((p) => p.navn === 'Venera 13\'s foto'));
   await s.screenshot({ path: `${UD}/venus-landet.png` });
+  // Længere tid pr. trin (jeres svar 20. november 2026): ca. 3 s ekstra i snit, efter tekstens ord
+  const plan = slut.plan, varighed = plan.slice(1).map((x, i) => x - plan[i]);
+  tjek('turen ned tager ca. 49 s (34 s + 3 s ekstra til hvert af de fem trin), og hvert trin står mindst ca. 5 s', Math.abs(slut.nedTid - 49) < 0.01 && Math.abs(plan.at(-1) - slut.nedTid) < 0.05 && varighed.every((d) => d > 5), JSON.stringify(varighed.map((d) => d.toFixed(1))));
+  // Underteksterne står i loggen 🔔, hver én gang
+  const logEfter = (await iLog()).slice(0, (await iLog()).length - logFør.length);
+  tjek('de seks undertekster på turen ned står i loggen, og Solsystemet har klokken 🔔', titler.every((t) => logEfter.filter((x) => x === t).length === 1) && (await fm(() => !document.querySelector('#solsystemVindue .logknap')?.hidden)), JSON.stringify(logEfter));
+  // Bladring (jeres svar 20. november 2026): ‹ › i bjælken, prikkerne og piletasterne. Kameraet glider hen til starten af
+  // trinet og fortsætter derfra, og måleren, prikken i søjlen og fotoet følger med
+  const bjælke = (await prøve()).bjælke;
+  tjek('landet: bjælken har ‹ og "↺ Forfra"', bjælke.some((b) => b === '‹') && bjælke.some((b) => b.includes('Forfra')), JSON.stringify(bjælke));
+  await fm(() => document.activeElement?.blur()); // (fokus væk fra knapperne)
+  // Følg et spring, til kameraet er fremme ved starten af trinet (og lidt efter)
+  const følg = async () => {
+    const set = [await prøve()];
+    const t1 = Date.now();
+    while (Date.now() - t1 < 30000 && (set.at(-1).springer || set.length < 3)) { await s.waitForTimeout(80); set.push(await prøve()); }
+    set.push(await prøve());
+    return set;
+  };
+  const ned0 = NED_TRIN.find((t) => t.id === 'ovn'), ned1 = NED_TRIN.find((t) => t.id === 'under');
+  await s.keyboard.press('ArrowLeft');
+  const s1 = await følg();
+  const top1 = Math.max(...s1.map((p) => p.hMiddel));
+  tjek('← fra "landet": tilbage til "Varmere end en ovn", fotoet væk, måleren der, og kameraet glider op til ca. 20 km', s1[0].trin === 'ovn' && s1[0].ut.includes(ned0.titel) && !s1[0].foto && s1.at(-1).måler && s1.at(-1).fase === 'ned' && top1 > 17.5 && top1 < 20.8, JSON.stringify([s1[0].trin, s1[0].foto, top1, s1.at(-1).fase]));
+  await s.click('#solsystemBjælke .bjælke-tilbage');
+  const s2 = await følg();
+  const top2 = Math.max(...s2.map((p) => p.hMiddel)), sidst2 = s2.at(-1);
+  tjek('‹ i bjælken: et trin mere tilbage til "Under skyerne" (ca. 48 km), og prikken i søjlen følger højden', s2[0].trin === 'under' && s2[0].ut.includes(ned1.titel) && top2 > 44.5 && top2 < 48.8 && Math.abs(sidst2.prik - 100 * (1 - sidst2.hMiddel / 100)) < 1.5 && !sidst2.springer, JSON.stringify([s2[0].trin, top2, sidst2.hMiddel, sidst2.prik]));
+  await s.keyboard.press('ArrowRight');
+  const s3 = await følg();
+  tjek('→ frem igen til "Varmere end en ovn", og turen fortsætter ned', s3[0].trin === 'ovn' && s3.at(-1).fase === 'ned' && !s3.at(-1).springer && s3.at(-1).hMiddel < 20.8, JSON.stringify([s3[0].trin, s3.at(-1).fase, s3.at(-1).hMiddel]));
+  await s.click('#solsystemBjælke .bjælke-næste');
+  await s.waitForFunction(() => atomlabTest.solsystem.fænomen().ned().fase === 'landet', null, { timeout: 30000, polling: 100 });
+  await s.waitForTimeout(300);
+  const s4 = await prøve();
+  tjek('"Næste: Landet ›" lander med det samme: 0 km, fotoet er der igen, og kontakten "Venera 13\'s foto" også', s4.trin === 'landet' && s4.tekst.højde === '0 km' && s4.foto && (await fm(() => atomlabTest.solsystem.styr())).some((p) => p.navn === 'Venera 13\'s foto'), JSON.stringify([s4.trin, s4.tekst, s4.foto]));
+  const logIgen = (await iLog()).slice(0, (await iLog()).length - logFør.length);
+  tjek('bladring skriver ikke underteksterne i loggen igen', logIgen.length === logEfter.length, JSON.stringify(logIgen));
   await fm(() => atomlabTest.solsystem.trykPå('Venera 13\'s foto'));
   tjek('kontakten "Venera 13\'s foto" skjuler fotoet', !(await F('ned')).foto && (await fm(() => document.querySelector('.venus-foto')?.hidden)) === true);
   // Tilbage til hele Venus: måleren, fotoet og disen er væk, og skyerne er der igen
