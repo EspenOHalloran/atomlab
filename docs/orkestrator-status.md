@@ -1,9 +1,6 @@
 # Orkestratoren: status
 
-*Opdateret af orkestratoren session_01YQoBWJHjboVRT37tHFPvrZ 19. november 2026 kl. ca. 22 UTC (overtog efter skift 7, startet af jer i en ny chat). Skemaet: trig_01NdpeL6XTDT4mpUiFyE1uCL (hver time) og vækningen trig_01Nt3SschkHXCDqUK4uTmZeN (20. november 03:32 dansk tid). Det gamle timeskema trig_01QbBJpjnC4M1PQJMBj3XpRB er slået fra (sletning blev afvist af tilladelsessystemet). Gamle sessioner er arkiveret 19. november, undtagen "Småting · Prøverunde med jer" (venter på jeres Venus-svar).*
-
-## Ved næste skift
-Slet eller slå mine skemaer fra, opret dine egne (cron `0 * * * *` "Orkestrator: tjek nu"), send dit id til de kørende sessioner, og skriv til brugeren.
+*Opdateret 20. november 2026 kl. ca. 10 dansk tid af sessionen "Småting · Gennemgang af det, der venter" efter gennemgangen med jer. **Ny orkestrator fra samme tid:** se "Skift af orkestrator" nederst. Hold denne fil under ca. 5 KB.*
 
 ## Jeres beslutninger (gælder stadig)
 - Højst **to tunge sessioner** (Opus) ad gangen. Skift orkestrator ved ca. 250.000 tokens (`get_session` uden id, `context_usage`).
@@ -15,19 +12,27 @@ Slet eller slå mine skemaer fra, opret dine egne (cron `0 * * * *` "Orkestrator
 - **Rækkefølgen (jeres go 19. november 2026):** T3 og Einsteins faktagrundlag, så overblikket, så Planet 9, så Kvantefysik forløb 1 før Lys og farver (står i `docs/koereplan.md`).
 - **S3b:** I henter selv de fire formmodeller (Mimas, Tethys, Dione, Rhea) fra sbn.psi.edu i en browser 20. november. Spejlene er tjekket: SBN-UMD og NAIF har dem ikke (NAIF har kun Enceladus).
 
-## Kører
-- **Solsystemet · Saturn S3: Enceladus** (session_01YQoBWL2njdQoQB6hh17JPR, Opus høj): tests kører, så PR og merge.
-- **Småting · Fund fra telefonen i Gåderne** (session_01YQoBWLduMBWBGtkyjfbde1, Opus høj): alle fire lavet, venter på `--ændret`, så PR og merge.
+## Jeres go (20. november 2026, gennemgangen i Småting)
+Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurdering) og starte disse, når der er plads (højst to tunge ad gangen, én session pr. spor):
+1. **Kvantefysik forløb 1, PR 2 (turen) og PR 3 ("Større …" og Gåde-kortet):** go givet. Start først, når PR 1 er merget. Prompt i `docs/lige-nu/kvantefysik.md` ("Næste"). PR 3 efter PR 2.
+2. **Venus "Ned gennem skyerne"** (længere tid, ca. 3 s ekstra pr. tekst efter ordtal, og bladring ‹ ›): prompt i `docs/lige-nu/aabne-punkter.md` (punktet om Venus).
+3. **G4c Sort hul** (Gåderne): go givet, målingen er fin (74 billeder/s på Tab A11, 57 på pc). Prompt i `docs/lige-nu/smaating.md` ("Næste i Gåderne").
+4. **Grafik G2** (kantudglatning og bedre glød): go givet, efter 1-3 eller når der er plads. Prompt i `docs/plan-grafik.md` (jeres svar 20. november). Så G3 med Værkstedet, og så Mars ekstra 4 (L2, en session på jeres pc).
+5. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
+- **Kører nu:** Solsystemet · Saturn S3b (session_01YQoBWMbsrBkrK8sRNBbCY2). **S3b-filerne er hentet** (flade i `billeder/solsystem/kilder/s3b/` på grenen `claude/saturn-s3b`).
 
-## Køen (i denne rækkefølge)
-1. **Videnskabsfolkene · Tycho T3** (prompten i `docs/lige-nu/videnskabsfolkene.md`, Opus høj), når en af de to er færdig. Bed den tjekke Tychos navn på hylden i telefonstørrelse.
-2. **Videnskabsfolkene · Faktagrundlag til Einsteins bog** (Opus **xhigh**, kun dokumenter, "lavet af Opus xhigh i stedet for Fable" + linje i `docs/plan-fable.md`), når den anden er færdig. Grundlag: `docs/plan-videnskabsfolk.md` (Einsteins bog, afsnit 2 og 8).
-3. **Småting · Overblikket opdateres** med alt fra 19. november og den lange plan.
-4. **Småting · Gåden Planet 9** (`docs/plan-gaader-3d.md`, `docs/fakta-gaader.md`), Opus høj, `/faktatjek`.
-5. **Kvantefysik · forløb 1: dobbeltspalten og "Hvor stopper kvanteverdenen?"** (`docs/drejebog-kvantefysik.md`), Opus høj, faktagrundlag for svære påstande med xhigh.
-6. Orkestratoren skriver selv oversigten over grafikplanen (`docs/plan-grafik.md`: lavet og tilbage) til jer.
-- Venter på jer: G4c (målingen `?maal#gaader` på Tab A11), Mars ekstra 4 (jeres pc), Ild 2 (prøven med sønnen), S3b (filerne).
+## Venter på jer
+- **Prøven med sønnen** i weekenden 22.-23. november ([guide-proeven.md](guide-proeven.md)). Blokerer Ild 2 og Kvantefysik forløb 2-3.
+- **Prøver på enhederne:** pc og mobil i Gåderne (navne, swipe, knib og zoom), Enceladus' skyggegrænse, stenene ved Naukluft, Curiosity og Planet 9 på tabletten, 4k-højdekortet på pc'en. Hvilken gåde gav lange stop (180-610 ms) på pc?
+- **Rettighedslinjen** for Smithsonians skanning fra 1915 (biodiversitylibrary.org har robottjek, læses i en browser).
+- **Hvad der sidst blev afgjort:** Grafik: G2 først, så Værkstedet (G3). L2 efter G2.
 
 ## Andet
 - Kendte røde tests: `venus` (også alene), `batteri` (også alene på main), `frigiv` og `overblik` (kun under belastning).
 - Ugegrænsen er tæt på (advarsel). Den nulstilles 25. november kl. 01:00 dansk tid.
+
+## Skift af orkestrator (20. november 2026)
+Den gamle orkestrator (session_01YQoBWJHjboVRT37tHFPvrZ) stod på 573.000 tokens, så **jeres ønske er: kontekst holdes kort.** Regler for orkestratoren:
+- Hver time: Læs kun denne fil og `list_sessions`. Er der ikke noget nyt, så svar med én linje og stop.
+- **Skift ved ca. 250.000 tokens** (`get_session` uden id, `context_usage`): Opret en ny orkestrator med `create_session` (`source_url: https://github.com/EspenOHalloran/atomlab`, Opus, medium), giv den prompten "Du er orkestratoren for AtomLab. Læs docs/orkestrator-status.md og følg den.", opret et nyt skema (cron `0 * * * *`, `persistent_session_id` = den nye session), slå dit eget fra, og skriv til brugeren. Opdatér denne fil, før du skifter.
+- Hver gang en session er færdig og merget: Arkivér den, og flyt det færdige ud af denne fil.

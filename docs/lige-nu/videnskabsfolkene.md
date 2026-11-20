@@ -14,5 +14,7 @@
    **Prompt til V2 (ny session, Opus, høj effort, kun dokumenter, kopiér):** "Spor Videnskabsfolkene, V2: drejebogen til Ole Rømer. Læs docs/lige-nu/videnskabsfolkene.md, docs/plan-videnskabsfolk.md (afsnit 1-6 og 8), docs/drejebog-tycho.md som skabelon (afsnit 1-3, 15 og 16) og Rømer i docs/fakta-videnskabsfolk.md. Tjek i origin/main, at den ikke er skrevet. Skriv docs/drejebog-roemer.md og docs/fakta-videnskabsfolk/roemer.md med den røde tråd fra begyndelsen, /faktatjek (Opus i stedet for Fable, en linje i docs/plan-fable.md), og spørgsmålene til jer med anbefalingen først. Ingen kode. PR og merge."
 3. Galilei og Newton får drejebøger, når de skal bygges (efter de syv andre).
 
+**Einsteins bog (jeres svar 20. november 2026):** De fire spørgsmål er besvaret (skanninger med skift til sat tekst, domænet, 1915 som opslag 3, én linje om Mileva Marić), se afsnit 11 i [fakta-einstein-bog.md](../fakta-einstein-bog.md). Drejebogen kan skrives, når I giver go (efter Rømer, eller før, hvis I vil). Rettighedslinjen for 1915-skanningen mangler stadig (siden har robottjek).
+
 ## Spørgsmål til jer
 Ingen lige nu.
