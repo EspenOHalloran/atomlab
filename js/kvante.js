@@ -3,16 +3,23 @@
 // elektroner eller lys mod en væg med to sprækker, luk en sprække, og tænd måleren. Tegningen står i js/kvante/baenk.js,
 // modellen og teksterne i js/data/kvante.js.
 // "Skyd" virker, mens knappen holdes nede, og det går hurtigere og hurtigere. Et tryk på en sprække i billedet lukker
-// eller åbner den.
+// eller åbner den. Turen "Prikker bliver til striber" (Forløb-klodsen, teksterne i js/data/forloeb/kvante.js) starter
+// af sig selv første gang.
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTilBoks, begrænsDrejning, ROLIG } from './scene3d.js';
 import { lyd } from './lyd.js';
 import { lavKontakt } from './kontakt.js';
 import { HVORFOR } from './data/hvorfor.js';
+import { tagVentForløb } from './gaa.js';
+import { startForløb, stopForløb, starterSelv, forløbVenter, forløbRørt, forløbTest, lavTurKnap, kørerForløb } from './forloeb.js';
+import { sætOrdTilOrdbog } from './ordforklaring.js';
+import { lukHvorfor } from './lag.js';
+import { STRIBER } from './data/forloeb/kvante.js';
 import {
   STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, PRIKKER, SKYDER, KVANTE_KORT,
   bølgelængde, nanometer, lysFarve, åbneSprækker, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, panelNøgle, talTekst,
+  mørktSted, RING_HALV,
 } from './data/kvante.js';
 import { lavBænk, KILDE_Y } from './kvante/baenk.js';
 
@@ -32,6 +39,8 @@ let holdTid = 0;
 let rest = 0; // brøkdelen af et skud, der er til gode
 let kø = 0; // skud, programmet selv skyder (fx i turen)
 let køFart = 60;
+let selvMål = 0; // programmet holder selv "Skyd" nede, til så mange er landet (turen og "Vis mig")
+let fingerHolder = false; // "Skyd" i turens linje holdes nede med en finger eller musen
 let påVej = []; // { tid, z, y, lampe }: elektroner, der lander om lidt
 let målerKontakt = null;
 let bølgeKontakt = null;
@@ -50,6 +59,11 @@ export function lav() {
   tæller.id = 'kvTæller';
   tæller.hidden = true;
   $('kvanteVindue').append(tæller);
+  const her = document.createElement('p');
+  her.className = 'kv-her';
+  her.id = 'kvHer';
+  her.hidden = true;
+  $('kvanteVindue').append(her);
 
   for (const b of document.querySelectorAll('[data-kv-slags]')) b.addEventListener('click', () => { lyd.klik(); vælgSlags(b.dataset.kvSlags); });
   for (const b of document.querySelectorAll('[data-kv-spraekker]')) b.addEventListener('click', () => { lyd.klik(); sætSprækker(b.dataset.kvSpraekker); });
@@ -65,6 +79,8 @@ export function lav() {
   $('kvanteHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpKvante').classList.remove('skjult'); });
   $('kvHvorfor').innerHTML = KVANTE_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">Hvorfor? ${HVORFOR[id].spørgsmål}</button>`).join('');
   lavTryk();
+  lavTurSkyd();
+  lavTurKnap($('kvante'), [STRIBER], () => startTur());
   // Når 3D-billedet får en ny størrelse (fx tabletten vendes), stilles kameraet igen
   new ResizeObserver(() => {
     const r = $('kvanteVindue').getBoundingClientRect();
@@ -86,11 +102,16 @@ export function start() {
   Object.assign(v, { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false });
   forfra({ straks: true });
   kamera({ straks: true });
+  // Turen starter af sig selv første gang, og når man kommer fra "Din fremgang" eller turens link
+  if (tagVentForløb([STRIBER.id]) || starterSelv(STRIBER)) startTur();
 }
 
 export function stop() {
+  stopForløb(); // kalder DEL.slut
   aktiv = false;
   holder = false;
+  fingerHolder = false;
+  selvMål = 0;
   kø = 0;
   påVej = [];
   verden.opdateringer.delete(opdater);
@@ -143,6 +164,7 @@ function ændret({ straks = false } = {}) {
   bænk.prikStørrelse(v.slags === 'kugler' ? 0.13 : 0.05);
   lysNu = lysFarve(nanometer(v.farve)).map((c) => c * 1.35);
   rng = tilfældig(1);
+  ringTal = 0;
   bænk.sæt({ d: v.d, a: bredde(), sprækker: v.sprækker, λ: λ(), måler: v.måler, straks });
   // Vandet (eller bølgens skær for elektroner og lys) starter forfra med de nye sprækker
   const kører = bænk.vandTændt();
@@ -155,6 +177,7 @@ function ændret({ straks = false } = {}) {
 
 function forfra({ straks = false } = {}) {
   holder = false;
+  selvMål = 0;
   kø = 0;
   bænk.vand(false);
   ændret({ straks });
@@ -215,6 +238,7 @@ function skud(instant = false) {
 }
 
 function land({ z, y, lampe }) {
+  if (ringZ != null && Math.abs(z - ringZ) < RING_HALV) ringTal++;
   if (lampe >= 0) bænk.lampe(lampe);
   bænk.prik(z, y, v.slags === 'lys' ? lysNu : FARVE.elektroner);
 }
@@ -252,6 +276,11 @@ function opdater(dt, tid) {
     const pr = v.slags === 'kugler' ? Math.min(14, 4 + holdTid * 2.5) : Math.min(HØJST_PR_SEK, 3 * 2 ** (holdTid / 0.75));
     rest += pr * dt;
   }
+  // Programmet holder selv knappen nede, til målet er nået
+  if (selvMål && bænk.antal() + påVej.length >= selvMål) {
+    selvMål = 0;
+    if (!fingerHolder) holder = false;
+  }
   if (kø > 0) {
     const n = Math.min(kø, køFart * dt + 0.5);
     rest += n;
@@ -265,6 +294,7 @@ function opdater(dt, tid) {
   while (påVej.length && påVej[0].tid <= 0) land(påVej.shift());
   bænk.opdater(dt, tid);
   tegnTæller();
+  tegnHer();
   panelTid += dt;
   if (panelTid > 0.25) { panelTid = 0; panel(); }
 }
@@ -340,17 +370,25 @@ function tryk(x, y) {
   stråle.setFromCamera({ x: ((x - r.left) / r.width) * 2 - 1, y: -((y - r.top) / r.height) * 2 + 1 }, verden.kamera);
   const ramt = stråle.intersectObjects(bænk.trykKasser, false)[0];
   if (ramt) return trykSprække(ramt.object.userData.sprække);
-  if (v.slags === 'boelger') { lyd.klik(); startBølger(); }
+  if (v.slags === 'boelger') {
+    lyd.klik();
+    startBølger();
+    if (turTrin === 'boelger' && forløbVenter()) forløbRørt();
+  }
 }
 
 // Sprække 0 er den venstre (z < 0), 1 den højre. Den sidste åbne kan ikke lukkes.
+// I turen kan sprækkerne kun trykkes i trin 4, og kun én gang: Så skyder programmet lige så mange elektroner som før.
 function trykSprække(i) {
   const navn = i === 0 ? 'venstre' : 'højre';
   const anden = i === 0 ? 'højre' : 'venstre';
+  if (turTrin && (turTrin !== 'luk' || v.sprækker !== 'begge')) return lyd.nej();
+  const før = { antal: bænk.antal() + påVej.length + kø, ring: ringTal };
   if (v.sprækker === 'begge') sætSprækker(anden);
   else if (v.sprækker === anden) sætSprækker('begge');
   else return lyd.nej();
   lyd.klik();
+  if (turTrin === 'luk') lukket(før);
   return navn;
 }
 
@@ -403,9 +441,203 @@ function panel(straks = false) {
   }
 }
 
+// ---------- Turen "Prikker bliver til striber" ----------
+let turTrin = null; // trinet i turen, der kører (eller null)
+let ringZ = null; // ringen om det mørke sted i trin 4 (z på bagvæggen), og hvor mange der er landet i den
+let ringTal = 0;
+let ringFør = null; // tallet i ringen, før sprækken blev lukket
+const SKYD_MÅL = { kugler: 40, elektroner: 1000, maaler: 1000 };
+
+function startTur() {
+  if (!aktiv) return;
+  lukHvorfor();
+  startForløb(STRIBER, DEL);
+}
+
+// Bænken til et trin: slags, begge sprækker åbne, måleren slukket og standardmålene. Bagvæggen ryddes.
+function opstil(slags, { måler = false } = {}) {
+  const ny = slags !== v.slags;
+  Object.assign(v, { slags, sprækker: 'begge', måler, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false });
+  forfra();
+  if (ny) kamera();
+}
+
+// Et trin starter: ringen væk, og intet skydes, før trinet selv siger det
+function trinStart(id) {
+  turTrin = id;
+  holder = fingerHolder = false;
+  selvMål = 0;
+  kø = 0;
+  ringZ = null;
+  ringFør = null;
+  bænk.ring(null);
+}
+
+// Programmet holder selv "Skyd" nede (det går hurtigere og hurtigere), til mål er landet
+function holdSelv(mål) {
+  if (!aktiv || v.slags === 'boelger') return;
+  selvMål = mål;
+  if (holder) return;
+  holder = true;
+  holdTid = 0;
+  rest = 0;
+  skud();
+}
+
+// Bagvæggen har ikke elektronernes striber (fx når man hopper direkte til trin 4): De skydes hurtigt frem igen
+function sikrStriber(n) {
+  const klar = v.slags === 'elektroner' && v.sprækker === 'begge' && !v.måler && v.d === STANDARD.d && v.a === STANDARD.a && v.fart === STANDARD.fart;
+  if (klar && bænk.antal() + påVej.length >= n * 0.5) return;
+  opstil('elektroner');
+  kø = n;
+  køFart = 500;
+}
+
+// Trin 4: En sprække er lukket, og bagvæggen er ryddet. Programmet skyder lige så mange elektroner som før (ca. 4 s).
+function lukket(før) {
+  ringFør = før.ring;
+  kø = Math.max(200, før.antal);
+  køFart = kø / 4;
+  if (forløbVenter()) forløbRørt();
+}
+
+// "Her: n" over ringen (et lille skilt, der følger ringen på skærmen)
+const tHer = new THREE.Vector3();
+let herTegnet = '';
+function tegnHer() {
+  const el = $('kvHer');
+  const tekst = ringZ == null ? '' : `Her: ${talTekst(ringTal)}${ringFør != null ? ` (før: ${talTekst(ringFør)})` : ''}`;
+  if (tekst !== herTegnet) {
+    herTegnet = tekst;
+    el.hidden = !tekst;
+    el.textContent = tekst;
+  }
+  if (!tekst) return;
+  bænk.ringTop(tHer).project(verden.kamera);
+  const r = $('kvanteVindue').getBoundingClientRect();
+  const c = verden.renderer.domElement.getBoundingClientRect();
+  el.style.left = `${c.left - r.left + ((tHer.x + 1) / 2) * c.width}px`;
+  el.style.top = `${c.top - r.top + ((1 - tHer.y) / 2) * c.height}px`;
+}
+
+// "Skyd" i turens linje holdes nede som knappen i panelet. Linjen tegnes om efter hvert klik, så lytterne sidder på
+// skærmen. Klikket fra en finger eller musen gør ingenting (trykket startede skuddene), men Enter og mellemrum (et klik
+// uden finger) holder knappen nede for en, til trinets mål er nået.
+let klikFraTastatur = false;
+function lavTurSkyd() {
+  const skærm = $('kvante');
+  skærm.addEventListener('pointerdown', (h) => {
+    const b = h.target.closest?.('.forløb-linje [data-knap="skyd"]');
+    if (!b || b.disabled || h.button > 0) return;
+    fingerHolder = true;
+    trykSkyd();
+  });
+  skærm.addEventListener('click', (h) => {
+    if (h.target.closest?.('.forløb-linje [data-knap="skyd"]')) klikFraTastatur = h.detail === 0;
+  }, { capture: true });
+  const slip = () => {
+    if (!fingerHolder) return;
+    fingerHolder = false;
+    if (!selvMål) holder = false;
+  };
+  for (const navn of ['pointerup', 'pointercancel']) window.addEventListener(navn, slip);
+}
+
+const skydKnap = (mål) => ({
+  id: 'skyd',
+  tekst: 'Skyd',
+  gør: () => {
+    if (!klikFraTastatur) return;
+    klikFraTastatur = false;
+    holdSelv(mål);
+  },
+});
+
+const DEL = {
+  trin: {
+    kugler: {
+      start: () => { trinStart('kugler'); opstil('kugler'); },
+      knapper: [skydKnap(SKYD_MÅL.kugler)],
+      færdig: () => v.slags === 'kugler' && bænk.antal() >= SKYD_MÅL.kugler,
+      visMig: () => holdSelv(SKYD_MÅL.kugler),
+    },
+    boelger: {
+      start: () => { trinStart('boelger'); opstil('boelger'); },
+      knapper: [{ id: 'boelger', tekst: 'Start bølgerne', gør: () => { lyd.klik(); startBølger(); } }],
+      // Bølgerne er nået bagvæggen, og den lyser
+      færdig: () => v.slags === 'boelger' && bænk.vandTændt() && bænk.vandFront() > 8,
+      visMig: () => startBølger(),
+    },
+    elektroner: {
+      start: () => { trinStart('elektroner'); opstil('elektroner'); },
+      knapper: [skydKnap(SKYD_MÅL.elektroner)],
+      færdig: () => v.slags === 'elektroner' && bænk.antal() >= SKYD_MÅL.elektroner,
+      visMig: () => holdSelv(SKYD_MÅL.elektroner),
+    },
+    luk: {
+      // Ringen om det første mørke sted til højre for midten. Elektronernes striber står der fra trin 3.
+      start: () => {
+        trinStart('luk');
+        sikrStriber(SKYD_MÅL.elektroner);
+        ringZ = mørktSted({ d: v.d, λ: λ() });
+        ringTal = bænk.zer().filter((z) => Math.abs(z - ringZ) < RING_HALV).length;
+        bænk.ring(ringZ);
+      },
+      færdig: () => v.sprækker !== 'begge' && ringFør != null && kø === 0 && !påVej.length,
+      visMig: () => { if (v.sprækker === 'begge') trykSprække(0); },
+    },
+    maaler: {
+      // Begge sprækker åbner af sig selv, og elektronerne fortsætter, så striberne kommer igen
+      start: () => {
+        trinStart('maaler');
+        opstil('elektroner');
+        kø = 600;
+        køFart = 150;
+      },
+      get knapper() {
+        return [{ id: 'maaler', tekst: 'Tænd måleren', gør: () => tændMåler(), aktiv: () => !v.måler }];
+      },
+      færdig: () => v.måler && bænk.antal() >= SKYD_MÅL.maaler,
+      visMig: () => tændMåler(),
+    },
+  },
+  layout: () => kamera(),
+  // Tonomura m.fl. (Hitachi, 1989): én elektron ad gangen, ca. 20 minutter (docs/erfaringer/fakta-faelder.md)
+  slutTekst: () => 'I 1989 så forskere hos Hitachi de samme striber komme frem af rigtige elektroner, én ad gangen. Det tog ca. 20 minutter.',
+  veje: [
+    { tekst: 'Leg frit med bænken', primær: true, her: true, gør: () => requestAnimationFrame(() => kamera()) },
+    { tekst: 'Er lys en bølge eller en partikel?', gør: () => { sætOrdTilOrdbog('foton'); location.hash = '#ordbog'; } },
+    { tekst: HVORFOR.kvanteKigger.spørgsmål, hvorfor: 'kvanteKigger' },
+  ],
+  slut: () => {
+    turTrin = null;
+    ringZ = null;
+    ringFør = null;
+    selvMål = 0;
+    bænk.ring(null);
+    tegnHer();
+    visStyring();
+    panel(true);
+  },
+};
+
+// Trin 5: Måleren tændes, bagvæggen ryddes, og elektronerne fortsætter, langsomt først, så hver lampe kan ses blinke
+function tændMåler() {
+  if (v.måler) return;
+  lyd.klik();
+  kø = 0;
+  sætMåler(true);
+  holder = false;
+  holdSelv(SKYD_MÅL.maaler);
+}
+
 // ---------- Til tests (?test) ----------
 export function testAdgang() {
   return {
+    forløb: forløbTest(),
+    startTur: () => startTur(),
+    tur: () => ({ kører: kørerForløb(), trin: turTrin, ring: ringZ, her: ringTal, før: ringFør, kø, selvMål, vist: bænk.ringVist() }),
+    herTekst: () => ($('kvHer').hidden ? '' : $('kvHer').textContent),
     synlig: () => bænk.gruppe.visible,
     opdateres: () => verden.opdateringer.has(opdater),
     valg: () => ({ ...v, a: bredde(), λ: λ() }),

@@ -1149,6 +1149,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .kv-mere > :not(summary) + :not(summary) { margin-top: 8px; }
 #kvante .liv-tal[hidden] { display: none; }
 /* Tælleren øverst i billedet: hvor mange der er landet */
+.kv-her { position: absolute; z-index: 1; margin: 0; padding: 4px 9px; border-radius: 9px; transform: translate(-50%, -100%); background: rgba(8, 12, 28, 0.72); border: 1px solid #ffd166; color: #ffe2a0; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; } #kvante .forløb-linje [data-knap="skyd"] { touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; } /* Turen: "Her: n" over ringen i trin 4, og "Skyd" holdes nede */
 .kv-tæller { position: absolute; left: 10px; top: 10px; z-index: 1; margin: 0; padding: 6px 10px; border-radius: 10px; background: rgba(8, 12, 28, 0.66); font-size: 14px; font-variant-numeric: tabular-nums; pointer-events: none; }
 /* Ikonet i menuen: prikker, der ligger i lodrette striber */
 .ikon-kvante { background:

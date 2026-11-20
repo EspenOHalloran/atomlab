@@ -1,0 +1,73 @@
+// Turen "Prikker bliver til striber" i Kvantefysik (Atomer, forløb 1). Ren data uden Three.js, så det kan testes i Node.
+// Drejebogen står i docs/drejebog-kvantefysik.md (afsnit 3) med rettelserne i docs/fable/E7-kvantefysik-noter.md
+// (afsnit 3: trin 5 giver ÉN bred bunke, ikke "som kuglerne", og højst to sætninger pr. tekst), og skabelonen i
+// docs/fable/E3-forloeb.md. Det, der rører bænken, står i js/kvante.js under samme trin-id. Faktatjekket står i
+// docs/fakta-kvantefysik/faktatjek-forloeb1.md.
+
+export const STRIBER = {
+  id: 'striber',
+  del: 'kvante',
+  titel: 'Prikker bliver til striber',
+  kernesætning: 'Elektroner lander én ad gangen som prikker, men prikkerne danner striber, som kun bølger kan lave. Måler man, hvilken vej elektronen tog, forsvinder striberne.',
+  trin: [
+    {
+      id: 'kugler',
+      spørg: 'Vi skyder små kugler mod en væg med to sprækker. Hvor rammer de bagvæggen?',
+      gæt: {
+        valg: [
+          { tekst: 'I to striber', efter: 'Prøv det!', svar: 'Ja, én stribe bag hver sprække.' },
+          { tekst: 'Over det hele', efter: 'Prøv det!', svar: 'Kun bag sprækkerne. Resten stopper i væggen.' },
+        ],
+      },
+      gør: 'Hold Skyd nede, til 40 kugler har ramt.',
+      så: 'To striber, én bag hver sprække. Sådan gør kugler.',
+      ord: [],
+    },
+    {
+      id: 'boelger',
+      spørg: 'Nu sender vi bølger i vand mod de samme to sprækker.',
+      gør: 'Tryk på vandet eller på Start bølgerne.',
+      så: 'Mange striber: Hvor en bølgetop møder en bølgedal, bliver vandet stille. Det hedder interferens.',
+      ord: ['interferens'],
+    },
+    {
+      id: 'elektroner',
+      spørg: 'Nu elektroner, én ad gangen, og hver bliver til én prik. Hvilket mønster giver mange prikker?',
+      gæt: {
+        valg: [
+          { tekst: 'To striber, som kuglerne', efter: 'Prøv det!', svar: 'Nej. Elektronerne laver bølgernes mønster.' },
+          { tekst: 'Mange striber, som bølgerne', efter: 'Prøv det!', svar: 'Ja, selvom de kom én ad gangen.' },
+        ],
+      },
+      gør: 'Hold Skyd nede: 10, 100, 1.000 elektroner.',
+      så: 'Mange striber, selvom de kom én ad gangen. Hver prik er en hel elektron, men mønstret er en bølges.',
+      ord: [],
+    },
+    {
+      id: 'luk',
+      spørg: 'I ringen lander næsten ingen. Hvad sker der her, hvis den ene sprække lukkes?',
+      gæt: {
+        valg: [
+          { tekst: 'Der kommer færre', efter: 'Det lyder rimeligt, så prøv det!', svar: 'Det er lige omvendt, og det er det mærkelige.' },
+          { tekst: 'Der kommer flere', efter: 'Prøv det!', svar: 'Ja. Det kan kun en bølge gøre.' },
+        ],
+      },
+      gør: 'Tryk på en sprække, så den lukker (elektronerne fortsætter af sig selv).',
+      så: 'Flere! Med to åbne sprækker går bølgen gennem begge, og de to dele slukker hinanden her.',
+      ord: [],
+    },
+    {
+      id: 'maaler',
+      spørg: 'Begge sprækker er åbne igen. Hvad ser en måler ved sprækkerne, når en elektron kommer?',
+      gæt: {
+        valg: [
+          { tekst: 'En hel elektron ved én sprække', efter: 'Prøv det!', svar: 'Ja, hver gang.' },
+          { tekst: 'En halv ved hver', efter: 'Prøv det!', svar: 'Nej, altid en hel ved én af dem.' },
+        ],
+      },
+      gør: 'Tænd måleren (elektronerne fortsætter af sig selv).',
+      så: 'Måleren finder altid en hel elektron ved én sprække. Men nu er de mørke striber væk.',
+      ord: [],
+    },
+  ],
+};

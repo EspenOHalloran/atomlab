@@ -6,7 +6,7 @@
 import * as THREE from 'three';
 import { LAV_KVALITET, ROLIG } from '../scene3d.js';
 import { glød, prikTekstur } from '../kosmos/faelles.js';
-import { KILDE_X, KUGLE_X, L, BAG_HALV, VÆG_HALV, SPRÆKKE_HØJDE, åbneSprækker } from '../data/kvante.js';
+import { KILDE_X, KUGLE_X, L, BAG_HALV, VÆG_HALV, SPRÆKKE_HØJDE, STRIBE_Y, RING_HALV, åbneSprækker } from '../data/kvante.js';
 
 export const PRIKKER_HØJST = LAV_KVALITET ? 12000 : 30000;
 export const KILDE_Y = 0.9; // midten af strålen
@@ -311,6 +311,29 @@ export function lavBænk() {
   }
   const iLuften = () => kugler.filter((k) => k.levende).length;
 
+  // Ringen i turens trin 4: en aflang ring om et mørkt sted på bagvæggen (striberne står lodret, så den går hele vejen op)
+  const RING_TOP = STRIBE_Y[1] + 0.1;
+  const ring = (() => {
+    const yd = (STRIBE_Y[1] - STRIBE_Y[0]) / 2 + 0.1;
+    const r = RING_HALV + 0.03;
+    const form = (rr) => {
+      const s = new THREE.Shape();
+      s.absarc(0, yd - r, rr, 0, Math.PI, false);
+      s.absarc(0, -yd + r, rr, Math.PI, 2 * Math.PI, false);
+      s.closePath();
+      return s;
+    };
+    const ydre = form(r);
+    ydre.holes.push(new THREE.Path(form(r - 0.04).getPoints(48)));
+    const m = new THREE.Mesh(new THREE.ShapeGeometry(ydre, 24), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 1.25, 0.35), transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+    m.rotation.y = -Math.PI / 2; // formens x bliver bænkens z, og fladen vender mod kilden
+    m.position.set(L - 0.03, (STRIBE_Y[0] + STRIBE_Y[1]) / 2, 0);
+    m.visible = false;
+    m.renderOrder = 2;
+    gruppe.add(m);
+    return m;
+  })();
+
   // ---------- Hvert billede ----------
   function opdater(dt, tid) {
     flytKugler(dt);
@@ -390,6 +413,13 @@ export function lavBænk() {
     zer: () => zer,
     blink: () => { t.blink = 1; },
     lampe: (i) => { t.lampe[i] = 1; },
+    // Ringen om et mørkt sted (z) i turens trin 4, eller væk (null). ringTop er punktet over ringen (til "Her: n").
+    ring(z) {
+      ring.visible = z != null;
+      if (z != null) ring.position.z = z;
+    },
+    ringVist: () => ring.visible,
+    ringTop: (v) => gruppe.localToWorld(v.set(L - 0.03, RING_TOP, ring.position.z)),
     // Vandet: tændt (bølgerne løber ud fra kilden), styrke (1 i vandet, svagt skær for elektronerne)
     vand(tændt, styrke = 1, farve = null) {
       if (tændt && !vandT.tændt) vandT.front = 0;

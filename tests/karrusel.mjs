@@ -14,7 +14,7 @@ let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const VERDENER = ['kerner', 'atomer', 'kemi', 'liv', 'elektricitet', 'rummet', 'biblioteket'];
 // Dele, der ikke står i "Din fremgang": Biblioteket og Kvantefysik (til turen kommer i PR 2, 20. november 2026)
-const UDEN_FREMGANG = ['kvante', 'ordbog', 'gaader', 'opdagelser'];
+const UDEN_FREMGANG = ['ordbog', 'gaader', 'opdagelser'];
 const DELE = { kerner: ['fusion', 'reaktor'], atomer: ['vaerksted', 'system', 'kvante'], kemi: ['molekyler', 'ild'], liv: ['liv', 'begyndelsen'], elektricitet: ['batteri'], rummet: ['solsystem', 'kosmos'], biblioteket: ['ordbog', 'gaader', 'opdagelser'] };
 const størrelser = [
   ['pc', { viewport: { width: 1280, height: 800 } }],

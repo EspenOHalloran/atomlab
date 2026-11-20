@@ -90,6 +90,9 @@ export function mørktSted({ d = STANDARD.d, λ = bølgelængde('elektroner') } 
   return (L * s) / Math.sqrt(1 - s * s);
 }
 
+// Ringen i turens trin 4 tæller prikkerne inden for ±RING_HALV af det mørke sted (hele bagvæggens højde)
+export const RING_HALV = 0.08;
+
 // En fordeling, man kan trække prikker fra (en tabel over den samlede chance, BIN felter over bagvæggen)
 export const BIN = 600;
 export function lavFordeling(valg) {
