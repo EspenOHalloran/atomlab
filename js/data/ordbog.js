@@ -40,6 +40,23 @@ export const ORDBOG = [
     former: ['orbital', 'orbitalen', 'orbitaler', 'orbitalerne'],
     tekst: 'Det område om atomets kerne, hvor en elektron sandsynligvis er. Det er ikke en bane, elektronen kører rundt i: Elektronen opfører sig som en bølge, og orbitalen er bølgens form. Der er plads til 2 elektroner i hver.',
   },
+  // Kvantefysik, bænken (20. november 2026). Kilder: docs/fakta-kvantefysik.md, afsnit 1 (Hitachi: 50 kV giver 5,4 pm,
+  // og 500-530 nm / 5,4 pm er 93.000-99.000), afsnit 7 (fælderne "kvante- om tanker og held" og "to steder på én gang").
+  {
+    id: 'interferens', ord: 'Interferens',
+    former: ['interferens', 'interferensen'],
+    tekst: 'Når to bølger mødes, lægges de sammen. Hvor en bølgetop møder en bølgetop, bliver bølgen større, og hvor en top møder en dal, slukker de hinanden. Det giver et mønster af striber.',
+  },
+  {
+    id: 'kvantefysik', ord: 'Kvantefysik',
+    former: ['kvantefysik', 'kvantefysikken', 'kvantemekanik', 'kvantemekanikken'],
+    tekst: 'Fysikken for det allermindste: elektroner, lys og atomer. Her breder tingene sig som bølger, men de bliver altid fundet ét sted som en hel partikel. Kvantefysik handler om ting på størrelse med atomer, ikke om tanker eller held.',
+  },
+  {
+    id: 'boelgelaengde', ord: 'Bølgelængde',
+    former: ['bølgelængde', 'bølgelængden', 'bølgelængder', 'bølgelængderne'],
+    tekst: 'Afstanden fra én bølgetop til den næste. Rødt lys har en bølgelængde på ca. 0,0007 mm. Elektroner har også en bølgelængde: I et kendt forsøg fra 1989 var den næsten 100.000 gange kortere end grønt lys.',
+  },
   {
     id: 'neutrino', ord: 'Neutrino',
     former: ['neutrino', 'neutrinoen', 'neutrinoer', 'neutrinoerne'],

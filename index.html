@@ -93,6 +93,13 @@
           <small>Alle 118 grundstoffer i 3D</small>
         </span>
       </a>
+      <a href="#kvante">
+        <span class="kort-ikon ikon-kvante"></span>
+        <span class="kort-tekst">
+          <strong>Kvantefysik</strong>
+          <small>Elektroner lander som prikker, men laver striber som bølger</small>
+        </span>
+      </a>
       <a href="#fusion">
         <span class="kort-ikon ikon-stjerne"></span>
         <span class="kort-tekst">
@@ -1087,6 +1094,95 @@
         <p><strong>Boblerne:</strong> Tryk <em>Dryp fedtstof</em>, og se fedtstofferne samle sig til små bobler med en hinde om.</p>
         <p><strong>RNA'et:</strong> Tryk <em>Kopiér</em>. Fejlene kommer tilfældigt, lige så tit som ved det rigtige RNA, så nogle kopier har ingen.</p>
         <p><strong>Trappen:</strong> Tryk på et trin for at se forsøget bag det. Træk for at dreje lidt, og rul eller knib for at zoome.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kvantefysik (del nr. 3 i Atomer, js/kvante.js): bænken med dobbeltspalten -->
+  <section id="kvante" class="skærm skjult" aria-label="Kvantefysik">
+    <header class="topbjælke">
+      <a class="knap lille" href="#">‹ Menu</a>
+      <h2>Kvantefysik</h2>
+      <span class="system-status">Atomer: Prikker bliver til striber</span>
+      <div class="topknapper">
+        <button class="knap lille ikon" data-lyd-knap title="Lyd til/fra">🔊</button>
+        <button class="knap lille ikon" id="kvanteHjælp" title="Hjælp">?</button>
+        <button class="knap lille ikon knap-fuldskaerm" title="Fuld skærm"></button>
+      </div>
+    </header>
+    <aside class="panel side-panel venstre-panel">
+      <div class="kv-styr">
+        <div class="kv-gruppe">
+          <h4 class="panel-overskrift">Skyd med</h4>
+          <div class="kv-valg" role="group" aria-label="Skyd med">
+            <button class="knap lille svag" data-kv-slags="kugler">Kugler</button>
+            <button class="knap lille svag" data-kv-slags="boelger">Bølger</button>
+            <button class="knap lille svag" data-kv-slags="elektroner">Elektroner</button>
+            <button class="knap lille svag" data-kv-slags="lys">Lys</button>
+          </div>
+        </div>
+        <div class="kv-gruppe">
+          <h4 class="panel-overskrift">Sprækker</h4>
+          <div class="kv-valg tre" role="group" aria-label="Sprækker">
+            <button class="knap lille svag" data-kv-spraekker="begge">Begge</button>
+            <button class="knap lille svag" data-kv-spraekker="venstre">Venstre</button>
+            <button class="knap lille svag" data-kv-spraekker="højre">Højre</button>
+          </div>
+        </div>
+        <label class="kv-skyder"><span>Afstand mellem sprækkerne</span>
+          <input type="range" id="kvAfstand" min="0" max="100" step="1" value="40" aria-label="Afstand mellem sprækkerne">
+          <span class="kv-skyder-ender" aria-hidden="true"><span>tæt</span><span>langt</span></span>
+        </label>
+        <label class="kv-skyder" id="kvFartGruppe"><span id="kvFartNavn">Fart</span>
+          <input type="range" id="kvFart" min="0" max="100" step="1" value="60" aria-label="Fart">
+          <span class="kv-skyder-ender" id="kvFartEnder" aria-hidden="true"></span>
+        </label>
+        <button id="kvMåler">Måler</button>
+        <div class="kv-knapper">
+          <button class="knap primær" id="kvSkyd">Skyd</button>
+          <button class="knap lille svag" id="kvForfra">Forfra</button>
+        </div>
+        <details class="kv-mere">
+          <summary>Flere indstillinger</summary>
+          <label class="kv-skyder"><span>Sprækkernes bredde</span>
+            <input type="range" id="kvBredde" min="0" max="100" step="1" value="43" aria-label="Sprækkernes bredde">
+            <span class="kv-skyder-ender" aria-hidden="true"><span>smal</span><span>bred</span></span>
+          </label>
+          <button id="kvBølgen">Vis bølgen</button>
+        </details>
+      </div>
+    </aside>
+    <div class="vindue" id="kvanteVindue" data-log></div>
+    <aside class="panel side-panel højre-panel">
+      <h3 class="liv-titel" id="kvTitel"></h3>
+      <p class="liv-tekst" id="kvTekst"></p>
+      <dl class="liv-tal" id="kvTal"></dl>
+      <div class="liv-hvorfor" id="kvHvorfor"></div>
+      <details class="forklaring-boks lag-boks lag-mere" data-lag="kv-nørd" name="kv-lag">
+        <summary><strong>Vil du vide mere?</strong></summary>
+        <p><strong>Dobbeltspalteforsøget</strong> hedder det, du laver her. Med elektroner én ad gangen blev det i 2002 kåret til fysikkens smukkeste forsøg af læserne af bladet Physics World.</p>
+        <p><strong>Bølgelængden:</strong> Louis de Broglie regnede ud, at bølgelængden er Plancks konstant delt med massen gange farten: λ = h/(m·v). Jo tungere og hurtigere noget er, jo kortere er bølgen, og jo tættere ligger striberne.</p>
+        <p><strong>I forsøget fra 1989</strong> fik elektronerne fart af 50.000 volt og fløj med ca. 40 % af lysets fart. Deres bølgelængde var ca. 5 milliardtedele af en millimeter (5,4 pm).</p>
+        <p><strong>En fodbold</strong> (0,43 kg) på 30 m/s har en bølgelængde på ca. 5 · 10⁻³⁵ m, ca. 10¹⁹ gange mindre end en atomkerne. Striberne ville ligge alt for tæt til at kunne ses, og luften og lyset, der rammer bolden, røber hele tiden dens vej.</p>
+      </details>
+      <details class="forklaring-boks lag-boks" data-lag="kv-ærligt" name="kv-lag">
+        <summary><strong>Ærligt talt</strong><span class="lag-kort">Hvad tegningen snyder med</span></summary>
+        <p>Vi tegner ikke elektronen på vej. Ingen har set den dér: Man ser kun, hvor den lander. Bølgens skær kan heller ikke ses i virkeligheden. Man ser kun prikkerne, og bølgen fortæller, hvor chancen er stor.</p>
+        <p>Bænken er forstørret mange gange. Rigtige sprækker til elektroner er ca. 1.000 gange smallere end et hår, og i forsøget fra 1989 tog det ca. 20 minutter at bygge striberne op. Her går det hurtigere og hurtigere, mens du holder knappen nede.</p>
+        <p>Måleren er tegnet som to lamper. I rigtige forsøg er det fx lys, der rammer partiklen ved sprækken. Mønstret er regnet med formlen for to smalle sprækker langt fra væggen, og tallene er spillets egne.</p>
+        <p>Kuglerne og vandet står på samme bænk, så du kan sammenligne. I virkeligheden skal sprækkerne til vand og kugler være meget større.</p>
+      </details>
+    </aside>
+  </section>
+
+  <div class="overlag skjult" id="hjælpKvante" role="dialog" aria-label="Hjælp til Kvantefysik">
+    <div class="dialog">
+      <header><h3>Kvantefysik</h3><button class="knap lille luk" data-luk>Luk</button></header>
+      <div class="hjælp-indhold">
+        <p><strong>Skyd med:</strong> Vælg kugler, bølger i vand, elektroner eller lys. Hold <em>Skyd</em> nede, så går det hurtigere og hurtigere. Med bølger trykker du <em>Start bølgerne</em> (eller på vandet).</p>
+        <p><strong>Sprækker:</strong> Tryk på en sprække i billedet for at lukke eller åbne den, eller vælg i panelet. <em>Måler</em> viser, hvilken sprække elektronen blev fundet ved.</p>
+        <p><strong>Skyderne:</strong> <em>Afstand</em> og <em>Fart</em> (for lys <em>Farve</em>) ændrer striberne. Under <em>Flere indstillinger</em> kan du gøre sprækkerne smallere og vise bølgens skær. <em>Forfra</em> rydder bagvæggen.</p>
+        <p><strong>Billedet:</strong> Træk for at dreje lidt, og rul eller knib for at zoome.</p>
       </div>
     </div>
   </div>

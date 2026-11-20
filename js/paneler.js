@@ -23,6 +23,7 @@ const SKÆRME = {
   ild: SIDER,
   liv: SIDER,
   begyndelsen: SIDER,
+  kvante: SIDER,
   solsystem: SIDER,
   kosmos: SIDER,
 };
