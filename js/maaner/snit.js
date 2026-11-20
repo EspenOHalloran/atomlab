@@ -196,7 +196,7 @@ export function lavSnitMåne(radius, { grænser, lys = 1, farve = [1, 0.98, 0.94
 }
 
 // ---------- Lupen ----------
-const LUPE_PX = 150; // lupens bredde i CSS-pixel
+const LUPE_PX = 150; // lupens bredde i CSS-pixel (på pc og tablet)
 const VINDUE_KM = 230; // så mange km er der fra top til bund i lupen
 
 // vindue: elementet over 3D-billedet, lupen ligger i (position: relative). måne: lavSnitMåne. data: { r, is, hav,
@@ -213,6 +213,8 @@ export function lavLupe(vindue, måne, data) {
   vindue.append(boks);
   const g = lærred.getContext('2d');
   let dpr = 0;
+  let W = LUPE_PX; // lupens bredde i CSS-pixel (mindre på telefoner, style.css)
+  const bredde = () => boks.offsetWidth || LUPE_PX;
 
   const plads = { x: 0, y: 0 }; // lupens midte i pixel fra vinduets øverste venstre hjørne
   let sat = false; // har lupen fået sin første plads?
@@ -244,7 +246,7 @@ export function lavLupe(vindue, måne, data) {
 
   function flyt(x, y) {
     const b = vindue.getBoundingClientRect();
-    const m = LUPE_PX / 2;
+    const m = bredde() / 2;
     plads.x = THREE.MathUtils.clamp(x, m, Math.max(m, b.width - m));
     plads.y = THREE.MathUtils.clamp(y, m, Math.max(m, b.height - m));
     boks.style.transform = `translate(${plads.x - m}px, ${plads.y - m}px)`;
@@ -274,15 +276,16 @@ export function lavLupe(vindue, måne, data) {
 
   function tegn() {
     const nyDpr = Math.min(2, devicePixelRatio || 1);
-    if (nyDpr !== dpr) {
+    const nyW = bredde();
+    if (nyDpr !== dpr || nyW !== W) {
       dpr = nyDpr;
-      lærred.width = lærred.height = Math.round(LUPE_PX * dpr);
+      W = nyW;
+      lærred.width = lærred.height = Math.round(W * dpr);
       sidstTegnet = '';
     }
     const nøgle = dybde == null ? 'ingen' : Math.round(dybde * 2) / 2;
     if (nøgle === sidstTegnet) return;
     sidstTegnet = nøgle;
-    const W = LUPE_PX;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, W, W);
     g.save();
@@ -353,7 +356,7 @@ export function lavLupe(vindue, måne, data) {
   }
   function bånd(y0, y1, farve) {
     g.fillStyle = farve;
-    g.fillRect(0, y0, LUPE_PX, y1 - y0);
+    g.fillRect(0, y0, W, y1 - y0);
   }
   function ring(W) {
     g.setTransform(dpr, 0, 0, dpr, 0, 0);

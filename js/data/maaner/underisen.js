@@ -2,6 +2,8 @@
 // model af magnetfeltet ved Europa. Ren data uden Three.js, så det kan testes i Node (tests/maaner-data.mjs).
 // Kilderne står i docs/fakta-maaner-liv.md (afsnit 1-2) og drejebogens afsnit 16.
 
+import { gå, kontakt } from '../../sideknap.js';
+
 export const KM_PR_ENHED = 250; // 1 enhed i scenen = 250 km (Europa bliver ca. 6,2 enheder i radius)
 
 // Europa: radius 1.560,8 km (NSSDC, "ca. 3.100 km" i teksterne). Isen 15-25 km og havet 60-150 km er skøn fra modeller
@@ -99,3 +101,29 @@ export const TAL = [
   ['Isen på Europa', 'ca. 15-25 km'],
   ['Havet under isen', '60-150 km dybt'],
 ];
+
+// ---------- Siden i højre panel (drejebogens afsnit 10: højst tre sætninger i Kort, budgettet for lagene) ----------
+// Faktatjekket 20. november 2026 (M2) mod docs/fakta-maaner-liv.md afsnit 1 og drejebogens afsnit 16.
+
+export const SIDE = {
+  kort: 'Europa kredser om Jupiter, den lille Enceladus om Saturn. Begge er dækket af is, og under isen er der et hav af salt vand. Træk et snit ned gennem Europa, og se lagene i den rigtige størrelse.',
+  emner: [
+    {
+      titel: 'Hvor tyk er isen?',
+      tekst: '<p>Isen på Europa er nok ca. 15-25 km tyk. Det er regnet ud fra modeller, ikke målt. Rumsonden Juno målte ca. 29 km ét sted, men kun det kolde, yderste lag. Under isen er havet 60-150 km dybt, og Jordens dybeste sted er ca. 11 km. Træk lupen hen over havet, og sammenlign.</p>',
+    },
+    {
+      titel: 'Hvordan ved vi, at der er et hav?',
+      tekst: `<p>Ingen har set havet. Men Jupiters magnetfelt hælder ca. 9,4° og drejer med planeten, så set fra Europa vipper det frem og tilbage. Salt vand leder strøm, og når feltet vipper, laver havet sit eget lille felt. Det målte rumsonden Galileo omkring år 2000. ${kontakt('Hav')}</p>`,
+      kontakt: 'Hav',
+    },
+    {
+      titel: 'Hvor meget vand er der?',
+      tekst: '<p>Måske dobbelt så meget som i alle Jordens have tilsammen, selv om Europa kun er ca. 3.100 km bred, lidt mindre end vores Måne. Havet kan have været der i ca. 4 milliarder år. Begge dele er skøn fra modeller.</p>',
+    },
+  ],
+  videre: [gå('solsystem:jupiter:europa', 'Europa ved Jupiter'), gå('solsystem:saturn:enceladus', 'Enceladus ved Saturn')],
+  nørd: '<p><b>Feltet i tegningen:</b> Havet er regnet som en skal, der leder strøm helt uden modstand. Så kan den vippende del af Jupiters felt ikke komme ind, og uden for havet bøjer den, som om der sad en magnet i Europa, der vender modsat. Den faste del af feltet, der peger mod syd, går lige igennem. Galileo målte et ekstra felt, der passede med et lag, der leder strøm godt, og den bedste forklaring er salt vand (Kivelson m.fl. 2000).</p>',
+  billeder: '<p>Europas kort er en mosaik af fotos fra Voyager og Galileo (NASA/JPL/USGS). Enceladus\' kort er fra Cassini (NASA/JPL/Space Science Institute, USGS). Begge er public domain.</p>',
+  ærligt: '<p>Lagenes tykkelse er skøn, ikke målt, undtagen Junos ene måling af isen. Snittet tegner midten af skønnene: 20 km is og 100 km hav. Jernkernen i Europa er noget, forskerne tror, ikke har set, og dens størrelse er gættet. Magnetfeltet er tegnet langt enklere end det rigtige og vipper meget hurtigere. Galileo er tegnet meget større, end den var.</p>',
+};
