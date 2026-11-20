@@ -13,12 +13,14 @@
 //   Solen står bag den (inden for 30°, MODLYS_GRÆNSE), lyser fontænerne. Bagefter glider kameraet helt ind i modlyset,
 //   og snittet åbner sig selv gennem Enceladus (isen er tyndere ved sydpolen). Enceladus er drejet DREJ_ENCELADUS om
 //   sin akse, så snittet vender mod kameraet i modlyset.
-// Trin 4 "tavle": Tavlen kommer frem (under scenen, til højre på brede skærme). "🛰️ Send Cassini" sender Cassini i en bue
-//   gennem sprøjtet, og fire kort falder ud. Man lægger dem på tavlen, og så fylder Europas søjle sig selv.
+// Trin 4 "tavle": Tavlen kommer frem (under scenen, til højre på brede skærme). "🛰️ Flyv med Cassini" (M4): Kameraet
+//   sidder bag Cassini, der flyver gennem sprøjtet, og man styrer højden (js/maaner/flyvetur.js). Fire kort falder ud,
+//   når målerne fyldes. Med ROLIG flyver Cassini i en bue set udefra. Man lægger kortene på tavlen, og så fylder Europas
+//   søjle sig selv.
 // Trin 5 "liv": Begge måner. Man trykker på rækken Liv på tavlen: "Ikke fundet. Ingen har endnu kunnet se efter."
 // Laboratoriet: skyderen "Snit" (begge måner), kontakterne "Magnetfelt", "Hav", "Modlys" (Solen står bag Enceladus,
 //   som ved Saturn) og "Navne", handlingerne "Europa", "Enceladus" og "Begge" i bjælken (jeres valg 20. november 2026),
-//   et tryk på en måne flyver hen til den, og tavlen kan foldes ind.
+//   et tryk på en måne flyver hen til den, tavlen kan foldes ind, og "🛰️ Flyv gennem fontænen" i bjælken (M4).
 // Kameraet styres her (kameraTil): målet glider på 1,3 s, og afstanden regnes, så boksen passer i hullet mellem panelerne.
 
 import * as THREE from 'three';
@@ -32,9 +34,11 @@ import { tagVentForløb } from '../gaa.js';
 import { lavSnitMåne, lavLupe } from './snit.js';
 import { lavMagnetfelt } from './magnetfelt.js';
 import { lavTavle } from './tavle.js';
+import { lavFlyvetur } from './flyvetur.js';
 import { UNDER_ISEN } from '../data/forloeb/under-isen.js';
 import { KM_PR_ENHED, EUROPA, ENCELADUS, JORDENS_DYBESTE, LAG, LAG_ENCELADUS, lagGrænser, isBundSyd, TAL, SIDE } from '../data/maaner/underisen.js';
 import { KORT, SELV, kortEfter } from '../data/maaner/tavle.js';
+import { TEKST as FLYV } from '../data/maaner/flyvetur.js';
 
 const RE = EUROPA.r / KM_PR_ENHED; // ca. 6,24
 const RN = ENCELADUS.r / KM_PR_ENHED; // ca. 1,01
@@ -61,6 +65,7 @@ const MODLYS_HOLD_S = 0.6; // trin 3: så længe skal modlyset holdes, før trin
 const ÅBN_EFTER_S = 2.0; // trin 3: så længe efter modlyset åbner snittet sig selv gennem Enceladus
 const CASSINI_S = 4.5; // trin 4: Cassinis bue
 const SLIP_VED = [0.36, 0.44, 0.52, 0.6]; // trin 4: her på buen falder kortene ud (midt i sprøjtet)
+const PUNKT_I_TUREN = 0.3; // fontænernes punkter er mindre under flyveturen (tæt på ville de fylde hele skærmen)
 const KORT_STR = TEST_HURTIG ? '2k' : '4k';
 const FORM_NET = TEST_HURTIG ? [128, 64] : LAV_KVALITET ? [256, 128] : [512, 256];
 
@@ -171,6 +176,19 @@ export default {
       else if (tavle.el.parentElement !== vindue) vindue.append(tavle.el);
     }
     tavle.el.hidden = true;
+
+    // Flyveturen gennem fontænen (M4): kameraet bag Cassini, og fundene falder ud på tavlen
+    const tur = lavFlyvetur({
+      gruppe, cassini, midte: new THREE.Vector3(ENCELADUS_X, 0, 0), radius: RN, kmPrEnhed: KM_PR_ENHED, sol: SOL,
+      vindue, lærred: verden.renderer.domElement,
+      fund: (id) => {
+        if (tavle.lagte.includes(id)) return; // (i laboratoriet ligger kortet der måske allerede)
+        tavle.slip(id);
+        if (autoLæg) tavle.læg(id);
+      },
+      færdig: () => { if (aktiv) kameraTil(ENC_MODLYS); ventVink = 15; },
+      vink: (t) => { if (kørerForløb()) forløbVink(t); },
+    });
     let fraTur = false; // turen er lige slut: tavlen kommer i laboratoriet, som man lagde den
 
     // ---------- Tilstanden ----------
@@ -223,6 +241,7 @@ export default {
     }
     // Hvilken måne kameraet ser på. Europa skjules ved Enceladus (den ville ellers stå bag Enceladus i modlyset).
     function sætFokus(f) {
+      tur.afbryd(); // (et nyt trin eller en anden måne stopper flyveturen)
       fokus = f;
       skyderVist = -1;
       sætSnit(snit);
@@ -371,10 +390,33 @@ export default {
       { handling: () => vælgMåne('europa'), tekst: 'Europa', skjul: iTur, deaktiv: () => fokus === 'europa' },
       { handling: () => vælgMåne('enceladus'), tekst: 'Enceladus', skjul: iTur, deaktiv: () => fokus === 'enceladus' },
       { handling: () => vælgMåne('begge'), tekst: 'Begge', skjul: iTur, deaktiv: () => fokus === 'begge' },
+      { handling: () => flyvLab(), tekst: FLYV.lab, skjul: iTur, deaktiv: () => tur.aktiv },
     ];
 
     // ---------- Cassini og kortene (trin 4) ----------
     let autoLæg = false; // "Næste ›" før handlingen: kortene lægges selv, når de falder ud
+    // Flyveturen (M4). Med ROLIG flyver Cassini i buen, set udefra (sendCassini).
+    let tavleVæk = false; // tavlen er skjult under turen (på en lav scene, hvor den står under scenen, fx telefonen)
+    function flyvMedCassini() {
+      if (ROLIG) { sendCassini(); return; }
+      if (cassiniSendt) return;
+      cassiniSendt = true;
+      flyvning = null;
+      const t = tavle.el.getBoundingClientRect(), v = vindue.getBoundingClientRect();
+      tavleVæk = t.top >= v.bottom - 2 && v.height < 420;
+      tur.start();
+      if (kørerForløb() && forløbVenter()) forløbRørt();
+    }
+    // Laboratoriet og vejen i "Det så du": turen igen, uden forløbet
+    function flyvLab() {
+      if (kørerForløb() || !aktiv) return;
+      visFelt(false);
+      sætFokus('enceladus');
+      cassiniT = null;
+      if (ROLIG) { kameraTil(ENC_MODLYS); cassiniSendt = false; sendCassini(); return; }
+      flyvning = null;
+      tur.start({ lab: true });
+    }
     function sendCassini() {
       if (cassiniSendt) return;
       cassiniSendt = true;
@@ -383,6 +425,7 @@ export default {
       if (kørerForløb() && forløbVenter()) forløbRørt();
     }
     function nulstilTavle() {
+      tur.afbryd();
       tavle.sæt(kortEfter('fontæner'));
       cassiniSendt = false;
       cassiniT = null;
@@ -466,11 +509,12 @@ export default {
             kameraTil(ENC_MODLYS);
           },
           get knapper() {
-            return [{ id: 'cassini', tekst: '🛰️ Send Cassini', gør: sendCassini, aktiv: () => !cassiniSendt }];
+            return [{ id: 'cassini', tekst: FLYV.knap, gør: flyvMedCassini, aktiv: () => !cassiniSendt }];
           },
           vis: ['.ui-tavle'],
           færdig: () => SELV.every((k) => tavle.lagte.includes(k.id)) && europaFyldt() && !tavle.fylder,
-          visMig: () => { autoLæg = true; sendCassini(); for (const id of tavle.bunke) tavle.læg(id); },
+          // "Vis mig": Cassini flyver selv helt ned, og kortene lægges, når de falder ud
+          visMig: () => { autoLæg = true; flyvMedCassini(); if (tur.aktiv) tur.autopilot(); for (const id of tavle.bunke) tavle.læg(id); },
         },
         liv: {
           start: () => {
@@ -495,6 +539,7 @@ export default {
         },
       },
       veje: [
+        { tekst: 'Flyv gennem fontænen ›', her: true, gør: () => requestAnimationFrame(() => { if (aktiv) { centrerVindue(); tilLab = false; flyvLab(); } }) },
         // (den samme knap som under "Gå videre" i panelet, så skallen flyver til stedet i Saturns træ)
         { tekst: 'Se fontænerne ved Saturn', gør: () => {
           const knap = skærm.querySelector('.højre-panel [data-gaa="solsystem:saturn:enceladus"]');
@@ -505,7 +550,7 @@ export default {
       ],
       // Scenen har fået en ny størrelse: Flyver kameraet, rettes kun afstanden, ellers springer det på plads
       layout: () => {
-        if (!kører() && !tilLab) return;
+        if ((!kører() && !tilLab) || tur.aktiv) return; // (under flyveturen styrer turen kameraet)
         if (flyvning) flyvning.tilAfstand = afstandFor(boks);
         else kameraTil(boks, true);
       },
@@ -568,8 +613,11 @@ export default {
           enceladus.gruppe.getWorldPosition(midt);
           solE.copy(midt).sub(verden.kamera.position).normalize().addScaledVector(verden.kamera.up, 0.22).normalize();
         } else solE.copy(SOL);
+        tur.opdater(dt); // (flyver Cassini, står Solen forude som uden "Modlys", og fontænernes punkter gøres mindre)
+        if (tur.aktiv) solE.copy(SOL);
         europa.sæt(SOL, tid);
         enceladus.sæt(solE, tid);
+        if (tur.aktiv && !ROLIG) enceladus.fontæner.material.uniforms.uStr.value *= PUNKT_I_TUREN;
         snitN.sæt(solE, tid);
         // Kortet toner ind, når det er hentet
         if (hentet.europa && synlig < 1) { synlig = Math.min(1, synlig + dt / 0.6); europa.sætSynlig(ROLIG ? 1 : synlig); }
@@ -584,8 +632,8 @@ export default {
         europa.gruppe.visible = europaVist;
         const encVist = hentet.enceladus && !felt.vist;
         enceladus.gruppe.visible = encVist;
-        enceladus.måne.visible = snitE <= 0;
-        snitN.gruppe.visible = encVist && snitE > 0;
+        enceladus.måne.visible = snitE <= 0 || tur.aktiv; // (under flyveturen er månen hel)
+        snitN.gruppe.visible = encVist && snitE > 0 && !tur.aktiv;
         felt.opdater(dt, tid, hav);
         if (trin === 'felt' && forløbFase() !== 'så') {
           if (hav) tidMed += dt; else tidUden += dt;
@@ -611,7 +659,11 @@ export default {
           });
           if (cassiniT >= 1) { cassiniT = null; cassini.visible = false; }
         }
-        if (trin === 'tavle' && forløbVenter() && !cassiniSendt && (ventVink -= dt) <= 0) { ventVink = 1e9; forløbVink(UNDER_ISEN.vink.tavle); }
+        // Trin 4: et vink, hvis Cassini ikke er sendt, eller hvis kortene ligger i bunken efter turen
+        if (trin === 'tavle' && forløbVenter() && !tur.aktiv && cassiniT === null && (!cassiniSendt || tavle.bunke.length) && (ventVink -= dt) <= 0) {
+          ventVink = 1e9;
+          forløbVink(cassiniSendt ? UNDER_ISEN.vink.tavle : UNDER_ISEN.vink.flyv);
+        }
         tavle.opdater(dt);
         // Tavlen: i turen kun i trin 4-5 (under scenen), i laboratoriet foldet ind øverst til venstre i 3D-vinduet med
         // alle kortene (efter turen, som man lagde dem)
@@ -621,22 +673,24 @@ export default {
           tavle.foldInd(true);
           fraTur = false;
         }
-        tavle.el.hidden = kørerForløb() ? !(trin === 'tavle' || trin === 'liv') : false;
+        if (tavleVæk && !tur.aktiv) tavleVæk = false;
+        tavle.el.hidden = kørerForløb() ? !(trin === 'tavle' || trin === 'liv') || tavleVæk : false;
 
         // Lupen ved Europa, forklaringen af lagene for den måne, man ser på
         lupe.vis(snit >= 0.999 && !felt.vist && fokus === 'europa'); // (ved begge måner ville den stå i vejen)
         lupe.opdater();
         const lagMåne = fokus === 'enceladus' ? 'enceladus' : 'europa';
         if (lagMåne !== lagVist) { lagVist = lagMåne; lagBoks.innerHTML = lagHTML(lagMåne === 'enceladus' ? LAG_ENCELADUS : LAG); }
-        lagBoks.hidden = (lagMåne === 'enceladus' ? snitE : snit) < 0.3 || felt.vist || trin === 'tavle' || trin === 'liv';
-        for (const n of navne) n.s.visible = navneTil() && !felt.vist && (n.måne === 'europa' ? europaVist : encVist);
+        lagBoks.hidden = (lagMåne === 'enceladus' ? snitE : snit) < 0.3 || felt.vist || trin === 'tavle' || trin === 'liv' || tur.aktiv;
+        for (const n of navne) n.s.visible = navneTil() && !felt.vist && !tur.aktiv && (n.måne === 'europa' ? europaVist : encVist);
         if (navneTæt !== (fokus === 'enceladus')) {
           navneTæt = fokus === 'enceladus';
           const k = navneTæt ? 0.4 : 1;
           for (const n of navne) { n.s.scale.copy(n.skala).multiplyScalar(k); n.s.position.y = n.måne === 'enceladus' && navneTæt ? RN + 0.35 : n.y; }
         }
         let tekst = '';
-        if (felt.vist) tekst = `<p>Jupiters magnetfelt vipper. ${hav ? 'Med havet bøjer feltlinjerne uden om Europa, og Galileo måler et ekstra felt.' : 'Uden hav går feltlinjerne lige igennem, og Galileo måler intet ekstra felt.'}</p>`;
+        if (tur.forklaring) tekst = `<p>${tur.forklaring}</p>`;
+        else if (felt.vist) tekst = `<p>Jupiters magnetfelt vipper. ${hav ? 'Med havet bøjer feltlinjerne uden om Europa, og Galileo måler et ekstra felt.' : 'Uden hav går feltlinjerne lige igennem, og Galileo måler intet ekstra felt.'}</p>`;
         else if (fokus === 'enceladus') tekst = modlysNu() > MODLYS_GRÆNSE || modlysKontakt ? '<p>Solen står bag Enceladus. De små iskorn i fontænerne spreder lyset fremad, så de lyser.</p>' : '<p>Drej rundt om Enceladus, til Solen står bag sydpolen. Så lyser fontænerne.</p>';
         else if (snit >= 1) tekst = '<p>Snittet er helt igennem. Træk lupen hen over havet.</p>';
         if (tekst !== sidsteForklaring) { sidsteForklaring = tekst; forklaring(tekst); }
@@ -645,6 +699,7 @@ export default {
       stop() {
         aktiv = false;
         if (kører()) stopForløb();
+        tur.stop(); // (før kameraets grænser sættes tilbage)
         lærred.removeEventListener('pointerdown', ned, { capture: true });
         lærred.removeEventListener('click', klik);
         removeEventListener('pointermove', flyt);
@@ -704,6 +759,10 @@ export default {
         snitNVist: () => snitN.gruppe.visible,
         cassini: () => ({ sendt: cassiniSendt, t: cassiniT, vist: cassini.visible }),
         sendCassini,
+        flyvMedCassini,
+        flyvLab,
+        flyvetur: tur.test,
+        sætHøjde: tur.sætHøjde,
         tavle: () => ({ lagte: tavle.lagte, bunke: tavle.bunke, farver: tavle.farver(), liv: tavle.livVist, fylder: tavle.fylder, vist: !tavle.el.hidden && tavle.el.isConnected, foldet: tavle.foldet, iForløb: tavle.el.parentElement === skærm }),
         læg: (id) => tavle.læg(id),
         lægForkert: (id, række) => tavle.lægForkert(id, række),
