@@ -44,6 +44,8 @@ export function udglat(tænd) {
   if (!komponist || TEST_HURTIG || tænd === til) return;
   til = tænd;
   komponist.reset(nytLag(tænd ? PRØVER : 0)); // reset frigiver de gamle lag og laver to nye som det givne
+  // Med MSAA er kanterne glatte i forvejen, så den fælles udglatning bagefter (SMAA/FXAA, G2) holder pause imens
+  if (verden.kanter) verden.kanter.enabled = !tænd;
   måling.tid = måling.billeder = måling.sidst = 0;
   if (tænd && VÆRN) verden.opdateringer.add(mål);
   else verden.opdateringer.delete(mål);
