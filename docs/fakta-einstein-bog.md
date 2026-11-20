@@ -203,3 +203,10 @@ Til `KILDER.md`, hvis skanningerne bruges: værk, bind, side, archive.org-id og 
 2. **Domænet www.biodiversitylibrary.org** til at læse rettighedslinjen for Smithsonians skanning fra 1915, før den bruges. **Anbefaling: ja**, når siden bygges (ikke nødvendigt for drejebogen).
 3. **Opslag 3 fra 1915 eller 1916?** 1915 (s. 845) er dagen, hvor den blev færdig, og den korte form (2a). 1916 (s. 808) er længere og sværere at læse, men har tallene 1,7″ og 43″ (s. 822). **Anbefaling: s. 845 fra 1915 som siden** og 1916 i "For nørder".
 4. **Mileva Marić:** én fair linje i "Ærligt talt" (som i afsnit 5). **Anbefaling: ja**, fordi myten er udbredt.
+
+## 11. Jeres svar (20. november 2026, gennemgangen i Småting)
+1. **Siderne:** De rigtige skanninger (som i Tychos bog), med et kort "Ærligt talt" om de gamle mikrofilm. **Tilføjelse fra jer:** Er en side svær at læse, skal man kunne skifte til "sætte teksten selv" (Old Standard TT med de samme linjer). Siden får altså begge udgaver og en kontakt.
+2. **Domænet www.biodiversitylibrary.org:** Ja, tilføjet af jer i miljøet. **Tjek samme dag:** Domænet er åbent (proxyen lukker det igennem), men siden svarer med Cloudflares robottjek (403, `cf-mitigated: challenge`), som PSI. Rettighedslinjen for Smithsonians skanning fra 1915 kan derfor ikke læses automatisk. Læs den i en browser (siden for skanningen på biodiversitylibrary.org, "Rights"/"Copyright"), eller tag en anden kilde (Smithsonians egen side eller archive.org), og skriv linjen ind her, før skanningen bruges.
+3. **Opslag 3:** 1915 (s. 845) som siden, 1916 (s. 808 og tallene 1,7″ og 43″ på s. 822) i "For nørder".
+4. **Mileva Marić:** Én fair linje i "Ærligt talt".
+Alle fire er jeres svar med anbefalingen. Det blokerer ikke længere drejebogen.

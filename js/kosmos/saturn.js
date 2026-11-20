@@ -31,7 +31,7 @@ const GRAD = Math.PI / 180;
 // tur: hvor månen står på turen og hvorfra kameraet kigger (se stopVed). kort: underteksten (på turen og ved et besøg).
 const MÅNER = [
   {
-    id: 'mimas', navn: 'Mimas', afstand: 185539, r: 198, døgn: 0.942, farve: [0.97, 0.97, 0.97], lys: 1.11,
+    id: 'mimas', navn: 'Mimas', afstand: 185539, r: 198, døgn: 0.942, farve: [0.97, 0.97, 0.97], lys: 1.11, form: true,
     kort: 'Kun 396 km bred. Krateret Herschel er ca. 140 km bredt, cirka en tredjedel af hele månen.',
     tur: { længde: -112, side: 45, højde: -8 }, // Herschel ligger ved 112° vest
   },
@@ -43,17 +43,17 @@ const MÅNER = [
     pad: 1.9,
   },
   {
-    id: 'tethys', navn: 'Tethys', afstand: 294619, r: 531, døgn: 1.888, farve: [0.96, 0.98, 1], lys: 1.36,
+    id: 'tethys', navn: 'Tethys', afstand: 294619, r: 531, døgn: 1.888, farve: [0.96, 0.98, 1], lys: 1.36, form: true,
     kort: 'Næsten ren vandis. Krateret Odysseus er 445 km bredt, ca. to femtedele af hele månen.',
     tur: { længde: -129, side: 45, højde: 18 }, // Odysseus ligger ved 33° nord og 129° vest
   },
   {
-    id: 'dione', navn: 'Dione', afstand: 377396, r: 561, døgn: 2.737, farve: [1, 1, 1], lys: 1.1,
+    id: 'dione', navn: 'Dione', afstand: 377396, r: 561, døgn: 2.737, farve: [1, 1, 1], lys: 1.1, form: true,
     kort: 'De lyse striber er klipper af is, hvor skorpen er revnet. Nogle er flere hundrede meter høje.',
     tur: { længde: 75, side: -45, højde: -8 }, // klipperne ligger omkring 75° øst
   },
   {
-    id: 'rhea', navn: 'Rhea', afstand: 527108, r: 764, døgn: 4.518, farve: [1, 0.98, 0.95], lys: 1.23,
+    id: 'rhea', navn: 'Rhea', afstand: 527108, r: 764, døgn: 4.518, farve: [1, 0.98, 0.95], lys: 1.23, form: true,
     kort: 'Saturns næststørste måne, ca. 1.530 km bred. Den er mest is og fuld af gamle kratere.',
     tur: { længde: 64, side: -45, højde: -8 },
   },
@@ -71,7 +71,7 @@ const MÅNER = [
 // Månernes kort er målinger i gråtoner og ligger med kun én kanal i grafikkortet (fylder en fjerdedel).
 const STØRRELSE = TEST_HURTIG ? '2k' : '4k';
 const MÅNER_8K = new Set(['enceladus', 'tethys', 'dione', 'rhea']);
-// Månerne med en rigtig form (S3): et kort over radius (`<id>-form.png`, lav_saturn_former.py) og så mange felter i nettet
+// Månerne med en rigtig form (S3, S3b: alle undtagen Titan): et kort over radius (`<id>-form.png`, lav_saturn_former.py) og så mange felter i nettet
 const FORM_NET = TEST_HURTIG ? [128, 64] : LAV_KVALITET ? [256, 128] : [512, 256];
 const FORHÅND_TID = 8000; // ms: så længe venter "Start flyby" højst på månernes kort
 
@@ -173,7 +173,7 @@ export default {
       let klode;
       if (m.id === 'enceladus') klode = lavEnceladus(r);
       else if (m.id === 'titan') klode = lavTitan(r, S);
-      else klode = lavIsmåne(r, { farve: m.farve, lys: m.lys });
+      else klode = lavIsmåne(r, { farve: m.farve, lys: m.lys, km: m.r });
       const plads = new THREE.Group(); // stedet i banen
       const krop = new THREE.Group(); // drejes, så samme side vender mod Saturn, og gøres større langt væk
       krop.add(klode.gruppe);
@@ -475,12 +475,13 @@ export default {
         hop: () => rejse.hop(), // gør den igangværende flyvning færdig
         // de hentede billeder, og om de ligger med én kanal i grafikkortet
         billeder: () => hentedeBilleder(['saturn', ...MÅNER.map((m) => m.id)]),
-        // S3: månens form (radius i km ved polerne og ækvator mod, på tværs af og væk fra Saturn) og fontænernes start
-        form(id) {
+        // S3: månens form (radius i km ved polerne og ækvator mod, på tværs af og væk fra Saturn) og fontænernes start.
+        // punkter: [[bredde, længde], …] giver også radius dér (fx et stort krater).
+        form(id, punkter = []) {
           const k = måneMed(id).klode;
           if (!k.harForm) return null;
           const r = (b, l) => k.radiusVed(b, l);
-          return { mod: r(0, 0), tværs: r(0, 90), væk: r(0, 180), nord: r(90, 0), syd: r(-90, 0), kilder: k.kilder?.() };
+          return { mod: r(0, 0), tværs: r(0, 90), væk: r(0, 180), nord: r(90, 0), syd: r(-90, 0), kilder: k.kilder?.(), punkter: punkter.map(([b, l]) => r(b, l)) };
         },
       },
     };

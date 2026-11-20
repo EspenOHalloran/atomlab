@@ -4,3 +4,6 @@ __pycache__/
 
 # Kildebilleder til Bibliotekets portrætter (billeder/biblioteket/lav_portraet.py)
 billeder/biblioteket/kilder/
+
+# Originalerne til formkortene (billeder/solsystem/lav_saturn_former.py). De ligger på grenen kilder-saturn-s3b.
+billeder/solsystem/kilder/
