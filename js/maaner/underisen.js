@@ -100,6 +100,8 @@ export default {
     let tidMed = 0, tidUden = 0; // trin 2: sekunder, feltet er set med og uden hav
     let trin = null; // forløbets trin-id, mens det kører
     let skyderVist = 0;
+    let førsteGang = true; // trin 1 vises første gang med begge måner
+    let ventEuropa = 0; // sekunder, til kameraet glider ind til Europa
 
     function sætSnit(s) {
       snit = THREE.MathUtils.clamp(s, 0, 1);
@@ -186,6 +188,7 @@ export default {
       glid = null;
       verden.styring.enabled = false;
       if (kørerForløb() && forløbVenter()) forløbRørt();
+      ventEuropa = 0;
     }
     function flyt(h) {
       if (!træk || h.pointerId !== træk.id) return;
@@ -228,7 +231,9 @@ export default {
             visFelt(false);
             sætSnit(0);
             glid = null;
-            kameraTil(EUROPA_BOKS);
+            // Billedet først (A6): Første gang ses begge måner ca. 2 s, før kameraet glider ind til Europa
+            if (førsteGang && !ROLIG) { ventEuropa = 2.2; kameraTil(BEGGE); } else kameraTil(EUROPA_BOKS);
+            førsteGang = false;
           },
           knapper: [{ id: 'skær', tekst: '✂️ Skær igennem', gør: () => glidTil(1, VIS_MIG_S), aktiv: () => snit < 1 && !glid }],
           færdig: () => snit >= 1,
@@ -298,6 +303,7 @@ export default {
         // Kortet toner ind, når det er hentet
         if (hentet.europa && synlig < 1) { synlig = Math.min(1, synlig + dt / 0.6); europa.sætSynlig(ROLIG ? 1 : synlig); }
         if (hentet.enceladus && !felt.vist && !enceladus.gruppe.visible) enceladus.gruppe.visible = true;
+        if (ventEuropa > 0 && (ventEuropa -= dt) <= 0 && trin === 'snit') kameraTil(EUROPA_BOKS);
         if (glid) {
           const d = glid.mål - snit, skridt = glid.fart * dt;
           if (Math.abs(d) <= skridt) { sætSnit(glid.mål); glid = null; } else sætSnit(snit + Math.sign(d) * skridt);

@@ -334,19 +334,20 @@ export function lavLupe(vindue, måne, data) {
       const yy = y(km);
       if (yy < 12 || yy > W - 6) return;
       if (boks) {
-        g.fillStyle = 'rgba(0, 0, 0, 0.55)';
+        g.fillStyle = 'rgba(0, 0, 0, 0.6)';
         g.fillRect(x - 4, yy - 11, g.measureText(tekst).width + 8, 15);
       }
       g.fillStyle = farve;
       g.fillText(tekst, x, yy);
     };
     mærke('Is', isBund / 2 + 5, W * 0.45, '#1b2440', false);
-    mærke(`Hav ${lav}-${høj} km`, isBund + lav * 0.9, W * 0.2);
+    mærke(`Hav ${lav}-${høj} km`, isBund + lav * 1.15, W * 0.2);
     mærke('Sten', isBund + høj + 24, W * 0.35);
     g.font = '600 11px system-ui, sans-serif';
     const jx = sx + sb + 5;
-    mærke('Jordens dybeste', isBund + data.dybeste - 1, jx, '#ffd36b', false);
-    mærke(`sted: ${data.dybeste} km`, isBund + data.dybeste - 1 + (12 * VINDUE_KM) / W, jx, '#ffd36b', false);
+    const ly = isBund + data.dybeste + (14 * VINDUE_KM) / W;
+    mærke('Jordens dybeste', ly, jx, '#ffd36b');
+    mærke(`sted: ${data.dybeste} km`, ly + (15 * VINDUE_KM) / W, jx, '#ffd36b');
     g.restore();
     ring(W);
   }

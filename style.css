@@ -2742,6 +2742,9 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 #solsystem .ui-bar::after { content: ''; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: rgba(255, 255, 255, 0.5); }
 #solsystem .ui-bar i { position: absolute; top: 0; bottom: 0; left: 50%; width: 0; border-radius: 5px; background: #7cc4ff; }
 #solsystem .ui-maaler-raekke:last-child .ui-bar i { background: #ffd36b; }
+@media (max-height: 500px) {
+  #solsystem .ui-lupe, #solsystem .ui-lupe canvas { width: 104px; height: 104px; }
+}
 @media (max-width: 560px) {
   #solsystem .ui-lupe, #solsystem .ui-lupe canvas { width: 120px; height: 120px; }
   #solsystem .ui-lag { font-size: 12px; gap: 2px 8px; }
