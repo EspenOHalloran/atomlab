@@ -21,7 +21,9 @@
 **PR 1 (20. november 2026):** Delen Kvantefysik med bænken og laboratoriet. Testen `kvante` (12 tjek). Ikke afprøvet: [ikke-afproevet.md](../ikke-afproevet.md) (Kvantefysik).
 
 ## Næste
-PR 2, turen "Prikker bliver til striber" (efter go fra orkestratoren). Samme session kan tage den.
+PR 2 (turen) og så PR 3 ("Større …" og Gåde-kortet). **Venter på et nyt go fra jer** (20. november 2026: De kørende sessioner gøres færdige, og der startes ikke nyt). Start en ny session (Opus, høj effort) med prompten:
+
+> Spor: Kvantefysik (ny del i Atomer). Læs docs/lige-nu/kvantefysik.md, docs/kode/kvante.md, docs/drejebog-kvantefysik.md (afsnit 3, 5, 8 og "Jeres svar"), docs/fable/E7-kvantefysik-noter.md (afsnit 3), docs/kode/forloeb.md, tjekliste B, C, D og F og kvante-fælderne i docs/erfaringer/fakta-faelder.md. Byg PR 2: turen "Prikker bliver til striber" med Forløb-klodsen (teksterne i js/data/forloeb/kvante.js, de fem trin og "Det så du" som i drejebogen afsnit 3 med E7-rettelserne: trin 5 giver ÉN bred bunke, ikke "som kuglerne", og højst to sætninger pr. tekst). Brug `kø` og `køFart` i js/kvante.js til "elektronerne fortsætter af sig selv", ringen med "Her: n" ved `mørktSted()` i trin 4 og lamperne i trin 5. "↻ Tur" (`lavTurKnap`), turen starter selv første gang, "Din fremgang" (`ud.kvante` med `slags: 'ture'` i js/main.js, og fjern `kvante` fra `UDEN_FREMGANG` i tests/karrusel.mjs), tre veje (Leg frit, fotonen i Ordbogen og kortet `kvanteKigger`). Testen kvante-forloeb (5-10 tjek), /faktatjek, --ændret i baggrunden, skærmbilleder på telefon og tablet, /faerdig, PR og merge. Bagefter, med et nyt go: PR 3, "Større …" (2.000 atomer, klumpen med over 7.000 atomer fra januar 2026 med kilde og dato tjekket ekstra grundigt, og fodbolden) og Gåde-kortet "Hvor stopper kvanteverdenen?" i js/data/gaader.js (fortolkningerne kun under "For nørder", lyset på skinnen i js/gaader/lys.js, ingen egen scene, seDet til bænken) og links fra `HVORFOR.orbitaler` og fotonen i Ordbogen.
 
 ## Spørgsmål til jer
 Ingen lige nu.
