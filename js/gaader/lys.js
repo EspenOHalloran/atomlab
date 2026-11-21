@@ -20,6 +20,16 @@ const prikker = (antal, størrelse) => {
   return { p, pos, farve };
 };
 
+// En glødende streg (20. november 2026, lamperne som én familie): den skarpe streg og under den en bred, svag udgave i
+// samme farve, så stregerne lyser som kuglerne i de andre lamper og ikke ser tynde og tegnede ud på skinnen.
+// Stadig fuld farve (målt), så betydningen af stregerne i streg.js er den samme.
+function neon(punkter, farve, { bredde = 2.5, ...valg } = {}) {
+  const g = new THREE.Group();
+  const svag = farve.clone().multiplyScalar(0.16); // svag, for stykkerne lægges oven i hinanden i hjørnerne (additivt)
+  g.add(fuld(punkter, svag, { ...valg, bredde: bredde * 3.4 }), fuld(punkter, farve, { ...valg, bredde }));
+  return g;
+}
+
 const LYS = {
   // Et par, der bliver til et glimt: to partikler kredser om hinanden, mødes og lyser op, og så kommer et nyt par
   antistof() {
@@ -56,7 +66,7 @@ const LYS = {
     const halsBund = Math.cos(0.38) * 1.5 - 0.6;
     const venstre = [[-hals, halsBund, 0], [-hals, 2.1, 0]];
     const højre = [[hals, halsBund, 0], [hals, 2.1, 0]];
-    g.add(fuld(profil, glas, { bredde: 2.5 }), fuld(venstre, glas, { bredde: 2.5 }), fuld(højre, glas, { bredde: 2.5 }));
+    g.add(neon(profil, glas), neon(venstre, glas), neon(højre, glas));
     // Vandet: bunden af kuglen under en vandret overflade
     const form = new THREE.Shape();
     const v0 = Math.PI + 0.45;
@@ -65,7 +75,7 @@ const LYS = {
     const vand = new THREE.Mesh(new THREE.ShapeGeometry(form, 24), new THREE.MeshBasicMaterial({ color: 0x1d4a6a, transparent: true, opacity: 0.6 }));
     vand.position.y = -0.6;
     g.add(vand);
-    const lyn = fuld([[-0.2, 1.6, 0], [0.25, 0.7, 0], [-0.15, 0.3, 0], [0.3, -0.5, 0]], new THREE.Color(1.6, 1.5, 0.9), { bredde: 3 });
+    const lyn = neon([[-0.2, 1.6, 0], [0.25, 0.7, 0], [-0.15, 0.3, 0], [0.3, -0.5, 0]], new THREE.Color(1.6, 1.5, 0.9), { bredde: 3 });
     g.add(lyn);
     return {
       gruppe: g,
@@ -117,7 +127,7 @@ const LYS = {
     };
     // De små kloders baner: perihelium til højre (vinkel 0 ± lidt), resten af banen langt ude til venstre
     for (const [a, e, v] of [[1.55, 0.86, 0.25], [1.4, 0.82, -0.2], [1.75, 0.88, 0.05], [1.3, 0.8, 0.5]]) {
-      drej.add(fuld(ellipse(a, e, Math.PI + v), guld, { bredde: 2 }));
+      drej.add(neon(ellipse(a, e, Math.PI + v), guld, { bredde: 2 }));
     }
     // Planet 9's bud: perihelium mod venstre, så det fjerneste punkt står til højre
     drej.add(stiplet(ellipse(0.95, 0.29, Math.PI), { bredde: 1.8, streg: 0.18, mellem: 0.12 }));
@@ -171,8 +181,8 @@ const LYS = {
       pos.set([x, (tal() - 0.5) * 3, 0], i * 3);
       farve.set([0.45, 0.9, 1.4], i * 3);
     }
-    const kant = new THREE.Color(0.25, 0.35, 0.6);
-    g.add(p, fuld([[-2.7, -1.75, 0], [2.7, -1.75, 0], [2.7, 1.75, 0], [-2.7, 1.75, 0], [-2.7, -1.75, 0]], kant, { bredde: 2 }));
+    const kant = new THREE.Color(0.35, 0.6, 1.0);
+    g.add(p, neon([[-2.7, -1.75, 0], [2.7, -1.75, 0], [2.7, 1.75, 0], [-2.7, 1.75, 0], [-2.7, -1.75, 0]], kant, { bredde: 2 }));
     g.add(glød(new THREE.Color(0.4, 0.8, 1.2), 1.6, 0.12));
     let vist = N;
     return {
@@ -329,6 +339,13 @@ function lavSortHul() {
     test: () => ({ linse: true, størrelse: tilstand.størrelse, tegnet: tilstand.tegnet, frys: tilstand.frys }),
   };
 }
+
+// Hver lampes farve (skæret bag lampen og lyset på skinnen under den, js/gaader/skinne.js)
+export const LAMPEFARVE = {
+  antistof: [1.0, 0.75, 0.5], begyndelsen: [0.5, 0.8, 1.0], liv: [0.3, 0.55, 1.2], sorthul: [1.0, 0.55, 0.3],
+  planet9: [1.0, 0.76, 0.4], moerktstof: [0.85, 0.7, 1.0], kvante: [0.4, 0.8, 1.2],
+};
+export const lampeFarve = (id) => new THREE.Color(...(LAMPEFARVE[id] ?? [0.6, 0.75, 1]));
 
 export function lavLys(id) {
   return LYS[id]?.() ?? null;

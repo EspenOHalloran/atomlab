@@ -105,7 +105,49 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await page.evaluate(() => { location.hash = '#vaerksted'; });
   await page.waitForTimeout(1500);
   await page.screenshot({ path: `${UD}/${navn}-vaerksted.png` });
+  if (navn === 'pc') {
+    // Kvalitetstrinnet findes kun på touch: På pc ændrer sætTrin intet
+    const pc = await page.evaluate(async () => { const s = await import('/js/scene3d.js'); const før = s.verden.renderer.getPixelRatio(); s.sætTrin('høj'); return { trin: s.kvalitetstrin(), ens: s.verden.renderer.getPixelRatio() === før, kanter: s.kanterSlags() }; });
+    tjek('pc: kvalitetstrinnet ændrer intet på pc', pc.trin === 'basis' && pc.ens && pc.kanter === 'SMAA', JSON.stringify(pc));
+  }
   tjek(`${navn}: ingen fejl i konsollen`, fejl.length === 0, fejl.join('\n'));
+  await page.context().close();
+}
+
+// Kvalitetstrinnet på touch (G1 del 2, docs/plan-kvalitetstrin.md): en tablet med devicePixelRatio 2 i Værkstedet
+{
+  const fejl = [];
+  const page = await (await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 })).newPage();
+  page.setDefaultTimeout(120000);
+  page.on('pageerror', (e) => fejl.push('pageerror: ' + e.message));
+  page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') fejl.push(m.type() + ': ' + m.text()); });
+  await page.goto(`${ADRESSE}/?test#vaerksted`);
+  await page.waitForFunction(() => window.atomlabTest?.klar(), null, { timeout: 30000 });
+  const tilstand = () => page.evaluate(async () => {
+    const s = await import('/js/scene3d.js');
+    const c = s.verden.renderer.domElement;
+    return { trin: s.kvalitetstrin(), pr: s.verden.renderer.getPixelRatio(), kanter: s.kanterSlags(), lærred: c.width, glød: s.verden.glød.renderTargetsHorizontal[0].width, sidst: s.verden.komponist.passes.at(-1) === s.verden.kanter };
+  });
+  const basis = await tilstand();
+  tjek('tablet: starter i Basis (pixelRatio 1,5, FXAA, gløden i en fjerdedel)', basis.trin === 'basis' && basis.pr === 1.5 && basis.kanter === 'FXAA' && Math.abs(basis.glød - basis.lærred / 4) <= 1, JSON.stringify(basis));
+  await page.evaluate(async () => (await import('/js/scene3d.js')).sætTrin('høj'));
+  const høj = await tilstand();
+  tjek('tablet: Høj giver pixelRatio 2, SMAA sidst og gløden i halv opløsning', høj.trin === 'høj' && høj.pr === 2 && høj.lærred === 2048 && høj.kanter === 'SMAA' && høj.sidst && Math.abs(høj.glød - høj.lærred / 2) <= 1, JSON.stringify(høj));
+  await page.screenshot({ path: `${UD}/tablet-hoej-vaerksted.png` });
+  // En skærm, der ikke har valgt Høj (Kosmos), går til Basis
+  await page.evaluate(() => { location.hash = '#kosmos'; });
+  await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+  const kosmos = await tilstand();
+  tjek('tablet: Kosmos (ikke målt) går tilbage til Basis', kosmos.trin === 'basis' && kosmos.pr === 1.5 && kosmos.kanter === 'FXAA' && Math.abs(kosmos.glød - kosmos.lærred / 4) <= 1, JSON.stringify(kosmos));
+  // Den automatiske måling: Testbrowseren er langsom (under 45 billeder/s), så Høj falder tilbage til Basis og bliver der
+  await page.evaluate(() => { location.hash = '#vaerksted'; });
+  await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+  await page.evaluate(async () => { const s = await import('/js/scene3d.js'); s.TRIN_GRÆNSER.ryk = 30; s.TRIN_GRÆNSER.ro = 0; s.sætTrin('høj'); s.autoTrin(true); });
+  await page.waitForFunction(async () => (await import('/js/scene3d.js')).kvalitetstrin() === 'basis', null, { timeout: 60000, polling: 500 }).catch(() => {});
+  await page.waitForTimeout(5000); // låst: går ikke op igen, selvom målingen fortsætter
+  const auto = await tilstand();
+  tjek('tablet: under 45 billeder/s falder Høj tilbage til Basis og bliver der', auto.trin === 'basis' && auto.kanter === 'FXAA', JSON.stringify(auto));
+  tjek('tablet: ingen fejl i konsollen med kvalitetstrinnet', fejl.length === 0, fejl.join('\n'));
   await page.context().close();
 }
 await b.close();

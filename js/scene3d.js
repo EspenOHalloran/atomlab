@@ -47,7 +47,7 @@ export function lavVerden(lærred) {
   } catch (fejl) {
     return false;
   }
-  renderer.setPixelRatio(TEST_HURTIG ? 0.5 : Math.min(devicePixelRatio, LAV_KVALITET ? 1.5 : 2));
+  renderer.setPixelRatio(skarphed());
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -117,7 +117,7 @@ export function lavVerden(lærred) {
     if (ROLIG) styring.autoRotate = false;
     styring.update(dt);
     if (TEST_HURTIG) renderer.render(scene, kamera);
-    else { komponist.render(dt); vogtKanter(nu); }
+    else { komponist.render(dt); vogtKanter(nu); vogtTrin(nu); }
   });
   return true;
 }
@@ -179,6 +179,76 @@ export function skiftKanter(slags) {
   }
   verden.kanter = ny;
 }
+// Kvalitetstrin på touch (G1 del 2, 20. november 2026, docs/plan-kvalitetstrin.md): Telefoner og tablets har to trin.
+// Basis er som før (skarphed højst 1,5, FXAA og gløden i en fjerdedel af opløsningen). Høj er som på pc (skarphed højst 2,
+// SMAA og gløden i halv opløsning). Hver skærm vælger selv, om den må få Høj (høj: true i SKÆRME i js/skaerme.js, og
+// menuen). Er der mindst 58 billeder i sekundet i 3 sekunder, skiftes der til Høj. Falder det under 45 i 2 sekunder,
+// skiftes der tilbage, og så bliver skærmen i Basis resten af besøget (ingen vippen frem og tilbage, og det dækker også en
+// tablet, der bliver varm). Partikler, kuglernes felter og teksturer følger stadig LAV_KVALITET, for de bygges ved start.
+// ryk: billeder over så mange sekunder (en skjult fane, et ryk) tæller ikke. Testene sætter den højere (testbrowseren er langsom).
+export const TRIN_GRÆNSER = { opFps: 58, opTid: 3, nedFps: 45, nedTid: 2, ro: 1.5, ryk: 0.5 };
+let trinAuto = LAV_KVALITET && !new URLSearchParams(location.search).has('test'); // ikke i testene, medmindre de slår det til
+const trin = { navn: 'basis', tilladt: false, låst: false, tid: 0, billeder: 0, sidst: 0, fra: 0 };
+export const kvalitetstrin = () => trin.navn;
+
+function skarphed() {
+  if (TEST_HURTIG) return 0.5;
+  return Math.min(devicePixelRatio, LAV_KVALITET && trin.navn !== 'høj' ? 1.5 : 2);
+}
+
+// Skifter trinnet ('basis' eller 'høj'). Kun på touch: Pc'en har altid det, der svarer til Høj.
+export function sætTrin(navn) {
+  if (!LAV_KVALITET || trin.navn === navn) return;
+  trin.navn = navn;
+  nulstilTrinMåling();
+  const { renderer, komponist } = verden;
+  if (!renderer) return;
+  const pr = skarphed();
+  renderer.setPixelRatio(pr);
+  komponist.setPixelRatio(pr);
+  tilpasStørrelse();
+  skiftKanter(navn === 'høj' ? 'SMAA' : 'FXAA');
+}
+
+// Kaldes ved hvert skærmskift (main.js), før skærmen starter. Måtte den forrige skærm få Høj, og må den nye også, beholdes
+// trinnet (så billedet ikke springer), ellers går den nye skærm til Basis.
+export function vælgKvalitet(tilladt) {
+  trin.tilladt = tilladt;
+  trin.låst = false;
+  if (!tilladt) sætTrin('basis');
+  nulstilTrinMåling();
+}
+
+// Kun til testene: slår den automatiske måling til eller fra
+export function autoTrin(til) { trinAuto = LAV_KVALITET && til; nulstilTrinMåling(); }
+
+function nulstilTrinMåling() {
+  trin.tid = trin.billeder = 0;
+  trin.sidst = 0;
+  trin.fra = performance.now() + TRIN_GRÆNSER.ro * 1000; // de første billeder efter et skift (nye lag, en skærm, der bygges) tæller ikke
+}
+
+function vogtTrin(nu) {
+  if (!trinAuto || !trin.tilladt || trin.låst) return;
+  const dt = (nu - trin.sidst) / 1000;
+  trin.sidst = nu;
+  if (nu < trin.fra || dt > TRIN_GRÆNSER.ryk) { trin.tid = trin.billeder = 0; return; } // et ryk eller en skjult fane tæller ikke
+  trin.tid += dt;
+  trin.billeder++;
+  const høj = trin.navn === 'høj';
+  if (trin.tid < (høj ? TRIN_GRÆNSER.nedTid : TRIN_GRÆNSER.opTid)) return;
+  const fps = trin.billeder / trin.tid;
+  trin.tid = trin.billeder = 0;
+  if (!høj && fps >= TRIN_GRÆNSER.opFps) {
+    sætTrin('høj');
+    globalThis.atomlabMåler?.(`Kvalitet: Basis → Høj (${fps.toFixed(0)} billeder/s)`);
+  } else if (høj && fps < TRIN_GRÆNSER.nedFps) {
+    sætTrin('basis');
+    trin.låst = true;
+    globalThis.atomlabMåler?.(`Kvalitet: Høj → Basis resten af besøget (${fps.toFixed(0)} billeder/s)`);
+  }
+}
+
 export const kanterSlags = () => verden.kanter instanceof SMAAPass ? 'SMAA' : verden.kanter instanceof FXAAPass ? 'FXAA' : null;
 
 // De farvede tågeskyer er pynt. I vores eget solsystem (fx ved Saturn) er himlen sort med stjerner, så der slås de fra.
@@ -316,8 +386,9 @@ export function tilpasStørrelse() {
   if (!renderer) return;
   renderer.setSize(innerWidth, innerHeight);
   komponist.setSize(innerWidth, innerHeight);
-  // Gløden regner selv i halv opløsning. På telefoner og tablets halverer vi den en gang til (den er sløret alligevel).
-  if (LAV_KVALITET) {
+  // Gløden regner selv i halv opløsning. På telefoner og tablets halverer vi den en gang til (den er sløret alligevel),
+  // undtagen i kvalitetstrinnet Høj.
+  if (LAV_KVALITET && trin.navn !== 'høj') {
     const pr = renderer.getPixelRatio();
     verden.glød.setSize(innerWidth * pr * 0.5, innerHeight * pr * 0.5);
   }

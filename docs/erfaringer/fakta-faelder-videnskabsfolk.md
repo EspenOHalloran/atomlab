@@ -66,3 +66,13 @@
 - archive.org's sideliste (`_page_numbers.json`) kan være forskudt: I Smithsonians *Sitzungsberichte* 1915 siger den s. 845 for `n921`, men billedet er s. 846. Se på billedet, før et `n` skrives. En skanning er heller ikke fri, fordi Wikipedia linker til den: Tjek licenslinjen.
 - "Tychos stjerne var en hvid dværg, der sugede gas fra sin nabostjerne." Det er type Ia (lysekkoet 2008), men om gassen kom fra en nabostjerne eller fra en anden hvid dværg, er ikke sikkert (nabostjernen Tycho G er omstridt). Skriv "fik nok gas fra en nabostjerne (forskerne er ikke helt enige)" (Tycho T3, 19. november 2026).
 - Et sted og en dato over et forord ("Knudstrup, foråret 1573") skal stå i kilden: Brevet til Pratensis slutter "Datæ Knusdorp die 5. Maj, Anno 1573" (n35). Slå det op på siden, før det skrives som fortællerens sted (Tycho T3).
+*Ole Rømer (V2, drejebogen 20. november 2026). Kilderne står i [fakta-videnskabsfolk/roemer.md](../fakta-videnskabsfolk/roemer.md).*
+- "Rømer forudsagde, at Io ville komme 10 minutter for sent den 16. november" (Wikipedia). *Phil. Trans.* (s. 894) siger kun, at han sagde det "fra begyndelsen af september", og at Io blev set 10 minutter for sent den 9. november. Skriv "i november".
+- "Rømer så selv Io komme for sent." Bladet siger "observed at Paris". Skriv "man så".
+- "Rømer beregnede farten til ca. 230.000 km/s i 1675" (dansk Wikipedia). Han gav aldrig en fart, og det var 1676. Huygens regnede 16⅔ jorddiametre i sekundet (ca. 212.000 km/s, med toiser ca. 214.000).
+- "Rømer var den første, der tænkte, at lyset bruger tid." En tekst i Paris-observatoriet tyder på, at Cassini foreslog det først (Bobis og Lequeux 2008). Skriv "viste".
+- Wikipedias eksempel fra 1672 ("Io kom et kvarter for sent efter 30 omgange") er mest målefejl: Med JPL Horizons forklarer lyset kun ca. 2¾ minut. Regn et historisk eksempel efter med Horizons, før det bruges.
+- Regn ikke lysets forsinkelse direkte ud fra Rømers egne klokkeslæt: Tiderne er talt fra middag (astronomisk tid), nok i sand soltid (soluret går ca. 20 minutter mere foran i november end i august), og Io går ikke helt jævnt. "Rømer's determination …" skriver 09:44:50 for en række, der i håndskriften står 9 49 50.
+- Klokkeslættet den 9. november står som 5.35.45 i bladet, men ser ud til at stå som 5 45 35 i Rømers egen liste. Skriv bladets tid, eller "lidt over halv seks".
+- Datoen for den engelske oversættelse i 1677 er "25. juli" i Wikipedia og "25. juni" på Commons. Skriv "1677".
+- JSTOR-skanninger af *Phil. Trans.* har en bjælke med JSTOR's navn nederst på første side, og en artikels figur kan sidde på en tavle sammen med en anden artikels (Fig. 11 og Fig. 1 på tavlen til nr. 136). Se alle billeder i PDF'en, før en side skæres til.

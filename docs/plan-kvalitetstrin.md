@@ -56,4 +56,5 @@ Kilder: [maalinger/mars-g1.md](maalinger/mars-g1.md), [orkestrator-status.md](or
 - Trinnet "Let" til svage enheder ([retning.md](retning.md), køreplanen nr. 9) kan bygges på den samme mekanisme.
 
 ## 5. Status
-- 20. november 2026: Planen er skrevet og venter på jeres go.
+- 20. november 2026: Planen er skrevet.
+- **20. november 2026: Lavet efter jeres go (status prøve).** Som i afsnit 3. Skærmene med Høj: Værkstedet, Molekyler, Det periodiske system, Kvantefysik, Ild, Stjerneovnen, Reaktoren, Liv, Batteriet, Ordbogen, Opdagelserne og menuen. Koden i [kode/kvalitet.md](kode/kvalitet.md). Næste: jeres måling på Tab A11 og A56 (Ikke afprøvet), så Kosmos og Solsystemet, hvis der er luft.
