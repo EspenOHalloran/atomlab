@@ -150,7 +150,7 @@ if (!process.argv.includes('--uden-browser')) {
   const i_tur = await f((t) => t.flyvetur());
   const afstand = Math.hypot(...i_tur.kamera.map((v, i) => v - i_tur.cassini[i]));
   tjek('trin 4: "Flyv med Cassini" sætter kameraet tæt bag Cassini, og målerne står øverst i 3D-vinduet', i_tur.aktiv && afstand < 2 && (await side.isVisible('#solsystemVindue > .ui-flyvetur')), `${afstand} ${JSON.stringify(i_tur)}`);
-  const lær = await side.locator('#solsystemVindue canvas').first().boundingBox();
+  const lær = await side.locator('#solsystemVindue').boundingBox();
   await side.mouse.move(lær.x + lær.width / 2, lær.y + lær.height * 0.6);
   await side.mouse.down();
   await side.mouse.move(lær.x + lær.width / 2, lær.y + lær.height * 0.4, { steps: 5 });
@@ -213,7 +213,7 @@ if (!process.argv.includes('--uden-browser')) {
   await f((t) => t.sætHøjde(49));
   await spol(FLYVETUR.varighed + 1);
   await f((t) => t.kameraFrem());
-  tjek('laboratoriet: "Flyv gennem fontænen" flyver turen, og bagefter er alle kort stadig på tavlen og bunken tom', lab.aktiv && !(await f((t) => t.flyvetur().aktiv)) && (await f((t) => t.tavle().lagte.length === KORT.length && !t.tavle().bunke.length && t.boks() === 'modlys')), JSON.stringify(lab));
+  tjek('laboratoriet: "Flyv gennem fontænen" flyver turen, og bagefter er alle kort stadig på tavlen og bunken tom', lab.aktiv && !(await f((t) => t.flyvetur().aktiv)) && (await f((t, n) => t.tavle().lagte.length === n && !t.tavle().bunke.length && t.boks() === 'modlys', KORT.length)), JSON.stringify(lab));
   tjek('konsollen er uden fejl', konsol.length === 0, konsol.join(' | '));
   await browser.close();
 }
