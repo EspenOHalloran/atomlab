@@ -2,11 +2,14 @@
 
 *Opdateret 20. november 2026 kl. ca. 22 dansk tid af orkestratoren for natten (session_01VDmQuADE7YByetGZE3Sd2Q, "Orkestrator · AtomLab (natten 20.-21. nov)"). Skemaet er trig_012gpYEzMFKG9WussGFBe8xh (hver time ved :55, fyrer ind i den session). Hold denne fil under ca. 5 KB.*
 
-## Natten 20.-21. november (jeres svar kl. ca. 21:55: "masser af forbrug", "gerne land på månerne", orkestratoren vælger)
-- **Merget i nat (alle status prøve):** Måner M3 (#399), G1 del 2 kvalitetstrin på touch (#400), Gåderne løftet A-D (#401), Rømers drejebog V2 (#402), M4 Flyv gennem fontænen (#403, #405), Einsteins drejebog (#404), M5a Land med Huygens, nedstigningen (#406). M5b Land med Huygens, landingen (#408). **Sporet Måner er bygget færdigt** (venter på prøven). Orkestratorens skema er slettet 21. november kl. ca. 06, da køen var tom.
-- **Valgt af orkestratoren, kan ændres af jer:** M4 styring A (man trækker højden, man kan ikke fejle). M5a: nedturen i sporets egen `js/maaner/nedtur.js`. Einsteins drejebog startet efter Rømer (jeres "du vurderer").
-- **Venter på jer:** Seks spørgsmål til Rømers bog og syv til Einsteins (sporets fil `docs/lige-nu/videnskabsfolkene.md`), rettighedslinjen for 1915-skanningen (før E4), Gåderne E (skinnen i skala med farvetone og højere på telefon, go?), målingen med `?maal` på Tab A11 og A56 efter G1 del 2, og prøven af hele "Under isen" og "Land med Huygens" med jeres søn.
-- Erfaringerne fra natten står i `docs/erfaringer/arbejdsmaade.md` (sidste punkt).
+## Natten 21.-22. november (jeres ord kl. ca. 21: "Einstein skal bare køre hele natten. Og evt andre spor der giver mening. Start en ny orkestrator når relevant. Du træffer beslutninger og orienterer mig i morgen.")
+- **Orkestratoren beslutter selv i nat** og skriver valgene her med "valgt af orkestratoren, kan ændres af jer". Retningsvalg (et helt nyt spor som Lys og farver, noget, der slettes) tages stadig ikke. De sættes på listen til jer.
+- **Einstein først (jeres go):** E1 (forsiden) kører i session_01VDmQu9Pn62UTaD83qW3Vxm, så E2 (turen) og E3 (klodsen `ligning` og opslag 3), én ad gangen. Hver session skriver prompten til det næste trin under "Næste" i `docs/lige-nu/videnskabsfolkene.md`. **Jeres ønske skal stå øverst i hver prompt:** "Gør dig virkelig umage med Einstein. Det skal være fedt … Hellere en side mere end en for lidt" (drejebogen afsnit 17). E4 venter på rettighedslinjen for 1915-skanningen (I læser den i en browser). Byg så Rømer R1-R3 (jeres svar: ja til alle anbefalinger), og til sidst E4-E5.
+- **Den anden plads (Småting, én ad gangen):** (1) Artefaktet "AtomLab Overblik" opdateres (serien Måner er færdig, læs det med `read` først), (2) Gåderne E (skinnen viser rejsen i skala med en farvetone og sidder højere på telefon, foreslået i #401). Ikke flere end to tunge sessioner ad gangen (5-timers grænsen, se erfaringerne).
+- **Rettet 21. november:** De røde tests `venus` og `batteri` (#411, de målte på det forkerte tidspunkt). Jeres svar til Rømer og Einstein (#410).
+
+## Natten 20.-21. november (lavet)
+Måner M3-M5b (#399-#408, sporet er bygget færdigt), G1 del 2 (#400), Gåderne A-D (#401), Rømers og Einsteins drejebøger (#402, #404). Erfaringerne står i `docs/erfaringer/arbejdsmaade.md` (sidste punkt). **Venter stadig på jer:** prøven med sønnen (Under isen, Land med Huygens og mere), målingen med `?maal` på Tab A11 og A56, stenen på 4 cm i landingsbilledet (Ikke afprøvet) og rettighedslinjen for 1915-skanningen.
 
 ## Jeres beslutninger (gælder stadig)
 - Højst **to tunge sessioner** (Opus) ad gangen. Skift orkestrator ved ca. 250.000 tokens (`get_session` uden id, `context_usage`).
