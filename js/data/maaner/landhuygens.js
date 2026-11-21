@@ -180,7 +180,7 @@ export const SIDE = {
     },
     {
       titel: 'Hvorfor kom der kun 350 billeder?',
-      tekst: '<p>Huygens sendte på to radiokanaler, A og B, til Cassini, som sendte det hele videre til Jorden. Der skulle komme ca. 700 billeder. Men på grund af en fejl i kommandoerne lyttede Cassini aldrig på kanal A, så kun ca. 350 kom frem. Cassinis måling af vinden gik også tabt. I stedet lyttede radioteleskoper på Jorden selv til Huygens\' svage signal og målte vinden ud fra det.</p>',
+      tekst: '<p>Huygens sendte på to radiokanaler, A og B, til Cassini, som sendte det hele videre til Jorden. Der skulle komme ca. 700 billeder. Men på grund af en fejl i kommandoerne lyttede Cassini aldrig på kanal A, så kun ca. 350 kom frem. Cassinis måling af vinden gik også tabt. I stedet lyttede radioteleskoper på Jorden selv til Huygens\' svage signal og målte vinden ud fra det, men ikke så nøjagtigt.</p>',
     },
   ],
   videre: [gå('solsystem:saturn:titan', 'Se Titan ved Saturn'), gå('solsystem:underisen', 'Under isen på Europa og Enceladus')],
