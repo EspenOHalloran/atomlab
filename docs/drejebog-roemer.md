@@ -197,4 +197,4 @@ Alle tal og årstal står med kilde og sikkerhed i [fakta-videnskabsfolk/roemer.
 5. **Gåden:** "Tæl lysets minutter" med perlesnoren og nutidens afstande (anbefalet: man finder selv de 10 minutter og opdager, at 22 var for mange). Eller "Sortér Rømers liste" (man lægger hans iagttagelser på tegningen og finder selv, hvornår Io ses gå ind og komme ud).
 6. **Gør det selv:** Jupiter → Månerne, som de er nu (anbefalet: findes allerede, og man ser Io i skyggen). Eller vent og byg "Rømers ur" ved Jupiter først (et større stykke arbejde i sporet Solsystemet).
 
-**Jeres svar:** (ikke givet endnu)
+**Jeres svar (21. november 2026):** "Ja til alle anbefalinger." Det betyder: 1) kernesætning A, 2) Jacob Conings maleri med filteret, 3) de fire sider (s. 893, Fig. 11, s. 894 og Rømers liste), 4) skanningen fra Royal Society og JSTOR på archive.org, 5) gåden "Tæl lysets minutter", 6) Gør det selv: Jupiter → Månerne, som de er nu. R1-R3 kan bygges.

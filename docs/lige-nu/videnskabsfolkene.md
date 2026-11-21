@@ -10,19 +10,11 @@
 
 ## Næste
 1. **Prøven med jeres søn** af Huygens og Tycho ([guide-proeven.md](../guide-proeven.md), spørgsmålene i drejebøgernes afsnit 10 og 13).
-2. **Rømer** (bog nr. 3 på hylden): Drejebogen er skrevet. Når I har svaret på de seks spørgsmål nedenfor, bygges R1-R3 (drejebogens afsnit 15).
+2. **Rømer** (bog nr. 3 på hylden): Drejebogen er skrevet, og jeres svar er givet 21. november. R1-R3 bygges (drejebogens afsnit 15).
    **Prompt til R1 (ny session, Opus, høj effort, kopiér):** "Spor Videnskabsfolkene, R1: Rømers forside. Læs docs/lige-nu/videnskabsfolkene.md, docs/drejebog-roemer.md (afsnit 1-4, 11, 15 og 16 med jeres svar) og docs/kode/opdagelser-tycho.md (sådan blev Tychos forside bygget). Tjek i origin/main, at den ikke er bygget. Byg R1 efter afsnit 15: roemer i js/data/opdagelser.js og js/data/opdagelser/roemer.js, portrættet med lav_portraet.py roemer og KILDER.md, vignetten med Jupiter og de fire måner, Ørsted og Curie som grå rygge. Test 1, 3 og 8, /faerdig, PR og merge."
-3. **Einstein** (bog nr. 6): Drejebogen er skrevet 21. november. Når I har svaret på de syv spørgsmål (drejebogens afsnit 17) og det åbne punkt om 1915-skanningen er lukket (afsnit 11), bygges E1-E5 (afsnit 16).
+3. **Einstein** (bog nr. 6): Drejebogen er skrevet, og jeres svar er givet 21. november (afsnit 17: "Det skal være fedt", gerne stor). E1-E3 kan bygges nu. E4 venter på det åbne punkt om 1915-skanningen (afsnit 11).
    **Prompt til E1 (ny session, Opus, høj effort, kopiér):** "Spor Videnskabsfolkene, E1: Einsteins forside. Læs docs/lige-nu/videnskabsfolkene.md, docs/drejebog-einstein.md (afsnit 1-4, 11, 16 og 17 med jeres svar) og docs/kode/opdagelser-tycho.md (sådan blev Tychos forside bygget). Tjek i origin/main, at den ikke er bygget. Byg E1 efter afsnit 16: einstein i js/data/opdagelser.js (med spørgsmål) og js/data/opdagelser/einstein.js, Old Standard TT i fonts/ med OFL.txt (spørg om domænet, hvis det er lukket), portrættet med lav_portraet.py einstein og KILDER.md, vignetten med uret og lysglimtet. Test 1, 3 og 8, /faerdig, PR og merge."
 4. Galilei og Newton får drejebøger, når de skal bygges (efter de syv andre).
 
 ## Spørgsmål til jer
-Rømers drejebog, afsnit 16 (anbefalingen først, svarene skrives dér):
-1. **Kernesætningen:** A (anbefalet: "Io kom for sent, når Jorden var langt fra Jupiter, for så skulle lyset rejse længere …") eller B (kortere).
-2. **Portrættet:** Jacob Conings maleri fra ca. 1700 med filteret (anbefalet) eller stikket fra 1735 af Rømer ved sit instrument.
-3. **De fire sider:** *Phil. Trans.* s. 893, Fig. 11, s. 894 og Rømers egen liste (anbefalet) eller kun tidsskriftets tre.
-4. **Skanningen:** Royal Society og JSTOR's skanning med Public Domain Mark (anbefalet) eller vente på den franske original (Gallica).
-5. **Gåden:** "Tæl lysets minutter" med perlesnoren (anbefalet) eller "Sortér Rømers liste".
-6. **Gør det selv:** Jupiter → Månerne, som de er nu (anbefalet), eller byg "Rømers ur" ved Jupiter først.
-
-Einsteins drejebog, afsnit 17 (anbefalingen først): 1) kernesætning A, 2) spørgsmålet "Hvad sker der, når lyset er lige hurtigt for alle?", 3) turen og så de tre ligninger, 4) Schmutzers foto med filteret, 5) Old Standard TT, 6) Gør det selv ved Rejsen i tid, 7) Google-skanningen af 1915, hvis Smithsonians linje ikke er fri. **Og det åbne punkt:** Åbn skanningen `sitzungsberichte1915deut` på biodiversitylibrary.org i en browser, og skriv linjen under "Rights" ind i fakta-einstein-bog.md, afsnit 11.
+Ingen lige nu. **Jeres svar 21. november 2026: "Ja til alle anbefalinger"** til både Rømers (afsnit 16) og Einsteins drejebog (afsnit 17), og ønsket om, at Einstein skal være "fedt" og gerne stor ("hellere en side mere end en for lidt"), står i Einsteins drejebog afsnit 17.
