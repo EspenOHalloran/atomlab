@@ -2826,3 +2826,50 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
   #solsystem .tv-løs { min-height: 36px; }
   #solsystem .tv-kort { min-height: 26px; font-size: 11px; padding: 2px 5px; }
 }
+/* Land med Huygens (M5a, js/maaner/landhuygens.js og nedtur.js): datoen og måleren øverst i midten af 3D-vinduet,
+   Huygens' kamera nederst til venstre (et tryk gør det større), skiltet "Tre uger senere …" og den orange toning. */
+#solsystem .ui-huygens { pointer-events: none; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: calc(100% - 16px); }
+#solsystem .lh-dato { padding: 3px 10px; border-radius: 8px; background: rgba(8, 12, 28, 0.72); color: var(--tekst); font-size: 13px; white-space: nowrap; }
+#solsystem .lh-maaler { display: flex; align-items: stretch; gap: 6px; padding: 6px 8px; border-radius: 10px; background: rgba(8, 12, 28, 0.78); border: 1px solid rgba(255, 255, 255, 0.12); }
+#solsystem .lh-maaler[hidden] { display: none; }
+#solsystem .lh-tal { display: flex; flex-direction: column; justify-content: center; min-width: 92px; padding: 0 6px; color: var(--svag); font-size: 12px; text-align: left; }
+#solsystem .lh-tal strong { color: var(--tekst); font-size: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#solsystem .lh-tal + .lh-tal { border-left: 1px solid rgba(255, 255, 255, 0.14); }
+#solsystem .lh-ur { pointer-events: auto; cursor: pointer; font: inherit; background: none; border: 0; border-left: 1px solid rgba(255, 255, 255, 0.14); border-radius: 0 8px 8px 0; min-height: 44px; color: var(--svag); }
+#solsystem .lh-ur:hover, #solsystem .lh-ur:focus-visible { background: rgba(255, 255, 255, 0.06); }
+#solsystem .lh-ur small { font-size: 11px; color: var(--svag); }
+#solsystem .lh-ur.jorden strong { color: #9fd0ff; }
+#solsystem .lh-soejle { position: relative; width: 50px; height: 64px; flex: none; }
+#solsystem .lh-bar { position: absolute; left: 4px; top: 4px; bottom: 4px; width: 10px; border-radius: 5px; background: linear-gradient(#c98a3c, #8a5424 70%, #3d2a1a); }
+#solsystem .lh-prik { position: absolute; left: 9px; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #fff; border: 2px solid var(--accent, #6cf); box-shadow: 0 0 6px rgba(255, 255, 255, 0.7); transform: translateY(4px); }
+#solsystem .lh-soejle small { position: absolute; left: 20px; top: 0; font-size: 10px; line-height: 12px; color: var(--svag); white-space: nowrap; }
+#solsystem .lh-soejle .lh-bund { top: auto; bottom: 0; }
+#solsystem .ui-huygens-kamera { pointer-events: auto; position: absolute; left: 8px; bottom: 8px; z-index: 3; margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 5px; border-radius: 10px; background: rgba(8, 12, 28, 0.82); border: 1px solid rgba(255, 255, 255, 0.14); transition: box-shadow 0.6s; }
+#solsystem .ui-huygens-kamera[hidden] { display: none; }
+#solsystem .ui-huygens-kamera.jorden { border-color: #ffd36b; box-shadow: 0 0 0 2px #ffd36b, 0 0 20px rgba(255, 211, 107, 0.6); animation: lh-jorden 1.2s ease-in-out 3; } /* det første billede, hvor jorden kan ses */
+@keyframes lh-jorden { 50% { box-shadow: 0 0 0 3px #ffe7a8, 0 0 34px rgba(255, 211, 107, 0.9); } }
+#solsystem .lh-billede { display: block; padding: 0; border: 0; background: #000; cursor: zoom-in; border-radius: 6px; overflow: hidden; }
+#solsystem .lh-billede img { display: block; width: 96px; height: 161px; object-fit: cover; image-rendering: auto; }
+#solsystem .ui-huygens-kamera.stor .lh-billede { cursor: zoom-out; }
+#solsystem .ui-huygens-kamera.stor .lh-billede img { width: min(220px, 40vw); height: auto; aspect-ratio: 200 / 335; max-height: calc(100vh - 200px); }
+#solsystem .ui-huygens-kamera figcaption { display: flex; flex-direction: column; max-width: 96px; font-size: 11px; color: var(--svag); }
+#solsystem .ui-huygens-kamera.stor figcaption { max-width: none; }
+#solsystem .ui-huygens-kamera figcaption b { color: var(--tekst); font-weight: 600; }
+#solsystem .ui-huygens-kamera figcaption small { font-size: 9px; opacity: 0.8; }
+#solsystem .lh-skilt { pointer-events: none; position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); z-index: 3; padding: 8px 16px; border-radius: 10px; background: rgba(8, 12, 28, 0.78); color: var(--tekst); font-size: 18px; }
+#solsystem .lh-skilt[hidden] { display: none; }
+#solsystem .lh-toning { pointer-events: none; position: absolute; inset: 0; z-index: 2; background: #b8743a; opacity: 0; transition: opacity 0.35s; }
+#solsystem .lh-toning.vis { opacity: 1; transition-duration: 0.3s; }
+@media (max-width: 560px), (max-height: 500px) {
+  #solsystem .lh-tal { min-width: 0; padding: 0 4px; font-size: 11px; }
+  #solsystem .lh-tal strong { font-size: 15px; }
+  #solsystem .lh-soejle { width: 18px; height: 48px; }
+  #solsystem .lh-soejle small { display: none; }
+  #solsystem .lh-billede img { width: 72px; height: 121px; }
+  #solsystem .ui-huygens-kamera figcaption { max-width: 82px; font-size: 10px; }
+}
+@media (max-height: 500px) { /* lav skærm på langs (telefonen): billedet og teksten ved siden af hinanden, så kameraet passer i 3D-vinduet */
+  #solsystem .ui-huygens-kamera { flex-direction: row; align-items: flex-end; }
+  #solsystem .lh-billede img { width: 54px; height: 90px; }
+}
+@media (prefers-reduced-motion: reduce) { #solsystem .lh-toning { transition: none; } #solsystem .ui-huygens-kamera.jorden { animation: none; } }
