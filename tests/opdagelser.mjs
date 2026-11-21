@@ -834,6 +834,8 @@ for (const [navn, opsætning] of [
     return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), intro: ses('#opdBog .bog-intro-tekst'), vignet: !v?.offsetWidth || (v.getBoundingClientRect().right <= innerWidth + 0.5 && v.getBoundingClientRect().left >= 0), bred: document.documentElement.scrollWidth > innerWidth + 1 };
   });
   tjek(`${navn}: Einsteins forside har portrættet, spørgsmålet og introduktionen fremme, vignetten er inden for skærmen, og intet går ud til siden`, ef.portræt && ef.titel && ef.intro && ef.vignet && !ef.bred, JSON.stringify(ef));
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('tycho')); // tilbage til Tycho til gåden nedenfor
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'tycho');
   // Tychos gåde (T3): kortet og de tre tal ses uden at rulle, knapperne er mindst 44 px, og intet går ud til siden
   await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'gaaden' && v.bladr(1)); });
   await vent(page, () => atomlabTest.opdagelser.scene()?.visGåden);
