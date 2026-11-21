@@ -308,7 +308,7 @@ export default {
     let tilLab = false;
     let ventVink = 0;
     let trinNu = null; // forløbets trin, mens det kører
-    // En knap med data-gaa (fx Christiaans Huygens' bog i Opdagelserne): gaa.js' lytter på hele siden tager den
+    // En knap med data-gaa (fx Christiaan Huygens' bog i Opdagelserne): gaa.js' lytter på hele siden tager den
     function gåTil(mål) {
       const b = document.createElement('button');
       b.dataset.gaa = mål;

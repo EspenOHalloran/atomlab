@@ -97,11 +97,12 @@ if (!process.argv.includes('--uden-browser')) {
   const urJ = await f((t) => t.ned().ur);
   await f((t) => t.skiftUr());
   tjek('trin 2: højt oppe viser kameraet billedet fra 147,7 km, og et tryk på uret viser, at Jorden intet har hørt endnu', højt.kamera && højt.billede === 147.7 && /Hørt på Jorden\s*intet endnu/.test(urJ), JSON.stringify([højt.billede, urJ]));
-  // Ned til ca. 26 km: Billedet fra 30,8 km, hvor jorden kan ses, lyser op
-  await spol((tidVed(26) - højt.s) / 150 + 0.2);
+  // Ned til ca. 28 km: Billedet fra 30,8 km, hvor jorden kan ses, lyser op (spolingen kan gå lidt for langt under
+  // belastning, så der er god plads til billedet fra 25,4 km)
+  await spol((tidVed(28) - højt.s) / 150);
   const lavt = await f((t) => ({ ...t.ned(), jordenKlasse: document.querySelector('#solsystem .ui-huygens-kamera').classList.contains('jorden') }));
   await side.screenshot({ path: `${UD}/huygens-30km.png` });
-  tjek('trin 2: ca. 26 km oppe viser kameraet billedet fra 30,8 km, som lyser op, og den lille faldskærm er ude', lavt.h < 27 && lavt.h > 24 && lavt.billede === 30.8 && lavt.jordenKlasse && lavt.skærm === 'lille' && lavt.set.includes(53.4), JSON.stringify(lavt));
+  tjek('trin 2: ca. 28 km oppe viser kameraet billedet fra 30,8 km, som lyser op, og den lille faldskærm er ude', lavt.h < 30.8 && lavt.h > 25.4 && lavt.billede === 30.8 && lavt.jordenKlasse && lavt.skærm === 'lille' && lavt.set.includes(53.4), JSON.stringify(lavt));
   // Et tryk på kameraet gør det større, og et til gør det lille igen
   await side.click('#solsystem .lh-billede');
   const stor = await f((t) => t.ned().stor);
