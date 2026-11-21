@@ -6,7 +6,7 @@ const b = await chromium.launch({ args: ARGS });
 const fejl = []; let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
 const FLYTTET = ['solstorm', 'solensfremtid', 'aarstider', 'formoerkelser', 'mars', 'saturn'];
-const ALLE = ['overblik', 'solen', 'solstorm', 'solensfremtid', 'merkur', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'underisen', 'uranus', 'neptun', 'pluto']; // (underisen står under Saturn, spor Måner)
+const ALLE = ['overblik', 'solen', 'solstorm', 'solensfremtid', 'merkur', 'venus', 'jorden', 'aarstider', 'formoerkelser', 'mars', 'jupiter', 'saturn', 'underisen', 'landhuygens', 'uranus', 'neptun', 'pluto']; // (underisen og landhuygens står under Saturn, spor Måner)
 
 async function side(vp, gemt, opt = {}) {
   const s = await (await b.newContext({ viewport: vp, ...opt })).newPage();
