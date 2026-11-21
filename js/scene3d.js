@@ -96,10 +96,12 @@ export function lavVerden(lærred) {
   komponist.addPass(new OutputPass());
   // Kantudglatning (G2, 20. november 2026): efter tonemappingen, for begge virker på det færdige billede. Pc'en får SMAA
   // (tre trin, finder kanterne og blander langs dem, pænest), touch FXAA (ét trin, billigst, lidt blødere billede).
-  const kanter = LAV_KVALITET ? new FXAAPass() : lavSMAA();
+  const kanter = LAV_KVALITET ? (gemteKanter.FXAA = new FXAAPass()) : lavSMAA();
   komponist.addPass(kanter);
 
   Object.assign(verden, { renderer, scene, kamera, styring, komponist, glød, kanter });
+
+  if (LAV_KVALITET && !TEST_HURTIG) setTimeout(forvarmSMAA, 2500); // (når den første skærm er i gang)
 
   addEventListener('resize', tilpasStørrelse);
   // Mobiler ændrer størrelse lidt efter, at skærmen drejes
@@ -166,18 +168,46 @@ function vogtKanter(nu) {
   }
 }
 
-// Skifter kantudglatningen ('SMAA', 'FXAA' eller null = ingen). Bruges af værnet og testene.
+// Skifter kantudglatningen ('SMAA', 'FXAA' eller null = ingen). Bruges af værnet, kvalitetstrinnet og testene.
+// På touch skifter kvalitetstrinnet frem og tilbage mellem de to, så begge gemmes og genbruges (gemteKanter): Deres
+// shadere laves kun én gang (SMAA på forhånd, forvarmSMAA), og et skift laver ingen nye. På pc frigives den gamle.
+const gemteKanter = {};
 export function skiftKanter(slags) {
   const { komponist, kanter } = verden;
   if (!komponist || kanterSlags() === slags) return;
-  const ny = slags === 'SMAA' ? lavSMAA() : slags === 'FXAA' ? new FXAAPass() : null;
+  const lav = () => (slags === 'SMAA' ? lavSMAA() : slags === 'FXAA' ? new FXAAPass() : null);
+  const ny = LAV_KVALITET && slags ? (gemteKanter[slags] ??= lav()) : lav();
   const i = komponist.passes.indexOf(kanter);
-  if (kanter) { komponist.removePass(kanter); kanter.dispose(); }
+  if (kanter) { komponist.removePass(kanter); if (!LAV_KVALITET) kanter.dispose(); }
   if (ny) {
     ny.enabled = kanter?.enabled ?? true; // holder Gåderne pause (MSAA), gør den nye det også
     komponist.insertPass(ny, i < 0 ? komponist.passes.length : i);
   }
   verden.kanter = ny;
+}
+
+// SMAA's tre shadere laves på forhånd på touch, så skiftet til Høj ikke venter på dem (telefonen A56 havde et ryk på
+// 114 ms ved skiftet, 21. november 2026, og testbrowseren lavede 2-3 nye shadere). Når dens to opslagsbilleder er
+// pakket ud, tegnes den én gang i et lille billede (4 × 4) lige før komponisten tegner, med det sidste trin på skærmen
+// som i brug (ellers bliver det en anden udgave af shaderen). Komponisten tegner hele skærmen igen bagefter.
+function forvarmSMAA() {
+  const smaa = (gemteKanter.SMAA ??= lavSMAA());
+  if (verden.kanter === smaa) return;
+  const varm = () => {
+    if (!smaa._areaTexture.version || !smaa._searchTexture.version) return; // (billederne er ikke klar endnu)
+    verden.opdateringer.delete(varm);
+    if (verden.kanter === smaa) return;
+    const { renderer } = verden;
+    const før = renderer.getRenderTarget();
+    const læs = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType });
+    smaa.setSize(4, 4);
+    smaa.renderToScreen = true;
+    try { smaa.render(renderer, null, læs); } finally {
+      renderer.setRenderTarget(før);
+      læs.dispose();
+    }
+  };
+  verden.opdateringer.add(varm);
 }
 // Kvalitetstrin på touch (G1 del 2, 20. november 2026, docs/plan-kvalitetstrin.md): Telefoner og tablets har to trin.
 // Basis er som før (skarphed højst 1,5, FXAA og gløden i en fjerdedel af opløsningen). Høj er som på pc (skarphed højst 2,
@@ -187,9 +217,20 @@ export function skiftKanter(slags) {
 // tablet, der bliver varm). Partikler, kuglernes felter og teksturer følger stadig LAV_KVALITET, for de bygges ved start.
 // ryk: billeder over så mange sekunder (en skjult fane, et ryk) tæller ikke. Testene sætter den højere (testbrowseren er langsom).
 export const TRIN_GRÆNSER = { opFps: 58, opTid: 3, nedFps: 45, nedTid: 2, ro: 1.5, ryk: 0.5 };
+// De tunge skærme (høj: 'tung' i SKÆRME: Solsystemet, Kosmos og Begyndelsen, 21. november 2026) går kun op, når der er
+// stor luft: mindst 100 billeder/s i 4 s. Det kan kun en skærm med 120 Hz (fx telefonen A56 med 117 billeder/s ved Mars),
+// ikke Tab A11 (90 Hz-skærm, ca. 62 billeder/s i Solsystemet), så tabletten bliver ikke tungere dér. De falder tilbage
+// allerede under 70 billeder/s i 2 s (det skal stadig være glat). Valgt af sessionen, kan ændres af jer.
+export const TRIN_GRÆNSER_TUNG = { opFps: 100, opTid: 4, nedFps: 70, nedTid: 2 };
 let trinAuto = LAV_KVALITET && !new URLSearchParams(location.search).has('test'); // ikke i testene, medmindre de slår det til
-const trin = { navn: 'basis', tilladt: false, låst: false, tid: 0, billeder: 0, sidst: 0, fra: 0 };
+// tung: skærmen er tung (strengere grænser). tungHøj: Høj er nået på en tung skærm (så må den beholdes på en anden tung).
+const trin = { navn: 'basis', tilladt: false, tung: false, tungHøj: false, id: null, låst: false, tid: 0, billeder: 0, sidst: 0, fra: 0 };
+// Skærme, hvor Høj er faldet tilbage i dette besøg af AtomLab (til siden lukkes): De prøver ikke igen, når man kommer
+// tilbage (ingen vippen frem og tilbage, heller ikke mellem skærmene, og en varm tablet får ro).
+const faldet = new Set();
 export const kvalitetstrin = () => trin.navn;
+export const trinTilstand = () => ({ navn: trin.navn, tung: trin.tung, låst: trin.låst }); // (til testene)
+const grænse = (navn) => (trin.tung ? TRIN_GRÆNSER_TUNG : TRIN_GRÆNSER)[navn];
 
 function skarphed() {
   if (TEST_HURTIG) return 0.5;
@@ -200,6 +241,7 @@ function skarphed() {
 export function sætTrin(navn) {
   if (!LAV_KVALITET || trin.navn === navn) return;
   trin.navn = navn;
+  trin.tungHøj = navn === 'høj' && trin.tung;
   nulstilTrinMåling();
   const { renderer, komponist } = verden;
   if (!renderer) return;
@@ -210,17 +252,21 @@ export function sætTrin(navn) {
   skiftKanter(navn === 'høj' ? 'SMAA' : 'FXAA');
 }
 
-// Kaldes ved hvert skærmskift (main.js), før skærmen starter. Måtte den forrige skærm få Høj, og må den nye også, beholdes
-// trinnet (så billedet ikke springer), ellers går den nye skærm til Basis.
-export function vælgKvalitet(tilladt) {
-  trin.tilladt = tilladt;
-  trin.låst = false;
-  if (!tilladt) sætTrin('basis');
+// Kaldes ved hvert skærmskift (main.js), før skærmen starter. tilladt: false, true eller 'tung' (høj i SKÆRME), id: skærmen.
+// Måtte den forrige skærm få Høj, og må den nye også, beholdes trinnet (så billedet ikke springer). En tung skærm beholder
+// det kun, hvis det er nået på en tung skærm (ellers kunne Tab A11 tage Høj med fra Værkstedet til Solsystemet). Er Høj
+// faldet tilbage på den nye skærm før, bliver den i Basis.
+export function vælgKvalitet(tilladt, id = null) {
+  trin.tilladt = !!tilladt;
+  trin.tung = tilladt === 'tung';
+  trin.id = id;
+  trin.låst = faldet.has(id);
+  if (!tilladt || trin.låst || (trin.tung && !trin.tungHøj)) sætTrin('basis');
   nulstilTrinMåling();
 }
 
 // Kun til testene: slår den automatiske måling til eller fra
-export function autoTrin(til) { trinAuto = LAV_KVALITET && til; nulstilTrinMåling(); }
+export function autoTrin(til) { trinAuto = LAV_KVALITET && til; faldet.clear(); trin.låst = false; nulstilTrinMåling(); }
 
 function nulstilTrinMåling() {
   trin.tid = trin.billeder = 0;
@@ -236,16 +282,17 @@ function vogtTrin(nu) {
   trin.tid += dt;
   trin.billeder++;
   const høj = trin.navn === 'høj';
-  if (trin.tid < (høj ? TRIN_GRÆNSER.nedTid : TRIN_GRÆNSER.opTid)) return;
+  if (trin.tid < grænse(høj ? 'nedTid' : 'opTid')) return;
   const fps = trin.billeder / trin.tid;
   trin.tid = trin.billeder = 0;
-  if (!høj && fps >= TRIN_GRÆNSER.opFps) {
+  if (!høj && fps >= grænse('opFps')) {
     sætTrin('høj');
-    globalThis.atomlabMåler?.(`Kvalitet: Basis → Høj (${fps.toFixed(0)} billeder/s)`);
-  } else if (høj && fps < TRIN_GRÆNSER.nedFps) {
+    globalThis.atomlabMåler?.(`Kvalitet: Basis → Høj (${fps.toFixed(0)} billeder/s${trin.tung ? ', tung skærm' : ''})`);
+  } else if (høj && fps < grænse('nedFps')) {
     sætTrin('basis');
     trin.låst = true;
-    globalThis.atomlabMåler?.(`Kvalitet: Høj → Basis resten af besøget (${fps.toFixed(0)} billeder/s)`);
+    if (trin.id) faldet.add(trin.id);
+    globalThis.atomlabMåler?.(`Kvalitet: Høj → Basis på denne skærm, til siden lukkes (${fps.toFixed(0)} billeder/s)`);
   }
 }
 
