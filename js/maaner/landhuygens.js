@@ -13,7 +13,7 @@
 // Rummet: 1 enhed = 100 km. Cassini og Huygens er tegnet meget større end de var, og Cassini står meget tættere på Titan.
 
 import * as THREE from 'three';
-import { verden, TEST_HURTIG, ROLIG, centrerVindue } from '../scene3d.js';
+import { verden, ROLIG, centrerVindue } from '../scene3d.js';
 import { hent } from '../solsystem/hent.js';
 import { lavTitan } from '../solsystem/atmosfaere.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbVenter, forløbRørt, forløbVink, forløbTest } from '../forloeb.js';
