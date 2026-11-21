@@ -35,7 +35,8 @@ const lysScene = (m, id, c) => {
     drejer: true,
     trin(t, valgt) {
       prøv = valgt != null ? g?.scene?.prøv?.[t] ?? null : null;
-      c.linje(prøv ?? '');
+      // Før det første gæt: scene.start, hvis kortet har en (Kvanteverdenen forklarer striberne)
+      c.linje(prøv ?? (t === 0 && valgt == null ? g?.scene?.start ?? '' : ''));
       c.knapper(prøv && g.seDet ? [{ tekst: `${g.seDet[1]} ›`, gaa: g.seDet[0] }] : []);
       if (this.stillet) return;
       this.stillet = true;
