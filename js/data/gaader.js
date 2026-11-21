@@ -620,7 +620,7 @@ export const GÅDER = [
     navn: 'Kvanteverdenen', // det korte navn under lyset på skinnen
     størrelse: -8.5, // grænsen i dag: klumperne er ca. 8 nm (10⁻⁸ m). Står før Livets begyndelse (-8)
     spørgsmål: 'Hvor stopper kvanteverdenen?',
-    linje: 'Elektroner giver striber. Hvad med større ting?',
+    linje: 'Små ting kan opføre sig som bølger. Hvad med større ting?',
     // Rekorden er slået op 20. november 2026: Pedalino m.fl., Nature 649, 866-870, online 21. januar 2026 (PubMed),
     // arXiv:2507.21211 ("more than 7'000 atoms at masses greater than 170'000 dalton", ca. 8 nm, ca. 160 m/s)
     dato: 'Sådan stod det i november 2026',
@@ -628,7 +628,8 @@ export const GÅDER = [
     trin: [
       {
         overskrift: 'Hvad ved vi?',
-        spørg: 'Kan noget så stort som et molekyle også give striber?',
+        // Introen skal kunne forstås uden bænken i Kvantefysik (jeres svar 21. november 2026: "Jeg aner ikke, hvad der menes med striber")
+        spørg: 'Skyder man elektroner mod to smalle sprækker, lander de i mange striber, ikke i to bunker. Det sker, fordi de opfører sig som bølger. Det er det, du ser bag kortet. Kan noget så stort som et molekyle også give striber?',
         gæt: {
           valg: [
             { tekst: 'Ja', efter: 'Rigtigt. Selv klumper med over 7.000 atomer gør det.' },
