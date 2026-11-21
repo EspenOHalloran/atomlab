@@ -51,19 +51,21 @@ await page.waitForTimeout(2500);
 await page.screenshot({ path: UD + '/b1-oplad.png' });
 
 // Kør til laderen skifter til konstant spænding
-let cvAndelNormal = null;
-for (let s = 0; s < 40 && cvAndelNormal === null; s += 0.5) {
-  await kør(0.5);
+// Konstant spænding varer kun ca. 1-2,5 s i spillets tid (de sidste 3 af 24 ioner), så fasen læses, lige når den
+// er opdaget, i små skridt. Panelet er opdateret efter kør(), for det skrives, hver gang en ion flytter sig.
+let cvAndelNormal = null, cvFase = null;
+for (let s = 0; s < 40 && cvAndelNormal === null; s += 0.25) {
+  await kør(0.25);
   i = await info();
-  if (i.cv) cvAndelNormal = i.andel;
+  if (i.cv && i.andel < 1) { cvAndelNormal = i.andel; cvFase = await tekst('#batteriFase'); }
 }
 tjek('normal: konstant spænding omkring 85 %', cvAndelNormal !== null && cvAndelNormal > 0.8 && cvAndelNormal < 0.95, cvAndelNormal);
+tjek('konstant spænding: fasetekst', cvFase?.startsWith('Konstant spænding'), cvFase);
 await kør(1.5);
 const cv1 = await info();
 await page.waitForTimeout(600);
 tjek('konstant spænding: 4,20 V', (await tekst('#batteriSpænding')) === '4,20 V', await tekst('#batteriSpænding'));
 tjek('konstant spænding: under 1 A', cv1.ampere < 0.95, cv1.ampere);
-tjek('konstant spænding: fasetekst', (await tekst('#batteriFase')).startsWith('Konstant spænding'), await tekst('#batteriFase'));
 await kør(2);
 const cv2 = await info();
 tjek('konstant spænding: strømmen falder', cv2.ampere < cv1.ampere || cv2.andel === 1, `${cv1.ampere} → ${cv2.ampere}`);

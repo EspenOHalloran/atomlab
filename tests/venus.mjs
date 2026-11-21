@@ -212,8 +212,12 @@ await s.screenshot({ path: `${UD}/venus.png` });
   await F('sætDato', midnat);
   await F('sætUnder', 100);
   await F('kigPå', 62, 3.3, 2500);
+  // Kameraet drejer langsomt om stedet (autoRotate, efter rigtig tid, også i pause). Det flyttede Maxwell Montes ca.
+  // 5 px i sekundet, og søgningen efter sletten tager flere sekunder før skærmbilledet, så målefeltet ramte ved siden
+  // af (fejlede fra 18. november 2026). Drejningen stoppes, mens der måles (samme modul som programmet).
+  const drejFør = await fm(async () => { const { verden } = await import('/js/scene3d.js'); const før = verden.styring.autoRotate; verden.styring.autoRotate = false; return før; });
   await fm(() => atomlabTest.solsystem.spol(0.5));
-  await s.waitForTimeout(800); // (det første skærmbillede efter et nyt tal kan vise det gamle)
+  await s.waitForTimeout(800); // (det første skærmbillede efter et nyt tal kan vise det gamle, og dæmpningen falder til ro)
   const fri = ({ x, y }) => fm(([x, y]) => document.elementFromPoint(x, y)?.tagName === 'CANVAS', [x, y]);
   const mx = await F('skærm', 65.2, 3.3);
   let slette = null, hSlette = 99;
@@ -239,6 +243,7 @@ await s.screenshot({ path: `${UD}/venus.png` });
   const [dagUden] = await rød([slette]);
   tjek('på dagsiden ses gløden ikke (næsten samme lys på sletten med og uden)', Math.abs(dagMed - dagUden) < 8, [dagMed, dagUden]);
   await F('sætUnder', 0);
+  await fm(async (før) => { const { verden } = await import('/js/scene3d.js'); verden.styring.autoRotate = før; }, drejFør);
 }
 
 // ---------- V3: stederne under skyerne ----------
