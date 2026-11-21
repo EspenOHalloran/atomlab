@@ -1,4 +1,7 @@
 Copyright (c) 2010, Igino Marini (mail@iginomarini.com)
+Copyright 2011 The Old Standard Project Authors (amkryukov@gmail.com)
+
+(Den første gælder IM FELL English Roman i atomlab-fell.woff2, den anden Old Standard TT i atomlab-oldstandard.woff2 og atomlab-oldstandard-kursiv.woff2. Se KILDER.md.)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
