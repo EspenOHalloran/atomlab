@@ -66,6 +66,12 @@
 - archive.org's sideliste (`_page_numbers.json`) kan være forskudt: I Smithsonians *Sitzungsberichte* 1915 siger den s. 845 for `n921`, men billedet er s. 846. Se på billedet, før et `n` skrives. En skanning er heller ikke fri, fordi Wikipedia linker til den: Tjek licenslinjen.
 - "Tychos stjerne var en hvid dværg, der sugede gas fra sin nabostjerne." Det er type Ia (lysekkoet 2008), men om gassen kom fra en nabostjerne eller fra en anden hvid dværg, er ikke sikkert (nabostjernen Tycho G er omstridt). Skriv "fik nok gas fra en nabostjerne (forskerne er ikke helt enige)" (Tycho T3, 19. november 2026).
 - Et sted og en dato over et forord ("Knudstrup, foråret 1573") skal stå i kilden: Brevet til Pratensis slutter "Datæ Knusdorp die 5. Maj, Anno 1573" (n35). Slå det op på siden, før det skrives som fortællerens sted (Tycho T3).
+*Einstein (drejebogen 21. november 2026). Kilderne står i [drejebog-einstein.md](../drejebog-einstein.md), afsnit 15.*
+- "En lampe på 100 W bliver 4 milliardtedele gram lettere på en time." Ikke en lampe i stikkontakten: Den får energien ind ad ledningen. Det er det, der sender energien ud (batteriet og lampen, Solen), der mister masse, og det er al energien (lys og varme), ikke kun lyset.
+- "Einsteins regel er, at intet kan indhente lyset." Hans regel (s. 892) er, at lysets fart ikke afhænger af, hvordan lampen bevæger sig. At intet kan nå lysets fart, følger af teorien. Erindringen om at jagte en lysstråle som 16-årig er fra 1949.
+- "Mileva Marić, fysikeren." Hun læste fysik og matematik med Einstein i Zürich, men fik ikke eksamensbeviset (Wikipedia "Mileva Marić"). Skriv, hvad hun læste.
+- "Masse er, hvor meget stof der er i noget." Ikke helt: Lys i en kasse har også masse. Brug træghed (Einsteins eget ord, "Trägheit"): hvor svært noget er at sætte i gang.
+- Wikipedia giver to dødsdage for fotografen Ferdinand Schmutzer (26. august i boksen, 26. oktober i teksten). Året (1928) er det samme, og det er året, der tæller for ophavsretten.
 *Ole Rømer (V2, drejebogen 20. november 2026). Kilderne står i [fakta-videnskabsfolk/roemer.md](../fakta-videnskabsfolk/roemer.md).*
 - "Rømer forudsagde, at Io ville komme 10 minutter for sent den 16. november" (Wikipedia). *Phil. Trans.* (s. 894) siger kun, at han sagde det "fra begyndelsen af september", og at Io blev set 10 minutter for sent den 9. november. Skriv "i november".
 - "Rømer så selv Io komme for sent." Bladet siger "observed at Paris". Skriv "man så".
