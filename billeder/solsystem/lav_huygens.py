@@ -3,6 +3,13 @@
 # Kør:  python3 -I lav_huygens.py <PIA07234.mov> <ud-mappe>
 # (kræver Pillow og ffmpeg. Originalen ligger ikke i repoet. Hent den med
 #  curl -o PIA07234.mov https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia07/pia07234/PIA07234.mov)
+# Billedet fra jorden (M5b, huygens/jorden.webp):  python3 -I lav_huygens.py --jorden <PIA07232.tif> <ud-mappe>
+# (hent den med
+#  curl -o PIA07232.tif https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia07/pia07232/PIA07232.tif)
+# PIA07232 "First Color View of Titan's Surface" (credit NASA/JPL/ESA/University of Arizona) er Huygens' billede fra jorden
+# med farverne lagt på bagefter ud fra Huygens' måling af lyset. Originalen er 546 × 693 med en hvid kant om billedet. Vi
+# skærer kanten væk (316 × 628 punkter) og ændrer ellers intet. Stenenes plads i billedet står i JORDEN i
+# js/data/maaner/landhuygens.js og passer kun til dette udsnit.
 #
 # Kilden er NASA Photojournal PIA07234 "Descent Through Clouds to Surface" (credit: NASA/JPL/ESA/University of Arizona,
 # ESA skriver "ESA/NASA/JPL/University of Arizona"): en film af Huygens' egne sort-hvide billeder fra kameraet DISR
@@ -31,7 +38,28 @@ def navn(km):
     return f'luft-{round(km * 10):04d}.webp'
 
 
+JORDEN_UDSNIT = (115, 32, 431, 660)  # billedet uden den hvide kant (PIA07232.tif er 546 × 693)
+
+
+def jorden(tif, ud):
+    billede = Image.open(tif).convert('RGB')
+    if billede.size != (546, 693):
+        raise SystemExit(f'Uventet størrelse {billede.size}: tjek JORDEN_UDSNIT')
+    udsnit = billede.crop(JORDEN_UDSNIT)
+    # Tjek, at der ikke er hvid kant tilbage (kanten er næsten 255 i alle tre farver)
+    for x, y in [(0, 300), (udsnit.width - 1, 300), (150, 0), (150, udsnit.height - 1)]:
+        if min(udsnit.getpixel((x, y))) > 240:
+            raise SystemExit(f'Hvid kant ved {(x, y)}: tjek JORDEN_UDSNIT')
+    os.makedirs(ud, exist_ok=True)
+    mål = os.path.join(ud, 'jorden.webp')
+    udsnit.save(mål, 'WEBP', quality=88, method=6)
+    print(f'jorden.webp  {udsnit.size}  {os.path.getsize(mål) // 1024} KB')
+
+
 def main():
+    if len(sys.argv) == 4 and sys.argv[1] == '--jorden':
+        jorden(sys.argv[2], sys.argv[3])
+        return
     if len(sys.argv) < 3:
         print('Brug: python3 -I lav_huygens.py <PIA07234.mov> <ud-mappe>')
         sys.exit(1)
