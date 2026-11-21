@@ -1,7 +1,8 @@
 // Forløbet "Under isen" i Solsystemet (docs/drejebog-maaner.md, afsnit 3-4). Ren data uden Three.js, så det kan testes
 // i Node. Det, der rører scenen (snittet, lupen, magnetfeltet og kontakten "Hav"), står i js/maaner/underisen.js under
 // samme trin-id. M2 (20. november 2026) lavede trin 1-2, M3 (20. november 2026) trin 3-5 (fontænerne, tavlen og "Er der
-// liv?") og den valgte kernesætning (drejebogens afsnit 1, valgt 12. november 2026).
+// liv?") og den valgte kernesætning (drejebogens afsnit 1, valgt 12. november 2026). M4 (20. november 2026): trin 4's Gør er
+// flyveturen gennem fontænen (js/maaner/flyvetur.js).
 // Fakta (docs/fakta-maaner-liv.md afsnit 1 og drejebogens afsnit 16): isen 15-25 km, havet 60-150 km og "måske dobbelt
 // så meget vand som i alle Jordens have" (NASA, skøn), Galileos måling "omkring år 2000" (Kivelson m.fl. 2000).
 // Trin 3-5: Enceladus ca. 504 km bred, Cassini opdagede fontænerne i 2005, over 100 fontæner (Porco m.fl. 2014: 101) langs
@@ -20,6 +21,7 @@ export const UNDER_ISEN = {
     hav: 'Prøv også at slå havet fra, og se, hvad Galileo så måler.',
     modlys: 'Drej videre, til Enceladus står mørk foran Solen. Så lyser fontænerne.',
     tavle: 'Træk et kort hen på en række på tavlen, eller tryk på kortet og så på rækken.',
+    flyv: 'Tryk på "Flyv med Cassini" for at flyve gennem sprøjtet og fange iskorn og gas.',
   },
   trin: [
     {
@@ -74,7 +76,7 @@ export const UNDER_ISEN = {
           { tekst: 'Næsten alt, liv har brug for', svar: 'Se tavlen.' },
         ],
       },
-      gør: 'Send Cassini gennem sprøjtet, og læg de fire fund på tavlen.',
+      gør: 'Flyv med Cassini gennem sprøjtet, og læg de fire fund på tavlen.',
       så: 'Enceladus har næsten alt, liv har brug for, og det meste er målt. På Europa er det meste regnet eller gættet.',
       ord: [],
     },

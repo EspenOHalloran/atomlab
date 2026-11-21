@@ -1,13 +1,15 @@
-// "Under isen" (spor Måner, M2-M3, docs/drejebog-maaner.md): tallene, magnetfeltets model og tavlens kort i Node, og i
+// "Under isen" (spor Måner, M2-M4, docs/drejebog-maaner.md): tallene, magnetfeltets model og tavlens kort i Node, og i
 // browseren fænomenet lige efter Saturn, forløbets trin 1 (et træk i Europa skærer snittet, og det glider selv det sidste
 // stykke, lupen finder dybden), trin 2 (feltet vipper, havet laver et ekstra felt, der vender modsat, og uden hav er det
-// væk), trin 3 (modlyset ved Enceladus og snittet, der åbner sig selv), trin 4 (Cassini og tavlen: et kort på en forkert
-// række glider selv hen til den rigtige), trin 5 (Liv), "Det så du" og "Leg frit" (laboratoriets kontakter og valget af
+// væk), trin 3 (modlyset ved Enceladus og snittet, der åbner sig selv), trin 4 (M4: flyveturen gennem fontænen, hvor man
+// styrer højden, og højt oppe flyver Cassini igennem igen, og tavlen: et kort på en forkert række glider selv hen til den
+// rigtige), trin 5 (Liv), "Det så du" og "Leg frit" (laboratoriets kontakter og valget af
 // måne i bjælken), og konsollen er uden fejl.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { EUROPA, ENCELADUS, FELT, lagVed, lagGrænser, isBundSyd, feltVed, ekstraFelt, SIDE } from '../js/data/maaner/underisen.js';
 import { KORT, RÆKKER, FARVER, MÅNER, SELV, feltFarve, tavlensFarver, kortEfter } from '../js/data/maaner/tavle.js';
 import { UNDER_ISEN } from '../js/data/forloeb/under-isen.js';
+import { FLYVETUR, FUND, TEKST as FLYV, enTur, spoletFrem } from '../js/data/maaner/flyvetur.js';
 import { FÆNOMEN_IDER } from '../js/data/faenomener.js';
 import { forløbMed } from '../js/data/forloeb/liste.js';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -44,6 +46,11 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
   tjek('tavlen: Enceladus er grøn i vand, energi og stoffer, Europa gul i energi og stoffer, Liv grå for begge (det bedste kort vinder)', ['vand', 'energi', 'stoffer'].every((r) => fuld.enceladus[r] === 'målt') && fuld.europa.vand === 'målt'
     && fuld.europa.energi === 'regnet' && fuld.europa.stoffer === 'regnet' && fuld.europa.liv === 'ukendt' && fuld.enceladus.liv === 'ukendt'
     && før.enceladus.energi === 'ukendt' && feltFarve([{ farve: 'regnet' }, { farve: 'målt' }], 'vand') === 'målt', JSON.stringify(fuld));
+  // Flyveturen (M4): én tur ved Cassinis dybeste dyk fylder begge målere, højt oppe skal der flere ture til (rundt mål)
+  tjek('flyveturen: én tur i 49 km fylder begge målere, i 300 km ikke, og turen er spolet frem ca. 12 gange', enTur(49) >= 1 && enTur(49, 'gas') >= 1 && enTur(300) < 1 && enTur(300) > 0.3
+    && FLYVETUR.højde.min === 49 && Math.abs(spoletFrem() - 12) < 1, `${enTur(49)} ${enTur(300)} ${spoletFrem()}`);
+  tjek('flyveturen: de fire fund er de fire kort fra Cassini, og fosfatet siges at være fundet i E-ringen', FUND.length === 4 && SELV.every((k) => FUND.some((f) => f.kort === k.id)) && /E-ring/.test(FUND.find((f) => f.kort === 'enceladus-fosfat').tekst)
+    && FUND.every((f) => f.ved > 0 && f.ved <= 1 && f.tekst));
 }
 
 // ---------- I browseren ----------
@@ -137,9 +144,30 @@ if (!process.argv.includes('--uden-browser')) {
   await klik('.fl-næste');
   await vent((t) => t.trin() === 'tavle');
   tjek('trin 4: tavlen står under scenen med Europas magnetfelt og Enceladus\' fontæner og vugge', (await f((t) => t.tavle().vist && t.tavle().iForløb && t.tavle().lagte.length === 3)) && (await side.isVisible('#solsystem > .ui-tavle')));
+  // Flyveturen (M4): kameraet sidder bag Cassini, man trækker op for at komme tættere på sydpolen
   await klik('.fl-handling[data-knap="cassini"]');
-  await spol(5);
+  await spol(0.3);
+  const i_tur = await f((t) => t.flyvetur());
+  const afstand = Math.hypot(...i_tur.kamera.map((v, i) => v - i_tur.cassini[i]));
+  tjek('trin 4: "Flyv med Cassini" sætter kameraet tæt bag Cassini, og målerne står øverst i 3D-vinduet', i_tur.aktiv && afstand < 2 && (await side.isVisible('#solsystemVindue > .ui-flyvetur')), `${afstand} ${JSON.stringify(i_tur)}`);
+  const lær = await side.locator('#solsystemVindue').boundingBox();
+  await side.mouse.move(lær.x + lær.width / 2, lær.y + lær.height * 0.6);
+  await side.mouse.down();
+  await side.mouse.move(lær.x + lær.width / 2, lær.y + lær.height * 0.4, { steps: 5 });
+  await side.mouse.up();
+  const styret = await f((t) => t.flyvetur().hMål);
+  // Højt oppe er målerne ikke fulde efter én tur, så Cassini flyver igennem igen
+  await f((t) => t.sætHøjde(300));
+  await spol(FLYVETUR.varighed + 1);
+  const højt = await f((t) => t.flyvetur());
+  tjek('trin 4: et træk op bringer Cassini tættere på, og højt oppe flyver den igennem igen (målerne er ikke fulde)', styret < FLYVETUR.højde.start && højt.aktiv && højt.tur === 2 && højt.fundet.length < 4 && højt.målere.korn > 0.2
+    && (await side.textContent('#solsystemVindue .uf-linje')) === FLYV.igen, `${styret} ${JSON.stringify(højt)}`);
+  await f((t) => t.sætHøjde(49));
+  await spol(FLYVETUR.varighed + 1);
+  await f((t) => t.kameraFrem());
   const bunke = await f((t) => t.tavle().bunke);
+  const efter = await f((t) => t.flyvetur());
+  tjek('trin 4: lavt nede fyldes målerne, de fire kort falder ud, og kameraet er ude i modlyset igen', !efter.aktiv && bunke.length === 4 && (await f((t) => t.boks())) === 'modlys' && !(await side.isVisible('#solsystemVindue > .ui-flyvetur')), JSON.stringify(efter));
   const fra = await side.locator('#solsystem .tv-løs[data-kort="enceladus-brint"]').boundingBox();
   const til = await side.locator('#solsystem .tv-felt[data-raekke="stoffer"][data-maane="enceladus"]').boundingBox();
   await side.mouse.move(fra.x + fra.width / 2, fra.y + fra.height / 2);
@@ -148,7 +176,7 @@ if (!process.argv.includes('--uden-browser')) {
   await side.mouse.up();
   await spol(0.2);
   const brint = await f((t) => t.tavle());
-  tjek('trin 4: Cassini taber fire kort, og brint trukket til Stoffer glider selv til Energi med et vink', bunke.length === 4 && brint.lagte.includes('enceladus-brint') && brint.farver.enceladus.energi === 'målt' && brint.farver.enceladus.stoffer === 'ukendt'
+  tjek('trin 4: brint trukket til Stoffer glider selv til Energi med et vink', brint.lagte.includes('enceladus-brint') && brint.farver.enceladus.energi === 'målt' && brint.farver.enceladus.stoffer === 'ukendt'
     && (await side.textContent('#solsystem .forløb-linje .fl-vink'))?.includes('Energi'), JSON.stringify(brint.farver));
   await side.click('#solsystem .tv-løs[data-kort="enceladus-salt"]');
   await side.click('#solsystem .tv-række[data-raekke="stoffer"]');
@@ -168,7 +196,7 @@ if (!process.argv.includes('--uden-browser')) {
   await klik('.fl-næste');
   await vent((t) => t.fase() === 'slut');
   const veje = await side.$$eval('#solsystem .forløb-linje .fl-vej', (v) => v.map((b) => b.textContent));
-  tjek('"Det så du": den valgte kernesætning og tre veje (fontænerne ved Saturn, Leg frit, Tag turen igen)', (await side.textContent('#solsystem .forløb-linje .fl-tekst')) === UNDER_ISEN.kernesætning && veje.length === 3 && veje.some((v) => v.startsWith('Leg frit')), veje.join());
+  tjek('"Det så du": den valgte kernesætning og fire veje (Flyv gennem fontænen, fontænerne ved Saturn, Leg frit, Tag turen igen)', (await side.textContent('#solsystem .forløb-linje .fl-tekst')) === UNDER_ISEN.kernesætning && veje.length === 4 && veje[0].startsWith('Flyv gennem fontænen') && veje.some((v) => v.startsWith('Leg frit')), veje.join());
   await side.click('#solsystem .forløb-linje .fl-vej:has-text("Leg frit")');
   await vent((t) => !t.kører());
   await spol(1);
@@ -178,6 +206,14 @@ if (!process.argv.includes('--uden-browser')) {
   await side.click('#solsystem .bjælke-handling:has-text("Enceladus")');
   await f((t) => t.kameraFrem());
   tjek('laboratoriet: "Enceladus" i bjælken flyver til Enceladus i modlys, Europa skjules, og knappen er grå', (await f((t) => t.fokus() === 'enceladus' && !t.europaVist() && t.modlys().cos > t.modlys().grænse)) && (await side.isDisabled('#solsystem .bjælke-handling:has-text("Enceladus")')));
+  // Laboratoriet: "Flyv gennem fontænen" i bjælken flyver turen igen. Kortene ligger allerede på tavlen.
+  await side.click('#solsystem .bjælke-handling:has-text("Flyv gennem fontænen")');
+  await spol(0.3);
+  const lab = await f((t) => t.flyvetur());
+  await f((t) => t.sætHøjde(49));
+  await spol(FLYVETUR.varighed + 1);
+  await f((t) => t.kameraFrem());
+  tjek('laboratoriet: "Flyv gennem fontænen" flyver turen, og bagefter er alle kort stadig på tavlen og bunken tom', lab.aktiv && !(await f((t) => t.flyvetur().aktiv)) && (await f((t, n) => t.tavle().lagte.length === n && !t.tavle().bunke.length && t.boks() === 'modlys', KORT.length)), JSON.stringify(lab));
   tjek('konsollen er uden fejl', konsol.length === 0, konsol.join(' | '));
   await browser.close();
 }
