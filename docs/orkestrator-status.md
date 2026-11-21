@@ -2,11 +2,11 @@
 
 *Opdateret 20. november 2026 kl. ca. 22 dansk tid af orkestratoren for natten (session_01VDmQuADE7YByetGZE3Sd2Q, "Orkestrator · AtomLab (natten 20.-21. nov)"). Skemaet er trig_012gpYEzMFKG9WussGFBe8xh (hver time ved :55, fyrer ind i den session). Hold denne fil under ca. 5 KB.*
 
-## Natten 20.-21. november (jeres svar kl. ca. 21:55)
-- **Forbruget:** "Der er masser af forbrug tilbage. Ignorer den gamle status." Spærringen til 25. november gælder ikke længere.
-- **Køen:** Orkestratoren vælger, "gerne noget med land på månerne". Plan: Måner M3, så M4 (flyveturen), så M5a og M5b ("Land med Huygens"), én ad gangen. Den anden plads efter G1 del 2: Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter).
-- Orkestratoren svarer på go og spørgsmål for jer i M3 og G1 del 2 (jeres "ja"), og den kører fra denne session.
-- **Kører:** Måner · M3 (session_01VDmQu8bj9uCkZo8q7qc4eA), Grafik G1 del 2, automatisk kvalitetstrin på touch (session_01VDmQu7BCVpMX7q12HJKTnw).
+## Natten 20.-21. november (jeres svar kl. ca. 21:55: "masser af forbrug", "gerne land på månerne", orkestratoren vælger)
+- **Merget i nat (alle status prøve):** Måner M3 (#399), G1 del 2 kvalitetstrin på touch (#400), Gåderne løftet A-D (#401), Rømers drejebog V2 (#402), M4 Flyv gennem fontænen (#403, #405), Einsteins drejebog (#404), M5a Land med Huygens, nedstigningen (#406). M5b (landingen) kører kl. ca. 06 dansk tid.
+- **Valgt af orkestratoren, kan ændres af jer:** M4 styring A (man trækker højden, man kan ikke fejle). M5a: nedturen i sporets egen `js/maaner/nedtur.js`. Einsteins drejebog startet efter Rømer (jeres "du vurderer").
+- **Venter på jer:** Seks spørgsmål til Rømers bog og syv til Einsteins (sporets fil `docs/lige-nu/videnskabsfolkene.md`), rettighedslinjen for 1915-skanningen (før E4), Gåderne E (skinnen i skala med farvetone og højere på telefon, go?), målingen med `?maal` på Tab A11 og A56 efter G1 del 2, og prøven af hele "Under isen" og "Land med Huygens" med jeres søn.
+- Erfaringerne fra natten står i `docs/erfaringer/arbejdsmaade.md` (sidste punkt).
 
 ## Jeres beslutninger (gælder stadig)
 - Højst **to tunge sessioner** (Opus) ad gangen. Skift orkestrator ved ca. 250.000 tokens (`get_session` uden id, `context_usage`).
@@ -19,15 +19,7 @@
 - **S3b:** I henter selv de fire formmodeller (Mimas, Tethys, Dione, Rhea) fra sbn.psi.edu i en browser 20. november. Spejlene er tjekket: SBN-UMD og NAIF har dem ikke (NAIF har kun Enceladus).
 
 ## Jeres go (20. november 2026, gennemgangen i Småting)
-Orkestratoren må **fortsætte automatisk igen** (hver time, efter egen vurdering) og starte disse, når der er plads (højst to tunge ad gangen, én session pr. spor):
-1. ~~Kvantefysik forløb 1, PR 2 og PR 3~~: færdig (#376, #378).
-2. ~~Venus "Ned gennem skyerne"~~ (færdig, #374): (længere tid, ca. 3 s ekstra pr. tekst efter ordtal, og bladring ‹ ›): prompt i `docs/lige-nu/aabne-punkter.md` (punktet om Venus).
-3. ~~G4c Sort hul~~ (færdig, #380): go givet, målingen er fin (74 billeder/s på Tab A11, 57 på pc). Prompt i `docs/lige-nu/smaating.md` ("Næste i Gåderne").
-4. ~~Grafik G2~~ (#387) og ~~G3 Værkstedet~~ (#392), begge status prøve (mål med `?maal` på Tab A11 og pc). Stjerneovnen venter på go efter prøven. Så Mars ekstra 4 (L2, en session på jeres pc).
-5. ~~Måner · drejebogen~~ (færdig, #383, jeres svar i #384). ~~M2 "Under isen" del 1~~ (færdig, #395, status prøve). M3 kører (jeres go 20. november om aftenen), så M4, M5a og M5b (se "Natten" øverst).
-6. **Videnskabsfolkene V2 (Rømers drejebog, kun dokumenter):** **ikke spurgt i gennemgangen**, vent på jeres go. Einsteins drejebog: fire spørgsmål besvaret (se `docs/fakta-einstein-bog.md` afsnit 11), men vent på jeres go og rettighedslinjen for 1915-skanningen.
-- **Færdige 20. november om aftenen, alle status prøve:** G3 Værkstedet (#392), Tycho trin 2 og Betelgeuse (#394), Måner M2 (#395).
-- **Færdig 20. november:** Saturn S3b (PR #370), Kvantefysik forløb 1 PR 1-3 (PR #372, #376, #378), Venus "Ned gennem skyerne" (PR #374) og G4c Sort hul (PR #380), alle merget, status prøve og arkiveret. Mulig senere forbedring: Rhea i ca. 2,2 km (større fil hos PSI, I henter den i en browser).
+Orkestratoren må fortsætte automatisk (hver time, højst to tunge ad gangen, én pr. spor). Punkt 1-6 fra gennemgangen er lavet (#370-#406, se historikken i sporenes filer). Tilbage: Stjerneovnen (G3) venter på go efter prøven, så Mars ekstra 4 (L2, en session på jeres pc).
 
 ## Venter på jer
 - **Prøven med sønnen** i weekenden 22.-23. november ([guide-proeven.md](guide-proeven.md)). Blokerer Ild 2 og Kvantefysik forløb 2-3.
