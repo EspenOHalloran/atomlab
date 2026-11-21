@@ -924,4 +924,11 @@ export const ORDBOG = [
     former: ['fontæne', 'fontænen', 'fontæner', 'fontænerne', 'fontænernes'],
     tekst: 'Vand og is, der sprøjter ud i rummet gennem revner i isen på en måne. Vandet kommer fra et hav under isen. Enceladus har over 100 fontæner ved sydpolen.',
   },
+  // Spor Måner, "Land med Huygens" trin 3 (docs/drejebog-maaner.md afsnit 14). Metan koger ved ca. −162 °C og fryser ved ca.
+  // −182 °C (ved Jordens lufttryk), så ved Titans ca. −179 °C kan den være flydende. Regn og søer: fakta-maaner-liv.md afsnit 3.
+  {
+    id: 'metan', ord: 'Metan',
+    former: ['metan', 'metanen', 'metans'],
+    tekst: 'En gas af carbon og hydrogen (CH₄). Det meste af naturgassen er metan. På Titan er det så koldt (ca. −179 °C), at metan kan være flydende: Det regner med metan, og der er søer af metan og ethan.',
+  },
 ];

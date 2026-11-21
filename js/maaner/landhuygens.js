@@ -1,14 +1,19 @@
-// "Land med Huygens" i Solsystemet (spor Måner, M5a, docs/drejebog-maaner.md afsnit 7-8 og 10): Titan med den orange
-// dis (lavTitan fra js/solsystem/atmosfaere.js, læst og brugt, ikke ændret), Cassini med Huygens på siden, slippet,
-// turen ind i luften og turen ned i faldskærm (js/maaner/nedtur.js). Forløbet "Land med Huygens" har i M5a to trin
-// (teksterne i js/data/forloeb/land-med-huygens.js, tallene i js/data/maaner/landhuygens.js). M5b laver landingen.
+// "Land med Huygens" i Solsystemet (spor Måner, M5a og M5b, docs/drejebog-maaner.md afsnit 7-8 og 10): Titan med den
+// orange dis (lavTitan fra js/solsystem/atmosfaere.js, læst og brugt, ikke ændret), Cassini med Huygens på siden, slippet,
+// turen ind i luften, turen ned i faldskærm og landingen (js/maaner/nedtur.js), billedet fra jorden med de to sten
+// (js/maaner/jordbillede.js) og Cassinis modtagere A og B (js/maaner/kanaler.js). Forløbet "Land med Huygens" har fire
+// trin (teksterne i js/data/forloeb/land-med-huygens.js, tallene i js/data/maaner/landhuygens.js).
 //
 // Faserne: 'cassini' (25. december 2004, Huygens sidder på Cassini) → 'slip' (Huygens glider fri og drejer langsomt)
 // → 'rejse' ("Tre uger senere …") → 'ind' (14. januar 2005: Huygens suser ind i luften fra 1.270 km med et skær foran
 // varmeskjoldet, og kameraet følger med) → 'toning' (en orange toning) → 'ned' (i faldskærm, nedtur.js).
 // Trin 1 "slip": Tryk på "Slip Huygens". Færdig, når faldskærmen er ude.
-// Trin 2 "disen": Turen ned spoles (⏩ slås til), og Huygens' kamera viser billederne fra luften. Færdig under 1 km.
-// Laboratoriet: bladring mellem etaperne (Cassini, Faldskærmen, Jorden, Sletten) som Venus' tur ned, handlingen
+// Trin 2 "disen": Turen ned spoles (⏩ slås til), og Huygens' kamera viser billederne fra luften. Færdig under 1 km, og
+// turen holder ved VENT_KM (800 m), så trin 3 kan spørge om lampen, før den tændes.
+// Trin 3 "landet": "🪂 Land" (▶, 30 gange hurtigere): Lampen tændes 700 m oppe, Huygens lander (hul, hop, glid og vip), og
+// ESA's billede fra jorden fylder scenen. Færdig, når begge sten er målt.
+// Trin 4 "tabt": Cassinis modtagere A og B over billedet. Færdig, når begge er prøvet (B: 350 billeder, A: ingen lyttede).
+// Laboratoriet: bladring mellem etaperne (Cassini, Faldskærmen, Jorden, Sletten, Landet) som Venus' tur ned, handlingen
 // "Slip Huygens", kontakten "Huygens' kamera" og tidsknappen (▶ 30 gange, ⏩ 150 gange hurtigere end virkeligheden).
 // Rummet: 1 enhed = 100 km. Cassini og Huygens er tegnet meget større end de var, og Cassini står meget tættere på Titan.
 
@@ -18,9 +23,13 @@ import { hent } from '../solsystem/hent.js';
 import { lavTitan } from '../solsystem/atmosfaere.js';
 import { startForløb, stopForløb, starterSelv, kørerForløb, forløbVenter, forløbRørt, forløbVink, forløbTest } from '../forloeb.js';
 import { tagVentForløb } from '../gaa.js';
+import * as fremgang from '../fremgang.js';
 import { lavHuygens, lavNedtur } from './nedtur.js';
+import { lavJordbillede } from './jordbillede.js';
+import { lavKanaler } from './kanaler.js';
 import { LAND_MED_HUYGENS } from '../data/forloeb/land-med-huygens.js';
-import { KM_PR_ENHED, TITAN, START_KM, FALDSKÆRM_KM, SPOL, ETAPER, DATO, TEKST, TAL, SIDE, tidVed } from '../data/maaner/landhuygens.js';
+import { UNDER_ISEN } from '../data/forloeb/under-isen.js';
+import { KM_PR_ENHED, TITAN, START_KM, FALDSKÆRM_KM, VENT_KM, NED_S, SPOL, ETAPER, DATO, TEKST, TAL, SIDE, tidVed } from '../data/maaner/landhuygens.js';
 
 const RT = TITAN.r / KM_PR_ENHED; // ca. 25,7
 const SOL = new THREE.Vector3(-0.62, 0.3, 0.72).normalize(); // Solen fra venstre og lidt forfra
@@ -37,6 +46,8 @@ const T2 = new THREE.Vector3().crossVectors(N, T1).normalize();
 const SKRÅ = 0.7; // så meget kommer Huygens fra siden pr. km, den falder
 const SYNSVINKEL = 40; // grader lodret (samme som i scene3d.js)
 // Under faldskærmen: kameraet ser skråt ned på Huygens, så jorden kan ses bag den (og faldskærmen er med)
+const JORDEN_STEN_ID = ['stor', 'lille'];
+const JORDEN_STEN = JORDEN_STEN_ID.length;
 const NED_BOKS = { hb: 2.1, hh: 2.6, mål: new THREE.Vector3(0, 1.4, 0), retning: new THREE.Vector3(0.75, 0.72, 1).normalize() };
 
 // Cassini: kroppen, parabolen og magnetometerets stang (tegnet af os, som i js/maaner/underisen.js)
@@ -111,6 +122,13 @@ export default {
     const nedtur = lavNedtur({ vindue, kamera: verden.kamera });
     gruppe.add(nedtur.gruppe);
     hent('titan-2k.jpg', (t) => { if (aktiv) nedtur.sætKort(t); }, { farve: false, kanaler: 1, rundt: false, vendt: true });
+    // Billedet fra jorden (trin 3) og Cassinis modtagere (trin 4)
+    const jordbillede = lavJordbillede({
+      vindue,
+      påMålt: () => { if (kører() && forløbVenter()) forløbRørt(); },
+      påLuk: () => visFoto(false),
+    });
+    const kanaler = lavKanaler({ vindue, påSkift: () => { if (kører() && forløbVenter()) forløbRørt(); } });
     const skilt = document.createElement('div'); // "Tre uger senere …"
     skilt.className = 'lh-skilt';
     skilt.hidden = true;
@@ -127,6 +145,7 @@ export default {
     let turbo = 1; // "Vis mig" i trin 2: spoler ekstra hurtigt ned til 1 km
     let hIndgang = START_KM; // højden på vej ind (km)
     let etapeVist = -1;
+    let autoSten = 0; // "Vis mig" i trin 3: sekunder, til næste sten måles (0: slået fra)
     const fri = new THREE.Vector3(); // hvor Huygens glider hen ved slippet
     const p = new THREE.Vector3(), v = new THREE.Vector3();
     const NED = new THREE.Vector3(0, -1, 0);
@@ -151,8 +170,32 @@ export default {
       huygensVedCassini();
       nedtur.skjul();
       nedtur.sætDato(DATO.slip);
+      nedtur.sætGrænse(0);
+      visFoto(false);
+      kanaler.vis(false);
       kameraVedCassini();
     }
+    // Billedet fra jorden fylder scenen (og skjuler Huygens' kamera). I laboratoriet kan det lukkes med ✕
+    function visFoto(til) {
+      jordbillede.vis(til, { luk: !kører() });
+      nedtur.foto(til);
+    }
+    // Huygens er landet og står stille: Billedet fra jorden kommer frem
+    nedtur.påLandet = () => {
+      if (!aktiv) return;
+      visFoto(true);
+      if (kører() && trinNu === 'landet') forløbVink(LAND_MED_HUYGENS.vink.sten);
+      if (autoSten) autoSten = 0.5;
+    };
+    // Lad Huygens dale det sidste stykke og lande (trin 3: ▶, så lampen og landingen kan ses)
+    let landTrykket = false; // ("Land" er trykket i trin 3)
+    function land() {
+      if (!aktiv || fase !== 'ned' || nedtur.landet) return;
+      landTrykket = true;
+      nedtur.sætGrænse(0);
+      ctx.tiden('spil');
+    }
+    const landStartet = () => fase === 'ned' && (landTrykket || nedtur.landet || nedtur.h < VENT_KM - 1e-3);
     function slip() {
       if (fase !== 'cassini' || !aktiv) return;
       fase = 'slip';
@@ -194,8 +237,17 @@ export default {
       rum.visible = false;
       skilt.hidden = true;
       toning.classList.remove('vis');
+      visFoto(false);
+      kanaler.vis(false);
       nedtur.start({ åbn, til: sek });
       kameraNed();
+    }
+    // Direkte til Huygens på jorden med billedet (etapen "Landet", og når man går tilbage til trin 3-4)
+    function tilLandet() {
+      if (fase !== 'ned') tilNed(NED_S, false);
+      kanaler.vis(false);
+      nedtur.tilLandet();
+      visFoto(true);
     }
 
     // ---------- Kameraet ----------
@@ -222,13 +274,15 @@ export default {
       k.position.copy(s.target).addScaledVector(NED_BOKS.retning, afstandFor(NED_BOKS.hb, NED_BOKS.hh));
       s.minDistance = 2.5;
       s.maxDistance = 14;
+      s.maxPolarAngle = 1.4; // (kameraet kan ikke komme under jorden, når Huygens er landet)
       verden.målAfstand = null;
     }
-    const styringFør = { min: verden.styring.minDistance, max: verden.styring.maxDistance };
+    const styringFør = { min: verden.styring.minDistance, max: verden.styring.maxDistance, polar: verden.styring.maxPolarAngle };
 
     // ---------- Etaperne i laboratoriet (bladring) ----------
     function etape() {
       if (fase !== 'ned') return 0;
+      if (nedtur.landet) return ETAPER.length - 1;
       const h = nedtur.h;
       for (let i = ETAPER.length - 1; i >= 1; i--) if (h <= ETAPER[i].km + 0.01) return i;
       return 1;
@@ -237,6 +291,7 @@ export default {
       if (!aktiv || kørerForløb()) return;
       nr = THREE.MathUtils.clamp(nr, 0, ETAPER.length - 1);
       if (nr === 0) tilCassini();
+      else if (ETAPER[nr].id === 'landet') { tilNed(NED_S, false); jordbillede.nulstil(); tilLandet(); }
       else tilNed(tidVed(ETAPER[nr].km), nr === 1);
       etapeVist = -1;
     }
@@ -245,6 +300,7 @@ export default {
     const styring = [
       { tekst: TEKST.kamera, til: true, skift: (til) => nedtur.kontakt(til) },
       { handling: () => slip(), tekst: TEKST.slip, skjul: () => Boolean(kørerForløb()) || fase !== 'cassini' },
+      { handling: () => visFoto(true), tekst: TEKST.foto, skjul: () => Boolean(kørerForløb()) || !nedtur.stille || jordbillede.vist },
     ];
 
     // ---------- Forløbet "Land med Huygens" (M5a: trin 1-2) ----------
@@ -252,6 +308,15 @@ export default {
     let tilLab = false;
     let ventVink = 0;
     let trinNu = null; // forløbets trin, mens det kører
+    // En knap med data-gaa (fx Christiaan Huygens' bog i Opdagelserne): gaa.js' lytter på hele siden tager den
+    function gåTil(mål) {
+      const b = document.createElement('button');
+      b.dataset.gaa = mål;
+      b.hidden = true;
+      skærm.append(b);
+      b.click();
+      b.remove();
+    }
     const FL_DEL = {
       trin: {
         slip: {
@@ -264,6 +329,8 @@ export default {
           start: () => {
             trinNu = 'disen';
             if (fase !== 'ned') tilNed(0);
+            else if (nedtur.landet || nedtur.h < VENT_KM) tilNed(tidVed(5), false); // (tilbage fra trin 3)
+            nedtur.sætGrænse(VENT_KM);
             nedtur.kontakt(true);
             sætKontakt(TEKST.kamera, true);
             turbo = 1;
@@ -279,18 +346,79 @@ export default {
             turbo = Math.max(1, (tidVed(0.95) - nedtur.s) / (4 * SPOL.hurtig));
           },
         },
+        landet: {
+          start: () => {
+            trinNu = 'landet';
+            kanaler.vis(false);
+            autoSten = 0;
+            landTrykket = false;
+            nedtur.landFart = 1;
+            if (fase === 'ned' && nedtur.landet) {
+              // (tilbage fra trin 4: Huygens står på jorden, og stenene kan måles igen)
+              jordbillede.nulstil();
+              tilLandet();
+              ventVink = 0;
+            } else {
+              if (fase !== 'ned' || nedtur.h < VENT_KM - 1e-3) tilNed(tidVed(VENT_KM), false);
+              nedtur.sætGrænse(VENT_KM);
+              jordbillede.nulstil();
+              ctx.tiden('spil');
+              ventVink = 10;
+            }
+          },
+          get knapper() { return [{ id: 'land', tekst: TEKST.land, gør: land, aktiv: () => !landStartet() }]; },
+          færdig: () => jordbillede.målt.size === JORDEN_STEN,
+          // "Vis mig": Huygens lander hurtigt, og bagefter måles stenene én ad gangen
+          visMig: () => {
+            if (!nedtur.landet) {
+              land();
+              turbo = Math.max(1, (NED_S - nedtur.s) / (1.6 * SPOL.spil));
+              nedtur.landFart = 2;
+              autoSten = -1; // (venter på landingen)
+            } else autoSten = 0.3;
+          },
+        },
+        tabt: {
+          start: () => {
+            trinNu = 'tabt';
+            autoSten = 0;
+            if (!(fase === 'ned' && nedtur.stille)) tilLandet();
+            jordbillede.vis(true, { luk: false });
+            kanaler.nulstil();
+            kanaler.vis(true);
+            ventVink = 10;
+          },
+          knapper: [],
+          færdig: () => kanaler.færdig,
+          visMig: () => { kanaler.tænd('B'); kanaler.tænd('A'); },
+        },
       },
-      veje: [
-        // (den samme knap som under "Gå videre" i panelet, så skallen flyver til stedet i Saturns træ)
-        { tekst: 'Se Titan ved Saturn', gør: () => {
-          const knap = skærm.querySelector('.højre-panel [data-gaa="solsystem:saturn:titan"]');
-          if (knap) knap.click(); else ctx.vælgFænomen('saturn');
-        } },
-        { tekst: 'Leg frit', her: true, gør: () => requestAnimationFrame(() => { if (aktiv) { centrerVindue(); tilLab = false; } }) },
-        { tekst: 'Tag turen igen', her: true, gør: () => requestAnimationFrame(() => { if (aktiv) { tilLab = false; startTur(); } }) },
-      ],
+      slutTekst: () => LAND_MED_HUYGENS.slut,
+      // Vejene videre (drejebogens afsnit 8 og 11): bogen om Christiaan Huygens, Titan ved Saturn, Leg frit og "Tag turen
+      // igen", eller "Under isen", hvis den tur ikke er taget
+      get veje() {
+        return [
+          { tekst: 'Læs om ham, der fandt Titan', primær: true, gør: () => gåTil('opdagelser:huygens') },
+          // (den samme knap som under "Gå videre" i panelet, så skallen flyver til stedet i Saturns træ)
+          { tekst: 'Se Titan ved Saturn', gør: () => {
+            const knap = skærm.querySelector('.højre-panel [data-gaa="solsystem:saturn:titan"]');
+            if (knap) knap.click(); else ctx.vælgFænomen('saturn');
+          } },
+          { tekst: 'Leg frit', her: true, gør: () => requestAnimationFrame(() => { if (aktiv) { centrerVindue(); tilLab = false; visFoto(nedtur.stille); } }) },
+          fremgang.forløbTaget(UNDER_ISEN.id)
+            ? { tekst: 'Tag turen igen', her: true, gør: () => requestAnimationFrame(() => { if (aktiv) { tilLab = false; startTur(); } }) }
+            : { tekst: 'Under isen', gør: () => gåTil('solsystem:underisen') },
+        ];
+      },
       layout: () => { if (!kører() && !tilLab) return; if (fase === 'ned') kameraNed(); else if (fase === 'cassini') kameraVedCassini(); },
-      slut: () => { tilLab = true; turbo = 1; ventVink = 0; trinNu = null; },
+      slut: () => {
+        tilLab = true; turbo = 1; ventVink = 0; trinNu = null; autoSten = 0;
+        nedtur.landFart = 1;
+        nedtur.sætGrænse(0);
+        kanaler.vis(false);
+        // (billedet fra jorden får sit ✕, når forløbet er væk)
+        if (jordbillede.vist) requestAnimationFrame(() => { if (aktiv && jordbillede.vist) visFoto(true); });
+      },
     };
     function startTur() {
       if (!aktiv) return;
@@ -349,7 +477,14 @@ export default {
         // I faldskærm: tiden spoles (▶ 30 gange, ⏩ 150 gange hurtigere, "Vis mig" endnu hurtigere)
         const spol = fase === 'ned' ? dt * (hurtig ? SPOL.hurtig : SPOL.spil) * turbo : 0;
         nedtur.opdater(dt, spol);
-        if (turbo > 1 && nedtur.h <= 0.95) turbo = 1;
+        if (turbo > 1 && nedtur.h <= 0.95 && trinNu !== 'landet') turbo = 1;
+        if (nedtur.landet && turbo > 1) turbo = 1;
+        kanaler.opdater(dt);
+        // "Vis mig" i trin 3: stenene måles én ad gangen, når billedet er fremme
+        if (autoSten > 0 && jordbillede.vist && (autoSten -= dt) <= 0) {
+          const næste = JORDEN_STEN_ID.find((id) => !jordbillede.målt.has(id));
+          if (næste) { jordbillede.mål(næste); autoSten = 0.6; } else autoSten = 0;
+        }
 
         // Underteksterne i laboratoriet (etaperne), og et vink i forløbet, hvis man venter
         if (!kørerForløb()) {
@@ -359,8 +494,12 @@ export default {
             const e = ETAPER[nr];
             visFase(e.titel, e.tekst, [nr + 1, ETAPER.length]);
           }
-        } else if (kører() && forløbVenter() && ventVink > 0 && (trinNu === 'disen' || fase === 'cassini') && (ventVink -= dt) <= 0) {
-          forløbVink(trinNu === 'slip' ? LAND_MED_HUYGENS.vink.slip : LAND_MED_HUYGENS.vink.kamera);
+        } else if (kører() && forløbVenter() && ventVink > 0 && (ventVink -= dt) <= 0) {
+          const v = LAND_MED_HUYGENS.vink;
+          if (trinNu === 'slip' && fase === 'cassini') forløbVink(v.slip);
+          else if (trinNu === 'disen') forløbVink(v.kamera);
+          else if (trinNu === 'landet' && !landStartet()) forløbVink(v.land);
+          else if (trinNu === 'tabt') forløbVink(v.kanaler);
         }
       },
       stop() {
@@ -368,6 +507,9 @@ export default {
         if (kører()) stopForløb();
         verden.styring.minDistance = styringFør.min;
         verden.styring.maxDistance = styringFør.max;
+        verden.styring.maxPolarAngle = styringFør.polar;
+        jordbillede.stop();
+        kanaler.stop();
         skilt.remove();
         toning.remove();
         nedtur.stop();
@@ -387,6 +529,13 @@ export default {
         hurtig: () => hurtig,
         turbo: () => turbo,
         rumVist: () => rum.visible,
+        land,
+        tilLandet,
+        jorden: () => ({ vist: jordbillede.vist, målt: [...jordbillede.målt], luk: jordbillede.el.classList.contains('med-luk') }),
+        målSten: (id) => jordbillede.mål(id),
+        kanaler: () => kanaler.test(),
+        tænd: (k) => kanaler.tænd(k),
+        veje: () => FL_DEL.veje.map((v) => v.tekst),
         huygens: () => ({ vist: huygens.gruppe.visible && rum.visible, pos: huygens.gruppe.position.toArray(), hIndgang }),
         skær: () => skær.visible,
       },

@@ -157,7 +157,7 @@ export const SIDER = {
       },
       {
         titel: 'Har nogen været der?',
-        tekst: '<p>Ja. Sonden Huygens landede på Titan 14. januar 2005. Den havde fløjet med Cassini hele vejen til Saturn.</p>',
+        tekst: `<p>Ja. Sonden Huygens landede på Titan 14. januar 2005. Den havde fløjet med Cassini hele vejen til Saturn. ${gå('solsystem:landhuygens', 'Land med Huygens')}</p>`, // (spor Måner, M5b)
       },
     ],
     videre: [sted('rhea', 'Rhea'), sted('maaner', 'Alle månerne')],

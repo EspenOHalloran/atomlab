@@ -11,17 +11,25 @@
 // - Måleren øverst i 3D-vinduet: datoen, søjlen fra jorden til 160 km, højden og uret ("I faldskærmen", et tryk skifter
 //   til "Hørt på Jorden"). Huygens' kamera nederst til venstre: Huygens' egne billeder, det seneste for højden (ESA's
 //   credit står under). Et tryk gør det større.
+// - Landingen (M5b): 700 m oppe tændes lampen (et varmt skær under sonden), og under ca. 150 m kommer jorden frem under
+//   Huygens som en flad jord med små sten (tegnet). Ved jorden laver Huygens et lille hul, hopper, glider 30-40 cm og
+//   vipper (LANDING), og faldskærmen falder sammen ved siden af. Så siger nedturen til (påLandet), og landhuygens.js viser
+//   ESA's billede fra jorden.
 // Tallene og tidsplanen står i js/data/maaner/landhuygens.js.
 
 import * as THREE from 'three';
 import { LAV_KVALITET, TEST_HURTIG, ROLIG, lavPrikTekstur } from '../scene3d.js';
-import { TITAN, FALDSKÆRM_KM, SE_JORDEN_KM, STOP_KM, højdeVed, tidVed, fartVed, skærmVed, urTekst, billedeVed, BILLEDER, KREDIT, DATO } from '../data/maaner/landhuygens.js';
+import { TITAN, FALDSKÆRM_KM, SE_JORDEN_KM, LAMPE_KM, NED_S, LANDING, højdeVed, tidVed, fartVed, skærmVed, urTekst, billedeVed, BILLEDER, KREDIT, DATO } from '../data/maaner/landhuygens.js';
 
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
 const SIGT = 15.8; // km: jorden lige under Huygens anes 30 km oppe (e^(−30/15,8) ≈ 0,15) og ses klart under 5 km
 const SØJLE_KM = FALDSKÆRM_KM; // søjlen går fra jorden til 160 km
 const STOR = 1.5, LILLE = 0.55; // faldskærmens størrelse i tegningen (8,3 m og 3 m)
 const KUPPEL_R = 600; // kuplens radius (kameraets far er 3000)
+// Ved jorden: Huygens' modul er ca. 1,3 m bredt og 0,7 enheder i tegningen, så 1 enhed er ca. 1,86 m
+const M_PR_ENHED = 1.86;
+const JORD_KM = 0.15; // under denne højde kommer jorden under Huygens frem (den toner ind ned til 50 m)
+const LAND_S = 2.8; // sekunder på skærmen fra stødet, til Huygens står stille (hul, hop, glid og vip)
 
 // Huygens: modulet (det, der landede) og varmeskjoldet og bagdækslet, som kun er med i rummet og på vej ind
 export function lavHuygens() {
@@ -125,6 +133,51 @@ const KUPPEL_FRAGMENT = /* glsl */ `
     gl_FragColor = vec4(c * uLys, 1.0);
   }`;
 
+// Jorden lige under Huygens (de sidste ca. 150 m): sand og små sten (tegnet efter billedet fra jorden), lyset fra disen og
+// lampens skær. Den toner ud mod kanten, så kuplens jord ses længere væk.
+const JORD_VERTEX = /* glsl */ `
+  varying vec2 vP;
+  void main() {
+    vP = position.xy;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }`;
+const JORD_FRAGMENT = /* glsl */ `
+  uniform float uSynlig, uLampe, uLys;
+  uniform vec2 uLampePos;
+  varying vec2 vP;
+  float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  float stoej(vec2 p) {
+    vec2 i = floor(p), f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+  }
+  // Små runde sten: afstanden til den nærmeste sten i et gitter
+  float sten(vec2 p) {
+    vec2 i = floor(p), f = fract(p);
+    float d = 1.0;
+    for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++) {
+      vec2 g = vec2(float(x), float(y));
+      vec2 o = vec2(hash(i + g), hash(i + g + 17.0));
+      float r = hash(i + g + 9.0) < 0.55 ? 0.0001 : 0.15 + 0.2 * hash(i + g + 5.0); // (ikke en sten i hver rude)
+      d = min(d, length(g + o - f) / r);
+    }
+    return d;
+  }
+  void main() {
+    float n = 0.6 * stoej(vP * 0.8) + 0.4 * stoej(vP * 3.1);
+    vec3 c = mix(vec3(0.33, 0.2, 0.1), vec3(0.5, 0.33, 0.17), n);
+    // Stenene er 4-15 cm (ca. 0,02-0,08 enheder), så de tegnes kun tæt på, ellers flimrer de
+    float st = sten(vP * 9.0);
+    float naer = 1.0 - smoothstep(2.0, 7.0, length(vP));
+    c = mix(c, vec3(0.6, 0.43, 0.25), (1.0 - smoothstep(0.7, 1.0, st)) * 0.75 * naer);
+    c *= uLys;
+    // Lampen: et varmt skær lige under Huygens
+    float l = exp(-dot(vP - uLampePos, vP - uLampePos) / 1.6) * uLampe;
+    c += vec3(0.5, 0.36, 0.18) * l;
+    float a = uSynlig * (1.0 - smoothstep(14.0, 40.0, length(vP)));
+    gl_FragColor = vec4(c, a);
+  }`;
+
 export function lavNedtur({ vindue, kamera }) {
   const gruppe = new THREE.Group();
   gruppe.visible = false;
@@ -181,6 +234,64 @@ export function lavNedtur({ vindue, kamera }) {
   kornP.frustumCulled = false;
   gruppe.add(kornP);
 
+  // ---------- Jorden, lampen, hullet og støvet (M5b) ----------
+  const BUND = -huygens.r * 0.43; // modulets bund (i system-gruppen)
+  const jordMat = new THREE.ShaderMaterial({
+    uniforms: { uSynlig: { value: 0 }, uLampe: { value: 0 }, uLys: { value: 1 }, uLampePos: { value: new THREE.Vector2() } },
+    vertexShader: JORD_VERTEX,
+    fragmentShader: JORD_FRAGMENT,
+    transparent: true,
+    depthWrite: false,
+  });
+  const jord = new THREE.Mesh(new THREE.CircleGeometry(40, 48), jordMat);
+  jord.rotation.x = -Math.PI / 2;
+  jord.renderOrder = -5;
+  jord.visible = false;
+  gruppe.add(jord);
+  // Lampen: en lille lysende prik under bunden og en svag kegle af lys ned mod jorden
+  const lampe = new THREE.Group();
+  const pære = new THREE.Mesh(new THREE.SphereGeometry(0.035, 10, 8), new THREE.MeshBasicMaterial({ color: 0xfff1c8 }));
+  pære.position.y = BUND - 0.01;
+  const keglGeo = new THREE.ConeGeometry(0.5, 1, 24, 1, true);
+  keglGeo.translate(0, -0.5, 0); // spidsen i origo, keglen nedad
+  const kegle = new THREE.Mesh(keglGeo, new THREE.MeshBasicMaterial({ color: 0xffc070, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+  kegle.position.y = BUND;
+  lampe.add(pære, kegle);
+  lampe.visible = false;
+  system.add(lampe);
+  // Hullet, Huygens lavede (12 cm dybt): en mørk plet på jorden, hvor den ramte
+  const hulC = document.createElement('canvas');
+  hulC.width = hulC.height = 64;
+  const hg = hulC.getContext('2d');
+  const hgrad = hg.createRadialGradient(32, 32, 0, 32, 32, 32);
+  hgrad.addColorStop(0, 'rgba(25,12,4,0.85)');
+  hgrad.addColorStop(0.55, 'rgba(40,20,8,0.6)');
+  hgrad.addColorStop(0.8, 'rgba(150,100,60,0.25)');
+  hgrad.addColorStop(1, 'rgba(150,100,60,0)');
+  hg.fillStyle = hgrad;
+  hg.fillRect(0, 0, 64, 64);
+  const hulTekstur = new THREE.CanvasTexture(hulC);
+  const hul = new THREE.Mesh(new THREE.CircleGeometry(huygens.r * 1.05, 32), new THREE.MeshBasicMaterial({ map: hulTekstur, transparent: true, depthWrite: false }));
+  hul.rotation.x = -Math.PI / 2;
+  hul.renderOrder = -4;
+  hul.position.y = BUND + 0.004; // (på jorden, når Huygens er landet)
+  hul.visible = false;
+  gruppe.add(hul);
+  // Støvet ved stødet: en ring af korn, der breder sig og falder til ro
+  const STØV = TEST_HURTIG ? 24 : 60;
+  const støvPos = new Float32Array(STØV * 3), støvFart = [];
+  for (let i = 0; i < STØV; i++) {
+    const a = (i / STØV) * Math.PI * 2 + Math.random() * 0.3;
+    støvFart.push([Math.cos(a) * (0.6 + Math.random() * 0.6), 0.3 + Math.random() * 0.5, Math.sin(a) * (0.6 + Math.random() * 0.6)]);
+  }
+  const støvGeo = new THREE.BufferGeometry();
+  støvGeo.setAttribute('position', new THREE.BufferAttribute(støvPos, 3));
+  const støvMat = new THREE.PointsMaterial({ size: 0.09, map: lavPrikTekstur(true), color: 0xd9a46c, transparent: true, opacity: 0, depthWrite: false });
+  const støv = new THREE.Points(støvGeo, støvMat);
+  støv.frustumCulled = false;
+  støv.visible = false;
+  gruppe.add(støv);
+
   // ---------- Måleren og Huygens' kamera (HTML i 3D-vinduet) ----------
   const ui = document.createElement('div');
   ui.className = 'ui-huygens';
@@ -229,6 +340,13 @@ export function lavNedtur({ vindue, kamera }) {
   const sete = new Set(); // billeder, der er vist (testene)
   let tid = 0, uiTid = 0;
   let sidsteUr = '';
+  let grænse = 0; // turen stopper i denne højde (km). Forløbets trin 2 holder ved VENT_KM, ellers lander Huygens
+  let landet = false; // Huygens har ramt jorden
+  let landTid = 0; // sekunder på skærmen siden stødet
+  let stille = false; // landingen er slut (Huygens står stille, og billedet fra jorden kan vises)
+  let fotoVist = false; // billedet fra jorden fylder scenen (så er Huygens' kamera skjult)
+  let landFart = 1; // "Vis mig" lander hurtigere
+  let påLandet = null;
 
   function tegnUr(nu = false) {
     const t = urTekst(s, jorden);
@@ -246,7 +364,7 @@ export function lavNedtur({ vindue, kamera }) {
   }
   function visBillede() {
     const b = billedeVed(h);
-    const vis = Boolean(b) && kameraTil && gruppe.visible;
+    const vis = Boolean(b) && kameraTil && gruppe.visible && !fotoVist;
     kam.hidden = !vis;
     if (!b || b === billede) return;
     billede = b;
@@ -257,10 +375,63 @@ export function lavNedtur({ vindue, kamera }) {
     kam.classList.toggle('jorden', b.km <= SE_JORDEN_KM + 1 && b.km >= SE_JORDEN_KM - 1);
   }
 
+  // Huygens og faldskærmen, som de hænger i luften (før landingen, og når man går tilbage)
+  function iLuften() {
+    landet = stille = false;
+    landTid = 0;
+    system.position.set(0, 0, 0);
+    system.rotation.set(0, 0, 0);
+    skærm.rotation.set(0, 0, 0);
+    skærm.position.set(0, 0.55, 0);
+    hul.visible = støv.visible = false;
+  }
+  // Landingen: hul, hop, glid og vip (u: sekunder siden stødet). Til sidst står Huygens stille
+  const HUL = (LANDING.hulCm / 100) / M_PR_ENHED, GLID = (LANDING.glidCm / 100) / M_PR_ENHED;
+  function landingVed(u) {
+    const hop = u < 0.12 ? -HUL * (u / 0.12) : u < 0.7 ? -HUL + (HUL + 0.11) * Math.sin(Math.PI * (u - 0.12) / 0.58) : 0;
+    const glid = GLID * THREE.MathUtils.smoothstep(u, 0.12, 1.3);
+    const vip = u > 0.6 ? 0.09 * Math.exp(-(u - 0.6) * 1.7) * Math.sin((u - 0.6) * 9) : 0;
+    system.position.set(glid, Math.max(-HUL, hop), 0);
+    system.rotation.set(0, 0, vip);
+    // Faldskærmen lægger sig ned ved siden af og falder sammen
+    const f = THREE.MathUtils.smoothstep(u, 0.1, LAND_S);
+    skærm.rotation.z = -1.45 * f;
+    skærm.position.set(0.25 * f, 0.55 - 0.45 * f, 0);
+    skærm.scale.y *= 1 - 0.7 * f;
+    // Støvet
+    støv.visible = u < 1.8 && !ROLIG;
+    støvMat.opacity = 0.7 * Math.max(0, 1 - u / 1.8);
+    for (let i = 0; i < STØV; i++) {
+      const [vx, vy, vz] = støvFart[i];
+      støvPos[i * 3] = vx * u;
+      støvPos[i * 3 + 1] = BUND + Math.max(0, vy * u - 0.5 * u * u);
+      støvPos[i * 3 + 2] = vz * u;
+    }
+    støvGeo.attributes.position.needsUpdate = true;
+  }
+
   return {
     gruppe,
     ui,
     get s() { return s; },
+    get landet() { return landet; },
+    get stille() { return stille; },
+    set påLandet(f) { påLandet = f; },
+    set landFart(x) { landFart = x; },
+    // Turen stopper i højden km (0: Huygens lander)
+    sætGrænse(km) { grænse = km; },
+    // Billedet fra jorden fylder scenen (skjuler Huygens' kamera)
+    foto(til) { fotoVist = til; ui.classList.toggle('foto', til); visBillede(); },
+    // Direkte til Huygens på jorden (etapen "Landet" og forløbets trin 3-4, når man kommer tilbage)
+    tilLandet() {
+      grænse = 0;
+      this.sæt(NED_S);
+      landet = stille = true;
+      landTid = LAND_S;
+      landingVed(LAND_S);
+      støv.visible = false;
+      hul.visible = true;
+    },
     get h() { return h; },
     get billede() { return billede; },
     get jorden() { return jorden; },
@@ -282,8 +453,9 @@ export function lavNedtur({ vindue, kamera }) {
       kam.classList.remove('stor');
     },
     sæt(sek) {
-      s = Math.min(Math.max(0, sek), tidVed(STOP_KM)); // (M5a: turen stopper ved STOP_KM, landingen kommer i M5b)
+      s = Math.min(Math.max(0, sek), grænse > 0 ? tidVed(grænse) : NED_S);
       h = højdeVed(s);
+      if (s < NED_S && landet) iLuften();
       tegnUI();
       visBillede();
     },
@@ -292,8 +464,14 @@ export function lavNedtur({ vindue, kamera }) {
     opdater(dt, spol) {
       if (!gruppe.visible) return;
       tid += dt;
-      if (h > STOP_KM + 1e-6) this.sæt(s + spol);
-      kuppelMat.uniforms.uH.value = h;
+      if (!landet && h > grænse + 1e-6) this.sæt(s + spol);
+      // Stødet: Huygens rammer jorden
+      if (!landet && s >= NED_S) {
+        landet = true;
+        landTid = 0;
+        hul.visible = true;
+      }
+      kuppelMat.uniforms.uH.value = Math.max(h, JORD_KM);
       kuppelMat.uniforms.uLys.value = 0.78 + 0.22 * Math.min(1, h / SØJLE_KM);
       // Faldskærmen folder sig ud og skiftes til den lille efter 15 min
       if (åbner < 1) åbner = Math.min(1, åbner + dt / 1.1);
@@ -302,8 +480,27 @@ export function lavNedtur({ vindue, kamera }) {
       const str = THREE.MathUtils.lerp(0.15, mål, e);
       skærm.scale.setScalar(str);
       skærm.scale.x = skærm.scale.z = str * (0.4 + 0.6 * e);
+      // Jorden under Huygens og lampen (fra 700 m)
+      const hM = (h * 1000) / M_PR_ENHED; // højden i tegningens enheder
+      jord.visible = h < JORD_KM;
+      jord.position.y = BUND - hM;
+      jordMat.uniforms.uSynlig.value = THREE.MathUtils.smoothstep(JORD_KM - h, 0, JORD_KM - 0.05);
+      jordMat.uniforms.uLys.value = kuppelMat.uniforms.uLys.value;
+      lampe.visible = h <= LAMPE_KM + 1e-9;
+      jordMat.uniforms.uLampe.value = lampe.visible ? 1 : 0;
+      kegle.scale.set(0.5, Math.min(hM + 0.02, 1.6), 0.5);
+      kegle.material.opacity = 0.09;
+      if (landet) {
+        if (!stille) {
+          landTid += dt * landFart;
+          if (landTid >= LAND_S || ROLIG) { landTid = LAND_S; stille = true; }
+          landingVed(landTid);
+          if (stille) { støv.visible = false; påLandet?.(); }
+        } else landingVed(LAND_S);
+        jordMat.uniforms.uLampePos.value.set(system.position.x, 0);
+      }
       // Huygens drejer langsomt og gynger lidt (mest højt oppe, hvor vinden er stærk)
-      if (!ROLIG) {
+      if (!ROLIG && !landet) {
         huygens.gruppe.rotation.y += dt * 0.6;
         const gyng = 0.02 + 0.05 * Math.min(1, h / 120);
         system.rotation.z = gyng * Math.sin(tid * 1.3);
@@ -329,6 +526,7 @@ export function lavNedtur({ vindue, kamera }) {
       vist: gruppe.visible, s, h, skærm: skærmVed(s), åbner, jorden, ur: urKnap.textContent.replace(/\s+/g, ' ').trim(),
       kamera: !kam.hidden, billede: billede?.km ?? null, stor: kam.classList.contains('stor'), set: [...sete], dato: datoEl.textContent,
       måler: !måler.hidden, højdeTekst: højdeEl.textContent, kort: kuppelMat.uniforms.uHarKort.value === 1,
+      lampe: lampe.visible, jord: jord.visible, landet, stille, hul: hul.visible, grænse, foto: fotoVist,
     }),
     skiftUr: () => urKnap.click(),
     stop() {
@@ -336,6 +534,8 @@ export function lavNedtur({ vindue, kamera }) {
       kam.remove();
       gruppe.traverse((o) => { o.geometry?.dispose(); o.material?.dispose?.(); });
       kornMat.map?.dispose();
+      støvMat.map?.dispose();
+      hulTekstur.dispose();
     },
   };
 }
