@@ -52,6 +52,20 @@ PERSONER = {
         'baggrund': 0.3,
         'detalje': 1.4,
     },
+    'einstein': {
+        # Ferdinand Schmutzer, foto 1921 (Einstein under et foredrag i Wien), restaureret af Adam Cuerden efter Østrigs
+        # Nationalbiblioteks eksemplar. Commons: PD-Austria og PD-old-auto-expired (Schmutzer døde 1928). Både et
+        # fotografisk værk (70 år efter fotografens død) og et fotografisk billede (50 år) er frit i Danmark
+        # (docs/drejebog-einstein.md afsnit 11). Udsnittet er hovedet med kraven og lidt af kridtbuen på tavlen.
+        'fil': 'einstein.jpg',
+        'url': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/'
+               'Einstein_1921_by_F_Schmutzer_-_restoration.jpg/'
+               '960px-Einstein_1921_by_F_Schmutzer_-_restoration.jpg',
+        'udsnit': (300, 90, 780, 690),   # i kilden (960 x 1261), 4:5
+        'gamma': 0.7,
+        'baggrund': 0.5,
+        'detalje': 1.6,
+    },
 }
 
 

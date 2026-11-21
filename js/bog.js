@@ -11,7 +11,8 @@
 // nr(), antal(), opslag(), find(id), lås(ja), scene(), fjern() }. tekster er modulet fra bog.tekster() med FORSIDE og
 // OPSLAG. Bogen har kun de opslag, der er bygget (E20 fund 6, stilguiden A9). Opslagets slags:
 //   'forside'  portrættet, spørgsmålet, introduktionen (FORSIDE.intro: sted og en bogtekst med stort forbogstav, den røde
-//              tråd 18. november 2026), Galileis lille tegning (eller bogens egen: FORSIDE.kort, stjerner som træsnit),
+//              tråd 18. november 2026), Galileis lille tegning (eller bogens egen: FORSIDE.kort, stjerner som træsnit, eller
+//              FORSIDE.vignet, Einsteins lommeur med lysglimtet),
 //              navnet og "Begynd" (kun, når bogen har flere opslag)
 //   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
 //              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
@@ -79,13 +80,99 @@ function kortTegning(k) {
     + `<polyline points="${w}" class="bog-træsnit-w"/><g class="bog-træsnit">${stjerner}</g></svg>`;
 }
 
+// Bogens vignet på forsiden (Einstein, E1): et lommeur med visere og et lysglimt, der farer forbi, som en stregtegning i et
+// tidsskrift fra 1905 (docs/drejebog-einstein.md afsnit 3 og 4). Kun viserne og glimtet er gule. v.klokken er timen, den
+// lille viser peger på (minutviseren står på 12), v.tid og v.lys er de kursive bogstaver ved uret og ved lyset. Glimtet
+// kommer fra lampen til venstre og farer med samme fart hele vejen (CSS-animationen er lineær), og sekundviseren i den lille
+// skive tikker (animerVignet). Med reduceret bevægelse står glimtet stille under uret.
+const UR = { x: 120, y: 56, r: 38 }; // midten og kassens radius (viewBox 240 × 114). Ændres de, så også transform-origin for .bog-vignet-sekund i style.css
+const BANE = { y: 106, fra: 22, til: 224 };
+function påUr(r, grader, c = UR) {
+  const v = (grader * Math.PI) / 180;
+  return [c.x + r * Math.sin(v), c.y - r * Math.cos(v)];
+}
+const tal = (n) => n.toFixed(2).replace(/\.?0+$/, '');
+function viser(grader, længde, bredde, pomme, klasse) {
+  // En Breguet-viser: en smal trekant og en lille ring ("pomme") et stykke ude, som på lommeure omkring 1900
+  const [hx, hy] = påUr(-3.5, grader), [sx, sy] = påUr(længde, grader);
+  const v = (grader * Math.PI) / 180, px = Math.cos(v) * bredde, py = Math.sin(v) * bredde;
+  const [mx, my] = påUr(pomme[0], grader);
+  return `<g class="bog-vignet-viser ${klasse}"><polygon points="${tal(hx - px)},${tal(hy - py)} ${tal(sx)},${tal(sy)} ${tal(hx + px)},${tal(hy + py)}"/>`
+    + `<circle cx="${tal(mx)}" cy="${tal(my)}" r="${pomme[1]}"/><circle cx="${tal(mx)}" cy="${tal(my)}" r="${tal(pomme[1] * 0.48)}" class="bog-vignet-hul"/></g>`;
+}
+export function lommeurTegning(v) {
+  const ROM = ['XII', 'I', 'II', 'III', 'IIII', 'V', '', 'VII', 'VIII', 'IX', 'X', 'XI']; // IIII som på lommeure, VI er skiven
+  const streger = Array.from({ length: 60 }, (_, i) => {
+    const [ax, ay] = påUr(32, i * 6), [bx, by] = påUr(i % 5 ? 30.4 : 28.6, i * 6);
+    return `<line x1="${tal(ax)}" y1="${tal(ay)}" x2="${tal(bx)}" y2="${tal(by)}"${i % 5 ? '' : ' class="time"'}/>`;
+  }).join('');
+  const romertal = ROM.map((t, i) => {
+    if (!t) return '';
+    const [x, y] = påUr(22, i * 30);
+    return `<text x="${tal(x)}" y="${tal(y)}">${t}</text>`;
+  }).join('');
+  const skive = { x: UR.x, y: UR.y + 15, r: 5.6 }; // den lille sekundskive ved 6 (fri af timeviseren, når den står på 7)
+  const sekStreger = Array.from({ length: 12 }, (_, i) => {
+    const [ax, ay] = påUr(skive.r, i * 30, skive), [bx, by] = påUr(skive.r - (i % 3 ? 0.9 : 1.6), i * 30, skive);
+    return `<line x1="${tal(ax)}" y1="${tal(ay)}" x2="${tal(bx)}" y2="${tal(by)}"/>`;
+  }).join('');
+  const top = UR.y - UR.r; // kassens top, og bøjlen og kronen over den
+  // Skraveringen på kassens skyggeside (nederst til højre), som i et kobberstik
+  const skygge = Array.from({ length: 34 }, (_, i) => {
+    const g = 62 + i * 4, [ax, ay] = påUr(35.8, g), [bx, by] = påUr(37.4, g);
+    return `<line x1="${tal(ax)}" y1="${tal(ay)}" x2="${tal(bx)}" y2="${tal(by)}"/>`;
+  }).join('');
+  const riller = [-4.5, -3, -1.5, 0, 1.5, 3, 4.5].map((d) => `<line x1="${UR.x + d}" y1="${top - 9.4}" x2="${UR.x + d}" y2="${top - 4.6}"/>`).join('');
+  return `<svg viewBox="0 0 240 114" role="img" aria-label="${esc(v.alt)}">`
+    + '<defs><radialGradient id="bogUrGlod"><stop offset="0" stop-color="#ffe680" stop-opacity="0.95"/><stop offset="0.45" stop-color="#ffc21a" stop-opacity="0.45"/><stop offset="1" stop-color="#ffb000" stop-opacity="0"/></radialGradient>'
+    + '<linearGradient id="bogUrHale" x1="0" x2="1"><stop offset="0" stop-color="#f2b400" stop-opacity="0"/><stop offset="1" stop-color="#f2b400"/></linearGradient></defs>'
+    // Lampen, lyset kommer fra, og banen med en pil
+    + `<g class="bog-vignet-streg"><path d="M8 ${BANE.y - 9}h10v13a1.5 1.5 0 0 1-1.5 1.5h-7a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M6.5 ${BANE.y - 9}h13l-2.5-4h-8z"/><path d="M13 ${BANE.y - 13}v-3"/></g>`
+    + `<rect x="10.5" y="${BANE.y - 6.5}" width="5" height="8" rx="1" class="bog-vignet-flamme"/>`
+    + `<line x1="${BANE.fra}" y1="${BANE.y}" x2="${BANE.til - 2}" y2="${BANE.y}" class="bog-vignet-bane"/>`
+    + `<path d="M${BANE.til - 4} ${BANE.y - 2.6}L${BANE.til + 3} ${BANE.y}L${BANE.til - 4} ${BANE.y + 2.6}z" class="bog-vignet-pil"/>`
+    + `<text x="${BANE.til - 16}" y="${BANE.y - 6}" class="bog-vignet-bogstav">${esc(v.lys)}</text>`
+    // Lommeuret: bøjlen, kronen med riller, kassen, skiven med minutstreger, romertallene og den lille sekundskive
+    + `<g class="bog-vignet-streg"><path d="M${UR.x - 10} ${top - 6}a10 11 0 0 1 20 0"/><path d="M${UR.x - 7.5} ${top - 6}a7.5 8 0 0 1 15 0" class="tynd"/></g>`
+    + `<rect x="${UR.x - 6}" y="${top - 10.5}" width="12" height="7" rx="1.5" class="bog-vignet-krone"/><g class="bog-vignet-streg tynd">${riller}</g>`
+    + `<rect x="${UR.x - 3.5}" y="${top - 4}" width="7" height="5" class="bog-vignet-krone"/>`
+    + `<circle cx="${UR.x}" cy="${UR.y}" r="${UR.r}" class="bog-vignet-kasse"/><g class="bog-vignet-streg tynd">${skygge}</g>`
+    + `<g class="bog-vignet-streg tynd"><circle cx="${UR.x}" cy="${UR.y}" r="35.4"/><circle cx="${UR.x}" cy="${UR.y}" r="32"/><circle cx="${UR.x}" cy="${UR.y}" r="27.4"/>`
+    + `<circle cx="${skive.x}" cy="${skive.y}" r="${skive.r}"/>${streger}${sekStreger}</g>`
+    + `<g class="bog-vignet-tal">${romertal}</g>`
+    + `<g class="bog-vignet-sekund"><line x1="${skive.x}" y1="${skive.y + 1.6}" x2="${skive.x}" y2="${skive.y - skive.r + 0.8}"/></g>`
+    + `<circle cx="${skive.x}" cy="${skive.y}" r="0.8" class="bog-vignet-nav"/>`
+    + viser((v.klokken % 12) * 30, 16, 1.7, [9, 2.2], 'time')
+    + viser(0, 26, 1.25, [18.5, 1.9], 'minut')
+    + `<circle cx="${UR.x}" cy="${UR.y}" r="1.9" class="bog-vignet-nav"/><circle cx="${UR.x}" cy="${UR.y}" r="0.6" class="bog-vignet-hul"/>`
+    + `<text x="${UR.x + 44}" y="${UR.y - 26}" class="bog-vignet-bogstav">${esc(v.tid)}</text>`
+    // Lysglimtet (står ved 150, hvis animationen ikke kører)
+    + `<g class="bog-vignet-glimt" transform="translate(150 ${BANE.y})"><circle r="8" fill="url(#bogUrGlod)"/><polygon points="-30,0 0,-1.7 0,1.7" fill="url(#bogUrHale)"/><circle r="2.2" class="bog-vignet-hoved"/></g>`
+    + '</svg>';
+}
+
+// Vignettens bevægelser (med element.animate, ikke @keyframes i style.css, som ikke kan føres til én skærm i --ændret):
+// glimtet farer fra lampen til pilen på 3,6 s med samme fart hele vejen (lineært) og toner ud, lampen lyser op, når det
+// farer ud, og sekundviseren tikker. Intet med ROLIG: Så står glimtet stille ved 150.
+function animerVignet(rod) {
+  const glimt = rod.querySelector('.bog-vignet-glimt');
+  if (!glimt?.animate) return;
+  const { y, fra, til } = BANE, slut = `translate(${til}px, ${y}px)`;
+  const igen = { duration: 3600, iterations: Infinity, easing: 'linear' };
+  glimt.animate([{ transform: `translate(${fra}px, ${y}px)`, opacity: 0 }, { opacity: 1, offset: 0.05 },
+    { transform: slut, opacity: 1, offset: 0.64 }, { transform: slut, opacity: 0, offset: 0.7 }, { transform: slut, opacity: 0 }], igen);
+  rod.querySelector('.bog-vignet-flamme')?.animate([{ opacity: 0.35 }, { opacity: 1, offset: 0.03 }, { opacity: 0.35, offset: 0.14 }, { opacity: 0.35 }], igen);
+  rod.querySelector('.bog-vignet-sekund')?.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 60000, iterations: Infinity, easing: 'steps(60)' });
+}
+
 function forsideHTML(bog, f, harNæste = true) {
   return `<div class="bog-opslag bog-forside">`
     + `<figure class="bog-portræt"><img src="${esc(bog.portræt)}" alt="${esc(f.portrætAlt)}" width="600" height="750" decoding="async"><figcaption>${esc(f.portrætTekst)}</figcaption></figure>`
     + `<div class="bog-forside-tekst">`
     + `<h3 class="bog-titel">${esc(f.spørgsmål)}</h3>`
     + (f.intro ? `<div class="bog-intro"><p class="bog-intro-sted">${esc(f.intro.sted)}</p><p class="bog-intro-tekst">${esc(f.intro.tekst)}</p></div>` : '')
-    + (f.kort ? `<figure class="bog-galilei bog-kort">${kortTegning(f.kort)}<figcaption>${esc(f.kort.tekst)}</figcaption></figure>`
+    + (f.vignet ? `<figure class="bog-galilei bog-vignet">${lommeurTegning(f.vignet)}<figcaption>${esc(f.vignet.tekst)}</figcaption></figure>`
+      : f.kort ? `<figure class="bog-galilei bog-kort">${kortTegning(f.kort)}<figcaption>${esc(f.kort.tekst)}</figcaption></figure>`
       : `<figure class="bog-galilei">${galileiTegning()}<figcaption>${esc(f.galilei)}</figcaption></figure>`)
     + `<p class="bog-navn">${esc(f.navn)} · ${esc(f.liv)}</p>`
     // "Begynd" kun, når der er noget at begynde på (stilguiden A9: kun det, der findes)
@@ -280,6 +367,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, lav = false, påBladr
   rod.style.setProperty('--bog-papir-mork', s.papirMørk ?? '#dccaa4');
   rod.style.setProperty('--bog-blaek', s.blæk ?? '#2b1f17');
   rod.style.setProperty('--bog-skrift', s.skrift ?? 'Georgia, serif');
+  rod.style.setProperty('--bog-titel-skala', String(s.titelSkala ?? 1)); // Old Standard er bredere end Fell (Einstein, E1)
   rod.dataset.bog = bog.id;
   rod.setAttribute('aria-label', `${bog.navn}: ${bog.titel ?? ''}`);
   rod.innerHTML = '<div class="bog-ramme" aria-live="polite"></div>'
@@ -304,6 +392,7 @@ export function lavBog(rod, bog, tekster, { rolig = false, lav = false, påBladr
       : o.slags === 'sider' ? siderHTML(o, tekster.BOGEN)
         : o.slags === 'om' ? omHTML(o, tekster.OM, bog.id) : sceneHTML(o);
     ramme.dataset.opslag = o.id;
+    if (o.slags === 'forside' && !rolig) animerVignet(ramme);
     ramme.scrollTop = 0;
     if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));
     else if (o.slags === 'sider') scene = lavSider(ramme.querySelector('.bog-sider-opslag'), bog.id, tekster.BOGEN, rolig, () => bladr(1));
