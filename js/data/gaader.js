@@ -628,8 +628,7 @@ export const GÅDER = [
     trin: [
       {
         overskrift: 'Hvad ved vi?',
-        // Introen skal kunne forstås uden bænken i Kvantefysik (jeres svar 21. november 2026: "Jeg aner ikke, hvad der menes med striber")
-        spørg: 'Skyder man elektroner mod to smalle sprækker, lander de i mange striber, ikke i to bunker. Det sker, fordi de opfører sig som bølger. Det er det, du ser bag kortet. Kan noget så stort som et molekyle også give striber?',
+        spørg: 'Kan noget så stort som et molekyle også give striber?',
         gæt: {
           valg: [
             { tekst: 'Ja', efter: 'Rigtigt. Selv klumper med over 7.000 atomer gør det.' },
@@ -674,6 +673,9 @@ export const GÅDER = [
     ven: 'Selv klumper med over 7.000 atomer opfører sig som bølger, og ingen ved, hvor det stopper.',
     // Ingen egen scene (som Livets begyndelse, G4e): én linje pr. trin efter gættet og knappen til seDet
     scene: {
+      // Står under billedet, før man gætter, så kortet kan forstås uden bænken i Kvantefysik (jeres svar 21. november 2026:
+      // "Jeg aner ikke, hvad der menes med striber"). Bølgen går gennem begge sprækker, elektronen findes ét sted (fakta-faelder.md).
+      start: 'Skyder man elektroner mod to smalle sprækker, lander de i mange striber, ikke i to bunker. Det sker, fordi de opfører sig som bølger. Det er det, du ser her.',
       prøv: [
         'På bænken i Kvantefysik kan du skyde med et molekyle med 2.000 atomer og en klump med over 7.000.',
         'På bænken i Kvantefysik kan du skyde med en fodbold og se, hvad der sker.',
