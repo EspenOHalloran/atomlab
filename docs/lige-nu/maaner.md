@@ -18,6 +18,7 @@
 **Alle byggetrin i planen er lavet** (punkt 1-4). Det, der mangler i sporet:
 - **Prøven** af "Under isen" (med flyveturen) og "Land med Huygens" med jeres søn, ti minutter uden hjælp ([guide-proeven.md](../guide-proeven.md), spørgsmålene i drejebogens afsnit 15, punkterne i [ikke-afproevet.md](../ikke-afproevet.md)). Begge forløb har status **prøve**, til den er lavet. Det er jeres, ikke en session.
 - **Punkt 5 i planen er ikke planlagt:** at stå på Europa eller Enceladus (tegnet ud fra fotos fra kredsløb) og Titans søer. Skal det laves, er første skridt en drejebog (Opus, høj) med én kernesætning og jeres go.
+- **I kø (venter på jeres go, I vælger selv tidspunktet):** Huygens og faldskærmen er kridhvide under faldet, og jorden ses ikke i scenen, selv om Huygens' kamera ser den (jeres skærmbilleder 22. november). Prompten: [prompt-maaner-huygens-lys.md](../prompt-maaner-huygens-lys.md).
 - Små løse ender: Vejen "Se Titan ved Saturn" slår ikke kontakten "Under disen" til (den står i Saturns fil, kræver Solsystemets go). Linket "Land med sonden Huygens ›" i Christiaan Huygens' bog spørges i Videnskabsfolkene-sporet (drejebogens afsnit 11).
 
 ## Spørgsmål til jer
