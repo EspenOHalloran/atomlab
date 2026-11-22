@@ -1,6 +1,7 @@
 // Atomværkstedet: byg et atom af protoner, neutroner og elektroner, og se hvad det bliver.
 
 import { verden, sætVindue, passerTil, kameraSving, flyInd, ROLIG } from './scene3d.js';
+import { brugKrogskygge, KERNE_SKYGGE } from './krogskygge.js';
 import { Atom, sætUdgave, hentUdgave, gemtVisning, gemVisning } from './atom.js';
 import { lavKontakt } from './kontakt.js';
 import { GRUNDSTOFFER, grundstof, KATEGORIER, TILSTANDE, faktaOm, skallerForIon, placering, konfigurationTekst } from './data/grundstoffer.js';
@@ -145,6 +146,7 @@ export const værkstedTilstand = () => ({ ...tilstand });
 
 export function startVærksted() {
   aktiv = true;
+  brugKrogskygge(KERNE_SKYGGE); // skygge i krogene (G4) i kernen
   opdaterLydknap();
   // Forløbet "Dit første atom" starter af sig selv første gang, og når man kommer fra dets link eller "Din fremgang"
   const forløb = tagVentForløb([FØRSTE_ATOM.id]) ?? (starterSelv(FØRSTE_ATOM) ? FØRSTE_ATOM.id : null);
@@ -171,6 +173,7 @@ function startAtomDel() {
 
 export function stopVærksted() {
   aktiv = false;
+  brugKrogskygge(null);
   stopForløb();
   stopAtomDel();
 }

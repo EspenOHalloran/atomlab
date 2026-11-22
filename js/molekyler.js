@@ -1222,6 +1222,9 @@ function visDitAtom() {
 }
 
 // ---------- Start og stop (fra js/molekyler-skaerm.js) ----------
+// Om saltkrystallen vises (skyggen i krogene tegnes kun da, js/krogskygge.js)
+export const krystalVises = () => Boolean(krystalGruppe?.visible);
+
 export function startByttebørs() {
   aktiv = true;
   rod.visible = true;
