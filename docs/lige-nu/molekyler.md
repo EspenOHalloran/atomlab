@@ -19,7 +19,7 @@
 1. **Prøven af Ild med sønnen** (turen og bordet, spørgsmålene i drejebogen, afsnit 9, og linjerne i [ikke-afproevet.md](../ikke-afproevet.md)). Derefter **Ild 2 "Flammens form og farve"**: Ny session, Opus, høj effort, "Læs docs/prompt-ild-2.md" ([prompt-ild-2.md](../prompt-ild-2.md)).
 2. Idéen "Rumfærgens blanding" (for meget hydrogen) i knaldgassen står i [ideer.md](../ideer.md).
 
-**Åbent:** Artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe) skal vise, at Molekyler M1-M4 er færdige. 8. november 2026 (M3) kunne det læses, men det er delt fra en anden organisation, så sessionen kan ikke rette i det. Det skal opdateres fra den konto, der ejer det.
+**Lukket (artefaktet opdateres ikke mere, jeres ønske 22. november 2026):** Artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe) skal vise, at Molekyler M1-M4 er færdige. 8. november 2026 (M3) kunne det læses, men det er delt fra en anden organisation, så sessionen kan ikke rette i det. Det skal opdateres fra den konto, der ejer det.
 
 **Jeres svar om testene (8. november 2026):** Testreglen bliver, som den er (`--ændret` vælger stadig alle tests, når en fælles fil er ændret). M2b blev merget, da de berørte tests var grønne efter den sidste merge af main (`byg-molekyler`, `vaerksted`, `byttebors`, `lag`, `ordbog`, `karrusel` og `molekyler`), uden at vente på en fjerde fuld kørsel.
 

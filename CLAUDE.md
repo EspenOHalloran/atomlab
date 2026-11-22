@@ -49,7 +49,7 @@ Der kører ofte flere sessioner samtidig. Næsten alle merge-konflikter var i de
 - **Læs kun det, opgaven bruger:** sporets fil, de afsnit af planen, der hører til delopgaven (og "Jeres svar"), og store filer med `grep` eller med `offset`/`limit` i det afsnit, der skal bruges. Læs ikke en fil igen, der allerede står i samtalen. Prompter har en kort læseliste med afsnit, ikke hele filer.
 - **Hjælpeagenter** starter forfra og skal læse det hele igen. Brug dem til store opslag og søgninger, der ellers ville fylde samtalen, ikke til små ting, hovedsessionen allerede ved. **Faktatjek:** Op til ca. 15 påstande tjekker hovedsessionen selv. Ved flere finder en Sonnet-hjælpeagent kilderne, og Opus vurderer dem (se `/faktatjek`).
 - **Tests** køres i baggrunden. Vent på beskeden om, at de er færdige (tjek ikke igen og igen med `sleep`), og push først bagefter. Kun `--ændret`, som DESIGN.md siger. **Skærmbilleder** kun af det, der er ændret, i de størrelser, hvor det kan gå galt.
-- **Artefaktet "AtomLab Overblik"** opdateres, når en serie er færdig (fx hele Jupiter), ikke efter hver delopgave.
+- **Artefaktet "AtomLab Overblik"** opdateres ikke mere (jeres ønske 22. november 2026: "Slut med at opdatere artefaktet").
 
 ## Hvem bruger det
 - Programmet laves af en far til hans 13-årige søn. Sønnen bruger det, han koder det ikke selv.
