@@ -3,7 +3,7 @@
 // langs skinnen. lavLys(id) giver { gruppe, opdater(dt, tid) } eller null for en ukendt gåde. Lysene er symboler, ikke i skala.
 
 import * as THREE from 'three';
-import { LAV_KVALITET, ROLIG, verden } from '../scene3d.js';
+import { LAV_KVALITET, ROLIG, verden, skærmLoft, nyeShadere } from '../scene3d.js';
 import { glød, prikTekstur } from '../kosmos/faelles.js';
 import { fuld, stiplet } from './streg.js';
 import { lavLinse, LINSE_KVALITET } from '../kosmos/linse.js';
@@ -204,11 +204,24 @@ const LYS = {
 // Laget tegnes kun, når lampen kan ses, og højst 30 gange i sekundet på tablet. Er billederne for langsomme (under 40 i sekundet på tablet), står billedet
 // stille og tegnes kun igen, når kameraet har flyttet sig. Snyd: Lampen er et symbol, ikke i skala, og den bøjede
 // stjernehimmel om hullet er skåret væk.
+// Skarp på touch (22. november 2026, målt på Samsung A56: 120 billeder/s med loftet 320 px, så hullet var et lille
+// billede trukket op): Har telefonen eller tabletten mindst 90 % af skærmens loft i 3 s, mens lampen ses, tegnes hullet
+// som på pc (højst 512 px) og 60 gange i sekundet. Falder den bagefter under 75 % af loftet, går den tilbage og bliver
+// dér resten af besøget. De første sekunder og tiden lige efter nye shadere tæller ikke (nyeShadere).
 const LINSE_AFSTAND = 45; // kameraet i linsens rum (M = 0,75, skiven går ud til 15)
 const LINSE_HALV = 16.5; // så meget af linsens rum, billedet viser til hver side
 const LAMPE_HALV = 3.2; // flade til hver side i lampens rum (lysene er bygget med radius ca. 3)
 const LINSE_HØJST = LAV_KVALITET ? 320 : 512;
 const LINSE_HYPPIGHED = LAV_KVALITET ? 1 / 30 : 0;
+const SKARP = { højst: 512, hyppighed: 1 / 60, op: 0.9, ned: 0.75, frys: 40, måleTid: 3 };
+// Fælles for alle lamper med hullet (skinnen og scenen Sort hul), så målingen huskes, når man går fra den ene til den anden
+const touchLinse = { skarp: false, låst: false };
+// Næste tilstand ud fra billeder/s i en måling og skærmens loft. Giver 'skarp', 'tilbage', 'frys' eller null (ingen ændring).
+export function linseSkift({ skarp, låst }, fps, loft) {
+  if (skarp) return fps < SKARP.ned * loft ? 'tilbage' : null;
+  if (!låst && fps >= SKARP.op * loft) return 'skarp';
+  return fps < SKARP.frys ? 'frys' : null;
+}
 const LINSE_HÆLDNING = 0.16; // skiven vippes lidt mod kameraet, så buen over skyggen ses tydeligt fra skinnen
 const INGEN_DYBDE = 400; // som i linse.js: der, hvor der kun er himmel
 
@@ -280,7 +293,8 @@ function lavSortHul() {
 
   function tegn(renderer, kamera, tid, px) {
     // Opløsningen følger lampen på skærmen (skiftes kun ved en tydelig forskel, så den ikke laves om under en flyvning)
-    const ønsket = THREE.MathUtils.clamp(Math.ceil(px / 32) * 32, 96, LINSE_HØJST);
+    const højst = LAV_KVALITET && touchLinse.skarp ? SKARP.højst : LINSE_HØJST;
+    const ønsket = THREE.MathUtils.clamp(Math.ceil(px / 32) * 32, 96, højst);
     if (!tilstand.størrelse || Math.abs(ønsket - tilstand.størrelse) / tilstand.størrelse > 0.25) {
       tilstand.størrelse = ønsket;
       const n = Math.round(ønsket / LINSE_KVALITET.skala);
@@ -313,17 +327,27 @@ function lavSortHul() {
       flade.quaternion.copy(q).multiply(kamera.quaternion);
       const px = påSkærmen(kamera, renderer);
       if (!px) return;
-      // Er billederne for langsomme på tabletten, står billedet stille (det måles kun, mens lampen ses)
+      // Touch: skarp, almindelig eller stillbillede efter billeder/s (det måles kun, mens lampen ses, og ikke lige
+      // efter nye shadere, hvor det hakker et par sekunder)
       if (LAV_KVALITET && !tilstand.frys && dt > 0) {
-        tilstand.billeder++;
-        tilstand.målTid += dt;
-        if (tilstand.målTid > 3) {
-          if (tilstand.billeder / tilstand.målTid < 40) tilstand.frys = true;
+        if (nyeShadere()) {
+          tilstand.billeder = 0;
+          tilstand.målTid = 0;
+        } else {
+          tilstand.billeder++;
+          tilstand.målTid += dt;
+        }
+        if (tilstand.målTid > SKARP.måleTid) {
+          const skift = linseSkift(touchLinse, tilstand.billeder / tilstand.målTid, skærmLoft());
+          if (skift === 'skarp') touchLinse.skarp = true;
+          else if (skift === 'tilbage') Object.assign(touchLinse, { skarp: false, låst: true });
+          else if (skift === 'frys') tilstand.frys = true;
           tilstand.billeder = 0;
           tilstand.målTid = 0;
         }
       }
-      if (tilstand.tegnet && tid - tilstand.sidst < LINSE_HYPPIGHED) return;
+      const hyppighed = LAV_KVALITET && touchLinse.skarp ? SKARP.hyppighed : LINSE_HYPPIGHED;
+      if (tilstand.tegnet && tid - tilstand.sidst < hyppighed) return;
       if (tilstand.frys && tilstand.tegnet) {
         g.getWorldQuaternion(q).multiply(hæld).invert();
         ret.copy(kamera.position).sub(p).applyQuaternion(q).normalize();
@@ -336,7 +360,7 @@ function lavSortHul() {
       linse.fjern();
       mål.dispose();
     },
-    test: () => ({ linse: true, størrelse: tilstand.størrelse, tegnet: tilstand.tegnet, frys: tilstand.frys }),
+    test: () => ({ linse: true, størrelse: tilstand.størrelse, tegnet: tilstand.tegnet, frys: tilstand.frys, skarp: touchLinse.skarp, låst: touchLinse.låst }),
   };
 }
 
