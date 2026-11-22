@@ -43,10 +43,15 @@ await landet();
 const førsteFoto = (await stå()).foto.synlig > 0;
 const iLandskab = await lager();
 const mbStår = await mb();
+// Det mindste tal, mens man letter: Landskabets billeder frigives med det samme, men Mars' egne kort lægges i grafikkortet
+// igen et par billeder efter, så efter få sekunder er tallet det samme som før (testbrowserens kort er små). Ét tal i et
+// tilfældigt øjeblik afhang af, hvor hurtigt billederne kom (fejlede, da Kosmos og Solsystemet lavede shadere på forhånd).
+await fm(() => { const t = globalThis.atomlabMålerTest; globalThis._mindst = Infinity; const f = () => { globalThis._mindst = Math.min(globalThis._mindst, t.tallene().teksturMB); if (globalThis._mindst !== -1) requestAnimationFrame(f); }; f(); });
 await fm(() => atomlabTest.solsystem.fænomen().tilbageOp());
 await s.waitForFunction(() => !atomlabTest.solsystem.fænomen().stå().står, null, { timeout: 30000, polling: 100 });
+await s.waitForTimeout(1000);
 const oppe = await lager();
-const mbOppe = await mb();
+const mbOppe = await fm(() => { const m = globalThis._mindst; globalThis._mindst = -1; return m; });
 tjek('Naukluft første gang: man står med fotoet', førsteFoto);
 tjek('op fra Stå på Mars: landskabets og fotoets billeder er slettet, Mars\' egne kort er der stadig',
   iLandskab.some((n) => n.startsWith('landskab/pano-')) && iLandskab.some((n) => n.startsWith('landskab/gale-'))
