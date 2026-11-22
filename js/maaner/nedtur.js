@@ -430,7 +430,8 @@ export function lavNedtur({ vindue, kamera }) {
   }
   function visBillede() {
     const b = billedeVed(h);
-    const vis = Boolean(b) && kameraTil && gruppe.visible && !fotoVist;
+    // (på jorden er kortet skjult: Det sidste billede fra luften er forældet, og det dækkede underteksten på telefonen)
+    const vis = Boolean(b) && kameraTil && gruppe.visible && !fotoVist && !stille;
     kam.hidden = !vis;
     if (!b || b === billede) return;
     billede = b;
@@ -497,6 +498,7 @@ export function lavNedtur({ vindue, kamera }) {
       landingVed(LAND_S);
       støv.visible = false;
       hul.visible = true;
+      visBillede();
     },
     get h() { return h; },
     get billede() { return billede; },
@@ -552,7 +554,7 @@ export function lavNedtur({ vindue, kamera }) {
           landTid += dt * landFart;
           if (landTid >= LAND_S || ROLIG) { landTid = LAND_S; stille = true; }
           landingVed(landTid);
-          if (stille) { støv.visible = false; påLandet?.(); }
+          if (stille) { støv.visible = false; visBillede(); påLandet?.(); }
         } else landingVed(LAND_S);
         jordMat.uniforms.uLampePos.value.set(system.position.x, 0);
       }

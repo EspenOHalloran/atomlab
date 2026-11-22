@@ -127,6 +127,9 @@ export const JORDEN = {
     { id: 'stor', cm: 15, x: 10.1, y: 58.1, b: 39.6, h: 8.0 },
     { id: 'lille', cm: 4, x: 63.9, y: 58.0, b: 10.8, h: 2.6 },
   ],
+  // Luppen "Tæt på stenene" ved siden af billedet, når der er plads (telefonen på langs): udsnittet med begge sten og
+  // linealerne (i procent af billedet, som stenene). Jeres valg 22. november 2026: Den lille sten var ca. 17 × 8 px.
+  lup: { x: 2, y: 48, b: 80, h: 26 },
 };
 
 // ---------- Kanal A og B (M5b) ----------
@@ -144,7 +147,7 @@ export const ETAPER = [
   { id: 'faldskaerm', km: FALDSKÆRM_KM, knap: 'Faldskærmen', titel: 'I faldskærm', tekst: '14. januar 2005. Huygens har bremset i luften og hænger i faldskærm højt oppe. Kameraet ser kun dis.' },
   { id: 'jorden', km: 31, knap: 'Jorden', titel: 'Kameraet kan se jorden', tekst: 'Ca. 30 km oppe kan kameraet se jorden gennem disen: lyse bakker med mørke spor, der ligner flodlejer.' },
   { id: 'slette', km: 9, knap: 'Sletten', titel: 'Ned mod den mørke slette', tekst: 'Huygens driver ned mod en flad, mørk slette. Det er der, den skal lande.' },
-  { id: 'landet', km: 0, knap: 'Landet', titel: 'Landet på Titan', tekst: 'Huygens står i et tørt flodleje med små sten af is. Tryk på de to sten foran den.' },
+  { id: 'landet', km: 0, knap: 'Landet', titel: 'Landet på Titan', tekst: 'Huygens står i et tørt flodleje med små sten af is. Find de to sten på billedet fra jorden.' },
 ];
 export const DATO = { slip: '25. december 2004', ned: '14. januar 2005' };
 

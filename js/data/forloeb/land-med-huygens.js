@@ -22,9 +22,9 @@ export const LAND_MED_HUYGENS = {
   slut: 'Titan blev fundet i 1655 af Christiaan Huygens, som sonden er opkaldt efter.',
   vink: {
     slip: 'Tryk på "Slip Huygens" for at sende Huygens af sted mod Titan.',
-    kamera: 'Hold øje med Huygens\' kamera i hjørnet. Hvornår kan det se jorden?',
+    kamera: 'Hold øje med Huygens\' kamera nederst i hjørnet.',
     land: 'Tryk på "Land" for at lade Huygens dale det sidste stykke ned.',
-    sten: 'Tryk på de to sten foran Huygens.',
+    sten: 'De to sten står i de lyse ringe. Tryk på dem.',
     kanaler: 'Tryk på modtagerne A og B på Cassini.',
   },
   trin: [
@@ -66,7 +66,7 @@ export const LAND_MED_HUYGENS = {
           { tekst: 'At blive fundet', svar: 'Der er ingen til at finde den.' },
         ],
       },
-      gør: 'Land, og tryk på de to sten foran Huygens.',
+      gør: 'Land, og find de to sten på billedet fra jorden.',
       så: 'Stenene er af is, hårde som sten ved ca. −179 °C. Huygens står i et tørt flodleje, som nok er gravet af flydende metan.',
       ord: ['metan'],
     },
