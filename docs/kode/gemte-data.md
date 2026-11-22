@@ -18,3 +18,4 @@
 - `atomlabGuide`: `{ id: tidspunkt }` for de guider, man har set eller sprunget over (`fusion`, `reaktor-kerne`, `reaktor-kæde`, `batteri`) og `fusion-rejse` (rejsen ind i Solen)
 - `atomlabSidsteDel`: id på den del, man sidst var i (fx `'kosmos'`). Ringen i menuen starter på verdenen for den del.
 - `atomlabLog`: `{ sidstSet, beskeder: [{ t, titel, tekst, type, skærm, vigtig, gange }] }`, de sidste 40 beskeder til loggen (🔔). Tallet på klokken er de vigtige (piller og store advarsler), der er kommet siden `sidstSet`.
+- `atomlabBogSide`: `{ bog: 'sat' }` for de bøger i Opdagelserne, hvor kontakten over en side med en ligning står på "Sat tekst" i stedet for "Skanning" (standard, så bogen står ikke i listen). Ét valg for hele bogen (Einstein E3, 22. november 2026, `js/bog-ligning.js`). Foldeboksene i opslaget huskes i `atomlabLag` som `bog-linjer` ("Linje for linje", fælles), `bog-ligning-nørd-<bog>` og `bog-ligning-ærligt-<bog>`. "Regn selv" huskes ikke.

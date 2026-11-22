@@ -1666,6 +1666,71 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .bs-hvor { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.6; }
 #opdagelser .bs-note { margin: 10px 0 0; font-size: 13px; opacity: 0.7; }
 @media (prefers-reduced-motion: reduce) { #opdagelser .bs-glød, #opdagelser .bs-side { animation: none; } }
+#opdagelser .bog-ligning-opslag { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 8px; height: 100%; min-height: 0; } /* Opslag med en ligning (Einstein E3, js/bog-ligning.js): siden (skanning eller sat tekst) til venstre, forordet, ligningen, stederne og lagene til højre */
+#opdagelser .lg-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; }
+#opdagelser .lg-top .bog-kapitel { margin: 0; }
+#opdagelser .lg-kontakt { display: inline-flex; border: 1px solid color-mix(in srgb, var(--bog-blaek) 45%, transparent); border-radius: 22px; overflow: hidden; }
+#opdagelser .lg-valg { min-height: 44px; padding: 0 16px; border: 0; background: transparent; color: var(--bog-blaek); font: inherit; font-size: 15px; cursor: pointer; }
+#opdagelser .lg-valg[aria-pressed="true"] { background: var(--bog-blaek); color: var(--bog-papir); }
+#opdagelser .lg-side { display: grid; grid-template-rows: minmax(0, 1fr) auto; justify-items: center; gap: 4px; height: 100%; min-height: 0; }
+#opdagelser .lg-skanning { height: min(calc(100cqh - 24px), 58cqw / var(--r, 0.593)); aspect-ratio: var(--forhold, 1000 / 1686); }
+#opdagelser .bog-ligning-opslag[data-visning="sat"] .lg-skanning, #opdagelser .bog-ligning-opslag[data-visning="skanning"] .lg-sat { display: none; }
+#opdagelser .lg-hvor { margin: 0; font-size: 12px; opacity: 0.7; text-align: center; }
+#opdagelser .lg-sat { box-sizing: border-box; height: calc(100cqh - 24px); width: min(58cqw, 33em); overflow-y: auto; scrollbar-width: thin; padding: 14px 16px 14px 30px; border-radius: 2px; background: color-mix(in srgb, var(--bog-papir) 70%, #fff); box-shadow: 0 4px 18px rgba(60, 35, 10, 0.35); font: 15px/1.5 var(--bog-skrift); hyphens: none; }
+#opdagelser .lg-sat-hoved { display: grid; grid-template-columns: 1fr auto 1fr; margin-bottom: 6px; }
+#opdagelser .lg-linje { position: relative; display: block; text-align: justify; text-align-last: justify; }
+#opdagelser .lg-linje.lg-kortlinje { text-align-last: auto; }
+#opdagelser .lg-linje.lg-ind { text-indent: 1.6em; }
+#opdagelser .lg-linje[data-nr]::before { content: attr(data-nr); position: absolute; left: -26px; top: 0.35em; text-indent: 0; font: 10px/1 system-ui, sans-serif; opacity: 0.5; }
+#opdagelser .lg-formel { display: block; margin: 6px 0; text-align: center; white-space: nowrap; }
+#opdagelser .lg-sat-sted { display: block; width: calc(100% + 8px); margin: 1px -4px; padding: 1px 4px; border: 0; border-radius: 3px; background: rgba(255, 196, 70, 0.22); box-shadow: 0 0 8px 2px rgba(240, 180, 50, 0.45); color: inherit; font: inherit; text-align: inherit; cursor: pointer; animation: bs-puls 2.6s ease-in-out infinite; }
+#opdagelser .lg-sat-sted[aria-pressed="true"] { background: rgba(255, 196, 70, 0.42); box-shadow: 0 0 0 2px #c9a24a, 0 0 14px 4px rgba(240, 180, 50, 0.7); animation: none; }
+#opdagelser .lg-rod { display: inline-flex; align-items: stretch; vertical-align: middle; }
+#opdagelser .lg-rodtegn { flex: none; width: 0.5em; height: auto; fill: none; stroke: currentColor; stroke-width: 1.2px; vector-effect: non-scaling-stroke; overflow: visible; }
+#opdagelser .lg-rodunder { padding: 0.06em 0.08em 0 0.12em; border-top: 1.2px solid currentColor; }
+#opdagelser .lg-brok { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: 0.8em; line-height: 1.1; }
+#opdagelser .lg-brok > :first-child { padding: 0 0.12em; border-bottom: 1px solid currentColor; }
+#opdagelser .lg-hoj { display: inline-flex; align-items: center; }
+#opdagelser .lg-par { display: inline-block; font-size: 1.55em; line-height: 1; transform: scaleX(0.7); }
+#opdagelser :is(.lg-sat, .lg-stor) sup { font-size: 0.6em; line-height: 0; }
+#opdagelser .lg-tekst { gap: 14px; }
+#opdagelser .lg-forord { display: grid; gap: 4px; }
+#opdagelser .lg-forord-sted { margin: 0; font: 19px/1.2 var(--bog-skrift); }
+#opdagelser .lg-forord-tekst { margin: 0; font: 16px/1.45 var(--bog-skrift); }
+#opdagelser .lg-forord-tekst::first-letter { float: left; margin: 4px 7px 0 0; padding: 2px 7px 0; font-size: 44px; line-height: 0.85; color: var(--bog-papir); background: var(--bog-blaek); border-radius: 2px; box-shadow: inset 0 0 0 2px var(--bog-papir), inset 0 0 0 3px var(--bog-blaek); }
+#opdagelser .lg-kort { font-weight: 600; }
+#opdagelser .lg-ligning { display: grid; gap: 8px; padding: 6px 12px 12px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--bog-blaek) 30%, transparent); background: color-mix(in srgb, var(--bog-papir) 60%, #fff); }
+#opdagelser .lg-stor { padding: 10px 0 4px; font: clamp(30px, 8vw, 46px)/1.2 var(--bog-skrift); text-align: center; white-space: nowrap; }
+#opdagelser .lg-stor [data-led] { border-radius: 4px; cursor: pointer; transition: background-color 0.2s, box-shadow 0.2s; }
+#opdagelser .lg-stor .lg-lyser { background: rgba(255, 196, 70, 0.38); box-shadow: 0 0 0 2px #c9a24a, 0 0 14px rgba(240, 180, 50, 0.6); }
+#opdagelser .lg-lig { padding: 0 0.1em; }
+#opdagelser .lg-led { min-height: 3em; font-size: 16px; line-height: 1.45; }
+#opdagelser .lg-led p { margin: 0; }
+#opdagelser .lg-led-navn { margin-right: 6px; font: 400 22px var(--bog-skrift); }
+#opdagelser .lg-idag { margin-top: 4px !important; font-size: 14px; opacity: 0.75; }
+#opdagelser .lg-farter { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px !important; font-size: 14px; }
+#opdagelser .lg-fart { min-width: 56px; min-height: 40px; padding: 0 10px; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--bog-blaek) 45%, transparent); background: transparent; color: var(--bog-blaek); font: inherit; font-size: 15px; cursor: pointer; }
+#opdagelser .lg-fart[aria-pressed="true"] { background: var(--bog-blaek); color: var(--bog-papir); }
+#opdagelser .bog-ligning-opslag .knap { min-height: 44px; background: transparent; color: var(--bog-blaek); border-color: rgba(60, 40, 20, 0.45); }
+#opdagelser .bog-ligning-opslag .knap:hover { background: rgba(60, 40, 20, 0.08); }
+#opdagelser .bog-ligning-opslag .lg-videre { justify-self: start; background: var(--bog-blaek); color: var(--bog-papir); }
+#opdagelser .lg-se { justify-self: start; }
+#opdagelser .lg-regn { padding: 10px 12px; border-radius: 8px; border: 1px solid #c9a24a; box-shadow: 0 0 8px rgba(201, 162, 74, 0.3); font-size: 16px; line-height: 1.45; }
+#opdagelser .lg-regn > summary strong, #opdagelser .bog-ligning-opslag .bo-lag summary strong { font-family: var(--bog-skrift); font-weight: 400; font-size: 18px; }
+#opdagelser .lg-regn-krop { display: grid; gap: 8px; margin-top: 8px; }
+#opdagelser .lg-regn-krop p { margin: 0; }
+#opdagelser .lg-regn-trin { display: grid; gap: 8px; margin: 0; padding-left: 1.4em; }
+#opdagelser .lg-regn-res { display: block; font: 400 18px/1.35 var(--bog-skrift); }
+#opdagelser .lg-regn-valg { display: flex; flex-wrap: wrap; gap: 8px; }
+#opdagelser .bog-ligning-opslag .lg-svar[aria-pressed="true"] { background: #c9a24a; color: #1d1a17; border-color: #c9a24a; opacity: 1; }
+#opdagelser .lg-regn-nørd { margin-top: 10px; font-size: 15px; }
+#opdagelser .lg-regn-nørd summary { cursor: pointer; opacity: 0.85; }
+#opdagelser .lg-tabel { margin-top: 6px; border-collapse: collapse; font-size: 14px; }
+#opdagelser .lg-tabel th, #opdagelser .lg-tabel td { padding: 4px 8px; border-bottom: 1px solid color-mix(in srgb, var(--bog-blaek) 20%, transparent); text-align: right; font-weight: 400; }
+#opdagelser .lg-tabel th:first-child, #opdagelser .lg-tabel td:first-child { text-align: left; }
+@media (prefers-reduced-motion: reduce) { #opdagelser .lg-sat-sted { animation: none; } }
+@media (max-width: 820px) and (orientation: portrait) { #opdagelser .bog-ligning-opslag { height: auto; grid-template-rows: none; } #opdagelser .lg-krop { height: auto; container-type: normal; grid-template-columns: minmax(0, 1fr); grid-template-rows: none; justify-items: center; } #opdagelser .lg-tekst { display: contents; } #opdagelser .lg-krop > *, #opdagelser .lg-tekst > * { box-sizing: border-box; width: min(100%, 560px); } #opdagelser .lg-forord { order: -1; } #opdagelser .lg-side { height: auto; } #opdagelser .lg-skanning { height: auto; width: min(100%, 560px, 42vh); } #opdagelser .lg-sat { height: auto; max-height: 75vh; width: min(100%, 560px); padding-left: 26px; font-size: 14px; } #opdagelser .lg-tekst > .knap { width: auto; justify-self: center; } } /* Højkant: forordet, siden, og resten under. Bogen ruller */
+@media (max-height: 500px) and (orientation: landscape) { #opdagelser .bog-ligning-opslag { height: auto; grid-template-rows: none; gap: 6px; } #opdagelser .bog-ligning-opslag .bog-kapitel { font-size: 18px; } #opdagelser .lg-valg { min-height: 40px; padding: 0 12px; font-size: 14px; } #opdagelser .lg-krop { height: auto; container-type: normal; grid-template-columns: minmax(0, 1fr); grid-template-rows: none; justify-items: center; } #opdagelser .lg-tekst { display: contents; } #opdagelser .lg-krop > *, #opdagelser .lg-tekst > * { box-sizing: border-box; width: min(100%, 560px); } #opdagelser .lg-forord { order: -1; } #opdagelser .lg-side { height: auto; } #opdagelser .lg-skanning { height: auto; width: min(100%, 520px); } #opdagelser .lg-sat { height: auto; max-height: 80vh; width: min(100%, 560px); font-size: 14px; } #opdagelser .lg-tekst > .knap { width: auto; justify-self: center; } #opdagelser .lg-stor { font-size: 34px; padding-top: 4px; } #opdagelser .lg-forord-tekst { font-size: 15px; line-height: 1.4; } #opdagelser .lg-forord-tekst::first-letter { font-size: 36px; } } /* Lav skærm på langs (fund i test 8, 22. november 2026): skanningen blev kun 116 px bred ved siden af teksten, så opslaget stables som på højkant, og siden får op til 520 px. Bogen ruller */
 #opdagelser .bog-om-opslag { display: grid; align-content: start; gap: 10px; } /* "Om Huygens" (H4): bogens sidste opslag (js/bog.js, slags 'om') */
 #opdagelser .bo-krop { display: grid; gap: 14px; width: min(680px, 100%); margin: 0 auto; }
 #opdagelser .bo-navn { margin: 0; text-align: center; font: 22px/1.2 var(--bog-skrift); }
