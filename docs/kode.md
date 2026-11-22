@@ -10,6 +10,7 @@
 |---|---|
 | [kode/faelles.md](kode/faelles.md) | `index.html`, `LICENSE`, `style.css`, `skaerme.js` (listen over delene og hentningen efter behov), `gaa.js`, `main.js`, `scene3d.js`, `guide.js`, `lag.js`, `paneler.js`, `pause.js`, `kontakt.js`, `ordforklaring.js`, `effekter.js`, `fremgang.js`, `forfra.js`, `lyd.js`, `beskeder.js`, `fuldskaerm.js`, `maaler.js` (måleren, `?maal`), `js/data/hvorfor.js`. |
 | [kode/kvalitet.md](kode/kvalitet.md) | Kvalitetstrinnet på touch (`scene3d.js`: Basis og Høj, `sætTrin`, `vælgKvalitet`, den automatiske måling og `høj: true` i `SKÆRME`). |
+| [kode/krogskygge.md](kode/krogskygge.md) | Skygge i krogene (ambient occlusion, G4: `krogskygge.js` med `GTAOPass` i Værkstedet, saltkrystallen og Reaktorens kerne). |
 | [kode/atom.md](kode/atom.md) | Atomet (`atom.js`): kernen, elektronskallerne, elektronskyen, udgaverne af atomet og G3's bløde kugler og glimt (bruges af Værkstedet, Det periodiske system og Reaktoren). |
 | [kode/forloeb.md](kode/forloeb.md) | Forløb-klodsen (`js/forloeb.js`): linjen under scenen, faserne, hvad delen leverer, og hvornår et forløb starter af sig selv. |
 | [kode/menu.md](kode/menu.md) | Menuen som en ring af verdenerne (`karrusel.js`, "Din fremgang" med forløbenes ✓) og baggrunden bag den (`menubaggrund.js`). |

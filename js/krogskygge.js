@@ -1,7 +1,7 @@
-// Skygge i krogene (ambient occlusion, G4, 21. november 2026, docs/plan-grafik.md). Hvor ting står tæt (nukleonerne i
-// kernen, ionerne i saltkrystallen, brændslet og stavene i Reaktoren), når mindre lys ind udefra, så krogene bliver
-// mørkere. Det giver dybde og tyngde. Three.js' GTAOPass tegner scenens retninger og dybde én gang til og regner skyggen
-// ud fra dem i halv opløsning. Den lægges oven i billedet lige efter tegningen af scenen, før gløden og kantudglatningen.
+// Skygge i krogene (ambient occlusion, G4, 22. november 2026, docs/plan-grafik.md). Hvor ting står tæt (nukleonerne i
+// kernen, ionerne i saltkrystallen), når mindre lys ind udefra, så krogene bliver mørkere. Det giver dybde og tyngde.
+// Three.js' GTAOPass tegner scenens retninger og dybde én gang til (i fuld opløsning) og regner skyggen ud fra dem i halv
+// opløsning. Den lægges oven i billedet lige efter tegningen af scenen, før gløden og kantudglatningen.
 //
 // Kun på de skærme, der vælger det: brugKrogskygge({ radius }) i skærmens start og brugKrogskygge(null) i dens stop.
 // Ikke på planeter set udefra og rummet (der er næsten intet tæt på hinanden, så den ses ikke, men koster det samme).
@@ -11,7 +11,8 @@ import * as THREE from 'three';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { verden, LAV_KVALITET, TEST_HURTIG, kvalitetstrin } from './scene3d.js';
 
-const SKALA = globalThis.atomlabAOSkala ?? 0.5; // skyggen regnes i halv bredde og højde (en fjerdedel af punkterne)
+// Skyggen regnes i halv bredde og højde (en fjerdedel af punkterne). atomlabAOSkala: kun til at prøve andre i et værktøj.
+const SKALA = globalThis.atomlabAOSkala ?? 0.5;
 const PRØVER = LAV_KVALITET ? 8 : 16; // retninger pr. punkt (GTAO) og punkter i udglatningen bagefter
 const VÆRN = !LAV_KVALITET && !new URLSearchParams(location.search).has('test');
 const VÆRN_FPS = 40;
