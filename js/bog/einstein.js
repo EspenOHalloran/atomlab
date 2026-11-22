@@ -46,8 +46,6 @@ const GR = Math.PI / 180;
 const ROM = ['XII', 'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
 
 const klem = (x, a, b) => Math.max(a, Math.min(b, x));
-const mod = (a, b, t) => a + (b - a) * t;
-const glat = (t) => { t = klem(t, 0, 1); return t * t * (3 - 2 * t); };
 
 // Skyderens værdi (0-1000) og højden i km: lineært i den sammentrykte højde
 const fAfHøjde = (h) => (klem(h, 0, TOP_KM) / TOP_KM) ** HØJDE_EKSP;
@@ -77,7 +75,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     // trin 3
     timer: 0, spoler: false, spolet: 0, slut: 0,
     // trin 4
-    højde: RUMSTATIONEN, visHøjde: RUMSTATIONEN, rørtHøjde: false, uden: false, udenT: 0,
+    højde: RUMSTATIONEN, visHøjde: RUMSTATIONEN, uden: false, udenT: 0,
   };
   let W = 1, H = 1, dpr = 1; // aldrig 0 (togets fart regnes som en del af bredden)
   let aktiv = true;
@@ -739,7 +737,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
   function banePunkt(m, β, u) {
     const A = Math.max(4, m.Amax * β), B = Math.max(6, m.Bmax * β);
     const v = Math.PI / 2 - 2 * Math.PI * u;
-    return [m.xF + A * Math.cos(v) - 0, (m.yU - B) + B * Math.sin(v)];
+    return [m.xF + A * Math.cos(v), m.yU - B + B * Math.sin(v)];
   }
 
   function tegnRundtur() {
@@ -1015,7 +1013,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
       lygteLys(lx, ly, k * 1.6, 1);
       streg(1.3 * k, GUL);
       for (let i = 0; i < 9; i++) {
-        const v = -Math.PI + (i / 8) * Math.PI * 1.0 - 0.0;
+        const v = -Math.PI + (i / 8) * Math.PI; // en halvcirkel over lampen
         for (const f of [fase, (fase + 0.5) % 1]) {
           const r1 = (16 + f * 34) * k, r2 = r1 + 7 * k;
           g.globalAlpha = 1 - f;
@@ -1284,7 +1282,6 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     forløbRørt();
     s.højde = klem(Math.round(h / 100) * 100, RUMSTATIONEN, GPS_HØJDE);
     if (s.højde >= GPS_HØJDE - 300) s.højde = GPS_HØJDE; // det sidste stykke tæller som helt oppe
-    s.rørtHøjde = true;
     if (s.højde < GPS_HØJDE) s.uden = false;
     if (fra !== 'skyder' && ui.skyder) ui.skyder.value = String(Math.round(((fAfHøjde(s.højde) - F_MIN) / (1 - F_MIN)) * 1000));
     tegnIgen();
@@ -1421,7 +1418,7 @@ export function lavFortælling(felt, { rolig = false, tekster = {}, påIgen = nu
     },
     gps() {
       sætTrin('gps');
-      Object.assign(s, { højde: RUMSTATIONEN, visHøjde: RUMSTATIONEN, rørtHøjde: false, uden: false });
+      Object.assign(s, { højde: RUMSTATIONEN, visHøjde: RUMSTATIONEN, uden: false });
       underGPS();
     },
   };
