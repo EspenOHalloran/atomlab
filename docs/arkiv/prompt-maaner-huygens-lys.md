@@ -1,6 +1,6 @@
 # Prompt: Måner · Huygens' lys og jorden under faldet
 
-*Lagt i kø 22. november 2026 af orkestratoren efter jeres skærmbilleder fra "Land med Huygens" på telefonen. **Venter på jeres go**, og I vælger selv, hvornår den startes. Ny session, Opus, høj effort. Kopiér prompten nedenfor.*
+*Lavet 22. november 2026 (se docs/lige-nu/maaner.md). Lagt i kø 22. november 2026 af orkestratoren efter jeres skærmbilleder fra "Land med Huygens" på telefonen. **Venter på jeres go**, og I vælger selv, hvornår den startes. Ny session, Opus, høj effort. Kopiér prompten nedenfor.*
 
 ## Det, I så (22. november 2026)
 1. **Huygens og faldskærmen er kridhvide og gløder** som en lyspære (ved 92 km og ved 7,9 km).

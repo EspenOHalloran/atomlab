@@ -18,7 +18,7 @@
 // Tallene og tidsplanen står i js/data/maaner/landhuygens.js.
 
 import * as THREE from 'three';
-import { LAV_KVALITET, TEST_HURTIG, ROLIG, lavPrikTekstur } from '../scene3d.js';
+import { LAV_KVALITET, TEST_HURTIG, ROLIG, lavPrikTekstur, verden } from '../scene3d.js';
 import { TITAN, FALDSKÆRM_KM, SE_JORDEN_KM, LAMPE_KM, NED_S, LANDING, højdeVed, tidVed, fartVed, skærmVed, urTekst, billedeVed, BILLEDER, KREDIT, DATO } from '../data/maaner/landhuygens.js';
 
 const MAPPE = new URL('../../billeder/solsystem/', import.meta.url);
@@ -30,6 +30,10 @@ const KUPPEL_R = 600; // kuplens radius (kameraets far er 3000)
 const M_PR_ENHED = 1.86;
 const JORD_KM = 0.15; // under denne højde kommer jorden under Huygens frem (den toner ind ned til 50 m)
 const LAND_S = 2.8; // sekunder på skærmen fra stødet, til Huygens står stille (hul, hop, glid og vip)
+// Lyset i disen (lineært). Et hvidt modul bliver dæmpet orange som disen over det (ESA: ved jorden ca. 1.000 gange
+// svagere end sollys på Jorden, men tegningen er lysere, så man kan se noget). Snorene er belyst af det samme lys
+const HIMMEL_LYS = 0.75, SOL_LYS = 0.3;
+const SNOR = 0x8a6c52;
 
 // Huygens: modulet (det, der landede) og varmeskjoldet og bagdækslet, som kun er med i rummet og på vej ind
 export function lavHuygens() {
@@ -84,7 +88,7 @@ function lavFaldskærm() {
   }
   const lg = new THREE.BufferGeometry();
   lg.setAttribute('position', new THREE.Float32BufferAttribute(linjer, 3));
-  const snore = new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0xd8d2c8, transparent: true, opacity: 0.8 }));
+  const snore = new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: SNOR, transparent: true, opacity: 0.8 }));
   g.add(kalot, snore);
   return g;
 }
@@ -110,27 +114,42 @@ const KUPPEL_FRAGMENT = /* glsl */ `
   }
   void main() {
     vec3 d = normalize(vRetning);
-    // Himlen: lysere orange ved horisonten og mod Solen, mørkere opad. Lidt lysere højt oppe
+    // Himlen: lysere orange ved horisonten og mod Solen, mørkere opad. Lidt lysere højt oppe. Farverne er lineære
+    // (komponisten lægger tonemapping og sRGB på bagefter, og i testene gør de to linjer nederst det samme)
     float hoej = clamp(uH / 160.0, 0.0, 1.0);
-    vec3 horisont = mix(vec3(0.62, 0.38, 0.17), vec3(0.78, 0.5, 0.24), hoej);
-    vec3 top = mix(vec3(0.3, 0.16, 0.07), vec3(0.42, 0.24, 0.1), hoej);
+    vec3 horisont = mix(vec3(0.27, 0.109, 0.031), vec3(0.467, 0.164, 0.044), hoej);
+    vec3 top = mix(vec3(0.088, 0.038, 0.014), vec3(0.14, 0.06, 0.019), hoej);
     vec3 c = mix(horisont, top, pow(clamp(d.y, 0.0, 1.0), 0.55));
-    c += vec3(0.22, 0.14, 0.05) * pow(max(dot(d, uSol), 0.0), 8.0);
+    c += vec3(0.2, 0.07, 0.012) * pow(max(dot(d, uSol), 0.0), 8.0);
     if (d.y < 0.0) {
       // Jorden: hvor strålen rammer en flad jord uH km under Huygens (km mod øst og nord)
       float s = uH / max(-d.y, 0.015);
       vec2 p = vec2(d.x, -d.z) * s;
       float g = 0.42;
       if (uHarKort > 0.5) g = texture2D(uKort, uLand + p / uKmPrUv).r;
-      // Små detaljer tegnet ovenpå (kortet har kun ca. 8 km pr. punkt)
-      float n = 0.5 * stoej(p * 0.6) + 0.3 * stoej(p * 2.3) + 0.2 * stoej(p * 9.0);
-      g = clamp((g - 0.45) * 1.8 + 0.45 + 0.4 * (n - 0.5), 0.0, 1.0);
-      // Mørke sletter og lyse bakker (orange lys fra disen)
-      vec3 jord = mix(vec3(0.13, 0.09, 0.06), vec3(0.72, 0.55, 0.36), g);
-      vec3 dis = mix(horisont, vec3(0.5, 0.3, 0.13), clamp(-d.y * 1.4, 0.0, 1.0) * (1.0 - 0.4 * hoej));
+      // Kortet har kun ca. 8 km pr. punkt, så landskabet er tegnet ovenpå efter Huygens' billeder: lyse bakker med
+      // mørke, forgrenede flodlejer, og en mørk slette, hvor Huygens landede (kysten lidt nord for den)
+      // (kortets lyse og mørke egne regnes i forhold til landingsstedet, så det altid ligger på sletten)
+      float g0 = uHarKort > 0.5 ? texture2D(uKort, uLand).r : 0.42;
+      float bakker = 0.55 * stoej(p * 0.35) + 0.3 * stoej(p * 1.1 + 7.0) + 0.15 * stoej(p * 3.7);
+      float kyst = smoothstep(0.3, 1.6, p.y + 0.6 * sin(p.x * 0.8) + 0.3 * sin(p.x * 2.1 + 1.0));
+      float land = (g - g0) * 1.5 + (bakker - 0.5) * 1.6 + 0.5 + 0.6 * (kyst - 0.5);
+      land = smoothstep(0.38, 0.62, land);
+      // Flodlejerne: tynde, snoede linjer (hvor støjen krydser midten), kun i nogle af bakkerne. De toner ud, når de
+      // bliver tyndere end en pixel (fwidth), ellers flimrer de
+      vec2 q = p * 0.9 + 2.2 * vec2(stoej(p * 0.3 + 2.0), stoej(p * 0.3 + 9.0));
+      float f = stoej(q) * 0.75 + stoej(q * 2.7) * 0.25 - 0.5;
+      float b = max(fwidth(f), 1e-4);
+      float flod = (1.0 - smoothstep(0.008, 0.026, abs(f))) * clamp(0.015 / b, 0.0, 1.0);
+      flod *= smoothstep(0.42, 0.62, stoej(p * 0.22 + 11.0));
+      land *= 1.0 - 0.7 * flod * smoothstep(0.2, 0.6, land);
+      vec3 jord = mix(vec3(0.065, 0.035, 0.017), vec3(0.267, 0.147, 0.071), land);
+      vec3 dis = mix(horisont, vec3(0.183, 0.079, 0.024), clamp(-d.y * 1.4, 0.0, 1.0) * (1.0 - 0.4 * hoej));
       c = mix(dis, jord, exp(-s / uSigt));
     }
     gl_FragColor = vec4(c * uLys, 1.0);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
   }`;
 
 // Jorden lige under Huygens (de sidste ca. 150 m): sand og små sten (tegnet efter billedet fra jorden), lyset fra disen og
@@ -165,18 +184,42 @@ const JORD_FRAGMENT = /* glsl */ `
   }
   void main() {
     float n = 0.6 * stoej(vP * 0.8) + 0.4 * stoej(vP * 3.1);
-    vec3 c = mix(vec3(0.33, 0.2, 0.1), vec3(0.5, 0.33, 0.17), n);
+    vec3 c = mix(vec3(0.055, 0.03, 0.015), vec3(0.1, 0.055, 0.026), n); // (lineært som kuplen, sletten ved Huygens)
     // Stenene er 4-15 cm (ca. 0,02-0,08 enheder), så de tegnes kun tæt på, ellers flimrer de
     float st = sten(vP * 9.0);
     float naer = 1.0 - smoothstep(2.0, 7.0, length(vP));
-    c = mix(c, vec3(0.6, 0.43, 0.25), (1.0 - smoothstep(0.7, 1.0, st)) * 0.75 * naer);
+    c = mix(c, vec3(0.16, 0.09, 0.04), (1.0 - smoothstep(0.7, 1.0, st)) * 0.75 * naer);
     c *= uLys;
     // Lampen: et varmt skær lige under Huygens
     float l = exp(-dot(vP - uLampePos, vP - uLampePos) / 1.6) * uLampe;
-    c += vec3(0.5, 0.36, 0.18) * l;
+    c += vec3(0.16, 0.09, 0.03) * l;
     float a = uSynlig * (1.0 - smoothstep(14.0, 40.0, length(vP)));
     gl_FragColor = vec4(c, a);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
   }`;
+
+// Scenens fælles lys (det hvide hovedlys, det blå kantlys og det svage lys alle steder) og spejlingen af et rum (scene.
+// environment) gjorde Huygens og faldskærmen kridhvide og glødende i disen (brugerens skærmbilleder 22. november 2026).
+// De slukkes, mens turen ned vises, og tændes igen bagefter. Styrken sættes til 0 i stedet for at skjule lysene, for
+// et andet antal lys laver alle shaderne om (et ryk)
+const slukket = new Map();
+let miljøFør = null;
+function fællesLys(sluk) {
+  const sc = verden.scene;
+  if (!sc) return;
+  if (sluk) {
+    if (slukket.size || miljøFør !== null) return;
+    for (const o of sc.children) if (o.isLight) { slukket.set(o, o.intensity); o.intensity = 0; }
+    miljøFør = sc.environmentIntensity;
+    sc.environmentIntensity = 0;
+  } else {
+    for (const [o, styrke] of slukket) o.intensity = styrke;
+    slukket.clear();
+    if (miljøFør !== null) sc.environmentIntensity = miljøFør;
+    miljøFør = null;
+  }
+}
 
 export function lavNedtur({ vindue, kamera }) {
   const gruppe = new THREE.Group();
@@ -194,8 +237,11 @@ export function lavNedtur({ vindue, kamera }) {
     vertexShader: KUPPEL_VERTEX,
     fragmentShader: KUPPEL_FRAGMENT,
     side: THREE.BackSide,
-    depthTest: false,
-    depthWrite: false,
+    // Kuplen tegnes først og skriver altid sin dybde, så stjernerne bagved (700-1300 enheder ude) ikke lyser igennem
+    // disen. (Uden dybdetest bliver dybden ikke skrevet, derfor AlwaysDepth)
+    depthTest: true,
+    depthFunc: THREE.AlwaysDepth,
+    depthWrite: true,
   });
   const kuppel = new THREE.Mesh(new THREE.SphereGeometry(KUPPEL_R, TEST_HURTIG ? 32 : 64, TEST_HURTIG ? 16 : 32), kuppelMat);
   kuppel.renderOrder = -10;
@@ -212,12 +258,15 @@ export function lavNedtur({ vindue, kamera }) {
   skærm.position.y = 0.55;
   system.add(skærm);
   const rem = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, huygens.r * 0.3, 0), new THREE.Vector3(0, 0.55, 0)]);
-  system.add(new THREE.Line(rem, new THREE.LineBasicMaterial({ color: 0xd8d2c8 })));
+  system.add(new THREE.Line(rem, new THREE.LineBasicMaterial({ color: SNOR })));
   gruppe.add(system);
-  gruppe.add(new THREE.AmbientLight(0xffb878, 1.1));
-  const sollys = new THREE.DirectionalLight(0xffd8a8, 1.0);
+  // Lyset kommer fra disen: orange fra oven og et svagt, brunt skær fra jorden nedenunder. Solen anes kun som et lidt
+  // lysere sted i disen, så den giver kun en svag skygge. (Scenens fælles lys er slukket under turen, se fællesLys)
+  const lin = (r, g, b) => new THREE.Color().setRGB(r, g, b, THREE.LinearSRGBColorSpace);
+  const disLys = new THREE.HemisphereLight(lin(1, 0.46, 0.15), lin(0.3, 0.16, 0.07), HIMMEL_LYS);
+  const sollys = new THREE.DirectionalLight(lin(1, 0.55, 0.22), SOL_LYS);
   sollys.position.copy(kuppelMat.uniforms.uSol.value);
-  gruppe.add(sollys);
+  gruppe.add(disLys, sollys);
 
   const N = TEST_HURTIG ? 60 : LAV_KVALITET ? 140 : 280;
   const korn = new Float32Array(N * 3);
@@ -229,7 +278,7 @@ export function lavNedtur({ vindue, kamera }) {
   }
   const kornGeo = new THREE.BufferGeometry();
   kornGeo.setAttribute('position', new THREE.BufferAttribute(korn, 3));
-  const kornMat = new THREE.PointsMaterial({ size: 0.07, map: lavPrikTekstur(true), color: 0xffd9ae, transparent: true, opacity: 0.45, depthWrite: false });
+  const kornMat = new THREE.PointsMaterial({ size: 0.07, map: lavPrikTekstur(true), color: 0xd9a272, transparent: true, opacity: 0.45, depthWrite: false });
   const kornP = new THREE.Points(kornGeo, kornMat);
   kornP.frustumCulled = false;
   gruppe.add(kornP);
@@ -254,7 +303,7 @@ export function lavNedtur({ vindue, kamera }) {
   pære.position.y = BUND - 0.01;
   const keglGeo = new THREE.ConeGeometry(0.5, 1, 24, 1, true);
   keglGeo.translate(0, -0.5, 0); // spidsen i origo, keglen nedad
-  const kegle = new THREE.Mesh(keglGeo, new THREE.MeshBasicMaterial({ color: 0xffc070, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+  const kegle = new THREE.Mesh(keglGeo, new THREE.MeshBasicMaterial({ color: 0xffc070, transparent: true, opacity: 0.035, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
   kegle.position.y = BUND;
   lampe.add(pære, kegle);
   lampe.visible = false;
@@ -357,6 +406,23 @@ export function lavNedtur({ vindue, kamera }) {
     ur.tal.textContent = t.tal;
     ur.under.textContent = `${t.under} ⇄`;
   }
+  // Det, der følger højden: disen og jorden i kuplen, lyset, jorden under Huygens og lampen (fra 700 m). Sættes, når
+  // højden skifter (også på pause, fx når man blader mellem etaperne), ikke kun i opdater
+  function tegnHøjde() {
+    kuppelMat.uniforms.uH.value = Math.max(h, JORD_KM);
+    const lys = 0.78 + 0.22 * Math.min(1, h / SØJLE_KM);
+    kuppelMat.uniforms.uLys.value = lys;
+    disLys.intensity = HIMMEL_LYS * lys;
+    sollys.intensity = SOL_LYS * lys;
+    const hM = (h * 1000) / M_PR_ENHED; // højden i tegningens enheder
+    jord.visible = h < JORD_KM;
+    jord.position.y = BUND - hM;
+    jordMat.uniforms.uSynlig.value = THREE.MathUtils.smoothstep(JORD_KM - h, 0, JORD_KM - 0.05);
+    jordMat.uniforms.uLys.value = lys;
+    lampe.visible = h <= LAMPE_KM + 1e-9;
+    jordMat.uniforms.uLampe.value = lampe.visible ? 1 : 0;
+    kegle.scale.set(0.5, Math.min(hM + 0.02, 1.6), 0.5);
+  }
   function tegnUI() {
     højdeEl.textContent = h >= 10 ? `${Math.round(h)} km` : h >= 1 ? `${h.toFixed(1).replace('.', ',')} km` : `${Math.round(h * 1000)} m`;
     prik.style.top = `${(1 - Math.min(1, h / SØJLE_KM)) * 100}%`;
@@ -441,6 +507,7 @@ export function lavNedtur({ vindue, kamera }) {
     start({ åbn = true, til = 0 } = {}) {
       hentBilleder();
       gruppe.visible = true;
+      fællesLys(true);
       måler.hidden = false;
       this.sætDato(DATO.ned);
       åbner = åbn && !ROLIG ? 0 : 1;
@@ -448,6 +515,7 @@ export function lavNedtur({ vindue, kamera }) {
     },
     skjul() {
       gruppe.visible = false;
+      fællesLys(false);
       måler.hidden = true;
       kam.hidden = true;
       kam.classList.remove('stor');
@@ -456,6 +524,7 @@ export function lavNedtur({ vindue, kamera }) {
       s = Math.min(Math.max(0, sek), grænse > 0 ? tidVed(grænse) : NED_S);
       h = højdeVed(s);
       if (s < NED_S && landet) iLuften();
+      tegnHøjde();
       tegnUI();
       visBillede();
     },
@@ -471,8 +540,6 @@ export function lavNedtur({ vindue, kamera }) {
         landTid = 0;
         hul.visible = true;
       }
-      kuppelMat.uniforms.uH.value = Math.max(h, JORD_KM);
-      kuppelMat.uniforms.uLys.value = 0.78 + 0.22 * Math.min(1, h / SØJLE_KM);
       // Faldskærmen folder sig ud og skiftes til den lille efter 15 min
       if (åbner < 1) åbner = Math.min(1, åbner + dt / 1.1);
       const mål = skærmVed(s) === 'stor' ? STOR : LILLE;
@@ -480,16 +547,6 @@ export function lavNedtur({ vindue, kamera }) {
       const str = THREE.MathUtils.lerp(0.15, mål, e);
       skærm.scale.setScalar(str);
       skærm.scale.x = skærm.scale.z = str * (0.4 + 0.6 * e);
-      // Jorden under Huygens og lampen (fra 700 m)
-      const hM = (h * 1000) / M_PR_ENHED; // højden i tegningens enheder
-      jord.visible = h < JORD_KM;
-      jord.position.y = BUND - hM;
-      jordMat.uniforms.uSynlig.value = THREE.MathUtils.smoothstep(JORD_KM - h, 0, JORD_KM - 0.05);
-      jordMat.uniforms.uLys.value = kuppelMat.uniforms.uLys.value;
-      lampe.visible = h <= LAMPE_KM + 1e-9;
-      jordMat.uniforms.uLampe.value = lampe.visible ? 1 : 0;
-      kegle.scale.set(0.5, Math.min(hM + 0.02, 1.6), 0.5);
-      kegle.material.opacity = 0.09;
       if (landet) {
         if (!stille) {
           landTid += dt * landFart;
@@ -525,11 +582,13 @@ export function lavNedtur({ vindue, kamera }) {
     test: () => ({
       vist: gruppe.visible, s, h, skærm: skærmVed(s), åbner, jorden, ur: urKnap.textContent.replace(/\s+/g, ' ').trim(),
       kamera: !kam.hidden, billede: billede?.km ?? null, stor: kam.classList.contains('stor'), set: [...sete], dato: datoEl.textContent,
-      måler: !måler.hidden, højdeTekst: højdeEl.textContent, kort: kuppelMat.uniforms.uHarKort.value === 1,
+      måler: !måler.hidden, højdeTekst: højdeEl.textContent, kort: kuppelMat.uniforms.uHarKort.value === 1, uH: kuppelMat.uniforms.uH.value,
       lampe: lampe.visible, jord: jord.visible, landet, stille, hul: hul.visible, grænse, foto: fotoVist,
+      fællesLys: verden.scene ? verden.scene.children.filter((o) => o.isLight).reduce((sum, o) => sum + o.intensity, 0) + verden.scene.environmentIntensity : null,
     }),
     skiftUr: () => urKnap.click(),
     stop() {
+      fællesLys(false);
       ui.remove();
       kam.remove();
       gruppe.traverse((o) => { o.geometry?.dispose(); o.material?.dispose?.(); });

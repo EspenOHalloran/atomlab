@@ -265,6 +265,14 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await vent(page, () => Math.abs(atomlabTest.gaader.skinne().pos() - 4) < 0.02);
   const hul = await vent(page, () => (atomlabTest.gaader.skinne().lampe('sorthul')?.tegnet ?? 0) > 0, null, 10000) && await page.evaluate(() => atomlabTest.gaader.skinne().lampe('sorthul'));
   tjek('skarpere: lampen for det sorte hul bruger linsen fra Kosmos og et lag på højst 512 px', hul?.linse && hul.tegnet > 0 && hul.størrelse >= 96 && hul.størrelse <= 512, JSON.stringify(hul));
+  // Skarp på touch (22. november 2026): A56 med 120 billeder/s bliver skarp, en tablet på 70 af 90 ikke, og falder den
+  // bagefter, går den tilbage og bliver dér. Under 40 billeder/s står billedet stille som før.
+  const skift = await page.evaluate(async () => {
+    const { linseSkift: f } = await import('/js/gaader/lys.js');
+    const fri = { skarp: false, låst: false };
+    return [f(fri, 115, 120), f(fri, 70, 90), f({ skarp: true, låst: false }, 80, 120), f({ skarp: false, låst: true }, 118, 120), f(fri, 30, 60), f({ skarp: true, låst: false }, 100, 120)].join();
+  });
+  tjek('skarp på touch: op ved 90 % af loftet, tilbage under 75 % og låst bagefter, stillbillede under 40', skift === 'skarp,,tilbage,,frys,', skift);
   await page.mouse.move(700, 300);
   await page.mouse.down();
   for (let i = 1; i <= 8; i++) await page.mouse.move(700 - i * 50, 300);
