@@ -4,6 +4,7 @@
 - `atomlabGaader`: `{ id: tidspunkt }` for de kort i Gåderne, man har gjort færdige (✓ i oversigten, G1 12. november 2026). "Nulstil al fremgang" rører det ikke.
 - `atomlabOpdagelserGaader`: `{ bog: tidspunkt }` for de bøger i Opdagelserne, hvor man har løst gåden (hele anagrammet hos Huygens, ✓ i opslaget "Hemmeligheden", H3 17. november 2026, og stjernen fundet med Tychos tal, T3 19. november 2026). "Nulstil al fremgang" rører det ikke (som Gåderne).
 - `atomlabGaaderSkinne`: `'1'`, når man har fløjet ud af et kort i Gåderne første gang og set lysene på skinnen tænde (G4b 14. november 2026). Uden den (og uden færdige kort) står man første gang foran det første kort. "Nulstil al fremgang" rører det ikke.
+- `atomlabLinseSkarp` (22. november 2026, kun touch, `js/gaader/lys.js`): `'1'`, når det sorte hul i Gåderne har klaret skarp (mindst 90 % af skærmens loft), så linsen får pc'ens shader fra start næste gang, og `'0'`, når den måtte gå tilbage. Slettes den, måles der forfra.
 - `atomlabLyd`: `'til'` eller `'fra'`
 - `atomlabFane`: den valgte fane i infopanelet (`atom`, `kerne`, `fakta` eller `nørd`)
 - `atomlabOpgaveFoldet`: `'ja'` hvis opgavepillen i toplinjen er foldet sammen

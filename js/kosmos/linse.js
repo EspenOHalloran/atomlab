@@ -15,9 +15,9 @@ import { M, ISCO, SKIVE_YDERST, FARVER, LOG_T, farvetabel } from '../data/sorthu
 
 // Kvaliteten: pc og tablet. skala = opløsningen af billedet i forhold til skærmen.
 // mindst = den laveste opløsning, den dynamiske opløsning må gå ned til.
-export const LINSE_KVALITET = LAV_KVALITET
-  ? { skala: 0.5, mindst: 0.3, maks: 110, kort: 0.085, langt: 0.3, oktaver: 2, stjernelag: 2 }
-  : { skala: 1, mindst: 0.4, maks: 170, kort: 0.06, langt: 0.24, oktaver: 4, stjernelag: 3 };
+export const LINSE_TOUCH = { skala: 0.5, mindst: 0.3, maks: 110, kort: 0.085, langt: 0.3, oktaver: 2, stjernelag: 2 };
+export const LINSE_PC = { skala: 1, mindst: 0.4, maks: 170, kort: 0.06, langt: 0.24, oktaver: 4, stjernelag: 3 };
+export const LINSE_KVALITET = LAV_KVALITET ? LINSE_TOUCH : LINSE_PC;
 // Dynamisk opløsning: Programmet måler billeder i sekundet hvert sekund og skruer ned for opløsningen under 45 og op
 // igen over 56 (to sekunder i træk). Ikke i testene (?test), hvor testbrowseren altid er langsom, medmindre en test slår
 // den til.
@@ -320,8 +320,9 @@ void main() {
 }`;
 
 // Laver lysbøjningen. Giver { flade (læg den i scenen), opdater(tid, lysere), skala(), dynamisk(til), fjern() }.
-export function lavLinse({ lysstyrke = 0.2 } = {}) {
-  const q = LINSE_KVALITET;
+// kvalitet: LINSE_KVALITET (standard) eller LINSE_PC (Gådernes skarpe hul på en stærk telefon, js/gaader/lys.js).
+export function lavLinse({ lysstyrke = 0.2, kvalitet = LINSE_KVALITET } = {}) {
+  const q = kvalitet;
   const lag = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false });
   lag.texture.minFilter = lag.texture.magFilter = THREE.LinearFilter;
   const tabel = farvetabel().map((c) => new THREE.Vector3(...c));
@@ -416,6 +417,8 @@ export function lavLinse({ lysstyrke = 0.2 } = {}) {
   return {
     flade,
     tekstur: lag.texture, // billedet (rgb) og dybden (a), til Gådernes lampe (js/gaader/lys.js)
+    kvalitet: q,
+    materialer: [linseMat, fladeMat], // så shaderne kan laves på forhånd (linseMat tegnes ikke i scenen, men i laget)
     // tid: fænomenets ur (står stille under pause). lysere: skiven lyser op, når den får mad.
     opdater(tid, lysere) {
       linseMat.uniforms.uTid.value = tid * TIDSSKALA;
