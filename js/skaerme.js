@@ -4,8 +4,9 @@
 // En ny del: en linje i SKÆRME, en sektion med samme id i index.html (og et link i .menukort) og et modul, der
 // eksporterer lav, start og stop (og testAdgang til ?test). modul er stien fra denne fil.
 // status: 'færdig' eller 'prøve' (prøvet af et barn eller ej, se docs/retning.md). Det vises ikke anderledes endnu (nr. 13).
-// høj: true = skærmen må få kvalitetstrinnet Høj på touch (js/scene3d.js, docs/plan-kvalitetstrin.md). Solsystemet,
-// Kosmos og Begyndelsen er ikke målt endnu og bliver i Basis. Gåderne (91 billeder/s på Tab A11) har det fra 20. november 2026.
+// høj: true = skærmen må få kvalitetstrinnet Høj på touch (js/scene3d.js, docs/plan-kvalitetstrin.md). Gåderne (91 billeder/s
+// på Tab A11) har det fra 20. november 2026. høj: 'tung' = kun ved stor luft (mindst 100 billeder/s, TRIN_GRÆNSER_TUNG):
+// Solsystemet, Kosmos og Begyndelsen fra 21. november 2026 (telefonen A56 havde 117-119 billeder/s i Basis dér).
 // html og css er til 10b, når en skærm får sine egne filer (tomme indtil da).
 export const SKÆRME = [
   { id: 'vaerksted', verden: 'atomer', titel: 'Atomværkstedet', modul: './vaerksted.js', status: 'færdig', høj: true },
@@ -16,10 +17,10 @@ export const SKÆRME = [
   { id: 'fusion', verden: 'kerner', titel: 'Stjerneovnen', modul: './fusion.js', status: 'færdig', høj: true },
   { id: 'reaktor', verden: 'kerner', titel: 'Reaktoren', modul: './reaktor.js', status: 'færdig', høj: true },
   { id: 'liv', verden: 'liv', titel: 'Liv', modul: './liv.js', status: 'prøve', høj: true },
-  { id: 'begyndelsen', verden: 'liv', titel: 'Begyndelsen', modul: './begyndelsen.js', status: 'prøve' },
+  { id: 'begyndelsen', verden: 'liv', titel: 'Begyndelsen', modul: './begyndelsen.js', status: 'prøve', høj: 'tung' },
   { id: 'batteri', verden: 'elektricitet', titel: 'Batteriet', modul: './batteri.js', status: 'færdig', høj: true },
-  { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig' },
-  { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig' },
+  { id: 'solsystem', verden: 'rummet', titel: 'Solsystemet', modul: './solsystem.js', status: 'færdig', høj: 'tung' },
+  { id: 'kosmos', verden: 'rummet', titel: 'Kosmos', modul: './kosmos.js', status: 'færdig', høj: 'tung' },
   { id: 'ordbog', verden: 'biblioteket', titel: 'Ordbogen', modul: './ordbog.js', status: 'færdig', høj: true },
   { id: 'gaader', verden: 'biblioteket', titel: 'Gåderne', modul: './gaader.js', status: 'prøve', høj: true },
   { id: 'opdagelser', verden: 'biblioteket', titel: 'Opdagelserne', modul: './opdagelser.js', status: 'prøve', høj: true },

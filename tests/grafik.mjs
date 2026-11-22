@@ -128,17 +128,37 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
     const c = s.verden.renderer.domElement;
     return { trin: s.kvalitetstrin(), pr: s.verden.renderer.getPixelRatio(), kanter: s.kanterSlags(), lærred: c.width, glød: s.verden.glød.renderTargetsHorizontal[0].width, sidst: s.verden.komponist.passes.at(-1) === s.verden.kanter };
   });
+  // SMAA's shadere laves på forhånd (forvarmSMAA, 2,5 s efter start), så skiftet til Høj ikke laver nye
+  await page.waitForTimeout(5000);
+  const programmer = () => page.evaluate(async () => (await import('/js/scene3d.js')).verden.renderer.info.programs.length);
+  const programmerFør = await programmer();
   const basis = await tilstand();
   tjek('tablet: starter i Basis (pixelRatio 1,5, FXAA, gløden i en fjerdedel)', basis.trin === 'basis' && basis.pr === 1.5 && basis.kanter === 'FXAA' && Math.abs(basis.glød - basis.lærred / 4) <= 1, JSON.stringify(basis));
   await page.evaluate(async () => (await import('/js/scene3d.js')).sætTrin('høj'));
   const høj = await tilstand();
   tjek('tablet: Høj giver pixelRatio 2, SMAA sidst og gløden i halv opløsning', høj.trin === 'høj' && høj.pr === 2 && høj.lærred === 2048 && høj.kanter === 'SMAA' && høj.sidst && Math.abs(høj.glød - høj.lærred / 2) <= 1, JSON.stringify(høj));
   await page.screenshot({ path: `${UD}/tablet-hoej-vaerksted.png` });
-  // En skærm, der ikke har valgt Høj (Kosmos), går til Basis
+  tjek('tablet: skiftet til Høj laver ingen nye shadere (SMAA er lavet på forhånd)', (await programmer()) === programmerFør, `${programmerFør} → ${await programmer()}`);
+  // En tung skærm (Kosmos) går til Basis, når Høj er nået på en let skærm (Tab A11 må ikke tage Høj med til Kosmos)
   await page.evaluate(() => { location.hash = '#kosmos'; });
   await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
   const kosmos = await tilstand();
-  tjek('tablet: Kosmos (ikke målt) går tilbage til Basis', kosmos.trin === 'basis' && kosmos.pr === 1.5 && kosmos.kanter === 'FXAA' && Math.abs(kosmos.glød - kosmos.lærred / 4) <= 1, JSON.stringify(kosmos));
+  const tung = await page.evaluate(async () => (await import('/js/scene3d.js')).trinTilstand().tung);
+  tjek('tablet: Kosmos er en tung skærm og går til Basis med Høj fra Værkstedet', tung && kosmos.trin === 'basis' && kosmos.pr === 1.5 && kosmos.kanter === 'FXAA' && Math.abs(kosmos.glød - kosmos.lærred / 4) <= 1, JSON.stringify(kosmos));
+  // Høj nået på en tung skærm beholdes på en let og tilbage på den tunge
+  await page.evaluate(async () => (await import('/js/scene3d.js')).sætTrin('høj'));
+  await page.evaluate(() => { location.hash = '#vaerksted'; });
+  await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+  await page.evaluate(() => { location.hash = '#kosmos'; });
+  await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+  tjek('tablet: Høj nået i Kosmos beholdes til Værkstedet og tilbage', (await tilstand()).trin === 'høj');
+  // Supernova: shaderne til eksplosionen er lavet, når fænomenet åbnes (før et ryk på 176 ms på telefonen A56)
+  await page.evaluate(() => atomlabTest.kosmos.vælg('supernova'));
+  let n = -1;
+  for (let i = 0; i < 30 && n !== (n = await programmer()); i++) await page.waitForTimeout(2000); // til der ikke kommer flere
+  await page.evaluate(() => { const k = atomlabTest.kosmos; k.trykPå('eksplodere'); k.spol(4); });
+  await page.waitForTimeout(3000);
+  tjek('tablet: "Lad stjernen eksplodere" laver ingen nye shadere', (await programmer()) === n, `${n} → ${await programmer()}`);
   // Den automatiske måling: Testbrowseren er langsom (under 45 billeder/s), så Høj falder tilbage til Basis og bliver der
   await page.evaluate(() => { location.hash = '#vaerksted'; });
   await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
@@ -147,6 +167,13 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await page.waitForTimeout(5000); // låst: går ikke op igen, selvom målingen fortsætter
   const auto = await tilstand();
   tjek('tablet: under 45 billeder/s falder Høj tilbage til Basis og bliver der', auto.trin === 'basis' && auto.kanter === 'FXAA', JSON.stringify(auto));
+  // Kommer man tilbage til skærmen, prøver den ikke igen (ingen vippen mellem skærmene)
+  await page.evaluate(() => { location.hash = '#system'; });
+  await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+  await page.evaluate(() => { location.hash = '#vaerksted'; });
+  await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+  const igen = await page.evaluate(async () => (await import('/js/scene3d.js')).trinTilstand());
+  tjek('tablet: efter et fald prøver Værkstedet ikke igen, når man kommer tilbage', igen.navn === 'basis' && igen.låst, JSON.stringify(igen));
   tjek('tablet: ingen fejl i konsollen med kvalitetstrinnet', fejl.length === 0, fejl.join('\n'));
   await page.context().close();
 }
