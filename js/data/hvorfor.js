@@ -363,6 +363,19 @@ export const HVORFOR = {
   // de Broglie, Davisson-Germer og Thomson 1927, Jönsson 1961, Merli, Missiroli og Pozzi 1974, Tonomura m.fl. 1989, Bach
   // m.fl. 2013, Hackermüller m.fl. 2004 med C₇₀), afsnit 6 (dekohærens, SEP) og afsnit 7 (fælderne om bevidstheden og
   // usikkerhedsrelationen). C₇₀ er aflangt som en rugbybold (C₆₀ er fodbolden).
+  // "To steder på én gang?" (22. november 2026, docs/plan-kvante-to-steder.md). Kilder i
+  // docs/fakta-kvantefysik/faktatjek-to-steder.md: Grangier, Roger og Aspect (Europhys. Lett. 1, 173, 1986), Jacques m.fl.
+  // med Aspect og Grangier (Eur. Phys. J. D 35, 561, 2005, arXiv:2011.12664: 23-32 sammenfald ud af ca. 100.000 fotoner,
+  // fordi kilden en sjælden gang sendte mere end én), Winelands Nobelforelæsning (Monroe m.fl. 1996: 83 nm),
+  // Nobelprisen 2012 (nobelprize.org), Kovachy m.fl. (Nature 528, 530, 2015: 54 cm) med kritikken fra Stamper-Kurn m.fl.
+  // (arXiv:1607.01454, "consistent with, but does not prove") og Schrödinger (Naturwissenschaften 23, 807, 1935).
+  kvanteToSteder: {
+    spørgsmål: 'Er elektronen så to steder på én gang?',
+    svar: 'Det siges tit, men ingen har nogensinde fundet en elektron to steder: Hver gang man kigger efter, finder man én hel elektron ét sted. Det, der går gennem begge sprækker, er bølgen, og den ses kun indirekte, på striberne. Fysikerne kalder det en superposition.\n\nI 1986 sendte tre forskere i Frankrig lys mod et halvgennemsigtigt spejl, én foton ad gangen og med en måler på hver vej. Målerne gav næsten aldrig udslag på samme tid, men de samme fotoner gav striber, når de to veje blev ført sammen igen.',
+    nørd: 'I 2005 gentog Alain Aspect, Philippe Grangier og deres kolleger det med et glasprisme, der deler lyset i to veje næsten som to sprækker. Ud af ca. 100.000 fotoner gav begge målere kun udslag samtidig 23-32 gange, fordi lyskilden en sjælden gang sendte mere end én foton. Større ting kan også deles i to bølger: I 1996 delte David Winelands hold én ion i to bølger 83 nanometer fra hinanden, og Serge Haroches hold gjorde noget lignende med mikrobølger mellem to spejle. De fik Nobelprisen i 2012. I 2015 meldte Mark Kasevich\' hold, at atomer var delt i to bølger ca. 54 cm fra hinanden, men andre forskere mener ikke, at forsøget beviser det helt. I alle forsøgene ses superpositionen kun indirekte, som interferens, når de to dele mødes igen. Schrödingers kat, der skulle være både levende og død, fandt Erwin Schrödinger på i 1935 som en indvending, ikke som noget, han troede på.',
+    næste: 'kvanteKigger',
+    link: { tekst: 'Er den begge steder, før man kigger? Gåden ›', handling: () => import('../gaa.js').then((m) => m.åbnGåde('kvante')) },
+  },
   kvanteKigger: {
     spørgsmål: 'Ved elektronen, at vi kigger?',
     svar: 'Nej. At måle betyder, at noget (lys, luft eller en måler) mærker, hvilken vej elektronen tog, også selvom intet menneske ser efter. Så er de mørke striber væk.\n\nI 2004 sendte forskere i Wien varme molekyler af 70 kulstofatomer gennem gitre med mange sprækker. Jo varmere molekylerne var, jo mere varmestråling sendte de ud, som røbede vejen, og jo svagere blev striberne.',
