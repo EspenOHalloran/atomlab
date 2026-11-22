@@ -39,7 +39,9 @@ export default {
         tekst: '<p>Det ved ingen. Einsteins teori siger, <i>at</i> stof krummer rumtiden, og præcis hvor meget, og det er målt mange gange. Men den siger ikke hvorfor. Newton havde det på samme måde med sin tyngdelov: I 1713 skrev han, at han ikke kendte grunden. Einstein kom et lag dybere, men det næste lag mangler stadig.</p>',
       },
     ],
-    videre: [gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:tyngdebolger', 'Tyngdebølger')],
+    // Linket til Einsteins side fra 1915 (Videnskabsfolkene E5, 22. november 2026, aftalt med orkestratoren): åbner bogen
+    // ved opslaget "1915: Tyngden"
+    videre: [gå('kosmos:sorthul', 'Sort hul'), gå('kosmos:tyngdebolger', 'Tyngdebølger'), gå('opdagelser:einstein:tyngden', 'Einsteins egen side fra 1915')],
     nørd: `
       <p><b>Tid går langsommere tæt på tunge ting.</b> Højt oppe, længere væk fra Jorden, går urene i GPS-satellitterne ca. 45 milliontedele sekund hurtigere pr. døgn. Men fordi satellitterne farer af sted, går de også ca. 7 milliontedele sekund langsommere (det forudsagde Einstein allerede i 1905). Samlet går de ca. 38 milliontedele sekund for hurtigt pr. døgn. Rettede man ikke for det, ville GPS tage fejl med omkring 10 km om dagen.</p>
       <p><b>Ting falder mod den langsomme tid.</b> For ting, der bevæger sig langsomt i forhold til lyset, som et æble eller Månen, kommer næsten hele tyngdekraften af, at tiden går en lille smule langsommere tæt på noget tungt. Ting falder den vej, tiden går langsomst. Men det fortæller, <i>hvordan</i> tyngdekraften virker, ikke <i>hvorfor</i>: Hvorfor stof får tiden til at gå langsommere, er det samme spørgsmål igen.</p>

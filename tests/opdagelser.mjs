@@ -1171,6 +1171,12 @@ for (const [navn, opsætning] of [
   await page.click('#tmpLink');
   const iBogen = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'tiden', null, 5000);
   tjek('et link med et opslag åbner også det opslag, når Opdagelserne allerede er fremme', iBogen);
+  // Rumtid i Kosmos: "Einsteins egen side fra 1915 ›" under "Gå videre" åbner "1915: Tyngden"
+  await O(() => { location.hash = '#kosmos:rumtid'; });
+  const rumtid = await vent(page, () => !!document.querySelector('#kosmos [data-gaa="opdagelser:einstein:tyngden"]'), null, 15000);
+  if (rumtid) await O(() => document.querySelector('#kosmos [data-gaa="opdagelser:einstein:tyngden"]').click());
+  const fraRumtid = rumtid && await vent(page, () => location.hash === '#opdagelser' && atomlabTest.opdagelser.vist()?.opslag === 'tyngden', null, 15000);
+  tjek('Rumtid: "Einsteins egen side fra 1915 ›" åbner Einsteins bog ved "1915: Tyngden"', fraRumtid);
   await ctx.close();
 }
 
