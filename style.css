@@ -2652,6 +2652,27 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 }
 /* Kosmos (forløbet "Rejsen i tid"): Styr-boksen og underteksten er skjult, for forløbets linje fortæller, hvad der sker */
 #kosmos.i-forløb .vindue :is(.styr, .undertekst.fase), #solsystem.i-forløb .vindue :is(.styr, .undertekst.fase) { display: none !important; }
+/* Lav skærm på langs (telefonen): forløbets linje står i en smal kolonne til højre, og scenen får resten (som i Opdagelserne).
+   Tavlen i "Under isen" (.ui-tavle.fl-vis) har sin egen regel længere nede, der vinder (:has), og dér står linjen under scenen. */
+@media (max-height: 500px) and (orientation: landscape) {
+  #kosmos.i-forløb, #solsystem.i-forløb { grid-template-columns: minmax(0, 1fr) minmax(0, 300px) !important; grid-template-rows: auto minmax(0, 1fr) !important; grid-template-areas: "top top" "vindue forløb" !important; }
+  :is(#kosmos, #solsystem).i-forløb > .forløb-linje { align-self: start; width: auto; max-height: 100%; box-sizing: border-box; overflow-y: auto; margin: 0 6px 6px 0; padding: 6px 8px 8px 10px; gap: 5px; font-size: 14px; line-height: 1.3; }
+  :is(#kosmos, #solsystem).i-forløb .fl-hoved { gap: 6px; }
+  :is(#kosmos, #solsystem).i-forløb .fl-titel { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  :is(#kosmos, #solsystem).i-forløb .fl-spring { padding: 0 8px; font-size: 12.5px; }
+  :is(#kosmos, #solsystem).i-forløb .fl-række { gap: 6px; }
+  :is(#kosmos, #solsystem).i-forløb .fl-række button { font-size: 13.5px; }
+  :is(#kosmos, #solsystem).i-forløb :is(.fl-gæt, .fl-vej, .fl-næste) { padding: 0 11px; }
+  :is(#kosmos, #solsystem).i-forløb .fl-gætter { gap: 6px; }
+}
+/* Land med Huygens (js/maaner/landhuygens.js): mens Huygens falder, også i laboratoriet efter turen, er sidefanerne,
+   Indstillinger og 🔔 skjult, og på telefonen også panelerne, som under en tur. De kommer igen, når Huygens er landet. */
+#solsystem.huygens-falder .vindue :is(.panel-fane, .styr, .logknap) { display: none !important; }
+@media (max-width: 560px) and (orientation: portrait), (max-height: 500px) and (orientation: landscape) {
+  #solsystem.huygens-falder:not(.i-forløb) { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: auto minmax(0, 1fr) !important; grid-template-areas: "top" "vindue" !important; }
+  #solsystem.huygens-falder:not(.i-forløb) > :not(.topbjælke, .vindue, .overlag) { display: none !important; }
+  #solsystem.huygens-falder:not(.i-forløb) > .vindue { grid-area: vindue !important; }
+}
 #minitabel .felt.forløb-mål { color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent); animation: forløbPuls 1.6s ease-in-out infinite; }
 @keyframes forløbPuls { 50% { box-shadow: 0 0 22px var(--accent); } }
 
