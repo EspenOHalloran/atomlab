@@ -20,9 +20,9 @@ let til = false; // MSAA er slået til lige nu
 let ønsket = false; // Gåderne er åbne og vil have udglatning
 const måling = { tid: 0, billeder: 0, sidst: 0, fra: 0, slukket: false, prøvetIgen: false };
 
-// Den rigtige tid mellem billederne (dt fra scene3d.js er højst 0,05 s, så den kan ikke måle langsomme billeder)
-function mål() {
-  const nu = performance.now();
+// Den rigtige tid mellem billederne (dt fra scene3d.js er højst 0,05 s, så den kan ikke måle langsomme billeder).
+// nu: tiden i ms (testene giver selv tiderne, målBillede)
+function mål(nu) {
   const dt = (nu - måling.sidst) / 1000;
   måling.sidst = nu;
   // Det første billede, en skjult fane, et ryk, de første sekunder og tiden lige efter nye shadere tæller ikke
@@ -59,8 +59,8 @@ export function udglat(tænd) {
   ønsket = tænd;
   Object.assign(måling, { tid: 0, billeder: 0, sidst: 0, slukket: false, prøvetIgen: false });
   skift(tænd);
-  if (tænd && VÆRN.til) verden.opdateringer.add(mål);
-  else verden.opdateringer.delete(mål);
+  if (tænd && VÆRN.til) verden.opdateringer.add(målNu);
+  else verden.opdateringer.delete(målNu);
 }
 
 function skift(tænd) {
@@ -73,7 +73,10 @@ function skift(tænd) {
   måling.fra = performance.now() + VÆRN.ro * 1000; // (nye lag, og billedet skal falde til ro)
 }
 
-// Til testene
+const målNu = () => mål(performance.now());
+
+// Til testene: værnets tilstand, og ét billede på tiden nu (ms), så testen selv bestemmer tiden mellem billederne
 export const værnTilstand = () => ({ ønsket, til, slukket: måling.slukket, prøvetIgen: måling.prøvetIgen });
+export const målBillede = (nu) => mål(nu);
 
 export const prøver = () => verden.komponist?.renderTarget1.samples ?? 0;

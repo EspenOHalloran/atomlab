@@ -51,46 +51,42 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
     tjek('pc: grænserne for Høj følger loftet (tung skærm ved 90: op 83, ned 68, så Kosmos med 88 får Høj på Tab A11)', loft.tung90.join() === '83,68' && loft.tung60.join() === '55,45' && loft.tung120.join() === '110,90', JSON.stringify(loft));
     tjek('pc: de lette skærme går op ved højst 58 og ned under 45 som før', loft.let60.join() === '55,45' && loft.let120.join() === '58,45', JSON.stringify(loft));
     // nyeShadere: sand lige efter, at en ny shader er lavet (i samme kald, for testbrowseren er langsom og SHADER_RO kort)
-    // lavShadere(sek): laver en ny shader hvert 0,3 s i siden selv, uafhængigt af testens kald
-    const lavShadere = (sek) => page.evaluate(async (sek) => {
+    const nyEfterShader = await page.evaluate(async () => {
       const s = await import('/js/scene3d.js');
       const THREE = await import('three');
-      const lav = () => {
-        globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
-        const net = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' }));
-        s.verden.renderer.compile(net, s.verden.kamera);
-      };
-      lav();
-      const svar = s.nyeShadere();
-      const nr = setInterval(lav, 300);
-      setTimeout(() => clearInterval(nr), sek * 1000);
-      return svar;
-    }, sek);
-    tjek('pc: nyeShadere() er sand lige efter en ny shader', await lavShadere(0));
-    // Gådernes værn: Testbrowseren er langsom, så med en grænse på 1000 billeder/s ville værnet slå udglatningen fra med
-    // det samme. Mens der laves nye shadere (hvert 0,3 s i 10 s), må det ikke måle.
-    const værn = () => page.evaluate(async () => { const g = await import('/js/gaader/kanter.js'); return { ...g.værnTilstand(), prøver: g.prøver() }; });
-    await lavShadere(10);
-    await page.evaluate(async () => {
+      globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
+      s.verden.renderer.compile(new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' })), s.verden.kamera);
+      return s.nyeShadere();
+    });
+    tjek('pc: nyeShadere() er sand lige efter en ny shader', nyEfterShader);
+    // Gådernes værn: Testen giver selv tiderne mellem billederne (målBillede), for testbrowseren er langsom og ujævn.
+    // 125 billeder/s → tændt. En ny shader og så 25 billeder/s i 2,8 s → stadig tændt (måler ikke). 25 billeder/s videre →
+    // slukket. 125 billeder/s i 6 s (over 90 % af loftet) → tændt igen én gang. 25 igen → slukket for resten.
+    const værnForløb = await page.evaluate(async () => {
+      const s = await import('/js/scene3d.js');
+      const THREE = await import('three');
       const g = await import('/js/gaader/kanter.js');
-      Object.assign(g.VÆRN, { til: true, fps: 1000, ro: 0, ryk: 30, tid: 1, igenTid: 1, igen: 0 });
+      Object.assign(g.VÆRN, { til: false, ro: 0 }); // (til: false = ingen måling af de rigtige billeder)
       g.udglat(true);
-    });
-    await page.waitForTimeout(4000);
-    const underShadere = await værn();
-    tjek('pc: Gådernes værn måler ikke, mens nye shadere laves (udglatningen er stadig slået til)', underShadere.til && !underShadere.slukket && underShadere.prøver === 4, JSON.stringify(underShadere));
-    // Bagefter: slået fra (for langsomt), prøvet igen én gang (igen: 0 = altid luft nok) og slået fra igen for resten
-    // (prøvetIgen er kun sand, når den er slået til igen. Testbrowseren tegner MSAA langsomt, så det kan tage minutter)
-    await page.waitForFunction(async () => { const v = (await import('/js/gaader/kanter.js')).værnTilstand(); return v.prøvetIgen && v.slukket; }, null, { timeout: 240000, polling: 1000 }).catch(() => {});
-    await page.waitForTimeout(3000);
-    const slut = await værn();
-    slut.diag = await page.evaluate(async () => { const s = await import('/js/scene3d.js'); const v = (await import('/js/gaader/kanter.js')).VÆRN; return { nye: s.nyeShadere(), programmer: s.verden.renderer.info.programs.length, loft: s.skærmLoft(), v }; });
-    tjek('pc: Gådernes værn slår udglatningen fra, prøver den igen én gang og lader den så være slukket', slut.slukket && !slut.til && slut.prøver === 0 && slut.prøvetIgen, JSON.stringify(slut));
-    await page.evaluate(async () => {
-      const g = await import('/js/gaader/kanter.js');
+      let t = performance.now() + 1000;
+      const billeder = (ms, sek) => { for (let i = 0; i < sek * 1000 / ms; i++) g.målBillede(t += ms); };
+      const tilstand = () => { const v = g.værnTilstand(); return `${v.til ? 'til' : 'fra'}${v.prøvetIgen ? ' (igen)' : ''}`; };
+      const r = [];
+      billeder(8, 4); r.push(tilstand());
+      globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
+      s.verden.renderer.compile(new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' })), s.verden.kamera);
+      s.nyeShadere(t); // (som billedløkken: den nye shader ses på tiden t)
+      billeder(40, 2.8); r.push(tilstand());
+      billeder(40, 4); r.push(tilstand());
+      billeder(8, 6); r.push(tilstand());
+      billeder(40, 4); r.push(tilstand());
+      billeder(8, 8); r.push(tilstand());
+      r.push(g.prøver());
       g.udglat(false);
-      Object.assign(g.VÆRN, { til: false, fps: 45, ro: 3, ryk: 0.5, tid: 3, igenTid: 5, igen: 0.9 });
+      Object.assign(g.VÆRN, { til: false, ro: 3 });
+      return r.join(', ');
     });
+    tjek('pc: Gådernes værn måler ikke lige efter nye shadere, slår fra under 45 billeder/s, prøver igen én gang og lader den så være slukket', værnForløb === 'til, til, fra, til (igen), fra (igen), fra (igen), 0', værnForløb);
   }
   // Supernovaen lyser meget, så gløden har noget at arbejde med
   await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('supernova'); k.trykPå('eksplodere'); k.spol(3); k.kameraFrem(); });
