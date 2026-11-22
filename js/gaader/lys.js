@@ -6,7 +6,8 @@ import * as THREE from 'three';
 import { LAV_KVALITET, ROLIG, verden, skærmLoft, nyeShadere } from '../scene3d.js';
 import { glød, prikTekstur } from '../kosmos/faelles.js';
 import { fuld, stiplet } from './streg.js';
-import { lavLinse, LINSE_KVALITET } from '../kosmos/linse.js';
+import { lavLinse, LINSE_KVALITET, LINSE_PC } from '../kosmos/linse.js';
+import { lavShadereFørst } from '../solsystem/shadere.js';
 
 const prikker = (antal, størrelse) => {
   const geo = new THREE.BufferGeometry();
@@ -208,14 +209,23 @@ const LYS = {
 // billede trukket op): Har telefonen eller tabletten mindst 90 % af skærmens loft i 3 s, mens lampen ses, tegnes hullet
 // som på pc (højst 512 px) og 60 gange i sekundet. Falder den bagefter under 75 % af loftet, går den tilbage og bliver
 // dér resten af besøget. De første sekunder og tiden lige efter nye shadere tæller ikke (nyeShadere).
+// Et gear mere (samme dag, efter målingen med 120 billeder/s og værst 12 ms): Op til 768 px (hullet fylder ca. 700 px på
+// A56), og har enheden klaret skarp før (atomlabLinseSkarp), får linsen pc'ens shader (4 oktaver, 3 stjernelag, 170
+// skridt) fra start. Går den tilbage, laves linsen om med touch-shaderen, og det huskes. Shaderne laves på forhånd.
 const LINSE_AFSTAND = 45; // kameraet i linsens rum (M = 0,75, skiven går ud til 15)
 const LINSE_HALV = 16.5; // så meget af linsens rum, billedet viser til hver side
 const LAMPE_HALV = 3.2; // flade til hver side i lampens rum (lysene er bygget med radius ca. 3)
 const LINSE_HØJST = LAV_KVALITET ? 320 : 512;
 const LINSE_HYPPIGHED = LAV_KVALITET ? 1 / 30 : 0;
-const SKARP = { højst: 512, hyppighed: 1 / 60, op: 0.9, ned: 0.75, frys: 40, måleTid: 3 };
-// Fælles for alle lamper med hullet (skinnen og scenen Sort hul), så målingen huskes, når man går fra den ene til den anden
-const touchLinse = { skarp: false, låst: false };
+const SKARP = { højst: 768, hyppighed: 1 / 60, op: 0.9, ned: 0.75, frys: 40, måleTid: 3 };
+const SKARP_GEMT = 'atomlabLinseSkarp'; // '1': enheden klarede skarp sidst, '0': den måtte gå tilbage
+function læsSkarp() { try { return localStorage.getItem(SKARP_GEMT) === '1'; } catch { return false; } }
+function gemSkarp(til) { try { localStorage.setItem(SKARP_GEMT, til ? '1' : '0'); } catch { /* (privat vindue) */ } }
+// Fælles for alle lamper med hullet (skinnen og scenen Sort hul), så målingen huskes, når man går fra den ene til den
+// anden. pc: linsen bruger pc'ens shader (kun touch, der har klaret skarp før).
+const touchPc = LAV_KVALITET && læsSkarp();
+const touchLinse = { skarp: touchPc, låst: false, pc: touchPc };
+const linseKvalitet = () => (touchLinse.pc ? LINSE_PC : LINSE_KVALITET);
 // Næste tilstand ud fra billeder/s i en måling og skærmens loft. Giver 'skarp', 'tilbage', 'frys' eller null (ingen ændring).
 export function linseSkift({ skarp, låst }, fps, loft) {
   if (skarp) return fps < SKARP.ned * loft ? 'tilbage' : null;
@@ -245,16 +255,13 @@ void main() {
 
 function lavSortHul() {
   const g = new THREE.Group();
-  const linse = lavLinse({ lysstyrke: 0.26 }); // lidt lysere end i Kosmos, for lampen er lille og får mindre glød
-  linse.dynamisk(false); // lampen styrer selv opløsningen og hvor tit den tegnes
   const linseScene = new THREE.Scene();
   const linseKamera = new THREE.PerspectiveCamera(THREE.MathUtils.radToDeg(2 * Math.atan(LINSE_HALV / LINSE_AFSTAND)), 1, 1, 1000);
-  linseScene.add(linse.flade);
   // Laget i linse.js får størrelsen af det, der tegnes i, gange kvaliteten (tablet 0,5). Derfor er målet større.
   const mål = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: true });
   const mat = new THREE.ShaderMaterial({
     defines: { INGEN_DYBDE: INGEN_DYBDE.toFixed(1) },
-    uniforms: { tLinse: { value: linse.tekstur }, uNaer: { value: LINSE_AFSTAND - 15 } },
+    uniforms: { tLinse: { value: null }, uNaer: { value: LINSE_AFSTAND - 15 } },
     vertexShader: LAMPE_VERTEX,
     fragmentShader: LAMPE_FRAGMENT,
     transparent: true,
@@ -267,6 +274,25 @@ function lavSortHul() {
   g.add(skær);
   flade.renderOrder = 1;
 
+  // Linsen (laves om, hvis touch skifter mellem pc'ens og touch' shader)
+  let linse = null;
+  let fjernet = false;
+  const varmGeo = new THREE.PlaneGeometry(1, 1);
+  function nyLinse() {
+    if (linse) { linseScene.remove(linse.flade); linse.fjern(); }
+    linse = lavLinse({ lysstyrke: 0.26, kvalitet: linseKvalitet() }); // lidt lysere end i Kosmos (lampen er lille)
+    linse.dynamisk(false); // lampen styrer selv opløsningen og hvor tit den tegnes
+    linseScene.add(linse.flade);
+    mat.uniforms.tLinse.value = linse.tekstur;
+    tilstand.størrelse = 0; // (laget får sin størrelse igen ved næste tegning)
+    // Shaderne på forhånd (målt på A56: 149 ms første gang hullet blev tegnet): linsens to i et lag, lampens i scenen
+    if (!verden.renderer) return;
+    const iLaget = new THREE.Group();
+    for (const m of linse.materialer) iLaget.add(new THREE.Mesh(varmGeo, m));
+    lavShadereFørst(iLaget, () => !fjernet, { mål });
+    lavShadereFørst(flade, () => !fjernet);
+  }
+
   const tilstand = { størrelse: 0, sidst: -1, tegnet: 0, frys: false, billeder: 0, målTid: 0, retning: new THREE.Vector3() };
   const p = new THREE.Vector3();
   const q = new THREE.Quaternion();
@@ -274,6 +300,7 @@ function lavSortHul() {
   const ret = new THREE.Vector3();
   const op = new THREE.Vector3();
   const buf = new THREE.Vector2();
+  nyLinse();
 
   // Lampens størrelse på skærmen (pixel i grafikkortet) eller 0, hvis den ikke kan ses
   function påSkærmen(kamera, renderer) {
@@ -297,7 +324,7 @@ function lavSortHul() {
     const ønsket = THREE.MathUtils.clamp(Math.ceil(px / 32) * 32, 96, højst);
     if (!tilstand.størrelse || Math.abs(ønsket - tilstand.størrelse) / tilstand.størrelse > 0.25) {
       tilstand.størrelse = ønsket;
-      const n = Math.round(ønsket / LINSE_KVALITET.skala);
+      const n = Math.round(ønsket / linse.kvalitet.skala);
       mål.setSize(n, n);
     }
     // Linsens kamera ser hullet fra samme retning som det rigtige kamera ser lampen (i lampens eget rum)
@@ -339,13 +366,14 @@ function lavSortHul() {
         }
         if (tilstand.målTid > SKARP.måleTid) {
           const skift = linseSkift(touchLinse, tilstand.billeder / tilstand.målTid, skærmLoft());
-          if (skift === 'skarp') touchLinse.skarp = true;
-          else if (skift === 'tilbage') Object.assign(touchLinse, { skarp: false, låst: true });
+          if (skift === 'skarp') { touchLinse.skarp = true; gemSkarp(true); } // (pc'ens shader fra næste besøg)
+          else if (skift === 'tilbage') { Object.assign(touchLinse, { skarp: false, låst: true, pc: false }); gemSkarp(false); }
           else if (skift === 'frys') tilstand.frys = true;
           tilstand.billeder = 0;
           tilstand.målTid = 0;
         }
       }
+      if (linse.kvalitet !== linseKvalitet()) nyLinse(); // (gik tilbage: touch-shaderen igen, også i den anden lampe)
       const hyppighed = LAV_KVALITET && touchLinse.skarp ? SKARP.hyppighed : LINSE_HYPPIGHED;
       if (tilstand.tegnet && tid - tilstand.sidst < hyppighed) return;
       if (tilstand.frys && tilstand.tegnet) {
@@ -357,10 +385,12 @@ function lavSortHul() {
       tegn(renderer, kamera, tid, px);
     },
     fjern() {
+      fjernet = true;
       linse.fjern();
       mål.dispose();
+      varmGeo.dispose();
     },
-    test: () => ({ linse: true, størrelse: tilstand.størrelse, tegnet: tilstand.tegnet, frys: tilstand.frys, skarp: touchLinse.skarp, låst: touchLinse.låst }),
+    test: () => ({ linse: true, størrelse: tilstand.størrelse, tegnet: tilstand.tegnet, frys: tilstand.frys, skarp: touchLinse.skarp, låst: touchLinse.låst, pc: linse.kvalitet === LINSE_PC }),
   };
 }
 
