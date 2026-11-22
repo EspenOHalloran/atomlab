@@ -3,7 +3,8 @@
 // (js/kosmos/skygge-sort.js). Kun det nye lægges til:
 // Trin 1: hullet med lysbøjningen, som man kan flyve rundt om (træk). Efter gættet tyngdebølgen fra 14. september 2015 som
 // en tone og en kurve, der tegnes, mens den spiller (målt, i farve).
-// Trin 2: de to kanter. Man flyver hen mod horisonten (linsen regner, at man kommer tæt på), og skærmen tones sort. Ringen er horisonten, hvor målingerne stopper.
+// Trin 2: de to kanter. Man flyver hen mod horisonten (linsen regner, at man kommer tæt på), og skærmen tones sort.
+// Ringen er horisonten, hvor målingerne stopper.
 // Efter gættet stemplet GÆT og Einsteins teori som stiplet: en streg ind mod midten, der toner ud, "højst ca. 67 sekunder
 // til midten" og "uendelig: her virker teorien ikke". Intet punkt i midten, og ingen flyvning gennem horisonten.
 // Trin 3 og det sidste billede: LISA, tre satellitter i en trekant bag Jorden, hvor armene bliver længere og kortere, når
