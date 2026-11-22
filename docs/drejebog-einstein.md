@@ -112,7 +112,7 @@ På telefon og højkant: siden øverst, ligningen under, og resten ruller (klass
 ## 8. Opslag 4: 1905, energien
 *Annalen der Physik* bd. 18, **s. 641** (artiklen "Ist die Trägheit eines Körpers von seinem Energieinhalt abhängig?", s. 639-641).
 
-**Forordet:** "**Bern, september 1905.** Einstein sender tre sider mere til *Annalen*. Den første linje siger, at de bygger på artiklen om tiden. Han forestiller sig et legeme, der sender lige meget lys ud til begge sider, og regner ud, hvad det betyder for dets masse. Han skriver ikke E = mc², men noget, der betyder det samme."
+**Forordet:** "**Bern, september 1905.** Einstein sender tre sider mere til *Annalen*. Den første linje siger, at de bygger på artiklen om tiden. Han forestiller sig et legeme, der sender lige meget lys ud til begge sider, og regner ud, hvad det betyder for dets masse. I dag skriver man det som E = mc²: Energien (E) er massen (m) gange lysets fart (c) ganget med sig selv. Einstein skrev det med andre bogstaver. På siden kan du se hvordan." *(Rettet 22. november 2026 efter jeres ønske: "E = mc2 står som en indforstået ting. Det duer ikke. Det skal forklares." Turens trin 3 forklarer nu også bogstaverne, første gang formlen står i bogen.)*
 
 **De glødende steder:**
 | Sted | Det glødende | Det, der står ved siden af |
