@@ -80,12 +80,11 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
     const underShadere = await værn();
     tjek('pc: Gådernes værn måler ikke, mens nye shadere laves (udglatningen er stadig slået til)', underShadere.til && !underShadere.slukket && underShadere.prøver === 4, JSON.stringify(underShadere));
     // Bagefter: slået fra (for langsomt), prøvet igen én gang (igen: 0 = altid luft nok) og slået fra igen for resten
-    await page.waitForFunction(async () => (await import('/js/gaader/kanter.js')).værnTilstand().prøvetIgen, null, { timeout: 90000, polling: 500 }).catch(() => {});
-    const igen = await værn();
-    await page.waitForFunction(async () => (await import('/js/gaader/kanter.js')).værnTilstand().slukket, null, { timeout: 90000, polling: 500 }).catch(() => {});
+    // (prøvetIgen er kun sand, når den er slået til igen. Testbrowseren tegner MSAA langsomt, så det kan tage minutter)
+    await page.waitForFunction(async () => { const v = (await import('/js/gaader/kanter.js')).værnTilstand(); return v.prøvetIgen && v.slukket; }, null, { timeout: 240000, polling: 1000 }).catch(() => {});
     await page.waitForTimeout(3000);
     const slut = await værn();
-    tjek('pc: Gådernes værn slår udglatningen fra, prøver den igen én gang og lader den så være slukket', igen.prøvetIgen && slut.slukket && !slut.til && slut.prøver === 0 && slut.prøvetIgen, JSON.stringify({ igen, slut }));
+    tjek('pc: Gådernes værn slår udglatningen fra, prøver den igen én gang og lader den så være slukket', slut.slukket && !slut.til && slut.prøver === 0 && slut.prøvetIgen, JSON.stringify(slut));
     await page.evaluate(async () => {
       const g = await import('/js/gaader/kanter.js');
       g.udglat(false);
