@@ -369,7 +369,7 @@ export const LIGNINGER = {
     // fodnoten "A. Einstein, Ann. d. Phys. 17. p. 891. 1905" til artiklen om tiden (s. 639, læst på sidebilledet n232)
     forord: {
       sted: 'Bern, september 1905',
-      tekst: 'Einstein sender tre sider mere til Annalen der Physik. Den første sætning siger, at de bygger på artiklen om tiden. Han forestiller sig et legeme, der sender lige meget lys ud til begge sider, og regner ud, hvad det betyder for dets masse. Han skriver ikke E = mc², men noget, der betyder det samme.',
+      tekst: 'Einstein sender tre sider mere til Annalen der Physik. Den første sætning siger, at de bygger på artiklen om tiden. Han forestiller sig et legeme, der sender lige meget lys ud til begge sider, og regner ud, hvad det betyder for dets masse. I dag skriver man det som E = mc²: Energien (E) er massen (m) gange lysets fart (c) ganget med sig selv. Einstein skrev det med andre bogstaver. På siden kan du se hvordan.',
     },
     side: {
       id: 's641', navn: 's. 641',
@@ -459,7 +459,7 @@ export const LIGNINGER = {
         valg: [{ v: massetab(), knap: '4 milliardtedele g' }, { v: 0.001, knap: '1 gram' }, { v: 1, knap: '1 kg' }],
         standard: 0.001,
         // intro står før eksemplet (det, eksemplet regner med)
-        intro: 'Vend den om: Massen *m* = *L*/*V*^{2} er det samme som *L* = *m* · *V*^{2}. I dag skriver man *E* = *mc*^{2}: Energien er massen gange lysets fart i anden.',
+        intro: 'Vend den om: Massen *m* = *L*/*V*^{2} er det samme som *L* = *m* · *V*^{2}. I dag skriver man *E* = *mc*^{2}: Energien er massen gange lysets fart ganget med sig selv.',
       },
     },
     // "Regn selv: Hvor meget lettere?" (drejebogen afsnit 8): batteriet fra trin 3 i turen. 100 W · 3.600 s = 360.000 J, og

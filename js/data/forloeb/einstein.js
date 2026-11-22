@@ -59,7 +59,8 @@ export const LIGE_HURTIGT = {
       },
       gør: 'Tryk på "Spol en time", og se på tallet under vægten.',
       // 100 W · 3.600 s / c² = 4,0 · 10⁻¹² kg = 4 milliardtedele gram. Solen: 3,828 · 10²⁶ W / c² = 4,3 millioner ton/s
-      så: 'Ja, men kun 4 milliardtedele gram: Masse er energi, E = mc². Solen bliver over 4 millioner ton lettere hvert sekund, fordi den lyser.',
+      // E = mc² forklares her, første gang den står i bogen (jeres ønske 22. november 2026: "Det skal forklares")
+      så: 'Ja, men kun 4 milliardtedele gram, for energi har masse: E = mc², hvor energien (E) er massen (m) gange lysets fart (c) gange lysets fart igen. Lysets fart er et kæmpe tal, så meget energi svarer kun til lidt masse, men Solen lyser så kraftigt, at den bliver over 4 millioner ton lettere hvert sekund.',
       ord: [],
     },
     {
