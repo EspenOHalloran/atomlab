@@ -3,7 +3,7 @@
 // gennem disen med ⏩, højdemåleren, uret, der skifter til Jorden, og Huygens' kamera, der først ser jorden ca. 30 km
 // oppe), trin 3 (lampen 700 m oppe, landingen, billedet fra jorden og stenene med linealen), trin 4 (modtagerne A og B og
 // de 350 billeder), "Det så du" med kernesætning A og vejene, og "Leg frit" (laboratoriets bladring med etapen "Landet" og
-// kontakten "Huygens' kamera"), og konsollen er uden fejl.
+// kontakten "Huygens' kamera"), lyset under turen (scenens fælles lys slukket) og konsollen er uden fejl.
 import { statSync, readFileSync } from 'node:fs';
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { FALDSKÆRM_KM, NED_S, LYSTID_S, SE_JORDEN_KM, VENT_KM, LAMPE_KM, BILLEDER, KREDIT, ETAPER, SIDE, JORDEN, KANALER, STRIMMEL, højdeVed, tidVed, billedeVed, urTekst, skærmVed } from '../js/data/maaner/landhuygens.js';
@@ -181,7 +181,7 @@ if (!process.argv.includes('--uden-browser')) {
   const styr = await side.evaluate(() => window.atomlabTest.solsystem.styr().map((s) => s.navn));
   await side.click('#solsystem .bjælke-tilbage');
   await spol(0.3);
-  const tilbage = await f((t) => ({ etape: t.etape(), h: t.ned().h, landet: t.ned().landet, jorden: t.jorden().vist }));
+  const tilbage = await f((t) => ({ etape: t.etape(), h: t.ned().h, landet: t.ned().landet, jorden: t.jorden().vist, lys: t.ned().fællesLys }));
   const skjult = (sel) => side.evaluate((sel) => [...document.querySelectorAll(sel)].every((e) => !e.offsetWidth), sel);
   const iFald = { falder: await f((t) => t.falder()), faner: await skjult('#solsystemVindue .panel-fane'), styr: await skjult('#solsystemStyr'), paneler: !(await skjult('#solsystem > .side-panel')) };
   await f((t) => t.gåEtape(4));
@@ -191,6 +191,15 @@ if (!process.argv.includes('--uden-browser')) {
   await f((t) => t.gåEtape(0));
   await spol(0.3);
   const knapper = await side.evaluate(() => window.atomlabTest.solsystem.knapper());
+  // Lyset (22. november 2026): Scenens fælles lys (hvidt, blåt og spejlingen) er slukket under turen ned, så Huygens kun
+  // lyses af disen, og tændt igen ved Cassini. Kuplens højde (jorden gennem disen) følger med, også på pause
+  const lysCassini = await f((t) => t.ned().fællesLys);
+  await side.evaluate(() => window.atomlabTest.solsystem.sætTid('pause'));
+  await f((t) => t.gåEtape(2));
+  const påPause = await f((t) => t.ned());
+  await f((t) => t.gåEtape(0));
+  await side.evaluate(() => window.atomlabTest.solsystem.sætTid('spil'));
+  tjek('lyset: under turen ned er scenens fælles lys slukket, ved Cassini er det tændt igen, og kuplens højde følger med på pause', tilbage.lys === 0 && lysCassini > 1 && påPause.h > 25 && Math.abs(påPause.uH - påPause.h) < 1e-6, JSON.stringify([tilbage.lys, lysCassini, påPause.h, påPause.uH]));
   tjek('laboratoriet: billedet fra jorden har ✕ og kan åbnes igen, "‹" går fra "Landet" til Sletten, etapen "Landet" viser billedet, og ved Cassini står "Slip Huygens"', lab.jorden.vist && lab.jorden.luk && lab.etape === 4 && !lab.kanaler && !lukket && fotoKnap
     && styr.some((s) => s?.startsWith('Huygens')) && tilbage.etape === 3 && !tilbage.landet && !tilbage.jorden && tilbage.h <= 9.01 && igen.etape === 4 && igen.jorden.vist && igen.jorden.målt.length === 0 && igen.stille
     && knapper.some((k) => k.includes('Slip Huygens')) && knapper.some((k) => k.includes('Næste: Faldskærmen')) && (await f((t) => t.scenen() === 'cassini')), JSON.stringify([lab, lukket, fotoKnap, styr, tilbage, igen, knapper]));
