@@ -112,15 +112,7 @@ document.addEventListener('click', (h) => {
     }
     return;
   }
-  if (skærm === 'gaader') {
-    lyd.klik();
-    if (location.hash === '#gaader' && hentetSkærm('gaader')) hentetSkærm('gaader').visGåde(id);
-    else {
-      ventGåde = id ?? null;
-      location.hash = '#gaader';
-    }
-    return;
-  }
+  if (skærm === 'gaader') return åbnGåde(id);
   if (skærm === 'liv') {
     lyd.klik();
     if (location.hash === '#liv' && hentetSkærm('liv')) hentetSkærm('liv').visDel(id);
@@ -183,6 +175,16 @@ document.addEventListener('click', (h) => {
 // Et forløb, delen skal starte, når den starter: fra "Din fremgang" i menuen eller fra forløbets eget link
 // (?forloeb=foerste-atom#vaerksted, fx fra en lærer). Linket starter forløbet, også selvom man har taget det.
 let ventForløb = new URLSearchParams(location.search).get('forloeb');
+
+// Et kort i Gåderne fra et "Hvorfor?"-kort (link.handling), som data-gaa="gaader:id"
+export function åbnGåde(id) {
+  lyd.klik();
+  if (location.hash === '#gaader' && hentetSkærm('gaader')) hentetSkærm('gaader').visGåde(id);
+  else {
+    ventGåde = id ?? null;
+    location.hash = '#gaader';
+  }
+}
 
 // Starter forløbet id i delen del (en skærm i js/skaerme.js)
 export function åbnForløb(del, id) {

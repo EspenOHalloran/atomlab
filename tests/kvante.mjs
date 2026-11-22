@@ -4,7 +4,7 @@
 // en sprække lukker den, måleren blinker ved én sprække, kuglerne lander i to bunker, vandets bølger løber,
 // panelerne har ingen rullebjælke, og et skærmskift rydder op.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
-import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER } from '../js/data/kvante.js';
+import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER, pulsTid, målerTekst } from '../js/data/kvante.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -18,7 +18,7 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
 const sætninger = (s) => (s.match(/[.!?](\s|$)/g) ?? []).length;
 const lange = Object.entries(PANEL).filter(([, p]) => sætninger(p.tekst) > 3).map(([k]) => k);
 const kort = KVANTE_KORT.filter((id) => !HVORFOR[id]?.svar || sætninger(HVORFOR[id].svar) > 6);
-tjek('teksterne: panelerne har højst tre sætninger, de tre "Hvorfor?"-kort findes, de tre nye ord står i Ordbogen, og delen står i Atomer med status prøve',
+tjek('teksterne: panelerne har højst tre sætninger, de fire "Hvorfor?"-kort findes (højst seks sætninger), de tre nye ord står i Ordbogen, og delen står i Atomer med status prøve',
   !lange.length && !kort.length && ['interferens', 'kvantefysik', 'boelgelaengde'].every((id) => ORDBOG.some((o) => o.id === id))
   && SKÆRME.some((s) => s.id === 'kvante' && s.verden === 'atomer' && s.status === 'prøve'), JSON.stringify({ lange, kort }));
 
@@ -58,6 +58,22 @@ tjek('Større …: molekylet og klumpen giver striber (klumpens tættest), fodbo
   JSON.stringify({ molekyle: [molekyle.toppe, molekyle.mørke], klump: [klump.toppe, klump.mørke], fodbold: fodbold.toppe, mangler: nøgler.filter((n) => !PANEL[n]) }));
 tjek('links: "Er elektronerne virkelig små kugler?" har "Se det selv", og fotonen i Ordbogen går til bænken med lys',
   /Se det selv/.test(HVORFOR.orbitaler.link?.tekst ?? '') && typeof HVORFOR.orbitaler.link?.handling === 'function' && LINKS.foton?.gaa?.[0] === 'kvante:lys');
+
+// "Er elektronen to steder på én gang?" (22. november 2026, docs/plan-kvante-to-steder.md): kortet står først (højst
+// fire spørgsmål), siger "ingen har nogensinde fundet" og "superposition", går videre til "Ved elektronen, at vi kigger?"
+// og til Gåden. Ordet superposition står i Ordbogen og peger på kortet. Bølgepakken når midten før kanten, og med én
+// sprække er vejen kortest bag den. Tælleren tæller aldrig begge.
+const ts = HVORFOR.kvanteToSteder;
+tjek('to steder: kortet står først i panelet (fire i alt), siger "ingen har nogensinde fundet" og "superposition", fortsætter til kvanteKigger og Gåden, og ordet superposition peger på det',
+  KVANTE_KORT.length === 4 && KVANTE_KORT[0] === 'kvanteToSteder' && /ingen har nogensinde fundet/.test(ts.svar) && /superposition/.test(ts.svar)
+  && /1986/.test(ts.svar) && /2012/.test(ts.nørd) && /54 cm/.test(ts.nørd) && /ikke.*beviser/.test(ts.nørd) && /1935/.test(ts.nørd)
+  && ts.næste === 'kvanteKigger' && typeof ts.link?.handling === 'function'
+  && ORDBOG.some((o) => o.id === 'superposition' && /én af mulighederne/.test(o.tekst)) && LINKS.superposition?.hvorfor === 'kvanteToSteder',
+  JSON.stringify({ kort: KVANTE_KORT }));
+const tMidt = pulsTid(0), tKant = pulsTid(2.5), tVenstre = pulsTid(-0.5, { sprækker: 'venstre' }), tHøjre = pulsTid(-0.5, { sprækker: 'højre' });
+tjek('bølgepakken: når midten af bagvæggen på ca. 1,5 s og kanten senere, og med kun den venstre åben når den først bag den venstre; tælleren siger "Begge på én gang: 0"',
+  tMidt > 1.3 && tMidt < 1.8 && tKant > tMidt && tVenstre < tHøjre && målerTekst([1234, 5]).linje === 'Venstre: 1.234 · Højre: 5' && målerTekst([1, 1]).begge === 'Begge på én gang: 0',
+  JSON.stringify({ tMidt, tKant, tVenstre, tHøjre }));
 
 // ---------- I browseren ----------
 const ctx = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
@@ -107,12 +123,15 @@ const r3 = await T(() => {
   k.skyd(1);
   const lamper = k.lamper();
   k.skyd(2999);
-  return { lamper, m: k.mønster(), panel: k.panel() };
+  k.spol(0.05);
+  return { lamper, m: k.mønster(), panel: k.panel(), målt: k.målt() };
 });
 await page.waitForTimeout(800);
 await page.screenshot({ path: `${UD}/2-maaler.png` });
-tjek('måleren: præcis én lampe blinker for en elektron, og med måler er der ingen mørke striber',
-  r3.lamper.filter((x) => x > 0.5).length === 1 && r3.m.mørke === 0 && r3.panel.titel === PANEL['elektroner-måler'].titel, JSON.stringify({ l: r3.lamper, m: r3.m.mørke }));
+tjek('måleren: præcis én lampe blinker for en elektron, tælleren over væggen har alle 3.000 ved én sprække ("Begge på én gang: 0"), og med måler er der ingen mørke striber',
+  r3.lamper.filter((x) => x > 0.5).length === 1 && r3.m.mørke === 0 && r3.panel.titel === PANEL['elektroner-måler'].titel
+  && r3.målt.tal[0] + r3.målt.tal[1] === 3000 && Math.min(...r3.målt.tal) > 1300 && /Venstre: [\d.]+ · Højre: [\d.]+Begge på én gang: 0/.test(r3.målt.tekst),
+  JSON.stringify({ l: r3.lamper, m: r3.m.mørke, målt: r3.målt }));
 
 // "Skyd" holdes nede: flere og flere, og det stopper, når knappen slippes
 await T(() => { atomlabTest.kvante.måler(false); atomlabTest.kvante.forfra(); });
@@ -130,6 +149,39 @@ await page.mouse.up();
 const efter = await T(() => { atomlabTest.kvante.spol(1); return { holder: atomlabTest.kvante.holder(), antal: atomlabTest.kvante.antal() }; });
 tjek('"Skyd" virker, mens den holdes nede, det går hurtigere og hurtigere, og det stopper, når den slippes',
   hold.holder && hold.ét >= 2 && hold.fire > 8 * hold.ét && !efter.holder && efter.antal - hold.fire < 60, JSON.stringify({ hold, efter }));
+
+// "Vis bølgen": Slået til skyder den én elektron, hvis bølgepakke går gennem begge sprækker, og prikken lander først, når
+// pakken når frem. "Skyd én" to gange: Den anden venter, til pakken foran er forbi. Med måler er der ingen bølge.
+const udenMåler = await T(() => atomlabTest.kvante.målt().tekst);
+await T(() => { atomlabTest.kvante.forfra(); document.querySelector('#kvante .kv-mere').open = true; });
+await page.click('#kvBølgen');
+const b1 = await T(() => {
+  const k = atomlabTest.kvante;
+  const før = k.puls();
+  k.spol(0.6);
+  const midt = { n: k.antal(), puls: k.puls() };
+  k.spol(1.6);
+  return { før, midt, efter: k.antal(), bølgen: k.valg().bølgen };
+});
+const b2 = await T(() => {
+  const k = atomlabTest.kvante;
+  k.spol(2.5);
+  k.skydÉn();
+  k.skydÉn();
+  const kø = k.puls();
+  k.spol(6);
+  return { kø, n: k.antal(), serie: k.puls().serie };
+});
+const b3 = await T(() => {
+  const k = atomlabTest.kvante;
+  k.måler(true);
+  return { bølgen: k.valg().bølgen, slået: document.querySelector('#kvBølgen').disabled, puls: k.puls().påVej };
+});
+await T(() => { atomlabTest.kvante.måler(false); atomlabTest.kvante.forfra(); });
+tjek('"Vis bølgen" skyder én elektron, hvis pakke er på vej, og prikken lander først, når pakken når frem; "Skyd én" to gange venter på pakken foran; med måler er bølgen slået fra; uden måler er tælleren væk',
+  !udenMåler && b1.bølgen && b1.før.kører && b1.før.påVej === 1 && b1.midt.n === 0 && b1.midt.puls.front > 2 && b1.efter === 1
+  && b2.kø.serie === 1 && b2.kø.påVej === 1 && b2.n === 3 && b2.serie === 0 && !b3.bølgen && b3.slået,
+  JSON.stringify({ udenMåler, b1, b2, b3 }));
 
 // Et tryk på en sprække i billedet lukker den, og et tryk igen åbner den
 await page.waitForTimeout(1500);

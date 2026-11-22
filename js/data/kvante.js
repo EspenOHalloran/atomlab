@@ -104,6 +104,25 @@ export function mørktSted({ d = STANDARD.d, λ = bølgelængde('elektroner') } 
 // Ringen i turens trin 4 tæller prikkerne inden for ±RING_HALV af det mørke sted (hele bagvæggens højde)
 export const RING_HALV = 0.08;
 
+// "Vis bølgen" (22. november 2026, docs/plan-kvante-to-steder.md): Hver elektron får en bølgepakke, der løber fra rørets
+// munding (BØLGE_START), gennem begge sprækker og ud til bagvæggen. Prikken tændes, når pakken når det sted, hvor den
+// lander. Vejen regnes som i vandets shader: frem til væggen og så i en lige linje fra den nærmeste åbne sprække.
+export const BØLGE_START = KILDE_X + 0.6;
+export const PULS_FART = 4.5; // enheder pr. sekund (ca. 1,6 s til midten af bagvæggen)
+export const PULS_BREDDE = 1.2; // pakkens længde (ca. fem bølgetoppe med elektronernes bølgelængde)
+// Prikken tændes lidt efter, at fronten er nået stedet (PULS_EFTER), mens lyset på bagvæggen toner ud, så man ser den ene prik.
+export const PULS_EFTER = 0.2;
+export function pulsTid(z, { sprækker = 'begge', d = STANDARD.d } = {}) {
+  const r = Math.min(...åbneSprækker(sprækker, d).map((zs) => Math.hypot(L, z - zs)));
+  return (-BØLGE_START + r) / PULS_FART + PULS_EFTER;
+}
+
+// Tælleren ved måleren: hvor mange elektroner lamperne fandt ved hver sprække, og hvor mange gange begge blinkede for
+// den samme elektron (aldrig: Hver elektron findes ét sted, docs/fakta-kvantefysik/faktatjek-to-steder.md)
+export function målerTekst([venstre, højre], begge = 0) {
+  return { linje: `Venstre: ${talTekst(venstre)} · Højre: ${talTekst(højre)}`, begge: `Begge på én gang: ${talTekst(begge)}` };
+}
+
 // En fordeling, man kan trække prikker fra (en tabel over den samlede chance, BIN felter over bagvæggen)
 export const BIN = 600;
 export function lavFordeling(valg) {
@@ -211,5 +230,5 @@ export const SKYDER = {
   boelger: { navn: 'Bølgelængde', ender: ['lang', 'kort'] },
 };
 
-// "Hvorfor?"-kortene i højre panel (js/data/hvorfor.js)
-export const KVANTE_KORT = ['kvanteKigger', 'kvanteHvordan', 'kvanteUsikker'];
+// "Hvorfor?"-kortene i højre panel (js/data/hvorfor.js). Højst fire (Retningen). "To steder" kom 22. november 2026.
+export const KVANTE_KORT = ['kvanteToSteder', 'kvanteKigger', 'kvanteHvordan', 'kvanteUsikker'];

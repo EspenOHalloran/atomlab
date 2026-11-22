@@ -108,12 +108,12 @@ Scenen er bænken set skråt fra siden. Kilden står til venstre, væggen med to
 Forklaringerne skrives ud fra afsnit 7 i faktagrundlaget ("Skriv i stedet"), så Ordbogen ikke får fælderne ind ad bagdøren.
 
 ## 7. Prøven (tre spørgsmål pr. forløb)
-1. **Forløb 1:** Hvordan lander én elektron på væggen? Hvad ser man, når der er landet tusind, og hvad fortæller det? Hvad sker der med striberne, når man måler, hvilken sprække elektronen går igennem?
+1. **Forløb 1:** Hvordan lander én elektron på væggen? Hvad ser man, når der er landet tusind, og hvad fortæller det? Hvad sker der med striberne, når man måler, hvilken sprække elektronen går igennem? **Og (tilføjet 22. november 2026 af Opus efter jeres ønske, [plan-kvante-to-steder.md](plan-kvante-to-steder.md)):** "Er elektronen to steder på én gang? Hvad har man målt, og hvad har man aldrig målt?" Et godt svar: Bølgen går gennem begge sprækker, og det ser man på striberne. Men ingen har fundet elektronen to steder: Måleren finder den altid ét sted, og så er striberne væk.
 2. **Forløb 2:** Hvorfor kan elektronen i et atom kun have bestemte energier? Hvorfor falder den ikke ind i kernen? Hvorfor lyser natrium gult og hydrogen rødt?
 3. **Forløb 3:** Hvad gør en kugle ved en bakke, den ikke har fart nok til, og hvad gør en proton? Hvad sker der, når bakken bliver lidt tykkere? Hvorfor kunne Solen ikke lyse uden tunneleffekten?
 4. **Forløb 4:** Hvad får man, når man måler en qubit? Hvad er forskellen på en qubit på ækvator og en mønt i luften? Nævn én ting, en kvantecomputer måske bliver god til, og én, den ikke er.
 
-Kan barnet efter forløb 1 kun sige "elektronen er to steder på én gang", er det forløbet, der skal rettes (trin 5).
+Kan barnet efter forløb 1 kun sige "elektronen er to steder på én gang", er det forløbet, der skal rettes (trin 5). Trin 5 fik et tredje gæt ("En hel ved begge på én gang"), og trin 6 "Bølgen og prikken" kom til 22. november 2026 af samme grund.
 
 ## 8. Links begge veje
 | Fra | Til | Hvordan |
@@ -142,7 +142,7 @@ I Rejsen er Kvantefysik stationen længst inde mod det mindste.
 ## Jeres svar
 *13. november 2026. I valgte anbefalingen i alle fem. Opus' noter står i [fable/E7-kvantefysik-noter.md](fable/E7-kvantefysik-noter.md) og skal læses sammen med denne drejebog: Afsnit 3 dér siger, hvad der rettes i trinene, når der bygges.*
 1. **Hvor meget bygges nu:** (a) Kun forløb 1 med bænken, så prøven med jeres søn, og derefter forløb 2 og 3.
-2. **Elektronen på vej til bagvæggen:** (a) Den tegnes ikke. Kun et blink ved kilden og prikken på væggen. Bølgen kan slås til som et svagt skær i laboratoriet.
+2. **Elektronen på vej til bagvæggen:** (a) Den tegnes ikke. Kun et blink ved kilden og prikken på væggen. Bølgen kan slås til som et svagt skær i laboratoriet. **Ændret 22. november 2026 (valgt af sessionen efter jeres ønske om "to steder", kan ændres af jer, [plan-kvante-to-steder.md](plan-kvante-to-steder.md)):** Elektronen tegnes stadig ikke, men "Vis bølgen" er nu en bølgepakke pr. elektron (gennem begge sprækker, og så én prik), og den vises også i turens nye trin 6 "Bølgen og prikken".
 3. **Energitrinene:** (a) I Kvantefysik. Kvantefysik ejer *hvorfor* der er trin, og Lys ejer *hvad* man ser. Lys kommer før Kvantefysik i køreplanen, så "Elektronens trin" i Værkstedet bliver bygget af Lys, og forløb 2 bruger det bagefter. Med Opus' tilføjelse: Forløb 2 gøres mindre (E7-noterne, afsnit 3, punkt 4 og 5). **Ændret 14. november 2026 (jeres svar på E11):** "Elektronens trin" bliver et "Hvorfor?"-kort i Lys (kun hydrogen), ikke et værktøj i Værkstedet. Forløb 2 genbruger scenen i sit trin 3 ([drejebog-lys.md](drejebog-lys.md) afsnit 6).
 4. **Fortolkningerne:** (a) Et nyt kort i Gåderne, "Hvor stopper kvanteverdenen?", bygget sammen med forløb 1. De tre fortolkninger står kun under "For nørder".
 5. **Kvantecomputeren (forløb 4):** (a) Vent, til forløb 1-3 er prøvet, og slå tallene op igen dér. Med Opus' tilføjelse: Sammenfiltring flyttes fra trin 4 til et "Hvorfor?"-kort (E7-noterne, afsnit 3, punkt 6).

@@ -2,7 +2,8 @@
 // Drejebogen står i docs/drejebog-kvantefysik.md (afsnit 3) med rettelserne i docs/fable/E7-kvantefysik-noter.md
 // (afsnit 3: trin 5 giver ÉN bred bunke, ikke "som kuglerne", og højst to sætninger pr. tekst), og skabelonen i
 // docs/fable/E3-forloeb.md. Det, der rører bænken, står i js/kvante.js under samme trin-id. Faktatjekket står i
-// docs/fakta-kvantefysik/faktatjek-forloeb1.md.
+// docs/fakta-kvantefysik/faktatjek-forloeb1.md. Det tredje gæt i trin 5 og trin 6 "Bølgen og prikken" kom 22. november 2026
+// (docs/plan-kvante-to-steder.md, faktatjek i docs/fakta-kvantefysik/faktatjek-to-steder.md).
 
 export const STRIBER = {
   id: 'striber',
@@ -63,10 +64,27 @@ export const STRIBER = {
         valg: [
           { tekst: 'En hel elektron ved én sprække', efter: 'Prøv det!', svar: 'Ja, hver gang.' },
           { tekst: 'En halv ved hver', efter: 'Prøv det!', svar: 'Nej, altid en hel ved én af dem.' },
+          // Den populære udgave ("to steder på én gang"), som jeres forventning var (21. november 2026)
+          { tekst: 'En hel ved begge på én gang', efter: 'Prøv det!', svar: 'Nej. Lamperne blinker aldrig begge for den samme elektron.' },
         ],
       },
       gør: 'Tænd måleren (elektronerne fortsætter af sig selv).',
-      så: 'Måleren finder altid en hel elektron ved én sprække. Men nu er de mørke striber væk.',
+      så: 'Måleren finder altid en hel elektron ved én sprække, aldrig ved begge. Men nu er de mørke striber væk.',
+      ord: [],
+    },
+    {
+      // Bølgen går gennem begge sprækker, elektronen findes ét sted (delens kernesætning, fakta-faelder.md)
+      id: 'boelgen',
+      spørg: 'Nu tegner vi elektronens bølge. Hvad finder bagvæggen, når bølgen når frem?',
+      gæt: {
+        valg: [
+          { tekst: 'En udtværet elektron', efter: 'Prøv det!', svar: 'Nej. Bølgen er bredt ud, men elektronen findes ét sted.' },
+          { tekst: 'Én hel prik ét sted', efter: 'Prøv det!', svar: 'Ja. Bølgen bestemmer kun chancen for hvor.' },
+          { tekst: 'To prikker, én fra hver sprække', efter: 'Prøv det!', svar: 'Nej. Bølgen gik gennem begge, men der kommer kun én prik.' },
+        ],
+      },
+      gør: 'Skyd én elektron ad gangen, og se bølgen.',
+      så: 'Bølgen går gennem begge sprækker og breder sig ud. Men elektronen bliver fundet ét sted, oftest hvor bølgen er stærk.',
       ord: [],
     },
   ],

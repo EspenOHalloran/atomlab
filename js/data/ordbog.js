@@ -52,6 +52,13 @@ export const ORDBOG = [
     former: ['kvantefysik', 'kvantefysikken', 'kvantemekanik', 'kvantemekanikken'],
     tekst: 'Fysikken for det allermindste: elektroner, lys og atomer. Her breder tingene sig som bølger, men de bliver altid fundet ét sted som en hel partikel. Kvantefysik handler om ting på størrelse med atomer, ikke om tanker eller held.',
   },
+  // Superposition (22. november 2026, docs/plan-kvante-to-steder.md): skrevet ud fra fælden "to steder på én gang", så den
+  // også passer til qubitten i forløb 4 ("en bestemt retning, ikke begge dele", fakta-kvantefysik.md afsnit 5 og 7)
+  {
+    id: 'superposition', ord: 'Superposition',
+    former: ['superposition', 'superpositionen', 'superpositioner'],
+    tekst: 'Når en kvantetings bølge er delt over flere muligheder på én gang, fx begge veje gennem to sprækker. Det ses som striber, når bølgerne mødes igen. Men måler man, finder man altid kun én af mulighederne.',
+  },
   {
     id: 'boelgelaengde', ord: 'Bølgelængde',
     former: ['bølgelængde', 'bølgelængden', 'bølgelængder', 'bølgelængderne'],
