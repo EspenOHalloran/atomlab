@@ -5,8 +5,8 @@
 
 import * as THREE from 'three';
 import { LAV_KVALITET, ROLIG } from '../scene3d.js';
-import { glød, prikTekstur } from '../kosmos/faelles.js';
-import { KILDE_X, KUGLE_X, L, BAG_HALV, VÆG_HALV, SPRÆKKE_HØJDE, STRIBE_Y, RING_HALV, åbneSprækker } from '../data/kvante.js';
+import { glød, prikTekstur, blødTekstur } from '../kosmos/faelles.js';
+import { KILDE_X, KUGLE_X, L, BAG_HALV, VÆG_HALV, SPRÆKKE_HØJDE, STRIBE_Y, RING_HALV, åbneSprækker, BØLGE_START, PULS_FART, PULS_BREDDE } from '../data/kvante.js';
 
 export const PRIKKER_HØJST = LAV_KVALITET ? 12000 : 30000;
 export const KILDE_Y = 0.9; // midten af strålen
@@ -17,8 +17,10 @@ const KUGLER_HØJST = 60;
 const KUGLE_FART = 6; // enheder pr. sekund
 const BØLGE_FART = 1.3; // vandets bølger, enheder pr. sekund
 const TYNGDE = 9;
+const VAND_LYS = new THREE.Color(0.45, 0.85, 1); // lyset på bagvæggen fra vandets bølger
 
 // Vandet: plane bølger før væggen og ringe fra de åbne sprækker bagved. Højden h giver lys på toppene.
+// Med uBredde > 0 er det en bølgepakke ("Vis bølgen" for elektroner og lys): kun et bånd med længden uBredde bag fronten.
 // Navnene i shaderen er kun ASCII (CLAUDE.md).
 const VAND_VERT = `
 varying vec2 vP;
@@ -36,10 +38,15 @@ uniform vec2 uAaben;
 uniform float uKilde;
 uniform float uStyrke;
 uniform vec3 uFarve;
+uniform float uBredde;
 varying vec2 vP;
-float bolge(float r, float front) {
-  float t = smoothstep(front, front - 0.25, r);
-  return t * cos(uK * r - uOmega * uTid);
+float hylster(float r) {
+  float t = 1.0 - smoothstep(uFront - 0.25, uFront, r);
+  if (uBredde > 0.0) t *= smoothstep(uFront - uBredde - 0.35, uFront - uBredde, r);
+  return t;
+}
+float bolge(float r) {
+  return hylster(r) * cos(uK * r - uOmega * uTid);
 }
 void main() {
   float x = vP.x;
@@ -48,8 +55,8 @@ void main() {
   float synlig = 0.0;
   if (x < 0.0) {
     float r = x - uKilde;
-    h = bolge(r, uFront);
-    synlig = smoothstep(uFront, uFront - 0.25, r);
+    h = bolge(r) * (uBredde > 0.0 ? 0.75 : 1.0);
+    synlig = hylster(r);
   } else {
     float n = 0.0;
     for (int i = 0; i < 2; i++) {
@@ -58,20 +65,25 @@ void main() {
       float zs = i == 0 ? uSpalte.x : uSpalte.y;
       float r = length(vec2(x, z - zs));
       // Vejen fra kilden: frem til væggen (-uKilde) og r fra sprækken
-      h += bolge(r - uKilde, uFront) / sqrt(1.0 + 1.6 * r);
-      synlig = max(synlig, smoothstep(uFront, uFront - 0.25, r - uKilde));
+      h += bolge(r - uKilde) / sqrt(1.0 + 1.6 * r);
+      synlig = max(synlig, hylster(r - uKilde));
       n += 1.0;
     }
     h *= n > 1.5 ? 0.75 : 1.0;
+    if (uBredde > 0.0) h *= 1.9; // bølgepakken: ringene bag sprækkerne skal ses lige så tydeligt som bølgen foran
   }
   float top = smoothstep(0.15, 0.95, h);
-  float dal = smoothstep(-0.15, -0.95, h);
+  float dal = 1.0 - smoothstep(-0.95, -0.15, h);
   vec3 farve = uFarve * (0.35 + 0.9 * top) + vec3(0.6, 0.85, 1.0) * top * top * 0.6;
-  float alfa = uStyrke * (0.28 + 0.55 * top + 0.12 * dal) * (0.25 + 0.75 * synlig);
+  // Bølgepakken er usynlig uden for sit bånd. Vandet har et svagt skær over det hele.
+  float flade = uBredde > 0.0 ? synlig : 0.25 + 0.75 * synlig;
+  float alfa = uStyrke * (0.28 + 0.55 * top + 0.12 * dal) * flade;
   gl_FragColor = vec4(farve, alfa);
 }`;
 
-// Lyset på bagvæggen, hvor vandets bølger er høje (tidens gennemsnit af to bølger fra sprækkerne)
+// Lyset på bagvæggen, hvor vandets bølger er høje (tidens gennemsnit af to bølger fra sprækkerne). For elektroner og
+// lys (uA > 0) ganges med sprækkernes egen bunke (sinc², som js/data/kvante.js), så lyset passer med prikkerne. Med en
+// bølgepakke (uBredde > 0) lyser hvert sted, når pakken når derhen, og toner ud bagefter.
 const BAG_FRAG = `
 uniform float uK;
 uniform vec2 uSpalte;
@@ -79,28 +91,44 @@ uniform vec2 uAaben;
 uniform float uL;
 uniform float uStyrke;
 uniform vec3 uFarve;
+uniform float uA;
+uniform float uFront;
+uniform float uBredde;
+uniform float uKilde;
 varying vec2 vP;
 void main() {
   float z = vP.x;
   vec2 a = vec2(0.0);
   float n = 0.0;
+  float rMin = 100.0;
   for (int i = 0; i < 2; i++) {
     float aaben = i == 0 ? uAaben.x : uAaben.y;
     if (aaben < 0.5) continue;
     float zs = i == 0 ? uSpalte.x : uSpalte.y;
     float r = length(vec2(uL, z - zs));
+    rMin = min(rMin, r);
     float f = uK * r;
     a += vec2(cos(f), sin(f)) / sqrt(r);
     n += 1.0;
   }
   float I = dot(a, a) / max(1.0, n * n) * uL;
+  if (uA > 0.0) {
+    float b = 0.5 * uK * uA * z / length(vec2(z, uL));
+    float s = abs(b) < 0.0001 ? 1.0 : sin(b) / b;
+    I *= s * s;
+  }
+  float tid = 1.0;
+  if (uBredde > 0.0) {
+    float r = rMin - uKilde;
+    tid = smoothstep(r - 0.05, r + 0.3, uFront) * (1.0 - smoothstep(r + 0.6, r + uBredde + 0.9, uFront));
+  }
   float kant = smoothstep(0.0, 0.25, vP.y + 0.6) * smoothstep(0.0, 0.25, 0.6 - vP.y);
-  gl_FragColor = vec4(uFarve * I * 1.4, uStyrke * min(1.0, I) * kant);
+  gl_FragColor = vec4(uFarve * I * 1.4, uStyrke * min(1.0, I) * kant * tid);
 }`;
 
 export function lavBænk() {
   const gruppe = new THREE.Group();
-  const t = { blink: 0, lampe: [0, 0], lukket: [0, 0], lukMål: [0, 0], måler: 0, målerMål: 0 };
+  const t = { blink: 0, lampe: [0, 0], lukket: [0, 0], lukMål: [0, 0], måler: 0, målerMål: 0, glimt: 0 };
 
   // Bordet
   const bordMat = new THREE.MeshStandardMaterial({ color: 0x1b2440, roughness: 0.85, metalness: 0.1 });
@@ -193,7 +221,10 @@ export function lavBænk() {
   gruppe.add(bag);
   const bagLys = new THREE.ShaderMaterial({
     vertexShader: VAND_VERT, fragmentShader: BAG_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    uniforms: { uK: { value: 30 }, uSpalte: { value: new THREE.Vector2(-0.5, 0.5) }, uAaben: { value: new THREE.Vector2(1, 1) }, uL: { value: L }, uStyrke: { value: 0 }, uFarve: { value: new THREE.Color(0.45, 0.85, 1) } },
+    uniforms: {
+      uK: { value: 30 }, uSpalte: { value: new THREE.Vector2(-0.5, 0.5) }, uAaben: { value: new THREE.Vector2(1, 1) }, uL: { value: L }, uStyrke: { value: 0 }, uFarve: { value: new THREE.Color(0.45, 0.85, 1) },
+      uA: { value: 0 }, uFront: { value: 0 }, uBredde: { value: 0 }, uKilde: { value: BØLGE_START },
+    },
   });
   // Fladen ligger i (z, y): x i geometrien er z på bagvæggen, y er højden målt fra midten af striberne
   const bagFlade = new THREE.Mesh(new THREE.PlaneGeometry(2 * BAG_HALV, 1.2), bagLys);
@@ -206,7 +237,8 @@ export function lavBænk() {
     vertexShader: VAND_VERT, fragmentShader: VAND_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide,
     uniforms: {
       uTid: { value: 0 }, uFront: { value: 0 }, uK: { value: 30 }, uOmega: { value: 30 }, uSpalte: { value: new THREE.Vector2(-0.5, 0.5) },
-      uAaben: { value: new THREE.Vector2(1, 1) }, uKilde: { value: KILDE_X + 0.6 }, uStyrke: { value: 0 }, uFarve: { value: new THREE.Color(0.25, 0.55, 0.95) },
+      uAaben: { value: new THREE.Vector2(1, 1) }, uKilde: { value: BØLGE_START }, uStyrke: { value: 0 }, uFarve: { value: new THREE.Color(0.25, 0.55, 0.95) },
+      uBredde: { value: 0 },
     },
   });
   const vandBredde = L - (KILDE_X + 0.6);
@@ -218,7 +250,20 @@ export function lavBænk() {
   vand.position.x = 0;
   vand.visible = false;
   gruppe.add(vand);
-  const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95) };
+  // bredde > 0: en bølgepakke ("Vis bølgen"), der slukker sig selv, når den er løbet forbi bagvæggen (PULS_SLUT)
+  const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95), bredde: 0, fart: BØLGE_FART };
+  const PULS_FORBI = -BØLGE_START + L + PULS_BREDDE; // båndet er forbi midten af bagvæggen (så må en ny pakke starte)
+  const PULS_SLUT = -BØLGE_START + Math.hypot(L, BAG_HALV + 1) + PULS_BREDDE + 1; // også lyset på kanten er tonet ud
+
+  // Et glimt, hvor elektronen med den tegnede bølgepakke lander ("Vis bølgen"), så man ser, at den findes ét sted
+  // En flad skive på bagvæggens flade (en sprite ville blive skåret over af væggen)
+  const glimt = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({
+    map: blødTekstur(), color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending,
+  }));
+  glimt.rotation.y = -Math.PI / 2; // vender mod kilden som bagvæggen
+  glimt.renderOrder = 3;
+  glimt.visible = false;
+  gruppe.add(glimt);
 
   // Prikkerne på bagvæggen
   const geo = new THREE.BufferGeometry();
@@ -380,18 +425,32 @@ export function lavBænk() {
     }
     t.blink = Math.max(0, t.blink - dt * (ROLIG ? 3 : 7));
     blinkLys.material.opacity = t.blink;
-    // Vandet
-    vandT.styrke += (vandT.mål - vandT.styrke) * (1 - Math.exp(-dt * 3));
+    t.glimt = Math.max(0, t.glimt - dt * 0.9);
+    glimt.visible = t.glimt > 0.01;
+    glimt.material.opacity = Math.min(1, t.glimt * 1.6);
+    glimt.scale.setScalar(0.3 + 0.6 * t.glimt);
+    // Vandet (eller bølgepakken)
+    vandT.styrke += (vandT.mål - vandT.styrke) * (1 - Math.exp(-dt * (vandT.bredde ? 12 : 3)));
     vand.visible = vandT.styrke > 0.01;
-    if (vandT.tændt) vandT.front += BØLGE_FART * dt;
+    if (vandT.tændt) vandT.front += vandT.fart * dt;
+    if (vandT.tændt && vandT.bredde && vandT.front > PULS_SLUT) {
+      vandT.tændt = false;
+      vandT.mål = 0;
+    }
     const u = vandMat.uniforms;
     u.uTid.value = tid;
     u.uFront.value = vandT.front;
     u.uStyrke.value = vandT.styrke;
     u.uFarve.value.copy(vandT.farve);
-    // Bagvæggen lyser, når bølgerne er nået derhen
-    const nået = vandT.front + (KILDE_X + 0.6) - L - 0.5;
-    bagLys.uniforms.uStyrke.value = vandT.styrke * Math.min(1, Math.max(0, nået));
+    u.uBredde.value = vandT.bredde;
+    u.uOmega.value = u.uK.value * vandT.fart; // bølgetoppene følger fronten
+    // Bagvæggen lyser, når bølgerne er nået derhen (bølgepakken: hvert sted for sig, i shaderen)
+    const b = bagLys.uniforms;
+    b.uFront.value = vandT.front;
+    b.uBredde.value = vandT.bredde;
+    b.uFarve.value.copy(vandT.bredde ? vandT.farve : VAND_LYS);
+    const nået = vandT.front + BØLGE_START - L - 0.5;
+    b.uStyrke.value = vandT.bredde ? vandT.styrke : vandT.styrke * Math.min(1, Math.max(0, nået));
     if (ændretTil >= ændretFra) {
       for (const navn of ['position', 'color']) {
         const a = geo.attributes[navn];
@@ -404,8 +463,9 @@ export function lavBænk() {
     }
   }
 
-  // Sprækkerne, vandets bølgelængde og hvilke sprækker der er åbne (fra delen)
-  function sæt({ d, a, sprækker, λ, måler, straks = false }) {
+  // Sprækkerne, vandets bølgelængde og hvilke sprækker der er åbne (fra delen). kuvert: sprækkernes bredde, så lyset på
+  // bagvæggen får den samme brede bunke som prikkerne (elektroner og lys), eller 0 (vandet)
+  function sæt({ d, a, sprækker, λ, måler, kuvert = 0, straks = false }) {
     bygVæg(d, a);
     const åbne = åbneSprækker(sprækker, d);
     t.lukMål = [åbne.includes(-d / 2) ? 0 : 1, åbne.includes(d / 2) ? 0 : 1];
@@ -417,7 +477,7 @@ export function lavBænk() {
       m.uniforms.uSpalte.value.set(-d / 2, d / 2);
       m.uniforms.uAaben.value.set(1 - t.lukMål[0], 1 - t.lukMål[1]);
     }
-    vandMat.uniforms.uOmega.value = ((2 * Math.PI) / λ) * BØLGE_FART;
+    bagLys.uniforms.uA.value = kuvert;
   }
 
   return {
@@ -441,6 +501,10 @@ export function lavBænk() {
     prikStørrelse: (x) => { prikMat.size = x; },
     zer: () => zer,
     blink: () => { t.blink = 1; },
+    glimt: (z, y) => {
+      glimt.position.set(L - 0.02, y, z);
+      t.glimt = 1;
+    },
     lampe: (i) => { t.lampe[i] = 1; },
     // Ringen om et mørkt sted (z) i turens trin 4, eller væk (null). ringTop er punktet over ringen (til "Her: n").
     ring(z) {
@@ -449,13 +513,27 @@ export function lavBænk() {
     },
     ringVist: () => ring.visible,
     ringTop: (v) => gruppe.localToWorld(v.set(L - 0.03, RING_TOP, ring.position.z)),
-    // Vandet: tændt (bølgerne løber ud fra kilden), styrke (1 i vandet, svagt skær for elektronerne)
+    // Vandet: tændt (bølgerne løber ud fra kilden og bliver ved), styrke og farve
     vand(tændt, styrke = 1, farve = null) {
-      if (tændt && !vandT.tændt) vandT.front = 0;
+      if (tændt && (!vandT.tændt || vandT.bredde)) vandT.front = 0;
       vandT.tændt = tændt;
       vandT.mål = tændt ? styrke : 0;
+      vandT.bredde = 0;
+      vandT.fart = BØLGE_FART;
       if (farve) vandT.farve.setRGB(...farve);
     },
+    // Én elektrons bølgepakke ("Vis bølgen"): fra rørets munding, gennem sprækkerne og ud til bagvæggen
+    puls(farve, styrke = 0.9) {
+      vandT.tændt = true;
+      vandT.front = 0;
+      vandT.bredde = PULS_BREDDE;
+      vandT.fart = PULS_FART;
+      vandT.mål = styrke;
+      vandT.farve.setRGB(...farve);
+    },
+    // En bølgepakke er på vej og er ikke nået forbi bagvæggen endnu (så venter den næste)
+    pulsOptaget: () => vandT.tændt && vandT.bredde > 0 && vandT.front < PULS_FORBI,
+    pulsKører: () => vandT.tændt && vandT.bredde > 0,
     vandFront: () => vandT.front,
     vandTændt: () => vandT.tændt,
     // Til at stille kameraet: bænkens kasse i gruppens koordinater
