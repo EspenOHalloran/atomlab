@@ -20,7 +20,8 @@ export const STRIBE_Y = [0.3, 1.5]; // prikkerne lander mellem disse højder (sp
 export const SPRÆKKE_HØJDE = 1.4; // sprækkerne går fra 0,2 til 1,6
 
 // Standard: 7 lyse striber inden for den brede bunke (d = 4·a), ca. 0,6 mellem dem midt på bagvæggen
-export const STANDARD = { d: 1.0, a: 0.25, fart: 0.6, farve: 0.45 };
+// syn: "Målerens lys" (PR 2 af "to steder", 22. november 2026): chancen for, at måleren ser en elektron (1 = alle)
+export const STANDARD = { d: 1.0, a: 0.25, fart: 0.6, farve: 0.45, syn: 1 };
 export const GRÆNSER = { d: [0.6, 1.6], a: [0.1, 0.45] };
 export const SLAGS = ['kugler', 'boelger', 'elektroner', 'lys', 'molekyle', 'klump', 'fodbold'];
 // "Større …" (PR 3): et molekyle med ca. 2.000 atomer (Fein m.fl., Nature Physics 15, 1242, 2019), en klump natrium med
@@ -119,8 +120,10 @@ export function pulsTid(z, { sprækker = 'begge', d = STANDARD.d } = {}) {
 
 // Tælleren ved måleren: hvor mange elektroner lamperne fandt ved hver sprække, og hvor mange gange begge blinkede for
 // den samme elektron (aldrig: Hver elektron findes ét sted, docs/fakta-kvantefysik/faktatjek-to-steder.md)
-export function målerTekst([venstre, højre], begge = 0) {
-  return { linje: `Venstre: ${talTekst(venstre)} · Højre: ${talTekst(højre)}`, begge: `Begge på én gang: ${talTekst(begge)}` };
+// ikkeSet (et tal, når målerens lys er skruet ned): elektroner, måleren ikke så
+export function målerTekst([venstre, højre], begge = 0, ikkeSet = null) {
+  const ikke = ikkeSet == null ? '' : ` · Ikke set: ${talTekst(ikkeSet)}`;
+  return { linje: `Venstre: ${talTekst(venstre)} · Højre: ${talTekst(højre)}${ikke}`, begge: `Begge på én gang: ${talTekst(begge)}` };
 }
 
 // En fordeling, man kan trække prikker fra (en tabel over den samlede chance, BIN felter over bagvæggen)
@@ -214,9 +217,18 @@ export const PANEL = {
   // λ = h/(m·v) = 6,626 · 10⁻³⁴ / (0,43 · 30) = 5,1 · 10⁻³⁵ m, ca. 10¹⁹ gange mindre end en proton (8,4 · 10⁻¹⁶ m)
   fodbold: { titel: 'En fodbold', tekst: 'En fodbold har også en bølge, men den er ca. 10¹⁹ gange mindre end en atomkerne, så striberne ville ligge alt for tæt til at ses. Og luften og lyset, der rammer bolden, røber hele tiden dens vej, så den lander i to bunker som kuglerne.' },
 };
-export function panelNøgle({ slags, sprækker, måler }) {
+// "Målerens lys" skruet ned (PR 2 af "to steder"): Feynmans tankeforsøg med svagt lys. Med én sprække åben giver både de
+// sete og de usete én bred bunke, så teksten om svagere striber gælder kun med begge åbne.
+const DELVIS = { elektroner: 'elektronerne', lys: 'fotonerne', molekyle: 'molekylerne', klump: 'klumperne' };
+for (const [slags, navn] of Object.entries(DELVIS)) {
+  PANEL[`${slags}-delvis`] = {
+    titel: 'Måleren ser kun nogle af dem',
+    tekst: `Med svagt lys ser måleren kun nogle af ${navn}. De gule prikker er dem, den så, og de giver ingen striber. De andre giver striber, så striberne bliver svagere.`,
+  };
+}
+export function panelNøgle({ slags, sprækker, måler, syn = 1 }) {
   if (kugleSlags(slags) || slags === 'boelger') return slags;
-  if (måler) return `${slags}-måler`;
+  if (måler) return syn < 1 && sprækker === 'begge' ? `${slags}-delvis` : `${slags}-måler`;
   return sprækker === 'begge' ? slags : `${slags}-en`;
 }
 

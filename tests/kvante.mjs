@@ -70,6 +70,11 @@ tjek('to steder: kortet står først i panelet (fire i alt), siger "ingen har no
   && ts.næste === 'kvanteKigger' && typeof ts.link?.handling === 'function'
   && ORDBOG.some((o) => o.id === 'superposition' && /én af mulighederne/.test(o.tekst)) && LINKS.superposition?.hvorfor === 'kvanteToSteder',
   JSON.stringify({ kort: KVANTE_KORT }));
+const delvis = ['elektroner', 'lys', 'molekyle', 'klump'].every((s) => PANEL[`${s}-delvis`]?.tekst && sætninger(PANEL[`${s}-delvis`].tekst) <= 3);
+tjek('Målerens lys: panelet har en tekst for hver slags, og den gælder kun med begge sprækker åbne og svagt lys',
+  delvis && panelNøgle({ slags: 'elektroner', sprækker: 'begge', måler: true, syn: 0.5 }) === 'elektroner-delvis'
+  && panelNøgle({ slags: 'elektroner', sprækker: 'venstre', måler: true, syn: 0.5 }) === 'elektroner-måler'
+  && panelNøgle({ slags: 'elektroner', sprækker: 'begge', måler: true, syn: 1 }) === 'elektroner-måler' && målerTekst([1, 2], 0, 3).linje === 'Venstre: 1 · Højre: 2 · Ikke set: 3');
 const tMidt = pulsTid(0), tKant = pulsTid(2.5), tVenstre = pulsTid(-0.5, { sprækker: 'venstre' }), tHøjre = pulsTid(-0.5, { sprækker: 'højre' });
 tjek('bølgepakken: når midten af bagvæggen på ca. 1,5 s og kanten senere, og med kun den venstre åben når den først bag den venstre; tælleren siger "Begge på én gang: 0"',
   tMidt > 1.3 && tMidt < 1.8 && tKant > tMidt && tVenstre < tHøjre && målerTekst([1234, 5]).linje === 'Venstre: 1.234 · Højre: 5' && målerTekst([1, 1]).begge === 'Begge på én gang: 0',
@@ -182,6 +187,32 @@ tjek('"Vis bølgen" skyder én elektron, hvis pakke er på vej, og prikken lande
   !udenMåler && b1.bølgen && b1.før.kører && b1.før.påVej === 1 && b1.midt.n === 0 && b1.midt.puls.front > 2 && b1.efter === 1
   && b2.kø.serie === 1 && b2.kø.påVej === 1 && b2.n === 3 && b2.serie === 0 && !b3.bølgen && b3.slået,
   JSON.stringify({ udenMåler, b1, b2, b3 }));
+
+// "Målerens lys" (to steder PR 2, Feynmans tankeforsøg): Med svagt lys ser måleren kun nogle af elektronerne. De sete
+// giver ingen striber, de usete giver striber, og striberne toner gradvist ud, jo stærkere lyset er. Kun med måleren.
+const lys = await T((z) => {
+  const k = atomlabTest.kvante;
+  const før = k.lysSkyder();
+  k.måler(true);
+  const kontrast = (syn) => {
+    k.sæt({ syn });
+    k.skyd(6000);
+    const top = k.tæl(0, 0.06), ring = k.tæl(z, 0.06);
+    return (top - ring) / (top + ring);
+  };
+  const v = [1, 0.5, 0].map(kontrast);
+  k.sæt({ syn: 0.5 });
+  k.skyd(6000);
+  k.spol(0.05);
+  return { før, v, delt: k.delt(), målt: k.målt(), antal: k.antal(), panel: k.panel().titel, skyder: k.lysSkyder() };
+}, ring);
+await T(() => { const k = atomlabTest.kvante; k.sæt({ syn: 1 }); k.måler(false); k.forfra(); });
+tjek('"Målerens lys": slået fra uden måler, striberne toner gradvist ud, jo stærkere lyset er, de sete prikker har ingen mørke striber, de usete har, og tælleren har "Ikke set" med alle talt',
+  lys.før.slået && lys.v[0] < 0.25 && lys.v[1] > 0.3 && lys.v[1] < 0.75 && lys.v[2] > 0.8
+  && lys.delt.set.mørke === 0 && lys.delt.set.antal > 2400 && lys.delt.ikke.toppe >= 5 && lys.delt.ikke.mørke > 0
+  && lys.målt.tal[0] + lys.målt.tal[1] + lys.målt.ikkeSet === lys.antal && /Ikke set: /.test(lys.målt.tekst)
+  && lys.panel === PANEL['elektroner-delvis'].titel && !lys.skyder.slået && lys.skyder.værdi === 50,
+  JSON.stringify({ ...lys, delt: lys.delt }));
 
 // Et tryk på en sprække i billedet lukker den, og et tryk igen åbner den
 await page.waitForTimeout(1500);
