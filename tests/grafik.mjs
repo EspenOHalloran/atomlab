@@ -79,7 +79,7 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
       billeder(40, 2.8); r.push(tilstand());
       billeder(40, 4); r.push(tilstand());
       billeder(8, 6); r.push(tilstand());
-      billeder(40, 4); r.push(tilstand());
+      billeder(40, 7); r.push(tilstand()); // (målingen kan begynde i de hurtige billeder lige efter, at den er slået til igen)
       billeder(8, 8); r.push(tilstand());
       r.push(g.prøver());
       g.udglat(false);
