@@ -3,6 +3,7 @@
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag. Einsteins
 // forside (E1, 21. november 2026) i test 1, 3 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
+// Energien og tyngden (E4, samme dag) i test 1, 7 og 8.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
 import { SKÆRME } from '../js/skaerme.js';
@@ -235,7 +236,7 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
   };
   if (tal.lys !== '1.079' || tal.ur !== '9,9' || tal.gram !== '0,000 000 004' || !(tal.sol > 4 && tal.sol < 4.4)) fejlE.push('turens tal');
   if (tal.gps.højde !== 45 || tal.gps.fart !== 7 || tal.gps.iAlt !== 38 || tal.lav >= 0 || !(tal.km > 10 && tal.km < 12) || !tal.lige) fejlE.push('GPS-tallene');
-  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling,tiden' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
+  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling,tiden,energien,tyngden' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
   if (t.VEJE.veje[0].opslag !== 'tiden' || !t.VEJE.veje[0].primær || t.VEJE.veje.length !== 3 || t.VEJE.veje[1].fænomen?.join() !== 'kosmos,tid') fejlE.push('vejene');
   if (t.FRI.kapitler.map((k) => k.id).join() !== 'toget,rundtur,vaegten,gps') fejlE.push('laboratoriet');
   tjek('Einsteins tur: fire trin (toget, rundturen, batteriet og GPS-uret) med kapitel og gæt i de tre sidste, ordene i Ordbogen, og tallene: 9,9 af 20 sekunder, 4 milliardtedele gram, +45 − 7 = 38 og ca. 10 km',
@@ -266,6 +267,35 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
   if (!/`einstein-s904\.webp`/.test(læs('billeder/biblioteket/KILDER.md')) || !/`einstein-s641\.webp`/.test(læs('billeder/biblioteket/KILDER.md')) || !existsSync(PROJEKT + 'billeder/biblioteket/einstein-s641.webp')) fejlL.push('KILDER.md og s. 641');
   tjek('Einsteins ligning om tiden: 4,32 s om dagen ved 1 % af lysets fart, 0,38 mod 0,51 ved 87 %, s. 904 sat linje for linje med stederne i linje 9-12 og 27-33, led for led i drejebogens orden, og "Men hvordan skrev han det?"',
     !fejlL.length, fejlL.join('; '));
+}
+// Einsteins energi og tyngde (E4, drejebogen afsnit 8 og 9): "Regn selv" 2 giver 4,0 · 10⁻¹² kg for lampens time (og 4 · 10⁻⁹ g
+// med Einsteins egne tal) og 4,3 · 10⁹ kg/s for Solen, "Regn selv" 3 giver 16, 6 og 10. Siderne er sat linje for linje (s. 641:
+// 29 linjer og fire formler, stederne i linje 12-21 og 22-24, s. 845: 21 linjer og ti formler, stederne i linje 1-2 og 9-10),
+// led for led i drejebogens orden, s. 845 står i KILDER.md, ordene masse og feltligning er i Ordbogen, og kernesætningen har
+// fået sin sidste sætning
+{
+  const t = await bogMed('einstein').tekster();
+  const E = t.LIGNINGER.energien, G = t.LIGNINGER.tyngden;
+  const læs = (f) => (existsSync(PROJEKT + f) ? readFileSync(PROJEKT + f, 'utf8') : '');
+  const fejl4 = [];
+  if (Math.abs(t.massetab() - 4.0e-12) > 0.01e-12) fejl4.push(`lampen: ${t.massetab()}`);
+  if (Math.abs(t.einsteinsGram(t.massetab() * t.LYSETS_FART ** 2 * t.ERG_PR_JOULE) - 4.0e-9) > 0.01e-9 || t.einsteinsGram(3.6e12) !== 4e-9) fejl4.push('Einsteins egne tal');
+  const sol = t.SOLEN_W / t.LYSETS_FART ** 2;
+  if (Math.abs(sol - 4.26e9) > 0.01e9 || !/4,3 milliarder kg/.test(E.regn.efter.res) || !/over 4 millioner ton/.test(E.regn.efter.res)) fejl4.push(`Solen: ${sol}`);
+  if (E.regn.valg.find((v) => v.rigtig)?.tekst !== '4 milliardtedele gram' || !E.regn.trin[1].res.endsWith('0,000 000 000 004 kg')) fejl4.push('svaret i "Hvor meget lettere?"');
+  if (!/28\.500 år/.test(t.energiEksempel(0.001)) || !/28 millioner år/.test(t.energiEksempel(1)) || !/i en time/.test(t.energiEksempel(t.massetab()))) fejl4.push('E = mc² med de tre masser');
+  if (t.felterIAlt() !== 16 || t.dobbelte() !== 6 || t.forskellige() !== 10 || G.regn.valg.find((v) => v.rigtig)?.tekst !== '10' || !/zehn Gleichungen/.test(G.regn.svar) || G.regn.skema?.n !== 4) fejl4.push('16, 6 og 10');
+  const nr = (L, id) => L.side.linjer.filter((l) => !l.f).map((l, i) => (l.sted === id ? i + 1 : 0)).filter(Boolean).join();
+  if (E.side.linjer.filter((l) => !l.f).length !== 29 || E.side.linjer.filter((l) => l.f).length !== 4 || nr(E, 'massen') !== '12,13,14,15,16,17,18,19,20,21' || nr(E, 'radium') !== '22,23,24') fejl4.push('linjerne på s. 641');
+  if (G.side.linjer.filter((l) => !l.f).length !== 21 || G.side.linjer.filter((l) => l.f).length !== 10 || nr(G, 'ti') !== '1,2' || nr(G, 'stof') !== '9,10'
+    || G.side.linjer.filter((l) => l.f).map((l) => l.nr).join() !== '(2),(3),(3a),(4),(2a),(5),(6),(3a),(7),(7a)') fejl4.push('linjerne på s. 845');
+  if (E.ligning.led.map((x) => x.id).join() !== 'L,V2,brok,masse,tal' || G.ligning.led.map((x) => x.id).join() !== 'g,G,im,kappa,T,halv,lig') fejl4.push('led for led');
+  if (!/`einstein-s845\.webp`/.test(læs('billeder/biblioteket/KILDER.md')) || !/SitzungsberichtePreussAkad19152/.test(læs('billeder/biblioteket/KILDER.md'))) fejl4.push('KILDER.md');
+  if (!ORDBOG.some((o) => o.id === 'masse' && /træg|sætte i gang/.test(o.tekst)) || !ORDBOG.some((o) => o.id === 'feltligning') || ORDBOG.some((o) => ['masse', 'feltligning'].includes(o.id) && o.tekst.length > 260)) fejl4.push('Ordbogen');
+  if (!/egne sider\.$/.test(forløbMed('lige-hurtigt')?.kernesætning ?? '')) fejl4.push('kernesætningen');
+  if (/stikkontakt/.test(E.regn.intro) || !/batteri/i.test(E.regn.intro) || !/lys og varme/.test(E.regn.intro)) fejl4.push('fælden med lampen');
+  tjek('Einsteins energi og tyngde: 4,0 · 10⁻¹² kg for lampens time (4 · 10⁻⁹ g med Einsteins tal), 4,3 milliarder kg i sekundet for Solen, 16, 6 og 10, s. 641 og s. 845 sat linje for linje med stederne, led for led, KILDER.md, Ordbogen og kernesætningen',
+    !fejl4.length, fejl4.join('; '));
 }
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -1017,6 +1047,85 @@ for (const [navn, opsætning] of [
   await ctx.close();
 }
 
+// Einsteins energi og tyngde (E4, test 7): Knappen videre i "1905: Tiden" fører til "1905: Energien", hvor s. 641 hentes først.
+// Radium-stedet viser tysk og dansk, Led for led ender med E = mc² og tre masser, og "Regn selv" ryster ved "4 gram", giver
+// 4 milliardtedele gram og Solen som del to. I "1915: Tyngden" (sidste opslag, ingen knap videre endnu) har den sætte s. 845
+// 21 linjer og ti formler, skemaet har 16 felter, et felt på den skrå linje giver et vink, de seks dobbelte foldes, "16"
+// ryster, og "10" giver "zehn Gleichungen". Linjen om, hvad man ikke kan, står fremme
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  const sider = [];
+  page.on('request', (r) => { const m = r.url().match(/einstein-(s\d+)\.webp/); if (m) sider.push(m[1]); });
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('einstein'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await O(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'tiden' && v.bladr(1)); });
+  await vent(page, () => atomlabTest.opdagelser.scene()?.hentet?.(), null, 15000);
+  const videreTekst = await O(() => document.querySelector('#opdBog .lg-videre')?.textContent);
+  await page.click('#opdBog .lg-videre');
+  const energi = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'energien' && atomlabTest.opdagelser.scene()?.hentet?.() && !document.querySelector('#opdBog .bog-blad'), null, 15000);
+  await page.click('#opdBog .bs-glød[data-sted="radium"]');
+  const radium = await O(() => ({ tysk: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.textContent, dansk: document.querySelector('#opdBog .bs-forklaring .bs-dansk')?.textContent, fagord: [...document.querySelectorAll('#opdBog .lg-forord-tekst .fagord')].map((f) => f.dataset.ord) }));
+  tjek('Einsteins energi: "Tre måneder senere … Hvad med massen? ›" i "1905: Tiden" fører til "1905: Energien", hvor s. 641 hentes, radium-stedet viser tysk og dansk, og forordet forklarer ordet masse',
+    /Hvad med massen\?/.test(videreTekst) && energi && sider.includes('s641') && sider.indexOf('s641') > sider.indexOf('s904') && /Radiumsalzen/.test(radium.tysk) && /radiumsalte/.test(radium.dansk) && radium.fagord.join() === 'masse',
+    JSON.stringify({ videreTekst, sider, radium }));
+  const led = [];
+  for (let i = 0; i < 6; i++) { await page.click('#opdBog .lg-led-næste'); led.push(await O(() => atomlabTest.opdagelser.scene().led())); }
+  const slut1 = await O(() => document.querySelector('#opdBog .lg-led')?.textContent);
+  await page.click('#opdBog .lg-fart[data-valg="2"]');
+  const slutKg = await O(() => document.querySelector('#opdBog .lg-led')?.textContent);
+  await page.click('#opdBog .lg-stor [data-led="L"]');
+  const l = await O(() => ({ led: atomlabTest.opdagelser.scene().led(), lyser: [...document.querySelectorAll('#opdBog .lg-stor .lg-lyser')].map((e) => e.dataset.led) }));
+  tjek('Einsteins energi: "Led for led" går gennem L, V², L/V², Masse og 9 · 10²⁰ til E = mc² med 1 gram (ca. 28.500 år for lampen), 1 kg giver 28 millioner år, og et tryk på L lyser L op',
+    led.join() === 'L,V2,brok,masse,tal,slut' && /E = mc/.test(slut1) && /28\.500 år/.test(slut1) && /28 millioner år/.test(slutKg) && l.led === 'L' && l.lyser.join() === 'L', JSON.stringify({ led, slut1, slutKg, l }));
+  await page.click('#opdBog .lg-regn > summary');
+  await page.click('#opdBog .lg-regn-knap');
+  await page.click('#opdBog .lg-regn-knap');
+  await page.click('#opdBog .lg-svar >> text=4 gram');
+  const forkert = await O(() => ({ vink: document.querySelector('#opdBog .lg-regn-svar')?.textContent, res: [...document.querySelectorAll('#opdBog .lg-regn-res')].map((e) => e.textContent) }));
+  await page.click('#opdBog .lg-svar >> text=4 milliardtedele gram');
+  const rigtigt = await O(() => document.querySelector('#opdBog .lg-regn-svar')?.textContent);
+  await page.click('#opdBog .lg-regn-del2');
+  const sol = await O(() => document.querySelector('#opdBog .lg-regn-svar')?.textContent);
+  tjek('Einsteins energi: "Regn selv" giver 360.000 joule og 0,000 000 000 004 kg, "4 gram" er for meget, "4 milliardtedele gram" giver radium, og del to giver Solens 4,3 milliarder kg i sekundet',
+    /360\.000 joule/.test(forkert.res[0]) && /0,000 000 000 004 kg/.test(forkert.res[1]) && /For meget/.test(forkert.vink) && /4 milliardtedele gram/.test(rigtigt) && /radium/.test(rigtigt) && /4,3 milliarder kg/.test(sol),
+    JSON.stringify({ forkert, rigtigt, sol }));
+  // Tyngden: den sætte side, skemaet og svaret
+  await page.click('#opdBog .lg-videre');
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'tyngden' && atomlabTest.opdagelser.scene()?.sætVisning && !document.querySelector('#opdBog .bog-blad'), null, 5000);
+  await O(() => atomlabTest.opdagelser.scene().sætVisning('sat'));
+  const sat = await O(() => ({
+    linjer: document.querySelectorAll('#opdBog .lg-sat .lg-linje').length,
+    formler: document.querySelectorAll('#opdBog .lg-sat .lg-formel').length,
+    numre: [...document.querySelectorAll('#opdBog .lg-sat .lg-fnr')].map((e) => e.textContent).join(),
+    steder: [...document.querySelectorAll('#opdBog .lg-sat-sted')].map((k) => k.dataset.sted).join(),
+    videre: !!document.querySelector('#opdBog .lg-videre'),
+    sidste: atomlabTest.opdagelser.bladr(1) === false,
+    ikke: getComputedStyle(document.querySelector('#opdBog .lg-ikke')).display !== 'none' && /universitetet/.test(document.querySelector('#opdBog .lg-ikke').textContent),
+    fagord: [...document.querySelectorAll('#opdBog .lg-forord-tekst .fagord')].map((f) => f.dataset.ord).join(),
+  }));
+  tjek('Einsteins tyngde: "Sat tekst" viser s. 845 med 21 linjer, ti formler med Einsteins numre og stederne "ti" og "stof", det er sidste opslag uden knap videre (til E5), linjen om universitetsmatematikken står fremme, og forordet forklarer feltligningen',
+    sat.linjer === 21 && sat.formler === 10 && sat.numre === '(2),(3),(3a),(4),(2a),(5),(6),(3a),(7),(7a)' && sat.steder === 'ti,stof' && !sat.videre && sat.sidste && sat.ikke && sat.fagord === 'feltligning', JSON.stringify(sat));
+  await page.click('#opdBog .lg-regn > summary');
+  const felter = await O(() => document.querySelectorAll('#opdBog .lg-felt').length);
+  await page.click('#opdBog .lg-regn-knap');
+  await page.click('#opdBog .lg-felt[data-i="3"][data-m="3"]');
+  const skrå = await O(() => document.querySelector('#opdBog .lg-regn-svar')?.textContent);
+  await page.click('#opdBog .lg-felt[data-i="1"][data-m="2"]');
+  await page.click('#opdBog .lg-felt[data-i="4"][data-m="1"]'); // makkeren under den skrå linje virker også
+  for (const [i, m] of [[1, 3], [2, 3], [2, 4], [3, 4]]) await page.click(`#opdBog .lg-felt[data-i="${i}"][data-m="${m}"]`);
+  const foldet = await O(() => ({ regn: atomlabTest.opdagelser.scene().regn(), væk: document.querySelectorAll('#opdBog .lg-felt.lg-foldet').length, dobbelt: document.querySelectorAll('#opdBog .lg-felt.lg-dobbelt').length }));
+  await page.click('#opdBog .lg-svar >> text=16');
+  const for16 = await O(() => document.querySelector('#opdBog .lg-regn-svar')?.textContent);
+  await page.click('#opdBog .lg-svar >> text=10');
+  const svar = await O(() => document.querySelector('#opdBog .lg-regn-svar')?.textContent);
+  tjek('Einsteins tyngde: skemaet har 16 felter, G₃₃ på den skrå linje giver et vink, de seks dobbelte foldes oven på deres makker, "16" er for mange, og "10" giver "zehn Gleichungen"',
+    felter === 16 && /skrå linje/.test(skrå) && foldet.regn.foldet === 6 && foldet.regn.trin === 2 && foldet.væk === 6 && foldet.dobbelt === 6 && /For mange/.test(for16) && /zehn Gleichungen/.test(svar),
+    JSON.stringify({ felter, skrå, foldet, for16, svar }));
+  await ctx.close();
+}
+
 // Telefon og tablet på højkant som første skærm: forsiden kan ses uden at rulle (også "Begynd"), et stryg bladrer, og
 // intet ligger uden for skærmen
 for (const [navn, opsætning] of [
@@ -1089,19 +1198,21 @@ for (const [navn, opsætning] of [
   tjek(`${navn}: Einsteins forside har portrættet, spørgsmålet, introduktionen og "Begynd" fremme uden at rulle, vignetten er inden for skærmen, og intet går ud til siden`, ef.portræt && ef.titel && ef.intro && ef.vignet && !ef.bred && ef.begynd, JSON.stringify(ef));
   // Einsteins ligning (E3): forordet, siden og ligningen er inden for skærmen, kontakten og stederne er mindst 44 px, og
   // intet går ud til siden, både med skanningen og den sætte tekst
-  for (const visning of ['skanning', 'sat']) {
-    await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'tiden' && v.bladr(1)); });
+  for (const [opslag, visning] of ['tiden', 'energien', 'tyngden'].flatMap((o) => [[o, 'skanning'], [o, 'sat']])) {
+    await page.evaluate((o) => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== o && v.bladr(1)); }, opslag);
     await vent(page, () => atomlabTest.opdagelser.scene()?.sætVisning);
     await page.evaluate((x) => atomlabTest.opdagelser.scene().sætVisning(x), visning);
     await page.waitForTimeout(700);
     const lg = await page.evaluate(() => {
       const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5;
       const side = document.querySelector(`#opdBog ${document.querySelector('#opdBog .bog-ligning-opslag').dataset.visning === 'sat' ? '.lg-sat' : '.lg-skanning'}`).getBoundingClientRect();
-      const stor = document.querySelector('#opdBog .lg-stor').getBoundingClientRect();
+      const storEl = document.querySelector('#opdBog .lg-stor');
+      const stor = storEl.getBoundingClientRect();
+      const storPasser = storEl.scrollWidth <= storEl.clientWidth + 1; // ligningen går ikke ud over sin kasse (tyngden er den bredeste)
       const knapper = [...document.querySelectorAll('#opdBog :is(.lg-valg, .bs-sted-knap, .lg-led-næste)')].map((e) => e.getBoundingClientRect());
-      return { side: inde(side) && side.width >= 120, stor: inde(stor) && stor.width >= 150, knapper: knapper.length === 5 && knapper.every((k) => inde(k) && k.height >= 40), bred: document.documentElement.scrollWidth > innerWidth + 1, mål: [side.width, stor.width].map(Math.round) };
+      return { side: inde(side) && side.width >= 120, stor: inde(stor) && stor.width >= 150 && storPasser, knapper: knapper.length === 5 && knapper.every((k) => inde(k) && k.height >= 40), bred: document.documentElement.scrollWidth > innerWidth + 1, mål: [side.width, stor.width].map(Math.round) };
     });
-    tjek(`${navn}: Einsteins ligning (${visning}) har siden og ligningen inden for skærmen, kontakten og knapperne er mindst 40 px, og intet går ud til siden`, lg.side && lg.stor && lg.knapper && !lg.bred, JSON.stringify(lg));
+    tjek(`${navn}: Einsteins ligning om ${opslag} (${visning}) har siden og ligningen inden for skærmen, kontakten og knapperne er mindst 40 px, og intet går ud til siden`, lg.side && lg.stor && lg.knapper && !lg.bred, JSON.stringify(lg));
   }
   await page.evaluate(() => atomlabTest.opdagelser.scene().sætVisning('skanning'));
   await page.evaluate(() => atomlabTest.opdagelser.åbn('tycho')); // tilbage til Tycho til gåden nedenfor

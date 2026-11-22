@@ -5,7 +5,7 @@
 // E1 (21. november 2026): forsiden med vignetten (lommeuret og lysglimtet, tegnet af lommeurTegning i js/bog.js). Kun de
 // opslag, der er bygget, står i OPSLAG (E20 fund 6, stilguiden A9). E2 (samme dag): turen "Lige hurtigt for alle"
 // (forløbet i js/data/forloeb/einstein.js, tegningerne i js/bog/einstein.js) og regnestykkerne bag den nedenfor. Ligningerne
-// kommer i E3 og E4, og "Om Einstein" i E5.
+// om tiden (E3), energien og tyngden (E4, 22. november 2026) står i LIGNINGER, og "Om Einstein" kommer i E5.
 
 export const FORSIDE = {
   // Bogens røde tråd (drejebogen afsnit 2): alle tre ligninger følger af, at lyset er lige hurtigt for alle
@@ -42,8 +42,10 @@ export const OPSLAG = [
   // opslaget et lille laboratorium med de fire kapitler og "Fortæl det igen" (som Tycho)
   { id: 'fortaelling', slags: 'scene', titel: 'Lige hurtigt for alle' },
   // Ligningerne på Einsteins egne sider (E3, drejebogen afsnit 6 og 7): et opslag af slags 'ligning' (js/bog-ligning.js),
-  // teksterne i LIGNINGER nedenfor. Energien (s. 641) og tyngden (s. 845) kommer i E4
+  // teksterne i LIGNINGER nedenfor. Energien (s. 641) og tyngden (s. 845) i E4 (drejebogen afsnit 8 og 9)
   { id: 'tiden', slags: 'ligning', titel: '1905: Tiden', ligning: 'tiden' },
+  { id: 'energien', slags: 'ligning', titel: '1905: Energien', ligning: 'energien' },
+  { id: 'tyngden', slags: 'ligning', titel: '1915: Tyngden', ligning: 'tyngden' },
 ];
 
 // "Det så du" (drejebogen afsnit 2 og 5, trin 5). Den vigtige vej er ligningerne på Einsteins egne sider (opslaget 'tiden',
@@ -134,6 +136,47 @@ export function småGram(gram, decimaler = 9) {
   const [hel, dec] = gram.toFixed(decimaler).split('.');
   return `${hel},${dec.match(/.{1,3}/g).join(' ')}`;
 }
+
+// ---------- Regnestykkerne bag ligningerne (testes i Node, drejebogen afsnit 7-9 og 15) ----------
+// Tiden: hvor meget et ur med farten β (en del af lysets fart) kommer bagud pr. sekund. bagudLet er Einsteins lette udgave
+// ½β², bagudRigtig er 1 − √(1 − β²) regnet uden at miste cifrene ved små farter (β²/(1 + √(1 − β²)) er det samme tal,
+// fælden med kommatal i faktafilen afsnit 8)
+export const bagudLet = (β) => (β * β) / 2;
+export const bagudRigtig = (β) => (β * β) / (1 + Math.sqrt(1 - β * β));
+export const bagudPrDøgn = (β, let_ = true) => (let_ ? bagudLet(β) : bagudRigtig(β)) * DØGN;
+// Led for led: tallene for uret fra turen (87 %, 20 sekunder hjemme)
+export function ledForLedEksempel(β = 0.87, t = HJEMME) {
+  const k = β * β, rest = 1 - k, rod = Math.sqrt(rest);
+  const b = dansk(β, Math.round(β * 100) % 10 ? 2 : 1); // 0,1 og 0,87
+  return `${b} · ${b} = ${dansk(k, 2)}. 1 − ${dansk(k, 2)} = ${dansk(rest, 2)}, og √${dansk(rest, 2)} = ${dansk(rod, 2)}. Når uret hjemme viser ${t} sekunder, viser det ${dansk(t * rod, 1)}.`;
+}
+const procent = (β) => `${dansk(β * 100)} %`;
+// Tre betydende cifre på dansk (0,00501 og 0,134). Tallene her er alle over 0,00001, så ingen e-notation
+export const treCifre = (x) => Number(x.toPrecision(3)).toString().replace('.', ',');
+
+// Energien (s. 641): Einstein målte energien i erg og massen i gram og delte med 9 · 10²⁰ (lysets fart 3 · 10¹⁰ cm/s i anden).
+// En joule er 10 millioner erg. 360.000 J er 3,6 · 10¹² erg, og 3,6 · 10¹² / 9 · 10²⁰ = 4 · 10⁻⁹ g, det samme som 4 · 10⁻¹² kg
+export const ERG_PR_JOULE = 1e7;
+export const EINSTEINS_V2 = 9e20; // cm²/s², s. 641, l. 20
+export const einsteinsGram = (erg) => erg / EINSTEINS_V2;
+export const energiAfMasse = (kg) => kg * LYSETS_FART ** 2; // joule (E = mc²)
+// Hvor længe lampen på 100 W kunne lyse for energien i massen m (sekunder)
+export const lampeTid = (kg, watt = LAMPE_W) => energiAfMasse(kg) / watt;
+const ÅR = 365.25 * DØGN;
+// Led for led i energien: massen vendt om til energi (E = mc²) og lampens tid. Tallene afrundes, så de kan læses: c² som
+// 90.000.000.000.000.000 og årene til tre cifre (1 g: ca. 28.500 år, 1 kg: ca. 28 millioner år, regnet i Node)
+export function energiEksempel(kg) {
+  const E = energiAfMasse(kg), s = lampeTid(kg), år = s / ÅR;
+  const masse = kg >= 1 ? `${dansk(kg)} kg` : kg >= 1e-3 ? `${småGram(kg, 3)} kg` : `${småGram(kg, 12)} kg`;
+  const tid = s < 2 * 3600 ? 'i en time' : år < 1e6 ? `i ca. ${dansk(Math.round(år / 100) * 100)} år` : `i ca. ${dansk(Math.round(år / 1e6))} millioner år`;
+  return `E = ${masse} · 90.000.000.000.000.000 = ca. ${dansk(Number(E.toPrecision(2)))} joule. Det kunne holde lampen på 100 watt tændt ${tid}.`;
+}
+
+// Tyngden (s. 845): i og m går fra 1 til n (n = 4: tre retninger i rummet og tiden). Skemaet har n · n felter, men G_im er
+// det samme som G_mi, så de n(n − 1)/2 over den skrå linje er dobbelte, og n(n + 1)/2 er forskellige ("zehn Gleichungen")
+export const felterIAlt = (n = 4) => n * n;
+export const dobbelte = (n = 4) => (n * (n - 1)) / 2;
+export const forskellige = (n = 4) => (n * (n + 1)) / 2;
 
 // ---------- Ligningerne (E3, drejebogen afsnit 6 og 7): opslag af slags 'ligning' i js/bog-ligning.js ----------
 // Hvert opslag: forordet (broen fra opslaget før), siden fra 1905 (skanningen og den samme side sat af os, kontakten
@@ -229,42 +272,53 @@ export const LIGNINGER = {
       næste: 'Næste led',
       forfra: 'Forfra',
       hjælp: 'Tryk på et bogstav i ligningen, eller gå led for led.',
-      idag: 'I dag skriver man c for lysets fart: τ = t√(1 − v²/c²).',
+      // Navnene står med den lille opmærkning (matte i js/bog-ligning.js)
       led: [
-        { id: 't', navn: 't', linje: 'Tiden på urene, der står stille (perronen, Jorden).' },
-        { id: 'tau', navn: 'τ', linje: 'Tiden på uret, der farer af sted. τ er det græske t og hedder "tau".' },
-        { id: 'v', navn: 'v', linje: 'Urets fart.' },
-        { id: 'V', navn: 'V', linje: 'Lysets fart. Einstein skrev V.', idag: 'I dag skriver man c.' },
-        { id: 'brok', navn: 'v/V', linje: 'Hvor stor en del af lysets fart uret har: 0,5 er halvdelen.' },
-        { id: 'kvadrat', navn: '(v/V)²', linje: 'Det tal ganget med sig selv: 0,5 · 0,5 = 0,25.' },
-        { id: 'enminus', navn: '1 − (v/V)²', linje: 'Altid mindre end 1, når uret bevæger sig.' },
+        { id: 't', navn: '*t*', linje: 'Tiden på urene, der står stille (perronen, Jorden).' },
+        { id: 'tau', navn: '*τ*', linje: 'Tiden på uret, der farer af sted. τ er det græske t og hedder "tau".' },
+        { id: 'v', navn: '*v*', linje: 'Urets fart.' },
+        { id: 'V', navn: '*V*', linje: 'Lysets fart. Einstein skrev V.', idag: 'I dag skriver man c.' },
+        { id: 'brok', navn: '*v*/*V*', linje: 'Hvor stor en del af lysets fart uret har: 0,5 er halvdelen.' },
+        { id: 'kvadrat', navn: '(*v*/*V*)^{2}', linje: 'Det tal ganget med sig selv: 0,5 · 0,5 = 0,25.' },
+        { id: 'enminus', navn: '1 − (*v*/*V*)^{2}', linje: 'Altid mindre end 1, når uret bevæger sig.' },
         { id: 'rod', navn: '√', linje: 'Kvadratroden. Den er også mindre end 1, så τ bliver mindre end t: Uret viser mindre tid.' },
       ],
-      // Efter det sidste led: uret fra turen regnet med ligningen (0,87² = 0,7569, 1 − 0,7569 = 0,2431, √0,2431 = 0,493, og
-      // 20 · 0,493 = 9,86 s), og man kan selv vælge en af turens farter (det ekstra lag, jeres ønske 21. november 2026).
-      // Tallene laves af ledForLedEksempel(), så de passer
-      eksempel: 'Med {fart} af lysets fart:',
-      vælgFart: 'Sæt en anden fart ind:',
+      // Efter det sidste led (slut): uret fra turen regnet med ligningen (0,87² = 0,7569, 1 − 0,7569 = 0,2431, √0,2431 =
+      // 0,493, og 20 · 0,493 = 9,86 s), og man kan selv vælge en af turens farter (det ekstra lag, jeres ønske 21. november
+      // 2026). Tallene laves af ledForLedEksempel(), så de passer. titel og tekst får det valgte (v)
+      slut: {
+        titel: (β) => `Med ${procent(β)} af lysets fart:`,
+        tekst: (β) => ledForLedEksempel(β),
+        vælg: 'Sæt en anden fart ind:',
+        valg: URETS_FARTER.map((β) => ({ v: β, knap: procent(β) })),
+        standard: 0.87,
+        idag: 'I dag skriver man c for lysets fart: *τ* = *t*\\r{1 − *v*^{2}/*c*^{2}}.',
+      },
     },
     // "Regn selv" (gåden, drejebogen afsnit 7): ½(v/V)² ved 1 % af lysets fart i et døgn (86.400 s) giver 4,32 s
     regn: {
       titel: 'Regn selv: Hvor meget bagud?',
       intro: 'Et ur flyver med 1 % af lysets fart (ca. 10,8 millioner km/t) i et døgn. Hvor meget kommer det bagud? Brug Einsteins lette udgave fra siden: ½(v/V)².',
       β: 0.01,
+      // Trinene (res er det, der står, når knappen er trykket), svaret og nørd-tabellen regnes i bagudLet/bagudRigtig
+      // (testet i Node). Ved 100 km/t er det kun 0,000 000 000 37 sekund om dagen
       trin: [
-        { tekst: 'v/V er 0,01. Gang det med sig selv.', knap: '× sig selv' },
-        { tekst: 'Tag halvdelen.', knap: '½ ·' },
+        { tekst: 'v/V er 0,01. Gang det med sig selv.', knap: '× sig selv', res: `0,01 · 0,01 = ${dansk(0.01 * 0.01, 4)}` },
+        { tekst: 'Tag halvdelen.', knap: '½ ·', res: `½ · ${dansk(0.01 * 0.01, 4)} = ${dansk(bagudLet(0.01), 5)}. Uret kommer ${dansk(bagudLet(0.01), 5)} sekund bagud for hvert sekund.` },
         { tekst: 'Et døgn har 86.400 sekunder. Hvor meget er uret bagud efter et døgn?' },
       ],
       valg: [{ tekst: '0,4 sekund', for: 'lidt' }, { tekst: '4,3 sekunder', rigtig: true }, { tekst: '43 sekunder', for: 'meget' }],
       vink: { lidt: 'For lidt.', meget: 'For meget.', fælles: 'Gang 0,00005 med 86.400. Det er det samme som 86.400 delt med 20.000.' },
+      svar: `${dansk(bagudPrDøgn(0.01), 1)} sekunder om dagen.`,
+      svarMere: `Ved 100 km/t er det kun ${småGram(bagudPrDøgn(100 / 3.6 / LYSETS_FART), 11)} sekund. Så lidt kan ingen mærke.`,
       igen: 'Regn igen',
-      // Tallene i nørd-tabellen og svaret regnes i bagudLet/bagudRigtig (testet i Node)
       nørd: {
         titel: 'For nørder: Passer den lette udgave altid?',
         tekst: 'Nej. Ved 87 % giver den lette udgave 0,38, men den rigtige formel giver 0,51 sekund bagud pr. sekund, altså at uret går halvt så hurtigt. Den lette udgave passer kun ved små farter. Det skriver Einstein selv: "bis auf Größen vierter und höherer Ordnung" (når man ser bort fra størrelser af fjerde og højere orden).',
-        farter: [0.01, 0.1, 0.5, 0.87],
-        kolonner: ['Fart', 'Let: ½(v/V)²', 'Rigtig: 1 − √(1 − (v/V)²)'],
+        tabel: {
+          kolonner: ['Fart', 'Let: ½(v/V)²', 'Rigtig: 1 − √(1 − (v/V)²)'],
+          rækker: [0.01, 0.1, 0.5, 0.87].map((β) => [procent(β), treCifre(bagudLet(β)), treCifre(bagudRigtig(β))]),
+        },
       },
     },
     // Linje for linje (drejebogen afsnit 7, faktafilen med teksterne afsnit 1): s. 904 og de andre sider fra artiklen
@@ -306,19 +360,353 @@ export const LIGNINGER = {
     // Knappen videre (den røde tråd) står kun, når der er et opslag efter (energien kommer i E4)
     videre: 'Tre måneder senere fandt han noget mere. Hvad med massen?',
   },
+  // ---------- Opslag 4: 1905, energien (E4, drejebogen afsnit 8, faktafilen afsnit 3 og teksterne afsnit 2) ----------
+  energien: {
+    ord: ['masse'], // fagordet i forordet (Ordbogen, E4)
+    // Forordet: "Bern, September 1905" står på s. 641, og artiklen er tre sider (s. 639-641). Den første sætning henviser med
+    // fodnoten "A. Einstein, Ann. d. Phys. 17. p. 891. 1905" til artiklen om tiden (s. 639, læst på sidebilledet n232)
+    forord: {
+      sted: 'Bern, september 1905',
+      tekst: 'Einstein sender tre sider mere til Annalen der Physik. Den første sætning siger, at de bygger på artiklen om tiden. Han forestiller sig et legeme, der sender lige meget lys ud til begge sider, og regner ud, hvad det betyder for dets masse. Han skriver ikke E = mc², men noget, der betyder det samme.',
+    },
+    side: {
+      id: 's641', navn: 's. 641',
+      fil: 'billeder/biblioteket/einstein-s641.webp', b: 1000, h: 1525,
+      hvor: 'Annalen der Physik, bind 18 (1905), side 641',
+      alt: 'Side 641 fra Annalen der Physik 1905, artiklens sidste side, med tysk tekst og fire formler. Midt på siden står, at massen bliver L over V i anden mindre, og nederst Bern, September 1905.',
+      hoved: ['', 'Trägheit eines Körpers von seinem Energieinhalt abhängig?', '641'],
+      // Siden linje for linje som på billedet (læst på sidebilledet n234, 22. november 2026). 29 linjer og fire formler.
+      // Den første linje er slutningen af "addi-tiven" fra s. 640
+      linjer: [
+        'tiven Konstanten der Energien *H* und *E* abhängt.  Wir können',
+        'also setzen:',
+        { f: '*H*_{0} − *E*_{0} = *K*_{0} + *C*,' },
+        { f: '*H*_{1} − *E*_{1} = *K*_{1} + *C*,' },
+        'da *C* sich während der Lichtaussendung nicht ändert.  Wir',
+        'erhalten also:',
+        { f: '*K*_{0} − *K*_{1} = *L*\\h{\\b{1}{\\r{1 − \\p{\\b{*v*}{*V*}}^{2}}} − 1}.' },
+        'Die kinetische Energie des Körpers in bezug auf (*ξ*, *η*, *ζ*) nimmt',
+        'infolge der Lichtaussendung ab, und zwar um einen von den',
+        'Qualitäten des Körpers unabhängigen Betrag.  Die Differenz',
+        '*K*_{0} − *K*_{1} hängt ferner von der Geschwindigkeit ebenso ab wie',
+        'die kinetische Energie des Elektrons (l. c. § 10).',
+        '>Unter Vernachlässigung von Größen vierter und höherer',
+        'Ordnung können wir setzen:',
+        { f: '*K*_{0} − *K*_{1} = \\b{*L*}{*V*^{2}} \\b{*v*^{2}}{2}.' },
+        { t: 'Aus dieser Gleichung folgt unmittelbar:', sted: 'massen' },
+        { t: '>Gibt ein Körper die Energie *L* in Form von Strahlung', sted: 'massen' },
+        { t: 'ab, so verkleinert sich seine Masse um *L*/*V*^{2}.  Hierbei ist es', sted: 'massen' },
+        { t: 'offenbar unwesentlich, daß die dem Körper entzogene Energie', sted: 'massen' },
+        { t: 'gerade in Energie der Strahlung übergeht, so daß wir zu der', sted: 'massen' },
+        { t: 'allgemeineren Folgerung geführt werden:', sted: 'massen' },
+        { t: '>Die Masse eines Körpers ist ein Maß für dessen Energie-', sted: 'massen' },
+        { t: 'inhalt; ändert sich die Energie um *L*, so ändert sich die Masse', sted: 'massen' },
+        { t: 'in demselben Sinne um *L*/9.10^{20}, wenn die Energie in Erg', sted: 'massen' },
+        { t: 'und die Masse in Grammen gemessen wird.', sted: 'massen' },
+        { t: '>Es ist nicht ausgeschlossen, daß bei Körpern, deren', sted: 'radium' },
+        { t: 'Energieinhalt in hohem Maße veränderlich ist (z. B. bei den', sted: 'radium' },
+        { t: 'Radiumsalzen), eine Prüfung der Theorie gelingen wird.', sted: 'radium' },
+        '>Wenn die Theorie den Tatsachen entspricht, so überträgt',
+        'die Strahlung Trägheit zwischen den emittierenden und absor-',
+        'bierenden Körpern.',
+        '>Bern, September 1905.',
+        { t: '(Eingegangen 27. September 1905.)', midt: true },
+      ],
+    },
+    vælg: 'Tryk på et sted, der lyser. Så kommer det tyske og vores oversættelse.',
+    // De glødende steder (drejebogen afsnit 8). felter målt med blækket i hver række på einstein-s641.webp (linje 12-21 er
+    // y 48,5-68,7 %, linje 22-24 er y 69,4-75,3 %, teksten går fra x 6,5 til 79,1 %)
+    steder: [
+      {
+        id: 'massen', navn: 'Massen bliver mindre', linjer: 'Linje 12-21',
+        felter: [[5.8, 48, 74.2, 20.9]],
+        kort: 'Sender noget energien L ud som lys, bliver massen L/V² mindre. Og det gælder al energi: Massen er et mål for, hvor meget energi der er i noget. I dag skriver man E = mc².',
+        tysk: 'Gibt ein Körper die Energie L in Form von Strahlung ab, so verkleinert sich seine Masse um L/V². … Die Masse eines Körpers ist ein Maß für dessen Energieinhalt; ändert sich die Energie um L, so ändert sich die Masse in demselben Sinne um L/9.10²⁰, wenn die Energie in Erg und die Masse in Grammen gemessen wird.',
+        dansk: 'Afgiver et legeme energien L som stråling, så bliver dets masse L/V² mindre. … Et legemes masse er et mål for dets energiindhold. Ændres energien med L, så ændres massen samme vej med L/9 · 10²⁰, når energien måles i erg og massen i gram.',
+      },
+      {
+        id: 'radium', navn: 'Prøv det med radium', linjer: 'Linje 22-24',
+        felter: [[5.8, 69.2, 74.2, 6.4]],
+        kort: 'Han foreslår, hvordan man kan prøve det: med radiumsalte, hvis energi ændrer sig meget. Den første måling, der passede, kom først i 1933.',
+        tysk: 'Es ist nicht ausgeschlossen, daß bei Körpern, deren Energieinhalt in hohem Maße veränderlich ist (z. B. bei den Radiumsalzen), eine Prüfung der Theorie gelingen wird.',
+        dansk: 'Det er ikke udelukket, at det vil lykkes at prøve teorien med legemer, hvis energiindhold ændrer sig meget (fx radiumsalte).',
+      },
+    ],
+    // Ligningen stor: "seine Masse" bliver L/V² mindre (Einstein skrev ikke Δm og ikke E = mc², fælden). Under den står
+    // hans eget tal for V² i erg og gram (l. 20). Led for led i drejebogens orden (afsnit 8)
+    ligning: {
+      navn: 'Masse − L/V²',
+      alt: 'Massen bliver L over V i anden mindre. V i anden er 9 gange 10 i tyvende',
+      start: 'Led for led',
+      næste: 'Næste led',
+      forfra: 'Forfra',
+      hjælp: 'Tryk på et bogstav i ligningen, eller gå led for led.',
+      led: [
+        { id: 'L', navn: '*L*', linje: 'Energien, der forsvinder ud som lys (Einstein skriver "Strahlung", stråling). Han målte den i erg, i dag i joule.', idag: 'I dag skriver man E.' },
+        { id: 'V2', navn: '*V*^{2}', linje: 'Lysets fart ganget med sig selv: et kæmpe tal (90 millioner milliarder, når farten er i meter i sekundet).', idag: 'I dag skriver man c².' },
+        { id: 'brok', navn: '*L*/*V*^{2}', linje: 'Energien delt med det kæmpe tal. Derfor bliver massen kun en lillebitte smule mindre.' },
+        { id: 'masse', navn: 'Masse', linje: 'Hvor svært noget er at sætte i gang eller standse. Einstein spørger i titlen, om "Trägheit" (træghed) afhænger af energien.' },
+        { id: 'tal', navn: '9 · 10^{20}', linje: 'Einsteins eget tal for V²: lysets fart, 30 milliarder centimeter i sekundet, ganget med sig selv.' },
+      ],
+      // Efter det sidste led: ligningen vendt om (m = L/V² er det samme som L = mV², i dag E = mc²) med tre masser. Tallene
+      // laves af energiEksempel() (1 g: ca. 90.000.000.000.000 J og ca. 28.500 år for lampen, testet i Node)
+      slut: {
+        titel: (kg) => `${kg >= 1 ? '1 kg' : kg >= 1e-3 ? '1 gram' : '4 milliardtedele gram'} bliver til energi:`,
+        tekst: (kg) => energiEksempel(kg),
+        vælg: 'Prøv en anden masse:',
+        valg: [{ v: massetab(), knap: '4 milliardtedele g' }, { v: 0.001, knap: '1 gram' }, { v: 1, knap: '1 kg' }],
+        standard: 0.001,
+        // intro står før eksemplet (det, eksemplet regner med)
+        intro: 'Vend den om: Massen *m* = *L*/*V*^{2} er det samme som *L* = *m* · *V*^{2}. I dag skriver man *E* = *mc*^{2}: Energien er massen gange lysets fart i anden.',
+      },
+    },
+    // "Regn selv: Hvor meget lettere?" (drejebogen afsnit 8): batteriet fra trin 3 i turen. 100 W · 3.600 s = 360.000 J, og
+    // 360.000 / c² = 4,0 · 10⁻¹² kg = 4 milliardtedele gram. Del to: Solen, 3,828 · 10²⁶ W / c² = 4,26 · 10⁹ kg/s (testet i Node).
+    // Ikke en lampe i stikkontakten (fælden): Det er batteriet, der sender energien ud, og det er al energien, lys og varme
+    regn: {
+      titel: 'Regn selv: Hvor meget lettere?',
+      intro: 'Et batteri får en lampe på 100 watt til at lyse i en time. Al energien forsvinder ud som lys og varme. Hvor meget lettere bliver batteriet og lampen? Brug Einsteins L/V².',
+      trin: [
+        { tekst: '100 watt er 100 joule hvert sekund, og en time har 3.600 sekunder.', knap: '100 · 3.600', res: `${dansk(LAMPE_W * TIME)} joule. Det er L.` },
+        { tekst: 'Lysets fart er ca. 300.000.000 meter i sekundet. Ganget med sig selv er det ca. 90.000.000.000.000.000. Del L med det.', knap: '÷ V²', res: `${dansk(LAMPE_W * TIME)} ÷ 90.000.000.000.000.000 = ${småGram(massetab(), 12)} kg` },
+        { tekst: 'Et kilogram er 1.000 gram. Hvor meget lettere bliver de?' },
+      ],
+      valg: [{ tekst: '4 gram', for: 'meget' }, { tekst: '4 milligram', for: 'meget' }, { tekst: '4 milliardtedele gram', rigtig: true }],
+      vink: { meget: 'For meget.', fælles: `Gang ${småGram(massetab(), 12)} kg med 1.000, og tæl nullerne: Et milligram er 0,001 gram, og en milliardtedel gram er 0,000 000 001 gram.` },
+      svar: '4 milliardtedele gram.',
+      svarMere: 'Det kunne ingen vægt i 1905 mærke. Derfor foreslog Einstein radium.',
+      // Del to (efter det rigtige svar): Solen
+      efter: {
+        tekst: 'Gør det samme med Solen. Den sender ca. 380 millioner milliarder milliarder joule ud hvert sekund.',
+        knap: '÷ V²',
+        res: `Ca. ${dansk(SOLEN_W / LYSETS_FART ** 2 / 1e9, 1)} milliarder kg hvert sekund: Solen bliver over ${dansk(Math.floor(solensTabTon() / 1e6))} millioner ton lettere i sekundet. Solen er så tung, at den på 4,6 milliarder år alligevel kun har mistet under en tusindedel af sin masse på den måde.`,
+      },
+      igen: 'Regn igen',
+      nørd: {
+        titel: 'For nørder: Med Einsteins egne tal',
+        tekst: 'Einstein målte energien i erg og massen i gram. En joule er 10 millioner erg. Hans tal giver præcis det samme:',
+        tabel: {
+          kolonner: ['', 'I dag', 'Einstein 1905'],
+          rækker: [
+            ['Energien', `${dansk(LAMPE_W * TIME)} joule`, '3,6 · 10¹² erg'],
+            ['Del med', 'c² = 9 · 10¹⁶ (m/s)²', 'V² = 9 · 10²⁰ (cm/s)²'],
+            ['Massen', '4 · 10⁻¹² kg', '4 · 10⁻⁹ g'],
+          ],
+        },
+      },
+    },
+    // Linje for linje (drejebogen afsnit 8, teksterne afsnit 2): fodnoten (s. 639), tankeforsøget (s. 640) og s. 641 fra
+    // formlen til radiumsaltene
+    linjer: {
+      titel: 'Linje for linje',
+      linje: 'Fem steder fra artiklen på tysk og dansk',
+      note: 'Det tyske er skrevet af efter siderne. Den danske oversættelse er vores egen.',
+      rækker: [
+        { hvor: 's. 639: Den første sætning', tysk: 'Die Resultate einer jüngst in diesen Annalen von mir publizierten elektrodynamischen Untersuchung¹) führen zu einer sehr interessanten Folgerung, die hier abgeleitet werden soll. — ¹) A. Einstein, Ann. d. Phys. 17. p. 891. 1905.', dansk: 'Resultaterne af en elektrodynamisk undersøgelse, som jeg for nylig har offentliggjort i disse Annalen¹), fører til en meget interessant følge, som skal udledes her. — ¹) Det er artiklen om tiden: bind 17, side 891.' },
+        { hvor: 's. 640: Lys til begge sider', tysk: 'Dieser Körper sende in einer mit der x-Achse den Winkel φ bildenden Richtung ebene Lichtwellen von der Energie L/2 (relativ zu (x, y, z) gemessen) und gleichzeitig eine gleich große Lichtmenge nach der entgegengesetzten Richtung. Hierbei bleibt der Körper in Ruhe in bezug auf das System (x, y, z).', dansk: 'Lad dette legeme sende plane lysbølger med energien L/2 (målt i forhold til (x, y, z)) ud i en retning, der danner vinklen φ med x-aksen, og samtidig en lige så stor mængde lys i den modsatte retning. Derved bliver legemet i hvile i forhold til systemet (x, y, z). (Det er et tankeforsøg: Einstein skriver "sende", lad det sende.)' },
+        { hvor: 's. 641, linje 10-11: Kun små farter', tysk: 'Unter Vernachlässigung von Größen vierter und höherer Ordnung können wir setzen: K₀ − K₁ = (L/V²)·(v²/2).', dansk: 'Når vi ser bort fra størrelser af fjerde og højere orden, kan vi sætte: K₀ − K₁ = (L/V²)·(v²/2). (Det er Newtons bevægelsesenergi ½mv² med massen L/V².)' },
+        { hvor: 's. 641, linje 12-21: Massen', tysk: 'Aus dieser Gleichung folgt unmittelbar: Gibt ein Körper die Energie L in Form von Strahlung ab, so verkleinert sich seine Masse um L/V². Hierbei ist es offenbar unwesentlich, daß die dem Körper entzogene Energie gerade in Energie der Strahlung übergeht, so daß wir zu der allgemeineren Folgerung geführt werden: Die Masse eines Körpers ist ein Maß für dessen Energieinhalt; ändert sich die Energie um L, so ändert sich die Masse in demselben Sinne um L/9.10²⁰, wenn die Energie in Erg und die Masse in Grammen gemessen wird.', dansk: 'Af denne ligning følger umiddelbart: Afgiver et legeme energien L som stråling, så bliver dets masse L/V² mindre. Det er åbenbart ligegyldigt, at den energi, legemet mister, netop bliver til stråling, og vi føres derfor til den mere almene følge: Et legemes masse er et mål for dets energiindhold. Ændres energien med L, så ændres massen samme vej med L/9 · 10²⁰, når energien måles i erg og massen i gram.' },
+        { hvor: 's. 641, linje 22-27: Radium og træghed', tysk: 'Es ist nicht ausgeschlossen, daß bei Körpern, deren Energieinhalt in hohem Maße veränderlich ist (z. B. bei den Radiumsalzen), eine Prüfung der Theorie gelingen wird. Wenn die Theorie den Tatsachen entspricht, so überträgt die Strahlung Trägheit zwischen den emittierenden und absorbierenden Körpern.', dansk: 'Det er ikke udelukket, at det vil lykkes at prøve teorien med legemer, hvis energiindhold ændrer sig meget (fx radiumsalte). Passer teorien med virkeligheden, så fører strålingen træghed over fra de legemer, der sender den ud, til dem, der opsuger den.' },
+      ],
+    },
+    // For nørder (drejebogen afsnit 8, faktafilen afsnit 3 og 5)
+    nørd: {
+      titel: 'For nørder',
+      punkter: [
+        'Han skrev c for lysets fart fra 1907. E = mc² står i hans håndskrift fra 1912, og i 1946 stod den i titlen på en artikel.',
+        'Andre var tæt på før ham: Poincaré gav i 1900 lysets energi en "tænkt" masse E/c², og Hasenöhrl fandt i 1904-1905 et tal for lys i en kasse, der var for stort. Einstein var den første, der sagde, at det gælder al energi.',
+        'I 1933 passede energien, når lithium og protoner blev til to heliumkerner, med formlen inden for en halv procent.',
+        'I Stjerneovnen forsvinder 0,7 % af massen, når brint bliver til helium. Det er den energi, Solen lyser med.',
+        'Artiklens titel er et spørgsmål: "Ist die Trägheit eines Körpers von seinem Energieinhalt abhängig?" (Afhænger et legemes træghed af dets energiindhold?). Svaret på side 641 er ja.',
+      ],
+    },
+    // Ærligt talt (faktafilen afsnit 3, 5 og 6, fælden med lampen i stikkontakten)
+    ærligt: {
+      titel: 'Ærligt talt',
+      linje: 'Hvad siden ikke siger',
+      punkter: [
+        'Einsteins bevis gjaldt kun små farter ("Unter Vernachlässigung von Größen vierter und höherer Ordnung", linje 10-11). Planck påpegede det i 1907, og historikere har diskuteret beviset siden. Einstein beviste det igen på andre måder i 1906 og 1907, og det er målt mange gange siden.',
+        'En lampe i stikkontakten bliver ikke lettere: Den får energien ind ad ledningen. Det er det, der sender energien ud, som bliver lettere: batteriet og lampen, eller Solen.',
+        '4 milliardtedele gram er alt for lidt til, at en vægt kan mærke det på et helt batteri. Vægten i turen viser kun, hvad der sker, ikke hvor meget.',
+        'Siden er fotograferet fra en mikrofilm, så den er grå og lidt uskarp. "Sat tekst" er de samme linjer sat af os.',
+      ],
+    },
+    seSelv: { tekst: 'Se det selv i Stjerneovnen', gaa: 'fusion' },
+    videre: 'Hvis masse er energi, hvad gør energien så ved tyngden?',
+  },
+
+  // ---------- Opslag 5: 1915, tyngden (E4, drejebogen afsnit 9, faktafilen afsnit 4 og teksterne afsnit 3) ----------
+  tyngden: {
+    ord: ['feltligning'],
+    // Forordet: 4., 11., 18. og 25. november 1915 var torsdage (regnet med datetime, drejebogen afsnit 9). "Energi og masse er
+    // det samme": 1916, s. 807, "daß die träge Masse nichts anderes ist als Energie"
+    forord: {
+      sted: 'Berlin, 25. november 1915',
+      tekst: 'Længe har Einstein prøvet at få tyngdekraften med i sin teori. I november lægger han fire meddelelser frem på akademiet i Berlin, en hver torsdag, og i den sidste står feltligningen færdig. Masse og energi er det samme, skriver han senere, og derfor er det energien, der står i den.',
+    },
+    side: {
+      id: 's845', navn: 's. 845',
+      fil: 'billeder/biblioteket/einstein-s845.webp', b: 1000, h: 1695,
+      hvor: 'Sitzungsberichte der Preußischen Akademie der Wissenschaften 1915, side 845',
+      alt: 'Side 845 fra Sitzungsberichte 1915 med tysk tekst og ti nummererede formler. Øverst står G i m er lig med nul, og midt på siden G i m er lig med minus kappa gange parentesen T i m minus en halv g i m T.',
+      hoved: ['', '\\k{Einstein}: Die Feldgleichungen der Gravitation', '845'],
+      // Siden linje for linje som på billedet (læst på Google-skanningen n372, 22. november 2026). 21 linjer og ti formler
+      // med Einsteins numre. Skanningen har gammeldags tal (o og ı for 0 og 1), her sat som almindelige tal
+      linjer: [
+        { t: '>Die allgemein kovarianten zehn Gleichungen des Gravitationsfeldes', sted: 'ti' },
+        { t: 'in Räumen, in denen »Materie« fehlt, erhalten wir, indem wir ansetzen', sted: 'ti' },
+        { f: '*G*_{*im*} = 0.', nr: '(2)', sted: 'ti' },
+        '>Diese Gleichungen lassen sich einfacher gestalten, wenn man das',
+        'Bezugssystem so wählt, daß \\r{−*g*} = 1 ist.  Dann verschwindet *S*_{*im*}',
+        'wegen (1b), so daß man statt (2) erhält',
+        { f: '*R*_{*im*} = \\s{*l*}\\b{∂Γ\\i{*l*}{*im*}}{∂*x*_{*l*}} + \\s{*ρl*}Γ\\i{*l*}{*iρ*}Γ\\i{*ρ*}{*ml*} = 0', nr: '(3)' },
+        { f: '\\r{−*g*} = 1.', nr: '(3a)' },
+        '>Dabei ist',
+        { f: 'Γ\\i{*l*}{*im*} = −\\c{*im*}{*l*}', nr: '(4)' },
+        'gesetzt, welche Größen wir als die »Komponenten« des Gravitations-',
+        'feldes bezeichnen.',
+        { t: '>Ist in dem betrachteten Raume »Materie« vorhanden, so tritt deren', sted: 'stof' },
+        { t: 'Energietensor auf der rechten Seite von (2) bzw. (3) auf.  Wir setzen', sted: 'stof' },
+        { f: '*G*_{*im*} = −κ\\p{*T*_{*im*} − \\b{1}{2} *g*_{*im*}*T*},', nr: '(2a)', sted: 'stof' },
+        'wobei',
+        { f: '\\s{*ρσ*}*g*^{*ρσ*}*T*_{*ρσ*} = \\s{*σ*}*T*\\i{*σ*}{*σ*} = *T*', nr: '(5)' },
+        'gesetzt ist; *T* ist der Skalar des Energietensors der »Materie«, die rechte',
+        'Seite von (2a) ein Tensor.  Spezialisieren wir wieder das Koordinaten-',
+        'system in der gewohnten Weise, so erhalten wir an Stelle von (2a)',
+        'die äquivalenten Gleichungen',
+        { f: '*R*_{*im*} = \\s{*l*}\\b{∂Γ\\i{*l*}{*im*}}{∂*x*_{*l*}} + \\s{*ρl*}Γ\\i{*l*}{*iρ*}Γ\\i{*ρ*}{*ml*} = −κ\\p{*T*_{*im*} − \\b{1}{2} *g*_{*im*}*T*}', nr: '(6)', lille: true },
+        { f: '\\r{−*g*} = 1.', nr: '(3a)' },
+        '>Wie stets nehmen wir an, daß die Divergenz des Energietensors',
+        'der Materie im Sinne des allgemeinen Differentialkalkuls verschwinde',
+        '(Impulsenergiesatz).  Bei der Spezialisierung der Koordinatenwahl ge-',
+        'mäß (3a) kommt dies darauf hinaus, daß die *T*_{*im*} die Bedingungen',
+        { f: '\\s{*λ*}\\b{∂*T*\\i{*λ*}{*σ*}}{∂*x*_{*λ*}} = −\\b{1}{2}\\s{*μν*}\\b{∂*g*^{*μν*}}{∂*x*_{*σ*}}*T*_{*μν*}', nr: '(7)' },
+        'oder',
+        { f: '\\s{*λ*}\\b{∂*T*\\i{*λ*}{*σ*}}{∂*x*_{*λ*}} = −\\s{*μν*}Γ\\i{*μ*}{*σν*}*T*\\i{*ν*}{*μ*}', nr: '(7a)' },
+        'erfüllen sollen.',
+      ],
+    },
+    vælg: 'Tryk på et sted, der lyser. Så kommer det tyske og vores oversættelse.',
+    // De glødende steder (drejebogen afsnit 9). felter målt med blækket i hver række på einstein-s845.webp (linje 1-2 og
+    // (2) er y 4,2-10,2 %, linje 9-10 og (2a) er y 35,5-42,8 %, teksten går fra x 3,9 til 90,4 %)
+    steder: [
+      {
+        id: 'ti', navn: 'Ti ligninger', linjer: 'Linje 1-2 og formel (2)',
+        felter: [[3.2, 3.8, 87.8, 6.8]],
+        kort: 'Ti ligninger for tyngdefeltet, hvor der ikke er noget stof. Med dem regnede han Merkurs bane en uge før.',
+        tysk: 'Die allgemein kovarianten zehn Gleichungen des Gravitationsfeldes in Räumen, in denen »Materie« fehlt, erhalten wir, indem wir ansetzen G_im = 0.',
+        dansk: 'De ti ligninger for tyngdefeltet i rum, hvor der ikke er "stof", får vi ved at sætte G_im = 0. (Einstein skriver "allgemein kovarianten": De ser ens ud, uanset hvordan man lægger sine koordinater.)',
+      },
+      {
+        id: 'stof', navn: 'Ligningen med stof', linjer: 'Linje 9-10 og formel (2a)',
+        felter: [[3.2, 35.1, 87.8, 8.1]],
+        kort: 'Ligningen med stof: Energien og stoffet til højre fortæller rumtiden til venstre, hvordan den skal krumme.',
+        tysk: 'Ist in dem betrachteten Raume »Materie« vorhanden, so tritt deren Energietensor auf der rechten Seite von (2) bzw. (3) auf. Wir setzen G_im = −κ(T_im − ½ g_im T).',
+        dansk: 'Er der "stof" i det rum, vi ser på, så kommer dets energitensor ind på højre side af (2) eller (3). Vi sætter G_im = −κ(T_im − ½ g_im T).',
+      },
+    ],
+    // Ligningen stor som på siden: G_im = −κ(T_im − ½ g_im T) (2a). Led for led i drejebogens orden (afsnit 9), forenklet, og
+    // det siges i "Ærligt talt". i og m er de små bogstaver under G, T og g (et tryk lyser dem alle op)
+    ligning: {
+      navn: 'G_im = −κ(T_im − ½ g_im T)',
+      alt: 'G i m er lig med minus kappa gange parentesen T i m minus en halv g i m T',
+      start: 'Led for led',
+      næste: 'Næste led',
+      forfra: 'Forfra',
+      hjælp: 'Tryk på et bogstav i ligningen, eller gå led for led.',
+      led: [
+        { id: 'g', navn: '*g*_{*im*}', linje: 'Rumtidens målestokke og ure i hvert punkt: hvordan man måler afstand og tid lige dér. Det er det, man leder efter.' },
+        { id: 'G', navn: '*G*_{*im*}', linje: 'Et mål for, hvor krum rumtiden er. Det regnes ud af g_im, og af hvordan den ændrer sig fra sted til sted.', idag: 'I dag hedder Einsteins G_im Ricci-tensoren og skrives R_μν.' },
+        { id: 'im', navn: '*i*, *m*', linje: 'Tal fra 1 til 4: tre retninger i rummet og tiden. Derfor er det ikke én ligning, men mange (se "Regn selv").' },
+        { id: 'kappa', navn: 'κ', linje: 'Et lillebitte tal, hvor Newtons tyngdekonstant gemmer sig. Derfor skal der meget masse til, før rumtiden krummer mærkbart.', idag: 'κ hedder "kappa". I dag skriver man 8πG/c⁴ i stedet.' },
+        { id: 'T', navn: '*T*_{*im*}', linje: 'Hvor meget energi der er (og dermed masse, se opslaget før), hvordan den strømmer, og hvor hårdt den trykker. Einstein kalder det stoffets energitensor.' },
+        { id: 'halv', navn: '½ *g*_{*im*}*T*', linje: 'Det nye stykke fra 25. november, der fik det hele til at passe. T uden små bogstaver er én samlet sum af alle T_im.' },
+        { id: 'lig', navn: '=', linje: 'Ikke en udregning, men en regel, der skal gælde i hvert punkt, hele tiden.' },
+      ],
+      // Efter det sidste led: John Wheelers korte udgave (uden anførselstegn, ordlyden varierer, faktafilen afsnit 4) og
+      // ligningen, som man skriver den i dag (fælden: G_im er Ricci-tensoren, ½-leddet står på den anden side, Λ fra 1917)
+      slut: {
+        titel: 'Kort sagt:',
+        tekst: 'Stoffet fortæller rumtiden, hvordan den skal krumme, og rumtiden fortæller stoffet, hvordan det skal bevæge sig. Sådan sagde fysikeren John Wheeler det senere.',
+        idag: 'I dag skriver man den *R*_{μν} − ½*R* *g*_{μν} + Λ*g*_{μν} = (8π*G*/*c*^{4}) *T*_{μν}. Uden Λ, der kom til i 1917, er det den samme ligning, bare med ½-leddet på den anden side.',
+      },
+    },
+    // "Regn selv: Hvor mange ligninger gemmer der sig i én?" (drejebogen afsnit 9): skemaet med 4 · 4 = 16 felter, de 6 over
+    // den skrå linje er dobbelte (G₁₂ = G₂₁), og 10 er tilbage, som Einstein skriver: "zehn Gleichungen" (testet i Node)
+    regn: {
+      titel: 'Regn selv: Hvor mange ligninger gemmer der sig i én?',
+      intro: 'Einstein skriver G_im med to små bogstaver, i og m. Hver af dem kan være 1, 2, 3 eller 4: tre retninger i rummet og tiden.',
+      // Skemaet står fremme fra trin fra, og i trin fold trykker man på de dobbelte felter
+      skema: { n: 4, fra: 0, fold: 1 },
+      trin: [
+        { tekst: 'Hvert felt i skemaet er én ligning. Hvor mange felter er der?', knap: '4 · 4', res: `${felterIAlt()} felter.` },
+        { tekst: 'Men G₁₂ er det samme som G₂₁. Tryk på de felter, der er dobbelte.', res: `${dobbelte()} felter var dobbelte. De lægger sig oven på deres makker.` },
+        { tekst: 'Hvor mange forskellige ligninger er der så?' },
+      ],
+      valg: [{ tekst: String(felterIAlt()), for: 'meget' }, { tekst: String(forskellige()), rigtig: true }, { tekst: '4', for: 'lidt' }],
+      vink: {
+        meget: 'For mange. Tæl felterne, der er tilbage i skemaet.',
+        lidt: 'For få. Felterne på den skrå linje (G₁₁, G₂₂, G₃₃ og G₄₄) har ingen makker, så de bliver.',
+        fælles: '',
+        diagonal: 'Det felt ligger på den skrå linje og har ingen makker. Tryk på et felt over den.',
+      },
+      svar: `${forskellige()}, som Einstein selv skriver: "zehn Gleichungen".`,
+      svarMere: 'Ti ligninger, der hænger sammen, og de skal løses alle på én gang.',
+      // Står fremme under "Regn selv" (jeres ønske om at sige det ærligt, drejebogen afsnit 9)
+      ikke: 'Med Newtons lov kan man sætte tal ind og få et svar. Det kan man ikke her: De ti ligninger skal løses, og det kræver matematik fra universitetet. Selv Einstein fik hjælp af matematikeren Grossmann.',
+      igen: 'Regn igen',
+      nørd: {
+        titel: 'For nørder: Hvorfor er G₁₂ det samme som G₂₁?',
+        tekst: 'Fordi det ikke betyder noget, hvilken af de to retninger man nævner først (på fagsprog: den er symmetrisk). Det samme gælder g_im og T_im. Med flere eller færre retninger bliver tallet et andet:',
+        tabel: {
+          kolonner: ['Retninger og tid', 'Felter', 'Forskellige'],
+          rækker: [2, 3, 4, 5].map((n) => [String(n), String(felterIAlt(n)), String(forskellige(n))]),
+        },
+      },
+    },
+    // Linje for linje (drejebogen afsnit 9, teksterne afsnit 3, alt læst på Google-skanningen n371-n374 og i 1916 på
+    // mikrofilmen): s. 844, s. 845 (begge steder), s. 847, og 1916, s. 822 (lyset og Merkur)
+    linjer: {
+      titel: 'Linje for linje',
+      linje: 'Seks steder fra 1915 og 1916 på tysk og dansk',
+      note: 'Det tyske er skrevet af efter siderne. Den danske oversættelse er vores egen.',
+      rækker: [
+        { hvor: '1915, s. 844: På en lidt anden måde', tysk: 'Neuerdings finde ich nun, daß man ohne Hypothese über den Energietensor der Materie auskommen kann, wenn man den Energietensor der Materie in etwas anderer Weise in die Feldgleichungen einsetzt, als dies in meinen beiden früheren Mitteilungen geschehen ist. Die Feldgleichungen für das Vakuum, auf welche ich die Erklärung der Perihelbewegung des Merkur gegründet habe, bleiben von dieser Modifikation unberührt.', dansk: 'Nu finder jeg, at man kan klare sig uden en hypotese om stoffets energitensor, hvis man sætter stoffets energitensor ind i feltligningerne på en lidt anden måde, end jeg gjorde i mine to tidligere meddelelser. Feltligningerne for det tomme rum, som jeg byggede forklaringen af Merkurs periheldrejning på, bliver ikke berørt af denne ændring.' },
+        { hvor: '1915, s. 845, linje 1-2: Ti ligninger', tysk: 'Die allgemein kovarianten zehn Gleichungen des Gravitationsfeldes in Räumen, in denen »Materie« fehlt, erhalten wir, indem wir ansetzen G_im = 0.', dansk: 'De ti generelt kovariante ligninger (de ser ens ud, uanset hvilke koordinater man bruger) for tyngdefeltet i rum, hvor der ikke er "stof", får vi ved at sætte G_im = 0.' },
+        { hvor: '1915, s. 845, linje 9-10: Med stof', tysk: 'Ist in dem betrachteten Raume »Materie« vorhanden, so tritt deren Energietensor auf der rechten Seite von (2) bzw. (3) auf. Wir setzen G_im = −κ(T_im − ½ g_im T).', dansk: 'Er der "stof" i det rum, vi ser på, så kommer dets energitensor ind på højre side af (2) eller (3). Vi sætter G_im = −κ(T_im − ½ g_im T).' },
+        { hvor: '1915, s. 847: Endelig færdig', tysk: 'Damit ist endlich die allgemeine Relativitätstheorie als logisches Gebäude abgeschlossen. Das Relativitätspostulat in seiner allgemeinsten Fassung, welches die Raumzeitkoordinaten zu physikalisch bedeutungslosen Parametern macht, führt mit zwingender Notwendigkeit zu einer ganz bestimmten Theorie der Gravitation, welche die Perihelbewegung des Merkur erklärt.', dansk: 'Dermed er den almene relativitetsteori endelig færdig som en logisk bygning. Relativitetspostulatet i sin mest almene form, der gør rumtidens koordinater til tal uden fysisk betydning, fører med tvingende nødvendighed til en helt bestemt teori om tyngdekraften, og den forklarer Merkurs periheldrejning.' },
+        { hvor: '1916, s. 822: Lyset bøjes', tysk: 'Ein an der Sonne vorbeigehender Lichtstrahl erfährt demnach eine Biegung von 1,7″, ein am Planeten Jupiter vorbeigehender eine solche von etwa 0,02″.', dansk: 'En lysstråle, der går tæt forbi Solen, bøjes altså 1,7″, og en, der går forbi planeten Jupiter, ca. 0,02″. (″ er et buesekund, en 3.600-del af en grad.)' },
+        { hvor: '1916, s. 822: Merkurs bane', tysk: 'Die Rechnung ergibt für den Planeten Merkur eine Drehung der Bahn um 43″ pro Jahrhundert, genau entsprechend der Konstatierung der Astronomen (Leverrier); diese fanden nämlich einen durch Störungen der übrigen Planeten nicht erklärbaren Rest der Perihelbewegung dieses Planeten von der angegebenen Größe.', dansk: 'Regningen giver for planeten Merkur en drejning af banen på 43″ pr. århundrede, præcis som astronomerne (Leverrier) har fastslået. De fandt nemlig en rest af denne planets periheldrejning af netop den størrelse, som de andre planeters træk ikke kan forklare.' },
+      ],
+    },
+    // For nørder (drejebogen afsnit 9, jeres svar 3: 1916 her, faktafilen afsnit 4 og 5)
+    nørd: {
+      titel: 'For nørder',
+      punkter: [
+        'I 1916 skrev han den lange udgave på 54 sider (Annalen der Physik, bind 49). Ligningen er nr. (53) på side 808, og på side 807 skriver han, at energien står i den, fordi "die träge Masse nichts anderes ist als Energie" (den træge masse er intet andet end energi). Det er opslaget før.',
+        'På side 822 regner han to ting, man kan måle: Lys, der går tæt forbi Solen, bøjes 1,7″ (i dag regnet til 1,75″), og Merkurs bane drejer 43″ pr. århundrede mere, end Newton giver. Han skriver "(Leverrier)", men Le Verrier fandt 38″ i 1859. De 43″ er Newcombs tal fra 1882.',
+        'På side 820 skriver han, at ure går langsommere tæt på tunge ting, og at lys fra store stjerner derfor må være rødforskudt. Det blev målt på Jorden i 1959-1960 (Pound og Rebka). Det er urene i GPS\'en fra turen.',
+        'Med en lommeregner: Hans formel (75) giver Merkurs 43″ (a = 5,79 · 10¹⁰ m, T = 88,0 døgn, e = 0,206 og 415 omløb pr. århundrede).',
+        'I 1916 indførte han også reglen om at droppe summetegnene Σ, når et bogstav står to gange (Einsteins summeregel, side 781). Se, hvor mange Σ der står på side 845.',
+        'Matematikeren David Hilbert lagde sit arbejde frem den 20. november 1915. Hvem der var først med hvad, har historikere diskuteret, men de fleste mener, at Einstein fandt ligningen selv, og Hilbert regnede selv teorien for Einsteins.',
+      ],
+    },
+    // Ærligt talt (faktafilen afsnit 4-6, fælderne om feltligningen)
+    ærligt: {
+      titel: 'Ærligt talt',
+      linje: 'Hvad siden ikke siger, og hvad vi har gjort lettere',
+      punkter: [
+        'Ligningen ser anderledes ud i dag: Einsteins G_im er det, man nu kalder Ricci-tensoren, ½-leddet står på den anden side, og Λ kom til i 1917. Det er den samme ligning skrevet på en anden måde.',
+        '"Led for led" er gjort meget lettere: g_im, G_im og T_im er hver ti tal, der hænger sammen, og at regne med dem kræver tensorregning fra universitetet.',
+        'Man kan ikke regne Merkur eller lyset ud med ligningen alene. Einstein regnede med tilnærmelser, der passer, når tyngden er svag, og dér bliver ligningen til Newtons lov.',
+        'Siden er Googles skanning af et eksemplar fra University of Minnesota (i 1915 hed akademiet "Königlich Preußische Akademie der Wissenschaften"). "Sat tekst" er de samme linjer sat af os.',
+      ],
+    },
+    seSelv: { tekst: 'Se det selv i Rumtid', gaa: 'kosmos:rumtid' },
+    // Knappen videre ("Havde han ret? ›") står først, når "Om Einstein" er bygget (E5)
+    videre: 'Havde han ret?',
+  },
 };
 // Kontakten over siden (jeres tilføjelse 20. november 2026): skanningen eller den samme side sat af os
 export const SIDE_VISNING = { skanning: 'Skanning', sat: 'Sat tekst', navn: 'Vis siden som' };
 
-// "Regn selv" og nørd-tabellen: hvor meget et ur med farten β (en del af lysets fart) kommer bagud pr. sekund.
-// bagudLet er Einsteins lette udgave ½β², bagudRigtig er 1 − √(1 − β²) regnet uden at miste cifrene ved små farter
-// (β²/(1 + √(1 − β²)) er det samme tal, fælden med kommatal i faktafilen afsnit 8)
-export const bagudLet = (β) => (β * β) / 2;
-export const bagudRigtig = (β) => (β * β) / (1 + Math.sqrt(1 - β * β));
-export const bagudPrDøgn = (β, let_ = true) => (let_ ? bagudLet(β) : bagudRigtig(β)) * DØGN;
-// Led for led: tallene for uret fra turen (87 %, 20 sekunder hjemme)
-export function ledForLedEksempel(β = 0.87, t = HJEMME) {
-  const k = β * β, rest = 1 - k, rod = Math.sqrt(rest);
-  const b = dansk(β, Math.round(β * 100) % 10 ? 2 : 1); // 0,1 og 0,87
-  return `${b} · ${b} = ${dansk(k, 2)}. 1 − ${dansk(k, 2)} = ${dansk(rest, 2)}, og √${dansk(rest, 2)} = ${dansk(rod, 2)}. Når uret hjemme viser ${t} sekunder, viser det ${dansk(t * rod, 1)}.`;
-}

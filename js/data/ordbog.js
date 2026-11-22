@@ -902,6 +902,19 @@ export const ORDBOG = [
     former: ['relativitetsteori', 'relativitetsteorien', 'relativitetsteoriens'],
     tekst: 'Einsteins teori om tid, rum og tyngde. Den særlige (1905) siger, at lyset er lige hurtigt for alle, så ure, der farer af sted, går langsommere, og masse er energi. Den almene (1915) siger, at tyngdekraft er krum rumtid.',
   },
+  // Opslag 4 og 5 i Einsteins bog (E4, 22. november 2026, drejebogen afsnit 14, faktatjekket i afsnit 15): masse som træghed
+  // (Einsteins eget ord "Trägheit", s. 639-641, fælden: ikke "hvor meget stof"), og feltligningen (s. 845, "zehn
+  // Gleichungen"). Kun i forløbets linje og i forordet til opslaget (data-ord-kun i js/bog-ligning.js)
+  {
+    id: 'feltligning', ord: 'Feltligning', kunI: '.fl-tekst, .lg-forord-tekst',
+    former: ['feltligning', 'feltligningen', 'feltligningens', 'feltligninger', 'feltligningerne'],
+    tekst: 'Einsteins ligning fra 1915 for tyngdekraften. Den siger, hvordan energi og stof krummer rumtiden. Man kan ikke bare sætte tal ind: De ti ligninger, den gemmer, skal løses, og det kræver matematik fra universitetet.',
+  },
+  {
+    id: 'masse', ord: 'Masse', kunI: '.fl-tekst, .lg-forord-tekst',
+    former: ['masse', 'massen', 'massens'],
+    tekst: 'Et mål for, hvor svært noget er at sætte i gang eller standse. Jo større masse, jo tungere er det på Jorden. Einstein viste, at masse er en form for energi: Mister noget energi, får det en lillebitte smule mindre masse.',
+  },
   {
     id: 'rumtid', ord: 'Rumtid', kunI: '.fl-tekst',
     former: ['rumtid', 'rumtiden', 'rumtidens'],
