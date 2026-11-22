@@ -31,4 +31,14 @@
 
 **Ny fælde (skrevet i fakta-faelder.md):** Kasevich' "superposition over 54 cm" (Nature 2015) er omstridt: Stamper-Kurn m.fl. (Nature 2016) mener, at striberne kun passer med, men ikke beviser, en superposition. Skriv "meldte" og "andre forskere mener ikke, at det er bevist". Og forsøget fra 1986 gav ikke 0 sammenfald, men ca. fem gange færre end den klassiske grænse: Skriv "næsten aldrig".
 
-**Ikke brugt, fordi kilden ikke kunne læses:** Feynmans forelæsninger, bind III, kapitel 1 ("Watching the electrons", "never both at once" og det svage lys). Tankeforsøget med en måler ved sprækkerne står på Wikipedia ("Double-slit experiment", med Feynman 1965 som kilde), men ordlyden og afsnittet om det svage lys slås op igen, før PR 2 ("Målerens lys") skrives.
+## PR 2: "Målerens lys" (22. november 2026, Opus xhigh i stedet for Fable)
+*Teksterne står i `js/data/kvante.js` (`PANEL['…-delvis']`) og `index.html` ("Ærligt talt" og hjælpen).* Feynmans egen tekst kunne ikke læses: feynmanlectures.caltech.edu afviser automatiske opslag, og kopier hos tredjepart blev ikke hentet (ophavsret). Derfor bygger PR 2 på kilderne nedenfor, og Feynman nævnes kun som tankeforsøg uden citat.
+
+| Påstand | | Kilde | Rettet |
+|---|---|---|---|
+| Tankeforsøget med lys ved sprækkerne er fra Feynmans forelæsninger (1960'erne) | OK (RS) | Wikipedia "Double-slit experiment" (henviser til Feynman, Leighton og Sands, bind III, 1965, kapitel 1) og Jacques m.fl. 2005 (henvisning [1]: "Feynman's lectures ... a thought-experiment"). Kapitlet hedder "Quantum Behavior", afsnit 1-6 "Watching the electrons" (indholdsfortegnelsen i søgeresultater) | "fra 1960'erne", ikke et årstal |
+| Er lyset svagt, slipper nogle elektroner forbi uden at blive set, og de giver striber. De sete giver ingen | OK (RS) | Søgeresultater, der gengiver afsnit 1-6 ("if the electrons are not seen, we have interference!"), kun set i gengivelser. Fysikken er lærebogsviden: En blanding af sete (ingen striber) og usete (striber) | Intet citat |
+| Ved man kun lidt om vejen, bliver striberne kun svagere | OK (RS) | Wikipedia "Double-slit experiment": "partial information could be obtained regarding which path a particle had taken without destroying the interference altogether" (forsøget fra 1987 og Greenberger og Yasin 1988), også fakta-kvantefysik.md afsnit 1 | |
+| Varme molekyler, der sender mere lys ud, giver svagere striber (Wien, 2004) | OK (S) | Hackermüller m.fl., Nature 427, 711 (2004), arXiv:quant-ph/0402146 (fakta-kvantefysik.md afsnit 1, læst af Fable og brugt i `kvanteKigger`) | |
+
+**Modellen (står i "Ærligt talt"):** Hver elektron bliver set med chancen på skyderen. Bliver den set, lander den som med fuld måler (ingen striber), ellers som uden måler. Synligheden af striberne bliver 1 minus chancen. Det passer med uligheden for bølger og veje (D² + V² ≤ 1, Englert 1996, fra hukommelsen, og Wikipedia "Wave–particle duality relation"), som ikke er nævnt i teksten.

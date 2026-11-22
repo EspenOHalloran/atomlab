@@ -33,10 +33,10 @@ Jeres søn skal kunne sige forskellen på to ting, der ofte blandes sammen:
 7. **"Ærligt talt":** bølgepakken er en tegning af chancen, ikke noget, man kan se, og man viser kun én bølge ad gangen. "Begge på én gang: 0": I rigtige forsøg sker det en sjælden gang, fordi kilden af og til sender to, eller en måler tæller forkert.
 8. **Prøvespørgsmålene** i drejebogen afsnit 7 (forløb 1) får et fjerde: "Er elektronen to steder på én gang? Hvad har man målt, og hvad har man aldrig målt?"
 
-## PR 2: "Målerens lys" (valgt af sessionen)
+## PR 2: "Målerens lys" (valgt af sessionen) ✅ lavet 22. november 2026
 - En skyder under "Flere indstillinger" (venstre panel har allerede fem valg fremme): "Målerens lys", svagt til stærkt, standard stærkt. Den virker kun, når måleren er tændt.
 - Hver elektron bliver set med en chance, der følger skyderen. Bliver den set, blinker én lampe, og den lander som uden striber. Ellers lander den med striber. Prikkerne, måleren så, får lampens farve, så man kan se de to mønstre hver for sig. Tælleren får "Ikke set: n".
-- Kilden er Feynmans forelæsninger (bind III, kapitel 1, "Watching the electrons"), som et tankeforsøg. Det siges i "Ærligt talt".
+- Kilden er Feynmans forelæsninger (bind III, kapitel 1, "Watching the electrons"), som et tankeforsøg. Det siges i "Ærligt talt", sammen med de varme molekyler fra Wien 2004, der viser det samme i virkeligheden. (Bygget sådan: Med fuldt lys har prikkerne deres egen farve. Kun når lyset er skruet ned, får de sete prikker lampens farve, så de to grupper kan skelnes.)
 
 ## Faktatjek
 Alle navne, årstal og tal tjekkes mod primærkilderne og skrives i [fakta-kvantefysik/faktatjek-to-steder.md](fakta-kvantefysik/faktatjek-to-steder.md) (lavet af Opus xhigh i stedet for Fable).

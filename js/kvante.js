@@ -25,14 +25,16 @@ import { lavBænk, KILDE_Y, VÆG_HØJDE } from './kvante/baenk.js';
 
 const $ = (id) => document.getElementById(id);
 const FARVE = { elektroner: [0.45, 0.9, 1.4], kugler: [1.1, 1.1, 1.15], molekyle: [1.4, 0.75, 0.3], klump: [1.45, 1.2, 0.35], fodbold: [1.15, 1.15, 1.15] };
+const SET_FARVE = [1.55, 1.2, 0.42]; // "Målerens lys" skruet ned: prikkerne, måleren så, får lampens farve
 const BØLGE_SKÆR = [0.3, 0.75, 1.0]; // "Vis bølgen": bølgepakkens farve for elektroner, molekyler og klumper (lys har sin egen farve)
 const HØJST_PR_SEK = 450; // elektroner pr. sekund, når knappen har været holdt nede længe
 const FLYVETID = 0.12; // s fra kilden blinker, til prikken tændes (elektronen tegnes ikke på vej)
 
 let bænk = null;
 let aktiv = false;
-const v = { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false };
-let fordeling = null; // tabellen, prikkerne trækkes fra (laves igen, når noget ændres)
+const v = { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false, syn: STANDARD.syn };
+let fordeling = null; // tabellen, prikkerne trækkes fra uden måler (laves igen, når noget ændres)
+let fordelingSet = null; // og for elektroner, måleren så (ingen striber)
 let rng = tilfældig(1);
 let holder = false; // "Skyd" holdes nede
 let holdTid = 0;
@@ -50,6 +52,8 @@ let størrelse = '';
 let lysNu = [1, 1, 1]; // fotonernes farve (regnes, når farven ændres)
 let størst = 'molekyle'; // den sidste valgte under "Større …" (knappen vælger den igen)
 let målt = [0, 0]; // elektroner, måleren fandt ved den venstre og den højre sprække (tælleren over væggen)
+let ikkeSet = 0; // elektroner, måleren ikke så (når "Målerens lys" er skruet ned)
+let sete = []; // for hver landet prik: så måleren den? (til testen, i samme rækkefølge som bænk.zer())
 let serie = 0; // skud, der venter på, at bølgepakken foran er nået forbi bagvæggen ("Skyd én" i turens trin 6)
 const stråle = new THREE.Raycaster();
 
@@ -80,6 +84,7 @@ export function lav() {
   $('kvAfstand').addEventListener('input', (h) => sæt({ d: skala(h.target.value, GRÆNSER.d) }));
   $('kvBredde').addEventListener('input', (h) => sæt({ a: skala(h.target.value, GRÆNSER.a) }));
   $('kvFart').addEventListener('input', (h) => sæt(v.slags === 'lys' ? { farve: h.target.value / 100 } : { fart: h.target.value / 100 }));
+  $('kvLys').addEventListener('input', (h) => sæt({ syn: h.target.value / 100 }));
   målerKontakt = lavKontakt($('kvMåler'));
   målerKontakt.knap.addEventListener('click', () => { lyd.klik(); sætMåler(!v.måler); });
   bølgeKontakt = lavKontakt($('kvBølgen'));
@@ -113,7 +118,7 @@ export function start() {
   verden.styring.maxPolarAngle = Math.PI / 2 - 0.06;
   verden.opdateringer.add(opdater);
   bænk.gruppe.visible = true;
-  Object.assign(v, { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false });
+  Object.assign(v, { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false, syn: STANDARD.syn });
   forfra({ straks: true });
   kamera({ straks: true });
   // Et link med en slags (fx "Se det selv" i Gåderne eller fotonen i Ordbogen) åbner bænken med den, uden turen.
@@ -185,6 +190,7 @@ function sæt(nyt) {
 // Noget er ændret: Bagvæggen ryddes, så mønstret passer til det nye (og vandet starter forfra)
 function ændret({ straks = false } = {}) {
   fordeling = null;
+  fordelingSet = null;
   påVej = [];
   bænk.ryd();
   bænk.prikStørrelse(kugleSlags(v.slags) ? 0.13 : 0.05);
@@ -193,6 +199,8 @@ function ændret({ straks = false } = {}) {
   rng = tilfældig(1);
   ringTal = 0;
   målt = [0, 0];
+  ikkeSet = 0;
+  sete = [];
   serie = 0;
   bænk.sæt({ d: v.d, a: bredde(), sprækker: v.sprækker, λ: λ(), måler: v.måler, kuvert: kvanteNu() ? bredde() : 0, straks });
   // Vandet starter forfra med de nye sprækker. Bølgepakkerne ("Vis bølgen") kommer først med det næste skud.
@@ -255,13 +263,17 @@ function startBølger() {
 function skud(instant = false) {
   if (v.slags === 'boelger') return;
   if (kugleSlags(v.slags)) return kugle(instant);
-  fordeling ??= lavFordeling({ slags: v.slags, sprækker: v.sprækker, måler: v.måler, d: v.d, a: bredde(), λ: λ() });
-  const z = fordeling.træk(rng());
+  // Måleren ser elektronen (med svagt lys kun med chancen v.syn, Feynmans tankeforsøg). En elektron, den så, lander uden
+  // striber, en, den ikke så, med striber. Med fuldt lys trækkes der ikke et ekstra tal (testene bruger det faste frø).
+  const set = v.måler && (v.syn >= 1 || rng() < v.syn);
+  const valg = { slags: v.slags, sprækker: v.sprækker, d: v.d, a: bredde(), λ: λ() };
+  const f = set ? (fordelingSet ??= lavFordeling({ ...valg, måler: true })) : (fordeling ??= lavFordeling({ ...valg, måler: false }));
+  const z = f.træk(rng());
   const y = STRIBE_Y[0] + rng() * (STRIBE_Y[1] - STRIBE_Y[0]);
   // Måleren finder elektronen ved én sprække (med kun én åben altid den)
   const åbne = åbneSprækker(v.sprækker, v.d);
-  const lampe = !v.måler ? -1 : åbne.length === 1 ? (åbne[0] < 0 ? 0 : 1) : rng() < 0.5 ? 0 : 1;
-  if (instant) return land({ z, y, lampe });
+  const lampe = !set ? -1 : åbne.length === 1 ? (åbne[0] < 0 ? 0 : 1) : rng() < 0.5 ? 0 : 1;
+  if (instant) return land({ z, y, lampe, ikke: v.måler && !set });
   bænk.blink();
   // "Vis bølgen": Elektronen lander, når dens bølgepakke når stedet. Der tegnes én pakke ad gangen (skydes der flere,
   // mens en pakke er på vej, lander de også først, når deres egen, usynlige pakke når frem).
@@ -271,7 +283,7 @@ function skud(instant = false) {
     påVej.push({ tid: pulsTid(z, { sprækker: v.sprækker, d: v.d }), z, y, lampe, glimt: tegnet });
     return;
   }
-  påVej.push({ tid: FLYVETID, z, y, lampe });
+  påVej.push({ tid: FLYVETID, z, y, lampe, ikke: v.måler && !set });
 }
 
 // Bølgepakkerne vises for elektroner og lys uden måler (hvad en måling gør ved bølgen, er fortolkning)
@@ -284,14 +296,18 @@ function skydÉn() {
   else skud();
 }
 
-function land({ z, y, lampe, glimt = false }) {
+function land({ z, y, lampe, glimt = false, ikke = false }) {
   if (ringZ != null && Math.abs(z - ringZ) < RING_HALV) ringTal++;
   if (glimt) bænk.glimt(z, y);
   if (lampe >= 0) {
     bænk.lampe(lampe);
     målt[lampe]++;
   }
-  bænk.prik(z, y, v.slags === 'lys' ? lysNu : FARVE[v.slags] ?? FARVE.elektroner);
+  if (ikke) ikkeSet++;
+  sete.push(lampe >= 0);
+  // Med svagt lys får prikkerne, måleren så, lampens farve, så man kan se de to mønstre hver for sig
+  const egen = v.slags === 'lys' ? lysNu : FARVE[v.slags] ?? FARVE.elektroner;
+  bænk.prik(z, y, lampe >= 0 && v.syn < 1 ? SET_FARVE : egen);
 }
 
 // En kugle sigter mest mod en åben sprække, ellers et sted på væggen. Den flyver lige: gennem en åben sprække lander
@@ -485,6 +501,8 @@ function visStyring() {
   }
   målerKontakt.sæt(v.måler);
   målerKontakt.knap.disabled = !kvanteNu();
+  $('kvLys').value = String(Math.round(v.syn * 100));
+  $('kvLys').disabled = !v.måler || !kvanteNu();
   bølgeKontakt.sæt(v.bølgen);
   bølgeKontakt.knap.disabled = !kvanteNu() || v.måler;
   $('kvSkyd').textContent = v.slags === 'boelger' ? 'Start bølgerne' : 'Skyd';
@@ -528,7 +546,7 @@ function startTur() {
 // Bænken til et trin: slags, begge sprækker åbne, måleren slukket og standardmålene. Bagvæggen ryddes.
 function opstil(slags, { måler = false, bølgen = false } = {}) {
   const ny = slags !== v.slags;
-  Object.assign(v, { slags, sprækker: 'begge', måler, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen });
+  Object.assign(v, { slags, sprækker: 'begge', måler, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen, syn: STANDARD.syn });
   forfra();
   if (ny) kamera();
 }
@@ -598,7 +616,7 @@ let måltTegnet = '';
 function tegnMålt() {
   const el = $('kvMålt');
   const vis = v.måler && kvanteNu();
-  const t = vis ? målerTekst(målt) : null;
+  const t = vis ? målerTekst(målt, 0, v.syn < 1 ? ikkeSet : null) : null;
   const tekst = t ? `${t.linje}|${t.begge}` : '';
   if (tekst !== måltTegnet) {
     måltTegnet = tekst;
@@ -781,7 +799,14 @@ export function testAdgang() {
     tæl: (z, r) => bænk.zer().filter((x) => Math.abs(x - z) < r).length,
     lamper: () => [...bænk.t.lampe],
     // Tælleren ved måleren ("Venstre: n · Højre: m" og "Begge på én gang: 0"), som den står på skærmen
-    målt: () => ({ tal: [...målt], tekst: $('kvMålt').hidden ? '' : $('kvMålt').textContent }),
+    målt: () => ({ tal: [...målt], ikkeSet, tekst: $('kvMålt').hidden ? '' : $('kvMålt').textContent }),
+    // "Målerens lys": mønstret af de prikker, måleren så, og af dem, den ikke så
+    delt(felter = 60) {
+      const zer = bænk.zer();
+      const del = (b) => { const h = histogram(zer.filter((_, i) => sete[i] === b), felter); return { antal: h.reduce((a, x) => a + x, 0), toppe: toppe(h), mørke: mørkeStriber(h) }; };
+      return { set: del(true), ikke: del(false) };
+    },
+    lysSkyder: () => ({ værdi: Number($('kvLys').value), slået: $('kvLys').disabled }),
     // Bølgepakken ("Vis bølgen"): på vej, fronten, og elektroner, der venter på at lande eller blive skudt
     puls: () => ({ kører: bænk.pulsKører(), optaget: bænk.pulsOptaget(), front: bænk.vandFront(), påVej: påVej.length, serie }),
     skydÉn: () => skydÉn(),
