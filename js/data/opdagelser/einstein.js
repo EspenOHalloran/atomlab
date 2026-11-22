@@ -46,6 +46,8 @@ export const OPSLAG = [
   { id: 'tiden', slags: 'ligning', titel: '1905: Tiden', ligning: 'tiden' },
   { id: 'energien', slags: 'ligning', titel: '1905: Energien', ligning: 'energien' },
   { id: 'tyngden', slags: 'ligning', titel: '1915: Tyngden', ligning: 'tyngden' },
+  // Bogens sidste opslag (E5, drejebogen afsnit 10): "Havde han ret?" med Gør det selv (Rejsen i tid), teksterne i OM
+  { id: 'om', slags: 'om', titel: 'Om Einstein' },
 ];
 
 // "Det så du" (drejebogen afsnit 2 og 5, trin 5). Den vigtige vej er ligningerne på Einsteins egne sider (opslaget 'tiden',
@@ -703,10 +705,105 @@ export const LIGNINGER = {
       ],
     },
     seSelv: { tekst: 'Se det selv i Rumtid', gaa: 'kosmos:rumtid' },
-    // Knappen videre ("Havde han ret? ›") står først, når "Om Einstein" er bygget (E5)
+    // Knappen videre til "Om Einstein" (E5), der svarer på spørgsmålet
     videre: 'Havde han ret?',
   },
 };
 // Kontakten over siden (jeres tilføjelse 20. november 2026): skanningen eller den samme side sat af os
 export const SIDE_VISNING = { skanning: 'Skanning', sat: 'Sat tekst', navn: 'Vis siden som' };
 
+// ---------- Om Einstein (bogens sidste opslag, E5, drejebogen afsnit 10) ----------
+// Budgettet: titel, højst to tal, højst tre sætninger, højst fire spørgsmål. Derefter "Vil du vide mere?" og "Ærligt
+// talt", lukkede. Kilderne står i docs/fakta-einstein-bog.md (afsnit 3-5) og docs/fakta-videnskabsfolk.md (afsnit 8).
+// Hver oplysning står ét sted: Det, der allerede står i de tre ligningers lag (ækvatoruret, beviset for L/V², Λ og
+// universitetsmatematikken, mikrofilmen, ordet relativitetsteori, c fra 1907 og lysuret fra 1909), står ikke her igen.
+// Ærligt talt har Mileva Marić-linjen og det, turen snyder med (listen øverst i js/bog/einstein.js, drejebogen afsnit 16
+// under E2), som ikke allerede står i et opslag.
+export const OM = {
+  titel: 'Om Einstein',
+  navn: 'Albert Einstein (1879-1955)',
+  tal: [
+    // Født 14. marts 1879, artiklerne kom i juni og september 1905 (faktafilen afsnit 2)
+    { tal: '26 år', tekst: 'da han skrev de to første ligninger i 1905' },
+    // +45 − 7 = 38 milliontedele sekund pr. døgn (gpsTal, turens trin 4 og Rumtid)
+    { tal: '38 milliontedele sekund', tekst: 'så meget går urene i GPS-satellitterne hurtigere end på jorden hvert døgn' },
+  ],
+  // Delens kernesætning passer kun halvt (drejebogen afsnit 1): Han regnede, og andre målte. Nobelprisen: fakta-videnskabsfolk.md afsnit 8
+  sætninger: 'Einstein regnede, og andre målte efter: Urene i fly og satellitter, lyset, der bøjes ved Solen, og Merkurs bane passer alle med hans ligninger. Han fik nobelprisen i fysik, men ikke for relativitetsteorien. Ligningerne bruges hver dag, når din telefon finder vej med GPS.',
+  // Gør det selv (drejebogen afsnit 12, tjekket på skærmen i E5): I Rejsen i tid er det "du", der flyver, og "Tvillingen"
+  // bliver hjemme (ikke en tvilling, der sendes ud). Knappen hedder "🚀 Flyv til …" (i forløbet "Flyv til TRAPPIST-1")
+  knap: {
+    tekst: 'Send et ur på rejse', gaa: 'kosmos:tid',
+    linje: 'I Rejsen i tid er det dig, der flyver næsten med lysets fart, mens din tvilling bliver hjemme. Tryk på "Flyv", og se, hvor meget yngre du er, når du kommer hjem. Det er Einsteins rundtur fra side 904 med dig som uret.',
+  },
+  // Et stille link (stilguiden A3): lyset, der bøjes. 4GM/(c²R) = 1,75″ ved Solen (faktafilen afsnit 8) er ca. 0,0005°
+  // som i Rumtid. Sort hul i Kosmos bøjer lyset med en shader efter Einsteins teori (js/kosmos/linse.js)
+  ekstra: {
+    tekst: 'Se lyset bøje om et sort hul', gaa: 'kosmos:sorthul',
+    linje: 'Stjernelys, der går tæt forbi Solen, bøjes kun ca. 0,0005 grader, så det kan kun måles. Tæt på et sort hul bøjes det så meget, at hele himlen bag det ser forvrænget ud.',
+  },
+  hvorfor: [
+    {
+      // Faktafilen afsnit 3 (1933), 4 og 5 (Merkur 43″, Newcomb, 1919 usikker), hvorfor.js og Rejsen i tid (Hafele og
+      // Keating 1971: "næsten som regnet ud"). Pound og Rebka står i tyngdens "For nørder"
+      spørgsmål: 'Hvordan ved man, at han havde ret?',
+      svar: 'Andre målte efter. I 1933 passede energien, når lithium blev ramt af protoner, med E = mc² inden for en halv procent. Merkurs bane drejer 43 buesekunder (en lillebitte vinkel) pr. århundrede mere, end Newtons lov giver, præcis som Einstein regnede ud. Lyset bøjes ved Solen: Målingerne ved solformørkelsen i 1919 var usikre, men senere målinger har vist det meget præcist.\n\nOg i 1971 fløj man atomure jorden rundt i passagerfly. Da de kom hjem, gik de forkert i forhold til urene på jorden, næsten præcis som ligningerne siger.',
+    },
+    {
+      // fakta-videnskabsfolk.md afsnit 8 (nobelprize.org "The Nobel Prize in Physics 1921")
+      spørgsmål: 'Fik han nobelprisen for relativitetsteorien?',
+      svar: 'Nej. Han fik prisen for 1921 for sit arbejde i teoretisk fysik og især for loven om den fotoelektriske effekt: Lys kan slå elektroner løs fra et metal, og det forklarede han med, at lys kommer i små portioner. Den artikel skrev han også i 1905.\n\nKomitéen syntes ikke, at nogen af dem, der var foreslået i 1921, var gode nok, så prisen blev gemt og givet året efter, i 1922.',
+    },
+    {
+      // Fælden i fakta-faelder.md (relativistisk masse: "det kræver mere og mere energi og uendelig meget at nå lysets
+      // fart") og fakta-faelder-videnskabsfolk.md (at intet kan nå lysets fart, er ikke en af reglerne, men følger af dem).
+      // LHC: CERN giver 99,9999991 % af lysets fart ved 7 TeV. Ved 6,8 TeV (fra 2022) er γ ca. 7.250 og farten ca.
+      // 99,999999 % (regnet), derfor "over 99,9999 %"
+      spørgsmål: 'Kan noget fare hurtigere end lyset?',
+      svar: 'Ikke ifølge Einsteins ligninger. Jo tættere noget kommer på lysets fart, jo mere energi skal der til for at komme bare lidt hurtigere, og for at nå helt op skal der uendelig meget. Det var ikke en af hans to regler, men noget, han regnede sig frem til.\n\nI partikelacceleratoren LHC ved CERN farer protonerne med over 99,9999 % af lysets fart. Men aldrig helt op.',
+    },
+    {
+      // Faktafilen afsnit 5 (Poincaré og Hasenöhrl, Besso s. 921), Wikipedia "History of special relativity" (Lorentz 1904)
+      // og "Marcel Grossmann" (tensorregningen til tyngden 1912-1913)
+      spørgsmål: 'Fandt han på det hele alene?',
+      svar: 'Nej. Han byggede på andre: Lorentz og Poincaré havde allerede regnet meget med lys og bevægelse før 1905, han talte med vennen Michele Besso (den eneste, han takker i artiklen om tiden), og hans gamle studiekammerat, matematikeren Marcel Grossmann, hjalp ham med den matematik, han skulle bruge til tyngdekraften.\n\nMen at bygge det hele på de to regler og regne sig frem til, at tiden ikke er den samme for alle, var hans idé.',
+    },
+  ],
+  nørd: {
+    titel: 'Vil du vide mere?',
+    linje: 'Det store år, myterne og lambda.',
+    punkter: [
+      // Faktafilen afsnit 1 og drejebogen afsnit 10
+      'I 1905 skrev han fire store artikler i Annalen der Physik, mens han arbejdede på patentkontoret: om lys i små portioner, om bittesmå korn, der danser rundt i en væske, fordi molekylerne støder til dem (Brownske bevægelser), om tiden og om energien. Han var 26.',
+      // Faktafilen afsnit 5
+      '"Alt er relativt" er en misforståelse. Teorien bygger på to ting, der er ens for alle: naturens love og lysets fart.',
+      // fakta-videnskabsfolk.md afsnit 8
+      '"Einstein dumpede i matematik" er en myte. Som 16-årig, et år før man plejede, dumpede han den almene del af optagelsesprøven til den tekniske højskole i Zürich, men i fysik og matematik klarede han sig med udmærkelse.',
+      // Faktafilen afsnit 5 (Gamow, men Alpher og Wheeler sagde også, at de havde hørt det: derfor "kun fra andre, især
+      // Gamow") og Wikipedia "Cosmological constant" / "Static universe" (1917 for et univers, der står stille; droppet
+      // efter Hubbles målinger, 1931; mørk energi 1998)
+      'I 1917 satte han et ekstra led, Λ (lambda), ind i ligningen, så universet kunne stå stille. Da man fandt ud af, at universet udvider sig, droppede han det igen. At han kaldte det "min største brøler", kender vi kun fra andre, især fysikeren George Gamow. Det står ikke i hans egne tekster. I dag er Λ med igen, fordi universet udvider sig hurtigere og hurtigere.',
+      // Faktafilen afsnit 5 (Hilbert) og afsnit 4 (25. november 1915)
+      'Han lagde feltligningen frem for akademiet i Berlin den 25. november 1915, ti år efter artiklen om tiden.',
+    ],
+  },
+  ærligt: {
+    titel: 'Ærligt talt',
+    linje: 'Det, han ikke gjorde selv, og det, turen snyder med.',
+    punkter: [
+      // Drejebogen afsnit 1: delens kernesætning ("De så efter og målte") passer kun halvt
+      'Einstein målte ikke selv. Han regnede ud fra to regler og sagde, hvad andre skulle måle. Målingerne kom bagefter, nogle først mange år senere.',
+      // Faktafilen afsnit 5 (Joffe 1955, Stachel, Esterson og Cassidy 2019) og fælden "Mileva Marić, fysikeren"
+      'Nogle har ment, at hans første kone, Mileva Marić, der læste fysik og matematik sammen med ham i Zürich, var med til at skrive artiklerne fra 1905. De er kun underskrevet af ham, og der findes ingen tekster om fysik fra hendes hånd. Derfor mener de fleste historikere det ikke, men nogle mener, at hun var en, han kunne tale fysik med.',
+      // Fælden "Man bliver tungere ved høj fart" (fakta-faelder.md)
+      'Artiklen fra 1905 regner med en masse, der vokser med farten. Det gør man ikke mere: Man bliver ikke tungere af at flyve hurtigt, men det kræver mere og mere energi at komme op i fart.',
+      // Listen øverst i js/bog/einstein.js (E2). 299.792 km/s · 3,6 / 100 km/t = 10,8 millioner
+      'I turen farer lyset alt for langsomt. I virkeligheden er det ca. 10 millioner gange hurtigere end et tog på 100 km/t, så toget ville se ud til at stå helt stille.',
+      // 0,99 · 299.792 km/s · 20 s = 5,9 millioner km
+      'Under rundturen viser urene tiden, som man regner den på perronen, ikke det, øjet ville se. Kun ved afgang og hjemkomst, når urene står side om side, er alle enige. Banen er heller ikke i rigtig størrelse: Ved 99 % af lysets fart ville turen på 20 sekunder være næsten 6 millioner km lang.',
+      'Satellitten, Jorden og højden er ikke i rigtig størrelse, og Jordens drejning er ikke regnet med i GPS-uret.',
+      // E1: lav_portraet.py med samme filter som de andre
+      'Portrættet er et foto fra 1921. Vi har lagt det samme filter over som de andre, så alle personerne i bogreolen ligner hinanden. Tegningerne, fortælleren og oversættelserne fra tysk er vores egne.',
+    ],
+  },
+};

@@ -209,13 +209,18 @@ export function startOpdagelser() {
   const vent = tagVentForløb(byggede().map((b) => b.forløb).filter(Boolean));
   const b = vent && byggede().find((x) => x.forløb === vent);
   if (b) åbnBog(b.id, { fortælling: true });
-  // En bog fra en knap et andet sted (data-gaa="opdagelser:huygens", fx citatet ved Saturn)
-  else visBog(tagVentBog());
+  // En bog fra en knap et andet sted (data-gaa="opdagelser:huygens", fx citatet ved Saturn), evt. med et opslag
+  else {
+    const v = tagVentBog();
+    if (v) visBog(v.id, v.opslag);
+  }
 }
 
-// Åbner en bygget bog fra en knap (js/gaa.js). Første gang starter fortællingen efter "Begynd" som normalt
-export function visBog(id) {
-  if (id && bogMed(id)?.bygget) åbnBog(id);
+// Åbner en bygget bog fra en knap (js/gaa.js). Første gang starter fortællingen efter "Begynd" som normalt. Med opslag
+// (fx 'energien' fra Stjerneovnen, Einstein E5) åbnes bogen ved det opslag, hvis det findes
+export async function visBog(id, opslag) {
+  if (!id || !bogMed(id)?.bygget) return;
+  if (await åbnBog(id) && opslag) visOpslag(opslag);
 }
 
 export function stopOpdagelser() {

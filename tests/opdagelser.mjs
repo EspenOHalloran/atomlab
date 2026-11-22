@@ -3,7 +3,7 @@
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag. Einsteins
 // forside (E1, 21. november 2026) i test 1, 3 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
-// Energien og tyngden (E4, samme dag) i test 1, 7 og 8.
+// Energien og tyngden (E4, samme dag) i test 1, 7 og 8. "Om Einstein" og links begge veje (E5, samme dag) i test 1, 6 og 7.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
 import { SKÆRME } from '../js/skaerme.js';
@@ -181,6 +181,19 @@ tjek('Tycho, Huygens og Einstein er de byggede bøger, og delen står i Bibliote
     && /passer/.test(ærligt) && /Klostertaget/.test(ærligt) && /60 jordradier/.test(ærligt) && /21\. november/.test(ærligt) && /tredje tal/.test(ærligt)
     && CITATER.tycho?.bog?.id === 'tycho',
     opslag);
+}
+// "Om Einstein" og links begge veje (E5, drejebogen afsnit 10 og 12): bogens sidste opslag, Gør det selv i Rejsen i tid
+// (dér er det "du", der flyver, og tvillingen bliver hjemme), Mileva Marić-linjen og turens snyd i Ærligt talt, og
+// citatet og Stjerneovnen linker til opslaget om energien
+{
+  const t = await bogMed('einstein').tekster();
+  const ærligt = t.OM.ærligt.punkter.join(' ');
+  const html = readFileSync(PROJEKT + 'index.html', 'utf8');
+  tjek('"Om Einstein": sidste opslag efter tyngden, 26 år og 38 milliontedele sekund, Rejsen i tid med dig og tvillingen, Mileva Marić og turens snyd i Ærligt talt, og citatet og Stjerneovnen linker til energien',
+    t.OPSLAG.map((o) => o.id).join() === 'forside,fortaelling,tiden,energien,tyngden,om' && t.LIGNINGER.tyngden.videre === 'Havde han ret?'
+    && t.OM.tal[0].tal === '26 år' && /^38 /.test(t.OM.tal[1].tal) && t.OM.knap.gaa === 'kosmos:tid' && /dig/.test(t.OM.knap.linje) && /tvilling/.test(t.OM.knap.linje) && /904/.test(t.OM.knap.linje)
+    && /Mileva Marić/.test(ærligt) && /målte ikke selv/.test(ærligt) && /10 millioner/.test(ærligt) && /6 millioner km/.test(ærligt) && !/fysikeren Mileva/.test(ærligt)
+    && CITATER.einsteinEnergi?.bog?.id === 'einstein:energien' && html.includes('data-gaa="opdagelser:einstein:energien"'));
 }
 tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab-fell.woff2') && existsSync(PROJEKT + 'fonts/OFL.txt'));
 
@@ -1100,13 +1113,12 @@ for (const [navn, opsætning] of [
     formler: document.querySelectorAll('#opdBog .lg-sat .lg-formel').length,
     numre: [...document.querySelectorAll('#opdBog .lg-sat .lg-fnr')].map((e) => e.textContent).join(),
     steder: [...document.querySelectorAll('#opdBog .lg-sat-sted')].map((k) => k.dataset.sted).join(),
-    videre: !!document.querySelector('#opdBog .lg-videre'),
-    sidste: atomlabTest.opdagelser.bladr(1) === false,
+    videre: document.querySelector('#opdBog .lg-videre')?.textContent ?? '',
     ikke: getComputedStyle(document.querySelector('#opdBog .lg-ikke')).display !== 'none' && /universitetet/.test(document.querySelector('#opdBog .lg-ikke').textContent),
     fagord: [...document.querySelectorAll('#opdBog .lg-forord-tekst .fagord')].map((f) => f.dataset.ord).join(),
   }));
-  tjek('Einsteins tyngde: "Sat tekst" viser s. 845 med 21 linjer, ti formler med Einsteins numre og stederne "ti" og "stof", det er sidste opslag uden knap videre (til E5), linjen om universitetsmatematikken står fremme, og forordet forklarer feltligningen',
-    sat.linjer === 21 && sat.formler === 10 && sat.numre === '(2),(3),(3a),(4),(2a),(5),(6),(3a),(7),(7a)' && sat.steder === 'ti,stof' && !sat.videre && sat.sidste && sat.ikke && sat.fagord === 'feltligning', JSON.stringify(sat));
+  tjek('Einsteins tyngde: "Sat tekst" viser s. 845 med 21 linjer, ti formler med Einsteins numre og stederne "ti" og "stof", knappen videre er "Havde han ret? ›" (E5), linjen om universitetsmatematikken står fremme, og forordet forklarer feltligningen',
+    sat.linjer === 21 && sat.formler === 10 && sat.numre === '(2),(3),(3a),(4),(2a),(5),(6),(3a),(7),(7a)' && sat.steder === 'ti,stof' && sat.videre === 'Havde han ret? ›' && sat.ikke && sat.fagord === 'feltligning', JSON.stringify(sat));
   await page.click('#opdBog .lg-regn > summary');
   const felter = await O(() => document.querySelectorAll('#opdBog .lg-felt').length);
   await page.click('#opdBog .lg-regn-knap');
@@ -1123,6 +1135,42 @@ for (const [navn, opsætning] of [
   tjek('Einsteins tyngde: skemaet har 16 felter, G₃₃ på den skrå linje giver et vink, de seks dobbelte foldes oven på deres makker, "16" er for mange, og "10" giver "zehn Gleichungen"',
     felter === 16 && /skrå linje/.test(skrå) && foldet.regn.foldet === 6 && foldet.regn.trin === 2 && foldet.væk === 6 && foldet.dobbelt === 6 && /For mange/.test(for16) && /zehn Gleichungen/.test(svar),
     JSON.stringify({ felter, skrå, foldet, for16, svar }));
+  // "Om Einstein" (E5, test 7): "Havde han ret? ›" fører til bogens sidste opslag med to tal, de fire spørgsmål, Gør det
+  // selv (Rejsen i tid) og det stille link til Sort hul. Et "Hvorfor?" åbner sit kort, og den vigtige knap åbner Rejsen i tid
+  await page.click('#opdBog .lg-videre');
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'om' && !document.querySelector('#opdBog .bog-blad'), null, 5000);
+  const om = await O(() => ({
+    nr: atomlabTest.opdagelser.vist().nr, antal: atomlabTest.opdagelser.vist().antal, sidste: document.querySelector('#opdBog .bog-pil[data-bladr="1"]').disabled,
+    navn: document.querySelector('#opdBog .bo-navn')?.textContent, tal: document.querySelectorAll('#opdBog .bo-tal p').length,
+    knap: document.querySelector('#opdBog .bo-knap')?.dataset.gaa, ekstra: document.querySelector('#opdBog .bo-ekstra')?.dataset.gaa,
+    hvorfor: document.querySelectorAll('#opdBog button[data-bo-hvorfor]').length, lag: atomlabTest.opdagelser.scene()?.lag?.() ?? [],
+  }));
+  await page.click('#opdBog button[data-bo-hvorfor="2"]');
+  const kort = await vent(page, () => /uendelig meget/.test(document.querySelector('.hvorfor-kort:not(.skjult)')?.textContent ?? ''), null, 3000);
+  tjek('"Om Einstein": "Havde han ret? ›" fører til det sidste opslag med navnet, to tal, fire spørgsmål (lysets fart åbner sit kort), Rejsen i tid og Sort hul, og de to lag er lukkede',
+    om.nr === om.antal - 1 && om.sidste && /1879-1955/.test(om.navn) && om.tal === 2 && om.knap === 'kosmos:tid' && om.ekstra === 'kosmos:sorthul' && om.hvorfor === 4
+    && om.lag.length === 2 && om.lag.every((l) => !l.åben) && kort, JSON.stringify({ om, kort }));
+  await page.click('#opdBog .bo-knap');
+  const tid = await vent(page, () => location.hash === '#kosmos' && /Flyv/.test(document.querySelector('#kosmos')?.textContent ?? '') && /Tvillingen/.test(document.querySelector('#kosmos')?.textContent ?? ''), null, 20000);
+  tjek('Gør det selv: "Send et ur på rejse ›" åbner Rejsen i tid med "Flyv" og tvillingen, som linjen siger', tid);
+  await ctx.close();
+}
+
+// Links begge veje til Einsteins bog (E5, test 6): "Se Einsteins egen side fra 1905 ›" i Stjerneovnens foldeboks og
+// citatet einsteinEnergi i Reaktoren åbner bogen ved opslaget "1905: Energien" (data-gaa="opdagelser:einstein:energien")
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#fusion');
+  const O = (f, a) => page.evaluate(f, a);
+  await vent(page, () => !!document.querySelector('#fusion [data-gaa="opdagelser:einstein:energien"]'), null, 15000);
+  await O(() => { document.querySelector('[data-lag="fus-energi"]').open = true; });
+  await page.click('#fusion [data-gaa="opdagelser:einstein:energien"]');
+  const fraOvnen = await vent(page, () => location.hash === '#opdagelser' && atomlabTest.opdagelser?.vist()?.bog === 'einstein' && atomlabTest.opdagelser.vist().opslag === 'energien', null, 15000);
+  tjek('Stjerneovnen: "Se Einsteins egen side fra 1905 ›" åbner Einsteins bog ved "1905: Energien"', fraOvnen);
+  // Bogen er åben: Et link med et andet opslag bladrer i den åbne bog
+  await O(() => { const k = document.createElement('button'); k.dataset.gaa = 'opdagelser:einstein:tiden'; k.id = 'tmpLink'; document.body.append(k); });
+  await page.click('#tmpLink');
+  const iBogen = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'tiden', null, 5000);
+  tjek('et link med et opslag åbner også det opslag, når Opdagelserne allerede er fremme', iBogen);
   await ctx.close();
 }
 

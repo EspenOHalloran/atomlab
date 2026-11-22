@@ -45,7 +45,8 @@ export function tagVentLiv() {
   return id;
 }
 
-// Bogen, Opdagelserne skal åbne, når de starter (fra en knap data-gaa="opdagelser:huygens", fx ved citatet ved Saturn)
+// Bogen, Opdagelserne skal åbne, når de starter (fra en knap data-gaa="opdagelser:huygens", fx ved citatet ved Saturn),
+// evt. med et opslag i bogen (data-gaa="opdagelser:einstein:energien", Einstein E5 22. november 2026): { id, opslag }
 let ventBog = null;
 export function tagVentBog() {
   const id = ventBog;
@@ -96,7 +97,7 @@ export function tagVentSted(skærm) {
 // Knapper med data-gaa="skærm:id" (eller bare "skærm", eller "skærm:id:sted") i teksterne åbner et fænomen et andet sted,
 // data-gaa="system:55" et grundstof i Det periodiske system, data-gaa="gaader:sorthul" et kort i Gåderne og
 // data-gaa="liv:protein" "Fra opskrift til protein" i Liv, data-gaa="molekyler:bytte" "Giv elektroner" i Molekyler og
-// data-gaa="opdagelser:huygens" en bog i Opdagelserne
+// data-gaa="opdagelser:huygens" en bog i Opdagelserne (og "opdagelser:einstein:energien" et opslag i bogen)
 document.addEventListener('click', (h) => {
   const b = h.target.closest?.('[data-gaa]');
   if (!b) return;
@@ -124,9 +125,9 @@ document.addEventListener('click', (h) => {
   }
   if (skærm === 'opdagelser') {
     lyd.klik();
-    if (location.hash === '#opdagelser' && hentetSkærm('opdagelser')) hentetSkærm('opdagelser').visBog(id);
+    if (location.hash === '#opdagelser' && hentetSkærm('opdagelser')) hentetSkærm('opdagelser').visBog(id, sted);
     else {
-      ventBog = id ?? null;
+      ventBog = id ? { id, opslag: sted } : null;
       location.hash = '#opdagelser';
     }
     return;
