@@ -1168,7 +1168,7 @@ for (const [navn, opsætning] of [
   tjek('Stjerneovnen: "Se Einsteins egen side fra 1905 ›" åbner Einsteins bog ved "1905: Energien"', fraOvnen);
   // Bogen er åben: Et link med et andet opslag bladrer i den åbne bog
   await O(() => { const k = document.createElement('button'); k.dataset.gaa = 'opdagelser:einstein:tiden'; k.id = 'tmpLink'; document.body.append(k); });
-  await page.click('#tmpLink');
+  await O(() => document.getElementById('tmpLink').click()); // knappen ligger under lærredet, så klikket sendes direkte
   const iBogen = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'tiden', null, 5000);
   tjek('et link med et opslag åbner også det opslag, når Opdagelserne allerede er fremme', iBogen);
   // Rumtid i Kosmos: "Einsteins egen side fra 1915 ›" under "Gå videre" åbner "1915: Tyngden"
