@@ -1,19 +1,22 @@
 // Gåden "Hvad er der inde i et sort hul?" i 3D (G4c, docs/plan-gaader-3d.md). Teksterne står i js/data/gaader.js (scene).
-// Linsen fra Kosmos bruges, som den er (lampen fra js/gaader/lys.js, js/kosmos/linse.js), og kun det nye lægges til:
+// Linsen fra Kosmos (js/kosmos/linse.js) dækker hele billedet som i Kosmos, med den bøjede himmel og skyggen holdt sort
+// (js/kosmos/skygge-sort.js). Kun det nye lægges til:
 // Trin 1: hullet med lysbøjningen, som man kan flyve rundt om (træk). Efter gættet tyngdebølgen fra 14. september 2015 som
 // en tone og en kurve, der tegnes, mens den spiller (målt, i farve).
-// Trin 2: de to kanter. Man flyver hen mod horisonten, og skærmen tones sort. Ringen er horisonten, hvor målingerne stopper.
+// Trin 2: de to kanter. Man flyver hen mod horisonten (linsen regner, at man kommer tæt på), og skærmen tones sort.
+// Ringen er horisonten, hvor målingerne stopper.
 // Efter gættet stemplet GÆT og Einsteins teori som stiplet: en streg ind mod midten, der toner ud, "højst ca. 67 sekunder
 // til midten" og "uendelig: her virker teorien ikke". Intet punkt i midten, og ingen flyvning gennem horisonten.
 // Trin 3 og det sidste billede: LISA, tre satellitter i en trekant bag Jorden, hvor armene bliver længere og kortere, når
 // en tyngdebølge går forbi (voldsomt overdrevet).
 
 import * as THREE from 'three';
-import { verden } from '../scene3d.js';
+import { verden, visRumstøv, rumstøvVist } from '../scene3d.js';
 import { glød, skilt } from '../kosmos/faelles.js';
 import { lyd } from '../lyd.js';
 import { gådeMed } from '../data/gaader.js';
-import { lavLys } from './lys.js';
+import { lavLinse } from '../kosmos/linse.js';
+import { holdSkyggenSort } from '../kosmos/skygge-sort.js';
 import { fuld, stiplet, stempel } from './streg.js';
 
 // ---------- Tyngdebølgen fra 2015 (GW150914, arXiv:1602.03837) ----------
@@ -45,8 +48,13 @@ function spilTonen() {
 // ---------- Pladserne (planet z = 0) ----------
 const HB1 = 6.2, HH1 = 4.6; // trin 1: hullet foroven og kurven forneden
 const HUL_Y = 1.1; // hullet, når kurven står under det
-const HUL_SKALA = 1.35; // lampen er ±3,2 enheder, her ±4,3
+const HUL_SKALA = 1.35; // efter gættet (skiven ca. ±3,9 enheder)
 const STOR_SKALA = 1.8; // før gættet står hullet alene, større og midt i billedet
+// Hullets størrelse: enheder i scenen pr. enhed i linsen ved skala 1 (M = 0,75 og skiven ud til 15, som lampen før:
+// ±3,2 enheder viste ±16,5 af linsens rum). Kosmos' skive er ca. 4 gange større.
+const ENHED = 3.2 / 16.5;
+const HÆLDNING = 0.2; // skiven vippes, så kameraet ser den lidt ovenfra (ca. 11°, som i Kosmos)
+const DYK_TÆT = 6; // dykket slutter 6 enheder fra midten i linsens rum (8 M): Skyggen fylder hele billedet
 const BØLGE_Y = -3.35;
 const BØLGE_B = 5.3; // den halve bredde af kurven
 const BØLGE_H = 0.62; // den største udsving
@@ -72,12 +80,27 @@ export function lavNær(ctx) {
   const N = T.navne;
   const { kamera, styring } = verden;
 
-  // Hullet: lampen med linsen fra Kosmos
-  const lampe = lavLys('sorthul');
-  const hul = lampe.gruppe;
+  // Hullet: Kosmos' linse over hele billedet. Linsen regner i rummet for vip (iGruppensRum): hul flyttes og gøres
+  // større, og vip vipper skiven. lysstyrke som skinnens lampe, så shaderen er den samme (ingen ny, når man kommer derfra).
+  const linse = lavLinse({ lysstyrke: 0.26, iGruppensRum: true });
+  const hul = new THREE.Group();
+  const vip = new THREE.Group();
+  vip.rotation.x = HÆLDNING;
+  vip.scale.setScalar(ENHED);
+  vip.add(linse.flade);
+  hul.add(vip);
   hul.position.set(0, HUL_Y, 0);
   hul.scale.setScalar(HUL_SKALA);
   gruppe.add(hul);
+  let tegnet = 0; // hvor mange gange linsen er tegnet (til testen)
+  const tegnLinse = linse.flade.onBeforeRender;
+  linse.flade.onBeforeRender = (...a) => { tegnet++; tegnLinse(...a); };
+  // Gløden må ikke brede lyset ind over skyggen (som i Kosmos). Kun når hullet ses.
+  const vipSkala = new THREE.Vector3();
+  const skygge = holdSkyggenSort(verden, vip, { enhed: () => vip.getWorldScale(vipSkala).x });
+  // Rumstøvet bliver ikke bøjet og ville flyde hen over billedet (som i Kosmos)
+  const støvFør = rumstøvVist();
+  visRumstøv(false);
 
   const bølge = lavBølge(gruppe, N, ROLIG);
   const sort = lavSort(gruppe);
@@ -86,6 +109,7 @@ export function lavNær(ctx) {
 
   let tilstand = null; // 'hul' | 'tone' | 'ind' | 'inde' | 'svar' | 'lisa'
   let tDyk = 0;
+  let dykSkala = 1; // hullets skala, når dykket slutter
   let tid0 = 0;
   const hulMål = { y: 0, skala: STOR_SKALA }; // hvor hullet glider hen i trin 1
   const hulNu = { y: 0, skala: STOR_SKALA }; // hvor det er nu
@@ -149,6 +173,8 @@ export function lavNær(ctx) {
         if (tilstand === 'ind' || tilstand === 'inde') return;
         tilstand = 'ind';
         tDyk = 0;
+        // Så stor bliver hullet til sidst: kameraet DYK_TÆT fra midten i linsens rum
+        dykSkala = Math.max(hulNu.skala, kamera.position.distanceTo(styring.target) / (ENHED * DYK_TÆT));
         styring.enabled = false;
         styring.autoRotate = false;
         lisa?.skjul();
@@ -184,7 +210,7 @@ export function lavNær(ctx) {
       const k = ROLIG ? 1 : 1 - Math.exp(-dt * 2.5);
       sætHul(hulNu.y + (hulMål.y - hulNu.y) * k, hulNu.skala + (hulMål.skala - hulNu.skala) * k);
     }
-    lampe.opdater(dt, tid);
+    linse.opdater(tid, 0);
     if (tilstand === 'tone') bølge.opdater(dt, hul.position);
     if (tilstand === 'ind') {
       tDyk += dt;
@@ -192,19 +218,21 @@ export function lavNær(ctx) {
         sort.sæt(tDyk / 0.8);
         if (tDyk > 0.9) inde();
       } else {
-        // Hullet vokser og glider ind midt i billedet, som om kameraet flyver derhen (linsen regner for et kamera, der står
-        // stille uden for horisonten, så kameraet selv flytter sig ikke)
+        // Hullet vokser og glider ind midt i billedet. Linsen regner i hullets rum, så det er det samme, som at kameraet
+        // flyver derhen: Skyggen vokser, og lyset bøjes mere, til skyggen fylder billedet (kameraet selv flytter sig ikke,
+        // for OrbitControls holder minDistance). Det vokser lige meget hvert øjeblik (i forhold), så farten føles jævn.
         const f = glat(tDyk / DYK);
-        hul.scale.setScalar(hulNu.skala * (1 + 3.5 * f * f));
+        hul.scale.setScalar(hulNu.skala * (dykSkala / hulNu.skala) ** f);
         p.set(0, hulNu.y, 0).lerp(styring.target, f);
         hul.position.copy(p);
-        sort.sæt(glat((tDyk / DYK - 0.45) / 0.55));
+        sort.sæt(glat((tDyk / DYK - 0.6) / 0.4));
         if (tDyk > DYK + 0.3) inde();
       }
     }
     if (tilstand === 'inde' || tilstand === 'svar') kanter.opdater(dt);
     if (tilstand === 'lisa') lisa.opdater(dt);
     sort.følg(kamera);
+    skygge.slå(hul.visible); // (ellers tog den gløden fra LISA og horisonten midt i billedet)
   }
 
   return {
@@ -216,11 +244,15 @@ export function lavNær(ctx) {
     tryk: () => { if (tilstand === 'ind') inde(); },
     spol: (s) => { for (let i = 0; i < s * 30; i++) opdater(1 / 30, tid0 + i / 30); },
     test: () => ({
-      tilstand, drejer: tilstand === 'hul' || tilstand === 'tone', lampe: lampe.test(), hulSes: hul.visible,
+      tilstand, drejer: tilstand === 'hul' || tilstand === 'tone', hulSes: hul.visible,
+      // Linsen dækker hele billedet (en flade over hele skærmen, tegnet først) og regner i hullets rum
+      linse: { tegnet, helt: linse.flade.renderOrder === -1000 && !linse.flade.frustumCulled, skala: Math.round(vip.getWorldScale(vipSkala).x * 1000) / 1000, skygge: skygge.skærm() },
       bølge: bølge.test(), sort: sort.test(), kanter: kanter.test(), lisa: lisa?.test() ?? null,
     }),
     fjern: () => {
-      lampe.fjern();
+      skygge.fjern();
+      linse.fjern();
+      visRumstøv(støvFør);
       styring.enabled = true;
       styring.autoRotate = false;
     },
@@ -254,6 +286,8 @@ function lavBølge(gruppe, N, ROLIG) {
   const skala = fuld([[-BØLGE_B, -0.7, 0], [x1, -0.7, 0]], new THREE.Color(0.45, 0.55, 0.68), { bredde: 1.4 });
   tid.position.x = (x1 - BØLGE_B) / 2 + 0.2;
   g.add(kurve, hoved, titel, tid, skala);
+  // Altid oven på linsen: Skiven skriver sin dybde, og dens forreste del står tættere på kameraet end kurven
+  g.traverse((o) => { if (o.material) o.material.depthTest = false; o.renderOrder = 5; });
   const segmenter = kurve.geometry.attributes.instanceStart.count;
   let t = -1;
   function stil() {

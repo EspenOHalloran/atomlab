@@ -308,11 +308,12 @@ const FLADE_FRAGMENT = /* glsl */ `
 uniform sampler2D tLinse;
 uniform mat4 uProjInv;
 uniform mat4 uProj;
+uniform float uEnhed;
 varying vec2 vUv;
 void main() {
   vec4 l = texture2D(tLinse, vUv);
   vec4 p = uProjInv * vec4(vUv * 2.0 - 1.0, 1.0, 1.0);
-  vec4 c = uProj * vec4(normalize(p.xyz / p.w) * max(l.a, 0.2), 1.0);
+  vec4 c = uProj * vec4(normalize(p.xyz / p.w) * max(l.a * uEnhed, 0.2), 1.0);
   gl_FragDepth = clamp(c.z / c.w * 0.5 + 0.5, 0.0, 1.0);
   gl_FragColor = vec4(l.rgb, 1.0);
   #include <tonemapping_fragment>
@@ -321,7 +322,11 @@ void main() {
 
 // Laver lysbøjningen. Giver { flade (læg den i scenen), opdater(tid, lysere), skala(), dynamisk(til), fjern() }.
 // kvalitet: LINSE_KVALITET (standard) eller LINSE_PC (Gådernes skarpe hul på en stærk telefon, js/gaader/lys.js).
-export function lavLinse({ lysstyrke = 0.2, kvalitet = LINSE_KVALITET } = {}) {
+// iGruppensRum: Linsen regner i rummet for den gruppe, fladen ligger i (flytning, drejning og størrelse). Så kan hullet
+// gøres mindre eller større, flyttes og vippes (Gådernes scene Sort hul, js/gaader/sorthul.js). Gruppens størrelse er
+// enheder i scenen pr. enhed i linsen (M = 0,75), og den skal være ens i alle retninger. Uden (Kosmos) regnes linsen i
+// scenens rum med hullet i gruppens midte, som før.
+export function lavLinse({ lysstyrke = 0.2, kvalitet = LINSE_KVALITET, iGruppensRum = false } = {}) {
   const q = kvalitet;
   const lag = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false });
   lag.texture.minFilter = lag.texture.magFilter = THREE.LinearFilter;
@@ -349,7 +354,7 @@ export function lavLinse({ lysstyrke = 0.2, kvalitet = LINSE_KVALITET } = {}) {
   const linse = new FullScreenQuad(linseMat);
 
   const fladeMat = new THREE.ShaderMaterial({
-    uniforms: { tLinse: { value: lag.texture }, uProjInv: linseMat.uniforms.uProjInv, uProj: { value: new THREE.Matrix4() } },
+    uniforms: { tLinse: { value: lag.texture }, uProjInv: linseMat.uniforms.uProjInv, uProj: { value: new THREE.Matrix4() }, uEnhed: { value: 1 } },
     vertexShader: VERTEX,
     fragmentShader: FLADE_FRAGMENT,
     depthTest: true,
@@ -361,6 +366,8 @@ export function lavLinse({ lysstyrke = 0.2, kvalitet = LINSE_KVALITET } = {}) {
   flade.renderOrder = -1000; // først, så stjernehimlen og fænomenets ting bliver tegnet bagefter og dybdetestet mod den
   const størrelse = new THREE.Vector2();
   const midt = new THREE.Vector3();
+  const gruppeInv = new THREE.Matrix4();
+  const gruppeSkala = new THREE.Vector3();
   let skala = q.skala;
   let dynamisk = DYNAMISK;
   const måling = { start: 0, sidst: 0, billeder: 0, gode: 0 };
@@ -400,11 +407,19 @@ export function lavLinse({ lysstyrke = 0.2, kvalitet = LINSE_KVALITET } = {}) {
       linseMat.uniforms.uTexel.value.set(1 / b, 1 / h);
     }
     const u = linseMat.uniforms;
-    u.uKameraVerden.value.copy(kamera.matrixWorld);
     u.uProjInv.value.copy(kamera.projectionMatrixInverse);
     fladeMat.uniforms.uProj.value.copy(kamera.projectionMatrix);
-    flade.parent.getWorldPosition(midt);
-    u.uKamPos.value.copy(kamera.position).sub(midt);
+    if (iGruppensRum) {
+      // Kameraet set fra gruppens rum (retningerne normaliseres i shaderen, så størrelsen i matricen gør ikke noget)
+      gruppeInv.copy(flade.parent.matrixWorld).invert();
+      u.uKameraVerden.value.multiplyMatrices(gruppeInv, kamera.matrixWorld);
+      u.uKamPos.value.setFromMatrixPosition(kamera.matrixWorld).applyMatrix4(gruppeInv);
+      fladeMat.uniforms.uEnhed.value = flade.parent.getWorldScale(gruppeSkala).x; // dybden i scenens enheder
+    } else {
+      u.uKameraVerden.value.copy(kamera.matrixWorld);
+      flade.parent.getWorldPosition(midt);
+      u.uKamPos.value.copy(kamera.position).sub(midt);
+    }
     const r0 = u.uKamPos.value.length();
     u.uKamG.value = 1 / Math.sqrt(Math.max(0.05, 1 - (2 * M) / r0));
     // Vinklen pr. punkt (CSS-pixel) midt i billedet: stjernernes størrelse

@@ -654,11 +654,14 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   const T = (f, a) => page.evaluate(f, a);
   await vent(page, påSkinne, null, 15000);
   await T(() => atomlabTest.gaader.visGåde('sorthul'));
-  const klar = await vent(page, () => (atomlabTest.gaader.scene()?.scene()?.lampe?.tegnet ?? 0) > 0, null, 15000);
+  const klar = await vent(page, () => (atomlabTest.gaader.scene()?.scene()?.linse?.tegnet ?? 0) > 0, null, 15000);
   const S = (sek) => T((s) => { const sc = atomlabTest.gaader.scene(); sc.spol(s); return sc.scene(); }, sek);
   const før = await S(0.2);
   tjek('G4c trin 1: hullet er linsen fra Kosmos, man kan flyve rundt om det, og kurven er skjult før gættet',
-    klar && før.tilstand === 'hul' && før.drejer && før.lampe.linse && !før.bølge.ses, JSON.stringify(før));
+    klar && før.tilstand === 'hul' && før.drejer && før.linse.tegnet > 0 && !før.bølge.ses, JSON.stringify(før));
+  // 22. november 2026: linsen over hele billedet som i Kosmos (ikke længere lampen), i hullets rum (skiven ca. ±5 enheder)
+  tjek('Sort hul som i Kosmos: linsen dækker hele billedet, regner i hullets rum, og skyggen holdes sort (midt i billedet)',
+    før.linse.helt && Math.abs(før.linse.skala - 0.349) < 0.01 && før.linse.skygge.r > 10 && Math.abs(før.linse.skygge.x - 444) < 60, JSON.stringify(før.linse));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]');
   const undervejs = (await S(0.3)).bølge;
   const tone = await S(1.2);
@@ -668,18 +671,25 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     && tone.bølge.svingninger >= 7 && tone.bølge.svingninger <= 12 && /Hør/.test(knap), JSON.stringify({ undervejs, tone: tone.bølge, knap }));
   await page.click('#gaadeTrin .fl-næste');
   const ind = await S(0.5);
+  const tæt = await S(1.3); // midt i dykket: linsen regner, at kameraet er kommet tæt på
   const inde = await S(3);
   const linjeInde = await T(() => document.getElementById('gaadeLinje').textContent);
   tjek('G4c trin 2: man flyver hen mod horisonten (ingen drejning), skærmen tones sort, og ringen står uden teorien før gættet',
     ind.tilstand === 'ind' && !ind.drejer && ind.sort < 1 && inde.tilstand === 'inde' && inde.sort === 1 && !inde.hulSes && inde.kanter.horisont
     && !inde.kanter.teori && !inde.kanter.stempel && /horisonten/.test(linjeInde), JSON.stringify({ ind, inde }));
+  tjek('Sort hul: i dykket kommer man (set fra linsen) tæt på, og skyggen vokser ud over billedet, før det tones sort',
+    tæt.tilstand === 'ind' && tæt.linse.skala > 3 * før.linse.skala && tæt.linse.skygge.r > 250, JSON.stringify(tæt.linse));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="0"]'); // "Målt" er forkert, men stemplet viser sandheden: GÆT
   const svar = (await S(2)).kanter;
   tjek('G4c trin 2: efter gættet GÆT og teorien som stiplet tekst (67 sekunder og "uendelig"), og stregen toner ud før midten (intet punkt)',
     svar.stempel && svar.teori && svar.tekster.length === 2 && svar.slut > 0.3 && svar.sidsteLys < 0.01, JSON.stringify(svar));
   await page.click('#gaadeTrin .fl-næste');
-  const l1 = (await S(0.3)).lisa;
-  const l2 = (await S(1)).lisa;
+  const s1 = await S(0.3);
+  const l1 = s1.lisa;
+  await page.waitForTimeout(500); // (nogle billeder tegnes)
+  const s2 = await S(1);
+  const l2 = s2.lisa;
+  tjek('Sort hul: i LISA ses hullet ikke, og linsen tegnes ikke', !s1.hulSes && !s2.hulSes && s2.linse.tegnet === s1.linse.tegnet, JSON.stringify([s1.linse, s2.linse]));
   await page.click('#gaadeTrin .fl-gæt[data-gaet="1"]');
   await page.click('#gaadeTrin .fl-næste');
   const ven = await T(() => document.getElementById('gaadeLinje').textContent);
@@ -700,6 +710,29 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.waitForFunction(() => document.querySelector('#gaader.skjult'), null, { timeout: 20000 });
   const ude = await page.evaluate(() => atomlabTest.gaader.prøver());
   tjek('skarpere: kantudglatning (4 prøver på pc) kun i Gåderne, væk igen i menuen', inde === 4 && ude === 0, JSON.stringify({ inde, ude }));
+  // Sort hul som i Kosmos (22. november 2026): Skyggen er sort med gløden (før brunlig), og den bøjede himmel om hullet ses
+  await page.evaluate(() => { location.hash = '#gaader'; });
+  await page.waitForFunction(() => window.atomlabTest?.gaader?.skinne?.()?.vist?.(), null, { timeout: 60000 });
+  await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
+  await page.waitForFunction(() => (atomlabTest.gaader.scene()?.scene()?.linse?.tegnet ?? 0) > 3, null, { timeout: 60000 });
+  const sk = await page.evaluate(() => atomlabTest.gaader.scene().scene().linse.skygge);
+  // Den øverste del af skyggen (skivens forreste del går hen over midten, som i Kosmos)
+  const r = Math.max(2, Math.round(sk.r * 0.15));
+  const billede = await page.screenshot({ clip: { x: Math.round(sk.x - r), y: Math.round(sk.y - sk.r * 0.6 - r), width: 2 * r, height: 2 * r } });
+  const lys = await page.evaluate(async (b64) => {
+    const img = new Image();
+    img.src = 'data:image/png;base64,' + b64;
+    await img.decode();
+    const c = document.createElement('canvas');
+    c.width = img.width; c.height = img.height;
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    let sum = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) { sum += Math.max(d[i], d[i + 1], d[i + 2]); n++; }
+    return sum / n;
+  }, billede.toString('base64'));
+  tjek('Sort hul (fuld grafik): skyggen er sort over skiven (gennemsnit under 8 af 255)', lys < 8, JSON.stringify({ sk, lys }));
   await fb.close();
 }
 
