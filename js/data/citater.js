@@ -55,7 +55,10 @@ export const CITATER = {
     person: 'Albert Einstein',
     kilde: 'Filmen "Atomic Physics", 1948',
     original: 'It followed from the special theory of relativity that mass and energy are both but different manifestations of the same thing.',
-    kommentar: 'Det er det, E = mc² betyder. Når en kerne henfalder, bliver en lille smule masse til energi.',
+    // Passer med s. 641 (Annalen der Physik 18, 1905): "Die Masse eines Körpers ist ein Maß für dessen Energieinhalt"
+    // (Einstein E5, 22. november 2026). Knappen åbner bogen ved opslaget "1905: Energien"
+    bog: { id: 'einstein:energien', tekst: 'Læs, hvor han skrev det første gang (1905)' },
+    kommentar: 'Det er det, E = mc² betyder. Når en urankerne spaltes, bliver en lille smule masse til energi. Første gang skrev Einstein det i 1905: Et legemes masse er et mål for, hvor meget energi det indeholder.',
   },
   feynmanKvante: {
     tekst: 'Jeg tror, jeg roligt kan sige, at ingen forstår kvantemekanik.',

@@ -72,6 +72,9 @@
 - "Mileva Marić, fysikeren." Hun læste fysik og matematik med Einstein i Zürich, men fik ikke eksamensbeviset (Wikipedia "Mileva Marić"). Skriv, hvad hun læste.
 - "Masse er, hvor meget stof der er i noget." Ikke helt: Lys i en kasse har også masse. Brug træghed (Einsteins eget ord, "Trägheit"): hvor svært noget er at sætte i gang.
 - Wikipedia giver to dødsdage for fotografen Ferdinand Schmutzer (26. august i boksen, 26. oktober i teksten). Året (1928) er det samme, og det er året, der tæller for ophavsretten.
+- "Den største brøler har vi kun fra Gamow." Gamow er den, der skrev det (1956 og 1970), men Ralph Alpher og John Wheeler sagde også, at de havde hørt Einstein sige det. Skriv "kender vi kun fra andre, især Gamow. Det står ikke i hans egne tekster" (Einstein E5, 22. november 2026).
+- "Protonerne i LHC farer med 99,9999991 % af lysets fart." Det er CERN's tal for 7 TeV. Ved 6,8 TeV (fra 2022) er det ca. 99,999999 %. Skriv "over 99,9999 %" (Einstein E5).
+- Et link til et andet sted i AtomLab skal passe med det, man ser dér: Drejebogen sendte "tvillingen" ud i Rejsen i tid, men dér er det "du", der flyver, og tvillingen bliver hjemme. Se på skærmen, før linjen skrives (Einstein E5).
 *Ole Rømer (V2, drejebogen 20. november 2026). Kilderne står i [fakta-videnskabsfolk/roemer.md](../fakta-videnskabsfolk/roemer.md).*
 - "Rømer forudsagde, at Io ville komme 10 minutter for sent den 16. november" (Wikipedia). *Phil. Trans.* (s. 894) siger kun, at han sagde det "fra begyndelsen af september", og at Io blev set 10 minutter for sent den 9. november. Skriv "i november".
 - "Rømer så selv Io komme for sent." Bladet siger "observed at Paris". Skriv "man så".

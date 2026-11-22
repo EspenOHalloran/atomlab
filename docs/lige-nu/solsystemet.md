@@ -22,3 +22,4 @@
 5. **Jeres ønsker 17. november 2026 (ikke planlagt endnu):** Rumrejsen (tyngdekraftsspillet, den oprindelige idé), Planet X/9, et stop ved asteroidebæltet og landing og udforskning på månerne med betingelser for liv. Står i [ideer.md](../ideer.md). Venter på rækkefølge og go.
 
 **Kosmos:** Det seneste (Betelgeuse set fra Jorden, 13. november 2026) står nu i [historikken](../arkiv/historik/solsystemet.md).
+**Lavet af et andet spor (22. november 2026, Videnskabsfolkene E5, aftalt med orkestratoren):** Rumtid har fået én knap mere i `videre` i `js/kosmos/rumtid.js`: "Einsteins egen side fra 1915" (`opdagelser:einstein:tyngden`), som åbner Einsteins bog ved "1915: Tyngden". Ingen ny tekst i panelet.
