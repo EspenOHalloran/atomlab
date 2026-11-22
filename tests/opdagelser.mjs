@@ -57,7 +57,7 @@ tjek('Tycho, Huygens og Einstein er de byggede bøger, og delen står i Bibliote
   const fl = forløbMed(bogMed('huygens').forløb);
   const ord = (t) => (t ?? '').split(/\s+/).filter(Boolean).length;
   const fejlFl = [];
-  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 2) fejlFl.push('forløbet findes ikke i listen');
+  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 3) fejlFl.push('forløbet findes ikke i listen');
   else {
     if (fl.trin.map((t) => t.id).join() !== 'linse,naetter,kanten,annulo') fejlFl.push('trinene');
     for (const t of fl.trin) {
@@ -187,13 +187,50 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
     e.spørgsmål === 'Hvad sker der, når lyset er lige hurtigt for alle?' && t.FORSIDE.spørgsmål === e.spørgsmål && /Bern/.test(i?.sted) && /1905/.test(i?.sted)
     && /\b26\b/.test(i?.tekst) && /Albert Einstein/.test(i?.tekst) && /tomme rum/.test(i?.tekst) && /jævnt/.test(i?.tekst) && sætninger <= 5 && i.tekst.endsWith('?')
     && t.FORSIDE.vignet?.klokken === 7 && t.FORSIDE.vignet.tid === 't' && t.FORSIDE.vignet.lys === 'V' && t.FORSIDE.vignet.alt && /omkring 42/.test(t.FORSIDE.portrætTekst)
-    && t.OPSLAG.length === 1 && t.OPSLAG[0].slags === 'forside',
+    && t.OPSLAG[0].slags === 'forside',
     JSON.stringify({ sætninger }));
   tjek('Einsteins bog: ryggen er bordeaux med sølv, skriften er Old Standard (almindelig og kursiv, OFL), og portrættet og skriften står i KILDER.md',
     e.stil.ryg === '#4a1f2a' && e.stil.rygKant === '#b8b8b8' && /AtomLab Old Standard/.test(e.stil.skrift)
     && ['fonts/atomlab-oldstandard.woff2', 'fonts/atomlab-oldstandard-kursiv.woff2'].every((f) => existsSync(PROJEKT + f))
     && /Old Standard Project Authors/.test(læs('fonts/OFL.txt')) && /atomlab-oldstandard\.woff2/.test(læs('fonts/KILDER.md'))
     && /`einstein\.webp`.*Schmutzer/.test(læs('billeder/biblioteket/KILDER.md')));
+}
+
+// Einsteins tur (E2, drejebogen afsnit 5, test 4): fire trin med kapitel, gæt i de tre sidste (ét rigtigt hver), højst to
+// sætninger i Så, ordene i Ordbogen (kun i forløbets linje), og regnestykkerne bag turen: 9,9 af 20 sekunder ved 87 %,
+// 4 milliardtedele gram, over 4 millioner ton i sekundet for Solen, +45 − 7 = 38 ved GPS-højden (bagud ved rumstationen)
+// og ca. 10 km fejl om dagen. "Det så du" har ligningerne som den vigtige vej (vises først, når E3 har bygget opslaget)
+{
+  const e = bogMed('einstein');
+  const t = await e.tekster();
+  const fl = forløbMed(e.forløb);
+  const fejlE = [];
+  if (!fl || fl.del !== 'opdagelser' || !forløbI('opdagelser').includes(fl)) fejlE.push('forløbet');
+  if (fl?.trin.map((x) => x.id).join() !== 'toget,rundtur,vaegten,gps') fejlE.push('trinene');
+  for (const x of fl?.trin ?? []) {
+    if (!x.kapitel || !x.spørg || !x.gør || !x.så) fejlE.push(`${x.id}: teksterne`);
+    if ((x.så.replace(/\bca\. /g, 'ca ').match(/[.!?](\s|$)/g) ?? []).length > 2) fejlE.push(`${x.id}: Så er over to sætninger`);
+    if (x.gæt && (x.gæt.valg.length !== 3 || x.gæt.valg.filter((v) => v.svar === 'Rigtigt gættet!').length !== 1 || x.gæt.valg.some((v) => v.tekst.length > 22))) fejlE.push(`${x.id}: gættet`);
+    for (const o of x.ord) {
+      const ord = ORDBOG.find((y) => y.id === o);
+      if (!ord || ord.kunI !== '.fl-tekst' || ord.tekst.length > 260 || !ord.former.some((f) => `${x.spørg} ${x.så}`.toLowerCase().includes(f))) fejlE.push(`${x.id}: ordet ${o}`);
+    }
+  }
+  if ((fl?.trin.filter((x) => x.gæt).length ?? 0) !== 3 || fl?.trin[0].gæt) fejlE.push('gæt i de tre sidste trin');
+  if (!/GPS/.test(fl?.kernesætning) || !/E = mc²/.test(fl?.kernesætning) || /intet kan/i.test(fl?.kernesætning)) fejlE.push('kernesætningen');
+  if (/stikkontakt/.test(fl?.trin[2].spørg) || !/Lys og varme/.test(fl?.trin[2].spørg) || !/batteri/i.test(fl?.trin[2].spørg)) fejlE.push('batteriet (fælden med lampen i stikkontakten)');
+  const tal = {
+    lys: t.dansk(t.LYSETS_FART_KMT / 1e6), ur: t.dansk(t.egentid(t.HJEMME, 0.87), 1), gram: t.småGram(t.massetab() * 1000),
+    sol: t.solensTabTon() / 1e6, gps: t.gpsTal(t.GPS_HØJDE), lav: t.gpsTal(t.RUMSTATIONEN).iAlt, km: t.gpsFejlKm(),
+    lige: Math.abs(t.gpsUr(3200).iAlt) < 0.5,
+  };
+  if (tal.lys !== '1.079' || tal.ur !== '9,9' || tal.gram !== '0,000 000 004' || !(tal.sol > 4 && tal.sol < 4.4)) fejlE.push('turens tal');
+  if (tal.gps.højde !== 45 || tal.gps.fart !== 7 || tal.gps.iAlt !== 38 || tal.lav >= 0 || !(tal.km > 10 && tal.km < 12) || !tal.lige) fejlE.push('GPS-tallene');
+  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
+  if (t.VEJE.veje[0].opslag !== 'tiden' || !t.VEJE.veje[0].primær || t.VEJE.veje.length !== 3 || t.VEJE.veje[1].fænomen?.join() !== 'kosmos,tid') fejlE.push('vejene');
+  if (t.FRI.kapitler.map((k) => k.id).join() !== 'toget,rundtur,vaegten,gps') fejlE.push('laboratoriet');
+  tjek('Einsteins tur: fire trin (toget, rundturen, batteriet og GPS-uret) med kapitel og gæt i de tre sidste, ordene i Ordbogen, og tallene: 9,9 af 20 sekunder, 4 milliardtedele gram, +45 − 7 = 38 og ca. 10 km',
+    !fejlE.length, `${fejlE.join('; ')} ${JSON.stringify(tal)}`);
 }
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -494,6 +531,87 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await ctx.close();
 }
 
+// Einsteins tur (E2, test 5): starter efter "Begynd" med "Bern, 1905". Lygterne tænder, når de står ud for hinanden, og
+// glimtene når målet samtidig. Fartknapperne kommer først bagefter. Rundturen ved 87 % giver 9,9 af 20 sekunder, timen
+// giver 0,000 000 004 g, og GPS-uret er bagud ved rumstationen og 38 foran ved GPS-højden. "Det så du" har kun de veje, der
+// findes, og laboratoriet har fire kapitler med "Uret flyver en tur" som standard
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '&forloebstart#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  const fase = (f) => vent(page, (f) => atomlabTest.opdagelser.forløb.fase() === f, f, 15000);
+  const T = () => O(() => atomlabTest.opdagelser.scene().tilstand());
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('einstein'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  const begynd = await O(() => !!document.querySelector('#opdBog .bog-begynd'));
+  await page.click('#opdBog .bog-begynd');
+  const startet = await vent(page, () => atomlabTest.opdagelser.forløb.kører() === 'lige-hurtigt' && atomlabTest.opdagelser.scene()?.tilstand().trin === 'toget');
+  const kapitel = await O(() => document.querySelector('#opdBog .bog-kapitel')?.textContent);
+  // Trin 1: ingen gæt, "Tænd begge", og farterne først bagefter
+  const før = { ...(await T()), knapper: await O(() => [...document.querySelectorAll('.forløb-linje .fl-handling')].map((x) => x.textContent)), gæt: await O(() => document.querySelectorAll('.forløb-linje .fl-gæt').length) };
+  await page.click('.forløb-linje .fl-handling >> text=Tænd begge');
+  const trin1 = (await fase('så')) && (await T()).mål;
+  const efter = await T();
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 2: tre gæt, "Mindre tid" er rigtigt, 87 % giver 9,9 af 20 sekunder
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'rundtur');
+  const gæt2 = await O(() => [...document.querySelectorAll('.forløb-linje .fl-gæt')].map((x) => x.textContent));
+  await page.click('.forløb-linje .fl-gæt >> text=Mindre tid');
+  await O(() => atomlabTest.opdagelser.scene().urFart(0.87));
+  await page.click('.forløb-linje .fl-handling >> text=Send af sted');
+  const rejser = (await T()).rejser;
+  const trin2 = (await fase('så')) && rejser;
+  const rund = { ...(await T()), svar: await O(() => document.querySelector('.forløb-linje .fl-svar')?.textContent), så: await O(() => document.querySelector('.forløb-linje .fl-så')?.textContent) };
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 3: en time giver 4 milliardtedele gram
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'vaegten');
+  await page.click('.forløb-linje .fl-gæt >> nth=0');
+  await page.click('.forløb-linje .fl-handling >> text=Spol en time');
+  const trin3 = await fase('så');
+  const vægt = await T();
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 4: bagud ved rumstationen, et vink halvvejs, og 38 foran ved GPS-højden. "Uden rettelse" kommer først øverst
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'gps');
+  const lav = await T();
+  await page.click('.forløb-linje .fl-gæt >> nth=1');
+  await O(() => atomlabTest.opdagelser.scene().højde(5000));
+  await O(() => document.querySelector('#opdBog .es-hoejde input').dispatchEvent(new Event('change')));
+  await page.waitForTimeout(700);
+  const midt = { ...(await T()), fase: await O(() => atomlabTest.opdagelser.forløb.fase()), vink: await O(() => document.querySelector('.forløb-linje .fl-vink')?.textContent ?? ''), uden: await O(() => !document.querySelector('#opdBog .es-uden')?.hidden) };
+  await O(() => atomlabTest.opdagelser.scene().højde(20200));
+  const trin4 = await fase('så');
+  const høj = await T();
+  await page.click('#opdBog .es-uden');
+  const uden = (await T()).uden;
+  await page.click('.forløb-linje .fl-næste');
+  await fase('slut');
+  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, lille: document.querySelector('.forløb-linje .fl-lille')?.textContent, veje: [...document.querySelectorAll('.forløb-linje .fl-vej')].map((v) => v.textContent) }));
+  tjek('Einsteins tur starter efter "Begynd" med "Bern, 1905: Toget og lyset", "Tænd begge" uden gæt, og glimtene når målet samtidig, før farterne kommer frem',
+    begynd && startet && kapitel === 'Bern, 1905: Toget og lyset' && før.knapper.join() === 'Tænd begge' && !før.gæt && !før.valg.length && trin1 && efter.valg.join('|') === '100 km/t|Halvdelen af lysets fart',
+    JSON.stringify({ kapitel, før, efter }));
+  tjek('Einsteins tur: uret, der fløj med 87 %, viser 9,9 af 20 sekunder, "Mindre tid" er rigtigt, og Så nævner relativitetsteorien',
+    trin2 && gæt2.join('|') === 'Det samme|Mere tid|Mindre tid' && Math.abs(rund.hjemme - 20) < 0.01 && Math.abs(rund.fløjet - 9.86) < 0.02 && rund.svar === 'Rigtigt gættet!' && /relativitetsteori/.test(rund.så),
+    JSON.stringify(rund));
+  tjek('Einsteins tur: en time med lampen gør batteriet og lampen 0,000 000 004 g lettere, og GPS-uret er bagud ved rumstationen, et vink halvvejs, og 38 foran ved GPS-højden (+45 − 7)',
+    trin3 && Math.abs(vægt.lettere - 4.0e-9) < 1e-10 && /0,000 000 004 g/.test(vægt.tekst) && lav.gps.iAlt < 0 && /bagud/.test(lav.tekst)
+    && midt.fase !== 'så' && /helt op/.test(midt.vink) && !midt.uden && trin4 && høj.gps.iAlt === 38 && /38 milliontedele sekund foran/.test(høj.tekst) && uden,
+    JSON.stringify({ vægt: vægt.lettere, lav: lav.gps, midt: { fase: midt.fase, vink: midt.vink, uden: midt.uden }, høj: høj.gps, uden }));
+  tjek('Einsteins tur: "Det så du" har kernesætningen med GPS, linjen om målingerne og kun de veje, der findes (Rejsen i tid og turen igen)',
+    /GPS/.test(slut.tekst) && /Målingerne/.test(slut.lille) && slut.veje.join('|') === 'Send et ur på rejse ›|Tag turen igen ›', JSON.stringify(slut));
+  // "Tag turen igen" starter forfra, og "Udforsk selv" giver laboratoriet med de fire kapitler
+  await page.click('.forløb-linje .fl-vej >> text=Tag turen igen');
+  const igen = await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'toget');
+  await page.click('.forløb-linje .fl-spring');
+  await vent(page, () => !atomlabTest.opdagelser.forløb.kører());
+  const lab = await O(() => ({ kapitler: [...document.querySelectorAll('#opdBog .hs-kapitler .hs-kapitel')].map((k) => k.textContent), t: atomlabTest.opdagelser.scene().tilstand(), låst: atomlabTest.opdagelser.låst(), send: !!document.querySelector('#opdBog .es-send') }));
+  await page.click('#opdBog .hs-kapitler .hs-kapitel >> text=Toget og lyset');
+  const labTog = await O(() => ({ t: atomlabTest.opdagelser.scene().tilstand(), tænd: !!document.querySelector('#opdBog .es-taend') }));
+  tjek('Einsteins tur: "Tag turen igen" starter forfra, og laboratoriet har fire kapitler med "Uret flyver en tur" som standard (med "Send af sted") og "Toget og lyset" med farterne og "Tænd begge"',
+    igen && lab.kapitler.join('|') === 'Toget og lyset|Uret flyver en tur|Batteriet på vægten|Uret højt oppe' && lab.t.lab === 'rundtur' && lab.send && !lab.låst
+    && labTog.t.lab === 'toget' && labTog.tænd && labTog.t.valg.length === 2, JSON.stringify({ lab, labTog }));
+  await ctx.close();
+}
+
 // Telefon på højkant og på langs i fortællingen: lærredet har plads, skyderen og tavlens tegninger er inden for skærmen,
 // og siden bliver ikke bredere end skærmen
 for (const [navn, opsætning] of [
@@ -546,6 +664,33 @@ for (const [navn, opsætning] of [
   }
   tjek(`${navn}: i Tychos tur har lærredet plads (mindst 140 px) i alle fem trin, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel`,
     målT.length === 5 && målT.every((m) => m.lærred >= 140 && m.inde && !m.bred && !m.dækker), JSON.stringify(målT));
+  // Einsteins tur (E2): i alle fire trin har lærredet plads, og knapperne, skyderen og tallene er inden for skærmen
+  await O(() => atomlabTest.opdagelser.hylden());
+  await O(() => atomlabTest.opdagelser.åbn('einstein'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await page.click('#opdBog .bog-begynd');
+  const målE = [];
+  for (const trin of ['toget', 'rundtur', 'vaegten', 'gps']) {
+    await vent(page, (t) => atomlabTest.opdagelser.forløb.trin() === t, trin);
+    if (trin !== 'toget') await page.click('.forløb-linje .fl-gæt >> nth=0');
+    await O(() => atomlabTest.opdagelser.forløb.visMigNu());
+    await vent(page, () => atomlabTest.opdagelser.forløb.fase() === 'så', null, 15000);
+    await page.waitForTimeout(300);
+    målE.push(await O(() => {
+      const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5 && x.top >= -0.5 && x.bottom <= innerHeight + 0.5;
+      const c = document.querySelector('#opdBog canvas').getBoundingClientRect();
+      const ting = [...document.querySelectorAll('#opdBog .hs-under button, #opdBog .hs-under input, #opdBog .es-maal, .forløb-linje button')].filter((e) => e.offsetWidth).map((e) => e.getBoundingClientRect());
+      const kap = document.querySelector('#opdBog .bog-kapitel'), hylde = document.getElementById('opdTilHylden').getBoundingClientRect();
+      const r = document.createRange();
+      r.selectNodeContents(kap);
+      const tk = r.getBoundingClientRect();
+      const dækker = tk.left < hylde.right && tk.right > hylde.left && tk.top < hylde.bottom && tk.bottom > hylde.top;
+      return { trin: atomlabTest.opdagelser.forløb.trin(), lærred: Math.round(Math.min(c.width, c.height)), inde: inde(c) && ting.every(inde), bred: document.documentElement.scrollWidth > innerWidth + 1, dækker };
+    }));
+    if (trin !== 'gps') await page.click('.forløb-linje .fl-næste');
+  }
+  tjek(`${navn}: i Einsteins tur har lærredet plads (mindst 140 px) i alle fire trin, knapperne, skyderen og tallene er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel`,
+    målE.length === 4 && målE.every((m) => m.lærred >= 140 && m.inde && !m.bred && !m.dækker), JSON.stringify(målE));
   await ctx.close();
 }
 
@@ -831,9 +976,12 @@ for (const [navn, opsætning] of [
     const ramme = document.querySelector('#opdBog .bog-ramme').getBoundingClientRect();
     const ses = (s) => { const x = document.querySelector(s)?.getBoundingClientRect(); return !!x && x.top >= ramme.top - 0.5 && x.top < ramme.bottom && x.left >= 0 && x.right <= innerWidth + 0.5; };
     const v = document.querySelector('#opdBog .bog-vignet');
-    return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), intro: ses('#opdBog .bog-intro-tekst'), vignet: !v?.offsetWidth || (v.getBoundingClientRect().right <= innerWidth + 0.5 && v.getBoundingClientRect().left >= 0), bred: document.documentElement.scrollWidth > innerWidth + 1 };
+    // "Begynd" (E2) ses uden at rulle: helt inden for bogens ramme og skærmen
+    const k = document.querySelector('#opdBog .bog-begynd')?.getBoundingClientRect();
+    const begynd = !!k && k.top >= ramme.top - 0.5 && k.bottom <= Math.min(ramme.bottom, innerHeight) + 0.5 && k.height >= 44;
+    return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), intro: ses('#opdBog .bog-intro-tekst'), vignet: !v?.offsetWidth || (v.getBoundingClientRect().right <= innerWidth + 0.5 && v.getBoundingClientRect().left >= 0), bred: document.documentElement.scrollWidth > innerWidth + 1, begynd };
   });
-  tjek(`${navn}: Einsteins forside har portrættet, spørgsmålet og introduktionen fremme, vignetten er inden for skærmen, og intet går ud til siden`, ef.portræt && ef.titel && ef.intro && ef.vignet && !ef.bred, JSON.stringify(ef));
+  tjek(`${navn}: Einsteins forside har portrættet, spørgsmålet, introduktionen og "Begynd" fremme uden at rulle, vignetten er inden for skærmen, og intet går ud til siden`, ef.portræt && ef.titel && ef.intro && ef.vignet && !ef.bred && ef.begynd, JSON.stringify(ef));
   await page.evaluate(() => atomlabTest.opdagelser.åbn('tycho')); // tilbage til Tycho til gåden nedenfor
   await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'tycho');
   // Tychos gåde (T3): kortet og de tre tal ses uden at rulle, knapperne er mindst 44 px, og intet går ud til siden
