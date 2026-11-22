@@ -109,6 +109,24 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
     // Kvalitetstrinnet findes kun på touch: På pc ændrer sætTrin intet
     const pc = await page.evaluate(async () => { const s = await import('/js/scene3d.js'); const før = s.verden.renderer.getPixelRatio(); s.sætTrin('høj'); return { trin: s.kvalitetstrin(), ens: s.verden.renderer.getPixelRatio() === før, kanter: s.kanterSlags() }; });
     tjek('pc: kvalitetstrinnet ændrer intet på pc', pc.trin === 'basis' && pc.ens && pc.kanter === 'SMAA', JSON.stringify(pc));
+    // Skygge i krogene (G4): lige efter tegningen af scenen, i halv opløsning, og kun på de skærme, der vælger den
+    const ao = () => page.evaluate(async () => { const k = await import('/js/krogskygge.js'); const s = await import('/js/scene3d.js'); return { ...k.krogskygge(), lærred: s.verden.renderer.domElement.width, kanterSidst: s.verden.komponist.passes.at(-1) === s.verden.kanter }; });
+    const iVærksted = await ao();
+    tjek('pc: skygge i krogene i Værkstedet, lige efter scenen, i halv opløsning, og kantudglatningen er stadig sidst', iVærksted.til && iVærksted.plads === 1 && Math.abs(iVærksted.bredde - iVærksted.lærred / 2) <= 1 && iVærksted.kanterSidst, JSON.stringify(iVærksted));
+    await page.evaluate(() => { location.hash = '#kosmos'; });
+    await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+    tjek('pc: ingen skygge i krogene i Kosmos', (await ao()).plads === -1);
+    await page.evaluate(() => { location.hash = '#reaktor'; });
+    await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+    await page.evaluate(() => atomlabTest.reaktor.tilstand('kerne'));
+    const kerne = await ao();
+    await page.evaluate(() => atomlabTest.reaktor.tilstand('kæde'));
+    tjek('pc: Reaktoren har skyggen på urankernen, ikke i kædereaktionen', kerne.til && (await ao()).plads === -1, JSON.stringify(kerne));
+    await page.evaluate(() => { location.hash = '#molekyler'; });
+    await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });
+    await page.waitForTimeout(500);
+    const mol = await ao();
+    tjek('pc: Molekyler har skyggen valgt, men tegner den kun, mens saltkrystallen vises', mol.valgt && !mol.til, JSON.stringify(mol));
   }
   tjek(`${navn}: ingen fejl i konsollen`, fejl.length === 0, fejl.join('\n'));
   await page.context().close();
@@ -138,7 +156,15 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   const høj = await tilstand();
   tjek('tablet: Høj giver pixelRatio 2, SMAA sidst og gløden i halv opløsning', høj.trin === 'høj' && høj.pr === 2 && høj.lærred === 2048 && høj.kanter === 'SMAA' && høj.sidst && Math.abs(høj.glød - høj.lærred / 2) <= 1, JSON.stringify(høj));
   await page.screenshot({ path: `${UD}/tablet-hoej-vaerksted.png` });
-  tjek('tablet: skiftet til Høj laver ingen nye shadere (SMAA er lavet på forhånd)', (await programmer()) === programmerFør, `${programmerFør} → ${await programmer()}`);
+  tjek('tablet: skiftet til Høj laver ingen nye shadere (SMAA og skyggen i krogene er lavet på forhånd)', (await programmer()) === programmerFør, `${programmerFør} → ${await programmer()}`);
+  // Skygge i krogene (G4): på touch kun i Høj
+  await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok))));
+  const aoHøj = await page.evaluate(async () => (await import('/js/krogskygge.js')).krogskygge().til);
+  await page.evaluate(async () => (await import('/js/scene3d.js')).sætTrin('basis'));
+  await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok))));
+  const aoBasis = await page.evaluate(async () => (await import('/js/krogskygge.js')).krogskygge().til);
+  await page.evaluate(async () => (await import('/js/scene3d.js')).sætTrin('høj'));
+  tjek('tablet: skygge i krogene i Værkstedet kun i Høj, ikke i Basis', aoHøj && !aoBasis, JSON.stringify({ aoHøj, aoBasis }));
   // En tung skærm (Kosmos) går til Basis, når Høj er nået på en let skærm (Tab A11 må ikke tage Høj med til Kosmos)
   await page.evaluate(() => { location.hash = '#kosmos'; });
   await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });

@@ -1147,6 +1147,7 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .kv-mere { display: flex; flex-direction: column; gap: 8px; }
 .kv-mere > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-size: 14px; color: var(--svag); }
 .kv-mere[open] > summary { margin-bottom: 4px; }
+#kvante .kv-skyder:has(input:disabled) { opacity: 0.45; } /* "Målerens lys" virker kun med måleren */
 .kv-mere > :not(summary) + :not(summary) { margin-top: 8px; }
 #kvante .liv-tal[hidden] { display: none; }
 /* Tælleren øverst i billedet: hvor mange der er landet */

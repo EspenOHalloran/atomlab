@@ -4,6 +4,7 @@
 
 import * as THREE from 'three';
 import { verden, sætVindue, passerTil, passerTilBoks, begrænsDrejning, kameraSving, LAV_KVALITET, lavPrikTekstur } from './scene3d.js';
+import { brugKrogskygge, KERNE_SKYGGE } from './krogskygge.js';
 import { Atom } from './atom.js';
 import { Effekter } from './effekter.js';
 import { grundstof } from './data/grundstoffer.js';
@@ -231,6 +232,7 @@ function startDelGuide() {
 
 export function stopReaktor() {
   aktiv = false;
+  brugKrogskygge(null);
   clearTimeout(guideTimer);
   rodKerne.visible = false;
   rodKæde.visible = false;
@@ -250,6 +252,9 @@ function sætTilstand(ny, første = false) {
     pause.sæt('spil');
   }
   tilstand = ny;
+  // Skygge i krogene (G4) kun på urankernen i del 1: I kædereaktionen står brændslet så langt fra hinanden på en flad
+  // plade, at den ikke kunne ses (målt 22. november 2026), men koster det samme
+  brugKrogskygge(ny === 'kerne' ? KERNE_SKYGGE : null);
   rodKerne.visible = ny === 'kerne';
   rodKæde.visible = ny === 'kæde';
   for (const el of document.querySelectorAll('[data-reaktor-del]')) el.classList.toggle('skjult', el.dataset.reaktorDel !== ny);
