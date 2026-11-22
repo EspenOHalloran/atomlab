@@ -12,7 +12,8 @@ import { verden, TEST_HURTIG } from '../scene3d.js';
 // baggrunden (fx landskabet i Stå på Mars, som bygges, mens kameraet flyver ned: Uden baggrund ville hakket flytte fra
 // landingen, hvor billedet er tonet ned, til flyvningen).
 // færdig() kaldes, når alle programmerne er klar (eller ikke kunne laves her).
-export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true, færdig = () => {} } = {}) {
+// mål: et andet mål at tegne i end scenens (fx Gådernes sorte hul, der tegnes i et lag for sig).
+export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true, færdig = () => {}, mål } = {}) {
   const { renderer, komponist, kamera, scene } = verden;
   const baggrund = renderer.extensions.has('KHR_parallel_shader_compile');
   if (!baggrund && !hovedtråd) { færdig(); return; }
@@ -20,7 +21,7 @@ export function lavShadereFørst(objekt, aktiv = () => true, { hovedtråd = true
   let materialer;
   // Samme mål som tegningen: Gløden tegner scenen i et billede uden tonemapping (komponistens buffer), testene direkte
   // på skærmen. Ellers bliver det andre udgaver af shaderne, end dem der bruges.
-  renderer.setRenderTarget(TEST_HURTIG ? null : komponist.readBuffer);
+  renderer.setRenderTarget(mål !== undefined ? mål : TEST_HURTIG ? null : komponist.readBuffer);
   try {
     materialer = [...renderer.compile(objekt, kamera, scene)];
   } catch {

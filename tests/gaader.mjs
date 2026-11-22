@@ -272,6 +272,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     const fri = { skarp: false, låst: false };
     return [f(fri, 115, 120), f(fri, 70, 90), f({ skarp: true, låst: false }, 80, 120), f({ skarp: false, låst: true }, 118, 120), f(fri, 30, 60), f({ skarp: true, låst: false }, 100, 120)].join();
   });
+  tjek('pc: hullet bruger pc-shaderen og gemmer intet om skarp på touch', hul?.pc === true && hul.skarp === false && await page.evaluate(() => localStorage.getItem('atomlabLinseSkarp')) === null, JSON.stringify(hul));
   tjek('skarp på touch: op ved 90 % af loftet, tilbage under 75 % og låst bagefter, stillbillede under 40', skift === 'skarp,,tilbage,,frys,', skift);
   await page.mouse.move(700, 300);
   await page.mouse.down();
