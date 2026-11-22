@@ -893,6 +893,20 @@ export const ORDBOG = [
     former: ['supernova', 'supernovaen', 'supernovaer', 'supernovaerne'],
     tekst: 'En stjerne, der eksploderer. I nogle uger lyser den stærkere end hundrede millioner sole. Det sker, når en hvid dværg bliver for tung, eller når kernen i en kæmpestjerne falder sammen.',
   },
+  // Einsteins bog, forløbet "Lige hurtigt for alle" (E2, 21. november 2026, docs/drejebog-einstein.md afsnit 14, faktatjekket
+  // i afsnit 15). Kun i forløbets linje, så Kosmos' Rumtid og Rejsen i tid ikke får prikker. Den særlige relativitetsteori er
+  // fra 1905 (Annalen der Physik 17, s. 891-921, og 18, s. 639-641), den almene fra 25. november 1915 (Sitzungsberichte,
+  // s. 844-847). Ure går langsommere tæt på tunge ting: Einstein 1916 (Annalen 49, s. 820)
+  {
+    id: 'relativitetsteori', ord: 'Relativitetsteori', kunI: '.fl-tekst',
+    former: ['relativitetsteori', 'relativitetsteorien', 'relativitetsteoriens'],
+    tekst: 'Einsteins teori om tid, rum og tyngde. Den særlige (1905) siger, at lyset er lige hurtigt for alle, så ure, der farer af sted, går langsommere, og masse er energi. Den almene (1915) siger, at tyngdekraft er krum rumtid.',
+  },
+  {
+    id: 'rumtid', ord: 'Rumtid', kunI: '.fl-tekst',
+    former: ['rumtid', 'rumtiden', 'rumtidens'],
+    tekst: 'Rummets tre retninger og tiden set som én helhed. Ifølge Einstein krummer tunge ting rumtiden, og det mærker vi som tyngdekraft: Ting følger krumningen, og ure går langsommere tæt på tunge ting.',
+  },
   // Merkur MP2 (17. november 2026, docs/drejebog-merkur-pluto.md afsnit 4). Soldøgn: NSSDC (Merkur 4.222,6 timer =
   // 175,94 døgn, Jorden 24 timer, stjernedøgnet 23,93 timer). Sublimation: tøris (CO₂) ved almindeligt tryk, og hullerne
   // på Merkur (NASA, "Hollows on Mercury": måske tab af flygtige stoffer). Pluto bruger det i MP3-MP4.

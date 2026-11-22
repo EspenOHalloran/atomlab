@@ -55,7 +55,9 @@ export const BØGER = [
     // bordeaux ryg med sølv, så den ikke ligner Huygens' røde, Tychos blå eller Rømers grønne
     stil: { papir: '#f3eee0', papirMørk: '#ddd4bd', blæk: '#17140f', ryg: '#4a1f2a', rygKant: '#b8b8b8', rygTekst: '#ece7dc', rygGlød: 'rgba(200, 206, 218, 0.35)', skrift: SKRIFT_1900, titelSkala: 0.84 },
     tekster: () => import('./opdagelser/einstein.js'),
-    // E2 giver forløb og scene (turen "Lige hurtigt for alle")
+    // Turen (E2): forløbet i js/data/forloeb/einstein.js og tegningerne i js/bog/einstein.js (hentes, når bogen åbnes)
+    forløb: 'lige-hurtigt',
+    scene: () => import('../bog/einstein.js'),
   },
   { id: 'bohr', navn: 'Niels Bohr', kort: 'Bohr', år: 1913, ejefald: 'Niels Bohrs', om: 'elektronernes skaller' },
   { id: 'lehmann', navn: 'Inge Lehmann', kort: 'Lehmann', år: 1936, ejefald: 'Inge Lehmanns', om: 'Jordens indre kerne' },
