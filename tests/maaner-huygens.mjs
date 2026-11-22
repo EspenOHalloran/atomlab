@@ -137,7 +137,17 @@ if (!process.argv.includes('--uden-browser')) {
   await side.click('#solsystem .lh-sten[data-sten="stor"]');
   const lineal = await side.textContent('#solsystem .lh-lineal[data-sten="stor"]');
   const efterEn = await f((t) => t.fase());
-  await side.click('#solsystem .lh-sten[data-sten="lille"]');
+  // Luppen "Tæt på stenene" (22. november 2026): Ved siden af billedet på en bred skærm, med de samme ringe (tal 1 og 2)
+  // og den lille sten mindst 40 px bred. Et tryk på den lille sten i luppen måler den
+  const lup = await side.evaluate(() => {
+    const r = (sel) => document.querySelector(sel)?.getBoundingClientRect();
+    const l = r('#solsystem .lh-lup'), lilleLup = r('#solsystem .lh-lup .lh-sten[data-sten="lille"]'), lilleFoto = r('#solsystem .lh-foto .lh-sten[data-sten="lille"]');
+    const nr = [...document.querySelectorAll('#solsystem .lh-foto .lh-sten')].map((b) => b.dataset.nr).join();
+    return { vist: Boolean(l?.width), b: Math.round(lilleLup?.width ?? 0), foto: Math.round(lilleFoto?.width ?? 0), nr, storMålt: document.querySelector('#solsystem .lh-lup .lh-sten[data-sten="stor"]')?.classList.contains('målt') };
+  });
+  await side.click('#solsystem .lh-lup .lh-sten[data-sten="lille"]');
+  tjek('luppen: står ved siden af billedet med ringene 1 og 2, den lille sten er mindst 40 px og større end på billedet, og målingen følger med', lup.vist && lup.nr === '1,2' && lup.b >= 40 && lup.b > lup.foto && lup.storMålt
+    && (await side.isVisible('#solsystem .lh-lup .lh-lineal[data-sten="lille"]')), JSON.stringify(lup));
   await vent((t) => t.fase() === 'så');
   await side.screenshot({ path: `${UD}/huygens-sten.png` });
   tjek('trin 3: et tryk på den venstre sten viser "ca. 15 cm", og trinet er først færdigt, når begge sten er målt', /ca\. 15 cm/.test(lineal) && efterEn !== 'så' && (await side.isVisible('#solsystem .lh-lineal[data-sten="lille"]'))
