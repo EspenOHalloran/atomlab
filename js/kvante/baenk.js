@@ -252,7 +252,7 @@ export function lavBænk() {
   gruppe.add(vand);
   // bredde > 0: en bølgepakke ("Vis bølgen"), der slukker sig selv, når den er løbet forbi bagvæggen (PULS_SLUT)
   const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95), bredde: 0, fart: BØLGE_FART };
-  const PULS_FORBI = -BØLGE_START + L + PULS_BREDDE; // båndet er forbi midten af bagvæggen (så må en ny pakke starte)
+  const PULS_FORBI = -BØLGE_START + L + PULS_BREDDE + 0.9; // lyset på midten af bagvæggen er tonet ud (så må en ny pakke starte)
   const PULS_SLUT = -BØLGE_START + Math.hypot(L, BAG_HALV + 1) + PULS_BREDDE + 1; // også lyset på kanten er tonet ud
 
   // Et glimt, hvor elektronen med den tegnede bølgepakke lander ("Vis bølgen"), så man ser, at den findes ét sted

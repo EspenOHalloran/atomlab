@@ -151,7 +151,7 @@ const skala = (x, [lav, høj]) => lav + ((høj - lav) * Number(x)) / 100;
 const tilSkyder = (x, [lav, høj]) => Math.round(((x - lav) / (høj - lav)) * 100);
 const bredde = () => Math.min(v.a, 0.6 * v.d);
 const λ = () => bølgelængde(v.slags, v);
-const kvanteNu = () => kvanteSlags(v.slags); // striber, måler og bølgens skær
+const kvanteNu = () => kvanteSlags(v.slags); // striber, måler og "Vis bølgen"
 
 // ---------- Valgene ----------
 function vælgSlags(slags) {
@@ -269,7 +269,6 @@ function skud(instant = false) {
     const tegnet = !bænk.pulsOptaget(); // denne elektron får den tegnede pakke (og et glimt, når den lander)
     if (tegnet) bænk.puls(v.slags === 'lys' ? lysFarve(nanometer(v.farve)) : BØLGE_SKÆR);
     påVej.push({ tid: pulsTid(z, { sprækker: v.sprækker, d: v.d }), z, y, lampe, glimt: tegnet });
-    påVej.sort((a, b) => a.tid - b.tid);
     return;
   }
   påVej.push({ tid: FLYVETID, z, y, lampe });
@@ -347,8 +346,17 @@ function opdater(dt, tid) {
     serie--;
     skud();
   }
-  for (const p of påVej) p.tid -= dt;
-  while (påVej.length && påVej[0].tid <= 0) land(påVej.shift());
+  // Med bølgepakker lander de ikke i den rækkefølge, de blev skudt (kanten af bagvæggen er længere væk end midten)
+  let landet = false;
+  for (const p of påVej) {
+    p.tid -= dt;
+    if (p.tid <= 0) landet = true;
+  }
+  if (landet) {
+    const nu = påVej.filter((p) => p.tid <= 0);
+    påVej = påVej.filter((p) => p.tid > 0);
+    for (const p of nu) land(p);
+  }
   bænk.opdater(dt, tid);
   tegnTæller();
   tegnHer();
