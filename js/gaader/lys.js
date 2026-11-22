@@ -200,8 +200,11 @@ const LYS = {
 // ---------- Det sorte hul med linsen ----------
 // Linsen fra Kosmos tegner hullet, skiven og fotonringen i et lille lag (højst 512 px på pc og 320 px på tablet, efter
 // lampens størrelse på skærmen) set fra den retning, kameraet ser lampen fra. Billedet ligger på en flade, der altid
-// vender mod kameraet, så hullet ser rigtigt ud, når kameraet drejer om det bag kortet. Himlen i linsens billede er
-// gennemsigtig (dybden 400 = himmel), så skinnens egen himmel ses bag hullet, undtagen fotonringen og lyse stjerner.
+// vender mod kameraet, så hullet ser rigtigt ud, når kameraet drejer om det. Himlen i linsens billede er gennemsigtig
+// (dybden 400 = himmel), så skinnens egen himmel ses bag hullet, undtagen fotonringen og lyse stjerner og en blød cirkel
+// om hullet, hvor linsens egen mørke, bøjede himmel ses (22. november 2026: før skinnede lampens farveskær igennem dér, så
+// det så brunt og kantet ud). Kanten regnes af 5 opslag, så den er blød. Scenen Sort hul bruger ikke lampen, men linsen
+// over hele billedet (js/gaader/sorthul.js).
 // Laget tegnes kun, når lampen kan ses, og højst 30 gange i sekundet på tablet. Er billederne for langsomme (under 40 i sekundet på tablet), står billedet
 // stille og tegnes kun igen, når kameraet har flyttet sig. Snyd: Lampen er et symbol, ikke i skala, og den bøjede
 // stjernehimmel om hullet er skåret væk.
@@ -239,16 +242,26 @@ const LAMPE_VERTEX = 'varying vec2 vUv; void main() { vUv = uv; gl_Position = pr
 const LAMPE_FRAGMENT = /* glsl */ `
 uniform sampler2D tLinse;
 uniform float uNaer;
+uniform vec2 uTexel;
 varying vec2 vUv;
+// Dybden er afstanden til skiven eller hullet, og 400 hvor der kun er himmel
+float daekker(vec2 uv) {
+  return clamp((INGEN_DYBDE - texture2D(tLinse, uv).a) / (INGEN_DYBDE - uNaer), 0.0, 1.0);
+}
 void main() {
   vec4 l = texture2D(tLinse, vUv);
-  // Dybden er afstanden til skiven eller hullet, og 400 hvor der kun er himmel. Langs kanten blandes de to af den
-  // lineære filtrering, så alpha bliver en blød kant.
-  float a = clamp((INGEN_DYBDE - l.a) / (INGEN_DYBDE - uNaer), 0.0, 1.0);
+  // Kanten mellem skiven og himlen: gennemsnittet af 5 opslag (midten og 1,5 pixel til hver side), så den er blød
+  // og uden trappetrin
+  vec2 d = uTexel * 1.5;
+  float a = (2.0 * daekker(vUv) + daekker(vUv + vec2(d.x, 0.0)) + daekker(vUv - vec2(d.x, 0.0))
+    + daekker(vUv + vec2(0.0, d.y)) + daekker(vUv - vec2(0.0, d.y))) / 6.0;
+  float r = length(vUv - 0.5) * 2.0;
+  // Om hullet ses linsens egen mørke, bøjede himmel (skyggen er 0,24 fra midten, skivens inderkant ca. 0,27)
+  a = max(a, 1.0 - smoothstep(0.4, 0.62, r));
   // Fotonringen og de bøjede stjerner er lys, der slap væk til himlen. De bliver stående, når de er lyse nok, og toner
   // ud mod lampens kant, så den mørke himmel og tågerne stadig er gennemsigtige.
   float lys = dot(l.rgb, vec3(0.2126, 0.7152, 0.0722));
-  float kant = 1.0 - smoothstep(0.55, 0.95, length(vUv - 0.5) * 2.0);
+  float kant = 1.0 - smoothstep(0.55, 0.95, r);
   a = max(a, smoothstep(0.03, 0.2, lys) * kant);
   gl_FragColor = vec4(l.rgb, a);
 }`;
@@ -261,7 +274,7 @@ function lavSortHul() {
   const mål = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: true });
   const mat = new THREE.ShaderMaterial({
     defines: { INGEN_DYBDE: INGEN_DYBDE.toFixed(1) },
-    uniforms: { tLinse: { value: null }, uNaer: { value: LINSE_AFSTAND - 15 } },
+    uniforms: { tLinse: { value: null }, uNaer: { value: LINSE_AFSTAND - 15 }, uTexel: { value: new THREE.Vector2(1 / 256, 1 / 256) } },
     vertexShader: LAMPE_VERTEX,
     fragmentShader: LAMPE_FRAGMENT,
     transparent: true,
@@ -269,9 +282,6 @@ function lavSortHul() {
   });
   const flade = new THREE.Mesh(new THREE.PlaneGeometry(2 * LAMPE_HALV, 2 * LAMPE_HALV), mat);
   g.add(flade);
-  // Lidt varmt skær om hullet, så lampen også lyser, før billedet er tegnet første gang
-  const skær = glød(new THREE.Color(1, 0.55, 0.25), 7, 0.12);
-  g.add(skær);
   flade.renderOrder = 1;
 
   // Linsen (laves om, hvis touch skifter mellem pc'ens og touch' shader)
@@ -326,6 +336,7 @@ function lavSortHul() {
       tilstand.størrelse = ønsket;
       const n = Math.round(ønsket / linse.kvalitet.skala);
       mål.setSize(n, n);
+      mat.uniforms.uTexel.value.setScalar(1 / ønsket); // (linsens lag er n · skala = ønsket stort)
     }
     // Linsens kamera ser hullet fra samme retning som det rigtige kamera ser lampen (i lampens eget rum)
     g.getWorldQuaternion(q).multiply(hæld).invert();
