@@ -21,6 +21,9 @@
 //              latinen og vores oversættelse, og "Linje for linje". BOGEN.intro står øverst ved siden af siden, og
 //              BOGEN.næste/sidst er en sti: "Næste side ›", og på den sidste side bladrer den videre (18. november 2026). Siderne hentes med hentBillede (js/hentning.js),
 //              første gang opslaget åbnes, og toner ind
+//   'ligning'  en side med en ligning (Einstein, E3 22. november 2026, js/bog-ligning.js): forordet, siden som skanning
+//              eller sat tekst (kontakten), de glødende steder, ligningen stor med "Led for led", "Regn selv" og de lukkede
+//              lag. Teksterne står i tekster.LIGNINGER[opslag.ligning]. Knappen videre kun, når der er et opslag efter
 //   'om'       bogens sidste opslag "Om …" (H4, tekster.OM): navnet, højst to tal, højst tre sætninger, sidens vigtige
 //              knap (OM.knap med data-gaa, fx Saturn fra kanten, den røde tråd 18. november 2026), evt. et stille link
 //              (OM.ekstra med data-gaa og linje, fx Betelgeuse hos Tycho), højst fire
@@ -30,6 +33,7 @@
 
 import { hentBillede } from './hentning.js';
 import { lavLagBokse, visHvorfor, lukHvorfor, vistHvorfor } from './lag.js';
+import { ligningHTML, lavLigning, læsVisning } from './bog-ligning.js';
 
 const STRYG = 50; // px vandret, før et stryg bladrer
 const sideBilleder = new Map(); // fil → Promise med et hentet <img> (siderne hentes kun én gang)
@@ -390,12 +394,14 @@ export function lavBog(rod, bog, tekster, { rolig = false, lav = false, påBladr
     scene = null;
     ramme.innerHTML = o.slags === 'forside' ? forsideHTML(bog, tekster.FORSIDE, opslag.length > 1)
       : o.slags === 'sider' ? siderHTML(o, tekster.BOGEN)
-        : o.slags === 'om' ? omHTML(o, tekster.OM, bog.id) : sceneHTML(o);
+        : o.slags === 'ligning' ? ligningHTML(o, tekster.LIGNINGER[o.ligning], { bogId: bog.id, harNæste: nr < opslag.length - 1, visning: læsVisning(bog.id), navne: tekster.SIDE_VISNING })
+          : o.slags === 'om' ? omHTML(o, tekster.OM, bog.id) : sceneHTML(o);
     ramme.dataset.opslag = o.id;
     if (o.slags === 'forside' && !rolig) animerVignet(ramme);
     ramme.scrollTop = 0;
     if (o.slags === 'scene' && lavScene) scene = lavScene(o, ramme.querySelector('.bog-scene'));
     else if (o.slags === 'sider') scene = lavSider(ramme.querySelector('.bog-sider-opslag'), bog.id, tekster.BOGEN, rolig, () => bladr(1));
+    else if (o.slags === 'ligning') scene = lavLigning(ramme.querySelector('.bog-ligning-opslag'), bog.id, tekster.LIGNINGER[o.ligning], { rolig, bladrVidere: () => bladr(1) });
     else if (o.slags === 'om') scene = lavOm(ramme.querySelector('.bog-om-opslag'), tekster.OM);
     // Portrættet toner ind, når det er hentet (ingen tom ramme, der blinker)
     const img = ramme.querySelector('.bog-portræt img');
