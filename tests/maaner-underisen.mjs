@@ -104,7 +104,10 @@ if (!process.argv.includes('--uden-browser')) {
   await klik('.fl-gæt');
   await f((t) => t.kameraFrem());
   await spol(2.5); // (Jupiters felt vipper ud til siden)
-  const med = await f((t) => t.felt());
+  // Feltet vipper frem og tilbage hvert 8. sekund i fænomenets ur, som startede, da fænomenet blev åbnet. Hvor langt det
+  // er vippet, afhænger derfor af, hvor lang tid testen har taget indtil nu: spol videre, til det er vippet godt ud.
+  let med = await f((t) => t.felt());
+  for (let i = 0; i < 16 && Math.abs(med.jupiter) <= 0.3; i++) { await spol(0.5); med = await f((t) => t.felt()); }
   tjek('trin 2: feltet vises, Enceladus er skjult, og med havet måler Galileo et ekstra felt, der vender modsat Jupiters', med.vist && !(await f((t) => t.enceladusVist())) && Math.abs(med.jupiter) > 0.3 && Math.sign(med.europa) === -Math.sign(med.jupiter) && Math.abs(med.europa) > 0.1, JSON.stringify(med));
   await side.screenshot({ path: `${UD}/felt-hav.png` });
   await klik('.fl-handling[data-knap="hav"]');

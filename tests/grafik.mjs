@@ -50,28 +50,33 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
     tjek('pc: skærmens loft skønnes ud fra tiden mellem billederne (90, 60, 60 ved 40 billeder/s, 60 ved 30, 120, 90, 60)', loft.lofter.join() === '90,60,60,60,120,90,60', loft.lofter.join());
     tjek('pc: grænserne for Høj følger loftet (tung skærm ved 90: op 83, ned 68, så Kosmos med 88 får Høj på Tab A11)', loft.tung90.join() === '83,68' && loft.tung60.join() === '55,45' && loft.tung120.join() === '110,90', JSON.stringify(loft));
     tjek('pc: de lette skærme går op ved højst 58 og ned under 45 som før', loft.let60.join() === '55,45' && loft.let120.join() === '58,45', JSON.stringify(loft));
-    // nyeShadere: sand lige efter, at en ny shader er lavet, og falsk igen efter SHADER_RO sekunder
-    const lavShader = () => page.evaluate(async () => {
+    // nyeShadere: sand lige efter, at en ny shader er lavet (i samme kald, for testbrowseren er langsom og SHADER_RO kort)
+    // lavShadere(sek): laver en ny shader hvert 0,3 s i siden selv, uafhængigt af testens kald
+    const lavShadere = (sek) => page.evaluate(async (sek) => {
       const s = await import('/js/scene3d.js');
       const THREE = await import('three');
-      globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
-      const net = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' }));
-      s.verden.renderer.compile(net, s.verden.kamera);
-    });
-    const nyeShadere = () => page.evaluate(async () => (await import('/js/scene3d.js')).nyeShadere());
-    await lavShader();
-    await page.waitForFunction(async () => (await import('/js/scene3d.js')).nyeShadere(), null, { timeout: 20000 }).catch(() => {});
-    tjek('pc: nyeShadere() er sand lige efter en ny shader', await nyeShadere());
+      const lav = () => {
+        globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
+        const net = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' }));
+        s.verden.renderer.compile(net, s.verden.kamera);
+      };
+      lav();
+      const svar = s.nyeShadere();
+      const nr = setInterval(lav, 300);
+      setTimeout(() => clearInterval(nr), sek * 1000);
+      return svar;
+    }, sek);
+    tjek('pc: nyeShadere() er sand lige efter en ny shader', await lavShadere(0));
     // Gådernes værn: Testbrowseren er langsom, så med en grænse på 1000 billeder/s ville værnet slå udglatningen fra med
-    // det samme. Mens der laves nye shadere (hvert sekund), må det ikke måle.
+    // det samme. Mens der laves nye shadere (hvert 0,3 s i 10 s), må det ikke måle.
     const værn = () => page.evaluate(async () => { const g = await import('/js/gaader/kanter.js'); return { ...g.værnTilstand(), prøver: g.prøver() }; });
-    await lavShader();
+    await lavShadere(10);
     await page.evaluate(async () => {
       const g = await import('/js/gaader/kanter.js');
       Object.assign(g.VÆRN, { til: true, fps: 1000, ro: 0, ryk: 30, tid: 1, igenTid: 1, igen: 0 });
       g.udglat(true);
     });
-    for (let i = 0; i < 6; i++) { await page.waitForTimeout(1000); await lavShader(); }
+    await page.waitForTimeout(4000);
     const underShadere = await værn();
     tjek('pc: Gådernes værn måler ikke, mens nye shadere laves (udglatningen er stadig slået til)', underShadere.til && !underShadere.slukket && underShadere.prøver === 4, JSON.stringify(underShadere));
     // Bagefter: slået fra (for langsomt), prøvet igen én gang (igen: 0 = altid luft nok) og slået fra igen for resten
