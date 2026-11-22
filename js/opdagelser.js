@@ -38,7 +38,7 @@ let tilbageKnap = null; // "‹ Hylden", som flyttes ind i bogens række med "�
 
 function rygHTML(b) {
   if (b.bygget) {
-    return `<button class="opd-omslag" data-bog="${b.id}" style="--ryg:${b.stil.ryg};--ryg-kant:${b.stil.rygKant};--bog-skrift:${b.stil.skrift}" aria-label="Åbn ${esc(b.navn)}: ${esc(b.titel)}">`
+    return `<button class="opd-omslag" data-bog="${b.id}" style="--ryg:${b.stil.ryg};--ryg-kant:${b.stil.rygKant};--bog-skrift:${b.stil.skrift}${b.stil.rygTekst ? `;--ryg-tekst:${b.stil.rygTekst}` : ''}${b.stil.rygGlød ? `;--ryg-glød:${b.stil.rygGlød}` : ''}" aria-label="Åbn ${esc(b.navn)}: ${esc(b.titel)}">`
       + `<img src="${esc(b.portræt)}" alt="" width="600" height="750" decoding="async">`
       + `<span class="opd-omslag-titel">${esc(b.titel)}</span><span class="opd-omslag-navn">${esc(b.kort)}</span></button>`;
   }
@@ -146,13 +146,21 @@ async function åbnBog(id, { fortælling = false } = {}) {
   return true;
 }
 
-// Skriften til 1600-tallets bøger (fonts/KILDER.md). Hentes først, når Opdagelserne åbnes (ikke ved start af AtomLab),
-// og med FontFace i stedet for @font-face i style.css. Indtil den er hentet, står overskrifterne med Georgia.
+// Skrifterne til bøgerne (fonts/KILDER.md): Fell til 1600-tallet og Old Standard (også kursiv) til 1900-tallet, ca. 90 KB
+// i alt. Hentes først, når Opdagelserne åbnes (ikke ved start af AtomLab), og med FontFace i stedet for @font-face i
+// style.css. Indtil de er hentet, står overskrifterne med Georgia.
+const SKRIFTER = [
+  ['AtomLab Fell', 'fonts/atomlab-fell.woff2', {}],
+  ['AtomLab Old Standard', 'fonts/atomlab-oldstandard.woff2', {}],
+  ['AtomLab Old Standard', 'fonts/atomlab-oldstandard-kursiv.woff2', { style: 'italic' }],
+];
 function hentSkrift() {
   if (!window.FontFace || !document.fonts) return;
-  const f = new FontFace('AtomLab Fell', "url('fonts/atomlab-fell.woff2') format('woff2')", { display: 'swap' });
-  document.fonts.add(f);
-  f.load().catch(() => {}); // uden skriften bruges Georgia
+  for (const [navn, fil, valg] of SKRIFTER) {
+    const f = new FontFace(navn, `url('${fil}') format('woff2')`, { display: 'swap', ...valg });
+    document.fonts.add(f);
+    f.load().catch(() => {}); // uden skriften bruges Georgia
+  }
 }
 
 export function lavOpdagelser() {

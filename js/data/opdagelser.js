@@ -11,9 +11,12 @@
 //   forløb   id'et på fortællingens forløb (js/data/forloeb/), som starter efter "Begynd" første gang
 //   scene    () => import(...) af bogens tegninger i js/bog/<id>.js (lavFortælling til opslaget af slags 'scene')
 //
-// Skrifterne er OFL og ligger i fonts/ (se fonts/KILDER.md). Bøgerne fra 1500- og 1600-tallet bruger 'AtomLab Fell' (IM Fell English).
+// Skrifterne er OFL og ligger i fonts/ (se fonts/KILDER.md). Bøgerne fra 1500- og 1600-tallet bruger 'AtomLab Fell' (IM Fell English),
+// og bøgerne fra 1900-tallet 'AtomLab Old Standard' (Old Standard TT, også i kursiv). stil.rygTekst og stil.rygGlød er farven på omslagets
+// titel og skæret om omslaget (guld, hvis de mangler), og stil.titelSkala gør forsidens titel mindre (en bred skrift).
 
 const SKRIFT_1600 = "'AtomLab Fell', Georgia, 'Times New Roman', serif";
+const SKRIFT_1900 = "'AtomLab Old Standard', Georgia, 'Times New Roman', serif";
 
 export const BØGER = [
   {
@@ -42,7 +45,18 @@ export const BØGER = [
   { id: 'newton', navn: 'Isaac Newton', kort: 'Newton', år: 1687, ejefald: 'Isaac Newtons', om: 'tyngdeloven' },
   { id: 'oersted', navn: 'H.C. Ørsted', kort: 'Ørsted', år: 1820, ejefald: 'H.C. Ørsteds', om: 'strøm og magneter', spørgsmål: 'Hvorfor drejede kompasnålen?' },
   { id: 'curie', navn: 'Marie Curie', kort: 'Curie', år: 1898, ejefald: 'Marie Curies', om: 'stoffer, der stråler' },
-  { id: 'einstein', navn: 'Albert Einstein', kort: 'Einstein', år: 1905, ejefald: 'Albert Einsteins', om: 'energi og masse' },
+  {
+    id: 'einstein', navn: 'Albert Einstein', kort: 'Einstein', år: 1905, ejefald: 'Albert Einsteins', om: 'tiden, lyset og E = mc²',
+    spørgsmål: 'Hvad sker der, når lyset er lige hurtigt for alle?',
+    // Titlen er navnet på turen (drejebogen afsnit 2, opslag 2)
+    titel: 'Lige hurtigt for alle', bygget: true,
+    portræt: 'billeder/biblioteket/einstein.webp',
+    // Et tysk tidsskrift fra 1905 (docs/drejebog-einstein.md afsnit 3): lyst, let gulnet papir, sort blæk og en mørk
+    // bordeaux ryg med sølv, så den ikke ligner Huygens' røde, Tychos blå eller Rømers grønne
+    stil: { papir: '#f3eee0', papirMørk: '#ddd4bd', blæk: '#17140f', ryg: '#4a1f2a', rygKant: '#b8b8b8', rygTekst: '#ece7dc', rygGlød: 'rgba(200, 206, 218, 0.35)', skrift: SKRIFT_1900, titelSkala: 0.84 },
+    tekster: () => import('./opdagelser/einstein.js'),
+    // E2 giver forløb og scene (turen "Lige hurtigt for alle")
+  },
   { id: 'bohr', navn: 'Niels Bohr', kort: 'Bohr', år: 1913, ejefald: 'Niels Bohrs', om: 'elektronernes skaller' },
   { id: 'lehmann', navn: 'Inge Lehmann', kort: 'Lehmann', år: 1936, ejefald: 'Inge Lehmanns', om: 'Jordens indre kerne' },
 ];

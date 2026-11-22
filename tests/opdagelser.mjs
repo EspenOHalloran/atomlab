@@ -1,11 +1,12 @@
 // Opdagelserne (#opdagelser, docs/plan-videnskabsfolk.md, afsnit 7): listen over bøgerne i Node (test 1, også siderne og "Om" fra H4), og i browseren,
 // at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med Huygens og to grå rygge (et tryk stiller bogens spørgsmål),
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
-// ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag.
+// ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag. Einsteins
+// forside (E1, 21. november 2026) i test 1, 3 og 8.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
 import { SKÆRME } from '../js/skaerme.js';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { forløbMed, forløbI } from '../js/data/forloeb/liste.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { CITATER } from '../js/data/citater.js';
@@ -47,8 +48,8 @@ for (const b of byggede()) {
   }
 }
 tjek('listen: ti bøger i årets rækkefølge med navn og år, hylden har højst to grå rygge med et spørgsmål, og en bygget bog har titel, stil, portræt, forside og kun byggede opslag', !fejlListe.length, fejlListe.join('; '));
-tjek('Tycho og Huygens er de byggede bøger, og delen står i Biblioteket efter Gåderne med status prøve',
-  byggede().map((b) => b.id).join() === 'tycho,huygens' && bogMed('huygens').år === 1656 && bogMed('tycho').år === 1572
+tjek('Tycho, Huygens og Einstein er de byggede bøger, og delen står i Biblioteket efter Gåderne med status prøve',
+  byggede().map((b) => b.id).join() === 'tycho,huygens,einstein' && bogMed('huygens').år === 1656 && bogMed('tycho').år === 1572
   && SKÆRME.findIndex((s) => s.id === 'opdagelser') === SKÆRME.findIndex((s) => s.id === 'gaader') + 1
   && SKÆRME.find((s) => s.id === 'opdagelser')?.status === 'prøve' && SKÆRME.find((s) => s.id === 'opdagelser')?.verden === 'biblioteket');
 // Fortællingens forløb (H2, test 4 i planen): tre trin med kapitel, gæt og korte tekster, og fagordene findes i Ordbogen
@@ -173,6 +174,27 @@ tjek('Tycho og Huygens er de byggede bøger, og delen står i Biblioteket efter 
 }
 tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab-fell.woff2') && existsSync(PROJEKT + 'fonts/OFL.txt'));
 
+// Einsteins forside (E1, docs/drejebog-einstein.md afsnit 3, 4 og 11): spørgsmålet er bogens røde tråd, introduktionen
+// (Bern 1905, 26 år, de to regler, højst fem sætninger og et spørgsmål til sidst), vignetten (uret viser 7 som Einsteins
+// tog på s. 893, bogstaverne t og V), portrættet og skriften med licensen og kilden
+{
+  const e = bogMed('einstein');
+  const t = await e.tekster();
+  const i = t.FORSIDE.intro;
+  const sætninger = (i?.tekst.match(/[.!?](\s|$)/g) ?? []).length;
+  const læs = (f) => (existsSync(PROJEKT + f) ? readFileSync(PROJEKT + f, 'utf8') : '');
+  tjek('Einsteins forside: spørgsmålet "Hvad sker der, når lyset er lige hurtigt for alle?", introduktionen (Bern 1905, 26 år, de to regler, højst fem sætninger, slutter med et spørgsmål) og vignetten med uret på 7, t og V',
+    e.spørgsmål === 'Hvad sker der, når lyset er lige hurtigt for alle?' && t.FORSIDE.spørgsmål === e.spørgsmål && /Bern/.test(i?.sted) && /1905/.test(i?.sted)
+    && /\b26\b/.test(i?.tekst) && /Albert Einstein/.test(i?.tekst) && /tomme rum/.test(i?.tekst) && /jævnt/.test(i?.tekst) && sætninger <= 5 && i.tekst.endsWith('?')
+    && t.FORSIDE.vignet?.klokken === 7 && t.FORSIDE.vignet.tid === 't' && t.FORSIDE.vignet.lys === 'V' && t.FORSIDE.vignet.alt && /omkring 42/.test(t.FORSIDE.portrætTekst)
+    && t.OPSLAG.length === 1 && t.OPSLAG[0].slags === 'forside',
+    JSON.stringify({ sætninger }));
+  tjek('Einsteins bog: ryggen er bordeaux med sølv, skriften er Old Standard (almindelig og kursiv, OFL), og portrættet og skriften står i KILDER.md',
+    e.stil.ryg === '#4a1f2a' && e.stil.rygKant === '#b8b8b8' && /AtomLab Old Standard/.test(e.stil.skrift)
+    && ['fonts/atomlab-oldstandard.woff2', 'fonts/atomlab-oldstandard-kursiv.woff2'].every((f) => existsSync(PROJEKT + f))
+    && /Old Standard Project Authors/.test(læs('fonts/OFL.txt')) && /atomlab-oldstandard\.woff2/.test(læs('fonts/KILDER.md'))
+    && /`einstein\.webp`.*Schmutzer/.test(læs('billeder/biblioteket/KILDER.md')));
+}
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
 const fejl = [];
@@ -195,8 +217,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await page.evaluate(() => { location.hash = '#opdagelser'; });
   const hylde = await vent(page, påHylden, null, 15000);
   const ryg = await page.evaluate(() => atomlabTest.opdagelser.hylde());
-  tjek('fra menuen: hentes først, når delen åbnes, og hylden har Tycho og Huygens med omslaget frem og kun to grå rygge (Rømer og Ørsted)',
-    !førHentet && hylde && ryg.map((r) => r.id).join() === 'tycho,huygens,roemer,oersted' && ryg.filter((r) => r.bygget).map((r) => r.id).join() === 'tycho,huygens', JSON.stringify(ryg));
+  tjek('fra menuen: hentes først, når delen åbnes, og hylden har Tycho, Huygens og Einstein med omslaget frem og kun to grå rygge (Rømer og Ørsted)',
+    !førHentet && hylde && ryg.map((r) => r.id).join() === 'tycho,huygens,roemer,oersted,einstein' && ryg.filter((r) => r.bygget).map((r) => r.id).join() === 'tycho,huygens,einstein', JSON.stringify(ryg));
   // Omslagene: titlen og navnet står inden for omslaget (Tychos titel fylder to linjer, T1)
   const omslag = await page.evaluate(() => [...document.querySelectorAll('#opdHylde .opd-omslag')].every((o) => {
     const r = o.getBoundingClientRect();
@@ -216,6 +238,29 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   }));
   tjek('Tychos omslag åbner forsiden med spørgsmålet, de Gheyns portræt og W\'et med seks stjerner, og uden "Begynd", når der kun er forsiden',
     tychoÅben && tycho.titel === 'Hvor kom den nye stjerne fra?' && tycho.portræt?.endsWith('tycho.webp') && tycho.stjerner === 6 && tycho.begynd === (tycho.antal > 1) && tycho.ryg === '#1c2a44', JSON.stringify(tycho));
+  await page.keyboard.press('Escape');
+  await vent(page, påHylden);
+  // Einsteins omslag (E1) åbner forsiden med spørgsmålet, Schmutzers portræt, vignetten (to visere, sekundviseren og
+  // lysglimtet) og skriften Old Standard. Bogen har kun forsiden, så "Begynd" er der ikke (A9)
+  await page.click('#opdHylde [data-bog="einstein"]');
+  const einsteinÅben = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'einstein');
+  await page.evaluate(() => document.fonts.ready);
+  const einstein = await page.evaluate(() => ({
+    titel: document.querySelector('#opdBog .bog-titel')?.textContent,
+    portræt: document.querySelector('#opdBog .bog-portræt img')?.getAttribute('src'),
+    visere: document.querySelectorAll('#opdBog .bog-vignet .bog-vignet-viser').length,
+    glimt: !!document.querySelector('#opdBog .bog-vignet .bog-vignet-glimt') && !!document.querySelector('#opdBog .bog-vignet .bog-vignet-sekund'),
+    tal: document.querySelectorAll('#opdBog .bog-vignet .bog-vignet-tal text').length,
+    begynd: !!document.querySelector('#opdBog .bog-begynd'),
+    bevæger: ['glimt', 'sekund', 'flamme'].every((k) => document.querySelector(`#opdBog .bog-vignet-${k}`)?.getAnimations().length === 1),
+    antal: atomlabTest.opdagelser.vist().antal,
+    skrift: document.fonts.check('40px "AtomLab Old Standard"') && [...document.fonts].some((f) => f.family.includes('AtomLab Old Standard') && f.style === 'italic' && f.status === 'loaded'),
+    ryg: document.querySelector('#opdHylde [data-bog="einstein"]')?.style.getPropertyValue('--ryg'),
+    titelLinjer: Math.round(document.querySelector('#opdBog .bog-titel').getBoundingClientRect().height / parseFloat(getComputedStyle(document.querySelector('#opdBog .bog-titel')).lineHeight)),
+  }));
+  tjek('Einsteins omslag åbner forsiden med spørgsmålet (to linjer på pc), Schmutzers portræt, lommeuret med to visere, sekundviseren, 11 romertal og lysglimtet (glimtet, lampen og sekundviseren bevæger sig), skriften Old Standard, og uden "Begynd", når der kun er forsiden',
+    einsteinÅben && einstein.titel === 'Hvad sker der, når lyset er lige hurtigt for alle?' && einstein.portræt?.endsWith('einstein.webp') && einstein.visere === 2 && einstein.glimt
+    && einstein.tal === 11 && einstein.bevæger && einstein.begynd === (einstein.antal > 1) && einstein.skrift && einstein.ryg === '#4a1f2a' && einstein.titelLinjer <= 2, JSON.stringify(einstein));
   await page.keyboard.press('Escape');
   await vent(page, påHylden);
   // En grå ryg åbner ingen bog, men stiller bogens spørgsmål
@@ -778,6 +823,19 @@ for (const [navn, opsætning] of [
     return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), kort: !kort?.offsetWidth || kort.getBoundingClientRect().right <= innerWidth + 0.5, bred: document.documentElement.scrollWidth > innerWidth + 1 };
   });
   tjek(`${navn}: Tychos forside har portrættet og spørgsmålet fremme, W'et er inden for skærmen, og intet går ud til siden`, tf.portræt && tf.titel && tf.kort && !tf.bred, JSON.stringify(tf));
+  // Einsteins forside (E1): portrættet, spørgsmålet og introduktionens første linje ses uden at rulle, vignetten er inden for
+  // skærmen (eller skjult på en lille telefon), og intet går ud til siden
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('einstein'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'einstein');
+  const ef = await page.evaluate(() => {
+    const ramme = document.querySelector('#opdBog .bog-ramme').getBoundingClientRect();
+    const ses = (s) => { const x = document.querySelector(s)?.getBoundingClientRect(); return !!x && x.top >= ramme.top - 0.5 && x.top < ramme.bottom && x.left >= 0 && x.right <= innerWidth + 0.5; };
+    const v = document.querySelector('#opdBog .bog-vignet');
+    return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), intro: ses('#opdBog .bog-intro-tekst'), vignet: !v?.offsetWidth || (v.getBoundingClientRect().right <= innerWidth + 0.5 && v.getBoundingClientRect().left >= 0), bred: document.documentElement.scrollWidth > innerWidth + 1 };
+  });
+  tjek(`${navn}: Einsteins forside har portrættet, spørgsmålet og introduktionen fremme, vignetten er inden for skærmen, og intet går ud til siden`, ef.portræt && ef.titel && ef.intro && ef.vignet && !ef.bred, JSON.stringify(ef));
+  await page.evaluate(() => atomlabTest.opdagelser.åbn('tycho')); // tilbage til Tycho til gåden nedenfor
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'tycho');
   // Tychos gåde (T3): kortet og de tre tal ses uden at rulle, knapperne er mindst 44 px, og intet går ud til siden
   await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'gaaden' && v.bladr(1)); });
   await vent(page, () => atomlabTest.opdagelser.scene()?.visGåden);
