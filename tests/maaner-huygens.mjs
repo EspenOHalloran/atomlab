@@ -182,15 +182,36 @@ if (!process.argv.includes('--uden-browser')) {
   await side.click('#solsystem .bjælke-tilbage');
   await spol(0.3);
   const tilbage = await f((t) => ({ etape: t.etape(), h: t.ned().h, landet: t.ned().landet, jorden: t.jorden().vist }));
+  const skjult = (sel) => side.evaluate((sel) => [...document.querySelectorAll(sel)].every((e) => !e.offsetWidth), sel);
+  const iFald = { falder: await f((t) => t.falder()), faner: await skjult('#solsystemVindue .panel-fane'), styr: await skjult('#solsystemStyr'), paneler: !(await skjult('#solsystem > .side-panel')) };
   await f((t) => t.gåEtape(4));
   await spol(0.3);
   const igen = await f((t) => ({ etape: t.etape(), jorden: t.jorden(), stille: t.ned().stille }));
+  const landetIgen = { falder: await f((t) => t.falder()), styr: !(await skjult('#solsystemStyr')) };
   await f((t) => t.gåEtape(0));
   await spol(0.3);
   const knapper = await side.evaluate(() => window.atomlabTest.solsystem.knapper());
   tjek('laboratoriet: billedet fra jorden har ✕ og kan åbnes igen, "‹" går fra "Landet" til Sletten, etapen "Landet" viser billedet, og ved Cassini står "Slip Huygens"', lab.jorden.vist && lab.jorden.luk && lab.etape === 4 && !lab.kanaler && !lukket && fotoKnap
     && styr.some((s) => s?.startsWith('Huygens')) && tilbage.etape === 3 && !tilbage.landet && !tilbage.jorden && tilbage.h <= 9.01 && igen.etape === 4 && igen.jorden.vist && igen.jorden.målt.length === 0 && igen.stille
     && knapper.some((k) => k.includes('Slip Huygens')) && knapper.some((k) => k.includes('Næste: Faldskærmen')) && (await f((t) => t.scenen() === 'cassini')), JSON.stringify([lab, lukket, fotoKnap, styr, tilbage, igen, knapper]));
+  tjek('laboratoriet på pc: mens Huygens falder, er sidefanerne og Indstillinger skjult (panelerne står), og når den er landet, kommer de igen', iFald.falder && iFald.faner && iFald.styr && iFald.paneler
+    && !landetIgen.falder && landetIgen.styr && !(await f((t) => t.falder())), JSON.stringify([iFald, landetIgen]));
+
+  // Telefon på langs (892 × 412): forløbets linje står i en kolonne til højre for scenen, og "Næste ›" kan nås uden at rulle.
+  // I laboratoriet er panelerne også væk, mens Huygens falder.
+  const tlf = await browser.newPage({ viewport: { width: 892, height: 412 }, hasTouch: true, isMobile: true });
+  tlf.on('pageerror', (e) => konsol.push(e.message));
+  await tlf.goto(`${ADRESSE}?test&forloeb=land-med-huygens#solsystem`);
+  await tlf.waitForFunction(() => window.atomlabTest?.solsystem?.fænomen?.()?.kører?.() === 'land-med-huygens', null, { timeout: 60000 });
+  const kolonne = await tlf.evaluate(() => { const r = (q) => document.querySelector(q).getBoundingClientRect(); const l = r('#solsystem .forløb-linje'), v = r('#solsystemVindue'), n = r('#solsystem .fl-næste');
+    return { linje: [Math.round(l.left), Math.round(l.width)], vindue: [Math.round(v.right), Math.round(v.height)], næste: Math.round(n.bottom), rul: document.querySelector('#solsystem .forløb-linje').scrollHeight > document.querySelector('#solsystem .forløb-linje').clientHeight + 1 }; });
+  await tlf.click('#solsystem .forløb-linje .fl-vej, #solsystem .forløb-linje .fl-spring');
+  await tlf.waitForFunction(() => !window.atomlabTest.solsystem.fænomen().kører());
+  await tlf.evaluate(() => window.atomlabTest.solsystem.fænomen().tilNed(100));
+  await tlf.waitForFunction(() => window.atomlabTest.solsystem.fænomen().falder());
+  const tlfFald = await tlf.evaluate(() => ({ paneler: [...document.querySelectorAll('#solsystem > .side-panel')].every((e) => !e.offsetWidth), vindue: Math.round(document.getElementById('solsystemVindue').getBoundingClientRect().width) }));
+  tjek('telefon på langs: linjen står i en kolonne til højre (højst 300 px), scenen er fuld højde, "Næste ›" kan nås uden at rulle, og i laboratoriet fylder faldet hele bredden', kolonne.linje[0] >= kolonne.vindue[0] && kolonne.linje[1] <= 300 && kolonne.vindue[1] > 330
+    && kolonne.næste <= 412 && !kolonne.rul && tlfFald.paneler && tlfFald.vindue > 860, JSON.stringify([kolonne, tlfFald]));
   tjek('konsollen er uden fejl', konsol.length === 0, konsol.join(' | '));
   await browser.close();
 }
