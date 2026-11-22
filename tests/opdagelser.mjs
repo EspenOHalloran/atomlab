@@ -249,7 +249,7 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
   };
   if (tal.lys !== '1.079' || tal.ur !== '9,9' || tal.gram !== '0,000 000 004' || !(tal.sol > 4 && tal.sol < 4.4)) fejlE.push('turens tal');
   if (tal.gps.højde !== 45 || tal.gps.fart !== 7 || tal.gps.iAlt !== 38 || tal.lav >= 0 || !(tal.km > 10 && tal.km < 12) || !tal.lige) fejlE.push('GPS-tallene');
-  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling,tiden,energien,tyngden' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
+  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling,tiden,energien,tyngden,om' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
   if (t.VEJE.veje[0].opslag !== 'tiden' || !t.VEJE.veje[0].primær || t.VEJE.veje.length !== 3 || t.VEJE.veje[1].fænomen?.join() !== 'kosmos,tid') fejlE.push('vejene');
   if (t.FRI.kapitler.map((k) => k.id).join() !== 'toget,rundtur,vaegten,gps') fejlE.push('laboratoriet');
   tjek('Einsteins tur: fire trin (toget, rundturen, batteriet og GPS-uret) med kapitel og gæt i de tre sidste, ordene i Ordbogen, og tallene: 9,9 af 20 sekunder, 4 milliardtedele gram, +45 − 7 = 38 og ca. 10 km',
