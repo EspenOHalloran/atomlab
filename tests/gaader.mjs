@@ -716,8 +716,9 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
   await page.evaluate(() => atomlabTest.gaader.visGåde('sorthul'));
   await page.waitForFunction(() => (atomlabTest.gaader.scene()?.scene()?.linse?.tegnet ?? 0) > 3, null, { timeout: 60000 });
   const sk = await page.evaluate(() => atomlabTest.gaader.scene().scene().linse.skygge);
-  const r = Math.max(2, Math.round(sk.r * 0.5));
-  const billede = await page.screenshot({ clip: { x: Math.round(sk.x - r), y: Math.round(sk.y - r), width: 2 * r, height: 2 * r } });
+  // Den øverste del af skyggen (skivens forreste del går hen over midten, som i Kosmos)
+  const r = Math.max(2, Math.round(sk.r * 0.15));
+  const billede = await page.screenshot({ clip: { x: Math.round(sk.x - r), y: Math.round(sk.y - sk.r * 0.6 - r), width: 2 * r, height: 2 * r } });
   const lys = await page.evaluate(async (b64) => {
     const img = new Image();
     img.src = 'data:image/png;base64,' + b64;
@@ -731,7 +732,7 @@ const påSkinne = () => document.querySelector('#gaader:not(.skjult)') && window
     for (let i = 0; i < d.length; i += 4) { sum += Math.max(d[i], d[i + 1], d[i + 2]); n++; }
     return sum / n;
   }, billede.toString('base64'));
-  tjek('Sort hul (fuld grafik): skyggen er sort midt i billedet (gennemsnit under 8 af 255)', lys < 8, JSON.stringify({ sk, lys }));
+  tjek('Sort hul (fuld grafik): skyggen er sort over skiven (gennemsnit under 8 af 255)', lys < 8, JSON.stringify({ sk, lys }));
   await fb.close();
 }
 
