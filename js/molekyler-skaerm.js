@@ -4,7 +4,7 @@
 // hjælpen, "Opgaver forfra" og forløbet "Når atomer mødes" (teksterne i js/data/forloeb/molekyler.js, drejebogen i
 // docs/drejebog-molekyler.md): trin 1-2 i "Del elektroner" og trin 3-4 i "Giv elektroner".
 
-import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, forløbGiv, opdaterFremgang as opdaterGiv, testAdgang as bytteTest } from './molekyler.js';
+import { lavByttebørs, startByttebørs, stopByttebørs, vælgPar, forløbGiv, opdaterFremgang as opdaterGiv, testAdgang as bytteTest, krystalVises } from './molekyler.js';
 import { lavBygMolekyler, startBygMolekyler, stopBygMolekyler, forløbByg, opdaterFremgang as opdaterDel, testAdgang as bygTest } from './molekyler-byg.js';
 import { OPGAVER_BYTTE } from './data/molekyler.js';
 import { OPGAVER_BYG } from './data/molekyler-byg.js';
@@ -16,6 +16,7 @@ import { toTrinsKnap } from './forfra.js';
 import { hentetSkærm } from './skaerme.js';
 import { tagVentMolekyler, tagVentForløb } from './gaa.js';
 import { centrerVindue, ROLIG } from './scene3d.js';
+import { brugKrogskygge } from './krogskygge.js';
 import { MØDES } from './data/forloeb/molekyler.js';
 import { startForløb, stopForløb, starterSelv, forløbVink, forløbFase, forløbTest, lavTurKnap } from './forloeb.js';
 
@@ -98,6 +99,8 @@ function visMåde() {
 
 export function start() {
   aktiv = true;
+  // Skygge i krogene (G4) kun i saltkrystallen: Atomerne og molekylerne ellers står ikke tæt nok til, at den ses
+  brugKrogskygge({ radius: 1.2, styrke: 1, når: krystalVises });
   const vent = tagVentMolekyler();
   if (MÅDER.includes(vent) && vent !== måde) {
     måde = vent;
@@ -110,6 +113,7 @@ export function start() {
 
 export function stop() {
   aktiv = false;
+  brugKrogskygge(null);
   stopForløb(); // (kalder MØDES_DEL.slut, der rydder timerne)
   STOP[måde]();
 }
