@@ -3,14 +3,17 @@
 // starter af sig selv første gang, trin 1 (kuglerne i to bunker, "Skyd" holdes nede i linjen), trin 2 (vandets bølger når
 // bagvæggen), trin 3 (1.000 elektroner giver striber), trin 4 (ringen med "Her: n" ved det mørke sted, en sprække lukkes
 // med et tryk, og programmet skyder lige så mange igen, så der kommer mange flere), trin 5 (begge åbne igen, måleren
-// tændes, og de mørke striber er væk), "Det så du" med tre veje (fotonen i Ordbogen), ✓ som taget, "Næste ›" før
-// handlingen fører hvert trin til Så, og et skærmskift rydder op.
-import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
+// tændes, tælleren siger "Begge på én gang: 0", og de mørke striber er væk), trin 6 "Bølgen og prikken" (22. november
+// 2026: bølgen vises, "Skyd én" giver én bølgepakke ad gangen, og hver elektron lander ét sted, når pakken når frem),
+// "Det så du" med tre veje (kortet "Er elektronen så to steder på én gang?" og fotonen i Ordbogen), ✓ som taget,
+// "Næste ›" før handlingen fører hvert trin til Så, og et skærmskift rydder op.
+import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
 import { STRIBER } from '../js/data/forloeb/kvante.js';
 import { FORLØB } from '../js/data/forloeb/liste.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { mørktSted, RING_HALV } from '../js/data/kvante.js';
+const UD = billedmappe('kvante-forloeb');
 const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -22,10 +25,19 @@ const lange = [...STRIBER.trin.flatMap((t) => [t.spørg, t.så, t.gør, ...(t.g�
 const ider = new Set(ORDBOG.map((o) => o.id));
 const mangler = STRIBER.trin.flatMap((t) => t.ord ?? []).filter((id) => !ider.has(id));
 const så5 = STRIBER.trin[4].så;
-tjek('teksterne: 5 trin og "Det så du", højst to sætninger i hver tekst (også gættets "efter" med instruksen), ordene står i Ordbogen, trin 5 siger "de mørke striber er væk" og ikke "som kuglerne", og vejenes kort og ord findes',
-  STRIBER.trin.length === 5 && !lange.length && !mangler.length && /mørke striber væk/.test(så5) && !/kugle/i.test(så5)
-  && sætninger(STRIBER.kernesætning) === 2 && FORLØB.includes(STRIBER) && HVORFOR.kvanteKigger?.svar && ider.has('foton'),
+const trin6 = STRIBER.trin[5];
+tjek('teksterne: 6 trin og "Det så du", højst to sætninger i hver tekst (også gættets "efter" med instruksen), ordene står i Ordbogen, trin 5 siger "de mørke striber er væk" og ikke "som kuglerne", og vejenes kort og ord findes',
+  STRIBER.trin.length === 6 && !lange.length && !mangler.length && /mørke striber væk/.test(så5) && !/kugle/i.test(så5)
+  && sætninger(STRIBER.kernesætning) === 2 && FORLØB.includes(STRIBER) && HVORFOR.kvanteKigger?.svar && HVORFOR.kvanteToSteder?.svar && ider.has('foton'),
   JSON.stringify({ lange, mangler }));
+// "To steder på én gang?" (22. november 2026): trin 5 har jeres gæt, og trin 6 siger, at bølgen går gennem begge, men
+// elektronen findes ét sted. Ingen tekst siger, at elektronen er to steder.
+const valg5 = STRIBER.trin[4].gæt.valg;
+const alt = JSON.stringify(STRIBER);
+tjek('trin 5 har gættet "En hel ved begge på én gang" (svaret: lamperne blinker aldrig begge), trin 6 "Bølgen og prikken" har tre gæt og siger "begge sprækker" og "fundet ét sted", og ingen tekst siger, at elektronen er to steder',
+  valg5.length === 3 && /begge på én gang/.test(valg5[2].tekst) && /aldrig begge/.test(valg5[2].svar) && /aldrig ved begge/.test(så5)
+  && trin6.id === 'boelgen' && trin6.gæt.valg.length === 3 && /begge sprækker/.test(trin6.så) && /fundet ét sted/.test(trin6.så)
+  && !/(er|være) to steder/.test(alt), JSON.stringify({ valg5, trin6 }));
 
 // ---------- I browseren ----------
 const ctx = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
@@ -116,29 +128,54 @@ await page.click('#kvante .fl-handling[data-knap="maaler"]');
 const lamper = await T(() => { const a = atomlabTest.kvante; let blink = 0; for (let i = 0; i < 40; i++) { a.spol(0.05); if (a.lamper().some((l) => l > 0.5)) blink++; } return blink; });
 await spol(8);
 await fase('så');
-const m5 = await T(() => ({ v: atomlabTest.kvante.valg(), n: atomlabTest.kvante.antal(), m: atomlabTest.kvante.mønster(), linje: document.querySelector('#kvante .forløb-linje').textContent }));
-tjek('trin 5: begge sprækker åbner af sig selv (ringen er væk), måleren tændes og blinker, og efter 1.000 elektroner er de mørke striber væk',
-  f5.sprækker === 'begge' && !f5.ring && !f5.her && m5.v.måler && lamper > 0 && m5.n >= 1000 && m5.m.mørke === 0 && /de mørke striber væk/.test(m5.linje),
-  JSON.stringify({ f5, lamper, n: m5.n, mørke: m5.m.mørke }));
+const m5 = await T(() => ({ v: atomlabTest.kvante.valg(), n: atomlabTest.kvante.antal(), m: atomlabTest.kvante.mønster(), linje: document.querySelector('#kvante .forløb-linje').textContent, målt: atomlabTest.kvante.målt() }));
+tjek('trin 5: begge sprækker åbner af sig selv (ringen er væk), måleren tændes og blinker, tælleren over væggen har fundet hver elektron ved én sprække ("Begge på én gang: 0"), og efter 1.000 elektroner er de mørke striber væk',
+  f5.sprækker === 'begge' && !f5.ring && !f5.her && m5.v.måler && lamper > 0 && m5.n >= 1000 && m5.m.mørke === 0 && /de mørke striber væk/.test(m5.linje)
+  && m5.målt.tal[0] + m5.målt.tal[1] === m5.n && m5.målt.tal[0] > 300 && m5.målt.tal[1] > 300 && /Begge på én gang: 0/.test(m5.målt.tekst),
+  JSON.stringify({ f5, lamper, n: m5.n, mørke: m5.m.mørke, målt: m5.målt }));
+
+// Trin 6: måleren slukkes, bagvæggen ryddes, og bølgen vises. Tre tryk på "Skyd én": Der tegnes én bølgepakke ad
+// gangen (de to andre venter), og ingen prik lander, før pakken er nået frem.
+await næste();
+await trin('boelgen');
+const f6 = await T(() => ({ v: atomlabTest.kvante.valg(), n: atomlabTest.kvante.antal(), målt: atomlabTest.kvante.målt().tekst }));
+await page.click('#kvante .fl-gæt >> nth=1');
+for (let i = 0; i < 3; i++) await page.click('#kvante .fl-handling[data-knap="skydEn"]');
+const kø6 = await T(() => atomlabTest.kvante.puls());
+await spol(0.6);
+const midt6 = await T(() => ({ n: atomlabTest.kvante.antal(), puls: atomlabTest.kvante.puls() }));
+await page.screenshot({ path: `${UD}/6-boelgen.png` });
+await spol(9);
+await fase('så');
+const s6 = await T(() => ({ n: atomlabTest.kvante.antal(), puls: atomlabTest.kvante.puls(), linje: document.querySelector('#kvante .forløb-linje').textContent }));
+tjek('trin 6: måleren er slukket, bagvæggen ryddet og bølgen vist, tre tryk på "Skyd én" giver én bølgepakke ad gangen (to venter), ingen prik lander, før pakken er nået frem, og bagefter står der tre prikker og "fundet ét sted"',
+  !f6.v.måler && f6.v.bølgen && f6.n === 0 && !f6.målt && kø6.kører && kø6.serie === 2 && kø6.påVej === 1
+  && midt6.n === 0 && midt6.puls.front > 2 && s6.n === 3 && s6.puls.serie === 0 && /fundet ét sted/.test(s6.linje),
+  JSON.stringify({ f6, kø6, midt6, s6: { n: s6.n, puls: s6.puls } }));
 
 // "Det så du" og vejen til fotonen i Ordbogen
 await næste();
 await fase('slut');
 const slut = await T(() => ({ tekst: document.querySelector('#kvante .forløb-linje').textContent, veje: [...document.querySelectorAll('#kvante .fl-vej')].map((e) => e.textContent) }));
 await page.click('#kvante .fl-vej >> nth=1');
+const kort = await page.waitForFunction(() => [...document.querySelectorAll('.hvorfor-kort')].some((k) => !k.classList.contains('skjult') && /to steder/.test(k.textContent)), null, { timeout: 5000, polling: 100 }).then(() => true, () => false);
+await T(() => document.querySelector('.hvorfor-kort .hk-luk')?.click());
+await page.waitForTimeout(300);
+await page.click('#kvante .fl-vej >> nth=2');
 await page.waitForFunction(() => atomlabTest.aktiv() === 'ordbog', null, { timeout: 20000, polling: 100 });
 await page.waitForFunction(() => document.getElementById('ord-foton')?.classList.contains('fremhævet'), null, { timeout: 5000, polling: 100 }).catch(() => {});
 const ordbog = await T(async () => ({ foton: document.getElementById('ord-foton')?.classList.contains('fremhævet'), taget: (await import('./js/fremgang.js')).forløbTaget('striber') }));
-tjek('"Det så du" har kernesætningen, Hitachi i 1989 og tre veje, vejen "Er lys en bølge …" åbner fotonen i Ordbogen, og turen er husket som taget',
-  slut.tekst.includes('forsvinder striberne') && /1989/.test(slut.tekst) && slut.veje.length === 3 && /Leg frit/.test(slut.veje[0]) && ordbog.foton && ordbog.taget,
-  JSON.stringify({ slut, ordbog }));
+tjek('"Det så du" har kernesætningen, Hitachi i 1989 og tre veje, kortet "Er elektronen så to steder på én gang?" åbner, vejen "Er lys en bølge …" åbner fotonen i Ordbogen, og turen er husket som taget',
+  slut.tekst.includes('forsvinder striberne') && /1989/.test(slut.tekst) && slut.veje.length === 3 && /Leg frit/.test(slut.veje[0])
+  && /to steder på én gang/.test(slut.veje[1]) && kort && ordbog.foton && ordbog.taget,
+  JSON.stringify({ slut, kort, ordbog }));
 
 // "Næste ›" før handlingen fører hvert trin til Så
 await T(() => { location.hash = '#kvante'; });
 await page.waitForFunction(() => atomlabTest.aktiv() === 'kvante', null, { timeout: 20000, polling: 100 });
 await T(() => atomlabTest.kvante.startTur());
 const vist = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 6; i++) {
   await page.waitForFunction(() => ['gæt', 'gør'].includes(atomlabTest.kvante.forløb.fase()), null, { timeout: 10000, polling: 100 });
   await T(() => atomlabTest.kvante.forløb.visMigNu());
   for (let t = 0; t < 30 && (await T(() => atomlabTest.kvante.forløb.fase())) !== 'så'; t++) {
@@ -146,9 +183,9 @@ for (let i = 0; i < 5; i++) {
     await page.waitForTimeout(150);
   }
   vist.push(await T(() => atomlabTest.kvante.forløb.fase()));
-  if (i < 4) await næste();
+  if (i < 5) await næste();
 }
-tjek('"Næste ›" før handlingen fører hvert af de fem trin helt til Så', vist.every((x) => x === 'så'), JSON.stringify(vist));
+tjek('"Næste ›" før handlingen fører hvert af de seks trin helt til Så', vist.length === 6 && vist.every((x) => x === 'så'), JSON.stringify(vist));
 
 // Et skærmskift midt i turen rydder op
 await T(() => atomlabTest.kvante.startTur());
