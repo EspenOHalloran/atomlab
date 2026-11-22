@@ -2,6 +2,12 @@
 
 *Det forrige "Senest lavet" fra [lige-nu/forloeb.md](../../lige-nu/forloeb.md), det nyeste øverst.*
 
+**Senest lavet (18. november 2026): Grundstoffet flyver hjem** (E20 fund 8, rettelse D i [prompt-e20-rettelser.md](../prompt-e20-rettelser.md), stilguiden C2). Det første grundstof ender ikke længere stille i loggen under "Dit første atom":
+- Når et nyt grundstof er opdaget i Værkstedet, flyver et lys fra atomet til dets felt i det lille periodiske system. Feltet tændes med et lille "ting" (`lyd.tændes`), og tælleren går fra fx 0 til 1 af 118, først når lyset lander (`js/vaerksted-hjem.js`).
+- Er tabellen ikke fremme (under turen, foldet sammen eller rullet væk), flyver lyset til tælleren eller til et lille mærke øverst i scenen ("Nyt grundstof: Hydrogen · Opdaget: 1 af 118"), til venstre for pillerne. Mærket ligger i scenens lag, så Forløb-linjen står stille, og det tager ikke fokus. Det går væk efter ca. 3 s.
+- Med "reducer bevægelse" tændes feltet uden flyvning. Pillen "Nyt grundstof" er som før (dæmpet under en tur).
+- Tests: `vaerksted` (lyset til He, tælleren 0 → 1, uden lys med "reducer bevægelse") og `forloeb` (hydrogen til mærket, linjen står stille). Det forrige "Senest lavet" står i [arkiv/historik/forloeb.md](../arkiv/historik/forloeb.md).
+
 **Senest lavet (17. november 2026): Turene er lettere at finde** (jeres ønske: "Jeg tror mange vil overse dem" i "↻ Tur"). Af fire forslag valgte I to:
 - **Prikken på "↻ Tur"** (`lavTurKnap` i `js/forloeb.js`, alle dele med en tur): En lyseblå prik, der pulserer tre gange, så længe en af delens ture ikke er taget (også efter "Udforsk selv"). Listen skriver "Ny" ved den, og knappen opdateres, når turen bliver taget.
 - **Turene i listen til venstre** (`js/faenomenskaerm.js`, Kosmos og Solsystemet): "▶ Tur: Rejsen i tid ✓" og "▶ Tur: Hvordan kan det ske?" under "Tid" (med prikken, som et fænomen, man ikke har set), og "▶ Tur: Rundt om Solen" øverst i overblikket, som Flybyen ved planeterne. Et tryk starter turen. Liv havde allerede sine ture i venstre panel.

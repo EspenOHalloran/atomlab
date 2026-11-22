@@ -136,6 +136,10 @@ export default {
     const toning = document.createElement('div'); // den orange toning ind i disen
     toning.className = 'lh-toning';
     vindue.append(toning);
+    // Mens Huygens falder (også i laboratoriet efter turen), er sidefanerne, Indstillinger og 🔔 skjult, og på telefonen
+    // også panelerne, så faldskærmen og jorden kan ses (style.css, .huygens-falder). De kommer igen, når den er landet.
+    let falderVist = false;
+    const visFalder = (til) => { if (til !== falderVist) { falderVist = til; skærm?.classList.toggle('huygens-falder', til); } };
 
     // ---------- Tilstanden ----------
     let fase = 'cassini';
@@ -442,6 +446,7 @@ export default {
         return { nr, ialt: ETAPER.length, næste: ETAPER[nr + 1]?.knap ?? '', gå: gåEtape, forfra: () => gåEtape(0) };
       },
       opdater(dt) {
+        visFalder(fase !== 'cassini' && !nedtur.landet);
         titan.sæt(SOL, dt);
         t += dt * rask;
         if (fase === 'slip') {
@@ -504,6 +509,7 @@ export default {
       },
       stop() {
         aktiv = false;
+        visFalder(false);
         if (kører()) stopForløb();
         verden.styring.minDistance = styringFør.min;
         verden.styring.maxDistance = styringFør.max;
@@ -518,6 +524,7 @@ export default {
       test: {
         ...forløbTest(),
         start: startTur,
+        falder: () => falderVist, // (sidefanerne, Indstillinger og 🔔 er skjult)
         scenen: () => fase, // ('cassini', 'slip', 'rejse', 'ind', 'toning' eller 'ned'. fase er forløbets)
         slip,
         tilNed: (km = FALDSKÆRM_KM) => tilNed(tidVed(km), false),
