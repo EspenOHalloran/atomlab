@@ -5,7 +5,19 @@
 // Hentes kun med ?maal (main.js), så starten ikke bliver større. Hænger sig på verden (scene3d.js) udefra: et punkt
 // forrest i verden.opdateringer, en indpakning af komponist.render og renderer.render og af nogle få kald på
 // WebGL-konteksten (teksturer og shadere). Den virker også under pause, for billederne tegnes stadig.
-import { verden, LAV_KVALITET, tilpasStørrelse, kvalitetstrin } from './scene3d.js';
+import { verden, LAV_KVALITET, tilpasStørrelse, kvalitetstrin, skærmLoft } from './scene3d.js';
+
+// Skærmens loft og berøring (målingen på Tab A11, 22. november 2026): Tablettens skærm går til ca. 90 billeder/s, mens
+// fingrene er på den, og til 60 uden. Derfor står loftet (skønnet ud fra tiden mellem billederne, skærmLoft i scene3d.js)
+// og tiden siden sidste berøring i teksten, så tal fra forskellige målinger kan sammenlignes.
+let sidstRørt = -Infinity;
+addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') sidstRørt = performance.now(); }, { capture: true, passive: true });
+addEventListener('pointermove', (e) => { if (e.pointerType === 'touch') sidstRørt = performance.now(); }, { capture: true, passive: true });
+function loftTekst() {
+  const sek = (performance.now() - sidstRørt) / 1000;
+  const rørt = sek < 1 ? 'med fingre nu' : Number.isFinite(sek) ? `sidst rørt for ${Math.round(sek)} s siden` : 'ikke rørt';
+  return `skærmens loft ca. ${skærmLoft()} billeder/s (${rørt})`;
+}
 
 const RYK = 50; // ms: et billede, der tager længere, er et ryk
 const VINDUE = 5000; // ms: "det værste billede" ses over de sidste 5 sekunder
@@ -453,7 +465,7 @@ export function tekst() {
     `Skærm ${screen.width}×${screen.height}, vindue ${innerWidth}×${innerHeight}, devicePixelRatio ${devicePixelRatio}, touch (LAV_KVALITET): ${LAV_KVALITET ? 'ja' : 'nej'}`,
     `Lærred ${t.bredde}×${t.højde} (pixelRatio ${t.pixelRatio})${LAV_KVALITET ? `, kvalitetstrin ${kvalitetstrin() === 'høj' ? 'Høj' : 'Basis'}` : ''}`,
     '',
-    `Nu: ${ms(t.fps)} billeder/s, ${ms(t.prBillede)} ms pr. billede, værst (5 s) ${ms(t.værst)} ms${t.gpu != null ? `, grafikkortet ${ms(t.gpu)} ms pr. billede` : ''}`,
+    `Nu: ${ms(t.fps)} billeder/s, ${ms(t.prBillede)} ms pr. billede, værst (5 s) ${ms(t.værst)} ms${t.gpu != null ? `, grafikkortet ${ms(t.gpu)} ms pr. billede` : ''}, ${loftTekst()}`,
     `Kald ${t.kald}, trekanter ${tal(t.trekanter)} (hele billedet), geometrier ${t.geometrier}, teksturer ${t.teksturer}, shaderprogrammer ${t.programmer}`,
     `Teksturer i grafikkortet (skøn): ${tal(t.teksturMB)} MB nu, højst ${tal(t.teksturMBHøjst)} MB${t.heapMB != null ? `. JavaScript-hukommelse: ${tal(t.heapMB)} MB` : ''}`,
     `Siden start (${tal(sek)} s): ${tal(total.billeder)} billeder, gennemsnit ${ms(total.billeder ? (total.billeder * 1000) / total.tid : 0)} billeder/s, median ${percentil(0.5)} ms, 95 % under ${percentil(0.95)} ms, 99 % under ${percentil(0.99)} ms, ryk over ${RYK} ms: ${total.ryk}`,
@@ -544,7 +556,8 @@ function lavFelt() {
       `Kald ${t.kald} · trekanter ${tal(t.trekanter)}<br>` +
       `Geometrier ${t.geometrier} · teksturer ${t.teksturer} · shadere ${t.programmer}<br>` +
       `Teksturer i grafikkortet ca. ${tal(t.teksturMB)} MB (højst ${tal(t.teksturMBHøjst)})<br>` +
-      `Lærred ${t.bredde}×${t.højde} · pixelRatio ${t.pixelRatio}${LAV_KVALITET ? ` · ${kvalitetstrin() === 'høj' ? 'Høj' : 'Basis'}` : ''}`;
+      `Lærred ${t.bredde}×${t.højde} · pixelRatio ${t.pixelRatio}${LAV_KVALITET ? ` · ${kvalitetstrin() === 'høj' ? 'Høj' : 'Basis'}` : ''}<br>` +
+      loftTekst().replace(/^s/, 'S');
     const kasse = $('.maaler-ryk');
     kasse.textContent = '';
     for (const r of ryk.slice(-8).reverse()) {

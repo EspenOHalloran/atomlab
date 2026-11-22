@@ -36,6 +36,58 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   tjek(`${navn}: gløden har de bløde vægte (radius 0)`, kant.vægte === '0.8,0.55,0.5,0.55,0.65' && kant.radius === 0, kant.vægte);
   tjek(`${navn}: Gådernes MSAA holder pause i udglatningen og slår den til igen`, kant.pauseIGåderne && kant.igenEfter);
   tjek(`${navn}: skiftet til FXAA og tilbage beholder trinnene`, kant.fxaa && kant.tilbage);
+  if (navn === 'pc') {
+    // Rettelser efter målingen på Tab A11 (22. november 2026): skærmens loft, nye shadere og Gådernes værn
+    const loft = await page.evaluate(async () => {
+      const s = await import('/js/scene3d.js');
+      const række = (n, ...ms) => Array.from({ length: n }, (_, i) => ms[i % ms.length]);
+      const g = (tung, l) => { const x = s.trinGrænser(tung, l); return [Math.round(x.op), Math.round(x.ned)]; };
+      return {
+        lofter: [række(60, 11.1), række(60, 16.7), række(60, 16.7, 33.3), række(60, 33.3), række(60, 8.33), række(60, 11.1, 22.2), række(60, 16.7, 16.6, 16.8, 5)].map(s.loftAf),
+        tung90: g(true, 90), tung60: g(true, 60), tung120: g(true, 120), let60: g(false, 60), let120: g(false, 120),
+      };
+    });
+    tjek('pc: skærmens loft skønnes ud fra tiden mellem billederne (90, 60, 60 ved 40 billeder/s, 60 ved 30, 120, 90, 60)', loft.lofter.join() === '90,60,60,60,120,90,60', loft.lofter.join());
+    tjek('pc: grænserne for Høj følger loftet (tung skærm ved 90: op 83, ned 68, så Kosmos med 88 får Høj på Tab A11)', loft.tung90.join() === '83,68' && loft.tung60.join() === '55,45' && loft.tung120.join() === '110,90', JSON.stringify(loft));
+    tjek('pc: de lette skærme går op ved højst 58 og ned under 45 som før', loft.let60.join() === '55,45' && loft.let120.join() === '58,45', JSON.stringify(loft));
+    // nyeShadere: sand lige efter, at en ny shader er lavet (i samme kald, for testbrowseren er langsom og SHADER_RO kort)
+    const nyEfterShader = await page.evaluate(async () => {
+      const s = await import('/js/scene3d.js');
+      const THREE = await import('three');
+      globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
+      s.verden.renderer.compile(new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' })), s.verden.kamera);
+      return s.nyeShadere();
+    });
+    tjek('pc: nyeShadere() er sand lige efter en ny shader', nyEfterShader);
+    // Gådernes værn: Testen giver selv tiderne mellem billederne (målBillede), for testbrowseren er langsom og ujævn.
+    // 125 billeder/s → tændt. En ny shader og så 25 billeder/s i 2,8 s → stadig tændt (måler ikke). 25 billeder/s videre →
+    // slukket. 125 billeder/s i 6 s (over 90 % af loftet) → tændt igen én gang. 25 igen → slukket for resten.
+    const værnForløb = await page.evaluate(async () => {
+      const s = await import('/js/scene3d.js');
+      const THREE = await import('three');
+      const g = await import('/js/gaader/kanter.js');
+      Object.assign(g.VÆRN, { til: false, ro: 0 }); // (til: false = ingen måling af de rigtige billeder)
+      g.udglat(true);
+      let t = performance.now() + 1000;
+      const billeder = (ms, sek) => { for (let i = 0; i < sek * 1000 / ms; i++) g.målBillede(t += ms); };
+      const tilstand = () => { const v = g.værnTilstand(); return `${v.til ? 'til' : 'fra'}${v.prøvetIgen ? ' (igen)' : ''}`; };
+      const r = [];
+      billeder(8, 4); r.push(tilstand());
+      globalThis.atomlabShaderNr = (globalThis.atomlabShaderNr ?? 0) + 1;
+      s.verden.renderer.compile(new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.ShaderMaterial({ defines: { NR: globalThis.atomlabShaderNr }, fragmentShader: 'void main() { gl_FragColor = vec4(float(NR)); }' })), s.verden.kamera);
+      s.nyeShadere(t); // (som billedløkken: den nye shader ses på tiden t)
+      billeder(40, 2.8); r.push(tilstand());
+      billeder(40, 4); r.push(tilstand());
+      billeder(8, 6); r.push(tilstand());
+      billeder(40, 7); r.push(tilstand()); // (målingen kan begynde i de hurtige billeder lige efter, at den er slået til igen)
+      billeder(8, 8); r.push(tilstand());
+      r.push(g.prøver());
+      g.udglat(false);
+      Object.assign(g.VÆRN, { til: false, ro: 3 });
+      return r.join(', ');
+    });
+    tjek('pc: Gådernes værn måler ikke lige efter nye shadere, slår fra under 45 billeder/s, prøver igen én gang og lader den så være slukket', værnForløb === 'til, til, fra, til (igen), fra (igen), fra (igen), 0', værnForløb);
+  }
   // Supernovaen lyser meget, så gløden har noget at arbejde med
   await page.evaluate(() => { const k = atomlabTest.kosmos; k.vælg('supernova'); k.trykPå('eksplodere'); k.spol(3); k.kameraFrem(); });
   await page.waitForTimeout(1500);
@@ -156,7 +208,7 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   const høj = await tilstand();
   tjek('tablet: Høj giver pixelRatio 2, SMAA sidst og gløden i halv opløsning', høj.trin === 'høj' && høj.pr === 2 && høj.lærred === 2048 && høj.kanter === 'SMAA' && høj.sidst && Math.abs(høj.glød - høj.lærred / 2) <= 1, JSON.stringify(høj));
   await page.screenshot({ path: `${UD}/tablet-hoej-vaerksted.png` });
-  tjek('tablet: skiftet til Høj laver ingen nye shadere (SMAA og skyggen i krogene er lavet på forhånd)', (await programmer()) === programmerFør, `${programmerFør} → ${await programmer()}`);
+  tjek('tablet: skiftet til Høj laver ingen nye shadere (SMAA er lavet på forhånd)', (await programmer()) === programmerFør, `${programmerFør} → ${await programmer()}`);
   // Skygge i krogene (G4): på touch kun i Høj
   await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok))));
   const aoHøj = await page.evaluate(async () => (await import('/js/krogskygge.js')).krogskygge().til);
@@ -164,7 +216,9 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
   await page.evaluate(() => new Promise((ok) => requestAnimationFrame(() => requestAnimationFrame(ok))));
   const aoBasis = await page.evaluate(async () => (await import('/js/krogskygge.js')).krogskygge().til);
   await page.evaluate(async () => (await import('/js/scene3d.js')).sætTrin('høj'));
-  tjek('tablet: skygge i krogene i Værkstedet kun i Høj, ikke i Basis', aoHøj && !aoBasis, JSON.stringify({ aoHøj, aoBasis }));
+  // Efter målingen på Tab A11 (22. november 2026): ingen skygge i krogene på touch, heller ikke i Høj (PÅ_TOUCH)
+  const aoValgt = await page.evaluate(async () => { const k = (await import('/js/krogskygge.js')).krogskygge(); return k.valgt || k.plads >= 0; });
+  tjek('tablet: ingen skygge i krogene i Værkstedet på touch, heller ikke i Høj', !aoHøj && !aoBasis && !aoValgt, JSON.stringify({ aoHøj, aoBasis, aoValgt }));
   // En tung skærm (Kosmos) går til Basis, når Høj er nået på en let skærm (Tab A11 må ikke tage Høj med til Kosmos)
   await page.evaluate(() => { location.hash = '#kosmos'; });
   await page.waitForFunction(() => atomlabTest.klar(), null, { timeout: 30000 });

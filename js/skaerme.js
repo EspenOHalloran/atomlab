@@ -5,7 +5,7 @@
 // eksporterer lav, start og stop (og testAdgang til ?test). modul er stien fra denne fil.
 // status: 'færdig' eller 'prøve' (prøvet af et barn eller ej, se docs/retning.md). Det vises ikke anderledes endnu (nr. 13).
 // høj: true = skærmen må få kvalitetstrinnet Høj på touch (js/scene3d.js, docs/plan-kvalitetstrin.md). Gåderne (91 billeder/s
-// på Tab A11) har det fra 20. november 2026. høj: 'tung' = kun ved stor luft (mindst 100 billeder/s, TRIN_GRÆNSER_TUNG):
+// på Tab A11) har det fra 20. november 2026. høj: 'tung' = kun, når billedet følger skærmens loft (mindst 92 %, TRIN_GRÆNSER_TUNG):
 // Solsystemet, Kosmos og Begyndelsen fra 21. november 2026 (telefonen A56 havde 117-119 billeder/s i Basis dér).
 // html og css er til 10b, når en skærm får sine egne filer (tomme indtil da).
 export const SKÆRME = [
