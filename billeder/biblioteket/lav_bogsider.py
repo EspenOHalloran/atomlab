@@ -2,7 +2,8 @@
 afsnit "Bogen selv"). Højst fire sider pr. bog.
 
 Siderne hentes fra en frigivet skanning på archive.org (licensen står i SIDER og i KILDER.md) og gøres mindre:
-1000 px brede og WebP med den kvalitet, der lige holder filen under MAKS (ca. 150-200 KB). Siden klippes ikke, så de
+1000 px brede og WebP med den kvalitet, der lige holder filen under MAKS (ca. 150-200 KB). Siden klippes ikke (kun
+Einsteins mikrofilm klippes til papiret, se 'udsnit'), så de
 glødende steder i js/data/opdagelser/<bog>.js (i % af siden) passer til billedet. Laves en side om med et andet
 udsnit, skal stederne måles igen.
 
@@ -38,13 +39,24 @@ BØGER = {
         'arkiv': 'operumprimitiasd00brahuoft',
         'sider': {'a': 36, 'b1b': 45, 'brevet': 32, 'd2': 62},
     },
+    'einstein': {
+        # Annalen der Physik 1905 i "Serials in Microfilm" (sim_...). Teksten er fri fra 2026 (Einstein døde 1955), men
+        # mikrofilmen har ingen licens og ingen dato (docs/fakta-einstein-bog.md, afsnit 6, jeres svar 1: bruges med
+        # "Ærligt talt" og kontakten til sat tekst). De to sider ligger i hver sit bind, så hver side har sit 'arkiv'.
+        # Mikrofilmen har sorte kanter og nabosidens kant med, så siden klippes til papiret ('udsnit' i kildens px,
+        # w1200 giver her ca. 2080 px). Stederne i js/data/opdagelser/einstein.js er målt på det klippede billede.
+        'sider': {
+            's904': {'arkiv': 'sim_annalen-der-physik_1905_17_5', 'n': 127, 'udsnit': (440, 110, 1988, 2720)},
+            's641': {'arkiv': 'sim_annalen-der-physik_1905_18_3', 'n': 234, 'udsnit': (45, 135, 1910, 2980)},
+        },
+    },
 }
 
 
-def hent(mappe, bog, n):
-    sti = os.path.join(mappe, f"{bog['arkiv']}-n{n}.jpg")
+def hent(mappe, arkiv, n):
+    sti = os.path.join(mappe, f"{arkiv}-n{n}.jpg")
     if not os.path.exists(sti):
-        url = f"https://archive.org/download/{bog['arkiv']}/page/n{n}_w1200.jpg"
+        url = f"https://archive.org/download/{arkiv}/page/n{n}_w1200.jpg"
         req = urllib.request.Request(url, headers={'User-Agent': UA})
         with urllib.request.urlopen(req) as svar, open(sti, 'wb') as f:
             f.write(svar.read())
@@ -65,7 +77,11 @@ def lav(navn, mappe, ud):
     bog = BØGER[navn]
     os.makedirs(mappe, exist_ok=True)
     for side, n in bog['sider'].items():
-        kilde = hent(mappe, bog, n)
+        # En side er enten nummeret i bogens arkiv eller {'arkiv', 'n', 'udsnit'} (Einstein: to bind og et udsnit).
+        s = n if isinstance(n, dict) else {'arkiv': bog['arkiv'], 'n': n}
+        kilde = hent(mappe, s['arkiv'], s['n'])
+        if s.get('udsnit'):
+            kilde = kilde.crop(s['udsnit'])
         h = round(kilde.height * BREDDE / kilde.width)
         data, q = webp(kilde.resize((BREDDE, h), Image.LANCZOS))
         sti = os.path.join(ud, f'{navn}-{side}.webp')

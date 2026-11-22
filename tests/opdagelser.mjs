@@ -2,7 +2,7 @@
 // at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med Huygens og to grå rygge (et tryk stiller bogens spørgsmål),
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag. Einsteins
-// forside (E1, 21. november 2026) i test 1, 3 og 8.
+// forside (E1, 21. november 2026) i test 1, 3 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
 import { SKÆRME } from '../js/skaerme.js';
@@ -32,7 +32,16 @@ for (const b of byggede()) {
   if (!existsSync(PROJEKT + b.portræt)) fejlListe.push(`${b.id}: portrættet findes ikke`);
   const t = await b.tekster();
   if (t.OPSLAG[0]?.slags !== 'forside' || !t.FORSIDE?.spørgsmål || !t.FORSIDE?.portrætAlt) fejlListe.push(`${b.id}: forsiden`);
-  if (!t.OPSLAG.every((o) => ['forside', 'scene', 'sider', 'om'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
+  if (!t.OPSLAG.every((o) => ['forside', 'scene', 'sider', 'ligning', 'om'].includes(o.slags) && o.id)) fejlListe.push(`${b.id}: et opslag af ukendt slags`);
+  // Opslag med en ligning (E3): siden findes, højst to glødende steder inden for siden og med tysk og dansk, og lagene
+  for (const o of t.OPSLAG.filter((x) => x.slags === 'ligning')) {
+    const L = t.LIGNINGER?.[o.ligning];
+    if (!L?.forord?.tekst || !existsSync(PROJEKT + L.side.fil) || !L.side.alt || !L.side.linjer?.length || !L.ligning?.led?.length || !L.regn?.valg?.some((v) => v.rigtig)
+      || !L.linjer?.rækker?.length || !L.nørd?.punkter?.length || !L.ærligt?.punkter?.length || !L.seSelv?.gaa) fejlListe.push(`${b.id}: opslaget ${o.id}`);
+    if (!L?.steder?.length || L.steder.length > 2 || L.steder.some((x) => !x.tysk || !x.dansk || !x.kort || !x.felter.length
+      || !L.side.linjer.some((l) => l.sted === x.id)
+      || x.felter.some(([v, oo, br, h]) => v < 0 || oo < 0 || br <= 0 || h <= 0 || v + br > 100 || oo + h > 100))) fejlListe.push(`${b.id}: de glødende steder i ${o.id}`);
+  }
   // "Om …" (H4): budgettet fra planen (højst to tal og fire spørgsmål, "Vil du vide mere?" og "Ærligt talt")
   if (t.OPSLAG.some((o) => o.slags === 'om') && (!t.OM?.navn || !t.OM.tal?.length || t.OM.tal.length > 2 || !t.OM.hvorfor?.length || t.OM.hvorfor.length > 4
     || t.OM.hvorfor.some((h) => !h.spørgsmål || !h.svar) || !t.OM.nørd?.punkter?.length || !t.OM.ærligt?.punkter?.length
@@ -226,11 +235,37 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
   };
   if (tal.lys !== '1.079' || tal.ur !== '9,9' || tal.gram !== '0,000 000 004' || !(tal.sol > 4 && tal.sol < 4.4)) fejlE.push('turens tal');
   if (tal.gps.højde !== 45 || tal.gps.fart !== 7 || tal.gps.iAlt !== 38 || tal.lav >= 0 || !(tal.km > 10 && tal.km < 12) || !tal.lige) fejlE.push('GPS-tallene');
-  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
+  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling,tiden' || t.OPSLAG[1].slags !== 'scene') fejlE.push('opslagene');
   if (t.VEJE.veje[0].opslag !== 'tiden' || !t.VEJE.veje[0].primær || t.VEJE.veje.length !== 3 || t.VEJE.veje[1].fænomen?.join() !== 'kosmos,tid') fejlE.push('vejene');
   if (t.FRI.kapitler.map((k) => k.id).join() !== 'toget,rundtur,vaegten,gps') fejlE.push('laboratoriet');
   tjek('Einsteins tur: fire trin (toget, rundturen, batteriet og GPS-uret) med kapitel og gæt i de tre sidste, ordene i Ordbogen, og tallene: 9,9 af 20 sekunder, 4 milliardtedele gram, +45 − 7 = 38 og ca. 10 km',
     !fejlE.length, `${fejlE.join('; ')} ${JSON.stringify(tal)}`);
+}
+
+// Einsteins ligning om tiden (E3, drejebogen afsnit 7): "Regn selv" giver 4,32 s pr. døgn ved 1 % (den lette udgave, og
+// 4,3201 med den rigtige), 0,38 mod 0,51 ved 87 %, og 0,000 000 000 37 s ved 100 km/t. Svaret blandt valgene er det
+// regnede. Siden er sat linje for linje (33 linjer og tre formler), stederne er linje 9-12 og 27-33, og "Det så du"
+// spørger "Men hvordan skrev han det?"
+{
+  const t = await bogMed('einstein').tekster();
+  const L = t.LIGNINGER.tiden;
+  const læs = (f) => (existsSync(PROJEKT + f) ? readFileSync(PROJEKT + f, 'utf8') : '');
+  const fejlL = [];
+  const døgn = t.bagudPrDøgn(L.regn.β), rigtig = t.bagudPrDøgn(L.regn.β, false);
+  if (Math.abs(døgn - 4.32) > 0.0005 || Math.abs(rigtig - 4.3201) > 0.0001) fejlL.push(`døgnet: ${døgn} og ${rigtig}`);
+  if (t.dansk(t.bagudLet(0.87), 2) !== '0,38' || t.dansk(t.bagudRigtig(0.87), 2) !== '0,51') fejlL.push('87 %');
+  if (t.småGram(t.bagudPrDøgn(100 / 3.6 / t.LYSETS_FART), 11) !== '0,000 000 000 37') fejlL.push('100 km/t');
+  if (L.regn.valg.find((v) => v.rigtig)?.tekst !== `${t.dansk(døgn, 1)} sekunder` || !L.regn.nørd.tekst.includes('0,38') || !L.regn.nørd.tekst.includes('0,51')) fejlL.push('svaret og nørd-teksten');
+  if (!/9,9\.$/.test(t.ledForLedEksempel())) fejlL.push('led for led: uret fra turen');
+  const tekst = L.side.linjer.filter((l) => !l.f);
+  const linjeNr = (id) => tekst.map((l, i) => (l.sted === id ? i + 1 : 0)).filter(Boolean);
+  if (tekst.length !== 33 || L.side.linjer.filter((l) => l.f).length !== 3) fejlL.push('linjerne på s. 904');
+  if (linjeNr('formlen').join() !== '9,10,11,12' || linjeNr('rundturen').join() !== '27,28,29,30,31,32,33') fejlL.push('stedernes linjer');
+  if (L.ligning.led.map((x) => x.id).join() !== 't,tau,v,V,brok,kvadrat,enminus,rod' || !L.ligning.led.find((x) => x.id === 'V').idag) fejlL.push('led for led');
+  if (t.VEJE.sætning !== 'Men hvordan skrev han det?' || t.VEJE.veje[0].opslag !== 'tiden') fejlL.push('"Det så du"');
+  if (!/`einstein-s904\.webp`/.test(læs('billeder/biblioteket/KILDER.md')) || !/`einstein-s641\.webp`/.test(læs('billeder/biblioteket/KILDER.md')) || !existsSync(PROJEKT + 'billeder/biblioteket/einstein-s641.webp')) fejlL.push('KILDER.md og s. 641');
+  tjek('Einsteins ligning om tiden: 4,32 s om dagen ved 1 % af lysets fart, 0,38 mod 0,51 ved 87 %, s. 904 sat linje for linje med stederne i linje 9-12 og 27-33, led for led i drejebogens orden, og "Men hvordan skrev han det?"',
+    !fejlL.length, fejlL.join('; '));
 }
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -596,8 +631,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
     trin3 && Math.abs(vægt.lettere - 4.0e-9) < 1e-10 && /0,000 000 004 g/.test(vægt.tekst) && lav.gps.iAlt < 0 && /bagud/.test(lav.tekst)
     && midt.fase !== 'så' && /helt op/.test(midt.vink) && !midt.uden && trin4 && høj.gps.iAlt === 38 && /38 milliontedele sekund foran/.test(høj.tekst) && uden,
     JSON.stringify({ vægt: vægt.lettere, lav: lav.gps, midt: { fase: midt.fase, vink: midt.vink, uden: midt.uden }, høj: høj.gps, uden }));
-  tjek('Einsteins tur: "Det så du" har kernesætningen med GPS, linjen om målingerne og kun de veje, der findes (Rejsen i tid og turen igen)',
-    /GPS/.test(slut.tekst) && /Målingerne/.test(slut.lille) && slut.veje.join('|') === 'Send et ur på rejse ›|Tag turen igen ›', JSON.stringify(slut));
+  tjek('Einsteins tur: "Det så du" har kernesætningen med GPS, "Men hvordan skrev han det?" og ligningerne som den første vej (E3), Rejsen i tid og turen igen',
+    /GPS/.test(slut.tekst) && /hvordan skrev han det/.test(slut.lille) && slut.veje.join('|') === 'Læs ligningerne på hans egne sider ›|Send et ur på rejse ›|Tag turen igen ›', JSON.stringify(slut));
   // "Tag turen igen" starter forfra, og "Udforsk selv" giver laboratoriet med de fire kapitler
   await page.click('.forløb-linje .fl-vej >> text=Tag turen igen');
   const igen = await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'toget');
@@ -912,6 +947,76 @@ for (const [navn, opsætning] of [
     ekstra && stille && iKosmos && direkte, JSON.stringify({ ekstra: !!ekstra, stille, iKosmos, direkte }));
 }
 
+// Einsteins ligning om tiden (E3, test 7): Skanningen af s. 904 hentes først dér, et glødende sted viser tysk og dansk, kontakten "Sat tekst" viser de samme linjer
+// med de samme steder og huskes, når bogen åbnes igen, "Led for led" går gennem de otte led til uret fra turen (9,9), et tryk
+// på V i ligningen vælger lysets fart, og "Regn selv" ryster ved et forkert svar og giver 4,3 sekunder ved det rigtige
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  const sider = [];
+  page.on('request', (r) => { const m = r.url().match(/einstein-(s\d+)\.webp/); if (m) sider.push(m[1]); });
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('einstein'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  const førSiden = sider.length;
+  await O(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'tiden' && v.bladr(1)); });
+  const hentet = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'tiden' && atomlabTest.opdagelser.scene()?.hentet?.(), null, 15000);
+  const glød = await O(() => [...document.querySelectorAll('#opdBog .bs-glød')].map((g) => g.dataset.sted));
+  await page.click('#opdBog .bs-glød[data-sted="rundturen"] >> nth=1');
+  const forklaring = await O(() => ({
+    sted: atomlabTest.opdagelser.scene().sted(),
+    tysk: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.textContent,
+    dansk: document.querySelector('#opdBog .bs-forklaring .bs-dansk')?.textContent,
+    lukket: [...document.querySelectorAll('#opdBog .bog-ligning-opslag details')].every((d) => !d.open),
+    forord: document.querySelector('#opdBog .lg-forord-tekst')?.textContent,
+  }));
+  tjek('Einsteins ligning: s. 904 hentes først ved opslaget "1905: Tiden", og et glødende sted viser tysk og dansk med lagene lukkede',
+    hentet && førSiden === 0 && sider[0] === 's904' && glød.filter((g, i, a) => a.indexOf(g) === i).join() === 'formlen,rundturen' && forklaring.sted === 'rundturen'
+    && forklaring.tysk?.includes('zurückkommt') && forklaring.dansk?.includes('bagud') && forklaring.lukket && /side 904/.test(forklaring.forord), JSON.stringify({ førSiden, sider, glød, forklaring }));
+  // Kontakten: den sætte tekst har de samme linjer og steder, og valget huskes for bogen
+  await page.click('#opdBog .lg-valg[data-visning="sat"]');
+  const sat = await O(() => ({
+    vist: getComputedStyle(document.querySelector('#opdBog .lg-sat')).display !== 'none' && getComputedStyle(document.querySelector('#opdBog .lg-skanning')).display === 'none',
+    linjer: document.querySelectorAll('#opdBog .lg-sat .lg-linje').length,
+    formler: document.querySelectorAll('#opdBog .lg-sat .lg-formel').length,
+    steder: [...document.querySelectorAll('#opdBog .lg-sat-sted')].map((k) => k.dataset.sted),
+    valgt: document.querySelector('#opdBog .lg-sat-sted[data-sted="rundturen"]')?.getAttribute('aria-pressed'),
+    gemt: localStorage.getItem('atomlabBogSide'),
+  }));
+  await page.click('#opdBog .lg-sat-sted[data-sted="formlen"]');
+  const satSted = await O(() => atomlabTest.opdagelser.scene().sted());
+  await O(() => atomlabTest.opdagelser.hylden());
+  await O(() => atomlabTest.opdagelser.åbn('einstein'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await O(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'tiden' && v.bladr(1)); });
+  const igen = await O(() => atomlabTest.opdagelser.scene()?.visning());
+  tjek('Einsteins ligning: "Sat tekst" viser s. 904 med 33 linjer, tre formler og de samme to steder (et tryk vælger stedet), og valget huskes, når bogen åbnes igen',
+    sat.vist && sat.linjer === 33 && sat.formler === 3 && sat.steder.join() === 'formlen,rundturen' && sat.valgt === 'true' && satSted === 'formlen'
+    && JSON.parse(sat.gemt ?? '{}').einstein === 'sat' && igen === 'sat', JSON.stringify({ sat, satSted, igen }));
+  // Led for led og et tryk på V i ligningen
+  const led = [];
+  for (let i = 0; i < 9; i++) { await page.click('#opdBog .lg-led-næste'); led.push(await O(() => atomlabTest.opdagelser.scene().led())); }
+  const slutTekst = await O(() => document.querySelector('#opdBog .lg-led')?.textContent);
+  await page.click('#opdBog .lg-fart[data-fart="0.5"]');
+  const halv = await O(() => document.querySelector('#opdBog .lg-led')?.textContent);
+  await page.click('#opdBog .lg-stor [data-led="V"]');
+  const v = await O(() => ({ led: atomlabTest.opdagelser.scene().led(), lyser: [...document.querySelectorAll('#opdBog .lg-stor .lg-lyser')].map((e) => e.dataset.led), tekst: document.querySelector('#opdBog .lg-led')?.textContent }));
+  tjek('Einsteins ligning: "Led for led" går gennem t, τ, v, V, v/V, (v/V)², 1 − (v/V)² og √ til uret fra turen (9,9 sekunder), en anden fart (50 %: 17,3) kan sættes ind, og et tryk på V lyser V op med "I dag skriver man c"',
+    led.join() === 't,tau,v,V,brok,kvadrat,enminus,rod,slut' && /9,9/.test(slutTekst) && /0,5 · 0,5 = 0,25/.test(halv) && /17,3/.test(halv) && v.led === 'V' && v.lyser.join() === 'V' && /Lysets fart/.test(v.tekst) && /skriver man c/.test(v.tekst), JSON.stringify({ led, slutTekst, halv, v }));
+  // Regn selv
+  await page.click('#opdBog .lg-regn > summary');
+  await page.click('#opdBog .lg-regn-knap');
+  await page.click('#opdBog .lg-regn-knap');
+  await page.click('#opdBog .lg-svar >> text=43 sekunder');
+  const forkert = await O(() => ({ vink: document.querySelector('#opdBog .lg-regn-svar')?.textContent, trin: document.querySelectorAll('#opdBog .lg-regn-res').length }));
+  await page.click('#opdBog .lg-svar >> text=4,3 sekunder');
+  const rigtigt = await O(() => ({ svar: document.querySelector('#opdBog .lg-regn-svar')?.textContent, låst: [...document.querySelectorAll('#opdBog .lg-svar')].every((k) => k.disabled) }));
+  tjek('Einsteins ligning: "Regn selv" går trin for trin (0,0001 og 0,00005), "43 sekunder" giver "For meget" og et vink, og "4,3 sekunder" giver svaret med 100 km/t',
+    forkert.trin === 2 && /For meget/.test(forkert.vink) && /86\.400/.test(forkert.vink) && /4,3 sekunder om dagen/.test(rigtigt.svar) && /0,000 000 000 37/.test(rigtigt.svar) && rigtigt.låst,
+    JSON.stringify({ forkert, rigtigt }));
+  await ctx.close();
+}
+
 // Telefon og tablet på højkant som første skærm: forsiden kan ses uden at rulle (også "Begynd"), et stryg bladrer, og
 // intet ligger uden for skærmen
 for (const [navn, opsætning] of [
@@ -982,6 +1087,23 @@ for (const [navn, opsætning] of [
     return { portræt: ses('#opdBog .bog-portræt img'), titel: ses('#opdBog .bog-titel'), intro: ses('#opdBog .bog-intro-tekst'), vignet: !v?.offsetWidth || (v.getBoundingClientRect().right <= innerWidth + 0.5 && v.getBoundingClientRect().left >= 0), bred: document.documentElement.scrollWidth > innerWidth + 1, begynd };
   });
   tjek(`${navn}: Einsteins forside har portrættet, spørgsmålet, introduktionen og "Begynd" fremme uden at rulle, vignetten er inden for skærmen, og intet går ud til siden`, ef.portræt && ef.titel && ef.intro && ef.vignet && !ef.bred && ef.begynd, JSON.stringify(ef));
+  // Einsteins ligning (E3): forordet, siden og ligningen er inden for skærmen, kontakten og stederne er mindst 44 px, og
+  // intet går ud til siden, både med skanningen og den sætte tekst
+  for (const visning of ['skanning', 'sat']) {
+    await page.evaluate(() => { const v = atomlabTest.opdagelser; while (v.vist().opslag !== 'tiden' && v.bladr(1)); });
+    await vent(page, () => atomlabTest.opdagelser.scene()?.sætVisning);
+    await page.evaluate((x) => atomlabTest.opdagelser.scene().sætVisning(x), visning);
+    await page.waitForTimeout(700);
+    const lg = await page.evaluate(() => {
+      const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5;
+      const side = document.querySelector(`#opdBog ${document.querySelector('#opdBog .bog-ligning-opslag').dataset.visning === 'sat' ? '.lg-sat' : '.lg-skanning'}`).getBoundingClientRect();
+      const stor = document.querySelector('#opdBog .lg-stor').getBoundingClientRect();
+      const knapper = [...document.querySelectorAll('#opdBog :is(.lg-valg, .bs-sted-knap, .lg-led-næste)')].map((e) => e.getBoundingClientRect());
+      return { side: inde(side) && side.width >= 120, stor: inde(stor) && stor.width >= 150, knapper: knapper.length === 5 && knapper.every((k) => inde(k) && k.height >= 40), bred: document.documentElement.scrollWidth > innerWidth + 1, mål: [side.width, stor.width].map(Math.round) };
+    });
+    tjek(`${navn}: Einsteins ligning (${visning}) har siden og ligningen inden for skærmen, kontakten og knapperne er mindst 40 px, og intet går ud til siden`, lg.side && lg.stor && lg.knapper && !lg.bred, JSON.stringify(lg));
+  }
+  await page.evaluate(() => atomlabTest.opdagelser.scene().sætVisning('skanning'));
   await page.evaluate(() => atomlabTest.opdagelser.åbn('tycho')); // tilbage til Tycho til gåden nedenfor
   await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside' && document.getElementById('opdBog').dataset.bog === 'tycho');
   // Tychos gåde (T3): kortet og de tre tal ses uden at rulle, knapperne er mindst 44 px, og intet går ud til siden
