@@ -5,8 +5,8 @@
 //
 // Kun på de skærme, der vælger det: brugKrogskygge({ radius }) i skærmens start og brugKrogskygge(null) i dens stop.
 // Ikke på planeter set udefra og rummet (der er næsten intet tæt på hinanden, så den ses ikke, men koster det samme).
-// Pc: altid (værn: under 40 billeder/s i 4 s → slukket resten af besøget på skærmen). Touch: kun i kvalitetstrinnet Høj,
-// aldrig i Basis. Testene, der tegner hurtigt (TEST_HURTIG), tegner uden komponist, så der sker intet.
+// Pc: altid (værn: under 40 billeder/s i 4 s → slukket resten af besøget på skærmen). Touch: slet ikke (PÅ_TOUCH, se
+// nedenfor). Testene, der tegner hurtigt (TEST_HURTIG), tegner uden komponist, så der sker intet.
 import * as THREE from 'three';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { verden, LAV_KVALITET, TEST_HURTIG, kvalitetstrin } from './scene3d.js';
@@ -16,6 +16,13 @@ const SKALA = globalThis.atomlabAOSkala ?? 0.5;
 const PRØVER = LAV_KVALITET ? 8 : 16; // retninger pr. punkt (GTAO) og punkter i udglatningen bagefter
 const VÆRN = !LAV_KVALITET && !new URLSearchParams(location.search).has('test');
 const VÆRN_FPS = 40;
+// Touch (22. november 2026, efter målingen på Tab A11): I Høj kostede skyggen så meget på tabletten (Mali-G615, lærred
+// 1920 × 1200), at Værkstedets kerne faldt fra Høj til Basis (32 billeder/s, ryk på 50-77 ms, mens tegningen på
+// processoren kun tog 1-4 ms), og efter faldet var der næsten 90 billeder/s uden. Faldet låser hele skærmen i Basis, så
+// skyggen kostede også den skarpe udgave. Derfor ingen skygge i krogene på touch, heller ikke i Høj: Kernen får Høj
+// (SMAA og den skarpere glød) i stedet. En billigere udgave (kvart opløsning, færre prøver) ville stadig tegne scenen én gang
+// til, og den ses mindst på en lille skærm. Valgt af sessionen, kan ændres af jer (true = kun i Høj, som før).
+export const PÅ_TOUCH = false;
 
 // Kun uigennemsigtige net giver skygge. Glød, prikker, linjer, sprites og gennemsigtige skaller (fx elektronskyen) skjules,
 // mens retningerne og dybden tegnes (GTAOPass skjuler selv kun prikker og linjer). Et objekt med userData.udenKrogskygge
@@ -104,7 +111,7 @@ function lavPas() {
 // den giver sand) eller null = slukket.
 export function brugKrogskygge(nyt) {
   const { komponist } = verden;
-  if (!komponist || TEST_HURTIG) return;
+  if (!komponist || TEST_HURTIG || (LAV_KVALITET && !PÅ_TOUCH)) return; // (touch: intet trin, ingen lag og ingen shadere)
   valg = nyt;
   værn.tid = værn.billeder = værn.sidst = 0;
   værn.slukket = false;

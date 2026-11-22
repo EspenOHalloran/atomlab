@@ -110,6 +110,7 @@ export function lavVerden(lærred) {
 
   let sidst = performance.now();
   renderer.setAnimationLoop((nu) => {
+    noterBillede(nu - sidst);
     const dt = Math.min(0.05, (nu - sidst) / 1000);
     sidst = nu;
     const tid = nu / 1000;
@@ -120,8 +121,48 @@ export function lavVerden(lærred) {
     styring.update(dt);
     if (TEST_HURTIG) renderer.render(scene, kamera);
     else { komponist.render(dt); vogtKanter(nu); vogtTrin(nu); }
+    noterShadere(nu);
   });
   return true;
+}
+
+// Skærmens loft og nye shadere (rettelser efter målingen på Tab A11, 22. november 2026, docs/maalinger/): Værnene måler
+// billeder i sekundet. Men (1) skærmen sætter et loft (Tab A11: ca. 90 med fingre på skærmen og 60 uden), så en fast
+// grænse som 100 billeder/s kan aldrig nås dér, og (2) mens nye shadere laves, hakker det kort, også på et hurtigt
+// grafikkort. Derfor husker billedløkken tiden mellem de seneste billeder (til loftet) og tidspunktet for den seneste nye
+// shader, og værnene ser bort fra billederne lige efter (SHADER_RO).
+const SENESTE = new Float32Array(120); // tiden mellem de seneste billeder (ms), ca. 1-2 s
+let senesteI = 0, senesteN = 0;
+function noterBillede(ms) {
+  if (!(ms > 0 && ms < 500)) return; // (et ryk eller en skjult fane siger intet om loftet)
+  SENESTE[senesteI] = ms;
+  senesteI = (senesteI + 1) % SENESTE.length;
+  senesteN = Math.min(senesteN + 1, SENESTE.length);
+}
+// De almindelige lofter for skærme (billeder/s). Under 60 findes de ikke, så et langsommere billede er grafikkortet.
+export const LOFTER = [60, 72, 75, 90, 100, 120, 144, 165, 240];
+// Skærmens loft ud fra tiden mellem billederne (ms): Billederne kommer altid ved et skift af skærmen, så de korteste
+// (den nederste fjerdedel) er skærmens takt, også når grafikkortet ikke når hvert skift (fx 40 billeder/s på en skærm
+// med 60: skiftevis 16,7 og 33,3 ms). Afrundet til det nærmeste almindelige loft.
+export function loftAf(tider) {
+  if (!tider.length) return 60;
+  const s = Array.from(tider).sort((a, b) => a - b);
+  const takt = 1000 / s[Math.floor(s.length / 4)];
+  return LOFTER.reduce((b, l) => (Math.abs(l - takt) < Math.abs(b - takt) ? l : b));
+}
+export const skærmLoft = () => loftAf(SENESTE.subarray(0, senesteN));
+// Shadere: Billedløkken ser efter hvert billede (og nyeShadere hver gang), om antallet af shaderprogrammer har ændret
+// sig. nyeShadere(nu) er sand i SHADER_RO sekunder efter (målt på Tab A11: ca. 3 s med ryk på 50-164 ms, efter at
+// Sort hul havde lavet tre shadere).
+export const SHADER_RO = 3;
+let shaderTid = -Infinity, programAntal = -1;
+function noterShadere(nu) {
+  const n = verden.renderer.info.programs?.length ?? 0;
+  if (n !== programAntal) { if (programAntal >= 0) shaderTid = nu; programAntal = n; }
+}
+export function nyeShadere(nu = performance.now()) {
+  noterShadere(nu); // (også shadere, der er lavet efter sidste billede, fx med renderer.compile)
+  return nu - shaderTid < SHADER_RO * 1000;
 }
 
 // En blødere glød (G2): Three.js' glød lægger fem slørede udgaver af det lyse oven i billedet, fra den skarpeste (tæt om
@@ -212,16 +253,27 @@ function forvarmSMAA() {
 // Kvalitetstrin på touch (G1 del 2, 20. november 2026, docs/plan-kvalitetstrin.md): Telefoner og tablets har to trin.
 // Basis er som før (skarphed højst 1,5, FXAA og gløden i en fjerdedel af opløsningen). Høj er som på pc (skarphed højst 2,
 // SMAA og gløden i halv opløsning). Hver skærm vælger selv, om den må få Høj (høj: true i SKÆRME i js/skaerme.js, og
-// menuen). Er der mindst 58 billeder i sekundet i 3 sekunder, skiftes der til Høj. Falder det under 45 i 2 sekunder,
-// skiftes der tilbage, og så bliver skærmen i Basis resten af besøget (ingen vippen frem og tilbage, og det dækker også en
-// tablet, der bliver varm). Partikler, kuglernes felter og teksturer følger stadig LAV_KVALITET, for de bygges ved start.
+// menuen). Er der mindst 92 % af skærmens loft (dog højst 58 billeder/s krævet) i 3 sekunder, skiftes der til Høj. Falder det
+// under 45 i 2 sekunder, skiftes der tilbage, og så bliver skærmen i Basis resten af besøget (ingen vippen frem og tilbage,
+// og det dækker også en tablet, der bliver varm). Partikler, kuglernes felter og teksturer følger stadig LAV_KVALITET,
+// for de bygges ved start.
 // ryk: billeder over så mange sekunder (en skjult fane, et ryk) tæller ikke. Testene sætter den højere (testbrowseren er langsom).
-export const TRIN_GRÆNSER = { opFps: 58, opTid: 3, nedFps: 45, nedTid: 2, ro: 1.5, ryk: 0.5 };
-// De tunge skærme (høj: 'tung' i SKÆRME: Solsystemet, Kosmos og Begyndelsen, 21. november 2026) går kun op, når der er
-// stor luft: mindst 100 billeder/s i 4 s. Det kan kun en skærm med 120 Hz (fx telefonen A56 med 117 billeder/s ved Mars),
-// ikke Tab A11 (90 Hz-skærm, ca. 62 billeder/s i Solsystemet), så tabletten bliver ikke tungere dér. De falder tilbage
-// allerede under 70 billeder/s i 2 s (det skal stadig være glat). Valgt af sessionen, kan ændres af jer.
-export const TRIN_GRÆNSER_TUNG = { opFps: 100, opTid: 4, nedFps: 70, nedTid: 2 };
+export const TRIN_GRÆNSER = { opAndel: 0.92, opFps: 58, opTid: 3, nedFps: 45, nedTid: 2, ro: 1.5, ryk: 0.5 };
+// De tunge skærme (høj: 'tung' i SKÆRME: Solsystemet, Kosmos og Begyndelsen, 21. november 2026) går kun op, når billedet
+// følger skærmens loft (mindst 92 % i 4 s), og falder tilbage under 75 % af loftet (dog mindst 45) i 2 s. Før var det
+// faste tal (op ved 100, ned under 70), men Tab A11's skærm går højst til 90 (med fingre) og 60 (uden), så Kosmos stod i
+// Basis med tydelig luft (88 billeder/s, målingen 22. november 2026). Med loftet 90: op ved 83, ned under 68. Med 60: op
+// ved 55, ned under 45. Med 120 (telefonen A56): op ved 110, ned under 90. Valgt af sessionen, kan ændres af jer.
+export const TRIN_GRÆNSER_TUNG = { opAndel: 0.92, opTid: 4, nedAndel: 0.75, nedFps: 45, nedTid: 2 };
+// Grænserne for et trinskift ved et givet loft: { op, ned } i billeder/s
+export function trinGrænser(tung, loft) {
+  if (tung) {
+    const g = TRIN_GRÆNSER_TUNG;
+    return { op: g.opAndel * loft, ned: Math.max(g.nedFps, g.nedAndel * loft) };
+  }
+  const g = TRIN_GRÆNSER;
+  return { op: Math.min(g.opFps, g.opAndel * loft), ned: g.nedFps };
+}
 let trinAuto = LAV_KVALITET && !new URLSearchParams(location.search).has('test'); // ikke i testene, medmindre de slår det til
 // tung: skærmen er tung (strengere grænser). tungHøj: Høj er nået på en tung skærm (så må den beholdes på en anden tung).
 const trin = { navn: 'basis', tilladt: false, tung: false, tungHøj: false, id: null, låst: false, tid: 0, billeder: 0, sidst: 0, fra: 0 };
@@ -278,21 +330,24 @@ function vogtTrin(nu) {
   if (!trinAuto || !trin.tilladt || trin.låst) return;
   const dt = (nu - trin.sidst) / 1000;
   trin.sidst = nu;
-  if (nu < trin.fra || dt > TRIN_GRÆNSER.ryk) { trin.tid = trin.billeder = 0; return; } // et ryk eller en skjult fane tæller ikke
+  // Et ryk, en skjult fane og billederne lige efter nye shadere tæller ikke (de siger intet om, hvad grafikkortet kan)
+  if (nu < trin.fra || dt > TRIN_GRÆNSER.ryk || nyeShadere(nu)) { trin.tid = trin.billeder = 0; return; }
   trin.tid += dt;
   trin.billeder++;
   const høj = trin.navn === 'høj';
   if (trin.tid < grænse(høj ? 'nedTid' : 'opTid')) return;
   const fps = trin.billeder / trin.tid;
   trin.tid = trin.billeder = 0;
-  if (!høj && fps >= grænse('opFps')) {
+  const loft = skærmLoft();
+  const { op, ned } = trinGrænser(trin.tung, loft);
+  if (!høj && fps >= op) {
     sætTrin('høj');
-    globalThis.atomlabMåler?.(`Kvalitet: Basis → Høj (${fps.toFixed(0)} billeder/s${trin.tung ? ', tung skærm' : ''})`);
-  } else if (høj && fps < grænse('nedFps')) {
+    globalThis.atomlabMåler?.(`Kvalitet: Basis → Høj (${fps.toFixed(0)} billeder/s, loft ${loft}${trin.tung ? ', tung skærm' : ''})`);
+  } else if (høj && fps < ned) {
     sætTrin('basis');
     trin.låst = true;
     if (trin.id) faldet.add(trin.id);
-    globalThis.atomlabMåler?.(`Kvalitet: Høj → Basis på denne skærm, til siden lukkes (${fps.toFixed(0)} billeder/s)`);
+    globalThis.atomlabMåler?.(`Kvalitet: Høj → Basis på denne skærm, til siden lukkes (${fps.toFixed(0)} billeder/s, loft ${loft})`);
   }
 }
 

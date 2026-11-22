@@ -2,31 +2,45 @@
 // så skiven, ringene, kolben og kuglerne fik trappekanter. Mens Gåderne er åbne, får komponisten et lag med flere
 // prøver pr. pixel (MSAA), og når man går, får den et almindeligt lag igen. Tabletten (en Mali, hvor MSAA er billig)
 // får 2 prøver, pc 4. Testene tegner uden komponist (TEST_HURTIG), så der sker intet.
-// Værn: Er der under 45 billeder i sekundet i 3 sekunder, slås udglatningen fra resten af besøget (ikke med ?test, hvor
-// testbrowseren altid er langsom, ligesom linsens dynamiske opløsning i js/kosmos/linse.js).
+// Værn: Er der under 45 billeder i sekundet i 3 sekunder, slås udglatningen fra (ikke med ?test, hvor testbrowseren
+// altid er langsom, ligesom linsens dynamiske opløsning i js/kosmos/linse.js).
+// Rettet efter målingen på Tab A11 (22. november 2026): Værnet slog udglatningen fra, mens Sort hul lavede sine shadere
+// (ca. 3 s med ryk), og så var billedet grimt resten af besøget, selvom det kørte med 91 billeder/s. Nu måler værnet ikke
+// de første RO sekunder efter start og efter nye shadere (nyeShadere i scene3d.js), og har det slået udglatningen fra,
+// prøves den igen én gang, når billedet bagefter følger skærmens loft (mindst 90 % i 5 s). Falder den igen, er det
+// grafikkortet, og så bliver den slukket, til Gåderne lukkes.
 import * as THREE from 'three';
-import { verden, LAV_KVALITET, TEST_HURTIG } from '../scene3d.js';
+import { verden, LAV_KVALITET, TEST_HURTIG, nyeShadere, skærmLoft, SHADER_RO } from '../scene3d.js';
 
 export const PRØVER = LAV_KVALITET ? 2 : 4;
-const VÆRN = !new URLSearchParams(location.search).has('test');
-const FPS_MINDST = 45;
-let til = false;
-const måling = { tid: 0, billeder: 0, sidst: 0 };
+// fps: grænsen, ro: sekunder efter start, ryk: længere billeder tæller ikke, igen: andel af loftet for at prøve igen.
+// Kun testene ændrer dem (testbrowseren er langsom).
+export const VÆRN = { til: !new URLSearchParams(location.search).has('test'), fps: 45, ro: SHADER_RO, ryk: 0.5, igen: 0.9, tid: 3, igenTid: 5 };
+let til = false; // MSAA er slået til lige nu
+let ønsket = false; // Gåderne er åbne og vil have udglatning
+const måling = { tid: 0, billeder: 0, sidst: 0, fra: 0, slukket: false, prøvetIgen: false };
 
 // Den rigtige tid mellem billederne (dt fra scene3d.js er højst 0,05 s, så den kan ikke måle langsomme billeder)
 function mål() {
   const nu = performance.now();
   const dt = (nu - måling.sidst) / 1000;
   måling.sidst = nu;
-  if (dt > 0.5) { måling.tid = måling.billeder = 0; return; } // det første billede eller en skjult fane tæller ikke
+  // Det første billede, en skjult fane, et ryk, de første sekunder og tiden lige efter nye shadere tæller ikke
+  if (dt > VÆRN.ryk || nu < måling.fra || nyeShadere(nu)) { måling.tid = måling.billeder = 0; return; }
   måling.tid += dt;
   måling.billeder++;
-  if (måling.tid < 3) return;
+  if (måling.tid < (måling.slukket ? VÆRN.igenTid : VÆRN.tid)) return;
   const fps = måling.billeder / måling.tid;
   måling.tid = måling.billeder = 0;
-  if (fps < FPS_MINDST) {
-    udglat(false);
+  if (!måling.slukket && fps < VÆRN.fps) {
+    måling.slukket = true;
+    skift(false);
     globalThis.atomlabMåler?.(`Gåderne: kantudglatning slået fra (${fps.toFixed(0)} billeder/s)`);
+  } else if (måling.slukket && !måling.prøvetIgen && fps >= VÆRN.igen * skærmLoft()) {
+    måling.slukket = false;
+    måling.prøvetIgen = true;
+    skift(true);
+    globalThis.atomlabMåler?.(`Gåderne: kantudglatning slået til igen (${fps.toFixed(0)} billeder/s uden)`);
   }
 }
 
@@ -39,16 +53,27 @@ function nytLag(samples) {
   return lag;
 }
 
+// Gåderne kalder udglat(true) i start og udglat(false) i stop
 export function udglat(tænd) {
+  if (!verden.komponist || TEST_HURTIG || tænd === ønsket) return;
+  ønsket = tænd;
+  Object.assign(måling, { tid: 0, billeder: 0, sidst: 0, slukket: false, prøvetIgen: false });
+  skift(tænd);
+  if (tænd && VÆRN.til) verden.opdateringer.add(mål);
+  else verden.opdateringer.delete(mål);
+}
+
+function skift(tænd) {
   const { komponist } = verden;
-  if (!komponist || TEST_HURTIG || tænd === til) return;
+  if (tænd === til) return;
   til = tænd;
   komponist.reset(nytLag(tænd ? PRØVER : 0)); // reset frigiver de gamle lag og laver to nye som det givne
   // Med MSAA er kanterne glatte i forvejen, så den fælles udglatning bagefter (SMAA/FXAA, G2) holder pause imens
   if (verden.kanter) verden.kanter.enabled = !tænd;
-  måling.tid = måling.billeder = måling.sidst = 0;
-  if (tænd && VÆRN) verden.opdateringer.add(mål);
-  else verden.opdateringer.delete(mål);
+  måling.fra = performance.now() + VÆRN.ro * 1000; // (nye lag, og billedet skal falde til ro)
 }
+
+// Til testene
+export const værnTilstand = () => ({ ønsket, til, slukket: måling.slukket, prøvetIgen: måling.prøvetIgen });
 
 export const prøver = () => verden.komponist?.renderTarget1.samples ?? 0;
