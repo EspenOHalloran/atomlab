@@ -11,8 +11,9 @@ const rod = new URL('..', import.meta.url).pathname;
 const filer = ['index.html', ...readdirSync(rod + 'js').filter((f) => f.endsWith('.js')).map((f) => 'js/' + f),
   ...readdirSync(rod + 'js/kosmos').map((f) => 'js/kosmos/' + f), ...readdirSync(rod + 'js/data').filter((f) => f !== 'ordbog.js' && f.endsWith('.js')).map((f) => 'js/data/' + f),
   ...readdirSync(rod + 'js/data/sider').map((f) => 'js/data/sider/' + f),
-  // Turenes tekster og Livs data (fx "antibiotika" i tur 4, 18. november 2026)
-  ...['forloeb', 'liv'].flatMap((m) => readdirSync(rod + 'js/data/' + m).filter((f) => f.endsWith('.js')).map((f) => `js/data/${m}/` + f))];
+  // Turenes tekster og Livs data (fx "antibiotika" i tur 4, 18. november 2026), og bøgernes tekster i Opdagelserne (fx
+  // "feltligningen" i forordet til Einsteins opslag om tyngden, E4 22. november 2026)
+  ...['forloeb', 'liv', 'opdagelser'].flatMap((m) => readdirSync(rod + 'js/data/' + m).filter((f) => f.endsWith('.js')).map((f) => `js/data/${m}/` + f))];
 const tekst = filer.map((f) => readFileSync(rod + f, 'utf8')).join('\n').toLowerCase();
 const former = new Set();
 for (const o of ORDBOG) {
