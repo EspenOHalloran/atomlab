@@ -1,5 +1,5 @@
 // Opslag af slags 'ligning' i bogen (js/bog.js), E3 22. november 2026, docs/drejebog-einstein.md afsnit 6 og 7. Fælles for
-// alle ti bøger, men i dag kun brugt af Einstein (tiden, og energien og tyngden i E4). Budgettet (planen, afsnit 3): Fremme
+// alle ti bøger, men i dag kun brugt af Einstein (tiden i E3, energien og tyngden i E4). Budgettet (planen, afsnit 3): Fremme
 // står kun forordet, siden og den store ligning. "Led for led" kommer frem ét led ad gangen, og "Regn selv", "Linje for
 // linje", "For nørder" og "Ærligt talt" er lukkede foldebokse.
 //
@@ -10,18 +10,23 @@
 //   Ligningen: bogstaverne er spændvidder med data-led inden i hinanden (v i v/V i (v/V)² i 1 − (v/V)² i √), så et tryk
 //          på et bogstav vælger det inderste led, der rummer det. "Led for led ›" går gennem leddene i drejebogens orden.
 //   Regn selv: ét trin ad gangen med en knap, og til sidst tre svar. Et forkert svar ryster lidt og giver et vink (B5).
+//          Alt står i dataene (E4): trinenes resultater (res), svaret, en del to efter svaret (efter), en linje, der står
+//          fremme under boksen (ikke), nørd-tabellen og et skema (tyngden: 4 · 4 felter, hvor man trykker de dobbelte væk).
+//   Efter det sidste led: L.ligning.slut (tiden: uret fra turen med turens farter, energien: E = mc² med tre masser,
+//          tyngden: John Wheelers korte udgave). titel og tekst kan være funktioner af det valgte.
 //
 // ligningHTML(o, L, { harNæste, visning }) giver opslagets HTML, og lavLigning(felt, bogId, L, { rolig, bladrVidere })
 // styrer det og giver { fjern(), test }.
 
 import { hentBillede } from './hentning.js';
 import { lavLagBokse } from './lag.js';
-import { bagudLet, bagudRigtig, bagudPrDøgn, ledForLedEksempel, dansk, småGram, LYSETS_FART, URETS_FARTER } from './data/opdagelser/einstein.js';
 
 const NØGLE = 'atomlabBogSide'; // { bog: 'sat' } (skanning er standard)
 const billeder = new Map(); // fil → Promise med et hentet <img>
 
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+// Tekst med små tal forneden: G_im, R_μν og T_im i teksterne om tyngden bliver til G med im under (E4)
+const prosa = (t) => esc(t).replace(/_([a-zμνρσλ]+)/g, '<sub>$1</sub>');
 
 function læsVisning(bogId) {
   try { return JSON.parse(localStorage.getItem(NØGLE) ?? '{}')[bogId] === 'sat' ? 'sat' : 'skanning'; } catch { return 'skanning'; }
@@ -40,7 +45,9 @@ const RODTEGN = '<svg class="lg-rodtegn" viewBox="0 0 10 20" preserveAspectRatio
 const rod = (indhold, attr = '') => `<span class="lg-rod"${attr}>${RODTEGN}<span class="lg-rodunder">${indhold}</span></span>`;
 
 // Den lille opmærkning fra js/data/opdagelser/einstein.js: *x* kursiv, \r{…} rod, \b{a}{b} brøk, \p{…} høj parentes, ^{…}
-// lille tal foroven. Alt andet skrives, som det står (escaped)
+// lille tal foroven, _{…} lille tal forneden. Fra E4 (s. 641 og s. 845): \h{…} høj krøllet parentes, \i{op}{ned} to små
+// indekser over hinanden (Γ med l foroven og im forneden), \s{…} et summetegn med indekset under, \c{a}{b} Christoffels
+// krøllede parentes med a over b og \k{…} kapitæler (EINSTEIN i sidehovedet). Alt andet skrives, som det står (escaped)
 export function matte(s) {
   let i = 0;
   function gruppe() {
@@ -61,10 +68,16 @@ export function matte(s) {
         i += 2;
         if (k === 'r') ud += rod(gruppe());
         else if (k === 'b') { const a = gruppe(); const b = gruppe(); ud += `<span class="lg-brok"><span>${a}</span><span>${b}</span></span>`; }
-        else if (k === 'p') ud += `<span class="lg-hoj"><span class="lg-par">(</span>${gruppe()}<span class="lg-par">)</span></span>`;
+        else if (k === 'p') ud += `<span class="lg-hoj"><span class="lg-par">(</span><span>${gruppe()}</span><span class="lg-par">)</span></span>`;
+        else if (k === 'h') ud += `<span class="lg-hoj"><span class="lg-par">{</span><span>${gruppe()}</span><span class="lg-par">}</span></span>`;
+        else if (k === 'i') { const op = gruppe(); const ned = gruppe(); ud += `<span class="lg-idx"><span>${op}</span><span>${ned}</span></span>`; }
+        else if (k === 's') ud += `<span class="lg-sum">Σ<span>${gruppe()}</span></span>`;
+        else if (k === 'c') { const a = gruppe(); const b = gruppe(); ud += `<span class="lg-hoj"><span class="lg-par">{</span><span class="lg-brok lg-uden"><span>${a}</span><span>${b}</span></span><span class="lg-par">}</span></span>`; }
+        else if (k === 'k') ud += `<span class="lg-kap">${gruppe()}</span>`;
         continue;
       }
       if (c === '^') { i++; ud += `<sup>${gruppe()}</sup>`; continue; }
+      if (c === '_') { i++; ud += `<sub>${gruppe()}</sub>`; continue; }
       if (c === '*') {
         const slut = s.indexOf('*', i + 1);
         ud += `<i>${esc(s.slice(i + 1, slut))}</i>`;
@@ -86,9 +99,25 @@ function ligningTiden() {
   const kvadrat = `<span class="lg-hoj" data-led="kvadrat"><span class="lg-par">(</span>${brøk}<span class="lg-par">)</span><sup>2</sup></span>`;
   return `${g('tau', '<i>τ</i>')}<span class="lg-lig"> = </span>${g('t', '<i>t</i>')}${rod(`<span data-led="enminus">1 − ${kvadrat}</span>`, ' data-led="rod"')}`;
 }
-const STORE = { tiden: ligningTiden };
+// Energien (drejebogen afsnit 8): massen bliver L/V² mindre (s. 641, l. 14), og under den Einsteins eget tal for V² (l. 20)
+function ligningEnergien() {
+  const g = (led, t) => `<span class="lg-g" data-led="${led}">${t}</span>`;
+  const brøk = `<span class="lg-brok" data-led="brok">${g('L', '<i>L</i>')}${g('V2', '<i>V</i><sup>2</sup>')}</span>`;
+  return `${g('masse', 'Masse')}<span class="lg-lig"> − </span>${brøk}`
+    + `<span class="lg-stor-under">${g('tal', '9 · 10<sup>20</sup>')} = <i>V</i><sup>2</sup> i erg og gram</span>`;
+}
+// Tyngden (drejebogen afsnit 9): G_im = −κ(T_im − ½ g_im T), formel (2a) på s. 845. Alle de små i og m er ét led
+function ligningTyngden() {
+  const g = (led, t) => `<span class="lg-g" data-led="${led}">${t}</span>`;
+  const im = '<sub data-led="im"><i>im</i></sub>';
+  const halv = `<span data-led="halv"><span class="lg-brok"><span>1</span><span>2</span></span> ${g('g', `<i>g</i>${im}`)}<i>T</i></span>`;
+  return `${g('G', `<i>G</i>${im}`)}<span class="lg-lig" data-led="lig"> = </span>−${g('kappa', 'κ')}`
+    + `<span class="lg-hoj"><span class="lg-par">(</span><span>${g('T', `<i>T</i>${im}`)} − ${halv}</span><span class="lg-par">)</span></span>`;
+}
+const STORE = { tiden: ligningTiden, energien: ligningEnergien, tyngden: ligningTyngden };
 
 function satHTML(side) {
+  const [venstre = '', midt = '', højre = ''] = side.hoved;
   // Linjerne grupperes, så et glødende sted er én knap om sine linjer
   const grupper = [];
   let nr = 0;
@@ -98,41 +127,52 @@ function satHTML(side) {
     const sidste = grupper.at(-1);
     if (!sidste || sidste.sted !== sted) grupper.push({ sted, linjer: [] });
     let html;
-    if (x.f) html = `<span class="lg-formel">${matte(x.f)}</span>`;
+    // En formel på sin egen linje med Einsteins nummer til højre (s. 845). lille: den lange formel (6)
+    if (x.f) html = `<span class="lg-formel${x.lille ? ' lg-formel-lille' : ''}"><span class="lg-fx">${matte(x.f)}</span>${x.nr ? `<span class="lg-fnr">${esc(x.nr)}</span>` : ''}</span>`;
     else {
       nr++;
       const ind = x.t.startsWith('>');
       // En kort linje (den sidste i et afsnit, "und", "Es ist also") strækkes ikke ud til kanten
-      const kortLinje = x.t.replace(/[*>]|\\r|[{}^]/g, '').length < 40;
-      html = `<span class="lg-linje${ind ? ' lg-ind' : ''}${kortLinje ? ' lg-kortlinje' : ''}"${nr % 5 ? '' : ` data-nr="${nr}"`}>${matte(ind ? x.t.slice(1) : x.t)}</span>`;
+      const kortLinje = x.t.replace(/[*>_^{}]|\\[a-z]/g, '').length < 40;
+      html = `<span class="lg-linje${ind ? ' lg-ind' : ''}${kortLinje ? ' lg-kortlinje' : ''}${x.midt ? ' lg-midt' : ''}"${nr % 5 ? '' : ` data-nr="${nr}"`}>${matte(ind ? x.t.slice(1) : x.t)}</span>`;
     }
     grupper.at(-1).linjer.push(html);
   }
-  return `<div class="lg-sat" lang="de"><span class="lg-sat-hoved"><span>${esc(side.hoved[0])}</span><i>${esc(side.hoved[1])}</i><span></span></span>`
+  // Sidehovedet: sidetallet til venstre eller højre og titlen i midten (kursiv i Annalen, kapitæler i Sitzungsberichte)
+  return `<div class="lg-sat" lang="de" data-side="${side.id}"><span class="lg-sat-hoved"><span>${esc(venstre)}</span><span class="lg-sat-titel">${matte(midt)}</span><span>${esc(højre)}</span></span>`
     + grupper.map((gr) => (gr.sted ? `<button class="lg-sat-sted" data-sted="${gr.sted}" aria-pressed="false">${gr.linjer.join('')}</button>` : gr.linjer.join(''))).join('')
     + '</div>';
 }
 
-function regnHTML(r) {
-  return `<details class="lag-boks lg-regn"><summary><strong>${esc(r.titel)}</strong></summary>`
-    + `<div class="lg-regn-krop"><p class="lg-regn-intro">${esc(r.intro)}</p><ol class="lg-regn-trin"></ol>`
-    + '<div class="lg-regn-valg" role="group"></div><p class="lg-regn-svar" aria-live="polite"></p></div>'
-    + `<details class="lg-regn-nørd"><summary>${esc(r.nørd.titel)}</summary><p>${esc(r.nørd.tekst)}</p>`
-    + `<table class="lg-tabel"><thead><tr>${r.nørd.kolonner.map((k) => `<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>`
-    + r.nørd.farter.map((β) => `<tr><td>${dansk(β * 100)} %</td><td>${kort(bagudLet(β))}</td><td>${kort(bagudRigtig(β))}</td></tr>`).join('')
-    + '</tbody></table></details></details>';
+// Skemaet i "Regn selv" (tyngden): n · n felter med G og de to små tal. Felterne over den skrå linje (i < m) kan foldes
+// oven på deres makker under linjen
+const SMÅ = '₀₁₂₃₄₅₆₇₈₉';
+const småTal = (n) => String(n).split('').map((c) => SMÅ[c]).join('');
+function skemaHTML(n) {
+  let ud = `<div class="lg-skema" role="group" aria-label="Skemaet med ${n * n} felter" style="--n:${n}">`;
+  for (let i = 1; i <= n; i++) for (let m = 1; m <= n; m++) {
+    const del = i < m ? 'over' : i > m ? 'under' : 'skrå';
+    ud += `<button class="lg-felt lg-${del}" data-i="${i}" data-m="${m}" aria-label="G ${i} ${m}"><i>G</i>${småTal(i)}${småTal(m)}</button>`;
+  }
+  return `${ud}</div>`;
 }
-// Tre betydende cifre på dansk (0,00501 og 0,134)
-export function kort(x) {
-  return Number(x.toPrecision(3)).toString().replace('.', ','); // tallene her er alle over 0,00001, så ingen e-notation
+function regnHTML(r) {
+  const n = r.nørd;
+  const tabel = n.tabel ? `<table class="lg-tabel"><thead><tr>${n.tabel.kolonner.map((k) => `<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>`
+    + n.tabel.rækker.map((række) => `<tr>${række.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('') + '</tbody></table>' : '';
+  return `<details class="lag-boks lg-regn"><summary><strong>${esc(r.titel)}</strong></summary>`
+    + `<div class="lg-regn-krop"><p class="lg-regn-intro">${prosa(r.intro)}</p>${r.skema ? skemaHTML(r.skema.n) : ''}<ol class="lg-regn-trin"></ol>`
+    + '<div class="lg-regn-valg" role="group"></div><p class="lg-regn-svar" aria-live="polite"></p></div>'
+    + `<details class="lg-regn-nørd"><summary>${esc(n.titel)}</summary><p>${prosa(n.tekst)}</p>${tabel}</details></details>`
+    + (r.ikke ? `<p class="lg-ikke">${esc(r.ikke)}</p>` : '');
 }
 
 function bokse(L, bogId) {
   const liste = (lag, id, ærligt = false) => `<details class="lag-boks bo-lag${ærligt ? ' ærligt' : ' lag-mere'}" data-lag="${id}"><summary><strong>${esc(lag.titel)}</strong>${ærligt ? ` <span class="lag-kort">${esc(lag.linje)}</span>` : ''}</summary>`
-    + `<ul>${lag.punkter.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></details>`;
+    + `<ul>${lag.punkter.map((p) => `<li>${prosa(p)}</li>`).join('')}</ul></details>`;
   const l = L.linjer;
   return `<details class="lag-boks bs-linjer" data-lag="bog-linjer"><summary><strong>${esc(l.titel)}</strong> <span class="lag-kort">${esc(l.linje)}</span></summary>`
-    + l.rækker.map((r) => `<div class="bs-række"><p class="bs-hvor">${esc(r.hvor)}</p><p class="bs-latin" lang="de">${esc(r.tysk)}</p><p class="bs-dansk">${esc(r.dansk)}</p></div>`).join('')
+    + l.rækker.map((r) => `<div class="bs-række"><p class="bs-hvor">${esc(r.hvor)}</p><p class="bs-latin" lang="de">${prosa(r.tysk)}</p><p class="bs-dansk">${prosa(r.dansk)}</p></div>`).join('')
     + `<p class="bs-note">${esc(l.note)}</p></details>`
     + liste(L.nørd, `bog-ligning-nørd-${bogId}`) + liste(L.ærligt, `bog-ligning-ærligt-${bogId}`, true);
 }
@@ -144,8 +184,8 @@ export function ligningHTML(o, L, { bogId, harNæste = false, visning = 'skannin
     + '<div class="bs-krop lg-krop">'
     + `<div class="lg-side"><div class="bs-billede lg-skanning"><p class="bs-henter">Henter siden …</p></div>${satHTML(L.side)}<p class="lg-hvor">${esc(L.side.hvor)}</p></div>`
     + '<div class="bs-tekst lg-tekst">'
-    + `<div class="lg-forord"><p class="lg-forord-sted">${esc(L.forord.sted)}</p><p class="lg-forord-tekst">${esc(L.forord.tekst)}</p></div>`
-    + `<div class="lg-ligning"><div class="lg-stor" lang="de" aria-label="${esc(L.ligning.alt)}">${STORE[o.ligning]?.() ?? matte(L.ligning.navn)}</div>`
+    + `<div class="lg-forord"><p class="lg-forord-sted">${esc(L.forord.sted)}</p><p class="lg-forord-tekst" data-ord-kun="${esc((L.ord ?? []).join(' '))}">${esc(L.forord.tekst)}</p></div>`
+    + `<div class="lg-ligning"><div class="lg-stor" lang="de" data-ligning="${esc(o.ligning)}" aria-label="${esc(L.ligning.alt)}">${STORE[o.ligning]?.() ?? matte(L.ligning.navn)}</div>`
     + `<div class="lg-led" aria-live="polite"></div><div class="lg-led-knapper"><button class="knap lille lg-led-næste">${esc(L.ligning.start)} ›</button></div></div>`
     + `<div class="bs-steder">${L.steder.map((x) => `<button class="bs-sted-knap" data-sted="${x.id}" aria-pressed="false">${esc(x.navn)}</button>`).join('')}</div>`
     + '<div class="bs-forklaring" aria-live="polite"></div>'
@@ -174,8 +214,9 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
   let sted = null;
   let led = -1; // indekset i L.ligning.led, -1 før "Led for led"
   let ledSlut = false; // efter det sidste led: eksemplet
-  let fart = 0.87; // farten i eksemplet (uret fra turen)
-  const regn = { trin: 0, svar: null, forkert: null };
+  const slut = L.ligning.slut;
+  let valgt = slut.standard ?? null; // det valgte i slut (tiden: farten, energien: massen)
+  const regn = { trin: 0, svar: null, forkert: null, foldet: new Set(), efter: false, skrå: false };
   const billede = felt.querySelector('.lg-skanning');
   const forklaring = felt.querySelector('.bs-forklaring');
   const ledFelt = felt.querySelector('.lg-led');
@@ -214,9 +255,9 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
     const x = L.steder.find((s) => s.id === sted);
     for (const k of felt.querySelectorAll('[data-sted]')) k.setAttribute('aria-pressed', String(k.dataset.sted === sted));
     forklaring.innerHTML = x
-      ? `<p class="bs-navn">${esc(x.navn)}</p><p class="lg-kort">${esc(x.kort)}</p>`
-        + `<p class="bs-latin" lang="de"><span class="bs-mærke">Tysk, ${esc(x.linjer.toLowerCase())}</span> ${esc(x.tysk)}</p>`
-        + `<p class="bs-dansk"><span class="bs-mærke">På dansk</span> ${esc(x.dansk)}</p>`
+      ? `<p class="bs-navn">${esc(x.navn)}</p><p class="lg-kort">${prosa(x.kort)}</p>`
+        + `<p class="bs-latin" lang="de"><span class="bs-mærke">Tysk, ${esc(x.linjer.toLowerCase())}</span> ${prosa(x.tysk)}</p>`
+        + `<p class="bs-dansk"><span class="bs-mærke">På dansk</span> ${prosa(x.dansk)}</p>`
       : `<p class="bs-vælg">${esc(L.vælg)}</p>`;
   }
 
@@ -225,17 +266,18 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
     const lg = L.ligning;
     for (const e of felt.querySelectorAll('.lg-stor [data-led]')) e.classList.toggle('lg-lyser', led >= 0 && !ledSlut && e.dataset.led === lg.led[led].id);
     if (ledSlut) {
-      const pct = (β) => `${dansk(β * 100)} %`;
-      ledFelt.innerHTML = `<p><b>${esc(lg.eksempel.replace('{fart}', pct(fart)))}</b> ${esc(ledForLedEksempel(fart))}</p>`
-        + `<p class="lg-farter"><span>${esc(lg.vælgFart)}</span> ${URETS_FARTER.map((β) => `<button class="lg-fart" data-fart="${β}" aria-pressed="${β === fart}">${pct(β)}</button>`).join('')}</p>`
-        + `<p class="lg-idag">${esc(lg.idag)}</p>`;
+      const hent = (x) => (typeof x === 'function' ? x(valgt) : x);
+      ledFelt.innerHTML = (slut.intro ? `<p class="lg-slut-intro">${matte(slut.intro)}</p>` : '')
+        + `<p><b>${esc(hent(slut.titel))}</b> ${esc(hent(slut.tekst))}</p>`
+        + (slut.valg ? `<p class="lg-farter"><span>${esc(slut.vælg)}</span> ${slut.valg.map((x, i) => `<button class="lg-fart" data-fart="${x.v}" data-valg="${i}" aria-pressed="${x.v === valgt}">${esc(x.knap)}</button>`).join('')}</p>` : '')
+        + (slut.idag ? `<p class="lg-idag">${matte(slut.idag)}</p>` : '');
       ledKnap.textContent = `${lg.forfra} ›`;
     } else if (led < 0) {
       ledFelt.innerHTML = `<p class="bs-vælg">${esc(lg.hjælp)}</p>`;
       ledKnap.textContent = `${lg.start} ›`;
     } else {
       const x = lg.led[led];
-      ledFelt.innerHTML = `<p><b class="lg-led-navn" lang="de">${matte(x.navn.replace(/([vVt])/g, '*$1*'))}</b> ${esc(x.linje)}</p>${x.idag ? `<p class="lg-idag">${esc(x.idag)}</p>` : ''}`;
+      ledFelt.innerHTML = `<p><b class="lg-led-navn" lang="de">${matte(x.navn)}</b> ${prosa(x.linje)}</p>${x.idag ? `<p class="lg-idag">${prosa(x.idag)}</p>` : ''}`;
       ledKnap.textContent = `${lg.næste} ›`;
     }
   }
@@ -258,26 +300,41 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
   const regnTrin = felt.querySelector('.lg-regn-trin');
   const regnValg = felt.querySelector('.lg-regn-valg');
   const regnSvar = felt.querySelector('.lg-regn-svar');
-  const β = R.β;
-  const resultat = [
-    `${dansk(β, 2)} · ${dansk(β, 2)} = ${dansk(β * β, 4)}`,
-    `½ · ${dansk(β * β, 4)} = ${dansk(bagudLet(β), 5)}. Uret kommer ${dansk(bagudLet(β), 5)} sekund bagud for hvert sekund.`,
-  ];
+  const skema = felt.querySelector('.lg-skema');
+  const nøgle = (i, m) => `${Math.min(i, m)}-${Math.max(i, m)}`;
+  const antalDobbelte = R.skema ? (R.skema.n * (R.skema.n - 1)) / 2 : 0;
+  function visSkema() {
+    if (!skema) return;
+    skema.classList.toggle('lg-fold', regn.trin === R.skema.fold);
+    for (const f of skema.querySelectorAll('.lg-felt')) {
+      const i = Number(f.dataset.i), m = Number(f.dataset.m), k = nøgle(i, m);
+      f.classList.toggle('lg-foldet', i < m && regn.foldet.has(k));
+      f.classList.toggle('lg-dobbelt', i > m && regn.foldet.has(k));
+      // Felterne over den skrå linje glider hen over deres makker (en celle er 1, og de står i, m og m, i)
+      f.style.setProperty('--dx', String(i - m));
+      f.style.setProperty('--dy', String(m - i));
+      f.disabled = regn.trin !== R.skema.fold || i > m && regn.foldet.has(k) || f.classList.contains('lg-foldet');
+    }
+  }
   function visRegn() {
-    regnTrin.innerHTML = R.trin.slice(0, regn.trin + 1).map((t, i) => `<li><span>${esc(t.tekst)}</span>`
-      + (i < regn.trin ? ` <b class="lg-regn-res">${esc(resultat[i])}</b>` : t.knap ? ` <button class="knap lille lg-regn-knap">${esc(t.knap)}</button>` : '')
+    regnTrin.innerHTML = R.trin.slice(0, regn.trin + 1).map((t, i) => `<li><span>${prosa(t.tekst)}</span>`
+      + (i < regn.trin ? ` <b class="lg-regn-res">${esc(t.res)}</b>` : t.knap ? ` <button class="knap lille lg-regn-knap">${esc(t.knap)}</button>` : '')
       + '</li>').join('');
     const sidste = regn.trin === R.trin.length - 1;
     regnValg.innerHTML = sidste ? R.valg.map((v, i) => `<button class="knap lille lg-svar" data-svar="${i}"${regn.svar !== null ? ' disabled' : ''}${regn.svar === i ? ' aria-pressed="true"' : ''}>${esc(v.tekst)}</button>`).join('') : '';
     if (regn.svar !== null) {
-      const bil = bagudPrDøgn(100 / 3.6 / LYSETS_FART);
-      regnSvar.innerHTML = `<b>${dansk(bagudPrDøgn(β), 1)} sekunder om dagen.</b> Ved 100 km/t er det kun ${småGram(bil, 11)} sekund. Så lidt kan ingen mærke. <button class="knap lille svag lg-regn-igen">${esc(R.igen)} ›</button>`;
+      // Svaret, og en del to, når der er en (energien: Solen)
+      const e = R.efter;
+      regnSvar.innerHTML = `<b>${esc(R.svar)}</b> ${esc(R.svarMere ?? '')}`
+        + (e ? `<span class="lg-regn-efter"><span>${esc(e.tekst)}</span> ${regn.efter ? `<b class="lg-regn-res">${esc(e.res)}</b>` : `<button class="knap lille lg-regn-del2">${esc(e.knap)}</button>`}</span>` : '')
+        + ` <button class="knap lille svag lg-regn-igen">${esc(R.igen)} ›</button>`;
     } else if (regn.forkert !== null) {
       const v = R.valg[regn.forkert];
-      regnSvar.textContent = `${R.vink[v.for]} ${R.vink.fælles}`;
-    } else regnSvar.textContent = '';
+      regnSvar.textContent = `${R.vink[v.for]} ${R.vink.fælles}`.trim();
+    } else regnSvar.textContent = regn.skrå ? R.vink.diagonal : '';
+    visSkema();
   }
-  function regnKnap() { if (regn.trin < R.trin.length - 1) { regn.trin++; visRegn(); } }
+  function regnKnap() { if (regn.trin < R.trin.length - 1 && regn.trin !== R.skema?.fold) { regn.trin++; visRegn(); } }
   function vælgSvar(i) {
     if (regn.svar !== null || regn.trin !== R.trin.length - 1) return;
     if (R.valg[i].rigtig) { regn.svar = i; regn.forkert = null; }
@@ -285,14 +342,35 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
     visRegn();
     if (!R.valg[i].rigtig) ryst(regnValg.querySelector(`[data-svar="${i}"]`), rolig);
   }
+  // Et tryk på et felt i skemaet: Et felt over den skrå linje (eller dets makker under den) lægger sig oven på makkeren.
+  // Et felt på den skrå linje har ingen makker (vink). Når alle de dobbelte er foldet, går regnestykket videre
+  function fold(i, m) {
+    if (!skema || regn.trin !== R.skema.fold) return;
+    if (i === m) {
+      regn.skrå = true;
+      visRegn();
+      ryst(skema.querySelector(`[data-i="${i}"][data-m="${m}"]`), rolig);
+      return;
+    }
+    regn.skrå = false;
+    regn.foldet.add(nøgle(i, m));
+    if (regn.foldet.size >= antalDobbelte) regn.trin++;
+    visRegn();
+  }
+  function regnForfra() {
+    Object.assign(regn, { trin: 0, svar: null, forkert: null, foldet: new Set(), efter: false, skrå: false });
+    visRegn();
+  }
 
   const klik = (h) => {
     const g = h.target.closest('.lg-stor [data-led]');
     if (g) { vælgLed(g.dataset.led); return; }
+    const f = h.target.closest('.lg-felt');
+    if (f) { fold(Number(f.dataset.i), Number(f.dataset.m)); return; }
     const k = h.target.closest('button');
     if (!k) return;
     if (k.dataset.visning) sætVisning(k.dataset.visning);
-    else if (k.dataset.fart) { fart = Number(k.dataset.fart); visLed(); }
+    else if (k.dataset.valg) { valgt = slut.valg[Number(k.dataset.valg)].v; visLed(); }
     else if (k.dataset.sted) {
       const på = k.classList.contains('bs-glød') || k.classList.contains('lg-sat-sted');
       sted = sted === k.dataset.sted && på ? null : k.dataset.sted;
@@ -303,7 +381,8 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
     else if (k.classList.contains('lg-led-næste')) næsteLed();
     else if (k.classList.contains('lg-regn-knap')) regnKnap();
     else if (k.dataset.svar) vælgSvar(Number(k.dataset.svar));
-    else if (k.classList.contains('lg-regn-igen')) { Object.assign(regn, { trin: 0, svar: null, forkert: null }); visRegn(); }
+    else if (k.classList.contains('lg-regn-del2')) { regn.efter = true; visRegn(); }
+    else if (k.classList.contains('lg-regn-igen')) regnForfra();
     else if (k.classList.contains('lg-videre')) bladrVidere?.();
   };
   felt.addEventListener('click', klik);
@@ -323,11 +402,15 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
       vælg(id) { sted = id; forklar(); },
       led: () => (ledSlut ? 'slut' : L.ligning.led[led]?.id ?? null),
       næsteLed,
-      fart(β) { fart = β; visLed(); },
+      // Det valgte efter det sidste led (tiden: farten, energien: massen). fart() er det gamle navn fra E3
+      fart(v) { valgt = v; visLed(); },
+      valgt: () => valgt,
       vælgLed,
-      regn: () => ({ ...regn }),
+      regn: () => ({ ...regn, foldet: regn.foldet.size }),
       regnKnap,
       vælgSvar,
+      fold,
+      delTo() { if (regn.svar !== null) { regn.efter = true; visRegn(); } },
     },
   };
 }

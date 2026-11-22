@@ -11,9 +11,9 @@ export const LIGE_HURTIGT = {
   id: 'lige-hurtigt',
   del: 'opdagelser',
   titel: 'Lige hurtigt for alle',
-  // Kernesætning A (jeres valg 21. november 2026, drejebogen afsnit 1 og 17). Den sidste sætning ("Jeg har selv læst de tre
-  // ligninger på hans egne sider") kommer med i E4, når siderne er bygget (valgt af sessionen, kan ændres af jer)
-  kernesætning: 'Fordi lyset er lige hurtigt for alle, går et ur, der farer af sted, langsommere, og masse er energi (E = mc²). Ti år senere viste Einstein, at tunge ting også får tiden til at gå langsommere, og det skal GPS\'en i min telefon regne med.',
+  // Kernesætning A (jeres valg 21. november 2026, drejebogen afsnit 1 og 17). Den sidste sætning kom med i E4 (22. november
+  // 2026), da alle tre sider med ligningerne var bygget
+  kernesætning: 'Fordi lyset er lige hurtigt for alle, går et ur, der farer af sted, langsommere, og masse er energi (E = mc²). Ti år senere viste Einstein, at tunge ting også får tiden til at gå langsommere, og det skal GPS\'en i min telefon regne med. Jeg har selv læst de tre ligninger på hans egne sider.',
   // Vinkene (stilguiden B5, js/bog/einstein.js), kun mens trinet venter
   vink: {
     tog: 'Lygterne tænder, når togets lygte er lige ud for en lygte på perronen.',

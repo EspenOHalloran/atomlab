@@ -48,6 +48,11 @@ BØGER = {
         'sider': {
             's904': {'arkiv': 'sim_annalen-der-physik_1905_17_5', 'n': 127, 'udsnit': (440, 110, 1988, 2720)},
             's641': {'arkiv': 'sim_annalen-der-physik_1905_18_3', 'n': 234, 'udsnit': (45, 135, 1910, 2980)},
+            # Sitzungsberichte 1915, s. 845 (E4, 22. november 2026): Googles skanning af Minnesotas eksemplar (reserven i
+            # docs/drejebog-einstein.md afsnit 11, jeres go 22. november 2026). w1200 giver her 1240 px. Udsnittet tager
+            # den tomme margen væk, men beholder linjen "Digitized by Google / Original from University of Minnesota"
+            # nederst, så skanningen bærer sin kilde (Google beder om, at den bliver stående)
+            's845': {'arkiv': 'SitzungsberichtePreussAkad19152', 'n': 372, 'udsnit': (130, 140, 1090, 1767)},
         },
     },
 }

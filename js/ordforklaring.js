@@ -9,7 +9,7 @@ import { ORDBOG } from './data/ordbog.js';
 const ZONER = [
   '.hjælp-indhold', '.forklaring-boks', '.seneste-boks', '.side-del', '.kosmos-forklaring', '.fane',
   '.system-kort', '.system-kategori', '.ærligt', '.ut-tekst', '.pille-mere', '#logListe li', '.hk-tekst', '.hk-nørd', '.liv-tekst', '.liv-ekstra',
-  '.fl-tekst',
+  '.fl-tekst', '.lg-forord-tekst',
 ].join(', ');
 // Et sted med data-ord-kun="proton atomkerne" markerer kun de ord (forløbets linje, js/forloeb.js: trinets egne fagord).
 // Et ord med kunI (fx de helt grundlæggende som proton og elektron) markeres kun i de steder, der passer på vælgeren,
