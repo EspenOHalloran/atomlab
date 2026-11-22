@@ -84,6 +84,7 @@ for (const [navn, opts] of [['pc', { viewport: { width: 1280, height: 800 } }], 
     await page.waitForFunction(async () => { const v = (await import('/js/gaader/kanter.js')).værnTilstand(); return v.prøvetIgen && v.slukket; }, null, { timeout: 240000, polling: 1000 }).catch(() => {});
     await page.waitForTimeout(3000);
     const slut = await værn();
+    slut.diag = await page.evaluate(async () => { const s = await import('/js/scene3d.js'); const v = (await import('/js/gaader/kanter.js')).VÆRN; return { nye: s.nyeShadere(), programmer: s.verden.renderer.info.programs.length, loft: s.skærmLoft(), v }; });
     tjek('pc: Gådernes værn slår udglatningen fra, prøver den igen én gang og lader den så være slukket', slut.slukket && !slut.til && slut.prøver === 0 && slut.prøvetIgen, JSON.stringify(slut));
     await page.evaluate(async () => {
       const g = await import('/js/gaader/kanter.js');
