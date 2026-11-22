@@ -175,7 +175,7 @@ async function visSkærm() {
   nulstilStyring();
   opdaterLydknapper();
   startPaneler(ny);
-  vælgKvalitet(ny === 'menu' || !!skærmMed(ny)?.høj); // kvalitetstrinnet Høj på touch (js/scene3d.js)
+  vælgKvalitet(ny === 'menu' || (skærmMed(ny)?.høj ?? false), ny); // kvalitetstrinnet Høj på touch (js/scene3d.js)
   modul.start();
 }
 

@@ -32,7 +32,7 @@ import { forløbMed, forløbI } from './data/forloeb/liste.js';
 import { lavTurKnap, kørerForløb } from './forloeb.js';
 import { forløbTaget } from './fremgang.js';
 import { sætBilledEjer, frigivBilleder } from './hentning.js';
-import { skjulTilKlar } from './solsystem/shadere.js';
+import { skjulTilKlar, lavShadereFørst } from './solsystem/shadere.js';
 
 // Tablet på højkant, telefoner og telefon på langs: Styr-boksen er foldet sammen fra start
 const SMAL = matchMedia('(max-width: 820px), (max-height: 500px)');
@@ -292,6 +292,10 @@ export function lavFænomenSkærm({ skærm, liste, forside = null }) {
       vælgFænomen: (id) => { if (valgt?.id !== id) vælg(id); },
       forrige: før?.id ?? null, // det fænomen, man kom fra (overblikket flyver ud fra det)
     });
+    // Shaderne til alt i fænomenet, også det, der først vises senere (fx Supernovaens lag og resterne efter "Lad stjernen
+    // eksplodere": tre nye shadere og et ryk på 176 ms på telefonen A56, 21. november 2026), laves nu, i baggrunden, hvor
+    // browseren kan (js/solsystem/shadere.js). Effekternes glimt og bølger bruger de samme shadere som fænomenernes glød.
+    lavShadereFørst(gruppe, () => valgt === f);
     // Det forrige fænomens billeder frigives først nu, så de billeder, det nye også bruger (fx Jorden), bliver liggende
     if (før !== f) frigivBilleder(før);
     tidsknap.hurtig(kørende.hurtig ?? null);
