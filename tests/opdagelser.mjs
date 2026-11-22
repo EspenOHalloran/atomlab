@@ -1000,7 +1000,7 @@ for (const [navn, opsætning] of [
   await page.click('#opdBog .lg-fart[data-fart="0.5"]');
   const halv = await O(() => document.querySelector('#opdBog .lg-led')?.textContent);
   await page.click('#opdBog .lg-stor [data-led="V"]');
-  const v = await O(() => ({ led: atomlabTest.opdagelser.scene().led(), lyser: [...document.querySelectorAll('#opdBog .lg-stor .lyser')].map((e) => e.dataset.led), tekst: document.querySelector('#opdBog .lg-led')?.textContent }));
+  const v = await O(() => ({ led: atomlabTest.opdagelser.scene().led(), lyser: [...document.querySelectorAll('#opdBog .lg-stor .lg-lyser')].map((e) => e.dataset.led), tekst: document.querySelector('#opdBog .lg-led')?.textContent }));
   tjek('Einsteins ligning: "Led for led" går gennem t, τ, v, V, v/V, (v/V)², 1 − (v/V)² og √ til uret fra turen (9,9 sekunder), en anden fart (50 %: 17,3) kan sættes ind, og et tryk på V lyser V op med "I dag skriver man c"',
     led.join() === 't,tau,v,V,brok,kvadrat,enminus,rod,slut' && /9,9/.test(slutTekst) && /0,5 · 0,5 = 0,25/.test(halv) && /17,3/.test(halv) && v.led === 'V' && v.lyser.join() === 'V' && /Lysets fart/.test(v.tekst) && /skriver man c/.test(v.tekst), JSON.stringify({ led, slutTekst, halv, v }));
   // Regn selv

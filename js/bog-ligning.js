@@ -104,7 +104,7 @@ function satHTML(side) {
       const ind = x.t.startsWith('>');
       // En kort linje (den sidste i et afsnit, "und", "Es ist also") strækkes ikke ud til kanten
       const kortLinje = x.t.replace(/[*>]|\\r|[{}^]/g, '').length < 40;
-      html = `<span class="lg-linje${ind ? ' ind' : ''}${kortLinje ? ' kort' : ''}"${nr % 5 ? '' : ` data-nr="${nr}"`}>${matte(ind ? x.t.slice(1) : x.t)}</span>`;
+      html = `<span class="lg-linje${ind ? ' lg-ind' : ''}${kortLinje ? ' lg-kortlinje' : ''}"${nr % 5 ? '' : ` data-nr="${nr}"`}>${matte(ind ? x.t.slice(1) : x.t)}</span>`;
     }
     grupper.at(-1).linjer.push(html);
   }
@@ -223,7 +223,7 @@ export function lavLigning(felt, bogId, L, { rolig = false, bladrVidere = null }
   // ---------- Led for led ----------
   function visLed() {
     const lg = L.ligning;
-    for (const e of felt.querySelectorAll('.lg-stor [data-led]')) e.classList.toggle('lyser', led >= 0 && !ledSlut && e.dataset.led === lg.led[led].id);
+    for (const e of felt.querySelectorAll('.lg-stor [data-led]')) e.classList.toggle('lg-lyser', led >= 0 && !ledSlut && e.dataset.led === lg.led[led].id);
     if (ledSlut) {
       const pct = (β) => `${dansk(β * 100)} %`;
       ledFelt.innerHTML = `<p><b>${esc(lg.eksempel.replace('{fart}', pct(fart)))}</b> ${esc(ledForLedEksempel(fart))}</p>`
