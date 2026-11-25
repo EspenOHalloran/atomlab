@@ -19,6 +19,7 @@ export const LINKS = {
   fission: { skærm: ['reaktor', 'Reaktoren'] },
   moderator: { skærm: ['reaktor', 'Reaktoren'] },
   fusion: { skærm: ['fusion', 'Stjerneovnen'] },
+  emc2: { skærm: ['fusion', 'Stjerneovnen'] },
   plasma: { skærm: ['fusion', 'Stjerneovnen'] },
   deuterium: { skærm: ['fusion', 'Stjerneovnen'] },
   elektrolyt: { skærm: ['batteri', 'Batteriet'] },

@@ -365,6 +365,21 @@ export const ORDBOG = [
       ['Hvorfor er affaldet farligt så længe?', 'Stykkerne fra spaltningen har for mange neutroner og er stærkt radioaktive. Nogle henfalder på få dage, mens fx cæsium-137 har en halveringstid på ca. 30 år. Samtidig bliver noget af uran-238 i brændslet til plutonium, som har en halveringstid på ca. 24.000 år. Derfor skal brugt brændsel gemmes sikkert i meget lang tid, fx dybt nede i fast klippe, som Finland har bygget et lager til.'],
     ],
   },
+  // E = mc² (25. november 2026, spor Småting): stod uforklaret i Stjerneovnen, Reaktoren, Solen, Tyngdebølger og "Hvorfor?".
+  // Forklaringen som i Einsteins bog (js/data/forloeb/einstein.js, trin 3). Kilder: docs/drejebog-einstein.md (1905, L/V²,
+  // c fra 1907, håndskriften 1912). 1 g · c² = 9 · 10¹³ J, delt med 100 W = 9 · 10¹¹ s ≈ 28.500 år. En kop te (0,25 kg)
+  // 80 °C varmere: 84 kJ / c² ≈ 9 · 10⁻¹³ kg ≈ en milliardtedel gram. Fusion 0,7 % og fission knap 0,1 % som i "Hvorfor?" (energi).
+  // ² er et tal (\p{N}), så grænsen efter ordet i js/ordforklaring.js holder.
+  {
+    id: 'emc2', ord: 'E = mc²',
+    former: ['e = mc²'],
+    tekst: 'Einsteins formel for, at masse og energi hænger sammen: Energien (E) er massen (m) gange lysets fart (c) gange lysets fart igen. Lysets fart er et kæmpe tal, så en lillebitte smule masse svarer til meget energi.',
+    mere: [
+      ['Bliver masse virkelig til energi?', 'Når lette kerner smelter sammen, eller en tung kerne flækker, vejer stykkerne bagefter en lille smule mindre tilsammen. Forskellen er sendt ud som energi, fx lys, varme og fart. Det gælder al energi, for energi har masse: En varm kop te vejer ca. en milliardtedel gram mere end den samme kop kold. Det er alt for lidt til at kunne vejes.'],
+      ['Hvor meget energi er der i 1 gram?', 'Nok til at holde en pære på 100 watt tændt i ca. 28.500 år. Men kun en lille del af massen bliver til energi: ca. 0,7 %, når brint bliver til helium i Solen, og knap 0,1 %, når uran spaltes i et atomkraftværk.'],
+      ['Skrev Einstein selv E = mc²?', 'Ikke i 1905. Han kaldte lysets fart V og energien L og skrev, at massen bliver L/V² mindre, når noget sender energien L ud som lys. Bogstavet c brugte han fra 1907, og E = mc² står i hans håndskrift fra 1912.'],
+    ],
+  },
   {
     id: 'halveringstid', ord: 'Halveringstid',
     former: ['halveringstid', 'halveringstiden', 'halveringstider'],
