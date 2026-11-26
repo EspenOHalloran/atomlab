@@ -133,6 +133,28 @@ await T(() => atomlabTest.vaerksted.spol(1.5));
 await page.waitForTimeout(800);
 tjek('det seneste henfald har markerede ord', await T(() => Boolean(document.querySelector('#sidsteHenfald .fagord'))), await page.textContent('#sidsteHenfald'));
 await tjekMærker('Værkstedet');
+
+// E = mc² (25. november 2026): formlen er et ord i Ordbogen, så den får prikker første gang, den står i Stjerneovnen og
+// Solen. ² er et tal, så grænsen efter ordet holder, og ordet i boksens overskrift (summary) markeres ikke
+await T(() => { location.hash = '#fusion'; });
+await page.waitForFunction(() => document.querySelector('#fusion:not(.skjult)'), null, { timeout: 30000, polling: 100 });
+const emc = await T(() => {
+  const boks = document.querySelector('#fusion details[data-lag="fus-energi"]');
+  const k = boks?.querySelectorAll('.fagord[data-ord="emc2"]') ?? [];
+  return { antal: k.length, tekst: k[0]?.textContent, iSummary: Boolean(boks?.querySelector('summary .fagord')) };
+});
+tjek('Stjerneovnen: "E = mc²" er markeret én gang i "Hvor kommer energien fra?" (ikke i overskriften)', emc.antal === 1 && emc.tekst === 'E = mc²' && !emc.iSummary, JSON.stringify(emc));
+await T(() => { const d = document.querySelector('#fusion details[data-lag="fus-energi"]'); d.hidden = false; d.open = true; });
+await rulFrem(page, '#fusion details[data-lag="fus-energi"] .fagord[data-ord="emc2"]');
+await page.click('#fusion details[data-lag="fus-energi"] .fagord[data-ord="emc2"]');
+await page.waitForTimeout(200);
+tjek('Stjerneovnen: et klik på "E = mc²" viser forklaringen med "Mere i Ordbogen ›"', (await vist()) === 'E = mc²' && (await T(() => atomlabTest.ord.link())), await vist());
+await page.keyboard.press('Escape');
+await T(() => { location.hash = '#solsystem'; });
+await page.waitForFunction(() => window.atomlabTest?.solsystem?.vælg, null, { timeout: 60000, polling: 100 });
+await T(() => atomlabTest.solsystem.vælg('solen'));
+const iSolen = await page.waitForSelector('#solsystemTekst .fagord[data-ord="emc2"]', { state: 'attached', timeout: 10000 }).then(() => true, () => false);
+tjek('Solen: "E = mc²" i "Vil du vide mere?" er markeret', iSolen);
 await ctx.close();
 
 // Telefon: tryk på et ord i Stjerneovnens hjælp
