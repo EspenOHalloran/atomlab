@@ -62,7 +62,7 @@ En prøve med sønnen efter hvert punkt.
 ## Sporenes næste trin (detaljerne står i sporets fil)
 | Spor | Næste |
 |---|---|
-| [Småting](lige-nu/smaating.md) | Forløbet som sti (E20 fund 2), så E20-rettelse A og B ([prompt-e20-rettelser.md](prompt-e20-rettelser.md)) og spørgsmålet i Rumtid. Desuden: "Ikke afprøvet" ned under ca. 10 punkter (resten til arkivet), testen `mars` delt i to, og faktatjekket af de tre faktafiler fra før. |
+| [Småting](lige-nu/smaating.md) | Forløbet som sti (E20 fund 2), så E20-rettelse A og B ([prompt-e20-rettelser.md](prompt-e20-rettelser.md)) og spørgsmålet i Rumtid. Desuden: "Ikke afprøvet" ned under ca. 10 punkter (resten til arkivet) og faktatjekket af de tre faktafiler fra før. |
 | [Forløb](lige-nu/forloeb.md) | Klodsen og "Dit første atom" er lavet (12. november 2026) og venter på prøven. Derefter Serie 2 nr. 5 (plan først). |
 | [Molekyler](lige-nu/molekyler.md) | Liv som tre ture og Molekyler som egen del (alle lavet, status "prøve"). Næste: Liv L5 delen "Begyndelsen" ([drejebog-liv.md](drejebog-liv.md), "Læs docs/prompt-liv-l5.md"). |
 | [Tid og rum](lige-nu/tid.md) | Runden med sønnen (begge forløb om tid og Kosmos i fire grupper er bygget, Serie 1 nr. 4). |
