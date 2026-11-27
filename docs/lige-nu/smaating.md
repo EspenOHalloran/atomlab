@@ -16,7 +16,7 @@
 
 **Næste:** 10a er færdig, så parallelle sessioner er billigere igen (de rører ikke længere skærmenes start i `main.js`). 10b (egen HTML og CSS pr. skærm) sker gradvist, først med Molekyler. Faktagrundlagene kan køre parallelt ([prompt-faktagrundlag.md](../prompt-faktagrundlag.md), én session pr. emne).
 
-Desuden i Småting: testen `mars` (585 sekunder) delt i to, og det, Fable ikke kunne tjekke i E13 (afsnit 4 i [E13-faktatjek.md](../fable/E13-faktatjek.md), fx Voyager "Mindst sikre" nr. 2, 4, 5 og 7).
+Desuden i Småting: det, Fable ikke kunne tjekke i E13 (afsnit 4 i [E13-faktatjek.md](../fable/E13-faktatjek.md), fx Voyager "Mindst sikre" nr. 2, 4, 5 og 7).
 - **Tyngdekraften som gåde (jeres idé 16. november 2026): Fable har svaret** i [E19-tyngdekraft.md](../fable/E19-tyngdekraft.md). **Jeres svar samme dag (afsnit 9):** Det, I hele tiden har ment, er "hvorfor krummer stof rumtiden?", og gåden venter måske. Fables vurdering: I har ikke overset noget (teorien siger *at*, ikke hvorfor), spørgsmålet bor bedst i Rumtid først, og et kort i Gåderne ("Hvordan virker tyngdekraften i det allermindste?", med jeres spørgsmål øverst i "Hvad ved vi ikke?") afgøres efter Kvantefysik forløb 1. Pladsen og listen på 10 venter med. **Spørgsmålet i Rumtid er bygget 17. november 2026** (se "Senest lavet"). Gåden står på listen i [plan-gaader-3d.md](../plan-gaader-3d.md) (efter Kvantefysik forløb 1).
 
 ## Næste i Gåderne
