@@ -130,8 +130,8 @@ Omregninger, jeg selv har lavet, er markeret med "(omregnet)".
 |---|---|---|---|---|
 | Nordpolen | 8 cykloner i en ottekant om én i midten | NASA Jupiter Facts | S | Åbnet |
 | Sydpolen | 5 cykloner i en femkant om én i midten | NASA Jupiter Facts | S | Åbnet |
-| En sjette ved sydpolen? | En ny, mindre cyklon viste sig i november 2019 (JunoCam 3. nov., JIRAM 4. nov.), og så var der en sekskant. På JIRAM-billedet fra 2021 er der igen fem i en femkant | 2019: PIA23559 i søgning. 2021: PIA24967, https://science.nasa.gov/photojournal/jupiters-polar-vortices-over-five-years/ | RS | Søgeresultat (2019) / åbnet (2021) |
-| Størrelse | sydpolen: 5.600-7.000 km. Nordpolen: ca. 4.000-4.600 km (BAA har andre tal) | Adriani m.fl. 2018, Nature 555, 216-219, doi:10.1038/nature25491 | RS (syd) / U (nord) | Søgeresultat |
+| En sjette ved sydpolen? | En ny, mindre cyklon viste sig i november 2019 (JunoCam 3. nov., JIRAM 4. nov.), og så var der en sekskant. På JIRAM-billedet fra 2021 er der igen fem i en femkant | 2019: NASA/JPL 12. dec. 2019 "NASA's Juno Navigators Enable Jupiter Cyclone Discovery" ("smaller … about the size of Texas"). 2021: PIA24967, https://science.nasa.gov/photojournal/jupiters-polar-vortices-over-five-years/. Forsvandt: NASA/JPL 11. dec. 2020 "NASA's Juno Spacecraft Updates Quarter-Century Jupiter Mystery" (Bolton: "the baby cyclone got kicked out, moved away, and eventually disappeared") | S | Åbnet 27. nov. 2026 (Opus i stedet for Fable) |
+| Størrelse | sydpolen: 5.600-7.000 km. Nordpolen: ca. 4.000-4.600 km, begge målt med JIRAM i infrarødt. JunoCam (synligt lys, 2020): ca. 2.400-2.800 km ved nordpolen. Gavriel og Kaspi 2021 (efter Adriani m.fl. 2020): "between 4,000 and 6,000 km" | Adriani m.fl. 2018, Nature 555, 216-219 (stadig lukket). NASA PIA22336 "A New View on Jupiter's North Pole" og PIA22337 "Jupiter's Southern Exposure in Infrared" (begge 2018), "All Eight Northern Circumpolar Cyclones in 2020" (science.nasa.gov/photojournal), arXiv 2110.09422 | S | Åbnet 27. nov. 2026 (Opus i stedet for Fable) |
 | Hvorfor de bliver, hvor de er | De vil gerne mod polen, men cyklonen i midten skubber dem tilbage | NASA Jupiter Facts | S | Åbnet |
 | Ægte farver eller infrarødt | Begge findes. JIRAM optager infrarødt (ca. 5 µm) og ser 50-70 km under skytoppene, så de billeder er falske farver. JunoCam optager synligt lys | PIA24967 og "NASA's Juno Catches 3 Waves of Jupiter's Polar Cyclones" (science.nasa.gov/photojournal) | S | Åbnet |
 
@@ -218,11 +218,11 @@ Omregninger, jeg selv har lavet, er markeret med "(omregnet)".
 
 ### Mindst sikre påstande
 
-1. Pletten nu (2024-2026) i km: Der er ikke fundet noget primært tal. 12.500 km (2023) er en amatørmåling, der er gengivet i medierne. Nord-syd-bredden er kun regnet ud fra excentriciteten. Brug "omtrent lige så bred som Jorden".
+1. Pletten nu (2024-2026) i km: Der er ikke fundet noget primært tal (heller ikke 27. november 2026: Sánchez-Lavega m.fl. 2024 giver kun farten). Programmets 13.000-14.000 km er målt i Hubbles kort fra december 2025, og det passer med farten: 16.500 km i 2014 minus 207-345 km om året giver ca. 12.700-14.200 km i 2025 (udregnet). 12.500 km (2023) er en amatørmåling, der er gengivet i medierne. Nord-syd-bredden er kun regnet ud fra excentriciteten. Brug "omtrent lige så bred som Jorden".
 2. Cassinis mål af pletten (2000) er ikke fundet.
 3. Junos status i november 2026: Den var aktiv i maj 2026, men der er ingen officiel afgørelse.
-4. Farven på nordlyset i synligt lys og om et øje kunne se det: ikke bekræftet.
-5. Størrelsen på cyklonerne ved nordpolen (kilderne er uenige), og at den sjette cyklon ved sydpolen forsvandt (udledt af PIA24967, ikke sagt direkte).
+4. Farven på nordlyset i synligt lys og om et øje kunne se det: ikke bekræftet (heller ikke 27. november 2026). Programmet siger "falsk farve" og giver det ingen ægte farve, så intet skal rettes.
+5. **Afklaret 27. november 2026 (Opus i stedet for Fable):** 4.000-4.600 km ved nordpolen og 5.600-7.000 km ved sydpolen i infrarødt (NASA PIA22336 og PIA22337). I synligt lys ser de mindre ud (JunoCam: 2.400-2.800 km ved nordpolen). NASA skriver direkte, at den sjette cyklon forsvandt (december 2020). Begge dele står nu i "For nørder" ved polerne.
 6. **Afklaret (E13):** Li 2018 giver selv 2,132 ± 0,051 (før 1,668 ± 0,085). Programmets "ca. dobbelt" og "nærmere 2" passer.
 7. Bind og sider for Horner & Jones II-IV og tidsskriftet for Chabrier 2023 er ikke fundet (DOI'erne er sikre).
 8. At Ios partikler mest er svovl og ilt (ikke slået op).

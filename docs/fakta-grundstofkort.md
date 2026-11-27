@@ -2,7 +2,7 @@
 
 *Punkt 7, 23. oktober 2026. Teksterne i `js/data/grundstoflag.js` er skrevet af tre hjælpeagenter (Opus, høj effort) og gennemgået af Opus. Ikke tjekket af Fable.*
 
-**Hvordan det er tjekket:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 2a og 3. Det dér rettede er rettet i programmet. Mærkerne "(H)" og "egen viden" herunder er fra før.
+**Hvordan det er tjekket:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 2a og 3. Det dér rettede er rettet i programmet. Mærkerne "(H)" og "egen viden" herunder er fra før. Det, Fable ikke kunne åbne (E13 afsnit 4), er tjekket 27. november 2026, se "Resten fra E13" nederst (lavet af Opus i stedet for Fable).
 
 **Det, Opus har rettet eller fjernet ved gennemgangen** (tjekliste B: hellere for forsigtigt end forkert):
 - Fjernet, fordi kilden manglede: berylliumkobber, der ikke slår gnister, Epsom-salt, vibrationsmotorer af wolfram, scandium i stadionlamper, brændselspillen, der svarer til 1 ton kul, og "Pt er næsten lige så sjældent som guld".
@@ -257,3 +257,24 @@ Brugerens ønske: Hvorfor hedder grupperne det, de gør? (`navnet` i `js/data/ka
 - **Plasmaskærm:** Hver celle er som et lille lysstofrør. Neon og xenon giver UV-lys, og et selvlysende lag giver rød, grøn eller blå. Tre celler pr. pixel. Produktionen stoppede 2014 (USA, Panasonic, LG og Samsung) og 2016 (Kina). ("Plasma display")
 
 **Mindst sikker:** "Det lå gemt i et ceriumstof" (Wikipedia: en urenhed i ceriumnitrat). Tegningen af plasma er forenklet og siger det.
+
+## Resten fra E13 (27. november 2026, lavet af Opus i stedet for Fable)
+
+*Påstandene i afsnit 4 i [E13-faktatjek.md](fable/E13-faktatjek.md), som Fable ikke kunne åbne. Opus (høj). **Intet i grundstofkortene skal rettes.** Stadig lukket i miljøet: ods.od.nih.gov (403), usmint.gov (403), sst.dk (429), silverinstitute.org, atsdr.cdc.gov, mst.dk, iea.org, pubs.rsc.org, eur-lex (kræver JavaScript) og PMC (reCAPTCHA). Der er derfor brugt andre kilder, og der står, når det kun er et søgeresultat (RS).*
+
+| Påstand i programmet | Resultat | Kilde |
+|---|---|---|
+| Mg: "Over 300 af kroppens enzymer har brug for det" | OK | Wikipedia "Magnesium" ("More than 300 enzymes require magnesium ions"), efter IOM, *Dietary Reference Intakes* (1997), åbnet. NIH's faktaark er stadig lukket |
+| Mg: "Ca. 20-25 g" | OK (spændet dækker begge kilder) | Emsley 19 g (Wikipedia "Composition of the human body", åbnet), RSC 25 g (E13) |
+| Zn: "Flere hundrede enzymer" | OK | NIH ODS: "the catalytic activity of hundreds of enzymes" (RS) |
+| Al: "typisk ca. 30-50 mg, mest i knoglerne" | OK | ATSDR, Toxicological Profile: "approximately 30–50 mg … about one-half is in the skeleton, and about one-fourth is in the lungs" (RS). Emsleys tabel har 60 mg (åbnet), altså samme størrelse |
+| Hg: "I EU må tandlæger næsten ikke bruge sølvfyldninger med kviksølv fra 2025" | OK | Forordning (EU) 2024/1849: forbudt fra 1. januar 2025, "except when deemed strictly necessary by the dentist based on the specific needs of the patient" (Wikipedia "Dental amalgam controversy" efter EU-Kommissionen, åbnet, og RS). Undtagelsen for lande med tilskud gjaldt til 30. juni 2026 |
+| I: "I Danmark skal der være iod i husholdningssalt og i salt til brød" | OK | BEK nr. 613 af 28. maj 2019, § 3: "skal være tilsat 20 mg jod pr. kg. salt" (retsinformation.dk, PDF åbnet). Hævet fra 13 mg i 2019 (RS) |
+| Rn: "Man måler typisk i 2-3 måneder om vinteren" | OK | Sundhedsstyrelsen anbefaler "en langtidsmåling, som tager to-tre måneder", i fyringssæsonen (1. oktober-30. april), gengivet af Bolius (RS) |
+| Rn: "meget radon på Bornholm, fordi der er granit i undergrunden" | OK | Sundhedsstyrelsen 2024, *Stråling, en del af din hverdag*: "De højeste niveauer findes på klippeøen Bornholm" (RS). Granitten: Bolius (RS) |
+| Ni: "a nickel" er 25 % nikkel, resten kobber | OK | Wikipedia "Nickel (United States coin)": 75 % kobber, 25 % nikkel (åbnet, efter US Mint) |
+| Zn: 1-cent-mønter fra 1982 og frem er ca. 97,5 % zink | OK | Wikipedia "Penny (United States coin)": "(1982–present) … 97.5% Zn, 2.5% Cu" (åbnet). **Nyt:** Den sidste 1-cent til omløb blev præget 12. november 2025 (samme side, efter US Mint). Teksten holder stadig |
+| Ag: "Solceller … bruger ca. en sjettedel af alt sølv" | OK | Silver Institute, *World Silver Survey 2025*: 197,6 mio. ounce af ca. 1,16 mia. i 2024 (17 %). *World Silver Survey 2026*: 186,6 af ca. 1,13 mia. i 2025 (16,5 %). Begge RS (pv-magazine). Silver Institute venter 19 % mindre i 2026, så tjek tallet igen i 2027 |
+| Cl: "Mange lande kommer chlor i drikkevandet. I Danmark gør man det normalt ikke" | OK | lex.dk "drikkevand" (åbnet): Grundvandet får i op mod 90 % af tilfældene kun "normalbehandling" (luftning og filtrering). Folketingsbilag 2010 (MPU, bilag 184): "Derfor bruges kloring ikke i Danmark" (RS) |
+| Johnsons figur i Science 2019 | Ikke åbnet | science.org svarer stadig 403. Wikimedia-tegningen og de to nyere artikler fra E13 er nok |
+
