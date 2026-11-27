@@ -87,7 +87,7 @@ export const SIDER = {
     ],
     videre: [sted('nordpol', 'Nordpolen'), sted('ringe', 'Ringene')],
     nørd: '<p>Ringene af cykloner ligger ved ca. 84° nord og syd. Cyklonerne er ca. 4.000-7.000 km brede, og vinden i dem når op til ca. 100 m/s. Gavriel og Kaspi (2021) har forklaret, hvorfor der er otte i nord og fem i syd: Det afhænger af, hvor store cyklonerne i midten er, og hvor hurtigt de drejer.</p>'
-      + '<p>Junos kamera JIRAM ser i infrarødt lys (ca. 5 µm) 50-70 km ned under de øverste skyer. I november 2019 kom en sjette, mindre cyklon til ved sydpolen, men i 2021 var der igen fem i ringen.</p>',
+      + '<p>Junos kamera JIRAM ser i infrarødt lys (ca. 5 µm) 50-70 km ned under de øverste skyer. I november 2019 kom en sjette, mindre cyklon til ved sydpolen, men den blev skubbet væk og forsvandt igen (NASA 2020).</p>',
     billeder: POL_BILLEDER,
     ærligt: POL_ÆRLIGT,
   },
@@ -102,7 +102,8 @@ export const SIDER = {
       NORDLYS,
     ],
     videre: [sted('sydpol', 'Sydpolen'), sted('ringe', 'Ringene')],
-    nørd: '<p>Hver cyklon drejer mod uret set ovenfra, som lavtryk på Jordens nordlige halvkugle. Ved sydpolen drejer de med uret. Mønsteret drejer langsomt mod vest som en helhed, nogle grader om året (Gavriel og Kaspi 2023).</p>',
+    nørd: '<p>Hver cyklon drejer mod uret set ovenfra, som lavtryk på Jordens nordlige halvkugle. Ved sydpolen drejer de med uret. Mønsteret drejer langsomt mod vest som en helhed, nogle grader om året (Gavriel og Kaspi 2023).</p>'
+      + '<p>Bredden er målt i infrarødt lys (JIRAM). På JunoCams billeder i synligt lys ser cyklonerne mindre ud, ca. 2.400-2.800 km (NASA 2020).</p>',
     billeder: POL_BILLEDER,
     ærligt: POL_ÆRLIGT,
   },
