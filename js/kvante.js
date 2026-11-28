@@ -234,6 +234,8 @@ function ændret({ straks = false } = {}) {
   visStyring();
   panel(true);
   tegnSkilt(); // med det samme, ikke først i næste billede (tjekliste E)
+  tegnPeg();
+  tegnVisning();
 }
 
 function forfra({ straks = false } = {}) {
@@ -282,6 +284,7 @@ function startBølger() {
   bænk.vand(false);
   bænk.vand(true, 1, [0.25, 0.55, 0.95]);
   visStyring();
+  tegnPeg(); // ringen og "Tryk på vandet" forsvinder med det samme (tjekliste E)
 }
 
 // Ét skud. instant: prikken lander straks (testene og "Vis mig"), ellers flyver kuglen, og elektronen lander om lidt.
