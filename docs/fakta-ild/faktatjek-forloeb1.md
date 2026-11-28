@@ -15,3 +15,16 @@
 | Kortet "Hvorfor er flammen gul?": glødende sod, for lidt oxygen inde i flammen, kornene brænder til CO₂ i kanten, det blå forneden fra reaktionen | W "Candle", W "Flame", Faraday ("all bright flames contain these solid particles") | OK |
 
 Ingen nye fælder.
+
+## Rettelser efter prøven (28. november 2026)
+*Opus (høj effort), `/faktatjek`. Prøven: [proeven-svar-2026-11.md](../proeven-svar-2026-11.md), afsnit 2. Kilderne er læst i wikiteksten (`action=raw`) 28. november 2026. acs.org, van.physics.illinois.edu og schoolphysics.co.uk er lukket i miljøet. ACS ("your breath blows some of the wax gas away, and without this fuel, the flame will go out") er kun set i et søgeresultat og ikke læst direkte.*
+
+| Påstand | Kilde | Dom |
+|---|---|---|
+| Trin 4, Så: "Pustet skubbede flammen væk fra vægen." | W "Fire" ("blowing hard on a flame will displace the heat of the currently burning gas from its fuel source"). Fælde 8 (man puster ikke oxygenet væk) | OK |
+| "Så kunne varmen ikke lave ny damp, og uden damp er der intet at brænde." | W "Candle" ("the liquefied fuel finally vaporizes to burn within the candle's flame", "When the liquid fuel reaches the flame, it vaporizes and combusts"). Trin 1 viser, at det er dampen, der brænder | OK (forenklet: Vægen køles også, og noget af dampen blæses væk) |
+| Svarene: "Varmen smelter og fordamper ny stearin, og dampen brænder og giver ny varme. Sådan holder flammen sig selv i gang." | W "Candle" ("This flame provides sufficient heat to keep the candle burning via a self-sustaining chain of events: the heat of the flame melts the top of the mass of solid fuel; the liquefied fuel then moves upward through the wick via capillary action; the liquefied fuel finally vaporizes to burn") | OK |
+| Luppen: "1. Atomerne slipper", "2. Nye partnere", "3. Varme!" (glimtet kommer, når de nye bindinger dannes) | At bryde bindinger koster energi, og der frigives energi, når nye dannes. Ved forbrænding frigives mere, end der bruges (OpenStax Chemistry 2e kap. 7.5, Bond energy). Forenklingen (hundredvis af små trin) står i "Ærligt talt" | OK |
+| Navnene: "O₂: oxygen (ilt)", "Stearin fra lyset", "H₂O (vand)" | Ilt er det danske ord for oxygen. Stykket er en forenklet stump af en stearinkæde (se "Stearin er mest lange kæder …" ovenfor) | OK |
+
+Ingen nye fælder.
