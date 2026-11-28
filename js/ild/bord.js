@@ -15,6 +15,8 @@ export const LYS_FLAMME = { bredde: 0.48, højde: 2.5 }; // ca. 3 cm høj, når 
 export const BRÆNDER_TOP = 0.6; // gasbrænderens rør
 export const BRÆNDER_FLAMME = { bredde: 0.34, højde: 3.0 };
 export const HVILE = { tændstik: new THREE.Vector3(2.7, 1.4, 0.4), ske: new THREE.Vector3(2.8, 3.9, 0.4) }; // værktøjernes plads, når de tages frem
+const SKE_HÆLD = -0.55; // skeen hælder mod kameraet (radianer om x), så undersiden med dugget kan ses
+const DRÅBER = LAV_KVALITET ? 36 : 60; // dugdråber under skeen
 const RØG_MAX = LAV_KVALITET ? 70 : 120;
 const CO2_MAX = LAV_KVALITET ? 50 : 90;
 
@@ -198,19 +200,64 @@ export function lavBord() {
   tændstik.visible = false;
   gruppe.add(tændstik);
 
-  // Skeen: skålen står i gruppens (0, 0, 0) med bunden nedad, skaftet går op mod højre
+  // Skeen: skålen står i gruppens (0, 0, 0) med bunden nedad, skaftet går op mod højre. Den hælder lidt mod kameraet,
+  // så man kan se undersiden, hvor dugget kommer (prøven 28. november 2026: dugget kunne ikke ses).
   const ske = new THREE.Group();
-  const skeMat = new THREE.MeshStandardMaterial({ color: 0xa9adb4, roughness: 0.3, metalness: 0.9, envMapIntensity: 0.6 });
+  const skeMat = new THREE.MeshStandardMaterial({ color: 0xa9adb4, roughness: 0.42, metalness: 0.75, envMapIntensity: 0.35 });
   const skål = net(new THREE.SphereGeometry(0.5, 24, 12), skeMat);
   skål.scale.set(1, 0.24, 0.72);
-  const skaft = net(new THREE.BoxGeometry(2.6, 0.07, 0.16), skeMat);
+  // Skaftet er mat (børstet stål), så det ikke blænder
+  const skaftMat = new THREE.MeshStandardMaterial({ color: 0x7d8189, roughness: 0.85, metalness: 0.35, envMapIntensity: 0.15 });
+  const skaft = net(new THREE.BoxGeometry(2.6, 0.07, 0.16), skaftMat);
   skaft.position.set(1.65, 0.32, 0);
   skaft.rotation.z = 0.25;
   ske.add(skål, skaft);
+  ske.rotation.x = SKE_HÆLD;
+  // Dugget: en hvid, mat belægning på undersiden og små dråber, der kommer én efter én, mens t.dug vokser
+  const dugMat = new THREE.MeshStandardMaterial({ color: 0xeef3f8, roughness: 0.95, metalness: 0, emissive: 0xc8d4e0, emissiveIntensity: 0, transparent: true, opacity: 0, depthWrite: false });
+  const belægning = net(new THREE.SphereGeometry(0.5, 24, 6, 0, Math.PI * 2, Math.PI * 0.55, Math.PI * 0.45), dugMat);
+  belægning.scale.set(1.025, 0.255, 0.74);
+  belægning.renderOrder = 2;
+  ske.add(belægning);
+  const dråbeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.08, metalness: 0, emissive: 0xdfe8f2, emissiveIntensity: 0.28 });
+  const dråbeGeo = new THREE.SphereGeometry(1, 8, 6);
+  const dråber = new THREE.InstancedMesh(dråbeGeo, dråbeMat, DRÅBER);
+  geoer.push(dråbeGeo);
+  mater.push(dråbeMat);
+  dråber.frustumCulled = false;
+  ske.add(dråber);
+  // Hver dråbe: en plads på undersiden, en størrelse og hvornår (dug 0-1) den kommer
+  const dråbeData = Array.from({ length: DRÅBER }, (_, i) => {
+    const θ = Math.PI * (0.62 + 0.36 * Math.sqrt(Math.random()));
+    const φ = Math.random() * Math.PI * 2;
+    const p = new THREE.Vector3(Math.sin(θ) * Math.cos(φ) * 0.5 * 1.03, Math.cos(θ) * 0.5 * 0.26, Math.sin(θ) * Math.sin(φ) * 0.5 * 0.75);
+    return { p, r: 0.022 + Math.random() * 0.026, når: (i / DRÅBER) * 0.85 };
+  });
+  const dråbeM = new THREE.Matrix4();
+  const dråbeQ = new THREE.Quaternion();
+  const dråbeS = new THREE.Vector3();
+  let dugTegnet = -1;
+  function tegnDug() {
+    const d = t.dug * (1 - t.sod);
+    if (Math.abs(d - dugTegnet) < 0.004) return;
+    dugTegnet = d;
+    dugMat.opacity = Math.min(1, d * 1.3) * 0.62;
+    dugMat.emissiveIntensity = 0.06 * d;
+    belægning.visible = d > 0.01;
+    for (let i = 0; i < DRÅBER; i++) {
+      const x = dråbeData[i];
+      const v = THREE.MathUtils.smoothstep(d, x.når, x.når + 0.15);
+      dråbeS.set(x.r * v, x.r * v * 0.7, x.r * v);
+      dråbeM.compose(x.p, dråbeQ, dråbeS);
+      dråber.setMatrixAt(i, dråbeM);
+    }
+    dråber.instanceMatrix.needsUpdate = true;
+    dråber.visible = d > 0.01;
+  }
   ske.visible = false;
   gruppe.add(ske);
   const SKE_REN = new THREE.Color(0xa9adb4);
-  const SKE_DUG = new THREE.Color(0x9aa3ad);
+  const SKE_DUG = new THREE.Color(0xc4cad1);
   const SKE_SOD = new THREE.Color(0x0b0b0c);
 
   // Glasset (vendt på hovedet over lyset)
@@ -339,8 +386,9 @@ export function lavBord() {
     slukker.position.lerpVectors(SLUKKER_OPPE, SLUKKER_NEDE, t.slukker);
     // Skeen: dug (lys og mat) og sod (sort)
     skeMat.color.copy(SKE_REN).lerp(SKE_DUG, t.dug * (1 - t.sod)).lerp(SKE_SOD, t.sod);
-    skeMat.roughness = 0.3 + 0.6 * Math.max(t.dug, t.sod);
-    skeMat.metalness = 0.92 * (1 - 0.75 * Math.max(t.dug * 0.8, t.sod));
+    skeMat.roughness = 0.42 + 0.5 * Math.max(t.dug, t.sod);
+    skeMat.metalness = 0.75 * (1 - 0.75 * Math.max(t.dug * 0.8, t.sod));
+    tegnDug();
 
     // Røgen stiger fra vægen (i vægtløshed bliver den hængende om vægen)
     if (t.røgKilde > 0) {

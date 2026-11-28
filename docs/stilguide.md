@@ -26,6 +26,9 @@ Forløbet kommer stadig først (Retningen). Men det er en sti med et gelænder, 
 6. **Det, man skal gøre nu, er den tydeligste tekst** i linjen. Spørgsmålet toner ned, når det er besvaret.
 7. **Bagefter er alt legetøjet fremme.** Alt, man har prøvet i forløbet, kan prøves frit i laboratoriet, og trinene kan vælges enkeltvis, når forløbet tages igen.
 8. **Laboratoriet åbner i to skridt.** Efter forløbet: scenen og det, man styrer med. Det, man læser, åbner man selv.
+9. **Ting har navne, mens man bruger dem.** Det, man skal trække eller trykke på, har et kort dansk navn ved sig fra starten, ikke først bagefter (fx "O₂: oxygen (ilt)" og "Stearin fra lyset"). Fagordet forklares med det ord, en 13-årig kender (Ild, prøven 28. november 2026).
+10. **Forvandlingen kan følges.** Det skift, trinet handler om (fx atomer, der bytter partnere), tager ca. 3-5 sekunder, er delt i dele, man kan se (gerne med "1, 2, 3" som en lille tekst), og står stille under pause (Ild, prøven 28. november 2026).
+11. **Så: først det, der skete, så navnet på det.** Så siger med konkrete ord, hvad man lige så (årsag og virkning). Et abstrakt udtryk (fx "holder sig selv i gang") kommer først efter kæden, der forklarer det, fx i svaret på gættet (Ild, prøven 28. november 2026).
 
 ## C. Glæde og undring
 1. **Ét "wow" i det første minut.** Hver del har et øjeblik, hvor noget stort eller uventet sker, før der er læst mere end én linje. Det skrives i planen ved siden af kernesætningen: "Det første wow er: …".

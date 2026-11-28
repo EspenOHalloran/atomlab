@@ -908,6 +908,13 @@ export const ORDBOG = [
     former: ['supernova', 'supernovaen', 'supernovaer', 'supernovaerne'],
     tekst: 'En stjerne, der eksploderer. I nogle uger lyser den stærkere end hundrede millioner sole. Det sker, når en hvid dværg bliver for tung, eller når kernen i en kæmpestjerne falder sammen.',
   },
+  // Rømers bog, forløbet "Himlens ur" (R2, 28. november 2026, docs/drejebog-roemer.md afsnit 12, faktatjekket). Kun i
+  // forløbets linje, så Kosmos' og Solsystemets tekster om sol- og måneformørkelser ikke får prikker
+  {
+    id: 'formoerkelse', ord: 'Formørkelse', kunI: '.fl-tekst',
+    former: ['formørkelse', 'formørkelsen', 'formørkelser', 'formørkelserne'],
+    tekst: 'Når et himmellegeme bliver mørkt eller skjult, fordi det kommer ind i et andets skygge, eller noget kommer foran det. Ved en måneformørkelse er Månen i Jordens skygge. Jupiters måner bliver formørket, når de går ind i Jupiters skygge.',
+  },
   // Einsteins bog, forløbet "Lige hurtigt for alle" (E2, 21. november 2026, docs/drejebog-einstein.md afsnit 14, faktatjekket
   // i afsnit 15). Kun i forløbets linje, så Kosmos' Rumtid og Rejsen i tid ikke får prikker. Den særlige relativitetsteori er
   // fra 1905 (Annalen der Physik 17, s. 891-921, og 18, s. 639-641), den almene fra 25. november 1915 (Sitzungsberichte,

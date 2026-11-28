@@ -806,6 +806,7 @@ export function testAdgang() {
       lagt: () => atomScene.lagt(),
       tal: () => atomScene.tal(),
       molekyler: () => atomScene.molekyler(),
+      navne: () => atomScene.navne(),
     },
     pause: () => pause.tilstand,
     sætPause: (t) => pause.sæt(t),

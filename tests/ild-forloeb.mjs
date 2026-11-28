@@ -8,6 +8,7 @@ import { ILD_1 } from '../js/data/forloeb/ild.js';
 import { FORLØB } from '../js/data/forloeb/liste.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
+const NAVN = { ethen: 'Stearin fra lyset', o2: 'O₂: oxygen (ilt)' }; // som i js/ild/atomer.js (der importerer Three.js)
 const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -63,7 +64,7 @@ tjek('trin 1: lyset pustes ud med røg, et tryk på vægen giver vinket, og tæn
 await næste();
 await page.waitForFunction(() => atomlabTest.ild.trin() === 'ske', null, { timeout: 10000 });
 await page.click('#ild .fl-gæt >> nth=1');
-await T(() => { const a = atomlabTest.ild; a.flytVærktøj(0, 3.6); a.spol(1.2); });
+await T(() => { const a = atomlabTest.ild; a.flytVærktøj(0, 3.6); a.spol(2); });
 await fase('så');
 const ske = await T(() => atomlabTest.ild.tilstand().ske);
 tjek('trin 2: den kolde ske over flammen dugger', ske.dug > 0.6 && ske.zone === 'over', JSON.stringify(ske));
@@ -72,8 +73,19 @@ tjek('trin 2: den kolde ske over flammen dugger', ske.dug > 0.6 && ske.zone === 
 await næste();
 await page.waitForFunction(() => atomlabTest.ild.trin() === 'atomer' && atomlabTest.ild.tilstand().scene === 'atomer', null, { timeout: 10000 });
 const førTæller = await T(() => atomlabTest.ild.tæller());
+const førNavne = await T(() => atomlabTest.ild.atomer.navne());
+tjek('trin 3: navnene står på stearinen og de tre O₂, mens man trækker (prøven 28. november 2026)',
+  førNavne.filter((n) => n === NAVN.o2).length === 3 && førNavne.includes(NAVN.ethen), JSON.stringify(førNavne));
 for (let i = 0; i < 3; i++) await T(() => { atomlabTest.ild.atomer.lægNæste(); atomlabTest.ild.spol(1); });
-await spol(2.5);
+// Partnerbyttet tager ca. 4,5 s i tre dele og står stille under pause (prøven 28. november 2026: det gik for hurtigt)
+await T(() => { const a = atomlabTest.ild; for (let i = 0; i < 60 && a.atomer.fase() === 'klar'; i++) a.spol(0.05); a.spol(1.5); a.sætPause('pause'); });
+const iByt = await T(() => ({ fase: atomlabTest.ild.atomer.fase(), navne: atomlabTest.ild.atomer.navne() }));
+await page.waitForTimeout(1500);
+const iPause = await T(() => ({ fase: atomlabTest.ild.atomer.fase(), navne: atomlabTest.ild.atomer.navne() }));
+await T(() => atomlabTest.ild.sætPause('spil'));
+tjek('trin 3: partnerbyttet er stadig i gang efter 1,5 s, viser "2. Nye partnere" og står stille under pause',
+  iByt.fase === 'reagerer' && /Nye partnere/.test(iByt.navne.join()) && JSON.stringify(iPause) === JSON.stringify(iByt), JSON.stringify({ iByt, iPause }));
+await spol(4);
 await fase('så');
 const efter = await T(() => ({ m: atomlabTest.ild.atomer.molekyler(), tæller: atomlabTest.ild.tæller(), ord: [...document.querySelectorAll('#ild .forløb-linje [data-ord], #ild .forløb-linje .ord')].length }));
 tjek('trin 3: i luppen bliver det til 2 CO₂ og 2 H₂O, og tælleren viser 2 kulstof, 4 hydrogen og 6 oxygen før og efter',
@@ -111,7 +123,7 @@ for (let i = 0; i < 4; i++) {
   await page.waitForFunction(() => ['gæt', 'gør'].includes(atomlabTest.ild.forløb.fase()), null, { timeout: 10000 });
   await page.waitForTimeout(TONING_MS(i));
   await T(() => atomlabTest.ild.forløb.visMigNu());
-  for (let t = 0; t < 16 && (await T(() => atomlabTest.ild.forløb.fase())) !== 'så'; t++) {
+  for (let t = 0; t < 30 && (await T(() => atomlabTest.ild.forløb.fase())) !== 'så'; t++) {
     await spol(0.5);
     await page.waitForTimeout(200);
   }
