@@ -33,3 +33,7 @@
 - **Ret 4, forklaringen i trin 4:** Gør forklaringen af, at flammen holder sig selv i gang, lettere at forstå. Tilføj gerne én sætning mere.
 - **Ild 2 "Flammens form og farve":** Ingen af fundene blokerer. Fundene 1-4 bør rettes først i en lille session i Molekyler (Ild 1), og Ild 2 kan så startes bagefter eller samtidig, hvis faren vil. Spørgsmål til faren: Skal Ild 2 vente på rettelserne?
 - Status for turen kan sættes til "prøvet, med rettelser" (fire).
+
+**Faren svarede bagefter (28. november 2026, ordret):** "ja, det var trin 3 jeg mente. tag rettelserne først som du anbefaler."
+- Navneproblemet (oxygen og stearin) gælder altså **trin 3**.
+- **Ild 2 venter på de fire rettelser.** Prompten til rettelserne står i [prompt-ild-rettelser.md](prompt-ild-rettelser.md) (ny session, spor Molekyler). Ild 2 startes først bagefter ([prompt-ild-2.md](prompt-ild-2.md)).
