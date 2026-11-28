@@ -27,7 +27,7 @@ export const STRIBER = {
     {
       id: 'boelger',
       spørg: 'Nu sender vi bølger i vand mod de samme to sprækker.',
-      gør: 'Tryk på vandet eller på Start bølgerne.',
+      gør: 'Tryk på det blå vand i karret (ved den gule ring), eller på Start bølgerne.',
       så: 'Mange striber: Hvor en bølgetop møder en bølgedal, bliver vandet stille. Det hedder interferens.',
       ord: ['interferens'],
     },

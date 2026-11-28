@@ -82,14 +82,25 @@ const kug = await T(() => ({ n: atomlabTest.kvante.antal(), midt: atomlabTest.kv
 tjek('trin 1: "Skyd" i linjen virker, mens den holdes nede, 40 kugler rammer i to bunker (ingen i midten), og slippet stopper skuddene',
   holdt1 && kug.n >= 40 && kug.midt === 0 && !kug.holder && /én bag hver sprække/.test(kug.linje), JSON.stringify({ holdt1, ...kug }));
 
-// Trin 2: bølgerne starter med knappen og når bagvæggen
+// Trin 2: Vandet står stille i karret med den gule ring og "Tryk på vandet" (rettelse 2 efter prøven 28. november 2026), et
+// rigtigt tryk på vandet starter bølgerne, ringen forsvinder, og bølgerne når bagvæggen
 await næste();
 await trin('boelger');
-await page.click('#kvante .fl-handling[data-knap="boelger"]');
+await spol(0.3);
+const førVand = await T(() => atomlabTest.kvante.vand());
+const vp = await T(() => atomlabTest.kvante.vandPunkt());
+await page.mouse.click(vp.x, vp.y);
+const trykket = await T(() => atomlabTest.kvante.vand());
 await spol(7);
 await fase('så');
 const vand = await T(() => ({ ...atomlabTest.kvante.vand(), linje: document.querySelector('#kvante .forløb-linje').innerHTML }));
-tjek('trin 2: "Start bølgerne" sender vandets bølger helt til bagvæggen, og Så har ordet interferens', vand.tændt && vand.front > 8 && /data-ord="interferens"/.test(vand.linje), JSON.stringify({ tændt: vand.tændt, front: vand.front }));
+await T(() => atomlabTest.kvante.slags('elektroner'));
+const udenKar = await T(() => atomlabTest.kvante.vand());
+await T(() => atomlabTest.kvante.slags('boelger'));
+tjek('trin 2: Karret med det stille vand, den gule ring og "Tryk på vandet" står der, før bølgerne starter, et tryk på ringen starter dem (ringen og teksten forsvinder), bølgerne når bagvæggen, Så har ordet interferens, og med elektroner er karret væk',
+  førVand.kar && førVand.mærke && førVand.peg && !førVand.tændt && trykket.tændt && !trykket.mærke && !trykket.peg
+  && vand.tændt && vand.front > 8 && /data-ord="interferens"/.test(vand.linje) && !udenKar.kar && !udenKar.mærke,
+  JSON.stringify({ førVand, trykket, tændt: vand.tændt, front: vand.front, udenKar }));
 
 // Trin 3: 1.000 elektroner giver mange striber
 await næste();

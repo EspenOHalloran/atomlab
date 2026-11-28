@@ -39,6 +39,8 @@ uniform float uKilde;
 uniform float uStyrke;
 uniform vec3 uFarve;
 uniform float uBredde;
+uniform float uStille;
+uniform float uKar;
 varying vec2 vP;
 float hylster(float r) {
   float t = 1.0 - smoothstep(uFront - 0.25, uFront, r);
@@ -78,7 +80,16 @@ void main() {
   // Bølgepakken er usynlig uden for sit bånd. Vandet har et svagt skær over det hele.
   float flade = uBredde > 0.0 ? synlig : 0.25 + 0.75 * synlig;
   float alfa = uStyrke * (0.28 + 0.55 * top + 0.12 * dal) * flade;
-  gl_FragColor = vec4(farve, alfa);
+  // Det stille vand i karret (bølger i vand, før og mens bølgerne løber): blåt med en svag, langsom glans, så man kan se,
+  // hvor vandet er (rettelse 2 efter prøven 28. november 2026: "tryk på vandet. hvilket vand?")
+  float glans = 0.5 + 0.5 * sin(x * 2.3 + z * 1.1 + uTid * 0.35) * sin(z * 1.9 - x * 0.7 - uTid * 0.25);
+  float aStille = uStille * (0.4 + 0.1 * glans);
+  vec3 cStille = uFarve * (0.5 + 0.22 * glans);
+  float a = alfa + aStille * (1.0 - alfa);
+  vec3 c = (farve * alfa + cStille * aStille * (1.0 - alfa)) / max(a, 0.0001);
+  // Karret er lige så bredt som væggen med sprækkerne
+  if (uKar > 0.5 && abs(z) > ${VÆG_HALV.toFixed(3)}) a = 0.0;
+  gl_FragColor = vec4(c, a);
 }`;
 
 // Lyset på bagvæggen, hvor vandets bølger er høje (tidens gennemsnit af to bølger fra sprækkerne). For elektroner og
@@ -238,7 +249,7 @@ export function lavBænk() {
     uniforms: {
       uTid: { value: 0 }, uFront: { value: 0 }, uK: { value: 30 }, uOmega: { value: 30 }, uSpalte: { value: new THREE.Vector2(-0.5, 0.5) },
       uAaben: { value: new THREE.Vector2(1, 1) }, uKilde: { value: BØLGE_START }, uStyrke: { value: 0 }, uFarve: { value: new THREE.Color(0.25, 0.55, 0.95) },
-      uBredde: { value: 0 },
+      uBredde: { value: 0 }, uStille: { value: 0 }, uKar: { value: 0 },
     },
   });
   const vandBredde = L - (KILDE_X + 0.6);
@@ -250,8 +261,44 @@ export function lavBænk() {
   vand.position.x = 0;
   vand.visible = false;
   gruppe.add(vand);
+
+  // Karret med vandet (kun med bølger i vand): en lav kant af glas om vandet og en bølgemaskine (en stang, der vipper op og
+  // ned i vandet og laver bølgerne) i stedet for kilden. Et tryk på vandet starter den.
+  const kar = new THREE.Group();
+  kar.visible = false;
+  gruppe.add(kar);
+  const glas = new THREE.MeshStandardMaterial({ color: 0x8cc4ff, roughness: 0.2, metalness: 0.1, transparent: true, opacity: 0.32, depthWrite: false });
+  const KAR_X0 = BØLGE_START - 0.08;
+  const KAR_HØJDE = 0.46;
+  const karKant = (bx, bz, x, z) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(bx, KAR_HØJDE, bz), glas);
+    m.position.set(x, KAR_HØJDE / 2, z);
+    m.renderOrder = 1;
+    kar.add(m);
+  };
+  karKant(0.05, 2 * VÆG_HALV + 0.1, KAR_X0, 0);
+  for (const side of [-1, 1]) karKant(L - KAR_X0, 0.05, (KAR_X0 + L) / 2, side * (VÆG_HALV + 0.05));
+  const stang = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2 * VÆG_HALV - 0.1, 16), metal);
+  stang.rotation.x = Math.PI / 2;
+  stang.position.set(BØLGE_START + 0.04, 0.4, 0);
+  const stangArme = [-1, 1].map((side) => {
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.06), metal);
+    arm.position.set(BØLGE_START + 0.04, 0.62, side * (VÆG_HALV - 0.2));
+    return arm;
+  });
+  kar.add(stang, ...stangArme);
+  const kilden = [kasse, rør, fod, blinkLys];
+
+  // Ringen, der viser, hvor man skal trykke ("Tryk på vandet"): en flad ring på vandet foran væggen, der pulserer
+  const MÆRKE = new THREE.Vector3(-1.9, 0.37, 0);
+  const mærke = new THREE.Mesh(new THREE.RingGeometry(0.34, 0.42, 48), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.3, 1.05, 0.35), transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+  mærke.rotation.x = -Math.PI / 2;
+  mærke.position.copy(MÆRKE);
+  mærke.renderOrder = 2;
+  mærke.visible = false;
+  gruppe.add(mærke);
   // bredde > 0: en bølgepakke ("Vis bølgen"), der slukker sig selv, når den er løbet forbi bagvæggen (PULS_SLUT)
-  const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95), bredde: 0, fart: BØLGE_FART };
+  const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95), bredde: 0, fart: BØLGE_FART, stille: 0 };
   const PULS_FORBI = -BØLGE_START + L + PULS_BREDDE + 0.9; // lyset på midten af bagvæggen er tonet ud (så må en ny pakke starte)
   const PULS_SLUT = -BØLGE_START + Math.hypot(L, BAG_HALV + 1) + PULS_BREDDE + 1; // også lyset på kanten er tonet ud
 
@@ -428,9 +475,18 @@ export function lavBænk() {
     glimt.visible = t.glimt > 0.01;
     glimt.material.opacity = Math.min(1, t.glimt * 1.6);
     glimt.scale.setScalar(0.3 + 0.6 * t.glimt);
-    // Vandet (eller bølgepakken)
+    // Vandet (eller bølgepakken) og det stille vand i karret
     vandT.styrke += (vandT.mål - vandT.styrke) * (1 - Math.exp(-dt * (vandT.bredde ? 12 : 3)));
-    vand.visible = vandT.styrke > 0.01;
+    vandT.stille += ((kar.visible ? 1 : 0) - vandT.stille) * (1 - Math.exp(-dt * 6));
+    vand.visible = vandT.styrke > 0.01 || vandT.stille > 0.01;
+    // Bølgemaskinen vipper op og ned, mens bølgerne løber (i takt med bølgerne)
+    stang.position.y = 0.4 + (vandT.tændt && !vandT.bredde ? 0.035 * Math.sin(vandMat.uniforms.uK.value * vandT.fart * tid) : 0);
+    for (const arm of stangArme) arm.position.y = stang.position.y + 0.22;
+    if (mærke.visible) {
+      const p = ROLIG ? 0.5 : 0.5 + 0.5 * Math.sin(tid * 4);
+      mærke.scale.setScalar(1 + 0.18 * p);
+      mærke.material.opacity = 0.55 + 0.45 * (1 - p);
+    }
     if (vandT.tændt) vandT.front += vandT.fart * dt;
     if (vandT.tændt && vandT.bredde && vandT.front > PULS_SLUT) {
       vandT.tændt = false;
@@ -442,6 +498,8 @@ export function lavBænk() {
     u.uStyrke.value = vandT.styrke;
     u.uFarve.value.copy(vandT.farve);
     u.uBredde.value = vandT.bredde;
+    u.uStille.value = vandT.stille;
+    u.uKar.value = kar.visible ? 1 : 0;
     u.uOmega.value = u.uK.value * vandT.fart; // bølgetoppene følger fronten
     // Bagvæggen lyser, når bølgerne er nået derhen (bølgepakken: hvert sted for sig, i shaderen)
     const b = bagLys.uniforms;
@@ -534,6 +592,17 @@ export function lavBænk() {
     pulsKører: () => vandT.tændt && vandT.bredde > 0,
     vandFront: () => vandT.front,
     vandTændt: () => vandT.tændt,
+    // Bølger i vand: karret med det stille vand og bølgemaskinen i stedet for kilden (true), eller kilden (false)
+    kar(ja) {
+      kar.visible = ja;
+      for (const m of kilden) m.visible = !ja;
+      if (!ja) mærke.visible = false;
+    },
+    karVist: () => kar.visible,
+    // Ringen på vandet, der viser, hvor man trykker, og punktet over den (til skiltet "Tryk på vandet")
+    mærke(ja) { mærke.visible = ja && kar.visible; },
+    mærkeVist: () => mærke.visible,
+    mærkeTop: (v) => gruppe.localToWorld(v.set(MÆRKE.x, MÆRKE.y + 0.12, MÆRKE.z)),
     // Til at stille kameraet: bænkens kasse i gruppens koordinater
     kasse: () => new THREE.Box3(new THREE.Vector3(KILDE_X - 0.6, 0, -BAG_HALV - 0.3), new THREE.Vector3(L + 0.2, VÆG_HØJDE + 0.25, BAG_HALV + 0.3)),
   };

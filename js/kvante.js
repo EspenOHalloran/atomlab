@@ -64,6 +64,13 @@ export function lav() {
   bænk.gruppe.visible = false;
   verden.scene.add(bænk.gruppe);
   skilt = lavSkilt($('kvanteVindue'));
+  // "Tryk på vandet" over ringen på vandet (bølger i vand, før bølgerne er startet)
+  const peg = document.createElement('p');
+  peg.className = 'kv-peg';
+  peg.id = 'kvPeg';
+  peg.hidden = true;
+  peg.textContent = 'Tryk på vandet';
+  $('kvanteVindue').append(peg);
   const måltSkilt = document.createElement('p');
   måltSkilt.className = 'kv-målt';
   måltSkilt.id = 'kvMålt';
@@ -141,6 +148,7 @@ export function stop() {
   bænk.gruppe.visible = false;
   bænk.vand(false);
   skilt.stop();
+  $('kvPeg').hidden = true;
   begrænsDrejning(null);
   $('hjælpKvante').classList.add('skjult');
 }
@@ -187,6 +195,7 @@ function ændret({ straks = false } = {}) {
   fordelingSet = null;
   påVej = [];
   bænk.ryd();
+  bænk.kar(v.slags === 'boelger');
   bænk.prikStørrelse(kugleSlags(v.slags) ? 0.13 : 0.05);
   bænk.bold(v.slags === 'fodbold');
   lysNu = lysFarve(nanometer(v.farve)).map((c) => c * 1.35);
@@ -370,6 +379,7 @@ function opdater(dt, tid) {
   }
   bænk.opdater(dt, tid);
   tegnSkilt();
+  tegnPeg();
   tegnMålt();
   panelTid += dt;
   if (panelTid > 0.25) { panelTid = 0; panel(); }
@@ -384,6 +394,21 @@ function tegnSkilt() {
     tal: tælTekst(v.slags, bænk.antal()),
     ring: ringZ == null ? null : ringTekst(ringTal, ringFør),
   });
+}
+
+// "Tryk på vandet": ringen på vandet og teksten over den, så længe bølgerne ikke er startet (rettelse 2 efter prøven)
+const tPeg = new THREE.Vector3();
+function tegnPeg() {
+  const el = $('kvPeg');
+  const vis = aktiv && v.slags === 'boelger' && !bænk.vandTændt();
+  if (bænk.mærkeVist() !== vis) bænk.mærke(vis);
+  if (el.hidden === vis) el.hidden = !vis;
+  if (!vis) return;
+  bænk.mærkeTop(tPeg).project(verden.kamera);
+  const r = $('kvanteVindue').getBoundingClientRect();
+  const c = verden.renderer.domElement.getBoundingClientRect();
+  el.style.left = `${c.left - r.left + ((tPeg.x + 1) / 2) * c.width}px`;
+  el.style.top = `${c.top - r.top + ((1 - tPeg.y) / 2) * c.height}px`;
 }
 
 // ---------- Kameraet ----------
@@ -794,7 +819,13 @@ export function testAdgang() {
     skydÉn: () => skydÉn(),
     bølgeKnap: () => $('kvBølgen').click(),
     lukket: () => [...bænk.t.lukMål],
-    vand: () => ({ tændt: bænk.vandTændt(), front: bænk.vandFront() }),
+    vand: () => ({ tændt: bænk.vandTændt(), front: bænk.vandFront(), kar: bænk.karVist(), mærke: bænk.mærkeVist(), peg: !$('kvPeg').hidden }),
+    // Skærmpunktet midt i ringen på vandet (til at trykke på vandet i testen)
+    vandPunkt() {
+      const p = bænk.mærkeTop(new THREE.Vector3()).project(verden.kamera);
+      const r = verden.renderer.domElement.getBoundingClientRect();
+      return { x: r.left + ((p.x + 1) / 2) * r.width, y: r.top + ((1 - p.y) / 2) * r.height + 4 };
+    },
     panel: () => ({ titel: $('kvTitel').textContent, tekst: $('kvTekst').textContent, tal: $('kvTal').textContent }),
     tæller: () => skilt.læs().tal,
     kamera: () => ({ drejet: bænk.gruppe.rotation.y, mål: verden.styring.target.toArray() }),
