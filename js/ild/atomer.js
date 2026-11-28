@@ -39,10 +39,14 @@ const O2_ATOMER = [[6, 7], [8, 9], [10, 11]];
 const O2_START = [[-11.5, -5.6, 0.4], [11.2, -6.2, -0.5], [0.6, 10.6, 1.2]]; // x, y og vinkel
 const PLADSER = [[-7.05, 4.35], [7.05, 4.35], [0, -6.75]]; // hvor de lægger sig ved stykket (oppe til venstre, oppe til højre, under)
 const FANG = 11.25; // slippes O₂ så tæt på stykket (enheder), lægger det sig på en plads (et rundt mål)
-const REAKTION_TID = ROLIG ? 0.6 : 1.5; // sekunder
+const REAKTION_TID = ROLIG ? 2.5 : 4.5; // sekunder (prøven 28. november 2026: før 1,5 s, for hurtigt til at følge)
+const BRYD = 0.22; // her i reaktionen (0-1) er de gamle bindinger brudt
+const BIND = 0.78; // her kommer de nye bindinger
 // Navnene på molekylerne. Før reaktionen står de på stykket og på de frie O₂, mens man trækker (prøven 28. november 2026:
 // sønnen vidste ikke, hvad oxygen og stearin var). Et O₂, der ligger på plads, mister sit navn, så der ikke er for mange.
 export const NAVN = { ethen: 'Stearin fra lyset', o2: 'O₂: oxygen (ilt)', co2: 'CO₂', vand: 'H₂O (vand)' };
+// De tre dele af partnerbyttet, som en lille tekst over atomerne, mens det sker
+export const BYT = ['1. Atomerne slipper', '2. Nye partnere', '3. Varme!'];
 // Efter reaktionen: hvert produkt, dets atomer (numrene) i skabelonens rækkefølge, og hvor det ender
 const PRODUKTER = [
   { slags: 'co2', navn: NAVN.co2, atomer: (o) => [o[0][0], 0, o[2][0]], plads: [-8.5, 4.2], ud: [-0.7, 0.35] },
@@ -77,6 +81,7 @@ export function lavAtomScene() {
   const tegneRet = [];
   const fra = atomer.map(() => new THREE.Vector3());
   const til = atomer.map(() => new THREE.Vector3());
+  const ud = atomer.map(() => new THREE.Vector3()); // fra det gamle molekyles midte ud mod atomet (enhedsvektor)
   const tV = new THREE.Vector3();
   const tV2 = new THREE.Vector3();
   const navne = [];
@@ -153,6 +158,7 @@ export function lavAtomScene() {
       return m;
     });
     atomer.forEach((a, i) => fra[i].copy(a.p));
+    for (const m of molekyler) for (const i of m.idx) ud[i].copy(atomer[i].p).sub(m.pos).normalize();
     // Hvor atomerne ender
     for (const m of produkter) {
       const sk = SKABELON[m.slags];
@@ -182,15 +188,19 @@ export function lavAtomScene() {
       placér();
       bindingerOgPar(molekyler);
     } else if (fase === 'reagerer') {
+      // Partnerbyttet i tre dele, så man kan følge det (prøven 28. november 2026: det gik for hurtigt):
+      // 1) de gamle bindinger strækkes og brydes, 2) de løse atomer flytter hen til deres nye partnere, 3) de nye
+      // bindinger kommer, og der kommer et glimt af varme (varmen kommer, når de nye bindinger dannes).
       rt += dt / REAKTION_TID;
-      const t = glat(Math.min(1, rt));
+      const flyt = glat(Math.min(1, Math.max(0, (rt - BRYD) / (BIND - BRYD + 0.08))));
+      const stræk = Math.sin(Math.PI * Math.min(1, rt / (BIND + 0.05))) * 0.9; // atomerne glider lidt fra hinanden
       atomer.forEach((a, i) => {
-        a.p.lerpVectors(fra[i], til[i], t);
-        a.lys = Math.max(0, 1 - Math.abs(rt - 0.5) * 2.2);
+        a.p.lerpVectors(fra[i], til[i], flyt).addScaledVector(ud[i], stræk);
+        a.lys = 0.55 * Math.max(0, Math.min(1, (rt - BRYD * 0.5) / 0.1, (BIND + 0.15 - rt) / 0.1));
       });
-      bindingerOgPar(rt < 0.5 ? molekyler : produkter);
-      glimt.visible = rt > 0.3 && rt < 0.95;
-      const g = Math.max(0, 1 - Math.abs(rt - 0.55) / 0.3);
+      bindingerOgPar(rt < BRYD ? molekyler : rt < BIND ? [] : produkter);
+      const g = Math.max(0, 1 - Math.abs(rt - (BIND + 0.08)) / 0.16);
+      glimt.visible = g > 0;
       glimt.scale.setScalar(4 + 14 * g);
       glimt.material.opacity = g;
       if (rt >= 1) {
@@ -217,6 +227,7 @@ export function lavAtomScene() {
     }
     navne.length = 0;
     if (fase === 'færdig') molekyler.forEach((m, i) => navne.push({ tekst: m.navn, p: navnPos[i].copy(m.pos).add(tV2.set(0, m.slags === 'vand' ? 2.6 : 2.4, 0)) }));
+    else if (fase === 'reagerer') navne.push({ tekst: BYT[rt < BRYD ? 0 : rt < BIND ? 1 : 2], p: navnPos[0].set(0, 9.2, 0) });
     else if (fase === 'klar') {
       navne.push({ tekst: NAVN.ethen, p: navnPos[0].set(0, 4.3, 0) });
       o2.forEach((m, i) => {

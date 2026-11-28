@@ -106,7 +106,7 @@ tjek('gasbrænderen er gul med lidt luft, blå med luft nok, og den går ud, nå
 await I(() => { const a = atomlabTest.ild; a.vælgFlamme('lys'); a.vælgScene('atomer'); });
 const før = await T(() => ({ tal: atomlabTest.ild.atomer.tal(), m: atomlabTest.ild.atomer.molekyler() }));
 for (let i = 0; i < 3; i++) await I(() => { atomlabTest.ild.atomer.lægNæste(); atomlabTest.ild.spol(1); });
-await spol(2.5);
+await spol(5); // partnerbyttet tager 4,5 s (REAKTION_TID)
 const efter = await T(() => ({ fase: atomlabTest.ild.atomer.fase(), tal: atomlabTest.ild.atomer.tal(), m: atomlabTest.ild.atomer.molekyler(), titel: atomlabTest.ild.panel().titel }));
 tjek('i luppen bliver ethen og tre O₂ til to CO₂ og to H₂O, og der er 2 C, 4 H og 6 O før og efter',
   før.m.join() === 'ethen,o2,o2,o2' && efter.fase === 'færdig' && efter.m.sort().join() === 'co2,co2,vand,vand' && JSON.stringify(før.tal) === JSON.stringify(efter.tal) && efter.tal.O === 6 && efter.titel === PANEL.atomerFærdig.titel,
