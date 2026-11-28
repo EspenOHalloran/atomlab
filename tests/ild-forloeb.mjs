@@ -63,7 +63,7 @@ tjek('trin 1: lyset pustes ud med røg, et tryk på vægen giver vinket, og tæn
 await næste();
 await page.waitForFunction(() => atomlabTest.ild.trin() === 'ske', null, { timeout: 10000 });
 await page.click('#ild .fl-gæt >> nth=1');
-await T(() => { const a = atomlabTest.ild; a.flytVærktøj(0, 3.6); a.spol(1.2); });
+await T(() => { const a = atomlabTest.ild; a.flytVærktøj(0, 3.6); a.spol(2); });
 await fase('så');
 const ske = await T(() => atomlabTest.ild.tilstand().ske);
 tjek('trin 2: den kolde ske over flammen dugger', ske.dug > 0.6 && ske.zone === 'over', JSON.stringify(ske));

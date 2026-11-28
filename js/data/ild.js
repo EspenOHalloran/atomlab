@@ -37,10 +37,12 @@ export function skeZone(px, py, { sod = 1, tyngde = 1, højdeForhold = 5.2 } = {
 // igen, når skeen bliver varm (efter et par sekunder, som i virkeligheden). Sod kommer kun i den gule del.
 export function skeSkridt(ske, zone, dt, sod = 1, køl = 0.1) {
   const iFlammen = zone === 'gul' || zone === 'kerne' || zone === 'kant' || zone === 'blå' || zone === 'kuppel';
-  const opvarm = iFlammen ? 0.45 : zone === 'over' ? 0.16 : -køl;
+  // Over flammen: dugget vokser over ca. 2,5 s, og skeen er varm nok til at tørre efter ca. 5 s (prøven 28. november 2026:
+  // dugget skulle vokse til, så man kan se det komme)
+  const opvarm = iFlammen ? 0.45 : zone === 'over' ? 0.1 : -køl;
   ske.varme = Math.min(1, Math.max(0, ske.varme + opvarm * dt));
-  if (zone === 'over' && ske.varme < 0.5) ske.dug = Math.min(1, ske.dug + 1.4 * dt);
-  else if (ske.varme > 0.5 || iFlammen) ske.dug = Math.max(0, ske.dug - 0.9 * dt);
+  if (zone === 'over' && ske.varme < 0.5) ske.dug = Math.min(1, ske.dug + 0.4 * dt);
+  else if (ske.varme > 0.5 || iFlammen) ske.dug = Math.max(0, ske.dug - 0.6 * dt);
   if (zone === 'gul') ske.sod = Math.min(1, ske.sod + 0.75 * dt * sod);
   return ske;
 }

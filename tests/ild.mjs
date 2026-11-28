@@ -64,7 +64,7 @@ const tændt = await tilstand();
 tjek('et pust slukker lyset og giver røg, og tændstikken i røgen over vægen tænder lyset gennem røgen', !pust.lysBrænder && pust.røg > 5 && løb.løber && tændt.lysBrænder && tændt.hændelse === 'gennemRøgen', JSON.stringify({ pust, løb: løb.løber, tændt: tændt.hændelse }));
 
 // Skeen: dug over flammen (som forsvinder, når skeen bliver varm) og sod i den gule del
-await I(() => { const a = atomlabTest.ild; a.vælgVærktøj('ske'); a.flytVærktøj(0, 3.5); a.spol(1); });
+await I(() => { const a = atomlabTest.ild; a.vælgVærktøj('ske'); a.flytVærktøj(0, 3.5); a.spol(2.5); });
 const dug = await tilstand();
 const dugPanel = (await T(() => atomlabTest.ild.panel())).titel;
 await spol(5);
