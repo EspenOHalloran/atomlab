@@ -232,7 +232,7 @@ function linjerHTML(b, side) {
   const rækker = l?.rækker.filter((r) => r.side === side.id) ?? [];
   if (!rækker.length) return '';
   return `<details class="lag-boks bs-linjer" data-lag="bog-linjer"><summary><strong>${esc(l.titel)}</strong> <span class="lag-kort">${esc(l.linje)}</span></summary>`
-    + rækker.map((r) => `<div class="bs-række"><p class="bs-hvor">${esc(r.linjer)}</p><p class="bs-latin" lang="la">${esc(r.latin)}</p><p class="bs-dansk">${esc(r.dansk)}</p></div>`).join('')
+    + rækker.map((r) => `<div class="bs-række"><p class="bs-hvor">${esc(r.linjer)}</p><p class="bs-latin" lang="${r.sprog ?? b.sprog ?? 'la'}">${esc(r.latin)}</p><p class="bs-dansk">${esc(r.dansk)}</p></div>`).join('')
     + `<p class="bs-note">${esc(l.note)}</p></details>`;
 }
 
@@ -249,7 +249,8 @@ function lavSider(felt, bogId, b, rolig, bladrVidere) {
     const sted = s.steder.find((x) => x.id === husk.sted);
     for (const k of felt.querySelectorAll('[data-sted]')) k.setAttribute('aria-pressed', String(k.dataset.sted === husk.sted));
     forklaring.innerHTML = sted
-      ? `<p class="bs-navn">${esc(sted.navn)}</p><p class="bs-latin" lang="la"><span class="bs-mærke">${esc(b.stedLatin)}</span> ${esc(sted.latin)}</p>`
+      // Sproget er latin, medmindre bogen eller stedet siger andet (Rømer: engelsk fra 1677, men listen er latin)
+      ? `<p class="bs-navn">${esc(sted.navn)}</p><p class="bs-latin" lang="${sted.sprog ?? b.sprog ?? 'la'}"><span class="bs-mærke">${esc(sted.mærke ?? b.stedLatin)}</span> ${esc(sted.latin)}</p>`
         + `<p class="bs-dansk"><span class="bs-mærke">${esc(b.stedDansk)}</span> ${esc(sted.dansk)}</p>`
       : `<p class="bs-vælg">${esc(b.vælg)}</p>`;
   }

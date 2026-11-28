@@ -24,7 +24,7 @@
 //             tid) blinker tallet, og intet sker. Ved 17.35.45 tænder Io. Et tryk (på kikkerten eller "Der er Io!") tæller,
 //             når Io er tændt, før det siger linjen "Ikke endnu". Færdig efter trykket
 //
-// Snyd, der skal stå i "Ærligt talt" (R3): Banerne ovenfra er ikke i rigtig størrelse (Jupiter er 5,2 gange så langt fra
+// Snyd, der står i "Ærligt talt" i "Om Rømer" (OM i js/data/opdagelser/roemer.js, R3): Banerne ovenfra er ikke i rigtig størrelse (Jupiter er 5,2 gange så langt fra
 // Solen som Jorden, her ca. 2,4 gange), og Jupiter står stille i tegningen (den flytter sig ca. 10° fra juli til november).
 // Io's bane er tegnet for stor. Lysglimtet farer lige hurtigt i begge forsøg, men stopuret tæller nutidens minutter
 // (Horizons), ikke tegningens længde. Tabellen er regnet ud fra august, som Rømer gjorde, ikke Cassinis tabel. Skyggen er
@@ -32,6 +32,9 @@
 // hurtigere end rigtige ure. Tegner kun, når noget bevæger sig.
 
 import { forløbFase, forløbRørt, forløbVenter, forløbVink } from '../forloeb.js';
+
+// Gåden "Tæl lysets minutter" (R3) står i sin egen fil. js/opdagelser.js laver den for opslaget 'gaaden' med lavGåde
+export { lavGåde } from './roemer-gaade.js';
 import {
   BANE_RADIUS, IO_OMLØB, OMLØB, SKYGGE_VINKEL, ioSted, skyggeKant, AUGUST, NOVEMBER, OPPOSITION, SIDSTE_DAG, MÅNEDER,
   kanSes, lysMinutter, forsinkelse, jordVinkel, minutTekst, datoTekst, NOV_START, NOV_TABEL, NOV_SET, klokken,

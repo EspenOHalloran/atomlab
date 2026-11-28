@@ -99,6 +99,9 @@ function startFortælling() {
   return true;
 }
 
+// Opslaget efter id i den åbne bog (gåden fører videre til bogen fra 1659 eller 1573, hos Rømer til tidsskriftet)
+const næsteEfter = (id) => { const o = åben?.tekster.OPSLAG ?? []; return o[o.findIndex((x) => x.id === id) + 1]?.id; };
+
 // Bladrer til et opslag i den åbne bog (fx "Hemmeligheden" fra "Det så du")
 function visOpslag(id) {
   const nr = bog?.find(id) ?? -1;
@@ -129,7 +132,7 @@ async function åbnBog(id, { fortælling = false } = {}) {
     lavScene: (o, felt) => {
       if (!scenemodul) return null;
       if (o.id === 'gaaden') {
-        return scenemodul.lavGåde(felt, tekster.ANAGRAM, { rolig: ROLIG, tekster: tekster.GÅDE, løst: Boolean(løste()[b.id]), påLøst: () => { lyd.klaret(); gemLøst(b.id); }, påVidere: () => visOpslag('bogen') });
+        return scenemodul.lavGåde(felt, tekster.ANAGRAM, { rolig: ROLIG, tekster: tekster.GÅDE, løst: Boolean(løste()[b.id]), påLøst: () => { lyd.klaret(); gemLøst(b.id); }, påVidere: () => visOpslag(næsteEfter('gaaden')) });
       }
       const scene = scenemodul.lavFortælling(felt, { rolig: ROLIG, tekster: tekster.FRI, anagram: tekster.ANAGRAM, påIgen: () => { lyd.klik(); startFortælling(); } });
       // Uden for forløbet er opslaget et laboratorium

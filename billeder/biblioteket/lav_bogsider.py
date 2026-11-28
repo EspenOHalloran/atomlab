@@ -55,13 +55,32 @@ BØGER = {
             's845': {'arkiv': 'SitzungsberichtePreussAkad19152', 'n': 372, 'udsnit': (130, 140, 1090, 1767)},
         },
     },
+    'roemer': {
+        # Philosophical Transactions bd. 12, nr. 136 (1677), s. 893-894 og tavlen: Royal Society og JSTOR's skanning
+        # ("Early Journal Content") på archive.org med Public Domain Mark (docs/drejebog-roemer.md afsnit 11, jeres svar 4
+        # 21. november 2026). n0 er s. 893 (JSTOR's bjælke nederst skæres fra), n1 s. 894, og n2 er tavlen, hvor Fig. 11
+        # står i øverste venstre hjørne. Fig. 11 hentes i fuld størrelse ('stor', 3969 px), for udsnittet er lille, og den
+        # bliver 870 px bred. Rømers egen liste "Obser. primi Jovialium Parisiis" er fra Commons (Kirstine Meyers gengivelse
+        # 1915, PD-old-100): billedet er side 4 (venstre) og side 1 (højre), så kun højre halvdel bruges
+        'arkiv': 'paper-doi-10_1098_rstl_1677_0024',
+        'sider': {
+            's893': {'n': 0, 'udsnit': (170, 100, 1730, 2600)},
+            'fig11': {'n': 2, 'stor': True, 'udsnit': (180, 80, 1050, 1660), 'bredde': 870},
+            's894': {'n': 1, 'udsnit': (170, 30, 1730, 2560)},
+            'liste': {'url': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/'
+                             'Ole_R%C3%B8mer_-_Obser._Primi_Jovialium_Parisiis_-_pp1%2B4.jpg/'
+                             '3840px-Ole_R%C3%B8mer_-_Obser._Primi_Jovialium_Parisiis_-_pp1%2B4.jpg',
+                      'fil': 'roemer-liste-3840.jpg', 'udsnit': (1920, 0, 3840, 2826)},
+        },
+    },
 }
 
 
-def hent(mappe, arkiv, n):
-    sti = os.path.join(mappe, f"{arkiv}-n{n}.jpg")
+def hent(mappe, arkiv, n, stor=False, url=None, fil=None):
+    """En side fra archive.org (w1200, eller fuld størrelse med stor) eller et billede fra en adresse (url)."""
+    sti = os.path.join(mappe, fil or f"{arkiv}-n{n}{'-stor' if stor else ''}.jpg")
     if not os.path.exists(sti):
-        url = f"https://archive.org/download/{arkiv}/page/n{n}_w1200.jpg"
+        url = url or f"https://archive.org/download/{arkiv}/page/n{n}{'' if stor else '_w1200'}.jpg"
         req = urllib.request.Request(url, headers={'User-Agent': UA})
         with urllib.request.urlopen(req) as svar, open(sti, 'wb') as f:
             f.write(svar.read())
@@ -83,16 +102,18 @@ def lav(navn, mappe, ud):
     os.makedirs(mappe, exist_ok=True)
     for side, n in bog['sider'].items():
         # En side er enten nummeret i bogens arkiv eller {'arkiv', 'n', 'udsnit'} (Einstein: to bind og et udsnit).
-        s = n if isinstance(n, dict) else {'arkiv': bog['arkiv'], 'n': n}
-        kilde = hent(mappe, s['arkiv'], s['n'])
+        # Rømer: en side kan også have 'stor' (fuld størrelse), 'url' og 'fil' (et billede fra Commons) og 'bredde'.
+        s = {'arkiv': bog.get('arkiv'), **n} if isinstance(n, dict) else {'arkiv': bog['arkiv'], 'n': n}
+        kilde = hent(mappe, s['arkiv'], s.get('n'), s.get('stor', False), s.get('url'), s.get('fil'))
         if s.get('udsnit'):
             kilde = kilde.crop(s['udsnit'])
-        h = round(kilde.height * BREDDE / kilde.width)
-        data, q = webp(kilde.resize((BREDDE, h), Image.LANCZOS))
+        b = s.get('bredde', BREDDE)
+        h = round(kilde.height * b / kilde.width)
+        data, q = webp(kilde.resize((b, h), Image.LANCZOS))
         sti = os.path.join(ud, f'{navn}-{side}.webp')
         with open(sti, 'wb') as f:
             f.write(data)
-        print(f'{sti}: {BREDDE} x {h}, kvalitet {q}, {len(data) // 1024} KB')
+        print(f'{sti}: {b} x {h}, kvalitet {q}, {len(data) // 1024} KB')
 
 
 if __name__ == '__main__':

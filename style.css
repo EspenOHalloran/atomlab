@@ -1573,6 +1573,54 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .bo-knap-linje { margin: -6px 0 0; font-size: 14px; line-height: 1.4; text-align: center; opacity: 0.8; } /* Linjen under Gør det selv (Tycho: hvad man trykker på ved Hvid dværg) */
 @media (max-height: 500px) and (orientation: landscape) { #opdagelser .tg { gap: 8px 12px; } #opdagelser .tg-side { gap: 6px; } #opdagelser .tg-linje { font-size: 14px; } #opdagelser .tg-linje.løst { font-size: 18px; } #opdagelser .tg-idag { padding: 6px 10px; font-size: 13px; line-height: 1.3; } #opdagelser .tg-idag .tg-idag-titel { font-size: 16px; margin-bottom: 2px; } #opdagelser .tg-idag .tg-småt { display: none; } #opdagelser .tg-idag table { margin: 0 0 4px; } #opdagelser .tg-videre-række .knap { padding: 0 12px; font-size: 14px; } } /* Lav skærm på langs: "Og i dag?" og knapperne kan ses uden at rulle */
 @container (max-width: 600px) or (max-aspect-ratio: 11 / 10) { #opdagelser .tg { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; height: auto; min-height: calc(100cqh - clamp(0px, 2vh, 24px)); align-content: center; align-items: start; } #opdagelser .tg-side { max-height: none; overflow: visible; } #opdagelser .tg-kort { width: min(100%, calc(62cqh * 176 / 114)); } } /* Smalt felt (telefon og tablet på højkant): kortet øverst og tallene under */
+#opdagelser .rg { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; height: auto; min-height: calc(100cqh - clamp(0px, 2vh, 24px)); align-content: center; align-items: start; } /* Rømers gåde "Tæl lysets minutter" (R3): Fig. 11 med perlesnoren øverst (Jupiter er langt ude, så tegningen er bred) og linjen under (js/bog/roemer-gaade.js) */
+#opdagelser .rg .tg-side { justify-self: center; justify-items: center; width: min(100%, 680px); max-height: none; overflow: visible; text-align: center; }
+#opdagelser .rg .tg-efter { justify-items: center; }
+#opdagelser .rg .tg-idag { text-align: left; }
+#opdagelser .rg-kort { position: relative; width: 100%; height: clamp(220px, calc(100cqh - 220px), 60cqw); } /* Tegningen "Tæl lysets minutter" (R3): Fig. 11 med perlesnoren og Jorden som knap (js/bog/roemer-gaade.js) */
+#opdagelser .rg-kort svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+#opdagelser .rg-akse { stroke: var(--bog-blaek); stroke-width: 0.8; opacity: 0.45; }
+#opdagelser .rg-bane, #opdagelser .rg-io-bane { fill: none; stroke: var(--bog-blaek); stroke-width: 1.1; }
+#opdagelser .rg-io-bane { stroke-width: 0.8; stroke-dasharray: 2 2; }
+#opdagelser .rg-skygge { fill: color-mix(in srgb, var(--bog-blaek) 22%, transparent); stroke: none; }
+#opdagelser .rg-io { fill: var(--bog-blaek); }
+#opdagelser .rg-jupiter { fill: var(--bog-papir); stroke: var(--bog-blaek); stroke-width: 1.3; }
+#opdagelser .rg-bånd { stroke: var(--bog-blaek); stroke-width: 1; }
+#opdagelser .rg-sol { fill: var(--bog-papir); stroke: var(--bog-blaek); stroke-width: 1.3; }
+#opdagelser .rg-stråle { stroke: var(--bog-blaek); stroke-width: 0.9; }
+#opdagelser .rg-bogstav { font: italic 16px var(--bog-skrift); fill: var(--bog-blaek); }
+#opdagelser .rg-bogstav.lille { font-size: 12px; }
+#opdagelser .rg-mærke { stroke: #8a6a2e; stroke-width: 2; }
+#opdagelser .rg-dato { font: 12px var(--bog-skrift); fill: #6b5220; text-anchor: middle; }
+#opdagelser .rg-snor { stroke: var(--bog-blaek); stroke-width: 0.8; opacity: 0.6; }
+#opdagelser .rg-p { fill: var(--bog-papir); stroke: var(--bog-blaek); stroke-width: 0.9; }
+#opdagelser .rg-p.guld { fill: #e2bd55; stroke: #8a6a2e; }
+#opdagelser .rg-p.talt { fill: #a8730f; stroke: #5c3d06; }
+#opdagelser .rg-perle-tal { font: 12px var(--bog-skrift); fill: #5c3d06; text-anchor: middle; font-variant-numeric: tabular-nums; }
+#opdagelser .rg-snor-tryk { stroke: transparent; stroke-width: 44px; stroke-linecap: round; pointer-events: stroke; cursor: pointer; }
+#opdagelser .rg-jorden { fill: var(--bog-papir); stroke: var(--bog-blaek); stroke-width: 1.4; }
+#opdagelser .rg-jord { position: absolute; width: 48px; height: 48px; padding: 0; transform: translate(-50%, -50%); border: 2px dashed rgba(138, 106, 46, 0.75); border-radius: 50%; background: rgba(226, 189, 85, 0.18); cursor: grab; touch-action: none; }
+#opdagelser .rg-jord[hidden] { display: none; }
+#opdagelser .rg-jord:active { cursor: grabbing; }
+#opdagelser .rg-jord:focus-visible { outline: 3px solid #c9a24a; outline-offset: 2px; }
+#opdagelser .rg-under { margin: 0; font-size: 15px; line-height: 1.4; }
+#opdagelser .rg-under[hidden] { display: none; }
+#opdagelser .rg-tæl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#opdagelser .rg-tæl[hidden] { display: none; }
+#opdagelser .rg-tæl .knap { min-width: 44px; min-height: 44px; padding: 0 12px; font-size: 20px; background: transparent; color: var(--bog-blaek); border-color: rgba(60, 40, 20, 0.45); }
+#opdagelser .rg-tæl .knap[hidden] { display: none; }
+#opdagelser .rg-tæl .rg-svar { font-size: 17px; padding: 0 18px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
+#opdagelser .rg-tal { min-width: 2.2em; font: 600 28px/1 inherit; text-align: center; font-variant-numeric: tabular-nums; }
+#opdagelser .rg-tæl.ryster { outline: 2px solid #a33; border-radius: 6px; }
+#opdagelser .rg-del-to { justify-self: start; min-height: 44px; padding: 0 16px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
+#opdagelser .rg-del-to[hidden] { display: none; }
+#opdagelser .rg-perle { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; opacity: 0.8; }
+#opdagelser .rg-perle-prik { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #e2bd55; border: 1px solid #8a6a2e; }
+#opdagelser .rg.fundet .rg-perle { display: none; }
+#opdagelser .rg .tg-idag thead th { font-weight: normal; font-style: italic; opacity: 0.8; }
+@container (min-width: 820px) { #opdagelser .rg.fundet:not([hidden]) .tg-side { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); width: min(100%, 980px); column-gap: 24px; align-items: center; text-align: left; } #opdagelser .rg.fundet .tg-side > :not(.tg-efter) { grid-column: 1; } #opdagelser .rg.fundet .tg-efter { grid-column: 2; grid-row: 1 / span 4; justify-items: start; } #opdagelser .rg.fundet .rg-kort { height: clamp(200px, calc(100cqh - 270px), 60cqw); } } /* Løst på et bredt felt: linjen til venstre og "Og i dag?" til højre, så det hele kan ses uden at rulle */
+@media (max-height: 500px) and (orientation: landscape) { #opdagelser .rg { grid-template-columns: minmax(0, 1fr) minmax(200px, 270px); height: calc(100cqh - clamp(0px, 2vh, 24px)); min-height: 0; align-items: center; } #opdagelser .rg .tg-side { max-height: 100%; overflow-y: auto; } #opdagelser .rg-kort { height: calc(100cqh - 20px); min-height: 0; } #opdagelser .rg-under { font-size: 13px; line-height: 1.3; } #opdagelser .rg-perle { display: none; } #opdagelser .rg-tal { font-size: 24px; } } /* Lav skærm på langs: linjen under og forklaringen af perlen fylder mindre */
+@container (max-width: 600px) or (max-aspect-ratio: 11 / 10) { #opdagelser .rg { grid-template-columns: minmax(0, 1fr); height: auto; } #opdagelser .rg-kort { height: 54cqh; min-height: 260px; } } /* Smalt felt: tegningen øverst (Jupiter øverst som hos Rømer) og linjen under */
 #opdagelser .bog-scene.hs-ord { grid-template-rows: minmax(0, 1fr); } /* Trin 4 og "Hemmeligheden" (H3): bunkerne af bogstaver i stedet for lærredet (js/bog/huygens-gaade.js) */
 #opdagelser .bog-scene.hs-ord .hs-lærred { display: none; }
 #opdagelser .bog-scene.hs-ord .hs-under { align-content: center; }
