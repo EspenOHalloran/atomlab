@@ -1,7 +1,7 @@
 // Kvantefysik, turen "Prikker bliver til striber" (PR 2, drejebogen i docs/drejebog-kvantefysik.md afsnit 3 med
 // rettelserne i docs/fable/E7-kvantefysik-noter.md afsnit 3): teksterne holder budgettet (højst to sætninger), turen
 // starter af sig selv første gang, trin 1 (kuglerne i to bunker, "Skyd" holdes nede i linjen), trin 2 (vandets bølger når
-// bagvæggen), trin 3 (1.000 elektroner giver striber), trin 4 (ringen med "Her: n" ved det mørke sted, en sprække lukkes
+// bagvæggen), trin 3 (1.000 elektroner giver striber), trin 4 (den gule ring ved det mørke sted med tallet på skiltet, en sprække lukkes
 // med et tryk, og programmet skyder lige så mange igen, så der kommer mange flere), trin 5 (begge åbne igen, måleren
 // tændes, tælleren siger "Begge på én gang: 0", og de mørke striber er væk), trin 6 "Bølgen og prikken" (22. november
 // 2026: bølgen vises, "Skyd én" giver én bølgepakke ad gangen, og hver elektron lander ét sted, når pakken når frem),
@@ -22,12 +22,14 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
 const sætninger = (s) => (s ?? '').match(/[.!?](\s|$)/g)?.length ?? 0;
 const instrukser = STRIBER.trin.flatMap((t) => (t.gæt?.valg ?? [{ efter: '' }]).map((v) => `${v.efter} ${t.gør}`));
 const lange = [...STRIBER.trin.flatMap((t) => [t.spørg, t.så, t.gør, ...(t.gæt?.valg ?? []).map((v) => v.svar)]), ...instrukser].filter((x) => sætninger(x) > 2);
+// Forklaringen under Så (mere, rettelserne efter prøven 28. november 2026: "skæres ud i pap") må have tre sætninger
+const langeMere = STRIBER.trin.map((t) => t.mere).filter((x) => x && sætninger(x) > 3);
 const ider = new Set(ORDBOG.map((o) => o.id));
 const mangler = STRIBER.trin.flatMap((t) => t.ord ?? []).filter((id) => !ider.has(id));
 const så5 = STRIBER.trin[4].så;
 const trin6 = STRIBER.trin[5];
 tjek('teksterne: 6 trin og "Det så du", højst to sætninger i hver tekst (også gættets "efter" med instruksen), ordene står i Ordbogen, trin 5 siger "de mørke striber er væk" og ikke "som kuglerne", og vejenes kort og ord findes',
-  STRIBER.trin.length === 6 && !lange.length && !mangler.length && /mørke striber væk/.test(så5) && !/kugle/i.test(så5)
+  STRIBER.trin.length === 6 && !lange.length && !langeMere.length && !mangler.length && /mørke striber væk/.test(så5) && !/kugle/i.test(så5)
   && sætninger(STRIBER.kernesætning) === 2 && FORLØB.includes(STRIBER) && HVORFOR.kvanteKigger?.svar && HVORFOR.kvanteToSteder?.svar && ider.has('foton'),
   JSON.stringify({ lange, mangler }));
 // "To steder på én gang?" (22. november 2026): trin 5 har jeres gæt, og trin 6 siger, at bølgen går gennem begge, men
@@ -82,14 +84,26 @@ const kug = await T(() => ({ n: atomlabTest.kvante.antal(), midt: atomlabTest.kv
 tjek('trin 1: "Skyd" i linjen virker, mens den holdes nede, 40 kugler rammer i to bunker (ingen i midten), og slippet stopper skuddene',
   holdt1 && kug.n >= 40 && kug.midt === 0 && !kug.holder && /én bag hver sprække/.test(kug.linje), JSON.stringify({ holdt1, ...kug }));
 
-// Trin 2: bølgerne starter med knappen og når bagvæggen
+// Trin 2: Vandet står stille i karret med den gule ring og "Tryk på vandet" (rettelse 2 efter prøven 28. november 2026), et
+// rigtigt tryk på vandet starter bølgerne, ringen forsvinder, og bølgerne når bagvæggen
 await næste();
 await trin('boelger');
-await page.click('#kvante .fl-handling[data-knap="boelger"]');
+await spol(0.3);
+const førVand = await T(() => atomlabTest.kvante.vand());
+const vp = await T(() => atomlabTest.kvante.vandPunkt());
+await page.mouse.click(vp.x, vp.y);
+const trykket = await T(() => atomlabTest.kvante.vand());
 await spol(7);
 await fase('så');
 const vand = await T(() => ({ ...atomlabTest.kvante.vand(), linje: document.querySelector('#kvante .forløb-linje').innerHTML }));
-tjek('trin 2: "Start bølgerne" sender vandets bølger helt til bagvæggen, og Så har ordet interferens', vand.tændt && vand.front > 8 && /data-ord="interferens"/.test(vand.linje), JSON.stringify({ tændt: vand.tændt, front: vand.front }));
+await T(() => atomlabTest.kvante.slags('elektroner'));
+const udenKar = await T(() => atomlabTest.kvante.vand());
+await T(() => atomlabTest.kvante.slags('boelger'));
+tjek('trin 2: Karret med det stille vand, den gule ring og "Tryk på vandet" står der, før bølgerne starter, et tryk på ringen starter dem (ringen og teksten forsvinder), bølgerne når bagvæggen, og så kommer de stiplede linjer og de to skilte "Top møder top" og "Top møder dal", Så har ordet interferens og forklaringen med vejen, og med elektroner er karret væk',
+  førVand.kar && førVand.mærke && førVand.peg && !førVand.tændt && trykket.tændt && !trykket.mærke && !trykket.peg
+  && vand.tændt && vand.front > 8 && vand.forklaret > 0.5 && vand.skilte.length === 2 && /Top møder top/.test(vand.skilte.join()) && /Top møder dal/.test(vand.skilte.join())
+  && /data-ord="interferens"/.test(vand.linje) && /fl-mere/.test(vand.linje) && /halv bølge længere/.test(vand.linje) && !udenKar.kar && !udenKar.mærke,
+  JSON.stringify({ førVand, trykket, tændt: vand.tændt, front: vand.front, udenKar }));
 
 // Trin 3: 1.000 elektroner giver mange striber
 await næste();
@@ -105,7 +119,7 @@ tjek('trin 3: Efter ca. 1.000 elektroner, holdt nede, står der mindst fem strib
 await næste();
 await trin('luk');
 await page.waitForTimeout(300);
-const r4 = await T((h) => ({ tur: atomlabTest.kvante.tur(), top: atomlabTest.kvante.tæl(0, h), her: atomlabTest.kvante.herTekst() }), RING_HALV);
+const r4 = await T((h) => ({ tur: atomlabTest.kvante.tur(), top: atomlabTest.kvante.tæl(0, h), her: atomlabTest.kvante.herTekst(), linje: document.querySelector('#kvante .forløb-linje').textContent }), RING_HALV);
 await page.click('#kvante .fl-gæt >> nth=1');
 const p = await T(() => atomlabTest.kvante.sprækkePunkt(0));
 await page.mouse.click(p.x, p.y);
@@ -113,16 +127,26 @@ let lukket = await T(() => atomlabTest.kvante.valg().sprækker);
 if (lukket === 'begge') { await page.waitForTimeout(300); await page.mouse.click(p.x, p.y); lukket = await T(() => atomlabTest.kvante.valg().sprækker); }
 await spol(5);
 await fase('så');
-const e4 = await T(() => ({ tur: atomlabTest.kvante.tur(), n: atomlabTest.kvante.antal(), her: atomlabTest.kvante.herTekst(), igen: atomlabTest.kvante.trykSprække(0) }));
-tjek('trin 4: ringen står ved det mørke sted med "Her: n" og under 15 % af toppen, et tryk lukker en sprække, programmet skyder lige så mange igen, og nu lander mange flere i ringen (sprækken kan ikke åbnes igen i trinet)',
-  r4.tur.vist && Math.abs(r4.tur.ring - mørktSted()) < 1e-9 && /^Her: \d+$/.test(r4.her) && r4.tur.her < 0.15 * r4.top
-  && lukket === 'højre' && e4.n >= 1000 && e4.tur.før === r4.tur.her && e4.tur.her >= 4 * Math.max(1, e4.tur.før) && /før:/.test(e4.her) && e4.igen === undefined,
+const e4 = await T(() => ({ tur: atomlabTest.kvante.tur(), n: atomlabTest.kvante.antal(), her: atomlabTest.kvante.herTekst(), linje: document.querySelector('#kvante .forløb-linje').textContent, igen: atomlabTest.kvante.trykSprække(0) }));
+tjek('trin 4: spørgsmålet siger "den gule ring på bagvæggen", ringen står ved det mørke sted, skiltet øverst i midten siger "I den gule ring: n", og n er under 15 % af toppen, Så forklarer med en halv bølge og bølgetop mod bølgedal, et tryk lukker en sprække, programmet skyder lige så mange igen, og nu lander mange flere i ringen (sprækken kan ikke åbnes igen i trinet)',
+  r4.tur.vist && Math.abs(r4.tur.ring - mørktSted()) < 1e-9 && /^I den gule ring: \d+$/.test(r4.her) && r4.tur.her < 0.15 * r4.top
+  && lukket === 'højre' && e4.n >= 1000 && e4.tur.før === r4.tur.her && e4.tur.her >= 4 * Math.max(1, e4.tur.før) && /før:/.test(e4.her) && e4.igen === undefined
+  && /den gule ring på bagvæggen/.test(r4.linje) && /halv bølge længere/.test(e4.linje) && /bølgetoppen/.test(e4.linje),
   JSON.stringify({ r4, lukket, e4 }));
 
 // Trin 5: begge åbner igen, måleren tændes, og de mørke striber er væk
 await næste();
 await trin('maaler');
-const f5 = await T(() => ({ sprækker: atomlabTest.kvante.valg().sprækker, ring: atomlabTest.kvante.tur().vist, her: atomlabTest.kvante.herTekst() }));
+await spol(1);
+const f5 = await T(() => ({
+  sprækker: atomlabTest.kvante.valg().sprækker, ring: atomlabTest.kvante.tur().vist, her: atomlabTest.kvante.herTekst(),
+  n: atomlabTest.kvante.antal(), kø: atomlabTest.kvante.tur().kø, målt: atomlabTest.kvante.målt(), måler: atomlabTest.kvante.valg().måler,
+  handlinger: document.querySelectorAll('#kvante .forløb-linje .fl-handling').length, gæt: document.querySelectorAll('#kvante .forløb-linje .fl-gæt').length,
+}));
+// Rettelse 6 efter prøven: Scenen er stille (striberne fra trin 3 står der, intet skydes), målerens lamper står fremme med
+// "Måleren er slukket", og gættene står alene (ingen "Tænd måleren" før gættet)
+tjek('trin 5, før gættet: 1.000 elektroner står der allerede, og intet skydes, lamperne står fremme med "Måleren er slukket", og de tre gæt står alene',
+  f5.n === 1000 && f5.kø === 0 && !f5.måler && f5.målt.lamper > 0.9 && f5.målt.tekst === 'Måleren er slukket' && f5.handlinger === 0 && f5.gæt === 3, JSON.stringify(f5));
 await page.click('#kvante .fl-gæt >> nth=0');
 await page.click('#kvante .fl-handling[data-knap="maaler"]');
 const lamper = await T(() => { const a = atomlabTest.kvante; let blink = 0; for (let i = 0; i < 40; i++) { a.spol(0.05); if (a.lamper().some((l) => l > 0.5)) blink++; } return blink; });

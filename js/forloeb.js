@@ -9,7 +9,9 @@
 // taget før, kan prikkerne trykkes. Scenen må delen lade virke i alle faser (forløbRørt() fra et tryk i scenen gør det
 // samme som et tryk på en af trinets knapper).
 //
-// Teksterne står som data i js/data/forloeb/ ({ id, del, titel, kernesætning, trin: [{ id, spørg, gæt, gør, så, ord }] }).
+// Teksterne står som data i js/data/forloeb/ ({ id, del, titel, kernesætning, trin: [{ id, spørg, gæt, gør, så, mere, ord }] }).
+// mere (valgfri): en forklaring på, hvorfor det skete, der står under Så (fx Kvantefysik trin 2 og 4: "Tingene må gerne skæres
+// ud i pap", prøven 28. november 2026). Så siger, hvad man så, og mere hvorfor.
 // Delen leverer det, der rører scenen, pr. trin-id:
 //   start()       sætter scenen op til trinet (kaldes også, når man går tilbage, så den skal kunne gentages)
 //   knapper       [{ id, tekst, kugle, gør(), aktiv(), tæller(), valgt() }]: trinets handling (de eneste knapper, der er
@@ -333,6 +335,7 @@ function tegn() {
     række = nøgle() + knapper();
   } else if (k.fase === 'så') {
     html += `<p class="fl-tekst fl-så" data-ord-kun="${ord}">${esc(t.så)}</p>`;
+    if (t.mere) html += `<p class="fl-tekst fl-mere" data-ord-kun="${ord}">${esc(t.mere)}</p>`;
     const svar = k.gæt != null ? t.gæt?.valg[k.gæt]?.svar : null;
     if (svar) html += `<p class="fl-lille fl-svar">${esc(svar)}</p>`;
     // Knapperne bliver: Det, man lige har forstået, må man lege videre med (stilguiden B1)

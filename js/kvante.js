@@ -19,9 +19,10 @@ import { STRIBER } from './data/forloeb/kvante.js';
 import {
   STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, PRIKKER, SKYDER, KVANTE_KORT,
   bølgelængde, nanometer, lysFarve, åbneSprækker, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, panelNøgle, talTekst,
-  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags, pulsTid, målerTekst,
+  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags, pulsTid, målerTekst, skiltTekst, tælTekst, ringTekst, stilleSted, FORKLAR, visning, L, BAG_HALV,
 } from './data/kvante.js';
 import { lavBænk, KILDE_Y, VÆG_HØJDE } from './kvante/baenk.js';
+import { lavSkilt } from './kvante/skilt.js';
 
 const $ = (id) => document.getElementById(id);
 const FARVE = { elektroner: [0.45, 0.9, 1.4], kugler: [1.1, 1.1, 1.15], molekyle: [1.4, 0.75, 0.3], klump: [1.45, 1.2, 0.35], fodbold: [1.15, 1.15, 1.15] };
@@ -31,6 +32,7 @@ const HØJST_PR_SEK = 450; // elektroner pr. sekund, når knappen har været hol
 const FLYVETID = 0.12; // s fra kilden blinker, til prikken tændes (elektronen tegnes ikke på vej)
 
 let bænk = null;
+let skilt = null; // skiltet øverst i midten af scenen: hvad der sendes nu, og hvor mange der er landet
 let aktiv = false;
 const v = { slags: 'elektroner', sprækker: 'begge', måler: false, d: STANDARD.d, a: STANDARD.a, fart: STANDARD.fart, farve: STANDARD.farve, bølgen: false, syn: STANDARD.syn };
 let fordeling = null; // tabellen, prikkerne trækkes fra uden måler (laves igen, når noget ændres)
@@ -61,16 +63,34 @@ export function lav() {
   bænk = lavBænk();
   bænk.gruppe.visible = false;
   verden.scene.add(bænk.gruppe);
-  const tæller = document.createElement('p');
-  tæller.className = 'kv-tæller';
-  tæller.id = 'kvTæller';
-  tæller.hidden = true;
-  $('kvanteVindue').append(tæller);
-  const her = document.createElement('p');
-  her.className = 'kv-her';
-  her.id = 'kvHer';
-  her.hidden = true;
-  $('kvanteVindue').append(her);
+  skilt = lavSkilt($('kvanteVindue'));
+  // "Tryk på vandet" over ringen på vandet (bølger i vand, før bølgerne er startet)
+  const peg = document.createElement('p');
+  peg.className = 'kv-peg';
+  peg.id = 'kvPeg';
+  peg.hidden = true;
+  peg.textContent = 'Tryk på vandet';
+  $('kvanteVindue').append(peg);
+  // Bølge eller prik: to mærker langs bænkens forkant, under vejen og under bagvæggen (rettelse 7 efter prøven)
+  for (const hvor of ['vej', 'bag']) {
+    const el = document.createElement('p');
+    el.className = `kv-vis ${hvor}`;
+    el.dataset.vis = hvor;
+    el.hidden = true;
+    el.innerHTML = '<i aria-hidden="true"></i><span></span>';
+    $('kvanteVindue').append(el);
+  }
+  // De to skilte på vandet, når bølgerne er nået bagvæggen: "Top møder top" og "Top møder dal" (rettelse 3 efter prøven)
+  for (const f of FORKLAR) {
+    const el = document.createElement('p');
+    el.className = `kv-forklar ${f.id}`;
+    el.dataset.forklar = f.id;
+    el.hidden = true;
+    el.innerHTML = '<b></b><small></small>';
+    el.querySelector('b').textContent = f.titel;
+    el.querySelector('small').textContent = f.tekst;
+    $('kvanteVindue').append(el);
+  }
   const måltSkilt = document.createElement('p');
   måltSkilt.className = 'kv-målt';
   måltSkilt.id = 'kvMålt';
@@ -147,6 +167,9 @@ export function stop() {
   verden.opdateringer.delete(opdater);
   bænk.gruppe.visible = false;
   bænk.vand(false);
+  skilt.stop();
+  $('kvPeg').hidden = true;
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-forklar, #kvanteVindue .kv-vis')) el.hidden = true;
   begrænsDrejning(null);
   $('hjælpKvante').classList.add('skjult');
 }
@@ -193,6 +216,7 @@ function ændret({ straks = false } = {}) {
   fordelingSet = null;
   påVej = [];
   bænk.ryd();
+  bænk.kar(v.slags === 'boelger');
   bænk.prikStørrelse(kugleSlags(v.slags) ? 0.13 : 0.05);
   bænk.bold(v.slags === 'fodbold');
   lysNu = lysFarve(nanometer(v.farve)).map((c) => c * 1.35);
@@ -209,6 +233,9 @@ function ændret({ straks = false } = {}) {
   if (v.slags === 'boelger' && kører) startBølger();
   visStyring();
   panel(true);
+  tegnSkilt(); // med det samme, ikke først i næste billede (tjekliste E)
+  tegnPeg();
+  tegnVisning();
 }
 
 function forfra({ straks = false } = {}) {
@@ -257,6 +284,7 @@ function startBølger() {
   bænk.vand(false);
   bænk.vand(true, 1, [0.25, 0.55, 0.95]);
   visStyring();
+  tegnPeg(); // ringen og "Tryk på vandet" forsvinder med det samme (tjekliste E)
 }
 
 // Ét skud. instant: prikken lander straks (testene og "Vis mig"), ellers flyver kuglen, og elektronen lander om lidt.
@@ -374,22 +402,91 @@ function opdater(dt, tid) {
     for (const p of nu) land(p);
   }
   bænk.opdater(dt, tid);
-  tegnTæller();
-  tegnHer();
+  tegnSkilt();
+  tegnPeg();
+  tegnForklar();
+  tegnVisning();
   tegnMålt();
   panelTid += dt;
   if (panelTid > 0.25) { panelTid = 0; panel(); }
 }
 
-// Tælleren øverst i billedet: hvor mange der er landet
-let tællerTegnet = '';
-function tegnTæller() {
-  const el = $('kvTæller');
-  const tekst = v.slags === 'boelger' ? '' : `${PRIKKER[v.slags]}: ${talTekst(bænk.antal())}`;
-  if (tekst === tællerTegnet) return;
-  tællerTegnet = tekst;
-  el.hidden = !tekst;
-  el.textContent = tekst;
+// Skiltet øverst i midten af scenen: hvad der sendes nu, hvor mange der er landet, og i turens trin 4 tallet i den gule
+// ring (før og efter lukningen). Skiltet skriver selv kun det, der er ændret.
+function tegnSkilt() {
+  if (!aktiv) return;
+  skilt.sæt({
+    ...skiltTekst(v),
+    tal: tælTekst(v.slags, bænk.antal()),
+    ring: ringZ == null ? null : ringTekst(ringTal, ringFør),
+  });
+}
+
+// "Tryk på vandet": ringen på vandet og teksten over den, så længe bølgerne ikke er startet (rettelse 2 efter prøven)
+const tPeg = new THREE.Vector3();
+function tegnPeg() {
+  const el = $('kvPeg');
+  const vis = aktiv && v.slags === 'boelger' && !bænk.vandTændt();
+  if (bænk.mærkeVist() !== vis) bænk.mærke(vis);
+  if (el.hidden === vis) el.hidden = !vis;
+  if (!vis) return;
+  bænk.mærkeTop(tPeg).project(verden.kamera);
+  const r = $('kvanteVindue').getBoundingClientRect();
+  const c = verden.renderer.domElement.getBoundingClientRect();
+  el.style.left = `${c.left - r.left + ((tPeg.x + 1) / 2) * c.width}px`;
+  el.style.top = `${c.top - r.top + ((1 - tPeg.y) / 2) * c.height}px`;
+}
+
+// "Top møder top" midt imellem og "Top møder dal" på den første stille linje: to skilte med en prik på vandet, når
+// bølgerne er nået bagvæggen (bølger i vand med begge sprækker åbne)
+const tForklar = new THREE.Vector3();
+function tegnForklar() {
+  const vis = aktiv && v.slags === 'boelger' && v.sprækker === 'begge' && bænk.forklaret() > 0.5;
+  const r = vis ? $('kvanteVindue').getBoundingClientRect() : null;
+  const c = vis ? verden.renderer.domElement.getBoundingClientRect() : null;
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-forklar')) {
+    if (el.hidden === vis) el.hidden = !vis;
+    if (!vis) continue;
+    const x = el.dataset.forklar === 'høj' ? 1.0 : 3.0;
+    const z = el.dataset.forklar === 'høj' ? 0 : stilleSted(x, { d: v.d, λ: λ() });
+    bænk.gruppe.localToWorld(tForklar.set(x, 0.37, z)).project(verden.kamera);
+    el.style.left = `${c.left - r.left + ((tForklar.x + 1) / 2) * c.width}px`;
+    el.style.top = `${c.top - r.top + ((1 - tForklar.y) / 2) * c.height}px`;
+  }
+}
+
+// Bølge eller prik: to mærker langs den kant af bordet, der vender mod kameraet. Under vejen (væggen med sprækkerne, x = 0)
+// og under bagvæggen (x = L). Teksten og ikonet skrives kun, når de ændrer sig.
+const IKON = {
+  bølge: '<svg viewBox="0 0 26 12"><path d="M1 6 Q4.25 0 7.5 6 T14 6 T20.5 6 T27 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  prik: '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.6" fill="currentColor"/></svg>',
+  kugle: '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="currentColor"/><circle cx="4.4" cy="4.2" r="1.6" fill="#fff" opacity="0.7"/></svg>',
+};
+const tVis = new THREE.Vector3();
+const visTegnet = {};
+function tegnVisning() {
+  const tekster = aktiv ? visning({ ...v, bølgen: bølgeNu() }) : null;
+  const r = $('kvanteVindue').getBoundingClientRect();
+  const c = verden.renderer.domElement.getBoundingClientRect();
+  // Den side af bordet (z), der vender mod kameraet
+  const nær = Math.sign(bænk.gruppe.worldToLocal(tVis.copy(verden.kamera.position)).z || 1) * (BAG_HALV + 0.62);
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-vis')) {
+    const t = tekster?.[el.dataset.vis];
+    if (el.hidden !== !t) el.hidden = !t;
+    if (!t) continue;
+    const nøgle = `${t.ikon}|${t.tekst}`;
+    if (visTegnet[el.dataset.vis] !== nøgle) {
+      visTegnet[el.dataset.vis] = nøgle;
+      el.className = `kv-vis ${el.dataset.vis} ${t.ikon === 'bølge' ? 'bølge' : 'prik'}`;
+      el.querySelector('i').innerHTML = IKON[t.ikon];
+      el.querySelector('span').textContent = t.tekst;
+    }
+    bænk.gruppe.localToWorld(tVis.set(el.dataset.vis === 'vej' ? 0 : L, 0, nær)).project(verden.kamera);
+    // Inden for scenen (på en telefon står bagvæggens mærke ellers ud over kanten)
+    const halv = el.offsetWidth / 2 + 6;
+    el.style.left = `${Math.min(r.width - halv, Math.max(halv, c.left - r.left + ((tVis.x + 1) / 2) * c.width))}px`;
+    el.style.top = `${c.top - r.top + ((1 - tVis.y) / 2) * c.height}px`;
+  }
 }
 
 // ---------- Kameraet ----------
@@ -402,8 +499,10 @@ function kamera({ straks = false } = {}) {
   størrelse = `${Math.round(r.width / 40)}x${Math.round(r.height / 40)}`;
   const forhold = r.height > 10 ? r.width / r.height : 1.5;
   const t = THREE.MathUtils.clamp((forhold - 0.7) / 0.9, 0, 1); // 0 smal, 1 bred
-  const φ = THREE.MathUtils.degToRad(22 + 30 * t); // vinklen mellem strålen og retningen til kameraet
-  const e = THREE.MathUtils.degToRad((36 - 12 * t) + (v.slags === 'boelger' ? 26 : 0));
+  // Bølger i vand ses mere fra siden og højt oppefra, så væggen med sprækkerne ikke skjuler ringene bagved (rettelse 3)
+  const vand = v.slags === 'boelger';
+  const φ = THREE.MathUtils.degToRad(vand ? 58 + 25 * t : 22 + 30 * t); // vinklen mellem strålen og retningen til kameraet
+  const e = THREE.MathUtils.degToRad(vand ? 60 - 6 * t : 36 - 12 * t);
   bænk.gruppe.rotation.y = Math.PI / 2 - φ;
   bænk.gruppe.updateMatrixWorld(true);
   const kasse = bænk.kasse();
@@ -419,11 +518,13 @@ function kamera({ straks = false } = {}) {
     hb = Math.max(hb, Math.abs(tV.x));
     hh = Math.max(hh, Math.abs(tV.dot(op)));
   }
+  // Plads øverst til skiltet (js/kvante/skilt.js): Bænken står lidt lavere i billedet
+  midt.addScaledVector(op, hh * 0.1);
   styring.target.copy(midt);
   const afstand = straks ? 14 : Math.max(k.position.distanceTo(midt), 6);
   k.position.copy(midt).addScaledVector(ret, afstand);
   styring.update();
-  passerTilBoks(hb * 1.04, hh * 1.1);
+  passerTilBoks(hb * 1.04, hh * 1.22);
   if (straks || ROLIG) {
     k.position.copy(midt).addScaledVector(ret, verden.målAfstand ?? afstand);
     verden.målAfstand = null;
@@ -561,6 +662,7 @@ function trinStart(id) {
   ringZ = null;
   ringFør = null;
   bænk.ring(null);
+  bænk.lamperFremme(false);
 }
 
 // Programmet holder selv "Skyd" nede (det går hurtigere og hurtigere), til mål er landet
@@ -591,32 +693,14 @@ function lukket(før) {
   if (forløbVenter()) forløbRørt();
 }
 
-// "Her: n" over ringen (et lille skilt, der følger ringen på skærmen)
-const tHer = new THREE.Vector3();
-let herTegnet = '';
-function tegnHer() {
-  const el = $('kvHer');
-  const tekst = ringZ == null ? '' : `Her: ${talTekst(ringTal)}${ringFør != null ? ` (før: ${talTekst(ringFør)})` : ''}`;
-  if (tekst !== herTegnet) {
-    herTegnet = tekst;
-    el.hidden = !tekst;
-    el.textContent = tekst;
-  }
-  if (!tekst) return;
-  bænk.ringTop(tHer).project(verden.kamera);
-  const r = $('kvanteVindue').getBoundingClientRect();
-  const c = verden.renderer.domElement.getBoundingClientRect();
-  el.style.left = `${c.left - r.left + ((tHer.x + 1) / 2) * c.width}px`;
-  el.style.top = `${c.top - r.top + ((1 - tHer.y) / 2) * c.height}px`;
-}
-
 // Tælleren ved måleren: et skilt over midten af væggen, så længe måleren er tændt (lab og turens trin 5)
 const tMålt = new THREE.Vector3();
 let måltTegnet = '';
 function tegnMålt() {
   const el = $('kvMålt');
   const vis = v.måler && kvanteNu();
-  const t = vis ? målerTekst(målt, 0, v.syn < 1 ? ikkeSet : null) : null;
+  // Turens trin 5, før måleren tændes: skiltet siger, at måleren er der, men er slukket
+  const t = vis ? målerTekst(målt, 0, v.syn < 1 ? ikkeSet : null) : turTrin === 'maaler' ? { linje: 'Måleren er slukket', begge: '' } : null;
   const tekst = t ? `${t.linje}|${t.begge}` : '';
   if (tekst !== måltTegnet) {
     måltTegnet = tekst;
@@ -630,8 +714,11 @@ function tegnMålt() {
   bænk.gruppe.localToWorld(tMålt.set(0, VÆG_HØJDE + 0.32, 0)).project(verden.kamera);
   const r = $('kvanteVindue').getBoundingClientRect();
   const c = verden.renderer.domElement.getBoundingClientRect();
+  // Under skiltet øverst i midten, hvis væggen står så højt i billedet (fx på en telefon)
+  const s = skilt.el.getBoundingClientRect();
+  const under = s.height && !skilt.el.classList.contains('midt') ? s.bottom - r.top + 6 + el.offsetHeight : 0;
   el.style.left = `${c.left - r.left + ((tMålt.x + 1) / 2) * c.width}px`;
-  el.style.top = `${c.top - r.top + ((1 - tMålt.y) / 2) * c.height}px`;
+  el.style.top = `${Math.max(under, c.top - r.top + ((1 - tMålt.y) / 2) * c.height)}px`;
 }
 
 // "Skyd" i turens linje holdes nede som knappen i panelet. Linjen tegnes om efter hvert klik, så lytterne sidder på
@@ -701,12 +788,14 @@ const DEL = {
       visMig: () => { if (v.sprækker === 'begge') trykSprække(0); },
     },
     maaler: {
-      // Begge sprækker åbner af sig selv, og elektronerne fortsætter, så striberne kommer igen
+      // Begge sprækker åbner af sig selv, og striberne fra trin 3 står der igen med det samme, så scenen er stille, mens man
+      // gætter. Målerens lamper står fremme, men slukket (rettelse 6 efter prøven 28. november 2026: "spørgsmålet er for
+      // nemt at overse").
       start: () => {
         trinStart('maaler');
         opstil('elektroner');
-        kø = 600;
-        køFart = 150;
+        for (let i = 0; i < SKYD_MÅL.elektroner; i++) skud(true);
+        bænk.lamperFremme(true);
       },
       get knapper() {
         return [{ id: 'maaler', tekst: 'Tænd måleren', gør: () => tændMåler(), aktiv: () => !v.måler }];
@@ -744,7 +833,8 @@ const DEL = {
     ringFør = null;
     selvMål = 0;
     bænk.ring(null);
-    tegnHer();
+    bænk.lamperFremme(false);
+    tegnSkilt();
     tegnMålt();
     visStyring();
     panel(true);
@@ -767,7 +857,9 @@ export function testAdgang() {
     forløb: forløbTest(),
     startTur: () => startTur(),
     tur: () => ({ kører: kørerForløb(), trin: turTrin, ring: ringZ, her: ringTal, før: ringFør, kø, selvMål, vist: bænk.ringVist() }),
-    herTekst: () => ($('kvHer').hidden ? '' : $('kvHer').textContent),
+    // Skiltet øverst i midten: titlen, linjen om det ændrede, tallet og den gule ring (trin 4)
+    skilt: () => skilt.læs(),
+    herTekst: () => skilt.læs().ring,
     synlig: () => bænk.gruppe.visible,
     opdateres: () => verden.opdateringer.has(opdater),
     valg: () => ({ ...v, a: bredde(), λ: λ() }),
@@ -783,7 +875,7 @@ export function testAdgang() {
     skyd(n) {
       for (let i = 0; i < n; i++) skud(true);
       bænk.opdater(0, 0);
-      tegnTæller();
+      tegnSkilt();
       panel();
       return bænk.antal();
     },
@@ -799,7 +891,7 @@ export function testAdgang() {
     tæl: (z, r) => bænk.zer().filter((x) => Math.abs(x - z) < r).length,
     lamper: () => [...bænk.t.lampe],
     // Tælleren ved måleren ("Venstre: n · Højre: m" og "Begge på én gang: 0"), som den står på skærmen
-    målt: () => ({ tal: [...målt], ikkeSet, tekst: $('kvMålt').hidden ? '' : $('kvMålt').textContent }),
+    målt: () => ({ tal: [...målt], ikkeSet, tekst: $('kvMålt').hidden ? '' : $('kvMålt').textContent, lamper: bænk.t.måler }),
     // "Målerens lys": mønstret af de prikker, måleren så, og af dem, den ikke så
     delt(felter = 60) {
       const zer = bænk.zer();
@@ -812,9 +904,20 @@ export function testAdgang() {
     skydÉn: () => skydÉn(),
     bølgeKnap: () => $('kvBølgen').click(),
     lukket: () => [...bænk.t.lukMål],
-    vand: () => ({ tændt: bænk.vandTændt(), front: bænk.vandFront() }),
+    // Bølge eller prik: de to mærker langs bordets forkant, som de står på skærmen
+    visning: () => [...document.querySelectorAll('#kvanteVindue .kv-vis')].map((e) => (e.hidden ? '' : e.textContent)),
+    vand: () => ({
+      tændt: bænk.vandTændt(), front: bænk.vandFront(), kar: bænk.karVist(), mærke: bænk.mærkeVist(), peg: !$('kvPeg').hidden,
+      forklaret: bænk.forklaret(), skilte: [...document.querySelectorAll('#kvanteVindue .kv-forklar')].filter((e) => !e.hidden).map((e) => e.textContent),
+    }),
+    // Skærmpunktet midt i ringen på vandet (til at trykke på vandet i testen)
+    vandPunkt() {
+      const p = bænk.mærkeTop(new THREE.Vector3()).project(verden.kamera);
+      const r = verden.renderer.domElement.getBoundingClientRect();
+      return { x: r.left + ((p.x + 1) / 2) * r.width, y: r.top + ((1 - p.y) / 2) * r.height + 4 };
+    },
     panel: () => ({ titel: $('kvTitel').textContent, tekst: $('kvTekst').textContent, tal: $('kvTal').textContent }),
-    tæller: () => ($('kvTæller').hidden ? '' : $('kvTæller').textContent),
+    tæller: () => skilt.læs().tal,
     kamera: () => ({ drejet: bænk.gruppe.rotation.y, mål: verden.styring.target.toArray() }),
     // Skærmpunktet for en sprække (til at trykke på den i testen)
     sprækkePunkt(i) {

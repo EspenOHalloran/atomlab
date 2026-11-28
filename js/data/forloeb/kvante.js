@@ -27,8 +27,10 @@ export const STRIBER = {
     {
       id: 'boelger',
       spørg: 'Nu sender vi bølger i vand mod de samme to sprækker.',
-      gør: 'Tryk på vandet eller på Start bølgerne.',
-      så: 'Mange striber: Hvor en bølgetop møder en bølgedal, bliver vandet stille. Det hedder interferens.',
+      gør: 'Tryk på det blå vand i karret (ved den gule ring), eller på Start bølgerne.',
+      så: 'Ringene fra de to sprækker mødes. Hvor top møder top, bliver bølgen høj, og hvor top møder dal, slukker de hinanden: Det hedder interferens.',
+      // Hvorfor mønstret (rettelse 3 efter prøven 28. november 2026: "jeg er som voksen ikke sikker på at jeg selv kan forklare det")
+      mere: 'Det afhænger af vejen: Er der lige langt til begge sprækker, møder top top. Er vejen fra den ene sprække en halv bølge længere, møder top dal, og vandet står stille (de stiplede linjer). Sådan skifter det ud til siderne, og derfor får bagvæggen lyse og mørke striber.',
       ord: ['interferens'],
     },
     {
@@ -46,7 +48,8 @@ export const STRIBER = {
     },
     {
       id: 'luk',
-      spørg: 'I ringen lander næsten ingen. Hvad sker der her, hvis den ene sprække lukkes?',
+      // "den gule ring på bagvæggen" (rettelse 4 efter prøven 28. november 2026: "i ringen - hvilken ring?")
+      spørg: 'I den gule ring på bagvæggen lander næsten ingen. Hvad sker der dér, hvis den ene sprække lukkes?',
       gæt: {
         valg: [
           { tekst: 'Der kommer færre', efter: 'Det lyder rimeligt, så prøv det!', svar: 'Det er lige omvendt, og det er det mærkelige.' },
@@ -54,13 +57,18 @@ export const STRIBER = {
         ],
       },
       gør: 'Tryk på en sprække, så den lukker (elektronerne fortsætter af sig selv).',
-      så: 'Flere! Med to åbne sprækker går bølgen gennem begge, og de to dele slukker hinanden her.',
+      så: 'Flere! Med to åbne sprækker går elektronens bølge gennem begge, og de to dele slukker hinanden i ringen.',
+      // Rettelse 5 efter prøven: "så de slukker hinanden fordi bølgetop og bund mødes? måske lige skriv en sætning eller to mere"
+      mere: 'Til ringen er vejen fra den ene sprække en halv bølge længere end fra den anden. Så møder bølgetoppen fra den ene sprække bølgedalen fra den anden, og de slukker hinanden, ligesom i vandet. Med én sprække er der ingen anden bølge at slukke med, så nu lander elektronerne også dér.',
       ord: [],
     },
     {
       id: 'maaler',
-      spørg: 'Begge sprækker er åbne igen. Hvad ser en måler ved sprækkerne, når en elektron kommer?',
+      // Rettelse 6 efter prøven 28. november 2026: Måleren står i scenen (slukket), gættene står alene, og "Tænd måleren"
+      // kommer efter gættet
+      spørg: 'Begge sprækker er åbne igen, og over dem sidder en måler. Hvad ser den, når en elektron kommer?',
       gæt: {
+        alene: true,
         valg: [
           { tekst: 'En hel elektron ved én sprække', efter: 'Prøv det!', svar: 'Ja, hver gang.' },
           { tekst: 'En halv ved hver', efter: 'Prøv det!', svar: 'Nej, altid en hel ved én af dem.' },
@@ -68,7 +76,7 @@ export const STRIBER = {
           { tekst: 'En hel ved begge på én gang', efter: 'Prøv det!', svar: 'Nej. Lamperne blinker aldrig begge for den samme elektron.' },
         ],
       },
-      gør: 'Tænd måleren (elektronerne fortsætter af sig selv).',
+      gør: 'Tænd måleren, og se lamperne over sprækkerne.',
       så: 'Måleren finder altid en hel elektron ved én sprække, aldrig ved begge. Men nu er de mørke striber væk.',
       ord: [],
     },
