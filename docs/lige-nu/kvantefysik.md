@@ -27,6 +27,7 @@ Planen er [plan-kvante-to-steder.md](../plan-kvante-to-steder.md) (valgt af sess
 
 ## Næste
 **Prøven med jeres søn** (forløb 1 med trin 6, status prøve, [guide-proeven.md](../guide-proeven.md)). Spørg også det nye prøvespørgsmål i drejebogen afsnit 7 ("Er elektronen to steder på én gang? Hvad har man målt, og hvad har man aldrig målt?"). Så et go til forløb 2 og 3 (drejebogen afsnit 2 og 4, med E7-noterne afsnit 3 punkt 4 og 5). Forløb 2 venter også på Lys' "Hvorfor?"-kort om elektronens trin (jeres svar 3).
+**Prøven 28. november 2026 (faren):** Forløb 1 skal rettes (syv fund), før sønnen prøver det, og forløb 2-3 venter. Prompten (Opus xhigh): [prompt-kvante-rettelser.md](../prompt-kvante-rettelser.md), svaret i [proeven-svar-2026-11.md](../proeven-svar-2026-11.md), afsnit 3.
 
 **Kan tjekkes senere:** Feynmans egen tekst om det svage lys (forelæsningerne bind III, afsnit 1-6) kunne ikke åbnes fra miljøet. Åbner I den i en browser, kan "Ærligt talt" få et kort citat.
 
