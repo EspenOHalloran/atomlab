@@ -11,6 +11,7 @@
 **Derefter i grafik:** G3 del 2 (Stjerneovnen, Jorden eller Kosmos), hver med sit eget go. Prompten til Stjerneovnen står øverst i [historikken](../arkiv/historik/smaating.md).
 
 **Næste efter E20:** Rettelserne i [prompt-e20-rettelser.md](../prompt-e20-rettelser.md): A (Gåderne) er lavet. B (tilbage-knappen) venter på jeres prøve på tabletten (se prompten) her i Småting. C (Opdagelserne) tages med H3 i Videnskabsfolkene, og D (grundstoffet flyver hjem) i Forløb. Begge kan starte nu, for forløbet som sti er merget.
+**Prøven 28. november 2026:** Tilbage-knappen (E20 B) er husket af faren som "virker fint", så B er ikke nødvendig, medmindre en ny prøve viser en fejl ([proeven-svar-2026-11.md](../proeven-svar-2026-11.md), afsnit 1b). "?"-knapperne og Gåderne (Antistof, skinnen, Sort hul) er ikke prøvet endnu.
 
 **Næste i Gåderne:** Prøven med jeres søn ([guide-proeven.md](../guide-proeven.md)): Kan han sige kernesætningen om Antistof, og vil han flyve ind i de andre? Prøv også skinnen på tabletten, og mål med `?maal` (se [ikke-afproevet.md](../ikke-afproevet.md)). Alle fem kort fra G4 har nu deres scene (G4c Sort hul 20. november 2026).
 
