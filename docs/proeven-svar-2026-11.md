@@ -37,6 +37,7 @@
 **Faren svarede bagefter (28. november 2026, ordret):** "ja, det var trin 3 jeg mente. tag rettelserne først som du anbefaler."
 - Navneproblemet (oxygen og stearin) gælder altså **trin 3**.
 - **Ild 2 venter på de fire rettelser.** Prompten til rettelserne står i [prompt-ild-rettelser.md](prompt-ild-rettelser.md) (ny session, spor Molekyler). Ild 2 startes først bagefter ([prompt-ild-2.md](prompt-ild-2.md)).
+- **Lavet 28. november 2026** (spor Molekyler): alle fire rettelser, se [lige-nu/molekyler.md](lige-nu/molekyler.md) og [kode/ild.md](kode/ild.md). Ild 2 kan startes.
 
 ## 3. Kvantefysik forløb 1, dobbeltspalten (28. november 2026)
 *Prøvet af faren (trin 2, 4 og 5 med skærmbilleder, som ikke ligger i repoet).*
