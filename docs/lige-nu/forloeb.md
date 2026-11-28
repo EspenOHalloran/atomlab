@@ -10,6 +10,7 @@
 **Status "prøve"** (venter på prøven med sønnen, [guide-proeven.md](../guide-proeven.md)): **"Dit første atom"**. Kernesætningen og de tre spørgsmål står i drejebogen (punkt 1 og 5).
 
 **Næste:** Prøven med sønnen. Bagefter i en ny session: *"Her er prøven fra i aften: …"* (Opus, medium). Der må bygges videre imens: Klodsen findes nu, så Liv, Molekyler og Tid kan få deres forløb i deres egne spor. I dette spor er det næste Serie 2 nr. 5 (byggeklodserne og budgettet for panelerne), som først skal have en kort plan, når Serie 1 er prøvet.
+**Prøven 28. november 2026:** "Dit første atom" virker. Rettes: ordene "plusladet" og "minus" i trin 1-2 (for tidligt), og "?" foran Hvorfor-knapperne (mere elegant, fælles ændring). Se [proeven-svar-2026-11.md](../proeven-svar-2026-11.md), afsnit 1a.
 
 **Næste fra E20:** Fund 1, 5 og 7 hører med til Serie 2 nr. 5 ([noterne](../fable/E20-ux-nyt-noter.md), afsnit 3 og 4). Grebene "Det ved jeg nu" og "Dit atom i menuen" ([E20-ux-nyt.md](../fable/E20-ux-nyt.md), "Wow" i dag) kan tages ét ad gangen bagefter, hvis I vil (noterne, afsnit 4).
 

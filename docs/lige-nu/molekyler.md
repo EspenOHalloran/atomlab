@@ -17,6 +17,7 @@
 **Næste (venter på jeres go):**
 - **Molekyler (Serie 1 nr. 3) er bygget** (14. november 2026). Det næste er prøven med sønnen. Idéen om et kort forløb "Vand af en gnist" (knaldgassen) og et om vandets form står i drejebogens afsnit 3.
 1. **Prøven af Ild med sønnen** (turen og bordet, spørgsmålene i drejebogen, afsnit 9, og linjerne i [ikke-afproevet.md](../ikke-afproevet.md)). Derefter **Ild 2 "Flammens form og farve"**: Ny session, Opus, høj effort, "Læs docs/prompt-ild-2.md" ([prompt-ild-2.md](../prompt-ild-2.md)).
+   **Prøven er taget 28. november 2026:** fire rettelser til turen (duggen, navne i trin 3, langsommere partnerbytte, forklaringen i trin 4). Ild 2 venter. Prompten: [prompt-ild-rettelser.md](../prompt-ild-rettelser.md), svaret i [proeven-svar-2026-11.md](../proeven-svar-2026-11.md), afsnit 2.
 2. Idéen "Rumfærgens blanding" (for meget hydrogen) i knaldgassen står i [ideer.md](../ideer.md).
 
 **Lukket (artefaktet opdateres ikke mere, jeres ønske 22. november 2026):** Artefaktet "AtomLab Overblik" (https://claude.ai/artifact/XvHst1oGt3vZJ5ijsh8mpe) skal vise, at Molekyler M1-M4 er færdige. 8. november 2026 (M3) kunne det læses, men det er delt fra en anden organisation, så sessionen kan ikke rette i det. Det skal opdateres fra den konto, der ejer det.

@@ -111,3 +111,5 @@ En prøve med sønnen efter hvert punkt.
 *Planen er [plan-solsystemet.md](plan-solsystemet.md), status i [lige-nu/solsystemet.md](lige-nu/solsystemet.md).*
 
 - **Ny del: Solsystemet med Rumrejsen** (jeres ønske): Udforsk planeterne og månerne (især Europa, Enceladus og Titan, hvor der måske er betingelser for liv), og Voyager-spillet, hvor man bruger planeternes tyngdekraft. Foreløbig plan i [docs/plan-solsystemet.md](plan-solsystemet.md). Fable skal gennemgå den, før vi går i gang.
+
+**Prøven med sønnen, 28. november 2026:** Svarene står i [proeven-svar-2026-11.md](proeven-svar-2026-11.md): Forløb-klodsen (virker, to rettelser), tilbage-knappen (virker), Ild (fire rettelser, Ild 2 venter, [prompt](prompt-ild-rettelser.md)) og Kvantefysik forløb 1 (syv rettelser, forløb 2-3 venter, [prompt](prompt-kvante-rettelser.md)). Ikke prøvet endnu: Videnskabsfolkene (Huygens, Tycho, Einstein) og Gåderne på tabletten (Antistof, skinnen, Sort hul), og Måner.
