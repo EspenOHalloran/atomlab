@@ -137,7 +137,16 @@ tjek('trin 4: spørgsmålet siger "den gule ring på bagvæggen", ringen står v
 // Trin 5: begge åbner igen, måleren tændes, og de mørke striber er væk
 await næste();
 await trin('maaler');
-const f5 = await T(() => ({ sprækker: atomlabTest.kvante.valg().sprækker, ring: atomlabTest.kvante.tur().vist, her: atomlabTest.kvante.herTekst() }));
+await spol(1);
+const f5 = await T(() => ({
+  sprækker: atomlabTest.kvante.valg().sprækker, ring: atomlabTest.kvante.tur().vist, her: atomlabTest.kvante.herTekst(),
+  n: atomlabTest.kvante.antal(), kø: atomlabTest.kvante.tur().kø, målt: atomlabTest.kvante.målt(), måler: atomlabTest.kvante.valg().måler,
+  handlinger: document.querySelectorAll('#kvante .forløb-linje .fl-handling').length, gæt: document.querySelectorAll('#kvante .forløb-linje .fl-gæt').length,
+}));
+// Rettelse 6 efter prøven: Scenen er stille (striberne fra trin 3 står der, intet skydes), målerens lamper står fremme med
+// "Måleren er slukket", og gættene står alene (ingen "Tænd måleren" før gættet)
+tjek('trin 5, før gættet: 1.000 elektroner står der allerede, og intet skydes, lamperne står fremme med "Måleren er slukket", og de tre gæt står alene',
+  f5.n === 1000 && f5.kø === 0 && !f5.måler && f5.målt.lamper > 0.9 && f5.målt.tekst === 'Måleren er slukket' && f5.handlinger === 0 && f5.gæt === 3, JSON.stringify(f5));
 await page.click('#kvante .fl-gæt >> nth=0');
 await page.click('#kvante .fl-handling[data-knap="maaler"]');
 const lamper = await T(() => { const a = atomlabTest.kvante; let blink = 0; for (let i = 0; i < 40; i++) { a.spol(0.05); if (a.lamper().some((l) => l > 0.5)) blink++; } return blink; });

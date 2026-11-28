@@ -615,6 +615,7 @@ function trinStart(id) {
   ringZ = null;
   ringFør = null;
   bænk.ring(null);
+  bænk.lamperFremme(false);
 }
 
 // Programmet holder selv "Skyd" nede (det går hurtigere og hurtigere), til mål er landet
@@ -651,7 +652,8 @@ let måltTegnet = '';
 function tegnMålt() {
   const el = $('kvMålt');
   const vis = v.måler && kvanteNu();
-  const t = vis ? målerTekst(målt, 0, v.syn < 1 ? ikkeSet : null) : null;
+  // Turens trin 5, før måleren tændes: skiltet siger, at måleren er der, men er slukket
+  const t = vis ? målerTekst(målt, 0, v.syn < 1 ? ikkeSet : null) : turTrin === 'maaler' ? { linje: 'Måleren er slukket', begge: '' } : null;
   const tekst = t ? `${t.linje}|${t.begge}` : '';
   if (tekst !== måltTegnet) {
     måltTegnet = tekst;
@@ -739,12 +741,14 @@ const DEL = {
       visMig: () => { if (v.sprækker === 'begge') trykSprække(0); },
     },
     maaler: {
-      // Begge sprækker åbner af sig selv, og elektronerne fortsætter, så striberne kommer igen
+      // Begge sprækker åbner af sig selv, og striberne fra trin 3 står der igen med det samme, så scenen er stille, mens man
+      // gætter. Målerens lamper står fremme, men slukket (rettelse 6 efter prøven 28. november 2026: "spørgsmålet er for
+      // nemt at overse").
       start: () => {
         trinStart('maaler');
         opstil('elektroner');
-        kø = 600;
-        køFart = 150;
+        for (let i = 0; i < SKYD_MÅL.elektroner; i++) skud(true);
+        bænk.lamperFremme(true);
       },
       get knapper() {
         return [{ id: 'maaler', tekst: 'Tænd måleren', gør: () => tændMåler(), aktiv: () => !v.måler }];
@@ -782,6 +786,7 @@ const DEL = {
     ringFør = null;
     selvMål = 0;
     bænk.ring(null);
+    bænk.lamperFremme(false);
     tegnSkilt();
     tegnMålt();
     visStyring();
@@ -839,7 +844,7 @@ export function testAdgang() {
     tæl: (z, r) => bænk.zer().filter((x) => Math.abs(x - z) < r).length,
     lamper: () => [...bænk.t.lampe],
     // Tælleren ved måleren ("Venstre: n · Højre: m" og "Begge på én gang: 0"), som den står på skærmen
-    målt: () => ({ tal: [...målt], ikkeSet, tekst: $('kvMålt').hidden ? '' : $('kvMålt').textContent }),
+    målt: () => ({ tal: [...målt], ikkeSet, tekst: $('kvMålt').hidden ? '' : $('kvMålt').textContent, lamper: bænk.t.måler }),
     // "Målerens lys": mønstret af de prikker, måleren så, og af dem, den ikke så
     delt(felter = 60) {
       const zer = bænk.zer();

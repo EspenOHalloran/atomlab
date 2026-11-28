@@ -183,7 +183,7 @@ void main() {
 
 export function lavBænk() {
   const gruppe = new THREE.Group();
-  const t = { blink: 0, lampe: [0, 0], lukket: [0, 0], lukMål: [0, 0], måler: 0, målerMål: 0, glimt: 0, ringPuls: 0 };
+  const t = { blink: 0, lampe: [0, 0], lukket: [0, 0], lukMål: [0, 0], måler: 0, målerMål: 0, glimt: 0, ringPuls: 0, lamperFremme: false };
 
   // Bordet
   const bordMat = new THREE.MeshStandardMaterial({ color: 0x1b2440, roughness: 0.85, metalness: 0.1 });
@@ -505,7 +505,7 @@ export function lavBænk() {
       lukkere[i].position.y = SPRÆKKE_BUND + SPRÆKKE_HØJDE + 0.02 - lukkere[i].scale.y / 2;
     }
     // Målerens lamper
-    t.måler += (t.målerMål - t.måler) * (1 - Math.exp(-dt * 8));
+    t.måler += (Math.max(t.målerMål, t.lamperFremme ? 1 : 0) - t.måler) * (1 - Math.exp(-dt * 8));
     for (let i = 0; i < 2; i++) {
       lamper[i].visible = t.måler > 0.02;
       lamper[i].scale.setScalar(Math.max(0.01, t.måler));
@@ -618,6 +618,8 @@ export function lavBænk() {
       t.glimt = 1;
     },
     lampe: (i) => { t.lampe[i] = 1; },
+    // Målerens lamper står fremme, men slukket (turens trin 5, før måleren tændes: Man kan se, hvad spørgsmålet handler om)
+    lamperFremme: (ja) => { t.lamperFremme = ja; },
     // Ringen om et mørkt sted (z) i turens trin 4, eller væk (null). Tallet i ringen står på skiltet (js/kvante/skilt.js).
     // Når ringen kommer frem, pulserer den et par gange, så øjet finder den (rettelse 4 efter prøven).
     ring(z) {

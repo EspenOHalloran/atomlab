@@ -1169,6 +1169,13 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 @keyframes kv-ind { from { opacity: 0; } }
 @media (max-width: 560px), (max-height: 500px) { .kv-forklar small { display: none; } .kv-forklar b { font-size: 12.5px; } }
 @media (prefers-reduced-motion: reduce) { .kv-forklar { animation: none; } }
+/* Turens spørgsmål kan ikke overses (rettelse 6 efter prøven 28. november 2026): Mens man gætter, står spørgsmålet større med et
+   gult "?" (gul er spørgsmål, stilguiden A7), og gættene er gule, så de ikke ligner trinets handlinger (lyseblå). */
+#kvante .forløb-linje[data-fase="gæt"] > .fl-tekst { font-size: 18px; font-weight: 700; line-height: 1.4; }
+#kvante .forløb-linje[data-fase="gæt"] > .fl-tekst::before { content: '?'; display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 8px; border-radius: 50%; background: var(--gul); color: #0b0f1e; font-size: 16px; font-weight: 800; vertical-align: 2px; }
+#kvante .fl-gæt { border-color: rgba(255, 212, 59, 0.75); background: rgba(255, 212, 59, 0.12); }
+#kvante .fl-gæt:hover { border-color: var(--gul); background: rgba(255, 212, 59, 0.22); }
+.kv-målt strong:empty { display: none; }
 /* Skiltet øverst i midten af scenen (js/kvante/skilt.js, rettelse 1 efter prøven): hvad der sendes nu og tælleren. Det oplyser
    kun, så det har ingen kant (stilguiden A4). Skifter det, kommer det stort frem midt i scenen (.midt) og glider op. */
 .kv-skilt { position: absolute; z-index: 1; left: 50%; top: 10px; transform: translate(-50%, 0); display: grid; justify-items: center; gap: 1px; width: max-content; max-width: calc(100% - 24px); box-sizing: border-box; padding: 7px 18px 9px; border-radius: 14px; background: rgba(8, 12, 28, 0.74); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35); text-align: center; line-height: 1.25; pointer-events: none; transition: top 0.6s ease, transform 0.6s ease, opacity 0.3s ease; }

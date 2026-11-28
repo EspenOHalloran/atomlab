@@ -64,8 +64,11 @@ export const STRIBER = {
     },
     {
       id: 'maaler',
-      spørg: 'Begge sprækker er åbne igen. Hvad ser en måler ved sprækkerne, når en elektron kommer?',
+      // Rettelse 6 efter prøven 28. november 2026: Måleren står i scenen (slukket), gættene står alene, og "Tænd måleren"
+      // kommer efter gættet
+      spørg: 'Begge sprækker er åbne igen, og over dem sidder en måler. Hvad ser den, når en elektron kommer?',
       gæt: {
+        alene: true,
         valg: [
           { tekst: 'En hel elektron ved én sprække', efter: 'Prøv det!', svar: 'Ja, hver gang.' },
           { tekst: 'En halv ved hver', efter: 'Prøv det!', svar: 'Nej, altid en hel ved én af dem.' },
@@ -73,7 +76,7 @@ export const STRIBER = {
           { tekst: 'En hel ved begge på én gang', efter: 'Prøv det!', svar: 'Nej. Lamperne blinker aldrig begge for den samme elektron.' },
         ],
       },
-      gør: 'Tænd måleren (elektronerne fortsætter af sig selv).',
+      gør: 'Tænd måleren, og se lamperne over sprækkerne.',
       så: 'Måleren finder altid en hel elektron ved én sprække, aldrig ved begge. Men nu er de mørke striber væk.',
       ord: [],
     },
