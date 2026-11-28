@@ -18,3 +18,18 @@
 **Svar (ordret):** "jeg har testet tilbageknappen på tablet tidligere. det virkede så vidt jeg husker fint."
 
 **Hvad det betyder for sporet (Småting):** Faren husker, at den virkede fint, men det er ikke en ny prøve med datoer og trin. Rettelse B i [prompt-e20-rettelser.md](prompt-e20-rettelser.md) er altså ikke nødvendig, medmindre det viser sig, at den ikke går ét niveau op overalt (menu, kort i Gåderne, bog i Opdagelserne). Marker B som "prøvet, virker, husket af faren" i `docs/lige-nu/smaating.md` til sidst. Tager faren den igen og finder en fejl, skrives den her.
+
+## 2. Ild, turen "Hvad brænder egentlig?" (28. november 2026)
+*Prøvet af faren og sønnen. Fire skærmbilleder blev sendt i chatten (trin 2 med skeen, trin 3 med molekylerne, trin 3 med CO₂ og H₂O, trin 4 med den slukkede kerte). De ligger ikke i repoet.*
+
+**Svar (ordret):** "vi kunne ikke se at skeen duggede, så den del faldt lidt til jorden. Selve skaftet på skeen reflekterede måske også lige rigelig meget lys. I trin 4 vidste han ikke hvad der var oxygen og stearin. måske et label eller anden indikation. labels kommer først efter. Den kemiske reaktion hvor de bytter partnere kan måske "slowes" ned så man bedre kan se og forstå hvad der sker. Overvej forklaringen i trin 4. kan den gøres mere forståelig? Måske en sætning mere? Ellers ser det fint ud."
+
+**Bemærkning:** Skærmbillederne viser molekylerne ("Træk oxygen fra luften hen til stykket af stearinen") i **trin 3**, og trin 4 er "Du pustede flammen væk". Faren skrev "trin 4" om manglen på navne, så den linje gælder sandsynligvis trin 3. Spørg faren, hvis det ikke er klart, før der rettes.
+
+**Hvad det betyder for sporet (Molekyler, Ild):**
+- **Ret 1, duggen på skeen:** Dugget kunne ikke ses. Gør duggen tydeligere (flere dråber, lysere hvid belægning, gerne en lille tilvækst over få sekunder), og tjek, at skaftet ikke blænder (mat skaft, mindre spejling).
+- **Ret 2, navne på molekylerne i trin 3:** Sønnen vidste ikke, hvad oxygen og stearin var. Sæt en label på hvert molekyle, mens han trækker (O₂ "oxygen" og stearin "voks"), eller en tydeligere indikation. Faren siger, at labels først kommer efter (som H₂O og CO₂ vises), så navnene skal komme før, ikke først bagefter.
+- **Ret 3, "slow motion" af partnerbyttet:** Selve reaktionen, hvor atomerne bytter partnere, skal gå langsommere, så man kan følge, hvad der sker.
+- **Ret 4, forklaringen i trin 4:** Gør forklaringen af, at flammen holder sig selv i gang, lettere at forstå. Tilføj gerne én sætning mere.
+- **Ild 2 "Flammens form og farve":** Ingen af fundene blokerer. Fundene 1-4 bør rettes først i en lille session i Molekyler (Ild 1), og Ild 2 kan så startes bagefter eller samtidig, hvis faren vil. Spørgsmål til faren: Skal Ild 2 vente på rettelserne?
+- Status for turen kan sættes til "prøvet, med rettelser" (fire).
