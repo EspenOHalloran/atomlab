@@ -37,3 +37,13 @@
 **Faren svarede bagefter (28. november 2026, ordret):** "ja, det var trin 3 jeg mente. tag rettelserne først som du anbefaler."
 - Navneproblemet (oxygen og stearin) gælder altså **trin 3**.
 - **Ild 2 venter på de fire rettelser.** Prompten til rettelserne står i [prompt-ild-rettelser.md](prompt-ild-rettelser.md) (ny session, spor Molekyler). Ild 2 startes først bagefter ([prompt-ild-2.md](prompt-ild-2.md)).
+
+## 3. Kvantefysik forløb 1, dobbeltspalten (28. november 2026)
+*Prøvet af faren (trin 2, 4 og 5 med skærmbilleder, som ikke ligger i repoet).*
+
+**Svar (ordret):** "jeg tænker om "nu sender vi bølger" og generelt den type beskeder burde stå mere centralt i billedet, så de ikke misser det. Og antal kugler bør nok også stå mere centralt. i trin 2 står der tryk på vandet. hvilket vand? Overvej om det kan forklares bedre HVORFOR bølgerne giver det mønster de gør. jeg er som voksen ikke sikker på at jeg selv kan forklare det bagefter. Måske skal animationen opgraderes så det bedre kan ses. trin 4: "i ringen" - hvilken ring? trin 4b: så de slukker hinanden fordi bølgetop og bund mødes? måske lige skriv en sætning eller to mere så det forstås. Tingene må gerne skæres ud i pap. trin 5: igen her skal der arbejdes med UI - spørgsmålet er for nemt at overse. Det er svært stof det her. måske skal det være mere klar undervejs at nu ser vi elektronen som bølger og hvornår vi ikke gør. du må gerne bruge xhigh eller max her hvis du skønner det givtigt, så vi får det mest informative, forståelige og også videnskabeligt korrekte billede. grafikken kan evt. løftes også."
+
+**Hvad det betyder for sporet (Kvantefysik):**
+- Forløb 1 virker, men er **ikke klar til prøve med sønnen**, før det er rettet. Forløb 2 og 3 **venter**: Faren vil først have forløb 1 gjort tydeligere.
+- **Rettelser (syv):** (1) Beskeder som "Nu sender vi bølger" og tælleren ("Her: 9") skal stå centralt i scenen, ikke kun i linjen nederst. (2) "Tryk på vandet": Peg på, hvilket vand (det skal være tydeligt i scenen). (3) Forklar bedre, *hvorfor* bølgerne giver stribemønstret, og løft animationen, så man ser bølgerne fra begge sprækker mødes. (4) Trin 4: "I ringen" skal sige, hvilken ring (midterstriben på væggen). (5) Trin 4b: Forklar, at bølgetop og bølgebund slukker hinanden, med en til to sætninger mere. "Tingene må gerne skæres ud i pap." (6) Trin 5: Spørgsmålet og valgene skal være sværere at overse (UI). (7) Gør det tydeligt hele vejen, hvornår elektronen vises som bølge, og hvornår som prik. Grafikken må løftes.
+- **Opus xhigh** (jeres tilladelse): Prompten er [prompt-kvante-rettelser.md](prompt-kvante-rettelser.md) (ny session, spor Kvantefysik).
