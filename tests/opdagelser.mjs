@@ -980,15 +980,15 @@ for (const [navn, opsætning] of [
   const gådeMål = await O(() => {
     const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5 && x.top >= -0.5 && x.bottom <= innerHeight + 0.5;
     const k = document.querySelector('#opdBog .rg-kort').getBoundingClientRect(), j = document.querySelector('#opdBog .rg-jord').getBoundingClientRect();
-    return { kort: Math.round(Math.min(k.width, k.height)), jord: Math.round(Math.min(j.width, j.height)), inde: inde(j), bred: document.documentElement.scrollWidth > innerWidth + 1 };
+    return { kort: Math.round(Math.min(k.width, k.height)), jord: Math.round(Math.min(j.width, j.height)), inde: inde(j), bred: document.documentElement.scrollWidth > innerWidth + 1, vB: innerWidth, vH: innerHeight };
   });
   await O(() => atomlabTest.opdagelser.scene().flyt());
-  gådeMål.svar = await O(() => {
-    const b = document.querySelector('#opdBog .rg-svar');
-    b.scrollIntoView({ block: 'nearest' });
-    const x = b.getBoundingClientRect();
-    return x.height >= 44 && x.left >= 0 && x.right <= innerWidth && x.top >= 0 && x.bottom <= innerHeight;
-  });
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'tæl', null, 4000);
+  await O(() => document.querySelector('#opdBog .rg-svar').scrollIntoView({ block: 'nearest' }));
+  await page.waitForTimeout(400); // gåden toner ind på 0,32 s
+  gådeMål.svarRet = await O(() => { const x = document.querySelector('#opdBog .rg-svar').getBoundingClientRect(); return [x.left, x.top, x.right, x.bottom, x.height].map(Math.round); });
+  const [sv, so, sh, sn, sH] = gådeMål.svarRet;
+  gådeMål.svar = sH >= 44 && sv >= 0 && sh <= gådeMål.vB && so >= 0 && sn <= gådeMål.vH;
   // En lav telefon på langs er ca. 390 px høj, så tegningen får ca. 190 px ved siden af linjen
   tjek(`${navn}: i Rømers gåde har tegningen plads (mindst 180 px), Jorden er en knap på mindst 44 px inden for skærmen, og "Svar" kan nås`,
     gådeMål.kort >= 180 && gådeMål.jord >= 44 && gådeMål.inde && !gådeMål.bred && gådeMål.svar, JSON.stringify(gådeMål));
