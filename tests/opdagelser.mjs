@@ -67,7 +67,7 @@ tjek('Tycho, Huygens, Rømer og Einstein er de byggede bøger, og delen står i 
   const fl = forløbMed(bogMed('huygens').forløb);
   const ord = (t) => (t ?? '').split(/\s+/).filter(Boolean).length;
   const fejlFl = [];
-  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 3) fejlFl.push('forløbet findes ikke i listen');
+  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 4) fejlFl.push('forløbet findes ikke i listen'); // Huygens, Tycho, Rømer (R2) og Einstein
   else {
     if (fl.trin.map((t) => t.id).join() !== 'linse,naetter,kanten,annulo') fejlFl.push('trinene');
     for (const t of fl.trin) {
@@ -339,7 +339,8 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
 {
   const fl = forløbMed(bogMed('roemer').forløb);
   const t = await bogMed('roemer').tekster();
-  const sætn = (x) => (x?.match(/[.!?](\s|$)/g) ?? []).length;
+  // "ca." og "9." (datoen) er ikke slutningen på en sætning
+  const sætn = (x) => ((x ?? '').replace(/\b(ca|fx)\. /g, '').replace(/\d\. /g, '').match(/[.!?](\s|$)/g) ?? []).length;
   const fejlR = [];
   if (!fl || fl.del !== 'opdagelser' || fl.trin.map((x) => x.id).join() !== 'skyggen,sent,hvorfor,november') fejlR.push('trinene');
   const rigtige = [];
