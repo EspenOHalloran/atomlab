@@ -989,8 +989,9 @@ for (const [navn, opsætning] of [
     const x = b.getBoundingClientRect();
     return x.height >= 44 && x.left >= 0 && x.right <= innerWidth && x.top >= 0 && x.bottom <= innerHeight;
   });
-  tjek(`${navn}: i Rømers gåde har tegningen plads (mindst 200 px), Jorden er en knap på mindst 44 px inden for skærmen, og "Svar" kan nås`,
-    gådeMål.kort >= 200 && gådeMål.jord >= 44 && gådeMål.inde && !gådeMål.bred && gådeMål.svar, JSON.stringify(gådeMål));
+  // En lav telefon på langs er ca. 390 px høj, så tegningen får ca. 190 px ved siden af linjen
+  tjek(`${navn}: i Rømers gåde har tegningen plads (mindst 180 px), Jorden er en knap på mindst 44 px inden for skærmen, og "Svar" kan nås`,
+    gådeMål.kort >= 180 && gådeMål.jord >= 44 && gådeMål.inde && !gådeMål.bred && gådeMål.svar, JSON.stringify(gådeMål));
   // Einsteins tur (E2): i alle fire trin har lærredet plads, og knapperne, skyderen og tallene er inden for skærmen
   await O(() => atomlabTest.opdagelser.hylden());
   await O(() => atomlabTest.opdagelser.åbn('einstein'));
@@ -1244,7 +1245,8 @@ for (const [navn, opsætning] of [
   await page.mouse.up();
   const trukket = await g();
   await page.click('#opdBog .rg-jord');
-  const nov = await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'tæl' && atomlabTest.opdagelser.scene().tilstand(), null, 6000);
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'tæl', null, 6000);
+  const nov = await g();
   await O(() => atomlabTest.opdagelser.scene().tæl(9));
   await page.click('#opdBog .rg-svar');
   const forkert = await g();
@@ -1256,7 +1258,8 @@ for (const [navn, opsætning] of [
   await page.click('#opdBog .rg-del-to');
   const h = await g();
   await page.click('#opdBog .rg-jord');
-  const e = await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'løst' && atomlabTest.opdagelser.scene().tilstand(), null, 15000);
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'løst', null, 15000);
+  const e = await g();
   const efter = { gemt: await O(() => localStorage.getItem('atomlabOpdagelserGaader')), idag: await O(() => document.querySelector('#opdBog .tg-idag')?.textContent ?? '') };
   tjek('Rømers gåde: forordet, Jorden trækkes fra august (36 perler) til 9. november (46, de 10 nye er gyldne), et forkert tal ryster, 10 tryk på snoren er rigtigt, og fra H til E kommer 16½ til',
     forord.forord && !start.forord && start.fase === 'aug' && start.perler === 36 && start.gyldne === 0 && trukket.fase === 'aug' && trukket.dag > 74 && trukket.gyldne > 0 && trukket.gyldne < 10
