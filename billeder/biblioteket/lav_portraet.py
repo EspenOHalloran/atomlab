@@ -7,8 +7,8 @@ så de ligner ét sæt, selv om kilderne er meget forskellige.
 
 Kun PIL og numpy. Kildebillederne lægges ikke i repoet (docs/retning.md). Kør:
     python lav_portraet.py <person> [mappe med kildebilledet] [ud-mappe]
-Uden mappe hentes kilden fra upload.wikimedia.org (en ærlig User-Agent og en thumbnail i en standardbredde,
-ellers svarer Wikimedia 429). Uden ud-mappe skrives <person>.webp ved siden af denne fil.
+Uden mappe hentes kilden fra Wikimedia (en ærlig User-Agent og en thumbnail i en standardbredde, ellers svarer
+Wikimedia 429). Fra november 2026 ligger thumbnails på thumb.wikimedia.org, og upload.wikimedia.org svarer 429. Uden ud-mappe skrives <person>.webp ved siden af denne fil.
 
 Licensen for hver kilde står i PERSONER og skal også stå i KILDER.md, før billedet kommer med i programmet.
 """
@@ -50,6 +50,20 @@ PERSONER = {
         'udsnit': (236, 160, 724, 770),  # i kilden (960 x 1335), 4:5
         'gamma': 0.75,
         'baggrund': 0.3,
+        'detalje': 1.4,
+    },
+    'roemer': {
+        # Jacob Coning, maleri fra omkring 1700. Commons: "Rømer, Ole (ur Berømte danske maend).jpg", fra
+        # "Farvereproduktioner efter 20 portrætter af berømte danske mænd" (København 1943). PD-Art, PD-old-100 (Coning
+        # døde 1724). Et foto af et maleri fra omkring 1700 har ingen egen ret i Danmark (§ 70 stk. 4), og fotoet fra 1943
+        # er over 50 år gammelt (docs/drejebog-roemer.md afsnit 11). Udsnittet er hovedet og parykken
+        'fil': 'roemer.jpg',
+        'url': 'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/'
+               'R%C3%B8mer%2C_Ole_%28ur_Ber%C3%B8mte_danske_maend%29.jpg/'
+               '960px-R%C3%B8mer%2C_Ole_%28ur_Ber%C3%B8mte_danske_maend%29.jpg',
+        'udsnit': (200, 20, 800, 770),   # i kilden (960 x 1199), 4:5
+        'gamma': 0.8,                    # parykken er lysere end baggrunden: lidt gamma og lidt baggrund, så krøllerne ses
+        'baggrund': 0.2,
         'detalje': 1.4,
     },
     'einstein': {
