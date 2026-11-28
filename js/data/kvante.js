@@ -234,6 +234,22 @@ export function panelNøgle({ slags, sprækker, måler, syn = 1 }) {
 
 // Navnet på det, der lander (tælleren og panelets tal)
 export const PRIKKER = { kugler: 'Kugler', elektroner: 'Elektroner', lys: 'Fotoner', molekyle: 'Molekyler', klump: 'Klumper', fodbold: 'Fodbolde' };
+const ENTAL = { kugler: 'kugle', elektroner: 'elektron', lys: 'foton', molekyle: 'molekyle', klump: 'klump', fodbold: 'fodbold' };
+
+// Skiltet øverst i midten af scenen (js/kvante/skilt.js, rettelse 1 efter prøven 28. november 2026): hvad der sendes nu,
+// en linje, når en sprække er lukket eller måleren tændt, hvor mange der er landet, og tallet i den gule ring (trin 4)
+const SKILT_TITEL = {
+  kugler: 'Kugler', boelger: 'Bølger i vand', elektroner: 'Elektroner, én ad gangen', lys: 'Lys, én foton ad gangen',
+  molekyle: 'Molekyler, ét ad gangen', klump: 'Klumper, én ad gangen', fodbold: 'Fodbolde',
+};
+export function skiltTekst({ slags, sprækker = 'begge', måler = false }) {
+  const ekstra = [];
+  if (sprækker !== 'begge') ekstra.push(`Kun den ${sprækker} sprække er åben`);
+  if (måler && kvanteSlags(slags)) ekstra.push('Måleren er tændt');
+  return { titel: SKILT_TITEL[slags] ?? '', ekstra: ekstra.join(' · ') };
+}
+export const tælTekst = (slags, n) => (PRIKKER[slags] ? { tal: talTekst(n), enhed: Math.round(n) === 1 ? ENTAL[slags] : PRIKKER[slags].toLowerCase() } : null);
+export const ringTekst = (nu, før = null) => ({ navn: 'I den gule ring:', tal: talTekst(nu), før: før == null ? '' : `(før: ${talTekst(før)})` });
 
 // Skyderen under "Afstand": fart for elektroner, farve for lys, bølgelængde for vandet. Kuglerne har ingen.
 export const SKYDER = {

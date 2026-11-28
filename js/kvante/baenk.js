@@ -380,7 +380,6 @@ export function lavBænk() {
   const iLuften = () => kugler.filter((k) => k.levende).length;
 
   // Ringen i turens trin 4: en aflang ring om et mørkt sted på bagvæggen (striberne står lodret, så den går hele vejen op)
-  const RING_TOP = STRIBE_Y[1] + 0.1;
   const ring = (() => {
     const yd = (STRIBE_Y[1] - STRIBE_Y[0]) / 2 + 0.1;
     const r = RING_HALV + 0.03;
@@ -506,13 +505,12 @@ export function lavBænk() {
       t.glimt = 1;
     },
     lampe: (i) => { t.lampe[i] = 1; },
-    // Ringen om et mørkt sted (z) i turens trin 4, eller væk (null). ringTop er punktet over ringen (til "Her: n").
+    // Ringen om et mørkt sted (z) i turens trin 4, eller væk (null). Tallet i ringen står på skiltet (js/kvante/skilt.js).
     ring(z) {
       ring.visible = z != null;
       if (z != null) ring.position.z = z;
     },
     ringVist: () => ring.visible,
-    ringTop: (v) => gruppe.localToWorld(v.set(L - 0.03, RING_TOP, ring.position.z)),
     // Vandet: tændt (bølgerne løber ud fra kilden og bliver ved), styrke og farve
     vand(tændt, styrke = 1, farve = null) {
       if (tændt && (!vandT.tændt || vandT.bredde)) vandT.front = 0;

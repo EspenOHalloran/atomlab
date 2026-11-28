@@ -1,7 +1,7 @@
 // Kvantefysik, turen "Prikker bliver til striber" (PR 2, drejebogen i docs/drejebog-kvantefysik.md afsnit 3 med
 // rettelserne i docs/fable/E7-kvantefysik-noter.md afsnit 3): teksterne holder budgettet (højst to sætninger), turen
 // starter af sig selv første gang, trin 1 (kuglerne i to bunker, "Skyd" holdes nede i linjen), trin 2 (vandets bølger når
-// bagvæggen), trin 3 (1.000 elektroner giver striber), trin 4 (ringen med "Her: n" ved det mørke sted, en sprække lukkes
+// bagvæggen), trin 3 (1.000 elektroner giver striber), trin 4 (den gule ring ved det mørke sted med tallet på skiltet, en sprække lukkes
 // med et tryk, og programmet skyder lige så mange igen, så der kommer mange flere), trin 5 (begge åbne igen, måleren
 // tændes, tælleren siger "Begge på én gang: 0", og de mørke striber er væk), trin 6 "Bølgen og prikken" (22. november
 // 2026: bølgen vises, "Skyd én" giver én bølgepakke ad gangen, og hver elektron lander ét sted, når pakken når frem),
@@ -114,8 +114,8 @@ if (lukket === 'begge') { await page.waitForTimeout(300); await page.mouse.click
 await spol(5);
 await fase('så');
 const e4 = await T(() => ({ tur: atomlabTest.kvante.tur(), n: atomlabTest.kvante.antal(), her: atomlabTest.kvante.herTekst(), igen: atomlabTest.kvante.trykSprække(0) }));
-tjek('trin 4: ringen står ved det mørke sted med "Her: n" og under 15 % af toppen, et tryk lukker en sprække, programmet skyder lige så mange igen, og nu lander mange flere i ringen (sprækken kan ikke åbnes igen i trinet)',
-  r4.tur.vist && Math.abs(r4.tur.ring - mørktSted()) < 1e-9 && /^Her: \d+$/.test(r4.her) && r4.tur.her < 0.15 * r4.top
+tjek('trin 4: ringen står ved det mørke sted, skiltet øverst i midten siger "I den gule ring: n", og n er under 15 % af toppen, et tryk lukker en sprække, programmet skyder lige så mange igen, og nu lander mange flere i ringen (sprækken kan ikke åbnes igen i trinet)',
+  r4.tur.vist && Math.abs(r4.tur.ring - mørktSted()) < 1e-9 && /^I den gule ring: \d+$/.test(r4.her) && r4.tur.her < 0.15 * r4.top
   && lukket === 'højre' && e4.n >= 1000 && e4.tur.før === r4.tur.her && e4.tur.her >= 4 * Math.max(1, e4.tur.før) && /før:/.test(e4.her) && e4.igen === undefined,
   JSON.stringify({ r4, lukket, e4 }));
 
