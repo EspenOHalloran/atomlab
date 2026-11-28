@@ -40,12 +40,15 @@ const O2_START = [[-11.5, -5.6, 0.4], [11.2, -6.2, -0.5], [0.6, 10.6, 1.2]]; // 
 const PLADSER = [[-7.05, 4.35], [7.05, 4.35], [0, -6.75]]; // hvor de lægger sig ved stykket (oppe til venstre, oppe til højre, under)
 const FANG = 11.25; // slippes O₂ så tæt på stykket (enheder), lægger det sig på en plads (et rundt mål)
 const REAKTION_TID = ROLIG ? 0.6 : 1.5; // sekunder
+// Navnene på molekylerne. Før reaktionen står de på stykket og på de frie O₂, mens man trækker (prøven 28. november 2026:
+// sønnen vidste ikke, hvad oxygen og stearin var). Et O₂, der ligger på plads, mister sit navn, så der ikke er for mange.
+export const NAVN = { ethen: 'Stearin fra lyset', o2: 'O₂: oxygen (ilt)', co2: 'CO₂', vand: 'H₂O (vand)' };
 // Efter reaktionen: hvert produkt, dets atomer (numrene) i skabelonens rækkefølge, og hvor det ender
 const PRODUKTER = [
-  { slags: 'co2', navn: 'CO₂', atomer: (o) => [o[0][0], 0, o[2][0]], plads: [-8.5, 4.2], ud: [-0.7, 0.35] },
-  { slags: 'co2', navn: 'CO₂', atomer: (o) => [o[1][1], 1, o[2][1]], plads: [8.5, 4.2], ud: [0.7, 0.35] },
-  { slags: 'vand', navn: 'H₂O', atomer: (o) => [o[0][1], 2, 3], plads: [-6, -6], ud: [-0.5, -0.5] },
-  { slags: 'vand', navn: 'H₂O', atomer: (o) => [o[1][0], 4, 5], plads: [6, -6], ud: [0.5, -0.5] },
+  { slags: 'co2', navn: NAVN.co2, atomer: (o) => [o[0][0], 0, o[2][0]], plads: [-8.5, 4.2], ud: [-0.7, 0.35] },
+  { slags: 'co2', navn: NAVN.co2, atomer: (o) => [o[1][1], 1, o[2][1]], plads: [8.5, 4.2], ud: [0.7, 0.35] },
+  { slags: 'vand', navn: NAVN.vand, atomer: (o) => [o[0][1], 2, 3], plads: [-6, -6], ud: [-0.5, -0.5] },
+  { slags: 'vand', navn: NAVN.vand, atomer: (o) => [o[1][0], 4, 5], plads: [6, -6], ud: [0.5, -0.5] },
 ];
 export const ATOM_KASSE = [14.5, 12]; // halv bredde og højde (enheder), som scenen skal kunne ses i
 
@@ -77,7 +80,7 @@ export function lavAtomScene() {
   const tV = new THREE.Vector3();
   const tV2 = new THREE.Vector3();
   const navne = [];
-  const navnPos = [0, 1, 2, 3].map(() => new THREE.Vector3());
+  const navnPos = [0, 1, 2, 3, 4].map(() => new THREE.Vector3());
   let produkter = [];
 
   const molekyle = (slags, idx, x, y, vinkel = 0) => ({ slags, idx, pos: new THREE.Vector3(x, y, 0), vinkel, drej: 0, v: new THREE.Vector3(), plads: -1, mål: null });
@@ -214,6 +217,15 @@ export function lavAtomScene() {
     }
     navne.length = 0;
     if (fase === 'færdig') molekyler.forEach((m, i) => navne.push({ tekst: m.navn, p: navnPos[i].copy(m.pos).add(tV2.set(0, m.slags === 'vand' ? 2.6 : 2.4, 0)) }));
+    else if (fase === 'klar') {
+      navne.push({ tekst: NAVN.ethen, p: navnPos[0].set(0, 4.3, 0) });
+      o2.forEach((m, i) => {
+        if (m.plads >= 0) return;
+        // Over molekylet (under det, når det er højt oppe), så langt væk, at navnet går fri af det drejede O₂
+        const af = Math.abs(Math.sin(m.vinkel)) * 1.81 + 2.3;
+        navne.push({ tekst: NAVN.o2, p: navnPos[i + 1].copy(m.pos).add(tV2.set(0, m.pos.y > 6 ? -af : af, 0)) });
+      });
+    }
     tegning.tegn({ atomer, bånd: tegneBånd, retninger: tegneRet, linje, navne, kamera, tid, ladninger: false });
   }
 
@@ -273,6 +285,7 @@ export function lavAtomScene() {
       return tæl;
     },
     molekyler: () => molekyler.map((m) => m.slags),
+    navne: () => navne.map((n) => n.tekst), // navnene, der står lige nu
     spol(sek, kamera) {
       for (let t = 0; t < sek; t += 0.05) opdater(0.05, kamera);
     },

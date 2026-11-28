@@ -42,7 +42,7 @@ export const ILD_1 = {
     {
       id: 'atomer',
       spørg: 'Stearin er mest lange kæder af kulstof og hydrogen. Hvordan bliver de til vand og CO₂?',
-      gør: 'Træk oxygen fra luften hen til stykket af stearinen, ét ad gangen.',
+      gør: 'Træk oxygen (ilt) fra luften hen til stykket af stearinen, ét ad gangen.',
       så: 'Atomerne bytter partnere og bliver til CO₂ og vand. Det er en kemisk reaktion, og den hedder forbrænding.',
       ord: ['kemisk-reaktion', 'forbraending'],
     },

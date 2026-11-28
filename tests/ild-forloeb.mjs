@@ -8,6 +8,7 @@ import { ILD_1 } from '../js/data/forloeb/ild.js';
 import { FORLØB } from '../js/data/forloeb/liste.js';
 import { ORDBOG } from '../js/data/ordbog.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
+const NAVN = { ethen: 'Stearin fra lyset', o2: 'O₂: oxygen (ilt)' }; // som i js/ild/atomer.js (der importerer Three.js)
 const b = await chromium.launch({ args: ARGS });
 let ok = 0, dårlig = 0;
 const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', navn); } else { dårlig++; console.log('FEJL', navn, ekstra); } };
@@ -72,6 +73,9 @@ tjek('trin 2: den kolde ske over flammen dugger', ske.dug > 0.6 && ske.zone === 
 await næste();
 await page.waitForFunction(() => atomlabTest.ild.trin() === 'atomer' && atomlabTest.ild.tilstand().scene === 'atomer', null, { timeout: 10000 });
 const førTæller = await T(() => atomlabTest.ild.tæller());
+const førNavne = await T(() => atomlabTest.ild.atomer.navne());
+tjek('trin 3: navnene står på stearinen og de tre O₂, mens man trækker (prøven 28. november 2026)',
+  førNavne.filter((n) => n === NAVN.o2).length === 3 && førNavne.includes(NAVN.ethen), JSON.stringify(førNavne));
 for (let i = 0; i < 3; i++) await T(() => { atomlabTest.ild.atomer.lægNæste(); atomlabTest.ild.spol(1); });
 await spol(2.5);
 await fase('så');
