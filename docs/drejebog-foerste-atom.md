@@ -10,9 +10,9 @@ Scenen er Værkstedets atom. Panelerne, opgaverne, fanerne og "Elektronsky" er s
 
 | Trin | Spørg (højst ca. 15 ord) | Gæt | Gør (knappen i linjen) | Så (højst ca. 20 ord) | Ord |
 |---|---|---|---|---|---|
-| 1 | Alt, du kan røre ved, er bygget af atomer. Lad os bygge det mindste. | – | **+ Proton** (atomet var tomt) | Det er atomets kerne: én proton. Den er plusladet. | proton, kerne |
-| 2 | Hvad mangler, før det er et helt atom? | *En proton mere* / *En elektron* | **+ Elektron** | Plus trækker i minus, så elektronen bliver ved kernen. Nu har du hydrogen, det mest almindelige grundstof i universet. | elektron, grundstof |
-| 3 | Hvad sker der, hvis du lægger en proton mere i kernen? | *Det bliver et nyt grundstof* / *Kernen går i stykker* | **+ Proton** | Begge dele! To protoner er helium. Men plus skubber plus væk, og to protoner alene kan ikke holde sammen. | – |
+| 1 | Alt, du kan røre ved, er bygget af atomer. Lad os bygge det mindste. | – | **+ Proton** (atomet var tomt) | Det er atomets kerne: én proton. Næsten hele atomets vægt sidder i kernen. | proton, kerne |
+| 2 | Hvad mangler, før det er et helt atom? | *En proton mere* / *En elektron* | **+ Elektron** | Protonen trækker i elektronen, så den bliver ved kernen. Nu har du hydrogen, universets mest almindelige grundstof. | elektron, grundstof |
+| 3 | Hvad sker der, hvis du lægger en proton mere i kernen? | *Det bliver et nyt grundstof* / *Kernen går i stykker* | **+ Proton** | Begge dele! To protoner er helium. Men kernen ryster: Protonerne skubber hinanden væk, og i virkeligheden holder to protoner alene ikke sammen. | – |
 | 4 | Kernen mangler noget, der kan holde den sammen. | – | **+ Neutron** (0/2) og **+ Elektron** (1/2). Knapperne stopper ved 2 | Nu holder kernen. Neutronerne er en slags lim: De trækker uden at skubbe. Du har bygget helium. | neutron |
 | 5 | Hydrogen og helium lyser nu i det periodiske system. Tryk på et af dem. | – | Tryk på H eller He (kun det lille periodiske system vises) | **Det så du:** kernesætningen og "Opdaget: 2 af 118" (tallet er det rigtige) | – |
 
@@ -20,6 +20,7 @@ Scenen er Værkstedets atom. Panelerne, opgaverne, fanerne og "Elektronsky" er s
 - **Scenen i trin 3:** Kernen med to protoner ryster og blinker (det gør den allerede i dag ved "Falder fra hinanden"). Den henfalder ikke af sig selv, så man kan redde den i trin 4. I virkeligheden falder den fra hinanden med det samme (står i Kerne-fanen).
 - **"Vis mig"** kommer efter ca. 20 sekunder uden noget: Værkstedet trykker selv på knappen.
 - **Til sidst tre veje:** *Byg videre selv* (panelerne åbner, Værkstedet som i dag), *Se Solen lave helium* (Stjerneovnen) og *Hvorfor holder kernen?* (det "Hvorfor?"-kort, der findes).
+- **Ingen ladning i trin 1-3** (prøven 28. november 2026, [proeven-svar-2026-11.md](proeven-svar-2026-11.md) afsnit 1a: "plusladet" og "minus" giver ikke mening endnu, når man starter her): Så siger, hvad der sker ("Protonen trækker i elektronen", "Protonerne skubber hinanden væk"), og ordet "ladning" kommer, når ordet forklares: i boblen ved proton og elektron (Ordbogen) og i kortet "Hvorfor holder kernen?". Testen `forloeb` tjekker det.
 - **Undervejs:** Belønningspillerne ("Opgave klaret", "Nyt grundstof") vises ikke, men gemmes i loggen, og opgaverne hydrogen, "to protoner" og helium bliver løst, fordi man har bygget dem. Fyrværkeriet i scenen bliver.
 
 ## 3. Valgt fra, og hvor det bor
@@ -35,6 +36,8 @@ proton, (atom)kerne, elektron, grundstof, neutron. Fem ord. **Ingen af dem står
 
 ## 6. Fakta, der skal tjekkes
 - Hydrogen er det mest almindelige grundstof i universet.
+- Næsten hele atomets vægt sidder i kernen (28. november 2026): En proton vejer ca. 1.836 gange så meget som en elektron, så i hydrogen sidder ca. 99,95 % af vægten i kernen, og i tungere atomer endnu mere (de tal står også i Ordbogens elektron, "ca. 1.800 gange").
+- Protonen trækker i elektronen (den elektriske tiltrækning, plus og minus), og protonerne skubber hinanden væk. Ordet ladning står i boblerne og i kortet.
 - To protoner alene kan ikke holde sammen (helium-2 er ubunden). "Plus skubber plus væk" er en del af grunden, ikke hele (kernekraften mellem to protoner er også en tand for svag). Teksten siger ikke "kun".
 - Neutronerne trækker med kernekraften uden at skubbe (passer med `HVORFOR.kernen`).
 - 118 kendte grundstoffer.

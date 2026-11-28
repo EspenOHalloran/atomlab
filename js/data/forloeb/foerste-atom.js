@@ -14,7 +14,9 @@ export const FØRSTE_ATOM = {
       id: 'proton',
       spørg: 'Alt, du kan røre ved, er bygget af atomer. Lad os bygge det mindste.',
       gør: 'Læg én proton i kernen.',
-      så: 'Det er atomets kerne: én proton. Den er plusladet.',
+      // Ingen ladning i de første trin (prøven 28. november 2026: "plusladet" og "minus" giver ikke mening endnu). Ladningen
+      // kommer, når ordet forklares: i boblen ved proton og elektron (js/data/ordbog.js) og i "Hvorfor holder kernen?".
+      så: 'Det er atomets kerne: én proton. Næsten hele atomets vægt sidder i kernen.',
       ord: ['proton', 'kerne'],
     },
     {
@@ -27,7 +29,7 @@ export const FØRSTE_ATOM = {
         ],
       },
       gør: 'Giv atomet en elektron.',
-      så: 'Elektronen er minus, og plus trækker i minus, så den bliver ved kernen. Nu har du hydrogen, universets mest almindelige grundstof.',
+      så: 'Protonen trækker i elektronen, så den bliver ved kernen. Nu har du hydrogen, universets mest almindelige grundstof.',
       ord: ['elektron', 'grundstof'],
     },
     {
@@ -43,7 +45,7 @@ export const FØRSTE_ATOM = {
       // Ikke "plus skubber plus væk, SÅ den falder fra hinanden": To neutroner kan heller ikke holde sammen, så frastødningen
       // er kun en del af grunden (docs/erfaringer/fakta-faelder.md), så de to ting står ved siden af hinanden.
       // Scenen holder på kernen (den ryster), så man kan redde den. Derfor "i virkeligheden" (E14).
-      så: 'Begge dele! To protoner er helium. Men kernen ryster: Plus skubber plus væk, og i virkeligheden holder to protoner alene ikke sammen.',
+      så: 'Begge dele! To protoner er helium. Men kernen ryster: Protonerne skubber hinanden væk, og i virkeligheden holder to protoner alene ikke sammen.',
       ord: [],
     },
     {

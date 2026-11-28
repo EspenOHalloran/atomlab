@@ -14,6 +14,8 @@
   --grøn: #8ce99a;
   --rød: #ff6b6b;
   --radius: 18px;
+  /* Pæren foran "Hvorfor?"-knapperne (button.hvorfor::before), tegnet som streger */
+  --pære: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9.5 18h5M10.5 21.2h3'/%3E%3Cpath d='M12 2.8a6.2 6.2 0 0 0-3.7 11.2c.8.6 1.2 1.4 1.2 2.3v.2h5v-.2c0-.9.4-1.7 1.2-2.3A6.2 6.2 0 0 0 12 2.8z'/%3E%3C/svg%3E");
 }
 
 * { box-sizing: border-box; }
@@ -1169,12 +1171,6 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 @keyframes kv-ind { from { opacity: 0; } }
 @media (max-width: 560px), (max-height: 500px) { .kv-forklar small { display: none; } .kv-forklar b { font-size: 12.5px; } }
 @media (prefers-reduced-motion: reduce) { .kv-forklar { animation: none; } }
-/* Turens spørgsmål kan ikke overses (rettelse 6 efter prøven 28. november 2026): Mens man gætter, står spørgsmålet større og
-   fedt, og gættene er gule (gul er spørgsmål, stilguiden A7), så de ikke ligner trinets handlinger (lyseblå). Intet "?" foran
-   teksten (jeres svar 28. november 2026: ikke elegant, en fælles markering for spørgsmål kommer fra sporet Forløb). */
-#kvante .forløb-linje[data-fase="gæt"] > .fl-tekst { font-size: 18px; font-weight: 700; line-height: 1.4; }
-#kvante .fl-gæt { border-color: rgba(255, 212, 59, 0.75); background: rgba(255, 212, 59, 0.12); }
-#kvante .fl-gæt:hover { border-color: var(--gul); background: rgba(255, 212, 59, 0.22); }
 .kv-målt strong:empty { display: none; }
 /* Bølge eller prik (rettelse 7 efter prøven): to mærker under bordets forkant med et tegnet ikon (en bølge eller en prik).
    De oplyser kun (ingen kant, A4). */
@@ -2507,7 +2503,14 @@ button.hvorfor {
   border: 1px solid rgba(255, 212, 59, 0.55); background: rgba(255, 212, 59, 0.1);
   color: #ffe08a; font: inherit; font-size: 0.92em; font-weight: 700; cursor: pointer; pointer-events: auto;
 }
-button.hvorfor::before { content: '? '; opacity: 0.8; }
+/* Markeringen for spørgsmål (prøven 28. november 2026, stilguiden A5): ingen "?" foran teksten, for spørgsmålet slutter selv
+   med "?". En lille tegnet pære i knappens egen farve (gul, i bogen blæk) betyder "her er en forklaring". Pæren er en maske,
+   så den følger farven ved hover, og den er skjult for skærmlæsere (pseudo-element uden tekst). */
+button.hvorfor::before {
+  content: ''; display: inline-block; width: 1.05em; height: 1.05em; margin: 0 0.3em 0 -0.1em; vertical-align: -0.17em;
+  background: currentColor; opacity: 0.9;
+  -webkit-mask: var(--pære) center / contain no-repeat; mask: var(--pære) center / contain no-repeat;
+}
 button.hvorfor:hover, button.hvorfor[aria-expanded="true"] { background: rgba(255, 212, 59, 0.25); color: var(--tekst); }
 
 /* "Hvorfor?"-kortet: ved knappen, og nedefra på telefon på højkant */
@@ -2872,8 +2875,12 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-nøgle { display: inline-flex; gap: 8px; }
 .fl-mærke { --farve: var(--accent); display: inline-grid; place-items: center; min-width: 44px; height: 44px; border-radius: 10px; background: var(--farve); color: #0b0f1e; font-size: 22px; font-weight: 800; box-shadow: 0 0 12px color-mix(in srgb, var(--farve) 50%, transparent); }
 .fl-række button { min-height: 44px; font: inherit; font-size: 15px; font-weight: 700; color: var(--tekst); cursor: pointer; }
-.fl-gæt { padding: 0 16px; border-radius: 22px; border: 1px solid rgba(95, 227, 255, 0.5); background: rgba(95, 227, 255, 0.08); }
-.fl-gæt:hover { background: rgba(95, 227, 255, 0.18); }
+/* Turens spørgsmål kan ikke overses (Kvantefysik, prøven 28. november 2026, gjort fælles for alle ture samme dag, stilguiden
+   B13): Mens man gætter, står spørgsmålet større og fedt, og gættene er gule (gul er spørgsmål, A7), så de ikke ligner trinets
+   handlinger (lyseblå). Intet "?" foran teksten. I em, så den mindre skrift på telefon og lave skærme også gælder her. */
+.forløb-linje[data-fase="gæt"] > .fl-tekst { font-size: 1.125em; font-weight: 700; line-height: 1.4; }
+.fl-gæt { padding: 0 16px; border-radius: 22px; border: 1px solid rgba(255, 212, 59, 0.75); background: rgba(255, 212, 59, 0.12); }
+.fl-gæt:hover { border-color: var(--gul); background: rgba(255, 212, 59, 0.22); }
 .fl-handling { --farve: var(--accent); display: inline-flex; align-items: center; gap: 9px; padding: 0 18px 0 8px; border-radius: 24px; border: 1px solid var(--farve); background: color-mix(in srgb, var(--farve) 14%, transparent); box-shadow: 0 0 16px color-mix(in srgb, var(--farve) 35%, transparent); }
 .fl-handling.proton { --farve: var(--proton); }
 .fl-handling.neutron { --farve: var(--neutron); }
@@ -2884,7 +2891,7 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-vismig { padding: 0 14px; border-radius: 12px; border: 1px dashed rgba(255, 212, 59, 0.7); background: rgba(255, 212, 59, 0.1); }
 .fl-vej { padding: 0 16px; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.06); }
 .fl-vej.primær, .fl-næste { background: var(--accent); border: 1px solid var(--accent); color: #031018 !important; }
-.fl-vej:hover, .fl-gæt:hover { border-color: var(--accent); }
+.fl-vej:hover { border-color: var(--accent); }
 .fl-nav { margin-left: auto; display: flex; gap: 8px; }
 .fl-nav:empty { display: none; }
 .fl-tilbage { min-width: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--panel-kant); background: rgba(255, 255, 255, 0.06); color: var(--svag) !important; }

@@ -15,6 +15,9 @@ const forLange = FØRSTE_ATOM.trin.filter((t) => ord(t.spørg) > 16 || ord(t.så
 tjek('teksterne: 3-6 trin, Spørg ≤ ca. 15 ord, Så ≤ ca. 20 ord, højst to fagord, mindst to gæt',
   FØRSTE_ATOM.trin.length >= 3 && FØRSTE_ATOM.trin.length <= 6 && !forLange.length && FØRSTE_ATOM.trin.filter((t) => t.gæt).length >= 2,
   forLange.map((t) => t.id).join(', '));
+// Ingen ladning, før ordet er forklaret (prøven 28. november 2026): Trin 1-3 siger ikke "plus", "minus" eller "ladet"
+const medLadning = FØRSTE_ATOM.trin.slice(0, 3).filter((t) => /plus|minus|ladet|ladning/i.test(`${t.spørg} ${t.så}`));
+tjek('trin 1-3 siger ikke plus, minus eller ladning (det kommer i ordenes bobler og i "Hvorfor?"-kortet)', !medLadning.length, medLadning.map((t) => t.id).join(', '));
 
 const ctx = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
 const page = await ctx.newPage();
