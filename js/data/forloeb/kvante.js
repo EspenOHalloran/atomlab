@@ -48,7 +48,8 @@ export const STRIBER = {
     },
     {
       id: 'luk',
-      spørg: 'I ringen lander næsten ingen. Hvad sker der her, hvis den ene sprække lukkes?',
+      // "den gule ring på bagvæggen" (rettelse 4 efter prøven 28. november 2026: "i ringen - hvilken ring?")
+      spørg: 'I den gule ring på bagvæggen lander næsten ingen. Hvad sker der dér, hvis den ene sprække lukkes?',
       gæt: {
         valg: [
           { tekst: 'Der kommer færre', efter: 'Det lyder rimeligt, så prøv det!', svar: 'Det er lige omvendt, og det er det mærkelige.' },
@@ -56,7 +57,9 @@ export const STRIBER = {
         ],
       },
       gør: 'Tryk på en sprække, så den lukker (elektronerne fortsætter af sig selv).',
-      så: 'Flere! Med to åbne sprækker går bølgen gennem begge, og de to dele slukker hinanden her.',
+      så: 'Flere! Med to åbne sprækker går elektronens bølge gennem begge, og de to dele slukker hinanden i ringen.',
+      // Rettelse 5 efter prøven: "så de slukker hinanden fordi bølgetop og bund mødes? måske lige skriv en sætning eller to mere"
+      mere: 'Til ringen er vejen fra den ene sprække en halv bølge længere end fra den anden. Så møder bølgetoppen fra den ene sprække bølgedalen fra den anden, og de slukker hinanden, ligesom i vandet. Med én sprække er der ingen anden bølge at slukke med, så nu lander elektronerne også dér.',
       ord: [],
     },
     {

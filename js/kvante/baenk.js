@@ -183,7 +183,7 @@ void main() {
 
 export function lavBænk() {
   const gruppe = new THREE.Group();
-  const t = { blink: 0, lampe: [0, 0], lukket: [0, 0], lukMål: [0, 0], måler: 0, målerMål: 0, glimt: 0 };
+  const t = { blink: 0, lampe: [0, 0], lukket: [0, 0], lukMål: [0, 0], måler: 0, målerMål: 0, glimt: 0, ringPuls: 0 };
 
   // Bordet
   const bordMat = new THREE.MeshStandardMaterial({ color: 0x1b2440, roughness: 0.85, metalness: 0.1 });
@@ -514,6 +514,10 @@ export function lavBænk() {
       lampeMat[i].color.setRGB(0.25 + 1.6 * l, 0.3 + 1.3 * l, 0.35 + 0.2 * l);
       lamper[i].userData.skær.material.opacity = l;
     }
+    // Ringen pulserer i ca. 3 sekunder, når den kommer frem (tre pulser)
+    t.ringPuls = Math.max(0, t.ringPuls - dt / 3);
+    const puls = ROLIG || !t.ringPuls ? 0 : Math.max(0, Math.sin(t.ringPuls * Math.PI * 6)) * t.ringPuls;
+    ring.scale.set(1 + 0.9 * puls, 1 + 0.08 * puls, 1); // formens x er bænkens z (bredden), y er højden
     t.blink = Math.max(0, t.blink - dt * (ROLIG ? 3 : 7));
     blinkLys.material.opacity = t.blink;
     t.glimt = Math.max(0, t.glimt - dt * 0.9);
@@ -615,7 +619,9 @@ export function lavBænk() {
     },
     lampe: (i) => { t.lampe[i] = 1; },
     // Ringen om et mørkt sted (z) i turens trin 4, eller væk (null). Tallet i ringen står på skiltet (js/kvante/skilt.js).
+    // Når ringen kommer frem, pulserer den et par gange, så øjet finder den (rettelse 4 efter prøven).
     ring(z) {
+      if (z != null && !ring.visible) t.ringPuls = 1;
       ring.visible = z != null;
       if (z != null) ring.position.z = z;
     },

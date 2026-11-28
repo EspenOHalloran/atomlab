@@ -119,7 +119,7 @@ tjek('trin 3: Efter ca. 1.000 elektroner, holdt nede, står der mindst fem strib
 await næste();
 await trin('luk');
 await page.waitForTimeout(300);
-const r4 = await T((h) => ({ tur: atomlabTest.kvante.tur(), top: atomlabTest.kvante.tæl(0, h), her: atomlabTest.kvante.herTekst() }), RING_HALV);
+const r4 = await T((h) => ({ tur: atomlabTest.kvante.tur(), top: atomlabTest.kvante.tæl(0, h), her: atomlabTest.kvante.herTekst(), linje: document.querySelector('#kvante .forløb-linje').textContent }), RING_HALV);
 await page.click('#kvante .fl-gæt >> nth=1');
 const p = await T(() => atomlabTest.kvante.sprækkePunkt(0));
 await page.mouse.click(p.x, p.y);
@@ -127,10 +127,11 @@ let lukket = await T(() => atomlabTest.kvante.valg().sprækker);
 if (lukket === 'begge') { await page.waitForTimeout(300); await page.mouse.click(p.x, p.y); lukket = await T(() => atomlabTest.kvante.valg().sprækker); }
 await spol(5);
 await fase('så');
-const e4 = await T(() => ({ tur: atomlabTest.kvante.tur(), n: atomlabTest.kvante.antal(), her: atomlabTest.kvante.herTekst(), igen: atomlabTest.kvante.trykSprække(0) }));
-tjek('trin 4: ringen står ved det mørke sted, skiltet øverst i midten siger "I den gule ring: n", og n er under 15 % af toppen, et tryk lukker en sprække, programmet skyder lige så mange igen, og nu lander mange flere i ringen (sprækken kan ikke åbnes igen i trinet)',
+const e4 = await T(() => ({ tur: atomlabTest.kvante.tur(), n: atomlabTest.kvante.antal(), her: atomlabTest.kvante.herTekst(), linje: document.querySelector('#kvante .forløb-linje').textContent, igen: atomlabTest.kvante.trykSprække(0) }));
+tjek('trin 4: spørgsmålet siger "den gule ring på bagvæggen", ringen står ved det mørke sted, skiltet øverst i midten siger "I den gule ring: n", og n er under 15 % af toppen, Så forklarer med en halv bølge og bølgetop mod bølgedal, et tryk lukker en sprække, programmet skyder lige så mange igen, og nu lander mange flere i ringen (sprækken kan ikke åbnes igen i trinet)',
   r4.tur.vist && Math.abs(r4.tur.ring - mørktSted()) < 1e-9 && /^I den gule ring: \d+$/.test(r4.her) && r4.tur.her < 0.15 * r4.top
-  && lukket === 'højre' && e4.n >= 1000 && e4.tur.før === r4.tur.her && e4.tur.her >= 4 * Math.max(1, e4.tur.før) && /før:/.test(e4.her) && e4.igen === undefined,
+  && lukket === 'højre' && e4.n >= 1000 && e4.tur.før === r4.tur.her && e4.tur.her >= 4 * Math.max(1, e4.tur.før) && /før:/.test(e4.her) && e4.igen === undefined
+  && /den gule ring på bagvæggen/.test(r4.linje) && /halv bølge længere/.test(e4.linje) && /bølgetoppen/.test(e4.linje),
   JSON.stringify({ r4, lukket, e4 }));
 
 // Trin 5: begge åbner igen, måleren tændes, og de mørke striber er væk
