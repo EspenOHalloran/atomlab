@@ -636,7 +636,9 @@ export default {
     function hvertBillede(dt) {
       if (første) {
         første = false;
-        helJupiter(START);
+        // Er et sted valgt før første billede (et link som "solsystem:jupiter:maaner" fra Rømers bog), står kameraet der
+        // med det samme. Før blev det sendt tilbage til hele Jupiter (fundet i R3, 28. november 2026)
+        if (visning === 'jupiter') helJupiter(START);
         rejse.hop();
       }
       // Jupiter drejer hen til formiddag ved pletten, mens kameraet flyver (også under pause)

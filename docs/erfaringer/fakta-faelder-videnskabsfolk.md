@@ -85,3 +85,6 @@
 - Klokkeslættet den 9. november står som 5.35.45 i bladet, men ser ud til at stå som 5 45 35 i Rømers egen liste. Skriv bladets tid, eller "lidt over halv seks".
 - Datoen for den engelske oversættelse i 1677 er "25. juli" i Wikipedia og "25. juni" på Commons. Skriv "1677".
 - JSTOR-skanninger af *Phil. Trans.* har en bjælke med JSTOR's navn nederst på første side, og en artikels figur kan sidde på en tavle sammen med en anden artikels (Fig. 11 og Fig. 1 på tavlen til nr. 136). Se alle billeder i PDF'en, før en side skæres til.
+- "Rømer skrev listen efter 1678." Den sidste række er 6. januar 1678, så den er skrevet tidligst i 1678. Skriv "tidligst i 1678" (R3, 28. november 2026).
+- En linje til Gør det selv skal passe med det, man ser: Ved Jupiter → Månerne bliver Io sort på den side af Jupiter, der vender væk fra Solen, ikke "bag Jupiter" set fra kameraet. Se det med ⏩ og dpr 2, før linjen skrives (R3).
+- Find ikke på en "kildetekst" til et billede uden tekst: Fig. 11 har kun bogstaver, så "Linje for linje" har ingen række for tegningen (R3).

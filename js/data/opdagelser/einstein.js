@@ -344,7 +344,8 @@ export const LIGNINGER = {
         'Artiklen har ingen henvisninger til andres arbejde, og den eneste, der takkes, er vennen og kollegaen M. Besso (s. 921).',
         'Han nævner kun "die mißlungenen Versuche" (de mislykkede forsøg) på at måle, hvordan Jorden bevæger sig gennem "lysmediet". Michelson og Morley står ikke ved navn.',
         'Lysuret, du kan se i Rejsen i tid, er ikke Einsteins. Det kom i 1909 (Lewis og Tolman).',
-        'Ole Rømer viste i 1676, at lyset bruger tid. Einstein gjorde lysets fart til en regel for alle.',
+        // Link til Rømers bog (drejebogen-einstein afsnit 2, lavet i R3 28. november 2026)
+        { tekst: 'Ole Rømer viste i 1676, at lyset bruger tid. Einstein gjorde lysets fart til en regel for alle.', gaa: 'opdagelser:roemer', knap: 'Læs Rømers bog' },
       ],
     },
     // Ærligt talt (faktafilen afsnit 2 og 6): skanningen er en mikrofilm uden licens (jeres svar 1), og ækvatoruret var forkert

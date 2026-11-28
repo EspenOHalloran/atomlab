@@ -2,7 +2,7 @@
 // at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med Huygens og to grå rygge (et tryk stiller bogens spørgsmål),
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag. Einsteins
-// forside (E1, 21. november 2026) i test 1, 3 og 8. Rømers forside (R1, 27. november 2026) i test 1, 3 og 8. Rømers tur (R2, 28. november 2026) i test 4, 5 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
+// forside (E1, 21. november 2026) i test 1, 3 og 8. Rømers forside (R1, 27. november 2026) i test 1, 3 og 8. Rømers tur (R2, 28. november 2026) i test 4, 5 og 8. Rømers gåde, tidsskriftet og "Om Rømer" (R3, 28. november 2026) i test 6 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
 // Energien og tyngden (E4, samme dag) i test 1, 7 og 8. "Om Einstein" og links begge veje (E5, samme dag) i test 1, 6 og 7.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
@@ -366,6 +366,36 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
   const ord = ORDBOG.find((y) => y.id === 'formoerkelse');
   if (!ord || ord.kunI !== '.fl-tekst' || ord.tekst.length > 260 || !ord.former.includes('formørkelse')) fejlR.push('Ordbogen');
   tjek('Rømers tur: fire trin (Io i skyggen, for tidligt og for sent, hvorfor, 9. november) med korte tekster, kernesætning A og ordet formørkelse, og Horizons giver 36 og 46 minutter og 10 minutter for sent',
+    !fejlR.length, fejlR.join('; '));
+}
+// Rømers gåde, tidsskriftet og "Om Rømer" (R3, drejebogen afsnit 6-9, test 6): perlerne er 36 i august og 46 den 9.
+// november (Horizons), de nye er 10, og hele Jordens bane fra H til E er 16,6 minutter. Tidsskriftet har fire sider med seks
+// steder, og listen er på latin. "Om Rømer" sender til Jupiter → Månerne, og fælderne står ikke i teksterne (16. november,
+// "Rømer så", "målte lysets fart", "den første, der tænkte"). Einsteins "1905: Tiden" og Jupiters måner har links til bogen
+{
+  const t = await bogMed('roemer').tekster();
+  const e = await bogMed('einstein').tekster();
+  const læs = (f) => (existsSync(PROJEKT + f) ? readFileSync(PROJEKT + f, 'utf8') : '');
+  const fejlR = [];
+  if (t.OPSLAG.map((o) => o.id).join() !== 'forside,fortaelling,gaaden,tidsskriftet,om') fejlR.push('opslagene');
+  if (t.PERLER.august !== 36 || t.PERLER.november !== 46 || t.PERLER.nye !== 10 || Math.abs(t.HELE_BANEN - 16.6) > 0.05 || Math.round(t.FORSKEL_MIO_KM) !== 181
+    || Math.abs(t.MINUT_KM / 1e6 - 18) > 0.05 || Math.abs(t.tegnetMinutter(180) - t.tegnetMinutter(0) - t.HELE_BANEN) > 0.01) fejlR.push(`perlerne ${t.PERLER.august} ${t.PERLER.november} ${t.HELE_BANEN}`);
+  if (!t.GÅDE.linjer.aug.includes(`${t.PERLER.august} minutter`) || !/^10 minutter, som Rømer sagde/.test(t.GÅDE.linjer.løst1) || !/^16½ minut/.test(t.GÅDE.linjer.løst)
+    || !t.GÅDE.linjer.løst1Under.includes('181 millioner km') || !/18 millioner km/.test(t.GÅDE.forord.tekst) || !/22 minutter/.test(t.GÅDE.forord.tekst)
+    || t.BOGSTAVER.map((x) => x.navn).join('') !== 'HLKEFG') fejlR.push('gådens tekster');
+  const sider = t.BOGEN.sider;
+  if (sider.map((x) => x.id).join() !== 's893,fig11,s894,liste' || sider.flatMap((x) => x.steder).length !== 6 || t.BOGEN.sprog !== 'en' || t.BOGEN.sidst !== 'Men troede de ham?'
+    || sider.at(-1).steder[0].sprog !== 'la' || !/5\.35\.45/.test(sider.at(-1).steder[0].dansk) || !t.BOGEN.linjer.rækker.every((r) => sider.some((x) => x.id === r.side))) fejlR.push('tidsskriftet');
+  const kilder = læs('billeder/biblioteket/KILDER.md');
+  if (!sider.every((x) => kilder.includes(x.fil.split('/').pop())) || !/'roemer':/.test(læs('billeder/biblioteket/lav_bogsider.py'))) fejlR.push('KILDER.md eller lav_bogsider.py');
+  if (t.OM.knap.gaa !== 'solsystem:jupiter:maaner' || !/Rundetårn/.test(t.OM.hvorfor[3].svar) || !/Uranienborg/.test(t.OM.hvorfor[0].svar) || !/Huygens/.test(t.OM.hvorfor[1].svar)) fejlR.push('"Om Rømer"');
+  const alt = JSON.stringify([t.GÅDE, t.BOGEN.intro, t.BOGEN.sider.map((x) => [x.om, x.steder.map((y) => y.dansk)]), t.OM]);
+  if (/16\. november/.test(alt) || /Rømer (så|kiggede) selv/.test(alt) || /Rømer målte lysets fart/.test(alt) || /første, der tænkte/.test(alt)) fejlR.push('en fælde');
+  const nørd = e.LIGNINGER.tiden.nørd.punkter.find((x) => typeof x === 'object');
+  if (nørd?.gaa !== 'opdagelser:roemer' || !/Rømer/.test(nørd.tekst)) fejlR.push('Einsteins link');
+  const { SIDER: JUPITER } = await import('../js/data/sider/jupiter.js');
+  if (!JUPITER.maaner.emner.some((x) => /lyset bruger tid/.test(x.titel) && /data-gaa="opdagelser:roemer"/.test(x.tekst))) fejlR.push('kortet ved Jupiters måner');
+  tjek('Rømers gåde, tidsskriftet og "Om Rømer": 36 og 46 perler (10 nye) og 16,6 minutter for hele banen, fire sider med seks steder, Gør det selv ved Jupiters måner og links fra Einstein og Jupiter',
     !fejlR.length, fejlR.join('; '));
 }
 // ---------- I browseren ----------
@@ -761,8 +791,8 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   tjek('Rømers tur: uret den 9. november venter på gættet, står stille ved tabellens tid ("Nu skulle den komme"), et tryk før Io siger "Ikke endnu", og Io kommer 17.35.45',
     trin4 && !venter.kører && venter.ur === '17.20.00' && /Nu skulle den komme/.test(nu.vink) && forTidligt.forTidligt === 1 && !forTidligt.set && /Ikke endnu/.test(forTidligt.vink)
     && io.set && io.ur === '17.35.45' && io.svar === 'Rigtigt gættet!' && /halv seks/.test(io.så), JSON.stringify({ venter, nu, forTidligt, io }));
-  tjek('Rømers tur: "Det så du" har kernesætningen, linjen om Rømers tegning og kun de veje, der er bygget',
-    /Lyset bruger altså tid/.test(slut.tekst) && /Rømer tegnede det/.test(slut.lille) && slut.veje.join('|') === 'Tag turen igen ›', JSON.stringify(slut));
+  tjek('Rømers tur: "Det så du" har kernesætningen, linjen om Rømers tegning og vejene til gåden og tidsskriftet (R3)',
+    /Lyset bruger altså tid/.test(slut.tekst) && /Rømer tegnede det/.test(slut.lille) && slut.veje.join('|') === 'Tæl lysets minutter ›|Bladr i tidsskriftet fra 1677 ›|Tag turen igen ›', JSON.stringify(slut));
   // "Tag turen igen" starter forfra, og "Udforsk selv" giver laboratoriet med de fire kapitler
   await page.click('.forløb-linje .fl-vej >> text=Tag turen igen');
   const igen = await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'skyggen');
@@ -939,6 +969,29 @@ for (const [navn, opsætning] of [
   }
   tjek(`${navn}: i Rømers tur har lærredet plads (mindst 140 px) i alle fire trin, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel`,
     målR.length === 4 && målR.every((m) => m.lærred >= 140 && m.inde && !m.bred && !m.dækker), JSON.stringify(målR));
+  // Rømers gåde (R3): tegningen har plads, Jorden (mindst 44 px) er inden for skærmen, og efter november kan "Svar" nås
+  await O(() => atomlabTest.opdagelser.hylden());
+  await O(() => atomlabTest.opdagelser.åbn('roemer'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await O(() => { while (atomlabTest.opdagelser.vist().opslag !== 'gaaden' && atomlabTest.opdagelser.bladr(1)); });
+  await vent(page, () => atomlabTest.opdagelser.scene()?.visGåden);
+  await O(() => atomlabTest.opdagelser.scene().visGåden());
+  await page.waitForTimeout(300);
+  const gådeMål = await O(() => {
+    const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5 && x.top >= -0.5 && x.bottom <= innerHeight + 0.5;
+    const k = document.querySelector('#opdBog .rg-kort').getBoundingClientRect(), j = document.querySelector('#opdBog .rg-jord').getBoundingClientRect();
+    return { kort: Math.round(Math.min(k.width, k.height)), jord: Math.round(Math.min(j.width, j.height)), inde: inde(j), bred: document.documentElement.scrollWidth > innerWidth + 1, vB: innerWidth, vH: innerHeight };
+  });
+  await O(() => atomlabTest.opdagelser.scene().flyt());
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'tæl', null, 4000);
+  await O(() => document.querySelector('#opdBog .rg-svar').scrollIntoView({ block: 'nearest' }));
+  await page.waitForTimeout(400); // gåden toner ind på 0,32 s
+  gådeMål.svarRet = await O(() => { const x = document.querySelector('#opdBog .rg-svar').getBoundingClientRect(); return [x.left, x.top, x.right, x.bottom, x.height].map(Math.round); });
+  const [sv, so, sh, sn, sH] = gådeMål.svarRet;
+  gådeMål.svar = sH >= 44 && sv >= 0 && sh <= gådeMål.vB && so >= 0 && sn <= gådeMål.vH;
+  // En lav telefon på langs er ca. 390 px høj, så tegningen får ca. 190 px ved siden af linjen
+  tjek(`${navn}: i Rømers gåde har tegningen plads (mindst 180 px), Jorden er en knap på mindst 44 px inden for skærmen, og "Svar" kan nås`,
+    gådeMål.kort >= 180 && gådeMål.jord >= 44 && gådeMål.inde && !gådeMål.bred && gådeMål.svar, JSON.stringify(gådeMål));
   // Einsteins tur (E2): i alle fire trin har lærredet plads, og knapperne, skyderen og tallene er inden for skærmen
   await O(() => atomlabTest.opdagelser.hylden());
   await O(() => atomlabTest.opdagelser.åbn('einstein'));
@@ -1163,6 +1216,82 @@ for (const [navn, opsætning] of [
   const tilbage = await vent(page, () => location.hash === '#opdagelser' && atomlabTest.opdagelser?.vist()?.bog === 'tycho', null, 15000);
   tjek('Gør det selv: "Se en stjerne eksplodere" åbner Hvid dværg i Kosmos, og "Læs Tychos bog" (citatet og "Hvem har set en?") åbner bogen igen',
     iKosmos && knapper >= 2 && tilbage, JSON.stringify({ iKosmos, knapper }));
+  await ctx.close();
+}
+
+// Rømers gåde, tidsskriftet og "Om Rømer" (R3, test 6): forordet, Jorden trækkes fra august til 9. november (de nye perler er
+// gyldne), et forkert tal ryster, et tryk på snoren tæller, 10 er rigtigt, så fra H til E giver 16½, og løsningen gemmes med
+// "Og i dag?". Videre til tidsskriftet: fire faner, listen er latin og s. 894 har 9. november, og stien ender i "Om Rømer",
+// hvor Gør det selv åbner Jupiter → Månerne med kameraet ude ved månerne, og kortet dér fører tilbage til bogen
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('roemer'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await O(() => { while (atomlabTest.opdagelser.vist().opslag !== 'gaaden' && atomlabTest.opdagelser.bladr(1)); });
+  await vent(page, () => atomlabTest.opdagelser.scene()?.tilstand);
+  const g = () => O(() => atomlabTest.opdagelser.scene().tilstand());
+  const forord = await g();
+  await page.click('#opdBog .ag-forord-knap');
+  const start = await g();
+  // Jorden trækkes med musen et stykke langs banen (mod uret), og et tryk sender den resten af vejen
+  const jord = await page.locator('#opdBog .rg-jord').boundingBox();
+  const sol = await O(() => { const r = document.querySelector('#opdBog .rg-kort').getBoundingClientRect(); const c = document.querySelector('#opdBog .rg-sol'); return { x: r.left + Number(c.getAttribute('cx')), y: r.top + Number(c.getAttribute('cy')) }; });
+  await page.mouse.move(jord.x + jord.width / 2, jord.y + jord.height / 2);
+  await page.mouse.down();
+  const r = Math.hypot(jord.x + jord.width / 2 - sol.x, jord.y + jord.height / 2 - sol.y);
+  for (const v of [40, 55, 70]) await page.mouse.move(sol.x + r * Math.cos(v * Math.PI / 180), sol.y - r * Math.sin(v * Math.PI / 180), { steps: 3 });
+  await page.mouse.up();
+  const trukket = await g();
+  await page.click('#opdBog .rg-jord');
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'tæl', null, 6000);
+  const nov = await g();
+  await O(() => atomlabTest.opdagelser.scene().tæl(9));
+  await page.click('#opdBog .rg-svar');
+  const forkert = await g();
+  await O(() => atomlabTest.opdagelser.scene().tæl(0));
+  for (let i = 0; i < 10; i++) await O(() => atomlabTest.opdagelser.scene().tryk());
+  const talt = await g();
+  await page.click('#opdBog .rg-svar');
+  const løst1 = await g();
+  await page.click('#opdBog .rg-del-to');
+  const h = await g();
+  await page.click('#opdBog .rg-jord');
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().fase === 'løst', null, 15000);
+  const e = await g();
+  const efter = { gemt: await O(() => localStorage.getItem('atomlabOpdagelserGaader')), idag: await O(() => document.querySelector('#opdBog .tg-idag')?.textContent ?? '') };
+  tjek('Rømers gåde: forordet, Jorden trækkes fra august (36 perler) til 9. november (46, de 10 nye er gyldne), et forkert tal ryster, 10 tryk på snoren er rigtigt, og fra H til E kommer 16½ til',
+    forord.forord && !start.forord && start.fase === 'aug' && start.perler === 36 && start.gyldne === 0 && trukket.fase === 'aug' && trukket.dag > 74 && trukket.gyldne > 0 && trukket.gyldne < 10
+    && nov.perler === 46 && nov.gyldne === 10 && forkert.fase === 'tæl' && /Tæl igen/.test(forkert.linje) && talt.talt === 10 && løst1.fase === 'løst1' && /^10 minutter, som Rømer sagde/.test(løst1.linje)
+    && h.fase === 'he' && h.perler === 35 && e.gyldne === 16 && e.halv && /^16½ minut/.test(e.linje) && e.løst && /roemer/.test(efter.gemt ?? '') && /16 min 38 s/.test(efter.idag),
+    JSON.stringify({ forord, start, trukket, nov, forkert, talt, løst1, h, e, efter }));
+  // "Se det hele i tidsskriftet fra 1677 ›" bladrer til tidsskriftet
+  await page.click('#opdBog .tg-videre');
+  const hentet = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'tidsskriftet' && atomlabTest.opdagelser.scene()?.hentet(), null, 15000);
+  const faner = await O(() => [...document.querySelectorAll('#opdBog .bs-fane')].map((f) => f.textContent));
+  await page.click('#opdBog .bs-fane >> text=Beviset');
+  await vent(page, () => atomlabTest.opdagelser.scene()?.side() === 's894' && atomlabTest.opdagelser.scene().hentet(), null, 15000);
+  await page.click('#opdBog .bs-sted-knap[data-sted="november"]');
+  const bevis = await O(() => ({ engelsk: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.textContent ?? '', lang: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.lang, dansk: document.querySelector('#opdBog .bs-forklaring .bs-dansk')?.textContent ?? '' }));
+  await page.click('#opdBog .bs-fane >> text=Listen');
+  await vent(page, () => atomlabTest.opdagelser.scene()?.side() === 'liste' && atomlabTest.opdagelser.scene().hentet(), null, 15000);
+  await page.click('#opdBog .bs-sted-knap[data-sted="nov9"]');
+  const liste = await O(() => ({ mærke: document.querySelector('#opdBog .bs-forklaring .bs-mærke')?.textContent, lang: document.querySelector('#opdBog .bs-forklaring .bs-latin')?.lang, videre: document.querySelector('#opdBog .bs-videre')?.textContent }));
+  await page.click('#opdBog .bs-videre');
+  const om = await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'om' && document.querySelector('#opdBog .bo-knap[data-gaa="solsystem:jupiter:maaner"]') && document.querySelector('#opdBog .bo-knap-linje'));
+  tjek('Rømers tidsskrift fra 1677: fire faner, s. 894 viser 9. november på engelsk med dansk, listen er latin, og "Men troede de ham? ›" går til "Om Rømer" med "Se Io forsvinde i Jupiters skygge ›"',
+    hentet && faner.join('|') === 'Spørgsmålet|Tegningen|Beviset|Listen' && /9th of November/.test(bevis.engelsk) && bevis.lang === 'en' && /10 minutter senere/.test(bevis.dansk)
+    && liste.mærke === 'Latin' && liste.lang === 'la' && liste.videre === 'Men troede de ham? ›' && om, JSON.stringify({ faner, bevis, liste }));
+  // Gør det selv: Jupiter → Månerne, hvor kameraet står ude ved månerne (ikke tæt på Jupiter), og kortet fører tilbage
+  await page.click('#opdBog .bo-knap');
+  const iSolsystem = await vent(page, () => location.hash === '#solsystem' && atomlabTest.solsystem?.valgt?.() === 'jupiter' && atomlabTest.solsystem.sted?.() === 'maaner', null, 30000);
+  const ude = await vent(page, () => Math.hypot(...atomlabTest.solsystem.kamera()) > 300, null, 15000);
+  const kort = await O(() => atomlabTest.solsystem.side().emner.map((x) => x.titel));
+  await O(() => document.querySelector('#solsystem [data-gaa="opdagelser:roemer"]').click());
+  const tilbage = await vent(page, () => location.hash === '#opdagelser' && atomlabTest.opdagelser?.vist()?.bog === 'roemer', null, 15000);
+  tjek('Gør det selv: "Se Io forsvinde i Jupiters skygge" åbner Jupiter → Månerne med kameraet ude ved månerne, og kortet "Hvordan ved man, at lyset bruger tid?" åbner Rømers bog igen',
+    iSolsystem && ude && kort.includes('Hvordan ved man, at lyset bruger tid?') && tilbage, JSON.stringify({ iSolsystem, ude, kort }));
   await ctx.close();
 }
 

@@ -160,6 +160,13 @@ export const SIDER = {
         titel: 'Hvem fandt dem?',
         tekst: '<p>Den 7. januar 1610 så Galileo Galilei tre små prikker ved Jupiter gennem sin kikkert. Nætterne efter flyttede de sig, og den 13. januar så han fire. Det var de første måner, man fandt om en anden planet end Jorden.</p>',
       },
+      {
+        // Link til Rømers bog i Opdagelserne (R3 28. november 2026, docs/drejebog-roemer.md afsnit 9, aftalt med sporet
+        // Solsystemet i docs/lige-nu/solsystemet.md). Phil. Trans. 1677 s. 894: 9. november 1676, 10 minutter senere end
+        // ventet ud fra august. Ikke "Rømer så selv" og ikke "16. november" (fakta-faelder-videnskabsfolk.md)
+        titel: 'Hvordan ved man, at lyset bruger tid?',
+        tekst: '<p>Den 9. november 1676 så man i Paris Io komme ud af Jupiters skygge 10 minutter senere, end man ventede ud fra august. Den danske astronom Ole Rømer havde sagt det på forhånd: Jorden var nu længere væk fra Jupiter, og lyset bruger tid på den længere vej.</p><p><button class="link-knap" data-gaa="opdagelser:roemer">Læs Rømers bog ›</button></p>',
+      },
     ],
     videre: [sted('io', 'Io'), sted('europa', 'Europa'), sted('ganymedes', 'Ganymedes'), sted('callisto', 'Callisto')],
     nørd: '<p><b>Laplace-resonansen:</b> Månernes vinkler i banen (λ) opfylder λ<sub>Io</sub> − 3·λ<sub>Europa</sub> + 2·λ<sub>Ganymedes</sub> = 180°. Derfor står de tre aldrig på linje på samme side af Jupiter. Når Io og Europa står på linje, er Ganymedes 90° væk.</p>'

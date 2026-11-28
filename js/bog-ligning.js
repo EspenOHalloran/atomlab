@@ -27,6 +27,9 @@ const billeder = new Map(); // fil → Promise med et hentet <img>
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 // Tekst med små tal forneden: G_im, R_μν og T_im i teksterne om tyngden bliver til G med im under (E4)
 const prosa = (t) => esc(t).replace(/_([a-zμνρσλ]+)/g, '<sub>$1</sub>');
+// Et punkt i "For nørder" er en tekst eller { tekst, gaa, knap } med et link til et andet sted (Rømers bog, R3)
+const punkt = (p) => (typeof p === 'string' ? prosa(p)
+  : `${prosa(p.tekst)} <button class="link-knap" data-gaa="${esc(p.gaa)}">${esc(p.knap)} ›</button>`);
 
 function læsVisning(bogId) {
   try { return JSON.parse(localStorage.getItem(NØGLE) ?? '{}')[bogId] === 'sat' ? 'sat' : 'skanning'; } catch { return 'skanning'; }
@@ -169,7 +172,7 @@ function regnHTML(r) {
 
 function bokse(L, bogId) {
   const liste = (lag, id, ærligt = false) => `<details class="lag-boks bo-lag${ærligt ? ' ærligt' : ' lag-mere'}" data-lag="${id}"><summary><strong>${esc(lag.titel)}</strong>${ærligt ? ` <span class="lag-kort">${esc(lag.linje)}</span>` : ''}</summary>`
-    + `<ul>${lag.punkter.map((p) => `<li>${prosa(p)}</li>`).join('')}</ul></details>`;
+    + `<ul>${lag.punkter.map((p) => `<li>${punkt(p)}</li>`).join('')}</ul></details>`;
   const l = L.linjer;
   return `<details class="lag-boks bs-linjer" data-lag="bog-linjer"><summary><strong>${esc(l.titel)}</strong> <span class="lag-kort">${esc(l.linje)}</span></summary>`
     + l.rækker.map((r) => `<div class="bs-række"><p class="bs-hvor">${esc(r.hvor)}</p><p class="bs-latin" lang="de">${prosa(r.tysk)}</p><p class="bs-dansk">${prosa(r.dansk)}</p></div>`).join('')
