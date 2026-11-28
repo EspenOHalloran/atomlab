@@ -1,8 +1,8 @@
 # Lige nu: Solsystemet og Kosmos
 
-*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 27. november 2026 (faktagrundlaget for Mørkt stof).*
+*Spor i [oversigten](../lige-nu.md). Kun én session ad gangen skriver her. Det forrige "Senest lavet" flyttes øverst i [arkiv/historik/solsystemet.md](../arkiv/historik/solsystemet.md). Højst ca. 5 KB. Sidst opdateret: 28. november 2026 (planen for Mørkt stof).*
 
-**Senest lavet (27. november 2026): Faktagrundlaget for Mørkt stof og "Mørkt, anti og ukendt"** (køreplanen nr. 8, startet af orkestratoren, kun dokumenter): [fakta-moerkt-anti-ukendt.md](../fakta-moerkt-anti-ukendt.md). Tallene (Planck 2018: 4,9, 26,4 og 68,5 %, så "ca. 5, 27 og 68 %" holder), de syv begreber side om side (Hvad er det? Findes det? Hvordan mærkes det?), fakta til fænomenet (galaksen, lysbøjningen og mindretallet med MOND) og et forslag til jeres bekymring om for mange begreber. Vigtigt: Gåden "Hvad er mørkt stof?" har allerede galaksen og lysbøjningen i 3D (G4d), så forslaget genbruger den i Kosmos. **Fire spørgsmål venter på jeres svar** (står nederst i filen). Intet bygges, før de er besvaret.
+**Senest lavet (28. november 2026): Planen for Mørkt stof og "Mørkt, anti og ukendt"** (køreplanen nr. 8, startet af orkestratoren, kun dokumenter): [plan-moerkt-stof.md](../plan-moerkt-stof.md). Den følger jeres svar A til alle fire: kortet med tre begreber fremme og mærket Fundet / Virkningen er målt / Kun en idé og foldeboksen "Forveksles ofte med", linjen "Ikke det samme som …" i Ordbogen og fænomenet Mørkt stof i Kosmos, der genbruger gådens galakse og lysbøjning og får "Hvad er universet lavet af?" med 100 klodser. Fire trin (MS1-MS4), én session og én prompt pr. trin. **Bygningen venter på jeres go efter prøven med jeres søn.** Faktagrundlaget (27. november 2026) står i [historikken](../arkiv/historik/solsystemet.md).
 
 **Jeres beslutning (18. november 2026, jeres ønske via orkestratoren):** Mars gøres færdig nu, før Månen og ønskerne fra 17. november. Først rettelsen ovenfor, så "Mars ekstra" med et go pr. del: 1) Nordpolen tæt på (M7b-pol), 2) sten og terræn i Stå på Mars (M8c del 3), 3) Curiosity som 3D-model (M8c del 2) og 4) lyset (L2, kræver en session på jeres pc). Planen og en prompt pr. del står i [prompt-mars-ekstra.md](../prompt-mars-ekstra.md).
 
@@ -16,6 +16,7 @@
 3. **Månen:** "Lys på hele Månen" og højderne i 2k/4k er lavet (19. november 2026, venter på jeres prøve, se "Ikke afprøvet"). Saturn S3 og S3b (formen på alle månerne undtagen Titan) er lavet 19.-20. november 2026. Tilbage herfra: **Jorden og Månen flottere** (se [ideer.md](../ideer.md)).
 4. **Tabletrunden** (6. november 2026): Fund 2-4 hører til G1 i [plan-grafik.md](../plan-grafik.md), M8c del 3 og L2 i [plan-mars.md](../plan-mars.md).
 
+4b. **Mørkt stof (køreplanen nr. 8):** MS1-MS4 i [plan-moerkt-stof.md](../plan-moerkt-stof.md), start med MS1 efter jeres go (efter prøven).
 5. **Jeres ønsker 17. november 2026 (ikke planlagt endnu):** Rumrejsen (tyngdekraftsspillet, den oprindelige idé), Planet X/9, et stop ved asteroidebæltet og landing og udforskning på månerne med betingelser for liv. Står i [ideer.md](../ideer.md). Venter på rækkefølge og go.
 
 **Kosmos:** Det seneste (Betelgeuse set fra Jorden, 13. november 2026) står nu i [historikken](../arkiv/historik/solsystemet.md).

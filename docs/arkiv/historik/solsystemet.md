@@ -1,5 +1,7 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (27. november 2026): Faktagrundlaget for Mørkt stof og "Mørkt, anti og ukendt"** (køreplanen nr. 8, startet af orkestratoren, kun dokumenter): [fakta-moerkt-anti-ukendt.md](../../fakta-moerkt-anti-ukendt.md). Tallene (Planck 2018: 4,9, 26,4 og 68,5 %, så "ca. 5, 27 og 68 %" holder), de syv begreber side om side (Hvad er det? Findes det? Hvordan mærkes det?), fakta til fænomenet (galaksen, lysbøjningen og mindretallet med MOND) og et forslag til jeres bekymring om for mange begreber. Vigtigt: Gåden "Hvad er mørkt stof?" har allerede galaksen og lysbøjningen i 3D (G4d), så forslaget genbruger den i Kosmos. Jeres svar 28. november 2026: A til alle fire.
+
 **Lavet (20. november 2026): Venus, "Ned gennem skyerne" med længere tid og bladring** (jeres svar 20. november 2026 i [aabne-punkter.md](aabne-punkter.md)). Status: **venter på jeres prøve** (se "Ikke afprøvet").
 - Hvert trin får ca. 3 sekunder ekstra, fordelt efter antallet af ord i underteksten (turen ned tager nu ca. 49 s i stedet for 34, trinene ca. 7-13 s).
 - Bladring: ‹ og "Næste: … ›" i bjælken, prikkerne i underteksten og piletasterne ← → på pc. Kameraet glider hen til starten af trinet og fortsætter derfra. Måleren, prikken i søjlen og fotoet følger med, og når man er landet, er der "↺ Forfra".
