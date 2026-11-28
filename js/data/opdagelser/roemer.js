@@ -226,7 +226,6 @@ export const PERLER = {
 };
 // Hele vejen fra H til E: 2 AE er 16,63 minutter ("16½": 16 hele perler og en halv). Rømer sagde 22
 export const HELE_BANEN = 2 * AE_SEKUNDER / 60;
-export const RØMERS_MINUTTER = 22;
 // Jorden var 181 millioner km længere væk fra Jupiter den 9. november end den 14. august (Horizons: 644 og 825 mio. km)
 export const FORSKEL_MIO_KM = (afstand(NOVEMBER) - afstand(AUGUST)) * AE_KM / 1e6;
 
