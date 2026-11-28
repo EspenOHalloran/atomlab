@@ -529,7 +529,7 @@ function opdaterPanel(kunTal = false) {
     // "Hvorfor?"-kortene ved trinet (et id eller en liste, fx Stigen: hvad holder den sammen, og hvem fandt den)
     const kort = [n.hvorfor ?? []].flat();
     $('livHvorfor').hidden = !kort.length;
-    $('livHvorfor').innerHTML = kort.map((id) => `<button class="hvorfor" data-hvorfor="${id}">Hvorfor? ${HVORFOR[id].spørgsmål}</button>`).join('');
+    $('livHvorfor').innerHTML = kort.map((id) => `<button class="hvorfor" data-hvorfor="${id}">${HVORFOR[id].spørgsmål}</button>`).join('');
     // Et link til en gåde (Gåderne G2: ved Ribosomet)
     $('livGaade').hidden = !n.gåde;
     if (n.gåde) {

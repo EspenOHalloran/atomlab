@@ -123,7 +123,7 @@ export function lav() {
     $('hjælpIld').classList.add('skjult');
     startTur();
   });
-  $('ildHvorfor').innerHTML = ILD_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">Hvorfor? ${HVORFOR[id].spørgsmål}</button>`).join('');
+  $('ildHvorfor').innerHTML = ILD_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">${HVORFOR[id].spørgsmål}</button>`).join('');
   lavTræk();
 }
 

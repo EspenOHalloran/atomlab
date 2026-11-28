@@ -116,7 +116,7 @@ export function lav() {
   $('kvForfra').addEventListener('click', () => { lyd.klik(); forfra(); });
   lavSkydKnap($('kvSkyd'));
   $('kvanteHjælp').addEventListener('click', () => { lyd.klik(); $('hjælpKvante').classList.remove('skjult'); });
-  $('kvHvorfor').innerHTML = KVANTE_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">Hvorfor? ${HVORFOR[id].spørgsmål}</button>`).join('');
+  $('kvHvorfor').innerHTML = KVANTE_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">${HVORFOR[id].spørgsmål}</button>`).join('');
   lavTryk();
   lavTurSkyd();
   lavTurKnap($('kvante'), [STRIBER], () => startTur());

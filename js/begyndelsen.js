@@ -292,7 +292,7 @@ function panel() {
   $('begTitel').textContent = p.titel;
   $('begTekst').textContent = p.tekst;
   tegnTal(p.tal);
-  $('begHvorfor').innerHTML = BEG_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">Hvorfor? ${HVORFOR[id].spørgsmål}</button>`).join('');
+  $('begHvorfor').innerHTML = BEG_KORT.map((id) => `<button class="hvorfor" data-hvorfor="${id}">${HVORFOR[id].spørgsmål}</button>`).join('');
   nøgle();
 }
 
