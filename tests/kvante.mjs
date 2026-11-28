@@ -4,7 +4,7 @@
 // en sprække lukker den, måleren blinker ved én sprække, kuglerne lander i to bunker, vandets bølger løber,
 // panelerne har ingen rullebjælke, og et skærmskift rydder op.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
-import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER, pulsTid, målerTekst } from '../js/data/kvante.js';
+import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER, pulsTid, målerTekst, stilleSted, skiltTekst } from '../js/data/kvante.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -80,6 +80,21 @@ tjek('bølgepakken: når midten af bagvæggen på ca. 1,5 s og kanten senere, og
   tMidt > 1.3 && tMidt < 1.8 && tKant > tMidt && tVenstre < tHøjre && målerTekst([1234, 5]).linje === 'Venstre: 1.234 · Højre: 5' && målerTekst([1, 1]).begge === 'Begge på én gang: 0',
   JSON.stringify({ tMidt, tKant, tVenstre, tHøjre }));
 
+// Vandet (rettelse 3 efter prøven 28. november 2026): skiltet "Top møder dal" står på den første stille linje, hvor vejen
+// fra den venstre sprække er en halv bølge længere end fra den højre, og de mørke striber på bagvæggen ligger på de stille
+// linjer. Skiltets tekster til alle slags.
+{
+  const λv = bølgelængde('boelger');
+  const vej = (x, z) => Math.hypot(x, z + STANDARD.d / 2) - Math.hypot(x, z - STANDARD.d / 2);
+  const steder = [1, 2, 3, 3.5].map((x) => vej(x, stilleSted(x)) / λv);
+  const mørk = stilleSted(3.5);
+  const titler = SLAGS.map((s) => skiltTekst({ slags: s }).titel);
+  tjek('vandet: "Top møder dal" står på den første stille linje (vejene er en halv bølge forskellige), bølgelængden er mellem 0,2 og 0,42, og skiltet har en titel til hver slags',
+    steder.every((x) => Math.abs(x - 0.5) < 1e-6) && mørk > 0.3 && mørk < 0.8 && λv >= 0.2 && λv <= 0.42 && titler.every(Boolean)
+    && skiltTekst({ slags: 'elektroner', sprækker: 'højre', måler: true }).ekstra === 'Kun den højre sprække er åben · Måleren er tændt',
+    JSON.stringify({ steder, mørk, λv, titler }));
+}
+
 // ---------- I browseren ----------
 const ctx = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
 const page = await ctx.newPage();
@@ -116,7 +131,7 @@ const r2 = await T((z) => {
   return { ryddet, m: k.mønster(), ring: k.tæl(z, 0.06), panel: k.panel(), lukket: k.lukket() };
 }, ring);
 tjek('elektroner: to sprækker giver striber (mindst fem toppe, under 15 % i ringen), én sprække rydder væggen og giver én bred bunke med mange flere i ringen',
-  r1.m.toppe >= 5 && r1.ring < 0.15 * r1.top && r1.tæller === 'Elektroner: 3.000' && r1.panel.titel === 'Elektroner'
+  r1.m.toppe >= 5 && r1.ring < 0.15 * r1.top && r1.tæller === '3.000 elektroner' && r1.panel.titel === 'Elektroner'
   && r2.ryddet === 0 && r2.m.mørke === 0 && r2.ring > 4 * r1.ring && r2.panel.titel === PANEL['elektroner-en'].titel && r2.lukket.join() === '0,1',
   JSON.stringify({ r1: { toppe: r1.m.toppe, ring: r1.ring, top: r1.top, t: r1.tæller }, r2: { m: r2.m.mørke, ring: r2.ring, l: r2.lukket } }));
 
@@ -271,7 +286,7 @@ await page.click('#kvStørre');
 const husket = await T(() => atomlabTest.kvante.valg().slags);
 tjek('Større …: knappen viser Molekyle, Klump og Fodbold (molekylet først), klumpen giver striber, og måleren fjerner dem',
   stor1.knap && stor1.valg && stor1.slags === 'molekyle' && stor1.titel === 'Molekyler med 2.000 atomer'
-  && klumpen.toppe >= 5 && klumpen.mørke > 0 && klumpen.målerMørke === 0 && /^Klumper: /.test(klumpen.tæller), JSON.stringify({ stor1, klumpen }));
+  && klumpen.toppe >= 5 && klumpen.mørke > 0 && klumpen.målerMørke === 0 && /klumper$/.test(klumpen.tæller), JSON.stringify({ stor1, klumpen }));
 tjek('Større …: fodbolden lander i to bunker som kuglerne (ingen i midten) og ligner en fodbold, uden måler, og knappen husker det sidste valg',
   bolden.midt === 0 && bolden.højre > 100 && bolden.venstre > 100 && bolden.titel === 'En fodbold' && bolden.bold && bolden.måler
   && !væk.knap && !væk.valg && !væk.bold && husket === 'fodbold', JSON.stringify({ bolden, væk, husket }));
@@ -295,6 +310,50 @@ await T(() => { const k = document.createElement('button'); k.dataset.gaa = 'kva
 const fraTur = await T(() => ({ slags: atomlabTest.kvante.valg().slags, tur: atomlabTest.kvante.tur().kører }));
 tjek('links: fotonen i Ordbogen åbner bænken med lys (uden turen), "kvante:stor" vælger "Større …", og "Se det selv" i Værkstedets kort starter turen',
   fraOrdbog.slags === 'lys' && !fraOrdbog.tur && herStor === 'fodbold' && turStart && fraTur.slags === 'fodbold' && !fraTur.tur, JSON.stringify({ fraOrdbog, herStor, turStart, fraTur }));
+
+// Skiltet øverst i midten af scenen (rettelse 1 efter prøven 28. november 2026): hvad der sendes nu, linjen om det ændrede,
+// tælleren, og at det kommer frem midt i scenen, når det skifter (men ikke, når kun tallet ændrer sig)
+const skilt = await T(async () => {
+  const k = atomlabTest.kvante;
+  k.slags('boelger');
+  const vand = k.skilt();
+  k.slags('elektroner');
+  k.skyd(1);
+  const én = k.skilt();
+  await new Promise((r) => setTimeout(r, 1900));
+  const oppe = k.skilt().midt;
+  k.skyd(9);
+  const ti = k.skilt();
+  k.sprækker('venstre');
+  k.måler(true);
+  k.spol(0.05);
+  const ændret = k.skilt();
+  const visMåler = k.visning();
+  k.måler(false);
+  k.sprækker('begge');
+  k.spol(0.05);
+  const visBølge = k.visning();
+  k.sæt({ bølgen: true });
+  k.spol(0.05);
+  const visTegnet = { mærker: k.visning(), skilt: k.skilt().ekstra };
+  k.sæt({ bølgen: false });
+  k.slags('kugler');
+  k.spol(0.05);
+  const visKugle = k.visning();
+  k.slags('elektroner');
+  const r = document.getElementById('kvSkilt').getBoundingClientRect();
+  const v = document.getElementById('kvanteVindue').getBoundingClientRect();
+  return { vand, én, oppe, ti, ændret, visMåler, visBølge, visTegnet, visKugle, midten: Math.abs((r.left + r.right) / 2 - (v.left + v.right) / 2) < 4 };
+});
+// Bølge eller prik (rettelse 7 efter prøven): mærkerne langs bordets forkant siger, hvad man ser på vejen og på bagvæggen
+tjek('bølge eller prik: elektroner "På vejen: en bølge (tegnes ikke)" og "På bagvæggen: én prik", med "Vis bølgen" "(tegnet)" og skiltet "Bølgen er tegnet", med måler "Ved sprækkerne: fundet ét sted", og kugler "På vejen: en kugle"',
+  skilt.visBølge.join('|') === 'På vejen: en bølge (tegnes ikke)|På bagvæggen: én prik' && skilt.visTegnet.mærker[0] === 'På vejen: en bølge (tegnet)'
+  && skilt.visTegnet.skilt === 'Bølgen er tegnet' && skilt.visMåler[0] === 'Ved sprækkerne: fundet ét sted' && skilt.visKugle[0] === 'På vejen: en kugle',
+  JSON.stringify({ visBølge: skilt.visBølge, visTegnet: skilt.visTegnet, visMåler: skilt.visMåler, visKugle: skilt.visKugle }));
+tjek('skiltet: "Bølger i vand" uden tal, "Elektroner, én ad gangen" med "1 elektron" og "10 elektroner", kommer frem midt i scenen ved et skift og glider op, siger "Kun den venstre sprække er åben · Måleren er tændt" og står i midten',
+  skilt.vand.titel === 'Bølger i vand' && !skilt.vand.tal && skilt.vand.midt && skilt.én.titel === 'Elektroner, én ad gangen' && skilt.én.tal === '1 elektron'
+  && !skilt.oppe && skilt.ti.tal === '10 elektroner' && !skilt.ti.midt && skilt.ændret.ekstra === 'Kun den venstre sprække er åben · Måleren er tændt' && skilt.ændret.midt && skilt.midten,
+  JSON.stringify(skilt));
 
 // Ingen rullebjælke i panelerne
 const rul = [];

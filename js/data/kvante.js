@@ -36,7 +36,9 @@ export const SPRÆKKER = ['begge', 'venstre', 'højre']; // venstre er z < 0, h�
 // Spillets bølgelængde. Elektroner: hurtigere giver kortere bølge (λ = h/(m·v)). Lys: blåt (450 nm) til rødt (680 nm),
 // skaleret, så grønt (530 nm) giver de samme striber som elektronerne med standardfarten.
 const λ_ELEKTRON = [0.27, 0.11]; // fra langsom (0) til hurtig (1)
-const λ_VAND = [0.3, 0.15];
+// Vandet: lange bølger (rettelse 3 efter prøven 28. november 2026), så de stille linjer ligger langt nok fra hinanden til at
+// kunne ses og forklares (med standardfarten 0,29: tre lyse og fire mørke striber på bagvæggen)
+const λ_VAND = [0.42, 0.2];
 // Molekylet og klumpen er tungere, så bølgen er kortere og striberne tættere. I virkeligheden er forskellen langt større:
 // klumpernes bølge er ca. 10-22 fm (arXiv:2507.21211), elektronernes i bænkens rigtige forsøg ca. 50 pm.
 const λ_STØRRE = { molekyle: 0.12, klump: 0.085 }; // vandets bølger: fra lange (0) til korte (1), ikke kortere, så de kan ses på en telefon
@@ -101,6 +103,24 @@ export function mørktSted({ d = STANDARD.d, λ = bølgelængde('elektroner') } 
   const s = λ / (2 * d);
   return (L * s) / Math.sqrt(1 - s * s);
 }
+
+// Bølger i vand: et sted på den første stille linje (vejen fra den venstre sprække er en halv bølge længere end fra den
+// højre) i afstanden x bag væggen, z > 0. Til skiltet "Top møder dal" på vandet (rettelse 3 efter prøven).
+export function stilleSted(x, { d = STANDARD.d, λ = bølgelængde('boelger') } = {}) {
+  const f = (z) => Math.hypot(x, z + d / 2) - Math.hypot(x, z - d / 2) - λ / 2;
+  let lo = 0, hi = BAG_HALV;
+  for (let i = 0; i < 40; i++) {
+    const m = (lo + hi) / 2;
+    if (f(m) < 0) lo = m; else hi = m;
+  }
+  return (lo + hi) / 2;
+}
+
+// De to skilte på vandet, når bølgerne er nået bagvæggen (rettelse 3 efter prøven 28. november 2026)
+export const FORKLAR = [
+  { id: 'høj', titel: 'Top møder top: høj bølge', tekst: 'Lige langt til begge sprækker' },
+  { id: 'stille', titel: 'Top møder dal: stille', tekst: 'En halv bølge længere til den ene sprække' },
+];
 
 // Ringen i turens trin 4 tæller prikkerne inden for ±RING_HALV af det mørke sted (hele bagvæggens højde)
 export const RING_HALV = 0.08;
@@ -200,7 +220,7 @@ export const talTekst = (n) => Math.round(n).toLocaleString('da-DK');
 // 'måler' (måleren er tændt).
 export const PANEL = {
   kugler: { titel: 'Kugler', tekst: 'Hver kugle flyver lige gennem én af sprækkerne. Den sætter et mærke på bagvæggen lige bag sprækken.' },
-  boelger: { titel: 'Bølger i vand', tekst: 'Bølgerne breder sig ud fra begge sprækker og mødes bag væggen. Hvor en bølgetop møder en bølgedal, bliver vandet stille. Det hedder interferens.' },
+  boelger: { titel: 'Bølger i vand', tekst: 'Bølgerne breder sig som ringe fra begge sprækker og mødes bag væggen. Hvor top møder top, bliver bølgen høj, og hvor top møder dal, står vandet stille (de stiplede linjer). Det hedder interferens.' },
   elektroner: { titel: 'Elektroner', tekst: 'Hver elektron lander som én prik ét sted. Men mange prikker danner striber, som kun bølger kan lave.' },
   'elektroner-en': { titel: 'Én sprække åben', tekst: 'Med kun én vej er der ingen anden bølge at mødes med. De mørke striber er væk, og elektronerne lander i én bred bunke.' },
   'elektroner-måler': { titel: 'Måleren er tændt', tekst: 'Måleren finder altid en hel elektron ved én af sprækkerne. Men nu er de mørke striber væk.' },
@@ -234,6 +254,35 @@ export function panelNøgle({ slags, sprækker, måler, syn = 1 }) {
 
 // Navnet på det, der lander (tælleren og panelets tal)
 export const PRIKKER = { kugler: 'Kugler', elektroner: 'Elektroner', lys: 'Fotoner', molekyle: 'Molekyler', klump: 'Klumper', fodbold: 'Fodbolde' };
+const ENTAL = { kugler: 'kugle', elektroner: 'elektron', lys: 'foton', molekyle: 'molekyle', klump: 'klump', fodbold: 'fodbold' };
+
+// Skiltet øverst i midten af scenen (js/kvante/skilt.js, rettelse 1 efter prøven 28. november 2026): hvad der sendes nu,
+// en linje, når en sprække er lukket eller måleren tændt, hvor mange der er landet, og tallet i den gule ring (trin 4)
+const SKILT_TITEL = {
+  kugler: 'Kugler', boelger: 'Bølger i vand', elektroner: 'Elektroner, én ad gangen', lys: 'Lys, én foton ad gangen',
+  molekyle: 'Molekyler med 2.000 atomer', klump: 'Klumper med over 7.000 atomer', fodbold: 'Fodbolde',
+};
+export function skiltTekst({ slags, sprækker = 'begge', måler = false, bølgen = false }) {
+  const ekstra = [];
+  if (sprækker !== 'begge') ekstra.push(`Kun den ${sprækker} sprække er åben`);
+  if (måler && kvanteSlags(slags)) ekstra.push('Måleren er tændt');
+  else if (bølgen && kvanteSlags(slags)) ekstra.push('Bølgen er tegnet');
+  return { titel: SKILT_TITEL[slags] ?? '', ekstra: ekstra.join(' · ') };
+}
+// Bølge eller prik (rettelse 7 efter prøven 28. november 2026: "mere klar undervejs at nu ser vi elektronen som bølger og
+// hvornår vi ikke gør"): to mærker langs bænkens forkant, ét under vejen og ét under bagvæggen. ikon er 'bølge', 'prik' eller
+// 'kugle'. Elektronen tegnes ikke på vej, men delen siger, at den breder sig som en bølge (kernesætningen, fakta-faelder.md:
+// "Bølgen går gennem begge sprækker. Elektronen bliver altid fundet ét sted"). Med måler siges kun det målte.
+export function visning({ slags, måler = false, bølgen = false }) {
+  if (kugleSlags(slags)) return { vej: { ikon: 'kugle', tekst: 'På vejen: en kugle' }, bag: { ikon: 'prik', tekst: 'På bagvæggen: ét mærke' } };
+  if (slags === 'boelger') return { vej: { ikon: 'bølge', tekst: 'På vejen: bølger' }, bag: { ikon: 'bølge', tekst: 'Bagvæggen lyser, hvor bølgerne er høje' } };
+  const bag = { ikon: 'prik', tekst: 'På bagvæggen: én prik' };
+  if (måler) return { vej: { ikon: 'prik', tekst: 'Ved sprækkerne: fundet ét sted' }, bag };
+  return { vej: { ikon: 'bølge', tekst: bølgen ? 'På vejen: en bølge (tegnet)' : 'På vejen: en bølge (tegnes ikke)' }, bag };
+}
+
+export const tælTekst = (slags, n) => (PRIKKER[slags] ? { tal: talTekst(n), enhed: Math.round(n) === 1 ? ENTAL[slags] : PRIKKER[slags].toLowerCase() } : null);
+export const ringTekst = (nu, før = null) => ({ navn: 'I den gule ring:', tal: talTekst(nu), før: før == null ? '' : `(før: ${talTekst(før)})` });
 
 // Skyderen under "Afstand": fart for elektroner, farve for lys, bølgelængde for vandet. Kuglerne har ingen.
 export const SKYDER = {
