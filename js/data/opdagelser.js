@@ -51,7 +51,9 @@ export const BØGER = [
     // Oxford i 1670'erne, altså fra samme år
     stil: { papir: '#f1ebdc', papirMørk: '#dcd3bd', blæk: '#161513', ryg: '#23402f', rygKant: '#c9a24a', skrift: SKRIFT_1600 },
     tekster: () => import('./opdagelser/roemer.js'),
-    // Turen "Himlens ur" (forløb og scene) kommer i R2, som hos Tycho (T1 → T2)
+    // Turen (R2): forløbet i js/data/forloeb/roemer.js og tegningerne i js/bog/roemer.js (hentes, når bogen åbnes)
+    forløb: 'himlens-ur',
+    scene: () => import('../bog/roemer.js'),
   },
   { id: 'newton', navn: 'Isaac Newton', kort: 'Newton', år: 1687, ejefald: 'Isaac Newtons', om: 'tyngdeloven' },
   { id: 'oersted', navn: 'H.C. Ørsted', kort: 'Ørsted', år: 1820, ejefald: 'H.C. Ørsteds', om: 'strøm og magneter', spørgsmål: 'Hvorfor drejede kompasnålen?' },

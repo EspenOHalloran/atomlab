@@ -2,7 +2,7 @@
 // at delen åbner fra menuen og som første skærm uden fejl (test 3), hylden med Huygens og to grå rygge (et tryk stiller bogens spørgsmål),
 // forsiden og bladringen (knapper, piletaster, stryg og Esc), og at telefon og tablet på højkant ikke får noget, der
 // ligger uden for skærmen (test 8). H1 16. november 2026. H2 (fortællingen som forløb, test 4 og 5) samme dag. Einsteins
-// forside (E1, 21. november 2026) i test 1, 3 og 8. Rømers forside (R1, 27. november 2026) i test 1, 3 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
+// forside (E1, 21. november 2026) i test 1, 3 og 8. Rømers forside (R1, 27. november 2026) i test 1, 3 og 8. Rømers tur (R2, 28. november 2026) i test 4, 5 og 8. Einsteins ligning om tiden (E3, 22. november 2026) i test 1, 7 og 8.
 // Energien og tyngden (E4, samme dag) i test 1, 7 og 8. "Om Einstein" og links begge veje (E5, samme dag) i test 1, 6 og 7.
 import { chromium, ADRESSE, ARGS } from './hjaelp.mjs';
 import { BØGER, bogMed, byggede, påHylden as hyldensBøger, rygLinje, KOMMENDE_PÅ_HYLDEN } from '../js/data/opdagelser.js';
@@ -67,7 +67,7 @@ tjek('Tycho, Huygens, Rømer og Einstein er de byggede bøger, og delen står i 
   const fl = forløbMed(bogMed('huygens').forløb);
   const ord = (t) => (t ?? '').split(/\s+/).filter(Boolean).length;
   const fejlFl = [];
-  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 3) fejlFl.push('forløbet findes ikke i listen');
+  if (!fl || fl.del !== 'opdagelser' || forløbI('opdagelser').length !== 4) fejlFl.push('forløbet findes ikke i listen'); // Huygens, Tycho, Rømer (R2) og Einstein
   else {
     if (fl.trin.map((t) => t.id).join() !== 'linse,naetter,kanten,annulo') fejlFl.push('trinene');
     for (const t of fl.trin) {
@@ -330,6 +330,43 @@ tjek('skriften og licensen ligger i fonts/', existsSync(PROJEKT + 'fonts/atomlab
   tjek('Rømers bog: ryggen er flaskegrøn med guld, skriften er Fell, og Conings portræt står i KILDER.md og lav_portraet.py',
     r.stil.ryg === '#23402f' && r.stil.rygKant === '#c9a24a' && /AtomLab Fell/.test(r.stil.skrift) && r.titel === 'Himlens ur'
     && /`roemer\.webp`.*Coning/.test(læs('billeder/biblioteket/KILDER.md')) && /'roemer':/.test(læs('billeder/biblioteket/lav_portraet.py')));
+}
+// Rømers tur (R2, drejebogen afsnit 5, test 4): fire trin med kapitel og gæt i de tre sidste (det rigtige ikke samme sted),
+// højst to sætninger i hver Så og tre i hvert Spørg, ordet formørkelse i Ordbogen, kernesætning A, og ingen af fælderne
+// (16. november, "Rømer så"). Tallene: Lyset er ca. 36 minutter om vejen 14. august og 46 den 9. november (Horizons), Io
+// kommer ca. 10 minutter for sent i november og lidt for tidligt ved oppositionen, Jupiter kan ikke ses i januar, og Io går
+// ind i skyggen ca. én Jupiter-radius fra kanten
+{
+  const fl = forløbMed(bogMed('roemer').forløb);
+  const t = await bogMed('roemer').tekster();
+  // "ca." og "9." (datoen) er ikke slutningen på en sætning
+  const sætn = (x) => ((x ?? '').replace(/\b(ca|fx)\. /g, '').replace(/\d\. /g, '').match(/[.!?](\s|$)/g) ?? []).length;
+  const fejlR = [];
+  if (!fl || fl.del !== 'opdagelser' || fl.trin.map((x) => x.id).join() !== 'skyggen,sent,hvorfor,november') fejlR.push('trinene');
+  const rigtige = [];
+  for (const x of fl?.trin ?? []) {
+    if (!x.kapitel || !x.gør || !x.så || sætn(x.så) > 2 || sætn(x.spørg) > 3) fejlR.push(`${x.id}: teksterne`);
+    if (x.id !== 'skyggen') {
+      if (!(x.gæt?.valg.length === 3 && x.gæt.valg.every((v) => v.svar) && x.gæt.valg.filter((v) => v.svar === 'Rigtigt gættet!').length === 1)) fejlR.push(`${x.id}: gættet`);
+      else rigtige.push(x.gæt.valg.findIndex((v) => v.svar === 'Rigtigt gættet!'));
+    }
+    for (const o of x.ord ?? []) if (!ORDBOG.some((y) => y.id === o && y.kunI)) fejlR.push(`${x.id}: ordet ${o}`);
+  }
+  if (new Set(rigtige).size < 2) fejlR.push('det rigtige gæt står samme sted');
+  const alt = JSON.stringify(fl);
+  if (!/Lyset bruger altså tid/.test(fl?.kernesætning) || !/selv set Io/.test(fl?.kernesætning) || /16\. november/.test(alt) || /Rømer (så|kigger)/.test(alt)
+    || !fl.trin[0].ord.includes('formoerkelse') || !/42½ time/.test(fl.trin[0].så) || !/lidt over halv seks/i.test(fl.trin[3].så)) fejlR.push('kernesætningen eller fælderne');
+  if (t.OPSLAG.find((o) => o.id === 'fortaelling')?.slags !== 'scene' || t.FRI.kapitler.length !== 4 || !t.VEJE.veje.find((v) => v.igen) || !t.VEJE.veje.find((v) => v.primær)?.opslag) fejlR.push('opslaget');
+  const aug = t.lysMinutter(t.AUGUST), nov = t.lysMinutter(t.NOVEMBER), sent = t.forsinkelse(t.NOVEMBER);
+  if (Math.round(aug) !== 36 || Math.round(nov) !== 46 || Math.abs(sent - 10) > 0.4 || t.forsinkelse(t.OPPOSITION) >= 0 || !t.kanSes(t.NOVEMBER) || t.kanSes(236)
+    || t.datoTekst(t.NOVEMBER) !== '9. november 1676' || t.datoTekst(t.AUGUST) !== '14. august 1676' || t.datoTekst(t.OPPOSITION) !== '9. juli 1676'
+    || t.klokken(t.NOV_SET) !== '17.35.45' || t.NOV_SET - t.NOV_TABEL !== 10 || t.minutTekst(sent) !== '10 minutter') fejlR.push(`tallene ${aug} ${nov} ${sent}`);
+  const ind = t.skyggeKant(t.SKYGGE_VINKEL, true), før = t.ioSted(ind - 0.01, t.SKYGGE_VINKEL), efter = t.ioSted(ind + 0.01, t.SKYGGE_VINKEL);
+  if (!før.synlig || !efter.iSkygge || før.x < 1.5 || før.x > 2.5 || Math.abs(t.IO_OMLØB - 42.5) > 0.1) fejlR.push(`skyggen ${før.x}`);
+  const ord = ORDBOG.find((y) => y.id === 'formoerkelse');
+  if (!ord || ord.kunI !== '.fl-tekst' || ord.tekst.length > 260 || !ord.former.includes('formørkelse')) fejlR.push('Ordbogen');
+  tjek('Rømers tur: fire trin (Io i skyggen, for tidligt og for sent, hvorfor, 9. november) med korte tekster, kernesætning A og ordet formørkelse, og Horizons giver 36 og 46 minutter og 10 minutter for sent',
+    !fejlR.length, fejlR.join('; '));
 }
 // ---------- I browseren ----------
 const b = await chromium.launch({ args: ARGS });
@@ -649,6 +686,99 @@ const påHylden = () => window.atomlabTest?.opdagelser && !document.getElementBy
   await ctx.close();
 }
 
+// Rømers tur (R2, test 5): starter efter "Begynd" med "Paris, 1676: Himlens ur". Io glider af sig selv ind i skyggen,
+// juli giver et vink om november, og november giver 10 minutter for sent. Lysglimtet i august og november giver 36 og 46
+// minutter. Uret den 9. november starter først efter gættet, et tryk før Io siger "Ikke endnu", og Io kommer 17.35.45.
+// "Det så du" har kun de veje, der er bygget, og laboratoriet har fire kapitler med "For sent" som standard
+{
+  const { page, ctx } = await nySide({ viewport: { width: 1280, height: 800 } }, '&forloebstart#opdagelser');
+  const O = (f, a) => page.evaluate(f, a);
+  const T = () => O(() => atomlabTest.opdagelser.scene().tilstand());
+  const fase = (f) => vent(page, (f) => atomlabTest.opdagelser.forløb.fase() === f, f, 15000);
+  const linje = () => O(() => ({ vink: document.querySelector('.forløb-linje .fl-vink')?.textContent ?? '', så: document.querySelector('.forløb-linje .fl-så')?.textContent ?? '', svar: document.querySelector('.forløb-linje .fl-svar')?.textContent ?? '', fase: atomlabTest.opdagelser.forløb.fase() }));
+  await vent(page, påHylden, null, 15000);
+  await O(() => atomlabTest.opdagelser.åbn('roemer'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  const begynd = await O(() => !!document.querySelector('#opdBog .bog-begynd'));
+  await page.click('#opdBog .bog-begynd');
+  const startet = await vent(page, () => atomlabTest.opdagelser.forløb.kører() === 'himlens-ur' && atomlabTest.opdagelser.scene()?.tilstand().trin === 'skyggen');
+  const kapitel = await O(() => document.querySelector('#opdBog .bog-kapitel')?.textContent);
+  // Trin 1: Io er synlig først og glider af sig selv ind i skyggen
+  const før1 = await T();
+  const trin1 = (await fase('så')) && (await T()).formørket && !(await T()).io.synlig && /formørkelse/.test((await linje()).så);
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 2: juli giver et vink, november giver Så
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'sent');
+  const gæt2 = await O(() => [...document.querySelectorAll('.forløb-linje .fl-gæt')].map((b) => b.textContent));
+  await page.click('.forløb-linje .fl-gæt >> nth=1');
+  await O(() => atomlabTest.opdagelser.scene().dag(40));
+  await page.waitForTimeout(300);
+  const juli = { ...(await T()), ...(await linje()) };
+  await O(() => atomlabTest.opdagelser.scene().dag(161));
+  const trin2 = await fase('så');
+  const nov = { ...(await T()), ...(await linje()) };
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 3: august, så november
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'hvorfor');
+  await page.click('.forløb-linje .fl-gæt >> nth=2');
+  const knapper3 = await O(() => [...document.querySelectorAll('.forløb-linje .fl-handling')].map((b) => b.textContent));
+  await page.click('.forløb-linje .fl-handling >> text=Io kommer ud');
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().målt.aug, null, 10000);
+  await page.waitForTimeout(200);
+  const aug = { ...(await T()), ...(await linje()) };
+  await page.click('.forløb-linje .fl-handling >> text=November');
+  await page.click('.forløb-linje .fl-handling >> text=Io kommer ud');
+  const trin3 = await fase('så');
+  const lys = { ...(await T()), ...(await linje()), mærker: await O(() => [...document.querySelectorAll('#opdBog .rs-mærker .ja')].map((m) => m.textContent)) };
+  await page.click('.forløb-linje .fl-næste');
+  // Trin 4: uret venter på gættet, tabellens tid giver "Nu skulle den komme", et tryk for tidligt giver "Ikke endnu"
+  await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'november');
+  await page.waitForTimeout(900);
+  const venter = await T();
+  await page.click('.forløb-linje .fl-gæt >> nth=0');
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().kører, null, 4000);
+  await O(() => atomlabTest.opdagelser.scene().spol('tabel'));
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().nuVist, null, 4000);
+  const nu = await linje();
+  await O(() => atomlabTest.opdagelser.scene().tryk());
+  const forTidligt = { ...(await T()), ...(await linje()) };
+  await O(() => atomlabTest.opdagelser.scene().spol('io'));
+  await vent(page, () => atomlabTest.opdagelser.scene().tilstand().ioLys > 0.3, null, 6000);
+  await page.click('.forløb-linje .fl-handling >> text=Der er Io!');
+  const trin4 = await fase('så');
+  const io = { ...(await T()), ...(await linje()) };
+  await page.click('.forløb-linje .fl-næste');
+  await fase('slut');
+  const slut = await O(() => ({ tekst: document.querySelector('.forløb-linje .fl-så')?.textContent, lille: document.querySelector('.forløb-linje .fl-lille')?.textContent, veje: [...document.querySelectorAll('.forløb-linje .fl-vej')].map((v) => v.textContent) }));
+  tjek('Rømers tur starter efter "Begynd" med "Paris, 1676: Himlens ur", og Io glider af sig selv ind i Jupiters skygge (formørkelse)',
+    begynd && startet && kapitel === 'Paris, 1676: Himlens ur' && før1.io.synlig && trin1, JSON.stringify({ kapitel, før1 }));
+  tjek('Rømers tur: juli giver Io lidt før tabellen og et vink om november, og november giver 10 minutter for sent',
+    trin2 && gæt2.length === 3 && juli.forsinkelse < 0 && juli.fase !== 'så' && /november/.test(juli.vink) && nov.dato === '9. november 1676' && nov.linje === 'Io kommer 10 minutter for sent.' && nov.svar === 'Rigtigt gættet!',
+    JSON.stringify({ gæt2, juli, nov }));
+  tjek('Rømers tur: lysglimtet er ca. 36 minutter om vejen i august (vink om november) og 46 i november, og begge mærker får ✓',
+    trin3 && knapper3.join('|') === 'Io kommer ud|August|November' && aug.målt.aug && !aug.målt.nov && aug.fase !== 'så' && /november/.test(aug.vink)
+    && Math.round(lys.stopur) === 46 && lys.mærker.length === 2 && /36/.test(lys.mærker[0]) && lys.svar === 'Rigtigt gættet!', JSON.stringify({ knapper3, aug, lys }));
+  tjek('Rømers tur: uret den 9. november venter på gættet, står stille ved tabellens tid ("Nu skulle den komme"), et tryk før Io siger "Ikke endnu", og Io kommer 17.35.45',
+    trin4 && !venter.kører && venter.ur === '17.20.00' && /Nu skulle den komme/.test(nu.vink) && forTidligt.forTidligt === 1 && !forTidligt.set && /Ikke endnu/.test(forTidligt.vink)
+    && io.set && io.ur === '17.35.45' && io.svar === 'Rigtigt gættet!' && /halv seks/.test(io.så), JSON.stringify({ venter, nu, forTidligt, io }));
+  tjek('Rømers tur: "Det så du" har kernesætningen, linjen om Rømers tegning og kun de veje, der er bygget',
+    /Lyset bruger altså tid/.test(slut.tekst) && /Rømer tegnede det/.test(slut.lille) && slut.veje.join('|') === 'Tag turen igen ›', JSON.stringify(slut));
+  // "Tag turen igen" starter forfra, og "Udforsk selv" giver laboratoriet med de fire kapitler
+  await page.click('.forløb-linje .fl-vej >> text=Tag turen igen');
+  const igen = await vent(page, () => atomlabTest.opdagelser.forløb.trin() === 'skyggen');
+  await page.click('.forløb-linje .fl-spring');
+  await vent(page, () => !atomlabTest.opdagelser.forløb.kører());
+  const lab = await O(() => ({ kapitler: [...document.querySelectorAll('#opdBog .hs-kapitler .hs-kapitel')].map((k) => k.textContent), t: atomlabTest.opdagelser.scene().tilstand(), låst: atomlabTest.opdagelser.låst() }));
+  await page.click('#opdBog .hs-kapitler .hs-kapitel >> text=Lysglimtet');
+  const labLys = await O(() => ({ t: atomlabTest.opdagelser.scene().tilstand(), knapper: [...document.querySelectorAll('#opdBog .ts-knapper .hs-kapitel')].map((k) => k.textContent) }));
+  await page.click('#opdBog .hs-kapitler .hs-kapitel >> text=9. november');
+  const labUr = await vent(page, () => atomlabTest.opdagelser.scene().tilstand().kører, null, 4000);
+  tjek('Rømers tur: "Tag turen igen" starter forfra, og laboratoriet har fire kapitler med "For sent" som standard, "Lysglimtet" med knapperne og "9. november", hvor uret starter af sig selv',
+    igen && lab.kapitler.join('|') === 'Io i skyggen|For sent|Lysglimtet|9. november' && lab.t.lab === 'sent' && !lab.låst
+    && labLys.t.lab === 'hvorfor' && labLys.knapper.join('|') === 'Io kommer ud|August|November' && labUr, JSON.stringify({ lab, labLys }));
+  await ctx.close();
+}
+
 // Einsteins tur (E2, test 5): starter efter "Begynd" med "Bern, 1905". Lygterne tænder, når de står ud for hinanden, og
 // glimtene når målet samtidig. Fartknapperne kommer først bagefter. Rundturen ved 87 % giver 9,9 af 20 sekunder, timen
 // giver 0,000 000 004 g, og GPS-uret er bagud ved rumstationen og 38 foran ved GPS-højden. "Det så du" har kun de veje, der
@@ -782,6 +912,33 @@ for (const [navn, opsætning] of [
   }
   tjek(`${navn}: i Tychos tur har lærredet plads (mindst 140 px) i alle fem trin, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel`,
     målT.length === 5 && målT.every((m) => m.lærred >= 140 && m.inde && !m.bred && !m.dækker), JSON.stringify(målT));
+  // Rømers tur (R2): i alle fire trin har lærredet plads, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel
+  await O(() => atomlabTest.opdagelser.hylden());
+  await O(() => atomlabTest.opdagelser.åbn('roemer'));
+  await vent(page, () => atomlabTest.opdagelser.vist()?.opslag === 'forside');
+  await page.click('#opdBog .bog-begynd');
+  const målR = [];
+  for (const trin of ['skyggen', 'sent', 'hvorfor', 'november']) {
+    await vent(page, (t) => atomlabTest.opdagelser.forløb.trin() === t, trin);
+    if (trin !== 'skyggen') await page.click('.forløb-linje .fl-gæt >> nth=0');
+    await O(() => atomlabTest.opdagelser.forløb.visMigNu());
+    await vent(page, () => atomlabTest.opdagelser.forløb.fase() === 'så', null, 20000);
+    await page.waitForTimeout(250);
+    målR.push(await O(() => {
+      const inde = (x) => x.left >= -0.5 && x.right <= innerWidth + 0.5 && x.top >= -0.5 && x.bottom <= innerHeight + 0.5;
+      const c = document.querySelector('#opdBog canvas').getBoundingClientRect();
+      const ting = [...document.querySelectorAll('#opdBog .hs-under input, #opdBog .hs-under .ts-maal, .forløb-linje button')].filter((e) => e.offsetWidth).map((e) => e.getBoundingClientRect());
+      const kap = document.querySelector('#opdBog .bog-kapitel'), hylde = document.getElementById('opdTilHylden').getBoundingClientRect();
+      const r = document.createRange();
+      r.selectNodeContents(kap);
+      const tk = r.getBoundingClientRect();
+      const dækker = tk.left < hylde.right && tk.right > hylde.left && tk.top < hylde.bottom && tk.bottom > hylde.top;
+      return { trin: atomlabTest.opdagelser.forløb.trin(), lærred: Math.round(Math.min(c.width, c.height)), inde: inde(c) && ting.every(inde), bred: document.documentElement.scrollWidth > innerWidth + 1, dækker };
+    }));
+    if (trin !== 'november') await page.click('.forløb-linje .fl-næste');
+  }
+  tjek(`${navn}: i Rømers tur har lærredet plads (mindst 140 px) i alle fire trin, alt er inden for skærmen, og "‹ Hylden" dækker ikke kapitlets titel`,
+    målR.length === 4 && målR.every((m) => m.lærred >= 140 && m.inde && !m.bred && !m.dækker), JSON.stringify(målR));
   // Einsteins tur (E2): i alle fire trin har lærredet plads, og knapperne, skyderen og tallene er inden for skærmen
   await O(() => atomlabTest.opdagelser.hylden());
   await O(() => atomlabTest.opdagelser.åbn('einstein'));
