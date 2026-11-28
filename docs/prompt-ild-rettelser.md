@@ -1,6 +1,6 @@
 # Prompt: Ild 1, rettelser efter prøven (28. november 2026)
 
-*Ny session, spor Molekyler, Opus, høj effort. Kopiér teksten under.*
+*Ny session, spor Molekyler, Opus, høj effort. Kopiér teksten under.* **Lavet 28. november 2026** (se [lige-nu/molekyler.md](lige-nu/molekyler.md)).
 
 > Spor: Molekyler. Navngiv chatten "Molekyler · Ild 1: rettelser efter prøven". Tjek først i origin/main (`git fetch origin`, `git log origin/main --oneline -30`, `git grep` på emnet), at det ikke er lavet. Læs `docs/lige-nu/molekyler.md`, `docs/proeven-svar-2026-11.md` (afsnit 2, med jeres svar ordret), `docs/drejebog-ild.md` (afsnit 9) og `docs/kode/` for Ild (`js/ild.js`, `js/ild/bord.js`, `js/ild/atomer.js`, `js/data/ild.js`). Byg fire rettelser i turen "Hvad brænder egentlig?", ét ad gangen, og vis mig hver, før næste:
 > 1. **Duggen på skeen** (trin 2) kunne ikke ses, og skaftet reflekterede for meget lys. Gør duggen tydeligere (lysere belægning og dråber, en tydelig tilvækst over få sekunder) og skaftet mat.

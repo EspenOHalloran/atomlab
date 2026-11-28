@@ -42,7 +42,7 @@ export const ILD_1 = {
     {
       id: 'atomer',
       spørg: 'Stearin er mest lange kæder af kulstof og hydrogen. Hvordan bliver de til vand og CO₂?',
-      gør: 'Træk oxygen fra luften hen til stykket af stearinen, ét ad gangen.',
+      gør: 'Træk oxygen (ilt) fra luften hen til stykket af stearinen, ét ad gangen.',
       så: 'Atomerne bytter partnere og bliver til CO₂ og vand. Det er en kemisk reaktion, og den hedder forbrænding.',
       ord: ['kemisk-reaktion', 'forbraending'],
     },
@@ -51,12 +51,14 @@ export const ILD_1 = {
       spørg: 'Hver gang atomerne bytter partnere, kommer der varme. Hvad bruger flammen den til?',
       gæt: {
         valg: [
-          { tekst: 'Ingenting, den forsvinder bare', efter: 'Prøv det: Pust til flammen.', svar: 'Den bliver brugt: Uden flammens varme kom der ingen ny damp.' },
-          { tekst: 'Til at lave ny damp af stearinen', efter: 'Prøv det: Pust til flammen.', svar: 'Ja. Varmen smelter og fordamper ny stearin.' },
+          { tekst: 'Ingenting, den forsvinder bare', efter: 'Prøv det: Pust til flammen.', svar: 'Nej, den bliver brugt. Varmen smelter og fordamper ny stearin, og dampen brænder og giver ny varme. Sådan holder flammen sig selv i gang.' },
+          { tekst: 'Til at lave ny damp af stearinen', efter: 'Prøv det: Pust til flammen.', svar: 'Ja. Varmen smelter og fordamper ny stearin, og dampen brænder og giver ny varme. Sådan holder flammen sig selv i gang.' },
         ],
       },
       gør: 'Pust til flammen.',
-      så: 'Du pustede flammen væk fra vægen. Uden dens varme kom der ingen ny damp. Flammen holder sig selv i gang.',
+      // Prøven 28. november 2026: lettere at forstå. Så siger, hvad pustet gjorde, og svaret på gættet siger ringen
+      // (varme → ny damp → varme). Faktatjek: docs/fakta-ild/faktatjek-forloeb1.md, "Rettelser efter prøven".
+      så: 'Pustet skubbede flammen væk fra vægen. Så kunne varmen ikke lave ny damp, og uden damp er der intet at brænde.',
       ord: [],
     },
   ],
