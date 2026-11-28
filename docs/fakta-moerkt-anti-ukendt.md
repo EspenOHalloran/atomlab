@@ -183,7 +183,7 @@ Mørketid står ikke i tabellen, fordi den ikke er noget i rummet (afsnit 2.7).
 3. **Tallene i 3D:** **A (mit råd):** "ca. 5, 27 og 68 %" som 100 klodser (NASA's runde tal), og Planck 2018 (4,9, 26,4 og 68,5 %) i "For nørder". B: Planck 2018 rundet (5, 26 og 69). C: I dele i stedet for procent: "1 del almindeligt stof, 5 dele mørkt stof og 14 dele mørk energi".
 4. **"Ved vi, at det findes?" i tre trin** (Fundet / Virkningen er målt / Kun en idé) på kortet og i 3D? **A (mit råd):** Ja, som et lille mærke ved hvert begreb. B: Nej, kun i teksten.
 
-**Jeres svar:** (venter)
+**Jeres svar (28. november 2026, til orkestratoren):** "dine anbefalinger", altså A til alle fire: (1) antistof, mørkt stof og mørk energi står fremme, sort hul, neutrino og negativ masse i en lukket foldeboks "Forveksles ofte med", mørketid kun i Ordbogen; (2) Mørkt stof-fænomenet genbruger gådens galakse og lysbøjning og får "Hvad er universet lavet af?" (100 klodser) som det nye; (3) "ca. 5, 27 og 68 %" som 100 klodser og Planck 2018 i "For nørder"; (4) et lille mærke "Fundet / Virkningen er målt / Kun en idé" ved hvert begreb.
 
 ## Tjek igen, før teksterne skrives
 - LZ: har den eller XENONnT set mere end den ene hændelse? DESI: kom resultaterne fra alle fem år (ventet 2027)? Euclid DR1 (midt i 2027).

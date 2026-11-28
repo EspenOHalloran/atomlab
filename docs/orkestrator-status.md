@@ -5,16 +5,12 @@
 ## 27. november (jeres go: "start en orkestrator der starter sessioner i din anbefalede rækkefølge og modelvalg og effort")
 Højst to tunge sessioner ad gangen. Intet, der venter på prøven med sønnen, er startet.
 - **Plads B, lavet og merget:** B1 BepiColombo ved Merkur (#451: i bane 21. november kl. 18.24 UTC, en brænding stoppede for tidligt, så omløbet er 75 timer i stedet for 58, sonden er i sikkerhed; **tjek adskillelsen efter 10. december**). B2 faktagrundlaget i [fakta-moerkt-anti-ukendt.md](fakta-moerkt-anti-ukendt.md) (#452). B3 testen `mars` var allerede delt i tre 16. november, kun forældede linjer rettet (#453). B4 resten af faktatjekket fra E13 (#454: fakta-grundstofkort, fakta-molekyler og fakta-solsystemet; intet forkert i programmet, Voyager nr. 2, 4 og 7 bekræftet, nr. 5 Sagans sidetal ikke fundet).
-- **Plads A, kører:** R1 Rømers forside (session_01YQoBWJ2CiF9cqinViMTSpF). **Venter på jer:** Den beder om at åbne domænet `thumb.wikimedia.org` (Commons lægger nu sine små billeder dér) for at hente Rømers portræt. Godkend anmodningen i den session. Derefter R2 og R3 (prompterne skrives under "Næste" i [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md)), og når R3 er bygget, linket fra Einsteins "1905: Tiden".
-- **Skemaet hver time blev afvist** af tilladelsessystemet (også slukningen af det gamle skema trig_01766rPmgKRNvnChNBnoTfxD, "skift 9", der stadig fyrer ved :45 ind i en arkiveret orkestrator). Orkestratoren vækkes kun af beskeder fra sessionerne. Sig "opret skemaet" og "sluk det gamle skema", eller gør det selv.
+- **Plads A, kører:** R1 Rømers forside (session_01YQoBWJ2CiF9cqinViMTSpF). Domænet `thumb.wikimedia.org` er godkendt 28. november. Derefter R2 og R3 (prompterne skrives under "Næste" i [lige-nu/videnskabsfolkene.md](lige-nu/videnskabsfolkene.md)), og når R3 er bygget, linket fra Einsteins "1905: Tiden".
 
-## Venter på jer (27. november)
-- **Fire retningsvalg fra B2** (står også i fakta-moerkt-anti-ukendt.md, anbefalingen først):
-  1. Hvad står fremme på kortet "Mørkt, anti og ukendt"? **A:** antistof, mørkt stof og mørk energi fremme, sort hul, neutrino og negativ masse i en lukket foldeboks "Forveksles ofte med", mørketid kun i Ordbogen. B: som A, men mørketid også i foldeboksen. C: kun de tre, ingen foldeboks. D: alle syv i en tabel.
-  2. Mørkt stof i Kosmos? **A:** genbrug gådens galakse og lysbøjning, og det nye er "Hvad er universet lavet af?" (100 klodser). B: et helt nyt fænomen. C: intet nyt fænomen, et trin i Big Bang.
-  3. Tallene i 3D? **A:** "ca. 5, 27 og 68 %" som 100 klodser, Planck 2018 (4,9/26,4/68,5) i "For nørder". B: 5/26/69. C: 1, 5 og 14 dele.
-  4. Et mærke "Fundet / Virkningen er målt / Kun en idé" ved hvert begreb? **A:** ja. B: kun i teksten.
-- Domænet `thumb.wikimedia.org` til R1 (se ovenfor).
+## Jeres svar 28. november
+- Domænet `thumb.wikimedia.org` er godkendt, og R1 kører videre.
+- De fire valg om Mørkt, anti og ukendt: **A til alle fire** (står i fakta-moerkt-anti-ukendt.md og koereplan.md nr. 8). Næste: en plan, så et go.
+- Skemaet er oprettet (trig_01WccMrAVnzwHsSyYkKuk1T3, hver time ved :54). Det gamle skema "skift 9" er slukket.
 
 ## Jeres beslutninger (gælder stadig)
 - Højst **to tunge sessioner** (Opus) ad gangen. Skift orkestrator ved ca. 250.000 tokens (`get_session` uden id, `context_usage`).
