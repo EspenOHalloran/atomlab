@@ -260,7 +260,7 @@ const ENTAL = { kugler: 'kugle', elektroner: 'elektron', lys: 'foton', molekyle:
 // en linje, når en sprække er lukket eller måleren tændt, hvor mange der er landet, og tallet i den gule ring (trin 4)
 const SKILT_TITEL = {
   kugler: 'Kugler', boelger: 'Bølger i vand', elektroner: 'Elektroner, én ad gangen', lys: 'Lys, én foton ad gangen',
-  molekyle: 'Molekyler, ét ad gangen', klump: 'Klumper, én ad gangen', fodbold: 'Fodbolde',
+  molekyle: 'Molekyler med 2.000 atomer', klump: 'Klumper med over 7.000 atomer', fodbold: 'Fodbolde',
 };
 export function skiltTekst({ slags, sprækker = 'begge', måler = false, bølgen = false }) {
   const ekstra = [];
