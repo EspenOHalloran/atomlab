@@ -36,7 +36,9 @@ export const SPRÆKKER = ['begge', 'venstre', 'højre']; // venstre er z < 0, h�
 // Spillets bølgelængde. Elektroner: hurtigere giver kortere bølge (λ = h/(m·v)). Lys: blåt (450 nm) til rødt (680 nm),
 // skaleret, så grønt (530 nm) giver de samme striber som elektronerne med standardfarten.
 const λ_ELEKTRON = [0.27, 0.11]; // fra langsom (0) til hurtig (1)
-const λ_VAND = [0.3, 0.15];
+// Vandet: lange bølger (rettelse 3 efter prøven 28. november 2026), så de stille linjer ligger langt nok fra hinanden til at
+// kunne ses og forklares (med standardfarten 0,29: tre lyse og fire mørke striber på bagvæggen)
+const λ_VAND = [0.42, 0.2];
 // Molekylet og klumpen er tungere, så bølgen er kortere og striberne tættere. I virkeligheden er forskellen langt større:
 // klumpernes bølge er ca. 10-22 fm (arXiv:2507.21211), elektronernes i bænkens rigtige forsøg ca. 50 pm.
 const λ_STØRRE = { molekyle: 0.12, klump: 0.085 }; // vandets bølger: fra lange (0) til korte (1), ikke kortere, så de kan ses på en telefon
@@ -101,6 +103,24 @@ export function mørktSted({ d = STANDARD.d, λ = bølgelængde('elektroner') } 
   const s = λ / (2 * d);
   return (L * s) / Math.sqrt(1 - s * s);
 }
+
+// Bølger i vand: et sted på den første stille linje (vejen fra den venstre sprække er en halv bølge længere end fra den
+// højre) i afstanden x bag væggen, z > 0. Til skiltet "Top møder dal" på vandet (rettelse 3 efter prøven).
+export function stilleSted(x, { d = STANDARD.d, λ = bølgelængde('boelger') } = {}) {
+  const f = (z) => Math.hypot(x, z + d / 2) - Math.hypot(x, z - d / 2) - λ / 2;
+  let lo = 0, hi = BAG_HALV;
+  for (let i = 0; i < 40; i++) {
+    const m = (lo + hi) / 2;
+    if (f(m) < 0) lo = m; else hi = m;
+  }
+  return (lo + hi) / 2;
+}
+
+// De to skilte på vandet, når bølgerne er nået bagvæggen (rettelse 3 efter prøven 28. november 2026)
+export const FORKLAR = [
+  { id: 'høj', titel: 'Top møder top: høj bølge', tekst: 'Lige langt til begge sprækker' },
+  { id: 'stille', titel: 'Top møder dal: stille', tekst: 'En halv bølge længere til den ene sprække' },
+];
 
 // Ringen i turens trin 4 tæller prikkerne inden for ±RING_HALV af det mørke sted (hele bagvæggens højde)
 export const RING_HALV = 0.08;
@@ -200,7 +220,7 @@ export const talTekst = (n) => Math.round(n).toLocaleString('da-DK');
 // 'måler' (måleren er tændt).
 export const PANEL = {
   kugler: { titel: 'Kugler', tekst: 'Hver kugle flyver lige gennem én af sprækkerne. Den sætter et mærke på bagvæggen lige bag sprækken.' },
-  boelger: { titel: 'Bølger i vand', tekst: 'Bølgerne breder sig ud fra begge sprækker og mødes bag væggen. Hvor en bølgetop møder en bølgedal, bliver vandet stille. Det hedder interferens.' },
+  boelger: { titel: 'Bølger i vand', tekst: 'Bølgerne breder sig som ringe fra begge sprækker og mødes bag væggen. Hvor top møder top, bliver bølgen høj, og hvor top møder dal, står vandet stille (de stiplede linjer). Det hedder interferens.' },
   elektroner: { titel: 'Elektroner', tekst: 'Hver elektron lander som én prik ét sted. Men mange prikker danner striber, som kun bølger kan lave.' },
   'elektroner-en': { titel: 'Én sprække åben', tekst: 'Med kun én vej er der ingen anden bølge at mødes med. De mørke striber er væk, og elektronerne lander i én bred bunke.' },
   'elektroner-måler': { titel: 'Måleren er tændt', tekst: 'Måleren finder altid en hel elektron ved én af sprækkerne. Men nu er de mørke striber væk.' },

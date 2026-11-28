@@ -15,7 +15,8 @@ const SPRÆKKE_BUND = 0.2;
 const VÆG_TYK = 0.12;
 const KUGLER_HØJST = 60;
 const KUGLE_FART = 6; // enheder pr. sekund
-const BØLGE_FART = 1.3; // vandets bølger, enheder pr. sekund
+const BØLGE_FART = 1.3; // vandets front, enheder pr. sekund
+const FASE_FART = 0.8; // vandets bølgetoppe, enheder pr. sekund (langsommere end fronten, så man kan følge dem)
 const TYNGDE = 9;
 const VAND_LYS = new THREE.Color(0.45, 0.85, 1); // lyset på bagvæggen fra vandets bølger
 
@@ -41,6 +42,8 @@ uniform vec3 uFarve;
 uniform float uBredde;
 uniform float uStille;
 uniform float uKar;
+uniform float uFarver;
+uniform float uForklar;
 varying vec2 vP;
 float hylster(float r) {
   float t = 1.0 - smoothstep(uFront - 0.25, uFront, r);
@@ -50,43 +53,84 @@ float hylster(float r) {
 float bolge(float r) {
   return hylster(r) * cos(uK * r - uOmega * uTid);
 }
+// Vandets farve ud fra højden hn (-1 dal, 0 stille, 1 top). Kun hvor top møder top (hn nær 1), er vandet så lyst, at det
+// gløder. En top fra én sprække alene (hn ca. 0,5) er svagere, og hvor top møder dal (hn ca. 0), står vandet stille.
+vec3 vandFarve(float hn) {
+  vec3 stille = uFarve * 0.36;
+  return hn > 0.0 ? mix(stille, vec3(0.55, 0.78, 0.97), hn * hn) : mix(stille, uFarve * 0.06, hn * hn);
+}
 void main() {
   float x = vP.x;
   float z = -vP.y;
-  float h = 0.0;
-  float synlig = 0.0;
-  if (x < 0.0) {
-    float r = x - uKilde;
-    h = bolge(r) * (uBredde > 0.0 ? 0.75 : 1.0);
-    synlig = hylster(r);
-  } else {
-    float n = 0.0;
-    for (int i = 0; i < 2; i++) {
-      float aaben = i == 0 ? uAaben.x : uAaben.y;
-      if (aaben < 0.5) continue;
-      float zs = i == 0 ? uSpalte.x : uSpalte.y;
-      float r = length(vec2(x, z - zs));
-      // Vejen fra kilden: frem til væggen (-uKilde) og r fra sprækken
-      h += bolge(r - uKilde) / sqrt(1.0 + 1.6 * r);
-      synlig = max(synlig, hylster(r - uKilde));
-      n += 1.0;
+  vec3 c = vec3(0.0);
+  float alfa = 0.0;
+  if (uBredde > 0.0) {
+    // Bølgepakken ("Vis bølgen" for elektroner og lys): kun et bånd med længden uBredde bag fronten
+    float h = 0.0;
+    float synlig = 0.0;
+    if (x < 0.0) {
+      float r = x - uKilde;
+      h = bolge(r) * 0.75;
+      synlig = hylster(r);
+    } else {
+      for (int i = 0; i < 2; i++) {
+        float aaben = i == 0 ? uAaben.x : uAaben.y;
+        if (aaben < 0.5) continue;
+        float zs = i == 0 ? uSpalte.x : uSpalte.y;
+        float r = length(vec2(x, z - zs));
+        // Vejen fra kilden: frem til væggen (-uKilde) og r fra sprækken
+        h += bolge(r - uKilde) / sqrt(1.0 + 1.6 * r);
+        synlig = max(synlig, hylster(r - uKilde));
+      }
+      h *= 1.9 * (uAaben.x + uAaben.y > 1.5 ? 0.75 : 1.0); // ringene bag sprækkerne ses lige så tydeligt som bølgen foran
     }
-    h *= n > 1.5 ? 0.75 : 1.0;
-    if (uBredde > 0.0) h *= 1.9; // bølgepakken: ringene bag sprækkerne skal ses lige så tydeligt som bølgen foran
+    float top = smoothstep(0.15, 0.95, h);
+    float dal = 1.0 - smoothstep(-0.95, -0.15, h);
+    c = uFarve * (0.35 + 0.9 * top) + vec3(0.6, 0.85, 1.0) * top * top * 0.6;
+    alfa = uStyrke * (0.28 + 0.55 * top + 0.12 * dal) * synlig;
+  } else {
+    // Bølger i vand (rettelse 3 efter prøven 28. november 2026: "se bølgerne fra begge sprækker mødes"): plane bølger før
+    // væggen og en ring af bølger fra hver åben sprække bagved. Vandets højde er summen af de to.
+    float e = 0.0;
+    float hn = 0.0;
+    if (x < 0.0) {
+      float r = x - uKilde;
+      e = hylster(r);
+      hn = 0.8 * e * cos(uK * r - uOmega * uTid);
+      c = vandFarve(hn);
+    } else {
+      float r1 = length(vec2(x, z - uSpalte.x));
+      float r2 = length(vec2(x, z - uSpalte.y));
+      float e1 = uAaben.x * hylster(r1 - uKilde);
+      float e2 = uAaben.y * hylster(r2 - uKilde);
+      float f1 = uK * (r1 - uKilde) - uOmega * uTid;
+      float f2 = uK * (r2 - uKilde) - uOmega * uTid;
+      float a1 = e1 / sqrt(1.0 + 1.6 * r1);
+      float a2 = e2 / sqrt(1.0 + 1.6 * r2);
+      float begge = uAaben.x * uAaben.y;
+      e = max(e1, e2);
+      hn = e * (a1 * cos(f1) + a2 * cos(f2)) / max((a1 + a2) * (begge > 0.5 ? 1.0 : 1.25), 0.0001);
+      c = vandFarve(hn);
+      // Bølgetoppene fra hver sprække i hver sin farve (grøn fra den venstre, pink fra den højre), så man ser de to ringe
+      float t1 = smoothstep(0.8, 0.97, cos(f1)) * e1;
+      float t2 = smoothstep(0.8, 0.97, cos(f2)) * e2;
+      c = mix(c, c * 0.55 + vec3(0.25, 0.95, 0.4), uFarver * begge * t1 * 0.7);
+      c = mix(c, c * 0.55 + vec3(1.0, 0.4, 0.78), uFarver * begge * t2 * 0.7);
+      // De stille linjer (stiplede): Her er vejen fra den ene sprække en halv (halvanden, …) bølge længere end fra den
+      // anden, så top møder dal. De ender ved de mørke striber på bagvæggen.
+      float s = 1.0 - smoothstep(0.0, 0.26, abs(cos(0.5 * uK * (r1 - r2))));
+      s *= step(0.35, fract((r1 + r2) * 1.25)) * e1 * e2 * begge;
+      c = mix(c, vec3(0.88, 0.93, 1.0), uForklar * s * 0.65);
+    }
+    alfa = uStyrke * 0.84 * e;
   }
-  float top = smoothstep(0.15, 0.95, h);
-  float dal = 1.0 - smoothstep(-0.95, -0.15, h);
-  vec3 farve = uFarve * (0.35 + 0.9 * top) + vec3(0.6, 0.85, 1.0) * top * top * 0.6;
-  // Bølgepakken er usynlig uden for sit bånd. Vandet har et svagt skær over det hele.
-  float flade = uBredde > 0.0 ? synlig : 0.25 + 0.75 * synlig;
-  float alfa = uStyrke * (0.28 + 0.55 * top + 0.12 * dal) * flade;
   // Det stille vand i karret (bølger i vand, før og mens bølgerne løber): blåt med en svag, langsom glans, så man kan se,
   // hvor vandet er (rettelse 2 efter prøven 28. november 2026: "tryk på vandet. hvilket vand?")
   float glans = 0.5 + 0.5 * sin(x * 2.3 + z * 1.1 + uTid * 0.35) * sin(z * 1.9 - x * 0.7 - uTid * 0.25);
   float aStille = uStille * (0.4 + 0.1 * glans);
   vec3 cStille = uFarve * (0.5 + 0.22 * glans);
   float a = alfa + aStille * (1.0 - alfa);
-  vec3 c = (farve * alfa + cStille * aStille * (1.0 - alfa)) / max(a, 0.0001);
+  c = (c * alfa + cStille * aStille * (1.0 - alfa)) / max(a, 0.0001);
   // Karret er lige så bredt som væggen med sprækkerne
   if (uKar > 0.5 && abs(z) > ${VÆG_HALV.toFixed(3)}) a = 0.0;
   gl_FragColor = vec4(c, a);
@@ -249,7 +293,7 @@ export function lavBænk() {
     uniforms: {
       uTid: { value: 0 }, uFront: { value: 0 }, uK: { value: 30 }, uOmega: { value: 30 }, uSpalte: { value: new THREE.Vector2(-0.5, 0.5) },
       uAaben: { value: new THREE.Vector2(1, 1) }, uKilde: { value: BØLGE_START }, uStyrke: { value: 0 }, uFarve: { value: new THREE.Color(0.25, 0.55, 0.95) },
-      uBredde: { value: 0 }, uStille: { value: 0 }, uKar: { value: 0 },
+      uBredde: { value: 0 }, uStille: { value: 0 }, uKar: { value: 0 }, uFarver: { value: 0 }, uForklar: { value: 0 },
     },
   });
   const vandBredde = L - (KILDE_X + 0.6);
@@ -298,7 +342,8 @@ export function lavBænk() {
   mærke.visible = false;
   gruppe.add(mærke);
   // bredde > 0: en bølgepakke ("Vis bølgen"), der slukker sig selv, når den er løbet forbi bagvæggen (PULS_SLUT)
-  const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95), bredde: 0, fart: BØLGE_FART, stille: 0 };
+  const vandT = { tændt: false, front: 0, styrke: 0, mål: 0, farve: new THREE.Color(0.25, 0.55, 0.95), bredde: 0, fart: BØLGE_FART, stille: 0, forklar: 0 };
+  const FORKLAR_FRONT = -BØLGE_START + L + 0.3; // fronten er nået bagvæggen midt for
   const PULS_FORBI = -BØLGE_START + L + PULS_BREDDE + 0.9; // lyset på midten af bagvæggen er tonet ud (så må en ny pakke starte)
   const PULS_SLUT = -BØLGE_START + Math.hypot(L, BAG_HALV + 1) + PULS_BREDDE + 1; // også lyset på kanten er tonet ud
 
@@ -480,7 +525,7 @@ export function lavBænk() {
     vandT.stille += ((kar.visible ? 1 : 0) - vandT.stille) * (1 - Math.exp(-dt * 6));
     vand.visible = vandT.styrke > 0.01 || vandT.stille > 0.01;
     // Bølgemaskinen vipper op og ned, mens bølgerne løber (i takt med bølgerne)
-    stang.position.y = 0.4 + (vandT.tændt && !vandT.bredde ? 0.035 * Math.sin(vandMat.uniforms.uK.value * vandT.fart * tid) : 0);
+    stang.position.y = 0.4 + (vandT.tændt && !vandT.bredde ? 0.035 * Math.sin(vandMat.uniforms.uK.value * FASE_FART * tid) : 0);
     for (const arm of stangArme) arm.position.y = stang.position.y + 0.22;
     if (mærke.visible) {
       const p = ROLIG ? 0.5 : 0.5 + 0.5 * Math.sin(tid * 4);
@@ -500,7 +545,13 @@ export function lavBænk() {
     u.uBredde.value = vandT.bredde;
     u.uStille.value = vandT.stille;
     u.uKar.value = kar.visible ? 1 : 0;
-    u.uOmega.value = u.uK.value * vandT.fart; // bølgetoppene følger fronten
+    u.uFarver.value = kar.visible ? 1 : 0;
+    // De stille linjer kommer frem, når bølgerne er nået bagvæggen (bølger i vand med begge sprækker åbne)
+    const forbi = kar.visible && vandT.tændt && vandT.front > FORKLAR_FRONT;
+    vandT.forklar += ((forbi ? 1 : 0) - vandT.forklar) * (1 - Math.exp(-dt * 2));
+    u.uForklar.value = vandT.forklar;
+    // Bølgepakken: toppene følger fronten. Vandet: toppene løber langsommere end fronten, så man kan følge dem med øjnene.
+    u.uOmega.value = u.uK.value * (vandT.bredde ? vandT.fart : FASE_FART);
     // Bagvæggen lyser, når bølgerne er nået derhen (bølgepakken: hvert sted for sig, i shaderen)
     const b = bagLys.uniforms;
     b.uFront.value = vandT.front;
@@ -591,6 +642,8 @@ export function lavBænk() {
     pulsOptaget: () => vandT.tændt && vandT.bredde > 0 && vandT.front < PULS_FORBI,
     pulsKører: () => vandT.tændt && vandT.bredde > 0,
     vandFront: () => vandT.front,
+    // De stille linjer er fremme (fra 0 til 1), når bølgerne i vandet er nået bagvæggen
+    forklaret: () => vandT.forklar,
     vandTændt: () => vandT.tændt,
     // Bølger i vand: karret med det stille vand og bølgemaskinen i stedet for kilden (true), eller kilden (false)
     kar(ja) {

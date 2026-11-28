@@ -28,7 +28,9 @@ export const STRIBER = {
       id: 'boelger',
       spørg: 'Nu sender vi bølger i vand mod de samme to sprækker.',
       gør: 'Tryk på det blå vand i karret (ved den gule ring), eller på Start bølgerne.',
-      så: 'Mange striber: Hvor en bølgetop møder en bølgedal, bliver vandet stille. Det hedder interferens.',
+      så: 'Ringene fra de to sprækker mødes. Hvor top møder top, bliver bølgen høj, og hvor top møder dal, slukker de hinanden: Det hedder interferens.',
+      // Hvorfor mønstret (rettelse 3 efter prøven 28. november 2026: "jeg er som voksen ikke sikker på at jeg selv kan forklare det")
+      mere: 'Det afhænger af vejen: Er der lige langt til begge sprækker, møder top top. Er vejen fra den ene sprække en halv bølge længere, møder top dal, og vandet står stille (de stiplede linjer). Sådan skifter det ud til siderne, og derfor får bagvæggen lyse og mørke striber.',
       ord: ['interferens'],
     },
     {

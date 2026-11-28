@@ -1157,6 +1157,18 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 .kv-peg { position: absolute; z-index: 1; margin: 0; transform: translate(-50%, calc(-100% - 6px)); padding: 3px 10px; border-radius: 9px; background: rgba(8, 12, 28, 0.78); color: #ffe2a0; font-size: 15px; font-weight: 700; white-space: nowrap; pointer-events: none; }
 .kv-peg::after { content: ''; position: absolute; left: 50%; top: 100%; width: 2px; height: 6px; margin-left: -1px; background: #ffd166; }
 .kv-peg[hidden] { display: none; }
+/* De to skilte på vandet (rettelse 3 efter prøven): en prik på vandet og teksten over den. De oplyser kun (ingen kant, A4). */
+.kv-forklar { position: absolute; z-index: 1; margin: 0; display: grid; justify-items: center; transform: translate(-50%, calc(-100% - 10px)); padding: 3px 9px 4px; border-radius: 9px; background: rgba(8, 12, 28, 0.8); color: #fff; text-align: center; line-height: 1.2; white-space: nowrap; pointer-events: none; animation: kv-ind 0.5s ease; }
+.kv-forklar b { font-size: 14px; }
+.kv-forklar small { font-size: 12px; color: #cfe3f7; }
+.kv-forklar::after { content: ''; position: absolute; left: 50%; top: calc(100% + 4px); width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px rgba(8, 12, 28, 0.8); }
+.kv-forklar.stille::after { background: #9fb6d6; }
+.kv-forklar.høj { transform: translate(-50%, 16px); } /* under sin prik, så de to skilte ikke dækker hinanden */
+.kv-forklar.høj::after { top: auto; bottom: calc(100% + 4px); }
+.kv-forklar[hidden] { display: none; }
+@keyframes kv-ind { from { opacity: 0; } }
+@media (max-width: 560px), (max-height: 500px) { .kv-forklar small { display: none; } .kv-forklar b { font-size: 12.5px; } }
+@media (prefers-reduced-motion: reduce) { .kv-forklar { animation: none; } }
 /* Skiltet øverst i midten af scenen (js/kvante/skilt.js, rettelse 1 efter prøven): hvad der sendes nu og tælleren. Det oplyser
    kun, så det har ingen kant (stilguiden A4). Skifter det, kommer det stort frem midt i scenen (.midt) og glider op. */
 .kv-skilt { position: absolute; z-index: 1; left: 50%; top: 10px; transform: translate(-50%, 0); display: grid; justify-items: center; gap: 1px; width: max-content; max-width: calc(100% - 24px); box-sizing: border-box; padding: 7px 18px 9px; border-radius: 14px; background: rgba(8, 12, 28, 0.74); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35); text-align: center; line-height: 1.25; pointer-events: none; transition: top 0.6s ease, transform 0.6s ease, opacity 0.3s ease; }
@@ -2836,6 +2848,7 @@ body.guide-kører .mission:not(.guide-mål) { visibility: hidden; }
 .fl-tekst { margin: 0; }
 .fl-svag { color: var(--svag); }
 .fl-så { color: #dff7ff; }
+.fl-mere { font-size: 15px; color: #c4d8ee; } /* Hvorfor det skete (trinets mere), under Så */
 .fl-lille { margin: -2px 0 0; font-size: 13px; color: var(--svag); }
 .fl-række { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .fl-nøgle { display: inline-flex; gap: 8px; }

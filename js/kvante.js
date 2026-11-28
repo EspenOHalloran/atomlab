@@ -19,7 +19,7 @@ import { STRIBER } from './data/forloeb/kvante.js';
 import {
   STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, PRIKKER, SKYDER, KVANTE_KORT,
   bølgelængde, nanometer, lysFarve, åbneSprækker, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, panelNøgle, talTekst,
-  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags, pulsTid, målerTekst, skiltTekst, tælTekst, ringTekst,
+  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags, pulsTid, målerTekst, skiltTekst, tælTekst, ringTekst, stilleSted, FORKLAR,
 } from './data/kvante.js';
 import { lavBænk, KILDE_Y, VÆG_HØJDE } from './kvante/baenk.js';
 import { lavSkilt } from './kvante/skilt.js';
@@ -71,6 +71,17 @@ export function lav() {
   peg.hidden = true;
   peg.textContent = 'Tryk på vandet';
   $('kvanteVindue').append(peg);
+  // De to skilte på vandet, når bølgerne er nået bagvæggen: "Top møder top" og "Top møder dal" (rettelse 3 efter prøven)
+  for (const f of FORKLAR) {
+    const el = document.createElement('p');
+    el.className = `kv-forklar ${f.id}`;
+    el.dataset.forklar = f.id;
+    el.hidden = true;
+    el.innerHTML = '<b></b><small></small>';
+    el.querySelector('b').textContent = f.titel;
+    el.querySelector('small').textContent = f.tekst;
+    $('kvanteVindue').append(el);
+  }
   const måltSkilt = document.createElement('p');
   måltSkilt.className = 'kv-målt';
   måltSkilt.id = 'kvMålt';
@@ -149,6 +160,7 @@ export function stop() {
   bænk.vand(false);
   skilt.stop();
   $('kvPeg').hidden = true;
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-forklar')) el.hidden = true;
   begrænsDrejning(null);
   $('hjælpKvante').classList.add('skjult');
 }
@@ -380,6 +392,7 @@ function opdater(dt, tid) {
   bænk.opdater(dt, tid);
   tegnSkilt();
   tegnPeg();
+  tegnForklar();
   tegnMålt();
   panelTid += dt;
   if (panelTid > 0.25) { panelTid = 0; panel(); }
@@ -411,6 +424,24 @@ function tegnPeg() {
   el.style.top = `${c.top - r.top + ((1 - tPeg.y) / 2) * c.height}px`;
 }
 
+// "Top møder top" midt imellem og "Top møder dal" på den første stille linje: to skilte med en prik på vandet, når
+// bølgerne er nået bagvæggen (bølger i vand med begge sprækker åbne)
+const tForklar = new THREE.Vector3();
+function tegnForklar() {
+  const vis = aktiv && v.slags === 'boelger' && v.sprækker === 'begge' && bænk.forklaret() > 0.5;
+  const r = vis ? $('kvanteVindue').getBoundingClientRect() : null;
+  const c = vis ? verden.renderer.domElement.getBoundingClientRect() : null;
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-forklar')) {
+    if (el.hidden === vis) el.hidden = !vis;
+    if (!vis) continue;
+    const x = el.dataset.forklar === 'høj' ? 1.0 : 3.0;
+    const z = el.dataset.forklar === 'høj' ? 0 : stilleSted(x, { d: v.d, λ: λ() });
+    bænk.gruppe.localToWorld(tForklar.set(x, 0.37, z)).project(verden.kamera);
+    el.style.left = `${c.left - r.left + ((tForklar.x + 1) / 2) * c.width}px`;
+    el.style.top = `${c.top - r.top + ((1 - tForklar.y) / 2) * c.height}px`;
+  }
+}
+
 // ---------- Kameraet ----------
 // Bænken drejes, så kameraet ser den skråt fra siden (kilden til venstre, bagvæggen til højre). På et smalt billede
 // ses den mere bagfra, så den fylder mindre i bredden. Vandet ses mere oppefra.
@@ -421,8 +452,10 @@ function kamera({ straks = false } = {}) {
   størrelse = `${Math.round(r.width / 40)}x${Math.round(r.height / 40)}`;
   const forhold = r.height > 10 ? r.width / r.height : 1.5;
   const t = THREE.MathUtils.clamp((forhold - 0.7) / 0.9, 0, 1); // 0 smal, 1 bred
-  const φ = THREE.MathUtils.degToRad(22 + 30 * t); // vinklen mellem strålen og retningen til kameraet
-  const e = THREE.MathUtils.degToRad((36 - 12 * t) + (v.slags === 'boelger' ? 26 : 0));
+  // Bølger i vand ses mere fra siden og højt oppefra, så væggen med sprækkerne ikke skjuler ringene bagved (rettelse 3)
+  const vand = v.slags === 'boelger';
+  const φ = THREE.MathUtils.degToRad(vand ? 58 + 25 * t : 22 + 30 * t); // vinklen mellem strålen og retningen til kameraet
+  const e = THREE.MathUtils.degToRad(vand ? 60 - 6 * t : 36 - 12 * t);
   bænk.gruppe.rotation.y = Math.PI / 2 - φ;
   bænk.gruppe.updateMatrixWorld(true);
   const kasse = bænk.kasse();
@@ -819,7 +852,10 @@ export function testAdgang() {
     skydÉn: () => skydÉn(),
     bølgeKnap: () => $('kvBølgen').click(),
     lukket: () => [...bænk.t.lukMål],
-    vand: () => ({ tændt: bænk.vandTændt(), front: bænk.vandFront(), kar: bænk.karVist(), mærke: bænk.mærkeVist(), peg: !$('kvPeg').hidden }),
+    vand: () => ({
+      tændt: bænk.vandTændt(), front: bænk.vandFront(), kar: bænk.karVist(), mærke: bænk.mærkeVist(), peg: !$('kvPeg').hidden,
+      forklaret: bænk.forklaret(), skilte: [...document.querySelectorAll('#kvanteVindue .kv-forklar')].filter((e) => !e.hidden).map((e) => e.textContent),
+    }),
     // Skærmpunktet midt i ringen på vandet (til at trykke på vandet i testen)
     vandPunkt() {
       const p = bænk.mærkeTop(new THREE.Vector3()).project(verden.kamera);

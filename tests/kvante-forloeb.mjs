@@ -22,12 +22,14 @@ const tjek = (navn, bet, ekstra = '') => { if (bet) { ok++; console.log('OK  ', 
 const sætninger = (s) => (s ?? '').match(/[.!?](\s|$)/g)?.length ?? 0;
 const instrukser = STRIBER.trin.flatMap((t) => (t.gæt?.valg ?? [{ efter: '' }]).map((v) => `${v.efter} ${t.gør}`));
 const lange = [...STRIBER.trin.flatMap((t) => [t.spørg, t.så, t.gør, ...(t.gæt?.valg ?? []).map((v) => v.svar)]), ...instrukser].filter((x) => sætninger(x) > 2);
+// Forklaringen under Så (mere, rettelserne efter prøven 28. november 2026: "skæres ud i pap") må have tre sætninger
+const langeMere = STRIBER.trin.map((t) => t.mere).filter((x) => x && sætninger(x) > 3);
 const ider = new Set(ORDBOG.map((o) => o.id));
 const mangler = STRIBER.trin.flatMap((t) => t.ord ?? []).filter((id) => !ider.has(id));
 const så5 = STRIBER.trin[4].så;
 const trin6 = STRIBER.trin[5];
 tjek('teksterne: 6 trin og "Det så du", højst to sætninger i hver tekst (også gættets "efter" med instruksen), ordene står i Ordbogen, trin 5 siger "de mørke striber er væk" og ikke "som kuglerne", og vejenes kort og ord findes',
-  STRIBER.trin.length === 6 && !lange.length && !mangler.length && /mørke striber væk/.test(så5) && !/kugle/i.test(så5)
+  STRIBER.trin.length === 6 && !lange.length && !langeMere.length && !mangler.length && /mørke striber væk/.test(så5) && !/kugle/i.test(så5)
   && sætninger(STRIBER.kernesætning) === 2 && FORLØB.includes(STRIBER) && HVORFOR.kvanteKigger?.svar && HVORFOR.kvanteToSteder?.svar && ider.has('foton'),
   JSON.stringify({ lange, mangler }));
 // "To steder på én gang?" (22. november 2026): trin 5 har jeres gæt, og trin 6 siger, at bølgen går gennem begge, men
@@ -97,9 +99,10 @@ const vand = await T(() => ({ ...atomlabTest.kvante.vand(), linje: document.quer
 await T(() => atomlabTest.kvante.slags('elektroner'));
 const udenKar = await T(() => atomlabTest.kvante.vand());
 await T(() => atomlabTest.kvante.slags('boelger'));
-tjek('trin 2: Karret med det stille vand, den gule ring og "Tryk på vandet" står der, før bølgerne starter, et tryk på ringen starter dem (ringen og teksten forsvinder), bølgerne når bagvæggen, Så har ordet interferens, og med elektroner er karret væk',
+tjek('trin 2: Karret med det stille vand, den gule ring og "Tryk på vandet" står der, før bølgerne starter, et tryk på ringen starter dem (ringen og teksten forsvinder), bølgerne når bagvæggen, og så kommer de stiplede linjer og de to skilte "Top møder top" og "Top møder dal", Så har ordet interferens og forklaringen med vejen, og med elektroner er karret væk',
   førVand.kar && førVand.mærke && førVand.peg && !førVand.tændt && trykket.tændt && !trykket.mærke && !trykket.peg
-  && vand.tændt && vand.front > 8 && /data-ord="interferens"/.test(vand.linje) && !udenKar.kar && !udenKar.mærke,
+  && vand.tændt && vand.front > 8 && vand.forklaret > 0.5 && vand.skilte.length === 2 && /Top møder top/.test(vand.skilte.join()) && /Top møder dal/.test(vand.skilte.join())
+  && /data-ord="interferens"/.test(vand.linje) && /fl-mere/.test(vand.linje) && /halv bølge længere/.test(vand.linje) && !udenKar.kar && !udenKar.mærke,
   JSON.stringify({ førVand, trykket, tændt: vand.tændt, front: vand.front, udenKar }));
 
 // Trin 3: 1.000 elektroner giver mange striber

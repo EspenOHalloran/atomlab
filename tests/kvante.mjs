@@ -4,7 +4,7 @@
 // en sprække lukker den, måleren blinker ved én sprække, kuglerne lander i to bunker, vandets bølger løber,
 // panelerne har ingen rullebjælke, og et skærmskift rydder op.
 import { chromium, ADRESSE, ARGS, billedmappe } from './hjaelp.mjs';
-import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER, pulsTid, målerTekst } from '../js/data/kvante.js';
+import { PANEL, KVANTE_KORT, intensitet, mørktSted, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, kugleForstørrelse, STANDARD, SLAGS, SPRÆKKER, panelNøgle, bølgelængde, PRIKKER, pulsTid, målerTekst, stilleSted, skiltTekst } from '../js/data/kvante.js';
 import { LINKS } from '../js/data/ordbogliste.js';
 import { HVORFOR } from '../js/data/hvorfor.js';
 import { ORDBOG } from '../js/data/ordbog.js';
@@ -79,6 +79,21 @@ const tMidt = pulsTid(0), tKant = pulsTid(2.5), tVenstre = pulsTid(-0.5, { spræ
 tjek('bølgepakken: når midten af bagvæggen på ca. 1,5 s og kanten senere, og med kun den venstre åben når den først bag den venstre; tælleren siger "Begge på én gang: 0"',
   tMidt > 1.3 && tMidt < 1.8 && tKant > tMidt && tVenstre < tHøjre && målerTekst([1234, 5]).linje === 'Venstre: 1.234 · Højre: 5' && målerTekst([1, 1]).begge === 'Begge på én gang: 0',
   JSON.stringify({ tMidt, tKant, tVenstre, tHøjre }));
+
+// Vandet (rettelse 3 efter prøven 28. november 2026): skiltet "Top møder dal" står på den første stille linje, hvor vejen
+// fra den venstre sprække er en halv bølge længere end fra den højre, og de mørke striber på bagvæggen ligger på de stille
+// linjer. Skiltets tekster til alle slags.
+{
+  const λv = bølgelængde('boelger');
+  const vej = (x, z) => Math.hypot(x, z + STANDARD.d / 2) - Math.hypot(x, z - STANDARD.d / 2);
+  const steder = [1, 2, 3, 3.5].map((x) => vej(x, stilleSted(x)) / λv);
+  const mørk = stilleSted(3.5);
+  const titler = SLAGS.map((s) => skiltTekst({ slags: s }).titel);
+  tjek('vandet: "Top møder dal" står på den første stille linje (vejene er en halv bølge forskellige), bølgelængden er mellem 0,2 og 0,42, og skiltet har en titel til hver slags',
+    steder.every((x) => Math.abs(x - 0.5) < 1e-6) && mørk > 0.3 && mørk < 0.8 && λv >= 0.2 && λv <= 0.42 && titler.every(Boolean)
+    && skiltTekst({ slags: 'elektroner', sprækker: 'højre', måler: true }).ekstra === 'Kun den højre sprække er åben · Måleren er tændt',
+    JSON.stringify({ steder, mørk, λv, titler }));
+}
 
 // ---------- I browseren ----------
 const ctx = await b.newContext({ viewport: { width: 1024, height: 768 }, hasTouch: true, isMobile: true, deviceScaleFactor: 1 });
