@@ -11,6 +11,7 @@
 - Forløbet virker, ingen blokerende fejl. Status kan gå til "prøvet" for klodsen, når tilbage-knappen er prøvet (1b).
 - **Ret:** Trin 1 og 2 i `js/data/forloeb/foerste-atom.js` siger "plusladet" og "minus", før ladning er forklaret. Skriv det uden ladning i de første trin (fx "Den holder kernen sammen" / "Elektronen bliver ved kernen"), og lad ladningen komme, når ordet forklares (Ordbogen, "Hvorfor?"-kortet).
 - **Ret (på tværs):** Spørgsmålsknapperne ("? Hvorfor holder kernen?", `hvorfor-række`, `js/vaerksted.js` linje ca. 243) har "?" foran teksten. Find en mere elegant markering, fx en lille cirkel med "?" som ikon eller en tynd streg i stedet for tegnet i teksten, og gør det ens for alle "Hvorfor?"-knapper (stilguiden, `docs/stilguide.md`). Det er en fælles ændring (tjekliste D/E), så den skal have sin egen opgave i Småting eller Forløb og et go.
+- **Lavet 28. november 2026** (spor Forløb): Trin 1-3 uden ladning, og en lille tegnet pære i alle "Hvorfor?"-knapper i stedet for "?" (valgt af orkestratoren, kan ændres af jer). Gættene er gule i alle ture. Se [lige-nu/forloeb.md](lige-nu/forloeb.md) og stilguiden A5 og B13.
 
 ## 1b. Tilbage-knappen, E20 B (28. november 2026)
 *Faren havde prøvet den på tabletten tidligere.*
