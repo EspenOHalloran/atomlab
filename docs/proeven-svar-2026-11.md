@@ -12,5 +12,9 @@
 - **Ret:** Trin 1 og 2 i `js/data/forloeb/foerste-atom.js` siger "plusladet" og "minus", før ladning er forklaret. Skriv det uden ladning i de første trin (fx "Den holder kernen sammen" / "Elektronen bliver ved kernen"), og lad ladningen komme, når ordet forklares (Ordbogen, "Hvorfor?"-kortet).
 - **Ret (på tværs):** Spørgsmålsknapperne ("? Hvorfor holder kernen?", `hvorfor-række`, `js/vaerksted.js` linje ca. 243) har "?" foran teksten. Find en mere elegant markering, fx en lille cirkel med "?" som ikon eller en tynd streg i stedet for tegnet i teksten, og gør det ens for alle "Hvorfor?"-knapper (stilguiden, `docs/stilguide.md`). Det er en fælles ændring (tjekliste D/E), så den skal have sin egen opgave i Småting eller Forløb og et go.
 
-## 1b. Tilbage-knappen, E20 B
-*Venter. Faren tager den for sig selv på tabletten.*
+## 1b. Tilbage-knappen, E20 B (28. november 2026)
+*Faren havde prøvet den på tabletten tidligere.*
+
+**Svar (ordret):** "jeg har testet tilbageknappen på tablet tidligere. det virkede så vidt jeg husker fint."
+
+**Hvad det betyder for sporet (Småting):** Faren husker, at den virkede fint, men det er ikke en ny prøve med datoer og trin. Rettelse B i [prompt-e20-rettelser.md](prompt-e20-rettelser.md) er altså ikke nødvendig, medmindre det viser sig, at den ikke går ét niveau op overalt (menu, kort i Gåderne, bog i Opdagelserne). Marker B som "prøvet, virker, husket af faren" i `docs/lige-nu/smaating.md` til sidst. Tager faren den igen og finder en fejl, skrives den her.
