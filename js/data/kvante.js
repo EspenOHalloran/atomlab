@@ -262,12 +262,25 @@ const SKILT_TITEL = {
   kugler: 'Kugler', boelger: 'Bølger i vand', elektroner: 'Elektroner, én ad gangen', lys: 'Lys, én foton ad gangen',
   molekyle: 'Molekyler, ét ad gangen', klump: 'Klumper, én ad gangen', fodbold: 'Fodbolde',
 };
-export function skiltTekst({ slags, sprækker = 'begge', måler = false }) {
+export function skiltTekst({ slags, sprækker = 'begge', måler = false, bølgen = false }) {
   const ekstra = [];
   if (sprækker !== 'begge') ekstra.push(`Kun den ${sprækker} sprække er åben`);
   if (måler && kvanteSlags(slags)) ekstra.push('Måleren er tændt');
+  else if (bølgen && kvanteSlags(slags)) ekstra.push('Bølgen er tegnet');
   return { titel: SKILT_TITEL[slags] ?? '', ekstra: ekstra.join(' · ') };
 }
+// Bølge eller prik (rettelse 7 efter prøven 28. november 2026: "mere klar undervejs at nu ser vi elektronen som bølger og
+// hvornår vi ikke gør"): to mærker langs bænkens forkant, ét under vejen og ét under bagvæggen. ikon er 'bølge', 'prik' eller
+// 'kugle'. Elektronen tegnes ikke på vej, men delen siger, at den breder sig som en bølge (kernesætningen, fakta-faelder.md:
+// "Bølgen går gennem begge sprækker. Elektronen bliver altid fundet ét sted"). Med måler siges kun det målte.
+export function visning({ slags, måler = false, bølgen = false }) {
+  if (kugleSlags(slags)) return { vej: { ikon: 'kugle', tekst: 'På vejen: en kugle' }, bag: { ikon: 'prik', tekst: 'På bagvæggen: ét mærke' } };
+  if (slags === 'boelger') return { vej: { ikon: 'bølge', tekst: 'På vejen: bølger' }, bag: { ikon: 'bølge', tekst: 'Bagvæggen lyser, hvor bølgerne er høje' } };
+  const bag = { ikon: 'prik', tekst: 'På bagvæggen: én prik' };
+  if (måler) return { vej: { ikon: 'prik', tekst: 'Ved sprækkerne: fundet ét sted' }, bag };
+  return { vej: { ikon: 'bølge', tekst: bølgen ? 'På vejen: en bølge (tegnet)' : 'På vejen: en bølge (tegnes ikke)' }, bag };
+}
+
 export const tælTekst = (slags, n) => (PRIKKER[slags] ? { tal: talTekst(n), enhed: Math.round(n) === 1 ? ENTAL[slags] : PRIKKER[slags].toLowerCase() } : null);
 export const ringTekst = (nu, før = null) => ({ navn: 'I den gule ring:', tal: talTekst(nu), før: før == null ? '' : `(før: ${talTekst(før)})` });
 

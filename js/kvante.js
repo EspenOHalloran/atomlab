@@ -19,7 +19,7 @@ import { STRIBER } from './data/forloeb/kvante.js';
 import {
   STANDARD, GRÆNSER, SLAGS, SPRÆKKER, STRIBE_Y, SPRÆKKE_HØJDE, kugleForstørrelse, PANEL, PRIKKER, SKYDER, KVANTE_KORT,
   bølgelængde, nanometer, lysFarve, åbneSprækker, lavFordeling, tilfældig, histogram, toppe, mørkeStriber, panelNøgle, talTekst,
-  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags, pulsTid, målerTekst, skiltTekst, tælTekst, ringTekst, stilleSted, FORKLAR,
+  mørktSted, RING_HALV, STØRRE, kugleSlags, kvanteSlags, pulsTid, målerTekst, skiltTekst, tælTekst, ringTekst, stilleSted, FORKLAR, visning, L, BAG_HALV,
 } from './data/kvante.js';
 import { lavBænk, KILDE_Y, VÆG_HØJDE } from './kvante/baenk.js';
 import { lavSkilt } from './kvante/skilt.js';
@@ -71,6 +71,15 @@ export function lav() {
   peg.hidden = true;
   peg.textContent = 'Tryk på vandet';
   $('kvanteVindue').append(peg);
+  // Bølge eller prik: to mærker langs bænkens forkant, under vejen og under bagvæggen (rettelse 7 efter prøven)
+  for (const hvor of ['vej', 'bag']) {
+    const el = document.createElement('p');
+    el.className = `kv-vis ${hvor}`;
+    el.dataset.vis = hvor;
+    el.hidden = true;
+    el.innerHTML = '<i aria-hidden="true"></i><span></span>';
+    $('kvanteVindue').append(el);
+  }
   // De to skilte på vandet, når bølgerne er nået bagvæggen: "Top møder top" og "Top møder dal" (rettelse 3 efter prøven)
   for (const f of FORKLAR) {
     const el = document.createElement('p');
@@ -160,7 +169,7 @@ export function stop() {
   bænk.vand(false);
   skilt.stop();
   $('kvPeg').hidden = true;
-  for (const el of document.querySelectorAll('#kvanteVindue .kv-forklar')) el.hidden = true;
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-forklar, #kvanteVindue .kv-vis')) el.hidden = true;
   begrænsDrejning(null);
   $('hjælpKvante').classList.add('skjult');
 }
@@ -393,6 +402,7 @@ function opdater(dt, tid) {
   tegnSkilt();
   tegnPeg();
   tegnForklar();
+  tegnVisning();
   tegnMålt();
   panelTid += dt;
   if (panelTid > 0.25) { panelTid = 0; panel(); }
@@ -439,6 +449,40 @@ function tegnForklar() {
     bænk.gruppe.localToWorld(tForklar.set(x, 0.37, z)).project(verden.kamera);
     el.style.left = `${c.left - r.left + ((tForklar.x + 1) / 2) * c.width}px`;
     el.style.top = `${c.top - r.top + ((1 - tForklar.y) / 2) * c.height}px`;
+  }
+}
+
+// Bølge eller prik: to mærker langs den kant af bordet, der vender mod kameraet. Under vejen (væggen med sprækkerne, x = 0)
+// og under bagvæggen (x = L). Teksten og ikonet skrives kun, når de ændrer sig.
+const IKON = {
+  bølge: '<svg viewBox="0 0 26 12"><path d="M1 6 Q4.25 0 7.5 6 T14 6 T20.5 6 T27 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+  prik: '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="3.6" fill="currentColor"/></svg>',
+  kugle: '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="currentColor"/><circle cx="4.4" cy="4.2" r="1.6" fill="#fff" opacity="0.7"/></svg>',
+};
+const tVis = new THREE.Vector3();
+const visTegnet = {};
+function tegnVisning() {
+  const tekster = aktiv ? visning({ ...v, bølgen: bølgeNu() }) : null;
+  const r = $('kvanteVindue').getBoundingClientRect();
+  const c = verden.renderer.domElement.getBoundingClientRect();
+  // Den side af bordet (z), der vender mod kameraet
+  const nær = Math.sign(bænk.gruppe.worldToLocal(tVis.copy(verden.kamera.position)).z || 1) * (BAG_HALV + 0.62);
+  for (const el of document.querySelectorAll('#kvanteVindue .kv-vis')) {
+    const t = tekster?.[el.dataset.vis];
+    if (el.hidden !== !t) el.hidden = !t;
+    if (!t) continue;
+    const nøgle = `${t.ikon}|${t.tekst}`;
+    if (visTegnet[el.dataset.vis] !== nøgle) {
+      visTegnet[el.dataset.vis] = nøgle;
+      el.className = `kv-vis ${el.dataset.vis} ${t.ikon === 'bølge' ? 'bølge' : 'prik'}`;
+      el.querySelector('i').innerHTML = IKON[t.ikon];
+      el.querySelector('span').textContent = t.tekst;
+    }
+    bænk.gruppe.localToWorld(tVis.set(el.dataset.vis === 'vej' ? 0 : L, 0, nær)).project(verden.kamera);
+    // Inden for scenen (på en telefon står bagvæggens mærke ellers ud over kanten)
+    const halv = el.offsetWidth / 2 + 6;
+    el.style.left = `${Math.min(r.width - halv, Math.max(halv, c.left - r.left + ((tVis.x + 1) / 2) * c.width))}px`;
+    el.style.top = `${c.top - r.top + ((1 - tVis.y) / 2) * c.height}px`;
   }
 }
 
@@ -857,6 +901,8 @@ export function testAdgang() {
     skydÉn: () => skydÉn(),
     bølgeKnap: () => $('kvBølgen').click(),
     lukket: () => [...bænk.t.lukMål],
+    // Bølge eller prik: de to mærker langs bordets forkant, som de står på skærmen
+    visning: () => [...document.querySelectorAll('#kvanteVindue .kv-vis')].map((e) => (e.hidden ? '' : e.textContent)),
     vand: () => ({
       tændt: bænk.vandTændt(), front: bænk.vandFront(), kar: bænk.karVist(), mærke: bænk.mærkeVist(), peg: !$('kvPeg').hidden,
       forklaret: bænk.forklaret(), skilte: [...document.querySelectorAll('#kvanteVindue .kv-forklar')].filter((e) => !e.hidden).map((e) => e.textContent),

@@ -328,12 +328,28 @@ const skilt = await T(async () => {
   k.måler(true);
   k.spol(0.05);
   const ændret = k.skilt();
-  const r = document.getElementById('kvSkilt').getBoundingClientRect();
-  const v = document.getElementById('kvanteVindue').getBoundingClientRect();
+  const visMåler = k.visning();
   k.måler(false);
   k.sprækker('begge');
-  return { vand, én, oppe, ti, ændret, midten: Math.abs((r.left + r.right) / 2 - (v.left + v.right) / 2) < 4 };
+  k.spol(0.05);
+  const visBølge = k.visning();
+  k.sæt({ bølgen: true });
+  k.spol(0.05);
+  const visTegnet = { mærker: k.visning(), skilt: k.skilt().ekstra };
+  k.sæt({ bølgen: false });
+  k.slags('kugler');
+  k.spol(0.05);
+  const visKugle = k.visning();
+  k.slags('elektroner');
+  const r = document.getElementById('kvSkilt').getBoundingClientRect();
+  const v = document.getElementById('kvanteVindue').getBoundingClientRect();
+  return { vand, én, oppe, ti, ændret, visMåler, visBølge, visTegnet, visKugle, midten: Math.abs((r.left + r.right) / 2 - (v.left + v.right) / 2) < 4 };
 });
+// Bølge eller prik (rettelse 7 efter prøven): mærkerne langs bordets forkant siger, hvad man ser på vejen og på bagvæggen
+tjek('bølge eller prik: elektroner "På vejen: en bølge (tegnes ikke)" og "På bagvæggen: én prik", med "Vis bølgen" "(tegnet)" og skiltet "Bølgen er tegnet", med måler "Ved sprækkerne: fundet ét sted", og kugler "På vejen: en kugle"',
+  skilt.visBølge.join('|') === 'På vejen: en bølge (tegnes ikke)|På bagvæggen: én prik' && skilt.visTegnet.mærker[0] === 'På vejen: en bølge (tegnet)'
+  && skilt.visTegnet.skilt === 'Bølgen er tegnet' && skilt.visMåler[0] === 'Ved sprækkerne: fundet ét sted' && skilt.visKugle[0] === 'På vejen: en kugle',
+  JSON.stringify({ visBølge: skilt.visBølge, visTegnet: skilt.visTegnet, visMåler: skilt.visMåler, visKugle: skilt.visKugle }));
 tjek('skiltet: "Bølger i vand" uden tal, "Elektroner, én ad gangen" med "1 elektron" og "10 elektroner", kommer frem midt i scenen ved et skift og glider op, siger "Kun den venstre sprække er åben · Måleren er tændt" og står i midten',
   skilt.vand.titel === 'Bølger i vand' && !skilt.vand.tal && skilt.vand.midt && skilt.én.titel === 'Elektroner, én ad gangen' && skilt.én.tal === '1 elektron'
   && !skilt.oppe && skilt.ti.tal === '10 elektroner' && !skilt.ti.midt && skilt.ændret.ekstra === 'Kun den venstre sprække er åben · Måleren er tændt' && skilt.ændret.midt && skilt.midten,
