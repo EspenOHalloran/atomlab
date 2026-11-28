@@ -1519,6 +1519,8 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .ts-ting.lyser { opacity: 1; font-weight: 600; }
 #opdagelser .ts-ting.lyser i { box-shadow: 0 0 0 2px #c9a24a; }
 #opdagelser .ts-knapper { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+#opdagelser .rs-linje { margin: 0; min-height: 1.35em; } /* Rømers tur (R2, js/bog/roemer.js): linjen under kikkerten og banerne */
+#opdagelser .rs-mærker { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; }
 #opdagelser .es-valg[hidden], #opdagelser .es-uden[hidden] { display: none; } /* Einsteins tur (E2, js/bog/einstein.js): togets og urets farter, tallene og "Uden rettelse" under lærredet */
 #opdagelser .es-maal b { font-variant-numeric: tabular-nums; }
 #opdagelser .es-valg .hs-kapitel { min-width: 60px; }

@@ -60,6 +60,7 @@
 | Afstanden Jorden-Jupiter: **14. august 1676: 4,306 AE** (644 mio. km), **9. november 1676: 5,518 AE** (825 mio. km) | JPL Horizons (kl. 0 UT) | Sikker |
 | Forskellen er 1,211 AE = **181 mio. km**. Lyset er **10,1 minut** om det (med 499 s pr. AE) | Regnet | Ret sikker |
 | Lyset var ca. **36 minutter** om at komme fra Jupiter 14. august og ca. **46 minutter** 9. november | Regnet (4,306 × 499 s = 35,8 min, 5,518 × 499 s = 45,9 min) | Ret sikker |
+| **Til turen (R2, 28. november 2026):** afstanden og vinklen fra Solen hver 5. dag fra 1. juni 1676 til 26. februar 1677 står i `AFSTAND` og `FRA_SOLEN` i `js/data/opdagelser/roemer.js`. Jupiter stod bag Solen omkring 22.-24. januar 1677 (1,6° den 22.). Vinklen Sol-Jupiter-Jorden (fasevinklen) var 10,6° 1. maj, 2° ved oppositionen og 10,6-11,1° i oktober. Ved oppositionen kom Io ca. 1,4 minut før tabellen fra august | JPL Horizons (`QUANTITIES` 20, 23 og 24, kl. 0 UT, hentet 28. november 2026) | Sikker |
 | Lyset er ca. 18 mio. km om et minut | 299.792 × 60 = 17,99 mio. km | Sikker |
 | Hele Jordens bane (to gange afstanden til Solen) tager lyset **16 min 38 s** i dag. Rømers 22 minutter er ca. **32 % for meget** (en tredjedel) | 2 × 499 s; 22 / 16,63 = 1,32 | Sikker |
 | Jorden fjernede sig højst ca. 26,7 km/s fra Jupiter i efteråret 1676. På én omgang af Io (42½ time) giver det ca. **14 sekunders** forsinkelse. Over 40 omgange bliver det minutter | Horizons (`deldot`, højst 26,69 km/s 7. oktober); 26,69 × 152.900 s / 299.792 = 13,6 s | Ret sikker |
