@@ -1,5 +1,10 @@
 # Historik: Solsystemet og Kosmos
 
+**Lavet (20. november 2026): Venus, "Ned gennem skyerne" med længere tid og bladring** (jeres svar 20. november 2026 i [aabne-punkter.md](aabne-punkter.md)). Status: **venter på jeres prøve** (se "Ikke afprøvet").
+- Hvert trin får ca. 3 sekunder ekstra, fordelt efter antallet af ord i underteksten (turen ned tager nu ca. 49 s i stedet for 34, trinene ca. 7-13 s).
+- Bladring: ‹ og "Næste: … ›" i bjælken, prikkerne i underteksten og piletasterne ← → på pc. Kameraet glider hen til starten af trinet og fortsætter derfra. Måleren, prikken i søjlen og fotoet følger med, og når man er landet, er der "↺ Forfra".
+- Underteksterne står nu i loggen 🔔 (hver én gang pr. tur), og Solsystemet har fået klokken.
+
 **Lavet (20. november 2026): Saturn S3b, formen på Mimas, Tethys, Dione og Rhea** ([plan-saturn-kvalitet.md](../plan-saturn-kvalitet.md), "Status efter S3b"). Filerne hentede I i en browser fra PSI.
 - Alle Saturns måner undtagen Titan har nu deres form fra Cassinis fotos: Mimas er tydeligt aflang (ca. 415 × 380 km) med Herschel som en fordybning, Tethys med Odysseus, og Dione og Rhea er næsten runde. Skyggegrænsen er ujævn med kratere. "Ærligt talt" ved hver måne nævner formen.
 - Originalerne ligger på grenen `kilder-saturn-s3b` (ca. 70 MB, ikke i `main`). Rhea er kun hentet i den grove udgave (ca. 8,6 km). En skarpere (ca. 2,2 km) ligger måske i samme mappe hos PSI.

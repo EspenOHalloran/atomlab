@@ -2,7 +2,7 @@
 
 *Lavet 23. oktober 2026 af en hjælpeagent (Opus, høj effort) til [planen](plan-molekyler.md). Ikke tjekket af Fable.*
 
-**Status:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 3: Tallene i afsnit 1-4 og 7 passer med NIST og tabellerne. De fleratomige længder i CCCBDB er åbnet af Opus 7. november. Nye tekster skal stadig gennem `/faktatjek`.
+**Status:** Tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](fable/E13-faktatjek.md) afsnit 3: Tallene i afsnit 1-4 og 7 passer med NIST og tabellerne. De fleratomige længder i CCCBDB er åbnet af Opus 7. november. Nye tekster skal stadig gennem `/faktatjek`. **Resten fra E13 afsnit 4 (27. november 2026, lavet af Opus i stedet for Fable):** Ammoniaks "ca. 70 % til kunstgødning" (`KENDTE_LISTE`) passer: Wikipedia "Ammonia" (åbnet) skriver "Around 70% of ammonia produced industrially is used to make fertilisers" efter IEA, *Ammonia Technology Roadmap* (2021). iea.org er stadig lukket i miljøet. CCCBDB (`cccbdb.nist.gov`) er også stadig lukket, så de fleratomige længder bygger fortsat på Opus' opslag 7. november ([m2.md](fakta-molekyler/m2.md)). Intet skal rettes.
 
 **Vigtigt om kilderne:** Jeg kunne ikke åbne en eneste side. WebFetch gav DNS-fejl for alle domæner (nist.gov, wikipedia, libretexts), og curl blev afvist af proxyen (403). Alle kilder nedenfor har jeg kun set som søgeresultater med uddrag. Hvor uddragene bekræfter et tal, skriver jeg det. Hvor tallet er standardlærebogsviden, som uddragene ikke dækkede, står det som "fra min viden". Inden teksterne kommer med, bør de vigtigste tal slås op i NIST WebBook eller CRC i en browser.
 

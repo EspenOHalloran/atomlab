@@ -2,7 +2,7 @@
 
 # Del 2: Voyager, Den store tur og slyngfysikken (til Rumrejsen)
 
-**Status:** Lavet fra hjælpeagentens hukommelse 23. oktober 2026. "Mindst sikre" nr. 1, 3 og 6 er tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](../fable/E13-faktatjek.md) afsnit 2d og 3. Resten er ikke tjekket. URL'erne er der, hvor tallene skal slås op. Sikkerheden gælder hukommelsen, ikke en tjekket kilde. Hele afsnittet skal tjekkes med `/faktatjek`, før Rumrejsen bygges (trin 5-6). Prototypen (trin 1b) bruger det ikke.
+**Status:** Lavet fra hjælpeagentens hukommelse 23. oktober 2026. "Mindst sikre" nr. 1, 3 og 6 er tjekket mod de åbnede kildesider af Fable 15. november 2026, se [E13-faktatjek.md](../fable/E13-faktatjek.md) afsnit 2d og 3. Nr. 2, 4, 5 og 7 er tjekket 27. november 2026 af Opus (høj), lavet af Opus i stedet for Fable (se "Mindst sikre" nederst). Resten af filen er ikke tjekket. URL'erne er der, hvor tallene skal slås op. Sikkerheden gælder hukommelsen, ikke en tjekket kilde. Hele afsnittet skal tjekkes med `/faktatjek`, før Rumrejsen bygges (trin 5-6). Prototypen (trin 1b) bruger det ikke.
 
 ## 1. Voyager 1 og 2
 
@@ -48,7 +48,8 @@ Kilder: https://science.nasa.gov/mission/voyager/voyager-1/ og https://science.n
 **Strømmen:** Hver sonde har tre RTG'er med plutonium-238 (halveringstid 87,7 år), som gav ca. 470 W tilsammen ved opsendelsen. *Ret sikker.*
 - De mister ca. 4 W om året, fordi plutoniet henfalder, og fordi termoelementerne slides. *Ret sikker.*
 - NASA har slukket instrumenter undervejs (fx i 2024-2025). *Ret sikker.*
-- NASA regner med, at måske et enkelt instrument kan køre ind i 2030'erne. *Ret sikker* på "2030'erne", *usikker* på et bestemt år.
+- NASA regner med, at måske et enkelt instrument kan køre ind i 2030'erne. **Bekræftet 27. november 2026:** NASA 5. marts 2025: "at least one science instrument into the 2030s". Ingen fast årstal. NASA's FAQ siger stadig "until around 2025" (gammel tekst) og Deep Space Network "through about 2036".
+- **Nyt (NASA's Voyager-blog, åbnet 27. november 2026):** Voyager 1's LECP blev slukket 17. april 2026. "Big Bang" (tre enheder skiftet til nogle, der bruger mindre strøm) blev lavet på Voyager 2 (blog 4. august 2026) og på Voyager 1 i starten af september 2026. Uden det skulle et instrument mere være slukket på Voyager 2 før udgangen af 2026 og på Voyager 1 allerede i sommeren 2027. Begge mister ca. 4 W om året.
 
 ## 2. Den lyseblå prik
 
@@ -59,7 +60,7 @@ Kilder: https://science.nasa.gov/mission/voyager/voyager-1/ og https://science.n
 - **Bagefter:** Kameraerne blev slukket kort efter for at spare strøm, så det var blandt de sidste billeder, sonden tog. Billederne blev sendt hjem over flere måneder og offentliggjort i juni 1990. *Ret sikker.*
 - **Carl Sagan** foreslog og pressede på for billedet. Der var modstand, fordi kameraet skulle pege tæt på Solen. *Sikker.*
 - Fælde: Den lyse "solstråle", Jorden ligger i, er spredt lys inde i kameraet, ikke en rigtig solstråle. *Ret sikker.*
-- **Her står Sagans tekst:** *Pale Blue Dot: A Vision of the Human Future in Space*, Random House, New York 1994, kapitel 1 "You Are Here", omkring side 6-7 i første udgave (*usikker* på siden). Han læste den også op i en tale på Cornell i 1996.
+- **Her står Sagans tekst:** *Pale Blue Dot: A Vision of the Human Future in Space*, Random House, New York 1994, kapitel 1 "You Are Here", omkring side 6-7 i første udgave (*usikker* på siden). **27. november 2026:** Sidetallet kunne stadig ikke findes. Archive.orgs to skanninger af førsteudgaven (Random House 1994) kan kun lånes, og Google Books er lukket i miljøet. Wikipedia henviser til s. 4-5 i e-bogen fra 2011, men det er om billedet, ikke om citatet. Skriv kun "kapitel 1" eller intet sidetal. Han læste den også op i en tale på Cornell i 1996.
   - Repoets citat `saganScene` i `js/data/citater.js` er fra samme afsnit.
 - **Kilder:** NASA/JPL's billede PIA00452 ("Solar System Portrait – Earth as Pale Blue Dot") og den nye behandling fra 2020, PIA23645. Se https://photojournal.jpl.nasa.gov/catalog/PIA00452
 
@@ -80,7 +81,7 @@ Kilder: https://science.nasa.gov/mission/voyager/voyager-1/ og https://science.n
 - Flyver sonden bag om planeten (på den side, planeten kommer fra), får den mere fart. Flyver den foran planeten, bremses den. *Sikker.*
 - Voyager 2 blev *bremset* ved Neptun, da den dykkede over nordpolen mod Triton. *Ret sikker.*
 
-**Voyager 2 ved Jupiter:** omtrent fra ca. 10 km/s til ca. 20 km/s i forhold til Solen. Flugthastigheden fra Solen ved 5,2 AU er ca. 18,5 km/s, så efter Jupiter var sonden hurtig nok til at forlade Solen. *Usikker* på de præcise tal.
+**Voyager 2 ved Jupiter:** omtrent fra ca. 10 km/s til ca. 20 km/s i forhold til Solen. Flugthastigheden fra Solen ved 5,2 AU er ca. 18,5 km/s, så efter Jupiter var sonden hurtig nok til at forlade Solen. **Bekræftet 27. november 2026 med JPL Horizons** (Voyager 2 = -32, centrum Solen, baneløsningen "Voyager_2_ST+refit2022_m"): 10,5 km/s 1. maj 1979 (5,03 AU) og 19,6 km/s 29. august 1979 (5,52 AU). Midt i juni er den 9,9 km/s, og lige efter Jupiter (15. juli) 21,9 km/s, men da trækker Jupiter stadig i den. Flugthastigheden ved 5,5 AU er ca. 18,0 km/s (udregnet).
 - Tallene er mit eget overslag med energibevarelse mellem forbiflyvningerne. De skal aflæses på den kendte graf "Voyager 2 heliocentric velocity vs. distance from Sun" (JPL, ofte tilskrevet Steve Matousek, findes på Wikimedia Commons og i NASA's "Basics of Space Flight").
 - Grafen viser farten hoppe ved Jupiter, Saturn og Uranus og falde ved Neptun, med flugthastigheden som en kurve, der falder udad.
 - Kilde: https://science.nasa.gov/learn/basics-of-space-flight/chapter4-1/
@@ -108,7 +109,7 @@ Kilder: https://science.nasa.gov/mission/voyager/voyager-1/ og https://science.n
 - Tabel 2a/2b gælder 3000 f.Kr.-3000 e.Kr. og har ekstra led (b, c, s, f) for Jupiter til Pluto.
 - Koordinaterne går ud fra Solen i ekliptika for J2000. "Jorden" er tyngdepunktet for Jorden og Månen.
 
-**Præcision (1800-2050), fra hukommelsen:** fra ca. 10-50 buesekunder for de indre planeter til ca. 400-600 buesekunder for Jupiter og Saturn. Afstanden kan være op til ca. 0,6 mio. km forkert for Jupiter og ca. 1,5 mio. km for Saturn. *Usikker* på de enkelte tal (de står i en tabel på siden).
+**Præcision (1800-2050), bekræftet 27. november 2026** i tabellen "Accuracy" på https://ssd.jpl.nasa.gov/planets/approx_pos.html (åbnet). Længde λ, bredde φ (buesekunder) og afstand ρ (1.000 km): Merkur 15/1/1, Venus 20/1/4, Jorden-Månen 20/8/6, Mars 40/2/25, Jupiter 400/10/600, Saturn 600/25/1.500, Uranus 50/2/1.000, Neptun 10/1/200. For 3000 f.Kr.-3000 e.Kr. er tallene større (Jupiter 600/100/1.000, Saturn 1.000/100/4.000). 400 buesekunder i længde svarer ved Jupiter til ca. 1,5 mio. km på tværs (udregnet: 400/206.265 × 778 mio. km).
 
 **Følge for spillet:** Fejlene på Saturns plads er meget større end Voyagers nærmeste afstande (fx 4.950 km over Neptuns skyer). Den virkelige Voyager-rute kan derfor ikke regnes frem præcist med disse elementer.
 - "Spøgelset" bør hentes fra Horizons og tegnes i forhold til planeterne.
@@ -129,12 +130,12 @@ Kilder: https://science.nasa.gov/mission/voyager/voyager-1/ og https://science.n
 ## Mindst sikre påstande (tjek dem først)
 
 1. **Bekræftet (E13):** NASA skriver, at Voyager 1 onsdag 18. november 2026 er ét lysdøgn (25,9 mia. km) fra Jorden.
-2. Voyager 2's fart ved Jupiter før og efter (ca. 10 → ca. 20 km/s). Det er et overslag, som skal aflæses på grafen.
+2. **Bekræftet (27. november 2026, JPL Horizons):** ca. 10,5 km/s før og ca. 19,6 km/s efter, se afsnit 4.
 3. **Afklaret (E13):** ca. 570.000 km over skytoppene og ca. 645.000 km fra centrum (NASA). "720.000 km" var forkert.
-4. Fejltabellen for Standish' elementer.
-5. Sidetallet for Sagans tekst (kapitel 1 "You Are Here" er ret sikkert).
+4. **Bekræftet (27. november 2026):** tabellen på JPL's side, se afsnit 5.
+5. Sidetallet for Sagans tekst: **stadig ikke fundet** (27. november 2026, se afsnit 2). Kapitel 1 "You Are Here" er ret sikkert.
 6. **Bekræftet (E13, kun Wikipedia):** BepiColombo ankommer 21. november 2026.
-7. Hvornår RTG'erne ikke kan holde noget instrument i gang (kun "2030'erne").
+7. **Bekræftet (27. november 2026):** NASA siger kun "into the 2030s" (5. marts 2025), se afsnit 1.
 
 Når der er netadgang igen, kan opgaven sendes igen, og så kan disse punkter tjekkes mod kilderne.
 

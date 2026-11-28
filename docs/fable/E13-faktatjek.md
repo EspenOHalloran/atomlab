@@ -72,6 +72,8 @@
 **`docs/fakta-solsystemet/del2-voyager.md`:** "Mindst sikre" nr. 1 og 3 er afklaret (afsnit 2d), og nr. 6 passer (BepiColombo 21. november 2026, kun Wikipedia). Nr. 2, 4, 5 og 7 er ikke tjekket.
 
 ## 4. Det, jeg ikke kunne tjekke
+*Tjekket 27. november 2026 af Opus (høj), lavet af Opus i stedet for Fable: Resultatet står ved påstandene i [fakta-grundstofkort.md](../fakta-grundstofkort.md) ("Resten fra E13" nederst), [fakta-molekyler.md](../fakta-molekyler.md) (Status), [del2-voyager.md](../fakta-solsystemet/del2-voyager.md) ("Mindst sikre" nr. 2, 4, 5 og 7) og [del5a](../fakta-solsystemet/del5a-jupiter-opslag-og-jupiter-selv.md)/[del5b](../fakta-solsystemet/del5b-jupiter-maanerne-og-himlen.md). Intet forkert i programmet. To præciseringer ved Jupiters poler (synligt lys mod infrarødt, og at den sjette cyklon forsvandt). Stadig ikke fundet: sidetallet for Sagans tekst og CCCBDB (lukket).*
+
 | Hvad | Hvorfor |
 |---|---|
 | Bindingslængder og vinkler for de fleratomige molekyler i CCCBDB | `cccbdb.nist.gov` faldt ud af miljøets liste midt i arbejdet. Tjekket af Opus 7. november. |
