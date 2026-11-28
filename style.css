@@ -1454,6 +1454,12 @@ details.liv-protein[open] > summary { margin-bottom: 8px; }
 #opdagelser .bog-vignet-pil { fill: var(--bog-blaek); }
 #opdagelser .bog-vignet-flamme { fill: #f2b400; opacity: 0.35; }
 #opdagelser .bog-vignet-hoved { fill: #fff3b8; stroke: #e0a000; stroke-width: 0.4; }
+#opdagelser .bog-kikkert { width: min(300px, 100%); } /* Rømers forside (R1): Jupiter og de fire måner i kikkertens synsfelt (kikkertTegning i js/bog.js) */
+#opdagelser .bog-kikkert-ramme { fill: none; stroke: rgba(243, 234, 215, 0.35); stroke-width: 0.6; }
+#opdBog[data-bog="roemer"] .bog-intro-tekst::first-letter { padding-bottom: 0.28em; } /* Fells J går under linjen: krogen skal være inde i feltet */
+#opdagelser .bog-kikkert-jupiter ellipse { fill: #eadfc4; }
+#opdagelser .bog-kikkert-stribe { fill: #b49a74; opacity: 0.8; }
+#opdagelser .bog-kikkert-navn { font: italic 9px/1 var(--bog-skrift); fill: #f3ead7; text-anchor: middle; }
 #opdagelser .bog-navn { margin: 0; font-family: var(--bog-skrift); font-size: 20px; }
 #opdagelser .bog-begynd { min-height: 48px; padding: 0 26px; font-size: 18px; background: var(--bog-blaek); color: var(--bog-papir); border-color: transparent; }
 #opdagelser .bog-intro { display: grid; gap: 6px; max-width: 30em; } /* Introduktionen på forsiden (den røde tråd, 18. november 2026): hvem han var, og hvorfor han kiggede */

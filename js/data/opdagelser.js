@@ -41,10 +41,24 @@ export const BØGER = [
     forløb: 'saturns-oerer',
     scene: () => import('../bog/huygens.js'),
   },
-  { id: 'roemer', navn: 'Ole Rømer', kort: 'Rømer', år: 1676, ejefald: 'Ole Rømers', om: 'lyset, der bruger tid', spørgsmål: 'Hvorfor kom Io for sent?' },
+  {
+    id: 'roemer', navn: 'Ole Rømer', kort: 'Rømer', år: 1676, ejefald: 'Ole Rømers', om: 'lyset, der bruger tid', spørgsmål: 'Hvorfor kom Io for sent?',
+    // Titlen er navnet på turen (drejebogen afsnit 2, opslag 2)
+    titel: 'Himlens ur', bygget: true,
+    portræt: 'billeder/biblioteket/roemer.webp',
+    // Et videnskabeligt tidsskrift fra 1670'erne (docs/drejebog-roemer.md afsnit 3): lyst papir, lidt koldere end Tychos,
+    // sort blæk og en mørk flaskegrøn ryg med guld, så den ikke ligner Huygens' røde eller Tychos blå. Fell-typerne er fra
+    // Oxford i 1670'erne, altså fra samme år
+    stil: { papir: '#f1ebdc', papirMørk: '#dcd3bd', blæk: '#161513', ryg: '#23402f', rygKant: '#c9a24a', skrift: SKRIFT_1600 },
+    tekster: () => import('./opdagelser/roemer.js'),
+    // Turen "Himlens ur" (forløb og scene) kommer i R2, som hos Tycho (T1 → T2)
+  },
   { id: 'newton', navn: 'Isaac Newton', kort: 'Newton', år: 1687, ejefald: 'Isaac Newtons', om: 'tyngdeloven' },
   { id: 'oersted', navn: 'H.C. Ørsted', kort: 'Ørsted', år: 1820, ejefald: 'H.C. Ørsteds', om: 'strøm og magneter', spørgsmål: 'Hvorfor drejede kompasnålen?' },
-  { id: 'curie', navn: 'Marie Curie', kort: 'Curie', år: 1898, ejefald: 'Marie Curies', om: 'stoffer, der stråler' },
+  { id: 'curie', navn: 'Marie Curie', kort: 'Curie', år: 1898, ejefald: 'Marie Curies', om: 'stoffer, der stråler',
+    // En grå ryg fra R1 (27. november 2026). Spørgsmålet er foreløbigt, til Curies drejebog er skrevet: I april 1898 fandt
+    // hun, at to uranmineraler (bl.a. begblende) strålede mere end uranet selv (Comptes rendus, april 1898)
+    spørgsmål: 'Hvorfor strålede stenen mere end rent uran?' },
   {
     id: 'einstein', navn: 'Albert Einstein', kort: 'Einstein', år: 1905, ejefald: 'Albert Einsteins', om: 'tiden, lyset og E = mc²',
     spørgsmål: 'Hvad sker der, når lyset er lige hurtigt for alle?',

@@ -12,7 +12,7 @@
 // OPSLAG. Bogen har kun de opslag, der er bygget (E20 fund 6, stilguiden A9). Opslagets slags:
 //   'forside'  portrættet, spørgsmålet, introduktionen (FORSIDE.intro: sted og en bogtekst med stort forbogstav, den røde
 //              tråd 18. november 2026), Galileis lille tegning (eller bogens egen: FORSIDE.kort, stjerner som træsnit, eller
-//              FORSIDE.vignet, Einsteins lommeur med lysglimtet),
+//              FORSIDE.vignet, Einsteins lommeur med lysglimtet, eller FORSIDE.kikkert, Rømers Jupiter med de fire måner),
 //              navnet og "Begynd" (kun, når bogen har flere opslag)
 //   'scene'    et kapitel med en tegning, man gør noget i (fortællingen, H2): titlen og et felt (.bog-scene), som
 //              lavScene(opslag, felt) fylder (bogens egen fil i js/bog/). lavScene giver et objekt med fjern(), som
@@ -169,6 +169,33 @@ function animerVignet(rod) {
   rod.querySelector('.bog-vignet-sekund')?.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 60000, iterations: Infinity, easing: 'steps(60)' });
 }
 
+// Bogens vignet på forsiden (Rømer, R1): Jupiter og de fire store måner på en linje i kikkertens mørke synsfelt
+// (docs/drejebog-roemer.md afsnit 4), en bred, mørk stribe med en tynd, lys ramme, som Galileis tegning hos Huygens.
+// k.måner har x og y i Jupiter-radier (KIKKERT_MÅNER i js/data/opdagelser/roemer.js), og månen med k.navn får sit navn
+// under sig. Jupiter er en lys skive med to svage striber, månerne er prikker (ikke i rigtig størrelse). Ingen bevægelse:
+// Io i skyggen er turens første wow (R2)
+const KIKKERT = { b: 200, h: 64, jupiter: 8.5 }; // viewBox 200 × 64, 1 Jupiter-radius = 8,5 px (Callisto ved -7,4 når 63 px ud)
+export function kikkertTegning(k) {
+  const { b, h, jupiter: s } = KIKKERT, cx = b / 2, cy = h / 2 - 2;
+  // Faste, svage stjerner i baggrunden (få, så månerne er det, man ser)
+  const stjerner = [[12, 10], [37, 52], [71, 8], [124, 55], [153, 11], [186, 44], [24, 34], [176, 22]]
+    .map(([x, y]) => `<circle cx="${x}" cy="${y}" r="0.6"/>`).join('');
+  const måner = k.måner.map((m) => {
+    const mx = tal(cx + m.x * s), my = tal(cy + m.y * s);
+    const navn = m.navn === k.navn ? `<text x="${mx}" y="${tal(cy + m.y * s + 12)}" class="bog-kikkert-navn">${esc(m.navn)}</text>` : '';
+    return `<circle cx="${mx}" cy="${my}" r="1.6" class="bog-kikkert-måne" data-måne="${esc(m.navn)}"/>${navn}`;
+  }).join('');
+  return `<svg viewBox="0 0 ${b} ${h}" role="img" aria-label="${esc(k.alt)}">`
+    + `<defs><clipPath id="bogKikkertJupiter"><ellipse cx="${cx}" cy="${cy}" rx="${s}" ry="${tal(s * 0.94)}"/></clipPath></defs>`
+    + `<rect width="${b}" height="${h}" rx="3" class="bog-tavle"/><rect x="3" y="3" width="${b - 6}" height="${h - 6}" rx="2" class="bog-kikkert-ramme"/>`
+    + `<g class="bog-tavle-prik">${stjerner}</g>`
+    // Jupiter: en lys skive, lidt fladtrykt (som den rigtige), med to striber
+    + `<g class="bog-kikkert-jupiter"><ellipse cx="${cx}" cy="${cy}" rx="${s}" ry="${tal(s * 0.94)}"/>`
+    + `<g clip-path="url(#bogKikkertJupiter)" class="bog-kikkert-stribe"><rect x="${cx - s}" y="${tal(cy - 3.2)}" width="${2 * s}" height="1.8"/><rect x="${cx - s}" y="${tal(cy + 1.4)}" width="${2 * s}" height="2"/></g></g>`
+    + `<g class="bog-tavle-figur">${måner}</g>`
+    + '</svg>';
+}
+
 function forsideHTML(bog, f, harNæste = true) {
   return `<div class="bog-opslag bog-forside">`
     + `<figure class="bog-portræt"><img src="${esc(bog.portræt)}" alt="${esc(f.portrætAlt)}" width="600" height="750" decoding="async"><figcaption>${esc(f.portrætTekst)}</figcaption></figure>`
@@ -177,6 +204,7 @@ function forsideHTML(bog, f, harNæste = true) {
     + (f.intro ? `<div class="bog-intro"><p class="bog-intro-sted">${esc(f.intro.sted)}</p><p class="bog-intro-tekst">${esc(f.intro.tekst)}</p></div>` : '')
     + (f.vignet ? `<figure class="bog-galilei bog-vignet">${lommeurTegning(f.vignet)}<figcaption>${esc(f.vignet.tekst)}</figcaption></figure>`
       : f.kort ? `<figure class="bog-galilei bog-kort">${kortTegning(f.kort)}<figcaption>${esc(f.kort.tekst)}</figcaption></figure>`
+      : f.kikkert ? `<figure class="bog-galilei bog-kikkert">${kikkertTegning(f.kikkert)}<figcaption>${esc(f.kikkert.tekst)}</figcaption></figure>`
       : `<figure class="bog-galilei">${galileiTegning()}<figcaption>${esc(f.galilei)}</figcaption></figure>`)
     + `<p class="bog-navn">${esc(f.navn)} · ${esc(f.liv)}</p>`
     // "Begynd" kun, når der er noget at begynde på (stilguiden A9: kun det, der findes)
